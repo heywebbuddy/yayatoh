@@ -1,7 +1,7 @@
 'use client';
 
 import { SECTION_KINDS, type SectionKind } from '@yayatoh/events/ui';
-import { Alert, Button, Input } from '@yayatoh/ui';
+import { Alert, Button, Input, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState, useEffect, useRef, useState } from 'react';
 import { errorMessageKey } from '@/lib/errors.ts';
@@ -81,24 +81,14 @@ export function SectionForm({
       noValidate
     >
       {fixedKind ? null : (
-        <div className="flex flex-col gap-1.5">
-          <label htmlFor={`${idPrefix}-kind`} className="text-[13px] font-bold text-ink">
-            {t('kind')}
-          </label>
-          <select
-            id={`${idPrefix}-kind`}
-            name="kind"
-            value={kind}
-            onChange={(e) => setKind(e.target.value as SectionKind)}
-            className="field"
-          >
-            {SECTION_KINDS.map((k) => (
-              <option key={k} value={k}>
-                {t(`kinds.${k}`)}
-              </option>
-            ))}
-          </select>
-        </div>
+        <Select
+          id={`${idPrefix}-kind`}
+          name="kind"
+          label={t('kind')}
+          value={kind}
+          onValueChange={(v) => setKind(v as SectionKind)}
+          options={SECTION_KINDS.map((k) => ({ value: k, label: t(`kinds.${k}`), text: t(`kinds.${k}`) }))}
+        />
       )}
       <Input
         id={`${idPrefix}-title`}

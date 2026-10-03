@@ -2,14 +2,25 @@ import { executeQuery } from '@yayatoh/kernel';
 import { composeNav, navLabelKey, PROFILES } from '@yayatoh/platform';
 import { listTemplatesQuery, STARTER_KEYS, STARTER_TEMPLATES } from '@yayatoh/templates';
 import { roleCan } from '@yayatoh/tenancy';
-import { Button, Card, EmptyState, Label, PageHeader } from '@yayatoh/ui';
+import { Button, buttonClass, Card, EmptyState, Label, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { CopyEventForm } from '@/components/copy-forms.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
-import { createFromStarterAction, createFromTemplateAction, deleteTemplateAction } from './actions.ts';
+import {
+  copyStarterAction,
+  createFromStarterAction,
+  createFromTemplateAction,
+  deleteTemplateAction,
+  duplicateTemplateAction,
+  setTemplateArchivedAction,
+} from './actions.ts';
 
-/** M1.4b: the org's event templates; each creates a new draft event (never with sales data). */
+/**
+ * M1.4b: the org's event templates; each creates a new draft event (never with sales data). U6: a
+ * New template builder, edit, duplicate and archive, and starters copied into "Your templates".
+ */
 export default async function TemplatesPage({
   params,
 }: {
@@ -20,10 +31,36 @@ export default async function TemplatesPage({
   const data = await loadConsole(org);
   const t = await getTranslations();
   const canWrite = roleCan(data.role, 'events:write');
-  const templates = await executeQuery(listTemplatesQuery, {}, data.ctx, ports);
+  const [templates, archived] = await Promise.all([
+    executeQuery(listTemplatesQuery, {}, data.ctx, ports),
+    executeQuery(listTemplatesQuery, { archived: true }, data.ctx, ports),
+  ]);
   return (
     <>
-      <PageHeader title={t('templates.title')} description={t('templates.description')} />
+      <PageHeader
+        title={t('templates.title')}
+        description={t('templates.description')}
+        actions={
+          canWrite ? (
+            <Link href={`/o/${org}/templates/new`} className={buttonClass('primary', 'md')}>
+              {t('templates.newTemplate')}
+            </Link>
+          ) : undefined
+        }
+      />
+      {/* UX principle 3: explain, then ask. */}
+      <section aria-labelledby="how-heading">
+        <Card className="flex flex-col gap-2">
+          <h2 id="how-heading" className="text-body font-bold">
+            {t('templates.howTitle')}
+          </h2>
+          <ol className="m-0 flex list-decimal flex-col gap-1 ps-5 text-body text-ink-2">
+            <li>{t('templates.howStep1')}</li>
+            <li>{t('templates.howStep2')}</li>
+            <li>{t('templates.howStep3')}</li>
+          </ol>
+        </Card>
+      </section>
       {/* M4.2a: starter templates. The profile presets modules, navigation and the checklist. */}
       <section aria-labelledby="starters-heading" className="flex flex-col gap-3">
         <h2 id="starters-heading" className="text-section">
@@ -50,6 +87,19 @@ export default async function TemplatesPage({
                       list: checklist.map((k) => t(`readiness.${k}`)).join(', '),
                     })}
                   </p>
+                  <p className="text-caption text-ink-2">{t('starters.readOnly')}</p>
+                  {canWrite ? (
+                    <form action={copyStarterAction.bind(null, org, key)}>
+                      <Button
+                        type="submit"
+                        variant="secondary"
+                        size="sm"
+                        aria-label={t('starters.copyFor', { name: t(`starters.${key}.name`) })}
+                      >
+                        {t('starters.copy')}
+                      </Button>
+                    </form>
+                  ) : null}
                   {canWrite ? (
                     <details className="group">
                       <summary className="flex min-h-10 cursor-pointer list-none items-center text-body underline [&::-webkit-details-marker]:hidden">
@@ -61,6 +111,7 @@ export default async function TemplatesPage({
                           action={createFromStarterAction.bind(null, org, key)}
                           defaults={{ name: '', startsAt: '' }}
                           submitLabel={t('templates.createEvent')}
+                          timeZone={data.org.timezone}
                         />
                       </div>
                     </details>
@@ -73,7 +124,17 @@ export default async function TemplatesPage({
       </section>
       <h2 className="text-section">{t('starters.yours')}</h2>
       {templates.length === 0 ? (
-        <EmptyState title={t('templates.emptyTitle')} description={t('templates.emptyDescription')} />
+        <EmptyState
+          title={t('templates.emptyTitle')}
+          description={t('templates.emptyDescription')}
+          action={
+            canWrite ? (
+              <Link href={`/o/${org}/templates/new`} className={buttonClass('primary', 'md')}>
+                {t('templates.newTemplate')}
+              </Link>
+            ) : undefined
+          }
+        />
       ) : (
         <ul className="flex list-none flex-col gap-3.5 p-0">
           {templates.map((tpl) => (
@@ -82,7 +143,11 @@ export default async function TemplatesPage({
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="flex flex-col gap-1">
                     <Label>{t(`profiles.${tpl.profile}`)}</Label>
-                    <h2 className="text-section">{tpl.name}</h2>
+                    <h2 className="text-section">
+                      <Link href={`/o/${org}/templates/${tpl.id}`} className="hover:underline">
+                        {tpl.name}
+                      </Link>
+                    </h2>
                     {tpl.description ? <p className="text-body text-ink-2">{tpl.description}</p> : null}
                     <p className="text-caption text-ink-2">
                       {t('templates.contents', {
@@ -91,18 +156,51 @@ export default async function TemplatesPage({
                         seats: tpl.seats,
                       })}
                     </p>
+                    <p className="text-caption text-ink-2">
+                      {t('templates.summary', { sections: tpl.sections, checklist: tpl.checklist })} ·{' '}
+                      {tpl.origin === 'event' ? t('templates.originEvent') : t('templates.originScratch')}
+                    </p>
                   </div>
                   {canWrite ? (
-                    <form action={deleteTemplateAction.bind(null, org, tpl.id)}>
-                      <Button
-                        type="submit"
-                        variant="ghost"
-                        size="sm"
-                        aria-label={t('templates.deleteFor', { name: tpl.name })}
+                    <div className="flex flex-wrap items-center gap-1">
+                      <Link
+                        href={`/o/${org}/templates/${tpl.id}`}
+                        aria-label={t('templates.editFor', { name: tpl.name })}
+                        className={buttonClass('ghost', 'sm')}
                       >
-                        {t('templates.delete')}
-                      </Button>
-                    </form>
+                        {t('templates.edit')}
+                      </Link>
+                      <form action={duplicateTemplateAction.bind(null, org, tpl.id, tpl.name)}>
+                        <Button
+                          type="submit"
+                          variant="ghost"
+                          size="sm"
+                          aria-label={t('templates.duplicateFor', { name: tpl.name })}
+                        >
+                          {t('templates.duplicate')}
+                        </Button>
+                      </form>
+                      <form action={setTemplateArchivedAction.bind(null, org, tpl.id, true)}>
+                        <Button
+                          type="submit"
+                          variant="ghost"
+                          size="sm"
+                          aria-label={t('templates.archiveFor', { name: tpl.name })}
+                        >
+                          {t('templates.archive')}
+                        </Button>
+                      </form>
+                      <form action={deleteTemplateAction.bind(null, org, tpl.id)}>
+                        <Button
+                          type="submit"
+                          variant="ghost"
+                          size="sm"
+                          aria-label={t('templates.deleteFor', { name: tpl.name })}
+                        >
+                          {t('templates.delete')}
+                        </Button>
+                      </form>
+                    </div>
                   ) : null}
                 </div>
                 {canWrite ? (
@@ -119,6 +217,7 @@ export default async function TemplatesPage({
                         action={createFromTemplateAction.bind(null, org, tpl.id, tpl.timezone)}
                         defaults={{ name: '', startsAt: '' }}
                         submitLabel={t('templates.createEvent')}
+                        timeZone={tpl.timezone}
                       />
                     </div>
                   </details>
@@ -128,6 +227,55 @@ export default async function TemplatesPage({
           ))}
         </ul>
       )}
+      {archived.length > 0 ? (
+        <section aria-labelledby="archived-heading">
+          <details className="group flex flex-col gap-3">
+            <summary className="flex min-h-10 cursor-pointer list-none items-center [&::-webkit-details-marker]:hidden">
+              <h2 id="archived-heading" className="text-section underline">
+                {t('templates.archivedTitle', { count: archived.length })}
+              </h2>
+            </summary>
+            <p className="pb-3 text-body text-ink-2">{t('templates.archivedHint')}</p>
+            <ul className="flex list-none flex-col gap-2 p-0">
+              {archived.map((tpl) => (
+                <li
+                  key={tpl.id}
+                  data-archived-template={tpl.id}
+                  className="flex flex-wrap items-center justify-between gap-3 rounded-card border border-line px-4 py-3"
+                >
+                  <Link href={`/o/${org}/templates/${tpl.id}`} className="text-body underline">
+                    {tpl.name}
+                  </Link>
+                  {canWrite ? (
+                    <span className="flex flex-wrap items-center gap-1">
+                      <form action={setTemplateArchivedAction.bind(null, org, tpl.id, false)}>
+                        <Button
+                          type="submit"
+                          variant="secondary"
+                          size="sm"
+                          aria-label={t('templates.restoreFor', { name: tpl.name })}
+                        >
+                          {t('templates.restore')}
+                        </Button>
+                      </form>
+                      <form action={deleteTemplateAction.bind(null, org, tpl.id)}>
+                        <Button
+                          type="submit"
+                          variant="ghost"
+                          size="sm"
+                          aria-label={t('templates.deleteFor', { name: tpl.name })}
+                        >
+                          {t('templates.delete')}
+                        </Button>
+                      </form>
+                    </span>
+                  ) : null}
+                </li>
+              ))}
+            </ul>
+          </details>
+        </section>
+      ) : null}
     </>
   );
 }

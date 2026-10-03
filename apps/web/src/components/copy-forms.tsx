@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, Input } from '@yayatoh/ui';
+import { Alert, Button, DateTimePicker, Input } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { type FormEvent, startTransition, useActionState } from 'react';
 import type { CopyFormState } from '@/app/[locale]/o/[org]/e/[event]/copy/actions.ts';
@@ -35,11 +35,14 @@ export function CopyEventForm({
   defaults,
   submitLabel,
   idPrefix,
+  timeZone,
 }: {
   action: Action;
   defaults: { name: string; startsAt: string };
   submitLabel: string;
   idPrefix: string;
+  /** The zone the start is entered in (shown beside the field). */
+  timeZone?: string;
 }) {
   const t = useTranslations('copy');
   const { pending, onSubmit, message, state } = useForm(action);
@@ -55,12 +58,12 @@ export function CopyEventForm({
         label={t('newName')}
         error={state.field === 'name' ? (message ?? undefined) : undefined}
       />
-      <Input
+      <DateTimePicker
         id={`${idPrefix}-startsAt`}
         name="startsAt"
-        type="datetime-local"
         required
         defaultValue={defaults.startsAt}
+        timeZone={timeZone}
         label={t('startsAt')}
         hint={t('startsAtHint')}
         error={state.field === 'startsAt' ? (message ?? undefined) : undefined}

@@ -151,7 +151,8 @@ test.describe('duplicate and templates', () => {
     await expectAccessible(page);
     const dup = page.getByRole('region', { name: 'Duplicate this event' });
     await expect(dup.getByLabel('Name of the new event')).toHaveValue(`${name} (copy)`);
-    await expect(dup.getByLabel('Starts', { exact: true })).toHaveValue('2027-09-10T19:00');
+    // U6: a U1 date-time picker; `data-value` is the wall time it submits.
+    await expect(dup.getByLabel('Starts', { exact: true })).toHaveAttribute('data-value', '2027-09-10T19:00');
     // Validation: a one-letter name.
     await dup.getByLabel('Name of the new event').fill('X');
     await dup.getByRole('button', { name: 'Duplicate event' }).click();

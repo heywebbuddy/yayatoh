@@ -1,5 +1,5 @@
 import { type Browser, expect, type Locator, type Page, test } from '@playwright/test';
-import { continueToPayment, expectAccessible, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, pickOption, signIn } from './helpers.ts';
 
 const VIEWER = 'jordan@lakeside.test';
 const ORG = '/o/lakeside-events';
@@ -109,7 +109,7 @@ test.describe('page content, announcements and access (M1.4d)', () => {
     await expect(sectionRows).toHaveCount(1);
 
     // A schedule with a bad time: the error names the line; the typed text is kept.
-    await add.getByLabel('Section type').selectOption('schedule');
+    await pickOption(add.getByLabel('Section type'), 'schedule');
     await add.getByLabel('Section title').fill('Programme');
     await add.getByLabel('Schedule', { exact: true }).fill('18:00 | Doors\n25:00 | Too late');
     await add.getByRole('button', { name: 'Add section' }).click();
@@ -122,7 +122,7 @@ test.describe('page content, announcements and access (M1.4d)', () => {
     await expect(sectionRows).toHaveCount(2);
 
     // FAQ: an answer is required.
-    await add.getByLabel('Section type').selectOption('faq');
+    await pickOption(add.getByLabel('Section type'), 'faq');
     await add.getByLabel('Section title').fill('FAQ');
     await add.getByLabel('Questions and answers').fill('Is there parking?');
     await add.getByRole('button', { name: 'Add section' }).click();
