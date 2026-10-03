@@ -30,16 +30,24 @@ function useRefusal() {
   };
 }
 
-/** Toast once per successful submit (the stamp changes on every success). */
-function useDone(state: FormState, title: string | undefined, onDone?: () => void) {
+/**
+ * Toast on success from inside the action, before React commits the refreshed page: the button or
+ * form may be gone from it (an answered request leaves its list), the toast region stays.
+ */
+function useWithToast<A extends unknown[]>(
+  action: (prev: FormState, ...rest: A) => Promise<FormState>,
+  title: string | undefined,
+  onDone?: () => void,
+) {
   const toast = useToast();
-  const seen = useRef<number | undefined>(undefined);
-  useEffect(() => {
-    if (!state.ok || state.stamp === seen.current) return;
-    seen.current = state.stamp;
-    if (title) toast({ title, tone: 'success' });
-    onDone?.();
-  }, [state, title, toast, onDone]);
+  return async (prev: FormState, ...rest: A): Promise<FormState> => {
+    const r = await action(prev, ...rest);
+    if (r.ok) {
+      if (title) toast({ title, tone: 'success' });
+      onDone?.();
+    }
+    return r;
+  };
 }
 
 /** One button that runs one action (accept, decline, withdraw, cancel, unblock …). */
@@ -57,9 +65,8 @@ export function ActionButton({
   /** A fuller name when the visible label is short ("Accept" → "Accept Ana's request"). */
   accessibleName?: string;
 }) {
-  const [state, formAction, pending] = useActionState(action, INITIAL_FORM_STATE);
+  const [state, formAction, pending] = useActionState(useWithToast(action, done), INITIAL_FORM_STATE);
   const refusal = useRefusal()(state);
-  useDone(state, done);
   return (
     <form action={formAction} className="flex flex-col gap-1.5">
       <Button type="submit" variant={variant} loading={pending} aria-label={accessibleName}>
@@ -113,10 +120,12 @@ const describedBy = (id: string, error: unknown, hint: unknown) =>
 export function ConnectForm({ action, personName }: { action: Action; personName: string }) {
   const t = useTranslations('networking');
   const id = useId();
-  const [state, formAction, pending] = useActionState(action, INITIAL_FORM_STATE);
   const ref = useRef<HTMLFormElement>(null);
+  const [state, formAction, pending] = useActionState(
+    useWithToast(action, t('person.requestSent', { name: personName }), () => ref.current?.reset()),
+    INITIAL_FORM_STATE,
+  );
   const refusal = useRefusal()(state);
-  useDone(state, t('person.requestSent', { name: personName }), () => ref.current?.reset());
   return (
     <form
       ref={ref}
@@ -161,10 +170,12 @@ export function MeetingRequestForm({
 }) {
   const t = useTranslations('networking');
   const id = useId();
-  const [state, formAction, pending] = useActionState(action, INITIAL_FORM_STATE);
   const ref = useRef<HTMLFormElement>(null);
+  const [state, formAction, pending] = useActionState(
+    useWithToast(action, t('person.meetingSent', { name: personName }), () => ref.current?.reset()),
+    INITIAL_FORM_STATE,
+  );
   const refusal = useRefusal()(state);
-  useDone(state, t('person.meetingSent', { name: personName }), () => ref.current?.reset());
   const bad = new Set(state.fields ?? []);
   const slotError = bad.has('slotId')
     ? state.reason === 'past'
