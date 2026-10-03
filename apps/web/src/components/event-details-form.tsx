@@ -4,7 +4,7 @@ import type { EventDetailsDto } from '@yayatoh/events';
 import { ATTENDANCE_MODES, MAX_TAG_LENGTH, tagKey } from '@yayatoh/events/ui';
 import { Alert, Button, Combobox, Input, Select, type SelectOption } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
-import { useActionState } from 'react';
+import { useActionState, useState } from 'react';
 import { Link } from '@/i18n/navigation.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
 import { type FormState, INITIAL_FORM_STATE } from '@/lib/form-state.ts';
@@ -56,13 +56,15 @@ export function EventDetailsForm({
   const categoryError =
     state.fields?.includes('category') && state.code ? te(errorMessageKey(state.code)) : undefined;
   const tagOptions = orgTags.map(tagOption);
+  // Controlled, so a new tag that matches a chosen one (any case) is not added twice.
+  const [tags, setTags] = useState<string[]>(() => [...details.tags]);
   // A new tag: the existing spelling when it matches one case-insensitively, else as typed.
   const createTag = (query: string): SelectOption => {
     const typed = query
       .trim()
       .replace(/\s+/g, ' ')
       .slice(0, MAX_TAG_LENGTH * 2);
-    const same = [...orgTags, ...details.tags].find((x) => tagKey(x) === tagKey(typed));
+    const same = [...tags, ...orgTags].find((x) => tagKey(x) === tagKey(typed));
     return tagOption(same ?? typed);
   };
   return (
@@ -163,7 +165,8 @@ export function EventDetailsForm({
             multiple
             label={t('tags')}
             hint={t('tagsHint')}
-            defaultValue={details.tags}
+            value={tags}
+            onValueChange={setTags}
             options={tagOptions}
             selectedOptions={details.tags.map(tagOption)}
             onCreate={createTag}

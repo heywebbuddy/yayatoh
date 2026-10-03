@@ -118,16 +118,21 @@ function CategoryItem({
   useEffect(() => {
     if (state.ok && state.reason === 'rename') setRenaming(false);
   }, [state]);
+  // Opening the rename form moves focus into its field.
+  const nameId = `category-name-${row.ref}`;
+  useEffect(() => {
+    if (renaming) document.getElementById(nameId)?.focus();
+  }, [renaming, nameId]);
   const done = state.ok && !pending && state.reason ? t(`done.${state.reason}` as 'done.hide') : null;
   return (
     <li>
       <Card className="flex flex-col gap-3">
         <div className="flex flex-wrap items-center gap-3">
           <div className="flex min-w-0 grow flex-col gap-0.5">
-            <h3 className="m-0 flex flex-wrap items-center gap-2 text-card break-words">
-              {row.label}
+            <div className="flex flex-wrap items-center gap-2">
+              <h3 className="m-0 text-card break-words">{row.label}</h3>
               {row.hidden ? <StatusPill tone="neutral" label={t('hidden')} /> : null}
-            </h3>
+            </div>
             <p className="m-0 text-caption text-ink-2">
               {row.renamed || row.platformLabel !== row.label
                 ? `${t('mapsTo', { marketplace: row.platformLabel })} · ${t('events', { count: row.eventCount })}`
@@ -190,12 +195,12 @@ function CategoryItem({
             <input type="hidden" name="intent" value="rename" />
             <div className="min-w-0 grow sm:max-w-96">
               <Input
+                id={nameId}
                 name="name"
                 label={t('newName', { name: row.label })}
                 defaultValue={row.label}
                 maxLength={MAX_CATEGORY_NAME * 2}
                 required
-                autoFocus
                 error={state.reason !== 'last_visible' ? error : undefined}
               />
             </div>
