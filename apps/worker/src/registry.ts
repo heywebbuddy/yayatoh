@@ -12,6 +12,7 @@ import {
 import { deviceBoardPublisher, publishMetricsChangedTx } from '@yayatoh/command-center';
 import {
   giftOutcomesSubscriber,
+  giftRefundsSubscriber,
   pledgeMailer,
   pledgeOutcomesSubscriber,
   receiptIssuer,
@@ -164,6 +165,7 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     alertEvaluator({ notifier }),
     // M4.8a: gift orders' outcomes (paid, failed, lapsed) move their gifts.
     giftOutcomesSubscriber,
+    giftRefundsSubscriber,
     // M4.8b: a receipt per paid gift or charity-ticket order, and year-end statements, to the donor.
     receiptIssuer({ notifier, appOrigin }),
     statementMailer({ notifier, appOrigin }),

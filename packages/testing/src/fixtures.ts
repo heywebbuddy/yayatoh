@@ -74,9 +74,11 @@ import {
   armLevelCommand,
   assignPaddleCommand,
   closeCallCommand,
+  closeMatchCommand,
   confirmEntriesCommand,
   createCampaignCommand as createGivingCampaignCommand,
   createLevelCommand as createGivingLevelCommand,
+  createMatchCommand,
   issueReceiptTx,
   paddleConsoleQuery,
   recordPaddlesCommand,
@@ -2482,6 +2484,7 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   await paddleRaiseRows(event.id, party.id, ctx);
   await screenRows(event.id, ctx);
   await pledgeCollectionRows(org.id, event.id, party.id);
+  await matchRows(org.id, event.id, ctx);
   return {
     org,
     ownerId,
@@ -2741,6 +2744,46 @@ async function pledgeCollectionRows(orgId: string, eventId: string, partyId: str
     await tx.execute(sql`insert into donations.pledge_attempts (org_id, collection_id, kind, attempt, gift_id,
       order_id, status, decline_code, settled_at) values (${orgId}, ${c?.id}, 'card', 1, ${gift.id},
       ${gift.order_id}, 'failed', 'card_declined', now())`);
+  });
+}
+
+/**
+ * M4.8f matching gifts (isolation coverage of matches and gift refunds): a 1:1 match on the fixture
+ * campaign over the paddle raise's window, closed into the sponsor's pledge (it matched the
+ * fixture's confirmed paddle pledge), and a refund recorded against the fixture's lapsed gift as
+ * the refund subscriber leaves one.
+ */
+async function matchRows(orgId: string, eventId: string, ctx: (o?: Partial<Ctx>) => Ctx) {
+  const view = await executeQuery(paddleConsoleQuery, { eventId }, ctx(), ports);
+  const campaign = view.campaigns[0];
+  if (!campaign) throw new Error('fixture: no campaign');
+  const now = Date.now();
+  const match = await executeCommand(
+    createMatchCommand,
+    {
+      eventId,
+      campaignId: campaign.id,
+      sponsorName: 'Fixture Sponsor',
+      sponsorEmail: 'sponsor@example.test',
+      publicName: 'The Fixture Family',
+      ratioPercent: 100,
+      capMinor: 2_500_000,
+      startsAt: new Date(now - 3_600_000),
+      endsAt: new Date(now + 3_600_000),
+    },
+    ctx(),
+    ports,
+  );
+  await executeCommand(closeMatchCommand, { eventId, matchId: match.id }, ctx(), ports);
+  await withTenant(systemCtx(orgId), async (tx) => {
+    const refundId = uuidv7();
+    await tx.execute(sql`insert into orders.refunds (id, org_id, order_id, status, reason, amount_minor,
+      currency, requested_by, completed_at)
+      select ${refundId}, org_id, order_id, 'succeeded', 'requested_by_customer', 1000, 'USD', 'fixture', now()
+      from donations.gifts where event_id = ${eventId} limit 1`);
+    await tx.execute(sql`insert into donations.gift_refunds (org_id, gift_id, refund_id, amount_minor, currency,
+      refunded_at) select org_id, id, ${refundId}, 1000, 'USD', now() from donations.gifts
+      where event_id = ${eventId} limit 1`);
   });
 }
 

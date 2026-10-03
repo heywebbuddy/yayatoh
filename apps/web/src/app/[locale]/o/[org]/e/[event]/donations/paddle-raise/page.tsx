@@ -58,7 +58,7 @@ export default async function PaddleRaisePage({
   const base = `/o/${org}/e/${event}/donations`;
   const levels = view.campaigns.flatMap((c) => c.levels.map((l) => ({ ...l, campaign: c })));
   const open = view.open;
-  const live: ConsoleLiveDto = { open: view.open, totals: view.totals };
+  const live: ConsoleLiveDto = { open: view.open, totals: view.totals, matches: view.matches };
   const crumbs = (
     <Crumbs
       items={[

@@ -15,6 +15,7 @@ import { useRealtime } from '@/lib/use-realtime.ts';
  */
 export function RaiseLive({ url, initial }: { url: string; initial: ConsoleLiveDto }) {
   const t = useTranslations('donations.raise');
+  const tm = useTranslations('donations.matches');
   const locale = useLocale();
   const router = useRouter();
   const [live, setLive] = useState(initial);
@@ -68,6 +69,24 @@ export function RaiseLive({ url, initial }: { url: string; initial: ConsoleLiveD
           <p className="m-0 text-body text-ink-2">{t('noneCallingBody')}</p>
         )}
       </Card>
+      {/* M4.8f: the sponsors' running challenge matches ("every gift doubled up to $25,000"). */}
+      {live.matches
+        .filter((m) => m.phase === 'live')
+        .map((m) => (
+          <Card key={m.id} className="flex flex-col gap-1" data-testid="console-match">
+            <p className="m-0 text-body font-bold text-ink">
+              {tm('headline', {
+                ratio: `r${m.ratioPercent}`,
+                percent: n.format(m.ratioPercent),
+                cap: fmt(m.capMinor, m.currency),
+              })}
+            </p>
+            <p className="m-0 text-body text-ink-2 tabular-nums" role="status">
+              {m.publicName ? tm('thanksTo', { name: m.publicName }) : tm('thanksAnonymous')}{' '}
+              {tm('progress', { matched: fmt(m.matchedMinor, m.currency), cap: fmt(m.capMinor, m.currency) })}
+            </p>
+          </Card>
+        ))}
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4" data-testid="raise-totals">
         <StatCard label={t('totalRaised')} value={fmt(live.totals.totalMinor, live.totals.currency)} />
         <StatCard label={t('paddlesRaised')} value={n.format(live.totals.count)} />

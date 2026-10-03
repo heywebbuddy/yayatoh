@@ -289,6 +289,13 @@ Start the slow reviews early. Everything is built against fakes meanwhile; each 
   - **The notice** shows on ticket pages over $75 (face price) with a value, once the charity is verified.
   - **Year-end statements** go out from January 1 (org timezone) for the previous year, once per donor; a payment receipted after its statement is not added to it (corrected statements later).
   - **Refunds, donor data requests and retention**: a refunded payment keeps its receipt (voided/corrected receipts wait for M4.8e/g); receipts and statements are not yet in data-subject exports or erasure, and are never purged (counsel: how long to keep tax records, and whether erasure must keep them).
+- [ ] **M4.8f matching gifts: defaults pending owner** (labels: `db-migration`, `payments`, `tenancy`; `docs/specs/M4.8/spec.md`). Built with these; say if any should change:
+  - **What a match counts:** paid online gifts (the gift, not the fee the donor covered) and confirmed paddle pledges of one campaign made in the window, less refunds. A paddle pledge counts when confirmed, before it is collected (M4.8e); a pledge later written off does not lower the sponsor's match yet.
+  - **Ratios offered:** 50 %, 1:1, 2:1, 3:1 (the store takes any 1–1,000 %). No per-donor limit yet.
+  - **After the close, the sponsor's pledge only goes down** (refunds, voided paddles), never up, and is cancelled at zero. Gifts after the close never count.
+  - **The sponsor appears on screens and the giving page only by the public name the host types** (empty: "a generous sponsor"); their name and email are host-only.
+  - **Gift orders can be refunded by amount from the order page** (the e2e does it), so the M4.8a note above about refunds is out of date; campaign totals still count refunded gifts in full until M4.8g.
+  - **Employer matching databases** (e.g. Double the Donation) are not integrated (P4-17: paid, your call); the charity exports the employer list as CSV.
 - [ ] **Legal copy (M4.1, `legal-copy`):** the privacy notice for guests whose details a host enters (already listed in the Phase 4 plan §4).
 - [ ] **Registration forms: consent wording and defaults, pending owner** (M5.1b; labels: `legal-copy`, `db-migration`, `tenancy`). Built with these; say if any should change (`docs/specs/M5.1/spec.md`):
   - **Consent wording (legal-copy, for counsel):** the exhibitor email-sharing checkbox (P5-8) shows placeholder text, version 1: "Exhibitors may receive my email address when I let them scan my badge." (13 locales, `registrationForm.consentText.exhibitor_email_sharing_v1`). Approved wording ships as **version 2** (a new version, never an edit), so consents already given keep the version they saw.

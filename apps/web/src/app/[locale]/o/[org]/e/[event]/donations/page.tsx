@@ -4,6 +4,7 @@ import {
   donationsConsoleQuery,
   giftsExportBulk,
   type HostGiftDto,
+  matchesQuery,
 } from '@yayatoh/donations';
 import { executeQuery, formatMoney, isDomainError, money } from '@yayatoh/kernel';
 import type { BulkOperationDto } from '@yayatoh/platform';
@@ -70,6 +71,13 @@ export default async function DonationsPage({
   // Gift outcomes from the outbox (the worker relays them; dev and e2e have none).
   await catchUpGifts(data.org.id);
   const view = await executeQuery(donationsConsoleQuery, { eventId: ev.id }, data.ctx, ports);
+  // M4.8f: the running challenge matches, for the Matching gifts card.
+  const running = can('orders:read')
+    ? (await executeQuery(matchesQuery, { eventId: ev.id }, data.ctx, ports)).matches.filter(
+        (m) => m.status === 'active',
+      )
+    : [];
+  const tm = await getTranslations('donations.matches');
   const t = await getTranslations('donations.console');
   const tn = await getTranslations('nav');
   const tb = await getTranslations('bulk');
@@ -274,6 +282,45 @@ export default async function DonationsPage({
             }
           />
           <p className="m-0 text-body text-ink-2">{t('receiptsBody')}</p>
+        </Card>
+      ) : null}
+
+      {/* M4.8f: challenge matches and the employer matching list. */}
+      {can('orders:read') ? (
+        <Card className="flex flex-col gap-3" data-testid="matches-card">
+          <CardHeader
+            title={tm('title')}
+            actions={
+              <Link
+                href={`/o/${org}/e/${event}/donations/matches`}
+                className={buttonClass('secondary', 'sm')}
+              >
+                {tm('cardLink')}
+              </Link>
+            }
+          />
+          <p className="m-0 text-body text-ink-2">{tm('cardBody')}</p>
+          {running.length > 0 ? (
+            <ul className="m-0 flex list-none flex-col gap-1 p-0">
+              {running.map((m) => (
+                <li key={m.id} className="text-body text-ink">
+                  <span className="font-bold">
+                    {tm('headline', {
+                      ratio: `r${m.ratioPercent}`,
+                      percent: n.format(m.ratioPercent),
+                      cap: fmt(m.capMinor, m.currency),
+                    })}
+                  </span>{' '}
+                  <span className="text-ink-2 tabular-nums">
+                    {tm('progress', {
+                      matched: fmt(m.matchedMinor, m.currency),
+                      cap: fmt(m.capMinor, m.currency),
+                    })}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          ) : null}
         </Card>
       ) : null}
 

@@ -6,6 +6,7 @@ import {
   GIFT_STATUSES,
   TRIBUTE_KINDS,
 } from './domain/giving.ts';
+import { LiveMatchDto } from './match-dto.ts';
 
 const Money = z.int().positive().max(100_000_000);
 const Text = (max: number) => z.string().trim().min(1).max(max);
@@ -112,6 +113,8 @@ export const PublicCampaignDto = z.object({
   raisedMinor: z.int(),
   giftCount: z.int(),
   levels: z.array(LevelDto),
+  /** M4.8f: the campaign's running challenge matches (terms and progress; the sponsor's public name). */
+  matches: z.array(LiveMatchDto).default([]),
 });
 export type PublicCampaignDto = z.infer<typeof PublicCampaignDto>;
 
