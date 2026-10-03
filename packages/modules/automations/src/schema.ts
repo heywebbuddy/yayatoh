@@ -13,12 +13,12 @@ import {
   uuid,
 } from 'drizzle-orm/pg-core';
 import {
-  JOURNEY_TRIGGERS,
+  ALL_ANCHORS,
+  ALL_TRIGGERS,
   MAX_OFFSET_DAYS,
   MAX_OFFSET_MINUTES,
   STEP_ACTIONS,
   STEP_CONDITIONS,
-  WAIT_ANCHORS,
 } from './domain/journey.ts';
 
 export const automationsSchema = pgSchema('automations');
@@ -57,8 +57,11 @@ export const journeys = tenantTable(
     index('journeys_org_updated_idx').on(t.orgId, t.updatedAt),
     check('journeys_name_check', sql`length(btrim(name)) between 1 and 120`),
     check('journeys_scope_check', sql`(event_id is null) <> (series_id is null)`),
-    check('journeys_trigger_check', inList('trigger', JOURNEY_TRIGGERS)),
-    check('journeys_template_check', sql`template is null or template in ('vision')`),
+    check('journeys_trigger_check', inList('trigger', ALL_TRIGGERS)),
+    check(
+      'journeys_template_check',
+      sql`template is null or template in ('vision', 'rsvp_reminders', 'invoice_reminders')`,
+    ),
     check('journeys_enabled_check', sql`not enabled or enabled_at is not null`),
   ],
 );
@@ -88,7 +91,7 @@ export const journeySteps = tenantTable(
       foreignColumns: [journeys.orgId, journeys.id],
     }).onDelete('cascade'),
     check('journey_steps_position_check', sql`position between 0 and 999`),
-    check('journey_steps_anchor_check', inList('anchor', WAIT_ANCHORS)),
+    check('journey_steps_anchor_check', inList('anchor', ALL_ANCHORS)),
     check('journey_steps_action_check', inList('action', STEP_ACTIONS)),
     check('journey_steps_condition_check', sql`condition is null or ${inList('condition', STEP_CONDITIONS)}`),
     check(
@@ -121,7 +124,8 @@ export const journeyRuns = tenantTable(
     eventId: uuid('event_id').notNull(),
     /** Multi-date events: the date the person holds (steps follow its start and end). */
     occurrenceId: uuid('occurrence_id'),
-    contactId: uuid('contact_id').notNull(),
+    /** The person (a crm contact); null for a party run (M4.1f), which has `party_id` instead. */
+    contactId: uuid('contact_id'),
     /** The order that enrolled them (purchase trigger); a full refund cancels the run. */
     orderId: uuid('order_id'),
     trigger: text('trigger').notNull(),
@@ -132,6 +136,13 @@ export const journeyRuns = tenantTable(
     /** Why a run was cancelled (order_refunded, ticket_cancelled, event_cancelled, journey_disabled). */
     reason: text('reason'),
     endedAt: tsz('ended_at'),
+    /**
+     * M4.1f system journeys (`rsvp_sent`): the wedding party (`guests.parties`, a lower tier; no
+     * foreign key, the run outlives it) instead of a contact. Guests never become contacts (P4-3).
+     */
+    partyId: uuid('party_id'),
+    /** M5.1d: `invoice_issued` runs: when the invoice is due (the `invoice_due` anchor). */
+    dueAt: tsz('due_at'),
   },
   (t) => [
     uniqueIndex('journey_runs_org_journey_event_contact_key').on(
@@ -150,7 +161,12 @@ export const journeyRuns = tenantTable(
       foreignColumns: [journeys.orgId, journeys.id],
     }).onDelete('cascade'),
     check('journey_runs_status_check', inList('status', RUN_STATUSES)),
-    check('journey_runs_trigger_check', inList('trigger', JOURNEY_TRIGGERS)),
+    check('journey_runs_trigger_check', inList('trigger', ALL_TRIGGERS)),
+    uniqueIndex('journey_runs_org_journey_event_party_key')
+      .on(t.orgId, t.journeyId, t.eventId, t.partyId)
+      .where(sql`party_id is not null`),
+    index('journey_runs_org_party_idx').on(t.orgId, t.partyId).where(sql`party_id is not null`),
+    check('journey_runs_subject_check', sql`(contact_id is null) <> (party_id is null)`),
     check('journey_runs_ended_check', sql`(status = 'active') = (ended_at is null)`),
     check('journey_runs_locale_check', sql`locale ~ '^[a-z]{2}(-[A-Z]{2})?$'`),
   ],
@@ -170,7 +186,8 @@ export const scheduledActions = tenantTable(
     journeyId: uuid('journey_id').notNull(),
     stepId: uuid('step_id').notNull(),
     eventId: uuid('event_id').notNull(),
-    contactId: uuid('contact_id').notNull(),
+    /** Null for a party run (M4.1f). */
+    contactId: uuid('contact_id'),
     /** Snapshot of the step (position and action) for the history, whatever the step becomes. */
     position: integer('position').notNull(),
     action: text('action').notNull(),
@@ -185,6 +202,8 @@ export const scheduledActions = tenantTable(
     outcome: text('outcome'),
     lastError: text('last_error'),
     completedAt: tsz('completed_at'),
+    /** M4.1f: the party of a party run. */
+    partyId: uuid('party_id'),
   },
   (t) => [
     uniqueIndex('scheduled_actions_org_idempotency_key').on(t.orgId, t.idempotencyKey),
@@ -206,5 +225,6 @@ export const scheduledActions = tenantTable(
     check('scheduled_actions_key_check', sql`length(idempotency_key) between 1 and 255`),
     check('scheduled_actions_done_check', sql`(status = 'pending') = (completed_at is null)`),
     check('scheduled_actions_outcome_check', sql`outcome is null or outcome ~ '^[a-z_]{1,40}$'`),
+    check('scheduled_actions_subject_check', sql`(contact_id is null) <> (party_id is null)`),
   ],
 );

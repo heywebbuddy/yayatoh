@@ -59,10 +59,7 @@ export default async function HelpCenterConsole({
         }
       />
       {canWrite ? null : (
-        <p
-          role="note"
-          className="rounded-card border border-zinc-200 bg-white px-4 py-3 text-body text-zinc-600"
-        >
+        <p role="note" className="rounded-card border border-line bg-surface px-4 py-3 text-body text-ink-2">
           {tc('readOnly')}
         </p>
       )}
@@ -92,7 +89,7 @@ export default async function HelpCenterConsole({
                     <Link href={`/o/${org}/help-center/${r.id}`} className="underline underline-offset-2">
                       {r.title}
                     </Link>
-                    <span className="text-caption text-zinc-500">
+                    <span className="text-caption text-ink-2">
                       <span dir="ltr" className="font-mono">
                         {r.slug}
                       </span>{' '}
@@ -155,7 +152,7 @@ export default async function HelpCenterConsole({
                       >
                         {r.title}
                       </Link>
-                      <span dir="ltr" className="font-mono text-caption text-zinc-500">
+                      <span dir="ltr" className="font-mono text-caption text-ink-2">
                         /help/{r.slug}
                       </span>
                     </span>

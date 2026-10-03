@@ -15,6 +15,8 @@ export interface ParticipationFacts {
   readonly spendMinor: number;
   readonly registeredAt: Date;
   readonly labels: readonly string[];
+  /** M4.1d: the contact's RSVP as a wedding guest at this event, if they are one. */
+  readonly rsvp?: 'attending' | 'declined' | 'awaiting' | null;
 }
 
 const MAX_ROW_LABELS = 60;
@@ -69,6 +71,7 @@ export async function replaceParticipationTx(
           registered: r.registered,
           orders: r.orders,
           labels: [...new Set(r.labels)].sort().slice(0, MAX_ROW_LABELS),
+          rsvp: r.rsvp ?? null,
         })),
       )
       .onConflictDoUpdate({
@@ -85,6 +88,7 @@ export async function replaceParticipationTx(
           registered: sql`excluded.registered`,
           orders: sql`excluded.orders`,
           labels: sql`excluded.labels`,
+          rsvp: sql`excluded.rsvp`,
           updatedAt: ctx.now,
         },
       });

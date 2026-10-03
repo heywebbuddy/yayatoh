@@ -3,6 +3,7 @@ import type { TenantTx } from '@yayatoh/db';
 import { orderRefTx } from '@yayatoh/orders';
 import { defineSubscriber, type PublishedEvent } from '@yayatoh/platform';
 import { z } from 'zod';
+import { journeyInvoiceHooks } from './invoice-hooks.ts';
 import {
   cancelRunsTx,
   enrollTx,
@@ -12,6 +13,7 @@ import {
   runsOfEvent,
   runsOfOrder,
 } from './lifecycle.ts';
+import { rsvpReminderHooks } from './rsvp-reminders.ts';
 
 /**
  * Journey subscribers (M3.7a). None of them accepts `replayed` events (ADR 0008): backfilled
@@ -172,4 +174,12 @@ export function journeyRescheduler() {
 }
 
 /** Every journey subscriber, for the worker's and the dev drain's composition roots. */
-export const journeySubscribers = () => [journeyTriggers(), journeyCancellations(), journeyRescheduler()];
+export const journeySubscribers = () => [
+  journeyTriggers(),
+  journeyCancellations(),
+  journeyRescheduler(),
+  // M4.1f: RSVP reminders (enroll on a sent invitation, stop on an answer, follow the deadline).
+  rsvpReminderHooks(),
+  // M5.1d: invoice reminders.
+  journeyInvoiceHooks(),
+];

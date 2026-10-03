@@ -26,11 +26,11 @@ export function SignupCodeForm() {
         {state.code ? (
           <section
             aria-label={t('created.label')}
-            className="flex flex-col gap-2 rounded-card border border-zinc-200 bg-white p-4"
+            className="flex flex-col gap-2 rounded-card border border-line bg-surface p-4"
           >
             <p className="text-body">{t('created.intro')}</p>
             <p className="font-mono text-section select-all">{state.code}</p>
-            <p className="text-caption text-zinc-600">
+            <p className="text-caption text-ink-2">
               {t('created.expires', {
                 date: new Intl.DateTimeFormat('en', { dateStyle: 'medium', timeZone: 'UTC' }).format(
                   new Date(state.expiresAt ?? 0),

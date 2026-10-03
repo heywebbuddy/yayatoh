@@ -1,14 +1,18 @@
+import { listSegmentsQuery } from '@yayatoh/audiences';
 import { currencyExponent, executeQuery, formatMoney, money } from '@yayatoh/kernel';
 import { isProfileKey, navIncludes } from '@yayatoh/platform';
 import {
   type AdmissionItemDto,
+  approvalSetupQuery,
+  payLaterRulesQuery,
   type RegistrationTypeDto,
   registrationSetupQuery,
 } from '@yayatoh/registration';
 import { roleCan } from '@yayatoh/tenancy';
-import { Card, EmptyState, PageHeader } from '@yayatoh/ui';
+import { Alert, buttonClass, Card, EmptyState, PageHeader } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { Crumbs } from '@/components/crumbs.tsx';
 import { type FieldSpec, ProgramForm } from '@/components/program-form.tsx';
 import { RegistrationCell } from '@/components/registration-cell.tsx';
 import { Link } from '@/i18n/navigation.ts';
@@ -25,6 +29,8 @@ import {
   updateItemAction,
   updateTypeAction,
 } from './actions.ts';
+import { ApprovalRules } from './approval-rules.tsx';
+import { PayLaterRules } from './pay-later-rules.tsx';
 
 const decimal = (minor: number, currency: string) => {
   const exp = currencyExponent(currency);
@@ -49,6 +55,13 @@ export default async function RegistrationPage({
   if (!navIncludes(profile, data.modules, 'registration')) notFound();
   const setup = await executeQuery(registrationSetupQuery, { eventId: ev.id }, data.ctx, ports);
   const canWrite = roleCan(data.role, 'events:write');
+  // M5.1c: applications, +1 and substitution per type; an audience can fill a member list.
+  const rules = await executeQuery(approvalSetupQuery, { eventId: ev.id }, data.ctx, ports);
+  // M5.1d: pay later by invoice per type.
+  const payLater = await executeQuery(payLaterRulesQuery, { eventId: ev.id }, data.ctx, ports);
+  const segments = canWrite
+    ? await executeQuery(listSegmentsQuery, {}, data.ctx, ports).catch(() => null)
+    : null;
   const t = await getTranslations('registration');
   const tv = await getTranslations('vocab');
   const tf = await getTranslations('registrationForm');
@@ -169,34 +182,54 @@ export default async function RegistrationPage({
   const empty = setup.types.length === 0 && setup.items.length === 0;
   return (
     <>
-      <PageHeader title={tv('registration')} description={t('subtitle')} />
-      {/* M5.1b: the multi-page registration form for this event's types. */}
-      <Link
-        href={`/o/${org}/e/${event}/registration-form`}
-        className="self-start text-body underline underline-offset-2"
-      >
-        {canWrite ? tf('openBuilder') : tf('openReadOnly')}
-      </Link>
-      {canWrite ? null : <p className="text-body text-zinc-500">{t('viewerNotice')}</p>}
-      <p className="text-caption text-zinc-600">
+      <PageHeader
+        breadcrumb={
+          <Crumbs
+            items={[
+              { label: data.org.name, href: `/o/${org}` },
+              { label: ev.name, href: `/o/${org}/e/${event}` },
+              { label: tv('registration') },
+            ]}
+          />
+        }
+        title={tv('registration')}
+        description={t('subtitle')}
+        actions={
+          <>
+            {/* M5.2b: session enrollment and waitlists. */}
+            <Link href={`/o/${org}/e/${event}/registration/enrollment`} className={buttonClass('secondary')}>
+              {t('openEnrollment')}
+            </Link>
+            {/* M5.1b: the multi-page registration form for this event's types. */}
+            <Link href={`/o/${org}/e/${event}/registration-form`} className={buttonClass('secondary')}>
+              {canWrite ? tf('openBuilder') : tf('openReadOnly')}
+            </Link>
+          </>
+        }
+      />
+      {canWrite ? null : <Alert tone="info" title={t('viewerNotice')} />}
+      <p className="m-0 text-caption text-ink-2">
         {setup.pack.active
           ? t('packActive', { registrants: setup.pack.quotas.registrants ?? 0 })
           : t('packInactive')}
       </p>
       {empty ? (
-        <Card className="flex flex-col gap-3">
-          <EmptyState title={t('emptyTitle')} description={t('emptyDescription')} />
-          {canWrite ? (
-            <ProgramForm
-              action={seedDefaultsAction.bind(null, org, event)}
-              fields={[]}
-              idPrefix="seed"
-              submitLabel={t('seedDefaults')}
-              successLabel={t('seeded')}
-              errors={errors}
-            />
-          ) : null}
-        </Card>
+        <EmptyState
+          title={t('emptyTitle')}
+          description={t('emptyDescription')}
+          action={
+            canWrite ? (
+              <ProgramForm
+                action={seedDefaultsAction.bind(null, org, event)}
+                fields={[]}
+                idPrefix="seed"
+                submitLabel={t('seedDefaults')}
+                successLabel={t('seeded')}
+                errors={errors}
+              />
+            ) : undefined
+          }
+        />
       ) : null}
 
       <section aria-labelledby="types-heading" className="flex flex-col gap-3">
@@ -204,15 +237,15 @@ export default async function RegistrationPage({
           {t('types')}
         </h2>
         {setup.types.length === 0 ? (
-          <p className="text-body text-zinc-500">{t('noTypes')}</p>
+          <p className="text-body text-ink-2">{t('noTypes')}</p>
         ) : (
           <ul className="flex list-none flex-col gap-3 p-0">
             {setup.types.map((x) => (
               <li key={x.id}>
                 <Card className="flex flex-col gap-2">
                   <h3 className="text-body font-medium">{x.name}</h3>
-                  <p className="text-caption text-zinc-600">{eligibilitySummary(x)}</p>
-                  <p className="text-caption text-zinc-600">
+                  <p className="text-caption text-ink-2">{eligibilitySummary(x)}</p>
+                  <p className="text-caption text-ink-2">
                     {x.capacity === null
                       ? t('takenUnlimited', { taken: x.quantityHeld + x.quantitySold })
                       : t('taken', { taken: x.quantityHeld + x.quantitySold, capacity: x.capacity })}
@@ -222,7 +255,7 @@ export default async function RegistrationPage({
                   </p>
                   {canWrite ? (
                     <details>
-                      <summary className="min-h-6 cursor-pointer text-caption text-zinc-600">
+                      <summary className="min-h-6 cursor-pointer text-caption text-ink-2">
                         {t('editNamed', { name: x.name })}
                       </summary>
                       <div className="flex flex-col gap-3 pt-3">
@@ -275,17 +308,17 @@ export default async function RegistrationPage({
           {t('items')}
         </h2>
         {setup.items.length === 0 ? (
-          <p className="text-body text-zinc-500">{t('noItems')}</p>
+          <p className="text-body text-ink-2">{t('noItems')}</p>
         ) : (
           <ul className="flex list-none flex-col gap-3 p-0">
             {setup.items.map((x) => (
               <li key={x.id}>
                 <Card className="flex flex-col gap-2">
                   <h3 className="text-body font-medium">{x.name}</h3>
-                  <p className="text-caption text-zinc-600">{t(`kind.${x.kind}`)}</p>
+                  <p className="text-caption text-ink-2">{t(`kind.${x.kind}`)}</p>
                   {canWrite ? (
                     <details>
-                      <summary className="min-h-6 cursor-pointer text-caption text-zinc-600">
+                      <summary className="min-h-6 cursor-pointer text-caption text-ink-2">
                         {t('editNamed', { name: x.name })}
                       </summary>
                       <div className="flex flex-col gap-3 pt-3">
@@ -338,23 +371,23 @@ export default async function RegistrationPage({
           <h2 id="matrix-heading" className="text-section">
             {t('matrix')}
           </h2>
-          <p className="text-body text-zinc-600">{t('matrixHint')}</p>
+          <p className="text-body text-ink-2">{t('matrixHint')}</p>
           <section
             // biome-ignore lint/a11y/noNoninteractiveTabindex: a scrollable region must be reachable by keyboard (axe scrollable-region-focusable)
             tabIndex={0}
             aria-label={t('matrixCaption')}
             // `relative`: absolutely positioned sr-only labels are clipped by the scroller too.
-            className="relative overflow-x-auto rounded-card border border-zinc-200 bg-white"
+            className="relative overflow-x-auto rounded-card border border-line bg-surface"
           >
             <table className="w-full border-collapse text-start">
               <caption className="sr-only">{t('matrixCaption')}</caption>
               <thead>
                 <tr>
-                  <th scope="col" className="p-3 text-start text-caption text-zinc-600">
+                  <th scope="col" className="p-3 text-start text-caption text-ink-2">
                     {t('typeColumn')}
                   </th>
                   {setup.items.map((i) => (
-                    <th key={i.id} scope="col" className="p-3 text-start text-caption text-zinc-600">
+                    <th key={i.id} scope="col" className="p-3 text-start text-caption text-ink-2">
                       {i.name}
                     </th>
                   ))}
@@ -362,7 +395,7 @@ export default async function RegistrationPage({
               </thead>
               <tbody>
                 {setup.types.map((x) => (
-                  <tr key={x.id} className="border-t border-zinc-100 align-top">
+                  <tr key={x.id} className="border-t border-line align-top">
                     <th scope="row" className="p-3 text-start text-body font-medium">
                       {x.name}
                     </th>
@@ -379,7 +412,7 @@ export default async function RegistrationPage({
                             disableAction={disableCellAction.bind(null, org, event, x.id, i.id)}
                           />
                           {cell ? (
-                            <p className="pt-1 text-caption text-zinc-500">
+                            <p className="pt-1 text-caption text-ink-2">
                               {t('cellSold', {
                                 count: cell.quantitySold,
                                 allIn: formatMoney(money(cell.allInMinor, setup.currency), locale),
@@ -395,6 +428,19 @@ export default async function RegistrationPage({
             </table>
           </section>
         </section>
+      ) : null}
+      {setup.types.length > 0 ? (
+        <ApprovalRules
+          org={org}
+          event={event}
+          types={setup.types}
+          rules={rules.types}
+          segments={segments}
+          canWrite={canWrite}
+        />
+      ) : null}
+      {setup.types.length > 0 ? (
+        <PayLaterRules org={org} event={event} types={setup.types} rules={payLater} canWrite={canWrite} />
       ) : null}
     </>
   );

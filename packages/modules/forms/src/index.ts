@@ -79,4 +79,39 @@ export {
   startRegistrationFormCommand,
   submitRegistrationFormCommand,
 } from './registration-forms.ts';
+// M4.1e: the `rsvp` kind (questions per guest of a household, write-back owned by guests).
+export {
+  checkRsvpAnswers,
+  EMPTY_RULE,
+  MAX_RSVP_QUESTIONS,
+  normalizeRsvp,
+  RSVP_BINDINGS,
+  RSVP_BOUND_MAX,
+  RSVP_CONTEXT_VARS,
+  RSVP_FIELD_TYPES,
+  RSVP_FORM_KIND,
+  type RsvpBinding,
+  type RsvpCheck,
+  type RsvpContextVar,
+  type RsvpFieldType,
+  RsvpFormDefinition,
+  type RsvpGuestContext,
+  type RsvpMenuOption,
+  RsvpQuestion,
+  type RsvpQuestionInput,
+  type RsvpRule,
+  rsvpVisible,
+  ruleFromLogic,
+  ruleToLogic,
+} from './rsvp.ts';
+export {
+  currentRsvpFormTx,
+  deleteRsvpResponsesTx,
+  publishRsvpFormTx,
+  type RsvpResponse,
+  replaceRsvpResponsesTx,
+  rsvpFormVersionsTx,
+  rsvpResponsesTx,
+  rsvpSealedKeysTx,
+} from './rsvp-forms.ts';
 export { ALL_FORM_KINDS, FORM_KINDS, RESPONDENT_TYPES, SUBJECT_TYPES } from './schema.ts';

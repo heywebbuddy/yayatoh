@@ -34,6 +34,8 @@ export const users = identity.table(
     twoFactorEnabled: boolean('two_factor_enabled').default(false),
     /** Preferred language for emails about the orgs they work in (M1.10d); null = English. */
     locale: text('locale'),
+    /** Colour theme (ADR 0022): light, dark or system; null = not chosen (light). */
+    theme: text('theme'),
     /**
      * Account deleted (M1.14e): the row is kept so audit entries and org records that name this
      * id stay consistent, but it is anonymised (email replaced by a hash at `.invalid`, name
@@ -49,6 +51,7 @@ export const users = identity.table(
       'users_locale_check',
       sql`locale is null or locale in ('en', 'es', 'fr', 'de', 'it', 'pt', 'nl', 'ru', 'ar', 'hi', 'ja', 'zh-CN', 'zh-TW')`,
     ),
+    check('users_theme_check', sql`theme is null or theme in ('light', 'dark', 'system')`),
   ],
 );
 

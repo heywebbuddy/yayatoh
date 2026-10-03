@@ -105,11 +105,8 @@ export default async function AnalysisPage({
                   'tickets.capacity',
                 ] as const
               ).map((k) => (
-                <div
-                  key={k}
-                  className="flex items-baseline justify-between gap-3 border-b border-zinc-100 py-2"
-                >
-                  <dt className="text-body text-zinc-600">{t(`reports.metric.${k}`)}</dt>
+                <div key={k} className="flex items-baseline justify-between gap-3 border-b border-line py-2">
+                  <dt className="text-body text-ink-2">{t(`reports.metric.${k}`)}</dt>
                   <dd className="font-mono tabular-nums">{metricText(m, k, locale).join(' · ')}</dd>
                 </div>
               ))}
@@ -271,7 +268,7 @@ export default async function AnalysisPage({
                     <span className="flex flex-col">
                       <span>{x.code}</span>
                       {x.active ? null : (
-                        <span className="text-caption text-zinc-500">{t('reports.inactive')}</span>
+                        <span className="text-caption text-ink-2">{t('reports.inactive')}</span>
                       )}
                     </span>
                   ),

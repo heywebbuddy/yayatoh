@@ -135,6 +135,8 @@ export const PublicOrderDto = OrderDto.omit({ eventId: true }).extend({
   refundRequest: BuyerRefundPanelDto,
   /** M3.10c: credit notes on this order (store credit shows its code: the buyer's own). */
   creditNotes: z.array(BuyerCreditNoteDto).default([]),
+  /** M5.1d: a pay-later order's invoice page (view, PDF, pay), on the event's public site. */
+  invoicePath: z.string().nullable().default(null),
 });
 export type PublicOrderDto = z.infer<typeof PublicOrderDto>;
 export const publicOrderSerializer = defineSerializer('orders.publicOrder', PublicOrderDto);
