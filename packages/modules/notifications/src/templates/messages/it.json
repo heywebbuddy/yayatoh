@@ -308,6 +308,21 @@
       "subject": "{org} ha cancellato i tuoi dati personali",
       "intro": "{org} ha cancellato i tuoi dati personali come richiesto. Alcuni documenti vanno conservati per legge (per esempio gli ordini pagati, ai fini fiscali), senza il tuo nome né la tua email; la ricevuta li elenca con il motivo. Questa è l’ultima email al riguardo.",
       "cta": "Vedi la ricevuta"
+    },
+    "alerts.metric": {
+      "subject": "La regola di avviso «{title}» è scattata",
+      "intro": "{reading, select, none {La tua regola di avviso «{title}» è ancora attiva per {org}.} other {La tua regola di avviso «{title}» è scattata per {org}: {reading} {windowDays, plural, one {nell’ultimo giorno} other {negli ultimi # giorni}}.}} Aprila per confermarla o posticiparla.",
+      "cta": "Apri l’avviso"
+    },
+    "alerts.metric-now": {
+      "subject": "La regola di avviso «{title}» è scattata",
+      "intro": "{reading, select, none {La tua regola di avviso «{title}» è ancora attiva per {org}.} other {La tua regola di avviso «{title}» è scattata per {org}: {reading} {windowDays, plural, one {nell’ultimo giorno} other {negli ultimi # giorni}}.}} Aprila per confermarla o posticiparla.",
+      "cta": "Apri l’avviso"
+    },
+    "analytics.report": {
+      "subject": "Il tuo report «{name}»: {period}",
+      "intro": "Il report «{name}» di {org} per {period} è pronto. Aprilo per scaricare il PDF.",
+      "cta": "Scarica il PDF"
     }
   },
   "roles": {

@@ -624,6 +624,630 @@ Lakeside Jazz Night 有需要注意的事項。點按鈕開啟處理頁面。
 }
 `;
 
+exports[`renderMessage: every kind in all 13 locales > alerts.metric · ar 1`] = `
+{
+  "subject": "تم تفعيل قاعدة التنبيه «Refunds this week»",
+  "text": "تم تفعيل قاعدة التنبيه «Refunds this week»
+
+مرحبًا،
+
+تم تفعيل قاعدة التنبيه «Refunds this week» في Lakeside Events: $1,250.00 خلال آخر 7 أيام. افتحه لتأكيده أو تأجيله.
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.metric · de 1`] = `
+{
+  "subject": "Alarmregel „Refunds this week“ wurde ausgelöst",
+  "text": "Alarmregel „Refunds this week“ wurde ausgelöst
+
+Hallo,
+
+Deine Alarmregel „Refunds this week“ wurde bei Lakeside Events ausgelöst: $1,250.00 in den letzten 7 Tagen. Öffne sie, um sie zu bestätigen oder zu pausieren.
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.metric · en 1`] = `
+{
+  "subject": "Alert rule “Refunds this week” is firing",
+  "text": "Alert rule “Refunds this week” is firing
+
+Hello,
+
+Your alert rule “Refunds this week” is firing at Lakeside Events: $1,250.00 over the last 7 days. Open it to acknowledge or snooze it.
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.metric · es 1`] = `
+{
+  "subject": "La regla de alerta «Refunds this week» se ha activado",
+  "text": "La regla de alerta «Refunds this week» se ha activado
+
+Hola:
+
+Tu regla de alerta «Refunds this week» se ha activado en Lakeside Events: $1,250.00 en los últimos 7 días. Ábrela para confirmarla o posponerla.
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.metric · fr 1`] = `
+{
+  "subject": "La règle d’alerte « Refunds this week » s’est déclenchée",
+  "text": "La règle d’alerte « Refunds this week » s’est déclenchée
+
+Bonjour,
+
+Votre règle d’alerte « Refunds this week » s’est déclenchée chez Lakeside Events : $1,250.00 sur les 7 derniers jours. Ouvrez-la pour la confirmer ou la mettre en pause.
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.metric · hi 1`] = `
+{
+  "subject": "अलर्ट नियम “Refunds this week” सक्रिय हुआ",
+  "text": "अलर्ट नियम “Refunds this week” सक्रिय हुआ
+
+नमस्ते,
+
+आपका अलर्ट नियम “Refunds this week” Lakeside Events में सक्रिय हुआ: पिछले 7 दिनों में $1,250.00। इसे स्वीकार करने या स्नूज़ करने के लिए खोलें।
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.metric · it 1`] = `
+{
+  "subject": "La regola di avviso «Refunds this week» è scattata",
+  "text": "La regola di avviso «Refunds this week» è scattata
+
+Ciao,
+
+La tua regola di avviso «Refunds this week» è scattata per Lakeside Events: $1,250.00 negli ultimi 7 giorni. Aprila per confermarla o posticiparla.
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.metric · ja 1`] = `
+{
+  "subject": "アラートルール「Refunds this week」が発動しました",
+  "text": "アラートルール「Refunds this week」が発動しました
+
+こんにちは。
+
+Lakeside Events のアラートルール「Refunds this week」が発動しました：直近 7 日間で $1,250.00。 開いて確認するか、スヌーズしてください。
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.metric · nl 1`] = `
+{
+  "subject": "Waarschuwingsregel ‘Refunds this week’ is afgegaan",
+  "text": "Waarschuwingsregel ‘Refunds this week’ is afgegaan
+
+Hallo,
+
+Je waarschuwingsregel ‘Refunds this week’ is afgegaan bij Lakeside Events: $1,250.00 in de afgelopen 7 dagen. Open hem om hem te bevestigen of uit te stellen.
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.metric · pt 1`] = `
+{
+  "subject": "A regra de alerta “Refunds this week” foi acionada",
+  "text": "A regra de alerta “Refunds this week” foi acionada
+
+Olá!
+
+Sua regra de alerta “Refunds this week” foi acionada em Lakeside Events: $1,250.00 nos últimos 7 dias. Abra para confirmar ou adiar.
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.metric · ru 1`] = `
+{
+  "subject": "Сработало правило оповещения «Refunds this week»",
+  "text": "Сработало правило оповещения «Refunds this week»
+
+Здравствуйте!
+
+Ваше правило оповещения «Refunds this week» в Lakeside Events сработало: $1,250.00 за последние 7 дней. Откройте его, чтобы подтвердить или отложить.
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.metric · zh-CN 1`] = `
+{
+  "subject": "提醒规则“Refunds this week”已触发",
+  "text": "提醒规则“Refunds this week”已触发
+
+您好：
+
+Lakeside Events 的提醒规则“Refunds this week”已触发：最近 7 天为 $1,250.00。 打开以确认或暂缓提醒。
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.metric · zh-TW 1`] = `
+{
+  "subject": "提醒規則「Refunds this week」已觸發",
+  "text": "提醒規則「Refunds this week」已觸發
+
+您好：
+
+Lakeside Events 的提醒規則「Refunds this week」已觸發：最近 7 天為 $1,250.00。 開啟以確認或暫緩提醒。
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.metric-now · ar 1`] = `
+{
+  "subject": "تم تفعيل قاعدة التنبيه «Daily registrations»",
+  "text": "تم تفعيل قاعدة التنبيه «Daily registrations»
+
+مرحبًا،
+
+تم تفعيل قاعدة التنبيه «Daily registrations» في Lakeside Events: 12 خلال اليوم الأخير. افتحه لتأكيده أو تأجيله.
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.metric-now · de 1`] = `
+{
+  "subject": "Alarmregel „Daily registrations“ wurde ausgelöst",
+  "text": "Alarmregel „Daily registrations“ wurde ausgelöst
+
+Hallo,
+
+Deine Alarmregel „Daily registrations“ wurde bei Lakeside Events ausgelöst: 12 in dem letzten Tag. Öffne sie, um sie zu bestätigen oder zu pausieren.
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.metric-now · en 1`] = `
+{
+  "subject": "Alert rule “Daily registrations” is firing",
+  "text": "Alert rule “Daily registrations” is firing
+
+Hello,
+
+Your alert rule “Daily registrations” is firing at Lakeside Events: 12 over the last day. Open it to acknowledge or snooze it.
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.metric-now · es 1`] = `
+{
+  "subject": "La regla de alerta «Daily registrations» se ha activado",
+  "text": "La regla de alerta «Daily registrations» se ha activado
+
+Hola:
+
+Tu regla de alerta «Daily registrations» se ha activado en Lakeside Events: 12 en el último día. Ábrela para confirmarla o posponerla.
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.metric-now · fr 1`] = `
+{
+  "subject": "La règle d’alerte « Daily registrations » s’est déclenchée",
+  "text": "La règle d’alerte « Daily registrations » s’est déclenchée
+
+Bonjour,
+
+Votre règle d’alerte « Daily registrations » s’est déclenchée chez Lakeside Events : 12 sur le dernier jour. Ouvrez-la pour la confirmer ou la mettre en pause.
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.metric-now · hi 1`] = `
+{
+  "subject": "अलर्ट नियम “Daily registrations” सक्रिय हुआ",
+  "text": "अलर्ट नियम “Daily registrations” सक्रिय हुआ
+
+नमस्ते,
+
+आपका अलर्ट नियम “Daily registrations” Lakeside Events में सक्रिय हुआ: पिछले दिन में 12। इसे स्वीकार करने या स्नूज़ करने के लिए खोलें।
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.metric-now · it 1`] = `
+{
+  "subject": "La regola di avviso «Daily registrations» è scattata",
+  "text": "La regola di avviso «Daily registrations» è scattata
+
+Ciao,
+
+La tua regola di avviso «Daily registrations» è scattata per Lakeside Events: 12 nell’ultimo giorno. Aprila per confermarla o posticiparla.
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.metric-now · ja 1`] = `
+{
+  "subject": "アラートルール「Daily registrations」が発動しました",
+  "text": "アラートルール「Daily registrations」が発動しました
+
+こんにちは。
+
+Lakeside Events のアラートルール「Daily registrations」が発動しました：直近 1 日間で 12。 開いて確認するか、スヌーズしてください。
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.metric-now · nl 1`] = `
+{
+  "subject": "Waarschuwingsregel ‘Daily registrations’ is afgegaan",
+  "text": "Waarschuwingsregel ‘Daily registrations’ is afgegaan
+
+Hallo,
+
+Je waarschuwingsregel ‘Daily registrations’ is afgegaan bij Lakeside Events: 12 in de afgelopen dag. Open hem om hem te bevestigen of uit te stellen.
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.metric-now · pt 1`] = `
+{
+  "subject": "A regra de alerta “Daily registrations” foi acionada",
+  "text": "A regra de alerta “Daily registrations” foi acionada
+
+Olá!
+
+Sua regra de alerta “Daily registrations” foi acionada em Lakeside Events: 12 no último dia. Abra para confirmar ou adiar.
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.metric-now · ru 1`] = `
+{
+  "subject": "Сработало правило оповещения «Daily registrations»",
+  "text": "Сработало правило оповещения «Daily registrations»
+
+Здравствуйте!
+
+Ваше правило оповещения «Daily registrations» в Lakeside Events сработало: 12 за последний 1 день. Откройте его, чтобы подтвердить или отложить.
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.metric-now · zh-CN 1`] = `
+{
+  "subject": "提醒规则“Daily registrations”已触发",
+  "text": "提醒规则“Daily registrations”已触发
+
+您好：
+
+Lakeside Events 的提醒规则“Daily registrations”已触发：最近 1 天为 12。 打开以确认或暂缓提醒。
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.metric-now · zh-TW 1`] = `
+{
+  "subject": "提醒規則「Daily registrations」已觸發",
+  "text": "提醒規則「Daily registrations」已觸發
+
+您好：
+
+Lakeside Events 的提醒規則「Daily registrations」已觸發：最近 1 天為 12。 開啟以確認或暫緩提醒。
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > analytics.report · ar 1`] = `
+{
+  "subject": "تقريرك «Weekly sales»: Sep 28 – Oct 4, 2026",
+  "text": "تقريرك «Weekly sales»: Sep 28 – Oct 4, 2026
+
+مرحبًا Weekly sales،
+
+تقرير «Weekly sales» الخاص بـ Lakeside Events عن Sep 28 – Oct 4, 2026 جاهز. افتحه لتنزيل ملف PDF.
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > analytics.report · de 1`] = `
+{
+  "subject": "Dein Bericht „Weekly sales“: Sep 28 – Oct 4, 2026",
+  "text": "Dein Bericht „Weekly sales“: Sep 28 – Oct 4, 2026
+
+Hallo Weekly sales,
+
+Der Bericht „Weekly sales“ von Lakeside Events für Sep 28 – Oct 4, 2026 ist fertig. Öffne ihn, um das PDF herunterzuladen.
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > analytics.report · en 1`] = `
+{
+  "subject": "Your report “Weekly sales”: Sep 28 – Oct 4, 2026",
+  "text": "Your report “Weekly sales”: Sep 28 – Oct 4, 2026
+
+Hi Weekly sales,
+
+The Lakeside Events report “Weekly sales” for Sep 28 – Oct 4, 2026 is ready. Open it to download the PDF.
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > analytics.report · es 1`] = `
+{
+  "subject": "Tu informe «Weekly sales»: Sep 28 – Oct 4, 2026",
+  "text": "Tu informe «Weekly sales»: Sep 28 – Oct 4, 2026
+
+Hola, Weekly sales:
+
+El informe «Weekly sales» de Lakeside Events para Sep 28 – Oct 4, 2026 está listo. Ábrelo para descargar el PDF.
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > analytics.report · fr 1`] = `
+{
+  "subject": "Votre rapport « Weekly sales » : Sep 28 – Oct 4, 2026",
+  "text": "Votre rapport « Weekly sales » : Sep 28 – Oct 4, 2026
+
+Bonjour Weekly sales,
+
+Le rapport « Weekly sales » de Lakeside Events pour Sep 28 – Oct 4, 2026 est prêt. Ouvrez-le pour télécharger le PDF.
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > analytics.report · hi 1`] = `
+{
+  "subject": "आपकी रिपोर्ट “Weekly sales”: Sep 28 – Oct 4, 2026",
+  "text": "आपकी रिपोर्ट “Weekly sales”: Sep 28 – Oct 4, 2026
+
+नमस्ते Weekly sales,
+
+Lakeside Events की रिपोर्ट “Weekly sales” Sep 28 – Oct 4, 2026 के लिए तैयार है। PDF डाउनलोड करने के लिए इसे खोलें।
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > analytics.report · it 1`] = `
+{
+  "subject": "Il tuo report «Weekly sales»: Sep 28 – Oct 4, 2026",
+  "text": "Il tuo report «Weekly sales»: Sep 28 – Oct 4, 2026
+
+Ciao Weekly sales,
+
+Il report «Weekly sales» di Lakeside Events per Sep 28 – Oct 4, 2026 è pronto. Aprilo per scaricare il PDF.
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > analytics.report · ja 1`] = `
+{
+  "subject": "レポート「Weekly sales」：Sep 28 – Oct 4, 2026",
+  "text": "レポート「Weekly sales」：Sep 28 – Oct 4, 2026
+
+Weekly sales 様
+
+Lakeside Events のレポート「Weekly sales」（Sep 28 – Oct 4, 2026）の準備ができました。開いて PDF をダウンロードしてください。
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > analytics.report · nl 1`] = `
+{
+  "subject": "Je rapport ‘Weekly sales’: Sep 28 – Oct 4, 2026",
+  "text": "Je rapport ‘Weekly sales’: Sep 28 – Oct 4, 2026
+
+Hoi Weekly sales,
+
+Het rapport ‘Weekly sales’ van Lakeside Events voor Sep 28 – Oct 4, 2026 staat klaar. Open het om de pdf te downloaden.
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > analytics.report · pt 1`] = `
+{
+  "subject": "Seu relatório “Weekly sales”: Sep 28 – Oct 4, 2026",
+  "text": "Seu relatório “Weekly sales”: Sep 28 – Oct 4, 2026
+
+Olá, Weekly sales!
+
+O relatório “Weekly sales” de Lakeside Events para Sep 28 – Oct 4, 2026 está pronto. Abra para baixar o PDF.
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > analytics.report · ru 1`] = `
+{
+  "subject": "Ваш отчёт «Weekly sales»: Sep 28 – Oct 4, 2026",
+  "text": "Ваш отчёт «Weekly sales»: Sep 28 – Oct 4, 2026
+
+Здравствуйте, Weekly sales!
+
+Отчёт «Weekly sales» организации Lakeside Events за Sep 28 – Oct 4, 2026 готов. Откройте его, чтобы скачать PDF.
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > analytics.report · zh-CN 1`] = `
+{
+  "subject": "你的报告“Weekly sales”：Sep 28 – Oct 4, 2026",
+  "text": "你的报告“Weekly sales”：Sep 28 – Oct 4, 2026
+
+Weekly sales，您好：
+
+Lakeside Events 的报告“Weekly sales”（Sep 28 – Oct 4, 2026）已准备好。打开即可下载 PDF。
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > analytics.report · zh-TW 1`] = `
+{
+  "subject": "你的報告「Weekly sales」：Sep 28 – Oct 4, 2026",
+  "text": "你的報告「Weekly sales」：Sep 28 – Oct 4, 2026
+
+Weekly sales，您好：
+
+Lakeside Events 的報告「Weekly sales」（Sep 28 – Oct 4, 2026）已準備好。開啟即可下載 PDF。
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
 exports[`renderMessage: every kind in all 13 locales > attendees.message · ar 1`] = `
 {
   "subject": "Parking update",

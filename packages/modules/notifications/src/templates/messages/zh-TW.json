@@ -308,6 +308,21 @@
       "subject": "{org} 已刪除您的個人資料",
       "intro": "{org} 已依您的要求刪除您的個人資料。部分紀錄依法必須保留（例如供稅務使用的已付款訂單），但已移除您的姓名與電子郵件；收據列出這些紀錄及原因。這是關於此事的最後一封郵件。",
       "cta": "查看收據"
+    },
+    "alerts.metric": {
+      "subject": "提醒規則「{title}」已觸發",
+      "intro": "{reading, select, none {{org} 的提醒規則「{title}」仍處於觸發狀態。} other {{org} 的提醒規則「{title}」已觸發：最近 {windowDays, plural, other {# 天}}為 {reading}。}} 開啟以確認或暫緩提醒。",
+      "cta": "開啟提醒"
+    },
+    "alerts.metric-now": {
+      "subject": "提醒規則「{title}」已觸發",
+      "intro": "{reading, select, none {{org} 的提醒規則「{title}」仍處於觸發狀態。} other {{org} 的提醒規則「{title}」已觸發：最近 {windowDays, plural, other {# 天}}為 {reading}。}} 開啟以確認或暫緩提醒。",
+      "cta": "開啟提醒"
+    },
+    "analytics.report": {
+      "subject": "你的報告「{name}」：{period}",
+      "intro": "{org} 的報告「{name}」（{period}）已準備好。開啟即可下載 PDF。",
+      "cta": "下載 PDF"
     }
   },
   "roles": {

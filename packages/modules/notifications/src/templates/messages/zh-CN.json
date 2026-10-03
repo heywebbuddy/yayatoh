@@ -308,6 +308,21 @@
       "subject": "{org} 已删除您的个人数据",
       "intro": "{org} 已按您的要求删除您的个人数据。部分记录依法必须保留（例如用于税务的已付款订单），但已去除您的姓名和电子邮件；收据中列出了这些记录及原因。这是关于此事的最后一封邮件。",
       "cta": "查看收据"
+    },
+    "alerts.metric": {
+      "subject": "提醒规则“{title}”已触发",
+      "intro": "{reading, select, none {{org} 的提醒规则“{title}”仍处于触发状态。} other {{org} 的提醒规则“{title}”已触发：最近 {windowDays, plural, other {# 天}}为 {reading}。}} 打开以确认或暂缓提醒。",
+      "cta": "打开提醒"
+    },
+    "alerts.metric-now": {
+      "subject": "提醒规则“{title}”已触发",
+      "intro": "{reading, select, none {{org} 的提醒规则“{title}”仍处于触发状态。} other {{org} 的提醒规则“{title}”已触发：最近 {windowDays, plural, other {# 天}}为 {reading}。}} 打开以确认或暂缓提醒。",
+      "cta": "打开提醒"
+    },
+    "analytics.report": {
+      "subject": "你的报告“{name}”：{period}",
+      "intro": "{org} 的报告“{name}”（{period}）已准备好。打开即可下载 PDF。",
+      "cta": "下载 PDF"
     }
   },
   "roles": {

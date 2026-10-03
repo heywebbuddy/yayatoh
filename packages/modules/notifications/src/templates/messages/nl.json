@@ -308,6 +308,21 @@
       "subject": "{org} heeft je persoonsgegevens gewist",
       "intro": "{org} heeft je persoonsgegevens gewist zoals gevraagd. Sommige gegevens moeten wettelijk bewaard blijven (bijvoorbeeld betaalde bestellingen voor de belasting), zonder je naam en e-mail; het ontvangstbewijs noemt ze met de reden. Dit is de laatste e-mail hierover.",
       "cta": "Ontvangstbewijs bekijken"
+    },
+    "alerts.metric": {
+      "subject": "Waarschuwingsregel ‘{title}’ is afgegaan",
+      "intro": "{reading, select, none {Je waarschuwingsregel ‘{title}’ staat bij {org} nog steeds af.} other {Je waarschuwingsregel ‘{title}’ is afgegaan bij {org}: {reading} in {windowDays, plural, one {de afgelopen dag} other {de afgelopen # dagen}}.}} Open hem om hem te bevestigen of uit te stellen.",
+      "cta": "Waarschuwing openen"
+    },
+    "alerts.metric-now": {
+      "subject": "Waarschuwingsregel ‘{title}’ is afgegaan",
+      "intro": "{reading, select, none {Je waarschuwingsregel ‘{title}’ staat bij {org} nog steeds af.} other {Je waarschuwingsregel ‘{title}’ is afgegaan bij {org}: {reading} in {windowDays, plural, one {de afgelopen dag} other {de afgelopen # dagen}}.}} Open hem om hem te bevestigen of uit te stellen.",
+      "cta": "Waarschuwing openen"
+    },
+    "analytics.report": {
+      "subject": "Je rapport ‘{name}’: {period}",
+      "intro": "Het rapport ‘{name}’ van {org} voor {period} staat klaar. Open het om de pdf te downloaden.",
+      "cta": "Pdf downloaden"
     }
   },
   "roles": {

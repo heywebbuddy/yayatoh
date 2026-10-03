@@ -308,6 +308,21 @@
       "subject": "{org} apagou os seus dados pessoais",
       "intro": "{org} apagou os seus dados pessoais como pediu. Alguns registos têm de ser guardados por lei (por exemplo, pedidos pagos para efeitos fiscais), sem o seu nome nem e-mail; o recibo indica-os com o motivo. Este é o último e-mail sobre o assunto.",
       "cta": "Ver o recibo"
+    },
+    "alerts.metric": {
+      "subject": "A regra de alerta “{title}” foi acionada",
+      "intro": "{reading, select, none {Sua regra de alerta “{title}” continua acionada em {org}.} other {Sua regra de alerta “{title}” foi acionada em {org}: {reading} {windowDays, plural, one {no último dia} other {nos últimos # dias}}.}} Abra para confirmar ou adiar.",
+      "cta": "Abrir o alerta"
+    },
+    "alerts.metric-now": {
+      "subject": "A regra de alerta “{title}” foi acionada",
+      "intro": "{reading, select, none {Sua regra de alerta “{title}” continua acionada em {org}.} other {Sua regra de alerta “{title}” foi acionada em {org}: {reading} {windowDays, plural, one {no último dia} other {nos últimos # dias}}.}} Abra para confirmar ou adiar.",
+      "cta": "Abrir o alerta"
+    },
+    "analytics.report": {
+      "subject": "Seu relatório “{name}”: {period}",
+      "intro": "O relatório “{name}” de {org} para {period} está pronto. Abra para baixar o PDF.",
+      "cta": "Baixar o PDF"
     }
   },
   "roles": {

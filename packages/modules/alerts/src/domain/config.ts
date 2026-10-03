@@ -58,13 +58,20 @@ export const RULE_KEYS = [
   // Batch 3e merge: failed campaign sends (M3.6b) and dispute evidence deadlines (M3.10c).
   'campaignFailed',
   'disputeDeadline',
+  // M6.2b: organizer-authored alert rules (measured by analytics, delivered through the outbox),
+  // one alert per rule (scope `m:{ruleId}`); money rules only reach members who see finance.
+  'metricRule',
+  'metricRuleFinance',
 ] as const;
 export type RuleKey = (typeof RULE_KEYS)[number];
 
 export interface RuleDef {
   readonly key: RuleKey;
-  /** Event rules are evaluated per event (grouped by rule + event); org rules once per org. */
-  readonly scope: 'event' | 'org';
+  /**
+   * Event rules are evaluated per event (grouped by rule + event); org rules once per org;
+   * `custom` (M6.2b): organizer rules, one alert per rule, driven by the analytics outbox event.
+   */
+  readonly scope: 'event' | 'org' | 'custom';
   readonly category: AlertCategory;
   /** Who may see the alert (and so be told about it). */
   readonly permission: string;
@@ -77,7 +84,7 @@ export interface RuleDef {
 
 const rule = (
   key: RuleKey,
-  scope: 'event' | 'org',
+  scope: 'event' | 'org' | 'custom',
   category: AlertCategory,
   permission: string,
   fix: string,
@@ -129,7 +136,13 @@ export const RULES: Readonly<Record<RuleKey, RuleDef>> = {
   automationFailed: rule('automationFailed', 'org', 'messaging', 'messages:read', '/messaging'),
   campaignFailed: rule('campaignFailed', 'org', 'messaging', 'marketing:read', '/campaigns'),
   disputeDeadline: rule('disputeDeadline', 'org', 'payments', 'finance:read', '/disputes'),
+  metricRule: rule('metricRule', 'custom', 'sales', 'orders:read', '/analytics/alerts'),
+  metricRuleFinance: rule('metricRuleFinance', 'custom', 'payments', 'finance:read', '/analytics/alerts'),
 };
+
+/** M6.2b: the custom rules (organizer-authored) and the scope key of one rule's alert. */
+export const METRIC_RULES = ['metricRule', 'metricRuleFinance'] as const satisfies readonly RuleKey[];
+export const metricScopeKey = (ruleId: string) => `m:${ruleId}`;
 
 export const isRuleKey = (v: string): v is RuleKey => (RULE_KEYS as readonly string[]).includes(v);
 

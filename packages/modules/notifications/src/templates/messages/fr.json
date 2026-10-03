@@ -308,6 +308,21 @@
       "subject": "{org} a effacé vos données personnelles",
       "intro": "{org} a effacé vos données personnelles comme demandé. Certains documents doivent être conservés par la loi (par exemple les commandes payées, pour les impôts), sans votre nom ni votre e-mail ; le reçu les liste avec la raison. C’est le dernier e-mail à ce sujet.",
       "cta": "Voir le reçu"
+    },
+    "alerts.metric": {
+      "subject": "La règle d’alerte « {title} » s’est déclenchée",
+      "intro": "{reading, select, none {Votre règle d’alerte « {title} » est toujours déclenchée chez {org}.} other {Votre règle d’alerte « {title} » s’est déclenchée chez {org} : {reading} sur {windowDays, plural, one {le dernier jour} other {les # derniers jours}}.}} Ouvrez-la pour la confirmer ou la mettre en pause.",
+      "cta": "Ouvrir l’alerte"
+    },
+    "alerts.metric-now": {
+      "subject": "La règle d’alerte « {title} » s’est déclenchée",
+      "intro": "{reading, select, none {Votre règle d’alerte « {title} » est toujours déclenchée chez {org}.} other {Votre règle d’alerte « {title} » s’est déclenchée chez {org} : {reading} sur {windowDays, plural, one {le dernier jour} other {les # derniers jours}}.}} Ouvrez-la pour la confirmer ou la mettre en pause.",
+      "cta": "Ouvrir l’alerte"
+    },
+    "analytics.report": {
+      "subject": "Votre rapport « {name} » : {period}",
+      "intro": "Le rapport « {name} » de {org} pour {period} est prêt. Ouvrez-le pour télécharger le PDF.",
+      "cta": "Télécharger le PDF"
     }
   },
   "roles": {

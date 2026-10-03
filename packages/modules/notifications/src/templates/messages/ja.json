@@ -308,6 +308,21 @@
       "subject": "{org}があなたの個人データを消去しました",
       "intro": "{org}はご依頼どおり個人データを消去しました。一部の記録は法律により保存が必要です（税務上の支払済み注文など）が、氏名とメールアドレスは削除されています。受領書にその一覧と理由を記載しています。この件のご連絡はこれが最後です。",
       "cta": "受領書を見る"
+    },
+    "alerts.metric": {
+      "subject": "アラートルール「{title}」が発動しました",
+      "intro": "{reading, select, none {{org} のアラートルール「{title}」は発動中のままです。} other {{org} のアラートルール「{title}」が発動しました：直近 {windowDays, plural, other {# 日間}}で {reading}。}} 開いて確認するか、スヌーズしてください。",
+      "cta": "アラートを開く"
+    },
+    "alerts.metric-now": {
+      "subject": "アラートルール「{title}」が発動しました",
+      "intro": "{reading, select, none {{org} のアラートルール「{title}」は発動中のままです。} other {{org} のアラートルール「{title}」が発動しました：直近 {windowDays, plural, other {# 日間}}で {reading}。}} 開いて確認するか、スヌーズしてください。",
+      "cta": "アラートを開く"
+    },
+    "analytics.report": {
+      "subject": "レポート「{name}」：{period}",
+      "intro": "{org} のレポート「{name}」（{period}）の準備ができました。開いて PDF をダウンロードしてください。",
+      "cta": "PDF をダウンロード"
     }
   },
   "roles": {

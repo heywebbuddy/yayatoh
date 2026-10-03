@@ -8,6 +8,7 @@ import { and, isNotNull, lt, ne } from 'drizzle-orm';
 import { z } from 'zod';
 import { eventMode } from './domain/config.ts';
 import { type AlertChange, type AlertDeps, evaluateEventAlertsTx, evaluateOrgAlertsTx } from './engine.ts';
+import { applyMetricRuleTx, METRIC_RULE_EVENT, sweepMetricAlertsTx } from './metric-rules.ts';
 import { alerts, type SignalKind, signals } from './schema.ts';
 
 /** How long a reported failure is kept (the rules count the last 24 hours). */
@@ -64,6 +65,8 @@ export const ALERT_TRIGGER_EVENTS = [
   'automations.journey_step_failed@1',
   'campaigns.send_failed@1',
   'payments.dispute_deadline_approaching@1',
+  // M6.2b: an organizer-authored rule changed state (analytics, same tier, through the outbox).
+  'analytics.alert_rule_evaluated@1',
 ] as const;
 
 /** Outbox events that are themselves what an org rule counts (one `alerts.signals` row each). */
@@ -134,6 +137,10 @@ export function alertEvaluator(deps: AlertDeps): Subscriber {
     events: ALERT_TRIGGER_EVENTS,
     handle: async (tx, event) => {
       const ctx = createCtx({ orgId: event.orgId, actor: { type: 'system', name: 'alerts.evaluator' } });
+      if (event.type === METRIC_RULE_EVENT) {
+        await applyMetricRuleTx(tx, ctx, event, deps);
+        return;
+      }
       const kind = SIGNAL_OF[event.type];
       if (kind)
         await tx
@@ -204,7 +211,11 @@ export async function evaluateOrgNow(
       ...(await withTenant(ctx, async (tx) => {
         // Signals outlive the rules' 24-hour window by a few days, then go (batch 3e).
         await tx.delete(signals).where(lt(signals.occurredAt, new Date(now.getTime() - SIGNAL_TTL_MS)));
-        return evaluateOrgAlertsTx(tx, ctx, deps, now);
+        return [
+          ...(await evaluateOrgAlertsTx(tx, ctx, deps, now)),
+          // M6.2b: organizer rules' snoozes and acknowledgements time out like the others.
+          ...(await sweepMetricAlertsTx(tx, ctx, deps, now)),
+        ];
       })),
     );
   return changes;

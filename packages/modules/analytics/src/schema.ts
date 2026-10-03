@@ -320,6 +320,8 @@ export const reportSchedules = tenantTable(
     eventId: uuid('event_id'),
     recipients: uuid('recipients').array().notNull(),
     enabled: boolean('enabled').notNull().default(true),
+    /** Periods due before this are never sent (created, or switched back on). */
+    activeSince: ts('active_since').notNull().defaultNow(),
     createdBy: uuid('created_by').notNull(),
   },
   (t) => [
@@ -385,7 +387,7 @@ export const reportFiles = tenantTable(
       columns: [t.orgId, t.runId],
       foreignColumns: [reportRuns.orgId, reportRuns.id],
     }).onDelete('cascade'),
-    check('report_files_locale_check', sql`locale ~ '^[a-z]{2}$'`),
+    check('report_files_locale_check', sql`locale ~ '^[a-z]{2}(-[A-Z]{2})?$'`),
     check('report_files_bytes_check', sql`bytes between 1 and 20000000`),
   ],
 );

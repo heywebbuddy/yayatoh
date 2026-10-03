@@ -28,6 +28,12 @@ export interface AlertDeps {
   readonly notifier: Notifier;
 }
 
+/** M6.2b: a custom rule's message (its notification kind and params). */
+export interface AlertMessage {
+  readonly kind: string;
+  readonly params: Readonly<Record<string, string | number>>;
+}
+
 /** One alert that changed in an evaluation (for callers, tests and logs). */
 export interface AlertChange {
   readonly alertId: string;
@@ -107,6 +113,8 @@ async function notifyTx(
   event: EventDto | null,
   deps: AlertDeps,
   escalate: { liveCritical: boolean; now: Date },
+  /** M6.2b: a custom rule's own message kind and params (in-app, email and push; no texts). */
+  message?: AlertMessage,
 ): Promise<number> {
   const rule = RULES[row.rule as RuleKey];
   const saved = await savedRoutingTx(tx);
@@ -128,6 +136,8 @@ async function notifyTx(
     eventName: event?.name ?? 'none',
   };
   const href = fixPath(row.rule as RuleKey, event?.slug ?? null);
+  const kind = message?.kind ?? ALERT_KIND;
+  const sent = message ? { ...message.params } : params;
   let queued = 0;
   for (const m of await memberUserIdsTx(tx, ORG_ROLES)) {
     if (!roleCan(m.role as (typeof ORG_ROLES)[number], rule.permission)) continue;
@@ -137,6 +147,20 @@ async function notifyTx(
       doorOnly !== undefined && (!doorOnly || DOOR_ONLY_CATEGORIES.has(rule.category as AlertCategory));
     const channels = escalated ? [...new Set([...routed, 'in_app', 'push', 'sms'] as const)] : routed;
     const now = channels.filter((c) => c !== 'sms');
+    if (message) {
+      if (now.length)
+        queued += (
+          await deps.notifier.enqueue(tx, {
+            kind,
+            to: { userId: m.userId },
+            channels: now,
+            params: { ...sent, _href: href },
+            dedupeKey: `alert:${row.id}:${row.notifyCount}:${m.userId}`,
+            href,
+          })
+        ).queued;
+      continue;
+    }
     const key = `alert:${row.id}:${row.notifyCount}:${m.userId}`;
     if (now.length)
       queued += (
@@ -172,16 +196,24 @@ async function notifyTx(
  * the scope's advisory lock, so concurrent evaluations (the subscriber and the sweep) serialize;
  * every step is recomputed from the sources, so evaluating twice changes nothing.
  */
-async function reconcileTx(
+export async function reconcileTx(
   tx: TenantTx,
   ctx: Ctx,
-  scope: { eventId: string | null; event: EventDto | null; rules: readonly RuleKey[] },
+  scope: {
+    eventId: string | null;
+    event: EventDto | null;
+    rules: readonly RuleKey[];
+    /** M6.2b: a custom rule's scope (`m:{ruleId}`), its title and its own message. */
+    scopeKey?: string;
+    title?: string | null;
+    message?: AlertMessage;
+  },
   firing: Partial<Record<RuleKey, Firing>>,
   deps: AlertDeps,
   now: Date,
 ): Promise<AlertChange[]> {
   const orgId = requireOrg(ctx);
-  const scopeKey = scope.eventId ?? 'org';
+  const scopeKey = scope.scopeKey ?? scope.eventId ?? 'org';
   const stored = new Map(
     (await tx.select().from(alerts).where(eq(alerts.scopeKey, scopeKey))).map((r) => [r.rule, r]),
   );
@@ -222,6 +254,7 @@ async function reconcileTx(
           firstFiredAt: now,
           openedAt: now,
           evaluatedAt: now,
+          title: scope.title ?? null,
         })
         .returning();
       if (!inserted) continue;
@@ -230,6 +263,7 @@ async function reconcileTx(
     } else if (s) {
       const state = stateAfter(s.state as AlertState, plan) ?? s.state;
       const set: Partial<typeof alerts.$inferInsert> = { state, evaluatedAt: now, updatedAt: now };
+      if (scope.title) set.title = scope.title;
       if (f) Object.assign(set, { count: f.count, severity: f.severity, params: { ...f.params } });
       if (plan.kind === 'resolve')
         Object.assign(set, {
@@ -260,7 +294,14 @@ async function reconcileTx(
     } else continue;
     let notified = false;
     if (planNotifies(plan)) {
-      await notifyTx(tx, row, scope.event, deps, { liveCritical: f?.liveCritical ?? false, now });
+      await notifyTx(
+        tx,
+        row,
+        scope.event,
+        deps,
+        { liveCritical: f?.liveCritical ?? false, now },
+        scope.message,
+      );
       const [after] = await tx
         .update(alerts)
         .set({ lastNotifiedAt: now, notifyCount: row.notifyCount + 1 })

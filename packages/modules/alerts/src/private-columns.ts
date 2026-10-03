@@ -8,11 +8,15 @@ export const privateColumns = columnPrivacy('alerts', {
   // Rule keys, groups, severities and states are fixed vocabularies; `params` holds numbers only.
   alerts: {
     rule: 'vocab',
-    scope_key: internal('none', { why: 'the event id or "org" by CHECK constraint; no free text' }),
+    scope_key: internal('none', {
+      why: 'the event id, "org" or "m:{rule id}" (M6.2b) by CHECK constraint; no free text',
+    }),
     category: 'vocab',
     severity: 'vocab',
     state: 'vocab',
     params: internal(),
+    // M6.2b: an organizer rule's name (console-only).
+    title: internal(),
   },
   alert_history: { action: 'vocab', state: 'vocab' },
   signals: { kind: 'vocab' },

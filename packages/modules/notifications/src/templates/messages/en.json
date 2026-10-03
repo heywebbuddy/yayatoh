@@ -308,6 +308,21 @@
       "subject": "{org} erased your personal data",
       "intro": "{org} erased your personal data as you asked. Some records must be kept by law (for example paid orders for tax), with your name and email removed; the receipt lists them and why. This is the last email you will get about it.",
       "cta": "View the receipt"
+    },
+    "alerts.metric": {
+      "subject": "Alert rule “{title}” is firing",
+      "intro": "{reading, select, none {Your alert rule “{title}” is still firing at {org}.} other {Your alert rule “{title}” is firing at {org}: {reading} over the last {windowDays, plural, one {day} other {# days}}.}} Open it to acknowledge or snooze it.",
+      "cta": "Open the alert"
+    },
+    "alerts.metric-now": {
+      "subject": "Alert rule “{title}” is firing",
+      "intro": "{reading, select, none {Your alert rule “{title}” is still firing at {org}.} other {Your alert rule “{title}” is firing at {org}: {reading} over the last {windowDays, plural, one {day} other {# days}}.}} Open it to acknowledge or snooze it.",
+      "cta": "Open the alert"
+    },
+    "analytics.report": {
+      "subject": "Your report “{name}”: {period}",
+      "intro": "The {org} report “{name}” for {period} is ready. Open it to download the PDF.",
+      "cta": "Download the PDF"
     }
   },
   "roles": {
