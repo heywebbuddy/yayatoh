@@ -9,7 +9,7 @@ import { SiteFooter, SiteHeader } from '@/components/marketplace/site-chrome.tsx
 import { TagFilter } from '@/components/marketplace/tag-filter.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { originFor } from '@/lib/hosts.ts';
-import { cachedEntries } from '@/server/cms.ts';
+import { cachedContactPage, cachedEntries } from '@/server/cms.ts';
 import { pageLocale } from '@/server/locale.ts';
 import { cachedListingTags, cachedOrganizerListings, cachedTenantListings } from '@/server/public-data.ts';
 import { requestHost } from '@/server/request-origin.ts';
@@ -61,6 +61,8 @@ export default async function OrganizerPage({ params, searchParams }: Props) {
   const path = req.kind === 'marketplace' ? `/o/${o.slug}` : `/organizers/${o.slug}`;
   // M1.4g: the organizer's blog, when it has published posts.
   const posts = await cachedEntries(o.orgId, 'post', 1);
+  // U10: the contact page, while the organizer has it on.
+  const contact = await cachedContactPage(o.orgId);
   const tc = await getTranslations('cmsPublic');
   return (
     <div className="min-h-dvh bg-surface">
@@ -75,6 +77,11 @@ export default async function OrganizerPage({ params, searchParams }: Props) {
           {posts.items.length > 0 ? (
             <Link href={`${path}/blogs`} className="self-start text-body underline">
               {tc('blog')}
+            </Link>
+          ) : null}
+          {contact ? (
+            <Link href={`${path}/contact`} className="self-start text-body underline">
+              {tc('contact')}
             </Link>
           ) : null}
         </OrgHero>

@@ -6,6 +6,7 @@ import { erasedAddressesTx, normalizeAddress, signLinkToken } from '@yayatoh/pla
 import { activeSuspensionsTx, organizationBrandTx } from '@yayatoh/tenancy';
 import { and, asc, desc, eq, inArray, isNull, lte, or } from 'drizzle-orm';
 import { erasedAddressAllows, erasedMailClass, suppressedReason } from './delivery-rules.ts';
+import { emailIdentityTx } from './email-identity.ts';
 import { fallbackTx, isFallbackReason } from './fallback.ts';
 import { kindOf, type MessageKind, whatsappCategoryOf } from './kinds.ts';
 import { decryptParams } from './notifier.ts';
@@ -128,6 +129,8 @@ export async function dispatchDueTx(
   const paused = (await activeSuspensionsTx(tx)).has('pause_messaging');
   // The org's own senders (M3.5b): verified sending domain, active 10DLC service, WhatsApp route.
   const senders = await orgSendersTx(tx);
+  // U10: the org's From name and Reply-To on every email it sends.
+  const identity = await emailIdentityTx(tx);
   // Policy gate v2 (M3.5a): quotas and caps loaded once for this org's batch.
   const gate = createGateState(orgId, org.timezone, now);
   const needEmails = due.filter((r) => r.channel === 'email' && !r.recipientEmail && r.recipientUserId);
@@ -393,7 +396,8 @@ export async function dispatchDueTx(
           headers['List-Unsubscribe-Post'] = 'List-Unsubscribe=One-Click';
         }
         ({ providerMessageId, provider } = await deps.transports.email.send({
-          from: { name: org.name, address: PLATFORM_SENDER },
+          from: { name: identity.fromName ?? org.name, address: PLATFORM_SENDER },
+          ...(identity.replyTo ? { replyTo: identity.replyTo } : {}),
           to: email,
           subject: rendered.subject,
           html: rendered.html,

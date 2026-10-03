@@ -214,6 +214,9 @@
         "request-code": "プライバシーリクエストのコード",
         "archive-ready": "個人データのアーカイブ準備完了",
         "erasure-done": "消去の受領書"
+      },
+      "cms": {
+        "contact_message": "お問い合わせページからのメッセージ"
       }
     },
     "status": {
@@ -381,6 +384,8 @@
     "webhooks": "Webhook",
     "sandboxes": "サンドボックス",
     "notifications": "通知",
+    "mediaLibrary": "メディアライブラリ",
+    "storage": "ストレージ",
     "moneyOverview": "概要",
     "salesByEvent": "イベント別売上",
     "fees": "手数料"
@@ -4655,7 +4660,8 @@
       "logo": "ロゴ",
       "speaker": "スピーカーの写真",
       "exhibitor": "出展者のロゴ",
-      "sponsor": "スポンサーのロゴ"
+      "sponsor": "スポンサーのロゴ",
+      "library": "ライブラリにアップロード"
     },
     "hint": {
       "cover": "イベントページの上部、イベントカード、リンクのプレビューに表示されます。",
@@ -4664,7 +4670,8 @@
       "logo": "コンソール、主催者ページとサイト、メールに表示されます。",
       "speaker": "イベントページ、スピーカーのページ、アジェンダのセッション横に表示されます。",
       "exhibitor": "イベントページで出展者と一緒に表示されます。SVG ロゴはどのサイズでも鮮明です。",
-      "sponsor": "イベントページのスポンサーのランクに表示されます（上位ランクほどロゴが大きくなります）。SVG ロゴは鮮明に表示されます。"
+      "sponsor": "イベントページのスポンサーのランクに表示されます（上位ランクほどロゴが大きくなります）。SVG ロゴは鮮明に表示されます。",
+      "library": "ここにアップロードした画像は、イベント、会場、スピーカー、ロゴに再アップロードなしで使えます。"
     },
     "empty": {
       "cover": "カバー画像はまだありません。",
@@ -4673,7 +4680,8 @@
       "logo": "ロゴはまだありません。",
       "speaker": "写真はまだありません。",
       "exhibitor": "ロゴはまだありません。",
-      "sponsor": "ロゴはまだありません。"
+      "sponsor": "ロゴはまだありません。",
+      "library": "ライブラリにはまだ画像がありません。"
     },
     "count": "{count, plural, other {#枚}}／{max}枚",
     "listLabel": "現在の画像",
@@ -5304,7 +5312,8 @@
     "tabsLabel": "コンテンツの種類",
     "tabs": {
       "post": "ブログ記事",
-      "page": "ページ"
+      "page": "ページ",
+      "contact": "お問い合わせページ"
     },
     "kind": {
       "post": "ブログ記事",
@@ -5387,7 +5396,8 @@
     "emptyDescription": "{org} はまだここに何も公開していません。",
     "posts": "記事",
     "by": "{name}",
-    "allPosts": "すべての記事"
+    "allPosts": "すべての記事",
+    "contact": "お問い合わせ"
   },
   "reviews": {
     "ratingLabel": "5 段階中 {rating} の評価",
@@ -15966,5 +15976,191 @@
       "step2": "手数料は注文ごとに差し引かれ、各支払いに表示されます。",
       "step3": "返金により手数料が返還された場合は、「返還された手数料」に表示されます。"
     }
+  },
+  "mediaLibrary": {
+    "title": "メディアライブラリ",
+    "description": "組織がアップロードしたすべての画像です。再アップロードせずにどこでも使えます。",
+    "upload": "画像をアップロード",
+    "uploadTitle": "ライブラリにアップロード",
+    "summaryLabel": "ライブラリの概要",
+    "summary": "画像: {images} · 再利用: {reuses} · ストレージ: {used} / {limit}",
+    "storageLink": "ストレージを見る",
+    "usedPercent": "ストレージの {percent}% を使用中",
+    "filtersLabel": "表示",
+    "filters": {
+      "all": "すべての画像",
+      "unused": "どこにも使われていない画像"
+    },
+    "emptyTitle": "まだ画像がありません",
+    "emptyDescription": "ロゴ、会場の写真、イベントのアートワークを一度アップロードすれば、どの画像欄からでも選べます。",
+    "emptyViewer": "チームがアップロードした画像がここに表示されます。",
+    "emptyUnusedTitle": "すべての画像が使われています",
+    "emptyUnusedDescription": "どこにも使われなくなった画像がここに表示され、削除できます。",
+    "findOwner": "アップロードできる人を見る",
+    "listLabel": "ライブラリの画像",
+    "decorativeName": "装飾画像",
+    "meta": "{size} · {width} × {height} px · {type}",
+    "usedIn": "使用場所",
+    "usedInFor": "{name} の使用場所",
+    "unused": "未使用",
+    "places": {
+      "event": "イベント: {name}",
+      "venue": "会場: {name}",
+      "org": "組織のロゴ",
+      "speaker": "スピーカー: {name}",
+      "exhibitor": "出展者: {name}",
+      "sponsor": "スポンサー: {name}",
+      "library": "ライブラリ"
+    },
+    "delete": "削除",
+    "deleteFor": "{name} を削除",
+    "confirmDelete": "この画像を完全に削除しますか？どこにも使われていません。",
+    "deleteForGood": "完全に削除",
+    "cancel": "キャンセル",
+    "inUseNote": "使用中です。削除する前に、使われている場所から外してください。",
+    "picker": {
+      "open": "メディアライブラリから選ぶ",
+      "hint": "組織がすでに持っている画像を使います。再アップロードはしません。",
+      "loading": "ライブラリを読み込み中…",
+      "empty": "ライブラリにはまだ画像がありません。",
+      "openLibrary": "メディアライブラリを開く",
+      "choose": "画像を選ぶ",
+      "noAlt": "装飾画像",
+      "alt": "この場所の代替テキスト",
+      "altHint": "画像を見られない人のために内容を説明してください。",
+      "altRequired": "画像を説明するか、装飾画像に設定してください。",
+      "decorative": "装飾（説明は不要）",
+      "use": "この画像を使う",
+      "placed": "画像を追加しました。",
+      "alreadyHere": "この画像はすでにここにあります。",
+      "noChoice": "まず画像を選んでください。"
+    }
+  },
+  "storage": {
+    "title": "ストレージ",
+    "description": "画像が使っている容量です。ストレージは Yayatoh が管理するため、接続するものはありません。",
+    "openLibrary": "メディアライブラリを開く",
+    "summaryLabel": "ストレージの概要",
+    "used": "使用量",
+    "ofDefault": "/ {limit}（標準）",
+    "ofCustom": "/ {limit}（ご契約プラン）",
+    "usedPercent": "ストレージの {percent}% を使用中",
+    "free": "空き",
+    "freeSub": "再利用した画像は追加の容量を使いません。",
+    "images": "画像",
+    "imagesSub": "保存ファイル: {files} · 再利用: {reuses}",
+    "nearlyFull": "ストレージがほぼいっぱいです。使わない画像を削除するか、容量追加について Yayatoh サポートにお問い合わせください。",
+    "byKindTitle": "容量の内訳",
+    "kind": "種類",
+    "imagesCol": "画像",
+    "size": "サイズ",
+    "share": "割合",
+    "shareOf": "{kind}: 使用容量の {percent}%",
+    "kinds": {
+      "events": "イベント画像",
+      "venues": "会場の写真",
+      "program": "スピーカー・出展者・スポンサー",
+      "logo": "組織のロゴ",
+      "library": "ライブラリのみ"
+    },
+    "portalFiles": "スピーカーポータルの資料は別に保存され、容量に含まれません: {files} ファイル、{size}。",
+    "largestTitle": "サイズの大きい画像",
+    "emptyTitle": "まだ画像がありません",
+    "emptyDescription": "画像と使用容量がここに表示されます。",
+    "emptyAction": "画像をアップロード",
+    "image": "画像",
+    "decorative": "装飾画像",
+    "usedIn": "使用場所",
+    "unused": "未使用",
+    "places": "使用箇所: {count}",
+    "managedNote": "容量が足りませんか？Yayatoh サポートにお問い合わせください。独自のストレージやメールのアカウントは不要です。"
+  },
+  "emailIdentity": {
+    "title": "メールの見え方",
+    "description": "組織が送るすべてのメール（チケット、リマインダー、キャンペーン、メッセージ）で、受信者に表示される名前と返信先です。",
+    "formLabel": "差出人名と返信先",
+    "fromName": "差出人名",
+    "fromNameHint": "空欄なら {org} を使います。Web アドレスやメールアドレスは使えません。",
+    "replyTo": "返信先アドレス（Reply-To）",
+    "replyToHint": "返信はここに届きます。空欄なら差出人アドレスに届きます。",
+    "errors": {
+      "too_long": "80 文字以内にしてください。",
+      "has_address": "名前にはメールアドレスや @ < > \" の文字を含められません。",
+      "has_domain": "名前を Web アドレス（example.com など）のようにはできません。",
+      "invalid_email": "name@example.com の形式で入力してください。",
+      "platform_address": "Yayatoh のアドレスではなく、ご自身のアドレスを使ってください。"
+    },
+    "previewTitle": "受信トレイでの表示",
+    "previewReplyTo": "返信先: {address}",
+    "previewNoReplyTo": "返信は差出人アドレスに届きます",
+    "saved": "保存しました。新しいメールはすべてこの設定を使います。",
+    "fixErrors": "強調表示された欄を確認してください。",
+    "done": {
+      "forbidden": "差出人名と返信先を変更できるのはオーナーと管理者だけです。",
+      "internal": "問題が発生しました。もう一度お試しください。"
+    },
+    "save": "保存",
+    "readOnly": "差出人名と返信先を変更できるのはオーナーと管理者だけです。"
+  },
+  "orgContact": {
+    "title": "{org} へのお問い合わせ",
+    "defaultIntro": "{org} にメッセージを送れます。返信はメールで届きます。",
+    "formLabel": "{org} へのメッセージ",
+    "honeypot": "この欄は空のままにしてください",
+    "fields": {
+      "name": "お名前",
+      "email": "メールアドレス",
+      "message": "メッセージ"
+    },
+    "emailHint": "返信を受け取るために使います。",
+    "messageHint": "10 文字以上。",
+    "consent": "このメッセージへの返信のために、{org} が私の名前とメールアドレスを使うことに同意します。",
+    "errors": {
+      "name": "お名前を入力してください。",
+      "email": "name@example.com の形式で入力してください。",
+      "message": "10 文字以上入力してください。",
+      "consent": "返信を受け取るにはチェックを入れてください。",
+      "human": "人間であることを確認してください。"
+    },
+    "rateLimited": "送信が多すぎます。{minutes} 分後にもう一度お試しください。",
+    "tooFast": "送信が速すぎます。少し待ってからもう一度送信してください。",
+    "expired": "このページは長時間開かれていました。再読み込みしてから送信してください。",
+    "fixErrors": "強調表示された欄を確認してください。",
+    "submit": "メッセージを送信",
+    "sentTitle": "送信しました",
+    "sentBody": "ありがとうございます。{org} からメールで返信があります。"
+  },
+  "orgContactConsole": {
+    "title": "お問い合わせページ",
+    "description": "サイト上のお問い合わせフォームです。メッセージは通知に届き、あなたのメールアドレスは表示されません。",
+    "settingsTitle": "お問い合わせページ",
+    "settingsLabel": "お問い合わせページの設定",
+    "enabled": "サイトにお問い合わせページを表示する",
+    "enabledHint": "サイトのメニューに「お問い合わせ」を追加します。",
+    "intro": "フォームの上の文章",
+    "introHint": "任意、500 文字まで。",
+    "introError": "500 文字以内にしてください。",
+    "savedOn": "保存しました。お問い合わせページを公開中です。",
+    "savedOff": "保存しました。お問い合わせページはオフです。",
+    "save": "保存",
+    "liveAt": "公開先",
+    "offNote": "ページはオフです。訪問者はメッセージを送れません。",
+    "privacyNote": "訪問者は、返信のために名前とメールアドレスが使われることに同意します。スパムは届く前に除外されます。",
+    "messagesTitle": "メッセージ",
+    "newCount": "新着: {count}",
+    "messagesHidden": "メッセージには訪問者の情報が含まれるため、サイトを編集できる人だけが読めます。",
+    "emptyTitle": "まだメッセージはありません",
+    "emptyOn": "お問い合わせページからのメッセージは、ここと通知に表示されます。",
+    "emptyOff": "メッセージを受け取るには、お問い合わせページをオンにしてください。",
+    "openPage": "お問い合わせページを開く",
+    "turnOn": "お問い合わせページをオンにする",
+    "from": "差出人",
+    "message": "メッセージ",
+    "received": "受信日時",
+    "status": "状態",
+    "statusNew": "新着",
+    "statusHandled": "対応済み",
+    "markHandled": "対応済みにする",
+    "markHandledFor": "{name} さんのメッセージを対応済みにする"
   }
 }

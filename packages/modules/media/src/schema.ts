@@ -16,10 +16,11 @@ import {
 
 export const mediaSchema = pgSchema('media');
 
-export const OWNER_TYPES = ['event', 'venue', 'org', 'speaker', 'exhibitor', 'sponsor'] as const;
+/** U10: `library` holds images uploaded straight to the org's media library (owner id = the org). */
+export const OWNER_TYPES = ['event', 'venue', 'org', 'speaker', 'exhibitor', 'sponsor', 'library'] as const;
 export type OwnerType = (typeof OWNER_TYPES)[number];
 /** `floorplan`: an event's floor plan images, drawn under its seating plans (M1.7g). */
-export const SLOTS = ['cover', 'gallery', 'photo', 'logo', 'floorplan'] as const;
+export const SLOTS = ['cover', 'gallery', 'photo', 'logo', 'floorplan', 'library'] as const;
 export type Slot = (typeof SLOTS)[number];
 
 const list = (col: string, values: readonly string[]) =>
@@ -54,6 +55,12 @@ export const assets = tenantTable(
     /** Stored bytes across all variants (counts against the org's quota). */
     bytes: bigint('bytes', { mode: 'number' }).notNull(),
     createdBy: uuid('created_by'),
+    /**
+     * U10 media library: a reuse of another image of the org. The reuse is its own placement
+     * (owner, slot, alt text) with variant rows that name the source's files; nothing is stored
+     * twice and its `bytes` are 0. Always the original (never a reuse of a reuse).
+     */
+    sourceAssetId: uuid('source_asset_id'),
   },
   (t) => [
     index('assets_org_owner_idx').on(t.orgId, t.ownerType, t.ownerId, t.slot, t.position),
@@ -66,13 +73,24 @@ export const assets = tenantTable(
     check('assets_slot_check', list('slot', SLOTS)),
     check(
       'assets_owner_slot_check',
-      sql`(owner_type = 'event' and slot in ('cover', 'gallery', 'floorplan')) or (owner_type = 'venue' and slot = 'photo') or (owner_type = 'org' and slot = 'logo' and owner_id = org_id) or (owner_type = 'speaker' and slot = 'photo') or (owner_type in ('exhibitor', 'sponsor') and slot = 'logo')`,
+      sql`(owner_type = 'event' and slot in ('cover', 'gallery', 'floorplan')) or (owner_type = 'venue' and slot = 'photo') or (owner_type = 'org' and slot = 'logo' and owner_id = org_id) or (owner_type = 'speaker' and slot = 'photo') or (owner_type in ('exhibitor', 'sponsor') and slot = 'logo') or (owner_type = 'library' and slot = 'library' and owner_id = org_id)`,
     ),
     check('assets_source_type_check', sql`source_type in ('jpeg', 'png', 'gif', 'webp', 'avif', 'svg')`),
     check('assets_dimensions_check', sql`width > 0 and height > 0`),
     check('assets_bytes_check', sql`bytes >= 0`),
     check('assets_alt_check', sql`decorative or (alt is not null and length(btrim(alt)) between 1 and 300)`),
     check('assets_position_check', sql`position >= 0`),
+    // U10: a reuse points at an original of the same org; the original can't go while reused.
+    foreignKey({
+      name: 'assets_source_fk',
+      columns: [t.orgId, t.sourceAssetId],
+      foreignColumns: [t.orgId, t.id],
+    }).onDelete('restrict'),
+    index('assets_org_source_idx').on(t.orgId, t.sourceAssetId).where(sql`source_asset_id is not null`),
+    check(
+      'assets_source_check',
+      sql`source_asset_id is null or (source_asset_id <> id and bytes = 0 and owner_type <> 'library')`,
+    ),
   ],
 );
 

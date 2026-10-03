@@ -74,11 +74,13 @@ import {
   createHelpArticleCommand,
   createHelpCategoryCommand,
   createSiteSectionCommand,
+  setContactPageCommand,
   setEntryStatusCommand,
   setHelpArticleStatusCommand,
   setSiteSectionStatusCommand,
   submitContactRequestCommand,
   submitHelpFeedbackCommand,
+  submitOrgContactCommand,
 } from '@yayatoh/cms';
 import {
   createDisplayLinkCommand,
@@ -193,7 +195,13 @@ import {
   setAttributionWindowCommand,
 } from '@yayatoh/marketing';
 import { addLegacyRedirectCommand, catchUpListings, updateSiteSettingsCommand } from '@yayatoh/marketplace';
-import { uploadLogo, uploadMedia, uploadProgramImage, uploadSpeakerPortalFile } from '@yayatoh/media';
+import {
+  reuseMedia,
+  uploadLogo,
+  uploadMedia,
+  uploadProgramImage,
+  uploadSpeakerPortalFile,
+} from '@yayatoh/media';
 import {
   announcementMailer,
   contactMessageCommand,
@@ -214,6 +222,7 @@ import {
   registerPushTokenCommand,
   sendTestNotificationCommand,
   setChannelSenderCommand,
+  setEmailIdentityCommand,
   setFrequencyCapsCommand,
   setMyPreferencesCommand,
   setQuotaLimitCommand,
@@ -1687,12 +1696,49 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   });
   // Media (M1.4e): an event cover and the org logo (assets, variants, blobs in the dev store),
   // and a quota override row.
-  await uploadMedia(
+  const coverImage = await uploadMedia(
     ctx(),
     { ownerType: 'event', ownerId: event.id, slot: 'cover', alt: `${name} cover`, file: fixturePng('cover') },
     ports,
   );
   await uploadLogo(ctx(), { alt: `${name} logo`, file: fixturePng('logo') }, ports);
+  // U10 "Email sending": the From name (the org's own name) and a Reply-To address.
+  await executeCommand(
+    setEmailIdentityCommand,
+    { fromName: name, replyTo: `team@${slug}.example` },
+    ctx(),
+    ports,
+  );
+  // U10: the org contact page (on) and one visitor message through it.
+  await executeCommand(
+    setContactPageCommand,
+    { enabled: true, intro: `Questions for ${name}?` },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    submitOrgContactCommand,
+    {
+      submissionKey: uuidv7(),
+      name: 'Vera Visitor',
+      email: `vera@${slug}.example`,
+      message: 'Do you have step-free access at the venue?',
+      consent: true,
+    },
+    createCtx({ orgId: org.id }),
+    ports,
+  );
+  // U10: the cover reused in the event's gallery from the media library (no new files: a reuse
+  // row whose variants name the cover's files).
+  await reuseMedia(
+    ctx(),
+    {
+      sourceAssetId: coverImage.asset.id,
+      target: { ownerType: 'event', ownerId: event.id, slot: 'gallery' },
+      alt: `${name} gallery`,
+    },
+    ports,
+  );
   await withTenant(systemCtx(org.id), (tx) =>
     tx.execute(sql`insert into media.quotas (org_id, bytes_limit) values (${org.id}, ${512 * 1024 * 1024})`),
   );

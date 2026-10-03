@@ -59,6 +59,18 @@ export {
   unsubscribeUrls,
 } from './dispatch.ts';
 export {
+  checkFromName,
+  checkReplyTo,
+  type EmailIdentity,
+  EmailIdentityDto,
+  emailIdentityQuery,
+  emailIdentityTx,
+  FROM_NAME_MAX,
+  type FromNameProblem,
+  type ReplyToProblem,
+  setEmailIdentityCommand,
+} from './email-identity.ts';
+export {
   FALLBACK_CHAINS,
   type FallbackChannel,
   type FallbackOutcome,

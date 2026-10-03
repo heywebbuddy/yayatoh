@@ -83,6 +83,10 @@
       "subject": "Nieuwe bestelling: {name}",
       "intro": "{name} kocht {count, plural, one {# ticket} other {# tickets}} voor {eventName} ({amount})."
     },
+    "cms.contact_message": {
+      "subject": "Nieuw bericht van {name} via je contactpagina",
+      "intro": "{name} ({email}) schreef je via de contactpagina van je site:"
+    },
     "messaging.contact_replied": {
       "subject": "Nieuw bericht van {name}",
       "intro": "{name} schreef je over {eventName}."

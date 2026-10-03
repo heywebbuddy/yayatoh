@@ -214,6 +214,9 @@
         "request-code": "Code voor privacyverzoek",
         "archive-ready": "Archief met persoonsgegevens klaar",
         "erasure-done": "Bewijs van wissing"
+      },
+      "cms": {
+        "contact_message": "Bericht via de contactpagina"
       }
     },
     "status": {
@@ -381,6 +384,8 @@
     "webhooks": "Webhooks",
     "sandboxes": "Sandboxes",
     "notifications": "Meldingen",
+    "mediaLibrary": "Mediabibliotheek",
+    "storage": "Opslag",
     "moneyOverview": "Overzicht",
     "salesByEvent": "Verkoop per evenement",
     "fees": "Kosten"
@@ -4655,7 +4660,8 @@
       "logo": "Logo",
       "speaker": "Foto van de spreker",
       "exhibitor": "Logo van de exposant",
-      "sponsor": "Logo van de sponsor"
+      "sponsor": "Logo van de sponsor",
+      "library": "Uploaden naar de bibliotheek"
     },
     "hint": {
       "cover": "Bovenaan de evenementpagina, op evenementkaarten en in linkvoorbeelden.",
@@ -4664,7 +4670,8 @@
       "logo": "In de console, op je organisatorpagina en -site en in e-mails.",
       "speaker": "Getoond op de evenementpagina, de eigen pagina van de spreker en naast hun sessies in het programma.",
       "exhibitor": "Getoond bij de exposant op de evenementpagina. SVG-logo’s blijven op elk formaat scherp.",
-      "sponsor": "Getoond in het niveau van de sponsor op de evenementpagina (hogere niveaus tonen grotere logo’s). SVG-logo’s blijven scherp."
+      "sponsor": "Getoond in het niveau van de sponsor op de evenementpagina (hogere niveaus tonen grotere logo’s). SVG-logo’s blijven scherp.",
+      "library": "Afbeeldingen die je hier uploadt, kun je gebruiken voor evenementen, locaties, sprekers en je logo zonder ze opnieuw te uploaden."
     },
     "empty": {
       "cover": "Nog geen omslagafbeelding.",
@@ -4673,7 +4680,8 @@
       "logo": "Nog geen logo.",
       "speaker": "Nog geen foto.",
       "exhibitor": "Nog geen logo.",
-      "sponsor": "Nog geen logo."
+      "sponsor": "Nog geen logo.",
+      "library": "Nog geen afbeeldingen in de bibliotheek."
     },
     "count": "{count, plural, one {# afbeelding} other {# afbeeldingen}} van {max}",
     "listLabel": "Huidige afbeeldingen",
@@ -5304,7 +5312,8 @@
     "tabsLabel": "Soort inhoud",
     "tabs": {
       "post": "Blogberichten",
-      "page": "Pagina’s"
+      "page": "Pagina’s",
+      "contact": "Contactpagina"
     },
     "kind": {
       "post": "Blogbericht",
@@ -5387,7 +5396,8 @@
     "emptyDescription": "{org} heeft hier nog niets gepubliceerd.",
     "posts": "Berichten",
     "by": "door {name}",
-    "allPosts": "Alle berichten"
+    "allPosts": "Alle berichten",
+    "contact": "Contact"
   },
   "reviews": {
     "ratingLabel": "Beoordeeld met {rating} van 5",
@@ -15966,5 +15976,191 @@
       "step2": "De kosten worden van elke order ingehouden en op elke uitbetaling vermeld.",
       "step3": "Wanneer kosten bij een terugbetaling worden teruggegeven, verschijnen ze onder teruggegeven kosten."
     }
+  },
+  "mediaLibrary": {
+    "title": "Mediabibliotheek",
+    "description": "Alle afbeeldingen die je organisatie heeft geüpload. Gebruik ze overal zonder ze opnieuw te uploaden.",
+    "upload": "Afbeeldingen uploaden",
+    "uploadTitle": "Uploaden naar de bibliotheek",
+    "summaryLabel": "Overzicht van de bibliotheek",
+    "summary": "Afbeeldingen: {images} · Hergebruik: {reuses} · Opslag: {used} van {limit}",
+    "storageLink": "Opslag bekijken",
+    "usedPercent": "{percent}% van de opslag gebruikt",
+    "filtersLabel": "Tonen",
+    "filters": {
+      "all": "Alle afbeeldingen",
+      "unused": "Nergens gebruikt"
+    },
+    "emptyTitle": "Nog geen afbeeldingen",
+    "emptyDescription": "Upload je logo’s, locatiefoto’s en evenementbeelden één keer en kies ze daarna in elk afbeeldingsveld.",
+    "emptyViewer": "Afbeeldingen die je team uploadt, verschijnen hier.",
+    "emptyUnusedTitle": "Alle afbeeldingen zijn in gebruik",
+    "emptyUnusedDescription": "Afbeeldingen die je nergens meer gebruikt, verschijnen hier, klaar om te verwijderen.",
+    "findOwner": "Zien wie mag uploaden",
+    "listLabel": "Afbeeldingen in de bibliotheek",
+    "decorativeName": "Decoratieve afbeelding",
+    "meta": "{size} · {width} × {height} px · {type}",
+    "usedIn": "Gebruikt in",
+    "usedInFor": "Waar {name} wordt gebruikt",
+    "unused": "Niet gebruikt",
+    "places": {
+      "event": "Evenement: {name}",
+      "venue": "Locatie: {name}",
+      "org": "Logo van de organisatie",
+      "speaker": "Spreker: {name}",
+      "exhibitor": "Exposant: {name}",
+      "sponsor": "Sponsor: {name}",
+      "library": "Bibliotheek"
+    },
+    "delete": "Verwijderen",
+    "deleteFor": "{name} verwijderen",
+    "confirmDelete": "Deze afbeelding definitief verwijderen? Ze wordt nergens gebruikt.",
+    "deleteForGood": "Definitief verwijderen",
+    "cancel": "Annuleren",
+    "inUseNote": "In gebruik: haal haar eerst weg waar ze wordt gebruikt.",
+    "picker": {
+      "open": "Kiezen uit de mediabibliotheek",
+      "hint": "Gebruik een afbeelding die je organisatie al heeft. Er wordt niets opnieuw geüpload.",
+      "loading": "Bibliotheek laden…",
+      "empty": "De bibliotheek heeft nog geen afbeeldingen.",
+      "openLibrary": "Mediabibliotheek openen",
+      "choose": "Kies een afbeelding",
+      "noAlt": "Decoratieve afbeelding",
+      "alt": "Alt-tekst voor deze plek",
+      "altHint": "Beschrijf de afbeelding voor mensen die haar niet kunnen zien.",
+      "altRequired": "Beschrijf de afbeelding of markeer haar als decoratief.",
+      "decorative": "Decoratief (geen beschrijving nodig)",
+      "use": "Deze afbeelding gebruiken",
+      "placed": "Afbeelding toegevoegd.",
+      "alreadyHere": "Deze afbeelding staat hier al.",
+      "noChoice": "Kies eerst een afbeelding."
+    }
+  },
+  "storage": {
+    "title": "Opslag",
+    "description": "Hoeveel ruimte je afbeeldingen gebruiken. Opslag wordt beheerd door Yayatoh: je hoeft niets te koppelen.",
+    "openLibrary": "Mediabibliotheek openen",
+    "summaryLabel": "Overzicht van de opslag",
+    "used": "Gebruikt",
+    "ofDefault": "van {limit} inbegrepen",
+    "ofCustom": "van {limit} (je abonnement)",
+    "usedPercent": "{percent}% van de opslag gebruikt",
+    "free": "Vrij",
+    "freeSub": "Hergebruikte afbeeldingen nemen geen extra ruimte in.",
+    "images": "Afbeeldingen",
+    "imagesSub": "Opgeslagen bestanden: {files} · Hergebruik: {reuses}",
+    "nearlyFull": "De opslag is bijna vol. Verwijder afbeeldingen die je niet meer gebruikt of neem contact op met Yayatoh-support voor meer ruimte.",
+    "byKindTitle": "Wat de ruimte gebruikt",
+    "kind": "Soort",
+    "imagesCol": "Afbeeldingen",
+    "size": "Grootte",
+    "share": "Aandeel",
+    "shareOf": "{kind}: {percent}% van de gebruikte opslag",
+    "kinds": {
+      "events": "Evenementafbeeldingen",
+      "venues": "Locatiefoto’s",
+      "program": "Sprekers, exposanten en sponsors",
+      "logo": "Logo van de organisatie",
+      "library": "Alleen in de bibliotheek"
+    },
+    "portalFiles": "Documenten uit het sprekersportaal worden apart opgeslagen en tellen niet mee: {files} bestanden, {size}.",
+    "largestTitle": "Grootste afbeeldingen",
+    "emptyTitle": "Nog geen afbeeldingen",
+    "emptyDescription": "Je afbeeldingen en de ruimte die ze innemen, verschijnen hier.",
+    "emptyAction": "Afbeeldingen uploaden",
+    "image": "Afbeelding",
+    "decorative": "Decoratieve afbeelding",
+    "usedIn": "Gebruikt in",
+    "unused": "Niet gebruikt",
+    "places": "Plekken: {count}",
+    "managedNote": "Meer ruimte nodig? Neem contact op met Yayatoh-support. Eigen opslag- of e-mailaccounts zijn nooit nodig."
+  },
+  "emailIdentity": {
+    "title": "Hoe je e-mail eruitziet",
+    "description": "De naam die mensen zien en waar hun antwoorden heen gaan, bij elke e-mail van je organisatie: tickets, herinneringen, campagnes en berichten.",
+    "formLabel": "Afzendernaam en Reply-To",
+    "fromName": "Afzendernaam",
+    "fromNameHint": "Laat leeg om {org} te gebruiken. Geen web- of e-mailadressen.",
+    "replyTo": "Antwoordadres (Reply-To)",
+    "replyToHint": "Antwoorden komen hier binnen. Laat leeg om ze op het afzenderadres te ontvangen.",
+    "errors": {
+      "too_long": "Gebruik maximaal 80 tekens.",
+      "has_address": "Een naam mag geen e-mailadres of de tekens @ < > \" bevatten.",
+      "has_domain": "Een naam mag niet op een webadres lijken (zoals example.com).",
+      "invalid_email": "Vul een adres in zoals naam@example.com.",
+      "platform_address": "Gebruik je eigen adres, niet een van Yayatoh."
+    },
+    "previewTitle": "Inboxen tonen",
+    "previewReplyTo": "Antwoorden gaan naar {address}",
+    "previewNoReplyTo": "Antwoorden gaan naar het afzenderadres",
+    "saved": "Opgeslagen. Elke nieuwe e-mail gebruikt deze instellingen.",
+    "fixErrors": "Controleer de gemarkeerde velden.",
+    "done": {
+      "forbidden": "Alleen eigenaren en beheerders kunnen de afzendernaam en het antwoordadres wijzigen.",
+      "internal": "Er ging iets mis. Probeer het opnieuw."
+    },
+    "save": "Opslaan",
+    "readOnly": "Alleen eigenaren en beheerders kunnen de afzendernaam en het antwoordadres wijzigen."
+  },
+  "orgContact": {
+    "title": "Contact met {org}",
+    "defaultIntro": "Stuur {org} een bericht. Je krijgt antwoord per e-mail.",
+    "formLabel": "Bericht aan {org}",
+    "honeypot": "Laat dit veld leeg",
+    "fields": {
+      "name": "Je naam",
+      "email": "Je e-mailadres",
+      "message": "Bericht"
+    },
+    "emailHint": "Zodat ze je kunnen antwoorden.",
+    "messageHint": "Minstens 10 tekens.",
+    "consent": "Ik ga ermee akkoord dat {org} mijn naam en e-mailadres gebruikt om dit bericht te beantwoorden.",
+    "errors": {
+      "name": "Vul je naam in.",
+      "email": "Vul een adres in zoals naam@example.com.",
+      "message": "Schrijf minstens 10 tekens.",
+      "consent": "Vink het vakje aan zodat ze je mogen antwoorden.",
+      "human": "Bevestig dat je een mens bent."
+    },
+    "rateLimited": "Te veel berichten. Probeer het over {minutes} min. opnieuw.",
+    "tooFast": "Dat ging erg snel. Wacht even en verstuur opnieuw.",
+    "expired": "Deze pagina stond lang open. Laad haar opnieuw en verstuur opnieuw.",
+    "fixErrors": "Controleer de gemarkeerde velden.",
+    "submit": "Bericht versturen",
+    "sentTitle": "Bericht verstuurd",
+    "sentBody": "Bedankt! {org} antwoordt op je e-mailadres."
+  },
+  "orgContactConsole": {
+    "title": "Contactpagina",
+    "description": "Een contactformulier op je site. Berichten komen binnen bij je meldingen; je eigen e-mailadres wordt nooit getoond.",
+    "settingsTitle": "Contactpagina",
+    "settingsLabel": "Instellingen van de contactpagina",
+    "enabled": "Contactpagina op je site tonen",
+    "enabledHint": "Voegt Contact toe aan het menu van je site.",
+    "intro": "Tekst boven het formulier",
+    "introHint": "Optioneel, tot 500 tekens.",
+    "introError": "Gebruik maximaal 500 tekens.",
+    "savedOn": "Opgeslagen. Je contactpagina staat online.",
+    "savedOff": "Opgeslagen. Je contactpagina staat uit.",
+    "save": "Opslaan",
+    "liveAt": "Online op",
+    "offNote": "De pagina staat uit: bezoekers kunnen geen berichten sturen.",
+    "privacyNote": "Bezoekers gaan ermee akkoord dat je hun naam en e-mail gebruikt om te antwoorden. Spam wordt gefilterd voordat het bij je komt.",
+    "messagesTitle": "Berichten",
+    "newCount": "Nieuw: {count}",
+    "messagesHidden": "Berichten bevatten gegevens van bezoekers: wie de site bewerkt, kan ze lezen.",
+    "emptyTitle": "Nog geen berichten",
+    "emptyOn": "Berichten van je contactpagina verschijnen hier en bij je meldingen.",
+    "emptyOff": "Zet de contactpagina aan om berichten te ontvangen.",
+    "openPage": "Contactpagina openen",
+    "turnOn": "Contactpagina aanzetten",
+    "from": "Van",
+    "message": "Bericht",
+    "received": "Ontvangen",
+    "status": "Status",
+    "statusNew": "Nieuw",
+    "statusHandled": "Afgehandeld",
+    "markHandled": "Markeren als afgehandeld",
+    "markHandledFor": "Bericht van {name} markeren als afgehandeld"
   }
 }

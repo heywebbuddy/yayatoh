@@ -91,6 +91,7 @@ export function sesEmailTransport(cfg: SesConfig) {
       const res = await call(cfg, 'POST', '/v2/email/outbound-emails', {
         FromEmailAddress: formatFrom(m.from.name, from),
         Destination: { ToAddresses: [m.to] },
+        ...(m.replyTo ? { ReplyToAddresses: [m.replyTo] } : {}),
         Content: {
           Simple: {
             Subject: { Data: m.subject, Charset: 'UTF-8' },

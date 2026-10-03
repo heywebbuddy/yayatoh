@@ -807,3 +807,9 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
   - **An event's promo code wins over an org coupon** if the same code ever existed in both; creating either refuses a code the other already uses, so this only matters for data made before U9 (none).
   - **Per-buyer limits count by email address** (the buyer's CRM contact); a merged contact's uses count together.
   - **A fixed-amount coupon works only at events in its own currency**; percentage coupons work in every currency. No conversion.
+
+## U10 — media library and settings parity (2026-10-03, pending owner)
+- [ ] **Removing an image from its place keeps it only if it is reused.** An image uploaded into an event, venue or speaker and used nowhere else is deleted when removed there (as before U10); one that is reused elsewhere moves to the media library. Images uploaded straight to the library stay until deleted there. Say if every removed image should stay in the library instead.
+- [ ] **Contact page messages go to owners, admins, managers and marketing** (in-app and email, as for other messages); the email carries the visitor's name, address and an excerpt, and organizers answer from their own mail. Say if one chosen address (e.g. a support inbox) should receive them instead.
+- [ ] **From name rules:** no addresses, `@ < > "` or anything that looks like a domain (so "Events.com Festival" is refused). Say if domain-like names should be allowed when they match the org's verified sending domain.
+- [ ] **Base issues found on the 3u base (not U10's, for the merge session):** 13 native `<select>`s in 3j pages fail U1's `no-native-select` check-modules rule; 19 console empty states in 3j pages have no action (U2's audit); (the 3u merge's own fix commits address part of this).

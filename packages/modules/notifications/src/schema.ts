@@ -686,3 +686,30 @@ export const storedContents = tenantTable(
     check('stored_contents_sms_check', sql`sms_body is null or length(sms_body) <= 2000`),
   ],
 );
+
+/**
+ * U10 "Email sending": how the org's email introduces itself. The From name (shown before the
+ * address; the address itself stays the verified sending domain or the platform sender, so mail
+ * never claims another domain) and the Reply-To address replies go to. One row per org; absent =
+ * the org's name and no Reply-To.
+ */
+export const emailSettings = tenantTable(
+  notificationsSchema,
+  'email_settings',
+  {
+    fromName: text('from_name'),
+    replyTo: text('reply_to'),
+    updatedBy: uuid('updated_by'),
+  },
+  (t) => [
+    uniqueIndex('email_settings_org_key').on(t.orgId),
+    check(
+      'email_settings_from_name_check',
+      sql`from_name is null or (char_length(from_name) between 1 and 80 and from_name !~ '[@<>"\\r\\n]')`,
+    ),
+    check(
+      'email_settings_reply_to_check',
+      sql`reply_to is null or (reply_to = lower(reply_to) and char_length(reply_to) between 3 and 254)`,
+    ),
+  ],
+);

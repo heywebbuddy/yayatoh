@@ -83,6 +83,10 @@
       "subject": "Новый заказ: {name}",
       "intro": "{name} купил(а) {count, plural, one {# билет} few {# билета} many {# билетов} other {# билета}} на {eventName} ({amount})."
     },
+    "cms.contact_message": {
+      "subject": "Новое сообщение от {name} со страницы контактов",
+      "intro": "{name} ({email}) написал(а) вам через страницу контактов на вашем сайте:"
+    },
     "messaging.contact_replied": {
       "subject": "Новое сообщение от {name}",
       "intro": "{name} написал(а) вам о {eventName}."

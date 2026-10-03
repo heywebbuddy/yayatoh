@@ -323,6 +323,13 @@ export const RATE_LIMIT_POLICIES = {
     identity: { limit: 3, windowMs: 60 * MIN },
     ipCeiling: { limit: 100, windowMs: 10 * MIN },
   },
+  /** U10: messages through an org's contact page; identity = the sender's email and the org. */
+  orgContact: {
+    device: { limit: 5, windowMs: 10 * MIN },
+    anonymousIp: { limit: 10, windowMs: 10 * MIN },
+    identity: { limit: 3, windowMs: 60 * MIN },
+    ipCeiling: { limit: 100, windowMs: 10 * MIN },
+  },
   /** Webhook calls that fail signature verification (valid deliveries are never limited). */
   webhookAbuse: {
     device: { limit: 30, windowMs: 10 * MIN },

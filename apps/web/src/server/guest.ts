@@ -4,6 +4,7 @@ import { withTenant } from '@yayatoh/db';
 import { createCtx } from '@yayatoh/kernel';
 import {
   devMailboxTransports,
+  emailIdentityTx,
   type MessageKind,
   PLATFORM_SENDER,
   renderMessage,
@@ -194,12 +195,13 @@ export async function sendGuestEmail(input: {
   readonly params: Readonly<Record<string, string | number>>;
 }): Promise<void> {
   const to = normalizeGuestEmail(input.to);
-  const brand = input.orgId
+  const [brand, identity] = input.orgId
     ? await withTenant(
         createCtx({ orgId: input.orgId, actor: { type: 'system', name: 'orders.guest-mail' } }),
-        (tx) => organizationBrandTx(tx, input.orgId as string),
+        async (tx) =>
+          [await organizationBrandTx(tx, input.orgId as string), await emailIdentityTx(tx)] as const,
       )
-    : null;
+    : [null, null];
   const org = {
     name: brand?.name ?? 'Yayatoh',
     brandColor: brand?.brandColor ?? null,
@@ -211,7 +213,9 @@ export async function sendGuestEmail(input: {
   // Dev and e2e read the latest code through /api/dev/last-code (never in production).
   if (devAuthEnabled() && typeof input.params.code === 'string') await rememberDevCode(to, input.params.code);
   await t.email.send({
-    from: { name: org.name, address: PLATFORM_SENDER },
+    // U10: the org's From name and Reply-To, as on all its email.
+    from: { name: identity?.fromName ?? org.name, address: PLATFORM_SENDER },
+    ...(identity?.replyTo ? { replyTo: identity.replyTo } : {}),
     to,
     subject: rendered.subject,
     html: rendered.html,

@@ -214,6 +214,9 @@
         "request-code": "Codice richiesta privacy",
         "archive-ready": "Archivio dati personali pronto",
         "erasure-done": "Ricevuta di cancellazione"
+      },
+      "cms": {
+        "contact_message": "Messaggio dalla pagina contatti"
       }
     },
     "status": {
@@ -381,6 +384,8 @@
     "webhooks": "Webhook",
     "sandboxes": "Sandbox",
     "notifications": "Notifiche",
+    "mediaLibrary": "Libreria media",
+    "storage": "Spazio di archiviazione",
     "moneyOverview": "Panoramica",
     "salesByEvent": "Vendite per evento",
     "fees": "Commissioni"
@@ -4655,7 +4660,8 @@
       "logo": "Logo",
       "speaker": "Foto del relatore",
       "exhibitor": "Logo dell’espositore",
-      "sponsor": "Logo dello sponsor"
+      "sponsor": "Logo dello sponsor",
+      "library": "Carica nella libreria"
     },
     "hint": {
       "cover": "Mostrata in cima alla pagina dell'evento, nelle schede degli eventi e nelle anteprime dei link.",
@@ -4664,7 +4670,8 @@
       "logo": "Mostrato nella console, nella tua pagina e nel tuo sito di organizzatore e nelle email.",
       "speaker": "Mostrata nella pagina dell’evento, nella pagina del relatore e accanto alle sue sessioni nel programma.",
       "exhibitor": "Mostrato con l’espositore nella pagina dell’evento. I loghi SVG restano nitidi a ogni dimensione.",
-      "sponsor": "Mostrato nel livello dello sponsor nella pagina dell’evento (i livelli più alti hanno loghi più grandi). I loghi SVG restano nitidi."
+      "sponsor": "Mostrato nel livello dello sponsor nella pagina dell’evento (i livelli più alti hanno loghi più grandi). I loghi SVG restano nitidi.",
+      "library": "Le immagini caricate qui si possono usare per eventi, sedi, relatori e il tuo logo senza caricarle di nuovo."
     },
     "empty": {
       "cover": "Ancora nessuna immagine di copertina.",
@@ -4673,7 +4680,8 @@
       "logo": "Ancora nessun logo.",
       "speaker": "Nessuna foto.",
       "exhibitor": "Nessun logo.",
-      "sponsor": "Nessun logo."
+      "sponsor": "Nessun logo.",
+      "library": "Ancora nessuna immagine nella libreria."
     },
     "count": "{count, plural, one {# immagine} other {# immagini}} su {max}",
     "listLabel": "Immagini attuali",
@@ -5304,7 +5312,8 @@
     "tabsLabel": "Tipo di contenuto",
     "tabs": {
       "post": "Articoli del blog",
-      "page": "Pagine"
+      "page": "Pagine",
+      "contact": "Pagina contatti"
     },
     "kind": {
       "post": "Articolo del blog",
@@ -5387,7 +5396,8 @@
     "emptyDescription": "{org} non ha ancora pubblicato nulla qui.",
     "posts": "Articoli",
     "by": "di {name}",
-    "allPosts": "Tutti gli articoli"
+    "allPosts": "Tutti gli articoli",
+    "contact": "Contatti"
   },
   "reviews": {
     "ratingLabel": "Valutato {rating} su 5",
@@ -15966,5 +15976,191 @@
       "step2": "La commissione viene trattenuta da ogni ordine e indicata in ogni pagamento.",
       "step3": "Quando un rimborso restituisce la commissione, questa compare tra le commissioni restituite."
     }
+  },
+  "mediaLibrary": {
+    "title": "Libreria media",
+    "description": "Tutte le immagini caricate dalla tua organizzazione. Usale ovunque senza caricarle di nuovo.",
+    "upload": "Carica immagini",
+    "uploadTitle": "Carica nella libreria",
+    "summaryLabel": "Riepilogo della libreria",
+    "summary": "Immagini: {images} · Riutilizzi: {reuses} · Spazio: {used} di {limit}",
+    "storageLink": "Vedi lo spazio",
+    "usedPercent": "{percent}% dello spazio usato",
+    "filtersLabel": "Mostra",
+    "filters": {
+      "all": "Tutte le immagini",
+      "unused": "Non usate da nessuna parte"
+    },
+    "emptyTitle": "Ancora nessuna immagine",
+    "emptyDescription": "Carica una volta loghi, foto delle sedi e grafiche degli eventi, poi sceglile da qualsiasi campo immagine.",
+    "emptyViewer": "Qui compariranno le immagini caricate dal tuo team.",
+    "emptyUnusedTitle": "Tutte le immagini sono in uso",
+    "emptyUnusedDescription": "Qui compariranno le immagini che non usi più da nessuna parte, pronte da eliminare.",
+    "findOwner": "Vedi chi può caricare",
+    "listLabel": "Immagini della libreria",
+    "decorativeName": "Immagine decorativa",
+    "meta": "{size} · {width} × {height} px · {type}",
+    "usedIn": "Usata in",
+    "usedInFor": "Dove è usata {name}",
+    "unused": "Non usata",
+    "places": {
+      "event": "Evento: {name}",
+      "venue": "Sede: {name}",
+      "org": "Logo dell’organizzazione",
+      "speaker": "Relatore: {name}",
+      "exhibitor": "Espositore: {name}",
+      "sponsor": "Sponsor: {name}",
+      "library": "Libreria"
+    },
+    "delete": "Elimina",
+    "deleteFor": "Elimina {name}",
+    "confirmDelete": "Eliminare definitivamente questa immagine? Non è usata da nessuna parte.",
+    "deleteForGood": "Elimina definitivamente",
+    "cancel": "Annulla",
+    "inUseNote": "In uso: rimuovila da dove è usata prima di eliminarla.",
+    "picker": {
+      "open": "Scegli dalla libreria media",
+      "hint": "Usa un’immagine che la tua organizzazione ha già. Non si carica nulla di nuovo.",
+      "loading": "Caricamento della libreria…",
+      "empty": "La libreria non contiene ancora immagini.",
+      "openLibrary": "Apri la libreria media",
+      "choose": "Scegli un’immagine",
+      "noAlt": "Immagine decorativa",
+      "alt": "Testo alternativo per questa posizione",
+      "altHint": "Descrivi l’immagine per chi non può vederla.",
+      "altRequired": "Descrivi l’immagine o segnala che è decorativa.",
+      "decorative": "Decorativa (nessuna descrizione necessaria)",
+      "use": "Usa questa immagine",
+      "placed": "Immagine aggiunta.",
+      "alreadyHere": "Questa immagine è già qui.",
+      "noChoice": "Prima scegli un’immagine."
+    }
+  },
+  "storage": {
+    "title": "Spazio di archiviazione",
+    "description": "Quanto spazio usano le tue immagini. Lo spazio è gestito da Yayatoh: non c’è nulla da collegare.",
+    "openLibrary": "Apri la libreria media",
+    "summaryLabel": "Riepilogo dello spazio",
+    "used": "Usato",
+    "ofDefault": "di {limit} inclusi",
+    "ofCustom": "di {limit} (il tuo piano)",
+    "usedPercent": "{percent}% dello spazio usato",
+    "free": "Libero",
+    "freeSub": "Le immagini riutilizzate non occupano spazio in più.",
+    "images": "Immagini",
+    "imagesSub": "File salvati: {files} · Riutilizzi: {reuses}",
+    "nearlyFull": "Lo spazio è quasi pieno. Elimina le immagini che non usi più o contatta l’assistenza Yayatoh per avere più spazio.",
+    "byKindTitle": "Cosa lo occupa",
+    "kind": "Tipo",
+    "imagesCol": "Immagini",
+    "size": "Dimensione",
+    "share": "Quota",
+    "shareOf": "{kind}: {percent}% dello spazio usato",
+    "kinds": {
+      "events": "Immagini degli eventi",
+      "venues": "Foto delle sedi",
+      "program": "Relatori, espositori e sponsor",
+      "logo": "Logo dell’organizzazione",
+      "library": "Solo nella libreria"
+    },
+    "portalFiles": "I documenti del portale relatori sono salvati a parte e non contano: {files} file, {size}.",
+    "largestTitle": "Immagini più grandi",
+    "emptyTitle": "Ancora nessuna immagine",
+    "emptyDescription": "Qui vedrai le tue immagini e lo spazio che occupano.",
+    "emptyAction": "Carica immagini",
+    "image": "Immagine",
+    "decorative": "Immagine decorativa",
+    "usedIn": "Usata in",
+    "unused": "Non usata",
+    "places": "Posizioni: {count}",
+    "managedNote": "Ti serve più spazio? Contatta l’assistenza Yayatoh. Non servono mai account propri di archiviazione o email."
+  },
+  "emailIdentity": {
+    "title": "Come appaiono le tue email",
+    "description": "Il nome che le persone vedono e dove vanno le loro risposte, in ogni email inviata dalla tua organizzazione: biglietti, promemoria, campagne e messaggi.",
+    "formLabel": "Nome mittente e Reply-To",
+    "fromName": "Nome mittente",
+    "fromNameHint": "Lascia vuoto per usare {org}. Niente indirizzi web o email.",
+    "replyTo": "Indirizzo di risposta (Reply-To)",
+    "replyToHint": "Le risposte arrivano qui. Lascia vuoto per riceverle all’indirizzo del mittente.",
+    "errors": {
+      "too_long": "Usa al massimo 80 caratteri.",
+      "has_address": "Un nome non può contenere un indirizzo email né i caratteri @ < > \".",
+      "has_domain": "Un nome non può sembrare un indirizzo web (come example.com).",
+      "invalid_email": "Inserisci un indirizzo come nome@example.com.",
+      "platform_address": "Usa un tuo indirizzo, non uno di Yayatoh."
+    },
+    "previewTitle": "Nelle caselle di posta compare",
+    "previewReplyTo": "Le risposte vanno a {address}",
+    "previewNoReplyTo": "Le risposte vanno all’indirizzo del mittente",
+    "saved": "Salvato. Ogni nuova email usa queste impostazioni.",
+    "fixErrors": "Controlla i campi evidenziati.",
+    "done": {
+      "forbidden": "Solo proprietari e amministratori possono modificare nome mittente e indirizzo di risposta.",
+      "internal": "Qualcosa è andato storto. Riprova."
+    },
+    "save": "Salva",
+    "readOnly": "Solo proprietari e amministratori possono modificare nome mittente e indirizzo di risposta."
+  },
+  "orgContact": {
+    "title": "Contatta {org}",
+    "defaultIntro": "Invia un messaggio a {org}. Ti risponderanno via email.",
+    "formLabel": "Messaggio a {org}",
+    "honeypot": "Lascia vuoto questo campo",
+    "fields": {
+      "name": "Il tuo nome",
+      "email": "La tua email",
+      "message": "Messaggio"
+    },
+    "emailHint": "Per poterti rispondere.",
+    "messageHint": "Almeno 10 caratteri.",
+    "consent": "Accetto che {org} usi il mio nome e la mia email per rispondere a questo messaggio.",
+    "errors": {
+      "name": "Inserisci il tuo nome.",
+      "email": "Inserisci un indirizzo come nome@example.com.",
+      "message": "Scrivi almeno 10 caratteri.",
+      "consent": "Spunta la casella per poter ricevere una risposta.",
+      "human": "Conferma di essere una persona."
+    },
+    "rateLimited": "Troppi messaggi. Riprova tra {minutes} min.",
+    "tooFast": "È stato velocissimo. Attendi un momento e invia di nuovo.",
+    "expired": "Questa pagina è rimasta aperta a lungo. Ricaricala e invia di nuovo.",
+    "fixErrors": "Controlla i campi evidenziati.",
+    "submit": "Invia messaggio",
+    "sentTitle": "Messaggio inviato",
+    "sentBody": "Grazie! {org} risponderà alla tua email."
+  },
+  "orgContactConsole": {
+    "title": "Pagina contatti",
+    "description": "Un modulo di contatto sul tuo sito. I messaggi arrivano nelle tue notifiche; il tuo indirizzo email non viene mai mostrato.",
+    "settingsTitle": "Pagina contatti",
+    "settingsLabel": "Impostazioni della pagina contatti",
+    "enabled": "Mostra la pagina contatti sul tuo sito",
+    "enabledHint": "Aggiunge Contatti al menu del tuo sito.",
+    "intro": "Testo sopra il modulo",
+    "introHint": "Facoltativo, fino a 500 caratteri.",
+    "introError": "Usa al massimo 500 caratteri.",
+    "savedOn": "Salvato. La pagina contatti è online.",
+    "savedOff": "Salvato. La pagina contatti è disattivata.",
+    "save": "Salva",
+    "liveAt": "Online su",
+    "offNote": "La pagina è disattivata: i visitatori non possono inviare messaggi.",
+    "privacyNote": "I visitatori accettano che tu usi nome ed email per rispondere. Lo spam viene filtrato prima di arrivarti.",
+    "messagesTitle": "Messaggi",
+    "newCount": "Nuovi: {count}",
+    "messagesHidden": "I messaggi contengono dati dei visitatori: li può leggere chi modifica il sito.",
+    "emptyTitle": "Ancora nessun messaggio",
+    "emptyOn": "I messaggi della pagina contatti compariranno qui e nelle tue notifiche.",
+    "emptyOff": "Attiva la pagina contatti per ricevere messaggi.",
+    "openPage": "Apri la pagina contatti",
+    "turnOn": "Attiva la pagina contatti",
+    "from": "Da",
+    "message": "Messaggio",
+    "received": "Ricevuto",
+    "status": "Stato",
+    "statusNew": "Nuovo",
+    "statusHandled": "Gestito",
+    "markHandled": "Segna come gestito",
+    "markHandledFor": "Segna come gestito il messaggio di {name}"
   }
 }

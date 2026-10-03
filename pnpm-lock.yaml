@@ -715,6 +715,9 @@ importers:
       '@yayatoh/checkin':
         specifier: workspace:*
         version: link:../../packages/modules/checkin
+      '@yayatoh/cms':
+        specifier: workspace:*
+        version: link:../../packages/modules/cms
       '@yayatoh/command-center':
         specifier: workspace:*
         version: link:../../packages/modules/command-center

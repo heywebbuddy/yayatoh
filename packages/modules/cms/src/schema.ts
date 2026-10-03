@@ -228,8 +228,16 @@ export const contactRequests = tenantTable(
     locale: text('locale').notNull().default('en'),
     status: text('status').notNull().default('new'),
     handledAt: ts('handled_at'),
+    /** U10: where it came from — the marketplace's contact page, or an org's own contact page. */
+    source: text('source').notNull().default('marketplace'),
+    /** U10: the form's one-time key, so a resubmitted form never delivers twice. */
+    submissionKey: uuid('submission_key'),
   },
   (t) => [
+    check('contact_requests_source_check', sql`source in ('marketplace', 'org_site')`),
+    uniqueIndex('contact_requests_org_submission_key')
+      .on(t.orgId, t.submissionKey)
+      .where(sql`submission_key is not null`),
     index('contact_requests_org_status_created_idx').on(t.orgId, t.status, t.createdAt),
     check('contact_requests_topic_check', sql`topic in ('sales', 'support', 'partnership', 'other')`),
     check('contact_requests_status_check', sql`status in ('new', 'handled')`),
@@ -238,5 +246,24 @@ export const contactRequests = tenantTable(
     check('contact_requests_company_check', sql`company is null or char_length(company) <= 160`),
     check('contact_requests_message_check', sql`char_length(message) between 1 and 4000`),
     check('contact_requests_locale_check', LOCALE_CHECK('locale')),
+  ],
+);
+
+/**
+ * U10: the org's contact page block (`/contact` on its tenant site, `/o/{slug}/contact` on the
+ * marketplace). Off until the organizer turns it on. Messages go to the org's members as
+ * notifications; the org's own addresses are never on the page.
+ */
+export const contactPages = tenantTable(
+  cmsSchema,
+  'contact_pages',
+  {
+    enabled: boolean('enabled').notNull().default(false),
+    /** A short line above the form (plain text). */
+    intro: text('intro'),
+  },
+  (t) => [
+    uniqueIndex('contact_pages_org_key').on(t.orgId),
+    check('contact_pages_intro_check', sql`intro is null or char_length(intro) between 1 and 500`),
   ],
 );

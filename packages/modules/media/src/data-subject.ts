@@ -8,7 +8,7 @@ import {
   type SubjectExport,
   type SubjectFile,
 } from '@yayatoh/platform';
-import { and, asc, eq, inArray, or } from 'drizzle-orm';
+import { and, asc, eq, inArray, or, sql } from 'drizzle-orm';
 import { PORTAL_FILE_CONTENT_TYPES } from './pipeline/documents.ts';
 import { CONTENT_TYPES, EXTENSIONS, type VariantFormat } from './pipeline/plan.ts';
 import { assets, variants } from './schema.ts';
@@ -47,6 +47,8 @@ async function speakerPhotosTx(tx: TenantTx, s: DataSubject) {
       width: assets.width,
       height: assets.height,
       createdAt: assets.createdAt,
+      /** U10: whose files hold the bytes (a reused library image's original). */
+      storageId: sql<string>`coalesce(${assets.sourceAssetId}, ${assets.id})`,
     })
     .from(assets)
     .where(and(eq(assets.ownerType, 'speaker'), inArray(assets.ownerId, ids)))
@@ -95,7 +97,11 @@ export const mediaDataSubjects = defineDataSubjectContributor({
       ...fallbacks.map((v) => ({
         name: `speaker-photo-${v.assetId}.${EXTENSIONS[v.format as VariantFormat] ?? 'bin'}`,
         contentType: CONTENT_TYPES[v.format as VariantFormat] ?? 'application/octet-stream',
-        read: () => mediaStore().get(orgId, storageKey(orgId, v.assetId, v.fileName)),
+        read: () =>
+          mediaStore().get(
+            orgId,
+            storageKey(orgId, photos.find((p) => p.id === v.assetId)?.storageId ?? v.assetId, v.fileName),
+          ),
       })),
     ];
     return {
@@ -107,7 +113,7 @@ export const mediaDataSubjects = defineDataSubjectContributor({
           bytes: f.bytes,
           uploadedAt: f.createdAt,
         })),
-        speakerPhotos: photos.map(({ id: _id, ...p }) => p),
+        speakerPhotos: photos.map(({ id: _id, storageId: _s, ...p }) => p),
       },
       files,
     };
@@ -126,13 +132,28 @@ export const mediaDataSubjects = defineDataSubjectContributor({
           )
           .returning({ id: portalFiles.id })
       : [];
-    const photoIds = photos.map((p) => p.id);
+    // U10: the person's photo goes everywhere it is used: its original (in the library or another
+    // place) and every reuse of it, reuses first (they point at the original).
+    const roots = [...new Set(photos.map((p) => p.storageId))];
+    const family = roots.length
+      ? await tx
+          .select({ id: assets.id, source: assets.sourceAssetId })
+          .from(assets)
+          .where(or(inArray(assets.id, roots), inArray(assets.sourceAssetId, roots)))
+      : [];
+    const photoIds = family.map((f) => f.id);
     const vars = photoIds.length
       ? await tx.delete(variants).where(inArray(variants.assetId, photoIds)).returning({ id: variants.id })
       : [];
-    const gone = photoIds.length
-      ? await tx.delete(assets).where(inArray(assets.id, photoIds)).returning({ id: assets.id })
-      : [];
+    const reuses = family.filter((f) => f.source !== null).map((f) => f.id);
+    const gone = [
+      ...(reuses.length
+        ? await tx.delete(assets).where(inArray(assets.id, reuses)).returning({ id: assets.id })
+        : []),
+      ...(roots.length
+        ? await tx.delete(assets).where(inArray(assets.id, roots)).returning({ id: assets.id })
+        : []),
+    ];
     return {
       erased: {
         'media.portal_files': files.length,

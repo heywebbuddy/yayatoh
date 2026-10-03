@@ -115,6 +115,8 @@ export const ORG_SECTIONS: readonly OrgNavSection[] = [
     items: [
       { key: 'publicSite', path: 'site', icon: 'store', module: 'core', needs: 'org:update' },
       { key: 'siteContent', path: 'content', icon: 'file-text', module: 'core', needs: 'marketing:read' },
+      // U10: every image the org uploaded, reusable across events, venues and the program.
+      { key: 'mediaLibrary', path: 'media', icon: 'image', module: 'core', needs: 'events:read' },
       { key: 'domains', path: 'domains', icon: 'globe', module: 'core', needs: 'org:update' },
       { key: 'emails', path: 'emails', icon: 'mail-check', module: 'core', needs: 'org:update' },
       {
@@ -142,6 +144,8 @@ export const ORG_SECTIONS: readonly OrgNavSection[] = [
       { key: 'team', path: 'team', icon: 'users', module: 'core', needs: 'members:read' },
       { key: 'plan', path: 'plan', icon: 'credit-card', module: 'core', needs: 'billing:read' },
       { key: 'sendingSetup', path: 'sending', icon: 'send', module: 'core', needs: 'org:update' },
+      // U10 (UX-3): storage usage (quota, what uses it, the largest images); platform-managed.
+      { key: 'storage', path: 'storage', icon: 'hard-drive', module: 'core', needs: 'events:read' },
       {
         key: 'messagingHealth',
         path: 'messaging',

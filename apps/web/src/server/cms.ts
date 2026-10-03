@@ -2,8 +2,10 @@ import 'server-only';
 import {
   type NavPageDto,
   navPages,
+  type PublicContactPageDto,
   type PublicEntryDto,
   type PublicEntryPageDto,
+  publicContactPage,
   publicEntries,
   publicEntry,
 } from '@yayatoh/cms';
@@ -108,4 +110,19 @@ export async function organizerContentSite(req: RequestHost, slug: string) {
 export async function marketplaceContentSite() {
   const org = await marketplaceContentOrg();
   return org ? { org, variant: 'marketplace' as const, base: '' } : null;
+}
+
+/** U10: the org's contact page (null while it is off), cached per org like its other content. */
+export const cachedContactPage = (orgId: string) =>
+  publicCached(
+    { org: orgId },
+    ['cms-contact'],
+    () => publicContactPage(orgId),
+    (raw) => raw as PublicContactPageDto | null,
+  );
+
+/** U10: where the org's contact page lives (its tenant site's `/contact`, else its organizer page's). */
+export function contactPublicUrl(req: RequestHost, o: PublicOrganizer): string {
+  const home = contentHome(req, o);
+  return `${home.origin}${home.base}/contact`;
 }

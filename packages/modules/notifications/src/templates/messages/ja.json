@@ -83,6 +83,10 @@
       "subject": "新しい注文: {name}",
       "intro": "{name} さんが {eventName} のチケットを {count, plural, other {# 枚}}購入しました（{amount}）。"
     },
+    "cms.contact_message": {
+      "subject": "お問い合わせページから {name} さんの新しいメッセージ",
+      "intro": "{name} さん（{email}）がサイトのお問い合わせページからメッセージを送りました:"
+    },
     "messaging.contact_replied": {
       "subject": "{name} さんから新しいメッセージ",
       "intro": "{name} さんから {eventName} についてメッセージが届きました。"

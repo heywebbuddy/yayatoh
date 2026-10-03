@@ -5,14 +5,19 @@ import { executeCommand, executeQuery, isDomainError } from '@yayatoh/kernel';
 import {
   addSendingDomainCommand,
   checkDmarc,
+  checkFromName,
+  checkReplyTo,
+  type FromNameProblem,
   fakeResolveTxt,
   identityPortFromEnv,
   normalizeSendingDomain,
+  type ReplyToProblem,
   type ResolveTxt,
   recordSendingDomainCheckCommand,
   removeSendingDomainCommand,
   type SendingIdentityPort,
   sendingSetupQuery,
+  setEmailIdentityCommand,
 } from '@yayatoh/notifications';
 import { revalidatePath } from 'next/cache';
 import { redirect } from '@/i18n/navigation.ts';
@@ -131,4 +136,37 @@ export async function removeSendingDomainAction(org: string, id: string): Promis
   }
   revalidatePath(`/o/${org}/sending`);
   redirect({ href: `/o/${org}/sending?done=${outcome}`, locale: data.ctx.locale });
+}
+
+export interface IdentityFormState {
+  readonly ok: boolean;
+  readonly code: 'forbidden' | 'internal' | 'invalid' | null;
+  readonly fromName?: FromNameProblem | null;
+  readonly replyTo?: ReplyToProblem | null;
+  readonly stamp?: number;
+}
+
+/**
+ * U10 "Email sending": the From name and Reply-To of every email the org sends. Checked here for
+ * per-field messages, then by the command (which checks again and authorizes).
+ */
+export async function saveEmailIdentityAction(
+  org: string,
+  _prev: IdentityFormState,
+  form: FormData,
+): Promise<IdentityFormState> {
+  const data = await loadConsole(org);
+  const fromName = String(form.get('fromName') ?? '');
+  const replyTo = String(form.get('replyTo') ?? '');
+  const name = checkFromName(fromName);
+  const reply = checkReplyTo(replyTo);
+  if (name.problem || reply.problem)
+    return { ok: false, code: 'invalid', fromName: name.problem, replyTo: reply.problem };
+  try {
+    await executeCommand(setEmailIdentityCommand, { fromName, replyTo }, data.ctx, ports);
+  } catch (err) {
+    return { ok: false, code: isDomainError(err) && err.code === 'forbidden' ? 'forbidden' : 'internal' };
+  }
+  revalidatePath(`/o/${org}/sending`);
+  return { ok: true, code: null, stamp: Date.now() };
 }

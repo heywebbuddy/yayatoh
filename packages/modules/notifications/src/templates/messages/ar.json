@@ -83,6 +83,10 @@
       "subject": "طلب جديد: {name}",
       "intro": "اشترى {name} {count, plural, zero {# تذكرة} one {تذكرة واحدة} two {تذكرتين} few {# تذاكر} many {# تذكرة} other {# تذكرة}} لفعالية {eventName} ({amount})."
     },
+    "cms.contact_message": {
+      "subject": "رسالة جديدة من {name} عبر صفحة التواصل",
+      "intro": "كتب إليك {name} ({email}) عبر صفحة التواصل في موقعك:"
+    },
     "messaging.contact_replied": {
       "subject": "رسالة جديدة من {name}",
       "intro": "كتب إليك {name} بشأن {eventName}."

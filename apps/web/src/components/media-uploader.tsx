@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { type DragEvent, type FormEvent, useActionState, useEffect, useId, useRef, useState } from 'react';
 import { removeMediaAction, updateMediaAltAction } from '@/app/[locale]/o/[org]/media-actions.ts';
+import { LibraryPicker } from '@/components/media-library-picker.tsx';
 import { type FormState, INITIAL_FORM_STATE } from '@/lib/form-state.ts';
 import {
   formatMegabytes,
@@ -15,7 +16,8 @@ import {
 } from '@/lib/media-limits.ts';
 import type { MediaItem } from '@/server/media.ts';
 
-type Slot = 'cover' | 'gallery' | 'photo' | 'logo';
+/** U10: `library` uploads straight to the org's media library (its page lists the images). */
+type Slot = 'cover' | 'gallery' | 'photo' | 'logo' | 'library';
 /** M1.4h: a program row's single image (speaker photo, exhibitor or sponsor logo). */
 type ProgramKind = 'speaker' | 'exhibitor' | 'sponsor';
 type Family = 'content' | 'logo' | ProgramKind;
@@ -61,6 +63,7 @@ export function MediaUploader({
   kind,
   defaultAlt = '',
   title,
+  listless = false,
 }: {
   org: string;
   slot: Slot;
@@ -72,6 +75,8 @@ export function MediaUploader({
   defaultAlt?: string;
   /** The section heading (default: the slot's title). */
   title?: string;
+  /** U10: no image list (the media library page shows its own grid). */
+  listless?: boolean;
 }) {
   const t = useTranslations('media');
   const locale = useLocale();
@@ -89,7 +94,7 @@ export function MediaUploader({
   const [dragging, setDragging] = useState(false);
 
   const family: Family = kind ?? (slot === 'logo' ? 'logo' : 'content');
-  const multiple = !kind && (slot === 'gallery' || slot === 'photo');
+  const multiple = !kind && (slot === 'gallery' || slot === 'photo' || slot === 'library');
   // Messages per slot, or per program kind (their photo/logo differ from venue photos and the org logo).
   const key = kind ?? slot;
   const altMissing = family === 'content' ? 'alt_required' : kind ? 'alt_missing' : 'alt_required';
@@ -184,12 +189,12 @@ export function MediaUploader({
           {title ?? t(`title.${key}`)}
         </Heading>
         <p className="text-body text-ink-2">{t(`hint.${key}`, { max: GALLERY_MAX })}</p>
-        {multiple ? (
+        {multiple && !listless ? (
           <p className="text-caption text-ink-2">{t('count', { count: items.length, max: GALLERY_MAX })}</p>
         ) : null}
       </div>
 
-      {items.length === 0 ? (
+      {listless ? null : items.length === 0 ? (
         <p className="rounded-card border border-dashed border-line px-4 py-6 text-body text-ink-2">
           {t(`empty.${key}`)}
         </p>
@@ -349,6 +354,16 @@ export function MediaUploader({
           </p>
         </form>
       )}
+      {/* U10: or place an image the org already has, without uploading it again. */}
+      {ticket !== null && slot !== 'library' && !full ? (
+        <LibraryPicker
+          org={org}
+          ticket={ticket}
+          allowDecorative={family === 'content'}
+          defaultAlt={defaultAlt}
+          replaceAssetId={replaceId}
+        />
+      ) : null}
     </section>
   );
 }

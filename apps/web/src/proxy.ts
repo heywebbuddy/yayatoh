@@ -244,7 +244,8 @@ export default async function proxy(req: NextRequest, event?: NextFetchEvent): P
     const ev = /^\/events\/([^/]+)\/?$/.exec(rest);
     if (ev) return secure(rewrite(req, forwarded, res, `/${locale}/t/${orgId}/events/${ev[1]}`, locale));
     // The org's CMS (M1.4g): its blog, posts and pages (the legacy Voyager paths).
-    const cms = /^\/(blogs|blogs\/[^/]+|pages\/[^/]+)\/?$/.exec(rest);
+    // U10: its contact page (a 404 there while the organizer has it off).
+    const cms = /^\/(blogs|blogs\/[^/]+|pages\/[^/]+|contact)\/?$/.exec(rest);
     if (cms) return secure(rewrite(req, forwarded, res, `/${locale}/t/${orgId}/${cms[1]}`, locale));
     // The live seat stream of that page (M1.7f): the host's org decides which events it may carry.
     const seats = /^\/events\/([^/]+)\/seats\/stream\/?$/.exec(rest);
@@ -284,11 +285,12 @@ export default async function proxy(req: NextRequest, event?: NextFetchEvent): P
   }
 
   if (kind === 'marketplace') {
-    // `/o/{slug}` and, M1.4g, its blog and pages (`/o/{slug}/blogs[/{post}]`, `/o/{slug}/pages/{page}`).
-    const org = /^\/o\/([^/]+)(\/blogs|\/blogs\/[^/]+|\/pages\/[^/]+)?\/?$/.exec(rest);
+    // `/o/{slug}` and, M1.4g, its blog and pages (`/o/{slug}/blogs[/{post}]`, `/o/{slug}/pages/{page}`);
+    // U10: its contact page (`/o/{slug}/contact`).
+    const org = /^\/o\/([^/]+)(\/blogs|\/blogs\/[^/]+|\/pages\/[^/]+|\/contact)?\/?$/.exec(rest);
     if (org)
       return secure(rewrite(req, forwarded, res, `/${locale}/organizers/${org[1]}${org[2] ?? ''}`, locale));
-    const long = /^\/organizers\/([^/]+)(\/blogs|\/blogs\/[^/]+|\/pages\/[^/]+)?\/?$/.exec(rest);
+    const long = /^\/organizers\/([^/]+)(\/blogs|\/blogs\/[^/]+|\/pages\/[^/]+|\/contact)?\/?$/.exec(rest);
     if (long)
       return secure(
         NextResponse.redirect(onHost(req, localizedPath(locale, `/o/${long[1]}${long[2] ?? ''}`)), 308),

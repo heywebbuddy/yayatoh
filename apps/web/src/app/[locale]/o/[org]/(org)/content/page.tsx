@@ -58,6 +58,10 @@ export default async function ContentPage({
       <nav aria-label={t('tabsLabel')} className="flex gap-2">
         {tab('post')}
         {tab('page')}
+        {/* U10: the contact page block of the org's site. */}
+        <Link href={`/o/${org}/content/contact`} className={buttonClass('secondary', 'sm')}>
+          {t('tabs.contact')}
+        </Link>
       </nav>
       {rows.length === 0 ? (
         <EmptyState

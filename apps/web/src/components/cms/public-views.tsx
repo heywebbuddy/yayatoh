@@ -11,7 +11,7 @@ import { SiteFooter, SiteHeader } from '@/components/marketplace/site-chrome.tsx
 import { Link } from '@/i18n/navigation.ts';
 import { formatDate } from '@/lib/format.ts';
 import { blogPostingJsonLd, jsonLdScript } from '@/lib/seo/jsonld.ts';
-import { cachedEntries, cachedEntry, contentHome, entryPath } from '@/server/cms.ts';
+import { cachedContactPage, cachedEntries, cachedEntry, contentHome, entryPath } from '@/server/cms.ts';
 import { requestHost } from '@/server/request-origin.ts';
 import { publicMetadata } from '@/server/seo.ts';
 import { TenantHeader } from './tenant-header.tsx';
@@ -27,7 +27,7 @@ export interface ContentSite {
   readonly base: string;
 }
 
-async function Chrome({
+export async function Chrome({
   site,
   current,
   children,
@@ -37,6 +37,8 @@ async function Chrome({
   children: ReactNode;
 }) {
   const t = await getTranslations('cmsPublic');
+  // U10: the organizer's contact page, while it is on.
+  const contact = site.variant === 'organizer' ? await cachedContactPage(site.org.orgId) : null;
   return (
     <div className="min-h-dvh bg-surface">
       {site.variant === 'tenant' ? <TenantHeader org={site.org} current={current} /> : <SiteHeader />}
@@ -60,6 +62,17 @@ async function Chrome({
                 {t('blog')}
               </Link>
             </li>
+            {contact ? (
+              <li>
+                <Link
+                  href={`${site.base}/contact`}
+                  aria-current={current === '/contact' ? 'page' : undefined}
+                  className="inline-flex min-h-10 items-center underline"
+                >
+                  {t('contact')}
+                </Link>
+              </li>
+            ) : null}
           </ul>
         </nav>
       ) : null}
