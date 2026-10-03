@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Generate the Swift and Kotlin /v1 clients from apps/api/openapi.json with openapi-generator
-# (pinned image). Local only, no CI job: the mobile apps are planned but not built (roadmap §8.3).
+# (pinned image). CI runs it as the `sdk-mobile` job and keeps the output as build artifacts (M6.3b);
+# nothing is published until the mobile build (roadmap §8.3).
 # Output goes to packages/sdk/mobile/out/ (git-ignored).
 set -euo pipefail
 root="$(cd "$(dirname "$0")/../../.." && pwd)"

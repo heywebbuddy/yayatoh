@@ -37,6 +37,9 @@ describe('org API keys (M1.13)', () => {
       keyId: k.id,
       scopes: ['events:read', 'orders:read'],
       sandbox: false,
+      // M6.3a: no expiry chosen; not a sandbox org.
+      expiresAt: null,
+      orgSandbox: false,
     });
   });
 

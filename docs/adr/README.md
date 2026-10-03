@@ -29,3 +29,4 @@ One file per decision, named `NNNN-short-title.md`. Each file has these sections
 | [0020](0020-coexistence-front-door.md) | Coexistence front door: proxy.ts decides and forwards with `fetch`; Cloudflare Worker only as fallback (proposed, M2.4a) | §7.4 |
 | [0021](0021-conference-module-layout.md) | Conference module layout: `registration`/`badges` (tier 5), `engagement` (tier 4), program grows unsplit; registration cells are managed ticket types | §3.5 |
 | [0022](0022-design-system-v2.md) | Design system v2: semantic tokens, light default, dark opt-in, Manrope, floating dark sidebar | §3.1 |
+| [0023](0023-phase-6-module-layout.md) | Phase 6 module layout: `analytics`/`integrations` (6), `agency` (5), `virtual` (4); crm grows; contact reference owners move a person's rows in one merge transaction; the timeline is a crm projection fed by its owners | §3.5 |

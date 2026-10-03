@@ -17,6 +17,8 @@ export {
   UpdateSettingsInput,
   updateSettingsCommand,
 } from './commands.ts';
+// M6.1c: data-subject requests (questions signed with the person's full name).
+export { engagementDataSubjects } from './data-subject.ts';
 export {
   type BallotProblem,
   ballotKeys,

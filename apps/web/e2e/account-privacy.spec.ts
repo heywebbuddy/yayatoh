@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { type Browser, expect, type Page, test } from '@playwright/test';
+import { unzip } from '@yayatoh/privacy';
 import {
   ageSession,
   codeForKey,
@@ -237,6 +238,18 @@ async function deleteFromPage(page: Page, email: string, setupKey: string) {
   }
 }
 
+/** M6.1c: find the person, open an erasure request and fulfil it from the console. */
+async function eraseFromConsole(page: Page, email: string) {
+  await page.goto('/o/lakeside-events/privacy');
+  await page.getByLabel('Email address', { exact: true }).fill(email);
+  await page.getByRole('button', { name: 'Find', exact: true }).click();
+  await page.getByRole('radio', { name: 'Erase their data (erasure)' }).check();
+  await page.getByRole('button', { name: 'Open the request' }).click();
+  await page.getByLabel(`Type ${email} to confirm`, { exact: true }).fill(email);
+  await page.getByRole('button', { name: 'Erase personal data' }).click();
+  await expect(page.getByText('Erased. The signed receipt below lists what was erased')).toBeVisible();
+}
+
 test.describe('organizer privacy requests: team invitations and erased addresses', () => {
   test.use({ viewport: { width: 1280, height: 900 } });
 
@@ -257,18 +270,18 @@ test.describe('organizer privacy requests: team invitations and erased addresses
     await expect(summary.locator('div').filter({ hasText: 'Team invitations' }).locator('dd')).toHaveText(
       '1',
     );
-    await page.getByRole('button', { name: 'Export data (JSON)' }).click();
+    // M6.1c: an access request, fulfilled with the signed archive; then an erasure request.
+    await page.getByRole('radio', { name: 'A copy of their data (access)' }).check();
+    await page.getByRole('button', { name: 'Open the request' }).click();
+    await page.getByRole('button', { name: 'Create the archive' }).click();
     const [download] = await Promise.all([
       page.waitForEvent('download'),
-      page.getByRole('link', { name: 'Download the file' }).click(),
+      page.getByRole('link', { name: 'Download the archive (ZIP)' }).click(),
     ]);
-    const doc = JSON.parse(readFileSync((await download.path()) as string, 'utf8'));
-    expect(doc.teamInvitations).toEqual([
-      expect.objectContaining({ email, role: 'scanner', status: 'pending' }),
-    ]);
-    await page.getByLabel(`Type ${email} to confirm`, { exact: true }).fill(email);
-    await page.getByRole('button', { name: 'Erase personal data' }).click();
-    await expect(page.getByTestId('dsar-erased')).toBeVisible();
+    const archive = unzip(readFileSync((await download.path()) as string));
+    const doc = JSON.parse(new TextDecoder().decode(archive.get('data/tenancy.json')));
+    expect(doc.invitations).toEqual([expect.objectContaining({ email, role: 'scanner', status: 'pending' })]);
+    await eraseFromConsole(page, email);
     await page.goto('/o/lakeside-events/team');
     await expect(page.getByRole('listitem').filter({ hasText: email })).toHaveCount(0);
   });
@@ -299,12 +312,7 @@ test.describe('organizer privacy requests: team invitations and erased addresses
     await importCsv(`Name,Email\nEra ${stamp},${email}\n`);
     await page.getByRole('button', { name: 'Import 1 guest' }).click();
     await expect(page.getByRole('region', { name: 'Guest-list import' })).toContainText(/Imported 1 guest/);
-    await page.goto('/o/lakeside-events/privacy');
-    await page.getByLabel('Email address', { exact: true }).fill(email);
-    await page.getByRole('button', { name: 'Find', exact: true }).click();
-    await page.getByLabel(`Type ${email} to confirm`, { exact: true }).fill(email);
-    await page.getByRole('button', { name: 'Erase personal data' }).click();
-    await expect(page.getByTestId('dsar-erased')).toBeVisible();
+    await eraseFromConsole(page, email);
 
     // Importing the address again: skipped with the reason.
     await importCsv(

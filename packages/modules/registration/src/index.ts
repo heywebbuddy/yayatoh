@@ -35,6 +35,7 @@ export {
   StartRegistrationInput,
   startRegistrationCommand,
 } from './checkout.ts';
+export { registrationDataSubjects } from './data-subject.ts';
 export * from './domain/approval.ts';
 export * from './domain/capacity.ts';
 export * from './domain/eligibility.ts';

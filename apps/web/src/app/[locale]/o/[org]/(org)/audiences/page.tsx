@@ -35,11 +35,27 @@ export default async function AudiencesPage({
         title={t('title')}
         description={t('description')}
         actions={
-          canSave ? (
-            <Link href={`/o/${org}/audiences/new`} className={buttonClass('primary')}>
-              {t('new')}
-            </Link>
-          ) : undefined
+          <>
+            {/* M6.1a: the org's people (timelines) and possible duplicates; M6.1b: contact insights. */}
+            {roleCan(data.role, 'contacts:read') ? (
+              <>
+                <Link href={`/o/${org}/audiences/people`} className={buttonClass('secondary')}>
+                  {t('peopleLink')}
+                </Link>
+                <Link href={`/o/${org}/audiences/duplicates`} className={buttonClass('secondary')}>
+                  {t('duplicatesLink')}
+                </Link>
+                <Link href={`/o/${org}/contacts/stats`} className={buttonClass('secondary')}>
+                  {t('insights')}
+                </Link>
+              </>
+            ) : null}
+            {canSave ? (
+              <Link href={`/o/${org}/audiences/new`} className={buttonClass('primary')}>
+                {t('new')}
+              </Link>
+            ) : null}
+          </>
         }
       />
       {segments.length === 0 ? (

@@ -325,6 +325,38 @@ export const MobileConfig = z
 
 export const ApiKeyScopes = z.array(z.enum(API_KEY_SCOPES));
 
+/** M6.3a: an API key scope, named for the generated clients. */
+export const ApiKeyScope = z.enum(API_KEY_SCOPES).openapi('ApiKeyScope');
+
+/** M6.3a: the calling API key (`GET /v1/orgs/{org}/api-key`). Never the secret or its hash. */
+export const ApiKeyInfo = z
+  .object({
+    id: z.uuid(),
+    name: z.string(),
+    prefix: z.string().openapi({ description: 'The first characters of the key, e.g. `yy_live_AbC1`.' }),
+    scopes: z.array(ApiKeyScope),
+    test: z.boolean().openapi({ description: 'A test key (`yy_test_…`): read-only, no personal data.' }),
+    sandboxOrg: z
+      .boolean()
+      .openapi({ description: 'The key belongs to a sandbox org: seeded data, fake payments only.' }),
+    createdAt: DateTime,
+    expiresAt: DateTime.nullable().openapi({
+      description: 'When the key stops working (null: never). Set when the key was rotated.',
+    }),
+    rotated: z
+      .boolean()
+      .openapi({ description: 'A newer key replaced this one; switch before `expiresAt`.' }),
+    rateLimit: z
+      .object({
+        keyPerMinute: z.int().openapi({ description: 'Requests per minute for this key.' }),
+        orgPerMinute: z
+          .int()
+          .openapi({ description: 'Requests per minute for every key of the org together.' }),
+      })
+      .openapi({ description: 'The plan’s `api_access` quotas that apply to this key.' }),
+  })
+  .openapi('ApiKeyInfo');
+
 /** Bulk actions on `/v1` (M1.13d): one path segment per registered M1.8 bulk action. */
 export const BULK_KINDS = [
   'labels',
