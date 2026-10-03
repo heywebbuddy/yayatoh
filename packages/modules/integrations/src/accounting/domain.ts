@@ -195,11 +195,7 @@ export interface DayPlan {
  * undoes. Rows not yet sent are replaced freely; a row whose outcome is uncertain blocks the day
  * until it settles (its retry keeps the same idempotency key, so it lands at most once).
  */
-export function planDay(
-  history: readonly DayHistoryRow[],
-  summary: DaySummary,
-  mapVersion: number,
-): DayPlan {
+export function planDay(history: readonly DayHistoryRow[], summary: DaySummary, mapVersion: number): DayPlan {
   const none: DayPlan = { supersede: [], reverse: null, post: false, unchanged: true, blocked: false };
   if (history.some((r) => r.status === 'failed' && r.uncertain)) return { ...none, blocked: true };
   const unsent = history.filter((r) => r.status === 'pending' || r.status === 'failed');

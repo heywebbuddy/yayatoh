@@ -38,4 +38,17 @@ export const privateColumns = columnPrivacy('integrations', {
     field: 'vocab',
     status: 'vocab',
   },
+  // M6.5d accounting: provider account ids and names, and daily totals (no person in them).
+  account_maps: { accounts: internal() },
+  accounting_journals: {
+    currency: 'vocab',
+    kind: 'vocab',
+    status: 'vocab',
+    summary: internal(),
+    summary_key: internal(),
+    lines: internal(),
+    idempotency_key: internal(),
+    external_id: internal(),
+    last_error_code: 'vocab',
+  },
 });

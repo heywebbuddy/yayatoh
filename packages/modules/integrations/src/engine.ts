@@ -11,6 +11,7 @@ import {
 import { tenantCommand } from '@yayatoh/platform';
 import { and, eq, inArray, isNotNull, lte, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
+import { postAccounting } from './accounting/run.ts';
 import type { AuthRef, IntegrationAuth } from './auth/port.ts';
 import { isProviderError } from './auth/port.ts';
 import { parseRules } from './connections.ts';
@@ -100,7 +101,8 @@ const CONNECTION_KEY = '-';
 
 const runEnded = () => new DomainError('invalid_state', 'The run has ended', { reason: 'run_ended' });
 
-async function runningTx(tx: TenantTx, runId: string) {
+/** Shared with the accounting step (M6.5d). */
+export async function runningTx(tx: TenantTx, runId: string) {
   const [run] = await tx.select().from(syncRuns).where(eq(syncRuns.id, runId)).for('update');
   if (run?.status !== 'running') throw runEnded();
   const [c] = await tx.select().from(connections).where(eq(connections.id, run.connectionId));
@@ -131,7 +133,7 @@ async function rulesTx(
   return m ? parseRules(m.rules) : (object[direction]?.defaultMapping ?? []);
 }
 
-interface ErrorInput {
+export interface ErrorInput {
   readonly connectionId: string;
   readonly runId: string;
   readonly step: ErrorStep;
@@ -145,7 +147,7 @@ interface ErrorInput {
 }
 
 /** Open (or count again) the inbox row for one record and step; schedule its automatic retry. */
-async function recordErrorTx(tx: TenantTx, ctx: Ctx, e: ErrorInput): Promise<void> {
+export async function recordErrorTx(tx: TenantTx, ctx: Ctx, e: ErrorInput): Promise<void> {
   const orgId = requireOrg(ctx);
   const [open] = await tx
     .select()
@@ -196,7 +198,13 @@ async function recordErrorTx(tx: TenantTx, ctx: Ctx, e: ErrorInput): Promise<voi
   });
 }
 
-async function resolveErrorsTx(tx: TenantTx, ctx: Ctx, connectionId: string, recordKeys: readonly string[]) {
+/** Shared with the accounting step (M6.5d). */
+export async function resolveErrorsTx(
+  tx: TenantTx,
+  ctx: Ctx,
+  connectionId: string,
+  recordKeys: readonly string[],
+) {
   if (recordKeys.length === 0) return;
   await tx
     .update(syncErrors)
@@ -227,7 +235,8 @@ async function setCursorTx(
     });
 }
 
-async function bumpRunTx(
+/** Shared with the accounting step (M6.5d). */
+export async function bumpRunTx(
   tx: TenantTx,
   ctx: Ctx,
   runId: string,
@@ -1046,6 +1055,13 @@ export async function runSync(
         throw isProviderError(err) ? new RunStop('push', err) : err;
       }
     }
+    // M6.5d: accounting connectors post their daily summary journals.
+    if (connector.accounting)
+      try {
+        await postAccounting(ctx, ports, connector, io, runId, connectionId);
+      } catch (err) {
+        throw isProviderError(err) ? new RunStop('push', err) : err;
+      }
     return finish('done');
   } catch (err) {
     const cause = err instanceof RunStop ? err.reason : err;

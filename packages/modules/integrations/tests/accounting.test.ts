@@ -14,14 +14,19 @@ import {
   journalReference,
   linesBalance,
   minorToDecimal,
-  planDay,
   type ProviderAccount,
+  planDay,
   reversalLines,
   summaryKey,
   validateAccountMap,
 } from '../src/accounting/domain.ts';
 
-const acct = (id: string): ProviderAccount => ({ id, code: id.toUpperCase(), name: `Account ${id}`, type: 'X' });
+const acct = (id: string): ProviderAccount => ({
+  id,
+  code: id.toUpperCase(),
+  name: `Account ${id}`,
+  type: 'X',
+});
 const MAP: AccountMap = {
   sales: acct('s'),
   donations: acct('d'),
@@ -89,7 +94,9 @@ describe('chart-of-accounts mapping', () => {
     expect(validateAccountMap({ ...chosen, donations: 's', refunds: 's' }, chart)).toEqual([]);
   });
   it('names missing, unknown and clearing-shared categories', () => {
-    expect(validateAccountMap({ ...chosen, fees: '' }, chart)).toEqual([{ category: 'fees', code: 'missing' }]);
+    expect(validateAccountMap({ ...chosen, fees: '' }, chart)).toEqual([
+      { category: 'fees', code: 'missing' },
+    ]);
     expect(validateAccountMap({ ...chosen, sales: 'gone' }, chart)).toEqual([
       { category: 'sales', code: 'unknown_account' },
     ]);
@@ -171,7 +178,9 @@ describe('re-posting on correction: reverse and re-post, never edit', () => {
 describe('keys, references and exact decimals', () => {
   it('idempotency is org + day + currency + revision', () => {
     expect(journalKey('o1', '2026-10-01', 'USD', 2, 'journal')).toBe('yayatoh:o1:2026-10-01:USD:r2');
-    expect(journalKey('o1', '2026-10-01', 'USD', 1, 'reversal')).toBe('yayatoh:o1:2026-10-01:USD:r1:reversal');
+    expect(journalKey('o1', '2026-10-01', 'USD', 1, 'reversal')).toBe(
+      'yayatoh:o1:2026-10-01:USD:r1:reversal',
+    );
     expect(journalReference('2026-10-01', 'USD', 12, 'reversal')).toBe('YY-20261001-USD-12R');
     expect(journalReference('2026-10-01', 'USD', 12, 'reversal').length).toBeLessThanOrEqual(21);
   });
@@ -183,11 +192,13 @@ describe('keys, references and exact decimals', () => {
     expect(minorToDecimal(1_005, 3)).toBe('1.005');
     expect(minorToDecimal(9_007_199_254_740_991, 2)).toBe('90071992547409.91');
     expect(decimalToMinor('123.45', 2)).toBe(12_345);
-    expect(decimalToMinor(0.1 + 0.2 > 0.3 ? '0.30' : '0.3', 2)).toBe(30);
+    expect(decimalToMinor('0.30', 2)).toBe(30);
+    expect(decimalToMinor(0.3, 2)).toBe(30);
     expect(decimalToMinor('1.005', 2)).toBeNull();
     expect(decimalToMinor('-0.05', 2)).toBe(-5);
     expect(decimalToMinor('abc', 2)).toBeNull();
-    for (const n of [0, 1, 99, 100, 101, 123_456_789]) expect(decimalToMinor(minorToDecimal(n, 2), 2)).toBe(n);
+    for (const n of [0, 1, 99, 100, 101, 123_456_789])
+      expect(decimalToMinor(minorToDecimal(n, 2), 2)).toBe(n);
   });
 
   it('days follow the org time zone', () => {
