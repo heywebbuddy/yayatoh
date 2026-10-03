@@ -30,13 +30,15 @@ export function AddEventToSeriesForm({
         hint={t('hint')}
         error={missing ? t('required') : undefined}
         defaultValue=""
-        placeholder={t('placeholder')}
-        options={events.map((e) => {
-          const text = e.otherSeries
-            ? t('optionMoves', { name: e.name, when: e.when, series: e.otherSeries })
-            : t('option', { name: e.name, when: e.when });
-          return { value: e.id, text, label: text };
-        })}
+        options={[
+          { value: '', text: t('placeholder'), label: t('placeholder') },
+          ...events.map((e) => {
+            const text = e.otherSeries
+              ? t('optionMoves', { name: e.name, when: e.when, series: e.otherSeries })
+              : t('option', { name: e.name, when: e.when });
+            return { value: e.id, text, label: text };
+          }),
+        ]}
       />
       <div aria-live="polite">
         {state.code && !missing ? <Alert title={tr(errorMessageKey(state.code))} /> : null}

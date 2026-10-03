@@ -23,9 +23,9 @@ import { ports } from '@/server/ports.ts';
 const IDEMPOTENT_CREATE = { ...createEventCommand, idempotent: true };
 const IDEMPOTENT_CREATE_IN_SERIES = { ...createEventInSeriesCommand, idempotent: true };
 
-/** U7: the Series field's value — none, one of the org's series, or `new:{name}` (created with the event). */
+/** U7: the Series field's value — none (`''`/`none`), one of the org's series, or `new:{name}` (created with the event). */
 function seriesChoice(value: string): { seriesId: string } | { newSeriesName: string } | null {
-  if (!value) return null;
+  if (!value || value === 'none') return null;
   return value.startsWith('new:') ? { newSeriesName: value.slice(4).trim() } : { seriesId: value };
 }
 
