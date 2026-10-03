@@ -143,3 +143,19 @@ Consumes (v1): `order.paid`, `order.refunded`, `order.disputed`, `order.dispute_
 - [ ] Switch to Month, filter one event, reload: the URL keeps it.
 - [ ] Rebuild: "Rebuild started", then (worker or dev route) "Done · N events checked, 0 updated".
 - [ ] Sign in as jordan@lakeside.test (viewer): counts only, no revenue, no rebuild.
+
+### 12. Gate results (M6.2a, on merge/next-3h + m0.5-foundation-ey5gqp + design-v2)
+- `pnpm verify`: lint, check:modules, typecheck (59 packages), 2525 unit tests (191 files), 1422
+  integration tests (158 files): all pass.
+- E2E `warehouse.spec.ts`: 18/18 (6 tests × 375/768/1280).
+- Whole web suite (2 workers; the org nav and seed changed): the first run stopped at the 2-hour
+  limit after 1693 of 1989 tests; the 272 unrun desktop tests ran after (293 passed). Failures, none
+  in analytics pages:
+  - `dev-login.spec.ts:31` (all viewports): the "newcomer" persona already owns an org created by an
+    earlier spec in the same database, so `/o` shows that org's home ("Good morning, Nia.").
+  - `venues.spec.ts:134` (all viewports): the console list's Category filter comes back as
+    `nightlife` instead of empty (state left by an earlier run on the shared database).
+  - `registration-approvals.spec.ts:236` (all viewports): after paying from the emailed link the
+    page reads "Pay for your order", not "You're registered" (M5.1c flow from batch 3h).
+  - `enrollment.spec.ts:105` and `speaker-portal.spec.ts:147/254` failed once under full-suite load
+    (email waits timed out) and pass when run alone.
