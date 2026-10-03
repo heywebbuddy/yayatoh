@@ -213,6 +213,8 @@ export {
   seatingLiveAccessQuery,
 } from './live.ts';
 export { seatedAttendeeIdsTx } from './participation.ts';
+// M4.7a: the seats of a party for its guest hub (the app passes this reader to the guests module).
+export { partySeatsTx } from './party-seats.ts';
 export { privateColumns } from './private-columns.ts';
 export {
   checkSeatRulesTx,

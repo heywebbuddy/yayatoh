@@ -32,6 +32,8 @@ export const PRIVATE_PATHS = [
   '/tv/',
   // M4.5a: guest websites (password-protected, never indexed: P4-3c).
   '/w/',
+  // M4.7a: a party's guest hub (its signed link; never indexed: P4-3).
+  '/hub/',
 ];
 
 /**

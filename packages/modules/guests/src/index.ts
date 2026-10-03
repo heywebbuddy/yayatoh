@@ -47,6 +47,18 @@ export {
   parseTags,
   plusOneRefusal,
 } from './domain/guests.ts';
+// M4.7a guest hub: one page per party (RSVP, program, seats, tickets) and its wallet pass port.
+export {
+  type GuestPassContent,
+  type GuestPassFacts,
+  guestPassContent,
+  guestPassSerial,
+  type HubTally,
+  hubTally,
+  nextProgramItem,
+  PASS_SEATS_MAX,
+  PASS_TEXT_MAX,
+} from './domain/hub.ts';
 export {
   GUEST_IMPORT_FIELDS,
   GUEST_IMPORT_REJECTIONS,
@@ -141,6 +153,15 @@ export {
   updatePartyCommand,
   updatePartyGuestCommand,
 } from './guests.ts';
+export {
+  type HubPerson,
+  type HubSeat,
+  type HubTicket,
+  PartyHubDto,
+  type PartyHubReaders,
+  type PartyHubView,
+  partyHubQuery,
+} from './hub.ts';
 export {
   GuestImportSummaryDto,
   GuestMappingInput,
@@ -338,3 +359,13 @@ export {
   tablePartiesTx,
   tablePartyTx,
 } from './tables.ts';
+export {
+  FAKE_PASS_CONTENT_TYPE,
+  type FakeGuestPass,
+  fakeGuestPassProvider,
+  GUEST_PASS_PLATFORMS,
+  type GuestPassPlatform,
+  type GuestPassProvider,
+  type GuestPassRequest,
+  type GuestPassResult,
+} from './wallet-pass.ts';

@@ -13,6 +13,8 @@ export function appOrigin(): string {
 export const rsvpUrl = (token: string) => `${appOrigin()}/rsvp/${encodeURIComponent(token)}`;
 /** M4.4a: a party's seat page (the same signed link; permanent as the party moves). */
 export const partySeatUrl = (token: string) => `${appOrigin()}/rsvp/${encodeURIComponent(token)}/seat`;
+/** A party's guest page (M4.7a): the same token as its RSVP link. */
+export const hubUrl = (token: string) => `${appOrigin()}/hub/${encodeURIComponent(token)}`;
 export const rsvpFindUrl = (code: string) => `${appOrigin()}/rsvp/find/${code}`;
 
 /** An event's public contact collector (M4.1f). */
