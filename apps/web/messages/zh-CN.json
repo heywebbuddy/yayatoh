@@ -8662,7 +8662,9 @@
         "not_connected": "此活动未开放在线捐款。",
         "campaign_closed": "此筹款活动已关闭。",
         "risk_blocked": "我们无法接受这笔捐款。请稍后再试或联系主办方。"
-      }
+      },
+      "showOnScreen": "在会场大屏上署名致谢我",
+      "showOnScreenHint": "默认关闭。您的姓名按上方的选择显示;捐款金额从不显示。"
     },
     "thanks": {
       "metaTitle": "谢谢",
@@ -8744,7 +8746,8 @@
       "cardBody": "为宾客分配号码牌，从控制台叫出捐赠档位，让观察员在手机上记录举起的号码牌，并确认认捐。",
       "openConsole": "打开控制台",
       "openSpotter": "记录号码牌",
-      "openPaddles": "号码牌"
+      "openPaddles": "号码牌",
+      "openScreen": "现场大屏"
     },
     "paddles": {
       "title": "号码牌",
@@ -8927,6 +8930,77 @@
       "confirmedOne": "号码牌 {number} 已确认为认捐。",
       "voided": "号码牌 {number} 已搁置。",
       "voidedPledge": "号码牌 {number} 已搁置，其认捐已取消。"
+    },
+    "screen": {
+      "metaTitle": "捐款大屏",
+      "totalLabel": "目前已筹",
+      "progressLabel": "目标进度",
+      "progressText": "{total} / {goal}",
+      "goal": "已达 {goal} 目标的 {percent}%",
+      "goalReached": "目标达成!",
+      "gifts": "{count, plural, =0 {成为第一位捐赠者} other {# 笔捐款}}",
+      "calling": "当前档位",
+      "callingLevel": "{amount} · {name}",
+      "paddles": "{count, plural, =0 {请举起您的号牌!} other {已举牌 # 次}}",
+      "thanksTitle": "感谢您",
+      "thanksEmpty": "每一份捐款都很重要。谢谢!",
+      "scanToGive": "扫码捐款",
+      "qrLabel": "捐款页面二维码:{url}",
+      "sideLabel": "如何捐款,以及我们的感谢",
+      "replacedTitle": "此大屏链接已被替换",
+      "replacedBody": "请向主办方索取新链接。"
+    },
+    "screenPage": {
+      "title": "现场大屏",
+      "subtitle": "为会场投影准备的筹款温度计:目标、总额、当前档位,以及对希望被署名的捐赠者的感谢。",
+      "setupTitle": "设置大屏",
+      "setupBody": "选择温度计跟随的筹款活动。其二维码会打开该活动的捐款页面。",
+      "settingsTitle": "大屏设置",
+      "campaign": "筹款活动",
+      "campaignHint": "温度计跟随此活动:已支付的捐款加上各档位举起的号牌。",
+      "chooseCampaign": "选择筹款活动",
+      "campaignClosed": "{name}(已关闭)",
+      "showNames": "按姓名致谢捐赠者",
+      "showNamesHint": "只显示勾选了“在大屏上署名致谢我”的捐赠者,并按其选择的方式显示。号牌持有人从不显示姓名。关闭:只显示总额。",
+      "setUp": "设置大屏",
+      "save": "保存",
+      "saved": "大屏已保存。已打开的大屏会立即更新。",
+      "rotated": "链接已替换。旧链接上的大屏已停止;请在投影电脑上打开新链接。",
+      "noCampaignsTitle": "请先添加筹款活动",
+      "noCampaignsBody": "大屏显示筹款活动的目标和总额。请在“捐款”标签页中创建。",
+      "openDonations": "打开捐款",
+      "notSetUp": "大屏尚未设置。",
+      "viewerNotice": "您可以在此查看大屏。请让能编辑活动的人进行设置或分享链接。",
+      "linkTitle": "大屏链接",
+      "linkBody": "在连接投影仪的电脑上打开此链接。无需登录,因此只与您的音视频团队分享。",
+      "linkLabel": "大屏链接",
+      "copy": "复制链接",
+      "copied": "链接已复制。",
+      "openScreen": "打开大屏",
+      "openContrast": "以高对比度打开",
+      "openStill": "以减少动画打开",
+      "rotate": "替换链接",
+      "rotateHint": "使用旧链接打开的大屏会立即停止。",
+      "givingTitle": "扫码捐款",
+      "givingOpen": "大屏上的二维码会打开 {campaign} 的捐款页面。手机捐款会实时计入总额。",
+      "givingClosed": "暂无二维码:连接 Stripe、发布活动并开放筹款后,捐款页面才会接受捐款。",
+      "previewTitle": "预览",
+      "cardsLink": "打印桌卡",
+      "errors": {
+        "campaign": "请选择本活动的筹款活动。"
+      },
+      "rotateConfirm": "立即替换(旧链接上的大屏将停止)"
+    },
+    "screenCards": {
+      "title": "桌卡",
+      "subtitle": "打印后在每张桌上放一张。宾客扫码即可用手机捐款。",
+      "print": "打印",
+      "sheetLabel": "桌卡",
+      "cardTitle": "扫码捐款",
+      "cardBody": "用手机为 {campaign} 捐款。您的捐款会计入大屏上的总额。",
+      "qrLabel": "捐款页面二维码:{url}",
+      "noScreenTitle": "请先设置大屏",
+      "noScreenBody": "桌卡打开的是大屏跟随的筹款活动。"
     }
   },
   "galaTables": {

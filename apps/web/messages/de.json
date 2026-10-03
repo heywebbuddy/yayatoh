@@ -8662,7 +8662,9 @@
         "not_connected": "Online-Spenden sind für diese Veranstaltung nicht geöffnet.",
         "campaign_closed": "Diese Kampagne ist beendet.",
         "risk_blocked": "Wir konnten diese Spende nicht annehmen. Bitte versuchen Sie es später erneut oder wenden Sie sich an den Gastgeber."
-      }
+      },
+      "showOnScreen": "Mir auf dem Bildschirm im Saal namentlich danken",
+      "showOnScreenHint": "Standardmäßig aus. Ihr Name erscheint wie oben gewählt; der Betrag Ihrer Spende nie."
     },
     "thanks": {
       "metaTitle": "Danke",
@@ -8744,7 +8746,8 @@
       "cardBody": "Gib Gästen Bieternummern, rufe Stufen über die Konsole auf, lass Spotter gehobene Nummern auf dem Handy erfassen und bestätige Zusagen.",
       "openConsole": "Konsole öffnen",
       "openSpotter": "Nummern erfassen",
-      "openPaddles": "Bieternummern"
+      "openPaddles": "Bieternummern",
+      "openScreen": "Live-Bildschirm"
     },
     "paddles": {
       "title": "Bieternummern",
@@ -8927,6 +8930,77 @@
       "confirmedOne": "Nummer {number} als Zusage bestätigt.",
       "voided": "Nummer {number} beiseitegelegt.",
       "voidedPledge": "Nummer {number} beiseitegelegt und ihre Zusage storniert."
+    },
+    "screen": {
+      "metaTitle": "Spendenbildschirm",
+      "totalLabel": "Bisher gesammelt",
+      "progressLabel": "Fortschritt zum Ziel",
+      "progressText": "{total} von {goal}",
+      "goal": "{percent} % des Ziels von {goal}",
+      "goalReached": "Ziel erreicht!",
+      "gifts": "{count, plural, =0 {Spenden Sie als Erste oder Erster} one {# Spende} other {# Spenden}}",
+      "calling": "Jetzt aufgerufen",
+      "callingLevel": "{amount} · {name}",
+      "paddles": "{count, plural, =0 {Heben Sie Ihre Bieterkarte!} one {# Bieterkarte gehoben} other {# Bieterkarten gehoben}}",
+      "thanksTitle": "Danke",
+      "thanksEmpty": "Jede Spende zählt. Danke!",
+      "scanToGive": "Scannen und spenden",
+      "qrLabel": "QR-Code zur Spendenseite: {url}",
+      "sideLabel": "So spenden Sie, und unser Dank",
+      "replacedTitle": "Dieser Bildschirm-Link wurde ersetzt",
+      "replacedBody": "Bitten Sie den Gastgeber um den neuen Link."
+    },
+    "screenPage": {
+      "title": "Live-Bildschirm",
+      "subtitle": "Ein Spendenbarometer für die Projektoren im Saal: Ziel, Gesamtbetrag, die aufgerufene Stufe und Dank an Spender, die genannt werden möchten.",
+      "setupTitle": "Bildschirm einrichten",
+      "setupBody": "Wählen Sie die Kampagne, der das Barometer folgt. Sein QR-Code öffnet die Spendenseite dieser Kampagne.",
+      "settingsTitle": "Bildschirmeinstellungen",
+      "campaign": "Kampagne",
+      "campaignHint": "Das Barometer folgt dieser Kampagne: bezahlte Spenden plus gehobene Bieterkarten auf ihren Stufen.",
+      "chooseCampaign": "Kampagne wählen",
+      "campaignClosed": "{name} (geschlossen)",
+      "showNames": "Spendern namentlich danken",
+      "showNamesHint": "Genannt werden nur Spender, die „Mir auf dem Bildschirm namentlich danken“ angekreuzt haben, so wie sie erscheinen möchten. Inhaber von Bieterkarten werden nie genannt. Aus: nur Summen.",
+      "setUp": "Bildschirm einrichten",
+      "save": "Speichern",
+      "saved": "Bildschirm gespeichert. Offene Bildschirme werden sofort aktualisiert.",
+      "rotated": "Link ersetzt. Bildschirme mit dem alten Link wurden gestoppt; öffnen Sie den neuen Link am Projektor.",
+      "noCampaignsTitle": "Zuerst eine Kampagne anlegen",
+      "noCampaignsBody": "Der Bildschirm zeigt Ziel und Gesamtbetrag einer Kampagne. Legen Sie eine im Tab Spenden an.",
+      "openDonations": "Spenden öffnen",
+      "notSetUp": "Der Bildschirm ist noch nicht eingerichtet.",
+      "viewerNotice": "Sie können den Bildschirm hier ansehen. Bitten Sie jemanden, der die Veranstaltung bearbeiten kann, ihn einzurichten oder den Link zu teilen.",
+      "linkTitle": "Bildschirm-Link",
+      "linkBody": "Öffnen Sie diesen Link auf dem Computer am Projektor. Eine Anmeldung ist nicht nötig, teilen Sie ihn daher nur mit Ihrem Technikteam.",
+      "linkLabel": "Bildschirm-Link",
+      "copy": "Link kopieren",
+      "copied": "Link kopiert.",
+      "openScreen": "Bildschirm öffnen",
+      "openContrast": "Mit hohem Kontrast öffnen",
+      "openStill": "Mit reduzierter Bewegung öffnen",
+      "rotate": "Link ersetzen",
+      "rotateHint": "Bildschirme mit dem alten Link stoppen sofort.",
+      "givingTitle": "QR-Spenden",
+      "givingOpen": "Der QR-Code des Bildschirms öffnet die Spendenseite für {campaign}. Spenden per Handy fließen live in die Summe ein.",
+      "givingClosed": "Noch kein QR-Code: Die Spendenseite nimmt Spenden an, sobald Stripe verbunden, die Veranstaltung veröffentlicht und die Kampagne offen ist.",
+      "previewTitle": "Vorschau",
+      "cardsLink": "Tischkarten drucken",
+      "errors": {
+        "campaign": "Wählen Sie eine Kampagne dieser Veranstaltung."
+      },
+      "rotateConfirm": "Jetzt ersetzen (Bildschirme mit dem alten Link stoppen)"
+    },
+    "screenCards": {
+      "title": "Tischkarten",
+      "subtitle": "Drucken Sie sie aus und legen Sie eine auf jeden Tisch. Gäste scannen den Code und spenden per Handy.",
+      "print": "Drucken",
+      "sheetLabel": "Tischkarten",
+      "cardTitle": "Scannen und spenden",
+      "cardBody": "Spenden Sie per Handy für {campaign}. Ihre Spende fließt in die Summe auf dem Bildschirm ein.",
+      "qrLabel": "QR-Code zur Spendenseite: {url}",
+      "noScreenTitle": "Zuerst den Bildschirm einrichten",
+      "noScreenBody": "Die Karten öffnen die Kampagne, der der Bildschirm folgt."
     }
   },
   "galaTables": {

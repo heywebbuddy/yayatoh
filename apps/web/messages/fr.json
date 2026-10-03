@@ -8662,7 +8662,9 @@
         "not_connected": "Les dons en ligne ne sont pas ouverts pour cet événement.",
         "campaign_closed": "Cette campagne est terminée.",
         "risk_blocked": "Nous n’avons pas pu accepter ce don. Réessayez plus tard ou contactez l’hôte."
-      }
+      },
+      "showOnScreen": "Me remercier par mon nom sur l’écran de la salle",
+      "showOnScreenHint": "Désactivé par défaut. Votre nom apparaît comme choisi ci-dessus ; le montant de votre don, jamais."
     },
     "thanks": {
       "metaTitle": "Merci",
@@ -8744,7 +8746,8 @@
       "cardBody": "Donnez des numéros de palette aux invités, appelez les paliers depuis la console, laissez les observateurs saisir les palettes levées sur leur téléphone et confirmez les promesses.",
       "openConsole": "Ouvrir la console",
       "openSpotter": "Saisir les palettes",
-      "openPaddles": "Numéros de palette"
+      "openPaddles": "Numéros de palette",
+      "openScreen": "Écran en direct"
     },
     "paddles": {
       "title": "Numéros de palette",
@@ -8927,6 +8930,77 @@
       "confirmedOne": "Palette {number} confirmée comme promesse.",
       "voided": "Palette {number} mise de côté.",
       "voidedPledge": "Palette {number} mise de côté et sa promesse annulée."
+    },
+    "screen": {
+      "metaTitle": "Écran des dons",
+      "totalLabel": "Collecté jusqu’ici",
+      "progressLabel": "Progression vers l’objectif",
+      "progressText": "{total} sur {goal}",
+      "goal": "{percent} % de l’objectif de {goal}",
+      "goalReached": "Objectif atteint !",
+      "gifts": "{count, plural, =0 {Soyez le premier à donner} one {# don} other {# dons}}",
+      "calling": "Palier en cours",
+      "callingLevel": "{amount} · {name}",
+      "paddles": "{count, plural, =0 {Levez votre pancarte !} one {# pancarte levée} other {# pancartes levées}}",
+      "thanksTitle": "Merci",
+      "thanksEmpty": "Chaque don compte. Merci !",
+      "scanToGive": "Scannez pour donner",
+      "qrLabel": "Code QR vers la page de dons : {url}",
+      "sideLabel": "Comment donner, et nos remerciements",
+      "replacedTitle": "Le lien de cet écran a été remplacé",
+      "replacedBody": "Demandez le nouveau lien à l’organisateur."
+    },
+    "screenPage": {
+      "title": "Écran en direct",
+      "subtitle": "Un thermomètre pour les projecteurs de la salle : l’objectif, le total, le palier en cours et des remerciements aux donateurs qui ont demandé à être nommés.",
+      "setupTitle": "Configurer l’écran",
+      "setupBody": "Choisissez la campagne que suit le thermomètre. Son code QR ouvre la page de dons de cette campagne.",
+      "settingsTitle": "Réglages de l’écran",
+      "campaign": "Campagne",
+      "campaignHint": "Le thermomètre suit cette campagne : dons payés et pancartes levées à ses paliers.",
+      "chooseCampaign": "Choisir une campagne",
+      "campaignClosed": "{name} (fermée)",
+      "showNames": "Remercier les donateurs par leur nom",
+      "showNamesHint": "Seuls les donateurs qui ont coché « Me remercier par mon nom à l’écran » sont nommés, comme ils ont choisi d’apparaître. Les détenteurs de pancartes ne sont jamais nommés. Désactivé : totaux seulement.",
+      "setUp": "Configurer l’écran",
+      "save": "Enregistrer",
+      "saved": "Écran enregistré. Les écrans ouverts se mettent à jour aussitôt.",
+      "rotated": "Lien remplacé. Les écrans ouverts avec l’ancien lien se sont arrêtés ; ouvrez le nouveau lien sur le projecteur.",
+      "noCampaignsTitle": "Ajoutez d’abord une campagne",
+      "noCampaignsBody": "L’écran affiche l’objectif et le total d’une campagne. Créez-en une dans l’onglet Dons.",
+      "openDonations": "Ouvrir les dons",
+      "notSetUp": "L’écran n’est pas encore configuré.",
+      "viewerNotice": "Vous pouvez suivre l’écran ici. Demandez à une personne qui peut modifier l’événement de le configurer ou d’en partager le lien.",
+      "linkTitle": "Lien de l’écran",
+      "linkBody": "Ouvrez ce lien sur l’ordinateur relié au projecteur. Aucune connexion n’est nécessaire : partagez-le uniquement avec votre équipe technique.",
+      "linkLabel": "Lien de l’écran",
+      "copy": "Copier le lien",
+      "copied": "Lien copié.",
+      "openScreen": "Ouvrir l’écran",
+      "openContrast": "Ouvrir en contraste élevé",
+      "openStill": "Ouvrir avec animations réduites",
+      "rotate": "Remplacer le lien",
+      "rotateHint": "Les écrans ouverts avec l’ancien lien s’arrêtent aussitôt.",
+      "givingTitle": "Dons par QR",
+      "givingOpen": "Le code QR de l’écran ouvre la page de dons de {campaign}. Les dons faits sur téléphone s’ajoutent au total en direct.",
+      "givingClosed": "Pas encore de code QR : la page de dons accepte des dons une fois Stripe connecté, l’événement publié et la campagne ouverte.",
+      "previewTitle": "Aperçu",
+      "cardsLink": "Imprimer les cartes de table",
+      "errors": {
+        "campaign": "Choisissez une campagne de cet événement."
+      },
+      "rotateConfirm": "Le remplacer (les écrans sur l’ancien lien s’arrêtent)"
+    },
+    "screenCards": {
+      "title": "Cartes de table",
+      "subtitle": "Imprimez-les et posez-en une sur chaque table. Les invités scannent le code pour donner depuis leur téléphone.",
+      "print": "Imprimer",
+      "sheetLabel": "Cartes de table",
+      "cardTitle": "Scannez pour donner",
+      "cardBody": "Donnez à {campaign} depuis votre téléphone. Votre don s’ajoute au total à l’écran.",
+      "qrLabel": "Code QR vers la page de dons : {url}",
+      "noScreenTitle": "Configurez d’abord l’écran",
+      "noScreenBody": "Les cartes ouvrent la campagne que suit l’écran."
     }
   },
   "galaTables": {

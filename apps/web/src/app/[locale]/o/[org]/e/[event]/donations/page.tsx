@@ -291,6 +291,11 @@ export default async function DonationsPage({
                 {tp('openConsole')}
               </Link>
             ) : null}
+            {can('orders:read') ? (
+              <Link href={`/o/${org}/e/${event}/donations/screen`} className={buttonClass('secondary', 'sm')}>
+                {tp('openScreen')}
+              </Link>
+            ) : null}
             {can('checkin:scan') ? (
               <Link
                 href={`/o/${org}/e/${event}/donations/paddle-raise/spot`}

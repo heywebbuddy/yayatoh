@@ -8662,7 +8662,9 @@
         "not_connected": "Online geven is niet open voor dit evenement.",
         "campaign_closed": "Deze campagne is gesloten.",
         "risk_blocked": "We konden deze gift niet aannemen. Probeer het later opnieuw of neem contact op met de host."
-      }
+      },
+      "showOnScreen": "Bedank mij bij naam op het scherm in de zaal",
+      "showOnScreenHint": "Standaard uit. Je naam verschijnt zoals je hierboven koos; het bedrag van je gift nooit."
     },
     "thanks": {
       "metaTitle": "Bedankt",
@@ -8744,7 +8746,8 @@
       "cardBody": "Geef gasten bordnummers, roep niveaus af vanuit de console, laat spotters opgestoken bordjes op hun telefoon noteren en bevestig toezeggingen.",
       "openConsole": "Console openen",
       "openSpotter": "Bordjes noteren",
-      "openPaddles": "Bordnummers"
+      "openPaddles": "Bordnummers",
+      "openScreen": "Live scherm"
     },
     "paddles": {
       "title": "Bordnummers",
@@ -8927,6 +8930,77 @@
       "confirmedOne": "Bordje {number} bevestigd als toezegging.",
       "voided": "Bordje {number} apart gezet.",
       "voidedPledge": "Bordje {number} apart gezet en de toezegging geannuleerd."
+    },
+    "screen": {
+      "metaTitle": "Giftenscherm",
+      "totalLabel": "Tot nu toe opgehaald",
+      "progressLabel": "Voortgang naar het doel",
+      "progressText": "{total} van {goal}",
+      "goal": "{percent}% van het doel van {goal}",
+      "goalReached": "Doel bereikt!",
+      "gifts": "{count, plural, =0 {Geef als eerste} one {# gift} other {# giften}}",
+      "calling": "Nu aan de beurt",
+      "callingLevel": "{amount} · {name}",
+      "paddles": "{count, plural, =0 {Steek je bordje op!} one {# bordje opgestoken} other {# bordjes opgestoken}}",
+      "thanksTitle": "Dank je wel",
+      "thanksEmpty": "Elke gift telt. Dank je wel!",
+      "scanToGive": "Scan om te geven",
+      "qrLabel": "QR-code naar de giftenpagina: {url}",
+      "sideLabel": "Zo geef je, en onze dank",
+      "replacedTitle": "De link van dit scherm is vervangen",
+      "replacedBody": "Vraag de organisator om de nieuwe link."
+    },
+    "screenPage": {
+      "title": "Live scherm",
+      "subtitle": "Een thermometer voor de projectoren in de zaal: het doel, het totaal, het niveau dat nu aan de beurt is en dank aan gevers die genoemd willen worden.",
+      "setupTitle": "Scherm instellen",
+      "setupBody": "Kies de campagne die de thermometer volgt. De QR-code opent de giftenpagina van die campagne.",
+      "settingsTitle": "Scherminstellingen",
+      "campaign": "Campagne",
+      "campaignHint": "De thermometer volgt deze campagne: betaalde giften plus opgestoken bordjes op de niveaus.",
+      "chooseCampaign": "Kies een campagne",
+      "campaignClosed": "{name} (gesloten)",
+      "showNames": "Gevers bij naam bedanken",
+      "showNamesHint": "Alleen gevers die „Bedank mij bij naam op het scherm” aanvinkten worden genoemd, zoals ze wilden verschijnen. Houders van bordjes worden nooit genoemd. Uit: alleen totalen.",
+      "setUp": "Scherm instellen",
+      "save": "Opslaan",
+      "saved": "Scherm opgeslagen. Open schermen worden meteen bijgewerkt.",
+      "rotated": "Link vervangen. Schermen met de oude link zijn gestopt; open de nieuwe link op de projector.",
+      "noCampaignsTitle": "Voeg eerst een campagne toe",
+      "noCampaignsBody": "Het scherm toont het doel en het totaal van een campagne. Maak er een aan op het tabblad Donaties.",
+      "openDonations": "Donaties openen",
+      "notSetUp": "Het scherm is nog niet ingesteld.",
+      "viewerNotice": "Je kunt het scherm hier volgen. Vraag iemand die het evenement kan bewerken om het in te stellen of de link te delen.",
+      "linkTitle": "Schermlink",
+      "linkBody": "Open deze link op de computer die op de projector is aangesloten. Inloggen is niet nodig, dus deel hem alleen met je AV-team.",
+      "linkLabel": "Schermlink",
+      "copy": "Link kopiëren",
+      "copied": "Link gekopieerd.",
+      "openScreen": "Scherm openen",
+      "openContrast": "Openen met hoog contrast",
+      "openStill": "Openen met minder beweging",
+      "rotate": "Link vervangen",
+      "rotateHint": "Schermen met de oude link stoppen meteen.",
+      "givingTitle": "Geven met QR",
+      "givingOpen": "De QR-code op het scherm opent de giftenpagina voor {campaign}. Giften via telefoons tellen live mee in het totaal.",
+      "givingClosed": "Nog geen QR-code: de giftenpagina neemt giften aan zodra Stripe is gekoppeld, het evenement is gepubliceerd en de campagne open is.",
+      "previewTitle": "Voorbeeld",
+      "cardsLink": "Tafelkaarten afdrukken",
+      "errors": {
+        "campaign": "Kies een campagne van dit evenement."
+      },
+      "rotateConfirm": "Nu vervangen (schermen met de oude link stoppen)"
+    },
+    "screenCards": {
+      "title": "Tafelkaarten",
+      "subtitle": "Druk ze af en leg er een op elke tafel. Gasten scannen de code om met hun telefoon te geven.",
+      "print": "Afdrukken",
+      "sheetLabel": "Tafelkaarten",
+      "cardTitle": "Scan om te geven",
+      "cardBody": "Geef aan {campaign} met je telefoon. Je gift telt mee in het totaal op het scherm.",
+      "qrLabel": "QR-code naar de giftenpagina: {url}",
+      "noScreenTitle": "Stel eerst het scherm in",
+      "noScreenBody": "De kaarten openen de campagne die het scherm volgt."
     }
   },
   "galaTables": {

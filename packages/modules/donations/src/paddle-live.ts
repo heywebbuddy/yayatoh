@@ -12,6 +12,7 @@ import {
   type SpotterStateDto,
 } from './paddle-dto.ts';
 import { paddleCalls, paddleEntries, paddles, pledges } from './schema-paddles.ts';
+import { publishScreenStateTx } from './screen-live.ts';
 
 type CallRow = typeof paddleCalls.$inferSelect;
 
@@ -136,11 +137,15 @@ export async function publishSpotterStateTx(tx: TenantTx, ctx: Ctx, eventId: str
   });
 }
 
-/** Tell the console and the recorder the open call and the totals (in the write's transaction). */
+/**
+ * Tell the console and the recorder the open call and the totals (in the write's transaction),
+ * and the room's giving screen its thermometer (M4.8d): every paddle-raise write moves both.
+ */
 export async function publishConsoleStateTx(tx: TenantTx, ctx: Ctx, eventId: string, currency: string) {
   await publishRealtimeTx(tx, requireOrg(ctx), PADDLE_CONSOLE_CHANNEL, {
     eventId,
     event: 'state',
     data: await consoleLiveTx(tx, eventId, currency),
   });
+  await publishScreenStateTx(tx, requireOrg(ctx), eventId);
 }

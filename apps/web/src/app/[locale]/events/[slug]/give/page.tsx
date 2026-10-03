@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import { catchUpGifts, publicGiving } from '@yayatoh/donations';
+import { catchUpGifts, publicGiving, QR_PLACES } from '@yayatoh/donations';
 import { checkoutTarget, publicEventBySlug } from '@yayatoh/events';
 import { formatMoney, money } from '@yayatoh/kernel';
 import { buttonClass, EmptyState, Label, ProgressBar } from '@yayatoh/ui';
@@ -19,7 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 type Params = {
   params: Promise<{ locale: string; slug: string }>;
-  searchParams: Promise<{ c?: string }>;
+  searchParams: Promise<{ c?: string; via?: string }>;
 };
 
 const UUID = /^[0-9a-f-]{36}$/;
@@ -38,7 +38,9 @@ export default async function GivePage({ params, searchParams }: Params) {
   const t = await getTranslations('donations.give');
   await catchUpGifts(target.orgId);
   const giving = await publicGiving(target.orgId, target.eventId);
-  const { c } = await searchParams;
+  const { c, via } = await searchParams;
+  // M4.8d: opened from a QR code on the room's screen or a table card (the gift is a QR gift).
+  const qr = (QR_PLACES as readonly string[]).includes(via ?? '') ? `&via=${via}` : '';
   const campaign =
     (c && UUID.test(c) ? giving.campaigns.find((x) => x.id === c) : undefined) ?? giving.campaigns[0] ?? null;
   const fmt = (minor: number, currency: string) => formatMoney(money(minor, currency), locale);
@@ -86,7 +88,7 @@ export default async function GivePage({ params, searchParams }: Params) {
               {giving.campaigns.map((x) => (
                 <Link
                   key={x.id}
-                  href={`/events/${slug}/give?c=${x.id}`}
+                  href={`/events/${slug}/give?c=${x.id}${qr}`}
                   aria-current={x.id === campaign.id ? 'page' : undefined}
                   className={chip}
                 >
@@ -98,7 +100,7 @@ export default async function GivePage({ params, searchParams }: Params) {
           <GiveForm
             key={campaign.id}
             campaign={campaign}
-            action={giveAction.bind(null, slug, campaign.id, randomUUID())}
+            action={giveAction.bind(null, slug, campaign.id, randomUUID(), qr ? 'qr' : 'online')}
           />
         </>
       )}

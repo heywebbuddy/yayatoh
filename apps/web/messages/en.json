@@ -8662,7 +8662,9 @@
         "not_connected": "Online giving isn’t open for this event.",
         "campaign_closed": "This campaign has closed.",
         "risk_blocked": "We couldn’t accept this gift. Please try again later or contact the host."
-      }
+      },
+      "showOnScreen": "Thank me by name on the screen in the room",
+      "showOnScreenHint": "Off by default. Your name appears as you chose above; the amount you give never does."
     },
     "thanks": {
       "metaTitle": "Thank you",
@@ -8744,7 +8746,8 @@
       "cardBody": "Give guests paddle numbers, call levels from the console, let spotters record raised paddles on their phones, and confirm pledges.",
       "openConsole": "Open the console",
       "openSpotter": "Spot paddles",
-      "openPaddles": "Paddle numbers"
+      "openPaddles": "Paddle numbers",
+      "openScreen": "Live screen"
     },
     "paddles": {
       "title": "Paddle numbers",
@@ -8927,6 +8930,77 @@
       "confirmedOne": "Paddle {number} confirmed as a pledge.",
       "voided": "Paddle {number} set aside.",
       "voidedPledge": "Paddle {number} set aside and its pledge cancelled."
+    },
+    "screen": {
+      "metaTitle": "Giving screen",
+      "totalLabel": "Raised so far",
+      "progressLabel": "Progress towards the goal",
+      "progressText": "{total} of {goal}",
+      "goal": "{percent}% of the {goal} goal",
+      "goalReached": "Goal reached!",
+      "gifts": "{count, plural, =0 {Be the first to give} one {# gift} other {# gifts}}",
+      "calling": "Now calling",
+      "callingLevel": "{amount} · {name}",
+      "paddles": "{count, plural, =0 {Raise your paddle!} one {# paddle raised} other {# paddles raised}}",
+      "thanksTitle": "Thank you",
+      "thanksEmpty": "Every gift counts. Thank you!",
+      "scanToGive": "Scan to give",
+      "qrLabel": "QR code to the giving page: {url}",
+      "sideLabel": "How to give, and thanks",
+      "replacedTitle": "This screen link was replaced",
+      "replacedBody": "Ask the host for the new link."
+    },
+    "screenPage": {
+      "title": "Live screen",
+      "subtitle": "A thermometer for the room's projectors: the goal, the total, the level being called and thanks to donors who asked to be named.",
+      "setupTitle": "Set up the screen",
+      "setupBody": "Choose the campaign the thermometer follows. Its QR code opens that campaign's giving page.",
+      "settingsTitle": "Screen settings",
+      "campaign": "Campaign",
+      "campaignHint": "The thermometer follows this campaign: paid gifts plus paddles raised at its levels.",
+      "chooseCampaign": "Choose a campaign",
+      "campaignClosed": "{name} (closed)",
+      "showNames": "Thank donors by name",
+      "showNamesHint": "Only donors who ticked “Thank me by name on the screen” are named, as they chose to appear. Paddle holders are never named. Off: totals only.",
+      "setUp": "Set up the screen",
+      "save": "Save",
+      "saved": "Screen saved. Open screens update at once.",
+      "rotated": "Link replaced. Screens on the old link have stopped; open the new link on the projector.",
+      "noCampaignsTitle": "Add a campaign first",
+      "noCampaignsBody": "The screen shows a campaign's goal and total. Create one on the Donations tab.",
+      "openDonations": "Open Donations",
+      "notSetUp": "The screen isn't set up yet.",
+      "viewerNotice": "You can watch the screen here. Ask someone who can edit the event to set it up or share its link.",
+      "linkTitle": "Screen link",
+      "linkBody": "Open this link on the computer connected to the projector. No sign-in is needed, so share it only with your AV team.",
+      "linkLabel": "Screen link",
+      "copy": "Copy link",
+      "copied": "Link copied.",
+      "openScreen": "Open the screen",
+      "openContrast": "Open in high contrast",
+      "openStill": "Open with reduced motion",
+      "rotate": "Replace the link",
+      "rotateHint": "Screens open on the old link stop at once.",
+      "givingTitle": "QR-to-give",
+      "givingOpen": "The screen's QR code opens the giving page for {campaign}. Gifts from phones join the total live.",
+      "givingClosed": "No QR code yet: the giving page takes gifts once Stripe is connected, the event is published and the campaign is open.",
+      "previewTitle": "Preview",
+      "cardsLink": "Print table cards",
+      "errors": {
+        "campaign": "Choose a campaign of this event."
+      },
+      "rotateConfirm": "Replace it (screens on the old link stop)"
+    },
+    "screenCards": {
+      "title": "Table cards",
+      "subtitle": "Print and place one on each table. Guests scan the code to give from their phones.",
+      "print": "Print",
+      "sheetLabel": "Table cards",
+      "cardTitle": "Scan to give",
+      "cardBody": "Give to {campaign} from your phone. Your gift joins the total on the screen.",
+      "qrLabel": "QR code to the giving page: {url}",
+      "noScreenTitle": "Set up the screen first",
+      "noScreenBody": "The cards open the campaign the screen follows."
     }
   },
   "galaTables": {
