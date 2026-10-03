@@ -80,7 +80,7 @@ export default async function DatesPage({
             <p role="status" className="text-body">
               {t('dates.cancelImpact', { count: sold.get(cancelling.id) ?? 0 })}
             </p>
-            <p className="text-body text-zinc-600">{t('dates.cancelRefunds')}</p>
+            <p className="text-body text-ink-2">{t('dates.cancelRefunds')}</p>
             <div className="flex flex-wrap gap-2">
               <form action={cancelDateAction.bind(null, org, event, cancelling.id)}>
                 <Button type="submit">{t('dates.confirmCancel')}</Button>
@@ -207,7 +207,7 @@ export default async function DatesPage({
             <h2 id="repeat-heading" className="text-section">
               {t('dates.repeat')}
             </h2>
-            <p className="text-body text-zinc-600">{t('dates.repeatHint', { timezone: zone })}</p>
+            <p className="text-body text-ink-2">{t('dates.repeatHint', { timezone: zone })}</p>
             <Card>
               <RecurrenceForm
                 action={recurrenceAction.bind(null, org, event)}
@@ -227,7 +227,7 @@ export default async function DatesPage({
         <h2 id="series-heading" className="text-section">
           {t('dates.series')}
         </h2>
-        <p className="text-body text-zinc-600">{t('dates.seriesHint')}</p>
+        <p className="text-body text-ink-2">{t('dates.seriesHint')}</p>
         <Card className="flex flex-col gap-3">
           {canWrite ? (
             <SeriesPicker
@@ -240,7 +240,7 @@ export default async function DatesPage({
               {series.find((s) => s.id === currentSeries)?.name ?? t('dates.noSeries')}
             </p>
           )}
-          <Link href={`/o/${org}/series`} className="self-start text-caption text-zinc-600 underline">
+          <Link href={`/o/${org}/series`} className="self-start text-caption text-ink-2 underline">
             {t('dates.manageSeries')}
           </Link>
         </Card>

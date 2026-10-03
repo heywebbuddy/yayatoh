@@ -39,6 +39,7 @@ import { z } from 'zod';
 import { formatCreditNoteNumber, parseCreditCode } from '../domain/credit-notes.ts';
 import { HOLD_MINUTES, orderLifecycle, PAYMENT_EXTENSION_MINUTES } from '../domain/lifecycle.ts';
 import { policySnapshot } from '../domain/refund-policy.ts';
+import { donationItemTx, payDonationOrderTx } from '../donation-orders.ts';
 import { CheckoutResultDto, OrderDto, StartCheckoutInput } from '../dto.ts';
 import { claimOccurrenceTx } from '../occurrence.ts';
 import { orderItems, orders } from '../schema.ts';
@@ -51,6 +52,7 @@ import {
   waitlistReserveTx,
 } from '../waitlist.ts';
 import { applyCreditTx, lockCreditByCodeTx, reclaimCreditTx, releaseCreditTx } from './credit-notes.ts';
+import { applyInvoiceProviderEventTx, invoiceOfOrderTx } from './invoices.ts';
 import { refundPolicyTx } from './refunds.ts';
 
 export const hashManageToken = (token: string) => createHash('sha256').update(token).digest('hex');
@@ -455,6 +457,8 @@ export const applyProviderEventCommand = tenantCommand({
     const e = input as ProviderEvent;
     if (!(await claimProviderEventTx(tx, e))) return { outcome: 'duplicate' as const, status: 'unchanged' };
     const order = await loadOrderTx(tx, e.orderId, true);
+    // M5.1d: an invoice's pay link (a part or all of its balance), matched to its own payment.
+    if (await invoiceOfOrderTx(tx, order.id)) return applyInvoiceProviderEventTx(tx, ctx, emit, order, e);
     if (
       order.providerPaymentId !== e.providerPaymentId ||
       order.totalMinor !== e.amountMinor ||
@@ -476,6 +480,12 @@ export const applyProviderEventCommand = tenantCommand({
       return { outcome: 'applied' as const, status: row.status };
     }
     if (order.status === 'paid') return { outcome: 'ignored' as const, status: order.status };
+    // M4.8a: a gift order has no tickets and holds no stock; it is paid as a gift.
+    const gift = await donationItemTx(tx, order.id);
+    if (gift) {
+      const row = await payDonationOrderTx(tx, ctx, order, gift.giftId, e.provider, emit);
+      return { outcome: 'applied' as const, status: row.status };
+    }
     if (order.status === 'expired') {
       // Paid after the hold lapsed: re-hold if stock is still there, otherwise flag for refund.
       let stockHeld = false;

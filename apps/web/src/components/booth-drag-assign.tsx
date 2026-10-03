@@ -33,7 +33,7 @@ export function BoothDragAssign({
   };
   return (
     <div className="flex flex-col gap-3">
-      <p className="text-caption text-zinc-600">{labels.drag}</p>
+      <p className="text-caption text-ink-2">{labels.drag}</p>
       <ul aria-label={labels.chips} className="flex list-none flex-wrap gap-2 p-0">
         {exhibitors.map((x) => (
           <li
@@ -41,7 +41,7 @@ export function BoothDragAssign({
             draggable
             data-exhibitor={x.id}
             onDragStart={(e) => e.dataTransfer.setData('text/plain', x.id)}
-            className="inline-flex min-h-6 cursor-grab items-center rounded-pill border border-zinc-200 bg-white px-3 text-caption"
+            className="inline-flex min-h-6 cursor-grab items-center rounded-pill border border-line bg-surface px-3 text-caption font-bold text-ink hover:border-line-strong"
           >
             {x.name}
           </li>
@@ -51,7 +51,9 @@ export function BoothDragAssign({
         viewBox={`0 0 ${doc.width} ${doc.height}`}
         role="img"
         aria-label={labels.map}
-        className="h-auto w-full rounded-card border border-zinc-200 bg-zinc-50"
+        // Floor plans are drawn on light "paper" in both modes, like a printed plan (ADR 0022).
+        data-theme="light"
+        className="h-auto w-full rounded-card border border-line bg-surface-2"
         preserveAspectRatio="xMidYMid meet"
       >
         {booths.map((b) => {
@@ -78,7 +80,7 @@ export function BoothDragAssign({
                 height={b.height}
                 rx={12}
                 strokeWidth={over === b.id ? 14 : 6}
-                className={b.taken ? 'fill-accent-100 stroke-accent-700' : 'fill-white stroke-zinc-400'}
+                className={b.taken ? 'fill-primary-soft stroke-primary' : 'fill-surface stroke-line-strong'}
               />
               <text
                 x={b.x + b.width / 2}
@@ -86,7 +88,7 @@ export function BoothDragAssign({
                 fontSize={size}
                 textAnchor="middle"
                 dominantBaseline="central"
-                className="pointer-events-none fill-zinc-900 font-medium"
+                className="pointer-events-none fill-ink font-extrabold"
               >
                 {b.number}
               </text>
@@ -94,7 +96,7 @@ export function BoothDragAssign({
           );
         })}
       </svg>
-      <p role="status" aria-live="polite" className="text-caption text-zinc-700">
+      <p role="status" aria-live="polite" className="text-caption text-ink-2">
         {message}
       </p>
     </div>

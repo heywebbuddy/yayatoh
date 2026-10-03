@@ -50,7 +50,7 @@ export default async function MacrosPage({ params }: { params: Promise<{ locale:
                   <details>
                     <summary className="flex min-h-6 cursor-pointer items-center gap-2 text-section">
                       {m.name}
-                      <span className="text-caption text-zinc-500">
+                      <span className="text-caption text-ink-2">
                         {m.actions.map((a) => t(`action.${a}`)).join(' · ')}
                       </span>
                     </summary>

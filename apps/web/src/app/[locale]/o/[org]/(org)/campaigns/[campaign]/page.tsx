@@ -138,7 +138,7 @@ export default async function CampaignPage({
           })}
         />
       ) : null}
-      {!canWrite ? <p className="text-caption text-zinc-600">{t('readOnly')}</p> : null}
+      {!canWrite ? <p className="text-caption text-ink-2">{t('readOnly')}</p> : null}
 
       {draft && canWrite ? (
         <CampaignEditor
@@ -157,11 +157,11 @@ export default async function CampaignPage({
           </h2>
           {preview.ok && preview.src ? (
             <>
-              <p className="text-caption text-zinc-600">
+              <p className="text-caption text-ink-2">
                 {t('previewSubject', { subject: preview.subject ?? '' })}
               </p>
               {preview.sms ? (
-                <p className="whitespace-pre-line rounded-card border border-zinc-200 bg-zinc-50 px-4 py-3 text-body">
+                <p className="whitespace-pre-line rounded-card border border-line bg-surface-2 px-4 py-3 text-body">
                   {preview.sms}
                 </p>
               ) : null}
@@ -169,11 +169,11 @@ export default async function CampaignPage({
                 title={t('previewFrame', { frame: t('frames.desktop') })}
                 src={preview.src}
                 sandbox=""
-                className="h-[560px] w-full rounded-card border border-zinc-200 bg-white"
+                className="h-[560px] w-full rounded-card border border-line bg-surface"
               />
             </>
           ) : (
-            <p className="text-body text-zinc-600">{t('errors.previewFailed')}</p>
+            <p className="text-body text-ink-2">{t('errors.previewFailed')}</p>
           )}
         </section>
       )}
@@ -206,7 +206,7 @@ export default async function CampaignPage({
                 </p>
                 {reach.excluded.length ? (
                   <table className="text-caption">
-                    <caption className="text-start text-zinc-600">{t('excludedCaption')}</caption>
+                    <caption className="text-start text-ink-2">{t('excludedCaption')}</caption>
                     <tbody>
                       {reach.excluded.map((x) => (
                         <tr key={x.reason}>
@@ -221,7 +221,7 @@ export default async function CampaignPage({
                 ) : null}
               </div>
             ) : reachError ? (
-              <p className="text-body text-pink-700">
+              <p className="text-body text-danger">
                 {t.has(`errors.${reachError}`) ? t(`errors.${reachError}`) : t('errors.unknown')}
               </p>
             ) : null}
@@ -287,15 +287,15 @@ export default async function CampaignPage({
                 ['notSent', results.notSent + results.failed],
               ] as const
             ).map(([k, v]) => (
-              <div key={k} className="flex flex-col gap-1 rounded-card border border-zinc-200 p-4">
-                <dt className="text-caption text-zinc-600">{t(`metrics.${k}`)}</dt>
+              <div key={k} className="flex flex-col gap-1 rounded-card border border-line p-4">
+                <dt className="text-caption text-ink-2">{t(`metrics.${k}`)}</dt>
                 <dd className="font-mono text-section">{v === null ? t('notTracked') : n(v)}</dd>
               </div>
             ))}
           </dl>
           {results.reach.excluded.length ? (
             <table className="text-caption">
-              <caption className="text-start text-zinc-600">{t('excludedCaption')}</caption>
+              <caption className="text-start text-ink-2">{t('excludedCaption')}</caption>
               <tbody>
                 {results.reach.excluded.map((x) => (
                   <tr key={x.reason}>
@@ -310,7 +310,7 @@ export default async function CampaignPage({
           ) : null}
           {results.reasons.length ? (
             <table className="text-caption">
-              <caption className="text-start text-zinc-600">{t('gateCaption')}</caption>
+              <caption className="text-start text-ink-2">{t('gateCaption')}</caption>
               <tbody>
                 {results.reasons.map((x) => (
                   <tr key={`${x.channel}-${x.reason}`}>

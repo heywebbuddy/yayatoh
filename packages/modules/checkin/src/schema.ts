@@ -41,6 +41,8 @@ export const SCAN_RESULTS = [
   'no_access',
   /** The scanner (checkpoint-scoped door staff, or their device) may not scan at this checkpoint. */
   'wrong_checkpoint',
+  /** M5.1d: the ticket's invoice still has a balance; admitted only with a staff override. */
+  'balance_due',
 ] as const;
 export type ScanResult = (typeof SCAN_RESULTS)[number];
 
@@ -63,6 +65,8 @@ export const admissions = tenantTable(
     checkpointId: uuid('checkpoint_id'),
     undoneAt: ts('undone_at'),
     undoneBy: uuid('undone_by'),
+    /** M5.1d: admitted with a balance still due on the invoice (a staff override, audited). */
+    balanceOverride: boolean('balance_override').notNull().default(false),
   },
   (t) => [
     uniqueIndex('admissions_org_ticket_day_live_key')

@@ -32,7 +32,7 @@ export default async function ProvidersPage() {
         <section className="overflow-x-auto" tabIndex={0} aria-label={t('tableCaption')}>
           <table className="w-full text-start text-caption">
             <caption className="sr-only">{t('tableCaption')}</caption>
-            <thead className="text-zinc-500">
+            <thead className="text-ink-2">
               <tr>
                 {cols.map((k) => (
                   <th key={k} scope="col" className="px-4 py-2 text-start font-normal">
@@ -43,7 +43,7 @@ export default async function ProvidersPage() {
             </thead>
             <tbody>
               {rows.map((r) => (
-                <tr key={r.provider} className="border-t border-zinc-100">
+                <tr key={r.provider} className="border-t border-line">
                   <th scope="row" className="px-4 py-2 text-start font-medium">
                     {name(r.provider)}
                   </th>
@@ -100,7 +100,7 @@ export default async function ProvidersPage() {
                       />
                     </span>
                     {item.check === 'env' && r.missing.length ? (
-                      <span className="block font-mono text-caption text-zinc-600">
+                      <span className="block font-mono text-caption text-ink-2">
                         {t('missing', { names: r.missing.join(', ') })}
                       </span>
                     ) : null}

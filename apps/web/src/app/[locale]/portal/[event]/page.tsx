@@ -27,7 +27,7 @@ export default async function AttendeePortal({
     { key: 'profile', Icon: User, href: null },
   ];
   return (
-    <div className="mx-auto flex min-h-dvh max-w-[430px] flex-col bg-zinc-50">
+    <div className="mx-auto flex min-h-dvh max-w-[430px] flex-col bg-surface-2">
       <header className="flex items-center justify-between px-5 pt-5">
         <span className="text-[19px] font-semibold tracking-[-0.04em]">{t('brand.wordmark')}</span>
         <Avatar
@@ -42,19 +42,19 @@ export default async function AttendeePortal({
       <main id="main" className="flex flex-1 flex-col gap-5 px-5 pt-6 pb-28">
         <div className="flex flex-col gap-2">
           <Label>{t('portal.day', { day: 1, date: formatDate(ev.startsAt, f) })}</Label>
-          <h1 className="text-[34px] leading-[1.05] font-light tracking-[-0.04em]">
+          <h1 className="text-[34px] leading-[1.05] font-extrabold tracking-[-0.04em]">
             {t('greeting.morning', { name: first })}
           </h1>
         </div>
         <section
           id="ticket"
           aria-label={t('portal.yourTicket')}
-          className="flex flex-col gap-4 rounded-panel bg-ink p-5 text-white"
+          className="flex flex-col gap-4 rounded-panel bg-hero p-5 text-white elevation-card"
         >
           <Label tone="inverse">{ev.name}</Label>
-          <p className="text-[28px] font-light tracking-[-0.03em]">{me.ticketType}</p>
+          <p className="text-[28px] font-extrabold tracking-[-0.03em]">{me.ticketType}</p>
           <p className="text-body text-white/70">{me.seat}</p>
-          <Button variant="on-dark" disabled title={t('common.comingSoon')} className="self-start">
+          <Button variant="inverse" disabled title={t('common.comingSoon')} className="self-start">
             {t('portal.addToWallet')}
           </Button>
         </section>
@@ -67,13 +67,13 @@ export default async function AttendeePortal({
               {t('portal.fullAgenda')}
             </a>
           </div>
-          <ul className="list-none divide-y divide-zinc-100 rounded-card border border-zinc-200 bg-white p-0">
+          <ul className="list-none divide-y divide-line rounded-card border border-line bg-surface p-0">
             {ev.agenda.map((s) => (
               <li key={s.time} className="flex gap-4 px-4 py-3.5">
-                <span className="w-12 font-mono text-caption text-zinc-500">{s.time}</span>
+                <span className="w-14 text-body font-extrabold text-ink tabular-nums">{s.time}</span>
                 <span className="flex flex-1 flex-col">
                   <span>{s.title}</span>
-                  <span className="text-caption text-zinc-500">{s.room}</span>
+                  <span className="text-caption text-ink-2">{s.room}</span>
                 </span>
               </li>
             ))}
@@ -82,7 +82,7 @@ export default async function AttendeePortal({
       </main>
       <nav
         aria-label={t('portal.app')}
-        className="fixed inset-x-0 bottom-0 mx-auto flex max-w-[430px] justify-around border-t border-zinc-200 bg-white/90 px-4 py-2 backdrop-blur"
+        className="fixed inset-x-0 bottom-0 mx-auto flex max-w-[430px] justify-around border-t border-line bg-surface/90 px-4 py-2 backdrop-blur"
       >
         {tabs.map(({ key, Icon, href }) =>
           href ? (
@@ -91,9 +91,9 @@ export default async function AttendeePortal({
               href={href}
               aria-label={t(`portal.tabs.${key}`)}
               aria-current={key === 'home' ? 'page' : undefined}
-              className={`flex size-11 items-center justify-center rounded-pill ${key === 'home' ? 'bg-zinc-100' : ''}`}
+              className={`flex size-11 items-center justify-center rounded-pill ${key === 'home' ? 'bg-surface-3' : ''}`}
             >
-              <Icon aria-hidden="true" className="size-5" strokeWidth={1.6} />
+              <Icon aria-hidden="true" className="size-5" strokeWidth={2} />
             </a>
           ) : (
             <button
@@ -102,9 +102,9 @@ export default async function AttendeePortal({
               disabled
               aria-label={t(`portal.tabs.${key}`)}
               title={t('common.comingSoon')}
-              className="flex size-11 items-center justify-center rounded-pill text-zinc-400"
+              className="flex size-11 items-center justify-center rounded-pill text-ink-3"
             >
-              <Icon aria-hidden="true" className="size-5" strokeWidth={1.6} />
+              <Icon aria-hidden="true" className="size-5" strokeWidth={2} />
             </button>
           ),
         )}

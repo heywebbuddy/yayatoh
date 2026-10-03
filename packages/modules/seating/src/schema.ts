@@ -292,3 +292,33 @@ export const subEventCharts = tenantTable(
     index('sub_event_charts_org_event_idx').on(t.orgId, t.eventId),
   ],
 );
+
+/** M4.2b: longest sponsor name on a hosted table. */
+export const MAX_SPONSOR_NAME = 80;
+
+/**
+ * Hosted tables (M4.2b gala tables and sponsors): a table of the event's plan (`item_id`, a table
+ * item of the plan document; per-date copies keep the ids, so one row covers every chart) carries
+ * a sponsor name and an optional logo (an image of the org's own media, `/media/{org}/…`). The
+ * editor always shows it; guests see it in the seat finder only once `published` and while the
+ * plan's map is public (`publicTableSponsors`).
+ */
+export const tableSponsors = tenantTable(
+  seatingSchema,
+  'table_sponsors',
+  {
+    eventId: uuid('event_id').notNull(),
+    itemId: uuid('item_id').notNull(),
+    sponsorName: text('sponsor_name').notNull(),
+    logoUrl: text('logo_url'),
+    published: boolean('published').notNull().default(false),
+  },
+  (t) => [
+    uniqueIndex('table_sponsors_org_event_item_key').on(t.orgId, t.eventId, t.itemId),
+    check('table_sponsors_name_length', sql`length(sponsor_name) between 1 and 80`),
+    check(
+      'table_sponsors_logo_check',
+      sql`logo_url is null or (length(logo_url) <= 300 and logo_url ~ '^/media/[0-9a-f-]{36}/[0-9a-f-]{36}/[A-Za-z0-9._-]+$')`,
+    ),
+  ],
+);

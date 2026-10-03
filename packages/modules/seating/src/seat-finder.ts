@@ -16,6 +16,7 @@ import { and, desc, eq, gte, inArray, lt } from 'drizzle-orm';
 import { z } from 'zod';
 import { type ChartKey, chartKeyTx, onChart, publicDoc } from './chart.ts';
 import { eventLayouts, eventSeats, FINDER_MODES, finderCodes, seatAssignments } from './schema.ts';
+import { PublicTableSponsorDto, publicTableSponsorsTx } from './table-sponsors.ts';
 
 /** Lookups per device (cookie) and event per minute before a challenge (roadmap §6.1). */
 export const FINDER_RATE_LIMIT = 30;
@@ -102,6 +103,9 @@ export const SeatFinderResultDto = z.object({
       itemKind: z.enum(['row', 'table']),
       itemLabel: z.string(),
       seatLabel: z.string(),
+      /** M4.2b: the hosted table's sponsor, once the host published it. */
+      sponsor: z.string().nullable(),
+      sponsorLogoUrl: z.string().nullable(),
     }),
   ),
   /** People in the party who have no seat yet. */
@@ -145,6 +149,11 @@ async function seatsOfTx(
   const seated = people.filter(
     (p) => seatedPeople.has(p.id) || (p.ticketId && seatedTickets.has(p.ticketId)),
   );
+  // M4.2b: published sponsors of the tables they sit at.
+  const tableIds = doc.items.flatMap((item) =>
+    item.kind === 'table' && item.seats.some((s) => mine.has(s.id)) ? [item.id] : [],
+  );
+  const sponsors = await publicTableSponsorsTx(tx, eventId, tableIds);
   // In plan order, so a party reads table by table.
   const seats = doc.items.flatMap((item) =>
     item.kind === 'object'
@@ -157,6 +166,8 @@ async function seatsOfTx(
             itemKind: item.kind,
             itemLabel: item.label,
             seatLabel: s.label,
+            sponsor: sponsors.get(item.id)?.sponsorName ?? null,
+            sponsorLogoUrl: sponsors.get(item.id)?.logoUrl ?? null,
           })),
   );
   return SeatFinderResultDto.parse({
@@ -292,7 +303,12 @@ export const finderPosterQuery = tenantQuery({
 
 // ─── Public ─────────────────────────────────────────────────────────────────────────────────
 
-export const PublicVenueMapDto = z.object({ doc: FloorplanDoc, mode: z.enum(FINDER_MODES) });
+export const PublicVenueMapDto = z.object({
+  doc: FloorplanDoc,
+  mode: z.enum(FINDER_MODES),
+  /** M4.2b: sponsors of hosted tables the host published (the plan is on sale). */
+  sponsors: z.array(PublicTableSponsorDto),
+});
 
 /**
  * The venue map for guests: the plan as drawn (stage, entrances, tables…) and how the seat
@@ -307,7 +323,7 @@ export const publicVenueMapQuery = tenantQuery({
   handler: async ({ input, tx }) => {
     try {
       const { doc, mode } = await openFinderTx(tx, input.eventId, null, input.occurrenceId);
-      return { doc, mode };
+      return { doc, mode, sponsors: [...(await publicTableSponsorsTx(tx, input.eventId)).values()] };
     } catch (err) {
       if (err instanceof DomainError && err.code === 'not_found') return null;
       throw err;

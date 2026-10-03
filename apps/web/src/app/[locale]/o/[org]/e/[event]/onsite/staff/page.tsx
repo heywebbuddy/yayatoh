@@ -79,7 +79,7 @@ export default async function DoorStaffPage({
                   <Card className="flex flex-col gap-3">
                     <div className="flex flex-wrap items-baseline gap-x-3">
                       <h3 className="text-body font-medium">{name}</h3>
-                      <p className="text-caption text-zinc-600" data-testid="staff-scope">
+                      <p className="text-caption text-ink-2" data-testid="staff-scope">
                         {t('doorStaff.scansAt', { where })}
                       </p>
                     </div>
@@ -115,13 +115,13 @@ export default async function DoorStaffPage({
           <h2 id="staff-add-heading" className="text-section">
             {t('doorStaff.addTitle')}
           </h2>
-          <p className="text-caption text-zinc-500">{t('doorStaff.addHint')}</p>
+          <p className="text-caption text-ink-2">{t('doorStaff.addHint')}</p>
           <Card>
             <DoorStaffForm action={save} checkpoints={checkpoints} members={candidates} />
           </Card>
         </section>
       ) : (
-        <p className="text-caption text-zinc-600">{t('doorStaff.readOnly')}</p>
+        <p className="text-caption text-ink-2">{t('doorStaff.readOnly')}</p>
       )}
     </>
   );

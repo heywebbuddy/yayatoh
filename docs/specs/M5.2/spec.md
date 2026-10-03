@@ -1,7 +1,7 @@
 # Spec: M5.2 — Agenda and session enrollment
 
 - **Milestone:** M5.2 (roadmap Phase 5, "M5.2 Agenda and enrollment"; Phase 5 plan `docs/plans/phase-5.md`, Wave 1: M5.2a, Wave 2: M5.2b)
-- **Status:** M5.2a built (2026-09-29); M5.2b (atomic enrollment and waitlist) follows in Wave 2
+- **Status:** M5.2a built (2026-09-29); M5.2b (atomic enrollment and waitlist) built (2026-10-02)
 - **Risk tags:** `db-migration`, `tenancy` (owner approval)
 - **Related:** M1.4f/h (the lightweight program), M3.9a (session surveys), ADRs 0002, 0003, 0012 (counters and holds), 0014 and 0015 (timezones); owner decisions P5-1 (behind the `sessions` module key), P5-9 (enrollment defaults), P5-11
 
@@ -78,3 +78,72 @@ claimed through functions M5.2b will call.
 | AC10 | Gated by the `sessions` module (P5-1) | `agenda.int.test.ts` ("a revoked sessions module refuses…") |
 | AC11 | axe, 375/768/1280, Arabic RTL | e2e (`expectAccessible` on every new screen and state; Arabic test) |
 | AC12 | No private column reaches a public page | `canary-crawl.spec.ts` (new columns declared in `private-columns.ts`) |
+
+## M5.2b — Atomic enrollment and waitlist (done)
+
+### 1. Goal and users
+Registrants of a conference build their own schedule: the sessions their registration includes, the
+optional sessions they enrol in (atomically, never oversold), one pick per "pick one" group, no
+overlapping sessions unless they choose, and a waitlist for full sessions that promotes them
+automatically until 24 hours before the session (P5-9). Organizers (`events:write`) see places and
+lines per session, choose how the line promotes, say which sessions each admission item gives, and
+promote a line by hand. Viewers read; nobody else sees anything.
+
+### 2. References
+- **Phase 5 plan:** Wave 2, "M5.2b Atomic enrollment and waitlist"; P5-9 (enrollment defaults), P5-1, P5-11.
+- **Roadmap:** Phase 5 M5.2; §4.3 tenancy; the M3.10a waitlist patterns (FIFO, timed offers, a sweeper, offer emails).
+- **Legacy evidence:** none (Eventmie Pro has no session enrollment).
+
+### 3. Scope (built)
+**Model** (module `registration`, tier 5; migration `0099_regular_landau.sql`, renumbered at merge):
+- `item_sessions` (event, admission item, session): which sessions an item gives. An `admission` item listing nothing gives every session; an `add_on` gives only what it lists.
+- `enrollment_settings` (one per event; no row = `auto`, 240-minute offers): `promotion` `auto | offer`, `offer_minutes` 15–2,880.
+- `session_enrollments` (event, session, registrant = admission ticket, order): `status` `enrolled | waiting | offered | dropped | left | expired | declined | skipped | cancelled`, the line position, offer window and count, who promoted, the skip reason, whether a group pick is held. One live row per registrant and session (partial unique). CHECKs keep offers and skips consistent.
+- Every table: `org_id`, ENABLE + FORCE RLS (NULLIF policy), org-leading indexes, composite FKs (hand-written down the tiers to `events.events`, `program.sessions`, `ticketing.tickets`, `orders.orders`), fixture rows for both orgs, every text column in `private-columns.ts`.
+
+**Program additions** (`program/src/enrollment.ts`): `enrollableSessionsTx`, `enrollableSessionsByIdTx`, `lockEnrollableSessionTx` (the counter row lock). The counter still moves only through `claimSessionPlaceTx` / `releaseSessionPlaceTx`. `updateSession` now refuses a capacity below the places held (`capacity_below_enrolled`, M5.2a's leftover) with a clear message.
+
+**Rules** (`registration/src/domain/enrollment.ts`, pure): `availableSessions`, `conflictsWith` (half-open overlaps; the pick-one group apart), `enrollDecision` (refuse / enrol with replacements / join the line), `planPromotion` (FIFO, re-check, pass over for good, bounded), `promotionOpen` (24 h close), `offerExpiry` (never past the close).
+
+**Commands and queries** (`registration/src/enrollment.ts`):
+- Attendee (`public:enrollment`, the order's manage link is the credential; entitlement `registration`): `enrollSession` (enrol, or join a full session's line; `choice` `refuse | replace | keep_both`), `dropSession` (drop, leave the line, or decline an offer), `acceptSessionOffer`, `mySchedule`.
+- Organizer: `enrollmentOverview` (`events:read`), `setEnrollmentSettings`, `setItemSessions`, `promoteSessionNow` (`events:write`; refused after the close, `promotion_closed`).
+- Platform: `sweepEnrollments` (`platform:registration.sweep`; the worker runs it every 30 s after the waitlist sweeper; lapsed offers expire, lines with free places promote).
+- **Atomicity:** each decision locks the session's counter row (and every session the registrant holds, in id order) plus a per-registrant advisory lock; the line is promoted before deciding (a free place belongs to the line); the claim is program's conditional UPDATE; the CHECK backs it up.
+- **Promotion:** `auto` enrols the next person at once; `offer` holds the place as an offer (accept from "My schedule"; a lapsed offer goes to the next). Each person is re-checked (still registered, still given the session, no overlap or group pick); one who no longer fits is `skipped` with the reason and never retried. Stops 24 h before the session; afterwards a free place goes to whoever enrols first and the line takes nobody new.
+- **Cancelled registrants** (`registration.enrollment` subscriber on `tickets.cancelled@1`, `order.refunded@1`): their live entries end (`cancelled`), places go back, lines promote. Idempotent.
+- **Emails** (`registration.enrollment-mailer` on `registration.session.promoted@1`): `registration.session-enrolled` and `registration.session-offer` (13 locales), linking to the schedule; one per entry and offer.
+
+**Pages**
+- **My schedule** `/orders/{token}/schedule` (linked from the order page as "My schedule" when the registrant has sessions; `?registrant=` picks one of an order's registrants). Phone-first, one column, by day in the event's timezone: each session's time, room, pick-one group and state (included, enrolled, offer until…, waitlist position, places available, full, waitlist closed, enrollment closed, started) with 48 px buttons: Enrol / Join the waitlist / Drop / Leave the waitlist / Accept / Decline. A refusal says why; an overlap or group conflict offers "Replace …" (and "Keep both" when both are uncapped). Rate-limited (`sessionEnrollment`, M1.14).
+- **Session enrollment** `/o/{org}/e/{event}/registration/enrollment` (linked from Registration): per optional session the places taken, waitlist (waiting, offered), the close time or "Waitlist closed", "Promote now" when someone waits; the waitlist setting (with validation); per admission item the sessions it gives (checkboxes). Empty state links to Sessions. Viewers read it.
+
+### 4. Later / not yet
+- Favorites without enrolling and the personal agenda with favorites (M5.10a); the session door line after the close (M5.6).
+- Offer emails' "accept" one-click link (today the link opens the schedule, where the attendee accepts).
+- A registrant chooser that follows M5.1c's group registrations by holder (today: by admission ticket of the order; add-ons of a group order apply to each registrant).
+- Bulk organizer actions (remove someone from a session, move between sessions), an enrollment CSV, and session check-in (M5.6a).
+- Capacity raises promote at the next sweep (≤ 30 s) or with "Promote now", not instantly.
+
+### 5. Acceptance (M5.2b)
+| ID | Criterion | Test |
+|---|---|---|
+| AC-M5.2b-01 | **No oversell under concurrency:** 200 parallel enrollments for 50 places give exactly 50 enrolled and 150 waiting (positions 1…150); a raw increment past capacity is refused by the CHECK | `packages/testing/tests/enrollment.int.test.ts` ("no oversell under concurrency") |
+| AC-M5.2b-02 | **Waitlist promotion never loops** (property, 400 seeded runs): at most the free places, FIFO, each person once, a fixpoint after each promotion, total work bounded by joins | `packages/modules/registration/tests/enrollment.test.ts` ("waitlist promotion never loops") |
+| AC-M5.2b-03 | **Promotion stops 24 h before the start** (exactly at the close it is closed; just before, it promotes); "promote now" and the sweeper refuse/skip after it; the line takes nobody new; a free place is first come | `enrollment.test.ts` (close time); `enrollment.int.test.ts` ("promotion stops 24 h before the start") |
+| AC-M5.2b-04 | **A session group allows exactly one pick** (refused, replaced on request; the DB guard holds under concurrent picks) | `enrollment.test.ts`; `enrollment.int.test.ts` ("a session group allows exactly one pick"); e2e (Track A / Track B) |
+| AC-M5.2b-05 | Overlaps refused with a clear message naming the session; replace swaps; keep both only when neither has a capacity | `enrollment.int.test.ts`; e2e ("overlap refused then replaced") |
+| AC-M5.2b-06 | Availability by admission item and add-ons | `enrollment.test.ts`; `enrollment.int.test.ts` ("availability comes from the admission item") |
+| AC-M5.2b-07 | FIFO auto-promotion on a drop; offer mode with accept and lapse; re-check passes over a person who no longer fits; cancelled registrants free their places; promotion emails link to the schedule once | `enrollment.int.test.ts`; e2e ("a drop promotes the next person (and emails them)") |
+| AC-M5.2b-08 | Organizer: counts, "promote now" after a capacity raise, capacity below places refused; setting validation; item sessions persisted | `enrollment.int.test.ts`; e2e (organizer test) |
+| AC-M5.2b-09 | Viewer `jordan@lakeside.test`: reads the page (no controls); organizer commands forbidden; the owner's open forms submitted as the viewer are refused | `enrollment.int.test.ts`; e2e (viewer test) |
+| AC-M5.2b-10 | Isolation (other org, forged registrant, a real link under another tenant), fixture rows for both orgs | `enrollment.int.test.ts`; `isolation.int.test.ts` |
+| AC-M5.2b-11 | Impersonation (allowed, audited; no money/export/delete category) and the read-only freeze (enrollment refused, schedule reads); `registration` added to the freeze and impersonation sweeps | `enrollment.int.test.ts`; `freeze.int.test.ts`; `impersonation.int.test.ts` |
+| AC-M5.2b-12 | Gated by the `registration` module | `enrollment.int.test.ts` ("a revoked registration module…") |
+| AC-M5.2b-13 | E2E on 375/768/1280: enrol, conflict refused, group pick, waitlist and promotion, keyboard only, axe on every new screen and state, Arabic RTL, empty state, persistence after reload | `apps/web/e2e/enrollment.spec.ts` |
+| AC-M5.2b-14 | Messages and emails in 13 locales with identical keys | `apps/web/tests/messages.test.ts`; notifications render snapshots |
+
+### 6. Gate (2026-10-02, after merging `merge/next-3e`, `merge/next-3f` and the build branch)
+- lint, check:modules, typecheck (56 packages, turbo `--concurrency=2`: the default concurrency ran out of memory on this 16 GB box), 2,344 unit tests: green.
+- Integration: 1,313 of 1,314 passed. `apps/worker/tests/badges.int.test.ts` ("the leader tick queues the batch until its PDF is done", M5.5a) timed out at 60 s under the full-suite load and passes alone (2/2).
+- E2E (375/768/1280): `enrollment.spec.ts` 21/21; `agenda`, `program`, `email-kind-labels`, `checkout`, `canary-crawl` green. `registration.spec.ts` "the viewer sees the page read-only…" fails on all three viewports before and after this increment: `getByText(/^Edit /)` also matches M5.1b's "Edit the registration form" link (merged in batch 3e).

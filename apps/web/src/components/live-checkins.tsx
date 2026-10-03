@@ -55,7 +55,7 @@ export function LiveCheckins({ url }: { url: string }) {
       data-stream={url}
     >
       <StatusDot status={DOT[state]} label={t(`state.${state}`)} live={state === 'live'} />
-      <p className="text-caption text-zinc-600" aria-live="polite" role="status">
+      <p className="text-caption text-ink-2" aria-live="polite" role="status">
         {count > 0 ? t('since', { count }) : t('waiting')}
       </p>
     </div>

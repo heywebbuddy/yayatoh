@@ -34,26 +34,26 @@ export function ReviewForm({ action }: { action: (prev: FormState, form: FormDat
         aria-describedby={bad.has('rating') ? 'review-rating-error' : undefined}
         className="flex flex-col gap-2"
       >
-        <legend className="text-caption text-zinc-600">{t('rating')}</legend>
+        <legend className="text-[13px] font-bold text-ink">{t('rating')}</legend>
         <div className="flex flex-wrap gap-2">
           {[1, 2, 3, 4, 5].map((n) => (
             <label
               key={n}
-              className="flex min-h-10 cursor-pointer items-center gap-2 rounded-pill border border-zinc-200 px-3 has-[:checked]:border-ink has-[:focus-visible]:outline-2"
+              className="flex min-h-10 cursor-pointer items-center gap-2 rounded-pill border border-line px-3 has-[:checked]:border-ink has-[:focus-visible]:outline-2"
             >
-              <input type="radio" name="rating" value={n} required className="size-4 accent-ink" />
+              <input type="radio" name="rating" value={n} required className="size-4 accent-primary" />
               {t('stars', { count: n })}
             </label>
           ))}
         </div>
         {bad.has('rating') ? (
-          <p id="review-rating-error" className="text-caption text-pink-700">
+          <p id="review-rating-error" className="text-caption text-danger">
             {t('ratingError')}
           </p>
         ) : null}
       </fieldset>
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="review-body" className="text-caption text-zinc-600">
+        <label htmlFor="review-body" className="text-[13px] font-bold text-ink">
           {t('body')}
         </label>
         <textarea
@@ -64,12 +64,9 @@ export function ReviewForm({ action }: { action: (prev: FormState, form: FormDat
           onChange={(e) => setLength(e.target.value.length)}
           aria-invalid={bad.has('body') || undefined}
           aria-describedby="review-body-hint"
-          className={`rounded-card border bg-white px-4 py-2 text-body ${bad.has('body') ? 'border-pink-700' : 'border-zinc-200'}`}
+          className={`rounded-card border bg-surface px-4 py-2 text-body ${bad.has('body') ? 'field-invalid' : ''}`}
         />
-        <p
-          id="review-body-hint"
-          className={`text-caption ${bad.has('body') ? 'text-pink-700' : 'text-zinc-500'}`}
-        >
+        <p id="review-body-hint" className={`text-caption ${bad.has('body') ? 'text-danger' : 'text-ink-2'}`}>
           {bad.has('body')
             ? t('bodyError', { max: REVIEW_BODY_MAX })
             : t('bodyHint', { count: length, max: REVIEW_BODY_MAX })}
