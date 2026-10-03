@@ -335,6 +335,10 @@
       "subject": "{org} heeft je persoonsgegevens gewist",
       "intro": "{org} heeft je persoonsgegevens gewist zoals gevraagd. Sommige gegevens moeten wettelijk bewaard blijven (bijvoorbeeld betaalde bestellingen voor de belasting), zonder je naam en e-mail; het ontvangstbewijs noemt ze met de reden. Dit is de laatste e-mail hierover.",
       "cta": "Ontvangstbewijs bekijken"
+    },
+    "badges.kiosk-code": {
+      "subject": "{code} is je code voor de badgekiosk van {eventName}",
+      "intro": "Voer {code} in bij de badgekiosk om je gegevens te controleren en je badge af te drukken. De code werkt één keer en verloopt over {minutes, plural, one {# minuut} other {# minuten}}. Heb je hem niet aangevraagd? Dan kun je deze e-mail negeren."
     }
   },
   "roles": {

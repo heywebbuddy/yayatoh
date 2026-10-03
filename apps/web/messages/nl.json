@@ -197,6 +197,9 @@
         "request-code": "Code voor privacyverzoek",
         "archive-ready": "Archief met persoonsgegevens klaar",
         "erasure-done": "Bewijs van wissing"
+      },
+      "badges": {
+        "kiosk-code": "Code voor de badgekiosk"
       }
     },
     "status": {
@@ -13635,6 +13638,25 @@
       "reason_required": "Kies waarom deze badge opnieuw wordt geprint.",
       "note_required": "Geef bij ‘Anders’ in een paar woorden aan waarom.",
       "note": "Houd de notitie onder de 200 tekens."
+    },
+    "balanceDue": "Er staat een bedrag open voor deze registratie. Druk de badge af via de badgepagina met een reden.",
+    "sourceKiosk": "Kiosk",
+    "kiosk": {
+      "heading": "Zelf afdrukken bij de kiosk",
+      "hint": "Deelnemers scannen hun ticket bij een incheckkiosk (of bevestigen een gemailde code), controleren hun gegevens en drukken hun badge één keer zelf af. Herdrukken, openstaande bedragen en registraties die nog wachten gaan naar de balie.",
+      "on": "Aan",
+      "off": "Uit",
+      "printsTo": "Drukt af op {printer}",
+      "emailOn": "E-mailcodes aan",
+      "emailOff": "E-mailcodes uit",
+      "options": "Zelf afdrukken",
+      "enabled": "Deelnemers drukken hun badge zelf af bij kiosken",
+      "emailCodes": "\"Gebruik je e-mail\" aanbieden (een eenmalige code naar de tickethouder)",
+      "printer": "Kiosken drukken af op",
+      "printerHint": "Het eigen afdrukvenster van de kiosk werkt met een printer die op de kiosk is aangesloten.",
+      "ownDialog": "Het eigen afdrukvenster van de kiosk",
+      "save": "Kioskinstellingen opslaan",
+      "saved": "Kioskinstellingen opgeslagen."
     }
   },
   "sessionCheckin": {
@@ -15202,5 +15224,54 @@
       "allow": "Toestaan",
       "deny": "Weigeren"
     }
+  },
+  "kioskPrint": {
+    "useEmail": "Ticket niet bij je? Gebruik je e-mail",
+    "loading": "We zoeken je badge…",
+    "emailTitle": "Gebruik je e-mail",
+    "emailHint": "We mailen een code van 6 cijfers naar het adres op je ticket.",
+    "emailLabel": "Je e-mailadres",
+    "sendCode": "Mail me een code",
+    "cancel": "Annuleren",
+    "emailInvalid": "Vul je e-mailadres in, bijvoorbeeld naam@example.com.",
+    "emailOffline": "E-mailcodes hebben een verbinding nodig. Scan je ticket of ga naar de balie.",
+    "emailLimited": "Er zijn te veel codes aangevraagd. Ga naar de balie.",
+    "emailFailed": "We konden nu geen code sturen. Probeer het opnieuw of ga naar de balie.",
+    "codeTitle": "Vul je code in",
+    "codeSent": "Als {email} een ticket voor dit evenement heeft, hebben we er een code van 6 cijfers naartoe gemaild. Die werkt 10 minuten.",
+    "codeLabel": "Code van 6 cijfers",
+    "confirmCode": "Code bevestigen",
+    "newCode": "Nieuwe code sturen",
+    "codeInvalid": "Vul de 6 cijfers uit de e-mail in.",
+    "codeWrong": "Die code klopt niet. {left, plural, one {Nog # poging.} other {Nog # pogingen.}}",
+    "codeExpired": "Die code is verlopen. Stuur een nieuwe code.",
+    "detailsTitle": "Controleer je gegevens",
+    "detailsHint": "Dit komt er op je badge te staan.",
+    "name": "Naam",
+    "company": "Bedrijf",
+    "jobTitle": "Functie",
+    "ticket": "Ticket",
+    "print": "Mijn badge afdrukken",
+    "printing": "Bezig met afdrukken…",
+    "wrongDetails": "Er klopt iets niet",
+    "notMe": "Dit ben ik niet",
+    "printingTitle": "Je badge wordt afgedrukt",
+    "printingHint": "Haal hem op bij de printer. Veel plezier!",
+    "queuedTitle": "Je badge staat in de wachtrij",
+    "queuedHint": "De kiosk is offline. Je badge wordt afgedrukt zodra hij weer verbonden is; heb je haast, ga dan naar de balie.",
+    "done": "Klaar",
+    "deskTitle": "Ga naar de balie",
+    "desk": {
+      "desk": "De registratiebalie drukt je badge voor je af.",
+      "printed": "Je badge is al afgedrukt. Heb je een nieuwe nodig, dan drukt de balie hem opnieuw af.",
+      "notFound": "We vonden hier geen badge voor dat ticket.",
+      "wrongDetails": "Geen probleem: de balie past je gegevens aan en drukt je badge af.",
+      "printFailed": "De printer heeft je badge niet aangenomen. De balie drukt hem voor je af.",
+      "locked": "Te veel foute codes. De balie helpt je verder.",
+      "offline": "De kiosk is nu offline. De balie drukt je badge af."
+    },
+    "readyTitle": "Je badge is klaar om af te drukken",
+    "readyHint": "Open hem, kies Afdrukken en haal hem op bij de printer.",
+    "openBadge": "Mijn badge openen om af te drukken"
   }
 }

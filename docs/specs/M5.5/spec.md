@@ -115,3 +115,73 @@ Desk staff (box office, managers) print and reprint badges onsite, from the atte
 | Permissions: viewers read the log only (hidden controls, 404 station and print pages, 403 job PDF, commands refused); watchdog/report are platform steps | `packages/testing/tests/badge-printing.int.test.ts`, `apps/web/e2e/badge-printing.spec.ts` |
 | Isolation: rows for both orgs in every new table; foreign org refused | `packages/testing/src/fixtures.ts`, `packages/testing/tests/isolation.int.test.ts`, `badge-printing.int.test.ts` |
 | Keyboard only, axe light and dark on every new screen, Arabic RTL | `apps/web/e2e/badge-printing.spec.ts` |
+
+## M5.5c — kiosk self-print (done)
+
+### 1. Goal and users
+An attendee at a check-in kiosk (M3.4a kiosk mode) identifies themselves, checks what their badge
+will say and prints it once, without staff. Organizers turn it on per event. Anything the kiosk
+can't settle (a reprint, a balance due, a registration still waiting, wrong details) goes to the desk.
+
+### 2. What was built
+- **Settings per event** (`badges.kiosk_settings`, `badges.setKioskSettings`, `events:write`; read
+  with `events:read`): off by default; where kiosks print (the kiosk's own print dialog, or one of
+  the event's printers, PrintNode included when switched on); whether "Use your email" is offered.
+  Shown on the printing page ("Kiosk self-print"); viewers see the state only.
+- **Device-only commands** (`checkin:device`; each checks `requireKioskDeviceTx`: the caller is a
+  live kiosk locked to this event, and self-print is on):
+  - `badges.kioskLookup`: the ticket whose active barcode payload or short code was scanned (never a
+    ticket id alone) → `KioskBadgeDto` (name, company, job title as the template places them, ticket
+    type, status `ready | printed | desk`) and a 5-minute pass bound to this kiosk and ticket.
+  - `badges.kioskRequestCode` (factory with a `WaitingRegistrationLookup`, composed in the web app
+    with `registration.hasWaitingRegistrationTx`) and `badges.kioskVerifyCode`: a six-digit code to
+    the holder's own address. One own ticket → that ticket; several, or an application/approval/
+    reservation still waiting → the desk; nothing → no email, same answer. Only the code's HMAC is
+    stored (`badges.kiosk_challenges`; no address); 10 minutes; 5 wrong tries lock it; only the kiosk
+    that asked can use it; a newer code retires older ones; the M1.14 `guestCode` limiter (scope
+    `kiosk`) applies. A verified code returns the badge, its pass, and the short code the kiosk
+    checks the attendee in with (never shown).
+  - `badges.kioskPrint`: proof is the pass or the ticket's own code (offline queue). Idempotent per
+    `requestKey`; under the same advisory lock as the desk, a badge with any counted print returns
+    `printed` (no job), a balance due or no template returns `desk`. Jobs are logged
+    `source = 'kiosk'`, `kind = 'print'`, `first_print`. PrintNode jobs are handed over at once.
+  - `badges.kioskJobBadge`: a browser job's badge PDF for the kiosk that made it (signed token bound
+    to the device, 30 minutes).
+  - `badges.kioskSnapshot`: every badge's allowlisted details and status, for offline use.
+- **Routes** (device bearer token): `GET|POST /api/scan/kiosk/badges` (`lookup`, `email`, `verify`,
+  `print`), `GET /api/scan/kiosk/badges/pdf`. An emailed code is never in a response.
+- **Kiosk screen**: after a scan that admits (or finds the ticket already in), the "Check your
+  details" panel replaces the code field: name, company, job title, ticket; "Print my badge",
+  "Something's wrong" (→ desk), "Not me". The browser path opens the badge PDF ("Open my badge to
+  print", P5-2 stage 1: AirPrint/print dialog; the CSP allows no frames, so no silent iframe print);
+  PrintNode prints silently. "No ticket with you? Use your email" → email → code → details (and the
+  attendee is checked in). One attendee at a time: "Done", "Not me", a desk message (after 10 s) or a
+  minute without a touch unmounts the panel, so nothing about them stays for the next person.
+- **Offline**: the snapshot is sealed in IndexedDB with the device key (like the manifest), refreshed
+  on start, every 30 s and on reconnect; it is only opened by the ticket a scan resolved from the
+  manifest. Offline prints queue (sealed, with the scanned code as proof) only on PrintNode kiosks
+  and go out on reconnect; a print-dialog kiosk sends the attendee to the desk.
+- **Merged on the way**: M5.1d's balance-due override now gates M5.5b print jobs
+  (`startPrintJob.overrideToken`, `badges.printState.paymentDue`; the override opens the print page).
+- **Email**: message kind `badges.kiosk-code` (13 locales).
+
+### 3. Later / not yet
+- Editing details at the kiosk (corrections go to the desk).
+- Choosing between several own tickets at the kiosk (sent to the desk).
+- Silent printing on the browser path (needs a kiosk browser with kiosk printing or PrintNode).
+
+### 4. Acceptance
+| # | Criterion | Test |
+|---|---|---|
+| AC1 | A kiosk never shows another attendee's details: possession only (code or emailed code on that kiosk), allowlisted fields, other events/orgs/devices refused, scanners and members refused, nothing left on screen between visits | `packages/testing/tests/kiosk-print.int.test.ts`, `apps/web/e2e/kiosk-print.spec.ts` |
+| AC2 | A printed badge is logged once: retries reuse the job, a second try (or two kiosks at once) says printed, the desk still reprints with a reason | `kiosk-print.int.test.ts`, `kiosk-print.spec.ts` (print log) |
+| AC3 | Balance due, no template, several tickets and waiting registrations go to the desk | `kiosk-print.int.test.ts` |
+| AC4 | Email code: same answer for unknown addresses, no address or code stored, wrong tries count, lock after 5, one kiosk only | `kiosk-print.int.test.ts`, `packages/modules/badges/tests/kiosk.test.ts`, e2e |
+| AC5 | Offline snapshot: details from the sealed snapshot; PrintNode prints queue, print-dialog kiosks send to the desk | `kiosk-print.spec.ts`, `kiosk-print.int.test.ts` (snapshot) |
+| AC6 | Settings: off by default, organizer only, keyboard, persisted, viewer sees no controls; axe light/dark; Arabic RTL | `kiosk-print.spec.ts` |
+| AC7 | Isolation: both orgs have kiosk settings and a kiosk code in the fixture | `isolation.int.test.ts` |
+
+### 5. Gate results (M5.5c)
+`pnpm verify` green on the merged branch (build branch with batch 3h, M5.5b): lint, check:modules,
+typecheck 59/59, unit 2730/2730 (12 new), integration 1534/1534 (18 new). E2E on 375/768/1280:
+`kiosk-print.spec.ts` 6/6, with `badge-printing`, `staff-mode`, `invoices` and `badges` 63/63 in all.

@@ -70,6 +70,7 @@ export {
   recordGuestArrivalsCommand,
   undoGuestArrivalCommand,
 } from './guest-checkin.ts';
+export { requireKioskDeviceTx } from './kiosk-device.ts';
 export {
   admittedTodayByCheckpointTx,
   capacityFactsTx,

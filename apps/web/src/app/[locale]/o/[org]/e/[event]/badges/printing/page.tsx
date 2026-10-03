@@ -21,7 +21,11 @@ import { Link } from '@/i18n/navigation.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
 import { ports } from '@/server/ports.ts';
 import { loadPrintingPage } from '@/server/printing.ts';
-import { archivePrinterAction, createPrinterAction } from '@/server/printing-actions.ts';
+import {
+  archivePrinterAction,
+  createPrinterAction,
+  setKioskSettingsAction,
+} from '@/server/printing-actions.ts';
 
 const PRINTER_TONE: Record<PrinterDto['status'], StatusTone> = {
   unknown: 'neutral',
@@ -43,7 +47,8 @@ export default async function PrintingPage({
   const { locale, org, event } = await params;
   const sp = await searchParams;
   setRequestLocale(locale);
-  const { data, ev, printing, canWrite, canPrint, platformPrintNode } = await loadPrintingPage(org, event);
+  const page = await loadPrintingPage(org, event);
+  const { data, ev, printing, kiosk, canWrite, canPrint, platformPrintNode } = page;
   const kind = PRINT_KINDS.find((k) => k === sp.kind);
   const log = await executeQuery(
     printLogQuery,
@@ -91,7 +96,8 @@ export default async function PrintingPage({
     {
       key: 'printer',
       header: tp('columns.printer'),
-      cell: (e: PrintLogEntryDto) => e.printerName ?? tp('deviceDialog'),
+      cell: (e: PrintLogEntryDto) =>
+        `${e.source === 'kiosk' ? `${tp('sourceKiosk')} · ` : ''}${e.printerName ?? tp('deviceDialog')}`,
     },
     {
       key: 'status',
@@ -212,6 +218,72 @@ export default async function PrintingPage({
               />
             </Card>
           </section>
+        ) : null}
+      </section>
+
+      <section aria-labelledby="kiosk-heading" className="flex flex-col gap-3">
+        <h2 id="kiosk-heading" className="text-section">
+          {tp('kiosk.heading')}
+        </h2>
+        <p className="max-w-prose text-caption text-ink-2">{tp('kiosk.hint')}</p>
+        <div className="flex flex-wrap items-center gap-2">
+          <StatusPill
+            tone={kiosk.enabled ? 'success' : 'neutral'}
+            label={kiosk.enabled ? tp('kiosk.on') : tp('kiosk.off')}
+          />
+          {kiosk.enabled ? (
+            <span className="text-caption text-ink-2">
+              {tp('kiosk.printsTo', {
+                printer:
+                  printing.printers.find((p) => p.id === kiosk.printerId)?.name ?? tp('kiosk.ownDialog'),
+              })}
+              {' · '}
+              {kiosk.emailCodes ? tp('kiosk.emailOn') : tp('kiosk.emailOff')}
+            </span>
+          ) : null}
+        </div>
+        {canWrite ? (
+          <Card size="panel" className="flex flex-col gap-3">
+            <ProgramForm
+              action={setKioskSettingsAction.bind(null, org, event)}
+              fields={[
+                {
+                  kind: 'checkboxes',
+                  name: 'options',
+                  label: tp('kiosk.options'),
+                  options: [
+                    { value: 'enabled', label: tp('kiosk.enabled') },
+                    { value: 'emailCodes', label: tp('kiosk.emailCodes') },
+                  ],
+                  defaultValues: [
+                    ...(kiosk.enabled ? ['enabled'] : []),
+                    ...(kiosk.emailCodes ? ['emailCodes'] : []),
+                  ],
+                },
+                {
+                  kind: 'select',
+                  name: 'printerId',
+                  label: tp('kiosk.printer'),
+                  hint: tp('kiosk.printerHint'),
+                  defaultValue: kiosk.printerId ?? '',
+                  options: [
+                    { value: '', label: tp('kiosk.ownDialog') },
+                    ...printing.printers
+                      .filter((p) => !p.archived)
+                      .map((p) => ({ value: p.id, label: p.name })),
+                  ],
+                },
+              ]}
+              idPrefix="kiosk-settings"
+              submitLabel={tp('kiosk.save')}
+              successLabel={tp('kiosk.saved')}
+              errors={{
+                archived: tp('errors.archived'),
+                printnode_off: tp('errors.printnode_off'),
+                printerId: tp('errors.printerId'),
+              }}
+            />
+          </Card>
         ) : null}
       </section>
 

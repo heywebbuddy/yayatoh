@@ -84,6 +84,7 @@ export {
   substituteByPayerCommand,
   substituteRegistrantCommand,
 } from './groups.ts';
+export { hasWaitingRegistrationTx } from './kiosk.ts';
 export { decisionDedupeKey, decisionMailer, registrantLifecycle } from './lifecycle.ts';
 // M5.1d: pay later by invoice per type (P5-5).
 export {

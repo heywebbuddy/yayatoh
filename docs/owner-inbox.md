@@ -703,6 +703,7 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **Decisions are final** in this increment (no undo); a declined proposal can't be reopened. Confirm, or ask for "reopen".
 - [ ] **Limits:** 20 extra questions, 100 reviewers per event, 2,000 proposals per call, up to 5 co-speakers, scores 1–5. Public form rate limit `cfpSubmit`: 10 per device per 10 minutes, 10 per submitter address per hour, 20 per anonymous IP per 10 minutes. Change by code.
 - [ ] **Wording (`legal-copy`):** the public form has no CFP terms or consent checkbox yet (the plan lists "CFP terms" for counsel). The emails are transactional (received; accepted or declined, with the organizer's note). The shared portal invitation email still says "see your sessions … complete your tasks" for every role; a reviewer-specific line is Later.
+
 ## M5.5b — badge printing (2026-10-03, pending owner)
 - [ ] **PrintNode account (Stage 2, P5-2).** Open one PrintNode integrator account; for each org that wants silent printing, create a child account with the org id as its creator reference, then switch it on with `pnpm --filter @yayatoh/worker printnode -- --org <slug> --on`. Put `PRINTNODE_API_KEY` in Doppler and set `BADGE_PRINTER_PROVIDER=printnode` only in production. Until then everything uses the fake. Label: `infra`.
 - [ ] **Batch PDFs and the print log.** A downloaded batch PDF is not counted as printed (a download is not a print), so the first onsite print of a pre-printed badge is logged as a first print. Confirm, or ask for "mark this batch as printed".
@@ -770,3 +771,7 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **RSVP pending levels:** warning from RSVP deadline −7 days, critical from −1 day, and it stays critical after the deadline until the event starts (so late answers keep being chased). No deadline set: no alert (the widget still shows the count). Confirm, or say if it should stop at the deadline.
 - [ ] **Guests without a table** (not declined, on a guest floor plan) alert in the last 7 days before the event (critical in the last day and while it runs). **Missing meals** (attending guests without a meal, events with a menu) alert in the last 7 days. Both thresholds are ours; say if you want other windows.
 - [ ] **Door staff see guest names** on the Command Center's guest seating and arrivals widgets (the same names they see on the Scan PWA's guest check-in); RSVP chasing and meals stay with hosts and planners (`guests:read`). Dietary and accessibility needs show as counts only, for everyone. Confirm.
+## M5.5c — kiosk self-print (2026-10-03, pending owner)
+- [ ] **Unattended kiosks need PrintNode for silent printing.** On the print-dialog path the attendee taps "Open my badge to print" and prints from the PDF (AirPrint). Confirm, or plan PrintNode (Stage 2) for unattended kiosks.
+- [ ] **Email codes** go only to the ticket holder's own address; an address with several tickets at the event, or a registration still waiting, is sent to the desk. Confirm.
+- [ ] **Kiosk email wording** (`badges.kiosk-code`, 13 locales; label `legal-copy`).

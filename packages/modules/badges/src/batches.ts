@@ -698,3 +698,35 @@ async function mergeParts(renderer: PdfRenderer, parts: readonly Uint8Array[]): 
   if (!renderer.merge) throw new Error('badges: the PDF renderer cannot merge');
   return renderer.merge(real);
 }
+
+/** What a badge says about its holder (the fields its template places; empty when not placed). */
+export interface BadgeDetails {
+  readonly firstName: string;
+  readonly lastName: string;
+  readonly company: string;
+  readonly jobTitle: string;
+}
+
+/**
+ * M5.5c: what each ticket's badge would say now, for the kiosk's "check your details". Tickets
+ * whose type has no template are missing from the map (they can't print).
+ */
+export async function badgeDetailsTx(
+  tx: TenantTx,
+  eventId: string,
+  tickets: readonly BadgeTicket[],
+): Promise<Map<string, BadgeDetails>> {
+  if (tickets.length === 0) return new Map();
+  const rows = await badgeRowsTx(tx, eventId, tickets, await currentVersionMapTx(tx, eventId));
+  return new Map(
+    rows.map((r) => [
+      r.ticket.id,
+      {
+        firstName: r.row.firstName,
+        lastName: r.row.lastName,
+        company: r.row.company,
+        jobTitle: r.row.jobTitle,
+      },
+    ]),
+  );
+}

@@ -1157,6 +1157,214 @@ Lakeside Jazz Night is next Friday. Doors open at 7 pm.
 }
 `;
 
+exports[`renderMessage: every kind in all 13 locales > badges.kiosk-code · ar 1`] = `
+{
+  "subject": "730514 هو رمز كشك الشارات الخاص بك في Midwest Leadership Summit",
+  "text": "730514 هو رمز كشك الشارات الخاص بك في Midwest Leadership Summit
+
+مرحبًا،
+
+أدخل 730514 في كشك الشارات لمراجعة بياناتك وطباعة شارتك. يعمل الرمز مرة واحدة وتنتهي صلاحيته خلال 10 دقائق. إذا لم تطلبه، يمكنك تجاهل هذه الرسالة.
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > badges.kiosk-code · de 1`] = `
+{
+  "subject": "730514 ist Ihr Code für das Badge-Terminal bei Midwest Leadership Summit",
+  "text": "730514 ist Ihr Code für das Badge-Terminal bei Midwest Leadership Summit
+
+Hallo,
+
+Geben Sie 730514 am Badge-Terminal ein, um Ihre Angaben zu prüfen und Ihr Badge zu drucken. Der Code gilt einmal und läuft in 10 Minuten ab. Wenn Sie ihn nicht angefordert haben, können Sie diese E-Mail ignorieren.
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > badges.kiosk-code · en 1`] = `
+{
+  "subject": "730514 is your badge kiosk code for Midwest Leadership Summit",
+  "text": "730514 is your badge kiosk code for Midwest Leadership Summit
+
+Hello,
+
+Enter 730514 on the badge kiosk to check your details and print your badge. The code works once and expires in 10 minutes. If you didn't ask for it, you can ignore this email.
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > badges.kiosk-code · es 1`] = `
+{
+  "subject": "730514 es tu código para el quiosco de credenciales de Midwest Leadership Summit",
+  "text": "730514 es tu código para el quiosco de credenciales de Midwest Leadership Summit
+
+Hola:
+
+Introduce 730514 en el quiosco de credenciales para revisar tus datos e imprimir tu credencial. El código sirve una vez y caduca en 10 minutos. Si no lo pediste, puedes ignorar este correo.
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > badges.kiosk-code · fr 1`] = `
+{
+  "subject": "730514 est votre code pour la borne de badges de Midwest Leadership Summit",
+  "text": "730514 est votre code pour la borne de badges de Midwest Leadership Summit
+
+Bonjour,
+
+Saisissez 730514 sur la borne de badges pour vérifier vos informations et imprimer votre badge. Le code fonctionne une fois et expire dans 10 minutes. Si vous ne l'avez pas demandé, ignorez cet e-mail.
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > badges.kiosk-code · hi 1`] = `
+{
+  "subject": "730514 Midwest Leadership Summit के बैज कियोस्क के लिए आपका कोड है",
+  "text": "730514 Midwest Leadership Summit के बैज कियोस्क के लिए आपका कोड है
+
+नमस्ते,
+
+अपना विवरण जाँचने और अपना बैज प्रिंट करने के लिए बैज कियोस्क पर 730514 दर्ज करें। कोड एक बार काम करता है और 10 मिनट में समाप्त हो जाता है। अगर आपने यह नहीं माँगा था, तो इस ईमेल को अनदेखा करें।
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > badges.kiosk-code · it 1`] = `
+{
+  "subject": "730514 è il tuo codice per il chiosco badge di Midwest Leadership Summit",
+  "text": "730514 è il tuo codice per il chiosco badge di Midwest Leadership Summit
+
+Ciao,
+
+Inserisci 730514 nel chiosco badge per controllare i tuoi dati e stampare il badge. Il codice vale una volta e scade tra 10 minuti. Se non l'hai richiesto, ignora questa email.
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > badges.kiosk-code · ja 1`] = `
+{
+  "subject": "730514 は Midwest Leadership Summit のバッジキオスク用コードです",
+  "text": "730514 は Midwest Leadership Summit のバッジキオスク用コードです
+
+こんにちは。
+
+バッジキオスクで 730514 を入力すると、登録内容を確認してバッジを印刷できます。コードは1回限り有効で、10分後に期限切れになります。心当たりがない場合は、このメールを無視してください。
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > badges.kiosk-code · nl 1`] = `
+{
+  "subject": "730514 is je code voor de badgekiosk van Midwest Leadership Summit",
+  "text": "730514 is je code voor de badgekiosk van Midwest Leadership Summit
+
+Hallo,
+
+Voer 730514 in bij de badgekiosk om je gegevens te controleren en je badge af te drukken. De code werkt één keer en verloopt over 10 minuten. Heb je hem niet aangevraagd? Dan kun je deze e-mail negeren.
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > badges.kiosk-code · pt 1`] = `
+{
+  "subject": "730514 é o seu código para o quiosque de crachás de Midwest Leadership Summit",
+  "text": "730514 é o seu código para o quiosque de crachás de Midwest Leadership Summit
+
+Olá!
+
+Introduza 730514 no quiosque de crachás para confirmar os seus dados e imprimir o seu crachá. O código funciona uma vez e expira em 10 minutos. Se não o pediu, pode ignorar este e-mail.
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > badges.kiosk-code · ru 1`] = `
+{
+  "subject": "730514 — ваш код для киоска бейджей на Midwest Leadership Summit",
+  "text": "730514 — ваш код для киоска бейджей на Midwest Leadership Summit
+
+Здравствуйте!
+
+Введите 730514 в киоске бейджей, чтобы проверить свои данные и напечатать бейдж. Код действует один раз и истекает через 10 минут. Если вы его не запрашивали, просто проигнорируйте это письмо.
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > badges.kiosk-code · zh-CN 1`] = `
+{
+  "subject": "730514 是你在 Midwest Leadership Summit 胸牌自助机的验证码",
+  "text": "730514 是你在 Midwest Leadership Summit 胸牌自助机的验证码
+
+您好：
+
+在胸牌自助机上输入 730514，即可核对你的信息并打印胸牌。验证码只能使用一次，10 分钟后失效。如果不是你本人申请，请忽略此邮件。
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > badges.kiosk-code · zh-TW 1`] = `
+{
+  "subject": "730514 是你在 Midwest Leadership Summit 名牌自助機的驗證碼",
+  "text": "730514 是你在 Midwest Leadership Summit 名牌自助機的驗證碼
+
+您好：
+
+在名牌自助機上輸入 730514，即可核對你的資料並列印名牌。驗證碼只能使用一次，10 分鐘後失效。如果不是你本人申請，請忽略此郵件。
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
 exports[`renderMessage: every kind in all 13 locales > campaigns.test · ar 1`] = `
 {
   "subject": "[تجربة] Early-bird tickets are back",

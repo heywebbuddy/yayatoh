@@ -18,6 +18,24 @@ export {
   type RibbonColor,
   TEXT_KINDS,
 } from './domain/design.ts';
+// M5.5c kiosk self-print (the Scan PWA's kiosk screen uses these too).
+export {
+  formatKioskCode,
+  isKioskCodeShape,
+  isKioskEmail,
+  judgeKioskCode,
+  KIOSK_CODE_ATTEMPTS,
+  KIOSK_CODE_TTL_MS,
+  KIOSK_DONE_MS,
+  KIOSK_IDLE_MS,
+  KIOSK_PASS_TTL_MS,
+  type KioskBadgeStatus,
+  type KioskCodeCheck,
+  type KioskEmailOutcome,
+  kioskBadgeStatus,
+  kioskEmailOutcome,
+  normalizeKioskCode,
+} from './domain/kiosk.ts';
 export {
   type Box,
   clampBox,

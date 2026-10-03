@@ -197,6 +197,9 @@
         "request-code": "Code de demande de confidentialité",
         "archive-ready": "Archive de données personnelles prête",
         "erasure-done": "Reçu d’effacement"
+      },
+      "badges": {
+        "kiosk-code": "Code de la borne de badges"
       }
     },
     "status": {
@@ -13635,6 +13638,25 @@
       "reason_required": "Indiquez pourquoi ce badge est réimprimé.",
       "note_required": "Pour « Autre », indiquez la raison en quelques mots.",
       "note": "La note doit faire moins de 200 caractères."
+    },
+    "balanceDue": "Un solde est dû sur cette inscription. Imprimez le badge depuis la page Badges en indiquant un motif.",
+    "sourceKiosk": "Borne",
+    "kiosk": {
+      "heading": "Impression en libre-service",
+      "hint": "Les participants scannent leur billet sur une borne d'accueil (ou confirment un code reçu par e-mail), vérifient leurs informations et impriment eux-mêmes leur badge, une fois. Les réimpressions, les soldes dus et les inscriptions en attente passent par l'accueil.",
+      "on": "Activée",
+      "off": "Désactivée",
+      "printsTo": "Imprime sur {printer}",
+      "emailOn": "Codes par e-mail activés",
+      "emailOff": "Codes par e-mail désactivés",
+      "options": "Libre-service",
+      "enabled": "Laisser les participants imprimer leur badge aux bornes",
+      "emailCodes": "Proposer « Utilisez votre e-mail » (un code à usage unique envoyé au titulaire du billet)",
+      "printer": "Les bornes impriment sur",
+      "printerHint": "La boîte d'impression de la borne fonctionne avec une imprimante branchée sur la borne.",
+      "ownDialog": "La boîte d'impression de la borne",
+      "save": "Enregistrer les réglages de borne",
+      "saved": "Réglages de borne enregistrés."
     }
   },
   "sessionCheckin": {
@@ -15202,5 +15224,54 @@
       "allow": "Autoriser",
       "deny": "Refuser"
     }
+  },
+  "kioskPrint": {
+    "useEmail": "Pas de billet sur vous ? Utilisez votre e-mail",
+    "loading": "Recherche de votre badge…",
+    "emailTitle": "Utilisez votre e-mail",
+    "emailHint": "Nous enverrons un code à 6 chiffres à l'adresse de votre billet.",
+    "emailLabel": "Votre e-mail",
+    "sendCode": "M'envoyer un code",
+    "cancel": "Annuler",
+    "emailInvalid": "Saisissez votre adresse e-mail, par exemple nom@example.com.",
+    "emailOffline": "Les codes par e-mail nécessitent une connexion. Scannez votre billet ou adressez-vous à l'accueil.",
+    "emailLimited": "Trop de codes ont été demandés. Adressez-vous à l'accueil.",
+    "emailFailed": "Impossible d'envoyer un code pour le moment. Réessayez ou adressez-vous à l'accueil.",
+    "codeTitle": "Saisissez votre code",
+    "codeSent": "Si {email} a un billet pour cet événement, nous lui avons envoyé un code à 6 chiffres. Il est valable 10 minutes.",
+    "codeLabel": "Code à 6 chiffres",
+    "confirmCode": "Confirmer le code",
+    "newCode": "Envoyer un nouveau code",
+    "codeInvalid": "Saisissez les 6 chiffres reçus par e-mail.",
+    "codeWrong": "Ce code n'est pas le bon. {left, plural, one {Il reste # essai.} other {Il reste # essais.}}",
+    "codeExpired": "Ce code a expiré. Envoyez-en un nouveau.",
+    "detailsTitle": "Vérifiez vos informations",
+    "detailsHint": "Voici ce qu'indiquera votre badge.",
+    "name": "Nom",
+    "company": "Entreprise",
+    "jobTitle": "Fonction",
+    "ticket": "Billet",
+    "print": "Imprimer mon badge",
+    "printing": "Impression…",
+    "wrongDetails": "Quelque chose ne va pas",
+    "notMe": "Ce n'est pas moi",
+    "printingTitle": "Votre badge s'imprime",
+    "printingHint": "Récupérez-le à l'imprimante. Bon événement !",
+    "queuedTitle": "Votre badge est en file d'attente",
+    "queuedHint": "La borne est hors ligne. Votre badge s'imprimera dès son retour en ligne ; si vous êtes pressé, adressez-vous à l'accueil.",
+    "done": "Terminé",
+    "deskTitle": "Adressez-vous à l'accueil",
+    "desk": {
+      "desk": "L'accueil imprimera votre badge.",
+      "printed": "Votre badge a déjà été imprimé. S'il vous en faut un nouveau, l'accueil peut le réimprimer.",
+      "notFound": "Nous n'avons pas trouvé de badge pour ce billet ici.",
+      "wrongDetails": "Pas de souci : l'accueil corrigera vos informations et imprimera votre badge.",
+      "printFailed": "L'imprimante n'a pas pris votre badge. L'accueil l'imprimera pour vous.",
+      "locked": "Trop de codes erronés. L'accueil va vous aider.",
+      "offline": "La borne est hors ligne pour le moment. L'accueil imprimera votre badge."
+    },
+    "readyTitle": "Votre badge est prêt à imprimer",
+    "readyHint": "Ouvrez-le, choisissez Imprimer, puis récupérez-le à l'imprimante.",
+    "openBadge": "Ouvrir mon badge pour l'imprimer"
   }
 }

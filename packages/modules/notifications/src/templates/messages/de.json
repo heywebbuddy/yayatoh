@@ -335,6 +335,10 @@
       "subject": "{org} hat Ihre personenbezogenen Daten gelöscht",
       "intro": "{org} hat Ihre personenbezogenen Daten wie gewünscht gelöscht. Einige Unterlagen müssen gesetzlich aufbewahrt werden (zum Beispiel bezahlte Bestellungen für die Steuer), ohne Ihren Namen und Ihre E-Mail; die Bestätigung listet sie mit Grund auf. Dies ist die letzte E-Mail dazu.",
       "cta": "Bestätigung ansehen"
+    },
+    "badges.kiosk-code": {
+      "subject": "{code} ist Ihr Code für das Badge-Terminal bei {eventName}",
+      "intro": "Geben Sie {code} am Badge-Terminal ein, um Ihre Angaben zu prüfen und Ihr Badge zu drucken. Der Code gilt einmal und läuft in {minutes, plural, one {# Minute} other {# Minuten}} ab. Wenn Sie ihn nicht angefordert haben, können Sie diese E-Mail ignorieren."
     }
   },
   "roles": {

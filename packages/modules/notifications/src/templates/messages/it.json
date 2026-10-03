@@ -335,6 +335,10 @@
       "subject": "{org} ha cancellato i tuoi dati personali",
       "intro": "{org} ha cancellato i tuoi dati personali come richiesto. Alcuni documenti vanno conservati per legge (per esempio gli ordini pagati, ai fini fiscali), senza il tuo nome né la tua email; la ricevuta li elenca con il motivo. Questa è l’ultima email al riguardo.",
       "cta": "Vedi la ricevuta"
+    },
+    "badges.kiosk-code": {
+      "subject": "{code} è il tuo codice per il chiosco badge di {eventName}",
+      "intro": "Inserisci {code} nel chiosco badge per controllare i tuoi dati e stampare il badge. Il codice vale una volta e scade tra {minutes, plural, one {# minuto} other {# minuti}}. Se non l'hai richiesto, ignora questa email."
     }
   },
   "roles": {

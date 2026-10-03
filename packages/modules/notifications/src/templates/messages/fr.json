@@ -335,6 +335,10 @@
       "subject": "{org} a effacé vos données personnelles",
       "intro": "{org} a effacé vos données personnelles comme demandé. Certains documents doivent être conservés par la loi (par exemple les commandes payées, pour les impôts), sans votre nom ni votre e-mail ; le reçu les liste avec la raison. C’est le dernier e-mail à ce sujet.",
       "cta": "Voir le reçu"
+    },
+    "badges.kiosk-code": {
+      "subject": "{code} est votre code pour la borne de badges de {eventName}",
+      "intro": "Saisissez {code} sur la borne de badges pour vérifier vos informations et imprimer votre badge. Le code fonctionne une fois et expire dans {minutes, plural, one {# minute} other {# minutes}}. Si vous ne l'avez pas demandé, ignorez cet e-mail."
     }
   },
   "roles": {

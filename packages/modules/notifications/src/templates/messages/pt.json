@@ -335,6 +335,10 @@
       "subject": "{org} apagou os seus dados pessoais",
       "intro": "{org} apagou os seus dados pessoais como pediu. Alguns registos têm de ser guardados por lei (por exemplo, pedidos pagos para efeitos fiscais), sem o seu nome nem e-mail; o recibo indica-os com o motivo. Este é o último e-mail sobre o assunto.",
       "cta": "Ver o recibo"
+    },
+    "badges.kiosk-code": {
+      "subject": "{code} é o seu código para o quiosque de crachás de {eventName}",
+      "intro": "Introduza {code} no quiosque de crachás para confirmar os seus dados e imprimir o seu crachá. O código funciona uma vez e expira em {minutes, plural, one {# minuto} other {# minutos}}. Se não o pediu, pode ignorar este e-mail."
     }
   },
   "roles": {

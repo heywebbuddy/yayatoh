@@ -335,6 +335,10 @@
       "subject": "{org} borró tus datos personales",
       "intro": "{org} borró tus datos personales como pediste. Algunos registros deben conservarse por ley (por ejemplo, pedidos pagados por impuestos), sin tu nombre ni tu correo; el recibo los enumera con el motivo. Este es el último correo sobre el tema.",
       "cta": "Ver el recibo"
+    },
+    "badges.kiosk-code": {
+      "subject": "{code} es tu código para el quiosco de credenciales de {eventName}",
+      "intro": "Introduce {code} en el quiosco de credenciales para revisar tus datos e imprimir tu credencial. El código sirve una vez y caduca en {minutes, plural, one {# minuto} other {# minutos}}. Si no lo pediste, puedes ignorar este correo."
     }
   },
   "roles": {

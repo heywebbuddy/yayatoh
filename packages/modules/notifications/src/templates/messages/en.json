@@ -335,6 +335,10 @@
       "subject": "{org} erased your personal data",
       "intro": "{org} erased your personal data as you asked. Some records must be kept by law (for example paid orders for tax), with your name and email removed; the receipt lists them and why. This is the last email you will get about it.",
       "cta": "View the receipt"
+    },
+    "badges.kiosk-code": {
+      "subject": "{code} is your badge kiosk code for {eventName}",
+      "intro": "Enter {code} on the badge kiosk to check your details and print your badge. The code works once and expires in {minutes, plural, one {# minute} other {# minutes}}. If you didn't ask for it, you can ignore this email."
     }
   },
   "roles": {

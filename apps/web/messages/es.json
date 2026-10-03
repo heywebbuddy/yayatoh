@@ -197,6 +197,9 @@
         "request-code": "Código de solicitud de privacidad",
         "archive-ready": "Archivo de datos personales listo",
         "erasure-done": "Recibo de supresión"
+      },
+      "badges": {
+        "kiosk-code": "Código del quiosco de credenciales"
       }
     },
     "status": {
@@ -13635,6 +13638,25 @@
       "reason_required": "Elige por qué se vuelve a imprimir esta acreditación.",
       "note_required": "Para «Otro», indica el motivo en pocas palabras.",
       "note": "La nota debe tener menos de 200 caracteres."
+    },
+    "balanceDue": "Esta inscripción tiene un saldo pendiente. Imprímela desde la página de credenciales indicando un motivo.",
+    "sourceKiosk": "Quiosco",
+    "kiosk": {
+      "heading": "Autoimpresión en quiosco",
+      "hint": "Los asistentes escanean su entrada en un quiosco de acceso (o confirman un código enviado por correo), revisan sus datos e imprimen su credencial una vez. Las reimpresiones, los saldos pendientes y las inscripciones aún en espera van al mostrador.",
+      "on": "Activada",
+      "off": "Desactivada",
+      "printsTo": "Imprime en {printer}",
+      "emailOn": "Códigos por correo activados",
+      "emailOff": "Códigos por correo desactivados",
+      "options": "Autoimpresión",
+      "enabled": "Permitir que los asistentes impriman su credencial en los quioscos",
+      "emailCodes": "Ofrecer \"Usa tu correo\" (un código de un solo uso para el titular de la entrada)",
+      "printer": "Los quioscos imprimen en",
+      "printerHint": "El diálogo de impresión del propio quiosco funciona con una impresora conectada al quiosco.",
+      "ownDialog": "El diálogo de impresión del quiosco",
+      "save": "Guardar ajustes del quiosco",
+      "saved": "Ajustes del quiosco guardados."
     }
   },
   "sessionCheckin": {
@@ -15202,5 +15224,54 @@
       "allow": "Permitir",
       "deny": "Denegar"
     }
+  },
+  "kioskPrint": {
+    "useEmail": "¿No tienes tu entrada? Usa tu correo",
+    "loading": "Buscando tu credencial…",
+    "emailTitle": "Usa tu correo",
+    "emailHint": "Enviaremos un código de 6 dígitos al correo de tu entrada.",
+    "emailLabel": "Tu correo electrónico",
+    "sendCode": "Envíame un código",
+    "cancel": "Cancelar",
+    "emailInvalid": "Escribe tu correo, por ejemplo nombre@example.com.",
+    "emailOffline": "Los códigos por correo necesitan conexión. Escanea tu entrada o acude al mostrador.",
+    "emailLimited": "Se han pedido demasiados códigos. Acude al mostrador.",
+    "emailFailed": "No hemos podido enviar un código ahora. Inténtalo de nuevo o acude al mostrador.",
+    "codeTitle": "Escribe tu código",
+    "codeSent": "Si {email} tiene una entrada para este evento, le hemos enviado un código de 6 dígitos. Sirve durante 10 minutos.",
+    "codeLabel": "Código de 6 dígitos",
+    "confirmCode": "Confirmar código",
+    "newCode": "Enviar un código nuevo",
+    "codeInvalid": "Escribe los 6 dígitos del correo.",
+    "codeWrong": "Ese código no es correcto. {left, plural, one {Te queda # intento.} other {Te quedan # intentos.}}",
+    "codeExpired": "Ese código ha caducado. Envía uno nuevo.",
+    "detailsTitle": "Revisa tus datos",
+    "detailsHint": "Esto es lo que dirá tu credencial.",
+    "name": "Nombre",
+    "company": "Empresa",
+    "jobTitle": "Cargo",
+    "ticket": "Entrada",
+    "print": "Imprimir mi credencial",
+    "printing": "Imprimiendo…",
+    "wrongDetails": "Hay algo mal",
+    "notMe": "No soy yo",
+    "printingTitle": "Tu credencial se está imprimiendo",
+    "printingHint": "Recógela en la impresora. ¡Disfruta del evento!",
+    "queuedTitle": "Tu credencial está en cola",
+    "queuedHint": "El quiosco está sin conexión. Tu credencial se imprimirá en cuanto vuelva; si tienes prisa, acude al mostrador.",
+    "done": "Listo",
+    "deskTitle": "Acude al mostrador",
+    "desk": {
+      "desk": "El mostrador de registro imprimirá tu credencial.",
+      "printed": "Tu credencial ya se imprimió. Si necesitas otra, el mostrador puede reimprimirla.",
+      "notFound": "No encontramos aquí una credencial para esa entrada.",
+      "wrongDetails": "Sin problema: el mostrador corregirá tus datos e imprimirá tu credencial.",
+      "printFailed": "La impresora no aceptó tu credencial. El mostrador la imprimirá por ti.",
+      "locked": "Demasiados códigos incorrectos. El mostrador te ayudará.",
+      "offline": "El quiosco está sin conexión. El mostrador imprimirá tu credencial."
+    },
+    "readyTitle": "Tu credencial está lista para imprimir",
+    "readyHint": "Ábrela, elige Imprimir y recógela en la impresora.",
+    "openBadge": "Abrir mi credencial para imprimir"
   }
 }

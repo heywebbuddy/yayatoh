@@ -168,6 +168,13 @@ export const KINDS = {
     urgent: true,
     params: ['code', 'eventName', 'url', 'minutes'],
   },
+  /** M5.5c: a badge kiosk's one-time code, sent at once by the web app (never queued). */
+  'badges.kiosk-code': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['code', 'eventName', 'minutes'],
+  },
   /** M1.5f: sent at once by the web app (never queued: the code is never stored). */
   'guest.checkout-code': {
     category: 'transactional',

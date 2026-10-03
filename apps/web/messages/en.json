@@ -197,6 +197,9 @@
         "request-code": "Privacy request code",
         "archive-ready": "Personal data archive ready",
         "erasure-done": "Erasure receipt"
+      },
+      "badges": {
+        "kiosk-code": "Badge kiosk code"
       }
     },
     "status": {
@@ -13635,6 +13638,25 @@
       "reason_required": "Choose why this badge is printed again.",
       "note_required": "For “Other”, say why in a few words.",
       "note": "Keep the note under 200 characters."
+    },
+    "balanceDue": "A balance is due on this registration. Print it from the Badges page with a reason.",
+    "sourceKiosk": "Kiosk",
+    "kiosk": {
+      "heading": "Kiosk self-print",
+      "hint": "Attendees at a check-in kiosk scan their ticket (or confirm a code emailed to them), check their details and print their own badge, once. Reprints, balances due and registrations still waiting go to the desk.",
+      "on": "On",
+      "off": "Off",
+      "printsTo": "Prints to {printer}",
+      "emailOn": "Email codes on",
+      "emailOff": "Email codes off",
+      "options": "Self-print",
+      "enabled": "Let attendees print their own badge at kiosks",
+      "emailCodes": "Offer \"Use your email\" (a one-time code sent to the ticket's holder)",
+      "printer": "Kiosks print to",
+      "printerHint": "The kiosk's own print dialog works with a printer attached to the kiosk.",
+      "ownDialog": "The kiosk's own print dialog",
+      "save": "Save kiosk settings",
+      "saved": "Kiosk settings saved."
     }
   },
   "sessionCheckin": {
@@ -15202,5 +15224,54 @@
       "allow": "Allow",
       "deny": "Deny"
     }
+  },
+  "kioskPrint": {
+    "useEmail": "No ticket with you? Use your email",
+    "loading": "Finding your badge…",
+    "emailTitle": "Use your email",
+    "emailHint": "We'll email a 6-digit code to the address on your ticket.",
+    "emailLabel": "Your email",
+    "sendCode": "Email me a code",
+    "cancel": "Cancel",
+    "emailInvalid": "Enter your email address, like name@example.com.",
+    "emailOffline": "Email codes need a connection. Scan your ticket, or please see the desk.",
+    "emailLimited": "Too many codes were asked for. Please see the desk.",
+    "emailFailed": "We couldn't send a code just now. Please try again or see the desk.",
+    "codeTitle": "Enter your code",
+    "codeSent": "If {email} has a ticket for this event, we've emailed a 6-digit code to it. It works for 10 minutes.",
+    "codeLabel": "6-digit code",
+    "confirmCode": "Confirm code",
+    "newCode": "Send a new code",
+    "codeInvalid": "Enter the 6 digits from the email.",
+    "codeWrong": "That code isn't right. {left, plural, one {# try left.} other {# tries left.}}",
+    "codeExpired": "That code has expired. Send a new code.",
+    "detailsTitle": "Check your details",
+    "detailsHint": "This is what your badge will say.",
+    "name": "Name",
+    "company": "Company",
+    "jobTitle": "Job title",
+    "ticket": "Ticket",
+    "print": "Print my badge",
+    "printing": "Printing…",
+    "wrongDetails": "Something's wrong",
+    "notMe": "Not me",
+    "printingTitle": "Your badge is printing",
+    "printingHint": "Collect it from the printer. Enjoy the event!",
+    "queuedTitle": "Your badge is in the queue",
+    "queuedHint": "The kiosk is offline. Your badge prints as soon as it reconnects; if you're in a hurry, please see the desk.",
+    "done": "Done",
+    "deskTitle": "Please see the desk",
+    "desk": {
+      "desk": "The registration desk will print your badge for you.",
+      "printed": "Your badge has already been printed. If you need a new one, the desk can reprint it.",
+      "notFound": "We couldn't find a badge for that ticket here.",
+      "wrongDetails": "No problem: the desk will correct your details and print your badge.",
+      "printFailed": "The printer didn't take your badge. The desk will print it for you.",
+      "locked": "Too many wrong codes. The desk will help you.",
+      "offline": "The kiosk is offline right now. The desk will print your badge."
+    },
+    "readyTitle": "Your badge is ready to print",
+    "readyHint": "Open it and choose Print, then collect it from the printer.",
+    "openBadge": "Open my badge to print"
   }
 }
