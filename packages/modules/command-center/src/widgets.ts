@@ -479,13 +479,12 @@ export type CampaignNames = (tx: TenantTx, ids: readonly string[]) => Promise<Re
 
 export const campaignsWidget = (names: CampaignNames | null) =>
   defineWidget(WIDGET_META.campaigns, CampaignsWidgetDto, async ({ tx, ctx, scope }) => {
-    const from = new Date(ctx.now.getTime() - (CAMPAIGNS_WIDGET_DAYS - 1) * 86_400_000);
-    const day = (d: Date) => utcToZonedInput(d, scope.event.timezone).slice(0, 10);
+    // The last 90 days up to today in the org's time zone, as the report counts days (batch 3g
+    // merge: days taken in the event's zone missed today's orders while the two zones' dates differ).
     const r = await analyticsReportTx(tx, ctx, {
       dimension: 'campaign',
       eventId: scope.event.id,
-      from: day(from),
-      to: day(ctx.now),
+      days: CAMPAIGNS_WIDGET_DAYS,
     });
     const campaigns = r.rows.filter(
       (x): x is typeof x & { kind: 'campaign' | 'utm' } => x.kind === 'campaign' || x.kind === 'utm',
