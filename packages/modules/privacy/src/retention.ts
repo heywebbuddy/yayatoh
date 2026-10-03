@@ -11,6 +11,7 @@ import {
 } from '@yayatoh/platform';
 import { purgeHolderLinksTx, redactHoldersForEventsTx, redactStaleClaimsTx } from '@yayatoh/ticketing';
 import { z } from 'zod';
+import { purgeExpiredArchivesTx } from './requests.ts';
 
 const DAY = 86_400_000;
 
@@ -49,6 +50,8 @@ export const RetentionResult = z.object({
   ticketHolders: z.int(),
   /** Registration form drafts past their expiry, never submitted (M5.1b: 14 days after the last save). */
   registrationDrafts: z.int(),
+  /** Data-subject access archives past their 7 days (M6.1c): the stored ZIP is deleted. */
+  dsarArchives: z.int(),
 });
 export type RetentionResult = z.infer<typeof RetentionResult>;
 
@@ -82,6 +85,7 @@ export const retentionCommand = tenantCommand({
       attendees: await redactAttendeesForEventsTx(tx, pastEvents, now),
       ticketHolders: await redactHoldersForEventsTx(tx, pastEvents, now),
       registrationDrafts: await purgeExpiredDraftsTx(tx, now),
+      dsarArchives: await purgeExpiredArchivesTx(tx, ctx),
     };
   },
   audit: (_input, r) => ({

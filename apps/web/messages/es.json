@@ -186,6 +186,11 @@
       "guests": {
         "invitation": "Invitación de boda",
         "rsvp-reminder": "Recordatorio de confirmación"
+      },
+      "privacy": {
+        "request-code": "Código de solicitud de privacidad",
+        "archive-ready": "Archivo de datos personales listo",
+        "erasure-done": "Recibo de supresión"
       }
     },
     "status": {
@@ -341,7 +346,9 @@
     "supportMacros": "Macros de soporte",
     "assistance": "Solicitudes de ayuda",
     "marketingAnalytics": "Analítica de marketing",
-    "badges": "Credenciales"
+    "badges": "Credenciales",
+    "orgAnalytics": "Analítica",
+    "integrations": "Integraciones"
   },
   "vocab": {
     "attendee": "Asistente",
@@ -923,9 +930,15 @@
         "capReached": "Es el máximo por pedido: {max} asientos.",
         "adaChosen": "{count, plural, one {{seats} es un asiento accesible} other {{seats} son asientos accesibles}}, reservado{count, plural, one {} other {s}} para quienes los necesitan. Elígelo{count, plural, one {} other {s}} solo si hace falta.",
         "overCap": "{count} asientos elegidos: el organizador pide un máximo de {max} por pedido.",
-        "keptUntil": "Reservado hasta el {date}"
+        "keptUntil": "Reservado hasta el {date}",
+        "companionWarn": "Los asientos de acompañante son para quienes vienen con una persona en silla de ruedas: hasta {max} por asiento accesible.",
+        "companionEnforced": "Los asientos de acompañante solo se venden con un asiento accesible: hasta {max} por asiento accesible.",
+        "companionChosen": "Asientos de acompañante sin asiento accesible: {seats}. Son para quienes vienen con una persona en silla de ruedas (hasta {max} por asiento accesible).",
+        "companionRefused": "Asientos de acompañante sin asiento accesible: {seats}. Solo se venden con un asiento accesible (hasta {max} por asiento): añade uno o elige otros asientos.",
+        "adaEnforcedBest": "Los asientos accesibles se reservan para quienes los necesitan hasta el {date}. Si necesitas uno, marca «Alguien de mi grupo usa silla de ruedas» y usa «Mejor disponible»."
       },
-      "groupSummary": "{group} — {free} de {total} libres{chosen, plural, =0 {} one { · # elegido} other { · # elegidos}}"
+      "groupSummary": "{group} — {free} de {total} libres{chosen, plural, =0 {} one { · # elegido} other { · # elegidos}}",
+      "companion": "Asiento de acompañante"
     },
     "seatRuleCap": "Son más asientos de los permitidos en un pedido. Elige menos, por favor.",
     "seatRuleAda": "Por ahora, los asientos accesibles están reservados para quienes los necesitan. Elige otros asientos.",
@@ -935,7 +948,43 @@
     "orgUnavailable": "Este organizador no está vendiendo entradas ahora mismo. Las entradas ya compradas siguen siendo válidas.",
     "riskBlocked": "No hemos podido aceptar este pedido. Ponte en contacto con el organizador.",
     "creditInvalid": "Ese código de saldo a favor no es válido o ya se usó.",
-    "creditNotApplicable": "Ese saldo a favor no se puede usar en estas entradas."
+    "creditNotApplicable": "Ese saldo a favor no se puede usar en estas entradas.",
+    "seatRuleCompanion": "Los asientos de acompañante solo se venden con un asiento accesible. Elige también un asiento accesible u otros asientos.",
+    "best": {
+      "title": "Mejor disponible",
+      "modeLegend": "¿Cómo quieres elegir los asientos?",
+      "mode": {
+        "best": "Mejor disponible: buscamos los mejores asientos juntos",
+        "pick": "Elegir mis asientos"
+      },
+      "need": "Alguien de mi grupo usa silla de ruedas y necesita un asiento accesible",
+      "needStaff": "El comprador necesita un asiento para silla de ruedas",
+      "needHint": "Los asientos accesibles y los asientos de acompañante contiguos se reservan para quienes los necesitan.",
+      "price": "Precio",
+      "onePrice": "Precio: {price}",
+      "quantity": "Número de asientos",
+      "find": "Buscar asientos",
+      "findAgain": "Buscar de nuevo",
+      "accessibleHint": "Buscaremos un asiento para silla de ruedas con asientos de acompañante al lado.",
+      "together": "{count, plural, one {Tu asiento:} other {# asientos juntos:}}",
+      "split": "No pudimos sentar juntos a tu grupo de {count}, así que tus asientos están en lugares distintos (grupos: {pieces}). También puedes elegir tus asientos.",
+      "seatsLabel": "Tus asientos",
+      "seatAccessible": "{seat} (para silla de ruedas)",
+      "seatCompanion": "{seat} (asiento de acompañante)",
+      "heldFor": "Reservados para ti durante {minutes} minutos mientras pagas.",
+      "clear": "Liberar estos asientos",
+      "notEnough": "No hay suficientes asientos libres a este precio para {count}. Prueba con menos asientos u otro precio, o elige tus asientos.",
+      "noAccessible": "No hay ningún asiento para silla de ruedas libre a este precio. Prueba otro precio o contacta con el organizador.",
+      "taken": "Esos asientos se acaban de ocupar. Inténtalo de nuevo.",
+      "ruleRefused": "Las reglas de asientos del organizador no permiten esa elección.",
+      "off": "«Mejor disponible» ya no se ofrece para este evento. Elige tus asientos.",
+      "findFirst": "Primero busca tus asientos: elige cuántos y pulsa «Buscar asientos».",
+      "expired": "Tus asientos estuvieron reservados 10 minutos y se han liberado. Vuelve a buscarlos."
+    },
+    "seatChannel": "Algunos de esos asientos están reservados para otro canal de venta. Elige otros asientos.",
+    "channelInvalid": "Este código de venta no es válido para este evento. Vuelve a abrir la página del evento sin él, o pregunta a quien te dio el enlace.",
+    "channelNotice": "Estás comprando a través de {name}: los asientos reservados para {name} también están abiertos para ti.",
+    "channelLinkInvalid": "Este enlace de venta no es válido para este evento. Aún puedes elegir entre los asientos abiertos a todos."
   },
   "fakePay": {
     "eyebrow": "Pago de prueba",
@@ -1489,12 +1538,14 @@
     },
     "activityLink": "Registro de actividad",
     "privacyLink": "Solicitudes de privacidad",
-    "charityLink": "Perfil benéfico"
+    "charityLink": "Perfil benéfico",
+    "planLink": "Plan y módulos"
   },
   "legal": {
     "platform": "Yayatoh",
     "updated": "Última actualización: {date}",
-    "organizerPages": "Políticas de {org}"
+    "organizerPages": "Políticas de {org}",
+    "privacyRequest": "Pide una copia de tus datos o que se borren"
   },
   "setup": {
     "title": "Prepárate para vender · {done} de {total} listos",
@@ -1874,7 +1925,8 @@
     "chooseDate": "Elige una fecha.",
     "dateSoldOut": "No quedan suficientes entradas para esta fecha.",
     "wrongDate": "Una de estas entradas no se vende para esta fecha.",
-    "dateUnavailable": "Esta fecha ya no está a la venta."
+    "dateUnavailable": "Esta fecha ya no está a la venta.",
+    "seatChannel": "Algunos de esos asientos están reservados para otro canal de venta (un patrocinador, un promotor o la venta en línea). Elige otros asientos."
   },
   "seating": {
     "title": "Asientos",
@@ -1971,14 +2023,19 @@
       "title": "Guardar como plano reutilizable",
       "name": "Nombre",
       "submit": "Guardar plano",
-      "done": "Guardado. Puedes usarlo en otros eventos."
+      "done": "Guardado. Puedes usarlo en otros eventos.",
+      "description": "Los planos guardados van a tu biblioteca de planos, desde donde puedes crear nuevos eventos.",
+      "library": "Abrir la biblioteca de planos"
     },
     "tabs": {
       "label": "Vistas de asientos",
       "plan": "Plano",
       "assign": "Asignar invitados",
       "finder": "Buscador de asientos",
-      "rules": "Reglas"
+      "rules": "Reglas",
+      "selection": "Mejor disponible",
+      "channels": "Canales",
+      "revisions": "Revisiones"
     },
     "assign": {
       "title": "Asignar invitados",
@@ -2115,7 +2172,8 @@
       "none": "Sin reglas: los compradores pueden elegir cualquier asiento libre.",
       "summary": {
         "ada": "Asientos accesibles reservados para quienes los necesitan hasta {days, plural, =0 {el inicio del evento} one {# día antes del evento} other {# días antes del evento}} ({date}) · {severity}",
-        "cap": "Máximo {max, plural, one {# asiento} other {# asientos}} por pedido · {severity}"
+        "cap": "Máximo {max, plural, one {# asiento} other {# asientos}} por pedido · {severity}",
+        "companion": "Asientos de acompañante solo con un asiento accesible, hasta {max} por asiento · {severity}"
       },
       "severityShort": {
         "warn": "avisa",
@@ -2148,7 +2206,14 @@
       },
       "save": "Guardar reglas",
       "saved": "Reglas de asientos guardadas.",
-      "fixErrors": "Corrige el campo marcado, por favor."
+      "fixErrors": "Corrige el campo marcado, por favor.",
+      "companion": {
+        "title": "Asientos de acompañante",
+        "on": "Vender asientos de acompañante solo con un asiento accesible",
+        "max": "Asientos de acompañante por asiento accesible",
+        "maxHint": "De 1 a 3. Se liberan junto con los asientos accesibles.",
+        "maxError": "Introduce un número entero de 1 a 3."
+      }
     },
     "groups": {
       "title": "Bloques de grupo",
@@ -2177,6 +2242,172 @@
         "forbidden": "Puedes ver los grupos, pero no cambiarlos.",
         "noMembers": "Nadie de la lista tiene todavía la etiqueta {label}."
       }
+    },
+    "selection": {
+      "title": "Mejor disponible y asientos de acompañante",
+      "description": "Permite que los compradores y la taquilla pidan los mejores asientos en lugar de elegirlos, y reserva asientos de acompañante junto a los asientos accesibles.",
+      "noPlan": "Este evento aún no tiene plano de asientos. Crea uno primero y luego configura aquí «Mejor disponible».",
+      "readOnly": "Puedes ver estos ajustes, pero no cambiarlos.",
+      "bestTitle": "Mejor disponible",
+      "bestOn": "Ofrecer «Mejor disponible» a los compradores y a la taquilla",
+      "bestHint": "Los compradores indican cuántos asientos quieren y a qué precio, y reciben los mejores asientos libres juntos. También pueden elegir sus asientos.",
+      "scoresTitle": "Puntuación de las zonas",
+      "scoresHint": "De 0 a 100: las puntuaciones más altas se ofrecen primero. Deja una zona en blanco para ordenarla por su distancia al escenario.",
+      "scoreLabel": "Puntuación de {section}",
+      "scoreError": "Introduce un número entero de 0 a 100 o déjalo en blanco.",
+      "noSections": "Este plano no tiene zonas: los asientos se ordenan por su distancia al escenario, luego por fila y por lo centrados que están.",
+      "saveBest": "Guardar mejor disponible",
+      "savedBest": "Ajustes de «Mejor disponible» guardados.",
+      "fixErrors": "Corrige el campo marcado, por favor.",
+      "bestOnSummary": "«Mejor disponible» se ofrece a los compradores y a la taquilla.",
+      "bestOffSummary": "«Mejor disponible» está desactivado: los compradores eligen sus asientos.",
+      "companionsTitle": "Asientos de acompañante",
+      "companionsDescription": "Los asientos de acompañante están junto a los asientos accesibles, para quienes vienen con una persona en silla de ruedas.",
+      "rulesLink": "Define la regla de los asientos de acompañante en la pestaña Reglas",
+      "noAccessible": "Este plano aún no tiene asientos accesibles. Márcalos en el plano y luego elige aquí los asientos de acompañante.",
+      "suggest": "Marcar los asientos junto a los asientos accesibles",
+      "group": {
+        "row": "Fila {label}",
+        "table": "Mesa {label}"
+      },
+      "seatAccessible": "Asiento {seat} · accesible",
+      "seatCompanion": "Asiento {seat}",
+      "suggested": "junto a un asiento accesible",
+      "saveCompanions": "Guardar asientos de acompañante",
+      "savedCompanions": "Asientos de acompañante guardados: {count}.",
+      "companionError": "Un asiento de acompañante debe estar en una fila o mesa con un asiento accesible y no puede ser un asiento accesible.",
+      "companionList": "Asientos de acompañante ({count}): {seats}",
+      "companionNone": "Aún no hay asientos de acompañante."
+    },
+    "fromLibrary": "Este evento parte de tu plano guardado. Pon precio a sus asientos y luego ponlos a la venta.",
+    "channels": {
+      "title": "Canales de venta",
+      "description": "Reserva bloques de asientos para la taquilla, patrocinadores o promotores. Un asiento de un canal nunca se vende por otro hasta que el canal lo libere.",
+      "noPlan": "Este evento aún no tiene plano de asientos. Crea uno primero y luego asigna sus asientos a los canales aquí.",
+      "readOnly": "Puedes ver los canales pero no cambiarlos.",
+      "saved": "Canal guardado.",
+      "deleted": "Canal eliminado. Sus asientos vuelven a estar abiertos a todos los canales.",
+      "listTitle": "Canales",
+      "empty": "Aún no hay canales de venta",
+      "emptyHint": "Añade un canal abajo y asígnale asientos. Los asientos sin canal se venden por todos los canales.",
+      "col": {
+        "channel": "Canal",
+        "code": "Código y enlace",
+        "release": "Liberación",
+        "seats": "Asientos",
+        "sold": "Vendido por él",
+        "actions": "Acciones"
+      },
+      "kind": {
+        "public": "En línea (sin código)",
+        "box_office": "Taquilla",
+        "sponsor": "Patrocinador",
+        "promoter": "Promotor"
+      },
+      "linkFor": "Enlace de {name}",
+      "released": "Liberado el {when}",
+      "neverReleased": "Reservado hasta que lo cambies",
+      "soldCount": "{orders, plural, =0 {Aún sin pedidos} one {# pedido} other {# pedidos}} · {seats, plural, one {# asiento} other {# asientos}}",
+      "edit": "Editar",
+      "editNamed": "Editar {name}",
+      "delete": "Eliminar",
+      "deleteNamed": "Eliminar {name}",
+      "addTitle": "Añadir un canal",
+      "editTitle": "Editar {name}",
+      "kindLabel": "Tipo",
+      "kindHint": "En línea y taquilla: como máximo uno de cada por evento. Los patrocinadores y promotores venden con su propio código.",
+      "nameLabel": "Nombre",
+      "nameHint": "Se muestra a quienes compran con el enlace del canal y en tus informes.",
+      "codeLabel": "Código",
+      "codeHint": "Solo patrocinadores y promotores: de 3 a 32 letras, dígitos, guiones o guiones bajos. Los compradores lo usan con el enlace del canal.",
+      "releaseLabel": "Liberar los asientos no vendidos el (opcional)",
+      "releaseHint": "Los asientos no vendidos vuelven a todos los canales en ese momento ({timeZone}). Déjalo vacío para conservarlos.",
+      "add": "Añadir canal",
+      "save": "Guardar canal",
+      "cancel": "Cancelar",
+      "added": "Canal añadido.",
+      "fixErrors": "Corrige el campo marcado.",
+      "errors": {
+        "kind": "Elige un tipo de canal.",
+        "kind_taken": "Este evento ya tiene un canal de ese tipo.",
+        "name": "Ponle un nombre al canal (hasta 80 caracteres).",
+        "code_required": "Los patrocinadores y promotores necesitan un código.",
+        "code_not_allowed": "Solo los patrocinadores y promotores tienen código. Déjalo vacío.",
+        "code_format": "Usa de 3 a 32 letras, dígitos, guiones o guiones bajos.",
+        "code_taken": "Otro canal de este evento ya tiene ese código.",
+        "releaseAt": "Introduce una fecha y una hora, o déjalo vacío.",
+        "seats": "Elige al menos una fila o mesa, y números de asiento que existan en ella."
+      },
+      "allotTitle": "Asignar asientos",
+      "allotDescription": "Elige filas y mesas y, si quieres, solo algunos de sus asientos. Todas las fechas del evento lo siguen. Los asientos que ya están en un canal pasan al que elijas.",
+      "noSeats": "El plano aún no tiene filas ni mesas.",
+      "allotTo": "Canal",
+      "everyChannel": "Ningún canal (abierto a todos los canales)",
+      "which": "Filas y mesas",
+      "item": {
+        "row": "Fila {label} ({seats, plural, one {# asiento} other {# asientos}})",
+        "table": "Mesa {label} ({seats, plural, one {# asiento} other {# asientos}})"
+      },
+      "itemAllotted": "{count, plural, one {# asiento} other {# asientos}} en {name}",
+      "seatNumbers": "Solo estos asientos (opcional)",
+      "seatNumbersHint": "Números de asiento de las filas y mesas elegidas, p. ej. 1-4, 9. Déjalo vacío para todos sus asientos.",
+      "allot": "Asignar asientos",
+      "allotted": "{count, plural, =0 {No cambió ningún asiento.} one {# asiento asignado.} other {# asientos asignados.}}",
+      "freed": "{count, plural, =0 {Ningún asiento estaba en un canal.} one {# asiento vuelve a estar abierto a todos los canales.} other {# asientos vuelven a estar abiertos a todos los canales.}}"
+    },
+    "revisions": {
+      "title": "Revisiones del plano",
+      "description": "Cada vez que se guarda el plano se crea una revisión. Mira qué cambió cada una y recupera un plano anterior. Los asientos retenidos y vendidos siempre se quedan como están.",
+      "noPlan": "Este evento aún no tiene plano de asientos. Crea uno primero; cada vez que lo guardes aparecerá aquí.",
+      "none": "Aún no hay revisiones",
+      "noneHint": "El próximo guardado del plano será la primera revisión.",
+      "readOnly": "Puedes ver las revisiones pero no restaurarlas.",
+      "listTitle": "Todas las revisiones",
+      "col": {
+        "revision": "Revisión",
+        "when": "Guardada",
+        "what": "Qué",
+        "changes": "Asientos cambiados"
+      },
+      "revision": "Revisión {number}",
+      "currentBadge": "El plano actual",
+      "kindSave": "Guardada",
+      "kindRestore": "Revisión {number} restaurada",
+      "seats": "{count, plural, one {# asiento} other {# asientos}}",
+      "first": "La primera revisión conservada.",
+      "noSeatChanges": "No se añadieron, quitaron ni renumeraron asientos.",
+      "added": "{count, plural, one {# asiento añadido} other {# asientos añadidos}}",
+      "removed": "{count, plural, one {# asiento quitado} other {# asientos quitados}}",
+      "renumbered": "{count, plural, one {# asiento renumerado} other {# asientos renumerados}}",
+      "moved": "{count, plural, one {# asiento movido} other {# asientos movidos}}",
+      "detailTitle": "Revisión {number}",
+      "changedTitle": "Qué cambió",
+      "restoreWouldTitle": "Restaurarla cambiaría",
+      "addedTitle": "Asientos añadidos",
+      "removedTitle": "Asientos quitados",
+      "renumberedTitle": "Asientos renumerados",
+      "renumberedSeat": "{from} → {to}",
+      "listOf": "{title} ({count})",
+      "more": "{count, plural, one {y # más} other {y # más}}",
+      "inUseTitle": "Asientos retenidos y vendidos",
+      "inUseNone": "No hay asientos retenidos ni vendidos: nada lo impide.",
+      "inUseKept": "{count, plural, =0 {Ningún asiento retenido o vendido se queda donde está.} one {# asiento retenido o vendido se queda exactamente como está.} other {# asientos retenidos o vendidos se quedan exactamente como están.}}",
+      "inUseRemapped": "{count, plural, one {# asiento retenido o vendido pasa al asiento con su etiqueta en esta revisión (mismo número, misma entrada):} other {# asientos retenidos o vendidos pasan a los asientos con sus etiquetas en esta revisión (mismos números, mismas entradas):}}",
+      "conflictsTitle": "{count, plural, one {Esta revisión no se puede restaurar: se perdería # asiento retenido o vendido.} other {Esta revisión no se puede restaurar: se perderían # asientos retenidos o vendidos.}}",
+      "conflict": {
+        "removed": {
+          "sold": "{label} está vendido y esta revisión no tiene ningún asiento con esa etiqueta.",
+          "held": "{label} está retenido por un comprador y esta revisión no tiene ningún asiento con esa etiqueta."
+        },
+        "renumbered": {
+          "sold": "{label} está vendido y pasaría a ser {to}: la entrada del comprador indicaría otro asiento.",
+          "held": "{label} está retenido por un comprador y pasaría a ser {to}."
+        }
+      },
+      "conflictsRefused": "Hay asientos retenidos o vendidos que ya no están en esa revisión. No se cambió nada.",
+      "isCurrent": "Este es el plano tal como está ahora.",
+      "restore": "Restaurar la revisión {number}",
+      "restoredNotice": "Revisión {number} restaurada. El plano actual es la revisión {now}."
     }
   },
   "venueMap": {
@@ -2493,70 +2724,199 @@
   },
   "privacy": {
     "title": "Solicitudes de privacidad",
-    "description": "Responde a quienes preguntan qué datos tienes sobre ellos o piden ser olvidados. Cada solicitud queda registrada.",
+    "description": "Responde a quienes piden una copia de los datos que tienes sobre ellos o piden ser olvidados. Cada solicitud vence a los 30 días y queda registrada.",
     "noticeLink": "Aviso de privacidad de Yayatoh",
     "noAccessTitle": "Solo propietarios y administradores pueden gestionar solicitudes de privacidad",
-    "noAccessDescription": "Pide a un propietario o administrador de esta organización que ayude con una solicitud sobre los datos de alguien.",
+    "noAccessDescription": "Pide a un propietario o administrador de esta organización que te ayude con una solicitud sobre los datos de una persona.",
     "find": {
       "title": "Buscar a una persona",
-      "hint": "Busca por correo en contactos, pedidos, entradas, listas de invitados, respuestas y registros de acceso.",
+      "hint": "Busca por correo en todo lo que guarda esta organización: contactos, pedidos, entradas, listas de invitados, formularios, mensajes, ponentes y más.",
       "email": "Correo electrónico",
       "submit": "Buscar"
     },
     "result": {
       "title": "Lo que esta organización tiene sobre {email}",
       "noneTitle": "No se encontró nada para este correo",
-      "noneDescription": "Ningún contacto, pedido, entrada o invitado usa esta dirección en esta organización."
-    },
-    "categories": {
-      "contacts": "Registros de contacto",
-      "consents": "Registros de consentimiento",
-      "orders": "Pedidos",
-      "paidOrders": "Pedidos pagados (se conservan para contabilidad)",
-      "tickets": "Entradas",
-      "activeTickets": "Entradas válidas",
-      "claims": "Enlaces de transferencia de entradas",
-      "holderLinks": "Enlaces de acceso a entradas",
-      "attendees": "Entradas en listas de invitados",
-      "answers": "Respuestas del pago",
-      "admissions": "Registros de acceso",
-      "invitations": "Invitaciones al equipo"
-    },
-    "export": {
-      "title": "Exportar sus datos",
-      "hint": "Un archivo JSON con todo lo anterior para enviarlo a la persona. Se elimina a los 7 días.",
-      "submit": "Exportar datos (JSON)",
-      "download": "Descargar el archivo",
-      "running": "Preparando el archivo… recarga la página en un momento."
-    },
-    "erase": {
-      "title": "Borrar a esta persona",
-      "what": "Su nombre, correo, teléfono, respuestas y enlaces se eliminan de contactos, pedidos, entradas y listas de invitados, y se borran los archivos exportados que los mencionan.",
-      "holds": "{paid, plural, =0 {No hay pedidos pagados que conservar.} one {Se conserva # pedido pagado para impuestos y contabilidad, sin su nombre ni correo.} other {Se conservan # pedidos pagados para impuestos y contabilidad, sin su nombre ni correo.}}",
-      "tickets": "{active, plural, =0 {No tiene entradas válidas.} one {# entrada válida sigue siendo válida, sin nombre.} other {# entradas válidas siguen siendo válidas, sin nombre.}}",
-      "final": "No se puede deshacer.",
-      "confirm": "Escribe {email} para confirmar",
-      "submit": "Borrar datos personales",
-      "done": "Borrado. {records, plural, one {Se anonimizó o eliminó # registro} other {Se anonimizaron o eliminaron # registros}}; {kept, plural, =0 {no se conservó ningún pedido pagado} one {se conservó # pedido pagado sin datos personales} other {se conservaron # pedidos pagados sin datos personales}}."
+      "noneDescription": "Ningún registro de esta organización usa esta dirección. Aun así, puedes abrir una solicitud para responder formalmente a la persona."
     },
     "errors": {
       "invalidEmail": "Introduce un correo electrónico válido.",
       "confirmMismatch": "No coincide. Escribe el mismo correo para confirmar.",
-      "nothingHeld": "Ya no se guarda nada sobre este correo."
-    },
-    "history": {
-      "title": "Solicitudes anteriores",
-      "caption": "Solicitudes de privacidad, las más recientes primero",
-      "empty": "Aún no hay solicitudes.",
-      "when": "Cuándo",
-      "kind": "Solicitud",
-      "subject": "Persona",
-      "by": "Gestionada por",
-      "records": "Registros"
+      "kindRequired": "Elige qué pide la persona.",
+      "reasonRequired": "Indica un motivo de al menos 3 caracteres.",
+      "closed": "Esta solicitud ya está cerrada."
     },
     "kinds": {
-      "access": "Acceso (exportación)",
+      "access": "Acceso (copia)",
       "erasure": "Supresión"
+    },
+    "modules": {
+      "crm": "Contactos y consentimiento",
+      "orders": "Pedidos y listas de espera",
+      "ticketing": "Entradas",
+      "attendees": "Entradas en listas de invitados",
+      "forms": "Respuestas de formularios",
+      "checkin": "Registros de acceso",
+      "tenancy": "Invitaciones al equipo",
+      "notifications": "Mensajes enviados",
+      "seating": "Buscador de asientos",
+      "alerts": "Ajustes de alertas",
+      "guests": "Invitados de bodas y fiestas",
+      "messaging": "Conversaciones",
+      "assistance": "Solicitudes de ayuda",
+      "program": "Datos de ponentes",
+      "events": "Cuentas del portal",
+      "media": "Archivos subidos",
+      "cms": "Mensajes del formulario de contacto",
+      "venues": "Solicitudes de presupuesto de recintos",
+      "reviews": "Reseñas",
+      "payments": "Disputas de pago",
+      "surveys": "Respuestas de encuestas",
+      "registration": "Inscripciones",
+      "badges": "Credenciales",
+      "automations": "Recorridos",
+      "campaigns": "Envíos de campañas",
+      "audiences": "Audiencias",
+      "marketing": "Atribución de marketing",
+      "reports": "Eventos de analítica",
+      "privacy": "Solicitudes de privacidad",
+      "platform": "Exportaciones y registros del sistema",
+      "donations": "Donaciones y recibos",
+      "engagement": "Preguntas de preguntas y respuestas en directo"
+    },
+    "open": {
+      "title": "Abrir una solicitud",
+      "hint": "Has confirmado quién lo pide. La solicitud vence en 30 días; la resuelves en su propia página.",
+      "kind": "¿Qué pide la persona?",
+      "access": "Una copia de sus datos (acceso)",
+      "accessHint": "Un ZIP firmado con todo lo que se guarda sobre ella.",
+      "erasure": "Borrar sus datos (supresión)",
+      "erasureHint": "La elimina de todas partes, salvo los registros que la ley te obliga a conservar.",
+      "submit": "Abrir la solicitud",
+      "existing": "Ya hay una solicitud abierta para esta persona.",
+      "review": "Revisar la solicitud abierta"
+    },
+    "queue": {
+      "title": "Solicitudes abiertas",
+      "caption": "Solicitudes de privacidad abiertas, primero las que vencen antes",
+      "emptyTitle": "No hay solicitudes abiertas",
+      "empty": "Cuando alguien pregunte por sus datos, búscalo arriba y abre una solicitud. Las personas también pueden pedirlo desde tu aviso de privacidad.",
+      "person": "Persona",
+      "kind": "Solicitud",
+      "source": "Origen",
+      "opened": "Abierta",
+      "due": "Vence",
+      "overdue": "Vencida",
+      "action": "Acción",
+      "review": "Revisar"
+    },
+    "closed": {
+      "title": "Solicitudes cerradas",
+      "caption": "Solicitudes resueltas y retiradas, las más recientes primero",
+      "empty": "Aún no hay solicitudes cerradas.",
+      "when": "Cerrada",
+      "status": "Estado",
+      "records": "Registros"
+    },
+    "statuses": {
+      "open": "Abierta",
+      "completed": "Resuelta",
+      "cancelled": "Retirada"
+    },
+    "sources": {
+      "staff": "El equipo, en nombre de la persona",
+      "self": "La persona (correo confirmado)"
+    },
+    "request": {
+      "titleAccess": "Solicitud de acceso",
+      "titleErasure": "Solicitud de supresión",
+      "openedNotice": "Solicitud abierta. Vence el {date}.",
+      "cancelledNotice": "Solicitud retirada.",
+      "fields": {
+        "kind": "Solicitud",
+        "source": "Origen",
+        "opened": "Abierta",
+        "due": "Vence el",
+        "verified": "Correo confirmado",
+        "completed": "Resuelta",
+        "cancelled": "Retirada",
+        "reason": "Motivo"
+      },
+      "holdings": {
+        "title": "Lo que tiene esta organización",
+        "empty": "No se guarda nada sobre esta persona",
+        "emptyHint": "Aun así puedes resolver la solicitud: la persona recibe una respuesta formal de que no se guarda nada."
+      },
+      "export": {
+        "title": "Enviarle una copia",
+        "hint": "Un ZIP con un archivo JSON por cada parte de Yayatoh y sus archivos, firmado para que cualquiera pueda comprobar que no se ha modificado. Se puede descargar durante 7 días.",
+        "submit": "Crear el archivo comprimido",
+        "done": "El archivo comprimido está listo.",
+        "notified": "Hemos enviado a la persona un enlace de descarga por correo.",
+        "until": "Disponible hasta el {date}.",
+        "download": "Descargar el archivo comprimido (ZIP)",
+        "expired": "El archivo comprimido caducó y se eliminó. Abre una nueva solicitud si la persona necesita otra copia."
+      },
+      "erase": {
+        "title": "Borrar a esta persona",
+        "what": "Su nombre, correo, teléfono, respuestas, mensajes y enlaces se eliminan de todas las partes de Yayatoh, y se borran los archivos exportados que la mencionan.",
+        "holds": "Los pedidos pagados, las notas de crédito, las disputas de pago y el historial de consentimiento se conservan cuando la ley lo exige, sin su nombre ni correo, y se indican en el comprobante.",
+        "files": "Sus archivos subidos y los archivos comprimidos anteriores se eliminan del almacenamiento.",
+        "final": "No se puede deshacer.",
+        "confirm": "Escribe {email} para confirmar",
+        "submit": "Borrar datos personales",
+        "done": "Borrado. El comprobante firmado de abajo indica qué se borró, qué se conservó y por qué."
+      },
+      "cancel": {
+        "title": "Retirar la solicitud",
+        "hint": "Si la persona la retiró o no era auténtica. El motivo queda registrado con la solicitud.",
+        "reason": "Motivo",
+        "submit": "Retirar solicitud"
+      },
+      "receipt": {
+        "title": "Comprobante de supresión",
+        "erased": "Borrado",
+        "held": "Conservado por obligación legal",
+        "noneErased": "No hubo nada que borrar.",
+        "noneHeld": "No hubo que conservar nada.",
+        "table": "Datos",
+        "action": "Qué se hizo",
+        "rows": "Registros",
+        "ref": "Registro",
+        "basis": "Motivo de conservación",
+        "until": "Se conserva hasta",
+        "files": "{count, plural, =0 {No se eliminó ningún archivo almacenado.} one {Se eliminó # archivo almacenado.} other {Se eliminaron # archivos almacenados.}}",
+        "suppressed": "La dirección está en la lista de borrados de toda la plataforma: ninguna organización puede volver a enviarle marketing salvo que la persona dé su consentimiento.",
+        "connectors": "{count, plural, =0 {No fue necesario avisar a ningún servicio conectado.} one {Servicio conectado al que también se pidió borrar a la persona: {names}.} other {Servicios conectados a los que también se pidió borrar a la persona: {names}.}}",
+        "signature": "Firmado con la clave Ed25519 {key}.",
+        "download": "Descargar el comprobante (PDF)",
+        "notified": "Hemos enviado a la persona un enlace a este comprobante por correo.",
+        "actions": {
+          "delete": "Eliminado",
+          "redact": "Datos personales eliminados",
+          "hold": "Conservado, sin datos personales"
+        },
+        "bases": {
+          "tax_accounting": "Registros fiscales y contables (7 años)",
+          "payment_dispute": "Pruebas para una disputa de pago",
+          "accountability": "Prueba de que se atendió la solicitud"
+        }
+      }
+    },
+    "pdf": {
+      "title": "Comprobante de supresión",
+      "request": "Solicitud",
+      "person": "Persona",
+      "source": "Solicitado por",
+      "requested": "Solicitado el",
+      "due": "Vence el",
+      "completed": "Borrado el",
+      "signatureTitle": "Firma",
+      "algorithm": "Algoritmo",
+      "keyId": "ID de clave",
+      "digest": "SHA-256 del comprobante",
+      "signature": "Firma (base64)",
+      "footer": "Emitido por Yayatoh para {org}. La firma cubre los datos del comprobante; compruébala con la clave pública de abajo."
     }
   },
   "privacyNotice": {
@@ -2737,7 +3097,8 @@
       "guests": "Invitados",
       "markHandled": "Marcar como atendida",
       "markNew": "Marcar como nueva"
-    }
+    },
+    "layoutLibrary": "Biblioteca de planos"
   },
   "details": {
     "title": "Detalles del evento",
@@ -3346,7 +3707,39 @@
       "attendees_read": "Leer asistentes",
       "attendees_write": "Modificar asistentes y reenviar entradas",
       "checkin_scan": "Escanear entradas"
-    }
+    },
+    "expiry": "Caduca",
+    "expiryHint": "Una clave que caduca debe rotarse antes. Cuanto más corta, más segura.",
+    "expiryIn": {
+      "30": "En 30 días",
+      "90": "En 90 días",
+      "365": "En un año",
+      "never": "Nunca"
+    },
+    "expiresColumn": "Caduca",
+    "createdBy": "Creada por",
+    "createdByPlatform": "Yayatoh",
+    "expired": "Caducada",
+    "rotatedStatus": "Rotada",
+    "rotate": "Rotar",
+    "rotateNamed": "Rotar la clave {name}",
+    "overlap": "La clave anterior sigue funcionando",
+    "overlapFor": {
+      "h0": "Nada: detenerla ya",
+      "h1": "Durante 1 hora",
+      "h24": "Durante 24 horas",
+      "h168": "Durante 7 días"
+    },
+    "rotateNow": "Rotar ahora",
+    "rotateNowNamed": "Rotar ahora la clave {name}",
+    "rotated": "Clave «{name}» rotada. La clave anterior funciona hasta {until}.",
+    "rotatedNow": "Clave «{name}» rotada. La clave anterior ya no funciona.",
+    "related": "API",
+    "usageLink": "Uso",
+    "sandboxesLink": "Sandboxes",
+    "rateLimitNote": "Cada clave puede hacer {perKey, number} solicitudes por minuto, y todas juntas {perOrg, number}.",
+    "noApiAccess": "El acceso a la API no forma parte del plan de esta organización: sus claves se rechazan.",
+    "webhooksLink": "Webhooks"
   },
   "market": {
     "wordmark": "Yayatoh",
@@ -4655,6 +5048,11 @@
     "terminated": {
       "title": "Esta organización está cerrada",
       "body": "El soporte de Yayatoh la cerró. Sus páginas públicas están desconectadas y no se puede cambiar nada. Como propietario aún puedes abrirla y descargar tus datos, por ejemplo desde Actividad."
+    },
+    "sandbox": {
+      "label": "Sandbox",
+      "title": "SANDBOX",
+      "body": "Esta es una organización de prueba. Los pagos son simulados y no se cobra nada; sus eventos nunca aparecen en el marketplace."
     }
   },
   "seatingDates": {
@@ -4737,8 +5135,13 @@
       "slot_full": "Este evento ya tiene 20 imágenes de plano.",
       "forbidden": "No puedes cambiar este plano.",
       "network": "La subida falló. Comprueba tu conexión e inténtalo de nuevo.",
-      "generic": "La subida falló. Inténtalo de nuevo."
-    }
+      "generic": "La subida falló. Inténtalo de nuevo.",
+      "pdf_page": "Esa página no existe: el PDF tiene {pages, plural, one {# página} other {# páginas}}.",
+      "pdf_unreadable": "No se puede leer este PDF. Exporta el plano como imagen u otro PDF e inténtalo de nuevo."
+    },
+    "pdfPage": "Página (PDF)",
+    "pdfHint": "También sirve un plano en PDF: elige la página del plano. Se convierte en imagen en tu navegador y se sube como tal.",
+    "pdfDrawing": "Dibujando la página {page} del PDF…"
   },
   "humanCheck": {
     "legend": "Verificación de seguridad",
@@ -5070,7 +5473,9 @@
         "consent": "Consentimiento de marketing",
         "label": "Etiqueta",
         "totals": "Totales históricos",
-        "seen": "Visto por primera o última vez"
+        "seen": "Visto por primera o última vez",
+        "stats": "Estadísticas del contacto",
+        "ltv": "Valor de vida"
       },
       "did": "Regla",
       "didYes": "Sí",
@@ -5128,7 +5533,19 @@
       "event": "Evento",
       "editionOf": "Edición anterior a",
       "series": "Serie",
-      "noSeries": "Aún no hay series"
+      "noSeries": "Aún no hay series",
+      "statsMetric": "Métrica",
+      "statsMetrics": {
+        "engagement": "Puntuación de participación",
+        "noShowPct": "Propensión a no asistir",
+        "sessionsAttended": "Sesiones asistidas",
+        "campaignsOpened": "Campañas abiertas",
+        "rfmRecency": "RFM recencia (quintil)",
+        "rfmFrequency": "RFM frecuencia (quintil)",
+        "rfmMonetary": "RFM monetario (quintil)"
+      },
+      "valuePercent": "Porcentaje",
+      "quintile": "Quintil (1–5)"
     },
     "scopes": {
       "any": "Cualquier evento",
@@ -5183,7 +5600,10 @@
         "unknown_legacy": "Desconocido (importado)",
         "none": "No otorgado"
       }
-    }
+    },
+    "peopleLink": "Personas",
+    "duplicatesLink": "Posibles duplicados",
+    "insights": "Información de contactos"
   },
   "refundOps": {
     "timeline": {
@@ -10864,6 +11284,1030 @@
       "waitlist_closed": "{title} está completa y su lista de espera se cerró 24 horas antes de la sesión.",
       "offer_ended": "La oferta para {title} terminó.",
       "full": "{title} se acaba de llenar. Vuelve a intentarlo para unirte a la lista de espera."
+    }
+  },
+  "people": {
+    "title": "Personas",
+    "audiences": "Audiencias",
+    "description": "Todas las personas de las que tu organización tiene un registro, las más recientes primero. Abre a alguien para ver todo su historial.",
+    "duplicatesLink": "Posibles duplicados",
+    "search": {
+      "label": "Buscar por nombre, correo o empresa",
+      "submit": "Buscar",
+      "noneTitle": "Nadie coincide",
+      "noneDescription": "Ningún nombre, correo ni empresa contiene «{q}». Prueba con una búsqueda más corta."
+    },
+    "emptyTitle": "Aún no hay personas",
+    "emptyDescription": "Las personas aparecen aquí cuando compran entradas, se registran o se añaden a una lista de invitados.",
+    "caption": "Personas",
+    "columns": {
+      "name": "Nombre",
+      "email": "Correo",
+      "company": "Empresa",
+      "added": "Añadida"
+    },
+    "next": "Página siguiente",
+    "person": {
+      "title": "Persona",
+      "details": "Datos",
+      "mergedHere": "Ese registro se fusionó con este."
+    },
+    "fields": {
+      "name": "Nombre",
+      "email": "Correo",
+      "phone": "Teléfono",
+      "company": "Empresa",
+      "added": "Añadida",
+      "emailConsent": "Correo de marketing",
+      "smsConsent": "SMS de marketing",
+      "history": "Historial",
+      "empty": "Sin indicar"
+    },
+    "merges": {
+      "title": "Registros fusionados",
+      "line": "{who} fusionado el {when}.",
+      "moved": "{moved, plural, =0 {No se movió nada.} one {Se movió # elemento.} other {Se movieron # elementos.}}",
+      "undoneOn": "Deshecho el {when}.",
+      "undoUntil": "Se puede deshacer hasta el {when}.",
+      "erased": "un registro borrado"
+    },
+    "undo": {
+      "submit": "Deshacer fusión",
+      "submitFor": "Deshacer la fusión de {who}",
+      "done": "Fusión deshecha. Los dos registros vuelven a estar separados, exactamente como antes.",
+      "openOther": "Abrir el otro registro",
+      "errors": {
+        "expired": "Esta fusión tiene más de 30 días y ya no se puede deshacer.",
+        "blocked": "Este registro se fusionó después con otro. Deshaz primero esa fusión.",
+        "erased": "Uno de estos registros se borró, así que la fusión ya no se puede deshacer.",
+        "undone": "Esta fusión ya se deshizo."
+      }
+    },
+    "errors": {
+      "forbidden": "Tu rol no puede fusionar personas. Pídeselo a una persona propietaria, administradora o gerente."
+    },
+    "timeline": {
+      "title": "Cronología",
+      "kind": "Qué",
+      "allKinds": "Todo",
+      "event": "Evento",
+      "allEvents": "Todos los eventos",
+      "filter": "Filtrar",
+      "noMatchTitle": "Nada coincide con estos filtros",
+      "noMatchDescription": "Elige «Todo» o «Todos los eventos» para ver más.",
+      "emptyTitle": "Aún no hay nada",
+      "emptyDescription": "Los pedidos, accesos, campañas, mensajes y encuestas aparecen aquí a medida que ocurren.",
+      "listLabel": "Cronología de {name}",
+      "older": "Anteriores"
+    },
+    "kinds": {
+      "order_paid": "Pedido pagado",
+      "order_refunded": "Reembolso",
+      "checked_in": "Acceso registrado",
+      "session_attended": "Asistió a una sesión",
+      "campaign_sent": "Campaña enviada",
+      "campaign_opened": "Abrió una campaña",
+      "campaign_clicked": "Hizo clic en una campaña",
+      "message_in": "Te escribió",
+      "message_out": "Respondiste",
+      "donation": "Donativo",
+      "rsvp": "Confirmación de asistencia",
+      "survey_sent": "Encuesta enviada",
+      "survey_responded": "Respondió una encuesta"
+    },
+    "merge": {
+      "done": "Registros fusionados. Puedes deshacerlo durante 30 días desde esta página.",
+      "submit": "Fusionar registros",
+      "hint": "Los pedidos, entradas, accesos, mensajes e historial pasan al registro que se conserva. Puedes deshacer una fusión durante 30 días.",
+      "errors": {
+        "alreadyMerged": "Uno de estos registros se fusionó o cambió desde que abriste esta página. Vuelve a la lista.",
+        "erased": "Uno de estos registros se borró y no se puede fusionar.",
+        "unavailable": "Ahora no se puede fusionar. Inténtalo más tarde.",
+        "keep": "Elige qué registro se conserva."
+      }
+    },
+    "duplicates": {
+      "title": "Posibles duplicados",
+      "description": "Personas que quizá figuran dos veces: el mismo correo, el mismo teléfono o un nombre parecido en la misma empresa.",
+      "scan": "Buscar duplicados",
+      "lastScan": "Última comprobación: {when}. Los contactos nuevos se comprueban automáticamente cada pocos minutos.",
+      "neverScanned": "Aún sin comprobar.",
+      "scanned": "{count, plural, =0 {No se encontraron posibles duplicados.} one {Se encontró # posible duplicado.} other {Se encontraron # posibles duplicados.}}",
+      "dismissedDone": "Marcado como personas distintas. Esta pareja no se volverá a sugerir.",
+      "bulkDone": "{count, plural, =0 {No se fusionó nada.} one {Se fusionó # pareja. Cada fusión se puede deshacer durante 30 días.} other {Se fusionaron # parejas. Cada fusión se puede deshacer durante 30 días.}}",
+      "statusNav": "Filtrar por estado",
+      "status": {
+        "open": "Abiertos ({count})",
+        "dismissed": "No duplicados",
+        "merged": "Fusionados"
+      },
+      "caption": {
+        "open": "Posibles duplicados por revisar",
+        "dismissed": "Parejas marcadas como personas distintas",
+        "merged": "Parejas fusionadas"
+      },
+      "empty": {
+        "open": {
+          "title": "No hay posibles duplicados",
+          "description": "Elige «Buscar duplicados» para comprobar a todos ahora. Los contactos nuevos se comprueban automáticamente."
+        },
+        "dismissed": {
+          "title": "Nada descartado",
+          "description": "Aquí aparecen las parejas que marques como personas distintas."
+        },
+        "merged": {
+          "title": "Aún no hay fusiones",
+          "description": "Aquí aparecen las parejas que fusiones. Deshaz una fusión desde la página de la persona."
+        }
+      },
+      "select": "Seleccionar",
+      "selectPair": "Seleccionar {pair}",
+      "pair": "{a} y {b}",
+      "columns": {
+        "people": "Personas",
+        "confidence": "Confianza",
+        "reasons": "Por qué",
+        "review": "Revisar"
+      },
+      "score": "{score} %",
+      "review": "Revisar",
+      "reviewPair": "Revisar {pair}",
+      "mergeSelected": "Fusionar selección",
+      "mergeSelectedHint": "Conserva el registro más antiguo de cada pareja y los datos más recientes. Se te pedirá confirmar que eres tú.",
+      "errors": {
+        "noneSelected": "Selecciona al menos una pareja para fusionar.",
+        "tooMany": "Selecciona como máximo 50 parejas a la vez."
+      }
+    },
+    "reasons": {
+      "email": "Mismo correo electrónico",
+      "phone": "Mismo teléfono",
+      "name_company": "Nombre parecido en la misma empresa"
+    },
+    "compare": {
+      "title": "Revisar posible duplicado",
+      "description": "{score} % de confianza: {reasons}.",
+      "resolved": "Esta pareja ya está resuelta.",
+      "record": "Registro {n}",
+      "older": "(más antiguo)",
+      "entries": "{count, plural, =0 {Sin entradas} one {# entrada} other {# entradas}}",
+      "openTimeline": "Abrir la cronología del {record}",
+      "consentTitle": "Consentimiento tras la fusión",
+      "consentEmail": "Correo de marketing: {status}",
+      "consentSms": "SMS de marketing: {status}",
+      "consentRule": "Gana la opción más estricta: si cualquiera de los registros se dio de baja, el registro fusionado queda dado de baja.",
+      "keepLegend": "Qué registro se conserva",
+      "keepHint": "El otro registro se fusiona con él. Su correo sigue llevando a esta persona.",
+      "keepOption": "{record} ({email})",
+      "fieldLegend": {
+        "name": "Nombre",
+        "email": "Correo",
+        "phone": "Teléfono",
+        "company": "Empresa"
+      },
+      "fieldOption": "{record}: {value}",
+      "dismiss": "No es la misma persona"
+    },
+    "consent": {
+      "granted": "Suscrito",
+      "withdrawn": "Dado de baja",
+      "unknown_legacy": "Desconocido (importado)",
+      "none": "Sin consentimiento"
+    }
+  },
+  "contactStats": {
+    "title": "Contacto",
+    "insightsTitle": "Información de contactos",
+    "insightsDescription": "Cómo participa tu gente en todos los eventos: participación, inasistencias, recencia y frecuencia.",
+    "audiencesLink": "Audiencias",
+    "notLive": "Este contacto se fusionó con otro o se borró. Sus estadísticas ya no cuentan.",
+    "emptyTitle": "Aún sin actividad",
+    "emptyDescription": "Las estadísticas aparecen cuando esta persona se registra en un evento, asiste a una sesión o abre una campaña.",
+    "emptyAction": "Crear una audiencia",
+    "glance": "De un vistazo",
+    "events": "Eventos registrados",
+    "attended": "Eventos asistidos",
+    "sessions": "Sesiones asistidas",
+    "campaigns": "Campañas abiertas",
+    "firstSeen": "Visto por primera vez",
+    "lastSeen": "Visto por última vez",
+    "never": "—",
+    "lifetimeValue": "Valor de vida",
+    "lifetimeOrders": "{count, plural, one {# pedido pagado} other {# pedidos pagados}}",
+    "noSpend": "Aún no hay pedidos pagados.",
+    "noSpendOrg": "Nadie ha pagado nada todavía.",
+    "scores": "Puntuaciones",
+    "engagement": "Puntuación de participación",
+    "engagementValue": "{score} / 100",
+    "engagementHow": "{wAttended} × {attended} eventos asistidos + {wSessions} × {sessions} sesiones + {wCampaigns} × {campaigns} campañas abiertas = {points} puntos. 100 × {points} ÷ ({points} + {half}) = {score}.",
+    "noShow": "Propensión a no asistir",
+    "noShowHow": "({noShows} inasistencias + {priorNoShows}) ÷ ({past} registros pasados + {priorRegistrations}) = {pct}. Los eventos próximos aún no cuentan.",
+    "rfm": "RFM",
+    "rfmHow": "Quintiles entre las personas de esta organización que participaron en un evento: 5 es el quinto superior.",
+    "rfmNone": "Aún sin clasificar: sin eventos.",
+    "recency": "Recencia",
+    "frequency": "Frecuencia",
+    "monetary": "Monetario",
+    "quintileValue": "{q} de 5",
+    "updated": "Actualizado el {date}",
+    "viewContact": "Ver contacto",
+    "headerSummary": "Participación {score} · Inasistencia {pct}",
+    "headerValue": "De por vida {amount}",
+    "totals": "Totales",
+    "total": {
+      "contacts": "Contactos",
+      "participants": "Participaron",
+      "attendedAny": "Asistieron",
+      "averageEngagement": "Participación media",
+      "noShowRate": "Tasa de inasistencia"
+    },
+    "distributions": "Distribuciones",
+    "distribution": {
+      "engagement": "Puntuación de participación",
+      "noShow": "Propensión a no asistir",
+      "frequency": "Eventos en los que participó",
+      "recency": "Visto por última vez"
+    },
+    "showData": "Mostrar los datos",
+    "range": "Rango",
+    "people": "Personas",
+    "bandRange": "{from}–{to}",
+    "bandFrom": "{from} o más",
+    "recencyWithin": "En los últimos {days} días",
+    "recencyOlder": "Hace más tiempo",
+    "value": {
+      "currency": "Moneda",
+      "payers": "Personas que pagaron",
+      "total": "Total",
+      "average": "Promedio",
+      "topFifth": "Quinto superior desde",
+      "max": "Máximo"
+    },
+    "orgEmptyTitle": "Aún no hay actividad de contactos",
+    "orgEmptyDescription": "Las estadísticas aparecen a medida que las personas se registran, hacen check-in, asisten a sesiones y abren campañas.",
+    "orgEmptyAction": "Ir a tus eventos"
+  },
+  "privacyRequest": {
+    "title": "Consulta sobre tus datos personales",
+    "description": "Pide a {org} una copia de los datos personales que tiene sobre ti, o que los borre. Responde en un plazo de 30 días. Primero te enviamos un código por correo para comprobar que la dirección es tuya.",
+    "notice": "Lee el aviso de privacidad de {org}",
+    "kindLegend": "¿Qué quieres?",
+    "access": "Una copia de mis datos",
+    "accessHint": "Recibes un enlace a un archivo ZIP con todo lo que se guarda sobre ti.",
+    "erasure": "Borrar mis datos",
+    "erasureHint": "{org} te elimina de sus registros, salvo lo que la ley le obliga a conservar (como los pedidos pagados, por motivos fiscales).",
+    "email": "Tu correo electrónico",
+    "emailHint": "La dirección que usaste con este organizador.",
+    "submit": "Enviarme un código",
+    "sent": "Hemos enviado un código de 6 dígitos a {email}. Introdúcelo para confirmar tu solicitud. Es válido durante 10 minutos.",
+    "resent": "Hemos enviado un código nuevo a {email}.",
+    "codeLabel": "Código de confirmación",
+    "confirm": "Confirmar mi solicitud",
+    "resend": "Enviar un código nuevo",
+    "changeEmail": "Usar otra dirección",
+    "doneTitle": "Solicitud recibida",
+    "doneBody": "{org} responderá antes del {date}. Tu referencia es {reference}. Recibirás un correo cuando esté resuelta.",
+    "existingBody": "Ya tienes una solicitud abierta con {org}. Vence el {date}; tu referencia es {reference}.",
+    "errors": {
+      "invalidEmail": "Introduce un correo electrónico válido.",
+      "kindRequired": "Elige una copia de tus datos o la supresión.",
+      "rateLimited": "{minutes, plural, one {Demasiados intentos. Inténtalo de nuevo en # minuto.} other {Demasiados intentos. Inténtalo de nuevo en # minutos.}}",
+      "codeFormat": "Introduce los 6 dígitos del correo.",
+      "wrong": "{count, plural, =0 {Ese código no es correcto. Pide un código nuevo.} one {Ese código no es correcto. Te queda # intento.} other {Ese código no es correcto. Te quedan # intentos.}}",
+      "locked": "Demasiados códigos incorrectos. Pide un código nuevo.",
+      "expired": "Ese código ha caducado o ya se usó. Pide un código nuevo.",
+      "generic": "Algo salió mal. Inténtalo de nuevo."
+    }
+  },
+  "apiUsage": {
+    "title": "Uso de la API",
+    "subtitle": "Solicitudes hechas con las claves de API de esta organización, por día en su zona horaria.",
+    "back": "Claves de API",
+    "range": "Periodo",
+    "lastDays": "Últimos {days, number} días",
+    "totalsTitle": "Totales",
+    "requests": "Solicitudes",
+    "errors": "Errores",
+    "rateLimited": "Limitadas",
+    "perDayTitle": "Solicitudes por día",
+    "perKeyTitle": "Solicitudes por clave",
+    "day": "Día",
+    "showData": "Mostrar los datos",
+    "emptyTitle": "No hay solicitudes a la API en este periodo",
+    "emptyDescription": "Las solicitudes hechas con tus claves aparecen aquí al instante. Crea una clave en la página Claves de API."
+  },
+  "sandboxes": {
+    "title": "Sandboxes",
+    "subtitle": "Organizaciones de prueba vinculadas a esta, para probar la API y el pago sin riesgo.",
+    "noAccessTitle": "Solo propietarios y administradores gestionan sandboxes",
+    "noAccessDescription": "Pide a un propietario o administrador de esta organización que cree una para ti.",
+    "factsTitle": "Cómo funciona una sandbox",
+    "factPayments": "Los pagos siempre son simulados: nunca se cobra nada, sea cual sea la configuración de la plataforma.",
+    "factMarketplace": "Sus eventos nunca aparecen en el marketplace.",
+    "factData": "Empieza con un evento de ejemplo y dos tipos de entrada.",
+    "factKeys": "Tiene sus propias claves de API y su propio equipo. Tú eres su propietario.",
+    "createTitle": "Crear una sandbox",
+    "name": "Nombre",
+    "nameHint": "Por ejemplo «Staging» o «Prueba de Zapier».",
+    "nameRequired": "Ponle un nombre a la sandbox.",
+    "create": "Crear sandbox",
+    "creating": "Creando…",
+    "created": "Sandbox «{name}» creada con un evento de ejemplo.",
+    "open": "Abrir la sandbox {name}",
+    "openShort": "Abrir",
+    "limit": "Esta organización ya tiene {max, number} sandboxes, el máximo. Elimina una primero.",
+    "sandboxOfSandbox": "Una sandbox no puede tener sandboxes propias",
+    "inSandboxDescription": "Crea sandboxes desde la organización a la que pertenece esta sandbox.",
+    "listTitle": "Tus sandboxes",
+    "emptyTitle": "Aún no hay sandboxes",
+    "emptyDescription": "Crea una para probar la API, el pago y el acceso con datos de ejemplo y pagos simulados.",
+    "address": "Dirección",
+    "createdAt": "Creada",
+    "actions": "Acciones",
+    "delete": "Eliminar",
+    "deleteNamed": "Eliminar la sandbox {name}",
+    "deleteWarning": "Se cierra para siempre: sus páginas dejan de estar en línea y sus miembros y claves pierden el acceso.",
+    "deleteConfirm": "Eliminar para siempre",
+    "deleteConfirmNamed": "Eliminar para siempre la sandbox {name}"
+  },
+  "webhooks": {
+    "title": "Webhooks",
+    "subtitle": "Envía los eventos de tu organización a tus propios sistemas en el momento en que ocurren.",
+    "docs": "Guía de webhooks y verificación de firmas",
+    "related": "Páginas relacionadas",
+    "portalLink": "Abrir el portal de webhooks",
+    "apiKeysLink": "Claves de API",
+    "noAccessTitle": "Solo los propietarios y administradores gestionan los webhooks",
+    "noAccessDescription": "Pide a un propietario o administrador de esta organización que añada o cambie los endpoints de webhook.",
+    "noModuleTitle": "Los webhooks no están incluidos en tu plan",
+    "noModuleDescription": "Los webhooks vienen con el acceso a la API. Contáctanos para activarlo en tu organización.",
+    "unavailableTitle": "Los webhooks aún no están disponibles",
+    "unavailableDescription": "El envío de webhooks todavía se está configurando en esta plataforma. Vuelve pronto.",
+    "emptyTitle": "Aún no hay endpoints de webhook",
+    "emptyDescription": "Añade abajo la URL https de tu receptor y envíale un mensaje de prueba.",
+    "listTitle": "Endpoints",
+    "url": "URL del endpoint",
+    "urlHint": "https en el puerto 443, accesible desde internet. Cada mensaje va firmado.",
+    "description": "Descripción",
+    "descriptionHint": "Opcional, para tu equipo (hasta 200 caracteres).",
+    "descriptionTooLong": "Usa 200 caracteres o menos.",
+    "events": "Eventos",
+    "allEvents": "Todos los eventos",
+    "eventCount": "{count, plural, one {# evento} other {# eventos}}",
+    "status": "Estado",
+    "active": "Activo",
+    "disabled": "En pausa",
+    "createdAt": "Añadido",
+    "createTitle": "Añadir un endpoint",
+    "settingsTitle": "Configuración del endpoint",
+    "receive": "Eventos que se envían",
+    "receiveAll": "Todos los eventos, incluidos los nuevos",
+    "receiveSelected": "Solo los eventos que elija",
+    "typesRequired": "Elige al menos un evento o envía todos los eventos.",
+    "groups": {
+      "orders": "Pedidos y pagos",
+      "tickets": "Entradas",
+      "checkin": "Control de acceso",
+      "events": "Eventos y tipos de entrada",
+      "registration": "Inscripción",
+      "engagement": "Participación",
+      "meta": "Pruebas"
+    },
+    "enabled": "Enviar mensajes a este endpoint",
+    "enabledHint": "Desactívalo para pausar los envíos sin eliminar el endpoint.",
+    "create": "Añadir endpoint",
+    "save": "Guardar cambios",
+    "saved": "Endpoint guardado.",
+    "limit": "Esta organización ya tiene el máximo de endpoints. Elimina uno para añadir otro.",
+    "urlProblem": {
+      "malformed": "Introduce una URL completa, como https://example.com/webhooks.",
+      "scheme": "Usa una URL https://.",
+      "credentials": "Quita el usuario y la contraseña de la URL.",
+      "port": "Usa el puerto https estándar (443).",
+      "host": "Este host no puede recibir webhooks. Usa una dirección pública.",
+      "address": "Esta dirección es privada o reservada. Usa una dirección pública.",
+      "dns": "No encontramos este host. Revisa la dirección.",
+      "length": "Esta URL es demasiado larga."
+    },
+    "deleted": "Endpoint eliminado.",
+    "created": "Endpoint añadido. Envíale un mensaje de prueba para comprobar tu receptor.",
+    "back": "Todos los endpoints de webhook",
+    "endpointTitle": "Endpoint de webhook",
+    "testTitle": "Enviar un mensaje de prueba",
+    "testEventType": "Tipo de mensaje",
+    "testHint": "webhook.test, o cualquier evento con sus datos de ejemplo documentados. Solo este endpoint lo recibe.",
+    "sendTest": "Enviar prueba",
+    "testSent": "Mensaje de prueba enviado ({type}). Su entrega aparece abajo.",
+    "secretTitle": "Secreto de firma",
+    "secretHint": "Úsalo para comprobar que cada mensaje viene realmente de nosotros.",
+    "revealSecret": "Mostrar secreto",
+    "hideSecret": "Ocultar",
+    "copy": "Copiar",
+    "copied": "Copiado",
+    "rotateHint": "Un secreto nuevo sustituye a este. Durante 24 horas ambos firman cada mensaje, para que tengas tiempo de desplegarlo.",
+    "rotateSecret": "Rotar secreto",
+    "rotatedSecret": "Secreto rotado. El secreto anterior sigue funcionando durante 24 horas.",
+    "deliveriesTitle": "Envíos recientes",
+    "deliveriesUnavailable": "Ahora no se pueden cargar los envíos. Inténtalo de nuevo en un minuto.",
+    "noDeliveriesTitle": "Aún no hay envíos",
+    "noDeliveriesDescription": "Envía un mensaje de prueba o espera al próximo evento.",
+    "attemptedAt": "Hora",
+    "eventType": "Evento",
+    "response": "Respuesta",
+    "noResponse": "Sin respuesta",
+    "trigger": "Enviado por",
+    "triggerManual": "Reenvío",
+    "triggerScheduled": "Automático",
+    "nextRetry": "Próximo reintento",
+    "actions": "Acciones",
+    "attemptSucceeded": "Entregado",
+    "attemptFailed": "Fallido",
+    "attemptPending": "Pendiente",
+    "resend": "Reenviar",
+    "resendNamed": "Reenviar {type} de {when}",
+    "resent": "Reenviado",
+    "recoverTitle": "Recuperar mensajes fallidos",
+    "recoverHint": "Si tu receptor estuvo caído, reenvía todos los mensajes que fallaron desde un momento dado.",
+    "recoverSince": "Fallidos desde",
+    "recoverWindow": {
+      "1h": "La última hora",
+      "24h": "Las últimas 24 horas",
+      "7d": "Los últimos 7 días"
+    },
+    "recover": "Reenviar mensajes fallidos",
+    "recovering": "Se están reenviando los mensajes fallidos.",
+    "deleteTitle": "Eliminar este endpoint",
+    "deleteHint": "Deja de recibir mensajes de inmediato. No se puede deshacer.",
+    "delete": "Eliminar endpoint",
+    "portalTitle": "Portal de webhooks",
+    "portalSubtitle": "Endpoints, registros de envío y reenvíos de nuestro proveedor de webhooks.",
+    "portalAlternative": "Todo lo de aquí también está en <link>las páginas de Webhooks</link>.",
+    "portalFrameTitle": "Portal de webhooks",
+    "portalUnavailable": "Ahora no se puede abrir el portal de webhooks. Inténtalo de nuevo en un minuto.",
+    "fakePortal": {
+      "title": "Portal de webhooks (modo de prueba)",
+      "subtitle": "Un sustituto del portal del proveedor: aquí nada se envía por la red.",
+      "endpoints": "Endpoints",
+      "url": "URL",
+      "types": "Eventos",
+      "allTypes": "Todos",
+      "status": "Estado",
+      "enabled": "Activo",
+      "disabled": "En pausa",
+      "noEndpoints": "Aún no hay endpoints",
+      "attempts": "Intentos recientes",
+      "noAttempts": "Aún no hay intentos",
+      "type": "Evento",
+      "message": "Mensaje",
+      "succeeded": "Entregado",
+      "failed": "Fallido",
+      "at": "Hora"
+    }
+  },
+  "developers": {
+    "brand": "Yayatoh para desarrolladores",
+    "skip": "Ir al contenido",
+    "title": "Desarrolladores",
+    "subtitle": "Construye sobre Yayatoh: la API REST, los webhooks y los SDK.",
+    "nav": {
+      "label": "Documentación para desarrolladores",
+      "home": "Inicio",
+      "guides": "Guías",
+      "reference": "Referencia de la API",
+      "events": "Eventos de webhook"
+    },
+    "search": {
+      "label": "Buscar en la documentación",
+      "placeholder": "Busca guías, endpoints y eventos",
+      "submit": "Buscar",
+      "results": "{count, plural, =0 {Sin resultados} one {# resultado} other {# resultados}}",
+      "resultsLabel": "Resultados de la búsqueda",
+      "resultsFor": "Resultados para «{query}»",
+      "none": "No hay coincidencias. Prueba con otra palabra, como «orders» o «webhook».",
+      "kinds": {
+        "guide": "Guía",
+        "operation": "Endpoint",
+        "event": "Evento"
+      }
+    },
+    "englishNotice": "Las guías y la referencia están en inglés.",
+    "startTitle": "Empieza aquí",
+    "cards": {
+      "guides": "Claves de API, paginación, idempotencia, webhooks y entornos de prueba, paso a paso.",
+      "reference": "Cada endpoint de /v1 con sus parámetros y respuestas, generado a partir de OpenAPI.",
+      "events": "Cada evento de webhook con su esquema versionado y un ejemplo."
+    },
+    "guidesSubtitle": "Guías paso a paso para construir sobre la API.",
+    "backToGuides": "Todas las guías",
+    "reference": {
+      "title": "Referencia de la API",
+      "subtitle": "Cada endpoint de /v1, generado a partir del documento OpenAPI.",
+      "interactive": "Pruébalo en la referencia interactiva",
+      "download": "Descargar openapi.json",
+      "tags": "Secciones",
+      "auth": "Autenticación",
+      "parameters": "Parámetros",
+      "parametersOf": "Parámetros de {operation}",
+      "name": "Nombre",
+      "in": "Ubicación",
+      "type": "Tipo",
+      "description": "Descripción",
+      "requestBody": "Cuerpo de la solicitud",
+      "responses": "Respuestas"
+    },
+    "events": {
+      "title": "Eventos de webhook",
+      "subtitle": "Cada mensaje que pueden recibir tus endpoints, con su esquema versionado. Los datos llevan identificadores y hechos, nunca datos personales.",
+      "verifyLink": "Cómo verificar las firmas",
+      "groups": "Grupos de eventos",
+      "fieldsOf": "Campos de {type}",
+      "data": "data",
+      "field": "Campo",
+      "type": "Tipo",
+      "required": "Obligatorio",
+      "yes": "Sí",
+      "no": "No",
+      "example": "Mensaje de ejemplo de {type}"
+    }
+  },
+  "billingPlan": {
+    "title": "Plan y módulos",
+    "subtitle": "Tu plan, los módulos que incluye y cómo se aplican las comisiones por entrada.",
+    "noAccessTitle": "Solo propietarios, administradores y finanzas pueden ver el plan",
+    "noAccessDescription": "Pide los detalles del plan a un propietario de esta organización.",
+    "dormantTitle": "Las suscripciones aún no están activadas",
+    "dormantBody": "Tu organización sigue en su plan actual y conserva todos los módulos que tiene hoy. Nada cambia hasta que se lancen las suscripciones.",
+    "inactiveTitle": "La facturación no está activa para esta organización",
+    "inactiveBody": "Tu organización sigue en su plan actual y conserva todos los módulos que tiene hoy. Nada cambia hasta que se configure su facturación.",
+    "updatedTitle": "Cambio de plan recibido",
+    "updatedBody": "El proveedor de facturación confirmó el cambio. Los módulos de abajo están al día.",
+    "currentPlan": "Plan actual",
+    "pricePerMonth": "{price} al mes",
+    "pricePerYear": "{price} al año",
+    "priceQuote": "Presupuesto a medida",
+    "renews": "Se renueva el {date}",
+    "endsOn": "Termina el {date}",
+    "source": {
+      "subscription": "Suscripción",
+      "plan": "Plan incluido"
+    },
+    "status": {
+      "active": "Activa",
+      "trialing": "Prueba",
+      "past_due": "Pago vencido",
+      "canceled": "Cancelada",
+      "unpaid": "Impagada",
+      "paused": "En pausa",
+      "incomplete": "Incompleta",
+      "incomplete_expired": "Caducada"
+    },
+    "fees": {
+      "title": "Comisiones por entrada",
+      "grandfathered": "Se mantienen tus comisiones por entrada anteriores. Un cambio de plan nunca las modifica.",
+      "plan": "Las comisiones por entrada siguen el plan {plan}."
+    },
+    "modules": {
+      "title": "Tus módulos",
+      "description": "Lo que tu organización puede usar ahora.",
+      "count": "{count, plural, one {# módulo} other {# módulos}}"
+    },
+    "catalog": {
+      "title": "Planes",
+      "description": "Planes provisionales: los precios no son definitivos y aún no hay nada a la venta.",
+      "empty": "Aún no hay planes.",
+      "plan": "Plan",
+      "price": "Precio",
+      "modules": "Módulos",
+      "status": "Estado",
+      "onSale": "A la venta",
+      "notOnSale": "Aún no a la venta"
+    },
+    "test": {
+      "title": "Facturación de prueba (solo desarrollo)",
+      "body": "Simula un cambio de plan con el proveedor de facturación de prueba. Envía los mismos webhooks que el proveedor real.",
+      "open": "Abrir el portal de facturación de prueba"
+    },
+    "planName": {
+      "launch_standard": "Estándar de lanzamiento",
+      "tier_free": "Gratis",
+      "tier_starter": "Inicial",
+      "tier_pro": "Pro",
+      "tier_agency": "Agencia",
+      "tier_enterprise": "Empresa"
+    },
+    "module": {
+      "core": "Base",
+      "events": "Eventos",
+      "ticketing": "Venta de entradas",
+      "orders": "Pedidos",
+      "attendees": "Asistentes",
+      "checkin": "Acceso",
+      "seating": "Asientos",
+      "seat_finder": "Buscador de asiento",
+      "guests": "Lista de invitados",
+      "rsvp": "Confirmaciones",
+      "distribution": "Distribución",
+      "access_codes": "Códigos de acceso",
+      "marketing": "Marketing",
+      "messaging": "Mensajería",
+      "reports": "Informes",
+      "whitelabel": "Marca blanca",
+      "ai": "Asistente de IA",
+      "chat": "Chat",
+      "donations": "Donaciones",
+      "registration": "Inscripción",
+      "sessions": "Sesiones",
+      "speakers": "Ponentes",
+      "exhibitors": "Expositores",
+      "sponsors": "Patrocinadores",
+      "badges": "Acreditaciones",
+      "gallery": "Galería",
+      "website": "Sitio web",
+      "api_access": "Acceso a la API",
+      "integrations": "Integraciones",
+      "enterprise": "SSO y SCIM",
+      "agency": "Agencia",
+      "virtual": "Eventos virtuales",
+      "advanced_seating": "Asientos avanzados",
+      "ai_seating": "Asientos con IA",
+      "analytics_pro": "Analítica avanzada"
+    }
+  },
+  "billingPortal": {
+    "eyebrow": "Facturación de prueba",
+    "title": "Elige un plan",
+    "description": "Solo para desarrollo. Esta página sustituye al portal del proveedor de facturación y envía los mismos webhooks.",
+    "planLegend": "Plan",
+    "switch": "Cambiar de plan",
+    "cancel": "Cancelar la suscripción",
+    "back": "Volver sin cambios",
+    "chooseError": "Elige el plan al que quieres cambiar."
+  },
+  "seatingLibrary": {
+    "title": "Biblioteca de planos",
+    "description": "Los planos de asientos que guardaste desde tus eventos. Crea un evento nuevo a partir de uno; cada evento conserva su propia copia.",
+    "deleted": "Plano quitado de la biblioteca. Los eventos que lo usaban conservan su copia.",
+    "emptyTitle": "Tu biblioteca de planos está vacía",
+    "emptyHint": "Abre el plano de asientos de un evento y elige «Guardar plano» para conservarlo aquí.",
+    "emptyViewer": "Aquí aparecerán los planos guardados desde los eventos.",
+    "toEvents": "Ir a los eventos",
+    "startTitle": "Crear un evento a partir de un plano",
+    "startDescription": "El nuevo evento recibe su propia copia del plano. Luego pones precio a sus asientos y los pones a la venta.",
+    "layout": "Plano",
+    "layoutOption": "{name} ({seats, plural, one {# asiento} other {# asientos}})",
+    "eventName": "Nombre del evento",
+    "profile": "Tipo de evento",
+    "timezone": "Zona horaria",
+    "startsAt": "Empieza",
+    "endsAt": "Termina",
+    "start": "Crear el evento",
+    "fixErrors": "Corrige el campo marcado.",
+    "errors": {
+      "layoutId": "Elige un plano.",
+      "name": "Ponle un nombre al evento (de 2 a 160 caracteres).",
+      "slug": "Ya existe un evento con ese nombre. Elige otro.",
+      "profile": "Elige un tipo de evento con asientos.",
+      "startsAt": "Indica cuándo empieza el evento.",
+      "endsAt": "Indica cuándo termina el evento, después de que empiece.",
+      "layoutName": "Ponle un nombre al plano (hasta 120 caracteres)."
+    },
+    "listTitle": "Planos guardados",
+    "seats": "{count, plural, one {# asiento} other {# asientos}}",
+    "rows": "{count, plural, one {# fila} other {# filas}}",
+    "tables": "{count, plural, one {# mesa} other {# mesas}}",
+    "withImage": "con una imagen del plano",
+    "usedBy": "{count, plural, =0 {Aún no lo usa ningún evento} one {Lo usa # evento} other {Lo usan # eventos}}",
+    "updated": "actualizado el {date}",
+    "renameLabel": "Nombre de {name}",
+    "rename": "Cambiar nombre",
+    "renamed": "Nombre cambiado.",
+    "startFrom": "Crear un evento con él",
+    "startFromNamed": "Crear un evento con {name}",
+    "delete": "Eliminar",
+    "deleteNamed": "Eliminar {name}"
+  },
+  "warehouse": {
+    "title": "Analítica",
+    "description": "Todos tus eventos juntos: registros, entradas, check-ins y ausencias a lo largo del tiempo, y tus mejores eventos.",
+    "filters": "Filtros",
+    "from": "Desde",
+    "to": "Hasta",
+    "event": "Evento",
+    "allEvents": "Todos los eventos",
+    "apply": "Aplicar",
+    "timeZoneNote": "Los días son días naturales en {timeZone}, la zona horaria de tu organización.",
+    "rangeErrors": {
+      "invalid_date": "Introduce las fechas como año, mes y día.",
+      "from_after_to": "La fecha de fin es anterior a la de inicio.",
+      "range_too_long": "Elige un periodo de dos años como máximo."
+    },
+    "periodLabel": "Mostrar por",
+    "view": {
+      "day": "Día",
+      "week": "Semana",
+      "month": "Mes"
+    },
+    "emptyTitle": "Todavía no hay nada en este periodo",
+    "emptyBody": "No hay registros, entradas ni check-ins entre estas fechas. Prueba con un periodo más largo u otro evento; los pedidos nuevos aparecen aquí en segundos.",
+    "emptyAction": "Mostrar los últimos 12 meses",
+    "figures": {
+      "label": "Totales del periodo",
+      "registrations": "Registros",
+      "ticketsIssued": "Entradas de pago emitidas",
+      "tickets": "Entradas vendidas",
+      "compTickets": "Entradas gratuitas",
+      "checkins": "Check-ins",
+      "noShows": "Ausencias"
+    },
+    "revenue": {
+      "title": "Ingresos",
+      "net": "Ventas netas ({currency})",
+      "grossRefunds": "{gross} pagado, {refunds} reembolsado",
+      "byPeriod": "Ingresos por periodo",
+      "noRevenue": "No hay ventas ni reembolsos en este periodo.",
+      "period": "Periodo",
+      "currency": "Moneda",
+      "gross": "Pagado",
+      "refunds": "Reembolsado",
+      "netColumn": "Neto",
+      "topEvents": "Eventos con más ingresos",
+      "eventColumn": "Evento",
+      "weekOf": "Semana del {day}"
+    },
+    "trend": "A lo largo del tiempo",
+    "chartTitle": "Registros, entradas de pago y check-ins a lo largo del tiempo",
+    "byPeriod": "Cifras por periodo",
+    "period": "Periodo",
+    "topEvents": "Mejores eventos",
+    "noTopEvents": "Ningún evento tuvo registros en este periodo.",
+    "definitions": "Las entradas vendidas son las de pago menos las reembolsadas. Un check-in cuenta cada entrada una vez, el día de su primer acceso. Las ausencias son entradas válidas sin check-in, contadas el día en que terminó el evento.",
+    "definitionsFinance": "Las entradas vendidas son las de pago menos las reembolsadas. Un check-in cuenta cada entrada una vez, el día de su primer acceso. Las ausencias son entradas válidas sin check-in, contadas el día en que terminó el evento. Los ingresos son lo que pagaron los compradores menos los reembolsos, por moneda y antes de las comisiones de la plataforma (consulta Finanzas).",
+    "rebuildTitle": "Reconstruir la analítica",
+    "rebuildBody": "Vuelve a calcular todas las cifras de esta página a partir de tus pedidos y check-ins, unos pocos eventos cada vez. Úsalo después de cambiar la zona horaria de tu organización.",
+    "rebuild": "Reconstruir",
+    "rebuilding": "Iniciando…",
+    "rebuildStarted": "Reconstrucción iniciada",
+    "rebuildStartedBody": "Las cifras se recalculan en segundo plano; mientras tanto puedes seguir usando esta página.",
+    "rebuildRunning": "Ya hay una reconstrucción en curso.",
+    "runStatus": {
+      "running": "En curso",
+      "done": "Terminada",
+      "failed": "Fallida",
+      "cancelled": "Cancelada"
+    },
+    "runProgress": "{events, plural, one {# evento revisado} many {# eventos revisados} other {# eventos revisados}}, {written, plural, one {# actualizado} many {# actualizados} other {# actualizados}}"
+  },
+  "integrations": {
+    "title": "Integraciones",
+    "description": "Conecta las herramientas que ya usas. Los contactos y registros se mantienen al día en ambos sentidos y te avisamos cuando algo necesita revisión.",
+    "tabsLabel": "Secciones de integraciones",
+    "tabs": {
+      "connections": "Conexiones",
+      "errors": "Errores"
+    },
+    "cancelled": "Se canceló la conexión.",
+    "offTitle": "Las integraciones aún no están activadas aquí",
+    "offDescription": "Las conexiones necesitan el servicio de integraciones, que todavía no está configurado en este sitio. Consulta a la administración de la plataforma.",
+    "noneTitle": "Aún no hay integraciones para conectar",
+    "noneDescription": "Las nuevas integraciones aparecerán en esta página cuando estén disponibles.",
+    "connectors": {
+      "demo": {
+        "description": "Una app de contactos de prueba para probar integraciones: los contactos se sincronizan en ambos sentidos con tu CRM. Solo en entornos de prueba."
+      }
+    },
+    "sandboxBadge": "Pruebas",
+    "account": "Cuenta",
+    "lastSync": "Última sincronización",
+    "never": "Nunca",
+    "openErrors": "Errores abiertos",
+    "openErrorCount": "{count, plural, one {# registro necesita revisión} other {# registros necesitan revisión}}",
+    "noErrors": "Ninguno",
+    "notInPlan": "No incluido en tu plan",
+    "manage": "Gestionar",
+    "manageNamed": "Gestionar {name}",
+    "connect": "Conectar",
+    "connectNamed": "Conectar {name}",
+    "reconnect": "Volver a conectar",
+    "reconnectNamed": "Volver a conectar {name}",
+    "readOnly": "Solo propietarios y administradores pueden conectar o cambiar integraciones.",
+    "breadcrumb": "Ruta de navegación",
+    "objects": {
+      "contacts": "Contactos"
+    },
+    "fields": {
+      "email": "Correo electrónico",
+      "name": "Nombre"
+    },
+    "status": {
+      "none": "Sin conectar",
+      "pending": "Esperando aprobación",
+      "active": "Conectada",
+      "paused": "En pausa",
+      "revoked": "Desconectada",
+      "failed": "La conexión falló"
+    },
+    "runStatus": {
+      "queued": "En cola",
+      "running": "En curso",
+      "succeeded": "Sincronizada",
+      "partial": "Sincronizada con errores",
+      "failed": "Falló",
+      "cancelled": "Cancelada"
+    },
+    "errorsFeedback": {
+      "unavailable": "Esta integración no está disponible aquí.",
+      "provider_unavailable": "No se pudo contactar con el proveedor. Inténtalo de nuevo en unos minutos.",
+      "not_approved": "El proveedor aún no ha confirmado la conexión. Termina de conectar allí y vuelve a comprobarlo.",
+      "denied": "No se aprobó la conexión, así que no se conectó nada.",
+      "expired": "Ese enlace de conexión caducó. Empieza de nuevo con Conectar.",
+      "validation_failed": "Hay datos que corregir.",
+      "forbidden": "No tienes acceso a esto.",
+      "module_not_enabled": "Las integraciones no están incluidas en tu plan.",
+      "not_found": "No encontramos eso.",
+      "conflict": "Esta integración ya está conectada.",
+      "invalid_state": "Eso no se puede hacer ahora.",
+      "impersonation_blocked": "El personal que actúa como miembro no puede conectar integraciones.",
+      "read_only_freeze": "Los cambios están en pausa durante el mantenimiento programado. Inténtalo cuando termine.",
+      "internal": "Algo salió mal por nuestra parte."
+    },
+    "detail": {
+      "title": "Integración",
+      "syncNow": "Sincronizar ahora",
+      "syncing": "Sincronización en camino",
+      "connected": "{name} está conectada. La primera sincronización empieza en breve.",
+      "sync": {
+        "queued": "Sincronización iniciada. Actualiza en un momento para ver el resultado.",
+        "already": "Ya hay una sincronización en camino."
+      },
+      "done": {
+        "paused": "La sincronización está en pausa.",
+        "resumed": "La sincronización vuelve a estar activa.",
+        "interval": "Calendario de sincronización guardado.",
+        "disconnected": "Desconectada. Ya no se sincroniza nada y se revocó el acceso en el proveedor."
+      },
+      "revoked": {
+        "user": "Desconectada el {when}.",
+        "provider": "El proveedor dejó de aceptar esta conexión el {when}, así que la sincronización se detuvo. Vuelve a conectar para continuar."
+      },
+      "pending": "Esperando a que se apruebe la conexión en el proveedor.",
+      "checkConnection": "Comprobar conexión",
+      "cancelConnect": "Cancelar",
+      "confirmDisconnect": "¿Desconectar {name}?",
+      "confirmDisconnectBody": "La sincronización se detiene al instante y se revoca el acceso de Yayatoh en el proveedor. Los registros ya sincronizados se quedan donde están.",
+      "disconnect": "Desconectar",
+      "keep": "Mantener conectada",
+      "statusTitle": "Estado",
+      "connectedAt": "Conectada",
+      "nextSync": "Próxima sincronización",
+      "interval": "Sincronizar cada",
+      "saveInterval": "Guardar calendario",
+      "pause": "Pausar sincronización",
+      "resume": "Reanudar sincronización",
+      "intervals": {
+        "15": "15 minutos",
+        "60": "Hora",
+        "360": "6 horas",
+        "1440": "Día"
+      }
+    },
+    "mapping": {
+      "sectionTitle": "Asignación de campos",
+      "sectionHelp": "Elige qué campo rellena cuál. Cada guardado crea una versión nueva y la próxima sincronización la usa.",
+      "title": {
+        "pull": "Hacia Yayatoh",
+        "push": "Hacia el proveedor"
+      },
+      "help": {
+        "pull": "Los campos del proveedor rellenan los de Yayatoh.",
+        "push": "Los campos de Yayatoh rellenan los del proveedor."
+      },
+      "version": "Versión {version}",
+      "saved": "Asignación guardada como versión {version}. La próxima sincronización la usa.",
+      "invalid": "Esta asignación aún no se puede guardar. Revisa los campos marcados.",
+      "required": "obligatorio",
+      "source": "Viene de",
+      "transform": "Cambiar",
+      "default": "Si está vacío, usar",
+      "notMapped": "— Sin asignar —",
+      "transforms": {
+        "none": "Dejar igual",
+        "trim": "Quitar espacios",
+        "lowercase": "minúsculas",
+        "uppercase": "MAYÚSCULAS",
+        "title_case": "Primera Letra En Mayúscula",
+        "first_word": "Primera palabra",
+        "last_word": "Última palabra",
+        "to_number": "Número",
+        "to_boolean": "Sí o no",
+        "to_date": "Fecha"
+      },
+      "save": {
+        "pull": "Guardar asignación de importación",
+        "push": "Guardar asignación de exportación"
+      },
+      "issue": {
+        "missing_required": "Elige de dónde viene {field}: es obligatorio.",
+        "unknown_source": "Ese campo no existe en el proveedor.",
+        "unknown_target": "{field} no se puede rellenar.",
+        "duplicate_target": "{field} se rellena dos veces.",
+        "other": "Revisa este campo."
+      }
+    },
+    "runs": {
+      "title": "Sincronizaciones recientes",
+      "caption": "Sincronizaciones recientes de esta integración",
+      "empty": "Aún no hay sincronizaciones. La primera empieza poco después de conectar.",
+      "when": "Inicio",
+      "trigger": "Iniciada por",
+      "status": "Resultado",
+      "pulled": "Entrada",
+      "pushed": "Salida",
+      "skipped": "Sin cambios",
+      "failed": "Errores",
+      "error": "Problema",
+      "triggers": {
+        "manual": "Sincronizar ahora",
+        "schedule": "Calendario",
+        "retry": "Reintento"
+      }
+    },
+    "codes": {
+      "auth_revoked": "El proveedor ya no acepta esta conexión",
+      "invalid_token": "El proveedor ya no acepta esta conexión",
+      "auth_failed": "El proveedor rechazó la conexión",
+      "invalid_value": "Un valor no encaja en su campo",
+      "missing_required": "Un campo obligatorio está vacío",
+      "transform_failed": "No se pudo convertir un valor",
+      "duplicate_record": "Dos registros apuntan al mismo contacto",
+      "write_failed": "No se pudo guardar en Yayatoh",
+      "push_failed": "No se pudo enviar al proveedor",
+      "network": "No se pudo contactar con el proveedor",
+      "lease_expired": "La sincronización se detuvo de forma inesperada",
+      "disconnected": "Detenida al desconectar",
+      "paused": "Detenida al pausar",
+      "sync_failed": "La sincronización falló",
+      "unknown_connector": "Esta integración ya no está disponible",
+      "other": "Error ({code})"
+    },
+    "inbox": {
+      "title": "Errores de integración",
+      "description": "Registros que no se pudieron sincronizar, agrupados por causa. Se reintentan automáticamente durante un tiempo. Corrige el registro en su origen y pulsa Reintentar, o descarta lo que no necesites.",
+      "retried": "{count, plural, =0 {Nada que reintentar: esas conexiones no están activas.} one {# registro se reintentará en la próxima sincronización.} other {# registros se reintentarán en la próxima sincronización.}}",
+      "dismissed": "{count, plural, one {# registro descartado.} other {# registros descartados.}}",
+      "filterLabel": "Mostrar errores",
+      "status": {
+        "open": "Abiertos",
+        "resolved": "Resueltos",
+        "dismissed": "Descartados"
+      },
+      "empty": {
+        "open": "No hay errores abiertos",
+        "resolved": "Aún no hay nada resuelto",
+        "dismissed": "No hay nada descartado"
+      },
+      "emptyOpenHelp": "Todo está sincronizado. Cuando un registro no se pueda sincronizar, aparecerá aquí con el siguiente paso.",
+      "backToConnections": "Ir a las conexiones",
+      "groupTitle": "{connector}: {step} · {count, plural, one {# registro} other {# registros}}",
+      "steps": {
+        "auth": "Conexión",
+        "pull": "Lectura en el proveedor",
+        "map": "Asignación",
+        "write": "Guardado en Yayatoh",
+        "push": "Envío al proveedor"
+      },
+      "field": "Campo: {field}",
+      "lastSeen": "Visto por última vez {when}",
+      "retryAll": "Reintentar todo",
+      "retryAllNamed": "Reintentar todo: {group}",
+      "dismissAll": "Descartar todo",
+      "dismissAllNamed": "Descartar todo: {group}",
+      "recordsCaption": "Registros: {group}",
+      "record": "Registro",
+      "object": "Qué",
+      "objectDirection": "{object} ({direction})",
+      "directions": {
+        "pull": "entrada",
+        "push": "salida"
+      },
+      "wholeConnection": "Toda la conexión",
+      "attempts": "Intentos",
+      "nextRetry": "Próximo reintento automático",
+      "closedAt": "Cerrado",
+      "manualRetry": "Te está esperando",
+      "actions": "Acciones",
+      "retry": "Reintentar",
+      "retryNamed": "Reintentar {record}",
+      "dismiss": "Descartar",
+      "dismissNamed": "Descartar {record}",
+      "more": "{count, plural, one {# registro más sin mostrar.} other {# registros más sin mostrar.}}"
+    },
+    "fakeConsent": {
+      "title": "Consentimiento de prueba",
+      "eyebrow": "Proveedor de prueba",
+      "heading": "¿Conectar {name} con Yayatoh?",
+      "body": "{name} es un proveedor de prueba. Si lo permites, Yayatoh podrá leer y escribir lo siguiente en tu nombre:",
+      "allow": "Permitir",
+      "deny": "Denegar"
     }
   }
 }

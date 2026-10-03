@@ -68,6 +68,28 @@ export function ApiKeyForm({
             </p>
           ) : null}
         </fieldset>
+        {/* M6.3a: how long the key lives; 90 days unless the creator picks otherwise. */}
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor="api-key-expiry" className="text-caption text-ink-2">
+            {t('apiKeys.expiry')}
+          </label>
+          <select
+            id="api-key-expiry"
+            name="expiresInDays"
+            defaultValue="90"
+            aria-describedby="api-key-expiry-hint"
+            className="min-h-10 self-start rounded-pill border border-line bg-surface-solid px-4 text-body"
+          >
+            {(['30', '90', '365', 'never'] as const).map((v) => (
+              <option key={v} value={v}>
+                {t(`apiKeys.expiryIn.${v}`)}
+              </option>
+            ))}
+          </select>
+          <p id="api-key-expiry-hint" className="text-caption text-ink-2">
+            {t('apiKeys.expiryHint')}
+          </p>
+        </div>
         {/* M1.13d: a test key (`yy_test_…`) is read-only and never sees personal data. */}
         <fieldset className="flex flex-col gap-2">
           <legend className="text-[13px] font-bold text-ink">{t('apiKeys.mode')}</legend>

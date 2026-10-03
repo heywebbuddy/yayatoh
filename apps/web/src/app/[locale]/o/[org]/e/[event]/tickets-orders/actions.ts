@@ -13,6 +13,7 @@ import {
   setCheckoutSettingsCommand,
   setRefundPolicyCommand,
 } from '@yayatoh/orders';
+import { holdBestAvailableStaffCommand, releaseBestAvailableCommand } from '@yayatoh/seating';
 import {
   archiveTicketTypeCommand,
   createPromoCodeCommand,
@@ -22,6 +23,7 @@ import {
 } from '@yayatoh/ticketing';
 import { refresh, revalidatePath } from 'next/cache';
 import { getTranslations } from 'next-intl/server';
+import type { BestSeatsRequest, BestSeatsState } from '@/components/best-available.tsx';
 import type { SupportState } from '@/components/support-tools.tsx';
 import type { FormState } from '@/lib/form-state.ts';
 import { loadEvent } from '@/server/console.ts';
@@ -257,7 +259,12 @@ export async function boxOfficeSaleAction(
     .map(([k, v]) => ({ ticketTypeId: k.slice(4), quantity: Number(v) }))
     .filter((i) => Number.isInteger(i.quantity) && i.quantity > 0);
   const seats = [...new Set(form.getAll('seat').map(String))].slice(0, 50);
-  if (items.length === 0 && seats.length === 0)
+  // M6.11a: seats best available holds for this sale, and whether the buyer needs an accessible seat.
+  const seatHold = String(form.get('seatHold') ?? '').trim();
+  const held = Number(form.get('seatHoldCount') ?? 0);
+  if (form.get('seatMode') === 'best' && !seatHold && items.length === 0)
+    return { ok: false, code: 'validation_failed', reason: 'find_seats' };
+  if (items.length === 0 && seats.length === 0 && !seatHold)
     return { ok: false, code: 'validation_failed', reason: 'empty' };
   try {
     const { order } = await executeCommand(
@@ -265,7 +272,9 @@ export async function boxOfficeSaleAction(
       {
         eventId: ev.id,
         items,
-        seats,
+        seats: seatHold ? [] : seats,
+        ...(seatHold ? { seatHold } : {}),
+        accessibleNeed: form.get('accessibleNeed') === '1',
         overrideRules: form.get('overrideRules') === '1',
         buyer: { name: String(form.get('name') ?? ''), email: String(form.get('email') ?? '') },
         method: String(form.get('method') ?? 'cash'),
@@ -277,7 +286,8 @@ export async function boxOfficeSaleAction(
       ports,
     );
     revalidatePath(`/o/${org}/e/${event}/tickets-orders`);
-    return { ok: true, code: null, orderId: order.id, seats: seats.length || undefined };
+    const sold = seatHold ? (Number.isInteger(held) && held > 0 ? held : undefined) : seats.length;
+    return { ok: true, code: null, orderId: order.id, seats: sold || undefined };
   } catch (err) {
     // Someone took a seat first: the page reloads its map with the answer (the stream also says).
     if (isDomainError(err) && err.details?.reason === 'seats_taken') refresh();
@@ -392,4 +402,56 @@ export async function transferRulesAction(
   }
   revalidatePath(`/o/${org}/e/${event}/tickets-orders`);
   return success();
+}
+
+/**
+ * Best available at the box office (M6.11a): staff hold the best seats for the buyer in front of
+ * them (and may say the buyer needs an accessible seat); the sale takes the hold over.
+ */
+export async function boxOfficeBestSeatsAction(
+  org: string,
+  event: string,
+  input: BestSeatsRequest,
+): Promise<BestSeatsState> {
+  const { data, event: ev } = await loadEvent(org, event, 'ticketsOrders');
+  try {
+    const hold = await executeCommand(
+      holdBestAvailableStaffCommand,
+      {
+        eventId: ev.id,
+        ticketTypeId: String(input.ticketTypeId),
+        quantity: Number(input.quantity),
+        accessible: input.accessible === true,
+        ...(input.occurrenceId ? { occurrenceId: String(input.occurrenceId) } : {}),
+        ...(input.replaceToken ? { replaceToken: String(input.replaceToken) } : {}),
+      },
+      data.ctx,
+      ports,
+    );
+    return {
+      ok: true,
+      code: null,
+      hold: {
+        token: hold.token,
+        expiresAt: hold.expiresAt.getTime(),
+        pieces: hold.pieces,
+        seats: hold.seats.map((x) => ({ label: x.label, accessible: x.accessible, companion: x.companion })),
+      },
+    };
+  } catch (err) {
+    if (isDomainError(err)) return { ok: false, code: err.code, reason: String(err.details?.reason ?? '') };
+    throw err;
+  }
+}
+
+/** Give a box office best-available hold back. */
+export async function boxOfficeReleaseSeatsAction(org: string, event: string, token: string): Promise<void> {
+  const { data, event: ev } = await loadEvent(org, event, 'ticketsOrders');
+  if (!/^[A-Za-z0-9_-]{32}$/.test(String(token))) return;
+  await executeCommand(
+    releaseBestAvailableCommand,
+    { eventId: ev.id, token: String(token) },
+    data.ctx,
+    ports,
+  ).catch(() => undefined);
 }

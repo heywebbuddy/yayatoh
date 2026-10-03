@@ -1,5 +1,5 @@
-# openapi-generator config for the future Kotlin (Android) client (roadmap §6.1, §8.3). Not built
-# in CI: mobile apps are deferred. Run scripts/generate-mobile.sh to produce it locally.
+# openapi-generator config for the future Kotlin (Android) client (roadmap §6.1, §8.3). Generated
+# in CI as an artifact (the `sdk-mobile` job, M6.3b), not published: mobile apps are deferred.
 generatorName: kotlin
 inputSpec: /local/apps/api/openapi.json
 outputDir: /local/packages/sdk/mobile/out/kotlin
