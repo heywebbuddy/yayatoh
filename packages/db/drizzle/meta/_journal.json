@@ -883,6 +883,13 @@
       "when": 1791021280821,
       "tag": "0125_zippy_longshot",
       "breakpoints": true
+    },
+    {
+      "idx": 126,
+      "version": "7",
+      "when": 1791021313989,
+      "tag": "0126_curvy_warlock",
+      "breakpoints": true
     }
   ]
 }

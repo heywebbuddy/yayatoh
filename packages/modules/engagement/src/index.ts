@@ -42,6 +42,16 @@ export {
   QUESTION_MAX_LENGTH,
   QUESTION_RATE,
 } from './domain/questions.ts';
+// M5.7b: engagement events and scores.
+export {
+  type Counts,
+  DEFAULT_WEIGHTS,
+  engagementScore,
+  MAX_WEIGHT,
+  normalizeCounts,
+  sessionScore,
+  type Weights,
+} from './domain/score.ts';
 export {
   type DisplayClaim,
   PARTICIPANT_KEY,
@@ -70,6 +80,8 @@ export { ENGAGEMENT_REALTIME_CHANNELS, LIVE_CHANNEL, MODERATION_CHANNEL } from '
 export {
   ANONYMOUS_IDENTITY,
   type AnonymousIdentity,
+  ENGAGEMENT_KINDS,
+  type EngagementKind,
   POLL_KINDS,
   POLL_STATES,
   type PollKind,
@@ -77,3 +89,24 @@ export {
   QUESTION_STATES,
   type QuestionState,
 } from './schema.ts';
+export {
+  Account,
+  AttendeeScoreDto,
+  applyEngagementEventTx,
+  catchUpEngagement,
+  ENGAGEMENT_SOURCE_EVENTS,
+  type EngagementFact,
+  EventScoresDto,
+  engagementActivity,
+  eventScoresQuery,
+  forgetEngagementTx,
+  recordEngagementTx,
+  rescoreTx,
+  resetScoreWeightsCommand,
+  SCORES_SHOWN,
+  SessionScoreDto,
+  scoreWeightsQuery,
+  setScoreWeightsCommand,
+  WeightsDto,
+  weightsTx,
+} from './scores.ts';

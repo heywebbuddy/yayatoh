@@ -5311,7 +5311,8 @@
         "consent": "マーケティングへの同意",
         "label": "ラベル",
         "totals": "累計",
-        "seen": "初回または最終の記録"
+        "seen": "初回または最終の記録",
+        "engagement": "エンゲージメントスコア"
       },
       "did": "ルール",
       "didYes": "した",
@@ -5369,7 +5370,8 @@
       "event": "イベント",
       "editionOf": "この前の開催",
       "series": "シリーズ",
-      "noSeries": "シリーズはまだありません"
+      "noSeries": "シリーズはまだありません",
+      "engagementScore": "スコア"
     },
     "scopes": {
       "any": "すべてのイベント",
@@ -11384,6 +11386,54 @@
       "topQuestions": "注目の質問",
       "noQuestions": "まだ質問はありません。",
       "join": "スマートフォンで参加"
+    },
+    "scores": {
+      "link": "エンゲージメントスコア",
+      "title": "エンゲージメントスコア",
+      "description": "{event}で最も参加した人と、各セッションの状況。",
+      "back": "セッションに戻る",
+      "engaged": "参加した来場者",
+      "average": "平均スコア",
+      "attendeesTitle": "最も参加した来場者",
+      "emptyTitle": "まだ参加がありません",
+      "emptyHint": "来場者がチェックイン、ライブ投票、質問、フィードバックアンケートへの回答、セッション登録をするとスコアが表示されます。",
+      "attendee": "来場者",
+      "score": "スコア",
+      "breakdown": "カウント内容",
+      "countOf": "{kind} × {count}",
+      "sessionsTitle": "セッション",
+      "session": "セッション",
+      "participants": "参加者",
+      "noSessions": "このイベントにはまだセッションがありません。",
+      "weightsTitle": "スコアの重み",
+      "formula": "スコア = 種類ごとのポイント × 回数。チェックインは1イベントにつき1回です。重みは組織のすべてのイベントに適用されます。",
+      "customWeights": "組織の重み",
+      "defaultWeights": "既定の重み",
+      "weightInvalid": "0〜100の整数を入力してください。",
+      "saveWeights": "重みを保存",
+      "resetWeights": "既定の重みに戻す",
+      "weightsReadOnly": "重みを変更できるのはオーナーと管理者のみです。",
+      "weightsSaved": "重みを保存しました。すべてのスコアを再計算しました。",
+      "weightsReset": "既定の重みに戻しました。すべてのスコアを再計算しました。",
+      "kinds": {
+        "check_in": "チェックイン",
+        "poll_vote": "投票",
+        "question": "質問",
+        "feedback": "フィードバック",
+        "enrollment": "セッション登録"
+      }
+    },
+    "feedback": {
+      "heading": "このセッションはいかがでしたか？",
+      "give": "フィードバックする",
+      "answered": "フィードバックをありがとうございました。",
+      "signInHint": "登録したメールアドレスでサインインしてフィードバックしてください。",
+      "signIn": "サインイン",
+      "errors": {
+        "already_answered": "このセッションのフィードバックは送信済みです。",
+        "expired": "フィードバックのリンクの有効期限が切れています。",
+        "other": "このセッションにはフィードバックできません。"
+      }
     }
   },
   "enrollment": {

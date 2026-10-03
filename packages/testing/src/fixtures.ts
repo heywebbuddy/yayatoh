@@ -93,12 +93,14 @@ import {
 } from '@yayatoh/donations';
 import {
   askQuestionCommand,
+  catchUpEngagement,
   createPollCommand,
   enableLiveCommand,
   moderateQuestionCommand,
   openPollCommand,
   participantKey,
   pinQuestionCommand,
+  setScoreWeightsCommand,
   updateSettingsCommand,
   upvoteQuestionCommand,
   voteCommand,
@@ -2496,6 +2498,7 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   await executeCommand(setMyAlertPhoneCommand, { smsPhone: '+15550100199' }, ctx(), ports);
   await executeCommand(setSalesTargetCommand, { eventId: event.id, tickets: 150 }, ctx(), ports);
   await liveEngagementFixture(org.id, event.id, ctx);
+  await engagementScoreFixture(org.id, event.id, slug, ctx);
   // M4.2b gala tables (isolation coverage): the fixture order's first ticket item recorded as a
   // purchased table, and a sponsor on a table of the event plan. Rows only: no second order and no
   // new tickets, so tests that count the fixture's orders and tickets are unchanged.
@@ -2793,6 +2796,69 @@ async function liveEngagementFixture(orgId: string, eventId: string, ctx: (o?: P
   );
   await executeCommand(pinQuestionCommand, { ...at, questionId: approved }, ctx(), ports);
   await askedBy(2, 'A question still waiting for a moderator', true);
+}
+
+/** M5.7b: the fixture buyer's signed-in account (no real user; the actor id ties it to the commands). */
+export const fixtureBuyerAccount = (slug: string) => ({
+  userId: '01a10000-0000-7000-8000-00000000b7e1',
+  email: `buyer@${slug}.test`,
+});
+
+/** M5.7b: the org's engagement weights in the fixture (not the defaults, so tests see them apply). */
+export const FIXTURE_ENGAGEMENT_WEIGHTS = {
+  check_in: 8,
+  poll_vote: 3,
+  question: 4,
+  feedback: 6,
+  enrollment: 2,
+} as const;
+
+/**
+ * M5.7b engagement scores (isolation coverage of `engagement.engagement_events`,
+ * `engagement.score_weights` and `crm.event_engagement`): the org's own weights; the fixture
+ * buyer, signed in, rates the keynote in a new poll and asks a named question; the activity
+ * subscriber catches up on the buyer's door scan and post-event survey answer. The fixture
+ * attendee's score is then 8 (check-in) + 3 (vote) + 4 (question) + 6 (feedback) = 21.
+ */
+async function engagementScoreFixture(
+  orgId: string,
+  eventId: string,
+  slug: string,
+  ctx: (o?: Partial<Ctx>) => Ctx,
+) {
+  const [keynote] = await withTenant(systemCtx(orgId), (tx) => programSessionsOf(tx, eventId));
+  if (!keynote) throw new Error('fixture: the fixture event has no session');
+  await executeCommand(setScoreWeightsCommand, FIXTURE_ENGAGEMENT_WEIGHTS, ctx(), ports);
+  const account = fixtureBuyerAccount(slug);
+  const buyer = createCtx({ orgId, actor: { type: 'user', userId: account.userId } });
+  const key = participantKey('fixture-secret', keynote.id, `user:${account.userId}`);
+  const rating = await executeCommand(
+    createPollCommand,
+    { eventId, sessionId: keynote.id, kind: 'rating', question: 'Rate the keynote', ratingScale: 5 },
+    ctx(),
+    ports,
+  );
+  await executeCommand(openPollCommand, { eventId, pollId: rating.id }, ctx(), ports);
+  await executeCommand(
+    voteCommand,
+    { eventId, pollId: rating.id, participantKey: key, rating: 5, account },
+    buyer,
+    ports,
+  );
+  await executeCommand(
+    askQuestionCommand,
+    {
+      eventId,
+      sessionId: keynote.id,
+      participantKey: key,
+      body: 'Will the slides be shared?',
+      name: 'Fixture Buyer',
+      account,
+    },
+    buyer,
+    ports,
+  );
+  await catchUpEngagement(orgId);
 }
 
 /**

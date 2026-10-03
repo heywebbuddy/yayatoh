@@ -5311,7 +5311,8 @@
         "consent": "Consentimento de marketing",
         "label": "Etiqueta",
         "totals": "Totais acumulados",
-        "seen": "Visto pela primeira ou última vez"
+        "seen": "Visto pela primeira ou última vez",
+        "engagement": "Pontuação de engajamento"
       },
       "did": "Regra",
       "didYes": "Sim",
@@ -5369,7 +5370,8 @@
       "event": "Evento",
       "editionOf": "Edição anterior a",
       "series": "Série",
-      "noSeries": "Ainda não há séries"
+      "noSeries": "Ainda não há séries",
+      "engagementScore": "Pontuação"
     },
     "scopes": {
       "any": "Qualquer evento",
@@ -11384,6 +11386,54 @@
       "topQuestions": "Perguntas em destaque",
       "noQuestions": "Ainda não há perguntas.",
       "join": "Participe pelo celular"
+    },
+    "scores": {
+      "link": "Pontuações de engajamento",
+      "title": "Pontuações de engajamento",
+      "description": "Quem mais participou de {event} e como foi cada sessão.",
+      "back": "Voltar às sessões",
+      "engaged": "Participantes engajados",
+      "average": "Pontuação média",
+      "attendeesTitle": "Participantes mais engajados",
+      "emptyTitle": "Ainda sem engajamento",
+      "emptyHint": "As pontuações aparecem quando os participantes fazem check-in, votam em enquetes ao vivo, fazem perguntas, respondem pesquisas de feedback e se inscrevem em sessões.",
+      "attendee": "Participante",
+      "score": "Pontuação",
+      "breakdown": "O que contou",
+      "countOf": "{kind} × {count}",
+      "sessionsTitle": "Sessões",
+      "session": "Sessão",
+      "participants": "Participantes",
+      "noSessions": "Este evento ainda não tem sessões.",
+      "weightsTitle": "Pesos da pontuação",
+      "formula": "Pontuação = os pontos de cada tipo × quantas vezes a pessoa fez isso. O check-in conta uma vez por evento. Os pesos valem para todos os eventos da sua organização.",
+      "customWeights": "Pesos da sua organização",
+      "defaultWeights": "Pesos padrão",
+      "weightInvalid": "Digite um número inteiro de 0 a 100.",
+      "saveWeights": "Salvar pesos",
+      "resetWeights": "Usar os pesos padrão",
+      "weightsReadOnly": "Somente proprietários e administradores podem alterar os pesos.",
+      "weightsSaved": "Pesos salvos. Todas as pontuações foram recalculadas.",
+      "weightsReset": "Pesos padrão restaurados. Todas as pontuações foram recalculadas.",
+      "kinds": {
+        "check_in": "Check-in",
+        "poll_vote": "Voto em enquete",
+        "question": "Pergunta",
+        "feedback": "Feedback",
+        "enrollment": "Inscrição em sessão"
+      }
+    },
+    "feedback": {
+      "heading": "Como foi esta sessão?",
+      "give": "Dar feedback",
+      "answered": "Obrigado, recebemos seu feedback.",
+      "signInHint": "Entre com o e-mail usado na inscrição para dar feedback.",
+      "signIn": "Entrar",
+      "errors": {
+        "already_answered": "Você já deu feedback sobre esta sessão.",
+        "expired": "Seu link de feedback expirou.",
+        "other": "Não é possível dar feedback sobre esta sessão."
+      }
     }
   },
   "enrollment": {

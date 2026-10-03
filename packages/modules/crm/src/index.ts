@@ -20,6 +20,7 @@ export {
   upsertContactTx,
 } from './contacts.ts';
 export { consentRegivenSinceTx, contactDsarTx, eraseContactDsarTx, unlinkContactUserTx } from './dsar.ts';
+export { contactForAccountTx, replaceEventEngagementTx } from './engagement.ts';
 export { privateColumns } from './private-columns.ts';
 export {
   type ParticipationFacts,

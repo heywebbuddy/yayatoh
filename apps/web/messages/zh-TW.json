@@ -5311,7 +5311,8 @@
         "consent": "行銷同意",
         "label": "標籤",
         "totals": "累計資料",
-        "seen": "首次或最近出現"
+        "seen": "首次或最近出現",
+        "engagement": "參與度分數"
       },
       "did": "規則",
       "didYes": "是",
@@ -5369,7 +5370,8 @@
       "event": "活動",
       "editionOf": "此前一屆",
       "series": "系列",
-      "noSeries": "還沒有系列"
+      "noSeries": "還沒有系列",
+      "engagementScore": "分數"
     },
     "scopes": {
       "any": "任意活動",
@@ -11384,6 +11386,54 @@
       "topQuestions": "熱門問題",
       "noQuestions": "還沒有問題。",
       "join": "用手機參與"
+    },
+    "scores": {
+      "link": "參與度分數",
+      "title": "參與度分數",
+      "description": "誰在 {event} 參與最多，以及每場議程的狀況。",
+      "back": "返回議程",
+      "engaged": "參與的出席者",
+      "average": "平均分數",
+      "attendeesTitle": "參與度最高的出席者",
+      "emptyTitle": "尚無參與",
+      "emptyHint": "出席者報到、在即時投票中投票、提問、填寫意見問卷及報名議程後，分數就會出現。",
+      "attendee": "出席者",
+      "score": "分數",
+      "breakdown": "計入項目",
+      "countOf": "{kind} × {count}",
+      "sessionsTitle": "議程",
+      "session": "議程",
+      "participants": "參與者",
+      "noSessions": "此活動尚無議程。",
+      "weightsTitle": "分數權重",
+      "formula": "分數 = 每類分值 × 出席者完成的次數。報到每個活動只計一次。權重適用於貴組織的所有活動。",
+      "customWeights": "貴組織的權重",
+      "defaultWeights": "預設權重",
+      "weightInvalid": "請輸入 0 到 100 的整數。",
+      "saveWeights": "儲存權重",
+      "resetWeights": "使用預設權重",
+      "weightsReadOnly": "只有擁有者和管理員可以變更權重。",
+      "weightsSaved": "權重已儲存，所有分數已重新計算。",
+      "weightsReset": "已恢復預設權重，所有分數已重新計算。",
+      "kinds": {
+        "check_in": "報到",
+        "poll_vote": "投票",
+        "question": "提問",
+        "feedback": "意見",
+        "enrollment": "議程報名"
+      }
+    },
+    "feedback": {
+      "heading": "這場議程如何？",
+      "give": "提供意見",
+      "answered": "謝謝，我們已收到您的意見。",
+      "signInHint": "請使用報名時的電子郵件登入以提供意見。",
+      "signIn": "登入",
+      "errors": {
+        "already_answered": "您已對這場議程提供過意見。",
+        "expired": "您的意見連結已過期。",
+        "other": "這場議程無法提供意見。"
+      }
     }
   },
   "enrollment": {

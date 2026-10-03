@@ -40,7 +40,7 @@ export default async function SessionsPage({
 }) {
   const { locale, org, event } = await params;
   setRequestLocale(locale);
-  const { data, ev, program, canWrite } = await loadProgramPage(org, event, 'sessions');
+  const { data, ev, program, canWrite, canReadPeople } = await loadProgramPage(org, event, 'sessions');
   const t = await getTranslations();
   const tp = await getTranslations('program');
   const tcfp = await getTranslations('cfp');
@@ -173,8 +173,13 @@ export default async function SessionsPage({
         title={t('nav.sessions')}
         description={tp('sessionsSubtitle')}
         actions={
-          isPublic || canWrite ? (
+          isPublic || canWrite || canReadPeople ? (
             <div className="flex flex-wrap items-center gap-3">
+              {canReadPeople ? (
+                <Link href={`/o/${org}/e/${event}/engagement`} className={buttonClass('secondary')}>
+                  {t('engagement.scores.link')}
+                </Link>
+              ) : null}
               {canWrite ? (
                 <Link href={`/o/${org}/e/${event}/sessions/import`} className={buttonClass('secondary')}>
                   {t('agenda.import.link')}

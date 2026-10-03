@@ -1,12 +1,17 @@
 import { participantState, publicLiveSession } from '@yayatoh/engagement';
 import { checkoutTarget } from '@yayatoh/events';
+import { createCtx, executeQuery, isDomainError } from '@yayatoh/kernel';
+import { feedbackPromptQuery } from '@yayatoh/surveys';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
+import { FeedbackPrompt } from '@/components/engagement/feedback-prompt.tsx';
 import { ParticipantView } from '@/components/engagement/participant-view.tsx';
-import { liveChannelUrl, participantKeyFor, participantName } from '@/server/engagement.ts';
+import { localizedPath } from '@/lib/seo/urls.ts';
+import { liveChannelUrl, participantKeyFor, participantName, viewerAccount } from '@/server/engagement.ts';
 import { pageLocale } from '@/server/locale.ts';
-import { askAction, upvoteAction, voteAction } from './actions.ts';
+import { ports } from '@/server/ports.ts';
+import { askAction, openFeedbackAction, upvoteAction, voteAction } from './actions.ts';
 
 type Params = { params: Promise<{ locale: string; slug: string; session: string }> };
 
@@ -33,8 +38,34 @@ export default async function LiveSessionPage({ params }: Params) {
   const me = key
     ? await participantState(target.orgId, session, key)
     : { votedPollIds: [], upvotedQuestionIds: [], pendingQuestions: 0 };
+  // M5.7b: once the session is over, its feedback survey (if any) asks the signed-in attendee.
+  const account = await viewerAccount();
+  const prompt = await executeQuery(
+    feedbackPromptQuery,
+    { eventId: target.eventId, sessionId: session, ...(account ? { account } : {}) },
+    createCtx({
+      orgId: target.orgId,
+      ...(account ? { actor: { type: 'user' as const, userId: account.userId } } : {}),
+    }),
+    ports,
+  ).catch((err) => {
+    // An org without surveys (entitlement) simply has no prompt.
+    if (isDomainError(err)) return null;
+    throw err;
+  });
+  const here = localizedPath(locale, `/events/${slug}/live/${session}`);
   return (
     <ParticipantView
+      feedback={
+        prompt && prompt.state !== 'none' ? (
+          <FeedbackPrompt
+            state={prompt.state}
+            title={prompt.title ?? ''}
+            signInHref={`${localizedPath(locale, '/sign-in')}?next=${encodeURIComponent(here)}`}
+            open={openFeedbackAction.bind(null, slug, session)}
+          />
+        ) : null
+      }
       eventName={live.eventName}
       eventHref={`/events/${slug}`}
       sessionTitle={live.sessionTitle}

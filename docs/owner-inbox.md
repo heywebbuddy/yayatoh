@@ -648,3 +648,11 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **PrintNode account (Stage 2, P5-2).** Open one PrintNode integrator account; for each org that wants silent printing, create a child account with the org id as its creator reference, then switch it on with `pnpm --filter @yayatoh/worker printnode -- --org <slug> --on`. Put `PRINTNODE_API_KEY` in Doppler and set `BADGE_PRINTER_PROVIDER=printnode` only in production. Until then everything uses the fake. Label: `infra`.
 - [ ] **Batch PDFs and the print log.** A downloaded batch PDF is not counted as printed (a download is not a print), so the first onsite print of a pre-printed badge is logged as a first print. Confirm, or ask for "mark this batch as printed".
 - [ ] **Reprint reasons:** Damaged, Lost, Details changed, Misprinted, Printer problem, Other (with a note). Confirm the list.
+
+## M5.7b — feedback and engagement score (2026-10-03, pending owner)
+- [ ] **Default weights:** check-in 10, poll vote 2, question 3, feedback 5, session enrollment 1 (whole points 0–100 per kind, set per organization by owners and admins on an event's Engagement scores page). A check-in counts once per event. Confirm or change the defaults.
+- [ ] **Who is scored:** only signed-in attendees (the account's email matches an attendee of the event); devices without an account take part unscored. **Anonymous questions are never scored** (nothing may tie a person to them); upvotes are not scored. Confirm.
+- [ ] **Signed-in votes and named questions now run as the person's account**, so the audit log shows who voted in which poll (never the choice) and who asked a named question. Anonymous questions still run without an account. Confirm this is acceptable.
+- [ ] **Who sees scores:** anyone with `attendees:read` (owners, admins, managers, viewers, event managers); scores name attendees and show their email. Confirm, or restrict.
+- [ ] **Feedback prompt:** shown on the live session page (sessions with polls/Q&A on) once the session is over, for a session feedback survey; it gives the attendee their survey link without an email. No automatic feedback email at session end yet. Say if you want one.
+- [ ] **Data-subject exports** don't include engagement facts or scores yet (counts and ids only). Say if they should.

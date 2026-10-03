@@ -10,6 +10,8 @@ export { type CanaryAdmin, type CanaryFile, type CanaryOrg, canaryOrg } from './
 export {
   createOrgFixture,
   EXPORT_PARAMS,
+  FIXTURE_ENGAGEMENT_WEIGHTS,
+  fixtureBuyerAccount,
   FIXTURE_SITE_PASSWORD,
   type OrgFixture,
   staleCtx,

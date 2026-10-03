@@ -5311,7 +5311,8 @@
         "consent": "Marketing-Einwilligung",
         "label": "Label",
         "totals": "Gesamtwerte",
-        "seen": "Zuerst oder zuletzt gesehen"
+        "seen": "Zuerst oder zuletzt gesehen",
+        "engagement": "Engagement-Score"
       },
       "did": "Regel",
       "didYes": "Ja",
@@ -5369,7 +5370,8 @@
       "event": "Veranstaltung",
       "editionOf": "Ausgabe vor",
       "series": "Reihe",
-      "noSeries": "Noch keine Reihen"
+      "noSeries": "Noch keine Reihen",
+      "engagementScore": "Score"
     },
     "scopes": {
       "any": "Beliebige Veranstaltung",
@@ -11384,6 +11386,54 @@
       "topQuestions": "Top-Fragen",
       "noQuestions": "Noch keine Fragen.",
       "join": "Mach mit auf deinem Handy"
+    },
+    "scores": {
+      "link": "Engagement-Scores",
+      "title": "Engagement-Scores",
+      "description": "Wer bei {event} am meisten mitgemacht hat und wie jede Session lief.",
+      "back": "Zurück zu den Sessions",
+      "engaged": "Engagierte Teilnehmende",
+      "average": "Durchschnittlicher Score",
+      "attendeesTitle": "Die engagiertesten Teilnehmenden",
+      "emptyTitle": "Noch kein Engagement",
+      "emptyHint": "Scores erscheinen, sobald Teilnehmende einchecken, in Live-Umfragen abstimmen, Fragen stellen, Feedback-Umfragen beantworten und sich für Sessions anmelden.",
+      "attendee": "Teilnehmer:in",
+      "score": "Score",
+      "breakdown": "Was gezählt hat",
+      "countOf": "{kind} × {count}",
+      "sessionsTitle": "Sessions",
+      "session": "Session",
+      "participants": "Teilnehmende",
+      "noSessions": "Diese Veranstaltung hat noch keine Sessions.",
+      "weightsTitle": "Gewichtung",
+      "formula": "Score = Punkte pro Art × wie oft die Person es getan hat. Ein Check-in zählt einmal pro Veranstaltung. Die Gewichtung gilt für alle Veranstaltungen deiner Organisation.",
+      "customWeights": "Gewichtung deiner Organisation",
+      "defaultWeights": "Standardgewichtung",
+      "weightInvalid": "Gib eine ganze Zahl von 0 bis 100 ein.",
+      "saveWeights": "Gewichtung speichern",
+      "resetWeights": "Standardgewichtung verwenden",
+      "weightsReadOnly": "Nur Inhaber:innen und Admins können die Gewichtung ändern.",
+      "weightsSaved": "Gewichtung gespeichert. Alle Scores wurden neu berechnet.",
+      "weightsReset": "Standardgewichtung wiederhergestellt. Alle Scores wurden neu berechnet.",
+      "kinds": {
+        "check_in": "Check-in",
+        "poll_vote": "Umfragestimme",
+        "question": "Frage",
+        "feedback": "Feedback",
+        "enrollment": "Session-Anmeldung"
+      }
+    },
+    "feedback": {
+      "heading": "Wie war diese Session?",
+      "give": "Feedback geben",
+      "answered": "Danke, dein Feedback ist angekommen.",
+      "signInHint": "Melde dich mit der E-Mail-Adresse an, mit der du dich registriert hast, um Feedback zu geben.",
+      "signIn": "Anmelden",
+      "errors": {
+        "already_answered": "Du hast für diese Session bereits Feedback gegeben.",
+        "expired": "Dein Feedback-Link ist abgelaufen.",
+        "other": "Für diese Session ist kein Feedback möglich."
+      }
     }
   },
   "enrollment": {

@@ -18,6 +18,7 @@ import {
   receiptIssuer,
   statementMailer,
 } from '@yayatoh/donations';
+import { engagementActivity } from '@yayatoh/engagement';
 import { findEventTx, portalInviteMailer } from '@yayatoh/events';
 import { registrationResumeMailer } from '@yayatoh/forms';
 import { invitationMailer as guestInvitationMailer } from '@yayatoh/guests';
@@ -154,6 +155,8 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     sponsorCompCodes(),
     // M3.6a: contact × event participation and contact profiles for audiences.
     participationProjector(),
+    // M5.7b: door scans, answered surveys and enrollments become engagement (scores for audiences).
+    engagementActivity(),
     listingsProjector({ onChange: (orgId) => revalidatePublicCache(appOrigin, orgId, secret) }),
     // M3.1: metric snapshots and time series, and the analytics sink (Postgres until M6.2).
     // M3.2: each projected change pings the event's Command Center (no figures on the channel).

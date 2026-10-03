@@ -67,6 +67,8 @@ const SECTION_OF: Record<string, string> = {
   website: 'website',
   // M4.5b: the gallery (no longer a placeholder).
   gallery: 'gallery',
+  // M5.7b: Engagement scores, reached from Sessions (the sessions section).
+  engagement: 'sessions',
 };
 
 describe('event console route sweep (M4.2a)', () => {
