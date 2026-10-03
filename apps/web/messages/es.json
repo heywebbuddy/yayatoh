@@ -15385,11 +15385,11 @@
     "saved": "Guardado. Cada correo nuevo usa esta configuración.",
     "fixErrors": "Revisa los campos marcados.",
     "done": {
-      "forbidden": "Solo los propietarios y administradores pueden cambiar esto.",
+      "forbidden": "Solo los propietarios y administradores pueden cambiar el remitente y la dirección de respuesta.",
       "internal": "Algo salió mal. Inténtalo de nuevo."
     },
     "save": "Guardar",
-    "readOnly": "Solo los propietarios y administradores pueden cambiar esto."
+    "readOnly": "Solo los propietarios y administradores pueden cambiar el remitente y la dirección de respuesta."
   },
   "orgContact": {
     "title": "Contactar con {org}",

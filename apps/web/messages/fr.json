@@ -15385,11 +15385,11 @@
     "saved": "Enregistré. Chaque nouvel e-mail utilise ces réglages.",
     "fixErrors": "Vérifiez les champs signalés.",
     "done": {
-      "forbidden": "Seuls les propriétaires et administrateurs peuvent modifier ceci.",
+      "forbidden": "Seuls les propriétaires et administrateurs peuvent modifier le nom d’expéditeur et l’adresse de réponse.",
       "internal": "Un problème est survenu. Réessayez."
     },
     "save": "Enregistrer",
-    "readOnly": "Seuls les propriétaires et administrateurs peuvent modifier ceci."
+    "readOnly": "Seuls les propriétaires et administrateurs peuvent modifier le nom d’expéditeur et l’adresse de réponse."
   },
   "orgContact": {
     "title": "Contacter {org}",

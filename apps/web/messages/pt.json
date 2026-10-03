@@ -15385,11 +15385,11 @@
     "saved": "Salvo. Cada novo e-mail usa estas configurações.",
     "fixErrors": "Confira os campos destacados.",
     "done": {
-      "forbidden": "Só proprietários e administradores podem alterar isto.",
+      "forbidden": "Só proprietários e administradores podem alterar o nome do remetente e o endereço de resposta.",
       "internal": "Algo deu errado. Tente de novo."
     },
     "save": "Salvar",
-    "readOnly": "Só proprietários e administradores podem alterar isto."
+    "readOnly": "Só proprietários e administradores podem alterar o nome do remetente e o endereço de resposta."
   },
   "orgContact": {
     "title": "Fale com {org}",

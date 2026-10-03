@@ -36,3 +36,13 @@ content org and read under its RLS (never across tenants):
   English (`pickLocale`). Search ranking and related articles are pure (`domain/help.ts`).
 - Public commands: `submitHelpFeedback` (`public:help_feedback`) and `submitContactRequest`
   (`public:contact_request`); the web rate-limits both (`helpFeedback`, `contactRequest`).
+
+**Org contact page (U10)** — `contact_pages` (one row per org: on/off, a line of text) and
+`contact_requests` rows with `source = 'org_site'`:
+- `submitOrgContactCommand` (`public:contact_request`; the web rate-limits `orgContact`, checks a
+  honeypot, a signed fill-time stamp and the human check first) is refused while the page is off,
+  needs the visitor's consent, and stores once per form key (`submission_key`, unique per org).
+- `cms.org_contact_received@1` (no personal data) → `orgContactNotifier` notifies the org's
+  members (`cms.contact_message`, deduplicated by the message id). Messages are read with
+  `orgContactMessagesQuery` (`marketing:write` roles; personal data). The public page gets only
+  `PublicContactPageDto` (its line of text): never an address of the org.

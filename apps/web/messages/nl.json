@@ -15385,11 +15385,11 @@
     "saved": "Opgeslagen. Elke nieuwe e-mail gebruikt deze instellingen.",
     "fixErrors": "Controleer de gemarkeerde velden.",
     "done": {
-      "forbidden": "Alleen eigenaren en beheerders kunnen dit wijzigen.",
+      "forbidden": "Alleen eigenaren en beheerders kunnen de afzendernaam en het antwoordadres wijzigen.",
       "internal": "Er ging iets mis. Probeer het opnieuw."
     },
     "save": "Opslaan",
-    "readOnly": "Alleen eigenaren en beheerders kunnen dit wijzigen."
+    "readOnly": "Alleen eigenaren en beheerders kunnen de afzendernaam en het antwoordadres wijzigen."
   },
   "orgContact": {
     "title": "Contact met {org}",

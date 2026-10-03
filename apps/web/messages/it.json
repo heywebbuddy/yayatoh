@@ -15385,11 +15385,11 @@
     "saved": "Salvato. Ogni nuova email usa queste impostazioni.",
     "fixErrors": "Controlla i campi evidenziati.",
     "done": {
-      "forbidden": "Solo proprietari e amministratori possono modificarlo.",
+      "forbidden": "Solo proprietari e amministratori possono modificare nome mittente e indirizzo di risposta.",
       "internal": "Qualcosa è andato storto. Riprova."
     },
     "save": "Salva",
-    "readOnly": "Solo proprietari e amministratori possono modificarlo."
+    "readOnly": "Solo proprietari e amministratori possono modificare nome mittente e indirizzo di risposta."
   },
   "orgContact": {
     "title": "Contatta {org}",

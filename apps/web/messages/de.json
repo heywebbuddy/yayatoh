@@ -15385,11 +15385,11 @@
     "saved": "Gespeichert. Jede neue E-Mail verwendet diese Einstellungen.",
     "fixErrors": "Prüfen Sie die markierten Felder.",
     "done": {
-      "forbidden": "Nur Inhaber und Admins können das ändern.",
+      "forbidden": "Nur Inhaber und Admins können Absendername und Antwortadresse ändern.",
       "internal": "Etwas ist schiefgelaufen. Versuchen Sie es erneut."
     },
     "save": "Speichern",
-    "readOnly": "Nur Inhaber und Admins können das ändern."
+    "readOnly": "Nur Inhaber und Admins können Absendername und Antwortadresse ändern."
   },
   "orgContact": {
     "title": "{org} kontaktieren",

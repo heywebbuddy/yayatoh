@@ -15385,11 +15385,11 @@
     "saved": "Saved. Every new email uses these settings.",
     "fixErrors": "Check the highlighted fields.",
     "done": {
-      "forbidden": "Only owners and admins can change this.",
+      "forbidden": "Only owners and admins can change the From name and Reply-To.",
       "internal": "Something went wrong. Try again."
     },
     "save": "Save",
-    "readOnly": "Only owners and admins can change this."
+    "readOnly": "Only owners and admins can change the From name and Reply-To."
   },
   "orgContact": {
     "title": "Contact {org}",
