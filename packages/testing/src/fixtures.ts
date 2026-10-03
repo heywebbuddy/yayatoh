@@ -118,6 +118,7 @@ import {
   startRegistrationFormCommand,
 } from '@yayatoh/forms';
 import {
+  addGuestSiteBlockCommand,
   addPartyGuestCommand,
   addPlusOneCommand,
   collectorQueueQuery,
@@ -130,26 +131,25 @@ import {
   markRsvpViewedCommand,
   moveGuestCommand,
   partyRsvpQuery,
+  publishGuestSiteCommand,
   publishRsvpQuestionsCommand,
   readGuestTable,
   recordSubEventResponseCommand,
   rejectSubmissionCommand,
+  type SiteBlockKind,
+  saveGuestSiteCommand,
   saveMenuOptionCommand,
   setCollectorCommand,
+  setGuestSitePasswordCommand,
   setInvitationsCommand,
   setInvitationTemplateCommand,
   setPartyLocaleCommand,
   setRsvpSettingsCommand,
   stageGuestImportCommand,
   submitContactCommand,
+  updateGuestSiteBlockCommand,
   updatePartyGuestCommand,
   validateGuestImportCommand,
-  addGuestSiteBlockCommand,
-  publishGuestSiteCommand,
-  saveGuestSiteCommand,
-  setGuestSitePasswordCommand,
-  type SiteBlockKind,
-  updateGuestSiteBlockCommand,
 } from '@yayatoh/guests';
 import { type Ctx, createCtx, executeCommand, executeQuery, uuidv7 } from '@yayatoh/kernel';
 import {
@@ -2662,7 +2662,12 @@ async function guestSiteRows(eventId: string, ctx: () => Ctx) {
   ];
   for (const [kind, heading, content] of blocks) {
     const b = await executeCommand(addGuestSiteBlockCommand, { ...ev, kind }, ctx(), ports);
-    await executeCommand(updateGuestSiteBlockCommand, { ...ev, blockId: b.id, heading, content }, ctx(), ports);
+    await executeCommand(
+      updateGuestSiteBlockCommand,
+      { ...ev, blockId: b.id, heading, content },
+      ctx(),
+      ports,
+    );
   }
   await executeCommand(setGuestSitePasswordCommand, { ...ev, password: FIXTURE_SITE_PASSWORD }, ctx(), ports);
   await executeCommand(publishGuestSiteCommand, { ...ev, published: true }, ctx(), ports);

@@ -39,21 +39,30 @@ export async function guestSiteScenario(
     ctx,
     ports,
   );
-  const block = async (kind: 'text' | 'program' | 'travel' | 'registry' | 'faq', heading: string, content: unknown) => {
+  const block = async (
+    kind: 'text' | 'program' | 'travel' | 'registry' | 'faq',
+    heading: string,
+    content: unknown,
+  ) => {
     const b = await executeCommand(addGuestSiteBlockCommand, { ...ev, kind }, ctx, ports);
     await executeCommand(updateGuestSiteBlockCommand, { ...ev, blockId: b.id, heading, content }, ctx, ports);
   };
   await block('text', 'Welcome', { body: 'Join us by the **lake** in June.' });
   await block('program', 'The day', { show: 'everyone', subEventIds: [] });
   await block('travel', 'Getting there', {
-    items: [{ title: 'Lakeside Inn', details: 'Ask for the wedding rate.', url: 'https://inn.example.test/' }],
+    items: [
+      { title: 'Lakeside Inn', details: 'Ask for the wedding rate.', url: 'https://inn.example.test/' },
+    ],
   });
   await block('registry', 'Registry', {
     items: [{ label: 'Our gift list', url: 'https://gifts.example.test/ana-luis' }],
   });
-  await block('faq', 'Questions', { items: [{ question: 'Can I bring my kids?', answer: 'Yes, of course.' }] });
+  await block('faq', 'Questions', {
+    items: [{ question: 'Can I bring my kids?', answer: 'Yes, of course.' }],
+  });
   await executeCommand(setGuestSitePasswordCommand, { ...ev, password: GUEST_SITE_PASSWORD }, ctx, ports);
-  if (opts.publish ?? true) await executeCommand(publishGuestSiteCommand, { ...ev, published: true }, ctx, ports);
+  if (opts.publish ?? true)
+    await executeCommand(publishGuestSiteCommand, { ...ev, published: true }, ctx, ports);
   const site = await executeQuery(guestSiteQuery, ev, ctx, ports);
   if (!site.code) throw new Error('guestSiteScenario: no site code');
   // Sanity: the scenario's reception is for Luis only, so "everyone" leaves it out.

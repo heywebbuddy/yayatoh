@@ -84,9 +84,9 @@ describe('guest website rules', () => {
     const travel = BLOCK_CONTENT.travel.parse({ items: [{ title: 'Hotel', details: 'Hi‮', url: '' }] });
     expect(travel.items[0]).toEqual({ title: 'Hotel', details: 'Hi', url: null });
     expect(BLOCK_CONTENT.faq.safeParse({ items: [{ question: 'Kids?', answer: '  ' }] }).success).toBe(false);
-    expect(BLOCK_CONTENT.registry.safeParse({ items: Array(21).fill({ label: 'x', url: 'https://a.b' }) }).success).toBe(
-      false,
-    );
+    expect(
+      BLOCK_CONTENT.registry.safeParse({ items: Array(21).fill({ label: 'x', url: 'https://a.b' }) }).success,
+    ).toBe(false);
   });
 
   it('stored content is read item by item: anything malformed or unknown is dropped', () => {

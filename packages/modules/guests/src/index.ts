@@ -105,6 +105,20 @@ export {
   strictName,
   tally,
 } from './domain/rsvp.ts';
+// M4.5a guest website: blocks, the password gate, the public page.
+export {
+  emptyContent,
+  MAX_BLOCK_ITEMS,
+  MAX_SITE_BLOCKS,
+  normalizeSitePassword,
+  passwordProblem,
+  programSubEvents,
+  readContent,
+  SITE_PASSWORD_MAX,
+  SITE_PASSWORD_MIN,
+  siteAccessToken,
+  siteAccessValid,
+} from './domain/site.ts';
 export * from './dto.ts';
 export {
   addPartyGuestCommand,
@@ -260,44 +274,13 @@ export {
   type PartyRsvpState,
   RESPONSE_STATUSES,
   type ResponseStatus,
+  SITE_BLOCK_KINDS,
+  SITE_STATUSES,
+  type SiteBlockKind,
+  type SiteStatus,
   SUB_EVENT_KINDS,
   type SubEventKind,
 } from './schema.ts';
-export {
-  CreateSubEventInput,
-  createSubEventCommand,
-  MAX_SUB_EVENTS_PER_EVENT,
-  moveSubEventCommand,
-  removeSubEventCommand,
-  SubEventDto,
-  SubEventSummaryDto,
-  subEventsOfEventTx,
-  subEventsQuery,
-  updateSubEventCommand,
-} from './sub-events.ts';
-// M4.2b gala tables: a purchased table's party and the guests holding its tickets.
-export {
-  addTableGuestTx,
-  guestsByTicketTx,
-  type TableSource,
-  tablePartiesTx,
-  tablePartyTx,
-} from './tables.ts';
-// M4.5a guest website: blocks, the password gate, the public page.
-export {
-  emptyContent,
-  MAX_BLOCK_ITEMS,
-  MAX_SITE_BLOCKS,
-  normalizeSitePassword,
-  passwordProblem,
-  programSubEvents,
-  readContent,
-  SITE_PASSWORD_MAX,
-  SITE_PASSWORD_MIN,
-  siteAccessToken,
-  siteAccessValid,
-} from './domain/site.ts';
-export { SITE_BLOCK_KINDS, SITE_STATUSES, type SiteBlockKind, type SiteStatus } from './schema.ts';
 export {
   addGuestSiteBlockCommand,
   GuestSiteDto,
@@ -318,3 +301,23 @@ export {
   unlockGuestSiteQuery,
   updateGuestSiteBlockCommand,
 } from './site.ts';
+export {
+  CreateSubEventInput,
+  createSubEventCommand,
+  MAX_SUB_EVENTS_PER_EVENT,
+  moveSubEventCommand,
+  removeSubEventCommand,
+  SubEventDto,
+  SubEventSummaryDto,
+  subEventsOfEventTx,
+  subEventsQuery,
+  updateSubEventCommand,
+} from './sub-events.ts';
+// M4.2b gala tables: a purchased table's party and the guests holding its tickets.
+export {
+  addTableGuestTx,
+  guestsByTicketTx,
+  type TableSource,
+  tablePartiesTx,
+  tablePartyTx,
+} from './tables.ts';

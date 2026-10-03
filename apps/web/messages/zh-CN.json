@@ -10865,5 +10865,134 @@
       "offer_ended": "{title} 的邀请已结束。",
       "full": "{title} 刚刚满员。再试一次即可加入候补名单。"
     }
+  },
+  "guestSiteHost": {
+    "subtitle": "为宾客准备的页面：欢迎辞、日程、交通住宿、礼物清单以及常见问题解答。受密码保护，从不被列出或收录。",
+    "open": "打开网站",
+    "viewerNotice": "你可以在这里查看网站。只有主人和策划师可以修改。",
+    "statusTitle": "你的网站",
+    "published": "已发布",
+    "draft": "草稿",
+    "publishedNote": "于 {date} 发布。宾客通过下方地址和密码打开。",
+    "draftNote": "尚未发布。发布之前宾客无法打开。",
+    "needsPassword": "请先设置密码：没有密码无法发布网站。",
+    "address": "网站地址",
+    "privacyNote": "从不出现在市场或搜索引擎中。宾客的姓名、回复和联系方式绝不会显示在上面。",
+    "publish": "发布网站",
+    "unpublish": "下线网站",
+    "publishedDone": "已发布。请把地址和密码分享给宾客。",
+    "unpublishedDone": "网站已下线。",
+    "passwordTitle": "密码",
+    "passwordSet": "已设置",
+    "passwordMissing": "未设置",
+    "passwordIntro": "请印在请柬上。宾客在每台设备上输入一次；不区分大小写。设置新密码后，用旧密码进入的人都将被拒之门外。",
+    "savePassword": "保存密码",
+    "passwordSaved": "密码已保存。",
+    "detailsTitle": "标题和欢迎辞",
+    "saveDetails": "保存标题和欢迎辞",
+    "detailsSaved": "已保存。",
+    "blocksTitle": "{count, plural, =0 {版块} other {# 个版块}}",
+    "emptyTitle": "还没有版块",
+    "emptyWrite": "在下方添加第一个版块：先写欢迎辞，再加上日程、交通和常见问题。",
+    "emptyRead": "主人还没有添加版块。",
+    "kindLabel": "{kind} · 第 {n} 个版块",
+    "noSubEvents": "请在宾客页面添加子活动（仪式、晚宴……）来填充日程。",
+    "saveBlock": "保存“{name}”",
+    "blockSaved": "版块已保存。",
+    "moveUp": "上移“{name}”",
+    "moveDown": "下移“{name}”",
+    "moved": "已移动。",
+    "removeBlock": "删除“{name}”",
+    "removed": "版块已删除。",
+    "addTitle": "添加版块",
+    "addBlock": "添加版块",
+    "blockAdded": "版块已添加。请在上方填写。",
+    "subEventEveryone": "{name}（全员受邀）",
+    "kinds": {
+      "text": "文字",
+      "program": "日程",
+      "travel": "交通住宿",
+      "registry": "礼物清单",
+      "faq": "常见问题"
+    },
+    "show": {
+      "everyone": "全员受邀的子活动",
+      "chosen": "仅我勾选的子活动"
+    },
+    "fields": {
+      "heading": "标题",
+      "headingHint": "可选。",
+      "body": "正文",
+      "bodyHint": "段落、**粗体**、*斜体*、列表和链接。",
+      "show": "显示哪些子活动",
+      "showHint": "只邀请部分宾客的子活动（如彩排晚宴）只有勾选后才会显示。",
+      "subEvents": "显示的子活动",
+      "urlHint": "以 https:// 开头的完整链接。",
+      "password": "密码",
+      "newPassword": "新密码",
+      "passwordHint": "至少 {min} 个字符。",
+      "title": "标题",
+      "intro": "欢迎辞（可选）",
+      "language": "你书写所用的语言",
+      "languageHint": "宾客可以把页面按钮切换为自己的语言；你写的内容保持原样。",
+      "kind": "版块类型",
+      "kindHint": "日程会列出子活动及其时间。"
+    },
+    "item": {
+      "travel": {
+        "title": "地点 {n}：名称",
+        "details": "地点 {n}：详情",
+        "url": "地点 {n}：网站"
+      },
+      "registry": {
+        "label": "礼物清单 {n}：名称",
+        "url": "礼物清单 {n}：链接"
+      },
+      "faq": {
+        "question": "问题 {n}",
+        "answer": "回答 {n}"
+      }
+    },
+    "errors": {
+      "title": "请为网站填写标题。",
+      "password": "请输入密码。",
+      "required": "请填写此项。",
+      "tooShort": "至少使用 {min} 个字符。",
+      "tooLong": "最多使用 72 个字符。",
+      "passwordRequired": "发布前请设置密码。",
+      "tooManyBlocks": "一个网站最多有 {max} 个版块。",
+      "httpsOnly": "请使用以 https:// 开头的完整链接。",
+      "subEvents": "请选择本活动的子活动。"
+    }
+  },
+  "guestSite": {
+    "metaTitle": "宾客网站",
+    "gateTitle": "此网站为私密网站",
+    "gateIntro": "请输入请柬上的密码查看详情。",
+    "formLabel": "打开网站",
+    "password": "密码",
+    "passwordHint": "密码在你的请柬上，不区分大小写。",
+    "submit": "打开网站",
+    "challengeTitle": "还差一步",
+    "challengeHint": "请确认你是真人，然后再试一次。",
+    "errors": {
+      "empty": "请输入密码。",
+      "wrong": "密码不正确。请核对请柬后再试一次。",
+      "challengeFailed": "验证未通过，请再试一次。",
+      "rateLimited": "{minutes, plural, other {尝试次数过多。请在 # 分钟后再试。}}",
+      "closed": "此网站目前无法访问。"
+    },
+    "languages": "语言",
+    "onThisPage": "本页内容",
+    "empty": "主人仍在准备此页面。",
+    "headings": {
+      "text": "介绍",
+      "program": "日程",
+      "travel": "交通住宿",
+      "registry": "礼物清单",
+      "faq": "问题"
+    },
+    "visit": "{name} 的网站",
+    "newTab": "（在新标签页中打开）"
   }
 }

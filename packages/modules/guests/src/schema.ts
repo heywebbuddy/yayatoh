@@ -693,7 +693,10 @@ export const sites = tenantTable(
       sql`password_hash is null or password_hash ~ '^scrypt\\$16384\\$8\\$1\\$[A-Za-z0-9_-]{22}\\$[A-Za-z0-9_-]{43}$'`,
     ),
     check('sites_password_version_check', sql`password_version >= 0`),
-    check('sites_published_check', sql`status <> 'published' or (password_hash is not null and published_at is not null)`),
+    check(
+      'sites_published_check',
+      sql`status <> 'published' or (password_hash is not null and published_at is not null)`,
+    ),
   ],
 );
 

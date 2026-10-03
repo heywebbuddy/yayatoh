@@ -87,10 +87,21 @@ describe('the host builds the guest website (M4.5a)', () => {
       ports,
     );
     expect(
-      (await executeCommand(moveGuestSiteBlockCommand, { ...ev, blockId: second?.id as string, direction: 'up' }, a.ctx(), ports))
-        .moved,
+      (
+        await executeCommand(
+          moveGuestSiteBlockCommand,
+          { ...ev, blockId: second?.id as string, direction: 'up' },
+          a.ctx(),
+          ports,
+        )
+      ).moved,
     ).toBe(false);
-    await executeCommand(removeGuestSiteBlockCommand, { ...ev, blockId: first?.id as string }, a.ctx(), ports);
+    await executeCommand(
+      removeGuestSiteBlockCommand,
+      { ...ev, blockId: first?.id as string },
+      a.ctx(),
+      ports,
+    );
     view = await executeQuery(guestSiteQuery, ev, a.ctx(), ports);
     expect(view.blocks.map((x) => x.kind)).toEqual(['program', 'travel', 'registry', 'faq']);
     const rows = await admin<{ position: number }[]>`
@@ -103,31 +114,45 @@ describe('the host builds the guest website (M4.5a)', () => {
     const audit = await admin<{ data: string }[]>`
       select data::text from platform.audit_events where org_id = ${a.org.id} and action like 'guests.site.%'`;
     expect(audit.length).toBeGreaterThan(5);
-    expect(audit.map((r) => r.data).join(' ')).not.toMatch(/Lake House|lake house|gifts\.example|kids|scrypt/i);
+    expect(audit.map((r) => r.data).join(' ')).not.toMatch(
+      /Lake House|lake house|gifts\.example|kids|scrypt/i,
+    );
   });
 
   it('refuses bad input: short passwords, http links, unknown sub-events, publishing without a password', async () => {
     const w = await rsvpScenario(a.org.id, { ctx: a.ctx() });
     const ev = { eventId: w.eventId };
     // A site that never got a password can't go live (P4-3c).
-    expect(await codeOf(executeCommand(publishGuestSiteCommand, { ...ev, published: true }, a.ctx(), ports))).toBe(
-      'invalid_state:password_required',
-    );
     expect(
-      await codeOf(executeCommand(setGuestSitePasswordCommand, { ...ev, password: ' abc  ' }, a.ctx(), ports)),
+      await codeOf(executeCommand(publishGuestSiteCommand, { ...ev, published: true }, a.ctx(), ports)),
+    ).toBe('invalid_state:password_required');
+    expect(
+      await codeOf(
+        executeCommand(setGuestSitePasswordCommand, { ...ev, password: ' abc  ' }, a.ctx(), ports),
+      ),
     ).toBe('validation_failed:too_short');
     const reg = await executeCommand(addGuestSiteBlockCommand, { ...ev, kind: 'registry' }, a.ctx(), ports);
     expect(
       await codeOf(
         executeCommand(
           updateGuestSiteBlockCommand,
-          { ...ev, blockId: reg.id, heading: null, content: { items: [{ label: 'Gifts', url: 'http://x.test' }] } },
+          {
+            ...ev,
+            blockId: reg.id,
+            heading: null,
+            content: { items: [{ label: 'Gifts', url: 'http://x.test' }] },
+          },
           a.ctx(),
           ports,
         ),
       ),
     ).toBe('validation_failed:https_only');
-    const program = await executeCommand(addGuestSiteBlockCommand, { ...ev, kind: 'program' }, a.ctx(), ports);
+    const program = await executeCommand(
+      addGuestSiteBlockCommand,
+      { ...ev, kind: 'program' },
+      a.ctx(),
+      ports,
+    );
     expect(
       await codeOf(
         executeCommand(
@@ -142,7 +167,12 @@ describe('the host builds the guest website (M4.5a)', () => {
     const other = await rsvpScenario(a.org.id, { ctx: a.ctx() });
     expect(
       await codeOf(
-        executeCommand(removeGuestSiteBlockCommand, { eventId: other.eventId, blockId: reg.id }, a.ctx(), ports),
+        executeCommand(
+          removeGuestSiteBlockCommand,
+          { eventId: other.eventId, blockId: reg.id },
+          a.ctx(),
+          ports,
+        ),
       ),
     ).toBe('not_found');
     expect(
@@ -166,11 +196,17 @@ describe('the password gate (M4.5a acceptance)', () => {
     await executeCommand(publishGuestSiteCommand, { eventId: s.eventId, published: true }, a.ctx(), ports);
     const target = await guestSiteTarget(s.code.toLowerCase());
     expect(target).toEqual({ orgId: a.org.id, eventId: s.eventId });
-    const locked = await executeQuery(publicGuestSiteQuery, { eventId: s.eventId, access: null }, visitor(a.org.id), ports);
+    const locked = await executeQuery(
+      publicGuestSiteQuery,
+      { eventId: s.eventId, access: null },
+      visitor(a.org.id),
+      ports,
+    );
     expect(locked).toEqual({ state: 'locked', eventName: s.eventName });
     for (const access of ['', 'forged', `${'A'.repeat(43)}`])
       expect(
-        (await executeQuery(publicGuestSiteQuery, { eventId: s.eventId, access }, visitor(a.org.id), ports)).state,
+        (await executeQuery(publicGuestSiteQuery, { eventId: s.eventId, access }, visitor(a.org.id), ports))
+          .state,
       ).toBe('locked');
   });
 
@@ -180,7 +216,12 @@ describe('the password gate (M4.5a acceptance)', () => {
     expect(await unlock(s, a.org.id, '')).toBeNull();
     const access = await unlock(s, a.org.id, '  LAKE HOUSE ');
     expect(access).toEqual(expect.any(String));
-    const open = await executeQuery(publicGuestSiteQuery, { eventId: s.eventId, access }, visitor(a.org.id), ports);
+    const open = await executeQuery(
+      publicGuestSiteQuery,
+      { eventId: s.eventId, access },
+      visitor(a.org.id),
+      ports,
+    );
     if (open.state !== 'open') throw new Error('expected open');
     expect(open.title).toBe('Ana & Luis');
     expect(open.timezone).toBe('America/Chicago');
@@ -190,9 +231,21 @@ describe('the password gate (M4.5a acceptance)', () => {
   it('a new password locks out everyone who used the old one', async () => {
     const s = await site(a);
     const old = await unlock(s, a.org.id, GUEST_SITE_PASSWORD);
-    await executeCommand(setGuestSitePasswordCommand, { eventId: s.eventId, password: 'Second Pass' }, a.ctx(), ports);
+    await executeCommand(
+      setGuestSitePasswordCommand,
+      { eventId: s.eventId, password: 'Second Pass' },
+      a.ctx(),
+      ports,
+    );
     expect(
-      (await executeQuery(publicGuestSiteQuery, { eventId: s.eventId, access: old }, visitor(a.org.id), ports)).state,
+      (
+        await executeQuery(
+          publicGuestSiteQuery,
+          { eventId: s.eventId, access: old },
+          visitor(a.org.id),
+          ports,
+        )
+      ).state,
     ).toBe('locked');
     expect(await unlock(s, a.org.id, GUEST_SITE_PASSWORD)).toBeNull();
     expect(await unlock(s, a.org.id, 'second pass')).toEqual(expect.any(String));
@@ -204,7 +257,9 @@ describe('the password gate (M4.5a acceptance)', () => {
     await executeCommand(publishGuestSiteCommand, { eventId: s.eventId, published: false }, a.ctx(), ports);
     expect(await guestSiteTarget(s.code)).toBeNull();
     expect(
-      await codeOf(executeQuery(publicGuestSiteQuery, { eventId: s.eventId, access }, visitor(a.org.id), ports)),
+      await codeOf(
+        executeQuery(publicGuestSiteQuery, { eventId: s.eventId, access }, visitor(a.org.id), ports),
+      ),
     ).toBe('not_found:site_unpublished');
     expect(await codeOf(unlock(s, a.org.id, GUEST_SITE_PASSWORD))).toBe('not_found:site_unpublished');
   });
@@ -214,7 +269,12 @@ describe('no guest data on the guest website (M4.5a acceptance, P4-3)', () => {
   it('the program lists sub-events everyone is invited to; no guest, party, answer or contact ever', async () => {
     const s = await site(a);
     const access = await unlock(s, a.org.id, GUEST_SITE_PASSWORD);
-    const open = await executeQuery(publicGuestSiteQuery, { eventId: s.eventId, access }, visitor(a.org.id), ports);
+    const open = await executeQuery(
+      publicGuestSiteQuery,
+      { eventId: s.eventId, access },
+      visitor(a.org.id),
+      ports,
+    );
     if (open.state !== 'open') throw new Error('expected open');
     const program = open.blocks.find((x) => x.kind === 'program');
     expect(program?.kind === 'program' ? program.items.map((i) => [i.name, i.place]) : []).toEqual([
@@ -224,7 +284,16 @@ describe('no guest data on the guest website (M4.5a acceptance, P4-3)', () => {
     // The reception is for Luis only: it never appears on a page anyone with the password reads.
     expect(text).not.toContain('Reception');
     // The host's own words may name the couple ("Ana & Luis"); guest records never appear.
-    for (const name of ['Luis López', 'López', 'Ana García', 'Mei Chen', 'Garcia family', 'Chen family', s.garcia.pin, s.lookupCode])
+    for (const name of [
+      'Luis López',
+      'López',
+      'Ana García',
+      'Mei Chen',
+      'Garcia family',
+      'Chen family',
+      s.garcia.pin,
+      s.lookupCode,
+    ])
       expect(text).not.toContain(name);
     expect(text).not.toMatch(/[0-9a-f]{8}-[0-9a-f]{4}-/);
     // The host may still pick the reception explicitly.
@@ -242,7 +311,12 @@ describe('no guest data on the guest website (M4.5a acceptance, P4-3)', () => {
       a.ctx(),
       ports,
     );
-    const again = await executeQuery(publicGuestSiteQuery, { eventId: s.eventId, access }, visitor(a.org.id), ports);
+    const again = await executeQuery(
+      publicGuestSiteQuery,
+      { eventId: s.eventId, access },
+      visitor(a.org.id),
+      ports,
+    );
     const p2 = again.state === 'open' ? again.blocks.find((x) => x.kind === 'program') : undefined;
     expect(p2?.kind === 'program' ? p2.items.map((i) => i.name) : []).toEqual(['Ceremony', 'Reception']);
   });
@@ -280,10 +354,23 @@ describe('guest website: isolation, permissions, impersonation, freeze', () => {
     const accessB = await unlock(sb, b.org.id, GUEST_SITE_PASSWORD);
     // B's event under A's org (a header can't pick the org; even if it could, RLS hides B's rows).
     for (const run of [
-      () => executeQuery(publicGuestSiteQuery, { eventId: sb.eventId, access: accessB }, visitor(a.org.id), ports),
-      () => executeQuery(unlockGuestSiteQuery, { eventId: sb.eventId, password: GUEST_SITE_PASSWORD }, visitor(a.org.id), ports),
+      () =>
+        executeQuery(
+          publicGuestSiteQuery,
+          { eventId: sb.eventId, access: accessB },
+          visitor(a.org.id),
+          ports,
+        ),
+      () =>
+        executeQuery(
+          unlockGuestSiteQuery,
+          { eventId: sb.eventId, password: GUEST_SITE_PASSWORD },
+          visitor(a.org.id),
+          ports,
+        ),
       () => executeQuery(guestSiteQuery, { eventId: sb.eventId }, a.ctx(), ports),
-      () => executeCommand(publishGuestSiteCommand, { eventId: sb.eventId, published: false }, a.ctx(), ports),
+      () =>
+        executeCommand(publishGuestSiteCommand, { eventId: sb.eventId, published: false }, a.ctx(), ports),
       () =>
         executeCommand(removeGuestSiteBlockCommand, { eventId: sb.eventId, blockId: blockB }, a.ctx(), ports),
       () =>
@@ -298,7 +385,9 @@ describe('guest website: isolation, permissions, impersonation, freeze', () => {
     // A's own event with B's block id: still not found.
     const sa = await site(a, false);
     expect(
-      await codeOf(executeCommand(removeGuestSiteBlockCommand, { eventId: sa.eventId, blockId: blockB }, a.ctx(), ports)),
+      await codeOf(
+        executeCommand(removeGuestSiteBlockCommand, { eventId: sa.eventId, blockId: blockB }, a.ctx(), ports),
+      ),
     ).toBe('not_found');
     const [n] = await admin<{ n: number }[]>`
       select count(*)::int as n from guests.site_blocks where org_id = ${b.org.id} and event_id = ${sb.eventId}`;
@@ -306,8 +395,14 @@ describe('guest website: isolation, permissions, impersonation, freeze', () => {
     // An access proof from B's site never opens A's.
     const sa2 = await site(a);
     expect(
-      (await executeQuery(publicGuestSiteQuery, { eventId: sa2.eventId, access: accessB }, visitor(a.org.id), ports))
-        .state,
+      (
+        await executeQuery(
+          publicGuestSiteQuery,
+          { eventId: sa2.eventId, access: accessB },
+          visitor(a.org.id),
+          ports,
+        )
+      ).state,
     ).toBe('locked');
   });
 
@@ -324,7 +419,12 @@ describe('guest website: isolation, permissions, impersonation, freeze', () => {
       () => executeCommand(publishGuestSiteCommand, { ...ev, published: true }, viewer, ports),
       () => executeCommand(addGuestSiteBlockCommand, { ...ev, kind: 'faq' }, viewer, ports),
       () =>
-        executeCommand(updateGuestSiteBlockCommand, { ...ev, blockId, heading: 'X', content: { body: 'x' } }, viewer, ports),
+        executeCommand(
+          updateGuestSiteBlockCommand,
+          { ...ev, blockId, heading: 'X', content: { body: 'x' } },
+          viewer,
+          ports,
+        ),
       () => executeCommand(moveGuestSiteBlockCommand, { ...ev, blockId, direction: 'down' }, viewer, ports),
       () => executeCommand(removeGuestSiteBlockCommand, { ...ev, blockId }, viewer, ports),
       () => executeQuery(guestSiteQuery, ev, visitor(a.org.id), ports),
@@ -341,7 +441,14 @@ describe('guest website: isolation, permissions, impersonation, freeze', () => {
     const view = await executeQuery(guestSiteQuery, ev, acting, ports);
     expect(view.title).toBe('Staff edit');
     expect(
-      await codeOf(executeCommand(removeGuestSiteBlockCommand, { ...ev, blockId: view.blocks[0]?.id as string }, acting, ports)),
+      await codeOf(
+        executeCommand(
+          removeGuestSiteBlockCommand,
+          { ...ev, blockId: view.blocks[0]?.id as string },
+          acting,
+          ports,
+        ),
+      ),
     ).toBe('impersonation_blocked:delete');
   });
 
@@ -356,13 +463,15 @@ describe('guest website: isolation, permissions, impersonation, freeze', () => {
         () => executeCommand(setGuestSitePasswordCommand, { ...ev, password: 'frozen pass' }, a.ctx(), ports),
         () => executeCommand(publishGuestSiteCommand, { ...ev, published: false }, a.ctx(), ports),
         () => executeCommand(addGuestSiteBlockCommand, { ...ev, kind: 'faq' }, a.ctx(), ports),
-        () => executeCommand(moveGuestSiteBlockCommand, { ...ev, blockId, direction: 'down' }, a.ctx(), ports),
+        () =>
+          executeCommand(moveGuestSiteBlockCommand, { ...ev, blockId, direction: 'down' }, a.ctx(), ports),
         () => executeCommand(removeGuestSiteBlockCommand, { ...ev, blockId }, a.ctx(), ports),
       ])
         expect((await codeOf(run())).startsWith('read_only_freeze')).toBe(true);
       const access = await unlock(s, a.org.id, GUEST_SITE_PASSWORD);
       expect(
-        (await executeQuery(publicGuestSiteQuery, { eventId: s.eventId, access }, visitor(a.org.id), ports)).state,
+        (await executeQuery(publicGuestSiteQuery, { eventId: s.eventId, access }, visitor(a.org.id), ports))
+          .state,
       ).toBe('open');
     } finally {
       await admin`select platform.set_ops_flag('read_only_freeze', null::jsonb, 'test', 'test:guest-site')`;

@@ -32,6 +32,8 @@ const PREFIXES: readonly [string, PageType][] = [
   ['/invite', 'token'],
   // M3.3a TV mode: a display link's token in the path.
   ['/tv', 'token'],
+  // M4.5a: a guest website (its address in the path, its content behind a password).
+  ['/w', 'token'],
   ['/scan', 'scan'],
 ];
 

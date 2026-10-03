@@ -60,7 +60,10 @@ export const TravelItem = z.object({
 export const TravelContent = z.object({ items: z.array(TravelItem).max(MAX_BLOCK_ITEMS).default([]) });
 export const RegistryItem = z.object({ label: Line(120).min(1), url: HttpsUrl });
 export const RegistryContent = z.object({ items: z.array(RegistryItem).max(MAX_BLOCK_ITEMS).default([]) });
-export const FaqItem = z.object({ question: Line(200).min(1), answer: Markdown(ITEM_TEXT_MAX).pipe(z.string().min(1)) });
+export const FaqItem = z.object({
+  question: Line(200).min(1),
+  answer: Markdown(ITEM_TEXT_MAX).pipe(z.string().min(1)),
+});
 export const FaqContent = z.object({ items: z.array(FaqItem).max(MAX_BLOCK_ITEMS).default([]) });
 
 export const BLOCK_CONTENT = {
@@ -207,7 +210,9 @@ export async function verifySitePassword(password: string, stored: string | null
  * secret. Changing the password bumps the version, so every earlier cookie stops working at once.
  */
 export function siteAccessToken(siteId: string, passwordVersion: number, secret: string): string {
-  return createHmac('sha256', secret).update(`guests.site-access:${siteId}:${passwordVersion}`).digest('base64url');
+  return createHmac('sha256', secret)
+    .update(`guests.site-access:${siteId}:${passwordVersion}`)
+    .digest('base64url');
 }
 
 export function siteAccessValid(

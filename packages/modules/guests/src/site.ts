@@ -116,7 +116,12 @@ export async function guestSiteTarget(raw: string): Promise<{ orgId: string; eve
 const Kind = z.enum(SITE_BLOCK_KINDS);
 
 export const SiteBlockDto = z.discriminatedUnion('kind', [
-  z.object({ id: z.uuid(), kind: z.literal('text'), heading: z.string().nullable(), content: BLOCK_CONTENT.text }),
+  z.object({
+    id: z.uuid(),
+    kind: z.literal('text'),
+    heading: z.string().nullable(),
+    content: BLOCK_CONTENT.text,
+  }),
   z.object({
     id: z.uuid(),
     kind: z.literal('program'),
@@ -216,7 +221,9 @@ export const guestSitePublishedQuery = tenantQuery({
   output: z.object({ published: z.boolean() }),
   entitlement: 'website',
   permission: 'guests:read',
-  handler: async ({ input, tx }) => ({ published: (await siteOfTx(tx, input.eventId))?.status === 'published' }),
+  handler: async ({ input, tx }) => ({
+    published: (await siteOfTx(tx, input.eventId))?.status === 'published',
+  }),
 });
 
 const Optional = (max: number) =>
