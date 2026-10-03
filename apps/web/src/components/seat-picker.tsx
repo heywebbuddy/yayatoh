@@ -1,7 +1,13 @@
 'use client';
 
 import type { FloorplanDoc } from '@yayatoh/floorplan';
-import { activeAdaRule, evaluateSeatRules, type RuleHit, type SeatingRule } from '@yayatoh/seating/client';
+import {
+  activeAdaRule,
+  activeCompanionRule,
+  evaluateSeatRules,
+  type RuleHit,
+  type SeatingRule,
+} from '@yayatoh/seating/client';
 import { Button } from '@yayatoh/ui';
 import dynamic from 'next/dynamic';
 import { useFormatter, useTranslations } from 'next-intl';
@@ -25,7 +31,13 @@ export interface SeatMapView {
     readonly ticketTypeId: string;
     readonly available: boolean;
     readonly accessible: boolean;
+    /** M6.11a: a companion seat (sold with an accessible seat when the organizer says so). */
+    readonly companion?: boolean;
+    /** M6.11b: kept for another sales channel: never choosable here, whatever the live feed says. */
+    readonly otherChannel?: boolean;
   }[];
+  /** M6.11a: buyers may ask for the best available seats instead. */
+  readonly bestAvailable?: boolean;
 }
 
 /** Where the live availability comes from: the public stream, or the organizer's (box office). */
@@ -74,6 +86,7 @@ export function SeatPicker({
   stream = null,
   context = 'checkout',
   timeZone,
+  accessibleNeed = false,
   onChoice,
 }: {
   map: SeatMapView;
@@ -84,6 +97,8 @@ export function SeatPicker({
   context?: 'checkout' | 'box_office';
   /** The event's timezone (rule dates are shown in it). */
   timeZone?: string;
+  /** M6.11a: the buyer said someone in the party needs an accessible seat. */
+  accessibleNeed?: boolean;
   onChoice?: (choice: SeatChoice) => void;
 }) {
   const t = useTranslations('checkout.seats');
@@ -99,7 +114,12 @@ export function SeatPicker({
   // A freshly loaded map is the truth again; live changes apply on top of it.
   useEffect(() => setLive(new Map()), [map]);
   const available = useMemo(
-    () => new Set(map.seats.filter((s) => live.get(s.seatUuid) ?? s.available).map((s) => s.seatUuid)),
+    () =>
+      new Set(
+        map.seats
+          .filter((s) => !s.otherChannel && (live.get(s.seatUuid) ?? s.available))
+          .map((s) => s.seatUuid),
+      ),
     [map.seats, live],
   );
   // A seat taken meanwhile (a live change, or a refreshed map) drops out of the selection.
@@ -112,6 +132,7 @@ export function SeatPicker({
   const startsAt = map.startsAt ? new Date(map.startsAt) : null;
   const now = new Date();
   const ada = startsAt ? activeAdaRule(rules, startsAt, now) : null;
+  const companionRule = startsAt ? activeCompanionRule(rules, startsAt, now) : null;
   const cap = rules.find((r) => r.kind === 'max_per_order_seats');
   const capMax = cap?.kind === 'max_per_order_seats' ? cap.params.max : null;
   const hardMax =
@@ -124,12 +145,14 @@ export function SeatPicker({
             seats: [...selected].map((id) => ({
               seatUuid: id,
               accessible: bySeat.get(id)?.accessible ?? false,
+              companion: bySeat.get(id)?.companion ?? false,
             })),
             startsAt,
             now: new Date(),
+            accessibleNeed,
           })
         : [],
-    [selected, map, context, bySeat],
+    [selected, map, context, bySeat, accessibleNeed],
   );
   const choiceKey = `${[...selected].join(',')}|${hits.map((h) => `${h.rule}:${h.severity}`).join(',')}`;
   useEffect(() => onChoice?.({ seats: [...selected], hits }), [choiceKey]);
@@ -202,6 +225,21 @@ export function SeatPicker({
       return h.severity === 'warn' || context !== 'checkout'
         ? [t('rules.adaChosen', { count: h.seats.length, seats: h.seats.map(labelOf).join(', ') })]
         : [];
+    // M6.11a: companion seats chosen without (enough) accessible seats; enforced ones are said
+    // even online, since the order would be refused.
+    if (h.rule === 'ada_companion')
+      return [
+        t(
+          h.severity === 'enforce' && context === 'checkout'
+            ? 'rules.companionRefused'
+            : 'rules.companionChosen',
+          {
+            count: h.seats.length,
+            seats: h.seats.map(labelOf).join(', '),
+            max: h.maxPerAccessible,
+          },
+        ),
+      ];
     return h.severity === 'warn' || context !== 'checkout'
       ? [t('rules.overCap', { max: h.max, count: h.count })]
       : [];
@@ -230,12 +268,20 @@ export function SeatPicker({
           {showMap ? t('hideMap') : t('showMap')}
         </Button>
       </div>
-      {ada || capMax ? (
+      {ada || capMax || companionRule ? (
         <ul className="flex list-none flex-col gap-1 p-0 text-caption text-ink-2">
           {ada ? (
             <li>
               {ada.severity === 'enforce'
-                ? t('rules.adaEnforced', { date: date(ada.releaseAt) })
+                ? // M6.11a: with best available, a buyer who needs one can still get one online.
+                  t(
+                    map.bestAvailable && context === 'checkout'
+                      ? 'rules.adaEnforcedBest'
+                      : 'rules.adaEnforced',
+                    {
+                      date: date(ada.releaseAt),
+                    },
+                  )
                 : t('rules.adaWarn', { date: date(ada.releaseAt) })}
             </li>
           ) : null}
@@ -244,6 +290,13 @@ export function SeatPicker({
               {cap?.severity === 'enforce'
                 ? t('rules.capEnforced', { max: capMax })
                 : t('rules.capWarn', { max: capMax })}
+            </li>
+          ) : null}
+          {companionRule ? (
+            <li>
+              {t(companionRule.severity === 'enforce' ? 'rules.companionEnforced' : 'rules.companionWarn', {
+                max: companionRule.maxPerAccessible,
+              })}
             </li>
           ) : null}
         </ul>
@@ -376,6 +429,9 @@ const SeatGroup = memo(
                 />
                 {t('seat', { label: seat.label, price: prices[seat.ticketTypeId] ?? '' })}
                 {seat.accessible ? <span className="text-caption">{t('accessible')}</span> : null}
+                {seat.companion && !seat.accessible ? (
+                  <span className="text-caption">{t('companion')}</span>
+                ) : null}
                 {seat.accessible && !free && keptNote ? (
                   <span className="text-caption">{keptNote}</span>
                 ) : null}

@@ -1,3 +1,4 @@
+export { mediaDataSubjects } from './data-subject.ts';
 export * from './dto.ts';
 export {
   catchUpProgramMedia,
@@ -77,6 +78,7 @@ export { mediaStore, mediaStoreFromEnv, setMediaStore } from './storage/config.t
 export type { MediaStore } from './storage/port.ts';
 export { postgresMediaStore } from './storage/postgres.ts';
 export { r2MediaStore } from './storage/r2.ts';
+export { catchUpErasedMedia, subjectErasedMediaCleaner } from './subject-erased.ts';
 export {
   signUploadTicket,
   type UploadTicket,

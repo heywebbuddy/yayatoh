@@ -24,6 +24,8 @@ const ORG_NAV: readonly NavItem[] = [
     module: 'marketing',
     icon: 'chart',
   },
+  // M6.2a: cross-event dashboards from the analytics warehouse.
+  { key: 'orgAnalytics', path: 'analytics', group: 'overview', module: 'analytics_pro', icon: 'chart' },
   { key: 'refundRequests', path: 'refund-requests', group: 'overview', module: 'ticketing', icon: 'undo' },
   { key: 'disputes', path: 'disputes', group: 'overview', module: 'ticketing', icon: 'shield-alert' },
   { key: 'supportMacros', path: 'macros', group: 'overview', module: 'ticketing', icon: 'zap' },
@@ -43,6 +45,8 @@ const ORG_NAV: readonly NavItem[] = [
   { key: 'messagingHealth', path: 'messaging', group: 'build', module: 'messaging', icon: 'gauge' },
   { key: 'sendingSetup', path: 'sending', group: 'build', module: 'core', icon: 'send' },
   { key: 'apiKeys', path: 'api-keys', group: 'build', module: 'core', icon: 'key' },
+  // M6.4a: connectors, field mapping, sync history and the errors inbox.
+  { key: 'integrations', path: 'integrations', group: 'build', module: 'integrations', icon: 'link' },
   { key: 'activity', path: 'activity', group: 'build', module: 'core', icon: 'history' },
   { key: 'privacy', path: 'privacy', group: 'build', module: 'core', icon: 'shield' },
 ];
@@ -60,12 +64,14 @@ const NEEDS: Readonly<Record<string, string>> = {
   campaigns: 'marketing:read',
   journeys: 'marketing:read',
   marketingAnalytics: 'marketing:read',
+  orgAnalytics: 'orders:read',
   refundRequests: 'orders:read',
   disputes: 'finance:read',
   supportMacros: 'orders:support',
   finance: 'finance:read',
   activity: 'audit:read',
   privacy: 'privacy:manage',
+  integrations: 'integrations:read',
 };
 
 export default async function OrgLayout({
