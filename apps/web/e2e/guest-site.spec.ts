@@ -74,7 +74,7 @@ test.describe('guest website: the host (M4.5a)', () => {
     ).toBeVisible();
 
     // The password: too short, then saved.
-    const password = page.getByLabel('Password', { exact: true });
+    const password = page.getByRole('textbox', { name: 'Password', exact: true });
     await password.fill('abc');
     await submit(page, page.getByRole('button', { name: 'Save the password' }));
     await expect(page.getByText('Use at least 6 characters.')).toBeVisible();
@@ -221,6 +221,25 @@ test.describe('guest website: the host (M4.5a)', () => {
   });
 });
 
+test('the setup guide: "publish your guest website" is a real item that ticks once published', async ({
+  page,
+}) => {
+  const s = await withSite(false);
+  await signIn(page);
+  await page.goto(`${ORG}/e/${s.eventSlug}/setup-guide`);
+  const item = page.locator('[data-rule="guestSitePublished"]');
+  await expect(item.getByText('Coming soon')).toHaveCount(0);
+  await expect(item).not.toContainText('Done');
+  await expect(item.getByRole('link')).toHaveAttribute('href', new RegExp(`/e/${s.eventSlug}/website$`));
+  await item.getByRole('link').click();
+  await submit(page, page.getByRole('button', { name: 'Publish the website' }));
+  await expect(
+    page.getByText('Published. Share the address and the password with your guests.'),
+  ).toBeVisible();
+  await page.goto(`${ORG}/e/${s.eventSlug}/setup-guide`);
+  await expect(page.locator('[data-rule="guestSitePublished"]')).toContainText('Done');
+});
+
 test.describe('guest website: guests (M4.5a)', () => {
   test('the password gate shows the event name only; the password (any case) opens the site; a reload keeps it open', async ({
     page,
@@ -231,8 +250,19 @@ test.describe('guest website: guests (M4.5a)', () => {
     await expect(page.getByRole('heading', { name: 'This website is private', level: 1 })).toBeVisible();
     await expect(page.getByText(s.eventName)).toBeVisible();
     // Nothing of the site before the password: not the title, not a block, not a sub-event.
-    for (const hidden of ['Ana & Luis', 'Welcome', 'Ceremony', 'gifts.example.test', 'Can I bring my kids?'])
-      expect(await page.content()).not.toContain(hidden);
+    // (The app's message catalog ships with every page, so generic words are checked on screen.)
+    const html = await page.content();
+    for (const hidden of [
+      'Ana &amp; Luis',
+      'Join us by the',
+      'gifts.example.test',
+      'Lakeside Inn',
+      'Can I bring my kids?',
+    ])
+      expect(html).not.toContain(hidden);
+    const shown = await page.locator('main').innerText();
+    for (const hidden of ['Welcome', 'Ceremony', 'The garden', 'Registry'])
+      expect(shown).not.toContain(hidden);
     await expectAccessibleBothModes(page);
 
     const open = page.getByRole('button', { name: 'Open the website' });
@@ -311,15 +341,18 @@ test.describe('guest website: guests (M4.5a)', () => {
     const s = await withSite();
     await page.goto(`/w/${s.code}`);
     const open = page.getByRole('button', { name: 'Open the website' });
-    await page.getByLabel('Password').fill('wrong password');
-    for (let i = 0; i < 8; i++) {
-      await submit(page, open);
-      await expect(
-        page.getByText('That password doesn’t match. Check your invitation and try again.'),
-      ).toBeVisible();
+    // The device budget is 8 tries in 10 minutes (the address-wide budgets are shared with other
+    // tests running in parallel, so the check may come sooner): wrong tries until it appears.
+    const challenge = page.getByRole('group', { name: 'One more step' });
+    const wrong = page.getByText('That password doesn’t match. Check your invitation and try again.');
+    let tries = 0;
+    while (!(await challenge.isVisible()) && tries < 12) {
       await page.getByLabel('Password').fill('wrong password');
+      await submit(page, open);
+      await expect(wrong.or(challenge)).toBeVisible();
+      tries++;
     }
-    await submit(page, open);
+    expect(tries).toBeGreaterThan(1);
     await expect(page.getByRole('group', { name: 'One more step' })).toBeVisible();
     await expectAccessibleBothModes(page);
     await passHumanCheck(page);
@@ -351,7 +384,7 @@ test.describe('guest website: guests (M4.5a)', () => {
     // The hosts' words keep their language; the page's own words are Arabic.
     await expect(page.locator('[lang="en"]').first()).toBeVisible();
     await expect(page.getByRole('navigation', { name: 'اللغات' })).toBeVisible();
-    await expect(page.getByRole('link', { name: 'English' })).toHaveAttribute('href', `/w/${s.code}`);
+    await expect(page.getByRole('link', { name: 'English' })).toHaveAttribute('href', `/en/w/${s.code}`);
     await expectAccessibleBothModes(page);
     // Every locale renders the gate in its own language.
     await page.context().clearCookies();
@@ -368,18 +401,17 @@ test.describe('guest website: guests (M4.5a)', () => {
   test('never indexed and never on the marketplace', async ({ page, request }) => {
     const s = await withSite();
     // On the marketplace host (public pages there are indexable): this one never is.
-    const res = await request.get(`http://yayatoh.localhost:3100/w/${s.code}`);
+    const market = { headers: { host: 'yayatoh.localhost:3100' } };
+    const res = await request.get(`/w/${s.code}`, market);
     expect(res.status()).toBe(200);
     expect(res.headers()['x-robots-tag']).toBe('noindex, nofollow');
     await page.goto(`/w/${s.code}`);
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
-    const robots = await (await request.get('http://yayatoh.localhost:3100/robots.txt')).text();
+    const robots = await (await request.get('/robots.txt', market)).text();
     expect(robots).toContain('Disallow: /w/');
-    const sitemap = await (await request.get('http://yayatoh.localhost:3100/sitemaps/en.xml')).text();
+    const sitemap = await (await request.get('/sitemaps/en.xml', market)).text();
     expect(sitemap).not.toContain('/w/');
-    const listing = await (
-      await request.get(`http://yayatoh.localhost:3100/events?q=${encodeURIComponent(s.eventName)}`)
-    ).text();
+    const listing = await (await request.get(`/events?q=${encodeURIComponent(s.eventName)}`, market)).text();
     expect(listing).not.toContain(s.eventSlug);
   });
 });

@@ -131,7 +131,7 @@ test.describe('canary leak crawl (roadmap §9)', () => {
       expect(res?.status, url).toBe(200);
       leaks.push(...leaksIn(url, `${res?.body ?? ''}\n${res?.extra ?? ''}`, { kind: 'public' }));
     }
-    await page.goto(gate[0] as string);
+    await page.goto(`${MARKET}/en/w/${c.guestSite.code}`);
     await page.getByLabel('Password').fill(c.guestSite.password);
     await page.getByRole('button', { name: 'Open the website' }).click();
     await expect(page.getByRole('navigation', { name: 'On this page' })).toBeVisible();
