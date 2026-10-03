@@ -1,18 +1,17 @@
-import { getUsersByIds } from '@yayatoh/auth';
 import { executeQuery } from '@yayatoh/kernel';
-import { dsarHistoryQuery } from '@yayatoh/privacy';
+import { type DsarRequestDto, requestsQuery } from '@yayatoh/privacy';
 import { roleCan } from '@yayatoh/tenancy';
-import { EmptyState, PageHeader, Table } from '@yayatoh/ui';
+import { EmptyState, PageHeader, SectionHeader, StatusPill, Table } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { PrivacyConsole } from '@/components/privacy-console.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
-import { erasePersonAction, exportPersonAction, findPersonAction } from './actions.ts';
+import { findPersonAction, openRequestAction } from './actions.ts';
 
 /**
- * Privacy requests (M1.14c): find a person across the org, export their data (JSON), erase them
- * with legal holds, and the record of past requests. Owners and admins only.
+ * Privacy requests (M1.14c, M6.1c): find a person across every module, open an access or erasure
+ * request, and work the queue (open requests by due date; then closed ones). Owners and admins.
  */
 export default async function PrivacyPage({ params }: { params: Promise<{ locale: string; org: string }> }) {
   const { locale, org } = await params;
@@ -27,14 +26,17 @@ export default async function PrivacyPage({ params }: { params: Promise<{ locale
       </>
     );
   }
-  const history = await executeQuery(dsarHistoryQuery, { limit: 20 }, data.ctx, ports);
-  const people = await getUsersByIds(history.flatMap((h) => (h.requestedBy ? [h.requestedBy] : [])));
-  const when = new Intl.DateTimeFormat(locale, {
-    timeZone: data.org.timezone,
-    dateStyle: 'medium',
-    timeStyle: 'short',
-  });
-  const prefix = locale === 'en' ? '' : `/${locale}`;
+  const { open, closed } = await executeQuery(requestsQuery, { limit: 50 }, data.ctx, ports);
+  const date = new Intl.DateTimeFormat(locale, { timeZone: data.org.timezone, dateStyle: 'medium' });
+  const review = (r: DsarRequestDto) => (
+    <Link
+      href={`/o/${org}/privacy/requests/${r.id}`}
+      className="inline-flex min-h-6 items-center text-body underline underline-offset-2"
+    >
+      {t('privacy.queue.review')}
+      <span className="sr-only"> {r.subjectHint}</span>
+    </Link>
+  );
   return (
     <>
       <PageHeader
@@ -48,40 +50,85 @@ export default async function PrivacyPage({ params }: { params: Promise<{ locale
       />
       <PrivacyConsole
         find={findPersonAction.bind(null, org)}
-        exportData={exportPersonAction.bind(null, org)}
-        erase={erasePersonAction.bind(null, org)}
-        downloadBase={`${prefix}/o/${org}/privacy/exports`}
+        open={openRequestAction.bind(null, org)}
+        org={org}
       />
-      <section aria-labelledby="dsar-history" className="flex flex-col gap-3">
-        <h2 id="dsar-history" className="text-section">
-          {t('privacy.history.title')}
-        </h2>
+      <section aria-labelledby="dsar-open" className="flex flex-col gap-3">
+        <SectionHeader id="dsar-open" title={t('privacy.queue.title')} count={open.length} />
+        {open.length === 0 ? (
+          <EmptyState title={t('privacy.queue.emptyTitle')} description={t('privacy.queue.empty')} />
+        ) : (
+          <Table
+            caption={t('privacy.queue.caption')}
+            rowKey={(r) => r.id}
+            rows={open}
+            columns={[
+              { key: 'subject', header: t('privacy.queue.person'), cell: (r) => r.subjectHint, mono: true },
+              { key: 'kind', header: t('privacy.queue.kind'), cell: (r) => t(`privacy.kinds.${r.kind}`) },
+              {
+                key: 'source',
+                header: t('privacy.queue.source'),
+                cell: (r) => t(`privacy.sources.${r.source}`),
+              },
+              {
+                key: 'opened',
+                header: t('privacy.queue.opened'),
+                cell: (r) => <time dateTime={r.createdAt.toISOString()}>{date.format(r.createdAt)}</time>,
+              },
+              {
+                key: 'due',
+                header: t('privacy.queue.due'),
+                cell: (r) =>
+                  r.dueAt ? (
+                    <span className="inline-flex flex-wrap items-center gap-2">
+                      <time dateTime={r.dueAt.toISOString()}>{date.format(r.dueAt)}</time>
+                      {r.overdue ? <StatusPill tone="danger" label={t('privacy.queue.overdue')} /> : null}
+                    </span>
+                  ) : (
+                    '—'
+                  ),
+              },
+              { key: 'review', header: t('privacy.queue.action'), cell: review, align: 'end' },
+            ]}
+          />
+        )}
+      </section>
+      <section aria-labelledby="dsar-closed" className="flex flex-col gap-3">
+        <SectionHeader id="dsar-closed" title={t('privacy.closed.title')} />
         <Table
-          caption={t('privacy.history.caption')}
-          rowKey={(h) => h.id}
-          rows={history}
-          empty={t('privacy.history.empty')}
+          caption={t('privacy.closed.caption')}
+          rowKey={(r) => r.id}
+          rows={closed}
+          empty={t('privacy.closed.empty')}
           columns={[
             {
               key: 'at',
-              header: t('privacy.history.when'),
-              cell: (h) => <time dateTime={h.createdAt.toISOString()}>{when.format(h.createdAt)}</time>,
+              header: t('privacy.closed.when'),
+              cell: (r) => {
+                const at = r.completedAt ?? r.cancelledAt ?? r.createdAt;
+                return <time dateTime={at.toISOString()}>{date.format(at)}</time>;
+              },
             },
-            { key: 'kind', header: t('privacy.history.kind'), cell: (h) => t(`privacy.kinds.${h.kind}`) },
-            { key: 'subject', header: t('privacy.history.subject'), cell: (h) => h.subjectHint, mono: true },
+            { key: 'kind', header: t('privacy.queue.kind'), cell: (r) => t(`privacy.kinds.${r.kind}`) },
+            { key: 'subject', header: t('privacy.queue.person'), cell: (r) => r.subjectHint, mono: true },
             {
-              key: 'by',
-              header: t('privacy.history.by'),
-              cell: (h) =>
-                h.requestedBy ? (people.get(h.requestedBy)?.name ?? t('activity.formerMember')) : '—',
+              key: 'status',
+              header: t('privacy.closed.status'),
+              cell: (r) => (
+                <StatusPill
+                  tone={r.status === 'completed' ? 'success' : 'neutral'}
+                  label={t(`privacy.statuses.${r.status}`)}
+                />
+              ),
             },
             {
               key: 'records',
-              header: t('privacy.history.records'),
-              cell: (h) => Object.values(h.summary).reduce((a, b) => a + b, 0),
+              header: t('privacy.closed.records'),
+              cell: (r) => Object.values(r.summary).reduce((a, b) => a + b, 0),
               mono: true,
               align: 'end',
             },
+            { key: 'review', header: t('privacy.queue.action'), cell: review, align: 'end' },
           ]}
         />
       </section>

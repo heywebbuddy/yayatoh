@@ -22,7 +22,10 @@ import { limitRequest } from '@/server/rate-limit.ts';
  */
 export async function handlePaymentWebhook(req: Request, expected: 'fake' | 'stripe'): Promise<Response> {
   const provider = getPaymentProvider();
-  if (provider.name !== expected) return new Response(null, { status: 404 });
+  // M6.3a: on a Stripe deployment the fake endpoint stays open for sandbox orgs' fake payments
+  // only (the sandbox-safe provider refuses a fake-signed event for any other org).
+  const sandboxFake = expected === 'fake' && 'sandboxSafe' in provider;
+  if (provider.name !== expected && !sandboxFake) return new Response(null, { status: 404 });
   const raw = await req.text();
   let event: WebhookEvent;
   try {

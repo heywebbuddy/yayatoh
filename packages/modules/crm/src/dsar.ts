@@ -1,11 +1,24 @@
 import type { TenantTx } from '@yayatoh/db';
 import { ERASED_EMAIL } from '@yayatoh/platform';
-import { and, asc, desc, eq, inArray } from 'drizzle-orm';
-import { consents, contactStats, contacts, eventParticipation } from './schema.ts';
+import { and, asc, desc, eq, inArray, or } from 'drizzle-orm';
+import { scrubMergeSnapshotsTx } from './merge/engine.ts';
+import {
+  consents,
+  contactScores,
+  contactSignals,
+  contactStats,
+  contacts,
+  eventParticipation,
+} from './schema.ts';
 
 /** A person's org contact and consent history, allowlisted (M1.14c data-subject access). */
-export async function contactDsarTx(tx: TenantTx, emailNorm: string) {
-  const rows = await tx.select().from(contacts).where(eq(contacts.emailNorm, emailNorm));
+export async function contactDsarTx(tx: TenantTx, emailNorm: string, linked: readonly string[] = []) {
+  const rows = await tx
+    .select()
+    .from(contacts)
+    .where(
+      or(eq(contacts.emailNorm, emailNorm), linked.length ? inArray(contacts.id, [...linked]) : undefined),
+    );
   const ids = rows.map((r) => r.id);
   const history = ids.length
     ? await tx
@@ -24,12 +37,24 @@ export async function contactDsarTx(tx: TenantTx, emailNorm: string) {
   const stats = ids.length
     ? await tx.select().from(contactStats).where(inArray(contactStats.contactId, ids))
     : [];
+  // M6.1b: the scores and the signals behind them (sessions attended, campaigns opened).
+  const scores = ids.length
+    ? await tx.select().from(contactScores).where(inArray(contactScores.contactId, ids))
+    : [];
+  const signals = ids.length
+    ? await tx
+        .select()
+        .from(contactSignals)
+        .where(inArray(contactSignals.contactId, ids))
+        .orderBy(asc(contactSignals.occurredAt))
+    : [];
   return {
     contacts: rows.map((r) => ({
       id: r.id,
       email: r.email,
       name: r.name,
       phone: r.phoneE164,
+      company: r.company,
       source: r.source,
       createdAt: r.createdAt,
     })),
@@ -59,6 +84,22 @@ export async function contactDsarTx(tx: TenantTx, emailNorm: string) {
       firstSeenAt: t.firstSeenAt,
       lastSeenAt: t.lastSeenAt,
     })),
+    scores: scores.map((s) => ({
+      events: s.events,
+      eventsAttended: s.eventsAttended,
+      noShows: s.noShows,
+      sessionsAttended: s.sessionsAttended,
+      campaignsOpened: s.campaignsOpened,
+      engagementScore: s.engagementScore,
+      noShowBps: s.noShowBps,
+      computedAt: s.computedAt,
+    })),
+    signals: signals.map((g) => ({
+      kind: g.kind,
+      refId: g.refId,
+      eventId: g.eventId,
+      occurredAt: g.occurredAt,
+    })),
   };
 }
 
@@ -66,8 +107,18 @@ export async function contactDsarTx(tx: TenantTx, emailNorm: string) {
  * Erase a contact: email, name and phone are replaced (the row stays so attendee and order
  * references hold). Consent rows are kept as legal evidence; they carry no personal data.
  */
-export async function eraseContactDsarTx(tx: TenantTx, emailNorm: string, now: Date) {
-  const rows = await tx.select({ id: contacts.id }).from(contacts).where(eq(contacts.emailNorm, emailNorm));
+export async function eraseContactDsarTx(
+  tx: TenantTx,
+  emailNorm: string,
+  now: Date,
+  linked: readonly string[] = [],
+) {
+  const rows = await tx
+    .select({ id: contacts.id })
+    .from(contacts)
+    .where(
+      or(eq(contacts.emailNorm, emailNorm), linked.length ? inArray(contacts.id, [...linked]) : undefined),
+    );
   for (const r of rows) {
     // email_norm is unique per org: make each erased contact's placeholder unique.
     const placeholder = ERASED_EMAIL.replace('@', `+${r.id}@`);
@@ -78,11 +129,18 @@ export async function eraseContactDsarTx(tx: TenantTx, emailNorm: string, now: D
         emailNorm: placeholder,
         name: null,
         phoneE164: null,
+        company: null,
         userId: null,
         updatedAt: now,
       })
       .where(eq(contacts.id, r.id));
   }
+  // M6.1a: merge snapshots holding the old fields are scrubbed (such merges can't be undone).
+  await scrubMergeSnapshotsTx(
+    tx,
+    rows.map((r) => r.id),
+    now,
+  );
   const kept = rows.length
     ? (
         await tx
