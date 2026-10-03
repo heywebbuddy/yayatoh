@@ -1,4 +1,4 @@
-import { columnPrivacy, internal, personal } from '@yayatoh/db';
+import { columnPrivacy, holder, internal, personal } from '@yayatoh/db';
 
 /**
  * Column privacy of the `program` schema (roadmap §9 canary leak test; see `columnPrivacy` in
@@ -70,4 +70,30 @@ export const privateColumns = columnPrivacy('program', {
   cfp_co_speakers: { name: personal(), email: personal('email') },
   cfp_reviewers: { name: personal(), email: personal('email') },
   cfp_reviews: { comment: internal() },
+  // M5.4b: sponsor packages, deliverables and lead licenses. Package terms and grants are between
+  // the organizer and the sponsor (never public); the comp code is shared by the sponsor with its
+  // guests only.
+  sponsor_packages: {
+    description: internal(),
+    currency: 'vocab',
+    logo_placements: 'vocab',
+    deliverables: internal('json'),
+  },
+  sponsor_grants: {
+    status: 'vocab',
+    source: 'vocab',
+    currency: 'vocab',
+    logo_placements: 'vocab',
+    granted_by: internal(),
+    note: internal(),
+    comp_code: holder('code'),
+  },
+  sponsor_deliverables: {
+    title: internal(),
+    owner: 'vocab',
+    owner_name: personal(),
+    status: 'vocab',
+    completed_by: 'vocab',
+  },
+  lead_license_purchases: { currency: 'vocab', status: 'vocab' },
 });

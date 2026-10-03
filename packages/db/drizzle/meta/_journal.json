@@ -862,6 +862,13 @@
       "when": 1791021091467,
       "tag": "0122_abandoned_spot",
       "breakpoints": true
+    },
+    {
+      "idx": 123,
+      "version": "7",
+      "when": 1791021151485,
+      "tag": "0123_motionless_drax",
+      "breakpoints": true
     }
   ]
 }

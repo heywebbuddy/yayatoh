@@ -1,3 +1,10 @@
+// M5.4b: add-on orders (sponsor packages, extra lead licenses).
+export {
+  addonItemTx,
+  payAddonOrderTx,
+  startLeadLicenseCheckoutCommand,
+  startSponsorPackageCheckoutCommand,
+} from './addon-orders.ts';
 export {
   BOOKING_FILTERS,
   BookingDto,

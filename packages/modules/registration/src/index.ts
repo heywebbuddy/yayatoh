@@ -36,6 +36,14 @@ export {
   startRegistrationCommand,
 } from './checkout.ts';
 export * from './domain/approval.ts';
+// M5.4b: sponsor comp registration codes.
+export {
+  compCode,
+  isCompCode,
+  makeCompCodeTx,
+  sponsorCompCodes,
+  sponsorCompUsageQuery,
+} from './comp-codes.ts';
 export * from './domain/capacity.ts';
 export * from './domain/eligibility.ts';
 // M5.2b: session enrollment and the session waitlist.

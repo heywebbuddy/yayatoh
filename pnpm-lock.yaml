@@ -2166,6 +2166,9 @@ importers:
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../../platform
+      '@yayatoh/program':
+        specifier: workspace:*
+        version: link:../program
       '@yayatoh/seating':
         specifier: workspace:*
         version: link:../seating
@@ -2295,6 +2298,9 @@ importers:
 
   packages/modules/program:
     dependencies:
+      '@yayatoh/billing':
+        specifier: workspace:*
+        version: link:../billing
       '@yayatoh/contracts':
         specifier: workspace:*
         version: link:../../contracts
