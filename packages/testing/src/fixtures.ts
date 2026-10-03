@@ -267,9 +267,11 @@ import {
   publishEventLayoutCommand,
   requestFinderCodeCommand,
   saveLayoutCommand,
+  seatGuestsCommand,
   setEventLayoutCommand,
   setFinderSettingsCommand,
   setSeatingRulesCommand,
+  setVipTableCommand,
 } from '@yayatoh/seating';
 import {
   createSurveyCommand,
@@ -2009,6 +2011,21 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   await executeCommand(
     giveSubEventOwnChartCommand,
     { eventId: event.id, subEventId: reception.id, layoutId: layout.id },
+    ctx(),
+    ports,
+  );
+  // M4.3a guest seating (isolation coverage): the host at row A of the
+  // reception's own chart, and row A marked as a VIP zone.
+  const rowA = plan.items[0]?.id ?? '';
+  await executeCommand(
+    seatGuestsCommand,
+    { eventId: event.id, subEventId: reception.id, itemId: rowA, guestIds: [host.id] },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    setVipTableCommand,
+    { eventId: event.id, subEventId: reception.id, itemId: rowA, vip: true },
     ctx(),
     ports,
   );
