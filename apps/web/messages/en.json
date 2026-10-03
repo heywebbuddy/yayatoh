@@ -15508,6 +15508,12 @@
       },
       "google_calendar": {
         "description": "Every session of your live events on a Google Calendar, kept up to date: moved sessions move and cancelled ones come off. Times show in each event's time zone."
+      },
+      "quickbooks": {
+        "description": "Post a daily summary journal of your sales, fees, refunds, payouts and donations to QuickBooks Online."
+      },
+      "xero": {
+        "description": "Post a daily summary journal of your sales, fees, refunds, payouts and donations to Xero."
       }
     },
     "sandboxBadge": "Sandbox",
@@ -15536,7 +15542,8 @@
       "campaigns": "Campaigns",
       "campaign_members": "Campaign members",
       "sponsor_opportunities": "Sponsor opportunities",
-      "sessions": "Sessions"
+      "sessions": "Sessions",
+      "journals": "Daily journals"
     },
     "fields": {
       "email": "Email",
@@ -15738,7 +15745,14 @@
       "conflict": "Clashes with a record already in Yayatoh",
       "not_found": "Something it needs isn't here yet",
       "validation_failed": "Yayatoh didn't accept it",
-      "remove_failed": "Couldn't be removed at the provider"
+      "remove_failed": "Couldn't be removed at the provider",
+      "currency_unsupported": "Your books only take their base currency",
+      "post_failed": "Couldn't be posted to your books",
+      "http_400": "Your books refused it: check the mapped accounts",
+      "http_429": "The provider asked us to slow down",
+      "http_503": "The provider is unavailable right now",
+      "no_organisation": "No organisation was found for this connection",
+      "account_code_missing": "A mapped account has no code"
     },
     "inbox": {
       "title": "Integration errors",
@@ -16055,6 +16069,83 @@
       "object": "Kind",
       "count": "Records",
       "empty": "Nothing linked yet. Records are linked as they sync."
+    },
+    "accounting": {
+      "mapTitle": "Chart of accounts",
+      "mapHelp": "Choose where each line of the daily summary journal goes in your books. Days are posted after they end, in your organization's time zone.",
+      "notMapped": "Map your accounts to start posting daily journals.",
+      "version": "Version {version} · posting days from {day}",
+      "chartUnavailable": "We couldn't load your chart of accounts from {name}. Try again in a moment.",
+      "chooseAccount": "Choose an account",
+      "categories": {
+        "sales": {
+          "label": "Ticket sales",
+          "hint": "Credited with the day's gross ticket sales."
+        },
+        "donations": {
+          "label": "Donations",
+          "hint": "Credited with the day's online gifts."
+        },
+        "refunds": {
+          "label": "Refunds",
+          "hint": "Debited with what was refunded to buyers and donors."
+        },
+        "fees": {
+          "label": "Yayatoh fees",
+          "hint": "Debited with the day's platform fees, less fees given back."
+        },
+        "payouts": {
+          "label": "Payouts",
+          "hint": "The bank account payouts from Yayatoh land in."
+        },
+        "clearing": {
+          "label": "Clearing account",
+          "hint": "Holds the money Yayatoh or your processor keeps for you. It balances each journal."
+        }
+      },
+      "startsOn": "Post days from",
+      "startsOnHint": "The first day to post, up to a year back.",
+      "save": "Save account mapping",
+      "saved": "Account mapping saved as version {version}. The next sync posts with it.",
+      "invalid": "This mapping can't be saved yet. Check the fields marked below.",
+      "saveFailed": "The mapping couldn't be saved. Try again in a moment.",
+      "issue": {
+        "missing": "Choose an account for {field}.",
+        "unknown_account": "That account isn't in your books any more. Choose another one for {field}.",
+        "clearing_shared": "The clearing account can't also be used for {field}.",
+        "starts_in_future": "Choose today or an earlier day.",
+        "starts_too_early": "Choose a day within the last year.",
+        "missing_date": "Enter the first day to post.",
+        "other": "Check this field."
+      },
+      "journalsTitle": "Daily journals",
+      "journalsHelp": "One journal per day and currency. A day that changes after it was posted is reversed and posted again, never edited.",
+      "journalsCaption": "Daily summary journals sent to your books",
+      "waiting": "{count, plural, one {# journal is waiting to be sent.} other {# journals are waiting to be sent.}}",
+      "emptyTitle": "No journals yet",
+      "emptyMapped": "Days are posted after they end, on the next sync.",
+      "emptyUnmapped": "Map your accounts, then sync to post the days since your first day.",
+      "emptyMapAction": "Map accounts",
+      "emptyPostAction": "Check for days to post",
+      "emptyBackAction": "Back to integrations",
+      "columns": {
+        "day": "Day",
+        "currency": "Currency",
+        "kind": "Entry",
+        "amount": "Amount",
+        "status": "Status",
+        "reference": "Reference in your books"
+      },
+      "kinds": {
+        "journal": "Journal · revision {revision}",
+        "reversal": "Reversal of revision {revision}"
+      },
+      "status": {
+        "pending": "Waiting",
+        "posted": "Posted",
+        "failed": "Not posted",
+        "superseded": "Replaced"
+      }
     }
   },
   "kioskPrint": {

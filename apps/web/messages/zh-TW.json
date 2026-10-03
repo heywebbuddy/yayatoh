@@ -15508,6 +15508,12 @@
       },
       "google_calendar": {
         "description": "將進行中活動的每個場次同步到 Google 日曆並保持最新：調整的場次會跟著移動，取消的場次會被移除。時間依各活動的時區顯示。"
+      },
+      "quickbooks": {
+        "description": "每天將銷售、費用、退款、撥款與捐款的彙總日記帳分錄過帳到 QuickBooks Online。"
+      },
+      "xero": {
+        "description": "每天將銷售、費用、退款、撥款與捐款的彙總日記帳分錄過帳到 Xero。"
       }
     },
     "sandboxBadge": "測試",
@@ -15536,7 +15542,8 @@
       "campaigns": "行銷活動",
       "campaign_members": "行銷活動成員",
       "sponsor_opportunities": "贊助商機",
-      "sessions": "場次"
+      "sessions": "場次",
+      "journals": "每日分錄"
     },
     "fields": {
       "email": "電子郵件",
@@ -15738,7 +15745,14 @@
       "conflict": "與 Yayatoh 中已有的紀錄衝突",
       "not_found": "所需的內容還不在這裡",
       "validation_failed": "Yayatoh 未接受",
-      "remove_failed": "無法在服務方移除"
+      "remove_failed": "無法在服務方移除",
+      "currency_unsupported": "你的帳簿只接受其本位幣",
+      "post_failed": "無法過帳到你的帳簿",
+      "http_400": "你的帳簿拒絕了它：請檢查對應的科目",
+      "http_429": "提供者要求我們放慢速度",
+      "http_503": "提供者目前無法使用",
+      "no_organisation": "找不到此連線對應的組織",
+      "account_code_missing": "某個對應的科目沒有代碼"
     },
     "inbox": {
       "title": "整合錯誤",
@@ -16055,6 +16069,83 @@
       "object": "類型",
       "count": "記錄",
       "empty": "尚未連結任何內容。記錄會在同步時連結。"
+    },
+    "accounting": {
+      "mapTitle": "會計科目表",
+      "mapHelp": "選擇每日彙總分錄的每一行記入帳簿中的哪個科目。每天結束後依你組織的時區過帳。",
+      "notMapped": "對應科目後即可開始過帳每日分錄。",
+      "version": "版本 {version} · 自 {day} 起過帳",
+      "chartUnavailable": "無法從 {name} 載入你的會計科目表。請稍後再試。",
+      "chooseAccount": "選擇科目",
+      "categories": {
+        "sales": {
+          "label": "票券銷售",
+          "hint": "以當天票券銷售總額貸記。"
+        },
+        "donations": {
+          "label": "捐款",
+          "hint": "以當天線上捐款貸記。"
+        },
+        "refunds": {
+          "label": "退款",
+          "hint": "以退還給購買者與捐款人的金額借記。"
+        },
+        "fees": {
+          "label": "Yayatoh 費用",
+          "hint": "以當天平台費用（扣除退還的費用）借記。"
+        },
+        "payouts": {
+          "label": "撥款",
+          "hint": "接收 Yayatoh 撥款的銀行帳戶。"
+        },
+        "clearing": {
+          "label": "暫記科目",
+          "hint": "記錄 Yayatoh 或支付處理方為你保管的資金，用來平衡每筆分錄。"
+        }
+      },
+      "startsOn": "開始過帳日期",
+      "startsOnHint": "第一個過帳的日期，最早一年前。",
+      "save": "儲存科目對應",
+      "saved": "科目對應已儲存為版本 {version}。下次同步會用它過帳。",
+      "invalid": "此對應尚無法儲存。請檢查標示的欄位。",
+      "saveFailed": "無法儲存對應。請稍後再試。",
+      "issue": {
+        "missing": "請為「{field}」選擇科目。",
+        "unknown_account": "該科目已不在你的帳簿中。請為「{field}」另選一個。",
+        "clearing_shared": "暫記科目不能同時用於「{field}」。",
+        "starts_in_future": "請選擇今天或更早的日期。",
+        "starts_too_early": "請選擇過去一年內的日期。",
+        "missing_date": "請輸入第一個過帳的日期。",
+        "other": "請檢查此欄位。"
+      },
+      "journalsTitle": "每日分錄",
+      "journalsHelp": "每天每種貨幣一筆分錄。過帳後有變動的日期會先沖銷再重新過帳，絕不直接修改。",
+      "journalsCaption": "傳送到你帳簿的每日彙總分錄",
+      "waiting": "{count, plural, other {# 筆分錄等待傳送。}}",
+      "emptyTitle": "還沒有分錄",
+      "emptyMapped": "每天結束後，會在下次同步時過帳。",
+      "emptyUnmapped": "先對應科目，再同步，即可過帳自第一天以來的日期。",
+      "emptyMapAction": "對應科目",
+      "emptyPostAction": "檢查待過帳的日期",
+      "emptyBackAction": "返回整合",
+      "columns": {
+        "day": "日期",
+        "currency": "貨幣",
+        "kind": "分錄",
+        "amount": "金額",
+        "status": "狀態",
+        "reference": "帳簿中的參考編號"
+      },
+      "kinds": {
+        "journal": "分錄 · 修訂 {revision}",
+        "reversal": "沖銷修訂 {revision}"
+      },
+      "status": {
+        "pending": "等待中",
+        "posted": "已過帳",
+        "failed": "未過帳",
+        "superseded": "已取代"
+      }
     }
   },
   "kioskPrint": {

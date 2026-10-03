@@ -19,6 +19,8 @@ export {
   saveCharityProfileCommand,
   verifyCharityCommand,
 } from './charity.ts';
+// M6.5d: online giving per day and currency (accounting summaries).
+export { type DonationDayTotals, donationDailyTotalsTx } from './daily-totals.ts';
 // M4.8d live giving screen: the thermometer for the room's projectors (signed link, realtime
 // channel, reconnect snapshot), QR-to-give, names only for donors who opted in (P4-13).
 // M6.1c: data-subject requests (export and erasure) for gifts, receipts and statements.

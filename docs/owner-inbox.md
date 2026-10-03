@@ -894,3 +894,26 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **New alert rules (defaults):** `integrationFailed` — any failed sync run or connection revoked at the provider in the last 24 hours (warning; critical once a connection is lost), for members with `integrations:read`; `billingPastDue` — the plan subscription is past due (warning) or unpaid (critical), for `billing:read`. Change the thresholds by asking; copy in 13 locales.
 - [ ] **Two REST-hook surfaces on /v1** (both additive, kept): M6.4c's `/orgs/{org}/hooks` (Zapier: key-bound, samples, `webhooks:subscribe`) and M6.5c's `/orgs/{org}/webhook-endpoints` (Make and n8n, `webhooks:manage`). Once /v1 ships they cannot be removed; say if you want one surface before landing.
 - [ ] **One `@opentelemetry/api` version** (pnpm override 1.9.1 in `pnpm-workspace.yaml`) so every package shares one drizzle-orm build. Remove it when no dependency pins 1.9.0.
+
+## M6.5d — accounting: QuickBooks Online and Xero (2026-10-03, pending owner)
+- [ ] **Accounts to create (owner only):** an Intuit developer app (QuickBooks Online Accounting
+  scope `com.intuit.quickbooks.accounting`) and a Xero app (`accounting.transactions`,
+  `accounting.settings.read`, `offline_access`), each added to Nango as the `quickbooks` and `xero`
+  integrations. Until then both run against fakes only. The endpoints are UNVERIFIED against real
+  accounts: in particular we assume Nango's QuickBooks proxy carries the company (realm) in its
+  base URL; if not, the connector needs the realm from the connection's config.
+- [ ] **Payments approval (`payments` tag):** the summaries read the payments ledger and gifts and
+  post money to the organizer's books. Owner approval needed before main.
+- [ ] **Journal shape (P6-6, built with these defaults):** sales and donations credited, refunds,
+  Yayatoh fees and payouts debited, and a **clearing account** (money Yayatoh or the processor holds
+  for the organizer) takes the balance. Donations are what the donor was charged (gift plus any fee
+  they covered). Days are posted once they end in the org's time zone; posting can start up to a
+  year back. Confirm, or say if you want fees net of refunds shown differently.
+- [ ] **Zero-fee orders leave no ledger journal** (an `organizer_mor` sale with no application fee, a
+  refund that gives no fee back): their gross is therefore missing from the summaries. Decide
+  whether payments should post memo-only journals for them (a payments change, not done here).
+- [ ] **Corrections:** a changed day is reversed and posted again on the same day, never edited. If
+  the books have closed that period, the provider refuses it and it waits in the errors inbox.
+  Confirm, or ask for corrections to be posted on the day they are noticed instead.
+- [ ] **Xero multi-currency:** Xero manual journals take the base currency only; days in other
+  currencies wait in the errors inbox (`currency_unsupported`). Say if you need multi-currency Xero.

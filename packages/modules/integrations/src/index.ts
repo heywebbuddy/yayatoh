@@ -1,3 +1,20 @@
+// M6.5d: accounting (daily summary journals to QuickBooks Online and Xero).
+export * from './accounting/domain.ts';
+export {
+  AccountingDetailDto,
+  AccountMapDto,
+  accountingDetailQuery,
+  accountingDetailSerializer,
+  currentAccountMapTx,
+  JOURNALS_OBJECT,
+  JournalDto,
+  journalRecordKey,
+  prepareJournalsCommand,
+  RECENT_JOURNALS,
+  recordJournalResultsCommand,
+  saveAccountMapCommand,
+} from './accounting/journals.ts';
+export { chartOfAccounts, postAccounting } from './accounting/run.ts';
 export {
   FAKE_ACCESS_TOKEN,
   FAKE_REFRESH_TOKEN,
@@ -18,6 +35,7 @@ export {
   ProviderError,
   type ProviderRequest,
   type ProviderResponse,
+  providerHeaderName,
   type ResolvedConnection,
   redactSecrets,
 } from './auth/port.ts';
@@ -147,6 +165,14 @@ export {
 export { slackConnector } from './connectors/slack.ts';
 export { integrationsDataSubjects } from './data-subject.ts';
 export * from './domain/calendar.ts';
+export {
+  type FakeBooksJournal,
+  QUICKBOOKS_FAKE_ACCOUNTS,
+  quickbooksConnector,
+  quickbooksFakeProvider,
+  quickbooksJournals,
+} from './connectors/quickbooks.ts';
+export { XERO_FAKE_ACCOUNTS, xeroConnector, xeroFakeProvider, xeroJournals } from './connectors/xero.ts';
 export * from './domain/mapping.ts';
 export * from './domain/sync.ts';
 export {
@@ -194,9 +220,11 @@ export {
 } from './personal.ts';
 export { privateColumns } from './private-columns.ts';
 export {
+  type AccountingSide,
   type ConnectorDefinition,
   defineConnector,
   isImporter,
+  type JournalToPost,
   type LocalRecord,
   mappingFields,
   type ObjectDefinition,
