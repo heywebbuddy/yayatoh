@@ -210,7 +210,7 @@ export async function importOrderTx(
   }
   if (off.length) await voidTicketsTx(tx, ctx, { orderId, ticketIds: off, reason: 'imported_inactive' });
   emit({
-    type: ORDER_IMPORTED_EVENT,
+    type: 'order.imported',
     version: 1,
     aggregateType: 'order',
     aggregateId: orderId,
