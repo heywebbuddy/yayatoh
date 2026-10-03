@@ -1,7 +1,7 @@
 # Spec: M6.4 — API and integrations: integrations framework and connectors
 
 - **Milestone:** M6.4 (roadmap §10 Phase 6; Phase 6 plan `docs/plans/phase-6.md`, decisions P6-1, P6-4, P6-13)
-- **Status:** M6.4a built (2026-10-03; local gate: lint, check:modules, typecheck, unit 2706/2706, integration 1519/1520 — the one failure, `marketing-analytics.int.test.ts` › campaigns tile, passes alone and is outside this work; integrations e2e 18/18 on three viewports, canary crawl and console specs green), behind the `integrations` module key and the `IntegrationAuth` port (fake in dev/CI, off in production until Nango is configured). M6.4b–d stack on it.
+- **Status:** M6.4a built (2026-10-03; local gate: lint, check:modules, typecheck, unit 2706/2706, integration 1519/1520; the one failure, `marketing-analytics.int.test.ts` › campaigns tile, was a date-zone bug that merge/next-3h fixed, and it passes after merging that fix; integrations e2e 18/18 on three viewports, canary crawl and console specs green), behind the `integrations` module key and the `IntegrationAuth` port (fake in dev/CI, off in production until Nango is configured). M6.4b–d stack on it.
 - **Risk tags:** `db-migration`, `tenancy`, `infra`
 - **Related ADRs:** 0008 (outbox), 0018/0022 (tokens, design v2)
 
