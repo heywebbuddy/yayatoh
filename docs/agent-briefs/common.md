@@ -47,6 +47,7 @@ For each user-visible feature write Playwright tests (`apps/web/e2e/*.spec.ts`, 
 ## Gate before your final push (all must pass)
 1. `pnpm verify` (lint → check:modules → typecheck → unit → integration)
 2. `pnpm db:bootstrap`, rebuild web (+admin if touched), then run on all three projects: your new e2e specs, plus every existing spec that covers a page, route or module you changed (find them with grep). Run the WHOLE web suite (`cd apps/web && npx playwright test --reporter=line`) only if you changed shared infrastructure: the root/org layouts, navigation, auth/session, `proxy.ts`, the CSP, `helpers.ts`, seed data or fixtures used by other specs. The merge session and CI always run the whole suite, so that is where cross-feature breakage is caught. Run the admin suite if you touched admin. Fix real failures. If a failure is clearly pre-existing and unrelated, record the exact error in your report. (Owner asked for speed on 2026-09-29.)
+   **Builders never run the whole web e2e suite** (about 2 hours and a large share of the weekly usage budget): merge batches run it. Run only your specs and the related ones above, on all three projects. (Owner, 2026-10-03.)
 3. Add your milestone section to `docs/specs/<milestone>/spec.md` (what was built, "Later"/"Not yet", Acceptance table mapping each criterion to its test file).
 
 ## Don't stall (added 2026-10-02)
