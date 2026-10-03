@@ -14,7 +14,7 @@ import {
   ports,
 } from '@yayatoh/testing';
 import sharp from 'sharp';
-import { expectAccessibleBothModes, signIn } from './helpers.ts';
+import { expectAccessibleBothModes, expectPicked, pickOption, signIn } from './helpers.ts';
 
 /**
  * M4.5b: the event gallery. Acceptance: the per-event storage cap is enforced (the host's and the
@@ -116,7 +116,7 @@ test.describe('gallery: the host (M4.5b)', () => {
     await expect(page.getByTestId('gallery-usage')).toHaveText('0 MB of 5 GB used');
     await expectAccessibleBothModes(page);
 
-    await page.getByLabel('Gallery for guests').selectOption('on');
+    await pickOption(page.getByLabel('Gallery for guests'), 'on');
     await page.getByLabel('Storage for this event (MB)').fill('0');
     await page.getByLabel('Photos and links per guest').fill('0');
     await submit(page, page.getByRole('button', { name: 'Save gallery settings' }));
@@ -126,12 +126,12 @@ test.describe('gallery: the host (M4.5b)', () => {
 
     await page.getByLabel('Storage for this event (MB)').fill('200');
     await page.getByLabel('Photos and links per guest').fill('10');
-    await page.getByLabel('Guest photos').selectOption('auto');
+    await pickOption(page.getByLabel('Guest photos'), 'auto');
     await submit(page, page.getByRole('button', { name: 'Save gallery settings' }));
     await expect(page.getByText('Gallery settings saved.')).toBeVisible();
     await page.reload();
-    await expect(page.getByLabel('Gallery for guests')).toHaveValue('on');
-    await expect(page.getByLabel('Guest photos')).toHaveValue('auto');
+    await expectPicked(page.getByLabel('Gallery for guests'), 'on');
+    await expectPicked(page.getByLabel('Guest photos'), 'auto');
     await expect(page.getByLabel('Storage for this event (MB)')).toHaveValue('200');
     await expect(page.getByTestId('gallery-usage')).toHaveText('0 MB of 200 MB used');
     await expect(page.getByText("Address for guests (behind the website's password)").first()).toBeVisible();

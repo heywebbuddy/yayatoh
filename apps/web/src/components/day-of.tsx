@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@yayatoh/ui';
+import { Button, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { createContext, type ReactNode, useActionState, useContext, useId, useState } from 'react';
 import type { DayOfState } from '@/app/[locale]/o/[org]/e/[event]/day-of/actions.ts';
@@ -105,10 +105,10 @@ export function KioskStartForm({ action, device }: { action: Action; device: str
         <label htmlFor={`${id}-kind`} className="text-[13px] font-bold text-ink">
           {t('kioskKind', { device })}
         </label>
-        <select id={`${id}-kind`} name="kind" defaultValue="guests" className="field">
+        <Select id={`${id}-kind`} name="kind" defaultValue="guests" className="field">
           <option value="guests">{t('kindGuests')}</option>
           <option value="board">{t('kindBoard')}</option>
-        </select>
+        </Select>
       </div>
       <div className="flex flex-col gap-1.5">
         <label htmlFor={`${id}-pin`} className="text-[13px] font-bold text-ink">

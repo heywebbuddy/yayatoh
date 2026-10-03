@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, type ButtonVariant, ToastProvider, useToast } from '@yayatoh/ui';
+import { Button, type ButtonVariant, Select, ToastProvider, useToast } from '@yayatoh/ui';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { type ReactNode, useActionState, useEffect, useId, useRef } from 'react';
@@ -192,7 +192,7 @@ export function MeetingRequestForm({
       noValidate
     >
       <Field id={`${id}-slot`} label={t('person.slot')} error={slotError}>
-        <select
+        <Select
           id={`${id}-slot`}
           name="slotId"
           defaultValue=""
@@ -206,10 +206,10 @@ export function MeetingRequestForm({
               {s.label}
             </option>
           ))}
-        </select>
+        </Select>
       </Field>
       <Field id={`${id}-place`} label={t('person.place')} error={placeError}>
-        <select
+        <Select
           id={`${id}-place`}
           name="locationId"
           defaultValue=""
@@ -223,7 +223,7 @@ export function MeetingRequestForm({
               {s.label}
             </option>
           ))}
-        </select>
+        </Select>
       </Field>
       <Field id={`${id}-message`} label={t('person.note')} hint={t('person.noteHint')}>
         <textarea
@@ -303,7 +303,7 @@ export function SafetyForms({
         >
           <p className="text-body text-ink-2">{t('safety.reportHelp')}</p>
           <Field id={`${id}-reason`} label={t('safety.reason')} error={reasonError}>
-            <select
+            <Select
               id={`${id}-reason`}
               name="reason"
               defaultValue=""
@@ -317,7 +317,7 @@ export function SafetyForms({
                   {r.label}
                 </option>
               ))}
-            </select>
+            </Select>
           </Field>
           <Field
             id={`${id}-details`}

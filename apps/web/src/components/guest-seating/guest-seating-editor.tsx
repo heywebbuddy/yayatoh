@@ -3,7 +3,7 @@
 import { type FloorplanDoc, hitTest } from '@yayatoh/floorplan';
 import type { GuestSeatingDto } from '@yayatoh/seating';
 import { declinedSeated, unseatedOf, vipWarning } from '@yayatoh/seating/client';
-import { Alert, Badge, Button, StatusPill } from '@yayatoh/ui';
+import { Alert, Badge, Button, Select, StatusPill } from '@yayatoh/ui';
 import dynamic from 'next/dynamic';
 import { useTranslations } from 'next-intl';
 import {
@@ -87,7 +87,7 @@ export function GuestSeatingEditor({
   const [vipChoice, setVipChoice] = useState<Readonly<Record<string, boolean>>>({});
   const dragged = useRef<string[] | null>(null);
   const plan = useRef<HTMLDivElement>(null);
-  const moveSelect = useRef<HTMLSelectElement>(null);
+  const moveSelect = useRef<HTMLButtonElement>(null);
 
   // Live: re-read shortly after the guest list or the seating changes (coalesced).
   const refreshTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -407,7 +407,7 @@ export function GuestSeatingEditor({
               id="gs-search"
               type="search"
               value={query}
-              onChange={(e) => setQuery(e.currentTarget.value)}
+              onValueChange={(v) => setQuery(v)}
               className={field}
             />
           </div>
@@ -416,35 +416,30 @@ export function GuestSeatingEditor({
               <label htmlFor="gs-status" className="text-[13px] font-bold text-ink">
                 {t('queue.status')}
               </label>
-              <select
+              <Select
                 id="gs-status"
                 value={status}
-                onChange={(e) => setStatus(e.currentTarget.value as StatusFilter)}
+                onValueChange={(v) => setStatus(v as StatusFilter)}
                 className={field}
               >
                 <option value="all">{t('queue.statusAll')}</option>
                 <option value="attending">{t('status.attending')}</option>
                 <option value="pending">{t('status.pending')}</option>
-              </select>
+              </Select>
             </div>
             {sides.length ? (
               <div className="flex flex-col gap-1.5">
                 <label htmlFor="gs-side" className="text-[13px] font-bold text-ink">
                   {t('queue.side')}
                 </label>
-                <select
-                  id="gs-side"
-                  value={side}
-                  onChange={(e) => setSide(e.currentTarget.value)}
-                  className={field}
-                >
+                <Select id="gs-side" value={side} onValueChange={(v) => setSide(v)} className={field}>
                   <option value="">{t('queue.sideAll')}</option>
                   {sides.map((s) => (
                     <option key={s} value={s}>
                       {s}
                     </option>
                   ))}
-                </select>
+                </Select>
               </div>
             ) : null}
           </div>
@@ -548,10 +543,10 @@ export function GuestSeatingEditor({
                 <label htmlFor="gs-target" className="text-[13px] font-bold text-ink">
                   {t('form.table')}
                 </label>
-                <select
+                <Select
                   id="gs-target"
                   value={target}
-                  onChange={(e) => setTarget(e.currentTarget.value)}
+                  onValueChange={(v) => setTarget(v)}
                   className={field}
                   aria-describedby={cantFit ? 'gs-cant-fit' : undefined}
                 >
@@ -561,7 +556,7 @@ export function GuestSeatingEditor({
                       {placeOption(p)}
                     </option>
                   ))}
-                </select>
+                </Select>
               </div>
               {cantFit && chosen ? (
                 <p id="gs-cant-fit" className="m-0 text-caption font-bold text-warning">
@@ -635,11 +630,11 @@ export function GuestSeatingEditor({
             <label htmlFor="gs-detail" className="text-[13px] font-bold text-ink">
               {t('details.choose')}
             </label>
-            <select
+            <Select
               id="gs-detail"
               value={detail}
-              onChange={(e) => {
-                setDetail(e.currentTarget.value);
+              onValueChange={(v) => {
+                setDetail(v);
                 setMoving(null);
               }}
               className={field}
@@ -649,7 +644,7 @@ export function GuestSeatingEditor({
                   {placeOption(p)}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
           {shownPlace ? (
             <section
@@ -800,11 +795,11 @@ export function GuestSeatingEditor({
                                   >
                                     {t('form.table')}
                                   </label>
-                                  <select
+                                  <Select
                                     ref={moveSelect}
                                     id={`gs-move-${g.id}`}
                                     value={moving.itemId}
-                                    onChange={(e) => setMoving({ ...moving, itemId: e.currentTarget.value })}
+                                    onValueChange={(v) => setMoving({ ...moving, itemId: v })}
                                     className={field}
                                   >
                                     <option value="">{t('form.choose')}</option>
@@ -815,7 +810,7 @@ export function GuestSeatingEditor({
                                           {placeOption(p)}
                                         </option>
                                       ))}
-                                  </select>
+                                  </Select>
                                   <div className="flex flex-wrap gap-2">
                                     <Button type="submit" size="sm" disabled={pending}>
                                       {t('details.moveSubmit')}

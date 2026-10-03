@@ -1,5 +1,5 @@
 import { type Browser, expect, type Locator, type Page, test } from '@playwright/test';
-import { expectAccessible, expectAccessibleBothModes, signIn } from './helpers.ts';
+import { expectAccessible, expectAccessibleBothModes, pickOption, signIn } from './helpers.ts';
 
 /**
  * M5.6a session check-in. The organizer adds a session door (validation, keyboard, persistence),
@@ -71,7 +71,7 @@ test.describe('session check-in (M5.6a)', () => {
     await press(add);
     await expect(page.getByText('Choose the session this door is for.')).toBeVisible();
     await page.getByLabel('Session', { exact: true }).focus();
-    await page.getByLabel('Session', { exact: true }).selectOption(await talkOption(page));
+    await pickOption(page.getByLabel('Session', { exact: true }), await talkOption(page));
     await page.getByLabel('People the room holds (optional)').fill('lots');
     await press(add);
     await expect(
@@ -92,7 +92,7 @@ test.describe('session check-in (M5.6a)', () => {
 
     // The same name again is refused with its own message.
     await page.getByLabel('Door name').fill('Room S door');
-    await page.getByLabel('Session', { exact: true }).selectOption(await talkOption(page));
+    await pickOption(page.getByLabel('Session', { exact: true }), await talkOption(page));
     await press(add);
     await expect(page.getByText('A checkpoint with this name already exists.')).toBeVisible();
 
@@ -128,7 +128,7 @@ test.describe('session check-in (M5.6a)', () => {
       await field.fill(code);
       await field.press('Enter');
     };
-    await page.getByLabel('Scanning at').selectOption({ label: 'Talk door' });
+    await pickOption(page.getByLabel('Scanning at'), { label: 'Talk door' });
     await expect(page.getByRole('group', { name: 'Scanning' })).toBeVisible();
 
     // The room holds one: Ana goes in, Ben meets a full room.
@@ -166,13 +166,13 @@ test.describe('session check-in (M5.6a)', () => {
 
     // The other gates: not enrolled in the workshop; the day pass doesn't give the briefing.
     await page.getByRole('radio', { name: 'In', exact: true }).check();
-    await page.getByLabel('Scanning at').selectOption({ label: 'Workshop door' });
+    await pickOption(page.getByLabel('Scanning at'), { label: 'Workshop door' });
     await scan(codeOf(f, 'Cleo'));
     await expect(result).toContainText('Not enrolled in this session');
     await expect(result).toContainText('They need to be registered and, for this session, enrolled.');
     await scan(codeOf(f, 'Ana'));
     await expect(result).toContainText('In — enjoy the session');
-    await page.getByLabel('Scanning at').selectOption({ label: 'Briefing door' });
+    await pickOption(page.getByLabel('Scanning at'), { label: 'Briefing door' });
     await scan(codeOf(f, 'Dev'));
     await expect(result).toContainText("This pass doesn't include this session");
     await expectAccessible(page);
@@ -242,7 +242,7 @@ test.describe('session check-in (M5.6a)', () => {
     const device = await deviceContext.newPage();
     await device.goto(link ?? '');
     await expect(device.getByText('4 tickets on this device')).toBeVisible();
-    await device.getByLabel('Scanning at').selectOption({ label: 'Talk door' });
+    await pickOption(device.getByLabel('Scanning at'), { label: 'Talk door' });
     await expect(device.getByText('Small room talk')).toBeVisible();
     await expect(device.getByTestId('scan-room-count')).toHaveText('In the room: 0 of 1');
     const field = device.getByLabel('Ticket code');

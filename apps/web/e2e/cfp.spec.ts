@@ -1,5 +1,12 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { expectAccessible, expectAccessibleBothModes, lastEmailedCode, signIn } from './helpers.ts';
+import {
+  expectAccessible,
+  expectAccessibleBothModes,
+  expectPicked,
+  lastEmailedCode,
+  pickOption,
+  signIn,
+} from './helpers.ts';
 
 /**
  * M5.3b call for papers: the organizer opens a call (validation) with an extra question; a guest
@@ -33,8 +40,8 @@ async function newPage(browser: Browser): Promise<Page> {
 async function createEvent(page: Page, name: string) {
   await page.goto(`${ORG}/events/new`);
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Event type').selectOption('conference');
-  await page.getByLabel('Time zone').selectOption(TZ);
+  await pickOption(page.getByLabel('Event type'), 'conference');
+  await pickOption(page.getByLabel('Time zone'), TZ);
   await page.getByLabel('Starts', { exact: true }).fill(at(40, '09:00'));
   await page.getByLabel('Ends', { exact: true }).fill(at(42, '18:00'));
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -49,12 +56,12 @@ async function createEvent(page: Page, name: string) {
 async function openCall(page: Page, base: string, opts: { blind?: boolean } = {}) {
   await page.goto(`${base}/speakers/cfp/settings`);
   const form = page.getByRole('region', { name: 'The call' });
-  await form.getByLabel('Status').selectOption('open');
+  await pickOption(form.getByLabel('Status'), 'open');
   for (const m of ['15 min', '20 min', '60 min', '90 min'])
     await form.getByRole('checkbox', { name: m, exact: true }).uncheck();
   await form.getByRole('checkbox', { name: '30 min', exact: true }).check();
   await form.getByRole('checkbox', { name: '45 min', exact: true }).check();
-  await form.getByLabel('Co-speakers allowed per proposal').selectOption('2');
+  await pickOption(form.getByLabel('Co-speakers allowed per proposal'), '2');
   const blind = form.getByRole('checkbox', { name: /Hide who submitted/ });
   if (opts.blind) await blind.check();
   else await blind.uncheck();
@@ -72,7 +79,7 @@ async function propose(
   await guest.goto(`/events/${slug}/cfp`);
   await guest.getByLabel('Title', { exact: true }).fill(p.title);
   await guest.getByLabel('Abstract', { exact: true }).fill(`Why ${p.title} matters.`);
-  await guest.getByLabel('Length').selectOption('45');
+  await pickOption(guest.getByLabel('Length'), '45');
   await guest.getByLabel('Your name').fill(p.name);
   await guest.getByLabel('Your email').fill(p.email);
   if (p.co) {
@@ -162,30 +169,30 @@ test.describe('call for papers (M5.3b)', () => {
     await form.getByRole('button', { name: 'Save the call' }).click();
     await expect(form.getByText('Choose at least one session length.')).toBeVisible();
     await form.getByRole('checkbox', { name: '30 min', exact: true }).check();
-    await form.getByLabel('Status').selectOption('open');
+    await pickOption(form.getByLabel('Status'), 'open');
     await form.getByLabel('Deadline (optional)').fill(at(-1, '12:00'));
     await form.getByRole('button', { name: 'Save the call' }).click();
     await expect(form.getByText('The deadline has passed', { exact: false })).toBeVisible();
     await form.getByLabel('Deadline (optional)').fill(at(20, '17:00'));
     await form.getByRole('checkbox', { name: '45 min', exact: true }).check();
-    await form.getByLabel('Co-speakers allowed per proposal').selectOption('2');
+    await pickOption(form.getByLabel('Co-speakers allowed per proposal'), '2');
     await form.getByLabel('Introduction on the public form').fill(`Tell us about events ${s}.`);
     await form.getByRole('button', { name: 'Save the call' }).click();
     await expect(form.getByText('Call saved.')).toBeVisible();
     await page.reload();
-    await expect(page.getByLabel('Status')).toHaveValue('open');
+    await expectPicked(page.getByLabel('Status'), 'open');
     await expect(page.getByRole('checkbox', { name: '45 min', exact: true })).toBeChecked();
     await expect(page.getByText('Open', { exact: true }).first()).toBeVisible();
 
     // An extra question (forms engine): a choice question needs two choices.
     const add = page.getByRole('region', { name: 'Extra questions' });
     await expect(add.getByText('No extra questions')).toBeVisible();
-    await add.getByLabel('Answer type').selectOption('select');
+    await pickOption(add.getByLabel('Answer type'), 'select');
     await add.getByLabel('Question', { exact: true }).fill('Level');
     await add.getByLabel('Choices').fill('Intro');
     await add.getByRole('button', { name: 'Add a question' }).click();
     await expect(add.getByText('Give at least two choices, one per line.')).toBeVisible();
-    await add.getByLabel('Answer type').selectOption('short_text');
+    await pickOption(add.getByLabel('Answer type'), 'short_text');
     await add.getByLabel('Question', { exact: true }).fill('Your city');
     await add.getByLabel('Choices').fill('');
     await add.getByRole('checkbox', { name: 'Required' }).check();
@@ -314,7 +321,7 @@ test.describe('call for papers (M5.3b)', () => {
     // Assign Rita to proposal one only (keyboard: choose, then Enter on the button).
     await page.goto(`${base}/speakers/cfp/${oneId}`);
     const assign = page.getByLabel('Reviewer', { exact: true });
-    await assign.selectOption({ label: 'Rita Reviewer' });
+    await pickOption(assign, { label: 'Rita Reviewer' });
     await page.getByRole('button', { name: 'Assign', exact: true }).press('Enter');
     await expect(page.getByText('Reviewer assigned.')).toBeVisible();
     await expect(page.getByText('not reviewed yet')).toBeVisible();

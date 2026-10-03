@@ -4,6 +4,7 @@ import {
   expectAccessibleBothModes,
   lastEmailedCode,
   ownClientIp,
+  pickOption,
   signIn,
 } from './helpers.ts';
 import { addGuests } from './seating-helpers.ts';
@@ -45,8 +46,8 @@ async function conference(page: Page, label: string, exhibitors: string[] = []):
   const tag = stamp();
   await page.goto(`${ORG}/events/new`);
   await page.getByLabel('Event name', { exact: true }).fill(`${label} ${tag}`);
-  await page.getByLabel('Event type').selectOption('conference');
-  await page.getByLabel('Time zone').selectOption(TZ);
+  await pickOption(page.getByLabel('Event type'), 'conference');
+  await pickOption(page.getByLabel('Time zone'), TZ);
   await page.getByLabel('Starts', { exact: true }).fill(at(40, '09:00'));
   await page.getByLabel('Ends', { exact: true }).fill(at(40, '18:00'));
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -77,8 +78,8 @@ async function conference(page: Page, label: string, exhibitors: string[] = []):
       await add.getByRole('button', { name: 'Add booth' }).click();
       await expect(add.getByText('Booth added.')).toBeVisible();
       const assign = page.getByRole('region', { name: 'Assign a booth' });
-      await assign.getByLabel('Booth', { exact: true }).selectOption({ label: `C${i + 1}` });
-      await assign.getByLabel('Exhibitor', { exact: true }).selectOption({ label: x });
+      await pickOption(assign.getByLabel('Booth', { exact: true }), { label: `C${i + 1}` });
+      await pickOption(assign.getByLabel('Exhibitor', { exact: true }), { label: x });
       await assign.getByRole('button', { name: 'Assign' }).click();
       await expect(assign.getByText('Assigned.')).toBeVisible();
     }
@@ -292,7 +293,7 @@ test.describe('networking chat (M5.8b)', () => {
     await b.getByText(`Block or report ${ana}`).click();
     await b.getByRole('button', { name: `Report ${ana}` }).click();
     await expect(b.getByText('Choose a reason.')).toBeVisible();
-    await b.getByLabel('Reason').selectOption({ label: 'Spam or unwanted selling' });
+    await pickOption(b.getByLabel('Reason'), { label: 'Spam or unwanted selling' });
     await b.getByLabel('What happened').fill('Selling in every message.');
     await expectAccessible(b);
     await b.getByRole('button', { name: `Report ${ana}` }).click();
@@ -440,7 +441,7 @@ test.describe('networking chat (M5.8b)', () => {
     // Ana reports the booth's chat; the organizer removes the message and suspends the booth.
     await a.reload();
     await a.getByText(`Block or report ${acme}`).click();
-    await a.getByLabel('Reason').selectOption({ label: 'Inappropriate content' });
+    await pickOption(a.getByLabel('Reason'), { label: 'Inappropriate content' });
     await a.getByRole('button', { name: `Report and block ${acme}` }).click();
     await expect(a).toHaveURL(/\/network\/chat\?notice=reported$/);
     await page.goto(conf.console);

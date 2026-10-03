@@ -1,5 +1,11 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { continueToPayment, expectAccessible, expectAccessibleBothModes, signIn } from './helpers.ts';
+import {
+  continueToPayment,
+  expectAccessible,
+  expectAccessibleBothModes,
+  pickOption,
+  signIn,
+} from './helpers.ts';
 
 /**
  * M5.5b printing and the print log: printers per event, a print station's heartbeat keeping its
@@ -18,8 +24,8 @@ const day = (n: number) => new Date(Date.now() + n * 86_400_000).toISOString().s
 async function createConference(page: Page, name: string) {
   await page.goto(`${ORG}/events/new`);
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Event type').selectOption('conference');
-  await page.getByLabel('Time zone').selectOption(TZ);
+  await pickOption(page.getByLabel('Event type'), 'conference');
+  await pickOption(page.getByLabel('Time zone'), TZ);
   await page.getByLabel('Starts', { exact: true }).fill(`${day(30)}T09:00`);
   await page.getByLabel('Ends', { exact: true }).fill(`${day(31)}T18:00`);
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -46,7 +52,7 @@ async function register(browser: Browser, slug: string, name: string) {
   const guest = await (await browser.newContext()).newPage();
   const email = `${name.split(' ')[0]?.toLowerCase()}+${Date.now()}@example.test`;
   await guest.goto(`/events/${slug}`);
-  await guest.getByLabel('Quantity — Delegate').selectOption('1');
+  await pickOption(guest.getByLabel('Quantity — Delegate'), '1');
   await guest.getByLabel('Full name').fill(name);
   await guest.getByLabel('Email for your tickets').fill(email);
   await continueToPayment(guest, email);
@@ -125,7 +131,7 @@ test.describe('badge printing and print log (M5.5b)', () => {
     const panel = page.getByRole('region', { name: 'Badge' });
     await expect(panel.getByText('Not printed yet.')).toBeVisible();
     await expect(panel.getByLabel('Why print it again?')).toHaveCount(0);
-    await panel.getByLabel('Printer').selectOption({ label: 'Front desk · Offline' });
+    await pickOption(panel.getByLabel('Printer'), { label: 'Front desk · Offline' });
     await panel.getByRole('button', { name: 'Print badge for Ada Lovelace' }).focus();
     await page.keyboard.press('Enter');
     await expect(
@@ -144,10 +150,10 @@ test.describe('badge printing and print log (M5.5b)', () => {
     await panel.getByRole('button', { name: 'Reprint badge for Ada Lovelace' }).click();
     await expect(panel.getByText('Choose why this badge is printed again.')).toBeVisible();
     await expect(panel.getByLabel('Why print it again?')).toHaveAttribute('aria-invalid', 'true');
-    await panel.getByLabel('Why print it again?').selectOption({ label: 'Other' });
+    await pickOption(panel.getByLabel('Why print it again?'), { label: 'Other' });
     await panel.getByRole('button', { name: 'Reprint badge for Ada Lovelace' }).click();
     await expect(panel.getByText('For “Other”, say why in a few words.')).toBeVisible();
-    await panel.getByLabel('Why print it again?').selectOption({ label: 'Damaged' });
+    await pickOption(panel.getByLabel('Why print it again?'), { label: 'Damaged' });
     await panel.getByRole('button', { name: 'Reprint badge for Ada Lovelace' }).click();
     await expect(panel.getByText('Printed 2 times, last on')).toBeVisible();
     const history = panel.getByRole('list').last();
@@ -175,7 +181,7 @@ test.describe('badge printing and print log (M5.5b)', () => {
     expect((await dev(page, { op: 'printnode', enabled: '1' })).ok()).toBe(true);
     await page.goto(`${base}/badges/printing`);
     await add.getByLabel('Printer name').fill('Zebra');
-    await add.getByLabel('How it prints').selectOption('printnode');
+    await pickOption(add.getByLabel('How it prints'), 'printnode');
     await add.getByRole('button', { name: 'Add printer' }).click();
     await expect(add.getByText("Enter the printer's PrintNode number.")).toBeVisible();
     await add.getByLabel('PrintNode printer number').fill(pnId);
@@ -192,14 +198,14 @@ test.describe('badge printing and print log (M5.5b)', () => {
     await one.getByLabel('Name or ticket number').fill('Bob');
     await one.getByRole('button', { name: 'Find' }).click();
     await page.getByRole('link', { name: 'Print badge for Bob Baker' }).click();
-    await page.getByLabel('Printer').selectOption({ label: 'Zebra · Online' });
-    await page.getByLabel('Why print it again?').selectOption({ label: 'Lost' });
+    await pickOption(page.getByLabel('Printer'), { label: 'Zebra · Online' });
+    await pickOption(page.getByLabel('Why print it again?'), { label: 'Lost' });
     await page.getByRole('button', { name: 'Reprint badge for Bob Baker' }).click();
     await expect(page.getByText('Badge sent to Zebra.')).toBeVisible();
     // A printer that refuses: the job fails, is logged, and does not count.
     expect((await dev(page, { op: 'fake-state', printerId: pnId, state: 'rejects' })).ok()).toBe(true);
-    await page.getByLabel('Printer').selectOption({ label: 'Zebra · Online' });
-    await page.getByLabel('Why print it again?').selectOption({ label: 'Printer problem' });
+    await pickOption(page.getByLabel('Printer'), { label: 'Zebra · Online' });
+    await pickOption(page.getByLabel('Why print it again?'), { label: 'Printer problem' });
     await page.getByRole('button', { name: 'Reprint badge for Bob Baker' }).click();
     await expect(
       page.getByText('The badge could not be sent (printer_rejected).', { exact: false }),

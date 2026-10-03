@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Field } from '@yayatoh/ui';
+import { Button, Field, Select } from '@yayatoh/ui';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useActionState, useEffect, useId } from 'react';
@@ -84,7 +84,7 @@ export function ChatSafety({
           >
             <p className="text-body text-ink-2">{report.help}</p>
             <Field id={`${id}-reason`} label={t('safety.reason')} error={reasonError ?? undefined}>
-              <select
+              <Select
                 id={`${id}-reason`}
                 name="reason"
                 defaultValue=""
@@ -98,7 +98,7 @@ export function ChatSafety({
                     {r.label}
                   </option>
                 ))}
-              </select>
+              </Select>
             </Field>
             <Field
               id={`${id}-details`}

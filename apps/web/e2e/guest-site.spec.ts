@@ -10,7 +10,7 @@ import {
   type RsvpScenario,
   rsvpScenario,
 } from '@yayatoh/testing';
-import { expectAccessibleBothModes, passHumanCheck, signIn } from './helpers.ts';
+import { expectAccessibleBothModes, expectPicked, passHumanCheck, pickOption, signIn } from './helpers.ts';
 
 /**
  * M4.5a: the guest website. The host builds it from blocks (validation named on each field),
@@ -48,7 +48,7 @@ async function submit(page: Page, button: Locator) {
 }
 
 async function addSection(page: Page, kind: string) {
-  await page.getByLabel('Kind of section').selectOption({ label: kind });
+  await pickOption(page.getByLabel('Kind of section'), { label: kind });
   await submit(page, page.getByRole('button', { name: 'Add the section' }));
   await expect(page.getByText('Section added. Fill it in above.')).toBeVisible();
 }
@@ -131,7 +131,7 @@ test.describe('guest website: the host (M4.5a)', () => {
     // The program: sub-events everyone is invited to by default; the reception is for Luis only.
     await addSection(page, 'Program');
     const program = block(page, 'Program');
-    await expect(program.getByLabel('Which sub-events')).toHaveValue('everyone');
+    await expectPicked(program.getByLabel('Which sub-events'), 'everyone');
     await expect(program.getByRole('checkbox', { name: 'Ceremony (everyone is invited)' })).toBeVisible();
     await expect(program.getByRole('checkbox', { name: 'Reception', exact: true })).toBeVisible();
 
@@ -200,7 +200,7 @@ test.describe('guest website: the host (M4.5a)', () => {
     await page.goto(editor(s));
     const kind = page.getByLabel('Kind of section');
     await kind.focus();
-    await kind.selectOption({ label: 'Text' });
+    await pickOption(kind, { label: 'Text' });
     await page.keyboard.press('Tab');
     await expect(page.getByRole('button', { name: 'Add the section' })).toBeFocused();
     await page.keyboard.press('Enter');
