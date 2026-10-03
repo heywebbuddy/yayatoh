@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import AxeBuilder from '@axe-core/playwright';
-import { type BrowserContext, expect, type Page, test } from '@playwright/test';
+import { type BrowserContext, expect, type Locator, type Page, test } from '@playwright/test';
 import { base32Decode, devPersonaTotpSecret, secretKey, totp } from '@yayatoh/auth/totp';
 
 export const OWNER = 'pani@lakeside.test';
@@ -271,4 +271,40 @@ export async function withOpenSignup<T>(open: boolean, fn: () => Promise<T>): Pr
       unlinkSync(SIGNUP_LOCK);
     }
   }
+}
+
+/**
+ * Chooses an option in a U1 `Select`/picker (the replacement for `locator.selectOption`): opens the
+ * listbox from its trigger and clicks the option. Like `selectOption`, a string matches an option's
+ * value first, then its visible label; `{ label }` matches the label only, `{ value }` the value
+ * only, `{ index }` the nth option.
+ */
+export async function pickOption(
+  trigger: Locator,
+  choice: string | { label?: string; value?: string; index?: number },
+): Promise<void> {
+  await trigger.click();
+  const listId = await trigger.getAttribute('aria-controls');
+  const list = trigger.page().locator(`[id="${listId}"]`);
+  await expect(list).toBeVisible();
+  const options = list.getByRole('option');
+  const byValue = (v: string) =>
+    list.locator(`[role="option"][data-value="${v.replace(/(["\\])/g, '\\$1')}"]`);
+  let option: Locator;
+  if (typeof choice === 'string') {
+    option = byValue(choice);
+    if (!(await option.count())) option = list.getByRole('option', { name: choice, exact: true });
+    if (!(await option.count())) option = options.filter({ hasText: choice }).first();
+  } else if (choice.value !== undefined) option = byValue(choice.value);
+  else if (choice.label !== undefined) {
+    const exact = list.getByRole('option', { name: choice.label, exact: true });
+    option = (await exact.count()) ? exact : options.filter({ hasText: choice.label }).first();
+  } else option = options.nth(choice.index ?? 0);
+  await option.first().click();
+  await expect(list.getByRole('option')).toHaveCount(0);
+}
+
+/** The value a U1 `Select`/picker holds (what its hidden input submits). */
+export async function expectPicked(trigger: Locator, value: string | RegExp): Promise<void> {
+  await expect(trigger).toHaveAttribute('data-value', value);
 }

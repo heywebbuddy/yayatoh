@@ -12309,5 +12309,24 @@
       "allow": "अनुमति दें",
       "deny": "मना करें"
     }
+  },
+  "formControls": {
+    "search": "खोजें",
+    "noResults": "कोई मिलान नहीं",
+    "loading": "लोड हो रहा है…",
+    "remove": "{label} हटाएँ",
+    "create": "“{query}” बनाएँ",
+    "clear": "साफ़ करें",
+    "chooseDate": "तारीख चुनें",
+    "chooseTime": "समय चुनें",
+    "previousMonth": "पिछला महीना",
+    "nextMonth": "अगला महीना",
+    "today": "आज",
+    "invalidDate": "{example} जैसी तारीख दर्ज करें",
+    "invalidTime": "{example} जैसा समय दर्ज करें",
+    "tooEarly": "{date} या उसके बाद की तारीख चुनें",
+    "tooLate": "{date} या उससे पहले की तारीख चुनें",
+    "timeZoneNote": "समय {zone} में",
+    "selected": "चुना गया"
   }
 }
