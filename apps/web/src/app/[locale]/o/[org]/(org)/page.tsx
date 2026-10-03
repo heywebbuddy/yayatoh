@@ -232,7 +232,12 @@ async function EventList({
         </nav>
       ) : null}
       <search aria-label={t('eventFilters.label')}>
-        <form method="get" className="flex flex-wrap items-end gap-3">
+        {/* Keyed by the filters: after "Clear filters" (a client navigation) the fields show the new values. */}
+        <form
+          key={`${active?.slug ?? ''}|${filters.category ?? ''}|${filters.tag ?? ''}|${filters.q ?? ''}`}
+          method="get"
+          className="flex flex-wrap items-end gap-3"
+        >
           {active ? <input type="hidden" name="series" value={active.slug} /> : null}
           <div className="flex min-w-0 grow flex-col gap-1.5 sm:max-w-80">
             <label htmlFor="filter-q" className="text-[13px] font-bold text-ink">
