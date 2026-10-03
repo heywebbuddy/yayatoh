@@ -187,6 +187,25 @@ export const KINDS = {
     urgent: false,
     params: ['url', 'eventName', 'title', 'until', 'timeZone'],
   },
+  // M5.3b: call for papers — the proposal arrived, and the decision (to every speaker on it).
+  'program.cfp-received': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: ['eventName', 'title'],
+  },
+  'program.cfp-accepted': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: ['eventName', 'title', 'note', 'hasNote'],
+  },
+  'program.cfp-rejected': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: ['eventName', 'title', 'note', 'hasNote'],
+  },
   'guest.waitlist-code': {
     category: 'transactional',
     channels: ['email'],

@@ -32,6 +32,40 @@ export {
   saveBoothCommand,
   unassignBoothCommand,
 } from './booths.ts';
+// M5.3b: call for papers.
+export {
+  addCfpQuestionCommand,
+  addCfpReviewerCommand,
+  assignCfpReviewerCommand,
+  CfpCallDto,
+  type CfpOverviewDto,
+  type CfpReviewerDto,
+  type CfpSubmissionDetailDto,
+  type CfpSubmissionRowDto,
+  cfpMailer,
+  cfpOverviewQuery,
+  cfpReviewerHomeQuery,
+  cfpReviewerSubmissionQuery,
+  cfpSubmissionQuery,
+  DecideCfpInput,
+  decideCfpSubmissionCommand,
+  MAX_CFP_QUESTIONS,
+  MAX_CFP_REVIEWERS,
+  type PublicCfpDto,
+  placeDraftSessionCommand,
+  publicCfp,
+  type ReviewerHomeDto,
+  type ReviewerSubmissionDto,
+  removeCfpQuestionCommand,
+  reviewerPrincipalTx,
+  revokeCfpReviewerCommand,
+  SaveCfpInput,
+  type SubmitCfpInput,
+  saveCfpCommand,
+  submitCfpCommand,
+  submitCfpReviewCommand,
+  unassignCfpReviewerCommand,
+} from './cfp.ts';
 export {
   ADMISSIONS,
   type Admission,
@@ -56,6 +90,14 @@ export {
   planAgendaImport,
   readAgendaRow,
 } from './domain/agenda.ts';
+export {
+  averageScore,
+  type CfpOpenness,
+  cfpOpenness,
+  checkCoSpeakers,
+  draftSessionTimes,
+  forReviewer,
+} from './domain/cfp.ts';
 export {
   allowanceUse,
   BOOTH_WARNING_KINDS,
@@ -167,6 +209,7 @@ export {
 export { privateColumns } from './private-columns.ts';
 export { publicProgram, publicSpeaker } from './public.ts';
 export { EXHIBITOR_MEMBER_ROLES } from './schema.ts';
+export { CFP_STATUSES, type CfpStatus, SUBMISSION_STATUSES, type SubmissionStatus } from './schema-cfp.ts';
 export {
   ASSIGNEE_STATUSES,
   CHANGE_STATUSES,

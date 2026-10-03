@@ -244,6 +244,18 @@
     "alerts.alert-urgent-text": {
       "subject": "{rule, select, unseated {{count, plural, one {Eén deelnemer heeft geen plaats} other {{countWords} deelnemers hebben geen plaats}}} undistributed {{count, plural, one {Eén gekocht ticket is niet doorgegeven} other {{countWords} gekochte tickets zijn niet doorgegeven}}} paymentsFailed {{count, plural, one {Eén betaling is mislukt} other {{countWords} betalingen zijn mislukt}}} paymentsStuck {{count, plural, one {Eén betaling blijft hangen} other {{countWords} betalingen blijven hangen}}} refundSurge {{count, plural, one {Eén terugbetaling in het afgelopen uur} other {{countWords} terugbetalingen in het afgelopen uur}}} devicesOffline {{count, plural, one {Eén check-inapparaat is offline} other {{countWords} check-inapparaten zijn offline}}} devicesLowBattery {{count, plural, one {Eén check-inapparaat heeft een bijna lege batterij} other {{countWords} check-inapparaten hebben een bijna lege batterij}}} devicesBacklog {{count, plural, one {Eén check-inapparaat heeft scans die wachten op synchronisatie} other {{countWords} check-inapparaten hebben scans die wachten op synchronisatie}}} capacityNear {De locatie is voor {count}% vol} capacityFull {De locatie is vol ({count}%)} sellOut {{count}% van de tickets is verkocht} salesPace {De ticketverkoop ligt op {count}% van het beoogde tempo} readiness {{count, plural, one {Eén instellingsstap blokkeert dit evenement} other {{countWords} instellingsstappen blokkeren dit evenement}}} domain {{count, plural, one {Eén eigen domein heeft een probleem} other {{countWords} eigen domeinen hebben een probleem}}} payoutsPastDue {{count, plural, one {Eén vereiste voor het uitbetalingsaccount is achterstallig} other {{countWords} vereisten voor het uitbetalingsaccount zijn achterstallig}}} deliverability {De bezorgbaarheid van e-mail vraagt aandacht} automationFailed {{count, plural, one {Eén bericht of bulkactie is vandaag mislukt} other {{countWords} berichten of bulkacties zijn vandaag mislukt}}} assistanceOverdue {{count, plural, one {{countWords} hulpvraag wacht te lang} other {{countWords} hulpvragen wachten te lang}}} campaignFailed {{count, plural, one {Eén campagneverzending is vandaag mislukt} other {{countWords} campagneverzendingen zijn vandaag mislukt}}} disputeDeadline {{count, plural, one {Eén geschil heeft binnenkort bewijs nodig} other {{countWords} geschillen hebben binnenkort bewijs nodig}}} other {Melding}}",
       "intro": "{eventName, select, none {Er vraagt iets aandacht bij {org}.} other {Er vraagt iets aandacht bij {eventName}.}} De knop opent de pagina die het oplost."
+    },
+    "program.cfp-received": {
+      "subject": "We hebben je voorstel ‘{title}’ ontvangen",
+      "intro": "Bedankt voor je voorstel ‘{title}’ voor {eventName}. {org} beoordeelt het en mailt je het besluit."
+    },
+    "program.cfp-accepted": {
+      "subject": "Je voorstel ‘{title}’ is geaccepteerd",
+      "intro": "Goed nieuws: {org} heeft ‘{title}’ voor {eventName} geaccepteerd. De organisatoren laten je binnenkort weten wanneer je sessie is.{hasNote, select, yes { Bericht van de organisatoren: {note}} other {}}"
+    },
+    "program.cfp-rejected": {
+      "subject": "Over je voorstel ‘{title}’",
+      "intro": "Bedankt voor je voorstel ‘{title}’ voor {eventName}. {org} kon het deze keer niet in het programma opnemen.{hasNote, select, yes { Bericht van de organisatoren: {note}} other {}}"
     }
   },
   "roles": {
@@ -261,7 +273,8 @@
     "speaker": "spreker",
     "exhibitor_admin": "exposantbeheerder",
     "exhibitor_staff": "exposantmedewerker",
-    "sponsor_contact": "sponsorcontact"
+    "sponsor_contact": "sponsorcontact",
+    "cfp_reviewer": "beoordelaar van de call for papers"
   },
   "account": {
     "deleted": {

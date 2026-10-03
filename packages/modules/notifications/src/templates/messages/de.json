@@ -244,6 +244,18 @@
     "alerts.alert-urgent-text": {
       "subject": "{rule, select, unseated {{count, plural, one {Ein Teilnehmer hat keinen Sitzplatz} other {{countWords} Teilnehmende haben keinen Sitzplatz}}} undistributed {{count, plural, one {Ein gekauftes Ticket wurde nicht weitergegeben} other {{countWords} gekaufte Tickets wurden nicht weitergegeben}}} paymentsFailed {{count, plural, one {Eine Zahlung ist fehlgeschlagen} other {{countWords} Zahlungen sind fehlgeschlagen}}} paymentsStuck {{count, plural, one {Eine Zahlung hängt fest} other {{countWords} Zahlungen hängen fest}}} refundSurge {{count, plural, one {Eine Erstattung in der letzten Stunde} other {{countWords} Erstattungen in der letzten Stunde}}} devicesOffline {{count, plural, one {Ein Check-in-Gerät ist offline} other {{countWords} Check-in-Geräte sind offline}}} devicesLowBattery {{count, plural, one {Ein Check-in-Gerät hat einen schwachen Akku} other {{countWords} Check-in-Geräte haben einen schwachen Akku}}} devicesBacklog {{count, plural, one {Ein Check-in-Gerät hat Scans, die auf die Synchronisierung warten} other {{countWords} Check-in-Geräte haben Scans, die auf die Synchronisierung warten}}} capacityNear {Der Veranstaltungsort ist zu {count} % voll} capacityFull {Der Veranstaltungsort ist voll ({count} %)} sellOut {{count} % der Tickets sind verkauft} salesPace {Der Ticketverkauf liegt bei {count} % des Zieltempos} readiness {{count, plural, one {Ein Einrichtungsschritt blockiert diese Veranstaltung} other {{countWords} Einrichtungsschritte blockieren diese Veranstaltung}}} domain {{count, plural, one {Eine eigene Domain hat ein Problem} other {{countWords} eigene Domains haben ein Problem}}} payoutsPastDue {{count, plural, one {Eine Anforderung des Auszahlungskontos ist überfällig} other {{countWords} Anforderungen des Auszahlungskontos sind überfällig}}} deliverability {Die E-Mail-Zustellbarkeit braucht Aufmerksamkeit} automationFailed {{count, plural, one {Eine Nachricht oder Sammelaktion ist heute fehlgeschlagen} other {{countWords} Nachrichten oder Sammelaktionen sind heute fehlgeschlagen}}} assistanceOverdue {{count, plural, one {Eine Hilfeanfrage wartet zu lange} other {{countWords} Hilfeanfragen warten zu lange}}} campaignFailed {{count, plural, one {Ein Kampagnenversand ist heute fehlgeschlagen} other {{countWords} Kampagnenversände sind heute fehlgeschlagen}}} disputeDeadline {{count, plural, one {Eine Rückbuchung braucht bald Nachweise} other {{countWords} Rückbuchungen brauchen bald Nachweise}}} other {Warnung}}",
       "intro": "{eventName, select, none {Bei {org} braucht etwas Aufmerksamkeit.} other {Bei {eventName} braucht etwas Aufmerksamkeit.}} Die Schaltfläche öffnet die Seite, die es behebt."
+    },
+    "program.cfp-received": {
+      "subject": "Wir haben Ihren Vorschlag „{title}“ erhalten",
+      "intro": "Danke für Ihren Vorschlag „{title}“ für {eventName}. {org} prüft ihn und schickt Ihnen die Entscheidung per E-Mail."
+    },
+    "program.cfp-accepted": {
+      "subject": "Ihr Vorschlag „{title}“ wurde angenommen",
+      "intro": "Gute Nachrichten: {org} hat „{title}“ für {eventName} angenommen. Die Veranstalter teilen Ihnen bald die Zeit Ihrer Session mit.{hasNote, select, yes { Hinweis der Veranstalter: {note}} other {}}"
+    },
+    "program.cfp-rejected": {
+      "subject": "Zu Ihrem Vorschlag „{title}“",
+      "intro": "Danke für Ihren Vorschlag „{title}“ für {eventName}. {org} konnte ihn diesmal leider nicht ins Programm aufnehmen.{hasNote, select, yes { Hinweis der Veranstalter: {note}} other {}}"
     }
   },
   "roles": {
@@ -261,7 +273,8 @@
     "speaker": "Speaker",
     "exhibitor_admin": "Aussteller-Admin",
     "exhibitor_staff": "Aussteller-Team",
-    "sponsor_contact": "Sponsor-Kontakt"
+    "sponsor_contact": "Sponsor-Kontakt",
+    "cfp_reviewer": "Gutachter des Call for Papers"
   },
   "account": {
     "deleted": {

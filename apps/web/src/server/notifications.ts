@@ -46,7 +46,7 @@ import {
   type Subscriber,
   subscribes,
 } from '@yayatoh/platform';
-import { taskReminderMailer } from '@yayatoh/program';
+import { cfpMailer, taskReminderMailer } from '@yayatoh/program';
 import { registrationCapacity } from '@yayatoh/registration';
 import { surveyMailer } from '@yayatoh/surveys';
 import { impersonationNotice, invitationMailer, orgStatusNotice } from '@yayatoh/tenancy';
@@ -125,6 +125,7 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     // M5.3a speaker portal: invitations and task reminders.
     portalInviteMailer({ notifier, appOrigin }),
     taskReminderMailer({ notifier, appOrigin }),
+    cfpMailer({ notifier }),
   ];
 }
 

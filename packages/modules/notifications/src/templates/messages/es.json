@@ -244,6 +244,18 @@
     "alerts.alert-urgent-text": {
       "subject": "{rule, select, unseated {{count, plural, one {Un asistente no tiene asiento} other {{countWords} asistentes no tienen asiento}}} undistributed {{count, plural, one {Una entrada comprada no se ha distribuido} other {{countWords} entradas compradas no se han distribuido}}} paymentsFailed {{count, plural, one {Un pago falló} other {{countWords} pagos fallaron}}} paymentsStuck {{count, plural, one {Un pago está atascado} other {{countWords} pagos están atascados}}} refundSurge {{count, plural, one {Un reembolso en la última hora} other {{countWords} reembolsos en la última hora}}} devicesOffline {{count, plural, one {Un dispositivo de control de acceso está sin conexión} other {{countWords} dispositivos de control de acceso están sin conexión}}} devicesLowBattery {{count, plural, one {Un dispositivo de control de acceso tiene poca batería} other {{countWords} dispositivos de control de acceso tienen poca batería}}} devicesBacklog {{count, plural, one {Un dispositivo de control de acceso tiene escaneos pendientes de sincronizar} other {{countWords} dispositivos de control de acceso tienen escaneos pendientes de sincronizar}}} capacityNear {El recinto está al {count} % de su capacidad} capacityFull {El recinto está lleno ({count} %)} sellOut {El {count} % de las entradas está vendido} salesPace {La venta de entradas va al {count} % del ritmo objetivo} readiness {{count, plural, one {Un paso de configuración bloquea este evento} other {{countWords} pasos de configuración bloquean este evento}}} domain {{count, plural, one {Un dominio personalizado tiene un problema} other {{countWords} dominios personalizados tienen un problema}}} payoutsPastDue {{count, plural, one {Un requisito de la cuenta de pagos está vencido} other {{countWords} requisitos de la cuenta de pagos están vencidos}}} deliverability {La entregabilidad del correo necesita atención} automationFailed {{count, plural, one {Un mensaje o acción masiva falló hoy} other {{countWords} mensajes o acciones masivas fallaron hoy}}} assistanceOverdue {{count, plural, one {{countWords} solicitud de ayuda lleva demasiado esperando} other {{countWords} solicitudes de ayuda llevan demasiado esperando}}} campaignFailed {{count, plural, one {Un envío de campaña falló hoy} other {{countWords} envíos de campaña fallaron hoy}}} disputeDeadline {{count, plural, one {Una disputa necesita pruebas pronto} other {{countWords} disputas necesitan pruebas pronto}}} other {Alerta}}",
       "intro": "{eventName, select, none {Algo necesita atención en {org}.} other {Algo necesita atención en {eventName}.}} El botón abre la página que lo soluciona."
+    },
+    "program.cfp-received": {
+      "subject": "Hemos recibido tu propuesta «{title}»",
+      "intro": "Gracias por proponer «{title}» para {eventName}. {org} la revisará y te enviará la decisión por correo."
+    },
+    "program.cfp-accepted": {
+      "subject": "Tu propuesta «{title}» ha sido aceptada",
+      "intro": "Buenas noticias: {org} ha aceptado «{title}» para {eventName}. Los organizadores compartirán pronto el horario de tu sesión.{hasNote, select, yes { Nota de los organizadores: {note}} other {}}"
+    },
+    "program.cfp-rejected": {
+      "subject": "Sobre tu propuesta «{title}»",
+      "intro": "Gracias por proponer «{title}» para {eventName}. {org} no ha podido incluirla en el programa esta vez.{hasNote, select, yes { Nota de los organizadores: {note}} other {}}"
     }
   },
   "roles": {
@@ -261,7 +273,8 @@
     "speaker": "ponente",
     "exhibitor_admin": "administrador de expositor",
     "exhibitor_staff": "personal de expositor",
-    "sponsor_contact": "contacto de patrocinador"
+    "sponsor_contact": "contacto de patrocinador",
+    "cfp_reviewer": "revisor de la convocatoria de ponencias"
   },
   "account": {
     "deleted": {

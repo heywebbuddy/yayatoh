@@ -182,7 +182,11 @@ import {
 } from '@yayatoh/platform';
 import { dsarExportBulk } from '@yayatoh/privacy';
 import {
+  addCfpQuestionCommand,
+  addCfpReviewerCommand,
   assignBoothCommand,
+  assignCfpReviewerCommand,
+  cfpOverviewQuery,
   claimSessionPlaceTx,
   createExhibitorCommand,
   createPortalTaskCommand,
@@ -194,6 +198,7 @@ import {
   createSponsorCommand,
   createSponsorTierCommand,
   createTrackCommand,
+  decideCfpSubmissionCommand,
   inviteExhibitorMemberCommand,
   inviteSpeakerCommand,
   portalInviteStaffCommand,
@@ -202,10 +207,13 @@ import {
   publishAgendaCommand,
   recordGroupPickTx,
   saveBoothCommand,
+  saveCfpCommand,
   saveExhibitorListingCommand,
   saveExhibitorSettingsCommand,
   setSessionAgendaCommand,
   speakerPortalQuery,
+  submitCfpCommand,
+  submitCfpReviewCommand,
 } from '@yayatoh/program';
 import {
   createRegistrationTypeCommand,
@@ -2140,6 +2148,74 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   await withTenant(systemCtx(org.id), (tx) =>
     tx.execute(sql`insert into alerts.signals (org_id, kind, source_event_id, occurred_at)
       values (${org.id}, 'journey_step_failed', ${uuidv7()}, now() - interval '2 days')`),
+  );
+  // M5.3b call for papers: an open call with one question, a proposal with a co-speaker and an
+  // answer (forms engine), a reviewer (portal account) assigned and reviewing, and a second
+  // proposal accepted (speaker + draft session): isolation coverage of every cfp table.
+  await executeCommand(
+    saveCfpCommand,
+    { eventId: event.id, status: 'open', durations: [30, 45], intro: `Speak at ${name}` },
+    ctx(),
+    ports,
+  );
+  const cfpQuestion = await executeCommand(
+    addCfpQuestionCommand,
+    { eventId: event.id, type: 'short_text', label: 'Your city' },
+    ctx(),
+    ports,
+  );
+  const cfpPublic = createCtx({ orgId: org.id, locale: 'en' });
+  for (const n of [1, 2])
+    await executeCommand(
+      submitCfpCommand,
+      {
+        eventId: event.id,
+        title: `Proposal ${n} for ${name}`,
+        abstract: 'A talk about *fixtures*.',
+        durationMinutes: 30,
+        speakerName: `Proposer ${n}`,
+        speakerEmail: `proposer${n}-${slug}@example.test`,
+        speakerCompany: name,
+        speakerBio: 'Bio of the proposer.',
+        coSpeakers: [{ name: `Co ${n}`, email: `co${n}-${slug}@example.test` }],
+        answers: { [cfpQuestion.key]: 'Lisbon' },
+      },
+      cfpPublic,
+      ports,
+    );
+  const cfpView = await executeQuery(cfpOverviewQuery, { eventId: event.id }, ctx(), ports);
+  const [cfpFirst, cfpSecond] = cfpView.submissions;
+  if (!cfpFirst || !cfpSecond) throw new Error('fixture: cfp submissions');
+  const cfpReviewer = await executeCommand(
+    addCfpReviewerCommand,
+    { eventId: event.id, name: `Reviewer of ${name}`, email: `reviewer-${slug}@example.test` },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    assignCfpReviewerCommand,
+    { eventId: event.id, submissionId: cfpFirst.id, reviewerId: cfpReviewer.reviewerId },
+    ctx(),
+    ports,
+  );
+  const reviewerSession = await createPortalSession({
+    orgId: org.id,
+    accountId: cfpReviewer.accountId,
+    host: 'fixture.test',
+  });
+  const reviewerPrincipal = await portalPrincipalBySession(reviewerSession.token, 'fixture.test');
+  if (!reviewerPrincipal) throw new Error('fixture: reviewer session');
+  await executeCommand(
+    submitCfpReviewCommand,
+    { submissionId: cfpFirst.id, score: 4, comment: 'A clear, useful talk.' },
+    portalCtx(reviewerPrincipal),
+    ports,
+  );
+  await executeCommand(
+    decideCfpSubmissionCommand,
+    { eventId: event.id, submissionId: cfpSecond.id, decision: 'accept', note: 'Welcome aboard.' },
+    ctx(),
+    ports,
   );
   return {
     org,

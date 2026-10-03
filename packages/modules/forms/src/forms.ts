@@ -66,7 +66,10 @@ export async function currentFormTx(tx: TenantTx, s: Subject) {
  */
 function checkKindRules(kind: Subject['kind'], definition: FormDefinition): void {
   for (const f of definition.fields) {
-    if ((kind === 'checkout_questions' || kind === 'cfp') && !(FIELD_TYPES as readonly string[]).includes(f.type))
+    if (
+      (kind === 'checkout_questions' || kind === 'cfp') &&
+      !(FIELD_TYPES as readonly string[]).includes(f.type)
+    )
       throw new DomainError('validation_failed', 'Not a checkout question type', {
         reason: 'form_invalid',
         field: f.key,

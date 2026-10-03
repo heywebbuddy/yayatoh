@@ -244,6 +244,18 @@
     "alerts.alert-urgent-text": {
       "subject": "{rule, select, unseated {{count, plural, one {Un partecipante non ha un posto} other {{countWords} partecipanti non hanno un posto}}} undistributed {{count, plural, one {Un biglietto acquistato non è stato distribuito} other {{countWords} biglietti acquistati non sono stati distribuiti}}} paymentsFailed {{count, plural, one {Un pagamento non è riuscito} other {{countWords} pagamenti non sono riusciti}}} paymentsStuck {{count, plural, one {Un pagamento è bloccato} other {{countWords} pagamenti sono bloccati}}} refundSurge {{count, plural, one {Un rimborso nell’ultima ora} other {{countWords} rimborsi nell’ultima ora}}} devicesOffline {{count, plural, one {Un dispositivo di check-in è offline} other {{countWords} dispositivi di check-in sono offline}}} devicesLowBattery {{count, plural, one {Un dispositivo di check-in ha la batteria scarica} other {{countWords} dispositivi di check-in hanno la batteria scarica}}} devicesBacklog {{count, plural, one {Un dispositivo di check-in ha scansioni in attesa di sincronizzazione} other {{countWords} dispositivi di check-in hanno scansioni in attesa di sincronizzazione}}} capacityNear {La sede è piena al {count}%} capacityFull {La sede è al completo ({count}%)} sellOut {Il {count}% dei biglietti è venduto} salesPace {Le vendite dei biglietti sono al {count}% del ritmo previsto} readiness {{count, plural, one {Un passaggio di configurazione blocca questo evento} other {{countWords} passaggi di configurazione bloccano questo evento}}} domain {{count, plural, one {Un dominio personalizzato ha un problema} other {{countWords} domini personalizzati hanno un problema}}} payoutsPastDue {{count, plural, one {Un requisito dell’account di pagamento è scaduto} other {{countWords} requisiti dell’account di pagamento sono scaduti}}} deliverability {Il recapito delle email richiede attenzione} automationFailed {{count, plural, one {Un messaggio o un’azione di massa non è riuscito oggi} other {{countWords} messaggi o azioni di massa non sono riusciti oggi}}} assistanceOverdue {{count, plural, one {{countWords} richiesta di aiuto aspetta da troppo} other {{countWords} richieste di aiuto aspettano da troppo}}} campaignFailed {{count, plural, one {Un invio di campagna non è riuscito oggi} other {{countWords} invii di campagna non sono riusciti oggi}}} disputeDeadline {{count, plural, one {Una contestazione richiede presto delle prove} other {{countWords} contestazioni richiedono presto delle prove}}} other {Avviso}}",
       "intro": "{eventName, select, none {Qualcosa richiede attenzione in {org}.} other {Qualcosa richiede attenzione per {eventName}.}} Il pulsante apre la pagina che lo risolve."
+    },
+    "program.cfp-received": {
+      "subject": "Abbiamo ricevuto la tua proposta «{title}»",
+      "intro": "Grazie per aver proposto «{title}» per {eventName}. {org} la valuterà e ti invierà la decisione via email."
+    },
+    "program.cfp-accepted": {
+      "subject": "La tua proposta «{title}» è stata accettata",
+      "intro": "Buone notizie: {org} ha accettato «{title}» per {eventName}. Gli organizzatori condivideranno presto l’orario della tua sessione.{hasNote, select, yes { Nota degli organizzatori: {note}} other {}}"
+    },
+    "program.cfp-rejected": {
+      "subject": "Sulla tua proposta «{title}»",
+      "intro": "Grazie per aver proposto «{title}» per {eventName}. Questa volta {org} non ha potuto includerla nel programma.{hasNote, select, yes { Nota degli organizzatori: {note}} other {}}"
     }
   },
   "roles": {
@@ -261,7 +273,8 @@
     "speaker": "relatore",
     "exhibitor_admin": "amministratore espositore",
     "exhibitor_staff": "staff espositore",
-    "sponsor_contact": "referente sponsor"
+    "sponsor_contact": "referente sponsor",
+    "cfp_reviewer": "revisore della call for papers"
   },
   "account": {
     "deleted": {
