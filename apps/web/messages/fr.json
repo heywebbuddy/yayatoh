@@ -10878,7 +10878,8 @@
       "people": "Participants",
       "connections": "Contacts",
       "meetings": "Rendez-vous",
-      "profile": "Mon profil"
+      "profile": "Mon profil",
+      "chats": "Messages"
     },
     "signIn": {
       "intro": "Voyez qui d’autre vient, échangez vos contacts et réservez de courts rendez-vous. Seules les personnes qui choisissent d’y participer apparaissent ici.",
@@ -10978,7 +10979,8 @@
       "choosePlace": "Choisissez un lieu",
       "placeRequired": "Choisissez un lieu.",
       "requestMeeting": "Envoyer la demande de rendez-vous",
-      "meetingSent": "Demande de rendez-vous envoyée à {name}."
+      "meetingSent": "Demande de rendez-vous envoyée à {name}.",
+      "message": "Envoyer un message à {name}"
     },
     "kind": {
       "booth": "Stand",
@@ -11027,7 +11029,9 @@
       "withdrawn": "Demande retirée.",
       "remove": "Retirer",
       "removeName": "Retirer votre contact avec {name}",
-      "removed": "Contact retiré."
+      "removed": "Contact retiré.",
+      "message": "Message",
+      "messageTo": "Envoyer un message à {name}"
     },
     "meetings": {
       "metaTitle": "Mes rendez-vous",
@@ -11166,7 +11170,153 @@
         "tooShort": "Le temps entre le début et la fin est plus court qu’un créneau.",
         "overlap": "Ces créneaux chevauchent des créneaux existants.",
         "tooMany": "C’est plus que ce que cet événement peut contenir. Supprimez-en d’abord."
+      },
+      "chatLabel": "Messagerie entre contacts et partenaires de rendez-vous, et avec les exposants à leur stand",
+      "chat": {
+        "heading": "Messagerie",
+        "on": "Les participants peuvent écrire à leurs contacts et partenaires de rendez-vous, et aux exposants qui acceptent les messages. Vous ne voyez que les discussions signalées.",
+        "off": "La messagerie est désactivée. Activez-la dans les réglages ci-dessus.",
+        "stats": {
+          "conversations": "Discussions",
+          "messagesToday": "Messages des dernières 24 heures",
+          "openReports": "Signalements de messagerie ouverts",
+          "booths": "Stands qui acceptent les messages"
+        },
+        "reports": "Signalements de messagerie",
+        "noReports": "Aucun signalement de messagerie à examiner.",
+        "openReports": "Signalements de messagerie ouverts",
+        "reportTitle": "{reporter} a signalé sa discussion avec {reported}",
+        "reportTitleBooth": "{reporter} a signalé sa discussion de stand avec {reported}",
+        "excerpt": "Les derniers messages avant le signalement",
+        "removedMessage": "Message supprimé",
+        "remove": "Supprimer",
+        "removeFrom": "Supprimer le message de {name} à {time}",
+        "removed": "Message supprimé. Plus personne ne le voit.",
+        "hide": "Masquer du networking",
+        "hideName": "Masquer {name} du networking",
+        "hidden": "{name} est masqué du networking.",
+        "suspend": "Suspendre la messagerie du stand",
+        "suspendName": "Suspendre la messagerie du stand de {name}",
+        "suspended": "La messagerie du stand de {name} est suspendue.",
+        "dismiss": "Classer",
+        "dismissReport": "Classer le signalement concernant {name}",
+        "dismissed": "Signalement classé.",
+        "closedReports": "{count, plural, one {# signalement de messagerie traité} many {# signalements de messagerie traités} other {# signalements de messagerie traités}}",
+        "moderation": {
+          "open": "Ouvert",
+          "actioned": "Mesure prise",
+          "dismissed": "Classé"
+        },
+        "suspendedBooths": "Messageries de stand suspendues",
+        "noSuspended": "Aucune messagerie de stand n’est suspendue.",
+        "restore": "Lever la suspension",
+        "restoreName": "Lever la suspension de la messagerie du stand de {name}",
+        "restored": "{name} peut de nouveau recevoir des messages."
       }
+    },
+    "unreadChats": "{count, plural, one {# discussion avec des messages non lus} many {# discussions avec des messages non lus} other {# discussions avec des messages non lus}}"
+  },
+  "chat": {
+    "metaTitle": "Messages",
+    "title": "Messages",
+    "description": "Vos discussions avec vos contacts et partenaires de rendez-vous, et avec les exposants à leur stand.",
+    "conversationsHeading": "Vos discussions",
+    "emptyTitle": "Aucune discussion pour l’instant",
+    "emptyDescription": "Vous pouvez écrire à quelqu’un dès que vous êtes en contact ou avez convenu d’un rendez-vous. Ouvrez l’un de vos contacts pour commencer.",
+    "toConnections": "Voir vos contacts",
+    "unread": "{count, plural, one {# message non lu} many {# messages non lus} other {# messages non lus}}",
+    "boothLabel": "Stand {numbers}",
+    "lastRemoved": "Message supprimé",
+    "lastFromMe": "Vous : {body}",
+    "lastFromBooth": "Votre stand : {body}",
+    "boothsHeading": "Écrire aux exposants",
+    "boothsHelp": "Ces exposants répondent aux questions depuis leur stand.",
+    "noBooths": "Aucun exposant n’accepte de messages pour le moment.",
+    "chatWithBooth": "Écrire à {name}",
+    "openBooth": "Écrire",
+    "notice": {
+      "reported": "Merci de nous l’avoir signalé. L’organisateur et Yayatoh vont l’examiner, et cette personne ne peut plus vous écrire.",
+      "blocked": "Bloqué. Vous ne vous verrez plus dans le networking."
+    },
+    "closed": {
+      "chat_off": "L’organisateur a désactivé la messagerie pour cet événement.",
+      "not_connected": "Vous pourrez écrire à {name} une fois en contact ou après avoir convenu d’un rendez-vous.",
+      "booth_closed": "{name} n’accepte pas de messages pour le moment.",
+      "blocked": "Cette discussion est bloquée.",
+      "blockedByMe": "Vous avez bloqué la messagerie de ce stand. Débloquez-la ci-dessous pour écrire à nouveau."
+    },
+    "threadMetaTitle": "Discussion",
+    "threadTitle": "Discussion avec {name}",
+    "backToChats": "Toutes les discussions",
+    "viewProfile": "Profil de {name}",
+    "noMessages": "Aucun message pour l’instant. Dites bonjour à {name}.",
+    "logLabel": "Messages avec {name}",
+    "you": "Vous",
+    "removed": "Message supprimé par l’organisateur",
+    "messageLabel": "Message",
+    "messageHint": "Entrée pour envoyer. Maj+Entrée pour aller à la ligne. 2 000 caractères maximum.",
+    "send": "Envoyer",
+    "live": "Les nouveaux messages s’affichent ici dès leur arrivée.",
+    "connecting": "Connexion…",
+    "reconnecting": "Reconnexion… Les nouveaux messages s’afficheront à votre retour en ligne.",
+    "errors": {
+      "not_connected": "Vous ne pouvez écrire qu’à vos contacts ou aux personnes avec qui vous avez convenu d’un rendez-vous.",
+      "chat_off": "L’organisateur a désactivé la messagerie pour cet événement.",
+      "booth_closed": "Cet exposant n’accepte pas de messages pour le moment.",
+      "blocked": "Cette discussion est bloquée.",
+      "not_found": "Cette personne n’est plus disponible pour discuter.",
+      "too_fast": "Vous envoyez des messages trop vite. Patientez une minute, puis réessayez.",
+      "hourly_limit": "Vous avez envoyé beaucoup de messages cette heure-ci. Réessayez plus tard.",
+      "too_many_new_chats": "Vous avez lancé beaucoup de nouvelles discussions cette heure-ci. Réessayez plus tard.",
+      "awaiting_reply": "Attendez une réponse avant d’envoyer d’autres messages.",
+      "required": "Écrivez d’abord un message.",
+      "too_long": "Un message ne peut pas dépasser 2 000 caractères.",
+      "already_removed": "Ce message a déjà été supprimé."
+    },
+    "safety": {
+      "summary": "Bloquer ou signaler {name}",
+      "block": "Bloquer {name}",
+      "unblock": "Débloquer {name}",
+      "unblockHelp": "Vous pourrez de nouveau vous écrire dans cette discussion.",
+      "blockBoothHelp": "{name} ne pourra plus vous répondre et vous ne pourrez plus lui écrire. Vous pourrez débloquer plus tard.",
+      "blockVisitorHelp": "{name} ne pourra plus écrire à votre stand. Vous pourrez débloquer plus tard.",
+      "report": "Signaler et bloquer {name}",
+      "reportHelp": "Dites à l’organisateur ce qui s’est passé. Yayatoh examine aussi les signalements de messagerie. Signaler bloque aussi cette discussion.",
+      "reason": "Motif",
+      "chooseReason": "Choisissez un motif",
+      "reasonRequired": "Choisissez un motif.",
+      "details": "Ce qui s’est passé",
+      "detailsHint": "Obligatoire pour « Autre chose ». 500 caractères maximum.",
+      "detailsRequired": "Dites-nous ce qui s’est passé."
+    },
+    "portal": {
+      "title": "Messagerie du stand",
+      "description": "Les participants inscrits au networking peuvent écrire à votre stand. Toute l’équipe du stand partage cette boîte de réception.",
+      "back": "Retour à {name}",
+      "backToChats": "Toutes les discussions du stand",
+      "on": "Accepte les messages",
+      "off": "N’accepte pas de messages",
+      "suspended": "L’organisateur a suspendu la messagerie de votre stand après un signalement.",
+      "eventOff": "La messagerie est désactivée pour cet événement.",
+      "notAtBooth": "Les visiteurs trouveront la messagerie de votre stand dès que vous aurez un stand visible.",
+      "turnOn": "Accepter les messages à notre stand",
+      "turnOff": "Ne plus accepter de messages",
+      "adminOnly": "Seul l’administrateur de votre exposant peut activer ou désactiver la messagerie du stand.",
+      "conversations": "Discussions des visiteurs",
+      "emptyTitle": "Aucune discussion pour l’instant",
+      "emptyDescription": "Quand des visiteurs écrivent à votre stand, leurs messages s’affichent ici.",
+      "emptyOff": "Activez la messagerie du stand pour que les visiteurs puissent vous écrire.",
+      "blocked": "Bloqué",
+      "unreadChats": "{count, plural, =0 {Aucune discussion non lue} one {# discussion avec des messages non lus} many {# discussions avec des messages non lus} other {# discussions avec des messages non lus}}",
+      "open": "Ouvrir la messagerie du stand",
+      "closedBlockedByMe": "Vous avez bloqué {name}. Débloquez cette personne ci-dessous pour répondre.",
+      "closed": {
+        "chat_off": "La messagerie est désactivée pour cet événement.",
+        "booth_closed": "Votre stand n’accepte pas de messages. Activez la messagerie du stand pour répondre.",
+        "blocked": "{name} a bloqué la messagerie de votre stand.",
+        "not_connected": "Cette discussion est fermée."
+      },
+      "reported": "Merci. L’organisateur et Yayatoh vont examiner votre signalement ; ce visiteur ne peut plus écrire à votre stand."
     }
   }
 }

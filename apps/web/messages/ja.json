@@ -10878,7 +10878,8 @@
       "people": "参加者",
       "connections": "つながり",
       "meetings": "ミーティング",
-      "profile": "マイプロフィール"
+      "profile": "マイプロフィール",
+      "chats": "チャット"
     },
     "signIn": {
       "intro": "ほかに誰が来るかを見て、つながり、短いミーティングを予約できます。ここに表示されるのは参加を選んだ人だけです。",
@@ -10978,7 +10979,8 @@
       "choosePlace": "場所を選択",
       "placeRequired": "場所を選んでください。",
       "requestMeeting": "ミーティングをリクエスト",
-      "meetingSent": "{name} さんにミーティングのリクエストを送りました。"
+      "meetingSent": "{name} さんにミーティングのリクエストを送りました。",
+      "message": "{name} さんにメッセージを送る"
     },
     "kind": {
       "booth": "ブース",
@@ -11027,7 +11029,9 @@
       "withdrawn": "リクエストを取り下げました。",
       "remove": "削除",
       "removeName": "{name} さんとのつながりを削除",
-      "removed": "つながりを削除しました。"
+      "removed": "つながりを削除しました。",
+      "message": "メッセージ",
+      "messageTo": "{name} さんにメッセージを送る"
     },
     "meetings": {
       "metaTitle": "ミーティング",
@@ -11166,7 +11170,153 @@
         "tooShort": "開始から終了までが 1 つの時間枠より短いです。",
         "overlap": "既存の時間枠と重なっています。",
         "tooMany": "このイベントの上限を超えています。先にいくつか削除してください。"
+      },
+      "chatLabel": "つながりやミーティング相手とのチャット、ブースでの出展者とのチャット",
+      "chat": {
+        "heading": "チャット",
+        "on": "参加者は、つながりやミーティング相手、チャットを受け付けている出展者とチャットできます。主催者が見られるのは報告された会話だけです。",
+        "off": "チャットはオフです。上の設定でオンにしてください。",
+        "stats": {
+          "conversations": "会話",
+          "messagesToday": "過去 24 時間のメッセージ",
+          "openReports": "未対応のチャット報告",
+          "booths": "チャットを受け付けているブース"
+        },
+        "reports": "チャットの報告",
+        "noReports": "確認するチャットの報告はありません。",
+        "openReports": "未対応のチャット報告",
+        "reportTitle": "{reporter} さんが {reported} さんとのチャットを報告しました",
+        "reportTitleBooth": "{reporter} さんが {reported} とのブースチャットを報告しました",
+        "excerpt": "報告前の最新メッセージ",
+        "removedMessage": "削除されたメッセージ",
+        "remove": "削除",
+        "removeFrom": "{time} の {name} さんのメッセージを削除",
+        "removed": "メッセージを削除しました。どちらにも表示されなくなります。",
+        "hide": "ネットワーキングで非表示にする",
+        "hideName": "{name} さんをネットワーキングで非表示にする",
+        "hidden": "{name} さんをネットワーキングで非表示にしました。",
+        "suspend": "ブースチャットを停止",
+        "suspendName": "{name} のブースチャットを停止",
+        "suspended": "{name} のブースチャットを停止しました。",
+        "dismiss": "却下",
+        "dismissReport": "{name} についての報告を却下",
+        "dismissed": "報告を却下しました。",
+        "closedReports": "{count, plural, other {対応済みのチャット報告 # 件}}",
+        "moderation": {
+          "open": "未対応",
+          "actioned": "対応済み",
+          "dismissed": "却下"
+        },
+        "suspendedBooths": "停止中のブースチャット",
+        "noSuspended": "停止中のブースチャットはありません。",
+        "restore": "停止を解除",
+        "restoreName": "{name} のブースチャットの停止を解除",
+        "restored": "{name} は再びチャットを受け付けられます。"
       }
+    },
+    "unreadChats": "{count, plural, other {未読メッセージのあるチャット # 件}}"
+  },
+  "chat": {
+    "metaTitle": "チャット",
+    "title": "チャット",
+    "description": "つながりやミーティング相手、ブースの出展者とのメッセージ。",
+    "conversationsHeading": "あなたのチャット",
+    "emptyTitle": "まだチャットはありません",
+    "emptyDescription": "つながるか、ミーティングが決まった相手にメッセージを送れます。つながりを開いて始めましょう。",
+    "toConnections": "つながりへ",
+    "unread": "{count, plural, other {未読メッセージ # 件}}",
+    "boothLabel": "ブース {numbers}",
+    "lastRemoved": "削除されたメッセージ",
+    "lastFromMe": "あなた: {body}",
+    "lastFromBooth": "あなたのブース: {body}",
+    "boothsHeading": "出展者とチャット",
+    "boothsHelp": "これらの出展者はブースで質問に答えています。",
+    "noBooths": "現在チャットを受け付けている出展者はいません。",
+    "chatWithBooth": "{name} とチャット",
+    "openBooth": "チャット",
+    "notice": {
+      "reported": "お知らせいただきありがとうございます。主催者と Yayatoh が確認します。相手はもうあなたにメッセージを送れません。",
+      "blocked": "ブロックしました。今後ネットワーキングでお互いに表示されません。"
+    },
+    "closed": {
+      "chat_off": "主催者がこのイベントのチャットをオフにしました。",
+      "not_connected": "つながるか、ミーティングが決まると {name} さんにメッセージを送れます。",
+      "booth_closed": "{name} は現在チャットを受け付けていません。",
+      "blocked": "このチャットはブロックされています。",
+      "blockedByMe": "このブースのチャットをブロックしています。下でブロックを解除すると再び送れます。"
+    },
+    "threadMetaTitle": "チャット",
+    "threadTitle": "{name} とのチャット",
+    "backToChats": "すべてのチャット",
+    "viewProfile": "{name} のプロフィール",
+    "noMessages": "まだメッセージはありません。{name} にあいさつしましょう。",
+    "logLabel": "{name} とのメッセージ",
+    "you": "あなた",
+    "removed": "主催者が削除したメッセージ",
+    "messageLabel": "メッセージ",
+    "messageHint": "Enter で送信、Shift+Enter で改行。2,000 文字以内。",
+    "send": "送信",
+    "live": "新しいメッセージは届き次第ここに表示されます。",
+    "connecting": "接続中…",
+    "reconnecting": "再接続中… オンラインに戻ると新しいメッセージが表示されます。",
+    "errors": {
+      "not_connected": "メッセージを送れるのは、つながりのある相手かミーティングが決まった相手だけです。",
+      "chat_off": "主催者がこのイベントのチャットをオフにしました。",
+      "booth_closed": "この出展者は現在チャットを受け付けていません。",
+      "blocked": "このチャットはブロックされています。",
+      "not_found": "この相手とはもうチャットできません。",
+      "too_fast": "送信が速すぎます。1 分待ってからもう一度お試しください。",
+      "hourly_limit": "この 1 時間に多くのメッセージを送りました。しばらくしてからお試しください。",
+      "too_many_new_chats": "この 1 時間に多くの新しいチャットを始めました。しばらくしてからお試しください。",
+      "awaiting_reply": "返信を待ってから続けて送ってください。",
+      "required": "まずメッセージを入力してください。",
+      "too_long": "メッセージは 2,000 文字以内です。",
+      "already_removed": "このメッセージはすでに削除されています。"
+    },
+    "safety": {
+      "summary": "{name} をブロックまたは報告",
+      "block": "{name} をブロック",
+      "unblock": "{name} のブロックを解除",
+      "unblockHelp": "このチャットで再びやり取りできるようになります。",
+      "blockBoothHelp": "{name} はあなたに返信できなくなり、あなたも送れなくなります。後でブロックを解除できます。",
+      "blockVisitorHelp": "{name} さんはあなたのブースにメッセージを送れなくなります。後でブロックを解除できます。",
+      "report": "{name} を報告してブロック",
+      "reportHelp": "何があったか主催者に伝えてください。Yayatoh もチャットの報告を確認します。報告するとこのチャットもブロックされます。",
+      "reason": "理由",
+      "chooseReason": "理由を選んでください",
+      "reasonRequired": "理由を選んでください。",
+      "details": "何があったか",
+      "detailsHint": "「その他」の場合は必須です。500 文字以内。",
+      "detailsRequired": "何があったか教えてください。"
+    },
+    "portal": {
+      "title": "ブースチャット",
+      "description": "ネットワーキングに参加した参加者があなたのブースにメッセージを送れます。ブースのチーム全員でこの受信箱を共有します。",
+      "back": "{name} に戻る",
+      "backToChats": "すべてのブースチャット",
+      "on": "チャット受付中",
+      "off": "チャット受付停止中",
+      "suspended": "報告を受けて主催者があなたのブースチャットを停止しました。",
+      "eventOff": "このイベントのチャットはオフです。",
+      "notAtBooth": "公開されたブースがあると、来場者がブースチャットを見つけられます。",
+      "turnOn": "ブースでチャットを受け付ける",
+      "turnOff": "チャットの受付を停止する",
+      "adminOnly": "ブースチャットのオン・オフは出展者の管理者だけが切り替えられます。",
+      "conversations": "来場者とのチャット",
+      "emptyTitle": "まだチャットはありません",
+      "emptyDescription": "来場者があなたのブースにメッセージを送ると、ここに表示されます。",
+      "emptyOff": "来場者がメッセージを送れるよう、ブースチャットをオンにしてください。",
+      "blocked": "ブロック中",
+      "unreadChats": "{count, plural, =0 {未読のチャットはありません} other {未読メッセージのあるチャット # 件}}",
+      "open": "ブースチャットを開く",
+      "closedBlockedByMe": "{name} さんをブロックしています。返信するには下でブロックを解除してください。",
+      "closed": {
+        "chat_off": "このイベントのチャットはオフです。",
+        "booth_closed": "あなたのブースはチャットを受け付けていません。返信するにはブースチャットをオンにしてください。",
+        "blocked": "{name} さんがあなたのブースのチャットをブロックしました。",
+        "not_connected": "このチャットは終了しています。"
+      },
+      "reported": "ありがとうございます。主催者と Yayatoh が報告を確認します。この来場者はもうあなたのブースにメッセージを送れません。"
     }
   }
 }

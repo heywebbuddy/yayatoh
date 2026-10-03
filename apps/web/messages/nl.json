@@ -10878,7 +10878,8 @@
       "people": "Mensen",
       "connections": "Connecties",
       "meetings": "Afspraken",
-      "profile": "Mijn profiel"
+      "profile": "Mijn profiel",
+      "chats": "Chats"
     },
     "signIn": {
       "intro": "Zie wie er nog meer komt, maak connecties en boek korte afspraken. Alleen wie zelf meedoet, verschijnt hier.",
@@ -10978,7 +10979,8 @@
       "choosePlace": "Kies een plek",
       "placeRequired": "Kies een plek.",
       "requestMeeting": "Afspraakverzoek versturen",
-      "meetingSent": "Afspraakverzoek verstuurd naar {name}."
+      "meetingSent": "Afspraakverzoek verstuurd naar {name}.",
+      "message": "Stuur {name} een bericht"
     },
     "kind": {
       "booth": "Stand",
@@ -11027,7 +11029,9 @@
       "withdrawn": "Verzoek ingetrokken.",
       "remove": "Verwijderen",
       "removeName": "Je connectie met {name} verwijderen",
-      "removed": "Connectie verwijderd."
+      "removed": "Connectie verwijderd.",
+      "message": "Bericht",
+      "messageTo": "Stuur {name} een bericht"
     },
     "meetings": {
       "metaTitle": "Mijn afspraken",
@@ -11166,7 +11170,153 @@
         "tooShort": "De tijd tussen begin en einde is korter dan één slot.",
         "overlap": "Deze slots overlappen met slots die je al hebt.",
         "tooMany": "Dat is meer dan dit evenement aankan. Verwijder er eerst een paar."
+      },
+      "chatLabel": "Chat tussen connecties en afspraakpartners, en met exposanten op hun stand",
+      "chat": {
+        "heading": "Chat",
+        "on": "Deelnemers kunnen chatten met hun connecties en afspraakpartners, en met exposanten die chats aannemen. Je ziet alleen gesprekken die iemand heeft gemeld.",
+        "off": "Chat staat uit. Zet het hierboven aan bij de instellingen.",
+        "stats": {
+          "conversations": "Gesprekken",
+          "messagesToday": "Berichten in de afgelopen 24 uur",
+          "openReports": "Open chatmeldingen",
+          "booths": "Stands die chats aannemen"
+        },
+        "reports": "Chatmeldingen",
+        "noReports": "Geen chatmeldingen om te beoordelen.",
+        "openReports": "Open chatmeldingen",
+        "reportTitle": "{reporter} heeft de chat met {reported} gemeld",
+        "reportTitleBooth": "{reporter} heeft de standchat met {reported} gemeld",
+        "excerpt": "De laatste berichten vóór de melding",
+        "removedMessage": "Bericht verwijderd",
+        "remove": "Verwijderen",
+        "removeFrom": "Het bericht van {name} om {time} verwijderen",
+        "removed": "Bericht verwijderd. Niemand ziet het nog.",
+        "hide": "Verbergen bij netwerken",
+        "hideName": "{name} verbergen bij netwerken",
+        "hidden": "{name} is verborgen bij netwerken.",
+        "suspend": "Standchat schorsen",
+        "suspendName": "De standchat van {name} schorsen",
+        "suspended": "De standchat van {name} is geschorst.",
+        "dismiss": "Afwijzen",
+        "dismissReport": "De melding over {name} afwijzen",
+        "dismissed": "Melding afgewezen.",
+        "closedReports": "{count, plural, one {# afgehandelde chatmelding} other {# afgehandelde chatmeldingen}}",
+        "moderation": {
+          "open": "Open",
+          "actioned": "Maatregel genomen",
+          "dismissed": "Afgewezen"
+        },
+        "suspendedBooths": "Geschorste standchats",
+        "noSuspended": "Geen enkele standchat is geschorst.",
+        "restore": "Schorsing opheffen",
+        "restoreName": "De schorsing van de standchat van {name} opheffen",
+        "restored": "{name} kan weer chats aannemen."
       }
+    },
+    "unreadChats": "{count, plural, one {# chat met ongelezen berichten} other {# chats met ongelezen berichten}}"
+  },
+  "chat": {
+    "metaTitle": "Chats",
+    "title": "Chats",
+    "description": "Berichten met je connecties en afspraakpartners, en met exposanten op hun stand.",
+    "conversationsHeading": "Je chats",
+    "emptyTitle": "Nog geen chats",
+    "emptyDescription": "Je kunt iemand een bericht sturen zodra jullie verbonden zijn of een afspraak hebben. Open een van je connecties om te beginnen.",
+    "toConnections": "Naar je connecties",
+    "unread": "{count, plural, one {# ongelezen bericht} other {# ongelezen berichten}}",
+    "boothLabel": "Stand {numbers}",
+    "lastRemoved": "Bericht verwijderd",
+    "lastFromMe": "Jij: {body}",
+    "lastFromBooth": "Jouw stand: {body}",
+    "boothsHeading": "Chatten met exposanten",
+    "boothsHelp": "Deze exposanten beantwoorden vragen op hun stand.",
+    "noBooths": "Er neemt nu geen exposant chats aan.",
+    "chatWithBooth": "Chatten met {name}",
+    "openBooth": "Chatten",
+    "notice": {
+      "reported": "Bedankt voor je melding. De organisator en Yayatoh bekijken het, en deze persoon kan je geen berichten meer sturen.",
+      "blocked": "Geblokkeerd. Jullie zien elkaar niet meer bij netwerken."
+    },
+    "closed": {
+      "chat_off": "De organisator heeft chat voor dit evenement uitgezet.",
+      "not_connected": "Je kunt {name} een bericht sturen zodra jullie verbonden zijn of een afspraak hebben.",
+      "booth_closed": "{name} neemt nu geen chats aan.",
+      "blocked": "Deze chat is geblokkeerd.",
+      "blockedByMe": "Je hebt de chat van deze stand geblokkeerd. Deblokkeer hieronder om weer te schrijven."
+    },
+    "threadMetaTitle": "Chat",
+    "threadTitle": "Chat met {name}",
+    "backToChats": "Alle chats",
+    "viewProfile": "Profiel van {name}",
+    "noMessages": "Nog geen berichten. Zeg hallo tegen {name}.",
+    "logLabel": "Berichten met {name}",
+    "you": "Jij",
+    "removed": "Bericht verwijderd door de organisator",
+    "messageLabel": "Bericht",
+    "messageHint": "Enter verstuurt. Shift+Enter begint een nieuwe regel. Tot 2.000 tekens.",
+    "send": "Versturen",
+    "live": "Nieuwe berichten verschijnen hier zodra ze binnenkomen.",
+    "connecting": "Verbinden…",
+    "reconnecting": "Opnieuw verbinden… Nieuwe berichten verschijnen zodra je weer online bent.",
+    "errors": {
+      "not_connected": "Je kunt alleen berichten sturen aan je connecties of aan mensen met wie je een afspraak hebt.",
+      "chat_off": "De organisator heeft chat voor dit evenement uitgezet.",
+      "booth_closed": "Deze exposant neemt nu geen chats aan.",
+      "blocked": "Deze chat is geblokkeerd.",
+      "not_found": "Deze persoon is niet meer beschikbaar voor chat.",
+      "too_fast": "Je stuurt te snel berichten. Wacht een minuut en probeer het opnieuw.",
+      "hourly_limit": "Je hebt dit uur veel berichten gestuurd. Probeer het later opnieuw.",
+      "too_many_new_chats": "Je bent dit uur veel nieuwe chats begonnen. Probeer het later opnieuw.",
+      "awaiting_reply": "Wacht op een antwoord voordat je meer berichten stuurt.",
+      "required": "Schrijf eerst een bericht.",
+      "too_long": "Een bericht mag maximaal 2.000 tekens lang zijn.",
+      "already_removed": "Dit bericht is al verwijderd."
+    },
+    "safety": {
+      "summary": "{name} blokkeren of melden",
+      "block": "{name} blokkeren",
+      "unblock": "{name} deblokkeren",
+      "unblockHelp": "Jullie kunnen elkaar in deze chat weer berichten sturen.",
+      "blockBoothHelp": "{name} kan je niet meer antwoorden en jij kunt niet meer schrijven. Je kunt later deblokkeren.",
+      "blockVisitorHelp": "{name} kan je stand geen berichten meer sturen. Je kunt later deblokkeren.",
+      "report": "{name} melden en blokkeren",
+      "reportHelp": "Vertel de organisator wat er gebeurde. Yayatoh bekijkt chatmeldingen ook. Melden blokkeert deze chat ook.",
+      "reason": "Reden",
+      "chooseReason": "Kies een reden",
+      "reasonRequired": "Kies een reden.",
+      "details": "Wat er gebeurde",
+      "detailsHint": "Verplicht bij ‘Iets anders’. Tot 500 tekens.",
+      "detailsRequired": "Vertel ons wat er gebeurde."
+    },
+    "portal": {
+      "title": "Standchat",
+      "description": "Deelnemers die meedoen aan netwerken kunnen je stand berichten sturen. Je hele standteam deelt deze inbox.",
+      "back": "Terug naar {name}",
+      "backToChats": "Alle standchats",
+      "on": "Neemt chats aan",
+      "off": "Neemt geen chats aan",
+      "suspended": "De organisator heeft je standchat na een melding geschorst.",
+      "eventOff": "Chat staat uit voor dit evenement.",
+      "notAtBooth": "Bezoekers vinden je standchat zodra je een zichtbare stand hebt.",
+      "turnOn": "Chats aannemen op onze stand",
+      "turnOff": "Geen chats meer aannemen",
+      "adminOnly": "Alleen de beheerder van je exposant kan de standchat aan- of uitzetten.",
+      "conversations": "Chats van bezoekers",
+      "emptyTitle": "Nog geen chats",
+      "emptyDescription": "Als bezoekers je stand een bericht sturen, verschijnen hun berichten hier.",
+      "emptyOff": "Zet de standchat aan zodat bezoekers je kunnen schrijven.",
+      "blocked": "Geblokkeerd",
+      "unreadChats": "{count, plural, =0 {Geen ongelezen chats} one {# chat met ongelezen berichten} other {# chats met ongelezen berichten}}",
+      "open": "Standchat openen",
+      "closedBlockedByMe": "Je hebt {name} geblokkeerd. Deblokkeer hieronder om te antwoorden.",
+      "closed": {
+        "chat_off": "Chat staat uit voor dit evenement.",
+        "booth_closed": "Je stand neemt geen chats aan. Zet de standchat aan om te antwoorden.",
+        "blocked": "{name} heeft de chat van je stand geblokkeerd.",
+        "not_connected": "Deze chat is gesloten."
+      },
+      "reported": "Bedankt. De organisator en Yayatoh bekijken je melding; deze bezoeker kan je stand geen berichten meer sturen."
     }
   }
 }

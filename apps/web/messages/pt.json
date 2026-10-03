@@ -10878,7 +10878,8 @@
       "people": "Pessoas",
       "connections": "Conexões",
       "meetings": "Reuniões",
-      "profile": "Meu perfil"
+      "profile": "Meu perfil",
+      "chats": "Conversas"
     },
     "signIn": {
       "intro": "Veja quem mais vai, conecte-se e marque reuniões rápidas. Só aparece aqui quem escolhe participar.",
@@ -10978,7 +10979,8 @@
       "choosePlace": "Escolha um local",
       "placeRequired": "Escolha um local.",
       "requestMeeting": "Enviar pedido de reunião",
-      "meetingSent": "Pedido de reunião enviado para {name}."
+      "meetingSent": "Pedido de reunião enviado para {name}.",
+      "message": "Enviar uma mensagem para {name}"
     },
     "kind": {
       "booth": "Estande",
@@ -11027,7 +11029,9 @@
       "withdrawn": "Pedido retirado.",
       "remove": "Remover",
       "removeName": "Remover sua conexão com {name}",
-      "removed": "Conexão removida."
+      "removed": "Conexão removida.",
+      "message": "Mensagem",
+      "messageTo": "Enviar uma mensagem para {name}"
     },
     "meetings": {
       "metaTitle": "Minhas reuniões",
@@ -11166,7 +11170,153 @@
         "tooShort": "O tempo entre início e fim é menor que um horário.",
         "overlap": "Estes horários se sobrepõem a horários existentes.",
         "tooMany": "É mais do que este evento comporta. Exclua alguns primeiro."
+      },
+      "chatLabel": "Chat entre conexões e pessoas com reunião, e com expositores no estande",
+      "chat": {
+        "heading": "Chat",
+        "on": "Os participantes podem conversar com suas conexões e com quem tem reunião marcada, e com expositores que aceitam conversas. Você só vê conversas que alguém denunciou.",
+        "off": "O chat está desligado. Ligue-o nas configurações acima.",
+        "stats": {
+          "conversations": "Conversas",
+          "messagesToday": "Mensagens nas últimas 24 horas",
+          "openReports": "Denúncias de chat abertas",
+          "booths": "Estandes que aceitam conversas"
+        },
+        "reports": "Denúncias de chat",
+        "noReports": "Nenhuma denúncia de chat para analisar.",
+        "openReports": "Denúncias de chat abertas",
+        "reportTitle": "{reporter} denunciou a conversa com {reported}",
+        "reportTitleBooth": "{reporter} denunciou a conversa do estande com {reported}",
+        "excerpt": "As últimas mensagens antes da denúncia",
+        "removedMessage": "Mensagem removida",
+        "remove": "Remover",
+        "removeFrom": "Remover a mensagem de {name} das {time}",
+        "removed": "Mensagem removida. Ninguém a vê mais.",
+        "hide": "Ocultar do networking",
+        "hideName": "Ocultar {name} do networking",
+        "hidden": "{name} está oculto do networking.",
+        "suspend": "Suspender o chat do estande",
+        "suspendName": "Suspender o chat do estande de {name}",
+        "suspended": "O chat do estande de {name} está suspenso.",
+        "dismiss": "Arquivar",
+        "dismissReport": "Arquivar a denúncia sobre {name}",
+        "dismissed": "Denúncia arquivada.",
+        "closedReports": "{count, plural, one {# denúncia de chat tratada} many {# denúncias de chat tratadas} other {# denúncias de chat tratadas}}",
+        "moderation": {
+          "open": "Aberta",
+          "actioned": "Com medidas",
+          "dismissed": "Arquivada"
+        },
+        "suspendedBooths": "Chats de estande suspensos",
+        "noSuspended": "Nenhum chat de estande está suspenso.",
+        "restore": "Retirar a suspensão",
+        "restoreName": "Retirar a suspensão do chat do estande de {name}",
+        "restored": "{name} pode voltar a receber conversas."
       }
+    },
+    "unreadChats": "{count, plural, one {# conversa com mensagens não lidas} many {# conversas com mensagens não lidas} other {# conversas com mensagens não lidas}}"
+  },
+  "chat": {
+    "metaTitle": "Conversas",
+    "title": "Conversas",
+    "description": "Mensagens com suas conexões e com quem tem reunião marcada, e com expositores no estande.",
+    "conversationsHeading": "Suas conversas",
+    "emptyTitle": "Nenhuma conversa ainda",
+    "emptyDescription": "Você pode enviar mensagens a alguém quando estiverem conectados ou tiverem marcado uma reunião. Abra uma das suas conexões para começar.",
+    "toConnections": "Ir para suas conexões",
+    "unread": "{count, plural, one {# mensagem não lida} many {# mensagens não lidas} other {# mensagens não lidas}}",
+    "boothLabel": "Estande {numbers}",
+    "lastRemoved": "Mensagem removida",
+    "lastFromMe": "Você: {body}",
+    "lastFromBooth": "Seu estande: {body}",
+    "boothsHeading": "Converse com expositores",
+    "boothsHelp": "Estes expositores respondem a perguntas no estande.",
+    "noBooths": "No momento nenhum expositor aceita conversas.",
+    "chatWithBooth": "Conversar com {name}",
+    "openBooth": "Conversar",
+    "notice": {
+      "reported": "Obrigado por avisar. O organizador e a Yayatoh vão analisar, e essa pessoa não pode mais enviar mensagens para você.",
+      "blocked": "Bloqueado. Vocês não se verão mais no networking."
+    },
+    "closed": {
+      "chat_off": "O organizador desligou o chat deste evento.",
+      "not_connected": "Você poderá enviar mensagens para {name} quando estiverem conectados ou tiverem marcado uma reunião.",
+      "booth_closed": "{name} não está aceitando conversas no momento.",
+      "blocked": "Esta conversa está bloqueada.",
+      "blockedByMe": "Você bloqueou o chat deste estande. Desbloqueie abaixo para escrever de novo."
+    },
+    "threadMetaTitle": "Conversa",
+    "threadTitle": "Conversa com {name}",
+    "backToChats": "Todas as conversas",
+    "viewProfile": "Perfil de {name}",
+    "noMessages": "Nenhuma mensagem ainda. Diga olá para {name}.",
+    "logLabel": "Mensagens com {name}",
+    "you": "Você",
+    "removed": "Mensagem removida pelo organizador",
+    "messageLabel": "Mensagem",
+    "messageHint": "Enter envia. Shift+Enter começa uma nova linha. Até 2.000 caracteres.",
+    "send": "Enviar",
+    "live": "Novas mensagens aparecem aqui assim que chegam.",
+    "connecting": "Conectando…",
+    "reconnecting": "Reconectando… Novas mensagens vão aparecer quando você voltar a ficar on-line.",
+    "errors": {
+      "not_connected": "Você só pode enviar mensagens para suas conexões ou para quem tem reunião marcada com você.",
+      "chat_off": "O organizador desligou o chat deste evento.",
+      "booth_closed": "Este expositor não está aceitando conversas no momento.",
+      "blocked": "Esta conversa está bloqueada.",
+      "not_found": "Esta pessoa não está mais disponível para conversar.",
+      "too_fast": "Você está enviando mensagens rápido demais. Espere um minuto e tente de novo.",
+      "hourly_limit": "Você enviou muitas mensagens nesta hora. Tente mais tarde.",
+      "too_many_new_chats": "Você iniciou muitas conversas novas nesta hora. Tente mais tarde.",
+      "awaiting_reply": "Espere uma resposta antes de enviar mais mensagens.",
+      "required": "Escreva uma mensagem primeiro.",
+      "too_long": "Uma mensagem pode ter no máximo 2.000 caracteres.",
+      "already_removed": "Esta mensagem já foi removida."
+    },
+    "safety": {
+      "summary": "Bloquear ou denunciar {name}",
+      "block": "Bloquear {name}",
+      "unblock": "Desbloquear {name}",
+      "unblockHelp": "Vocês poderão voltar a trocar mensagens nesta conversa.",
+      "blockBoothHelp": "{name} não poderá mais responder a você, e você não poderá escrever. Você pode desbloquear depois.",
+      "blockVisitorHelp": "{name} não poderá mais escrever para o seu estande. Você pode desbloquear depois.",
+      "report": "Denunciar e bloquear {name}",
+      "reportHelp": "Conte ao organizador o que aconteceu. A Yayatoh também analisa denúncias de chat. Denunciar também bloqueia esta conversa.",
+      "reason": "Motivo",
+      "chooseReason": "Escolha um motivo",
+      "reasonRequired": "Escolha um motivo.",
+      "details": "O que aconteceu",
+      "detailsHint": "Obrigatório para “Outro motivo”. Até 500 caracteres.",
+      "detailsRequired": "Conte o que aconteceu."
+    },
+    "portal": {
+      "title": "Chat do estande",
+      "description": "Participantes que entraram no networking podem escrever para o seu estande. Toda a equipe do estande compartilha esta caixa de entrada.",
+      "back": "Voltar para {name}",
+      "backToChats": "Todas as conversas do estande",
+      "on": "Aceitando conversas",
+      "off": "Não aceita conversas",
+      "suspended": "O organizador suspendeu o chat do seu estande após uma denúncia.",
+      "eventOff": "O chat está desligado neste evento.",
+      "notAtBooth": "Os visitantes vão encontrar o chat do seu estande quando você tiver um estande visível.",
+      "turnOn": "Aceitar conversas no nosso estande",
+      "turnOff": "Parar de aceitar conversas",
+      "adminOnly": "Só o administrador do seu expositor pode ligar ou desligar o chat do estande.",
+      "conversations": "Conversas dos visitantes",
+      "emptyTitle": "Nenhuma conversa ainda",
+      "emptyDescription": "Quando visitantes escreverem para o seu estande, as mensagens aparecem aqui.",
+      "emptyOff": "Ligue o chat do estande para que os visitantes possam escrever para você.",
+      "blocked": "Bloqueado",
+      "unreadChats": "{count, plural, =0 {Nenhuma conversa não lida} one {# conversa com mensagens não lidas} many {# conversas com mensagens não lidas} other {# conversas com mensagens não lidas}}",
+      "open": "Abrir o chat do estande",
+      "closedBlockedByMe": "Você bloqueou {name}. Desbloqueie abaixo para responder.",
+      "closed": {
+        "chat_off": "O chat está desligado neste evento.",
+        "booth_closed": "Seu estande não está aceitando conversas. Ligue o chat do estande para responder.",
+        "blocked": "{name} bloqueou o chat do seu estande.",
+        "not_connected": "Esta conversa está fechada."
+      },
+      "reported": "Obrigado. O organizador e a Yayatoh vão analisar sua denúncia; este visitante não pode mais escrever para o seu estande."
     }
   }
 }
