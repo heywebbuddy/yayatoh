@@ -431,7 +431,16 @@ export const DEFAULT_LAYOUTS: Readonly<Record<CcRole, Readonly<Record<EventMode,
       'tickets',
       'timeline',
     ],
-    wrap: ['sales', 'tickets', 'checkins', 'arrivals', 'alerts', 'exhibitorActivity', 'sponsorActivity', 'timeline'],
+    wrap: [
+      'sales',
+      'tickets',
+      'checkins',
+      'arrivals',
+      'alerts',
+      'exhibitorActivity',
+      'sponsorActivity',
+      'timeline',
+    ],
   },
   ops: {
     planning: [
