@@ -325,11 +325,11 @@ test.describe('networking (M5.8a)', () => {
     await b.keyboard.press('Enter');
     await expect(b.getByText(`You're now connected with ${ana}.`)).toBeVisible();
     await expect(
-      b.getByRole('region', { name: 'Your connections' }).getByRole('link', { name: ana }),
+      b.getByRole('region', { name: 'Your connections' }).getByRole('link', { name: ana, exact: true }),
     ).toBeVisible();
     await b.reload();
     await expect(
-      b.getByRole('region', { name: 'Your connections' }).getByRole('link', { name: ana }),
+      b.getByRole('region', { name: 'Your connections' }).getByRole('link', { name: ana, exact: true }),
     ).toBeVisible();
     await a.goto(conf.network);
     await expect(people(a).getByText('Connected')).toBeVisible();
