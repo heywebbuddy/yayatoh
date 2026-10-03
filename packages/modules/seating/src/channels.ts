@@ -307,6 +307,8 @@ export const saveSeatChannelCommand = tenantCommand({
 /** Remove a channel: its seats go back to every channel (orders keep their seats). */
 export const deleteSeatChannelCommand = tenantCommand({
   name: 'seating.deleteChannel',
+  // Its allotment and its sales report go with it (M1.2e: refused while impersonating).
+  category: 'delete',
   input: z.object({ eventId: z.uuid(), id: z.uuid() }),
   output: z.object({ released: z.int() }),
   entitlement: 'advanced_seating',
