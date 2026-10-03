@@ -7,6 +7,7 @@ import {
   OPEN_HOUSE,
   pickOption,
   signIn,
+  WEDDING_OWNER,
 } from './helpers.ts';
 
 /**
@@ -385,15 +386,17 @@ test.describe('the person’s own request (public)', () => {
   });
 
   test('the org’s privacy notice links to it; an unknown org is not found', async ({ page }) => {
-    await signIn(page);
-    await page.goto('/o/lakeside-events/settings#legal-privacy');
+    // The wedding org, not the shared lakeside org: settings.spec expects lakeside's setup
+    // checklist to still ask for a privacy notice (batch 3i merge).
+    await signIn(page, WEDDING_OWNER);
+    await page.goto('/o/rosewood-weddings/settings#legal-privacy');
     const legal = page.getByRole('region', { name: 'Your legal pages' });
     await legal.getByLabel('Privacy notice').fill('We use guest details only to run our events.');
     await legal.getByRole('button', { name: 'Save' }).nth(1).click();
     await expect(legal.getByText('Saved.')).toBeVisible();
-    await page.goto('/legal/lakeside-events/privacy');
+    await page.goto('/legal/rosewood-weddings/privacy');
     await page.getByRole('link', { name: 'Ask for a copy of your data, or for it to be erased' }).click();
-    await expect(page).toHaveURL(/\/privacy-request\/lakeside-events$/);
+    await expect(page).toHaveURL(/\/privacy-request\/rosewood-weddings$/);
     expect((await page.request.get('/privacy-request/no-such-org-here')).status()).toBe(404);
   });
 });
