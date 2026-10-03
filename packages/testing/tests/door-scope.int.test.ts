@@ -21,7 +21,7 @@ import { addMemberCommand } from '@yayatoh/tenancy';
 import { createTicketTypeCommand } from '@yayatoh/ticketing';
 import { sql } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { type OrgFixture, ports, systemCtx, twoOrgs, userCtx } from '../src/index.ts';
+import { bareOrg, type OrgFixture, ports, systemCtx, twoOrgs, userCtx } from '../src/index.ts';
 
 let a: OrgFixture;
 let b: OrgFixture;
@@ -212,6 +212,43 @@ describe('checkpoint-scoped door staff (M1.9d)', () => {
       a.ctx(),
       ports,
     );
+  });
+
+  it('manifest: an org that has issued no ticket yet still gets a scope its device can verify (batch 3j merge)', async () => {
+    // A guest-only wedding or gala (M4.4b guest check-in) has no signing key until the manifest
+    // signs its scope: the header must carry that key, or the Scan PWA refuses its first sync.
+    const o = await bareOrg(`no-keys-${uuidv7().slice(-8)}`, 'No Keys Yet');
+    const ev = await executeCommand(
+      createEventCommand,
+      {
+        name: 'Keyless',
+        timezone: 'America/Chicago',
+        startsAt: '2027-12-01T15:00:00Z',
+        endsAt: '2027-12-02T04:00:00Z',
+      },
+      o.ctx(),
+      ports,
+    );
+    const keyCount = async () =>
+      (
+        await withTenant(systemCtx(o.orgId), (tx) =>
+          tx.execute<{ n: number }>(sql`select count(*)::int as n from ticketing.signing_keys`),
+        )
+      )[0]?.n;
+    expect(await keyCount()).toBe(0);
+    const r = await executeCommand(
+      enrollDeviceCommand,
+      { label: 'Door', assignedUserId: null },
+      o.ctx(),
+      ports,
+    );
+    const dc = await deviceContext(r.token);
+    if (!dc) throw new Error('device did not resolve');
+    const page = await executeQuery(deviceManifestQuery, { eventId: ev.id, limit: 100 }, dc.ctx, ports);
+    expect(page.rows).toEqual([]);
+    expect(await keyCount()).toBe(1);
+    expect(Object.keys(page.header.publicKeys)).toHaveLength(1);
+    expect(await verifyManifestScope(page.header)).toBe(true);
   });
 
   it('manifest: a device handed to scoped staff gets only their checkpoints, with a signed scope', async () => {
