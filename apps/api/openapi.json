@@ -590,6 +590,10 @@
             "type": "string",
             "format": "uuid"
           },
+          "orderId": {
+            "type": "string",
+            "format": "uuid"
+          },
           "eventId": {
             "type": "string",
             "format": "uuid"
@@ -604,7 +608,6 @@
           }
         },
         "required": [
-          "operationId",
           "eventId",
           "ticketIds"
         ]
@@ -13853,7 +13856,7 @@
           "webhooks"
         ],
         "summary": "Tickets were cancelled in bulk.",
-        "description": "One message per bulk cancellation, with the ids of the tickets it voided.\n\nVersion 1. Sent as a Standard Webhooks message (see the verification guide).",
+        "description": "One message per bulk cancellation (`operationId`) or per voided invoice (`orderId`: M5.1d pay later), with the ids of the tickets it voided. Exactly one of `operationId` and `orderId` is present.\n\nVersion 1. Sent as a Standard Webhooks message (see the verification guide).",
         "parameters": [
           {
             "schema": {

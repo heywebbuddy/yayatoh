@@ -17,6 +17,10 @@ import {
 } from '../src/catalog.ts';
 import { INTERNAL_EVENTS } from '../src/internal-events.ts';
 
+const ORDER_ID = '0192f1a4-7c3e-7d51-9a2b-3c4d5e6f7a91';
+const EVENT_ID = '0192f1a4-7c3e-7d51-9a2b-3c4d5e6f7a92';
+const TICKET_ID = '0192f1a4-7c3e-7d51-9a2b-3c4d5e6f7a93';
+const ORG_ID = '0192f1a4-7c3e-7d51-9a2b-3c4d5e6f7a94';
 const ROOT = join(import.meta.dirname, '../../../..');
 const entries = EVENT_CATALOG as readonly CatalogEntry[];
 
@@ -187,6 +191,20 @@ describe('thin payloads (D21)', () => {
     expect([...emitted].sort()).toEqual(expect.arrayContaining(['box_office', 'free', 'invoice']));
     for (const via of [...emitted, 'fake', 'stripe'])
       expect(() => toPublicData(paid, { ...(paid.example as object), via }), via).not.toThrow();
+  });
+
+  it('tickets.cancelled carries a bulk operation or a voided invoice (batch 3i: M5.1d), never neither', () => {
+    const cancelled = entryForSource('tickets.cancelled@1') as CatalogEntry;
+    const base = { eventId: EVENT_ID, ticketIds: [TICKET_ID] };
+    expect(toPublicData(cancelled, { ...base, orderId: ORDER_ID, orgId: ORG_ID })).toEqual({
+      ...base,
+      orderId: ORDER_ID,
+    });
+    expect(toPublicData(cancelled, { ...base, operationId: ORDER_ID })).toEqual({
+      ...base,
+      operationId: ORDER_ID,
+    });
+    expect(() => toPublicData(cancelled, base)).toThrow();
   });
 
   it('refuses a payload whose published fields carry free text instead of sending it', () => {

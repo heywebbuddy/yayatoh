@@ -280,10 +280,20 @@ export const EVENT_CATALOG = [
     version: 1,
     group: 'tickets',
     summary: 'Tickets were cancelled in bulk.',
-    description: 'One message per bulk cancellation, with the ids of the tickets it voided.',
+    description:
+      'One message per bulk cancellation (`operationId`) or per voided invoice (`orderId`: M5.1d pay later), with the ids of the tickets it voided. Exactly one of `operationId` and `orderId` is present.',
     source: 'tickets.cancelled@1',
     schemaName: 'WebhookTicketsCancelledV1',
-    schema: z.object({ operationId: id(), eventId: id(), ticketIds: z.array(id()).max(1000) }),
+    schema: z
+      .object({
+        operationId: id().optional(),
+        orderId: id().optional(),
+        eventId: id(),
+        ticketIds: z.array(id()).max(1000),
+      })
+      .refine((v) => (v.operationId === undefined) !== (v.orderId === undefined), {
+        message: 'exactly one of operationId and orderId',
+      }),
     example: { operationId: OTHER, eventId: EVENT, ticketIds: [TICKET] },
   }),
   entry({
