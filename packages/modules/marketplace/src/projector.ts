@@ -39,6 +39,8 @@ export const ORG_LISTING_EVENTS = [
 export const ORG_STATUS_EVENTS = ['org.status_changed@1'] as const;
 /** M6.14a: a listing row changed or went (the search index follows the projection). */
 export const LISTING_CHANGED = { type: 'marketplace.listing_changed', version: 1 } as const;
+/** M6.14a: a venue moved (its events' geo point). */
+export const VENUE_LISTING_EVENTS = ['venue.updated@1'] as const;
 export const LISTING_CHANGED_EVENTS = ['marketplace.listing_changed@1'] as const;
 
 async function emitListingChangedTx(tx: TenantTx, orgId: string, eventId: string) {
@@ -181,8 +183,10 @@ export function listingsProjector(deps: { onChange?: (orgId: string) => Promise<
         await rebuildOrgListingsTx(tx, event.orgId);
       } else if (
         (ORG_LISTING_EVENTS as readonly string[]).includes(key) ||
-        // M6.14a: the org's visible review count is every listing's popularity.
-        (REVIEW_VISIBILITY_EVENTS as readonly string[]).includes(key)
+        // M6.14a: the org's visible review count is every listing's popularity; a venue's
+        // location is its events' geo point.
+        (REVIEW_VISIBILITY_EVENTS as readonly string[]).includes(key) ||
+        (VENUE_LISTING_EVENTS as readonly string[]).includes(key)
       ) {
         await refreshOrgListingsTx(tx, event.orgId);
       } else {
