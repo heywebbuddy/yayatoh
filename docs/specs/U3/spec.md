@@ -62,3 +62,8 @@ An organizer reviewing the preview hit three dead ends: "View on your site" on a
 | Existing domain, step-up, CMS, venue and media journeys still pass | `domains.spec.ts`, `step-up.spec.ts`, `cms.spec.ts`, `venues.spec.ts` (validation of map link and coordinates moved to the details form, same assertions), `media.spec.ts` |
 
 Screenshots (before/after, light and dark, 1280 and 390 px): `docs/ux/screenshots/u3/`.
+
+## 5. Gate (final, 2026-10-03)
+- `pnpm lint`, `pnpm check:modules`, typecheck (62/62, `--concurrency=2`): pass.
+- Unit 2973/2973 (new: `content-url.test.ts` 7, `domain-wizard.test.ts` 3). Integration 1664/1664.
+- E2E on 375/768/1280: `u3-review-bugs.spec.ts` (9 tests × 3) and the related `venues`, `domains`, `step-up`, `cms`, `media`, `maintenance`, `team`, `api-keys`, `two-factor`, `account-privacy`, `webhooks`, `social-sign-in`, `staff-mode`, `settings` and `contact-merge` specs: all pass on the final merged tree (step-up, team and U3 rerun after the last U1 merge).
