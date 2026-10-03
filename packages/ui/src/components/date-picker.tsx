@@ -39,7 +39,7 @@ import {
   ymdString,
   zonedToUtc,
 } from './dates.ts';
-import { PANEL_CLASS, useFloatingPanel } from './floating.ts';
+import { PANEL_SHELL, useFloatingPanel } from './floating.ts';
 import { FieldMessage, fieldClass } from './input.tsx';
 import { Tick } from './select.tsx';
 import { useUiLocale } from './ui-locale.tsx';
@@ -568,7 +568,7 @@ function Picker({ kind, ...p }: DatePickerProps & { kind: Kind }) {
     if (focus) button.current?.focus();
   }, []);
   const dismiss = useCallback(() => close(false), [close]);
-  useFloatingPanel(open, wrap, panel, dismiss, { matchWidth: false });
+  useFloatingPanel(open, wrap, panel, dismiss, { matchWidth: false, maxWidth: 560 });
 
   const pickDay = (d: Ymd) => {
     const q = { ymd: d, time: parsed.time ?? (kind === 'datetime' ? { h: 9, mi: 0 } : null) };
@@ -686,9 +686,9 @@ function Picker({ kind, ...p }: DatePickerProps & { kind: Kind }) {
           popover="manual"
           role="dialog"
           aria-label={buttonLabel}
-          className={cx(PANEL_CLASS, 'w-auto p-2')}
+          className={cx(PANEL_SHELL, 'w-max overflow-auto overscroll-contain p-2')}
         >
-          <div className="flex items-start gap-2">
+          <div className="flex flex-wrap items-start gap-2">
             {kind !== 'time' ? (
               <Calendar
                 selected={parsed.ymd}

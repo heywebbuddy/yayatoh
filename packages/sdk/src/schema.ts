@@ -1524,7 +1524,7 @@ export interface webhooks {
         put?: never;
         /**
          * An order was paid and its tickets issued.
-         * @description Sent once per order when payment completes (online, at the box office, or a free order). `via` says how it was paid. Read the order and its tickets with `GET /v1/orgs/{org}/orders/{orderId}`.
+         * @description Sent once per order when payment completes (online, at the box office, by invoice, or a free order). `via` says how it was paid. Read the order and its tickets with `GET /v1/orgs/{org}/orders/{orderId}`.
          *
          *     Version 1. Sent as a Standard Webhooks message (see the verification guide).
          */
@@ -1810,7 +1810,7 @@ export interface webhooks {
         put?: never;
         /**
          * Tickets were cancelled in bulk.
-         * @description One message per bulk cancellation, with the ids of the tickets it voided.
+         * @description One message per bulk cancellation (`operationId`) or per voided invoice (`orderId`: M5.1d pay later), with the ids of the tickets it voided. Exactly one of `operationId` and `orderId` is present.
          *
          *     Version 1. Sent as a Standard Webhooks message (see the verification guide).
          */
@@ -3322,7 +3322,7 @@ export interface components {
             version: 1;
         };
         /** @enum {string} */
-        WebhookPaymentVia: "free" | "box_office" | "fake" | "stripe";
+        WebhookPaymentVia: "free" | "box_office" | "fake" | "stripe" | "invoice";
         WebhookRegistrationSubmittedV1: {
             /** Format: uuid */
             eventId: string | null;
@@ -3502,7 +3502,9 @@ export interface components {
             /** Format: uuid */
             eventId: string;
             /** Format: uuid */
-            operationId: string;
+            operationId?: string;
+            /** Format: uuid */
+            orderId?: string;
             ticketIds: string[];
         };
         /** @description Tickets were cancelled in bulk. */
