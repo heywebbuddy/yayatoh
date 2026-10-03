@@ -1,7 +1,7 @@
 import type { PortalPrincipal } from '@yayatoh/events';
 import { executeQuery } from '@yayatoh/kernel';
 import { portalExhibitorLogoQuery } from '@yayatoh/media';
-import { exhibitorPortalQuery } from '@yayatoh/program';
+import { exhibitorPortalQuery, portalLeadLicensesQuery } from '@yayatoh/program';
 import {
   Alert,
   Avatar,
@@ -23,6 +23,7 @@ import { type FieldSpec, ProgramForm } from '@/components/program-form.tsx';
 import { portalRequestCtx } from '@/server/portal.ts';
 import { ports } from '@/server/ports.ts';
 import { inviteStaffAction, revokeStaffAction, saveProfileAction } from './exhibitor-actions.ts';
+import { LeadLicensesSection } from './lead-licenses-section.tsx';
 
 const LOGO_RESULTS = ['saved', 'alt', 'file', 'too_large', 'unsupported', 'failed'] as const;
 type LogoResult = (typeof LOGO_RESULTS)[number];
@@ -37,13 +38,16 @@ export async function ExhibitorPortal({
   principal,
   locale,
   logoParam,
+  paid = false,
 }: {
   principal: PortalPrincipal;
   locale: string;
   logoParam: string | undefined;
+  paid?: boolean;
 }) {
   const ctx = await portalRequestCtx(principal);
   const view = await executeQuery(exhibitorPortalQuery, {}, ctx, ports);
+  const leads = await executeQuery(portalLeadLicensesQuery, {}, ctx, ports);
   const logo = await executeQuery(portalExhibitorLogoQuery, {}, ctx, ports);
   const t = await getTranslations('exhibitorPortal');
   const tp = await getTranslations('program');
@@ -279,6 +283,8 @@ export async function ExhibitorPortal({
           </Card>
         </section>
       ) : null}
+
+      <LeadLicensesSection leads={leads} locale={locale} eventName={view.event.name} paid={paid} />
 
       <section aria-labelledby="tasks-heading" className="flex flex-col gap-3">
         <SectionHeader id="tasks-heading" title={t('tasksHeading')} />

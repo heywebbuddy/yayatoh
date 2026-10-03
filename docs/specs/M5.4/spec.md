@@ -1,7 +1,7 @@
 # Spec: M5.4 — Exhibitor portal, booths and sponsors
 
 - **Milestone:** M5.4 (roadmap Phase 5; Phase 5 plan `docs/plans/phase-5.md`, Wave 1: M5.4a; Wave 2: M5.4b)
-- **Status:** M5.4a built (2026-09-29); M5.4b (sponsor packages, deliverables, lead licenses) follows
+- **Status:** M5.4a built (2026-09-29); M5.4b built (2026-10-03: sponsor packages, deliverables, sponsor portal, lead licenses)
 - **Risk tags:** `db-migration`, `auth`, `tenancy` (owner approval)
 - **Related:** decisions P5-1 (behind flags), P5-4 (licenses, later), P5-7 (portal sign-in), P5-8 (lead sharing, later), P5-11; ADRs 0002, 0003, 0010 (event roles), 0012 (floor plan documents), 0014; M1.4f/h (program, logos), M1.5f (guest links), M1.14 (rate limits)
 
@@ -129,3 +129,156 @@ See `docs/owner-inbox.md` ("Exhibitor portal defaults, pending owner").
 
 ### 17. Gate (2026-09-29)
 `pnpm verify` green (lint, check:modules, typecheck, 1508 unit, 970 integration). E2E on 375/768/1280: `exhibitor-portal.spec.ts` (4 tests × 3), plus `program`, `program-media`, `events`, `media`, `door-staff`, `email-kind-labels`, `security`, `seating` and `canary-crawl` specs, all passing.
+
+
+## M5.4b — sponsor packages, deliverables and lead licenses (built 2026-10-03)
+
+### 1. Goal and users
+Organizers sell sponsorship as **packages**: bundles of event-level allowances (comp registrations,
+exhibitor badges, lead licenses, logo placements, session slots). A sponsor gets exactly what its
+package includes, whether the organizer grants it or the sponsor's contact buys it in the
+**sponsor portal**. Both sides keep a **deliverables checklist** with due dates and an owner, and
+the organizer sees what is overdue. Exhibitor admins give their people **lead licenses** (P5-4)
+and buy extra ones.
+
+### 2. Scope (built)
+- **Packages = sponsor tiers** (`program.sponsor_packages`, one per tier): description, price
+  (null = granted only), quantity (null = no limit), on sale, the allowances, logo placements
+  (website, agenda, badges, signage, stage, emails) and deliverable templates
+  (`title | sponsor|organizer | days before the event`). Organizer page *Sponsors → Packages and
+  sponsors* (`/o/{org}/e/{event}/sponsors/packages`).
+- **Grants** (`program.sponsor_grants`): one active and one pending per sponsor (partial uniques).
+  The grant **snapshots** the allowances. Activating (paid or organizer-granted) moves the sponsor
+  to the tier, adds the template deliverables (due dates counted back from the event's first day in
+  its zone) and emits `program.sponsor_package.activated@1`. Cancelling ends the allowances,
+  releases the session slots and emits `…cancelled@1`; deleting a sponsor cancels its package and
+  revokes its contacts. Quantity counts active grants and purchases whose 15-minute hold is live.
+- **Purchase (fake provider in dev/CI).** `orders.startSponsorPackageCheckout`
+  (`portal:sponsor_contact`) and `orders.startLeadLicenseCheckout` (`portal:exhibitor_admin`):
+  program reserves (`reserveSponsorPackageTx` / `reserveLeadLicensesTx`, row locks), orders opens an
+  **add-on order** (`orders.addon_items`, one line, no tickets, today's fee absorbed, the org's funds
+  flow), then the provider's hosted page. `orders.applyProviderEvent` pays it through
+  `payAddonOrderTx`: program activates first (`activatePurchasedGrantTx` /
+  `activateLicensePurchaseTx`) in the same transaction, then paid + ledger sale +
+  `order.addon_paid@1` (never `order.paid@1`). A late payment that can no longer activate (sold
+  out meanwhile) emits `order.payment_orphaned@1` and leaves the order unpaid.
+- **Comp registrations.** Registration's subscriber `registration.sponsor-comp-codes` makes one
+  ticketing promo code per active grant (`COMP-XXXXXXXX`, 100 %, `maxRedemptions` = the allowance,
+  limited to the event's admission passes) and records it on the grant; cancelling deactivates it.
+  Guests type it in the registration code box (add-ons stay paid). `registration.sponsorCompUsage`
+  shows "Used: x of N" in the portal.
+- **Exhibitor link and allowances.** `program.sponsor_profiles.exhibitor_id` (one sponsor per
+  exhibitor, `ON DELETE SET NULL (exhibitor_id)`): that exhibitor's staff allowance becomes base +
+  the active packages' exhibitor badges (M5.4a's invite limit and both views use it), and its lead
+  licenses included + packages + bought.
+- **Session slots** (`program.sponsored_sessions`): the organizer assigns sessions up to the
+  package's slots; the portal lists them in the event zone.
+- **Sponsor contacts** are M5.3a portal accounts (subject `sponsor`, role `sponsor_contact`):
+  invite, resend, revoke from the packages page; one sign-in flow. The **sponsor portal**
+  (`/event-portal` for a sponsor principal): the package and allowances, comp code and use, linked
+  exhibitor, sponsored sessions, packages for sale (buy → payment page → back with a thank-you),
+  the deliverables checklist (tick off the sponsor's own).
+- **Deliverables** (`program.sponsor_deliverables`): title, owner (sponsor/organizer), person
+  responsible, due date = end of that day in the event's zone (`due_at` = next local midnight), done
+  by whom and when. Page *Sponsors → Deliverables*: overdue first (most overdue first), all, add,
+  tick off/reopen, delete. Per sponsor counts on the packages page.
+- **Lead licenses** (`program.lead_licenses`, `program.lead_license_purchases`, two columns on
+  `program.exhibitor_settings`): a license is one named seat held by a live portal account of the
+  exhibitor; revoked people's seats free themselves; assignment counts under the exhibitor's row lock
+  (concurrent assignments stop exactly at the allowance). Using licenses activates the
+  `lead_retrieval` event add-on (billing catalog, free in beta, quota 2,000). Organizer page
+  *Exhibitors → Lead licenses*; exhibitor portal section *Lead licenses* (admin gives/takes back,
+  buys; staff see their own seat).
+
+**Out (Later / not yet):** refunds of add-on orders from the console; package upgrades (one package
+at a time); deliverable reminders and an overdue event (M5.9a alert rules); file uploads on
+deliverables; showing sponsored sessions and logo placements on public pages; exhibitor tasks on
+M5.3a's generic task model (organizer UI still pending, as in M5.4a); lead capture itself (M5.6b).
+
+### 3. `touches:`
+```yaml
+touches:
+  - packages/modules/program/src/{schema,schema-sponsors,index,private-columns,people,exhibitor-portal}.ts
+  - packages/modules/program/src/{sponsor-packages,sponsor-deliverables,sponsor-portal,sponsor-allowances,sponsor-dto,lead-licenses}.ts
+  - packages/modules/program/src/domain/sponsorship.ts
+  - packages/modules/orders/src/{schema-addons,addon-orders,index,private-columns}.ts, commands/checkout.ts (3-line hook)
+  - packages/modules/registration/src/{comp-codes,index}.ts
+  - packages/modules/billing/src/addons.ts (lead_retrieval key)
+  - packages/db/drizzle/0114_sudden_night_thrasher.sql
+  - packages/testing/src/fixtures.ts
+  - apps/web/src/app/[locale]/o/[org]/e/[event]/sponsors/{page.tsx,packages/**,deliverables/**}
+  - apps/web/src/app/[locale]/o/[org]/e/[event]/exhibitors/{page.tsx,licenses/**}
+  - apps/web/src/app/[locale]/event-portal/{page.tsx,exhibitor-portal.tsx,exhibitor-actions.ts,sponsor-portal.tsx,sponsor-actions.ts,lead-licenses-section.tsx}
+  - apps/web/src/components/program-form.tsx (additive: `date` kind, `min`)
+  - apps/web/src/server/notifications.ts, apps/worker/src/registry.ts (subscriber)
+  - apps/web/messages/*.json
+```
+
+### 4. Data model
+| Table | Change | Notes |
+|---|---|---|
+| `program.sponsor_packages` | new | per tier; price, quantity, on sale (needs a price), allowances (CHECKed ranges), placements (closed list), templates jsonb array |
+| `program.sponsor_grants` | new | status pending/active/cancelled, source purchase/organizer, order id, hold, snapshot of allowances, comp code |
+| `program.sponsor_profiles` | new | sponsor → exhibitor (unique per exhibitor, SET NULL on exhibitor delete) |
+| `program.sponsor_deliverables` | new | owner, person, `due_at`, status with `(status = 'done') = (completed_at is not null)` |
+| `program.sponsored_sessions` | new | session unique; cascade with sponsor and session |
+| `program.lead_license_purchases` | new | quantity 1–100, unit price, status, order id, hold |
+| `program.lead_licenses` | new | one seat per portal account (unique), FK to `events.portal_accounts` |
+| `program.exhibitor_settings` | +2 columns | `included_lead_licenses` (default 1, 0–50), `lead_license_price_minor` |
+| `orders.addon_items` | new | one per order, kind sponsor_package/lead_licenses, ref, quantity, unit face, fee |
+| `billing.addons` | +1 row | `lead_retrieval` (free in beta) |
+
+All new tables via `tenantTable()` (FORCE RLS, NULLIF policy, org-leading indexes, composite FKs),
+fixture rows for both orgs, every text/jsonb/text[] column in `private-columns.ts` (the comp code is
+`holder`). **Migration** `0114_sudden_night_thrasher.sql` (renumber at merge), expand only. Hand-written:
+the two new CHECKs on `exhibitor_settings` added `NOT VALID` then validated; composite
+`(org_id, event_id) → events.events` FKs (cascade) for the seven new program tables;
+`sponsor_profiles_exhibitor_fk` with `ON DELETE SET NULL ("exhibitor_id")`;
+`lead_licenses_account_fk → events.portal_accounts` (cascade); the `lead_retrieval` catalog row.
+
+### 5. API diff
+- **`/v1`:** none. **`/api/v2`:** none.
+- **Program** (`sponsors` key; organizer `events:write`, reads `events:read`): `saveSponsorPackage`,
+  `grantSponsorPackage`, `cancelSponsorGrant`, `setSponsorExhibitor`, `inviteSponsorContact`,
+  `resendSponsorInvite`, `revokeSponsorContact`, `assignSponsoredSession`,
+  `unassignSponsoredSession`, `addSponsorDeliverable`, `setSponsorDeliverableDone`,
+  `deleteSponsorDeliverable`; queries `sponsorshipAdmin`, `sponsorDeliverables`. Portal
+  (`portal:sponsor_contact`): `sponsorPortal`, `portalSetDeliverableDone`. Licenses (`exhibitors`
+  key): `saveLeadLicenseSettings`, `leadLicensesAdmin`; portal `portalLeadLicenses`
+  (`portal:exhibitor`), `portalAssignLeadLicense`, `portalReleaseLeadLicense`
+  (`portal:exhibitor_admin`).
+- **Orders:** `startSponsorPackageCheckout`, `startLeadLicenseCheckout` (Idempotency-Key from the
+  page). **Registration:** `sponsorCompUsage`.
+
+### 6. Events
+| Event | Version | Producer | Consumers |
+|---|---|---|---|
+| `program.sponsor_package.activated` | 1 | program (grant or paid purchase) | `registration.sponsor-comp-codes` |
+| `program.sponsor_package.cancelled` | 1 | program (cancel, sponsor deleted) | `registration.sponsor-comp-codes` |
+| `order.addon_paid` | 1 | orders (`payAddonOrderTx`) | none yet (metrics later) |
+
+### 7. Acceptance criteria
+| ID | Given / When / Then | Test |
+|---|---|---|
+| AC-M5.4b-01 | Buying "Gold" grants exactly its allowances: comp code 100 % × 10, badges base + 4, licenses 1 + 3, placements, 1 session slot (a 2nd refused); later package edits don't change it; duplicate webhook is a no-op; ledger sale and one `order.addon_paid@1` | `packages/testing/tests/sponsorship.int.test.ts` ("buying Gold…"); e2e "a sponsor contact buys Gold…" |
+| AC-M5.4b-02 | Overdue deliverables list correctly: open and past the end of the due day in the event zone, most overdue first; done excluded; boundary at local midnight; reopen returns it | int ("overdue deliverables list correctly"); unit `program/tests/sponsorship.test.ts`; e2e deliverables test |
+| AC-M5.4b-03 | Quantity: a held purchase takes the place until its hold lapses; organizer grants respect it | int ("a package sells at most its quantity") |
+| AC-M5.4b-04 | Comp code makes a registration's pass free (add-ons paid), exactly N uses; closed on cancel | int ("comp registration codes", cancel path) |
+| AC-M5.4b-05 | A sponsor contact sees only their sponsor; another sponsor's or the organizer's deliverables look unknown; exhibitor principals, members, org B and revoked contacts are refused | int ("a sponsor contact sees only…", "ticks off only…") |
+| AC-M5.4b-06 | Lead licenses: 1 included, seats up to the allowance (concurrent: exactly 3 of 6), extra bought through the payment page, revoked seats free, staff see only their own and can't assign; `lead_retrieval` add-on activated | int (lead licenses describe); e2e "an exhibitor admin gives out lead licenses…" |
+| AC-M5.4b-07 | Staff invites stop at base + package badges | int ("staff invites stop at the base allowance plus…") |
+| AC-M5.4b-08 | Viewer reads and is refused every organizer command; no controls in the UI | int (viewer test); e2e viewer test |
+| AC-M5.4b-09 | Validation messages, keyboard-only paths, axe light/dark, Arabic RTL on every new screen, 375/768/1280 | `apps/web/e2e/sponsorship.spec.ts` |
+| AC-M5.4b-10 | Isolation and canary cover the new tables and columns | `isolation.int.test.ts`, `canary.int.test.ts`, `column-privacy.test.ts` |
+
+### 8. Security and privacy
+- The tenant comes from the portal session or the console route; portal commands re-check the
+  principal in their transaction (`sponsorPrincipalTx`, `exhibitorPrincipalTx`) and act only on the
+  principal's own sponsor or exhibitor.
+- Money only through orders/payments on the fake provider in dev/CI; paid is set only from a
+  verified, deduplicated provider event; Idempotency-Key on the purchase.
+- The sponsor portal payload is an allowlist (`sponsorPortalSerializer`); comp codes never reach
+  public pages.
+
+### 9. Gate (2026-10-03)
+See the final commit message (report) for `pnpm verify` and e2e results.

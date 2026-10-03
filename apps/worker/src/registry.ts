@@ -41,6 +41,7 @@ import {
   registrantLifecycle,
   registrationCapacity,
   registrationEnrollment,
+  sponsorCompCodes,
 } from '@yayatoh/registration';
 import { analyticsForwarder, metricsProjector, postgresAnalyticsSink } from '@yayatoh/reports';
 import { finderCodeMailer, releaseCancelledSeats } from '@yayatoh/seating';
@@ -141,6 +142,8 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     // M5.2b: cancelled registrants give their session places back; promotions are emailed.
     registrationEnrollment(),
     enrollmentMailer({ notifier, appOrigin }),
+    // M5.4b: sponsor comp registration codes.
+    sponsorCompCodes(),
     // M3.6a: contact × event participation and contact profiles for audiences.
     participationProjector(),
     listingsProjector({ onChange: (orgId) => revalidatePublicCache(appOrigin, orgId, secret) }),

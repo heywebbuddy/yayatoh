@@ -799,6 +799,13 @@
       "when": 1791001044629,
       "tag": "0113_zippy_longshot",
       "breakpoints": true
+    },
+    {
+      "idx": 114,
+      "version": "7",
+      "when": 1791019629168,
+      "tag": "0114_sudden_night_thrasher",
+      "breakpoints": true
     }
   ]
 }
