@@ -2,8 +2,8 @@ import type { TenantTx } from '@yayatoh/db';
 import { type Ctx, requireOrg } from '@yayatoh/kernel';
 import { publishRealtimeTx } from '@yayatoh/platform';
 import { and, asc, desc, eq, inArray, ne, sql } from 'drizzle-orm';
-import { activeMatchesTx } from './match-progress.ts';
 import { type CallStatus, callTotals, type EntryStatus } from './domain/paddles.ts';
+import { activeMatchesTx } from './match-progress.ts';
 import {
   type CallDto,
   type ConsoleLiveDto,

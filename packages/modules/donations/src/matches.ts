@@ -13,7 +13,12 @@ import {
   type MatchStatus,
   matchPhase,
 } from './domain/matches.ts';
-import { activeMatchesTx, type LiveMatchDto, matchProgressTx, resyncMatchPledgesTx } from './match-progress.ts';
+import {
+  activeMatchesTx,
+  type LiveMatchDto,
+  matchProgressTx,
+  resyncMatchPledgesTx,
+} from './match-progress.ts';
 import { publishConsoleStateTx } from './paddle-live.ts';
 import { paddleEventTx } from './paddles.ts';
 import { campaigns, gifts } from './schema.ts';
@@ -268,13 +273,20 @@ export const matchesQuery = tenantQuery({
         .where(eq(matches.eventId, event.id))
         .orderBy(desc(matches.createdAt), desc(matches.id)),
       tx
-        .select({ id: pledges.id, matchId: pledges.matchId, amountMinor: pledges.amountMinor, status: pledges.status })
+        .select({
+          id: pledges.id,
+          matchId: pledges.matchId,
+          amountMinor: pledges.amountMinor,
+          status: pledges.status,
+        })
         .from(pledges)
         .where(and(eq(pledges.eventId, event.id), eq(pledges.source, 'match'))),
       tx
         .select({ n: sql<number>`count(*)::int` })
         .from(gifts)
-        .where(and(eq(gifts.eventId, event.id), eq(gifts.status, 'paid'), sql`${gifts.employer} is not null`)),
+        .where(
+          and(eq(gifts.eventId, event.id), eq(gifts.status, 'paid'), sql`${gifts.employer} is not null`),
+        ),
     ]);
     const progress = await matchProgressTx(tx, rows);
     const pledgeOf = new Map(ps.map((p) => [p.matchId, p]));
@@ -304,7 +316,11 @@ export const matchesQuery = tenantQuery({
           matchedMinor: pledge?.status === 'cancelled' ? 0 : matched,
           remainingMinor: m.status === 'active' ? (p?.remainingMinor ?? 0) : 0,
           pledge: pledge
-            ? { id: pledge.id, amountMinor: pledge.amountMinor, status: pledge.status as 'confirmed' | 'cancelled' }
+            ? {
+                id: pledge.id,
+                amountMinor: pledge.amountMinor,
+                status: pledge.status as 'confirmed' | 'cancelled',
+              }
             : null,
           closedAt: m.closedAt,
         };

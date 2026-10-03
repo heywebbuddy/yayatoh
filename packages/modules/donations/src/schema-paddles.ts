@@ -11,7 +11,14 @@ import {
   uniqueIndex,
   uuid,
 } from 'drizzle-orm/pg-core';
-import { CALL_STATUSES, ENTRY_STATUSES, PADDLE_MAX, PADDLE_MIN, PLEDGE_SOURCES, PLEDGE_STATUSES } from './domain/paddles.ts';
+import {
+  CALL_STATUSES,
+  ENTRY_STATUSES,
+  PADDLE_MAX,
+  PADDLE_MIN,
+  PLEDGE_SOURCES,
+  PLEDGE_STATUSES,
+} from './domain/paddles.ts';
 import { campaigns, donationsSchema } from './schema.ts';
 import { matches } from './schema-matches.ts';
 

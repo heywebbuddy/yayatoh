@@ -87,7 +87,10 @@ async function paidGift(amountMinor: number, extra: Record<string, unknown> = {}
     orderId: r.orderId,
     applicationFeeMinor: 0,
   });
-  const e = (await provider.verifyWebhook(body, new Headers({ 'x-fake-signature': signature }))) as ProviderEvent;
+  const e = (await provider.verifyWebhook(
+    body,
+    new Headers({ 'x-fake-signature': signature }),
+  )) as ProviderEvent;
   await executeCommand(applyProviderEventCommand, e, systemCtx(a.org.id), ports);
   await catchUpGifts(a.org.id);
   return r;
@@ -200,10 +203,13 @@ describe('creating a match (M4.8f)', () => {
     await expect(newMatch({}, viewer)).rejects.toMatchObject({ code: 'forbidden' });
     const m = await newMatch({ sponsorName: 'Viewer Test', capMinor: 10_000 });
     expect((await view(a, viewer)).matches.some((x) => x.id === m.id)).toBe(true);
-    for (const cmd of [cancelMatchCommand, closeMatchCommand])
-      await expect(
-        executeCommand(cmd, { eventId: a.event.id, matchId: m.id }, viewer, ports),
-      ).rejects.toMatchObject({ code: 'forbidden' });
+    const at = { eventId: a.event.id, matchId: m.id };
+    await expect(executeCommand(cancelMatchCommand, at, viewer, ports)).rejects.toMatchObject({
+      code: 'forbidden',
+    });
+    await expect(executeCommand(closeMatchCommand, at, viewer, ports)).rejects.toMatchObject({
+      code: 'forbidden',
+    });
     // Org B can neither read nor act on org A's match.
     await expect(view(a, b.ctx())).rejects.toMatchObject({ code: 'not_found' });
     await expect(
@@ -324,10 +330,10 @@ describe('a 1:1 match capped at $25,000', () => {
     expect(live.matches.some((x) => x.id === matchId)).toBe(false);
     expect(live.totals.pledgedMinor).toBeGreaterThanOrEqual(2_000_000);
     // Closing twice is refused; so is cancelling a closed match.
-    for (const cmd of [closeMatchCommand, cancelMatchCommand])
-      await expect(
-        executeCommand(cmd, { eventId: a.event.id, matchId }, a.ctx(), ports),
-      ).rejects.toMatchObject({ code: 'invalid_state', details: { reason: 'match_closed' } });
+    const refused = { code: 'invalid_state', details: { reason: 'match_closed' } };
+    const at = { eventId: a.event.id, matchId };
+    await expect(executeCommand(closeMatchCommand, at, a.ctx(), ports)).rejects.toMatchObject(refused);
+    await expect(executeCommand(cancelMatchCommand, at, a.ctx(), ports)).rejects.toMatchObject(refused);
   });
 
   it('gifts after the close never raise it; a later refund brings the sponsor’s pledge down', async () => {
@@ -379,7 +385,12 @@ describe('windows, ratios and paddle pledges', () => {
       endsAt: new Date(Date.now() - 24 * HOUR),
     });
     expect(await matchOf(past.id)).toMatchObject({ phase: 'ended', matchedMinor: 0 });
-    const r = await executeCommand(closeMatchCommand, { eventId: a.event.id, matchId: past.id }, a.ctx(), ports);
+    const r = await executeCommand(
+      closeMatchCommand,
+      { eventId: a.event.id, matchId: past.id },
+      a.ctx(),
+      ports,
+    );
     expect(r).toMatchObject({ matchedMinor: 0, pledgeId: null });
     expect((await matchOf(past.id)).pledge).toBeNull();
   });
@@ -414,7 +425,10 @@ describe('windows, ratios and paddle pledges', () => {
     );
     const rec = await executeCommand(
       recordPaddlesCommand,
-      { eventId: a.event.id, entries: [{ clientId: uuidv7(), callId: call.id, paddle: 1, recordedAt: new Date() }] },
+      {
+        eventId: a.event.id,
+        entries: [{ clientId: uuidv7(), callId: call.id, paddle: 1, recordedAt: new Date() }],
+      },
       a.ctx(),
       ports,
     );
@@ -424,7 +438,12 @@ describe('windows, ratios and paddle pledges', () => {
     await executeCommand(closeCallCommand, { eventId: a.event.id, callId: call.id }, a.ctx(), ports);
     await executeCommand(confirmEntriesCommand, { eventId: a.event.id, callId: call.id }, a.ctx(), ports);
     expect((await matchOf(m.id)).matchedMinor).toBe(level.amountMinor);
-    const closed = await executeCommand(closeMatchCommand, { eventId: a.event.id, matchId: m.id }, a.ctx(), ports);
+    const closed = await executeCommand(
+      closeMatchCommand,
+      { eventId: a.event.id, matchId: m.id },
+      a.ctx(),
+      ports,
+    );
     expect(closed.matchedMinor).toBe(level.amountMinor);
     const [entry] = await withTenant(a.ctx(), (tx) =>
       tx.execute<{ id: string }>(

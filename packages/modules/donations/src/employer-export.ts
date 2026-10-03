@@ -86,15 +86,13 @@ export const employerExportAction = defineBulkAction({
     const byId = new Map(rows.map((r) => [r.g.id, r]));
     const refunds = new Map(refunded.map((r) => [r.giftId, Number(r.sum)]));
     const h = params.headers;
-    let out = meta.first
-      ? `﻿${csvRow([h.employer, h.donor, h.email, h.date, h.campaign, h.amount])}`
-      : '';
+    let out = meta.first ? `﻿${csvRow([h.employer, h.donor, h.email, h.date, h.campaign, h.amount])}` : '';
     const results = [];
     const fmt = (minor: number, currency: string) =>
       formatMoney(money(minor, currency), params.locale).replace(/ /g, ' ');
     for (const id of ids) {
       const r = byId.get(id);
-      if (!r || !r.g.employer) {
+      if (!r?.g.employer) {
         results.push({ id, ok: false, code: 'not_found' });
         continue;
       }

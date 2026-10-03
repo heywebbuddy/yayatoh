@@ -27,7 +27,6 @@ export interface MatchProgress {
   readonly remainingMinor: number;
 }
 
-
 /**
  * Progress of each match, computed from the campaign's confirmed gifts (never stored while a match
  * runs): online gifts that were paid in the window, each less what was refunded of it, and paddle

@@ -1,6 +1,16 @@
 import { tenantTable } from '@yayatoh/db';
 import { type SQL, sql } from 'drizzle-orm';
-import { bigint, check, foreignKey, index, integer, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import {
+  bigint,
+  check,
+  foreignKey,
+  index,
+  integer,
+  text,
+  timestamp,
+  uniqueIndex,
+  uuid,
+} from 'drizzle-orm/pg-core';
 import {
   MATCH_CAP_MAX_MINOR,
   MATCH_CAP_MIN_MINOR,
@@ -62,10 +72,7 @@ export const matches = tenantTable(
       sql`sponsor_email is null or (sponsor_email = lower(sponsor_email) and length(sponsor_email) between 3 and 254)`,
     ),
     check('matches_public_name_length', sql`public_name is null or length(public_name) between 1 and 120`),
-    check(
-      'matches_ratio_check',
-      sql.raw(`ratio_percent between ${MATCH_RATIO_MIN} and ${MATCH_RATIO_MAX}`),
-    ),
+    check('matches_ratio_check', sql.raw(`ratio_percent between ${MATCH_RATIO_MIN} and ${MATCH_RATIO_MAX}`)),
     check(
       'matches_cap_check',
       sql.raw(`cap_minor between ${MATCH_CAP_MIN_MINOR} and ${MATCH_CAP_MAX_MINOR}`),

@@ -5,6 +5,7 @@ import { and, asc, desc, eq, inArray, ne, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { campaignOfEventTx, levelsByCampaignTx } from './campaigns.ts';
 import { type EntryOutcome, type EntryStatus, entryStatusFor, undoStep } from './domain/paddles.ts';
+import { activeMatchesTx, resyncMatchPledgesTx } from './match-progress.ts';
 import {
   PaddleConsoleDto,
   PaddleReviewDto,
@@ -23,7 +24,6 @@ import {
 } from './paddle-live.ts';
 import { paddleEventTx, paddleNamesTx } from './paddles.ts';
 import { campaigns, levels } from './schema.ts';
-import { activeMatchesTx, resyncMatchPledgesTx } from './match-progress.ts';
 import { paddleCalls, paddleEntries, paddles, pledges } from './schema-paddles.ts';
 
 /**
