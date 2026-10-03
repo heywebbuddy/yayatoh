@@ -6,7 +6,7 @@ import {
   type Dimension,
 } from '@yayatoh/marketing';
 import { roleCan } from '@yayatoh/tenancy';
-import { buttonClass, Card, PageHeader } from '@yayatoh/ui';
+import { buttonClass, Card, PageHeader, SectionHeader, Tabs, tabClass } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
@@ -102,26 +102,24 @@ export default async function MarketingAnalyticsPage({
         label={t('summaryLabel')}
       />
       {report.totals.otherCurrencyOrders > 0 ? (
-        <p className="text-caption text-zinc-600">
+        <p className="text-caption text-ink-2">
           {t('otherCurrency', { count: report.totals.otherCurrencyOrders })}
         </p>
       ) : null}
-      <nav aria-label={t('viewLabel')} className="flex flex-wrap gap-2">
+      <Tabs label={t('viewLabel')} className="self-start">
         {DIMENSIONS.map((v) => (
           <Link
             key={v}
             href={`${base}${qs(v)}`}
             aria-current={v === view ? 'page' : undefined}
-            className={buttonClass(v === view ? 'primary' : 'secondary', 'sm')}
+            className={tabClass(v === view)}
           >
             {t(`view.${v}`)}
           </Link>
         ))}
-      </nav>
+      </Tabs>
       <section aria-labelledby="rows-heading" className="flex flex-col gap-3">
-        <h2 id="rows-heading" className="text-section">
-          {t(`view.${view}`)}
-        </h2>
+        <SectionHeader id="rows-heading" title={t(`view.${view}`)} count={report.rows.length} />
         <AnalyticsRows
           view={view}
           rows={report.rows}
@@ -133,16 +131,15 @@ export default async function MarketingAnalyticsPage({
               : null
           }
         />
-        <p className="text-caption text-zinc-500">{t('creditNote')}</p>
+        <p className="text-caption text-ink-2">{t('creditNote')}</p>
       </section>
       {canDeliverability ? (
-        <Card className="flex flex-col gap-2">
-          <h2 className="text-section">{t('deliverabilityLink')}</h2>
-          <p className="text-body text-zinc-600">{t('deliverabilityTeaser')}</p>
-          <Link
-            href={`${base}/deliverability`}
-            className="inline-flex min-h-6 items-center self-start underline"
-          >
+        <Card tone="feature" className="flex flex-wrap items-center justify-between gap-4">
+          <div className="flex min-w-0 flex-col gap-1">
+            <h2 className="m-0 text-card text-ink">{t('deliverabilityLink')}</h2>
+            <p className="m-0 text-body text-ink-2">{t('deliverabilityTeaser')}</p>
+          </div>
+          <Link href={`${base}/deliverability`} className={buttonClass('secondary')}>
             {t('openDeliverability')}
           </Link>
         </Card>

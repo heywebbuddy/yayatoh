@@ -48,7 +48,7 @@ export default async function MessagesPage({
             aria-current={f === filter ? 'page' : undefined}
             className={cx(
               'flex min-h-8 items-center rounded-pill border px-3 text-caption',
-              f === filter ? 'border-zinc-900 bg-zinc-900 text-white' : 'border-zinc-200 bg-white',
+              f === filter ? 'border-ink bg-tag text-white' : 'border-line bg-surface',
             )}
           >
             {t(`filter.${f}`)}
@@ -61,21 +61,21 @@ export default async function MessagesPage({
         <Card className="p-2">
           <ul className="flex list-none flex-col p-0">
             {threads.map((th) => (
-              <li key={th.id} className={cx('rounded-[14px] px-3 py-2.5', th.unread && 'bg-zinc-50')}>
+              <li key={th.id} className={cx('rounded-control px-3 py-2.5', th.unread && 'bg-surface-2')}>
                 <Link href={`/o/${org}/messages/${th.id}`} className="flex flex-col gap-0.5">
                   <span className="flex flex-wrap items-center gap-2">
                     <span className={cx('text-body', th.unread && 'font-medium')}>
                       {th.contactName ?? th.contactEmail}
                     </span>
-                    <span className="text-caption text-zinc-500">{th.contactEmail}</span>
+                    <span className="text-caption text-ink-2">{th.contactEmail}</span>
                     {th.unread ? <Chip>{t('unread')}</Chip> : null}
                     {th.blocked ? <Chip>{t('blockedChip')}</Chip> : null}
                   </span>
-                  <span className="line-clamp-1 text-caption text-zinc-600">
+                  <span className="line-clamp-1 text-caption text-ink-2">
                     {th.lastDirection === 'out' ? `${t('you')}: ` : ''}
                     {th.preview}
                   </span>
-                  <span className="text-caption text-zinc-500">{when.format(th.lastMessageAt)}</span>
+                  <span className="text-caption text-ink-2">{when.format(th.lastMessageAt)}</span>
                 </Link>
               </li>
             ))}

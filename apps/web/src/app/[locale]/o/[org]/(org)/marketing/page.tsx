@@ -66,10 +66,7 @@ export default async function MarketingConsole({
         }
       />
       {canWrite ? null : (
-        <p
-          role="note"
-          className="rounded-card border border-zinc-200 bg-white px-4 py-3 text-body text-zinc-600"
-        >
+        <p role="note" className="rounded-card border border-line bg-surface px-4 py-3 text-body text-ink-2">
           {tc('readOnly')}
         </p>
       )}
@@ -89,7 +86,7 @@ export default async function MarketingConsole({
                   {t(`placement.${p}`)}
                 </h2>
                 {rows.length === 0 ? (
-                  <p className="text-body text-zinc-600">{t('noSections')}</p>
+                  <p className="text-body text-ink-2">{t('noSections')}</p>
                 ) : (
                   <Table
                     caption={t(`placement.${p}`)}
@@ -107,7 +104,7 @@ export default async function MarketingConsole({
                             >
                               {r.heading}
                             </Link>
-                            <span className="text-caption text-zinc-500">
+                            <span className="text-caption text-ink-2">
                               <span dir="ltr" className="font-mono">
                                 {r.slug}
                               </span>{' '}
@@ -143,7 +140,7 @@ export default async function MarketingConsole({
         ) : (
           <ul aria-label={t('tabs.requests')} className="flex list-none flex-col gap-3 p-0">
             {requests.map((r: ContactRequestDto) => (
-              <li key={r.id} className="flex flex-col gap-2 rounded-card border border-zinc-200 bg-white p-4">
+              <li key={r.id} className="flex flex-col gap-2 rounded-card border border-line bg-surface p-4">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <p className="text-body font-medium break-words">
                     {r.name}
@@ -154,7 +151,7 @@ export default async function MarketingConsole({
                     label={t(`requestStatus.${r.status}`)}
                   />
                 </div>
-                <p className="text-caption text-zinc-500">
+                <p className="text-caption text-ink-2">
                   {t(`topics.${r.topic}`)} ·{' '}
                   <a href={`mailto:${r.email}`} dir="ltr" className="underline">
                     {r.email}

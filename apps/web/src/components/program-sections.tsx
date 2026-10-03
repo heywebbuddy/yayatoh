@@ -9,7 +9,7 @@ import { sponsorLogoClass } from '@/lib/program-media.ts';
 /** M1.4h: speaker photos and exhibitor/sponsor logos by row id (allowlisted `PublicMediaDto`). */
 export type ProgramImages = Readonly<Record<string, PublicMediaDto>>;
 
-const h2 = 'text-[28px] font-normal tracking-[-0.03em]';
+const h2 = 'text-section';
 
 /** One session row of the public agenda (times in the event's timezone). */
 export function SessionRow({
@@ -19,6 +19,7 @@ export function SessionRow({
   day,
   images = {},
   optionalLabel,
+  live = null,
 }: {
   s: PublicSessionDto;
   slug: string;
@@ -28,26 +29,26 @@ export function SessionRow({
   images?: ProgramImages;
   /** M5.2a: shown for optional sessions ("Optional"); the session type's name is shown as is. */
   optionalLabel?: string;
+  /** M5.7a: the link to the session's live polls and Q&A, when it has them. */
+  live?: { href: string; label: string } | null;
 }) {
   const kind = [s.type, s.admission === 'optional' ? optionalLabel : undefined].filter(Boolean);
   return (
     <li className="flex flex-col gap-1 px-5 py-4 sm:flex-row sm:gap-6">
-      <span className="w-32 shrink-0 font-mono text-caption text-zinc-600">
+      <span className="w-32 shrink-0 text-body font-extrabold text-ink tabular-nums">
         {day ? <span className="block font-sans">{day}</span> : null}
         {time.format(s.startsAt)}–{time.format(s.endsAt)}
       </span>
       <span className="flex min-w-0 flex-1 flex-col gap-1">
         <span className="font-medium">{s.title}</span>
-        {kind.length > 0 ? (
-          <span className="font-mono text-label uppercase text-zinc-500">{kind.join(' · ')}</span>
-        ) : null}
+        {kind.length > 0 ? <span className="text-label uppercase text-ink-2">{kind.join(' · ')}</span> : null}
         {s.speakers.length > 0 ? (
           <span className="flex flex-wrap gap-x-2 text-caption">
             {s.speakers.map((p) => (
               <Link
                 key={p.id}
                 href={`/events/${slug}/speakers/${p.id}`}
-                className="inline-flex min-h-6 items-center gap-1.5 text-zinc-700 underline underline-offset-2"
+                className="inline-flex min-h-6 items-center gap-1.5 text-ink-2 underline underline-offset-2"
               >
                 {images[p.id] ? (
                   // The name follows, so the avatar adds nothing for screen readers.
@@ -64,11 +65,19 @@ export function SessionRow({
           </span>
         ) : null}
         {s.description ? (
-          <Markdown source={s.description} className="flex flex-col gap-2 text-caption text-zinc-600" />
+          <Markdown source={s.description} className="flex flex-col gap-2 text-caption text-ink-2" />
+        ) : null}
+        {live ? (
+          <Link
+            href={live.href}
+            className="inline-flex min-h-11 items-center self-start font-medium underline underline-offset-2"
+          >
+            {live.label}
+          </Link>
         ) : null}
       </span>
       {s.room || s.track ? (
-        <span className="text-caption text-zinc-500">{[s.room, s.track].filter(Boolean).join(' · ')}</span>
+        <span className="text-caption text-ink-2">{[s.room, s.track].filter(Boolean).join(' · ')}</span>
       ) : null}
     </li>
   );
@@ -84,6 +93,7 @@ export async function ProgramSections({
   locale,
   timeZone,
   images = {},
+  liveSessions = [],
   exhibitorMap = false,
 }: {
   program: PublicProgramDto;
@@ -91,10 +101,13 @@ export async function ProgramSections({
   locale: string;
   timeZone: string;
   images?: ProgramImages;
+  /** M5.7a: sessions with live polls and Q&A. */
+  liveSessions?: readonly string[];
   /** M5.4a: the event has booths, so the exhibitor map page exists. */
   exhibitorMap?: boolean;
 }) {
   const t = await getTranslations('publicEvent');
+  const tl = await getTranslations('engagement.participant');
   const ta = await getTranslations('agenda');
   const time = new Intl.DateTimeFormat(locale, { timeZone, hour: 'numeric', minute: '2-digit' });
   const dayLabel = new Intl.DateTimeFormat(locale, {
@@ -110,12 +123,12 @@ export async function ProgramSections({
         <section
           id="agenda"
           aria-labelledby="agenda-heading"
-          className="flex flex-col gap-4 px-6 pb-10 md:px-16"
+          className="flex scroll-mt-4 flex-col gap-4 rounded-panel border border-line bg-surface p-5 elevation-card glass md:p-6"
         >
           <h2 id="agenda-heading" className={h2}>
             {t('agenda')}
           </h2>
-          <p className="text-caption text-zinc-500">
+          <p className="text-caption text-ink-2">
             {t('datesTimezone', { timezone: timeZone.replace(/_/g, ' ') })}
           </p>
           {days.map((d) => (
@@ -123,7 +136,7 @@ export async function ProgramSections({
               <h3 id={`agenda-${d.day}`} className="text-section">
                 {dayLabel.format(new Date(`${d.day}T00:00:00Z`))}
               </h3>
-              <ol className="list-none divide-y divide-zinc-100 rounded-card border border-zinc-200 p-0">
+              <ol className="list-none divide-y divide-line rounded-card border border-line p-0">
                 {d.items.map((s) => (
                   <SessionRow
                     key={s.id}
@@ -132,6 +145,11 @@ export async function ProgramSections({
                     time={time}
                     images={images}
                     optionalLabel={ta('optional')}
+                    live={
+                      liveSessions.includes(s.id)
+                        ? { href: `/events/${slug}/live/${s.id}`, label: tl('join') }
+                        : null
+                    }
                   />
                 ))}
               </ol>
@@ -143,7 +161,7 @@ export async function ProgramSections({
         <section
           id="speakers"
           aria-labelledby="speakers-heading"
-          className="flex flex-col gap-4 px-6 pb-10 md:px-16"
+          className="flex scroll-mt-4 flex-col gap-4 rounded-panel border border-line bg-surface p-5 elevation-card glass md:p-6"
         >
           <h2 id="speakers-heading" className={h2}>
             {t('speakers')}
@@ -152,7 +170,7 @@ export async function ProgramSections({
             {program.speakers.map((p) => {
               const photo = images[p.id];
               return (
-                <li key={p.id} className="flex items-center gap-3 rounded-card border border-zinc-200 p-4">
+                <li key={p.id} className="flex items-center gap-3 rounded-card border border-line p-4">
                   {photo ? (
                     <MediaPicture
                       image={photo}
@@ -168,7 +186,7 @@ export async function ProgramSections({
                       {p.name}
                     </Link>
                     {p.title || p.company ? (
-                      <span className="text-caption text-zinc-600">
+                      <span className="text-caption text-ink-2">
                         {[p.title, p.company].filter(Boolean).join(' · ')}
                       </span>
                     ) : null}
@@ -183,7 +201,7 @@ export async function ProgramSections({
         <section
           id="exhibitors"
           aria-labelledby="exhibitors-heading"
-          className="flex flex-col gap-4 px-6 pb-10 md:px-16"
+          className="flex scroll-mt-4 flex-col gap-4 rounded-panel border border-line bg-surface p-5 elevation-card glass md:p-6"
         >
           <h2 id="exhibitors-heading" className={h2}>
             {t('exhibitors')}
@@ -198,7 +216,7 @@ export async function ProgramSections({
           ) : null}
           <ul className="grid list-none grid-cols-1 gap-3 p-0 sm:grid-cols-2 xl:grid-cols-3">
             {program.exhibitors.map((x) => (
-              <li key={x.id} className="flex flex-col gap-1 rounded-card border border-zinc-200 p-4">
+              <li key={x.id} className="flex flex-col gap-1 rounded-card border border-line p-4">
                 {images[x.id] ? (
                   <MediaPicture
                     image={images[x.id] as PublicMediaDto}
@@ -208,13 +226,10 @@ export async function ProgramSections({
                 ) : null}
                 <span className="font-medium">{x.name}</span>
                 {x.boothLabel ? (
-                  <span className="text-caption text-zinc-600">{t('booth', { booth: x.boothLabel })}</span>
+                  <span className="text-caption text-ink-2">{t('booth', { booth: x.boothLabel })}</span>
                 ) : null}
                 {x.description ? (
-                  <Markdown
-                    source={x.description}
-                    className="flex flex-col gap-2 text-caption text-zinc-600"
-                  />
+                  <Markdown source={x.description} className="flex flex-col gap-2 text-caption text-ink-2" />
                 ) : null}
                 {x.websiteUrl ? (
                   <a
@@ -234,20 +249,17 @@ export async function ProgramSections({
         <section
           id="sponsors"
           aria-labelledby="sponsors-heading"
-          className="flex flex-col gap-4 px-6 pb-10 md:px-16"
+          className="flex scroll-mt-4 flex-col gap-4 rounded-panel border border-line bg-surface p-5 elevation-card glass md:p-6"
         >
           <h2 id="sponsors-heading" className={h2}>
             {t('sponsors')}
           </h2>
           {program.sponsorTiers.map((tier, rank) => (
             <section key={tier.name} aria-label={tier.name} className="flex flex-col gap-2">
-              <h3 className="font-mono text-label uppercase text-zinc-600">{tier.name}</h3>
+              <h3 className="text-label uppercase text-ink-2">{tier.name}</h3>
               <ul className="flex list-none flex-wrap gap-3 p-0">
                 {tier.sponsors.map((s) => (
-                  <li
-                    key={s.id}
-                    className="flex flex-col gap-1 rounded-card border border-zinc-200 px-4 py-3"
-                  >
+                  <li key={s.id} className="flex flex-col gap-1 rounded-card border border-line px-4 py-3">
                     {images[s.id] ? (
                       // Logos are sized by tier: the first tier's are the largest.
                       <MediaPicture
@@ -270,7 +282,7 @@ export async function ProgramSections({
                     {s.description ? (
                       <Markdown
                         source={s.description}
-                        className="flex flex-col gap-2 text-caption text-zinc-600"
+                        className="flex flex-col gap-2 text-caption text-ink-2"
                       />
                     ) : null}
                   </li>

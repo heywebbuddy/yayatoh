@@ -18,7 +18,7 @@ export interface EntryValues {
   readonly seoDescription: string;
 }
 
-const area = 'rounded-card border bg-white px-4 py-2 text-body';
+const area = 'rounded-card border bg-surface px-4 py-2 text-body';
 
 /**
  * Create or edit a page or post (M1.4g). "Preview" renders the body exactly as the public page
@@ -77,7 +77,7 @@ export function EntryEditor({
         error={slugError}
       />
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="entry-excerpt" className="text-caption text-zinc-600">
+        <label htmlFor="entry-excerpt" className="text-[13px] font-bold text-ink">
           {t('fields.excerpt')}
         </label>
         <textarea
@@ -88,15 +88,15 @@ export function EntryEditor({
           defaultValue={values?.excerpt}
           aria-invalid={bad.has('excerpt') || undefined}
           aria-describedby="entry-excerpt-hint"
-          className={`${area} ${bad.has('excerpt') ? 'border-pink-700' : 'border-zinc-200'}`}
+          className={`${area} ${bad.has('excerpt') ? 'field-invalid' : ''}`}
         />
-        <p id="entry-excerpt-hint" className="text-caption text-zinc-500">
+        <p id="entry-excerpt-hint" className="text-caption text-ink-2">
           {t('excerptHint')}
         </p>
       </div>
       <div className="flex flex-col gap-1.5">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <label htmlFor="entry-body" className="text-caption text-zinc-600">
+          <label htmlFor="entry-body" className="text-[13px] font-bold text-ink">
             {t('fields.body')}
           </label>
           <Button
@@ -118,26 +118,26 @@ export function EntryEditor({
           onChange={(e) => setBody(e.target.value)}
           aria-invalid={bad.has('body') || undefined}
           aria-describedby="entry-body-hint"
-          className={`${area} font-mono ${bad.has('body') ? 'border-pink-700' : 'border-zinc-200'}`}
+          className={`${area} font-mono ${bad.has('body') ? 'field-invalid' : ''}`}
         />
-        <p id="entry-body-hint" className="text-caption text-zinc-500">
+        <p id="entry-body-hint" className="text-caption text-ink-2">
           {t('bodyHint')}
         </p>
         <section
           id={previewId}
           aria-label={t('previewLabel')}
           hidden={!preview}
-          className="rounded-card border border-dashed border-zinc-300 bg-white p-4"
+          className="rounded-card border border-dashed border-line-strong bg-surface p-4"
         >
           {body.trim() ? (
             <Markdown source={body} />
           ) : (
-            <p className="text-body text-zinc-500">{t('previewEmpty')}</p>
+            <p className="text-body text-ink-2">{t('previewEmpty')}</p>
           )}
         </section>
       </div>
-      <fieldset className="flex flex-col gap-4 rounded-card border border-zinc-200 p-4">
-        <legend className="px-1 text-caption text-zinc-600">{t('seoLegend')}</legend>
+      <fieldset className="flex flex-col gap-4 rounded-card border border-line p-4">
+        <legend className="px-1 text-[13px] font-bold text-ink">{t('seoLegend')}</legend>
         <Input
           id="entry-seo-title"
           name="seoTitle"

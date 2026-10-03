@@ -129,18 +129,18 @@ export default async function EventDashboard({
               {rules.map((r) => (
                 <li key={r.key} className="flex items-center gap-2.5 py-1 text-[13px]">
                   <span
-                    className={`flex size-[18px] items-center justify-center rounded-full ${r.done ? 'bg-green-500 text-white' : 'border border-zinc-300'}`}
+                    className={`flex size-[18px] items-center justify-center rounded-full ${r.done ? 'bg-success-dot text-white' : 'border border-line-strong'}`}
                   >
                     {r.done ? <Check aria-hidden="true" className="size-3" strokeWidth={2.5} /> : null}
                   </span>
                   {r.path !== undefined && !r.done ? (
                     <Link
                       href={r.path ? `${base}/${r.path}` : base}
-                      className="inline-flex min-h-6 items-center text-zinc-600 underline underline-offset-2"
+                      className="inline-flex min-h-6 items-center text-ink-2 underline underline-offset-2"
                     >
                       {t(`readiness.${r.key}`)}
                       {r.comingSoon ? (
-                        <span className="ms-1.5 text-caption text-zinc-500 no-underline">
+                        <span className="ms-1.5 text-caption text-ink-2 no-underline">
                           ({t('readiness.comingSoon')})
                         </span>
                       ) : (
@@ -148,7 +148,7 @@ export default async function EventDashboard({
                       )}
                     </Link>
                   ) : (
-                    <span className={r.done ? 'text-zinc-900' : 'text-zinc-500'}>
+                    <span className={r.done ? 'text-ink' : 'text-ink-2'}>
                       {t(`readiness.${r.key}`)}
                       <span className="sr-only">{r.done ? t('readiness.done') : t('readiness.todo')}</span>
                     </span>

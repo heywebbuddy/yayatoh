@@ -198,6 +198,11 @@
       "intro": "{org} a émis l’avoir {number} de {amount} sur votre commande pour {eventName}. {storeCredit, select, yes {Utilisez le code {code} au paiement pour l’utiliser lors d’une prochaine commande chez {org}.} other {Ce montant vous a été remboursé.}}",
       "cta": "Voir ma commande"
     },
+    "orders.invoice": {
+      "subject": "Facture {number} pour {eventName}",
+      "intro": "Votre inscription à {eventName} est enregistrée. {org} a émis la facture {number} d’un montant de {amount}, à régler au plus tard le {due}. Utilisez le bouton ci-dessous pour la consulter, télécharger le PDF ou la payer en totalité ou en partie.",
+      "cta": "Voir et payer la facture"
+    },
     "orders.support-reply": {
       "subject": "{subject}",
       "intro": "Un message de {org} au sujet de votre commande pour {eventName} :",
@@ -226,6 +231,21 @@
       "intro": "Voici votre lien pour reprendre votre inscription à {eventName} là où vous l'avez laissée. Il fonctionne pendant {days, plural, one {# jour} other {# jours}} après votre dernier enregistrement et uniquement pour vous : ne le transférez pas. Si vous ne l'avez pas demandé, vous pouvez ignorer cet e-mail.",
       "cta": "Poursuivre mon inscription"
     },
+    "orders.table-naming": {
+      "subject": "{reminder, plural, =1 {Rappel : nommez vos invités pour {eventName}} other {Nommez vos invités pour {eventName}}}",
+      "intro": "Votre {tableName} compte {size, plural, one {# place} other {# places}}. {missing, plural, =0 {Chaque place a un nom ; vous pouvez les vérifier à tout moment.} one {# place attend encore un nom.} other {# places attendent encore un nom.}} Utilisez le bouton ci-dessous pour nous dire qui est assis à votre table.",
+      "cta": "Nommer mes invités"
+    },
+    "registration.approved": {
+      "subject": "Votre demande pour {eventName} est acceptée",
+      "intro": "Bonne nouvelle, {name} : votre demande de participation à {eventName} en tant que {typeName} a été acceptée. Utilisez le bouton ci-dessous pour voir votre inscription et, si votre pass est payant, payer et confirmer votre place.",
+      "cta": "Voir mon inscription"
+    },
+    "registration.denied": {
+      "subject": "Votre demande pour {eventName}",
+      "intro": "Merci d’avoir demandé à participer à {eventName} en tant que {typeName}, {name}. L’organisateur n’a pas pu accepter votre demande cette fois-ci. Aucun montant ne vous a été facturé.",
+      "cta": "Voir ma demande"
+    },
     "portal.invite": {
       "subject": "Invitation au portail de {eventName}",
       "intro": "{org} vous a invité au portail de {eventName} en tant que {role}. Vous pourrez y voir vos sessions, mettre à jour votre profil et accomplir vos tâches. Le bouton demande un code de connexion envoyé à cette adresse.",
@@ -240,6 +260,36 @@
       "subject": "Rappel : {title} pour {eventName}",
       "intro": "{org} attend toujours « {title} » pour {eventName}. Échéance : {until}.",
       "cta": "Ouvrir mes tâches"
+    },
+    "donations.receipt": {
+      "subject": "{deductible, select, yes {Votre reçu de don de {org}} other {Votre reçu de paiement de {org}}}",
+      "intro": "Merci pour votre paiement de {amount} pour {eventName}. Votre reçu figure ci-dessous. Conservez-le, ou sa copie PDF, avec vos documents.",
+      "cta": "Télécharger le reçu PDF"
+    },
+    "donations.year-end-statement": {
+      "subject": "Votre relevé des dons {year} de {org}",
+      "intro": "Merci d’avoir soutenu {org} en {year}. Votre relevé des paiements déductibles des impôts figure ci-dessous et en PDF.",
+      "cta": "Télécharger le relevé PDF"
+    },
+    "guests.invitation": {
+      "subject": "{subject}",
+      "intro": "{message}",
+      "cta": "Répondre à l'invitation"
+    },
+    "guests.rsvp-reminder": {
+      "subject": "Rappel : merci de répondre pour {eventName}",
+      "intro": "{name}, nous n'avons pas encore reçu votre réponse. Dites-nous qui viendra à {eventName} avant le {deadline}.",
+      "cta": "Répondre maintenant"
+    },
+    "registration.session-enrolled": {
+      "subject": "Une place s'est libérée : vous participez à {sessionTitle}",
+      "intro": "Une place s'est libérée dans {sessionTitle} à {eventName} ({when}) et vous étiez le prochain sur la liste d'attente : vous êtes maintenant inscrit. Si vous ne pouvez pas venir, retirez la session de votre programme pour que la personne suivante obtienne la place.",
+      "cta": "Ouvrir mon programme"
+    },
+    "registration.session-offer": {
+      "subject": "Une place dans {sessionTitle} vous est réservée jusqu'au {until}",
+      "intro": "Une place s'est libérée dans {sessionTitle} à {eventName} ({when}) et vous êtes le prochain sur la liste. Acceptez-la depuis votre programme avant le {until} ; ensuite, elle ira à la personne suivante.",
+      "cta": "Accepter ma place"
     },
     "alerts.alert-urgent-text": {
       "subject": "{rule, select, unseated {{count, plural, one {Un participant n’a pas de place} other {{countWords} participants n’ont pas de place}}} undistributed {{count, plural, one {Un billet acheté n’a pas été distribué} other {{countWords} billets achetés n’ont pas été distribués}}} paymentsFailed {{count, plural, one {Un paiement a échoué} other {{countWords} paiements ont échoué}}} paymentsStuck {{count, plural, one {Un paiement est bloqué} other {{countWords} paiements sont bloqués}}} refundSurge {{count, plural, one {Un remboursement au cours de la dernière heure} other {{countWords} remboursements au cours de la dernière heure}}} devicesOffline {{count, plural, one {Un appareil de contrôle est hors ligne} other {{countWords} appareils de contrôle sont hors ligne}}} devicesLowBattery {{count, plural, one {Un appareil de contrôle a une batterie faible} other {{countWords} appareils de contrôle ont une batterie faible}}} devicesBacklog {{count, plural, one {Un appareil de contrôle a des scans en attente de synchronisation} other {{countWords} appareils de contrôle ont des scans en attente de synchronisation}}} capacityNear {Le lieu est rempli à {count} %} capacityFull {Le lieu est complet ({count} %)} sellOut {{count} % des billets sont vendus} salesPace {Les ventes de billets sont à {count} % du rythme visé} readiness {{count, plural, one {Une étape de préparation bloque cet événement} other {{countWords} étapes de préparation bloquent cet événement}}} domain {{count, plural, one {Un domaine personnalisé a un problème} other {{countWords} domaines personnalisés ont un problème}}} payoutsPastDue {{count, plural, one {Une exigence du compte de versement est en retard} other {{countWords} exigences du compte de versement sont en retard}}} deliverability {La délivrabilité des e-mails demande votre attention} automationFailed {{count, plural, one {Un message ou une action groupée a échoué aujourd’hui} other {{countWords} messages ou actions groupées ont échoué aujourd’hui}}} assistanceOverdue {{count, plural, one {{countWords} demande d’aide attend depuis trop longtemps} other {{countWords} demandes d’aide attendent depuis trop longtemps}}} campaignFailed {{count, plural, one {Un envoi de campagne a échoué aujourd’hui} other {{countWords} envois de campagne ont échoué aujourd’hui}}} disputeDeadline {{count, plural, one {Un litige demande bientôt des preuves} other {{countWords} litiges demandent bientôt des preuves}}} other {Alerte}}",

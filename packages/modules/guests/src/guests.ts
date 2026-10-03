@@ -1,6 +1,7 @@
 import { attendeesByIdsTx } from '@yayatoh/attendees';
 import { isUniqueViolation, type TenantTx } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
+import { deleteRsvpResponsesTx } from '@yayatoh/forms';
 import { actorId, type Ctx, DomainError, requireOrg } from '@yayatoh/kernel';
 import { keyVault, tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { and, asc, desc, eq, ilike, inArray, isNotNull, ne, or, type SQL, sql } from 'drizzle-orm';
@@ -23,12 +24,14 @@ import {
   PartyDto,
   partySerializer,
 } from './dto.ts';
+import { rsvpStateCondition } from './rsvp-filter.ts';
 import {
   AGE_CLASSES,
   ENTRY_SOURCES,
   type GuestSource,
   guests,
   type HistoryAction,
+  PARTY_RSVP_STATES,
   parties,
   rsvpHistory,
 } from './schema.ts';
@@ -87,7 +90,7 @@ const invalid = (field: string, reason: string) =>
  * The sealed part of a guest (P4-3): never stored or logged in plaintext. Email and phone arrive
  * with an import (M4.1b) and are kept when the host edits the other answers.
  */
-interface Sealed {
+export interface Sealed {
   dietary: string | null;
   accessibility: string | null;
   address: string | null;
@@ -102,7 +105,7 @@ export async function seal(orgId: string, s: Sealed): Promise<string | null> {
   return keyVault().encrypt(orgId, new TextEncoder().encode(JSON.stringify(present)));
 }
 
-async function unseal(orgId: string, ciphertext: string | null): Promise<Sealed> {
+export async function unseal(orgId: string, ciphertext: string | null): Promise<Sealed> {
   const out: Sealed = { dietary: null, accessibility: null, address: null, email: null, phone: null };
   if (!ciphertext) return out;
   const raw = JSON.parse(new TextDecoder().decode(await keyVault().decrypt(orgId, ciphertext))) as Record<
@@ -352,6 +355,12 @@ export const removePartyCommand = tenantCommand({
       .where(eq(guests.partyId, input.partyId))
       .returning({ id: guests.id });
     await tx.delete(parties).where(eq(parties.id, input.partyId));
+    // M4.1e: their RSVP answers leave with them.
+    await deleteRsvpResponsesTx(
+      tx,
+      input.eventId,
+      gone.map((g) => g.id),
+    );
     await recordHistoryTx(tx, ctx, [
       ...gone.map((g) => ({
         eventId: input.eventId,
@@ -599,6 +608,12 @@ export const removePartyGuestCommand = tenantCommand({
       .delete(guests)
       .where(or(eq(guests.id, g.id), eq(guests.hostGuestId, g.id)))
       .returning({ id: guests.id });
+    // M4.1e: their RSVP answers leave with them.
+    await deleteRsvpResponsesTx(
+      tx,
+      input.eventId,
+      gone.map((r) => r.id),
+    );
     await recordHistoryTx(
       tx,
       ctx,
@@ -680,6 +695,8 @@ export const GuestListInput = z.object({
   side: z.string().trim().max(40).optional(),
   tag: z.string().trim().max(40).optional(),
   vip: z.boolean().optional(),
+  /** M4.1d: parties in this RSVP state. */
+  rsvp: z.enum(PARTY_RSVP_STATES).optional(),
   limit: z.number().int().min(1).max(200).default(50),
   offset: z.number().int().min(0).max(100_000).default(0),
 });
@@ -705,6 +722,7 @@ export const guestListQuery = tenantQuery({
         sql`exists (select 1 from unnest(${parties.tags}) as t(v) where lower(t.v) = lower(${input.tag}))`,
       );
     if (input.vip !== undefined) conds.push(eq(parties.vip, input.vip));
+    if (input.rsvp) conds.push(rsvpStateCondition(parties.id, input.rsvp));
     if (input.search) {
       const pat = `%${escapeLike(input.search)}%`;
       const match = or(

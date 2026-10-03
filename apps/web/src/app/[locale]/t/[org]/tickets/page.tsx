@@ -34,13 +34,13 @@ export default async function YourTickets({ params }: Props) {
   const session = await getSession();
   const rows = session ? await buyerOrdersInOrg(orgId, session.userId) : [];
   return (
-    <div className="min-h-dvh bg-white">
+    <div className="min-h-dvh bg-surface">
       <TenantHeader org={o} current="/tickets" />
       <main id="main" className="mx-auto flex w-full max-w-3xl flex-col gap-6 px-4 py-8 md:px-6">
         <PageHeader eyebrow={<Label>{o.name}</Label>} title={t('title')} />
         {!session ? (
           <Card className="flex flex-col gap-3">
-            <p className="text-body text-zinc-600">{t('signedOut', { org: o.name })}</p>
+            <p className="text-body text-ink-2">{t('signedOut', { org: o.name })}</p>
             <a
               href={`${localizedPath(locale, '/sign-in')}?next=${encodeURIComponent(localizedPath(locale, '/tickets'))}`}
               className={buttonClass('primary', 'md', 'self-start')}
@@ -68,7 +68,7 @@ export default async function YourTickets({ params }: Props) {
                       >
                         {r.eventName}
                       </a>
-                      <span className="text-caption text-zinc-600">
+                      <span className="text-caption text-ink-2">
                         {when} · {t(`status.${r.status}`)}
                       </span>
                     </div>

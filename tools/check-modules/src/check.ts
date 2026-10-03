@@ -41,6 +41,9 @@ const MIGRATION_TOOLS = ['tools/legacy-migrate'];
 /** The one file allowed to call Next's cache primitives: every entry is keyed and tagged by org. */
 const CACHE_HELPER = 'apps/web/src/server/public-cache.ts';
 const TOKEN_FILES = ['packages/ui/src/tokens.ts', 'packages/ui/src/styles.css'];
+/** Tailwind's default palette (switched off in styles.css) and the retired ADR 0018 colour names. */
+const RAW_PALETTE =
+  /(?<![\w-])(?:[\w-]+:)*(?:bg|text|border(?:-[xytbselr])?|divide|ring|ring-offset|outline|fill|stroke|from|via|to|decoration|placeholder|caret|accent|shadow)-(?:(?:slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose|accent)-\d{2,3}|accent-text|nav-glass|glass)(?![\w-])/;
 
 function walk(dir: string, out: string[] = []): string[] {
   if (!existsSync(dir)) return out;
@@ -137,13 +140,22 @@ export function checkModules(root: string): Violation[] {
     const add = (rule: string, message: string) => violations.push({ rule, file: rel, message });
     const test = isTestFile(rel);
 
-    // Raw colour literals outside the token files (ADR 0018).
+    // Raw colour literals outside the token files (ADR 0018, ADR 0022): hex, rgb()/hsl() and
+    // Tailwind default-palette or retired ADR 0018 classes, in the web app, the staff console and
+    // the UI package. Only role tokens (`bg-surface`, `text-ink-2`, `bg-primary`) are allowed.
     if (
-      (rel.startsWith('apps/web/src/') || rel.startsWith('packages/ui/src/')) &&
-      !TOKEN_FILES.includes(rel)
+      (rel.startsWith('apps/web/src/') ||
+        rel.startsWith('apps/admin/src/') ||
+        rel.startsWith('packages/ui/src/')) &&
+      !TOKEN_FILES.includes(rel) &&
+      !test
     ) {
       const hex = src.match(/#[0-9a-fA-F]{6}\b|#[0-9a-fA-F]{3}\b(?![0-9a-fA-F])/g);
-      if (hex && !test) add('design-tokens', `raw colour ${hex[0]} — use a token from @yayatoh/ui`);
+      if (hex) add('design-tokens', `raw colour ${hex[0]} — use a token from @yayatoh/ui`);
+      const fn = src.match(/\b(?:rgba?|hsla?|oklch|oklab)\(\s*\d/);
+      if (fn) add('design-tokens', `raw colour ${fn[0]}… — use a token from @yayatoh/ui`);
+      const palette = src.match(RAW_PALETTE);
+      if (palette) add('design-tokens', `palette class ${palette[0]} — use a role token (ADR 0022)`);
     }
     if (!SOURCE.test(abs)) continue;
 

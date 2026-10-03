@@ -145,7 +145,7 @@ describe('profile checklists (M4.2a)', () => {
     expect(readinessPercent(guests)).toBe(50);
   });
 
-  it('a gala asks for tables and sponsors (coming soon), tickets and a floor plan', () => {
+  it('a gala asks for tables and sponsors (M4.2b: a table ticket), tickets and a floor plan', () => {
     const gala = readinessRules({
       ...base,
       nav: new Set(['home', 'ticketsOrders', 'seating', 'tablesSponsors']),
@@ -162,10 +162,16 @@ describe('profile checklists (M4.2a)', () => {
       'floorPlanChosen',
       'published',
     ]);
-    expect(gala.find((r) => r.key === 'tablesSponsors')).toMatchObject({
-      comingSoon: true,
-      path: 'tables-sponsors',
+    const item = gala.find((r) => r.key === 'tablesSponsors');
+    expect(item).toMatchObject({ done: false, path: 'tables-sponsors' });
+    expect(item?.comingSoon).toBeUndefined();
+    const sold = readinessRules({
+      ...base,
+      nav: new Set(['home', 'ticketsOrders', 'seating', 'tablesSponsors']),
+      checklist: ['tablesSponsors', 'floorPlanChosen'],
+      tableTickets: 1,
     });
+    expect(sold.find((r) => r.key === 'tablesSponsors')).toMatchObject({ done: true });
   });
 
   it('every checklist key has a label and a hint in English', async () => {
