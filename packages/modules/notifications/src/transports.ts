@@ -1,4 +1,13 @@
-import { mkdirSync, readdirSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
+import {
+  mkdirSync,
+  readdirSync,
+  readFileSync,
+  renameSync,
+  rmSync,
+  statSync,
+  utimesSync,
+  writeFileSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { type DeliveryEvent, signFakeDeliveryEvents } from './delivery.ts';
@@ -324,9 +333,13 @@ export function readDevMailbox(
 
 /**
  * Dev/CI: take the fake provider's pending delivery reports (each once: a file is claimed by
- * renaming it, so two drains never post the same report; the webhook dedupes anyway).
+ * renaming it, so two drains never post the same report; the webhook dedupes anyway). A claimed
+ * report stays on disk until its taker has posted it (`releaseDevDeliveryEvent`), so another
+ * drain can wait for it (`settleDevDeliveryEvents`).
  */
-export function takeDevDeliveryEvents(dir = devMailboxDir()): Array<{ body: string; signature: string }> {
+export function takeDevDeliveryEvents(
+  dir = devMailboxDir(),
+): Array<{ body: string; signature: string; claimed: string }> {
   const folder = join(dir, EVENTS_DIR);
   let files: string[];
   try {
@@ -334,18 +347,56 @@ export function takeDevDeliveryEvents(dir = devMailboxDir()): Array<{ body: stri
   } catch {
     return [];
   }
-  const out: Array<{ body: string; signature: string }> = [];
+  const out: Array<{ body: string; signature: string; claimed: string }> = [];
   for (const f of files.sort()) {
     const claimed = join(folder, `${f}.${process.pid}.claimed`);
     try {
       renameSync(join(folder, f), claimed);
+      // The claim's time: a claim left behind by a process that died is ignored after a minute.
+      const now = new Date();
+      utimesSync(claimed, now, now);
     } catch {
       continue;
     }
-    out.push(JSON.parse(readFileSync(claimed, 'utf8')));
-    rmSync(claimed, { force: true });
+    out.push({ ...JSON.parse(readFileSync(claimed, 'utf8')), claimed });
   }
   return out;
+}
+
+const STALE_CLAIM_MS = 60_000;
+
+/** Dev/CI: a taken report has been posted (or given up on). */
+export function releaseDevDeliveryEvent(claimed: string): void {
+  rmSync(claimed, { force: true });
+}
+
+/**
+ * Dev/CI (batch 3g merge): wait until no report is still claimed by another drain, so a drain
+ * that sent a message returns only after its delivery report was recorded, even when a drain
+ * running at the same time took that report (the messaging e2e read a bounce too early).
+ * Bounded: gives up after `timeoutMs`; claims older than a minute (a process that died) are ignored.
+ */
+export async function settleDevDeliveryEvents(dir = devMailboxDir(), timeoutMs = 15_000): Promise<boolean> {
+  const folder = join(dir, EVENTS_DIR);
+  const deadline = Date.now() + timeoutMs;
+  for (;;) {
+    let pending: string[];
+    try {
+      pending = readdirSync(folder).filter((f) => {
+        if (!f.endsWith('.claimed')) return false;
+        try {
+          return Date.now() - statSync(join(folder, f)).mtimeMs < STALE_CLAIM_MS;
+        } catch {
+          return false;
+        }
+      });
+    } catch {
+      return true;
+    }
+    if (pending.length === 0) return true;
+    if (Date.now() > deadline) return false;
+    await new Promise((r) => setTimeout(r, 100));
+  }
 }
 
 /**
