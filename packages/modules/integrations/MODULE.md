@@ -54,3 +54,14 @@ Slack, Mailchimp, HubSpot, Klaviyo) with `defineConnector` in `src/connectors/` 
   queues `integrations.sync` (exclusive per connection); the dev drain (`/api/dev/integrations/run`)
   runs `runDueSyncs`. Events: `integrations.connection_connected@1`,
   `integrations.connection_revoked@1`, `integrations.sync_completed@1` (ids, codes and counts).
+- **Accounting (M6.5d, P6-6):** QuickBooks Online and Xero (`src/connectors/quickbooks.ts`,
+  `xero.ts`) have no objects but an `accounting` side (chart of accounts, `postJournal`). A run
+  posts **one daily summary journal per day (org time zone) and currency** from the ledger
+  (`@yayatoh/payments` `ledgerDailyTotalsTx`: memo gross, fees, refunds; transfers as payouts) and
+  giving (`@yayatoh/donations` `donationDailyTotalsTx`), mapped to the org's accounts
+  (`account_maps`, versioned; every category required, the clearing account unshared). Journals
+  (`accounting_journals`) are never edited: a changed day gets a reversal of the standing journal
+  and the next revision; the provider's idempotency key is org + day + currency + revision (+
+  kind). Unsent rows are superseded freely; an uncertain failure blocks its day until its retry
+  (same key) settles. Days from the mapping's first day to yesterday; integer minor units, sent as
+  exact decimals. Xero takes its base currency only (`currency_unsupported`).
