@@ -45,6 +45,7 @@ export default async function BadgesPage({
     canPrintOne && q ? await executeQuery(badgeTicketsQuery, { eventId: ev.id, q }, data.ctx, ports) : [];
   const t = await getTranslations();
   const tb = await getTranslations('badges');
+  const tp = await getTranslations('badgePrinting');
   const format = await getFormatter();
   const base = `/o/${org}/e/${event}/badges`;
   // Route handlers (PDFs) are linked directly: the default locale has no prefix.
@@ -84,6 +85,11 @@ export default async function BadgesPage({
         }
         title={t('nav.badges')}
         description={tb('subtitle')}
+        actions={
+          <Link href={`${base}/printing`} className={buttonClass('secondary')}>
+            {tp('title')}
+          </Link>
+        }
       />
       {canWrite ? null : <Alert tone="info" title={tb('viewerNotice')} />}
 
@@ -92,7 +98,21 @@ export default async function BadgesPage({
           {tb('templates')}
         </h2>
         {setup.templates.length === 0 ? (
-          <EmptyState title={tb('emptyTitle')} description={tb('emptyDescription')} />
+          <EmptyState
+            title={tb('emptyTitle')}
+            description={tb('emptyDescription')}
+            action={
+              canWrite ? (
+                <Link href={`${base}#new-template`} className={buttonClass('primary', 'md')}>
+                  {tb('emptyAction')}
+                </Link>
+              ) : (
+                <Link href={`/o/${org}/e/${event}`} className={buttonClass('primary', 'md')}>
+                  {tb('backToEvent')}
+                </Link>
+              )
+            }
+          />
         ) : (
           <ul className="flex list-none flex-col gap-3 p-0">
             {setup.templates.map((x) => (
@@ -144,7 +164,7 @@ export default async function BadgesPage({
           </ul>
         )}
         {canWrite ? (
-          <section aria-labelledby="new-template-heading">
+          <section id="new-template" aria-labelledby="new-template-heading">
             <Card size="panel" className="flex flex-col gap-3">
               <h3 id="new-template-heading" className="text-section">
                 {tb('newTemplate')}
@@ -346,7 +366,7 @@ export default async function BadgesPage({
           <h2 id="one-heading" className="text-section">
             {tb('oneBadge')}
           </h2>
-          <p className="max-w-prose text-caption text-ink-2">{tb('oneBadgeHint')}</p>
+          <p className="max-w-prose text-caption text-ink-2">{tp('deskHint')}</p>
           <form method="get" className="flex flex-wrap items-end gap-3" action={`${raw}#one-heading`}>
             <div className="flex flex-col gap-1.5">
               <label htmlFor="badge-q" className="text-[13px] font-bold text-ink">
@@ -398,9 +418,9 @@ export default async function BadgesPage({
                         </details>
                       </>
                     ) : (
-                      <a href={`${raw}/ticket/${f.id}`} className={buttonClass('ghost', 'sm')}>
-                        {tb('badgePdf', { name: f.holderName })}
-                      </a>
+                      <Link href={`${base}/print/${f.id}`} className={buttonClass('ghost', 'sm')}>
+                        {tp('printBadgeFor', { name: f.holderName })}
+                      </Link>
                     )}
                   </li>
                 ))}

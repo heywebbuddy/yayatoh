@@ -4,6 +4,7 @@ import { Button, Card, PageHeader } from '@yayatoh/ui';
 import { listVenuesQuery } from '@yayatoh/venues';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { EventDetailsForm, VanityForm } from '@/components/event-details-form.tsx';
+import { HowItWorks } from '@/components/how-it-works.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
@@ -36,6 +37,7 @@ export default async function EventDetailsPage({
   return (
     <>
       <PageHeader title={t('title')} description={t('subtitle')} />
+      <HowItWorks topic="eventType" />
       {canWrite ? null : <p className="text-body text-ink-2">{t('viewerNotice')}</p>}
       <Card size="panel">
         <EventDetailsForm

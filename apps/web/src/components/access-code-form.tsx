@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, Input } from '@yayatoh/ui';
+import { Alert, Button, DateTimePicker, Input } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState, useEffect, useRef } from 'react';
 import { errorMessageKey } from '@/lib/errors.ts';
@@ -50,9 +50,8 @@ export function AccessCodeForm({
           hint={t('maxUsesHint')}
           error={bad.has('maxUses') ? t('maxUsesInvalid') : undefined}
         />
-        <Input
+        <DateTimePicker
           name="expiresAt"
-          type="datetime-local"
           label={t('expiresAt')}
           hint={t('expiresHint')}
           error={bad.has('expiresAt') ? t('expiresInvalid') : undefined}

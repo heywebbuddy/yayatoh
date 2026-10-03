@@ -7,7 +7,7 @@ import {
 } from '@yayatoh/guests';
 import { executeQuery, isDomainError } from '@yayatoh/kernel';
 import { isProfileKey, navIncludes, PROFILES } from '@yayatoh/platform';
-import { Button, buttonClass, Card, EmptyState, PageHeader, Table } from '@yayatoh/ui';
+import { Button, buttonClass, Card, EmptyState, PageHeader, Select, Table } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { AutoRefresh } from '@/components/auto-refresh.tsx';
@@ -85,8 +85,16 @@ export default async function GuestImportPage({
   if (!can('guests:write'))
     return (
       <>
-        <PageHeader title={t('title')} actions={back} />
-        <EmptyState title={t('noAccessTitle')} description={t('noAccessDescription')} />
+        <PageHeader title={t('title')} />
+        <EmptyState
+          title={t('noAccessTitle')}
+          description={t('noAccessDescription')}
+          action={
+            <Link href={guestsHref} className={buttonClass('primary', 'md')}>
+              {t('backToGuests')}
+            </Link>
+          }
+        />
       </>
     );
 
@@ -291,14 +299,14 @@ export default async function GuestImportPage({
                       <label htmlFor={`map-${f}`} className={label}>
                         {t(`field.${f}`)}
                       </label>
-                      <select id={`map-${f}`} name={f} defaultValue={s.mapping[f] ?? ''} className={control}>
+                      <Select id={`map-${f}`} name={f} defaultValue={s.mapping[f] ?? ''} className={control}>
                         <option value="">{t('notInList')}</option>
                         {s.headers.map((h, i) => (
                           <option key={`${i}-${h}`} value={i}>
                             {h || t('columnN', { n: i + 1 })}
                           </option>
                         ))}
-                      </select>
+                      </Select>
                     </div>
                   ))}
                   <div className="sm:col-span-2 lg:col-span-4">

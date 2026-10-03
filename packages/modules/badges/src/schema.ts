@@ -14,6 +14,15 @@ import {
   uniqueIndex,
   uuid,
 } from 'drizzle-orm/pg-core';
+import {
+  MAX_PRINT_NOTE,
+  PRINT_JOB_STATUSES,
+  PRINT_KINDS,
+  PRINT_REASONS,
+  PRINT_SOURCES,
+  PRINTER_ADAPTERS,
+  PRINTER_STATUSES,
+} from './domain/printing.ts';
 import { BADGE_SIZES } from './domain/sizes.ts';
 import { BATCH_SORTS } from './domain/sort.ts';
 
@@ -175,4 +184,109 @@ export const batchParts = tenantTable(
     }).onDelete('cascade'),
     check('batch_parts_seq_check', sql`seq >= 0 and badges >= 0`),
   ],
+);
+
+/* ------------------------------------------------------------------------ M5.5b printing ---- */
+
+/**
+ * A badge printer of one event (M5.5b, P5-2): reached through the browser's print dialog
+ * (AirPrint too) or PrintNode. Printers are archived, never deleted (the print log keeps them).
+ * `status` moves `unknown → online` on the first heartbeat and `online → offline` once, when the
+ * watchdog finds it silent for 90 s (that transition emits `badges.printer_offline@1`).
+ */
+export const printers = tenantTable(
+  badgesSchema,
+  'printers',
+  {
+    eventId: uuid('event_id').notNull(),
+    name: text('name').notNull(),
+    adapter: text('adapter').notNull(),
+    /** The printer's id in the org's PrintNode account (PrintNode printers only). */
+    printnodePrinterId: integer('printnode_printer_id'),
+    status: text('status').notNull().default('unknown'),
+    lastSeenAt: ts('last_seen_at'),
+    offlineAt: ts('offline_at'),
+    archivedAt: ts('archived_at'),
+    createdBy: uuid('created_by'),
+  },
+  (t) => [
+    index('printers_org_event_idx').on(t.orgId, t.eventId, t.createdAt),
+    index('printers_org_status_idx').on(t.orgId, t.status, t.lastSeenAt),
+    uniqueIndex('printers_org_event_name_key')
+      .on(t.orgId, t.eventId, sql`lower(name)`)
+      .where(sql`archived_at is null`),
+    check('printers_name_length_check', sql`char_length(name) between 1 and 60`),
+    check('printers_adapter_check', list('adapter', PRINTER_ADAPTERS)),
+    check('printers_status_check', list('status', PRINTER_STATUSES)),
+    check(
+      'printers_printnode_check',
+      sql`(adapter = 'printnode') = (printnode_printer_id is not null) and coalesce(printnode_printer_id, 1) > 0`,
+    ),
+    check('printers_offline_check', sql`(status = 'offline') = (offline_at is not null)`),
+  ],
+);
+
+/**
+ * The print log (M5.5b): one row per print or reprint of one badge, with its reason (a first
+ * print is `first_print`; a reprint names why, and `other` needs a note). Idempotent per
+ * `request_key`. A null printer is the browser's print dialog on the desk's own device.
+ */
+export const printJobs = tenantTable(
+  badgesSchema,
+  'print_jobs',
+  {
+    eventId: uuid('event_id').notNull(),
+    ticketId: uuid('ticket_id').notNull(),
+    printerId: uuid('printer_id'),
+    adapter: text('adapter').notNull(),
+    kind: text('kind').notNull(),
+    reason: text('reason').notNull(),
+    note: text('note'),
+    status: text('status').notNull(),
+    source: text('source').notNull(),
+    locale: text('locale').notNull(),
+    requestKey: text('request_key').notNull(),
+    /** PrintNode's print job id, once accepted. */
+    providerJobId: text('provider_job_id'),
+    errorCode: text('error_code'),
+    requestedBy: uuid('requested_by'),
+    sentAt: ts('sent_at'),
+  },
+  (t) => [
+    index('print_jobs_org_event_idx').on(t.orgId, t.eventId, t.createdAt),
+    index('print_jobs_org_ticket_idx').on(t.orgId, t.ticketId, t.createdAt),
+    index('print_jobs_org_printer_idx').on(t.orgId, t.printerId, t.createdAt),
+    uniqueIndex('print_jobs_org_request_key').on(t.orgId, t.requestKey),
+    foreignKey({
+      name: 'print_jobs_printer_fk',
+      columns: [t.orgId, t.printerId],
+      foreignColumns: [printers.orgId, printers.id],
+    }),
+    check('print_jobs_adapter_check', list('adapter', PRINTER_ADAPTERS)),
+    check('print_jobs_kind_check', list('kind', PRINT_KINDS)),
+    check('print_jobs_reason_check', list('reason', PRINT_REASONS)),
+    check('print_jobs_kind_reason_check', sql`(kind = 'print') = (reason = 'first_print')`),
+    check(
+      'print_jobs_note_check',
+      sql`note is null or char_length(note) between 1 and ${sql.raw(String(MAX_PRINT_NOTE))}`,
+    ),
+    check('print_jobs_other_note_check', sql`reason <> 'other' or note is not null`),
+    check('print_jobs_status_check', list('status', PRINT_JOB_STATUSES)),
+    check('print_jobs_source_check', list('source', PRINT_SOURCES)),
+    check('print_jobs_request_key_check', sql`char_length(request_key) between 8 and 80`),
+    check('print_jobs_printnode_check', sql`adapter = 'browser' or printer_id is not null`),
+  ],
+);
+
+/**
+ * Per-org print settings (M5.5b). PrintNode (Stage 2, P5-2) is switched on per org by platform
+ * staff once the org's PrintNode account is open (`printnode_enabled`); one row per org.
+ */
+export const printSettings = tenantTable(
+  badgesSchema,
+  'print_settings',
+  {
+    printnodeEnabled: boolean('printnode_enabled').notNull().default(false),
+  },
+  (t) => [uniqueIndex('print_settings_org_key').on(t.orgId)],
 );

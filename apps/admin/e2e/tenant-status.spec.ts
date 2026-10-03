@@ -7,6 +7,7 @@ import {
   MARKET,
   makeStaff,
   openTenant,
+  pickOption,
   replayForm,
   serverForm,
   signInStaff,
@@ -77,7 +78,7 @@ test('staff suspend an org: public pages 404 (noindex), listing gone, checkout r
   // A buyer opens the event page before anything happens.
   const buyer = await webPage(browser);
   await buyer.goto(`/events/${event}`);
-  await buyer.getByLabel('Quantity — Free entry', { exact: true }).selectOption('1');
+  await pickOption(buyer.getByLabel('Quantity — Free entry', { exact: true }), '1');
   await buyer.getByLabel('Full name', { exact: true }).fill('Bea Buyer');
   await buyer.getByLabel('Email for your tickets', { exact: true }).fill(`bea+${slug}@example.test`);
 
@@ -245,7 +246,7 @@ test('staff suspend an org: public pages 404 (noindex), listing gone, checkout r
 
   // Acting as a member of a closed org is refused.
   const act = page.getByRole('region', { name: 'Act as a member' });
-  await act.getByLabel('Member', { exact: true }).selectOption({ index: 1 });
+  await pickOption(act.getByLabel('Member', { exact: true }), { index: 1 });
   await act.getByLabel("Reason (shown to the org's owners)", { exact: true }).fill('e2e: look around');
   await act.getByRole('button', { name: 'Start acting as member' }).click();
   await expect(
@@ -293,7 +294,7 @@ test('members other than owners lose a closed org; a suspended org can still be 
   // Staff may still act as a member of a suspended org (read-only for them too).
   const tenantUrl = page.url().split('?')[0] ?? '';
   const act = page.getByRole('region', { name: 'Act as a member' });
-  await act.getByLabel('Member', { exact: true }).selectOption({ index: 1 });
+  await pickOption(act.getByLabel('Member', { exact: true }), { index: 1 });
   await act.getByLabel("Reason (shown to the org's owners)", { exact: true }).fill('e2e: why suspended');
   await act.getByRole('button', { name: 'Start acting as member' }).click();
   await expect(page).toHaveURL(`${WEB}/o/${slug}`);

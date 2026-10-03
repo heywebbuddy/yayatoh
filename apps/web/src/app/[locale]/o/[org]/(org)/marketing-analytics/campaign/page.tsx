@@ -5,7 +5,6 @@ import { buttonClass, Card, PageHeader, SectionHeader, StatusDot, Table, Tag } f
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { Crumbs } from '@/components/crumbs.tsx';
 import { AnalyticsRows, FigureTiles, RangeForm, ratePct } from '@/components/marketing-analytics.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { campaignNames } from '@/server/campaign-names.ts';
@@ -70,22 +69,9 @@ export default async function CampaignAnalyticsPage({
   const named =
     d.kind === 'campaign' ? (await campaignNames(data.ctx, [key.slice(2)])).get(key.slice(2)) : undefined;
   const name = named ?? d.name ?? t('unnamed');
-  const rangeQs = new URLSearchParams({ from: d.fromDay, to: d.toDay }).toString();
   return (
     <>
-      <PageHeader
-        breadcrumb={
-          <Crumbs
-            items={[
-              { label: data.org.name, href: `/o/${org}` },
-              { label: t('title'), href: `${base}?${rangeQs}` },
-              { label: name },
-            ]}
-          />
-        }
-        title={name}
-        tag={<Tag>{t(`kind.${d.kind}`)}</Tag>}
-      />
+      <PageHeader title={name} tag={<Tag>{t(`kind.${d.kind}`)}</Tag>} />
       <RangeForm
         action={`${prefix}${base}/campaign`}
         from={error ? (sp.from ?? d.fromDay) : d.fromDay}

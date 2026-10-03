@@ -5,8 +5,11 @@ import { PortalChangeStatus } from '@/components/portal-change-status.tsx';
 import { PortalShell, PortalSignedOut } from '@/components/portal-shell.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatMoment, formatSessionTime } from '@/lib/portal-format.ts';
+import { loadReviewerPortal } from '@/server/cfp-portal.ts';
 import { currentPortalPrincipal, loadSpeakerPortal } from '@/server/portal.ts';
 import { ExhibitorPortal } from './exhibitor-portal.tsx';
+import { ReviewerHome } from './reviewer-portal.tsx';
+import { SponsorPortal } from './sponsor-portal.tsx';
 
 export async function generateMetadata({
   params,
@@ -14,28 +17,54 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const exhibitor = (await currentPortalPrincipal())?.subjectKind === 'exhibitor';
-  const t = await getTranslations({ locale, namespace: exhibitor ? 'exhibitorPortal' : 'speakerPortal' });
-  return { title: t('title'), robots: { index: false, follow: false } };
+  const kind = (await currentPortalPrincipal())?.subjectKind;
+  const namespace =
+    kind === 'exhibitor'
+      ? 'exhibitorPortal'
+      : kind === 'cfp_reviewer'
+        ? 'cfpReview'
+        : kind === 'sponsor'
+          ? 'sponsorPortal'
+          : 'speakerPortal';
+  const t = await getTranslations({ locale, namespace });
+  return {
+    title: t(namespace === 'cfpReview' ? 'portalTitle' : 'title'),
+    robots: { index: false, follow: false },
+  };
 }
 
 /**
  * The portal's home (one sign-in for every portal role, M5.3a): the speaker portal's overview
  * (their sessions in the event time zone and open tasks), or for an exhibitor admin or staff
- * member the exhibitor portal (M5.4a).
+ * member the exhibitor portal (M5.4a), for a sponsor contact the sponsor portal (M5.4b).
  */
 export default async function SpeakerPortalPage({
   params,
   searchParams,
 }: {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ signedOut?: string; logo?: string }>;
+  searchParams: Promise<{ signedOut?: string; logo?: string; paid?: string }>;
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
   const principal = await currentPortalPrincipal();
   if (principal?.subjectKind === 'exhibitor')
-    return <ExhibitorPortal principal={principal} locale={locale} logoParam={(await searchParams).logo} />;
+    return (
+      <ExhibitorPortal
+        principal={principal}
+        locale={locale}
+        logoParam={(await searchParams).logo}
+        paid={(await searchParams).paid === '1'}
+      />
+    );
+  // M5.4b: a sponsor contact sees the sponsor portal.
+  if (principal?.subjectKind === 'sponsor' && principal.role === 'sponsor_contact')
+    return <SponsorPortal principal={principal} locale={locale} paid={(await searchParams).paid === '1'} />;
+  // M5.3b: a call-for-papers reviewer sees the proposals assigned to them.
+  if (principal?.subjectKind === 'cfp_reviewer') {
+    const reviewer = await loadReviewerPortal();
+    if (reviewer) return <ReviewerHome data={reviewer.data} />;
+  }
   const portal = await loadSpeakerPortal();
   if (!portal) return <PortalSignedOut signedOut={Boolean((await searchParams).signedOut)} />;
   const { data } = portal;

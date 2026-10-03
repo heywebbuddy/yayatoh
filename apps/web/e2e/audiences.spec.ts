@@ -3,7 +3,7 @@ import { closePools } from '@yayatoh/db';
 import { localKeyVault, setKeyVault } from '@yayatoh/platform';
 import { resolveOrgSlug } from '@yayatoh/tenancy';
 import { type AudienceScenario, audienceScenario } from '@yayatoh/testing';
-import { expectAccessible, newUser } from './helpers.ts';
+import { expectAccessible, expectPicked, newUser, pickOption, pickWithKeyboard } from './helpers.ts';
 
 // Tickets are signed with the org's keys: seal them under the web server's key vault.
 const kms = process.env.LOCAL_KMS_KEY;
@@ -54,10 +54,9 @@ test.describe('audiences (M3.6a)', () => {
     await expect(condition).toBeVisible();
     // The newest event (this year's edition) is picked: its five people on the list.
     await expect(count(page)).toHaveText('5 people match');
-    // Not checked in yet: choose with the keyboard on the native select.
+    // Not checked in yet: choose with the keyboard on the select.
     const checkedIn = condition.getByLabel('Checked in');
-    await checkedIn.focus();
-    await checkedIn.selectOption('no');
+    await pickWithKeyboard(checkedIn, 'no');
     await expect(count(page)).toHaveText('4 people match');
     await expect.poll(() => previewNames(page)).toEqual(['Ava', 'Cy', 'Fin', 'Ivy']);
     await expectAccessible(page);
@@ -65,7 +64,7 @@ test.describe('audiences (M3.6a)', () => {
     // A nested OR group narrows it again (press label, or has a seat).
     await page.getByRole('button', { name: 'Add group' }).first().click();
     const group = page.getByRole('group', { name: 'Group 2' });
-    await group.getByLabel('New condition').selectOption('label');
+    await pickOption(group.getByLabel('New condition'), 'label');
     await group.getByRole('button', { name: 'Add condition' }).click();
     await group.getByLabel('Label', { exact: true }).fill('press');
     await expect(count(page)).toHaveText('1 person matches');
@@ -92,7 +91,7 @@ test.describe('audiences (M3.6a)', () => {
       await page.goto(`/o/${slug}/audiences/new?template=${key}`);
       const templates = page.getByRole('region', { name: 'Start from a template' });
       await expect(templates.getByRole('radio', { name: new RegExp(name) })).toBeChecked();
-      await templates.getByRole('combobox').selectOption({ label: `${s.thisYearName} (Jun 3, 2028)` });
+      await pickOption(templates.getByRole('combobox'), { label: `${s.thisYearName} (Jun 3, 2028)` });
       return templates;
     };
 
@@ -109,7 +108,8 @@ test.describe('audiences (M3.6a)', () => {
     await expect(count(page)).toHaveText('1 person matches');
     await expect.poll(() => previewNames(page)).toEqual([...s.expected.lastYearNotThisYear]);
     // The builder shows what the template means (series-relative).
-    await expect(page.getByRole('group', { name: /Condition 1:/ }).getByLabel('Events')).toHaveValue(
+    await expectPicked(
+      page.getByRole('group', { name: /Condition 1:/ }).getByLabel('Events'),
       'previousEdition',
     );
 

@@ -14,11 +14,13 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@yayatoh/billing": "workspace:*",
     "@yayatoh/contracts": "workspace:*",
     "@yayatoh/csv": "workspace:*",
     "@yayatoh/db": "workspace:*",
     "@yayatoh/events": "workspace:*",
     "@yayatoh/floorplan": "workspace:*",
+    "@yayatoh/forms": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
     "@yayatoh/notifications": "workspace:*",
     "@yayatoh/platform": "workspace:*",

@@ -6,7 +6,13 @@ import { closePools } from '@yayatoh/db';
 import { resolveOrgSlug } from '@yayatoh/tenancy';
 import { type RsvpScenario, rsvpScenario } from '@yayatoh/testing';
 import { prepareZXingModule, readBarcodes } from 'zxing-wasm/reader';
-import { expectAccessible, expectAccessibleBothModes, passHumanCheck, signIn } from './helpers.ts';
+import {
+  expectAccessible,
+  expectAccessibleBothModes,
+  passHumanCheck,
+  pickOption,
+  signIn,
+} from './helpers.ts';
 
 // Batch 3h merge: axe runs in light and dark on every screen now (twice the checks), so these long
 // journeys get more than the default 30 s.
@@ -134,7 +140,7 @@ test.describe('RSVP (M4.1d)', () => {
 
     await signIn(page);
     await page.goto(`${console_(s)}/guests`);
-    await page.getByLabel('RSVP', { exact: true }).selectOption({ label: 'Responded' });
+    await pickOption(page.getByLabel('RSVP', { exact: true }), { label: 'Responded' });
     await page.getByRole('button', { name: 'Apply' }).click();
     await expect(page.getByRole('region', { name: 'Chen', exact: true })).toBeVisible();
     await expect(page.getByRole('region', { name: 'Garcia', exact: true })).toHaveCount(0);
@@ -143,7 +149,7 @@ test.describe('RSVP (M4.1d)', () => {
         .getByRole('region', { name: 'Chen', exact: true })
         .getByText("Ceremony: 0 attending, 1 can't attend, 0 awaiting"),
     ).toBeVisible();
-    await page.getByLabel('RSVP', { exact: true }).selectOption({ label: 'Invited' });
+    await pickOption(page.getByLabel('RSVP', { exact: true }), { label: 'Invited' });
     await page.getByRole('button', { name: 'Apply' }).click();
     await expect(page.getByRole('region', { name: 'Garcia', exact: true })).toBeVisible();
     await expect(page.getByRole('region', { name: 'Chen', exact: true })).toHaveCount(0);
@@ -415,7 +421,10 @@ test.describe('RSVP (M4.1d)', () => {
     await page.reload();
     await expect(page.getByText(/RSVPs close on January 1, 2020/)).toBeVisible();
     await expect(page.getByText('Finding an invitation by name and PIN is off.')).toBeVisible();
-    await expect(page.getByLabel('Deadline (America/Chicago)')).toHaveValue('2020-01-01T12:00');
+    await expect(page.getByLabel('Deadline (America/Chicago)')).toHaveAttribute(
+      'data-value',
+      '2020-01-01T12:00',
+    );
     await expectAccessibleBothModes(page);
     const res = await page.goto(`/rsvp/find/${s.lookupCode}`);
     expect(res?.status()).toBe(404);

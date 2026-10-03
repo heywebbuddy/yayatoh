@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, Input, SkeletonCard } from '@yayatoh/ui';
+import { Alert, Button, Input, Select, SkeletonCard } from '@yayatoh/ui';
 import { useFormatter, useTranslations } from 'next-intl';
 import { useCallback, useEffect, useId, useState } from 'react';
 import { StepUpProvider, useStepUp } from '@/components/step-up.tsx';
@@ -16,6 +16,7 @@ import {
 
 type Loaded = Extract<SupervisorLoad, { state: 'ok' }>;
 type Device = Loaded['view']['devices'][number];
+type KioskKind = 'tickets' | 'guests' | 'board';
 
 /**
  * Supervisor mode (M3.4a): a signed-in supervisor sees every device of the org and can force a
@@ -195,6 +196,8 @@ function DeviceCard({
   const [pinError, setPinError] = useState<string | null>(null);
   const [confirmRevoke, setConfirmRevoke] = useState(false);
   const [busy, setBusy] = useState(false);
+  /** M4.4b: what the kiosk will show (the board stands at no entrance). */
+  const [kind, setKind] = useState<KioskKind>('tickets');
   const names = new Map(checkpoints.map((c) => [c.id, c.name]));
   const actionable = d.where !== 'elsewhere';
 
@@ -233,6 +236,9 @@ function DeviceCard({
           {d.label}
           {isSelf ? ` · ${t('thisDevice')}` : ''}
           {d.mode === 'kiosk' ? ` · ${t('kiosk')}` : ''}
+          {d.mode === 'kiosk' && d.kioskKind && d.kioskKind !== 'tickets'
+            ? ` · ${t(d.kioskKind === 'guests' ? 'kindGuests' : 'kindBoard')}`
+            : ''}
         </h3>
         <p className="flex flex-wrap gap-x-3 text-caption text-ink-2">
           <span className={d.online ? 'text-success' : 'text-danger'}>
@@ -278,7 +284,7 @@ function DeviceCard({
                 <label htmlFor={`${id}-move`} className="text-[13px] font-bold text-ink">
                   {t('moveTo', { label: d.label })}
                 </label>
-                <select
+                <Select
                   id={`${id}-move`}
                   name="checkpointId"
                   defaultValue={d.checkpointId ?? ''}
@@ -290,7 +296,7 @@ function DeviceCard({
                       {c.name}
                     </option>
                   ))}
-                </select>
+                </Select>
               </div>
               <Button type="submit" variant="secondary" disabled={busy}>
                 {t('move')}
@@ -358,25 +364,41 @@ function DeviceCard({
                   action: 'kiosk_start',
                   eventId,
                   deviceId: d.id,
-                  checkpointId: String(f.get('kioskCheckpointId') ?? '') || null,
+                  checkpointId: kind === 'board' ? null : String(f.get('kioskCheckpointId') ?? '') || null,
                   pin,
+                  kind,
                 },
-                t('kioskStarted', { label: d.label }),
+                t(kind === 'board' ? 'boardStarted' : 'kioskStarted', { label: d.label }),
               );
             }}
           >
-            {entrances.length > 0 ? (
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor={`${id}-kind`} className="text-[13px] font-bold text-ink">
+                {t('kioskKind', { label: d.label })}
+              </label>
+              <Select
+                id={`${id}-kind`}
+                name="kind"
+                value={kind}
+                onValueChange={(v) => setKind(v as KioskKind)}
+              >
+                <option value="tickets">{t('kindTickets')}</option>
+                <option value="guests">{t('kindGuests')}</option>
+                <option value="board">{t('kindBoard')}</option>
+              </Select>
+            </div>
+            {entrances.length > 0 && kind !== 'board' ? (
               <div className="flex flex-col gap-1.5">
                 <label htmlFor={`${id}-kiosk`} className="text-[13px] font-bold text-ink">
                   {t('kioskEntrance', { label: d.label })}
                 </label>
-                <select id={`${id}-kiosk`} name="kioskCheckpointId" className="field">
+                <Select id={`${id}-kiosk`} name="kioskCheckpointId" className="field">
                   {entrances.map((c) => (
                     <option key={c.id} value={c.id}>
                       {c.name}
                     </option>
                   ))}
-                </select>
+                </Select>
               </div>
             ) : null}
             <Input

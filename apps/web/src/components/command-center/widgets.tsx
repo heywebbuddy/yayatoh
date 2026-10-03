@@ -9,6 +9,16 @@ import type { ReactNode } from 'react';
 import { Link } from '@/i18n/navigation.ts';
 import { SEVERITY_DOT } from '../alerts-list.tsx';
 import {
+  type ExhibitorActivity,
+  ExhibitorActivityBody,
+  type SessionAttendance,
+  SessionAttendanceBody,
+  type SessionFill,
+  SessionFillBody,
+  type SponsorActivity,
+  SponsorActivityBody,
+} from './conference-widgets.tsx';
+import {
   type Capacity,
   CapacityBody,
   type CheckinSpeed,
@@ -636,5 +646,13 @@ export function WidgetBody({
       return <CampaignsBody d={data as Campaigns} c={ctx} />;
     case 'deliverability':
       return <DeliverabilityBody d={data as Deliverability} c={ctx} />;
+    case 'sessionAttendance':
+      return <SessionAttendanceBody d={data as SessionAttendance} c={ctx} />;
+    case 'sessionFill':
+      return <SessionFillBody d={data as SessionFill} c={ctx} />;
+    case 'exhibitorActivity':
+      return <ExhibitorActivityBody d={data as ExhibitorActivity} c={ctx} />;
+    case 'sponsorActivity':
+      return <SponsorActivityBody d={data as SponsorActivity} c={ctx} />;
   }
 }

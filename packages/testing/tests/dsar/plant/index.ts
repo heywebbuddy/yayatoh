@@ -7,10 +7,11 @@ import { plantCampaigns } from './campaigns.ts';
 import { plantCheckin } from './checkin.ts';
 import { plantCms } from './cms.ts';
 import { plantCrm } from './crm.ts';
-import { plantDonations } from './donations.ts';
-import { plantEngagement } from './engagement.ts';
+import { plantDonations, plantDonationsCollection } from './donations.ts';
+import { plantEngagement, plantNetworking } from './engagement.ts';
 import { plantEvents } from './events.ts';
 import { plantForms } from './forms.ts';
+import { plantGallery } from './gallery.ts';
 import { plantGuests } from './guests.ts';
 import { plantMarketing } from './marketing.ts';
 import { plantMedia } from './media.ts';
@@ -18,7 +19,7 @@ import { plantMessaging } from './messaging.ts';
 import { plantNotifications } from './notifications.ts';
 import { plantOrders } from './orders.ts';
 import { plantPayments } from './payments.ts';
-import { plantProgram } from './program.ts';
+import { plantCfp, plantProgram } from './program.ts';
 import { plantRegistration } from './registration.ts';
 import { plantReviews } from './reviews.ts';
 import { plantSeating } from './seating.ts';
@@ -56,6 +57,11 @@ export const PLANTERS: readonly (readonly [string, Planter])[] = [
   ['registration', plantRegistration],
   ['donations', plantDonations],
   ['engagement', plantEngagement],
+  // Batch 3u merge: the tables batch 3j added.
+  ['donations collection', plantDonationsCollection],
+  ['networking', plantNetworking],
+  ['cfp', plantCfp],
+  ['gallery', plantGallery],
 ];
 
 /** Plant the person in every module of one org; returns the tables written. */
