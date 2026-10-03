@@ -133,7 +133,7 @@ ids only) granted to `platform_reader`.
 
 ## M6.4c — Zapier and Slack (done)
 
-- **Status:** built 2026-10-03 on M6.4a, behind the `integrations` module key (Slack) and `api_access` (Zapier, `/v1`), the `IntegrationAuth` port (fake in dev/CI, Nango in production once configured) and the webhook publisher port (fake in dev/CI, Svix in production). Nothing talks to Slack or Zapier from dev or CI.
+- **Status:** built 2026-10-03 on M6.4a (local gate: lint, check:modules, typecheck 63/63, unit 2990/2990, integration 1687 with the two failures it found fixed and their files re-run green; e2e `slack-zapier` + `integrations` 42/42 on three viewports), behind the `integrations` module key (Slack) and `api_access` (Zapier, `/v1`), the `IntegrationAuth` port (fake in dev/CI, Nango in production once configured) and the webhook publisher port (fake in dev/CI, Svix in production). Nothing talks to Slack or Zapier from dev or CI.
 - **Risk tags:** `db-migration`, `tenancy`, `infra`
 
 ### 1. Goal and users
