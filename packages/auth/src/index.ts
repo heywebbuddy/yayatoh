@@ -155,3 +155,10 @@ export {
   type UserSummary,
   type UserTheme,
 } from './users.ts';
+export {
+  findOrCreateSsoAccount,
+  isPlatformStaff,
+  revokeAllSessions,
+  type SsoAccount,
+  sessionSsoOrg,
+} from './sso.ts';

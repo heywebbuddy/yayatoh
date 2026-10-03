@@ -981,6 +981,13 @@
       "when": 1791021869480,
       "tag": "0139_conference_alert_rules",
       "breakpoints": true
+    },
+    {
+      "idx": 140,
+      "version": "7",
+      "when": 1791050056631,
+      "tag": "0140_plain_nehzno",
+      "breakpoints": true
     }
   ]
 }
