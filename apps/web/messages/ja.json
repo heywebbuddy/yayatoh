@@ -8662,7 +8662,9 @@
         "not_connected": "このイベントではオンライン寄付を受け付けていません。",
         "campaign_closed": "このキャンペーンは終了しました。",
         "risk_blocked": "この寄付を受け付けられませんでした。後でもう一度お試しいただくか、主催者にご連絡ください。"
-      }
+      },
+      "showOnScreen": "会場のスクリーンで名前を出して感謝してほしい",
+      "showOnScreenHint": "初期設定はオフです。名前は上で選んだとおりに表示され、寄付額は表示されません。"
     },
     "thanks": {
       "metaTitle": "ありがとうございます",
@@ -8744,7 +8746,8 @@
       "cardBody": "ゲストにパドル番号を配り、コンソールから金額レベルを呼び、スポッターがスマホで挙がったパドルを記録し、寄付の約束を確定します。",
       "openConsole": "コンソールを開く",
       "openSpotter": "パドルを記録",
-      "openPaddles": "パドル番号"
+      "openPaddles": "パドル番号",
+      "openScreen": "ライブスクリーン"
     },
     "paddles": {
       "title": "パドル番号",
@@ -8927,6 +8930,76 @@
       "confirmedOne": "パドル{number}を約束として確定しました。",
       "voided": "パドル{number}を保留にしました。",
       "voidedPledge": "パドル{number}を保留にし、その約束を取り消しました。"
+    },
+    "screen": {
+      "metaTitle": "寄付スクリーン",
+      "totalLabel": "これまでの寄付額",
+      "progressLabel": "目標への進捗",
+      "progressText": "{goal} 中 {total}",
+      "goal": "目標 {goal} の {percent}%",
+      "goalReached": "目標達成!",
+      "gifts": "{count, plural, =0 {最初の寄付者になりましょう} other {# 件の寄付}}",
+      "calling": "ただいまの金額",
+      "callingLevel": "{amount} · {name}",
+      "paddles": "{count, plural, =0 {パドルを挙げてください!} other {# 本のパドル}}",
+      "thanksTitle": "ありがとうございます",
+      "thanksEmpty": "すべての寄付が力になります。ありがとうございます!",
+      "scanToGive": "スキャンして寄付",
+      "qrLabel": "寄付ページへの QR コード: {url}",
+      "sideLabel": "寄付の方法と感謝",
+      "replacedTitle": "このスクリーンのリンクは置き換えられました",
+      "replacedBody": "主催者に新しいリンクを確認してください。"
+    },
+    "screenPage": {
+      "title": "ライブスクリーン",
+      "subtitle": "会場のプロジェクター用の寄付メーター。目標、合計、呼びかけ中の金額、名前の表示を希望した寄付者への感謝を映します。",
+      "setupTitle": "スクリーンを設定",
+      "setupBody": "メーターが追うキャンペーンを選んでください。QR コードはそのキャンペーンの寄付ページを開きます。",
+      "settingsTitle": "スクリーンの設定",
+      "campaign": "キャンペーン",
+      "campaignHint": "メーターはこのキャンペーンを追います。支払い済みの寄付と、各金額で挙がったパドルの合計です。",
+      "chooseCampaign": "キャンペーンを選択",
+      "campaignClosed": "{name}(終了)",
+      "showNames": "寄付者の名前で感謝を表示",
+      "showNamesHint": "「スクリーンで名前を出して感謝してほしい」を選んだ寄付者だけを、本人が選んだ表示で紹介します。パドルの持ち主の名前は表示しません。オフ: 合計のみ。",
+      "setUp": "スクリーンを設定",
+      "save": "保存",
+      "saved": "スクリーンを保存しました。開いているスクリーンはすぐに更新されます。",
+      "rotated": "リンクを置き換えました。古いリンクのスクリーンは停止しました。プロジェクターで新しいリンクを開いてください。",
+      "noCampaignsTitle": "まずキャンペーンを追加してください",
+      "noCampaignsBody": "スクリーンはキャンペーンの目標と合計を表示します。寄付タブで作成してください。",
+      "openDonations": "寄付を開く",
+      "notSetUp": "スクリーンはまだ設定されていません。",
+      "viewerNotice": "ここでスクリーンを確認できます。設定やリンクの共有は、イベントを編集できる人に依頼してください。",
+      "linkTitle": "スクリーンのリンク",
+      "linkBody": "プロジェクターにつないだパソコンでこのリンクを開いてください。サインイン不要のため、共有は音響・映像チームだけにしてください。",
+      "linkLabel": "スクリーンのリンク",
+      "copy": "リンクをコピー",
+      "copied": "リンクをコピーしました。",
+      "openScreen": "スクリーンを開く",
+      "openContrast": "ハイコントラストで開く",
+      "openStill": "動きを減らして開く",
+      "rotate": "リンクを置き換える",
+      "rotateHint": "古いリンクで開いているスクリーンはすぐに停止します。",
+      "givingTitle": "QR で寄付",
+      "givingOpen": "スクリーンの QR コードは {campaign} の寄付ページを開きます。スマートフォンからの寄付はリアルタイムで合計に加わります。",
+      "givingClosed": "QR コードはまだありません。Stripe を連携し、イベントを公開し、キャンペーンが受付中になると寄付ページが寄付を受け付けます。",
+      "previewTitle": "プレビュー",
+      "cardsLink": "テーブルカードを印刷",
+      "errors": {
+        "campaign": "このイベントのキャンペーンを選んでください。"
+      }
+    },
+    "screenCards": {
+      "title": "テーブルカード",
+      "subtitle": "印刷して各テーブルに 1 枚ずつ置いてください。ゲストはコードをスキャンしてスマートフォンから寄付できます。",
+      "print": "印刷",
+      "sheetLabel": "テーブルカード",
+      "cardTitle": "スキャンして寄付",
+      "cardBody": "スマートフォンから {campaign} に寄付できます。寄付はスクリーンの合計に加わります。",
+      "qrLabel": "寄付ページへの QR コード: {url}",
+      "noScreenTitle": "まずスクリーンを設定してください",
+      "noScreenBody": "カードはスクリーンが追うキャンペーンを開きます。"
     }
   },
   "galaTables": {

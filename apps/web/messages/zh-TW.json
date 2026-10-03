@@ -8662,7 +8662,9 @@
         "not_connected": "此活動未開放線上捐款。",
         "campaign_closed": "此募款活動已關閉。",
         "risk_blocked": "我們無法接受這筆捐款。請稍後再試或聯絡主辦方。"
-      }
+      },
+      "showOnScreen": "在會場大螢幕上具名感謝我",
+      "showOnScreenHint": "預設關閉。您的姓名依上方的選擇顯示;捐款金額從不顯示。"
     },
     "thanks": {
       "metaTitle": "謝謝",
@@ -8744,7 +8746,8 @@
       "cardBody": "為賓客分配號碼牌，從控制台叫出捐贈檔位，讓觀察員在手機上記錄舉起的號碼牌，並確認認捐。",
       "openConsole": "開啟控制台",
       "openSpotter": "記錄號碼牌",
-      "openPaddles": "號碼牌"
+      "openPaddles": "號碼牌",
+      "openScreen": "現場大螢幕"
     },
     "paddles": {
       "title": "號碼牌",
@@ -8927,6 +8930,76 @@
       "confirmedOne": "號碼牌 {number} 已確認為認捐。",
       "voided": "號碼牌 {number} 已擱置。",
       "voidedPledge": "號碼牌 {number} 已擱置，其認捐已取消。"
+    },
+    "screen": {
+      "metaTitle": "捐款大螢幕",
+      "totalLabel": "目前已募得",
+      "progressLabel": "目標進度",
+      "progressText": "{total} / {goal}",
+      "goal": "已達 {goal} 目標的 {percent}%",
+      "goalReached": "目標達成!",
+      "gifts": "{count, plural, =0 {成為第一位捐款人} other {# 筆捐款}}",
+      "calling": "目前級距",
+      "callingLevel": "{amount} · {name}",
+      "paddles": "{count, plural, =0 {請舉起您的號牌!} other {已舉牌 # 次}}",
+      "thanksTitle": "感謝您",
+      "thanksEmpty": "每一筆捐款都很重要。謝謝!",
+      "scanToGive": "掃碼捐款",
+      "qrLabel": "捐款頁面 QR 碼:{url}",
+      "sideLabel": "如何捐款,以及我們的感謝",
+      "replacedTitle": "此大螢幕連結已被更換",
+      "replacedBody": "請向主辦單位索取新連結。"
+    },
+    "screenPage": {
+      "title": "現場大螢幕",
+      "subtitle": "為會場投影準備的募款溫度計:目標、總額、目前級距,以及對希望具名的捐款人的感謝。",
+      "setupTitle": "設定大螢幕",
+      "setupBody": "選擇溫度計追蹤的募款活動。其 QR 碼會開啟該活動的捐款頁面。",
+      "settingsTitle": "大螢幕設定",
+      "campaign": "募款活動",
+      "campaignHint": "溫度計追蹤此活動:已付款的捐款加上各級距舉起的號牌。",
+      "chooseCampaign": "選擇募款活動",
+      "campaignClosed": "{name}(已關閉)",
+      "showNames": "以姓名感謝捐款人",
+      "showNamesHint": "只顯示勾選「在大螢幕上具名感謝我」的捐款人,並依其選擇的方式顯示。號牌持有人從不顯示姓名。關閉:只顯示總額。",
+      "setUp": "設定大螢幕",
+      "save": "儲存",
+      "saved": "大螢幕已儲存。已開啟的大螢幕會立即更新。",
+      "rotated": "連結已更換。舊連結上的大螢幕已停止;請在投影電腦上開啟新連結。",
+      "noCampaignsTitle": "請先新增募款活動",
+      "noCampaignsBody": "大螢幕顯示募款活動的目標和總額。請在「捐款」分頁中建立。",
+      "openDonations": "開啟捐款",
+      "notSetUp": "大螢幕尚未設定。",
+      "viewerNotice": "您可以在此檢視大螢幕。請讓能編輯活動的人進行設定或分享連結。",
+      "linkTitle": "大螢幕連結",
+      "linkBody": "在連接投影機的電腦上開啟此連結。無需登入,因此只與您的影音團隊分享。",
+      "linkLabel": "大螢幕連結",
+      "copy": "複製連結",
+      "copied": "連結已複製。",
+      "openScreen": "開啟大螢幕",
+      "openContrast": "以高對比開啟",
+      "openStill": "以減少動態開啟",
+      "rotate": "更換連結",
+      "rotateHint": "使用舊連結開啟的大螢幕會立即停止。",
+      "givingTitle": "掃碼捐款",
+      "givingOpen": "大螢幕上的 QR 碼會開啟 {campaign} 的捐款頁面。手機捐款會即時計入總額。",
+      "givingClosed": "尚無 QR 碼:連結 Stripe、發布活動並開放募款後,捐款頁面才會接受捐款。",
+      "previewTitle": "預覽",
+      "cardsLink": "列印桌卡",
+      "errors": {
+        "campaign": "請選擇本活動的募款活動。"
+      }
+    },
+    "screenCards": {
+      "title": "桌卡",
+      "subtitle": "列印後在每張桌上放一張。賓客掃碼即可用手機捐款。",
+      "print": "列印",
+      "sheetLabel": "桌卡",
+      "cardTitle": "掃碼捐款",
+      "cardBody": "用手機為 {campaign} 捐款。您的捐款會計入大螢幕上的總額。",
+      "qrLabel": "捐款頁面 QR 碼:{url}",
+      "noScreenTitle": "請先設定大螢幕",
+      "noScreenBody": "桌卡開啟的是大螢幕追蹤的募款活動。"
     }
   },
   "galaTables": {
