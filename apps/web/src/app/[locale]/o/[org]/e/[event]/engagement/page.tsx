@@ -68,10 +68,8 @@ export default async function EngagementPage({ params }: Params) {
         <StatCard label={t('engaged')} value={nf.format(r.engaged)} testId="engaged-count" />
         <StatCard label={t('average')} value={nf.format(r.averageScore)} testId="average-score" />
       </div>
-      <section aria-labelledby="attendees-heading" className="flex flex-col gap-3">
-        <h2 id="attendees-heading" className="text-section">
-          {t('attendeesTitle')}
-        </h2>
+      <div className="flex flex-col gap-3">
+        <h2 className="text-section">{t('attendeesTitle')}</h2>
         {r.attendees.length === 0 ? (
           <EmptyState icon={<Sparkles />} title={t('emptyTitle')} description={t('emptyHint')} />
         ) : (
@@ -96,11 +94,9 @@ export default async function EngagementPage({ params }: Params) {
             ]}
           />
         )}
-      </section>
-      <section aria-labelledby="sessions-heading" className="flex flex-col gap-3">
-        <h2 id="sessions-heading" className="text-section">
-          {t('sessionsTitle')}
-        </h2>
+      </div>
+      <div className="flex flex-col gap-3">
+        <h2 className="text-section">{t('sessionsTitle')}</h2>
         <Table
           caption={t('sessionsTitle')}
           rowKey={(s) => s.sessionId}
@@ -128,7 +124,7 @@ export default async function EngagementPage({ params }: Params) {
             { key: 'breakdown', header: t('breakdown'), cell: (s) => breakdown(s.counts) || '—' },
           ]}
         />
-      </section>
+      </div>
       <section aria-labelledby="weights-heading" className="flex flex-col gap-3">
         <h2 id="weights-heading" className="text-section">
           {t('weightsTitle')}
