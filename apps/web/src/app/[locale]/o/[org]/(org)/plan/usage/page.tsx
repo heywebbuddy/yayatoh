@@ -4,6 +4,7 @@ import { roleCan } from '@yayatoh/tenancy';
 import {
   Alert,
   Breadcrumb,
+  buttonClass,
   EmptyState,
   PageHeader,
   SectionHeader,
@@ -37,6 +38,7 @@ export default async function UsagePage({
   const data = await loadConsole(org);
   const t = await getTranslations('billingUsage');
   const tp = await getTranslations('billingPlan');
+  const tn = await getTranslations('nav');
   const breadcrumb = (
     <Breadcrumb
       label={t('breadcrumb')}
@@ -47,7 +49,15 @@ export default async function UsagePage({
     return (
       <>
         <PageHeader breadcrumb={breadcrumb} title={t('title')} description={t('subtitle')} />
-        <EmptyState title={tp('noAccessTitle')} description={tp('noAccessDescription')} />
+        <EmptyState
+          title={tp('noAccessTitle')}
+          description={tp('noAccessDescription')}
+          action={
+            <Link href={`/o/${org}`} className={buttonClass('secondary', 'md')}>
+              {tn('home')}
+            </Link>
+          }
+        />
       </>
     );
   }
@@ -124,7 +134,15 @@ export default async function UsagePage({
       <section aria-labelledby="history-heading" className="flex flex-col gap-3">
         <SectionHeader id="history-heading" title={t('historyTitle')} description={t('historyDescription')} />
         {empty ? (
-          <EmptyState title={t('emptyTitle')} description={t('emptyBody')} />
+          <EmptyState
+            title={t('emptyTitle')}
+            description={t('emptyBody')}
+            action={
+              <Link href={`/o/${org}/plan`} className={buttonClass('secondary', 'md')}>
+                {tp('title')}
+              </Link>
+            }
+          />
         ) : (
           <Table
             caption={t('historyTitle')}
