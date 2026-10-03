@@ -23,6 +23,7 @@ import {
   UpdateCampaignInput,
 } from './dto.ts';
 import { campaigns, gifts, levels } from './schema.ts';
+import { publishScreenStateTx, screenEventsOfCampaignTx } from './screen-live.ts';
 
 type CampaignRow = typeof campaigns.$inferSelect;
 
@@ -135,6 +136,9 @@ export const updateCampaignCommand = tenantCommand({
     } catch (err) {
       throw nameTaken(err);
     }
+    // A new name or goal reaches the room's screen at once (M4.8d).
+    for (const eventId of await screenEventsOfCampaignTx(tx, c.id))
+      await publishScreenStateTx(tx, requireOrg(ctx), eventId);
     return { id: c.id };
   },
   audit: (input) => ({

@@ -78,6 +78,7 @@ import {
   createLevelCommand as createGivingLevelCommand,
   issueReceiptTx,
   paddleConsoleQuery,
+  saveScreenCommand,
   recordPaddlesCommand,
   saveCharityProfileCommand,
   setFairValueCommand,
@@ -2429,6 +2430,7 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   await donationRows(org.id, event.id, slug, ctx);
   await receiptRows(org.id, event.id, ga.id, checkout.order.id, ctx);
   await paddleRaiseRows(event.id, party.id, ctx);
+  await screenRows(event.id, ctx);
   return {
     org,
     ownerId,
@@ -2641,6 +2643,14 @@ async function paddleRaiseRows(eventId: string, partyId: string, ctx: (o?: Parti
   );
   await executeCommand(closeCallCommand, { eventId, callId: call.id }, ctx(), ports);
   await executeCommand(confirmEntriesCommand, { eventId, callId: call.id }, ctx(), ports);
+}
+
+/** M4.8d live giving screen (isolation coverage of `donations.screens`): the fixture campaign's screen. */
+async function screenRows(eventId: string, ctx: (o?: Partial<Ctx>) => Ctx) {
+  const view = await executeQuery(paddleConsoleQuery, { eventId }, ctx(), ports);
+  const campaign = view.campaigns[0];
+  if (!campaign) throw new Error('fixture: no campaign for the screen');
+  await executeCommand(saveScreenCommand, { eventId, campaignId: campaign.id, showNames: true }, ctx(), ports);
 }
 
 /** English headers for attendee exports (the console passes its own locale's). */
