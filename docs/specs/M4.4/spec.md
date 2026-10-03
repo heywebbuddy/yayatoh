@@ -212,3 +212,8 @@ A snapshot or day-of read is one `viewTx` per chart (event plan + sub-events) pl
 - [ ] Turn the venue Wi-Fi off: type a full name on the kiosk → "Your table: Table 2"; the board keeps paging. Staff: exit kiosk with the PIN. Wi-Fi on: the arrivals show on Day-of as "Guest kiosk".
 - [ ] On a phone's Scan PWA: Guests → pick "Bride" → Check in everyone in a party.
 
+### Gate (M4.4b, 2026-10-03)
+- Base: build branch + `merge/next-3g` + `merge/next-3h` + `agent/m4.3a` + `agent/m4.4a`, re-merged before the gate.
+- `pnpm lint`, `pnpm check:modules`, typecheck 59/59 (`--concurrency=2`), unit 2716/2716 (203 files), integration 1529/1529 (167 files), `pnpm contracts:check`.
+- E2E at 375/768/1280 (`--workers=2`): `guest-checkin` 12 passed; `social-workspace`, `staff-mode`, `scan-pwa`, `door-staff`, `assistance`, `guest-seat-finder`, `canary-crawl`, `noindex` 87 passed (the rest skipped by design).
+
