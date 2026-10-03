@@ -66,7 +66,11 @@ export async function computeClientSnapshotTx(
 ): Promise<ComputedClient> {
   const now = clientCtx.now;
   const total = (await eventIdsTx(tx)).length;
-  const ids = await upcomingEventIdsTx(tx, new Date(now.getTime() - RECENT_MS), new Date(now.getTime() + AHEAD_MS));
+  const ids = await upcomingEventIdsTx(
+    tx,
+    new Date(now.getTime() - RECENT_MS),
+    new Date(now.getTime() + AHEAD_MS),
+  );
   const events: ComputedEvent[] = [];
   const revenue: Record<string, number> = {};
   let ordersSold = 0;
@@ -237,14 +241,20 @@ export const agencySnapshotSubscriber = defineSubscriber({
     const p = GrantPayload.safeParse(event.payload);
     if (!p.success || p.data.clientOrgId !== event.orgId) return;
     const now = new Date();
-    const agencyCtx = createCtx({ orgId: p.data.agencyOrgId, actor: { type: 'system', name: SNAPSHOT_ACTOR }, now });
+    const agencyCtx = createCtx({
+      orgId: p.data.agencyOrgId,
+      actor: { type: 'system', name: SNAPSHOT_ACTOR },
+      now,
+    });
     const grant = await liveAgencyGrantTx(tx, p.data.grantId);
     if (!grant || grant.agencyOrgId !== p.data.agencyOrgId) {
       await withTenant(agencyCtx, async (atx) => {
         await atx.delete(eventSnapshots).where(eq(eventSnapshots.clientOrgId, event.orgId));
         await atx
           .delete(clientSnapshots)
-          .where(and(eq(clientSnapshots.clientOrgId, event.orgId), eq(clientSnapshots.grantId, p.data.grantId)));
+          .where(
+            and(eq(clientSnapshots.clientOrgId, event.orgId), eq(clientSnapshots.grantId, p.data.grantId)),
+          );
       });
       return;
     }

@@ -1,6 +1,17 @@
 import { tenantTable } from '@yayatoh/db';
 import { sql } from 'drizzle-orm';
-import { bigint, boolean, check, integer, jsonb, pgSchema, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import {
+  bigint,
+  boolean,
+  check,
+  integer,
+  jsonb,
+  pgSchema,
+  text,
+  timestamp,
+  uniqueIndex,
+  uuid,
+} from 'drizzle-orm/pg-core';
 
 export const agency = pgSchema('agency');
 

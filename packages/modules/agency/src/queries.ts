@@ -41,6 +41,8 @@ export const AgencyClientDto = z.object({
   name: z.string(),
   status: z.string(),
   timezone: z.string(),
+  /** The client's default currency (an empty money total is shown in it). */
+  currency: z.string(),
   role: z.enum(AGENCY_GRANT_ROLES),
   finance: z.boolean(),
   grantedAt: z.date(),
@@ -68,6 +70,7 @@ export const agencyClientsQuery = tenantQuery({
         name: g.name,
         status: g.status,
         timezone: g.timezone,
+        currency: g.currency,
         role: g.role,
         finance: g.finance,
         grantedAt: g.grantedAt,

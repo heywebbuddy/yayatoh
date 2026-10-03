@@ -23,7 +23,9 @@ describe('agency pages: pure rules', () => {
   });
 
   it('counts published events running now as live', () => {
-    expect(liveCount([ev('a', 'published', -1, 1), ev('b', 'draft', -1, 1), ev('c', 'published', 1, 2)], now)).toBe(1);
+    expect(
+      liveCount([ev('a', 'published', -1, 1), ev('b', 'draft', -1, 1), ev('c', 'published', 1, 2)], now),
+    ).toBe(1);
   });
 
   it('check-in rate in basis points, capped and zero-safe', () => {

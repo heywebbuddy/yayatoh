@@ -9,6 +9,8 @@ import { loadConsoleBase } from '@/server/console.ts';
 
 const ORG_NAV: readonly NavItem[] = [
   { key: 'home', path: '', group: 'overview', module: 'core', icon: 'home' },
+  // M6.7a: an agency org's Clients | Events | Marketing | Reports (entitlement `agency`).
+  { key: 'agency', path: 'agency', group: 'overview', module: 'agency', icon: 'briefcase' },
   { key: 'commandCenter', path: 'command-center', group: 'overview', module: 'core', icon: 'gauge' },
   // M3.2b: the alert engine's alerts, with the open count as the badge.
   { key: 'alerts', path: 'alerts', group: 'overview', module: 'core', icon: 'bell' },
@@ -29,6 +31,8 @@ const ORG_NAV: readonly NavItem[] = [
   { key: 'supportMacros', path: 'macros', group: 'overview', module: 'ticketing', icon: 'zap' },
   { key: 'venues', path: 'venues', group: 'build', module: 'core', icon: 'building' },
   { key: 'team', path: 'team', group: 'build', module: 'core', icon: 'users' },
+  // M6.7a: agencies the org gave access to.
+  { key: 'agencies', path: 'agencies', group: 'build', module: 'core', icon: 'handshake' },
   { key: 'series', path: 'series', group: 'build', module: 'core', icon: 'layers' },
   { key: 'templates', path: 'templates', group: 'build', module: 'core', icon: 'copy' },
   { key: 'domains', path: 'domains', group: 'build', module: 'core', icon: 'globe' },
@@ -66,6 +70,27 @@ const NEEDS: Readonly<Record<string, string>> = {
   finance: 'finance:read',
   activity: 'audit:read',
   privacy: 'privacy:manage',
+  agency: 'agency:read',
+  agencies: 'members:read',
+};
+
+/**
+ * M6.7a: what someone acting through an agency grant may open besides `NEEDS`. Org settings,
+ * the team, domains, the public site, payouts, sending setup, API keys and the CMS are the
+ * client's own: an agency role holds none of these permissions, and the pages refuse it too.
+ */
+const AGENCY_NEEDS: Readonly<Record<string, string>> = {
+  team: 'members:read',
+  domains: 'org:update',
+  publicSite: 'org:update',
+  siteContent: 'org:update',
+  helpCenter: 'org:update',
+  marketingSite: 'org:update',
+  payouts: 'payouts:manage',
+  settings: 'org:update',
+  emails: 'org:update',
+  sendingSetup: 'org:update',
+  apiKeys: 'api_keys:manage',
 };
 
 export default async function OrgLayout({
@@ -93,6 +118,8 @@ export default async function OrgLayout({
             data.modules.has(i.module) &&
             (data.role !== 'collaborator' || i.key === 'home') &&
             (!NEEDS[i.key] || roleCan(data.role, NEEDS[i.key] as string)) &&
+            (!data.agency || !AGENCY_NEEDS[i.key] || roleCan(data.role, AGENCY_NEEDS[i.key] as string)) &&
+            (i.key !== 'agency' || data.org.kind === 'agency') &&
             (!CONTENT_ORG_ONLY.has(i.key) || isPlatformContentOrg(data.org.slug)),
         ),
         badges: openAlerts > 0 ? { alerts: String(openAlerts) } : {},

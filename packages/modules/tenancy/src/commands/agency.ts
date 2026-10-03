@@ -3,7 +3,7 @@ import { type Ctx, DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { and, desc, eq, isNull, sql } from 'drizzle-orm';
 import { z } from 'zod';
-import { type AgencyGrantRole, agencyConsoleRole, type AgencyConsoleRole } from '../domain/permissions.ts';
+import { type AgencyConsoleRole, type AgencyGrantRole, agencyConsoleRole } from '../domain/permissions.ts';
 import { AGENCY_GRANT_ROLES, orgAccessGrants } from '../schema.ts';
 
 /**
@@ -113,7 +113,13 @@ export const grantAgencyAccessCommand = tenantCommand({
       version: 1,
       aggregateType: 'agency_grant',
       aggregateId: row.id,
-      payload: { grantId: row.id, clientOrgId: orgId, agencyOrgId: row.agencyOrgId, role: row.role, finance: row.finance },
+      payload: {
+        grantId: row.id,
+        clientOrgId: orgId,
+        agencyOrgId: row.agencyOrgId,
+        role: row.role,
+        finance: row.finance,
+      },
     });
     return toDto(row, new Map([[agency.org_id, { slug: agency.slug, name: agency.name }]]));
   },
@@ -151,7 +157,13 @@ export const updateAgencyGrantCommand = tenantCommand({
       version: 1,
       aggregateType: 'agency_grant',
       aggregateId: row.id,
-      payload: { grantId: row.id, clientOrgId: row.orgId, agencyOrgId: row.agencyOrgId, role: row.role, finance: row.finance },
+      payload: {
+        grantId: row.id,
+        clientOrgId: row.orgId,
+        agencyOrgId: row.agencyOrgId,
+        role: row.role,
+        finance: row.finance,
+      },
     });
     return toDto(row, await agencyProfilesTx(tx, [row.agencyOrgId]));
   },
@@ -222,7 +234,10 @@ export const listAgencyGrantsQuery = tenantQuery({
       .where(sql`${orgAccessGrants.revokedAt} is not null`)
       .orderBy(desc(orgAccessGrants.revokedAt))
       .limit(20);
-    const profiles = await agencyProfilesTx(tx, [...live, ...revoked].map((r) => r.agencyOrgId));
+    const profiles = await agencyProfilesTx(
+      tx,
+      [...live, ...revoked].map((r) => r.agencyOrgId),
+    );
     return { live: live.map((r) => toDto(r, profiles)), revoked: revoked.map((r) => toDto(r, profiles)) };
   },
 });
@@ -253,7 +268,9 @@ export async function agencyAccessTx(tx: TenantTx): Promise<AgencyAccess | null>
     agency_name: string;
     role: AgencyGrantRole;
     finance: boolean;
-  }>(sql`select grant_id, agency_org_id, agency_slug, agency_name, role, finance from tenancy.agency_access()`);
+  }>(
+    sql`select grant_id, agency_org_id, agency_slug, agency_name, role, finance from tenancy.agency_access()`,
+  );
   if (!r) return null;
   return {
     grantId: r.grant_id,
@@ -393,6 +410,11 @@ export async function liveAgencyGrantTx(
     .from(orgAccessGrants)
     .where(and(eq(orgAccessGrants.id, grantId), isNull(orgAccessGrants.revokedAt)));
   return row
-    ? { grantId: row.id, agencyOrgId: row.agencyOrgId, role: row.role as AgencyGrantRole, finance: row.finance }
+    ? {
+        grantId: row.id,
+        agencyOrgId: row.agencyOrgId,
+        role: row.role as AgencyGrantRole,
+        finance: row.finance,
+      }
     : null;
 }

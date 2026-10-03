@@ -2,6 +2,7 @@ import {
   Armchair,
   Award,
   Bell,
+  Briefcase,
   Building2,
   Calendar,
   CalendarCheck,
@@ -12,6 +13,7 @@ import {
   FileText,
   Gauge,
   Globe,
+  Handshake,
   Heart,
   History,
   House,
@@ -96,6 +98,9 @@ const ICONS: Record<string, LucideIcon> = {
   'shield-alert': ShieldAlert,
   zap: Zap,
   'id-card': IdCard,
+  // M6.7a: the agency's Clients pages and a client's Agencies page.
+  briefcase: Briefcase,
+  handshake: Handshake,
 };
 
 export function Icon({ name, className = 'size-4' }: { name: string; className?: string }) {

@@ -31,9 +31,8 @@ import {
 } from '@yayatoh/platform';
 import { applyUnpublishedMetricEvents } from '@yayatoh/reports';
 import {
+  type ConsoleRole,
   eventRoleCan,
-  memberRole,
-  type OrgRole,
   resolveOrgSlug,
   roleCan,
   roleRequiresTwoFactor,
@@ -41,6 +40,7 @@ import {
 import { cookies } from 'next/headers';
 import { realtimeUrl } from '@/lib/realtime-url.ts';
 import { devAuthEnabled } from './dev.ts';
+import { orgActor } from './org-actor.ts';
 import { ports } from './ports.ts';
 import { getSession } from './session.ts';
 
@@ -176,7 +176,7 @@ export async function widgetChannels(opts: {
   ctx: Ctx;
   orgId: string;
   eventId: string;
-  role: OrgRole;
+  role: ConsoleRole;
   modules: ReadonlySet<string>;
 }): Promise<Partial<Record<WidgetChannel, string>>> {
   const eventRoles = await eventRolesOf(opts.ctx, opts.eventId);
@@ -247,17 +247,12 @@ async function asMember(
   const imp = session.impersonation;
   if (!resolved || (imp && imp.orgId !== resolved.orgId))
     return { status: 404, body: { error: 'not_found' } };
-  const base = createCtx({
-    orgId: resolved.orgId,
-    actor: { type: 'user', userId: session.userId },
-    stepUpAt: session.stepUpAt,
-    impersonatedBy: imp ? { staffUserId: imp.staffUserId, impersonationId: imp.id } : null,
-  });
-  const role = await memberRole(base);
-  if (!role) return { status: 404, body: { error: 'not_found' } };
-  if (!imp && !session.twoFactorEnabled && roleRequiresTwoFactor(role))
+  // M6.7a: a member, or an agency acting through the client's live grant.
+  const actor = await orgActor(resolved.orgId, session);
+  if (!actor) return { status: 404, body: { error: 'not_found' } };
+  if (!imp && !session.twoFactorEnabled && (roleRequiresTwoFactor(actor.role) || actor.agency?.finance))
     return { status: 403, body: { error: 'two_factor_required' } };
-  const ctx = await commandCenterCtx(base);
+  const ctx = await commandCenterCtx(actor.ctx);
   try {
     const ev = await executeQuery(getEventBySlugQuery, { slug: eventSlug }, ctx, ports);
     return await fn(ctx, ev.id);

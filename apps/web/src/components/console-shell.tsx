@@ -7,6 +7,7 @@ import type { ReactNode } from 'react';
 import { Link } from '@/i18n/navigation.ts';
 import type { ConsoleData } from '@/server/console.ts';
 import { currentTheme } from '@/server/theme.ts';
+import { AgencyBadge } from './agency-badge.tsx';
 import { BrandMark } from './brand-mark.tsx';
 import { Crumbs } from './crumbs.tsx';
 import { GlobalSearch } from './global-search.tsx';
@@ -113,6 +114,35 @@ async function SidebarContent({
               <span className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap">{o.name}</span>
             </Link>
           ))}
+          {data.clients.length > 0 ? (
+            <>
+              {/* M6.7a: client orgs reached through an agency grant. */}
+              <p className="px-2.5 pt-2.5 pb-1.5 text-label tracking-[0.12em] text-ink-2 uppercase">
+                {t('shell.clientsSection')}
+              </p>
+              {data.clients.map((c) => (
+                <Link
+                  key={c.orgId}
+                  href={`/o/${c.slug}`}
+                  aria-current={c.slug === data.org.slug ? 'true' : undefined}
+                  className="flex min-h-10 items-center gap-2.5 rounded-[10px] px-2.5 text-body font-semibold hover:bg-surface-3 aria-[current=true]:text-primary-ink"
+                >
+                  <span
+                    aria-hidden="true"
+                    className="flex size-6 shrink-0 items-center justify-center rounded-[7px] bg-surface-3 text-[10px] font-extrabold text-ink-2"
+                  >
+                    {initialsOf(c.name)}
+                  </span>
+                  <span className="flex min-w-0 flex-col">
+                    <span className="overflow-hidden text-ellipsis whitespace-nowrap">{c.name}</span>
+                    <span className="overflow-hidden text-caption font-normal text-ellipsis whitespace-nowrap text-ink-2">
+                      {t('shell.viaAgency', { agency: c.agencyName })}
+                    </span>
+                  </span>
+                </Link>
+              ))}
+            </>
+          ) : null}
         </div>
       </details>
       <div className="flex flex-col gap-4">
@@ -226,6 +256,7 @@ export async function ConsoleShell({
         <ImpersonationBanner session={data.session} locale={data.ctx.locale} timeZone={data.org.timezone} />
         <MaintenanceBanner orgId={data.org.id} locale={data.ctx.locale} timeZone={data.org.timezone} />
         <OrgStatusBanner status={data.org.status} />
+        <AgencyBadge data={data} />
         <IncidentBanner variant="console" />
         <header className="relative z-30 flex flex-wrap items-center gap-2.5">
           <MobileNav openLabel={t('menu')} closeLabel={t('closeMenu')}>

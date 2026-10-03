@@ -22,6 +22,7 @@ import {
   addMemberCommand,
   agencyAccess,
   consoleRole,
+  createOrganization,
   getOrganizationQuery,
   grantAgencyAccessCommand,
   listAgencyGrantsQuery,
@@ -31,7 +32,6 @@ import {
   myAgencyClients,
   revokeAgencyGrantCommand,
   updateAgencyGrantCommand,
-  createOrganization,
 } from '@yayatoh/tenancy';
 import { sql } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
@@ -93,7 +93,12 @@ beforeAll(async () => {
     ports,
   );
   agencyId = agency.id;
-  await executeCommand(addMemberCommand, { userId: staff, role: 'manager' }, userCtx(agencyOwner, agencyId), ports);
+  await executeCommand(
+    addMemberCommand,
+    { userId: staff, role: 'manager' },
+    userCtx(agencyOwner, agencyId),
+    ports,
+  );
   await executeCommand(
     setEntitlementOverrideCommand,
     { moduleKey: 'agency', effect: 'grant', reason: 'agency fixture' },
@@ -132,7 +137,12 @@ describe('agency v1: grants (M6.7a)', () => {
     expect(
       (
         await errorOf(
-          executeCommand(grantAgencyAccessCommand, { agency: agencySlug, role: 'viewer' }, staleCtx(a.ctx()), ports),
+          executeCommand(
+            grantAgencyAccessCommand,
+            { agency: agencySlug, role: 'viewer' },
+            staleCtx(a.ctx()),
+            ports,
+          ),
         )
       ).code,
     ).toBe('step_up_required');
@@ -151,7 +161,12 @@ describe('agency v1: grants (M6.7a)', () => {
     ).toBe('forbidden');
     // An agency can't grant itself.
     const self = await errorOf(
-      executeCommand(grantAgencyAccessCommand, { agency: agencySlug, role: 'viewer' }, userCtx(agencyOwner, agencyId), ports),
+      executeCommand(
+        grantAgencyAccessCommand,
+        { agency: agencySlug, role: 'viewer' },
+        userCtx(agencyOwner, agencyId),
+        ports,
+      ),
     );
     expect(self.code).toBe('validation_failed');
   });
@@ -187,7 +202,9 @@ describe('agency v1: grants (M6.7a)', () => {
       (await errorOf(executeQuery(listEventsQuery, {}, via(a.org.id, g.id, strangerAgencyId), ports))).code,
     ).toBe('forbidden');
     // A's grant never opens B.
-    expect((await errorOf(executeQuery(listEventsQuery, {}, via(b.org.id, g.id), ports))).code).toBe('forbidden');
+    expect((await errorOf(executeQuery(listEventsQuery, {}, via(b.org.id, g.id), ports))).code).toBe(
+      'forbidden',
+    );
     // A stranger can't ride the grant.
     const riding = userCtx(stranger, a.org.id, { viaAgency: { grantId: g.id, agencyOrgId: agencyId } });
     expect((await errorOf(executeQuery(listEventsQuery, {}, riding, ports))).code).toBe('forbidden');
@@ -259,7 +276,12 @@ describe('agency v1: grants (M6.7a)', () => {
     ).toMatch(/row-level security/);
 
     // The client opts in: the agency reads exactly what the owner reads (and still writes nothing it can't).
-    await executeCommand(updateAgencyGrantCommand, { grantId: g.id, role: 'manager', finance: true }, a.ctx(), ports);
+    await executeCommand(
+      updateAgencyGrantCommand,
+      { grantId: g.id, role: 'manager', finance: true },
+      a.ctx(),
+      ports,
+    );
     expect((await agencyAccess(userCtx(staff, a.org.id)))?.consoleRole).toBe('agency_manager_finance');
     for (const table of MONEY_TABLES)
       expect(await countRows(agent, table), `${table}: with finance`).toBe(await countRows(owner, table));
@@ -267,7 +289,12 @@ describe('agency v1: grants (M6.7a)', () => {
     for (const table of MONEY_TABLES) expect(await countRows(via(b.org.id, g.id), table)).toBe(0);
 
     // Withdrawn again: back to nothing on the next request.
-    await executeCommand(updateAgencyGrantCommand, { grantId: g.id, role: 'manager', finance: false }, a.ctx(), ports);
+    await executeCommand(
+      updateAgencyGrantCommand,
+      { grantId: g.id, role: 'manager', finance: false },
+      a.ctx(),
+      ports,
+    );
     for (const table of MONEY_TABLES) expect(await countRows(agent, table)).toBe(0);
   });
 
@@ -290,22 +317,35 @@ describe('agency v1: grants (M6.7a)', () => {
     ).toBe('forbidden');
     // Another agency without the `agency` entitlement can't refresh.
     expect(
-      (await errorOf(executeCommand(refreshAgencySnapshotsCommand, {}, userCtx(stranger, strangerAgencyId), ports)))
-        .code,
+      (
+        await errorOf(
+          executeCommand(refreshAgencySnapshotsCommand, {}, userCtx(stranger, strangerAgencyId), ports),
+        )
+      ).code,
     ).toBe('module_not_enabled');
 
     // With finance, revenue appears per currency.
     const g = { id: grantA };
-    await executeCommand(updateAgencyGrantCommand, { grantId: g.id, role: 'manager', finance: true }, a.ctx(), ports);
+    await executeCommand(
+      updateAgencyGrantCommand,
+      { grantId: g.id, role: 'manager', finance: true },
+      a.ctx(),
+      ports,
+    );
     await executeCommand(refreshAgencySnapshotsCommand, {}, agencyCtx(), ports);
     const withMoney = await executeQuery(agencyClientsQuery, {}, agencyCtx(), ports);
     expect(withMoney[0]?.snapshot?.revenue).not.toBeNull();
     // Opt-in withdrawn: hidden at once, before any refresh.
-    await executeCommand(updateAgencyGrantCommand, { grantId: g.id, role: 'manager', finance: false }, a.ctx(), ports);
-    expect((await executeQuery(agencyClientsQuery, {}, agencyCtx(), ports))[0]?.snapshot?.revenue).toBeNull();
-    expect((await executeQuery(agencyEventsQuery, {}, agencyCtx(), ports)).every((e) => e.grossMinor === null)).toBe(
-      true,
+    await executeCommand(
+      updateAgencyGrantCommand,
+      { grantId: g.id, role: 'manager', finance: false },
+      a.ctx(),
+      ports,
     );
+    expect((await executeQuery(agencyClientsQuery, {}, agencyCtx(), ports))[0]?.snapshot?.revenue).toBeNull();
+    expect(
+      (await executeQuery(agencyEventsQuery, {}, agencyCtx(), ports)).every((e) => e.grossMinor === null),
+    ).toBe(true);
   });
 
   it('a revoked grant cuts access on the next request', async () => {
@@ -332,7 +372,9 @@ describe('agency v1: grants (M6.7a)', () => {
     // The audit log has the grant's whole life.
     const log = await executeQuery(auditLogQuery, { limit: 100 }, a.ctx(), ports);
     const actions = log.entries.filter((e) => e.targetId === g.id).map((e) => e.action);
-    expect(actions).toEqual(expect.arrayContaining(['agencyGrant.create', 'agencyGrant.update', 'agencyGrant.revoke']));
+    expect(actions).toEqual(
+      expect.arrayContaining(['agencyGrant.create', 'agencyGrant.update', 'agencyGrant.revoke']),
+    );
   });
 
   it('the outbox subscriber snapshots a new client for its agency, and drops a revoked one', async () => {

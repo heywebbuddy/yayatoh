@@ -1,4 +1,4 @@
-import { createCtx, isDomainError } from '@yayatoh/kernel';
+import { isDomainError } from '@yayatoh/kernel';
 import {
   isProgramOwner,
   MAX_UPLOAD_BYTES,
@@ -8,6 +8,7 @@ import {
   verifyUploadTicket,
 } from '@yayatoh/media';
 import { revalidatePath } from 'next/cache';
+import { orgActor } from '@/server/org-actor.ts';
 import { ports } from '@/server/ports.ts';
 import { getSession } from '@/server/session.ts';
 
@@ -54,14 +55,10 @@ export async function POST(req: Request): Promise<Response> {
   const decorative = form.get('decorative') === '1';
   const replace = String(form.get('replaceAssetId') ?? '').trim() || null;
   // Staff acting as a member (M1.2e) work in that org only, and every write names them.
-  const imp = session.impersonation;
-  if (imp && imp.orgId !== ticket.orgId) return refuse(403, 'forbidden');
-  const ctx = createCtx({
-    orgId: ticket.orgId,
-    actor: { type: 'user', userId: session.userId },
-    locale: String(form.get('locale') ?? 'en'),
-    impersonatedBy: imp ? { staffUserId: imp.staffUserId, impersonationId: imp.id } : null,
-  });
+  // M6.7a: an agency uploads through the client's live grant (the command re-checks it).
+  const actor = await orgActor(ticket.orgId, session, { locale: String(form.get('locale') ?? 'en') });
+  if (!actor) return refuse(403, 'forbidden');
+  const ctx = actor.ctx;
   const bytes = new Uint8Array(await file.arrayBuffer());
   try {
     const owner = ticket.ownerType;

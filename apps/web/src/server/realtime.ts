@@ -44,7 +44,7 @@ import {
   type SeatFeed,
   type SeatStreamKind,
 } from '@yayatoh/seating';
-import { memberRole } from '@yayatoh/tenancy';
+import { orgActor } from './org-actor.ts';
 import { ports } from './ports.ts';
 import { getSession } from './session.ts';
 
@@ -252,8 +252,11 @@ export async function authorizeRealtime(
     if (session) {
       identified = true;
       who = `user:${session.userId}`;
-      const userCtx = createCtx({ orgId: channel.orgId, actor: { type: 'user', userId: session.userId } });
-      const member = (await memberRole(userCtx)) !== null;
+      // A member, or (M6.7a) an agency acting through the client's live grant.
+      const actor = await orgActor(channel.orgId, session);
+      const userCtx =
+        actor?.ctx ?? createCtx({ orgId: channel.orgId, actor: { type: 'user', userId: session.userId } });
+      const member = actor !== null;
       ctx = userCtx;
       decision = await decideRealtimeAccess(channel, {
         memberOrgId: member ? channel.orgId : null,
