@@ -36,7 +36,7 @@ never indexed and never on the marketplace (P4-3c).
 - **Messages:** `guestSiteHost.*` and `guestSite.*` (105 keys) in all 13 locales with per-locale plurals.
 
 **Later / not yet:**
-- Gallery (M4.5b).
+- Gallery: built in M4.5b (below).
 - Content per language (the hosts write in one language; guests switch only the page's own words).
 - Opening the site straight from a party's RSVP link without the password, and an RSVP block linking to the party's page.
 - Themes beyond the design tokens (colours, photos, a cover image once the media pipeline is wired here).
@@ -58,3 +58,39 @@ never indexed and never on the marketplace (P4-3c).
 | AC10 | Readiness: the checklist item counts and ticks when published | `apps/web/tests/readiness.test.ts`, `guest-site.spec.ts` ("the setup guide …") |
 
 **Gate (M4.5a, 2026-10-03, on build branch + merge/next-3h):** lint, check:modules and typecheck (59/59) clean; unit 2697 passed; integration 1510 of 1511 passed (`marketing-analytics.int.test.ts` "the campaigns tile shows the event’s exact figures to the marketing role" got 0 attributed orders under full-suite load and passes alone, 13/13; it touches no guest code). e2e on all three projects: `guest-site.spec.ts` 30/30, `canary-crawl.spec.ts` (desktop) all passed, `social-workspace.spec.ts`, `noindex.spec.ts`, `security.spec.ts`, `front-door.spec.ts` all passed.
+
+## M4.5b — Gallery (2026-10-03)
+
+Plan row: uploads by guests and the host through a signed link, straight to storage (HEIC accepted), the re-encoding pipeline, the moderation queue (P4-6), a per-event cap and a per-guest quota, a live slideshow over SSE, video links only with a Stream adapter stub behind a port (P4-5). **Acceptance: the per-event storage cap is enforced.**
+
+### What was built
+- **New module `@yayatoh/gallery`** (tier 5, schema `gallery`; `MODULE.md`): `settings` (on/off, moderation `hold`|`auto`, cap, guest quota bytes and items), `uploaders` (a guest's typed name, or a host member), `items` (photo or video link; `uploading` → `pending` → `published`), `variants` (re-encoded files). All tenant tables with FORCE RLS, org-leading indexes, composite FKs (to `events.events`, cascade) and fixture rows for both orgs.
+- **Uploads straight to storage.** A slot is a presigned PUT for exactly the declared size: `MediaStore.presignPut` (new, R2: SigV4 query signing with a signed `content-length`, tested against AWS's published vector). The Postgres store (dev, CI) can't sign, so `/api/gallery/direct/{token}` stands in (HMAC token: org, staging key, exact size, expiry) and stores the bytes unread. Completing reads the staged object, checks its size, sniffs it (JPEG, PNG, GIF, WebP, AVIF; **HEIC** through the `HeicDecoder` port; never SVG), re-encodes it with the media pipeline (`processImage`, now with a size option; EXIF/GPS never survive) and deletes the staging object after commit. Largest upload 25 MB. Slots expire after an hour and are swept before new ones are handed out.
+- **Per-event cap and per-guest quota (P4-6).** Placeholders (`GALLERY_LIMITS`): 5 GiB per event, 250 MiB and 50 items per guest, 5,000 items per event. Hosts may lower them, never raise them. Usage = stored bytes of processed photos + declared bytes of open slots. Checked under the event's advisory lock when a slot is handed out (exactly at the cap is allowed, one byte over refused; concurrent slots are serialized) and again on completion with the stored size (an over-cap photo is deleted and the answer is `refused`/`event_cap`).
+- **Moderation (P4-6).** Guest uploads wait for approval unless the event is set to auto-publish; host uploads publish at once. Approve one or all, reject (deletes rows and files), remove. Guests take back their own items.
+- **Video (P4-5).** YouTube and Vimeo links only, parsed to provider + id; the pasted URL is never stored and pages get a canonical https link. `VideoHost` port with a Cloudflare Stream stub (`VIDEO_HOST=cloudflare_stream` + account id/token; refuses uploads until wired).
+- **Live slideshow.** Realtime channel `event.gallery` (log; ids and states only). Hosts at `/o/{org}/e/{event}/gallery/slideshow` (realtime route, `guests:read`); guests at `/w/{code}/slideshow` through `/api/gallery/stream/{code}` (site password cookie + gallery on). New photos play next; pause/play, previous/next as 44 px buttons and arrow keys/Space; autoplay pauses on hover/focus and is off under reduced motion; announcements only for what a person did or new arrivals.
+- **Privacy.** Guests reach the gallery only through the published guest site and past its password (`guestSiteAccessTx`, new in guests). Names and captions are personal columns; items leave only through allowlisted DTOs with **signed file URLs** (`/api/gallery/file/…?e=&s=`, valid to the end of the next UTC day, also checked against the item still existing; private cache, inert CSP, noindex). Nothing creates contacts or audience members, emits domain events, or reaches the marketplace (P4-3).
+- **Console** `/o/{org}/e/{event}/gallery` (replaces the placeholder; `gallery` is no longer a placeholder section): status, storage meter against the cap, settings form, the guest address, host uploader, video link form, waiting-for-approval queue and the published grid. Viewers read only. Warns when the guest site isn't published.
+- **Guest page** `/w/{code}/gallery`: the gate (comes back to the gallery), closed state, uploader with name (first time), caption and per-file results, quota line, full/quota-reached notices instead of the fields, video link form, "your photos" with state and take back, the published grid. The guest site shows "See and share photos" while the gallery is on.
+- **Abuse:** new M1.14 policy `galleryUpload` (120 per device per hour, 240 per anonymous address, 5,000 per site, IP ceiling 2,000).
+- **Messages:** `gallery.*` (190 keys) and `guestSite.galleryLink` in all 13 locales.
+
+**Later / not yet:**
+- A worker sweep for expired slots across all orgs (today they are swept per event when a new slot is handed out; they never count once expired).
+- Real HEVC decoding in production (owner inbox); dev and CI decode a test container.
+- Bulk download for the hosts; reordering; captions edited after upload; per-photo alt text separate from the caption.
+- The canary crawl doesn't visit the gallery pages yet (columns are declared; the DTO allowlist and signed URLs are tested).
+- Event deletion leaves gallery files in the store (rows cascade).
+
+### Acceptance (M4.5b)
+| # | Criterion | Test |
+|---|---|---|
+| AC1 | **The per-event storage cap is enforced**: at the slot (exact cap allowed, one byte over refused, host and guest), at completion (stored size), concurrent slots serialized, expired slots stop counting, a lowered cap blocks uploads, hosts can't raise it; the UI refuses and says the gallery is full | `packages/testing/tests/gallery.int.test.ts` ("the per-event storage cap is enforced"), `packages/modules/gallery/tests/gallery.test.ts` (quota), `apps/web/e2e/gallery.spec.ts` ("the per-event storage cap is enforced") |
+| AC2 | Per-guest quota (items, bytes), other guests and hosts unaffected; video links count as items | `gallery.int.test.ts` ("the per-guest quota"), `gallery.spec.ts` ("the per-guest quota") |
+| AC3 | Moderation: hold by default, auto-publish, host photos at once, approve/reject/remove, files deleted | `gallery.int.test.ts` ("uploads and moderation"), `gallery.spec.ts` ("the moderation queue") |
+| AC4 | Straight to storage, HEIC accepted, re-encoded; SVG/junk/undecodable HEIC/size mismatch refused | `gallery.int.test.ts` ("what a photo may be"), `gallery.spec.ts` (host uploads), `packages/modules/media/tests/storage.test.ts` (presigned PUT) |
+| AC5 | Live slideshow over SSE for hosts and guests; stream needs the password | `gallery.spec.ts` ("the live slideshow") |
+| AC6 | Video links only; Stream stub behind the port | `gallery.test.ts`, `gallery.int.test.ts` ("video links only") |
+| AC7 | Guest gate, signed file URLs, isolation, viewer read-only, impersonation, freeze | `gallery.int.test.ts`, isolation suite (fixture rows), `gallery.spec.ts` (viewers, guests) |
+| AC8 | Keyboard only, axe light and dark, Arabic RTL, 13 locales | `gallery.spec.ts`, `apps/web/tests/messages.test.ts` |

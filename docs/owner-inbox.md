@@ -547,3 +547,10 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **Who records offline payments and voids invoices:** `orders:refund` (owners, admins, finance), the existing money permission; box office and managers can't. Confirm, or ask for a separate `invoices:manage` permission.
 - [ ] **Invoice wording (`legal-copy`):** the invoice email, the PDF (terms line "Net 30, due no later than 7 days before the event", "Issued by {org} through Yayatoh"), the buyer's invoice page and the reminder template (13 locales). Late-payment wording is deliberately neutral (P5-5: the registration stands). Our PDF is not a tax invoice (no tax lines or seller tax ids yet).
 - [ ] **Door and badge overrides:** any scanner may admit a balance-due ticket with a reason (audited); badge desk staff (`attendees:write`) may print one. Confirm, or restrict to supervisors.
+
+## M4.5b — gallery (2026-10-03, pending owner)
+- [ ] **Gallery limits (P4-6 placeholders):** 5 GiB per event, 250 MB and 50 photos/links per guest, 25 MB per upload, 5,000 items per event. Hosts may lower them. Give the real numbers (they are constants in `packages/modules/gallery/src/domain/limits.ts`).
+- [ ] **Direct uploads to R2** need CORS on the media bucket allowing `PUT` from the app's origins with the `content-length` header (presigned URLs, 1 hour). Until `MEDIA_STORE=r2`, uploads go through the app's dev route.
+- [ ] **HEIC in production:** the prebuilt image library has no HEVC decoder (patents). Choose a decoder for the `HeicDecoder` port: a libvips/libheif build with libde265 in a worker, or an image service (e.g. Cloudflare Images). Dev and CI decode a test container only.
+- [ ] **Cloudflare Stream (P4-5):** when the account exists, set `VIDEO_HOST=cloudflare_stream`, `CLOUDFLARE_STREAM_ACCOUNT_ID`, `CLOUDFLARE_STREAM_API_TOKEN`; the adapter is a stub until then (links only).
+- [ ] **Uploader names are shown to other guests** next to their published photos (behind the site password). Confirm, or ask for photos without names.
