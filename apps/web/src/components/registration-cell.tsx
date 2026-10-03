@@ -49,7 +49,7 @@ export function RegistrationCell({
     <div className="flex min-w-40 flex-col gap-1.5">
       <form key={price ?? 'none'} action={formAction} className="flex flex-wrap items-end gap-2" noValidate>
         <div className="flex flex-col gap-1">
-          <label htmlFor={`${id}-price`} className="text-caption text-zinc-600">
+          <label htmlFor={`${id}-price`} className="text-[13px] font-bold text-ink">
             {t('priceFor', { cell: label, currency })}
           </label>
           <input
@@ -60,7 +60,7 @@ export function RegistrationCell({
             placeholder={price === null ? t('notOffered') : undefined}
             aria-invalid={bad ? true : undefined}
             aria-describedby={message ? `${id}-msg` : undefined}
-            className={`min-h-10 w-28 rounded-pill border bg-white px-4 text-body ${bad ? 'border-pink-700' : 'border-zinc-200'}`}
+            className={`field w-28 ${bad ? 'field-invalid' : ''}`}
           />
         </div>
         <Button type="submit" size="sm" disabled={pending}>
@@ -76,7 +76,7 @@ export function RegistrationCell({
           </Button>
         </form>
       ) : null}
-      <p id={`${id}-msg`} aria-live="polite" className="text-caption text-pink-700">
+      <p id={`${id}-msg`} aria-live="polite" className="text-caption text-danger">
         {message}
       </p>
     </div>

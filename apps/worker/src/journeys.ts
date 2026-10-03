@@ -33,7 +33,11 @@ export function journeyJob() {
     retryLimit: 3,
     payload: z.object({ orgId: z.uuid() }),
     handler: async ({ orgId }) => {
-      const r = await runDueActions(orgId, { notifier }, ports, { limit: 500 });
+      // M4.1f: RSVP reminders carry the party's link (the app's origin).
+      const appOrigin = process.env.NEXT_PUBLIC_APP_ORIGIN;
+      const r = await runDueActions(orgId, { notifier, ...(appOrigin ? { appOrigin } : {}) }, ports, {
+        limit: 500,
+      });
       if (r.done || r.failed || r.enrolled) console.info(JSON.stringify({ job: JOURNEY_JOB, orgId, ...r }));
     },
   });

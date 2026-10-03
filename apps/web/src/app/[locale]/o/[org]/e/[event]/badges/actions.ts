@@ -6,6 +6,7 @@ import {
   cancelBatchCommand,
   createTemplateCommand,
   deleteTemplateCommand,
+  overrideBalanceDueCommand,
   saveTemplateCommand,
   setDefaultTemplateCommand,
   startBatchCommand,
@@ -180,4 +181,33 @@ export async function cancelBatchAction(org: string, event: string, batchId: str
   }
   done(org, event);
   redirect({ href: `${page(org, event)}?batch=${batchId}#batch-heading`, locale });
+}
+
+/**
+ * M5.1d: print the badge of a registration whose invoice still has a balance: the reason is
+ * audited, then the badge PDF opens with the short-lived override.
+ */
+export async function overrideBadgeAction(
+  org: string,
+  event: string,
+  ticketId: string,
+  _prev: ProgramFormState,
+  form: FormData,
+): Promise<ProgramFormState> {
+  const { data, event: ev } = await loadEvent(org, event, 'badges');
+  let token: string;
+  try {
+    ({ token } = await executeCommand(
+      overrideBalanceDueCommand,
+      { eventId: ev.id, ticketId, note: String(form.get('note') ?? '') },
+      data.ctx,
+      ports,
+    ));
+  } catch (err) {
+    return failure(err);
+  }
+  return redirect({
+    href: `${page(org, event)}/ticket/${ticketId}?override=${encodeURIComponent(token)}`,
+    locale: await getLocale(),
+  });
 }

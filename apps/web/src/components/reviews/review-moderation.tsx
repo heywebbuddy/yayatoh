@@ -32,7 +32,7 @@ export function ReviewModeration({
   const bad = new Set(state.fields ?? []);
   const inputId = `moderate-reason-${id}`;
   return (
-    <div className="flex flex-col gap-3 border-t border-zinc-100 pt-3">
+    <div className="flex flex-col gap-3 border-t border-line pt-3">
       <form
         action={formAction}
         onSubmit={keepValues(formAction)}

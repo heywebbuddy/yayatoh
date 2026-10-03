@@ -146,8 +146,12 @@ export {
 export {
   getUserLocale,
   getUsersByIds,
+  getUserTheme,
   setUserLocale,
+  setUserTheme,
   USER_LOCALES,
+  USER_THEMES,
   type UserLocale,
   type UserSummary,
+  type UserTheme,
 } from './users.ts';

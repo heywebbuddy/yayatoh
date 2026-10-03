@@ -51,8 +51,8 @@ const REASONS = new Set([
 const REJECTIONS = new Set<string>(GUEST_IMPORT_REJECTIONS);
 
 const field = 'flex flex-col gap-1.5';
-const label = 'text-caption text-zinc-600';
-const control = 'min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body';
+const label = 'text-caption text-ink-2';
+const control = 'field';
 
 /**
  * Guest-list import (M4.1b): paste, a CSV or XLSX file, or a Google Sheet link → match the
@@ -130,12 +130,12 @@ export default async function GuestImportPage({
       {errorText ? (
         <p
           role="alert"
-          className="rounded-card border border-pink-700 bg-pink-50 px-4 py-3 text-body text-pink-700"
+          className="rounded-card border border-danger bg-danger-soft px-4 py-3 text-body text-danger"
         >
           {errorText}
         </p>
       ) : null}
-      <p className="text-caption text-zinc-600">{t('privacyNote')}</p>
+      <p className="text-caption text-ink-2">{t('privacyNote')}</p>
 
       {!s ? (
         <section aria-labelledby="import-step1" className="flex flex-col gap-4">
@@ -163,9 +163,9 @@ export default async function GuestImportPage({
                     rows={8}
                     aria-describedby="import-text-hint"
                     spellCheck={false}
-                    className="rounded-card border border-zinc-200 bg-white px-4 py-2 font-mono text-caption"
+                    className="rounded-card border border-line bg-surface px-4 py-2 font-mono text-caption"
                   />
-                  <p id="import-text-hint" className="text-caption text-zinc-500">
+                  <p id="import-text-hint" className="text-caption text-ink-2">
                     {t('pasteHint')}
                   </p>
                 </div>
@@ -194,9 +194,9 @@ export default async function GuestImportPage({
                     required
                     aria-describedby="import-file-hint"
                     accept=".csv,.tsv,.txt,.xlsx,text/csv,text/plain,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                    className="min-h-10 text-body file:me-3 file:min-h-10 file:rounded-pill file:border file:border-zinc-200 file:bg-white file:px-4"
+                    className="min-h-10 text-body file:me-3 file:min-h-10 file:rounded-pill file:border file:border-line file:bg-surface file:px-4"
                   />
-                  <p id="import-file-hint" className="text-caption text-zinc-500">
+                  <p id="import-file-hint" className="text-caption text-ink-2">
                     {t('fileHint')}
                   </p>
                 </div>
@@ -211,7 +211,7 @@ export default async function GuestImportPage({
                     aria-describedby="import-sheet-hint"
                     className={control}
                   />
-                  <p id="import-sheet-hint" className="text-caption text-zinc-500">
+                  <p id="import-sheet-hint" className="text-caption text-ink-2">
                     {t('sheetHint')}
                   </p>
                 </div>
@@ -243,7 +243,7 @@ export default async function GuestImportPage({
                     aria-describedby="import-url-hint"
                     className={control}
                   />
-                  <p id="import-url-hint" className="text-caption text-zinc-500">
+                  <p id="import-url-hint" className="text-caption text-ink-2">
                     {t('googleHint')}
                   </p>
                 </div>
@@ -272,15 +272,15 @@ export default async function GuestImportPage({
                 <h2 id="import-step2" className="text-section">
                   {t('step2')}
                 </h2>
-                <p className="text-body text-zinc-600">
+                <p className="text-body text-ink-2">
                   {sourceLabel(s)} · {t('rows', { count: s.rowCount })}
                 </p>
                 {s.sheets.length > 1 ? (
-                  <p className="text-caption text-zinc-600">
+                  <p className="text-caption text-ink-2">
                     {t('otherSheets', { sheets: s.sheets.filter((x) => x !== s.sheet).join(', ') })}
                   </p>
                 ) : null}
-                <p className="text-caption text-zinc-600">{t('mappingHint')}</p>
+                <p className="text-caption text-ink-2">{t('mappingHint')}</p>
                 <form
                   action={validateImportAction.bind(null, org, event, s.batchId)}
                   aria-label={t('step2')}
@@ -336,7 +336,7 @@ export default async function GuestImportPage({
               {s.rejected ? (
                 <ul
                   aria-label={t('reasonsLabel')}
-                  className="flex list-none flex-col gap-1 p-0 text-caption text-pink-700"
+                  className="flex list-none flex-col gap-1 p-0 text-caption text-danger"
                 >
                   {GUEST_IMPORT_REJECTIONS.filter((c) => s.rejectedByCode[c]).map((c) => (
                     <li key={c}>
@@ -357,19 +357,19 @@ export default async function GuestImportPage({
                           <div className="flex flex-wrap items-center gap-2">
                             <h4 className="text-body font-medium">{p.name}</h4>
                             {p.vip ? (
-                              <span className="rounded-pill bg-accent-50 px-2 py-px text-caption text-accent-text">
+                              <span className="rounded-pill bg-primary-soft px-2 py-px text-caption text-primary-ink">
                                 {tp('vip')}
                               </span>
                             ) : null}
                             {p.side ? (
-                              <span className="rounded-pill bg-zinc-100 px-2 py-px text-caption text-zinc-700">
+                              <span className="rounded-pill bg-surface-3 px-2 py-px text-caption text-ink-2">
                                 {tp('sideValue', { side: p.side })}
                               </span>
                             ) : null}
                             {p.tags.map((x) => (
                               <span
                                 key={x}
-                                className="rounded-pill bg-zinc-100 px-2 py-px text-caption text-zinc-700"
+                                className="rounded-pill bg-surface-3 px-2 py-px text-caption text-ink-2"
                               >
                                 {x}
                               </span>
@@ -402,7 +402,7 @@ export default async function GuestImportPage({
                     ))}
                   </ol>
                   {s.partiesPlanned > s.preview.length ? (
-                    <p className="text-caption text-zinc-600">
+                    <p className="text-caption text-ink-2">
                       {t('previewMore', { count: s.partiesPlanned - s.preview.length })}
                     </p>
                   ) : null}
@@ -427,7 +427,7 @@ export default async function GuestImportPage({
                     <Button type="submit">{t('start', { count: s.partiesPlanned })}</Button>
                   </form>
                 ) : (
-                  <p className="text-body text-zinc-600">{t('error.nothing_to_import')}</p>
+                  <p className="text-body text-ink-2">{t('error.nothing_to_import')}</p>
                 )}
                 {s.rejected ? (
                   <a href={rejectedHref} className={buttonClass('secondary')} download>
@@ -441,7 +441,7 @@ export default async function GuestImportPage({
           {s.status === 'importing' || s.status === 'imported' ? (
             <section
               aria-labelledby="import-result"
-              className="flex flex-col gap-3 rounded-panel border border-zinc-200 bg-white px-5 py-4"
+              className="flex flex-col gap-3 rounded-panel border border-line bg-surface px-5 py-4"
             >
               {running ? <AutoRefresh seconds={2} /> : null}
               <h2 id="import-result" className="text-section">
@@ -455,7 +455,7 @@ export default async function GuestImportPage({
                     done: n(op?.processed ?? 0),
                     total: n(op?.total ?? s.partiesPlanned),
                   })}
-                  className="h-2 w-full accent-ink"
+                  className="h-2 w-full accent-primary"
                 />
               ) : null}
               <p className="text-body" role="status">
@@ -467,7 +467,7 @@ export default async function GuestImportPage({
                     })}
               </p>
               {s.rejected ? (
-                <p className="text-caption text-pink-700">{t('rejectedSummary', { count: s.rejected })}</p>
+                <p className="text-caption text-danger">{t('rejectedSummary', { count: s.rejected })}</p>
               ) : null}
               <div className="flex flex-wrap gap-2">
                 <Link href={guestsHref} className={buttonClass('primary')}>

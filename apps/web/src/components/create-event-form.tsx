@@ -37,7 +37,7 @@ export function CreateEventForm({
   const zones = ZONES.includes(defaults.timezone as (typeof ZONES)[number])
     ? ZONES
     : [defaults.timezone, ...ZONES];
-  const selectClass = 'min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body';
+  const selectClass = 'field';
   return (
     <Card size="panel" className="max-w-2xl">
       <form action={formAction} className="flex flex-col gap-4">
@@ -48,7 +48,7 @@ export function CreateEventForm({
         <Input name="name" required minLength={2} maxLength={160} label={t('newEvent.name')} />
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="profile" className="text-caption text-zinc-600">
+            <label htmlFor="profile" className="text-[13px] font-bold text-ink">
               {t('newEvent.profile')}
             </label>
             <select id="profile" name="profile" defaultValue={defaults.profile} className={selectClass}>
@@ -60,7 +60,7 @@ export function CreateEventForm({
             </select>
           </div>
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="timezone" className="text-caption text-zinc-600">
+            <label htmlFor="timezone" className="text-[13px] font-bold text-ink">
               {t('newEvent.timezone')}
             </label>
             <select id="timezone" name="timezone" defaultValue={defaults.timezone} className={selectClass}>

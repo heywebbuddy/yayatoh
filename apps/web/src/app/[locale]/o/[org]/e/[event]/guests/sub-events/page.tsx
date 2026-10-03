@@ -42,7 +42,7 @@ type Search = { side?: string; tag?: string; vip?: string };
 function Disclosure({ summary, children }: { summary: string; children: ReactNode }) {
   return (
     <details className="group">
-      <summary className="min-h-6 cursor-pointer py-0.5 text-caption text-zinc-600 underline-offset-2 hover:underline">
+      <summary className="min-h-6 cursor-pointer py-0.5 text-caption text-ink-2 underline-offset-2 hover:underline">
         {summary}
       </summary>
       <section aria-label={summary} className="flex flex-col gap-3 pt-3">
@@ -53,7 +53,7 @@ function Disclosure({ summary, children }: { summary: string; children: ReactNod
 }
 
 const pill = 'rounded-pill px-2 py-px text-caption';
-const control = 'min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body';
+const control = 'field';
 
 /**
  * Sub-events and invitations (M4.1c): the wedding's parts (ceremony, reception, rehearsal
@@ -309,7 +309,7 @@ export default async function SubEventsPage({
       <Link href={`/o/${org}/e/${event}/guests`} className="min-h-6 self-start py-1 text-caption underline">
         {t('backToGuests')}
       </Link>
-      {canWrite ? null : <p className="text-body text-zinc-500">{t('viewerNotice')}</p>}
+      {canWrite ? null : <p className="text-body text-ink-2">{t('viewerNotice')}</p>}
 
       <section aria-labelledby="sub-events-heading" className="flex flex-col gap-3">
         <h2 id="sub-events-heading" className="text-section">
@@ -334,31 +334,31 @@ export default async function SubEventsPage({
                         <h3 id={`sub-${s.id}-name`} className="text-body font-medium">
                           {s.name}
                         </h3>
-                        <span className={`${pill} bg-zinc-100 text-zinc-700`}>{t(`kinds.${s.kind}`)}</span>
+                        <span className={`${pill} bg-surface-3 text-ink-2`}>{t(`kinds.${s.kind}`)}</span>
                         {s.inviteAll ? (
-                          <span className={`${pill} bg-accent-50 text-accent-text`}>
+                          <span className={`${pill} bg-primary-soft text-primary-ink`}>
                             {t('everyoneInvited')}
                           </span>
                         ) : null}
                       </div>
-                      <p className="text-caption text-zinc-700">
+                      <p className="text-caption text-ink-2">
                         <time dateTime={s.startsAt.toISOString()}>
                           {dt.formatRange(s.startsAt, s.endsAt)}
                         </time>
                       </p>
                       {s.place || venue ? (
-                        <p className="text-caption text-zinc-600">
+                        <p className="text-caption text-ink-2">
                           {t('placeValue', { place: [s.place, venue?.name].filter(Boolean).join(' · ') })}
                         </p>
                       ) : null}
                       {linked ? (
-                        <p className="text-caption text-zinc-600">{t('dateValue', { date: linked })}</p>
+                        <p className="text-caption text-ink-2">{t('dateValue', { date: linked })}</p>
                       ) : null}
-                      <p className="text-caption text-zinc-600" data-testid={`sub-counts-${i}`}>
+                      <p className="text-caption text-ink-2" data-testid={`sub-counts-${i}`}>
                         {t('counts', { invited: s.invited, attending: s.attending, declined: s.declined })}
                       </p>
                       {chart ? (
-                        <p className="text-caption text-zinc-600" data-testid={`sub-chart-${i}`}>
+                        <p className="text-caption text-ink-2" data-testid={`sub-chart-${i}`}>
                           {chart.source === 'sub_event'
                             ? t('chart.own', { count: chart.seatCount })
                             : chart.source === 'date'
@@ -482,7 +482,7 @@ export default async function SubEventsPage({
             <h2 id="add-sub-event-heading" className="text-section">
               {t('add')}
             </h2>
-            <p className="text-caption text-zinc-600">{t('addHint')}</p>
+            <p className="text-caption text-ink-2">{t('addHint')}</p>
             <ProgramForm
               action={createSubEventAction.bind(null, org, event)}
               fields={subEventFields()}
@@ -514,7 +514,7 @@ export default async function SubEventsPage({
                 className="flex flex-wrap items-end gap-3"
               >
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="matrix-side" className="text-caption text-zinc-600">
+                  <label htmlFor="matrix-side" className="text-[13px] font-bold text-ink">
                     {tp('side')}
                   </label>
                   <select id="matrix-side" name="side" defaultValue={side} className={control}>
@@ -527,7 +527,7 @@ export default async function SubEventsPage({
                   </select>
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="matrix-tag" className="text-caption text-zinc-600">
+                  <label htmlFor="matrix-tag" className="text-[13px] font-bold text-ink">
                     {tp('tag')}
                   </label>
                   <select id="matrix-tag" name="tag" defaultValue={tag} className={control}>
@@ -540,7 +540,7 @@ export default async function SubEventsPage({
                   </select>
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="matrix-vip" className="text-caption text-zinc-600">
+                  <label htmlFor="matrix-vip" className="text-[13px] font-bold text-ink">
                     {tp('vip')}
                   </label>
                   <select
@@ -554,10 +554,7 @@ export default async function SubEventsPage({
                     <option value="no">{tp('vipNot')}</option>
                   </select>
                 </div>
-                <button
-                  type="submit"
-                  className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
-                >
+                <button type="submit" className="field">
                   {tp('apply')}
                 </button>
                 {filtered ? (
@@ -570,7 +567,7 @@ export default async function SubEventsPage({
                 ) : null}
               </form>
             </search>
-            <p role="status" className="text-caption text-zinc-600">
+            <p role="status" className="text-caption text-ink-2">
               {filtered
                 ? t('showingFiltered', { parties: matrix.parties.length, guests: shownGuests.length })
                 : t('showingAll', { parties: matrix.parties.length, guests: shownGuests.length })}
@@ -594,7 +591,7 @@ export default async function SubEventsPage({
                     <h3 id="bulk-heading" className="text-body font-medium">
                       {t('bulk')}
                     </h3>
-                    <p className="text-caption text-zinc-600">
+                    <p className="text-caption text-ink-2">
                       {filtered ? t('bulkHintFiltered') : t('bulkHint')}
                     </p>
                     <ProgramForm
@@ -642,7 +639,7 @@ export default async function SubEventsPage({
             <h2 id="response-heading" className="text-section">
               {t('record')}
             </h2>
-            <p className="text-caption text-zinc-600">{t('recordHint')}</p>
+            <p className="text-caption text-ink-2">{t('recordHint')}</p>
             <ProgramForm
               action={recordResponseAction.bind(null, org, event)}
               fields={[
@@ -709,7 +706,7 @@ export default async function SubEventsPage({
               const g = h.guestId ? everyGuest.get(h.guestId) : undefined;
               const sName = h.subEventId ? subName.get(h.subEventId) : undefined;
               return (
-                <li key={h.id} className="text-caption text-zinc-600">
+                <li key={h.id} className="text-caption text-ink-2">
                   {tp(`actions.${h.action}`)}
                   {sName ? ` · ${sName}` : ''}
                   {g ? ` · ${nameOf(g)}` : ''} · {tp(`sources.${h.source}`)} · {actorLabel(h.actor)} ·{' '}

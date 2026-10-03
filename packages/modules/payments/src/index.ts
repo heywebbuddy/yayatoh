@@ -46,6 +46,8 @@ export {
   signFakeDisputeWebhook,
   signFakeWebhook,
 } from './fake.ts';
+// M5.1d: invoice payments (pay link and organizer-collected) on the ledger.
+export { postInvoicePaymentTx } from './invoice-ledger.ts';
 export {
   balanceTx,
   type JournalInput,

@@ -1,5 +1,5 @@
 import { html, qrPath, SafeHtml } from '@yayatoh/pdf';
-import { color } from '@yayatoh/ui/tokens';
+import { print } from '@yayatoh/ui/tokens';
 import { type ResolvedElement, resolveBadge } from './domain/content.ts';
 import type { BadgeDesign } from './domain/design.ts';
 import { faceOrigin } from './domain/layout.ts';
@@ -33,7 +33,7 @@ function element(
   if (e.kind === 'qr') {
     const q = qrPath(code);
     const side = Math.min(e.w, e.h);
-    return html`<svg class="qr" style="${`left:${n(e.x + (e.w - side) / 2)}mm;top:${n(e.y + (e.h - side) / 2)}mm;width:${n(side)}mm;height:${n(side)}mm`}" role="img" aria-label="${qrLabel}" viewBox="0 0 ${q.size} ${q.size}" shape-rendering="crispEdges"><rect width="${q.size}" height="${q.size}" fill="${color.white}"/><path d="${q.d}" fill="${color.ink}"/></svg>`;
+    return html`<svg class="qr" style="${`left:${n(e.x + (e.w - side) / 2)}mm;top:${n(e.y + (e.h - side) / 2)}mm;width:${n(side)}mm;height:${n(side)}mm`}" role="img" aria-label="${qrLabel}" viewBox="0 0 ${q.size} ${q.size}" shape-rendering="crispEdges"><rect width="${q.size}" height="${q.size}" fill="${print.paper}"/><path d="${q.d}" fill="${print.ink}"/></svg>`;
   }
   if (e.kind === 'logo' && logo)
     return html`<img class="logo" style="${box}" src="${logo.dataUri}" alt="${logo.alt}">`;
@@ -82,7 +82,7 @@ export function badgesHtml(input: BadgesHtmlInput): string {
 <style>
   ${new SafeHtml(pageRules(sizes))}
   * { box-sizing: border-box; }
-  body { margin: 0; color: ${color.ink}; font-family: 'Noto Sans', 'Noto Sans Arabic', 'Noto Sans Devanagari', 'Noto Sans CJK JP', 'Noto Sans CJK SC', 'Noto Sans CJK TC', sans-serif; }
+  body { margin: 0; color: ${print.ink}; font-family: 'Noto Sans', 'Noto Sans Arabic', 'Noto Sans Devanagari', 'Noto Sans CJK JP', 'Noto Sans CJK SC', 'Noto Sans CJK TC', sans-serif; }
   .badge { position: relative; overflow: hidden; break-after: page; }
   .badge:last-child { break-after: auto; }
   .face { position: absolute; inset-inline-start: 0; overflow: hidden; transform-origin: center; }

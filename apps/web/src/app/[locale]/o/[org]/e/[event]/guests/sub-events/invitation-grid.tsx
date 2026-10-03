@@ -110,7 +110,7 @@ export function InvitationGrid({
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="overflow-x-auto rounded-card border border-zinc-200">
+      <div className="overflow-x-auto rounded-card border border-line">
         <table
           // biome-ignore lint/a11y/noNoninteractiveElementToInteractiveRole: the WAI-ARIA data grid pattern (one tab stop, arrow keys) on a real table keeps its row and column headers
           role="grid"
@@ -122,14 +122,14 @@ export function InvitationGrid({
             <tr>
               <th
                 scope="col"
-                className="sticky start-0 z-10 bg-white px-3 py-2 text-start text-caption text-zinc-600"
+                className="sticky start-0 z-10 bg-surface px-3 py-2 text-start text-caption text-ink-2"
               >
                 {t('guestColumn')}
               </th>
               {columns.map((col) => (
                 <th key={col.id} scope="col" className="min-w-32 px-3 py-2 text-center align-bottom">
-                  <span className="block text-caption font-medium text-zinc-800">{col.name}</span>
-                  <span className="block text-caption text-zinc-600">{col.detail}</span>
+                  <span className="block text-caption font-medium text-ink">{col.name}</span>
+                  <span className="block text-caption text-ink-2">{col.detail}</span>
                 </th>
               ))}
             </tr>
@@ -139,11 +139,11 @@ export function InvitationGrid({
               <tr
                 key={row.key}
                 data-level={row.level}
-                className="border-t border-zinc-100 data-[level=party]:bg-zinc-50"
+                className="border-t border-line data-[level=party]:bg-surface-2"
               >
                 <th
                   scope="row"
-                  className="sticky start-0 z-10 bg-white px-3 py-1.5 text-start font-normal data-[level=party]:bg-zinc-50 data-[level=party]:font-medium data-[level=guest]:ps-6 data-[level=plus_one]:ps-10"
+                  className="sticky start-0 z-10 bg-surface px-3 py-1.5 text-start font-normal data-[level=party]:bg-surface-2 data-[level=party]:font-medium data-[level=guest]:ps-6 data-[level=plus_one]:ps-10"
                   data-level={row.level}
                 >
                   {row.header}
@@ -173,10 +173,10 @@ export function InvitationGrid({
                           }}
                           onFocus={() => setPos([r, c])}
                           onKeyDown={(e) => onKey(e, r, c)}
-                          className="size-6 cursor-pointer accent-accent-900 aria-disabled:cursor-not-allowed aria-disabled:opacity-60"
+                          className="size-6 cursor-pointer accent-primary aria-disabled:cursor-not-allowed aria-disabled:opacity-60"
                         />
                         {cell.response ? (
-                          <span className="text-caption text-zinc-600">{cell.response}</span>
+                          <span className="text-caption text-ink-2">{cell.response}</span>
                         ) : null}
                       </span>
                     </td>
@@ -187,12 +187,12 @@ export function InvitationGrid({
           </tbody>
         </table>
       </div>
-      <p className="text-caption text-zinc-600">{t('gridHelp')}</p>
+      <p className="text-caption text-ink-2">{t('gridHelp')}</p>
       <p
         role="status"
         aria-live="polite"
         data-tone={message?.tone}
-        className="min-h-6 text-caption text-zinc-700 data-[tone=error]:text-pink-700"
+        className="min-h-6 text-caption text-ink-2 data-[tone=error]:text-danger"
       >
         {pending ? t('saving') : (message?.text ?? '')}
       </p>

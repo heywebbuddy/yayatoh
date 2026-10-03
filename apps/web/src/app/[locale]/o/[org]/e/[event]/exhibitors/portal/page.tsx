@@ -5,8 +5,9 @@ import {
   exhibitorPortalAdminQuery,
   type ProfileProposalDto,
 } from '@yayatoh/program';
-import { Button, Card, Chip, EmptyState, PageHeader } from '@yayatoh/ui';
+import { Alert, Button, Card, Chip, EmptyState, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { Crumbs } from '@/components/crumbs.tsx';
 import { ProgramForm } from '@/components/program-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { ports } from '@/server/ports.ts';
@@ -42,22 +43,28 @@ export default async function ExhibitorPortalAdminPage({ params }: Params) {
   const { data, ev, canWrite } = await loadProgramPage(org, event, 'exhibitors');
   const admin = await executeQuery(exhibitorPortalAdminQuery, { eventId: ev.id }, data.ctx, ports);
   const t = await getTranslations('exhibitorAdmin');
+  const tn = await getTranslations('nav');
   const tp = await getTranslations('program');
   const tr = await getTranslations('exhibitorPortal');
   const signInUrl = `${(await requestHost()).origin}/${locale}/event-portal/sign-in/${portalSiteToken(data.org.id, ev.id)}`;
   const base = `/o/${org}/e/${event}`;
   return (
     <>
-      <nav aria-label={t('breadcrumb')}>
-        <Link
-          href={`${base}/exhibitors`}
-          className="inline-flex min-h-6 items-center text-caption text-zinc-600"
-        >
-          {t('back')}
-        </Link>
-      </nav>
-      <PageHeader title={t('title')} description={t('subtitle')} />
-      {canWrite ? null : <p className="text-body text-zinc-500">{tp('viewerNotice')}</p>}
+      <PageHeader
+        breadcrumb={
+          <Crumbs
+            items={[
+              { label: data.org.name, href: `/o/${org}` },
+              { label: ev.name, href: `/o/${org}/e/${event}` },
+              { label: tn('exhibitors'), href: `/o/${org}/e/${event}/exhibitors` },
+              { label: t('title') },
+            ]}
+          />
+        }
+        title={t('title')}
+        description={t('subtitle')}
+      />
+      {canWrite ? null : <Alert tone="info" title={tp('viewerNotice')} />}
 
       <section aria-labelledby="portal-settings-heading" className="flex flex-col gap-3">
         <h2 id="portal-settings-heading" className="text-section">
@@ -70,7 +77,7 @@ export default async function ExhibitorPortalAdminPage({ params }: Params) {
               approval: admin.settings.approvalRequired ? 'yes' : 'no',
             })}
           </p>
-          <p className="text-caption text-zinc-600">
+          <p className="text-caption text-ink-2">
             {t('signInPage')} <span className="break-all font-mono">{signInUrl}</span>
           </p>
           {canWrite ? (
@@ -155,7 +162,7 @@ function ExhibitorCard({
         </h3>
         <Chip tone="neutral">{x.listed ? t('listed') : t('unlisted')}</Chip>
       </div>
-      <p className="text-caption text-zinc-600">
+      <p className="text-caption text-ink-2">
         {t('staffUse', { used: x.staff.used, allowance: x.staff.allowance })}
         {x.staffAllowance === null ? ` · ${t('eventDefault')}` : ''}
         {x.categories.length ? ` · ${x.categories.join(', ')}` : ''}
@@ -164,7 +171,7 @@ function ExhibitorCard({
       {change ? (
         <section
           aria-labelledby={`change-${id}`}
-          className="flex flex-col gap-2 rounded-card border border-accent-300 p-3"
+          className="flex flex-col gap-2 rounded-card border border-primary p-3"
         >
           <h4 id={`change-${id}`} className="text-body font-medium">
             {t('pendingChange', { name: x.name })}
@@ -188,7 +195,7 @@ function ExhibitorCard({
               </thead>
               <tbody>
                 {DIFF_FIELDS.filter((k) => show(x.current, k) !== show(change.proposed, k)).map((k) => (
-                  <tr key={k} className="border-t border-zinc-100 align-top">
+                  <tr key={k} className="border-t border-line align-top">
                     <th scope="row" className="py-1 pe-3 text-start font-normal">
                       {t(`fields.${k}`)}
                     </th>
@@ -227,13 +234,13 @@ function ExhibitorCard({
           {t('people')}
         </h4>
         {x.members.length === 0 ? (
-          <p className="text-caption text-zinc-500">{t('noPeople')}</p>
+          <p className="text-caption text-ink-2">{t('noPeople')}</p>
         ) : (
           <ul className="flex list-none flex-col gap-1 p-0">
             {x.members.map((m) => (
-              <li key={m.id} className="flex flex-wrap items-center gap-2 border-t border-zinc-100 pt-2">
+              <li key={m.id} className="flex flex-wrap items-center gap-2 border-t border-line pt-2">
                 <span className="text-body">{m.email}</span>
-                <span className="text-caption text-zinc-600">
+                <span className="text-caption text-ink-2">
                   {tr(`roles.${m.role}`)} · {tr(`statuses.${m.status}`)}
                 </span>
                 {canWrite ? (
@@ -258,8 +265,8 @@ function ExhibitorCard({
 
       {canWrite ? (
         <>
-          <details className="border-t border-zinc-100 pt-2">
-            <summary className="min-h-6 cursor-pointer text-caption text-zinc-600">
+          <details className="border-t border-line pt-2">
+            <summary className="min-h-6 cursor-pointer text-caption text-ink-2">
               {t('inviteNamed', { name: x.name })}
             </summary>
             <div className="pt-3">
@@ -291,8 +298,8 @@ function ExhibitorCard({
               />
             </div>
           </details>
-          <details className="border-t border-zinc-100 pt-2">
-            <summary className="min-h-6 cursor-pointer text-caption text-zinc-600">
+          <details className="border-t border-line pt-2">
+            <summary className="min-h-6 cursor-pointer text-caption text-ink-2">
               {t('listingNamed', { name: x.name })}
             </summary>
             <div className="pt-3">

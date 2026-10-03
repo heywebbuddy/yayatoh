@@ -15,23 +15,36 @@ export interface Demand {
   readonly offered: number;
   /** Places people on the type's lines wait for. */
   readonly waiting: number;
+  /** M5.1c: places approved applicants hold until they pay (or are confirmed). */
+  readonly approved?: number;
+}
+
+/**
+ * Places an approval may still give (M5.1c): like `publicRoom`, the people waiting, open offers and
+ * earlier approvals keep theirs (null = unlimited).
+ */
+export function approvalRoom(c: TypeCounter, d: Demand): number | null {
+  return publicRoom(c, d);
 }
 
 /** Places a buyer outside the waitlist may take now (null = unlimited). */
 export function publicRoom(c: TypeCounter, d: Demand): number | null {
   if (c.capacity === null) return null;
-  return Math.max(0, c.capacity - c.held - c.sold - d.offered - d.waiting);
+  return Math.max(0, c.capacity - c.held - c.sold - d.offered - d.waiting - (d.approved ?? 0));
 }
 
 /** Places free for offers to the people waiting (null = unlimited: nobody waits). */
-export function offerRoom(c: TypeCounter, d: Pick<Demand, 'offered'>): number | null {
+export function offerRoom(c: TypeCounter, d: Pick<Demand, 'offered' | 'approved'>): number | null {
   if (c.capacity === null) return null;
-  return Math.max(0, c.capacity - c.held - c.sold - d.offered);
+  return Math.max(0, c.capacity - c.held - c.sold - d.offered - (d.approved ?? 0));
 }
 
-/** The lowest capacity an organizer may set: what is held, sold or offered already. */
-export function capacityFloor(c: Omit<TypeCounter, 'capacity'>, d: Pick<Demand, 'offered'>): number {
-  return c.held + c.sold + d.offered;
+/** The lowest capacity an organizer may set: what is held, sold, offered or approved already. */
+export function capacityFloor(
+  c: Omit<TypeCounter, 'capacity'>,
+  d: Pick<Demand, 'offered' | 'approved'>,
+): number {
+  return c.held + c.sold + d.offered + (d.approved ?? 0);
 }
 
 export interface Claim {

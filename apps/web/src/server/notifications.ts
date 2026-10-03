@@ -11,8 +11,10 @@ import {
   staffAlertsSubscriber,
 } from '@yayatoh/checkin';
 import { withTenant } from '@yayatoh/db';
+import { receiptIssuer, statementMailer } from '@yayatoh/donations';
 import { findEventTx, portalInviteMailer } from '@yayatoh/events';
 import { registrationResumeMailer } from '@yayatoh/forms';
+import { invitationMailer as guestInvitationMailer } from '@yayatoh/guests';
 import { createCtx } from '@yayatoh/kernel';
 import { announcementMailer, contactWroteNotifier, threadReplyMailer } from '@yayatoh/messaging';
 import {
@@ -30,6 +32,7 @@ import {
 } from '@yayatoh/notifications';
 import {
   creditNoteMailer,
+  invoiceMailer,
   orderLinkMailer,
   postponementMailer,
   refundDeclineMailer,
@@ -37,6 +40,7 @@ import {
   refundRequestNotifier,
   reminderRescheduler,
   supportReplyMailer,
+  tableNamingMailer,
   ticketMailer,
   waitlistMailer,
 } from '@yayatoh/orders';
@@ -49,7 +53,13 @@ import {
   subscribes,
 } from '@yayatoh/platform';
 import { taskReminderMailer } from '@yayatoh/program';
-import { registrationCapacity } from '@yayatoh/registration';
+import {
+  decisionMailer,
+  enrollmentMailer,
+  registrantLifecycle,
+  registrationCapacity,
+  registrationEnrollment,
+} from '@yayatoh/registration';
 import { surveyMailer } from '@yayatoh/surveys';
 import { impersonationNotice, invitationMailer, orgStatusNotice } from '@yayatoh/tenancy';
 import {
@@ -97,6 +107,8 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     transferMailer({ notifier, appOrigin }),
     walletPassSync({ provider: devWalletPasses }),
     creditNoteMailer({ notifier, appOrigin }),
+    // M5.1d: pay-later invoices.
+    invoiceMailer({ notifier, appOrigin }),
     supportReplyMailer({ notifier, appOrigin }),
     // Dispute evidence deadlines reach finance through the alert engine (batch 3e: the
     // `disputeDeadline` rule), not a second notification.
@@ -113,12 +125,16 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     // M3.4a: staff alerts for the Scan PWA (web push per device).
     staffAlertsSubscriber(staffAlertSource),
     surveyMailer({ notifier, appOrigin }),
+    // M4.1f: wedding invitations by email and text (as in the worker).
+    guestInvitationMailer({ notifier, appOrigin }),
     registrationResumeMailer({
       notifier,
       appOrigin,
       eventName: async (tx, id) => (await findEventTx(tx, id))?.name ?? null,
     }),
     waitlistMailer({ notifier, appOrigin }),
+    // M4.2b: a purchased table's claim link to its buyer.
+    tableNamingMailer({ notifier, appOrigin }),
     alertEvaluator({ notifier }),
     // M3.7a: journeys enroll, follow date changes and cancellations (their steps run below).
     ...journeySubscribers(),
@@ -127,6 +143,15 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     // M5.3a speaker portal: invitations and task reminders.
     portalInviteMailer({ notifier, appOrigin }),
     taskReminderMailer({ notifier, appOrigin }),
+    // M5.1c: registrants follow their orders; approval and denial emails.
+    registrantLifecycle(),
+    decisionMailer({ notifier, appOrigin }),
+    // M5.2b: cancelled registrants free their session places; promotions are mailed.
+    registrationEnrollment(),
+    enrollmentMailer({ notifier, appOrigin }),
+    // M4.8b: receipts per paid gift or charity-ticket order, and year-end statements (as in the worker).
+    receiptIssuer({ notifier, appOrigin }),
+    statementMailer({ notifier, appOrigin }),
   ];
 }
 
@@ -174,7 +199,7 @@ export async function drainOrgMessages(
     consumed += fresh;
     // Journey steps due now (M3.7a; the worker's `automations.run-due` job): they queue messages
     // and may emit events (a survey step's `survey.sent`), so the next pass picks those up.
-    const steps = await runDueActions(orgId, { notifier }, ports);
+    const steps = await runDueActions(orgId, { notifier, appOrigin }, ports);
     journeySteps += steps.done + steps.skipped + steps.failed;
     if (fresh === 0 && steps.done === 0) break;
   }
