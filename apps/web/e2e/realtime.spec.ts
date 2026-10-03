@@ -1,5 +1,5 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { continueToPayment, expectAccessible, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, pickOption, signIn } from './helpers.ts';
 import { seatedGala, unique } from './seating-helpers.ts';
 
 const PORT = Number(process.env.E2E_PORT ?? 3100);
@@ -29,7 +29,7 @@ async function doorsEvent(page: Page, browser: Browser, n = 2) {
   const s = stamp();
   await page.goto('/o/lakeside-events/events/new');
   await page.getByLabel('Event name', { exact: true }).fill(`Live Doors ${s}`);
-  await page.getByLabel('Time zone').selectOption('America/Chicago');
+  await pickOption(page.getByLabel('Time zone'), 'America/Chicago');
   await page.getByLabel('Starts', { exact: true }).fill(chicago(-1));
   await page.getByLabel('Ends', { exact: true }).fill(chicago(3));
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -46,7 +46,7 @@ async function doorsEvent(page: Page, browser: Browser, n = 2) {
   const guestContext = await browser.newContext();
   const guest = await guestContext.newPage();
   await guest.goto(`/events/${base.split('/').pop()}`);
-  await guest.getByLabel('Quantity — Door pass').selectOption(String(n));
+  await pickOption(guest.getByLabel('Quantity — Door pass'), String(n));
   await guest.getByLabel('Full name').fill(`Lia ${s}`);
   await guest.getByLabel('Email for your tickets').fill(`lia+${s}@example.test`);
   await continueToPayment(guest, `lia+${s}@example.test`);

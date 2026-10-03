@@ -93,7 +93,7 @@ export function MappingForm({
                 name={`source.${i}`}
                 label={t('source')}
                 value={row.source}
-                onChange={(e) => setRow(i, { source: e.target.value })}
+                onValueChange={(v) => setRow(i, { source: v })}
                 error={error}
               >
                 <option value="">{t('notMapped')}</option>
@@ -108,7 +108,7 @@ export function MappingForm({
                 name={`transform.${i}`}
                 label={t('transform')}
                 value={row.transform}
-                onChange={(e) => setRow(i, { transform: e.target.value as MappingRule['transform'] })}
+                onValueChange={(v) => setRow(i, { transform: v as MappingRule['transform'] })}
               >
                 {TRANSFORMS.map((x) => (
                   <option key={x} value={x}>

@@ -1,5 +1,13 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { ageSession, confirmStepUp, expectAccessible, newUser, personaCode, signIn } from './helpers.ts';
+import {
+  ageSession,
+  confirmStepUp,
+  expectAccessible,
+  newUser,
+  personaCode,
+  pickOption,
+  signIn,
+} from './helpers.ts';
 
 /**
  * M3.9a surveys: build a post-event survey, send it (with a reminder), answer from the guest link
@@ -116,7 +124,7 @@ test.describe('surveys (M3.9a)', () => {
     await expect(add.getByText('Write the question.')).toBeVisible();
     await expect(add.getByLabel('Question', { exact: true })).toHaveAttribute('aria-invalid', 'true');
     await add.getByLabel('Question', { exact: true }).fill('Best part');
-    await add.getByLabel('Type', { exact: true }).selectOption({ label: 'One choice' });
+    await pickOption(add.getByLabel('Type', { exact: true }), { label: 'One choice' });
     await add.getByRole('button', { name: 'Add question' }).click();
     await expect(add.getByText('Add at least one option, one per line.')).toBeVisible();
     await expectAccessible(page);
@@ -329,8 +337,8 @@ test.describe('surveys (M3.9a)', () => {
     await signIn(page);
     await page.goto(`${ORG}/events/new`);
     await page.getByLabel('Event name', { exact: true }).fill(`Forum ${s}`);
-    await page.getByLabel('Event type').selectOption('conference');
-    await page.getByLabel('Time zone').selectOption('America/Chicago');
+    await pickOption(page.getByLabel('Event type'), 'conference');
+    await pickOption(page.getByLabel('Time zone'), 'America/Chicago');
     await page.getByLabel('Starts', { exact: true }).fill('2031-05-01T09:00');
     await page.getByLabel('Ends', { exact: true }).fill('2031-05-01T18:00');
     await page.getByRole('button', { name: 'Create draft' }).click();
@@ -349,7 +357,7 @@ test.describe('surveys (M3.9a)', () => {
     await expect(page.getByText('Choose a session.')).toBeVisible();
     await expect(page.getByLabel('Session', { exact: true })).toHaveAttribute('aria-invalid', 'true');
     await expectAccessible(page);
-    await page.getByLabel('Session', { exact: true }).selectOption({ label: `Keynote ${s}` });
+    await pickOption(page.getByLabel('Session', { exact: true }), { label: `Keynote ${s}` });
     await page.getByRole('button', { name: 'Create session feedback' }).click();
     await expect(page.getByRole('heading', { name: `Feedback: Keynote ${s}`, level: 1 })).toBeVisible();
     await expect(page.getByText(`Session feedback: Keynote ${s}`)).toBeVisible();
