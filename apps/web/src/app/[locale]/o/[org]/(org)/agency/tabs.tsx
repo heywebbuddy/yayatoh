@@ -12,13 +12,20 @@ const TABS = [
   { key: 'reports', path: '/reports' },
 ] as const;
 
+/** M6.8b: agency v2 operations, shown while the `agency_v2` switch is on. */
+const V2_TABS = [
+  { key: 'library', path: '/library' },
+  { key: 'campaigns', path: '/campaigns' },
+  { key: 'team', path: '/team' },
+] as const;
+
 /** Clients | Events | Marketing | Reports (vision §12). */
-export function AgencyTabs({ base }: { base: string }) {
+export function AgencyTabs({ base, v2 = false }: { base: string; v2?: boolean }) {
   const t = useTranslations('agency');
   const pathname = usePathname();
   return (
     <Tabs label={t('tabs')}>
-      {TABS.map((tab) => {
+      {[...TABS, ...(v2 ? V2_TABS : [])].map((tab) => {
         const active = tab.path ? pathname.endsWith(`/agency${tab.path}`) : pathname.endsWith('/agency');
         return (
           <Link

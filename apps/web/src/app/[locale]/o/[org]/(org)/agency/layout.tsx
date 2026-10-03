@@ -1,6 +1,8 @@
-import { EmptyState, PageHeader } from '@yayatoh/ui';
+import { agencyV2Enabled } from '@yayatoh/agency-ops';
+import { buttonClass, EmptyState, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { ReactNode } from 'react';
+import { Link } from '@/i18n/navigation.ts';
 import { refreshAgencyAction } from './actions.ts';
 import { loadAgency } from './load.ts';
 import { RefreshForm } from './refresh-form.tsx';
@@ -21,6 +23,7 @@ export default async function AgencyLayout({
   setRequestLocale(locale);
   const { data, canRead } = await loadAgency(org);
   const t = await getTranslations('agency');
+  const tr = await getTranslations();
   if (!canRead)
     return (
       <>
@@ -28,6 +31,11 @@ export default async function AgencyLayout({
         <EmptyState
           title={t('noAccessTitle')}
           description={t('noAccessDescription', { agency: data.org.name })}
+          action={
+            <Link href={`/o/${org}/team`} className={buttonClass('primary', 'md')}>
+              {tr('settings.findOwner')}
+            </Link>
+          }
         />
       </>
     );
@@ -38,7 +46,7 @@ export default async function AgencyLayout({
         description={t('subtitle', { agency: data.org.name })}
         actions={<RefreshForm action={refreshAgencyAction.bind(null, org)} />}
       />
-      <AgencyTabs base={`/o/${org}/agency`} />
+      <AgencyTabs base={`/o/${org}/agency`} v2={await agencyV2Enabled()} />
       {children}
     </>
   );

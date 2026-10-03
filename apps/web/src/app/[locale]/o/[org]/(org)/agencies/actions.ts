@@ -1,10 +1,12 @@
 'use server';
 
+import { applyBrandKitCommand, detachAgencyCommand } from '@yayatoh/agency-ops';
 import { executeCommand, isDomainError } from '@yayatoh/kernel';
 import {
   AGENCY_GRANT_ROLES,
   grantAgencyAccessCommand,
   revokeAgencyGrantCommand,
+  revokeAgencyStaffGrantCommand,
   updateAgencyGrantCommand,
 } from '@yayatoh/tenancy';
 import { revalidatePath } from 'next/cache';
@@ -88,6 +90,55 @@ export async function setAgencyFinanceAction(
   const data = await loadConsole(org);
   try {
     await executeCommand(updateAgencyGrantCommand, { grantId, role, finance }, data.ctx, ports);
+  } catch (err) {
+    return { code: isDomainError(err) ? err.code : 'internal' };
+  }
+  revalidatePath(`/o/${org}/agencies`);
+}
+
+/**
+ * M6.8b: leave an agency. The client keeps all its data (copies it received included); the
+ * agency's grant, team places and day-of passes end at once. One click, like revoking.
+ */
+export async function detachAgencyAction(
+  org: string,
+  grantId: string,
+  _form?: FormData,
+): Promise<{ code: string } | undefined> {
+  const data = await loadConsole(org);
+  try {
+    await executeCommand(detachAgencyCommand, { grantId }, data.ctx, ports);
+  } catch (err) {
+    return { code: isDomainError(err) ? err.code : 'internal' };
+  }
+  revalidatePath(`/o/${org}/agencies`);
+  redirect({ href: `/o/${org}/agencies?detached=${grantId}`, locale: await getLocale() });
+}
+
+/** M6.8b: use a brand kit received from an agency on the org's public pages (org settings). */
+export async function applyBrandKitAction(
+  org: string,
+  kitId: string,
+  _form?: FormData,
+): Promise<{ code: string } | undefined> {
+  const data = await loadConsole(org);
+  try {
+    await executeCommand(applyBrandKitCommand, { kitId }, data.ctx, ports);
+  } catch (err) {
+    return { code: isDomainError(err) ? err.code : 'internal' };
+  }
+  revalidatePath(`/o/${org}/agencies`);
+}
+
+/** M6.8b: take one agency person's team place or day-of pass away (next request). */
+export async function revokeAgencyPersonAction(
+  org: string,
+  staffGrantId: string,
+  _form?: FormData,
+): Promise<{ code: string } | undefined> {
+  const data = await loadConsole(org);
+  try {
+    await executeCommand(revokeAgencyStaffGrantCommand, { staffGrantId }, data.ctx, ports);
   } catch (err) {
     return { code: isDomainError(err) ? err.code : 'internal' };
   }

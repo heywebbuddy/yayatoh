@@ -1,6 +1,6 @@
 import { agencyEventsQuery } from '@yayatoh/agency';
 import { executeQuery, formatMoney, money } from '@yayatoh/kernel';
-import { EmptyState, Table } from '@yayatoh/ui';
+import { buttonClass, EmptyState, Table } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Link } from '@/i18n/navigation.ts';
@@ -10,6 +10,7 @@ import { loadAgency } from '../load.ts';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('agency');
+  const to = await getTranslations('agencyOps');
   return { title: t('tab.events') };
 }
 
@@ -28,7 +29,18 @@ export default async function AgencyEventsPage({
   if (!canRead) return null;
   const t = await getTranslations('agency');
   const events = await executeQuery(agencyEventsQuery, {}, data.ctx, ports);
-  if (events.length === 0) return <EmptyState title={t('eventsTitle')} description={t('eventsEmpty')} />;
+  if (events.length === 0)
+    return (
+      <EmptyState
+        title={t('eventsTitle')}
+        description={t('eventsEmpty')}
+        action={
+          <Link href={`/o/${org}/agency`} className={buttonClass('primary', 'md')}>
+            {to('actions.openClients')}
+          </Link>
+        }
+      />
+    );
   const n = (v: number) => formatNumber(v, locale);
   const anyHidden = events.some((e) => e.grossMinor === null);
   return (

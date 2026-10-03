@@ -10,6 +10,7 @@ import { loadAgency } from './load.ts';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('agency');
+  const to = await getTranslations('agencyOps');
   return { title: t('tab.clients') };
 }
 
@@ -31,7 +32,15 @@ export default async function AgencyClientsPage({
   const clients = await executeQuery(agencyClientsQuery, {}, data.ctx, ports);
   if (clients.length === 0)
     return (
-      <EmptyState title={t('emptyTitle')} description={t('emptyDescription', { address: data.org.slug })} />
+      <EmptyState
+        title={t('emptyTitle')}
+        description={t('emptyDescription', { address: data.org.slug })}
+        action={
+          <Link href={`/o/${org}/team`} className={buttonClass('primary', 'md')}>
+            {to('actions.inviteTeam')}
+          </Link>
+        }
+      />
     );
   const n = (v: number) => formatNumber(v, locale);
   return (

@@ -30,14 +30,15 @@ function pages(dir: string): string[] {
 
 const routes = pages(ORG_DIR).map((p) => relative(ORG_DIR, p).split(sep).slice(0, -1).join('/'));
 const allModules = new Set<string>(MODULE_KEYS);
-const access = (role: OrgRole | 'collaborator', contentOrg = false) => ({
+const access = (role: OrgRole | 'collaborator', contentOrg = false, agencyOrg = false) => ({
   role,
   can: (p: string) => role !== 'collaborator' && roleCan(role, p),
   modules: allModules,
   contentOrg,
+  agencyOrg,
 });
-const keysOf = (role: OrgRole | 'collaborator', contentOrg = false) =>
-  visibleOrgSections(access(role, contentOrg)).flatMap((s) => s.items.map((i) => i.key));
+const keysOf = (role: OrgRole | 'collaborator', contentOrg = false, agencyOrg = false) =>
+  visibleOrgSections(access(role, contentOrg, agencyOrg)).flatMap((s) => s.items.map((i) => i.key));
 const sectionsOf = (role: OrgRole | 'collaborator') => visibleOrgSections(access(role)).map((s) => s.key);
 
 describe('org navigation route sweep', () => {
@@ -81,7 +82,9 @@ describe('who sees which sections', () => {
   it('shows the owner every section and item (the CMS only in the content org)', () => {
     expect(sectionsOf('owner')).toEqual([...ORG_SECTION_KEYS]);
     const all = ORG_SECTIONS.flatMap((s) => s.items.map((i) => i.key));
-    expect(keysOf('owner', true)).toEqual(all);
+    // Every item: in the content org that is also an agency (M6.7a: the agency pages need one).
+    expect(keysOf('owner', true, true)).toEqual(all);
+    expect(keysOf('owner', true)).toEqual(all.filter((k) => k !== 'agency'));
     expect(keysOf('owner')).not.toContain('helpCenter');
     expect(keysOf('owner')).not.toContain('marketingSite');
   });

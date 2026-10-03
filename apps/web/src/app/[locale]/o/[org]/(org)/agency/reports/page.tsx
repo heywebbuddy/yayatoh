@@ -1,14 +1,16 @@
 import { agencyClientsQuery, reportTotals } from '@yayatoh/agency';
 import { executeQuery, formatMoney, money } from '@yayatoh/kernel';
-import { EmptyState, StatCard, Table } from '@yayatoh/ui';
+import { buttonClass, EmptyState, StatCard, Table } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { Link } from '@/i18n/navigation.ts';
 import { formatNumber } from '@/lib/format.ts';
 import { ports } from '@/server/ports.ts';
 import { loadAgency } from '../load.ts';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('agency');
+  const to = await getTranslations('agencyOps');
   return { title: t('tab.reports') };
 }
 
@@ -29,7 +31,15 @@ export default async function AgencyReportsPage({
   const clients = await executeQuery(agencyClientsQuery, {}, data.ctx, ports);
   if (clients.length === 0)
     return (
-      <EmptyState title={t('emptyTitle')} description={t('emptyDescription', { address: data.org.slug })} />
+      <EmptyState
+        title={t('emptyTitle')}
+        description={t('emptyDescription', { address: data.org.slug })}
+        action={
+          <Link href={`/o/${org}/team`} className={buttonClass('primary', 'md')}>
+            {to('actions.inviteTeam')}
+          </Link>
+        }
+      />
     );
   const rows = clients.map((c) => ({
     client: c,
