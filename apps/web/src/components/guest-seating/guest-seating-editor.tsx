@@ -607,13 +607,15 @@ export function GuestSeatingEditor({
               />
               {t('map.guests')}
             </li>
-            <li className="flex items-center gap-1.5">
-              <span
-                aria-hidden="true"
-                className="inline-block size-3 rounded-pill border border-line-strong bg-tag"
-              />
-              {t('map.tickets')}
-            </li>
+            {places.some((p) => p.taken > 0) ? (
+              <li className="flex items-center gap-1.5">
+                <span
+                  aria-hidden="true"
+                  className="inline-block size-3 rounded-pill border border-line-strong bg-tag"
+                />
+                {t('map.tickets')}
+              </li>
+            ) : null}
             <li className="flex items-center gap-1.5">
               <span
                 aria-hidden="true"
