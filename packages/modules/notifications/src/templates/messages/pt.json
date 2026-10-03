@@ -335,6 +335,11 @@
     "program.cfp-rejected": {
       "subject": "Sobre sua proposta “{title}”",
       "intro": "Obrigado por propor “{title}” para {eventName}. Desta vez, {org} não pôde incluí-la na programação.{hasNote, select, yes { Nota dos organizadores: {note}} other {}}"
+    },
+    "ce.certificate": {
+      "subject": "Seu certificado de {org}",
+      "intro": "Você obteve {credits} em {eventName}. Seu certificado (código {code}) está abaixo e em PDF.",
+      "cta": "Baixar o certificado em PDF"
     }
   },
   "roles": {

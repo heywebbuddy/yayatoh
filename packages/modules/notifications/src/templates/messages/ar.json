@@ -335,6 +335,11 @@
     "program.cfp-rejected": {
       "subject": "بخصوص مقترحك «{title}»",
       "intro": "شكرًا لتقديمك «{title}» إلى {eventName}. لم تتمكن {org} من إدراجه في البرنامج هذه المرة.{hasNote, select, yes { ملاحظة من المنظمين: {note}} other {}}"
+    },
+    "ce.certificate": {
+      "subject": "شهادتك من {org}",
+      "intro": "حصلت على {credits} في {eventName}. شهادتك (الرمز {code}) أدناه، وبصيغة PDF.",
+      "cta": "تنزيل الشهادة بصيغة PDF"
     }
   },
   "roles": {

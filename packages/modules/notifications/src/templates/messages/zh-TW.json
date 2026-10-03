@@ -335,6 +335,11 @@
     "program.cfp-rejected": {
       "subject": "關於您的提案「{title}」",
       "intro": "感謝您為 {eventName} 提交「{title}」。很遺憾，{org} 這次未能將其納入議程。{hasNote, select, yes { 主辦單位留言：{note}} other {}}"
+    },
+    "ce.certificate": {
+      "subject": "來自 {org} 的證明",
+      "intro": "您在 {eventName} 獲得了 {credits}。您的證明（驗證碼 {code}）見下文及 PDF。",
+      "cta": "下載 PDF 證明"
     }
   },
   "roles": {

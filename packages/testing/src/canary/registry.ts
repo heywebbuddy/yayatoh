@@ -8,6 +8,7 @@ import { privateColumns as automations } from '@yayatoh/automations';
 import { privateColumns as badges } from '@yayatoh/badges';
 import { privateColumns as billing } from '@yayatoh/billing';
 import { privateColumns as campaigns } from '@yayatoh/campaigns';
+import { privateColumns as ce } from '@yayatoh/ce';
 import { privateColumns as checkin } from '@yayatoh/checkin';
 import { privateColumns as cms } from '@yayatoh/cms';
 import { privateColumns as commandCenter } from '@yayatoh/command-center';
@@ -89,6 +90,7 @@ export const COLUMN_PRIVACY: readonly SchemaPrivacy[] = [
   ticketing,
   venues,
   virtual,
+  ce,
   webhooks,
 ];
 

@@ -4,6 +4,7 @@ import { attendeeMessageMailer } from '@yayatoh/attendees';
 import { getUsersByIds } from '@yayatoh/auth';
 import { journeySubscribers, runDueActions } from '@yayatoh/automations';
 import { campaignsTimeline } from '@yayatoh/campaigns';
+import { certificateMailer } from '@yayatoh/ce';
 import {
   chatReportSignals,
   checkinTimeline,
@@ -82,6 +83,7 @@ import {
   transferMailer,
   walletPassSync,
 } from '@yayatoh/ticketing';
+import { zoomRegistrantsSubscriber } from '@yayatoh/virtual';
 import { conferenceSources } from './conference-sources.ts';
 import { webhookAdapter } from './delivery-webhooks.ts';
 // The composition root registers the key vault (message params and manage links are encrypted).
@@ -138,6 +140,9 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     networkChatSignals(),
     // M6.9a: the virtual checkpoint (as in the worker).
     virtualAttendanceSubscriber(),
+    // M6.9b: new holders become Zoom registrants; CE certificates are mailed (as in the worker).
+    zoomRegistrantsSubscriber(),
+    certificateMailer({ notifier, appOrigin }),
     fraudSignalAlerts({ notifier }),
     // M3.4a: staff alerts for the Scan PWA (web push per device).
     staffAlertsSubscriber(staffAlertSource),

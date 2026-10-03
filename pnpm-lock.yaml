@@ -483,6 +483,9 @@ importers:
       '@yayatoh/campaigns':
         specifier: workspace:*
         version: link:../../packages/modules/campaigns
+      '@yayatoh/ce':
+        specifier: workspace:*
+        version: link:../../packages/modules/ce
       '@yayatoh/checkin':
         specifier: workspace:*
         version: link:../../packages/modules/checkin
@@ -712,6 +715,9 @@ importers:
       '@yayatoh/campaigns':
         specifier: workspace:*
         version: link:../../packages/modules/campaigns
+      '@yayatoh/ce':
+        specifier: workspace:*
+        version: link:../../packages/modules/ce
       '@yayatoh/checkin':
         specifier: workspace:*
         version: link:../../packages/modules/checkin
@@ -1602,7 +1608,7 @@ importers:
         version: link:../virtual
       drizzle-orm:
         specifier: 'catalog:'
-        version: 0.45.3(@opentelemetry/api@1.9.1)(kysely@0.29.6)(pg@8.23.0)(postgres@3.4.9)
+        version: 0.45.3(@opentelemetry/api@1.9.0)(kysely@0.29.6)(pg@8.23.0)(postgres@3.4.9)
       intl-messageformat:
         specifier: 11.2.15
         version: 11.2.15
@@ -3159,6 +3165,9 @@ importers:
       '@yayatoh/campaigns':
         specifier: workspace:*
         version: link:../modules/campaigns
+      '@yayatoh/ce':
+        specifier: workspace:*
+        version: link:../modules/ce
       '@yayatoh/checkin':
         specifier: workspace:*
         version: link:../modules/checkin
@@ -11030,13 +11039,6 @@ snapshots:
   drizzle-orm@0.45.3(@opentelemetry/api@1.9.0)(kysely@0.29.6)(pg@8.23.0)(postgres@3.4.9):
     optionalDependencies:
       '@opentelemetry/api': 1.9.0
-      kysely: 0.29.6
-      pg: 8.23.0
-      postgres: 3.4.9
-
-  drizzle-orm@0.45.3(@opentelemetry/api@1.9.1)(kysely@0.29.6)(pg@8.23.0)(postgres@3.4.9):
-    optionalDependencies:
-      '@opentelemetry/api': 1.9.1
       kysely: 0.29.6
       pg: 8.23.0
       postgres: 3.4.9

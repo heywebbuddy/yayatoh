@@ -370,6 +370,7 @@ import {
 import { createVenueCommand, submitQuoteRequestCommand } from '@yayatoh/venues';
 import { createEndpointCommand } from '@yayatoh/webhooks';
 import { sql } from 'drizzle-orm';
+import { ceFixture } from './ce.ts';
 import { enableGallery, guestGalleryPhoto, guestSiteAccess, hostGalleryPhoto } from './gallery.ts';
 import { connectDemo, fakeAuth } from './integrations.ts';
 import { catchUpTimeline } from './merge.ts';
@@ -2610,6 +2611,8 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   await networkingFixture(org.id, event.id, ctx, exhibitorCtx);
   // M6.9a virtual: an access choice, a stream, a viewing with a minute, and the virtual checkpoint.
   await virtualFixture(org.id, event.id);
+  // M6.9b: a Zoom webinar with a registrant and attendance; a CE rule, certificate and award.
+  await ceFixture(org.id, event.id);
   // M4.2b gala tables (isolation coverage): the fixture order's first ticket item recorded as a
   // purchased table, and a sponsor on a table of the event plan. Rows only: no second order and no
   // new tickets, so tests that count the fixture's orders and tickets are unchanged.
