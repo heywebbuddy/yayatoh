@@ -12,9 +12,9 @@ import {
 import { deviceBoardPublisher, publishMetricsChangedTx } from '@yayatoh/command-center';
 import {
   giftOutcomesSubscriber,
+  giftRefundsSubscriber,
   pledgeMailer,
   pledgeOutcomesSubscriber,
-  giftRefundsSubscriber,
   receiptIssuer,
   statementMailer,
 } from '@yayatoh/donations';
