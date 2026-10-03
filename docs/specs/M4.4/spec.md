@@ -103,3 +103,8 @@ A party page reads the event's charts once per sub-event (`viewTx`: parties, pla
 - [ ] Guests → RSVP → a party: **Seat page QR code** (note: closed). Seating → Seat finder: tick "Show guests…", choose **By full name and the PIN on their invitation**, Save.
 - [ ] Scan the party's seat QR on a phone: the table ringed on the map, "From your party", "Also at this table".
 - [ ] Publish the event, open the seat finder: wrong PIN and unknown name give the same answer; the right name and PIN show "Table 1 · 3 of your party sit here", no names.
+
+### Gate (2026-10-03)
+- Base: `origin/m0.5-foundation-ey5gqp` + `origin/merge/next-3g` + `origin/merge/next-3h` (design v2 included) + `origin/agent/m4.3a`; re-merged the latest next-3g and next-3h before the gate (clean).
+- `pnpm lint`, `pnpm check:modules`, typecheck 59/59 (`--concurrency=2`), unit 2701/2701 (202 files), integration 1519/1519 (166 files).
+- E2E at 375/768/1280 (`--workers=2`): `guest-seat-finder` 18 passed; `seat-finder`, `seat-poster`, `rsvp`, `rsvp-questions`, `gala-tables`, `assistance`, `guest-invites` 117 passed; `canary-crawl` 7 passed (14 skipped by design).
