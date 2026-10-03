@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button } from '@yayatoh/ui';
+import { Alert, Button, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { type FormEvent, startTransition, useActionState, useEffect, useRef, useState } from 'react';
 import type { BoxOfficeState } from '@/app/[locale]/o/[org]/e/[event]/tickets-orders/actions.ts';
@@ -107,13 +107,13 @@ export function BoxOfficeForm({
           <label htmlFor="bo-date" className="text-[13px] font-bold text-ink">
             {t('date')}
           </label>
-          <select id="bo-date" name="occurrenceId" required className={field}>
+          <Select id="bo-date" name="occurrenceId" required className={field}>
             {dates.map((d) => (
               <option key={d.id} value={d.id}>
                 {d.label}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
       ) : null}
       <fieldset className="flex flex-col gap-2">
@@ -200,13 +200,13 @@ export function BoxOfficeForm({
           <label htmlFor="bo-method" className="text-[13px] font-bold text-ink">
             {t('methodLabel')}
           </label>
-          <select id="bo-method" name="method" defaultValue="cash" className={field}>
+          <Select id="bo-method" name="method" defaultValue="cash" className={field}>
             {METHODS.map((m) => (
               <option key={m} value={m}>
                 {t(`method.${m}`)}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
         <div className="flex flex-col gap-1.5">
           <label htmlFor="bo-reference" className="text-[13px] font-bold text-ink">

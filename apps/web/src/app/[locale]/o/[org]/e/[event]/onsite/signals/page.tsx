@@ -11,7 +11,7 @@ import { eventRolesOf } from '@yayatoh/events';
 import { executeQuery } from '@yayatoh/kernel';
 import { composeNav, isProfileKey } from '@yayatoh/platform';
 import { eventRoleCan, roleCan } from '@yayatoh/tenancy';
-import { Button, Card, EmptyState, PageHeader } from '@yayatoh/ui';
+import { Button, Card, EmptyState, PageHeader, Select } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { DetectionForm } from '@/components/detection-form.tsx';
@@ -94,39 +94,39 @@ export default async function SignalsPage({
           <label htmlFor="signal-kind" className="text-[13px] font-bold text-ink">
             {t('fraudSignals.filter.kind')}
           </label>
-          <select id="signal-kind" name="kind" defaultValue={kind ?? ''} className={select}>
+          <Select id="signal-kind" name="kind" defaultValue={kind ?? ''} className={select}>
             <option value="">{t('fraudSignals.filter.allKinds')}</option>
             {FRAUD_SIGNAL_KINDS.map((k) => (
               <option key={k} value={k}>
                 {t(`checkpoints.signal.${k}`)}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
         <div className="flex flex-col gap-1.5">
           <label htmlFor="signal-severity" className="text-[13px] font-bold text-ink">
             {t('fraudSignals.filter.severity')}
           </label>
-          <select id="signal-severity" name="severity" defaultValue={severity ?? ''} className={select}>
+          <Select id="signal-severity" name="severity" defaultValue={severity ?? ''} className={select}>
             <option value="">{t('fraudSignals.filter.allSeverities')}</option>
             {FRAUD_SEVERITIES.map((s) => (
               <option key={s} value={s}>
                 {t(`signals.severity.${s}`)}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
         <div className="flex flex-col gap-1.5">
           <label htmlFor="signal-status" className="text-[13px] font-bold text-ink">
             {t('fraudSignals.filter.status')}
           </label>
-          <select id="signal-status" name="status" defaultValue={status} className={select}>
+          <Select id="signal-status" name="status" defaultValue={status} className={select}>
             {STATUSES.map((s) => (
               <option key={s} value={s}>
                 {s === 'all' ? t('fraudSignals.filter.allStatuses') : t(`signals.status.${s}`)}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
         <Button type="submit" variant="secondary">
           {t('fraudSignals.filter.apply')}

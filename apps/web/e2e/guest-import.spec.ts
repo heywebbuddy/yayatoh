@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { expect, type Page, test } from '@playwright/test';
-import { expectAccessible, signIn } from './helpers.ts';
+import { expectAccessible, expectPicked, pickOption, signIn } from './helpers.ts';
 
 /**
  * M4.1b: guest-list import. Paste a list, fix the column mapping, preview the parties, import,
@@ -29,8 +29,8 @@ function chicagoDate(days: number): string {
 async function createWedding(page: Page, name: string): Promise<string> {
   await page.goto(`${ORG}/events/new`);
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Event type').selectOption('wedding');
-  await page.getByLabel('Time zone').selectOption(TZ);
+  await pickOption(page.getByLabel('Event type'), 'wedding');
+  await pickOption(page.getByLabel('Time zone'), TZ);
   await page.getByLabel('Starts', { exact: true }).fill(`${chicagoDate(60)}T16:00`);
   await page.getByLabel('Ends', { exact: true }).fill(`${chicagoDate(60)}T23:00`);
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -86,10 +86,10 @@ test.describe('guests: import (M4.1b)', () => {
     await expect(page).toHaveURL(/batch=[0-9a-f-]{36}/);
     const mapping = page.getByRole('form', { name: '2. Match your columns' });
     await expect(page.getByText('Pasted list · 5 rows')).toBeVisible();
-    await expect(mapping.getByLabel('Household or party')).toHaveValue('0');
-    await expect(mapping.getByLabel('Dietary needs')).toHaveValue('3');
-    await expect(mapping.getByLabel('Plus one')).toHaveValue('4');
-    await expect(mapping.getByLabel('Full name')).toHaveValue('');
+    await expectPicked(mapping.getByLabel('Household or party'), '0');
+    await expectPicked(mapping.getByLabel('Dietary needs'), '3');
+    await expectPicked(mapping.getByLabel('Plus one'), '4');
+    await expectPicked(mapping.getByLabel('Full name'), '');
     const sample = page.getByRole('region', { name: 'First rows as read' });
     await expect(sample.getByRole('cell', { name: 'Luis Garcia' })).toBeVisible();
     await expectAccessible(page);
@@ -97,7 +97,7 @@ test.describe('guests: import (M4.1b)', () => {
     // No name column yet: refused with the reason.
     await mapping.getByRole('button', { name: 'Check the list' }).click();
     await expectAlert(page, "Choose the column with the guests' names (full name or first name).");
-    await page.getByLabel('Full name').selectOption({ label: 'Who' });
+    await pickOption(page.getByLabel('Full name'), { label: 'Who' });
     await page.getByRole('button', { name: 'Check the list' }).click();
     await expect(page.getByRole('status').filter({ hasText: 'will be created' })).toHaveText(
       "2 parties with 5 guests will be created. 2 rows can't be imported.",
@@ -200,7 +200,7 @@ test.describe('guests: import (M4.1b)', () => {
       ['Home address', 'Address'],
       ['Plus one', 'Plus one'],
     ] as const)
-      await expect(mapping.getByLabel(label, { exact: true }).locator('option:checked')).toHaveText(header);
+      await expect(mapping.getByLabel(label, { exact: true })).toHaveText(header);
     await mapping.getByRole('button', { name: 'Check the list' }).click();
     await expect(page.getByRole('status').filter({ hasText: 'will be created' })).toHaveText(
       "3 parties with 7 guests will be created. 1 row can't be imported.",
@@ -296,9 +296,7 @@ test.describe('guests: import (M4.1b)', () => {
     const form = page.getByRole('form', { name: 'اللصق من جدول بيانات' });
     await form.getByLabel('قائمتك').fill('الاسم\tالعائلة\nليلى حسن\tآل حسن\nعمر حسن\tآل حسن');
     await form.getByRole('button', { name: 'قراءة القائمة الملصقة' }).click();
-    await expect(page.getByRole('form', { name: '2. طابِق الأعمدة' }).getByLabel('الاسم الكامل')).toHaveValue(
-      '0',
-    );
+    await expectPicked(page.getByRole('form', { name: '2. طابِق الأعمدة' }).getByLabel('الاسم الكامل'), '0');
     await page.getByRole('button', { name: 'مراجعة القائمة' }).click();
     await expect(page.getByRole('heading', { name: 'المجموعات التي ستُنشأ' })).toBeVisible();
     await expectAccessible(page);

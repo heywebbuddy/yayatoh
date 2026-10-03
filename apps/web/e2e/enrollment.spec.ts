@@ -1,5 +1,5 @@
 import { type Browser, expect, type Locator, type Page, test } from '@playwright/test';
-import { expectAccessibleBothModes, signIn } from './helpers.ts';
+import { expectAccessibleBothModes, expectPicked, pickOption, signIn } from './helpers.ts';
 
 /**
  * M5.2b session enrollment and waitlists. The attendee reaches "My schedule" from their order
@@ -184,7 +184,7 @@ test.describe('session enrollment and waitlists (M5.2b)', () => {
 
     // The waitlist setting: a bad window is refused with its message; a good one is saved.
     const settings = page.getByRole('region', { name: 'When a place frees up' });
-    await settings.getByLabel('Waitlist promotion').selectOption('offer');
+    await pickOption(settings.getByLabel('Waitlist promotion'), 'offer');
     await settings.getByLabel('Offer window (minutes)').fill('5');
     await press(settings.getByRole('button', { name: 'Save waitlist setting' }));
     await expect(settings.getByText('Enter a number of minutes from 15 to 2,880.')).toBeVisible();
@@ -208,9 +208,10 @@ test.describe('session enrollment and waitlists (M5.2b)', () => {
 
     // Persisted after a reload.
     await page.reload();
-    await expect(
+    await expectPicked(
       page.getByRole('region', { name: 'When a place frees up' }).getByLabel('Waitlist promotion'),
-    ).toHaveValue('offer');
+      'offer',
+    );
     await expect(
       page.getByRole('region', { name: 'When a place frees up' }).getByLabel('Offer window (minutes)'),
     ).toHaveValue('90');
@@ -228,8 +229,8 @@ test.describe('session enrollment and waitlists (M5.2b)', () => {
     await page.goto('/o/lakeside-events/events/new');
     const name = `Empty Summit ${stamp()}`;
     await page.getByLabel('Event name', { exact: true }).fill(name);
-    await page.getByLabel('Event type').selectOption('conference');
-    await page.getByLabel('Time zone').selectOption('America/Chicago');
+    await pickOption(page.getByLabel('Event type'), 'conference');
+    await pickOption(page.getByLabel('Time zone'), 'America/Chicago');
     const d = new Date(Date.now() + 40 * 86_400_000).toISOString().slice(0, 10);
     await page.getByLabel('Starts', { exact: true }).fill(`${d}T09:00`);
     await page.getByLabel('Ends', { exact: true }).fill(`${d}T18:00`);

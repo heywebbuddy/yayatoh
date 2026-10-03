@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { continueToPayment, expectAccessible, OPEN_HOUSE, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, OPEN_HOUSE, pickOption, signIn } from './helpers.ts';
 
 test.describe('refunds', () => {
   test.use({ viewport: { width: 1280, height: 900 } });
@@ -22,7 +22,7 @@ test.describe('refunds', () => {
     // A guest buys two tickets through the test payment page.
     const guest = await (await browser.newContext()).newPage();
     await guest.goto('/events/lakeside-open-house');
-    await guest.getByLabel(`Quantity — ${pass}`).selectOption('2');
+    await pickOption(guest.getByLabel(`Quantity — ${pass}`), '2');
     await guest.getByLabel('Full name').fill(buyer);
     await guest.getByLabel('Email for your tickets').fill(`rita+${stamp}@example.test`);
     await continueToPayment(guest, `rita+${stamp}@example.test`);
@@ -36,7 +36,7 @@ test.describe('refunds', () => {
     await expect(page.getByRole('heading', { name: `Order from ${buyer}` })).toBeVisible();
     await expectAccessible(page);
     const form = page.getByRole('region', { name: 'Refund' });
-    await form.getByLabel('Reason').selectOption('requested_by_customer');
+    await pickOption(form.getByLabel('Reason'), 'requested_by_customer');
     await form.getByRole('checkbox').first().check();
     await form.getByRole('button', { name: 'Refund' }).click();
     await expect(form.getByText(/^Refunded\./)).toBeVisible();

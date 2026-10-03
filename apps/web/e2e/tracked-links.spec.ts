@@ -1,5 +1,12 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { continueToPayment, expectAccessible, OPEN_HOUSE, signIn, WEDDING_OWNER } from './helpers.ts';
+import {
+  continueToPayment,
+  expectAccessible,
+  OPEN_HOUSE,
+  pickOption,
+  signIn,
+  WEDDING_OWNER,
+} from './helpers.ts';
 
 const PORT = Number(process.env.E2E_PORT ?? 3100);
 const LAKESIDE = `http://lakeside-events.yayatoh.events:${PORT}`;
@@ -48,7 +55,7 @@ async function codeOf(page: Page, label: string): Promise<string> {
 
 /** A guest buys one pass on the page it is on (paying on the test payment page if it costs). */
 async function buy(guest: Page, pass: string, name: string, paid: boolean) {
-  await guest.getByLabel(`Quantity — ${pass}`).selectOption('1');
+  await pickOption(guest.getByLabel(`Quantity — ${pass}`), '1');
   await guest.getByLabel('Full name').fill(name);
   const email = `${name.replace(/\W+/g, '.').toLowerCase()}@example.test`;
   await guest.getByLabel('Email for your tickets').fill(email);
@@ -301,7 +308,7 @@ test.describe('tracked links', () => {
     // refuses tracked links on the seeded wedding, whose profile shows no marketing pages).
     await page.goto('/o/rosewood-weddings/events/new');
     await page.getByLabel('Event name', { exact: true }).fill(`Untracked ${stamp()}`);
-    await page.getByLabel('Event type').selectOption('other');
+    await pickOption(page.getByLabel('Event type'), 'other');
     await page.getByLabel('Starts', { exact: true }).fill('2027-11-01T18:00');
     await page.getByLabel('Ends', { exact: true }).fill('2027-11-01T22:00');
     await page.getByRole('button', { name: 'Create draft' }).click();

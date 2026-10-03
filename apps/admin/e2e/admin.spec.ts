@@ -2,7 +2,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, type Page, test } from '@playwright/test';
 import { devPersonaTotpSecret, secretKey, totp } from '@yayatoh/auth/totp';
 import { signFakeDisputeWebhook } from '@yayatoh/payments';
-import { continueToPayment } from './helpers.ts';
+import { continueToPayment, pickOption } from './helpers.ts';
 
 const WEB = `http://localhost:${process.env.E2E_PORT ?? 3100}`;
 const STAFF = 'omar@yayatoh.test';
@@ -137,7 +137,7 @@ test('staff see a tenant dispute and open its evidence packet', async ({ page, b
   await expect(org.getByRole('row').filter({ hasText: `Staff dispute ${stamp}` })).toBeVisible();
   const guest = await (await browser.newContext({ baseURL: WEB })).newPage();
   await guest.goto('/events/lakeside-open-house');
-  await guest.getByLabel(`Quantity — Staff dispute ${stamp}`).selectOption('1');
+  await pickOption(guest.getByLabel(`Quantity — Staff dispute ${stamp}`), '1');
   await guest.getByLabel('Full name').fill('Stella Staff');
   await guest.getByLabel('Email for your tickets').fill(`stella+${stamp}@example.test`);
   await continueToPayment(guest, `stella+${stamp}@example.test`);
@@ -350,7 +350,7 @@ test('staff review a messaging report: allowlisted excerpt, a note is required, 
   const guest = await (await browser.newContext({ baseURL: WEB })).newPage();
   await guest.goto(new URL(replyLink).pathname);
   const theirs = guest.getByRole('region', { name: 'Block or report' });
-  await theirs.getByLabel('Reason').selectOption('abuse');
+  await pickOption(theirs.getByLabel('Reason'), 'abuse');
   await theirs.getByLabel('Details (optional)').fill(`Rude ${stamp}`);
   await theirs.getByRole('button', { name: 'Report to Yayatoh' }).click();
   await expect(theirs.getByText('Thanks. Yayatoh will review this conversation.')).toBeVisible();
@@ -446,7 +446,7 @@ test('staff act as a member for an hour: reason required, banner everywhere, mon
 
   // A blank reason is refused by the server (the owners see the reason).
   const member = section.getByLabel('Member');
-  await member.selectOption({ label: 'Pani Digital (pani@lakeside.test) · owner' });
+  await pickOption(member, { label: 'Pani Digital (pani@lakeside.test) · owner' });
   await section.getByLabel("Reason (shown to the org's owners)").fill('   ');
   await section.getByRole('button', { name: 'Start acting as member' }).click();
   await expect(
@@ -455,7 +455,7 @@ test('staff act as a member for an hour: reason required, banner everywhere, mon
   await expectAccessible(page);
 
   // With a reason: signed in on the app host as the member, with the banner.
-  await member.selectOption({ label: 'Pani Digital (pani@lakeside.test) · owner' });
+  await pickOption(member, { label: 'Pani Digital (pani@lakeside.test) · owner' });
   await section.getByLabel("Reason (shown to the org's owners)").fill(`e2e support check ${stamp}`);
   await section.getByRole('button', { name: 'Start acting as member' }).click();
   await expect(page).toHaveURL(`${WEB}/o/lakeside-events`);
@@ -500,7 +500,7 @@ test('staff act as a member for an hour: reason required, banner everywhere, mon
   // A guest buys; the staff member can't refund it.
   const guest = await (await browser.newContext({ baseURL: WEB })).newPage();
   await guest.goto('/events/lakeside-open-house');
-  await guest.getByLabel(`Quantity — ${pass}`).selectOption('1');
+  await pickOption(guest.getByLabel(`Quantity — ${pass}`), '1');
   await guest.getByLabel('Full name').fill(`Ivy Impersonation ${stamp}`);
   await guest.getByLabel('Email for your tickets').fill(`ivy+${stamp}@example.test`);
   await continueToPayment(guest, `ivy+${stamp}@example.test`);
@@ -509,7 +509,7 @@ test('staff act as a member for an hour: reason required, banner everywhere, mon
   await page.reload();
   await page.getByRole('link', { name: `Ivy Impersonation ${stamp}` }).click();
   const refund = page.getByRole('region', { name: 'Refund' });
-  await refund.getByLabel('Reason').selectOption('requested_by_customer');
+  await pickOption(refund.getByLabel('Reason'), 'requested_by_customer');
   await refund.getByRole('checkbox').first().check();
   await refund.getByRole('button', { name: 'Refund' }).click();
   const refused =
@@ -573,7 +573,7 @@ test('an open impersonation can be ended from the staff console too', async ({ p
   await expect(page.getByRole('heading', { name: 'Lakeside Events' })).toBeVisible();
   const tenantUrl = page.url();
   const section = page.getByRole('region', { name: 'Act as a member' });
-  await section.getByLabel('Member').selectOption({ label: 'Jordan Lee (jordan@lakeside.test) · viewer' });
+  await pickOption(section.getByLabel('Member'), { label: 'Jordan Lee (jordan@lakeside.test) · viewer' });
   await section.getByLabel("Reason (shown to the org's owners)").fill(`e2e console end ${stamp}`);
   await section.getByRole('button', { name: 'Start acting as member' }).click();
   await expect(page).toHaveURL(`${WEB}/o/lakeside-events`);
