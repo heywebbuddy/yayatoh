@@ -625,3 +625,10 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
   - **Event time zone in the create-event wizard** is now the full IANA list, grouped by region with the current offset, instead of the 13 zones the wizard offered. Values are unchanged (IANA names).
   - **Arabic digits in the date and time pickers:** dates and times show Arabic-Indic digits (٠٥/١١/٢٠٢٦) in Arabic, as the U1 spec asks. The rest of the app still formats numbers with Western digits in Arabic (the CLDR default); say if you want one rule everywhere.
   - **Typed dates** use the reader's locale order (11/05/2026 in English, 05.11.2026 in German). ISO (2026-11-05) always works too.
+
+## U9 — coupons and currencies (2026-10-03, pending owner)
+- [ ] **Built with these defaults; say if any should change:**
+  - **The currency locks with the first order of any kind**, including an unpaid checkout that later expired: the database refuses the change once any order exists. Stricter alternative: none. Looser: only paid orders (needs a status-aware check instead of the foreign key).
+  - **An event's promo code wins over an org coupon** if the same code ever existed in both; creating either refuses a code the other already uses, so this only matters for data made before U9 (none).
+  - **Per-buyer limits count by email address** (the buyer's CRM contact); a merged contact's uses count together.
+  - **A fixed-amount coupon works only at events in its own currency**; percentage coupons work in every currency. No conversion.
