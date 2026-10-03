@@ -1979,7 +1979,8 @@
       "assign": "Assign guests",
       "finder": "Seat finder",
       "rules": "Rules",
-      "guests": "Seat guests"
+      "guests": "Seat guests",
+      "solver": "Auto-seat"
     },
     "assign": {
       "title": "Assign guests",
@@ -2298,6 +2299,134 @@
         "noGuests": "Choose at least one guest to seat.",
         "noPlace": "Choose a table or row.",
         "dropMiss": "Drop a party onto a table or a row."
+      }
+    },
+    "solver": {
+      "title": "Seating rules and solver",
+      "description": "Set rules, let the solver propose a table for everyone still unseated, review the proposal and accept one table or all. Guests you seated by hand never move.",
+      "rules": {
+        "heading": "Rules",
+        "listLabel": "Seating rules",
+        "empty": "No rules yet. Add one below, or run the solver without rules: it still keeps every table within its seats.",
+        "hard": "Hard",
+        "soft": "Soft",
+        "badge": "{strength} · weight {weight}",
+        "strength": "Strength",
+        "strengthHint": "A proposal never breaks a hard rule. Soft rules are kept when they can be; each break costs its weight.",
+        "weight": "Weight",
+        "weightHint": "1 to 10. Soft rules with a higher weight matter more.",
+        "save": "Save",
+        "remove": "Remove",
+        "saved": "Rule saved.",
+        "removed": "Rule removed.",
+        "added": "Rule added.",
+        "editLabel": "Change rule: {rule}",
+        "kinds": {
+          "keep_together": "Keep together",
+          "keep_apart": "Keep apart",
+          "vip_near_stage": "VIP nearest the stage",
+          "access_near_exit": "Accessibility needs near exits",
+          "table_max": "Table maximum"
+        },
+        "add": {
+          "heading": "Add a rule",
+          "kind": "Rule",
+          "by": "Who",
+          "byEach": "Each party",
+          "byParty": "A party",
+          "byTag": "Everyone with a tag",
+          "bySide": "Everyone on a side",
+          "party": "Party",
+          "tag": "Tag",
+          "side": "Side",
+          "choose": "Choose…",
+          "together": "Keep together",
+          "first": "First group",
+          "second": "Second group",
+          "accessTag": "Tag for accessibility needs",
+          "accessHint": "Parties with this tag sit at the tables nearest an exit or entrance. Answers to accessibility questions stay private.",
+          "max": "People per table at most",
+          "vipHint": "VIP parties sit at the tables nearest the stage.",
+          "submit": "Add rule"
+        },
+        "errors": {
+          "value": "Choose who the rule is about.",
+          "same": "Choose two different groups.",
+          "weight": "Enter a weight from 1 to 10.",
+          "max": "Enter a number from 1 to 40.",
+          "duplicate": "This event already has that rule.",
+          "tooMany": "An event can have at most 50 rules.",
+          "unknownParty": "That party isn't on this guest list."
+        },
+        "describe": {
+          "togetherParty": "Keep each party together",
+          "togetherTag": "Keep everyone tagged “{value}” together",
+          "togetherSide": "Keep the {value} side together",
+          "apart": "Keep {a} apart from {b}",
+          "targetParty": "{value}",
+          "targetTag": "everyone tagged “{value}”",
+          "targetSide": "the {value} side",
+          "vip": "VIP parties nearest the stage",
+          "access": "Guests tagged “{tag}” nearest an exit",
+          "tableMax": "At most {max} people per table"
+        }
+      },
+      "run": {
+        "heading": "Proposal",
+        "queue": "{count, plural, one {# guest} other {# guests}} still to seat. {fixed, plural, =0 {Nobody is seated yet.} one {# guest seated by hand stays where they are.} other {# guests seated by hand stay where they are.}}",
+        "nothing": "Everyone is seated. There is nothing to propose.",
+        "seed": "Arrangement number",
+        "seedHint": "The same number always gives the same proposal.",
+        "seedError": "Enter a whole number from 1 to 1,000,000.",
+        "start": "Propose seating",
+        "cancel": "Stop",
+        "again": "Try another arrangement",
+        "running": "Working on a proposal… {percent}%",
+        "progress": "Proposal progress",
+        "cancelled": "Stopped. Nothing was proposed.",
+        "failed": "The solver stopped unexpectedly. Try again."
+      },
+      "summary": {
+        "heading": "Summary",
+        "done": "Proposal ready in {seconds} s (arrangement {seed}).",
+        "seated": "{count, plural, one {# guest} other {# guests}} at {tables, plural, one {# table} other {# tables}}; {queue, plural, =0 {nobody left in the queue} one {# guest left in the queue} other {# guests left in the queue}}.",
+        "hardOk": "No hard rule is broken.",
+        "hardBroken": "{count, plural, one {# hard rule is broken} other {# hard rules are broken}}. Change the proposal before accepting.",
+        "soft": "Soft rules: penalty {penalty} (0 is best).",
+        "ruleLine": "{rule}: {count, plural, =0 {kept} one {# break} other {# breaks}}",
+        "issues": {
+          "no_stage": "The plan has no stage, so “VIP nearest the stage” can't apply.",
+          "no_exit": "The plan has no exit or entrance, so “Accessibility needs near exits” can't apply.",
+          "group_too_big": "A group of {size} is bigger than any table ({room} seats). It is kept on as few tables as possible.",
+          "too_few_seats": "{size} guests to seat but only {room} free seats: some stay in the queue.",
+          "no_room": "The plan has no tables or rows."
+        }
+      },
+      "tables": {
+        "heading": "Proposed tables",
+        "none": "No table is proposed.",
+        "region": "Table {label}",
+        "fill": "{proposed} proposed · {seated} seated · {free} of {capacity} free",
+        "overFull": "{count, plural, one {# guest too many} other {# guests too many}} for the free seats.",
+        "broken": "Breaks a hard rule: {rules}",
+        "over": "More guests than seats",
+        "accept": "Accept table {label}",
+        "acceptAll": "Accept all tables",
+        "fixFirst": "Fix the tables marked with a warning first.",
+        "acceptedTable": "Table {label} accepted: {count, plural, one {# guest} other {# guests}} seated.",
+        "acceptedAll": "Proposal accepted: {count, plural, one {# guest} other {# guests}} seated.",
+        "queueHeading": "Left in the queue",
+        "guest": "{name} ({party})",
+        "moveLabel": "Table for {name}",
+        "queueOption": "Leave in the queue",
+        "optionFree": "Table {label} ({free} free)",
+        "toEditor": "Open the seating editor"
+      },
+      "acceptErrors": {
+        "already_seated": "Someone in this proposal was seated by hand meanwhile. Propose again.",
+        "declined": "A guest in this proposal has declined. Propose again.",
+        "hard_rule": "Accepting this would break a hard rule.",
+        "cant_fit": "Only {fits} more fit at that table."
       }
     }
   },

@@ -38,7 +38,13 @@ export default async function SeatFinderSettingsPage({
   return (
     <>
       <PageHeader title={t('finder.title')} description={t('finder.description')} />
-      <SeatingTabs base={base} active="finder" finder guests={data.modules.has('guests')} />
+      <SeatingTabs
+        base={base}
+        active="finder"
+        finder
+        guests={data.modules.has('guests')}
+        solver={data.modules.has('guests') && data.modules.has('ai_seating')}
+      />
       {!settings ? (
         <EmptyState
           title={t('finder.noPlan')}

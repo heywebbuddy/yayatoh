@@ -1979,7 +1979,8 @@
       "assign": "Placer les invités",
       "finder": "Trouver sa place",
       "rules": "Règles",
-      "guests": "Placer les invités"
+      "guests": "Placer les invités",
+      "solver": "Placement automatique"
     },
     "assign": {
       "title": "Placer les invités",
@@ -2298,6 +2299,134 @@
         "noGuests": "Choisissez au moins un invité.",
         "noPlace": "Choisissez une table ou une rangée.",
         "dropMiss": "Déposez un groupe sur une table ou une rangée."
+      }
+    },
+    "solver": {
+      "title": "Règles de placement et planificateur",
+      "description": "Définissez des règles, laissez le planificateur proposer une table à chaque invité pas encore placé, vérifiez la proposition et acceptez une table ou toutes. Les invités placés à la main ne bougent jamais.",
+      "rules": {
+        "heading": "Règles",
+        "listLabel": "Règles de placement",
+        "empty": "Aucune règle pour l’instant. Ajoutez-en une ci-dessous ou lancez le planificateur sans règle : il respecte quand même le nombre de places de chaque table.",
+        "hard": "Stricte",
+        "soft": "Souple",
+        "badge": "{strength} · poids {weight}",
+        "strength": "Type",
+        "strengthHint": "Une proposition n’enfreint jamais une règle stricte. Les règles souples sont respectées quand c’est possible ; chaque écart coûte son poids.",
+        "weight": "Poids",
+        "weightHint": "De 1 à 10. Les règles souples au poids plus élevé comptent davantage.",
+        "save": "Enregistrer",
+        "remove": "Supprimer",
+        "saved": "Règle enregistrée.",
+        "removed": "Règle supprimée.",
+        "added": "Règle ajoutée.",
+        "editLabel": "Modifier la règle : {rule}",
+        "kinds": {
+          "keep_together": "Garder ensemble",
+          "keep_apart": "Garder séparés",
+          "vip_near_stage": "VIP au plus près de la scène",
+          "access_near_exit": "Accessibilité près des sorties",
+          "table_max": "Maximum par table"
+        },
+        "add": {
+          "heading": "Ajouter une règle",
+          "kind": "Règle",
+          "by": "Qui",
+          "byEach": "Chaque groupe",
+          "byParty": "Un groupe",
+          "byTag": "Tous ceux qui ont une étiquette",
+          "bySide": "Tous ceux d’un côté",
+          "party": "Groupe",
+          "tag": "Étiquette",
+          "side": "Côté",
+          "choose": "Choisir…",
+          "together": "Garder ensemble",
+          "first": "Premier groupe",
+          "second": "Second groupe",
+          "accessTag": "Étiquette pour les besoins d’accessibilité",
+          "accessHint": "Les groupes avec cette étiquette sont placés aux tables les plus proches d’une sortie ou d’une entrée. Les réponses sur l’accessibilité restent privées.",
+          "max": "Nombre maximum de personnes par table",
+          "vipHint": "Les groupes VIP sont placés aux tables les plus proches de la scène.",
+          "submit": "Ajouter la règle"
+        },
+        "errors": {
+          "value": "Choisissez à qui s’applique la règle.",
+          "same": "Choisissez deux groupes différents.",
+          "weight": "Saisissez un poids de 1 à 10.",
+          "max": "Saisissez un nombre de 1 à 40.",
+          "duplicate": "Cet événement a déjà cette règle.",
+          "tooMany": "Un événement peut avoir au plus 50 règles.",
+          "unknownParty": "Ce groupe ne figure pas sur cette liste d’invités."
+        },
+        "describe": {
+          "togetherParty": "Garder chaque groupe ensemble",
+          "togetherTag": "Garder ensemble tous ceux étiquetés « {value} »",
+          "togetherSide": "Garder ensemble le côté {value}",
+          "apart": "Garder {a} séparés de {b}",
+          "targetParty": "{value}",
+          "targetTag": "tous ceux étiquetés « {value} »",
+          "targetSide": "le côté {value}",
+          "vip": "Groupes VIP au plus près de la scène",
+          "access": "Invités étiquetés « {tag} » près d’une sortie",
+          "tableMax": "Au plus {max} personnes par table"
+        }
+      },
+      "run": {
+        "heading": "Proposition",
+        "queue": "{count, plural, one {# invité} other {# invités}} encore à placer. {fixed, plural, =0 {Personne n’est encore placé.} one {# invité placé à la main reste à sa place.} other {# invités placés à la main restent à leur place.}}",
+        "nothing": "Tout le monde est placé. Il n’y a rien à proposer.",
+        "seed": "Numéro de disposition",
+        "seedHint": "Le même numéro donne toujours la même proposition.",
+        "seedError": "Saisissez un nombre entier de 1 à 1 000 000.",
+        "start": "Proposer un placement",
+        "cancel": "Arrêter",
+        "again": "Essayer une autre disposition",
+        "running": "Proposition en cours… {percent} %",
+        "progress": "Avancement de la proposition",
+        "cancelled": "Arrêté. Rien n’a été proposé.",
+        "failed": "Le planificateur s’est arrêté de façon inattendue. Réessayez."
+      },
+      "summary": {
+        "heading": "Résumé",
+        "done": "Proposition prête en {seconds} s (disposition {seed}).",
+        "seated": "{count, plural, one {# invité} other {# invités}} à {tables, plural, one {# table} other {# tables}} ; {queue, plural, =0 {personne ne reste en attente} one {# invité reste en attente} other {# invités restent en attente}}.",
+        "hardOk": "Aucune règle stricte n’est enfreinte.",
+        "hardBroken": "{count, plural, one {# règle stricte est enfreinte} other {# règles strictes sont enfreintes}}. Modifiez la proposition avant de l’accepter.",
+        "soft": "Règles souples : pénalité {penalty} (0 est le mieux).",
+        "ruleLine": "{rule} : {count, plural, =0 {respectée} one {# écart} other {# écarts}}",
+        "issues": {
+          "no_stage": "Le plan n’a pas de scène : « VIP au plus près de la scène » ne peut pas s’appliquer.",
+          "no_exit": "Le plan n’a ni sortie ni entrée : « Accessibilité près des sorties » ne peut pas s’appliquer.",
+          "group_too_big": "Un groupe de {size} est plus grand que toutes les tables ({room} places). Il est réparti sur le moins de tables possible.",
+          "too_few_seats": "{size} invités à placer mais seulement {room} places libres : certains restent en attente.",
+          "no_room": "Le plan n’a ni table ni rangée."
+        }
+      },
+      "tables": {
+        "heading": "Tables proposées",
+        "none": "Aucune table proposée.",
+        "region": "Table {label}",
+        "fill": "{proposed} proposés · {seated} placés · {free} sur {capacity} libres",
+        "overFull": "{count, plural, one {# invité de trop} other {# invités de trop}} pour les places libres.",
+        "broken": "Enfreint une règle stricte : {rules}",
+        "over": "Plus d’invités que de places",
+        "accept": "Accepter la table {label}",
+        "acceptAll": "Accepter toutes les tables",
+        "fixFirst": "Corrigez d’abord les tables signalées par un avertissement.",
+        "acceptedTable": "Table {label} acceptée : {count, plural, one {# invité placé} other {# invités placés}}.",
+        "acceptedAll": "Proposition acceptée : {count, plural, one {# invité placé} other {# invités placés}}.",
+        "queueHeading": "En attente",
+        "guest": "{name} ({party})",
+        "moveLabel": "Table pour {name}",
+        "queueOption": "Laisser en attente",
+        "optionFree": "Table {label} ({free} libres)",
+        "toEditor": "Ouvrir l’éditeur de placement"
+      },
+      "acceptErrors": {
+        "already_seated": "Quelqu’un de cette proposition a été placé à la main entre-temps. Proposez à nouveau.",
+        "declined": "Un invité de cette proposition a décliné. Proposez à nouveau.",
+        "hard_rule": "Accepter ceci enfreindrait une règle stricte.",
+        "cant_fit": "Il ne reste que {fits} places à cette table."
       }
     }
   },

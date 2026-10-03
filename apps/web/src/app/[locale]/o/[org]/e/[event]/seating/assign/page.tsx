@@ -71,6 +71,7 @@ export default async function AssignSeatsPage({
         active="assign"
         finder={data.modules.has('seat_finder')}
         guests={data.modules.has('guests')}
+        solver={data.modules.has('guests') && data.modules.has('ai_seating')}
         date={dateId}
       />
       <SeatingDatePicker

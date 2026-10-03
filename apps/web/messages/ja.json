@@ -1979,7 +1979,8 @@
       "assign": "ゲストの割り当て",
       "finder": "座席検索",
       "rules": "ルール",
-      "guests": "ゲストの席決め"
+      "guests": "ゲストの席決め",
+      "solver": "自動配席"
     },
     "assign": {
       "title": "ゲストの割り当て",
@@ -2298,6 +2299,134 @@
         "noGuests": "ゲストを1人以上選んでください。",
         "noPlace": "テーブルまたは列を選んでください。",
         "dropMiss": "グループをテーブルか列の上で離してください。"
+      }
+    },
+    "solver": {
+      "title": "配席ルールとプランナー",
+      "description": "ルールを設定すると、まだ席のないゲスト全員にプランナーがテーブルを提案します。提案を確認し、1卓ずつまたはすべて確定してください。手動で配席したゲストは動かしません。",
+      "rules": {
+        "heading": "ルール",
+        "listLabel": "配席ルール",
+        "empty": "まだルールはありません。下で追加するか、ルールなしでプランナーを実行してください。その場合も各テーブルの席数は守られます。",
+        "hard": "必須",
+        "soft": "推奨",
+        "badge": "{strength}・重み {weight}",
+        "strength": "種類",
+        "strengthHint": "提案が必須ルールを破ることはありません。推奨ルールはできる限り守られ、破るごとに重みの分だけ減点されます。",
+        "weight": "重み",
+        "weightHint": "1〜10。重みが大きい推奨ルールほど優先されます。",
+        "save": "保存",
+        "remove": "削除",
+        "saved": "ルールを保存しました。",
+        "removed": "ルールを削除しました。",
+        "added": "ルールを追加しました。",
+        "editLabel": "ルールを変更: {rule}",
+        "kinds": {
+          "keep_together": "同じテーブルにする",
+          "keep_apart": "別のテーブルにする",
+          "vip_near_stage": "VIPをステージの近くに",
+          "access_near_exit": "配慮が必要な方を出口の近くに",
+          "table_max": "1卓の上限"
+        },
+        "add": {
+          "heading": "ルールを追加",
+          "kind": "ルール",
+          "by": "対象",
+          "byEach": "各グループ",
+          "byParty": "1つのグループ",
+          "byTag": "タグが付いた全員",
+          "bySide": "同じ側の全員",
+          "party": "グループ",
+          "tag": "タグ",
+          "side": "側",
+          "choose": "選択…",
+          "together": "同じテーブルにする",
+          "first": "1つ目のグループ",
+          "second": "2つ目のグループ",
+          "accessTag": "配慮が必要な方のタグ",
+          "accessHint": "このタグのグループは出口または入口に最も近いテーブルに座ります。アクセシビリティに関する回答は非公開のままです。",
+          "max": "1卓の最大人数",
+          "vipHint": "VIPグループはステージに最も近いテーブルに座ります。",
+          "submit": "ルールを追加"
+        },
+        "errors": {
+          "value": "ルールの対象を選んでください。",
+          "same": "異なる2つのグループを選んでください。",
+          "weight": "1〜10の重みを入力してください。",
+          "max": "1〜40の数を入力してください。",
+          "duplicate": "このイベントには同じルールがすでにあります。",
+          "tooMany": "1つのイベントのルールは50件までです。",
+          "unknownParty": "そのグループはこのゲストリストにありません。"
+        },
+        "describe": {
+          "togetherParty": "各グループを同じテーブルに",
+          "togetherTag": "タグ「{value}」の全員を同じテーブルに",
+          "togetherSide": "{value}側を同じテーブルに",
+          "apart": "{a}と{b}を別のテーブルに",
+          "targetParty": "{value}",
+          "targetTag": "タグ「{value}」の全員",
+          "targetSide": "{value}側",
+          "vip": "VIPグループをステージの近くに",
+          "access": "タグ「{tag}」のゲストを出口の近くに",
+          "tableMax": "1卓 {max} 人まで"
+        }
+      },
+      "run": {
+        "heading": "提案",
+        "queue": "まだ席のないゲスト: {count, plural, other {# 人}}。{fixed, plural, =0 {まだ誰も配席されていません。} other {手動で配席した # 人はそのままです。}}",
+        "nothing": "全員の席が決まっています。提案することはありません。",
+        "seed": "配置番号",
+        "seedHint": "同じ番号からは常に同じ提案が出ます。",
+        "seedError": "1〜1,000,000の整数を入力してください。",
+        "start": "配席を提案",
+        "cancel": "停止",
+        "again": "別の配置を試す",
+        "running": "提案を作成中… {percent}%",
+        "progress": "提案の進行状況",
+        "cancelled": "停止しました。何も提案されていません。",
+        "failed": "プランナーが予期せず停止しました。もう一度お試しください。"
+      },
+      "summary": {
+        "heading": "概要",
+        "done": "{seconds} 秒で提案ができました(配置 {seed})。",
+        "seated": "{count, plural, other {# 人}}を{tables, plural, other {# 卓}}に配席。{queue, plural, =0 {待ちリストには誰も残っていません} other {待ちリストに # 人}}。",
+        "hardOk": "必須ルールはすべて守られています。",
+        "hardBroken": "{count, plural, other {# 件の必須ルールが破られています}}。確定する前に提案を変更してください。",
+        "soft": "推奨ルール: 減点 {penalty}(0が最良)。",
+        "ruleLine": "{rule}: {count, plural, =0 {守られています} other {# 件の違反}}",
+        "issues": {
+          "no_stage": "プランにステージがないため、「VIPをステージの近くに」は適用できません。",
+          "no_exit": "プランに出口も入口もないため、「配慮が必要な方を出口の近くに」は適用できません。",
+          "group_too_big": "{size} 人のグループはどのテーブル({room} 席)よりも大きいため、できるだけ少ないテーブルに分けます。",
+          "too_few_seats": "配席するゲストは {size} 人ですが空席は {room} 席だけです。一部は待ちリストに残ります。",
+          "no_room": "プランにテーブルも列もありません。"
+        }
+      },
+      "tables": {
+        "heading": "提案されたテーブル",
+        "none": "提案されたテーブルはありません。",
+        "region": "テーブル {label}",
+        "fill": "提案 {proposed}・配席済み {seated}・空き {free}/{capacity}",
+        "overFull": "空席より {count, plural, other {# 人}}多くなっています。",
+        "broken": "必須ルール違反: {rules}",
+        "over": "席数より多いゲスト",
+        "accept": "テーブル {label} を確定",
+        "acceptAll": "すべてのテーブルを確定",
+        "fixFirst": "先に警告のあるテーブルを直してください。",
+        "acceptedTable": "テーブル {label} を確定しました: {count, plural, other {# 人}}を配席。",
+        "acceptedAll": "提案を確定しました: {count, plural, other {# 人}}を配席。",
+        "queueHeading": "待ちリスト",
+        "guest": "{name}({party})",
+        "moveLabel": "{name} のテーブル",
+        "queueOption": "待ちリストに残す",
+        "optionFree": "テーブル {label}(空き {free})",
+        "toEditor": "配席エディターを開く"
+      },
+      "acceptErrors": {
+        "already_seated": "この提案に含まれる方がその間に手動で配席されました。もう一度提案してください。",
+        "declined": "この提案に含まれるゲストが欠席を回答しました。もう一度提案してください。",
+        "hard_rule": "確定すると必須ルールに違反します。",
+        "cant_fit": "そのテーブルにはあと {fits} 人しか座れません。"
       }
     }
   },

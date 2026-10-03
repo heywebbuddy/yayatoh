@@ -1979,7 +1979,8 @@
       "assign": "安排宾客",
       "finder": "座位查询",
       "rules": "规则",
-      "guests": "安排宾客座位"
+      "guests": "安排宾客座位",
+      "solver": "自动排座"
     },
     "assign": {
       "title": "安排宾客",
@@ -2298,6 +2299,134 @@
         "noGuests": "请至少选择一位宾客。",
         "noPlace": "请选择桌子或排。",
         "dropMiss": "请把这组放到桌子或排上。"
+      }
+    },
+    "solver": {
+      "title": "座位规则与排座器",
+      "description": "设置规则后,排座器会为每位尚未入座的宾客推荐桌位。检查方案后,可逐桌或全部确认。您手动安排的宾客永远不会被移动。",
+      "rules": {
+        "heading": "规则",
+        "listLabel": "座位规则",
+        "empty": "还没有规则。请在下方添加,或不设规则直接运行排座器:它仍会让每桌人数不超过座位数。",
+        "hard": "硬性",
+        "soft": "弹性",
+        "badge": "{strength} · 权重 {weight}",
+        "strength": "类型",
+        "strengthHint": "方案绝不会违反硬性规则。弹性规则尽量遵守;每次违反按其权重计分。",
+        "weight": "权重",
+        "weightHint": "1 到 10。权重越高的弹性规则越重要。",
+        "save": "保存",
+        "remove": "删除",
+        "saved": "规则已保存。",
+        "removed": "规则已删除。",
+        "added": "规则已添加。",
+        "editLabel": "修改规则:{rule}",
+        "kinds": {
+          "keep_together": "安排在一起",
+          "keep_apart": "分开安排",
+          "vip_near_stage": "VIP 最靠近舞台",
+          "access_near_exit": "无障碍需求靠近出口",
+          "table_max": "每桌上限"
+        },
+        "add": {
+          "heading": "添加规则",
+          "kind": "规则",
+          "by": "对象",
+          "byEach": "每个宾客组",
+          "byParty": "一个宾客组",
+          "byTag": "带某个标签的所有人",
+          "bySide": "某一方的所有人",
+          "party": "宾客组",
+          "tag": "标签",
+          "side": "一方",
+          "choose": "请选择…",
+          "together": "安排在一起",
+          "first": "第一组",
+          "second": "第二组",
+          "accessTag": "无障碍需求标签",
+          "accessHint": "带此标签的宾客组会安排在离出口或入口最近的桌位。无障碍相关的回答保持私密。",
+          "max": "每桌最多人数",
+          "vipHint": "VIP 宾客组会安排在离舞台最近的桌位。",
+          "submit": "添加规则"
+        },
+        "errors": {
+          "value": "请选择规则适用的对象。",
+          "same": "请选择两个不同的组。",
+          "weight": "请输入 1 到 10 的权重。",
+          "max": "请输入 1 到 40 的数字。",
+          "duplicate": "此活动已有这条规则。",
+          "tooMany": "每个活动最多 50 条规则。",
+          "unknownParty": "该宾客组不在此宾客名单中。"
+        },
+        "describe": {
+          "togetherParty": "每个宾客组坐在一起",
+          "togetherTag": "所有带“{value}”标签的人坐在一起",
+          "togetherSide": "{value}方坐在一起",
+          "apart": "{a}与{b}分开",
+          "targetParty": "{value}",
+          "targetTag": "所有带“{value}”标签的人",
+          "targetSide": "{value}方",
+          "vip": "VIP 宾客组最靠近舞台",
+          "access": "带“{tag}”标签的宾客靠近出口",
+          "tableMax": "每桌最多 {max} 人"
+        }
+      },
+      "run": {
+        "heading": "方案",
+        "queue": "尚有 {count, plural, other {# 位宾客}}待安排。{fixed, plural, =0 {还没有人入座。} other {手动安排的 # 位宾客保持不动。}}",
+        "nothing": "所有人都已入座,无需推荐。",
+        "seed": "排列编号",
+        "seedHint": "相同的编号总是得到相同的方案。",
+        "seedError": "请输入 1 到 1,000,000 的整数。",
+        "start": "推荐座位",
+        "cancel": "停止",
+        "again": "换一种排列",
+        "running": "正在生成方案… {percent}%",
+        "progress": "方案进度",
+        "cancelled": "已停止,没有生成方案。",
+        "failed": "排座器意外停止,请重试。"
+      },
+      "summary": {
+        "heading": "摘要",
+        "done": "方案已在 {seconds} 秒内完成(排列 {seed})。",
+        "seated": "{count, plural, other {# 位宾客}}安排在{tables, plural, other { # 桌}};{queue, plural, =0 {候补队列中无人} other {候补队列中还有 # 位}}。",
+        "hardOk": "没有违反任何硬性规则。",
+        "hardBroken": "{count, plural, other {违反了 # 条硬性规则}}。确认前请修改方案。",
+        "soft": "弹性规则:扣分 {penalty}(0 为最佳)。",
+        "ruleLine": "{rule}:{count, plural, =0 {已遵守} other {# 次违反}}",
+        "issues": {
+          "no_stage": "平面图没有舞台,因此“VIP 最靠近舞台”无法生效。",
+          "no_exit": "平面图没有出口或入口,因此“无障碍需求靠近出口”无法生效。",
+          "group_too_big": "一组 {size} 人比任何一桌({room} 个座位)都多,会尽量分到最少的桌。",
+          "too_few_seats": "需安排 {size} 位宾客,但只有 {room} 个空位:部分宾客将留在候补队列。",
+          "no_room": "平面图中没有桌子或排。"
+        }
+      },
+      "tables": {
+        "heading": "推荐的桌位",
+        "none": "没有推荐的桌位。",
+        "region": "第 {label} 桌",
+        "fill": "推荐 {proposed} · 已入座 {seated} · 空位 {free}/{capacity}",
+        "overFull": "比空位多出 {count, plural, other {# 位}}宾客。",
+        "broken": "违反硬性规则:{rules}",
+        "over": "宾客多于座位",
+        "accept": "确认第 {label} 桌",
+        "acceptAll": "确认所有桌位",
+        "fixFirst": "请先修正带警告的桌位。",
+        "acceptedTable": "第 {label} 桌已确认:{count, plural, other {# 位宾客}}已入座。",
+        "acceptedAll": "方案已确认:{count, plural, other {# 位宾客}}已入座。",
+        "queueHeading": "候补队列",
+        "guest": "{name}({party})",
+        "moveLabel": "{name} 的桌位",
+        "queueOption": "留在候补队列",
+        "optionFree": "第 {label} 桌(空 {free})",
+        "toEditor": "打开排座编辑器"
+      },
+      "acceptErrors": {
+        "already_seated": "此方案中有人在此期间被手动安排了座位。请重新推荐。",
+        "declined": "此方案中有宾客已婉拒。请重新推荐。",
+        "hard_rule": "确认此方案会违反硬性规则。",
+        "cant_fit": "该桌只能再坐 {fits} 人。"
       }
     }
   },

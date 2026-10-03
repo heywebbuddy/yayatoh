@@ -13,12 +13,15 @@ export function SeatingTabs({
   finder = false,
   date = null,
   guests = false,
+  solver = false,
 }: {
   base: string;
-  active: 'plan' | 'assign' | 'guests' | 'rules' | 'finder';
+  active: 'plan' | 'assign' | 'guests' | 'solver' | 'rules' | 'finder';
   finder?: boolean;
   /** The org has the guests module: the guest seating editor (M4.3a). */
   guests?: boolean;
+  /** The org has guests and the ai_seating module: seating rules and the solver (M6.12a). */
+  solver?: boolean;
   /** The date whose chart the plan and guest views show (M1.7g); kept when switching views. */
   date?: string | null;
 }) {
@@ -28,6 +31,7 @@ export function SeatingTabs({
     { key: 'plan', href: `${base}${q}` },
     { key: 'assign', href: `${base}/assign${q}` },
     ...(guests ? [{ key: 'guests', href: `${base}/guests` } as const] : []),
+    ...(guests && solver ? [{ key: 'solver', href: `${base}/solver` } as const] : []),
     { key: 'rules', href: `${base}/rules` },
     ...(finder ? [{ key: 'finder', href: `${base}/finder` } as const] : []),
   ] as const;
