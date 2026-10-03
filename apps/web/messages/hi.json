@@ -12639,7 +12639,7 @@
   },
   "money": {
     "export": "CSV निर्यात करें",
-    "periodForm": "अवधि",
+    "periodForm": "अवधि चुनें",
     "tabs": {
       "label": "वित्त पेज",
       "overview": "अवलोकन",

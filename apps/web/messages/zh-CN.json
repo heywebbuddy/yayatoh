@@ -12639,7 +12639,7 @@
   },
   "money": {
     "export": "导出 CSV",
-    "periodForm": "期间",
+    "periodForm": "选择期间",
     "tabs": {
       "label": "财务页面",
       "overview": "概览",

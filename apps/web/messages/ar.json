@@ -12639,7 +12639,7 @@
   },
   "money": {
     "export": "تصدير CSV",
-    "periodForm": "الفترة",
+    "periodForm": "اختيار الفترة",
     "tabs": {
       "label": "صفحات الأموال",
       "overview": "نظرة عامة",

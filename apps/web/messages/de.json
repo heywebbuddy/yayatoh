@@ -12639,7 +12639,7 @@
   },
   "money": {
     "export": "CSV exportieren",
-    "periodForm": "Zeitraum",
+    "periodForm": "Zeitraum wählen",
     "tabs": {
       "label": "Finanzseiten",
       "overview": "Übersicht",

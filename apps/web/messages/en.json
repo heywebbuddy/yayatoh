@@ -12639,7 +12639,7 @@
   },
   "money": {
     "export": "Export CSV",
-    "periodForm": "Period",
+    "periodForm": "Choose a period",
     "tabs": {
       "label": "Money pages",
       "overview": "Overview",

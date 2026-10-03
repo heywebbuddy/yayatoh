@@ -12639,7 +12639,7 @@
   },
   "money": {
     "export": "匯出 CSV",
-    "periodForm": "期間",
+    "periodForm": "選擇期間",
     "tabs": {
       "label": "財務頁面",
       "overview": "總覽",

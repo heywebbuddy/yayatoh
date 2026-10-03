@@ -12639,7 +12639,7 @@
   },
   "money": {
     "export": "CSV をエクスポート",
-    "periodForm": "期間",
+    "periodForm": "期間を選択",
     "tabs": {
       "label": "売上・支払いページ",
       "overview": "概要",

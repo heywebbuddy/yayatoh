@@ -12639,7 +12639,7 @@
   },
   "money": {
     "export": "CSV exporteren",
-    "periodForm": "Periode",
+    "periodForm": "Kies een periode",
     "tabs": {
       "label": "Financiële pagina's",
       "overview": "Overzicht",
