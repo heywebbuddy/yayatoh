@@ -145,6 +145,8 @@ export const S = {
     time: 'Start time',
     zone: 'Event time zone',
     currency: 'Currency',
+    resetForm: 'A form with a reset button',
+    reset: 'Reset',
   },
   table: {
     caption: 'Latest orders',

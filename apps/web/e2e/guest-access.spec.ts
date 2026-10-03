@@ -217,7 +217,7 @@ test.describe('guest checkout with an emailed code', () => {
     const email = emailFor('arabic');
     await guest.goto(`/ar/events/${slug}`);
     await expect(guest.locator('html')).toHaveAttribute('dir', 'rtl');
-    await pickOption(guest.locator('select[name^="qty:"]').first(), '1');
+    await pickOption(guest.locator('[role="combobox"][data-name^="qty:"]').first(), '1');
     await guest.locator('#name').fill('ليلى');
     await guest.locator('#email').fill(email);
     await guest.locator('#email').press('Enter');

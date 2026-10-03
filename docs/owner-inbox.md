@@ -623,3 +623,10 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **What "sections" and "checklist items" mean in a template.** Chosen default: *sections* are the event page's content sections (text, FAQ, schedule, location, links — the M1.4d blocks); *checklist items* are the organizer's own to-dos, a new per-event list shown under "Your checklist" on the setup guide (the profile's readiness checks stay computed). Per-event switching of workspace sections (nav items) was not built: profiles stay the unit that switches sections on (UX-2). Confirm, or ask for nav-section toggles as a later increment.
 - [ ] **Duplicating an event and saving it as a template now also copy its page sections and checklist titles** (snapshot v2; v1 templates still read). Confirm.
 - [ ] **A template's kind of event is fixed once made** (change it by starting a new template). Confirm.
+
+## U1 — form controls (2026-10-03, pending owner)
+- [ ] **Built with these defaults; say if any should change:**
+  - **Type-ahead on a closed dropdown chooses straight away**, as the browser's own select did (the keyboard paths and habits stay the same). To search, open the list (Enter, ↓ or a click); lists of more than 8 options open with a search box.
+  - **Event time zone in the create-event wizard** is now the full IANA list, grouped by region with the current offset, instead of the 13 zones the wizard offered. Values are unchanged (IANA names).
+  - **Arabic digits in the date and time pickers:** dates and times show Arabic-Indic digits (٠٥/١١/٢٠٢٦) in Arabic, as the U1 spec asks. The rest of the app still formats numbers with Western digits in Arabic (the CLDR default); say if you want one rule everywhere.
+  - **Typed dates** use the reader's locale order (11/05/2026 in English, 05.11.2026 in German). ISO (2026-11-05) always works too.
