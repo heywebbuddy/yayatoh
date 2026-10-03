@@ -1978,7 +1978,8 @@
       "plan": "Plan",
       "assign": "Gäste platzieren",
       "finder": "Platzfinder",
-      "rules": "Regeln"
+      "rules": "Regeln",
+      "guests": "Gäste platzieren"
     },
     "assign": {
       "title": "Gäste platzieren",
@@ -2176,6 +2177,127 @@
         "notEnough": "{fits, plural, =0 {Dort ist kein Platz frei.} one {Dort ist nur # Platz frei.} other {Dort sind nur # Plätze frei.}}",
         "forbidden": "Du kannst die Gruppen sehen, aber nicht ändern.",
         "noMembers": "Noch niemand auf der Liste hat das Label {label}."
+      }
+    },
+    "guestSeating": {
+      "title": "Gäste platzieren",
+      "description": "Platzieren Sie Gruppen an Tischen. Ziehen Sie eine Gruppe aus der Warteliste auf den Plan, oder haken Sie Gäste an, wählen Sie einen Tisch und drücken Sie „Ausgewählte Gäste platzieren“ – die Tastatur kann alles, was Ziehen kann.",
+      "chart": {
+        "label": "Sitzordnung für",
+        "event": "Ganze Veranstaltung"
+      },
+      "noPlan": "{chart} hat noch keinen Sitzplan",
+      "noPlanHint": "Erstellen Sie zuerst den Plan (Tische oder Reihen) und platzieren Sie dann hier Ihre Gäste.",
+      "toPlan": "Zum Plan",
+      "noGuests": "Noch keine Gäste zu platzieren",
+      "noGuestsHint": "Fügen Sie auf der Gästeseite Gruppen hinzu (oder laden Sie sie zu diesem Teil des Tages ein) und platzieren Sie sie dann hier.",
+      "toGuests": "Zu den Gästen",
+      "summary": "{seated} platziert · {unseated} offen",
+      "readOnly": "Sie sehen die Sitzordnung, können sie aber nicht ändern.",
+      "declinedSeated": "{count, plural, one {# Gast, der abgesagt hat, sitzt noch.} other {# Gäste, die abgesagt haben, sitzen noch.}} Entfernen Sie sie in den Tischdetails.",
+      "live": {
+        "live": "Live",
+        "connecting": "Verbinde …",
+        "offline": "Offline, verbinde neu"
+      },
+      "vip": "VIP",
+      "queue": {
+        "title": "Ohne Platz ({count})",
+        "search": "Gruppen und Gäste suchen",
+        "status": "Antwort",
+        "statusAll": "Alle Antworten",
+        "side": "Seite",
+        "sideAll": "Alle Seiten",
+        "list": "Gruppen ohne Platz",
+        "selectParty": "Alle in {party} auswählen",
+        "toSeat": "{count, plural, one {# offen} other {# offen}}",
+        "selected": "{count, plural, =0 {Niemand ausgewählt} one {# Gast ausgewählt} other {# Gäste ausgewählt}}",
+        "clear": "Auswahl aufheben",
+        "empty": "Alle haben einen Platz.",
+        "noMatch": "Keine Gruppe passt zu diesen Filtern."
+      },
+      "status": {
+        "attending": "Kommt",
+        "pending": "Antwort ausstehend",
+        "declined": "Abgesagt"
+      },
+      "guest": {
+        "guestOf": "Begleitung von {name}",
+        "meal": "Essen: {meal}",
+        "noMeal": "Kein Essen gewählt",
+        "child": "Kind",
+        "infant": "Kleinkind"
+      },
+      "form": {
+        "title": "Ausgewählte Gäste platzieren",
+        "table": "Tisch oder Reihe",
+        "choose": "Tisch oder Reihe wählen",
+        "option": "{place} – {free} von {capacity} frei",
+        "optionVip": "{place} – {free} von {capacity} frei · VIP-Bereich",
+        "cantFit": "Passt nicht: {asked, plural, one {# Gast} other {# Gäste}} ausgewählt, {fits, plural, =0 {keine Plätze} one {# Platz} other {# Plätze}} frei an {place}.",
+        "submit": "Ausgewählte Gäste platzieren",
+        "submitting": "Platziere …"
+      },
+      "place": {
+        "table": "Tisch {label}",
+        "row": "Reihe {label}"
+      },
+      "map": {
+        "title": "Plan",
+        "hint": "Ziehen Sie eine Gruppe auf einen Tisch, um sie zu platzieren. Klicken Sie auf einen Tisch, um zu sehen, wer dort sitzt.",
+        "readOnlyHint": "Klicken Sie auf einen Tisch, um zu sehen, wer dort sitzt.",
+        "dropHere": "Ablegen an {place}: {free} frei",
+        "dropCantFit": "Passt nicht an {place}: {count, plural, one {# Gast} other {# Gäste}}, {free} frei",
+        "guests": "Gäste",
+        "tickets": "Ticketinhaber",
+        "vip": "VIP-Bereich"
+      },
+      "details": {
+        "title": "Tischdetails",
+        "choose": "Tisch oder Reihe",
+        "none": "Dieser Plan hat keine Tische oder Reihen.",
+        "counts": "{seated} platziert · {free} von {capacity} frei",
+        "tickets": "{count, plural, one {# Platz durch ein Ticket belegt} other {# Plätze durch Tickets belegt}}",
+        "sponsor": "Gastgeber: {name}",
+        "vipZone": "VIP-Bereich",
+        "vipFromPlan": "In einem VIP-Abschnitt des Plans",
+        "warnings": "Diesen Tisch prüfen",
+        "warnDeclined": "{name} hat abgesagt und sitzt noch.",
+        "warnVipOutside": "{party} ist eine VIP-Gruppe außerhalb eines VIP-Bereichs.",
+        "warnNotVip": "{party} ist keine VIP-Gruppe, sitzt aber in einem VIP-Bereich.",
+        "meals": "Essen",
+        "mealCount": "{meal}: {count}",
+        "noMeal": "Nicht gewählt",
+        "empty": "Hier sitzt noch niemand. Platzieren Sie eine Gruppe aus der Warteliste.",
+        "unseatParty": "{party} entfernen",
+        "move": "Verschieben nach …",
+        "moveLabel": "{name} an einen anderen Tisch verschieben",
+        "unseat": "Entfernen",
+        "unseatLabel": "{name} entfernen",
+        "moveTo": "{name} verschieben",
+        "moveSubmit": "Verschieben",
+        "cancel": "Abbrechen"
+      },
+      "done": {
+        "seated": "{count, plural, one {# Gast} other {# Gäste}} an {place} platziert.",
+        "moved": "{name} nach {place} verschoben.",
+        "unseated": "{count, plural, one {# Gast ist} other {# Gäste sind}} wieder in der Warteliste.",
+        "vipOn": "{place} ist jetzt ein VIP-Bereich.",
+        "vipOff": "{place} ist kein VIP-Bereich mehr."
+      },
+      "warnings": {
+        "vip_outside": "{party} ist eine VIP-Gruppe, und {place} ist kein VIP-Bereich.",
+        "not_vip_inside": "{place} ist ein VIP-Bereich, und {party} ist keine VIP-Gruppe."
+      },
+      "errors": {
+        "forbidden": "Sie sehen die Sitzordnung, können sie aber nicht ändern.",
+        "cantFit": "Passt nicht: {asked, plural, one {# Gast braucht} other {# Gäste brauchen}} einen Platz, und dort {fits, plural, =0 {ist kein Platz} one {ist nur # Platz} other {sind nur # Plätze}} frei.",
+        "declined": "Dieser Gast hat abgesagt. Nur Gäste, die nicht abgesagt haben, können platziert werden.",
+        "unknown": "Dieser Gast steht nicht mehr auf der Liste. Die Seite wird aktualisiert.",
+        "noPlan": "Dafür gibt es noch keinen Sitzplan.",
+        "noGuests": "Wählen Sie mindestens einen Gast aus.",
+        "noPlace": "Wählen Sie einen Tisch oder eine Reihe.",
+        "dropMiss": "Legen Sie eine Gruppe auf einem Tisch oder einer Reihe ab."
       }
     }
   },

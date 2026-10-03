@@ -1978,7 +1978,8 @@
       "plan": "Plano",
       "assign": "Asignar invitados",
       "finder": "Buscador de asientos",
-      "rules": "Reglas"
+      "rules": "Reglas",
+      "guests": "Sentar invitados"
     },
     "assign": {
       "title": "Asignar invitados",
@@ -2176,6 +2177,127 @@
         "notEnough": "{fits, plural, =0 {No hay asientos libres allí.} one {Solo queda # asiento libre allí.} other {Solo quedan # asientos libres allí.}}",
         "forbidden": "Puedes ver los grupos, pero no cambiarlos.",
         "noMembers": "Nadie de la lista tiene todavía la etiqueta {label}."
+      }
+    },
+    "guestSeating": {
+      "title": "Sentar invitados",
+      "description": "Sienta a los grupos en las mesas. Arrastra un grupo de la cola al plano, o marca invitados, elige una mesa y pulsa «Sentar a los seleccionados»: el teclado hace todo lo que hace arrastrar.",
+      "chart": {
+        "label": "Distribución para",
+        "event": "Todo el evento"
+      },
+      "noPlan": "{chart} aún no tiene plano de mesas",
+      "noPlanHint": "Crea primero el plano (mesas o filas) y luego sienta aquí a tus invitados.",
+      "toPlan": "Ir al plano",
+      "noGuests": "Aún no hay invitados que sentar",
+      "noGuestsHint": "Añade grupos en la página Invitados (o invítalos a esta parte del día) y luego siéntalos aquí.",
+      "toGuests": "Ir a Invitados",
+      "summary": "{seated} sentados · {unseated} por sentar",
+      "readOnly": "Puedes ver la distribución, pero no cambiarla.",
+      "declinedSeated": "{count, plural, one {# invitado que no asistirá sigue sentado.} other {# invitados que no asistirán siguen sentados.}} Retíralos en los detalles de la mesa.",
+      "live": {
+        "live": "En vivo",
+        "connecting": "Conectando…",
+        "offline": "Sin conexión, reconectando"
+      },
+      "vip": "VIP",
+      "queue": {
+        "title": "Sin sentar ({count})",
+        "search": "Buscar grupos e invitados",
+        "status": "Respuesta",
+        "statusAll": "Todas las respuestas",
+        "side": "Lado",
+        "sideAll": "Todos los lados",
+        "list": "Grupos por sentar",
+        "selectParty": "Seleccionar a todos en {party}",
+        "toSeat": "{count, plural, one {# por sentar} other {# por sentar}}",
+        "selected": "{count, plural, =0 {Nadie seleccionado} one {# invitado seleccionado} other {# invitados seleccionados}}",
+        "clear": "Borrar selección",
+        "empty": "Todos tienen asiento.",
+        "noMatch": "Ningún grupo coincide con estos filtros."
+      },
+      "status": {
+        "attending": "Asistirá",
+        "pending": "Sin respuesta",
+        "declined": "No asistirá"
+      },
+      "guest": {
+        "guestOf": "Acompañante de {name}",
+        "meal": "Menú: {meal}",
+        "noMeal": "Sin menú elegido",
+        "child": "Niño",
+        "infant": "Bebé"
+      },
+      "form": {
+        "title": "Sentar a los invitados seleccionados",
+        "table": "Mesa o fila",
+        "choose": "Elige una mesa o fila",
+        "option": "{place} — {free} de {capacity} libres",
+        "optionVip": "{place} — {free} de {capacity} libres · zona VIP",
+        "cantFit": "No caben: {asked, plural, one {# invitado seleccionado} other {# invitados seleccionados}}, {fits, plural, =0 {ningún asiento libre} one {# asiento libre} other {# asientos libres}} en {place}.",
+        "submit": "Sentar a los seleccionados",
+        "submitting": "Sentando…"
+      },
+      "place": {
+        "table": "Mesa {label}",
+        "row": "Fila {label}"
+      },
+      "map": {
+        "title": "Plano",
+        "hint": "Arrastra un grupo a una mesa para sentarlo. Haz clic en una mesa para ver quién se sienta allí.",
+        "readOnlyHint": "Haz clic en una mesa para ver quién se sienta allí.",
+        "dropHere": "Soltar en {place}: {free} libres",
+        "dropCantFit": "No caben en {place}: {count, plural, one {# invitado} other {# invitados}}, {free} libres",
+        "guests": "Invitados",
+        "tickets": "Con entrada",
+        "vip": "Zona VIP"
+      },
+      "details": {
+        "title": "Detalles de la mesa",
+        "choose": "Mesa o fila",
+        "none": "Este plano no tiene mesas ni filas.",
+        "counts": "{seated} sentados · {free} de {capacity} libres",
+        "tickets": "{count, plural, one {# asiento ocupado por una entrada} other {# asientos ocupados por entradas}}",
+        "sponsor": "Anfitrión: {name}",
+        "vipZone": "Zona VIP",
+        "vipFromPlan": "En una sección VIP del plano",
+        "warnings": "Revisa esta mesa",
+        "warnDeclined": "{name} no asistirá y sigue sentado.",
+        "warnVipOutside": "{party} es un grupo VIP fuera de una zona VIP.",
+        "warnNotVip": "{party} no es un grupo VIP, pero está en una zona VIP.",
+        "meals": "Menús",
+        "mealCount": "{meal}: {count}",
+        "noMeal": "Sin elegir",
+        "empty": "Aún no hay nadie aquí. Sienta un grupo de la cola.",
+        "unseatParty": "Retirar a {party}",
+        "move": "Mover a…",
+        "moveLabel": "Mover a {name} a otra mesa",
+        "unseat": "Retirar",
+        "unseatLabel": "Retirar a {name}",
+        "moveTo": "Mover a {name}",
+        "moveSubmit": "Mover",
+        "cancel": "Cancelar"
+      },
+      "done": {
+        "seated": "{count, plural, one {# invitado sentado} other {# invitados sentados}} en {place}.",
+        "moved": "{name} se movió a {place}.",
+        "unseated": "{count, plural, one {# invitado vuelve} other {# invitados vuelven}} a la cola.",
+        "vipOn": "{place} ahora es zona VIP.",
+        "vipOff": "{place} ya no es zona VIP."
+      },
+      "warnings": {
+        "vip_outside": "{party} es un grupo VIP y {place} no es zona VIP.",
+        "not_vip_inside": "{place} es zona VIP y {party} no es un grupo VIP."
+      },
+      "errors": {
+        "forbidden": "Puedes ver la distribución, pero no cambiarla.",
+        "cantFit": "No caben: {asked, plural, one {# invitado necesita} other {# invitados necesitan}} asiento y allí {fits, plural, =0 {no hay asientos libres} one {solo queda # asiento libre} other {solo quedan # asientos libres}}.",
+        "declined": "Ese invitado no asistirá. Solo se puede sentar a quienes no han declinado.",
+        "unknown": "Ese invitado ya no está en la lista. La página se actualizará.",
+        "noPlan": "Aún no hay plano de mesas para esto.",
+        "noGuests": "Elige al menos un invitado.",
+        "noPlace": "Elige una mesa o fila.",
+        "dropMiss": "Suelta el grupo sobre una mesa o una fila."
       }
     }
   },

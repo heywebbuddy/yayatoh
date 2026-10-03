@@ -1978,7 +1978,8 @@
       "plan": "座席表",
       "assign": "ゲストの割り当て",
       "finder": "座席検索",
-      "rules": "ルール"
+      "rules": "ルール",
+      "guests": "ゲストの席決め"
     },
     "assign": {
       "title": "ゲストの割り当て",
@@ -2176,6 +2177,127 @@
         "notEnough": "{fits, plural, =0 {そこに空席はありません。} other {そこの空席は#席だけです。}}",
         "forbidden": "グループは閲覧のみ可能で、変更はできません。",
         "noMembers": "リストにラベル「{label}」を持つ人はまだいません。"
+      }
+    },
+    "guestSeating": {
+      "title": "ゲストの席決め",
+      "description": "グループをテーブルに配置します。待機リストからグループをマップへドラッグするか、ゲストを選んでテーブルを選び「選択したゲストを配置」を押します。ドラッグでできることはすべてキーボードでもできます。",
+      "chart": {
+        "label": "席次の対象",
+        "event": "イベント全体"
+      },
+      "noPlan": "{chart}の座席表はまだありません",
+      "noPlanHint": "先に座席表（テーブルまたは列）を作成してから、ここでゲストを配置してください。",
+      "toPlan": "座席表へ",
+      "noGuests": "配置するゲストはまだいません",
+      "noGuestsHint": "ゲストページでグループを追加する（またはこの時間帯に招待する）と、ここで配置できます。",
+      "toGuests": "ゲストへ",
+      "summary": "配置済み {seated} · 未配置 {unseated}",
+      "readOnly": "席次を見ることはできますが、変更はできません。",
+      "declinedSeated": "{count, plural, other {欠席と回答したゲスト#人がまだ着席しています。}}テーブル詳細で外してください。",
+      "live": {
+        "live": "ライブ",
+        "connecting": "接続中…",
+        "offline": "オフライン、再接続中"
+      },
+      "vip": "VIP",
+      "queue": {
+        "title": "未配置（{count}）",
+        "search": "グループとゲストを検索",
+        "status": "回答",
+        "statusAll": "すべての回答",
+        "side": "サイド",
+        "sideAll": "すべてのサイド",
+        "list": "未配置のグループ",
+        "selectParty": "{party}の全員を選択",
+        "toSeat": "{count, plural, other {未配置 #人}}",
+        "selected": "{count, plural, =0 {選択なし} other {#人を選択中}}",
+        "clear": "選択を解除",
+        "empty": "全員の席が決まりました。",
+        "noMatch": "条件に合うグループはありません。"
+      },
+      "status": {
+        "attending": "出席",
+        "pending": "回答待ち",
+        "declined": "欠席"
+      },
+      "guest": {
+        "guestOf": "{name}の同伴者",
+        "meal": "料理：{meal}",
+        "noMeal": "料理未選択",
+        "child": "子ども",
+        "infant": "乳幼児"
+      },
+      "form": {
+        "title": "選択したゲストを配置",
+        "table": "テーブルまたは列",
+        "choose": "テーブルまたは列を選択",
+        "option": "{place} — 空き {free}/{capacity}",
+        "optionVip": "{place} — 空き {free}/{capacity} · VIPエリア",
+        "cantFit": "入りきりません：{asked, plural, other {#人}}を選択中、{place}の空きは{fits, plural, =0 {ありません} other {#席}}。",
+        "submit": "選択したゲストを配置",
+        "submitting": "配置中…"
+      },
+      "place": {
+        "table": "テーブル{label}",
+        "row": "{label}列"
+      },
+      "map": {
+        "title": "マップ",
+        "hint": "グループをテーブルへドラッグして配置します。テーブルをクリックすると着席者が表示されます。",
+        "readOnlyHint": "テーブルをクリックすると着席者が表示されます。",
+        "dropHere": "{place}に配置：空き {free}",
+        "dropCantFit": "{place}には入りきりません：{count, plural, other {#人}}、空き {free}",
+        "guests": "ゲスト",
+        "tickets": "チケット保有者",
+        "vip": "VIPエリア"
+      },
+      "details": {
+        "title": "テーブル詳細",
+        "choose": "テーブルまたは列",
+        "none": "この座席表にはテーブルも列もありません。",
+        "counts": "着席 {seated} · 空き {free}/{capacity}",
+        "tickets": "{count, plural, other {チケットで埋まっている席 #}}",
+        "sponsor": "提供：{name}",
+        "vipZone": "VIPエリア",
+        "vipFromPlan": "座席表のVIPセクション内",
+        "warnings": "このテーブルを確認",
+        "warnDeclined": "{name}さんは欠席と回答していますが、まだ着席しています。",
+        "warnVipOutside": "{party}はVIPグループですが、VIPエリアの外にいます。",
+        "warnNotVip": "{party}はVIPグループではありませんが、VIPエリアにいます。",
+        "meals": "料理",
+        "mealCount": "{meal}：{count}",
+        "noMeal": "未選択",
+        "empty": "まだ誰も座っていません。待機リストからグループを配置してください。",
+        "unseatParty": "{party}を外す",
+        "move": "移動…",
+        "moveLabel": "{name}を別のテーブルへ移動",
+        "unseat": "外す",
+        "unseatLabel": "{name}を外す",
+        "moveTo": "{name}を移動",
+        "moveSubmit": "移動",
+        "cancel": "キャンセル"
+      },
+      "done": {
+        "seated": "{place}に{count, plural, other {#人}}を配置しました。",
+        "moved": "{name}を{place}へ移動しました。",
+        "unseated": "{count, plural, other {#人}}が待機リストに戻りました。",
+        "vipOn": "{place}をVIPエリアにしました。",
+        "vipOff": "{place}はVIPエリアではなくなりました。"
+      },
+      "warnings": {
+        "vip_outside": "{party}はVIPグループですが、{place}はVIPエリアではありません。",
+        "not_vip_inside": "{place}はVIPエリアですが、{party}はVIPグループではありません。"
+      },
+      "errors": {
+        "forbidden": "席次を見ることはできますが、変更はできません。",
+        "cantFit": "入りきりません：{asked, plural, other {#人}}分の席が必要ですが、空きは{fits, plural, =0 {ありません} other {#席だけです}}。",
+        "declined": "このゲストは欠席と回答しています。欠席していないゲストのみ配置できます。",
+        "unknown": "このゲストはもうリストにいません。ページを更新します。",
+        "noPlan": "まだ座席表がありません。",
+        "noGuests": "ゲストを1人以上選んでください。",
+        "noPlace": "テーブルまたは列を選んでください。",
+        "dropMiss": "グループをテーブルか列の上で離してください。"
       }
     }
   },

@@ -1978,7 +1978,8 @@
       "plan": "Plattegrond",
       "assign": "Gasten plaatsen",
       "finder": "Plaatszoeker",
-      "rules": "Regels"
+      "rules": "Regels",
+      "guests": "Gasten plaatsen"
     },
     "assign": {
       "title": "Gasten plaatsen",
@@ -2176,6 +2177,127 @@
         "notEnough": "{fits, plural, =0 {Daar is geen plaats vrij.} one {Daar is maar # plaats vrij.} other {Daar zijn maar # plaatsen vrij.}}",
         "forbidden": "Je kunt de groepen zien, maar niet wijzigen.",
         "noMembers": "Nog niemand op de lijst heeft het label {label}."
+      }
+    },
+    "guestSeating": {
+      "title": "Gasten plaatsen",
+      "description": "Plaats gezelschappen aan tafels. Sleep een gezelschap uit de wachtrij naar de kaart, of vink gasten aan, kies een tafel en druk op ‘Geselecteerde gasten plaatsen’: het toetsenbord kan alles wat slepen kan.",
+      "chart": {
+        "label": "Tafelschikking voor",
+        "event": "Hele evenement"
+      },
+      "noPlan": "{chart} heeft nog geen plattegrond",
+      "noPlanHint": "Maak eerst de plattegrond (tafels of rijen) en plaats je gasten dan hier.",
+      "toPlan": "Naar de plattegrond",
+      "noGuests": "Nog geen gasten om te plaatsen",
+      "noGuestsHint": "Voeg gezelschappen toe op de pagina Gasten (of nodig ze uit voor dit deel van de dag) en plaats ze dan hier.",
+      "toGuests": "Naar Gasten",
+      "summary": "{seated} geplaatst · {unseated} nog te plaatsen",
+      "readOnly": "Je kunt de tafelschikking zien, maar niet wijzigen.",
+      "declinedSeated": "{count, plural, one {# gast die heeft afgezegd zit nog aan tafel.} other {# gasten die hebben afgezegd zitten nog aan tafel.}} Haal ze weg in de tafeldetails.",
+      "live": {
+        "live": "Live",
+        "connecting": "Verbinden…",
+        "offline": "Offline, opnieuw verbinden"
+      },
+      "vip": "VIP",
+      "queue": {
+        "title": "Zonder plaats ({count})",
+        "search": "Gezelschappen en gasten zoeken",
+        "status": "Antwoord",
+        "statusAll": "Alle antwoorden",
+        "side": "Kant",
+        "sideAll": "Alle kanten",
+        "list": "Gezelschappen nog te plaatsen",
+        "selectParty": "Iedereen in {party} selecteren",
+        "toSeat": "{count, plural, one {# te plaatsen} other {# te plaatsen}}",
+        "selected": "{count, plural, =0 {Niemand geselecteerd} one {# gast geselecteerd} other {# gasten geselecteerd}}",
+        "clear": "Selectie wissen",
+        "empty": "Iedereen heeft een plaats.",
+        "noMatch": "Geen gezelschap past bij deze filters."
+      },
+      "status": {
+        "attending": "Komt",
+        "pending": "Wacht op antwoord",
+        "declined": "Afgezegd"
+      },
+      "guest": {
+        "guestOf": "Introducé van {name}",
+        "meal": "Maaltijd: {meal}",
+        "noMeal": "Geen maaltijd gekozen",
+        "child": "Kind",
+        "infant": "Baby"
+      },
+      "form": {
+        "title": "Geselecteerde gasten plaatsen",
+        "table": "Tafel of rij",
+        "choose": "Kies een tafel of rij",
+        "option": "{place} — {free} van {capacity} vrij",
+        "optionVip": "{place} — {free} van {capacity} vrij · VIP-zone",
+        "cantFit": "Past niet: {asked, plural, one {# gast} other {# gasten}} geselecteerd, {fits, plural, =0 {geen plaatsen} one {# plaats} other {# plaatsen}} vrij aan {place}.",
+        "submit": "Geselecteerde gasten plaatsen",
+        "submitting": "Plaatsen…"
+      },
+      "place": {
+        "table": "Tafel {label}",
+        "row": "Rij {label}"
+      },
+      "map": {
+        "title": "Kaart",
+        "hint": "Sleep een gezelschap naar een tafel om het te plaatsen. Klik op een tafel om te zien wie er zit.",
+        "readOnlyHint": "Klik op een tafel om te zien wie er zit.",
+        "dropHere": "Neerzetten op {place}: {free} vrij",
+        "dropCantFit": "Past niet aan {place}: {count, plural, one {# gast} other {# gasten}}, {free} vrij",
+        "guests": "Gasten",
+        "tickets": "Tickethouders",
+        "vip": "VIP-zone"
+      },
+      "details": {
+        "title": "Tafeldetails",
+        "choose": "Tafel of rij",
+        "none": "Deze plattegrond heeft geen tafels of rijen.",
+        "counts": "{seated} geplaatst · {free} van {capacity} vrij",
+        "tickets": "{count, plural, one {# plaats bezet door een ticket} other {# plaatsen bezet door tickets}}",
+        "sponsor": "Aangeboden door {name}",
+        "vipZone": "VIP-zone",
+        "vipFromPlan": "In een VIP-sectie van de plattegrond",
+        "warnings": "Controleer deze tafel",
+        "warnDeclined": "{name} heeft afgezegd en zit nog aan tafel.",
+        "warnVipOutside": "{party} is een VIP-gezelschap buiten een VIP-zone.",
+        "warnNotVip": "{party} is geen VIP-gezelschap maar zit in een VIP-zone.",
+        "meals": "Maaltijden",
+        "mealCount": "{meal}: {count}",
+        "noMeal": "Niet gekozen",
+        "empty": "Hier zit nog niemand. Plaats een gezelschap uit de wachtrij.",
+        "unseatParty": "{party} weghalen",
+        "move": "Verplaatsen naar…",
+        "moveLabel": "{name} naar een andere tafel verplaatsen",
+        "unseat": "Weghalen",
+        "unseatLabel": "{name} weghalen",
+        "moveTo": "{name} verplaatsen",
+        "moveSubmit": "Verplaatsen",
+        "cancel": "Annuleren"
+      },
+      "done": {
+        "seated": "{count, plural, one {# gast} other {# gasten}} geplaatst aan {place}.",
+        "moved": "{name} verplaatst naar {place}.",
+        "unseated": "{count, plural, one {# gast staat} other {# gasten staan}} weer in de wachtrij.",
+        "vipOn": "{place} is nu een VIP-zone.",
+        "vipOff": "{place} is geen VIP-zone meer."
+      },
+      "warnings": {
+        "vip_outside": "{party} is een VIP-gezelschap en {place} is geen VIP-zone.",
+        "not_vip_inside": "{place} is een VIP-zone en {party} is geen VIP-gezelschap."
+      },
+      "errors": {
+        "forbidden": "Je kunt de tafelschikking zien, maar niet wijzigen.",
+        "cantFit": "Past niet: {asked, plural, one {# gast heeft} other {# gasten hebben}} een plaats nodig en daar {fits, plural, =0 {is geen plaats} one {is maar # plaats} other {zijn maar # plaatsen}} vrij.",
+        "declined": "Deze gast heeft afgezegd. Alleen gasten die niet hebben afgezegd kun je plaatsen.",
+        "unknown": "Deze gast staat niet meer op de lijst. De pagina wordt vernieuwd.",
+        "noPlan": "Hier is nog geen plattegrond voor.",
+        "noGuests": "Kies minstens één gast.",
+        "noPlace": "Kies een tafel of rij.",
+        "dropMiss": "Zet een gezelschap neer op een tafel of rij."
       }
     }
   },
