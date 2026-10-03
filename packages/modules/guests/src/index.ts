@@ -42,6 +42,26 @@ export {
   uninvitedWith,
   windowInputs,
 } from './domain/invitations.ts';
+// M4.1d: the RSVP flow (party link, QR, name + PIN, household answers, deadline, host tools).
+export {
+  checkHouseholdAnswers,
+  LOOKUP_ALPHABET,
+  LOOKUP_CODE_LENGTH,
+  lookupCodeFrom,
+  normalizeLookupCode,
+  normalizePin,
+  type PlusOneName,
+  participationRsvp,
+  partyRsvpState,
+  type RsvpAnswer,
+  type RsvpGuest,
+  type RsvpRefusal,
+  rsvpOpen,
+  type SubEventTally,
+  strictFullName,
+  strictName,
+  tally,
+} from './domain/rsvp.ts';
 export * from './dto.ts';
 export {
   addPartyGuestCommand,
@@ -91,6 +111,35 @@ export {
 } from './invitations.ts';
 export { privateColumns } from './private-columns.ts';
 export {
+  createRsvpLinksCommand,
+  findRsvpByNameCommand,
+  markRsvpSentCommand,
+  markRsvpViewedCommand,
+  PartyRsvpDetailDto,
+  PartyRsvpSummaryDto,
+  PUBLIC_RSVP_STATES,
+  PublicRsvpDto,
+  partyRsvpQuery,
+  publicRsvpQuery,
+  RSVP_LINK_PURPOSE,
+  RsvpOverviewDto,
+  RsvpSettingsDto,
+  reopenRsvpCommand,
+  resetRsvpLinkCommand,
+  resetRsvpPinCommand,
+  rsvpLinkRef,
+  rsvpLinksQuery,
+  rsvpLinkToken,
+  rsvpLookupTarget,
+  rsvpOverviewQuery,
+  rsvpPinFor,
+  rsvpSettingsQuery,
+  SubEventTallyDto,
+  setRsvpSettingsCommand,
+  submitRsvpCommand,
+} from './rsvp.ts';
+export { RSVP_LINK_TTL_MS, rsvpByContactTx } from './rsvp-state.ts';
+export {
   AGE_CLASSES,
   type AgeClass,
   ENTRY_SOURCES,
@@ -104,6 +153,8 @@ export {
   IMPORT_STATUSES,
   type ImportSource,
   type ImportStatus,
+  PARTY_RSVP_STATES,
+  type PartyRsvpState,
   RESPONSE_STATUSES,
   type ResponseStatus,
   SUB_EVENT_KINDS,

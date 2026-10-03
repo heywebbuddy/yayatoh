@@ -743,6 +743,13 @@
       "when": 1790986522595,
       "tag": "0105_glossy_tyger_tiger",
       "breakpoints": true
+    },
+    {
+      "idx": 106,
+      "version": "7",
+      "when": 1790986631919,
+      "tag": "0106_harsh_grey_gargoyle",
+      "breakpoints": true
     }
   ]
 }

@@ -113,13 +113,18 @@ import {
   addPartyGuestCommand,
   addPlusOneCommand,
   createPartyCommand,
+  createRsvpLinksCommand,
   createSubEventCommand,
   guessGuestMapping,
   guestImportBulk,
+  markRsvpSentCommand,
+  markRsvpViewedCommand,
   moveGuestCommand,
+  partyRsvpQuery,
   readGuestTable,
   recordSubEventResponseCommand,
   setInvitationsCommand,
+  setRsvpSettingsCommand,
   stageGuestImportCommand,
   updatePartyGuestCommand,
   validateGuestImportCommand,
@@ -2237,6 +2242,28 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   await withTenant(systemCtx(org.id), (tx) =>
     tx.execute(sql`insert into alerts.signals (org_id, kind, source_event_id, occurred_at)
       values (${org.id}, 'journey_step_failed', ${uuidv7()}, now() - interval '2 days')`),
+  );
+  // M4.1d: RSVP settings (deadline, name lookup), links for every party, the fixture party sent
+  // and opened through its link (isolation coverage of `rsvp_settings` and `party_rsvp`).
+  await executeCommand(
+    setRsvpSettingsCommand,
+    { eventId: event.id, deadline: new Date(event.startsAt.getTime() - 7 * 86_400_000), nameLookup: true },
+    ctx(),
+    ports,
+  );
+  await executeCommand(createRsvpLinksCommand, { eventId: event.id }, ctx(), ports);
+  await executeCommand(markRsvpSentCommand, { eventId: event.id, partyId: party.id }, ctx(), ports);
+  const partyLink = await executeQuery(
+    partyRsvpQuery,
+    { eventId: event.id, partyId: party.id },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    markRsvpViewedCommand,
+    { token: partyLink.token ?? '' },
+    createCtx({ orgId: org.id, now: new Date(event.startsAt.getTime() - 30 * 86_400_000) }),
+    ports,
   );
   return {
     org,

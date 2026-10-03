@@ -4,8 +4,11 @@ import {
   type GuestDto,
   guestListQuery,
   type HistoryEntryDto,
+  PARTY_RSVP_STATES,
   type PartyWithGuestsDto,
   partyHistoryQuery,
+  rsvpLinksQuery,
+  rsvpOverviewQuery,
 } from '@yayatoh/guests';
 import { executeQuery } from '@yayatoh/kernel';
 import { isProfileKey, navIncludes, navLabelKey, PROFILES } from '@yayatoh/platform';
@@ -30,11 +33,21 @@ import {
   updateGuestAction,
   updatePartyAction,
 } from './actions.ts';
+import { PartyRsvp } from './party-rsvp.tsx';
+import { rsvpUrl } from './rsvp/links.ts';
 
 const PAGE_SIZE = 50;
 const UUID = /^[0-9a-f-]{36}$/;
 
-type Search = { q?: string; side?: string; tag?: string; vip?: string; page?: string; history?: string };
+type Search = {
+  q?: string;
+  side?: string;
+  tag?: string;
+  vip?: string;
+  page?: string;
+  history?: string;
+  rsvp?: string;
+};
 
 /** A disclosure whose content is a named region (so its forms can be found by name). */
 function Disclosure({ summary, children }: { summary: string; children: ReactNode }) {
@@ -87,7 +100,9 @@ export default async function GuestsPage({
   const tag = (sp.tag ?? '').trim().slice(0, 40);
   const vip = sp.vip === 'yes' ? true : sp.vip === 'no' ? false : undefined;
   const page = Math.max(1, Math.min(1000, Number.parseInt(sp.page ?? '1', 10) || 1));
-  const filtered = !!(q || side || tag || vip !== undefined);
+  // M4.1d: parties at one RSVP step.
+  const rsvp = PARTY_RSVP_STATES.find((s) => s === sp.rsvp);
+  const filtered = !!(q || side || tag || vip !== undefined || rsvp);
   const list = await executeQuery(
     guestListQuery,
     {
@@ -96,12 +111,23 @@ export default async function GuestsPage({
       side: side || undefined,
       tag: tag || undefined,
       vip,
+      rsvp,
       limit: PAGE_SIZE,
       offset: (page - 1) * PAGE_SIZE,
     },
     data.ctx,
     ports,
   );
+  const listed = list.parties.map((p) => p.id);
+  const [rsvpOverview, rsvpLinks] = await Promise.all([
+    executeQuery(rsvpOverviewQuery, { eventId: ev.id, partyIds: listed }, data.ctx, ports),
+    canWrite && listed.length
+      ? executeQuery(rsvpLinksQuery, { eventId: ev.id, partyIds: listed }, data.ctx, ports)
+      : Promise.resolve([]),
+  ]);
+  const rsvpOf = new Map(rsvpOverview.parties.map((r) => [r.partyId, r]));
+  const linkOf = new Map(rsvpLinks.map((l) => [l.partyId, rsvpUrl(l.token)]));
+  const rsvpSubName = new Map(rsvpOverview.subEvents.map((s) => [s.id, s.name]));
   const historyFor = sp.history && UUID.test(sp.history) ? sp.history : null;
   const history: HistoryEntryDto[] =
     historyFor && list.parties.some((p) => p.id === historyFor)
@@ -291,7 +317,7 @@ export default async function GuestsPage({
   ];
   const filterHref = (over: Partial<Search>) => {
     const u = new URLSearchParams();
-    const merged = { q, side, tag, vip: sp.vip ?? '', page: '', ...over };
+    const merged = { q, side, tag, vip: sp.vip ?? '', rsvp: rsvp ?? '', page: '', ...over };
     for (const [k, v] of Object.entries(merged)) if (v) u.set(k, String(v));
     const s = u.toString();
     return `/o/${org}/e/${event}/guests${s ? `?${s}` : ''}`;
@@ -354,6 +380,12 @@ export default async function GuestsPage({
       >
         {t('subEvents.link')}
       </Link>
+      <Link
+        href={`/o/${org}/e/${event}/guests/rsvp`}
+        className="inline-flex min-h-8 items-center self-start rounded-[10px] text-body font-bold text-primary-ink underline-offset-2 hover:underline"
+      >
+        {t('rsvpHost.link')}
+      </Link>
       {canWrite ? null : <p className="text-body text-ink-2">{tp('viewerNotice')}</p>}
 
       <section aria-labelledby="guest-counts-heading" className="flex flex-col gap-3">
@@ -387,7 +419,7 @@ export default async function GuestsPage({
             <search aria-label={tp('filters')}>
               <form
                 // Remount on navigation: uncontrolled fields would keep the previous filters' values.
-                key={`${q}|${side}|${tag}|${sp.vip ?? ''}`}
+                key={`${q}|${side}|${tag}|${sp.vip ?? ''}|${rsvp ?? ''}`}
                 method="get"
                 className="flex flex-wrap items-end gap-3 rounded-card border border-line bg-surface p-4 glass"
               >
@@ -450,6 +482,19 @@ export default async function GuestsPage({
                     <option value="">{tp('vipAny')}</option>
                     <option value="yes">{tp('vipOnly')}</option>
                     <option value="no">{tp('vipNot')}</option>
+                  </select>
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label htmlFor="guest-rsvp" className="text-[13px] font-bold text-ink">
+                    {t('rsvpHost.filter')}
+                  </label>
+                  <select id="guest-rsvp" name="rsvp" defaultValue={rsvp ?? ''} className="field">
+                    <option value="">{t('rsvpHost.filterAny')}</option>
+                    {PARTY_RSVP_STATES.map((s) => (
+                      <option key={s} value={s}>
+                        {t(`rsvpHost.states.${s}`)}
+                      </option>
+                    ))}
                   </select>
                 </div>
                 <button type="submit" className={buttonClass('secondary')}>
@@ -685,6 +730,16 @@ export default async function GuestsPage({
                             </Disclosure>
                           </div>
                         ) : null}
+                        <PartyRsvp
+                          org={org}
+                          event={event}
+                          party={p}
+                          summary={rsvpOf.get(p.id)}
+                          url={linkOf.get(p.id) ?? null}
+                          canWrite={canWrite}
+                          locked={rsvpOverview.locked}
+                          subName={rsvpSubName}
+                        />
                         {historyFor === p.id ? (
                           <section aria-labelledby={`history-${p.id}`} className="flex flex-col gap-2">
                             <h4 id={`history-${p.id}`} className="text-caption font-medium text-ink-2">
