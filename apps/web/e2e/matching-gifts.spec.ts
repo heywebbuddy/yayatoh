@@ -249,11 +249,19 @@ test.describe('matching gifts (M4.8f)', () => {
     await page.keyboard.type('500');
     await page.keyboard.press('Enter');
     await expect(form.getByText('Match added')).toBeVisible();
+    // The paddle-raise console shows the running match with its public name.
+    await page.goto(`${g.donations}/paddle-raise`);
+    const onConsole = page.getByTestId('console-match');
+    await expect(onConsole).toContainText('Every gift doubled up to $500.00');
+    await expect(onConsole).toContainText('Thanks to The Keys. $0.00 matched of $500.00');
+    await page.goto(g.matches);
     const card = matchCard(page, 'Key Sponsor');
     const close = card.getByRole('button', { name: 'Close Key Sponsor’s match and record the pledge' });
     await close.focus();
     await page.keyboard.press('Enter');
-    await expect(card.getByTestId('match-pledge')).toHaveText('It came to nothing, so no pledge was recorded.');
+    await expect(card.getByTestId('match-pledge')).toHaveText(
+      'It came to nothing, so no pledge was recorded.',
+    );
   });
 
   test('a viewer sees matches but none of the actions, and cannot download the list', async ({
@@ -272,7 +280,9 @@ test.describe('matching gifts (M4.8f)', () => {
     await expect(
       viewer.getByText('You can see matches. Ask an organizer to add, close or cancel one.'),
     ).toBeVisible();
-    await expect(matchCard(viewer, 'Viewer Bank').getByText('Every gift doubled up to $1,000.00')).toBeVisible();
+    await expect(
+      matchCard(viewer, 'Viewer Bank').getByText('Every gift doubled up to $1,000.00'),
+    ).toBeVisible();
     await expect(viewer.getByRole('region', { name: 'Add a match' })).toHaveCount(0);
     await expect(viewer.getByRole('button', { name: /Close|Cancel/ })).toHaveCount(0);
     await expect(viewer.getByRole('button', { name: 'Export employer list' })).toHaveCount(0);
