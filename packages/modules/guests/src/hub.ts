@@ -48,7 +48,11 @@ export interface PartyHubReaders {
     people: readonly HubPerson[],
   ) => Promise<{ seats: readonly HubSeat[]; unseated: number } | null>;
   /** The party's active tickets with their current codes (others are left out). */
-  readonly tickets: (tx: TenantTx, eventId: string, ticketIds: readonly string[]) => Promise<readonly HubTicket[]>;
+  readonly tickets: (
+    tx: TenantTx,
+    eventId: string,
+    ticketIds: readonly string[],
+  ) => Promise<readonly HubTicket[]>;
 }
 
 const Token = z.string().min(10).max(200);
@@ -74,6 +78,8 @@ export const PartyHubDto = z.discriminatedUnion('state', [
     partyName: z.string(),
     /** The serial of the party's wallet pass. */
     passSerial: z.string(),
+    /** Whether the party opened its invitation before (the page records the first open only). */
+    viewed: z.boolean(),
     rsvp: z.object({
       open: z.boolean(),
       deadline: z.date().nullable(),
@@ -138,7 +144,8 @@ export const partyHubQuery = (readers: PartyHubReaders) =>
     handler: async ({ input, ctx, tx }) => {
       const row = await linkPartyTx(tx, input.token);
       const ev = await eventOfTx(tx, row.eventId);
-      if (row.linkExpiresAt.getTime() <= ctx.now.getTime()) return { state: 'expired' as const, eventName: ev.name };
+      if (row.linkExpiresAt.getTime() <= ctx.now.getTime())
+        return { state: 'expired' as const, eventName: ev.name };
       const settings = await settingsTx(tx, row.eventId);
       const party = await partyOfTx(tx, row.eventId, row.partyId);
       const all = await rsvpFactsTx(tx, row.eventId, [row.partyId]);
@@ -193,6 +200,7 @@ export const partyHubQuery = (readers: PartyHubReaders) =>
         endsAt: ev.endsAt,
         partyName: party.envelopeName ?? party.name,
         passSerial: guestPassSerial(row.partyId),
+        viewed: row.viewedAt !== null,
         rsvp: {
           open: rsvpOpen(settings?.deadline ?? null, ctx.now, row.reopened),
           deadline: settings?.deadline ?? null,

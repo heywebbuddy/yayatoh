@@ -11,6 +11,8 @@ export function appOrigin(): string {
 
 /** A party's RSVP link, and the paper fallback's address. */
 export const rsvpUrl = (token: string) => `${appOrigin()}/rsvp/${encodeURIComponent(token)}`;
+/** A party's guest page (M4.7a): the same token as its RSVP link. */
+export const hubUrl = (token: string) => `${appOrigin()}/hub/${encodeURIComponent(token)}`;
 export const rsvpFindUrl = (code: string) => `${appOrigin()}/rsvp/find/${code}`;
 
 /** An event's public contact collector (M4.1f). */

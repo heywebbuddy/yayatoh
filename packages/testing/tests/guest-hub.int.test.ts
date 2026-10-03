@@ -1,3 +1,4 @@
+import { withTenant } from '@yayatoh/db';
 import { type AdminSql, adminClient, closePools } from '@yayatoh/db/testing';
 import {
   FAKE_PASS_CONTENT_TYPE,
@@ -11,7 +12,6 @@ import {
 } from '@yayatoh/guests';
 import { type Ctx, createCtx, executeCommand, executeQuery, isDomainError } from '@yayatoh/kernel';
 import { partyTicketsTx } from '@yayatoh/ticketing';
-import { withTenant } from '@yayatoh/db';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import {
   type GuestHubScenario,
@@ -103,6 +103,7 @@ describe('the party hub (M4.7a)', () => {
         'tickets',
         'timezone',
         'siteCode',
+        'viewed',
       ].sort(),
     );
     const json = JSON.stringify(h);

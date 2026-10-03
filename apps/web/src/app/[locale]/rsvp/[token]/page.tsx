@@ -9,6 +9,7 @@ import { Alert, EmptyState, Label, PageHeader, StatusPill } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { Link } from '@/i18n/navigation.ts';
 import { ports } from '@/server/ports.ts';
 import { submitRsvpAction } from './actions.ts';
 import { HouseholdForm, type HouseholdGuest } from './household-form.tsx';
@@ -53,6 +54,7 @@ export default async function RsvpPage({
     view.state === 'open' ? await executeQuery(publicRsvpQuestionsQuery, { token }, ctx, ports) : null;
   const { thanks } = await searchParams;
   const t = await getTranslations('rsvp');
+  const tHub = await getTranslations('hub');
 
   const when = (start: Date, end: Date) =>
     new Intl.DateTimeFormat(locale, {
@@ -187,6 +189,16 @@ export default async function RsvpPage({
             />
           </>
         )
+      ) : null}
+      {view.state !== 'expired' ? (
+        <p className="m-0">
+          <Link
+            href={`/hub/${encodeURIComponent(token)}`}
+            className="inline-flex min-h-11 items-center font-bold text-primary-ink underline underline-offset-2"
+          >
+            {tHub('openHub')}
+          </Link>
+        </p>
       ) : null}
     </main>
   );
