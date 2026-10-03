@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { expectAccessible } from './helpers.ts';
+import { expectAccessibleBothModes } from './helpers.ts';
 
 /**
  * /dev/login (batch 3h, owner 2026-10-02): the newcomer and the staff persona are labelled by what
@@ -25,7 +25,7 @@ test.describe('dev sign-in personas', () => {
     await expect(omar.getByRole('button', { name: 'Sign in' })).toHaveCount(0);
     const admin = omar.getByRole('link', { name: 'Open the admin console' });
     await expect(admin).toHaveAttribute('href', /:3001\/sign-in$/);
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
   });
 
   test('the newcomer signs in to the no-organization start, by keyboard', async ({ page }) => {
@@ -33,7 +33,8 @@ test.describe('dev sign-in personas', () => {
     const nia = page.locator('[data-persona="nia@newcomer.test"]');
     await nia.getByRole('button', { name: 'Sign in' }).focus();
     await page.keyboard.press('Enter');
-    await expect(page.getByRole('heading', { name: "You're not in an organization yet" })).toBeVisible();
+    await expect(page).toHaveURL(/\/o$/);
+    await expect(page.getByText("You're not in an organization yet", { exact: true })).toBeVisible();
   });
 
   test('the staff link is reachable by keyboard and the Arabic page labels both cards', async ({ page }) => {
@@ -45,6 +46,6 @@ test.describe('dev sign-in personas', () => {
     const admin = omar.getByRole('link', { name: 'فتح وحدة تحكم الإدارة' });
     await admin.focus();
     await expect(admin).toBeFocused();
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
   });
 });
