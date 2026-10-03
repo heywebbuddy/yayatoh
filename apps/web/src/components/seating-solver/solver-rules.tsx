@@ -14,7 +14,7 @@ import {
 } from '@yayatoh/seating/client';
 import { Alert, Badge, Button, Input, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
-import { type FormEvent, useId, useState, useTransition } from 'react';
+import { type FormEvent, useCallback, useId, useState, useTransition } from 'react';
 import type { SolverState } from '@/app/[locale]/o/[org]/e/[event]/seating/solver/actions.ts';
 import { useRouter } from '@/i18n/navigation.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
@@ -32,30 +32,35 @@ export interface RuleNames {
 /** A rule in words ("Keep the Bride side apart from the Groom side"). */
 export function useDescribeRule(names: RuleNames) {
   const t = useTranslations('seating.solver.rules.describe');
-  const partyName = (id: string) => names.parties.find((p) => p.id === id)?.name ?? '?';
-  const target = (x: RuleTarget) =>
-    x.by === 'party'
-      ? t('targetParty', { value: partyName(x.value) })
-      : x.by === 'tag'
-        ? t('targetTag', { value: x.value })
-        : t('targetSide', { value: x.value });
-  return (r: SolverRuleSpec): string => {
-    switch (r.kind) {
-      case 'keep_together': {
-        const g = r.params.group;
-        if (g.by === 'party') return t('togetherParty');
-        return g.by === 'tag' ? t('togetherTag', { value: g.value }) : t('togetherSide', { value: g.value });
+  return useCallback(
+    (r: SolverRuleSpec): string => {
+      const partyName = (id: string) => names.parties.find((p) => p.id === id)?.name ?? '?';
+      const target = (x: RuleTarget) =>
+        x.by === 'party'
+          ? t('targetParty', { value: partyName(x.value) })
+          : x.by === 'tag'
+            ? t('targetTag', { value: x.value })
+            : t('targetSide', { value: x.value });
+      switch (r.kind) {
+        case 'keep_together': {
+          const g = r.params.group;
+          if (g.by === 'party') return t('togetherParty');
+          return g.by === 'tag'
+            ? t('togetherTag', { value: g.value })
+            : t('togetherSide', { value: g.value });
+        }
+        case 'keep_apart':
+          return t('apart', { a: target(r.params.a), b: target(r.params.b) });
+        case 'vip_near_stage':
+          return t('vip');
+        case 'access_near_exit':
+          return t('access', { tag: r.params.tag });
+        case 'table_max':
+          return t('tableMax', { max: r.params.max });
       }
-      case 'keep_apart':
-        return t('apart', { a: target(r.params.a), b: target(r.params.b) });
-      case 'vip_near_stage':
-        return t('vip');
-      case 'access_near_exit':
-        return t('access', { tag: r.params.tag });
-      case 'table_max':
-        return t('tableMax', { max: r.params.max });
-    }
-  };
+    },
+    [t, names],
+  );
 }
 
 function weightError(v: string) {
@@ -127,6 +132,7 @@ function RuleRow({
       {canWrite ? (
         <form
           onSubmit={save}
+          noValidate
           aria-label={t('editLabel', { rule: text })}
           className="flex flex-wrap items-end gap-2"
         >

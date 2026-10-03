@@ -1,10 +1,26 @@
 'use client';
 
 import type { SolverProblemDto } from '@yayatoh/seating';
-import { compile, evaluate, type SolverProblem, type SolverRuleSpec } from '@yayatoh/seating/client';
+import {
+  compile,
+  type Evaluation,
+  evaluate,
+  type SolverProblem,
+  type SolverRuleSpec,
+} from '@yayatoh/seating/client';
 import { Alert, Badge, Button, fieldClass, Input, ProgressBar } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
-import { type FormEvent, useEffect, useId, useMemo, useState, useTransition } from 'react';
+import {
+  type FormEvent,
+  memo,
+  useCallback,
+  useDeferredValue,
+  useEffect,
+  useId,
+  useMemo,
+  useState,
+  useTransition,
+} from 'react';
 import type { SolverState } from '@/app/[locale]/o/[org]/e/[event]/seating/solver/actions.ts';
 import { Link, useRouter } from '@/i18n/navigation.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
@@ -24,12 +40,37 @@ async function keyOf(nonce: string, tables: { itemId: string; guestIds: string[]
   return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, '0')).join('');
 }
 
+/** Who is proposed where, each table's room, and what blocks accepting it. */
+function layoutOf(
+  live: Seats,
+  problem: SolverProblemDto,
+  names: ProposalNames,
+  evaluation: Evaluation | null,
+) {
+  const place = new Map(problem.places.map((p) => [p.itemId, p]));
+  const fixedAt = new Map<string, number>();
+  for (const item of Object.values(problem.fixed)) fixedAt.set(item, (fixedAt.get(item) ?? 0) + 1);
+  const proposedAt = new Map<string, string[]>();
+  for (const [g, item] of Object.entries(live))
+    if (item) proposedAt.set(item, [...(proposedAt.get(item) ?? []), g]);
+  const room = (itemId: string) => (place.get(itemId)?.capacity ?? 0) - (fixedAt.get(itemId) ?? 0);
+  const free = (itemId: string) => room(itemId) - (proposedAt.get(itemId)?.length ?? 0);
+  const tables = names.places.filter((p) => proposedAt.has(p.itemId));
+  const inQueue = Object.entries(live)
+    .filter(([, item]) => item === null)
+    .map(([g]) => g);
+  const hardAt = (itemId: string) => (evaluation?.hard ?? []).filter((v) => v.itemIds.includes(itemId));
+  const blocked = (itemId: string) => free(itemId) < 0 || hardAt(itemId).length > 0;
+  return { place, fixedAt, proposedAt, room, free, tables, inQueue, hardAt, blocked };
+}
+
 /**
  * The proposal (M6.12a): run the solver (a Web Worker; progress and a Stop button), read the
  * text summary, move any proposed guest with the table chooser beside their name (the list is
  * the whole editor: no dragging needed), then accept one table or all. Guests seated by hand
  * are never part of a proposal. Hard-rule breaks and over-full tables are shown and stop the
- * accept until the host changes the proposal.
+ * accept until the host changes the proposal. The summary renders at once; the (long) list of
+ * tables follows as a deferred render.
  */
 export function SolverProposal({
   problem,
@@ -83,29 +124,12 @@ export function SolverProposal({
     () => (live ? evaluate(compiled, { ...live, ...problem.fixed }) : null),
     [compiled, live, problem.fixed],
   );
+  const layout = live ? layoutOf(live, problem, names, evaluation) : null;
+  const anyBlocked = layout ? layout.tables.some((p) => layout.blocked(p.itemId)) : false;
 
-  const place = new Map(problem.places.map((p) => [p.itemId, p]));
-  const fixedAt = new Map<string, number>();
-  for (const item of Object.values(problem.fixed)) fixedAt.set(item, (fixedAt.get(item) ?? 0) + 1);
-  const proposedAt = new Map<string, string[]>();
-  for (const [g, item] of Object.entries(live ?? {}))
-    if (item) proposedAt.set(item, [...(proposedAt.get(item) ?? []), g]);
-  const room = (itemId: string) => (place.get(itemId)?.capacity ?? 0) - (fixedAt.get(itemId) ?? 0);
-  const tables = names.places.filter((p) => proposedAt.has(p.itemId));
-  const inQueue = Object.entries(live ?? {})
-    .filter(([, item]) => item === null)
-    .map(([g]) => g);
-  const rule = (ruleId: string | null) => problem.rules.find((r) => r.id === ruleId);
-  const brokenAt = (itemId: string) =>
-    (evaluation?.hard ?? [])
-      .filter((v) => v.itemIds.includes(itemId))
-      .map((v) => {
-        const r = rule(v.ruleId);
-        return r ? describe(r) : t('tables.over');
-      });
-  const overAt = (itemId: string) => (proposedAt.get(itemId)?.length ?? 0) > room(itemId);
-  const blocked = (itemId: string) => overAt(itemId) || brokenAt(itemId).length > 0;
-  const anyBlocked = tables.some((p) => blocked(p.itemId));
+  // The list follows the proposal as a deferred render (hundreds of choosers).
+  const listSeats = useDeferredValue(live);
+  const listEvaluation = useDeferredValue(evaluation);
 
   const runIt = (e: FormEvent) => {
     e.preventDefault();
@@ -130,7 +154,8 @@ export function SolverProposal({
 
   const send = (itemIds: string[]) =>
     startTransition(async () => {
-      const chosen = itemIds.map((itemId) => ({ itemId, guestIds: proposedAt.get(itemId) ?? [] }));
+      if (!layout) return;
+      const chosen = itemIds.map((itemId) => ({ itemId, guestIds: layout.proposedAt.get(itemId) ?? [] }));
       const key = await keyOf(nonce, chosen);
       const r = await accept({ tables: chosen, key });
       if (r.ok) {
@@ -163,7 +188,10 @@ export function SolverProposal({
       }
     });
 
-  const move = (guestId: string, to: string) => setSeats((s) => (s ? { ...s, [guestId]: to || null } : s));
+  const move = useCallback(
+    (guestId: string, to: string) => setSeats((s) => (s ? { ...s, [guestId]: to || null } : s)),
+    [],
+  );
 
   const seatedCount = Object.values(live ?? {}).filter(Boolean).length;
   const running = run.state === 'running';
@@ -223,7 +251,7 @@ export function SolverProposal({
         {feedback ? <Alert tone={feedback.tone} title={feedback.text} /> : null}
       </div>
 
-      {live && evaluation && run.state === 'done' ? (
+      {live && layout && evaluation && run.state === 'done' ? (
         <>
           <section
             aria-labelledby={`${id}-sum`}
@@ -236,7 +264,11 @@ export function SolverProposal({
               {t('summary.done', { seconds: (run.ms / 1000).toFixed(1), seed: run.seed })}
             </p>
             <p className="m-0 text-body">
-              {t('summary.seated', { count: seatedCount, tables: tables.length, queue: inQueue.length })}
+              {t('summary.seated', {
+                count: seatedCount,
+                tables: layout.tables.length,
+                queue: layout.inQueue.length,
+              })}
             </p>
             <p className="m-0 text-body font-semibold">
               {evaluation.hard.length
@@ -265,12 +297,12 @@ export function SolverProposal({
             ))}
           </section>
 
-          {canWrite && tables.length ? (
+          {canWrite && layout.tables.length ? (
             <div>
               <Button
                 type="button"
-                onClick={() => send(tables.map((p) => p.itemId))}
-                disabled={pending || anyBlocked}
+                onClick={() => send(layout.tables.map((p) => p.itemId))}
+                disabled={pending || anyBlocked || listSeats !== live}
               >
                 {t('tables.acceptAll')}
               </Button>
@@ -278,88 +310,18 @@ export function SolverProposal({
             </div>
           ) : null}
 
-          <h3 className="m-0 text-body font-bold text-ink">{t('tables.heading')}</h3>
-          {tables.length === 0 ? <p className="m-0 text-body text-ink-2">{t('tables.none')}</p> : null}
-          <ul className="m-0 grid list-none gap-3 p-0 md:grid-cols-2">
-            {tables.map((p) => {
-              const guests = proposedAt.get(p.itemId) ?? [];
-              const free = room(p.itemId) - guests.length;
-              const broken = brokenAt(p.itemId);
-              return (
-                <li key={p.itemId}>
-                  <section
-                    aria-label={t('tables.region', { label: p.label })}
-                    className="flex flex-col gap-2 rounded-md border border-line p-3"
-                  >
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <h4 className="m-0 text-body font-bold text-ink">
-                        {t('tables.region', { label: p.label })}
-                      </h4>
-                      <Badge tone={free < 0 ? 'danger' : 'neutral'}>
-                        {t('tables.fill', {
-                          proposed: guests.length,
-                          seated: fixedAt.get(p.itemId) ?? 0,
-                          free: Math.max(0, free),
-                          capacity: place.get(p.itemId)?.capacity ?? 0,
-                        })}
-                      </Badge>
-                    </div>
-                    {free < 0 ? (
-                      <Alert tone="warning" title={t('tables.overFull', { count: -free })} />
-                    ) : null}
-                    {broken.length ? (
-                      <Alert tone="warning" title={t('tables.broken', { rules: broken.join('; ') })} />
-                    ) : null}
-                    <ul className="m-0 flex list-none flex-col gap-2 p-0">
-                      {guests.map((g) => (
-                        <GuestRow
-                          key={g}
-                          guestId={g}
-                          name={names.guests.get(g)}
-                          value={p.itemId}
-                          places={names.places}
-                          free={(itemId) => room(itemId) - (proposedAt.get(itemId)?.length ?? 0)}
-                          onMove={move}
-                          canWrite={canWrite}
-                        />
-                      ))}
-                    </ul>
-                    {canWrite ? (
-                      <div>
-                        <Button
-                          type="button"
-                          variant="secondary"
-                          size="sm"
-                          disabled={pending || blocked(p.itemId)}
-                          onClick={() => send([p.itemId])}
-                        >
-                          {t('tables.accept', { label: p.label })}
-                        </Button>
-                      </div>
-                    ) : null}
-                  </section>
-                </li>
-              );
-            })}
-          </ul>
-          {inQueue.length ? (
-            <section aria-label={t('tables.queueHeading')} className="flex flex-col gap-2">
-              <h3 className="m-0 text-body font-bold text-ink">{t('tables.queueHeading')}</h3>
-              <ul className="m-0 flex list-none flex-col gap-2 p-0">
-                {inQueue.map((g) => (
-                  <GuestRow
-                    key={g}
-                    guestId={g}
-                    name={names.guests.get(g)}
-                    value=""
-                    places={names.places}
-                    free={(itemId) => room(itemId) - (proposedAt.get(itemId)?.length ?? 0)}
-                    onMove={move}
-                    canWrite={canWrite}
-                  />
-                ))}
-              </ul>
-            </section>
+          {listSeats ? (
+            <ProposalList
+              seats={listSeats}
+              evaluation={listEvaluation}
+              problem={problem}
+              names={names}
+              describe={describe}
+              canWrite={canWrite}
+              pending={pending}
+              onMove={move}
+              onAccept={send}
+            />
           ) : null}
         </>
       ) : null}
@@ -367,21 +329,132 @@ export function SolverProposal({
   );
 }
 
+/** The proposed tables and the queue, each guest with a table chooser (rendered deferred). */
+const ProposalList = memo(function ProposalList({
+  seats,
+  evaluation,
+  problem,
+  names,
+  describe,
+  canWrite,
+  pending,
+  onMove,
+  onAccept,
+}: {
+  seats: Seats;
+  evaluation: Evaluation | null;
+  problem: SolverProblemDto;
+  names: ProposalNames;
+  describe: (r: SolverRuleSpec) => string;
+  canWrite: boolean;
+  pending: boolean;
+  onMove: (guestId: string, to: string) => void;
+  onAccept: (itemIds: string[]) => void;
+}) {
+  const t = useTranslations('seating.solver.tables');
+  const layout = layoutOf(seats, problem, names, evaluation);
+  const options = names.places.map((p) => ({ ...p, free: Math.max(0, layout.free(p.itemId)) }));
+  const brokenAt = (itemId: string) =>
+    layout.hardAt(itemId).map((v) => {
+      const r = problem.rules.find((x) => x.id === v.ruleId);
+      return r ? describe(r) : t('over');
+    });
+  return (
+    <>
+      <h3 className="m-0 text-body font-bold text-ink">{t('heading')}</h3>
+      {layout.tables.length === 0 ? <p className="m-0 text-body text-ink-2">{t('none')}</p> : null}
+      <ul className="m-0 grid list-none gap-3 p-0 md:grid-cols-2">
+        {layout.tables.map((p) => {
+          const guests = layout.proposedAt.get(p.itemId) ?? [];
+          const free = layout.free(p.itemId);
+          const broken = brokenAt(p.itemId);
+          return (
+            <li key={p.itemId}>
+              <section
+                aria-label={t('region', { label: p.label })}
+                className="flex flex-col gap-2 rounded-md border border-line p-3"
+              >
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <h4 className="m-0 text-body font-bold text-ink">{t('region', { label: p.label })}</h4>
+                  <Badge tone={free < 0 ? 'danger' : 'neutral'}>
+                    {t('fill', {
+                      proposed: guests.length,
+                      seated: layout.fixedAt.get(p.itemId) ?? 0,
+                      free: Math.max(0, free),
+                      capacity: layout.place.get(p.itemId)?.capacity ?? 0,
+                    })}
+                  </Badge>
+                </div>
+                {free < 0 ? <Alert tone="warning" title={t('overFull', { count: -free })} /> : null}
+                {broken.length ? (
+                  <Alert tone="warning" title={t('broken', { rules: broken.join('; ') })} />
+                ) : null}
+                <ul className="m-0 flex list-none flex-col gap-2 p-0">
+                  {guests.map((g) => (
+                    <GuestRow
+                      key={g}
+                      guestId={g}
+                      name={names.guests.get(g)}
+                      value={p.itemId}
+                      options={options}
+                      onMove={onMove}
+                      canWrite={canWrite}
+                    />
+                  ))}
+                </ul>
+                {canWrite ? (
+                  <div>
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      size="sm"
+                      disabled={pending || layout.blocked(p.itemId)}
+                      onClick={() => onAccept([p.itemId])}
+                    >
+                      {t('accept', { label: p.label })}
+                    </Button>
+                  </div>
+                ) : null}
+              </section>
+            </li>
+          );
+        })}
+      </ul>
+      {layout.inQueue.length ? (
+        <section aria-label={t('queueHeading')} className="flex flex-col gap-2">
+          <h3 className="m-0 text-body font-bold text-ink">{t('queueHeading')}</h3>
+          <ul className="m-0 flex list-none flex-col gap-2 p-0">
+            {layout.inQueue.map((g) => (
+              <GuestRow
+                key={g}
+                guestId={g}
+                name={names.guests.get(g)}
+                value=""
+                options={options}
+                onMove={onMove}
+                canWrite={canWrite}
+              />
+            ))}
+          </ul>
+        </section>
+      ) : null}
+    </>
+  );
+});
+
 /** A proposed guest and the table chooser that moves them (the keyboard path; no drag). */
 function GuestRow({
   guestId,
   name,
   value,
-  places,
-  free,
+  options,
   onMove,
   canWrite,
 }: {
   guestId: string;
   name: { name: string; party: string } | undefined;
   value: string;
-  places: readonly { itemId: string; label: string }[];
-  free: (itemId: string) => number;
+  options: readonly { itemId: string; label: string; free: number }[];
   onMove: (guestId: string, to: string) => void;
   canWrite: boolean;
 }) {
@@ -398,9 +471,9 @@ function GuestRow({
           className={fieldClass('sm', 'w-auto pe-9')}
         >
           <option value="">{t('queueOption')}</option>
-          {places.map((p) => (
+          {options.map((p) => (
             <option key={p.itemId} value={p.itemId}>
-              {t('optionFree', { label: p.label, free: Math.max(0, free(p.itemId)) })}
+              {t('optionFree', { label: p.label, free: p.free })}
             </option>
           ))}
         </select>
