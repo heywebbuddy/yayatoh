@@ -107,10 +107,12 @@ export const virtualCheckpointsQuery = tenantQuery({
         checkpointId: checkpoints.id,
         sessionId: checkpoints.sessionId,
         name: checkpoints.name,
-        checkedIn: sql<number>`(select count(*)::int from ${virtualAttendance} va where va.checkpoint_id = ${checkpoints.id})`,
+        checkedIn: sql<number>`count(${virtualAttendance.id})::int`,
       })
       .from(checkpoints)
+      .leftJoin(virtualAttendance, eq(virtualAttendance.checkpointId, checkpoints.id))
       .where(and(eq(checkpoints.eventId, input.eventId), eq(checkpoints.kind, VIRTUAL_CHECKPOINT_KIND)))
+      .groupBy(checkpoints.id)
       .orderBy(checkpoints.name);
     return rows.flatMap((r) => (r.sessionId ? [{ ...r, sessionId: r.sessionId }] : []));
   },

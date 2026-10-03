@@ -403,9 +403,7 @@ export const checkpoints = tenantTable(
       .where(sql`self_checkin_token is not null`),
     index('checkpoints_org_session_idx').on(t.orgId, t.sessionId).where(sql`session_id is not null`),
     // M6.9a: one virtual checkpoint per session.
-    uniqueIndex('checkpoints_org_virtual_session_key')
-      .on(t.orgId, t.sessionId)
-      .where(sql`kind = 'virtual'`),
+    uniqueIndex('checkpoints_org_virtual_session_key').on(t.orgId, t.sessionId).where(sql`kind = 'virtual'`),
     check(
       'checkpoints_location_check',
       sql`(latitude is null) = (longitude is null) and (latitude is null or (latitude between -90 and 90 and longitude between -180 and 180))`,

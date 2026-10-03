@@ -163,6 +163,8 @@ export {
   TransferDto,
   transfersForOrderTx,
 } from './transfers.ts';
+// M6.9a: ticket type names for the virtual module's access modes.
+export { ticketTypeNamesTx } from './virtual-facts.ts';
 export {
   type FakeWalletPush,
   fakeWalletPassProvider,
@@ -172,5 +174,3 @@ export {
   walletPassSync,
   walletSerial,
 } from './wallet.ts';
-// M6.9a: ticket type names for the virtual module's access modes.
-export { ticketTypeNamesTx } from './virtual-facts.ts';

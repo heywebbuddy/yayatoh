@@ -114,7 +114,6 @@ export {
   type ArrivalSource,
   CHECKPOINT_KINDS,
   type CheckpointKind,
-  VIRTUAL_CHECKPOINT_KIND,
   DEVICE_EVENT_KINDS,
   type DeviceEventKind,
   FRAUD_NOTE_MAX,
@@ -135,6 +134,7 @@ export {
   STAFF_PUSH_KINDS,
   type StaffAlertKind,
   type StaffPushKind,
+  VIRTUAL_CHECKPOINT_KIND,
 } from './schema.ts';
 // M5.6a: session check-in (gates, scan in/out, overrides, attendance, self check-in flyers).
 export {

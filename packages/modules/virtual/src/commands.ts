@@ -7,13 +7,7 @@ import { ticketTypeNamesTx } from '@yayatoh/ticketing';
 import { and, eq, gte, lt, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { ACCESS_MODES, type AccessMode, effectiveAccess } from './domain/access.ts';
-import {
-  StreamDto,
-  StreamingUsageDto,
-  StreamKeyDto,
-  TicketAccessDto,
-  VirtualSetupDto,
-} from './dto.ts';
+import { StreamDto, StreamingUsageDto, StreamKeyDto, TicketAccessDto, VirtualSetupDto } from './dto.ts';
 import { currentVideoProvider, videoProvider } from './provider/registry.ts';
 import { streams, ticketAccess, watchMinutes } from './schema.ts';
 
@@ -65,7 +59,12 @@ async function ticketAccessListTx(tx: TenantTx, eventId: string): Promise<Ticket
   const chosen = await accessChoicesTx(tx, eventId);
   return (await ticketTypeNamesTx(tx, eventId)).map((t) => {
     const access = chosen.get(t.id) ?? null;
-    return { ticketTypeId: t.id, name: t.name, access, effective: effectiveAccess(ev.attendanceMode, access) };
+    return {
+      ticketTypeId: t.id,
+      name: t.name,
+      access,
+      effective: effectiveAccess(ev.attendanceMode, access),
+    };
   });
 }
 
@@ -146,7 +145,9 @@ export const setTicketAccessCommand = tenantCommand({
         target: [ticketAccess.orgId, ticketAccess.ticketTypeId],
         set: { access: input.access, updatedAt: ctx.now },
       });
-    const row = (await ticketAccessListTx(tx, input.eventId)).find((t) => t.ticketTypeId === input.ticketTypeId);
+    const row = (await ticketAccessListTx(tx, input.eventId)).find(
+      (t) => t.ticketTypeId === input.ticketTypeId,
+    );
     if (!row) throw new DomainError('internal');
     return row;
   },
@@ -180,7 +181,11 @@ export const createStreamCommand = tenantCommand({
     if (existing) return { sessionId: input.sessionId, stream: toStream(existing) };
     const provider = videoProvider();
     const orgId = requireOrg(ctx);
-    const live = await provider.createLiveStream({ orgId, sessionId: input.sessionId, idempotencyKey: input.sessionId });
+    const live = await provider.createLiveStream({
+      orgId,
+      sessionId: input.sessionId,
+      idempotencyKey: input.sessionId,
+    });
     await tx
       .insert(streams)
       .values({
@@ -247,7 +252,11 @@ export const revealStreamKeyCommand = tenantCommand({
     const provider = videoProvider();
     if (provider.name !== s.provider)
       throw new DomainError('invalid_state', 'Streaming provider changed', { reason: 'provider_changed' });
-    return { sessionId: s.sessionId, ingestUrl: s.ingestUrl, streamKey: await provider.streamKey(s.providerStreamId) };
+    return {
+      sessionId: s.sessionId,
+      ingestUrl: s.ingestUrl,
+      streamKey: await provider.streamKey(s.providerStreamId),
+    };
   },
   audit: (input) => ({
     action: 'virtual.stream.key_revealed',

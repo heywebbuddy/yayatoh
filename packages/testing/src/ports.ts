@@ -40,6 +40,7 @@ import { seatAssignAction, setOccupantDirectory, setPartyCredentials } from '@ya
 import { surveyExportAction, surveysContactOwner } from '@yayatoh/surveys';
 import { createOrgAuthorizer, orgStatusGate } from '@yayatoh/tenancy';
 import { ticketResendAction } from '@yayatoh/ticketing';
+import { configureVirtual, fakeVideoProvider } from '@yayatoh/virtual';
 import {
   configureWebhooks,
   type FakePublisher,
@@ -67,6 +68,10 @@ setPartyCredentials(guestsPartyCredentials);
 
 // M5.6a: session doors learn registrations and enrollments from the registration module.
 setSessionAccessSource(registrationSessionAccess);
+
+/** M6.9a: the fake video provider (no network), as the apps use in dev and CI. */
+export const videoProvider = fakeVideoProvider({ seed: randomBytes(32).toString('hex') });
+configureVirtual({ provider: videoProvider });
 
 // M6.1c: every module's data-subject contributor, as the web registers them.
 registerDataSubjectContributors(DATA_SUBJECT_CONTRIBUTORS);

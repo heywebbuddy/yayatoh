@@ -26,4 +26,5 @@ export function effectiveAccess(delivery: DeliveryMode, explicit: AccessMode | n
 /** Whether holders of a ticket type may watch the event's streams. */
 export const mayWatch = (access: AccessMode): boolean => access !== 'in_person';
 
-export const isDeliveryMode = (v: string): v is DeliveryMode => (DELIVERY_MODES as readonly string[]).includes(v);
+export const isDeliveryMode = (v: string): v is DeliveryMode =>
+  (DELIVERY_MODES as readonly string[]).includes(v);

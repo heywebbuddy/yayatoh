@@ -1,5 +1,5 @@
 import type { TenantTx } from '@yayatoh/db';
-import { type DomainEvent, DomainError, requireOrg } from '@yayatoh/kernel';
+import { DomainError, type DomainEvent, requireOrg } from '@yayatoh/kernel';
 import { signLinkToken, tenantCommand, tenantQuery, verifyLinkToken } from '@yayatoh/platform';
 import { sessionsOf } from '@yayatoh/program';
 import { ticketForScanTx } from '@yayatoh/ticketing';
@@ -76,7 +76,13 @@ export const viewerQuery = tenantQuery({
     const h = await holderTx(tx, input.eventId, input.ticketToken);
     const ev = await eventOrThrowTx(tx, input.eventId);
     if (!mayWatch(h.access))
-      return { eventName: ev.name, timezone: ev.timezone, holderName: h.holderName, access: h.access, sessions: [] };
+      return {
+        eventName: ev.name,
+        timezone: ev.timezone,
+        holderName: h.holderName,
+        access: h.access,
+        sessions: [],
+      };
     const on = await tx
       .select({ sessionId: streams.sessionId })
       .from(streams)
@@ -116,7 +122,9 @@ export const startPlaybackCommand = tenantCommand({
     const orgId = requireOrg(ctx);
     const h = await holderTx(tx, input.eventId, input.ticketToken);
     if (!mayWatch(h.access))
-      throw new DomainError('forbidden', 'This ticket is for in-person attendance', { reason: 'in_person_only' });
+      throw new DomainError('forbidden', 'This ticket is for in-person attendance', {
+        reason: 'in_person_only',
+      });
     const s = await streamOfTx(tx, input.sessionId);
     if (!s || s.eventId !== input.eventId || !s.enabled) throw new DomainError('not_found');
     const provider = videoProvider();
@@ -206,9 +214,11 @@ export const heartbeatCommand = tenantCommand({
     if (!view) throw forbidden('invalid_token');
     const [stream] = await tx.select().from(streams).where(eq(streams.id, view.streamId));
     if (!stream || stream.playbackId !== claims.playbackId) throw forbidden('invalid_token');
-    if (!stream.enabled) throw new DomainError('invalid_state', 'The stream is off', { reason: 'stream_off' });
+    if (!stream.enabled)
+      throw new DomainError('invalid_state', 'The stream is off', { reason: 'stream_off' });
     await assertStillWatchingTx(tx, view.eventId, view.ticketId);
-    const minutesNow = async () => (await ticketMinutesTx(tx, view.ticketId, view.sessionId)).get(view.sessionId) ?? 0;
+    const minutesNow = async () =>
+      (await ticketMinutesTx(tx, view.ticketId, view.sessionId)).get(view.sessionId) ?? 0;
     const verdict = beatVerdict(view, input.seq, ctx.now);
     if (verdict !== 'count') return { counted: false, reason: verdict, minutes: await minutesNow() };
     await tx
@@ -248,7 +258,7 @@ export const heartbeatCommand = tenantCommand({
 async function assertStillWatchingTx(tx: TenantTx, eventId: string, ticketId: string) {
   const ev = await eventOrThrowTx(tx, eventId);
   const t = await ticketForScanTx(tx, { id: ticketId });
-  if (!t || t.status !== 'active') throw forbidden('ticket_void');
+  if (t?.status !== 'active') throw forbidden('ticket_void');
   const chosen = (await accessChoicesTx(tx, eventId)).get(t.ticketTypeId) ?? null;
   if (!mayWatch(effectiveAccess(ev.attendanceMode, chosen))) throw forbidden('in_person_only');
 }

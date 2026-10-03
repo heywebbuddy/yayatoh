@@ -59,6 +59,7 @@
     "@yayatoh/ticket-crypto": "workspace:*",
     "@yayatoh/ticketing": "workspace:*",
     "@yayatoh/venues": "workspace:*",
+    "@yayatoh/virtual": "workspace:*",
     "@yayatoh/webhooks": "workspace:*",
     "drizzle-orm": "catalog:"
   },

@@ -8,6 +8,8 @@ export {
   streamingUsageQuery,
   virtualSetupQuery,
 } from './commands.ts';
+// M6.1c data-subject requests: watch time per session is exported; streams are not about anyone.
+export { virtualDataSubjects } from './data-subject.ts';
 export {
   ACCESS_MODES,
   type AccessMode,
@@ -30,12 +32,22 @@ export {
   splitMinutes,
 } from './domain/watch.ts';
 export * from './dto.ts';
+export { privateColumns } from './private-columns.ts';
 export { FAKE_INGEST_URL, FAKE_KID, fakePlaybackCheck, fakeVideoProvider } from './provider/fake.ts';
 export { MAX_TOKEN_LENGTH } from './provider/jwt.ts';
 export { MUX_INGEST_URL, muxVideoProvider } from './provider/mux.ts';
-export { type LiveStream, type PlaybackClaims, type VideoProvider, VideoUnavailableError } from './provider/port.ts';
-export { configureVirtual, currentVideoProvider, videoProvider, videoProviderFromEnv } from './provider/registry.ts';
-export { privateColumns } from './private-columns.ts';
+export {
+  type LiveStream,
+  type PlaybackClaims,
+  type VideoProvider,
+  VideoUnavailableError,
+} from './provider/port.ts';
+export {
+  configureVirtual,
+  currentVideoProvider,
+  videoProvider,
+  videoProviderFromEnv,
+} from './provider/registry.ts';
 export {
   heartbeatCommand,
   playbackOrg,

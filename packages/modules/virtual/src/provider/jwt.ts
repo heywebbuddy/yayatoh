@@ -15,7 +15,12 @@ export const MAX_TOKEN_LENGTH = 1500;
 
 export type Signer =
   | { readonly alg: 'HS256'; readonly kid: string; readonly secret: string }
-  | { readonly alg: 'RS256'; readonly kid: string; readonly privateKey: KeyObject; readonly publicKey: KeyObject };
+  | {
+      readonly alg: 'RS256';
+      readonly kid: string;
+      readonly privateKey: KeyObject;
+      readonly publicKey: KeyObject;
+    };
 
 function signature(s: Signer, input: string): string {
   if (s.alg === 'HS256') return createHmac('sha256', s.secret).update(input).digest('base64url');
@@ -69,7 +74,7 @@ export function verifyJwt(s: Signer, token: string, now: Date): PlaybackClaims |
   if (!header || header.alg !== s.alg || header.kid !== s.kid) return null;
   if (!authentic(s, `${h}.${p}`, sig)) return null;
   const body = parse(p);
-  if (!body || body.aud !== 'v' || typeof body.exp !== 'number' || typeof body.sub !== 'string') return null;
+  if (body?.aud !== 'v' || typeof body.exp !== 'number' || typeof body.sub !== 'string') return null;
   const yy = body.yy as { org?: unknown; vid?: unknown } | undefined;
   if (!yy || typeof yy.org !== 'string' || typeof yy.vid !== 'string') return null;
   if (!PLAYBACK_ID.test(body.sub) || !UUID.test(yy.org) || !UUID.test(yy.vid)) return null;

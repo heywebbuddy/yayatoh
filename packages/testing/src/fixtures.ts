@@ -374,6 +374,7 @@ import { connectDemo, fakeAuth } from './integrations.ts';
 import { catchUpTimeline } from './merge.ts';
 import { networkingFixture } from './networking.ts';
 import { ports, runBulk, submitRegistrationForm } from './ports.ts';
+import { virtualFixture } from './virtual.ts';
 
 export interface OrgFixture {
   readonly org: OrganizationDto;
@@ -2606,6 +2607,8 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   await engagementScoreFixture(org.id, event.id, slug, ctx);
   // M5.8a networking (every networking table, both orgs), with M5.8b chat (direct and booth).
   await networkingFixture(org.id, event.id, ctx, exhibitorCtx);
+  // M6.9a virtual: an access choice, a stream, a viewing with a minute, and the virtual checkpoint.
+  await virtualFixture(org.id, event.id);
   // M4.2b gala tables (isolation coverage): the fixture order's first ticket item recorded as a
   // purchased table, and a sponsor on a table of the event plan. Rows only: no second order and no
   // new tickets, so tests that count the fixture's orders and tickets are unchanged.

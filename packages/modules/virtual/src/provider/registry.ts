@@ -9,8 +9,11 @@ import type { VideoProvider } from './port.ts';
  * CI and previews) the fake, seeded from `APP_TOKEN_SECRET`. Anything else, including production
  * without Mux, returns null: streaming is off and the console says so.
  */
-export function videoProviderFromEnv(env: Readonly<Record<string, string | undefined>>): VideoProvider | null {
-  const provider = env.VIDEO_PROVIDER ?? (env.NODE_ENV === 'production' && !env.YAYATOH_DEV_AUTH ? '' : 'fake');
+export function videoProviderFromEnv(
+  env: Readonly<Record<string, string | undefined>>,
+): VideoProvider | null {
+  const provider =
+    env.VIDEO_PROVIDER ?? (env.NODE_ENV === 'production' && !env.YAYATOH_DEV_AUTH ? '' : 'fake');
   if (provider === 'fake') {
     if (env.VERCEL_ENV === 'production' || !env.APP_TOKEN_SECRET || env.APP_TOKEN_SECRET.length < 32)
       return null;
