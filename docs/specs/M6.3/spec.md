@@ -213,3 +213,12 @@ and missing headers refused). The SDK has `verifyWebhook` (Web Crypto) and `Webh
 | Docs pages render with a working search; keyboard only, axe, RTL | `developers.spec.ts` (search with and without JS, keyboard and skip link, guides, reference, catalog, Arabic, axe) |
 | SDK publish pipeline (dry run); Swift/Kotlin generated | `packages/sdk/tests/npm-package.test.ts` (manifest, plain-JS import, NodeNext consumer type-check); CI `sdk-npm`, `sdk-mobile` |
 | `/v1` additive, contracts clean | `pnpm contracts:check`; semantic diff: paths and existing components unchanged |
+
+### 5. Gate (2026-10-03)
+- `pnpm lint`, `pnpm check:modules`, `pnpm contracts:check` clean; typecheck 58/58; unit 2,434 tests (197 files).
+- Integration: 1,384 tests in 156 files (run in four chunks), then the webhooks, isolation, canary and
+  API-key/sandbox files again after the last M6.3a merge (38/38).
+- E2E (375/768/1280): the whole web suite once (`proxy.ts` changed): 1,852 passed; failures were
+  M6.3a's keyboard test (fixed upstream since) and two load flakes in `sending-setup` and
+  `speaker-portal` that pass alone. After the last merge: webhooks, developers, api-keys,
+  speaker-portal, sending-setup and security, 243/243.
