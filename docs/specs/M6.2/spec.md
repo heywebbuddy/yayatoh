@@ -299,3 +299,11 @@ worker leaves runs pending without it). Notification kinds `alerts.metric`, `ale
 - [ ] Alert rules: "Registrations today at least 3" fires; it appears in Alerts; edit to 100 → resolved.
 - [ ] Reports: schedule weekly to yourself; `POST /api/dev/analytics/run reports=1` twice → one
   email, one row, Download PDF.
+
+### 12. Gate results (M6.2b, on m0.5-foundation-ey5gqp + merge/next-3i, re-merged before the gate)
+- `pnpm lint`, `pnpm check:modules`: ok. Typecheck (`turbo run typecheck --concurrency=2`): 62/62.
+- Unit: 2978/2978 (226 files). Integration: 1685/1685 (181 files) — the first run found
+  `analytics.deleteView` without its `delete` category (impersonation test); fixed, and that file
+  plus the M6.2b suites re-run green.
+- E2E (2 workers, 375/768/1280): `analytics-pro.spec.ts` 30/30 plus the related `warehouse`,
+  `alerts`, `marketing-analytics`, `marketing`, `tracked-links`, `command-center` specs: 132/132.
