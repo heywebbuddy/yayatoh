@@ -13,6 +13,7 @@ export const privateColumns = columnPrivacy('billing', {
     provider: 'vocab',
     provider_customer_id: internal(),
     grandfathered_reason: 'vocab',
+    nonprofit_discount: 'vocab',
   },
   subscriptions: {
     provider: 'vocab',
@@ -24,4 +25,16 @@ export const privateColumns = columnPrivacy('billing', {
   },
   org_entitlements: { module_key: 'vocab', provider: 'vocab' },
   provider_events: { provider: 'vocab', provider_event_id: internal(), type: 'vocab' },
+  usage_records: { meter: 'vocab', source_type: 'vocab' },
+  plan_changes: {
+    from_plan_key: 'vocab',
+    to_plan_key: 'vocab',
+    price_lookup_key: 'vocab',
+    direction: 'vocab',
+    currency: 'vocab',
+    removed_modules: 'vocab',
+    status: 'vocab',
+    requested_by: internal(),
+    idempotency_key: internal(),
+  },
 });
