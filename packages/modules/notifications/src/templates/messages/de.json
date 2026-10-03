@@ -339,6 +339,21 @@
     "badges.kiosk-code": {
       "subject": "{code} ist Ihr Code für das Badge-Terminal bei {eventName}",
       "intro": "Geben Sie {code} am Badge-Terminal ein, um Ihre Angaben zu prüfen und Ihr Badge zu drucken. Der Code gilt einmal und läuft in {minutes, plural, one {# Minute} other {# Minuten}} ab. Wenn Sie ihn nicht angefordert haben, können Sie diese E-Mail ignorieren."
+    },
+    "alerts.metric": {
+      "subject": "Alarmregel „{title}“ wurde ausgelöst",
+      "intro": "{reading, select, none {Deine Alarmregel „{title}“ ist bei {org} weiterhin ausgelöst.} other {Deine Alarmregel „{title}“ wurde bei {org} ausgelöst: {reading} in {windowDays, plural, one {dem letzten Tag} other {den letzten # Tagen}}.}} Öffne sie, um sie zu bestätigen oder zu pausieren.",
+      "cta": "Alarm öffnen"
+    },
+    "alerts.metric-now": {
+      "subject": "Alarmregel „{title}“ wurde ausgelöst",
+      "intro": "{reading, select, none {Deine Alarmregel „{title}“ ist bei {org} weiterhin ausgelöst.} other {Deine Alarmregel „{title}“ wurde bei {org} ausgelöst: {reading} in {windowDays, plural, one {dem letzten Tag} other {den letzten # Tagen}}.}} Öffne sie, um sie zu bestätigen oder zu pausieren.",
+      "cta": "Alarm öffnen"
+    },
+    "analytics.report": {
+      "subject": "Dein Bericht „{name}“: {period}",
+      "intro": "Der Bericht „{name}“ von {org} für {period} ist fertig. Öffne ihn, um das PDF herunterzuladen.",
+      "cta": "PDF herunterladen"
     }
   },
   "roles": {

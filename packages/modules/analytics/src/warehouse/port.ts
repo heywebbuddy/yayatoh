@@ -1,6 +1,7 @@
 import type { TenantTx } from '@yayatoh/db';
 import { type Ctx, requireOrg } from '@yayatoh/kernel';
 import { z } from 'zod';
+import { type AttributionModel, AttributionRow } from '../attribution/models.ts';
 import { DAILY_METRICS, type DailyMetric, type WarehouseAdapterName } from '../schema.ts';
 
 /**
@@ -52,6 +53,8 @@ export const EventSnapshot = z.object({
   timeZone: z.string(),
   daily: z.array(DailyRow),
   state: EventState.nullable(),
+  /** M6.2b: attributed orders and revenue per day, model and touch (empty: none attributed). */
+  attribution: z.array(AttributionRow).optional(),
 });
 export type EventSnapshot = z.infer<typeof EventSnapshot>;
 
@@ -79,6 +82,24 @@ export interface EventTotal {
   readonly value: number;
 }
 
+/** M6.2b: an attribution range (one model at a time). */
+export interface AttributionRange extends DayRange {
+  readonly model: AttributionModel;
+}
+
+/** Attributed figures of one event, day, touch and currency (the explorer groups them). */
+export interface AttributionTotal {
+  readonly eventId: string;
+  readonly day: string;
+  readonly source: string;
+  readonly medium: string;
+  readonly campaign: string;
+  readonly linkId: string | null;
+  readonly currency: string;
+  readonly creditBps: number;
+  readonly revenueMinor: number;
+}
+
 export interface EventStateRow extends EventState {
   readonly eventId: string;
 }
@@ -98,6 +119,8 @@ export interface AnalyticsWarehouse {
   eventTotals(scope: WarehouseScope, range: DayRange): Promise<EventTotal[]>;
   /** Events whose end day falls in the range (no-shows). */
   eventStates(scope: WarehouseScope, range: DayRange): Promise<EventStateRow[]>;
+  /** M6.2b: attributed orders and revenue of one model per event, day and touch over the range. */
+  attributionTotals(scope: WarehouseScope, range: AttributionRange): Promise<AttributionTotal[]>;
 }
 
 /** Canonical order of a snapshot's rows (hashing, comparisons, fixtures). */

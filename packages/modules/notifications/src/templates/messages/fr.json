@@ -339,6 +339,21 @@
     "badges.kiosk-code": {
       "subject": "{code} est votre code pour la borne de badges de {eventName}",
       "intro": "Saisissez {code} sur la borne de badges pour vérifier vos informations et imprimer votre badge. Le code fonctionne une fois et expire dans {minutes, plural, one {# minute} other {# minutes}}. Si vous ne l'avez pas demandé, ignorez cet e-mail."
+    },
+    "alerts.metric": {
+      "subject": "La règle d’alerte « {title} » s’est déclenchée",
+      "intro": "{reading, select, none {Votre règle d’alerte « {title} » est toujours déclenchée chez {org}.} other {Votre règle d’alerte « {title} » s’est déclenchée chez {org} : {reading} sur {windowDays, plural, one {le dernier jour} other {les # derniers jours}}.}} Ouvrez-la pour la confirmer ou la mettre en pause.",
+      "cta": "Ouvrir l’alerte"
+    },
+    "alerts.metric-now": {
+      "subject": "La règle d’alerte « {title} » s’est déclenchée",
+      "intro": "{reading, select, none {Votre règle d’alerte « {title} » est toujours déclenchée chez {org}.} other {Votre règle d’alerte « {title} » s’est déclenchée chez {org} : {reading} sur {windowDays, plural, one {le dernier jour} other {les # derniers jours}}.}} Ouvrez-la pour la confirmer ou la mettre en pause.",
+      "cta": "Ouvrir l’alerte"
+    },
+    "analytics.report": {
+      "subject": "Votre rapport « {name} » : {period}",
+      "intro": "Le rapport « {name} » de {org} pour {period} est prêt. Ouvrez-le pour télécharger le PDF.",
+      "cta": "Télécharger le PDF"
     }
   },
   "roles": {

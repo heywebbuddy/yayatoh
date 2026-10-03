@@ -25,11 +25,17 @@ import {
  *   whatever the URL says. The URL carries the same org, and every row a pipe returns must carry
  *   it too (checked here), so a mis-deployed pipe cannot leak another org's rows.
  */
-export const TINYBIRD_DATASOURCES = { daily: 'yy_daily_rollups', states: 'yy_event_states' } as const;
+export const TINYBIRD_DATASOURCES = {
+  daily: 'yy_daily_rollups',
+  states: 'yy_event_states',
+  /** M6.2b: attribution rows, under the same version as the event's daily rows. */
+  attribution: 'yy_attribution_rollups',
+} as const;
 export const TINYBIRD_PIPES = {
   dailyTotals: 'yy_daily_totals',
   eventTotals: 'yy_event_totals',
   eventStates: 'yy_event_states_by_end_day',
+  attributionRows: 'yy_attribution_rows',
 } as const;
 export const SNAPSHOT_MARKER = '__snapshot';
 
@@ -96,6 +102,19 @@ const EventStateRow = z.object({
   checked_in: Num,
 });
 
+const AttributionTotalRow = z.object({
+  org_id: z.string(),
+  event_id: z.uuid(),
+  day: z.iso.date(),
+  source: z.string(),
+  medium: z.string(),
+  campaign: z.string(),
+  link_id: z.string(),
+  currency: z.string(),
+  credit_bps: Num,
+  revenue_minor: Num,
+});
+
 export class TinybirdError extends Error {
   readonly status: number;
   constructor(message: string, status: number) {
@@ -128,7 +147,7 @@ export function tinybirdWarehouse(cfg: TinybirdConfig): AnalyticsWarehouse {
   async function pipe<T extends z.ZodType<{ org_id: string }>>(
     scope: WarehouseScope,
     name: string,
-    range: DayRange,
+    range: DayRange & { model?: string },
     row: T,
   ): Promise<z.infer<T>[]> {
     const orgId = scopeOrg(scope);
@@ -140,6 +159,7 @@ export function tinybirdWarehouse(cfg: TinybirdConfig): AnalyticsWarehouse {
     );
     const qs = new URLSearchParams({ org_id: orgId, from: range.from, to: range.to });
     if (range.eventId) qs.set('event_id', range.eventId);
+    if (range.model) qs.set('model', range.model);
     const res = await doFetch(`${base}/v0/pipes/${encodeURIComponent(name)}.json?${qs.toString()}`, {
       headers: { authorization: `Bearer ${token}` },
     });
@@ -174,9 +194,24 @@ export function tinybirdWarehouse(cfg: TinybirdConfig): AnalyticsWarehouse {
         valid_tickets: s?.validTickets ?? 0,
         checked_in: s?.checkedIn ?? 0,
       };
+      // M6.2b: attribution rows share the version; pipes take the newest version from the daily
+      // datasource (which always has the marker), so an event whose attribution vanished reads empty.
+      const attribution = (snapshot.state ? (snapshot.attribution ?? []) : []).map((r) => ({
+        ...head,
+        day: r.day,
+        model: r.model,
+        source: r.source,
+        medium: r.medium,
+        campaign: r.campaign,
+        link_id: r.linkId ?? '',
+        currency: r.currency,
+        credit_bps: r.creditBps,
+        revenue_minor: r.revenueMinor,
+      }));
       const rows =
         (await append(TINYBIRD_DATASOURCES.daily, daily)) +
-        (await append(TINYBIRD_DATASOURCES.states, [state]));
+        (await append(TINYBIRD_DATASOURCES.states, [state])) +
+        (attribution.length ? await append(TINYBIRD_DATASOURCES.attribution, attribution) : 0);
       return { rows };
     },
 
@@ -204,6 +239,21 @@ export function tinybirdWarehouse(cfg: TinybirdConfig): AnalyticsWarehouse {
         endDay: r.end_day,
         validTickets: r.valid_tickets,
         checkedIn: r.checked_in,
+      }));
+    },
+
+    async attributionTotals(scope, range) {
+      const rows = await pipe(scope, TINYBIRD_PIPES.attributionRows, range, AttributionTotalRow);
+      return rows.map((r) => ({
+        eventId: r.event_id,
+        day: r.day,
+        source: r.source,
+        medium: r.medium,
+        campaign: r.campaign,
+        linkId: r.link_id || null,
+        currency: r.currency,
+        creditBps: r.credit_bps,
+        revenueMinor: r.revenue_minor,
       }));
     },
   };

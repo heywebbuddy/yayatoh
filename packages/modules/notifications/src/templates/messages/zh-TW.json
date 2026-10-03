@@ -339,6 +339,21 @@
     "badges.kiosk-code": {
       "subject": "{code} 是你在 {eventName} 名牌自助機的驗證碼",
       "intro": "在名牌自助機上輸入 {code}，即可核對你的資料並列印名牌。驗證碼只能使用一次，{minutes, plural, other {# 分鐘}}後失效。如果不是你本人申請，請忽略此郵件。"
+    },
+    "alerts.metric": {
+      "subject": "提醒規則「{title}」已觸發",
+      "intro": "{reading, select, none {{org} 的提醒規則「{title}」仍處於觸發狀態。} other {{org} 的提醒規則「{title}」已觸發：最近 {windowDays, plural, other {# 天}}為 {reading}。}} 開啟以確認或暫緩提醒。",
+      "cta": "開啟提醒"
+    },
+    "alerts.metric-now": {
+      "subject": "提醒規則「{title}」已觸發",
+      "intro": "{reading, select, none {{org} 的提醒規則「{title}」仍處於觸發狀態。} other {{org} 的提醒規則「{title}」已觸發：最近 {windowDays, plural, other {# 天}}為 {reading}。}} 開啟以確認或暫緩提醒。",
+      "cta": "開啟提醒"
+    },
+    "analytics.report": {
+      "subject": "你的報告「{name}」：{period}",
+      "intro": "{org} 的報告「{name}」（{period}）已準備好。開啟即可下載 PDF。",
+      "cta": "下載 PDF"
     }
   },
   "roles": {

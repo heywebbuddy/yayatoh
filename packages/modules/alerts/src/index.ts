@@ -57,6 +57,14 @@ export {
   eventFactsTx,
   orgFactsTx,
 } from './facts.ts';
+export {
+  applyMetricRuleTx,
+  METRIC_KIND,
+  METRIC_NOW_KIND,
+  METRIC_RULE_EVENT,
+  readingText,
+  sweepMetricAlertsTx,
+} from './metric-rules.ts';
 export { privateColumns } from './private-columns.ts';
 export {
   ALERT_TRIGGER_EVENTS,

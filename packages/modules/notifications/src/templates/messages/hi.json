@@ -339,6 +339,21 @@
     "badges.kiosk-code": {
       "subject": "{code} {eventName} के बैज कियोस्क के लिए आपका कोड है",
       "intro": "अपना विवरण जाँचने और अपना बैज प्रिंट करने के लिए बैज कियोस्क पर {code} दर्ज करें। कोड एक बार काम करता है और {minutes, plural, one {# मिनट} other {# मिनट}} में समाप्त हो जाता है। अगर आपने यह नहीं माँगा था, तो इस ईमेल को अनदेखा करें।"
+    },
+    "alerts.metric": {
+      "subject": "अलर्ट नियम “{title}” सक्रिय हुआ",
+      "intro": "{reading, select, none {आपका अलर्ट नियम “{title}” {org} में अब भी सक्रिय है।} other {आपका अलर्ट नियम “{title}” {org} में सक्रिय हुआ: {windowDays, plural, one {पिछले दिन} other {पिछले # दिनों}} में {reading}।}} इसे स्वीकार करने या स्नूज़ करने के लिए खोलें।",
+      "cta": "अलर्ट खोलें"
+    },
+    "alerts.metric-now": {
+      "subject": "अलर्ट नियम “{title}” सक्रिय हुआ",
+      "intro": "{reading, select, none {आपका अलर्ट नियम “{title}” {org} में अब भी सक्रिय है।} other {आपका अलर्ट नियम “{title}” {org} में सक्रिय हुआ: {windowDays, plural, one {पिछले दिन} other {पिछले # दिनों}} में {reading}।}} इसे स्वीकार करने या स्नूज़ करने के लिए खोलें।",
+      "cta": "अलर्ट खोलें"
+    },
+    "analytics.report": {
+      "subject": "आपकी रिपोर्ट “{name}”: {period}",
+      "intro": "{org} की रिपोर्ट “{name}” {period} के लिए तैयार है। PDF डाउनलोड करने के लिए इसे खोलें।",
+      "cta": "PDF डाउनलोड करें"
     }
   },
   "roles": {

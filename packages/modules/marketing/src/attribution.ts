@@ -6,6 +6,7 @@ import { and, eq, gte, inArray, lte, or } from 'drizzle-orm';
 import { alias } from 'drizzle-orm/pg-core';
 import { z } from 'zod';
 import { pseudonym } from './domain/click-token.ts';
+import { clickPath, landingKind } from './domain/touches.ts';
 import { cleanUtmValue } from './domain/utm.ts';
 import {
   CLOCK_SKEW_MS,
@@ -17,7 +18,13 @@ import {
   pickTouches,
 } from './domain/window.ts';
 import { AttributionSettingsDto, OrderAttributionDto } from './dto.ts';
-import { attributionSettings, attributions, linkClicks, trackingLinks } from './schema.ts';
+import {
+  attributionSettings,
+  attributions,
+  attributionTouches,
+  linkClicks,
+  trackingLinks,
+} from './schema.ts';
 
 /** The org's attribution window in days (the default until an organizer sets one). */
 export async function attributionWindowTx(tx: TenantTx): Promise<number> {
@@ -81,6 +88,16 @@ export const AttributeOrderInput = z.object({
   utm: z.object({ first: UtmInput, last: UtmInput }).nullish(),
 });
 
+/** M6.2b: an order's attribution was recorded (the warehouse recomputes the event's attribution). */
+export const ORDER_ATTRIBUTED_EVENT = 'marketing.order_attributed';
+const attributedEvent = (orderId: string, eventId: string) => ({
+  type: ORDER_ATTRIBUTED_EVENT,
+  version: 1,
+  aggregateType: 'order',
+  aggregateId: orderId,
+  payload: { orderId, eventId },
+});
+
 const AttributeOrderOutput = z.object({
   outcome: z.enum(['click', 'utm', 'none', 'exists']),
 });
@@ -97,7 +114,7 @@ export const attributeOrderCommand = tenantCommand({
   output: AttributeOrderOutput,
   entitlement: 'marketing',
   permission: 'public:checkout',
-  handler: async ({ input, ctx, tx }) => {
+  handler: async ({ input, ctx, tx, emit }) => {
     const orgId = requireOrg(ctx);
     const [order] = await orderOutcomesTx(tx, [input.orderId]);
     if (!order) throw new DomainError('not_found', 'Order not found');
@@ -136,10 +153,14 @@ export const attributeOrderCommand = tenantCommand({
       : [];
     const touches = pickTouches(clicks, { eventId: order.eventId, at: orderAt }, windowDays);
     if (touches) {
+      // M6.2b: every counting click is a touch of the path (multi-touch models).
+      const path = clickPath(
+        clicks.filter((c) => c.eventId === order.eventId && inWindow(c.clickedAt, orderAt, windowDays)),
+      );
       const links = await tx
         .select()
         .from(trackingLinks)
-        .where(inArray(trackingLinks.id, [touches.first.linkId, touches.last.linkId]));
+        .where(inArray(trackingLinks.id, [...new Set(path.map((c) => c.linkId))]));
       const first = links.find((l) => l.id === touches.first.linkId);
       const last = links.find((l) => l.id === touches.last.linkId);
       await tx
@@ -166,6 +187,28 @@ export const attributeOrderCommand = tenantCommand({
           windowDays,
         })
         .onConflictDoNothing();
+      const byId = new Map(links.map((l) => [l.id, l] as const));
+      await tx
+        .insert(attributionTouches)
+        .values(
+          path.map((c, position) => {
+            const l = byId.get(c.linkId);
+            return {
+              orgId,
+              orderId: order.orderId,
+              position,
+              kind: 'click',
+              at: c.clickedAt,
+              linkId: c.linkId,
+              campaignId: l?.campaignId ?? null,
+              source: l?.utmSource ?? 'unknown',
+              medium: l?.utmMedium ?? null,
+              campaign: l?.utmCampaign ?? null,
+            };
+          }),
+        )
+        .onConflictDoNothing();
+      emit(attributedEvent(order.orderId, order.eventId));
       return { outcome: 'click' as const };
     }
     const utm = input.utm;
@@ -195,6 +238,28 @@ export const attributeOrderCommand = tenantCommand({
           windowDays,
         })
         .onConflictDoNothing();
+      // M6.2b: the landings (first and last; one when they are the same landing) as the path.
+      const landings = first === utm.last || first.at === utm.last.at ? [utm.last] : [first, utm.last];
+      await tx
+        .insert(attributionTouches)
+        .values(
+          landings.map((u, position) => {
+            const medium = cleanUtmValue(u.medium);
+            const campaign = cleanUtmValue(u.campaign);
+            return {
+              orgId,
+              orderId: order.orderId,
+              position,
+              kind: landingKind({ medium, campaign }),
+              at: new Date(u.at),
+              source: cleanUtmValue(u.source) ?? lastSource,
+              medium,
+              campaign,
+            };
+          }),
+        )
+        .onConflictDoNothing();
+      emit(attributedEvent(order.orderId, order.eventId));
       return { outcome: 'utm' as const };
     }
     return { outcome: 'none' as const };

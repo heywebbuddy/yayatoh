@@ -8,7 +8,16 @@ import {
   setMyAlertPhoneCommand,
   setSalesTargetCommand,
 } from '@yayatoh/alerts';
-import { backfillOrgNow, catchUpWarehouse, postgresWarehouse } from '@yayatoh/analytics';
+import {
+  backfillOrgNow,
+  catchUpWarehouse,
+  createAlertRuleCommand,
+  createReportScheduleCommand,
+  periodContaining,
+  postgresWarehouse,
+  runReportPeriod,
+  saveViewCommand,
+} from '@yayatoh/analytics';
 import {
   assignCommand as assistanceAssignCommand,
   addNoteCommand as assistanceNoteCommand,
@@ -2690,6 +2699,44 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   // then one backfill run (rows in every analytics table for the isolation suite).
   await catchUpWarehouse(org.id);
   await backfillOrgNow(org.id, postgresWarehouse);
+  // M6.2b: the fixture order's touch path and attribution rollups come from the attribution
+  // record and the warehouse above; plus the owner's explorer view, an alert rule, a report
+  // schedule and one sent period (its run, PDF and message): rows in every new table.
+  await executeCommand(
+    saveViewCommand,
+    {
+      name: 'Linear revenue by source',
+      measure: 'attributed_revenue',
+      dimension: 'source',
+      model: 'linear',
+      range: '30d',
+    },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    createAlertRuleCommand,
+    {
+      name: 'Registrations today',
+      measure: 'registrations',
+      condition: 'above',
+      threshold: 1000,
+      windowDays: 1,
+    },
+    ctx(),
+    ports,
+  );
+  const reportSchedule = await executeCommand(
+    createReportScheduleCommand,
+    { name: 'Daily summary', frequency: 'daily', recipients: [ownerId] },
+    ctx(),
+    ports,
+  );
+  await runReportPeriod(org.id, reportSchedule.id, periodContaining('daily', '2027-10-01'), {
+    notifier: createNotifier(),
+    renderer: { render: async () => new TextEncoder().encode('%PDF-1.7 fixture report') },
+    userLocales: async () => new Map(),
+  });
   // M3.2b alert engine: the fixture event's unseated ticket holders raise an alert (evaluated as
   // the worker would, a day before the event), the owner acknowledges it; one routing row, the
   // owner's alert number and a sales target (isolation coverage of every alerts table).

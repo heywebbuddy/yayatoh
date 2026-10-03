@@ -159,7 +159,9 @@
       "alerts": {
         "alert": "警示",
         "alert-text": "警示簡訊",
-        "alert-urgent-text": "緊急警示簡訊"
+        "alert-urgent-text": "緊急警示簡訊",
+        "metric": "提醒規則",
+        "metric-now": "提醒規則（立即傳送）"
       },
       "campaigns": {
         "test": "行銷活動測試"
@@ -204,6 +206,9 @@
       },
       "badges": {
         "kiosk-code": "名牌自助機驗證碼"
+      },
+      "analytics": {
+        "report": "定期報告"
       }
     },
     "status": {
@@ -7394,7 +7399,9 @@
       "invoicesOverdue": "開啟發票",
       "rsvpPending": "開啟回覆",
       "guestsUnseated": "安排賓客座位",
-      "mealsMissing": "開啟回覆詳情"
+      "mealsMissing": "開啟回覆詳情",
+      "metricRule": "開啟提醒規則",
+      "metricRuleFinance": "開啟提醒規則"
     },
     "rules": {
       "unseated": "{count, plural, other {{countWords} 位參加者沒有座位}}",
@@ -7430,7 +7437,9 @@
       "invoicesOverdue": "{count, plural, other {{countWords}張發票已逾期}}",
       "rsvpPending": "{count, plural, other {{countWords} 位賓客尚未回覆出席邀請}}",
       "guestsUnseated": "{count, plural, other {{countWords} 位賓客沒有桌位}}",
-      "mealsMissing": "{count, plural, other {{countWords} 位出席賓客尚未選擇餐點}}"
+      "mealsMissing": "{count, plural, other {{countWords} 位出席賓客尚未選擇餐點}}",
+      "metricRule": "提醒規則「{title}」已觸發",
+      "metricRuleFinance": "提醒規則「{title}」已觸發"
     },
     "widget": {
       "title": "警示",
@@ -15895,5 +15904,276 @@
       "archived": "已封存"
     },
     "refreshedAt": "重新整理時間"
+  },
+  "analyticsPro": {
+    "tabs": {
+      "label": "分析區塊",
+      "overview": "概覽",
+      "explore": "探索",
+      "alerts": "提醒規則",
+      "reports": "報告"
+    },
+    "explore": {
+      "title": "探索",
+      "description": "選擇一個指標及其細分方式。歸因會顯示哪些活動、管道和來源帶來了銷售。",
+      "form": "選擇要顯示的內容",
+      "measure": "指標",
+      "groupCounts": "數量",
+      "groupMoney": "金額",
+      "groupAttribution": "歸因",
+      "measures": {
+        "registrations": "報名數",
+        "tickets": "售出票券（淨數）",
+        "comp_tickets": "免費票券",
+        "refunded_tickets": "已退款票券",
+        "checkins": "報到",
+        "no_shows": "未出席",
+        "attributed_orders": "歸因訂單",
+        "gross": "已付款",
+        "refunds": "已退款",
+        "net": "淨銷售額",
+        "attributed_revenue": "歸因收入"
+      },
+      "dimension": "細分維度",
+      "dimensions": {
+        "period": "期間",
+        "event": "活動",
+        "channel": "管道",
+        "source": "來源",
+        "campaign": "行銷活動"
+      },
+      "model": "歸因模型",
+      "modelHint": "僅用於歸因訂單和收入。",
+      "models": {
+        "first": "首次接觸",
+        "last": "最後接觸",
+        "linear": "線性（平均分配）"
+      },
+      "range": "期間",
+      "ranges": {
+        "7d": "最近 7 天",
+        "30d": "最近 30 天",
+        "90d": "最近 90 天",
+        "365d": "最近 12 個月",
+        "custom": "自訂日期"
+      },
+      "from": "從",
+      "to": "到",
+      "customHint": "期間為「自訂日期」時使用。",
+      "granularity": "顯示單位",
+      "granularities": {
+        "day": "天",
+        "week": "週",
+        "month": "月"
+      },
+      "event": "活動",
+      "allEvents": "所有活動",
+      "apply": "顯示",
+      "errors": {
+        "touch_dimension": "管道、來源和行銷活動僅適用於歸因訂單或收入。",
+        "custom_needs_dates": "自訂期間請填寫兩個日期。",
+        "from_after_to": "結束日期早於開始日期。",
+        "range_too_long": "請選擇兩年以內的期間。",
+        "invalid_date": "請依年、月、日填寫日期。"
+      },
+      "resultsCaption": "依{dimension}的{measure}，{from} 至 {to}",
+      "total": "合計",
+      "none": "無",
+      "unnamedCampaign": "未命名的行銷活動",
+      "weekOf": "{day} 那一週",
+      "currency": "貨幣",
+      "value": "數值",
+      "truncated": "僅顯示前 500 列。選擇較短的期間或單一活動以查看其餘內容。",
+      "emptyTitle": "此選擇沒有可顯示的內容",
+      "emptyBody": "此期間沒有該指標的資料。請嘗試較長的期間、其他活動或其他指標。",
+      "emptyAction": "顯示最近 12 個月",
+      "export": "匯出 CSV",
+      "exportLabel": "將這些結果匯出為 CSV 檔案",
+      "timeZoneNote": "日期依 {timeZone}（你所屬組織的時區）的日曆日計算。",
+      "attributionNote": "歸因會把每筆歸因訂單分配給你的歸因期間內促成它的造訪：被點擊的追蹤連結、帶 UTM 參數的造訪，以及引導買家前來的其他網站。首次接觸計入第一次造訪，最後接觸計入最後一次造訪，線性模型則平均分配訂單（剩餘的 1 分計入最後一次造訪）。收入是買家支付的金額，依貨幣分別計算；沒有記錄到造訪的訂單不參與歸因。",
+      "saveTitle": "儲存此檢視",
+      "viewName": "名稱",
+      "save": "儲存檢視",
+      "saved": "檢視已儲存",
+      "viewErrors": {
+        "name": "請輸入不超過 80 個字元的名稱。",
+        "name_taken": "你已經有同名的檢視。",
+        "too_many_views": "你已有 50 個儲存的檢視，請先刪除一個。"
+      },
+      "views": "你儲存的檢視",
+      "noViews": "還沒有儲存的檢視。在上方選擇要顯示的內容，再儲存到這裡，一鍵即可返回。",
+      "deleteView": "刪除",
+      "deleteViewLabel": "刪除檢視 {name}",
+      "deleted": "檢視已刪除"
+    },
+    "rules": {
+      "title": "提醒規則",
+      "description": "當某個數字越過界限時收到提醒。規則提醒會像內建提醒一樣，透過「提醒」傳送給你的團隊。",
+      "createTitle": "新增提醒規則",
+      "editTitle": "編輯提醒規則",
+      "name": "名稱",
+      "nameHint": "顯示在提醒及其電子郵件中。",
+      "measure": "指標",
+      "measures": {
+        "registrations": "報名數",
+        "tickets": "售出票券（淨數）",
+        "refunded_tickets": "已退款票券",
+        "checkins": "報到",
+        "gross": "已付款",
+        "refunds": "已退款",
+        "net": "淨銷售額"
+      },
+      "condition": "當它",
+      "conditions": {
+        "above": "至少為",
+        "below": "低於",
+        "rise": "上升至少（%）",
+        "drop": "下降至少（%）"
+      },
+      "threshold": "門檻",
+      "thresholdHint": "數量、金額，或上升與下降的百分比（與前一期間相比）。",
+      "window": "統計範圍",
+      "windows": {
+        "d1": "今天",
+        "d7": "最近 7 天",
+        "d14": "最近 14 天",
+        "d30": "最近 30 天"
+      },
+      "currency": "貨幣",
+      "currencyHint": "金額規則只比較一種貨幣。",
+      "noCurrency": "非金額",
+      "event": "活動",
+      "allEvents": "所有活動",
+      "severity": "嚴重程度",
+      "severities": {
+        "info": "資訊",
+        "warning": "警告",
+        "critical": "嚴重"
+      },
+      "quietHours": "遵守勿擾時段",
+      "quietHoursHint": "如果規則在 21:00 至 8:00 之間觸發，電子郵件和推播會等到每位收件人所在時區的 8:00 再傳送。應用程式內的提醒會立即顯示。",
+      "create": "建立規則",
+      "save": "儲存變更",
+      "back": "返回提醒規則",
+      "created": "規則已建立",
+      "saved": "變更已儲存",
+      "list": "你的規則",
+      "emptyTitle": "還沒有提醒規則",
+      "emptyBody": "在上方建立一條規則，例如「今天的退款至少 10 筆」。條件一成立就會提醒你。",
+      "columns": {
+        "name": "規則",
+        "condition": "條件",
+        "status": "狀態",
+        "lastValue": "最新讀數",
+        "actions": "操作"
+      },
+      "summary": "{window}{measure}{condition}{threshold}",
+      "status": {
+        "firing": "已觸發",
+        "ok": "正常",
+        "off": "已關閉",
+        "new": "尚未檢查"
+      },
+      "edit": "編輯",
+      "editLabel": "編輯 {name}",
+      "turnOff": "關閉",
+      "turnOn": "開啟",
+      "turnOffLabel": "關閉 {name}",
+      "turnOnLabel": "開啟 {name}",
+      "delete": "刪除",
+      "deleteLabel": "刪除 {name}",
+      "deleted": "規則已刪除",
+      "turnedOff": "規則已關閉",
+      "turnedOn": "規則已開啟",
+      "readOnly": "你可以查看這些規則，但不能修改。",
+      "errors": {
+        "name": "請輸入不超過 80 個字元的名稱。",
+        "name_taken": "已有同名規則。",
+        "threshold": "請輸入 0 或更大的數字。",
+        "percent_range": "請輸入 1 到 1000 之間的百分比。",
+        "currency_required": "請為金額規則選擇貨幣。",
+        "too_many_rules": "你已有 50 條規則，請先刪除一條。"
+      }
+    },
+    "reports": {
+      "title": "定期報告",
+      "description": "每天、每週或每月以電子郵件傳送分析 PDF，依你所屬組織的時區統計。",
+      "createTitle": "新增定期報告",
+      "editTitle": "編輯定期報告",
+      "name": "名稱",
+      "frequency": "頻率",
+      "frequencies": {
+        "daily": "每天（昨天的數據）",
+        "weekly": "每週一（上週，週一至週日）",
+        "monthly": "每月 1 日（上個月）"
+      },
+      "frequencyShort": {
+        "daily": "每天",
+        "weekly": "每週",
+        "monthly": "每月"
+      },
+      "sendHour": "傳送時間",
+      "sendHourHint": "{timeZone} 時間。",
+      "event": "活動",
+      "allEvents": "所有活動",
+      "recipients": "傳送給",
+      "recipientsHint": "可以查看訂單的成員。只有能查看財務的人，其 PDF 中才包含收入；每份 PDF 使用閱讀者的語言。",
+      "you": "{name}（你）",
+      "create": "排定報告",
+      "save": "儲存變更",
+      "back": "返回定期報告",
+      "created": "報告已排定",
+      "saved": "變更已儲存",
+      "list": "排程",
+      "emptyTitle": "還沒有定期報告",
+      "emptyBody": "在上方排定一份：每個期間會以電子郵件傳送一次，並附上 PDF 的連結。",
+      "columns": {
+        "name": "報告",
+        "frequency": "頻率",
+        "next": "下次傳送",
+        "recipients": "收件人",
+        "status": "狀態",
+        "actions": "操作"
+      },
+      "recipientsCount": "{count, plural, other {# 位成員}}",
+      "status": {
+        "on": "開啟",
+        "off": "關閉"
+      },
+      "edit": "編輯",
+      "editLabel": "編輯 {name}",
+      "turnOff": "關閉",
+      "turnOn": "開啟",
+      "turnOffLabel": "關閉 {name}",
+      "turnOnLabel": "開啟 {name}",
+      "delete": "刪除",
+      "deleteLabel": "刪除 {name}",
+      "deleted": "排程已刪除",
+      "turnedOff": "排程已關閉",
+      "turnedOn": "排程已開啟",
+      "recent": "最近的報告",
+      "recentEmpty": "尚未傳送任何報告。第一份將在下次傳送時間寄出。",
+      "recentColumns": {
+        "report": "報告",
+        "period": "期間",
+        "status": "狀態",
+        "file": "PDF"
+      },
+      "runStatus": {
+        "pending": "等待中",
+        "sent": "已傳送",
+        "failed": "失敗"
+      },
+      "download": "下載 PDF",
+      "downloadLabel": "下載 {period} 的 {name}（PDF）",
+      "notReady": "尚未就緒",
+      "errors": {
+        "name": "請輸入不超過 80 個字元的名稱。",
+        "name_taken": "已有同名排程。",
+        "recipients": "請至少選擇一位成員。",
+        "bad_recipient": "請選擇可以查看訂單的成員。",
+        "too_many_schedules": "你已有 25 個排程，請先刪除一個。"
+      }
+    }
   }
 }

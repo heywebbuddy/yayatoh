@@ -17,6 +17,7 @@ import { buttonClass, Card, EmptyState, PageHeader, StatusPill, Tabs, tabClass }
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { AnalyticsTabs } from '@/components/analytics-tabs.tsx';
 import {
   AnalyticsFilters,
   CountsOverTime,
@@ -108,6 +109,7 @@ export default async function OrgAnalyticsPage({
   return (
     <>
       <PageHeader title={t('title')} description={t('description')} />
+      <AnalyticsTabs org={org} current="overview" />
       <AnalyticsFilters
         action={`${prefix}${base}`}
         from={range.from}

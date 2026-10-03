@@ -159,7 +159,9 @@
       "alerts": {
         "alert": "Warnung",
         "alert-text": "Warnungs-SMS",
-        "alert-urgent-text": "Dringende Warnung per SMS"
+        "alert-urgent-text": "Dringende Warnung per SMS",
+        "metric": "Alarmregel",
+        "metric-now": "Alarmregel (sofort gesendet)"
       },
       "campaigns": {
         "test": "Kampagnentest"
@@ -204,6 +206,9 @@
       },
       "badges": {
         "kiosk-code": "Code für das Badge-Terminal"
+      },
+      "analytics": {
+        "report": "Geplanter Bericht"
       }
     },
     "status": {
@@ -7394,7 +7399,9 @@
       "invoicesOverdue": "Rechnungen öffnen",
       "rsvpPending": "Antworten öffnen",
       "guestsUnseated": "Gäste platzieren",
-      "mealsMissing": "RSVP-Antworten öffnen"
+      "mealsMissing": "RSVP-Antworten öffnen",
+      "metricRule": "Alarmregeln öffnen",
+      "metricRuleFinance": "Alarmregeln öffnen"
     },
     "rules": {
       "unseated": "{count, plural, one {Ein Teilnehmer hat keinen Sitzplatz} other {{countWords} Teilnehmende haben keinen Sitzplatz}}",
@@ -7430,7 +7437,9 @@
       "invoicesOverdue": "{count, plural, one {Eine Rechnung ist überfällig} other {{countWords} Rechnungen sind überfällig}}",
       "rsvpPending": "{count, plural, one {Ein Gast hat noch nicht auf die Einladung geantwortet} other {{countWords} Gäste haben noch nicht auf die Einladung geantwortet}}",
       "guestsUnseated": "{count, plural, one {Ein Gast hat keinen Tisch} other {{countWords} Gäste haben keinen Tisch}}",
-      "mealsMissing": "{count, plural, one {Ein zusagender Gast hat kein Essen gewählt} other {{countWords} zusagende Gäste haben kein Essen gewählt}}"
+      "mealsMissing": "{count, plural, one {Ein zusagender Gast hat kein Essen gewählt} other {{countWords} zusagende Gäste haben kein Essen gewählt}}",
+      "metricRule": "Alarmregel „{title}“ wurde ausgelöst",
+      "metricRuleFinance": "Alarmregel „{title}“ wurde ausgelöst"
     },
     "widget": {
       "title": "Warnungen",
@@ -15895,5 +15904,276 @@
       "archived": "Archiviert"
     },
     "refreshedAt": "Aktualisiert"
+  },
+  "analyticsPro": {
+    "tabs": {
+      "label": "Analysebereiche",
+      "overview": "Übersicht",
+      "explore": "Erkunden",
+      "alerts": "Alarmregeln",
+      "reports": "Berichte"
+    },
+    "explore": {
+      "title": "Erkunden",
+      "description": "Wähle eine Kennzahl und wie sie aufgeschlüsselt wird. Die Attribution zeigt, welche Kampagnen, Kanäle und Quellen zu Verkäufen geführt haben.",
+      "form": "Auswählen, was angezeigt wird",
+      "measure": "Kennzahl",
+      "groupCounts": "Anzahlen",
+      "groupMoney": "Geld",
+      "groupAttribution": "Attribution",
+      "measures": {
+        "registrations": "Anmeldungen",
+        "tickets": "Verkaufte Tickets (netto)",
+        "comp_tickets": "Freitickets",
+        "refunded_tickets": "Erstattete Tickets",
+        "checkins": "Check-ins",
+        "no_shows": "Nicht erschienen",
+        "attributed_orders": "Zugeordnete Bestellungen",
+        "gross": "Bezahlt",
+        "refunds": "Erstattet",
+        "net": "Nettoumsatz",
+        "attributed_revenue": "Zugeordneter Umsatz"
+      },
+      "dimension": "Aufschlüsseln nach",
+      "dimensions": {
+        "period": "Zeitraum",
+        "event": "Event",
+        "channel": "Kanal",
+        "source": "Quelle",
+        "campaign": "Kampagne"
+      },
+      "model": "Attributionsmodell",
+      "modelHint": "Nur für zugeordnete Bestellungen und Umsätze.",
+      "models": {
+        "first": "Erster Kontakt",
+        "last": "Letzter Kontakt",
+        "linear": "Linear (zu gleichen Teilen)"
+      },
+      "range": "Zeitraum",
+      "ranges": {
+        "7d": "Letzte 7 Tage",
+        "30d": "Letzte 30 Tage",
+        "90d": "Letzte 90 Tage",
+        "365d": "Letzte 12 Monate",
+        "custom": "Eigene Daten"
+      },
+      "from": "Von",
+      "to": "Bis",
+      "customHint": "Wird verwendet, wenn der Zeitraum „Eigene Daten“ ist.",
+      "granularity": "Anzeigen nach",
+      "granularities": {
+        "day": "Tag",
+        "week": "Woche",
+        "month": "Monat"
+      },
+      "event": "Event",
+      "allEvents": "Alle Events",
+      "apply": "Anzeigen",
+      "errors": {
+        "touch_dimension": "Kanal, Quelle und Kampagne funktionieren nur mit zugeordneten Bestellungen oder Umsätzen.",
+        "custom_needs_dates": "Gib für einen eigenen Zeitraum beide Daten ein.",
+        "from_after_to": "Das Enddatum liegt vor dem Startdatum.",
+        "range_too_long": "Wähle einen Zeitraum von höchstens zwei Jahren.",
+        "invalid_date": "Gib Daten als Jahr, Monat und Tag ein."
+      },
+      "resultsCaption": "{measure} nach {dimension}, {from} bis {to}",
+      "total": "Summe",
+      "none": "Keine",
+      "unnamedCampaign": "Unbenannte Kampagne",
+      "weekOf": "Woche vom {day}",
+      "currency": "Währung",
+      "value": "Wert",
+      "truncated": "Die ersten 500 Zeilen werden angezeigt. Wähle einen kürzeren Zeitraum oder ein einzelnes Event, um den Rest zu sehen.",
+      "emptyTitle": "Für diese Auswahl gibt es nichts anzuzeigen",
+      "emptyBody": "Für diese Kennzahl gibt es in diesem Zeitraum keine Daten. Versuche einen längeren Zeitraum, ein anderes Event oder eine andere Kennzahl.",
+      "emptyAction": "Die letzten 12 Monate anzeigen",
+      "export": "CSV exportieren",
+      "exportLabel": "Diese Ergebnisse als CSV-Datei exportieren",
+      "timeZoneNote": "Tage sind Kalendertage in {timeZone}, der Zeitzone deiner Organisation.",
+      "attributionNote": "Die Attribution verteilt jede zugeordnete Bestellung auf die Besuche, die innerhalb deines Attributionsfensters zu ihr geführt haben: angeklickte Tracking-Links, Aufrufe mit UTM-Werten und andere Websites, die den Käufer geschickt haben. Erster Kontakt schreibt sie dem ersten Besuch zu, letzter Kontakt dem letzten, und linear teilt die Bestellung zu gleichen Teilen (ein übrig bleibender Cent geht an den letzten Besuch). Umsatz ist, was der Käufer bezahlt hat, je Währung; Bestellungen ohne erfassten Besuch werden nicht zugeordnet.",
+      "saveTitle": "Diese Ansicht speichern",
+      "viewName": "Name",
+      "save": "Ansicht speichern",
+      "saved": "Ansicht gespeichert",
+      "viewErrors": {
+        "name": "Gib einen Namen mit höchstens 80 Zeichen ein.",
+        "name_taken": "Du hast bereits eine Ansicht mit diesem Namen.",
+        "too_many_views": "Du hast 50 gespeicherte Ansichten. Lösche zuerst eine."
+      },
+      "views": "Deine gespeicherten Ansichten",
+      "noViews": "Noch keine gespeicherten Ansichten. Wähle oben aus, was angezeigt wird, und speichere es hier, um mit einem Klick zurückzukehren.",
+      "deleteView": "Löschen",
+      "deleteViewLabel": "Ansicht {name} löschen",
+      "deleted": "Ansicht gelöscht"
+    },
+    "rules": {
+      "title": "Alarmregeln",
+      "description": "Lass dich benachrichtigen, wenn eine Zahl eine Grenze überschreitet. Regelalarme erreichen dein Team über Alarme, wie die eingebauten.",
+      "createTitle": "Neue Alarmregel",
+      "editTitle": "Alarmregel bearbeiten",
+      "name": "Name",
+      "nameHint": "Wird im Alarm und in seiner E-Mail angezeigt.",
+      "measure": "Kennzahl",
+      "measures": {
+        "registrations": "Anmeldungen",
+        "tickets": "Verkaufte Tickets (netto)",
+        "refunded_tickets": "Erstattete Tickets",
+        "checkins": "Check-ins",
+        "gross": "Bezahlt",
+        "refunds": "Erstattet",
+        "net": "Nettoumsatz"
+      },
+      "condition": "Wenn sie",
+      "conditions": {
+        "above": "mindestens ist",
+        "below": "unter",
+        "rise": "um mindestens (%) steigt",
+        "drop": "um mindestens (%) sinkt"
+      },
+      "threshold": "Schwellenwert",
+      "thresholdHint": "Eine Anzahl, ein Betrag für Geld oder ein Prozentsatz für Anstiege und Rückgänge (verglichen mit dem Zeitraum davor).",
+      "window": "Über",
+      "windows": {
+        "d1": "Heute",
+        "d7": "Die letzten 7 Tage",
+        "d14": "Die letzten 14 Tage",
+        "d30": "Die letzten 30 Tage"
+      },
+      "currency": "Währung",
+      "currencyHint": "Geldregeln vergleichen eine Währung.",
+      "noCurrency": "Kein Geld",
+      "event": "Event",
+      "allEvents": "Alle Events",
+      "severity": "Schweregrad",
+      "severities": {
+        "info": "Info",
+        "warning": "Warnung",
+        "critical": "Kritisch"
+      },
+      "quietHours": "Ruhezeiten beachten",
+      "quietHoursHint": "E-Mail und Push warten bis 8:00 Uhr in der Zeitzone jeder empfangenden Person, wenn die Regel zwischen 21:00 und 8:00 Uhr auslöst. In-App-Alarme erscheinen sofort.",
+      "create": "Regel erstellen",
+      "save": "Änderungen speichern",
+      "back": "Zurück zu den Alarmregeln",
+      "created": "Regel erstellt",
+      "saved": "Änderungen gespeichert",
+      "list": "Deine Regeln",
+      "emptyTitle": "Noch keine Alarmregeln",
+      "emptyBody": "Erstelle oben eine Regel, zum Beispiel „Erstattungen heute sind mindestens 10“. Du wirst benachrichtigt, sobald das zutrifft.",
+      "columns": {
+        "name": "Regel",
+        "condition": "Bedingung",
+        "status": "Status",
+        "lastValue": "Letzter Wert",
+        "actions": "Aktionen"
+      },
+      "summary": "{measure} {condition} {threshold} · {window}",
+      "status": {
+        "firing": "Ausgelöst",
+        "ok": "OK",
+        "off": "Aus",
+        "new": "Noch nicht geprüft"
+      },
+      "edit": "Bearbeiten",
+      "editLabel": "{name} bearbeiten",
+      "turnOff": "Ausschalten",
+      "turnOn": "Einschalten",
+      "turnOffLabel": "{name} ausschalten",
+      "turnOnLabel": "{name} einschalten",
+      "delete": "Löschen",
+      "deleteLabel": "{name} löschen",
+      "deleted": "Regel gelöscht",
+      "turnedOff": "Regel ausgeschaltet",
+      "turnedOn": "Regel eingeschaltet",
+      "readOnly": "Du kannst diese Regeln sehen, aber nicht ändern.",
+      "errors": {
+        "name": "Gib einen Namen mit höchstens 80 Zeichen ein.",
+        "name_taken": "Es gibt bereits eine Regel mit diesem Namen.",
+        "threshold": "Gib eine Zahl ab 0 ein.",
+        "percent_range": "Gib einen Prozentsatz zwischen 1 und 1000 ein.",
+        "currency_required": "Wähle eine Währung für eine Geldregel.",
+        "too_many_rules": "Du hast 50 Regeln. Lösche zuerst eine."
+      }
+    },
+    "reports": {
+      "title": "Geplante Berichte",
+      "description": "Ein PDF deiner Analysen per E-Mail jeden Tag, jede Woche oder jeden Monat, gezählt in der Zeitzone deiner Organisation.",
+      "createTitle": "Neuer geplanter Bericht",
+      "editTitle": "Geplanten Bericht bearbeiten",
+      "name": "Name",
+      "frequency": "Wie oft",
+      "frequencies": {
+        "daily": "Jeden Tag (Zahlen von gestern)",
+        "weekly": "Jeden Montag (letzte Woche, Montag bis Sonntag)",
+        "monthly": "Am 1. (letzter Monat)"
+      },
+      "frequencyShort": {
+        "daily": "Täglich",
+        "weekly": "Wöchentlich",
+        "monthly": "Monatlich"
+      },
+      "sendHour": "Senden um",
+      "sendHourHint": "Uhrzeit in {timeZone}.",
+      "event": "Event",
+      "allEvents": "Alle Events",
+      "recipients": "Senden an",
+      "recipientsHint": "Mitglieder, die Bestellungen sehen können. Umsätze stehen nur für diejenigen im PDF, die Finanzen sehen können; jedes PDF ist in der Sprache seines Lesers.",
+      "you": "{name} (du)",
+      "create": "Bericht planen",
+      "save": "Änderungen speichern",
+      "back": "Zurück zu den geplanten Berichten",
+      "created": "Bericht geplant",
+      "saved": "Änderungen gespeichert",
+      "list": "Zeitpläne",
+      "emptyTitle": "Noch keine geplanten Berichte",
+      "emptyBody": "Plane oben einen: Er kommt einmal pro Zeitraum per E-Mail, mit einem Link zu seinem PDF.",
+      "columns": {
+        "name": "Bericht",
+        "frequency": "Wie oft",
+        "next": "Nächster Versand",
+        "recipients": "Empfänger",
+        "status": "Status",
+        "actions": "Aktionen"
+      },
+      "recipientsCount": "{count, plural, one {# Mitglied} other {# Mitglieder}}",
+      "status": {
+        "on": "An",
+        "off": "Aus"
+      },
+      "edit": "Bearbeiten",
+      "editLabel": "{name} bearbeiten",
+      "turnOff": "Ausschalten",
+      "turnOn": "Einschalten",
+      "turnOffLabel": "{name} ausschalten",
+      "turnOnLabel": "{name} einschalten",
+      "delete": "Löschen",
+      "deleteLabel": "{name} löschen",
+      "deleted": "Zeitplan gelöscht",
+      "turnedOff": "Zeitplan ausgeschaltet",
+      "turnedOn": "Zeitplan eingeschaltet",
+      "recent": "Neueste Berichte",
+      "recentEmpty": "Noch wurde kein Bericht gesendet. Der erste geht zur nächsten Sendezeit raus.",
+      "recentColumns": {
+        "report": "Bericht",
+        "period": "Zeitraum",
+        "status": "Status",
+        "file": "PDF"
+      },
+      "runStatus": {
+        "pending": "Wartet",
+        "sent": "Gesendet",
+        "failed": "Fehlgeschlagen"
+      },
+      "download": "PDF herunterladen",
+      "downloadLabel": "{name} für {period} herunterladen (PDF)",
+      "notReady": "Nicht bereit",
+      "errors": {
+        "name": "Gib einen Namen mit höchstens 80 Zeichen ein.",
+        "name_taken": "Es gibt bereits einen Zeitplan mit diesem Namen.",
+        "recipients": "Wähle mindestens ein Mitglied.",
+        "bad_recipient": "Wähle Mitglieder, die Bestellungen sehen können.",
+        "too_many_schedules": "Du hast 25 Zeitpläne. Lösche zuerst einen."
+      }
+    }
   }
 }

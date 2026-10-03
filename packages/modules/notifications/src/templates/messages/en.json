@@ -339,6 +339,21 @@
     "badges.kiosk-code": {
       "subject": "{code} is your badge kiosk code for {eventName}",
       "intro": "Enter {code} on the badge kiosk to check your details and print your badge. The code works once and expires in {minutes, plural, one {# minute} other {# minutes}}. If you didn't ask for it, you can ignore this email."
+    },
+    "alerts.metric": {
+      "subject": "Alert rule “{title}” is firing",
+      "intro": "{reading, select, none {Your alert rule “{title}” is still firing at {org}.} other {Your alert rule “{title}” is firing at {org}: {reading} over the last {windowDays, plural, one {day} other {# days}}.}} Open it to acknowledge or snooze it.",
+      "cta": "Open the alert"
+    },
+    "alerts.metric-now": {
+      "subject": "Alert rule “{title}” is firing",
+      "intro": "{reading, select, none {Your alert rule “{title}” is still firing at {org}.} other {Your alert rule “{title}” is firing at {org}: {reading} over the last {windowDays, plural, one {day} other {# days}}.}} Open it to acknowledge or snooze it.",
+      "cta": "Open the alert"
+    },
+    "analytics.report": {
+      "subject": "Your report “{name}”: {period}",
+      "intro": "The {org} report “{name}” for {period} is ready. Open it to download the PDF.",
+      "cta": "Download the PDF"
     }
   },
   "roles": {

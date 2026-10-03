@@ -1,3 +1,4 @@
+export { type AnalyticsReportPdfInput, analyticsReportHtml, type ReportTable } from './analytics-report.ts';
 export { type CreditNotePdfInput, creditNoteHtml } from './credit-note.ts';
 export { type DsarReceiptPdfInput, dsarReceiptHtml } from './dsar-receipt.ts';
 export { disputeEvidenceHtml, type EvidencePdfInput, type EvidenceSection } from './evidence.ts';

@@ -159,7 +159,9 @@
       "alerts": {
         "alert": "アラート",
         "alert-text": "アラートSMS",
-        "alert-urgent-text": "緊急アラートSMS"
+        "alert-urgent-text": "緊急アラートSMS",
+        "metric": "アラートルール",
+        "metric-now": "アラートルール（即時送信）"
       },
       "campaigns": {
         "test": "キャンペーンのテスト"
@@ -204,6 +206,9 @@
       },
       "badges": {
         "kiosk-code": "バッジキオスクのコード"
+      },
+      "analytics": {
+        "report": "定期レポート"
       }
     },
     "status": {
@@ -7394,7 +7399,9 @@
       "invoicesOverdue": "請求書を開く",
       "rsvpPending": "出欠を開く",
       "guestsUnseated": "ゲストの席を決める",
-      "mealsMissing": "出欠の回答を開く"
+      "mealsMissing": "出欠の回答を開く",
+      "metricRule": "アラートルールを開く",
+      "metricRuleFinance": "アラートルールを開く"
     },
     "rules": {
       "unseated": "{count, plural, other {{countWords}人の参加者に座席がありません}}",
@@ -7430,7 +7437,9 @@
       "invoicesOverdue": "{count, plural, other {{countWords}件の請求書が支払期限を過ぎています}}",
       "rsvpPending": "{count, plural, other {{countWords}人のゲストが出欠に回答していません}}",
       "guestsUnseated": "{count, plural, other {{countWords}人のゲストにテーブルがありません}}",
-      "mealsMissing": "{count, plural, other {出席する{countWords}人のゲストが料理を選んでいません}}"
+      "mealsMissing": "{count, plural, other {出席する{countWords}人のゲストが料理を選んでいません}}",
+      "metricRule": "アラートルール「{title}」が発動しました",
+      "metricRuleFinance": "アラートルール「{title}」が発動しました"
     },
     "widget": {
       "title": "アラート",
@@ -15895,5 +15904,276 @@
       "archived": "アーカイブ済み"
     },
     "refreshedAt": "更新日時"
+  },
+  "analyticsPro": {
+    "tabs": {
+      "label": "アナリティクスのセクション",
+      "overview": "概要",
+      "explore": "探索",
+      "alerts": "アラートルール",
+      "reports": "レポート"
+    },
+    "explore": {
+      "title": "探索",
+      "description": "指標と内訳の方法を選びます。アトリビューションは、どのキャンペーン・チャネル・参照元が売上につながったかを示します。",
+      "form": "表示する内容を選ぶ",
+      "measure": "指標",
+      "groupCounts": "件数",
+      "groupMoney": "金額",
+      "groupAttribution": "アトリビューション",
+      "measures": {
+        "registrations": "申込数",
+        "tickets": "販売チケット（純数）",
+        "comp_tickets": "無料チケット",
+        "refunded_tickets": "返金済みチケット",
+        "checkins": "チェックイン",
+        "no_shows": "不参加",
+        "attributed_orders": "アトリビューション対象の注文",
+        "gross": "支払額",
+        "refunds": "返金額",
+        "net": "純売上",
+        "attributed_revenue": "アトリビューション売上"
+      },
+      "dimension": "内訳",
+      "dimensions": {
+        "period": "期間",
+        "event": "イベント",
+        "channel": "チャネル",
+        "source": "参照元",
+        "campaign": "キャンペーン"
+      },
+      "model": "アトリビューションモデル",
+      "modelHint": "アトリビューション対象の注文と売上にのみ使います。",
+      "models": {
+        "first": "ファーストタッチ",
+        "last": "ラストタッチ",
+        "linear": "線形（均等配分）"
+      },
+      "range": "期間",
+      "ranges": {
+        "7d": "過去 7 日間",
+        "30d": "過去 30 日間",
+        "90d": "過去 90 日間",
+        "365d": "過去 12 か月",
+        "custom": "日付を指定"
+      },
+      "from": "開始日",
+      "to": "終了日",
+      "customHint": "期間が「日付を指定」のときに使います。",
+      "granularity": "表示単位",
+      "granularities": {
+        "day": "日",
+        "week": "週",
+        "month": "月"
+      },
+      "event": "イベント",
+      "allEvents": "すべてのイベント",
+      "apply": "表示",
+      "errors": {
+        "touch_dimension": "チャネル・参照元・キャンペーンは、アトリビューション対象の注文または売上でのみ使えます。",
+        "custom_needs_dates": "期間を指定するには両方の日付を入力してください。",
+        "from_after_to": "終了日が開始日より前です。",
+        "range_too_long": "2 年以内の期間を選んでください。",
+        "invalid_date": "日付は年・月・日の形式で入力してください。"
+      },
+      "resultsCaption": "{dimension}別の{measure}（{from}〜{to}）",
+      "total": "合計",
+      "none": "なし",
+      "unnamedCampaign": "名前のないキャンペーン",
+      "weekOf": "{day} の週",
+      "currency": "通貨",
+      "value": "値",
+      "truncated": "最初の 500 行を表示しています。残りを見るには期間を短くするか、イベントを 1 つ選んでください。",
+      "emptyTitle": "この選択では表示するものがありません",
+      "emptyBody": "この期間のこの指標のデータはありません。期間を長くするか、別のイベントや指標を試してください。",
+      "emptyAction": "過去 12 か月を表示",
+      "export": "CSV をエクスポート",
+      "exportLabel": "この結果を CSV ファイルとしてエクスポート",
+      "timeZoneNote": "日付は組織のタイムゾーン {timeZone} の暦日です。",
+      "attributionNote": "アトリビューションは、アトリビューション期間内に注文につながった訪問（クリックされたトラッキングリンク、UTM 付きの訪問、購入者を送った他サイト）に各注文を配分します。ファーストタッチは最初の訪問に、ラストタッチは最後の訪問に計上し、線形は注文を均等に分けます（端数の 1 セントは最後の訪問へ）。売上は購入者が支払った額で、通貨ごとに集計します。訪問が記録されていない注文は対象外です。",
+      "saveTitle": "このビューを保存",
+      "viewName": "名前",
+      "save": "ビューを保存",
+      "saved": "ビューを保存しました",
+      "viewErrors": {
+        "name": "80 文字以内で名前を入力してください。",
+        "name_taken": "同じ名前のビューがすでにあります。",
+        "too_many_views": "保存済みビューが 50 件あります。先に 1 件削除してください。"
+      },
+      "views": "保存したビュー",
+      "noViews": "保存したビューはまだありません。上で表示内容を選び、ここに保存すればワンクリックで戻れます。",
+      "deleteView": "削除",
+      "deleteViewLabel": "ビュー「{name}」を削除",
+      "deleted": "ビューを削除しました"
+    },
+    "rules": {
+      "title": "アラートルール",
+      "description": "数値がしきい値を超えたら通知します。ルールのアラートは、組み込みのものと同じくアラート機能でチームに届きます。",
+      "createTitle": "新しいアラートルール",
+      "editTitle": "アラートルールを編集",
+      "name": "名前",
+      "nameHint": "アラートとそのメールに表示されます。",
+      "measure": "指標",
+      "measures": {
+        "registrations": "申込数",
+        "tickets": "販売チケット（純数）",
+        "refunded_tickets": "返金済みチケット",
+        "checkins": "チェックイン",
+        "gross": "支払額",
+        "refunds": "返金額",
+        "net": "純売上"
+      },
+      "condition": "条件",
+      "conditions": {
+        "above": "以上",
+        "below": "未満",
+        "rise": "以上増加（%）",
+        "drop": "以上減少（%）"
+      },
+      "threshold": "しきい値",
+      "thresholdHint": "件数、金額、または増減の割合（直前の期間との比較）。",
+      "window": "対象期間",
+      "windows": {
+        "d1": "今日",
+        "d7": "過去 7 日間",
+        "d14": "過去 14 日間",
+        "d30": "過去 30 日間"
+      },
+      "currency": "通貨",
+      "currencyHint": "金額のルールは 1 つの通貨で比較します。",
+      "noCurrency": "金額以外",
+      "event": "イベント",
+      "allEvents": "すべてのイベント",
+      "severity": "重要度",
+      "severities": {
+        "info": "情報",
+        "warning": "警告",
+        "critical": "重大"
+      },
+      "quietHours": "夜間の通知を控える",
+      "quietHoursHint": "ルールが 21:00〜8:00 に発動した場合、メールとプッシュは各受信者のタイムゾーンで 8:00 まで待ちます。アプリ内のアラートはすぐに表示されます。",
+      "create": "ルールを作成",
+      "save": "変更を保存",
+      "back": "アラートルールに戻る",
+      "created": "ルールを作成しました",
+      "saved": "変更を保存しました",
+      "list": "ルール一覧",
+      "emptyTitle": "アラートルールはまだありません",
+      "emptyBody": "上でルールを作成してください（例：「今日の返金が 10 件以上」）。条件を満たした時点でお知らせします。",
+      "columns": {
+        "name": "ルール",
+        "condition": "条件",
+        "status": "状態",
+        "lastValue": "最新の値",
+        "actions": "操作"
+      },
+      "summary": "{measure}が{window}で{threshold}{condition}",
+      "status": {
+        "firing": "発動中",
+        "ok": "正常",
+        "off": "オフ",
+        "new": "未確認"
+      },
+      "edit": "編集",
+      "editLabel": "{name} を編集",
+      "turnOff": "オフにする",
+      "turnOn": "オンにする",
+      "turnOffLabel": "{name} をオフにする",
+      "turnOnLabel": "{name} をオンにする",
+      "delete": "削除",
+      "deleteLabel": "{name} を削除",
+      "deleted": "ルールを削除しました",
+      "turnedOff": "ルールをオフにしました",
+      "turnedOn": "ルールをオンにしました",
+      "readOnly": "これらのルールは閲覧のみ可能で、変更はできません。",
+      "errors": {
+        "name": "80 文字以内で名前を入力してください。",
+        "name_taken": "同じ名前のルールがすでにあります。",
+        "threshold": "0 以上の数値を入力してください。",
+        "percent_range": "1〜1000 の割合を入力してください。",
+        "currency_required": "金額のルールには通貨を選んでください。",
+        "too_many_rules": "ルールが 50 件あります。先に 1 件削除してください。"
+      }
+    },
+    "reports": {
+      "title": "定期レポート",
+      "description": "アナリティクスの PDF を毎日・毎週・毎月メールで送ります。集計は組織のタイムゾーンで行います。",
+      "createTitle": "新しい定期レポート",
+      "editTitle": "定期レポートを編集",
+      "name": "名前",
+      "frequency": "頻度",
+      "frequencies": {
+        "daily": "毎日（前日の数値）",
+        "weekly": "毎週月曜（先週の月曜〜日曜）",
+        "monthly": "毎月 1 日（先月）"
+      },
+      "frequencyShort": {
+        "daily": "毎日",
+        "weekly": "毎週",
+        "monthly": "毎月"
+      },
+      "sendHour": "送信時刻",
+      "sendHourHint": "{timeZone} の時刻です。",
+      "event": "イベント",
+      "allEvents": "すべてのイベント",
+      "recipients": "送信先",
+      "recipientsHint": "注文を閲覧できるメンバー。売上は経理を閲覧できる人の PDF にのみ含まれ、各 PDF は読む人の言語で作成されます。",
+      "you": "{name}（あなた）",
+      "create": "レポートを予約",
+      "save": "変更を保存",
+      "back": "定期レポートに戻る",
+      "created": "レポートを予約しました",
+      "saved": "変更を保存しました",
+      "list": "スケジュール",
+      "emptyTitle": "定期レポートはまだありません",
+      "emptyBody": "上で予約してください。期間ごとに 1 回、PDF へのリンク付きでメールが届きます。",
+      "columns": {
+        "name": "レポート",
+        "frequency": "頻度",
+        "next": "次回送信",
+        "recipients": "受信者",
+        "status": "状態",
+        "actions": "操作"
+      },
+      "recipientsCount": "{count, plural, other {# 人のメンバー}}",
+      "status": {
+        "on": "オン",
+        "off": "オフ"
+      },
+      "edit": "編集",
+      "editLabel": "{name} を編集",
+      "turnOff": "オフにする",
+      "turnOn": "オンにする",
+      "turnOffLabel": "{name} をオフにする",
+      "turnOnLabel": "{name} をオンにする",
+      "delete": "削除",
+      "deleteLabel": "{name} を削除",
+      "deleted": "スケジュールを削除しました",
+      "turnedOff": "スケジュールをオフにしました",
+      "turnedOn": "スケジュールをオンにしました",
+      "recent": "最近のレポート",
+      "recentEmpty": "まだレポートは送信されていません。最初のレポートは次の送信時刻に送られます。",
+      "recentColumns": {
+        "report": "レポート",
+        "period": "期間",
+        "status": "状態",
+        "file": "PDF"
+      },
+      "runStatus": {
+        "pending": "待機中",
+        "sent": "送信済み",
+        "failed": "失敗"
+      },
+      "download": "PDF をダウンロード",
+      "downloadLabel": "{period} の {name} をダウンロード（PDF）",
+      "notReady": "準備中",
+      "errors": {
+        "name": "80 文字以内で名前を入力してください。",
+        "name_taken": "同じ名前のスケジュールがすでにあります。",
+        "recipients": "メンバーを 1 人以上選んでください。",
+        "bad_recipient": "注文を閲覧できるメンバーを選んでください。",
+        "too_many_schedules": "スケジュールが 25 件あります。先に 1 件削除してください。"
+      }
+    }
   }
 }

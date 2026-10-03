@@ -10,6 +10,7 @@ import { purgeRealtimeMessages } from '@yayatoh/platform';
 import { setOccupantDirectory } from '@yayatoh/seating';
 import { fakeDomainProvider } from '@yayatoh/tenancy';
 import { sweepAlerts } from './alerts.ts';
+import { analyticsTickJob, enqueueAnalyticsTicks } from './analytics-pro.ts';
 import { badgeBatchJob, enqueueDueBadgeBatches } from './badges.ts';
 import { syncBillingCatalog } from './billing-catalog.ts';
 import { runBillingPass } from './billing-usage.ts';
@@ -89,6 +90,13 @@ const jobs = [
   campaignReleaseJob,
   // M6.2a: warehouse backfills, a page at a time at each run's pace.
   backfillJob(warehouseFromEnv()),
+  // M6.2b: organizer alert rules and scheduled PDF reports (reports wait while Gotenberg is unset).
+  analyticsTickJob({
+    notifier: createNotifier(),
+    renderer: gotenbergUrl ? gotenbergRenderer({ url: gotenbergUrl, timeoutMs: 60_000 }) : null,
+    userLocales,
+    warehouse: warehouseFromEnv(),
+  }),
   ...(payments ? [massRefundJob(payments)] : []),
   ...(gotenbergUrl ? [badgeBatchJob(gotenbergRenderer({ url: gotenbergUrl, timeoutMs: 60_000 }))] : []),
 ];
@@ -493,6 +501,19 @@ setInterval(() => {
       queueingBackfills = false;
     });
 }, 5_000).unref();
+
+// Analytics ticks (M6.2b): every minute, one job per org with alert rules or report schedules
+// (leader only; the exclusive queue keeps one per org).
+let queueingAnalytics = false;
+setInterval(() => {
+  if (!release || stopping || queueingAnalytics) return;
+  queueingAnalytics = true;
+  enqueueAnalyticsTicks(boss)
+    .catch((err) => console.error('analytics tick', err))
+    .finally(() => {
+      queueingAnalytics = false;
+    });
+}, 60_000).unref();
 
 // Realtime message log (M3.1b): keep an hour for resumptions; prune every 5 minutes (leader only).
 setInterval(() => {

@@ -339,6 +339,21 @@
     "badges.kiosk-code": {
       "subject": "{code} 是你在 {eventName} 胸牌自助机的验证码",
       "intro": "在胸牌自助机上输入 {code}，即可核对你的信息并打印胸牌。验证码只能使用一次，{minutes, plural, other {# 分钟}}后失效。如果不是你本人申请，请忽略此邮件。"
+    },
+    "alerts.metric": {
+      "subject": "提醒规则“{title}”已触发",
+      "intro": "{reading, select, none {{org} 的提醒规则“{title}”仍处于触发状态。} other {{org} 的提醒规则“{title}”已触发：最近 {windowDays, plural, other {# 天}}为 {reading}。}} 打开以确认或暂缓提醒。",
+      "cta": "打开提醒"
+    },
+    "alerts.metric-now": {
+      "subject": "提醒规则“{title}”已触发",
+      "intro": "{reading, select, none {{org} 的提醒规则“{title}”仍处于触发状态。} other {{org} 的提醒规则“{title}”已触发：最近 {windowDays, plural, other {# 天}}为 {reading}。}} 打开以确认或暂缓提醒。",
+      "cta": "打开提醒"
+    },
+    "analytics.report": {
+      "subject": "你的报告“{name}”：{period}",
+      "intro": "{org} 的报告“{name}”（{period}）已准备好。打开即可下载 PDF。",
+      "cta": "下载 PDF"
     }
   },
   "roles": {

@@ -339,6 +339,21 @@
     "badges.kiosk-code": {
       "subject": "{code} es tu código para el quiosco de credenciales de {eventName}",
       "intro": "Introduce {code} en el quiosco de credenciales para revisar tus datos e imprimir tu credencial. El código sirve una vez y caduca en {minutes, plural, one {# minuto} other {# minutos}}. Si no lo pediste, puedes ignorar este correo."
+    },
+    "alerts.metric": {
+      "subject": "La regla de alerta «{title}» se ha activado",
+      "intro": "{reading, select, none {Tu regla de alerta «{title}» sigue activa en {org}.} other {Tu regla de alerta «{title}» se ha activado en {org}: {reading} en {windowDays, plural, one {el último día} other {los últimos # días}}.}} Ábrela para confirmarla o posponerla.",
+      "cta": "Abrir la alerta"
+    },
+    "alerts.metric-now": {
+      "subject": "La regla de alerta «{title}» se ha activado",
+      "intro": "{reading, select, none {Tu regla de alerta «{title}» sigue activa en {org}.} other {Tu regla de alerta «{title}» se ha activado en {org}: {reading} en {windowDays, plural, one {el último día} other {los últimos # días}}.}} Ábrela para confirmarla o posponerla.",
+      "cta": "Abrir la alerta"
+    },
+    "analytics.report": {
+      "subject": "Tu informe «{name}»: {period}",
+      "intro": "El informe «{name}» de {org} para {period} está listo. Ábrelo para descargar el PDF.",
+      "cta": "Descargar el PDF"
     }
   },
   "roles": {

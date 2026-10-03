@@ -1224,6 +1224,12 @@ importers:
       '@yayatoh/checkin':
         specifier: workspace:*
         version: link:../checkin
+      '@yayatoh/contracts':
+        specifier: workspace:*
+        version: link:../../contracts
+      '@yayatoh/csv':
+        specifier: workspace:*
+        version: link:../../csv
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../../db
@@ -1233,9 +1239,15 @@ importers:
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../kernel
+      '@yayatoh/marketing':
+        specifier: workspace:*
+        version: link:../marketing
       '@yayatoh/orders':
         specifier: workspace:*
         version: link:../orders
+      '@yayatoh/pdf':
+        specifier: workspace:*
+        version: link:../../pdf
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../../platform

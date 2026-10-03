@@ -320,6 +320,7 @@ export { overdueInvoicesTx } from './invoice-facts.ts';
 export { invoiceMailer } from './invoice-mailer.ts';
 // M5.2b: the manage token behind a session-schedule email link.
 export { orderManageTokenTx } from './manage-link.ts';
+export { type SoldOrderDayFact, soldOrderDaysTx } from './order-days.ts';
 export { buyerFactsTx, orderRefTx } from './participation.ts';
 export { orderPaymentStateTx } from './payment-state.ts';
 export { privateColumns } from './private-columns.ts';
