@@ -114,6 +114,14 @@ export default async function CfpSubmissionPage({
           <EmptyState
             title={t('noReviewsTitle')}
             description={canWrite && open ? t('noReviewsAssign') : t('noReviewsDescription')}
+            action={
+              <Link
+                href={`/o/${org}/e/${event}/speakers/cfp/reviewers`}
+                className={buttonClass('secondary', 'md')}
+              >
+                {t('reviewersHeading')}
+              </Link>
+            }
           />
         ) : (
           <ul className="m-0 flex list-none flex-col divide-y divide-line rounded-card border border-line bg-surface p-0 glass">

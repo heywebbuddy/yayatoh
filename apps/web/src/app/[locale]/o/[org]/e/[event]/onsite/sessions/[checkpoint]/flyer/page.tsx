@@ -1,7 +1,7 @@
 import { type SessionAttendanceDto, sessionAttendanceQuery } from '@yayatoh/checkin';
 import { executeQuery } from '@yayatoh/kernel';
 import { composeNav, isProfileKey } from '@yayatoh/platform';
-import { Card, EmptyState, PageHeader } from '@yayatoh/ui';
+import { buttonClass, Card, EmptyState, PageHeader } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { PrintButton } from '@/components/print-button.tsx';
@@ -41,7 +41,15 @@ export default async function SessionFlyerPage({
     return (
       <>
         <PageHeader title={t('sessionCheckin.flyerTitle')} />
-        <EmptyState title={t('checkin.noAccessTitle')} description={t('checkin.noAccessDescription')} />
+        <EmptyState
+          title={t('checkin.noAccessTitle')}
+          description={t('checkin.noAccessDescription')}
+          action={
+            <Link href={`/o/${org}/e/${event}`} className={buttonClass('primary', 'md')}>
+              {t('emptyActions.eventHome')}
+            </Link>
+          }
+        />
       </>
     );
   }
@@ -55,6 +63,11 @@ export default async function SessionFlyerPage({
         <EmptyState
           title={t('sessionCheckin.flyerOffTitle')}
           description={t('sessionCheckin.flyerOffDescription')}
+          action={
+            <Link href={`/o/${org}/e/${event}/onsite/sessions`} className={buttonClass('primary', 'md')}>
+              {t('sessionCheckin.title')}
+            </Link>
+          }
         />
       </>
     );

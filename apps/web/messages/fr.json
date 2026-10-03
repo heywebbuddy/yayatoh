@@ -15220,7 +15220,8 @@
   },
   "emptyActions": {
     "seeEvents": "Voir vos événements",
-    "eventHome": "Aller à l’accueil de l’événement"
+    "eventHome": "Aller à l’accueil de l’événement",
+    "clearSearch": "Effacer la recherche"
   },
   "coupons": {
     "title": "Coupons",

@@ -3,7 +3,9 @@ import {
   continueToPayment,
   expectAccessible,
   expectAccessibleBothModes,
+  expectPicked,
   newUser,
+  pickOption,
   signIn,
 } from './helpers.ts';
 import { createGala, publishEvent, unique } from './seating-helpers.ts';
@@ -51,7 +53,7 @@ async function buyAndNameTable(
   const context = await browser.newContext();
   const guest = await context.newPage();
   await guest.goto(`/events/${slug}`);
-  await guest.getByLabel(`Quantity — ${ticket}`).selectOption('1');
+  await pickOption(guest.getByLabel(`Quantity — ${ticket}`), '1');
   await guest.getByLabel('Full name').fill(buyer);
   await guest.getByLabel('Email for your tickets').fill(emailOf(buyer));
   await continueToPayment(guest, emailOf(buyer));
@@ -159,7 +161,7 @@ test.describe('paddle raise (M4.8c)', () => {
     await expect(one.getByText('Choose a guest or a party.')).toBeVisible();
     // Bulk with a start number out of range.
     const bulk = page.getByRole('region', { name: 'Give paddles in bulk' });
-    await expect(bulk.getByLabel('Who')).toHaveValue('tables');
+    await expectPicked(bulk.getByLabel('Who'), 'tables');
     await bulk.getByLabel('First number (optional)').fill('0');
     await bulk.getByRole('button', { name: 'Give paddles' }).click();
     await expect(bulk.getByText('Enter a paddle number from 1 to 99999.')).toBeVisible();
@@ -176,7 +178,7 @@ test.describe('paddle raise (M4.8c)', () => {
     await expect(bulk.getByText('Everyone in that group already has a paddle.')).toBeVisible();
 
     // The whole table's party gets its own paddle: a taken number first, then the next free one.
-    await one.getByLabel('Guest or party').selectOption({ label: `Table: ${g.company}` });
+    await pickOption(one.getByLabel('Guest or party'), { label: `Table: ${g.company}` });
     await one.getByLabel('Paddle number (optional)').fill('101');
     await one.getByRole('button', { name: 'Give paddle' }).click();
     await expect(one.getByText('That paddle number is already given.')).toBeVisible();

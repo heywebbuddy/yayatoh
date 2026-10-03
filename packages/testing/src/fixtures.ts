@@ -90,6 +90,7 @@ import { withTenant } from '@yayatoh/db';
 import {
   armLevelCommand,
   assignPaddleCommand,
+  catchUpGiftRefunds,
   closeCallCommand,
   closeMatchCommand,
   confirmEntriesCommand,
@@ -2922,6 +2923,9 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   // mappings, cursors, a run, record links and the demo's broken record in the errors inbox).
   const demo = await connectDemo(ctx());
   await runSync(org.id, demo.connectionId, { auth: fakeAuth }, ports);
+  // Batch 3u merge: the warehouse catches up again on what the fixture emitted after its first
+  // catch-up (batch 3j's rows: the gift refund), as the worker would.
+  await catchUpWarehouse(org.id);
   return {
     org,
     ownerId,
@@ -3250,8 +3254,8 @@ async function pledgeCollectionRows(orgId: string, eventId: string, partyId: str
 /**
  * M4.8f matching gifts (isolation coverage of matches and gift refunds): a 1:1 match on the fixture
  * campaign over the paddle raise's window, closed into the sponsor's pledge (it matched the
- * fixture's confirmed paddle pledge), and a refund recorded against the fixture's lapsed gift as
- * the refund subscriber leaves one.
+ * fixture's confirmed paddle pledge), and a refund of the fixture's lapsed gift with its
+ * `order.refunded@1`, recorded by the gift refund subscriber.
  */
 async function matchRows(orgId: string, eventId: string, ctx: (o?: Partial<Ctx>) => Ctx) {
   const view = await executeQuery(paddleConsoleQuery, { eventId }, ctx(), ports);
@@ -3275,16 +3279,37 @@ async function matchRows(orgId: string, eventId: string, ctx: (o?: Partial<Ctx>)
     ports,
   );
   await executeCommand(closeMatchCommand, { eventId, matchId: match.id }, ctx(), ports);
+  // The refund is written as the refund flow leaves it (with its `order.refunded@1`, so the
+  // projections that read refunds see it, the warehouse included); the gift refund row comes from
+  // the real subscriber (batch 3u merge: it was inserted directly, without the event).
   await withTenant(systemCtx(orgId), async (tx) => {
     const refundId = uuidv7();
+    const [gift] = await tx.execute<{ order_id: string }>(
+      sql`select order_id from donations.gifts where event_id = ${eventId} limit 1`,
+    );
+    if (!gift) throw new Error('fixture: no gift to refund');
     await tx.execute(sql`insert into orders.refunds (id, org_id, order_id, status, reason, amount_minor,
       currency, requested_by, completed_at)
-      select ${refundId}, org_id, order_id, 'succeeded', 'requested_by_customer', 1000, 'USD', 'fixture', now()
-      from donations.gifts where event_id = ${eventId} limit 1`);
-    await tx.execute(sql`insert into donations.gift_refunds (org_id, gift_id, refund_id, amount_minor, currency,
-      refunded_at) select org_id, id, ${refundId}, 1000, 'USD', now() from donations.gifts
-      where event_id = ${eventId} limit 1`);
+      values (${refundId}, ${orgId}, ${gift.order_id}, 'succeeded', 'requested_by_customer', 1000, 'USD', 'fixture', now())`);
+    await emitEvents(tx, systemCtx(orgId), [
+      {
+        type: 'order.refunded',
+        version: 1,
+        aggregateType: 'order',
+        aggregateId: gift.order_id,
+        payload: {
+          orgId,
+          orderId: gift.order_id,
+          refundId,
+          amountMinor: 1000,
+          currency: 'USD',
+          tickets: 0,
+          fully: false,
+        },
+      },
+    ]);
   });
+  await catchUpGiftRefunds(orgId);
 }
 
 /** English headers for attendee exports (the console passes its own locale's). */

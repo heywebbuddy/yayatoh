@@ -2,7 +2,13 @@ import { type Browser, expect, type Page, test } from '@playwright/test';
 import { closePools } from '@yayatoh/db';
 import { checkoutTarget } from '@yayatoh/events';
 import { type PledgeScenario, pledgeScenario } from '@yayatoh/testing';
-import { continueToPayment, expectAccessible, expectAccessibleBothModes, newUser } from './helpers.ts';
+import {
+  continueToPayment,
+  expectAccessible,
+  expectAccessibleBothModes,
+  newUser,
+  pickOption,
+} from './helpers.ts';
 
 // axe runs in light and dark on most screens, and each journey sets up its own gala.
 test.describe.configure({ timeout: 240_000 });
@@ -53,7 +59,7 @@ async function phone(browser: Browser) {
 /** The fake provider's card step: pick a test card and save it. */
 async function fakeCardStep(page: Page, card: '4242' | '0002' | '9995' = '4242') {
   await expect(page).toHaveURL(/\/checkout\/fake\/setup\?/);
-  await page.getByLabel('Test card').selectOption(card);
+  await pickOption(page.getByLabel('Test card'), card);
   await page.getByRole('button', { name: 'Save card (test)' }).click();
 }
 
@@ -190,7 +196,7 @@ test.describe('cards on file and pledge collection (M4.8e)', () => {
     const record = okafor.getByRole('button', { name: `Record payment for paddle ${g.s.okafor.paddle}` });
     await record.click();
     await expect(okafor.getByText('Choose how it was paid.')).toBeVisible();
-    await okafor.getByLabel('How it was paid').selectOption('check');
+    await pickOption(okafor.getByLabel('How it was paid'), 'check');
     await okafor.getByLabel('Received on').fill('2099-01-01');
     await record.click();
     await expect(okafor.getByText("The date can't be in the future.")).toBeVisible();
@@ -306,7 +312,7 @@ test.describe('cards on file and pledge collection (M4.8e)', () => {
     await buyer.page.goto(`/events/${g.slug}`);
     const box = buyer.page.getByLabel(/Save my card for tonight's giving/);
     await expect(box).not.toBeChecked();
-    await buyer.page.getByLabel('Quantity — Supporter').selectOption('1');
+    await pickOption(buyer.page.getByLabel('Quantity — Supporter'), '1');
     await buyer.page.getByLabel('Full name').fill('Box Buyer');
     await buyer.page.getByLabel('Email for your tickets').fill(email);
     await box.check();

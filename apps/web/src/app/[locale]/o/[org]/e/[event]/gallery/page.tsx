@@ -1,7 +1,16 @@
 import { type GalleryItemDto, hostGalleryQuery } from '@yayatoh/gallery';
 import { executeQuery } from '@yayatoh/kernel';
 import { isProfileKey, navIncludes, navLabelKey, PROFILES } from '@yayatoh/platform';
-import { Alert, Card, CardHeader, EmptyState, PageHeader, ProgressBar, StatusPill } from '@yayatoh/ui';
+import {
+  Alert,
+  buttonClass,
+  Card,
+  CardHeader,
+  EmptyState,
+  PageHeader,
+  ProgressBar,
+  StatusPill,
+} from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { GalleryPhoto } from '@/components/gallery/photo.tsx';
@@ -303,6 +312,17 @@ export default async function GalleryPage({
           <EmptyState
             title={t('pendingEmptyTitle')}
             description={s.moderation === 'auto' ? t('pendingEmptyAuto') : t('pendingEmptyHold')}
+            action={
+              canWrite ? (
+                <a href="#gallery-upload-heading" className={buttonClass('secondary', 'md')}>
+                  {t('uploadTitle')}
+                </a>
+              ) : (
+                <Link href={`/o/${org}/e/${event}`} className={buttonClass('secondary', 'md')}>
+                  {tr('emptyActions.eventHome')}
+                </Link>
+              )
+            }
           />
         ) : (
           <ul className="m-0 grid list-none gap-4 p-0 sm:grid-cols-2 lg:grid-cols-3">
@@ -343,6 +363,17 @@ export default async function GalleryPage({
           <EmptyState
             title={t('publishedEmptyTitle')}
             description={canWrite ? t('publishedEmptyWrite') : t('publishedEmptyRead')}
+            action={
+              canWrite ? (
+                <a href="#gallery-upload-heading" className={buttonClass('primary', 'md')}>
+                  {t('uploadTitle')}
+                </a>
+              ) : (
+                <Link href={`/o/${org}/e/${event}`} className={buttonClass('secondary', 'md')}>
+                  {tr('emptyActions.eventHome')}
+                </Link>
+              )
+            }
           />
         ) : (
           <ul className="m-0 grid list-none gap-4 p-0 sm:grid-cols-2 lg:grid-cols-3">

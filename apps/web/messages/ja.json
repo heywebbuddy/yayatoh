@@ -15220,7 +15220,8 @@
   },
   "emptyActions": {
     "seeEvents": "イベントを見る",
-    "eventHome": "イベントのホームへ"
+    "eventHome": "イベントのホームへ",
+    "clearSearch": "検索をクリア"
   },
   "coupons": {
     "title": "クーポン",

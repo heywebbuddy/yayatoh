@@ -15220,7 +15220,8 @@
   },
   "emptyActions": {
     "seeEvents": "查看你的活動",
-    "eventHome": "前往活動首頁"
+    "eventHome": "前往活動首頁",
+    "clearSearch": "清除搜尋"
   },
   "coupons": {
     "title": "優惠券",
