@@ -17,6 +17,23 @@ export {
   UpdateSettingsInput,
   updateSettingsCommand,
 } from './commands.ts';
+// M5.8a: networking (directory, connections, meetings, block and report).
+export {
+  DIRECTORY_PAGE,
+  escapeLike,
+  freeTable,
+  INTEREST_MAX_LENGTH,
+  icsEscape,
+  MAX_INTERESTS,
+  MAX_LOCATION_CAPACITY,
+  MAX_PENDING_REQUESTS,
+  MAX_SLOT_MINUTES,
+  MAX_SLOT_SERIES,
+  MIN_SLOT_MINUTES,
+  meetingIcs,
+  normalizeInterests,
+  slotSeries,
+} from './domain/networking.ts';
 export {
   type BallotProblem,
   ballotKeys,
@@ -51,6 +68,47 @@ export {
 } from './domain/tokens.ts';
 export * from './dto.ts';
 export {
+  blockedQuery,
+  blockPersonCommand,
+  cancelMeetingCommand,
+  DirectoryInput,
+  directoryQuery,
+  myConnectionsQuery,
+  myMeetingQuery,
+  myMeetingsQuery,
+  networkHomeQuery,
+  OptInInput,
+  optInCommand,
+  optOutCommand,
+  personQuery,
+  ReportInput,
+  RequestConnectionInput,
+  RequestMeetingInput,
+  reportPersonCommand,
+  requestConnectionCommand,
+  requestMeetingCommand,
+  respondConnectionCommand,
+  respondMeetingCommand,
+  UpdateProfileInput,
+  unblockPersonCommand,
+  updateProfileCommand,
+  withdrawConnectionCommand,
+} from './networking/attendee.ts';
+export {
+  AddSlotsInput,
+  addMeetingSlotsCommand,
+  deleteMeetingLocationCommand,
+  deleteMeetingSlotCommand,
+  networkConsoleQuery,
+  resolveReportCommand,
+  restoreProfileCommand,
+  SaveLocationInput,
+  saveMeetingLocationCommand,
+  UpdateNetworkSettingsInput,
+  updateNetworkSettingsCommand,
+} from './networking/console.ts';
+export * from './networking/dto.ts';
+export {
   AskInput,
   askQuestionCommand,
   displaySession,
@@ -70,10 +128,20 @@ export { ENGAGEMENT_REALTIME_CHANNELS, LIVE_CHANNEL, MODERATION_CHANNEL } from '
 export {
   ANONYMOUS_IDENTITY,
   type AnonymousIdentity,
+  CONNECTION_STATES,
+  type ConnectionState,
+  LOCATION_KINDS,
+  type LocationKind,
+  MEETING_STATES,
+  type MeetingState,
   POLL_KINDS,
   POLL_STATES,
   type PollKind,
   type PollState,
   QUESTION_STATES,
   type QuestionState,
+  REPORT_REASONS,
+  REPORT_STATES,
+  type ReportReason,
+  type ReportState,
 } from './schema.ts';
