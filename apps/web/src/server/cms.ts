@@ -13,7 +13,12 @@ import {
   publicOrganizerById,
   publicSiteSettings,
 } from '@yayatoh/marketplace';
-import { contentHomeFor, contentUrlFor, entryPath, organizerBase as organizerBaseFor } from '@/lib/content-url.ts';
+import {
+  contentHomeFor,
+  contentUrlFor,
+  entryPath,
+  organizerBase as organizerBaseFor,
+} from '@/lib/content-url.ts';
 import { apexHost } from '@/lib/hosts.ts';
 import { publicCached } from './public-cache.ts';
 import type { RequestHost } from './request-origin.ts';

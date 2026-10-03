@@ -54,7 +54,10 @@ describe('content public URLs per host class (U3)', () => {
 
   it('the marketplace content org lives at the apex root', () => {
     const o = { apexHost: 'yayatoh.com', isContentOrg: true };
-    expect(contentHomeFor(req('app.yayatoh.com'), noSite, o)).toEqual({ origin: 'https://yayatoh.com', base: '' });
+    expect(contentHomeFor(req('app.yayatoh.com'), noSite, o)).toEqual({
+      origin: 'https://yayatoh.com',
+      base: '',
+    });
     expect(contentHomeFor(req('localhost', 'http:', '3100'), noSite, o)).toEqual({
       origin: 'http://localhost:3100',
       base: '',

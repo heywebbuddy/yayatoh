@@ -1718,7 +1718,40 @@
     "added": "Dominio aggiunto. Ora pubblica i record DNS mostrati sopra.",
     "managedMissing": "Il tuo indirizzo gratuito {host} non è ancora configurato.",
     "managedCreate": "Configura il mio indirizzo gratuito",
-    "noAccess": "Solo i proprietari e gli amministratori possono modificare i domini."
+    "noAccess": "Solo i proprietari e gli amministratori possono modificare i domini.",
+    "how": {
+      "title": "Come funziona",
+      "add": "Aggiungi un dominio di tua proprietà, ad esempio biglietti.latuaazienda.it.",
+      "dns": "Copia i record DNS che mostriamo nelle impostazioni della società che gestisce il tuo dominio.",
+      "check": "Controlliamo i record e configuriamo un certificato sicuro (https). Di solito servono pochi minuti, a volte fino a un giorno.",
+      "live": "Quando è attivo, rendilo il tuo indirizzo principale così link ed email lo useranno."
+    },
+    "wizard": {
+      "label": "Collega {host}",
+      "steps": "Passaggi per collegare {host}",
+      "step": {
+        "domain": "Dominio aggiunto",
+        "dns": "Record DNS",
+        "verify": "Verificato",
+        "ssl": "Connessione sicura",
+        "primary": "Principale"
+      },
+      "dns": {
+        "signIn": "Accedi dove gestisci il DNS del tuo dominio (il tuo registrar o un servizio come Cloudflare).",
+        "open": "Apri le impostazioni DNS di questo dominio.",
+        "add": "Aggiungi ogni record qui sotto esattamente come mostrato. Rimuovi altri record A o CNAME con lo stesso nome.",
+        "back": "Torna qui e seleziona Controlla ora."
+      },
+      "copyColumn": "Copia",
+      "copyName": "nome del record {type} {name}",
+      "copyValue": "valore del record {type} {name}",
+      "copy": "Copia",
+      "copied": "Copiato",
+      "verify": "Abbiamo trovato i tuoi record DNS e li stiamo verificando. Controlla di nuovo tra qualche minuto.",
+      "ssl": "Il tuo dominio è verificato. Stiamo emettendo il certificato sicuro (https), di solito in pochi minuti.",
+      "primary": "{host} è attivo. Rendilo principale così i tuoi link, biglietti ed email lo useranno.",
+      "result": "{status} · controllato {when}"
+    }
   },
   "suspensions": {
     "pause_checkout": "La vendita dei biglietti è stata sospesa dall’assistenza Yayatoh.",
@@ -3098,7 +3131,17 @@
       "markHandled": "Segna come gestita",
       "markNew": "Segna come nuova"
     },
-    "layoutLibrary": "Libreria di piantine"
+    "layoutLibrary": "Libreria di piantine",
+    "createNext": "Foto e altri dettagli (indirizzo, mappa, accessibilità) vengono dopo.",
+    "createdNext": "Aggiungi subito le foto, poi completa i dettagli qui sotto.",
+    "steps": {
+      "label": "Nuova location",
+      "create": "Crea",
+      "photos": "Foto",
+      "details": "Dettagli"
+    },
+    "detailsTitle": "Dettagli",
+    "photo": "Foto"
   },
   "details": {
     "title": "Dettagli dell’evento",
@@ -4505,7 +4548,18 @@
     "invalidCode": "Quel codice non ha funzionato. Riprova.",
     "invalidPassword": "La password non è corretta.",
     "rateLimited": "Troppi tentativi. Attendi 15 minuti, poi riprova.",
-    "unauthenticated": "La sessione è scaduta. Accedi di nuovo."
+    "unauthenticated": "La sessione è scaduta. Accedi di nuovo.",
+    "again": "Conferma la tua identità",
+    "retry": "Riprova",
+    "problem": {
+      "impersonating": "Stai agendo come questo membro, quindi non puoi confermare al suo posto. Chiedigli di fare questa modifica.",
+      "unauthenticated": "La sessione è scaduta. Accedi di nuovo.",
+      "failed": "Non è stato possibile avviare la conferma. Controlla la connessione e riprova."
+    },
+    "persona": {
+      "explain": "Account demo: ha effettuato l'accesso senza app di autenticazione, quindi puoi confermare senza codice. Non viene mai offerto sul sito reale.",
+      "confirm": "Conferma senza codice (account demo)"
+    }
   },
   "surveys": {
     "title": "Sondaggi",

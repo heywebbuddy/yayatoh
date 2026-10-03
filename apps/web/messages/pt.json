@@ -1718,7 +1718,40 @@
     "added": "Domínio adicionado. Agora publique os registros DNS mostrados acima.",
     "managedMissing": "Seu endereço gratuito {host} ainda não está configurado.",
     "managedCreate": "Configurar meu endereço gratuito",
-    "noAccess": "Somente proprietários e administradores podem alterar domínios."
+    "noAccess": "Somente proprietários e administradores podem alterar domínios.",
+    "how": {
+      "title": "Como funciona",
+      "add": "Adicione um domínio seu, como ingressos.suaempresa.com.",
+      "dns": "Copie os registros DNS que mostramos para as configurações da empresa que gerencia seu domínio.",
+      "check": "Verificamos os registros e configuramos um certificado seguro (https). Normalmente leva minutos, às vezes até um dia.",
+      "live": "Quando estiver ativo, torne-o seu endereço principal para que links e e-mails o usem."
+    },
+    "wizard": {
+      "label": "Conectar {host}",
+      "steps": "Etapas para conectar {host}",
+      "step": {
+        "domain": "Domínio adicionado",
+        "dns": "Registros DNS",
+        "verify": "Verificado",
+        "ssl": "Conexão segura",
+        "primary": "Principal"
+      },
+      "dns": {
+        "signIn": "Entre onde você gerencia o DNS do seu domínio (seu registrador ou um serviço como o Cloudflare).",
+        "open": "Abra as configurações de DNS deste domínio.",
+        "add": "Adicione cada registro abaixo exatamente como aparece. Remova outros registros A ou CNAME com o mesmo nome.",
+        "back": "Volte aqui e selecione Verificar agora."
+      },
+      "copyColumn": "Copiar",
+      "copyName": "nome do registro {type} {name}",
+      "copyValue": "valor do registro {type} {name}",
+      "copy": "Copiar",
+      "copied": "Copiado",
+      "verify": "Encontramos seus registros DNS e estamos verificando-os. Verifique de novo em alguns minutos.",
+      "ssl": "Seu domínio está verificado. Estamos emitindo o certificado seguro (https), o que costuma levar alguns minutos.",
+      "primary": "{host} está ativo. Torne-o principal para que seus links, ingressos e e-mails o usem.",
+      "result": "{status} · verificado {when}"
+    }
   },
   "suspensions": {
     "pause_checkout": "A venda de ingressos foi pausada pelo suporte da Yayatoh.",
@@ -3098,7 +3131,17 @@
       "markHandled": "Marcar como atendido",
       "markNew": "Marcar como novo"
     },
-    "layoutLibrary": "Biblioteca de mapas"
+    "layoutLibrary": "Biblioteca de mapas",
+    "createNext": "As fotos e os demais detalhes (endereço, mapa, acessibilidade) vêm em seguida.",
+    "createdNext": "Adicione fotos agora e depois preencha os detalhes abaixo.",
+    "steps": {
+      "label": "Novo local",
+      "create": "Criar",
+      "photos": "Fotos",
+      "details": "Detalhes"
+    },
+    "detailsTitle": "Detalhes",
+    "photo": "Foto"
   },
   "details": {
     "title": "Detalhes do evento",
@@ -4505,7 +4548,18 @@
     "invalidCode": "Esse código não funcionou. Tente de novo.",
     "invalidPassword": "Essa senha não está correta.",
     "rateLimited": "Tentativas demais. Aguarde 15 minutos e tente de novo.",
-    "unauthenticated": "Sua sessão terminou. Entre de novo."
+    "unauthenticated": "Sua sessão terminou. Entre de novo.",
+    "again": "Confirmar que é você",
+    "retry": "Tentar novamente",
+    "problem": {
+      "impersonating": "Você está agindo como este membro e não pode confirmar por ele. Peça a ele que faça esta alteração.",
+      "unauthenticated": "Sua sessão terminou. Entre novamente.",
+      "failed": "Não conseguimos iniciar a confirmação. Verifique sua conexão e tente novamente."
+    },
+    "persona": {
+      "explain": "Conta de demonstração: ela entrou sem autenticador, então você pode confirmar sem código. Isso nunca é oferecido no site real.",
+      "confirm": "Confirmar sem código (conta de demonstração)"
+    }
   },
   "surveys": {
     "title": "Pesquisas",

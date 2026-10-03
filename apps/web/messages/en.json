@@ -1718,7 +1718,40 @@
     "added": "Domain added. Now publish the DNS records shown above.",
     "managedMissing": "Your free address {host} is not set up yet.",
     "managedCreate": "Set up my free address",
-    "noAccess": "Only owners and admins can change domains."
+    "noAccess": "Only owners and admins can change domains.",
+    "how": {
+      "title": "How it works",
+      "add": "Add a domain you own, such as tickets.yourcompany.com.",
+      "dns": "Copy the DNS records we show into the settings of the company that manages your domain.",
+      "check": "We check the records and set up a secure (https) certificate. It usually takes minutes, sometimes up to a day.",
+      "live": "Once it's live, make it your primary address so links and emails use it."
+    },
+    "wizard": {
+      "label": "Connect {host}",
+      "steps": "Steps to connect {host}",
+      "step": {
+        "domain": "Domain added",
+        "dns": "DNS records",
+        "verify": "Verified",
+        "ssl": "Secure connection",
+        "primary": "Primary"
+      },
+      "dns": {
+        "signIn": "Sign in where you manage your domain's DNS (your registrar, or a service such as Cloudflare).",
+        "open": "Open the DNS settings for this domain.",
+        "add": "Add each record below exactly as shown. Remove other A or CNAME records with the same name.",
+        "back": "Come back here and select Check now."
+      },
+      "copyColumn": "Copy",
+      "copyName": "name of the {type} record {name}",
+      "copyValue": "value of the {type} record {name}",
+      "copy": "Copy",
+      "copied": "Copied",
+      "verify": "We found your DNS records and are verifying them. Check again in a few minutes.",
+      "ssl": "Your domain is verified. We're issuing its secure (https) certificate, which usually takes a few minutes.",
+      "primary": "{host} is live. Make it primary so your links, tickets and emails use it.",
+      "result": "{status} · checked {when}"
+    }
   },
   "suspensions": {
     "pause_checkout": "Ticket sales are paused by Yayatoh support.",
@@ -3098,7 +3131,17 @@
       "markHandled": "Mark as handled",
       "markNew": "Mark as new"
     },
-    "layoutLibrary": "Seating library"
+    "layoutLibrary": "Seating library",
+    "createNext": "Photos and the other details (address, map, accessibility) come next.",
+    "createdNext": "Add photos now, then fill in the details below.",
+    "steps": {
+      "label": "New venue",
+      "create": "Create",
+      "photos": "Photos",
+      "details": "Details"
+    },
+    "detailsTitle": "Details",
+    "photo": "Photo"
   },
   "details": {
     "title": "Event details",
@@ -4505,7 +4548,18 @@
     "invalidCode": "That code didn't work. Try again.",
     "invalidPassword": "That password isn't right.",
     "rateLimited": "Too many attempts. Wait 15 minutes, then try again.",
-    "unauthenticated": "Your session has ended. Sign in again."
+    "unauthenticated": "Your session has ended. Sign in again.",
+    "again": "Confirm it's you",
+    "retry": "Try again",
+    "problem": {
+      "impersonating": "You're acting as this member, so you can't confirm for them. Ask them to make this change.",
+      "unauthenticated": "Your session has ended. Sign in again.",
+      "failed": "We couldn't start the confirmation. Check your connection and try again."
+    },
+    "persona": {
+      "explain": "Demo account: it signed in without an authenticator, so you can confirm without a code. This is never offered on the live site.",
+      "confirm": "Confirm without a code (demo account)"
+    }
   },
   "surveys": {
     "title": "Surveys",

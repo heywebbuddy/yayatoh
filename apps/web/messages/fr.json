@@ -1718,7 +1718,40 @@
     "added": "Domaine ajouté. Publiez maintenant les enregistrements DNS affichés ci-dessus.",
     "managedMissing": "Votre adresse gratuite {host} n’est pas encore configurée.",
     "managedCreate": "Configurer mon adresse gratuite",
-    "noAccess": "Seuls les propriétaires et les administrateurs peuvent modifier les domaines."
+    "noAccess": "Seuls les propriétaires et les administrateurs peuvent modifier les domaines.",
+    "how": {
+      "title": "Comment ça marche",
+      "add": "Ajoutez un domaine qui vous appartient, par exemple billets.votreentreprise.fr.",
+      "dns": "Copiez les enregistrements DNS affichés dans les réglages de la société qui gère votre domaine.",
+      "check": "Nous vérifions les enregistrements et installons un certificat sécurisé (https). Cela prend généralement quelques minutes, parfois jusqu'à un jour.",
+      "live": "Une fois actif, faites-en votre adresse principale pour que les liens et les e-mails l'utilisent."
+    },
+    "wizard": {
+      "label": "Connecter {host}",
+      "steps": "Étapes pour connecter {host}",
+      "step": {
+        "domain": "Domaine ajouté",
+        "dns": "Enregistrements DNS",
+        "verify": "Vérifié",
+        "ssl": "Connexion sécurisée",
+        "primary": "Principal"
+      },
+      "dns": {
+        "signIn": "Connectez-vous là où vous gérez le DNS de votre domaine (votre registraire ou un service comme Cloudflare).",
+        "open": "Ouvrez les réglages DNS de ce domaine.",
+        "add": "Ajoutez chaque enregistrement ci-dessous exactement comme affiché. Supprimez les autres enregistrements A ou CNAME portant le même nom.",
+        "back": "Revenez ici et sélectionnez Vérifier maintenant."
+      },
+      "copyColumn": "Copier",
+      "copyName": "nom de l'enregistrement {type} {name}",
+      "copyValue": "valeur de l'enregistrement {type} {name}",
+      "copy": "Copier",
+      "copied": "Copié",
+      "verify": "Nous avons trouvé vos enregistrements DNS et les vérifions. Vérifiez à nouveau dans quelques minutes.",
+      "ssl": "Votre domaine est vérifié. Nous émettons son certificat sécurisé (https), ce qui prend généralement quelques minutes.",
+      "primary": "{host} est actif. Faites-en votre domaine principal pour que vos liens, billets et e-mails l’utilisent.",
+      "result": "{status} · vérifié {when}"
+    }
   },
   "suspensions": {
     "pause_checkout": "La vente de billets a été suspendue par le support Yayatoh.",
@@ -3098,7 +3131,17 @@
       "markHandled": "Marquer comme traitée",
       "markNew": "Marquer comme nouvelle"
     },
-    "layoutLibrary": "Bibliothèque de plans"
+    "layoutLibrary": "Bibliothèque de plans",
+    "createNext": "Les photos et les autres informations (adresse, plan, accessibilité) viennent ensuite.",
+    "createdNext": "Ajoutez des photos maintenant, puis complétez les informations ci-dessous.",
+    "steps": {
+      "label": "Nouveau lieu",
+      "create": "Créer",
+      "photos": "Photos",
+      "details": "Informations"
+    },
+    "detailsTitle": "Informations",
+    "photo": "Photo"
   },
   "details": {
     "title": "Détails de l’événement",
@@ -4505,7 +4548,18 @@
     "invalidCode": "Ce code n’a pas fonctionné. Réessayez.",
     "invalidPassword": "Ce mot de passe n’est pas correct.",
     "rateLimited": "Trop de tentatives. Attendez 15 minutes, puis réessayez.",
-    "unauthenticated": "Votre session a expiré. Reconnectez-vous."
+    "unauthenticated": "Votre session a expiré. Reconnectez-vous.",
+    "again": "Confirmer que c'est vous",
+    "retry": "Réessayer",
+    "problem": {
+      "impersonating": "Vous agissez en tant que ce membre et ne pouvez pas confirmer à sa place. Demandez-lui de faire cette modification.",
+      "unauthenticated": "Votre session a expiré. Reconnectez-vous.",
+      "failed": "Impossible de lancer la confirmation. Vérifiez votre connexion et réessayez."
+    },
+    "persona": {
+      "explain": "Compte de démonstration : il s'est connecté sans application d'authentification, vous pouvez donc confirmer sans code. Ce n'est jamais proposé sur le site réel.",
+      "confirm": "Confirmer sans code (compte de démonstration)"
+    }
   },
   "surveys": {
     "title": "Enquêtes",

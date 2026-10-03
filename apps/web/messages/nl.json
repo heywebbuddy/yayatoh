@@ -1718,7 +1718,40 @@
     "added": "Domein toegevoegd. Publiceer nu de DNS-records die hierboven staan.",
     "managedMissing": "Je gratis adres {host} is nog niet ingesteld.",
     "managedCreate": "Mijn gratis adres instellen",
-    "noAccess": "Alleen eigenaren en beheerders kunnen domeinen wijzigen."
+    "noAccess": "Alleen eigenaren en beheerders kunnen domeinen wijzigen.",
+    "how": {
+      "title": "Zo werkt het",
+      "add": "Voeg een domein toe dat van jou is, bijvoorbeeld tickets.jouwbedrijf.nl.",
+      "dns": "Kopieer de DNS-records die we tonen naar de instellingen van het bedrijf dat je domein beheert.",
+      "check": "We controleren de records en zetten een beveiligd (https-)certificaat op. Dat duurt meestal minuten, soms tot een dag.",
+      "live": "Zodra het live is, maak je het je hoofdadres zodat links en e-mails het gebruiken."
+    },
+    "wizard": {
+      "label": "{host} koppelen",
+      "steps": "Stappen om {host} te koppelen",
+      "step": {
+        "domain": "Domein toegevoegd",
+        "dns": "DNS-records",
+        "verify": "Geverifieerd",
+        "ssl": "Beveiligde verbinding",
+        "primary": "Hoofdadres"
+      },
+      "dns": {
+        "signIn": "Log in waar je de DNS van je domein beheert (je registrar of een dienst als Cloudflare).",
+        "open": "Open de DNS-instellingen van dit domein.",
+        "add": "Voeg elk record hieronder precies zo toe. Verwijder andere A- of CNAME-records met dezelfde naam.",
+        "back": "Kom hier terug en kies Nu controleren."
+      },
+      "copyColumn": "Kopiëren",
+      "copyName": "naam van het {type}-record {name}",
+      "copyValue": "waarde van het {type}-record {name}",
+      "copy": "Kopiëren",
+      "copied": "Gekopieerd",
+      "verify": "We hebben je DNS-records gevonden en verifiëren ze. Controleer over een paar minuten opnieuw.",
+      "ssl": "Je domein is geverifieerd. We geven het beveiligde (https-)certificaat uit; dat duurt meestal een paar minuten.",
+      "primary": "{host} is live. Maak het je hoofdadres zodat je links, tickets en e-mails het gebruiken.",
+      "result": "{status} · gecontroleerd {when}"
+    }
   },
   "suspensions": {
     "pause_checkout": "De ticketverkoop is gepauzeerd door Yayatoh-support.",
@@ -3098,7 +3131,17 @@
       "markHandled": "Markeren als afgehandeld",
       "markNew": "Markeren als nieuw"
     },
-    "layoutLibrary": "Zaalplanbibliotheek"
+    "layoutLibrary": "Zaalplanbibliotheek",
+    "createNext": "Foto’s en de overige gegevens (adres, kaart, toegankelijkheid) volgen hierna.",
+    "createdNext": "Voeg nu foto’s toe en vul daarna de gegevens hieronder in.",
+    "steps": {
+      "label": "Nieuwe locatie",
+      "create": "Aanmaken",
+      "photos": "Foto’s",
+      "details": "Gegevens"
+    },
+    "detailsTitle": "Gegevens",
+    "photo": "Foto"
   },
   "details": {
     "title": "Evenementdetails",
@@ -4505,7 +4548,18 @@
     "invalidCode": "Die code werkte niet. Probeer het opnieuw.",
     "invalidPassword": "Dat wachtwoord klopt niet.",
     "rateLimited": "Te veel pogingen. Wacht 15 minuten en probeer het dan opnieuw.",
-    "unauthenticated": "Je sessie is verlopen. Log opnieuw in."
+    "unauthenticated": "Je sessie is verlopen. Log opnieuw in.",
+    "again": "Bevestig dat jij het bent",
+    "retry": "Opnieuw proberen",
+    "problem": {
+      "impersonating": "Je handelt als dit lid en kunt niet voor hen bevestigen. Vraag hen deze wijziging zelf te doen.",
+      "unauthenticated": "Je sessie is verlopen. Log opnieuw in.",
+      "failed": "We konden de bevestiging niet starten. Controleer je verbinding en probeer het opnieuw."
+    },
+    "persona": {
+      "explain": "Demo-account: het is ingelogd zonder authenticator, dus je kunt bevestigen zonder code. Dit wordt nooit aangeboden op de live site.",
+      "confirm": "Bevestigen zonder code (demo-account)"
+    }
   },
   "surveys": {
     "title": "Enquêtes",
