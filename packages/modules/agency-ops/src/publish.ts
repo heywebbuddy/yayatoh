@@ -330,7 +330,7 @@ export const receiveTemplateCommand = tenantCommand({
       });
     return { localId: copy.id, updated: false };
   },
-  audit: (input, r) => ({
+  audit: (_input, r) => ({
     action: 'agencyTemplate.receive',
     targetType: 'template',
     targetId: r.localId,

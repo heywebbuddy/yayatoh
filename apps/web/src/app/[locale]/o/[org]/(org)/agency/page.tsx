@@ -10,7 +10,6 @@ import { loadAgency } from './load.ts';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('agency');
-  const to = await getTranslations('agencyOps');
   return { title: t('tab.clients') };
 }
 
@@ -28,6 +27,7 @@ export default async function AgencyClientsPage({
   const { data, canRead } = await loadAgency(org);
   if (!canRead) return null;
   const t = await getTranslations('agency');
+  const to = await getTranslations('agencyOps');
   const ta = await getTranslations('agencies');
   const clients = await executeQuery(agencyClientsQuery, {}, data.ctx, ports);
   if (clients.length === 0)

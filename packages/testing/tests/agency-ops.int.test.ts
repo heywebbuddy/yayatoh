@@ -89,7 +89,7 @@ async function setFlag(on: boolean) {
   await db.end();
 }
 
-async function grant(orgId: string, ctx: Ctx, role: 'manager' | 'marketing' | 'viewer') {
+async function grant(ctx: Ctx, role: 'manager' | 'marketing' | 'viewer') {
   const g = await executeCommand(grantAgencyAccessCommand, { agency: agencySlug, role }, ctx, ports);
   return g.id;
 }
@@ -177,9 +177,9 @@ beforeAll(async () => {
   );
   c = { id: cOrg.id, owner: cOwner };
   await setFlag(true);
-  grantA = await grant(a.org.id, a.ctx(), 'manager');
-  grantB = await grant(b.org.id, b.ctx(), 'marketing');
-  grantC = await grant(c.id, userCtx(cOwner, c.id), 'viewer');
+  grantA = await grant(a.ctx(), 'manager');
+  grantB = await grant(b.ctx(), 'marketing');
+  grantC = await grant(userCtx(cOwner, c.id), 'viewer');
   // The agency's own template, from the fixture event's snapshot (two checkout questions, a
   // seating plan, ticket types), saved in the agency org.
   const [src] = await withTenant(systemCtx(a.org.id), (tx) =>

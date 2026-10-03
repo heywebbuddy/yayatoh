@@ -11,7 +11,7 @@ import {
   revokeAgencyStaffGrantTx,
 } from '@yayatoh/tenancy';
 import { z } from 'zod';
-import { clientSystemCtx, liveClientTx, requireAgencyOrgTx, requireAgencyV2Tx, userOf } from './common.ts';
+import { clientSystemCtx, liveClientTx, requireAgencyOrgTx, userOf } from './common.ts';
 import { dayOfWindow } from './domain.ts';
 
 /**
