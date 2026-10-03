@@ -68,6 +68,8 @@ export interface SocialPackScenario {
   readonly eventSlug: string;
   readonly eventName: string;
   readonly subEventId: string;
+  /** The wedding's start (22:00 UTC, 40 days out). */
+  readonly startsAt: Date;
   readonly deadline: Date;
   /** The fourteen waiting households, in FAMILIES order. */
   readonly pending: readonly SocialPackParty[];
@@ -216,6 +218,7 @@ export async function socialPackScenario(
     eventSlug: ev.slug,
     eventName,
     subEventId: sub.id,
+    startsAt: start,
     deadline,
     pending,
     rivera,

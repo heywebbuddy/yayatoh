@@ -129,7 +129,7 @@ describe('levels: deadline −7 d and −1 d', () => {
   });
 
   it('in the last week before the wedding: guests without a table and missing meals', async () => {
-    const start = Date.now() + 40 * DAY;
+    const start = s.startsAt.getTime();
     await s.evaluate(new Date(start - 3 * DAY));
     const list = await alertsOf(a.ctx(), s.eventId);
     const by = Object.fromEntries(list.map((x) => [x.rule, x]));
