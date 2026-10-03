@@ -4,6 +4,7 @@ import { createEntryCommand, createHelpArticleCommand, createSiteSectionCommand 
 import { emptySegment } from '@yayatoh/crm';
 import { withTenant } from '@yayatoh/db';
 import { createAnnouncementCommand, getEventBySlugQuery } from '@yayatoh/events';
+import { rsvpLinkToken } from '@yayatoh/guests';
 import { executeCommand, executeQuery } from '@yayatoh/kernel';
 import { updateSiteSettingsCommand } from '@yayatoh/marketplace';
 import { announcementMailer, sendAnnouncementCommand } from '@yayatoh/messaging';
@@ -79,6 +80,12 @@ export interface CanaryOrg {
    * itself), to crawl the networking pages as them. Null when the event has none.
    */
   readonly networkEmail: string | null;
+  /**
+   * Batch 3j merge: the fixture party's signed RSVP link (its guest hub, seat and card pages are
+   * crawled as the party) and the version of the event's giving screen link (M4.8d).
+   */
+  readonly partyToken: string | null;
+  readonly screenVersion: number | null;
 }
 
 const ident = (...parts: string[]) => parts.map((p) => `"${p.replace(/"/g, '""')}"`).join('.');
@@ -151,6 +158,14 @@ export async function canaryOrg(o: {
      order by a.created_at limit 1`,
     [orgId, event.id],
   );
+  const [link] = await o.admin.unsafe(
+    `select link_id from guests.party_rsvp where org_id = $1 and event_id = $2 order by created_at limit 1`,
+    [orgId, event.id],
+  );
+  const [screen] = await o.admin.unsafe(
+    `select version from donations.screens where org_id = $1 and event_id = $2`,
+    [orgId, event.id],
+  );
   return {
     orgId,
     slug,
@@ -165,6 +180,8 @@ export async function canaryOrg(o: {
     filled,
     guestSite: { code: site.code as string, password: FIXTURE_SITE_PASSWORD },
     networkEmail: (member?.email as string | undefined) ?? null,
+    partyToken: link ? rsvpLinkToken(link.link_id as string) : null,
+    screenVersion: screen ? Number(screen.version) : null,
   };
 }
 

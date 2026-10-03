@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { expect, type Page, test } from '@playwright/test';
 import { LOCALES } from '@yayatoh/contracts';
+import { signScreenToken } from '@yayatoh/donations';
 import { signDisplayToken } from '@yayatoh/engagement';
 import type { CanaryOrg } from '@yayatoh/testing';
 import {
@@ -14,6 +15,7 @@ import {
   GUEST_SITE_ALLOW,
   type Leak,
   leaksIn,
+  PARTY_ALLOW,
   V1_ALLOW,
 } from '@yayatoh/testing/canary';
 import { lastEmailedCode } from './helpers.ts';
@@ -147,6 +149,85 @@ test.describe('canary leak crawl (roadmap §9)', () => {
       leaks.push(...leaksIn(url, text, surface));
     }
     expect(shown).toBeGreaterThan(0);
+    expect(formatLeaks(leaks)).toBe('no canary leaks');
+  });
+
+  test('batch 3j pages: the giving screen, card saving, the call for papers; a party’s own pages show only the party (M4.4a, M4.7a, M4.8d, M4.8e, M5.3b)', async ({
+    page,
+  }) => {
+    const c = canary();
+    const ev = c.event.slug;
+    const leaks: Leak[] = [];
+    const get = async (url: string, surface: Parameters<typeof leaksIn>[2], status = 200) => {
+      const res = await browserFetch(page, url);
+      expect(res?.status, url).toBe(status);
+      const text = `${res?.body ?? ''}\n${res?.extra ?? ''}`;
+      leaks.push(...leaksIn(url, text, surface));
+      return text;
+    };
+    // Public: anyone can open these (the card page and the call for papers have no secret).
+    for (const url of [
+      `${MARKET}/events/${ev}/card`,
+      `${MARKET}/events/${ev}/card?src=checkin`,
+      `${MARKET}/events/${ev}/cfp`,
+      `${MARKET}/ar/events/${ev}/cfp`,
+    ])
+      await get(url, { kind: 'public' });
+    // The room's giving screen and its stream: totals and opted-in names only (P4-13).
+    expect(c.screenVersion).not.toBeNull();
+    const screen = signScreenToken(
+      { orgId: c.orgId, eventId: c.event.id, version: c.screenVersion ?? 1 },
+      process.env.APP_TOKEN_SECRET ?? '',
+    );
+    await get(`${MARKET}/giving-screen/${screen}`, { kind: 'public' });
+    const stream = await page.evaluate(async (u) => {
+      const ctrl = new AbortController();
+      const res = await fetch(u, { signal: ctrl.signal });
+      let out = `${res.status}\n`;
+      if (res.ok && res.body) {
+        const reader = res.body.getReader();
+        const deadline = Date.now() + 5_000;
+        while (!out.includes('event: snapshot') && Date.now() < deadline) {
+          const { value, done } = await reader.read();
+          if (done) break;
+          out += new TextDecoder().decode(value);
+        }
+      }
+      ctrl.abort();
+      return out;
+    }, `/api/donations/screen/${screen}`);
+    expect(stream).toContain('event: snapshot');
+    leaks.push(...leaksIn('giving screen stream', stream, { kind: 'public' }));
+    // A party's own pages (its signed link): the party's names and program, nothing else.
+    expect(c.partyToken).not.toBeNull();
+    const party = encodeURIComponent(c.partyToken ?? '');
+    const surface = { kind: 'scoped' as const, allow: PARTY_ALLOW };
+    let shown = 0;
+    for (const url of [
+      `${MARKET}/hub/${party}`,
+      `${MARKET}/ar/hub/${party}`,
+      `${MARKET}/hub/${party}/manifest`,
+      `${MARKET}/rsvp/${party}/seat`,
+      `${MARKET}/rsvp/${party}/card`,
+    ])
+      shown += findCanaries(await get(url, surface)).length;
+    // The crawl is live: the party's own names are on its pages.
+    expect(shown).toBeGreaterThan(0);
+    // Batch 3j merge: M4.5b's gallery and slideshow behind the same password show the site, the
+    // published photos' captions and their uploaders' names, nothing else (P4-3).
+    const gallery = {
+      kind: 'scoped' as const,
+      allow: [...GUEST_SITE_ALLOW, 'gallery.items.caption', 'gallery.uploaders.display_name'],
+    };
+    for (const url of [
+      `${MARKET}/w/${c.guestSite.code}/gallery`,
+      `${MARKET}/ar/w/${c.guestSite.code}/gallery`,
+      `${MARKET}/w/${c.guestSite.code}/slideshow`,
+    ]) {
+      const res = await browserFetch(page, url);
+      expect(res?.status, url).toBe(200);
+      leaks.push(...leaksIn(url, `${res?.body ?? ''}\n${res?.extra ?? ''}`, gallery));
+    }
     expect(formatLeaks(leaks)).toBe('no canary leaks');
   });
 
