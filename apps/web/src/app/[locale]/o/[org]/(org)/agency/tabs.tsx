@@ -10,15 +10,17 @@ const TABS = [
   { key: 'events', path: '/events' },
   { key: 'marketing', path: '/marketing' },
   { key: 'reports', path: '/reports' },
+  // M6.8a (flag `agency_v2`): agency billing and the commission statement.
+  { key: 'billing', path: '/billing' },
 ] as const;
 
 /** Clients | Events | Marketing | Reports (vision §12). */
-export function AgencyTabs({ base }: { base: string }) {
+export function AgencyTabs({ base, billing = false }: { base: string; billing?: boolean }) {
   const t = useTranslations('agency');
   const pathname = usePathname();
   return (
     <Tabs label={t('tabs')}>
-      {TABS.map((tab) => {
+      {TABS.filter((tab) => billing || tab.key !== 'billing').map((tab) => {
         const active = tab.path ? pathname.endsWith(`/agency${tab.path}`) : pathname.endsWith('/agency');
         return (
           <Link

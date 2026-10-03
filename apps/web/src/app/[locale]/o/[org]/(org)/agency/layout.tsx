@@ -1,3 +1,4 @@
+import { agencyV2Enabled } from '@yayatoh/billing';
 import { EmptyState, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { ReactNode } from 'react';
@@ -38,7 +39,7 @@ export default async function AgencyLayout({
         description={t('subtitle', { agency: data.org.name })}
         actions={<RefreshForm action={refreshAgencyAction.bind(null, org)} />}
       />
-      <AgencyTabs base={`/o/${org}/agency`} />
+      <AgencyTabs base={`/o/${org}/agency`} billing={agencyV2Enabled()} />
       {children}
     </>
   );
