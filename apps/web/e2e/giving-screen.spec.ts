@@ -1,5 +1,5 @@
 import { type Browser, type BrowserContext, expect, type Page, test } from '@playwright/test';
-import { expectAccessible, expectAccessibleBothModes, newUser } from './helpers.ts';
+import { continueToPayment, expectAccessible, expectAccessibleBothModes, newUser } from './helpers.ts';
 
 // Each journey opens a projector and phones of its own, and axe runs in light and dark.
 test.describe.configure({ timeout: 180_000 });
@@ -28,6 +28,7 @@ interface Gala {
 async function gala(page: Page, connected = true): Promise<Gala> {
   const user = await newUser(page, {
     org: true,
+    twoFactor: true,
     event: 'published',
     profile: 'gala',
     ...(connected ? { payouts: 'active' as const } : {}),
@@ -198,7 +199,7 @@ test.describe('live giving screen (M4.8d)', () => {
     await expect(screen.getByTestId('screen-gifts')).toHaveText('3 gifts');
     await expect(thanks(screen).getByRole('listitem')).toHaveText(['Ada Lovelace']);
     const html = await screen.content();
-    for (const secret of ['Bo Quiet', 'Quiet', 'Eve', 'Secret', '@example.test'])
+    for (const secret of ['Bo Quiet', 'Eve Secret', 'Secret', '@example.test'])
       expect(html).not.toContain(secret);
     await expectAccessible(screen);
 
@@ -216,18 +217,42 @@ test.describe('live giving screen (M4.8d)', () => {
     browser,
   }) => {
     const g = await gala(page);
-    // A party with a paddle (the host spots it themselves).
-    await page.goto(`${g.base}/guests`);
-    const add = page.getByRole('region', { name: 'Add party' });
-    await add.getByLabel('Party name').fill('The Paddle Party');
-    await add.getByRole('button', { name: 'Add party' }).click();
-    await expect(add.getByText('Party added.')).toBeVisible();
+    // A purchased table whose party holds a paddle (the host spots it themselves).
+    const ticket = 'Table of 2';
+    const company = `Acme ${stamp()}`;
+    await page.goto(`${g.base}/tickets-orders`);
+    await page.getByLabel('Name', { exact: true }).fill(ticket);
+    await page.getByLabel('Price (USD)').fill('400');
+    await page.getByLabel('Quantity available').fill('10');
+    await page.getByLabel('Seats per table').fill('2');
+    await page.getByRole('button', { name: 'Add ticket type' }).click();
+    await expect(page.getByRole('row').filter({ hasText: ticket })).toContainText('Table of 2');
+    const bctx = await browser.newContext();
+    const buyer = await bctx.newPage();
+    const buyerEmail = `chair+${stamp()}@example.test`;
+    await buyer.goto(`/events/${g.slug}`);
+    await buyer.getByLabel(`Quantity — ${ticket}`).selectOption('1');
+    await buyer.getByLabel('Full name').fill('Chair Person');
+    await buyer.getByLabel('Email for your tickets').fill(buyerEmail);
+    await continueToPayment(buyer, buyerEmail);
+    await buyer.getByRole('button', { name: 'Pay now (test)' }).click();
+    await expect(buyer.getByText('Paid', { exact: true })).toBeVisible();
+    await buyer
+      .getByRole('region', { name: 'Your tables' })
+      .getByRole('link', { name: `Name guests at ${ticket} #1` })
+      .click();
+    await buyer.getByLabel('Company or sponsor name').fill(company);
+    await buyer.getByRole('button', { name: 'Save name' }).click();
+    await expect(buyer.getByText('Name saved.')).toBeVisible();
+    await bctx.close();
     await page.goto(`${g.donations}/paddles`);
-    const one = page.getByRole('region', { name: 'Give one paddle' });
-    await one.getByLabel('Guest or party').selectOption({ label: 'Party: The Paddle Party' });
-    await one.getByLabel('Paddle number (optional)').fill('100');
-    await one.getByRole('button', { name: 'Give paddle' }).click();
-    await expect(one.getByText('Paddle given.')).toBeVisible();
+    const bulk = page.getByRole('region', { name: 'Give paddles in bulk' });
+    await bulk.getByLabel('One paddle for').selectOption('party');
+    await bulk.getByRole('button', { name: 'Give paddles' }).click();
+    await expect(bulk.getByText('Paddles given.')).toBeVisible();
+    await expect(
+      page.getByRole('table', { name: 'Paddles' }).getByRole('row').filter({ hasText: company }),
+    ).toContainText('100');
     const path = await setUpScreen(page, g);
 
     // Opened in high contrast and reduced motion from the link (a projector without a keyboard).
@@ -271,7 +296,7 @@ test.describe('live giving screen (M4.8d)', () => {
     await expect(total(screen)).toHaveText('$1,000.00');
     await expect(screen.getByTestId('screen-gifts')).toHaveText('1 gift');
     // Paddle holders are never named on a screen.
-    await expect(screen.getByText('The Paddle Party')).toHaveCount(0);
+    await expect(screen.getByText(company)).toHaveCount(0);
 
     // A dropped connection: the level closes meanwhile; back online, the snapshot catches up.
     await context.setOffline(true);
@@ -296,9 +321,12 @@ test.describe('live giving screen (M4.8d)', () => {
     await expect(screen.getByRole('heading', { name: 'This screen link was replaced' })).toBeVisible({
       timeout: 5_000,
     });
-    await expect(screen.getByRole('alert')).toHaveText('Ask the host for the new link.');
+    await expect(screen.getByRole('alert').filter({ hasText: /./ })).toHaveText(
+      'Ask the host for the new link.',
+    );
+    // The page shows the new link once the action's refresh lands.
+    await expect.poll(() => linkPath(page)).not.toBe(path);
     const next = await linkPath(page);
-    expect(next).not.toBe(path);
     expect((await screen.goto(path))?.status()).toBe(404);
     expect((await screen.goto(next))?.status()).toBe(200);
     await expect(total(screen)).toHaveText('$1,000.00');

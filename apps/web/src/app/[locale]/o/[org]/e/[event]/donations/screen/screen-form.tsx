@@ -29,7 +29,13 @@ export function ScreenForm({
     if (state.field) ref.current?.querySelector<HTMLElement>(`[name="${state.field}"]`)?.focus();
   }, [state]);
   return (
-    <form ref={ref} action={formAction} className="flex flex-col gap-4" aria-label={t('settingsTitle')}>
+    <form
+      ref={ref}
+      action={formAction}
+      noValidate
+      className="flex flex-col gap-4"
+      aria-label={t('settingsTitle')}
+    >
       <Select
         id="screen-campaign"
         name="campaignId"
