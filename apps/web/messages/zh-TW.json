@@ -9255,6 +9255,219 @@
       },
       "cardLink": "開啟配捐",
       "cardBody": "讓贊助方在一段時間內將捐款加倍直到上限，並匯出捐贈者的雇主以申請配捐。"
+    },
+    "report": {
+      "title": "捐贈報告",
+      "subtitle": "籌得多少、如何籌得、已收回的認捐以及每位捐贈者，並與總帳核對。",
+      "noAccessTitle": "需要財務許可權",
+      "noAccessDescription": "捐贈報告包含捐贈者姓名和金額，請向所有者、管理員或財務成員索取。",
+      "reconcileLink": "對帳",
+      "emptyTitle": "還沒有捐贈",
+      "emptyDescription": "捐贈、舉牌認捐和捐贈票一到賬就會顯示在這裡。請先在“捐贈”標籤中開啟一個活動。",
+      "backToDonations": "前往捐贈",
+      "asOf": "截至目前。匯出中的日期採用活動時區（{zone}）。",
+      "totalsTitle": "合計",
+      "totalsIn": "{currency} 合計",
+      "stats": {
+        "raised": "已籌得",
+        "raisedSub": "來自 {donors, plural, other {# 位捐贈者}}的 {count, plural, other {# 筆捐贈和付款}}",
+        "online": "刷卡收到",
+        "onlineSub": "含 {cover} 代付手續費；已退款 {refunded}",
+        "offline": "線下支付",
+        "ticketSub": "另有捐贈票 {amount}",
+        "pledged": "現場認捐",
+        "collectedLabel": "已收回的認捐",
+        "pledgedSub": "已收回 {collected} · 已核銷 {writtenOff} · 待收 {open}",
+        "matched": "贊助方配捐",
+        "matchedSub": "贊助方的認捐，另行收取"
+      },
+      "check": {
+        "title": "總帳核對",
+        "notReconciled": "尚未對帳",
+        "matches": "分毫不差",
+        "differs": "相差 {amount}",
+        "ledger": "總帳備忘分錄",
+        "provider": "Stripe 餘額（上次對帳）",
+        "none": "尚未對帳",
+        "fees": "Stripe 手續費"
+      },
+      "bySource": {
+        "title": "按來源",
+        "source": "來源",
+        "count": "捐贈",
+        "net": "實收"
+      },
+      "sources": {
+        "online": "捐贈頁面",
+        "qr": "QR 碼",
+        "paddle": "舉牌環節",
+        "ticket": "捐贈票"
+      },
+      "byLevel": {
+        "title": "按級距",
+        "empty": "還沒有使用任何級距。",
+        "level": "級距",
+        "own": "自定金額",
+        "gifts": "捐贈",
+        "giftsCell": "{count, plural, other {# 筆}} · {amount}",
+        "pledges": "舉牌認捐",
+        "pledgesCell": "{count, plural, other {# 筆認捐}} · {amount}"
+      },
+      "byMatch": {
+        "title": "按配捐",
+        "sponsor": "贊助方",
+        "campaign": "活動",
+        "status": "狀態",
+        "matched": "已配捐",
+        "matchedCell": "{matched} / {cap}"
+      },
+      "matchStatus": {
+        "active": "進行中",
+        "closed": "已結束",
+        "cancelled": "已取消"
+      },
+      "byDonor": {
+        "title": "按捐贈者",
+        "note": "匿名捐贈者已標出：你能看到是誰捐的，但切勿公開致謝或列出他們。",
+        "empty": "還沒有捐贈者。",
+        "donor": "捐贈者",
+        "anonymous": "匿名",
+        "email": "郵箱",
+        "count": "捐贈",
+        "net": "捐贈額",
+        "truncated": "這裡只列出捐贈最多的 500 位；匯出檔案包含所有人。"
+      },
+      "export": {
+        "title": "匯出到你的捐贈者 CRM",
+        "body": "每筆捐贈、線下付款和捐贈票各一行，並保留匿名標記。你需要先確認身份。",
+        "error": "匯出未能開始：{reason}",
+        "layout": "列格式",
+        "layoutHint": "CRM 格式使用該 CRM 自己的列名，匯入時無需對映。",
+        "format": "檔案型別",
+        "csv": "CSV（.csv）",
+        "xlsx": "Excel（.xlsx）",
+        "submit": "匯出捐贈者",
+        "statusCsv": "捐贈者匯出（CSV）",
+        "statusXlsx": "捐贈者匯出（Excel）"
+      },
+      "layouts": {
+        "generic": "任意電子表格（當前語言）",
+        "salesforce_npsp": "Salesforce Nonprofit（NPSP）",
+        "bloomerang": "Bloomerang",
+        "little_green_light": "Little Green Light"
+      },
+      "cardTitle": "報告與匯出",
+      "cardLink": "開啟報告",
+      "cardBody": "按來源、級距、配捐和捐贈者的合計；已收回的認捐；匯出到你的捐贈者 CRM。",
+      "cardReconcile": "與 Stripe 對帳",
+      "file": {
+        "headers": {
+          "date": "日期",
+          "firstName": "名",
+          "lastName": "姓",
+          "donor": "捐贈者",
+          "email": "郵箱",
+          "anonymous": "匿名",
+          "amount": "實收金額",
+          "gift": "捐贈額",
+          "feeCover": "代付手續費",
+          "refunded": "已退款",
+          "currency": "幣種",
+          "campaign": "活動",
+          "level": "級距",
+          "source": "來源",
+          "method": "支付方式",
+          "employer": "僱主",
+          "tribute": "致敬或紀念物件",
+          "paddle": "號碼牌",
+          "reference": "參考號"
+        },
+        "yes": "是",
+        "no": "否",
+        "sources": {
+          "online": "捐贈頁面",
+          "qr": "QR 碼",
+          "paddle": "舉牌環節",
+          "ticket": "捐贈票"
+        },
+        "methods": {
+          "card": "銀行卡",
+          "check": "支票",
+          "wire": "電匯",
+          "stock": "股票",
+          "daf": "捐贈者建議基金",
+          "cash": "現金",
+          "other": "其他"
+        },
+        "privacyTitle": "你的捐贈者只屬於你",
+        "privacy": "匯出檔案只包含本活動的捐贈者。請妥善儲存檔案，匯入後刪除。"
+      }
+    },
+    "recon": {
+      "title": "捐贈對帳",
+      "subtitle": "總帳中的本活動捐贈，與你的 Stripe 帳戶及其撥款進行比對。",
+      "noAccessTitle": "需要財務許可權",
+      "noAccessDescription": "請讓所有者、管理員或財務成員進行捐贈對帳。",
+      "errors": {
+        "note": "寫下你的發現（3 到 500 個字元）。",
+        "provider": "無法連線 Stripe，請幾分鐘後重試。"
+      },
+      "run": "立即對帳",
+      "ran": "已對帳。",
+      "reportLink": "捐贈報告",
+      "notConnectedTitle": "沒有可比對的 Stripe 帳戶",
+      "notConnectedDescription": "捐贈直接進入你已連線的 Stripe 帳戶。請在“撥款”中連線後，再回到這裡對帳。",
+      "status": {
+        "open": "未解決",
+        "resolved": "已解決",
+        "cleared": "已對平"
+      },
+      "viewerNotice": "你可以檢視對帳。所有者、管理員和財務成員負責執行對帳並處理差異。",
+      "runTitle": "最近一次對帳",
+      "lastRun": "上次對帳 {at}：{ledger} 條總帳記錄對比 {provider} 筆 Stripe 流水。",
+      "neverRun": "尚未對帳。立即對帳，將總帳與 Stripe 比對。",
+      "stats": {
+        "ledger": "總帳備忘分錄",
+        "provider": "Stripe 餘額",
+        "fees": "Stripe 手續費",
+        "unpaidOut": "尚未撥款",
+        "unpaidOutSub": "{count, plural, =0 {已全部撥款} other {# 筆流水等待撥款}}"
+      },
+      "diffsTitle": "差異",
+      "cleanTitle": "全部一致",
+      "cleanDescription": "總帳中的每筆捐贈和退款都與 Stripe 分毫不差。",
+      "allSettled": "沒有未解決的差異：都已解決或對平。",
+      "kinds": {
+        "missing_at_provider": "總帳有，Stripe 沒有",
+        "missing_in_ledger": "Stripe 有，總帳沒有",
+        "amount_mismatch": "金額不一致"
+      },
+      "ledger": "總帳",
+      "provider": "Stripe",
+      "difference": "差額",
+      "resolvedNote": "已解決：{note}",
+      "noteLabel": "你的發現",
+      "noteHint": "例如：電話退款、Stripe 調整、重複記賬。",
+      "resolve": "解決 {reference}",
+      "resolved": "已解決。",
+      "payoutsTitle": "撥款",
+      "payoutsBody": "從你的 Stripe 帳戶發出、包含本活動捐贈的撥款。一筆撥款也可能包含其他款項。",
+      "payoutsEmpty": "還沒有撥款。Stripe 會在捐贈到賬幾天後撥款。",
+      "payout": {
+        "id": "撥款",
+        "status": "狀態",
+        "arrival": "到賬日",
+        "amount": "撥款金額",
+        "donations": "本活動的捐贈",
+        "donationsCell": "{count, plural, other {# 筆流水}}：扣除 {fees} 手續費後 {net}"
+      },
+      "payoutStatus": {
+        "pending": "待處理",
+        "in_transit": "在途",
+        "paid": "已到賬",
+        "failed": "失敗",
+        "canceled": "已取消"
+      }
     }
   },
   "galaTables": {

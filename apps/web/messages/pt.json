@@ -9255,6 +9255,219 @@
       },
       "cardLink": "Abrir doações dobradas",
       "cardBody": "Deixe um patrocinador dobrar as doações de um período até um teto, e exporte os empregadores dos doadores."
+    },
+    "report": {
+      "title": "Relatório de doações",
+      "subtitle": "O que foi arrecadado e como, as promessas recebidas e cada doador, conferidos com o livro-razão.",
+      "noAccessTitle": "É necessário acesso financeiro",
+      "noAccessDescription": "Peça o relatório de doações a um proprietário, administrador ou membro do financeiro: ele nomeia doadores e valores.",
+      "reconcileLink": "Conciliação",
+      "emptyTitle": "Ainda não há doações",
+      "emptyDescription": "Doações, promessas de raquete e ingressos de doação aparecem aqui assim que chegam. Abra uma campanha na aba Doações para começar.",
+      "backToDonations": "Ir para Doações",
+      "asOf": "Até agora. As datas das exportações estão no fuso horário do evento ({zone}).",
+      "totalsTitle": "Totais",
+      "totalsIn": "Totais em {currency}",
+      "stats": {
+        "raised": "Arrecadado",
+        "raisedSub": "{count, plural, one {# doação ou pagamento} other {# doações e pagamentos}} de {donors, plural, one {# doador} other {# doadores}}",
+        "online": "Recebido por cartão",
+        "onlineSub": "Inclui {cover} de taxas cobertas; {refunded} reembolsado",
+        "offline": "Pago fora do sistema",
+        "ticketSub": "Mais {amount} de ingressos de doação",
+        "pledged": "Prometido no salão",
+        "collectedLabel": "Promessas recebidas",
+        "pledgedSub": "{collected} recebido · {writtenOff} baixado · {open} ainda em aberto",
+        "matched": "Igualado por patrocinadores",
+        "matchedSub": "Promessas dos patrocinadores, recebidas à parte"
+      },
+      "check": {
+        "title": "Verificação do livro-razão",
+        "notReconciled": "Ainda não conciliado",
+        "matches": "Bate até o centavo",
+        "differs": "Difere em {amount}",
+        "ledger": "Lançamentos de memória do razão",
+        "provider": "Saldo no Stripe (última conciliação)",
+        "none": "Ainda não conciliado",
+        "fees": "Taxas do Stripe"
+      },
+      "bySource": {
+        "title": "Por origem",
+        "source": "Origem",
+        "count": "Doações",
+        "net": "Recebido"
+      },
+      "sources": {
+        "online": "Página de doação",
+        "qr": "Código QR",
+        "paddle": "Leilão de raquetes",
+        "ticket": "Ingressos de doação"
+      },
+      "byLevel": {
+        "title": "Por nível",
+        "empty": "Nenhum nível usado ainda.",
+        "level": "Nível",
+        "own": "Valores livres",
+        "gifts": "Doações",
+        "giftsCell": "{count, plural, one {# doação} other {# doações}} · {amount}",
+        "pledges": "Promessas de raquete",
+        "pledgesCell": "{count, plural, one {# promessa} other {# promessas}} · {amount}"
+      },
+      "byMatch": {
+        "title": "Por igualação",
+        "sponsor": "Patrocinador",
+        "campaign": "Campanha",
+        "status": "Situação",
+        "matched": "Igualado",
+        "matchedCell": "{matched} de {cap}"
+      },
+      "matchStatus": {
+        "active": "Em andamento",
+        "closed": "Encerrada",
+        "cancelled": "Cancelada"
+      },
+      "byDonor": {
+        "title": "Por doador",
+        "note": "Doadores anônimos estão marcados: você vê quem doou, mas nunca agradeça nem os cite publicamente.",
+        "empty": "Ainda não há doadores.",
+        "donor": "Doador",
+        "anonymous": "Anônimo",
+        "email": "E-mail",
+        "count": "Doações",
+        "net": "Doado",
+        "truncated": "Aqui aparecem só os 500 maiores doadores; a exportação traz todos."
+      },
+      "export": {
+        "title": "Exportar para o seu CRM de doadores",
+        "body": "Uma linha por doação, pagamento fora do sistema e ingresso de doação, com a marca de anônimo. Primeiro você confirma que é você.",
+        "error": "A exportação não começou: {reason}",
+        "layout": "Colunas para",
+        "layoutHint": "Os formatos de CRM usam os nomes de coluna do próprio CRM, então o arquivo é importado sem mapeamento.",
+        "format": "Tipo de arquivo",
+        "csv": "CSV (.csv)",
+        "xlsx": "Excel (.xlsx)",
+        "submit": "Exportar doadores",
+        "statusCsv": "Exportação de doadores (CSV)",
+        "statusXlsx": "Exportação de doadores (Excel)"
+      },
+      "layouts": {
+        "generic": "Qualquer planilha (este idioma)",
+        "salesforce_npsp": "Salesforce Nonprofit (NPSP)",
+        "bloomerang": "Bloomerang",
+        "little_green_light": "Little Green Light"
+      },
+      "cardTitle": "Relatório e exportações",
+      "cardLink": "Abrir o relatório",
+      "cardBody": "Totais por origem, nível, igualação e doador; promessas recebidas; exportações para o seu CRM de doadores.",
+      "cardReconcile": "Conciliar com o Stripe",
+      "file": {
+        "headers": {
+          "date": "Data",
+          "firstName": "Nome",
+          "lastName": "Sobrenome",
+          "donor": "Doador",
+          "email": "E-mail",
+          "anonymous": "Anônimo",
+          "amount": "Valor recebido",
+          "gift": "Doação",
+          "feeCover": "Taxa coberta",
+          "refunded": "Reembolsado",
+          "currency": "Moeda",
+          "campaign": "Campanha",
+          "level": "Nível",
+          "source": "Origem",
+          "method": "Forma de pagamento",
+          "employer": "Empregador",
+          "tribute": "Em homenagem ou memória de",
+          "paddle": "Raquete",
+          "reference": "Referência"
+        },
+        "yes": "Sim",
+        "no": "Não",
+        "sources": {
+          "online": "Página de doação",
+          "qr": "Código QR",
+          "paddle": "Leilão de raquetes",
+          "ticket": "Ingresso de doação"
+        },
+        "methods": {
+          "card": "Cartão",
+          "check": "Cheque",
+          "wire": "Transferência",
+          "stock": "Ações",
+          "daf": "Fundo aconselhado pelo doador",
+          "cash": "Dinheiro",
+          "other": "Outro"
+        },
+        "privacyTitle": "Seus doadores continuam seus",
+        "privacy": "As exportações trazem só os doadores deste evento. Guarde o arquivo com segurança e apague-o depois de importar."
+      }
+    },
+    "recon": {
+      "title": "Conciliação de doações",
+      "subtitle": "As doações do evento no livro-razão, comparadas com a sua conta Stripe e os repasses.",
+      "noAccessTitle": "É necessário acesso financeiro",
+      "noAccessDescription": "Peça a um proprietário, administrador ou membro do financeiro para conciliar as doações.",
+      "errors": {
+        "note": "Diga o que encontrou (de 3 a 500 caracteres).",
+        "provider": "Não foi possível falar com o Stripe. Tente de novo em alguns minutos."
+      },
+      "run": "Conciliar agora",
+      "ran": "Conciliado.",
+      "reportLink": "Relatório de doações",
+      "notConnectedTitle": "Nenhuma conta Stripe para comparar",
+      "notConnectedDescription": "As doações vão direto para a sua conta Stripe conectada. Conecte-a em Repasses e depois concilie aqui.",
+      "status": {
+        "open": "Em aberto",
+        "resolved": "Resolvida",
+        "cleared": "Acertada"
+      },
+      "viewerNotice": "Você pode ver a conciliação. Proprietários, administradores e o financeiro a executam e resolvem diferenças.",
+      "runTitle": "Última execução",
+      "lastRun": "Última conciliação {at}: {ledger} lançamentos do razão contra {provider} movimentos do Stripe.",
+      "neverRun": "Ainda não conciliado. Concilie agora para comparar o razão com o Stripe.",
+      "stats": {
+        "ledger": "Lançamentos de memória do razão",
+        "provider": "Saldo no Stripe",
+        "fees": "Taxas do Stripe",
+        "unpaidOut": "Ainda não repassado",
+        "unpaidOutSub": "{count, plural, =0 {Tudo foi repassado} one {# movimento aguarda um repasse} other {# movimentos aguardam um repasse}}"
+      },
+      "diffsTitle": "Diferenças",
+      "cleanTitle": "Tudo confere",
+      "cleanDescription": "Cada doação e reembolso do razão confere até o centavo com o Stripe.",
+      "allSettled": "Nenhuma diferença em aberto: todas resolvidas ou acertadas.",
+      "kinds": {
+        "missing_at_provider": "No razão, não no Stripe",
+        "missing_in_ledger": "No Stripe, não no razão",
+        "amount_mismatch": "Os valores diferem"
+      },
+      "ledger": "Razão",
+      "provider": "Stripe",
+      "difference": "Diferença",
+      "resolvedNote": "Resolvida: {note}",
+      "noteLabel": "O que você encontrou",
+      "noteHint": "Por exemplo: reembolsado por telefone, ajuste do Stripe, lançamento duplicado.",
+      "resolve": "Resolver {reference}",
+      "resolved": "Resolvida.",
+      "payoutsTitle": "Repasses",
+      "payoutsBody": "Repasses da sua conta Stripe que levaram doações deste evento. Um repasse também pode levar outros valores.",
+      "payoutsEmpty": "Ainda não há repasses. O Stripe repassa alguns dias depois que as doações chegam.",
+      "payout": {
+        "id": "Repasse",
+        "status": "Situação",
+        "arrival": "Chega",
+        "amount": "Repasse",
+        "donations": "Doações deste evento",
+        "donationsCell": "{count, plural, one {# movimento} other {# movimentos}}: {net} após {fees} de taxas"
+      },
+      "payoutStatus": {
+        "pending": "Pendente",
+        "in_transit": "A caminho",
+        "paid": "Pago",
+        "failed": "Falhou",
+        "canceled": "Cancelado"
+      }
     }
   },
   "galaTables": {

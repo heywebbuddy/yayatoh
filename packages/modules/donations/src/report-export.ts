@@ -1,4 +1,4 @@
-import { csvRow, writeXlsx } from '@yayatoh/csv';
+import { csvRow, writeXlsx, XLSX_CONTENT_TYPE } from '@yayatoh/csv';
 import { DomainError } from '@yayatoh/kernel';
 import { bulkCommands, defineBulkAction } from '@yayatoh/platform';
 import { z } from 'zod';
@@ -131,3 +131,6 @@ export function donorXlsxFile(content: string): Uint8Array {
     { sheet: 'Donations' },
   );
 }
+
+/** The workbook's media type, for the download. */
+export const DONOR_XLSX_CONTENT_TYPE = XLSX_CONTENT_TYPE;

@@ -302,6 +302,7 @@ export {
   ReportTotalsDto,
 } from './report-dto.ts';
 export {
+  DONOR_XLSX_CONTENT_TYPE,
   DonorExportParams,
   donorCsvExportAction,
   donorCsvExportBulk,

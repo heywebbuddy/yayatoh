@@ -9255,6 +9255,219 @@
       },
       "cardLink": "マッチングギフトを開く",
       "cardBody": "スポンサーが期間内の寄付を上限まで2倍にします。上乗せ申請用に寄付者の勤務先も書き出せます。"
+    },
+    "report": {
+      "title": "寄付レポート",
+      "subtitle": "集まった金額とその内訳、回収した誓約、すべての寄付者を元帳と照合して表示します。",
+      "noAccessTitle": "財務の権限が必要です",
+      "noAccessDescription": "寄付レポートには寄付者名と金額が含まれます。オーナー、管理者、財務担当に依頼してください。",
+      "reconcileLink": "照合",
+      "emptyTitle": "まだ寄付はありません",
+      "emptyDescription": "寄付、パドルの誓約、寄付チケットは届きしだいここに表示されます。まずは寄付タブでキャンペーンを開いてください。",
+      "backToDonations": "寄付へ移動",
+      "asOf": "現時点までの集計です。エクスポートの日付はイベントのタイムゾーン（{zone}）です。",
+      "totalsTitle": "合計",
+      "totalsIn": "{currency}の合計",
+      "stats": {
+        "raised": "集まった金額",
+        "raisedSub": "{donors, plural, other {#人}}の寄付者から{count, plural, other {#件}}の寄付・支払い",
+        "online": "カードでの受領",
+        "onlineSub": "負担された手数料{cover}を含む、返金{refunded}",
+        "offline": "オフラインでの支払い",
+        "ticketSub": "ほかに寄付チケット{amount}",
+        "pledged": "会場での誓約",
+        "collectedLabel": "回収済みの誓約",
+        "pledgedSub": "回収{collected}・貸倒{writtenOff}・未回収{open}",
+        "matched": "スポンサーによるマッチング",
+        "matchedSub": "スポンサーの誓約は別途回収します"
+      },
+      "check": {
+        "title": "元帳チェック",
+        "notReconciled": "未照合",
+        "matches": "1セント単位まで一致",
+        "differs": "{amount}の差異",
+        "ledger": "元帳のメモ記帳",
+        "provider": "Stripe残高（前回の照合）",
+        "none": "未照合",
+        "fees": "Stripe手数料"
+      },
+      "bySource": {
+        "title": "経路別",
+        "source": "経路",
+        "count": "寄付",
+        "net": "受領額"
+      },
+      "sources": {
+        "online": "寄付ページ",
+        "qr": "QRコード",
+        "paddle": "パドルラウンド",
+        "ticket": "寄付チケット"
+      },
+      "byLevel": {
+        "title": "レベル別",
+        "empty": "まだ使われたレベルはありません。",
+        "level": "レベル",
+        "own": "任意の金額",
+        "gifts": "寄付",
+        "giftsCell": "{count, plural, other {#件}}・{amount}",
+        "pledges": "パドルの誓約",
+        "pledgesCell": "{count, plural, other {#件}}・{amount}"
+      },
+      "byMatch": {
+        "title": "マッチング別",
+        "sponsor": "スポンサー",
+        "campaign": "キャンペーン",
+        "status": "状態",
+        "matched": "マッチング額",
+        "matchedCell": "{cap}中{matched}"
+      },
+      "matchStatus": {
+        "active": "実施中",
+        "closed": "終了",
+        "cancelled": "中止"
+      },
+      "byDonor": {
+        "title": "寄付者別",
+        "note": "匿名の寄付者には印が付いています。誰が寄付したかは見えますが、公の場で感謝したり名前を出したりしないでください。",
+        "empty": "まだ寄付者はいません。",
+        "donor": "寄付者",
+        "anonymous": "匿名",
+        "email": "メール",
+        "count": "寄付",
+        "net": "寄付額",
+        "truncated": "ここには上位500人の寄付者のみ表示します。エクスポートには全員が含まれます。"
+      },
+      "export": {
+        "title": "寄付者CRM向けにエクスポート",
+        "body": "寄付、オフライン支払い、寄付チケットごとに1行、匿名フラグも保持します。最初に本人確認を行います。",
+        "error": "エクスポートを開始できませんでした：{reason}",
+        "layout": "列の形式",
+        "layoutHint": "CRM形式ではCRM独自の列名を使うため、対応付けなしでインポートできます。",
+        "format": "ファイル形式",
+        "csv": "CSV（.csv）",
+        "xlsx": "Excel（.xlsx）",
+        "submit": "寄付者をエクスポート",
+        "statusCsv": "寄付者エクスポート（CSV）",
+        "statusXlsx": "寄付者エクスポート（Excel）"
+      },
+      "layouts": {
+        "generic": "一般的な表計算（この言語）",
+        "salesforce_npsp": "Salesforce Nonprofit（NPSP）",
+        "bloomerang": "Bloomerang",
+        "little_green_light": "Little Green Light"
+      },
+      "cardTitle": "レポートとエクスポート",
+      "cardLink": "レポートを開く",
+      "cardBody": "経路・レベル・マッチング・寄付者別の合計、回収した誓約、寄付者CRM向けのエクスポート。",
+      "cardReconcile": "Stripeと照合",
+      "file": {
+        "headers": {
+          "date": "日付",
+          "firstName": "名",
+          "lastName": "姓",
+          "donor": "寄付者",
+          "email": "メール",
+          "anonymous": "匿名",
+          "amount": "受領額",
+          "gift": "寄付額",
+          "feeCover": "負担手数料",
+          "refunded": "返金額",
+          "currency": "通貨",
+          "campaign": "キャンペーン",
+          "level": "レベル",
+          "source": "経路",
+          "method": "支払方法",
+          "employer": "勤務先",
+          "tribute": "記念・追悼の対象",
+          "paddle": "パドル",
+          "reference": "参照番号"
+        },
+        "yes": "はい",
+        "no": "いいえ",
+        "sources": {
+          "online": "寄付ページ",
+          "qr": "QRコード",
+          "paddle": "パドルラウンド",
+          "ticket": "寄付チケット"
+        },
+        "methods": {
+          "card": "カード",
+          "check": "小切手",
+          "wire": "銀行振込",
+          "stock": "株式",
+          "daf": "ドナー・アドバイズド・ファンド",
+          "cash": "現金",
+          "other": "その他"
+        },
+        "privacyTitle": "寄付者はあなたの団体のものです",
+        "privacy": "エクスポートにはこのイベントの寄付者だけが含まれます。ファイルは安全に保管し、インポート後に削除してください。"
+      }
+    },
+    "recon": {
+      "title": "寄付の照合",
+      "subtitle": "元帳にあるイベントの寄付を、Stripeアカウントとその入金と比較します。",
+      "noAccessTitle": "財務の権限が必要です",
+      "noAccessDescription": "寄付の照合はオーナー、管理者、財務担当に依頼してください。",
+      "errors": {
+        "note": "確認した内容を書いてください（3〜500文字）。",
+        "provider": "Stripeに接続できませんでした。数分後にもう一度お試しください。"
+      },
+      "run": "今すぐ照合",
+      "ran": "照合しました。",
+      "reportLink": "寄付レポート",
+      "notConnectedTitle": "比較できるStripeアカウントがありません",
+      "notConnectedDescription": "寄付は接続済みのStripeアカウントに直接入ります。入金設定で接続してから、ここで照合してください。",
+      "status": {
+        "open": "未解決",
+        "resolved": "解決済み",
+        "cleared": "一致"
+      },
+      "viewerNotice": "照合結果は閲覧できます。実行と差異の解決はオーナー、管理者、財務担当が行います。",
+      "runTitle": "前回の照合",
+      "lastRun": "前回の照合 {at}：元帳{ledger}件とStripeの取引{provider}件を比較。",
+      "neverRun": "まだ照合していません。今すぐ照合して元帳とStripeを比較しましょう。",
+      "stats": {
+        "ledger": "元帳のメモ記帳",
+        "provider": "Stripe残高",
+        "fees": "Stripe手数料",
+        "unpaidOut": "未入金",
+        "unpaidOutSub": "{count, plural, =0 {すべて入金済みです} other {#件の取引が入金待ちです}}"
+      },
+      "diffsTitle": "差異",
+      "cleanTitle": "すべて一致しています",
+      "cleanDescription": "元帳のすべての寄付と返金が、Stripeと1セント単位まで一致しています。",
+      "allSettled": "未解決の差異はありません。すべて解決済みか一致しています。",
+      "kinds": {
+        "missing_at_provider": "元帳にあり、Stripeにない",
+        "missing_in_ledger": "Stripeにあり、元帳にない",
+        "amount_mismatch": "金額が異なる"
+      },
+      "ledger": "元帳",
+      "provider": "Stripe",
+      "difference": "差額",
+      "resolvedNote": "解決済み：{note}",
+      "noteLabel": "確認した内容",
+      "noteHint": "例：電話で返金、Stripeによる調整、重複記帳。",
+      "resolve": "{reference}を解決",
+      "resolved": "解決しました。",
+      "payoutsTitle": "入金",
+      "payoutsBody": "このイベントの寄付を含む、Stripeアカウントからの入金です。入金にはほかのお金が含まれることもあります。",
+      "payoutsEmpty": "まだ入金はありません。Stripeは寄付の到着から数日後に入金します。",
+      "payout": {
+        "id": "入金",
+        "status": "状態",
+        "arrival": "着金日",
+        "amount": "入金額",
+        "donations": "このイベントの寄付",
+        "donationsCell": "{count, plural, other {#件}}：手数料{fees}差引後{net}"
+      },
+      "payoutStatus": {
+        "pending": "保留中",
+        "in_transit": "送金中",
+        "paid": "入金済み",
+        "failed": "失敗",
+        "canceled": "キャンセル"
+      }
     }
   },
   "galaTables": {

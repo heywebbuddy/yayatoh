@@ -78,6 +78,7 @@ export default async function DonationsPage({
       )
     : [];
   const tm = await getTranslations('donations.matches');
+  const tr = await getTranslations('donations.report');
   const t = await getTranslations('donations.console');
   const tn = await getTranslations('nav');
   const tb = await getTranslations('bulk');
@@ -321,6 +322,27 @@ export default async function DonationsPage({
               ))}
             </ul>
           ) : null}
+        </Card>
+      ) : null}
+
+      {/* M4.8g: the donations report, donor CRM exports and reconciliation (finance roles). */}
+      {can('finance:read') ? (
+        <Card className="flex flex-col gap-3" data-testid="report-card">
+          <CardHeader
+            title={tr('cardTitle')}
+            actions={
+              <Link href={`/o/${org}/e/${event}/donations/report`} className={buttonClass('secondary', 'sm')}>
+                {tr('cardLink')}
+              </Link>
+            }
+          />
+          <p className="m-0 text-body text-ink-2">{tr('cardBody')}</p>
+          <Link
+            href={`/o/${org}/e/${event}/donations/reconciliation`}
+            className="inline-flex min-h-6 items-center self-start text-body font-bold text-ink underline underline-offset-4"
+          >
+            {tr('cardReconcile')}
+          </Link>
         </Card>
       ) : null}
 

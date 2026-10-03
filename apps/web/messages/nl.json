@@ -9255,6 +9255,219 @@
       },
       "cardLink": "Verdubbelde giften openen",
       "cardBody": "Laat een sponsor giften in een periode verdubbelen tot een maximum, en exporteer de werkgevers van donateurs."
+    },
+    "report": {
+      "title": "Donatierapport",
+      "subtitle": "Wat er is opgehaald en hoe, geïnde toezeggingen en elke donateur, gecontroleerd tegen het grootboek.",
+      "noAccessTitle": "Financiële toegang nodig",
+      "noAccessDescription": "Vraag een eigenaar, beheerder of financieel lid om het donatierapport: het noemt donateurs en bedragen.",
+      "reconcileLink": "Afstemming",
+      "emptyTitle": "Nog geen donaties",
+      "emptyDescription": "Giften, peddeltoezeggingen en donatietickets verschijnen hier zodra ze binnenkomen. Open een campagne op het tabblad Donaties om te beginnen.",
+      "backToDonations": "Naar Donaties",
+      "asOf": "Tot nu toe. Datums in exports staan in de tijdzone van het evenement ({zone}).",
+      "totalsTitle": "Totalen",
+      "totalsIn": "Totalen in {currency}",
+      "stats": {
+        "raised": "Opgehaald",
+        "raisedSub": "{count, plural, one {# gift of betaling} other {# giften en betalingen}} van {donors, plural, one {# donateur} other {# donateurs}}",
+        "online": "Per kaart ontvangen",
+        "onlineSub": "Inclusief {cover} aan gedekte kosten; {refunded} terugbetaald",
+        "offline": "Offline betaald",
+        "ticketSub": "Plus {amount} uit donatietickets",
+        "pledged": "Toegezegd in de zaal",
+        "collectedLabel": "Geïnde toezeggingen",
+        "pledgedSub": "{collected} geïnd · {writtenOff} afgeschreven · {open} nog open",
+        "matched": "Verdubbeld door sponsors",
+        "matchedSub": "Toezeggingen van sponsors, apart geïnd"
+      },
+      "check": {
+        "title": "Grootboekcontrole",
+        "notReconciled": "Nog niet afgestemd",
+        "matches": "Klopt tot op de cent",
+        "differs": "Wijkt {amount} af",
+        "ledger": "Memoboekingen in het grootboek",
+        "provider": "Stripe-saldo (laatste afstemming)",
+        "none": "Nog niet afgestemd",
+        "fees": "Stripe-kosten"
+      },
+      "bySource": {
+        "title": "Per herkomst",
+        "source": "Herkomst",
+        "count": "Giften",
+        "net": "Ontvangen"
+      },
+      "sources": {
+        "online": "Geefpagina",
+        "qr": "QR-code",
+        "paddle": "Peddelronde",
+        "ticket": "Donatietickets"
+      },
+      "byLevel": {
+        "title": "Per niveau",
+        "empty": "Nog geen niveaus gebruikt.",
+        "level": "Niveau",
+        "own": "Eigen bedragen",
+        "gifts": "Giften",
+        "giftsCell": "{count, plural, one {# gift} other {# giften}} · {amount}",
+        "pledges": "Peddeltoezeggingen",
+        "pledgesCell": "{count, plural, one {# toezegging} other {# toezeggingen}} · {amount}"
+      },
+      "byMatch": {
+        "title": "Per verdubbeling",
+        "sponsor": "Sponsor",
+        "campaign": "Campagne",
+        "status": "Status",
+        "matched": "Verdubbeld",
+        "matchedCell": "{matched} van {cap}"
+      },
+      "matchStatus": {
+        "active": "Loopt",
+        "closed": "Afgesloten",
+        "cancelled": "Geannuleerd"
+      },
+      "byDonor": {
+        "title": "Per donateur",
+        "note": "Anonieme donateurs zijn gemarkeerd: je ziet wie gaf, maar bedank of noem ze nooit in het openbaar.",
+        "empty": "Nog geen donateurs.",
+        "donor": "Donateur",
+        "anonymous": "Anoniem",
+        "email": "E-mail",
+        "count": "Giften",
+        "net": "Gegeven",
+        "truncated": "Hier staan alleen de 500 grootste donateurs; de export bevat iedereen."
+      },
+      "export": {
+        "title": "Exporteren voor je donateurs-CRM",
+        "body": "Eén rij per gift, offline betaling en donatieticket, met de anoniem-markering. Je bevestigt eerst dat jij het bent.",
+        "error": "De export is niet gestart: {reason}",
+        "layout": "Kolommen voor",
+        "layoutHint": "CRM-indelingen gebruiken de kolomnamen van het CRM, zodat het bestand zonder koppelen wordt geïmporteerd.",
+        "format": "Bestandstype",
+        "csv": "CSV (.csv)",
+        "xlsx": "Excel (.xlsx)",
+        "submit": "Donateurs exporteren",
+        "statusCsv": "Donateursexport (CSV)",
+        "statusXlsx": "Donateursexport (Excel)"
+      },
+      "layouts": {
+        "generic": "Elk rekenblad (deze taal)",
+        "salesforce_npsp": "Salesforce Nonprofit (NPSP)",
+        "bloomerang": "Bloomerang",
+        "little_green_light": "Little Green Light"
+      },
+      "cardTitle": "Rapport en exports",
+      "cardLink": "Rapport openen",
+      "cardBody": "Totalen per herkomst, niveau, verdubbeling en donateur; geïnde toezeggingen; exports voor je donateurs-CRM.",
+      "cardReconcile": "Afstemmen met Stripe",
+      "file": {
+        "headers": {
+          "date": "Datum",
+          "firstName": "Voornaam",
+          "lastName": "Achternaam",
+          "donor": "Donateur",
+          "email": "E-mail",
+          "anonymous": "Anoniem",
+          "amount": "Ontvangen bedrag",
+          "gift": "Gift",
+          "feeCover": "Gedekte kosten",
+          "refunded": "Terugbetaald",
+          "currency": "Valuta",
+          "campaign": "Campagne",
+          "level": "Niveau",
+          "source": "Herkomst",
+          "method": "Betaalmethode",
+          "employer": "Werkgever",
+          "tribute": "Ter ere of ter nagedachtenis van",
+          "paddle": "Peddel",
+          "reference": "Referentie"
+        },
+        "yes": "Ja",
+        "no": "Nee",
+        "sources": {
+          "online": "Geefpagina",
+          "qr": "QR-code",
+          "paddle": "Peddelronde",
+          "ticket": "Donatieticket"
+        },
+        "methods": {
+          "card": "Kaart",
+          "check": "Cheque",
+          "wire": "Overboeking",
+          "stock": "Aandelen",
+          "daf": "Donateursfonds",
+          "cash": "Contant",
+          "other": "Overig"
+        },
+        "privacyTitle": "Je donateurs blijven van jou",
+        "privacy": "Exports bevatten alleen de donateurs van dit evenement. Bewaar het bestand veilig en verwijder het na het importeren."
+      }
+    },
+    "recon": {
+      "title": "Afstemming van donaties",
+      "subtitle": "De giften van het evenement in het grootboek, vergeleken met je Stripe-account en de uitbetalingen.",
+      "noAccessTitle": "Financiële toegang nodig",
+      "noAccessDescription": "Vraag een eigenaar, beheerder of financieel lid om de donaties af te stemmen.",
+      "errors": {
+        "note": "Schrijf wat je hebt gevonden (3 tot 500 tekens).",
+        "provider": "Stripe was niet bereikbaar. Probeer het over een paar minuten opnieuw."
+      },
+      "run": "Nu afstemmen",
+      "ran": "Afgestemd.",
+      "reportLink": "Donatierapport",
+      "notConnectedTitle": "Geen Stripe-account om te vergelijken",
+      "notConnectedDescription": "Giften gaan rechtstreeks naar je gekoppelde Stripe-account. Koppel het bij Uitbetalingen en stem hier af.",
+      "status": {
+        "open": "Open",
+        "resolved": "Opgelost",
+        "cleared": "Vereffend"
+      },
+      "viewerNotice": "Je kunt de afstemming bekijken. Eigenaren, beheerders en financiële leden voeren hem uit en lossen verschillen op.",
+      "runTitle": "Laatste afstemming",
+      "lastRun": "Laatst afgestemd {at}: {ledger} grootboekboekingen tegenover {provider} Stripe-bewegingen.",
+      "neverRun": "Nog niet afgestemd. Stem nu af om het grootboek met Stripe te vergelijken.",
+      "stats": {
+        "ledger": "Memoboekingen in het grootboek",
+        "provider": "Stripe-saldo",
+        "fees": "Stripe-kosten",
+        "unpaidOut": "Nog niet uitbetaald",
+        "unpaidOutSub": "{count, plural, =0 {Alles is uitbetaald} one {# beweging wacht op een uitbetaling} other {# bewegingen wachten op een uitbetaling}}"
+      },
+      "diffsTitle": "Verschillen",
+      "cleanTitle": "Alles klopt",
+      "cleanDescription": "Elke gift en terugbetaling in het grootboek klopt tot op de cent met Stripe.",
+      "allSettled": "Geen open verschillen: alles is opgelost of vereffend.",
+      "kinds": {
+        "missing_at_provider": "In het grootboek, niet bij Stripe",
+        "missing_in_ledger": "Bij Stripe, niet in het grootboek",
+        "amount_mismatch": "Bedragen wijken af"
+      },
+      "ledger": "Grootboek",
+      "provider": "Stripe",
+      "difference": "Verschil",
+      "resolvedNote": "Opgelost: {note}",
+      "noteLabel": "Wat je hebt gevonden",
+      "noteHint": "Bijvoorbeeld: telefonisch terugbetaald, correctie van Stripe, dubbele boeking.",
+      "resolve": "{reference} oplossen",
+      "resolved": "Opgelost.",
+      "payoutsTitle": "Uitbetalingen",
+      "payoutsBody": "Uitbetalingen van je Stripe-account met giften van dit evenement. Een uitbetaling kan ook ander geld bevatten.",
+      "payoutsEmpty": "Nog geen uitbetalingen. Stripe betaalt een paar dagen na binnenkomst van de giften uit.",
+      "payout": {
+        "id": "Uitbetaling",
+        "status": "Status",
+        "arrival": "Komt binnen",
+        "amount": "Uitbetaling",
+        "donations": "Giften van dit evenement",
+        "donationsCell": "{count, plural, one {# beweging} other {# bewegingen}}: {net} na {fees} kosten"
+      },
+      "payoutStatus": {
+        "pending": "In afwachting",
+        "in_transit": "Onderweg",
+        "paid": "Betaald",
+        "failed": "Mislukt",
+        "canceled": "Geannuleerd"
+      }
     }
   },
   "galaTables": {

@@ -9255,6 +9255,219 @@
       },
       "cardLink": "Ouvrir les dons abondés",
       "cardBody": "Laissez un mécène doubler les dons d’une période jusqu’à un plafond, et exportez les employeurs des donateurs."
+    },
+    "report": {
+      "title": "Rapport des dons",
+      "subtitle": "Ce qui a été collecté et comment, les promesses encaissées et chaque donateur, rapprochés du grand livre.",
+      "noAccessTitle": "Accès finances requis",
+      "noAccessDescription": "Demandez le rapport des dons à un propriétaire, un administrateur ou un membre des finances : il nomme les donateurs et les montants.",
+      "reconcileLink": "Rapprochement",
+      "emptyTitle": "Aucun don pour l'instant",
+      "emptyDescription": "Les dons, promesses de palette et billets de don apparaissent ici dès qu'ils arrivent. Ouvrez une campagne dans l'onglet Dons pour commencer.",
+      "backToDonations": "Aller aux dons",
+      "asOf": "Jusqu'à maintenant. Les dates des exports sont dans le fuseau horaire de l'événement ({zone}).",
+      "totalsTitle": "Totaux",
+      "totalsIn": "Totaux en {currency}",
+      "stats": {
+        "raised": "Collecté",
+        "raisedSub": "{count, plural, one {# don ou paiement} other {# dons et paiements}} de {donors, plural, one {# donateur} other {# donateurs}}",
+        "online": "Reçu par carte",
+        "onlineSub": "Dont {cover} de frais pris en charge ; {refunded} remboursés",
+        "offline": "Payé hors ligne",
+        "ticketSub": "Plus {amount} de billets de don",
+        "pledged": "Promis dans la salle",
+        "collectedLabel": "Promesses encaissées",
+        "pledgedSub": "{collected} encaissés · {writtenOff} passés en perte · {open} encore ouverts",
+        "matched": "Doublé par les mécènes",
+        "matchedSub": "Promesses des mécènes, encaissées à part"
+      },
+      "check": {
+        "title": "Contrôle du grand livre",
+        "notReconciled": "Pas encore rapproché",
+        "matches": "Juste au centime près",
+        "differs": "Écart de {amount}",
+        "ledger": "Écritures mémo du grand livre",
+        "provider": "Solde Stripe (dernier rapprochement)",
+        "none": "Pas encore rapproché",
+        "fees": "Frais Stripe"
+      },
+      "bySource": {
+        "title": "Par origine",
+        "source": "Origine",
+        "count": "Dons",
+        "net": "Reçu"
+      },
+      "sources": {
+        "online": "Page de don",
+        "qr": "QR code",
+        "paddle": "Levée de palettes",
+        "ticket": "Billets de don"
+      },
+      "byLevel": {
+        "title": "Par palier",
+        "empty": "Aucun palier utilisé pour l'instant.",
+        "level": "Palier",
+        "own": "Montants libres",
+        "gifts": "Dons",
+        "giftsCell": "{count, plural, one {# don} other {# dons}} · {amount}",
+        "pledges": "Promesses de palette",
+        "pledgesCell": "{count, plural, one {# promesse} other {# promesses}} · {amount}"
+      },
+      "byMatch": {
+        "title": "Par doublement",
+        "sponsor": "Mécène",
+        "campaign": "Campagne",
+        "status": "Statut",
+        "matched": "Doublé",
+        "matchedCell": "{matched} sur {cap}"
+      },
+      "matchStatus": {
+        "active": "En cours",
+        "closed": "Clôturé",
+        "cancelled": "Annulé"
+      },
+      "byDonor": {
+        "title": "Par donateur",
+        "note": "Les donateurs anonymes sont signalés : vous voyez qui a donné, mais ne les remerciez ni ne les citez jamais publiquement.",
+        "empty": "Aucun donateur pour l'instant.",
+        "donor": "Donateur",
+        "anonymous": "Anonyme",
+        "email": "E-mail",
+        "count": "Dons",
+        "net": "Donné",
+        "truncated": "Seuls les 500 plus grands donateurs sont listés ici ; l'export les contient tous."
+      },
+      "export": {
+        "title": "Exporter vers votre CRM de donateurs",
+        "body": "Une ligne par don, paiement hors ligne et billet de don, avec l'indicateur d'anonymat. Vous confirmerez d'abord votre identité.",
+        "error": "L'export n'a pas démarré : {reason}",
+        "layout": "Colonnes pour",
+        "layoutHint": "Les formats CRM reprennent les noms de colonnes du CRM, pour importer le fichier sans correspondance.",
+        "format": "Type de fichier",
+        "csv": "CSV (.csv)",
+        "xlsx": "Excel (.xlsx)",
+        "submit": "Exporter les donateurs",
+        "statusCsv": "Export des donateurs (CSV)",
+        "statusXlsx": "Export des donateurs (Excel)"
+      },
+      "layouts": {
+        "generic": "Tout tableur (cette langue)",
+        "salesforce_npsp": "Salesforce Nonprofit (NPSP)",
+        "bloomerang": "Bloomerang",
+        "little_green_light": "Little Green Light"
+      },
+      "cardTitle": "Rapport et exports",
+      "cardLink": "Ouvrir le rapport",
+      "cardBody": "Totaux par origine, palier, doublement et donateur ; promesses encaissées ; exports pour votre CRM de donateurs.",
+      "cardReconcile": "Rapprocher avec Stripe",
+      "file": {
+        "headers": {
+          "date": "Date",
+          "firstName": "Prénom",
+          "lastName": "Nom",
+          "donor": "Donateur",
+          "email": "E-mail",
+          "anonymous": "Anonyme",
+          "amount": "Montant reçu",
+          "gift": "Don",
+          "feeCover": "Frais pris en charge",
+          "refunded": "Remboursé",
+          "currency": "Devise",
+          "campaign": "Campagne",
+          "level": "Palier",
+          "source": "Origine",
+          "method": "Moyen de paiement",
+          "employer": "Employeur",
+          "tribute": "En l'honneur ou à la mémoire de",
+          "paddle": "Palette",
+          "reference": "Référence"
+        },
+        "yes": "Oui",
+        "no": "Non",
+        "sources": {
+          "online": "Page de don",
+          "qr": "QR code",
+          "paddle": "Levée de palettes",
+          "ticket": "Billet de don"
+        },
+        "methods": {
+          "card": "Carte",
+          "check": "Chèque",
+          "wire": "Virement",
+          "stock": "Actions",
+          "daf": "Fonds orienté par le donateur",
+          "cash": "Espèces",
+          "other": "Autre"
+        },
+        "privacyTitle": "Vos donateurs restent les vôtres",
+        "privacy": "Les exports ne contiennent que les donateurs de cet événement. Conservez le fichier en lieu sûr et supprimez-le après import."
+      }
+    },
+    "recon": {
+      "title": "Rapprochement des dons",
+      "subtitle": "Les dons de l'événement dans le grand livre, comparés à votre compte Stripe et à ses virements.",
+      "noAccessTitle": "Accès finances requis",
+      "noAccessDescription": "Demandez à un propriétaire, un administrateur ou un membre des finances de rapprocher les dons.",
+      "errors": {
+        "note": "Indiquez ce que vous avez trouvé (3 à 500 caractères).",
+        "provider": "Stripe est injoignable. Réessayez dans quelques minutes."
+      },
+      "run": "Rapprocher maintenant",
+      "ran": "Rapproché.",
+      "reportLink": "Rapport des dons",
+      "notConnectedTitle": "Aucun compte Stripe à comparer",
+      "notConnectedDescription": "Les dons arrivent directement sur votre compte Stripe connecté. Connectez-le dans Virements, puis rapprochez ici.",
+      "status": {
+        "open": "Ouvert",
+        "resolved": "Résolu",
+        "cleared": "Soldé"
+      },
+      "viewerNotice": "Vous pouvez consulter le rapprochement. Propriétaires, administrateurs et finances le lancent et résolvent les écarts.",
+      "runTitle": "Dernier passage",
+      "lastRun": "Dernier rapprochement {at} : {ledger} écritures du grand livre face à {provider} mouvements Stripe.",
+      "neverRun": "Pas encore rapproché. Rapprochez maintenant pour comparer le grand livre à Stripe.",
+      "stats": {
+        "ledger": "Écritures mémo du grand livre",
+        "provider": "Solde Stripe",
+        "fees": "Frais Stripe",
+        "unpaidOut": "Pas encore viré",
+        "unpaidOutSub": "{count, plural, =0 {Tout a été viré} one {# mouvement attend un virement} other {# mouvements attendent un virement}}"
+      },
+      "diffsTitle": "Écarts",
+      "cleanTitle": "Tout concorde",
+      "cleanDescription": "Chaque don et remboursement du grand livre concorde au centime près avec Stripe.",
+      "allSettled": "Aucun écart ouvert : tous sont résolus ou soldés.",
+      "kinds": {
+        "missing_at_provider": "Dans le grand livre, pas chez Stripe",
+        "missing_in_ledger": "Chez Stripe, pas dans le grand livre",
+        "amount_mismatch": "Les montants diffèrent"
+      },
+      "ledger": "Grand livre",
+      "provider": "Stripe",
+      "difference": "Écart",
+      "resolvedNote": "Résolu : {note}",
+      "noteLabel": "Ce que vous avez trouvé",
+      "noteHint": "Par exemple : remboursé par téléphone, ajustement Stripe, écriture en double.",
+      "resolve": "Résoudre {reference}",
+      "resolved": "Résolu.",
+      "payoutsTitle": "Virements",
+      "payoutsBody": "Virements de votre compte Stripe qui ont porté des dons de cet événement. Un virement peut aussi porter d'autres fonds.",
+      "payoutsEmpty": "Aucun virement pour l'instant. Stripe vire quelques jours après l'arrivée des dons.",
+      "payout": {
+        "id": "Virement",
+        "status": "Statut",
+        "arrival": "Arrivée",
+        "amount": "Virement",
+        "donations": "Dons de cet événement",
+        "donationsCell": "{count, plural, one {# mouvement} other {# mouvements}} : {net} après {fees} de frais"
+      },
+      "payoutStatus": {
+        "pending": "En attente",
+        "in_transit": "En route",
+        "paid": "Payé",
+        "failed": "Échoué",
+        "canceled": "Annulé"
+      }
     }
   },
   "galaTables": {

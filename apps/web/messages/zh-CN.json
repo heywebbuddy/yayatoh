@@ -9255,6 +9255,219 @@
       },
       "cardLink": "打开配捐",
       "cardBody": "让赞助方在一段时间内将捐款翻倍直至上限，并导出捐赠者的雇主以申请配捐。"
+    },
+    "report": {
+      "title": "捐赠报告",
+      "subtitle": "筹得多少、如何筹得、已收回的认捐以及每位捐赠者，并与总账核对。",
+      "noAccessTitle": "需要财务权限",
+      "noAccessDescription": "捐赠报告包含捐赠者姓名和金额，请向所有者、管理员或财务成员索取。",
+      "reconcileLink": "对账",
+      "emptyTitle": "还没有捐赠",
+      "emptyDescription": "捐赠、举牌认捐和捐赠票一到账就会显示在这里。请先在“捐赠”标签中开启一个活动。",
+      "backToDonations": "前往捐赠",
+      "asOf": "截至目前。导出中的日期采用活动时区（{zone}）。",
+      "totalsTitle": "合计",
+      "totalsIn": "{currency} 合计",
+      "stats": {
+        "raised": "已筹得",
+        "raisedSub": "来自 {donors, plural, other {# 位捐赠者}}的 {count, plural, other {# 笔捐赠和付款}}",
+        "online": "刷卡收到",
+        "onlineSub": "含 {cover} 代付手续费；已退款 {refunded}",
+        "offline": "线下支付",
+        "ticketSub": "另有捐赠票 {amount}",
+        "pledged": "现场认捐",
+        "collectedLabel": "已收回的认捐",
+        "pledgedSub": "已收回 {collected} · 已核销 {writtenOff} · 待收 {open}",
+        "matched": "赞助方配捐",
+        "matchedSub": "赞助方的认捐，另行收取"
+      },
+      "check": {
+        "title": "总账核对",
+        "notReconciled": "尚未对账",
+        "matches": "分毫不差",
+        "differs": "相差 {amount}",
+        "ledger": "总账备忘分录",
+        "provider": "Stripe 余额（上次对账）",
+        "none": "尚未对账",
+        "fees": "Stripe 手续费"
+      },
+      "bySource": {
+        "title": "按来源",
+        "source": "来源",
+        "count": "捐赠",
+        "net": "实收"
+      },
+      "sources": {
+        "online": "捐赠页面",
+        "qr": "二维码",
+        "paddle": "举牌环节",
+        "ticket": "捐赠票"
+      },
+      "byLevel": {
+        "title": "按档位",
+        "empty": "还没有使用任何档位。",
+        "level": "档位",
+        "own": "自定金额",
+        "gifts": "捐赠",
+        "giftsCell": "{count, plural, other {# 笔}} · {amount}",
+        "pledges": "举牌认捐",
+        "pledgesCell": "{count, plural, other {# 笔认捐}} · {amount}"
+      },
+      "byMatch": {
+        "title": "按配捐",
+        "sponsor": "赞助方",
+        "campaign": "活动",
+        "status": "状态",
+        "matched": "已配捐",
+        "matchedCell": "{matched} / {cap}"
+      },
+      "matchStatus": {
+        "active": "进行中",
+        "closed": "已结束",
+        "cancelled": "已取消"
+      },
+      "byDonor": {
+        "title": "按捐赠者",
+        "note": "匿名捐赠者已标出：你能看到是谁捐的，但切勿公开致谢或列出他们。",
+        "empty": "还没有捐赠者。",
+        "donor": "捐赠者",
+        "anonymous": "匿名",
+        "email": "邮箱",
+        "count": "捐赠",
+        "net": "捐赠额",
+        "truncated": "这里只列出捐赠最多的 500 位；导出文件包含所有人。"
+      },
+      "export": {
+        "title": "导出到你的捐赠者 CRM",
+        "body": "每笔捐赠、线下付款和捐赠票各一行，并保留匿名标记。你需要先确认身份。",
+        "error": "导出未能开始：{reason}",
+        "layout": "列格式",
+        "layoutHint": "CRM 格式使用该 CRM 自己的列名，导入时无需映射。",
+        "format": "文件类型",
+        "csv": "CSV（.csv）",
+        "xlsx": "Excel（.xlsx）",
+        "submit": "导出捐赠者",
+        "statusCsv": "捐赠者导出（CSV）",
+        "statusXlsx": "捐赠者导出（Excel）"
+      },
+      "layouts": {
+        "generic": "任意电子表格（当前语言）",
+        "salesforce_npsp": "Salesforce Nonprofit（NPSP）",
+        "bloomerang": "Bloomerang",
+        "little_green_light": "Little Green Light"
+      },
+      "cardTitle": "报告与导出",
+      "cardLink": "打开报告",
+      "cardBody": "按来源、档位、配捐和捐赠者的合计；已收回的认捐；导出到你的捐赠者 CRM。",
+      "cardReconcile": "与 Stripe 对账",
+      "file": {
+        "headers": {
+          "date": "日期",
+          "firstName": "名",
+          "lastName": "姓",
+          "donor": "捐赠者",
+          "email": "邮箱",
+          "anonymous": "匿名",
+          "amount": "实收金额",
+          "gift": "捐赠额",
+          "feeCover": "代付手续费",
+          "refunded": "已退款",
+          "currency": "币种",
+          "campaign": "活动",
+          "level": "档位",
+          "source": "来源",
+          "method": "支付方式",
+          "employer": "雇主",
+          "tribute": "致敬或纪念对象",
+          "paddle": "号牌",
+          "reference": "参考号"
+        },
+        "yes": "是",
+        "no": "否",
+        "sources": {
+          "online": "捐赠页面",
+          "qr": "二维码",
+          "paddle": "举牌环节",
+          "ticket": "捐赠票"
+        },
+        "methods": {
+          "card": "银行卡",
+          "check": "支票",
+          "wire": "电汇",
+          "stock": "股票",
+          "daf": "捐赠者建议基金",
+          "cash": "现金",
+          "other": "其他"
+        },
+        "privacyTitle": "你的捐赠者只属于你",
+        "privacy": "导出文件只包含本活动的捐赠者。请妥善保存文件，导入后删除。"
+      }
+    },
+    "recon": {
+      "title": "捐赠对账",
+      "subtitle": "总账中的本活动捐赠，与你的 Stripe 账户及其打款进行比对。",
+      "noAccessTitle": "需要财务权限",
+      "noAccessDescription": "请让所有者、管理员或财务成员进行捐赠对账。",
+      "errors": {
+        "note": "写下你的发现（3 到 500 个字符）。",
+        "provider": "无法连接 Stripe，请几分钟后重试。"
+      },
+      "run": "立即对账",
+      "ran": "已对账。",
+      "reportLink": "捐赠报告",
+      "notConnectedTitle": "没有可比对的 Stripe 账户",
+      "notConnectedDescription": "捐赠直接进入你已连接的 Stripe 账户。请在“打款”中连接后，再回到这里对账。",
+      "status": {
+        "open": "未解决",
+        "resolved": "已解决",
+        "cleared": "已对平"
+      },
+      "viewerNotice": "你可以查看对账。所有者、管理员和财务成员负责运行对账并处理差异。",
+      "runTitle": "最近一次对账",
+      "lastRun": "上次对账 {at}：{ledger} 条总账记录对比 {provider} 笔 Stripe 流水。",
+      "neverRun": "尚未对账。立即对账，将总账与 Stripe 比对。",
+      "stats": {
+        "ledger": "总账备忘分录",
+        "provider": "Stripe 余额",
+        "fees": "Stripe 手续费",
+        "unpaidOut": "尚未打款",
+        "unpaidOutSub": "{count, plural, =0 {已全部打款} other {# 笔流水等待打款}}"
+      },
+      "diffsTitle": "差异",
+      "cleanTitle": "全部一致",
+      "cleanDescription": "总账中的每笔捐赠和退款都与 Stripe 分毫不差。",
+      "allSettled": "没有未解决的差异：都已解决或对平。",
+      "kinds": {
+        "missing_at_provider": "总账有，Stripe 没有",
+        "missing_in_ledger": "Stripe 有，总账没有",
+        "amount_mismatch": "金额不一致"
+      },
+      "ledger": "总账",
+      "provider": "Stripe",
+      "difference": "差额",
+      "resolvedNote": "已解决：{note}",
+      "noteLabel": "你的发现",
+      "noteHint": "例如：电话退款、Stripe 调整、重复记账。",
+      "resolve": "解决 {reference}",
+      "resolved": "已解决。",
+      "payoutsTitle": "打款",
+      "payoutsBody": "从你的 Stripe 账户发出、包含本活动捐赠的打款。一笔打款也可能包含其他款项。",
+      "payoutsEmpty": "还没有打款。Stripe 会在捐赠到账几天后打款。",
+      "payout": {
+        "id": "打款",
+        "status": "状态",
+        "arrival": "到账日",
+        "amount": "打款金额",
+        "donations": "本活动的捐赠",
+        "donationsCell": "{count, plural, other {# 笔流水}}：扣除 {fees} 手续费后 {net}"
+      },
+      "payoutStatus": {
+        "pending": "待处理",
+        "in_transit": "在途",
+        "paid": "已到账",
+        "failed": "失败",
+        "canceled": "已取消"
+      }
     }
   },
   "galaTables": {

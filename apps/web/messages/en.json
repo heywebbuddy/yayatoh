@@ -9255,6 +9255,219 @@
       },
       "cardLink": "Open matching gifts",
       "cardBody": "Let a sponsor double gifts in a window up to a cap, and export donors’ employers for matching."
+    },
+    "report": {
+      "title": "Donations report",
+      "subtitle": "What was raised and how, pledges collected, and every donor, checked against the ledger.",
+      "noAccessTitle": "Finance access needed",
+      "noAccessDescription": "Ask an owner, admin or finance member for the donations report: it names donors and amounts.",
+      "reconcileLink": "Reconciliation",
+      "emptyTitle": "No donations yet",
+      "emptyDescription": "Gifts, paddle pledges and donation tickets appear here once they come in. Open a campaign on the Donations tab to start.",
+      "backToDonations": "Go to Donations",
+      "asOf": "Up to now. Dates in exports are in the event's time zone ({zone}).",
+      "totalsTitle": "Totals",
+      "totalsIn": "Totals in {currency}",
+      "stats": {
+        "raised": "Raised",
+        "raisedSub": "{count, plural, one {# gift or payment} other {# gifts and payments}} from {donors, plural, one {# donor} other {# donors}}",
+        "online": "Received by card",
+        "onlineSub": "Includes {cover} of covered fees; {refunded} refunded",
+        "offline": "Paid offline",
+        "ticketSub": "Plus {amount} from donation tickets",
+        "pledged": "Pledged in the room",
+        "collectedLabel": "Pledges collected",
+        "pledgedSub": "{collected} collected · {writtenOff} written off · {open} still open",
+        "matched": "Matched by sponsors",
+        "matchedSub": "Sponsors' pledges, collected separately"
+      },
+      "check": {
+        "title": "Ledger check",
+        "notReconciled": "Not reconciled yet",
+        "matches": "Matches to the cent",
+        "differs": "Differs by {amount}",
+        "ledger": "Ledger memo entries",
+        "provider": "Stripe balance (last reconciled)",
+        "none": "Not reconciled yet",
+        "fees": "Stripe fees"
+      },
+      "bySource": {
+        "title": "By source",
+        "source": "Source",
+        "count": "Gifts",
+        "net": "Received"
+      },
+      "sources": {
+        "online": "Giving page",
+        "qr": "QR code",
+        "paddle": "Paddle raise",
+        "ticket": "Donation tickets"
+      },
+      "byLevel": {
+        "title": "By level",
+        "empty": "No levels used yet.",
+        "level": "Level",
+        "own": "Own amounts",
+        "gifts": "Gifts",
+        "giftsCell": "{count, plural, one {# gift} other {# gifts}} · {amount}",
+        "pledges": "Paddle pledges",
+        "pledgesCell": "{count, plural, one {# pledge} other {# pledges}} · {amount}"
+      },
+      "byMatch": {
+        "title": "By match",
+        "sponsor": "Sponsor",
+        "campaign": "Campaign",
+        "status": "Status",
+        "matched": "Matched",
+        "matchedCell": "{matched} of {cap}"
+      },
+      "matchStatus": {
+        "active": "Running",
+        "closed": "Closed",
+        "cancelled": "Cancelled"
+      },
+      "byDonor": {
+        "title": "By donor",
+        "note": "Anonymous donors are flagged: you see who gave, but never thank or list them publicly.",
+        "empty": "No donors yet.",
+        "donor": "Donor",
+        "anonymous": "Anonymous",
+        "email": "Email",
+        "count": "Gifts",
+        "net": "Given",
+        "truncated": "Only the 500 largest donors are listed here; the export has everyone."
+      },
+      "export": {
+        "title": "Export for your donor CRM",
+        "body": "One row per gift, offline payment and donation ticket, with the anonymous flag kept. You'll confirm it's you first.",
+        "error": "The export didn't start: {reason}",
+        "layout": "Columns for",
+        "layoutHint": "CRM layouts use the CRM's own column names, so the file imports without remapping.",
+        "format": "File type",
+        "csv": "CSV (.csv)",
+        "xlsx": "Excel (.xlsx)",
+        "submit": "Export donors",
+        "statusCsv": "Donor export (CSV)",
+        "statusXlsx": "Donor export (Excel)"
+      },
+      "layouts": {
+        "generic": "Any spreadsheet (this language)",
+        "salesforce_npsp": "Salesforce Nonprofit (NPSP)",
+        "bloomerang": "Bloomerang",
+        "little_green_light": "Little Green Light"
+      },
+      "cardTitle": "Report and exports",
+      "cardLink": "Open the report",
+      "cardBody": "Totals by source, level, match and donor; pledges collected; exports for your donor CRM.",
+      "cardReconcile": "Reconcile with Stripe",
+      "file": {
+        "headers": {
+          "date": "Date",
+          "firstName": "First name",
+          "lastName": "Last name",
+          "donor": "Donor",
+          "email": "Email",
+          "anonymous": "Anonymous",
+          "amount": "Amount received",
+          "gift": "Gift",
+          "feeCover": "Fee covered",
+          "refunded": "Refunded",
+          "currency": "Currency",
+          "campaign": "Campaign",
+          "level": "Level",
+          "source": "Source",
+          "method": "Payment method",
+          "employer": "Employer",
+          "tribute": "In honor or memory of",
+          "paddle": "Paddle",
+          "reference": "Reference"
+        },
+        "yes": "Yes",
+        "no": "No",
+        "sources": {
+          "online": "Giving page",
+          "qr": "QR code",
+          "paddle": "Paddle raise",
+          "ticket": "Donation ticket"
+        },
+        "methods": {
+          "card": "Card",
+          "check": "Check",
+          "wire": "Wire transfer",
+          "stock": "Stock",
+          "daf": "Donor-advised fund",
+          "cash": "Cash",
+          "other": "Other"
+        },
+        "privacyTitle": "Your donors stay yours",
+        "privacy": "Exports hold this event's donors only. Store the file safely and delete it once it's imported."
+      }
+    },
+    "recon": {
+      "title": "Donations reconciliation",
+      "subtitle": "The event's gifts in the ledger, compared with your Stripe account and its payouts.",
+      "noAccessTitle": "Finance access needed",
+      "noAccessDescription": "Ask an owner, admin or finance member to reconcile donations.",
+      "errors": {
+        "note": "Say what you found (3 to 500 characters).",
+        "provider": "Stripe couldn't be reached. Try again in a few minutes."
+      },
+      "run": "Reconcile now",
+      "ran": "Reconciled.",
+      "reportLink": "Donations report",
+      "notConnectedTitle": "No Stripe account to compare",
+      "notConnectedDescription": "Gifts go straight to your connected Stripe account. Connect it under Payouts, then reconcile here.",
+      "status": {
+        "open": "Open",
+        "resolved": "Resolved",
+        "cleared": "Cleared"
+      },
+      "viewerNotice": "You can read the reconciliation. Owners, admins and finance members run it and resolve differences.",
+      "runTitle": "Latest run",
+      "lastRun": "Last reconciled {at}: {ledger} ledger entries against {provider} Stripe movements.",
+      "neverRun": "Not reconciled yet. Reconcile now to compare the ledger with Stripe.",
+      "stats": {
+        "ledger": "Ledger memo entries",
+        "provider": "Stripe balance",
+        "fees": "Stripe fees",
+        "unpaidOut": "Not paid out yet",
+        "unpaidOutSub": "{count, plural, =0 {Everything has been paid out} one {# movement waits for a payout} other {# movements wait for a payout}}"
+      },
+      "diffsTitle": "Differences",
+      "cleanTitle": "Everything matches",
+      "cleanDescription": "Every gift and refund in the ledger matches Stripe to the cent.",
+      "allSettled": "No open differences: every one is resolved or cleared.",
+      "kinds": {
+        "missing_at_provider": "In the ledger, not at Stripe",
+        "missing_in_ledger": "At Stripe, not in the ledger",
+        "amount_mismatch": "Amounts differ"
+      },
+      "ledger": "Ledger",
+      "provider": "Stripe",
+      "difference": "Difference",
+      "resolvedNote": "Resolved: {note}",
+      "noteLabel": "What you found",
+      "noteHint": "For example: refunded by phone, Stripe adjustment, duplicate entry.",
+      "resolve": "Resolve {reference}",
+      "resolved": "Resolved.",
+      "payoutsTitle": "Payouts",
+      "payoutsBody": "Payouts from your Stripe account that carried this event's gifts. A payout can carry other money too.",
+      "payoutsEmpty": "No payouts yet. Stripe pays out a few days after gifts arrive.",
+      "payout": {
+        "id": "Payout",
+        "status": "Status",
+        "arrival": "Arrives",
+        "amount": "Payout",
+        "donations": "This event's gifts",
+        "donationsCell": "{count, plural, one {# movement} other {# movements}}: {net} after {fees} fees"
+      },
+      "payoutStatus": {
+        "pending": "Pending",
+        "in_transit": "On its way",
+        "paid": "Paid",
+        "failed": "Failed",
+        "canceled": "Cancelled"
+      }
     }
   },
   "galaTables": {

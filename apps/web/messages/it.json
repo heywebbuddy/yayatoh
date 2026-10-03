@@ -9255,6 +9255,219 @@
       },
       "cardLink": "Apri donazioni raddoppiate",
       "cardBody": "Lascia che uno sponsor raddoppi le donazioni di un periodo fino a un tetto, ed esporta i datori di lavoro dei donatori."
+    },
+    "report": {
+      "title": "Report delle donazioni",
+      "subtitle": "Quanto è stato raccolto e come, le promesse incassate e ogni donatore, verificati con il libro mastro.",
+      "noAccessTitle": "Serve l'accesso finanziario",
+      "noAccessDescription": "Chiedi il report delle donazioni a un proprietario, un amministratore o un membro della finanza: riporta donatori e importi.",
+      "reconcileLink": "Riconciliazione",
+      "emptyTitle": "Ancora nessuna donazione",
+      "emptyDescription": "Donazioni, promesse con paletta e biglietti di donazione compaiono qui appena arrivano. Apri una campagna nella scheda Donazioni per iniziare.",
+      "backToDonations": "Vai alle donazioni",
+      "asOf": "Fino ad ora. Le date negli export sono nel fuso orario dell'evento ({zone}).",
+      "totalsTitle": "Totali",
+      "totalsIn": "Totali in {currency}",
+      "stats": {
+        "raised": "Raccolto",
+        "raisedSub": "{count, plural, one {# donazione o pagamento} other {# donazioni e pagamenti}} da {donors, plural, one {# donatore} other {# donatori}}",
+        "online": "Ricevuto con carta",
+        "onlineSub": "Include {cover} di commissioni coperte; {refunded} rimborsati",
+        "offline": "Pagato offline",
+        "ticketSub": "Più {amount} dai biglietti di donazione",
+        "pledged": "Promesso in sala",
+        "collectedLabel": "Promesse incassate",
+        "pledgedSub": "{collected} incassati · {writtenOff} stralciati · {open} ancora aperti",
+        "matched": "Raddoppiato dagli sponsor",
+        "matchedSub": "Promesse degli sponsor, incassate a parte"
+      },
+      "check": {
+        "title": "Verifica del libro mastro",
+        "notReconciled": "Non ancora riconciliato",
+        "matches": "Torna al centesimo",
+        "differs": "Differisce di {amount}",
+        "ledger": "Registrazioni memo del libro",
+        "provider": "Saldo Stripe (ultima riconciliazione)",
+        "none": "Non ancora riconciliato",
+        "fees": "Commissioni Stripe"
+      },
+      "bySource": {
+        "title": "Per provenienza",
+        "source": "Provenienza",
+        "count": "Donazioni",
+        "net": "Ricevuto"
+      },
+      "sources": {
+        "online": "Pagina donazioni",
+        "qr": "Codice QR",
+        "paddle": "Asta con paletta",
+        "ticket": "Biglietti di donazione"
+      },
+      "byLevel": {
+        "title": "Per livello",
+        "empty": "Ancora nessun livello usato.",
+        "level": "Livello",
+        "own": "Importi liberi",
+        "gifts": "Donazioni",
+        "giftsCell": "{count, plural, one {# donazione} other {# donazioni}} · {amount}",
+        "pledges": "Promesse con paletta",
+        "pledgesCell": "{count, plural, one {# promessa} other {# promesse}} · {amount}"
+      },
+      "byMatch": {
+        "title": "Per raddoppio",
+        "sponsor": "Sponsor",
+        "campaign": "Campagna",
+        "status": "Stato",
+        "matched": "Raddoppiato",
+        "matchedCell": "{matched} su {cap}"
+      },
+      "matchStatus": {
+        "active": "In corso",
+        "closed": "Chiuso",
+        "cancelled": "Annullato"
+      },
+      "byDonor": {
+        "title": "Per donatore",
+        "note": "I donatori anonimi sono segnalati: vedi chi ha donato, ma non ringraziarli né citarli mai pubblicamente.",
+        "empty": "Ancora nessun donatore.",
+        "donor": "Donatore",
+        "anonymous": "Anonimo",
+        "email": "Email",
+        "count": "Donazioni",
+        "net": "Donato",
+        "truncated": "Qui compaiono solo i 500 donatori maggiori; l'export li contiene tutti."
+      },
+      "export": {
+        "title": "Esporta per il tuo CRM dei donatori",
+        "body": "Una riga per donazione, pagamento offline e biglietto di donazione, con l'indicatore di anonimato. Prima confermerai la tua identità.",
+        "error": "L'export non è partito: {reason}",
+        "layout": "Colonne per",
+        "layoutHint": "I formati CRM usano i nomi di colonna del CRM, così il file si importa senza mappature.",
+        "format": "Tipo di file",
+        "csv": "CSV (.csv)",
+        "xlsx": "Excel (.xlsx)",
+        "submit": "Esporta donatori",
+        "statusCsv": "Export donatori (CSV)",
+        "statusXlsx": "Export donatori (Excel)"
+      },
+      "layouts": {
+        "generic": "Qualsiasi foglio di calcolo (questa lingua)",
+        "salesforce_npsp": "Salesforce Nonprofit (NPSP)",
+        "bloomerang": "Bloomerang",
+        "little_green_light": "Little Green Light"
+      },
+      "cardTitle": "Report ed export",
+      "cardLink": "Apri il report",
+      "cardBody": "Totali per provenienza, livello, raddoppio e donatore; promesse incassate; export per il tuo CRM dei donatori.",
+      "cardReconcile": "Riconcilia con Stripe",
+      "file": {
+        "headers": {
+          "date": "Data",
+          "firstName": "Nome",
+          "lastName": "Cognome",
+          "donor": "Donatore",
+          "email": "Email",
+          "anonymous": "Anonimo",
+          "amount": "Importo ricevuto",
+          "gift": "Donazione",
+          "feeCover": "Commissione coperta",
+          "refunded": "Rimborsato",
+          "currency": "Valuta",
+          "campaign": "Campagna",
+          "level": "Livello",
+          "source": "Provenienza",
+          "method": "Metodo di pagamento",
+          "employer": "Datore di lavoro",
+          "tribute": "In onore o in memoria di",
+          "paddle": "Paletta",
+          "reference": "Riferimento"
+        },
+        "yes": "Sì",
+        "no": "No",
+        "sources": {
+          "online": "Pagina donazioni",
+          "qr": "Codice QR",
+          "paddle": "Asta con paletta",
+          "ticket": "Biglietto di donazione"
+        },
+        "methods": {
+          "card": "Carta",
+          "check": "Assegno",
+          "wire": "Bonifico",
+          "stock": "Azioni",
+          "daf": "Fondo consigliato dal donatore",
+          "cash": "Contanti",
+          "other": "Altro"
+        },
+        "privacyTitle": "I tuoi donatori restano tuoi",
+        "privacy": "Gli export contengono solo i donatori di questo evento. Conserva il file in sicurezza ed eliminalo dopo l'importazione."
+      }
+    },
+    "recon": {
+      "title": "Riconciliazione delle donazioni",
+      "subtitle": "Le donazioni dell'evento nel libro mastro, confrontate con il tuo account Stripe e i suoi bonifici.",
+      "noAccessTitle": "Serve l'accesso finanziario",
+      "noAccessDescription": "Chiedi a un proprietario, un amministratore o un membro della finanza di riconciliare le donazioni.",
+      "errors": {
+        "note": "Scrivi cosa hai trovato (da 3 a 500 caratteri).",
+        "provider": "Stripe non è raggiungibile. Riprova tra qualche minuto."
+      },
+      "run": "Riconcilia ora",
+      "ran": "Riconciliato.",
+      "reportLink": "Report delle donazioni",
+      "notConnectedTitle": "Nessun account Stripe da confrontare",
+      "notConnectedDescription": "Le donazioni arrivano direttamente sul tuo account Stripe collegato. Collegalo in Pagamenti, poi riconcilia qui.",
+      "status": {
+        "open": "Aperta",
+        "resolved": "Risolta",
+        "cleared": "Pareggiata"
+      },
+      "viewerNotice": "Puoi consultare la riconciliazione. Proprietari, amministratori e finanza la avviano e risolvono le differenze.",
+      "runTitle": "Ultima esecuzione",
+      "lastRun": "Ultima riconciliazione {at}: {ledger} registrazioni del libro contro {provider} movimenti Stripe.",
+      "neverRun": "Non ancora riconciliato. Riconcilia ora per confrontare il libro con Stripe.",
+      "stats": {
+        "ledger": "Registrazioni memo del libro",
+        "provider": "Saldo Stripe",
+        "fees": "Commissioni Stripe",
+        "unpaidOut": "Non ancora versato",
+        "unpaidOutSub": "{count, plural, =0 {Tutto è stato versato} one {# movimento attende un bonifico} other {# movimenti attendono un bonifico}}"
+      },
+      "diffsTitle": "Differenze",
+      "cleanTitle": "Tutto torna",
+      "cleanDescription": "Ogni donazione e rimborso del libro torna al centesimo con Stripe.",
+      "allSettled": "Nessuna differenza aperta: tutte risolte o pareggiate.",
+      "kinds": {
+        "missing_at_provider": "Nel libro, non su Stripe",
+        "missing_in_ledger": "Su Stripe, non nel libro",
+        "amount_mismatch": "Gli importi differiscono"
+      },
+      "ledger": "Libro",
+      "provider": "Stripe",
+      "difference": "Differenza",
+      "resolvedNote": "Risolta: {note}",
+      "noteLabel": "Cosa hai trovato",
+      "noteHint": "Per esempio: rimborsato per telefono, rettifica Stripe, registrazione doppia.",
+      "resolve": "Risolvi {reference}",
+      "resolved": "Risolta.",
+      "payoutsTitle": "Bonifici",
+      "payoutsBody": "Bonifici dal tuo account Stripe che hanno portato donazioni di questo evento. Un bonifico può contenere anche altro denaro.",
+      "payoutsEmpty": "Ancora nessun bonifico. Stripe versa alcuni giorni dopo l'arrivo delle donazioni.",
+      "payout": {
+        "id": "Bonifico",
+        "status": "Stato",
+        "arrival": "Arrivo",
+        "amount": "Bonifico",
+        "donations": "Donazioni di questo evento",
+        "donationsCell": "{count, plural, one {# movimento} other {# movimenti}}: {net} dopo {fees} di commissioni"
+      },
+      "payoutStatus": {
+        "pending": "In attesa",
+        "in_transit": "In arrivo",
+        "paid": "Pagato",
+        "failed": "Non riuscito",
+        "canceled": "Annullato"
+      }
     }
   },
   "galaTables": {

@@ -9255,6 +9255,219 @@
       },
       "cardLink": "Matching-Spenden öffnen",
       "cardBody": "Lassen Sie einen Sponsor Spenden in einem Zeitfenster bis zu einer Obergrenze verdoppeln, und exportieren Sie die Arbeitgeber der Spender."
+    },
+    "report": {
+      "title": "Spendenbericht",
+      "subtitle": "Was gesammelt wurde und wie, eingezogene Zusagen und alle Spender, abgeglichen mit dem Hauptbuch.",
+      "noAccessTitle": "Finanzzugriff erforderlich",
+      "noAccessDescription": "Bitte eine Inhaberin, einen Admin oder ein Finanzmitglied um den Spendenbericht: Er nennt Spender und Beträge.",
+      "reconcileLink": "Abgleich",
+      "emptyTitle": "Noch keine Spenden",
+      "emptyDescription": "Spenden, Paddle-Zusagen und Spendentickets erscheinen hier, sobald sie eingehen. Öffne auf dem Tab Spenden eine Kampagne, um zu beginnen.",
+      "backToDonations": "Zu den Spenden",
+      "asOf": "Bis jetzt. Datumsangaben in Exporten sind in der Zeitzone der Veranstaltung ({zone}).",
+      "totalsTitle": "Summen",
+      "totalsIn": "Summen in {currency}",
+      "stats": {
+        "raised": "Gesammelt",
+        "raisedSub": "{count, plural, one {# Spende oder Zahlung} other {# Spenden und Zahlungen}} von {donors, plural, one {# Spender} other {# Spendern}}",
+        "online": "Per Karte erhalten",
+        "onlineSub": "Inklusive {cover} übernommener Gebühren; {refunded} erstattet",
+        "offline": "Offline bezahlt",
+        "ticketSub": "Dazu {amount} aus Spendentickets",
+        "pledged": "Im Saal zugesagt",
+        "collectedLabel": "Eingezogene Zusagen",
+        "pledgedSub": "{collected} eingezogen · {writtenOff} abgeschrieben · {open} noch offen",
+        "matched": "Von Sponsoren verdoppelt",
+        "matchedSub": "Zusagen der Sponsoren, separat eingezogen"
+      },
+      "check": {
+        "title": "Hauptbuch-Prüfung",
+        "notReconciled": "Noch nicht abgeglichen",
+        "matches": "Stimmt auf den Cent",
+        "differs": "Weicht um {amount} ab",
+        "ledger": "Merkposten im Hauptbuch",
+        "provider": "Stripe-Saldo (letzter Abgleich)",
+        "none": "Noch nicht abgeglichen",
+        "fees": "Stripe-Gebühren"
+      },
+      "bySource": {
+        "title": "Nach Herkunft",
+        "source": "Herkunft",
+        "count": "Spenden",
+        "net": "Erhalten"
+      },
+      "sources": {
+        "online": "Spendenseite",
+        "qr": "QR-Code",
+        "paddle": "Paddle-Runde",
+        "ticket": "Spendentickets"
+      },
+      "byLevel": {
+        "title": "Nach Stufe",
+        "empty": "Noch keine Stufen genutzt.",
+        "level": "Stufe",
+        "own": "Eigene Beträge",
+        "gifts": "Spenden",
+        "giftsCell": "{count, plural, one {# Spende} other {# Spenden}} · {amount}",
+        "pledges": "Paddle-Zusagen",
+        "pledgesCell": "{count, plural, one {# Zusage} other {# Zusagen}} · {amount}"
+      },
+      "byMatch": {
+        "title": "Nach Verdopplung",
+        "sponsor": "Sponsor",
+        "campaign": "Kampagne",
+        "status": "Status",
+        "matched": "Verdoppelt",
+        "matchedCell": "{matched} von {cap}"
+      },
+      "matchStatus": {
+        "active": "Läuft",
+        "closed": "Abgeschlossen",
+        "cancelled": "Abgesagt"
+      },
+      "byDonor": {
+        "title": "Nach Spender",
+        "note": "Anonyme Spender sind markiert: Du siehst, wer gegeben hat, dankst oder nennst sie aber nie öffentlich.",
+        "empty": "Noch keine Spender.",
+        "donor": "Spender",
+        "anonymous": "Anonym",
+        "email": "E-Mail",
+        "count": "Spenden",
+        "net": "Gegeben",
+        "truncated": "Hier stehen nur die 500 größten Spender; der Export enthält alle."
+      },
+      "export": {
+        "title": "Export für dein Spender-CRM",
+        "body": "Eine Zeile pro Spende, Offline-Zahlung und Spendenticket, mit Anonym-Kennzeichen. Zuerst bestätigst du, dass du es bist.",
+        "error": "Der Export wurde nicht gestartet: {reason}",
+        "layout": "Spalten für",
+        "layoutHint": "CRM-Layouts verwenden die Spaltennamen des CRM, damit die Datei ohne Zuordnung importiert wird.",
+        "format": "Dateityp",
+        "csv": "CSV (.csv)",
+        "xlsx": "Excel (.xlsx)",
+        "submit": "Spender exportieren",
+        "statusCsv": "Spenderexport (CSV)",
+        "statusXlsx": "Spenderexport (Excel)"
+      },
+      "layouts": {
+        "generic": "Jede Tabellenkalkulation (diese Sprache)",
+        "salesforce_npsp": "Salesforce Nonprofit (NPSP)",
+        "bloomerang": "Bloomerang",
+        "little_green_light": "Little Green Light"
+      },
+      "cardTitle": "Bericht und Exporte",
+      "cardLink": "Bericht öffnen",
+      "cardBody": "Summen nach Herkunft, Stufe, Verdopplung und Spender; eingezogene Zusagen; Exporte für dein Spender-CRM.",
+      "cardReconcile": "Mit Stripe abgleichen",
+      "file": {
+        "headers": {
+          "date": "Datum",
+          "firstName": "Vorname",
+          "lastName": "Nachname",
+          "donor": "Spender",
+          "email": "E-Mail",
+          "anonymous": "Anonym",
+          "amount": "Erhaltener Betrag",
+          "gift": "Spende",
+          "feeCover": "Übernommene Gebühr",
+          "refunded": "Erstattet",
+          "currency": "Währung",
+          "campaign": "Kampagne",
+          "level": "Stufe",
+          "source": "Herkunft",
+          "method": "Zahlungsart",
+          "employer": "Arbeitgeber",
+          "tribute": "Zu Ehren oder im Gedenken an",
+          "paddle": "Paddle",
+          "reference": "Referenz"
+        },
+        "yes": "Ja",
+        "no": "Nein",
+        "sources": {
+          "online": "Spendenseite",
+          "qr": "QR-Code",
+          "paddle": "Paddle-Runde",
+          "ticket": "Spendenticket"
+        },
+        "methods": {
+          "card": "Karte",
+          "check": "Scheck",
+          "wire": "Überweisung",
+          "stock": "Aktien",
+          "daf": "Donor-Advised Fund",
+          "cash": "Bar",
+          "other": "Sonstiges"
+        },
+        "privacyTitle": "Deine Spender bleiben deine",
+        "privacy": "Exporte enthalten nur die Spender dieser Veranstaltung. Bewahre die Datei sicher auf und lösche sie nach dem Import."
+      }
+    },
+    "recon": {
+      "title": "Spendenabgleich",
+      "subtitle": "Die Spenden der Veranstaltung im Hauptbuch, verglichen mit deinem Stripe-Konto und seinen Auszahlungen.",
+      "noAccessTitle": "Finanzzugriff erforderlich",
+      "noAccessDescription": "Bitte eine Inhaberin, einen Admin oder ein Finanzmitglied, die Spenden abzugleichen.",
+      "errors": {
+        "note": "Schreib, was du gefunden hast (3 bis 500 Zeichen).",
+        "provider": "Stripe war nicht erreichbar. Versuch es in ein paar Minuten noch einmal."
+      },
+      "run": "Jetzt abgleichen",
+      "ran": "Abgeglichen.",
+      "reportLink": "Spendenbericht",
+      "notConnectedTitle": "Kein Stripe-Konto zum Vergleichen",
+      "notConnectedDescription": "Spenden gehen direkt auf dein verbundenes Stripe-Konto. Verbinde es unter Auszahlungen und gleiche dann hier ab.",
+      "status": {
+        "open": "Offen",
+        "resolved": "Geklärt",
+        "cleared": "Ausgeglichen"
+      },
+      "viewerNotice": "Du kannst den Abgleich lesen. Inhaber, Admins und Finanzmitglieder führen ihn aus und klären Abweichungen.",
+      "runTitle": "Letzter Lauf",
+      "lastRun": "Zuletzt abgeglichen {at}: {ledger} Hauptbuch-Einträge gegen {provider} Stripe-Bewegungen.",
+      "neverRun": "Noch nicht abgeglichen. Gleiche jetzt ab, um das Hauptbuch mit Stripe zu vergleichen.",
+      "stats": {
+        "ledger": "Merkposten im Hauptbuch",
+        "provider": "Stripe-Saldo",
+        "fees": "Stripe-Gebühren",
+        "unpaidOut": "Noch nicht ausgezahlt",
+        "unpaidOutSub": "{count, plural, =0 {Alles wurde ausgezahlt} one {# Bewegung wartet auf eine Auszahlung} other {# Bewegungen warten auf eine Auszahlung}}"
+      },
+      "diffsTitle": "Abweichungen",
+      "cleanTitle": "Alles stimmt",
+      "cleanDescription": "Jede Spende und Erstattung im Hauptbuch stimmt auf den Cent mit Stripe überein.",
+      "allSettled": "Keine offenen Abweichungen: Alle sind geklärt oder ausgeglichen.",
+      "kinds": {
+        "missing_at_provider": "Im Hauptbuch, nicht bei Stripe",
+        "missing_in_ledger": "Bei Stripe, nicht im Hauptbuch",
+        "amount_mismatch": "Beträge weichen ab"
+      },
+      "ledger": "Hauptbuch",
+      "provider": "Stripe",
+      "difference": "Differenz",
+      "resolvedNote": "Geklärt: {note}",
+      "noteLabel": "Was du gefunden hast",
+      "noteHint": "Zum Beispiel: telefonisch erstattet, Stripe-Korrektur, doppelter Eintrag.",
+      "resolve": "{reference} klären",
+      "resolved": "Geklärt.",
+      "payoutsTitle": "Auszahlungen",
+      "payoutsBody": "Auszahlungen von deinem Stripe-Konto mit Spenden dieser Veranstaltung. Eine Auszahlung kann auch anderes Geld enthalten.",
+      "payoutsEmpty": "Noch keine Auszahlungen. Stripe zahlt einige Tage nach Eingang der Spenden aus.",
+      "payout": {
+        "id": "Auszahlung",
+        "status": "Status",
+        "arrival": "Eingang",
+        "amount": "Auszahlung",
+        "donations": "Spenden dieser Veranstaltung",
+        "donationsCell": "{count, plural, one {# Bewegung} other {# Bewegungen}}: {net} nach {fees} Gebühren"
+      },
+      "payoutStatus": {
+        "pending": "Ausstehend",
+        "in_transit": "Unterwegs",
+        "paid": "Bezahlt",
+        "failed": "Fehlgeschlagen",
+        "canceled": "Storniert"
+      }
     }
   },
   "galaTables": {
