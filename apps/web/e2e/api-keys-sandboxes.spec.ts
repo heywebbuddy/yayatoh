@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
-import { expectAccessible, signIn, WEDDING_OWNER } from './helpers.ts';
+import { expectAccessible, expectPicked, pickOption, signIn, WEDDING_OWNER } from './helpers.ts';
 
 /**
  * M6.3a: key lifetimes, rotation and creators, the API usage page, per-plan rate limits over
@@ -15,7 +15,7 @@ const auth = (key: string) => ({ authorization: `Bearer ${key}` });
 async function createKey(page: Page, name: string, scopes: string[], expiry?: string) {
   await page.getByLabel('Name', { exact: true }).fill(name);
   for (const s of scopes) await page.getByRole('checkbox', { name: s }).check();
-  if (expiry) await page.getByLabel('Expires').selectOption({ label: expiry });
+  if (expiry) await pickOption(page.getByLabel('Expires'), { label: expiry });
   await page.getByRole('button', { name: 'Create key' }).click();
   await expect(page.getByText(`Key “${name}” created.`)).toBeVisible();
   return (await page.getByTestId('new-api-key').textContent()) ?? '';
@@ -30,7 +30,7 @@ test.describe('API key lifetimes and rotation (M6.3a)', () => {
     await signIn(page);
     await page.goto(KEYS);
     // 90 days unless chosen otherwise; the plan's rate limits are explained.
-    await expect(page.getByLabel('Expires')).toHaveValue('90');
+    await expectPicked(page.getByLabel('Expires'), '90');
     await expect(page.getByTestId('rate-limit-note')).toHaveText(
       'Each key can make 600 requests a minute, and all keys together 1,200.',
     );
@@ -66,7 +66,7 @@ test.describe('API key lifetimes and rotation (M6.3a)', () => {
 
     // Rotate with no overlap: the old key stops at once, the new one works.
     await row.getByText('Rotate', { exact: true }).click();
-    await row.getByLabel('The old key keeps working').selectOption({ label: 'Not at all: stop it now' });
+    await pickOption(row.getByLabel('The old key keeps working'), { label: 'Not at all: stop it now' });
     await row.getByRole('button', { name: `Rotate key ${name} now` }).click();
     await expect(page.getByText(`Key “${name}” rotated. The old key has stopped working.`)).toBeVisible();
     const second = (await page.getByTestId('rotated-api-key').textContent()) ?? '';
@@ -86,7 +86,7 @@ test.describe('API key lifetimes and rotation (M6.3a)', () => {
     await expect(page.getByTestId('rotated-api-key')).toHaveCount(0);
     const secondRow = keyRow(page, second);
     await secondRow.getByText('Rotate', { exact: true }).click();
-    await secondRow.getByLabel('The old key keeps working').selectOption({ label: 'For 1 hour' });
+    await pickOption(secondRow.getByLabel('The old key keeps working'), { label: 'For 1 hour' });
     await secondRow.getByRole('button', { name: `Rotate key ${name} now` }).click();
     await expect(
       page.getByText(new RegExp(`Key “${name}” rotated\\. The old key works until .+\\.`)),

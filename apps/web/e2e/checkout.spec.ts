@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { continueToPayment, expectAccessible, OPEN_HOUSE, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, OPEN_HOUSE, pickOption, signIn } from './helpers.ts';
 
 test.describe('checkout', () => {
   test.use({ viewport: { width: 1280, height: 900 } });
@@ -27,7 +27,7 @@ test.describe('checkout', () => {
     const guest = await (await browser.newContext()).newPage();
     await guest.goto('/events/lakeside-open-house');
     await expectAccessible(guest);
-    await guest.getByLabel(`Quantity — Free pass ${stamp}`).selectOption('1');
+    await pickOption(guest.getByLabel(`Quantity — Free pass ${stamp}`), '1');
     await guest.getByLabel('Full name').fill(`Grace Hopper ${stamp}`);
     await guest.getByLabel('Email for your tickets').fill(`grace+${stamp}@example.test`);
     await continueToPayment(guest, `grace+${stamp}@example.test`);
@@ -45,7 +45,7 @@ test.describe('checkout', () => {
     expect((await pdf.body()).subarray(0, 5).toString()).toBe('%PDF-');
 
     await guest.goto('/events/lakeside-open-house');
-    await guest.getByLabel(`Quantity — Paid pass ${stamp}`).selectOption('2');
+    await pickOption(guest.getByLabel(`Quantity — Paid pass ${stamp}`), '2');
     await guest.getByLabel('Full name').fill(`Alan Turing ${stamp}`);
     await guest.getByLabel('Email for your tickets').fill(`alan+${stamp}@example.test`);
     await guest.getByLabel(/^Email me news and offers from Lakeside Events/).check();

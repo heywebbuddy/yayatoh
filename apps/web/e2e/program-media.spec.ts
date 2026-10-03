@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { type Browser, expect, type Locator, type Page, test } from '@playwright/test';
 import { closePools } from '@yayatoh/db';
-import { expectAccessible, signIn } from './helpers.ts';
+import { expectAccessible, pickOption, signIn } from './helpers.ts';
 
 /**
  * M1.4h: speaker photos, exhibitor and sponsor logos — console uploaders and thumbnails, the
@@ -44,8 +44,8 @@ async function noHorizontalScroll(page: Page) {
 async function createEvent(page: Page, name: string, opts: { publish?: boolean } = {}) {
   await page.goto(`${ORG}/events/new`);
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Event type').selectOption('conference');
-  await page.getByLabel('Time zone').selectOption(TZ);
+  await pickOption(page.getByLabel('Event type'), 'conference');
+  await pickOption(page.getByLabel('Time zone'), TZ);
   await page.getByLabel('Starts', { exact: true }).fill(at(40, '09:00'));
   await page.getByLabel('Ends', { exact: true }).fill(at(42, '18:00'));
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -349,7 +349,7 @@ test.describe('program media (M1.4h)', () => {
       ['Gold', `Globex ${s}`],
       ['Silver', `Initech ${s}`],
     ] as const) {
-      await sp.getByLabel('Tier').selectOption({ label: t });
+      await pickOption(sp.getByLabel('Tier'), { label: t });
       await sp.getByLabel('Sponsor name').fill(n);
       await sp.getByRole('button', { name: 'Add sponsor' }).click();
       await expect(sp.getByText('Sponsor added.')).toBeVisible();

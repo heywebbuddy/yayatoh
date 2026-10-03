@@ -1,6 +1,6 @@
 import { IMPORT_ERROR_CODES, importSummaryQuery } from '@yayatoh/attendees';
 import { executeQuery, isDomainError } from '@yayatoh/kernel';
-import { Button, buttonClass, Card, EmptyState, PageHeader, Table } from '@yayatoh/ui';
+import { Button, buttonClass, Card, EmptyState, PageHeader, Select, Table } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Link } from '@/i18n/navigation.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
@@ -113,7 +113,7 @@ export default async function ImportPage({
                   <label htmlFor={`map-${f}`} className="text-[13px] font-bold text-ink">
                     {t(`import.field.${f}`)}
                   </label>
-                  <select
+                  <Select
                     id={`map-${f}`}
                     name={f}
                     required={f === 'email'}
@@ -128,7 +128,7 @@ export default async function ImportPage({
                         {h || t('import.columnN', { n: i + 1 })}
                       </option>
                     ))}
-                  </select>
+                  </Select>
                 </div>
               ))}
               <div className="flex flex-col gap-1.5">

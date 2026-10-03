@@ -14953,5 +14953,24 @@
       },
       "reported": "Bedankt. De organisator en Yayatoh bekijken je melding; deze bezoeker kan je stand geen berichten meer sturen."
     }
+  },
+  "formControls": {
+    "search": "Zoeken",
+    "noResults": "Geen resultaten",
+    "loading": "Laden…",
+    "remove": "{label} verwijderen",
+    "create": "‘{query}’ maken",
+    "clear": "Wissen",
+    "chooseDate": "Kies een datum",
+    "chooseTime": "Kies een tijd",
+    "previousMonth": "Vorige maand",
+    "nextMonth": "Volgende maand",
+    "today": "Vandaag",
+    "invalidDate": "Voer een datum in zoals {example}",
+    "invalidTime": "Voer een tijd in zoals {example}",
+    "tooEarly": "Kies een datum op of na {date}",
+    "tooLate": "Kies een datum op of voor {date}",
+    "timeZoneNote": "Tijden in {zone}",
+    "selected": "Geselecteerd"
   }
 }

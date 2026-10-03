@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, Input } from '@yayatoh/ui';
+import { Alert, Button, Input, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState } from 'react';
 import type { IncidentFormState } from '@/app/incidents/actions.ts';
@@ -45,13 +45,13 @@ export function NewIncidentForm({
         <label htmlFor="incident-impact" className="text-[13px] font-bold text-ink">
           {t('new.impact')}
         </label>
-        <select id="incident-impact" name="impact" defaultValue="minor" className={select}>
+        <Select id="incident-impact" name="impact" defaultValue="minor" className={select}>
           {impacts.map((i) => (
             <option key={i} value={i}>
               {t(`impact.${i}`)}
             </option>
           ))}
-        </select>
+        </Select>
       </div>
       <fieldset className="flex flex-col gap-2">
         <legend className="mb-1 text-[13px] font-bold text-ink">{t('new.components')}</legend>
@@ -114,13 +114,13 @@ export function IncidentUpdateForm({
         <label htmlFor={`status-${id}`} className="text-[13px] font-bold text-ink">
           {t('update.status')}
         </label>
-        <select id={`status-${id}`} name="status" className={select}>
+        <Select id={`status-${id}`} name="status" className={select}>
           {statuses.map((s) => (
             <option key={s} value={s}>
               {t(`status.${s}`)}
             </option>
           ))}
-        </select>
+        </Select>
       </div>
       <div className="flex flex-col gap-1.5">
         <label htmlFor={`body-${id}`} className="text-[13px] font-bold text-ink">

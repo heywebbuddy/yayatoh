@@ -14953,5 +14953,24 @@
       },
       "reported": "谢谢。主办方和 Yayatoh 会审核你的举报；该访客已无法再给你的展位发消息。"
     }
+  },
+  "formControls": {
+    "search": "搜索",
+    "noResults": "没有匹配项",
+    "loading": "正在加载…",
+    "remove": "移除{label}",
+    "create": "创建“{query}”",
+    "clear": "清除",
+    "chooseDate": "选择日期",
+    "chooseTime": "选择时间",
+    "previousMonth": "上个月",
+    "nextMonth": "下个月",
+    "today": "今天",
+    "invalidDate": "请输入日期，例如 {example}",
+    "invalidTime": "请输入时间，例如 {example}",
+    "tooEarly": "请选择 {date} 或之后的日期",
+    "tooLate": "请选择 {date} 或之前的日期",
+    "timeZoneNote": "{zone} 时间",
+    "selected": "已选择"
   }
 }

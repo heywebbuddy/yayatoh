@@ -1,7 +1,7 @@
 'use client';
 
 import { STAFF_REASONS } from '@yayatoh/assistance/client';
-import { Alert, Button } from '@yayatoh/ui';
+import { Alert, Button, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { type FormEvent, useCallback, useEffect, useState } from 'react';
 import type { HelpRequest, ScanClient } from '@/scan/client.ts';
@@ -164,10 +164,10 @@ export function StaffHelp({ client, refreshKey }: { client: ScanClient; refreshK
             <label htmlFor="staff-ask-reason" className="text-[13px] font-bold text-ink">
               {t('scan.reasonLabel')}
             </label>
-            <select
+            <Select
               id="staff-ask-reason"
               value={reason}
-              onChange={(e) => setReason(e.target.value)}
+              onValueChange={(v) => setReason(v)}
               className="field"
             >
               {STAFF_REASONS.map((r) => (
@@ -175,7 +175,7 @@ export function StaffHelp({ client, refreshKey }: { client: ScanClient; refreshK
                   {t(`reason.${r}`)}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
           <div className="flex flex-col gap-1">
             <label htmlFor="staff-ask-note" className="text-[13px] font-bold text-ink">

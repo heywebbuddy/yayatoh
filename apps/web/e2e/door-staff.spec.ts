@@ -1,5 +1,5 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { continueToPayment, expectAccessible, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, inOptions, pickOption, signIn, stepOption } from './helpers.ts';
 
 const VIEWER = 'jordan@lakeside.test';
 
@@ -21,7 +21,7 @@ function chicago(offsetH: number): string {
 async function eventWithTickets(page: Page, browser: Browser, name: string, count: number) {
   await page.goto('/o/lakeside-events/events/new');
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Time zone').selectOption('America/Chicago');
+  await pickOption(page.getByLabel('Time zone'), 'America/Chicago');
   await page.getByLabel('Starts', { exact: true }).fill(chicago(-1));
   await page.getByLabel('Ends', { exact: true }).fill(chicago(3));
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -37,7 +37,7 @@ async function eventWithTickets(page: Page, browser: Browser, name: string, coun
   await expect(page.getByRole('row').filter({ hasText: 'Door pass' })).toBeVisible();
   const guest = await (await browser.newContext()).newPage();
   await guest.goto(`/events/${base.split('/').pop()}`);
-  await guest.getByLabel('Quantity — Door pass').selectOption(String(count));
+  await pickOption(guest.getByLabel('Quantity — Door pass'), String(count));
   await guest.getByLabel('Full name').fill(`Guest ${name}`);
   const email = `guest+${Date.now()}@example.test`;
   await guest.getByLabel('Email for your tickets').fill(email);
@@ -90,9 +90,8 @@ test.describe('checkpoint-scoped door staff', () => {
 
     // Keyboard only: pick Jordan, tick North gate, submit.
     const member = add.getByLabel('Team member');
-    await member.focus();
-    await page.keyboard.press('ArrowDown');
-    await expect(member.locator('option:checked')).toHaveText('Jordan Lee');
+    await stepOption(member);
+    await expect(member).toHaveText('Jordan Lee');
     await add.getByRole('checkbox', { name: 'North gate' }).focus();
     await page.keyboard.press('Space');
     await expect(add.getByRole('checkbox', { name: 'North gate' })).toBeChecked();
@@ -118,7 +117,7 @@ test.describe('checkpoint-scoped door staff', () => {
       'Nobody assigned',
     );
     await page.getByLabel('Device name').fill(`Jordan phone ${stamp}`);
-    await page.getByLabel('Handed to').selectOption({ label: 'Jordan Lee' });
+    await pickOption(page.getByLabel('Handed to'), { label: 'Jordan Lee' });
     await page.getByRole('button', { name: 'Add device' }).click();
     const link = await page.getByTestId('scan-link').getAttribute('href');
     expect(link).toMatch(/\/scan#e=[0-9a-f-]{36}&k=yyd_/);
@@ -130,7 +129,9 @@ test.describe('checkpoint-scoped door staff', () => {
     await signIn(jordanPage, VIEWER);
     await jordanPage.goto(`${base}/onsite`);
     const where = jordanPage.getByLabel('Scanning at');
-    await expect(where.locator('option')).toHaveText(['Choose your checkpoint', 'North gate']);
+    await inOptions(where, (list) =>
+      expect(list.getByRole('option')).toHaveText(['Choose your checkpoint', 'North gate']),
+    );
     const field = jordanPage.getByLabel('Ticket code');
     const result = jordanPage.getByRole('status').filter({ has: jordanPage.locator('[data-result]') });
     await field.fill(codes[0] as string);
@@ -139,7 +140,7 @@ test.describe('checkpoint-scoped door staff', () => {
     await expect(result).toContainText('You scan at North gate.');
     await expectAccessible(jordanPage);
     await expectNoHorizontalScroll(jordanPage);
-    await where.selectOption({ label: 'North gate' });
+    await pickOption(where, { label: 'North gate' });
     await field.fill(codes[0] as string);
     await field.press('Enter');
     await expect(result).toContainText('Welcome in');
@@ -157,7 +158,9 @@ test.describe('checkpoint-scoped door staff', () => {
     await device.goto(link ?? '');
     await expect(device.getByRole('heading', { name: `Scoped ${stamp}` })).toBeVisible();
     const stand = device.getByLabel('Scanning at');
-    await expect(stand.locator('option')).toHaveText(['Choose your checkpoint', 'North gate']);
+    await inOptions(stand, (list) =>
+      expect(list.getByRole('option')).toHaveText(['Choose your checkpoint', 'North gate']),
+    );
     const code = device.getByLabel('Ticket code');
     const verdict = device.getByRole('status').filter({ has: device.locator('[data-result]') });
     await code.fill(codes[1] as string);
@@ -167,7 +170,7 @@ test.describe('checkpoint-scoped door staff', () => {
     await expect(verdict).toContainText('Confirmed by the server');
     await expectAccessible(device);
     await expectNoHorizontalScroll(device);
-    await stand.selectOption({ label: 'North gate' });
+    await pickOption(stand, { label: 'North gate' });
     await code.fill(codes[1] as string);
     await code.press('Enter');
     await expect(verdict).toContainText('Welcome in');
