@@ -1,12 +1,12 @@
 You are the merge session for **Yayatoh 2.0** (repo heywebbuddy/yayatoh), batch 3k: the last Phase 4/5 builders and Phase 6 Wave 2, merged on top of batches 3i and 3j. Nobody is watching live: work autonomously to completion and never wait for input. The orchestrator lands your result on the build branch after reading your report.
 
 ## Branch and git
-You start on the build branch `m0.5-foundation-ey5gqp`. It carries batches 3c–3h **and design v2**.
-- If `origin/merge/next-3i` or `origin/merge/next-3j` is not an ancestor of the build branch, stop and report: both must land first.
-- `git fetch origin && git checkout -B merge/next-3k origin/m0.5-foundation-ey5gqp`
-- Publish with a normal push: `git push -u origin merge/next-3k`. Never push to any other branch. Never force-push. Never open PRs.
-- Every couple of hours, and **before your final gate**, fetch and merge the latest `origin/m0.5-foundation-ey5gqp` again.
-- **UX track:** U1 (new form controls and a `no-native-select` gate) and U2 (grouped nav) may land before or during your batch. If they have landed, convert every native `<select>` and date/time input your branches add to the U1 components and place every new page in U2's nav groups.
+You start on the build branch `m0.5-foundation-ey5gqp`. It carries batches 3c–3i **and design v2**. Batch 3j (`origin/merge/next-3j`) has not landed yet: per `docs/agent-briefs/e2e-sharding.md` ("Running ahead"), you start on top of it.
+- `git fetch origin && git checkout -B merge/next-3k origin/m0.5-foundation-ey5gqp && git merge --no-edit origin/merge/next-3j`. 3j was built before 3i landed: renumber 3j's migrations after 3i's last (0122), keep both batches' code (union), and fix the wiring the two batches need together. Note what you did for 3j in your report under "3j on 3i".
+- Publish with a normal push: `git push -u origin merge/next-3k`. Never push to any other branch except the `e2e-ready/3k` ref (see below). Never force-push. Never open PRs.
+- Every couple of hours, and **before your final gate**, fetch and merge the latest `origin/m0.5-foundation-ey5gqp` and `origin/merge/next-3j` again (3j's session is still finishing; take its newest head).
+- **UX track:** U1 (new form controls and a `no-native-select` gate) and U2 (grouped nav) are in `origin/merge/next-3u`, not landed yet. If they land before your final gate, convert every native `<select>` and date/time input your branches add to the U1 components and place every new page in U2's nav groups.
+- **Whole e2e:** run it sharded, exactly as `docs/agent-briefs/e2e-sharding.md` says (ready ref `e2e-ready/3k`).
 
 ## Merge these branches, one at a time, in this order, with merge commits
 The orchestrator lists the final set in your launch prompt (only builders that reported). Expected:
@@ -59,7 +59,7 @@ As in `merge-3e.md`:
 - `pnpm verify`
 - `db:generate` shows no changes
 - `contracts:check`
-- the WHOLE web e2e suite on a fresh DB (3 projects, 2 workers, headless shell), then the admin suite
+- the WHOLE web e2e suite on a fresh DB (3 projects, 2 workers, headless shell), sharded 3 ways per `e2e-sharding.md`, then the admin suite
 
 Never weaken, skip or delete a test.
 
