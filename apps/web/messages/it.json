@@ -1978,7 +1978,8 @@
       "plan": "Piantina",
       "assign": "Assegna ospiti",
       "finder": "Trova posto",
-      "rules": "Regole"
+      "rules": "Regole",
+      "guests": "Disponi gli ospiti"
     },
     "assign": {
       "title": "Assegna ospiti",
@@ -2176,6 +2177,127 @@
         "notEnough": "{fits, plural, =0 {Non ci sono posti liberi lì.} one {Lì è libero solo # posto.} other {Lì sono liberi solo # posti.}}",
         "forbidden": "Puoi vedere i gruppi ma non modificarli.",
         "noMembers": "Nessuno nella lista ha ancora l’etichetta {label}."
+      }
+    },
+    "guestSeating": {
+      "title": "Disponi gli ospiti",
+      "description": "Disponi i gruppi ai tavoli. Trascina un gruppo dalla coda sulla mappa, oppure seleziona gli ospiti, scegli un tavolo e premi «Fai sedere i selezionati»: la tastiera fa tutto ciò che fa il trascinamento.",
+      "chart": {
+        "label": "Disposizione per",
+        "event": "Intero evento"
+      },
+      "noPlan": "{chart} non ha ancora una piantina dei posti",
+      "noPlanHint": "Crea prima la piantina (tavoli o file), poi disponi qui i tuoi ospiti.",
+      "toPlan": "Vai alla piantina",
+      "noGuests": "Ancora nessun ospite da disporre",
+      "noGuestsHint": "Aggiungi gruppi nella pagina Ospiti (o invitali a questo momento della giornata), poi disponili qui.",
+      "toGuests": "Vai agli ospiti",
+      "summary": "{seated} seduti · {unseated} da sistemare",
+      "readOnly": "Puoi vedere la disposizione, ma non modificarla.",
+      "declinedSeated": "{count, plural, one {# ospite che ha declinato è ancora seduto.} other {# ospiti che hanno declinato sono ancora seduti.}} Toglili nei dettagli del tavolo.",
+      "live": {
+        "live": "In diretta",
+        "connecting": "Connessione…",
+        "offline": "Offline, riconnessione"
+      },
+      "vip": "VIP",
+      "queue": {
+        "title": "Senza posto ({count})",
+        "search": "Cerca gruppi e ospiti",
+        "status": "Risposta",
+        "statusAll": "Tutte le risposte",
+        "side": "Lato",
+        "sideAll": "Tutti i lati",
+        "list": "Gruppi da sistemare",
+        "selectParty": "Seleziona tutti in {party}",
+        "toSeat": "{count, plural, one {# da sistemare} other {# da sistemare}}",
+        "selected": "{count, plural, =0 {Nessuno selezionato} one {# ospite selezionato} other {# ospiti selezionati}}",
+        "clear": "Annulla selezione",
+        "empty": "Tutti hanno un posto.",
+        "noMatch": "Nessun gruppo corrisponde a questi filtri."
+      },
+      "status": {
+        "attending": "Presente",
+        "pending": "In attesa di risposta",
+        "declined": "Ha declinato"
+      },
+      "guest": {
+        "guestOf": "Accompagnatore di {name}",
+        "meal": "Pasto: {meal}",
+        "noMeal": "Nessun pasto scelto",
+        "child": "Bambino",
+        "infant": "Neonato"
+      },
+      "form": {
+        "title": "Fai sedere gli ospiti selezionati",
+        "table": "Tavolo o fila",
+        "choose": "Scegli un tavolo o una fila",
+        "option": "{place} — {free} di {capacity} liberi",
+        "optionVip": "{place} — {free} di {capacity} liberi · zona VIP",
+        "cantFit": "Non c’è posto: {asked, plural, one {# ospite selezionato} other {# ospiti selezionati}}, {fits, plural, =0 {nessun posto libero} one {# posto libero} other {# posti liberi}} a {place}.",
+        "submit": "Fai sedere i selezionati",
+        "submitting": "Sistemazione…"
+      },
+      "place": {
+        "table": "Tavolo {label}",
+        "row": "Fila {label}"
+      },
+      "map": {
+        "title": "Mappa",
+        "hint": "Trascina un gruppo su un tavolo per farlo sedere. Fai clic su un tavolo per vedere chi è seduto.",
+        "readOnlyHint": "Fai clic su un tavolo per vedere chi è seduto.",
+        "dropHere": "Rilascia su {place}: {free} liberi",
+        "dropCantFit": "Non c’è posto a {place}: {count, plural, one {# ospite} other {# ospiti}}, {free} liberi",
+        "guests": "Ospiti",
+        "tickets": "Titolari di biglietto",
+        "vip": "Zona VIP"
+      },
+      "details": {
+        "title": "Dettagli del tavolo",
+        "choose": "Tavolo da mostrare",
+        "none": "Questa piantina non ha tavoli né file.",
+        "counts": "{seated} seduti · {free} di {capacity} liberi",
+        "tickets": "{count, plural, one {# posto occupato da un biglietto} other {# posti occupati da biglietti}}",
+        "sponsor": "Offerto da {name}",
+        "vipZone": "Zona VIP",
+        "vipFromPlan": "In una sezione VIP della piantina",
+        "warnings": "Controlla questo tavolo",
+        "warnDeclined": "{name} ha declinato ed è ancora seduto.",
+        "warnVipOutside": "{party} è un gruppo VIP fuori da una zona VIP.",
+        "warnNotVip": "{party} non è un gruppo VIP ma siede in una zona VIP.",
+        "meals": "Pasti",
+        "mealCount": "{meal}: {count}",
+        "noMeal": "Non scelto",
+        "empty": "Qui non siede ancora nessuno. Fai sedere un gruppo dalla coda.",
+        "unseatParty": "Togli {party}",
+        "move": "Sposta a…",
+        "moveLabel": "Sposta {name} a un altro tavolo",
+        "unseat": "Togli",
+        "unseatLabel": "Togli {name}",
+        "moveTo": "Sposta {name}",
+        "moveSubmit": "Sposta",
+        "cancel": "Annulla"
+      },
+      "done": {
+        "seated": "{count, plural, one {# ospite sistemato} other {# ospiti sistemati}} a {place}.",
+        "moved": "{name} spostato a {place}.",
+        "unseated": "{count, plural, one {# ospite è tornato} other {# ospiti sono tornati}} in coda.",
+        "vipOn": "{place} ora è una zona VIP.",
+        "vipOff": "{place} non è più una zona VIP."
+      },
+      "warnings": {
+        "vip_outside": "{party} è un gruppo VIP e {place} non è una zona VIP.",
+        "not_vip_inside": "{place} è una zona VIP e {party} non è un gruppo VIP."
+      },
+      "errors": {
+        "forbidden": "Puoi vedere la disposizione, ma non modificarla.",
+        "cantFit": "Non c’è posto: {asked, plural, one {# ospite ha} other {# ospiti hanno}} bisogno di un posto e lì {fits, plural, =0 {non ci sono posti liberi} one {c’è solo # posto libero} other {ci sono solo # posti liberi}}.",
+        "declined": "Questo ospite ha declinato. Si possono sistemare solo gli ospiti che non hanno declinato.",
+        "unknown": "Questo ospite non è più nell’elenco. La pagina verrà aggiornata.",
+        "noPlan": "Non c’è ancora una piantina per questo.",
+        "noGuests": "Scegli almeno un ospite.",
+        "noPlace": "Scegli un tavolo o una fila.",
+        "dropMiss": "Rilascia il gruppo su un tavolo o una fila."
       }
     }
   },

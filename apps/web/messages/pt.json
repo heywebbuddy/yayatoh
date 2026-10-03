@@ -1978,7 +1978,8 @@
       "plan": "Planta",
       "assign": "Atribuir convidados",
       "finder": "Localizador de assentos",
-      "rules": "Regras"
+      "rules": "Regras",
+      "guests": "Acomodar convidados"
     },
     "assign": {
       "title": "Atribuir convidados",
@@ -2176,6 +2177,127 @@
         "notEnough": "{fits, plural, =0 {Não há lugares livres ali.} one {Só # lugar está livre ali.} other {Só # lugares estão livres ali.}}",
         "forbidden": "Pode ver os grupos, mas não alterá-los.",
         "noMembers": "Ainda ninguém na lista tem a etiqueta {label}."
+      }
+    },
+    "guestSeating": {
+      "title": "Acomodar convidados",
+      "description": "Acomode os grupos nas mesas. Arraste um grupo da fila para o mapa, ou marque convidados, escolha uma mesa e pressione “Acomodar selecionados”: o teclado faz tudo o que arrastar faz.",
+      "chart": {
+        "label": "Lugares para",
+        "event": "Evento inteiro"
+      },
+      "noPlan": "{chart} ainda não tem mapa de lugares",
+      "noPlanHint": "Crie primeiro o mapa (mesas ou filas) e depois acomode aqui os seus convidados.",
+      "toPlan": "Ir para o mapa",
+      "noGuests": "Ainda não há convidados para acomodar",
+      "noGuestsHint": "Adicione grupos na página Convidados (ou convide-os para esta parte do dia) e depois acomode-os aqui.",
+      "toGuests": "Ir para Convidados",
+      "summary": "{seated} acomodados · {unseated} por acomodar",
+      "readOnly": "Você pode ver os lugares, mas não alterá-los.",
+      "declinedSeated": "{count, plural, one {# convidado que recusou ainda está acomodado.} other {# convidados que recusaram ainda estão acomodados.}} Retire-os nos detalhes da mesa.",
+      "live": {
+        "live": "Ao vivo",
+        "connecting": "Conectando…",
+        "offline": "Offline, reconectando"
+      },
+      "vip": "VIP",
+      "queue": {
+        "title": "Sem lugar ({count})",
+        "search": "Pesquisar grupos e convidados",
+        "status": "Resposta",
+        "statusAll": "Todas as respostas",
+        "side": "Lado",
+        "sideAll": "Todos os lados",
+        "list": "Grupos por acomodar",
+        "selectParty": "Selecionar todos de {party}",
+        "toSeat": "{count, plural, one {# por acomodar} other {# por acomodar}}",
+        "selected": "{count, plural, =0 {Ninguém selecionado} one {# convidado selecionado} other {# convidados selecionados}}",
+        "clear": "Limpar seleção",
+        "empty": "Todos têm lugar.",
+        "noMatch": "Nenhum grupo corresponde a estes filtros."
+      },
+      "status": {
+        "attending": "Vai comparecer",
+        "pending": "Aguardando resposta",
+        "declined": "Recusou"
+      },
+      "guest": {
+        "guestOf": "Acompanhante de {name}",
+        "meal": "Refeição: {meal}",
+        "noMeal": "Nenhuma refeição escolhida",
+        "child": "Criança",
+        "infant": "Bebê"
+      },
+      "form": {
+        "title": "Acomodar os convidados selecionados",
+        "table": "Mesa ou fila",
+        "choose": "Escolha uma mesa ou fila",
+        "option": "{place} — {free} de {capacity} livres",
+        "optionVip": "{place} — {free} de {capacity} livres · zona VIP",
+        "cantFit": "Não cabem: {asked, plural, one {# convidado selecionado} other {# convidados selecionados}}, {fits, plural, =0 {nenhum lugar livre} one {# lugar livre} other {# lugares livres}} em {place}.",
+        "submit": "Acomodar selecionados",
+        "submitting": "Acomodando…"
+      },
+      "place": {
+        "table": "Mesa {label}",
+        "row": "Fila {label}"
+      },
+      "map": {
+        "title": "Mapa",
+        "hint": "Arraste um grupo para uma mesa para acomodá-lo. Clique numa mesa para ver quem está nela.",
+        "readOnlyHint": "Clique numa mesa para ver quem está nela.",
+        "dropHere": "Soltar em {place}: {free} livres",
+        "dropCantFit": "Não cabem em {place}: {count, plural, one {# convidado} other {# convidados}}, {free} livres",
+        "guests": "Convidados",
+        "tickets": "Com ingresso",
+        "vip": "Zona VIP"
+      },
+      "details": {
+        "title": "Detalhes da mesa",
+        "choose": "Mesa a mostrar",
+        "none": "Este mapa não tem mesas nem filas.",
+        "counts": "{seated} acomodados · {free} de {capacity} livres",
+        "tickets": "{count, plural, one {# lugar ocupado por um ingresso} other {# lugares ocupados por ingressos}}",
+        "sponsor": "Oferecida por {name}",
+        "vipZone": "Zona VIP",
+        "vipFromPlan": "Numa seção VIP do mapa",
+        "warnings": "Verifique esta mesa",
+        "warnDeclined": "{name} recusou e ainda está acomodado.",
+        "warnVipOutside": "{party} é um grupo VIP fora de uma zona VIP.",
+        "warnNotVip": "{party} não é um grupo VIP, mas está numa zona VIP.",
+        "meals": "Refeições",
+        "mealCount": "{meal}: {count}",
+        "noMeal": "Não escolhida",
+        "empty": "Ninguém está aqui ainda. Acomode um grupo da fila.",
+        "unseatParty": "Retirar {party}",
+        "move": "Mover para…",
+        "moveLabel": "Mover {name} para outra mesa",
+        "unseat": "Retirar",
+        "unseatLabel": "Retirar {name}",
+        "moveTo": "Mover {name}",
+        "moveSubmit": "Mover",
+        "cancel": "Cancelar"
+      },
+      "done": {
+        "seated": "{count, plural, one {# convidado acomodado} other {# convidados acomodados}} em {place}.",
+        "moved": "{name} foi para {place}.",
+        "unseated": "{count, plural, one {# convidado voltou} other {# convidados voltaram}} para a fila.",
+        "vipOn": "{place} agora é uma zona VIP.",
+        "vipOff": "{place} já não é uma zona VIP."
+      },
+      "warnings": {
+        "vip_outside": "{party} é um grupo VIP e {place} não é uma zona VIP.",
+        "not_vip_inside": "{place} é uma zona VIP e {party} não é um grupo VIP."
+      },
+      "errors": {
+        "forbidden": "Você pode ver os lugares, mas não alterá-los.",
+        "cantFit": "Não cabem: {asked, plural, one {# convidado precisa} other {# convidados precisam}} de lugar e ali {fits, plural, =0 {não há lugares livres} one {só há # lugar livre} other {só há # lugares livres}}.",
+        "declined": "Este convidado recusou. Só é possível acomodar quem não recusou.",
+        "unknown": "Este convidado já não está na lista. A página será atualizada.",
+        "noPlan": "Ainda não há mapa de lugares para isto.",
+        "noGuests": "Escolha pelo menos um convidado.",
+        "noPlace": "Escolha uma mesa ou fila.",
+        "dropMiss": "Solte o grupo numa mesa ou fila."
       }
     }
   },

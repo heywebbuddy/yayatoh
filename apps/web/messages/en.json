@@ -1978,7 +1978,8 @@
       "plan": "Plan",
       "assign": "Assign guests",
       "finder": "Seat finder",
-      "rules": "Rules"
+      "rules": "Rules",
+      "guests": "Seat guests"
     },
     "assign": {
       "title": "Assign guests",
@@ -2176,6 +2177,127 @@
         "notEnough": "{fits, plural, =0 {No seats are free there.} one {Only # seat is free there.} other {Only # seats are free there.}}",
         "forbidden": "You can see the groups but not change them.",
         "noMembers": "No one on the list has the label {label} yet."
+      }
+    },
+    "guestSeating": {
+      "title": "Seat guests",
+      "description": "Seat parties at tables. Drag a party from the queue onto the map, or tick guests, choose a table and press Seat selected guests — the keyboard does everything dragging does.",
+      "chart": {
+        "label": "Seating for",
+        "event": "Whole event"
+      },
+      "noPlan": "{chart} has no seating plan yet",
+      "noPlanHint": "Create the plan (tables or rows) first, then seat your guests here.",
+      "toPlan": "Go to the plan",
+      "noGuests": "No guests to seat yet",
+      "noGuestsHint": "Add parties on the Guests page (or invite them to this part of the day), then seat them here.",
+      "toGuests": "Go to Guests",
+      "summary": "{seated} seated · {unseated} to seat",
+      "readOnly": "You can see the seating but not change it.",
+      "declinedSeated": "{count, plural, one {# guest who declined is still seated.} other {# guests who declined are still seated.}} Unseat them in the table details.",
+      "live": {
+        "live": "Live",
+        "connecting": "Connecting…",
+        "offline": "Offline, reconnecting"
+      },
+      "vip": "VIP",
+      "queue": {
+        "title": "Unseated ({count})",
+        "search": "Search parties and guests",
+        "status": "Reply",
+        "statusAll": "All replies",
+        "side": "Side",
+        "sideAll": "All sides",
+        "list": "Parties still to seat",
+        "selectParty": "Select everyone in {party}",
+        "toSeat": "{count, plural, one {# to seat} other {# to seat}}",
+        "selected": "{count, plural, =0 {No one selected} one {# guest selected} other {# guests selected}}",
+        "clear": "Clear selection",
+        "empty": "Everyone has a seat.",
+        "noMatch": "No party matches these filters."
+      },
+      "status": {
+        "attending": "Attending",
+        "pending": "Awaiting reply",
+        "declined": "Declined"
+      },
+      "guest": {
+        "guestOf": "Guest of {name}",
+        "meal": "Meal: {meal}",
+        "noMeal": "No meal chosen",
+        "child": "Child",
+        "infant": "Infant"
+      },
+      "form": {
+        "title": "Seat the selected guests",
+        "table": "Table or row",
+        "choose": "Choose a table or row",
+        "option": "{place} — {free} of {capacity} free",
+        "optionVip": "{place} — {free} of {capacity} free · VIP zone",
+        "cantFit": "Can't fit: {asked, plural, one {# guest} other {# guests}} selected, {fits, plural, =0 {no seats} one {# seat} other {# seats}} free at {place}.",
+        "submit": "Seat selected guests",
+        "submitting": "Seating…"
+      },
+      "place": {
+        "table": "Table {label}",
+        "row": "Row {label}"
+      },
+      "map": {
+        "title": "Map",
+        "hint": "Drag a party onto a table to seat it. Click a table to see who sits there.",
+        "readOnlyHint": "Click a table to see who sits there.",
+        "dropHere": "Drop on {place}: {free} free",
+        "dropCantFit": "Can't fit at {place}: {count, plural, one {# guest} other {# guests}}, {free} free",
+        "guests": "Guests",
+        "tickets": "Ticket holders",
+        "vip": "VIP zone"
+      },
+      "details": {
+        "title": "Table details",
+        "choose": "Table to show",
+        "none": "This chart has no tables or rows.",
+        "counts": "{seated} seated · {free} of {capacity} free",
+        "tickets": "{count, plural, one {# seat held by a ticket} other {# seats held by tickets}}",
+        "sponsor": "Hosted by {name}",
+        "vipZone": "VIP zone",
+        "vipFromPlan": "In a VIP section of the plan",
+        "warnings": "Check this table",
+        "warnDeclined": "{name} declined and is still seated.",
+        "warnVipOutside": "{party} is a VIP party outside a VIP zone.",
+        "warnNotVip": "{party} is not a VIP party but sits in a VIP zone.",
+        "meals": "Meals",
+        "mealCount": "{meal}: {count}",
+        "noMeal": "Not chosen",
+        "empty": "No one sits here yet. Seat a party from the queue.",
+        "unseatParty": "Unseat {party}",
+        "move": "Move to…",
+        "moveLabel": "Move {name} to another table",
+        "unseat": "Unseat",
+        "unseatLabel": "Unseat {name}",
+        "moveTo": "Move {name}",
+        "moveSubmit": "Move",
+        "cancel": "Cancel"
+      },
+      "done": {
+        "seated": "Seated {count, plural, one {# guest} other {# guests}} at {place}.",
+        "moved": "Moved {name} to {place}.",
+        "unseated": "{count, plural, one {# guest is} other {# guests are}} back in the queue.",
+        "vipOn": "{place} is now a VIP zone.",
+        "vipOff": "{place} is no longer a VIP zone."
+      },
+      "warnings": {
+        "vip_outside": "{party} is a VIP party, and {place} is not a VIP zone.",
+        "not_vip_inside": "{place} is a VIP zone, and {party} is not a VIP party."
+      },
+      "errors": {
+        "forbidden": "You can see the seating but not change it.",
+        "cantFit": "Can't fit: {asked, plural, one {# guest needs} other {# guests need}} a seat, and {fits, plural, =0 {no seats are} one {only # seat is} other {only # seats are}} free there.",
+        "declined": "That guest declined. Only guests who haven't declined can be seated.",
+        "unknown": "That guest is no longer on this list. The page will refresh.",
+        "noPlan": "There is no seating plan for this yet.",
+        "noGuests": "Choose at least one guest to seat.",
+        "noPlace": "Choose a table or row.",
+        "dropMiss": "Drop a party onto a table or a row."
       }
     }
   },
