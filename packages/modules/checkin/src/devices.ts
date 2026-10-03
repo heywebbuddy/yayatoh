@@ -70,6 +70,16 @@ const deviceEvent = (type: string, orgId: string, deviceId: string) => ({
   payload: { orgId, deviceId },
 });
 
+/**
+ * The event a device last reported working at (null: none yet, or not this org's device). The
+ * alert engine's outbox subscriber uses it to re-evaluate that event alone on a device event
+ * (batch 3g merge); the scheduled sweep refreshes the org's other events.
+ */
+export async function deviceEventIdTx(tx: TenantTx, deviceId: string): Promise<string | null> {
+  const [r] = await tx.select({ eventId: devices.eventId }).from(devices).where(eq(devices.id, deviceId));
+  return r?.eventId ?? null;
+}
+
 /** How recently a device must have sent a heartbeat to count as online. */
 export const DEVICE_ONLINE_WINDOW_MS = 90_000;
 

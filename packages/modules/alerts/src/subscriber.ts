@@ -1,4 +1,4 @@
-import { DEVICE_ONLINE_WINDOW_MS, markQuietDevicesTx } from '@yayatoh/checkin';
+import { DEVICE_ONLINE_WINDOW_MS, deviceEventIdTx, markQuietDevicesTx } from '@yayatoh/checkin';
 import { type TenantTx, withTenant } from '@yayatoh/db';
 import { findEventTx, upcomingEventIdsTx } from '@yayatoh/events';
 import { type Ctx, createCtx } from '@yayatoh/kernel';
@@ -84,6 +84,12 @@ export async function alertTargetsTx(
 ): Promise<{ eventIds: string[]; org: boolean }> {
   const p = event.payload;
   if (event.type.startsWith('device.')) {
+    // A device working at an event: that event (batch 3g merge). Re-evaluating every live and
+    // pre-show event of the org on each heartbeat cost ~1.6 s per heartbeat with 129 such events
+    // (the shared e2e org) and stalled every drain behind it; the scheduled sweep (30 s) and the
+    // device watchdog refresh the org's other events.
+    const own = await deviceEventIdTx(tx, event.aggregateId);
+    if (own) return { eventIds: [own], org: false };
     const ids = await upcomingEventIdsTx(
       tx,
       new Date(now.getTime() - 2 * 3_600_000),

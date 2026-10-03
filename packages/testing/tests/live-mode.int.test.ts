@@ -1,5 +1,6 @@
 import {
   acknowledgeAlertCommand,
+  alertTargetsTx,
   catchUpAlerts,
   evaluateOrgNow,
   listAlertsQuery,
@@ -742,6 +743,37 @@ describe("the dev drain's scoped watchdog (batch 3g merge)", () => {
     expect(alert).toMatchObject({ severity: 'critical', state: 'open' });
     await withTenant(systemCtx(a.org.id), (tx) =>
       tx.execute(sql`update checkin.devices set revoked_at = now() where id = ${d.deviceId}::uuid`),
+    );
+  });
+});
+
+describe("the alert engine's device fan-out (batch 3g merge)", () => {
+  it("a device event re-evaluates the device's own event; a device without one, the org's events around now", async () => {
+    const e = await liveEvent(a, 'Device fan-out');
+    const working = await executeCommand(enrollDeviceCommand, { label: 'Door 12' }, a.ctx(), ports);
+    const idle = await executeCommand(enrollDeviceCommand, { label: 'Door 13' }, a.ctx(), ports);
+    await executeCommand(
+      heartbeatCommand,
+      { batteryPct: 80, queueDepth: 0, clockOffsetMs: 0, eventId: e, checkpointId: null },
+      deviceCtx(working.deviceId, at(0)),
+      ports,
+    );
+    const targets = (deviceId: string) =>
+      withTenant(systemCtx(a.org.id), (tx) =>
+        alertTargetsTx(
+          tx,
+          { type: 'device.heartbeat', payload: {}, aggregateType: 'device', aggregateId: deviceId },
+          at(0),
+        ),
+      );
+    expect(await targets(working.deviceId)).toEqual({ eventIds: [e], org: false });
+    const around = await targets(idle.deviceId);
+    expect(around.eventIds).toContain(e);
+    expect(around.eventIds.length).toBeGreaterThanOrEqual(1);
+    await withTenant(systemCtx(a.org.id), (tx) =>
+      tx.execute(
+        sql`update checkin.devices set revoked_at = now() where id in (${working.deviceId}::uuid, ${idle.deviceId}::uuid)`,
+      ),
     );
   });
 });
