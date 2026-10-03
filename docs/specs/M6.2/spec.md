@@ -159,3 +159,143 @@ Consumes (v1): `order.paid`, `order.refunded`, `order.disputed`, `order.dispute_
     page reads "Pay for your order", not "You're registered" (M5.1c flow from batch 3h).
   - `enrollment.spec.ts:105` and `speaker-portal.spec.ts:147/254` failed once under full-suite load
     (email waits timed out) and pass when run alone.
+
+## M6.2b — Attribution, explorer, alert rules, scheduled reports (built)
+
+### 1. Goal and users
+Organizers want to know which campaigns, channels and sources sold their tickets (not only the
+first or last click), to slice their figures without asking for a report, to be told when a number
+crosses a line, and to get the figures by email without opening the console. Users: owners, admins,
+managers, finance, box office and viewers (each with what their role may see).
+
+### 2. References
+Plan `docs/plans/phase-6.md` row M6.2B and P6-2 ("a curated explorer covering events, channels,
+cohorts and attribution, built in the app"), P6-1 (fakes, flags), P6-13 (`analytics_pro`); the
+brief `docs/agent-briefs/m6.2b.md`. Builds on M6.2a (warehouse port), M3.8a/b (tracked links,
+attribution records, campaign keys), M3.2b (alert engine), M1.10 (notifications), ADR 0017 (PDF).
+
+### 3. Scope
+**In**
+- **Touch paths** (marketing, tier 5): `marketing.attribution_touches` written with each
+  attribution record — every counting click in the org's lookback window (default 30 days, 1–90),
+  at most 50 (the first and the latest 49), each with its link's UTM values and M3.6b campaign; or
+  the first and last landings (`utm`, or `referral`: a page opened from another site without UTM
+  values records `source = referring host, medium = referral`; our own hosts and payment return
+  pages excluded; only the host kept). Event `marketing.order_attributed@1` (ids). Older records
+  fall back to their first/last touch.
+- **Multi-touch attribution** (analytics): first, last and linear models over those paths, stored
+  as warehouse rollups (`analytics.attribution_rollups`, part of the event snapshot; Tinybird
+  datasource + pipe), per payment day in the org time zone, model, source, medium, campaign key and
+  link, in basis points of an order and integer minor units per currency. **Remainder rule:** each
+  touch gets `floor(total / n)`; the remainder (fewer than `n` units) goes to the **last** touch.
+- **Curated explorer** `/o/{org}/analytics/explore`: 11 measures (registrations, net tickets, free
+  tickets, refunded tickets, check-ins, no-shows, attributed orders; paid, refunded, net, attributed
+  revenue for finance), 5 dimensions (period by day/week/month, event; channel, source, campaign for
+  attribution measures), presets or custom dates, an event filter, the attribution model. No free
+  SQL. Saved views per member; CSV export through an allowlist serializer.
+- **Organizer alert rules** `/o/{org}/analytics/alerts`: measure (7), condition (at least, below,
+  rises/drops by at least N % against the previous window), window (today, 7, 14, 30 days), event,
+  currency for money, severity, quiet hours (default on). Evaluated from the warehouse by the
+  worker every minute (and at once on create/edit/switch); delivered by the M3.2b engine (alert
+  lifecycle, routing, history, acknowledge/snooze) through `analytics.alert_rule_evaluated@1`.
+- **Scheduled PDF reports** `/o/{org}/analytics/reports`: daily (yesterday), weekly (Monday–Sunday)
+  or monthly, sent at an hour in the org time zone the day after the period, to chosen members;
+  one PDF per recipient language and finance visibility; the email links to the PDF in the console.
+
+**Out (Later / not yet)**
+- View-through credit for campaign sends without a click; netting refunds in attributed revenue;
+  data-driven or time-decay models; cohorts in the explorer (P6-2 lists them; not in the brief).
+- PDF attachments (the notifications pipeline has none; the email links to the console).
+- A member time-zone setting (quiet hours use the push device's zone, else the org's).
+- Text messages for organizer rule alerts; `/v1` routes for the explorer, rules and reports.
+
+### 4. `touches:`
+```yaml
+touches:
+  - packages/modules/analytics/** (attribution/, explorer/, rules/, reports/, access.ts, tick.ts, schema, port, adapters, compute, ingest, tinybird/*)
+  - packages/modules/marketing/src/{attribution,touch-paths,schema,private-columns,index,click}.ts, src/domain/{touches,referral}.ts
+  - packages/modules/orders/src/{order-days,index}.ts
+  - packages/modules/alerts/src/{engine,metric-rules,subscriber,api,schema,private-columns,index}.ts, src/domain/config.ts
+  - packages/modules/notifications/src/{kinds.ts,templates/samples.ts,templates/messages/*.json}
+  - packages/modules/webhooks/src/internal-events.ts
+  - packages/pdf/src/{analytics-report,index}.ts
+  - packages/db/drizzle/0123_cheerful_anita_blake.sql (+ meta)
+  - packages/testing/src/{attribution,fixtures,index}.ts, tests/analytics-pro.int.test.ts
+  - apps/worker/src/{analytics-pro,main}.ts, tests/analytics-pro.int.test.ts
+  - apps/web: analytics/{explore,alerts,reports}/**, analytics/page.tsx (tabs), components/{analytics-tabs,analytics-pro-forms}.tsx,
+    server/{explorer,analytics-pro,alerts}.ts, lib/{rule-threshold,attribution-capture}.ts, api/dev/analytics/run,
+    command-center widgets (title param), messages ×13, e2e/analytics-pro.spec.ts, tests/rule-threshold.test.ts
+```
+
+### 5. Data model
+| Table | Notes |
+|---|---|
+| `marketing.attribution_touches` | (org, order, position) unique; kind `click`/`utm`/`referral`; link (clicks only, CHECK), campaign id, source, medium, campaign; FK to the attribution record (cascade) and the link |
+| `analytics.attribution_rollups` | (org, event, day, model, source, medium, campaign, link, currency) unique NULLS NOT DISTINCT; `credit_bps`, `revenue_minor` ≥ 0 |
+| `analytics.saved_views` | (org, user, name) unique; measure/dimension/model/granularity/range vocab; custom from/to CHECK |
+| `analytics.alert_rules` | (org, name) unique; measure, condition, threshold (bigint; 1–1000 for %), window 1/7/14/30, currency (money only, CHECK), severity, quiet hours, enabled, last state/value |
+| `analytics.report_schedules` | (org, name) unique; frequency, send hour 0–23, event, recipients uuid[1..20], enabled, `active_since` |
+| `analytics.report_runs` | **(org, schedule, period key) unique** — the dedupe key; status pending/sent/failed, attempts, error |
+| `analytics.report_files` | (org, run, locale, finance) unique; the PDF (bytea) |
+
+All `tenantTable` with FORCE RLS, org-leading indexes, composite FKs; fixture rows for both orgs;
+every text column declared in `private-columns.ts`.
+
+**Migration** `0123_cheerful_anita_blake.sql` (new tables, one new nullable column
+`alerts.alerts.title`; nothing destructive). Hand-written blocks:
+1. The three CHECKs on the existing `alerts.alerts` (`alerts_rule_check` with the two new rule
+   keys, `alerts_scope_check` allowing `m:{uuid}` for those rules, `alerts_title_check`) added
+   `NOT VALID`, then `VALIDATE CONSTRAINT`.
+2. Composite FKs `(org_id, event_id) → events.events`: `attribution_rollups` ON DELETE CASCADE;
+   `saved_views`, `alert_rules`, `report_schedules` ON DELETE SET NULL (`event_id`).
+
+### 6. API diff
+- `/v1`: none. `/api/v2`: none.
+- Queries: `analytics.explore` (`orders:read`), `analytics.exploreMoney` (`finance:read`),
+  `analytics.listSavedViews`, `analytics.listAlertRules`, `analytics.getAlertRule` (`orders:read`;
+  money rules only with finance), `analytics.listReportSchedules`, `analytics.getReportSchedule`
+  (`org:update`), `analytics.listReportRuns`, `analytics.reportFile` (`orders:read`; finance files
+  only with finance). Commands (audited): `analytics.saveView`, `deleteView` (`orders:read`, own
+  rows), `createAlertRule`, `updateAlertRule`, `setAlertRuleEnabled`, `deleteAlertRule`
+  (`alerts:manage`), `createReportSchedule`, `updateReportSchedule`, `setReportScheduleEnabled`,
+  `deleteReportSchedule` (`org:update`). All entitlement `analytics_pro`.
+- Web routes: `/o/{org}/analytics/explore/export` (CSV), `/o/{org}/analytics/reports/files/{id}`
+  (PDF). Dev only: `POST /api/dev/analytics/run` (`rules=1`, `reports=1`).
+
+### 7. Events
+Emits `marketing.order_attributed@1` (orderId, eventId) and `analytics.alert_rule_evaluated@1`
+(rule id and name, state, numbers, vocabulary), both internal (`workflow`). The warehouse consumes
+the first; the alerts evaluator the second.
+
+### 8. Entitlements, flags, providers
+`analytics_pro`. Tinybird stays the fake in dev/CI. PDFs through Gotenberg (`GOTENBERG_URL`; the
+worker leaves runs pending without it). Notification kinds `alerts.metric`, `alerts.metric-now`,
+`analytics.report` (13 locales).
+
+### 9. Security and privacy
+- Money only through the finance-gated query, rules and PDFs; the counts DTOs have no money field.
+- Touch paths and rollups hold UTM values and hosts only (no click hashes, no people); referral
+  capture keeps the host, never the path or query.
+- Saved views are filtered by the caller; report PDFs are served only to members, never public.
+
+### 10. Acceptance criteria
+| ID | Criterion | Test |
+|---|---|---|
+| AC1 | A fixture campaign's attributed revenue (and orders) match hand-computed numbers to the cent for first, last and linear, by source, channel and campaign, with the remainder rule | `packages/testing/tests/analytics-pro.int.test.ts`, `packages/modules/analytics/tests/pro.test.ts`, `apps/web/e2e/analytics-pro.spec.ts` |
+| AC2 | Tinybird (fake) attribution equals Postgres; every query scoped to the org | `analytics-pro.int.test.ts`, `pro.test.ts` |
+| AC3 | Isolation: another org's event not found, rollups/touches/views invisible under RLS; isolation suite and canary cover every new table | `analytics-pro.int.test.ts`, `isolation.int.test.ts`, `canary.int.test.ts`, `column-privacy.test.ts` |
+| AC4 | Finance gating: viewers/managers refused money; counts query refuses money measures; money views and rules need finance; money rules hidden from others | `analytics-pro.int.test.ts`, e2e |
+| AC5 | Explorer validation (touch dimension, custom dates, from after to, closed vocabularies), saved views private and unique, CSV through the allowlist serializer | `analytics-pro.int.test.ts`, `pro.test.ts`, e2e |
+| AC6 | Alert rules: fire, update, resolve, reopen and sweep through the M3.2b engine; evaluating twice sends nothing new; quiet hours hold email in the recipient's night; permissions and validation | `analytics-pro.int.test.ts`, e2e |
+| AC7 | A scheduled report arrives once per period through a failed render, concurrent ticks and re-runs; one PDF per language and finance visibility; members only | `analytics-pro.int.test.ts`, `apps/worker/tests/analytics-pro.int.test.ts`, e2e |
+| AC8 | DST: daily (Berlin, New York, Lord Howe), weekly and monthly schedules across DST changes send every period once, none skipped | `pro.test.ts`, `analytics-pro.int.test.ts` |
+| AC9 | E2E (375/768/1280): explorer (measure, dimension, period, model; save view; export), rule create/edit/disable/delete, schedule a report (send, download); keyboard only; axe in both themes; Arabic RTL; viewer and scanner denials | `apps/web/e2e/analytics-pro.spec.ts` |
+| AC10 | Referral capture and touch-path ordering/capping; threshold parsing to minor units | `packages/modules/marketing/tests/touches.test.ts`, `apps/web/tests/rule-threshold.test.ts` |
+
+### 11. Demo
+- [ ] Owner → Analytics → Explore: Attributed revenue by Source, Linear: Instagram $13.33,
+  partner $3.34 (the fixture); switch to First and Last.
+- [ ] Save the view, reload, open it from the list; Export CSV.
+- [ ] Alert rules: "Registrations today at least 3" fires; it appears in Alerts; edit to 100 → resolved.
+- [ ] Reports: schedule weekly to yourself; `POST /api/dev/analytics/run reports=1` twice → one
+  email, one row, Download PDF.

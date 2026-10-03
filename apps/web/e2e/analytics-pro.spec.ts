@@ -233,6 +233,7 @@ test.describe('organizer alert rules (M6.2b)', () => {
     await rule.getByRole('link', { name: `Edit ${name}` }).click();
     await expect(page.getByRole('heading', { level: 1, name: 'Edit alert rule' })).toBeVisible();
     await expect(page.getByLabel('Threshold', { exact: true })).toHaveValue('3');
+    await page.waitForLoadState('load');
     await page.getByLabel('Threshold', { exact: true }).fill('100');
     await page.getByTestId('alert-rule-submit').click();
     await expect(page.getByRole('status').getByText('Changes saved')).toBeVisible();
@@ -383,7 +384,10 @@ test.describe('scheduled PDF reports (M6.2b)', () => {
     // Edit, switch off and on, delete.
     await sched.getByRole('link', { name: `Edit ${name}` }).click();
     await expect(page.getByLabel('How often', { exact: true })).toHaveValue('weekly');
+    // Fully loaded: a change made before hydration would be reset to the saved value.
+    await page.waitForLoadState('load');
     await page.getByLabel('How often', { exact: true }).selectOption('monthly');
+    await expect(page.getByLabel('How often', { exact: true })).toHaveValue('monthly');
     await page.getByTestId('report-schedule-submit').click();
     await expect(page.getByRole('status').getByText('Changes saved')).toBeVisible();
     await expect(sched).toContainText('Monthly');

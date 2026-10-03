@@ -34,3 +34,9 @@ payments, notifications, platform); it reads them through their exported counts 
   and campaigns (`campaigns.send_failed@1`) are recorded once per outbox event as `signals` (kept 7
   days) and counted by the org rules; this module never imports them, and they never import it.
   Dispute deadlines (`payments`, a lower tier) are read as counts (`disputeDeadlineFactsTx`).
+- **Organizer rules (M6.2b).** Rule keys `metricRule` (sales group, `orders:read`) and
+  `metricRuleFinance` (payments group, `finance:read`), scope `m:{ruleId}`, title = the rule's
+  name. Driven only by `analytics.alert_rule_evaluated@1` (analytics is the same tier); the sweep
+  wakes snoozes and times out acknowledgements from the stored reading. Sent in the app, by email
+  and by push (never text) as `alerts.metric` (waits out quiet hours in the recipient's time zone)
+  or `alerts.metric-now`.
