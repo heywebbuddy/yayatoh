@@ -16,6 +16,7 @@ import {
   refundsFee,
   ticketRefund,
 } from '../domain/refund-policy.ts';
+import { refundUnits } from '../domain/tables.ts';
 import {
   orderItems,
   orders,
@@ -116,7 +117,8 @@ export async function computeTx(
   let c: Computed;
   if (req.ticketIds) {
     const busy = new Set(open.filter((r) => r.status === 'pending').flatMap((r) => r.ticketIds));
-    const tickets = (await ticketsForOrderTx(tx, order.id)).filter((t) => req.ticketIds?.includes(t.id));
+    const orderTickets = await ticketsForOrderTx(tx, order.id);
+    const tickets = orderTickets.filter((t) => req.ticketIds?.includes(t.id));
     if (tickets.length !== new Set(req.ticketIds).size)
       throw new DomainError('validation_failed', 'Unknown ticket for this order', { field: 'ticketIds' });
     if (tickets.some((t) => t.status !== 'active' || busy.has(t.id)))
@@ -127,10 +129,20 @@ export async function computeTx(
       (await tx.select().from(orderItems).where(eq(orderItems.orderId, order.id))).map((i) => [i.id, i]),
     );
     const feeBack = refundsFee(req.reason as RefundReason);
+    // M4.2b: a table (sold as one unit) is refunded whole, once, whatever its seats.
+    const units = refundUnits(
+      tickets,
+      orderTickets.filter((t) => t.status === 'active'),
+    );
+    if (!units)
+      throw new DomainError('validation_failed', 'Refund every seat of a table together', {
+        field: 'ticketIds',
+        reason: 'table_partial',
+      });
     let amount = 0;
     let fee = 0;
     let retained = 0;
-    for (const t of tickets) {
+    for (const t of units) {
       const item = items.get(t.orderItemId);
       if (!item) throw new DomainError('internal', 'Ticket without an order item');
       const r = ticketRefund(item, feeBack);

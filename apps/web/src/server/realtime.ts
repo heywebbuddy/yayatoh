@@ -3,6 +3,12 @@ import { createHash } from 'node:crypto';
 import { ASSISTANCE_CHANNEL } from '@yayatoh/assistance';
 import { checkinFactsTx, deviceContext } from '@yayatoh/checkin';
 import { type TenantTx, withTenant } from '@yayatoh/db';
+import {
+  ENGAGEMENT_REALTIME_CHANNELS,
+  moderationSnapshotTx,
+  publicSnapshotTx,
+  sessionChannelOpen,
+} from '@yayatoh/engagement';
 import { findEventTx, isPublicEvent } from '@yayatoh/events';
 import { createCtx } from '@yayatoh/kernel';
 import {
@@ -61,6 +67,8 @@ export const REALTIME_CHANNELS = createRealtimeRegistry([
   SEAT_STATES_CHANNEL,
   // M3.3b: the event's help queue (ids and states; the console and the Scan PWA re-read).
   ASSISTANCE_CHANNEL,
+  // M5.7a: live polls and Q&A, one session each.
+  ...ENGAGEMENT_REALTIME_CHANNELS,
 ]);
 
 /** Stream (re)connections per caller and channel per minute. */
@@ -134,7 +142,14 @@ const SNAPSHOTS: Record<string, (tx: TenantTx, channel: ResolvedChannel) => Prom
     const f = await checkinFactsTx(tx, { eventId: c.eventId ?? undefined });
     return { admitted: f.admissions, tickets: f.tickets };
   },
+  // M5.7a: the audience's (approved questions, shown results) and the moderators' full state.
+  'session.live': (tx, c) => publicSnapshotTx(tx, c.sessionId ?? ''),
+  'session.moderation': (tx, c) => moderationSnapshotTx(tx, c.sessionId ?? ''),
 };
+
+/** Session channels (M5.7a) name a real session of their event with live engagement on. */
+const sessionOpen = (c: ResolvedChannel) =>
+  c.scope !== 'session' || sessionChannelOpen(c.orgId, c.eventId ?? '', c.sessionId ?? '');
 
 function logSource(channel: ResolvedChannel): SseSource {
   const live = realtimeLive();
@@ -250,7 +265,7 @@ export async function authorizeRealtime(
   if (decision === 'deny') return { ok: false, status: identified ? 403 : 401 };
   if (decision === 'public') {
     const open = channel.eventId ? await isPublicEvent(channel.orgId, channel.eventId) : false;
-    if (!open) return { ok: false, status: 404 };
+    if (!open || !(await sessionOpen(channel))) return { ok: false, status: 404 };
     return { ok: true, channel, as: 'public', who };
   }
   // Allowed by role or device: the module must be on, and the event must be this org's.
@@ -261,6 +276,7 @@ export async function authorizeRealtime(
     const exists = await withTenant(systemCtx(channel.orgId), (tx) => findEventTx(tx, eventId));
     if (!exists) return { ok: false, status: 404 };
   }
+  if (!(await sessionOpen(channel))) return { ok: false, status: 404 };
   return { ok: true, channel, as, who };
 }
 

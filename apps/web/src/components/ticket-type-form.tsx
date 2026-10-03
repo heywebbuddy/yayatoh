@@ -42,6 +42,14 @@ export function TicketTypeForm({
         defaultValue={10}
         label={t('tickets.maxPerOrder')}
       />
+      <Input
+        name="tableSize"
+        type="number"
+        min={2}
+        max={20}
+        label={t('galaTables.tableSize')}
+        hint={t('galaTables.tableSizeHint')}
+      />
       <div className="flex flex-col gap-1.5">
         <label htmlFor="feeMode" className="text-[13px] font-bold text-ink">
           {t('tickets.feeMode')}

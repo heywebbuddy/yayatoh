@@ -266,6 +266,29 @@ Start the slow reviews early. Everything is built against fakes meanwhile; each 
   - **Uninviting clears the answer** (the guest's and their plus-one's) for that sub-event, recorded in the history; removing a sub-event with recorded answers asks for a confirmation.
   - **Limit** (placeholder): 20 sub-events per event.
   - **The history of a removed sub-event** keeps its actions but not its name (history rows hold field names and ids only, never values).
+- [ ] **M4.2b gala tables and sponsors: defaults pending owner** (labels: `db-migration`, `payments`, `tenancy`). Built with these defaults; say if any should change (`docs/specs/M4.2/spec.md`, M4.2b):
+  - **A table is sold and refunded whole.** A table ticket ("Table of 10", 2–20 seats) is priced per table and counts as one unit of inventory; buying it issues one ticket per seat (the guest slots). A refund by tickets must include every live seat of a table and pays the table price once (`table_partial` otherwise); the table goes back on sale when none of its seats is left. Refunding single seats of a table (pro-rata) is not offered.
+  - **Unnamed slots go with a refund; named guests stay on the guest list** with their (now void) ticket, so the host still sees who was meant to come.
+  - **The claim link** is signed, one per table, never expires on its own and closes when the event ends or the order is no longer paid. The buyer gets it by email after paying and on their order page; they may email it to themselves again once a minute. The host's "send naming reminders" emails buyers of tables with names missing, at most once an hour per table.
+  - **A named guest's email is optional.** With one, the seat's ticket is reissued to the guest (their own QR); without, the ticket is reissued in the guest's name but stays with the buyer's email (the buyer forwards it). The guest's email is sealed with the other private answers (P4-3).
+  - **The party** of a table is the buyer's company or the sponsor (the buyer names it on the link; default: the buyer's name). One party per table; the guests module limit of 20 guests per party bounds a table at 20 seats.
+  - **Sponsors on the floor plan** belong to the plan's tables (not to the purchase): the host types the sponsor and, optionally, picks a logo from the event's own images. The editor always shows it; guests see it (seat finder, venue map data) only when the host ticked "Show the sponsor to guests" and the plan is on sale.
+  - **Who:** owners, admins, managers, box office and event managers name guests and send reminders (`tables:write`); viewers read (`tables:read`); co-hosts through `tables:*`; planners do not see Tables & Sponsors (P4-8 lists no tables for them).
+- [ ] **M4.8a donations: defaults pending owner** (labels: `db-migration`, `payments`, `tenancy`; `docs/specs/M4.8/spec.md`). Built with these; say if any should change:
+  - **The processing fee donors may cover** is Stripe's standard US card rate, **2.9 % + 30¢**, computed so the charity nets the whole gift (a $1,000 gift adds $30.18). A charity on Stripe's nonprofit rate (2.2 % + 30¢) would want its own rate: a per-org setting is a small follow-up (the rule is a parameter already).
+  - **Own-amount limits** default to **$5 – $25,000** per gift (each campaign can change them).
+  - **"How my name appears" has no default**: the donor must choose full name, first name only or anonymous (P4-13: a name appears only if the donor opted in). Say if you prefer a preselected choice.
+  - **Gifts are not refundable from the console yet** (the refund flow is ticket-shaped); a refund would go through Stripe's dashboard on the connected account until M4.8e/g.
+  - **Gift orders** appear in the event's orders as orders with no tickets (created via "donation"); they send no ticket emails, start no journeys and do not count as ticket sales.
+  - **Donor data requests:** gifts are not yet in data-subject exports and erasure (M1.14c); this lands with M4.8b receipts (a receipt record must outlive an erasure request, which needs counsel). Gifts that were never paid already lose their donor after 30 days (the daily retention pass).
+- [ ] **M4.8b charity receipts: counsel and defaults pending owner** (labels: `legal-copy`, `db-migration`, `payments`, `tenancy`; `docs/specs/M4.8/spec.md`). Built with these; say if any should change:
+  - **Counsel reviews the receipt wording**: every string of receipts, year-end statements and the quid-pro-quo notice is in `packages/modules/donations/src/legal/receipt-copy.ts` (version `2026-10-02.1`). English is the source; the 12 other locales are courtesy translations (say whether receipts should print English alongside them). Approved wording ships as a new version.
+  - **The IRS list**: run `IRS_EO_BMF_DIR=<dir> pnpm --filter @yayatoh/worker irs-exempt-list` on the admin host monthly (public IRS download, ~100 MB). Until it runs, production staff cannot verify any charity (dev and CI use a recorded fixture).
+  - **Who verifies**: staff admins and support (`charities` action); finance cannot.
+  - **What gets a receipt**: every paid gift, and every paid ticket order with at least one ticket type that has a fair-market value (a line without a value counts at its full price; Yayatoh's booking fee is not part of the payment to the charity). Tax-deductible only for a verified charity selling on its own Stripe account in USD; otherwise "This payment is not tax-deductible".
+  - **The notice** shows on ticket pages over $75 (face price) with a value, once the charity is verified.
+  - **Year-end statements** go out from January 1 (org timezone) for the previous year, once per donor; a payment receipted after its statement is not added to it (corrected statements later).
+  - **Refunds, donor data requests and retention**: a refunded payment keeps its receipt (voided/corrected receipts wait for M4.8e/g); receipts and statements are not yet in data-subject exports or erasure, and are never purged (counsel: how long to keep tax records, and whether erasure must keep them).
 - [ ] **Legal copy (M4.1, `legal-copy`):** the privacy notice for guests whose details a host enters (already listed in the Phase 4 plan §4).
 - [ ] **Registration forms: consent wording and defaults, pending owner** (M5.1b; labels: `legal-copy`, `db-migration`, `tenancy`). Built with these; say if any should change (`docs/specs/M5.1/spec.md`):
   - **Consent wording (legal-copy, for counsel):** the exhibitor email-sharing checkbox (P5-8) shows placeholder text, version 1: "Exhibitors may receive my email address when I let them scan my badge." (13 locales, `registrationForm.consentText.exhibitor_email_sharing_v1`). Approved wording ships as **version 2** (a new version, never an edit), so consents already given keep the version they saw.
@@ -280,6 +303,17 @@ Start the slow reviews early. Everything is built against fakes meanwhile; each 
   - **Email and phone** columns are imported sealed with the dietary, accessibility and address answers (shown on the Guests page to the same roles). They create no CRM contacts, consents or audience members (P4-3); M4.1f will use them for invitations.
   - **XLSX parser:** a small cell-values-only reader in `@yayatoh/csv` on top of **fflate 0.8.3** (MIT, maintained, no known advisories); no formulas are evaluated (the cached value is read), macros and other parts are never opened. Old binary `.xls` files are refused with a "save as .xlsx or CSV" message.
   - **Google Sheet links (P4-7):** only `https://docs.google.com/spreadsheets/d/<id>` links, read once as CSV through the SSRF guard (10 s, 5 MB), redirects only to Google's content hosts; the link is not stored. A sheet that isn't shared as "anyone with the link" gets a clear message.
+- [ ] **M4.1d RSVP flow: defaults pending owner** (labels: `db-migration`, `auth`). Built with these defaults; say if any should change:
+  - **A PIN per party, not one per event.** P4-2 says "the event PIN"; the paper fallback uses a six-digit PIN printed on each party's invitation instead, so a guest who knows one PIN can't open another household by typing its names. Hosts reset a party's PIN from the Guests page.
+  - **Strict name matching:** case, extra spaces and Unicode forms don't matter; accents, letters, word order and partial names do ("Ana Lopez" is not "Ana López"). Any guest of the party (named plus-ones too) may use their own full name with the party's PIN. Hosts can turn name lookup off (the address then answers "not found").
+  - **Rate limit (`rsvpLookup`):** 5 tries per device per 10 minutes, then the human check before each further try (or a "wait N minutes" message where no check is configured); 100 tries per event per 15 minutes across devices; the usual IP ceiling. Wrong names, partial names and wrong PINs get the same answer.
+  - **Links last until 60 days after the event ends.** A guest who proves the PIN after that gets the same link renewed. "Reset the link" makes every earlier link and QR code stop at once.
+  - **Deadline and reopen:** after the deadline the page shows the party's answers read-only with "contact the hosts". "Reopen" lets one party answer once more; its next answer closes it again.
+  - **States:** `sent` is set by the host ("Mark as sent") until M4.1f sends invitations; `viewed` on the first open of the link; `responded` when the party answers, or when the host has recorded an answer (paper/typed) for every invitation of the party.
+  - **Plus-ones:** a placeholder plus-one who attends anything must be named; one who declines everything can stay unnamed.
+  - **Participation (M3.6a):** the RSVP sets `event_participation.rsvp` (attending / declined / awaiting) on rows that already exist for a guest linked to a guest-list entry. It never creates a contact, consent or participation row, and segments and campaigns don't read it (P4-3).
+  - **Paper address:** printed as `https://<app>/rsvp/find/<CODE>` (8 characters without look-alikes). The code names no one.
+
 ## Enterprise readiness (M5.11, P5-6)
 Claude Code built the evidence automation (M5.11a): `compliance/controls.yaml`, the policy drafts in
 `compliance/policies/`, the weekly **Evidence** workflow and its bundle, and the VPAT draft. These
@@ -476,9 +510,40 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 ## M5.1a — registration types (2026-09-29, pending owner)
 - [ ] Conference pack quotas per event: 30 registration types, 20 admission items, 5,000 registrants (defaults in `billing.addons`; free in beta, price with D22). Change them by data, no code change.
 - [ ] Registration always asks buyers for the emailed code (M1.5f), even when an org turned the checkout email check off, so "email domain" eligibility means a proved address. Confirm or relax.
+- **M5.1c decision emails (`legal-copy`, pending owner):** the approval and denial email wording (13 locales) and the defaults chosen per the roadmap: substitution closes 24 h before the start (per type, 0–720 h), one +1 guest per host (1–10), member lists up to 5,000 addresses. Review when convenient.
 
 ## Design system v2 (2026-10-02, pending owner)
 - [ ] **Event workspace navigation.** The approved Guests artboard puts the org menu in the sidebar and the event's sections in a top tab row. The build keeps the event's sections in the sidebar (conferences have ~20 sections; one list beats two navigations with the same names for keyboard and screen-reader users) and uses segmented tabs inside sections. Confirm, or ask for the artboard's tab IA (ADR 0022 "Shells").
 - [ ] **Dark primary fill.** `#7B5CFF` gives white button text 4.36:1; buttons use `#6C4CF2` (5.3:1) and `#7B5CFF` stays for glows, rings and the active sidebar tile. Confirm.
 - [ ] **CJK fonts** are not self-hosted (5–9 MB per face); Chinese and Japanese use Noto Sans JP/SC/TC when installed, then the platform face. Confirm, or approve per-locale font CSS.
 - [ ] **Required-field marker.** No asterisk on required labels (the browser announces "required"; errors say what is missing). Confirm or ask for "(optional)" markers on optional fields instead.
+
+## M5.2b — session enrollment and waitlists (2026-10-02, pending owner)
+- [ ] Offer window default when an event chooses "offer the place" instead of auto-enrol: 4 hours (15 minutes to 48 hours allowed; offers always end at the 24 h close). Auto-enrol stays the default (P5-9).
+- [ ] After the 24 h close, a place that frees up goes to whoever enrols first from their schedule and the waitlist takes nobody new (until M5.6's door line). Confirm, or keep the line open without promotion.
+- [ ] "Keep both" for overlapping sessions is offered only when neither session has a capacity (P5-9 as written). Confirm.
+- [ ] A registrant is their admission ticket; in a group order (M5.1c) the order's add-ons give their sessions to every registrant of that order. Confirm or ask for per-person add-ons.
+
+## M5.7a — live polls and Q&A (2026-10-02, pending owner)
+- [ ] **Who may take part:** anyone with the link, on **published events that are not private**, without an account (one vote per browser or account). Private events and "ticket holders only" are not supported yet. Confirm, or ask for holder-only participation.
+- [ ] **Anonymous questions:** allowed by default; the name behind an anonymous question is **not kept** by default ("Nobody sees them"); organizers can switch a session to "Moderators can see them" (askers are told). Confirm the defaults.
+- [ ] **Limits:** 5 questions per person per session per 10 minutes, 300 characters a question, 50 polls and 2,000 questions per session, word clouds keep 300 distinct words. Big-screen links never expire on their own (organizers replace them to revoke). Confirm or adjust.
+- [ ] **Questions and tallies are kept with the event** (no separate retention yet; only an optional typed name is personal). Decide a retention period if wanted.
+
+## M4.1e — RSVP questions (2026-10-02, pending owner)
+- [ ] One meal question per event (one `guests.meal` per guest). Weddings with a rehearsal-dinner menu and a reception menu would need a second meal per guest: say if you want it.
+- [ ] Private answers (dietary, accessibility, private questions) are never shown back on the guest's RSVP page; leaving one blank keeps the earlier answer, and only the hosts can clear it. Confirm.
+- [ ] Exporting answers needs `attendees:export` (owners, admins, managers, event managers, co-hosts); the private columns need the new `attendees:export_private` (owners, admins, co-hosts). Managers export without private columns; planners can't export. Confirm or widen.
+
+## M4.1f — invitations and contact collector (2026-10-02, pending owner)
+- [ ] **Invitations and RSVP reminders are transactional** (P4-3): they go out without marketing consent, carry no unsubscribe link and are not subject to the org's marketing pause, but they **do** respect quiet hours (21:00–08:00 in the event's timezone, as guests have none of their own), bounces, complaints and STOP. Texts need no consent record (a guest who gave their number to the hosts asked to be invited). Confirm, or say if texts should need a recorded consent (they would then need a crm contact, which P4-3 rules out).
+- [ ] **Reminder defaults:** 14 and 3 days before the RSVP deadline, at the deadline's wall-clock time, by email; at most 5 reminder days between 1 and 90. Reminders need a deadline. Changing them starts a new set-up (already-sent reminders stay in each party's history).
+- [ ] **Collector limits:** 5 submissions per device per hour (then the human check), 300 per collector per hour, an IP ceiling of 200 per hour; at most 2,000 pending submissions per event; 12 people per submission. A submission's sealed payload is deleted as soon as the host approves, merges or rejects it.
+- [ ] **Invitation wording:** a built-in text in all 13 languages (`packages/modules/guests/src/domain/invite-copy.ts`) until the host writes their own per language. Please review the built-in wording (labels: `legal-copy`).
+- [ ] **Test sends** go by email to the signed-in host only; the test's RSVP button opens a page that says the link isn't valid (it belongs to no party).
+- [ ] **SMS provider** for invitations: the Twilio account (owner inbox M3.5b) is still needed for real texts; dev and CI use the fake providers.
+
+## M5.1d — invoices, PO and pay later (2026-10-02, pending owner)
+- [ ] **Who records offline payments and voids invoices:** `orders:refund` (owners, admins, finance), the existing money permission; box office and managers can't. Confirm, or ask for a separate `invoices:manage` permission.
+- [ ] **Invoice wording (`legal-copy`):** the invoice email, the PDF (terms line "Net 30, due no later than 7 days before the event", "Issued by {org} through Yayatoh"), the buyer's invoice page and the reminder template (13 locales). Late-payment wording is deliberately neutral (P5-5: the registration stands). Our PDF is not a tax invoice (no tax lines or seller tax ids yet).
+- [ ] **Door and badge overrides:** any scanner may admit a balance-due ticket with a reason (audited); badge desk staff (`attendees:write`) may print one. Confirm, or restrict to supervisors.

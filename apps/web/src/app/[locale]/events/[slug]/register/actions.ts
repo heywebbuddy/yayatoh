@@ -4,6 +4,7 @@ import { checkoutTarget, publicEventBySlug } from '@yayatoh/events';
 import { createCtx, executeCommand, formatMoney, isDomainError, money } from '@yayatoh/kernel';
 import { attachPaymentCommand, checkoutRiskSignals, waitlistToken } from '@yayatoh/orders';
 import {
+  applyCommand,
   joinRegistrationWaitlistCommand,
   publicRegistration,
   startRegistrationCommand,
@@ -26,6 +27,11 @@ export interface RegistrationOptionView {
   readonly description: string | null;
   readonly priceLabel: string;
   readonly full: boolean;
+  /** M5.1c: applied for (approval before payment). */
+  readonly apply: boolean;
+  /** M5.1d: may pay later by invoice; whether a PO number is asked for or required. */
+  readonly payLater: boolean;
+  readonly poNumber: 'off' | 'optional' | 'required';
   readonly items: readonly {
     readonly id: string;
     readonly name: string;
@@ -83,6 +89,9 @@ async function lookup(slug: string, email: string, accessCode: string, locale: s
         ? fmt(t.minAllInMinor, t.currency)
         : `${fmt(t.minAllInMinor, t.currency)} – ${fmt(t.maxAllInMinor, t.currency)}`,
     full: t.full,
+    apply: t.apply,
+    payLater: t.payLater,
+    poNumber: t.poNumber,
     items: (pub.items[t.id] ?? []).map((i) => ({ ...i, priceLabel: fmt(i.allInMinor, t.currency) })),
   }));
   return { target, event, types };
@@ -134,7 +143,8 @@ export async function registerAction(
     .getAll('addOn')
     .map(String)
     .filter((id) => UUID.test(id));
-  const intent = form.get('intent') === 'waitlist' ? 'waitlist' : 'register';
+  const raw = form.get('intent');
+  const intent = raw === 'waitlist' ? 'waitlist' : raw === 'apply' ? 'apply' : 'register';
   const keep = { options: prev.options };
   if (!UUID.test(typeId)) return { ...keep, code: 'validation_failed', field: 'type' };
   if (!UUID.test(admission)) return { ...keep, code: 'validation_failed', field: 'admission' };
@@ -167,6 +177,43 @@ export async function registerAction(
     actor: session ? { type: 'user', userId: session.userId } : { type: 'anonymous' },
     locale,
   });
+  if (intent === 'apply') {
+    // M5.1c: an application (nobody is charged); the applicant's own page shows what happens next.
+    let token: string;
+    try {
+      const r = await executeCommand(
+        applyCommand,
+        {
+          eventId: target.eventId,
+          registrationTypeId: typeId,
+          admissionItemId: admission,
+          addOnItemIds: addOns,
+          name,
+          email,
+          company:
+            String(form.get('company') ?? '')
+              .trim()
+              .slice(0, 120) || null,
+          jobTitle:
+            String(form.get('jobTitle') ?? '')
+              .trim()
+              .slice(0, 120) || null,
+          message:
+            String(form.get('message') ?? '')
+              .trim()
+              .slice(0, 2000) || null,
+          ...(accessCode ? { accessCode } : {}),
+          locale,
+        },
+        ctx,
+        ports,
+      );
+      token = r.token;
+    } catch (err) {
+      return { ...keep, ...fail(err) };
+    }
+    return redirect({ href: `/events/${slug}/registration/${token}`, locale });
+  }
   if (intent === 'waitlist') {
     try {
       const r = await executeCommand(
@@ -208,6 +255,20 @@ export async function registerAction(
   });
   if (risk.action === 'block') return { ...keep, code: 'forbidden', reason: 'risk_blocked' };
   let result: Awaited<ReturnType<typeof startRegistration>>;
+  // M5.1d: pay later by invoice (types that offer it), with the PO number and company.
+  const payLater =
+    form.get('payment') === 'invoice'
+      ? {
+          poNumber:
+            String(form.get('poNumber') ?? '')
+              .trim()
+              .slice(0, 60) || null,
+          billingCompany:
+            String(form.get('billingCompany') ?? '')
+              .trim()
+              .slice(0, 120) || null,
+        }
+      : null;
   try {
     result = await startRegistration(ctx, {
       eventId: target.eventId,
@@ -217,6 +278,7 @@ export async function registerAction(
       ...(accessCode ? { accessCode } : {}),
       locale,
       riskReview: risk.action === 'review' ? [...risk.rules] : [],
+      ...(payLater ? { payLater } : {}),
     });
   } catch (err) {
     const state = fail(err);
@@ -227,7 +289,7 @@ export async function registerAction(
     }
     return { ...keep, ...state };
   }
-  return pay(target.orgId, event.name, locale, ctx, result);
+  return pay(target.orgId, event.name, locale, ctx, result, slug);
 }
 
 const startRegistration = (ctx: ReturnType<typeof createCtx>, input: Record<string, unknown>) =>
@@ -240,10 +302,14 @@ async function pay(
   locale: string,
   ctx: ReturnType<typeof createCtx>,
   result: Awaited<ReturnType<typeof startRegistration>>,
+  slug: string,
 ): Promise<RegistrationState> {
   const { order, manageToken, payment: flow } = result;
   const orderPath = `/orders/${manageToken}`;
   if (order.status === 'paid') return redirect({ href: orderPath, locale });
+  // M5.1d: registered on an invoice: the buyer's invoice page (view, PDF, pay now or later).
+  if (result.invoiceToken)
+    return redirect({ href: `/events/${slug}/invoice/${result.invoiceToken}`, locale });
   const origin = process.env.BETTER_AUTH_URL ?? 'http://localhost:3000';
   const payment = await getPaymentProvider().createPayment({
     orgId,

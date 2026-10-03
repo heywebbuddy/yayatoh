@@ -16,6 +16,7 @@ import { organizationLogoTx } from '@yayatoh/tenancy';
 import { type BadgeTicket, badgeTicketsTx } from '@yayatoh/ticketing';
 import { and, asc, desc, eq, inArray } from 'drizzle-orm';
 import { z } from 'zod';
+import { overrideAllows } from './balance-override.ts';
 import { BadgeDesign } from './domain/design.ts';
 import { type BadgeRow, badgeRow, companyOf, placedKinds } from './domain/row.ts';
 import { BATCH_SORTS, sortBadges } from './domain/sort.ts';
@@ -213,7 +214,10 @@ export const startBatchCommand = tenantCommand({
     const map = await currentVersionMapTx(tx, input.eventId);
     if (!map.fallback && Object.keys(map.byType).length === 0)
       throw new DomainError('invalid_state', 'Create a badge template first', { reason: 'no_template' });
-    const tickets = await badgeTicketsTx(tx, { eventId: input.eventId, ticketTypeIds: input.ticketTypeIds });
+    // M5.1d: a ticket whose invoice still has a balance prints only one at a time, with an audited
+    // override at the desk; batches leave it out (counted as skipped).
+    const all = await badgeTicketsTx(tx, { eventId: input.eventId, ticketTypeIds: input.ticketTypeIds });
+    const tickets = all.filter((t) => !t.paymentDue);
     if (tickets.length > MAX_BATCH_BADGES)
       throw new DomainError('validation_failed', `At most ${MAX_BATCH_BADGES} badges per PDF`, {
         reason: 'too_many',
@@ -244,7 +248,7 @@ export const startBatchCommand = tenantCommand({
         ticketIds: sorted.map((s) => s.id),
         versionMap: map,
         total: sorted.length,
-        skipped: tickets.length - rows.length,
+        skipped: all.length - rows.length,
         requestedBy: ctx.actor.type === 'user' ? ctx.actor.userId : null,
         expiresAt: new Date(ctx.now.getTime() + FILE_TTL_MS),
       })
@@ -365,7 +369,13 @@ export async function batchFileByLink(
 /** One badge (onsite reprint or a single print at the desk): the HTML for the PDF renderer. */
 export const singleBadgeQuery = tenantQuery({
   name: 'badges.singleBadge',
-  input: z.object({ eventId: z.uuid(), ticketId: z.uuid(), locale: z.string().max(10).default('en') }),
+  input: z.object({
+    eventId: z.uuid(),
+    ticketId: z.uuid(),
+    locale: z.string().max(10).default('en'),
+    /** M5.1d: an override recorded for this ticket (`badges.overrideBalanceDue`'s signed token). */
+    overrideToken: z.string().max(200).optional(),
+  }),
   output: z.object({ html: z.string(), holderName: z.string() }),
   entitlement: 'badges',
   permission: 'attendees:write',
@@ -374,6 +384,11 @@ export const singleBadgeQuery = tenantQuery({
     const tickets = await badgeTicketsTx(tx, { eventId: input.eventId, ticketIds: [input.ticketId] });
     const t = tickets[0];
     if (!t) throw new DomainError('not_found', 'Ticket not found');
+    // M5.1d: a balance is due on its invoice: printed only after an audited staff override.
+    if (t.paymentDue && !overrideAllows(input.overrideToken, t.id, ctx.now))
+      throw new DomainError('invalid_state', 'A balance is due on this registration', {
+        reason: 'balance_due',
+      });
     const rows = await badgeRowsTx(tx, input.eventId, tickets, await currentVersionMapTx(tx, input.eventId));
     if (rows.length === 0)
       throw new DomainError('invalid_state', 'Create a badge template first', { reason: 'no_template' });
@@ -388,7 +403,16 @@ export const singleBadgeQuery = tenantQuery({
 export const badgeTicketsQuery = tenantQuery({
   name: 'badges.tickets',
   input: z.object({ eventId: z.uuid(), q: z.string().trim().max(80).default('') }),
-  output: z.array(z.object({ id: z.uuid(), holderName: z.string(), typeName: z.string(), serial: z.int() })),
+  output: z.array(
+    z.object({
+      id: z.uuid(),
+      holderName: z.string(),
+      typeName: z.string(),
+      serial: z.int(),
+      /** M5.1d: its invoice still has a balance (print with an override). */
+      paymentDue: z.boolean(),
+    }),
+  ),
   entitlement: 'badges',
   permission: 'attendees:write',
   handler: async ({ input, tx }) => {
@@ -397,7 +421,13 @@ export const badgeTicketsQuery = tenantQuery({
     return all
       .filter((t) => !q || t.holderName.toLocaleLowerCase().includes(q) || String(t.serial) === q)
       .slice(0, 50)
-      .map((t) => ({ id: t.id, holderName: t.holderName, typeName: t.typeName, serial: t.serial }));
+      .map((t) => ({
+        id: t.id,
+        holderName: t.holderName,
+        typeName: t.typeName,
+        serial: t.serial,
+        paymentDue: t.paymentDue,
+      }));
   },
 });
 

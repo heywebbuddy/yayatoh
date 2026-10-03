@@ -125,7 +125,11 @@ const emptyCounts = (): ActionCounts =>
   Object.fromEntries(ACTION_STATUSES.map((s) => [s, 0])) as unknown as ActionCounts;
 
 async function findJourneyTx(tx: TenantTx, journeyId: string, lock = false) {
-  const q = tx.select().from(journeys).where(eq(journeys.id, journeyId));
+  // System journeys (M4.1f RSVP reminders) are managed by their module, never here.
+  const q = tx
+    .select()
+    .from(journeys)
+    .where(and(eq(journeys.id, journeyId), inArray(journeys.trigger, [...JOURNEY_TRIGGERS])));
   const [row] = await (lock ? q.for('update') : q);
   if (!row) throw new DomainError('not_found', 'Journey not found');
   return row;
@@ -185,7 +189,12 @@ export const listJourneysQuery = tenantQuery({
     const rows = await tx
       .select()
       .from(journeys)
-      .where(input.eventId ? eq(journeys.eventId, input.eventId) : undefined)
+      .where(
+        and(
+          input.eventId ? eq(journeys.eventId, input.eventId) : undefined,
+          inArray(journeys.trigger, [...JOURNEY_TRIGGERS]),
+        ),
+      )
       .orderBy(desc(journeys.updatedAt), desc(journeys.id))
       .limit(500);
     return summaries(tx, rows);
@@ -288,7 +297,7 @@ export const journeyRunsQuery = tenantQuery({
     const page = rows.slice(0, RUNS_PAGE);
     const people = await contactsByIdsTx(
       tx,
-      page.map((r) => r.contactId),
+      page.flatMap((r) => (r.contactId ? [r.contactId] : [])),
     );
     const counts = await countsOfRuns(
       tx,
@@ -297,9 +306,9 @@ export const journeyRunsQuery = tenantQuery({
     return runPageSerializer.serialize({
       rows: page.map((r) => ({
         id: r.id,
-        contactId: r.contactId,
-        name: people.get(r.contactId)?.name ?? null,
-        email: people.get(r.contactId)?.email ?? null,
+        contactId: r.contactId as string,
+        name: r.contactId ? (people.get(r.contactId)?.name ?? null) : null,
+        email: r.contactId ? (people.get(r.contactId)?.email ?? null) : null,
         trigger: r.trigger as RunDto['trigger'],
         triggeredAt: r.triggeredAt,
         status: r.status as RunDto['status'],
@@ -324,8 +333,9 @@ export const journeyRunQuery = tenantQuery({
       .select()
       .from(journeyRuns)
       .where(and(eq(journeyRuns.id, input.runId), eq(journeyRuns.journeyId, input.journeyId)));
-    if (!run) throw new DomainError('not_found', 'Run not found');
-    const person = (await contactsByIdsTx(tx, [run.contactId])).get(run.contactId);
+    if (!run?.contactId) throw new DomainError('not_found', 'Run not found');
+    const contactId = run.contactId;
+    const person = (await contactsByIdsTx(tx, [contactId])).get(contactId);
     const ev = await findEventTx(tx, run.eventId);
     const actions = await tx
       .select()
@@ -335,7 +345,7 @@ export const journeyRunQuery = tenantQuery({
     return runDetailSerializer.serialize({
       run: {
         id: run.id,
-        contactId: run.contactId,
+        contactId,
         name: person?.name ?? null,
         email: person?.email ?? null,
         trigger: run.trigger as RunDto['trigger'],

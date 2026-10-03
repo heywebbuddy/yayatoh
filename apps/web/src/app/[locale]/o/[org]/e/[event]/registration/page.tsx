@@ -1,7 +1,10 @@
+import { listSegmentsQuery } from '@yayatoh/audiences';
 import { currencyExponent, executeQuery, formatMoney, money } from '@yayatoh/kernel';
 import { isProfileKey, navIncludes } from '@yayatoh/platform';
 import {
   type AdmissionItemDto,
+  approvalSetupQuery,
+  payLaterRulesQuery,
   type RegistrationTypeDto,
   registrationSetupQuery,
 } from '@yayatoh/registration';
@@ -25,6 +28,8 @@ import {
   updateItemAction,
   updateTypeAction,
 } from './actions.ts';
+import { ApprovalRules } from './approval-rules.tsx';
+import { PayLaterRules } from './pay-later-rules.tsx';
 
 const decimal = (minor: number, currency: string) => {
   const exp = currencyExponent(currency);
@@ -49,6 +54,13 @@ export default async function RegistrationPage({
   if (!navIncludes(profile, data.modules, 'registration')) notFound();
   const setup = await executeQuery(registrationSetupQuery, { eventId: ev.id }, data.ctx, ports);
   const canWrite = roleCan(data.role, 'events:write');
+  // M5.1c: applications, +1 and substitution per type; an audience can fill a member list.
+  const rules = await executeQuery(approvalSetupQuery, { eventId: ev.id }, data.ctx, ports);
+  // M5.1d: pay later by invoice per type.
+  const payLater = await executeQuery(payLaterRulesQuery, { eventId: ev.id }, data.ctx, ports);
+  const segments = canWrite
+    ? await executeQuery(listSegmentsQuery, {}, data.ctx, ports).catch(() => null)
+    : null;
   const t = await getTranslations('registration');
   const tv = await getTranslations('vocab');
   const tf = await getTranslations('registrationForm');
@@ -176,6 +188,13 @@ export default async function RegistrationPage({
         className="self-start text-body underline underline-offset-2"
       >
         {canWrite ? tf('openBuilder') : tf('openReadOnly')}
+      </Link>
+      {/* M5.2b: session enrollment and waitlists. */}
+      <Link
+        href={`/o/${org}/e/${event}/registration/enrollment`}
+        className="self-start text-body underline underline-offset-2"
+      >
+        {t('openEnrollment')}
       </Link>
       {canWrite ? null : <p className="text-body text-ink-2">{t('viewerNotice')}</p>}
       <p className="text-caption text-ink-2">
@@ -395,6 +414,19 @@ export default async function RegistrationPage({
             </table>
           </section>
         </section>
+      ) : null}
+      {setup.types.length > 0 ? (
+        <ApprovalRules
+          org={org}
+          event={event}
+          types={setup.types}
+          rules={rules.types}
+          segments={segments}
+          canWrite={canWrite}
+        />
+      ) : null}
+      {setup.types.length > 0 ? (
+        <PayLaterRules org={org} event={event} types={setup.types} rules={payLater} canWrite={canWrite} />
       ) : null}
     </>
   );
