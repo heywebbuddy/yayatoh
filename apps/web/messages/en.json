@@ -186,6 +186,11 @@
       "guests": {
         "invitation": "Wedding invitation",
         "rsvp-reminder": "RSVP reminder"
+      },
+      "privacy": {
+        "request-code": "Privacy request code",
+        "archive-ready": "Personal data archive ready",
+        "erasure-done": "Erasure receipt"
       }
     },
     "status": {
@@ -341,7 +346,9 @@
     "supportMacros": "Support macros",
     "assistance": "Help requests",
     "marketingAnalytics": "Marketing analytics",
-    "badges": "Badges"
+    "badges": "Badges",
+    "orgAnalytics": "Analytics",
+    "integrations": "Integrations"
   },
   "vocab": {
     "attendee": "Attendee",
@@ -923,9 +930,15 @@
         "capReached": "That's the most one order can have: {max} seats.",
         "adaChosen": "{count, plural, one {{seats} is an accessible seat} other {{seats} are accessible seats}}, kept for guests who need them. Please choose {count, plural, one {it} other {them}} only if needed.",
         "overCap": "{count} seats chosen: the organizer asks for at most {max} per order.",
-        "keptUntil": "Kept back until {date}"
+        "keptUntil": "Kept back until {date}",
+        "companionWarn": "Companion seats are for guests who come with a wheelchair user: up to {max} per accessible seat.",
+        "companionEnforced": "Companion seats are sold only with an accessible seat: up to {max} per accessible seat.",
+        "companionChosen": "Companion seats without an accessible seat: {seats}. They are for guests who come with a wheelchair user (up to {max} per accessible seat).",
+        "companionRefused": "Companion seats without an accessible seat: {seats}. They are sold only with an accessible seat (up to {max} each): add one, or choose other seats.",
+        "adaEnforcedBest": "Accessible seats are kept for guests who need them until {date}. If you need one, tick “Someone in my party uses a wheelchair” and use Best available."
       },
-      "groupSummary": "{group} — {free} of {total} free{chosen, plural, =0 {} other { · # chosen}}"
+      "groupSummary": "{group} — {free} of {total} free{chosen, plural, =0 {} other { · # chosen}}",
+      "companion": "Companion seat"
     },
     "seatRuleCap": "That's more seats than one order may have. Please choose fewer.",
     "seatRuleAda": "Accessible seats are kept for guests who need them for now. Please choose other seats.",
@@ -935,7 +948,43 @@
     "orgUnavailable": "This organizer isn't selling tickets right now. Tickets already bought stay valid.",
     "riskBlocked": "We couldn’t take this order. Please contact the organizer.",
     "creditInvalid": "That store credit code isn't valid or has been spent.",
-    "creditNotApplicable": "That store credit can't be used on these tickets."
+    "creditNotApplicable": "That store credit can't be used on these tickets.",
+    "seatRuleCompanion": "Companion seats are sold only with an accessible seat. Choose an accessible seat too, or other seats.",
+    "best": {
+      "title": "Best available",
+      "modeLegend": "How would you like to choose seats?",
+      "mode": {
+        "best": "Best available: we find the best seats together",
+        "pick": "Choose my seats"
+      },
+      "need": "Someone in my party uses a wheelchair and needs an accessible seat",
+      "needStaff": "The buyer needs a wheelchair-accessible seat",
+      "needHint": "Accessible seats and the companion seats next to them are kept for guests who need them.",
+      "price": "Price",
+      "onePrice": "Price: {price}",
+      "quantity": "Number of seats",
+      "find": "Find seats",
+      "findAgain": "Find seats again",
+      "accessibleHint": "We'll look for a wheelchair-accessible seat with companion seats next to it.",
+      "together": "{count, plural, one {Your seat:} other {# seats together:}}",
+      "split": "We couldn't seat your party of {count} together, so your seats are in separate places (groups: {pieces}). You can choose your seats instead.",
+      "seatsLabel": "Your seats",
+      "seatAccessible": "{seat} (wheelchair-accessible)",
+      "seatCompanion": "{seat} (companion seat)",
+      "heldFor": "Held for you for {minutes} minutes while you check out.",
+      "clear": "Give these seats back",
+      "notEnough": "Not enough free seats at this price for {count}. Try fewer seats or another price, or choose your seats.",
+      "noAccessible": "No wheelchair-accessible seat is free at this price. Try another price, or contact the organizer.",
+      "taken": "Those seats were just taken. Please try again.",
+      "ruleRefused": "The organizer's seating rules don't allow that choice.",
+      "off": "Best available isn't offered for this event any more. Choose your seats instead.",
+      "findFirst": "Find your seats first: choose how many, then press Find seats.",
+      "expired": "Your seats were held for 10 minutes and have been released. Please find seats again."
+    },
+    "seatChannel": "Some of those seats are kept for another sales channel. Choose other seats.",
+    "channelInvalid": "This sales code isn't valid for this event. Open the event page again without it, or ask whoever gave you the link.",
+    "channelNotice": "You're buying through {name}: seats kept for {name} are open to you too.",
+    "channelLinkInvalid": "This sales link isn't valid for this event. You can still choose from the seats open to everyone."
   },
   "fakePay": {
     "eyebrow": "Test payment",
@@ -1489,12 +1538,14 @@
     },
     "activityLink": "Activity log",
     "privacyLink": "Privacy requests",
-    "charityLink": "Charity profile"
+    "charityLink": "Charity profile",
+    "planLink": "Plan and modules"
   },
   "legal": {
     "platform": "Yayatoh",
     "updated": "Last updated {date}",
-    "organizerPages": "{org} policies"
+    "organizerPages": "{org} policies",
+    "privacyRequest": "Ask for a copy of your data, or for it to be erased"
   },
   "setup": {
     "title": "Get ready to sell · {done} of {total} done",
@@ -1874,7 +1925,8 @@
     "chooseDate": "Choose a date.",
     "dateSoldOut": "Not enough tickets left for this date.",
     "wrongDate": "One of these tickets isn't sold for this date.",
-    "dateUnavailable": "This date is no longer on sale."
+    "dateUnavailable": "This date is no longer on sale.",
+    "seatChannel": "Some of those seats are kept for another sales channel (a sponsor, a promoter or online sales). Choose other seats."
   },
   "seating": {
     "title": "Seating",
@@ -1971,14 +2023,19 @@
       "title": "Save as a reusable plan",
       "name": "Name",
       "submit": "Save plan",
-      "done": "Saved. You can use it for other events."
+      "done": "Saved. You can use it for other events.",
+      "description": "Saved plans go to your seating library, where you can start new events from them.",
+      "library": "Open the seating library"
     },
     "tabs": {
       "label": "Seating views",
       "plan": "Plan",
       "assign": "Assign guests",
       "finder": "Seat finder",
-      "rules": "Rules"
+      "rules": "Rules",
+      "selection": "Best available",
+      "channels": "Channels",
+      "revisions": "Revisions"
     },
     "assign": {
       "title": "Assign guests",
@@ -2115,7 +2172,8 @@
       "none": "No rules: buyers can choose any free seat.",
       "summary": {
         "ada": "Accessible seats kept for guests who need them until {days, plural, =0 {the event starts} one {# day before the event} other {# days before the event}} ({date}) · {severity}",
-        "cap": "At most {max, plural, one {# seat} other {# seats}} per order · {severity}"
+        "cap": "At most {max, plural, one {# seat} other {# seats}} per order · {severity}",
+        "companion": "Companion seats sold only with an accessible seat, up to {max} each · {severity}"
       },
       "severityShort": {
         "warn": "warns",
@@ -2148,7 +2206,14 @@
       },
       "save": "Save rules",
       "saved": "Seating rules saved.",
-      "fixErrors": "Please fix the highlighted field."
+      "fixErrors": "Please fix the highlighted field.",
+      "companion": {
+        "title": "Companion seats",
+        "on": "Sell companion seats only with an accessible seat",
+        "max": "Companion seats per accessible seat",
+        "maxHint": "From 1 to 3. They are released together with the accessible seats.",
+        "maxError": "Enter a whole number from 1 to 3."
+      }
     },
     "groups": {
       "title": "Group blocks",
@@ -2177,6 +2242,172 @@
         "forbidden": "You can see the groups but not change them.",
         "noMembers": "No one on the list has the label {label} yet."
       }
+    },
+    "selection": {
+      "title": "Best available and companion seats",
+      "description": "Let buyers and the box office ask for the best seats instead of choosing them, and keep companion seats next to accessible seats.",
+      "noPlan": "This event has no seating plan yet. Create one first, then set up best available here.",
+      "readOnly": "You can see these settings but not change them.",
+      "bestTitle": "Best available",
+      "bestOn": "Offer “Best available” to buyers and the box office",
+      "bestHint": "Buyers say how many seats at which price and get the best free seats that sit together. They can still choose their own seats.",
+      "scoresTitle": "Section scores",
+      "scoresHint": "From 0 to 100: higher scores are offered first. Leave a section blank to rank it by its distance to the stage.",
+      "scoreLabel": "Score for {section}",
+      "scoreError": "Enter a whole number from 0 to 100, or leave it blank.",
+      "noSections": "This plan has no sections: seats are ranked by their distance to the stage, then by row and by how central they are.",
+      "saveBest": "Save best available",
+      "savedBest": "Best available settings saved.",
+      "fixErrors": "Please fix the highlighted field.",
+      "bestOnSummary": "Best available is offered to buyers and the box office.",
+      "bestOffSummary": "Best available is off: buyers choose their seats.",
+      "companionsTitle": "Companion seats",
+      "companionsDescription": "Companion seats sit next to accessible seats, for the people who come with a wheelchair user.",
+      "rulesLink": "Set the companion-seat rule on the Rules tab",
+      "noAccessible": "This plan has no accessible seats yet. Mark them on the plan, then choose companion seats here.",
+      "suggest": "Tick the seats next to accessible seats",
+      "group": {
+        "row": "Row {label}",
+        "table": "Table {label}"
+      },
+      "seatAccessible": "Seat {seat} · accessible",
+      "seatCompanion": "Seat {seat}",
+      "suggested": "next to an accessible seat",
+      "saveCompanions": "Save companion seats",
+      "savedCompanions": "Companion seats saved: {count}.",
+      "companionError": "A companion seat must sit in a row or at a table with an accessible seat, and can't be an accessible seat itself.",
+      "companionList": "Companion seats ({count}): {seats}",
+      "companionNone": "No companion seats yet."
+    },
+    "fromLibrary": "This event starts from your saved plan. Price its seats, then put them on sale.",
+    "channels": {
+      "title": "Sales channels",
+      "description": "Keep blocks of seats for the box office, sponsors or promoters. A seat in one channel is never sold through another until the channel releases it.",
+      "noPlan": "This event has no seating plan yet. Create one first, then allot its seats to channels here.",
+      "readOnly": "You can see the channels but not change them.",
+      "saved": "Channel saved.",
+      "deleted": "Channel removed. Its seats are open to every channel again.",
+      "listTitle": "Channels",
+      "empty": "No sales channels yet",
+      "emptyHint": "Add a channel below, then allot seats to it. Seats in no channel are sold through every channel.",
+      "col": {
+        "channel": "Channel",
+        "code": "Code and link",
+        "release": "Release",
+        "seats": "Seats",
+        "sold": "Sold through it",
+        "actions": "Actions"
+      },
+      "kind": {
+        "public": "Online (no code)",
+        "box_office": "Box office",
+        "sponsor": "Sponsor",
+        "promoter": "Promoter"
+      },
+      "linkFor": "Link for {name}",
+      "released": "Released {when}",
+      "neverReleased": "Kept until you change it",
+      "soldCount": "{orders, plural, =0 {No orders yet} one {# order} other {# orders}} · {seats, plural, one {# seat} other {# seats}}",
+      "edit": "Edit",
+      "editNamed": "Edit {name}",
+      "delete": "Remove",
+      "deleteNamed": "Remove {name}",
+      "addTitle": "Add a channel",
+      "editTitle": "Edit {name}",
+      "kindLabel": "Kind",
+      "kindHint": "Online and box office: at most one of each per event. Sponsors and promoters sell through their own code.",
+      "nameLabel": "Name",
+      "nameHint": "Shown to buyers who use the channel's link, and in your reports.",
+      "codeLabel": "Code",
+      "codeHint": "Sponsors and promoters only: 3 to 32 letters, digits, dashes or underscores. Buyers use it through the channel's link.",
+      "releaseLabel": "Release unsold seats at (optional)",
+      "releaseHint": "Unsold seats go back to every channel at this time ({timeZone}). Leave it empty to keep them.",
+      "add": "Add channel",
+      "save": "Save channel",
+      "cancel": "Cancel",
+      "added": "Channel added.",
+      "fixErrors": "Please fix the highlighted field.",
+      "errors": {
+        "kind": "Choose a kind of channel.",
+        "kind_taken": "This event already has a channel of that kind.",
+        "name": "Give the channel a name (up to 80 characters).",
+        "code_required": "Sponsors and promoters need a code.",
+        "code_not_allowed": "Only sponsors and promoters have a code. Leave it empty.",
+        "code_format": "Use 3 to 32 letters, digits, dashes or underscores.",
+        "code_taken": "Another channel of this event has that code.",
+        "releaseAt": "Enter a date and time, or leave it empty.",
+        "seats": "Choose at least one row or table, and seat numbers that exist in it."
+      },
+      "allotTitle": "Allot seats",
+      "allotDescription": "Choose rows and tables, and optionally only some of their seats. Every date of the event follows. Seats already in a channel move to the one you choose.",
+      "noSeats": "The plan has no rows or tables yet.",
+      "allotTo": "Channel",
+      "everyChannel": "No channel (open to every channel)",
+      "which": "Rows and tables",
+      "item": {
+        "row": "Row {label} ({seats, plural, one {# seat} other {# seats}})",
+        "table": "Table {label} ({seats, plural, one {# seat} other {# seats}})"
+      },
+      "itemAllotted": "{count, plural, one {# seat} other {# seats}} in {name}",
+      "seatNumbers": "Only these seats (optional)",
+      "seatNumbersHint": "Seat numbers in the chosen rows and tables, e.g. 1-4, 9. Leave it empty for all their seats.",
+      "allot": "Allot seats",
+      "allotted": "{count, plural, =0 {No seats changed.} one {# seat allotted.} other {# seats allotted.}}",
+      "freed": "{count, plural, =0 {No seats were in a channel.} one {# seat is open to every channel again.} other {# seats are open to every channel again.}}"
+    },
+    "revisions": {
+      "title": "Plan revisions",
+      "description": "Every save of the plan is a revision. See what each one changed, and bring an earlier plan back. Held and sold seats always stay as they are.",
+      "noPlan": "This event has no seating plan yet. Create one first; every save then appears here.",
+      "none": "No revisions yet",
+      "noneHint": "The next save of the plan will be the first revision.",
+      "readOnly": "You can see the revisions but not restore them.",
+      "listTitle": "All revisions",
+      "col": {
+        "revision": "Revision",
+        "when": "Saved",
+        "what": "What",
+        "changes": "Seats changed"
+      },
+      "revision": "Revision {number}",
+      "currentBadge": "The plan now",
+      "kindSave": "Saved",
+      "kindRestore": "Restored revision {number}",
+      "seats": "{count, plural, one {# seat} other {# seats}}",
+      "first": "The first revision kept.",
+      "noSeatChanges": "No seats added, removed or renumbered.",
+      "added": "{count, plural, one {# seat added} other {# seats added}}",
+      "removed": "{count, plural, one {# seat removed} other {# seats removed}}",
+      "renumbered": "{count, plural, one {# seat renumbered} other {# seats renumbered}}",
+      "moved": "{count, plural, one {# seat moved} other {# seats moved}}",
+      "detailTitle": "Revision {number}",
+      "changedTitle": "What it changed",
+      "restoreWouldTitle": "Restoring it would change",
+      "addedTitle": "Seats added",
+      "removedTitle": "Seats removed",
+      "renumberedTitle": "Seats renumbered",
+      "renumberedSeat": "{from} → {to}",
+      "listOf": "{title} ({count})",
+      "more": "{count, plural, one {and # more} other {and # more}}",
+      "inUseTitle": "Held and sold seats",
+      "inUseNone": "No seats are held or sold: nothing stands in the way.",
+      "inUseKept": "{count, plural, =0 {No held or sold seat stays where it is.} one {# held or sold seat stays exactly as it is.} other {# held or sold seats stay exactly as they are.}}",
+      "inUseRemapped": "{count, plural, one {# held or sold seat moves to the seat with its label in this revision (same seat number, same ticket):} other {# held or sold seats move to the seats with their labels in this revision (same seat numbers, same tickets):}}",
+      "conflictsTitle": "{count, plural, one {This revision can't be restored: # held or sold seat would be lost.} other {This revision can't be restored: # held or sold seats would be lost.}}",
+      "conflict": {
+        "removed": {
+          "sold": "{label} is sold and this revision has no seat with that label.",
+          "held": "{label} is held by a buyer and this revision has no seat with that label."
+        },
+        "renumbered": {
+          "sold": "{label} is sold and would become {to}: the buyer's ticket would name another seat.",
+          "held": "{label} is held by a buyer and would become {to}."
+        }
+      },
+      "conflictsRefused": "Held or sold seats are not in that revision any more. Nothing was changed.",
+      "isCurrent": "This is the plan as it is now.",
+      "restore": "Restore revision {number}",
+      "restoredNotice": "Revision {number} restored. The plan now is revision {now}."
     }
   },
   "venueMap": {
@@ -2493,70 +2724,199 @@
   },
   "privacy": {
     "title": "Privacy requests",
-    "description": "Answer people who ask what you hold about them, or ask to be forgotten. Every request is recorded.",
+    "description": "Answer people who ask for a copy of what you hold about them, or ask to be forgotten. Each request is due within 30 days and recorded.",
     "noticeLink": "Yayatoh privacy notice",
     "noAccessTitle": "Only owners and admins can handle privacy requests",
     "noAccessDescription": "Ask an owner or admin of this organization to help with a request about someone’s data.",
     "find": {
       "title": "Find a person",
-      "hint": "Search by email across contacts, orders, tickets, guest lists, answers and check-ins.",
+      "hint": "Search by email across everything this organization holds: contacts, orders, tickets, guest lists, forms, messages, speakers and more.",
       "email": "Email address",
       "submit": "Find"
     },
     "result": {
       "title": "What this organization holds about {email}",
       "noneTitle": "Nothing found for this email",
-      "noneDescription": "No contact, order, ticket or guest record uses this address in this organization."
-    },
-    "categories": {
-      "contacts": "Contact records",
-      "consents": "Consent records",
-      "orders": "Orders",
-      "paidOrders": "Paid orders (kept for accounting)",
-      "tickets": "Tickets",
-      "activeTickets": "Valid tickets",
-      "claims": "Ticket transfer links",
-      "holderLinks": "Ticket access links",
-      "attendees": "Guest list entries",
-      "answers": "Checkout answers",
-      "admissions": "Check-ins",
-      "invitations": "Team invitations"
-    },
-    "export": {
-      "title": "Export their data",
-      "hint": "A JSON file with everything above, for you to send to the person. It is deleted after 7 days.",
-      "submit": "Export data (JSON)",
-      "download": "Download the file",
-      "running": "Preparing the file… reload the page in a moment."
-    },
-    "erase": {
-      "title": "Erase this person",
-      "what": "Their name, email, phone, answers and links are removed from contacts, orders, tickets and guest lists, and export files that mention them are deleted.",
-      "holds": "{paid, plural, =0 {No paid orders need to be kept.} one {# paid order is kept for tax and accounting, without their name or email.} other {# paid orders are kept for tax and accounting, without their name or email.}}",
-      "tickets": "{active, plural, =0 {They have no valid tickets.} one {# valid ticket stays valid, without a name.} other {# valid tickets stay valid, without a name.}}",
-      "final": "This can’t be undone.",
-      "confirm": "Type {email} to confirm",
-      "submit": "Erase personal data",
-      "done": "Erased. {records, plural, one {# record was} other {# records were}} redacted or deleted; {kept, plural, =0 {no paid orders were kept} one {# paid order was kept without personal data} other {# paid orders were kept without personal data}}."
+      "noneDescription": "No record in this organization uses this address. You can still open a request to answer the person formally."
     },
     "errors": {
       "invalidEmail": "Enter a valid email address.",
       "confirmMismatch": "That doesn’t match. Type the same email address to confirm.",
-      "nothingHeld": "Nothing is held about this email any more."
-    },
-    "history": {
-      "title": "Past requests",
-      "caption": "Privacy requests, newest first",
-      "empty": "No requests yet.",
-      "when": "When",
-      "kind": "Request",
-      "subject": "Person",
-      "by": "Handled by",
-      "records": "Records"
+      "kindRequired": "Choose what the person asks for.",
+      "reasonRequired": "Give a reason of at least 3 characters.",
+      "closed": "This request is already closed."
     },
     "kinds": {
-      "access": "Access (export)",
+      "access": "Access (copy)",
       "erasure": "Erasure"
+    },
+    "modules": {
+      "crm": "Contacts and consent",
+      "orders": "Orders and waitlists",
+      "ticketing": "Tickets",
+      "attendees": "Guest list entries",
+      "forms": "Form answers",
+      "checkin": "Check-ins",
+      "tenancy": "Team invitations",
+      "notifications": "Messages sent",
+      "seating": "Seat finder",
+      "alerts": "Alert settings",
+      "guests": "Wedding and party guests",
+      "messaging": "Conversations",
+      "assistance": "Help requests",
+      "program": "Speaker details",
+      "events": "Portal accounts",
+      "media": "Uploaded files",
+      "cms": "Contact form messages",
+      "venues": "Venue quote requests",
+      "reviews": "Reviews",
+      "payments": "Payment disputes",
+      "surveys": "Survey answers",
+      "registration": "Registrations",
+      "badges": "Badges",
+      "automations": "Journeys",
+      "campaigns": "Campaign sends",
+      "audiences": "Audiences",
+      "marketing": "Marketing attribution",
+      "reports": "Analytics events",
+      "privacy": "Privacy requests",
+      "platform": "Exports and system records",
+      "donations": "Donations and receipts",
+      "engagement": "Live Q&A questions"
+    },
+    "open": {
+      "title": "Open a request",
+      "hint": "You confirmed who is asking. The request is due in 30 days; you fulfil it on its own page.",
+      "kind": "What does the person ask for?",
+      "access": "A copy of their data (access)",
+      "accessHint": "A signed ZIP with everything held about them.",
+      "erasure": "Erase their data (erasure)",
+      "erasureHint": "Removes them everywhere, except records the law requires you to keep.",
+      "submit": "Open the request",
+      "existing": "A request is already open for this person.",
+      "review": "Review the open request"
+    },
+    "queue": {
+      "title": "Open requests",
+      "caption": "Open privacy requests, the soonest due first",
+      "emptyTitle": "No open requests",
+      "empty": "When someone asks about their data, find them above and open a request. People can also ask from your privacy notice.",
+      "person": "Person",
+      "kind": "Request",
+      "source": "From",
+      "opened": "Opened",
+      "due": "Due",
+      "overdue": "Overdue",
+      "action": "Action",
+      "review": "Review"
+    },
+    "closed": {
+      "title": "Closed requests",
+      "caption": "Fulfilled and withdrawn requests, newest first",
+      "empty": "No closed requests yet.",
+      "when": "Closed",
+      "status": "Status",
+      "records": "Records"
+    },
+    "statuses": {
+      "open": "Open",
+      "completed": "Done",
+      "cancelled": "Withdrawn"
+    },
+    "sources": {
+      "staff": "Staff, for the person",
+      "self": "The person (email confirmed)"
+    },
+    "request": {
+      "titleAccess": "Access request",
+      "titleErasure": "Erasure request",
+      "openedNotice": "Request opened. It is due by {date}.",
+      "cancelledNotice": "Request withdrawn.",
+      "fields": {
+        "kind": "Request",
+        "source": "From",
+        "opened": "Opened",
+        "due": "Due by",
+        "verified": "Email confirmed",
+        "completed": "Fulfilled",
+        "cancelled": "Withdrawn",
+        "reason": "Reason"
+      },
+      "holdings": {
+        "title": "What this organization holds",
+        "empty": "Nothing is held about this person",
+        "emptyHint": "You can still fulfil the request: the person gets a formal answer that nothing is held."
+      },
+      "export": {
+        "title": "Send them a copy",
+        "hint": "One ZIP with a JSON file per part of Yayatoh and their files, signed so anyone can check it was not changed. It can be downloaded for 7 days.",
+        "submit": "Create the archive",
+        "done": "The archive is ready.",
+        "notified": "We emailed the person a download link.",
+        "until": "Available until {date}.",
+        "download": "Download the archive (ZIP)",
+        "expired": "The archive expired and was deleted. Open a new request if the person needs another copy."
+      },
+      "erase": {
+        "title": "Erase this person",
+        "what": "Their name, email, phone, answers, messages and links are removed from every part of Yayatoh, and export files that mention them are deleted.",
+        "holds": "Paid orders, credit notes, payment disputes and consent history are kept where the law requires, without their name or email, and listed in the receipt.",
+        "files": "Their uploads and earlier archives are deleted from storage.",
+        "final": "This can’t be undone.",
+        "confirm": "Type {email} to confirm",
+        "submit": "Erase personal data",
+        "done": "Erased. The signed receipt below lists what was erased and what was kept, and why."
+      },
+      "cancel": {
+        "title": "Withdraw the request",
+        "hint": "If the person withdrew it, or it was not genuine. The reason is recorded with the request.",
+        "reason": "Reason",
+        "submit": "Withdraw request"
+      },
+      "receipt": {
+        "title": "Erasure receipt",
+        "erased": "Erased",
+        "held": "Kept under a legal hold",
+        "noneErased": "Nothing needed erasing.",
+        "noneHeld": "Nothing had to be kept.",
+        "table": "Data",
+        "action": "What happened",
+        "rows": "Records",
+        "ref": "Record",
+        "basis": "Why it is kept",
+        "until": "Kept until",
+        "files": "{count, plural, =0 {No stored files were deleted.} one {# stored file was deleted.} other {# stored files were deleted.}}",
+        "suppressed": "The address is on the platform-wide erased list: no organization can send it marketing again unless the person opts in.",
+        "connectors": "{count, plural, =0 {No connected services needed to be told.} other {Connected services told to erase the person too: {names}.}}",
+        "signature": "Signed with Ed25519 key {key}.",
+        "download": "Download the receipt (PDF)",
+        "notified": "We emailed the person a link to this receipt.",
+        "actions": {
+          "delete": "Deleted",
+          "redact": "Personal data removed",
+          "hold": "Kept, personal data removed"
+        },
+        "bases": {
+          "tax_accounting": "Tax and accounting records (7 years)",
+          "payment_dispute": "Evidence for a payment dispute",
+          "accountability": "Proof the request was handled"
+        }
+      }
+    },
+    "pdf": {
+      "title": "Erasure receipt",
+      "request": "Request",
+      "person": "Person",
+      "source": "Asked by",
+      "requested": "Requested",
+      "due": "Due by",
+      "completed": "Erased",
+      "signatureTitle": "Signature",
+      "algorithm": "Algorithm",
+      "keyId": "Key id",
+      "digest": "Receipt SHA-256",
+      "signature": "Signature (base64)",
+      "footer": "Issued by Yayatoh for {org}. The signature covers the receipt’s data; check it with the public key below."
     }
   },
   "privacyNotice": {
@@ -2737,7 +3097,8 @@
       "guests": "Guests",
       "markHandled": "Mark as handled",
       "markNew": "Mark as new"
-    }
+    },
+    "layoutLibrary": "Seating library"
   },
   "details": {
     "title": "Event details",
@@ -3346,7 +3707,39 @@
       "attendees_read": "Read attendees",
       "attendees_write": "Change attendees and resend tickets",
       "checkin_scan": "Scan tickets"
-    }
+    },
+    "expiry": "Expires",
+    "expiryHint": "An expiring key must be rotated before it ends. Shorter is safer.",
+    "expiryIn": {
+      "30": "In 30 days",
+      "90": "In 90 days",
+      "365": "In a year",
+      "never": "Never"
+    },
+    "expiresColumn": "Expires",
+    "createdBy": "Created by",
+    "createdByPlatform": "Yayatoh",
+    "expired": "Expired",
+    "rotatedStatus": "Rotated",
+    "rotate": "Rotate",
+    "rotateNamed": "Rotate key {name}",
+    "overlap": "The old key keeps working",
+    "overlapFor": {
+      "h0": "Not at all: stop it now",
+      "h1": "For 1 hour",
+      "h24": "For 24 hours",
+      "h168": "For 7 days"
+    },
+    "rotateNow": "Rotate now",
+    "rotateNowNamed": "Rotate key {name} now",
+    "rotated": "Key “{name}” rotated. The old key works until {until}.",
+    "rotatedNow": "Key “{name}” rotated. The old key has stopped working.",
+    "related": "API",
+    "usageLink": "Usage",
+    "sandboxesLink": "Sandboxes",
+    "rateLimitNote": "Each key can make {perKey, number} requests a minute, and all keys together {perOrg, number}.",
+    "noApiAccess": "API access is not part of this organization’s plan: its keys are refused.",
+    "webhooksLink": "Webhooks"
   },
   "market": {
     "wordmark": "Yayatoh",
@@ -4655,6 +5048,11 @@
     "terminated": {
       "title": "This organization is closed",
       "body": "Yayatoh support closed it. Its public pages are offline and nothing can be changed. As an owner you can still open it and download your data, for example from Activity."
+    },
+    "sandbox": {
+      "label": "Sandbox",
+      "title": "SANDBOX",
+      "body": "This is a test organization. Payments are fake and nothing is charged; its events never appear on the marketplace."
     }
   },
   "seatingDates": {
@@ -4737,8 +5135,13 @@
       "slot_full": "This event has 20 floor plan images already.",
       "forbidden": "You can't change this plan.",
       "network": "The upload failed. Check your connection and try again.",
-      "generic": "The upload failed. Try again."
-    }
+      "generic": "The upload failed. Try again.",
+      "pdf_page": "That page doesn't exist: the PDF has {pages, plural, one {# page} other {# pages}}.",
+      "pdf_unreadable": "This PDF can't be read. Export the plan as an image or another PDF and try again."
+    },
+    "pdfPage": "Page (PDF)",
+    "pdfHint": "A PDF floor plan works too: choose the page with the plan. It is turned into an image in your browser, then uploaded like one.",
+    "pdfDrawing": "Drawing page {page} of the PDF…"
   },
   "humanCheck": {
     "legend": "Security check",
@@ -5070,7 +5473,9 @@
         "consent": "Marketing consent",
         "label": "Label",
         "totals": "Lifetime totals",
-        "seen": "First or last seen"
+        "seen": "First or last seen",
+        "stats": "Contact stats",
+        "ltv": "Lifetime value"
       },
       "did": "Rule",
       "didYes": "Did",
@@ -5128,7 +5533,19 @@
       "event": "Event",
       "editionOf": "Edition before",
       "series": "Series",
-      "noSeries": "No series yet"
+      "noSeries": "No series yet",
+      "statsMetric": "Stat",
+      "statsMetrics": {
+        "engagement": "Engagement score",
+        "noShowPct": "No-show propensity",
+        "sessionsAttended": "Sessions attended",
+        "campaignsOpened": "Campaigns opened",
+        "rfmRecency": "RFM recency (quintile)",
+        "rfmFrequency": "RFM frequency (quintile)",
+        "rfmMonetary": "RFM monetary (quintile)"
+      },
+      "valuePercent": "Percent",
+      "quintile": "Quintile (1–5)"
     },
     "scopes": {
       "any": "Any event",
@@ -5183,7 +5600,10 @@
         "unknown_legacy": "Unknown (imported)",
         "none": "Not given"
       }
-    }
+    },
+    "peopleLink": "People",
+    "duplicatesLink": "Possible duplicates",
+    "insights": "Contact insights"
   },
   "refundOps": {
     "timeline": {
@@ -10864,6 +11284,1030 @@
       "waitlist_closed": "{title} is full and its waitlist closed 24 hours before the session.",
       "offer_ended": "The offer for {title} has ended.",
       "full": "{title} just filled up. Try again to join the waitlist."
+    }
+  },
+  "people": {
+    "title": "People",
+    "audiences": "Audiences",
+    "description": "Everyone your organization has a record for, newest first. Open someone to see their whole history.",
+    "duplicatesLink": "Possible duplicates",
+    "search": {
+      "label": "Search by name, email or company",
+      "submit": "Search",
+      "noneTitle": "No one matches",
+      "noneDescription": "Nobody's name, email or company contains “{q}”. Try a shorter search."
+    },
+    "emptyTitle": "No people yet",
+    "emptyDescription": "People appear here when they buy tickets, register or are added to a guest list.",
+    "caption": "People",
+    "columns": {
+      "name": "Name",
+      "email": "Email",
+      "company": "Company",
+      "added": "Added"
+    },
+    "next": "Next page",
+    "person": {
+      "title": "Person",
+      "details": "Details",
+      "mergedHere": "That record was merged into this one."
+    },
+    "fields": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "company": "Company",
+      "added": "Added",
+      "emailConsent": "Marketing email",
+      "smsConsent": "Marketing texts",
+      "history": "History",
+      "empty": "Not given"
+    },
+    "merges": {
+      "title": "Merged records",
+      "line": "Merged {who} on {when}.",
+      "moved": "{moved, plural, =0 {Nothing moved.} one {# item moved.} other {# items moved.}}",
+      "undoneOn": "Undone on {when}.",
+      "undoUntil": "Can be undone until {when}.",
+      "erased": "an erased record"
+    },
+    "undo": {
+      "submit": "Undo merge",
+      "submitFor": "Undo the merge of {who}",
+      "done": "Merge undone. Both records are separate again, exactly as before.",
+      "openOther": "Open the other record",
+      "errors": {
+        "expired": "This merge is more than 30 days old and can no longer be undone.",
+        "blocked": "This record was merged into another one since. Undo that merge first.",
+        "erased": "One of these records was erased, so the merge can no longer be undone.",
+        "undone": "This merge was already undone."
+      }
+    },
+    "errors": {
+      "forbidden": "Your role can't merge people. Ask an owner, admin or manager."
+    },
+    "timeline": {
+      "title": "Timeline",
+      "kind": "What",
+      "allKinds": "Everything",
+      "event": "Event",
+      "allEvents": "All events",
+      "filter": "Filter",
+      "noMatchTitle": "Nothing matches these filters",
+      "noMatchDescription": "Choose “Everything” or “All events” to see more.",
+      "emptyTitle": "Nothing here yet",
+      "emptyDescription": "Orders, check-ins, campaigns, messages and surveys appear here as they happen.",
+      "listLabel": "Timeline of {name}",
+      "older": "Older"
+    },
+    "kinds": {
+      "order_paid": "Order paid",
+      "order_refunded": "Refund",
+      "checked_in": "Checked in",
+      "session_attended": "Attended a session",
+      "campaign_sent": "Campaign sent",
+      "campaign_opened": "Opened a campaign",
+      "campaign_clicked": "Clicked a campaign",
+      "message_in": "Wrote to you",
+      "message_out": "You replied",
+      "donation": "Donation",
+      "rsvp": "RSVP",
+      "survey_sent": "Survey sent",
+      "survey_responded": "Answered a survey"
+    },
+    "merge": {
+      "done": "Records merged. You can undo this for 30 days from this page.",
+      "submit": "Merge records",
+      "hint": "Orders, tickets, check-ins, messages and history move to the record that stays. You can undo a merge for 30 days.",
+      "errors": {
+        "alreadyMerged": "One of these records was merged or changed since you opened this page. Go back to the list.",
+        "erased": "One of these records was erased and can't be merged.",
+        "unavailable": "Merging isn't available right now. Try again later.",
+        "keep": "Choose which record stays."
+      }
+    },
+    "duplicates": {
+      "title": "Possible duplicates",
+      "description": "People who may be on file twice: the same email, the same phone, or a similar name at the same company.",
+      "scan": "Look for duplicates",
+      "lastScan": "Last checked {when}. New contacts are checked automatically every few minutes.",
+      "neverScanned": "Not checked yet.",
+      "scanned": "{count, plural, =0 {No possible duplicates found.} one {Found # possible duplicate.} other {Found # possible duplicates.}}",
+      "dismissedDone": "Marked as not the same person. This pair won't be suggested again.",
+      "bulkDone": "{count, plural, =0 {Nothing was merged.} one {Merged # pair. Each merge can be undone for 30 days.} other {Merged # pairs. Each merge can be undone for 30 days.}}",
+      "statusNav": "Filter by status",
+      "status": {
+        "open": "Open ({count})",
+        "dismissed": "Not duplicates",
+        "merged": "Merged"
+      },
+      "caption": {
+        "open": "Possible duplicates to review",
+        "dismissed": "Pairs marked as not the same person",
+        "merged": "Merged pairs"
+      },
+      "empty": {
+        "open": {
+          "title": "No possible duplicates",
+          "description": "Choose “Look for duplicates” to check everyone now. New contacts are checked automatically."
+        },
+        "dismissed": {
+          "title": "Nothing dismissed",
+          "description": "Pairs you mark as not the same person are listed here."
+        },
+        "merged": {
+          "title": "No merges yet",
+          "description": "Pairs you merge are listed here. Undo a merge from the person's page."
+        }
+      },
+      "select": "Select",
+      "selectPair": "Select {pair}",
+      "pair": "{a} and {b}",
+      "columns": {
+        "people": "People",
+        "confidence": "Confidence",
+        "reasons": "Why",
+        "review": "Review"
+      },
+      "score": "{score}%",
+      "review": "Review",
+      "reviewPair": "Review {pair}",
+      "mergeSelected": "Merge selected",
+      "mergeSelectedHint": "Keeps the older record of each pair and the most recent details. You'll be asked to confirm it's you.",
+      "errors": {
+        "noneSelected": "Select at least one pair to merge.",
+        "tooMany": "Select at most 50 pairs at a time."
+      }
+    },
+    "reasons": {
+      "email": "Same email address",
+      "phone": "Same phone number",
+      "name_company": "Similar name at the same company"
+    },
+    "compare": {
+      "title": "Review possible duplicate",
+      "description": "{score}% confidence: {reasons}.",
+      "resolved": "This pair was already resolved.",
+      "record": "Record {n}",
+      "older": "(older)",
+      "entries": "{count, plural, =0 {No entries} one {# entry} other {# entries}}",
+      "openTimeline": "Open the timeline of {record}",
+      "consentTitle": "Consent after merging",
+      "consentEmail": "Marketing email: {status}",
+      "consentSms": "Marketing texts: {status}",
+      "consentRule": "The strictest choice wins: if either record opted out, the merged record is opted out.",
+      "keepLegend": "Which record stays",
+      "keepHint": "The other record is merged into it. Its email address still finds this person.",
+      "keepOption": "{record} ({email})",
+      "fieldLegend": {
+        "name": "Name",
+        "email": "Email",
+        "phone": "Phone",
+        "company": "Company"
+      },
+      "fieldOption": "{record}: {value}",
+      "dismiss": "Not the same person"
+    },
+    "consent": {
+      "granted": "Opted in",
+      "withdrawn": "Opted out",
+      "unknown_legacy": "Unknown (imported)",
+      "none": "No consent"
+    }
+  },
+  "contactStats": {
+    "title": "Contact",
+    "insightsTitle": "Contact insights",
+    "insightsDescription": "How your people take part across every event: engagement, no-shows, recency and frequency.",
+    "audiencesLink": "Audiences",
+    "notLive": "This contact was merged into another or erased. Their stats no longer count.",
+    "emptyTitle": "No activity yet",
+    "emptyDescription": "Stats appear once this person registers for an event, attends a session or opens a campaign.",
+    "emptyAction": "Build an audience",
+    "glance": "At a glance",
+    "events": "Events registered",
+    "attended": "Events attended",
+    "sessions": "Sessions attended",
+    "campaigns": "Campaigns opened",
+    "firstSeen": "First seen",
+    "lastSeen": "Last seen",
+    "never": "—",
+    "lifetimeValue": "Lifetime value",
+    "lifetimeOrders": "{count, plural, one {# paid order} other {# paid orders}}",
+    "noSpend": "No paid orders yet.",
+    "noSpendOrg": "Nobody has paid for anything yet.",
+    "scores": "Scores",
+    "engagement": "Engagement score",
+    "engagementValue": "{score} / 100",
+    "engagementHow": "{wAttended} × {attended} events attended + {wSessions} × {sessions} sessions + {wCampaigns} × {campaigns} campaigns opened = {points} points. 100 × {points} ÷ ({points} + {half}) = {score}.",
+    "noShow": "No-show propensity",
+    "noShowHow": "({noShows} no-shows + {priorNoShows}) ÷ ({past} past registrations + {priorRegistrations}) = {pct}. Upcoming events don’t count yet.",
+    "rfm": "RFM",
+    "rfmHow": "Quintiles among this organization’s people who took part in an event: 5 is the top fifth.",
+    "rfmNone": "Not ranked yet: no events.",
+    "recency": "Recency",
+    "frequency": "Frequency",
+    "monetary": "Monetary",
+    "quintileValue": "{q} of 5",
+    "updated": "Updated {date}",
+    "viewContact": "View contact",
+    "headerSummary": "Engagement {score} · No-show {pct}",
+    "headerValue": "Lifetime {amount}",
+    "totals": "Totals",
+    "total": {
+      "contacts": "Contacts",
+      "participants": "Took part",
+      "attendedAny": "Attended",
+      "averageEngagement": "Average engagement",
+      "noShowRate": "No-show rate"
+    },
+    "distributions": "Distributions",
+    "distribution": {
+      "engagement": "Engagement score",
+      "noShow": "No-show propensity",
+      "frequency": "Events taken part in",
+      "recency": "Last seen"
+    },
+    "showData": "Show the data",
+    "range": "Range",
+    "people": "People",
+    "bandRange": "{from}–{to}",
+    "bandFrom": "{from} or more",
+    "recencyWithin": "Within {days} days",
+    "recencyOlder": "Longer ago",
+    "value": {
+      "currency": "Currency",
+      "payers": "Paying people",
+      "total": "Total",
+      "average": "Average",
+      "topFifth": "Top fifth from",
+      "max": "Highest"
+    },
+    "orgEmptyTitle": "No contact activity yet",
+    "orgEmptyDescription": "Stats appear as people register, check in, attend sessions and open campaigns.",
+    "orgEmptyAction": "Go to your events"
+  },
+  "privacyRequest": {
+    "title": "Ask about your personal data",
+    "description": "Ask {org} for a copy of the personal data it holds about you, or to erase it. They answer within 30 days. First we email you a code to check the address is yours.",
+    "notice": "Read the {org} privacy notice",
+    "kindLegend": "What would you like?",
+    "access": "A copy of my data",
+    "accessHint": "You get a link to a ZIP file with everything held about you.",
+    "erasure": "Erase my data",
+    "erasureHint": "{org} removes you from its records, except what the law requires it to keep (such as paid orders for tax).",
+    "email": "Your email address",
+    "emailHint": "The address you used with this organizer.",
+    "submit": "Email me a code",
+    "sent": "We emailed a 6-digit code to {email}. Enter it to confirm your request. It works for 10 minutes.",
+    "resent": "We sent a new code to {email}.",
+    "codeLabel": "Confirmation code",
+    "confirm": "Confirm my request",
+    "resend": "Send a new code",
+    "changeEmail": "Use another address",
+    "doneTitle": "Request received",
+    "doneBody": "{org} will answer by {date}. Your reference is {reference}. You will get an email when it is done.",
+    "existingBody": "You already have an open request with {org}. It is due by {date}; your reference is {reference}.",
+    "errors": {
+      "invalidEmail": "Enter a valid email address.",
+      "kindRequired": "Choose a copy of your data or erasure.",
+      "rateLimited": "{minutes, plural, one {Too many attempts. Try again in # minute.} other {Too many attempts. Try again in # minutes.}}",
+      "codeFormat": "Enter the 6 digits from the email.",
+      "wrong": "{count, plural, =0 {That code isn’t right. Ask for a new code.} one {That code isn’t right. # try left.} other {That code isn’t right. # tries left.}}",
+      "locked": "Too many wrong codes. Ask for a new code.",
+      "expired": "That code has expired or was already used. Ask for a new code.",
+      "generic": "Something went wrong. Please try again."
+    }
+  },
+  "apiUsage": {
+    "title": "API usage",
+    "subtitle": "Requests made with this organization’s API keys, per day in the organization’s time zone.",
+    "back": "API keys",
+    "range": "Period",
+    "lastDays": "Last {days, number} days",
+    "totalsTitle": "Totals",
+    "requests": "Requests",
+    "errors": "Errors",
+    "rateLimited": "Rate limited",
+    "perDayTitle": "Requests per day",
+    "perKeyTitle": "Requests per key",
+    "day": "Day",
+    "showData": "Show the data",
+    "emptyTitle": "No API requests in this period",
+    "emptyDescription": "Requests made with your keys show up here as soon as they are made. Create a key on the API keys page."
+  },
+  "sandboxes": {
+    "title": "Sandboxes",
+    "subtitle": "Test organizations linked to this one, to try the API and checkout safely.",
+    "noAccessTitle": "Only owners and admins manage sandboxes",
+    "noAccessDescription": "Ask an owner or admin of this organization to create one for you.",
+    "factsTitle": "How a sandbox works",
+    "factPayments": "Payments are always fake: nothing is ever charged, whatever the platform’s settings.",
+    "factMarketplace": "Its events never appear on the marketplace.",
+    "factData": "It starts with a sample event and two ticket types.",
+    "factKeys": "It has its own API keys and team. You are its owner.",
+    "createTitle": "Create a sandbox",
+    "name": "Name",
+    "nameHint": "For example “Staging” or “Zapier test”.",
+    "nameRequired": "Give the sandbox a name.",
+    "create": "Create sandbox",
+    "creating": "Creating…",
+    "created": "Sandbox “{name}” created with a sample event.",
+    "open": "Open sandbox {name}",
+    "openShort": "Open",
+    "limit": "This organization already has {max, number} sandboxes, the most it can have. Delete one first.",
+    "sandboxOfSandbox": "A sandbox can’t have sandboxes of its own",
+    "inSandboxDescription": "Create sandboxes from the organization this sandbox belongs to.",
+    "listTitle": "Your sandboxes",
+    "emptyTitle": "No sandboxes yet",
+    "emptyDescription": "Create one to try the API, checkout and check-in with sample data and fake payments.",
+    "address": "Address",
+    "createdAt": "Created",
+    "actions": "Actions",
+    "delete": "Delete",
+    "deleteNamed": "Delete sandbox {name}",
+    "deleteWarning": "It closes for good: its pages go offline, its members and keys lose access.",
+    "deleteConfirm": "Delete for good",
+    "deleteConfirmNamed": "Delete sandbox {name} for good"
+  },
+  "webhooks": {
+    "title": "Webhooks",
+    "subtitle": "Send your organization's events to your own systems as they happen.",
+    "docs": "Webhook guide and signature verification",
+    "related": "Related pages",
+    "portalLink": "Open the webhook portal",
+    "apiKeysLink": "API keys",
+    "noAccessTitle": "Only owners and admins manage webhooks",
+    "noAccessDescription": "Ask an owner or admin of this organization to add or change webhook endpoints.",
+    "noModuleTitle": "Webhooks are not part of your plan",
+    "noModuleDescription": "Webhooks come with API access. Contact us to turn it on for your organization.",
+    "unavailableTitle": "Webhooks are not available yet",
+    "unavailableDescription": "Webhook delivery is still being set up on this platform. Check back soon.",
+    "emptyTitle": "No webhook endpoints yet",
+    "emptyDescription": "Add the https URL of your receiver below, then send it a test message.",
+    "listTitle": "Endpoints",
+    "url": "Endpoint URL",
+    "urlHint": "https on port 443, reachable from the internet. Every message is signed.",
+    "description": "Description",
+    "descriptionHint": "Optional, for your team (up to 200 characters).",
+    "descriptionTooLong": "Use 200 characters or fewer.",
+    "events": "Events",
+    "allEvents": "All events",
+    "eventCount": "{count, plural, one {# event} other {# events}}",
+    "status": "Status",
+    "active": "Active",
+    "disabled": "Paused",
+    "createdAt": "Added",
+    "createTitle": "Add an endpoint",
+    "settingsTitle": "Endpoint settings",
+    "receive": "Events to send",
+    "receiveAll": "All events, including new ones",
+    "receiveSelected": "Only the events I choose",
+    "typesRequired": "Choose at least one event, or send all events.",
+    "groups": {
+      "orders": "Orders and payments",
+      "tickets": "Tickets",
+      "checkin": "Check-in",
+      "events": "Events and ticket types",
+      "registration": "Registration",
+      "engagement": "Engagement",
+      "meta": "Tests"
+    },
+    "enabled": "Send messages to this endpoint",
+    "enabledHint": "Turn this off to pause deliveries without deleting the endpoint.",
+    "create": "Add endpoint",
+    "save": "Save changes",
+    "saved": "Endpoint saved.",
+    "limit": "This organization has the most endpoints allowed. Delete one to add another.",
+    "urlProblem": {
+      "malformed": "Enter a full URL, like https://example.com/webhooks.",
+      "scheme": "Use an https:// URL.",
+      "credentials": "Remove the user name and password from the URL.",
+      "port": "Use the standard https port (443).",
+      "host": "This host can't receive webhooks. Use a public address.",
+      "address": "This address is private or reserved. Use a public address.",
+      "dns": "We couldn't find this host. Check the address.",
+      "length": "This URL is too long."
+    },
+    "deleted": "Endpoint deleted.",
+    "created": "Endpoint added. Send it a test message to check your receiver.",
+    "back": "All webhook endpoints",
+    "endpointTitle": "Webhook endpoint",
+    "testTitle": "Send a test message",
+    "testEventType": "Message type",
+    "testHint": "webhook.test, or any event with its documented example data. Only this endpoint receives it.",
+    "sendTest": "Send test",
+    "testSent": "Test message sent ({type}). Its delivery is listed below.",
+    "secretTitle": "Signing secret",
+    "secretHint": "Use it to check that each message really comes from us.",
+    "revealSecret": "Show secret",
+    "hideSecret": "Hide",
+    "copy": "Copy",
+    "copied": "Copied",
+    "rotateHint": "A new secret replaces this one. For 24 hours both sign each message, so you have time to deploy it.",
+    "rotateSecret": "Rotate secret",
+    "rotatedSecret": "Secret rotated. The previous secret keeps working for 24 hours.",
+    "deliveriesTitle": "Recent deliveries",
+    "deliveriesUnavailable": "Deliveries can't be loaded right now. Try again in a minute.",
+    "noDeliveriesTitle": "No deliveries yet",
+    "noDeliveriesDescription": "Send a test message, or wait for the next event.",
+    "attemptedAt": "Time",
+    "eventType": "Event",
+    "response": "Response",
+    "noResponse": "No response",
+    "trigger": "Sent by",
+    "triggerManual": "Resend",
+    "triggerScheduled": "Automatic",
+    "nextRetry": "Next retry",
+    "actions": "Actions",
+    "attemptSucceeded": "Delivered",
+    "attemptFailed": "Failed",
+    "attemptPending": "Pending",
+    "resend": "Resend",
+    "resendNamed": "Resend {type} from {when}",
+    "resent": "Resent",
+    "recoverTitle": "Recover failed messages",
+    "recoverHint": "After your receiver was down, resend every message that failed since a time.",
+    "recoverSince": "Failed since",
+    "recoverWindow": {
+      "1h": "The last hour",
+      "24h": "The last 24 hours",
+      "7d": "The last 7 days"
+    },
+    "recover": "Resend failed messages",
+    "recovering": "Failed messages are being resent.",
+    "deleteTitle": "Delete this endpoint",
+    "deleteHint": "It stops receiving messages at once. This can't be undone.",
+    "delete": "Delete endpoint",
+    "portalTitle": "Webhook portal",
+    "portalSubtitle": "Endpoints, delivery logs and replay from our webhook provider.",
+    "portalAlternative": "Everything here is also on <link>the Webhooks pages</link>.",
+    "portalFrameTitle": "Webhook portal",
+    "portalUnavailable": "The webhook portal can't be opened right now. Try again in a minute.",
+    "fakePortal": {
+      "title": "Webhook portal (test mode)",
+      "subtitle": "A stand-in for the provider's portal: nothing here is sent over the network.",
+      "endpoints": "Endpoints",
+      "url": "URL",
+      "types": "Events",
+      "allTypes": "All",
+      "status": "Status",
+      "enabled": "Active",
+      "disabled": "Paused",
+      "noEndpoints": "No endpoints yet",
+      "attempts": "Recent attempts",
+      "noAttempts": "No attempts yet",
+      "type": "Event",
+      "message": "Message",
+      "succeeded": "Delivered",
+      "failed": "Failed",
+      "at": "Time"
+    }
+  },
+  "developers": {
+    "brand": "Yayatoh Developers",
+    "skip": "Skip to content",
+    "title": "Developers",
+    "subtitle": "Build on Yayatoh: the REST API, webhooks and SDKs.",
+    "nav": {
+      "label": "Developer docs",
+      "home": "Overview",
+      "guides": "Guides",
+      "reference": "API reference",
+      "events": "Webhook events"
+    },
+    "search": {
+      "label": "Search the docs",
+      "placeholder": "Search guides, endpoints and events",
+      "submit": "Search",
+      "results": "{count, plural, =0 {No results} one {# result} other {# results}}",
+      "resultsLabel": "Search results",
+      "resultsFor": "Results for “{query}”",
+      "none": "Nothing matches. Try another word, like “orders” or “webhook”.",
+      "kinds": {
+        "guide": "Guide",
+        "operation": "Endpoint",
+        "event": "Event"
+      }
+    },
+    "englishNotice": "Guides and the reference are in English.",
+    "startTitle": "Start here",
+    "cards": {
+      "guides": "API keys, pagination, idempotency, webhooks and sandboxes, step by step.",
+      "reference": "Every /v1 endpoint with its parameters and responses, generated from OpenAPI.",
+      "events": "Every webhook event with its versioned schema and an example."
+    },
+    "guidesSubtitle": "Step-by-step guides for building on the API.",
+    "backToGuides": "All guides",
+    "reference": {
+      "title": "API reference",
+      "subtitle": "Every /v1 endpoint, generated from the OpenAPI document.",
+      "interactive": "Try it in the interactive reference",
+      "download": "Download openapi.json",
+      "tags": "Sections",
+      "auth": "Authentication",
+      "parameters": "Parameters",
+      "parametersOf": "Parameters of {operation}",
+      "name": "Name",
+      "in": "In",
+      "type": "Type",
+      "description": "Description",
+      "requestBody": "Request body",
+      "responses": "Responses"
+    },
+    "events": {
+      "title": "Webhook events",
+      "subtitle": "Every message your endpoints can receive, with its versioned schema. Payloads carry ids and facts, never personal data.",
+      "verifyLink": "How to verify signatures",
+      "groups": "Event groups",
+      "fieldsOf": "Fields of {type}",
+      "data": "data",
+      "field": "Field",
+      "type": "Type",
+      "required": "Required",
+      "yes": "Yes",
+      "no": "No",
+      "example": "Example {type} message"
+    }
+  },
+  "billingPlan": {
+    "title": "Plan and modules",
+    "subtitle": "Your plan, the modules it includes and how per-ticket fees apply.",
+    "noAccessTitle": "Only owners, admins and finance can see the plan",
+    "noAccessDescription": "Ask an owner of this organization if you need the plan details.",
+    "dormantTitle": "Subscriptions aren't switched on yet",
+    "dormantBody": "Your organization stays on its current plan and keeps every module it has today. Nothing changes until subscriptions launch.",
+    "inactiveTitle": "Billing isn't active for this organization",
+    "inactiveBody": "Your organization stays on its current plan and keeps every module it has today. Nothing changes until billing is set up for it.",
+    "updatedTitle": "Plan change received",
+    "updatedBody": "The billing provider confirmed the change. The modules below are up to date.",
+    "currentPlan": "Current plan",
+    "pricePerMonth": "{price} a month",
+    "pricePerYear": "{price} a year",
+    "priceQuote": "Custom quote",
+    "renews": "Renews on {date}",
+    "endsOn": "Ends on {date}",
+    "source": {
+      "subscription": "Subscription",
+      "plan": "Included plan"
+    },
+    "status": {
+      "active": "Active",
+      "trialing": "Trial",
+      "past_due": "Payment overdue",
+      "canceled": "Canceled",
+      "unpaid": "Unpaid",
+      "paused": "Paused",
+      "incomplete": "Incomplete",
+      "incomplete_expired": "Expired"
+    },
+    "fees": {
+      "title": "Per-ticket fees",
+      "grandfathered": "Your legacy per-ticket fees are kept. A plan change never changes them.",
+      "plan": "Per-ticket fees follow the {plan} plan."
+    },
+    "modules": {
+      "title": "Your modules",
+      "description": "What your organization can use right now.",
+      "count": "{count, plural, one {# module} other {# modules}}"
+    },
+    "catalog": {
+      "title": "Plans",
+      "description": "Placeholder plans: prices are not final and nothing is on sale yet.",
+      "empty": "No plans yet.",
+      "plan": "Plan",
+      "price": "Price",
+      "modules": "Modules",
+      "status": "Status",
+      "onSale": "On sale",
+      "notOnSale": "Not on sale yet"
+    },
+    "test": {
+      "title": "Test billing (development only)",
+      "body": "Simulate a plan change through the test billing provider. It sends the same webhooks the real provider would.",
+      "open": "Open the test billing portal"
+    },
+    "planName": {
+      "launch_standard": "Launch standard",
+      "tier_free": "Free",
+      "tier_starter": "Starter",
+      "tier_pro": "Pro",
+      "tier_agency": "Agency",
+      "tier_enterprise": "Enterprise"
+    },
+    "module": {
+      "core": "Core",
+      "events": "Events",
+      "ticketing": "Ticketing",
+      "orders": "Orders",
+      "attendees": "Attendees",
+      "checkin": "Check-in",
+      "seating": "Seating",
+      "seat_finder": "Seat finder",
+      "guests": "Guest list",
+      "rsvp": "RSVP",
+      "distribution": "Distribution",
+      "access_codes": "Access codes",
+      "marketing": "Marketing",
+      "messaging": "Messaging",
+      "reports": "Reports",
+      "whitelabel": "White label",
+      "ai": "AI assistant",
+      "chat": "Chat",
+      "donations": "Donations",
+      "registration": "Registration",
+      "sessions": "Sessions",
+      "speakers": "Speakers",
+      "exhibitors": "Exhibitors",
+      "sponsors": "Sponsors",
+      "badges": "Badges",
+      "gallery": "Gallery",
+      "website": "Website",
+      "api_access": "API access",
+      "integrations": "Integrations",
+      "enterprise": "SSO and SCIM",
+      "agency": "Agency",
+      "virtual": "Virtual events",
+      "advanced_seating": "Advanced seating",
+      "ai_seating": "AI seating",
+      "analytics_pro": "Advanced analytics"
+    }
+  },
+  "billingPortal": {
+    "eyebrow": "Test billing",
+    "title": "Choose a plan",
+    "description": "Development only. This page stands in for the billing provider's portal and sends the same webhooks it would.",
+    "planLegend": "Plan",
+    "switch": "Switch plan",
+    "cancel": "Cancel subscription",
+    "back": "Back without changes",
+    "chooseError": "Choose a plan to switch to."
+  },
+  "seatingLibrary": {
+    "title": "Seating library",
+    "description": "Floor plans you saved from your events. Start a new event from one; each event keeps its own copy.",
+    "deleted": "Plan removed from the library. Events that used it keep their copy.",
+    "emptyTitle": "Your seating library is empty",
+    "emptyHint": "Open an event's seating plan and choose “Save plan” to keep it here.",
+    "emptyViewer": "Plans saved from events will appear here.",
+    "toEvents": "Go to events",
+    "startTitle": "Start a new event from a plan",
+    "startDescription": "The new event gets its own copy of the plan. You then price its seats and put them on sale.",
+    "layout": "Plan",
+    "layoutOption": "{name} ({seats, plural, one {# seat} other {# seats}})",
+    "eventName": "Event name",
+    "profile": "Kind of event",
+    "timezone": "Time zone",
+    "startsAt": "Starts",
+    "endsAt": "Ends",
+    "start": "Create the event",
+    "fixErrors": "Please fix the highlighted field.",
+    "errors": {
+      "layoutId": "Choose a plan.",
+      "name": "Give the event a name (2 to 160 characters).",
+      "slug": "An event with that name already exists. Choose another name.",
+      "profile": "Choose a kind of event that has seating.",
+      "startsAt": "Enter when the event starts.",
+      "endsAt": "Enter when the event ends, after it starts.",
+      "layoutName": "Give the plan a name (up to 120 characters)."
+    },
+    "listTitle": "Saved plans",
+    "seats": "{count, plural, one {# seat} other {# seats}}",
+    "rows": "{count, plural, one {# row} other {# rows}}",
+    "tables": "{count, plural, one {# table} other {# tables}}",
+    "withImage": "with a floor plan image",
+    "usedBy": "{count, plural, =0 {Not used by an event yet} one {Used by # event} other {Used by # events}}",
+    "updated": "updated {date}",
+    "renameLabel": "Name of {name}",
+    "rename": "Rename",
+    "renamed": "Renamed.",
+    "startFrom": "Start an event from it",
+    "startFromNamed": "Start an event from {name}",
+    "delete": "Remove",
+    "deleteNamed": "Remove {name}"
+  },
+  "warehouse": {
+    "title": "Analytics",
+    "description": "All your events together: registrations, tickets, check-ins and no-shows over time, and your best events.",
+    "filters": "Filters",
+    "from": "From",
+    "to": "To",
+    "event": "Event",
+    "allEvents": "All events",
+    "apply": "Apply",
+    "timeZoneNote": "Days are calendar days in {timeZone}, your organization’s time zone.",
+    "rangeErrors": {
+      "invalid_date": "Enter dates as year, month and day.",
+      "from_after_to": "The end date is before the start date.",
+      "range_too_long": "Choose a period of two years or less."
+    },
+    "periodLabel": "Show by",
+    "view": {
+      "day": "Day",
+      "week": "Week",
+      "month": "Month"
+    },
+    "emptyTitle": "Nothing in this period yet",
+    "emptyBody": "No registrations, tickets or check-ins between these dates. Try a longer period or another event; new orders show up here within seconds.",
+    "emptyAction": "Show the last 12 months",
+    "figures": {
+      "label": "Totals for the period",
+      "registrations": "Registrations",
+      "ticketsIssued": "Paid tickets issued",
+      "tickets": "Tickets sold",
+      "compTickets": "Free tickets",
+      "checkins": "Check-ins",
+      "noShows": "No-shows"
+    },
+    "revenue": {
+      "title": "Revenue",
+      "net": "Net sales ({currency})",
+      "grossRefunds": "{gross} paid, {refunds} refunded",
+      "byPeriod": "Revenue by period",
+      "noRevenue": "No sales or refunds in this period.",
+      "period": "Period",
+      "currency": "Currency",
+      "gross": "Paid",
+      "refunds": "Refunded",
+      "netColumn": "Net",
+      "topEvents": "Top events by revenue",
+      "eventColumn": "Event",
+      "weekOf": "Week of {day}"
+    },
+    "trend": "Over time",
+    "chartTitle": "Registrations, paid tickets and check-ins over time",
+    "byPeriod": "Figures by period",
+    "period": "Period",
+    "topEvents": "Top events",
+    "noTopEvents": "No event had registrations in this period.",
+    "definitions": "Tickets sold are paid tickets minus refunded ones. A check-in counts each ticket once, on the day of its first entry. No-shows are valid tickets never checked in, counted on the day an event ended.",
+    "definitionsFinance": "Tickets sold are paid tickets minus refunded ones. A check-in counts each ticket once, on the day of its first entry. No-shows are valid tickets never checked in, counted on the day an event ended. Revenue is what buyers paid minus refunds, per currency and before platform fees (see Finance).",
+    "rebuildTitle": "Rebuild analytics",
+    "rebuildBody": "Recomputes every figure on this page from your orders and check-ins, a few events at a time. Use it after changing your organization’s time zone.",
+    "rebuild": "Rebuild",
+    "rebuilding": "Starting…",
+    "rebuildStarted": "Rebuild started",
+    "rebuildStartedBody": "Figures are recomputed in the background; this page stays usable meanwhile.",
+    "rebuildRunning": "A rebuild is already running.",
+    "runStatus": {
+      "running": "Running",
+      "done": "Done",
+      "failed": "Failed",
+      "cancelled": "Cancelled"
+    },
+    "runProgress": "{events, plural, one {# event checked} other {# events checked}}, {written, plural, one {# updated} other {# updated}}"
+  },
+  "integrations": {
+    "title": "Integrations",
+    "description": "Connect the tools you already use. Contacts and records stay in step both ways, and you hear about anything that needs a look.",
+    "tabsLabel": "Integrations sections",
+    "tabs": {
+      "connections": "Connections",
+      "errors": "Errors"
+    },
+    "cancelled": "The connection was cancelled.",
+    "offTitle": "Integrations aren't switched on here yet",
+    "offDescription": "Connections need the integrations service, which isn't set up on this site yet. Ask your platform administrator.",
+    "noneTitle": "No integrations to connect yet",
+    "noneDescription": "New integrations appear on this page as they become available.",
+    "connectors": {
+      "demo": {
+        "description": "A sandbox contacts app for trying integrations: contacts sync both ways with your CRM. Test environments only."
+      }
+    },
+    "sandboxBadge": "Sandbox",
+    "account": "Account",
+    "lastSync": "Last sync",
+    "never": "Never",
+    "openErrors": "Open errors",
+    "openErrorCount": "{count, plural, one {# record needs a look} other {# records need a look}}",
+    "noErrors": "None",
+    "notInPlan": "Not in your plan",
+    "manage": "Manage",
+    "manageNamed": "Manage {name}",
+    "connect": "Connect",
+    "connectNamed": "Connect {name}",
+    "reconnect": "Reconnect",
+    "reconnectNamed": "Reconnect {name}",
+    "readOnly": "Only owners and admins can connect or change integrations.",
+    "breadcrumb": "Breadcrumb",
+    "objects": {
+      "contacts": "Contacts"
+    },
+    "fields": {
+      "email": "Email",
+      "name": "Name"
+    },
+    "status": {
+      "none": "Not connected",
+      "pending": "Waiting for approval",
+      "active": "Connected",
+      "paused": "Paused",
+      "revoked": "Disconnected",
+      "failed": "Connection failed"
+    },
+    "runStatus": {
+      "queued": "Queued",
+      "running": "Running",
+      "succeeded": "Synced",
+      "partial": "Synced with errors",
+      "failed": "Failed",
+      "cancelled": "Cancelled"
+    },
+    "errorsFeedback": {
+      "unavailable": "This integration isn't available here.",
+      "provider_unavailable": "The provider couldn't be reached. Try again in a few minutes.",
+      "not_approved": "The provider hasn't confirmed the connection yet. Finish connecting there, then check again.",
+      "denied": "The connection wasn't approved, so nothing was connected.",
+      "expired": "That connect link has expired. Start again with Connect.",
+      "validation_failed": "Some details need fixing.",
+      "forbidden": "You don't have access to this.",
+      "module_not_enabled": "Integrations aren't in your plan.",
+      "not_found": "We couldn't find that.",
+      "conflict": "This integration is already connected.",
+      "invalid_state": "That can't be done right now.",
+      "impersonation_blocked": "Staff acting as a member can't connect integrations.",
+      "read_only_freeze": "Changes are paused during scheduled maintenance. Try again when it ends.",
+      "internal": "Something went wrong on our side."
+    },
+    "detail": {
+      "title": "Integration",
+      "syncNow": "Sync now",
+      "syncing": "Sync on its way",
+      "connected": "{name} is connected. The first sync starts shortly.",
+      "sync": {
+        "queued": "Sync started. Refresh in a moment to see the result.",
+        "already": "A sync is already on its way."
+      },
+      "done": {
+        "paused": "Syncing is paused.",
+        "resumed": "Syncing is back on.",
+        "interval": "Sync schedule saved.",
+        "disconnected": "Disconnected. Nothing syncs any more and access was revoked at the provider."
+      },
+      "revoked": {
+        "user": "Disconnected on {when}.",
+        "provider": "The provider stopped accepting this connection on {when}, so syncing stopped. Reconnect to carry on."
+      },
+      "pending": "Waiting for the connection to be approved at the provider.",
+      "checkConnection": "Check connection",
+      "cancelConnect": "Cancel",
+      "confirmDisconnect": "Disconnect {name}?",
+      "confirmDisconnectBody": "Syncing stops at once and Yayatoh's access is revoked at the provider. Records already synced stay where they are.",
+      "disconnect": "Disconnect",
+      "keep": "Keep connected",
+      "statusTitle": "Status",
+      "connectedAt": "Connected",
+      "nextSync": "Next sync",
+      "interval": "Sync every",
+      "saveInterval": "Save schedule",
+      "pause": "Pause syncing",
+      "resume": "Resume syncing",
+      "intervals": {
+        "15": "15 minutes",
+        "60": "Hour",
+        "360": "6 hours",
+        "1440": "Day"
+      }
+    },
+    "mapping": {
+      "sectionTitle": "Field mapping",
+      "sectionHelp": "Choose which field fills which. Each save keeps a new version, and the next sync uses it.",
+      "title": {
+        "pull": "Into Yayatoh",
+        "push": "Out to the provider"
+      },
+      "help": {
+        "pull": "The provider's fields fill Yayatoh's fields.",
+        "push": "Yayatoh's fields fill the provider's fields."
+      },
+      "version": "Version {version}",
+      "saved": "Mapping saved as version {version}. The next sync uses it.",
+      "invalid": "This mapping can't be saved yet. Check the fields marked below.",
+      "required": "required",
+      "source": "Comes from",
+      "transform": "Change",
+      "default": "If empty, use",
+      "notMapped": "— Not mapped —",
+      "transforms": {
+        "none": "Keep as is",
+        "trim": "Trim spaces",
+        "lowercase": "lowercase",
+        "uppercase": "UPPERCASE",
+        "title_case": "Title Case",
+        "first_word": "First word",
+        "last_word": "Last word",
+        "to_number": "Number",
+        "to_boolean": "Yes or no",
+        "to_date": "Date"
+      },
+      "save": {
+        "pull": "Save import mapping",
+        "push": "Save export mapping"
+      },
+      "issue": {
+        "missing_required": "Choose where {field} comes from: it's required.",
+        "unknown_source": "That field doesn't exist at the provider.",
+        "unknown_target": "{field} can't be filled.",
+        "duplicate_target": "{field} is filled twice.",
+        "other": "Check this field."
+      }
+    },
+    "runs": {
+      "title": "Recent syncs",
+      "caption": "Recent syncs of this integration",
+      "empty": "No syncs yet. The first one starts shortly after connecting.",
+      "when": "Started",
+      "trigger": "Started by",
+      "status": "Result",
+      "pulled": "In",
+      "pushed": "Out",
+      "skipped": "Unchanged",
+      "failed": "Errors",
+      "error": "Problem",
+      "triggers": {
+        "manual": "Sync now",
+        "schedule": "Schedule",
+        "retry": "Retry"
+      }
+    },
+    "codes": {
+      "auth_revoked": "The provider no longer accepts this connection",
+      "invalid_token": "The provider no longer accepts this connection",
+      "auth_failed": "The provider refused the connection",
+      "invalid_value": "A value doesn't fit its field",
+      "missing_required": "A required field is empty",
+      "transform_failed": "A value couldn't be converted",
+      "duplicate_record": "Two records point to the same contact",
+      "write_failed": "Couldn't be saved in Yayatoh",
+      "push_failed": "Couldn't be sent to the provider",
+      "network": "The provider couldn't be reached",
+      "lease_expired": "The sync stopped unexpectedly",
+      "disconnected": "Stopped by disconnecting",
+      "paused": "Stopped by pausing",
+      "sync_failed": "The sync failed",
+      "unknown_connector": "This integration is no longer available",
+      "other": "Error ({code})"
+    },
+    "inbox": {
+      "title": "Integration errors",
+      "description": "Records that couldn't sync, grouped by what went wrong. They're retried automatically for a while. Fix a record where it came from, then Retry, or Dismiss what you don't need.",
+      "retried": "{count, plural, =0 {Nothing to retry: those connections aren't active.} one {# record will be retried on the next sync.} other {# records will be retried on the next sync.}}",
+      "dismissed": "{count, plural, one {# record dismissed.} other {# records dismissed.}}",
+      "filterLabel": "Show errors",
+      "status": {
+        "open": "Open",
+        "resolved": "Resolved",
+        "dismissed": "Dismissed"
+      },
+      "empty": {
+        "open": "No open errors",
+        "resolved": "Nothing resolved yet",
+        "dismissed": "Nothing dismissed"
+      },
+      "emptyOpenHelp": "Everything synced. When a record can't sync, it shows up here with what to do next.",
+      "backToConnections": "Go to connections",
+      "groupTitle": "{connector}: {step} · {count, plural, one {# record} other {# records}}",
+      "steps": {
+        "auth": "Connection",
+        "pull": "Reading from the provider",
+        "map": "Mapping",
+        "write": "Saving in Yayatoh",
+        "push": "Sending to the provider"
+      },
+      "field": "Field: {field}",
+      "lastSeen": "Last seen {when}",
+      "retryAll": "Retry all",
+      "retryAllNamed": "Retry all: {group}",
+      "dismissAll": "Dismiss all",
+      "dismissAllNamed": "Dismiss all: {group}",
+      "recordsCaption": "Records: {group}",
+      "record": "Record",
+      "object": "What",
+      "objectDirection": "{object} ({direction})",
+      "directions": {
+        "pull": "in",
+        "push": "out"
+      },
+      "wholeConnection": "Whole connection",
+      "attempts": "Attempts",
+      "nextRetry": "Next automatic retry",
+      "closedAt": "Closed",
+      "manualRetry": "Waiting for you",
+      "actions": "Actions",
+      "retry": "Retry",
+      "retryNamed": "Retry {record}",
+      "dismiss": "Dismiss",
+      "dismissNamed": "Dismiss {record}",
+      "more": "{count, plural, one {# more record not shown.} other {# more records not shown.}}"
+    },
+    "fakeConsent": {
+      "title": "Sandbox consent",
+      "eyebrow": "Sandbox provider",
+      "heading": "Connect {name} to Yayatoh?",
+      "body": "{name} is a test provider. Allowing lets Yayatoh read and write the following on your behalf:",
+      "allow": "Allow",
+      "deny": "Deny"
     }
   }
 }

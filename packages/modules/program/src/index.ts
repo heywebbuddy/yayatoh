@@ -32,6 +32,7 @@ export {
   saveBoothCommand,
   unassignBoothCommand,
 } from './booths.ts';
+export { programDataSubjects } from './data-subject.ts';
 export {
   ADMISSIONS,
   type Admission,

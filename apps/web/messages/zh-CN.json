@@ -186,6 +186,11 @@
       "guests": {
         "invitation": "婚礼邀请",
         "rsvp-reminder": "回复提醒"
+      },
+      "privacy": {
+        "request-code": "隐私请求验证码",
+        "archive-ready": "个人数据存档已就绪",
+        "erasure-done": "删除收据"
       }
     },
     "status": {
@@ -341,7 +346,9 @@
     "supportMacros": "客服宏",
     "assistance": "求助请求",
     "marketingAnalytics": "营销分析",
-    "badges": "胸卡"
+    "badges": "胸卡",
+    "orgAnalytics": "数据分析",
+    "integrations": "集成"
   },
   "vocab": {
     "attendee": "参会者",
@@ -923,9 +930,15 @@
         "capReached": "这是单笔订单的上限：{max} 个座位。",
         "adaChosen": "{count, plural, other {{seats} 是无障碍座位，为有需要的宾客保留。请仅在需要时选择。}}",
         "overCap": "已选 {count} 个座位：主办方要求每笔订单最多 {max} 个。",
-        "keptUntil": "保留至 {date}"
+        "keptUntil": "保留至 {date}",
+        "companionWarn": "陪同座位供与轮椅使用者同行的宾客使用：每个无障碍座位最多 {max} 个。",
+        "companionEnforced": "陪同座位仅与无障碍座位一起出售：每个无障碍座位最多 {max} 个。",
+        "companionChosen": "没有无障碍座位的陪同座位：{seats}。它们供与轮椅使用者同行的宾客使用（每个无障碍座位最多 {max} 个）。",
+        "companionRefused": "没有无障碍座位的陪同座位：{seats}。陪同座位仅与无障碍座位一起出售（每个最多 {max} 个）：请添加一个无障碍座位，或选择其他座位。",
+        "adaEnforcedBest": "无障碍座位保留给有需要的宾客，直到 {date}。如果你需要，请勾选“我的同行者中有人使用轮椅”，并使用最佳可选座位。"
       },
-      "groupSummary": "{group} — {total} 个中 {free} 个空座{chosen, plural, =0 {} other { · 已选 #}}"
+      "groupSummary": "{group} — {total} 个中 {free} 个空座{chosen, plural, =0 {} other { · 已选 #}}",
+      "companion": "陪同座位"
     },
     "seatRuleCap": "超出了单笔订单可选的座位数，请减少选择。",
     "seatRuleAda": "无障碍座位目前为有需要的宾客保留，请选择其他座位。",
@@ -935,7 +948,43 @@
     "orgUnavailable": "该主办方目前未在售票。已购买的门票仍然有效。",
     "riskBlocked": "我们无法接受此订单。请联系主办方。",
     "creditInvalid": "该店铺余额代码无效或已用完。",
-    "creditNotApplicable": "该店铺余额不能用于这些门票。"
+    "creditNotApplicable": "该店铺余额不能用于这些门票。",
+    "seatRuleCompanion": "陪同座位仅与无障碍座位一起出售。请同时选择一个无障碍座位，或选择其他座位。",
+    "best": {
+      "title": "最佳可选座位",
+      "modeLegend": "你想如何选座？",
+      "mode": {
+        "best": "最佳可选座位：我们为你找到相邻的最佳座位",
+        "pick": "自己选座"
+      },
+      "need": "我的同行者中有人使用轮椅，需要无障碍座位",
+      "needStaff": "购票者需要轮椅无障碍座位",
+      "needHint": "无障碍座位及其旁边的陪同座位保留给有需要的宾客。",
+      "price": "价格",
+      "onePrice": "价格：{price}",
+      "quantity": "座位数量",
+      "find": "查找座位",
+      "findAgain": "重新查找",
+      "accessibleHint": "我们会寻找一个轮椅无障碍座位，并在旁边安排陪同座位。",
+      "together": "{count, plural, other {# 个相邻座位：}}",
+      "split": "无法让你们 {count} 人坐在一起，因此座位分在不同位置（分组数：{pieces}）。你也可以自己选座。",
+      "seatsLabel": "你的座位",
+      "seatAccessible": "{seat}（轮椅无障碍）",
+      "seatCompanion": "{seat}（陪同座位）",
+      "heldFor": "在你付款期间为你保留 {minutes} 分钟。",
+      "clear": "释放这些座位",
+      "notEnough": "此价格下没有足够的空座供 {count} 人使用。请减少座位数、换个价格，或自己选座。",
+      "noAccessible": "此价格下没有空闲的轮椅无障碍座位。请换个价格，或联系主办方。",
+      "taken": "这些座位刚刚被选走了。请重试。",
+      "ruleRefused": "主办方的座位规则不允许这样选择。",
+      "off": "此活动已不再提供最佳可选座位。请自己选座。",
+      "findFirst": "请先查找座位：选择数量，然后点击“查找座位”。",
+      "expired": "你的座位已保留 10 分钟，现已释放。请重新查找。"
+    },
+    "seatChannel": "其中部分座位为其他销售渠道保留。请选择其他座位。",
+    "channelInvalid": "此销售码不适用于本活动。请不带销售码重新打开活动页面，或询问给你链接的人。",
+    "channelNotice": "你正在通过 {name} 购买：为 {name} 保留的座位也向你开放。",
+    "channelLinkInvalid": "此销售链接不适用于本活动。你仍可从向所有人开放的座位中选择。"
   },
   "fakePay": {
     "eyebrow": "测试付款",
@@ -1489,12 +1538,14 @@
     },
     "activityLink": "活动日志",
     "privacyLink": "隐私请求",
-    "charityLink": "慈善机构资料"
+    "charityLink": "慈善机构资料",
+    "planLink": "套餐和模块"
   },
   "legal": {
     "platform": "Yayatoh",
     "updated": "最后更新于 {date}",
-    "organizerPages": "{org} 的政策"
+    "organizerPages": "{org} 的政策",
+    "privacyRequest": "申请获取您的数据副本或将其抹除"
   },
   "setup": {
     "title": "准备开售 · 已完成 {done}/{total}",
@@ -1874,7 +1925,8 @@
     "chooseDate": "请选择场次。",
     "dateSoldOut": "此场次剩余门票不足。",
     "wrongDate": "其中一种门票不在此场次出售。",
-    "dateUnavailable": "此场次已停止售票。"
+    "dateUnavailable": "此场次已停止售票。",
+    "seatChannel": "其中部分座位为其他销售渠道（赞助商、推广方或线上销售）保留。请选择其他座位。"
   },
   "seating": {
     "title": "座位",
@@ -1971,14 +2023,19 @@
       "title": "保存为可复用的座位图",
       "name": "名称",
       "submit": "保存座位图",
-      "done": "已保存。你可以将它用于其他活动。"
+      "done": "已保存。你可以将它用于其他活动。",
+      "description": "保存的座位图会放入你的座位图库，你可以从中创建新活动。",
+      "library": "打开座位图库"
     },
     "tabs": {
       "label": "座位视图",
       "plan": "座位图",
       "assign": "安排宾客",
       "finder": "座位查询",
-      "rules": "规则"
+      "rules": "规则",
+      "selection": "最佳可选座位",
+      "channels": "渠道",
+      "revisions": "版本"
     },
     "assign": {
       "title": "安排宾客",
@@ -2115,7 +2172,8 @@
       "none": "无规则：购票者可选择任何空座。",
       "summary": {
         "ada": "无障碍座位为有需要的宾客保留至{days, plural, =0 {活动开始} other {活动前 # 天}}（{date}）· {severity}",
-        "cap": "每笔订单最多 {max, plural, other {# 个座位}} · {severity}"
+        "cap": "每笔订单最多 {max, plural, other {# 个座位}} · {severity}",
+        "companion": "陪同座位仅与无障碍座位一起出售，每个最多 {max} 个 · {severity}"
       },
       "severityShort": {
         "warn": "提醒",
@@ -2148,7 +2206,14 @@
       },
       "save": "保存规则",
       "saved": "座位规则已保存。",
-      "fixErrors": "请修改标出的字段。"
+      "fixErrors": "请修改标出的字段。",
+      "companion": {
+        "title": "陪同座位",
+        "on": "陪同座位仅与无障碍座位一起出售",
+        "max": "每个无障碍座位的陪同座位数",
+        "maxHint": "1 到 3。会与无障碍座位一起开放给所有人。",
+        "maxError": "请输入 1 到 3 的整数。"
+      }
     },
     "groups": {
       "title": "团体座位区",
@@ -2177,6 +2242,172 @@
         "forbidden": "你可以查看团体，但不能更改。",
         "noMembers": "名单中还没有人带有标签 {label}。"
       }
+    },
+    "selection": {
+      "title": "最佳可选座位和陪同座位",
+      "description": "让购票者和售票处直接请求最佳座位而不必自己挑选，并在无障碍座位旁保留陪同座位。",
+      "noPlan": "此活动还没有座位图。请先创建座位图，再在这里设置最佳可选座位。",
+      "readOnly": "你可以查看这些设置，但不能更改。",
+      "bestTitle": "最佳可选座位",
+      "bestOn": "向购票者和售票处提供“最佳可选座位”",
+      "bestHint": "购票者选择座位数量和价格，即可获得相邻的最佳空座。他们也仍可自己选座。",
+      "scoresTitle": "区域评分",
+      "scoresHint": "0 到 100：评分越高越先提供。留空的区域按与舞台的距离排序。",
+      "scoreLabel": "{section} 的评分",
+      "scoreError": "请输入 0 到 100 的整数，或留空。",
+      "noSections": "此座位图没有区域：座位按与舞台的距离排序，然后按排和靠近中间的程度排序。",
+      "saveBest": "保存最佳可选座位",
+      "savedBest": "最佳可选座位设置已保存。",
+      "fixErrors": "请修改标出的字段。",
+      "bestOnSummary": "已向购票者和售票处提供最佳可选座位。",
+      "bestOffSummary": "最佳可选座位已关闭：购票者自己选座。",
+      "companionsTitle": "陪同座位",
+      "companionsDescription": "陪同座位位于无障碍座位旁，供与轮椅使用者同行的人使用。",
+      "rulesLink": "在“规则”标签页设置陪同座位规则",
+      "noAccessible": "此座位图还没有无障碍座位。请先在座位图中标出，再在这里选择陪同座位。",
+      "suggest": "勾选无障碍座位旁的座位",
+      "group": {
+        "row": "{label} 排",
+        "table": "{label} 号桌"
+      },
+      "seatAccessible": "{seat} 号座 · 无障碍",
+      "seatCompanion": "{seat} 号座",
+      "suggested": "在无障碍座位旁",
+      "saveCompanions": "保存陪同座位",
+      "savedCompanions": "已保存陪同座位：{count} 个。",
+      "companionError": "陪同座位必须与无障碍座位在同一排或同一桌，且本身不能是无障碍座位。",
+      "companionList": "陪同座位（{count} 个）：{seats}",
+      "companionNone": "还没有陪同座位。"
+    },
+    "fromLibrary": "此活动基于你保存的座位图创建。请先为座位定价，再开始销售。",
+    "channels": {
+      "title": "销售渠道",
+      "description": "为现场售票、赞助商或推广方保留座位区块。某个渠道的座位在该渠道释放之前，绝不会通过其他渠道售出。",
+      "noPlan": "此活动还没有座位图。请先创建一个，再在这里把座位分配给渠道。",
+      "readOnly": "你可以查看渠道，但不能修改。",
+      "saved": "渠道已保存。",
+      "deleted": "渠道已删除。其座位重新向所有渠道开放。",
+      "listTitle": "渠道",
+      "empty": "还没有销售渠道",
+      "emptyHint": "在下方添加渠道，然后为其分配座位。不属于任何渠道的座位可通过所有渠道售出。",
+      "col": {
+        "channel": "渠道",
+        "code": "销售码和链接",
+        "release": "释放",
+        "seats": "座位",
+        "sold": "通过该渠道售出",
+        "actions": "操作"
+      },
+      "kind": {
+        "public": "线上（无销售码）",
+        "box_office": "现场售票",
+        "sponsor": "赞助商",
+        "promoter": "推广方"
+      },
+      "linkFor": "{name} 的链接",
+      "released": "已于 {when} 释放",
+      "neverReleased": "保留至你更改为止",
+      "soldCount": "{orders, plural, =0 {还没有订单} other {# 个订单}} · {seats, plural, other {# 个座位}}",
+      "edit": "编辑",
+      "editNamed": "编辑 {name}",
+      "delete": "删除",
+      "deleteNamed": "删除 {name}",
+      "addTitle": "添加渠道",
+      "editTitle": "编辑 {name}",
+      "kindLabel": "类型",
+      "kindHint": "线上和现场售票：每个活动各最多一个。赞助商和推广方使用各自的销售码销售。",
+      "nameLabel": "名称",
+      "nameHint": "向使用该渠道链接的购票人显示，并出现在你的报表中。",
+      "codeLabel": "销售码",
+      "codeHint": "仅限赞助商和推广方：3 到 32 个字母、数字、连字符或下划线。购票人通过渠道链接使用它。",
+      "releaseLabel": "释放未售座位的时间（可选）",
+      "releaseHint": "未售座位将在此时间（{timeZone}）回到所有渠道。留空则一直保留。",
+      "add": "添加渠道",
+      "save": "保存渠道",
+      "cancel": "取消",
+      "added": "渠道已添加。",
+      "fixErrors": "请修正标出的字段。",
+      "errors": {
+        "kind": "请选择渠道类型。",
+        "kind_taken": "此活动已有该类型的渠道。",
+        "name": "请为渠道命名（最多 80 个字符）。",
+        "code_required": "赞助商和推广方需要销售码。",
+        "code_not_allowed": "只有赞助商和推广方有销售码。请留空。",
+        "code_format": "请使用 3 到 32 个字母、数字、连字符或下划线。",
+        "code_taken": "此活动的另一个渠道已使用该销售码。",
+        "releaseAt": "请输入日期和时间，或留空。",
+        "seats": "请至少选择一排或一桌，并填写其中存在的座位号。"
+      },
+      "allotTitle": "分配座位",
+      "allotDescription": "选择排和桌，也可以只选其中部分座位。活动的所有日期都会同步。已在某个渠道中的座位会转到你选择的渠道。",
+      "noSeats": "座位图中还没有排或桌。",
+      "allotTo": "渠道",
+      "everyChannel": "无渠道（向所有渠道开放）",
+      "which": "排和桌",
+      "item": {
+        "row": "第 {label} 排（{seats, plural, other {# 个座位}}）",
+        "table": "{label} 号桌（{seats, plural, other {# 个座位}}）"
+      },
+      "itemAllotted": "{name} 中 {count, plural, other {# 个座位}}",
+      "seatNumbers": "仅这些座位（可选）",
+      "seatNumbersHint": "所选排和桌中的座位号，例如 1-4, 9。留空则包括其全部座位。",
+      "allot": "分配座位",
+      "allotted": "{count, plural, =0 {没有座位变化。} other {已分配 # 个座位。}}",
+      "freed": "{count, plural, =0 {没有座位属于任何渠道。} other {# 个座位重新向所有渠道开放。}}"
+    },
+    "revisions": {
+      "title": "座位图版本",
+      "description": "每次保存座位图都会生成一个版本。查看每个版本改了什么，并恢复以前的座位图。已保留和已售出的座位始终保持不变。",
+      "noPlan": "此活动还没有座位图。请先创建一个；之后每次保存都会显示在这里。",
+      "none": "还没有版本",
+      "noneHint": "下一次保存座位图将成为第一个版本。",
+      "readOnly": "你可以查看版本，但不能恢复。",
+      "listTitle": "所有版本",
+      "col": {
+        "revision": "版本",
+        "when": "保存时间",
+        "what": "内容",
+        "changes": "变化的座位"
+      },
+      "revision": "版本 {number}",
+      "currentBadge": "当前座位图",
+      "kindSave": "已保存",
+      "kindRestore": "已恢复版本 {number}",
+      "seats": "{count, plural, other {# 个座位}}",
+      "first": "保留的第一个版本。",
+      "noSeatChanges": "没有新增、删除或重新编号的座位。",
+      "added": "{count, plural, other {新增 # 个座位}}",
+      "removed": "{count, plural, other {删除 # 个座位}}",
+      "renumbered": "{count, plural, other {重新编号 # 个座位}}",
+      "moved": "{count, plural, other {移动 # 个座位}}",
+      "detailTitle": "版本 {number}",
+      "changedTitle": "该版本的改动",
+      "restoreWouldTitle": "恢复后会改变",
+      "addedTitle": "新增的座位",
+      "removedTitle": "删除的座位",
+      "renumberedTitle": "重新编号的座位",
+      "renumberedSeat": "{from} → {to}",
+      "listOf": "{title}（{count}）",
+      "more": "{count, plural, other {另有 # 个}}",
+      "inUseTitle": "已保留和已售出的座位",
+      "inUseNone": "没有已保留或已售出的座位：没有任何阻碍。",
+      "inUseKept": "{count, plural, =0 {没有已保留或已售出的座位留在原处。} other {# 个已保留或已售出的座位完全保持不变。}}",
+      "inUseRemapped": "{count, plural, other {# 个已保留或已售出的座位将转到此版本中标签相同的座位（座位号和门票都不变）：}}",
+      "conflictsTitle": "{count, plural, other {无法恢复此版本：会丢失 # 个已保留或已售出的座位。}}",
+      "conflict": {
+        "removed": {
+          "sold": "{label} 已售出，而此版本中没有该标签的座位。",
+          "held": "{label} 已被购票人保留，而此版本中没有该标签的座位。"
+        },
+        "renumbered": {
+          "sold": "{label} 已售出，恢复后会变成 {to}：购票人的门票将指向另一个座位。",
+          "held": "{label} 已被购票人保留，恢复后会变成 {to}。"
+        }
+      },
+      "conflictsRefused": "有已保留或已售出的座位不在该版本中。未做任何更改。",
+      "isCurrent": "这就是当前的座位图。",
+      "restore": "恢复版本 {number}",
+      "restoredNotice": "已恢复版本 {number}。当前座位图为版本 {now}。"
     }
   },
   "venueMap": {
@@ -2493,70 +2724,199 @@
   },
   "privacy": {
     "title": "隐私请求",
-    "description": "回应询问您持有其哪些数据或要求被遗忘的人。每个请求都会被记录。",
+    "description": "回应向您索取其数据副本或要求被遗忘的人。每个请求须在 30 天内处理，并会被记录。",
     "noticeLink": "Yayatoh 隐私声明",
     "noAccessTitle": "只有所有者和管理员可以处理隐私请求",
-    "noAccessDescription": "请此组织的所有者或管理员协助处理有关某人数据的请求。",
+    "noAccessDescription": "如需处理有关某人数据的请求，请联系此组织的所有者或管理员。",
     "find": {
       "title": "查找某人",
-      "hint": "按邮箱在联系人、订单、门票、宾客名单、回答和签到记录中搜索。",
+      "hint": "按邮箱搜索此组织持有的所有数据：联系人、订单、门票、宾客名单、表单、消息、演讲嘉宾等。",
       "email": "邮箱地址",
       "submit": "查找"
     },
     "result": {
       "title": "此组织持有的关于 {email} 的数据",
       "noneTitle": "未找到此邮箱的数据",
-      "noneDescription": "此组织中没有任何联系人、订单、门票或宾客记录使用该地址。"
-    },
-    "categories": {
-      "contacts": "联系人记录",
-      "consents": "同意记录",
-      "orders": "订单",
-      "paidOrders": "已付款订单（为会计保留）",
-      "tickets": "门票",
-      "activeTickets": "有效门票",
-      "claims": "门票转让链接",
-      "holderLinks": "门票访问链接",
-      "attendees": "宾客名单条目",
-      "answers": "结账时的回答",
-      "admissions": "签到",
-      "invitations": "团队邀请"
-    },
-    "export": {
-      "title": "导出其数据",
-      "hint": "包含以上全部内容的 JSON 文件，供您发送给本人。7 天后删除。",
-      "submit": "导出数据（JSON）",
-      "download": "下载文件",
-      "running": "正在准备文件……请稍后刷新页面。"
-    },
-    "erase": {
-      "title": "抹除此人",
-      "what": "其姓名、邮箱、电话、回答和链接将从联系人、订单、门票和宾客名单中移除，提及此人的导出文件也会被删除。",
-      "holds": "{paid, plural, =0 {没有需要保留的已付款订单。} other {# 个已付款订单将为税务和会计保留，但不含姓名和邮箱。}}",
-      "tickets": "{active, plural, =0 {没有有效门票。} other {# 张有效门票仍然有效，但不含姓名。}}",
-      "final": "此操作无法撤销。",
-      "confirm": "输入 {email} 以确认",
-      "submit": "抹除个人数据",
-      "done": "已抹除。{records, plural, other {# 条记录}}已脱敏或删除；{kept, plural, =0 {未保留已付款订单} other {已保留 # 个不含个人数据的已付款订单}}。"
+      "noneDescription": "此组织中没有任何记录使用该地址。您仍可以创建请求，向此人作出正式答复。"
     },
     "errors": {
       "invalidEmail": "请输入有效的邮箱地址。",
       "confirmMismatch": "不匹配。请输入相同的邮箱地址以确认。",
-      "nothingHeld": "已不再持有此邮箱的任何数据。"
-    },
-    "history": {
-      "title": "过往请求",
-      "caption": "隐私请求，最新在前",
-      "empty": "暂无请求。",
-      "when": "时间",
-      "kind": "请求",
-      "subject": "对象",
-      "by": "处理人",
-      "records": "记录数"
+      "kindRequired": "请选择此人提出的请求类型。",
+      "reasonRequired": "请填写至少 3 个字符的原因。",
+      "closed": "此请求已关闭。"
     },
     "kinds": {
-      "access": "访问（导出）",
+      "access": "访问（副本）",
       "erasure": "抹除"
+    },
+    "modules": {
+      "crm": "联系人和同意",
+      "orders": "订单和候补名单",
+      "ticketing": "门票",
+      "attendees": "宾客名单条目",
+      "forms": "表单回答",
+      "checkin": "签到",
+      "tenancy": "团队邀请",
+      "notifications": "已发送的消息",
+      "seating": "座位查询",
+      "alerts": "提醒设置",
+      "guests": "婚礼和派对宾客",
+      "messaging": "对话",
+      "assistance": "求助请求",
+      "program": "演讲嘉宾信息",
+      "events": "门户账户",
+      "media": "上传的文件",
+      "cms": "联系表单消息",
+      "venues": "场地报价请求",
+      "reviews": "评价",
+      "payments": "付款争议",
+      "surveys": "问卷回答",
+      "registration": "报名",
+      "badges": "胸卡",
+      "automations": "旅程",
+      "campaigns": "营销活动发送记录",
+      "audiences": "受众",
+      "marketing": "营销归因",
+      "reports": "分析事件",
+      "privacy": "隐私请求",
+      "platform": "导出和系统记录",
+      "donations": "捐赠和收据",
+      "engagement": "现场问答中的问题"
+    },
+    "open": {
+      "title": "创建请求",
+      "hint": "您已确认请求人身份。请求须在 30 天内处理；您可在其单独页面中完成处理。",
+      "kind": "此人提出了什么请求？",
+      "access": "获取其数据副本（访问）",
+      "accessHint": "一个已签名的 ZIP，包含关于此人的所有数据。",
+      "erasure": "抹除其数据（抹除）",
+      "erasureHint": "从所有地方移除此人，法律要求您保留的记录除外。",
+      "submit": "创建请求",
+      "existing": "此人已有一个未完成的请求。",
+      "review": "查看未完成的请求"
+    },
+    "queue": {
+      "title": "未完成的请求",
+      "caption": "未完成的隐私请求，最早到期的在前",
+      "emptyTitle": "没有未完成的请求",
+      "empty": "有人询问其数据时，请在上方查找此人并创建请求。他们也可以通过您的隐私声明提出请求。",
+      "person": "对象",
+      "kind": "请求",
+      "source": "来源",
+      "opened": "创建时间",
+      "due": "截止",
+      "overdue": "已逾期",
+      "action": "操作",
+      "review": "查看"
+    },
+    "closed": {
+      "title": "已关闭的请求",
+      "caption": "已完成和已撤回的请求，最新在前",
+      "empty": "暂无已关闭的请求。",
+      "when": "关闭时间",
+      "status": "状态",
+      "records": "记录数"
+    },
+    "statuses": {
+      "open": "未完成",
+      "completed": "已完成",
+      "cancelled": "已撤回"
+    },
+    "sources": {
+      "staff": "工作人员代为提出",
+      "self": "本人（邮箱已确认）"
+    },
+    "request": {
+      "titleAccess": "访问请求",
+      "titleErasure": "抹除请求",
+      "openedNotice": "请求已创建，截止日期为 {date}。",
+      "cancelledNotice": "请求已撤回。",
+      "fields": {
+        "kind": "请求",
+        "source": "来源",
+        "opened": "创建时间",
+        "due": "截止日期",
+        "verified": "邮箱已确认",
+        "completed": "完成时间",
+        "cancelled": "撤回时间",
+        "reason": "原因"
+      },
+      "holdings": {
+        "title": "此组织持有的数据",
+        "empty": "没有持有关于此人的任何数据",
+        "emptyHint": "您仍可以完成请求：此人将收到未持有任何数据的正式答复。"
+      },
+      "export": {
+        "title": "发送副本给此人",
+        "hint": "一个 ZIP，包含 Yayatoh 每个部分的 JSON 文件及此人的文件，并已签名，任何人都可验证其未被篡改。可在 7 天内下载。",
+        "submit": "创建归档",
+        "done": "归档已就绪。",
+        "notified": "我们已通过邮件向此人发送下载链接。",
+        "until": "有效期至 {date}。",
+        "download": "下载归档（ZIP）",
+        "expired": "归档已过期并被删除。如此人需要另一份副本，请创建新请求。"
+      },
+      "erase": {
+        "title": "抹除此人",
+        "what": "其姓名、邮箱、电话、回答、消息和链接将从 Yayatoh 的所有部分中移除，提及此人的导出文件也会被删除。",
+        "holds": "已付款订单、贷记单、付款争议和同意记录会在法律要求的范围内保留，但不含姓名和邮箱，并列在回执中。",
+        "files": "其上传内容和之前的归档将从存储中删除。",
+        "final": "此操作无法撤销。",
+        "confirm": "输入 {email} 以确认",
+        "submit": "抹除个人数据",
+        "done": "已抹除。下方的签名回执列出了已抹除和已保留的内容及原因。"
+      },
+      "cancel": {
+        "title": "撤回请求",
+        "hint": "适用于此人已撤回请求或请求不真实的情况。原因会与请求一起记录。",
+        "reason": "原因",
+        "submit": "撤回请求"
+      },
+      "receipt": {
+        "title": "抹除回执",
+        "erased": "已抹除",
+        "held": "因法定保留义务而保留",
+        "noneErased": "没有需要抹除的内容。",
+        "noneHeld": "没有需要保留的内容。",
+        "table": "数据",
+        "action": "处理方式",
+        "rows": "记录数",
+        "ref": "记录",
+        "basis": "保留原因",
+        "until": "保留至",
+        "files": "{count, plural, =0 {没有删除任何已存储的文件。} other {已删除 # 个已存储的文件。}}",
+        "suppressed": "该地址已列入全平台的已抹除名单：除非此人主动同意，任何组织都不能再向其发送营销信息。",
+        "connectors": "{count, plural, =0 {无需通知任何已连接的服务。} other {已同时要求以下已连接的服务抹除此人：{names}。}}",
+        "signature": "使用 Ed25519 密钥 {key} 签名。",
+        "download": "下载回执（PDF）",
+        "notified": "我们已通过邮件向此人发送此回执的链接。",
+        "actions": {
+          "delete": "已删除",
+          "redact": "已移除个人数据",
+          "hold": "已保留，个人数据已移除"
+        },
+        "bases": {
+          "tax_accounting": "税务和会计记录（7 年）",
+          "payment_dispute": "付款争议的证据",
+          "accountability": "请求已处理的证明"
+        }
+      }
+    },
+    "pdf": {
+      "title": "抹除回执",
+      "request": "请求",
+      "person": "对象",
+      "source": "请求人",
+      "requested": "请求时间",
+      "due": "截止日期",
+      "completed": "抹除时间",
+      "signatureTitle": "签名",
+      "algorithm": "算法",
+      "keyId": "密钥 ID",
+      "digest": "回执 SHA-256",
+      "signature": "签名（base64）",
+      "footer": "由 Yayatoh 代表 {org} 签发。签名涵盖回执数据；请使用下方的公钥进行验证。"
     }
   },
   "privacyNotice": {
@@ -2737,7 +3097,8 @@
       "guests": "宾客人数",
       "markHandled": "标记为已处理",
       "markNew": "标记为新请求"
-    }
+    },
+    "layoutLibrary": "座位图库"
   },
   "details": {
     "title": "活动详情",
@@ -3346,7 +3707,39 @@
       "attendees_read": "读取参会者",
       "attendees_write": "修改参会者并重新发送门票",
       "checkin_scan": "扫描门票"
-    }
+    },
+    "expiry": "过期时间",
+    "expiryHint": "会过期的密钥必须在到期前轮换。有效期越短越安全。",
+    "expiryIn": {
+      "30": "30 天后",
+      "90": "90 天后",
+      "365": "一年后",
+      "never": "永不"
+    },
+    "expiresColumn": "过期时间",
+    "createdBy": "创建者",
+    "createdByPlatform": "Yayatoh",
+    "expired": "已过期",
+    "rotatedStatus": "已轮换",
+    "rotate": "轮换",
+    "rotateNamed": "轮换密钥 {name}",
+    "overlap": "旧密钥继续可用",
+    "overlapFor": {
+      "h0": "不保留：立即停用",
+      "h1": "1 小时",
+      "h24": "24 小时",
+      "h168": "7 天"
+    },
+    "rotateNow": "立即轮换",
+    "rotateNowNamed": "立即轮换密钥 {name}",
+    "rotated": "密钥“{name}”已轮换。旧密钥可用至 {until}。",
+    "rotatedNow": "密钥“{name}”已轮换。旧密钥已停用。",
+    "related": "API",
+    "usageLink": "用量",
+    "sandboxesLink": "沙盒",
+    "rateLimitNote": "每个密钥每分钟可发出 {perKey, number} 个请求，所有密钥合计 {perOrg, number} 个。",
+    "noApiAccess": "此组织的套餐不包含 API 访问：其密钥会被拒绝。",
+    "webhooksLink": "Webhook"
   },
   "market": {
     "wordmark": "Yayatoh",
@@ -4655,6 +5048,11 @@
     "terminated": {
       "title": "此组织已关闭",
       "body": "Yayatoh 支持团队已关闭此组织。其公开页面已下线，无法再做任何更改。作为所有者，你仍可打开它并下载你的数据，例如在“动态”中。"
+    },
+    "sandbox": {
+      "label": "沙盒",
+      "title": "沙盒",
+      "body": "这是一个测试组织。付款为模拟付款，不会扣款；其活动永远不会出现在市场上。"
     }
   },
   "seatingDates": {
@@ -4737,8 +5135,13 @@
       "slot_full": "此活动已有 20 张平面图图片。",
       "forbidden": "你无法更改此座位图。",
       "network": "上传失败。请检查网络连接后重试。",
-      "generic": "上传失败。请重试。"
-    }
+      "generic": "上传失败。请重试。",
+      "pdf_page": "该页不存在：此 PDF 共有 {pages, plural, other {# 页}}。",
+      "pdf_unreadable": "无法读取此 PDF。请将平面图导出为图片或另一个 PDF 后重试。"
+    },
+    "pdfPage": "页码（PDF）",
+    "pdfHint": "也可以使用 PDF 平面图：选择平面图所在的页。它会在你的浏览器中转换为图片，再作为图片上传。",
+    "pdfDrawing": "正在绘制 PDF 的第 {page} 页…"
   },
   "humanCheck": {
     "legend": "安全验证",
@@ -5070,7 +5473,9 @@
         "consent": "营销同意",
         "label": "标签",
         "totals": "累计数据",
-        "seen": "首次或最近出现"
+        "seen": "首次或最近出现",
+        "stats": "联系人统计",
+        "ltv": "终身价值"
       },
       "did": "规则",
       "didYes": "是",
@@ -5128,7 +5533,19 @@
       "event": "活动",
       "editionOf": "此前一届",
       "series": "系列",
-      "noSeries": "还没有系列"
+      "noSeries": "还没有系列",
+      "statsMetric": "指标",
+      "statsMetrics": {
+        "engagement": "参与度得分",
+        "noShowPct": "缺席倾向",
+        "sessionsAttended": "参加的分会场",
+        "campaignsOpened": "打开的营销活动",
+        "rfmRecency": "RFM 近度（五分位）",
+        "rfmFrequency": "RFM 频率（五分位）",
+        "rfmMonetary": "RFM 金额（五分位）"
+      },
+      "valuePercent": "百分比",
+      "quintile": "五分位（1–5）"
     },
     "scopes": {
       "any": "任意活动",
@@ -5183,7 +5600,10 @@
         "unknown_legacy": "未知（导入）",
         "none": "未同意"
       }
-    }
+    },
+    "peopleLink": "人员",
+    "duplicatesLink": "可能的重复",
+    "insights": "联系人洞察"
   },
   "refundOps": {
     "timeline": {
@@ -10864,6 +11284,1030 @@
       "waitlist_closed": "{title} 已满，候补名单已在场次开始前 24 小时关闭。",
       "offer_ended": "{title} 的邀请已结束。",
       "full": "{title} 刚刚满员。再试一次即可加入候补名单。"
+    }
+  },
+  "people": {
+    "title": "人员",
+    "audiences": "受众",
+    "description": "贵组织有记录的所有人，最新的在前。打开某人即可查看其完整历史。",
+    "duplicatesLink": "可能的重复",
+    "search": {
+      "label": "按姓名、邮箱或公司搜索",
+      "submit": "搜索",
+      "noneTitle": "没有匹配的人",
+      "noneDescription": "没有任何姓名、邮箱或公司包含“{q}”。请尝试更短的关键词。"
+    },
+    "emptyTitle": "还没有人员",
+    "emptyDescription": "有人购票、报名或被加入宾客名单后，会出现在这里。",
+    "caption": "人员",
+    "columns": {
+      "name": "姓名",
+      "email": "邮箱",
+      "company": "公司",
+      "added": "添加时间"
+    },
+    "next": "下一页",
+    "person": {
+      "title": "人员",
+      "details": "详情",
+      "mergedHere": "那条记录已合并到这条记录。"
+    },
+    "fields": {
+      "name": "姓名",
+      "email": "邮箱",
+      "phone": "电话",
+      "company": "公司",
+      "added": "添加时间",
+      "emailConsent": "营销邮件",
+      "smsConsent": "营销短信",
+      "history": "历史",
+      "empty": "未填写"
+    },
+    "merges": {
+      "title": "已合并的记录",
+      "line": "已于 {when} 合并 {who}。",
+      "moved": "{moved, plural, =0 {未移动任何内容。} other {已移动 # 项。}}",
+      "undoneOn": "已于 {when} 撤销。",
+      "undoUntil": "可在 {when} 前撤销。",
+      "erased": "一条已删除的记录"
+    },
+    "undo": {
+      "submit": "撤销合并",
+      "submitFor": "撤销对 {who} 的合并",
+      "done": "已撤销合并。两条记录已恢复为分开状态，与之前完全一致。",
+      "openOther": "打开另一条记录",
+      "errors": {
+        "expired": "此合并已超过 30 天，无法再撤销。",
+        "blocked": "此记录之后又被合并到另一条记录。请先撤销那次合并。",
+        "erased": "其中一条记录已被删除，因此无法再撤销合并。",
+        "undone": "此合并已被撤销。"
+      }
+    },
+    "errors": {
+      "forbidden": "你的角色无法合并人员。请联系所有者、管理员或经理。"
+    },
+    "timeline": {
+      "title": "时间线",
+      "kind": "类型",
+      "allKinds": "全部",
+      "event": "活动",
+      "allEvents": "全部活动",
+      "filter": "筛选",
+      "noMatchTitle": "没有符合这些筛选条件的内容",
+      "noMatchDescription": "选择“全部”或“全部活动”以查看更多。",
+      "emptyTitle": "这里还没有内容",
+      "emptyDescription": "订单、签到、营销活动、消息和问卷发生后会出现在这里。",
+      "listLabel": "{name} 的时间线",
+      "older": "更早"
+    },
+    "kinds": {
+      "order_paid": "订单已付款",
+      "order_refunded": "退款",
+      "checked_in": "已签到",
+      "session_attended": "参加了一场分会",
+      "campaign_sent": "营销活动已发送",
+      "campaign_opened": "打开了营销活动",
+      "campaign_clicked": "点击了营销活动",
+      "message_in": "给你发了消息",
+      "message_out": "你回复了",
+      "donation": "捐款",
+      "rsvp": "回复邀请",
+      "survey_sent": "问卷已发送",
+      "survey_responded": "回答了问卷"
+    },
+    "merge": {
+      "done": "记录已合并。你可以在 30 天内在此页面撤销。",
+      "submit": "合并记录",
+      "hint": "订单、门票、签到、消息和历史将转到保留的记录。合并可在 30 天内撤销。",
+      "errors": {
+        "alreadyMerged": "自你打开此页面后，其中一条记录已被合并或更改。请返回列表。",
+        "erased": "其中一条记录已被删除，无法合并。",
+        "unavailable": "现在无法合并，请稍后再试。",
+        "keep": "请选择保留哪条记录。"
+      }
+    },
+    "duplicates": {
+      "title": "可能的重复",
+      "description": "可能被记录了两次的人：相同邮箱、相同电话，或同一公司的相似姓名。",
+      "scan": "查找重复",
+      "lastScan": "上次检查：{when}。新联系人每隔几分钟会自动检查。",
+      "neverScanned": "尚未检查。",
+      "scanned": "{count, plural, =0 {未发现可能的重复。} other {发现 # 个可能的重复。}}",
+      "dismissedDone": "已标记为不是同一人。此组合不会再被推荐。",
+      "bulkDone": "{count, plural, =0 {未合并任何内容。} other {已合并 # 组。每次合并均可在 30 天内撤销。}}",
+      "statusNav": "按状态筛选",
+      "status": {
+        "open": "待处理（{count}）",
+        "dismissed": "非重复",
+        "merged": "已合并"
+      },
+      "caption": {
+        "open": "待审核的可能重复",
+        "dismissed": "标记为不是同一人的组合",
+        "merged": "已合并的组合"
+      },
+      "empty": {
+        "open": {
+          "title": "没有可能的重复",
+          "description": "选择“查找重复”立即检查所有人。新联系人会自动检查。"
+        },
+        "dismissed": {
+          "title": "没有已排除的",
+          "description": "你标记为不是同一人的组合会显示在这里。"
+        },
+        "merged": {
+          "title": "还没有合并",
+          "description": "你合并的组合会显示在这里。可在该人员页面撤销合并。"
+        }
+      },
+      "select": "选择",
+      "selectPair": "选择 {pair}",
+      "pair": "{a} 和 {b}",
+      "columns": {
+        "people": "人员",
+        "confidence": "可信度",
+        "reasons": "原因",
+        "review": "审核"
+      },
+      "score": "{score}%",
+      "review": "审核",
+      "reviewPair": "审核 {pair}",
+      "mergeSelected": "合并所选",
+      "mergeSelectedHint": "保留每组中较早的记录和最新的信息。系统会要求你确认身份。",
+      "errors": {
+        "noneSelected": "请至少选择一组进行合并。",
+        "tooMany": "每次最多选择 50 组。"
+      }
+    },
+    "reasons": {
+      "email": "相同邮箱地址",
+      "phone": "相同电话号码",
+      "name_company": "同一公司的相似姓名"
+    },
+    "compare": {
+      "title": "审核可能的重复",
+      "description": "可信度 {score}%：{reasons}。",
+      "resolved": "此组合已处理。",
+      "record": "记录 {n}",
+      "older": "（较早）",
+      "entries": "{count, plural, =0 {无条目} other {# 条}}",
+      "openTimeline": "打开{record}的时间线",
+      "consentTitle": "合并后的同意状态",
+      "consentEmail": "营销邮件：{status}",
+      "consentSms": "营销短信：{status}",
+      "consentRule": "以最严格的选择为准：只要任一记录已退订，合并后的记录即为退订。",
+      "keepLegend": "保留哪条记录",
+      "keepHint": "另一条记录会合并到这里。其邮箱地址仍能找到此人。",
+      "keepOption": "{record}（{email}）",
+      "fieldLegend": {
+        "name": "姓名",
+        "email": "邮箱",
+        "phone": "电话",
+        "company": "公司"
+      },
+      "fieldOption": "{record}：{value}",
+      "dismiss": "不是同一人"
+    },
+    "consent": {
+      "granted": "已订阅",
+      "withdrawn": "已退订",
+      "unknown_legacy": "未知（导入）",
+      "none": "无同意"
+    }
+  },
+  "contactStats": {
+    "title": "联系人",
+    "insightsTitle": "联系人洞察",
+    "insightsDescription": "你的参与者在所有活动中的表现：参与度、缺席、近度和频率。",
+    "audiencesLink": "受众",
+    "notLive": "此联系人已合并到其他联系人或已被清除，其统计数据不再计入。",
+    "emptyTitle": "暂无活动",
+    "emptyDescription": "此人报名活动、参加分会场或打开营销活动后，统计数据就会显示。",
+    "emptyAction": "创建受众",
+    "glance": "概览",
+    "events": "报名的活动",
+    "attended": "出席的活动",
+    "sessions": "参加的分会场",
+    "campaigns": "打开的营销活动",
+    "firstSeen": "首次出现",
+    "lastSeen": "最近出现",
+    "never": "—",
+    "lifetimeValue": "终身价值",
+    "lifetimeOrders": "{count, plural, other {# 笔已付款订单}}",
+    "noSpend": "暂无已付款订单。",
+    "noSpendOrg": "还没有人付过款。",
+    "scores": "得分",
+    "engagement": "参与度得分",
+    "engagementValue": "{score} / 100",
+    "engagementHow": "{wAttended} × {attended} 出席活动 + {wSessions} × {sessions} 分会场 + {wCampaigns} × {campaigns} 打开的营销活动 = {points} 分. 100 × {points} ÷ ({points} + {half}) = {score}.",
+    "noShow": "缺席倾向",
+    "noShowHow": "({noShows} 次缺席 + {priorNoShows}) ÷ ({past} 次过往报名 + {priorRegistrations}) = {pct}. 即将举行的活动暂不计入。",
+    "rfm": "RFM",
+    "rfmHow": "在本组织参加过活动的人中的五分位：5 为最高的五分之一。",
+    "rfmNone": "尚未排名：没有活动。",
+    "recency": "近度",
+    "frequency": "频率",
+    "monetary": "金额",
+    "quintileValue": "{q} / 5",
+    "updated": "更新于 {date}",
+    "viewContact": "查看联系人",
+    "headerSummary": "参与度 {score} · 缺席 {pct}",
+    "headerValue": "终身 {amount}",
+    "totals": "总计",
+    "total": {
+      "contacts": "联系人",
+      "participants": "参与过",
+      "attendedAny": "出席过",
+      "averageEngagement": "平均参与度",
+      "noShowRate": "缺席率"
+    },
+    "distributions": "分布",
+    "distribution": {
+      "engagement": "参与度得分",
+      "noShow": "缺席倾向",
+      "frequency": "参与的活动数",
+      "recency": "最近出现"
+    },
+    "showData": "显示数据",
+    "range": "区间",
+    "people": "人数",
+    "bandRange": "{from}–{to}",
+    "bandFrom": "{from} 及以上",
+    "recencyWithin": "{days} 天内",
+    "recencyOlder": "更早",
+    "value": {
+      "currency": "币种",
+      "payers": "付款人数",
+      "total": "总计",
+      "average": "平均",
+      "topFifth": "最高五分之一起点",
+      "max": "最高"
+    },
+    "orgEmptyTitle": "暂无联系人活动",
+    "orgEmptyDescription": "随着人们报名、签到、参加分会场和打开营销活动，统计数据会显示。",
+    "orgEmptyAction": "前往你的活动"
+  },
+  "privacyRequest": {
+    "title": "查询您的个人数据",
+    "description": "请 {org} 提供其持有的关于您的个人数据副本，或将其抹除。对方会在 30 天内答复。我们会先向您发送一个验证码邮件，以确认该地址属于您。",
+    "notice": "阅读 {org} 的隐私声明",
+    "kindLegend": "您想要什么？",
+    "access": "获取我的数据副本",
+    "accessHint": "您将收到一个 ZIP 文件链接，其中包含关于您的所有数据。",
+    "erasure": "抹除我的数据",
+    "erasureHint": "{org} 会从其记录中移除您，法律要求保留的内容除外（例如用于税务的已付款订单）。",
+    "email": "您的邮箱地址",
+    "emailHint": "您在此主办方使用的邮箱地址。",
+    "submit": "发送验证码到我的邮箱",
+    "sent": "我们已将 6 位验证码发送至 {email}。请输入验证码以确认请求。验证码 10 分钟内有效。",
+    "resent": "我们已向 {email} 发送新的验证码。",
+    "codeLabel": "验证码",
+    "confirm": "确认我的请求",
+    "resend": "发送新的验证码",
+    "changeEmail": "使用其他地址",
+    "doneTitle": "请求已收到",
+    "doneBody": "{org} 将在 {date} 前答复。您的参考编号是 {reference}。处理完成后您会收到邮件。",
+    "existingBody": "您在 {org} 已有一个未完成的请求。截止日期为 {date}；您的参考编号是 {reference}。",
+    "errors": {
+      "invalidEmail": "请输入有效的邮箱地址。",
+      "kindRequired": "请选择获取数据副本或抹除。",
+      "rateLimited": "{minutes, plural, other {尝试次数过多。请在 # 分钟后重试。}}",
+      "codeFormat": "请输入邮件中的 6 位数字。",
+      "wrong": "{count, plural, =0 {验证码不正确。请重新获取验证码。} other {验证码不正确。还剩 # 次机会。}}",
+      "locked": "错误次数过多。请重新获取验证码。",
+      "expired": "验证码已过期或已被使用。请重新获取验证码。",
+      "generic": "出了点问题。请重试。"
+    }
+  },
+  "apiUsage": {
+    "title": "API 用量",
+    "subtitle": "使用此组织 API 密钥发出的请求，按组织时区的每天统计。",
+    "back": "API 密钥",
+    "range": "时间段",
+    "lastDays": "最近 {days, number} 天",
+    "totalsTitle": "合计",
+    "requests": "请求",
+    "errors": "错误",
+    "rateLimited": "被限流",
+    "perDayTitle": "每天请求数",
+    "perKeyTitle": "每个密钥的请求数",
+    "day": "日期",
+    "showData": "显示数据",
+    "emptyTitle": "此时间段内没有 API 请求",
+    "emptyDescription": "使用你的密钥发出的请求会立即显示在这里。请在 API 密钥页面创建密钥。"
+  },
+  "sandboxes": {
+    "title": "沙盒",
+    "subtitle": "与此组织关联的测试组织，可安全地试用 API 和结账。",
+    "noAccessTitle": "只有所有者和管理员可以管理沙盒",
+    "noAccessDescription": "请让此组织的所有者或管理员为你创建一个。",
+    "factsTitle": "沙盒如何运作",
+    "factPayments": "付款始终是模拟的：无论平台如何设置，都不会扣款。",
+    "factMarketplace": "其活动永远不会出现在市场上。",
+    "factData": "初始包含一个示例活动和两种票种。",
+    "factKeys": "它有自己的 API 密钥和团队。你是它的所有者。",
+    "createTitle": "创建沙盒",
+    "name": "名称",
+    "nameHint": "例如“Staging”或“Zapier 测试”。",
+    "nameRequired": "请为沙盒命名。",
+    "create": "创建沙盒",
+    "creating": "正在创建…",
+    "created": "已创建沙盒“{name}”，并附带一个示例活动。",
+    "open": "打开沙盒 {name}",
+    "openShort": "打开",
+    "limit": "此组织已有 {max, number} 个沙盒，已达上限。请先删除一个。",
+    "sandboxOfSandbox": "沙盒不能再拥有沙盒",
+    "inSandboxDescription": "请在此沙盒所属的组织中创建沙盒。",
+    "listTitle": "你的沙盒",
+    "emptyTitle": "还没有沙盒",
+    "emptyDescription": "创建一个沙盒，用示例数据和模拟付款试用 API、结账和签到。",
+    "address": "地址",
+    "createdAt": "创建时间",
+    "actions": "操作",
+    "delete": "删除",
+    "deleteNamed": "删除沙盒 {name}",
+    "deleteWarning": "沙盒将被永久关闭：页面下线，成员和密钥失去访问权限。",
+    "deleteConfirm": "永久删除",
+    "deleteConfirmNamed": "永久删除沙盒 {name}"
+  },
+  "webhooks": {
+    "title": "Webhook",
+    "subtitle": "在事件发生时，把组织的事件发送到你自己的系统。",
+    "docs": "Webhook 指南和签名验证",
+    "related": "相关页面",
+    "portalLink": "打开 Webhook 门户",
+    "apiKeysLink": "API 密钥",
+    "noAccessTitle": "只有所有者和管理员可以管理 Webhook",
+    "noAccessDescription": "请让本组织的所有者或管理员添加或修改 Webhook 端点。",
+    "noModuleTitle": "你的套餐不包含 Webhook",
+    "noModuleDescription": "Webhook 随 API 访问一同提供。请联系我们为你的组织开通。",
+    "unavailableTitle": "Webhook 暂不可用",
+    "unavailableDescription": "本平台的 Webhook 发送仍在配置中，请稍后再来。",
+    "emptyTitle": "还没有 Webhook 端点",
+    "emptyDescription": "在下方添加接收端的 https 网址，然后向它发送一条测试消息。",
+    "listTitle": "端点",
+    "url": "端点网址",
+    "urlHint": "端口 443 上的 https，可从互联网访问。每条消息都有签名。",
+    "description": "说明",
+    "descriptionHint": "可选，供团队参考（最多 200 个字符）。",
+    "descriptionTooLong": "请不超过 200 个字符。",
+    "events": "事件",
+    "allEvents": "所有事件",
+    "eventCount": "{count, plural, other {# 个事件}}",
+    "status": "状态",
+    "active": "启用",
+    "disabled": "已暂停",
+    "createdAt": "添加时间",
+    "createTitle": "添加端点",
+    "settingsTitle": "端点设置",
+    "receive": "要发送的事件",
+    "receiveAll": "所有事件，包括新增的",
+    "receiveSelected": "只发送我选择的事件",
+    "typesRequired": "请至少选择一个事件，或发送所有事件。",
+    "groups": {
+      "orders": "订单和付款",
+      "tickets": "门票",
+      "checkin": "入场",
+      "events": "活动和票种",
+      "registration": "报名",
+      "engagement": "互动",
+      "meta": "测试"
+    },
+    "enabled": "向此端点发送消息",
+    "enabledHint": "关闭后可暂停投递，而不删除端点。",
+    "create": "添加端点",
+    "save": "保存更改",
+    "saved": "端点已保存。",
+    "limit": "本组织的端点数量已达上限。请先删除一个再添加。",
+    "urlProblem": {
+      "malformed": "请输入完整网址，例如 https://example.com/webhooks。",
+      "scheme": "请使用 https:// 网址。",
+      "credentials": "请从网址中删除用户名和密码。",
+      "port": "请使用标准 https 端口（443）。",
+      "host": "此主机无法接收 Webhook。请使用公网地址。",
+      "address": "此地址是私有或保留地址。请使用公网地址。",
+      "dns": "找不到此主机。请检查地址。",
+      "length": "此网址太长。"
+    },
+    "deleted": "端点已删除。",
+    "created": "端点已添加。发送一条测试消息来检查你的接收端。",
+    "back": "所有 Webhook 端点",
+    "endpointTitle": "Webhook 端点",
+    "testTitle": "发送测试消息",
+    "testEventType": "消息类型",
+    "testHint": "webhook.test，或任一事件及其文档中的示例数据。只有此端点会收到。",
+    "sendTest": "发送测试",
+    "testSent": "测试消息已发送（{type}）。投递情况见下方。",
+    "secretTitle": "签名密钥",
+    "secretHint": "用它来确认每条消息确实来自我们。",
+    "revealSecret": "显示密钥",
+    "hideSecret": "隐藏",
+    "copy": "复制",
+    "copied": "已复制",
+    "rotateHint": "新密钥将取代此密钥。24 小时内两者都会为每条消息签名，方便你完成部署。",
+    "rotateSecret": "轮换密钥",
+    "rotatedSecret": "密钥已轮换。之前的密钥在 24 小时内仍然有效。",
+    "deliveriesTitle": "最近的投递",
+    "deliveriesUnavailable": "暂时无法加载投递记录，请一分钟后重试。",
+    "noDeliveriesTitle": "还没有投递记录",
+    "noDeliveriesDescription": "发送一条测试消息，或等待下一个事件。",
+    "attemptedAt": "时间",
+    "eventType": "事件",
+    "response": "响应",
+    "noResponse": "无响应",
+    "trigger": "发送方式",
+    "triggerManual": "重新发送",
+    "triggerScheduled": "自动",
+    "nextRetry": "下次重试",
+    "actions": "操作",
+    "attemptSucceeded": "已送达",
+    "attemptFailed": "失败",
+    "attemptPending": "等待中",
+    "resend": "重新发送",
+    "resendNamed": "重新发送 {when} 的 {type}",
+    "resent": "已重新发送",
+    "recoverTitle": "恢复失败的消息",
+    "recoverHint": "如果接收端曾经宕机，可重新发送自某个时间以来所有失败的消息。",
+    "recoverSince": "失败时间范围",
+    "recoverWindow": {
+      "1h": "最近 1 小时",
+      "24h": "最近 24 小时",
+      "7d": "最近 7 天"
+    },
+    "recover": "重新发送失败的消息",
+    "recovering": "正在重新发送失败的消息。",
+    "deleteTitle": "删除此端点",
+    "deleteHint": "它会立即停止接收消息。此操作无法撤销。",
+    "delete": "删除端点",
+    "portalTitle": "Webhook 门户",
+    "portalSubtitle": "来自我们 Webhook 服务商的端点、投递日志和重新发送。",
+    "portalAlternative": "这里的所有功能也都在<link>Webhook 页面</link>中。",
+    "portalFrameTitle": "Webhook 门户",
+    "portalUnavailable": "暂时无法打开 Webhook 门户，请一分钟后重试。",
+    "fakePortal": {
+      "title": "Webhook 门户（测试模式）",
+      "subtitle": "服务商门户的替身：这里不会通过网络发送任何内容。",
+      "endpoints": "端点",
+      "url": "网址",
+      "types": "事件",
+      "allTypes": "全部",
+      "status": "状态",
+      "enabled": "启用",
+      "disabled": "已暂停",
+      "noEndpoints": "还没有端点",
+      "attempts": "最近的尝试",
+      "noAttempts": "还没有尝试",
+      "type": "事件",
+      "message": "消息",
+      "succeeded": "已送达",
+      "failed": "失败",
+      "at": "时间"
+    }
+  },
+  "developers": {
+    "brand": "Yayatoh 开发者",
+    "skip": "跳到正文",
+    "title": "开发者",
+    "subtitle": "基于 Yayatoh 构建：REST API、Webhook 和 SDK。",
+    "nav": {
+      "label": "开发者文档",
+      "home": "概览",
+      "guides": "指南",
+      "reference": "API 参考",
+      "events": "Webhook 事件"
+    },
+    "search": {
+      "label": "搜索文档",
+      "placeholder": "搜索指南、端点和事件",
+      "submit": "搜索",
+      "results": "{count, plural, =0 {没有结果} other {# 个结果}}",
+      "resultsLabel": "搜索结果",
+      "resultsFor": "“{query}”的搜索结果",
+      "none": "没有匹配项。试试其他词，例如“orders”或“webhook”。",
+      "kinds": {
+        "guide": "指南",
+        "operation": "端点",
+        "event": "事件"
+      }
+    },
+    "englishNotice": "指南和参考文档为英文。",
+    "startTitle": "从这里开始",
+    "cards": {
+      "guides": "逐步讲解 API 密钥、分页、幂等、Webhook 和沙盒。",
+      "reference": "根据 OpenAPI 生成的每个 /v1 端点及其参数和响应。",
+      "events": "每个 Webhook 事件及其版本化结构和示例。"
+    },
+    "guidesSubtitle": "基于 API 开发的分步指南。",
+    "backToGuides": "所有指南",
+    "reference": {
+      "title": "API 参考",
+      "subtitle": "根据 OpenAPI 文档生成的每个 /v1 端点。",
+      "interactive": "在交互式参考中试用",
+      "download": "下载 openapi.json",
+      "tags": "章节",
+      "auth": "身份验证",
+      "parameters": "参数",
+      "parametersOf": "{operation} 的参数",
+      "name": "名称",
+      "in": "位置",
+      "type": "类型",
+      "description": "说明",
+      "requestBody": "请求正文",
+      "responses": "响应"
+    },
+    "events": {
+      "title": "Webhook 事件",
+      "subtitle": "你的端点可能收到的每条消息及其版本化结构。数据只包含 ID 和事实，绝不包含个人数据。",
+      "verifyLink": "如何验证签名",
+      "groups": "事件分组",
+      "fieldsOf": "{type} 的字段",
+      "data": "data",
+      "field": "字段",
+      "type": "类型",
+      "required": "必填",
+      "yes": "是",
+      "no": "否",
+      "example": "{type} 消息示例"
+    }
+  },
+  "billingPlan": {
+    "title": "套餐和模块",
+    "subtitle": "您的套餐、包含的模块以及每张门票手续费的计算方式。",
+    "noAccessTitle": "只有所有者、管理员和财务可以查看套餐",
+    "noAccessDescription": "如需套餐详情，请联系此组织的所有者。",
+    "dormantTitle": "订阅尚未开启",
+    "dormantBody": "您的组织保持当前套餐，并保留现有的全部模块。订阅上线前一切不变。",
+    "inactiveTitle": "此组织尚未启用计费",
+    "inactiveBody": "您的组织保持当前套餐，并保留现有的全部模块。计费设置完成前一切不变。",
+    "updatedTitle": "已收到套餐变更",
+    "updatedBody": "计费服务商已确认变更。下方模块已是最新。",
+    "currentPlan": "当前套餐",
+    "pricePerMonth": "每月 {price}",
+    "pricePerYear": "每年 {price}",
+    "priceQuote": "定制报价",
+    "renews": "将于 {date} 续订",
+    "endsOn": "将于 {date} 结束",
+    "source": {
+      "subscription": "订阅",
+      "plan": "附带套餐"
+    },
+    "status": {
+      "active": "有效",
+      "trialing": "试用",
+      "past_due": "付款逾期",
+      "canceled": "已取消",
+      "unpaid": "未付款",
+      "paused": "已暂停",
+      "incomplete": "未完成",
+      "incomplete_expired": "已过期"
+    },
+    "fees": {
+      "title": "每张门票手续费",
+      "grandfathered": "您原有的每张门票手续费保持不变。更换套餐不会改变它们。",
+      "plan": "每张门票手续费按 {plan} 套餐计算。"
+    },
+    "modules": {
+      "title": "您的模块",
+      "description": "您的组织现在可以使用的功能。",
+      "count": "{count, plural, other {# 个模块}}"
+    },
+    "catalog": {
+      "title": "套餐",
+      "description": "暂定套餐：价格尚未确定，目前没有在售。",
+      "empty": "暂无套餐。",
+      "plan": "套餐",
+      "price": "价格",
+      "modules": "模块",
+      "status": "状态",
+      "onSale": "在售",
+      "notOnSale": "尚未开售"
+    },
+    "test": {
+      "title": "测试计费（仅限开发环境）",
+      "body": "通过测试计费服务商模拟套餐变更。它发送与真实服务商相同的 Webhook。",
+      "open": "打开测试计费门户"
+    },
+    "planName": {
+      "launch_standard": "上线标准版",
+      "tier_free": "免费版",
+      "tier_starter": "入门版",
+      "tier_pro": "专业版",
+      "tier_agency": "代理版",
+      "tier_enterprise": "企业版"
+    },
+    "module": {
+      "core": "基础",
+      "events": "活动",
+      "ticketing": "票务",
+      "orders": "订单",
+      "attendees": "参与者",
+      "checkin": "签到",
+      "seating": "座位",
+      "seat_finder": "座位查找",
+      "guests": "宾客名单",
+      "rsvp": "回复邀请",
+      "distribution": "分销",
+      "access_codes": "访问码",
+      "marketing": "营销",
+      "messaging": "消息",
+      "reports": "报表",
+      "whitelabel": "白标",
+      "ai": "AI 助手",
+      "chat": "聊天",
+      "donations": "捐款",
+      "registration": "报名",
+      "sessions": "分会场",
+      "speakers": "演讲嘉宾",
+      "exhibitors": "参展商",
+      "sponsors": "赞助商",
+      "badges": "胸牌",
+      "gallery": "相册",
+      "website": "网站",
+      "api_access": "API 访问",
+      "integrations": "集成",
+      "enterprise": "SSO 和 SCIM",
+      "agency": "代理",
+      "virtual": "线上活动",
+      "advanced_seating": "高级座位",
+      "ai_seating": "AI 排座",
+      "analytics_pro": "高级分析"
+    }
+  },
+  "billingPortal": {
+    "eyebrow": "测试计费",
+    "title": "选择套餐",
+    "description": "仅限开发环境。此页面代替计费服务商的门户，并发送相同的 Webhook。",
+    "planLegend": "套餐",
+    "switch": "更换套餐",
+    "cancel": "取消订阅",
+    "back": "不做更改并返回",
+    "chooseError": "请选择要更换到的套餐。"
+  },
+  "seatingLibrary": {
+    "title": "座位图库",
+    "description": "你从活动中保存的座位图。可从其中之一创建新活动；每个活动都保留自己的副本。",
+    "deleted": "座位图已从图库删除。使用过它的活动仍保留各自的副本。",
+    "emptyTitle": "你的座位图库是空的",
+    "emptyHint": "打开某个活动的座位图并选择“保存座位图”，即可保存在这里。",
+    "emptyViewer": "从活动中保存的座位图会显示在这里。",
+    "toEvents": "前往活动",
+    "startTitle": "从座位图创建新活动",
+    "startDescription": "新活动会获得一份座位图副本。之后你为座位定价并开始销售。",
+    "layout": "座位图",
+    "layoutOption": "{name}（{seats, plural, other {# 个座位}}）",
+    "eventName": "活动名称",
+    "profile": "活动类型",
+    "timezone": "时区",
+    "startsAt": "开始",
+    "endsAt": "结束",
+    "start": "创建活动",
+    "fixErrors": "请修正标出的字段。",
+    "errors": {
+      "layoutId": "请选择座位图。",
+      "name": "请为活动命名（2 到 160 个字符）。",
+      "slug": "已有同名活动。请换一个名称。",
+      "profile": "请选择带座位的活动类型。",
+      "startsAt": "请输入活动开始时间。",
+      "endsAt": "请输入活动结束时间，须晚于开始时间。",
+      "layoutName": "请为座位图命名（最多 120 个字符）。"
+    },
+    "listTitle": "已保存的座位图",
+    "seats": "{count, plural, other {# 个座位}}",
+    "rows": "{count, plural, other {# 排}}",
+    "tables": "{count, plural, other {# 桌}}",
+    "withImage": "附平面图图片",
+    "usedBy": "{count, plural, =0 {尚未被活动使用} other {被 # 个活动使用}}",
+    "updated": "更新于 {date}",
+    "renameLabel": "{name} 的名称",
+    "rename": "重命名",
+    "renamed": "已重命名。",
+    "startFrom": "用它创建活动",
+    "startFromNamed": "用 {name} 创建活动",
+    "delete": "删除",
+    "deleteNamed": "删除 {name}"
+  },
+  "warehouse": {
+    "title": "数据分析",
+    "description": "汇总所有活动：报名、门票、签到和未到场随时间的变化，以及表现最好的活动。",
+    "filters": "筛选",
+    "from": "开始日期",
+    "to": "结束日期",
+    "event": "活动",
+    "allEvents": "所有活动",
+    "apply": "应用",
+    "timeZoneNote": "日期按贵组织时区 {timeZone} 的自然日计算。",
+    "rangeErrors": {
+      "invalid_date": "请按年、月、日输入日期。",
+      "from_after_to": "结束日期早于开始日期。",
+      "range_too_long": "请选择不超过两年的时间段。"
+    },
+    "periodLabel": "显示方式",
+    "view": {
+      "day": "按日",
+      "week": "按周",
+      "month": "按月"
+    },
+    "emptyTitle": "该时间段内暂无数据",
+    "emptyBody": "这些日期之间没有报名、门票或签到。请尝试更长的时间段或其他活动；新订单会在几秒内显示在这里。",
+    "emptyAction": "显示最近 12 个月",
+    "figures": {
+      "label": "该时间段合计",
+      "registrations": "报名",
+      "ticketsIssued": "已出付费门票",
+      "tickets": "售出门票",
+      "compTickets": "免费门票",
+      "checkins": "签到",
+      "noShows": "未到场"
+    },
+    "revenue": {
+      "title": "收入",
+      "net": "净销售额（{currency}）",
+      "grossRefunds": "已付 {gross}，已退 {refunds}",
+      "byPeriod": "按时间段的收入",
+      "noRevenue": "该时间段内没有销售或退款。",
+      "period": "时间段",
+      "currency": "币种",
+      "gross": "已付",
+      "refunds": "已退",
+      "netColumn": "净额",
+      "topEvents": "收入最高的活动",
+      "eventColumn": "活动",
+      "weekOf": "{day} 起的一周"
+    },
+    "trend": "趋势",
+    "chartTitle": "报名、付费门票和签到的趋势",
+    "byPeriod": "按时间段的数据",
+    "period": "时间段",
+    "topEvents": "表现最好的活动",
+    "noTopEvents": "该时间段内没有活动有报名。",
+    "definitions": "售出门票为付费门票减去已退款门票。签到按每张门票首次入场的日期计一次。未到场为从未签到的有效门票，计入活动结束当天。",
+    "definitionsFinance": "售出门票为付费门票减去已退款门票。签到按每张门票首次入场的日期计一次。未到场为从未签到的有效门票，计入活动结束当天。收入为买家支付金额减去退款，按币种分别计算，未扣除平台费用（见财务）。",
+    "rebuildTitle": "重建数据分析",
+    "rebuildBody": "根据您的订单和签到重新计算本页所有数据，每次处理几个活动。更改组织时区后请使用此功能。",
+    "rebuild": "重建",
+    "rebuilding": "正在启动…",
+    "rebuildStarted": "已开始重建",
+    "rebuildStartedBody": "数据正在后台重新计算；在此期间本页仍可使用。",
+    "rebuildRunning": "已有重建正在进行。",
+    "runStatus": {
+      "running": "进行中",
+      "done": "已完成",
+      "failed": "失败",
+      "cancelled": "已取消"
+    },
+    "runProgress": "{events, plural, other {已检查 # 个活动}}，{written, plural, other {已更新 # 个}}"
+  },
+  "integrations": {
+    "title": "集成",
+    "description": "连接你已在使用的工具。联系人和记录在双向保持同步，有需要处理的情况时会通知你。",
+    "tabsLabel": "集成分区",
+    "tabs": {
+      "connections": "连接",
+      "errors": "错误"
+    },
+    "cancelled": "连接已取消。",
+    "offTitle": "此处尚未开启集成",
+    "offDescription": "连接需要集成服务，而本站点尚未配置。请联系平台管理员。",
+    "noneTitle": "暂时没有可连接的集成",
+    "noneDescription": "新的集成一旦可用，就会显示在此页面。",
+    "connectors": {
+      "demo": {
+        "description": "用于试用集成的测试联系人应用：联系人与你的 CRM 双向同步。仅限测试环境。"
+      }
+    },
+    "sandboxBadge": "测试",
+    "account": "账户",
+    "lastSync": "上次同步",
+    "never": "从未",
+    "openErrors": "未解决的错误",
+    "openErrorCount": "{count, plural, other {# 条记录需要处理}}",
+    "noErrors": "无",
+    "notInPlan": "不在你的套餐内",
+    "manage": "管理",
+    "manageNamed": "管理 {name}",
+    "connect": "连接",
+    "connectNamed": "连接 {name}",
+    "reconnect": "重新连接",
+    "reconnectNamed": "重新连接 {name}",
+    "readOnly": "只有所有者和管理员可以连接或更改集成。",
+    "breadcrumb": "面包屑导航",
+    "objects": {
+      "contacts": "联系人"
+    },
+    "fields": {
+      "email": "电子邮件",
+      "name": "姓名"
+    },
+    "status": {
+      "none": "未连接",
+      "pending": "等待授权",
+      "active": "已连接",
+      "paused": "已暂停",
+      "revoked": "已断开",
+      "failed": "连接失败"
+    },
+    "runStatus": {
+      "queued": "排队中",
+      "running": "进行中",
+      "succeeded": "已同步",
+      "partial": "已同步（有错误）",
+      "failed": "失败",
+      "cancelled": "已取消"
+    },
+    "errorsFeedback": {
+      "unavailable": "此集成在这里不可用。",
+      "provider_unavailable": "无法连接到服务商。请几分钟后再试。",
+      "not_approved": "服务商尚未确认连接。请在对方完成连接后再检查。",
+      "denied": "连接未获授权，因此没有连接任何内容。",
+      "expired": "该连接链接已过期。请重新点击“连接”开始。",
+      "validation_failed": "有些信息需要修改。",
+      "forbidden": "你没有访问权限。",
+      "module_not_enabled": "你的套餐不包含集成。",
+      "not_found": "未找到相关内容。",
+      "conflict": "此集成已连接。",
+      "invalid_state": "现在无法执行此操作。",
+      "impersonation_blocked": "以成员身份操作的员工无法连接集成。",
+      "read_only_freeze": "计划维护期间暂停更改。请在维护结束后再试。",
+      "internal": "我们这边出了点问题。"
+    },
+    "detail": {
+      "title": "集成",
+      "syncNow": "立即同步",
+      "syncing": "同步即将开始",
+      "connected": "{name} 已连接。首次同步即将开始。",
+      "sync": {
+        "queued": "同步已开始。稍后刷新即可查看结果。",
+        "already": "已有一次同步正在进行。"
+      },
+      "done": {
+        "paused": "同步已暂停。",
+        "resumed": "同步已恢复。",
+        "interval": "同步计划已保存。",
+        "disconnected": "已断开。不再同步任何内容，并已在服务商处撤销访问权限。"
+      },
+      "revoked": {
+        "user": "已于 {when} 断开。",
+        "provider": "服务商自 {when} 起不再接受此连接，因此同步已停止。请重新连接以继续。"
+      },
+      "pending": "正在等待服务商授权此连接。",
+      "checkConnection": "检查连接",
+      "cancelConnect": "取消",
+      "confirmDisconnect": "要断开 {name} 吗？",
+      "confirmDisconnectBody": "同步会立即停止，并在服务商处撤销 Yayatoh 的访问权限。已同步的记录保持不变。",
+      "disconnect": "断开",
+      "keep": "保持连接",
+      "statusTitle": "状态",
+      "connectedAt": "连接时间",
+      "nextSync": "下次同步",
+      "interval": "同步频率",
+      "saveInterval": "保存计划",
+      "pause": "暂停同步",
+      "resume": "恢复同步",
+      "intervals": {
+        "15": "每 15 分钟",
+        "60": "每小时",
+        "360": "每 6 小时",
+        "1440": "每天"
+      }
+    },
+    "mapping": {
+      "sectionTitle": "字段映射",
+      "sectionHelp": "选择由哪个字段填充哪个字段。每次保存都会生成新版本，下次同步时使用。",
+      "title": {
+        "pull": "导入 Yayatoh",
+        "push": "导出到服务商"
+      },
+      "help": {
+        "pull": "用服务商的字段填充 Yayatoh 的字段。",
+        "push": "用 Yayatoh 的字段填充服务商的字段。"
+      },
+      "version": "版本 {version}",
+      "saved": "映射已保存为版本 {version}。下次同步时使用。",
+      "invalid": "此映射暂时无法保存。请检查下面标出的字段。",
+      "required": "必填",
+      "source": "来源",
+      "transform": "转换",
+      "default": "为空时使用",
+      "notMapped": "— 未映射 —",
+      "transforms": {
+        "none": "保持不变",
+        "trim": "去除空格",
+        "lowercase": "小写",
+        "uppercase": "大写",
+        "title_case": "单词首字母大写",
+        "first_word": "第一个词",
+        "last_word": "最后一个词",
+        "to_number": "数字",
+        "to_boolean": "是或否",
+        "to_date": "日期"
+      },
+      "save": {
+        "pull": "保存导入映射",
+        "push": "保存导出映射"
+      },
+      "issue": {
+        "missing_required": "请选择 {field} 的来源：此项必填。",
+        "unknown_source": "服务商没有这个字段。",
+        "unknown_target": "无法填充 {field}。",
+        "duplicate_target": "{field} 被填充了两次。",
+        "other": "请检查此字段。"
+      }
+    },
+    "runs": {
+      "title": "最近的同步",
+      "caption": "此集成最近的同步",
+      "empty": "还没有同步。连接后不久就会开始首次同步。",
+      "when": "开始时间",
+      "trigger": "发起方",
+      "status": "结果",
+      "pulled": "导入",
+      "pushed": "导出",
+      "skipped": "未变化",
+      "failed": "错误",
+      "error": "问题",
+      "triggers": {
+        "manual": "立即同步",
+        "schedule": "计划",
+        "retry": "重试"
+      }
+    },
+    "codes": {
+      "auth_revoked": "服务商不再接受此连接",
+      "invalid_token": "服务商不再接受此连接",
+      "auth_failed": "服务商拒绝了连接",
+      "invalid_value": "某个值不符合其字段",
+      "missing_required": "必填字段为空",
+      "transform_failed": "某个值无法转换",
+      "duplicate_record": "两条记录指向同一个联系人",
+      "write_failed": "无法保存到 Yayatoh",
+      "push_failed": "无法发送到服务商",
+      "network": "无法连接到服务商",
+      "lease_expired": "同步意外停止",
+      "disconnected": "因断开而停止",
+      "paused": "因暂停而停止",
+      "sync_failed": "同步失败",
+      "unknown_connector": "此集成已不可用",
+      "other": "错误（{code}）"
+    },
+    "inbox": {
+      "title": "集成错误",
+      "description": "无法同步的记录，按原因分组。系统会在一段时间内自动重试。请在来源处修正记录后点击“重试”，或忽略不需要的记录。",
+      "retried": "{count, plural, =0 {没有可重试的内容：这些连接未处于活动状态。} other {# 条记录将在下次同步时重试。}}",
+      "dismissed": "{count, plural, other {已忽略 # 条记录。}}",
+      "filterLabel": "显示错误",
+      "status": {
+        "open": "未解决",
+        "resolved": "已解决",
+        "dismissed": "已忽略"
+      },
+      "empty": {
+        "open": "没有未解决的错误",
+        "resolved": "暂无已解决的错误",
+        "dismissed": "暂无已忽略的错误"
+      },
+      "emptyOpenHelp": "全部已同步。如果有记录无法同步，会连同下一步操作显示在这里。",
+      "backToConnections": "前往连接",
+      "groupTitle": "{connector}：{step} · {count, plural, other {# 条记录}}",
+      "steps": {
+        "auth": "连接",
+        "pull": "从服务商读取",
+        "map": "映射",
+        "write": "保存到 Yayatoh",
+        "push": "发送到服务商"
+      },
+      "field": "字段：{field}",
+      "lastSeen": "最近出现于 {when}",
+      "retryAll": "全部重试",
+      "retryAllNamed": "全部重试：{group}",
+      "dismissAll": "全部忽略",
+      "dismissAllNamed": "全部忽略：{group}",
+      "recordsCaption": "记录：{group}",
+      "record": "记录",
+      "object": "类型",
+      "objectDirection": "{object}（{direction}）",
+      "directions": {
+        "pull": "导入",
+        "push": "导出"
+      },
+      "wholeConnection": "整个连接",
+      "attempts": "尝试次数",
+      "nextRetry": "下次自动重试",
+      "closedAt": "关闭时间",
+      "manualRetry": "等待你处理",
+      "actions": "操作",
+      "retry": "重试",
+      "retryNamed": "重试 {record}",
+      "dismiss": "忽略",
+      "dismissNamed": "忽略 {record}",
+      "more": "{count, plural, other {另有 # 条记录未显示。}}"
+    },
+    "fakeConsent": {
+      "title": "测试授权",
+      "eyebrow": "测试服务商",
+      "heading": "要将 {name} 连接到 Yayatoh 吗？",
+      "body": "{name} 是测试服务商。允许后，Yayatoh 可以代表你读取和写入以下内容：",
+      "allow": "允许",
+      "deny": "拒绝"
     }
   }
 }

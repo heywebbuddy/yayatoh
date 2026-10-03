@@ -3,8 +3,10 @@ import { alertEvaluator, evaluateOrgNow, watchQuietDevices } from '@yayatoh/aler
 import { attendeeMessageMailer } from '@yayatoh/attendees';
 import { getUsersByIds } from '@yayatoh/auth';
 import { journeySubscribers, runDueActions } from '@yayatoh/automations';
+import { campaignsTimeline } from '@yayatoh/campaigns';
 import {
   chatReportSignals,
+  checkinTimeline,
   checkoutRiskSignals,
   fraudSignalAlerts,
   sendStaffAlertPushes,
@@ -16,7 +18,12 @@ import { findEventTx, portalInviteMailer } from '@yayatoh/events';
 import { registrationResumeMailer } from '@yayatoh/forms';
 import { invitationMailer as guestInvitationMailer } from '@yayatoh/guests';
 import { createCtx } from '@yayatoh/kernel';
-import { announcementMailer, contactWroteNotifier, threadReplyMailer } from '@yayatoh/messaging';
+import {
+  announcementMailer,
+  contactWroteNotifier,
+  messagingTimeline,
+  threadReplyMailer,
+} from '@yayatoh/messaging';
 import {
   createNotifier,
   type DispatchDeps,
@@ -34,6 +41,7 @@ import {
   creditNoteMailer,
   invoiceMailer,
   orderLinkMailer,
+  ordersTimeline,
   postponementMailer,
   refundDeclineMailer,
   refundMailer,
@@ -60,7 +68,7 @@ import {
   registrationCapacity,
   registrationEnrollment,
 } from '@yayatoh/registration';
-import { surveyMailer } from '@yayatoh/surveys';
+import { surveyMailer, surveysTimeline } from '@yayatoh/surveys';
 import { impersonationNotice, invitationMailer, orgStatusNotice } from '@yayatoh/tenancy';
 import {
   claimLinkMailer,
@@ -152,6 +160,12 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     // M4.8b: receipts per paid gift or charity-ticket order, and year-end statements (as in the worker).
     receiptIssuer({ notifier, appOrigin }),
     statementMailer({ notifier, appOrigin }),
+    // M6.1a: the person timeline (crm projection), as in the worker.
+    ordersTimeline(),
+    checkinTimeline(),
+    messagingTimeline(),
+    surveysTimeline(),
+    campaignsTimeline(),
   ];
 }
 
