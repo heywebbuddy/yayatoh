@@ -1,5 +1,15 @@
 import { expect, type Page, test } from '@playwright/test';
-import { ageSession, codeForKey, confirmStepUp, expectAccessible, newUser, signIn } from './helpers.ts';
+import {
+  ageSession,
+  codeForKey,
+  confirmStepUp,
+  expectAccessible,
+  inOptions,
+  newUser,
+  pickOption,
+  pickWithKeyboard,
+  signIn,
+} from './helpers.ts';
 
 test.describe('team and invitations', () => {
   test.use({ viewport: { width: 1280, height: 900 } });
@@ -9,7 +19,7 @@ test.describe('team and invitations', () => {
     await page.goto('/o/lakeside-events/team');
     const email = `invitee-${Date.now()}@example.test`;
     await page.getByLabel('Email address').fill(email);
-    await page.getByLabel('Role', { exact: true }).selectOption('scanner');
+    await pickOption(page.getByLabel('Role', { exact: true }), 'scanner');
     await page.getByRole('button', { name: 'Send invitation' }).click();
     await expect(page.getByText('Invitation sent.')).toBeVisible();
     const row = page.getByRole('listitem').filter({ hasText: email });
@@ -55,7 +65,7 @@ test.describe('team: change roles and remove members (M1.2c leftover)', () => {
     await ageSession(page);
     const row = page.getByRole('row').filter({ hasText: name });
     await expect(roleCell(page, name)).toHaveText('Viewer');
-    await row.getByLabel(`Role for ${name}`, { exact: true }).selectOption('manager');
+    await pickOption(row.getByLabel(`Role for ${name}`, { exact: true }), 'manager');
     await row.getByRole('button', { name: `Save role for ${name}` }).click();
     await confirmStepUp(page, codeForKey(owner.setupKey ?? ''));
     await expect(page.getByRole('status').filter({ hasText: `${name}'s role was changed.` })).toBeVisible();
@@ -87,8 +97,7 @@ test.describe('team: change roles and remove members (M1.2c leftover)', () => {
     await page.goto(`/o/${owner.orgSlug}/team`);
     const row = page.getByRole('row').filter({ hasText: name });
     const select = row.getByLabel(`Role for ${name}`, { exact: true });
-    await select.focus();
-    await select.selectOption('scanner');
+    await pickWithKeyboard(select, 'scanner');
     await page.keyboard.press('Tab');
     await expect(row.getByRole('button', { name: `Save role for ${name}` })).toBeFocused();
     await page.keyboard.press('Enter');
@@ -107,7 +116,7 @@ test.describe('team: change roles and remove members (M1.2c leftover)', () => {
     const { owner, ownerName: myName, name } = await ownerWithTeammate(page, 'admin');
     await page.goto(`/o/${owner.orgSlug}/team`);
     const me = page.getByRole('row').filter({ hasText: myName });
-    await me.getByLabel(`Role for ${myName}`, { exact: true }).selectOption('admin');
+    await pickOption(me.getByLabel(`Role for ${myName}`, { exact: true }), 'admin');
     await me.getByRole('button', { name: `Save role for ${myName}` }).click();
     await expect(
       me.getByRole('alert').filter({ hasText: 'An organization needs at least one owner.' }),
@@ -127,9 +136,9 @@ test.describe('team: change roles and remove members (M1.2c leftover)', () => {
     await expect(ownerRow.getByText('Only owners can change owners')).toBeVisible();
     await expect(ownerRow.getByRole('button', { name: /^Remove/ })).toHaveCount(0);
     const teammate = adminPage.getByRole('row').filter({ hasText: name });
-    await expect(
-      teammate.getByLabel(`Role for ${name}`, { exact: true }).locator('option[value="owner"]'),
-    ).toHaveCount(0);
+    await inOptions(teammate.getByLabel(`Role for ${name}`, { exact: true }), (list) =>
+      expect(list.locator('[data-value="owner"]')).toHaveCount(0),
+    );
     await adminContext.close();
   });
 
@@ -140,7 +149,7 @@ test.describe('team: change roles and remove members (M1.2c leftover)', () => {
     const { owner, name } = await ownerWithTeammate(page);
     await page.goto(`/o/${owner.orgSlug}/team`);
     const row = page.getByRole('row').filter({ hasText: name });
-    await row.getByLabel(`Role for ${name}`, { exact: true }).selectOption('manager');
+    await pickOption(row.getByLabel(`Role for ${name}`, { exact: true }), 'manager');
     const [request] = await Promise.all([
       page.waitForRequest((r) => r.method() === 'POST' && Boolean(r.headers()['next-action'])),
       row.getByRole('button', { name: `Save role for ${name}` }).click(),

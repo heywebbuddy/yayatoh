@@ -3,7 +3,7 @@ import { listEventsQuery } from '@yayatoh/events';
 import { executeQuery } from '@yayatoh/kernel';
 import { ALERTS_CHANNEL, realtimeChannelName } from '@yayatoh/platform';
 import { roleCan } from '@yayatoh/tenancy';
-import { buttonClass, Card, EmptyState, PageHeader, StatusDot } from '@yayatoh/ui';
+import { buttonClass, Card, EmptyState, PageHeader, Select, StatusDot } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { AlertActions } from '@/components/alert-actions.tsx';
@@ -104,14 +104,14 @@ export default async function AlertsPage({
             <label htmlFor="alerts-event" className="text-[13px] font-bold text-ink">
               {t('eventLabel')}
             </label>
-            <select id="alerts-event" name="event" defaultValue={eventId ?? ''} className="field">
+            <Select id="alerts-event" name="event" defaultValue={eventId ?? ''} className="field">
               <option value="">{t('allEvents')}</option>
               {events.map((e) => (
                 <option key={e.id} value={e.id}>
                   {e.name}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
           <button type="submit" className={buttonClass('secondary')}>
             {t('apply')}

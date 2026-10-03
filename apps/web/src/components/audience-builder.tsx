@@ -18,7 +18,7 @@ import {
   TOTAL_METRICS,
   templateDefinition,
 } from '@yayatoh/audiences/client';
-import { Alert, Button, Input, Table } from '@yayatoh/ui';
+import { Alert, Button, DatePicker, Input, Select, Table } from '@yayatoh/ui';
 import { useLocale, useTranslations } from 'next-intl';
 import { type ReactNode, useActionState, useEffect, useId, useMemo, useRef, useState } from 'react';
 import type { PreviewResult, SaveAudienceState } from '@/app/[locale]/o/[org]/(org)/audiences/actions.ts';
@@ -383,14 +383,14 @@ function Templates({
       <div className="flex flex-wrap items-end gap-3">
         <label className="flex flex-col gap-1.5 text-[13px] font-bold text-ink">
           {key === 'lastYearNotThisYear' ? t('templates.thisYearsEvent') : t('templates.event')}
-          <select className={SELECT} value={eventId} onChange={(e) => setEventId(e.target.value)}>
+          <Select className={SELECT} value={eventId} onValueChange={(v) => setEventId(v)}>
             {events.length === 0 ? <option value="">{t('templates.noEvents')}</option> : null}
             {events.map((e) => (
               <option key={e.id} value={e.id}>
                 {t('eventOption', { name: e.name, date: e.date })}
               </option>
             ))}
-          </select>
+          </Select>
         </label>
         {needsTypes ? (
           <fieldset className="flex flex-col gap-1.5">
@@ -463,14 +463,14 @@ function GroupEditor({
       <legend className="px-1 text-[13px] font-bold text-ink">{title}</legend>
       <label className="flex flex-wrap items-center gap-2 text-caption text-ink-2">
         {t('match')}
-        <select
+        <Select
           className={SELECT}
           value={group.op}
-          onChange={(e) => p.set(path, (g) => ({ ...(g as DraftGroup), op: e.target.value as 'and' | 'or' }))}
+          onValueChange={(v) => p.set(path, (g) => ({ ...(g as DraftGroup), op: v as 'and' | 'or' }))}
         >
           <option value="and">{t('all')}</option>
           <option value="or">{t('any')}</option>
-        </select>
+        </Select>
       </label>
       {group.conditions.length === 0 ? <p className="text-caption text-ink-2">{t('emptyGroup')}</p> : null}
       <ol className="flex list-none flex-col gap-3 p-0">
@@ -503,18 +503,18 @@ function GroupEditor({
         <label className="flex flex-col gap-1.5 text-[13px] font-bold text-ink" htmlFor={`${id}-type`}>
           {t('conditionType')}
         </label>
-        <select
+        <Select
           id={`${id}-type`}
           className={SELECT}
           value={adding}
-          onChange={(e) => setAdding(e.target.value as ConditionType)}
+          onValueChange={(v) => setAdding(v as ConditionType)}
         >
           {CONDITION_TYPES.filter((ct) => ct !== 'ltv' || p.canMoney).map((ct) => (
             <option key={ct} value={ct}>
               {t(`types.${ct}`)}
             </option>
           ))}
-        </select>
+        </Select>
         <Button
           type="button"
           size="sm"
@@ -568,22 +568,21 @@ function ConditionEditor({ node, path, ...p }: EditorProps & { node: Draft; path
     options: readonly (readonly [string, string])[],
     on: (v: string) => void,
   ) => (
-    <select className={SELECT} value={value} onChange={(e) => on(e.target.value)}>
+    <Select className={SELECT} value={value} onValueChange={(v) => on(v)}>
       {options.map(([v, l]) => (
         <option key={v} value={v}>
           {l}
         </option>
       ))}
-    </select>
+    </Select>
   );
   const date = (label: string, key: string) =>
     field(
       label,
-      <input
-        type="date"
+      <DatePicker
         className={SELECT}
         value={(node[key] as string | null) ?? ''}
-        onChange={(e) => put({ [key]: e.target.value || null })}
+        onValueChange={(v) => put({ [key]: v || null })}
       />,
     );
   const ops = COMPARISONS.map((o) => [o, t(`ops.${o}`)] as const);
@@ -911,41 +910,33 @@ function ScopeEditor({
     <>
       <label className="flex flex-col gap-1.5 text-[13px] font-bold text-ink">
         {t('builder.scope')}
-        <select
-          className={cls}
-          value={scope.kind}
-          onChange={(e) => change(e.target.value as SegmentScope['kind'])}
-        >
+        <Select className={cls} value={scope.kind} onValueChange={(v) => change(v as SegmentScope['kind'])}>
           {SCOPE_KINDS.map((k) => (
             <option key={k} value={k}>
               {t(`scopes.${k}`)}
             </option>
           ))}
-        </select>
+        </Select>
       </label>
       {scope.kind === 'event' || scope.kind === 'previousEdition' ? (
         <label className="flex flex-col gap-1.5 text-[13px] font-bold text-ink">
           {scope.kind === 'event' ? t('builder.event') : t('builder.editionOf')}
-          <select
-            className={cls}
-            value={scope.eventId}
-            onChange={(e) => put({ ...scope, eventId: e.target.value })}
-          >
+          <Select className={cls} value={scope.eventId} onValueChange={(v) => put({ ...scope, eventId: v })}>
             {events.map((e) => (
               <option key={e.id} value={e.id}>
                 {t('eventOption', { name: e.name, date: e.date })}
               </option>
             ))}
-          </select>
+          </Select>
         </label>
       ) : null}
       {scope.kind === 'series' ? (
         <label className="flex flex-col gap-1.5 text-[13px] font-bold text-ink">
           {t('builder.series')}
-          <select
+          <Select
             className={cls}
             value={scope.seriesId}
-            onChange={(e) => put({ ...scope, seriesId: e.target.value })}
+            onValueChange={(v) => put({ ...scope, seriesId: v })}
           >
             {series.length === 0 ? <option value="">{t('builder.noSeries')}</option> : null}
             {series.map((s) => (
@@ -953,28 +944,22 @@ function ScopeEditor({
                 {s.name}
               </option>
             ))}
-          </select>
+          </Select>
         </label>
       ) : null}
       {scope.kind === 'eventsBetween' ? (
         <>
           <label className="flex flex-col gap-1.5 text-[13px] font-bold text-ink">
             {t('builder.from')}
-            <input
-              type="date"
+            <DatePicker
               className={cls}
               value={scope.from}
-              onChange={(e) => put({ ...scope, from: e.target.value })}
+              onValueChange={(v) => put({ ...scope, from: v })}
             />
           </label>
           <label className="flex flex-col gap-1.5 text-[13px] font-bold text-ink">
             {t('builder.to')}
-            <input
-              type="date"
-              className={cls}
-              value={scope.to}
-              onChange={(e) => put({ ...scope, to: e.target.value })}
-            />
+            <DatePicker className={cls} value={scope.to} onValueChange={(v) => put({ ...scope, to: v })} />
           </label>
         </>
       ) : null}

@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { signFakeDisputeWebhook } from '@yayatoh/payments';
-import { continueToPayment, expectAccessible, OPEN_HOUSE, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, OPEN_HOUSE, pickOption, signIn } from './helpers.ts';
 
 test.describe('disputes', () => {
   test.use({ viewport: { width: 1280, height: 900 } });
@@ -21,7 +21,7 @@ test.describe('disputes', () => {
 
     const guest = await (await browser.newContext()).newPage();
     await guest.goto('/events/lakeside-open-house');
-    await guest.getByLabel(`Quantity — ${pass}`).selectOption('1');
+    await pickOption(guest.getByLabel(`Quantity — ${pass}`), '1');
     await guest.getByLabel('Full name').fill(buyer);
     await guest.getByLabel('Email for your tickets').fill(`dee+${stamp}@example.test`);
     await continueToPayment(guest, `dee+${stamp}@example.test`);

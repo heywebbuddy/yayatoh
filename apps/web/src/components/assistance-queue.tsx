@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, StatusDot } from '@yayatoh/ui';
+import { Alert, Button, Select, StatusDot } from '@yayatoh/ui';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useActionState, useEffect, useRef } from 'react';
@@ -108,14 +108,14 @@ export function RequestActions({
             <label htmlFor={`assign-${requestId}`} className="text-[13px] font-bold text-ink">
               {t('assignLabel', { title })}
             </label>
-            <select id={`assign-${requestId}`} name="assignee" defaultValue="" className="field">
+            <Select id={`assign-${requestId}`} name="assignee" defaultValue="" className="field">
               <option value="">{t('choosePerson')}</option>
               {staff.map((s) => (
                 <option key={s.id} value={s.id}>
                   {s.name}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
           <Button type="submit" size="sm" variant="secondary" disabled={pending}>
             {t('assign')}

@@ -8,7 +8,6 @@ import { MediaUploader } from '@/components/media-uploader.tsx';
 import { VenueForm } from '@/components/venue-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatNumber } from '@/lib/format.ts';
-import { zonesWith } from '@/lib/zones.ts';
 import { loadConsole } from '@/server/console.ts';
 import { mediaPanel } from '@/server/media.ts';
 import { ports } from '@/server/ports.ts';
@@ -79,7 +78,6 @@ export default async function VenuePage({
         <VenueForm
           action={updateVenueAction.bind(null, org, venue.id)}
           venue={venue}
-          zones={zonesWith(venue.timezone)}
           defaultTimezone={venue.timezone}
           disabled={!canWrite}
         />
