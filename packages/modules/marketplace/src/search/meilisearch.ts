@@ -32,7 +32,6 @@ export class MeilisearchError extends Error {
   readonly status: number;
   constructor(message: string, status: number) {
     super(message);
-    this.status = status;
     this.name = 'MeilisearchError';
     this.status = status;
   }
