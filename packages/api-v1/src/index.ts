@@ -21,6 +21,7 @@ import { publicRoutes } from './routes/public.ts';
 import { salesRoutes } from './routes/sales.ts';
 import { API_VERSION } from './routes/version.ts';
 import { clientInfo } from './telemetry.ts';
+import { registerWebhooks } from './webhooks.ts';
 
 export { cachedJson, etagOf } from './caching.ts';
 export type { MobileSettings, Principal, V1Deps } from './context.ts';
@@ -61,6 +62,11 @@ const API_TAGS = [
   },
   { name: 'check-in', description: 'Online scans with an API key or session.' },
   { name: 'scanner', description: 'The Scan PWA’s device-token routes (manifest, offline sync).' },
+  {
+    name: 'webhooks',
+    description:
+      'Messages your webhook endpoints receive (Settings → Webhooks): thin payloads of ids and facts, signed with Standard Webhooks.',
+  },
 ];
 
 export const OPENAPI_INFO = {
@@ -88,6 +94,9 @@ export const OPENAPI_INFO = {
       '  window; an expired, rotated-out or revoked key answers 401 on the next request.',
       '- **Sandbox orgs:** create one from Settings → Sandboxes for seeded data and fake payments;',
       '  its keys work exactly like live ones, and it never takes real money.',
+      '- **Webhooks:** add endpoints under Settings → Webhooks. Every message is listed under',
+      '  `webhooks` with its versioned schema; payloads are thin (ids and facts, never personal',
+      '  data) and signed with Standard Webhooks (`webhook-id`, `webhook-timestamp`, `webhook-signature`).',
       '- **Request ids:** every response has `X-Request-Id` (send your own to correlate).',
       '- **Caching:** content reads send an `ETag`; send it back as `If-None-Match` for a 304.',
       '- **Deprecation:** a deprecated route answers with `Deprecation` (RFC 9745) and, once a',
@@ -316,6 +325,7 @@ export function createV1(deps: V1Deps) {
     if (!doc) {
       const wrapper = new OpenAPIHono();
       wrapper.route('/v1', v1);
+      registerWebhooks(wrapper);
       doc = wrapper.getOpenAPI31Document(OPENAPI_INFO);
     }
     const prefix = basePath.replace(/\/v1$/, '');
@@ -328,5 +338,6 @@ export function createV1(deps: V1Deps) {
 export function openApiDocument(deps: V1Deps) {
   const app = new OpenAPIHono();
   app.route('/v1', createV1(deps));
+  registerWebhooks(app);
   return app.getOpenAPI31Document(OPENAPI_INFO);
 }

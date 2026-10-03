@@ -36,6 +36,7 @@ import { privateColumns as templates } from '@yayatoh/templates';
 import { privateColumns as tenancy } from '@yayatoh/tenancy';
 import { privateColumns as ticketing } from '@yayatoh/ticketing';
 import { privateColumns as venues } from '@yayatoh/venues';
+import { privateColumns as webhooks } from '@yayatoh/webhooks';
 
 /**
  * Every module's column-privacy declaration (roadmap §9). A module that adds tenant tables exports
@@ -80,6 +81,7 @@ export const COLUMN_PRIVACY: readonly SchemaPrivacy[] = [
   tenancy,
   ticketing,
   venues,
+  webhooks,
 ];
 
 /** `schema.table.column` */

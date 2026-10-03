@@ -37,6 +37,13 @@ import { seatAssignAction } from '@yayatoh/seating';
 import { surveyExportAction, surveysContactOwner } from '@yayatoh/surveys';
 import { createOrgAuthorizer, orgStatusGate } from '@yayatoh/tenancy';
 import { ticketResendAction } from '@yayatoh/ticketing';
+import {
+  configureWebhooks,
+  type FakePublisher,
+  fakePublisher,
+  fakeResolver,
+  memoryWebhookStore,
+} from '@yayatoh/webhooks';
 import { DATA_SUBJECT_CONTRIBUTORS } from './dsar/contributors.ts';
 
 /** The same composition the apps use: billing entitlements + tenancy authorizer. */
@@ -53,6 +60,13 @@ setKeyVault(localKeyVault(process.env.LOCAL_KMS_KEY ?? randomBytes(32).toString(
 
 // M6.1c: every module's data-subject contributor, as the web registers them.
 registerDataSubjectContributors(DATA_SUBJECT_CONTRIBUTORS);
+/** M6.3b: outbound webhooks go to the fake publisher (deliveries recorded, never sent). */
+export const webhookPublisher: FakePublisher = fakePublisher({
+  seed: randomBytes(32).toString('hex'),
+  appOrigin: 'https://app.yayatoh.test',
+  store: memoryWebhookStore(),
+});
+configureWebhooks({ publisher: webhookPublisher, resolver: fakeResolver });
 
 /** The bulk actions the apps register, and the step command built from them. */
 export const BULK_ACTIONS = [

@@ -47,6 +47,7 @@ export {
   ports,
   runBulk,
   submitRegistrationForm,
+  webhookPublisher,
 } from './ports.ts';
 export { type RsvpParty, type RsvpScenario, rsvpScenario } from './rsvp.ts';
 export {

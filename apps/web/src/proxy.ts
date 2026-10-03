@@ -20,6 +20,7 @@ import { bareHost, classifyHost } from './lib/hosts.ts';
 import { robotsHeader } from './lib/seo/robots.ts';
 import { localizedPath } from './lib/seo/urls.ts';
 import { TtlCache } from './lib/ttl-cache.ts';
+import { webhookPortalFrameSources } from './lib/webhook-portal.ts';
 
 /**
  * Optimistic only (CLAUDE.md): no authorization here. The proxy maps the Host to a site
@@ -106,8 +107,12 @@ export default async function proxy(req: NextRequest, event?: NextFetchEvent): P
     nonce,
     dev: process.env.NODE_ENV === 'development',
     https,
-    // Ably (M3.1b) when it is the configured transport; SSE is same-origin.
-    extra: { connect: realtimeConnectSources() },
+    // Ably (M3.1b) when it is the configured transport; SSE is same-origin. M6.3b: Svix's portal
+    // on the console's embedded-portal page, once Svix is configured (nothing otherwise).
+    extra: {
+      connect: realtimeConnectSources(),
+      frame: webhookPortalFrameSources(stripLocale(path, routing.locales), process.env),
+    },
   });
   const forwarded = new Headers(req.headers);
   forwarded.set('x-nonce', nonce);

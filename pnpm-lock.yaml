@@ -576,6 +576,9 @@ importers:
       '@yayatoh/venues':
         specifier: workspace:*
         version: link:../../packages/modules/venues
+      '@yayatoh/webhooks':
+        specifier: workspace:*
+        version: link:../../packages/modules/webhooks
       geist:
         specifier: 1.7.2
         version: 1.7.2(next@16.3.6(@opentelemetry/api@1.9.0)(@playwright/test@1.63.0)(@types/node@24.19.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))
@@ -748,6 +751,9 @@ importers:
       '@yayatoh/ticketing':
         specifier: workspace:*
         version: link:../../packages/modules/ticketing
+      '@yayatoh/webhooks':
+        specifier: workspace:*
+        version: link:../../packages/modules/webhooks
       drizzle-orm:
         specifier: 'catalog:'
         version: 0.45.3(@opentelemetry/api@1.9.0)(kysely@0.29.6)(pg@8.23.0)(postgres@3.4.9)
@@ -830,6 +836,9 @@ importers:
       '@yayatoh/venues':
         specifier: workspace:*
         version: link:../modules/venues
+      '@yayatoh/webhooks':
+        specifier: workspace:*
+        version: link:../modules/webhooks
       hono:
         specifier: 'catalog:'
         version: 4.13.9
@@ -2665,6 +2674,40 @@ importers:
         specifier: 'catalog:'
         version: 6.0.3
 
+  packages/modules/webhooks:
+    dependencies:
+      '@hono/zod-openapi':
+        specifier: 'catalog:'
+        version: 1.6.3(hono@4.13.9)(zod@4.6.5)
+      '@yayatoh/billing':
+        specifier: workspace:*
+        version: link:../billing
+      '@yayatoh/db':
+        specifier: workspace:*
+        version: link:../../db
+      '@yayatoh/kernel':
+        specifier: workspace:*
+        version: link:../../kernel
+      '@yayatoh/platform':
+        specifier: workspace:*
+        version: link:../../platform
+      drizzle-orm:
+        specifier: 'catalog:'
+        version: 0.45.3(@opentelemetry/api@1.9.0)(kysely@0.29.6)(pg@8.23.0)(postgres@3.4.9)
+      zod:
+        specifier: 'catalog:'
+        version: 4.6.5
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.19.0
+      '@yayatoh/config':
+        specifier: workspace:*
+        version: link:../../config
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
   packages/pdf:
     dependencies:
       qrcode:
@@ -2889,6 +2932,9 @@ importers:
       '@yayatoh/venues':
         specifier: workspace:*
         version: link:../modules/venues
+      '@yayatoh/webhooks':
+        specifier: workspace:*
+        version: link:../modules/webhooks
       drizzle-orm:
         specifier: 'catalog:'
         version: 0.45.3(@opentelemetry/api@1.9.0)(kysely@0.29.6)(pg@8.23.0)(postgres@3.4.9)

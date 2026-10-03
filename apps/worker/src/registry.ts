@@ -42,6 +42,7 @@ import {
 } from '@yayatoh/orders';
 import { payoutDestinationMailer } from '@yayatoh/payments';
 import { type Subscriber, signLinkToken } from '@yayatoh/platform';
+import { defaultResolver } from '@yayatoh/platform/ssrf';
 import { erasureConnectorNotifier } from '@yayatoh/privacy';
 import { portalSpeakerCleanup, taskReminderMailer } from '@yayatoh/program';
 import {
@@ -64,6 +65,7 @@ import {
   transferMailer,
   walletPassSync,
 } from '@yayatoh/ticketing';
+import { configureWebhooks, webhookPublisherFromEnv, webhookPublisherSubscriber } from '@yayatoh/webhooks';
 import { z } from 'zod';
 import { contactStatsJob } from './contact-stats.ts';
 import { duplicateScanJob } from './duplicates.ts';
@@ -86,6 +88,9 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     throw new Error('APP_TOKEN_SECRET and NEXT_PUBLIC_APP_ORIGIN are required by the worker');
   // Subscribers queue messages; the notifications dispatcher sends them (main.ts).
   const notifier = createNotifier();
+  // M6.3b: outbound webhooks (Svix, or the fake outside production until the owner's account).
+  const webhooks = webhookPublisherFromEnv(env, appOrigin);
+  configureWebhooks({ publisher: webhooks, resolver: defaultResolver });
   return [
     invitationMailer({ notifier, appOrigin, secret }),
     ticketMailer({ notifier, appOrigin }),
@@ -179,6 +184,8 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     // M4.8b: a receipt per paid gift or charity-ticket order, and year-end statements, to the donor.
     receiptIssuer({ notifier, appOrigin }),
     statementMailer({ notifier, appOrigin }),
+    // M6.3b: public outbox events to the org's webhook endpoints (thin payloads, catalog only).
+    webhookPublisherSubscriber({ publisher: () => webhooks }),
   ];
 }
 

@@ -15,8 +15,10 @@ import {
   registerDataSubjectContributors,
   setKeyVault,
 } from '@yayatoh/platform';
+import { defaultResolver } from '@yayatoh/platform/ssrf';
 import { surveysContactOwner } from '@yayatoh/surveys';
 import { createOrgAuthorizer, orgStatusGate } from '@yayatoh/tenancy';
+import { configureWebhooks, fakeResolver, webhookPublisherFromEnv } from '@yayatoh/webhooks';
 import { DATA_SUBJECT_CONTRIBUTORS } from './data-subjects.ts';
 
 /** Composition root for the web transport (Server Actions / RSC). Same ports as /v1. */
@@ -47,3 +49,12 @@ registerContactReferenceOwners([
   automationsContactOwner,
   participationContactOwner,
 ]);
+// M6.3b: outbound webhooks through Svix, or the fake (dev, preview, CI) until the owner's account.
+const webhookPublisher = webhookPublisherFromEnv(
+  process.env,
+  process.env.NEXT_PUBLIC_APP_ORIGIN || process.env.BETTER_AUTH_URL || 'http://localhost:3000',
+);
+configureWebhooks({
+  publisher: webhookPublisher,
+  resolver: webhookPublisher?.name === 'fake' ? fakeResolver : defaultResolver,
+});

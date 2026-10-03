@@ -311,6 +311,7 @@ import {
   requestHolderLinkCommand,
 } from '@yayatoh/ticketing';
 import { createVenueCommand, submitQuoteRequestCommand } from '@yayatoh/venues';
+import { createEndpointCommand } from '@yayatoh/webhooks';
 import { sql } from 'drizzle-orm';
 import { catchUpTimeline } from './merge.ts';
 import { ports, runBulk, submitRegistrationForm } from './ports.ts';
@@ -2491,6 +2492,10 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   await executeCommand(
     mergeContactsCommand,
     { sourceContactId: twins.two, targetContactId: twins.one },
+  // M6.3b: one webhook endpoint (fake publisher), so webhooks.endpoints has rows for both orgs.
+  await executeCommand(
+    createEndpointCommand,
+    { url: `https://hooks.example.com/${slug}`, description: 'Fixture receiver', eventTypes: ['order.paid'] },
     ctx(),
     ports,
   );
