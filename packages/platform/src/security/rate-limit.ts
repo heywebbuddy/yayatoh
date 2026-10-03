@@ -389,6 +389,17 @@ export const RATE_LIMIT_POLICIES = {
     identity: { limit: 300, windowMs: 60 * MIN },
     ipCeiling: { limit: 200, windowMs: 60 * MIN },
   },
+  /**
+   * M4.5a: a guest website's password. Past the device budget the page asks for the human check
+   * before each further try; identity = the site's address, across devices (a whole wedding's
+   * guests unlocking it the same evening stays well under it).
+   */
+  guestSitePassword: {
+    device: { limit: 8, windowMs: 10 * MIN },
+    anonymousIp: { limit: 30, windowMs: 10 * MIN },
+    identity: { limit: 300, windowMs: 15 * MIN },
+    ipCeiling: { limit: 300, windowMs: 10 * MIN },
+  },
 } as const satisfies Record<string, RateLimitPolicy>;
 
 export type RateLimitPolicyName = keyof typeof RATE_LIMIT_POLICIES;

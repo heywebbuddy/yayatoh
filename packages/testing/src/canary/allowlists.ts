@@ -59,3 +59,17 @@ export const EXPORT_ALLOW = {
   // An audience (M3.6a): the contact's name and email; counts, dates and consent codes only.
   audience: ['crm.contacts.name', 'crm.contacts.email'],
 } as const satisfies Record<string, readonly ColumnId[]>;
+
+/**
+ * M4.5a: a guest website once the visitor proved its password: the hosts' own content and the
+ * program (sub-event names and places, venues are public). Never a guest, a party, an answer or
+ * a contact detail (P4-3); the locked gate is a public page (no canary at all).
+ */
+export const GUEST_SITE_ALLOW: readonly ColumnId[] = [
+  'guests.sites.title',
+  'guests.sites.intro',
+  'guests.site_blocks.heading',
+  'guests.site_blocks.content',
+  'guests.sub_events.name',
+  'guests.sub_events.place',
+];

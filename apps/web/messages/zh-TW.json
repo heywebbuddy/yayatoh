@@ -10865,5 +10865,134 @@
       "offer_ended": "{title} 的邀請已結束。",
       "full": "{title} 剛剛額滿。再試一次即可加入候補名單。"
     }
+  },
+  "guestSiteHost": {
+    "subtitle": "為賓客準備的頁面：歡迎詞、流程、交通住宿、禮物清單以及常見問題解答。受密碼保護，從不被列出或收錄。",
+    "open": "開啟網站",
+    "viewerNotice": "你可以在這裡檢視網站。只有主人和規劃師可以修改。",
+    "statusTitle": "你的網站",
+    "published": "已發布",
+    "draft": "草稿",
+    "publishedNote": "於 {date} 發布。賓客透過下方網址和密碼開啟。",
+    "draftNote": "尚未發布。發布之前賓客無法開啟。",
+    "needsPassword": "請先設定密碼：沒有密碼無法發布網站。",
+    "address": "網站網址",
+    "privacyNote": "從不出現在市集或搜尋引擎中。賓客的姓名、回覆和聯絡方式絕不會顯示在上面。",
+    "publish": "發布網站",
+    "unpublish": "下線網站",
+    "publishedDone": "已發布。請把網址和密碼分享給賓客。",
+    "unpublishedDone": "網站已下線。",
+    "passwordTitle": "密碼",
+    "passwordSet": "已設定",
+    "passwordMissing": "未設定",
+    "passwordIntro": "請印在喜帖上。賓客在每台裝置上輸入一次；不分大小寫。設定新密碼後，用舊密碼進入的人都會被擋在門外。",
+    "savePassword": "儲存密碼",
+    "passwordSaved": "密碼已儲存。",
+    "detailsTitle": "標題和歡迎詞",
+    "saveDetails": "儲存標題和歡迎詞",
+    "detailsSaved": "已儲存。",
+    "blocksTitle": "{count, plural, =0 {區塊} other {# 個區塊}}",
+    "emptyTitle": "還沒有區塊",
+    "emptyWrite": "在下方新增第一個區塊：先寫歡迎詞，再加上流程、交通和常見問題。",
+    "emptyRead": "主人還沒有新增區塊。",
+    "kindLabel": "{kind} · 第 {n} 個區塊",
+    "noSubEvents": "請在賓客頁面新增子活動（儀式、晚宴……）來填入流程。",
+    "saveBlock": "儲存「{name}」",
+    "blockSaved": "區塊已儲存。",
+    "moveUp": "上移「{name}」",
+    "moveDown": "下移「{name}」",
+    "moved": "已移動。",
+    "removeBlock": "移除「{name}」",
+    "removed": "區塊已移除。",
+    "addTitle": "新增區塊",
+    "addBlock": "新增區塊",
+    "blockAdded": "區塊已新增。請在上方填寫。",
+    "subEventEveryone": "{name}（全員受邀）",
+    "kinds": {
+      "text": "文字",
+      "program": "流程",
+      "travel": "交通住宿",
+      "registry": "禮物清單",
+      "faq": "常見問題"
+    },
+    "show": {
+      "everyone": "全員受邀的子活動",
+      "chosen": "僅我勾選的子活動"
+    },
+    "fields": {
+      "heading": "標題",
+      "headingHint": "選填。",
+      "body": "內文",
+      "bodyHint": "段落、**粗體**、*斜體*、清單和連結。",
+      "show": "顯示哪些子活動",
+      "showHint": "只邀請部分賓客的子活動（如彩排晚宴）只有勾選後才會顯示。",
+      "subEvents": "顯示的子活動",
+      "urlHint": "以 https:// 開頭的完整連結。",
+      "password": "密碼",
+      "newPassword": "新密碼",
+      "passwordHint": "至少 {min} 個字元。",
+      "title": "標題",
+      "intro": "歡迎詞（選填）",
+      "language": "你書寫所用的語言",
+      "languageHint": "賓客可以把頁面按鈕切換成自己的語言；你寫的內容保持原樣。",
+      "kind": "區塊類型",
+      "kindHint": "流程會列出子活動及其時間。"
+    },
+    "item": {
+      "travel": {
+        "title": "地點 {n}：名稱",
+        "details": "地點 {n}：詳情",
+        "url": "地點 {n}：網站"
+      },
+      "registry": {
+        "label": "禮物清單 {n}：名稱",
+        "url": "禮物清單 {n}：連結"
+      },
+      "faq": {
+        "question": "問題 {n}",
+        "answer": "回答 {n}"
+      }
+    },
+    "errors": {
+      "title": "請為網站填寫標題。",
+      "password": "請輸入密碼。",
+      "required": "請填寫此欄。",
+      "tooShort": "至少使用 {min} 個字元。",
+      "tooLong": "最多使用 72 個字元。",
+      "passwordRequired": "發布前請設定密碼。",
+      "tooManyBlocks": "一個網站最多有 {max} 個區塊。",
+      "httpsOnly": "請使用以 https:// 開頭的完整連結。",
+      "subEvents": "請選擇本活動的子活動。"
+    }
+  },
+  "guestSite": {
+    "metaTitle": "賓客網站",
+    "gateTitle": "此網站為私密網站",
+    "gateIntro": "請輸入喜帖上的密碼查看詳情。",
+    "formLabel": "開啟網站",
+    "password": "密碼",
+    "passwordHint": "密碼在你的喜帖上，不分大小寫。",
+    "submit": "開啟網站",
+    "challengeTitle": "還差一步",
+    "challengeHint": "請確認你是真人，然後再試一次。",
+    "errors": {
+      "empty": "請輸入密碼。",
+      "wrong": "密碼不正確。請核對喜帖後再試一次。",
+      "challengeFailed": "驗證未通過，請再試一次。",
+      "rateLimited": "{minutes, plural, other {嘗試次數過多。請在 # 分鐘後再試。}}",
+      "closed": "此網站目前無法存取。"
+    },
+    "languages": "語言",
+    "onThisPage": "本頁內容",
+    "empty": "主人仍在準備此頁面。",
+    "headings": {
+      "text": "介紹",
+      "program": "流程",
+      "travel": "交通住宿",
+      "registry": "禮物清單",
+      "faq": "問題"
+    },
+    "visit": "{name} 的網站",
+    "newTab": "（在新分頁中開啟）"
   }
 }

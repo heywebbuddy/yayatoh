@@ -20,7 +20,7 @@ import {
   setLegalPageCommand,
 } from '@yayatoh/tenancy';
 import { sql } from 'drizzle-orm';
-import { createOrgFixture, EXPORT_PARAMS, systemCtx, userCtx } from '../fixtures.ts';
+import { createOrgFixture, EXPORT_PARAMS, FIXTURE_SITE_PASSWORD, systemCtx, userCtx } from '../fixtures.ts';
 import { ports, runBulk } from '../ports.ts';
 import {
   canaryToken,
@@ -67,6 +67,8 @@ export interface CanaryOrg {
   readonly outbound: readonly { readonly channel: string; readonly payload: string }[];
   /** Private columns filled (id → rows written). */
   readonly filled: Readonly<Record<string, number>>;
+  /** M4.5a: the fixture event's guest website (published) and its password. */
+  readonly guestSite: { readonly code: string; readonly password: string };
 }
 
 const ident = (...parts: string[]) => parts.map((p) => `"${p.replace(/"/g, '""')}"`).join('.');
@@ -126,6 +128,11 @@ export async function canaryOrg(o: {
   );
   const exports = await generateExports(orgId, ctx, event.id, slug);
   const outbound = await sendOutbound(orgId, ctx, event.id);
+  const [site] = await o.admin.unsafe(
+    `select code from guests.sites where org_id = $1 and event_id = $2 and status = 'published'`,
+    [orgId, event.id],
+  );
+  if (!site) throw new Error('canary: the fixture event has no published guest website');
   return {
     orgId,
     slug,
@@ -137,6 +144,7 @@ export async function canaryOrg(o: {
     exports,
     outbound,
     filled,
+    guestSite: { code: site.code as string, password: FIXTURE_SITE_PASSWORD },
   };
 }
 
