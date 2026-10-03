@@ -471,6 +471,7 @@ Behind `donations`; the worker run is leader-only. Live Stripe waits for the own
 
 ### 14. Build notes (2026-10-03)
 Base: build branch + `merge/next-3g` + `merge/next-3h` + `agent/m4.8c` + `agent/m4.4a` (M4.8c's migration renumbered 0113 → 0115 after M4.4a's 0113/0114). Design v2 components only (PageHeader, Card, StatCard, StatusPill, EmptyState, Table, Alert, Button, Input, Select, Checkbox, Textarea); local compositions in the feature folders: `CardForm`, `CardPage`, `OneTap`, `SettleForms`, `CardSavingQr`; the pledges page reuses M4.8c's `RaiseActionButton`/`RaiseAnnouncer`.
+- Gate: lint, check:modules, typecheck 59/59, unit 2,782 passed (205 files), integration 1,554 passed (168 files; `impersonation.int.test.ts` caught `donations.removeSavedCard` without the `delete` category — fixed and re-run). e2e: `pledge-collection.spec.ts` 15/15 (3 projects); related `donations`, `paddle-raise`, `receipts`, `guest-seat-finder`, `checkout`, `gala-tables`, `alerts`, `checkin` together 144/144 (3 projects, with the new spec); `canary-crawl` + `security` 40 passed (desktop).
 
 ### 15. Demo checklist
 - [ ] A connected org with a published gala: a campaign with $1,000 and $250 levels; three parties with paddles; a paddle raise with confirmed pledges.
