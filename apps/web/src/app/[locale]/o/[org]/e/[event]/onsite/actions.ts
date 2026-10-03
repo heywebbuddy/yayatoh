@@ -1,6 +1,7 @@
 'use server';
 
 import {
+  admitBalanceDueCommand,
   createCheckpointCommand,
   enrollDeviceCommand,
   type ScanOutcomeDto,
@@ -27,6 +28,28 @@ export async function scanAction(
 ): Promise<ScanState> {
   const { data, event: ev } = await loadEvent(org, event, 'onsite');
   const seq = (prev.kind === 'idle' ? 0 : prev.seq) + 1;
+  // M5.1d: admit a ticket with a balance due on its invoice (staff override, with a reason).
+  if (form.get('intent') === 'override') {
+    const note = String(form.get('note') ?? '').trim();
+    if (note.length < 3) return { kind: 'error', code: 'override_note', seq };
+    try {
+      const outcome = await executeCommand(
+        admitBalanceDueCommand,
+        {
+          eventId: ev.id,
+          code: String(form.get('code') ?? ''),
+          checkpointId: String(form.get('checkpointId') ?? '') || undefined,
+          note,
+        },
+        data.ctx,
+        ports,
+      );
+      revalidatePath(`/o/${org}/e/${event}/onsite`);
+      return { kind: 'outcome', outcome, seq };
+    } catch (err) {
+      return { kind: 'error', code: isDomainError(err) ? err.code : 'internal', seq };
+    }
+  }
   try {
     const outcome = await executeCommand(
       scanTicketCommand,
@@ -119,6 +142,11 @@ export async function createCheckpointAction(
     (latitude !== null && Math.abs(latitude) > 90) ||
     (longitude !== null && Math.abs(longitude) > 180);
   if (badLocation) return { ok: false, code: 'validation_failed', field: 'location' };
+  // M3.3a: how many people the area holds (blank = not limited), a whole number from 1.
+  const rawCapacity = String(form.get('capacity') ?? '').trim();
+  const capacity = rawCapacity === '' ? null : Number(rawCapacity);
+  if (capacity !== null && (!Number.isInteger(capacity) || capacity < 1 || capacity > 1_000_000))
+    return { ok: false, code: 'validation_failed', field: 'capacity' };
   try {
     await executeCommand(
       createCheckpointCommand,
@@ -129,6 +157,7 @@ export async function createCheckpointAction(
         ticketTypeIds: form.get('kind') === 'zone' ? form.getAll('ticketTypeIds').map(String) : [],
         latitude,
         longitude,
+        capacity,
       },
       data.ctx,
       ports,

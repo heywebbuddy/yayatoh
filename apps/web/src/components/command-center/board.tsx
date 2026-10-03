@@ -1,7 +1,7 @@
 'use client';
 
 import { moveWidget, type WidgetChannel, type WidgetKey } from '@yayatoh/command-center/client';
-import { Button, Card, cx, Label, StatusDot } from '@yayatoh/ui';
+import { Button, Card, cx, Skeleton, SkeletonText, StatusDot } from '@yayatoh/ui';
 import { ArrowDown, ArrowUp, Eye, EyeOff, GripVertical } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -16,14 +16,16 @@ interface Slot {
 }
 
 type LayoutResult = { ok: boolean; code: string | null };
+type Params = Readonly<Record<string, string>>;
 type Urls = Partial<Record<WidgetChannel, string>>;
 
 /** Messages per channel that mean "something changed" (the widget then re-reads its loader). */
 const CHANNEL_EVENTS: Readonly<Record<WidgetChannel, readonly string[]>> = {
-  'event.checkins': ['admission', 'snapshot'],
+  'event.checkins': ['admission', 'scan', 'snapshot'],
   'event.devices': ['device', 'snapshot'],
   'event.metrics': ['metric', 'snapshot'],
   'org.alerts': ['alert', 'snapshot'],
+  'event.assistance': ['request', 'snapshot'],
 };
 const POLL_MS = 30_000;
 const SPAN: Record<Slot['size'], string> = { sm: '', md: 'md:col-span-2', lg: 'md:col-span-2 xl:col-span-3' };
@@ -80,7 +82,7 @@ export function CommandCenterBoard({
   reset,
 }: {
   slots: readonly Slot[];
-  channels: Readonly<Record<string, WidgetChannel | null>>;
+  channels: Readonly<Record<string, readonly WidgetChannel[]>>;
   urls: Urls;
   initial: Readonly<Record<string, unknown>>;
   widgetUrl: string;
@@ -104,17 +106,32 @@ export function CommandCenterBoard({
   const [failed, setFailed] = useState(false);
   const [streams, setStreams] = useState<Record<string, 'connecting' | 'live' | 'offline'>>({});
   const [dragging, setDragging] = useState<WidgetKey | null>(null);
+  // M3.3a: widget options (the live feed's filters), paused widgets, and news waiting while paused.
+  const [params, setParamsState] = useState<Record<string, Params>>({});
+  const [paused, setPaused] = useState<Set<WidgetKey>>(() => new Set());
+  const [waiting, setWaiting] = useState<Set<WidgetKey>>(() => new Set());
+  const paramsRef = useRef(params);
+  paramsRef.current = params;
+  const pausedRef = useRef(paused);
+  pausedRef.current = paused;
   const [, startTransition] = useTransition();
   const refocus = useRef<string | null>(null);
   const size = new Map(slots.map((s) => [s.key, s.size]));
   const title = (k: WidgetKey) => t(`widget.${k}.title`);
 
+  // Only the latest re-read of a widget lands (a slow one started before a filter change never
+  // overwrites the newer answer).
+  const latest = useRef(new Map<string, number>());
   const refetch = useCallback(
-    async (key: WidgetKey) => {
+    async (key: WidgetKey, p?: Params) => {
+      const qs = new URLSearchParams(Object.entries(p ?? paramsRef.current[key] ?? {})).toString();
+      const seq = (latest.current.get(key) ?? 0) + 1;
+      latest.current.set(key, seq);
       try {
-        const res = await fetch(`${widgetUrl}/${key}`, { cache: 'no-store' });
-        if (!res.ok) return;
+        const res = await fetch(`${widgetUrl}/${key}${qs ? `?${qs}` : ''}`, { cache: 'no-store' });
+        if (!res.ok || latest.current.get(key) !== seq) return;
         const body = (await res.json()) as { data: unknown };
+        if (latest.current.get(key) !== seq) return;
         setData((d) => ({ ...d, [key]: body.data }));
       } catch {
         // Offline for a moment: the next message or poll re-reads.
@@ -134,7 +151,12 @@ export function CommandCenterBoard({
         channel,
         setTimeout(() => {
           timers.current.delete(channel);
-          for (const k of visibleKey.split(',') as WidgetKey[]) if (channels[k] === channel) void refetch(k);
+          for (const k of visibleKey.split(',') as WidgetKey[]) {
+            if (!channels[k]?.includes(channel)) continue;
+            // A paused widget keeps what it shows; it says there is news and catches up on resume.
+            if (pausedRef.current.has(k)) setWaiting((w) => (w.has(k) ? w : new Set(w).add(k)));
+            else void refetch(k);
+          }
         }, 250),
       );
     },
@@ -150,8 +172,8 @@ export function CommandCenterBoard({
   // Widgets with no channel the member can follow are re-read on a timer.
   useEffect(() => {
     const polled = (visibleKey.split(',') as WidgetKey[]).filter((k) => {
-      const ch = channels[k];
-      return k && (!ch || !urls[ch]);
+      const ch = channels[k] ?? [];
+      return k && !ch.some((c) => urls[c]);
     });
     if (polled.length === 0) return;
     const id = setInterval(() => {
@@ -232,9 +254,7 @@ export function CommandCenterBoard({
       if (r.ok) router.refresh();
     });
 
-  const followed = [
-    ...new Set(visible.map((k) => channels[k]).filter((c): c is WidgetChannel => Boolean(c && urls[c]))),
-  ];
+  const followed = [...new Set(visible.flatMap((k) => (channels[k] ?? []).filter((c) => urls[c])))];
   const liveState =
     followed.length === 0
       ? 'polling'
@@ -249,6 +269,29 @@ export function CommandCenterBoard({
     [],
   );
   const ctx = { locale, timeZone, base };
+  const controls = (k: WidgetKey) => ({
+    params: params[k] ?? {},
+    setParams: (next: Params) => {
+      paramsRef.current = { ...paramsRef.current, [k]: next };
+      setParamsState((m) => ({ ...m, [k]: next }));
+      void refetch(k, next);
+    },
+    paused: paused.has(k),
+    waiting: waiting.has(k),
+    togglePause: () => {
+      const next = new Set(paused);
+      if (next.has(k)) {
+        next.delete(k);
+        setWaiting((w) => {
+          const n = new Set(w);
+          n.delete(k);
+          return n;
+        });
+        void refetch(k);
+      } else next.add(k);
+      setPaused(next);
+    },
+  });
 
   return (
     <section aria-labelledby="cc-widgets" className="flex flex-col gap-4">
@@ -262,7 +305,7 @@ export function CommandCenterBoard({
         />
       ))}
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h2 id="cc-widgets" className="text-section">
+        <h2 id="cc-widgets" className="text-card">
           {t('widgets')}
         </h2>
         <div className="flex flex-wrap items-center gap-3">
@@ -291,14 +334,14 @@ export function CommandCenterBoard({
       <p
         role="status"
         aria-live="polite"
-        className={cx('text-caption', failed ? 'text-pink-700' : 'text-zinc-600')}
+        className={cx('text-caption', failed ? 'text-danger' : 'text-ink-2')}
       >
         {message}
       </p>
       {visible.length === 0 ? (
         <Card className="text-center">
           <p className="text-section">{t('empty.title')}</p>
-          <p className="text-body text-zinc-600">{t('empty.description')}</p>
+          <p className="text-body text-ink-2">{t('empty.description')}</p>
         </Card>
       ) : (
         <ol
@@ -315,16 +358,14 @@ export function CommandCenterBoard({
             >
               <Card className="flex h-full flex-col gap-3">
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <h3 className="m-0">
-                    <Label>{title(k)}</Label>
-                  </h3>
+                  <h3 className="m-0 text-body font-bold tracking-normal text-ink-2">{title(k)}</h3>
                   {customizing ? (
                     <div className="flex items-center gap-1">
                       <span
                         draggable
                         onDragStart={() => setDragging(k)}
                         onDragEnd={() => setDragging(null)}
-                        className="inline-flex size-7 cursor-grab items-center justify-center rounded-pill text-zinc-500"
+                        className="inline-flex size-8 cursor-grab items-center justify-center rounded-[10px] text-ink-2 hover:bg-surface-3"
                         title={t('drag', { widget: title(k) })}
                         aria-hidden="true"
                       >
@@ -363,11 +404,15 @@ export function CommandCenterBoard({
                   ) : null}
                 </div>
                 {data[k] === undefined ? (
-                  <p className="text-caption text-zinc-500">{t('loading')}</p>
+                  <div role="status" className="flex flex-col gap-3">
+                    <span className="sr-only">{t('loading')}</span>
+                    <Skeleton className="h-9 w-1/2" />
+                    <SkeletonText lines={2} />
+                  </div>
                 ) : data[k] === null ? (
-                  <p className="text-caption text-zinc-600">{t('unavailable')}</p>
+                  <p className="text-caption text-ink-2">{t('unavailable')}</p>
                 ) : (
-                  <WidgetBody widget={k} data={data[k]} ctx={ctx} />
+                  <WidgetBody widget={k} data={data[k]} ctx={ctx} controls={controls(k)} />
                 )}
               </Card>
             </li>
@@ -393,7 +438,7 @@ export function CommandCenterBoard({
                 ))}
             </ul>
           ) : (
-            <p className="text-caption text-zinc-600">{t('hiddenNone')}</p>
+            <p className="text-caption text-ink-2">{t('hiddenNone')}</p>
           )}
         </section>
       ) : null}

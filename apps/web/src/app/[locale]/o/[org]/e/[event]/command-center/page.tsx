@@ -1,9 +1,12 @@
-import { type EventViewDto, eventViewQuery, WIDGET_META } from '@yayatoh/command-center';
+import { type EventViewDto, eventViewQuery, followedChannels, WIDGET_META } from '@yayatoh/command-center';
 import { executeQuery, isDomainError } from '@yayatoh/kernel';
-import { EmptyState, PageHeader } from '@yayatoh/ui';
+import { buttonClass, EmptyState, PageHeader, Tag } from '@yayatoh/ui';
+import { MonitorPlay, ScanLine } from 'lucide-react';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { CommandCenterBoard } from '@/components/command-center/board.tsx';
 import { ModePanel } from '@/components/command-center/mode-panel.tsx';
+import { Crumbs, eventWhen } from '@/components/crumbs.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import { commandCenterCtx, loadWidget, WIDGETS, widgetChannels } from '@/server/command-center.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
@@ -62,9 +65,42 @@ export default async function CommandCenterPage({
       data-role={view.role}
     >
       <PageHeader
-        eyebrow={<span className="text-caption text-zinc-500">{t(`role.${view.role}`)}</span>}
+        breadcrumb={
+          <Crumbs
+            items={[
+              { label: data.org.name, href: `/o/${org}` },
+              { label: ev.name, href: base },
+              { label: t('title') },
+            ]}
+          />
+        }
         title={t('title')}
-        description={ev.name}
+        tag={<Tag>{t(`role.${view.role}`)}</Tag>}
+        meta={
+          <>
+            <span>{eventWhen(ev, locale)}</span>
+            {ev.venueName ? (
+              <>
+                <span aria-hidden="true">·</span>
+                <span>{ev.venueName}</span>
+              </>
+            ) : null}
+          </>
+        }
+        actions={
+          <>
+            {data.modules.has('checkin') ? (
+              <Link href={`${base}/command-center/tv`} className={buttonClass('secondary')}>
+                <MonitorPlay aria-hidden="true" strokeWidth={2} />
+                {t('tv.open')}
+              </Link>
+            ) : null}
+            <Link href="/scan" className={buttonClass('primary')}>
+              <ScanLine aria-hidden="true" strokeWidth={2} />
+              {t('openScanner')}
+            </Link>
+          </>
+        }
       />
       <ModePanel
         mode={view.mode}
@@ -76,7 +112,7 @@ export default async function CommandCenterPage({
       <CommandCenterBoard
         key={`${view.mode.mode}:${slots.map((s) => `${s.key}${s.hidden ? '-' : ''}`).join(',')}`}
         slots={slots}
-        channels={Object.fromEntries(slots.map((s) => [s.key, WIDGET_META[s.key].channel]))}
+        channels={Object.fromEntries(slots.map((s) => [s.key, followedChannels(WIDGET_META[s.key])]))}
         urls={channels}
         initial={initial}
         widgetUrl={`/api/command-center/${org}/${event}`}

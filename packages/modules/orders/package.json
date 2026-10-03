@@ -22,6 +22,7 @@
     "@yayatoh/db": "workspace:*",
     "@yayatoh/events": "workspace:*",
     "@yayatoh/forms": "workspace:*",
+    "@yayatoh/guests": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
     "@yayatoh/notifications": "workspace:*",
     "@yayatoh/payments": "workspace:*",

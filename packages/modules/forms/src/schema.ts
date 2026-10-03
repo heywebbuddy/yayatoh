@@ -18,15 +18,17 @@ export const formsSchema = pgSchema('forms');
 export const FORM_KINDS = ['checkout_questions', 'survey'] as const;
 /**
  * Every kind the table holds. `registration` (M5.1b) has pages and per-type paths and its own
- * commands (`registration-forms.ts`); the commands for the other kinds never accept it.
+ * commands (`registration-forms.ts`); the commands for the other kinds never accept it. `rsvp`
+ * (M4.1e) holds an event's RSVP questions (`rsvp-forms.ts`); its responses are per guest.
  */
-export const ALL_FORM_KINDS = [...FORM_KINDS, 'registration'] as const;
+export const ALL_FORM_KINDS = [...FORM_KINDS, 'registration', 'rsvp'] as const;
 export const SUBJECT_TYPES = ['event', 'survey'] as const;
 /**
  * `survey_invitation`: one person's signed survey link (M3.9a). `form_respondent`: one person
- * filling a registration form (`forms.respondents`, M5.1b).
+ * filling a registration form (`forms.respondents`, M5.1b). `guest`: one guest answering an event's
+ * RSVP questions (M4.1e; an id of the guests module, which owns the guest).
  */
-export const RESPONDENT_TYPES = ['order', 'survey_invitation', 'form_respondent'] as const;
+export const RESPONDENT_TYPES = ['order', 'survey_invitation', 'form_respondent', 'guest'] as const;
 
 /** One form per (kind, subject), e.g. an event's checkout questions or a survey's questions. */
 export const forms = tenantTable(
@@ -40,7 +42,7 @@ export const forms = tenantTable(
   },
   (t) => [
     uniqueIndex('forms_org_kind_subject_key').on(t.orgId, t.kind, t.subjectType, t.subjectId),
-    check('forms_kind_check', sql`kind in ('checkout_questions', 'survey', 'registration')`),
+    check('forms_kind_check', sql`kind in ('checkout_questions', 'survey', 'registration', 'rsvp')`),
     check('forms_subject_type_check', sql`subject_type in ('event', 'survey')`),
   ],
 );
@@ -92,7 +94,7 @@ export const formResponses = tenantTable(
     }),
     check(
       'form_responses_respondent_type_check',
-      sql`respondent_type in ('order', 'survey_invitation', 'form_respondent')`,
+      sql`respondent_type in ('order', 'survey_invitation', 'form_respondent', 'guest')`,
     ),
   ],
 );

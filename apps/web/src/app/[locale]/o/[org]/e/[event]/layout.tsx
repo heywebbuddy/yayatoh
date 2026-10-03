@@ -1,5 +1,5 @@
 import { composeNav, type NavItem } from '@yayatoh/platform';
-import { Label } from '@yayatoh/ui';
+import { StatusPill } from '@yayatoh/ui';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server';
 import type { ReactNode } from 'react';
@@ -27,6 +27,15 @@ const COMMAND_CENTER: NavItem = {
   icon: 'gauge',
 };
 
+/** M3.3b: the event's help queue (guest and staff requests), with the run items. */
+const ASSISTANCE: NavItem = {
+  key: 'assistance',
+  path: 'assistance',
+  group: 'run',
+  module: 'checkin',
+  icon: 'life-buoy',
+};
+
 /** M1.4b: every event can have several dates, a series and copies, whatever its profile. */
 const COPY_NAV: readonly NavItem[] = [
   { key: 'dates', path: 'dates', group: 'build', module: 'core', icon: 'calendar-range' },
@@ -43,6 +52,7 @@ const NEEDS: Readonly<Record<string, string>> = {
   marketing: 'messages:read',
   team: 'event_team:read',
   trackedLinks: 'marketing:read',
+  assistance: 'assistance:read',
 };
 
 export default async function EventLayout({
@@ -61,6 +71,7 @@ export default async function EventLayout({
   const items = [
     ...composeNav(profile, data.modules).flatMap((i) => (i.key === 'home' ? [i, COMMAND_CENTER] : [i])),
     ...(data.modules.has('marketing') ? [TRACKED_LINKS] : []),
+    ...(data.modules.has('checkin') ? [ASSISTANCE] : []),
     ...COPY_NAV,
   ].filter((i) => opens(i.key) && (!NEEDS[i.key] || can(NEEDS[i.key] as string)));
   const rules = opens('setupGuide') ? await loadReadiness(org, event) : [];
@@ -76,12 +87,21 @@ export default async function EventLayout({
         badges: { setupGuide: `${counted.filter((r) => r.done).length}/${counted.length}` },
       }}
       status={
-        <>
-          <Label>
-            {t(`eventStatus.${ev.status}`)} · {t(`phase.${phase.phase}`, { days: phase.days })}
-          </Label>
-          <span aria-hidden="true" className="size-1.5 rounded-full bg-accent-900" />
-        </>
+        <StatusPill
+          tone={
+            ev.status === 'cancelled'
+              ? 'danger'
+              : phase.phase === 'live'
+                ? 'success'
+                : ev.status === 'draft' || ev.status === 'postponed'
+                  ? 'waiting'
+                  : phase.phase === 'completed'
+                    ? 'neutral'
+                    : 'info'
+          }
+          live={phase.phase === 'live'}
+          label={`${t(`eventStatus.${ev.status}`)} · ${t(`phase.${phase.phase}`, { days: phase.days })}`}
+        />
       }
     >
       {/* M4.2a: the event's profile rewords the sentences its client components show. */}

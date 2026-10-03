@@ -8,6 +8,7 @@ import { sweepAlerts } from './alerts.ts';
 import { badgeBatchJob, enqueueDueBadgeBatches } from './badges.ts';
 import { runDueBulkOperations } from './bulk.ts';
 import { bossRelease, campaignReleaseJob, campaignTick } from './campaigns.ts';
+import { DEVICE_WATCHDOG_MS, runDeviceWatchdog } from './device-watchdog.ts';
 import { domainRecheckJob } from './domains.ts';
 import { endExpiredImpersonations } from './impersonations.ts';
 import { enqueueJourneyWork } from './journeys.ts';
@@ -25,8 +26,9 @@ import { JOBS, subscribers } from './registry.ts';
 import { relayOnce } from './relay.ts';
 import { runRetention } from './retention.ts';
 import { runSettlements } from './settlements.ts';
-import { alertDisputeDeadlines, sweepExpiredHolds, sweepWaitlists } from './sweeper.ts';
+import { alertDisputeDeadlines, sweepEnrollments, sweepExpiredHolds, sweepWaitlists } from './sweeper.ts';
 import { startWorker } from './worker.ts';
+import { runYearEndStatements } from './year-end.ts';
 
 const connectionString = process.env.JOBS_DATABASE_URL;
 if (!connectionString) throw new Error('JOBS_DATABASE_URL is not set (see .env.example)');
@@ -93,7 +95,10 @@ setInterval(() => {
   sweepExpiredHolds()
     .catch((err) => console.error('sweeper', err))
     .then(() => sweepWaitlists())
-    .catch((err) => console.error('waitlist sweeper', err));
+    .catch((err) => console.error('waitlist sweeper', err))
+    // M5.2b: lapsed session offers, then session lines with free places.
+    .then(() => sweepEnrollments())
+    .catch((err) => console.error('enrollment sweeper', err));
 }, 30_000).unref();
 
 // Dispute evidence deadline alerts (M3.10c): hourly (leader only); each level is raised once.
@@ -276,6 +281,24 @@ const retain = () => {
 setTimeout(retain, 10 * 60_000).unref();
 setInterval(retain, 24 * 3_600_000).unref();
 
+// Year-end giving statements (M4.8b): daily, first run 15 minutes after start (leader only). Each
+// org's previous calendar year in its own timezone; donors already stated are skipped.
+let stating = false;
+const stateYearEnd = () => {
+  if (!release || stopping || stating) return;
+  stating = true;
+  runYearEndStatements()
+    .then((r) => {
+      if (r.issued || r.failed) console.info(JSON.stringify({ job: 'donations.year-end', ...r }));
+    })
+    .catch((err) => console.error('year-end statements', err))
+    .finally(() => {
+      stating = false;
+    });
+};
+setTimeout(stateYearEnd, 15 * 60_000).unref();
+setInterval(stateYearEnd, 24 * 3_600_000).unref();
+
 // Alert engine (M3.2b): live and pre-show events every 30 s, everything else every 5 minutes (leader only).
 const alertDeps = { notifier: createNotifier() };
 let sweepingAlerts = false;
@@ -293,6 +316,26 @@ setInterval(() => {
       sweepingAlerts = false;
     });
 }, 30_000).unref();
+
+// Live device watchdog (M3.3a): every second, devices that just crossed the 90 s offline line
+// get their transition and raise "devices offline" at once (leader only). The first look covers
+// the last minute, so a restart doesn't miss a device that went quiet meanwhile.
+let watching = false;
+let watchedUntil = new Date(Date.now() - 60_000);
+setInterval(() => {
+  if (!release || stopping || watching) return;
+  watching = true;
+  const to = new Date();
+  runDeviceWatchdog(alertDeps, { from: watchedUntil, to })
+    .then((r) => {
+      watchedUntil = to;
+      if (r.quiet) console.info(JSON.stringify({ job: 'devices.watchdog', ...r }));
+    })
+    .catch((err) => console.error('device watchdog', err))
+    .finally(() => {
+      watching = false;
+    });
+}, DEVICE_WATCHDOG_MS).unref();
 
 // Realtime message log (M3.1b): keep an hour for resumptions; prune every 5 minutes (leader only).
 setInterval(() => {

@@ -20,6 +20,7 @@ import {
   scanCheckpointTx,
   TWO_ENTRANCES_WINDOW_MS,
 } from './checkpoints.ts';
+import { scanningDeviceOf } from './live.ts';
 import { withOccurrenceTx } from './occurrence.ts';
 import { admissions, checkpoints, SCAN_RESULTS, type ScanResult, scans } from './schema.ts';
 import { checkVelocityTx, FraudSignalDto, fraudSignalsTx, openHighSignalCountTx } from './signals.ts';
@@ -48,7 +49,7 @@ export const ScanOutcomeDto = z.object({
 });
 export type ScanOutcomeDto = z.infer<typeof ScanOutcomeDto>;
 
-async function resolveCode(
+export async function resolveCode(
   tx: TenantTx,
   raw: string,
 ): Promise<{ kind: 'yy1' | 'short' | 'legacy' | 'unknown'; ticket: ScannableTicket | null }> {
@@ -67,7 +68,7 @@ async function resolveCode(
   return { kind: 'unknown', ticket: null };
 }
 
-const summary = (t: ScannableTicket | null) =>
+export const summary = (t: ScannableTicket | null) =>
   t ? { holderName: t.holderName, typeName: t.typeName, serial: t.serial, shortCode: t.shortCode } : null;
 
 export const scanTicketCommand = tenantCommand({
@@ -92,6 +93,8 @@ export const scanTicketCommand = tenantCommand({
     const checkpoint = await scanCheckpointTx(tx, event.id, input.checkpointId);
     const { kind, ticket } = await resolveCode(tx, input.code);
     const scannedBy = ctx.actor.type === 'user' ? ctx.actor.userId : null;
+    // M3.3a: a scan a device sends online is its scan (speed per device, the feed, "last scan").
+    const deviceId = scanningDeviceOf(ctx);
 
     if (input.clientScanId) {
       const [prior] = await tx.select().from(scans).where(eq(scans.clientScanId, input.clientScanId));
@@ -121,6 +124,13 @@ export const scanTicketCommand = tenantCommand({
     if (verdict === 'ok' && ticket && checkpoint?.kind === 'zone') {
       // Zones admit nobody to the event; they only check the pass includes the zone.
       result = zoneAllows(checkpoint, ticket.ticketTypeId) ? 'granted' : 'no_access';
+    } else if (
+      verdict === 'ok' &&
+      ticket?.paymentDue &&
+      !(await liveAdmissionTx(tx, ticket.id, eventDay(ctx.now, event.timezone)))
+    ) {
+      // M5.1d: the invoice still has a balance. Nobody is admitted; staff may override (audited).
+      result = 'balance_due';
     } else if (verdict === 'ok' && ticket) {
       const day = eventDay(ctx.now, event.timezone);
       const [adm] = await tx
@@ -132,6 +142,7 @@ export const scanTicketCommand = tenantCommand({
           day,
           admittedAt: ctx.now,
           admittedBy: scannedBy,
+          deviceId,
           checkpointId: checkpoint?.id ?? null,
         })
         .onConflictDoNothing()
@@ -205,15 +216,28 @@ export const scanTicketCommand = tenantCommand({
       clientScanId: input.clientScanId ?? null,
       scannedAt: ctx.now,
       scannedBy,
+      deviceId,
       checkpointId: checkpoint?.id ?? null,
     });
+    // The live feed (M3.3a) follows scans nobody was let in by too: the outcome group only.
+    if (!['admitted', 'granted', 'provisional'].includes(result))
+      await publishRealtimeTx(tx, orgId, CHECKINS_CHANNEL, {
+        eventId: event.id,
+        event: 'scan',
+        data: {
+          outcome: result === 'duplicate' ? 'duplicate' : 'refused',
+          checkpointId: checkpoint?.id ?? null,
+          count: 1,
+          at: ctx.now.toISOString(),
+        },
+      });
     if (result === 'invalid')
       await checkInvalidBurstTx(tx, emit, {
         orgId,
         eventId: event.id,
         at: ctx.now,
         userId: scannedBy,
-        deviceId: null,
+        deviceId,
       });
     await checkVelocityTx(tx, emit, {
       orgId,
@@ -241,6 +265,15 @@ export const scanTicketCommand = tenantCommand({
     data: { result: r?.result, checkpointId: input.checkpointId ?? null },
   }),
 });
+
+/** The ticket's live admission on an event day, if any. */
+export async function liveAdmissionTx(tx: TenantTx, ticketId: string, day: string) {
+  const [live] = await tx
+    .select()
+    .from(admissions)
+    .where(and(eq(admissions.ticketId, ticketId), eq(admissions.day, day), isNull(admissions.undoneAt)));
+  return live ?? null;
+}
 
 export const undoAdmissionCommand = tenantCommand({
   name: 'checkin.undoAdmission',

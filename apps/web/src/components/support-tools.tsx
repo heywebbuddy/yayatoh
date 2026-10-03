@@ -6,8 +6,8 @@ import { useActionState, useId, useState } from 'react';
 import { errorMessageKey } from '@/lib/errors.ts';
 import { type FormState, INITIAL_FORM_STATE } from '@/lib/form-state.ts';
 
-const field = 'min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body';
-const area = 'rounded-card border border-zinc-200 bg-white px-4 py-2 text-body';
+const field = 'field';
+const area = 'rounded-card border border-line bg-surface px-4 py-2 text-body';
 
 type Action<S> = (prev: S, form: FormData) => Promise<S>;
 
@@ -35,7 +35,7 @@ function ShownOnce({ label, value }: { label: string; value: string }) {
   const id = useId();
   return (
     <div className="flex flex-col gap-1">
-      <label htmlFor={id} className="text-caption text-zinc-600">
+      <label htmlFor={id} className="text-[13px] font-bold text-ink">
         {label}
       </label>
       <input
@@ -64,7 +64,7 @@ export function TransferTicketForm({
   return (
     <form key={state.stamp ?? 0} action={formAction} className="flex flex-col gap-3" noValidate>
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="transfer-ticket" className="text-caption text-zinc-600">
+        <label htmlFor="transfer-ticket" className="text-[13px] font-bold text-ink">
           {t('ticket')}
         </label>
         <select id="transfer-ticket" name="ticketId" required className={field}>
@@ -155,9 +155,9 @@ export function CreditNoteForm({
   return (
     <form key={state.stamp ?? 0} action={formAction} className="flex flex-col gap-3" noValidate>
       <input type="hidden" name="key" value={requestKey} />
-      <p className="text-caption text-zinc-600">{t('creditable', { amount: creditable })}</p>
+      <p className="text-caption text-ink-2">{t('creditable', { amount: creditable })}</p>
       <fieldset className="flex flex-col gap-2">
-        <legend className="text-caption text-zinc-600">{t('kindLegend')}</legend>
+        <legend className="text-[13px] font-bold text-ink">{t('kindLegend')}</legend>
         {(['partial', 'full'] as const).map((k) => (
           <label key={k} className="flex min-h-6 items-center gap-2 text-body">
             <input
@@ -174,7 +174,7 @@ export function CreditNoteForm({
       </fieldset>
       {kind === 'partial' ? (
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="credit-amount" className="text-caption text-zinc-600">
+          <label htmlFor="credit-amount" className="text-[13px] font-bold text-ink">
             {t('amount', { currency })}
           </label>
           <input
@@ -187,7 +187,7 @@ export function CreditNoteForm({
         </div>
       ) : null}
       <fieldset className="flex flex-col gap-2">
-        <legend className="text-caption text-zinc-600">{t('dispositionLegend')}</legend>
+        <legend className="text-[13px] font-bold text-ink">{t('dispositionLegend')}</legend>
         {(['store_credit', 'refunded'] as const).map((d, i) => (
           <label key={d} className="flex min-h-6 items-center gap-2 text-body">
             <input type="radio" name="disposition" value={d} defaultChecked={i === 0} className="size-5" />
@@ -196,7 +196,7 @@ export function CreditNoteForm({
         ))}
       </fieldset>
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="credit-reason" className="text-caption text-zinc-600">
+        <label htmlFor="credit-reason" className="text-[13px] font-bold text-ink">
           {t('reason')}
         </label>
         <textarea
@@ -208,7 +208,7 @@ export function CreditNoteForm({
           aria-invalid={state.fields?.includes('reason') || undefined}
           className={area}
         />
-        <p id="credit-reason-hint" className="text-caption text-zinc-500">
+        <p id="credit-reason-hint" className="text-caption text-ink-2">
           {t('reasonHint')}
         </p>
       </div>
@@ -256,7 +256,7 @@ export function RunMacroForm({
     <form key={state.stamp ?? 0} action={formAction} className="flex flex-col gap-3" noValidate>
       <input type="hidden" name="key" value={requestKey} />
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="macro-select" className="text-caption text-zinc-600">
+        <label htmlFor="macro-select" className="text-[13px] font-bold text-ink">
           {t('choose')}
         </label>
         <select
@@ -275,10 +275,10 @@ export function RunMacroForm({
       </div>
       {macro ? (
         <section
-          className="flex flex-col gap-1 rounded-card border border-zinc-200 p-3"
+          className="flex flex-col gap-1 rounded-card border border-line p-3"
           aria-label={t('preview')}
         >
-          <p className="text-caption text-zinc-600">
+          <p className="text-caption text-ink-2">
             {t('does', { actions: macro.actions.map((a) => t(`action.${a}`)).join(' · ') })}
           </p>
           {macro.actions.includes('email_buyer') || macro.actions.includes('add_note') ? (
@@ -291,9 +291,9 @@ export function RunMacroForm({
       ) : null}
       {transfers ? (
         <fieldset className="flex flex-col gap-3">
-          <legend className="text-caption text-zinc-600">{t('transferLegend')}</legend>
+          <legend className="text-[13px] font-bold text-ink">{t('transferLegend')}</legend>
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="macro-ticket" className="text-caption text-zinc-600">
+            <label htmlFor="macro-ticket" className="text-[13px] font-bold text-ink">
               {t('ticket')}
             </label>
             <select id="macro-ticket" name="ticketId" className={field}>
@@ -364,7 +364,7 @@ export function MacroEditor({
         aria-invalid={state.fields?.includes('subject') || undefined}
       />
       <div className="flex flex-col gap-1.5">
-        <label htmlFor={id('body')} className="text-caption text-zinc-600">
+        <label htmlFor={id('body')} className="text-[13px] font-bold text-ink">
           {t('body')}
         </label>
         <textarea
@@ -378,7 +378,7 @@ export function MacroEditor({
           aria-invalid={state.fields?.includes('body') || undefined}
           className={area}
         />
-        <p id={id('fields')} className="text-caption text-zinc-500">
+        <p id={id('fields')} className="text-caption text-ink-2">
           {t('fieldsHint')}{' '}
           <span dir="ltr" className="font-mono">
             {fields.map((f) => `{{${f}}}`).join(' ')}
@@ -386,7 +386,7 @@ export function MacroEditor({
         </p>
       </div>
       <fieldset className="flex flex-col gap-2">
-        <legend className="text-caption text-zinc-600">{t('actionsLegend')}</legend>
+        <legend className="text-[13px] font-bold text-ink">{t('actionsLegend')}</legend>
         {(['email_buyer', 'add_note', 'resend_tickets', 'transfer_ticket'] as const).map((a) => (
           <label key={a} className="flex min-h-6 items-center gap-2 text-body">
             <input
@@ -500,7 +500,7 @@ export function TransferRulesForm({
         {t('allowed')}
       </label>
       <div className="flex flex-col gap-1.5">
-        <label htmlFor={`${idPrefix}-cutoff`} className="text-caption text-zinc-600">
+        <label htmlFor={`${idPrefix}-cutoff`} className="text-[13px] font-bold text-ink">
           {t('cutoff')}
         </label>
         <input
@@ -512,12 +512,12 @@ export function TransferRulesForm({
           aria-invalid={state.fields?.includes('transferCutoffHours') || undefined}
           className={`${field} w-28`}
         />
-        <span id={`${idPrefix}-cutoff-hint`} className="text-caption text-zinc-500">
+        <span id={`${idPrefix}-cutoff-hint`} className="text-caption text-ink-2">
           {t('cutoffHint')}
         </span>
       </div>
       <div className="flex flex-col gap-1.5">
-        <label htmlFor={`${idPrefix}-fee`} className="text-caption text-zinc-600">
+        <label htmlFor={`${idPrefix}-fee`} className="text-[13px] font-bold text-ink">
           {t('fee', { currency })}
         </label>
         <input
@@ -528,7 +528,7 @@ export function TransferRulesForm({
           aria-invalid={state.fields?.includes('transferFeeMinor') || undefined}
           className={`${field} w-28`}
         />
-        <span className="text-caption text-zinc-500">{t('feeHint')}</span>
+        <span className="text-caption text-ink-2">{t('feeHint')}</span>
       </div>
       <Button type="submit" size="sm" variant="secondary" disabled={pending}>
         {t('save')}

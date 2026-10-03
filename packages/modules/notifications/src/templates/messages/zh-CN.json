@@ -181,12 +181,12 @@
       "cta": "查看我的订单"
     },
     "alerts.alert": {
-      "subject": "{rule, select, unseated {{count, plural, other {{countWords} 位参会者没有座位}}} undistributed {{count, plural, other {{countWords} 张已购门票尚未分发}}} paymentsFailed {{count, plural, other {{countWords} 笔付款失败}}} paymentsStuck {{count, plural, other {{countWords} 笔付款卡住了}}} refundSurge {{count, plural, other {过去一小时内有 {countWords} 笔退款}}} devicesOffline {{count, plural, other {{countWords} 台签到设备离线}}} devicesLowBattery {{count, plural, other {{countWords} 台签到设备电量不足}}} devicesBacklog {{count, plural, other {{countWords} 台签到设备有待同步的扫描}}} capacityNear {场地已满 {count}%} capacityFull {场地已满员（{count}%）} sellOut {已售出 {count}% 的门票} salesPace {门票销售达到目标进度的 {count}%} readiness {{count, plural, other {{countWords} 个设置步骤阻碍了此活动}}} domain {{count, plural, other {{countWords} 个自定义域名有问题}}} payoutsPastDue {{count, plural, other {收款账户有 {countWords} 项要求已逾期}}} deliverability {电子邮件送达率需要关注} automationFailed {{count, plural, other {今天有 {countWords} 条消息或批量操作失败}}} campaignFailed {{count, plural, other {今天有 {countWords} 次营销活动发送失败}}} disputeDeadline {{count, plural, other {有 {countWords} 起争议需要尽快提交证据}}} other {提醒}}",
+      "subject": "{rule, select, unseated {{count, plural, other {{countWords} 位参会者没有座位}}} undistributed {{count, plural, other {{countWords} 张已购门票尚未分发}}} paymentsFailed {{count, plural, other {{countWords} 笔付款失败}}} paymentsStuck {{count, plural, other {{countWords} 笔付款卡住了}}} refundSurge {{count, plural, other {过去一小时内有 {countWords} 笔退款}}} devicesOffline {{count, plural, other {{countWords} 台签到设备离线}}} devicesLowBattery {{count, plural, other {{countWords} 台签到设备电量不足}}} devicesBacklog {{count, plural, other {{countWords} 台签到设备有待同步的扫描}}} capacityNear {场地已满 {count}%} capacityFull {场地已满员（{count}%）} sellOut {已售出 {count}% 的门票} salesPace {门票销售达到目标进度的 {count}%} readiness {{count, plural, other {{countWords} 个设置步骤阻碍了此活动}}} domain {{count, plural, other {{countWords} 个自定义域名有问题}}} payoutsPastDue {{count, plural, other {收款账户有 {countWords} 项要求已逾期}}} deliverability {电子邮件送达率需要关注} automationFailed {{count, plural, other {今天有 {countWords} 条消息或批量操作失败}}} assistanceOverdue {{count, plural, other {{countWords} 个求助请求等待过久}}} campaignFailed {{count, plural, other {今天有 {countWords} 次营销活动发送失败}}} disputeDeadline {{count, plural, other {有 {countWords} 起争议需要尽快提交证据}}} other {提醒}}",
       "intro": "{eventName, select, none {{org} 有需要关注的事项。} other {{eventName} 有需要关注的事项。}}点击按钮打开处理页面。",
       "cta": "去处理"
     },
     "alerts.alert-text": {
-      "subject": "{rule, select, unseated {{count, plural, other {{countWords} 位参会者没有座位}}} undistributed {{count, plural, other {{countWords} 张已购门票尚未分发}}} paymentsFailed {{count, plural, other {{countWords} 笔付款失败}}} paymentsStuck {{count, plural, other {{countWords} 笔付款卡住了}}} refundSurge {{count, plural, other {过去一小时内有 {countWords} 笔退款}}} devicesOffline {{count, plural, other {{countWords} 台签到设备离线}}} devicesLowBattery {{count, plural, other {{countWords} 台签到设备电量不足}}} devicesBacklog {{count, plural, other {{countWords} 台签到设备有待同步的扫描}}} capacityNear {场地已满 {count}%} capacityFull {场地已满员（{count}%）} sellOut {已售出 {count}% 的门票} salesPace {门票销售达到目标进度的 {count}%} readiness {{count, plural, other {{countWords} 个设置步骤阻碍了此活动}}} domain {{count, plural, other {{countWords} 个自定义域名有问题}}} payoutsPastDue {{count, plural, other {收款账户有 {countWords} 项要求已逾期}}} deliverability {电子邮件送达率需要关注} automationFailed {{count, plural, other {今天有 {countWords} 条消息或批量操作失败}}} campaignFailed {{count, plural, other {今天有 {countWords} 次营销活动发送失败}}} disputeDeadline {{count, plural, other {有 {countWords} 起争议需要尽快提交证据}}} other {提醒}}",
+      "subject": "{rule, select, unseated {{count, plural, other {{countWords} 位参会者没有座位}}} undistributed {{count, plural, other {{countWords} 张已购门票尚未分发}}} paymentsFailed {{count, plural, other {{countWords} 笔付款失败}}} paymentsStuck {{count, plural, other {{countWords} 笔付款卡住了}}} refundSurge {{count, plural, other {过去一小时内有 {countWords} 笔退款}}} devicesOffline {{count, plural, other {{countWords} 台签到设备离线}}} devicesLowBattery {{count, plural, other {{countWords} 台签到设备电量不足}}} devicesBacklog {{count, plural, other {{countWords} 台签到设备有待同步的扫描}}} capacityNear {场地已满 {count}%} capacityFull {场地已满员（{count}%）} sellOut {已售出 {count}% 的门票} salesPace {门票销售达到目标进度的 {count}%} readiness {{count, plural, other {{countWords} 个设置步骤阻碍了此活动}}} domain {{count, plural, other {{countWords} 个自定义域名有问题}}} payoutsPastDue {{count, plural, other {收款账户有 {countWords} 项要求已逾期}}} deliverability {电子邮件送达率需要关注} automationFailed {{count, plural, other {今天有 {countWords} 条消息或批量操作失败}}} assistanceOverdue {{count, plural, other {{countWords} 个求助请求等待过久}}} campaignFailed {{count, plural, other {今天有 {countWords} 次营销活动发送失败}}} disputeDeadline {{count, plural, other {有 {countWords} 起争议需要尽快提交证据}}} other {提醒}}",
       "intro": "{eventName, select, none {{org} 有需要关注的事项。} other {{eventName} 有需要关注的事项。}}点击按钮打开处理页面。"
     },
     "campaigns.test": {
@@ -197,6 +197,11 @@
       "subject": "{eventName} 的贷记单 {number}",
       "intro": "{org} 已为你在 {eventName} 的订单开具金额为 {amount} 的贷记单 {number}。{storeCredit, select, yes {在 {org} 的下一笔订单结账时输入代码 {code} 即可使用。} other {此金额已退还给你。}}",
       "cta": "查看我的订单"
+    },
+    "orders.invoice": {
+      "subject": "{eventName} 的发票 {number}",
+      "intro": "您已报名参加 {eventName}。{org} 已开具发票 {number}，金额 {amount}，付款截止日期为 {due}。请使用下方按钮查看发票、下载 PDF，或支付全部或部分款项。",
+      "cta": "查看并支付发票"
     },
     "orders.support-reply": {
       "subject": "{subject}",
@@ -226,6 +231,21 @@
       "intro": "这是您的链接，可从上次中断的地方继续 {eventName} 的报名。它在您最后一次保存后 {days, plural, other {# 天}} 内有效，且仅供您本人使用，请勿转发。如果您没有请求此邮件，可以忽略。",
       "cta": "继续我的报名"
     },
+    "orders.table-naming": {
+      "subject": "{reminder, plural, =1 {提醒：请填写 {eventName} 的宾客姓名} other {请填写 {eventName} 的宾客姓名}}",
+      "intro": "您的{tableName}共有 {size, plural, other {# 个座位}}。{missing, plural, =0 {每个座位都已填写姓名，您可随时查看。} other {还有 # 个座位未填写姓名。}}请使用下方按钮告诉我们谁坐在您的桌位。",
+      "cta": "填写宾客姓名"
+    },
+    "registration.approved": {
+      "subject": "您参加 {eventName} 的申请已获批准",
+      "intro": "{name}，好消息：您以 {typeName} 身份参加 {eventName} 的申请已获批准。请点击下方按钮查看您的报名；如果您的通行证需要付费，请完成付款以确认名额。",
+      "cta": "查看我的报名"
+    },
+    "registration.denied": {
+      "subject": "您参加 {eventName} 的申请",
+      "intro": "{name}，感谢您申请以 {typeName} 身份参加 {eventName}。主办方这次未能批准您的申请。您没有被收取任何费用。",
+      "cta": "查看我的申请"
+    },
     "portal.invite": {
       "subject": "邀请您加入{eventName}门户",
       "intro": "{org}邀请您以{role}身份加入{eventName}门户。您可以在那里查看自己的场次、更新个人资料并完成任务。点击按钮后需要输入发送到此邮箱的登录验证码。",
@@ -240,6 +260,40 @@
       "subject": "提醒：{eventName}的{title}",
       "intro": "{org}仍在等待您提交{eventName}的“{title}”。截止时间：{until}。",
       "cta": "打开我的任务"
+    },
+    "donations.receipt": {
+      "subject": "{deductible, select, yes {来自 {org} 的捐赠收据} other {来自 {org} 的付款收据}}",
+      "intro": "感谢您为 {eventName} 支付 {amount}。您的收据如下。请将其或 PDF 副本与您的记录一起保存。",
+      "cta": "下载 PDF 收据"
+    },
+    "donations.year-end-statement": {
+      "subject": "来自 {org} 的 {year} 年捐赠明细",
+      "intro": "感谢您在 {year} 年支持 {org}。您的可抵税付款明细如下，并附 PDF。",
+      "cta": "下载 PDF 明细"
+    },
+    "guests.invitation": {
+      "subject": "{subject}",
+      "intro": "{message}",
+      "cta": "回复邀请"
+    },
+    "guests.rsvp-reminder": {
+      "subject": "提醒：请回复{eventName}的邀请",
+      "intro": "{name}，我们尚未收到您的回复。请在{deadline}前告诉我们哪几位会出席{eventName}。",
+      "cta": "立即回复"
+    },
+    "registration.session-enrolled": {
+      "subject": "有空位了：你已报名 {sessionTitle}",
+      "intro": "{eventName}（{when}）的 {sessionTitle} 有空位了，你是候补名单上的下一位，现已为你报名。如果无法参加，请从日程中移除该场次，让下一位获得名额。",
+      "cta": "打开我的日程"
+    },
+    "registration.session-offer": {
+      "subject": "{sessionTitle} 的名额为你保留至 {until}",
+      "intro": "{eventName}（{when}）的 {sessionTitle} 有空位了，下一位就是你。请在 {until} 前在日程中接受；逾时名额将转给下一位。",
+      "cta": "接受名额"
+    },
+    "alerts.alert-urgent-text": {
+      "subject": "{rule, select, unseated {{count, plural, other {{countWords} 位参会者没有座位}}} undistributed {{count, plural, other {{countWords} 张已购门票尚未分发}}} paymentsFailed {{count, plural, other {{countWords} 笔付款失败}}} paymentsStuck {{count, plural, other {{countWords} 笔付款卡住了}}} refundSurge {{count, plural, other {过去一小时内有 {countWords} 笔退款}}} devicesOffline {{count, plural, other {{countWords} 台签到设备离线}}} devicesLowBattery {{count, plural, other {{countWords} 台签到设备电量不足}}} devicesBacklog {{count, plural, other {{countWords} 台签到设备有待同步的扫描}}} capacityNear {场地已满 {count}%} capacityFull {场地已满员（{count}%）} sellOut {已售出 {count}% 的门票} salesPace {门票销售达到目标进度的 {count}%} readiness {{count, plural, other {{countWords} 个设置步骤阻碍了此活动}}} domain {{count, plural, other {{countWords} 个自定义域名有问题}}} payoutsPastDue {{count, plural, other {收款账户有 {countWords} 项要求已逾期}}} deliverability {电子邮件送达率需要关注} automationFailed {{count, plural, other {今天有 {countWords} 条消息或批量操作失败}}} assistanceOverdue {{count, plural, other {{countWords} 个求助请求等待过久}}} campaignFailed {{count, plural, other {今天有 {countWords} 次营销活动发送失败}}} disputeDeadline {{count, plural, other {有 {countWords} 起争议需要尽快提交证据}}} other {提醒}}",
+      "intro": "{eventName, select, none {{org} 有需要关注的事项。} other {{eventName} 有需要关注的事项。}}点击按钮打开处理页面。"
     }
   },
   "roles": {

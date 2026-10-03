@@ -205,6 +205,43 @@ describe('who serves a request', () => {
       '/event-portal/sign-in/site',
       '/fr/event-portal',
       '/events/summit/exhibitors',
+      // Batch 3g merge: TV display links, the seat finder and its guest help pages, the Scan PWA's
+      // help requests and the Command Center's presence ping.
+      '/tv/abc~sig',
+      '/ar/tv/abc~sig',
+      '/events/summit/seat-finder',
+      '/events/summit/seat-finder/help',
+      '/events/summit/seat-finder/help/abc~sig',
+      '/ar/events/summit/seat-finder/help',
+      '/api/scan/assistance',
+      '/api/tv/abc~sig',
+      '/api/command-center/org/event/presence',
+      // M5.1c: group registration, the applicant's page, the payer's group page.
+      '/events/summit/register/group',
+      '/events/summit/registration/abc~sig',
+      '/events/summit/group/abc~sig',
+      // M5.7a: the participant page and the big screen (and its stream).
+      '/events/summit/live/0190a0b0-0000-7000-8000-000000000001',
+      '/ar/events/summit/live/0190a0b0-0000-7000-8000-000000000001',
+      '/display/org~session~1~sig',
+      '/api/engagement/display/org~session~1~sig',
+      // M4.1d/M4.1f: RSVP pages and the contact collector.
+      '/rsvp/abc~sig',
+      '/rsvp/find/ABCD2345',
+      '/collect/ABCD2345',
+      '/es/collect/ABCD2345',
+      // M4.2b: a gala table's claim link.
+      '/tables/abc~sig',
+      // M4.8a: the giving page and its thank-you page.
+      '/events/summit/give',
+      '/events/summit/give/thanks',
+      '/ar/events/summit/give',
+      // M4.8b: receipt and year-end statement PDFs.
+      '/receipts/0190a0b0-0000-7000-8000-000000000001/abc~sig',
+      '/statements/0190a0b0-0000-7000-8000-000000000001/abc~sig',
+      // M5.1d: the buyer's invoice and its PDF.
+      '/events/summit/invoice/abc~sig',
+      '/events/summit/invoice/abc~sig/pdf',
     ]) {
       expect(isPlatformPath(new URL(p, 'https://x').pathname) || decide(p).owner === 'next').toBe(true);
       expect(decide(p, flags(), { legacy: true })).toEqual({
@@ -218,6 +255,12 @@ describe('who serves a request', () => {
     // The event page itself and its other sub-paths stay with the route table.
     expect(isPlatformPath('/events/summit')).toBe(false);
     expect(isPlatformPath('/events/summit/attendee')).toBe(false);
+    expect(isPlatformPath('/events/summit/seat-finder/help/a/b')).toBe(false);
+    expect(isPlatformPath('/tvguide')).toBe(false);
+    expect(isPlatformPath('/events/summit/group')).toBe(false);
+    expect(isPlatformPath('/events/summit/live')).toBe(false);
+    expect(isPlatformPath('/events/summit/give/other')).toBe(false);
+    expect(isPlatformPath('/displays')).toBe(false);
   });
 });
 

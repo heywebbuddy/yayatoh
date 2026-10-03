@@ -3,6 +3,8 @@
 import {
   createJourneyCommand,
   deleteJourneyCommand,
+  INVOICE_REMINDER_MESSAGES,
+  invoiceRemindersTemplate,
   setJourneyEnabledCommand,
   updateJourneyCommand,
   VISION_MESSAGES,
@@ -30,6 +32,26 @@ const fieldOf = (err: { details?: Record<string, unknown> }): string | undefined
   return issue?.path || undefined;
 };
 
+/** M5.1d: the invoice reminders' copy in the organizer's language; placeholders stay as written. */
+async function invoiceReminderCopy() {
+  const t = await getTranslations('journeys.invoiceReminders');
+  const keep = {
+    name: '{name}',
+    event: '{event}',
+    when: '{when}',
+    invoice: '{invoice}',
+    balance: '{balance}',
+    due: '{due}',
+    link: '{link}',
+  };
+  return Object.fromEntries(
+    INVOICE_REMINDER_MESSAGES.map((k) => [
+      k,
+      { subject: t(`${k}.subject`, keep), body: t(`${k}.body`, keep) },
+    ]),
+  ) as Parameters<typeof invoiceRemindersTemplate>[0];
+}
+
 /** The vision template's copy in the organizer's language; placeholders stay as `{name}`… */
 async function visionCopy() {
   const t = await getTranslations('journeys.vision');
@@ -50,9 +72,15 @@ export async function createJourneyAction(
   const [kind, id] = scope.split(':');
   if (!id || (kind !== 'event' && kind !== 'series'))
     return { ok: false, code: 'validation_failed', field: 'scope' };
-  const template = form.get('template') === 'vision' ? 'vision' : null;
+  const raw = form.get('template');
+  const template = raw === 'vision' || raw === 'invoice_reminders' ? raw : null;
   const trigger = String(form.get('trigger') ?? 'order_paid');
-  const fromTemplate = template ? visionTemplate(await visionCopy()) : null;
+  const fromTemplate =
+    template === 'vision'
+      ? visionTemplate(await visionCopy())
+      : template === 'invoice_reminders'
+        ? invoiceRemindersTemplate(await invoiceReminderCopy())
+        : null;
   let journeyId: string;
   try {
     ({ id: journeyId } = await executeCommand(

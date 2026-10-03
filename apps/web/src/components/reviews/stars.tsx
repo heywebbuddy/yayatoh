@@ -8,8 +8,8 @@ export function Stars({ rating, label }: { rating: number; label: string }) {
         <Star
           key={n}
           aria-hidden="true"
-          className={n <= rating ? 'size-4 fill-accent-900 text-accent-900' : 'size-4 text-zinc-300'}
-          strokeWidth={1.75}
+          className={n <= rating ? 'size-4 fill-primary text-primary-ink' : 'size-4 text-ink-3'}
+          strokeWidth={2}
         />
       ))}
     </span>

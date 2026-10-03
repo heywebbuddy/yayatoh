@@ -5,6 +5,19 @@ export {
   userPreferencesTx,
 } from './account-data.ts';
 export {
+  CAMPAIGN_DEDUPE_PREFIX,
+  campaignDedupeKey,
+  campaignSendStatsTx,
+  DELIVERABILITY_THRESHOLDS,
+  type DeliverabilityBreakdown,
+  type DeliverabilityVerdict,
+  deliverabilityBreakdownTx,
+  deliverabilityVerdict,
+  PLATFORM_SENDER_DOMAIN,
+  rateBps,
+  type SendTally,
+} from './deliverability.ts';
+export {
   DELIVERY_SIGNATURE_TOLERANCE_S,
   DeliveryEvent,
   type DeliveryWebhookAdapter,
@@ -79,6 +92,7 @@ export {
   OPTIONAL_CATEGORIES,
   whatsappCategoryOf,
 } from './kinds.ts';
+export { type MessageState, messageStatesByPrefixTx, messageStatesTx } from './message-states.ts';
 export { addInboxItemTx, createNotifier } from './notifier.ts';
 export {
   allowedPlaceholders,

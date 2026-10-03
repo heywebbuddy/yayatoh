@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Input } from '@yayatoh/ui';
+import { Button, cx, Input, Tabs, tabClass } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { KioskScreen } from '@/components/scan-kiosk.tsx';
@@ -8,7 +8,13 @@ import { StaffPanel } from '@/components/scan-staff.tsx';
 import { SupervisorPanel } from '@/components/scan-supervisor.tsx';
 import { SignalBanner } from '@/components/signal-banner.tsx';
 import { canUseCamera } from '@/scan/camera.ts';
-import { ScanClient, type ScanConfig, type ScanOutcome, ScanSyncError } from '@/scan/client.ts';
+import {
+  ScanClient,
+  type ScanConfig,
+  type ScanOutcome,
+  ScanSyncError,
+  type StaffView,
+} from '@/scan/client.ts';
 import { markScanFeedback, markScanStart } from '@/scan/feedback.ts';
 import { followChannel } from '@/scan/stream.ts';
 import { useCameraScan } from '@/scan/use-camera.ts';
@@ -36,15 +42,15 @@ const RESULT_KEY: Record<string, string> = {
 };
 
 const TONE: Record<string, string> = {
-  admitted: 'border-green-600 bg-green-50 text-green-900',
-  granted: 'border-green-600 bg-green-50 text-green-900',
-  provisional: 'border-accent-700 bg-accent-50 text-accent-text',
-  duplicate: 'border-accent-700 bg-accent-50 text-accent-text',
-  not_today: 'border-accent-700 bg-accent-50 text-accent-text',
-  wrong_date: 'border-accent-700 bg-accent-50 text-accent-text',
-  outside_window: 'border-accent-700 bg-accent-50 text-accent-text',
+  admitted: 'border-success bg-success-soft text-success',
+  granted: 'border-success bg-success-soft text-success',
+  provisional: 'border-primary bg-primary-soft text-primary-ink',
+  duplicate: 'border-warning bg-warning-soft text-warning',
+  not_today: 'border-warning bg-warning-soft text-warning',
+  wrong_date: 'border-warning bg-warning-soft text-warning',
+  outside_window: 'border-warning bg-warning-soft text-warning',
 };
-const tone = (key: string) => TONE[key] ?? 'border-pink-700 bg-pink-50 text-pink-700';
+const tone = (key: string) => TONE[key] ?? 'border-danger bg-danger-soft text-danger';
 
 /**
  * The Scan PWA: works offline from a downloaded guest list, queues scans, and syncs when the
@@ -73,7 +79,7 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
   const [refreshKey, setRefreshKey] = useState(0);
   const [live, setLive] = useState(false);
   const [selfId, setSelfId] = useState<string | null>(null);
-  const [channels, setChannels] = useState<{ checkins: string; devices: string } | null>(null);
+  const [channels, setChannels] = useState<StaffView['channels'] | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const markRef = useRef<{ id: string; scanId: string } | null>(null);
   const seq = useRef(0);
@@ -220,6 +226,19 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
           bump();
         },
       }),
+      // M3.3b: help requests raised, taken or closed re-read the staff screen's queue.
+      ...(channels.assistance
+        ? [
+            followChannel({
+              channel: channels.assistance,
+              token: client.token,
+              // Only a request that changed: the stream's own (re)connect snapshot changes nothing.
+              onMessage: (event) => {
+                if (event === 'request') bump();
+              },
+            }),
+          ]
+        : []),
     ];
     return () => {
       for (const stop of stops) stop();
@@ -256,7 +275,7 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
   }, [t]);
   useCameraScan(camera, video, scan, onCameraError);
 
-  if (phase === 'boot') return <p className="text-body text-zinc-500">{t('common.loading')}</p>;
+  if (phase === 'boot') return <p className="text-body text-ink-2">{t('common.loading')}</p>;
 
   if (phase === 'wiped') {
     return (
@@ -264,7 +283,7 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
         <h1 id="wiped-heading" className="text-title">
           {t('scan.wipedTitle')}
         </h1>
-        <p className="text-body text-zinc-600">{t('scan.wipedDescription')}</p>
+        <p className="text-body text-ink-2">{t('scan.wipedDescription')}</p>
       </section>
     );
   }
@@ -283,11 +302,18 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
         }}
       >
         <h1 className="text-title">{t('scan.setupTitle')}</h1>
-        <p className="text-body text-zinc-600">{t('scan.setupHint')}</p>
-        <Input name="eventId" required label={t('scan.eventId')} autoComplete="off" />
-        <Input name="token" required label={t('scan.deviceKey')} autoComplete="off" spellCheck={false} />
-        {error ? <p className="text-body text-pink-700">{error}</p> : null}
-        <Button type="submit" className="self-start">
+        <p className="text-body text-ink-2">{t('scan.setupHint')}</p>
+        <Input name="eventId" required label={t('scan.eventId')} autoComplete="off" fieldSize="lg" />
+        <Input
+          name="token"
+          required
+          label={t('scan.deviceKey')}
+          autoComplete="off"
+          spellCheck={false}
+          fieldSize="lg"
+        />
+        {error ? <p className="text-body font-semibold text-danger">{error}</p> : null}
+        <Button type="submit" size="lg" className="w-full sm:w-auto sm:self-start">
           {t('scan.start')}
         </Button>
       </form>
@@ -320,7 +346,7 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
     <div className="flex flex-col gap-4">
       <header className="flex flex-col gap-1">
         <h1 className="text-title">{client?.eventName ?? t('scan.title')}</h1>
-        <p className="flex flex-wrap gap-x-3 text-caption text-zinc-600" aria-live="polite">
+        <p className="flex flex-wrap gap-x-3 text-caption text-ink-2" aria-live="polite">
           <span data-testid="scan-network">{online ? t('scan.online') : t('scan.offline')}</span>
           <span>{t('scan.tickets', { count: tickets })}</span>
           <span data-testid="scan-queue">{t('scan.queued', { count: queue })}</span>
@@ -332,19 +358,19 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
           </p>
         ) : null}
       </header>
-      <nav aria-label={t('scanStaff.modes')} className="flex flex-wrap gap-2">
+      <Tabs label={t('scanStaff.modes')}>
         {views.map((v) => (
-          <Button
+          <button
             key={v.key}
             type="button"
-            variant={view === v.key ? 'primary' : 'secondary'}
             aria-pressed={view === v.key}
             onClick={() => setView(v.key)}
+            className={cx(tabClass(view === v.key), 'min-h-12 grow justify-center text-[15px]')}
           >
             {v.label}
-          </Button>
+          </button>
         ))}
-      </nav>
+      </Tabs>
       {client && view === 'staff' ? (
         <StaffPanel
           client={client}
@@ -361,7 +387,7 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
         <ScanView>
           {client && (client.checkpoints.length > 0 || client.scoped) ? (
             <div className="flex flex-col gap-1.5 self-start">
-              <label htmlFor="scan-app-checkpoint" className="text-caption text-zinc-600">
+              <label htmlFor="scan-app-checkpoint" className="text-[13px] font-bold text-ink">
                 {t('checkpoints.scanningAt')}
               </label>
               <select
@@ -374,7 +400,7 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
                   void client.setCheckpoint(id || null).then(() => tick());
                   input.current?.focus();
                 }}
-                className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
+                className="field"
               >
                 <option value="">
                   {client.scoped ? t('checkpoints.chooseStand') : t('checkpoints.wholeEvent')}
@@ -397,8 +423,8 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
               input.current?.focus();
             }}
           >
-            <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-              <label htmlFor="scan-app-code" className="text-caption text-zinc-600">
+            <div className="flex min-w-0 flex-1 basis-full flex-col gap-1.5 sm:basis-64">
+              <label htmlFor="scan-app-code" className="text-[13px] font-bold text-ink">
                 {t('checkin.codeLabel')}
               </label>
               <input
@@ -410,24 +436,25 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
                 autoComplete="off"
                 autoCapitalize="characters"
                 spellCheck={false}
-                className="min-h-14 w-full rounded-pill border border-zinc-300 bg-white px-5 font-mono text-[18px] tracking-[0.08em]"
+                className="field field-lg w-full font-mono tracking-[0.08em]"
               />
             </div>
-            <Button type="submit" className="min-h-14">
+            <Button type="submit" size="lg" className="flex-1 sm:flex-none">
               {t('checkin.check')}
             </Button>
             {hasCamera ? (
               <Button
                 type="button"
                 variant="secondary"
-                className="min-h-14"
+                size="lg"
+                className="flex-1 sm:flex-none"
                 onClick={() => setCamera((v) => !v)}
               >
                 {camera ? t('scan.stopCamera') : t('scan.camera')}
               </Button>
             ) : null}
           </form>
-          {error ? <p className="text-body text-pink-700">{error}</p> : null}
+          {error ? <p className="text-body text-danger">{error}</p> : null}
           {camera ? (
             <video
               ref={video}
@@ -440,9 +467,9 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
             {last && resultKey ? (
               <div
                 data-result={resultKey}
-                className={`flex flex-col gap-1 rounded-panel border-2 px-6 py-5 ${tone(resultKey)}`}
+                className={`flex flex-col gap-1.5 rounded-panel border-2 px-6 py-6 elevation-card ${tone(resultKey)}`}
               >
-                <p className="text-[28px] leading-tight font-medium tracking-[-0.02em]">
+                <p className="text-[32px] leading-tight font-extrabold tracking-[-0.03em]">
                   {t(`checkin.result.${resultKey}`)}
                 </p>
                 {resultKey === 'wrong_checkpoint' && client ? (

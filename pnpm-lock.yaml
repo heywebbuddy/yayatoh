@@ -253,6 +253,9 @@ importers:
 
   apps/admin:
     dependencies:
+      '@fontsource-variable/manrope':
+        specifier: 5.3.0
+        version: 5.3.0
       '@yayatoh/auth':
         specifier: workspace:*
         version: link:../../packages/auth
@@ -265,6 +268,9 @@ importers:
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@yayatoh/donations':
+        specifier: workspace:*
+        version: link:../../packages/modules/donations
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../packages/kernel
@@ -423,6 +429,15 @@ importers:
 
   apps/web:
     dependencies:
+      '@fontsource-variable/manrope':
+        specifier: 5.3.0
+        version: 5.3.0
+      '@fontsource-variable/noto-sans-devanagari':
+        specifier: 5.3.0
+        version: 5.3.0
+      '@fontsource/ibm-plex-sans-arabic':
+        specifier: 5.3.0
+        version: 5.3.0
       '@yayatoh/ai':
         specifier: workspace:*
         version: link:../../packages/modules/ai
@@ -432,6 +447,9 @@ importers:
       '@yayatoh/api-v1':
         specifier: workspace:*
         version: link:../../packages/api-v1
+      '@yayatoh/assistance':
+        specifier: workspace:*
+        version: link:../../packages/modules/assistance
       '@yayatoh/attendees':
         specifier: workspace:*
         version: link:../../packages/modules/attendees
@@ -474,6 +492,12 @@ importers:
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@yayatoh/donations':
+        specifier: workspace:*
+        version: link:../../packages/modules/donations
+      '@yayatoh/engagement':
+        specifier: workspace:*
+        version: link:../../packages/modules/engagement
       '@yayatoh/events':
         specifier: workspace:*
         version: link:../../packages/modules/events
@@ -658,6 +682,9 @@ importers:
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@yayatoh/donations':
+        specifier: workspace:*
+        version: link:../../packages/modules/donations
       '@yayatoh/events':
         specifier: workspace:*
         version: link:../../packages/modules/events
@@ -1021,6 +1048,9 @@ importers:
 
   packages/modules/alerts:
     dependencies:
+      '@yayatoh/assistance':
+        specifier: workspace:*
+        version: link:../assistance
       '@yayatoh/checkin':
         specifier: workspace:*
         version: link:../checkin
@@ -1051,6 +1081,49 @@ importers:
       '@yayatoh/seating':
         specifier: workspace:*
         version: link:../seating
+      '@yayatoh/tenancy':
+        specifier: workspace:*
+        version: link:../tenancy
+      '@yayatoh/ticketing':
+        specifier: workspace:*
+        version: link:../ticketing
+      drizzle-orm:
+        specifier: 'catalog:'
+        version: 0.45.3(@opentelemetry/api@1.9.0)(kysely@0.29.6)(pg@8.23.0)(postgres@3.4.9)
+      zod:
+        specifier: 'catalog:'
+        version: 4.6.5
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.19.0
+      '@yayatoh/config':
+        specifier: workspace:*
+        version: link:../../config
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  packages/modules/assistance:
+    dependencies:
+      '@yayatoh/checkin':
+        specifier: workspace:*
+        version: link:../checkin
+      '@yayatoh/contracts':
+        specifier: workspace:*
+        version: link:../../contracts
+      '@yayatoh/db':
+        specifier: workspace:*
+        version: link:../../db
+      '@yayatoh/events':
+        specifier: workspace:*
+        version: link:../events
+      '@yayatoh/kernel':
+        specifier: workspace:*
+        version: link:../../kernel
+      '@yayatoh/platform':
+        specifier: workspace:*
+        version: link:../../platform
       '@yayatoh/tenancy':
         specifier: workspace:*
         version: link:../tenancy
@@ -1137,6 +1210,9 @@ importers:
       '@yayatoh/events':
         specifier: workspace:*
         version: link:../events
+      '@yayatoh/guests':
+        specifier: workspace:*
+        version: link:../guests
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../kernel
@@ -1192,6 +1268,9 @@ importers:
       '@yayatoh/events':
         specifier: workspace:*
         version: link:../events
+      '@yayatoh/guests':
+        specifier: workspace:*
+        version: link:../guests
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../kernel
@@ -1450,6 +1529,9 @@ importers:
 
   packages/modules/command-center:
     dependencies:
+      '@yayatoh/assistance':
+        specifier: workspace:*
+        version: link:../assistance
       '@yayatoh/billing':
         specifier: workspace:*
         version: link:../billing
@@ -1468,6 +1550,9 @@ importers:
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../kernel
+      '@yayatoh/marketing':
+        specifier: workspace:*
+        version: link:../marketing
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../../platform
@@ -1517,6 +1602,98 @@ importers:
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../../platform
+      drizzle-orm:
+        specifier: 'catalog:'
+        version: 0.45.3(@opentelemetry/api@1.9.0)(kysely@0.29.6)(pg@8.23.0)(postgres@3.4.9)
+      zod:
+        specifier: 'catalog:'
+        version: 4.6.5
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.19.0
+      '@yayatoh/config':
+        specifier: workspace:*
+        version: link:../../config
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  packages/modules/donations:
+    dependencies:
+      '@yayatoh/contracts':
+        specifier: workspace:*
+        version: link:../../contracts
+      '@yayatoh/csv':
+        specifier: workspace:*
+        version: link:../../csv
+      '@yayatoh/db':
+        specifier: workspace:*
+        version: link:../../db
+      '@yayatoh/events':
+        specifier: workspace:*
+        version: link:../events
+      '@yayatoh/kernel':
+        specifier: workspace:*
+        version: link:../../kernel
+      '@yayatoh/orders':
+        specifier: workspace:*
+        version: link:../orders
+      '@yayatoh/pdf':
+        specifier: workspace:*
+        version: link:../../pdf
+      '@yayatoh/platform':
+        specifier: workspace:*
+        version: link:../../platform
+      '@yayatoh/tenancy':
+        specifier: workspace:*
+        version: link:../tenancy
+      '@yayatoh/ticketing':
+        specifier: workspace:*
+        version: link:../ticketing
+      '@yayatoh/ui':
+        specifier: workspace:*
+        version: link:../../ui
+      drizzle-orm:
+        specifier: 'catalog:'
+        version: 0.45.3(@opentelemetry/api@1.9.0)(kysely@0.29.6)(pg@8.23.0)(postgres@3.4.9)
+      intl-messageformat:
+        specifier: 11.2.15
+        version: 11.2.15
+      zod:
+        specifier: 'catalog:'
+        version: 4.6.5
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.19.0
+      '@yayatoh/config':
+        specifier: workspace:*
+        version: link:../../config
+      pdfjs-dist:
+        specifier: 5.4.296
+        version: 5.4.296
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  packages/modules/engagement:
+    dependencies:
+      '@yayatoh/db':
+        specifier: workspace:*
+        version: link:../../db
+      '@yayatoh/events':
+        specifier: workspace:*
+        version: link:../events
+      '@yayatoh/kernel':
+        specifier: workspace:*
+        version: link:../../kernel
+      '@yayatoh/platform':
+        specifier: workspace:*
+        version: link:../../platform
+      '@yayatoh/program':
+        specifier: workspace:*
+        version: link:../program
       drizzle-orm:
         specifier: 'catalog:'
         version: 0.45.3(@opentelemetry/api@1.9.0)(kysely@0.29.6)(pg@8.23.0)(postgres@3.4.9)
@@ -1619,9 +1796,15 @@ importers:
       '@yayatoh/events':
         specifier: workspace:*
         version: link:../events
+      '@yayatoh/forms':
+        specifier: workspace:*
+        version: link:../forms
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../kernel
+      '@yayatoh/notifications':
+        specifier: workspace:*
+        version: link:../notifications
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../../platform
@@ -1650,6 +1833,9 @@ importers:
       '@yayatoh/contracts':
         specifier: workspace:*
         version: link:../../contracts
+      '@yayatoh/csv':
+        specifier: workspace:*
+        version: link:../../csv
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../../db
@@ -1659,12 +1845,18 @@ importers:
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../kernel
+      '@yayatoh/notifications':
+        specifier: workspace:*
+        version: link:../notifications
       '@yayatoh/orders':
         specifier: workspace:*
         version: link:../orders
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../../platform
+      '@yayatoh/tenancy':
+        specifier: workspace:*
+        version: link:../tenancy
       drizzle-orm:
         specifier: 'catalog:'
         version: 0.45.3(@opentelemetry/api@1.9.0)(kysely@0.29.6)(pg@8.23.0)(postgres@3.4.9)
@@ -1889,6 +2081,9 @@ importers:
       '@yayatoh/forms':
         specifier: workspace:*
         version: link:../forms
+      '@yayatoh/guests':
+        specifier: workspace:*
+        version: link:../guests
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../kernel
@@ -2094,6 +2289,9 @@ importers:
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../../platform
+      '@yayatoh/program':
+        specifier: workspace:*
+        version: link:../program
       '@yayatoh/ticketing':
         specifier: workspace:*
         version: link:../ticketing
@@ -2544,6 +2742,9 @@ importers:
       '@yayatoh/alerts':
         specifier: workspace:*
         version: link:../modules/alerts
+      '@yayatoh/assistance':
+        specifier: workspace:*
+        version: link:../modules/assistance
       '@yayatoh/attendees':
         specifier: workspace:*
         version: link:../modules/attendees
@@ -2586,6 +2787,12 @@ importers:
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../db
+      '@yayatoh/donations':
+        specifier: workspace:*
+        version: link:../modules/donations
+      '@yayatoh/engagement':
+        specifier: workspace:*
+        version: link:../modules/engagement
       '@yayatoh/events':
         specifier: workspace:*
         version: link:../modules/events
@@ -3622,6 +3829,15 @@ packages:
 
   '@floating-ui/vue@1.1.9':
     resolution: {integrity: sha512-BfNqNW6KA83Nexspgb9DZuz578R7HT8MZw1CfK9I6Ah4QReNWEJsXWHN+SdmOVLNGmTPDi+fDT535Df5PzMLbQ==}
+
+  '@fontsource-variable/manrope@5.3.0':
+    resolution: {integrity: sha512-6D5dgokHsWDDMtmXHznKa0hK229NN+1a4BLPmUCLqcO1Pw5EEhWY5RFt0AcXnVRAljFFPfRtLkJePQj6LSsV6g==}
+
+  '@fontsource-variable/noto-sans-devanagari@5.3.0':
+    resolution: {integrity: sha512-52XBcJS3jRvZ5ugFXJvdKgffXPYnN08LeodXkgCbepOdMKVRVTQu1yj071cq8S3zmUwT6w6XKKXRSQlQkwwNNg==}
+
+  '@fontsource/ibm-plex-sans-arabic@5.3.0':
+    resolution: {integrity: sha512-ZZ4g+JDgQY0NqSh4o0MNWU1sHQmtcee1g++aKAwyJvZxnT5y51JXsN1cIXnaQaMd40dcbK6QFYa+Z1LbaiNuqA==}
 
   '@formatjs/fast-memoize@3.1.7':
     resolution: {integrity: sha512-zXfhLpvA6T7+efdt9JLbBwZ00tT7NsBMDVnDu8rpHeNNv8KfRZAMo2gkG0k9lK/Nzc//3kJ9pImsfuJxk3KhUA==}
@@ -7923,6 +8139,12 @@ snapshots:
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
+
+  '@fontsource-variable/manrope@5.3.0': {}
+
+  '@fontsource-variable/noto-sans-devanagari@5.3.0': {}
+
+  '@fontsource/ibm-plex-sans-arabic@5.3.0': {}
 
   '@formatjs/fast-memoize@3.1.7': {}
 

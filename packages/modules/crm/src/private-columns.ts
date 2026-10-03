@@ -22,5 +22,5 @@ export const privateColumns = columnPrivacy('crm', {
     email_consent: 'vocab',
     sms_consent: 'vocab',
   },
-  event_participation: { currency: 'vocab', source: 'vocab', labels: internal() },
+  event_participation: { currency: 'vocab', source: 'vocab', labels: internal(), rsvp: 'vocab' },
 });

@@ -66,6 +66,13 @@ export const KINDS = {
     urgent: false,
     params: ['url', 'name', 'eventName', 'number', 'amountMinor', 'currency', 'storeCredit', 'code'],
   },
+  // M5.1d: a pay-later invoice (number, amount, due date; the link views, downloads and pays it).
+  'orders.invoice': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['url', 'name', 'eventName', 'number', 'amountMinor', 'currency', 'dueOn'],
+  },
   'orders.support-reply': {
     category: 'transactional',
     channels: ['email'],
@@ -96,6 +103,14 @@ export const KINDS = {
     channels: ['email'],
     urgent: true,
     params: ['url', 'name', 'fromName', 'eventName'],
+  },
+  // M4.2b gala tables: a table's claim link to its buyer (after payment, on request, or the
+  // host's naming reminder: `reminder` = 1).
+  'orders.table-naming': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['url', 'name', 'eventName', 'tableName', 'size', 'missing', 'reminder'],
   },
   'events.postponed': {
     category: 'transactional',
@@ -211,12 +226,38 @@ export const KINDS = {
     urgent: false,
     params: ['url', 'name', 'eventName', 'passName'],
   },
+  // Session waitlist promotion (M5.2b, P5-9): enrolled at once, or offered a place until a time.
+  'registration.session-enrolled': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: ['url', 'name', 'eventName', 'sessionTitle', 'startsAt', 'timeZone'],
+  },
+  'registration.session-offer': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['url', 'name', 'eventName', 'sessionTitle', 'startsAt', 'until', 'timeZone'],
+  },
   // Registration form save and resume (M5.1b): the person asked for their link.
   'forms.resume': {
     category: 'transactional',
     channels: ['email'],
     urgent: true,
     params: ['url', 'name', 'eventName', 'days'],
+  },
+  // Apply-to-attend decisions (M5.1c): the applicant's link (pay step or confirmation), the reason.
+  'registration.approved': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['url', 'name', 'eventName', 'typeName', 'body'],
+  },
+  'registration.denied': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['url', 'name', 'eventName', 'typeName', 'body'],
   },
   'orders.order-link': {
     category: 'transactional',
@@ -261,6 +302,21 @@ export const KINDS = {
   // Journeys (M3.7a): a step's message, written by the organizer (subject and body), sent on the
   // step's own channel (email, SMS, WhatsApp or push) to one person about one event. Reminders:
   // the person can switch them off, texts need informational consent, quiet hours apply.
+  // M4.1f: a wedding party's invitation (the host's wording, the party's RSVP link) and the RSVP
+  // deadline reminders of its journey. Transactional (P4-3: guests are never marketing; no
+  // consent or contact needed), not urgent: quiet hours apply in the event's timezone.
+  'guests.invitation': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: ['url', 'subject', 'message', 'eventName'],
+  },
+  'guests.rsvp-reminder': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: ['url', 'name', 'eventName', 'deadline'],
+  },
   'automations.message': {
     category: 'reminders',
     channels: ['email'],
@@ -358,11 +414,33 @@ export const KINDS = {
     urgent: false,
     params: ['rule', 'count', 'severity', 'eventName'],
   },
+  // M3.3a live-critical escalation: the same text to a member on duty at the event's doors, sent
+  // at once (devices offline, capacity reached, a payment outage while the doors are open).
+  'alerts.alert-urgent-text': {
+    category: 'transactional',
+    channels: ['sms'],
+    urgent: true,
+    params: ['rule', 'count', 'severity', 'eventName'],
+  },
   'notifications.test': {
     category: 'transactional',
     channels: ['in_app', 'push'],
     urgent: true,
     params: [],
+  },
+  // M4.8b: a donation receipt (one per payment) and the year-end giving statement, to the donor
+  // only. The receipt's own wording (`body`) is the donations module's legal-copy template.
+  'donations.receipt': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: ['url', 'name', 'eventName', 'amountMinor', 'currency', 'deductible', 'body'],
+  },
+  'donations.year-end-statement': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: ['url', 'name', 'year', 'amountMinor', 'currency', 'body'],
   },
 } as const satisfies Record<string, KindDefinition>;
 

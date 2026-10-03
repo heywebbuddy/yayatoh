@@ -181,12 +181,12 @@
       "cta": "注文を見る"
     },
     "alerts.alert": {
-      "subject": "{rule, select, unseated {{count, plural, other {{countWords}人の参加者に座席がありません}}} undistributed {{count, plural, other {購入済みチケット{countWords}枚が配布されていません}}} paymentsFailed {{count, plural, other {{countWords}件の支払いが失敗しました}}} paymentsStuck {{count, plural, other {{countWords}件の支払いが止まっています}}} refundSurge {{count, plural, other {直近1時間で{countWords}件の返金}}} devicesOffline {{count, plural, other {{countWords}台のチェックイン端末がオフラインです}}} devicesLowBattery {{count, plural, other {{countWords}台のチェックイン端末のバッテリー残量が少なくなっています}}} devicesBacklog {{count, plural, other {{countWords}台のチェックイン端末に同期待ちのスキャンがあります}}} capacityNear {会場は{count}%埋まっています} capacityFull {会場は満員です（{count}%）} sellOut {チケットの{count}%が売れました} salesPace {チケット販売は目標ペースの{count}%です} readiness {{count, plural, other {{countWords}件の設定手順がこのイベントを妨げています}}} domain {{count, plural, other {{countWords}件のカスタムドメインに問題があります}}} payoutsPastDue {{count, plural, other {受取アカウントの要件{countWords}件が期限切れです}}} deliverability {メールの到達率に注意が必要です} automationFailed {{count, plural, other {本日{countWords}件のメッセージまたは一括操作が失敗しました}}} campaignFailed {{count, plural, other {本日{countWords}件のキャンペーン配信が失敗しました}}} disputeDeadline {{count, plural, other {{countWords}件の異議申し立てに間もなく証拠の提出が必要です}}} other {アラート}}",
+      "subject": "{rule, select, unseated {{count, plural, other {{countWords}人の参加者に座席がありません}}} undistributed {{count, plural, other {購入済みチケット{countWords}枚が配布されていません}}} paymentsFailed {{count, plural, other {{countWords}件の支払いが失敗しました}}} paymentsStuck {{count, plural, other {{countWords}件の支払いが止まっています}}} refundSurge {{count, plural, other {直近1時間で{countWords}件の返金}}} devicesOffline {{count, plural, other {{countWords}台のチェックイン端末がオフラインです}}} devicesLowBattery {{count, plural, other {{countWords}台のチェックイン端末のバッテリー残量が少なくなっています}}} devicesBacklog {{count, plural, other {{countWords}台のチェックイン端末に同期待ちのスキャンがあります}}} capacityNear {会場は{count}%埋まっています} capacityFull {会場は満員です（{count}%）} sellOut {チケットの{count}%が売れました} salesPace {チケット販売は目標ペースの{count}%です} readiness {{count, plural, other {{countWords}件の設定手順がこのイベントを妨げています}}} domain {{count, plural, other {{countWords}件のカスタムドメインに問題があります}}} payoutsPastDue {{count, plural, other {受取アカウントの要件{countWords}件が期限切れです}}} deliverability {メールの到達率に注意が必要です} automationFailed {{count, plural, other {本日{countWords}件のメッセージまたは一括操作が失敗しました}}} assistanceOverdue {{count, plural, other {{countWords}件のヘルプ依頼が長く待たされています}}} campaignFailed {{count, plural, other {本日{countWords}件のキャンペーン配信が失敗しました}}} disputeDeadline {{count, plural, other {{countWords}件の異議申し立てに間もなく証拠の提出が必要です}}} other {アラート}}",
       "intro": "{eventName, select, none {{org}で対応が必要なことがあります。} other {{eventName}で対応が必要なことがあります。}}ボタンから解決するページを開けます。",
       "cta": "解決する"
     },
     "alerts.alert-text": {
-      "subject": "{rule, select, unseated {{count, plural, other {{countWords}人の参加者に座席がありません}}} undistributed {{count, plural, other {購入済みチケット{countWords}枚が配布されていません}}} paymentsFailed {{count, plural, other {{countWords}件の支払いが失敗しました}}} paymentsStuck {{count, plural, other {{countWords}件の支払いが止まっています}}} refundSurge {{count, plural, other {直近1時間で{countWords}件の返金}}} devicesOffline {{count, plural, other {{countWords}台のチェックイン端末がオフラインです}}} devicesLowBattery {{count, plural, other {{countWords}台のチェックイン端末のバッテリー残量が少なくなっています}}} devicesBacklog {{count, plural, other {{countWords}台のチェックイン端末に同期待ちのスキャンがあります}}} capacityNear {会場は{count}%埋まっています} capacityFull {会場は満員です（{count}%）} sellOut {チケットの{count}%が売れました} salesPace {チケット販売は目標ペースの{count}%です} readiness {{count, plural, other {{countWords}件の設定手順がこのイベントを妨げています}}} domain {{count, plural, other {{countWords}件のカスタムドメインに問題があります}}} payoutsPastDue {{count, plural, other {受取アカウントの要件{countWords}件が期限切れです}}} deliverability {メールの到達率に注意が必要です} automationFailed {{count, plural, other {本日{countWords}件のメッセージまたは一括操作が失敗しました}}} campaignFailed {{count, plural, other {本日{countWords}件のキャンペーン配信が失敗しました}}} disputeDeadline {{count, plural, other {{countWords}件の異議申し立てに間もなく証拠の提出が必要です}}} other {アラート}}",
+      "subject": "{rule, select, unseated {{count, plural, other {{countWords}人の参加者に座席がありません}}} undistributed {{count, plural, other {購入済みチケット{countWords}枚が配布されていません}}} paymentsFailed {{count, plural, other {{countWords}件の支払いが失敗しました}}} paymentsStuck {{count, plural, other {{countWords}件の支払いが止まっています}}} refundSurge {{count, plural, other {直近1時間で{countWords}件の返金}}} devicesOffline {{count, plural, other {{countWords}台のチェックイン端末がオフラインです}}} devicesLowBattery {{count, plural, other {{countWords}台のチェックイン端末のバッテリー残量が少なくなっています}}} devicesBacklog {{count, plural, other {{countWords}台のチェックイン端末に同期待ちのスキャンがあります}}} capacityNear {会場は{count}%埋まっています} capacityFull {会場は満員です（{count}%）} sellOut {チケットの{count}%が売れました} salesPace {チケット販売は目標ペースの{count}%です} readiness {{count, plural, other {{countWords}件の設定手順がこのイベントを妨げています}}} domain {{count, plural, other {{countWords}件のカスタムドメインに問題があります}}} payoutsPastDue {{count, plural, other {受取アカウントの要件{countWords}件が期限切れです}}} deliverability {メールの到達率に注意が必要です} automationFailed {{count, plural, other {本日{countWords}件のメッセージまたは一括操作が失敗しました}}} assistanceOverdue {{count, plural, other {{countWords}件のヘルプ依頼が長く待たされています}}} campaignFailed {{count, plural, other {本日{countWords}件のキャンペーン配信が失敗しました}}} disputeDeadline {{count, plural, other {{countWords}件の異議申し立てに間もなく証拠の提出が必要です}}} other {アラート}}",
       "intro": "{eventName, select, none {{org}で対応が必要なことがあります。} other {{eventName}で対応が必要なことがあります。}}ボタンから解決するページを開けます。"
     },
     "campaigns.test": {
@@ -197,6 +197,11 @@
       "subject": "{eventName} のクレジットノート {number}",
       "intro": "{org} が {eventName} のご注文に対して {amount} のクレジットノート {number} を発行しました。{storeCredit, select, yes {{org} での今後のご注文で、お支払い時にコード {code} を入力してご利用ください。} other {この金額は返金済みです。}}",
       "cta": "注文を見る"
+    },
+    "orders.invoice": {
+      "subject": "{eventName}の請求書 {number}",
+      "intro": "{eventName}への登録が完了しました。{org}が請求書 {number}（{amount}、支払期限 {due}）を発行しました。下のボタンから請求書の確認、PDFのダウンロード、全額または一部のお支払いができます。",
+      "cta": "請求書を確認して支払う"
     },
     "orders.support-reply": {
       "subject": "{subject}",
@@ -226,6 +231,21 @@
       "intro": "{eventName}の登録を中断したところから再開するためのリンクです。最後に保存してから{days, plural, other {# 日間}}、ご本人のみ使用できますので転送しないでください。心当たりがない場合は、このメールを無視してください。",
       "cta": "登録を続ける"
     },
+    "orders.table-naming": {
+      "subject": "{reminder, plural, =1 {リマインダー：{eventName} のゲスト名を入力してください} other {{eventName} のゲスト名を入力してください}}",
+      "intro": "{tableName} の席数は {size, plural, other {# 席}} です。{missing, plural, =0 {すべての席に名前が入っています。いつでも確認できます。} other {あと # 席の名前が未入力です。}}下のボタンから、テーブルに座る方をお知らせください。",
+      "cta": "ゲスト名を入力する"
+    },
+    "registration.approved": {
+      "subject": "{eventName} への参加申請が承認されました",
+      "intro": "{name} 様、{typeName} として {eventName} に参加する申請が承認されました。下のボタンから登録内容を確認し、有料のパスの場合はお支払いを済ませて参加を確定してください。",
+      "cta": "登録内容を見る"
+    },
+    "registration.denied": {
+      "subject": "{eventName} への参加申請について",
+      "intro": "{name} 様、{typeName} として {eventName} への参加をお申し込みいただきありがとうございます。今回は主催者が申請を承認できませんでした。料金は請求されていません。",
+      "cta": "申請内容を見る"
+    },
     "portal.invite": {
       "subject": "{eventName}のポータルへの招待",
       "intro": "{org}から{eventName}のポータルに{role}として招待されました。セッションの確認、プロフィールの更新、タスクの完了ができます。ボタンを押すと、このアドレスに送られるサインインコードの入力を求められます。",
@@ -240,6 +260,40 @@
       "subject": "リマインダー：{eventName}の{title}",
       "intro": "{org}は{eventName}の「{title}」をまだお待ちしています。期限：{until}。",
       "cta": "タスクを開く"
+    },
+    "donations.receipt": {
+      "subject": "{deductible, select, yes {{org}からの寄付の領収書} other {{org}からのお支払いの領収書}}",
+      "intro": "{eventName}への{amount}のお支払いをありがとうございます。領収書は以下のとおりです。この領収書またはPDFの控えを記録として保管してください。",
+      "cta": "PDFの領収書をダウンロード"
+    },
+    "donations.year-end-statement": {
+      "subject": "{org}からの{year}年 寄付明細書",
+      "intro": "{year}年に{org}をご支援いただきありがとうございます。税控除対象のお支払いの明細は以下とPDFのとおりです。",
+      "cta": "PDFの明細書をダウンロード"
+    },
+    "guests.invitation": {
+      "subject": "{subject}",
+      "intro": "{message}",
+      "cta": "招待状に返信する"
+    },
+    "guests.rsvp-reminder": {
+      "subject": "リマインダー：{eventName} のご返信のお願い",
+      "intro": "{name} 様、まだご返信をいただいておりません。{deadline} までに {eventName} へのご出席者をお知らせください。",
+      "cta": "今すぐ返信する"
+    },
+    "registration.session-enrolled": {
+      "subject": "空きが出ました：{sessionTitle} に登録されました",
+      "intro": "{eventName}（{when}）の {sessionTitle} に空きが出て、キャンセル待ちの次の順番があなたでしたので、登録が完了しました。参加できない場合は、次の方が参加できるようスケジュールからセッションを外してください。",
+      "cta": "スケジュールを開く"
+    },
+    "registration.session-offer": {
+      "subject": "{sessionTitle} の席を {until} まで確保しています",
+      "intro": "{eventName}（{when}）の {sessionTitle} に空きが出て、次の順番はあなたです。{until} までにスケジュールから承諾してください。それを過ぎると次の方に回ります。",
+      "cta": "席を承諾する"
+    },
+    "alerts.alert-urgent-text": {
+      "subject": "{rule, select, unseated {{count, plural, other {{countWords}人の参加者に座席がありません}}} undistributed {{count, plural, other {購入済みチケット{countWords}枚が配布されていません}}} paymentsFailed {{count, plural, other {{countWords}件の支払いが失敗しました}}} paymentsStuck {{count, plural, other {{countWords}件の支払いが止まっています}}} refundSurge {{count, plural, other {直近1時間で{countWords}件の返金}}} devicesOffline {{count, plural, other {{countWords}台のチェックイン端末がオフラインです}}} devicesLowBattery {{count, plural, other {{countWords}台のチェックイン端末のバッテリー残量が少なくなっています}}} devicesBacklog {{count, plural, other {{countWords}台のチェックイン端末に同期待ちのスキャンがあります}}} capacityNear {会場は{count}%埋まっています} capacityFull {会場は満員です（{count}%）} sellOut {チケットの{count}%が売れました} salesPace {チケット販売は目標ペースの{count}%です} readiness {{count, plural, other {{countWords}件の設定手順がこのイベントを妨げています}}} domain {{count, plural, other {{countWords}件のカスタムドメインに問題があります}}} payoutsPastDue {{count, plural, other {受取アカウントの要件{countWords}件が期限切れです}}} deliverability {メールの到達率に注意が必要です} automationFailed {{count, plural, other {本日{countWords}件のメッセージまたは一括操作が失敗しました}}} assistanceOverdue {{count, plural, other {{countWords}件のヘルプ依頼が長く待たされています}}} campaignFailed {{count, plural, other {本日{countWords}件のキャンペーン配信が失敗しました}}} disputeDeadline {{count, plural, other {{countWords}件の異議申し立てに間もなく証拠の提出が必要です}}} other {アラート}}",
+      "intro": "{eventName, select, none {{org}で対応が必要なことがあります。} other {{eventName}で対応が必要なことがあります。}}ボタンから解決するページを開けます。"
     }
   },
   "roles": {

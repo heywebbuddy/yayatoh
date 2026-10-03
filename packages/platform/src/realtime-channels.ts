@@ -18,8 +18,10 @@ import { channelOrg } from './realtime.ts';
  * Wire names are always org-scoped (`org:{orgId}:…`, ADR 0009): an org channel is
  * `org:{orgId}:{topic}`, an event channel `org:{orgId}:event:{eventId}:{topic}`. The same names are
  * used for SSE and for Ably, so a token or a stream for one org can never name another org's.
+ * A session channel (M5.7a, one program session's live polls and Q&A) is
+ * `org:{orgId}:event:{eventId}:session:{sessionId}:{topic}`.
  */
-export type RealtimeScope = 'org' | 'event';
+export type RealtimeScope = 'org' | 'event' | 'session';
 
 export interface RealtimeAccess {
   /** Anyone may attach (the app still runs the channel's own public check, e.g. "on sale"). */
@@ -52,6 +54,7 @@ const EVENT_NAME = /^[a-z][a-z0-9_.-]{0,39}$/;
 const UUID = '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}';
 const EVENT_WIRE = new RegExp(`^org:(${UUID}):event:(${UUID}):([a-z][a-z0-9-]{0,39})$`);
 const ORG_WIRE = new RegExp(`^org:(${UUID}):([a-z][a-z0-9-]{0,39})$`);
+const SESSION_WIRE = new RegExp(`^org:(${UUID}):event:(${UUID}):session:(${UUID}):([a-z][a-z0-9-]{0,19})$`);
 const EMPTY = z.object({});
 /** Snapshot (`snapshot`) and resynchronise (`refresh`) are sent by the stream itself. */
 const RESERVED = new Set(['snapshot', 'refresh']);
@@ -59,7 +62,8 @@ const RESERVED = new Set(['snapshot', 'refresh']);
 export function defineRealtimeChannel<E extends RealtimeEvents>(
   def: Omit<RealtimeChannelDef<E>, 'key'>,
 ): RealtimeChannelDef<E> {
-  if (!TOPIC.test(def.topic)) throw new Error(`Invalid realtime topic: ${def.topic}`);
+  if (!TOPIC.test(def.topic) || (def.scope === 'session' && def.topic.length > 20))
+    throw new Error(`Invalid realtime topic: ${def.topic}`);
   if (!def.access.public && !def.access.permission && !def.access.devices)
     throw new Error(`Realtime channel ${def.topic} has no audience`);
   for (const name of Object.keys(def.events)) {
@@ -70,16 +74,21 @@ export function defineRealtimeChannel<E extends RealtimeEvents>(
   return { ...def, key: `${def.scope}.${def.topic}` };
 }
 
-/** The wire name of a channel for one org (and event). */
+/** The wire name of a channel for one org (and event, and session). */
 export function realtimeChannelName(
   def: Pick<RealtimeChannelDef, 'scope' | 'topic'>,
   orgId: string,
   eventId?: string | null,
+  sessionId?: string | null,
 ): string {
   const name =
-    def.scope === 'event' ? `org:${orgId}:event:${eventId ?? ''}:${def.topic}` : `org:${orgId}:${def.topic}`;
-  if (!(def.scope === 'event' ? EVENT_WIRE : ORG_WIRE).test(name) || !channelOrg(name))
-    throw new Error(`Invalid realtime channel: ${name}`);
+    def.scope === 'session'
+      ? `org:${orgId}:event:${eventId ?? ''}:session:${sessionId ?? ''}:${def.topic}`
+      : def.scope === 'event'
+        ? `org:${orgId}:event:${eventId ?? ''}:${def.topic}`
+        : `org:${orgId}:${def.topic}`;
+  const wire = def.scope === 'session' ? SESSION_WIRE : def.scope === 'event' ? EVENT_WIRE : ORG_WIRE;
+  if (!wire.test(name) || !channelOrg(name)) throw new Error(`Invalid realtime channel: ${name}`);
   return name;
 }
 
@@ -89,11 +98,23 @@ export interface ParsedChannel {
   readonly eventId: string | null;
   readonly scope: RealtimeScope;
   readonly topic: string;
+  /** Session channels only (M5.7a). */
+  readonly sessionId?: string | null;
 }
 
 /** Split a wire name into its parts, or null when it is not a well-formed channel name. */
 export function parseRealtimeChannel(name: string): ParsedChannel | null {
   if (name.length > 160) return null;
+  const s = SESSION_WIRE.exec(name);
+  if (s)
+    return {
+      name,
+      orgId: s[1] ?? '',
+      eventId: s[2] ?? '',
+      sessionId: s[3] ?? '',
+      scope: 'session',
+      topic: s[4] ?? '',
+    };
   const e = EVENT_WIRE.exec(name);
   if (e) return { name, orgId: e[1] ?? '', eventId: e[2] ?? '', scope: 'event', topic: e[3] ?? '' };
   const o = ORG_WIRE.exec(name);
@@ -200,6 +221,16 @@ export const CHECKINS_CHANNEL = defineRealtimeChannel({
   events: {
     admission: z.object({
       change: z.enum(['admitted', 'undone', 'synced']),
+      checkpointId: z.uuid().nullable(),
+      count: z.int().min(1).max(10_000),
+      at: isoTime,
+    }),
+    /**
+     * M3.3a live feed: scans nobody was let in by (a duplicate, or refused), grouped only. The
+     * Command Center re-reads its feed; no ticket, code or holder travels.
+     */
+    scan: z.object({
+      outcome: z.enum(['duplicate', 'refused']),
       checkpointId: z.uuid().nullable(),
       count: z.int().min(1).max(10_000),
       at: isoTime,

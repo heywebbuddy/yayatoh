@@ -1,3 +1,4 @@
+import { ASSISTANCE_CHANNEL } from '@yayatoh/assistance';
 import { deviceIdOf } from '@yayatoh/checkin';
 import { executeQuery } from '@yayatoh/kernel';
 import { CHECKINS_CHANNEL, DEVICES_CHANNEL, realtimeChannelName } from '@yayatoh/platform';
@@ -23,6 +24,8 @@ export async function GET(req: Request) {
     const channels = {
       checkins: realtimeChannelName(CHECKINS_CHANNEL, orgId, eventId),
       devices: realtimeChannelName(DEVICES_CHANNEL, orgId, eventId),
+      // M3.3b: the help queue on the staff screen.
+      assistance: realtimeChannelName(ASSISTANCE_CHANNEL, orgId, eventId),
     };
     return Response.json(
       { ...view, channels, deviceId: deviceIdOf(device.ctx) },

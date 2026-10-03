@@ -13,6 +13,12 @@ export interface Persona {
    * secret derived from DEV_PERSONA_PASSWORD, and /dev/login answers the challenge with it.
    */
   readonly twoFactor: boolean;
+  /**
+   * What /dev/login says the persona is (batch 3h, owner 2026-10-02): an org `member` shows its role
+   * and org; a `newcomer` has no organization yet (sign-up and onboarding); `staff` is Yayatoh staff,
+   * who work in the admin console, so its card links there instead of signing in here.
+   */
+  readonly kind?: 'member' | 'newcomer' | 'staff';
 }
 
 export const PERSONAS: readonly Persona[] = [
@@ -56,10 +62,24 @@ export const PERSONAS: readonly Persona[] = [
   // A public organizer with a tenant site and a full calendar (marketplace, M1.11).
   { email: 'lee@harbor.test', name: 'Lee Harbor', orgSlug: 'harbor-arts', role: 'owner', twoFactor: true },
   // A newcomer who will own the organization she signs up.
-  { email: 'nia@newcomer.test', name: 'Nia Newcomer', orgSlug: '', role: 'owner', twoFactor: true },
+  {
+    email: 'nia@newcomer.test',
+    name: 'Nia Newcomer',
+    orgSlug: '',
+    role: 'owner',
+    twoFactor: true,
+    kind: 'newcomer',
+  },
   // Platform staff (apps/admin): the staff role comes from the worker CLI, not from an org.
   // Staff get passkeys later (roadmap §10); no org role requires two-step verification here.
-  { email: 'omar@yayatoh.test', name: 'Omar Ops', orgSlug: '', role: 'owner', twoFactor: false },
+  {
+    email: 'omar@yayatoh.test',
+    name: 'Omar Ops',
+    orgSlug: '',
+    role: 'owner',
+    twoFactor: false,
+    kind: 'staff',
+  },
 ];
 
 export const SEED_ORGS = [
@@ -67,6 +87,9 @@ export const SEED_ORGS = [
   { slug: 'rosewood-weddings', name: 'Rosewood Weddings', profile: 'wedding' },
   { slug: 'harbor-arts', name: 'Harbor Arts Collective', profile: 'concert' },
 ] as const;
+
+/** The admin console's sign-in page (apps/admin on :3001 in development), for the staff persona. */
+export const adminSignInUrl = () => `${process.env.ADMIN_AUTH_URL ?? 'http://localhost:3001'}/sign-in`;
 
 export function personaByEmail(email: string): Persona | undefined {
   return PERSONAS.find((p) => p.email === email);

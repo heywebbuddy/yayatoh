@@ -41,25 +41,25 @@ export default async function SpeakerSessionPage({
   return (
     <PortalShell data={data} active={null} title={s.title}>
       <Card className="flex flex-col gap-2">
-        <p className="text-body">{formatSessionTime(s.startsAt, s.endsAt, locale, data.event.timezone)}</p>
-        <p className="text-caption text-zinc-600">
+        <p className="m-0 text-card text-ink tabular-nums">
+          {formatSessionTime(s.startsAt, s.endsAt, locale, data.event.timezone)}
+        </p>
+        <p className="text-caption text-ink-2">
           {s.room ? t('room', { room: s.room }) : t('roomTba')}
           {s.track ? ` · ${t('track', { track: s.track })}` : ''}
         </p>
         {s.coSpeakers.length ? (
-          <p className="text-caption text-zinc-600">
-            {t('withCoSpeakers', { names: s.coSpeakers.join(', ') })}
-          </p>
+          <p className="text-caption text-ink-2">{t('withCoSpeakers', { names: s.coSpeakers.join(', ') })}</p>
         ) : null}
         {s.description ? <Markdown source={s.description} /> : null}
       </Card>
       {s.change ? <PortalChangeStatus change={s.change} /> : null}
       <section aria-labelledby="session-edit-heading">
         <Card size="panel" className="flex flex-col gap-3">
-          <h2 id="session-edit-heading" className="text-section">
+          <h2 id="session-edit-heading" className="m-0 text-card text-ink">
             {t('suggestChanges')}
           </h2>
-          <p className="text-caption text-zinc-600">{t('sessionApprovalHint')}</p>
+          <p className="text-caption text-ink-2">{t('sessionApprovalHint')}</p>
           <ProgramForm
             action={proposeSessionAction.bind(null, s.id)}
             idPrefix="portal-session"

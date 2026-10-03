@@ -1,5 +1,6 @@
 import * as ai from '@yayatoh/ai';
 import * as alerts from '@yayatoh/alerts';
+import * as assistance from '@yayatoh/assistance';
 import * as attendees from '@yayatoh/attendees';
 import * as audiences from '@yayatoh/audiences';
 import * as automations from '@yayatoh/automations';
@@ -12,6 +13,8 @@ import * as commandCenter from '@yayatoh/command-center';
 import * as crm from '@yayatoh/crm';
 import { withoutTenant } from '@yayatoh/db';
 import { adminClient, closePools } from '@yayatoh/db/testing';
+import * as donations from '@yayatoh/donations';
+import * as engagement from '@yayatoh/engagement';
 import * as events from '@yayatoh/events';
 import * as forms from '@yayatoh/forms';
 import * as guests from '@yayatoh/guests';
@@ -59,6 +62,8 @@ const MODULES = {
   // Batch 3d merge: M3.2b's alert engine and M3.2a's Command Center (M3.4a and M3.5b grew
   // checkin and notifications, already listed).
   alerts,
+  // Batch 3g merge: M3.3b's guest assistance queue (M3.3a grew checkin and the Command Center).
+  assistance,
   attendees,
   // Batch 3c merge: the modules of batch 3b (audiences, marketing) and 3c (guests; cms grew).
   audiences,
@@ -73,6 +78,9 @@ const MODULES = {
   cms,
   commandCenter,
   crm,
+  engagement,
+  // M4.8a: gifts, campaigns and the gift CSV.
+  donations,
   events,
   forms,
   guests,
@@ -175,6 +183,8 @@ describe('read-only freeze (M2.5a)', () => {
     // (M5.5a's badge batch PDF, the first module-level one; bulk exports are built per module).
     expect([...categories].sort()).toEqual(['delete', 'export', 'money', 'write']);
     expect([...ALLOWED].sort()).toEqual([
+      // M5.1d: admitting a ticket with a balance due (an audited override) is a door action too.
+      'checkin.admitBalanceDue',
       'checkin.heartbeat',
       'checkin.scanTicket',
       'checkin.syncScans',

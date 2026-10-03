@@ -8,7 +8,7 @@ import { errorMessageKey } from '@/lib/errors.ts';
 
 type Action = (prev: CampaignFormState, form: FormData) => Promise<CampaignFormState>;
 const INITIAL: CampaignFormState = { ok: false, code: null };
-const FIELD = 'min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body';
+const FIELD = 'field';
 
 /** The outcome of a form: success in a live region, a failure as an alert with its reason. */
 function Outcome({ state, success }: { state: CampaignFormState; success?: string | null }) {
@@ -81,7 +81,7 @@ export function AudiencePanel({
     <form action={formAction} className="flex flex-col gap-3" aria-label={t('audienceTitle')} noValidate>
       <Outcome state={state} success={state.message === 'audienceSaved' ? t('audienceSaved') : null} />
       <fieldset className="flex flex-col gap-2">
-        <legend className="text-caption text-zinc-600">{t('audienceKind')}</legend>
+        <legend className="text-[13px] font-bold text-ink">{t('audienceKind')}</legend>
         <div className="flex flex-wrap gap-x-6 gap-y-2">
           {(['segment', 'template'] as const).map((k) => (
             <label key={k} className="flex min-h-6 items-center gap-2 text-body">
@@ -91,7 +91,7 @@ export function AudiencePanel({
                 value={k}
                 checked={kind === k}
                 onChange={() => setKind(k)}
-                className="size-5 accent-zinc-900"
+                className="size-5 accent-primary"
               />
               {t(`audienceKinds.${k}`)}
             </label>
@@ -100,7 +100,7 @@ export function AudiencePanel({
       </fieldset>
       {kind === 'segment' ? (
         <div className="flex flex-col gap-1.5">
-          <label htmlFor={`${uid}-segment`} className="text-caption text-zinc-600">
+          <label htmlFor={`${uid}-segment`} className="text-[13px] font-bold text-ink">
             {t('savedAudience')}
           </label>
           <select
@@ -119,7 +119,7 @@ export function AudiencePanel({
             ))}
           </select>
           {errors.segmentId ? (
-            <p id={`${uid}-segment-error`} className="text-caption text-pink-700">
+            <p id={`${uid}-segment-error`} className="text-caption text-danger">
               {t('errors.chooseAudience')}
             </p>
           ) : null}
@@ -127,7 +127,7 @@ export function AudiencePanel({
       ) : (
         <>
           <div className="flex flex-col gap-1.5">
-            <label htmlFor={`${uid}-template`} className="text-caption text-zinc-600">
+            <label htmlFor={`${uid}-template`} className="text-[13px] font-bold text-ink">
               {t('template')}
             </label>
             <select
@@ -144,7 +144,7 @@ export function AudiencePanel({
             </select>
           </div>
           <div className="flex flex-col gap-1.5">
-            <label htmlFor={`${uid}-event`} className="text-caption text-zinc-600">
+            <label htmlFor={`${uid}-event`} className="text-[13px] font-bold text-ink">
               {t('templateEvent')}
             </label>
             <select
@@ -163,7 +163,7 @@ export function AudiencePanel({
               ))}
             </select>
             {errors.eventId ? (
-              <p id={`${uid}-event-error`} className="text-caption text-pink-700">
+              <p id={`${uid}-event-error`} className="text-caption text-danger">
                 {t('errors.chooseEvent')}
               </p>
             ) : null}
@@ -188,7 +188,7 @@ export function TestSendPanel({ action }: { action: Action }) {
         success={state.message === 'testSent' ? t('testSent', { count: state.count ?? 0 }) : null}
       />
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="test-addresses" className="text-caption text-zinc-600">
+        <label htmlFor="test-addresses" className="text-[13px] font-bold text-ink">
           {t('testAddresses')}
         </label>
         <textarea
@@ -197,13 +197,13 @@ export function TestSendPanel({ action }: { action: Action }) {
           rows={2}
           aria-invalid={err ? true : undefined}
           aria-describedby={`test-addresses-hint${err ? ' test-addresses-error' : ''}`}
-          className="rounded-card border border-zinc-200 bg-white px-4 py-3 text-body"
+          className="rounded-card border border-line bg-surface px-4 py-3 text-body"
         />
-        <p id="test-addresses-hint" className="text-caption text-zinc-500">
+        <p id="test-addresses-hint" className="text-caption text-ink-2">
           {t('testHint')}
         </p>
         {err ? (
-          <p id="test-addresses-error" className="text-caption text-pink-700">
+          <p id="test-addresses-error" className="text-caption text-danger">
             {t(`errors.test_${err}`)}
           </p>
         ) : null}
@@ -242,7 +242,7 @@ export function SendPanel({
       >
         <Outcome state={sState} />
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="schedule-at" className="text-caption text-zinc-600">
+          <label htmlFor="schedule-at" className="text-[13px] font-bold text-ink">
             {t('scheduleAt')}
           </label>
           <input
@@ -253,11 +253,11 @@ export function SendPanel({
             aria-describedby={`schedule-at-hint${atErr ? ' schedule-at-error' : ''}`}
             className={FIELD}
           />
-          <p id="schedule-at-hint" className="text-caption text-zinc-500">
+          <p id="schedule-at-hint" className="text-caption text-ink-2">
             {t('scheduleHint', { timeZone })}
           </p>
           {atErr ? (
-            <p id="schedule-at-error" className="text-caption text-pink-700">
+            <p id="schedule-at-error" className="text-caption text-danger">
               {t(`errors.at_${atErr}`)}
             </p>
           ) : null}
@@ -349,7 +349,7 @@ export function NewCampaignForm({ action }: { action: Action }) {
     >
       <Outcome state={state} />
       <div className="flex min-w-60 flex-col gap-1.5">
-        <label htmlFor="new-campaign-name" className="text-caption text-zinc-600">
+        <label htmlFor="new-campaign-name" className="text-[13px] font-bold text-ink">
           {t('name')}
         </label>
         <input
@@ -361,13 +361,13 @@ export function NewCampaignForm({ action }: { action: Action }) {
           className={FIELD}
         />
         {nameErr ? (
-          <p id="new-campaign-name-error" className="text-caption text-pink-700">
+          <p id="new-campaign-name-error" className="text-caption text-danger">
             {t(nameErr === 'conflict' ? 'errors.name_taken' : 'errors.required')}
           </p>
         ) : null}
       </div>
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="new-campaign-channel" className="text-caption text-zinc-600">
+        <label htmlFor="new-campaign-channel" className="text-[13px] font-bold text-ink">
           {t('channel')}
         </label>
         <select id="new-campaign-channel" name="channel" defaultValue="email" className={FIELD}>

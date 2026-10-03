@@ -37,6 +37,13 @@ export default async function RegisterPage({ params }: Params) {
         find={findOptionsAction.bind(null, slug)}
         register={registerAction.bind(null, slug)}
       />
+      {/* M5.1c: one payer for several people. */}
+      <Link
+        href={`/events/${slug}/register/group`}
+        className="self-start text-body underline underline-offset-2"
+      >
+        {t('registerGroup')}
+      </Link>
       <Link href={`/events/${slug}`} className="self-start text-body underline underline-offset-2">
         {t('backToEvent')}
       </Link>

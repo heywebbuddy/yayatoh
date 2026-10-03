@@ -181,12 +181,12 @@
       "cta": "Meine Bestellung ansehen"
     },
     "alerts.alert": {
-      "subject": "{rule, select, unseated {{count, plural, one {Ein Teilnehmer hat keinen Sitzplatz} other {{countWords} Teilnehmende haben keinen Sitzplatz}}} undistributed {{count, plural, one {Ein gekauftes Ticket wurde nicht weitergegeben} other {{countWords} gekaufte Tickets wurden nicht weitergegeben}}} paymentsFailed {{count, plural, one {Eine Zahlung ist fehlgeschlagen} other {{countWords} Zahlungen sind fehlgeschlagen}}} paymentsStuck {{count, plural, one {Eine Zahlung hängt fest} other {{countWords} Zahlungen hängen fest}}} refundSurge {{count, plural, one {Eine Erstattung in der letzten Stunde} other {{countWords} Erstattungen in der letzten Stunde}}} devicesOffline {{count, plural, one {Ein Check-in-Gerät ist offline} other {{countWords} Check-in-Geräte sind offline}}} devicesLowBattery {{count, plural, one {Ein Check-in-Gerät hat einen schwachen Akku} other {{countWords} Check-in-Geräte haben einen schwachen Akku}}} devicesBacklog {{count, plural, one {Ein Check-in-Gerät hat Scans, die auf die Synchronisierung warten} other {{countWords} Check-in-Geräte haben Scans, die auf die Synchronisierung warten}}} capacityNear {Der Veranstaltungsort ist zu {count} % voll} capacityFull {Der Veranstaltungsort ist voll ({count} %)} sellOut {{count} % der Tickets sind verkauft} salesPace {Der Ticketverkauf liegt bei {count} % des Zieltempos} readiness {{count, plural, one {Ein Einrichtungsschritt blockiert diese Veranstaltung} other {{countWords} Einrichtungsschritte blockieren diese Veranstaltung}}} domain {{count, plural, one {Eine eigene Domain hat ein Problem} other {{countWords} eigene Domains haben ein Problem}}} payoutsPastDue {{count, plural, one {Eine Anforderung des Auszahlungskontos ist überfällig} other {{countWords} Anforderungen des Auszahlungskontos sind überfällig}}} deliverability {Die E-Mail-Zustellbarkeit braucht Aufmerksamkeit} automationFailed {{count, plural, one {Eine Nachricht oder Sammelaktion ist heute fehlgeschlagen} other {{countWords} Nachrichten oder Sammelaktionen sind heute fehlgeschlagen}}} campaignFailed {{count, plural, one {Ein Kampagnenversand ist heute fehlgeschlagen} other {{countWords} Kampagnenversände sind heute fehlgeschlagen}}} disputeDeadline {{count, plural, one {Eine Rückbuchung braucht bald Nachweise} other {{countWords} Rückbuchungen brauchen bald Nachweise}}} other {Warnung}}",
+      "subject": "{rule, select, unseated {{count, plural, one {Ein Teilnehmer hat keinen Sitzplatz} other {{countWords} Teilnehmende haben keinen Sitzplatz}}} undistributed {{count, plural, one {Ein gekauftes Ticket wurde nicht weitergegeben} other {{countWords} gekaufte Tickets wurden nicht weitergegeben}}} paymentsFailed {{count, plural, one {Eine Zahlung ist fehlgeschlagen} other {{countWords} Zahlungen sind fehlgeschlagen}}} paymentsStuck {{count, plural, one {Eine Zahlung hängt fest} other {{countWords} Zahlungen hängen fest}}} refundSurge {{count, plural, one {Eine Erstattung in der letzten Stunde} other {{countWords} Erstattungen in der letzten Stunde}}} devicesOffline {{count, plural, one {Ein Check-in-Gerät ist offline} other {{countWords} Check-in-Geräte sind offline}}} devicesLowBattery {{count, plural, one {Ein Check-in-Gerät hat einen schwachen Akku} other {{countWords} Check-in-Geräte haben einen schwachen Akku}}} devicesBacklog {{count, plural, one {Ein Check-in-Gerät hat Scans, die auf die Synchronisierung warten} other {{countWords} Check-in-Geräte haben Scans, die auf die Synchronisierung warten}}} capacityNear {Der Veranstaltungsort ist zu {count} % voll} capacityFull {Der Veranstaltungsort ist voll ({count} %)} sellOut {{count} % der Tickets sind verkauft} salesPace {Der Ticketverkauf liegt bei {count} % des Zieltempos} readiness {{count, plural, one {Ein Einrichtungsschritt blockiert diese Veranstaltung} other {{countWords} Einrichtungsschritte blockieren diese Veranstaltung}}} domain {{count, plural, one {Eine eigene Domain hat ein Problem} other {{countWords} eigene Domains haben ein Problem}}} payoutsPastDue {{count, plural, one {Eine Anforderung des Auszahlungskontos ist überfällig} other {{countWords} Anforderungen des Auszahlungskontos sind überfällig}}} deliverability {Die E-Mail-Zustellbarkeit braucht Aufmerksamkeit} automationFailed {{count, plural, one {Eine Nachricht oder Sammelaktion ist heute fehlgeschlagen} other {{countWords} Nachrichten oder Sammelaktionen sind heute fehlgeschlagen}}} assistanceOverdue {{count, plural, one {Eine Hilfeanfrage wartet zu lange} other {{countWords} Hilfeanfragen warten zu lange}}} campaignFailed {{count, plural, one {Ein Kampagnenversand ist heute fehlgeschlagen} other {{countWords} Kampagnenversände sind heute fehlgeschlagen}}} disputeDeadline {{count, plural, one {Eine Rückbuchung braucht bald Nachweise} other {{countWords} Rückbuchungen brauchen bald Nachweise}}} other {Warnung}}",
       "intro": "{eventName, select, none {Bei {org} braucht etwas Aufmerksamkeit.} other {Bei {eventName} braucht etwas Aufmerksamkeit.}} Die Schaltfläche öffnet die Seite, die es behebt.",
       "cta": "Beheben"
     },
     "alerts.alert-text": {
-      "subject": "{rule, select, unseated {{count, plural, one {Ein Teilnehmer hat keinen Sitzplatz} other {{countWords} Teilnehmende haben keinen Sitzplatz}}} undistributed {{count, plural, one {Ein gekauftes Ticket wurde nicht weitergegeben} other {{countWords} gekaufte Tickets wurden nicht weitergegeben}}} paymentsFailed {{count, plural, one {Eine Zahlung ist fehlgeschlagen} other {{countWords} Zahlungen sind fehlgeschlagen}}} paymentsStuck {{count, plural, one {Eine Zahlung hängt fest} other {{countWords} Zahlungen hängen fest}}} refundSurge {{count, plural, one {Eine Erstattung in der letzten Stunde} other {{countWords} Erstattungen in der letzten Stunde}}} devicesOffline {{count, plural, one {Ein Check-in-Gerät ist offline} other {{countWords} Check-in-Geräte sind offline}}} devicesLowBattery {{count, plural, one {Ein Check-in-Gerät hat einen schwachen Akku} other {{countWords} Check-in-Geräte haben einen schwachen Akku}}} devicesBacklog {{count, plural, one {Ein Check-in-Gerät hat Scans, die auf die Synchronisierung warten} other {{countWords} Check-in-Geräte haben Scans, die auf die Synchronisierung warten}}} capacityNear {Der Veranstaltungsort ist zu {count} % voll} capacityFull {Der Veranstaltungsort ist voll ({count} %)} sellOut {{count} % der Tickets sind verkauft} salesPace {Der Ticketverkauf liegt bei {count} % des Zieltempos} readiness {{count, plural, one {Ein Einrichtungsschritt blockiert diese Veranstaltung} other {{countWords} Einrichtungsschritte blockieren diese Veranstaltung}}} domain {{count, plural, one {Eine eigene Domain hat ein Problem} other {{countWords} eigene Domains haben ein Problem}}} payoutsPastDue {{count, plural, one {Eine Anforderung des Auszahlungskontos ist überfällig} other {{countWords} Anforderungen des Auszahlungskontos sind überfällig}}} deliverability {Die E-Mail-Zustellbarkeit braucht Aufmerksamkeit} automationFailed {{count, plural, one {Eine Nachricht oder Sammelaktion ist heute fehlgeschlagen} other {{countWords} Nachrichten oder Sammelaktionen sind heute fehlgeschlagen}}} campaignFailed {{count, plural, one {Ein Kampagnenversand ist heute fehlgeschlagen} other {{countWords} Kampagnenversände sind heute fehlgeschlagen}}} disputeDeadline {{count, plural, one {Eine Rückbuchung braucht bald Nachweise} other {{countWords} Rückbuchungen brauchen bald Nachweise}}} other {Warnung}}",
+      "subject": "{rule, select, unseated {{count, plural, one {Ein Teilnehmer hat keinen Sitzplatz} other {{countWords} Teilnehmende haben keinen Sitzplatz}}} undistributed {{count, plural, one {Ein gekauftes Ticket wurde nicht weitergegeben} other {{countWords} gekaufte Tickets wurden nicht weitergegeben}}} paymentsFailed {{count, plural, one {Eine Zahlung ist fehlgeschlagen} other {{countWords} Zahlungen sind fehlgeschlagen}}} paymentsStuck {{count, plural, one {Eine Zahlung hängt fest} other {{countWords} Zahlungen hängen fest}}} refundSurge {{count, plural, one {Eine Erstattung in der letzten Stunde} other {{countWords} Erstattungen in der letzten Stunde}}} devicesOffline {{count, plural, one {Ein Check-in-Gerät ist offline} other {{countWords} Check-in-Geräte sind offline}}} devicesLowBattery {{count, plural, one {Ein Check-in-Gerät hat einen schwachen Akku} other {{countWords} Check-in-Geräte haben einen schwachen Akku}}} devicesBacklog {{count, plural, one {Ein Check-in-Gerät hat Scans, die auf die Synchronisierung warten} other {{countWords} Check-in-Geräte haben Scans, die auf die Synchronisierung warten}}} capacityNear {Der Veranstaltungsort ist zu {count} % voll} capacityFull {Der Veranstaltungsort ist voll ({count} %)} sellOut {{count} % der Tickets sind verkauft} salesPace {Der Ticketverkauf liegt bei {count} % des Zieltempos} readiness {{count, plural, one {Ein Einrichtungsschritt blockiert diese Veranstaltung} other {{countWords} Einrichtungsschritte blockieren diese Veranstaltung}}} domain {{count, plural, one {Eine eigene Domain hat ein Problem} other {{countWords} eigene Domains haben ein Problem}}} payoutsPastDue {{count, plural, one {Eine Anforderung des Auszahlungskontos ist überfällig} other {{countWords} Anforderungen des Auszahlungskontos sind überfällig}}} deliverability {Die E-Mail-Zustellbarkeit braucht Aufmerksamkeit} automationFailed {{count, plural, one {Eine Nachricht oder Sammelaktion ist heute fehlgeschlagen} other {{countWords} Nachrichten oder Sammelaktionen sind heute fehlgeschlagen}}} assistanceOverdue {{count, plural, one {Eine Hilfeanfrage wartet zu lange} other {{countWords} Hilfeanfragen warten zu lange}}} campaignFailed {{count, plural, one {Ein Kampagnenversand ist heute fehlgeschlagen} other {{countWords} Kampagnenversände sind heute fehlgeschlagen}}} disputeDeadline {{count, plural, one {Eine Rückbuchung braucht bald Nachweise} other {{countWords} Rückbuchungen brauchen bald Nachweise}}} other {Warnung}}",
       "intro": "{eventName, select, none {Bei {org} braucht etwas Aufmerksamkeit.} other {Bei {eventName} braucht etwas Aufmerksamkeit.}} Die Schaltfläche öffnet die Seite, die es behebt."
     },
     "campaigns.test": {
@@ -197,6 +197,11 @@
       "subject": "Gutschrift {number} für {eventName}",
       "intro": "{org} hat die Gutschrift {number} über {amount} zu deiner Bestellung für {eventName} ausgestellt. {storeCredit, select, yes {Löse den Code {code} an der Kasse ein, um ihn bei einer künftigen Bestellung bei {org} zu nutzen.} other {Dieser Betrag wurde dir erstattet.}}",
       "cta": "Meine Bestellung ansehen"
+    },
+    "orders.invoice": {
+      "subject": "Rechnung {number} für {eventName}",
+      "intro": "Sie sind für {eventName} angemeldet. {org} hat die Rechnung {number} über {amount} ausgestellt, fällig am {due}. Über die Schaltfläche unten können Sie sie ansehen, als PDF herunterladen oder ganz oder teilweise bezahlen.",
+      "cta": "Rechnung ansehen und bezahlen"
     },
     "orders.support-reply": {
       "subject": "{subject}",
@@ -226,6 +231,21 @@
       "intro": "Hier ist Ihr Link, um Ihre Anmeldung für {eventName} dort fortzusetzen, wo Sie aufgehört haben. Er gilt {days, plural, one {# Tag} other {# Tage}} nach dem letzten Speichern und nur für Sie; bitte leiten Sie ihn nicht weiter. Wenn Sie ihn nicht angefordert haben, können Sie diese E-Mail ignorieren.",
       "cta": "Anmeldung fortsetzen"
     },
+    "orders.table-naming": {
+      "subject": "{reminder, plural, =1 {Erinnerung: Nennen Sie Ihre Gäste für {eventName}} other {Nennen Sie Ihre Gäste für {eventName}}}",
+      "intro": "Ihr {tableName} hat {size, plural, one {# Platz} other {# Plätze}}. {missing, plural, =0 {Jeder Platz hat einen Namen; Sie können sie jederzeit prüfen.} one {# Platz braucht noch einen Namen.} other {# Plätze brauchen noch einen Namen.}} Sagen Sie uns über die Schaltfläche unten, wer an Ihrem Tisch sitzt.",
+      "cta": "Meine Gäste nennen"
+    },
+    "registration.approved": {
+      "subject": "Ihre Anmeldung für {eventName} wurde bestätigt",
+      "intro": "Gute Nachrichten, {name}: Ihre Bewerbung zur Teilnahme an {eventName} als {typeName} wurde angenommen. Über die Schaltfläche unten sehen Sie Ihre Anmeldung und können, falls Ihr Pass etwas kostet, bezahlen und Ihren Platz bestätigen.",
+      "cta": "Meine Anmeldung ansehen"
+    },
+    "registration.denied": {
+      "subject": "Ihre Bewerbung für {eventName}",
+      "intro": "Danke für Ihre Bewerbung zur Teilnahme an {eventName} als {typeName}, {name}. Der Veranstalter konnte Ihre Bewerbung diesmal nicht annehmen. Ihnen wurde nichts berechnet.",
+      "cta": "Meine Bewerbung ansehen"
+    },
     "portal.invite": {
       "subject": "Einladung zum Portal von {eventName}",
       "intro": "{org} hat Sie als {role} zum Portal von {eventName} eingeladen. Dort sehen Sie Ihre Sessions, aktualisieren Ihr Profil und erledigen Ihre Aufgaben. Die Schaltfläche fragt nach einem Anmeldecode, der an diese Adresse gesendet wird.",
@@ -240,6 +260,40 @@
       "subject": "Erinnerung: {title} für {eventName}",
       "intro": "{org} wartet noch auf „{title}“ für {eventName}. Fällig: {until}.",
       "cta": "Meine Aufgaben öffnen"
+    },
+    "donations.receipt": {
+      "subject": "{deductible, select, yes {Ihre Spendenquittung von {org}} other {Ihr Zahlungsbeleg von {org}}}",
+      "intro": "Danke für Ihre Zahlung von {amount} für {eventName}. Ihr Beleg steht unten. Bewahren Sie ihn oder die PDF-Kopie bei Ihren Unterlagen auf.",
+      "cta": "PDF-Beleg herunterladen"
+    },
+    "donations.year-end-statement": {
+      "subject": "Ihre Spendenübersicht {year} von {org}",
+      "intro": "Danke, dass Sie {org} im Jahr {year} unterstützt haben. Ihre Übersicht der steuerlich absetzbaren Zahlungen steht unten und als PDF.",
+      "cta": "PDF-Übersicht herunterladen"
+    },
+    "guests.invitation": {
+      "subject": "{subject}",
+      "intro": "{message}",
+      "cta": "Auf die Einladung antworten"
+    },
+    "guests.rsvp-reminder": {
+      "subject": "Erinnerung: Bitte antworten Sie für {eventName}",
+      "intro": "{name}, wir haben noch keine Antwort von Ihnen. Bitte sagen Sie uns bis {deadline}, wer zu {eventName} kommt.",
+      "cta": "Jetzt antworten"
+    },
+    "registration.session-enrolled": {
+      "subject": "Ein Platz ist frei: Du bist in {sessionTitle} dabei",
+      "intro": "In {sessionTitle} bei {eventName} ({when}) ist ein Platz frei geworden, und du warst als Nächstes auf der Warteliste. Du bist jetzt angemeldet. Wenn du nicht kannst, entferne die Session aus deinem Plan, damit die nächste Person den Platz bekommt.",
+      "cta": "Meinen Plan öffnen"
+    },
+    "registration.session-offer": {
+      "subject": "Ein Platz in {sessionTitle} ist bis {until} für dich reserviert",
+      "intro": "In {sessionTitle} bei {eventName} ({when}) ist ein Platz frei geworden, und du bist als Nächstes dran. Nimm ihn vor {until} in deinem Plan an; danach geht er an die nächste Person.",
+      "cta": "Platz annehmen"
+    },
+    "alerts.alert-urgent-text": {
+      "subject": "{rule, select, unseated {{count, plural, one {Ein Teilnehmer hat keinen Sitzplatz} other {{countWords} Teilnehmende haben keinen Sitzplatz}}} undistributed {{count, plural, one {Ein gekauftes Ticket wurde nicht weitergegeben} other {{countWords} gekaufte Tickets wurden nicht weitergegeben}}} paymentsFailed {{count, plural, one {Eine Zahlung ist fehlgeschlagen} other {{countWords} Zahlungen sind fehlgeschlagen}}} paymentsStuck {{count, plural, one {Eine Zahlung hängt fest} other {{countWords} Zahlungen hängen fest}}} refundSurge {{count, plural, one {Eine Erstattung in der letzten Stunde} other {{countWords} Erstattungen in der letzten Stunde}}} devicesOffline {{count, plural, one {Ein Check-in-Gerät ist offline} other {{countWords} Check-in-Geräte sind offline}}} devicesLowBattery {{count, plural, one {Ein Check-in-Gerät hat einen schwachen Akku} other {{countWords} Check-in-Geräte haben einen schwachen Akku}}} devicesBacklog {{count, plural, one {Ein Check-in-Gerät hat Scans, die auf die Synchronisierung warten} other {{countWords} Check-in-Geräte haben Scans, die auf die Synchronisierung warten}}} capacityNear {Der Veranstaltungsort ist zu {count} % voll} capacityFull {Der Veranstaltungsort ist voll ({count} %)} sellOut {{count} % der Tickets sind verkauft} salesPace {Der Ticketverkauf liegt bei {count} % des Zieltempos} readiness {{count, plural, one {Ein Einrichtungsschritt blockiert diese Veranstaltung} other {{countWords} Einrichtungsschritte blockieren diese Veranstaltung}}} domain {{count, plural, one {Eine eigene Domain hat ein Problem} other {{countWords} eigene Domains haben ein Problem}}} payoutsPastDue {{count, plural, one {Eine Anforderung des Auszahlungskontos ist überfällig} other {{countWords} Anforderungen des Auszahlungskontos sind überfällig}}} deliverability {Die E-Mail-Zustellbarkeit braucht Aufmerksamkeit} automationFailed {{count, plural, one {Eine Nachricht oder Sammelaktion ist heute fehlgeschlagen} other {{countWords} Nachrichten oder Sammelaktionen sind heute fehlgeschlagen}}} assistanceOverdue {{count, plural, one {Eine Hilfeanfrage wartet zu lange} other {{countWords} Hilfeanfragen warten zu lange}}} campaignFailed {{count, plural, one {Ein Kampagnenversand ist heute fehlgeschlagen} other {{countWords} Kampagnenversände sind heute fehlgeschlagen}}} disputeDeadline {{count, plural, one {Eine Rückbuchung braucht bald Nachweise} other {{countWords} Rückbuchungen brauchen bald Nachweise}}} other {Warnung}}",
+      "intro": "{eventName, select, none {Bei {org} braucht etwas Aufmerksamkeit.} other {Bei {eventName} braucht etwas Aufmerksamkeit.}} Die Schaltfläche öffnet die Seite, die es behebt."
     }
   },
   "roles": {
