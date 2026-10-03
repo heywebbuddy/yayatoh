@@ -117,8 +117,8 @@ import {
   issueReceiptTx,
   paddleConsoleQuery,
   recordDonationReconciliationCommand,
-  resolveDonationReconItemCommand,
   recordPaddlesCommand,
+  resolveDonationReconItemCommand,
   saveCharityProfileCommand,
   saveScreenCommand,
   setFairValueCommand,
@@ -343,8 +343,8 @@ import {
 } from '@yayatoh/reports';
 import { reportReviewCommand, submitReviewCommand } from '@yayatoh/reviews';
 import {
-  allotSeatsCommand,
   addSolverRuleCommand,
+  allotSeatsCommand,
   assignSeatsCommand,
   giveSubEventOwnChartCommand,
   holdSeatsTx,

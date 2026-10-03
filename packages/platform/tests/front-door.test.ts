@@ -271,6 +271,17 @@ describe('who serves a request', () => {
       '/events/summit/network/chat/0190a0b0-0000-7000-8000-000000000001',
       '/session-checkin/abcdefghijklmnopqrstuvwxyz012345',
       '/api/gallery/file/abc~sig',
+      // Batch 3k merge: M5.10a's conference hub (an order link: its views, manifest, service worker
+      // and icons) and signed calendar feed; M5.2b's schedule on the same order link.
+      '/orders/abc~sig',
+      '/orders/abc~sig/schedule',
+      '/orders/abc~sig/hub',
+      '/ar/orders/abc~sig/hub',
+      '/orders/abc~sig/hub/manifest',
+      '/conference-hub-sw.js',
+      '/conference-hub-icon-192.png',
+      '/hub-sw.js',
+      '/api/calendar/org~reg~1~sig.ics',
     ]) {
       expect(isPlatformPath(new URL(p, 'https://x').pathname) || decide(p).owner === 'next').toBe(true);
       expect(decide(p, flags(), { legacy: true })).toEqual({
@@ -295,6 +306,8 @@ describe('who serves a request', () => {
     expect(isPlatformPath('/events/summit/network/other')).toBe(false);
     expect(isPlatformPath('/events/summit/network/people/a/b')).toBe(false);
     expect(isPlatformPath('/giving-screens')).toBe(false);
+    expect(isPlatformPath('/ordersx')).toBe(false);
+    expect(isPlatformPath('/conference-hub-sw.jsx')).toBe(false);
   });
 });
 
