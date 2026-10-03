@@ -12309,5 +12309,24 @@
       "allow": "許可",
       "deny": "拒否"
     }
+  },
+  "formControls": {
+    "search": "検索",
+    "noResults": "一致する項目はありません",
+    "loading": "読み込み中…",
+    "remove": "{label} を削除",
+    "create": "「{query}」を作成",
+    "clear": "クリア",
+    "chooseDate": "日付を選択",
+    "chooseTime": "時刻を選択",
+    "previousMonth": "前の月",
+    "nextMonth": "次の月",
+    "today": "今日",
+    "invalidDate": "{example} のように日付を入力してください",
+    "invalidTime": "{example} のように時刻を入力してください",
+    "tooEarly": "{date} 以降の日付を選んでください",
+    "tooLate": "{date} 以前の日付を選んでください",
+    "timeZoneNote": "{zone} の時刻",
+    "selected": "選択済み"
   }
 }

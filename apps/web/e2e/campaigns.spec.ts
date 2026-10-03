@@ -3,7 +3,7 @@ import { closePools } from '@yayatoh/db';
 import { localKeyVault, setKeyVault } from '@yayatoh/platform';
 import { resolveOrgSlug } from '@yayatoh/tenancy';
 import { campaignScenario } from '@yayatoh/testing';
-import { expectAccessible, expectHtmlAccessible, newUser } from './helpers.ts';
+import { expectAccessible, expectHtmlAccessible, newUser, pickOption } from './helpers.ts';
 
 /**
  * M3.6b campaigns: build a campaign from blocks with the keyboard, pick an audience (the count
@@ -86,7 +86,7 @@ async function fillAndSave(page: Page) {
 async function chooseEveryone(page: Page) {
   const form = page.getByRole('form', { name: 'Audience' });
   await form.getByLabel('A saved audience', { exact: true }).check();
-  await form.getByLabel('Saved audience', { exact: true }).selectOption({ label: 'Everyone' });
+  await pickOption(form.getByLabel('Saved audience', { exact: true }), { label: 'Everyone' });
   await form.getByRole('button', { name: 'Use this audience' }).click();
   await expect(page.getByText('Audience saved.')).toBeVisible();
 }
@@ -130,7 +130,7 @@ test.describe('campaigns (M3.6b)', () => {
     // Keyboard only: add a button block (inserted before the footer), focus lands on it.
     const type = editor.getByLabel('Block type');
     await type.focus();
-    await type.selectOption('button');
+    await pickOption(type, 'button');
     await page.keyboard.press('Tab');
     await expect(editor.getByRole('button', { name: 'Add block' })).toBeFocused();
     await page.keyboard.press('Enter');
@@ -144,10 +144,10 @@ test.describe('campaigns (M3.6b)', () => {
     await expect(editor.getByRole('group', { name: 'Block 3: Text' })).toBeVisible();
     await expect(editor.getByRole('button', { name: 'Move Block 2: Button up' })).toBeFocused();
     // An event card, then remove a divider again.
-    await type.selectOption('eventCard');
+    await pickOption(type, 'eventCard');
     await editor.getByRole('button', { name: 'Add block' }).click();
     await expect(editor.getByRole('group', { name: 'Block 4: Event card' })).toBeVisible();
-    await type.selectOption('divider');
+    await pickOption(type, 'divider');
     await editor.getByRole('button', { name: 'Add block' }).click();
     await editor.getByRole('button', { name: 'Remove Block 5: Divider' }).click();
     await expect(editor.getByRole('group', { name: 'Block 5: Footer' })).toBeVisible();

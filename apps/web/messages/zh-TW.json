@@ -12309,5 +12309,24 @@
       "allow": "允許",
       "deny": "拒絕"
     }
+  },
+  "formControls": {
+    "search": "搜尋",
+    "noResults": "沒有相符項目",
+    "loading": "載入中…",
+    "remove": "移除{label}",
+    "create": "建立「{query}」",
+    "clear": "清除",
+    "chooseDate": "選擇日期",
+    "chooseTime": "選擇時間",
+    "previousMonth": "上個月",
+    "nextMonth": "下個月",
+    "today": "今天",
+    "invalidDate": "請輸入日期，例如 {example}",
+    "invalidTime": "請輸入時間，例如 {example}",
+    "tooEarly": "請選擇 {date} 或之後的日期",
+    "tooLate": "請選擇 {date} 或之前的日期",
+    "timeZoneNote": "{zone} 時間",
+    "selected": "已選取"
   }
 }

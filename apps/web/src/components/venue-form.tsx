@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, Input } from '@yayatoh/ui';
+import { Alert, Button, Input, TimeZonePicker } from '@yayatoh/ui';
 import type { VenueDto } from '@yayatoh/venues';
 import { useTranslations } from 'next-intl';
 import { useActionState } from 'react';
@@ -14,13 +14,11 @@ const FIELD_ERRORS = ['name', 'country', 'latitude', 'longitude', 'timezone', 'c
 export function VenueForm({
   action,
   venue,
-  zones,
   defaultTimezone,
   disabled = false,
 }: {
   action: (prev: FormState, form: FormData) => Promise<FormState>;
   venue?: VenueDto;
-  zones: readonly string[];
   defaultTimezone: string;
   disabled?: boolean;
 }) {
@@ -102,20 +100,14 @@ export function VenueForm({
           <label htmlFor="venue-timezone" className="text-[13px] font-bold text-ink">
             {t('timezone')}
           </label>
-          <select
+          <TimeZonePicker
             id="venue-timezone"
             name="timezone"
             defaultValue={venue?.timezone ?? defaultTimezone}
             aria-invalid={bad.has('timezone') || undefined}
             aria-describedby={bad.has('timezone') ? 'venue-timezone-error' : undefined}
             className={`${selectClass} ${bad.has('timezone') ? 'field-invalid' : ''}`}
-          >
-            {zones.map((z) => (
-              <option key={z} value={z}>
-                {z.replace(/_/g, ' ')}
-              </option>
-            ))}
-          </select>
+          />
           {bad.has('timezone') ? (
             <p id="venue-timezone-error" className="text-caption text-danger">
               {t('errors.timezone')}

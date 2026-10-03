@@ -43,6 +43,7 @@ import {
   EmptyState,
   Label,
   SearchPill,
+  Select,
   StatusDot,
   Table,
 } from '@yayatoh/ui';
@@ -473,31 +474,31 @@ export default async function AttendeesPage({
                 <label htmlFor="attendee-source" className="sr-only">
                   {t('attendees.source')}
                 </label>
-                <select id="attendee-source" name="source" defaultValue={source ?? ''} className="field">
+                <Select id="attendee-source" name="source" defaultValue={source ?? ''} className="field">
                   <option value="">{t('attendees.anySource')}</option>
                   {ATTENDEE_SOURCES.map((x) => (
                     <option key={x} value={x}>
                       {t(`attendeeSource.${x}`)}
                     </option>
                   ))}
-                </select>
+                </Select>
                 <label htmlFor="attendee-status" className="sr-only">
                   {t('attendees.status')}
                 </label>
-                <select id="attendee-status" name="status" defaultValue={status ?? ''} className="field">
+                <Select id="attendee-status" name="status" defaultValue={status ?? ''} className="field">
                   <option value="">{t('attendees.anyStatus')}</option>
                   {ATTENDEE_STATUSES.map((x) => (
                     <option key={x} value={x}>
                       {t(`attendeeRecordStatus.${x}`)}
                     </option>
                   ))}
-                </select>
+                </Select>
                 {ticketing ? (
                   <>
                     <label htmlFor="attendee-type" className="sr-only">
                       {t('attendees.ticketType')}
                     </label>
-                    <select
+                    <Select
                       id="attendee-type"
                       name="type"
                       defaultValue={ticketTypeId ?? ''}
@@ -509,11 +510,11 @@ export default async function AttendeesPage({
                           {x.name}
                         </option>
                       ))}
-                    </select>
+                    </Select>
                     <label htmlFor="attendee-checkin" className="sr-only">
                       {t('attendees.checkIn')}
                     </label>
-                    <select
+                    <Select
                       id="attendee-checkin"
                       name="checkin"
                       defaultValue={checkedIn ?? ''}
@@ -525,11 +526,11 @@ export default async function AttendeesPage({
                           {t(`attendees.checkedIn.${x}`)}
                         </option>
                       ))}
-                    </select>
+                    </Select>
                     <label htmlFor="attendee-distribution" className="sr-only">
                       {t('attendees.distribution')}
                     </label>
-                    <select
+                    <Select
                       id="attendee-distribution"
                       name="distribution"
                       defaultValue={distribution ?? ''}
@@ -541,7 +542,7 @@ export default async function AttendeesPage({
                           {t(`attendees.distributionFilter.${x}`)}
                         </option>
                       ))}
-                    </select>
+                    </Select>
                   </>
                 ) : null}
               </>
