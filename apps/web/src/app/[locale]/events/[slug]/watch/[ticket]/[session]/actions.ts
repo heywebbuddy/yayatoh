@@ -2,7 +2,7 @@
 
 import { checkoutTarget } from '@yayatoh/events';
 import { createCtx, executeCommand, isDomainError } from '@yayatoh/kernel';
-import { startPlaybackCommand } from '@yayatoh/virtual';
+import { startPlaybackCommand, type VideoProviderName } from '@yayatoh/virtual';
 import { ports } from '@/server/ports.ts';
 
 /** A playback token for the player, or the refusal's code and reason. */
@@ -13,7 +13,9 @@ export interface PlaybackState {
   readonly token?: string;
   readonly playbackUrl?: string;
   readonly expiresAt?: string;
-  readonly provider?: 'fake' | 'mux';
+  readonly provider?: VideoProviderName;
+  /** M6.10a: a fake provider (test pattern, CDN check). */
+  readonly sandbox?: boolean;
 }
 
 /**
@@ -41,6 +43,7 @@ export async function startPlaybackAction(
       playbackUrl: p.playbackUrl,
       expiresAt: p.expiresAt.toISOString(),
       provider: p.provider,
+      sandbox: p.sandbox,
     };
   } catch (err) {
     if (!isDomainError(err)) throw err;

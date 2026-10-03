@@ -9,6 +9,7 @@ import { accessChoicesTx, eventOrThrowTx } from './commands.ts';
 import { effectiveAccess, mayWatch } from './domain/access.ts';
 import { ZoomSetupDto, ZoomSyncDto } from './dto.ts';
 import { watchMinutes, zoomAttendance, zoomRegistrants, zoomWebinars } from './schema.ts';
+import { zoomSegmentKey } from './zoom-keys.ts';
 
 /**
  * M6.9b: sessions delivered as Zoom webinars. The organizer links a session to its webinar id;
@@ -134,6 +135,7 @@ async function zoomSetupTx(tx: TenantTx, eventId: string): Promise<ZoomSetupDto>
       startsAt: s.startsAt,
       endsAt: s.endsAt,
       webinarId: byLink.get(s.id)?.webinarId ?? null,
+      created: byLink.get(s.id)?.origin === 'created',
       registrants: r.get(s.id) ?? 0,
       attendees: a.get(s.id) ?? 0,
     })),
@@ -156,48 +158,60 @@ export const zoomSetupQuery = tenantQuery({
 /**
  * Deliver a session as a Zoom webinar (its id from Zoom). A webinar serves one session of the
  * org. Linking another id to the session moves its registrants to the new webinar (they are sent
- * again); the holders with online access become registrants at once.
+ * again); the holders with online access become registrants at once. `origin` (M6.10a): `created`
+ * when Yayatoh created the webinar through the org's Zoom connection (only that path passes it),
+ * else `linked`.
  */
+export async function linkZoomWebinarTx(
+  tx: TenantTx,
+  ctx: Ctx,
+  input: { eventId: string; sessionId: string; webinarId: string; origin?: 'linked' | 'created' },
+): Promise<ZoomSyncDto> {
+  const orgId = requireOrg(ctx);
+  const origin = input.origin ?? 'linked';
+  const webinarId = normalizeWebinarId(input.webinarId);
+  if (!webinarId)
+    throw new DomainError('validation_failed', 'Not a Zoom webinar id', {
+      field: 'webinarId',
+      reason: 'webinar_id',
+    });
+  const ev = await eventOrThrowTx(tx, input.eventId);
+  if (ev.attendanceMode === 'in_person')
+    throw new DomainError('invalid_state', 'This event is in person only', { reason: 'in_person_event' });
+  const s = (await sessionsOf(tx, ev.id)).find((x) => x.id === input.sessionId && !x.draft);
+  if (!s) throw new DomainError('not_found', 'Session not found', { field: 'sessionId' });
+  const [taken] = await tx.select().from(zoomWebinars).where(eq(zoomWebinars.webinarId, webinarId));
+  if (taken && taken.sessionId !== s.id)
+    throw new DomainError('conflict', 'This webinar is linked to another session', {
+      field: 'webinarId',
+      reason: 'webinar_taken',
+    });
+  const [link] = await tx.select().from(zoomWebinars).where(eq(zoomWebinars.sessionId, s.id));
+  if (!link)
+    await tx.insert(zoomWebinars).values({ orgId, eventId: ev.id, sessionId: s.id, webinarId, origin });
+  else if (link.webinarId !== webinarId) {
+    await tx
+      .update(zoomWebinars)
+      .set({ webinarId, origin, updatedAt: ctx.now })
+      .where(eq(zoomWebinars.id, link.id));
+    // Registered at the old webinar: send them to the new one.
+    await tx
+      .update(zoomRegistrants)
+      .set({ updatedAt: ctx.now })
+      .where(eq(zoomRegistrants.webinarLinkId, link.id));
+  } else if (origin === 'created' && link.origin !== 'created')
+    await tx.update(zoomWebinars).set({ origin, updatedAt: ctx.now }).where(eq(zoomWebinars.id, link.id));
+  return { ...(await reconcileZoomRegistrantsTx(tx, orgId, ev.id, ctx.now)), webinarId };
+}
+
+/** The organizer types a webinar's id (M6.9b). */
 export const linkZoomWebinarCommand = tenantCommand({
   name: 'virtual.linkZoomWebinar',
   input: z.object({ eventId: z.uuid(), sessionId: z.uuid(), webinarId: z.string().max(40) }),
   output: ZoomSyncDto,
   entitlement: 'virtual',
   permission: 'events:write',
-  handler: async ({ input, ctx, tx }) => {
-    const orgId = requireOrg(ctx);
-    const webinarId = normalizeWebinarId(input.webinarId);
-    if (!webinarId)
-      throw new DomainError('validation_failed', 'Not a Zoom webinar id', {
-        field: 'webinarId',
-        reason: 'webinar_id',
-      });
-    const ev = await eventOrThrowTx(tx, input.eventId);
-    if (ev.attendanceMode === 'in_person')
-      throw new DomainError('invalid_state', 'This event is in person only', { reason: 'in_person_event' });
-    const s = (await sessionsOf(tx, ev.id)).find((x) => x.id === input.sessionId && !x.draft);
-    if (!s) throw new DomainError('not_found', 'Session not found', { field: 'sessionId' });
-    const [taken] = await tx.select().from(zoomWebinars).where(eq(zoomWebinars.webinarId, webinarId));
-    if (taken && taken.sessionId !== s.id)
-      throw new DomainError('conflict', 'This webinar is linked to another session', {
-        field: 'webinarId',
-        reason: 'webinar_taken',
-      });
-    const [link] = await tx.select().from(zoomWebinars).where(eq(zoomWebinars.sessionId, s.id));
-    if (!link) await tx.insert(zoomWebinars).values({ orgId, eventId: ev.id, sessionId: s.id, webinarId });
-    else if (link.webinarId !== webinarId) {
-      await tx
-        .update(zoomWebinars)
-        .set({ webinarId, updatedAt: ctx.now })
-        .where(eq(zoomWebinars.id, link.id));
-      // Registered at the old webinar: send them to the new one.
-      await tx
-        .update(zoomRegistrants)
-        .set({ updatedAt: ctx.now })
-        .where(eq(zoomRegistrants.webinarLinkId, link.id));
-    }
-    return { ...(await reconcileZoomRegistrantsTx(tx, orgId, ev.id, ctx.now)), webinarId };
-  },
+  handler: async ({ input, ctx, tx }) => linkZoomWebinarTx(tx, ctx, { ...input, origin: 'linked' }),
   audit: (input) => ({
     action: 'virtual.zoom.link',
     targetType: 'session',
@@ -370,6 +384,9 @@ export async function recordZoomAttendanceTx(
         .where(and(eq(zoomRegistrants.webinarLinkId, link.id), eq(zoomRegistrants.email, email)))
         .limit(1)
     : [];
+  // M6.10a: the same stay from a join/leave webhook and from this report has the same key, so it
+  // is one row (the report's times win: Zoom's own record of the whole stay).
+  const segmentKey = email ? zoomSegmentKey(email, v.joinedAt) : null;
   const values = {
     eventId: link.eventId,
     sessionId: link.sessionId,
@@ -378,6 +395,7 @@ export async function recordZoomAttendanceTx(
     email,
     joinedAt: v.joinedAt,
     leftAt: v.leftAt,
+    segmentKey,
   };
   if (localId) {
     const [row] = await tx
@@ -390,6 +408,10 @@ export async function recordZoomAttendanceTx(
   const [row] = await tx
     .insert(zoomAttendance)
     .values({ orgId, ...values })
+    .onConflictDoUpdate({
+      target: [zoomAttendance.orgId, zoomAttendance.webinarLinkId, zoomAttendance.segmentKey],
+      set: { ...values, updatedAt: ctx.now },
+    })
     .returning({ id: zoomAttendance.id });
   if (!row) throw new DomainError('internal');
   return row.id;

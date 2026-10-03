@@ -4,7 +4,7 @@ import { eventRolesOf } from '@yayatoh/events';
 import { createCommandPorts } from '@yayatoh/platform';
 import { registrationSessionAccess } from '@yayatoh/registration';
 import { createOrgAuthorizer, orgStatusGate } from '@yayatoh/tenancy';
-import { configureVirtual, videoProviderFromEnv } from '@yayatoh/virtual';
+import { configureVirtual, videoProvidersFromEnv } from '@yayatoh/virtual';
 
 /** The same composition as the web app: billing entitlements + tenancy authorizer. */
 export const ports = createCommandPorts({
@@ -18,5 +18,6 @@ export const ports = createCommandPorts({
 // (a higher tier than check-in, so it is plugged in here).
 setSessionAccessSource(registrationSessionAccess);
 
-// M6.9a: video for virtual sessions (the Mux fake outside production until the owner's account).
-configureVirtual({ provider: videoProviderFromEnv(process.env) });
+// M6.9a/M6.10a: video for virtual sessions (the Mux and Cloudflare Stream fakes outside
+// production until the owner's accounts).
+configureVirtual({ providers: videoProvidersFromEnv(process.env) });

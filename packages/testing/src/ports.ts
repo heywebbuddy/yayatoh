@@ -70,8 +70,11 @@ setPartyCredentials(guestsPartyCredentials);
 setSessionAccessSource(registrationSessionAccess);
 
 /** M6.9a: the fake video provider (no network), as the apps use in dev and CI. */
-export const videoProvider = fakeVideoProvider({ seed: randomBytes(32).toString('hex') });
-configureVirtual({ provider: videoProvider });
+const videoSeed = randomBytes(32).toString('hex');
+export const videoProvider = fakeVideoProvider({ seed: videoSeed });
+/** M6.10a: the fake Cloudflare Stream, the second provider a session may switch to. */
+export const cloudflareVideoProvider = fakeVideoProvider({ seed: videoSeed, kind: 'cloudflare' });
+configureVirtual({ provider: videoProvider, providers: [cloudflareVideoProvider] });
 
 // M6.1c: every module's data-subject contributor, as the web registers them.
 registerDataSubjectContributors(DATA_SUBJECT_CONTRIBUTORS);

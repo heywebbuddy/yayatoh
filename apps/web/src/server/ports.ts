@@ -21,7 +21,7 @@ import { registrationSessionAccess } from '@yayatoh/registration';
 import { setOccupantDirectory, setPartyCredentials } from '@yayatoh/seating';
 import { surveysContactOwner } from '@yayatoh/surveys';
 import { createOrgAuthorizer, orgStatusGate } from '@yayatoh/tenancy';
-import { configureVirtual, videoProviderFromEnv } from '@yayatoh/virtual';
+import { configureVirtual, videoProvidersFromEnv } from '@yayatoh/virtual';
 import { configureWebhooks, fakeResolver, webhookPublisherFromEnv } from '@yayatoh/webhooks';
 import { DATA_SUBJECT_CONTRIBUTORS } from './data-subjects.ts';
 
@@ -71,5 +71,6 @@ setPartyCredentials(guestsPartyCredentials);
 // M5.6a: session doors learn registrations and enrollments from the registration module
 // (a higher tier than check-in, so it is plugged in here).
 setSessionAccessSource(registrationSessionAccess);
-// M6.9a: video for virtual sessions (the Mux fake outside production until the owner's account).
-configureVirtual({ provider: videoProviderFromEnv(process.env) });
+// M6.9a/M6.10a: video for virtual sessions (the Mux and Cloudflare Stream fakes outside
+// production until the owner's accounts).
+configureVirtual({ providers: videoProvidersFromEnv(process.env) });
