@@ -14,6 +14,26 @@ export {
   recordPayoutAccountCommand,
   setPayoutHoldCommand,
 } from './accounts.ts';
+export {
+  accrueCommissionTx,
+  agencyCommissionMirror,
+  agencyCommissionStatementQuery,
+  type CommissionReversal,
+  CommissionStatementDto,
+  clientCommissionStatementQuery,
+  commissionBalanceTx,
+  recordCommissionReversalCommand,
+  reverseCommissionTx,
+} from './commission.ts';
+export {
+  COMMISSION_ENTRY_KINDS,
+  type CommissionEntryKind,
+  commissionFor,
+  cumulativeReversal,
+  mirrorPostings,
+  reversalForRefund,
+  splitReversal,
+} from './commission-math.ts';
 export { paymentProviderFromEnv } from './config.ts';
 export { paymentsDataSubjects } from './data-subject.ts';
 export { claimProviderEventTx } from './dedupe.ts';

@@ -10,8 +10,9 @@ import {
   uuidv7,
 } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
-import { and, desc, eq, inArray, isNotNull, isNull, lte, sql } from 'drizzle-orm';
+import { and, desc, eq, inArray, isNotNull, isNull, lte, ne, sql } from 'drizzle-orm';
 import { z } from 'zod';
+import { postCommissionTransferTx, releaseCommissionsTx } from './commission.ts';
 import { balanceTx, postJournalTx, postTransferReversalTx } from './ledger.ts';
 import type { PaymentProvider } from './port.ts';
 import { paymentAccounts, SETTLEMENT_KINDS, SETTLEMENT_STATUSES, settlements } from './schema.ts';
@@ -196,12 +197,19 @@ export const releaseDueSettlementsCommand = tenantCommand({
       await tx.update(settlements).set({ reserveReleasedAt: ctx.now }).where(eq(settlements.id, s.id));
     }
 
-    // 3. Settlements that waited for a payout account, now that there is one.
+    // 2b. M6.8a: agencies' commission on released events (a second transfer in the event's group).
+    await releaseCommissionsTx(tx, ctx, async (eventId) => {
+      const event = await findEventTx(tx, eventId);
+      return event !== null && event !== undefined && ctx.now >= releaseDate(event.endsAt);
+    });
+
+    // 3. Settlements that waited for a payout account, now that there is one (commission
+    // settlements wait for the agency's account instead: step 2b).
     if (destination)
       await tx
         .update(settlements)
         .set({ status: 'ready', destinationAccountId: destination, updatedAt: ctx.now })
-        .where(eq(settlements.status, 'waiting_account'));
+        .where(and(eq(settlements.status, 'waiting_account'), ne(settlements.kind, 'commission')));
 
     const ready = await tx
       .select()
@@ -264,18 +272,20 @@ export const recordTransferCommand = tenantCommand({
         .where(eq(settlements.id, s.id));
       return { status: 'failed' as const, changed: true };
     }
-    await postJournalTx(tx, ctx, {
-      key: `transfer:${s.id}`,
-      kind: 'transfer',
-      refType: 'settlement',
-      refId: s.id,
-      eventId: s.eventId,
-      memo: { transferId: input.transferId },
-      postings: [
-        { account: 'org:payable_releasable', amountMinor: s.amountMinor, currency: s.currency },
-        { account: 'platform:stripe_cash', amountMinor: -s.amountMinor, currency: s.currency },
-      ],
-    });
+    if (s.kind === 'commission') await postCommissionTransferTx(tx, ctx, s, input.transferId);
+    else
+      await postJournalTx(tx, ctx, {
+        key: `transfer:${s.id}`,
+        kind: 'transfer',
+        refType: 'settlement',
+        refId: s.id,
+        eventId: s.eventId,
+        memo: { transferId: input.transferId },
+        postings: [
+          { account: 'org:payable_releasable', amountMinor: s.amountMinor, currency: s.currency },
+          { account: 'platform:stripe_cash', amountMinor: -s.amountMinor, currency: s.currency },
+        ],
+      });
     await tx
       .update(settlements)
       .set({
@@ -286,13 +296,14 @@ export const recordTransferCommand = tenantCommand({
         updatedAt: ctx.now,
       })
       .where(eq(settlements.id, s.id));
-    emit({
-      type: 'payouts.transferred',
-      version: 1,
-      aggregateType: 'settlement',
-      aggregateId: s.id,
-      payload: { orgId: s.orgId, settlementId: s.id, amountMinor: s.amountMinor, currency: s.currency },
-    });
+    if (s.kind !== 'commission')
+      emit({
+        type: 'payouts.transferred',
+        version: 1,
+        aggregateType: 'settlement',
+        aggregateId: s.id,
+        payload: { orgId: s.orgId, settlementId: s.id, amountMinor: s.amountMinor, currency: s.currency },
+      });
     return { status: 'transferred' as const, changed: true };
   },
   audit: (input) => ({
@@ -311,6 +322,8 @@ export async function eventTransferTx(tx: TenantTx, eventId: string): Promise<st
     .where(
       and(
         eq(settlements.eventId, eventId),
+        // The organizer's transfers only: an agency's commission transfer is reversed on its own.
+        ne(settlements.kind, 'commission'),
         eq(settlements.status, 'transferred'),
         isNotNull(settlements.transferId),
       ),

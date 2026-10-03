@@ -388,7 +388,7 @@ async function succeedTx(tx: TenantTx, ctx: Ctx, refund: typeof refunds.$inferSe
       voided.flatMap((t) => (t.attendeeId ? [t.attendeeId] : [])),
     );
   }
-  const { receivableMinor } = await postRefundTx(tx, ctx, {
+  const { receivableMinor, commissionReversal } = await postRefundTx(tx, ctx, {
     refundId: refund.id,
     orderId: order.id,
     eventId: order.eventId,
@@ -434,7 +434,7 @@ async function succeedTx(tx: TenantTx, ctx: Ctx, refund: typeof refunds.$inferSe
   });
   // Paid out already: the organizer's share is a receivable; ask the caller to reverse the transfer.
   const transferId = receivableMinor > 0 ? await eventTransferTx(tx, order.eventId) : null;
-  return transferId
+  const reversal = transferId
     ? {
         transferId,
         amountMinor: receivableMinor,
@@ -443,6 +443,19 @@ async function succeedTx(tx: TenantTx, ctx: Ctx, refund: typeof refunds.$inferSe
         orderId: order.id,
       }
     : null;
+  // M6.8a: the agency's commission was transferred already: reverse that transfer explicitly too.
+  const commission =
+    commissionReversal?.transferId && commissionReversal.afterTransferMinor > 0
+      ? {
+          transferId: commissionReversal.transferId,
+          agencyOrgId: commissionReversal.agencyOrgId,
+          amountMinor: commissionReversal.afterTransferMinor,
+          currency: refund.currency,
+          eventId: order.eventId,
+          orderId: order.id,
+        }
+      : null;
+  return { reversal, commission };
 }
 
 /**
@@ -497,6 +510,21 @@ export const completeRefundCommand = tenantCommand({
         orderId: z.uuid(),
       })
       .nullable(),
+    /**
+     * M6.8a: the agency's commission was transferred already: reverse this much of its transfer
+     * explicitly (never `reverse_transfer`), then record it. Absent when there is none.
+     */
+    commissionReversal: z
+      .object({
+        transferId: z.string(),
+        agencyOrgId: z.uuid(),
+        amountMinor: z.int(),
+        currency: z.string(),
+        eventId: z.uuid(),
+        orderId: z.uuid(),
+      })
+      .nullable()
+      .optional(),
   }),
   entitlement: 'ticketing',
   permission: 'orders:refund',
@@ -524,9 +552,14 @@ export const completeRefundCommand = tenantCommand({
       .where(eq(refunds.id, refund.id))
       .returning();
     if (!row) throw new DomainError('internal');
-    const reversal = input.outcome === 'succeeded' ? await succeedTx(tx, ctx, row, emit) : null;
+    const done = input.outcome === 'succeeded' ? await succeedTx(tx, ctx, row, emit) : null;
     if (input.outcome === 'failed') await reopenRequestTx(tx, ctx, row);
-    return { status: input.outcome, changed: true, reversal };
+    return {
+      status: input.outcome,
+      changed: true,
+      reversal: done?.reversal ?? null,
+      commissionReversal: done?.commission ?? null,
+    };
   },
   audit: (input, r) => ({
     action: 'order.refund_complete',

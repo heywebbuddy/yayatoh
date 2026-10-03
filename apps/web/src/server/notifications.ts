@@ -3,6 +3,7 @@ import { alertEvaluator, evaluateOrgNow, watchQuietDevices } from '@yayatoh/aler
 import { attendeeMessageMailer } from '@yayatoh/attendees';
 import { getUsersByIds } from '@yayatoh/auth';
 import { journeySubscribers, runDueActions } from '@yayatoh/automations';
+import { agencyBillingGrantRevoked } from '@yayatoh/billing';
 import { campaignsTimeline } from '@yayatoh/campaigns';
 import {
   chatReportSignals,
@@ -54,7 +55,7 @@ import {
   ticketMailer,
   waitlistMailer,
 } from '@yayatoh/orders';
-import { payoutDestinationMailer } from '@yayatoh/payments';
+import { agencyCommissionMirror, payoutDestinationMailer } from '@yayatoh/payments';
 import {
   consumeEvent,
   processedPairsTx,
@@ -181,6 +182,9 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     pledgeMailer({ notifier, appOrigin }),
     // M5.3b: call-for-papers receipts and decisions.
     cfpMailer({ notifier }),
+    // M6.8a: agency commission mirrored into the agency's ledger; a revoked grant ends agency billing.
+    agencyCommissionMirror,
+    agencyBillingGrantRevoked,
   ];
 }
 

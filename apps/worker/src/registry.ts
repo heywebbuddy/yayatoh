@@ -4,7 +4,7 @@ import { warehouseFromEnv, warehouseIngestor } from '@yayatoh/analytics';
 import { attendeeMessageMailer } from '@yayatoh/attendees';
 import { contactSignalsSubscriber, participationProjector } from '@yayatoh/audiences';
 import { journeySubscribers } from '@yayatoh/automations';
-import { billingUsageMeter, nonprofitDiscountFromCharity } from '@yayatoh/billing';
+import { agencyBillingGrantRevoked, billingUsageMeter, nonprofitDiscountFromCharity } from '@yayatoh/billing';
 import { campaignsTimeline } from '@yayatoh/campaigns';
 import {
   chatReportSignals,
@@ -52,7 +52,7 @@ import {
   ticketMailer,
   waitlistMailer,
 } from '@yayatoh/orders';
-import { payoutDestinationMailer } from '@yayatoh/payments';
+import { agencyCommissionMirror, payoutDestinationMailer } from '@yayatoh/payments';
 import { type Subscriber, signLinkToken } from '@yayatoh/platform';
 import { defaultResolver } from '@yayatoh/platform/ssrf';
 import { erasureConnectorNotifier } from '@yayatoh/privacy';
@@ -216,6 +216,9 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     pledgeMailer({ notifier, appOrigin }),
     // M6.7a: a client's grant snapshots it for its agency at once (and a revoke removes it).
     agencySnapshotSubscriber,
+    // M6.8a: agency commission mirrored into the agency's ledger; a revoked grant ends agency billing.
+    agencyCommissionMirror,
+    agencyBillingGrantRevoked,
     // M6.6b: the billing meters (messaging, AI credits, devices) count usage from the outbox, and a
     // verified charity profile gives the org the nonprofit discount.
     billingUsageMeter(),

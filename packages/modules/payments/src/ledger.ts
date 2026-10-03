@@ -3,6 +3,7 @@ import { type Ctx, DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantQuery } from '@yayatoh/platform';
 import { sql } from 'drizzle-orm';
 import { z } from 'zod';
+import { accrueCommissionTx, type CommissionReversal, reverseCommissionTx } from './commission.ts';
 import type { FundsFlow } from './port.ts';
 import { LEDGER_ACCOUNTS, type LedgerAccount, postings } from './schema.ts';
 
@@ -84,7 +85,7 @@ export async function postSaleTx(
           { account: 'platform:platform_fee_revenue', amountMinor: -o.feeMinor, currency: c },
         ];
   if (lines.every((l) => l.amountMinor === 0)) return null;
-  return postJournalTx(tx, ctx, {
+  const sale = await postJournalTx(tx, ctx, {
     key: `sale:${o.orderId}`,
     kind: 'sale',
     refType: 'order',
@@ -93,6 +94,9 @@ export async function postSaleTx(
     memo: { fundsFlow: o.fundsFlow, grossMinor: o.totalMinor, feeMinor: o.feeMinor },
     postings: lines,
   });
+  // M6.8a: agency billing in force earns the agency its commission (separate charges & transfers only).
+  if (o.fundsFlow === 'platform_mor') await accrueCommissionTx(tx, ctx, o);
+  return sale;
 }
 
 /** An account's balance for this org (debit positive), optionally for one event's journals. */
@@ -128,11 +132,14 @@ export async function postRefundTx(
     feeRefundedMinor: number;
     currency: string;
   },
-): Promise<{ receivableMinor: number }> {
+): Promise<{ receivableMinor: number; commissionReversal: CommissionReversal | null }> {
   const c = r.currency;
   let lines: Posting[];
   let receivableMinor = 0;
+  let commissionReversal: CommissionReversal | null = null;
   if (r.fundsFlow === 'platform_mor') {
+    // M6.8a: the agency's commission comes back first, in proportion to the refund (its own journal).
+    commissionReversal = await reverseCommissionTx(tx, ctx, r);
     const orgShare = r.amountMinor - r.feeRefundedMinor;
     const held = Math.max(0, -(await balanceTx(tx, 'org:payable_held', c, r.eventId)));
     const fromHeld = Math.min(orgShare, held);
@@ -152,7 +159,7 @@ export async function postRefundTx(
       { account: 'platform:platform_fee_revenue', amountMinor: r.feeRefundedMinor, currency: c },
     ];
   }
-  if (lines.every((l) => l.amountMinor === 0)) return { receivableMinor: 0 };
+  if (lines.every((l) => l.amountMinor === 0)) return { receivableMinor: 0, commissionReversal };
   await postJournalTx(tx, ctx, {
     key: `refund:${r.refundId}`,
     kind: 'refund',
@@ -168,7 +175,7 @@ export async function postRefundTx(
     },
     postings: lines,
   });
-  return { receivableMinor };
+  return { receivableMinor, commissionReversal };
 }
 
 /** A transfer reversal succeeded: the organizer's debt is paid back from their account. */

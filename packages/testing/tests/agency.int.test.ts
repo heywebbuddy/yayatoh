@@ -111,6 +111,13 @@ beforeAll(async () => {
     ports,
   );
   strangerAgencyId = other.id;
+  // `agency` is on every plan in beta (M6.6a, P6-13): staff switch it off for this one.
+  await executeCommand(
+    setEntitlementOverrideCommand,
+    { moduleKey: 'agency', effect: 'revoke', reason: 'agency fixture without the entitlement' },
+    systemCtx(strangerAgencyId),
+    ports,
+  );
 }, 240_000);
 afterAll(closePools);
 

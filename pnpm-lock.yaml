@@ -2392,6 +2392,9 @@ importers:
 
   packages/modules/payments:
     dependencies:
+      '@yayatoh/billing':
+        specifier: workspace:*
+        version: link:../billing
       '@yayatoh/contracts':
         specifier: workspace:*
         version: link:../../contracts

@@ -1631,6 +1631,14 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     await tx.execute(sql`insert into agency.event_snapshots (org_id, client_org_id, event_id, name, slug, status, starts_at,
       ends_at, timezone, currency, refreshed_at) values (${org.id}, ${affiliate.id}, ${uuidv7()}, 'Affiliate Gala',
       'affiliate-gala', 'published', now(), now() + interval '3 hours', 'America/New_York', 'USD', now())`);
+    // M6.8a agency billing (isolation coverage): an offer to pay the affiliate's plan (as an agency
+    // would hold it), and an ended acceptance of the fixture agency's billing (never in force).
+    await tx.execute(sql`insert into billing.agency_billing_offers (org_id, client_org_id, offered_by)
+      values (${org.id}, ${affiliate.id}, ${ownerId})`);
+    await tx.execute(sql`insert into billing.agency_billing (org_id, grant_id, agency_org_id, commission_bps,
+      accepted_by, accepted_at, ended_at, end_reason)
+      select ${org.id}, g.id, ${agencyOrg.id}, 1000, ${ownerId}, now() - interval '2 days', now() - interval '1 day', 'client'
+      from tenancy.org_access_grants g where g.org_id = ${org.id} and g.agency_org_id = ${agencyOrg.id}`);
   });
   await withTenant(systemCtx(org.id), async (tx) => {
     await tx.execute(

@@ -86,6 +86,9 @@ export default defineConfig({
             // simulate a plan change through the webhook. It applies only to orgs with a billing
             // customer (none of the seeded ones), so every other spec runs as with billing off.
             BILLING_ENABLED: '1',
+            // M6.8a: agency v2 money (flag `agency_v2`); it applies only to agency orgs whose
+            // clients accept an offer, which only the agency-money spec makes.
+            AGENCY_V2_ENABLED: '1',
             ...frontDoorEnv,
           },
         },

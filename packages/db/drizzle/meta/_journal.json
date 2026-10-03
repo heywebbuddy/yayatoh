@@ -995,6 +995,13 @@
       "when": 1791061273893,
       "tag": "0141_flawless_chamber",
       "breakpoints": true
+    },
+    {
+      "idx": 142,
+      "version": "7",
+      "when": 1791062215326,
+      "tag": "0142_lean_hex",
+      "breakpoints": true
     }
   ]
 }
