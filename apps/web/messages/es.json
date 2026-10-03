@@ -1784,7 +1784,31 @@
     "added": "Dominio añadido. Ahora publica los registros DNS que se muestran arriba.",
     "managedMissing": "Tu dirección gratuita {host} aún no está configurada.",
     "managedCreate": "Configurar mi dirección gratuita",
-    "noAccess": "Solo los propietarios y administradores pueden cambiar los dominios."
+    "noAccess": "Solo los propietarios y administradores pueden cambiar los dominios.",
+    "wizard": {
+      "label": "Conectar {host}",
+      "steps": "Pasos para conectar {host}",
+      "step": {
+        "domain": "Dominio añadido",
+        "dns": "Registros DNS",
+        "verify": "Verificado",
+        "ssl": "Conexión segura",
+        "primary": "Principal"
+      },
+      "dns": {
+        "signIn": "Inicia sesión donde gestionas el DNS de tu dominio (tu registrador o un servicio como Cloudflare).",
+        "open": "Abre la configuración DNS de este dominio.",
+        "add": "Añade cada registro de abajo tal como aparece. Elimina otros registros A o CNAME con el mismo nombre.",
+        "back": "Vuelve aquí y selecciona Comprobar ahora."
+      },
+      "copyName": "nombre del registro {type}",
+      "copyValue": "valor del registro {type}",
+      "copy": "Copiar",
+      "copied": "Copiado",
+      "verify": "Encontramos tus registros DNS y los estamos verificando. Vuelve a comprobar en unos minutos.",
+      "ssl": "Tu dominio está verificado. Estamos emitiendo su certificado seguro (https), lo que suele tardar unos minutos.",
+      "primary": "{host} está activo. Hazlo principal para que tus enlaces, entradas y correos lo usen."
+    }
   },
   "suspensions": {
     "pause_checkout": "El soporte de Yayatoh ha pausado la venta de entradas.",
@@ -3419,6 +3443,16 @@
       "editListing": "Editar la ficha del directorio"
     },
     "layoutLibrary": "Biblioteca de planos",
+    "createNext": "Las fotos y el resto de los datos (dirección, mapa, accesibilidad) vienen después.",
+    "createdNext": "Añade fotos ahora y luego completa los datos de abajo.",
+    "steps": {
+      "label": "Nuevo recinto",
+      "create": "Crear",
+      "photos": "Fotos",
+      "details": "Datos"
+    },
+    "detailsTitle": "Datos",
+    "photo": "Foto",
     "emptyAction": "Añade tu primer recinto",
     "emptyViewerAction": "Explorar el directorio de recintos"
   },
@@ -4856,7 +4890,18 @@
     "invalidCode": "Ese código no funcionó. Inténtalo de nuevo.",
     "invalidPassword": "Esa contraseña no es correcta.",
     "rateLimited": "Demasiados intentos. Espera 15 minutos e inténtalo de nuevo.",
-    "unauthenticated": "Tu sesión terminó. Vuelve a iniciar sesión."
+    "unauthenticated": "Tu sesión terminó. Vuelve a iniciar sesión.",
+    "again": "Confirmar que eres tú",
+    "retry": "Intentar de nuevo",
+    "problem": {
+      "impersonating": "Estás actuando como este miembro, así que no puedes confirmar por él. Pídele que haga este cambio.",
+      "unauthenticated": "Tu sesión ha terminado. Vuelve a iniciar sesión.",
+      "failed": "No pudimos iniciar la confirmación. Revisa tu conexión e inténtalo de nuevo."
+    },
+    "persona": {
+      "explain": "Cuenta de demostración: inició sesión sin autenticador, así que puedes confirmar sin código. Nunca se ofrece en el sitio real.",
+      "confirm": "Continuar sin código (cuenta de demostración)"
+    }
   },
   "surveys": {
     "title": "Encuestas",

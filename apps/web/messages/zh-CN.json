@@ -1784,7 +1784,31 @@
     "added": "域名已添加。现在请发布上方显示的 DNS 记录。",
     "managedMissing": "你的免费地址 {host} 尚未设置。",
     "managedCreate": "设置我的免费地址",
-    "noAccess": "只有所有者和管理员可以更改域名。"
+    "noAccess": "只有所有者和管理员可以更改域名。",
+    "wizard": {
+      "label": "连接 {host}",
+      "steps": "连接 {host} 的步骤",
+      "step": {
+        "domain": "已添加域名",
+        "dns": "DNS 记录",
+        "verify": "已验证",
+        "ssl": "安全连接",
+        "primary": "主地址"
+      },
+      "dns": {
+        "signIn": "登录你管理域名 DNS 的地方（域名注册商或 Cloudflare 等服务）。",
+        "open": "打开此域名的 DNS 设置。",
+        "add": "按显示内容准确添加下面的每条记录。删除同名的其他 A 或 CNAME 记录。",
+        "back": "回到这里并选择“立即检查”。"
+      },
+      "copyName": "{type} 记录的名称",
+      "copyValue": "{type} 记录的值",
+      "copy": "复制",
+      "copied": "已复制",
+      "verify": "我们已找到你的 DNS 记录，正在验证。请几分钟后再检查。",
+      "ssl": "你的域名已验证。我们正在签发安全（https）证书，通常需要几分钟。",
+      "primary": "{host} 已生效。将其设为主地址，让你的链接、门票和邮件都使用它。"
+    }
   },
   "suspensions": {
     "pause_checkout": "门票销售已被 Yayatoh 支持团队暂停。",
@@ -3419,6 +3443,16 @@
       "editListing": "编辑目录信息"
     },
     "layoutLibrary": "座位图库",
+    "createNext": "照片和其他信息（地址、地图、无障碍）将在下一步填写。",
+    "createdNext": "现在添加照片，然后填写下面的信息。",
+    "steps": {
+      "label": "新场地",
+      "create": "创建",
+      "photos": "照片",
+      "details": "信息"
+    },
+    "detailsTitle": "信息",
+    "photo": "照片",
     "emptyAction": "添加第一个场地",
     "emptyViewerAction": "浏览场地目录"
   },
@@ -4856,7 +4890,18 @@
     "invalidCode": "验证码无效，请重试。",
     "invalidPassword": "密码不正确。",
     "rateLimited": "尝试次数过多。请等待 15 分钟后重试。",
-    "unauthenticated": "会话已结束，请重新登录。"
+    "unauthenticated": "会话已结束，请重新登录。",
+    "again": "确认是你本人",
+    "retry": "重试",
+    "problem": {
+      "impersonating": "你正在以该成员身份操作，无法代其确认。请让对方自行完成此更改。",
+      "unauthenticated": "你的会话已结束。请重新登录。",
+      "failed": "无法开始确认。请检查网络连接后重试。"
+    },
+    "persona": {
+      "explain": "演示账号：它登录时未使用身份验证器，因此可以无需验证码确认。正式网站上绝不会提供此选项。",
+      "confirm": "无需验证码继续（演示账号）"
+    }
   },
   "surveys": {
     "title": "问卷",

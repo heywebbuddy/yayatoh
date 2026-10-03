@@ -1784,7 +1784,31 @@
     "added": "Domain hinzugefügt. Veröffentliche jetzt die oben angezeigten DNS-Einträge.",
     "managedMissing": "Deine kostenlose Adresse {host} ist noch nicht eingerichtet.",
     "managedCreate": "Meine kostenlose Adresse einrichten",
-    "noAccess": "Nur Inhaber und Admins können Domains ändern."
+    "noAccess": "Nur Inhaber und Admins können Domains ändern.",
+    "wizard": {
+      "label": "{host} verbinden",
+      "steps": "Schritte zum Verbinden von {host}",
+      "step": {
+        "domain": "Domain hinzugefügt",
+        "dns": "DNS-Einträge",
+        "verify": "Bestätigt",
+        "ssl": "Sichere Verbindung",
+        "primary": "Hauptadresse"
+      },
+      "dns": {
+        "signIn": "Melden Sie sich dort an, wo Sie das DNS Ihrer Domain verwalten (bei Ihrem Registrar oder einem Dienst wie Cloudflare).",
+        "open": "Öffnen Sie die DNS-Einstellungen dieser Domain.",
+        "add": "Fügen Sie jeden Eintrag unten genau wie angezeigt hinzu. Entfernen Sie andere A- oder CNAME-Einträge mit demselben Namen.",
+        "back": "Kommen Sie hierher zurück und wählen Sie „Jetzt prüfen“."
+      },
+      "copyName": "Name des {type}-Eintrags",
+      "copyValue": "Wert des {type}-Eintrags",
+      "copy": "Kopieren",
+      "copied": "Kopiert",
+      "verify": "Wir haben Ihre DNS-Einträge gefunden und prüfen sie. Prüfen Sie in ein paar Minuten erneut.",
+      "ssl": "Ihre Domain ist bestätigt. Wir stellen das sichere (https-)Zertifikat aus, was meist ein paar Minuten dauert.",
+      "primary": "{host} ist aktiv. Machen Sie die Domain zur Hauptadresse, damit Ihre Links, Tickets und E-Mails sie verwenden."
+    }
   },
   "suspensions": {
     "pause_checkout": "Der Ticketverkauf wurde vom Yayatoh-Support pausiert.",
@@ -3419,6 +3443,16 @@
       "editListing": "Verzeichniseintrag bearbeiten"
     },
     "layoutLibrary": "Saalplan-Bibliothek",
+    "createNext": "Fotos und die weiteren Angaben (Adresse, Karte, Barrierefreiheit) folgen im nächsten Schritt.",
+    "createdNext": "Fügen Sie jetzt Fotos hinzu und ergänzen Sie dann die Angaben unten.",
+    "steps": {
+      "label": "Neuer Veranstaltungsort",
+      "create": "Anlegen",
+      "photos": "Fotos",
+      "details": "Angaben"
+    },
+    "detailsTitle": "Angaben",
+    "photo": "Foto",
     "emptyAction": "Ersten Veranstaltungsort hinzufügen",
     "emptyViewerAction": "Verzeichnis der Veranstaltungsorte ansehen"
   },
@@ -4856,7 +4890,18 @@
     "invalidCode": "Dieser Code hat nicht funktioniert. Versuche es erneut.",
     "invalidPassword": "Dieses Passwort ist nicht richtig.",
     "rateLimited": "Zu viele Versuche. Warte 15 Minuten und versuche es dann erneut.",
-    "unauthenticated": "Deine Sitzung ist abgelaufen. Melde dich erneut an."
+    "unauthenticated": "Deine Sitzung ist abgelaufen. Melde dich erneut an.",
+    "again": "Bestätigen, dass Sie es sind",
+    "retry": "Erneut versuchen",
+    "problem": {
+      "impersonating": "Sie handeln als dieses Mitglied und können nicht für es bestätigen. Bitten Sie es, diese Änderung selbst vorzunehmen.",
+      "unauthenticated": "Ihre Sitzung ist abgelaufen. Melden Sie sich erneut an.",
+      "failed": "Die Bestätigung konnte nicht gestartet werden. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut."
+    },
+    "persona": {
+      "explain": "Demokonto: Es wurde ohne Authentifizierungs-App angemeldet, daher können Sie ohne Code bestätigen. Auf der Live-Website wird das nie angeboten.",
+      "confirm": "Ohne Code fortfahren (Demokonto)"
+    }
   },
   "surveys": {
     "title": "Umfragen",

@@ -13,19 +13,22 @@ import {
   publicOrganizerById,
   publicSiteSettings,
 } from '@yayatoh/marketplace';
-import { originFor } from '@/lib/hosts.ts';
+import {
+  contentHomeFor,
+  contentUrlFor,
+  entryPath,
+  organizerBase as organizerBaseFor,
+} from '@/lib/content-url.ts';
+import { apexHost } from '@/lib/hosts.ts';
 import { publicCached } from './public-cache.ts';
 import type { RequestHost } from './request-origin.ts';
-import { apexOrigin } from './seo.ts';
 
 type Raw = Record<string, unknown>;
 const date = (v: unknown) => new Date(String(v));
 const reviveEntry = (e: Raw) =>
   ({ ...e, publishedAt: date(e.publishedAt), updatedAt: date(e.updatedAt) }) as unknown as PublicEntryDto;
 
-/** Public path of an entry (the legacy Voyager paths: `/blogs/{slug}`, `/pages/{slug}`). */
-export const entryPath = (kind: 'page' | 'post', slug: string) =>
-  kind === 'page' ? `/pages/${slug}` : `/blogs/${slug}`;
+export { entryPath };
 
 /**
  * The org whose pages and posts the marketplace itself shows at `yayatoh.com/blogs/…` and
@@ -42,22 +45,14 @@ const isContentOrg = (o: PublicOrganizer) => process.env.MARKETPLACE_CONTENT_ORG
 /** Is this org (by slug) the marketplace content org, whose console edits the help center and marketing site? */
 export const isPlatformContentOrg = (slug: string) => process.env.MARKETPLACE_CONTENT_ORG?.trim() === slug;
 
-/**
- * Where an org's pages and posts are canonical (roadmap §4.2, as for events): the marketplace
- * apex for the marketplace content org; the org's tenant site when it runs one; else its
- * organizer page on the apex (`/o/{slug}/blogs/…`).
- */
+/** Where an org's pages and posts are canonical on this request (see `contentHomeFor`). */
 export function contentHome(req: RequestHost, o: PublicOrganizer): { origin: string; base: string } {
-  if (isContentOrg(o)) return { origin: apexOrigin(req), base: '' };
-  if (o.tenantSite && o.primaryHost)
-    return { origin: o.primaryHost === req.host ? req.origin : originFor(req, o.primaryHost), base: '' };
-  return { origin: apexOrigin(req), base: `/o/${o.slug}` };
+  return contentHomeFor(req, o, { apexHost: apexHost(), isContentOrg: isContentOrg(o) });
 }
 
 /** The canonical absolute URL of a published entry. */
 export function contentPublicUrl(req: RequestHost, o: PublicOrganizer, kind: 'page' | 'post', slug: string) {
-  const home = contentHome(req, o);
-  return `${home.origin}${home.base}${entryPath(kind, slug)}`;
+  return contentUrlFor(req, o, kind, slug, { apexHost: apexHost(), isContentOrg: isContentOrg(o) });
 }
 
 /**
@@ -66,7 +61,7 @@ export function contentPublicUrl(req: RequestHost, o: PublicOrganizer, kind: 'pa
  * `/organizers/{slug}` on dev hosts (where `/o/…` is the console).
  */
 export function organizerBase(req: RequestHost, slug: string): string {
-  return req.kind === 'marketplace' ? `/o/${slug}` : `/organizers/${slug}`;
+  return organizerBaseFor(req.kind, slug);
 }
 
 export const cachedEntries = (orgId: string, kind: 'page' | 'post', page: number) =>

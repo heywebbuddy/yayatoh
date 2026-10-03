@@ -1,6 +1,6 @@
 import { executeQuery, isDomainError } from '@yayatoh/kernel';
 import { roleCan } from '@yayatoh/tenancy';
-import { Alert, Button, buttonClass, Card, EmptyState, PageHeader, StatusDot } from '@yayatoh/ui';
+import { Alert, Button, buttonClass, Card, EmptyState, PageHeader, StatusDot, Stepper } from '@yayatoh/ui';
 import { getVenueQuery, listQuoteRequestsQuery, type VenueDto } from '@yayatoh/venues';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
@@ -72,19 +72,39 @@ export default async function VenuePage({
           </>
         }
       />
-      {saved ? <Alert tone="info" title={t('created')} /> : null}
+      {saved ? (
+        <>
+          <Stepper
+            label={t('steps.label')}
+            steps={[
+              { label: t('steps.create'), state: 'done' },
+              { label: t('steps.photos'), state: photos.items.length > 0 ? 'done' : 'current' },
+              { label: t('steps.details'), state: photos.items.length > 0 ? 'current' : 'todo' },
+            ]}
+          />
+          <Alert tone="info" title={t('created')}>
+            {canWrite ? t('createdNext') : null}
+          </Alert>
+        </>
+      ) : null}
       {venue.archivedAt ? <Alert tone="info" title={t('archivedNotice')} /> : null}
-      <Card size="panel" id="venue-details">
-        <VenueForm
-          action={updateVenueAction.bind(null, org, venue.id)}
-          venue={venue}
-          defaultTimezone={venue.timezone}
-          disabled={!canWrite}
-        />
-      </Card>
+      {/* U3: photos first (create → photos → details), so a new venue gets its pictures right away. */}
       <Card size="panel">
         <MediaUploader org={org} slot="photo" ticket={photos.ticket} items={photos.items} />
       </Card>
+      <section id="venue-details" aria-labelledby="venue-details-heading" className="flex scroll-mt-6 flex-col gap-3">
+        <h2 id="venue-details-heading" className="text-section">
+          {t('detailsTitle')}
+        </h2>
+        <Card size="panel">
+          <VenueForm
+            action={updateVenueAction.bind(null, org, venue.id)}
+            venue={venue}
+            defaultTimezone={venue.timezone}
+            disabled={!canWrite}
+          />
+        </Card>
+      </section>
       <section aria-labelledby="quotes-heading" className="flex flex-col gap-3">
         <h2 id="quotes-heading" className="text-section">
           {t('quotes.title')}

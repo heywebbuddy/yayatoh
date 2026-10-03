@@ -1784,7 +1784,31 @@
     "added": "網域已新增。現在請發布上方顯示的 DNS 記錄。",
     "managedMissing": "你的免費網址 {host} 尚未設定。",
     "managedCreate": "設定我的免費網址",
-    "noAccess": "只有擁有者和管理員可以變更網域。"
+    "noAccess": "只有擁有者和管理員可以變更網域。",
+    "wizard": {
+      "label": "連接 {host}",
+      "steps": "連接 {host} 的步驟",
+      "step": {
+        "domain": "已新增網域",
+        "dns": "DNS 記錄",
+        "verify": "已驗證",
+        "ssl": "安全連線",
+        "primary": "主要位址"
+      },
+      "dns": {
+        "signIn": "登入你管理網域 DNS 的地方（網域註冊商或 Cloudflare 等服務）。",
+        "open": "開啟此網域的 DNS 設定。",
+        "add": "依照顯示內容準確新增下方每筆記錄。刪除同名的其他 A 或 CNAME 記錄。",
+        "back": "回到這裡並選擇「立即檢查」。"
+      },
+      "copyName": "{type} 記錄的名稱",
+      "copyValue": "{type} 記錄的值",
+      "copy": "複製",
+      "copied": "已複製",
+      "verify": "我們已找到你的 DNS 記錄，正在驗證。請幾分鐘後再檢查。",
+      "ssl": "你的網域已驗證。我們正在簽發安全（https）憑證，通常需要幾分鐘。",
+      "primary": "{host} 已生效。將其設為主要位址，讓你的連結、票券和電子郵件都使用它。"
+    }
   },
   "suspensions": {
     "pause_checkout": "票券販售已由 Yayatoh 支援團隊暫停。",
@@ -3419,6 +3443,16 @@
       "editListing": "編輯目錄資訊"
     },
     "layoutLibrary": "座位圖庫",
+    "createNext": "照片和其他資訊（地址、地圖、無障礙）將在下一步填寫。",
+    "createdNext": "現在新增照片，然後填寫下方的資訊。",
+    "steps": {
+      "label": "新場地",
+      "create": "建立",
+      "photos": "照片",
+      "details": "資訊"
+    },
+    "detailsTitle": "資訊",
+    "photo": "照片",
     "emptyAction": "新增第一個場地",
     "emptyViewerAction": "瀏覽場地目錄"
   },
@@ -4856,7 +4890,18 @@
     "invalidCode": "驗證碼無效，請再試一次。",
     "invalidPassword": "密碼不正確。",
     "rateLimited": "嘗試次數過多。請等候 15 分鐘後再試。",
-    "unauthenticated": "工作階段已結束，請重新登入。"
+    "unauthenticated": "工作階段已結束，請重新登入。",
+    "again": "確認是你本人",
+    "retry": "重試",
+    "problem": {
+      "impersonating": "你正以此成員的身分操作，無法代其確認。請對方自行完成此變更。",
+      "unauthenticated": "你的工作階段已結束。請重新登入。",
+      "failed": "無法開始確認。請檢查網路連線後重試。"
+    },
+    "persona": {
+      "explain": "示範帳號：它登入時未使用驗證器，因此可以不用驗證碼確認。正式網站上絕不會提供此選項。",
+      "confirm": "不用驗證碼繼續（示範帳號）"
+    }
   },
   "surveys": {
     "title": "問卷",
