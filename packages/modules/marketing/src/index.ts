@@ -17,6 +17,7 @@ export {
 export {
   AttributeOrderInput,
   attributeOrderCommand,
+  ORDER_ATTRIBUTED_EVENT,
   attributionSettingsQuery,
   attributionWindowTx,
   orderAttributionQuery,
@@ -55,3 +56,6 @@ export {
 } from './links.ts';
 export { privateColumns } from './private-columns.ts';
 export { campaignClicksTx, linkDetailQuery, linkReportQuery, utmOnlyReportQuery } from './reports.ts';
+export { referralUtm } from './domain/referral.ts';
+export { clickPath, landingKind, MAX_TOUCHES, REFERRAL_MEDIUM, TOUCH_KINDS, type TouchKind } from './domain/touches.ts';
+export { eventTouchPathsTx, type TouchFact, type TouchPath } from './touch-paths.ts';

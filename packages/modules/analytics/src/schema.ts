@@ -2,16 +2,24 @@ import { tenantTable } from '@yayatoh/db';
 import { sql } from 'drizzle-orm';
 import {
   bigint,
+  boolean,
   check,
+  customType,
   date,
+  foreignKey,
   index,
   integer,
   pgSchema,
   text,
   timestamp,
+  unique,
   uniqueIndex,
   uuid,
 } from 'drizzle-orm/pg-core';
+import { ATTRIBUTION_MODELS } from './attribution/models.ts';
+import { DIMENSIONS as EXPLORER_DIMENSIONS, MEASURES, RANGE_PRESETS } from './explorer/catalog.ts';
+import { MAX_RECIPIENTS, REPORT_FREQUENCIES, REPORT_RUN_STATUSES } from './reports/catalog.ts';
+import { RULE_CONDITIONS, RULE_MEASURES, RULE_SEVERITIES, RULE_WINDOWS } from './rules/catalog.ts';
 
 export const analyticsSchema = pgSchema('analytics');
 
@@ -166,5 +174,218 @@ export const backfillRuns = tenantTable(
       'backfill_runs_page_check',
       sql`page_size between 1 and 500 and pages_per_minute between 1 and 600`,
     ),
+  ],
+);
+
+// ---------------------------------------------------------------------------------------------
+// M6.2b: attribution rollups, explorer views, organizer alert rules, scheduled reports.
+
+const listOf = (values: readonly (string | number)[]) =>
+  values.map((v) => (typeof v === 'number' ? String(v) : `'${v}'`)).join(', ');
+const inList = (col: string, values: readonly (string | number)[]) => sql.raw(`${col} in (${listOf(values)})`);
+
+const bytea = customType<{ data: Uint8Array; driverData: Buffer }>({
+  dataType: () => 'bytea',
+  toDriver: (v) => Buffer.from(v),
+  fromDriver: (v) => new Uint8Array(v),
+});
+
+/**
+ * The Postgres warehouse's attribution rollups (M6.2b): attributed orders (in basis points of an
+ * order) and revenue (minor units, per currency) per org, event, payment day (org time zone),
+ * model and touch (source, medium, campaign key, link). Part of an event's snapshot: replaced
+ * with it as one unit, rebuilt by the backfill.
+ */
+export const attributionRollups = tenantTable(
+  analyticsSchema,
+  'attribution_rollups',
+  {
+    eventId: uuid('event_id').notNull(),
+    day: date('day', { mode: 'string' }).notNull(),
+    model: text('model').notNull(),
+    source: text('source').notNull(),
+    medium: text('medium').notNull().default(''),
+    campaign: text('campaign').notNull().default(''),
+    linkId: uuid('link_id'),
+    currency: text('currency').notNull(),
+    creditBps: bigint('credit_bps', { mode: 'number' }).notNull(),
+    revenueMinor: bigint('revenue_minor', { mode: 'number' }).notNull(),
+  },
+  (t) => [
+    unique('attribution_rollups_org_event_dims_key')
+      .on(t.orgId, t.eventId, t.day, t.model, t.source, t.medium, t.campaign, t.linkId, t.currency)
+      .nullsNotDistinct(),
+    index('attribution_rollups_org_model_day_idx').on(t.orgId, t.model, t.day),
+    check('attribution_rollups_model_check', inList('model', ATTRIBUTION_MODELS)),
+    check('attribution_rollups_currency_check', sql`currency ~ '^[A-Z]{3}$'`),
+    check('attribution_rollups_source_check', sql`length(source) between 1 and 255`),
+    check('attribution_rollups_dims_check', sql`length(medium) <= 100 and length(campaign) <= 102`),
+    check('attribution_rollups_values_check', sql`credit_bps >= 0 and revenue_minor >= 0`),
+  ],
+);
+
+/**
+ * A member's saved explorer views (M6.2b): a measure, a dimension and a period, private to the
+ * member who saved it. Names are unique per member.
+ */
+export const savedViews = tenantTable(
+  analyticsSchema,
+  'saved_views',
+  {
+    userId: uuid('user_id').notNull(),
+    name: text('name').notNull(),
+    measure: text('measure').notNull(),
+    dimension: text('dimension').notNull(),
+    model: text('model'),
+    granularity: text('granularity').notNull().default('day'),
+    range: text('range').notNull(),
+    fromDay: date('from_day', { mode: 'string' }),
+    toDay: date('to_day', { mode: 'string' }),
+    eventId: uuid('event_id'),
+  },
+  (t) => [
+    uniqueIndex('saved_views_org_user_name_key').on(t.orgId, t.userId, t.name),
+    index('saved_views_org_user_idx').on(t.orgId, t.userId, t.createdAt),
+    check('saved_views_name_check', sql`length(name) between 1 and 80`),
+    check('saved_views_measure_check', inList('measure', MEASURES)),
+    check('saved_views_dimension_check', inList('dimension', EXPLORER_DIMENSIONS)),
+    check('saved_views_model_check', sql.raw(`model is null or model in (${listOf(ATTRIBUTION_MODELS)})`)),
+    check('saved_views_granularity_check', sql`granularity in ('day', 'week', 'month')`),
+    check('saved_views_range_check', inList('range', RANGE_PRESETS)),
+    check(
+      'saved_views_custom_check',
+      sql`(range = 'custom') = (from_day is not null and to_day is not null) and (from_day is null or from_day <= to_day)`,
+    ),
+  ],
+);
+
+/**
+ * Organizer-authored alert rules (M6.2b) on the M3.2b engine: evaluated by the analytics worker
+ * tick from the warehouse; a change of state reaches the alerts module through the outbox
+ * (`analytics.alert_rule_evaluated@1`), which opens, updates or resolves the rule's alert and
+ * sends it (respecting quiet hours in each recipient's time zone when `quiet_hours`).
+ */
+export const alertRules = tenantTable(
+  analyticsSchema,
+  'alert_rules',
+  {
+    name: text('name').notNull(),
+    measure: text('measure').notNull(),
+    condition: text('condition').notNull(),
+    threshold: bigint('threshold', { mode: 'number' }).notNull(),
+    windowDays: integer('window_days').notNull(),
+    /** Money measures: the currency compared ('' for counts). */
+    currency: text('currency').notNull().default(''),
+    eventId: uuid('event_id'),
+    severity: text('severity').notNull().default('warning'),
+    quietHours: boolean('quiet_hours').notNull().default(true),
+    enabled: boolean('enabled').notNull().default(true),
+    createdBy: uuid('created_by').notNull(),
+    lastState: text('last_state'),
+    lastValue: bigint('last_value', { mode: 'number' }),
+    lastEvaluatedAt: ts('last_evaluated_at'),
+  },
+  (t) => [
+    uniqueIndex('alert_rules_org_name_key').on(t.orgId, t.name),
+    index('alert_rules_org_enabled_idx').on(t.orgId, t.enabled),
+    check('alert_rules_name_check', sql`length(name) between 1 and 80`),
+    check('alert_rules_measure_check', inList('measure', RULE_MEASURES)),
+    check('alert_rules_condition_check', inList('condition', RULE_CONDITIONS)),
+    check('alert_rules_window_check', inList('window_days', RULE_WINDOWS)),
+    check('alert_rules_severity_check', inList('severity', RULE_SEVERITIES)),
+    check('alert_rules_state_check', sql`last_state is null or last_state in ('ok', 'firing')`),
+    check(
+      'alert_rules_threshold_check',
+      sql`threshold between 0 and 1000000000000 and (condition in ('above', 'below') or threshold between 1 and 1000)`,
+    ),
+    check(
+      'alert_rules_currency_check',
+      sql`(measure in ('gross', 'refunds', 'net')) = (currency ~ '^[A-Z]{3}$') and (currency = '' or currency ~ '^[A-Z]{3}$')`,
+    ),
+  ],
+);
+
+/**
+ * Scheduled PDF reports (M6.2b): the org dashboard for the last complete day, week (Monday to
+ * Sunday) or month in the org's time zone, emailed to members at `send_hour` (org time) after the
+ * period ends. Revenue only for recipients whose role may see finance.
+ */
+export const reportSchedules = tenantTable(
+  analyticsSchema,
+  'report_schedules',
+  {
+    name: text('name').notNull(),
+    frequency: text('frequency').notNull(),
+    sendHour: integer('send_hour').notNull().default(8),
+    eventId: uuid('event_id'),
+    recipients: uuid('recipients').array().notNull(),
+    enabled: boolean('enabled').notNull().default(true),
+    createdBy: uuid('created_by').notNull(),
+  },
+  (t) => [
+    uniqueIndex('report_schedules_org_name_key').on(t.orgId, t.name),
+    index('report_schedules_org_enabled_idx').on(t.orgId, t.enabled),
+    check('report_schedules_name_check', sql`length(name) between 1 and 80`),
+    check('report_schedules_frequency_check', inList('frequency', REPORT_FREQUENCIES)),
+    check('report_schedules_hour_check', sql`send_hour between 0 and 23`),
+    check(
+      'report_schedules_recipients_check',
+      sql.raw(`cardinality(recipients) between 1 and ${MAX_RECIPIENTS}`),
+    ),
+  ],
+);
+
+/**
+ * One period of a schedule (M6.2b): created once per (schedule, period key) — the dedupe key —
+ * so a retried job, a restarted worker or two ticks at once never send a period twice.
+ */
+export const reportRuns = tenantTable(
+  analyticsSchema,
+  'report_runs',
+  {
+    scheduleId: uuid('schedule_id').notNull(),
+    periodKey: text('period_key').notNull(),
+    periodFrom: date('period_from', { mode: 'string' }).notNull(),
+    periodTo: date('period_to', { mode: 'string' }).notNull(),
+    status: text('status').notNull().default('pending'),
+    attempts: integer('attempts').notNull().default(0),
+    recipientsSent: integer('recipients_sent').notNull().default(0),
+    sentAt: ts('sent_at'),
+    error: text('error'),
+  },
+  (t) => [
+    uniqueIndex('report_runs_org_schedule_period_key').on(t.orgId, t.scheduleId, t.periodKey),
+    index('report_runs_org_created_idx').on(t.orgId, t.createdAt),
+    foreignKey({
+      name: 'report_runs_schedule_fk',
+      columns: [t.orgId, t.scheduleId],
+      foreignColumns: [reportSchedules.orgId, reportSchedules.id],
+    }).onDelete('cascade'),
+    check('report_runs_status_check', inList('status', REPORT_RUN_STATUSES)),
+    check('report_runs_period_check', sql`period_from <= period_to`),
+    check('report_runs_key_check', sql`period_key ~ '^(D[0-9]{4}-[0-9]{2}-[0-9]{2}|W[0-9]{4}-[0-9]{2}-[0-9]{2}|M[0-9]{4}-[0-9]{2})$'`),
+  ],
+);
+
+/** A run's rendered PDF per recipient locale and finance visibility (M6.2b). */
+export const reportFiles = tenantTable(
+  analyticsSchema,
+  'report_files',
+  {
+    runId: uuid('run_id').notNull(),
+    locale: text('locale').notNull(),
+    finance: boolean('finance').notNull(),
+    pdf: bytea('pdf').notNull(),
+    bytes: integer('bytes').notNull(),
+  },
+  (t) => [
+    uniqueIndex('report_files_org_run_variant_key').on(t.orgId, t.runId, t.locale, t.finance),
+    foreignKey({
+      name: 'report_files_run_fk',
+      columns: [t.orgId, t.runId],
+      foreignColumns: [reportRuns.orgId, reportRuns.id],
+    }).onDelete('cascade'),
+    check('report_files_locale_check', sql`locale ~ '^[a-z]{2}$'`),
+    check('report_files_bytes_check', sql`bytes between 1 and 20000000`),
   ],
 );

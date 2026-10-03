@@ -26,3 +26,4 @@ export {
   utmFromParams,
 } from './domain/utm.ts';
 export { DAY_MS, DEFAULT_WINDOW_DAYS, MAX_WINDOW_DAYS } from './domain/window.ts';
+export { referralUtm } from './domain/referral.ts';

@@ -1,0 +1,22 @@
+# M6.2b — attributed orders (basis points of an order) and revenue (minor units) per org, event,
+# payment day (org time zone), model and touch (source, medium, campaign key, link). Appended
+# with the event's daily rows under the same `version`; pipes take the newest version from
+# `yy_daily_rollups` (which always carries the `__snapshot` marker). Every row carries `org_id`.
+
+SCHEMA >
+    `org_id` String `json:$.org_id`,
+    `event_id` String `json:$.event_id`,
+    `version` UInt64 `json:$.version`,
+    `day` Date `json:$.day`,
+    `model` LowCardinality(String) `json:$.model`,
+    `source` String `json:$.source`,
+    `medium` String `json:$.medium`,
+    `campaign` String `json:$.campaign`,
+    `link_id` String `json:$.link_id`,
+    `currency` LowCardinality(String) `json:$.currency`,
+    `credit_bps` Int64 `json:$.credit_bps`,
+    `revenue_minor` Int64 `json:$.revenue_minor`
+
+ENGINE "MergeTree"
+ENGINE_PARTITION_KEY "toYYYYMM(day)"
+ENGINE_SORTING_KEY "org_id, model, day, event_id, version"

@@ -10,4 +10,32 @@ export const privateColumns = columnPrivacy('analytics', {
   event_sync: { adapter: 'vocab', hash: internal(), time_zone: 'vocab' },
   ingest_log: { event_type: 'vocab', adapter: 'vocab', outcome: 'vocab' },
   backfill_runs: { status: 'vocab', adapter: 'vocab', started_by: internal(), error: internal() },
+  // M6.2b: touch dimensions come from organizers' UTM values (console-only); names are the
+  // organizer's own words (console-only); everything else is vocabulary.
+  attribution_rollups: {
+    model: 'vocab',
+    source: internal(),
+    medium: internal(),
+    campaign: internal(),
+    currency: 'vocab',
+  },
+  saved_views: {
+    name: internal(),
+    measure: 'vocab',
+    dimension: 'vocab',
+    model: 'vocab',
+    granularity: 'vocab',
+    range: 'vocab',
+  },
+  alert_rules: {
+    name: internal(),
+    measure: 'vocab',
+    condition: 'vocab',
+    currency: 'vocab',
+    severity: 'vocab',
+    last_state: 'vocab',
+  },
+  report_schedules: { name: internal(), frequency: 'vocab' },
+  report_runs: { period_key: 'vocab', status: 'vocab', error: internal() },
+  report_files: { locale: 'vocab' },
 });

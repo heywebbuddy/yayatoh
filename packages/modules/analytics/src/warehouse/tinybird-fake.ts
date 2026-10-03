@@ -2,7 +2,8 @@ import { createHmac, timingSafeEqual } from 'node:crypto';
 import { SNAPSHOT_MARKER, TINYBIRD_DATASOURCES, TINYBIRD_PIPES, type TinybirdConfig } from './tinybird.ts';
 
 /**
- * An in-memory Tinybird for dev and CI (M6.2a): the Events API and the three published pipes,
+ * An in-memory Tinybird for dev and CI (M6.2a): the Events API and the published pipes (M6.2b
+ * adds the attribution datasource and pipe),
  * with the semantics of the files in `packages/modules/analytics/tinybird/` (newest version of
  * each event wins). It records every call and is strict where Tinybird is lenient, so tests can
  * prove isolation:
@@ -52,6 +53,7 @@ export function fakeTinybird(opts: { now?: () => Date } = {}): FakeTinybird {
   const datasources: Record<string, Row[]> = {
     [TINYBIRD_DATASOURCES.daily]: [],
     [TINYBIRD_DATASOURCES.states]: [],
+    [TINYBIRD_DATASOURCES.attribution]: [],
   };
 
   function verify(token: string, pipe: string): string | null {
@@ -112,6 +114,42 @@ export function fakeTinybird(opts: { now?: () => Date } = {}): FakeTinybird {
             (r) => `${r.event_id}|${r.metric}|${r.currency}`,
             (r) => ({ event_id: r.event_id, metric: r.metric, currency: r.currency }),
           );
+    }
+    if (pipe === TINYBIRD_PIPES.attributionRows) {
+      // M6.2b: the event's newest version is the daily datasource's (it always has the marker).
+      const top = new Map<string, number>();
+      for (const r of (datasources[TINYBIRD_DATASOURCES.daily] ?? []).filter((x) => x.org_id === orgId))
+        top.set(String(r.event_id), Math.max(top.get(String(r.event_id)) ?? -1, Number(r.version)));
+      const model = q.get('model');
+      const rows = (datasources[TINYBIRD_DATASOURCES.attribution] ?? []).filter(
+        (r) =>
+          r.org_id === orgId &&
+          Number(r.version) === top.get(String(r.event_id)) &&
+          r.model === model &&
+          String(r.day) >= from &&
+          String(r.day) <= to &&
+          inEvent(r),
+      );
+      const out = new Map<string, Row>();
+      for (const r of rows) {
+        const k = [r.event_id, r.day, r.source, r.medium, r.campaign, r.link_id, r.currency].join('|');
+        const cur = out.get(k) ?? {
+          org_id: orgId,
+          event_id: r.event_id,
+          day: r.day,
+          source: r.source,
+          medium: r.medium,
+          campaign: r.campaign,
+          link_id: r.link_id,
+          currency: r.currency,
+          credit_bps: 0,
+          revenue_minor: 0,
+        };
+        cur.credit_bps = Number(cur.credit_bps) + Number(r.credit_bps);
+        cur.revenue_minor = Number(cur.revenue_minor) + Number(r.revenue_minor);
+        out.set(k, cur);
+      }
+      return model ? [...out.values()] : null;
     }
     if (pipe === TINYBIRD_PIPES.eventStates)
       return latest(TINYBIRD_DATASOURCES.states, orgId)

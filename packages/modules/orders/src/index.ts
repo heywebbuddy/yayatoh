@@ -415,3 +415,4 @@ export {
   waitlistRef,
   waitlistToken,
 } from './waitlist.ts';
+export { type SoldOrderDayFact, soldOrderDaysTx } from './order-days.ts';
