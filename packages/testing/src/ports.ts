@@ -3,7 +3,7 @@ import { attendeeEmailAction, attendeeImportAction, attendeeLabelAction } from '
 import { audienceExportAction } from '@yayatoh/audiences';
 import { billingEntitlements } from '@yayatoh/billing';
 import { recordTermConsentTx } from '@yayatoh/crm';
-import { giftsExportAction } from '@yayatoh/donations';
+import { employerExportAction, giftsExportAction } from '@yayatoh/donations';
 import { eventRolesOf } from '@yayatoh/events';
 import { submitRegistrationFormCommand } from '@yayatoh/forms';
 import { guestImportAction, rsvpAnswersExportAction, rsvpAnswersPrivateExportAction } from '@yayatoh/guests';
@@ -56,6 +56,7 @@ export const BULK_ACTIONS = [
   rsvpAnswersExportAction,
   rsvpAnswersPrivateExportAction,
   giftsExportAction,
+  employerExportAction,
 ] as const;
 export const bulkStep = bulkStepCommand(BULK_ACTIONS);
 export const runBulk = (orgId: string, operationId: string, budgetMs?: number) =>

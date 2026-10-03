@@ -23,6 +23,7 @@ import {
 } from './paddle-live.ts';
 import { paddleEventTx, paddleNamesTx } from './paddles.ts';
 import { campaigns, levels } from './schema.ts';
+import { activeMatchesTx, resyncMatchPledgesTx } from './match-progress.ts';
 import { paddleCalls, paddleEntries, paddles, pledges } from './schema-paddles.ts';
 
 /**
@@ -450,8 +451,10 @@ export const voidEntryCommand = tenantCommand({
             .update(pledges)
             .set({ status: 'cancelled', cancelledAt: ctx.now, updatedAt: ctx.now })
             .where(and(eq(pledges.entryId, e.id), eq(pledges.status, 'confirmed')))
-            .returning({ id: pledges.id })
+            .returning({ id: pledges.id, campaignId: pledges.campaignId })
         : [];
+    // M4.8f: a sponsor's recorded match comes down with the pledges it matched.
+    for (const p of cancelled) await resyncMatchPledgesTx(tx, p.campaignId, ctx.now);
     await tx
       .update(paddleEntries)
       .set({ status: 'voided', reviewedAt: ctx.now, updatedAt: ctx.now })
@@ -474,7 +477,7 @@ export const paddleConsoleQuery = tenantQuery({
   output: PaddleConsoleDto,
   entitlement: 'donations',
   permission: 'orders:read',
-  handler: async ({ input, tx }) => {
+  handler: async ({ input, ctx, tx }) => {
     const event = await paddleEventTx(tx, input.eventId);
     const cs = await tx
       .select()
@@ -502,6 +505,7 @@ export const paddleConsoleQuery = tenantQuery({
       open: calls.find((c) => c.status === 'open') ?? null,
       calls,
       totals: await raiseTotalsTx(tx, event.id, event.currency, calls),
+      matches: await activeMatchesTx(tx, event.id, ctx.now),
       paddleCount: n,
     };
   },

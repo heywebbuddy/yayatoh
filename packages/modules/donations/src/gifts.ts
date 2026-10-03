@@ -19,6 +19,7 @@ import {
   StartGiftResultDto as StartGiftResult,
   type StartGiftResultDto,
 } from './dto.ts';
+import { activeMatchesTx } from './match-progress.ts';
 import { campaigns, gifts, levels } from './schema.ts';
 
 const GIFT_PURPOSE = 'donations.gift';
@@ -202,7 +203,11 @@ export async function publicGiving(orgId: string, eventId: string): Promise<Publ
           .orderBy(asc(campaigns.position), asc(campaigns.createdAt))
       : [];
     const ids = rows.map((r) => r.id);
-    const [lv, totals] = await Promise.all([levelsByCampaignTx(tx, ids), campaignTotalsTx(tx, ids)]);
+    const [lv, totals, live] = await Promise.all([
+      levelsByCampaignTx(tx, ids),
+      campaignTotalsTx(tx, ids),
+      activeMatchesTx(tx, eventId, ctx.now, ids),
+    ]);
     return PublicGivingDto.parse({
       available: connected,
       campaigns: rows.map((r) => ({
@@ -216,6 +221,7 @@ export async function publicGiving(orgId: string, eventId: string): Promise<Publ
         raisedMinor: totals.get(r.id)?.raisedMinor ?? 0,
         giftCount: totals.get(r.id)?.giftCount ?? 0,
         levels: lv.get(r.id) ?? [],
+        matches: live.filter((m) => m.campaignId === r.id),
       })),
       processingFee: DEFAULT_PROCESSING_FEE,
     });

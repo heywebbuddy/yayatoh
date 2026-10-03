@@ -1,7 +1,7 @@
 import 'server-only';
 import { attendeeEmailAction, attendeeImportAction, attendeeLabelAction } from '@yayatoh/attendees';
 import { audienceExportAction } from '@yayatoh/audiences';
-import { giftsExportAction } from '@yayatoh/donations';
+import { employerExportAction, giftsExportAction } from '@yayatoh/donations';
 import { guestImportAction, rsvpAnswersExportAction, rsvpAnswersPrivateExportAction } from '@yayatoh/guests';
 import { ticketCancelAction, waitlistExportAction } from '@yayatoh/orders';
 import { auditExportAction, bulkStepCommand, runBulkOperation } from '@yayatoh/platform';
@@ -33,6 +33,7 @@ export const BULK_ACTIONS = [
   rsvpAnswersExportAction,
   rsvpAnswersPrivateExportAction,
   giftsExportAction,
+  employerExportAction,
 ] as const;
 const step = bulkStepCommand(BULK_ACTIONS);
 

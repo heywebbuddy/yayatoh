@@ -139,6 +139,7 @@ export {
   MAX_SYNC_BATCH,
   PADDLE_MAX,
   PADDLE_MIN,
+  PLEDGE_SOURCES,
   parsePaddleNumber,
 } from './domain/paddles.ts';
 export {
@@ -179,3 +180,32 @@ export {
   paddlesQuery,
   releasePaddleCommand,
 } from './paddles.ts';
+// M4.8f matching gifts: challenge matches (sponsor, window, ratio, cap) computed from confirmed
+// gifts, the sponsor's pledge, refunds of gifts, and the employer matching list (P4-17).
+export {
+  inWindow,
+  MATCH_CAP_MAX_MINOR,
+  MATCH_CAP_MIN_MINOR,
+  MATCH_RATIOS,
+  MATCH_STATUSES,
+  type MatchPhase,
+  type MatchStatus,
+  matchableAmount,
+  matchedAmount,
+  matchPhase,
+  remainingToCap,
+} from './domain/matches.ts';
+export { EmployerExportParams, employerExportAction, employerExportBulk } from './employer-export.ts';
+export { activeMatchesTx, LiveMatchDto, resyncMatchPledgesTx } from './match-progress.ts';
+export {
+  cancelMatchCommand,
+  catchUpGiftRefunds,
+  closeMatchCommand,
+  createMatchCommand,
+  giftRefundsSubscriber,
+  MatchDto,
+  MatchesViewDto,
+  MatchInput,
+  matchesQuery,
+  publicMatches,
+} from './matches.ts';

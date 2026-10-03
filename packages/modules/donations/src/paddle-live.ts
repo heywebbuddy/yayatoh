@@ -2,6 +2,7 @@ import type { TenantTx } from '@yayatoh/db';
 import { type Ctx, requireOrg } from '@yayatoh/kernel';
 import { publishRealtimeTx } from '@yayatoh/platform';
 import { and, asc, desc, eq, inArray, ne, sql } from 'drizzle-orm';
+import { activeMatchesTx } from './match-progress.ts';
 import { type CallStatus, callTotals, type EntryStatus } from './domain/paddles.ts';
 import {
   type CallDto,
@@ -102,11 +103,13 @@ export async function consoleLiveTx(
   tx: TenantTx,
   eventId: string,
   currency: string,
+  now: Date = new Date(),
 ): Promise<ConsoleLiveDto> {
   const calls = await callsOfEventTx(tx, eventId);
   return {
     open: calls.find((c) => c.status === 'open') ?? null,
     totals: await raiseTotalsTx(tx, eventId, currency, calls),
+    matches: await activeMatchesTx(tx, eventId, now),
   };
 }
 
