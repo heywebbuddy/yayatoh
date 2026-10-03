@@ -15,7 +15,7 @@ async function back(org: string, connectionId: string, params: Record<string, st
   const locale = await getLocale();
   revalidatePath(`/o/${org}/integrations`, 'layout');
   return redirect({
-    href: { pathname: `/o/${org}/integrations/${connectionId}`, query: params, hash: 'audience-heading' },
+    href: { pathname: `/o/${org}/integrations/${connectionId}`, query: params },
     locale,
   });
 }
