@@ -580,3 +580,14 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **Payloads are thin only** (D21): ids, statuses, amounts, counts and times; no "full" payload mode per endpoint yet. Approve, or ask for full payloads on non-personal events later.
 - [ ] Placeholders: at most **20 endpoints per org**; recovery reaches back **14 days**; secret rotation keeps the old secret signing for **24 hours** (Svix's default).
 - [ ] Docs live at `/developers` on the marketplace host; guides and the reference are English in every locale (the shell is translated).
+## Design system v2 (2026-10-02, pending owner)
+- [ ] **Event workspace navigation.** The approved Guests artboard puts the org menu in the sidebar and the event's sections in a top tab row. The build keeps the event's sections in the sidebar (conferences have ~20 sections; one list beats two navigations with the same names for keyboard and screen-reader users) and uses segmented tabs inside sections. Confirm, or ask for the artboard's tab IA (ADR 0022 "Shells").
+- [ ] **Dark primary fill.** `#7B5CFF` gives white button text 4.36:1; buttons use `#6C4CF2` (5.3:1) and `#7B5CFF` stays for glows, rings and the active sidebar tile. Confirm.
+- [ ] **CJK fonts** are not self-hosted (5–9 MB per face); Chinese and Japanese use Noto Sans JP/SC/TC when installed, then the platform face. Confirm, or approve per-locale font CSS.
+- [ ] **Required-field marker.** No asterisk on required labels (the browser announces "required"; errors say what is missing). Confirm or ask for "(optional)" markers on optional fields instead.
+
+## M6.6a — billing foundation (2026-10-02, pending owner)
+- [ ] **Tiers and prices (D22).** Free $0 / Starter $29 / Pro $99 / Agency $249 / Enterprise (quote) are seeded as placeholders, switched off, with placeholder module sets (`PLACEHOLDER_PLANS`). Their per-ticket fee schedules are copies of the legacy one until you set them. Change by data (or in Stripe, then run the catalog sync); no code change.
+- [ ] **When a subscription ends** (canceled, expired), a non-grandfathered org falls back to the default plan (`launch_standard`: today's modules and fees). Confirm, or choose the Free tier; M6.6b adds read-only dunning.
+- [ ] **Grandfathering.** Every org that existed at the migration, and every organizer the legacy migration creates, keeps its legacy per-ticket fees when subscriptions switch on. Confirm the rule (staff can change one org).
+- [ ] **Stripe Billing setup** (when you switch billing on): products with `plan_key` and `sort_order` metadata, recurring prices with lookup keys (`tier_pro_month_usd`), Entitlement Features whose lookup keys are module keys, a billing webhook endpoint at `/api/webhooks/billing/stripe` (its secret is `STRIPE_BILLING_WEBHOOK_SECRET`), then `BILLING_PROVIDER=stripe` and `BILLING_ENABLED=1`. Label: `payments`.

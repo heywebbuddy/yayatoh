@@ -1494,7 +1494,8 @@
     },
     "activityLink": "活動紀錄",
     "privacyLink": "隱私請求",
-    "charityLink": "慈善機構資料"
+    "charityLink": "慈善機構資料",
+    "planLink": "方案和模組"
   },
   "legal": {
     "platform": "Yayatoh",
@@ -11598,5 +11599,118 @@
       "no": "否",
       "example": "{type} 訊息範例"
     }
+  },
+  "billingPlan": {
+    "title": "方案和模組",
+    "subtitle": "您的方案、包含的模組，以及每張票券手續費的計算方式。",
+    "noAccessTitle": "只有擁有者、管理員和財務可以查看方案",
+    "noAccessDescription": "如需方案詳情，請聯絡此組織的擁有者。",
+    "dormantTitle": "訂閱尚未開啟",
+    "dormantBody": "您的組織維持目前的方案，並保留現有的所有模組。訂閱上線前一切不變。",
+    "inactiveTitle": "此組織尚未啟用計費",
+    "inactiveBody": "您的組織維持目前的方案，並保留現有的所有模組。計費設定完成前一切不變。",
+    "updatedTitle": "已收到方案變更",
+    "updatedBody": "計費服務商已確認變更。下方模組已是最新。",
+    "currentPlan": "目前方案",
+    "pricePerMonth": "每月 {price}",
+    "pricePerYear": "每年 {price}",
+    "priceQuote": "客製報價",
+    "renews": "將於 {date} 續訂",
+    "endsOn": "將於 {date} 結束",
+    "source": {
+      "subscription": "訂閱",
+      "plan": "附帶方案"
+    },
+    "status": {
+      "active": "有效",
+      "trialing": "試用",
+      "past_due": "付款逾期",
+      "canceled": "已取消",
+      "unpaid": "未付款",
+      "paused": "已暫停",
+      "incomplete": "未完成",
+      "incomplete_expired": "已過期"
+    },
+    "fees": {
+      "title": "每張票券手續費",
+      "grandfathered": "您原有的每張票券手續費維持不變。變更方案不會改變它們。",
+      "plan": "每張票券手續費依 {plan} 方案計算。"
+    },
+    "modules": {
+      "title": "您的模組",
+      "description": "您的組織現在可以使用的功能。",
+      "count": "{count, plural, other {# 個模組}}"
+    },
+    "catalog": {
+      "title": "方案",
+      "description": "暫定方案：價格尚未確定，目前沒有販售。",
+      "empty": "尚無方案。",
+      "plan": "方案",
+      "price": "價格",
+      "modules": "模組",
+      "status": "狀態",
+      "onSale": "販售中",
+      "notOnSale": "尚未開賣"
+    },
+    "test": {
+      "title": "測試計費（僅限開發環境）",
+      "body": "透過測試計費服務商模擬方案變更。它會傳送與真實服務商相同的 Webhook。",
+      "open": "開啟測試計費入口"
+    },
+    "planName": {
+      "launch_standard": "上線標準版",
+      "tier_free": "免費版",
+      "tier_starter": "入門版",
+      "tier_pro": "專業版",
+      "tier_agency": "代理版",
+      "tier_enterprise": "企業版"
+    },
+    "module": {
+      "core": "基礎",
+      "events": "活動",
+      "ticketing": "票務",
+      "orders": "訂單",
+      "attendees": "參加者",
+      "checkin": "報到",
+      "seating": "座位",
+      "seat_finder": "座位查詢",
+      "guests": "賓客名單",
+      "rsvp": "回覆邀請",
+      "distribution": "通路",
+      "access_codes": "存取碼",
+      "marketing": "行銷",
+      "messaging": "訊息",
+      "reports": "報表",
+      "whitelabel": "白標",
+      "ai": "AI 助理",
+      "chat": "聊天",
+      "donations": "捐款",
+      "registration": "報名",
+      "sessions": "議程場次",
+      "speakers": "講者",
+      "exhibitors": "參展商",
+      "sponsors": "贊助商",
+      "badges": "識別證",
+      "gallery": "相簿",
+      "website": "網站",
+      "api_access": "API 存取",
+      "integrations": "整合",
+      "enterprise": "SSO 與 SCIM",
+      "agency": "代理",
+      "virtual": "線上活動",
+      "advanced_seating": "進階座位",
+      "ai_seating": "AI 排座",
+      "analytics_pro": "進階分析"
+    }
+  },
+  "billingPortal": {
+    "eyebrow": "測試計費",
+    "title": "選擇方案",
+    "description": "僅限開發環境。此頁面代替計費服務商的入口，並傳送相同的 Webhook。",
+    "planLegend": "方案",
+    "switch": "變更方案",
+    "cancel": "取消訂閱",
+    "back": "不變更並返回",
+    "chooseError": "請選擇要變更的方案。"
   }
 }

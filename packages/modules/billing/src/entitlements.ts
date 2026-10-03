@@ -3,13 +3,52 @@ import { type CommandPorts, type Ctx, DomainError, requireOrg } from '@yayatoh/k
 import { isModuleKey, tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { sql } from 'drizzle-orm';
 import { z } from 'zod';
+import { billingEnabled } from './provider/flag.ts';
+import { LIVE_SUBSCRIPTION_STATUSES } from './provider/port.ts';
 import { entitlementOverrides } from './schema.ts';
 
 export const DEFAULT_PLAN = 'launch_standard';
 
-/** The org's effective modules inside an existing tenant transaction. */
+/**
+ * The org's effective modules inside an existing tenant transaction:
+ * `(base ∪ active grants) − active revokes`, where base is the org's plan modules, or, once
+ * billing is switched on (M6.6a) and the org has a live subscription whose entitlements the
+ * provider has synced, those entitlements (plus `core`, so a misconfigured product never locks an
+ * org out of its console). With billing off this is exactly the pre-billing query.
+ */
 export async function effectiveModulesTx(tx: TenantTx): Promise<Set<string>> {
-  const rows = await tx.execute<{ module_key: string }>(sql`
+  const rows = billingEnabled()
+    ? await tx.execute<{ module_key: string }>(sql`
+    with plan as (
+      select coalesce((select plan_key from billing.org_plans limit 1), ${DEFAULT_PLAN}) as key
+    ),
+    synced as (
+      select exists (
+        select 1 from billing.org_billing
+        where provider_customer_id is not null and entitlements_synced_at is not null
+      ) and exists (
+        select 1 from billing.subscriptions
+        where status in (${sql.join(
+          LIVE_SUBSCRIPTION_STATUSES.map((s) => sql`${s}`),
+          sql`, `,
+        )})
+      ) as live
+    )
+    (
+      select module_key from billing.org_entitlements where (select live from synced)
+      union
+      select 'core' where (select live from synced)
+      union
+      select module_key from billing.plan_modules
+      where plan_key = (select key from plan) and not (select live from synced)
+      union
+      select module_key from billing.entitlement_overrides
+      where effect = 'grant' and (expires_at is null or expires_at > now())
+    )
+    except
+    select module_key from billing.entitlement_overrides
+    where effect = 'revoke' and (expires_at is null or expires_at > now())`)
+    : await tx.execute<{ module_key: string }>(sql`
     with plan as (
       select coalesce((select plan_key from billing.org_plans limit 1), ${DEFAULT_PLAN}) as key
     )

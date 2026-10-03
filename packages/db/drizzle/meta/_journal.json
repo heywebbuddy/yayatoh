@@ -827,6 +827,13 @@
       "when": 1791021658863,
       "tag": "0117_yummy_wind_dancer",
       "breakpoints": true
+    },
+    {
+      "idx": 118,
+      "version": "7",
+      "when": 1791021707283,
+      "tag": "0118_chilly_grandmaster",
+      "breakpoints": true
     }
   ]
 }

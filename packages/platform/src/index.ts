@@ -94,7 +94,7 @@ export {
   turnstileHumanCheck,
 } from './human-check.ts';
 export { IDENTITY_KEY_SCOPE, type KeyVault, keyVault, localKeyVault, setKeyVault } from './key-vault.ts';
-export { isModuleKey, MODULE_KEYS, type ModuleKey } from './modules.ts';
+export { isModuleKey, MODULE_KEYS, type ModuleKey, PHASE6_MODULE_KEYS } from './modules.ts';
 export {
   type MemberNotificationIntent,
   memoryNotifier,

@@ -1494,7 +1494,8 @@
     },
     "activityLink": "Registro attività",
     "privacyLink": "Richieste privacy",
-    "charityLink": "Profilo benefico"
+    "charityLink": "Profilo benefico",
+    "planLink": "Piano e moduli"
   },
   "legal": {
     "platform": "Yayatoh",
@@ -11598,5 +11599,118 @@
       "no": "No",
       "example": "Messaggio di esempio {type}"
     }
+  },
+  "billingPlan": {
+    "title": "Piano e moduli",
+    "subtitle": "Il tuo piano, i moduli inclusi e come si applicano le commissioni per biglietto.",
+    "noAccessTitle": "Solo proprietari, amministratori e finanza vedono il piano",
+    "noAccessDescription": "Chiedi i dettagli del piano a un proprietario di questa organizzazione.",
+    "dormantTitle": "Gli abbonamenti non sono ancora attivi",
+    "dormantBody": "La tua organizzazione resta sul piano attuale e mantiene tutti i moduli di oggi. Nulla cambia fino al lancio degli abbonamenti.",
+    "inactiveTitle": "La fatturazione non è attiva per questa organizzazione",
+    "inactiveBody": "La tua organizzazione resta sul piano attuale e mantiene tutti i moduli di oggi. Nulla cambia finché la fatturazione non è configurata.",
+    "updatedTitle": "Cambio di piano ricevuto",
+    "updatedBody": "Il fornitore di fatturazione ha confermato il cambio. I moduli qui sotto sono aggiornati.",
+    "currentPlan": "Piano attuale",
+    "pricePerMonth": "{price} al mese",
+    "pricePerYear": "{price} all’anno",
+    "priceQuote": "Preventivo su misura",
+    "renews": "Si rinnova il {date}",
+    "endsOn": "Termina il {date}",
+    "source": {
+      "subscription": "Abbonamento",
+      "plan": "Piano incluso"
+    },
+    "status": {
+      "active": "Attivo",
+      "trialing": "Prova",
+      "past_due": "Pagamento scaduto",
+      "canceled": "Annullato",
+      "unpaid": "Non pagato",
+      "paused": "In pausa",
+      "incomplete": "Incompleto",
+      "incomplete_expired": "Scaduto"
+    },
+    "fees": {
+      "title": "Commissioni per biglietto",
+      "grandfathered": "Le tue commissioni per biglietto precedenti restano invariate. Un cambio di piano non le modifica mai.",
+      "plan": "Le commissioni per biglietto seguono il piano {plan}."
+    },
+    "modules": {
+      "title": "I tuoi moduli",
+      "description": "Ciò che la tua organizzazione può usare ora.",
+      "count": "{count, plural, one {# modulo} other {# moduli}}"
+    },
+    "catalog": {
+      "title": "Piani",
+      "description": "Piani provvisori: i prezzi non sono definitivi e non c’è ancora nulla in vendita.",
+      "empty": "Ancora nessun piano.",
+      "plan": "Piano",
+      "price": "Prezzo",
+      "modules": "Moduli",
+      "status": "Stato",
+      "onSale": "In vendita",
+      "notOnSale": "Non ancora in vendita"
+    },
+    "test": {
+      "title": "Fatturazione di prova (solo sviluppo)",
+      "body": "Simula un cambio di piano con il fornitore di fatturazione di prova. Invia gli stessi webhook del fornitore reale.",
+      "open": "Apri il portale di fatturazione di prova"
+    },
+    "planName": {
+      "launch_standard": "Standard di lancio",
+      "tier_free": "Gratuito",
+      "tier_starter": "Starter",
+      "tier_pro": "Pro",
+      "tier_agency": "Agenzia",
+      "tier_enterprise": "Enterprise"
+    },
+    "module": {
+      "core": "Base",
+      "events": "Eventi",
+      "ticketing": "Biglietteria",
+      "orders": "Ordini",
+      "attendees": "Partecipanti",
+      "checkin": "Accessi",
+      "seating": "Posti",
+      "seat_finder": "Trova posto",
+      "guests": "Lista ospiti",
+      "rsvp": "Risposte",
+      "distribution": "Distribuzione",
+      "access_codes": "Codici di accesso",
+      "marketing": "Marketing",
+      "messaging": "Messaggi",
+      "reports": "Report",
+      "whitelabel": "White label",
+      "ai": "Assistente IA",
+      "chat": "Chat",
+      "donations": "Donazioni",
+      "registration": "Registrazione",
+      "sessions": "Sessioni",
+      "speakers": "Relatori",
+      "exhibitors": "Espositori",
+      "sponsors": "Sponsor",
+      "badges": "Badge",
+      "gallery": "Galleria",
+      "website": "Sito web",
+      "api_access": "Accesso API",
+      "integrations": "Integrazioni",
+      "enterprise": "SSO e SCIM",
+      "agency": "Agenzia",
+      "virtual": "Eventi virtuali",
+      "advanced_seating": "Posti avanzati",
+      "ai_seating": "Posti con IA",
+      "analytics_pro": "Analisi avanzate"
+    }
+  },
+  "billingPortal": {
+    "eyebrow": "Fatturazione di prova",
+    "title": "Scegli un piano",
+    "description": "Solo per lo sviluppo. Questa pagina sostituisce il portale del fornitore di fatturazione e invia gli stessi webhook.",
+    "planLegend": "Piano",
+    "switch": "Cambia piano",
+    "cancel": "Annulla l’abbonamento",
+    "back": "Torna senza modifiche",
+    "chooseError": "Scegli il piano a cui passare."
   }
 }
