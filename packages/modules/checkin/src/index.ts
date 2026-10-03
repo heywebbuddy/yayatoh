@@ -16,6 +16,11 @@ export {
 } from './checkpoints.ts';
 // M5.9a: the conference Command Center pack's counts (alert rules and widgets read these).
 export { kiosksOfflineTx, sessionsInRoomTx } from './conference-facts.ts';
+// M6.1a: contact merges move this module's references (ADR 0023).
+export { checkinContactOwner } from './contact-merge.ts';
+// M6.2a: check-ins per day (first live admission) for the analytics warehouse.
+export { dailyCheckinFactsTx } from './daily-facts.ts';
+export { checkinDataSubjects } from './data-subject.ts';
 export {
   DEVICE_ONLINE_WINDOW_MS,
   DeviceDto,
@@ -216,3 +221,5 @@ export {
   verifyKioskPin,
 } from './staff-mode.ts';
 export { type CheckinScope, type CheckinSeriesFact, checkinFactsTx, checkinSeriesTx } from './stats.ts';
+// M6.1a: the person timeline's facts from this module (crm projection).
+export { checkinTimeline } from './timeline.ts';

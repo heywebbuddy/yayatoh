@@ -192,6 +192,11 @@
       "guests": {
         "invitation": "婚禮邀請",
         "rsvp-reminder": "回覆提醒"
+      },
+      "privacy": {
+        "request-code": "隱私請求驗證碼",
+        "archive-ready": "個人資料封存檔已就緒",
+        "erasure-done": "刪除收據"
       }
     },
     "status": {
@@ -347,7 +352,9 @@
     "supportMacros": "客服巨集",
     "assistance": "求助請求",
     "marketingAnalytics": "行銷分析",
-    "badges": "名牌"
+    "badges": "名牌",
+    "orgAnalytics": "數據分析",
+    "integrations": "整合"
   },
   "vocab": {
     "attendee": "參加者",
@@ -929,9 +936,15 @@
         "capReached": "這是單筆訂單的上限：{max} 個座位。",
         "adaChosen": "{count, plural, other {{seats} 是無障礙座位，為有需要的賓客保留。請僅在需要時選擇。}}",
         "overCap": "已選 {count} 個座位：主辦單位要求每筆訂單最多 {max} 個。",
-        "keptUntil": "保留至 {date}"
+        "keptUntil": "保留至 {date}",
+        "companionWarn": "陪同座位供與輪椅使用者同行的賓客使用：每個無障礙座位最多 {max} 個。",
+        "companionEnforced": "陪同座位僅與無障礙座位一起販售：每個無障礙座位最多 {max} 個。",
+        "companionChosen": "沒有無障礙座位的陪同座位：{seats}。它們供與輪椅使用者同行的賓客使用（每個無障礙座位最多 {max} 個）。",
+        "companionRefused": "沒有無障礙座位的陪同座位：{seats}。陪同座位僅與無障礙座位一起販售（每個最多 {max} 個）：請加入一個無障礙座位，或選擇其他座位。",
+        "adaEnforcedBest": "無障礙座位保留給有需要的賓客，直到 {date}。如果你需要，請勾選「我的同行者中有人使用輪椅」，並使用最佳可選座位。"
       },
-      "groupSummary": "{group} — {total} 個中 {free} 個空位{chosen, plural, =0 {} other { · 已選 #}}"
+      "groupSummary": "{group} — {total} 個中 {free} 個空位{chosen, plural, =0 {} other { · 已選 #}}",
+      "companion": "陪同座位"
     },
     "seatRuleCap": "超出了單筆訂單可選的座位數，請減少選擇。",
     "seatRuleAda": "無障礙座位目前為有需要的賓客保留，請選擇其他座位。",
@@ -942,7 +955,43 @@
     "riskBlocked": "我們無法接受此訂單。請聯絡主辦單位。",
     "creditInvalid": "此商店餘額代碼無效或已用完。",
     "creditNotApplicable": "此商店餘額不能用於這些票券。",
-    "saveCardForGiving": "為今晚的捐贈儲存我的信用卡（在下一頁完成；未經您在那裡同意，不會儲存任何資訊）"
+    "saveCardForGiving": "為今晚的捐贈儲存我的信用卡（在下一頁完成；未經您在那裡同意，不會儲存任何資訊）",
+    "seatRuleCompanion": "陪同座位僅與無障礙座位一起販售。請同時選擇一個無障礙座位，或選擇其他座位。",
+    "best": {
+      "title": "最佳可選座位",
+      "modeLegend": "你想如何選位？",
+      "mode": {
+        "best": "最佳可選座位：我們為你找到相鄰的最佳座位",
+        "pick": "自行選位"
+      },
+      "need": "我的同行者中有人使用輪椅，需要無障礙座位",
+      "needStaff": "購票者需要輪椅無障礙座位",
+      "needHint": "無障礙座位及其旁邊的陪同座位保留給有需要的賓客。",
+      "price": "價格",
+      "onePrice": "價格：{price}",
+      "quantity": "座位數量",
+      "find": "尋找座位",
+      "findAgain": "重新尋找",
+      "accessibleHint": "我們會尋找一個輪椅無障礙座位，並在旁邊安排陪同座位。",
+      "together": "{count, plural, other {# 個相鄰座位：}}",
+      "split": "無法讓你們 {count} 人坐在一起，因此座位分在不同位置（分組數：{pieces}）。你也可以自行選位。",
+      "seatsLabel": "你的座位",
+      "seatAccessible": "{seat}（輪椅無障礙）",
+      "seatCompanion": "{seat}（陪同座位）",
+      "heldFor": "在你付款期間為你保留 {minutes} 分鐘。",
+      "clear": "釋出這些座位",
+      "notEnough": "此價格下沒有足夠的空位供 {count} 人使用。請減少座位數、換個價格，或自行選位。",
+      "noAccessible": "此價格下沒有空的輪椅無障礙座位。請換個價格，或聯絡主辦單位。",
+      "taken": "這些座位剛剛被選走了。請再試一次。",
+      "ruleRefused": "主辦單位的座位規則不允許這樣選擇。",
+      "off": "此活動已不再提供最佳可選座位。請自行選位。",
+      "findFirst": "請先尋找座位：選擇數量，然後點選「尋找座位」。",
+      "expired": "你的座位已保留 10 分鐘，現已釋出。請重新尋找。"
+    },
+    "seatChannel": "其中部分座位保留給其他銷售通路。請選擇其他座位。",
+    "channelInvalid": "此銷售碼不適用於本活動。請不帶銷售碼重新開啟活動頁面，或詢問給你連結的人。",
+    "channelNotice": "你正透過 {name} 購買：保留給 {name} 的座位也向你開放。",
+    "channelLinkInvalid": "此銷售連結不適用於本活動。你仍可從向所有人開放的座位中選擇。"
   },
   "fakePay": {
     "eyebrow": "測試付款",
@@ -1510,12 +1559,14 @@
     },
     "activityLink": "活動紀錄",
     "privacyLink": "隱私請求",
-    "charityLink": "慈善機構資料"
+    "charityLink": "慈善機構資料",
+    "planLink": "方案和模組"
   },
   "legal": {
     "platform": "Yayatoh",
     "updated": "最後更新於 {date}",
-    "organizerPages": "{org} 的政策"
+    "organizerPages": "{org} 的政策",
+    "privacyRequest": "申請取得您的資料副本或將其抹除"
   },
   "setup": {
     "title": "準備開賣 · 已完成 {done}/{total}",
@@ -1895,7 +1946,8 @@
     "chooseDate": "請選擇場次。",
     "dateSoldOut": "此場次剩餘門票不足。",
     "wrongDate": "其中一種門票不在此場次販售。",
-    "dateUnavailable": "此場次已停止售票。"
+    "dateUnavailable": "此場次已停止售票。",
+    "seatChannel": "其中部分座位保留給其他銷售通路（贊助商、推廣方或線上銷售）。請選擇其他座位。"
   },
   "seating": {
     "title": "座位",
@@ -1992,7 +2044,9 @@
       "title": "儲存為可重複使用的座位圖",
       "name": "名稱",
       "submit": "儲存座位圖",
-      "done": "已儲存。你可以將它用於其他活動。"
+      "done": "已儲存。你可以將它用於其他活動。",
+      "description": "儲存的座位圖會放進你的座位圖庫，你可以從中建立新活動。",
+      "library": "開啟座位圖庫"
     },
     "tabs": {
       "label": "座位檢視",
@@ -2001,7 +2055,10 @@
       "finder": "座位查詢",
       "rules": "規則",
       "guests": "安排賓客座位",
-      "cards": "桌卡與匯出"
+      "cards": "桌卡與匯出",
+      "selection": "最佳可選座位",
+      "channels": "通路",
+      "revisions": "版本"
     },
     "assign": {
       "title": "安排賓客",
@@ -2144,7 +2201,8 @@
       "none": "無規則：購票者可選擇任何空位。",
       "summary": {
         "ada": "無障礙座位為有需要的賓客保留至{days, plural, =0 {活動開始} other {活動前 # 天}}（{date}）· {severity}",
-        "cap": "每筆訂單最多 {max, plural, other {# 個座位}} · {severity}"
+        "cap": "每筆訂單最多 {max, plural, other {# 個座位}} · {severity}",
+        "companion": "陪同座位僅與無障礙座位一起販售，每個最多 {max} 個 · {severity}"
       },
       "severityShort": {
         "warn": "提醒",
@@ -2177,7 +2235,14 @@
       },
       "save": "儲存規則",
       "saved": "座位規則已儲存。",
-      "fixErrors": "請修改標出的欄位。"
+      "fixErrors": "請修改標出的欄位。",
+      "companion": {
+        "title": "陪同座位",
+        "on": "陪同座位僅與無障礙座位一起販售",
+        "max": "每個無障礙座位的陪同座位數",
+        "maxHint": "1 到 3。會與無障礙座位一起開放給所有人。",
+        "maxError": "請輸入 1 到 3 的整數。"
+      }
     },
     "groups": {
       "title": "團體座位區",
@@ -2407,6 +2472,172 @@
         "sheetChart": "座位表",
         "sheetMeals": "餐點數量"
       }
+    },
+    "selection": {
+      "title": "最佳可選座位與陪同座位",
+      "description": "讓購票者和售票處直接要求最佳座位而不必自己挑選，並在無障礙座位旁保留陪同座位。",
+      "noPlan": "此活動還沒有座位圖。請先建立座位圖，再在這裡設定最佳可選座位。",
+      "readOnly": "你可以檢視這些設定，但不能變更。",
+      "bestTitle": "最佳可選座位",
+      "bestOn": "向購票者和售票處提供「最佳可選座位」",
+      "bestHint": "購票者選擇座位數量和價格，即可取得相鄰的最佳空位。他們也仍可自行選位。",
+      "scoresTitle": "區域評分",
+      "scoresHint": "0 到 100：評分越高越先提供。留空的區域依與舞台的距離排序。",
+      "scoreLabel": "{section} 的評分",
+      "scoreError": "請輸入 0 到 100 的整數，或留空。",
+      "noSections": "此座位圖沒有區域：座位依與舞台的距離排序，再依排別和靠近中間的程度排序。",
+      "saveBest": "儲存最佳可選座位",
+      "savedBest": "最佳可選座位設定已儲存。",
+      "fixErrors": "請修改標出的欄位。",
+      "bestOnSummary": "已向購票者和售票處提供最佳可選座位。",
+      "bestOffSummary": "最佳可選座位已關閉：購票者自行選位。",
+      "companionsTitle": "陪同座位",
+      "companionsDescription": "陪同座位位於無障礙座位旁，供與輪椅使用者同行的人使用。",
+      "rulesLink": "在「規則」分頁設定陪同座位規則",
+      "noAccessible": "此座位圖還沒有無障礙座位。請先在座位圖中標出，再在這裡選擇陪同座位。",
+      "suggest": "勾選無障礙座位旁的座位",
+      "group": {
+        "row": "{label} 排",
+        "table": "{label} 號桌"
+      },
+      "seatAccessible": "{seat} 號座 · 無障礙",
+      "seatCompanion": "{seat} 號座",
+      "suggested": "在無障礙座位旁",
+      "saveCompanions": "儲存陪同座位",
+      "savedCompanions": "已儲存陪同座位：{count} 個。",
+      "companionError": "陪同座位必須與無障礙座位在同一排或同一桌，且本身不能是無障礙座位。",
+      "companionList": "陪同座位（{count} 個）：{seats}",
+      "companionNone": "還沒有陪同座位。"
+    },
+    "fromLibrary": "此活動以你儲存的座位圖建立。請先為座位定價，再開始銷售。",
+    "channels": {
+      "title": "銷售通路",
+      "description": "為現場售票、贊助商或推廣方保留座位區塊。某個通路的座位在該通路釋出之前，絕不會透過其他通路售出。",
+      "noPlan": "此活動還沒有座位圖。請先建立一個，再在這裡把座位分配給通路。",
+      "readOnly": "你可以檢視通路，但不能修改。",
+      "saved": "通路已儲存。",
+      "deleted": "通路已移除。其座位重新向所有通路開放。",
+      "listTitle": "通路",
+      "empty": "還沒有銷售通路",
+      "emptyHint": "在下方新增通路，再為它分配座位。不屬於任何通路的座位可透過所有通路售出。",
+      "col": {
+        "channel": "通路",
+        "code": "銷售碼與連結",
+        "release": "釋出",
+        "seats": "座位",
+        "sold": "透過此通路售出",
+        "actions": "操作"
+      },
+      "kind": {
+        "public": "線上（無銷售碼）",
+        "box_office": "現場售票",
+        "sponsor": "贊助商",
+        "promoter": "推廣方"
+      },
+      "linkFor": "{name} 的連結",
+      "released": "已於 {when} 釋出",
+      "neverReleased": "保留至你變更為止",
+      "soldCount": "{orders, plural, =0 {還沒有訂單} other {# 筆訂單}} · {seats, plural, other {# 個座位}}",
+      "edit": "編輯",
+      "editNamed": "編輯 {name}",
+      "delete": "移除",
+      "deleteNamed": "移除 {name}",
+      "addTitle": "新增通路",
+      "editTitle": "編輯 {name}",
+      "kindLabel": "類型",
+      "kindHint": "線上與現場售票：每個活動各最多一個。贊助商和推廣方使用各自的銷售碼銷售。",
+      "nameLabel": "名稱",
+      "nameHint": "會向使用此通路連結的購票人顯示，並出現在你的報表中。",
+      "codeLabel": "銷售碼",
+      "codeHint": "僅限贊助商和推廣方：3 到 32 個英文字母、數字、連字號或底線。購票人透過通路連結使用。",
+      "releaseLabel": "釋出未售座位的時間（選填）",
+      "releaseHint": "未售座位會在此時間（{timeZone}）回到所有通路。留白則持續保留。",
+      "add": "新增通路",
+      "save": "儲存通路",
+      "cancel": "取消",
+      "added": "通路已新增。",
+      "fixErrors": "請修正標示的欄位。",
+      "errors": {
+        "kind": "請選擇通路類型。",
+        "kind_taken": "此活動已有該類型的通路。",
+        "name": "請為通路命名（最多 80 個字元）。",
+        "code_required": "贊助商和推廣方需要銷售碼。",
+        "code_not_allowed": "只有贊助商和推廣方有銷售碼。請留白。",
+        "code_format": "請使用 3 到 32 個英文字母、數字、連字號或底線。",
+        "code_taken": "此活動的另一個通路已使用該銷售碼。",
+        "releaseAt": "請輸入日期和時間，或留白。",
+        "seats": "請至少選擇一排或一桌，並填寫其中存在的座位號碼。"
+      },
+      "allotTitle": "分配座位",
+      "allotDescription": "選擇排和桌，也可以只選其中部分座位。活動的所有日期都會同步。已在某個通路中的座位會轉到你選擇的通路。",
+      "noSeats": "座位圖中還沒有排或桌。",
+      "allotTo": "通路",
+      "everyChannel": "無通路（向所有通路開放）",
+      "which": "排和桌",
+      "item": {
+        "row": "第 {label} 排（{seats, plural, other {# 個座位}}）",
+        "table": "{label} 號桌（{seats, plural, other {# 個座位}}）"
+      },
+      "itemAllotted": "{name} 中 {count, plural, other {# 個座位}}",
+      "seatNumbers": "僅這些座位（選填）",
+      "seatNumbersHint": "所選排和桌中的座位號碼，例如 1-4, 9。留白則包括其全部座位。",
+      "allot": "分配座位",
+      "allotted": "{count, plural, =0 {沒有座位變更。} other {已分配 # 個座位。}}",
+      "freed": "{count, plural, =0 {沒有座位屬於任何通路。} other {# 個座位重新向所有通路開放。}}"
+    },
+    "revisions": {
+      "title": "座位圖版本",
+      "description": "每次儲存座位圖都會產生一個版本。查看每個版本改了什麼，並還原先前的座位圖。已保留和已售出的座位一律保持不變。",
+      "noPlan": "此活動還沒有座位圖。請先建立一個；之後每次儲存都會顯示在這裡。",
+      "none": "還沒有版本",
+      "noneHint": "下一次儲存座位圖就會是第一個版本。",
+      "readOnly": "你可以檢視版本，但不能還原。",
+      "listTitle": "所有版本",
+      "col": {
+        "revision": "版本",
+        "when": "儲存時間",
+        "what": "內容",
+        "changes": "變更的座位"
+      },
+      "revision": "版本 {number}",
+      "currentBadge": "目前的座位圖",
+      "kindSave": "已儲存",
+      "kindRestore": "已還原版本 {number}",
+      "seats": "{count, plural, other {# 個座位}}",
+      "first": "保留的第一個版本。",
+      "noSeatChanges": "沒有新增、移除或重新編號的座位。",
+      "added": "{count, plural, other {新增 # 個座位}}",
+      "removed": "{count, plural, other {移除 # 個座位}}",
+      "renumbered": "{count, plural, other {重新編號 # 個座位}}",
+      "moved": "{count, plural, other {移動 # 個座位}}",
+      "detailTitle": "版本 {number}",
+      "changedTitle": "此版本的變更",
+      "restoreWouldTitle": "還原後會變更",
+      "addedTitle": "新增的座位",
+      "removedTitle": "移除的座位",
+      "renumberedTitle": "重新編號的座位",
+      "renumberedSeat": "{from} → {to}",
+      "listOf": "{title}（{count}）",
+      "more": "{count, plural, other {另有 # 個}}",
+      "inUseTitle": "已保留和已售出的座位",
+      "inUseNone": "沒有已保留或已售出的座位：沒有任何阻礙。",
+      "inUseKept": "{count, plural, =0 {沒有已保留或已售出的座位留在原處。} other {# 個已保留或已售出的座位完全保持不變。}}",
+      "inUseRemapped": "{count, plural, other {# 個已保留或已售出的座位會轉到此版本中標籤相同的座位（座位號碼和門票都不變）：}}",
+      "conflictsTitle": "{count, plural, other {無法還原此版本：會失去 # 個已保留或已售出的座位。}}",
+      "conflict": {
+        "removed": {
+          "sold": "{label} 已售出，而此版本沒有該標籤的座位。",
+          "held": "{label} 已被購票人保留，而此版本沒有該標籤的座位。"
+        },
+        "renumbered": {
+          "sold": "{label} 已售出，還原後會變成 {to}：購票人的門票將指向另一個座位。",
+          "held": "{label} 已被購票人保留，還原後會變成 {to}。"
+        }
+      },
+      "conflictsRefused": "有已保留或已售出的座位不在該版本中。未做任何變更。",
+      "isCurrent": "這就是目前的座位圖。",
+      "restore": "還原版本 {number}",
+      "restoredNotice": "已還原版本 {number}。目前的座位圖為版本 {now}。"
     }
   },
   "venueMap": {
@@ -2734,72 +2965,199 @@
   },
   "privacy": {
     "title": "隱私請求",
-    "description": "回應詢問您持有其哪些資料或要求被遺忘的人。每個請求都會被記錄。",
+    "description": "回應向您索取其資料副本或要求被遺忘的人。每個請求須在 30 天內處理，並會被記錄。",
     "noticeLink": "Yayatoh 隱私權聲明",
     "noAccessTitle": "只有擁有者和管理員可以處理隱私請求",
-    "noAccessDescription": "請此組織的擁有者或管理員協助處理有關某人資料的請求。",
+    "noAccessDescription": "如需處理有關某人資料的請求，請聯絡此組織的擁有者或管理員。",
     "find": {
       "title": "尋找某人",
-      "hint": "依電子郵件在聯絡人、訂單、票券、賓客名單、回答和報到紀錄中搜尋。",
+      "hint": "依電子郵件搜尋此組織持有的所有資料：聯絡人、訂單、票券、賓客名單、表單、訊息、演講嘉賓等。",
       "email": "電子郵件地址",
       "submit": "搜尋"
     },
     "result": {
       "title": "此組織持有的關於 {email} 的資料",
       "noneTitle": "找不到此電子郵件的資料",
-      "noneDescription": "此組織中沒有任何聯絡人、訂單、票券或賓客紀錄使用該地址。"
-    },
-    "categories": {
-      "contacts": "聯絡人紀錄",
-      "consents": "同意紀錄",
-      "orders": "訂單",
-      "paidOrders": "已付款訂單（為會計保留）",
-      "tickets": "票券",
-      "activeTickets": "有效票券",
-      "claims": "票券轉讓連結",
-      "holderLinks": "票券存取連結",
-      "attendees": "賓客名單項目",
-      "answers": "結帳時的回答",
-      "admissions": "報到",
-      "invitations": "團隊邀請",
-      "networkProfiles": "社交名片",
-      "chatMessages": "已傳送的聊天訊息"
-    },
-    "export": {
-      "title": "匯出其資料",
-      "hint": "包含以上所有內容的 JSON 檔案，供您寄給本人。7 天後刪除。",
-      "submit": "匯出資料（JSON）",
-      "download": "下載檔案",
-      "running": "正在準備檔案……請稍後重新整理頁面。"
-    },
-    "erase": {
-      "title": "抹除此人",
-      "what": "其姓名、電子郵件、電話、回答和連結將從聯絡人、訂單、票券和賓客名單中移除，提及此人的匯出檔案也會被刪除。",
-      "holds": "{paid, plural, =0 {沒有需要保留的已付款訂單。} other {# 筆已付款訂單將為稅務和會計保留，但不含姓名和電子郵件。}}",
-      "tickets": "{active, plural, =0 {沒有有效票券。} other {# 張有效票券仍然有效，但不含姓名。}}",
-      "final": "此操作無法復原。",
-      "confirm": "輸入 {email} 以確認",
-      "submit": "抹除個人資料",
-      "done": "已抹除。{records, plural, other {# 筆紀錄}}已去識別化或刪除；{kept, plural, =0 {未保留已付款訂單} other {已保留 # 筆不含個人資料的已付款訂單}}。"
+      "noneDescription": "此組織中沒有任何紀錄使用該地址。您仍可建立請求，向此人作出正式答覆。"
     },
     "errors": {
       "invalidEmail": "請輸入有效的電子郵件地址。",
       "confirmMismatch": "不相符。請輸入相同的電子郵件地址以確認。",
-      "nothingHeld": "已不再持有此電子郵件的任何資料。"
-    },
-    "history": {
-      "title": "過往請求",
-      "caption": "隱私請求，最新在前",
-      "empty": "尚無請求。",
-      "when": "時間",
-      "kind": "請求",
-      "subject": "對象",
-      "by": "處理人",
-      "records": "紀錄數"
+      "kindRequired": "請選擇此人提出的請求類型。",
+      "reasonRequired": "請填寫至少 3 個字元的原因。",
+      "closed": "此請求已關閉。"
     },
     "kinds": {
-      "access": "存取（匯出）",
+      "access": "存取（副本）",
       "erasure": "抹除"
+    },
+    "modules": {
+      "crm": "聯絡人與同意",
+      "orders": "訂單與候補名單",
+      "ticketing": "票券",
+      "attendees": "賓客名單項目",
+      "forms": "表單回答",
+      "checkin": "報到",
+      "tenancy": "團隊邀請",
+      "notifications": "已傳送的訊息",
+      "seating": "座位查詢",
+      "alerts": "警示設定",
+      "guests": "婚禮與派對賓客",
+      "messaging": "對話",
+      "assistance": "求助請求",
+      "program": "演講嘉賓資訊",
+      "events": "入口網站帳戶",
+      "media": "上傳的檔案",
+      "cms": "聯絡表單訊息",
+      "venues": "場地報價請求",
+      "reviews": "評價",
+      "payments": "付款爭議",
+      "surveys": "問卷回答",
+      "registration": "報名",
+      "badges": "名牌",
+      "automations": "旅程",
+      "campaigns": "行銷活動傳送紀錄",
+      "audiences": "受眾",
+      "marketing": "行銷歸因",
+      "reports": "分析事件",
+      "privacy": "隱私請求",
+      "platform": "匯出與系統紀錄",
+      "donations": "捐贈與收據",
+      "engagement": "現場問答中的問題"
+    },
+    "open": {
+      "title": "建立請求",
+      "hint": "您已確認請求人的身分。請求須在 30 天內處理；您可在其專屬頁面完成處理。",
+      "kind": "此人提出了什麼請求？",
+      "access": "取得其資料副本（存取）",
+      "accessHint": "一個已簽署的 ZIP，包含關於此人的所有資料。",
+      "erasure": "抹除其資料（抹除）",
+      "erasureHint": "從所有地方移除此人，法律要求您保留的紀錄除外。",
+      "submit": "建立請求",
+      "existing": "此人已有一個未完成的請求。",
+      "review": "查看未完成的請求"
+    },
+    "queue": {
+      "title": "未完成的請求",
+      "caption": "未完成的隱私請求，最早到期的在前",
+      "emptyTitle": "沒有未完成的請求",
+      "empty": "有人詢問其資料時，請在上方尋找此人並建立請求。他們也可以透過您的隱私權聲明提出請求。",
+      "person": "對象",
+      "kind": "請求",
+      "source": "來源",
+      "opened": "建立時間",
+      "due": "期限",
+      "overdue": "已逾期",
+      "action": "操作",
+      "review": "查看"
+    },
+    "closed": {
+      "title": "已關閉的請求",
+      "caption": "已完成與已撤回的請求，最新在前",
+      "empty": "尚無已關閉的請求。",
+      "when": "關閉時間",
+      "status": "狀態",
+      "records": "紀錄數"
+    },
+    "statuses": {
+      "open": "未完成",
+      "completed": "已完成",
+      "cancelled": "已撤回"
+    },
+    "sources": {
+      "staff": "工作人員代為提出",
+      "self": "本人（電子郵件已確認）"
+    },
+    "request": {
+      "titleAccess": "存取請求",
+      "titleErasure": "抹除請求",
+      "openedNotice": "請求已建立，期限為 {date}。",
+      "cancelledNotice": "請求已撤回。",
+      "fields": {
+        "kind": "請求",
+        "source": "來源",
+        "opened": "建立時間",
+        "due": "期限",
+        "verified": "電子郵件已確認",
+        "completed": "完成時間",
+        "cancelled": "撤回時間",
+        "reason": "原因"
+      },
+      "holdings": {
+        "title": "此組織持有的資料",
+        "empty": "沒有持有關於此人的任何資料",
+        "emptyHint": "您仍可完成請求：此人將收到未持有任何資料的正式答覆。"
+      },
+      "export": {
+        "title": "傳送副本給此人",
+        "hint": "一個 ZIP，包含 Yayatoh 每個部分的 JSON 檔案及此人的檔案，並已簽署，任何人都能驗證其未遭竄改。可在 7 天內下載。",
+        "submit": "建立封存檔",
+        "done": "封存檔已就緒。",
+        "notified": "我們已透過電子郵件將下載連結寄給此人。",
+        "until": "可下載至 {date}。",
+        "download": "下載封存檔（ZIP）",
+        "expired": "封存檔已過期並已刪除。如此人需要另一份副本，請建立新請求。"
+      },
+      "erase": {
+        "title": "抹除此人",
+        "what": "其姓名、電子郵件、電話、回答、訊息和連結將從 Yayatoh 的所有部分移除，提及此人的匯出檔案也會被刪除。",
+        "holds": "已付款訂單、折讓單、付款爭議和同意紀錄會在法律要求的範圍內保留，但不含姓名和電子郵件，並列於收據中。",
+        "files": "其上傳內容和先前的封存檔將從儲存空間刪除。",
+        "final": "此操作無法復原。",
+        "confirm": "輸入 {email} 以確認",
+        "submit": "抹除個人資料",
+        "done": "已抹除。下方的簽署收據列出了已抹除與已保留的內容及原因。"
+      },
+      "cancel": {
+        "title": "撤回請求",
+        "hint": "適用於此人已撤回請求或請求並非真實的情況。原因會與請求一起記錄。",
+        "reason": "原因",
+        "submit": "撤回請求"
+      },
+      "receipt": {
+        "title": "抹除收據",
+        "erased": "已抹除",
+        "held": "因法定保存義務而保留",
+        "noneErased": "沒有需要抹除的內容。",
+        "noneHeld": "沒有需要保留的內容。",
+        "table": "資料",
+        "action": "處理方式",
+        "rows": "紀錄數",
+        "ref": "紀錄",
+        "basis": "保留原因",
+        "until": "保留至",
+        "files": "{count, plural, =0 {沒有刪除任何已儲存的檔案。} other {已刪除 # 個已儲存的檔案。}}",
+        "suppressed": "該地址已列入全平台的已抹除名單：除非此人主動同意，任何組織都不能再向其傳送行銷訊息。",
+        "connectors": "{count, plural, =0 {不需要通知任何已連結的服務。} other {已同時要求以下已連結的服務抹除此人：{names}。}}",
+        "signature": "使用 Ed25519 金鑰 {key} 簽署。",
+        "download": "下載收據（PDF）",
+        "notified": "我們已透過電子郵件將此收據的連結寄給此人。",
+        "actions": {
+          "delete": "已刪除",
+          "redact": "已移除個人資料",
+          "hold": "已保留，個人資料已移除"
+        },
+        "bases": {
+          "tax_accounting": "稅務與會計紀錄（7 年）",
+          "payment_dispute": "付款爭議的證據",
+          "accountability": "請求已處理的證明"
+        }
+      }
+    },
+    "pdf": {
+      "title": "抹除收據",
+      "request": "請求",
+      "person": "對象",
+      "source": "請求人",
+      "requested": "請求時間",
+      "due": "期限",
+      "completed": "抹除時間",
+      "signatureTitle": "簽章",
+      "algorithm": "演算法",
+      "keyId": "金鑰 ID",
+      "digest": "收據 SHA-256",
+      "signature": "簽章（base64）",
+      "footer": "由 Yayatoh 代表 {org} 核發。簽章涵蓋收據資料；請使用下方的公開金鑰驗證。"
     }
   },
   "privacyNotice": {
@@ -2980,7 +3338,8 @@
       "guests": "賓客人數",
       "markHandled": "標示為已處理",
       "markNew": "標示為新請求"
-    }
+    },
+    "layoutLibrary": "座位圖庫"
   },
   "details": {
     "title": "活動詳細資料",
@@ -3589,7 +3948,39 @@
       "attendees_read": "讀取參加者",
       "attendees_write": "修改參加者並重新寄送票券",
       "checkin_scan": "掃描門票"
-    }
+    },
+    "expiry": "到期時間",
+    "expiryHint": "會到期的金鑰必須在到期前輪替。效期越短越安全。",
+    "expiryIn": {
+      "30": "30 天後",
+      "90": "90 天後",
+      "365": "一年後",
+      "never": "永不"
+    },
+    "expiresColumn": "到期時間",
+    "createdBy": "建立者",
+    "createdByPlatform": "Yayatoh",
+    "expired": "已到期",
+    "rotatedStatus": "已輪替",
+    "rotate": "輪替",
+    "rotateNamed": "輪替金鑰 {name}",
+    "overlap": "舊金鑰繼續可用",
+    "overlapFor": {
+      "h0": "不保留：立即停用",
+      "h1": "1 小時",
+      "h24": "24 小時",
+      "h168": "7 天"
+    },
+    "rotateNow": "立即輪替",
+    "rotateNowNamed": "立即輪替金鑰 {name}",
+    "rotated": "金鑰「{name}」已輪替。舊金鑰可用至 {until}。",
+    "rotatedNow": "金鑰「{name}」已輪替。舊金鑰已停用。",
+    "related": "API",
+    "usageLink": "用量",
+    "sandboxesLink": "沙盒",
+    "rateLimitNote": "每把金鑰每分鐘可發出 {perKey, number} 個請求，所有金鑰合計 {perOrg, number} 個。",
+    "noApiAccess": "此組織的方案不包含 API 存取：其金鑰會被拒絕。",
+    "webhooksLink": "Webhook"
   },
   "market": {
     "wordmark": "Yayatoh",
@@ -4898,6 +5289,11 @@
     "terminated": {
       "title": "此組織已關閉",
       "body": "Yayatoh 支援團隊已關閉此組織。其公開頁面已下線，無法再做任何變更。身為擁有者，你仍可開啟它並下載你的資料，例如在「動態」中。"
+    },
+    "sandbox": {
+      "label": "沙盒",
+      "title": "沙盒",
+      "body": "這是一個測試組織。付款為模擬付款，不會扣款；其活動永遠不會出現在市集上。"
     }
   },
   "seatingDates": {
@@ -4980,8 +5376,13 @@
       "slot_full": "此活動已有 20 張平面圖圖片。",
       "forbidden": "你無法更改此座位圖。",
       "network": "上傳失敗。請檢查網路連線後重試。",
-      "generic": "上傳失敗。請重試。"
-    }
+      "generic": "上傳失敗。請重試。",
+      "pdf_page": "該頁不存在：此 PDF 共有 {pages, plural, other {# 頁}}。",
+      "pdf_unreadable": "無法讀取此 PDF。請將平面圖匯出為圖片或另一個 PDF 後再試一次。"
+    },
+    "pdfPage": "頁碼（PDF）",
+    "pdfHint": "也可以使用 PDF 平面圖：選擇平面圖所在的頁面。它會在你的瀏覽器中轉成圖片，再以圖片上傳。",
+    "pdfDrawing": "正在繪製 PDF 第 {page} 頁…"
   },
   "humanCheck": {
     "legend": "安全驗證",
@@ -5314,7 +5715,9 @@
         "label": "標籤",
         "totals": "累計資料",
         "seen": "首次或最近出現",
-        "engagement": "參與度分數"
+        "engagement": "參與度分數",
+        "stats": "聯絡人統計",
+        "ltv": "終身價值"
       },
       "did": "規則",
       "didYes": "是",
@@ -5373,7 +5776,19 @@
       "editionOf": "此前一屆",
       "series": "系列",
       "noSeries": "還沒有系列",
-      "engagementScore": "分數"
+      "engagementScore": "分數",
+      "statsMetric": "指標",
+      "statsMetrics": {
+        "engagement": "參與度分數",
+        "noShowPct": "缺席傾向",
+        "sessionsAttended": "參加的場次",
+        "campaignsOpened": "開啟的行銷活動",
+        "rfmRecency": "RFM 近度（五分位）",
+        "rfmFrequency": "RFM 頻率（五分位）",
+        "rfmMonetary": "RFM 金額（五分位）"
+      },
+      "valuePercent": "百分比",
+      "quintile": "五分位（1–5）"
     },
     "scopes": {
       "any": "任意活動",
@@ -5428,7 +5843,10 @@
         "unknown_legacy": "未知（匯入）",
         "none": "未同意"
       }
-    }
+    },
+    "peopleLink": "人員",
+    "duplicatesLink": "可能的重複",
+    "insights": "聯絡人洞察"
   },
   "refundOps": {
     "timeline": {
@@ -13494,6 +13912,1030 @@
         "not_connected": "此聊天已關閉。"
       },
       "reported": "謝謝。主辦單位和 Yayatoh 會審核你的檢舉；這位訪客已無法再傳訊息給你的攤位。"
+    }
+  },
+  "people": {
+    "title": "人員",
+    "audiences": "受眾",
+    "description": "貴組織有紀錄的所有人，最新的在前。開啟某人即可查看其完整歷史。",
+    "duplicatesLink": "可能的重複",
+    "search": {
+      "label": "依姓名、電子郵件或公司搜尋",
+      "submit": "搜尋",
+      "noneTitle": "沒有符合的人",
+      "noneDescription": "沒有任何姓名、電子郵件或公司包含「{q}」。請嘗試較短的關鍵字。"
+    },
+    "emptyTitle": "還沒有人員",
+    "emptyDescription": "有人購票、報名或被加入賓客名單後，會出現在這裡。",
+    "caption": "人員",
+    "columns": {
+      "name": "姓名",
+      "email": "電子郵件",
+      "company": "公司",
+      "added": "新增時間"
+    },
+    "next": "下一頁",
+    "person": {
+      "title": "人員",
+      "details": "詳細資料",
+      "mergedHere": "那筆紀錄已合併到這筆紀錄。"
+    },
+    "fields": {
+      "name": "姓名",
+      "email": "電子郵件",
+      "phone": "電話",
+      "company": "公司",
+      "added": "新增時間",
+      "emailConsent": "行銷郵件",
+      "smsConsent": "行銷簡訊",
+      "history": "歷史",
+      "empty": "未填寫"
+    },
+    "merges": {
+      "title": "已合併的紀錄",
+      "line": "已於 {when} 合併 {who}。",
+      "moved": "{moved, plural, =0 {未移動任何內容。} other {已移動 # 項。}}",
+      "undoneOn": "已於 {when} 復原。",
+      "undoUntil": "可在 {when} 前復原。",
+      "erased": "一筆已刪除的紀錄"
+    },
+    "undo": {
+      "submit": "復原合併",
+      "submitFor": "復原對 {who} 的合併",
+      "done": "已復原合併。兩筆紀錄已恢復為分開狀態，與之前完全相同。",
+      "openOther": "開啟另一筆紀錄",
+      "errors": {
+        "expired": "此合併已超過 30 天，無法再復原。",
+        "blocked": "此紀錄之後又被合併到另一筆紀錄。請先復原那次合併。",
+        "erased": "其中一筆紀錄已被刪除，因此無法再復原合併。",
+        "undone": "此合併已被復原。"
+      }
+    },
+    "errors": {
+      "forbidden": "你的角色無法合併人員。請聯絡擁有者、管理員或經理。"
+    },
+    "timeline": {
+      "title": "時間軸",
+      "kind": "類型",
+      "allKinds": "全部",
+      "event": "活動",
+      "allEvents": "所有活動",
+      "filter": "篩選",
+      "noMatchTitle": "沒有符合這些篩選條件的內容",
+      "noMatchDescription": "選擇「全部」或「所有活動」以查看更多。",
+      "emptyTitle": "這裡還沒有內容",
+      "emptyDescription": "訂單、報到、行銷活動、訊息和問卷發生後會出現在這裡。",
+      "listLabel": "{name} 的時間軸",
+      "older": "更早"
+    },
+    "kinds": {
+      "order_paid": "訂單已付款",
+      "order_refunded": "退款",
+      "checked_in": "已報到",
+      "session_attended": "參加了一場分會",
+      "campaign_sent": "行銷活動已寄出",
+      "campaign_opened": "開啟了行銷活動",
+      "campaign_clicked": "點擊了行銷活動",
+      "message_in": "傳訊息給你",
+      "message_out": "你已回覆",
+      "donation": "捐款",
+      "rsvp": "回覆邀請",
+      "survey_sent": "問卷已寄出",
+      "survey_responded": "回答了問卷"
+    },
+    "merge": {
+      "done": "紀錄已合併。你可以在 30 天內於此頁面復原。",
+      "submit": "合併紀錄",
+      "hint": "訂單、票券、報到、訊息和歷史會轉到保留的紀錄。合併可在 30 天內復原。",
+      "errors": {
+        "alreadyMerged": "自你開啟此頁面後，其中一筆紀錄已被合併或變更。請返回清單。",
+        "erased": "其中一筆紀錄已被刪除，無法合併。",
+        "unavailable": "目前無法合併，請稍後再試。",
+        "keep": "請選擇保留哪筆紀錄。"
+      }
+    },
+    "duplicates": {
+      "title": "可能的重複",
+      "description": "可能被記錄了兩次的人：相同電子郵件、相同電話，或同一公司的相似姓名。",
+      "scan": "尋找重複",
+      "lastScan": "上次檢查：{when}。新聯絡人每隔幾分鐘會自動檢查。",
+      "neverScanned": "尚未檢查。",
+      "scanned": "{count, plural, =0 {未發現可能的重複。} other {發現 # 個可能的重複。}}",
+      "dismissedDone": "已標記為不是同一人。此組合不會再被建議。",
+      "bulkDone": "{count, plural, =0 {未合併任何內容。} other {已合併 # 組。每次合併皆可在 30 天內復原。}}",
+      "statusNav": "依狀態篩選",
+      "status": {
+        "open": "待處理（{count}）",
+        "dismissed": "非重複",
+        "merged": "已合併"
+      },
+      "caption": {
+        "open": "待審核的可能重複",
+        "dismissed": "標記為不是同一人的組合",
+        "merged": "已合併的組合"
+      },
+      "empty": {
+        "open": {
+          "title": "沒有可能的重複",
+          "description": "選擇「尋找重複」立即檢查所有人。新聯絡人會自動檢查。"
+        },
+        "dismissed": {
+          "title": "沒有已排除的",
+          "description": "你標記為不是同一人的組合會顯示在這裡。"
+        },
+        "merged": {
+          "title": "還沒有合併",
+          "description": "你合併的組合會顯示在這裡。可在該人員頁面復原合併。"
+        }
+      },
+      "select": "選取",
+      "selectPair": "選取 {pair}",
+      "pair": "{a} 和 {b}",
+      "columns": {
+        "people": "人員",
+        "confidence": "可信度",
+        "reasons": "原因",
+        "review": "審核"
+      },
+      "score": "{score}%",
+      "review": "審核",
+      "reviewPair": "審核 {pair}",
+      "mergeSelected": "合併所選",
+      "mergeSelectedHint": "保留每組中較早的紀錄和最新的資訊。系統會要求你確認身分。",
+      "errors": {
+        "noneSelected": "請至少選取一組進行合併。",
+        "tooMany": "每次最多選取 50 組。"
+      }
+    },
+    "reasons": {
+      "email": "相同電子郵件地址",
+      "phone": "相同電話號碼",
+      "name_company": "同一公司的相似姓名"
+    },
+    "compare": {
+      "title": "審核可能的重複",
+      "description": "可信度 {score}%：{reasons}。",
+      "resolved": "此組合已處理。",
+      "record": "紀錄 {n}",
+      "older": "（較早）",
+      "entries": "{count, plural, =0 {無項目} other {# 項}}",
+      "openTimeline": "開啟{record}的時間軸",
+      "consentTitle": "合併後的同意狀態",
+      "consentEmail": "行銷郵件：{status}",
+      "consentSms": "行銷簡訊：{status}",
+      "consentRule": "以最嚴格的選擇為準：只要任一紀錄已取消訂閱，合併後的紀錄即為取消訂閱。",
+      "keepLegend": "保留哪筆紀錄",
+      "keepHint": "另一筆紀錄會合併到這裡。其電子郵件地址仍能找到此人。",
+      "keepOption": "{record}（{email}）",
+      "fieldLegend": {
+        "name": "姓名",
+        "email": "電子郵件",
+        "phone": "電話",
+        "company": "公司"
+      },
+      "fieldOption": "{record}：{value}",
+      "dismiss": "不是同一人"
+    },
+    "consent": {
+      "granted": "已訂閱",
+      "withdrawn": "已取消訂閱",
+      "unknown_legacy": "未知（匯入）",
+      "none": "無同意"
+    }
+  },
+  "contactStats": {
+    "title": "聯絡人",
+    "insightsTitle": "聯絡人洞察",
+    "insightsDescription": "你的參與者在所有活動中的表現：參與度、缺席、近度與頻率。",
+    "audiencesLink": "受眾",
+    "notLive": "此聯絡人已合併至其他聯絡人或已被清除，其統計資料不再計入。",
+    "emptyTitle": "尚無活動",
+    "emptyDescription": "此人報名活動、參加場次或開啟行銷活動後，統計資料就會顯示。",
+    "emptyAction": "建立受眾",
+    "glance": "概覽",
+    "events": "報名的活動",
+    "attended": "出席的活動",
+    "sessions": "參加的場次",
+    "campaigns": "開啟的行銷活動",
+    "firstSeen": "首次出現",
+    "lastSeen": "最近出現",
+    "never": "—",
+    "lifetimeValue": "終身價值",
+    "lifetimeOrders": "{count, plural, other {# 筆已付款訂單}}",
+    "noSpend": "尚無已付款訂單。",
+    "noSpendOrg": "還沒有人付過款。",
+    "scores": "分數",
+    "engagement": "參與度分數",
+    "engagementValue": "{score} / 100",
+    "engagementHow": "{wAttended} × {attended} 出席活動 + {wSessions} × {sessions} 場次 + {wCampaigns} × {campaigns} 開啟的行銷活動 = {points} 分. 100 × {points} ÷ ({points} + {half}) = {score}.",
+    "noShow": "缺席傾向",
+    "noShowHow": "({noShows} 次缺席 + {priorNoShows}) ÷ ({past} 次過往報名 + {priorRegistrations}) = {pct}. 即將舉行的活動暫不計入。",
+    "rfm": "RFM",
+    "rfmHow": "在本組織參加過活動的人之中的五分位：5 為最高的五分之一。",
+    "rfmNone": "尚未排名：沒有活動。",
+    "recency": "近度",
+    "frequency": "頻率",
+    "monetary": "金額",
+    "quintileValue": "{q} / 5",
+    "updated": "更新於 {date}",
+    "viewContact": "檢視聯絡人",
+    "headerSummary": "參與度 {score} · 缺席 {pct}",
+    "headerValue": "終身 {amount}",
+    "totals": "總計",
+    "total": {
+      "contacts": "聯絡人",
+      "participants": "參與過",
+      "attendedAny": "出席過",
+      "averageEngagement": "平均參與度",
+      "noShowRate": "缺席率"
+    },
+    "distributions": "分布",
+    "distribution": {
+      "engagement": "參與度分數",
+      "noShow": "缺席傾向",
+      "frequency": "參與的活動數",
+      "recency": "最近出現"
+    },
+    "showData": "顯示資料",
+    "range": "區間",
+    "people": "人數",
+    "bandRange": "{from}–{to}",
+    "bandFrom": "{from} 以上",
+    "recencyWithin": "{days} 天內",
+    "recencyOlder": "更早",
+    "value": {
+      "currency": "幣別",
+      "payers": "付款人數",
+      "total": "總計",
+      "average": "平均",
+      "topFifth": "最高五分之一起點",
+      "max": "最高"
+    },
+    "orgEmptyTitle": "尚無聯絡人活動",
+    "orgEmptyDescription": "隨著大家報名、報到、參加場次和開啟行銷活動，統計資料就會顯示。",
+    "orgEmptyAction": "前往你的活動"
+  },
+  "privacyRequest": {
+    "title": "查詢您的個人資料",
+    "description": "請 {org} 提供其持有的關於您的個人資料副本，或將其抹除。對方會在 30 天內答覆。我們會先寄送驗證碼到您的電子郵件，以確認該地址屬於您。",
+    "notice": "閱讀 {org} 的隱私權聲明",
+    "kindLegend": "您想要什麼？",
+    "access": "取得我的資料副本",
+    "accessHint": "您將收到一個 ZIP 檔案連結，其中包含關於您的所有資料。",
+    "erasure": "抹除我的資料",
+    "erasureHint": "{org} 會從其紀錄中移除您，法律要求保留的內容除外（例如供稅務用途的已付款訂單）。",
+    "email": "您的電子郵件地址",
+    "emailHint": "您在此主辦方使用的電子郵件地址。",
+    "submit": "寄送驗證碼給我",
+    "sent": "我們已將 6 位數驗證碼寄至 {email}。請輸入驗證碼以確認請求。驗證碼 10 分鐘內有效。",
+    "resent": "我們已將新的驗證碼寄至 {email}。",
+    "codeLabel": "驗證碼",
+    "confirm": "確認我的請求",
+    "resend": "寄送新的驗證碼",
+    "changeEmail": "使用其他地址",
+    "doneTitle": "已收到請求",
+    "doneBody": "{org} 將在 {date} 前答覆。您的參考編號是 {reference}。處理完成後您會收到電子郵件。",
+    "existingBody": "您在 {org} 已有一個未完成的請求。期限為 {date}；您的參考編號是 {reference}。",
+    "errors": {
+      "invalidEmail": "請輸入有效的電子郵件地址。",
+      "kindRequired": "請選擇取得資料副本或抹除。",
+      "rateLimited": "{minutes, plural, other {嘗試次數過多。請在 # 分鐘後再試一次。}}",
+      "codeFormat": "請輸入電子郵件中的 6 位數字。",
+      "wrong": "{count, plural, =0 {驗證碼不正確。請重新取得驗證碼。} other {驗證碼不正確。還剩 # 次機會。}}",
+      "locked": "錯誤次數過多。請重新取得驗證碼。",
+      "expired": "驗證碼已過期或已被使用。請重新取得驗證碼。",
+      "generic": "發生錯誤。請再試一次。"
+    }
+  },
+  "apiUsage": {
+    "title": "API 用量",
+    "subtitle": "使用此組織 API 金鑰發出的請求，依組織時區每日統計。",
+    "back": "API 金鑰",
+    "range": "期間",
+    "lastDays": "最近 {days, number} 天",
+    "totalsTitle": "總計",
+    "requests": "請求",
+    "errors": "錯誤",
+    "rateLimited": "遭限流",
+    "perDayTitle": "每日請求數",
+    "perKeyTitle": "每把金鑰的請求數",
+    "day": "日期",
+    "showData": "顯示資料",
+    "emptyTitle": "此期間沒有 API 請求",
+    "emptyDescription": "使用你的金鑰發出的請求會立即顯示在這裡。請在 API 金鑰頁面建立金鑰。"
+  },
+  "sandboxes": {
+    "title": "沙盒",
+    "subtitle": "與此組織連結的測試組織，可安全地試用 API 與結帳。",
+    "noAccessTitle": "只有擁有者和管理員可以管理沙盒",
+    "noAccessDescription": "請此組織的擁有者或管理員為你建立一個。",
+    "factsTitle": "沙盒如何運作",
+    "factPayments": "付款一律為模擬：無論平台如何設定，都不會扣款。",
+    "factMarketplace": "其活動永遠不會出現在市集上。",
+    "factData": "一開始就有一個範例活動和兩種票種。",
+    "factKeys": "它有自己的 API 金鑰和團隊。你是它的擁有者。",
+    "createTitle": "建立沙盒",
+    "name": "名稱",
+    "nameHint": "例如「Staging」或「Zapier 測試」。",
+    "nameRequired": "請為沙盒命名。",
+    "create": "建立沙盒",
+    "creating": "建立中…",
+    "created": "已建立沙盒「{name}」，並附上一個範例活動。",
+    "open": "開啟沙盒 {name}",
+    "openShort": "開啟",
+    "limit": "此組織已有 {max, number} 個沙盒，已達上限。請先刪除一個。",
+    "sandboxOfSandbox": "沙盒不能再擁有沙盒",
+    "inSandboxDescription": "請在此沙盒所屬的組織中建立沙盒。",
+    "listTitle": "你的沙盒",
+    "emptyTitle": "還沒有沙盒",
+    "emptyDescription": "建立一個沙盒，用範例資料和模擬付款試用 API、結帳和報到。",
+    "address": "地址",
+    "createdAt": "建立時間",
+    "actions": "操作",
+    "delete": "刪除",
+    "deleteNamed": "刪除沙盒 {name}",
+    "deleteWarning": "沙盒將永久關閉：頁面下線，成員和金鑰失去存取權。",
+    "deleteConfirm": "永久刪除",
+    "deleteConfirmNamed": "永久刪除沙盒 {name}"
+  },
+  "webhooks": {
+    "title": "Webhook",
+    "subtitle": "在事件發生時，把組織的事件傳送到你自己的系統。",
+    "docs": "Webhook 指南和簽章驗證",
+    "related": "相關頁面",
+    "portalLink": "開啟 Webhook 入口網站",
+    "apiKeysLink": "API 金鑰",
+    "noAccessTitle": "只有擁有者和管理員可以管理 Webhook",
+    "noAccessDescription": "請讓本組織的擁有者或管理員新增或修改 Webhook 端點。",
+    "noModuleTitle": "你的方案不包含 Webhook",
+    "noModuleDescription": "Webhook 隨 API 存取一同提供。請聯絡我們為你的組織開通。",
+    "unavailableTitle": "Webhook 暫不可用",
+    "unavailableDescription": "本平台的 Webhook 傳送仍在設定中，請稍後再來。",
+    "emptyTitle": "還沒有 Webhook 端點",
+    "emptyDescription": "在下方新增接收端的 https 網址，然後向它傳送一則測試訊息。",
+    "listTitle": "端點",
+    "url": "端點網址",
+    "urlHint": "連接埠 443 上的 https，可從網際網路存取。每則訊息都有簽章。",
+    "description": "說明",
+    "descriptionHint": "選填，供團隊參考（最多 200 個字元）。",
+    "descriptionTooLong": "請不超過 200 個字元。",
+    "events": "事件",
+    "allEvents": "所有事件",
+    "eventCount": "{count, plural, other {# 個事件}}",
+    "status": "狀態",
+    "active": "啟用",
+    "disabled": "已暫停",
+    "createdAt": "新增時間",
+    "createTitle": "新增端點",
+    "settingsTitle": "端點設定",
+    "receive": "要傳送的事件",
+    "receiveAll": "所有事件，包括新增的",
+    "receiveSelected": "只傳送我選擇的事件",
+    "typesRequired": "請至少選擇一個事件，或傳送所有事件。",
+    "groups": {
+      "orders": "訂單和付款",
+      "tickets": "票券",
+      "checkin": "入場",
+      "events": "活動和票種",
+      "registration": "報名",
+      "engagement": "互動",
+      "meta": "測試"
+    },
+    "enabled": "向此端點傳送訊息",
+    "enabledHint": "關閉後可暫停投遞，而不刪除端點。",
+    "create": "新增端點",
+    "save": "儲存變更",
+    "saved": "端點已儲存。",
+    "limit": "本組織的端點數量已達上限。請先刪除一個再新增。",
+    "urlProblem": {
+      "malformed": "請輸入完整網址，例如 https://example.com/webhooks。",
+      "scheme": "請使用 https:// 網址。",
+      "credentials": "請從網址中刪除使用者名稱和密碼。",
+      "port": "請使用標準 https 連接埠（443）。",
+      "host": "此主機無法接收 Webhook。請使用公開位址。",
+      "address": "此位址是私人或保留位址。請使用公開位址。",
+      "dns": "找不到此主機。請檢查位址。",
+      "length": "此網址太長。"
+    },
+    "deleted": "端點已刪除。",
+    "created": "端點已新增。傳送一則測試訊息來檢查你的接收端。",
+    "back": "所有 Webhook 端點",
+    "endpointTitle": "Webhook 端點",
+    "testTitle": "傳送測試訊息",
+    "testEventType": "訊息類型",
+    "testHint": "webhook.test，或任一事件及其文件中的範例資料。只有此端點會收到。",
+    "sendTest": "傳送測試",
+    "testSent": "測試訊息已傳送（{type}）。投遞情況見下方。",
+    "secretTitle": "簽章金鑰",
+    "secretHint": "用它來確認每則訊息確實來自我們。",
+    "revealSecret": "顯示金鑰",
+    "hideSecret": "隱藏",
+    "copy": "複製",
+    "copied": "已複製",
+    "rotateHint": "新金鑰將取代此金鑰。24 小時內兩者都會為每則訊息簽章，方便你完成部署。",
+    "rotateSecret": "輪換金鑰",
+    "rotatedSecret": "金鑰已輪換。之前的金鑰在 24 小時內仍然有效。",
+    "deliveriesTitle": "最近的投遞",
+    "deliveriesUnavailable": "暫時無法載入投遞紀錄，請一分鐘後重試。",
+    "noDeliveriesTitle": "還沒有投遞紀錄",
+    "noDeliveriesDescription": "傳送一則測試訊息，或等待下一個事件。",
+    "attemptedAt": "時間",
+    "eventType": "事件",
+    "response": "回應",
+    "noResponse": "無回應",
+    "trigger": "傳送方式",
+    "triggerManual": "重新傳送",
+    "triggerScheduled": "自動",
+    "nextRetry": "下次重試",
+    "actions": "操作",
+    "attemptSucceeded": "已送達",
+    "attemptFailed": "失敗",
+    "attemptPending": "等待中",
+    "resend": "重新傳送",
+    "resendNamed": "重新傳送 {when} 的 {type}",
+    "resent": "已重新傳送",
+    "recoverTitle": "復原失敗的訊息",
+    "recoverHint": "如果接收端曾經停機，可重新傳送自某個時間以來所有失敗的訊息。",
+    "recoverSince": "失敗時間範圍",
+    "recoverWindow": {
+      "1h": "最近 1 小時",
+      "24h": "最近 24 小時",
+      "7d": "最近 7 天"
+    },
+    "recover": "重新傳送失敗的訊息",
+    "recovering": "正在重新傳送失敗的訊息。",
+    "deleteTitle": "刪除此端點",
+    "deleteHint": "它會立即停止接收訊息。此操作無法復原。",
+    "delete": "刪除端點",
+    "portalTitle": "Webhook 入口網站",
+    "portalSubtitle": "來自我們 Webhook 服務商的端點、投遞日誌和重新傳送。",
+    "portalAlternative": "這裡的所有功能也都在<link>Webhook 頁面</link>中。",
+    "portalFrameTitle": "Webhook 入口網站",
+    "portalUnavailable": "暫時無法開啟 Webhook 入口網站，請一分鐘後重試。",
+    "fakePortal": {
+      "title": "Webhook 入口網站（測試模式）",
+      "subtitle": "服務商入口網站的替代品：這裡不會透過網路傳送任何內容。",
+      "endpoints": "端點",
+      "url": "網址",
+      "types": "事件",
+      "allTypes": "全部",
+      "status": "狀態",
+      "enabled": "啟用",
+      "disabled": "已暫停",
+      "noEndpoints": "還沒有端點",
+      "attempts": "最近的嘗試",
+      "noAttempts": "還沒有嘗試",
+      "type": "事件",
+      "message": "訊息",
+      "succeeded": "已送達",
+      "failed": "失敗",
+      "at": "時間"
+    }
+  },
+  "developers": {
+    "brand": "Yayatoh 開發者",
+    "skip": "跳到內文",
+    "title": "開發者",
+    "subtitle": "基於 Yayatoh 建構：REST API、Webhook 和 SDK。",
+    "nav": {
+      "label": "開發者文件",
+      "home": "概覽",
+      "guides": "指南",
+      "reference": "API 參考",
+      "events": "Webhook 事件"
+    },
+    "search": {
+      "label": "搜尋文件",
+      "placeholder": "搜尋指南、端點和事件",
+      "submit": "搜尋",
+      "results": "{count, plural, =0 {沒有結果} other {# 個結果}}",
+      "resultsLabel": "搜尋結果",
+      "resultsFor": "「{query}」的搜尋結果",
+      "none": "沒有符合項目。試試其他字詞，例如「orders」或「webhook」。",
+      "kinds": {
+        "guide": "指南",
+        "operation": "端點",
+        "event": "事件"
+      }
+    },
+    "englishNotice": "指南和參考文件為英文。",
+    "startTitle": "從這裡開始",
+    "cards": {
+      "guides": "逐步講解 API 金鑰、分頁、冪等、Webhook 和沙盒。",
+      "reference": "根據 OpenAPI 產生的每個 /v1 端點及其參數和回應。",
+      "events": "每個 Webhook 事件及其版本化結構和範例。"
+    },
+    "guidesSubtitle": "基於 API 開發的分步指南。",
+    "backToGuides": "所有指南",
+    "reference": {
+      "title": "API 參考",
+      "subtitle": "根據 OpenAPI 文件產生的每個 /v1 端點。",
+      "interactive": "在互動式參考中試用",
+      "download": "下載 openapi.json",
+      "tags": "章節",
+      "auth": "身分驗證",
+      "parameters": "參數",
+      "parametersOf": "{operation} 的參數",
+      "name": "名稱",
+      "in": "位置",
+      "type": "類型",
+      "description": "說明",
+      "requestBody": "請求本文",
+      "responses": "回應"
+    },
+    "events": {
+      "title": "Webhook 事件",
+      "subtitle": "你的端點可能收到的每則訊息及其版本化結構。資料只包含 ID 和事實，絕不包含個人資料。",
+      "verifyLink": "如何驗證簽章",
+      "groups": "事件分組",
+      "fieldsOf": "{type} 的欄位",
+      "data": "data",
+      "field": "欄位",
+      "type": "類型",
+      "required": "必填",
+      "yes": "是",
+      "no": "否",
+      "example": "{type} 訊息範例"
+    }
+  },
+  "billingPlan": {
+    "title": "方案和模組",
+    "subtitle": "您的方案、包含的模組，以及每張票券手續費的計算方式。",
+    "noAccessTitle": "只有擁有者、管理員和財務可以查看方案",
+    "noAccessDescription": "如需方案詳情，請聯絡此組織的擁有者。",
+    "dormantTitle": "訂閱尚未開啟",
+    "dormantBody": "您的組織維持目前的方案，並保留現有的所有模組。訂閱上線前一切不變。",
+    "inactiveTitle": "此組織尚未啟用計費",
+    "inactiveBody": "您的組織維持目前的方案，並保留現有的所有模組。計費設定完成前一切不變。",
+    "updatedTitle": "已收到方案變更",
+    "updatedBody": "計費服務商已確認變更。下方模組已是最新。",
+    "currentPlan": "目前方案",
+    "pricePerMonth": "每月 {price}",
+    "pricePerYear": "每年 {price}",
+    "priceQuote": "客製報價",
+    "renews": "將於 {date} 續訂",
+    "endsOn": "將於 {date} 結束",
+    "source": {
+      "subscription": "訂閱",
+      "plan": "附帶方案"
+    },
+    "status": {
+      "active": "有效",
+      "trialing": "試用",
+      "past_due": "付款逾期",
+      "canceled": "已取消",
+      "unpaid": "未付款",
+      "paused": "已暫停",
+      "incomplete": "未完成",
+      "incomplete_expired": "已過期"
+    },
+    "fees": {
+      "title": "每張票券手續費",
+      "grandfathered": "您原有的每張票券手續費維持不變。變更方案不會改變它們。",
+      "plan": "每張票券手續費依 {plan} 方案計算。"
+    },
+    "modules": {
+      "title": "您的模組",
+      "description": "您的組織現在可以使用的功能。",
+      "count": "{count, plural, other {# 個模組}}"
+    },
+    "catalog": {
+      "title": "方案",
+      "description": "暫定方案：價格尚未確定，目前沒有販售。",
+      "empty": "尚無方案。",
+      "plan": "方案",
+      "price": "價格",
+      "modules": "模組",
+      "status": "狀態",
+      "onSale": "販售中",
+      "notOnSale": "尚未開賣"
+    },
+    "test": {
+      "title": "測試計費（僅限開發環境）",
+      "body": "透過測試計費服務商模擬方案變更。它會傳送與真實服務商相同的 Webhook。",
+      "open": "開啟測試計費入口"
+    },
+    "planName": {
+      "launch_standard": "上線標準版",
+      "tier_free": "免費版",
+      "tier_starter": "入門版",
+      "tier_pro": "專業版",
+      "tier_agency": "代理版",
+      "tier_enterprise": "企業版"
+    },
+    "module": {
+      "core": "基礎",
+      "events": "活動",
+      "ticketing": "票務",
+      "orders": "訂單",
+      "attendees": "參加者",
+      "checkin": "報到",
+      "seating": "座位",
+      "seat_finder": "座位查詢",
+      "guests": "賓客名單",
+      "rsvp": "回覆邀請",
+      "distribution": "通路",
+      "access_codes": "存取碼",
+      "marketing": "行銷",
+      "messaging": "訊息",
+      "reports": "報表",
+      "whitelabel": "白標",
+      "ai": "AI 助理",
+      "chat": "聊天",
+      "donations": "捐款",
+      "registration": "報名",
+      "sessions": "議程場次",
+      "speakers": "講者",
+      "exhibitors": "參展商",
+      "sponsors": "贊助商",
+      "badges": "識別證",
+      "gallery": "相簿",
+      "website": "網站",
+      "api_access": "API 存取",
+      "integrations": "整合",
+      "enterprise": "SSO 與 SCIM",
+      "agency": "代理",
+      "virtual": "線上活動",
+      "advanced_seating": "進階座位",
+      "ai_seating": "AI 排座",
+      "analytics_pro": "進階分析"
+    }
+  },
+  "billingPortal": {
+    "eyebrow": "測試計費",
+    "title": "選擇方案",
+    "description": "僅限開發環境。此頁面代替計費服務商的入口，並傳送相同的 Webhook。",
+    "planLegend": "方案",
+    "switch": "變更方案",
+    "cancel": "取消訂閱",
+    "back": "不變更並返回",
+    "chooseError": "請選擇要變更的方案。"
+  },
+  "seatingLibrary": {
+    "title": "座位圖庫",
+    "description": "你從活動中儲存的座位圖。可從其中之一建立新活動；每個活動都保有自己的副本。",
+    "deleted": "座位圖已從圖庫移除。使用過它的活動仍保有各自的副本。",
+    "emptyTitle": "你的座位圖庫是空的",
+    "emptyHint": "開啟某個活動的座位圖並選擇「儲存座位圖」，即可保存在這裡。",
+    "emptyViewer": "從活動中儲存的座位圖會顯示在這裡。",
+    "toEvents": "前往活動",
+    "startTitle": "從座位圖建立新活動",
+    "startDescription": "新活動會取得一份座位圖副本。之後你為座位定價並開始銷售。",
+    "layout": "座位圖",
+    "layoutOption": "{name}（{seats, plural, other {# 個座位}}）",
+    "eventName": "活動名稱",
+    "profile": "活動類型",
+    "timezone": "時區",
+    "startsAt": "開始",
+    "endsAt": "結束",
+    "start": "建立活動",
+    "fixErrors": "請修正標示的欄位。",
+    "errors": {
+      "layoutId": "請選擇座位圖。",
+      "name": "請為活動命名（2 到 160 個字元）。",
+      "slug": "已有同名活動。請換一個名稱。",
+      "profile": "請選擇有座位的活動類型。",
+      "startsAt": "請輸入活動開始時間。",
+      "endsAt": "請輸入活動結束時間，須晚於開始時間。",
+      "layoutName": "請為座位圖命名（最多 120 個字元）。"
+    },
+    "listTitle": "已儲存的座位圖",
+    "seats": "{count, plural, other {# 個座位}}",
+    "rows": "{count, plural, other {# 排}}",
+    "tables": "{count, plural, other {# 桌}}",
+    "withImage": "附平面圖圖片",
+    "usedBy": "{count, plural, =0 {尚未被活動使用} other {被 # 個活動使用}}",
+    "updated": "更新於 {date}",
+    "renameLabel": "{name} 的名稱",
+    "rename": "重新命名",
+    "renamed": "已重新命名。",
+    "startFrom": "用它建立活動",
+    "startFromNamed": "用 {name} 建立活動",
+    "delete": "移除",
+    "deleteNamed": "移除 {name}"
+  },
+  "warehouse": {
+    "title": "數據分析",
+    "description": "彙整所有活動：報名、票券、報到與未到場隨時間的變化，以及表現最好的活動。",
+    "filters": "篩選",
+    "from": "開始日期",
+    "to": "結束日期",
+    "event": "活動",
+    "allEvents": "所有活動",
+    "apply": "套用",
+    "timeZoneNote": "日期依貴組織時區 {timeZone} 的日曆日計算。",
+    "rangeErrors": {
+      "invalid_date": "請依年、月、日輸入日期。",
+      "from_after_to": "結束日期早於開始日期。",
+      "range_too_long": "請選擇不超過兩年的期間。"
+    },
+    "periodLabel": "顯示方式",
+    "view": {
+      "day": "按日",
+      "week": "按週",
+      "month": "按月"
+    },
+    "emptyTitle": "此期間尚無資料",
+    "emptyBody": "這些日期之間沒有報名、票券或報到。請嘗試更長的期間或其他活動；新訂單會在幾秒內顯示於此。",
+    "emptyAction": "顯示最近 12 個月",
+    "figures": {
+      "label": "此期間合計",
+      "registrations": "報名",
+      "ticketsIssued": "已開立付費票券",
+      "tickets": "售出票券",
+      "compTickets": "免費票券",
+      "checkins": "報到",
+      "noShows": "未到場"
+    },
+    "revenue": {
+      "title": "營收",
+      "net": "淨銷售額（{currency}）",
+      "grossRefunds": "已付 {gross}，已退 {refunds}",
+      "byPeriod": "依期間的營收",
+      "noRevenue": "此期間沒有銷售或退款。",
+      "period": "期間",
+      "currency": "幣別",
+      "gross": "已付",
+      "refunds": "已退",
+      "netColumn": "淨額",
+      "topEvents": "營收最高的活動",
+      "eventColumn": "活動",
+      "weekOf": "{day} 起的一週"
+    },
+    "trend": "趨勢",
+    "chartTitle": "報名、付費票券與報到的趨勢",
+    "byPeriod": "依期間的數據",
+    "period": "期間",
+    "topEvents": "表現最好的活動",
+    "noTopEvents": "此期間沒有活動有報名。",
+    "definitions": "售出票券為付費票券減去已退款票券。報到依每張票券首次入場的日期計一次。未到場為從未報到的有效票券，計入活動結束當天。",
+    "definitionsFinance": "售出票券為付費票券減去已退款票券。報到依每張票券首次入場的日期計一次。未到場為從未報到的有效票券，計入活動結束當天。營收為買家支付金額減去退款，依幣別分別計算，未扣除平台費用（見財務）。",
+    "rebuildTitle": "重建數據分析",
+    "rebuildBody": "依您的訂單與報到重新計算本頁所有數據，每次處理幾個活動。變更組織時區後請使用此功能。",
+    "rebuild": "重建",
+    "rebuilding": "正在啟動…",
+    "rebuildStarted": "已開始重建",
+    "rebuildStartedBody": "數據正在背景重新計算；在此期間本頁仍可使用。",
+    "rebuildRunning": "已有重建正在進行。",
+    "runStatus": {
+      "running": "進行中",
+      "done": "已完成",
+      "failed": "失敗",
+      "cancelled": "已取消"
+    },
+    "runProgress": "{events, plural, other {已檢查 # 個活動}}，{written, plural, other {已更新 # 個}}"
+  },
+  "integrations": {
+    "title": "整合",
+    "description": "串接你已在使用的工具。聯絡人和記錄會雙向保持一致，有需要處理的情況時會通知你。",
+    "tabsLabel": "整合區塊",
+    "tabs": {
+      "connections": "連線",
+      "errors": "錯誤"
+    },
+    "cancelled": "已取消連線。",
+    "offTitle": "這裡尚未開啟整合功能",
+    "offDescription": "連線需要整合服務，而本網站尚未設定。請聯絡平台管理員。",
+    "noneTitle": "目前沒有可串接的整合",
+    "noneDescription": "新的整合一推出，就會顯示在此頁面。",
+    "connectors": {
+      "demo": {
+        "description": "用來試用整合的測試聯絡人應用程式：聯絡人會與你的 CRM 雙向同步。僅限測試環境。"
+      }
+    },
+    "sandboxBadge": "測試",
+    "account": "帳戶",
+    "lastSync": "上次同步",
+    "never": "從未",
+    "openErrors": "未解決的錯誤",
+    "openErrorCount": "{count, plural, other {# 筆記錄需要處理}}",
+    "noErrors": "無",
+    "notInPlan": "不在你的方案內",
+    "manage": "管理",
+    "manageNamed": "管理 {name}",
+    "connect": "串接",
+    "connectNamed": "串接 {name}",
+    "reconnect": "重新串接",
+    "reconnectNamed": "重新串接 {name}",
+    "readOnly": "只有擁有者和管理員可以串接或變更整合。",
+    "breadcrumb": "導覽路徑",
+    "objects": {
+      "contacts": "聯絡人"
+    },
+    "fields": {
+      "email": "電子郵件",
+      "name": "姓名"
+    },
+    "status": {
+      "none": "未串接",
+      "pending": "等待授權",
+      "active": "已串接",
+      "paused": "已暫停",
+      "revoked": "已中斷",
+      "failed": "串接失敗"
+    },
+    "runStatus": {
+      "queued": "排隊中",
+      "running": "進行中",
+      "succeeded": "已同步",
+      "partial": "已同步（有錯誤）",
+      "failed": "失敗",
+      "cancelled": "已取消"
+    },
+    "errorsFeedback": {
+      "unavailable": "這裡無法使用此整合。",
+      "provider_unavailable": "無法連上服務商。請幾分鐘後再試。",
+      "not_approved": "服務商尚未確認連線。請在對方完成串接後再檢查一次。",
+      "denied": "連線未獲授權，因此沒有串接任何項目。",
+      "expired": "這個串接連結已過期。請重新點選「串接」開始。",
+      "validation_failed": "有些資訊需要修正。",
+      "forbidden": "你沒有存取權限。",
+      "module_not_enabled": "你的方案不包含整合功能。",
+      "not_found": "找不到相關內容。",
+      "conflict": "此整合已經串接。",
+      "invalid_state": "現在無法執行此操作。",
+      "impersonation_blocked": "以成員身分操作的員工無法串接整合。",
+      "read_only_freeze": "排定維護期間暫停變更。請在維護結束後再試。",
+      "internal": "我們這邊出了點問題。"
+    },
+    "detail": {
+      "title": "整合",
+      "syncNow": "立即同步",
+      "syncing": "同步即將開始",
+      "connected": "{name} 已串接。首次同步即將開始。",
+      "sync": {
+        "queued": "同步已開始。稍後重新整理即可查看結果。",
+        "already": "已有一次同步正在進行。"
+      },
+      "done": {
+        "paused": "同步已暫停。",
+        "resumed": "同步已恢復。",
+        "interval": "同步排程已儲存。",
+        "disconnected": "已中斷連線。不再同步任何內容，並已在服務商端撤銷存取權限。"
+      },
+      "revoked": {
+        "user": "已於 {when} 中斷連線。",
+        "provider": "服務商自 {when} 起不再接受此連線，因此同步已停止。請重新串接以繼續。"
+      },
+      "pending": "正在等待服務商授權此連線。",
+      "checkConnection": "檢查連線",
+      "cancelConnect": "取消",
+      "confirmDisconnect": "要中斷 {name} 的連線嗎？",
+      "confirmDisconnectBody": "同步會立即停止，並在服務商端撤銷 Yayatoh 的存取權限。已同步的記錄維持不變。",
+      "disconnect": "中斷連線",
+      "keep": "保持連線",
+      "statusTitle": "狀態",
+      "connectedAt": "串接時間",
+      "nextSync": "下次同步",
+      "interval": "同步頻率",
+      "saveInterval": "儲存排程",
+      "pause": "暫停同步",
+      "resume": "恢復同步",
+      "intervals": {
+        "15": "每 15 分鐘",
+        "60": "每小時",
+        "360": "每 6 小時",
+        "1440": "每天"
+      }
+    },
+    "mapping": {
+      "sectionTitle": "欄位對應",
+      "sectionHelp": "選擇由哪個欄位填入哪個欄位。每次儲存都會產生新版本，下次同步時使用。",
+      "title": {
+        "pull": "匯入 Yayatoh",
+        "push": "匯出至服務商"
+      },
+      "help": {
+        "pull": "以服務商的欄位填入 Yayatoh 的欄位。",
+        "push": "以 Yayatoh 的欄位填入服務商的欄位。"
+      },
+      "version": "版本 {version}",
+      "saved": "對應已儲存為版本 {version}。下次同步時使用。",
+      "invalid": "此對應暫時無法儲存。請檢查下方標示的欄位。",
+      "required": "必填",
+      "source": "來源",
+      "transform": "轉換",
+      "default": "空白時使用",
+      "notMapped": "— 未對應 —",
+      "transforms": {
+        "none": "維持原樣",
+        "trim": "去除空白",
+        "lowercase": "小寫",
+        "uppercase": "大寫",
+        "title_case": "每個字首大寫",
+        "first_word": "第一個字",
+        "last_word": "最後一個字",
+        "to_number": "數字",
+        "to_boolean": "是或否",
+        "to_date": "日期"
+      },
+      "save": {
+        "pull": "儲存匯入對應",
+        "push": "儲存匯出對應"
+      },
+      "issue": {
+        "missing_required": "請選擇 {field} 的來源：此項必填。",
+        "unknown_source": "服務商沒有這個欄位。",
+        "unknown_target": "無法填入 {field}。",
+        "duplicate_target": "{field} 被填入兩次。",
+        "other": "請檢查此欄位。"
+      }
+    },
+    "runs": {
+      "title": "最近的同步",
+      "caption": "此整合最近的同步",
+      "empty": "還沒有同步紀錄。串接後不久就會開始首次同步。",
+      "when": "開始時間",
+      "trigger": "發起方",
+      "status": "結果",
+      "pulled": "匯入",
+      "pushed": "匯出",
+      "skipped": "未變更",
+      "failed": "錯誤",
+      "error": "問題",
+      "triggers": {
+        "manual": "立即同步",
+        "schedule": "排程",
+        "retry": "重試"
+      }
+    },
+    "codes": {
+      "auth_revoked": "服務商不再接受此連線",
+      "invalid_token": "服務商不再接受此連線",
+      "auth_failed": "服務商拒絕了連線",
+      "invalid_value": "某個值不符合其欄位",
+      "missing_required": "必填欄位是空的",
+      "transform_failed": "某個值無法轉換",
+      "duplicate_record": "兩筆記錄指向同一位聯絡人",
+      "write_failed": "無法儲存到 Yayatoh",
+      "push_failed": "無法傳送到服務商",
+      "network": "無法連上服務商",
+      "lease_expired": "同步意外停止",
+      "disconnected": "因中斷連線而停止",
+      "paused": "因暫停而停止",
+      "sync_failed": "同步失敗",
+      "unknown_connector": "此整合已無法使用",
+      "other": "錯誤（{code}）"
+    },
+    "inbox": {
+      "title": "整合錯誤",
+      "description": "無法同步的記錄，依原因分組。系統會在一段時間內自動重試。請在來源端修正記錄後點選「重試」，或略過不需要的記錄。",
+      "retried": "{count, plural, =0 {沒有可重試的項目：這些連線目前未啟用。} other {# 筆記錄將在下次同步時重試。}}",
+      "dismissed": "{count, plural, other {已略過 # 筆記錄。}}",
+      "filterLabel": "顯示錯誤",
+      "status": {
+        "open": "未解決",
+        "resolved": "已解決",
+        "dismissed": "已略過"
+      },
+      "empty": {
+        "open": "沒有未解決的錯誤",
+        "resolved": "目前沒有已解決的錯誤",
+        "dismissed": "目前沒有已略過的錯誤"
+      },
+      "emptyOpenHelp": "全部都已同步。若有記錄無法同步，會連同下一步顯示在這裡。",
+      "backToConnections": "前往連線",
+      "groupTitle": "{connector}：{step} · {count, plural, other {# 筆記錄}}",
+      "steps": {
+        "auth": "連線",
+        "pull": "從服務商讀取",
+        "map": "欄位對應",
+        "write": "儲存到 Yayatoh",
+        "push": "傳送到服務商"
+      },
+      "field": "欄位：{field}",
+      "lastSeen": "最近一次出現：{when}",
+      "retryAll": "全部重試",
+      "retryAllNamed": "全部重試：{group}",
+      "dismissAll": "全部略過",
+      "dismissAllNamed": "全部略過：{group}",
+      "recordsCaption": "記錄：{group}",
+      "record": "記錄",
+      "object": "類型",
+      "objectDirection": "{object}（{direction}）",
+      "directions": {
+        "pull": "匯入",
+        "push": "匯出"
+      },
+      "wholeConnection": "整個連線",
+      "attempts": "嘗試次數",
+      "nextRetry": "下次自動重試",
+      "closedAt": "關閉時間",
+      "manualRetry": "等待你處理",
+      "actions": "操作",
+      "retry": "重試",
+      "retryNamed": "重試 {record}",
+      "dismiss": "略過",
+      "dismissNamed": "略過 {record}",
+      "more": "{count, plural, other {另有 # 筆記錄未顯示。}}"
+    },
+    "fakeConsent": {
+      "title": "測試授權",
+      "eyebrow": "測試服務商",
+      "heading": "要將 {name} 串接到 Yayatoh 嗎？",
+      "body": "{name} 是測試服務商。允許後，Yayatoh 可代表你讀取和寫入以下內容：",
+      "allow": "允許",
+      "deny": "拒絕"
     }
   }
 }

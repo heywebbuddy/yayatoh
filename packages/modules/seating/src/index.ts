@@ -10,6 +10,29 @@ export {
   seatsOccupiedTx,
   unassignSeatsCommand,
 } from './assignments.ts';
+// M6.11a: best available and the ADA engine (companion seats).
+export {
+  adoptSeatHoldTx,
+  BEST_AVAILABLE_HOLD_MINUTES,
+  BestAvailableHoldDto,
+  companionSeatsTx,
+  companionSuggestions,
+  HeldSeatDto,
+  holdBestAvailableCommand,
+  holdBestAvailableStaffCommand,
+  holdBestAvailableTx,
+  holdIdForToken,
+  MAX_BEST_AVAILABLE,
+  MAX_COMPANION_SEATS,
+  MAX_SECTION_SCORE,
+  releaseBestAvailableCommand,
+  SelectionPageDto,
+  SelectionSettingsDto,
+  selectionPageQuery,
+  selectionSettingsTx,
+  setCompanionSeatsCommand,
+  setSelectionSettingsCommand,
+} from './best-available.ts';
 export { BulkAssignTarget, seatAssignAction, seatAssignBulk } from './bulk-assign.ts';
 // M4.3b cards and exports: place, escort and table cards (PDF), the seating chart and meal counts.
 export {
@@ -22,14 +45,39 @@ export {
   seatingCardsQuery,
 } from './cards.ts';
 export { type CardsCopy, type CardsHtmlInput, cardsHtml } from './cards-document.ts';
+// M6.11b: sales channels and allotments, layout revisions, the venue layout library.
+export {
+  allotSeatsCommand,
+  assertSeatChannelsTx,
+  ChannelDto,
+  ChannelsPageDto,
+  channelKeptSeatsTx,
+  deleteSeatChannelCommand,
+  MAX_ALLOT_SEATS,
+  MAX_CHANNELS,
+  orderChannelTx,
+  recordChannelOrderTx,
+  resolveSaleChannelTx,
+  saveSeatChannelCommand,
+  seatChannelsQuery,
+} from './channels.ts';
 export { type ChartKey, publicDoc } from './chart.ts';
 export { instantiateSeatingTx, SeatingSnapshot, seatingSnapshotTx } from './copy.ts';
+export { seatingDataSubjects } from './data-subject.ts';
 export {
   ASSIGN_SEAT_STATES,
   type AssignSeatState,
   assignSeatState,
   pickSeats,
 } from './domain/assign.ts';
+export {
+  type BestAvailableFailure,
+  type BestAvailablePick,
+  type BestAvailableRequest,
+  bestAvailable,
+  isTogether,
+  type PlanSeat,
+} from './domain/best-available.ts';
 export {
   BULK_ASSIGN_FAILURES,
   BULK_ASSIGN_WARNINGS,
@@ -83,6 +131,16 @@ export {
   type TableCard,
   tableCards,
 } from './domain/cards.ts';
+export {
+  type ChannelRef,
+  channelHolds,
+  normalizeChannelCode,
+  SALE_VIAS,
+  type SaleVia,
+  saleChannel,
+  seatNumberList,
+  sellableThrough,
+} from './domain/channels.ts';
 // M4.4a guest seat finder: the party's page (link), PIN mode and the `PartyCredentials` port.
 export { type FinderGuest, type FinderParty, partyOnChart } from './domain/guest-finder.ts';
 // M4.3a guest seating: parties and guests at tables (the OccupantDirectory port, guests side).
@@ -107,7 +165,18 @@ export {
   seatCounts,
 } from './domain/live.ts';
 export {
+  diffDocs,
+  type InUseSeat,
+  type LayoutDiff,
+  planRestore,
+  RESTORE_CONFLICTS,
+  type RestoreConflict,
+  type RestoreOutcome,
+  type RestorePlan,
+} from './domain/revisions.ts';
+export {
   activeAdaRule,
+  activeCompanionRule,
   adaReleaseAt,
   blockingHits,
   evaluateSeatRules,
@@ -195,6 +264,12 @@ export {
   setEventLayoutCommand,
 } from './layouts.ts';
 export {
+  deleteLayoutCommand,
+  LibraryLayoutDto,
+  layoutLibraryQuery,
+  renameLayoutCommand,
+} from './library.ts';
+export {
   chartForDate,
   createSeatFeed,
   listenForSeatChanges,
@@ -217,7 +292,18 @@ export { seatedAttendeeIdsTx } from './participation.ts';
 export { partySeatsTx } from './party-seats.ts';
 export { privateColumns } from './private-columns.ts';
 export {
+  DIFF_LIST_LIMIT,
+  KEEP_REVISIONS,
+  layoutRevisionQuery,
+  layoutRevisionsQuery,
+  RevisionDetailDto,
+  RevisionSummaryDto,
+  RevisionsPageDto,
+  restoreLayoutRevisionCommand,
+} from './revisions.ts';
+export {
   checkSeatRulesTx,
+  MAX_COMPANIONS_PER_ACCESSIBLE,
   MAX_RELEASE_DAYS,
   MAX_SEATS_PER_ORDER,
   RuleHitDto,
@@ -228,9 +314,13 @@ export {
 } from './rules.ts';
 export {
   BLOCK_REASONS,
+  CHANNEL_CODE,
+  CHANNEL_KINDS,
+  CODE_CHANNEL_KINDS,
   EVENT_LAYOUT_STATUSES,
   FINDER_MODES,
   MAX_GROUP_LABEL,
+  REVISION_KINDS,
   RULE_SEVERITIES,
   SEAT_BLOCK_REASONS,
   SEATING_RULE_KINDS,

@@ -1,5 +1,6 @@
 import * as ai from '@yayatoh/ai';
 import * as alerts from '@yayatoh/alerts';
+import * as analytics from '@yayatoh/analytics';
 import * as assistance from '@yayatoh/assistance';
 import * as attendees from '@yayatoh/attendees';
 import * as audiences from '@yayatoh/audiences';
@@ -18,6 +19,7 @@ import * as engagement from '@yayatoh/engagement';
 import * as events from '@yayatoh/events';
 import * as forms from '@yayatoh/forms';
 import * as guests from '@yayatoh/guests';
+import * as integrations from '@yayatoh/integrations';
 import {
   type Command,
   type Ctx,
@@ -48,6 +50,7 @@ import * as templates from '@yayatoh/templates';
 import * as tenancy from '@yayatoh/tenancy';
 import * as ticketing from '@yayatoh/ticketing';
 import * as venues from '@yayatoh/venues';
+import * as webhooks from '@yayatoh/webhooks';
 import { sql } from 'drizzle-orm';
 import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
 import { type OrgFixture, ports, systemCtx, twoOrgs } from '../src/index.ts';
@@ -62,6 +65,9 @@ const MODULES = {
   // Batch 3d merge: M3.2b's alert engine and M3.2a's Command Center (M3.4a and M3.5b grew
   // checkin and notifications, already listed).
   alerts,
+  // Batch 3i merge: M6.2a's warehouse, M6.4a's integrations and M6.3b's webhooks (M6.1x, M6.3a,
+  // M6.6a and M6.11x grew modules already listed).
+  analytics,
   // Batch 3g merge: M3.3b's guest assistance queue (M3.3a grew checkin and the Command Center).
   assistance,
   attendees,
@@ -84,6 +90,7 @@ const MODULES = {
   events,
   forms,
   guests,
+  integrations,
   marketing,
   marketplace,
   media,
@@ -103,6 +110,7 @@ const MODULES = {
   tenancy,
   ticketing,
   venues,
+  webhooks,
 };
 
 type AnyCommand = Command<unknown, unknown, unknown, unknown>;

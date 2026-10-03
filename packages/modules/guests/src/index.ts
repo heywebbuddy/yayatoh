@@ -15,6 +15,9 @@ export {
   setCollectorCommand,
   submitContactCommand,
 } from './collector.ts';
+// M6.1a: contact merges move this module's references (ADR 0023).
+export { guestsContactOwner } from './contact-merge.ts';
+export { guestsDataSubjects } from './data-subject.ts';
 // M4.4b: names for the day of (check-in, kiosk, A–Z board).
 export { guestNamesTx } from './day-of.ts';
 export {

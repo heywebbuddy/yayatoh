@@ -30,6 +30,8 @@ export const PERMISSIONS = [
    */
   'attendees:export_private',
   'contacts:read',
+  /** Merge duplicate contacts and undo merges (M6.1a): moves orders, tickets and history. */
+  'contacts:merge',
   'finance:read',
   /** Resolve reconciliation differences (M1.6e). */
   'finance:reconcile',
@@ -80,6 +82,17 @@ export const PERMISSIONS = [
   'tables:read',
   /** Name a purchased table's guests by hand and send naming reminders (M4.2b). */
   'tables:write',
+  /** Create and delete sandbox orgs linked to this org (M6.3a). Owners and admins. */
+  'sandbox:manage',
+  /** Webhook endpoints, their signing secrets, test sends and replays (M6.3b). Owners and admins. */
+  'webhooks:manage',
+  /** See the org's integrations: connections, sync history, mappings and the errors inbox (M6.4a). */
+  'integrations:read',
+  /**
+   * Connect, map, sync, pause and disconnect third-party integrations, and work the errors inbox
+   * (M6.4a). Org data leaves through them: owners and admins only.
+   */
+  'integrations:manage',
 ] as const;
 export type Permission = (typeof PERMISSIONS)[number];
 
@@ -104,6 +117,7 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'guests:write',
     'attendees:export',
     'contacts:read',
+    'contacts:merge',
     'marketing:read',
     'marketing:write',
     'checkin:scan',
@@ -116,6 +130,7 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'assistance:manage',
     'tables:read',
     'tables:write',
+    'integrations:read',
   ],
   finance: [
     'org:read',
@@ -313,7 +328,7 @@ export const TEAM_EVENT_ROLES = ['co_host', 'planner'] as const;
 export type TeamEventRole = (typeof TEAM_EVENT_ROLES)[number];
 
 /** Permissions that no event role ever grants, whatever its wildcards (defence in depth). */
-const NEVER_EVENT_SCOPED = /^(platform|payouts|billing|members|api_keys|audit|privacy|org):/;
+const NEVER_EVENT_SCOPED = /^(platform|payouts|billing|members|api_keys|sandbox|webhooks|audit|privacy|org):/;
 
 function grants(entry: string, permission: string): boolean {
   if (entry === permission) return true;

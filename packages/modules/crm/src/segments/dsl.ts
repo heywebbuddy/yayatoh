@@ -149,6 +149,55 @@ export const EngagementCondition = z
   })
   .strict();
 
+/**
+ * M6.1b contact stats: engagement score (0–100), no-show propensity (percent, 0–100), sessions
+ * attended, campaigns opened, and the org's RFM quintiles (1–5). `rfmMonetary` ranks spending,
+ * so it counts as a money condition (finance permission), like `ltv`.
+ */
+export const STATS_METRICS = [
+  'engagement',
+  'noShowPct',
+  'sessionsAttended',
+  'campaignsOpened',
+  'rfmRecency',
+  'rfmFrequency',
+  'rfmMonetary',
+] as const;
+export type StatsMetric = (typeof STATS_METRICS)[number];
+/** The largest value each metric can take (counts are open-ended). */
+export const STATS_METRIC_MAX: Readonly<Record<StatsMetric, number>> = {
+  engagement: 100,
+  noShowPct: 100,
+  sessionsAttended: 1_000_000,
+  campaignsOpened: 1_000_000,
+  rfmRecency: 5,
+  rfmFrequency: 5,
+  rfmMonetary: 5,
+};
+
+export const StatsCondition = z
+  .object({
+    type: z.literal('stats'),
+    metric: z.enum(STATS_METRICS),
+    op: z.enum(COMPARISONS),
+    value: z.int().min(0).max(1_000_000),
+  })
+  .strict()
+  .refine((v) => v.value <= STATS_METRIC_MAX[v.metric], {
+    message: 'Value out of range',
+    path: ['value'],
+  });
+
+/** Lifetime value (M6.1b): paid orders as the buyer, net of refunds, in one currency, all time. */
+export const LifetimeValueCondition = z
+  .object({
+    type: z.literal('ltv'),
+    currency: z.string().regex(/^[A-Z]{3}$/),
+    op: z.enum(COMPARISONS),
+    amountMinor: z.int().min(0).max(1_000_000_000_000),
+  })
+  .strict();
+
 export const SegmentCondition = z.discriminatedUnion('type', [
   ParticipationCondition,
   SpendCondition,
@@ -156,6 +205,8 @@ export const SegmentCondition = z.discriminatedUnion('type', [
   LabelCondition,
   TotalsCondition,
   SeenCondition,
+  StatsCondition,
+  LifetimeValueCondition,
   EngagementCondition,
 ]);
 export type SegmentCondition = z.infer<typeof SegmentCondition>;
@@ -167,6 +218,8 @@ export const CONDITION_TYPES = [
   'label',
   'totals',
   'seen',
+  'stats',
+  'ltv',
   'engagement',
 ] as const;
 export type ConditionType = (typeof CONDITION_TYPES)[number];
@@ -256,7 +309,21 @@ export function usesProfileConditions(def: SegmentDefinition): boolean {
   let found = false;
   const walk = (n: SegmentNode) => {
     if (n.type === 'group') n.conditions.forEach(walk);
-    else if (n.type === 'totals' || n.type === 'seen') found = true;
+    else if (n.type === 'totals' || n.type === 'seen' || n.type === 'stats' || n.type === 'ltv') found = true;
+  };
+  walk(def.root);
+  return found;
+}
+
+/**
+ * Does the definition use money (M6.1b): lifetime value or the RFM monetary quintile? Those need
+ * the finance permission to preview or save, so a role without it learns nothing about spending.
+ */
+export function usesMoneyConditions(def: SegmentDefinition): boolean {
+  let found = false;
+  const walk = (n: SegmentNode) => {
+    if (n.type === 'group') n.conditions.forEach(walk);
+    else if (n.type === 'ltv' || (n.type === 'stats' && n.metric === 'rfmMonetary')) found = true;
   };
   walk(def.root);
   return found;

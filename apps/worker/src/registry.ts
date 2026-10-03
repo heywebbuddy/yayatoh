@@ -1,9 +1,12 @@
 import { alertEvaluator, connectedConferenceSources } from '@yayatoh/alerts';
+import { warehouseFromEnv, warehouseIngestor } from '@yayatoh/analytics';
 import { attendeeMessageMailer } from '@yayatoh/attendees';
-import { participationProjector } from '@yayatoh/audiences';
+import { contactSignalsSubscriber, participationProjector } from '@yayatoh/audiences';
 import { journeySubscribers } from '@yayatoh/automations';
+import { campaignsTimeline } from '@yayatoh/campaigns';
 import {
   chatReportSignals,
+  checkinTimeline,
   checkoutRiskSignals,
   derivedStaffAlerts,
   fraudSignalAlerts,
@@ -24,13 +27,19 @@ import { findEventTx, portalInviteMailer } from '@yayatoh/events';
 import { registrationResumeMailer } from '@yayatoh/forms';
 import { invitationMailer as guestInvitationMailer } from '@yayatoh/guests';
 import { listingsProjector } from '@yayatoh/marketplace';
-import { programMediaCleaner, speakerPhotoApprover } from '@yayatoh/media';
-import { announcementMailer, contactWroteNotifier, threadReplyMailer } from '@yayatoh/messaging';
+import { programMediaCleaner, speakerPhotoApprover, subjectErasedMediaCleaner } from '@yayatoh/media';
+import {
+  announcementMailer,
+  contactWroteNotifier,
+  messagingTimeline,
+  threadReplyMailer,
+} from '@yayatoh/messaging';
 import { createNotifier } from '@yayatoh/notifications';
 import {
   creditNoteMailer,
   invoiceMailer,
   orderLinkMailer,
+  ordersTimeline,
   postponementMailer,
   refundDeclineMailer,
   refundMailer,
@@ -43,6 +52,8 @@ import {
 } from '@yayatoh/orders';
 import { payoutDestinationMailer } from '@yayatoh/payments';
 import { type Subscriber, signLinkToken } from '@yayatoh/platform';
+import { defaultResolver } from '@yayatoh/platform/ssrf';
+import { erasureConnectorNotifier } from '@yayatoh/privacy';
 import { cfpMailer, portalSpeakerCleanup, taskReminderMailer } from '@yayatoh/program';
 import {
   decisionMailer,
@@ -54,7 +65,7 @@ import {
 } from '@yayatoh/registration';
 import { analyticsForwarder, metricsProjector, postgresAnalyticsSink } from '@yayatoh/reports';
 import { finderCodeMailer, releaseCancelledSeats } from '@yayatoh/seating';
-import { surveyMailer } from '@yayatoh/surveys';
+import { surveyMailer, surveysTimeline } from '@yayatoh/surveys';
 import { impersonationNotice, invitationMailer, orgStatusNotice } from '@yayatoh/tenancy';
 import {
   claimLinkMailer,
@@ -65,7 +76,11 @@ import {
   transferMailer,
   walletPassSync,
 } from '@yayatoh/ticketing';
+import { configureWebhooks, webhookPublisherFromEnv, webhookPublisherSubscriber } from '@yayatoh/webhooks';
 import { z } from 'zod';
+import { contactStatsJob } from './contact-stats.ts';
+import { duplicateScanJob } from './duplicates.ts';
+import { syncJob } from './integrations.ts';
 import { defineJob } from './jobs.ts';
 import { journeyJob } from './journeys.ts';
 
@@ -77,7 +92,8 @@ export const heartbeat = defineJob({
 });
 
 /** Composition root for jobs and event subscribers. Modules register theirs here as they land. */
-export const JOBS = [heartbeat, journeyJob()] as const;
+// M6.4a: integration syncs (the fake port in dev/CI; off in production until Nango is configured).
+export const JOBS = [heartbeat, journeyJob(), duplicateScanJob(), contactStatsJob(), syncJob()] as const;
 export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] {
   const secret = env.APP_TOKEN_SECRET;
   const appOrigin = env.NEXT_PUBLIC_APP_ORIGIN;
@@ -85,6 +101,9 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     throw new Error('APP_TOKEN_SECRET and NEXT_PUBLIC_APP_ORIGIN are required by the worker');
   // Subscribers queue messages; the notifications dispatcher sends them (main.ts).
   const notifier = createNotifier();
+  // M6.3b: outbound webhooks (Svix, or the fake outside production until the owner's account).
+  const webhooks = webhookPublisherFromEnv(env, appOrigin);
+  configureWebhooks({ publisher: webhooks, resolver: defaultResolver });
   return [
     invitationMailer({ notifier, appOrigin, secret }),
     ticketMailer({ notifier, appOrigin }),
@@ -127,6 +146,9 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     // (M3.2b) replaces `derivedStaffAlerts` here and in apps/web/src/server/scan-staff.ts.
     staffAlertsSubscriber(derivedStaffAlerts),
     programMediaCleaner(),
+    // M6.1c: an erasure's stored files, then the connector hooks (M6.4), after it committed.
+    subjectErasedMediaCleaner(),
+    erasureConnectorNotifier(),
     // M5.3a speaker portal: invitations, task reminders, approved photos.
     portalInviteMailer({ notifier, appOrigin }),
     taskReminderMailer({ notifier, appOrigin }),
@@ -160,6 +182,10 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     participationProjector(),
     // M5.7b: door scans, answered surveys and enrollments become engagement (scores for audiences).
     engagementActivity(),
+    // M6.1a: the person timeline (crm projection), fed by each owning module.
+    ...timelineSubscribers(),
+    // M6.1b: sessions attended and campaigns opened feed the contact stats.
+    contactSignalsSubscriber(),
     listingsProjector({ onChange: (orgId) => revalidatePublicCache(appOrigin, orgId, secret) }),
     // M3.1: metric snapshots and time series, and the analytics sink (Postgres until M6.2).
     // M3.2: each projected change pings the event's Command Center (no figures on the channel).
@@ -169,6 +195,8 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
       },
     }),
     analyticsForwarder(postgresAnalyticsSink),
+    // M6.2a: the analytics warehouse (Postgres rollups, or Tinybird with ANALYTICS_WAREHOUSE).
+    warehouseIngestor(warehouseFromEnv(env)),
     // M3.2: device presence for the Command Center's device widgets (events in pre-show or live).
     deviceBoardPublisher(),
     // M3.2b: the alert engine re-evaluates what each outbox event touched (sends through notifications).
@@ -182,7 +210,14 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     // M4.8e: pledge payments settle their pledges; the donor's summary, invoice and reminders.
     pledgeOutcomesSubscriber,
     pledgeMailer({ notifier, appOrigin }),
+    // M6.3b: public outbox events to the org's webhook endpoints (thin payloads, catalog only).
+    webhookPublisherSubscriber({ publisher: () => webhooks }),
   ];
+}
+
+/** M6.1a: the modules that write the person timeline (the web's dev drain runs the same list). */
+export function timelineSubscribers(): Subscriber[] {
+  return [ordersTimeline(), checkinTimeline(), messagingTimeline(), surveysTimeline(), campaignsTimeline()];
 }
 
 /**

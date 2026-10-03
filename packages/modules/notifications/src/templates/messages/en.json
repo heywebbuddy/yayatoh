@@ -321,6 +321,20 @@
     "program.cfp-rejected": {
       "subject": "About your proposal “{title}”",
       "intro": "Thank you for proposing “{title}” for {eventName}. {org} could not include it in the program this time.{hasNote, select, yes { Note from the organizers: {note}} other {}}"
+    },
+    "privacy.request-code": {
+      "subject": "{code} is your code to confirm your privacy request",
+      "intro": "Enter {code} to confirm your request to {org} for {kind, select, erasure {erasing your personal data} other {a copy of your personal data}}. The code works once and expires in {minutes, plural, one {# minute} other {# minutes}}. If you didn't ask for it, you can ignore this email: nothing happens without the code."
+    },
+    "privacy.archive-ready": {
+      "subject": "Your personal data from {org} is ready",
+      "intro": "{org} answered your request: a copy of the personal data it holds about you is ready as a ZIP file. The link works for {days, plural, one {# day} other {# days}}. The archive is signed, so you can check it was not changed.",
+      "cta": "Download my data"
+    },
+    "privacy.erasure-done": {
+      "subject": "{org} erased your personal data",
+      "intro": "{org} erased your personal data as you asked. Some records must be kept by law (for example paid orders for tax), with your name and email removed; the receipt lists them and why. This is the last email you will get about it.",
+      "cta": "View the receipt"
     }
   },
   "roles": {

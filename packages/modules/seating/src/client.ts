@@ -15,6 +15,15 @@ export {
   type PaperSize,
   sheetLayout,
 } from './domain/cards.ts';
+// M6.11b: sales channels (the organizer's forms and the public map use the same rules).
+export {
+  CHANNEL_KINDS,
+  CODE_CHANNEL_KINDS,
+  channelHolds,
+  normalizeChannelCode,
+  seatNumberList,
+  sellableThrough,
+} from './domain/channels.ts';
 // M4.3a guest seating: fit, VIP zones and the queue, the same in the editor and the commands.
 export {
   declinedSeated,
@@ -42,6 +51,7 @@ export {
 } from './domain/live.ts';
 export {
   activeAdaRule,
+  activeCompanionRule,
   adaReleaseAt,
   blockingHits,
   evaluateSeatRules,

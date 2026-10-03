@@ -35,8 +35,9 @@ export function assertOrgKey(orgId: string, key: string): void {
     parts[0] !== orgId ||
     !UUID.test(parts[1] ?? '') ||
     !(
-      /^[0-9]{1,5}-[0-9a-f]{32}\.(avif|webp|jpg|png|svg|pdf)$/.test(parts[2] ?? '') ||
-      // M5.5a badge PDFs share the first form (`{n}-{hash}.pdf`); M5.3a portal files (as uploaded): `f-{hash}.{ext}`.
+      /^[0-9]{1,5}-[0-9a-f]{32}\.(avif|webp|jpg|png|svg|pdf|zip)$/.test(parts[2] ?? '') ||
+      // M5.5a badge PDFs share the first form (`{n}-{hash}.pdf`), as do M6.1c data-subject archives
+      // (`{org}/{request}/0-{hash}.zip`); M5.3a portal files (as uploaded): `f-{hash}.{ext}`.
       /^f-[0-9a-f]{32}\.(pdf|pptx|docx|jpg|png|webp)$/.test(parts[2] ?? '') ||
       // M4.5b: a gallery upload as the browser sent it, before it is sniffed and re-encoded.
       /^u-[0-9a-f]{32}$/.test(parts[2] ?? '')

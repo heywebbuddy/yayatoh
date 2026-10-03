@@ -17,6 +17,7 @@ export {
   setSalesTargetCommand,
   snoozeAlertCommand,
 } from './api.ts';
+export { alertsDataSubjects } from './data-subject.ts';
 export * from './domain/config.ts';
 export {
   type AlertEvent,

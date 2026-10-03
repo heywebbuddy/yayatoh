@@ -24,6 +24,7 @@ export {
   storeBatchChunkCommand,
 } from './batches.ts';
 export * from './client.ts';
+export { badgesDataSubjects } from './data-subject.ts';
 export { LINK_TTL_MS, signBatchLink, verifyBatchLink } from './link.ts';
 export {
   type BadgePrinter,

@@ -13,6 +13,7 @@
   "dependencies": {
     "@yayatoh/ai": "workspace:*",
     "@yayatoh/alerts": "workspace:*",
+    "@yayatoh/analytics": "workspace:*",
     "@yayatoh/assistance": "workspace:*",
     "@yayatoh/attendees": "workspace:*",
     "@yayatoh/audiences": "workspace:*",
@@ -35,6 +36,7 @@
     "@yayatoh/forms": "workspace:*",
     "@yayatoh/gallery": "workspace:*",
     "@yayatoh/guests": "workspace:*",
+    "@yayatoh/integrations": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
     "@yayatoh/marketing": "workspace:*",
     "@yayatoh/marketplace": "workspace:*",
@@ -57,6 +59,7 @@
     "@yayatoh/ticket-crypto": "workspace:*",
     "@yayatoh/ticketing": "workspace:*",
     "@yayatoh/venues": "workspace:*",
+    "@yayatoh/webhooks": "workspace:*",
     "drizzle-orm": "catalog:"
   },
   "devDependencies": {

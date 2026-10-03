@@ -283,6 +283,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/orgs/{org}/api-key": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The calling API key: scopes, expiry and rate limits (any scope)
+         * @description Who am I, for an org API key (M6.3a): its name, prefix, scopes, expiry (rotation sets one) and the per-minute quotas of the org’s plan. Never the secret. A user session gets `403`.
+         */
+        get: operations["getCurrentApiKey"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/orgs/{org}/attendees/search": {
         parameters: {
             query?: never;
@@ -1204,7 +1224,690 @@ export interface paths {
         trace?: never;
     };
 }
-export type webhooks = Record<string, never>;
+export interface webhooks {
+    "event.archived": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * An event was archived.
+         * @description It is hidden from lists; its data is kept. `from` and `to` are the event’s status before and after.
+         *
+         *     Version 1. Sent as a Standard Webhooks message (see the verification guide).
+         */
+        post: operations["webhook_event_archived_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "event.cancelled": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * An event was cancelled.
+         * @description Refunds follow the organizer’s policy (`order.refunded` per order). `from` and `to` are the event’s status before and after.
+         *
+         *     Version 1. Sent as a Standard Webhooks message (see the verification guide).
+         */
+        post: operations["webhook_event_cancelled_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "event.completed": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * An event was marked as completed.
+         * @description It is over; reports are final. `from` and `to` are the event’s status before and after.
+         *
+         *     Version 1. Sent as a Standard Webhooks message (see the verification guide).
+         */
+        post: operations["webhook_event_completed_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "event.created": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * An event was created (new, duplicated or from a template).
+         * @description The event starts as a draft. `profile` is its kind (concert, gala, conference…).
+         *
+         *     Version 1. Sent as a Standard Webhooks message (see the verification guide).
+         */
+        post: operations["webhook_event_created_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "event.occurrence_cancelled": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * One date of a recurring event was cancelled.
+         * @description `startsAt` is when the cancelled date was due to start.
+         *
+         *     Version 1. Sent as a Standard Webhooks message (see the verification guide).
+         */
+        post: operations["webhook_event_occurrence_cancelled_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "event.postponed": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * An event was postponed.
+         * @description The date is to be announced; ticket holders keep their tickets. `from` and `to` are the event’s status before and after.
+         *
+         *     Version 1. Sent as a Standard Webhooks message (see the verification guide).
+         */
+        post: operations["webhook_event_postponed_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "event.published": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * An event was published.
+         * @description It is on sale and visible according to its visibility. `from` and `to` are the event’s status before and after.
+         *
+         *     Version 1. Sent as a Standard Webhooks message (see the verification guide).
+         */
+        post: operations["webhook_event_published_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "event.rescheduled": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * A postponed event has a new date.
+         * @description Read the event for its new `startsAt`. `from` and `to` are the event’s status before and after.
+         *
+         *     Version 1. Sent as a Standard Webhooks message (see the verification guide).
+         */
+        post: operations["webhook_event_rescheduled_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "event.unpublished": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * An event was taken offline.
+         * @description It went back to draft; its page and sales are closed. `from` and `to` are the event’s status before and after.
+         *
+         *     Version 1. Sent as a Standard Webhooks message (see the verification guide).
+         */
+        post: operations["webhook_event_unpublished_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "event.updated": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * An event’s details changed.
+         * @description `fields` names what changed (for example `startsAt`); read the event for the new values.
+         *
+         *     Version 1. Sent as a Standard Webhooks message (see the verification guide).
+         */
+        post: operations["webhook_event_updated_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "form.registration_submitted": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * A registration form was submitted.
+         * @description The answers are never in the payload; they stay in the console. `formVersion` is the form version answered.
+         *
+         *     Version 1. Sent as a Standard Webhooks message (see the verification guide).
+         */
+        post: operations["webhook_form_registration_submitted_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "order.dispute_closed": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * A dispute was decided.
+         * @description A lost dispute cancels the order’s live tickets.
+         *
+         *     Version 1. Sent as a Standard Webhooks message (see the verification guide).
+         */
+        post: operations["webhook_order_dispute_closed_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "order.disputed": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * A buyer disputed a payment (chargeback).
+         * @description Evidence can be submitted from the console before the provider’s deadline.
+         *
+         *     Version 1. Sent as a Standard Webhooks message (see the verification guide).
+         */
+        post: operations["webhook_order_disputed_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "order.expired": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * An unpaid order expired and released its tickets.
+         * @description The checkout hold ran out before payment; the held tickets went back on sale.
+         *
+         *     Version 1. Sent as a Standard Webhooks message (see the verification guide).
+         */
+        post: operations["webhook_order_expired_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "order.paid": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * An order was paid and its tickets issued.
+         * @description Sent once per order when payment completes (online, at the box office, by invoice, or a free order). `via` says how it was paid. Read the order and its tickets with `GET /v1/orgs/{org}/orders/{orderId}`.
+         *
+         *     Version 1. Sent as a Standard Webhooks message (see the verification guide).
+         */
+        post: operations["webhook_order_paid_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "order.payment_failed": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * A payment attempt for an order failed.
+         * @description The buyer can try again until the order expires.
+         *
+         *     Version 1. Sent as a Standard Webhooks message (see the verification guide).
+         */
+        post: operations["webhook_order_payment_failed_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "order.refunded": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * All or part of an order was refunded.
+         * @description Sent for each refund. `fully` is true when nothing is left to refund; `tickets` counts the tickets the refund cancelled.
+         *
+         *     Version 1. Sent as a Standard Webhooks message (see the verification guide).
+         */
+        post: operations["webhook_order_refunded_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "program.agenda_published": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * An event’s agenda was published.
+         * @description `agendaVersion` increases with each publish; read the agenda from the public content API.
+         *
+         *     Version 1. Sent as a Standard Webhooks message (see the verification guide).
+         */
+        post: operations["webhook_program_agenda_published_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "review.submitted": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * An attendee rated an event.
+         * @description `rating` is 1 to 5. The review text is not in the payload.
+         *
+         *     Version 1. Sent as a Standard Webhooks message (see the verification guide).
+         */
+        post: operations["webhook_review_submitted_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "survey.responded": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * A survey was answered.
+         * @description The answers stay in the console; the payload says which survey and invitation.
+         *
+         *     Version 1. Sent as a Standard Webhooks message (see the verification guide).
+         */
+        post: operations["webhook_survey_responded_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "ticket_type.archived": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * A ticket type was archived.
+         * @description It is no longer sold; tickets already issued stay valid.
+         *
+         *     Version 1. Sent as a Standard Webhooks message (see the verification guide).
+         */
+        post: operations["webhook_ticket_type_archived_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "ticket_type.created": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * A ticket type was added to an event.
+         * @description Read it with `GET /v1/orgs/{org}/events/{eventId}/ticket-types`.
+         *
+         *     Version 1. Sent as a Standard Webhooks message (see the verification guide).
+         */
+        post: operations["webhook_ticket_type_created_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "ticket_type.updated": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * A ticket type changed.
+         * @description `fields` names what changed (for example `priceMinor`).
+         *
+         *     Version 1. Sent as a Standard Webhooks message (see the verification guide).
+         */
+        post: operations["webhook_ticket_type_updated_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "ticket.admission_undone": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * A scan was undone.
+         * @description Door staff reversed an admission (a mistaken scan); the ticket can be scanned again.
+         *
+         *     Version 1. Sent as a Standard Webhooks message (see the verification guide).
+         */
+        post: operations["webhook_ticket_admission_undone_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "ticket.admitted": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * A ticket was scanned in.
+         * @description `day` is the event day in the event’s time zone. `offline` is true when a door device scanned without a connection and synced later.
+         *
+         *     Version 1. Sent as a Standard Webhooks message (see the verification guide).
+         */
+        post: operations["webhook_ticket_admitted_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "ticket.claimed": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * A distributed ticket was claimed by its guest.
+         * @description Sent when someone opens a claim link and takes the ticket.
+         *
+         *     Version 1. Sent as a Standard Webhooks message (see the verification guide).
+         */
+        post: operations["webhook_ticket_claimed_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "ticket.transferred": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * A ticket moved to a new holder.
+         * @description The previous QR code stops working; `rev` is the ticket’s new revision. The new holder’s details are not in the payload.
+         *
+         *     Version 1. Sent as a Standard Webhooks message (see the verification guide).
+         */
+        post: operations["webhook_ticket_transferred_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "tickets.cancelled": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Tickets were cancelled in bulk.
+         * @description One message per bulk cancellation (`operationId`) or per voided invoice (`orderId`: M5.1d pay later), with the ids of the tickets it voided. Exactly one of `operationId` and `orderId` is present.
+         *
+         *     Version 1. Sent as a Standard Webhooks message (see the verification guide).
+         */
+        post: operations["webhook_tickets_cancelled_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "waitlist.joined": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Someone joined an event’s waitlist.
+         * @description Who joined is not in the payload.
+         *
+         *     Version 1. Sent as a Standard Webhooks message (see the verification guide).
+         */
+        post: operations["webhook_waitlist_joined_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "waitlist.offered": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * A waitlist entry was offered a place.
+         * @description `offer` counts the offers this entry has had (1 for the first).
+         *
+         *     Version 1. Sent as a Standard Webhooks message (see the verification guide).
+         */
+        post: operations["webhook_waitlist_offered_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "webhook.test": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * A test message sent from the console.
+         * @description Sent only to the endpoint you test, with `test: true`. Use it to check that your endpoint verifies signatures and answers 2xx.
+         *
+         *     Version 1. Sent as a Standard Webhooks message (see the verification guide).
+         */
+        post: operations["webhook_webhook_test_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+}
 export interface components {
     schemas: {
         /** @description The organizer’s agenda with track and room ids and capacities. */
@@ -1264,6 +1967,36 @@ export interface components {
             data: components["schemas"]["Announcement"][];
             nextCursor: string | null;
         };
+        ApiKeyInfo: {
+            /** Format: date-time */
+            createdAt: string;
+            /**
+             * Format: date-time
+             * @description When the key stops working (null: never). Set when the key was rotated.
+             */
+            expiresAt: string | null;
+            /** Format: uuid */
+            id: string;
+            name: string;
+            /** @description The first characters of the key, e.g. `yy_live_AbC1`. */
+            prefix: string;
+            /** @description The plan’s `api_access` quotas that apply to this key. */
+            rateLimit: {
+                /** @description Requests per minute for this key. */
+                keyPerMinute: number;
+                /** @description Requests per minute for every key of the org together. */
+                orgPerMinute: number;
+            };
+            /** @description A newer key replaced this one; switch before `expiresAt`. */
+            rotated: boolean;
+            /** @description The key belongs to a sandbox org: seeded data, fake payments only. */
+            sandboxOrg: boolean;
+            scopes: components["schemas"]["ApiKeyScope"][];
+            /** @description A test key (`yy_test_…`): read-only, no personal data. */
+            test: boolean;
+        };
+        /** @enum {string} */
+        ApiKeyScope: "org:read" | "events:read" | "events:write" | "orders:read" | "orders:refund" | "attendees:read" | "attendees:write" | "checkin:scan";
         /** @enum {string} */
         AttendanceMode: "in_person" | "online" | "hybrid";
         Attendee: {
@@ -2226,6 +2959,733 @@ export interface components {
         VenuePage: {
             data: components["schemas"]["Venue"][];
             nextCursor: string | null;
+        };
+        WebhookAgendaPublishedV1: {
+            agendaVersion: number;
+            /** Format: uuid */
+            eventId: string;
+            /** Format: date-time */
+            publishedAt: string;
+            sessions: number;
+        };
+        /** @description An event’s agenda was published. */
+        WebhookAgendaPublishedV1Message: {
+            /** @enum {string} */
+            apiVersion: "v1";
+            data: components["schemas"]["WebhookAgendaPublishedV1"];
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            occurredAt: string;
+            /** Format: uuid */
+            orgId: string;
+            /** @enum {string} */
+            type: "program.agenda_published";
+            /** @enum {number} */
+            version: 1;
+        };
+        /** @enum {string} */
+        WebhookDisputeOutcome: "won" | "lost";
+        WebhookEventArchivedV1: {
+            /** Format: uuid */
+            eventId: string;
+            from: components["schemas"]["WebhookEventStatus"];
+            to: components["schemas"]["WebhookEventStatus"];
+        };
+        /** @description An event was archived. */
+        WebhookEventArchivedV1Message: {
+            /** @enum {string} */
+            apiVersion: "v1";
+            data: components["schemas"]["WebhookEventArchivedV1"];
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            occurredAt: string;
+            /** Format: uuid */
+            orgId: string;
+            /** @enum {string} */
+            type: "event.archived";
+            /** @enum {number} */
+            version: 1;
+        };
+        WebhookEventCancelledV1: {
+            /** Format: uuid */
+            eventId: string;
+            from: components["schemas"]["WebhookEventStatus"];
+            to: components["schemas"]["WebhookEventStatus"];
+        };
+        /** @description An event was cancelled. */
+        WebhookEventCancelledV1Message: {
+            /** @enum {string} */
+            apiVersion: "v1";
+            data: components["schemas"]["WebhookEventCancelledV1"];
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            occurredAt: string;
+            /** Format: uuid */
+            orgId: string;
+            /** @enum {string} */
+            type: "event.cancelled";
+            /** @enum {number} */
+            version: 1;
+        };
+        WebhookEventCompletedV1: {
+            /** Format: uuid */
+            eventId: string;
+            from: components["schemas"]["WebhookEventStatus"];
+            to: components["schemas"]["WebhookEventStatus"];
+        };
+        /** @description An event was marked as completed. */
+        WebhookEventCompletedV1Message: {
+            /** @enum {string} */
+            apiVersion: "v1";
+            data: components["schemas"]["WebhookEventCompletedV1"];
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            occurredAt: string;
+            /** Format: uuid */
+            orgId: string;
+            /** @enum {string} */
+            type: "event.completed";
+            /** @enum {number} */
+            version: 1;
+        };
+        WebhookEventCreatedV1: {
+            /** Format: uuid */
+            eventId: string;
+            profile: string;
+            slug: string;
+        };
+        /** @description An event was created (new, duplicated or from a template). */
+        WebhookEventCreatedV1Message: {
+            /** @enum {string} */
+            apiVersion: "v1";
+            data: components["schemas"]["WebhookEventCreatedV1"];
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            occurredAt: string;
+            /** Format: uuid */
+            orgId: string;
+            /** @enum {string} */
+            type: "event.created";
+            /** @enum {number} */
+            version: 1;
+        };
+        WebhookEventOccurrenceCancelledV1: {
+            /** Format: uuid */
+            eventId: string;
+            /** Format: uuid */
+            occurrenceId: string;
+            /** Format: date-time */
+            startsAt: string;
+        };
+        /** @description One date of a recurring event was cancelled. */
+        WebhookEventOccurrenceCancelledV1Message: {
+            /** @enum {string} */
+            apiVersion: "v1";
+            data: components["schemas"]["WebhookEventOccurrenceCancelledV1"];
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            occurredAt: string;
+            /** Format: uuid */
+            orgId: string;
+            /** @enum {string} */
+            type: "event.occurrence_cancelled";
+            /** @enum {number} */
+            version: 1;
+        };
+        WebhookEventPostponedV1: {
+            /** Format: uuid */
+            eventId: string;
+            from: components["schemas"]["WebhookEventStatus"];
+            to: components["schemas"]["WebhookEventStatus"];
+        };
+        /** @description An event was postponed. */
+        WebhookEventPostponedV1Message: {
+            /** @enum {string} */
+            apiVersion: "v1";
+            data: components["schemas"]["WebhookEventPostponedV1"];
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            occurredAt: string;
+            /** Format: uuid */
+            orgId: string;
+            /** @enum {string} */
+            type: "event.postponed";
+            /** @enum {number} */
+            version: 1;
+        };
+        WebhookEventPublishedV1: {
+            /** Format: uuid */
+            eventId: string;
+            from: components["schemas"]["WebhookEventStatus"];
+            to: components["schemas"]["WebhookEventStatus"];
+        };
+        /** @description An event was published. */
+        WebhookEventPublishedV1Message: {
+            /** @enum {string} */
+            apiVersion: "v1";
+            data: components["schemas"]["WebhookEventPublishedV1"];
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            occurredAt: string;
+            /** Format: uuid */
+            orgId: string;
+            /** @enum {string} */
+            type: "event.published";
+            /** @enum {number} */
+            version: 1;
+        };
+        WebhookEventRescheduledV1: {
+            /** Format: uuid */
+            eventId: string;
+            from: components["schemas"]["WebhookEventStatus"];
+            to: components["schemas"]["WebhookEventStatus"];
+        };
+        /** @description A postponed event has a new date. */
+        WebhookEventRescheduledV1Message: {
+            /** @enum {string} */
+            apiVersion: "v1";
+            data: components["schemas"]["WebhookEventRescheduledV1"];
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            occurredAt: string;
+            /** Format: uuid */
+            orgId: string;
+            /** @enum {string} */
+            type: "event.rescheduled";
+            /** @enum {number} */
+            version: 1;
+        };
+        /** @enum {string} */
+        WebhookEventStatus: "draft" | "published" | "postponed" | "cancelled" | "completed" | "archived";
+        WebhookEventUnpublishedV1: {
+            /** Format: uuid */
+            eventId: string;
+            from: components["schemas"]["WebhookEventStatus"];
+            to: components["schemas"]["WebhookEventStatus"];
+        };
+        /** @description An event was taken offline. */
+        WebhookEventUnpublishedV1Message: {
+            /** @enum {string} */
+            apiVersion: "v1";
+            data: components["schemas"]["WebhookEventUnpublishedV1"];
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            occurredAt: string;
+            /** Format: uuid */
+            orgId: string;
+            /** @enum {string} */
+            type: "event.unpublished";
+            /** @enum {number} */
+            version: 1;
+        };
+        WebhookEventUpdatedV1: {
+            /** Format: uuid */
+            eventId: string;
+            fields: string[];
+        };
+        /** @description An event’s details changed. */
+        WebhookEventUpdatedV1Message: {
+            /** @enum {string} */
+            apiVersion: "v1";
+            data: components["schemas"]["WebhookEventUpdatedV1"];
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            occurredAt: string;
+            /** Format: uuid */
+            orgId: string;
+            /** @enum {string} */
+            type: "event.updated";
+            /** @enum {number} */
+            version: 1;
+        };
+        WebhookOrderDisputeClosedV1: {
+            /** Format: uuid */
+            disputeId: string;
+            /** Format: uuid */
+            orderId: string;
+            outcome: components["schemas"]["WebhookDisputeOutcome"];
+        };
+        /** @description A dispute was decided. */
+        WebhookOrderDisputeClosedV1Message: {
+            /** @enum {string} */
+            apiVersion: "v1";
+            data: components["schemas"]["WebhookOrderDisputeClosedV1"];
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            occurredAt: string;
+            /** Format: uuid */
+            orgId: string;
+            /** @enum {string} */
+            type: "order.dispute_closed";
+            /** @enum {number} */
+            version: 1;
+        };
+        WebhookOrderDisputedV1: {
+            amountMinor: number;
+            /** Format: uuid */
+            disputeId: string;
+            /** Format: uuid */
+            orderId: string;
+        };
+        /** @description A buyer disputed a payment (chargeback). */
+        WebhookOrderDisputedV1Message: {
+            /** @enum {string} */
+            apiVersion: "v1";
+            data: components["schemas"]["WebhookOrderDisputedV1"];
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            occurredAt: string;
+            /** Format: uuid */
+            orgId: string;
+            /** @enum {string} */
+            type: "order.disputed";
+            /** @enum {number} */
+            version: 1;
+        };
+        WebhookOrderExpiredV1: {
+            /** Format: uuid */
+            orderId: string;
+        };
+        /** @description An unpaid order expired and released its tickets. */
+        WebhookOrderExpiredV1Message: {
+            /** @enum {string} */
+            apiVersion: "v1";
+            data: components["schemas"]["WebhookOrderExpiredV1"];
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            occurredAt: string;
+            /** Format: uuid */
+            orgId: string;
+            /** @enum {string} */
+            type: "order.expired";
+            /** @enum {number} */
+            version: 1;
+        };
+        WebhookOrderPaidV1: {
+            currency: string;
+            /** Format: uuid */
+            eventId: string;
+            /** Format: uuid */
+            orderId: string;
+            totalMinor: number;
+            via: components["schemas"]["WebhookPaymentVia"];
+        };
+        /** @description An order was paid and its tickets issued. */
+        WebhookOrderPaidV1Message: {
+            /** @enum {string} */
+            apiVersion: "v1";
+            data: components["schemas"]["WebhookOrderPaidV1"];
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            occurredAt: string;
+            /** Format: uuid */
+            orgId: string;
+            /** @enum {string} */
+            type: "order.paid";
+            /** @enum {number} */
+            version: 1;
+        };
+        WebhookOrderPaymentFailedV1: {
+            /** Format: uuid */
+            eventId: string;
+            /** Format: uuid */
+            orderId: string;
+        };
+        /** @description A payment attempt for an order failed. */
+        WebhookOrderPaymentFailedV1Message: {
+            /** @enum {string} */
+            apiVersion: "v1";
+            data: components["schemas"]["WebhookOrderPaymentFailedV1"];
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            occurredAt: string;
+            /** Format: uuid */
+            orgId: string;
+            /** @enum {string} */
+            type: "order.payment_failed";
+            /** @enum {number} */
+            version: 1;
+        };
+        WebhookOrderRefundedV1: {
+            amountMinor: number;
+            currency: string;
+            fully: boolean;
+            /** Format: uuid */
+            orderId: string;
+            /** Format: uuid */
+            refundId: string;
+            tickets: number;
+        };
+        /** @description All or part of an order was refunded. */
+        WebhookOrderRefundedV1Message: {
+            /** @enum {string} */
+            apiVersion: "v1";
+            data: components["schemas"]["WebhookOrderRefundedV1"];
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            occurredAt: string;
+            /** Format: uuid */
+            orgId: string;
+            /** @enum {string} */
+            type: "order.refunded";
+            /** @enum {number} */
+            version: 1;
+        };
+        /** @enum {string} */
+        WebhookPaymentVia: "free" | "box_office" | "fake" | "stripe" | "invoice";
+        WebhookRegistrationSubmittedV1: {
+            /** Format: uuid */
+            eventId: string | null;
+            formVersion: number | null;
+            registrationTypeId: string | null;
+            /** Format: uuid */
+            respondentId: string;
+        };
+        /** @description A registration form was submitted. */
+        WebhookRegistrationSubmittedV1Message: {
+            /** @enum {string} */
+            apiVersion: "v1";
+            data: components["schemas"]["WebhookRegistrationSubmittedV1"];
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            occurredAt: string;
+            /** Format: uuid */
+            orgId: string;
+            /** @enum {string} */
+            type: "form.registration_submitted";
+            /** @enum {number} */
+            version: 1;
+        };
+        WebhookReviewSubmittedV1: {
+            /** Format: uuid */
+            eventId: string;
+            rating: number;
+            /** Format: uuid */
+            reviewId: string;
+        };
+        /** @description An attendee rated an event. */
+        WebhookReviewSubmittedV1Message: {
+            /** @enum {string} */
+            apiVersion: "v1";
+            data: components["schemas"]["WebhookReviewSubmittedV1"];
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            occurredAt: string;
+            /** Format: uuid */
+            orgId: string;
+            /** @enum {string} */
+            type: "review.submitted";
+            /** @enum {number} */
+            version: 1;
+        };
+        WebhookSurveyRespondedV1: {
+            /** Format: uuid */
+            eventId: string | null;
+            /** Format: uuid */
+            invitationId: string;
+            /** Format: uuid */
+            surveyId: string;
+        };
+        /** @description A survey was answered. */
+        WebhookSurveyRespondedV1Message: {
+            /** @enum {string} */
+            apiVersion: "v1";
+            data: components["schemas"]["WebhookSurveyRespondedV1"];
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            occurredAt: string;
+            /** Format: uuid */
+            orgId: string;
+            /** @enum {string} */
+            type: "survey.responded";
+            /** @enum {number} */
+            version: 1;
+        };
+        WebhookTestV1: {
+            /** Format: uuid */
+            endpointId: string;
+            /** @enum {boolean} */
+            test: true;
+        };
+        /** @description A test message sent from the console. */
+        WebhookTestV1Message: {
+            /** @enum {string} */
+            apiVersion: "v1";
+            data: components["schemas"]["WebhookTestV1"];
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            occurredAt: string;
+            /** Format: uuid */
+            orgId: string;
+            /** @enum {string} */
+            type: "webhook.test";
+            /** @enum {number} */
+            version: 1;
+        };
+        WebhookTicketAdmissionUndoneV1: {
+            /** Format: uuid */
+            admissionId: string;
+            /** Format: date-time */
+            admittedAt: string;
+            /** Format: date */
+            day: string;
+            /** Format: uuid */
+            eventId: string;
+            /** Format: uuid */
+            ticketId: string;
+        };
+        /** @description A scan was undone. */
+        WebhookTicketAdmissionUndoneV1Message: {
+            /** @enum {string} */
+            apiVersion: "v1";
+            data: components["schemas"]["WebhookTicketAdmissionUndoneV1"];
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            occurredAt: string;
+            /** Format: uuid */
+            orgId: string;
+            /** @enum {string} */
+            type: "ticket.admission_undone";
+            /** @enum {number} */
+            version: 1;
+        };
+        WebhookTicketAdmittedV1: {
+            /** Format: uuid */
+            admissionId: string;
+            /** Format: date-time */
+            admittedAt: string;
+            /** Format: date */
+            day: string;
+            /** Format: uuid */
+            eventId: string;
+            offline?: boolean;
+            /** Format: uuid */
+            ticketId: string;
+        };
+        /** @description A ticket was scanned in. */
+        WebhookTicketAdmittedV1Message: {
+            /** @enum {string} */
+            apiVersion: "v1";
+            data: components["schemas"]["WebhookTicketAdmittedV1"];
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            occurredAt: string;
+            /** Format: uuid */
+            orgId: string;
+            /** @enum {string} */
+            type: "ticket.admitted";
+            /** @enum {number} */
+            version: 1;
+        };
+        WebhookTicketClaimedV1: {
+            /** Format: uuid */
+            claimId: string;
+            /** Format: uuid */
+            eventId: string | null;
+            rev: number;
+            /** Format: uuid */
+            ticketId: string;
+        };
+        /** @description A distributed ticket was claimed by its guest. */
+        WebhookTicketClaimedV1Message: {
+            /** @enum {string} */
+            apiVersion: "v1";
+            data: components["schemas"]["WebhookTicketClaimedV1"];
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            occurredAt: string;
+            /** Format: uuid */
+            orgId: string;
+            /** @enum {string} */
+            type: "ticket.claimed";
+            /** @enum {number} */
+            version: 1;
+        };
+        WebhookTicketsCancelledV1: {
+            /** Format: uuid */
+            eventId: string;
+            /** Format: uuid */
+            operationId?: string;
+            /** Format: uuid */
+            orderId?: string;
+            ticketIds: string[];
+        };
+        /** @description Tickets were cancelled in bulk. */
+        WebhookTicketsCancelledV1Message: {
+            /** @enum {string} */
+            apiVersion: "v1";
+            data: components["schemas"]["WebhookTicketsCancelledV1"];
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            occurredAt: string;
+            /** Format: uuid */
+            orgId: string;
+            /** @enum {string} */
+            type: "tickets.cancelled";
+            /** @enum {number} */
+            version: 1;
+        };
+        WebhookTicketTransferredV1: {
+            /** Format: uuid */
+            eventId: string;
+            rev: number;
+            /** Format: uuid */
+            ticketId: string;
+            /** Format: uuid */
+            transferId: string;
+        };
+        /** @description A ticket moved to a new holder. */
+        WebhookTicketTransferredV1Message: {
+            /** @enum {string} */
+            apiVersion: "v1";
+            data: components["schemas"]["WebhookTicketTransferredV1"];
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            occurredAt: string;
+            /** Format: uuid */
+            orgId: string;
+            /** @enum {string} */
+            type: "ticket.transferred";
+            /** @enum {number} */
+            version: 1;
+        };
+        WebhookTicketTypeArchivedV1: {
+            /** Format: uuid */
+            eventId: string;
+            /** Format: uuid */
+            ticketTypeId: string;
+        };
+        /** @description A ticket type was archived. */
+        WebhookTicketTypeArchivedV1Message: {
+            /** @enum {string} */
+            apiVersion: "v1";
+            data: components["schemas"]["WebhookTicketTypeArchivedV1"];
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            occurredAt: string;
+            /** Format: uuid */
+            orgId: string;
+            /** @enum {string} */
+            type: "ticket_type.archived";
+            /** @enum {number} */
+            version: 1;
+        };
+        WebhookTicketTypeCreatedV1: {
+            /** Format: uuid */
+            eventId: string;
+            /** Format: uuid */
+            ticketTypeId: string;
+        };
+        /** @description A ticket type was added to an event. */
+        WebhookTicketTypeCreatedV1Message: {
+            /** @enum {string} */
+            apiVersion: "v1";
+            data: components["schemas"]["WebhookTicketTypeCreatedV1"];
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            occurredAt: string;
+            /** Format: uuid */
+            orgId: string;
+            /** @enum {string} */
+            type: "ticket_type.created";
+            /** @enum {number} */
+            version: 1;
+        };
+        WebhookTicketTypeUpdatedV1: {
+            /** Format: uuid */
+            eventId: string;
+            fields: string[];
+            /** Format: uuid */
+            ticketTypeId: string;
+        };
+        /** @description A ticket type changed. */
+        WebhookTicketTypeUpdatedV1Message: {
+            /** @enum {string} */
+            apiVersion: "v1";
+            data: components["schemas"]["WebhookTicketTypeUpdatedV1"];
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            occurredAt: string;
+            /** Format: uuid */
+            orgId: string;
+            /** @enum {string} */
+            type: "ticket_type.updated";
+            /** @enum {number} */
+            version: 1;
+        };
+        WebhookWaitlistJoinedV1: {
+            /** Format: uuid */
+            entryId: string;
+            /** Format: uuid */
+            eventId: string;
+        };
+        /** @description Someone joined an event’s waitlist. */
+        WebhookWaitlistJoinedV1Message: {
+            /** @enum {string} */
+            apiVersion: "v1";
+            data: components["schemas"]["WebhookWaitlistJoinedV1"];
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            occurredAt: string;
+            /** Format: uuid */
+            orgId: string;
+            /** @enum {string} */
+            type: "waitlist.joined";
+            /** @enum {number} */
+            version: 1;
+        };
+        WebhookWaitlistOfferedV1: {
+            /** Format: uuid */
+            entryId: string;
+            /** Format: uuid */
+            eventId: string;
+            offer: number;
+        };
+        /** @description A waitlist entry was offered a place. */
+        WebhookWaitlistOfferedV1Message: {
+            /** @enum {string} */
+            apiVersion: "v1";
+            data: components["schemas"]["WebhookWaitlistOfferedV1"];
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            occurredAt: string;
+            /** Format: uuid */
+            orgId: string;
+            /** @enum {string} */
+            type: "waitlist.offered";
+            /** @enum {number} */
+            version: 1;
         };
     };
     responses: never;
@@ -3217,6 +4677,74 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Organization"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    getCurrentApiKey: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Organization id or slug */
+                org: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The calling key */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiKeyInfo"];
                 };
             };
             /** @description Validation failed (`validation_failed`) */
@@ -6897,6 +8425,905 @@ export interface operations {
                         type: string;
                     };
                 };
+            };
+        };
+    };
+    webhook_event_archived_v1: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The message id; retries and replays reuse it. Deduplicate on it. */
+                "webhook-id": string;
+                /** @description Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation). */
+                "webhook-signature": string;
+                /** @description Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away. */
+                "webhook-timestamp": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WebhookEventArchivedV1Message"];
+            };
+        };
+        responses: {
+            /** @description Any 2xx answer acknowledges the message; anything else is retried for about 28 hours. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    webhook_event_cancelled_v1: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The message id; retries and replays reuse it. Deduplicate on it. */
+                "webhook-id": string;
+                /** @description Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation). */
+                "webhook-signature": string;
+                /** @description Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away. */
+                "webhook-timestamp": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WebhookEventCancelledV1Message"];
+            };
+        };
+        responses: {
+            /** @description Any 2xx answer acknowledges the message; anything else is retried for about 28 hours. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    webhook_event_completed_v1: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The message id; retries and replays reuse it. Deduplicate on it. */
+                "webhook-id": string;
+                /** @description Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation). */
+                "webhook-signature": string;
+                /** @description Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away. */
+                "webhook-timestamp": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WebhookEventCompletedV1Message"];
+            };
+        };
+        responses: {
+            /** @description Any 2xx answer acknowledges the message; anything else is retried for about 28 hours. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    webhook_event_created_v1: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The message id; retries and replays reuse it. Deduplicate on it. */
+                "webhook-id": string;
+                /** @description Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation). */
+                "webhook-signature": string;
+                /** @description Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away. */
+                "webhook-timestamp": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WebhookEventCreatedV1Message"];
+            };
+        };
+        responses: {
+            /** @description Any 2xx answer acknowledges the message; anything else is retried for about 28 hours. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    webhook_event_occurrence_cancelled_v1: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The message id; retries and replays reuse it. Deduplicate on it. */
+                "webhook-id": string;
+                /** @description Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation). */
+                "webhook-signature": string;
+                /** @description Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away. */
+                "webhook-timestamp": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WebhookEventOccurrenceCancelledV1Message"];
+            };
+        };
+        responses: {
+            /** @description Any 2xx answer acknowledges the message; anything else is retried for about 28 hours. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    webhook_event_postponed_v1: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The message id; retries and replays reuse it. Deduplicate on it. */
+                "webhook-id": string;
+                /** @description Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation). */
+                "webhook-signature": string;
+                /** @description Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away. */
+                "webhook-timestamp": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WebhookEventPostponedV1Message"];
+            };
+        };
+        responses: {
+            /** @description Any 2xx answer acknowledges the message; anything else is retried for about 28 hours. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    webhook_event_published_v1: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The message id; retries and replays reuse it. Deduplicate on it. */
+                "webhook-id": string;
+                /** @description Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation). */
+                "webhook-signature": string;
+                /** @description Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away. */
+                "webhook-timestamp": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WebhookEventPublishedV1Message"];
+            };
+        };
+        responses: {
+            /** @description Any 2xx answer acknowledges the message; anything else is retried for about 28 hours. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    webhook_event_rescheduled_v1: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The message id; retries and replays reuse it. Deduplicate on it. */
+                "webhook-id": string;
+                /** @description Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation). */
+                "webhook-signature": string;
+                /** @description Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away. */
+                "webhook-timestamp": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WebhookEventRescheduledV1Message"];
+            };
+        };
+        responses: {
+            /** @description Any 2xx answer acknowledges the message; anything else is retried for about 28 hours. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    webhook_event_unpublished_v1: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The message id; retries and replays reuse it. Deduplicate on it. */
+                "webhook-id": string;
+                /** @description Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation). */
+                "webhook-signature": string;
+                /** @description Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away. */
+                "webhook-timestamp": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WebhookEventUnpublishedV1Message"];
+            };
+        };
+        responses: {
+            /** @description Any 2xx answer acknowledges the message; anything else is retried for about 28 hours. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    webhook_event_updated_v1: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The message id; retries and replays reuse it. Deduplicate on it. */
+                "webhook-id": string;
+                /** @description Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation). */
+                "webhook-signature": string;
+                /** @description Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away. */
+                "webhook-timestamp": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WebhookEventUpdatedV1Message"];
+            };
+        };
+        responses: {
+            /** @description Any 2xx answer acknowledges the message; anything else is retried for about 28 hours. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    webhook_form_registration_submitted_v1: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The message id; retries and replays reuse it. Deduplicate on it. */
+                "webhook-id": string;
+                /** @description Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation). */
+                "webhook-signature": string;
+                /** @description Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away. */
+                "webhook-timestamp": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WebhookRegistrationSubmittedV1Message"];
+            };
+        };
+        responses: {
+            /** @description Any 2xx answer acknowledges the message; anything else is retried for about 28 hours. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    webhook_order_dispute_closed_v1: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The message id; retries and replays reuse it. Deduplicate on it. */
+                "webhook-id": string;
+                /** @description Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation). */
+                "webhook-signature": string;
+                /** @description Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away. */
+                "webhook-timestamp": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WebhookOrderDisputeClosedV1Message"];
+            };
+        };
+        responses: {
+            /** @description Any 2xx answer acknowledges the message; anything else is retried for about 28 hours. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    webhook_order_disputed_v1: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The message id; retries and replays reuse it. Deduplicate on it. */
+                "webhook-id": string;
+                /** @description Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation). */
+                "webhook-signature": string;
+                /** @description Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away. */
+                "webhook-timestamp": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WebhookOrderDisputedV1Message"];
+            };
+        };
+        responses: {
+            /** @description Any 2xx answer acknowledges the message; anything else is retried for about 28 hours. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    webhook_order_expired_v1: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The message id; retries and replays reuse it. Deduplicate on it. */
+                "webhook-id": string;
+                /** @description Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation). */
+                "webhook-signature": string;
+                /** @description Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away. */
+                "webhook-timestamp": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WebhookOrderExpiredV1Message"];
+            };
+        };
+        responses: {
+            /** @description Any 2xx answer acknowledges the message; anything else is retried for about 28 hours. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    webhook_order_paid_v1: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The message id; retries and replays reuse it. Deduplicate on it. */
+                "webhook-id": string;
+                /** @description Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation). */
+                "webhook-signature": string;
+                /** @description Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away. */
+                "webhook-timestamp": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WebhookOrderPaidV1Message"];
+            };
+        };
+        responses: {
+            /** @description Any 2xx answer acknowledges the message; anything else is retried for about 28 hours. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    webhook_order_payment_failed_v1: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The message id; retries and replays reuse it. Deduplicate on it. */
+                "webhook-id": string;
+                /** @description Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation). */
+                "webhook-signature": string;
+                /** @description Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away. */
+                "webhook-timestamp": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WebhookOrderPaymentFailedV1Message"];
+            };
+        };
+        responses: {
+            /** @description Any 2xx answer acknowledges the message; anything else is retried for about 28 hours. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    webhook_order_refunded_v1: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The message id; retries and replays reuse it. Deduplicate on it. */
+                "webhook-id": string;
+                /** @description Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation). */
+                "webhook-signature": string;
+                /** @description Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away. */
+                "webhook-timestamp": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WebhookOrderRefundedV1Message"];
+            };
+        };
+        responses: {
+            /** @description Any 2xx answer acknowledges the message; anything else is retried for about 28 hours. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    webhook_program_agenda_published_v1: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The message id; retries and replays reuse it. Deduplicate on it. */
+                "webhook-id": string;
+                /** @description Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation). */
+                "webhook-signature": string;
+                /** @description Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away. */
+                "webhook-timestamp": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WebhookAgendaPublishedV1Message"];
+            };
+        };
+        responses: {
+            /** @description Any 2xx answer acknowledges the message; anything else is retried for about 28 hours. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    webhook_review_submitted_v1: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The message id; retries and replays reuse it. Deduplicate on it. */
+                "webhook-id": string;
+                /** @description Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation). */
+                "webhook-signature": string;
+                /** @description Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away. */
+                "webhook-timestamp": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WebhookReviewSubmittedV1Message"];
+            };
+        };
+        responses: {
+            /** @description Any 2xx answer acknowledges the message; anything else is retried for about 28 hours. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    webhook_survey_responded_v1: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The message id; retries and replays reuse it. Deduplicate on it. */
+                "webhook-id": string;
+                /** @description Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation). */
+                "webhook-signature": string;
+                /** @description Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away. */
+                "webhook-timestamp": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WebhookSurveyRespondedV1Message"];
+            };
+        };
+        responses: {
+            /** @description Any 2xx answer acknowledges the message; anything else is retried for about 28 hours. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    webhook_ticket_type_archived_v1: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The message id; retries and replays reuse it. Deduplicate on it. */
+                "webhook-id": string;
+                /** @description Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation). */
+                "webhook-signature": string;
+                /** @description Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away. */
+                "webhook-timestamp": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WebhookTicketTypeArchivedV1Message"];
+            };
+        };
+        responses: {
+            /** @description Any 2xx answer acknowledges the message; anything else is retried for about 28 hours. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    webhook_ticket_type_created_v1: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The message id; retries and replays reuse it. Deduplicate on it. */
+                "webhook-id": string;
+                /** @description Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation). */
+                "webhook-signature": string;
+                /** @description Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away. */
+                "webhook-timestamp": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WebhookTicketTypeCreatedV1Message"];
+            };
+        };
+        responses: {
+            /** @description Any 2xx answer acknowledges the message; anything else is retried for about 28 hours. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    webhook_ticket_type_updated_v1: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The message id; retries and replays reuse it. Deduplicate on it. */
+                "webhook-id": string;
+                /** @description Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation). */
+                "webhook-signature": string;
+                /** @description Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away. */
+                "webhook-timestamp": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WebhookTicketTypeUpdatedV1Message"];
+            };
+        };
+        responses: {
+            /** @description Any 2xx answer acknowledges the message; anything else is retried for about 28 hours. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    webhook_ticket_admission_undone_v1: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The message id; retries and replays reuse it. Deduplicate on it. */
+                "webhook-id": string;
+                /** @description Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation). */
+                "webhook-signature": string;
+                /** @description Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away. */
+                "webhook-timestamp": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WebhookTicketAdmissionUndoneV1Message"];
+            };
+        };
+        responses: {
+            /** @description Any 2xx answer acknowledges the message; anything else is retried for about 28 hours. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    webhook_ticket_admitted_v1: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The message id; retries and replays reuse it. Deduplicate on it. */
+                "webhook-id": string;
+                /** @description Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation). */
+                "webhook-signature": string;
+                /** @description Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away. */
+                "webhook-timestamp": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WebhookTicketAdmittedV1Message"];
+            };
+        };
+        responses: {
+            /** @description Any 2xx answer acknowledges the message; anything else is retried for about 28 hours. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    webhook_ticket_claimed_v1: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The message id; retries and replays reuse it. Deduplicate on it. */
+                "webhook-id": string;
+                /** @description Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation). */
+                "webhook-signature": string;
+                /** @description Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away. */
+                "webhook-timestamp": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WebhookTicketClaimedV1Message"];
+            };
+        };
+        responses: {
+            /** @description Any 2xx answer acknowledges the message; anything else is retried for about 28 hours. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    webhook_ticket_transferred_v1: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The message id; retries and replays reuse it. Deduplicate on it. */
+                "webhook-id": string;
+                /** @description Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation). */
+                "webhook-signature": string;
+                /** @description Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away. */
+                "webhook-timestamp": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WebhookTicketTransferredV1Message"];
+            };
+        };
+        responses: {
+            /** @description Any 2xx answer acknowledges the message; anything else is retried for about 28 hours. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    webhook_tickets_cancelled_v1: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The message id; retries and replays reuse it. Deduplicate on it. */
+                "webhook-id": string;
+                /** @description Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation). */
+                "webhook-signature": string;
+                /** @description Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away. */
+                "webhook-timestamp": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WebhookTicketsCancelledV1Message"];
+            };
+        };
+        responses: {
+            /** @description Any 2xx answer acknowledges the message; anything else is retried for about 28 hours. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    webhook_waitlist_joined_v1: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The message id; retries and replays reuse it. Deduplicate on it. */
+                "webhook-id": string;
+                /** @description Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation). */
+                "webhook-signature": string;
+                /** @description Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away. */
+                "webhook-timestamp": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WebhookWaitlistJoinedV1Message"];
+            };
+        };
+        responses: {
+            /** @description Any 2xx answer acknowledges the message; anything else is retried for about 28 hours. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    webhook_waitlist_offered_v1: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The message id; retries and replays reuse it. Deduplicate on it. */
+                "webhook-id": string;
+                /** @description Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation). */
+                "webhook-signature": string;
+                /** @description Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away. */
+                "webhook-timestamp": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WebhookWaitlistOfferedV1Message"];
+            };
+        };
+        responses: {
+            /** @description Any 2xx answer acknowledges the message; anything else is retried for about 28 hours. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    webhook_webhook_test_v1: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description The message id; retries and replays reuse it. Deduplicate on it. */
+                "webhook-id": string;
+                /** @description Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation). */
+                "webhook-signature": string;
+                /** @description Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away. */
+                "webhook-timestamp": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WebhookTestV1Message"];
+            };
+        };
+        responses: {
+            /** @description Any 2xx answer acknowledges the message; anything else is retried for about 28 hours. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };

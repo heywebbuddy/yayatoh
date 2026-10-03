@@ -321,6 +321,20 @@
     "program.cfp-rejected": {
       "subject": "Sulla tua proposta «{title}»",
       "intro": "Grazie per aver proposto «{title}» per {eventName}. Questa volta {org} non ha potuto includerla nel programma.{hasNote, select, yes { Nota degli organizzatori: {note}} other {}}"
+    },
+    "privacy.request-code": {
+      "subject": "{code} è il tuo codice per confermare la richiesta sulla privacy",
+      "intro": "Inserisci {code} per confermare la tua richiesta a {org}: {kind, select, erasure {cancellare i tuoi dati personali} other {una copia dei tuoi dati personali}}. Il codice vale una volta e scade tra {minutes, plural, one {# minuto} other {# minuti}}. Se non l’hai richiesto, ignora questa email: senza il codice non succede nulla."
+    },
+    "privacy.archive-ready": {
+      "subject": "I tuoi dati personali di {org} sono pronti",
+      "intro": "{org} ha risposto alla tua richiesta: una copia dei dati personali che conserva su di te è pronta in un file ZIP. Il link funziona per {days, plural, one {# giorno} other {# giorni}}. L’archivio è firmato, così puoi verificare che non sia stato modificato.",
+      "cta": "Scarica i miei dati"
+    },
+    "privacy.erasure-done": {
+      "subject": "{org} ha cancellato i tuoi dati personali",
+      "intro": "{org} ha cancellato i tuoi dati personali come richiesto. Alcuni documenti vanno conservati per legge (per esempio gli ordini pagati, ai fini fiscali), senza il tuo nome né la tua email; la ricevuta li elenca con il motivo. Questa è l’ultima email al riguardo.",
+      "cta": "Vedi la ricevuta"
     }
   },
   "roles": {

@@ -321,6 +321,20 @@
     "program.cfp-rejected": {
       "subject": "Over je voorstel ‘{title}’",
       "intro": "Bedankt voor je voorstel ‘{title}’ voor {eventName}. {org} kon het deze keer niet in het programma opnemen.{hasNote, select, yes { Bericht van de organisatoren: {note}} other {}}"
+    },
+    "privacy.request-code": {
+      "subject": "{code} is je code om je privacyverzoek te bevestigen",
+      "intro": "Voer {code} in om je verzoek aan {org} te bevestigen: {kind, select, erasure {je persoonsgegevens wissen} other {een kopie van je persoonsgegevens}}. De code werkt één keer en verloopt over {minutes, plural, one {# minuut} other {# minuten}}. Heb je dit niet gevraagd, negeer dan deze e-mail: zonder de code gebeurt er niets."
+    },
+    "privacy.archive-ready": {
+      "subject": "Je persoonsgegevens van {org} staan klaar",
+      "intro": "{org} heeft je verzoek beantwoord: een kopie van de persoonsgegevens die over je zijn opgeslagen staat klaar als zip-bestand. De link werkt {days, plural, one {# dag} other {# dagen}}. Het archief is ondertekend, zodat je kunt controleren dat het niet is gewijzigd.",
+      "cta": "Mijn gegevens downloaden"
+    },
+    "privacy.erasure-done": {
+      "subject": "{org} heeft je persoonsgegevens gewist",
+      "intro": "{org} heeft je persoonsgegevens gewist zoals gevraagd. Sommige gegevens moeten wettelijk bewaard blijven (bijvoorbeeld betaalde bestellingen voor de belasting), zonder je naam en e-mail; het ontvangstbewijs noemt ze met de reden. Dit is de laatste e-mail hierover.",
+      "cta": "Ontvangstbewijs bekijken"
     }
   },
   "roles": {

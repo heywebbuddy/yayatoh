@@ -321,6 +321,20 @@
     "program.cfp-rejected": {
       "subject": "关于您的提案“{title}”",
       "intro": "感谢您为 {eventName} 提交“{title}”。很遗憾，{org} 本次未能将其纳入议程。{hasNote, select, yes { 主办方留言：{note}} other {}}"
+    },
+    "privacy.request-code": {
+      "subject": "{code} 是您确认隐私请求的验证码",
+      "intro": "输入 {code} 以确认您向 {org} 提出的请求：{kind, select, erasure {删除您的个人数据} other {获取您的个人数据副本}}。验证码仅可使用一次，{minutes} 分钟后失效。如果这不是您的请求，请忽略此邮件：没有验证码不会发生任何操作。"
+    },
+    "privacy.archive-ready": {
+      "subject": "您在 {org} 的个人数据已准备好",
+      "intro": "{org} 已答复您的请求：其保存的您的个人数据副本已整理为 ZIP 文件。链接 {days} 天内有效。存档带有签名，您可以核实其未被篡改。",
+      "cta": "下载我的数据"
+    },
+    "privacy.erasure-done": {
+      "subject": "{org} 已删除您的个人数据",
+      "intro": "{org} 已按您的要求删除您的个人数据。部分记录依法必须保留（例如用于税务的已付款订单），但已去除您的姓名和电子邮件；收据中列出了这些记录及原因。这是关于此事的最后一封邮件。",
+      "cta": "查看收据"
     }
   },
   "roles": {

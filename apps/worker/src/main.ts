@@ -1,5 +1,7 @@
 import { connectedConferenceSources } from '@yayatoh/alerts';
+import { warehouseFromEnv } from '@yayatoh/analytics';
 import { printNodeFromEnv } from '@yayatoh/badges';
+import { billingEnabled, billingProviderFromEnv } from '@yayatoh/billing';
 import { setPlatformAuditSink, tryAcquireLeadership } from '@yayatoh/db/platform';
 import { createNotifier } from '@yayatoh/notifications';
 import { fakePaymentProvider } from '@yayatoh/payments';
@@ -8,11 +10,15 @@ import { purgeRealtimeMessages } from '@yayatoh/platform';
 import { fakeDomainProvider } from '@yayatoh/tenancy';
 import { sweepAlerts } from './alerts.ts';
 import { badgeBatchJob, enqueueDueBadgeBatches } from './badges.ts';
+import { syncBillingCatalog } from './billing-catalog.ts';
 import { runDueBulkOperations } from './bulk.ts';
 import { bossRelease, campaignReleaseJob, campaignTick } from './campaigns.ts';
+import { enqueueContactStats } from './contact-stats.ts';
 import { DEVICE_WATCHDOG_MS, runDeviceWatchdog } from './device-watchdog.ts';
 import { domainRecheckJob } from './domains.ts';
+import { enqueueDuplicateScans } from './duplicates.ts';
 import { endExpiredImpersonations } from './impersonations.ts';
+import { enqueueSyncWork } from './integrations.ts';
 import { enqueueJourneyWork } from './journeys.ts';
 import { enqueueDueMassRefunds, massRefundJob } from './mass-refunds.ts';
 import {
@@ -32,10 +38,12 @@ import { runSettlements } from './settlements.ts';
 import {
   alertDisputeDeadlines,
   collectDuePledges,
+  summarizeApiKeyUsage,
   sweepEnrollments,
   sweepExpiredHolds,
   sweepWaitlists,
 } from './sweeper.ts';
+import { backfillJob, enqueueDueBackfills } from './warehouse.ts';
 import { startWorker } from './worker.ts';
 import { runYearEndStatements } from './year-end.ts';
 
@@ -73,6 +81,8 @@ if (!gotenbergUrl) console.warn('badges: GOTENBERG_URL is not set; badge batch P
 const jobs = [
   ...JOBS,
   campaignReleaseJob,
+  // M6.2a: warehouse backfills, a page at a time at each run's pace.
+  backfillJob(warehouseFromEnv()),
   ...(payments ? [massRefundJob(payments)] : []),
   ...(gotenbergUrl ? [badgeBatchJob(gotenbergRenderer({ url: gotenbergUrl, timeoutMs: 60_000 }))] : []),
 ];
@@ -114,6 +124,12 @@ setInterval(() => {
 setInterval(() => {
   if (!release || stopping) return;
   alertDisputeDeadlines().catch((err) => console.error('dispute alerts', err));
+}, 3_600_000).unref();
+
+// API key usage (M6.3a): each finished day's counts per key go to the org's audit log, hourly (leader only).
+setInterval(() => {
+  if (!release || stopping) return;
+  summarizeApiKeyUsage().catch((err) => console.error('api key usage summaries', err));
 }, 3_600_000).unref();
 
 // Staff impersonations end after an hour (M1.2e): record the end in the org's audit log (leader only).
@@ -198,6 +214,30 @@ setInterval(() => {
       queueingJourneys = false;
     });
 }, 5_000).unref();
+// Duplicate detection (M6.1a): an incremental scan for each org with new or changed contacts,
+// every 5 minutes (leader only); the exclusive queue keeps one job per org.
+let queueingScans = false;
+setInterval(() => {
+  if (!release || stopping || queueingScans) return;
+  queueingScans = true;
+  enqueueDuplicateScans(boss)
+    .catch((err) => console.error('duplicates', err))
+    .finally(() => {
+      queueingScans = false;
+    });
+}, 5 * 60_000).unref();
+// Integration syncs (M6.4a): queue a job for each connection with work every 5 s (leader only);
+// the exclusive queue keeps one job per connection.
+let queueingSyncs = false;
+setInterval(() => {
+  if (!release || stopping || queueingSyncs) return;
+  queueingSyncs = true;
+  enqueueSyncWork(boss)
+    .catch((err) => console.error('integrations', err))
+    .finally(() => {
+      queueingSyncs = false;
+    });
+}, 5_000).unref();
 // Badge batch PDFs (M5.5a): queue a job for each unfinished batch every 3 s (leader only); the
 // exclusive queue keeps one job per batch.
 let queueingBadges = false;
@@ -238,6 +278,15 @@ setInterval(() => {
       pollingPrintNode = false;
     });
 }, PRINTNODE_POLL_MS).unref();
+// Contact stats (M6.1b): a rescore of every org with contacts shortly after start (the backfill)
+// and then daily, so registrations whose events have ended count as attended or no-shows
+// (leader only; the exclusive queue keeps one job per org).
+const queueContactStats = () => {
+  if (!release || stopping) return;
+  enqueueContactStats(boss).catch((err) => console.error('contact stats', err));
+};
+setTimeout(queueContactStats, 2 * 60_000).unref();
+setInterval(queueContactStats, 24 * 3_600_000).unref();
 
 // Daily reconciliation (M1.6e): the previous UTC day, hourly attempts (idempotent per org and
 // day, so only the first run of a day does work), leader only. The fake provider without a
@@ -257,6 +306,23 @@ const reconcile = () => {
 };
 setTimeout(reconcile, 5 * 60_000).unref();
 setInterval(reconcile, 3_600_000).unref();
+
+// Billing catalog (M6.6a): mirror the provider's plans, prices and Entitlement Features hourly
+// while subscription billing is switched on (BILLING_ENABLED; dormant by default), leader only.
+const billingProvider = billingEnabled() ? billingProviderFromEnv(process.env) : null;
+let syncingCatalog = false;
+const syncCatalog = () => {
+  if (!billingProvider || !release || stopping || syncingCatalog) return;
+  syncingCatalog = true;
+  syncBillingCatalog(billingProvider)
+    .then((r) => console.info(JSON.stringify({ job: 'billing.catalog', ...r })))
+    .catch((err) => console.error('billing.catalog', err))
+    .finally(() => {
+      syncingCatalog = false;
+    });
+};
+setTimeout(syncCatalog, 60_000).unref();
+setInterval(syncCatalog, 3_600_000).unref();
 
 // Pending custom domains (M1.3f): check them again every minute on their backoff schedule, so a
 // domain goes live without "Check now" (leader only; the fake provider until the owner's Vercel).
@@ -391,6 +457,19 @@ setInterval(() => {
       watching = false;
     });
 }, DEVICE_WATCHDOG_MS).unref();
+
+// Warehouse backfills (M6.2a): queue a job for each run with a page due every 5 s (leader only);
+// the exclusive queue keeps one job per run.
+let queueingBackfills = false;
+setInterval(() => {
+  if (!release || stopping || queueingBackfills) return;
+  queueingBackfills = true;
+  enqueueDueBackfills(boss)
+    .catch((err) => console.error('analytics backfill', err))
+    .finally(() => {
+      queueingBackfills = false;
+    });
+}, 5_000).unref();
 
 // Realtime message log (M3.1b): keep an hour for resumptions; prune every 5 minutes (leader only).
 setInterval(() => {

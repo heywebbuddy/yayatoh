@@ -11,9 +11,9 @@ import {
 } from '../schema.ts';
 
 /**
- * Data-subject requests for networking (M5.8a) and chat (M5.8b), read and redacted by the privacy
- * module (batch 3j merge: it moved to tier 6 so it can call these in its own transaction). A
- * person is their org contacts (a networking profile is keyed by contact, one per event).
+ * Data-subject requests for networking (M5.8a) and chat (M5.8b), part of engagement's M6.1c
+ * contributor (batch 3j merge, closing M5.8a's documented gap). A person is their org contacts (a
+ * networking profile is keyed by contact, one per event), as crm resolves them (`contact` refs).
  *
  * The access document gets what the person wrote or chose to show: their profiles, the notes on
  * requests they sent, the reports they filed and the chat messages they sent. Nothing about the
@@ -161,7 +161,8 @@ export async function networkingDsarTx(tx: TenantTx, contactIds: readonly string
 export async function eraseNetworkingDsarTx(tx: TenantTx, contactIds: readonly string[]) {
   const profiles = await profilesOfTx(tx, contactIds);
   const ids = profiles.map((p) => p.id);
-  if (ids.length === 0) return { profiles: 0, notes: 0, chatMessages: 0 };
+  if (ids.length === 0)
+    return { profiles: 0, connections: 0, meetings: 0, reports: 0, chatReports: 0, chatMessages: 0 };
   await tx
     .update(networkProfiles)
     .set({
@@ -174,37 +175,33 @@ export async function eraseNetworkingDsarTx(tx: TenantTx, contactIds: readonly s
       interests: [],
     })
     .where(inArray(networkProfiles.id, ids));
-  const notes =
-    (
-      await tx
-        .update(networkConnections)
-        .set({ message: null })
-        .where(
-          and(inArray(networkConnections.requesterId, ids), sql`${networkConnections.message} is not null`),
-        )
-        .returning({ id: networkConnections.id })
-    ).length +
-    (
-      await tx
-        .update(meetings)
-        .set({ message: null })
-        .where(and(inArray(meetings.requesterId, ids), sql`${meetings.message} is not null`))
-        .returning({ id: meetings.id })
-    ).length +
-    (
-      await tx
-        .update(networkReports)
-        .set({ details: null })
-        .where(and(inArray(networkReports.reporterId, ids), sql`${networkReports.details} is not null`))
-        .returning({ id: networkReports.id })
-    ).length +
-    (
-      await tx
-        .update(chatReports)
-        .set({ details: null })
-        .where(and(filedByProfiles(ids), sql`${chatReports.details} is not null`))
-        .returning({ id: chatReports.id })
-    ).length;
+  const connections = await tx
+    .update(networkConnections)
+    .set({ message: null })
+    .where(and(inArray(networkConnections.requesterId, ids), sql`${networkConnections.message} is not null`))
+    .returning({ id: networkConnections.id });
+  const asked = await tx
+    .update(meetings)
+    .set({ message: null })
+    .where(and(inArray(meetings.requesterId, ids), sql`${meetings.message} is not null`))
+    .returning({ id: meetings.id });
+  const reports = await tx
+    .update(networkReports)
+    .set({ details: null })
+    .where(and(inArray(networkReports.reporterId, ids), sql`${networkReports.details} is not null`))
+    .returning({ id: networkReports.id });
+  const chatFiled = await tx
+    .update(chatReports)
+    .set({ details: null })
+    .where(and(filedByProfiles(ids), sql`${chatReports.details} is not null`))
+    .returning({ id: chatReports.id });
   const deleted = await tx.delete(chatMessages).where(sentByProfiles(ids)).returning({ id: chatMessages.id });
-  return { profiles: ids.length, notes, chatMessages: deleted.length };
+  return {
+    profiles: ids.length,
+    connections: connections.length,
+    meetings: asked.length,
+    reports: reports.length,
+    chatReports: chatFiled.length,
+    chatMessages: deleted.length,
+  };
 }

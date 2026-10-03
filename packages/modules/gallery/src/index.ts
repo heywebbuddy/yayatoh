@@ -1,3 +1,5 @@
+// M6.1c data-subject requests (batch 3j merge): guests' uploads under the person's name.
+export { galleryDataSubjects } from './data-subject.ts';
 export { GALLERY_ACCEPT, isHeic } from './domain/heic.ts';
 export {
   CAPTION_MAX,

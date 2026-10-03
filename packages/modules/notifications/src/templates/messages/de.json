@@ -321,6 +321,20 @@
     "program.cfp-rejected": {
       "subject": "Zu Ihrem Vorschlag „{title}“",
       "intro": "Danke für Ihren Vorschlag „{title}“ für {eventName}. {org} konnte ihn diesmal leider nicht ins Programm aufnehmen.{hasNote, select, yes { Hinweis der Veranstalter: {note}} other {}}"
+    },
+    "privacy.request-code": {
+      "subject": "{code} ist Ihr Code zur Bestätigung Ihrer Datenschutzanfrage",
+      "intro": "Geben Sie {code} ein, um Ihre Anfrage an {org} zu bestätigen: {kind, select, erasure {Löschung Ihrer personenbezogenen Daten} other {eine Kopie Ihrer personenbezogenen Daten}}. Der Code gilt einmal und läuft in {minutes, plural, one {# Minute} other {# Minuten}} ab. Wenn Sie ihn nicht angefordert haben, können Sie diese E-Mail ignorieren: Ohne den Code passiert nichts."
+    },
+    "privacy.archive-ready": {
+      "subject": "Ihre personenbezogenen Daten von {org} sind bereit",
+      "intro": "{org} hat Ihre Anfrage beantwortet: Eine Kopie der Daten, die über Sie gespeichert sind, liegt als ZIP-Datei bereit. Der Link gilt {days, plural, one {# Tag} other {# Tage}}. Das Archiv ist signiert, damit Sie prüfen können, dass es nicht verändert wurde.",
+      "cta": "Meine Daten herunterladen"
+    },
+    "privacy.erasure-done": {
+      "subject": "{org} hat Ihre personenbezogenen Daten gelöscht",
+      "intro": "{org} hat Ihre personenbezogenen Daten wie gewünscht gelöscht. Einige Unterlagen müssen gesetzlich aufbewahrt werden (zum Beispiel bezahlte Bestellungen für die Steuer), ohne Ihren Namen und Ihre E-Mail; die Bestätigung listet sie mit Grund auf. Dies ist die letzte E-Mail dazu.",
+      "cta": "Bestätigung ansehen"
     }
   },
   "roles": {

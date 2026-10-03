@@ -53,6 +53,10 @@ export {
   UpdateSettingsInput,
   updateSettingsCommand,
 } from './commands.ts';
+// M6.1a contact merges (batch 3j merge): engagement facts and networking profiles move with the person.
+export { engagementContactOwner } from './contact-merge.ts';
+// M6.1c: data-subject requests (questions signed with the person's full name).
+export { engagementDataSubjects } from './data-subject.ts';
 export {
   BOOTH_PER_MINUTE,
   CHAT_MESSAGE_MAX,

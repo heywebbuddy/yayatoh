@@ -84,6 +84,7 @@ export {
   sessionFillTx,
   sponsorTierCountsTx,
 } from './conference-facts.ts';
+export { programDataSubjects } from './data-subject.ts';
 export {
   ADMISSIONS,
   type Admission,

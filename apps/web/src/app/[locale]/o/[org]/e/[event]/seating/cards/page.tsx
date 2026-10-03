@@ -58,7 +58,13 @@ export default async function SeatingCardsPage({
   return (
     <>
       <PageHeader title={t('cards.title')} description={t('cards.description')} />
-      <SeatingTabs base={base} active="cards" finder={data.modules.has('seat_finder')} guests />
+      <SeatingTabs
+        base={base}
+        active="cards"
+        finder={data.modules.has('seat_finder')}
+        guests
+        selection={data.modules.has('advanced_seating')}
+      />
       {view.subEvents.length ? (
         <nav aria-label={t('guestSeating.chart.label')}>
           <ul className="m-0 flex list-none flex-wrap gap-1.5 p-0">

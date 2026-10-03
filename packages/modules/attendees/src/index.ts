@@ -29,6 +29,9 @@ export {
   attendeesForExportTx,
   resolveAttendeeIdsTx,
 } from './bulk.ts';
+// M6.1a: contact merges move this module's references (ADR 0023).
+export { attendeesByTicketTx, attendeesContactOwner } from './contact-merge.ts';
+export { attendeesDataSubjects } from './data-subject.ts';
 export { attendeesDsarTx, eraseAttendeesDsarTx, redactAttendeesForEventsTx } from './dsar.ts';
 export * from './dto.ts';
 export {

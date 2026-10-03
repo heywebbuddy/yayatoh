@@ -321,6 +321,20 @@
     "program.cfp-rejected": {
       "subject": "Sobre sua proposta “{title}”",
       "intro": "Obrigado por propor “{title}” para {eventName}. Desta vez, {org} não pôde incluí-la na programação.{hasNote, select, yes { Nota dos organizadores: {note}} other {}}"
+    },
+    "privacy.request-code": {
+      "subject": "{code} é o seu código para confirmar o pedido de privacidade",
+      "intro": "Digite {code} para confirmar o seu pedido a {org}: {kind, select, erasure {apagar os seus dados pessoais} other {uma cópia dos seus dados pessoais}}. O código funciona uma vez e expira em {minutes, plural, one {# minuto} other {# minutos}}. Se não pediu, ignore este e-mail: nada acontece sem o código."
+    },
+    "privacy.archive-ready": {
+      "subject": "Os seus dados pessoais de {org} estão prontos",
+      "intro": "{org} respondeu ao seu pedido: uma cópia dos dados pessoais que guarda sobre si está pronta num ficheiro ZIP. O link funciona durante {days, plural, one {# dia} other {# dias}}. O arquivo está assinado, para que possa verificar que não foi alterado.",
+      "cta": "Descarregar os meus dados"
+    },
+    "privacy.erasure-done": {
+      "subject": "{org} apagou os seus dados pessoais",
+      "intro": "{org} apagou os seus dados pessoais como pediu. Alguns registos têm de ser guardados por lei (por exemplo, pedidos pagos para efeitos fiscais), sem o seu nome nem e-mail; o recibo indica-os com o motivo. Este é o último e-mail sobre o assunto.",
+      "cta": "Ver o recibo"
     }
   },
   "roles": {

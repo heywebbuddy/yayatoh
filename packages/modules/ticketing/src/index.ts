@@ -22,6 +22,7 @@ export {
   updateTicketTypeTx,
 } from './commands/ticket-types.ts';
 export { instantiateTicketTypesTx, TicketTypesSnapshot, ticketTypesSnapshotTx } from './copy.ts';
+export { ticketingDataSubjects } from './data-subject.ts';
 export {
   CLAIM_PURPOSE,
   claimContext,
