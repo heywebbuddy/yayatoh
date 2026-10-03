@@ -194,9 +194,10 @@ CREATE POLICY "sync_runs_tenant_isolation" ON "integrations"."sync_runs" AS PERM
 -- hand-written: begin (M6.4a integrations framework)
 -- P6-13: every plan gets the `integrations` module key (free within quotas in beta); the
 -- connectors are still behind the `IntegrationAuth` port (fake in dev/CI, off in production
--- until Nango is configured).
+-- until Nango is configured). Batch 3i merge: M6.6a's placeholder tiers (`tier_*`, switched off)
+-- keep their own module sets (integrations from Pro up), so they are left out here.
 INSERT INTO billing.plan_modules (plan_key, module_key)
-SELECT key, 'integrations' FROM billing.plans
+SELECT key, 'integrations' FROM billing.plans WHERE key NOT LIKE 'tier\_%'
 ON CONFLICT DO NOTHING;
 --> statement-breakpoint
 -- The sync scheduler (worker leader, platform_reader): connections with work now — a queued run
