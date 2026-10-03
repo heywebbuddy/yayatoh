@@ -2121,6 +2121,9 @@ importers:
       '@yayatoh/floorplan':
         specifier: workspace:*
         version: link:../../floorplan
+      '@yayatoh/forms':
+        specifier: workspace:*
+        version: link:../forms
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../kernel

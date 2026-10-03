@@ -76,6 +76,11 @@ export const sessions = tenantTable(
     roomId: uuid('room_id'),
     trackId: uuid('track_id'),
     capacity: integer('capacity'),
+    /**
+     * M5.3b: a draft (an accepted call-for-papers proposal not yet scheduled) is the organizer's
+     * only: never on the public agenda, its snapshot or the /v1 agenda.
+     */
+    draft: boolean('draft').notNull().default(false),
   },
   (t) => [
     index('sessions_org_event_starts_idx').on(t.orgId, t.eventId, t.startsAt),

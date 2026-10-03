@@ -66,12 +66,13 @@ export async function currentFormTx(tx: TenantTx, s: Subject) {
  */
 function checkKindRules(kind: Subject['kind'], definition: FormDefinition): void {
   for (const f of definition.fields) {
-    if (kind === 'checkout_questions' && !(FIELD_TYPES as readonly string[]).includes(f.type))
+    if ((kind === 'checkout_questions' || kind === 'cfp') && !(FIELD_TYPES as readonly string[]).includes(f.type))
       throw new DomainError('validation_failed', 'Not a checkout question type', {
         reason: 'form_invalid',
         field: f.key,
       });
-    if (kind === 'survey' && f.sensitive)
+    // CFP answers are read by reviewers (M5.3b): nothing sensitive either.
+    if ((kind === 'survey' || kind === 'cfp') && f.sensitive)
       throw new DomainError('validation_failed', 'Survey answers cannot be sensitive', {
         reason: 'form_invalid',
         field: f.key,
@@ -150,7 +151,11 @@ export const publishFormCommand = tenantCommand({
   output: z.object({ version: z.int() }),
   entitlement: 'ticketing',
   permission: 'events:write',
-  handler: async ({ input, ctx, tx }) => publishFormTx(tx, ctx, input, input.definition),
+  handler: async ({ input, ctx, tx }) => {
+    // CFP questions are published by the program module's command (the `speakers` module gate).
+    if (input.kind === 'cfp') throw new DomainError('forbidden', 'Use the call-for-papers command');
+    return publishFormTx(tx, ctx, input, input.definition);
+  },
   audit: (input, r) => ({
     action: 'form.publish',
     targetType: 'form',
