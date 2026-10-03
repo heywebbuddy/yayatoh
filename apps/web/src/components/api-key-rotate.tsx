@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button } from '@yayatoh/ui';
+import { Alert, Button, Select } from '@yayatoh/ui';
 import { useFormatter, useTranslations } from 'next-intl';
 import { useState } from 'react';
 import type { RotateKeyState } from '@/app/[locale]/o/[org]/(org)/api-keys/actions.ts';
@@ -90,7 +90,7 @@ export function ApiKeyRotate({
           <label htmlFor={`overlap-${id}`} className="text-caption text-ink-2">
             {t('overlap')}
           </label>
-          <select
+          <Select
             id={`overlap-${id}`}
             name="overlapHours"
             defaultValue="24"
@@ -101,7 +101,7 @@ export function ApiKeyRotate({
                 {t(`overlapFor.h${h}`)}
               </option>
             ))}
-          </select>
+          </Select>
           <div>
             <Button type="submit" size="sm" disabled={pending} aria-label={t('rotateNowNamed', { name })}>
               {t('rotateNow')}

@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, Input } from '@yayatoh/ui';
+import { Alert, Button, DateTimePicker, Input, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { type ReactNode, useActionState, useEffect, useRef } from 'react';
 import { errorMessageKey } from '@/lib/errors.ts';
@@ -124,7 +124,7 @@ export function ProgramForm({
               <label htmlFor={id(f.name)} className="text-[13px] font-bold text-ink">
                 {f.label}
               </label>
-              <select
+              <Select
                 id={id(f.name)}
                 name={f.name}
                 defaultValue={f.defaultValue ?? ''}
@@ -137,7 +137,7 @@ export function ProgramForm({
                     {o.label}
                   </option>
                 ))}
-              </select>
+              </Select>
               {error ? (
                 <p id={`${id(f.name)}-error`} className="text-caption text-danger">
                   {error}
@@ -178,22 +178,34 @@ export function ProgramForm({
               ) : null}
             </fieldset>
           );
-        const input = (
-          <Input
-            key={f.name}
-            id={id(f.name)}
-            name={f.name}
-            type={f.kind}
-            label={f.label}
-            hint={f.hint}
-            required={f.required}
-            maxLength={f.maxLength}
-            defaultValue={f.defaultValue}
-            error={error}
-            {...(f.kind === 'number' ? { min: f.min ?? 1, inputMode: 'numeric' as const } : {})}
-            {...(f.suggestions?.length ? { list: `${id(f.name)}-list`, autoComplete: 'off' } : {})}
-          />
-        );
+        const input =
+          f.kind === 'datetime-local' ? (
+            <DateTimePicker
+              key={f.name}
+              id={id(f.name)}
+              name={f.name}
+              label={f.label}
+              hint={f.hint}
+              required={f.required}
+              defaultValue={f.defaultValue}
+              error={error}
+            />
+          ) : (
+            <Input
+              key={f.name}
+              id={id(f.name)}
+              name={f.name}
+              type={f.kind}
+              label={f.label}
+              hint={f.hint}
+              required={f.required}
+              maxLength={f.maxLength}
+              defaultValue={f.defaultValue}
+              error={error}
+              {...(f.kind === 'number' ? { min: f.min ?? 1, inputMode: 'numeric' as const } : {})}
+              {...(f.suggestions?.length ? { list: `${id(f.name)}-list`, autoComplete: 'off' } : {})}
+            />
+          );
         return f.suggestions?.length ? (
           <div key={f.name}>
             {input}

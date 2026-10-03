@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@yayatoh/ui';
+import { Button, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useRef, useState } from 'react';
 
@@ -69,12 +69,12 @@ export function BulkFields({
         <label htmlFor="bulk-what" className="text-[13px] font-bold text-ink">
           {t('action')}
         </label>
-        <select
+        <Select
           id="bulk-what"
           name="bulk"
           value={what}
-          onChange={(e) => {
-            setWhat(e.target.value);
+          onValueChange={(v) => {
+            setWhat(v);
             setNothing(false);
           }}
           className={cls}
@@ -86,7 +86,7 @@ export function BulkFields({
           {canResend ? <option value="resend">{t('resend')}</option> : null}
           {canExport ? <option value="export">{t('export')}</option> : null}
           {canCancel ? <option value="cancelTickets">{t('cancelTickets')}</option> : null}
-        </select>
+        </Select>
       </div>
       {what === 'addLabel' || what === 'removeLabel' ? (
         <div className="flex flex-col gap-1.5">
@@ -143,21 +143,21 @@ export function BulkFields({
               <label htmlFor="bulk-date" className="text-[13px] font-bold text-ink">
                 {t('seatDate')}
               </label>
-              <select id="bulk-date" name="bulkDate" defaultValue="" className={cls}>
+              <Select id="bulk-date" name="bulkDate" defaultValue="" className={cls}>
                 <option value="">{t('seatDatePlan')}</option>
                 {seatDates.map((d) => (
                   <option key={d.value} value={d.value}>
                     {d.label}
                   </option>
                 ))}
-              </select>
+              </Select>
             </div>
           ) : null}
           <div className="flex flex-col gap-1.5">
             <label htmlFor="bulk-target" className="text-[13px] font-bold text-ink">
               {t('target')}
             </label>
-            <select
+            <Select
               id="bulk-target"
               name="bulkTarget"
               required
@@ -170,7 +170,7 @@ export function BulkFields({
                   {s.label}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
           {adaEnforced ? (
             <label className="flex min-h-6 items-center gap-2 self-center text-body">

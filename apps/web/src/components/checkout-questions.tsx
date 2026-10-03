@@ -1,7 +1,7 @@
 'use client';
 
 import { evaluate, type FieldType, type Logic } from '@yayatoh/forms/ui';
-import { Input } from '@yayatoh/ui';
+import { Input, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
@@ -74,13 +74,13 @@ export function CheckoutQuestions({
                 <label htmlFor={id} className="text-[13px] font-bold text-ink">
                   {label(q)}
                 </label>
-                <select
+                <Select
                   id={id}
                   name={name}
                   required={q.required}
                   defaultValue=""
                   aria-invalid={error(q.key) ? true : undefined}
-                  onChange={(e) => set(q.key, e.target.value || undefined)}
+                  onValueChange={(v) => set(q.key, v || undefined)}
                   className="field"
                 >
                   <option value="">{t('checkout.choose')}</option>
@@ -89,7 +89,7 @@ export function CheckoutQuestions({
                       {o.label}
                     </option>
                   ))}
-                </select>
+                </Select>
               </div>
             );
           }

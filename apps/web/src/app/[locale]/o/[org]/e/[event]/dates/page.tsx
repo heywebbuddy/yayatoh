@@ -125,7 +125,21 @@ export default async function DatesPage({
       ) : null}
 
       {dates.length === 0 ? (
-        <EmptyState title={t('dates.emptyTitle')} description={t('dates.single', { range: label(ev) })} />
+        <EmptyState
+          title={t('dates.emptyTitle')}
+          description={t('dates.single', { range: label(ev) })}
+          action={
+            canWrite ? (
+              <Link href={`/o/${org}/e/${event}/dates#adding-date`} className={buttonClass('primary', 'md')}>
+                {t('dates.addOne')}
+              </Link>
+            ) : (
+              <Link href={`/o/${org}/e/${event}`} className={buttonClass('primary', 'md')}>
+                {t('dates.backToEvent')}
+              </Link>
+            )
+          }
+        />
       ) : (
         <Table
           caption={t('dates.listCaption', { count: dates.length })}
@@ -195,8 +209,8 @@ export default async function DatesPage({
 
       {canWrite ? (
         <>
-          <section aria-labelledby="add-date-heading" className="flex flex-col gap-3">
-            <h2 id="add-date-heading" className="text-section">
+          <section id="adding-date" aria-labelledby="adding-date-heading" className="flex flex-col gap-3">
+            <h2 id="adding-date-heading" className="text-section">
               {t('dates.addOne')}
             </h2>
             <Card>

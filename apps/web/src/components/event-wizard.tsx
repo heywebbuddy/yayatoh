@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, Card, Input } from '@yayatoh/ui';
+import { Alert, Button, Card, DateTimePicker, Input, Select, TimeZonePicker } from '@yayatoh/ui';
 import { Check } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useActionState, useEffect, useRef, useState } from 'react';
@@ -10,21 +10,6 @@ import { readinessRules } from '@/lib/readiness.ts';
 
 const PROFILES = ['conference', 'gala', 'concert', 'wedding', 'community', 'agency', 'other'] as const;
 const MODES = ['in_person', 'online', 'hybrid'] as const;
-const ZONES = [
-  'America/New_York',
-  'America/Chicago',
-  'America/Denver',
-  'America/Los_Angeles',
-  'America/Toronto',
-  'Europe/London',
-  'Europe/Paris',
-  'Africa/Lagos',
-  'Africa/Accra',
-  'Asia/Dubai',
-  'Asia/Kolkata',
-  'Asia/Tokyo',
-  'Australia/Sydney',
-] as const;
 const STEPS = ['basics', 'when', 'tickets'] as const;
 /** Fields with their own message under `wizard.errors.*`; others get the generic one. */
 const KNOWN_ERRORS = new Set([
@@ -141,6 +126,7 @@ export function EventWizard({
 
   const set = (k: Field) => (e: { target: { value: string } }) =>
     setV((p) => ({ ...p, [k]: e.target.value }));
+  const setTo = (k: Field) => (value: string) => setV((p) => ({ ...p, [k]: value }));
   const go = (to: number) => {
     if (to > step) {
       const e = validate(step, v);
@@ -151,9 +137,6 @@ export function EventWizard({
     setReached((r) => Math.max(r, to));
   };
   const err = (k: Field) => (errors[k] ? t(`errors.${errors[k]}`) : undefined);
-  const zones = ZONES.includes(defaults.timezone as (typeof ZONES)[number])
-    ? ZONES
-    : [defaults.timezone, ...ZONES];
   const selectClass = 'field';
   const venue = venues.find((x) => x.id === v.venueId);
   const rules = readinessRules({
@@ -263,11 +246,11 @@ export function EventWizard({
               <label htmlFor="wizard-profile" className="text-[13px] font-bold text-ink">
                 {t('profile')}
               </label>
-              <select
+              <Select
                 id="wizard-profile"
                 name="profile"
                 value={v.profile}
-                onChange={set('profile')}
+                onValueChange={setTo('profile')}
                 className={selectClass}
               >
                 {PROFILES.map((p) => (
@@ -275,7 +258,7 @@ export function EventWizard({
                     {tn(`profiles.${p}`)}
                   </option>
                 ))}
-              </select>
+              </Select>
             </div>
           </>
         ) : null}
@@ -286,39 +269,33 @@ export function EventWizard({
               <label htmlFor="wizard-timezone" className="text-[13px] font-bold text-ink">
                 {t('timezone')}
               </label>
-              <select
+              <TimeZonePicker
                 id="wizard-timezone"
                 name="timezone"
                 value={v.timezone}
-                onChange={set('timezone')}
+                onValueChange={setTo('timezone')}
                 className={selectClass}
-              >
-                {zones.map((z) => (
-                  <option key={z} value={z}>
-                    {z.replace(/_/g, ' ')}
-                  </option>
-                ))}
-              </select>
+              />
             </div>
-            <Input
+            <DateTimePicker
               id="wizard-starts"
               name="startsAt"
-              type="datetime-local"
               required
               label={t('startsAt')}
               hint={t('localTimeHint')}
               value={v.startsAt}
-              onChange={set('startsAt')}
+              onValueChange={setTo('startsAt')}
+              timeZone={v.timezone}
               error={err('startsAt')}
             />
-            <Input
+            <DateTimePicker
               id="wizard-ends"
               name="endsAt"
-              type="datetime-local"
               required
               label={t('endsAt')}
               value={v.endsAt}
-              onChange={set('endsAt')}
+              onValueChange={setTo('endsAt')}
+              timeZone={v.timezone}
               error={err('endsAt')}
             />
             <fieldset className="flex flex-col gap-1.5 sm:col-span-2">
@@ -344,11 +321,11 @@ export function EventWizard({
                 <label htmlFor="wizard-venue" className="text-[13px] font-bold text-ink">
                   {t('savedVenue')}
                 </label>
-                <select
+                <Select
                   id="wizard-venue"
                   name="venueId"
                   value={v.venueId}
-                  onChange={set('venueId')}
+                  onValueChange={setTo('venueId')}
                   className={selectClass}
                 >
                   <option value="">{t('noSavedVenue')}</option>
@@ -357,7 +334,7 @@ export function EventWizard({
                       {[x.name, x.city].filter(Boolean).join(', ')}
                     </option>
                   ))}
-                </select>
+                </Select>
               </div>
             ) : null}
             {v.venueId ? null : (

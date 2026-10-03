@@ -1,5 +1,11 @@
 import { type Browser, type BrowserContext, expect, type Page, test } from '@playwright/test';
-import { continueToPayment, expectAccessible, expectAccessibleBothModes, newUser } from './helpers.ts';
+import {
+  continueToPayment,
+  expectAccessible,
+  expectAccessibleBothModes,
+  newUser,
+  pickOption,
+} from './helpers.ts';
 
 // Each journey opens a projector and phones of its own, and axe runs in light and dark.
 test.describe.configure({ timeout: 180_000 });
@@ -57,7 +63,7 @@ async function gala(page: Page, connected = true): Promise<Gala> {
 /** The screen page: choose the campaign and set the screen up; returns the projector's link path. */
 async function setUpScreen(page: Page, g: Gala): Promise<string> {
   await page.goto(`${g.donations}/screen`);
-  await page.getByLabel('Campaign').selectOption({ label: g.campaign });
+  await pickOption(page.getByLabel('Campaign'), { label: g.campaign });
   await page.getByRole('button', { name: 'Set up the screen' }).click();
   await expect(page.getByText('Screen saved. Open screens update at once.')).toBeVisible();
   return linkPath(page);
@@ -231,7 +237,7 @@ test.describe('live giving screen (M4.8d)', () => {
     const buyer = await bctx.newPage();
     const buyerEmail = `chair+${stamp()}@example.test`;
     await buyer.goto(`/events/${g.slug}`);
-    await buyer.getByLabel(`Quantity — ${ticket}`).selectOption('1');
+    await pickOption(buyer.getByLabel(`Quantity — ${ticket}`), '1');
     await buyer.getByLabel('Full name').fill('Chair Person');
     await buyer.getByLabel('Email for your tickets').fill(buyerEmail);
     await continueToPayment(buyer, buyerEmail);
@@ -247,7 +253,7 @@ test.describe('live giving screen (M4.8d)', () => {
     await bctx.close();
     await page.goto(`${g.donations}/paddles`);
     const bulk = page.getByRole('region', { name: 'Give paddles in bulk' });
-    await bulk.getByLabel('One paddle for').selectOption('party');
+    await pickOption(bulk.getByLabel('One paddle for'), 'party');
     await bulk.getByRole('button', { name: 'Give paddles' }).click();
     await expect(bulk.getByText('Paddles given.')).toBeVisible();
     await expect(

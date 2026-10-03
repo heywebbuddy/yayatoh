@@ -77,7 +77,15 @@ export default async function MatchesPage({
     return (
       <>
         <PageHeader breadcrumb={crumbs} title={t('title')} />
-        <EmptyState title={t('noAccessTitle')} description={t('noAccessDescription')} />
+        <EmptyState
+          title={t('noAccessTitle')}
+          description={t('noAccessDescription')}
+          action={
+            <Link href={`/o/${org}/e/${event}`} className={buttonClass('primary', 'md')}>
+              {te('emptyActions.eventHome')}
+            </Link>
+          }
+        />
       </>
     );
   // Gift outcomes and refunds from the outbox (the worker relays them; dev and e2e have none).
@@ -219,6 +227,17 @@ export default async function MatchesPage({
             icon={<HandCoins strokeWidth={2} />}
             title={t('emptyTitle')}
             description={canWrite ? t('emptyDescription') : t('emptyViewer')}
+            action={
+              canWrite ? (
+                <a href="#new-match" className={buttonClass('primary', 'md')}>
+                  {t('addTitle')}
+                </a>
+              ) : (
+                <Link href={`/o/${org}/e/${event}`} className={buttonClass('secondary', 'md')}>
+                  {te('emptyActions.eventHome')}
+                </Link>
+              )
+            }
           />
         ) : (
           <ol className="m-0 flex list-none flex-col gap-4 p-0" data-testid="matches">
@@ -313,7 +332,7 @@ export default async function MatchesPage({
           </ol>
         )}
         {canWrite && view.campaigns.length > 0 ? (
-          <section aria-labelledby="add-match-heading">
+          <section id="new-match" aria-labelledby="add-match-heading">
             <Card size="panel" className="flex flex-col gap-4">
               <CardHeader as="h3" id="add-match-heading" title={t('addTitle')} />
               <p className="m-0 text-body text-ink-2">{t('addBody')}</p>
@@ -387,6 +406,11 @@ export default async function MatchesPage({
             icon={<Building2 strokeWidth={2} />}
             title={t('employerEmptyTitle')}
             description={t('employerEmptyDescription')}
+            action={
+              <Link href={`/o/${org}/e/${event}/donations`} className={buttonClass('secondary', 'md')}>
+                {tn('donations')}
+              </Link>
+            }
           />
         ) : (
           <Card className="flex flex-col gap-2">

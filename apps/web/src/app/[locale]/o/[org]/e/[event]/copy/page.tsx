@@ -1,7 +1,8 @@
 import { utcToZonedInput } from '@yayatoh/kernel';
-import { Card, EmptyState, PageHeader } from '@yayatoh/ui';
+import { buttonClass, Card, EmptyState, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { CopyEventForm, SaveTemplateForm } from '@/components/copy-forms.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import { profileT } from '@/lib/profile-copy.ts';
 import { loadEvent } from '@/server/console.ts';
 import { duplicateAction, saveTemplateAction } from './actions.ts';
@@ -25,7 +26,15 @@ export default async function CopyPage({
     return (
       <>
         <PageHeader title={t('copy.title')} />
-        <EmptyState title={t('copy.noAccessTitle')} description={t('copy.noAccessDescription')} />
+        <EmptyState
+          title={t('copy.noAccessTitle')}
+          description={t('copy.noAccessDescription')}
+          action={
+            <Link href={`/o/${org}/e/${event}`} className={buttonClass('primary', 'md')}>
+              {t('copy.backToEvent')}
+            </Link>
+          }
+        />
       </>
     );
   return (

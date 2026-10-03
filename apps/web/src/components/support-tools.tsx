@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, Input } from '@yayatoh/ui';
+import { Alert, Button, Input, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState, useId, useState } from 'react';
 import { errorMessageKey } from '@/lib/errors.ts';
@@ -67,13 +67,13 @@ export function TransferTicketForm({
         <label htmlFor="transfer-ticket" className="text-[13px] font-bold text-ink">
           {t('ticket')}
         </label>
-        <select id="transfer-ticket" name="ticketId" required className={field}>
+        <Select id="transfer-ticket" name="ticketId" required className={field}>
           {tickets.map((tk) => (
             <option key={tk.id} value={tk.id}>
               {tk.label}
             </option>
           ))}
-        </select>
+        </Select>
       </div>
       <Input
         name="toName"
@@ -259,11 +259,11 @@ export function RunMacroForm({
         <label htmlFor="macro-select" className="text-[13px] font-bold text-ink">
           {t('choose')}
         </label>
-        <select
+        <Select
           id="macro-select"
           name="macroId"
           value={macroId}
-          onChange={(e) => setMacroId(e.target.value)}
+          onValueChange={(v) => setMacroId(v)}
           className={field}
         >
           {macros.map((m) => (
@@ -271,7 +271,7 @@ export function RunMacroForm({
               {m.name}
             </option>
           ))}
-        </select>
+        </Select>
       </div>
       {macro ? (
         <section
@@ -296,13 +296,13 @@ export function RunMacroForm({
             <label htmlFor="macro-ticket" className="text-[13px] font-bold text-ink">
               {t('ticket')}
             </label>
-            <select id="macro-ticket" name="ticketId" className={field}>
+            <Select id="macro-ticket" name="ticketId" className={field}>
               {tickets.map((tk) => (
                 <option key={tk.id} value={tk.id}>
                   {tk.label}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
           <Input name="toName" id="macro-to-name" maxLength={120} autoComplete="off" label={t('toName')} />
           <Input name="toEmail" id="macro-to-email" type="email" autoComplete="off" label={t('toEmail')} />

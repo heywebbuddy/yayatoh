@@ -2,7 +2,7 @@ import { type Browser, expect, type Page, test } from '@playwright/test';
 import { closePools } from '@yayatoh/db';
 import { resolveOrgSlug } from '@yayatoh/tenancy';
 import { type GuestCheckinScenario, guestCheckinScenario } from '@yayatoh/testing';
-import { expectAccessible, expectAccessibleBothModes, signIn } from './helpers.ts';
+import { expectAccessible, expectAccessibleBothModes, pickOption, signIn } from './helpers.ts';
 
 // axe in light and dark, several devices and an offline drill: these journeys take time.
 test.describe.configure({ timeout: 180_000 });
@@ -222,14 +222,14 @@ test.describe('kiosk, TV board and check-in (M4.4b)', () => {
     await expect(kCard.getByText('Enter a PIN of 4 to 8 digits.')).toBeVisible();
     await expect(kCard.getByLabel(`Staff PIN for ${kioskLabel}`)).toHaveAttribute('aria-invalid', 'true');
     await expectAccessible(page);
-    await kCard.getByLabel(`Screen for ${kioskLabel}`).selectOption({ label: 'Guest kiosk' });
+    await pickOption(kCard.getByLabel(`Screen for ${kioskLabel}`), { label: 'Guest kiosk' });
     await kCard.getByLabel(`Staff PIN for ${kioskLabel}`).fill('2468');
     await kCard.getByRole('button', { name: 'Start' }).click();
     await expect(page.getByTestId('day-of-feedback')).toHaveText(
       `${kioskLabel} switches over within a few seconds.`,
     );
     const bCard = page.locator(`[data-device="${boardLabel}"]`);
-    await bCard.getByLabel(`Screen for ${boardLabel}`).selectOption({ label: 'Table board (A–Z)' });
+    await pickOption(bCard.getByLabel(`Screen for ${boardLabel}`), { label: 'Table board (A–Z)' });
     await bCard.getByLabel(`Staff PIN for ${boardLabel}`).fill('1357');
     await bCard.getByRole('button', { name: 'Start' }).click();
     await expect(page.getByTestId('day-of-feedback')).toHaveText(

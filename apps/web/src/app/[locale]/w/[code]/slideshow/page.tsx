@@ -1,7 +1,7 @@
 import { publicSlidesQuery } from '@yayatoh/gallery';
 import { guestSiteTarget } from '@yayatoh/guests';
 import { createCtx, executeQuery, isDomainError } from '@yayatoh/kernel';
-import { EmptyState, Label, PageHeader } from '@yayatoh/ui';
+import { buttonClass, EmptyState, Label, PageHeader } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
@@ -73,6 +73,11 @@ export default async function GuestSlideshowPage({
             stream={`/api/gallery/stream/${code}`}
             reload={guestSlidesAction.bind(null, code)}
             title={t('title')}
+            emptyAction={
+              <Link href={`/w/${code}/gallery`} className={buttonClass('primary', 'md')}>
+                {t('backToGuestGallery')}
+              </Link>
+            }
           />
         </>
       )}

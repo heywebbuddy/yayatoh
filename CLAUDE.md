@@ -24,7 +24,7 @@ Run from the repo root. Local services: `docker compose up -d` (Postgres 18, Red
 | `pnpm verify` | **The local gate.** lint → check:modules → typecheck → unit → integration. Run before every PR. |
 | `pnpm dev` | All apps in watch mode (web :3000, api :4000, worker) |
 | `pnpm lint` / `pnpm format` | Biome check / Biome autofix |
-| `pnpm check:modules` | Boundary gate: public exports only, no raw DB client outside `packages/db`, `platform_reader` only in admin/worker, tables only via `tenantTable()`, tiers, raw colours |
+| `pnpm check:modules` | Boundary gate: public exports only, no raw DB client outside `packages/db`, `platform_reader` only in admin/worker, tables only via `tenantTable()`, tiers, raw colours, no native `<select>`/date inputs outside `packages/ui` |
 | `pnpm typecheck` | `tsc --noEmit` in every package (turbo) |
 | `pnpm test` | Unit tests (`*.test.ts`) |
 | `pnpm test:int` | Integration + isolation on real Postgres 18 (`*.int.test.ts`). Creates `yayatoh_test` from zero with random role passwords. Needs `ADMIN_DATABASE_URL` (local superuser; defaults to the compose service) |

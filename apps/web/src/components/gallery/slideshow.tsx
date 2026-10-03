@@ -2,7 +2,7 @@
 
 import { Button, EmptyState, StatusPill } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { type ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { useRealtime } from '@/lib/use-realtime.ts';
 import { GalleryPhoto } from './photo.tsx';
 import type { PhotoView } from './types.ts';
@@ -23,12 +23,15 @@ export function GallerySlideshow({
   stream,
   reload,
   title,
+  emptyAction,
 }: {
   initial: readonly PhotoView[];
   /** The SSE URL (the realtime route for hosts, the gallery stream for guests). */
   stream: string;
   reload: () => Promise<readonly PhotoView[]>;
   title: string;
+  /** Where to go while there is nothing to show (the gallery's upload, the guest gallery). */
+  emptyAction: ReactNode;
 }) {
   const t = useTranslations('gallery.slideshow');
   const [photos, setPhotos] = useState<readonly PhotoView[]>(initial);
@@ -155,7 +158,7 @@ export function GallerySlideshow({
           ) : null}
         </figure>
       ) : (
-        <EmptyState title={t('emptyTitle')} description={t('emptyDescription')} />
+        <EmptyState title={t('emptyTitle')} description={t('emptyDescription')} action={emptyAction} />
       )}
       <fieldset className="m-0 flex flex-wrap items-center gap-3 border-0 p-0">
         <legend className="sr-only">{t('controls')}</legend>

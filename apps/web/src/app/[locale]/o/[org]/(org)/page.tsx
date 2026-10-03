@@ -26,6 +26,7 @@ import {
   Label,
   PageHeader,
   Pagination,
+  Select,
   Skeleton,
   StatusDot,
 } from '@yayatoh/ui';
@@ -115,23 +116,36 @@ export default async function OrgHome({
         <h2 id="events-heading" className="text-section">
           {t('orgHome.events')}
         </h2>
-        <Suspense fallback={<EventsSkeleton label={t('common.loading')} />}>
-          <EventList
-            org={org}
-            locale={locale}
-            create={create}
-            seriesSlug={sp.series ?? null}
-            filters={{
-              category: (EVENT_CATEGORIES as readonly string[]).includes(sp.category ?? '')
-                ? (sp.category as EventCategory)
-                : undefined,
-              tag: sp.tag?.trim().slice(0, 40) || undefined,
-              q: sp.q?.trim().slice(0, 80) || undefined,
-            }}
-            page={Math.max(1, Math.floor(Number(sp.page)) || 1)}
-            keep={{ period: sp.period, from: sp.from, to: sp.to }}
+        {/* U2: the door role (scanner) can't list events: their work happens in the Scan app. */}
+        {roleCan(data.role, 'events:read') ? (
+          <Suspense fallback={<EventsSkeleton label={t('common.loading')} />}>
+            <EventList
+              org={org}
+              locale={locale}
+              create={create}
+              seriesSlug={sp.series ?? null}
+              filters={{
+                category: (EVENT_CATEGORIES as readonly string[]).includes(sp.category ?? '')
+                  ? (sp.category as EventCategory)
+                  : undefined,
+                tag: sp.tag?.trim().slice(0, 40) || undefined,
+                q: sp.q?.trim().slice(0, 80) || undefined,
+              }}
+              page={Math.max(1, Math.floor(Number(sp.page)) || 1)}
+              keep={{ period: sp.period, from: sp.from, to: sp.to }}
+            />
+          </Suspense>
+        ) : (
+          <EmptyState
+            title={t('orgHome.doorTitle')}
+            description={t('orgHome.doorDescription')}
+            action={
+              <Link href="/scan" className={buttonClass('primary', 'md')}>
+                {t('orgHome.openScan')}
+              </Link>
+            }
           />
-        </Suspense>
+        )}
       </section>
     </>
   );
@@ -256,7 +270,7 @@ async function EventList({
             <label htmlFor="filter-category" className="text-[13px] font-bold text-ink">
               {t('eventFilters.category')}
             </label>
-            <select
+            <Select
               id="filter-category"
               name="category"
               defaultValue={filters.category ?? ''}
@@ -268,13 +282,13 @@ async function EventList({
                   {t(`categories.${c}`)}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
           <div className="flex flex-col gap-1.5">
             <label htmlFor="filter-tag" className="text-[13px] font-bold text-ink">
               {t('eventFilters.tag')}
             </label>
-            <select
+            <Select
               id="filter-tag"
               name="tag"
               defaultValue={filters.tag?.toLowerCase() ?? ''}
@@ -286,7 +300,7 @@ async function EventList({
                   {tag.tag}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
           <button type="submit" className={buttonClass('secondary')}>
             {t('eventFilters.apply')}
@@ -302,11 +316,24 @@ async function EventList({
         </form>
       </search>
       {events.length === 0 && filtered ? (
-        <EmptyState title={t('eventFilters.noneTitle')} description={t('eventFilters.noneDescription')} />
+        <EmptyState
+          title={t('eventFilters.noneTitle')}
+          description={t('eventFilters.noneDescription')}
+          action={
+            <Link href={`/o/${org}`} className={buttonClass('secondary', 'md')}>
+              {t('orgHome.showEveryEvent')}
+            </Link>
+          }
+        />
       ) : events.length === 0 && active ? (
         <EmptyState
           title={t('orgHome.seriesEmptyTitle', { name: active.name })}
           description={t('orgHome.seriesEmptyDescription')}
+          action={
+            <Link href={`/o/${org}`} className={buttonClass('secondary', 'md')}>
+              {t('orgHome.showEveryEvent')}
+            </Link>
+          }
         />
       ) : events.length === 0 ? (
         <EmptyState
