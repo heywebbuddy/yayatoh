@@ -8,6 +8,8 @@ export const privateColumns = columnPrivacy('events', {
   access_code_attempts: { client_key: internal() },
   access_codes: { code: holder('code'), label: internal() },
   // Published announcements are public; the holders-only ones are not.
+  // U6: the organizer's own to-dos; never on a public page.
+  event_checklist_items: { title: internal() },
   event_announcements: {
     title: holder(undefined, { where: "audience <> 'public'" }),
     body: holder(undefined, { where: "audience <> 'public'" }),
