@@ -136,7 +136,7 @@ export default async function ConferenceHubPage({ params, searchParams }: Props)
                 key={tab.view}
                 href={href(tab.view)}
                 aria-current={tab.view === view ? 'page' : undefined}
-                className={`${tabClass(tab.view === view)} min-h-11 grow justify-center`}
+                className={`${tabClass(tab.view === view)} min-h-11 grow justify-center px-2.5!`}
               >
                 {tab.label}
               </a>
