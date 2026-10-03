@@ -778,3 +778,12 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **Revoking during a cutover freeze** waits for the freeze to end, because the freeze refuses every command except scans and provider completions. Say if revoke should be allowed during a freeze.
 - [ ] **Snapshots refresh** when a grant changes and when the agency clicks "Refresh numbers". A scheduled refresh is listed under "Later". Gross sales show only for clients who opted in.
 - [ ] **Agency terms (`legal-copy`):** the agency agreement terms (grants, no commission in v1) are still to be written (phase-6 plan §5).
+
+## M6.8b — agency v2 operations (2026-10-03, pending owner)
+- [ ] **Switch:** agency v2 is behind the platform switch `agency_v2`, off by default. Staff turn it on with `pnpm --filter @yayatoh/worker agency-v2 -- --on --reason "…"` (audited); there is no staff-console screen for it yet. Confirm one global switch is enough, or ask for per-org enablement.
+- [ ] **What an agency can keep private in a template:** its private notes, the checkout questions and the seating plan (each a checkbox). Ticket types and event settings always go to the client. Confirm the list.
+- [ ] **Brand kits are a name and an accent colour** for now; logos and fonts later. Applying a kit to the client's public pages is the client's own admins' decision (org settings); the agency only puts it in the client's library.
+- [ ] **Campaign fan-out:** audiences offered are "everyone with marketing consent" and "attendees of any of the client's events"; email only; send now or drafts. A client without a postal address gets a draft to finish. Confirm, or ask for scheduling and per-client audiences.
+- [ ] **Teams and day-of passes:** once an agency names a team for a client, only the team acts there; day-of passes default to three hours either side of the event (72 hours at most) and may be given to agency collaborators (event-day freelancers). The client sees and can revoke every person. Confirm the window and that collaborators may get passes.
+- [ ] **Detach vs handover:** the client detaches with one click (no step-up, like revoking); the agency's handover needs step-up. Both keep all the client's data and only end access. A handover does not move org ownership. During a cutover freeze both wait (like revoking, M6.7a).
+- [ ] **Design (U1):** the Select placeholder (`text-ink-3`) fails axe colour contrast on a card; the agency Team forms preselect the first option instead. Flagged for the design system.
