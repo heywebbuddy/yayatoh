@@ -12968,7 +12968,8 @@
       "people": "Persone",
       "connections": "Contatti",
       "meetings": "Incontri",
-      "profile": "Il mio profilo"
+      "profile": "Il mio profilo",
+      "chats": "Chat"
     },
     "signIn": {
       "intro": "Scopri chi altro partecipa, entra in contatto e prenota brevi incontri. Qui compare solo chi sceglie di partecipare.",
@@ -13068,7 +13069,8 @@
       "choosePlace": "Scegli un luogo",
       "placeRequired": "Scegli un luogo.",
       "requestMeeting": "Invia richiesta di incontro",
-      "meetingSent": "Richiesta di incontro inviata a {name}."
+      "meetingSent": "Richiesta di incontro inviata a {name}.",
+      "message": "Scrivi a {name}"
     },
     "kind": {
       "booth": "Stand",
@@ -13117,7 +13119,9 @@
       "withdrawn": "Richiesta ritirata.",
       "remove": "Rimuovi",
       "removeName": "Rimuovi il contatto con {name}",
-      "removed": "Contatto rimosso."
+      "removed": "Contatto rimosso.",
+      "message": "Scrivi",
+      "messageTo": "Scrivi a {name}"
     },
     "meetings": {
       "metaTitle": "I miei incontri",
@@ -13256,7 +13260,153 @@
         "tooShort": "Il tempo tra inizio e fine è più breve di una fascia.",
         "overlap": "Queste fasce si sovrappongono a quelle esistenti.",
         "tooMany": "È più di quanto questo evento possa contenere. Eliminane prima alcune."
+      },
+      "chatLabel": "Chat tra contatti e persone con un incontro, e con gli espositori al loro stand",
+      "chat": {
+        "heading": "Chat",
+        "on": "I partecipanti possono scrivere ai loro contatti e alle persone con cui hanno un incontro, e agli espositori che accettano chat. Vedi solo le conversazioni segnalate.",
+        "off": "La chat è disattivata. Attivala nelle impostazioni qui sopra.",
+        "stats": {
+          "conversations": "Conversazioni",
+          "messagesToday": "Messaggi nelle ultime 24 ore",
+          "openReports": "Segnalazioni di chat aperte",
+          "booths": "Stand che accettano chat"
+        },
+        "reports": "Segnalazioni di chat",
+        "noReports": "Nessuna segnalazione di chat da esaminare.",
+        "openReports": "Segnalazioni di chat aperte",
+        "reportTitle": "{reporter} ha segnalato la chat con {reported}",
+        "reportTitleBooth": "{reporter} ha segnalato la chat dello stand con {reported}",
+        "excerpt": "Gli ultimi messaggi prima della segnalazione",
+        "removedMessage": "Messaggio rimosso",
+        "remove": "Rimuovi",
+        "removeFrom": "Rimuovi il messaggio di {name} delle {time}",
+        "removed": "Messaggio rimosso. Nessuno lo vede più.",
+        "hide": "Nascondi dal networking",
+        "hideName": "Nascondi {name} dal networking",
+        "hidden": "{name} è nascosto dal networking.",
+        "suspend": "Sospendi la chat dello stand",
+        "suspendName": "Sospendi la chat dello stand di {name}",
+        "suspended": "La chat dello stand di {name} è sospesa.",
+        "dismiss": "Archivia",
+        "dismissReport": "Archivia la segnalazione su {name}",
+        "dismissed": "Segnalazione archiviata.",
+        "closedReports": "{count, plural, one {# segnalazione di chat gestita} other {# segnalazioni di chat gestite}}",
+        "moderation": {
+          "open": "Aperta",
+          "actioned": "Provvedimento preso",
+          "dismissed": "Archiviata"
+        },
+        "suspendedBooths": "Chat di stand sospese",
+        "noSuspended": "Nessuna chat di stand è sospesa.",
+        "restore": "Revoca la sospensione",
+        "restoreName": "Revoca la sospensione della chat dello stand di {name}",
+        "restored": "{name} può di nuovo ricevere chat."
       }
+    },
+    "unreadChats": "{count, plural, one {# chat con messaggi non letti} other {# chat con messaggi non letti}}"
+  },
+  "chat": {
+    "metaTitle": "Chat",
+    "title": "Chat",
+    "description": "Messaggi con i tuoi contatti e con chi ha un incontro con te, e con gli espositori al loro stand.",
+    "conversationsHeading": "Le tue chat",
+    "emptyTitle": "Ancora nessuna chat",
+    "emptyDescription": "Puoi scrivere a qualcuno quando siete in contatto o avete fissato un incontro. Apri uno dei tuoi contatti per iniziare.",
+    "toConnections": "Vai ai tuoi contatti",
+    "unread": "{count, plural, one {# messaggio non letto} other {# messaggi non letti}}",
+    "boothLabel": "Stand {numbers}",
+    "lastRemoved": "Messaggio rimosso",
+    "lastFromMe": "Tu: {body}",
+    "lastFromBooth": "Il tuo stand: {body}",
+    "boothsHeading": "Scrivi agli espositori",
+    "boothsHelp": "Questi espositori rispondono alle domande dal loro stand.",
+    "noBooths": "Al momento nessun espositore accetta chat.",
+    "chatWithBooth": "Scrivi a {name}",
+    "openBooth": "Scrivi",
+    "notice": {
+      "reported": "Grazie per la segnalazione. L’organizzatore e Yayatoh la esamineranno, e questa persona non può più scriverti.",
+      "blocked": "Bloccato. Non vi vedrete più nel networking."
+    },
+    "closed": {
+      "chat_off": "L’organizzatore ha disattivato la chat per questo evento.",
+      "not_connected": "Potrai scrivere a {name} quando sarete in contatto o avrete fissato un incontro.",
+      "booth_closed": "{name} al momento non accetta chat.",
+      "blocked": "Questa chat è bloccata.",
+      "blockedByMe": "Hai bloccato la chat di questo stand. Sbloccala qui sotto per scrivere di nuovo."
+    },
+    "threadMetaTitle": "Chat",
+    "threadTitle": "Chat con {name}",
+    "backToChats": "Tutte le chat",
+    "viewProfile": "Profilo di {name}",
+    "noMessages": "Ancora nessun messaggio. Saluta {name}.",
+    "logLabel": "Messaggi con {name}",
+    "you": "Tu",
+    "removed": "Messaggio rimosso dall’organizzatore",
+    "messageLabel": "Messaggio",
+    "messageHint": "Invio invia. Maiusc+Invio va a capo. Fino a 2.000 caratteri.",
+    "send": "Invia",
+    "live": "I nuovi messaggi compaiono qui appena arrivano.",
+    "connecting": "Connessione…",
+    "reconnecting": "Riconnessione… I nuovi messaggi compariranno quando sarai di nuovo online.",
+    "errors": {
+      "not_connected": "Puoi scrivere solo ai tuoi contatti o a chi ha un incontro fissato con te.",
+      "chat_off": "L’organizzatore ha disattivato la chat per questo evento.",
+      "booth_closed": "Questo espositore al momento non accetta chat.",
+      "blocked": "Questa chat è bloccata.",
+      "not_found": "Questa persona non è più disponibile per la chat.",
+      "too_fast": "Stai inviando messaggi troppo in fretta. Aspetta un minuto e riprova.",
+      "hourly_limit": "Hai inviato molti messaggi in quest’ora. Riprova più tardi.",
+      "too_many_new_chats": "Hai avviato molte nuove chat in quest’ora. Riprova più tardi.",
+      "awaiting_reply": "Aspetta una risposta prima di inviare altri messaggi.",
+      "required": "Scrivi prima un messaggio.",
+      "too_long": "Un messaggio può avere al massimo 2.000 caratteri.",
+      "already_removed": "Questo messaggio è già stato rimosso."
+    },
+    "safety": {
+      "summary": "Blocca o segnala {name}",
+      "block": "Blocca {name}",
+      "unblock": "Sblocca {name}",
+      "unblockHelp": "Potrete di nuovo scrivervi in questa chat.",
+      "blockBoothHelp": "{name} non potrà più risponderti e tu non potrai scrivergli. Puoi sbloccare in seguito.",
+      "blockVisitorHelp": "{name} non potrà più scrivere al tuo stand. Puoi sbloccare in seguito.",
+      "report": "Segnala e blocca {name}",
+      "reportHelp": "Racconta all’organizzatore cosa è successo. Anche Yayatoh esamina le segnalazioni di chat. Segnalare blocca anche questa chat.",
+      "reason": "Motivo",
+      "chooseReason": "Scegli un motivo",
+      "reasonRequired": "Scegli un motivo.",
+      "details": "Cosa è successo",
+      "detailsHint": "Obbligatorio per «Altro». Fino a 500 caratteri.",
+      "detailsRequired": "Raccontaci cosa è successo."
+    },
+    "portal": {
+      "title": "Chat dello stand",
+      "description": "I partecipanti iscritti al networking possono scrivere al tuo stand. Tutto il team dello stand condivide questa casella.",
+      "back": "Torna a {name}",
+      "backToChats": "Tutte le chat dello stand",
+      "on": "Accetta chat",
+      "off": "Non accetta chat",
+      "suspended": "L’organizzatore ha sospeso la chat del tuo stand dopo una segnalazione.",
+      "eventOff": "La chat è disattivata per questo evento.",
+      "notAtBooth": "I visitatori troveranno la chat del tuo stand quando avrai uno stand visibile.",
+      "turnOn": "Accetta chat al nostro stand",
+      "turnOff": "Non accettare più chat",
+      "adminOnly": "Solo l’amministratore del tuo espositore può attivare o disattivare la chat dello stand.",
+      "conversations": "Chat dei visitatori",
+      "emptyTitle": "Ancora nessuna chat",
+      "emptyDescription": "Quando i visitatori scrivono al tuo stand, i loro messaggi compaiono qui.",
+      "emptyOff": "Attiva la chat dello stand perché i visitatori possano scriverti.",
+      "blocked": "Bloccato",
+      "unreadChats": "{count, plural, =0 {Nessuna chat non letta} one {# chat con messaggi non letti} other {# chat con messaggi non letti}}",
+      "open": "Apri la chat dello stand",
+      "closedBlockedByMe": "Hai bloccato {name}. Sbloccalo qui sotto per rispondere.",
+      "closed": {
+        "chat_off": "La chat è disattivata per questo evento.",
+        "booth_closed": "Il tuo stand non accetta chat. Attiva la chat dello stand per rispondere.",
+        "blocked": "{name} ha bloccato la chat del tuo stand.",
+        "not_connected": "Questa chat è chiusa."
+      },
+      "reported": "Grazie. L’organizzatore e Yayatoh esamineranno la tua segnalazione; questo visitatore non può più scrivere al tuo stand."
     }
   }
 }

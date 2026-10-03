@@ -2,15 +2,21 @@ import { type TenantTx, withTenant } from '@yayatoh/db';
 import {
   addMeetingSlotsCommand,
   directoryQuery,
+  moderateChatReportCommand,
   myMeetingsQuery,
   optInCommand,
   optOutCommand,
+  replyBoothChatCommand,
+  reportChatCommand,
   reportPersonCommand,
   requestConnectionCommand,
   requestMeetingCommand,
   respondConnectionCommand,
   respondMeetingCommand,
   saveMeetingLocationCommand,
+  sendBoothMessageCommand,
+  sendChatMessageCommand,
+  setBoothChatCommand,
   updateNetworkSettingsCommand,
 } from '@yayatoh/engagement';
 import { type Command, type Ctx, createCtx, executeCommand, executeQuery } from '@yayatoh/kernel';
@@ -35,8 +41,17 @@ export async function networkPeople(orgId: string, eventId: string): Promise<str
  * on, a meeting point and a booth, three slots. Its two people opt in, connect and agree a meeting;
  * then the first reports the second (which blocks them: the connection is withdrawn and the
  * meeting cancelled) and the second opts out (a profile row that must never be listed).
+ *
+ * M5.8b chat (isolation coverage of every chat table): the two write to each other; the
+ * exhibitor turns booth chat on, the first writes to the booth and the booth answers; then the
+ * first reports the direct chat (the organizer dismisses it) on top of the M5.8a report.
  */
-export async function networkingFixture(orgId: string, eventId: string, ctx: (o?: Partial<Ctx>) => Ctx) {
+export async function networkingFixture(
+  orgId: string,
+  eventId: string,
+  ctx: (o?: Partial<Ctx>) => Ctx,
+  exhibitorCtx?: Ctx,
+) {
   const [a, b] = await networkPeople(orgId, eventId);
   if (!a || !b) throw new Error('fixture: networking needs two people at the fixture event');
   const pub = createCtx({ orgId });
@@ -84,6 +99,29 @@ export async function networkingFixture(orgId: string, eventId: string, ctx: (o?
     message: 'Coffee?',
   });
   await run(respondMeetingCommand, { eventId, email: b, meetingId: meeting.id, accept: true });
+  const chat = await run(sendChatMessageCommand, {
+    eventId,
+    email: a,
+    personId: ben,
+    body: 'Hi Ben, see you soon!',
+  });
+  const ana = (await executeQuery(directoryQuery, { eventId, email: b }, pub, ports)).people[0]?.id ?? '';
+  await run(sendChatMessageCommand, { eventId, email: b, personId: ana, body: 'Likewise.' });
+  if (exhibitorCtx) {
+    await run(setBoothChatCommand, { enabled: true }, exhibitorCtx);
+    const [ex] = await withTenant(ctx(), (tx) =>
+      tx.execute<{ id: string }>(
+        sql`select exhibitor_id as id from program.booth_assignments where event_id = ${eventId} limit 1`,
+      ),
+    );
+    const booth = await run(sendBoothMessageCommand, {
+      eventId,
+      email: a,
+      exhibitorId: ex?.id ?? '',
+      body: 'Do you ship to Canada?',
+    });
+    await run(replyBoothChatCommand, { conversationId: booth.conversationId, body: 'We do.' }, exhibitorCtx);
+  }
   await run(reportPersonCommand, {
     eventId,
     email: a,
@@ -91,5 +129,22 @@ export async function networkingFixture(orgId: string, eventId: string, ctx: (o?
     reason: 'spam',
     details: 'Sent the same pitch to everyone.',
   });
+  await run(reportChatCommand, {
+    eventId,
+    email: a,
+    conversationId: chat.conversationId,
+    reason: 'spam',
+    details: 'Fixture chat report.',
+  });
+  const [report] = await withTenant(ctx(), (tx) =>
+    tx.execute<{ id: string }>(
+      sql`select id from engagement.chat_reports where event_id = ${eventId} limit 1`,
+    ),
+  );
+  await run(
+    moderateChatReportCommand,
+    { eventId, reportId: report?.id ?? '', action: 'dismiss' as const },
+    ctx(),
+  );
   await run(optOutCommand, { eventId, email: b });
 }

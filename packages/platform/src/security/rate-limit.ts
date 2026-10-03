@@ -376,6 +376,15 @@ export const RATE_LIMIT_POLICIES = {
     identity: { limit: 120, windowMs: 60 * MIN },
     ipCeiling: { limit: 3000, windowMs: 10 * MIN },
   },
+  /** Networking chat (M5.8b): sending, read marks, block and report, from attendees and booth
+   * people; identity = the verified address or the portal account. The engagement module keeps
+   * the message limits themselves (per minute, hour, new chats, unanswered). */
+  chat: {
+    device: { limit: 120, windowMs: 10 * MIN },
+    anonymousIp: { limit: 600, windowMs: 10 * MIN },
+    identity: { limit: 300, windowMs: 60 * MIN },
+    ipCeiling: { limit: 6000, windowMs: 10 * MIN },
+  },
   /** CSP violation reports. */
   cspReport: {
     device: { limit: 60, windowMs: MIN },

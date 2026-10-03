@@ -12968,7 +12968,8 @@
       "people": "People",
       "connections": "Connections",
       "meetings": "Meetings",
-      "profile": "My profile"
+      "profile": "My profile",
+      "chats": "Chats"
     },
     "signIn": {
       "intro": "See who else is coming, connect and book short meetings. Only people who choose to take part appear here.",
@@ -13068,7 +13069,8 @@
       "choosePlace": "Choose a place",
       "placeRequired": "Choose a place.",
       "requestMeeting": "Send meeting request",
-      "meetingSent": "Meeting request sent to {name}."
+      "meetingSent": "Meeting request sent to {name}.",
+      "message": "Send {name} a message"
     },
     "kind": {
       "booth": "Booth",
@@ -13117,7 +13119,9 @@
       "withdrawn": "Request withdrawn.",
       "remove": "Remove",
       "removeName": "Remove your connection with {name}",
-      "removed": "Connection removed."
+      "removed": "Connection removed.",
+      "message": "Message",
+      "messageTo": "Message {name}"
     },
     "meetings": {
       "metaTitle": "My meetings",
@@ -13256,7 +13260,153 @@
         "tooShort": "The time between start and end is shorter than one slot.",
         "overlap": "These slots overlap slots you already have.",
         "tooMany": "That's more than this event can hold. Delete some first."
+      },
+      "chatLabel": "Chat between connections and meeting partners, and with exhibitors at their booths",
+      "chat": {
+        "heading": "Chat",
+        "on": "Attendees can chat with people they're connected with or meeting, and with exhibitors that take chats. You only ever see conversations someone reported.",
+        "off": "Chat is off. Turn it on in the settings above.",
+        "stats": {
+          "conversations": "Conversations",
+          "messagesToday": "Messages in the last 24 hours",
+          "openReports": "Open chat reports",
+          "booths": "Booths taking chats"
+        },
+        "reports": "Chat reports",
+        "noReports": "No chat reports to review.",
+        "openReports": "Open chat reports",
+        "reportTitle": "{reporter} reported their chat with {reported}",
+        "reportTitleBooth": "{reporter} reported their booth chat with {reported}",
+        "excerpt": "The latest messages before the report",
+        "removedMessage": "Message removed",
+        "remove": "Remove",
+        "removeFrom": "Remove the message from {name} at {time}",
+        "removed": "Message removed. Neither side sees it any more.",
+        "hide": "Hide from networking",
+        "hideName": "Hide {name} from networking",
+        "hidden": "{name} is hidden from networking.",
+        "suspend": "Suspend booth chat",
+        "suspendName": "Suspend {name}'s booth chat",
+        "suspended": "{name}'s booth chat is suspended.",
+        "dismiss": "Dismiss",
+        "dismissReport": "Dismiss the report about {name}",
+        "dismissed": "Report dismissed.",
+        "closedReports": "{count, plural, one {# handled chat report} other {# handled chat reports}}",
+        "moderation": {
+          "open": "Open",
+          "actioned": "Acted on",
+          "dismissed": "Dismissed"
+        },
+        "suspendedBooths": "Suspended booth chats",
+        "noSuspended": "No booth chat is suspended.",
+        "restore": "Lift suspension",
+        "restoreName": "Lift the suspension of {name}'s booth chat",
+        "restored": "{name} can take chats again."
       }
+    },
+    "unreadChats": "{count, plural, one {# chat with unread messages} other {# chats with unread messages}}"
+  },
+  "chat": {
+    "metaTitle": "Chats",
+    "title": "Chats",
+    "description": "Messages with people you're connected with or meeting, and with exhibitors at their booths.",
+    "conversationsHeading": "Your chats",
+    "emptyTitle": "No chats yet",
+    "emptyDescription": "You can message people once you're connected or have agreed a meeting. Open one of your connections to start.",
+    "toConnections": "Go to your connections",
+    "unread": "{count, plural, one {# unread message} other {# unread messages}}",
+    "boothLabel": "Booth {numbers}",
+    "lastRemoved": "Message removed",
+    "lastFromMe": "You: {body}",
+    "lastFromBooth": "Your booth: {body}",
+    "boothsHeading": "Chat with exhibitors",
+    "boothsHelp": "These exhibitors answer questions at their booth.",
+    "noBooths": "No exhibitor is taking chats right now.",
+    "chatWithBooth": "Chat with {name}",
+    "openBooth": "Chat",
+    "notice": {
+      "reported": "Thanks for telling us. The organizer and Yayatoh will review it, and they can't message you any more.",
+      "blocked": "Blocked. You won't see each other in networking any more."
+    },
+    "closed": {
+      "chat_off": "The organizer has turned chat off for this event.",
+      "not_connected": "You can message {name} once you're connected or have agreed a meeting.",
+      "booth_closed": "{name} isn't taking chats right now.",
+      "blocked": "This chat is blocked.",
+      "blockedByMe": "You blocked this booth's chat. Unblock it below to write again."
+    },
+    "threadMetaTitle": "Chat",
+    "threadTitle": "Chat with {name}",
+    "backToChats": "All chats",
+    "viewProfile": "{name}'s profile",
+    "noMessages": "No messages yet. Say hello to {name}.",
+    "logLabel": "Messages with {name}",
+    "you": "You",
+    "removed": "Message removed by the organizer",
+    "messageLabel": "Message",
+    "messageHint": "Enter sends. Shift+Enter starts a new line. Up to 2,000 characters.",
+    "send": "Send",
+    "live": "New messages appear here as they arrive.",
+    "connecting": "Connecting…",
+    "reconnecting": "Reconnecting… New messages will appear when you're back online.",
+    "errors": {
+      "not_connected": "You can only message people you're connected with or have agreed a meeting with.",
+      "chat_off": "The organizer has turned chat off for this event.",
+      "booth_closed": "This exhibitor isn't taking chats right now.",
+      "blocked": "This chat is blocked.",
+      "not_found": "This person isn't available for chat any more.",
+      "too_fast": "You're sending messages too fast. Wait a minute, then try again.",
+      "hourly_limit": "You've sent a lot of messages this hour. Try again later.",
+      "too_many_new_chats": "You've started many new chats this hour. Try again later.",
+      "awaiting_reply": "Wait for a reply before you send more messages.",
+      "required": "Write a message first.",
+      "too_long": "A message can be at most 2,000 characters.",
+      "already_removed": "This message was already removed."
+    },
+    "safety": {
+      "summary": "Block or report {name}",
+      "block": "Block {name}",
+      "unblock": "Unblock {name}",
+      "unblockHelp": "They can write to you again in this chat.",
+      "blockBoothHelp": "{name} can't answer you any more, and you can't write to them. You can unblock later.",
+      "blockVisitorHelp": "{name} can't write to your booth any more. You can unblock later.",
+      "report": "Report and block {name}",
+      "reportHelp": "Tell the organizer what happened. Yayatoh reviews chat reports too. Reporting also blocks this chat.",
+      "reason": "Reason",
+      "chooseReason": "Choose a reason",
+      "reasonRequired": "Choose a reason.",
+      "details": "What happened",
+      "detailsHint": "Required for “Something else”. Up to 500 characters.",
+      "detailsRequired": "Tell us what happened."
+    },
+    "portal": {
+      "title": "Booth chat",
+      "description": "Attendees who joined networking can write to your booth. Everyone on your booth team shares this inbox.",
+      "back": "Back to {name}",
+      "backToChats": "All booth chats",
+      "on": "Taking chats",
+      "off": "Not taking chats",
+      "suspended": "The organizer suspended your booth chat after a report.",
+      "eventOff": "Chat is off for this event.",
+      "notAtBooth": "Visitors can find your booth chat once you have a listed booth.",
+      "turnOn": "Take chats at our booth",
+      "turnOff": "Stop taking chats",
+      "adminOnly": "Only your exhibitor admin can turn booth chat on or off.",
+      "conversations": "Visitors' chats",
+      "emptyTitle": "No chats yet",
+      "emptyDescription": "When visitors write to your booth, their messages appear here.",
+      "emptyOff": "Turn booth chat on so visitors can write to you.",
+      "blocked": "Blocked",
+      "unreadChats": "{count, plural, =0 {No unread chats} one {# chat with unread messages} other {# chats with unread messages}}",
+      "open": "Open booth chat",
+      "closedBlockedByMe": "You blocked {name}. Unblock them below to answer.",
+      "closed": {
+        "chat_off": "Chat is off for this event.",
+        "booth_closed": "Your booth isn't taking chats. Turn booth chat on to answer.",
+        "blocked": "{name} blocked your booth's chat.",
+        "not_connected": "This chat is closed."
+      },
+      "reported": "Thanks. The organizer and Yayatoh will review your report; this visitor can't write to your booth any more."
     }
   }
 }

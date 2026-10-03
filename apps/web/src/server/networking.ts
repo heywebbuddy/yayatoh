@@ -1,5 +1,6 @@
 import 'server-only';
 import {
+  chatInboxQuery,
   myConnectionsQuery,
   myMeetingsQuery,
   type NetworkHomeDto,
@@ -65,8 +66,8 @@ export type NetworkPage =
       readonly home: NetworkHomeDto;
       readonly at: { readonly eventId: string; readonly email: string };
       readonly ctx: Ctx;
-      /** Requests waiting for this person's answer (the tab counts). */
-      readonly waiting: { readonly connections: number; readonly meetings: number };
+      /** Requests waiting for this person's answer, and unread chats (the tab counts). */
+      readonly waiting: { readonly connections: number; readonly meetings: number; readonly chats: number };
     };
 
 /**
@@ -89,9 +90,10 @@ export async function loadNetworkPage(slug: string): Promise<NetworkPage | null>
     throw err;
   }
   if (!home.profile?.optedIn || home.profile.hidden) return { kind: 'opt_in', target, home };
-  const [c, m] = await Promise.all([
+  const [c, m, chats] = await Promise.all([
     executeQuery(myConnectionsQuery, at, ctx, ports),
     executeQuery(myMeetingsQuery, at, ctx, ports),
+    executeQuery(chatInboxQuery, at, ctx, ports),
   ]);
   return {
     kind: 'member',
@@ -99,6 +101,16 @@ export async function loadNetworkPage(slug: string): Promise<NetworkPage | null>
     home,
     at,
     ctx,
-    waiting: { connections: c.incoming.length, meetings: m.incoming.length },
+    waiting: {
+      connections: c.incoming.length,
+      meetings: m.incoming.length,
+      chats: chats.conversations.filter((x) => x.unread > 0).length,
+    },
   };
 }
+
+/** The chat stream of an event's networking pages (M5.8b): the viewer's own inbox. */
+export const chatStreamPath = (slug: string) => `/events/${slug}/network/chat/stream`;
+
+/** An exhibitor's booth chat stream (M5.8b): the signed-in portal person's own exhibitor inbox. */
+export const boothStreamPath = '/event-portal/chat/stream';

@@ -154,13 +154,23 @@ export default async function NetworkConnectionsPage({ params }: Params) {
             mine.connected,
             t('connections.noConnected'),
             (c) => (
-              <ActionButton
-                action={withdrawConnectionAction.bind(null, slug, c.id)}
-                label={t('connections.remove')}
-                accessibleName={t('connections.removeName', { name: c.person.displayName })}
-                done={t('connections.removed')}
-                variant="ghost"
-              />
+              <>
+                {/* M5.8b: chat with a connection. */}
+                <Link
+                  href={networkPath(slug, `/chat/${c.person.id}`)}
+                  className={buttonClass('secondary', 'md', 'min-h-11')}
+                  aria-label={t('connections.messageTo', { name: c.person.displayName })}
+                >
+                  {t('connections.message')}
+                </Link>
+                <ActionButton
+                  action={withdrawConnectionAction.bind(null, slug, c.id)}
+                  label={t('connections.remove')}
+                  accessibleName={t('connections.removeName', { name: c.person.displayName })}
+                  done={t('connections.removed')}
+                  variant="ghost"
+                />
+              </>
             ),
           )}
         </>

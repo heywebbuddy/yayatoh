@@ -21,6 +21,8 @@ export {
   unpublishAgendaCommand,
 } from './agenda.ts';
 export * from './agenda-dto.ts';
+// M5.8b: exhibitors at booths, for booth chat (engagement).
+export { type BoothExhibitor, boothExhibitorsTx } from './booth-chat.ts';
 // M5.4a: exhibitor portal (members, invitations, profile approval) and booths.
 export {
   assignBoothCommand,

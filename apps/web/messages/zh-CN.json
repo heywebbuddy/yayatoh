@@ -12968,7 +12968,8 @@
       "people": "参会者",
       "connections": "联系人",
       "meetings": "会面",
-      "profile": "我的资料"
+      "profile": "我的资料",
+      "chats": "聊天"
     },
     "signIn": {
       "intro": "看看还有谁会来、建立联系并预约简短会面。这里只显示选择参与的人。",
@@ -13068,7 +13069,8 @@
       "choosePlace": "选择地点",
       "placeRequired": "请选择地点。",
       "requestMeeting": "发送会面请求",
-      "meetingSent": "已向 {name} 发送会面请求。"
+      "meetingSent": "已向 {name} 发送会面请求。",
+      "message": "给 {name} 发消息"
     },
     "kind": {
       "booth": "展位",
@@ -13117,7 +13119,9 @@
       "withdrawn": "已撤回请求。",
       "remove": "移除",
       "removeName": "移除与 {name} 的联系",
-      "removed": "已移除联系人。"
+      "removed": "已移除联系人。",
+      "message": "发消息",
+      "messageTo": "给 {name} 发消息"
     },
     "meetings": {
       "metaTitle": "我的会面",
@@ -13256,7 +13260,153 @@
         "tooShort": "开始与结束之间的时间短于一个时段。",
         "overlap": "这些时段与已有时段重叠。",
         "tooMany": "超出本活动的上限。请先删除一些。"
+      },
+      "chatLabel": "联系人和会面对象之间的聊天，以及与展商在展位上的聊天",
+      "chat": {
+        "heading": "聊天",
+        "on": "参会者可以与联系人、会面对象以及接受聊天的展商聊天。你只能看到被举报的对话。",
+        "off": "聊天已关闭。请在上方设置中开启。",
+        "stats": {
+          "conversations": "对话",
+          "messagesToday": "过去 24 小时的消息",
+          "openReports": "待处理的聊天举报",
+          "booths": "接受聊天的展位"
+        },
+        "reports": "聊天举报",
+        "noReports": "没有需要审核的聊天举报。",
+        "openReports": "待处理的聊天举报",
+        "reportTitle": "{reporter} 举报了与 {reported} 的聊天",
+        "reportTitleBooth": "{reporter} 举报了与 {reported} 的展位聊天",
+        "excerpt": "举报前的最新消息",
+        "removedMessage": "消息已移除",
+        "remove": "移除",
+        "removeFrom": "移除 {name} 在 {time} 发送的消息",
+        "removed": "消息已移除，双方都不会再看到。",
+        "hide": "在社交中隐藏",
+        "hideName": "在社交中隐藏 {name}",
+        "hidden": "已在社交中隐藏 {name}。",
+        "suspend": "暂停展位聊天",
+        "suspendName": "暂停 {name} 的展位聊天",
+        "suspended": "{name} 的展位聊天已暂停。",
+        "dismiss": "驳回",
+        "dismissReport": "驳回关于 {name} 的举报",
+        "dismissed": "举报已驳回。",
+        "closedReports": "{count, plural, other {# 条已处理的聊天举报}}",
+        "moderation": {
+          "open": "待处理",
+          "actioned": "已处理",
+          "dismissed": "已驳回"
+        },
+        "suspendedBooths": "已暂停的展位聊天",
+        "noSuspended": "没有被暂停的展位聊天。",
+        "restore": "解除暂停",
+        "restoreName": "解除 {name} 展位聊天的暂停",
+        "restored": "{name} 可以重新接受聊天了。"
       }
+    },
+    "unreadChats": "{count, plural, other {# 个聊天有未读消息}}"
+  },
+  "chat": {
+    "metaTitle": "聊天",
+    "title": "聊天",
+    "description": "与联系人、会面对象以及展位上的展商的消息。",
+    "conversationsHeading": "你的聊天",
+    "emptyTitle": "还没有聊天",
+    "emptyDescription": "成为联系人或约定会面后，你就可以给对方发消息。打开一位联系人开始聊天。",
+    "toConnections": "前往联系人",
+    "unread": "{count, plural, other {# 条未读消息}}",
+    "boothLabel": "展位 {numbers}",
+    "lastRemoved": "消息已移除",
+    "lastFromMe": "你：{body}",
+    "lastFromBooth": "你的展位：{body}",
+    "boothsHeading": "与展商聊天",
+    "boothsHelp": "这些展商在展位上回答问题。",
+    "noBooths": "目前没有展商接受聊天。",
+    "chatWithBooth": "与 {name} 聊天",
+    "openBooth": "聊天",
+    "notice": {
+      "reported": "感谢告知。主办方和 Yayatoh 会进行审核，对方将无法再给你发消息。",
+      "blocked": "已屏蔽。你们在社交中将不再看到彼此。"
+    },
+    "closed": {
+      "chat_off": "主办方已关闭本活动的聊天。",
+      "not_connected": "成为联系人或约定会面后，你才能给 {name} 发消息。",
+      "booth_closed": "{name} 目前不接受聊天。",
+      "blocked": "此聊天已被屏蔽。",
+      "blockedByMe": "你已屏蔽此展位的聊天。在下方解除屏蔽后即可再次发送。"
+    },
+    "threadMetaTitle": "聊天",
+    "threadTitle": "与 {name} 的聊天",
+    "backToChats": "全部聊天",
+    "viewProfile": "{name} 的资料",
+    "noMessages": "还没有消息。和 {name} 打个招呼吧。",
+    "logLabel": "与 {name} 的消息",
+    "you": "你",
+    "removed": "主办方移除了这条消息",
+    "messageLabel": "消息",
+    "messageHint": "按 Enter 发送，Shift+Enter 换行。最多 2,000 个字符。",
+    "send": "发送",
+    "live": "新消息一到就会显示在这里。",
+    "connecting": "正在连接…",
+    "reconnecting": "正在重新连接… 恢复在线后会显示新消息。",
+    "errors": {
+      "not_connected": "你只能给联系人或已约定会面的人发消息。",
+      "chat_off": "主办方已关闭本活动的聊天。",
+      "booth_closed": "该展商目前不接受聊天。",
+      "blocked": "此聊天已被屏蔽。",
+      "not_found": "此人已无法聊天。",
+      "too_fast": "你发送消息太快了。请等一分钟再试。",
+      "hourly_limit": "你这一小时发送的消息太多了。请稍后再试。",
+      "too_many_new_chats": "你这一小时发起的新聊天太多了。请稍后再试。",
+      "awaiting_reply": "请等对方回复后再继续发送。",
+      "required": "请先输入消息。",
+      "too_long": "消息最多 2,000 个字符。",
+      "already_removed": "这条消息已被移除。"
+    },
+    "safety": {
+      "summary": "屏蔽或举报 {name}",
+      "block": "屏蔽 {name}",
+      "unblock": "解除屏蔽 {name}",
+      "unblockHelp": "你们可以在此聊天中重新互发消息。",
+      "blockBoothHelp": "{name} 将无法回复你，你也无法给对方发消息。你可以稍后解除屏蔽。",
+      "blockVisitorHelp": "{name} 将无法再给你的展位发消息。你可以稍后解除屏蔽。",
+      "report": "举报并屏蔽 {name}",
+      "reportHelp": "告诉主办方发生了什么。Yayatoh 也会审核聊天举报。举报也会屏蔽此聊天。",
+      "reason": "原因",
+      "chooseReason": "选择原因",
+      "reasonRequired": "请选择原因。",
+      "details": "发生了什么",
+      "detailsHint": "选择“其他”时必填。最多 500 个字符。",
+      "detailsRequired": "请告诉我们发生了什么。"
+    },
+    "portal": {
+      "title": "展位聊天",
+      "description": "加入社交的参会者可以给你的展位发消息。展位团队共用这个收件箱。",
+      "back": "返回 {name}",
+      "backToChats": "全部展位聊天",
+      "on": "正在接受聊天",
+      "off": "不接受聊天",
+      "suspended": "收到举报后，主办方已暂停你的展位聊天。",
+      "eventOff": "本活动的聊天已关闭。",
+      "notAtBooth": "你有公开的展位后，访客才能找到你的展位聊天。",
+      "turnOn": "在我们的展位接受聊天",
+      "turnOff": "停止接受聊天",
+      "adminOnly": "只有展商管理员可以开启或关闭展位聊天。",
+      "conversations": "访客的聊天",
+      "emptyTitle": "还没有聊天",
+      "emptyDescription": "访客给你的展位发消息后，会显示在这里。",
+      "emptyOff": "开启展位聊天，访客才能给你发消息。",
+      "blocked": "已屏蔽",
+      "unreadChats": "{count, plural, =0 {没有未读聊天} other {# 个聊天有未读消息}}",
+      "open": "打开展位聊天",
+      "closedBlockedByMe": "你已屏蔽 {name}。在下方解除屏蔽后即可回复。",
+      "closed": {
+        "chat_off": "本活动的聊天已关闭。",
+        "booth_closed": "你的展位不接受聊天。开启展位聊天后即可回复。",
+        "blocked": "{name} 已屏蔽你的展位聊天。",
+        "not_connected": "此聊天已关闭。"
+      },
+      "reported": "谢谢。主办方和 Yayatoh 会审核你的举报；该访客已无法再给你的展位发消息。"
     }
   }
 }

@@ -280,6 +280,8 @@ export const networkSettings = tenantTable(
     eventId: uuid('event_id').notNull(),
     enabled: boolean('enabled').notNull().default(false),
     meetingsEnabled: boolean('meetings_enabled').notNull().default(true),
+    /** M5.8b: 1:1 chat between connections and meeting parties, and booth chat (on with networking). */
+    chatEnabled: boolean('chat_enabled').notNull().default(true),
   },
   (t) => [uniqueIndex('network_settings_org_event_key').on(t.orgId, t.eventId)],
 );
@@ -524,5 +526,184 @@ export const meetings = tenantTable(
       sql`(status = 'accepted') = (table_no is not null) and (table_no is null or table_no between 1 and 50)`,
     ),
     check('meetings_message_check', sql`message is null or char_length(message) between 1 and 300`),
+  ],
+);
+
+/* ------------------------------------------------------------------------- chat (M5.8b) ---- */
+
+export const CHAT_KINDS = ['direct', 'booth'] as const;
+export type ChatKind = (typeof CHAT_KINDS)[number];
+/** The two sides of a conversation: `a` the attendee (the lower profile id of a direct pair), `b` the other. */
+export const CHAT_SIDES = ['a', 'b'] as const;
+export type ChatSide = (typeof CHAT_SIDES)[number];
+/** The organizer's handling of a chat report. */
+export const CHAT_MODERATION_STATES = ['open', 'actioned', 'dismissed'] as const;
+export type ChatModerationState = (typeof CHAT_MODERATION_STATES)[number];
+/** Platform staff review of a chat report (M1.10d). */
+export const CHAT_REVIEW_STATES = ['open', 'resolved', 'dismissed'] as const;
+export type ChatReviewState = (typeof CHAT_REVIEW_STATES)[number];
+
+/**
+ * A 1:1 conversation at one event (P5-3): `direct` between two networking profiles (`profile_a`
+ * the lower id; one per pair), or `booth` between an attendee (`profile_a`) and an exhibitor (one
+ * per attendee and exhibitor, answered by the exhibitor's portal people). The exhibitor FK to
+ * `program.exhibitors` is hand-written in the migration. Each side's last read; a booth chat can
+ * be blocked by either side (`blocked_by`); direct chats honour `network_blocks`.
+ */
+export const chatConversations = tenantTable(
+  engagementSchema,
+  'chat_conversations',
+  {
+    eventId: uuid('event_id').notNull(),
+    kind: text('kind').notNull(),
+    profileA: uuid('profile_a').notNull(),
+    profileB: uuid('profile_b'),
+    exhibitorId: uuid('exhibitor_id'),
+    startedBy: text('started_by').notNull(),
+    aReadAt: ts('a_read_at'),
+    bReadAt: ts('b_read_at'),
+    lastMessageAt: ts('last_message_at'),
+    blockedBy: text('blocked_by'),
+    blockedAt: ts('blocked_at'),
+  },
+  (t) => [
+    uniqueIndex('chat_conversations_org_direct_key')
+      .on(t.orgId, t.profileA, t.profileB)
+      .where(sql`kind = 'direct'`),
+    uniqueIndex('chat_conversations_org_booth_key')
+      .on(t.orgId, t.profileA, t.exhibitorId)
+      .where(sql`kind = 'booth'`),
+    index('chat_conversations_org_a_idx').on(t.orgId, t.profileA, t.lastMessageAt),
+    index('chat_conversations_org_b_idx').on(t.orgId, t.profileB, t.lastMessageAt),
+    index('chat_conversations_org_exhibitor_idx').on(t.orgId, t.exhibitorId, t.lastMessageAt),
+    index('chat_conversations_org_event_idx').on(t.orgId, t.eventId),
+    foreignKey({
+      name: 'chat_conversations_profile_a_fk',
+      columns: [t.orgId, t.profileA],
+      foreignColumns: [networkProfiles.orgId, networkProfiles.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'chat_conversations_profile_b_fk',
+      columns: [t.orgId, t.profileB],
+      foreignColumns: [networkProfiles.orgId, networkProfiles.id],
+    }).onDelete('cascade'),
+    check('chat_conversations_kind_check', sql`kind in ('direct', 'booth')`),
+    check(
+      'chat_conversations_shape_check',
+      sql`(kind = 'direct' and profile_b is not null and exhibitor_id is null and profile_a < profile_b)
+        or (kind = 'booth' and profile_b is null and exhibitor_id is not null)`,
+    ),
+    check('chat_conversations_started_by_check', sql`started_by in ('a', 'b')`),
+    check(
+      'chat_conversations_blocked_check',
+      sql`(blocked_by is null) = (blocked_at is null) and (blocked_by is null or (kind = 'booth' and blocked_by in ('a', 'b')))`,
+    ),
+  ],
+);
+
+/**
+ * One message. `sender` is the side; on an exhibitor's side the portal account that wrote it is
+ * kept (`sender_account_id`, for the audit trail, never shown to the attendee). An organizer can
+ * remove a reported message (`removed_at`): neither side sees its text again.
+ */
+export const chatMessages = tenantTable(
+  engagementSchema,
+  'chat_messages',
+  {
+    eventId: uuid('event_id').notNull(),
+    conversationId: uuid('conversation_id').notNull(),
+    sender: text('sender').notNull(),
+    senderAccountId: uuid('sender_account_id'),
+    body: text('body').notNull(),
+    removedAt: ts('removed_at'),
+    removedBy: uuid('removed_by'),
+  },
+  (t) => [
+    index('chat_messages_org_conversation_idx').on(t.orgId, t.conversationId, t.createdAt),
+    index('chat_messages_org_event_idx').on(t.orgId, t.eventId, t.createdAt),
+    foreignKey({
+      name: 'chat_messages_conversation_fk',
+      columns: [t.orgId, t.conversationId],
+      foreignColumns: [chatConversations.orgId, chatConversations.id],
+    }).onDelete('cascade'),
+    check('chat_messages_sender_check', sql`sender in ('a', 'b')`),
+    check('chat_messages_body_check', sql`char_length(body) between 1 and 2000`),
+    check('chat_messages_removed_check', sql`(removed_at is null) = (removed_by is null)`),
+  ],
+);
+
+/**
+ * An exhibitor's booth chat: off until their exhibitor admin turns it on; an organizer can suspend
+ * it after a report (`suspended_at`). The exhibitor FK is hand-written in the migration.
+ */
+export const boothChatSettings = tenantTable(
+  engagementSchema,
+  'booth_chat_settings',
+  {
+    eventId: uuid('event_id').notNull(),
+    exhibitorId: uuid('exhibitor_id').notNull(),
+    enabled: boolean('enabled').notNull().default(false),
+    suspendedAt: ts('suspended_at'),
+    suspendedBy: uuid('suspended_by'),
+  },
+  (t) => [
+    uniqueIndex('booth_chat_settings_org_exhibitor_key').on(t.orgId, t.exhibitorId),
+    index('booth_chat_settings_org_event_idx').on(t.orgId, t.eventId),
+    check('booth_chat_settings_suspended_check', sql`(suspended_at is null) = (suspended_by is null)`),
+  ],
+);
+
+/**
+ * A report about a conversation from one of its sides. Reporting also blocks. The organizer
+ * handles it (`moderation`: hide the person or suspend the booth's chat, remove messages, or
+ * dismiss) and Yayatoh staff review it in the platform queue (`status`, M1.10d).
+ */
+export const chatReports = tenantTable(
+  engagementSchema,
+  'chat_reports',
+  {
+    eventId: uuid('event_id').notNull(),
+    conversationId: uuid('conversation_id').notNull(),
+    reporter: text('reporter').notNull(),
+    reporterAccountId: uuid('reporter_account_id'),
+    reason: text('reason').notNull(),
+    details: text('details'),
+    moderation: text('moderation').notNull().default('open'),
+    moderatedAt: ts('moderated_at'),
+    moderatedBy: uuid('moderated_by'),
+    status: text('status').notNull().default('open'),
+    /** Staff review (apps/admin): who (the `staff:<userId>` actor), when and why. */
+    reviewedBy: text('reviewed_by'),
+    reviewedAt: ts('reviewed_at'),
+    reviewNote: text('review_note'),
+  },
+  (t) => [
+    uniqueIndex('chat_reports_org_open_key')
+      .on(t.orgId, t.conversationId, t.reporter)
+      .where(sql`moderation = 'open'`),
+    index('chat_reports_org_event_idx').on(t.orgId, t.eventId, t.moderation, t.createdAt),
+    index('chat_reports_open_created_idx').on(t.createdAt, t.orgId).where(sql`status = 'open'`),
+    foreignKey({
+      name: 'chat_reports_conversation_fk',
+      columns: [t.orgId, t.conversationId],
+      foreignColumns: [chatConversations.orgId, chatConversations.id],
+    }).onDelete('cascade'),
+    check('chat_reports_reporter_check', sql`reporter in ('a', 'b')`),
+    check(
+      'chat_reports_reason_check',
+      sql`reason in ('spam', 'harassment', 'inappropriate', 'fake', 'other')`,
+    ),
+    check('chat_reports_details_check', sql`details is null or char_length(details) between 1 and 500`),
+    check('chat_reports_moderation_check', sql`moderation in ('open', 'actioned', 'dismissed')`),
+    check('chat_reports_moderated_check', sql`(moderation = 'open') = (moderated_at is null)`),
+    check('chat_reports_status_check', sql`status in ('open', 'resolved', 'dismissed')`),
+    check(
+      'chat_reports_review_check',
+      sql`(status = 'open' and reviewed_at is null) or (status <> 'open' and reviewed_at is not null and reviewed_by is not null and review_note is not null)`,
+    ),
+    check(
+      'chat_reports_review_note_check',
+      sql`review_note is null or char_length(review_note) between 1 and 1000`,
+    ),
   ],
 );

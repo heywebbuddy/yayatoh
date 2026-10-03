@@ -1,6 +1,6 @@
 import { myMeetingsQuery, type PersonDetailDto, personQuery, REPORT_REASONS } from '@yayatoh/engagement';
 import { executeQuery, isDomainError } from '@yayatoh/kernel';
-import { Avatar, avatarTone, Card, StatusPill } from '@yayatoh/ui';
+import { Avatar, avatarTone, buttonClass, Card, StatusPill } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
@@ -13,7 +13,7 @@ import {
   SafetyForms,
 } from '@/components/networking/network-forms.tsx';
 import { NetworkShell } from '@/components/networking/network-shell.tsx';
-import { getPathname } from '@/i18n/navigation.ts';
+import { getPathname, Link } from '@/i18n/navigation.ts';
 import { pageLocale } from '@/server/locale.ts';
 import { loadNetworkPage, networkPath } from '@/server/networking.ts';
 import { ports } from '@/server/ports.ts';
@@ -133,7 +133,16 @@ export default async function NetworkPersonPage({ params }: Params) {
             </div>
           </div>
         ) : (
-          <p className="text-body text-ink-2">{t('person.connectedHelp', { name: who.displayName })}</p>
+          <div className="flex flex-col gap-2">
+            <p className="text-body text-ink-2">{t('person.connectedHelp', { name: who.displayName })}</p>
+            {/* M5.8b: chat with a connection. */}
+            <Link
+              href={networkPath(slug, `/chat/${who.id}`)}
+              className={buttonClass('primary', 'md', 'min-h-11 self-start')}
+            >
+              {t('person.message', { name: who.displayName })}
+            </Link>
+          </div>
         )}
       </section>
 

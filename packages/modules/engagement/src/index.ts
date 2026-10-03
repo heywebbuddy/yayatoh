@@ -1,4 +1,40 @@
 // M5.7a: live polls and moderated Q&A per program session.
+
+// M5.8b: networking chat (1:1 between connections and meeting parties, booth chat, moderation).
+export {
+  blockBoothCommand,
+  boothThreadQuery,
+  chatInboxQuery,
+  chatReported,
+  chatStarted,
+  chatThreadQuery,
+  markChatReadCommand,
+  ReportChatInput,
+  reportChatCommand,
+  SendBoothInput,
+  SendChatInput,
+  sendBoothMessageCommand,
+  sendChatMessageCommand,
+} from './chat/attendee.ts';
+export {
+  chatConsoleQuery,
+  moderateChatReportCommand,
+  removeChatMessageCommand,
+  restoreBoothChatCommand,
+} from './chat/console.ts';
+export * from './chat/dto.ts';
+export {
+  blockVisitorCommand,
+  boothChatThreadQuery,
+  boothInboxQuery,
+  markBoothReadCommand,
+  replyBoothChatCommand,
+  reportVisitorCommand,
+  setBoothChatCommand,
+} from './chat/exhibitor.ts';
+export { BOOTH_CHAT_CHANNEL, CHAT_CHANNEL, CHAT_REALTIME_CHANNELS } from './chat/realtime.ts';
+export { chatReportsForReviewTx, chatRetentionCommand, reviewChatReportCommand } from './chat/review.ts';
+export { attendeeChatChannel, chatAttachAllowed, exhibitorChatChannel } from './chat/stream.ts';
 export {
   CreatePollInput,
   closePollCommand,
@@ -17,6 +53,20 @@ export {
   UpdateSettingsInput,
   updateSettingsCommand,
 } from './commands.ts';
+export {
+  BOOTH_PER_MINUTE,
+  CHAT_MESSAGE_MAX,
+  CHAT_PAGE,
+  CHAT_PER_HOUR,
+  CHAT_PER_MINUTE,
+  CHAT_RETENTION_MONTHS,
+  type ChatRefusal,
+  chatRefusal,
+  chatRetentionCutoff,
+  NEW_CHATS_PER_HOUR,
+  normalizeChatBody,
+  UNANSWERED_LIMIT,
+} from './domain/chat.ts';
 // M5.8a: networking (directory, connections, meetings, block and report).
 export {
   DIRECTORY_PAGE,
@@ -139,6 +189,10 @@ export { ENGAGEMENT_REALTIME_CHANNELS, LIVE_CHANNEL, MODERATION_CHANNEL } from '
 export {
   ANONYMOUS_IDENTITY,
   type AnonymousIdentity,
+  CHAT_KINDS,
+  CHAT_MODERATION_STATES,
+  CHAT_REVIEW_STATES,
+  type ChatKind,
   CONNECTION_STATES,
   type ConnectionState,
   LOCATION_KINDS,

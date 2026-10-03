@@ -1,5 +1,6 @@
+import { boothInboxQuery } from '@yayatoh/engagement';
 import type { PortalPrincipal } from '@yayatoh/events';
-import { executeQuery } from '@yayatoh/kernel';
+import { executeQuery, isDomainError } from '@yayatoh/kernel';
 import { portalExhibitorLogoQuery } from '@yayatoh/media';
 import { exhibitorPortalQuery, portalLeadLicensesQuery } from '@yayatoh/program';
 import {
@@ -7,6 +8,7 @@ import {
   Avatar,
   Badge,
   Button,
+  buttonClass,
   Card,
   EmptyState,
   fieldClass,
@@ -20,6 +22,7 @@ import { getTranslations } from 'next-intl/server';
 import { Markdown } from '@/components/markdown.tsx';
 import { PortalFrame } from '@/components/portal-shell.tsx';
 import { type FieldSpec, ProgramForm } from '@/components/program-form.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import { portalRequestCtx } from '@/server/portal.ts';
 import { ports } from '@/server/ports.ts';
 import { inviteStaffAction, revokeStaffAction, saveProfileAction } from './exhibitor-actions.ts';
@@ -49,6 +52,13 @@ export async function ExhibitorPortal({
   const view = await executeQuery(exhibitorPortalQuery, {}, ctx, ports);
   const leads = await executeQuery(portalLeadLicensesQuery, {}, ctx, ports);
   const logo = await executeQuery(portalExhibitorLogoQuery, {}, ctx, ports);
+  // M5.8b: booth chat (its state and what's unread).
+  // Hidden when the org has no live sessions module (booth chat runs under `sessions`).
+  const chat = await executeQuery(boothInboxQuery, {}, ctx, ports).catch((err: unknown) => {
+    if (isDomainError(err)) return null;
+    throw err;
+  });
+  const tc = await getTranslations('chat');
   const t = await getTranslations('exhibitorPortal');
   const tp = await getTranslations('program');
   const ts = await getTranslations('speakerPortal');
@@ -128,6 +138,28 @@ export async function ExhibitorPortal({
           </ul>
         )}
       </section>
+
+      {chat ? (
+        <section aria-labelledby="booth-chat-heading" className="flex flex-col gap-3">
+          <SectionHeader id="booth-chat-heading" title={tc('portal.title')} />
+          <Card className="flex flex-wrap items-center gap-3">
+            <StatusPill
+              tone={chat.enabled && !chat.suspended && chat.eventChat && chat.atBooth ? 'success' : 'neutral'}
+              label={
+                chat.enabled && !chat.suspended && chat.eventChat && chat.atBooth
+                  ? tc('portal.on')
+                  : tc('portal.off')
+              }
+            />
+            <span className="text-body text-ink-2">
+              {tc('portal.unreadChats', { count: chat.conversations.filter((c) => c.unread > 0).length })}
+            </span>
+            <Link href="/event-portal/chat" className={buttonClass('secondary', 'md', 'ms-auto min-h-11')}>
+              {tc('portal.open')}
+            </Link>
+          </Card>
+        </section>
+      ) : null}
 
       <section aria-labelledby="profile-heading" className="flex flex-col gap-3">
         <SectionHeader id="profile-heading" title={t('profileHeading')} />

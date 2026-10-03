@@ -22,6 +22,7 @@ import {
   saveLocationAction,
   settingsAction,
 } from './actions.ts';
+import { ChatConsole } from './chat-console.tsx';
 
 type Params = { params: Promise<{ locale: string; org: string; event: string }> };
 
@@ -132,8 +133,13 @@ export default async function NetworkingConsolePage({ params }: Params) {
                 options: [
                   { value: 'enabled', label: t('enabledLabel') },
                   { value: 'meetings', label: t('meetingsLabel') },
+                  { value: 'chat', label: t('chatLabel') },
                 ],
-                defaultValues: ['enabled', ...(c.settings.meetingsEnabled ? ['meetings'] : [])],
+                defaultValues: [
+                  'enabled',
+                  ...(c.settings.meetingsEnabled ? ['meetings'] : []),
+                  ...(c.settings.chatEnabled ? ['chat'] : []),
+                ],
               },
             ]}
           />
@@ -386,6 +392,18 @@ export default async function NetworkingConsolePage({ params }: Params) {
           </details>
         ) : null}
       </section>
+
+      {c.settings.enabled ? (
+        <ChatConsole
+          org={org}
+          event={event}
+          eventId={ev.id}
+          ctx={data.ctx}
+          canWrite={canWrite}
+          locale={locale}
+          timeZone={tz}
+        />
+      ) : null}
 
       <section aria-labelledby="net-hidden" className="flex flex-col gap-3">
         <h2 id="net-hidden" className="text-section">

@@ -56,4 +56,17 @@ export const privateColumns = columnPrivacy('engagement', {
   network_reports: { reason: 'vocab', details: personal(), status: 'vocab' },
   meeting_locations: { name: 'public', kind: 'vocab' },
   meetings: { status: 'vocab', message: personal() },
+  // M5.8b chat: a message is for its two sides only (the organizer and Yayatoh staff see an
+  // excerpt of a reported conversation); a report's details likewise.
+  chat_conversations: { kind: 'vocab', started_by: 'vocab', blocked_by: 'vocab' },
+  chat_messages: { sender: 'vocab', body: personal() },
+  chat_reports: {
+    reporter: 'vocab',
+    reason: 'vocab',
+    details: personal(),
+    moderation: 'vocab',
+    status: 'vocab',
+    reviewed_by: internal(),
+    review_note: internal(),
+  },
 });

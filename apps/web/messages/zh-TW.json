@@ -12968,7 +12968,8 @@
       "people": "參加者",
       "connections": "聯絡人",
       "meetings": "會面",
-      "profile": "我的檔案"
+      "profile": "我的檔案",
+      "chats": "聊天"
     },
     "signIn": {
       "intro": "看看還有誰會來、建立聯繫並預約簡短會面。這裡只顯示選擇參與的人。",
@@ -13068,7 +13069,8 @@
       "choosePlace": "選擇地點",
       "placeRequired": "請選擇地點。",
       "requestMeeting": "送出會面請求",
-      "meetingSent": "已向 {name} 送出會面請求。"
+      "meetingSent": "已向 {name} 送出會面請求。",
+      "message": "傳訊息給 {name}"
     },
     "kind": {
       "booth": "攤位",
@@ -13117,7 +13119,9 @@
       "withdrawn": "已撤回請求。",
       "remove": "移除",
       "removeName": "移除與 {name} 的聯繫",
-      "removed": "已移除聯絡人。"
+      "removed": "已移除聯絡人。",
+      "message": "傳訊息",
+      "messageTo": "傳訊息給 {name}"
     },
     "meetings": {
       "metaTitle": "我的會面",
@@ -13256,7 +13260,153 @@
         "tooShort": "開始與結束之間的時間短於一個時段。",
         "overlap": "這些時段與現有時段重疊。",
         "tooMany": "超出本活動的上限。請先刪除一些。"
+      },
+      "chatLabel": "聯絡人和會面對象之間的聊天，以及與參展商在攤位上的聊天",
+      "chat": {
+        "heading": "聊天",
+        "on": "參加者可以與聯絡人、會面對象以及接受聊天的參展商聊天。你只會看到被檢舉的對話。",
+        "off": "聊天已關閉。請在上方設定中開啟。",
+        "stats": {
+          "conversations": "對話",
+          "messagesToday": "過去 24 小時的訊息",
+          "openReports": "待處理的聊天檢舉",
+          "booths": "接受聊天的攤位"
+        },
+        "reports": "聊天檢舉",
+        "noReports": "沒有需要審核的聊天檢舉。",
+        "openReports": "待處理的聊天檢舉",
+        "reportTitle": "{reporter} 檢舉了與 {reported} 的聊天",
+        "reportTitleBooth": "{reporter} 檢舉了與 {reported} 的攤位聊天",
+        "excerpt": "檢舉前的最新訊息",
+        "removedMessage": "訊息已移除",
+        "remove": "移除",
+        "removeFrom": "移除 {name} 在 {time} 傳送的訊息",
+        "removed": "訊息已移除，雙方都不會再看到。",
+        "hide": "在交流中隱藏",
+        "hideName": "在交流中隱藏 {name}",
+        "hidden": "已在交流中隱藏 {name}。",
+        "suspend": "暫停攤位聊天",
+        "suspendName": "暫停 {name} 的攤位聊天",
+        "suspended": "{name} 的攤位聊天已暫停。",
+        "dismiss": "駁回",
+        "dismissReport": "駁回關於 {name} 的檢舉",
+        "dismissed": "檢舉已駁回。",
+        "closedReports": "{count, plural, other {# 則已處理的聊天檢舉}}",
+        "moderation": {
+          "open": "待處理",
+          "actioned": "已處理",
+          "dismissed": "已駁回"
+        },
+        "suspendedBooths": "已暫停的攤位聊天",
+        "noSuspended": "沒有被暫停的攤位聊天。",
+        "restore": "解除暫停",
+        "restoreName": "解除 {name} 攤位聊天的暫停",
+        "restored": "{name} 可以重新接受聊天了。"
       }
+    },
+    "unreadChats": "{count, plural, other {# 個聊天有未讀訊息}}"
+  },
+  "chat": {
+    "metaTitle": "聊天",
+    "title": "聊天",
+    "description": "與聯絡人、會面對象以及攤位上的參展商的訊息。",
+    "conversationsHeading": "你的聊天",
+    "emptyTitle": "還沒有聊天",
+    "emptyDescription": "成為聯絡人或約定會面後，你就可以傳訊息給對方。打開一位聯絡人開始聊天。",
+    "toConnections": "前往聯絡人",
+    "unread": "{count, plural, other {# 則未讀訊息}}",
+    "boothLabel": "攤位 {numbers}",
+    "lastRemoved": "訊息已移除",
+    "lastFromMe": "你：{body}",
+    "lastFromBooth": "你的攤位：{body}",
+    "boothsHeading": "與參展商聊天",
+    "boothsHelp": "這些參展商在攤位上回答問題。",
+    "noBooths": "目前沒有參展商接受聊天。",
+    "chatWithBooth": "與 {name} 聊天",
+    "openBooth": "聊天",
+    "notice": {
+      "reported": "感謝告知。主辦單位和 Yayatoh 會進行審核，對方將無法再傳訊息給你。",
+      "blocked": "已封鎖。你們在交流中將不再看到彼此。"
+    },
+    "closed": {
+      "chat_off": "主辦單位已關閉本活動的聊天。",
+      "not_connected": "成為聯絡人或約定會面後，你才能傳訊息給 {name}。",
+      "booth_closed": "{name} 目前不接受聊天。",
+      "blocked": "此聊天已被封鎖。",
+      "blockedByMe": "你已封鎖此攤位的聊天。在下方解除封鎖後即可再次傳送。"
+    },
+    "threadMetaTitle": "聊天",
+    "threadTitle": "與 {name} 的聊天",
+    "backToChats": "所有聊天",
+    "viewProfile": "{name} 的檔案",
+    "noMessages": "還沒有訊息。跟 {name} 打聲招呼吧。",
+    "logLabel": "與 {name} 的訊息",
+    "you": "你",
+    "removed": "主辦單位移除了這則訊息",
+    "messageLabel": "訊息",
+    "messageHint": "按 Enter 傳送，Shift+Enter 換行。最多 2,000 個字元。",
+    "send": "傳送",
+    "live": "新訊息一到就會顯示在這裡。",
+    "connecting": "連線中…",
+    "reconnecting": "重新連線中… 恢復連線後會顯示新訊息。",
+    "errors": {
+      "not_connected": "你只能傳訊息給聯絡人或已約定會面的人。",
+      "chat_off": "主辦單位已關閉本活動的聊天。",
+      "booth_closed": "這位參展商目前不接受聊天。",
+      "blocked": "此聊天已被封鎖。",
+      "not_found": "此人已無法聊天。",
+      "too_fast": "你傳送訊息太快了。請等一分鐘再試。",
+      "hourly_limit": "你這一小時傳送的訊息太多了。請稍後再試。",
+      "too_many_new_chats": "你這一小時發起的新聊天太多了。請稍後再試。",
+      "awaiting_reply": "請等對方回覆後再繼續傳送。",
+      "required": "請先輸入訊息。",
+      "too_long": "訊息最多 2,000 個字元。",
+      "already_removed": "這則訊息已被移除。"
+    },
+    "safety": {
+      "summary": "封鎖或檢舉 {name}",
+      "block": "封鎖 {name}",
+      "unblock": "解除封鎖 {name}",
+      "unblockHelp": "你們可以在此聊天中重新互傳訊息。",
+      "blockBoothHelp": "{name} 將無法回覆你，你也無法傳訊息給對方。你可以稍後解除封鎖。",
+      "blockVisitorHelp": "{name} 將無法再傳訊息給你的攤位。你可以稍後解除封鎖。",
+      "report": "檢舉並封鎖 {name}",
+      "reportHelp": "告訴主辦單位發生了什麼事。Yayatoh 也會審核聊天檢舉。檢舉也會封鎖此聊天。",
+      "reason": "原因",
+      "chooseReason": "選擇原因",
+      "reasonRequired": "請選擇原因。",
+      "details": "發生了什麼事",
+      "detailsHint": "選擇「其他」時必填。最多 500 個字元。",
+      "detailsRequired": "請告訴我們發生了什麼事。"
+    },
+    "portal": {
+      "title": "攤位聊天",
+      "description": "加入交流的參加者可以傳訊息給你的攤位。攤位團隊共用這個收件匣。",
+      "back": "返回 {name}",
+      "backToChats": "所有攤位聊天",
+      "on": "正在接受聊天",
+      "off": "不接受聊天",
+      "suspended": "收到檢舉後，主辦單位已暫停你的攤位聊天。",
+      "eventOff": "本活動的聊天已關閉。",
+      "notAtBooth": "你有公開的攤位後，訪客才能找到你的攤位聊天。",
+      "turnOn": "在我們的攤位接受聊天",
+      "turnOff": "停止接受聊天",
+      "adminOnly": "只有參展商管理員可以開啟或關閉攤位聊天。",
+      "conversations": "訪客的聊天",
+      "emptyTitle": "還沒有聊天",
+      "emptyDescription": "訪客傳訊息給你的攤位後，會顯示在這裡。",
+      "emptyOff": "開啟攤位聊天，訪客才能傳訊息給你。",
+      "blocked": "已封鎖",
+      "unreadChats": "{count, plural, =0 {沒有未讀聊天} other {# 個聊天有未讀訊息}}",
+      "open": "打開攤位聊天",
+      "closedBlockedByMe": "你已封鎖 {name}。在下方解除封鎖後即可回覆。",
+      "closed": {
+        "chat_off": "本活動的聊天已關閉。",
+        "booth_closed": "你的攤位不接受聊天。開啟攤位聊天後即可回覆。",
+        "blocked": "{name} 已封鎖你的攤位聊天。",
+        "not_connected": "此聊天已關閉。"
+      },
+      "reported": "謝謝。主辦單位和 Yayatoh 會審核你的檢舉；這位訪客已無法再傳訊息給你的攤位。"
     }
   }
 }
