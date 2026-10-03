@@ -1978,7 +1978,8 @@
       "plan": "座位图",
       "assign": "安排宾客",
       "finder": "座位查询",
-      "rules": "规则"
+      "rules": "规则",
+      "guests": "安排宾客座位"
     },
     "assign": {
       "title": "安排宾客",
@@ -2176,6 +2177,127 @@
         "notEnough": "{fits, plural, =0 {那里没有空位。} other {那里只有 # 个空位。}}",
         "forbidden": "你可以查看团体，但不能更改。",
         "noMembers": "名单中还没有人带有标签 {label}。"
+      }
+    },
+    "guestSeating": {
+      "title": "安排宾客座位",
+      "description": "将各组宾客安排到桌位。从待排队列把一组拖到平面图上，或勾选宾客、选择桌子并按“安排所选宾客”——拖动能做的事，键盘都能做。",
+      "chart": {
+        "label": "座位安排",
+        "event": "整个活动"
+      },
+      "noPlan": "{chart}还没有座位图",
+      "noPlanHint": "请先创建座位图（桌子或排），再在这里安排宾客。",
+      "toPlan": "前往座位图",
+      "noGuests": "还没有需要安排的宾客",
+      "noGuestsHint": "在“宾客”页面添加各组宾客（或邀请他们参加这一环节），然后在这里安排座位。",
+      "toGuests": "前往宾客",
+      "summary": "已安排 {seated} · 待安排 {unseated}",
+      "readOnly": "你可以查看座位安排，但不能修改。",
+      "declinedSeated": "{count, plural, other {# 位已婉拒的宾客仍在座位上。}}请在桌位详情中移除。",
+      "live": {
+        "live": "实时",
+        "connecting": "正在连接…",
+        "offline": "离线，正在重连"
+      },
+      "vip": "VIP",
+      "queue": {
+        "title": "待安排（{count}）",
+        "search": "搜索各组和宾客",
+        "status": "回复",
+        "statusAll": "全部回复",
+        "side": "方",
+        "sideAll": "全部",
+        "list": "待安排的各组宾客",
+        "selectParty": "选中{party}的所有人",
+        "toSeat": "{count, plural, other {待安排 # 位}}",
+        "selected": "{count, plural, =0 {未选择} other {已选 # 位宾客}}",
+        "clear": "清除选择",
+        "empty": "每个人都有座位了。",
+        "noMatch": "没有符合筛选条件的组。"
+      },
+      "status": {
+        "attending": "出席",
+        "pending": "等待回复",
+        "declined": "已婉拒"
+      },
+      "guest": {
+        "guestOf": "{name}的同伴",
+        "meal": "餐食：{meal}",
+        "noMeal": "未选餐食",
+        "child": "儿童",
+        "infant": "婴儿"
+      },
+      "form": {
+        "title": "安排所选宾客",
+        "table": "桌子或排",
+        "choose": "选择桌子或排",
+        "option": "{place} — 空 {free}/{capacity}",
+        "optionVip": "{place} — 空 {free}/{capacity} · VIP 区",
+        "cantFit": "坐不下：已选 {asked, plural, other {# 位宾客}}，{place}{fits, plural, =0 {没有空位} other {只有 # 个空位}}。",
+        "submit": "安排所选宾客",
+        "submitting": "正在安排…"
+      },
+      "place": {
+        "table": "{label} 号桌",
+        "row": "{label} 排"
+      },
+      "map": {
+        "title": "平面图",
+        "hint": "把一组拖到桌子上即可安排。点击桌子查看谁坐在那里。",
+        "readOnlyHint": "点击桌子查看谁坐在那里。",
+        "dropHere": "放到{place}：空 {free}",
+        "dropCantFit": "{place}坐不下：{count, plural, other {# 位宾客}}，空 {free}",
+        "guests": "宾客",
+        "tickets": "持票人",
+        "vip": "VIP 区"
+      },
+      "details": {
+        "title": "桌位详情",
+        "choose": "要查看的桌子",
+        "none": "此座位图没有桌子或排。",
+        "counts": "已坐 {seated} · 空 {free}/{capacity}",
+        "tickets": "{count, plural, other {# 个座位已被门票占用}}",
+        "sponsor": "赞助：{name}",
+        "vipZone": "VIP 区",
+        "vipFromPlan": "位于座位图的 VIP 区域",
+        "warnings": "请检查此桌",
+        "warnDeclined": "{name}已婉拒，但仍在座位上。",
+        "warnVipOutside": "{party}是 VIP 组，但不在 VIP 区。",
+        "warnNotVip": "{party}不是 VIP 组，却坐在 VIP 区。",
+        "meals": "餐食",
+        "mealCount": "{meal}：{count}",
+        "noMeal": "未选择",
+        "empty": "这里还没有人。请从待排队列安排一组。",
+        "unseatParty": "移除{party}",
+        "move": "移到…",
+        "moveLabel": "把{name}移到另一桌",
+        "unseat": "移除",
+        "unseatLabel": "移除{name}",
+        "moveTo": "移动{name}",
+        "moveSubmit": "移动",
+        "cancel": "取消"
+      },
+      "done": {
+        "seated": "已在{place}安排 {count, plural, other {# 位宾客}}。",
+        "moved": "已将{name}移到{place}。",
+        "unseated": "{count, plural, other {# 位宾客}}已回到待排队列。",
+        "vipOn": "{place}现在是 VIP 区。",
+        "vipOff": "{place}不再是 VIP 区。"
+      },
+      "warnings": {
+        "vip_outside": "{party}是 VIP 组，而{place}不是 VIP 区。",
+        "not_vip_inside": "{place}是 VIP 区，而{party}不是 VIP 组。"
+      },
+      "errors": {
+        "forbidden": "你可以查看座位安排，但不能修改。",
+        "cantFit": "坐不下：{asked, plural, other {# 位宾客}}需要座位，而那里{fits, plural, =0 {没有空位} other {只有 # 个空位}}。",
+        "declined": "这位宾客已婉拒。只能安排未婉拒的宾客。",
+        "unknown": "这位宾客已不在名单上。页面将刷新。",
+        "noPlan": "这里还没有座位图。",
+        "noGuests": "请至少选择一位宾客。",
+        "noPlace": "请选择桌子或排。",
+        "dropMiss": "请把这组放到桌子或排上。"
       }
     }
   },
