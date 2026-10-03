@@ -11316,11 +11316,14 @@
     "errors": {
       "charging": "Votre carte est en cours de débit : ce paiement n’a pas été lancé.",
       "settled": "Cette promesse est déjà réglée.",
-      "no_email": "Il nous faut un e-mail pour cette promesse. Demandez à l’organisateur d’en ajouter un.",
+      "no_email": "Saisissez votre e-mail pour payer.",
       "rate_limited": "Trop de tentatives. Attendez une minute et réessayez.",
       "not_connected": "Le paiement en ligne n’est pas disponible pour le moment. Demandez à l’organisateur comment payer.",
-      "generic": "Un problème est survenu. Réessayez."
-    }
+      "generic": "Un problème est survenu. Réessayez.",
+      "email": "Saisissez une adresse e-mail valide."
+    },
+    "email": "E-mail pour votre reçu",
+    "emailHint": "Nous envoyons le reçu à cette adresse."
   },
   "pledges": {
     "title": "Promesses de don",
@@ -11403,6 +11406,7 @@
       "checkinBody": "Montrez ce code aux invités après leur enregistrement : ils enregistrent une carte sur leur propre téléphone pour donner en un geste ce soir.",
       "tableTitle": "Enregistrement de carte sur les tables",
       "tableBody": "Imprimez ce code sur les cartes de table : les invités enregistrent une carte sur leur propre téléphone pour donner en un geste et pour leurs promesses."
-    }
+    },
+    "payLink": "Lien de paiement de la pancarte {paddle}"
   }
 }

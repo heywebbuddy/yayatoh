@@ -11316,11 +11316,14 @@
     "errors": {
       "charging": "Seu cartão está sendo cobrado agora, por isso este pagamento não foi iniciado.",
       "settled": "Este compromisso já está quitado.",
-      "no_email": "Precisamos de um e-mail para este compromisso. Peça ao organizador para adicionar.",
+      "no_email": "Informe seu e-mail para pagar.",
       "rate_limited": "Muitas tentativas. Aguarde um minuto e tente de novo.",
       "not_connected": "O pagamento on-line não está disponível agora. Pergunte ao organizador como pagar.",
-      "generic": "Algo deu errado. Tente de novo."
-    }
+      "generic": "Algo deu errado. Tente de novo.",
+      "email": "Informe um e-mail válido."
+    },
+    "email": "E-mail para o seu recibo",
+    "emailHint": "Enviamos o recibo para cá."
   },
   "pledges": {
     "title": "Compromissos",
@@ -11403,6 +11406,7 @@
       "checkinBody": "Mostre este código aos convidados depois do check-in: eles salvam um cartão no próprio celular para doar com um toque hoje à noite.",
       "tableTitle": "Salvar cartão nas mesas",
       "tableBody": "Imprima este código nos cartões de mesa: os convidados salvam um cartão no próprio celular para doar com um toque e para seus compromissos."
-    }
+    },
+    "payLink": "Link de pagamento da raquete {paddle}"
   }
 }

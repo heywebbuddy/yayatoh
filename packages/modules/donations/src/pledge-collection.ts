@@ -530,7 +530,12 @@ export type PledgePayResult = z.infer<typeof PledgePayResult>;
  */
 export const startPledgePaymentCommand = tenantCommand({
   name: 'donations.startPledgePayment',
-  input: z.object({ token: z.string().min(1).max(200), locale: z.string().min(2).max(10).default('en') }),
+  input: z.object({
+    token: z.string().min(1).max(200),
+    locale: z.string().min(2).max(10).default('en'),
+    /** When no email is on file: the donor's, for the receipt (kept on the pledge). */
+    email: z.string().trim().toLowerCase().email().max(254).nullish(),
+  }),
   output: PledgePayResult,
   entitlement: 'donations',
   permission: 'public:checkout',
@@ -544,8 +549,17 @@ export const startPledgePaymentCommand = tenantCommand({
       throw new DomainError('invalid_state', 'Your card is being charged', { reason: 'charging' });
     if (c.status !== 'scheduled' && c.status !== 'invoiced')
       throw new DomainError('invalid_state', 'This pledge is settled', { reason: 'settled' });
+    const donorEmail = c.donorEmail ?? input.email ?? null;
+    if (!donorEmail)
+      throw new DomainError('validation_failed', 'Enter an email for the receipt', {
+        reason: 'no_email',
+        field: 'email',
+      });
     if (!c.donorEmail)
-      throw new DomainError('invalid_state', 'No email for this pledge', { reason: 'no_email' });
+      await tx
+        .update(pledgeCollections)
+        .set({ donorEmail, updatedAt: ctx.now })
+        .where(eq(pledgeCollections.id, c.id));
     const event = await eventOrThrowTx(tx, c.eventId);
     if (c.status === 'scheduled') await invoiceTx(tx, emit, c, 'pay_link', ctx.now, event.timezone);
     const [campaign] = await tx.select().from(campaigns).where(eq(campaigns.id, c.campaignId));
@@ -557,7 +571,7 @@ export const startPledgePaymentCommand = tenantCommand({
       name: campaign.name,
       amountMinor: c.amountMinor,
       feeCoverMinor: 0,
-      donor: { email: c.donorEmail, name: c.donorName },
+      donor: { email: donorEmail, name: c.donorName },
       locale: input.locale,
     });
     await tx.insert(gifts).values({
@@ -570,7 +584,7 @@ export const startPledgePaymentCommand = tenantCommand({
       feeCoverMinor: 0,
       currency: started.order.currency,
       donorName: c.donorName,
-      donorEmail: c.donorEmail,
+      donorEmail,
       displayAs: 'full_name',
       locale: input.locale,
     });
@@ -636,6 +650,8 @@ export const PublicPledgeDto = z.object({
   chargeAt: z.date().nullable(),
   card: z.object({ brand: z.string().nullable(), last4: z.string().nullable() }).nullable(),
   timeZone: z.string(),
+  /** No email on file: the pay page asks for one (for the receipt). */
+  needsEmail: z.boolean(),
 });
 export type PublicPledgeDto = z.infer<typeof PublicPledgeDto>;
 
@@ -658,6 +674,7 @@ export async function publicPledge(orgId: string, token: string): Promise<Public
         levelName: paddleCalls.levelName,
         dueOn: pledgeCollections.dueOn,
         chargeAt: pledgeCollections.chargeAt,
+        donorEmail: pledgeCollections.donorEmail,
         cardStatus: savedCards.status,
         brand: savedCards.brand,
         last4: savedCards.last4,
@@ -671,8 +688,10 @@ export async function publicPledge(orgId: string, token: string): Promise<Public
     if (!r) return null;
     const event = await findEventTx(tx, r.eventId);
     const charging = r.status === 'scheduled' || r.status === 'charging';
+    const { donorEmail, ...rest } = r;
     return PublicPledgeDto.parse({
-      ...r,
+      ...rest,
+      needsEmail: !donorEmail,
       chargeAt: charging ? r.chargeAt : null,
       card: charging && r.cardStatus === 'active' ? { brand: r.brand, last4: r.last4 } : null,
       timeZone: event?.timezone ?? 'UTC',
@@ -824,11 +843,14 @@ export const PledgeRowDto = z.object({
   paidAt: z.date().nullable(),
   offlineMethod: z.enum(OFFLINE_METHODS).nullable(),
   note: z.string().nullable(),
+  /** The donor's pay link token (the host shares it when there is no email on file). */
+  payToken: z.string().nullable(),
 });
 export type PledgeRowDto = z.infer<typeof PledgeRowDto>;
 
 export const PledgeCollectionDto = z.object({
   eventName: z.string(),
+  eventSlug: z.string(),
   timeZone: z.string(),
   currency: z.string(),
   rows: z.array(PledgeRowDto),
@@ -913,10 +935,12 @@ export const pledgeCollectionQuery = tenantQuery({
         paidAt: c?.paidAt ?? null,
         offlineMethod: (c?.offlineMethod ?? null) as PledgeRowDto['offlineMethod'],
         note: c?.note ?? null,
+        payToken: c && (status === 'scheduled' || status === 'invoiced') ? pledgePayToken(c.id) : null,
       };
     });
     return {
       eventName: event.name,
+      eventSlug: event.slug,
       timeZone: event.timezone,
       currency: event.currency,
       rows: out,

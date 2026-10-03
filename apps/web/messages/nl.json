@@ -11316,11 +11316,14 @@
     "errors": {
       "charging": "Je kaart wordt nu afgeschreven, daarom is deze betaling niet gestart.",
       "settled": "Deze toezegging is al voldaan.",
-      "no_email": "We hebben een e-mailadres nodig voor deze toezegging. Vraag de organisator er een toe te voegen.",
+      "no_email": "Vul je e-mailadres in om te betalen.",
       "rate_limited": "Te veel pogingen. Wacht een minuut en probeer het opnieuw.",
       "not_connected": "Online betalen is nu niet mogelijk. Vraag de organisator hoe je kunt betalen.",
-      "generic": "Er ging iets mis. Probeer het opnieuw."
-    }
+      "generic": "Er ging iets mis. Probeer het opnieuw.",
+      "email": "Vul een geldig e-mailadres in."
+    },
+    "email": "E-mail voor je ontvangstbewijs",
+    "emailHint": "We sturen het ontvangstbewijs hierheen."
   },
   "pledges": {
     "title": "Toezeggingen",
@@ -11403,6 +11406,7 @@
       "checkinBody": "Laat gasten deze code zien na het inchecken: ze bewaren een kaart op hun eigen telefoon om vanavond met één tik te geven.",
       "tableTitle": "Kaart bewaren aan de tafels",
       "tableBody": "Druk deze code af op tafelkaartjes: gasten bewaren een kaart op hun eigen telefoon om met één tik te geven en voor hun toezeggingen."
-    }
+    },
+    "payLink": "Betaallink voor bordje {paddle}"
   }
 }

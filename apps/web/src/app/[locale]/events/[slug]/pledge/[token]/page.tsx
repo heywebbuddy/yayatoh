@@ -3,7 +3,7 @@ import { catchUpGifts, pledgeOutcomesSubscriber, publicPledge } from '@yayatoh/d
 import { checkoutTarget, publicEventBySlug } from '@yayatoh/events';
 import { formatMoney, money } from '@yayatoh/kernel';
 import { catchUpSubscriber } from '@yayatoh/platform';
-import { Alert, Button, Label, StatusPill } from '@yayatoh/ui';
+import { Alert, Button, Input, Label, StatusPill } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
@@ -16,7 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t('metaTitle'), robots: { index: false, follow: false } };
 }
 
-const KNOWN_ERRORS = ['charging', 'settled', 'no_email', 'rate_limited', 'not_connected'];
+const KNOWN_ERRORS = ['charging', 'settled', 'rate_limited', 'not_connected'];
 
 /**
  * A donor's pledge (M4.8e, P4-12), by the signed link in their summary, invoice and reminders:
@@ -73,7 +73,7 @@ export default async function PledgePage({
           </h2>
           <StatusPill tone={tone} label={t(`status.${p.status}`)} />
         </div>
-        {error ? (
+        {error && error !== 'email' && error !== 'no_email' ? (
           <Alert title={KNOWN_ERRORS.includes(error) ? t(`errors.${error}`) : t('errors.generic')} />
         ) : null}
         {p.status === 'scheduled' && p.card && p.chargeAt ? (
@@ -94,7 +94,23 @@ export default async function PledgePage({
         ) : null}
         {p.status === 'written_off' ? <p className="m-0 text-body text-ink">{t('closed')}</p> : null}
         {p.status === 'scheduled' || p.status === 'invoiced' ? (
-          <form action={payPledgeAction.bind(null, slug, token, randomUUID())}>
+          <form
+            action={payPledgeAction.bind(null, slug, token, randomUUID())}
+            noValidate
+            className="flex flex-col gap-4"
+          >
+            {p.needsEmail ? (
+              <Input
+                name="email"
+                type="email"
+                label={t('email')}
+                hint={t('emailHint')}
+                autoComplete="email"
+                required
+                fieldSize="lg"
+                error={error === 'email' || error === 'no_email' ? t(`errors.${error}`) : undefined}
+              />
+            ) : null}
             <Button type="submit" size="lg" className="w-full">
               {p.status === 'scheduled' ? t('payAnotherWay', { amount }) : t('payNow', { amount })}
             </Button>

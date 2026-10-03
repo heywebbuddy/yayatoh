@@ -68,7 +68,7 @@ export function CardForm({ action, org, event }: { action: Action; org: string; 
           label={t('consentLabel')}
           hint={t('consent', { org, event })}
           aria-invalid={consentError ? true : undefined}
-          aria-errormessage={consentError ? 'consent-error' : undefined}
+          aria-describedby={consentError ? 'consent-hint consent-error' : 'consent-hint'}
         />
         <FieldMessage id="consent" error={consentError} />
       </div>

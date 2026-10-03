@@ -11316,11 +11316,14 @@
     "errors": {
       "charging": "Stiamo addebitando la tua carta proprio ora, quindi questo pagamento non è stato avviato.",
       "settled": "Questo impegno è già saldato.",
-      "no_email": "Serve un’email per questo impegno. Chiedi all’organizzatore di aggiungerla.",
+      "no_email": "Inserisci la tua email per pagare.",
       "rate_limited": "Troppi tentativi. Attendi un minuto e riprova.",
       "not_connected": "Il pagamento online non è disponibile ora. Chiedi all’organizzatore come pagare.",
-      "generic": "Qualcosa è andato storto. Riprova."
-    }
+      "generic": "Qualcosa è andato storto. Riprova.",
+      "email": "Inserisci un indirizzo email valido."
+    },
+    "email": "Email per la ricevuta",
+    "emailHint": "Ti inviamo la ricevuta qui."
   },
   "pledges": {
     "title": "Impegni",
@@ -11403,6 +11406,7 @@
       "checkinBody": "Mostra questo codice agli ospiti dopo il check-in: salvano una carta sul proprio telefono per donare con un tocco stasera.",
       "tableTitle": "Salvataggio carta sui tavoli",
       "tableBody": "Stampa questo codice sui segnatavolo: gli ospiti salvano una carta sul proprio telefono per donare con un tocco e per i loro impegni."
-    }
+    },
+    "payLink": "Link di pagamento della paletta {paddle}"
   }
 }

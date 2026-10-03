@@ -11316,11 +11316,14 @@
     "errors": {
       "charging": "Your card is being charged right now, so this payment wasn't started.",
       "settled": "This pledge is already settled.",
-      "no_email": "We need an email for this pledge. Ask the host to add one.",
+      "no_email": "Enter your email to pay.",
       "rate_limited": "Too many tries. Wait a minute and try again.",
       "not_connected": "Online payment isn't available right now. Ask the host how to pay.",
-      "generic": "Something went wrong. Try again."
-    }
+      "generic": "Something went wrong. Try again.",
+      "email": "Enter a valid email address."
+    },
+    "email": "Email for your receipt",
+    "emailHint": "We send the receipt here."
   },
   "pledges": {
     "title": "Pledges",
@@ -11403,6 +11406,7 @@
       "checkinBody": "Show guests this code after they check in: they save a card on their own phone for one-tap giving tonight.",
       "tableTitle": "Card saving on the tables",
       "tableBody": "Print this code on table cards: guests save a card on their own phone for one-tap giving and pledges."
-    }
+    },
+    "payLink": "Pay link for paddle {paddle}"
   }
 }

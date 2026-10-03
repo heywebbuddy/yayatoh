@@ -11316,11 +11316,14 @@
     "errors": {
       "charging": "Ihre Karte wird gerade belastet, daher wurde diese Zahlung nicht gestartet.",
       "settled": "Diese Zusage ist bereits beglichen.",
-      "no_email": "Für diese Zusage fehlt eine E-Mail-Adresse. Bitten Sie den Gastgeber, eine hinzuzufügen.",
+      "no_email": "Geben Sie Ihre E-Mail-Adresse ein, um zu bezahlen.",
       "rate_limited": "Zu viele Versuche. Warten Sie eine Minute und versuchen Sie es erneut.",
       "not_connected": "Online-Zahlung ist gerade nicht möglich. Fragen Sie den Gastgeber, wie Sie zahlen können.",
-      "generic": "Etwas ist schiefgelaufen. Versuchen Sie es erneut."
-    }
+      "generic": "Etwas ist schiefgelaufen. Versuchen Sie es erneut.",
+      "email": "Geben Sie eine gültige E-Mail-Adresse ein."
+    },
+    "email": "E-Mail für Ihre Quittung",
+    "emailHint": "Ihre Quittung geht an diese Adresse."
   },
   "pledges": {
     "title": "Zusagen",
@@ -11403,6 +11406,7 @@
       "checkinBody": "Zeigen Sie Gästen diesen Code nach dem Check-in: Sie speichern auf ihrem eigenen Handy eine Karte für Spenden mit einem Tipp heute Abend.",
       "tableTitle": "Karte speichern an den Tischen",
       "tableBody": "Drucken Sie diesen Code auf Tischkarten: Gäste speichern auf ihrem eigenen Handy eine Karte für Spenden mit einem Tipp und für Zusagen."
-    }
+    },
+    "payLink": "Zahlungslink für Paddel {paddle}"
   }
 }

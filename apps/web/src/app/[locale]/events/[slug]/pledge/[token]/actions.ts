@@ -18,7 +18,12 @@ const UUID = /^[0-9a-f-]{36}$/;
  * waiting for its card charge moves to this payment instead ("pay another way"), so the card is
  * never charged as well. The page's Idempotency-Key makes a double submit one payment.
  */
-export async function payPledgeAction(slug: string, token: string, idempotencyKey: string): Promise<void> {
+export async function payPledgeAction(
+  slug: string,
+  token: string,
+  idempotencyKey: string,
+  form: FormData,
+): Promise<void> {
   const locale = await getLocale();
   const prefix = locale === 'en' ? '' : `/${locale}`;
   const here = `${prefix}/events/${slug}/pledge/${encodeURIComponent(token)}`;
@@ -26,6 +31,8 @@ export async function payPledgeAction(slug: string, token: string, idempotencyKe
   const target = await checkoutTarget(slug);
   const event = target ? await publicEventBySlug(slug) : null;
   if (!target || !event) nextRedirect(here);
+  const typed = String(form.get('email') ?? '').trim();
+  if (form.has('email') && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(typed)) nextRedirect(`${here}?error=email`);
   const limit = await limitAction('checkoutStart');
   if (!limit.allowed) nextRedirect(`${here}?error=rate_limited`);
   let r: Awaited<ReturnType<typeof start>>;
@@ -35,6 +42,7 @@ export async function payPledgeAction(slug: string, token: string, idempotencyKe
       {
         token,
         locale,
+        email: typed || null,
       },
     );
   } catch (err) {

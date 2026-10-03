@@ -11316,11 +11316,14 @@
     "errors": {
       "charging": "Estamos cobrando tu tarjeta en este momento, así que no se inició este pago.",
       "settled": "Este compromiso ya está saldado.",
-      "no_email": "Necesitamos un correo para este compromiso. Pide al anfitrión que lo añada.",
+      "no_email": "Escribe tu correo para pagar.",
       "rate_limited": "Demasiados intentos. Espera un minuto e inténtalo de nuevo.",
       "not_connected": "El pago en línea no está disponible ahora. Pregunta al anfitrión cómo pagar.",
-      "generic": "Algo salió mal. Inténtalo de nuevo."
-    }
+      "generic": "Algo salió mal. Inténtalo de nuevo.",
+      "email": "Escribe un correo electrónico válido."
+    },
+    "email": "Correo para tu recibo",
+    "emailHint": "Te enviamos el recibo aquí."
   },
   "pledges": {
     "title": "Compromisos",
@@ -11403,6 +11406,7 @@
       "checkinBody": "Muestra este código a los invitados después de registrarse: guardan una tarjeta en su propio teléfono para donar con un toque esta noche.",
       "tableTitle": "Guardar tarjeta en las mesas",
       "tableBody": "Imprime este código en las tarjetas de mesa: los invitados guardan una tarjeta en su propio teléfono para donar con un toque y para sus compromisos."
-    }
+    },
+    "payLink": "Enlace de pago de la paleta {paddle}"
   }
 }

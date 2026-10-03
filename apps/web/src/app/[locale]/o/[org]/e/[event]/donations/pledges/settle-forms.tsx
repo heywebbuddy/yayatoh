@@ -3,16 +3,20 @@
 import { OFFLINE_METHODS } from '@yayatoh/donations/collection';
 import { Alert, Button, Input, Select, Textarea } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
-import { useActionState, useEffect, useRef } from 'react';
+import { type FormEvent, startTransition, useActionState, useEffect, useRef } from 'react';
 import type { SettleState } from './actions.ts';
 
 type Action = (prev: SettleState, form: FormData) => Promise<SettleState>;
 const INITIAL: SettleState = { ok: null, message: '', stamp: 0 };
 
+/** Fields whose message shows under the field itself (the rest answer in the alert). */
+const INLINE = new Set(['receivedOn', 'note']);
+
 function Answer({ state }: { state: SettleState }) {
+  const show = state.message && !(state.field && INLINE.has(state.field));
   return (
     <div aria-live="polite">
-      {state.message ? <Alert tone={state.ok ? 'success' : 'danger'} title={state.message} /> : null}
+      {show ? <Alert tone={state.ok ? 'success' : 'danger'} title={state.message} /> : null}
     </div>
   );
 }
@@ -45,13 +49,24 @@ export function SettleForms({
     if (written.field) writeRef.current?.querySelector<HTMLElement>(`[name="${written.field}"]`)?.focus();
   }, [written]);
   const idp = `p${paddle}`;
+  // Submitted without the form action's automatic reset, so a refused form keeps what was typed.
+  const submitWith = (run: (data: FormData) => void) => (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const data = new FormData(e.currentTarget);
+    startTransition(() => run(data));
+  };
   return (
     <div className="flex flex-col gap-2">
       <details className="group">
         <summary className="inline-flex min-h-6 cursor-pointer items-center rounded-control px-1 font-semibold text-primary">
           {t('recordPayment')}
         </summary>
-        <form ref={recordRef} action={recordAction} noValidate className="mt-2 flex flex-col gap-3">
+        <form
+          ref={recordRef}
+          onSubmit={submitWith(recordAction)}
+          noValidate
+          className="mt-2 flex flex-col gap-3"
+        >
           <Answer state={recorded} />
           <label className="flex flex-col gap-1.5 text-body font-semibold text-ink" htmlFor={`${idp}-method`}>
             {t('method')}
@@ -91,7 +106,12 @@ export function SettleForms({
         <summary className="inline-flex min-h-6 cursor-pointer items-center rounded-control px-1 font-semibold text-ink-2">
           {t('writeOff')}
         </summary>
-        <form ref={writeRef} action={writeAction} noValidate className="mt-2 flex flex-col gap-3">
+        <form
+          ref={writeRef}
+          onSubmit={submitWith(writeAction)}
+          noValidate
+          className="mt-2 flex flex-col gap-3"
+        >
           <Answer state={written} />
           <Textarea
             id={`${idp}-writeoff-note`}

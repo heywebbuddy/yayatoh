@@ -160,7 +160,23 @@ export default async function PledgesPage({
                   header: t('columns.status'),
                   cell: (r) => <StatusPill tone={TONE[r.status]} label={t(`status.${r.status}`)} />,
                 },
-                { key: 'detail', header: t('columns.detail'), cell: (r) => detail(r) },
+                {
+                  key: 'detail',
+                  header: t('columns.detail'),
+                  cell: (r) => (
+                    <span className="flex flex-col gap-1">
+                      <span>{detail(r)}</span>
+                      {r.payToken ? (
+                        <a
+                          href={`/events/${view.eventSlug}/pledge/${encodeURIComponent(r.payToken)}`}
+                          className="inline-flex min-h-6 items-center text-caption font-semibold text-primary underline"
+                        >
+                          {t('payLink', { paddle: r.paddleNumber })}
+                        </a>
+                      ) : null}
+                    </span>
+                  ),
+                },
                 ...(canSettle
                   ? [
                       {
