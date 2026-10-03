@@ -38,3 +38,15 @@ export {
   type RuleSeverity,
   type SeatingRule,
 } from './domain/rules.ts';
+// M4.3b cards and exports: card kinds, paper sizes and sheet layouts for the print page.
+export {
+  CARD_KINDS,
+  type CardKind,
+  EXPORT_FORMATS,
+  EXPORT_KINDS,
+  type ExportFormat,
+  type ExportKind,
+  PAPER_SIZES,
+  type PaperSize,
+  sheetLayout,
+} from './domain/cards.ts';
