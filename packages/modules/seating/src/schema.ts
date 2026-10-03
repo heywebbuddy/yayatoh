@@ -19,9 +19,11 @@ export const seatingSchema = pgSchema('seating');
 export const EVENT_LAYOUT_STATUSES = ['draft', 'published', 'locked'] as const;
 /**
  * How guests look themselves up in the public seat finder (M1.7e): `code` = a one-time code
- * emailed to an address on the list (no enumeration); `name` = instant, by exact full name.
+ * emailed to an address on the list (no enumeration); `name` = instant, by exact full name;
+ * `pin` (M4.4a) = a wedding guest's exact full name plus the PIN printed on their party's invitation
+ * (the M4.1d PIN), answered with table labels only and the same reply for every miss.
  */
-export const FINDER_MODES = ['code', 'name'] as const;
+export const FINDER_MODES = ['code', 'name', 'pin'] as const;
 /** Reasons an organizer blocks seats by hand. */
 export const BLOCK_REASONS = ['channel', 'ada', 'kill'] as const;
 /**

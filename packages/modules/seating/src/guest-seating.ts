@@ -220,7 +220,7 @@ async function subEventOf(tx: TenantTx, eventId: string, subEventId: string | nu
 }
 
 /** The editor's whole view, assembled once (the query and the commands' checks share it). */
-async function viewTx(tx: TenantTx, eventId: string, subEventId: string | null) {
+export async function viewTx(tx: TenantTx, eventId: string, subEventId: string | null) {
   const dir = occupants();
   const subEvents = await dir.subEventsTx(tx, eventId);
   const sub = subEventId ? subEvents.find((s) => s.id === subEventId) : null;

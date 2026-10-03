@@ -1,8 +1,8 @@
 import { billingEntitlements } from '@yayatoh/billing';
 import { eventRolesOf } from '@yayatoh/events';
-import { guestsOccupantDirectory } from '@yayatoh/guests';
+import { guestsOccupantDirectory, guestsPartyCredentials } from '@yayatoh/guests';
 import { createCommandPorts, localKeyVault, setKeyVault } from '@yayatoh/platform';
-import { setOccupantDirectory } from '@yayatoh/seating';
+import { setOccupantDirectory, setPartyCredentials } from '@yayatoh/seating';
 import { createOrgAuthorizer, orgStatusGate } from '@yayatoh/tenancy';
 
 /** Composition root for the web transport (Server Actions / RSC). Same ports as /v1. */
@@ -19,3 +19,5 @@ if (localKms) setKeyVault(localKeyVault(localKms));
 
 // M4.3a: seating reaches the guest list through its OccupantDirectory port (same tier).
 setOccupantDirectory(guestsOccupantDirectory);
+// M4.4a: the guest seat finder checks party links and PINs through its PartyCredentials port.
+setPartyCredentials(guestsPartyCredentials);
