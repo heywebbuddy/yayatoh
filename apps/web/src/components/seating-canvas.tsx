@@ -269,7 +269,7 @@ const PlanItem = memo(
             width={item.width - 16}
             align="center"
             fontSize={26}
-            fill={color.zinc[700]}
+            fill={paper.muted}
             listening={false}
             wrap="none"
             ellipsis
