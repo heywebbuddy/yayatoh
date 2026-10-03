@@ -104,3 +104,111 @@ include it, and see who watched as totals (viewers, minutes, virtual check-ins).
 | Viewer read-only; empty state | `virtual.spec.ts` › a viewer sees the setup read-only… |
 | Keyboard only | `virtual.spec.ts` › keyboard only… |
 | axe in both themes; Arabic RTL | `virtual.spec.ts` (every screen) › Arabic (RTL)… |
+
+## M6.9b — Zoom and CE credits (done)
+
+### 1. Goal and users
+Organizers of conferences that award continuing-education (CE) credits deliver sessions as Zoom
+webinars and give sessions credit rules; attendees earn credits from session door scans, heartbeat
+watch time (M6.9a) and Zoom attendance, and receive a certificate (PDF, all 13 locales, Arabic
+right to left) by email and on their order page, with a public verification code. Phase 6 plan
+row M6.9B, decision P6-9 (Zoom for live webinars), P6-13 (entitlement `virtual`).
+
+### 2. References
+`docs/plans/phase-6.md` (P6-9, P6-13), M6.9a (this file), M6.4a integrations framework
+(`packages/modules/integrations/MODULE.md`), M5.6a session doors (`checkin`), M4.8b receipts
+(the legal-copy + PDF + signed-link pattern followed here), ADR 0017 (PDF via Gotenberg).
+
+### 3. Scope
+- **Zoom connector** (`integrations/src/connectors/zoom.ts`, through the `IntegrationAuth` port;
+  Nango in production, the fake in dev and CI, `availability: 'general'`, entitlement `virtual`):
+  - `registrants` (push): `virtual.zoom_registrants` rows → `POST /webinars/{id}/registrants`.
+    **Never duplicates**: one row per session and ticket (and one per webinar and email); the
+    engine's record link (one Zoom registrant per row); an `Idempotency-Key` per row and content
+    (a send whose answer was lost is applied once); Zoom (and the fake) keep one registrant per
+    address and webinar.
+  - `participants` (pull): after a session ends (and for 30 days), the webinar's participant
+    report (`GET /report/webinars/{id}/participants`, paged) → `virtual.zoom_attendance`, one row
+    per join → leave segment, matched to the ticket registered with that email (unmatched
+    participants are kept with no ticket and earn nothing). Stable record ids and a version of the
+    segment's times: a report pulled again writes nothing. A webinar Zoom has no report for (404)
+    is skipped.
+  - **Framework change (additive):** `SyncIO.read(fn)` runs a read in the org's tenant transaction
+    so a pull can scope its provider calls to what is linked here (the webinars to report on).
+- **Virtual (tier 4)**: `zoom_webinars` (a session's webinar id, one per session and per org),
+  `zoom_registrants`, `zoom_attendance`; `linkZoomWebinar` (events:write; normalizes "812 3456
+  7890"; refuses in-person events and a webinar already linked to another session; re-linking
+  moves registrants to the new webinar), `syncZoomRegistrants` (reconcile: holders with online
+  access, renamed holders), the `virtual.zoom-registrants` subscriber (`order.paid@1`: new holders
+  become registrants), `zoomSetupQuery` (counts only), `onlineAttendanceTx` for CE.
+- **CE module** (`packages/modules/ce`, tier 5, schema `ce`): `settings` (credit name, accreditor),
+  `session_rules` (credits in hundredths 1–10 000, minimum minutes 1–1440, count in person and/or
+  online), `certificates` (one per ticket; code `XXXXX-XXXXX`, Crockford, unique per org; revision,
+  content hash, status issued/revoked, holder name/email/locale), `awards` (the minutes and credits
+  per session behind a certificate).
+  - **Arithmetic** (`domain/credits.ts`, pure): minute buckets inside the session window; a visit
+    (scan in → out; never scanned out: until the session ends) and a Zoom segment count every UTC
+    minute they overlap; a watched minute is its own bucket; a minute counts once whatever covers
+    it; a session qualifies at its minimum; the certificate totals qualifying sessions.
+  - **`ce.calculate`** (events:write; the settings row is the lock): ended sessions only; same
+    inputs → nothing changes and nothing is sent; a different result → a new revision (emailed);
+    nothing qualifying any more (or a voided ticket) → withdrawn. Emits `ce.certificate_issued@1`
+    and `ce.certificate_revoked@1` (ids and revision; internal events, `personal`).
+  - **Certificate document** (`certificate-document.ts`) and its words
+    (`legal/certificate-copy.ts`, **LEGAL-COPY: placeholder wording pending counsel**, 13 locales,
+    `CERTIFICATE_COPY_VERSION` stored per certificate): A4 landscape, `dir="rtl"` for Arabic,
+    session dates in the event timezone, credits in the holder's locale, the verification URL
+    and code. The same words make the email body.
+  - **Mail**: `ce.certificate-mailer` → notification kind `ce.certificate` (13 locales), once per
+    revision (dedupe key), to the ticket holder only, with the signed PDF link
+    (`ce.certificate` token).
+  - **Public verification** (`public:ce`): status, a masked name ("Ana L."), event, organizer,
+    accreditor, credits and dates; never the address, the ticket or the full name.
+- **Web**: the conference nav's **CE credits** page (`/o/{org}/e/{event}/ce-credits`, build group,
+  `virtual` module): one primary action (Calculate credits and issue certificates) with its
+  summary, certificate details form, a rule form per session (inline validation for credits,
+  minutes and the attendance kinds), the certificates table with each PDF; read-only for viewers;
+  empty states with their next step. The **Stream setup** page gets a **Zoom webinars** section
+  (connect hint, a webinar ID form per session, registrants/attended counts, Sync with Zoom now).
+  Public: the holder's PDF `/{locale}/certificates/{org}/{token}` (`?format=html` for the HTML
+  alternative), the verification page `/{locale}/certificates/{org}/verify/{code}` and the code
+  form `/{locale}/certificates/{org}/verify` (no script needed). The order page shows **Download
+  your CE certificate** per ticket with an issued certificate. Messages in 13 locales (`ce.*`,
+  `virtual.zoom.*`, `nav.ceCredits`, `notifications.kinds.ce.certificate`, Zoom's
+  `integrations.*` labels).
+- **DSAR**: `ceDataSubjects` exports and deletes the person's certificates and awards; virtual's
+  contributor now exports Zoom registrations and attendance, deletes registrant rows and redacts
+  attendance (times kept, no address or ticket).
+- **Dev/CI**: `/api/dev/ce` (a hybrid conference with two ended sessions, Ana's 50 minutes at the
+  keynote door and 15 minutes watched online, Ben's 20 minutes, recorded through the real
+  commands at past times), `/api/dev/zoom` (attend at the fake Zoom; list its registrants).
+
+**Migration:** one generated migration (`0141_greedy_mathemanic.sql`, renumbered at merge): schema
+`ce` and its four tables, three `virtual.zoom_*` tables, FORCE RLS; hand-written block: the
+cross-module composite FKs to `events.events`, `program.sessions` and `ticketing.tickets` (cascade;
+`zoom_attendance.ticket_id` is `ON DELETE SET NULL ("ticket_id")`).
+
+**Later / not yet:**
+- Calculation runs when the organizer presses the button (and is idempotent); a worker pass after
+  sessions end is later.
+- A transferred ticket's old Zoom registrant is not cancelled at Zoom yet (the new holder is
+  registered); Zoom join/leave webhooks (live attendance) and creating webinars from Yayatoh are
+  later; registrants' personal join links are sent by Zoom's own confirmation email.
+- Two tickets with one holder email register once per webinar; their Zoom minutes land on the
+  first ticket registered.
+- Prorated credits (credits per hour attended) and per-ticket-type rules.
+- Zoom Marketplace app review and the Nango Zoom integration (owner inbox).
+
+### 4. Acceptance
+| Criterion | Test |
+|---|---|
+| A fixture attendee's CE certificate reproduces exactly from scans and watch time | `packages/testing/tests/ce-credits.int.test.ts` › a fixture attendee's certificate reproduces exactly from scans, watch time and Zoom (golden certificate text); `packages/modules/ce/tests/credits.test.ts` (bucket arithmetic) |
+| An attendee below the threshold gets no certificate | `ce-credits.int.test.ts` (Ben, Cara); e2e › Ben has no link |
+| Re-running the calculation is idempotent | `ce-credits.int.test.ts` › re-running the calculation is idempotent; e2e › "Unchanged: 1" |
+| Zoom registrant sync never duplicates registrants | `ce-credits.int.test.ts` › linking a webinar registers every holder… once (lost answers re-sent with the same keys), › a new holder (order.paid)…; e2e › Zoom: … registrants sync once |
+| Revisions, withdrawals, mail once per revision | `ce-credits.int.test.ts` › a stricter rule revises… |
+| Public verification never shows the full name or address; other orgs can't read it | `ce-credits.int.test.ts` › the public verification and the order page link…; e2e › verify |
+| Permissions, entitlement, tenant isolation | `ce-credits.int.test.ts` › organizer views…; `isolation.int.test.ts` (fixture rows for both orgs: `packages/testing/src/ce.ts`) |
+| E2E: configure CE rules, attend (scan + fake watch time), receive the certificate | `apps/web/e2e/ce-credits.spec.ts` › an owner sets CE rules and calculates; the attendee receives, downloads and verifies… |
+| RTL certificate | `ce-credits.spec.ts` › Arabic (RTL): the CE page, the certificate and its verification; `ce-credits.int.test.ts` (Arabic text) |
+| Keyboard only; axe both themes; RTL | `ce-credits.spec.ts` › a viewer sees CE credits read-only; keyboard only…; axe on every screen |
