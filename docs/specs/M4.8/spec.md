@@ -252,3 +252,113 @@ Behind the `donations` entitlement. Tax-deductible receipts need a verified prof
 
 ### 16. Owner tasks
 `docs/owner-inbox.md` → M4.8b: counsel reviews `receipt-copy.ts` (and the translations), run the IRS download job monthly, the staff role for verification, receipts after refunds, donor data requests and receipt retention.
+
+## M4.8c — paddle raise console and spotters (done)
+
+### 1. Goal and users
+The fund-a-need moment of a gala: the host or a hired auctioneer calls giving levels from the top down, guests raise numbered paddles, spotters on phones record the numbers, the room's total climbs live, and a recorder turns the recorded paddles into confirmed pledges afterwards. Users: the host and auctioneer (console), volunteers and staff who may scan at the event (spotters), the development lead (recorder), co-hosts.
+
+### 2. References
+- **Plan:** `docs/plans/phase-4.md` §6, row M4.8c; P4-12 (a pledge is a promise, never a charge), P4-13 (spotters see paddle numbers only), P4-9 (unconnected orgs can still run a paddle raise that records pledges).
+- **Builds on:** M4.8a (campaigns and levels), M4.2b (purchased tables' parties and the guests holding their tickets), M3.1b (realtime channels, the message log and SSE).
+
+### 3. Scope
+**In:**
+- **Paddle numbers** (`/o/{org}/e/{event}/donations/paddles`): a paddle is a number (1–99,999, unique per event) held by one named guest or one party (a household, or a purchased table's party). **Bulk:** every guest (or party) without a paddle, or only the guests (or parties) of purchased tables, numbered table by table from a chosen first number (default: after the highest, at least 100). **One at a time** at the check-in desk: choose the guest or party, the next free number or a chosen one. Take a paddle back while it has no counted entries. `guests:read` sees the list; `guests:write` gives and takes back.
+- **Console** (`…/donations/paddle-raise`): call a level (the campaign's levels, largest first); one level at a time per event; the live panel shows the level being called with its running count and total, the duplicates waiting for the recorder, and the raise's totals (raised by paddle, paddles recorded, confirmed pledges, to review), kept current over the console channel; close the level; **Undo** reverses the room's last step (`undoStep`): while a level is open, the newest paddle waiting for review is set aside (or, with none, the arm is withdrawn); after a close, the level reopens; confirmed pledges are never undone here. `orders:read` watches; `events:write` runs it. A call copies the level's name and amount, so editing the level later never changes what the room pledged.
+- **Spotter view** (`…/paddle-raise/spot`), phone first and keyboard first: type the number, Enter (44–56 px targets, numeric keyboard, autofocus, the field keeps focus). The level being called and the event's paddle numbers arrive over the spotters' channel (snapshot on (re)connect), so an unknown or malformed number, or a number typed while no level is called, is refused **on the device** with the reason, even offline. Each entry gets its own id on the device (`crypto.randomUUID()`) and waits in a queue kept in the browser's storage (`@yayatoh/donations/paddle-queue`): it is sent in batches of up to 100 when the network allows (on Enter, every 3 s while anything waits, on the `online` event, or "Send now") and leaves the queue only when the server answered for it. The list of recent entries shows waiting / recorded / already recorded (flagged for the recorder) / refused (and why). `checkin:scan` (box office, managers, door staff and co-hosts on their event).
+- **Sync** (`POST …/paddle-raise/sync`, JSON, same-origin only, the member's session; org and event from the path): `donations.recordPaddles` stores each entry **once per device id** (unique per org; a known id gets its stored status back, a parallel duplicate request falls back to the first answer), refuses (does not store) a paddle not given at this event (`paddle_unknown`), a level of another event or org (`call_unknown`) or a withdrawn arm (`call_withdrawn`), and flags the same paddle at the same call as `duplicate` (stored, linked to the first entry, not counted). Late entries for a closed level count (a phone that was offline). A device clock in the future is stored as the arrival time. Batches lock their calls in id order so duplicate checks see every earlier entry.
+- **Recorder's review** (`…/paddle-raise/review`): every level called (newest first) with its entries, holders' names (organizer only) and statuses; "Confirm N recorded paddles" turns a level's recorded entries into **pledges** (one per entry, the level's amount, the paddle's holder, `donations.pledges`, status `confirmed`); duplicates are confirmed one by one when the recorder decides they are real; "Set aside" voids an entry (and cancels its pledge if it had one). Refreshes live from the console channel.
+- **Realtime** (M3.1b log channels, registered in the web's registry): `event.paddle-spotters` (`checkin:scan`: the call and the paddle numbers, never names or amounts given) and `event.paddle-console` (`orders:read`: the open call and the totals). Both are published inside the writing transaction.
+- The Donations tab links to the console, the spotter view and the paddle numbers.
+
+**Later / not yet:**
+- Paddles for individual-ticket buyers who aren't guests (galas create guests from purchased tables only): an attendee holder kind, or creating a guest at check-in (pending owner, `docs/owner-inbox.md`).
+- Assigning a paddle from the check-in scan itself (the Scan PWA) — today the check-in desk uses the "Give one paddle" form; members with only the `scanner` org role can't open console pages, so spotters need box office, manager or an event's door staff role (the Scan PWA's device tokens are not accepted by the sync).
+- Pledge collection (cards on file, invoices, reminders, offline payments, write-offs), donor names on screens, the live thermometer and matches: M4.8d–f. Pledges do not count in the campaign's paid "raised" total until they are paid (M4.8e).
+- An own amount called from the floor (only configured levels can be called); a service worker so the spotter page loads with no network at all (the page must be open before the network drops).
+
+### 4. `touches:`
+```yaml
+touches:
+  - packages/modules/donations/src/{domain/paddles.ts,domain/paddle-queue.ts,schema-paddles.ts,paddle-dto.ts,paddle-live.ts,paddles.ts,paddle-raise.ts}  # new files
+  - packages/modules/donations/src/{index.ts,private-columns.ts}, package.json (+@yayatoh/guests, ./paddles and ./paddle-queue exports), MODULE.md   # appended
+  - packages/modules/donations/tests/paddles.test.ts
+  - packages/modules/guests/src/{paddle-holders.ts,index.ts}       # new read helpers + one export block
+  - packages/db/drizzle/0113_aromatic_captain_stacy.sql (+ meta)   # renumbered at merge
+  - packages/testing/src/fixtures.ts                               # paddleRaiseRows
+  - packages/testing/tests/{paddle-raise.int.test.ts,impersonation.int.test.ts}
+  - apps/web/src/app/[locale]/o/[org]/e/[event]/donations/{page.tsx,paddles/**,paddle-raise/**}
+  - apps/web/src/server/realtime.ts                                # two channels + snapshots
+  - apps/web/messages/*.json                                       # donations.{raiseCard,paddles,raise,spot,review}
+  - apps/web/e2e/paddle-raise.spec.ts
+```
+
+### 5. Data model
+| Table | Change | Notes |
+|---|---|---|
+| `donations.paddles` | new | event, number (unique per event), guest **or** party (exactly one; one paddle per guest and per party) |
+| `donations.paddle_calls` | new | event, campaign, level (set null when the level goes), level name and amount copied, currency, status open/closed/withdrawn (one open per event), opened/closed at |
+| `donations.paddle_entries` | new | event, call, `client_id` (the device's id, unique per org), paddle (set null when it goes) and number, status recorded/duplicate/confirmed/voided, duplicate of, spotter user id, recorded at (device clock), reviewed at |
+| `donations.pledges` | new | event, campaign, call, entry (unique), paddle number, guest or party (set null when they go), amount, currency, status confirmed/cancelled, source `paddle`, confirmed/cancelled at |
+
+**RLS notes:**
+- [x] All four tables use `tenantTable()` (ENABLE + FORCE RLS, NULLIF policy, org-leading indexes, org-scoped uniques, composite FKs).
+- [x] Fixture rows for both orgs (`paddleRaiseRows`: the fixture party's paddle, a called and closed level, one entry confirmed into a pledge).
+- [x] Text columns declared in `private-columns.ts` (level name public, statuses and currency vocab, the spotter's user id internal).
+
+**Migration:** `0113_aromatic_captain_stacy.sql` (to be renumbered), additive only. Hand-written block: `paddles_event_fk`, `paddle_calls_event_fk`, `paddle_entries_event_fk` (→ `events.events`, cascade); `paddles_guest_fk` / `paddles_party_fk` (→ `guests.guests` / `guests.parties`, cascade); `paddle_calls_level_fk` (→ `donations.levels`, `SET NULL (level_id)`); `paddle_entries_paddle_fk` (→ `donations.paddles`, `SET NULL (paddle_id)`); `pledges_event_fk` (→ `events.events`, no action: a money promise, like a gift); `pledges_guest_fk` / `pledges_party_fk` (`SET NULL (guest_id)` / `(party_id)`).
+
+### 6. API diff
+None on `/v1`. One web route: `POST /o/{org}/e/{event}/donations/paddle-raise/sync` (session, JSON, same-origin).
+
+### 7. Events
+None on the outbox. Realtime messages only (`state` on both channels).
+
+### 8. Entitlements and flags
+`donations` (every command, query and both channels). Permissions: `guests:read`/`guests:write` (paddles), `orders:read` (console, review), `events:write` (arm, close, undo, confirm, set aside), `checkin:scan` (spotters). Taking a paddle back is category `delete` (refused while staff impersonate). The read-only freeze refuses every write.
+
+### 9. ELT impact
+None (no legacy equivalent).
+
+### 10. Acceptance criteria
+| ID | Given / When / Then | Test |
+|---|---|---|
+| AC-M4.8c-01 | 30 spotters record 400 paddles, half of them offline for 2 minutes (synced after the level closed), with lost answers and parallel replays: exactly 400 entries, 400 distinct paddles and device ids, all recorded, the level's total = 400 × its amount | int `packages/testing/tests/paddle-raise.int.test.ts` ("acceptance: 30 spotters…"); unit `packages/modules/donations/tests/paddles.test.ts` (same run against the queue) |
+| AC-M4.8c-02 | The keyboard-only path works: the host calls a level with Enter; the spotter types numbers and Enter with the field keeping focus | e2e `apps/web/e2e/paddle-raise.spec.ts` ("the room…") |
+| AC-M4.8c-03 | A paddle not given at this event is refused: on the device (with its number) and by the server (not stored); a level of another event or org and a withdrawn arm are refused | e2e "the room…" (999); int "records entries…", "undo…", "another org sees none of it…" |
+| AC-M4.8c-04 | Duplicates are flagged for the recorder and never dropped; a replayed entry is stored once and gets its first answer | int "records entries…"; e2e "the room…" (flagged), "an offline spotter…" (replay) |
+| AC-M4.8c-05 | An offline spotter's entries wait on the phone (count shown, page reload keeps them) and sync once when back; nothing reaches the console meanwhile | e2e "an offline spotter…"; unit queue tests |
+| AC-M4.8c-06 | Paddles: bulk by table (or all), from a start number, the next free number at the desk, a taken number and a second paddle refused, take back refused once recorded | int "paddle numbers" block; e2e "paddle numbers…" |
+| AC-M4.8c-07 | Console: one level at a time, close, undo (void newest, withdraw empty arm, reopen), live running total | int "arms one level…", "undo…"; e2e "the room…" |
+| AC-M4.8c-08 | Recorder: confirm a level's recorded paddles into pledges once (amount and holder), duplicates one by one, set aside cancels a pledge | int "the recorder…"; e2e "the room…" |
+| AC-M4.8c-09 | Spotters and the live channels never carry names or amounts given (P4-13) | int "arms one level…" (realtime log scan) |
+| AC-M4.8c-10 | Permissions: door staff record on their event only and cannot run the console or confirm; viewers read without controls, get no spotter page and the sync refuses them | int "door staff…"; e2e "paddle numbers…" (viewer) |
+| AC-M4.8c-11 | Isolation: every new table covered; another org can neither read nor record against this org's levels | `isolation.int.test.ts` (fixture rows); int "another org sees none of it…" |
+| AC-M4.8c-12 | Accessibility: axe light and dark on every new screen and state; Arabic RTL of the three screens | e2e (`expectAccessibleBothModes` throughout), "Arabic (RTL)…" |
+
+### 11. Security and privacy
+- Spotters' phones get the level being called and the paddle numbers only; names reach the organizer's paddle list and review only (P4-13). Pledge amounts are numbers on organizer views.
+- The sync route is same-origin JSON with the member's session; the tenant comes from the path; the device id is unique per org, and an id another event already used is refused without revealing anything.
+- Audit rows carry counts (entries, refused, duplicates, confirmed), never names.
+
+### 12. Performance budget
+A sync batch (≤ 100 entries) is a handful of indexed reads and one insert per entry, under the call's row lock; 30 spotters syncing in parallel serialize per level for milliseconds. The console's live message is recomputed per batch (grouped counts per call).
+
+### 13. Rollout
+Behind the `donations` entitlement. Works for unconnected orgs too (pledges only, P4-9).
+
+### 14. Build notes (2026-10-03)
+Base: build branch + `merge/next-3g` + `agent/design-v2` + `merge/next-3h` (which carries `agent/m4.8a`, `agent/m4.8b` and `agent/m4.2b`).
+- Gate: lint, check:modules, typecheck (59/59), unit 2,703 passed (200 files), integration 1,509 passed (165 files). e2e: `paddle-raise.spec.ts` 12/12 (3 projects); related `donations`, `realtime` 36/36; `canary-crawl`, `security` 106 passed (14 skipped by project). The screens use design v2 components only (PageHeader, Card, StatCard, StatusPill, EmptyState, Table, Alert, Button); one local composition, `RaiseActionButton` (a one-button form announcing the server's answer), lives in the feature folder.
+
+### 15. Demo checklist
+- [ ] As the Lakeside owner, create a gala, add a "Table of 4" ticket, publish, buy a table on the public page (fake provider) and name three guests through the table's link.
+- [ ] Donations: add a campaign with levels $1,000 and $250. Open **Paddle numbers** → Give paddles (purchased tables) → 100–102.
+- [ ] Open the **console**; on a phone (a box-office member) open **Spot paddles**.
+- [ ] Call $1,000; type 100 ↵, 101 ↵, 100 ↵ on the phone (the third is flagged); watch the console climb; Undo; Close.
+- [ ] Put the phone in airplane mode, call $250, type three numbers, turn the network back on: they arrive once.
+- [ ] **Review**: confirm the recorded paddles into pledges; set one aside.
+
+### 16. Owner tasks
+`docs/owner-inbox.md` → M4.8c: paddles for individual-ticket buyers; spotters' roles (scanner role and the Scan PWA).

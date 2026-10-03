@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto';
 import { ASSISTANCE_CHANNEL } from '@yayatoh/assistance';
 import { checkinFactsTx, deviceContext } from '@yayatoh/checkin';
 import { type TenantTx, withTenant } from '@yayatoh/db';
+import { consoleLiveTx, PADDLE_REALTIME_CHANNELS, spotterStateTx } from '@yayatoh/donations';
 import {
   ENGAGEMENT_REALTIME_CHANNELS,
   moderationSnapshotTx,
@@ -77,6 +78,8 @@ export const REALTIME_CHANNELS = createRealtimeRegistry([
   GUEST_SEATS_CHANNEL,
   // M4.5b: the gallery's live slideshow (item ids and states; the slideshow re-reads).
   GALLERY_CHANNEL,
+  // M4.8c: the paddle raise's spotters (level and paddle numbers) and console (totals).
+  ...PADDLE_REALTIME_CHANNELS,
 ]);
 
 /** Stream (re)connections per caller and channel per minute. */
@@ -153,6 +156,12 @@ const SNAPSHOTS: Record<string, (tx: TenantTx, channel: ResolvedChannel) => Prom
   // M5.7a: the audience's (approved questions, shown results) and the moderators' full state.
   'session.live': (tx, c) => publicSnapshotTx(tx, c.sessionId ?? ''),
   'session.moderation': (tx, c) => moderationSnapshotTx(tx, c.sessionId ?? ''),
+  // M4.8c: a spotter's phone and the paddle-raise console (re)connecting.
+  'event.paddle-spotters': (tx, c) => spotterStateTx(tx, c.eventId ?? ''),
+  'event.paddle-console': async (tx, c) => {
+    const event = await findEventTx(tx, c.eventId ?? '');
+    return consoleLiveTx(tx, c.eventId ?? '', event?.currency ?? 'USD');
+  },
 };
 
 /** Session channels (M5.7a) name a real session of their event with live engagement on. */

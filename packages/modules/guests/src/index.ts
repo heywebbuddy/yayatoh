@@ -222,6 +222,14 @@ export {
   setPartyContactCommand,
   setPartyLocaleCommand,
 } from './invites.ts';
+// M4.8c paddle raise: who can hold a paddle, and their names for the organizer.
+export {
+  type PaddleHolderGuest,
+  type PaddleHolderParty,
+  paddleHolderNamesTx,
+  paddleHoldersTx,
+  paddleHolderTx,
+} from './paddle-holders.ts';
 export { privateColumns } from './private-columns.ts';
 // M4.3a guest seating: the guest list's live channel and seating's OccupantDirectory.
 export { GUESTS_CHANNEL, MAX_PARTY_MESSAGES, publishGuestChangesTx } from './realtime.ts';
