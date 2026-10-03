@@ -35,6 +35,7 @@ The organizer review's first complaint was "dropdowns look bad everywhere": ever
 - Typed entry for a date-time takes the locale's date, then the time. A single segmented field (day/month/year spinbuttons) could come later if organizers ask.
 - `CurrencyPicker` gets its first form in U9 (org and per-event currency).
 - Native `<datalist>` suggestions (program form) stay as they are: they're a text input with hints, not a select.
+- Batch 3j's new screens: `merge/next-3j` conflicts with 3i across ~80 files, including migration snapshots 0113–0122, so it couldn't be merged here. The merge-3k brief converts any native select or date input those branches add, and the `no-native-select` gate will name each one.
 
 ## Acceptance
 | Criterion | Test |
