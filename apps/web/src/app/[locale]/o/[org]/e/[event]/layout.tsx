@@ -116,10 +116,10 @@ export default async function EventLayout({
           {series ? (
             <Link
               href={`/o/${org}/series/${series.slug}`}
-              className="inline-flex min-h-8 min-w-0 items-center gap-1.5 rounded-pill border border-line bg-surface px-3 text-caption font-semibold text-ink-2 hover:text-ink"
+              className="inline-flex min-h-8 min-w-0 items-center gap-1.5 rounded-pill border border-line bg-surface px-3 py-1 text-caption font-semibold text-ink-2 hover:text-ink"
             >
               <Layers aria-hidden="true" className="size-3.5 shrink-0" />
-              <span className="truncate">{t('seriesLink.partOf', { name: series.name })}</span>
+              <span className="min-w-0 break-words">{t('seriesLink.partOf', { name: series.name })}</span>
             </Link>
           ) : null}
         </>
