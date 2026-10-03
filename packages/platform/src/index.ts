@@ -78,12 +78,13 @@ export {
   type NotificationRecipient,
   type Notifier,
 } from './notifier.ts';
-export { catchUpSubscriber, consumeEvent, processedPairsTx } from './outbox/consume.ts';
+export { catchUpSubscriber, consumeEvent } from './outbox/consume.ts';
 export {
   defineSubscriber,
   emitEvents,
   eventKey,
   type PublishedEvent,
+  processedPairsTx,
   recentEventsTx,
   type Subscriber,
   subscribes,

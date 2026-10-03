@@ -18,6 +18,7 @@ export {
   DEVICE_ONLINE_WINDOW_MS,
   DeviceDto,
   deviceContext,
+  deviceEventIdTx,
   deviceHealthTx,
   deviceIdOf,
   deviceManifestQuery,
