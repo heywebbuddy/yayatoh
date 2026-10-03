@@ -36,7 +36,7 @@ import { attendeeExportAction, bookingsExportAction } from '@yayatoh/reports';
 import { seatAssignAction } from '@yayatoh/seating';
 import { surveyExportAction, surveysContactOwner } from '@yayatoh/surveys';
 import { createOrgAuthorizer, orgStatusGate } from '@yayatoh/tenancy';
-import { ticketResendAction } from '@yayatoh/ticketing';
+import { ticketingContactOwner, ticketResendAction } from '@yayatoh/ticketing';
 import {
   configureWebhooks,
   type FakePublisher,
@@ -104,6 +104,7 @@ export const CONTACT_REFERENCE_OWNERS = [
   notificationsContactOwner,
   guestsContactOwner,
   ordersContactOwner,
+  ticketingContactOwner,
   checkinContactOwner,
   surveysContactOwner,
   campaignsContactOwner,

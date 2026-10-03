@@ -111,8 +111,10 @@ export {
   CreatePromoCodeInput,
   claimPromoTx,
   createPromoCodeCommand,
+  listOrgPromoCodesQuery,
   listPromoCodesQuery,
   normalizePromoCode,
+  type DiscountRule,
   PromoCodeDto,
   releasePromoTx,
   resolvePromoTx,
@@ -121,6 +123,7 @@ export {
 export { publicTicketTypes } from './public.ts';
 export {
   FEE_MODES,
+  COUPON_SCOPES,
   PROMO_KINDS,
   TICKET_STATUSES,
   TICKET_TYPE_MANAGERS,
@@ -168,3 +171,21 @@ export {
   walletPassSync,
   walletSerial,
 } from './wallet.ts';
+export {
+  COUPON_BUYER_LIMIT,
+  CouponDto,
+  type CouponRow,
+  CreateCouponInput,
+  claimCouponTx,
+  couponAppliesTo,
+  couponLive,
+  couponRule,
+  createCouponCommand,
+  listCouponsQuery,
+  reclaimCouponTx,
+  releaseCouponTx,
+  type ResolvedCode,
+  resolveCodeTx,
+  setCouponActiveCommand,
+} from './coupons.ts';
+export { ticketingContactOwner } from './contact-merge.ts';

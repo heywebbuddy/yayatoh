@@ -1,1 +1,1 @@
-export { promoCodes, signingKeys, ticketBarcodes, tickets, ticketTypes } from './schema.ts';
+export { couponRedemptions, coupons, promoCodes, signingKeys, ticketBarcodes, tickets, ticketTypes } from './schema.ts';

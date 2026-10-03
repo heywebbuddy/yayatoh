@@ -9,6 +9,7 @@ import { eventRolesOf } from '@yayatoh/events';
 import { guestsContactOwner } from '@yayatoh/guests';
 import { notificationsContactOwner } from '@yayatoh/notifications';
 import { ordersContactOwner } from '@yayatoh/orders';
+import { ticketingContactOwner } from '@yayatoh/ticketing';
 import {
   createCommandPorts,
   localKeyVault,
@@ -43,6 +44,7 @@ registerContactReferenceOwners([
   notificationsContactOwner,
   guestsContactOwner,
   ordersContactOwner,
+  ticketingContactOwner,
   checkinContactOwner,
   surveysContactOwner,
   campaignsContactOwner,

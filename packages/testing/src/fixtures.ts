@@ -319,6 +319,7 @@ import {
 } from '@yayatoh/tenancy';
 import {
   createClaimLinksCommand,
+  createCouponCommand,
   createPromoCodeCommand,
   createTicketTypeCommand,
   requestHolderLinkCommand,
@@ -599,6 +600,17 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     },
     systemCtx(org.id),
     ports,
+  );
+  // U9: an org coupon for the event and a (released) redemption by the paid order's buyer.
+  const coupon = await executeCommand(
+    createCouponCommand,
+    { code: 'FIXTUREORG', kind: 'amount', amountMinor: 500, currency: 'USD', scope: 'events', eventIds: [event.id] },
+    ctx(),
+    ports,
+  );
+  await withTenant(systemCtx(org.id), (tx) =>
+    tx.execute(sql`insert into ticketing.coupon_redemptions (org_id, coupon_id, order_id, event_id, buyer_contact_id, released_at)
+      select org_id, ${coupon.id}, id, event_id, buyer_contact_id, now() from orders.orders where id = ${checkout.order.id}`),
   );
   // M3.8a: the order's attribution record (first and last touch: the click above) and settings.
   await executeCommand(

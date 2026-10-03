@@ -21,6 +21,7 @@ export {
   updateAnnouncementCommand,
   updateSectionCommand,
 } from './commands/content.ts';
+export { CURRENCY_LOCKED, SetEventCurrencyInput, setEventCurrencyCommand } from './commands/currency.ts';
 export {
   eventDetailsQuery,
   orgTagsQuery,

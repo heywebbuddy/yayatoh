@@ -69,6 +69,8 @@ export const orders = tenantTable(
     /** `ticketing.promo_codes` (hand-written FK) and the code as the buyer typed it, normalized. */
     promoCodeId: uuid('promo_code_id'),
     promoCode: text('promo_code'),
+    /** U9: the org-wide coupon the order took (`ticketing.coupons`, hand-written FK); `promo_code` holds its code. */
+    couponId: uuid('coupon_id'),
     feeMinor: minor('fee_minor').notNull(),
     totalMinor: minor('total_minor').notNull(),
     fundsFlow: text('funds_flow').notNull(),

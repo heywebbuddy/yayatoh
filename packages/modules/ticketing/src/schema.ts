@@ -238,6 +238,78 @@ export const promoCodes = tenantTable(
   ],
 );
 
+export const COUPON_SCOPES = ['all', 'events'] as const;
+
+/**
+ * U9 org-wide coupons (UX-5): one code for every event of the org or for chosen events. Same
+ * discount kinds as promo codes; an amount coupon carries a currency and applies only to events
+ * in that currency. Uses are claimed with a conditional UPDATE (total limit); the per-buyer limit
+ * is checked under that row lock against `coupon_redemptions`.
+ */
+export const coupons = tenantTable(
+  ticketingSchema,
+  'coupons',
+  {
+    code: text('code').notNull(),
+    kind: text('kind').notNull(),
+    percentBps: integer('percent_bps'),
+    amountMinor: bigint('amount_minor', { mode: 'number' }),
+    /** Amount coupons only (null for percentages). */
+    currency: text('currency'),
+    scope: text('scope').notNull().default('all'),
+    /** `scope = 'events'`: the events it applies to (at least one). */
+    eventIds: uuid('event_ids').array().notNull().default(sql`'{}'::uuid[]`),
+    maxRedemptions: integer('max_redemptions'),
+    perBuyerLimit: integer('per_buyer_limit'),
+    redeemedCount: integer('redeemed_count').notNull().default(0),
+    startsAt: ts('starts_at'),
+    endsAt: ts('ends_at'),
+    active: boolean('active').notNull().default(true),
+  },
+  (t) => [
+    uniqueIndex('coupons_org_code_key').on(t.orgId, t.code),
+    check('coupons_code_check', sql`code ~ '^[A-Z0-9_-]{3,32}$'`),
+    check('coupons_kind_check', sql`kind in ('percent', 'amount')`),
+    check(
+      'coupons_value_check',
+      sql`(kind = 'percent' and percent_bps between 1 and 10000 and amount_minor is null and currency is null) or (kind = 'amount' and amount_minor > 0 and percent_bps is null and currency ~ '^[A-Z]{3}$')`,
+    ),
+    check('coupons_scope_check', sql`(scope = 'all' and cardinality(event_ids) = 0) or (scope = 'events' and cardinality(event_ids) >= 1)`),
+    check(
+      'coupons_redemptions_check',
+      sql`redeemed_count >= 0 and (max_redemptions is null or (max_redemptions >= 1 and redeemed_count <= max_redemptions))`,
+    ),
+    check('coupons_per_buyer_check', sql`per_buyer_limit is null or per_buyer_limit >= 1`),
+    check('coupons_window_check', sql`ends_at is null or starts_at is null or ends_at > starts_at`),
+  ],
+);
+
+/**
+ * One row per order that took a coupon (an order takes at most one code). `released_at` is set
+ * when the order lapses or is cancelled unpaid, which gives the use back.
+ */
+export const couponRedemptions = tenantTable(
+  ticketingSchema,
+  'coupon_redemptions',
+  {
+    couponId: uuid('coupon_id').notNull(),
+    orderId: uuid('order_id').notNull(),
+    eventId: uuid('event_id').notNull(),
+    /** The buyer's CRM contact (one per email address): the per-buyer limit counts by it. */
+    buyerContactId: uuid('buyer_contact_id').notNull(),
+    releasedAt: ts('released_at'),
+  },
+  (t) => [
+    uniqueIndex('coupon_redemptions_org_order_key').on(t.orgId, t.orderId),
+    index('coupon_redemptions_org_coupon_buyer_idx').on(t.orgId, t.couponId, t.buyerContactId),
+    foreignKey({
+      name: 'coupon_redemptions_coupon_fk',
+      columns: [t.orgId, t.couponId],
+      foreignColumns: [coupons.orgId, coupons.id],
+    }).onDelete('cascade'),
+  ],
+);
+
 /**
  * Distribution (roadmap M1.8): a claim link hands one ticket to whoever opens it and enters
  * their name and email. Claiming reissues the ticket (rev + 1), so the old QR stops working.
