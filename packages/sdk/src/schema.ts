@@ -2306,7 +2306,7 @@ export interface components {
             data: components["schemas"]["Image"][];
         };
         /** @enum {string} */
-        ImageSlot: "cover" | "gallery" | "photo" | "logo" | "floorplan";
+        ImageSlot: "cover" | "gallery" | "photo" | "logo" | "floorplan" | "library";
         ImageVariant: {
             /** @description The JPEG/PNG (or SVG) every client can show. */
             fallback: boolean;
