@@ -47,6 +47,10 @@ export type EntryOutcome =
 export const PLEDGE_STATUSES = ['confirmed', 'cancelled'] as const;
 export type PledgeStatus = (typeof PLEDGE_STATUSES)[number];
 
+/** Where a pledge comes from: a paddle raised at a call, or a sponsor's challenge match (M4.8f). */
+export const PLEDGE_SOURCES = ['paddle', 'match'] as const;
+export type PledgeSource = (typeof PLEDGE_SOURCES)[number];
+
 /** Spotters sync at most this many entries per request. */
 export const MAX_SYNC_BATCH = 100;
 

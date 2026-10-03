@@ -2,7 +2,7 @@ import { randomUUID } from 'node:crypto';
 import { catchUpGifts, publicGiving, QR_PLACES, savedCardView } from '@yayatoh/donations';
 import { checkoutTarget, publicEventBySlug } from '@yayatoh/events';
 import { formatMoney, money } from '@yayatoh/kernel';
-import { buttonClass, EmptyState, Label, ProgressBar } from '@yayatoh/ui';
+import { Alert, buttonClass, EmptyState, Label, ProgressBar } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
@@ -38,6 +38,7 @@ export default async function GivePage({ params, searchParams }: Params) {
   const ev = target ? await publicEventBySlug(slug) : null;
   if (!target || !ev) notFound();
   const t = await getTranslations('donations.give');
+  const tm = await getTranslations('donations.matches');
   await catchUpGifts(target.orgId);
   const giving = await publicGiving(target.orgId, target.eventId);
   const { c, via, tap } = await searchParams;
@@ -89,6 +90,27 @@ export default async function GivePage({ params, searchParams }: Params) {
         <EmptyState title={t('noCampaignTitle')} description={t('noCampaignBody')} />
       ) : (
         <>
+          {/* M4.8f: a sponsor's running challenge match on this campaign (P4-17). */}
+          {campaign.matches
+            .filter((m) => m.phase === 'live')
+            .map((m) => (
+              <Alert
+                key={m.id}
+                tone="success"
+                title={tm('headline', {
+                  ratio: `r${m.ratioPercent}`,
+                  percent: new Intl.NumberFormat(locale).format(m.ratioPercent),
+                  cap: fmt(m.capMinor, m.currency),
+                })}
+              >
+                <p className="m-0" data-testid="match-banner">
+                  {m.publicName ? tm('thanksTo', { name: m.publicName }) : tm('thanksAnonymous')}{' '}
+                  {m.remainingMinor > 0
+                    ? tm('publicProgress', { matched: fmt(m.matchedMinor, m.currency) })
+                    : tm('reached')}
+                </p>
+              </Alert>
+            ))}
           {giving.campaigns.length > 1 ? (
             <nav aria-label={t('campaignsNav')} className="flex flex-wrap gap-2">
               {giving.campaigns.map((x) => (

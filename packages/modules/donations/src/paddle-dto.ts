@@ -10,6 +10,7 @@ import {
   PADDLE_MAX,
   PADDLE_MIN,
 } from './domain/paddles.ts';
+import { LiveMatchDto } from './match-dto.ts';
 
 /** Allowlisted shapes of the paddle raise (M4.8c). Names reach organizer views only (P4-13). */
 const PaddleNumber = z.int().min(PADDLE_MIN).max(PADDLE_MAX);
@@ -85,8 +86,13 @@ export const RaiseTotalsDto = z.object({
 });
 export type RaiseTotalsDto = z.infer<typeof RaiseTotalsDto>;
 
-/** What the console's live channel carries: the open call and the totals (snapshot and updates). */
-export const ConsoleLiveDto = z.object({ open: CallDto.nullable(), totals: RaiseTotalsDto });
+/** What the console's live channel carries: the open call, the totals and the running matches. */
+export const ConsoleLiveDto = z.object({
+  open: CallDto.nullable(),
+  totals: RaiseTotalsDto,
+  /** M4.8f: the event's running challenge matches ("every gift doubled up to $25,000"). */
+  matches: z.array(LiveMatchDto),
+});
 export type ConsoleLiveDto = z.infer<typeof ConsoleLiveDto>;
 
 export const PaddleConsoleDto = ConsoleLiveDto.extend({

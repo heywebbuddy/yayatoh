@@ -132,4 +132,16 @@ export const privateColumns = columnPrivacy('donations', {
     status: 'vocab',
     decline_code: 'vocab',
   },
+  // M4.8f matching gifts. The sponsor's name and email are for the host (collection, receipts);
+  // the public name is what the sponsor chose to show on screens and the giving page.
+  matches: {
+    sponsor_name: personal(),
+    sponsor_email: personal('email'),
+    public_name: 'public',
+    currency: 'vocab',
+    status: 'vocab',
+  },
+  gift_refunds: {
+    currency: 'vocab',
+  },
 });

@@ -14,6 +14,7 @@ import {
   giftOutcomesSubscriber,
   pledgeMailer,
   pledgeOutcomesSubscriber,
+  giftRefundsSubscriber,
   receiptIssuer,
   statementMailer,
 } from '@yayatoh/donations';
@@ -164,6 +165,7 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     alertEvaluator({ notifier }),
     // M4.8a: gift orders' outcomes (paid, failed, lapsed) move their gifts.
     giftOutcomesSubscriber,
+    giftRefundsSubscriber,
     // M4.8b: a receipt per paid gift or charity-ticket order, and year-end statements, to the donor.
     receiptIssuer({ notifier, appOrigin }),
     statementMailer({ notifier, appOrigin }),
