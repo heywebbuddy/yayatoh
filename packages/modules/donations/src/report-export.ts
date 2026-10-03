@@ -126,10 +126,12 @@ export function donorXlsxFile(content: string): Uint8Array {
     .split('\n')
     .filter((l) => l.trim() !== '')
     .map((l) => Row.parse(JSON.parse(l)));
-  return writeXlsx(
-    rows.map((r, i) => (i === 0 ? r : r.map((c) => (DECIMAL.test(c) ? Number(c) : c)))),
-    { sheet: 'Donations' },
-  );
+  return writeXlsx([
+    {
+      name: 'Donations',
+      rows: rows.map((r, i) => (i === 0 ? r : r.map((c) => (DECIMAL.test(c) ? Number(c) : c)))),
+    },
+  ]);
 }
 
 /** The workbook's media type, for the download. */

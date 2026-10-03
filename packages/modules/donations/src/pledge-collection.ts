@@ -142,16 +142,14 @@ async function holdersTx(
 const holderKey = (r: { guestId: string | null; partyId: string | null; paddleNumber: number }) =>
   r.guestId ?? r.partyId ?? `paddle:${r.paddleNumber}`;
 
-/**
- * The event's confirmed paddle pledges that have no collection yet (locked). A sponsor's match
- * pledge (M4.8f, no paddle) is not collected here: the sponsor is not a guest with a card or link.
- */
+/** The event's confirmed pledges that have no collection yet (locked). */
 async function unclosedPledgesTx(tx: TenantTx, eventId: string, pledgeIds?: readonly string[]) {
-  const rows = await tx
+  return tx
     .select({
       id: pledges.id,
       campaignId: pledges.campaignId,
-      paddleNumber: pledges.paddleNumber,
+      // Paddle pledges only (the filter below), so the number is always set.
+      paddleNumber: sql<number>`${pledges.paddleNumber}`,
       guestId: pledges.guestId,
       partyId: pledges.partyId,
       amountMinor: pledges.amountMinor,
@@ -162,6 +160,7 @@ async function unclosedPledgesTx(tx: TenantTx, eventId: string, pledgeIds?: read
       and(
         eq(pledges.eventId, eventId),
         eq(pledges.status, 'confirmed'),
+        // Batch 3j merge: a sponsor's match pledge (M4.8f, no paddle holder) is not collected here.
         eq(pledges.source, 'paddle'),
         sql`not exists (select 1 from ${pledgeCollections} where ${pledgeCollections.pledgeId} = ${pledges.id})`,
         pledgeIds ? inArray(pledges.id, [...pledgeIds]) : undefined,
@@ -169,7 +168,6 @@ async function unclosedPledgesTx(tx: TenantTx, eventId: string, pledgeIds?: read
     )
     .orderBy(asc(pledges.confirmedAt), asc(pledges.id))
     .for('update');
-  return rows.flatMap((r) => (r.paddleNumber === null ? [] : [{ ...r, paddleNumber: r.paddleNumber }]));
 }
 
 /**
@@ -882,7 +880,8 @@ export const pledgeCollectionQuery = tenantQuery({
     const rows = await tx
       .select({
         pledgeId: pledges.id,
-        paddleNumber: pledges.paddleNumber,
+        // Paddle pledges only (the inner join on their call), so the number is always set.
+        paddleNumber: sql<number>`${pledges.paddleNumber}`,
         guestId: pledges.guestId,
         partyId: pledges.partyId,
         levelName: paddleCalls.levelName,
@@ -927,7 +926,7 @@ export const pledgeCollectionQuery = tenantQuery({
       else totals.openMinor += r.amountMinor;
       return {
         pledgeId: r.pledgeId,
-        paddleNumber: r.paddleNumber ?? 0,
+        paddleNumber: r.paddleNumber,
         holderName: names.get(r.guestId ?? r.partyId ?? '') || `#${r.paddleNumber}`,
         levelName: r.levelName,
         amountMinor: r.amountMinor,
@@ -983,6 +982,7 @@ export async function unpaidPledgeFactsTx(
       and(
         eq(pledges.eventId, eventId),
         eq(pledges.status, 'confirmed'),
+        eq(pledges.source, 'paddle'),
         or(isNull(pledgeCollections.id), inArray(pledgeCollections.status, [...OPEN_COLLECTION_STATUSES])),
       ),
     );
@@ -1001,6 +1001,7 @@ export async function unpaidPledgeEventIdsTx(tx: TenantTx, now: Date): Promise<s
     .where(
       and(
         eq(pledges.status, 'confirmed'),
+        eq(pledges.source, 'paddle'),
         or(isNull(pledgeCollections.id), inArray(pledgeCollections.status, [...OPEN_COLLECTION_STATUSES])),
       ),
     )

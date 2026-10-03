@@ -51,6 +51,8 @@ export {
   stageImportCommand,
   validateImportCommand,
 } from './imports.ts';
+// M5.8a: networking looks people up by verified address and active place.
+export { activeAttendeeByEmailTx, activeEventContactsTx } from './networking.ts';
 export { attendeeContactIdsTx, emitAttendeesChangedTx, participationAttendeesTx } from './participation.ts';
 export { privateColumns } from './private-columns.ts';
 export { ATTENDEE_SOURCES, ATTENDEE_STATUSES, IMPORT_FIELDS, type ImportField } from './schema.ts';

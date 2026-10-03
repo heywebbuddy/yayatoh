@@ -306,66 +306,73 @@ export const guestSeatingQuery = tenantQuery({
   output: GuestSeatingDto,
   entitlement: 'seating',
   permission: 'guests:read',
-  handler: async ({ input, tx }) => {
-    const v = await viewTx(tx, input.eventId, input.subEventId);
-    const sponsors = input.subEventId
-      ? []
-      : await tx
-          .select({ itemId: tableSponsors.itemId, name: tableSponsors.sponsorName })
-          .from(tableSponsors)
-          .where(eq(tableSponsors.eventId, input.eventId));
-    const sponsorOf = new Map(sponsors.map((s) => [s.itemId, s.name]));
-    const at = new Map(v.placed.map((s) => [s.guestId, s.itemId]));
-    const places = v.chart.places.map((p) => {
-      const seated = v.placed.filter((s) => s.itemId === p.itemId).length;
-      const taken = v.taken.get(p.itemId) ?? 0;
-      return {
-        itemId: p.itemId,
-        kind: p.kind,
-        label: p.label,
-        capacity: p.capacity,
-        taken,
-        seated,
-        free: Math.max(0, p.capacity - taken - seated),
-        vip: p.sectionVip || v.vip.has(p.itemId),
-        sectionVip: p.sectionVip,
-        sponsor: sponsorOf.get(p.itemId) ?? null,
-      };
-    });
-    const parties = v.parties.map((p) => ({
-      id: p.id,
-      name: p.name,
-      vip: p.vip,
-      side: p.side,
-      tags: [...p.tags],
-      guests: p.guests.map((g) => ({
-        id: g.id,
-        kind: g.kind,
-        name: g.name,
-        guestOf: g.guestOf,
-        ageClass: g.ageClass,
-        meal: g.meal,
-        status: g.status,
-        itemId: at.get(g.id) ?? null,
-      })),
-    }));
-    const all = parties.flatMap((p) => p.guests);
-    return GuestSeatingDto.parse({
-      subEventId: input.subEventId,
-      subEvents: v.subEvents.map((s) => ({ id: s.id, name: s.name })),
-      source: v.chart.source,
-      doc: v.chart.doc,
-      places,
-      parties,
-      counts: {
-        guests: all.filter((g) => g.status !== 'declined').length,
-        seated: all.filter((g) => g.itemId && g.status !== 'declined').length,
-        unseated: all.filter((g) => !g.itemId && g.status !== 'declined').length,
-        declinedSeated: all.filter((g) => g.itemId && g.status === 'declined').length,
-      },
-    });
-  },
+  handler: ({ input, tx }) => guestSeatingViewTx(tx, input.eventId, input.subEventId),
 });
+
+/** The editor's view (also read by the M4.3b cards and exports, in the caller's transaction). */
+export async function guestSeatingViewTx(
+  tx: TenantTx,
+  eventId: string,
+  subEventId: string | null,
+): Promise<GuestSeatingDto> {
+  const v = await viewTx(tx, eventId, subEventId);
+  const sponsors = subEventId
+    ? []
+    : await tx
+        .select({ itemId: tableSponsors.itemId, name: tableSponsors.sponsorName })
+        .from(tableSponsors)
+        .where(eq(tableSponsors.eventId, eventId));
+  const sponsorOf = new Map(sponsors.map((s) => [s.itemId, s.name]));
+  const at = new Map(v.placed.map((s) => [s.guestId, s.itemId]));
+  const places = v.chart.places.map((p) => {
+    const seated = v.placed.filter((s) => s.itemId === p.itemId).length;
+    const taken = v.taken.get(p.itemId) ?? 0;
+    return {
+      itemId: p.itemId,
+      kind: p.kind,
+      label: p.label,
+      capacity: p.capacity,
+      taken,
+      seated,
+      free: Math.max(0, p.capacity - taken - seated),
+      vip: p.sectionVip || v.vip.has(p.itemId),
+      sectionVip: p.sectionVip,
+      sponsor: sponsorOf.get(p.itemId) ?? null,
+    };
+  });
+  const parties = v.parties.map((p) => ({
+    id: p.id,
+    name: p.name,
+    vip: p.vip,
+    side: p.side,
+    tags: [...p.tags],
+    guests: p.guests.map((g) => ({
+      id: g.id,
+      kind: g.kind,
+      name: g.name,
+      guestOf: g.guestOf,
+      ageClass: g.ageClass,
+      meal: g.meal,
+      status: g.status,
+      itemId: at.get(g.id) ?? null,
+    })),
+  }));
+  const all = parties.flatMap((p) => p.guests);
+  return GuestSeatingDto.parse({
+    subEventId: subEventId,
+    subEvents: v.subEvents.map((s) => ({ id: s.id, name: s.name })),
+    source: v.chart.source,
+    doc: v.chart.doc,
+    places,
+    parties,
+    counts: {
+      guests: all.filter((g) => g.status !== 'declined').length,
+      seated: all.filter((g) => g.itemId && g.status !== 'declined').length,
+      unseated: all.filter((g) => !g.itemId && g.status !== 'declined').length,
+      declinedSeated: all.filter((g) => g.itemId && g.status === 'declined').length,
+    },
+  });
+}
 
 /* -------------------------------------------------------------------- commands ---- */
 

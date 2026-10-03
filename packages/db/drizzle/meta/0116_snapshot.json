@@ -1,6 +1,6 @@
 {
-  "id": "0f0d1873-1d9b-4dd2-b1fd-2cd6990ff1d9",
-  "prevId": "c03f0659-5e5b-4304-87f5-52e97b958459",
+  "id": "d2b41c8a-a262-4f85-ad4e-2be1dcd8b03e",
+  "prevId": "d7559f04-9f15-46e2-98d6-f66cd99b0f30",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -5161,7 +5161,7 @@
       "checkConstraints": {
         "alerts_rule_check": {
           "name": "alerts_rule_check",
-          "value": "rule in ('unseated', 'undistributed', 'paymentsFailed', 'paymentsStuck', 'refundSurge', 'devicesOffline', 'devicesLowBattery', 'devicesBacklog', 'capacityNear', 'capacityFull', 'sellOut', 'salesPace', 'readiness', 'assistanceOverdue', 'domain', 'payoutsPastDue', 'deliverability', 'automationFailed', 'campaignFailed', 'disputeDeadline', 'pledgesUnpaid')"
+          "value": "rule in ('unseated', 'undistributed', 'paymentsFailed', 'paymentsStuck', 'refundSurge', 'devicesOffline', 'devicesLowBattery', 'devicesBacklog', 'capacityNear', 'capacityFull', 'sellOut', 'salesPace', 'readiness', 'assistanceOverdue', 'domain', 'payoutsPastDue', 'deliverability', 'automationFailed', 'campaignFailed', 'disputeDeadline')"
         },
         "alerts_category_check": {
           "name": "alerts_category_check",
@@ -11354,6 +11354,12 @@
           "primaryKey": false,
           "notNull": false
         },
+        "kiosk_kind": {
+          "name": "kiosk_kind",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "app_version": {
           "name": "app_version",
           "type": "text",
@@ -11454,6 +11460,10 @@
         "devices_kiosk_pin_check": {
           "name": "devices_kiosk_pin_check",
           "value": "kiosk_pin_hash is null or kiosk_pin_hash ~ '^pbkdf2-sha256[$][0-9]{4,7}[$][A-Za-z0-9_-]{22}[$][A-Za-z0-9_-]{43}$'"
+        },
+        "devices_kiosk_kind_check": {
+          "name": "devices_kiosk_kind_check",
+          "value": "kiosk_kind is null or kiosk_kind in ('tickets', 'guests', 'board')"
         },
         "devices_app_version_check": {
           "name": "devices_app_version_check",
@@ -11772,6 +11782,202 @@
         "fraud_signals_note_check": {
           "name": "fraud_signals_note_check",
           "value": "resolution_note is null or length(resolution_note) between 1 and 500"
+        }
+      },
+      "isRLSEnabled": true
+    },
+    "checkin.guest_arrivals": {
+      "name": "guest_arrivals",
+      "schema": "checkin",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "uuidv7()"
+        },
+        "org_id": {
+          "name": "org_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "event_id": {
+          "name": "event_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "guest_id": {
+          "name": "guest_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "arrived_at": {
+          "name": "arrived_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "source": {
+          "name": "source",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "device_id": {
+          "name": "device_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "recorded_by": {
+          "name": "recorded_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "client_id": {
+          "name": "client_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "guest_arrivals_org_id_idx": {
+          "name": "guest_arrivals_org_id_idx",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "guest_arrivals_org_guest_key": {
+          "name": "guest_arrivals_org_guest_key",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "guest_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "guest_arrivals_org_client_key": {
+          "name": "guest_arrivals_org_client_key",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "client_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "guest_arrivals_org_event_at_idx": {
+          "name": "guest_arrivals_org_event_at_idx",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "event_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "arrived_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "guest_arrivals_org_id_id_key": {
+          "name": "guest_arrivals_org_id_id_key",
+          "nullsNotDistinct": false,
+          "columns": [
+            "org_id",
+            "id"
+          ]
+        }
+      },
+      "policies": {
+        "guest_arrivals_tenant_isolation": {
+          "name": "guest_arrivals_tenant_isolation",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "app_user"
+          ],
+          "using": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)",
+          "withCheck": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)"
+        }
+      },
+      "checkConstraints": {
+        "guest_arrivals_source_check": {
+          "name": "guest_arrivals_source_check",
+          "value": "source in ('scanner', 'kiosk', 'host')"
+        },
+        "guest_arrivals_device_check": {
+          "name": "guest_arrivals_device_check",
+          "value": "source <> 'host' or device_id is null"
         }
       },
       "isRLSEnabled": true
@@ -23031,6 +23237,383 @@
         "rsvp_settings_lookup_code_check": {
           "name": "rsvp_settings_lookup_code_check",
           "value": "lookup_code ~ '^[0-9A-Z_]{8,40}$'"
+        }
+      },
+      "isRLSEnabled": true
+    },
+    "guests.site_blocks": {
+      "name": "site_blocks",
+      "schema": "guests",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "uuidv7()"
+        },
+        "org_id": {
+          "name": "org_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "event_id": {
+          "name": "event_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "site_id": {
+          "name": "site_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "kind": {
+          "name": "kind",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "position": {
+          "name": "position",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "heading": {
+          "name": "heading",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "content": {
+          "name": "content",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::jsonb"
+        }
+      },
+      "indexes": {
+        "site_blocks_org_id_idx": {
+          "name": "site_blocks_org_id_idx",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "site_blocks_org_site_idx": {
+          "name": "site_blocks_org_site_idx",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "site_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "position",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "site_blocks_site_fk": {
+          "name": "site_blocks_site_fk",
+          "tableFrom": "site_blocks",
+          "tableTo": "sites",
+          "schemaTo": "guests",
+          "columnsFrom": [
+            "org_id",
+            "site_id"
+          ],
+          "columnsTo": [
+            "org_id",
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "site_blocks_org_id_id_key": {
+          "name": "site_blocks_org_id_id_key",
+          "nullsNotDistinct": false,
+          "columns": [
+            "org_id",
+            "id"
+          ]
+        }
+      },
+      "policies": {
+        "site_blocks_tenant_isolation": {
+          "name": "site_blocks_tenant_isolation",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "app_user"
+          ],
+          "using": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)",
+          "withCheck": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)"
+        }
+      },
+      "checkConstraints": {
+        "site_blocks_kind_check": {
+          "name": "site_blocks_kind_check",
+          "value": "kind in ('text', 'program', 'travel', 'registry', 'faq')"
+        },
+        "site_blocks_heading_length": {
+          "name": "site_blocks_heading_length",
+          "value": "heading is null or length(heading) between 1 and 120"
+        },
+        "site_blocks_position_check": {
+          "name": "site_blocks_position_check",
+          "value": "position >= 0"
+        },
+        "site_blocks_content_check": {
+          "name": "site_blocks_content_check",
+          "value": "jsonb_typeof(content) = 'object'"
+        }
+      },
+      "isRLSEnabled": true
+    },
+    "guests.sites": {
+      "name": "sites",
+      "schema": "guests",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "uuidv7()"
+        },
+        "org_id": {
+          "name": "org_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "event_id": {
+          "name": "event_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "code": {
+          "name": "code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'draft'"
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "intro": {
+          "name": "intro",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "content_locale": {
+          "name": "content_locale",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'en'"
+        },
+        "password_hash": {
+          "name": "password_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "password_version": {
+          "name": "password_version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "published_at": {
+          "name": "published_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "sites_org_id_idx": {
+          "name": "sites_org_id_idx",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "sites_org_event_key": {
+          "name": "sites_org_event_key",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "event_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "sites_code_key": {
+          "name": "sites_code_key",
+          "columns": [
+            {
+              "expression": "code",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "sites_org_id_id_key": {
+          "name": "sites_org_id_id_key",
+          "nullsNotDistinct": false,
+          "columns": [
+            "org_id",
+            "id"
+          ]
+        }
+      },
+      "policies": {
+        "sites_tenant_isolation": {
+          "name": "sites_tenant_isolation",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "app_user"
+          ],
+          "using": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)",
+          "withCheck": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)"
+        }
+      },
+      "checkConstraints": {
+        "sites_code_check": {
+          "name": "sites_code_check",
+          "value": "code ~ '^[0-9A-Z]{8}$'"
+        },
+        "sites_status_check": {
+          "name": "sites_status_check",
+          "value": "status in ('draft', 'published')"
+        },
+        "sites_title_length": {
+          "name": "sites_title_length",
+          "value": "length(title) between 1 and 120"
+        },
+        "sites_intro_length": {
+          "name": "sites_intro_length",
+          "value": "intro is null or length(intro) between 1 and 1000"
+        },
+        "sites_locale_check": {
+          "name": "sites_locale_check",
+          "value": "content_locale ~ '^[a-z]{2}(-[A-Z]{2})?$'"
+        },
+        "sites_password_hash_check": {
+          "name": "sites_password_hash_check",
+          "value": "password_hash is null or password_hash ~ '^scrypt\\$16384\\$8\\$1\\$[A-Za-z0-9_-]{22}\\$[A-Za-z0-9_-]{43}$'"
+        },
+        "sites_password_version_check": {
+          "name": "sites_password_version_check",
+          "value": "password_version >= 0"
+        },
+        "sites_published_check": {
+          "name": "sites_published_check",
+          "value": "status <> 'published' or (password_hash is not null and published_at is not null)"
         }
       },
       "isRLSEnabled": true
@@ -50855,1907 +51438,6 @@
         "venues_map_url_check": {
           "name": "venues_map_url_check",
           "value": "map_url is null or map_url ~ '^https://'"
-        }
-      },
-      "isRLSEnabled": true
-    },
-    "donations.pledge_attempts": {
-      "name": "pledge_attempts",
-      "schema": "donations",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "uuidv7()"
-        },
-        "org_id": {
-          "name": "org_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "collection_id": {
-          "name": "collection_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "kind": {
-          "name": "kind",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "attempt": {
-          "name": "attempt",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "gift_id": {
-          "name": "gift_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "order_id": {
-          "name": "order_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "status": {
-          "name": "status",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'pending'"
-        },
-        "decline_code": {
-          "name": "decline_code",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "settled_at": {
-          "name": "settled_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {
-        "pledge_attempts_org_id_idx": {
-          "name": "pledge_attempts_org_id_idx",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "pledge_attempts_org_order_key": {
-          "name": "pledge_attempts_org_order_key",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "order_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "pledge_attempts_org_card_attempt_key": {
-          "name": "pledge_attempts_org_card_attempt_key",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "collection_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "attempt",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "where": "kind = 'card'",
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "pledge_attempts_org_collection_idx": {
-          "name": "pledge_attempts_org_collection_idx",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "collection_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "pledge_attempts_collection_fk": {
-          "name": "pledge_attempts_collection_fk",
-          "tableFrom": "pledge_attempts",
-          "tableTo": "pledge_collections",
-          "schemaTo": "donations",
-          "columnsFrom": [
-            "org_id",
-            "collection_id"
-          ],
-          "columnsTo": [
-            "org_id",
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "pledge_attempts_gift_fk": {
-          "name": "pledge_attempts_gift_fk",
-          "tableFrom": "pledge_attempts",
-          "tableTo": "gifts",
-          "schemaTo": "donations",
-          "columnsFrom": [
-            "org_id",
-            "gift_id"
-          ],
-          "columnsTo": [
-            "org_id",
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "pledge_attempts_org_id_id_key": {
-          "name": "pledge_attempts_org_id_id_key",
-          "nullsNotDistinct": false,
-          "columns": [
-            "org_id",
-            "id"
-          ]
-        }
-      },
-      "policies": {
-        "pledge_attempts_tenant_isolation": {
-          "name": "pledge_attempts_tenant_isolation",
-          "as": "PERMISSIVE",
-          "for": "ALL",
-          "to": [
-            "app_user"
-          ],
-          "using": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)",
-          "withCheck": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)"
-        }
-      },
-      "checkConstraints": {
-        "pledge_attempts_kind_check": {
-          "name": "pledge_attempts_kind_check",
-          "value": "kind in ('card', 'link')"
-        },
-        "pledge_attempts_status_check": {
-          "name": "pledge_attempts_status_check",
-          "value": "status in ('pending', 'paid', 'failed')"
-        },
-        "pledge_attempts_attempt_check": {
-          "name": "pledge_attempts_attempt_check",
-          "value": "attempt >= 1"
-        }
-      },
-      "isRLSEnabled": true
-    },
-    "donations.pledge_collections": {
-      "name": "pledge_collections",
-      "schema": "donations",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "uuidv7()"
-        },
-        "org_id": {
-          "name": "org_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "event_id": {
-          "name": "event_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "campaign_id": {
-          "name": "campaign_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "pledge_id": {
-          "name": "pledge_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "amount_minor": {
-          "name": "amount_minor",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "currency": {
-          "name": "currency",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "donor_name": {
-          "name": "donor_name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "donor_email": {
-          "name": "donor_email",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "locale": {
-          "name": "locale",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'en'"
-        },
-        "status": {
-          "name": "status",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "saved_card_id": {
-          "name": "saved_card_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "charge_at": {
-          "name": "charge_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "card_attempts": {
-          "name": "card_attempts",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 0
-        },
-        "claimed_at": {
-          "name": "claimed_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "invoiced_at": {
-          "name": "invoiced_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "due_on": {
-          "name": "due_on",
-          "type": "date",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "paid_at": {
-          "name": "paid_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "offline_method": {
-          "name": "offline_method",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "offline_reference": {
-          "name": "offline_reference",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "received_on": {
-          "name": "received_on",
-          "type": "date",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "note": {
-          "name": "note",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "closed_by": {
-          "name": "closed_by",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "settled_by": {
-          "name": "settled_by",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {
-        "pledge_collections_org_id_idx": {
-          "name": "pledge_collections_org_id_idx",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "pledge_collections_org_pledge_key": {
-          "name": "pledge_collections_org_pledge_key",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "pledge_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "pledge_collections_org_event_status_idx": {
-          "name": "pledge_collections_org_event_status_idx",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "event_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "status",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "pledge_collections_org_charge_idx": {
-          "name": "pledge_collections_org_charge_idx",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "charge_at",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "where": "status in ('scheduled', 'charging')",
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "pledge_collections_pledge_fk": {
-          "name": "pledge_collections_pledge_fk",
-          "tableFrom": "pledge_collections",
-          "tableTo": "pledges",
-          "schemaTo": "donations",
-          "columnsFrom": [
-            "org_id",
-            "pledge_id"
-          ],
-          "columnsTo": [
-            "org_id",
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "pledge_collections_campaign_fk": {
-          "name": "pledge_collections_campaign_fk",
-          "tableFrom": "pledge_collections",
-          "tableTo": "campaigns",
-          "schemaTo": "donations",
-          "columnsFrom": [
-            "org_id",
-            "campaign_id"
-          ],
-          "columnsTo": [
-            "org_id",
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "pledge_collections_card_fk": {
-          "name": "pledge_collections_card_fk",
-          "tableFrom": "pledge_collections",
-          "tableTo": "saved_cards",
-          "schemaTo": "donations",
-          "columnsFrom": [
-            "org_id",
-            "saved_card_id"
-          ],
-          "columnsTo": [
-            "org_id",
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "pledge_collections_org_id_id_key": {
-          "name": "pledge_collections_org_id_id_key",
-          "nullsNotDistinct": false,
-          "columns": [
-            "org_id",
-            "id"
-          ]
-        }
-      },
-      "policies": {
-        "pledge_collections_tenant_isolation": {
-          "name": "pledge_collections_tenant_isolation",
-          "as": "PERMISSIVE",
-          "for": "ALL",
-          "to": [
-            "app_user"
-          ],
-          "using": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)",
-          "withCheck": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)"
-        }
-      },
-      "checkConstraints": {
-        "pledge_collections_status_check": {
-          "name": "pledge_collections_status_check",
-          "value": "status in ('scheduled', 'charging', 'invoiced', 'paid', 'paid_offline', 'written_off')"
-        },
-        "pledge_collections_amount_check": {
-          "name": "pledge_collections_amount_check",
-          "value": "amount_minor > 0"
-        },
-        "pledge_collections_currency_check": {
-          "name": "pledge_collections_currency_check",
-          "value": "currency ~ '^[A-Z]{3}$'"
-        },
-        "pledge_collections_card_check": {
-          "name": "pledge_collections_card_check",
-          "value": "status not in ('scheduled', 'charging') or (saved_card_id is not null and charge_at is not null)"
-        },
-        "pledge_collections_invoice_check": {
-          "name": "pledge_collections_invoice_check",
-          "value": "status <> 'invoiced' or (invoiced_at is not null and due_on is not null)"
-        },
-        "pledge_collections_offline_check": {
-          "name": "pledge_collections_offline_check",
-          "value": "(status = 'paid_offline') = (offline_method is not null)"
-        },
-        "pledge_collections_offline_method_check": {
-          "name": "pledge_collections_offline_method_check",
-          "value": "offline_method is null or offline_method in ('check', 'wire', 'stock', 'daf', 'cash', 'other')"
-        },
-        "pledge_collections_paid_check": {
-          "name": "pledge_collections_paid_check",
-          "value": "(status in ('paid', 'paid_offline')) = (paid_at is not null)"
-        },
-        "pledge_collections_written_off_check": {
-          "name": "pledge_collections_written_off_check",
-          "value": "status <> 'written_off' or note is not null"
-        },
-        "pledge_collections_attempts_check": {
-          "name": "pledge_collections_attempts_check",
-          "value": "card_attempts between 0 and 2"
-        }
-      },
-      "isRLSEnabled": true
-    },
-    "donations.saved_cards": {
-      "name": "saved_cards",
-      "schema": "donations",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "uuidv7()"
-        },
-        "org_id": {
-          "name": "org_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "event_id": {
-          "name": "event_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "party_id": {
-          "name": "party_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "guest_id": {
-          "name": "guest_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "email": {
-          "name": "email",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "source": {
-          "name": "source",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "status": {
-          "name": "status",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'pending'"
-        },
-        "provider": {
-          "name": "provider",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "connected_account_id": {
-          "name": "connected_account_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "provider_setup_id": {
-          "name": "provider_setup_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "customer_id": {
-          "name": "customer_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "payment_method_id": {
-          "name": "payment_method_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "brand": {
-          "name": "brand",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "last4": {
-          "name": "last4",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "exp_month": {
-          "name": "exp_month",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "exp_year": {
-          "name": "exp_year",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "consent_version": {
-          "name": "consent_version",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "consented_at": {
-          "name": "consented_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "locale": {
-          "name": "locale",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'en'"
-        },
-        "activated_at": {
-          "name": "activated_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "remove_after": {
-          "name": "remove_after",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "removed_at": {
-          "name": "removed_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {
-        "saved_cards_org_id_idx": {
-          "name": "saved_cards_org_id_idx",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "saved_cards_org_event_status_idx": {
-          "name": "saved_cards_org_event_status_idx",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "event_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "status",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "saved_cards_org_party_idx": {
-          "name": "saved_cards_org_party_idx",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "party_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "where": "party_id is not null",
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "saved_cards_org_guest_idx": {
-          "name": "saved_cards_org_guest_idx",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "guest_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "where": "guest_id is not null",
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "saved_cards_org_remove_idx": {
-          "name": "saved_cards_org_remove_idx",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "remove_after",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "where": "status = 'active'",
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "saved_cards_org_setup_key": {
-          "name": "saved_cards_org_setup_key",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "provider",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "provider_setup_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "where": "provider_setup_id is not null",
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "saved_cards_org_id_id_key": {
-          "name": "saved_cards_org_id_id_key",
-          "nullsNotDistinct": false,
-          "columns": [
-            "org_id",
-            "id"
-          ]
-        }
-      },
-      "policies": {
-        "saved_cards_tenant_isolation": {
-          "name": "saved_cards_tenant_isolation",
-          "as": "PERMISSIVE",
-          "for": "ALL",
-          "to": [
-            "app_user"
-          ],
-          "using": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)",
-          "withCheck": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)"
-        }
-      },
-      "checkConstraints": {
-        "saved_cards_status_check": {
-          "name": "saved_cards_status_check",
-          "value": "status in ('pending', 'active', 'failed', 'removed')"
-        },
-        "saved_cards_source_check": {
-          "name": "saved_cards_source_check",
-          "value": "source in ('checkout', 'checkin', 'table', 'party')"
-        },
-        "saved_cards_provider_check": {
-          "name": "saved_cards_provider_check",
-          "value": "provider in ('fake', 'stripe')"
-        },
-        "saved_cards_holder_check": {
-          "name": "saved_cards_holder_check",
-          "value": "num_nonnulls(party_id, guest_id) <= 1"
-        },
-        "saved_cards_active_check": {
-          "name": "saved_cards_active_check",
-          "value": "status <> 'active' or (customer_id is not null and payment_method_id is not null and activated_at is not null)"
-        },
-        "saved_cards_removed_check": {
-          "name": "saved_cards_removed_check",
-          "value": "(status = 'removed') = (removed_at is not null)"
-        }
-      },
-      "isRLSEnabled": true
-    },
-    "donations.paddle_calls": {
-      "name": "paddle_calls",
-      "schema": "donations",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "uuidv7()"
-        },
-        "org_id": {
-          "name": "org_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "event_id": {
-          "name": "event_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "campaign_id": {
-          "name": "campaign_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "level_id": {
-          "name": "level_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "level_name": {
-          "name": "level_name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "amount_minor": {
-          "name": "amount_minor",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "currency": {
-          "name": "currency",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "status": {
-          "name": "status",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'open'"
-        },
-        "opened_at": {
-          "name": "opened_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "closed_at": {
-          "name": "closed_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {
-        "paddle_calls_org_id_idx": {
-          "name": "paddle_calls_org_id_idx",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "paddle_calls_org_event_opened_idx": {
-          "name": "paddle_calls_org_event_opened_idx",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "event_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "opened_at",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "paddle_calls_org_event_open_key": {
-          "name": "paddle_calls_org_event_open_key",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "event_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "where": "status = 'open'",
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "paddle_calls_campaign_fk": {
-          "name": "paddle_calls_campaign_fk",
-          "tableFrom": "paddle_calls",
-          "tableTo": "campaigns",
-          "schemaTo": "donations",
-          "columnsFrom": [
-            "org_id",
-            "campaign_id"
-          ],
-          "columnsTo": [
-            "org_id",
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "paddle_calls_org_id_id_key": {
-          "name": "paddle_calls_org_id_id_key",
-          "nullsNotDistinct": false,
-          "columns": [
-            "org_id",
-            "id"
-          ]
-        }
-      },
-      "policies": {
-        "paddle_calls_tenant_isolation": {
-          "name": "paddle_calls_tenant_isolation",
-          "as": "PERMISSIVE",
-          "for": "ALL",
-          "to": [
-            "app_user"
-          ],
-          "using": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)",
-          "withCheck": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)"
-        }
-      },
-      "checkConstraints": {
-        "paddle_calls_status_check": {
-          "name": "paddle_calls_status_check",
-          "value": "status in ('open', 'closed', 'withdrawn')"
-        },
-        "paddle_calls_amount_check": {
-          "name": "paddle_calls_amount_check",
-          "value": "amount_minor > 0"
-        },
-        "paddle_calls_currency_check": {
-          "name": "paddle_calls_currency_check",
-          "value": "currency ~ '^[A-Z]{3}$'"
-        },
-        "paddle_calls_level_name_length": {
-          "name": "paddle_calls_level_name_length",
-          "value": "length(level_name) between 1 and 80"
-        },
-        "paddle_calls_closed_check": {
-          "name": "paddle_calls_closed_check",
-          "value": "(status = 'closed') = (closed_at is not null)"
-        }
-      },
-      "isRLSEnabled": true
-    },
-    "donations.paddle_entries": {
-      "name": "paddle_entries",
-      "schema": "donations",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "uuidv7()"
-        },
-        "org_id": {
-          "name": "org_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "event_id": {
-          "name": "event_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "call_id": {
-          "name": "call_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "client_id": {
-          "name": "client_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "paddle_id": {
-          "name": "paddle_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "paddle_number": {
-          "name": "paddle_number",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "status": {
-          "name": "status",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "duplicate_of": {
-          "name": "duplicate_of",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "spotter_user_id": {
-          "name": "spotter_user_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "recorded_at": {
-          "name": "recorded_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "reviewed_at": {
-          "name": "reviewed_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {
-        "paddle_entries_org_id_idx": {
-          "name": "paddle_entries_org_id_idx",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "paddle_entries_org_client_key": {
-          "name": "paddle_entries_org_client_key",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "client_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "paddle_entries_org_call_paddle_idx": {
-          "name": "paddle_entries_org_call_paddle_idx",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "call_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "paddle_number",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "paddle_entries_org_event_created_idx": {
-          "name": "paddle_entries_org_event_created_idx",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "event_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "created_at",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "paddle_entries_call_fk": {
-          "name": "paddle_entries_call_fk",
-          "tableFrom": "paddle_entries",
-          "tableTo": "paddle_calls",
-          "schemaTo": "donations",
-          "columnsFrom": [
-            "org_id",
-            "call_id"
-          ],
-          "columnsTo": [
-            "org_id",
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "paddle_entries_org_id_id_key": {
-          "name": "paddle_entries_org_id_id_key",
-          "nullsNotDistinct": false,
-          "columns": [
-            "org_id",
-            "id"
-          ]
-        }
-      },
-      "policies": {
-        "paddle_entries_tenant_isolation": {
-          "name": "paddle_entries_tenant_isolation",
-          "as": "PERMISSIVE",
-          "for": "ALL",
-          "to": [
-            "app_user"
-          ],
-          "using": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)",
-          "withCheck": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)"
-        }
-      },
-      "checkConstraints": {
-        "paddle_entries_status_check": {
-          "name": "paddle_entries_status_check",
-          "value": "status in ('recorded', 'duplicate', 'confirmed', 'voided')"
-        },
-        "paddle_entries_number_check": {
-          "name": "paddle_entries_number_check",
-          "value": "paddle_number between 1 and 99999"
-        },
-        "paddle_entries_spotter_length": {
-          "name": "paddle_entries_spotter_length",
-          "value": "spotter_user_id is null or length(spotter_user_id) <= 64"
-        }
-      },
-      "isRLSEnabled": true
-    },
-    "donations.paddles": {
-      "name": "paddles",
-      "schema": "donations",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "uuidv7()"
-        },
-        "org_id": {
-          "name": "org_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "event_id": {
-          "name": "event_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "number": {
-          "name": "number",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "guest_id": {
-          "name": "guest_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "party_id": {
-          "name": "party_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {
-        "paddles_org_id_idx": {
-          "name": "paddles_org_id_idx",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "paddles_org_event_number_key": {
-          "name": "paddles_org_event_number_key",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "event_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "number",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "paddles_org_guest_key": {
-          "name": "paddles_org_guest_key",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "guest_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "where": "guest_id is not null",
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "paddles_org_party_key": {
-          "name": "paddles_org_party_key",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "party_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "where": "party_id is not null",
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "paddles_org_id_id_key": {
-          "name": "paddles_org_id_id_key",
-          "nullsNotDistinct": false,
-          "columns": [
-            "org_id",
-            "id"
-          ]
-        }
-      },
-      "policies": {
-        "paddles_tenant_isolation": {
-          "name": "paddles_tenant_isolation",
-          "as": "PERMISSIVE",
-          "for": "ALL",
-          "to": [
-            "app_user"
-          ],
-          "using": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)",
-          "withCheck": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)"
-        }
-      },
-      "checkConstraints": {
-        "paddles_number_check": {
-          "name": "paddles_number_check",
-          "value": "number between 1 and 99999"
-        },
-        "paddles_holder_check": {
-          "name": "paddles_holder_check",
-          "value": "(guest_id is null) <> (party_id is null)"
-        }
-      },
-      "isRLSEnabled": true
-    },
-    "donations.pledges": {
-      "name": "pledges",
-      "schema": "donations",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "uuidv7()"
-        },
-        "org_id": {
-          "name": "org_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "event_id": {
-          "name": "event_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "campaign_id": {
-          "name": "campaign_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "call_id": {
-          "name": "call_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "entry_id": {
-          "name": "entry_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "paddle_number": {
-          "name": "paddle_number",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "guest_id": {
-          "name": "guest_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "party_id": {
-          "name": "party_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "amount_minor": {
-          "name": "amount_minor",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "currency": {
-          "name": "currency",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "status": {
-          "name": "status",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'confirmed'"
-        },
-        "source": {
-          "name": "source",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'paddle'"
-        },
-        "confirmed_at": {
-          "name": "confirmed_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "cancelled_at": {
-          "name": "cancelled_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {
-        "pledges_org_id_idx": {
-          "name": "pledges_org_id_idx",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "pledges_org_entry_key": {
-          "name": "pledges_org_entry_key",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "entry_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "pledges_org_event_status_idx": {
-          "name": "pledges_org_event_status_idx",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "event_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "status",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "pledges_org_campaign_idx": {
-          "name": "pledges_org_campaign_idx",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "campaign_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "pledges_campaign_fk": {
-          "name": "pledges_campaign_fk",
-          "tableFrom": "pledges",
-          "tableTo": "campaigns",
-          "schemaTo": "donations",
-          "columnsFrom": [
-            "org_id",
-            "campaign_id"
-          ],
-          "columnsTo": [
-            "org_id",
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "pledges_call_fk": {
-          "name": "pledges_call_fk",
-          "tableFrom": "pledges",
-          "tableTo": "paddle_calls",
-          "schemaTo": "donations",
-          "columnsFrom": [
-            "org_id",
-            "call_id"
-          ],
-          "columnsTo": [
-            "org_id",
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "pledges_entry_fk": {
-          "name": "pledges_entry_fk",
-          "tableFrom": "pledges",
-          "tableTo": "paddle_entries",
-          "schemaTo": "donations",
-          "columnsFrom": [
-            "org_id",
-            "entry_id"
-          ],
-          "columnsTo": [
-            "org_id",
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "pledges_org_id_id_key": {
-          "name": "pledges_org_id_id_key",
-          "nullsNotDistinct": false,
-          "columns": [
-            "org_id",
-            "id"
-          ]
-        }
-      },
-      "policies": {
-        "pledges_tenant_isolation": {
-          "name": "pledges_tenant_isolation",
-          "as": "PERMISSIVE",
-          "for": "ALL",
-          "to": [
-            "app_user"
-          ],
-          "using": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)",
-          "withCheck": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)"
-        }
-      },
-      "checkConstraints": {
-        "pledges_status_check": {
-          "name": "pledges_status_check",
-          "value": "status in ('confirmed', 'cancelled')"
-        },
-        "pledges_source_check": {
-          "name": "pledges_source_check",
-          "value": "source = 'paddle'"
-        },
-        "pledges_amount_check": {
-          "name": "pledges_amount_check",
-          "value": "amount_minor > 0"
-        },
-        "pledges_currency_check": {
-          "name": "pledges_currency_check",
-          "value": "currency ~ '^[A-Z]{3}$'"
-        },
-        "pledges_cancelled_check": {
-          "name": "pledges_cancelled_check",
-          "value": "(status = 'cancelled') = (cancelled_at is not null)"
         }
       },
       "isRLSEnabled": true

@@ -20,7 +20,7 @@ import {
   resetRsvpPinAction,
 } from '../actions.ts';
 import { CopyLink } from '../copy-link.tsx';
-import { partySeatUrl, rsvpFindUrl, rsvpUrl } from '../links.ts';
+import { hubUrl, partySeatUrl, rsvpFindUrl, rsvpUrl } from '../links.ts';
 import { GuestsCrumbs } from '../nav.tsx';
 
 const UUID = /^[0-9a-f-]{36}$/;
@@ -78,6 +78,7 @@ export default async function PartyRsvpPage({
           throw err;
         })
     : false;
+  const hub = detail?.token ? hubUrl(detail.token) : null;
   const findUrl = ov.settings.nameLookup && detail?.lookupCode ? rsvpFindUrl(detail.lookupCode) : null;
   const act = (action: typeof resetRsvpPinAction, id: string, label: string, done: string, hint?: string) => (
     <div className="flex flex-col gap-2 border-b border-line pb-4 last:border-0 last:pb-0">
@@ -200,6 +201,13 @@ export default async function PartyRsvpPage({
                 <p className="m-0 text-caption text-ink-2">
                   {t('linkExpires', { date: fmt(detail.linkExpiresAt) ?? '' })}
                 </p>
+                {/* M4.7a: the party's guest page (same key as the RSVP link). */}
+                {hub ? (
+                  <>
+                    <CopyLink label={t('hubLinkLabel', { party: name })} url={hub} />
+                    <p className="m-0 text-caption text-ink-2">{t('hubLinkHint')}</p>
+                  </>
+                ) : null}
               </Card>
             </section>
 

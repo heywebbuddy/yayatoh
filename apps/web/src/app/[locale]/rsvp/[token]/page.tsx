@@ -64,6 +64,7 @@ export default async function RsvpPage({
   const seated = seats?.state === 'open' && seats.charts.some((c) => c.places.length > 0);
   const { thanks } = await searchParams;
   const t = await getTranslations('rsvp');
+  const tHub = await getTranslations('hub');
 
   const when = (start: Date, end: Date) =>
     new Intl.DateTimeFormat(locale, {
@@ -210,6 +211,16 @@ export default async function RsvpPage({
             />
           </>
         )
+      ) : null}
+      {view.state !== 'expired' ? (
+        <p className="m-0">
+          <Link
+            href={`/hub/${encodeURIComponent(token)}`}
+            className="inline-flex min-h-11 items-center font-bold text-primary-ink underline underline-offset-2"
+          >
+            {tHub('openHub')}
+          </Link>
+        </p>
       ) : null}
     </main>
   );

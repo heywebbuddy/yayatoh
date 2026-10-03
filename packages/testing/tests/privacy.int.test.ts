@@ -323,7 +323,7 @@ describe('retention', () => {
     const ticketTypeId = (
       await withTenant(o.ctx(), (tx) =>
         tx.execute<{ id: string }>(
-          sql`select id from ticketing.ticket_types where event_id = ${o.event.id} limit 1`,
+          sql`select id from ticketing.ticket_types where event_id = ${o.event.id} and managed_by is null order by created_at limit 1`,
         ),
       )
     )[0]?.id as string;

@@ -19,8 +19,6 @@ export {
   saveCharityProfileCommand,
   verifyCharityCommand,
 } from './charity.ts';
-// M4.8d live giving screen: the thermometer for the room's projectors (signed link, realtime
-// channel, reconnect snapshot), QR-to-give, names only for donors who opted in (P4-13).
 // M4.8e: cards on file and pledge collection.
 export {
   ATTEMPT_KINDS,
@@ -44,6 +42,8 @@ export {
   exportRow,
   splitName,
 } from './domain/crm.ts';
+// M4.8d live giving screen: the thermometer for the room's projectors (signed link, realtime
+// channel, reconnect snapshot), QR-to-give, names only for donors who opted in (P4-13).
 export {
   CAMPAIGN_STATUSES,
   type CampaignStatus,

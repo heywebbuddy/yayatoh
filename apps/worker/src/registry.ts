@@ -1,4 +1,4 @@
-import { alertEvaluator } from '@yayatoh/alerts';
+import { alertEvaluator, connectedConferenceSources } from '@yayatoh/alerts';
 import { attendeeMessageMailer } from '@yayatoh/attendees';
 import { participationProjector } from '@yayatoh/audiences';
 import { journeySubscribers } from '@yayatoh/automations';
@@ -7,6 +7,7 @@ import {
   checkoutRiskSignals,
   derivedStaffAlerts,
   fraudSignalAlerts,
+  networkChatSignals,
   staffAlertsSubscriber,
 } from '@yayatoh/checkin';
 import { deviceBoardPublisher, publishMetricsChangedTx } from '@yayatoh/command-center';
@@ -18,6 +19,7 @@ import {
   receiptIssuer,
   statementMailer,
 } from '@yayatoh/donations';
+import { engagementActivity } from '@yayatoh/engagement';
 import { findEventTx, portalInviteMailer } from '@yayatoh/events';
 import { registrationResumeMailer } from '@yayatoh/forms';
 import { invitationMailer as guestInvitationMailer } from '@yayatoh/guests';
@@ -41,13 +43,14 @@ import {
 } from '@yayatoh/orders';
 import { payoutDestinationMailer } from '@yayatoh/payments';
 import { type Subscriber, signLinkToken } from '@yayatoh/platform';
-import { portalSpeakerCleanup, taskReminderMailer } from '@yayatoh/program';
+import { cfpMailer, portalSpeakerCleanup, taskReminderMailer } from '@yayatoh/program';
 import {
   decisionMailer,
   enrollmentMailer,
   registrantLifecycle,
   registrationCapacity,
   registrationEnrollment,
+  sponsorCompCodes,
 } from '@yayatoh/registration';
 import { analyticsForwarder, metricsProjector, postgresAnalyticsSink } from '@yayatoh/reports';
 import { finderCodeMailer, releaseCancelledSeats } from '@yayatoh/seating';
@@ -117,6 +120,8 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     // M1.9e: checkout risk outcomes and chat reports become fraud signals; high ones alert.
     checkoutRiskSignals(),
     chatReportSignals(),
+    // M5.8b: networking chat reports about attendees.
+    networkChatSignals(),
     fraudSignalAlerts({ notifier }),
     // M3.4a: staff alerts for the Scan PWA (web push per device). The Command Center alert engine
     // (M3.2b) replaces `derivedStaffAlerts` here and in apps/web/src/server/scan-staff.ts.
@@ -125,6 +130,7 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     // M5.3a speaker portal: invitations, task reminders, approved photos.
     portalInviteMailer({ notifier, appOrigin }),
     taskReminderMailer({ notifier, appOrigin }),
+    cfpMailer({ notifier }),
     speakerPhotoApprover(),
     portalSpeakerCleanup(),
     surveyMailer({ notifier, appOrigin }),
@@ -148,8 +154,12 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     // M5.2b: cancelled registrants give their session places back; promotions are emailed.
     registrationEnrollment(),
     enrollmentMailer({ notifier, appOrigin }),
+    // M5.4b: sponsor comp registration codes.
+    sponsorCompCodes(),
     // M3.6a: contact × event participation and contact profiles for audiences.
     participationProjector(),
+    // M5.7b: door scans, answered surveys and enrollments become engagement (scores for audiences).
+    engagementActivity(),
     listingsProjector({ onChange: (orgId) => revalidatePublicCache(appOrigin, orgId, secret) }),
     // M3.1: metric snapshots and time series, and the analytics sink (Postgres until M6.2).
     // M3.2: each projected change pings the event's Command Center (no figures on the channel).
@@ -162,7 +172,7 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     // M3.2: device presence for the Command Center's device widgets (events in pre-show or live).
     deviceBoardPublisher(),
     // M3.2b: the alert engine re-evaluates what each outbox event touched (sends through notifications).
-    alertEvaluator({ notifier }),
+    alertEvaluator({ notifier, conference: connectedConferenceSources }),
     // M4.8a: gift orders' outcomes (paid, failed, lapsed) move their gifts.
     giftOutcomesSubscriber,
     giftRefundsSubscriber,

@@ -16,6 +16,7 @@ import { privateColumns as donations } from '@yayatoh/donations';
 import { privateColumns as engagement } from '@yayatoh/engagement';
 import { privateColumns as events } from '@yayatoh/events';
 import { privateColumns as forms } from '@yayatoh/forms';
+import { privateColumns as gallery } from '@yayatoh/gallery';
 import { privateColumns as guests } from '@yayatoh/guests';
 import { privateColumns as marketing } from '@yayatoh/marketing';
 import { privateColumns as marketplace } from '@yayatoh/marketplace';
@@ -60,6 +61,7 @@ export const COLUMN_PRIVACY: readonly SchemaPrivacy[] = [
   donations,
   events,
   forms,
+  gallery,
   guests,
   marketing,
   marketplace,

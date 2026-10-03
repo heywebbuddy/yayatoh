@@ -285,7 +285,7 @@ touches:
   - packages/modules/donations/src/{index.ts,private-columns.ts}, package.json (+@yayatoh/guests, ./paddles and ./paddle-queue exports), MODULE.md   # appended
   - packages/modules/donations/tests/paddles.test.ts
   - packages/modules/guests/src/{paddle-holders.ts,index.ts}       # new read helpers + one export block
-  - packages/db/drizzle/0113_aromatic_captain_stacy.sql (+ meta)   # renumbered at merge
+  - packages/db/drizzle/0115_aromatic_captain_stacy.sql (+ meta)   # renumbered at merge
   - packages/testing/src/fixtures.ts                               # paddleRaiseRows
   - packages/testing/tests/{paddle-raise.int.test.ts,impersonation.int.test.ts}
   - apps/web/src/app/[locale]/o/[org]/e/[event]/donations/{page.tsx,paddles/**,paddle-raise/**}
@@ -307,7 +307,7 @@ touches:
 - [x] Fixture rows for both orgs (`paddleRaiseRows`: the fixture party's paddle, a called and closed level, one entry confirmed into a pledge).
 - [x] Text columns declared in `private-columns.ts` (level name public, statuses and currency vocab, the spotter's user id internal).
 
-**Migration:** `0113_aromatic_captain_stacy.sql` (to be renumbered), additive only. Hand-written block: `paddles_event_fk`, `paddle_calls_event_fk`, `paddle_entries_event_fk` (→ `events.events`, cascade); `paddles_guest_fk` / `paddles_party_fk` (→ `guests.guests` / `guests.parties`, cascade); `paddle_calls_level_fk` (→ `donations.levels`, `SET NULL (level_id)`); `paddle_entries_paddle_fk` (→ `donations.paddles`, `SET NULL (paddle_id)`); `pledges_event_fk` (→ `events.events`, no action: a money promise, like a gift); `pledges_guest_fk` / `pledges_party_fk` (`SET NULL (guest_id)` / `(party_id)`).
+**Migration:** `0115_aromatic_captain_stacy.sql` (0113 on agent/m4.8c; renumbered after M4.4a's 0113/0114 when M4.8e stacked them) (to be renumbered), additive only. Hand-written block: `paddles_event_fk`, `paddle_calls_event_fk`, `paddle_entries_event_fk` (→ `events.events`, cascade); `paddles_guest_fk` / `paddles_party_fk` (→ `guests.guests` / `guests.parties`, cascade); `paddle_calls_level_fk` (→ `donations.levels`, `SET NULL (level_id)`); `paddle_entries_paddle_fk` (→ `donations.paddles`, `SET NULL (paddle_id)`); `pledges_event_fk` (→ `events.events`, no action: a money promise, like a gift); `pledges_guest_fk` / `pledges_party_fk` (`SET NULL (guest_id)` / `(party_id)`).
 
 ### 6. API diff
 None on `/v1`. One web route: `POST /o/{org}/e/{event}/donations/paddle-raise/sync` (session, JSON, same-origin).
@@ -387,6 +387,36 @@ The room's thermometer during a gala's fund-a-need: a projector shows the goal, 
 - Pledges paid later (M4.8e) must not be counted twice when their payments arrive.
 - Text-to-give (P4-15, waits for the 10DLC campaign).
 
+## M4.8e — cards on file and pledge collection (done)
+
+### 1. Goal and users
+Turn a raised paddle into collected money without staff ever typing a card number: guests save a card on their own phone for the evening (one-tap gifts; their pledges are charged the next morning), every other pledge gets a pay link with a due date and reminders, and the host settles the rest by hand (offline payments, write-offs). Users: guests and donors (phones), the development lead and finance (the pledges page), the host (alerts).
+
+### 2. References
+- **Plan:** `docs/plans/phase-4.md` row M4.8e; P4-12 (pledges paid later, chasing unpaid ones), P4-14 (cards saved for one-tap giving; `payments` and `legal-copy`, owner approval), P4-9/P4-10 (direct charges on the connected account, application fee 0), P4-13 (no donor data on public pages).
+- **Builds on:** M4.8a (gifts and donation orders), M4.8b (receipts per paid order), M4.8c (pledges), M4.4a (the party's permanent link and QR code), M3.2b (alerts), the payments port and the fake provider. M4.4b (check-in) is built in parallel: the check-in entry is the desk's card-saving QR code on the existing check-in page (not the scan result).
+
+### 3. Scope
+**In:**
+- **Payment port (additive):** `createCardSetup` (a SetupIntent for off-session use on the organizer's connected account; Stripe: a customer on the connected account and a Checkout Session in setup mode), `chargeSavedCard` (an off-session PaymentIntent with `confirm`, exactly the amount, idempotent per key; a card error is a decline, not a throw), `detachSavedCard`, and a `SetupEvent` webhook (`setup.succeeded` / `setup.failed`, references and display details only). The fake provider has a hosted card step (`/checkout/fake/setup`, test cards 4242 charges, 0002 always declines, 9995 declines its first charge) and remembers one answer per idempotency key, like Stripe.
+- **Saving a card** (`donations.saved_cards`): opt-in only, on the guest's own device, from four entry points: the party's own link (`/rsvp/{token}/card`, the QR code on the place card, also linked from the party's seat page), the table and check-in QR codes (`/events/{slug}/card?src=table|checkin`; the pledges page shows the table code, the check-in page shows the desk code while a campaign is open), and the checkout box "Save my card for tonight's giving" (unticked; after paying the buyer lands on the card page). Name, email and the authorization box (required, never pre-ticked) — the consent text version (`CARD_CONSENT_VERSION`) and time are recorded when the card is started; the verified setup webhook makes it `active` (deduplicated by provider event id). The device keeps the card's signed link in an http-only cookie (3 days). The card page shows the saved card (brand, last four) with "Give now" and "Remove my card".
+- **One-tap giving** (the giving page): with an active card saved on this device for this event, one button per level ("Give $250.00 · A school day") charges it off-session, exactly the level's amount, no fee cover; the page's Idempotency-Key makes a double tap one gift and one charge; the answer is applied to the order like a webhook (`orders.attachPayment` + `orders.applyProviderEvent`, event id `{provider}:card-charge:{payment id}`), so the gift, ledger and receipt follow the M4.8a/b path.
+- **Closing the night** (`/o/{org}/e/{event}/donations/pledges`, `donations.closePledges`, finance roles `orders:refund`, money category): every confirmed pledge without a collection gets one (`donations.pledge_collections`): with an active card of its holder (the guest, the guest's party or the party; else one saved under the holder's email; the newest wins) it is **scheduled** for the first 09:00 in the event's time zone at least six hours later; otherwise it is **invoiced** (pay link, due in 30 days). Each donor with an email gets one summary (`donations.pledge-summary`: the card and the charge time, or the pay links and the due date). Running it again only picks up new pledges.
+- **The morning run** (`collectPledges`: the worker every 5 minutes, leader only; the dev route `/api/dev/donations/collect` in dev/CI): `donations.claimPledgeCharges` claims due charges under `FOR UPDATE SKIP LOCKED`, creates the try's gift and order (`pledge_attempts`, the order key `order:<id>:1`) and marks the collection `charging`; the provider charges the saved card; `donations.settleCardCharge` records the answer. A claim whose run vanished is handed out again after 10 minutes **with the same order and key**, so the provider answers the first charge and nothing is charged twice. A card that is no longer usable (removed, failed, another account) is never charged: the pledge is invoiced instead.
+- **Declines:** the first decline is retried 24 hours later; the second makes it an invoice (`donations.pledge-invoice`, with the reason) — never a third charge.
+- **Pay link** (`/events/{slug}/pledge/{token}`, signed): the pledge, its state and one action — "Pay $X now" (or "pay another way" before the card charge, which moves the pledge off the card). Exactly the pledged amount, a direct charge on the connected account, fee 0 (`donations.startPledgePayment`, idempotent). With no email on file the page asks for one (kept on the pledge, for the receipt). Settled pledges refuse another payment.
+- **Reminders** (P4-12): queued with the invoice at +7, +21 and +28 days, 09:00 in the event's zone (`donations.pledge-reminder`, `sendAfter`, dedupe key per collection and step), and **cancelled the moment the pledge is settled** (paid by card or link, recorded offline, written off). Built on the notifications queue ("today's reminder planner"), not on journeys: they are transactional and fixed by P4-12.
+- **Offline payments and write-offs** (finance roles, money category): record a check, wire, stock, donor-advised fund, cash or other payment (date not in the future, optional reference and note; idempotent), or write a pledge off with a required note. Both also work before the night is closed. Offline-paid pledges count in the campaign's "raised" total like paid gifts.
+- **Alert** (M3.2b engine, rule `pledgesUnpaid`, event scope, `orders:read`, category payments): "N pledges are still unpaid 14 days after the event", with the sum in its params; the planning sweep evaluates events over for 14 days that still have unpaid pledges; the fix link opens the pledges page; resolves when they are settled.
+- **Retention (P4-14):** cards are removed from the charity's customer 30 days after the event (`donations.expireSavedCards` in the same run → `detachSavedCard`).
+
+**Later / not yet:**
+- Saving the card with the ticket payment itself (`setup_future_usage` on the checkout's PaymentIntent): today the checkout box opens the card page after paying, so the guest saves the card with its own consent step.
+- The check-in scan result offering the guest's own card page (needs M4.4b's scan outcome to carry the guest or party): today the desk shows the event's card QR code.
+- The alert text shows the count; the amount is on the pledges page (the alert renderers pass counts only).
+- Receipts for offline-paid pledges (M4.8b issues receipts per paid order); a donor's several pledges paid in one charge; refunds of pledge payments (M4.8g); Stripe Terminal card readers.
+- The card-on-file wording and the pledge terms are `legal-copy` (pending the owner and counsel).
+
 ### 4. `touches:`
 ```yaml
 touches:
@@ -404,6 +434,25 @@ touches:
   - apps/web/src/app/[locale]/events/[slug]/give/{page.tsx,actions.ts,give-form.tsx}
   - apps/web/messages/*.json                               # donations.{screen,screenPage,screenCards}, give.showOnScreen*, raiseCard.openScreen
   - apps/web/e2e/{giving-screen.spec.ts,donations.spec.ts (keyboard path)}
+  - packages/modules/payments/src/{port.ts,fake.ts,stripe.ts,index.ts}       # additive port methods + SetupEvent
+  - packages/modules/payments/tests/saved-cards.test.ts
+  - packages/modules/donations/src/{domain/collection.ts,schema-collection.ts,saved-cards.ts,pledge-collection.ts,pledge-totals.ts,legal/card-consent.ts}  # new
+  - packages/modules/donations/src/{index.ts,private-columns.ts,campaigns.ts}, package.json (+payments, +notifications, ./collection export), MODULE.md
+  - packages/modules/donations/tests/collection.test.ts
+  - packages/modules/guests/src/{pledge-contact.ts,index.ts}                  # one new read helper
+  - packages/modules/alerts/src/{domain/config.ts,domain/rules.ts,facts.ts,subscriber.ts}, package.json, tests/rules.test.ts
+  - packages/modules/notifications/src/{kinds.ts,templates/samples.ts,templates/messages/*.json}
+  - packages/db/drizzle/0116_abnormal_midnight.sql (+ meta)                   # renumber at merge
+  - packages/testing/src/{fixtures.ts,pledges.ts,index.ts}, tests/pledge-collection.int.test.ts
+  - apps/worker/src/{main.ts,registry.ts,sweeper.ts}
+  - apps/web/src/app/[locale]/events/[slug]/{card/**,pledge/[token]/**,give/{page.tsx,one-tap.tsx,one-tap-actions.ts},actions.ts}
+  - apps/web/src/app/[locale]/rsvp/[token]/{card/page.tsx,seat/page.tsx}
+  - apps/web/src/app/[locale]/checkout/fake/setup/**
+  - apps/web/src/app/[locale]/o/[org]/e/[event]/{donations/pledges/**,donations/page.tsx,onsite/page.tsx}
+  - apps/web/src/app/api/dev/donations/collect/route.ts
+  - apps/web/src/{components/checkout-form.tsx,components/public-event-view.tsx,server/webhooks.ts,server/notifications.ts,server/saved-card.ts}
+  - apps/web/messages/*.json        # savedCard, pledgePay, pledges, fakePay.*, checkout.saveCardForGiving, partySeats.saveCard, donations.raiseCard.openPledges, alerts.*
+  - apps/web/e2e/pledge-collection.spec.ts
 ```
 
 ### 5. Data model
@@ -430,6 +479,24 @@ None on the outbox. Realtime messages on `event.giving-screen`: `state` (the who
 
 ### 9. ELT impact
 None (no legacy equivalent).
+| `donations.saved_cards` | new | event; party or guest (at most one); name, email (personal); source; status `pending/active/failed/removed`; provider references (secret: connected account, setup, customer, payment method); brand, last four, expiry; consent version and time; activated, remove-after (event end + 30 days), removed |
+| `donations.pledge_collections` | new | one per pledge (unique): amount and currency copied, donor name/email/locale, status `scheduled/charging/invoiced/paid/paid_offline/written_off`, card and charge time, card tries (≤ 2), claim time, invoice time and due day, paid time, offline method/reference/received day, note, who closed and who settled; CHECKs tie each status to its columns |
+| `donations.pledge_attempts` | new | one per try: `card` (try 1 or 2, unique) or `link`; its gift and order (unique); status `pending/paid/failed`, decline code |
+| `alerts.alerts` | CHECK widened | `alerts_rule_check` gains `pledgesUnpaid` (`NOT VALID` + `VALIDATE`) |
+
+**Migration:** `0116_abnormal_midnight.sql` (expand only; after M4.8c's `0115`; renumber at merge). Hand-written block: `saved_cards_event_fk` and `pledge_collections_event_fk` (→ `events.events`, no action: consent and money records keep their event), `saved_cards_party_fk` / `saved_cards_guest_fk` (`SET NULL (party_id)` / `(guest_id)`), `pledge_attempts_order_fk` (→ `orders.orders`). Hand edit: the widened `alerts_rule_check` as `NOT VALID` then `VALIDATE CONSTRAINT`.
+
+### 6. API diff
+None on `/v1`. The `PaymentProvider` port gains three methods and one webhook event type (internal).
+
+### 7. Events
+`donations.pledges_closed@1` and `donations.pledge_invoiced@1` (→ `donations.pledge-mailer`). Consumed: `order.donation_paid@1`, `order.payment_failed@1`, `order.expired@1` (→ `donations.pledge-outcomes`).
+
+### 8. Entitlements and flags
+Behind `donations`. Cards and pay links need a connected account (P4-9).
+
+### 9. ELT impact
+None.
 
 ### 10. Acceptance criteria
 | ID | Given / When / Then | Test |
@@ -474,86 +541,6 @@ Base: build branch + `merge/next-3g` + `merge/next-3h` (design v2, M4.8a/b) + `a
 
 ### 16. Owner tasks
 `docs/owner-inbox.md` → M4.8d: what the total counts, names on screen, the link, QR-to-give and table cards.
-
-## M4.8e — cards on file and pledge collection (done)
-
-### 1. Goal and users
-Turn a raised paddle into collected money without staff ever typing a card number: guests save a card on their own phone for the evening (one-tap gifts; their pledges are charged the next morning), every other pledge gets a pay link with a due date and reminders, and the host settles the rest by hand (offline payments, write-offs). Users: guests and donors (phones), the development lead and finance (the pledges page), the host (alerts).
-
-### 2. References
-- **Plan:** `docs/plans/phase-4.md` row M4.8e; P4-12 (pledges paid later, chasing unpaid ones), P4-14 (cards saved for one-tap giving; `payments` and `legal-copy`, owner approval), P4-9/P4-10 (direct charges on the connected account, application fee 0), P4-13 (no donor data on public pages).
-- **Builds on:** M4.8a (gifts and donation orders), M4.8b (receipts per paid order), M4.8c (pledges), M4.4a (the party's permanent link and QR code), M3.2b (alerts), the payments port and the fake provider. M4.4b (check-in) is built in parallel: the check-in entry is the desk's card-saving QR code on the existing check-in page (not the scan result).
-
-### 3. Scope
-**In:**
-- **Payment port (additive):** `createCardSetup` (a SetupIntent for off-session use on the organizer's connected account; Stripe: a customer on the connected account and a Checkout Session in setup mode), `chargeSavedCard` (an off-session PaymentIntent with `confirm`, exactly the amount, idempotent per key; a card error is a decline, not a throw), `detachSavedCard`, and a `SetupEvent` webhook (`setup.succeeded` / `setup.failed`, references and display details only). The fake provider has a hosted card step (`/checkout/fake/setup`, test cards 4242 charges, 0002 always declines, 9995 declines its first charge) and remembers one answer per idempotency key, like Stripe.
-- **Saving a card** (`donations.saved_cards`): opt-in only, on the guest's own device, from four entry points: the party's own link (`/rsvp/{token}/card`, the QR code on the place card, also linked from the party's seat page), the table and check-in QR codes (`/events/{slug}/card?src=table|checkin`; the pledges page shows the table code, the check-in page shows the desk code while a campaign is open), and the checkout box "Save my card for tonight's giving" (unticked; after paying the buyer lands on the card page). Name, email and the authorization box (required, never pre-ticked) — the consent text version (`CARD_CONSENT_VERSION`) and time are recorded when the card is started; the verified setup webhook makes it `active` (deduplicated by provider event id). The device keeps the card's signed link in an http-only cookie (3 days). The card page shows the saved card (brand, last four) with "Give now" and "Remove my card".
-- **One-tap giving** (the giving page): with an active card saved on this device for this event, one button per level ("Give $250.00 · A school day") charges it off-session, exactly the level's amount, no fee cover; the page's Idempotency-Key makes a double tap one gift and one charge; the answer is applied to the order like a webhook (`orders.attachPayment` + `orders.applyProviderEvent`, event id `{provider}:card-charge:{payment id}`), so the gift, ledger and receipt follow the M4.8a/b path.
-- **Closing the night** (`/o/{org}/e/{event}/donations/pledges`, `donations.closePledges`, finance roles `orders:refund`, money category): every confirmed pledge without a collection gets one (`donations.pledge_collections`): with an active card of its holder (the guest, the guest's party or the party; else one saved under the holder's email; the newest wins) it is **scheduled** for the first 09:00 in the event's time zone at least six hours later; otherwise it is **invoiced** (pay link, due in 30 days). Each donor with an email gets one summary (`donations.pledge-summary`: the card and the charge time, or the pay links and the due date). Running it again only picks up new pledges.
-- **The morning run** (`collectPledges`: the worker every 5 minutes, leader only; the dev route `/api/dev/donations/collect` in dev/CI): `donations.claimPledgeCharges` claims due charges under `FOR UPDATE SKIP LOCKED`, creates the try's gift and order (`pledge_attempts`, the order key `order:<id>:1`) and marks the collection `charging`; the provider charges the saved card; `donations.settleCardCharge` records the answer. A claim whose run vanished is handed out again after 10 minutes **with the same order and key**, so the provider answers the first charge and nothing is charged twice. A card that is no longer usable (removed, failed, another account) is never charged: the pledge is invoiced instead.
-- **Declines:** the first decline is retried 24 hours later; the second makes it an invoice (`donations.pledge-invoice`, with the reason) — never a third charge.
-- **Pay link** (`/events/{slug}/pledge/{token}`, signed): the pledge, its state and one action — "Pay $X now" (or "pay another way" before the card charge, which moves the pledge off the card). Exactly the pledged amount, a direct charge on the connected account, fee 0 (`donations.startPledgePayment`, idempotent). With no email on file the page asks for one (kept on the pledge, for the receipt). Settled pledges refuse another payment.
-- **Reminders** (P4-12): queued with the invoice at +7, +21 and +28 days, 09:00 in the event's zone (`donations.pledge-reminder`, `sendAfter`, dedupe key per collection and step), and **cancelled the moment the pledge is settled** (paid by card or link, recorded offline, written off). Built on the notifications queue ("today's reminder planner"), not on journeys: they are transactional and fixed by P4-12.
-- **Offline payments and write-offs** (finance roles, money category): record a check, wire, stock, donor-advised fund, cash or other payment (date not in the future, optional reference and note; idempotent), or write a pledge off with a required note. Both also work before the night is closed. Offline-paid pledges count in the campaign's "raised" total like paid gifts.
-- **Alert** (M3.2b engine, rule `pledgesUnpaid`, event scope, `orders:read`, category payments): "N pledges are still unpaid 14 days after the event", with the sum in its params; the planning sweep evaluates events over for 14 days that still have unpaid pledges; the fix link opens the pledges page; resolves when they are settled.
-- **Retention (P4-14):** cards are removed from the charity's customer 30 days after the event (`donations.expireSavedCards` in the same run → `detachSavedCard`).
-
-**Later / not yet:**
-- Saving the card with the ticket payment itself (`setup_future_usage` on the checkout's PaymentIntent): today the checkout box opens the card page after paying, so the guest saves the card with its own consent step.
-- The check-in scan result offering the guest's own card page (needs M4.4b's scan outcome to carry the guest or party): today the desk shows the event's card QR code.
-- The alert text shows the count; the amount is on the pledges page (the alert renderers pass counts only).
-- Receipts for offline-paid pledges (M4.8b issues receipts per paid order); a donor's several pledges paid in one charge; refunds of pledge payments (M4.8g); Stripe Terminal card readers.
-- The card-on-file wording and the pledge terms are `legal-copy` (pending the owner and counsel).
-
-### 4. `touches:`
-```yaml
-touches:
-  - packages/modules/payments/src/{port.ts,fake.ts,stripe.ts,index.ts}       # additive port methods + SetupEvent
-  - packages/modules/payments/tests/saved-cards.test.ts
-  - packages/modules/donations/src/{domain/collection.ts,schema-collection.ts,saved-cards.ts,pledge-collection.ts,pledge-totals.ts,legal/card-consent.ts}  # new
-  - packages/modules/donations/src/{index.ts,private-columns.ts,campaigns.ts}, package.json (+payments, +notifications, ./collection export), MODULE.md
-  - packages/modules/donations/tests/collection.test.ts
-  - packages/modules/guests/src/{pledge-contact.ts,index.ts}                  # one new read helper
-  - packages/modules/alerts/src/{domain/config.ts,domain/rules.ts,facts.ts,subscriber.ts}, package.json, tests/rules.test.ts
-  - packages/modules/notifications/src/{kinds.ts,templates/samples.ts,templates/messages/*.json}
-  - packages/db/drizzle/0116_abnormal_midnight.sql (+ meta)                   # renumber at merge
-  - packages/testing/src/{fixtures.ts,pledges.ts,index.ts}, tests/pledge-collection.int.test.ts
-  - apps/worker/src/{main.ts,registry.ts,sweeper.ts}
-  - apps/web/src/app/[locale]/events/[slug]/{card/**,pledge/[token]/**,give/{page.tsx,one-tap.tsx,one-tap-actions.ts},actions.ts}
-  - apps/web/src/app/[locale]/rsvp/[token]/{card/page.tsx,seat/page.tsx}
-  - apps/web/src/app/[locale]/checkout/fake/setup/**
-  - apps/web/src/app/[locale]/o/[org]/e/[event]/{donations/pledges/**,donations/page.tsx,onsite/page.tsx}
-  - apps/web/src/app/api/dev/donations/collect/route.ts
-  - apps/web/src/{components/checkout-form.tsx,components/public-event-view.tsx,server/webhooks.ts,server/notifications.ts,server/saved-card.ts}
-  - apps/web/messages/*.json        # savedCard, pledgePay, pledges, fakePay.*, checkout.saveCardForGiving, partySeats.saveCard, donations.raiseCard.openPledges, alerts.*
-  - apps/web/e2e/pledge-collection.spec.ts
-```
-
-### 5. Data model
-| Table | Change | Notes |
-|---|---|---|
-| `donations.saved_cards` | new | event; party or guest (at most one); name, email (personal); source; status `pending/active/failed/removed`; provider references (secret: connected account, setup, customer, payment method); brand, last four, expiry; consent version and time; activated, remove-after (event end + 30 days), removed |
-| `donations.pledge_collections` | new | one per pledge (unique): amount and currency copied, donor name/email/locale, status `scheduled/charging/invoiced/paid/paid_offline/written_off`, card and charge time, card tries (≤ 2), claim time, invoice time and due day, paid time, offline method/reference/received day, note, who closed and who settled; CHECKs tie each status to its columns |
-| `donations.pledge_attempts` | new | one per try: `card` (try 1 or 2, unique) or `link`; its gift and order (unique); status `pending/paid/failed`, decline code |
-| `alerts.alerts` | CHECK widened | `alerts_rule_check` gains `pledgesUnpaid` (`NOT VALID` + `VALIDATE`) |
-
-**Migration:** `0116_abnormal_midnight.sql` (expand only; after M4.8c's `0115`; renumber at merge). Hand-written block: `saved_cards_event_fk` and `pledge_collections_event_fk` (→ `events.events`, no action: consent and money records keep their event), `saved_cards_party_fk` / `saved_cards_guest_fk` (`SET NULL (party_id)` / `(guest_id)`), `pledge_attempts_order_fk` (→ `orders.orders`). Hand edit: the widened `alerts_rule_check` as `NOT VALID` then `VALIDATE CONSTRAINT`.
-
-### 6. API diff
-None on `/v1`. The `PaymentProvider` port gains three methods and one webhook event type (internal).
-
-### 7. Events
-`donations.pledges_closed@1` and `donations.pledge_invoiced@1` (→ `donations.pledge-mailer`). Consumed: `order.donation_paid@1`, `order.payment_failed@1`, `order.expired@1` (→ `donations.pledge-outcomes`).
-
-### 8. Entitlements and flags
-Behind `donations`. Cards and pay links need a connected account (P4-9).
-
-### 9. ELT impact
-None.
-
-### 10. Acceptance criteria
-| ID | Given / When / Then | Test |
-|---|---|---|
 | AC-M4.8e-01 | A confirmed pledge with a saved card is charged once, on schedule (09:00 local the next morning, nothing before), exactly the pledged amount, on the connected account | int `pledge-collection.int.test.ts` ("closing the night…" block); unit `collection.test.ts` (charge time, DST); e2e `pledge-collection.spec.ts` ("a guest saves a card…") |
 | AC-M4.8e-02 | Replayed jobs never charge twice: replayed runs charge nothing; a run that vanished after charging is replayed under the same key and the provider answers the first charge | int "replayed runs never charge twice", "a crashed run replays under the same key"; e2e (second morning run: 0) |
 | AC-M4.8e-03 | Reminders stop once paid: three queued at +7/+21/+28 days 09:00 local, all cancelled when the pay link is paid | int "pays exactly the pledge; the reminders stop…", "0002 declines twice…" |
@@ -676,7 +663,7 @@ After the gala the charity's finance people (owners, admins, finance members; co
 - **Memo entries (payments):** a gift is a direct charge on the charity's connected account with application fee 0, so it never posted a journal (`postSaleTx` posts nothing at 0). Each paid gift now gets a memo-only journal (`kind = 'donation_memo'`, key `donation:<orderId>`, memo `{grossMinor, currency, connectedAccountId, fundsFlow}`) and each refund of a gift one more (`donation_refund_memo`, key `donation_refund:<refundId>`), written by the new `payments.post_memo` SECURITY DEFINER function (memo kinds only, org-checked, idempotent per key, no postings). Balances and the platform reconciliation (M1.6e) are unchanged.
 - **Connected account on the payment port (additive):** `listConnectedBalanceTransactions({connectedAccountId, from, to})` (charges, refunds, payouts; gross, the provider's fee, net, the payout each was paid out in) and `listPayouts`. The fake records direct charges (webhook naming the account), refunds and saved-card charges on the account with Stripe's US nonprofit fee (2.2% + 30¢) and makes daily payouts (UTC day D, created D+1, arriving D+3); Stripe lists `balance_transactions` and `payouts` on the account (`Stripe-Account`), attributing charges by their metadata and payouts by `balance_transactions?payout=`.
 - **Report** (`/o/{org}/e/{event}/donations/report`, `donations.report`, `finance:read`): every line of money of the event — paid gifts (online, QR, or a paddle pledge paid by card or pay link) less their refunds, pledges paid offline, and paid lines of donation ticket types — totalled per currency (received by card, offline, ticket donations, raised; covered fees and refunds; pledged / collected (card, link, offline) / written off / open; matched by sponsors), per source, per level (gifts given at it; paddle pledges called at it, never a paid pledge twice), per match, per donor (by email; flagged anonymous if any gift was), plus the ledger check: the memo entries and the provider as the last reconciliation saw it ("Matches to the cent" / "Differs by …").
-- **Donor CRM exports** (CSV and Excel): one row per gift, offline payment and donation ticket line (fully refunded gifts left out), in four layouts — generic (the requester's language), Salesforce NPSP Data Import, Bloomerang, Little Green Light (each CRM's own column names, split first/last names, `TRUE`/`FALSE`) — each keeping the anonymous flag. Bulk exports (`donations.donorsCsv`, `donations.donorsXlsx`): `finance:read`, a fresh step-up, audited, refused while staff act as a member; read in the event's tenant only. Excel files are written by a new minimal writer in `@yayatoh/csv` (inline strings, never formulas; amounts as numbers).
+- **Donor CRM exports** (CSV and Excel): one row per gift, offline payment and donation ticket line (fully refunded gifts left out), in four layouts — generic (the requester's language), Salesforce NPSP Data Import, Bloomerang, Little Green Light (each CRM's own column names, split first/last names, `TRUE`/`FALSE`) — each keeping the anonymous flag. Bulk exports (`donations.donorsCsv`, `donations.donorsXlsx`): `finance:read`, a fresh step-up, audited, refused while staff act as a member; read in the event's tenant only. Excel files are written by M4.3b's XLSX writer in `@yayatoh/csv` (inline strings, never formulas; bold frozen header; amounts as numbers).
 - **Reconciliation** (`/o/{org}/e/{event}/donations/reconciliation`, like M1.6e): "Reconcile now" (`finance:reconcile`) asks the provider for the movements and payouts of every connected account the event's gifts were charged on, from a week before the first gift to a day ahead, keeps the event's charges and refunds (`order:<gift order>`, `refund:<gift refund>`), and compares them per reference and currency with the memo entries. Differences (`missing_at_provider`, `missing_in_ledger`, `amount_mismatch`) are kept per reference: opened, updated, `cleared` when both sides agree again; finance resolves one with a note (stays resolved while its amounts don't change). The run keeps per-currency totals (ledger, provider, provider fees, not paid out yet) and the payouts that carried the event's gifts (whole payout, the event's gross, fees, net, count).
 - **Campaign totals net refunds:** the campaign's "raised" (Donations tab, giving page, screen) now subtracts refunds, the covered fee first (the M4.8f owner note "until M4.8g").
 - **UI:** a "Report and exports" card on the Donations tab (finance roles), the two pages (design v2 components: PageHeader, StatCard, Table with phone stacking, StatusPill, Badge, EmptyState, Alert), a dev route `/api/dev/donations/provider` (dev/CI, fake only: age the account's movements, add drift).
@@ -695,11 +682,10 @@ touches:
   - packages/modules/payments/src/{port.ts,fake.ts,stripe.ts,memo-ledger.ts,index.ts}   # additive port methods; memo journals
   - packages/modules/payments/tests/connected-balance.test.ts
   - packages/modules/orders/src/{donation-orders.ts,commands/refunds.ts,donation-ticket-facts.ts,index.ts}
-  - packages/csv/src/{xlsx-write.ts,index.ts}, packages/csv/tests/xlsx-write.test.ts
   - packages/modules/donations/src/{domain/report.ts,domain/reconcile.ts,domain/crm.ts,report.ts,report-dto.ts,report-export.ts,reconciliation.ts,schema-reconciliation.ts}  # new
   - packages/modules/donations/src/{index.ts,private-columns.ts,campaigns.ts,pledge-collection.ts}, MODULE.md
   - packages/modules/donations/tests/report.test.ts
-  - packages/db/drizzle/0119_short_namorita.sql (+ meta)   # renumber at merge
+  - packages/db/drizzle/0130_green_loa.sql (+ meta)   # renumber at merge
   - packages/testing/src/{fixtures.ts,ports.ts}, tests/{donations-report,donations,pledge-collection}.int.test.ts
   - apps/worker/src/bulk.ts
   - apps/web/src/app/[locale]/o/[org]/e/[event]/donations/{page.tsx,report/**,reconciliation/**}
@@ -723,8 +709,8 @@ touches:
 - [x] Fixture rows for both orgs (`donationReconRows`: one run over the fixture gift order with a `missing_in_ledger` difference and a payout).
 - [x] Every text/jsonb column declared in `private-columns.ts` (references, payout ids, totals, notes and actors internal).
 
-**Migration:** `0119_short_namorita.sql` (renumber at merge), additive. Hand-written block: (1) `recon_runs_event_fk`, `recon_items_event_fk`, `recon_payouts_event_fk` (→ `events.events`, cascade); (2) `payments.post_memo(uuid, text, text, text, uuid, timestamptz, jsonb, uuid)` SECURITY DEFINER (`search_path = pg_catalog`), owned by `ledger_writer` (with the `GRANT CREATE` / `REVOKE CREATE ON SCHEMA payments` dance post_journal uses), `REVOKE ALL … FROM PUBLIC`, `GRANT EXECUTE … TO app_user`.
-The stacked branches' migrations were renumbered in this branch: M4.8e's `0113`–`0116` kept, M4.8d's `0114_long_fat_cobra` → `0117`, M4.8f's `0114_medical_santa_claus` → `0118` (snapshots rebased; `drizzle-kit generate` shows no changes).
+**Migration:** `0130_green_loa.sql` (renumber at merge), additive. Hand-written block: (1) `recon_runs_event_fk`, `recon_items_event_fk`, `recon_payouts_event_fk` (→ `events.events`, cascade); (2) `payments.post_memo(uuid, text, text, text, uuid, timestamptz, jsonb, uuid)` SECURITY DEFINER (`search_path = pg_catalog`), owned by `ledger_writer` (with the `GRANT CREATE` / `REVOKE CREATE ON SCHEMA payments` dance post_journal uses), `REVOKE ALL … FROM PUBLIC`, `GRANT EXECUTE … TO app_user`.
+Generated after batch 3j's `0129_conference_alert_rules` (`drizzle-kit generate` shows no changes afterwards).
 
 ### 6. API diff
 None on `/v1`. The `PaymentProvider` port gains `listConnectedBalanceTransactions` and `listPayouts` (internal). The fake's signed webhook may name `connectedAccountId` (stripped before the app sees the event).
@@ -744,7 +730,7 @@ None.
 | AC-M4.8g-01 | **The fixture gala's report totals equal the ledger memo entries and the provider's balance transactions to the cent** (online and QR gifts, a covered fee, a partial refund, a card-paid pledge; offline and ticket donations reported apart) | int `donations-report.int.test.ts` ("acceptance: the totals equal…"); e2e `donations-report.spec.ts` ("report totals, the ledger check…") |
 | AC-M4.8g-02 | **Exports never include donors of the other org** | int "CSV, generic layout…", "Excel…" (the other org's gift never appears); e2e (export journey) |
 | AC-M4.8g-03 | Per source (online, QR, paddle, ticket), per level, per match, per donor; pledged vs collected vs written off vs open | unit `donations/tests/report.test.ts`; int "totals per currency…", "per source, per level…" |
-| AC-M4.8g-04 | CRM layouts (generic localized, Salesforce NPSP, Bloomerang, Little Green Light) keep the anonymous flag; CSV and XLSX; never a formula | unit `report.test.ts`, `csv/tests/xlsx-write.test.ts`; int CSV/Excel tests; e2e (step-up, both files) |
+| AC-M4.8g-04 | CRM layouts (generic localized, Salesforce NPSP, Bloomerang, Little Green Light) keep the anonymous flag; CSV and XLSX; never a formula | unit `report.test.ts` (and M4.3b's `csv/tests/xlsx-write.test.ts`); int CSV/Excel tests; e2e (step-up, both files) |
 | AC-M4.8g-05 | Reconciliation lists differences like M1.6e (missing at provider, missing in ledger, amount mismatch), resolves with a note, clears when both sides agree | unit (`reconcileDonations`, `nextItemStatus`); int "lists a missing provider charge…"; e2e (drift, empty note error, resolved, persisted) |
 | AC-M4.8g-06 | Payouts: which payouts carried the gifts; what is not paid out yet | unit (fake payouts, Stripe adapter); int "shows the payouts…"; e2e (aged movements, "Paid") |
 | AC-M4.8g-07 | Memo entries only through `payments.post_memo` (memo kinds, own org, once per key); no postings for gifts | int "memo entries are written only…"; `donations.int.test.ts` (memo, no postings) |
@@ -764,7 +750,7 @@ The report reads the event's paid gifts, refunds, pledges, collections, matches 
 Behind `donations`. Live Stripe needs the owner's account (connected-account listing is written against the pinned API version and tested with the fake Stripe API).
 
 ### 14. Build notes (2026-10-03)
-Base: build branch (batch 3h, design v2) + `agent/m4.8c`, `agent/m4.8d`, `agent/m4.8e`, `agent/m4.8f` (batch 3j not merged yet). Merge fixes in this branch: migrations renumbered (above); the `fixtures.ts` merge of 3d/3e lost `screenRows`' closing brace (restored); `index.ts` lost an `export {` (restored); M4.8f made `pledges.paddle_number` nullable, so M4.8e's collection reads paddle pledges only (`source = 'paddle'`) and its isolation test counts paddle pledges.
+Base: build branch (batch 3h, design v2) + `agent/m4.8c`–`f`, then `merge/next-3j` before the final gate (its resolutions of the four donations branches, its migration numbering 0113–0129 and M4.3b's XLSX writer were taken; this increment's own XLSX writer was dropped for M4.3b's). This increment's migration is `0130_green_loa.sql`.
 
 ### 15. Demo checklist
 - [ ] A connected gala: give two gifts on the giving page (one anonymous), refund part of one from its order page.

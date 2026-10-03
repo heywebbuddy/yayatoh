@@ -26,9 +26,13 @@ import { catchUpParticipation, saveSegmentCommand, templateDefinition } from '@y
 import { createJourneyCommand, journeyTriggers, setJourneyEnabledCommand } from '@yayatoh/automations';
 import {
   assignTemplateCommand,
+  createPrinterCommand,
   createTemplateCommand,
+  printerHeartbeatCommand,
   runBadgeBatch,
+  setPrintNodeCommand,
   startBatchCommand,
+  startPrintJobCommand,
 } from '@yayatoh/badges';
 import { setEntitlementOverrideCommand, setFeeOverrideCommand } from '@yayatoh/billing';
 import {
@@ -45,6 +49,7 @@ import {
   enrollDeviceCommand,
   heartbeatCommand,
   markQuietDevicesTx,
+  recordGuestArrivalsCommand,
   reportPresenceCommand,
   scanTicketCommand,
   setDetectionSettingsCommand,
@@ -89,12 +94,14 @@ import {
 } from '@yayatoh/donations';
 import {
   askQuestionCommand,
+  catchUpEngagement,
   createPollCommand,
   enableLiveCommand,
   moderateQuestionCommand,
   openPollCommand,
   participantKey,
   pinQuestionCommand,
+  setScoreWeightsCommand,
   updateSettingsCommand,
   upvoteQuestionCommand,
   voteCommand,
@@ -127,7 +134,9 @@ import {
   setJobTitlesCommand,
   startRegistrationFormCommand,
 } from '@yayatoh/forms';
+import { addGalleryVideoCommand } from '@yayatoh/gallery';
 import {
+  addGuestSiteBlockCommand,
   addPartyGuestCommand,
   addPlusOneCommand,
   collectorQueueQuery,
@@ -140,18 +149,23 @@ import {
   markRsvpViewedCommand,
   moveGuestCommand,
   partyRsvpQuery,
+  publishGuestSiteCommand,
   publishRsvpQuestionsCommand,
   readGuestTable,
   recordSubEventResponseCommand,
   rejectSubmissionCommand,
+  type SiteBlockKind,
+  saveGuestSiteCommand,
   saveMenuOptionCommand,
   setCollectorCommand,
+  setGuestSitePasswordCommand,
   setInvitationsCommand,
   setInvitationTemplateCommand,
   setPartyLocaleCommand,
   setRsvpSettingsCommand,
   stageGuestImportCommand,
   submitContactCommand,
+  updateGuestSiteBlockCommand,
   updatePartyGuestCommand,
   validateGuestImportCommand,
 } from '@yayatoh/guests';
@@ -208,6 +222,7 @@ import {
   setCheckoutSettingsCommand,
   setRefundPolicyCommand,
   startCheckoutCommand,
+  startLeadLicenseCheckoutCommand,
   startRefundCommand,
 } from '@yayatoh/orders';
 import {
@@ -225,7 +240,13 @@ import {
 } from '@yayatoh/platform';
 import { dsarExportBulk } from '@yayatoh/privacy';
 import {
+  addCfpQuestionCommand,
+  addCfpReviewerCommand,
+  addSponsorDeliverableCommand,
   assignBoothCommand,
+  assignCfpReviewerCommand,
+  assignSponsoredSessionCommand,
+  cfpOverviewQuery,
   claimSessionPlaceTx,
   createExhibitorCommand,
   createPortalTaskCommand,
@@ -237,8 +258,12 @@ import {
   createSponsorCommand,
   createSponsorTierCommand,
   createTrackCommand,
+  decideCfpSubmissionCommand,
+  grantSponsorPackageCommand,
   inviteExhibitorMemberCommand,
   inviteSpeakerCommand,
+  inviteSponsorContactCommand,
+  portalAssignLeadLicenseCommand,
   portalInviteStaffCommand,
   portalSaveProfileCommand,
   sessionsOf as programSessionsOf,
@@ -246,10 +271,16 @@ import {
   publishAgendaCommand,
   recordGroupPickTx,
   saveBoothCommand,
+  saveCfpCommand,
   saveExhibitorListingCommand,
   saveExhibitorSettingsCommand,
+  saveLeadLicenseSettingsCommand,
+  saveSponsorPackageCommand,
   setSessionAgendaCommand,
+  setSponsorExhibitorCommand,
   speakerPortalQuery,
+  submitCfpCommand,
+  submitCfpReviewCommand,
 } from '@yayatoh/program';
 import {
   applyCommand,
@@ -307,6 +338,7 @@ import {
   updateOrganizationCommand,
 } from '@yayatoh/tenancy';
 import {
+  badgeTicketsTx,
   createClaimLinksCommand,
   createPromoCodeCommand,
   createTicketTypeCommand,
@@ -314,6 +346,8 @@ import {
 } from '@yayatoh/ticketing';
 import { createVenueCommand, submitQuoteRequestCommand } from '@yayatoh/venues';
 import { sql } from 'drizzle-orm';
+import { enableGallery, guestGalleryPhoto, guestSiteAccess, hostGalleryPhoto } from './gallery.ts';
+import { networkingFixture } from './networking.ts';
 import { ports, runBulk, submitRegistrationForm } from './ports.ts';
 
 export interface OrgFixture {
@@ -644,6 +678,40 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     badgeBatch.id,
     { maxChunks: 1 },
   );
+  // M5.5b printing: the print settings row (PrintNode off), a station printer heard from, and one
+  // badge printed and reprinted (the print log).
+  await executeCommand(setPrintNodeCommand, { enabled: false }, systemCtx(org.id), ports);
+  const badgePrinter = await executeCommand(
+    createPrinterCommand,
+    { eventId: event.id, name: 'Fixture desk', adapter: 'browser' },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    printerHeartbeatCommand,
+    { eventId: event.id, printerId: badgePrinter.id },
+    ctx(),
+    ports,
+  );
+  const [badgeTicket] = await withTenant(ctx(), (tx) => badgeTicketsTx(tx, { eventId: event.id }));
+  if (badgeTicket)
+    for (const [n, reason] of [
+      [1, null],
+      [2, 'damaged'],
+    ] as const)
+      await executeCommand(
+        startPrintJobCommand,
+        {
+          eventId: event.id,
+          ticketId: badgeTicket.id,
+          printerId: badgePrinter.id,
+          reason,
+          note: n === 2 ? 'Fixture reprint' : null,
+          requestKey: `fixture-print-${n}-${slug}`,
+        },
+        ctx(),
+        ports,
+      );
   // A dispute on the paid order, opened (hold) and won (hold undone): isolation coverage.
   for (const [type, outcome] of [
     ['dispute.created', undefined],
@@ -1533,7 +1601,7 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     { ownerId: speaker.id, alt: `Photo of ${name} Speaker`, file: fixturePng('logo') },
     ports,
   );
-  await executeCommand(
+  const keynote = await executeCommand(
     createSessionCommand,
     {
       eventId: event.id,
@@ -1614,10 +1682,83 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ctx(),
     ports,
   );
-  await executeCommand(
+  const sponsor = await executeCommand(
     createSponsorCommand,
     { eventId: event.id, tierId: tier.id, name: `${name} Sponsor` },
     ctx(),
+    ports,
+  );
+  // M5.4b: Gold's package terms (on sale, with a deliverable template), the sponsor exhibiting as
+  // the exhibitor, the package granted by the organizer (its deliverables and an extra one), a
+  // sponsored session, a sponsor contact; lead licenses for sale, an exhibitor admin's purchase
+  // waiting for payment (an add-on order) and a license held by the admin.
+  await executeCommand(
+    saveSponsorPackageCommand,
+    {
+      eventId: event.id,
+      tierId: tier.id,
+      description: 'Our top package.',
+      priceMinor: 500_000,
+      quantity: 3,
+      onSale: true,
+      compRegistrations: 5,
+      exhibitorBadges: 2,
+      leadLicenses: 2,
+      logoPlacements: ['website', 'stage'],
+      sessionSlots: 1,
+      deliverables: [{ title: 'Send logo files', owner: 'sponsor', daysBefore: 14 }],
+    },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    setSponsorExhibitorCommand,
+    { eventId: event.id, sponsorId: sponsor.id, exhibitorId: exhibitor.id },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    grantSponsorPackageCommand,
+    { eventId: event.id, sponsorId: sponsor.id, tierId: tier.id, note: 'Paid by wire' },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    addSponsorDeliverableCommand,
+    {
+      eventId: event.id,
+      sponsorId: sponsor.id,
+      title: 'Print the stage banner',
+      owner: 'organizer',
+      ownerName: 'Production team',
+      dueDate: new Date(event.startsAt.getTime() - 7 * 86_400_000).toISOString().slice(0, 10),
+    },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    assignSponsoredSessionCommand,
+    { eventId: event.id, sponsorId: sponsor.id, sessionId: keynote.session.id },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    inviteSponsorContactCommand,
+    { eventId: event.id, sponsorId: sponsor.id, email: `sponsor@${slug}.example` },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    saveLeadLicenseSettingsCommand,
+    { eventId: event.id, includedLeadLicenses: 1, leadLicensePriceMinor: 25_000 },
+    ctx(),
+    ports,
+  );
+  await executeCommand(startLeadLicenseCheckoutCommand, { quantity: 2, locale: 'en' }, exhibitorCtx, ports);
+  await executeCommand(
+    portalAssignLeadLicenseCommand,
+    { accountId: exhibitorInvite.member.id },
+    exhibitorCtx,
     ports,
   );
   // M5.2a: agenda model v2 on the weekly event (so the launch event's agenda stays live): a
@@ -1892,6 +2033,30 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
         where s.event_id = ${event.id} and t.order_id = ${checkout.order.id} limit 1`);
     });
   }
+  // M5.6a session check-in: a door for the event's first session with its flyer on, and one
+  // visit there (let in past the full room by a staff override, then scanned out).
+  if (fullPass) {
+    const [first] = await withTenant(systemCtx(org.id), (tx) =>
+      tx.execute<{ id: string }>(
+        sql`select id from program.sessions where event_id = ${event.id} order by starts_at, id limit 1`,
+      ),
+    );
+    if (first) {
+      const sessionDoor = await executeCommand(
+        createCheckpointCommand,
+        { eventId: event.id, name: 'Session door', kind: 'session', sessionId: first.id, selfCheckin: true },
+        ctx(),
+        ports,
+      );
+      await withTenant(systemCtx(org.id), (tx) =>
+        tx.execute(sql`insert into checkin.session_attendance
+            (org_id, event_id, checkpoint_id, session_id, ticket_id, in_at, out_at, source, override_gates, override_reason)
+          select ${org.id}, ${event.id}, ${sessionDoor.id}, ${first.id}, t.id, now() - interval '50 minutes',
+            now() - interval '5 minutes', 'override', array['capacity']::text[], 'Fixture: speaker guest.'
+          from ticketing.tickets t where t.order_id = ${checkout.order.id} limit 1`),
+      );
+    }
+  }
   // M4.1a: a party with a named guest (sealed answers, linked to a guest-list entry), a child and
   // an unnamed plus-one; then an edit and a move, so every history action has rows.
   const party = await executeCommand(
@@ -2037,6 +2202,24 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     setVipTableCommand,
     { eventId: event.id, subEventId: reception.id, itemId: rowA, vip: true },
     ctx(),
+    ports,
+  );
+  // M4.4b guest check-in (isolation coverage): the door device checks the host in.
+  await executeCommand(
+    recordGuestArrivalsCommand,
+    {
+      eventId: event.id,
+      arrivals: [
+        {
+          clientId: uuidv7(),
+          guestId: host.id,
+          deviceTs: new Date('2027-10-14T14:56:00Z'),
+          clockOffsetMs: 0,
+          source: 'scanner',
+        },
+      ],
+    },
+    deviceCtx,
     ports,
   );
   // M4.1b: a pasted guest list staged, checked and imported (a household with a plus-one and a
@@ -2317,6 +2500,9 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   await executeCommand(setMyAlertPhoneCommand, { smsPhone: '+15550100199' }, ctx(), ports);
   await executeCommand(setSalesTargetCommand, { eventId: event.id, tickets: 150 }, ctx(), ports);
   await liveEngagementFixture(org.id, event.id, ctx);
+  await engagementScoreFixture(org.id, event.id, slug, ctx);
+  // M5.8a networking (every networking table, both orgs), with M5.8b chat (direct and booth).
+  await networkingFixture(org.id, event.id, ctx, exhibitorCtx);
   // M4.2b gala tables (isolation coverage): the fixture order's first ticket item recorded as a
   // purchased table, and a sponsor on a table of the event plan. Rows only: no second order and no
   // new tickets, so tests that count the fixture's orders and tickets are unchanged.
@@ -2447,6 +2633,12 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     tx.execute(sql`insert into guests.invite_messages (org_id, event_id, party_id, kind, channel, dedupe_key, locale)
       values (${org.id}, ${event.id}, ${party.id}, 'invitation', 'email', ${`guests-invite:${party.id}:${uuidv7()}`}, 'es')`),
   );
+  // M4.5a: the guest website, published behind a password, with one block of each kind
+  // (isolation coverage of `sites` and `site_blocks`; the canary crawl unlocks it).
+  await guestSiteRows(event.id, ctx);
+  // M4.5b: the gallery behind it (isolation coverage of every gallery table): a host photo
+  // (published), a guest's photo waiting for approval and a video link.
+  await galleryRows(org.id, event.id, ctx);
   await donationRows(org.id, event.id, slug, ctx);
   await receiptRows(org.id, event.id, ga.id, checkout.order.id, ctx);
   await paddleRaiseRows(event.id, party.id, ctx);
@@ -2454,6 +2646,75 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   await pledgeCollectionRows(org.id, event.id, party.id);
   await matchRows(org.id, event.id, ctx);
   await donationReconRows(org.id, event.id, ctx);
+  // M5.3b call for papers: an open call with one question, a proposal with a co-speaker and an
+  // answer (forms engine), a reviewer (portal account) assigned and reviewing, and a second
+  // proposal declined (acceptance would add speakers and a session to the fixture event, which other
+  // suites count; the accept path is covered by cfp.int.test.ts): isolation coverage of every cfp table.
+  await executeCommand(
+    saveCfpCommand,
+    { eventId: event.id, status: 'open', durations: [30, 45], intro: `Speak at ${name}` },
+    ctx(),
+    ports,
+  );
+  const cfpQuestion = await executeCommand(
+    addCfpQuestionCommand,
+    { eventId: event.id, type: 'short_text', label: 'Your city' },
+    ctx(),
+    ports,
+  );
+  const cfpPublic = createCtx({ orgId: org.id, locale: 'en' });
+  for (const n of [1, 2])
+    await executeCommand(
+      submitCfpCommand,
+      {
+        eventId: event.id,
+        title: `Proposal ${n} for ${name}`,
+        abstract: 'A talk about *fixtures*.',
+        durationMinutes: 30,
+        speakerName: `Proposer ${n}`,
+        speakerEmail: `proposer${n}-${slug}@example.test`,
+        speakerCompany: name,
+        speakerBio: 'Bio of the proposer.',
+        coSpeakers: [{ name: `Co ${n}`, email: `co${n}-${slug}@example.test` }],
+        answers: { [cfpQuestion.key]: 'Lisbon' },
+      },
+      cfpPublic,
+      ports,
+    );
+  const cfpView = await executeQuery(cfpOverviewQuery, { eventId: event.id }, ctx(), ports);
+  const [cfpFirst, cfpSecond] = cfpView.submissions;
+  if (!cfpFirst || !cfpSecond) throw new Error('fixture: cfp submissions');
+  const cfpReviewer = await executeCommand(
+    addCfpReviewerCommand,
+    { eventId: event.id, name: `Reviewer of ${name}`, email: `reviewer-${slug}@example.test` },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    assignCfpReviewerCommand,
+    { eventId: event.id, submissionId: cfpFirst.id, reviewerId: cfpReviewer.reviewerId },
+    ctx(),
+    ports,
+  );
+  const reviewerSession = await createPortalSession({
+    orgId: org.id,
+    accountId: cfpReviewer.accountId,
+    host: 'fixture.test',
+  });
+  const reviewerPrincipal = await portalPrincipalBySession(reviewerSession.token, 'fixture.test');
+  if (!reviewerPrincipal) throw new Error('fixture: reviewer session');
+  await executeCommand(
+    submitCfpReviewCommand,
+    { submissionId: cfpFirst.id, score: 4, comment: 'A clear, useful talk.' },
+    portalCtx(reviewerPrincipal),
+    ports,
+  );
+  await executeCommand(
+    decideCfpSubmissionCommand,
+    { eventId: event.id, submissionId: cfpSecond.id, decision: 'reject', note: 'Thank you for applying.' },
+    ctx(),
+    ports,
+  );
   return {
     org,
     ownerId,
@@ -2540,6 +2801,69 @@ async function liveEngagementFixture(orgId: string, eventId: string, ctx: (o?: P
   );
   await executeCommand(pinQuestionCommand, { ...at, questionId: approved }, ctx(), ports);
   await askedBy(2, 'A question still waiting for a moderator', true);
+}
+
+/** M5.7b: the fixture buyer's signed-in account (no real user; the actor id ties it to the commands). */
+export const fixtureBuyerAccount = (slug: string) => ({
+  userId: '01a10000-0000-7000-8000-00000000b7e1',
+  email: `buyer@${slug}.test`,
+});
+
+/** M5.7b: the org's engagement weights in the fixture (not the defaults, so tests see them apply). */
+export const FIXTURE_ENGAGEMENT_WEIGHTS = {
+  check_in: 8,
+  poll_vote: 3,
+  question: 4,
+  feedback: 6,
+  enrollment: 2,
+} as const;
+
+/**
+ * M5.7b engagement scores (isolation coverage of `engagement.engagement_events`,
+ * `engagement.score_weights` and `crm.event_engagement`): the org's own weights; the fixture
+ * buyer, signed in, rates the keynote in a new poll and asks a named question; the activity
+ * subscriber catches up on the buyer's door scan and post-event survey answer. The fixture
+ * attendee's score is then 8 (check-in) + 3 (vote) + 4 (question) + 6 (feedback) = 21.
+ */
+async function engagementScoreFixture(
+  orgId: string,
+  eventId: string,
+  slug: string,
+  ctx: (o?: Partial<Ctx>) => Ctx,
+) {
+  const [keynote] = await withTenant(systemCtx(orgId), (tx) => programSessionsOf(tx, eventId));
+  if (!keynote) throw new Error('fixture: the fixture event has no session');
+  await executeCommand(setScoreWeightsCommand, FIXTURE_ENGAGEMENT_WEIGHTS, ctx(), ports);
+  const account = fixtureBuyerAccount(slug);
+  const buyer = createCtx({ orgId, actor: { type: 'user', userId: account.userId } });
+  const key = participantKey('fixture-secret', keynote.id, `user:${account.userId}`);
+  const rating = await executeCommand(
+    createPollCommand,
+    { eventId, sessionId: keynote.id, kind: 'rating', question: 'Rate the keynote', ratingScale: 5 },
+    ctx(),
+    ports,
+  );
+  await executeCommand(openPollCommand, { eventId, pollId: rating.id }, ctx(), ports);
+  await executeCommand(
+    voteCommand,
+    { eventId, pollId: rating.id, participantKey: key, rating: 5, account },
+    buyer,
+    ports,
+  );
+  await executeCommand(
+    askQuestionCommand,
+    {
+      eventId,
+      sessionId: keynote.id,
+      participantKey: key,
+      body: 'Will the slides be shared?',
+      name: 'Fixture Buyer',
+      account,
+    },
+    buyer,
+    ports,
+  );
+  await catchUpEngagement(orgId);
 }
 
 /**
@@ -2826,4 +3150,55 @@ async function donationReconRows(orgId: string, eventId: string, ctx: (o?: Parti
     ctx(),
     ports,
   );
+}
+
+/** The fixture's guest website password (the canary crawl unlocks the site with it). */
+export const FIXTURE_SITE_PASSWORD = 'fixture site pass';
+
+/** M4.5b: the fixture event's gallery: on, a host photo, a guest's pending photo, a video link. */
+async function galleryRows(orgId: string, eventId: string, ctx: () => Ctx) {
+  await enableGallery(ctx(), eventId);
+  await hostGalleryPhoto(ctx(), eventId, fixturePng('cover'), 'Fixture host photo');
+  const access = await guestSiteAccess(orgId, eventId, FIXTURE_SITE_PASSWORD);
+  await guestGalleryPhoto(
+    orgId,
+    { eventId, access, name: 'Fixture Guest' },
+    fixturePng('logo'),
+    'Fixture guest photo',
+  );
+  await executeCommand(
+    addGalleryVideoCommand,
+    { eventId, url: 'https://youtu.be/dQw4w9WgXcQ', caption: 'Fixture video' },
+    ctx(),
+    ports,
+  );
+}
+
+/** M4.5a: the fixture event's guest website, one block of each kind, published. */
+async function guestSiteRows(eventId: string, ctx: () => Ctx) {
+  const ev = { eventId };
+  await executeCommand(
+    saveGuestSiteCommand,
+    { ...ev, title: 'Fixture guest site', intro: 'Welcome, guests.', contentLocale: 'en' },
+    ctx(),
+    ports,
+  );
+  const blocks: [SiteBlockKind, string, unknown][] = [
+    ['text', 'Welcome', { body: 'See you **soon**.' }],
+    ['program', 'Program', { show: 'everyone', subEventIds: [] }],
+    ['travel', 'Travel', { items: [{ title: 'Fixture Inn', details: 'Near the venue.', url: null }] }],
+    ['registry', 'Registry', { items: [{ label: 'Gift list', url: 'https://gifts.example.test/fixture' }] }],
+    ['faq', 'FAQ', { items: [{ question: 'Parking?', answer: 'On site.' }] }],
+  ];
+  for (const [kind, heading, content] of blocks) {
+    const b = await executeCommand(addGuestSiteBlockCommand, { ...ev, kind }, ctx(), ports);
+    await executeCommand(
+      updateGuestSiteBlockCommand,
+      { ...ev, blockId: b.id, heading, content },
+      ctx(),
+      ports,
+    );
+  }
+  await executeCommand(setGuestSitePasswordCommand, { ...ev, password: FIXTURE_SITE_PASSWORD }, ctx(), ports);
+  await executeCommand(publishGuestSiteCommand, { ...ev, published: true }, ctx(), ports);
 }

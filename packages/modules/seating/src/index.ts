@@ -11,6 +11,17 @@ export {
   unassignSeatsCommand,
 } from './assignments.ts';
 export { BulkAssignTarget, seatAssignAction, seatAssignBulk } from './bulk-assign.ts';
+// M4.3b cards and exports: place, escort and table cards (PDF), the seating chart and meal counts.
+export {
+  ExportGuestSeatingInput,
+  exportGuestSeatingCommand,
+  GuestSeatingExportDto,
+  MealCountsDto,
+  SeatingCardsDto,
+  SeatingSheetDto,
+  seatingCardsQuery,
+} from './cards.ts';
+export { type CardsCopy, type CardsHtmlInput, cardsHtml } from './cards-document.ts';
 export { type ChartKey, publicDoc } from './chart.ts';
 export { instantiateSeatingTx, SeatingSnapshot, seatingSnapshotTx } from './copy.ts';
 export {
@@ -29,6 +40,49 @@ export {
   planChunk,
   planUndo,
 } from './domain/bulk-assign.ts';
+export {
+  CARD_KINDS,
+  type CardKind,
+  type CardsOf,
+  cardSizeMm,
+  cardsOf,
+  defaultPaper,
+  type EscortCard,
+  EXPORT_FORMATS,
+  EXPORT_KINDS,
+  type ExportCell,
+  type ExportCopy,
+  type ExportFormat,
+  type ExportKind,
+  escortCards,
+  isCardKind,
+  isExportFormat,
+  isExportKind,
+  isPaperSize,
+  isTent,
+  type MealCountRow,
+  type MealCounts,
+  mealCounts,
+  mealCountsTable,
+  nameSheet,
+  PAPER,
+  PAPER_SIZES,
+  type PaperSize,
+  type PlaceCard,
+  paginate,
+  placeCards,
+  type SeatingSheet,
+  type SeatingViewLike,
+  SHEET_MARGIN_MM,
+  type SheetGuest,
+  type SheetLayout,
+  type SheetPlace,
+  seatingChartTable,
+  seatingSheet,
+  sheetLayout,
+  type TableCard,
+  tableCards,
+} from './domain/cards.ts';
 // M4.4a guest seat finder: the party's page (link), PIN mode and the `PartyCredentials` port.
 export { type FinderGuest, type FinderParty, partyOnChart } from './domain/guest-finder.ts';
 // M4.3a guest seating: parties and guests at tables (the OccupantDirectory port, guests side).
@@ -77,6 +131,8 @@ export {
   SeatGroupDto,
   seatGroupsQuery,
 } from './groups.ts';
+// M4.4b: every guest's tables for the day of (check-in, kiosk, A–Z board, host view).
+export { type GuestPlace, type GuestPlaces, guestPlacesTx } from './guest-day-of.ts';
 export {
   findGuestSeatByPinCommand,
   GuestSeatResultDto,
@@ -92,6 +148,7 @@ export {
   GuestSeatDto,
   GuestSeatingDto,
   guestSeatingQuery,
+  guestSeatingViewTx,
   MAX_GUESTS_PER_SEATING,
   type Occupant,
   type OccupantDirectory,
@@ -156,6 +213,8 @@ export {
   seatingLiveAccessQuery,
 } from './live.ts';
 export { seatedAttendeeIdsTx } from './participation.ts';
+// M4.7a: the seats of a party for its guest hub (the app passes this reader to the guests module).
+export { partySeatsTx } from './party-seats.ts';
 export { privateColumns } from './private-columns.ts';
 export {
   checkSeatRulesTx,

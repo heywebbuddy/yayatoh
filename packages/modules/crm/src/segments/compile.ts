@@ -100,6 +100,9 @@ function conditionSql(c: SegmentCondition, o: CompileOptions): SQL {
     }
     case 'totals':
       return sql`coalesce(${TOTAL_COLUMNS[c.metric]}, 0) ${OPS[c.op]} ${c.value}`;
+    case 'engagement':
+      return sql`(select coalesce(sum(p.score), 0) from crm.event_engagement p
+        where p.contact_id = c.id and ${scopeSql(c.scope, o)}) ${OPS[c.op]} ${c.value}`;
     case 'seen': {
       const col = c.which === 'first' ? sql.raw('pr.first_seen_at') : sql.raw('pr.last_seen_at');
       const parts: SQL[] = [sql`${col} is not null`];

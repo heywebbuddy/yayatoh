@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "yayatoh": {
-    "tier": 5
+    "tier": 6
   },
   "exports": {
     ".": "./src/index.ts"
@@ -19,6 +19,7 @@
     "@yayatoh/crm": "workspace:*",
     "@yayatoh/csv": "workspace:*",
     "@yayatoh/db": "workspace:*",
+    "@yayatoh/engagement": "workspace:*",
     "@yayatoh/events": "workspace:*",
     "@yayatoh/forms": "workspace:*",
     "@yayatoh/kernel": "workspace:*",

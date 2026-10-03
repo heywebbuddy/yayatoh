@@ -11,12 +11,14 @@ import {
   spotterStateTx,
 } from '@yayatoh/donations';
 import {
+  CHAT_REALTIME_CHANNELS,
   ENGAGEMENT_REALTIME_CHANNELS,
   moderationSnapshotTx,
   publicSnapshotTx,
   sessionChannelOpen,
 } from '@yayatoh/engagement';
 import { findEventTx, isPublicEvent } from '@yayatoh/events';
+import { GALLERY_CHANNEL } from '@yayatoh/gallery';
 import { GUESTS_CHANNEL } from '@yayatoh/guests';
 import { createCtx } from '@yayatoh/kernel';
 import {
@@ -78,13 +80,18 @@ export const REALTIME_CHANNELS = createRealtimeRegistry([
   ASSISTANCE_CHANNEL,
   // M5.7a: live polls and Q&A, one session each.
   ...ENGAGEMENT_REALTIME_CHANNELS,
+  // M4.3a: the guest seating editor follows the guest list and the guests' places.
+  GUESTS_CHANNEL,
+  GUEST_SEATS_CHANNEL,
+  // M4.5b: the gallery's live slideshow (item ids and states; the slideshow re-reads).
+  GALLERY_CHANNEL,
   // M4.8c: the paddle raise's spotters (level and paddle numbers) and console (totals).
   ...PADDLE_REALTIME_CHANNELS,
   // M4.8d: the room's giving screen (thermometer; its projector streams through a signed link).
   GIVING_SCREEN_CHANNEL,
-  // M4.3a: the guest seating editor follows the guest list and the guests' places.
-  GUESTS_CHANNEL,
-  GUEST_SEATS_CHANNEL,
+  // M5.8b: chat inboxes (attendees, exhibitors). Registered so they resolve; only their own
+  // stream routes attach them (`inboxStreamResponse`), the generic attach refuses them.
+  ...CHAT_REALTIME_CHANNELS,
 ]);
 
 /** Stream (re)connections per caller and channel per minute. */
@@ -399,6 +406,48 @@ export async function seatStreamResponse(
     req,
     { ok: true, channel, as: opts.kind === 'public' ? 'public' : 'member', who: opts.who ?? 'anonymous' },
     { rateBucket: `seat-stream:${opts.eventId}:${streamKey(opts.who)}` },
+  );
+}
+
+/**
+ * M4.5b: a guest's live slideshow. The route already checked the guest site's password and that
+ * the gallery is on (the org and event come from the site's address); same stream, same limits.
+ */
+export async function galleryStreamResponse(
+  req: Request,
+  opts: { orgId: string; eventId: string; who: string | null },
+): Promise<Response> {
+  const channel = REALTIME_CHANNELS.resolve(
+    `org:${opts.orgId}:event:${opts.eventId}:${GALLERY_CHANNEL.topic}`,
+  ) as ResolvedChannel;
+  return realtimeStreamResponse(
+    req,
+    { ok: true, channel, as: 'public', who: opts.who ?? 'anonymous' },
+    { rateBucket: `gallery-stream:${opts.eventId}:${streamKey(opts.who)}` },
+  );
+}
+
+/**
+ * A chat inbox stream (M5.8b): the route proved who the caller is and worked out their own inbox
+ * (`own`); a `channel` the browser names must be exactly that inbox (403 otherwise: another
+ * person's, another event's or another org's inbox is never attached). Same stream, limits and
+ * resumption as every channel.
+ */
+export async function inboxStreamResponse(
+  req: Request,
+  own: string | null,
+  who: string,
+  allowed: (own: string | null, requested: string) => boolean,
+): Promise<Response> {
+  if (!own) return new Response(null, { status: 404 });
+  const requested = new URL(req.url).searchParams.get('channel');
+  if (requested !== null && !allowed(own, requested)) return new Response(null, { status: 403 });
+  const channel = REALTIME_CHANNELS.resolve(own);
+  if (!channel) return new Response(null, { status: 404 });
+  return realtimeStreamResponse(
+    req,
+    { ok: true, channel, as: 'member', who },
+    { rateBucket: `chat-stream:${channel.inboxId ?? ''}:${streamKey(who)}` },
   );
 }
 

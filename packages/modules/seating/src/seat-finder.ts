@@ -114,7 +114,7 @@ export const SeatFinderResultDto = z.object({
 export type SeatFinderResultDto = z.infer<typeof SeatFinderResultDto>;
 
 /** Seats of these attendees: given by the organizer (M1.7d) or bought with their ticket (M1.7c). */
-async function seatsOfTx(
+export async function seatsOfTx(
   tx: TenantTx,
   doc: FloorplanDoc,
   eventId: string,

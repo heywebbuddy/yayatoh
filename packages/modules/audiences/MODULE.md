@@ -25,3 +25,6 @@ segment DSL and its SQL compiler belong to `crm`, which it calls down the tiers.
 - **Export** is the platform bulk-export path (`audiences.contactsCsv`): step-up, `bulk.start` audit,
   impersonation category `export`, allowlisted CSV columns; permission `attendees:export`.
 - Templates are pure (`./client`): they fill the builder with ordinary definitions.
+- **Engagement (M5.7b).** The DSL's `engagement` condition reads `crm.event_engagement` (kept by
+  the `engagement` module): the sum of a contact's scores over the events in scope, compared with a
+  whole number. Its scope is resolved like every other condition's.

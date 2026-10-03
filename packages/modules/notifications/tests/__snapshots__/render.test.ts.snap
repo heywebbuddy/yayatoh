@@ -9789,6 +9789,630 @@ exports[`renderMessage: every kind in all 13 locales > portal.sign-in · zh-TW 1
 }
 `;
 
+exports[`renderMessage: every kind in all 13 locales > program.cfp-accepted · ar 1`] = `
+{
+  "subject": "تم قبول مقترحك «Designing for trust»",
+  "text": "تم قبول مقترحك «Designing for trust»
+
+مرحبًا،
+
+أخبار سارة: قبلت Lakeside Events «Designing for trust» في Midwest Leadership Summit. سيرسل إليك المنظمون موعد جلستك قريبًا. ملاحظة من المنظمين: We would love a 30-minute version.
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-accepted · de 1`] = `
+{
+  "subject": "Ihr Vorschlag „Designing for trust“ wurde angenommen",
+  "text": "Ihr Vorschlag „Designing for trust“ wurde angenommen
+
+Hallo,
+
+Gute Nachrichten: Lakeside Events hat „Designing for trust“ für Midwest Leadership Summit angenommen. Die Veranstalter teilen Ihnen bald die Zeit Ihrer Session mit. Hinweis der Veranstalter: We would love a 30-minute version.
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-accepted · en 1`] = `
+{
+  "subject": "Your proposal “Designing for trust” was accepted",
+  "text": "Your proposal “Designing for trust” was accepted
+
+Hello,
+
+Good news: Lakeside Events accepted “Designing for trust” for Midwest Leadership Summit. The organizers will share your session time soon. Note from the organizers: We would love a 30-minute version.
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-accepted · es 1`] = `
+{
+  "subject": "Tu propuesta «Designing for trust» ha sido aceptada",
+  "text": "Tu propuesta «Designing for trust» ha sido aceptada
+
+Hola:
+
+Buenas noticias: Lakeside Events ha aceptado «Designing for trust» para Midwest Leadership Summit. Los organizadores compartirán pronto el horario de tu sesión. Nota de los organizadores: We would love a 30-minute version.
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-accepted · fr 1`] = `
+{
+  "subject": "Votre proposition « Designing for trust » est acceptée",
+  "text": "Votre proposition « Designing for trust » est acceptée
+
+Bonjour,
+
+Bonne nouvelle : Lakeside Events a accepté « Designing for trust » pour Midwest Leadership Summit. Les organisateurs vous communiqueront bientôt l’horaire de votre session. Message des organisateurs : We would love a 30-minute version.
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-accepted · hi 1`] = `
+{
+  "subject": "आपका प्रस्ताव “Designing for trust” स्वीकार कर लिया गया है",
+  "text": "आपका प्रस्ताव “Designing for trust” स्वीकार कर लिया गया है
+
+नमस्ते,
+
+अच्छी खबर: Lakeside Events ने Midwest Leadership Summit के लिए “Designing for trust” स्वीकार कर लिया है। आयोजक जल्द ही आपके सत्र का समय बताएँगे। आयोजकों का संदेश: We would love a 30-minute version.
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-accepted · it 1`] = `
+{
+  "subject": "La tua proposta «Designing for trust» è stata accettata",
+  "text": "La tua proposta «Designing for trust» è stata accettata
+
+Ciao,
+
+Buone notizie: Lakeside Events ha accettato «Designing for trust» per Midwest Leadership Summit. Gli organizzatori condivideranno presto l’orario della tua sessione. Nota degli organizzatori: We would love a 30-minute version.
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-accepted · ja 1`] = `
+{
+  "subject": "ご提案「Designing for trust」が採択されました",
+  "text": "ご提案「Designing for trust」が採択されました
+
+こんにちは。
+
+うれしいお知らせです。Lakeside EventsはMidwest Leadership Summitで「Designing for trust」を採択しました。セッションの日時は主催者から近日中にお知らせします。 主催者からのメッセージ：We would love a 30-minute version.
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-accepted · nl 1`] = `
+{
+  "subject": "Je voorstel ‘Designing for trust’ is geaccepteerd",
+  "text": "Je voorstel ‘Designing for trust’ is geaccepteerd
+
+Hallo,
+
+Goed nieuws: Lakeside Events heeft ‘Designing for trust’ voor Midwest Leadership Summit geaccepteerd. De organisatoren laten je binnenkort weten wanneer je sessie is. Bericht van de organisatoren: We would love a 30-minute version.
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-accepted · pt 1`] = `
+{
+  "subject": "Sua proposta “Designing for trust” foi aceita",
+  "text": "Sua proposta “Designing for trust” foi aceita
+
+Olá!
+
+Boa notícia: Lakeside Events aceitou “Designing for trust” para Midwest Leadership Summit. Os organizadores vão compartilhar o horário da sua sessão em breve. Nota dos organizadores: We would love a 30-minute version.
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-accepted · ru 1`] = `
+{
+  "subject": "Ваша заявка «Designing for trust» принята",
+  "text": "Ваша заявка «Designing for trust» принята
+
+Здравствуйте!
+
+Хорошие новости: Lakeside Events принимает «Designing for trust» на Midwest Leadership Summit. Организаторы скоро сообщат время вашего выступления. Комментарий организаторов: We would love a 30-minute version.
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-accepted · zh-CN 1`] = `
+{
+  "subject": "您的提案“Designing for trust”已被接受",
+  "text": "您的提案“Designing for trust”已被接受
+
+您好：
+
+好消息：Lakeside Events 已接受您为 Midwest Leadership Summit 提交的“Designing for trust”。主办方将很快告知您的场次时间。 主办方留言：We would love a 30-minute version.
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-accepted · zh-TW 1`] = `
+{
+  "subject": "您的提案「Designing for trust」已獲接受",
+  "text": "您的提案「Designing for trust」已獲接受
+
+您好：
+
+好消息：Lakeside Events 已接受您為 Midwest Leadership Summit 提交的「Designing for trust」。主辦單位將盡快告知您的場次時間。 主辦單位留言：We would love a 30-minute version.
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-received · ar 1`] = `
+{
+  "subject": "استلمنا مقترحك «Designing for trust»",
+  "text": "استلمنا مقترحك «Designing for trust»
+
+مرحبًا،
+
+شكرًا لتقديمك «Designing for trust» إلى Midwest Leadership Summit. ستراجعه Lakeside Events وترسل إليك القرار بالبريد الإلكتروني.
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-received · de 1`] = `
+{
+  "subject": "Wir haben Ihren Vorschlag „Designing for trust“ erhalten",
+  "text": "Wir haben Ihren Vorschlag „Designing for trust“ erhalten
+
+Hallo,
+
+Danke für Ihren Vorschlag „Designing for trust“ für Midwest Leadership Summit. Lakeside Events prüft ihn und schickt Ihnen die Entscheidung per E-Mail.
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-received · en 1`] = `
+{
+  "subject": "We received your proposal “Designing for trust”",
+  "text": "We received your proposal “Designing for trust”
+
+Hello,
+
+Thank you for proposing “Designing for trust” for Midwest Leadership Summit. Lakeside Events will review it and email you the decision.
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-received · es 1`] = `
+{
+  "subject": "Hemos recibido tu propuesta «Designing for trust»",
+  "text": "Hemos recibido tu propuesta «Designing for trust»
+
+Hola:
+
+Gracias por proponer «Designing for trust» para Midwest Leadership Summit. Lakeside Events la revisará y te enviará la decisión por correo.
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-received · fr 1`] = `
+{
+  "subject": "Nous avons bien reçu votre proposition « Designing for trust »",
+  "text": "Nous avons bien reçu votre proposition « Designing for trust »
+
+Bonjour,
+
+Merci d’avoir proposé « Designing for trust » pour Midwest Leadership Summit. Lakeside Events va l’examiner et vous enverra sa décision par e-mail.
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-received · hi 1`] = `
+{
+  "subject": "हमें आपका प्रस्ताव “Designing for trust” मिल गया है",
+  "text": "हमें आपका प्रस्ताव “Designing for trust” मिल गया है
+
+नमस्ते,
+
+Midwest Leadership Summit के लिए “Designing for trust” प्रस्तावित करने के लिए धन्यवाद। Lakeside Events इसकी समीक्षा करेगा और निर्णय आपको ईमेल करेगा।
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-received · it 1`] = `
+{
+  "subject": "Abbiamo ricevuto la tua proposta «Designing for trust»",
+  "text": "Abbiamo ricevuto la tua proposta «Designing for trust»
+
+Ciao,
+
+Grazie per aver proposto «Designing for trust» per Midwest Leadership Summit. Lakeside Events la valuterà e ti invierà la decisione via email.
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-received · ja 1`] = `
+{
+  "subject": "ご提案「Designing for trust」を受け付けました",
+  "text": "ご提案「Designing for trust」を受け付けました
+
+こんにちは。
+
+Midwest Leadership Summitへの「Designing for trust」のご提案ありがとうございます。Lakeside Eventsが審査し、結果をメールでお知らせします。
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-received · nl 1`] = `
+{
+  "subject": "We hebben je voorstel ‘Designing for trust’ ontvangen",
+  "text": "We hebben je voorstel ‘Designing for trust’ ontvangen
+
+Hallo,
+
+Bedankt voor je voorstel ‘Designing for trust’ voor Midwest Leadership Summit. Lakeside Events beoordeelt het en mailt je het besluit.
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-received · pt 1`] = `
+{
+  "subject": "Recebemos sua proposta “Designing for trust”",
+  "text": "Recebemos sua proposta “Designing for trust”
+
+Olá!
+
+Obrigado por propor “Designing for trust” para Midwest Leadership Summit. Lakeside Events vai analisá-la e enviará a decisão por e-mail.
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-received · ru 1`] = `
+{
+  "subject": "Мы получили вашу заявку «Designing for trust»",
+  "text": "Мы получили вашу заявку «Designing for trust»
+
+Здравствуйте!
+
+Спасибо за заявку «Designing for trust» на Midwest Leadership Summit. Lakeside Events рассмотрит её и сообщит решение по электронной почте.
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-received · zh-CN 1`] = `
+{
+  "subject": "我们已收到您的提案“Designing for trust”",
+  "text": "我们已收到您的提案“Designing for trust”
+
+您好：
+
+感谢您为 Midwest Leadership Summit 提交“Designing for trust”。Lakeside Events 将进行评审，并通过电子邮件告知结果。
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-received · zh-TW 1`] = `
+{
+  "subject": "我們已收到您的提案「Designing for trust」",
+  "text": "我們已收到您的提案「Designing for trust」
+
+您好：
+
+感謝您為 Midwest Leadership Summit 提交「Designing for trust」。Lakeside Events 將進行審查，並以電子郵件通知結果。
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-rejected · ar 1`] = `
+{
+  "subject": "بخصوص مقترحك «Designing for trust»",
+  "text": "بخصوص مقترحك «Designing for trust»
+
+مرحبًا،
+
+شكرًا لتقديمك «Designing for trust» إلى Midwest Leadership Summit. لم تتمكن Lakeside Events من إدراجه في البرنامج هذه المرة.
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-rejected · de 1`] = `
+{
+  "subject": "Zu Ihrem Vorschlag „Designing for trust“",
+  "text": "Zu Ihrem Vorschlag „Designing for trust“
+
+Hallo,
+
+Danke für Ihren Vorschlag „Designing for trust“ für Midwest Leadership Summit. Lakeside Events konnte ihn diesmal leider nicht ins Programm aufnehmen.
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-rejected · en 1`] = `
+{
+  "subject": "About your proposal “Designing for trust”",
+  "text": "About your proposal “Designing for trust”
+
+Hello,
+
+Thank you for proposing “Designing for trust” for Midwest Leadership Summit. Lakeside Events could not include it in the program this time.
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-rejected · es 1`] = `
+{
+  "subject": "Sobre tu propuesta «Designing for trust»",
+  "text": "Sobre tu propuesta «Designing for trust»
+
+Hola:
+
+Gracias por proponer «Designing for trust» para Midwest Leadership Summit. Lakeside Events no ha podido incluirla en el programa esta vez.
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-rejected · fr 1`] = `
+{
+  "subject": "À propos de votre proposition « Designing for trust »",
+  "text": "À propos de votre proposition « Designing for trust »
+
+Bonjour,
+
+Merci d’avoir proposé « Designing for trust » pour Midwest Leadership Summit. Lakeside Events n’a pas pu l’inclure au programme cette fois-ci.
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-rejected · hi 1`] = `
+{
+  "subject": "आपके प्रस्ताव “Designing for trust” के बारे में",
+  "text": "आपके प्रस्ताव “Designing for trust” के बारे में
+
+नमस्ते,
+
+Midwest Leadership Summit के लिए “Designing for trust” प्रस्तावित करने के लिए धन्यवाद। इस बार Lakeside Events इसे कार्यक्रम में शामिल नहीं कर सका।
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-rejected · it 1`] = `
+{
+  "subject": "Sulla tua proposta «Designing for trust»",
+  "text": "Sulla tua proposta «Designing for trust»
+
+Ciao,
+
+Grazie per aver proposto «Designing for trust» per Midwest Leadership Summit. Questa volta Lakeside Events non ha potuto includerla nel programma.
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-rejected · ja 1`] = `
+{
+  "subject": "ご提案「Designing for trust」について",
+  "text": "ご提案「Designing for trust」について
+
+こんにちは。
+
+Midwest Leadership Summitへの「Designing for trust」のご提案ありがとうございます。今回、Lakeside Eventsはプログラムに含めることができませんでした。
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-rejected · nl 1`] = `
+{
+  "subject": "Over je voorstel ‘Designing for trust’",
+  "text": "Over je voorstel ‘Designing for trust’
+
+Hallo,
+
+Bedankt voor je voorstel ‘Designing for trust’ voor Midwest Leadership Summit. Lakeside Events kon het deze keer niet in het programma opnemen.
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-rejected · pt 1`] = `
+{
+  "subject": "Sobre sua proposta “Designing for trust”",
+  "text": "Sobre sua proposta “Designing for trust”
+
+Olá!
+
+Obrigado por propor “Designing for trust” para Midwest Leadership Summit. Desta vez, Lakeside Events não pôde incluí-la na programação.
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-rejected · ru 1`] = `
+{
+  "subject": "О вашей заявке «Designing for trust»",
+  "text": "О вашей заявке «Designing for trust»
+
+Здравствуйте!
+
+Спасибо за заявку «Designing for trust» на Midwest Leadership Summit. В этот раз Lakeside Events не смогли включить её в программу.
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-rejected · zh-CN 1`] = `
+{
+  "subject": "关于您的提案“Designing for trust”",
+  "text": "关于您的提案“Designing for trust”
+
+您好：
+
+感谢您为 Midwest Leadership Summit 提交“Designing for trust”。很遗憾，Lakeside Events 本次未能将其纳入议程。
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-rejected · zh-TW 1`] = `
+{
+  "subject": "關於您的提案「Designing for trust」",
+  "text": "關於您的提案「Designing for trust」
+
+您好：
+
+感謝您為 Midwest Leadership Summit 提交「Designing for trust」。很遺憾，Lakeside Events 這次未能將其納入議程。
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
 exports[`renderMessage: every kind in all 13 locales > program.task-reminder · ar 1`] = `
 {
   "subject": "تذكير: Upload your slides لـ Midwest Leadership Summit",

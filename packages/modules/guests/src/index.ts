@@ -15,6 +15,8 @@ export {
   setCollectorCommand,
   submitContactCommand,
 } from './collector.ts';
+// M4.4b: names for the day of (check-in, kiosk, A–Z board).
+export { guestNamesTx } from './day-of.ts';
 export {
   type CollectorMember,
   type CollectorPayload,
@@ -45,6 +47,18 @@ export {
   parseTags,
   plusOneRefusal,
 } from './domain/guests.ts';
+// M4.7a guest hub: one page per party (RSVP, program, seats, tickets) and its wallet pass port.
+export {
+  type GuestPassContent,
+  type GuestPassFacts,
+  guestPassContent,
+  guestPassSerial,
+  type HubTally,
+  hubTally,
+  nextProgramItem,
+  PASS_SEATS_MAX,
+  PASS_TEXT_MAX,
+} from './domain/hub.ts';
 export {
   GUEST_IMPORT_FIELDS,
   GUEST_IMPORT_REJECTIONS,
@@ -105,6 +119,20 @@ export {
   strictName,
   tally,
 } from './domain/rsvp.ts';
+// M4.5a guest website: blocks, the password gate, the public page.
+export {
+  emptyContent,
+  MAX_BLOCK_ITEMS,
+  MAX_SITE_BLOCKS,
+  normalizeSitePassword,
+  passwordProblem,
+  programSubEvents,
+  readContent,
+  SITE_PASSWORD_MAX,
+  SITE_PASSWORD_MIN,
+  siteAccessToken,
+  siteAccessValid,
+} from './domain/site.ts';
 export * from './dto.ts';
 export {
   addPartyGuestCommand,
@@ -125,6 +153,15 @@ export {
   updatePartyCommand,
   updatePartyGuestCommand,
 } from './guests.ts';
+export {
+  type HubPerson,
+  type HubSeat,
+  type HubTicket,
+  PartyHubDto,
+  type PartyHubReaders,
+  type PartyHubView,
+  partyHubQuery,
+} from './hub.ts';
 export {
   GuestImportSummaryDto,
   GuestMappingInput,
@@ -272,6 +309,10 @@ export {
   type PartyRsvpState,
   RESPONSE_STATUSES,
   type ResponseStatus,
+  SITE_BLOCK_KINDS,
+  SITE_STATUSES,
+  type SiteBlockKind,
+  type SiteStatus,
   SUB_EVENT_KINDS,
   type SubEventKind,
 } from './schema.ts';
@@ -286,6 +327,28 @@ export {
   seatingSubEventsTx,
   wholeEventStatus,
 } from './seating-occupants.ts';
+export {
+  addGuestSiteBlockCommand,
+  GuestSiteDto,
+  guestSitePublishedQuery,
+  guestSiteQuery,
+  guestSiteTarget,
+  moveGuestSiteBlockCommand,
+  PublicGuestSiteDto,
+  PublicSiteBlockDto,
+  publicGuestSiteQuery,
+  publishGuestSiteCommand,
+  removeGuestSiteBlockCommand,
+  SaveGuestSiteInput,
+  SiteBlockDto,
+  saveGuestSiteCommand,
+  setGuestSitePasswordCommand,
+  UpdateGuestSiteBlockInput,
+  unlockGuestSiteQuery,
+  updateGuestSiteBlockCommand,
+} from './site.ts';
+// M4.5b: the gallery behind the guest site (in the gallery module's transactions).
+export { guestSiteAccessTx, guestSiteCodeTx } from './site-access.ts';
 export {
   CreateSubEventInput,
   createSubEventCommand,
@@ -306,3 +369,13 @@ export {
   tablePartiesTx,
   tablePartyTx,
 } from './tables.ts';
+export {
+  FAKE_PASS_CONTENT_TYPE,
+  type FakeGuestPass,
+  fakeGuestPassProvider,
+  GUEST_PASS_PLATFORMS,
+  type GuestPassPlatform,
+  type GuestPassProvider,
+  type GuestPassRequest,
+  type GuestPassResult,
+} from './wallet-pass.ts';

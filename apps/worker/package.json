@@ -17,7 +17,8 @@
     "drill-tickets": "node scripts/drill-tickets.ts",
     "metrics:rebuild": "node scripts/metrics-rebuild.ts",
     "audit-sample": "node scripts/audit-sample.ts",
-    "irs-exempt-list": "node scripts/irs-exempt-list.ts"
+    "irs-exempt-list": "node scripts/irs-exempt-list.ts",
+    "printnode": "node scripts/printnode.ts"
   },
   "dependencies": {
     "@yayatoh/alerts": "workspace:*",
@@ -32,6 +33,7 @@
     "@yayatoh/command-center": "workspace:*",
     "@yayatoh/db": "workspace:*",
     "@yayatoh/donations": "workspace:*",
+    "@yayatoh/engagement": "workspace:*",
     "@yayatoh/events": "workspace:*",
     "@yayatoh/forms": "workspace:*",
     "@yayatoh/guests": "workspace:*",
@@ -45,8 +47,8 @@
     "@yayatoh/pdf": "workspace:*",
     "@yayatoh/platform": "workspace:*",
     "@yayatoh/privacy": "workspace:*",
-    "@yayatoh/registration": "workspace:*",
     "@yayatoh/program": "workspace:*",
+    "@yayatoh/registration": "workspace:*",
     "@yayatoh/reports": "workspace:*",
     "@yayatoh/seating": "workspace:*",
     "@yayatoh/surveys": "workspace:*",

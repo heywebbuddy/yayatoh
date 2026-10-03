@@ -24,7 +24,9 @@
     "@yayatoh/events": "workspace:*",
     "@yayatoh/guests": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
+    "@yayatoh/notifications": "workspace:*",
     "@yayatoh/orders": "workspace:*",
+    "@yayatoh/payments": "workspace:*",
     "@yayatoh/pdf": "workspace:*",
     "@yayatoh/platform": "workspace:*",
     "@yayatoh/tenancy": "workspace:*",
@@ -32,9 +34,7 @@
     "@yayatoh/ui": "workspace:*",
     "drizzle-orm": "catalog:",
     "intl-messageformat": "11.2.15",
-    "zod": "catalog:",
-    "@yayatoh/notifications": "workspace:*",
-    "@yayatoh/payments": "workspace:*"
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@types/node": "catalog:",

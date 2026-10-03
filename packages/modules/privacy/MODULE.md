@@ -1,4 +1,4 @@
-# privacy (tier 5)
+# privacy (tier 6)
 
 Data-subject requests and retention (M1.14c). Owns Postgres schema `privacy`
 (`dsar_requests`, the accountability record; `account_requests`, the global record of account DSARs). Reads and redacts other modules only through
@@ -29,5 +29,11 @@ their exported `*DsarTx` / retention functions, inside the caller's tenant trans
   `privacy.account_requests` (hash + masked hint, actor, reason; SECURITY DEFINER insert only).
 - Org-side erasure also removes team invitations addressed to the person and adds the address to
   the platform-wide erased list (`platform.erased_addresses`).
+
+- Networking and chat (M5.8a/b; batch 3j merge, which moved privacy from tier 5 to tier 6 so it can
+  call `@yayatoh/engagement` in its own transaction): the access document lists the person's
+  networking profiles, the notes on requests they sent, the reports they filed and the chat
+  messages they sent (`networking`); erasure redacts and opts out their profiles, clears those
+  notes and report details, and deletes the chat messages they sent.
 
 **Public surface:** `.` only.

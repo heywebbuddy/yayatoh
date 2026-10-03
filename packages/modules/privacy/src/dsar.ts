@@ -2,6 +2,7 @@ import { attendeesDsarTx, eraseAttendeesDsarTx } from '@yayatoh/attendees';
 import { admissionsDsarTx } from '@yayatoh/checkin';
 import { contactDsarTx, eraseContactDsarTx, normalizeEmail } from '@yayatoh/crm';
 import type { TenantTx } from '@yayatoh/db';
+import { eraseNetworkingDsarTx, networkingDsarTx } from '@yayatoh/engagement';
 import { findEventTx } from '@yayatoh/events';
 import { eraseResponsesDsarTx, responsesDsarTx } from '@yayatoh/forms';
 import { type Ctx, DomainError, requireOrg, uuidv7 } from '@yayatoh/kernel';
@@ -61,7 +62,12 @@ export async function collectSubjectTx(tx: TenantTx, orgId: string, emailNorm: s
     tx,
     ticketing.tickets.map((t) => t.id),
   );
-  return { crm, orders, ticketing, attendees, answers, admissions, invitations };
+  // Networking profiles, notes, reports and chat messages (M5.8a/b), keyed by the person's contacts.
+  const networking = await networkingDsarTx(
+    tx,
+    crm.contacts.map((c) => c.id),
+  );
+  return { crm, orders, ticketing, attendees, answers, admissions, invitations, networking };
 }
 
 type Subject = Awaited<ReturnType<typeof collectSubjectTx>>;
@@ -79,6 +85,8 @@ export const DsarSummary = z.object({
   answers: z.int(),
   admissions: z.int(),
   invitations: z.int(),
+  networkProfiles: z.int(),
+  chatMessages: z.int(),
 });
 export type DsarSummary = z.infer<typeof DsarSummary>;
 
@@ -98,6 +106,8 @@ export function summarize(s: Subject): DsarSummary {
     answers: s.answers.length,
     admissions: s.admissions.length,
     invitations: s.invitations.length,
+    networkProfiles: s.networking.profiles.length,
+    chatMessages: s.networking.chatMessages.length,
   };
 }
 
@@ -198,6 +208,7 @@ export async function subjectDocumentTx(tx: TenantTx, ctx: Ctx, emailNorm: strin
     formAnswers: s.answers,
     checkIns: s.admissions,
     teamInvitations: s.invitations,
+    networking: s.networking,
     notes: [
       'Card numbers are never stored by the organizer or Yayatoh; payments are processed by Stripe.',
       'Money amounts are in minor units of the order currency (e.g. cents).',
@@ -261,6 +272,9 @@ export const EraseResult = z.object({
     answers: z.int(),
     invitations: z.int(),
     files: z.int(),
+    networkProfiles: z.int(),
+    networkNotes: z.int(),
+    chatMessages: z.int(),
   }),
 });
 
@@ -292,6 +306,9 @@ export const eraseSubjectCommand = tenantCommand({
     const tickets = await eraseTicketsDsarTx(tx, email, ctx.now);
     const attendees = await eraseAttendeesDsarTx(tx, email, contact.contactIds, ctx.now);
     const invitations = await eraseInvitationsDsarTx(tx, email, ctx.now);
+    // Networking and chat (M5.8a/b): profiles redacted and opted out, notes cleared, sent chat
+    // messages deleted. The contacts keep their ids after the redaction above.
+    const networking = await eraseNetworkingDsarTx(tx, contact.contactIds);
     const files = await purgeFilesMentioningTx(tx, email);
     // The buyer's browser push devices in this org (M1.10e): their endpoint is personal data.
     await eraseSubjectPushDevicesTx(tx, email);
@@ -311,6 +328,9 @@ export const eraseSubjectCommand = tenantCommand({
       answers: answers.erased,
       invitations: invitations.deleted + invitations.redacted,
       files,
+      networkProfiles: networking.profiles,
+      networkNotes: networking.notes,
+      chatMessages: networking.chatMessages,
     };
     const [row] = await tx
       .insert(dsarRequests)

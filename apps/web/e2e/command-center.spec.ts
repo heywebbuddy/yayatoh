@@ -111,7 +111,17 @@ test.describe('Command Center (M3.2a)', () => {
     await expect(page.getByText('Owner view')).toBeVisible();
     await expect(page.getByTestId('cc-mode')).toHaveText('Planning');
     await expect(page.getByText(/^Pre-show starts /)).toBeVisible();
-    expect(await shown(page)).toEqual(['readiness', 'sales', 'tickets', 'alerts', 'timeline']);
+    // M5.9a: a conference's planning layout adds session fill, exhibitors and sponsors.
+    expect(await shown(page)).toEqual([
+      'readiness',
+      'sales',
+      'tickets',
+      'alerts',
+      'sessionFill',
+      'exhibitorActivity',
+      'sponsorActivity',
+      'timeline',
+    ]);
     // Revenue in the org currency, minor units formatted; readiness with deep links to fix it.
     await expect(page.getByTestId('cc-sales-total')).toHaveText('$0.00');
     await expect(page.getByTestId('cc-tickets-sold')).toHaveText('0');
@@ -147,13 +157,29 @@ test.describe('Command Center (M3.2a)', () => {
       'Coming up hidden. Layout saved.',
     );
     await expect(page.getByRole('button', { name: 'Show Coming up' })).toBeFocused();
-    expect(await shown(page)).toEqual(['tickets', 'readiness', 'sales', 'alerts']);
+    expect(await shown(page)).toEqual([
+      'tickets',
+      'readiness',
+      'sales',
+      'alerts',
+      'sessionFill',
+      'exhibitorActivity',
+      'sponsorActivity',
+    ]);
     await expectAccessible(page);
 
     // Persisted for this member and event.
     await page.reload();
     await expect(page.getByTestId('command-center')).toHaveAttribute('data-mode', 'planning');
-    expect(await shown(page)).toEqual(['tickets', 'readiness', 'sales', 'alerts']);
+    expect(await shown(page)).toEqual([
+      'tickets',
+      'readiness',
+      'sales',
+      'alerts',
+      'sessionFill',
+      'exhibitorActivity',
+      'sponsorActivity',
+    ]);
     await page.getByRole('button', { name: 'Customize layout' }).click();
     await expect(
       page.getByRole('region', { name: 'Hidden widgets' }).getByRole('button', { name: 'Show Coming up' }),
@@ -163,11 +189,30 @@ test.describe('Command Center (M3.2a)', () => {
     await page.getByRole('button', { name: 'Show Coming up' }).focus();
     await page.keyboard.press('Enter');
     await expect(page.getByText('Coming up shown. Layout saved.')).toBeVisible();
-    expect(await shown(page)).toEqual(['tickets', 'readiness', 'sales', 'alerts', 'timeline']);
+    expect(await shown(page)).toEqual([
+      'tickets',
+      'readiness',
+      'sales',
+      'alerts',
+      'sessionFill',
+      'exhibitorActivity',
+      'sponsorActivity',
+      'timeline',
+    ]);
     await page.getByRole('button', { name: 'Reset to default' }).click();
     await expect(page.getByText('Layout reset to default.')).toBeVisible();
     await page.reload();
-    expect(await shown(page)).toEqual(['readiness', 'sales', 'tickets', 'alerts', 'timeline']);
+    // M5.9a: a conference's planning layout adds session fill, exhibitors and sponsors.
+    expect(await shown(page)).toEqual([
+      'readiness',
+      'sales',
+      'tickets',
+      'alerts',
+      'sessionFill',
+      'exhibitorActivity',
+      'sponsorActivity',
+      'timeline',
+    ]);
 
     // Arabic, right to left.
     await page.goto(`/ar${base}/command-center`);
@@ -206,6 +251,8 @@ test.describe('Command Center (M3.2a)', () => {
       'devices',
       'seatFill',
       'alerts',
+      // M5.9a: a conference's session rooms, live.
+      'sessionAttendance',
       // M3.3a live mode: the feed, speed, capacity, the duplicate/invalid monitor.
       'liveFeed',
       'checkinSpeed',
@@ -273,6 +320,7 @@ test.describe('Command Center (M3.2a)', () => {
       'Devices online',
       'Seat fill',
       'Alerts',
+      'Session rooms',
       'Live feed',
       'Check-in speed',
       'Capacity',

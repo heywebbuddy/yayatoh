@@ -7,6 +7,7 @@ import {
   catchUpGifts,
   closeCallCommand,
   closeMatchCommand,
+  closePledgesCommand,
   confirmEntriesCommand,
   createCampaignCommand,
   createMatchCommand,
@@ -15,10 +16,12 @@ import {
   giftRefundsSubscriber,
   matchesQuery,
   paddleConsoleQuery,
+  pledgeCollectionQuery,
   publicGiving,
   recordPaddlesCommand,
   type StartGiftResultDto,
   startGiftCommand,
+  unpaidPledgeFactsTx,
   voidEntryCommand,
 } from '@yayatoh/donations';
 import { type Ctx, createCtx, executeCommand, executeQuery, uuidv7 } from '@yayatoh/kernel';
@@ -329,6 +332,26 @@ describe('a 1:1 match capped at $25,000', () => {
     const live = await executeQuery(paddleConsoleQuery, { eventId: a.event.id }, a.ctx(), ports);
     expect(live.matches.some((x) => x.id === matchId)).toBe(false);
     expect(live.totals.pledgedMinor).toBeGreaterThanOrEqual(2_000_000);
+    // Batch 3j merge (M4.8e x M4.8f): closing the night collects paddle pledges only. The sponsor's
+    // pledge has no paddle holder: no collection, not on the pledges page, never an unpaid alert.
+    await executeCommand(closePledgesCommand, { eventId: a.event.id }, a.ctx(), ports);
+    const collections = await withTenant(a.ctx(), (tx) =>
+      tx.execute<{ n: number }>(
+        sql`select count(*)::int as n from donations.pledge_collections where pledge_id = ${r.pledgeId}`,
+      ),
+    );
+    expect(collections[0]?.n).toBe(0);
+    const pledgesPage = await executeQuery(pledgeCollectionQuery, { eventId: a.event.id }, a.ctx(), ports);
+    expect(pledgesPage.rows.some((x) => x.pledgeId === r.pledgeId)).toBe(false);
+    const after = new Date(a.event.endsAt.getTime() + 15 * 86_400_000);
+    const unpaid = await withTenant(a.ctx(), (tx) => unpaidPledgeFactsTx(tx, a.event.id, after));
+    const paddleUnpaid = await withTenant(a.ctx(), (tx) =>
+      tx.execute<{ n: number }>(sql`select count(*)::int as n from donations.pledges p
+        left join donations.pledge_collections c on c.pledge_id = p.id
+        where p.event_id = ${a.event.id} and p.status = 'confirmed' and p.source = 'paddle'
+          and (c.id is null or c.status in ('scheduled', 'charging', 'invoiced'))`),
+    );
+    expect(unpaid.count).toBe(paddleUnpaid[0]?.n);
     // Closing twice is refused; so is cancelling a closed match.
     const refused = { code: 'invalid_state', details: { reason: 'match_closed' } };
     const at = { eventId: a.event.id, matchId };

@@ -1,3 +1,10 @@
+// M5.4b: add-on orders (sponsor packages, extra lead licenses).
+export {
+  addonItemTx,
+  payAddonOrderTx,
+  startLeadLicenseCheckoutCommand,
+  startSponsorPackageCheckoutCommand,
+} from './addon-orders.ts';
 export {
   BOOKING_FILTERS,
   BookingDto,
@@ -298,6 +305,8 @@ export {
   parseGuestLinkToken,
   resendAt,
 } from './guest/otp.ts';
+// M5.9a: overdue invoices for the conference Command Center pack (a count).
+export { overdueInvoicesTx } from './invoice-facts.ts';
 export { invoiceMailer } from './invoice-mailer.ts';
 // M5.2b: the manage token behind a session-schedule email link.
 export { orderManageTokenTx } from './manage-link.ts';
