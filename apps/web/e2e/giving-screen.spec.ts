@@ -196,7 +196,7 @@ test.describe('live giving screen (M4.8d)', () => {
     await expect(total(screen)).toHaveText('$1,025.00', { timeout: 3_000 });
     // An anonymous donor can't opt in at all (the box is gone).
     const eve = await giveFromPhone(browser, give, {
-      name: 'Eve Secret',
+      name: 'Eve Hushline',
       choice: '50',
       displayAs: 'Give anonymously',
       onScreen: false,
@@ -205,7 +205,9 @@ test.describe('live giving screen (M4.8d)', () => {
     await expect(screen.getByTestId('screen-gifts')).toHaveText('3 gifts');
     await expect(thanks(screen).getByRole('listitem')).toHaveText(['Ada Lovelace']);
     const html = await screen.content();
-    for (const secret of ['Bo Quiet', 'Eve Secret', 'Secret', '@example.test'])
+    // The surnames are words the app's own copy never uses, so a hit is a leak and not a message
+    // key of the catalogue the layout ships (batch 3u merge: 'Secret' matched M6.3b's webhook copy).
+    for (const secret of ['Bo Quiet', 'Eve Hushline', 'Hushline', 'Quiet', '@example.test'])
       expect(html).not.toContain(secret);
     await expectAccessible(screen);
 
