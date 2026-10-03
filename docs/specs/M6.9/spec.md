@@ -1,7 +1,7 @@
 # Spec: M6.9 — Virtual and hybrid v1
 
 - **Milestone:** M6.9 (roadmap §10 Phase 6; Phase 6 plan `docs/plans/phase-6.md`, decisions P6-1, P6-9, P6-13; D24)
-- **Status:** M6.9a built (2026-10-03), behind the `virtual` module key and the `VideoProvider` port (the Mux fake in dev/CI; streaming off in production until the owner's Mux account exists). M6.9b (Zoom and CE credits) stacks on it.
+- **Status:** M6.9a built (2026-10-03; gate: lint, check:modules, typecheck 55/55, unit 3455/3455, integration 1940/1941 — the one failure, `audit.int.test.ts` › hash chain, timed out at 30 s under full-suite load and passes 9/9 on its own; e2e `virtual.spec.ts` 15/15 on three viewports plus the related checkout, enrollment, assistance, check-in, checkpoints, session check-in, program, conference pack, security and canary crawl specs), behind the `virtual` module key and the `VideoProvider` port (the Mux fake in dev/CI; streaming off in production until the owner's Mux account exists). M6.9b (Zoom and CE credits) stacks on it.
 - **Risk tags:** `db-migration`, `tenancy`
 - **Related ADRs:** 0001 (modular monolith: same-tier modules talk through events), 0008 (outbox), 0023 (Phase 6 module layout: `virtual` tier 4)
 
