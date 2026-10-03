@@ -1,0 +1,33 @@
+{
+  "name": "@yayatoh/gallery",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "yayatoh": {
+    "tier": 5
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./client": "./src/client.ts",
+    "./testing": "./src/testing.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@yayatoh/db": "workspace:*",
+    "@yayatoh/events": "workspace:*",
+    "@yayatoh/guests": "workspace:*",
+    "@yayatoh/kernel": "workspace:*",
+    "@yayatoh/media": "workspace:*",
+    "@yayatoh/platform": "workspace:*",
+    "drizzle-orm": "catalog:",
+    "sharp": "0.35.4",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@yayatoh/config": "workspace:*",
+    "typescript": "catalog:"
+  }
+}

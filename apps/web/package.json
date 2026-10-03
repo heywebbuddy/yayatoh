@@ -40,6 +40,7 @@
     "@yayatoh/events": "workspace:*",
     "@yayatoh/floorplan": "workspace:*",
     "@yayatoh/forms": "workspace:*",
+    "@yayatoh/gallery": "workspace:*",
     "@yayatoh/guests": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
     "@yayatoh/marketing": "workspace:*",
@@ -86,6 +87,7 @@
     "@yayatoh/config": "workspace:*",
     "@yayatoh/sdk": "workspace:*",
     "@yayatoh/testing": "workspace:*",
+    "sharp": "0.35.4",
     "tailwindcss": "catalog:",
     "typescript": "catalog:"
   }

@@ -11,6 +11,7 @@ import {
 } from '@yayatoh/engagement';
 import { findEventTx, isPublicEvent } from '@yayatoh/events';
 import { GUESTS_CHANNEL } from '@yayatoh/guests';
+import { GALLERY_CHANNEL } from '@yayatoh/gallery';
 import { createCtx } from '@yayatoh/kernel';
 import {
   ablyRealtimePublisher,
@@ -74,6 +75,8 @@ export const REALTIME_CHANNELS = createRealtimeRegistry([
   // M4.3a: the guest seating editor follows the guest list and the guests' places.
   GUESTS_CHANNEL,
   GUEST_SEATS_CHANNEL,
+  // M4.5b: the gallery's live slideshow (item ids and states; the slideshow re-reads).
+  GALLERY_CHANNEL,
 ]);
 
 /** Stream (re)connections per caller and channel per minute. */
@@ -380,6 +383,24 @@ export async function seatStreamResponse(
     req,
     { ok: true, channel, as: opts.kind === 'public' ? 'public' : 'member', who: opts.who ?? 'anonymous' },
     { rateBucket: `seat-stream:${opts.eventId}:${streamKey(opts.who)}` },
+  );
+}
+
+/**
+ * M4.5b: a guest's live slideshow. The route already checked the guest site's password and that
+ * the gallery is on (the org and event come from the site's address); same stream, same limits.
+ */
+export async function galleryStreamResponse(
+  req: Request,
+  opts: { orgId: string; eventId: string; who: string | null },
+): Promise<Response> {
+  const channel = REALTIME_CHANNELS.resolve(
+    `org:${opts.orgId}:event:${opts.eventId}:${GALLERY_CHANNEL.topic}`,
+  ) as ResolvedChannel;
+  return realtimeStreamResponse(
+    req,
+    { ok: true, channel, as: 'public', who: opts.who ?? 'anonymous' },
+    { rateBucket: `gallery-stream:${opts.eventId}:${streamKey(opts.who)}` },
   );
 }
 

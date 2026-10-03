@@ -65,6 +65,8 @@ const SECTION_OF: Record<string, string> = {
   donations: 'donations',
   // M4.5a: the guest website (no longer a placeholder).
   website: 'website',
+  // M4.5b: the gallery (no longer a placeholder).
+  gallery: 'gallery',
 };
 
 describe('event console route sweep (M4.2a)', () => {

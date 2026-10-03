@@ -573,3 +573,9 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **The A–Z board shows names publicly at the venue** (seated guests who haven't declined, as the host wrote them, with their table). It runs only on a device the host starts as the board. Say if you want first name + initial instead.
 - [ ] **Day-of needs the check-in module.** The wedding nav's Day-of item requires `checkin`, which isn't among the wedding profile's default modules; orgs with check-in (all current plans) see it. Say if weddings should get `checkin` by default.
 
+## M4.5b — gallery (2026-10-03, pending owner)
+- [ ] **Gallery limits (P4-6 placeholders):** 5 GiB per event, 250 MB and 50 photos/links per guest, 25 MB per upload, 5,000 items per event. Hosts may lower them. Give the real numbers (they are constants in `packages/modules/gallery/src/domain/limits.ts`).
+- [ ] **Direct uploads to R2** need CORS on the media bucket allowing `PUT` from the app's origins with the `content-length` header (presigned URLs, 1 hour). Until `MEDIA_STORE=r2`, uploads go through the app's dev route.
+- [ ] **HEIC in production:** the prebuilt image library has no HEVC decoder (patents). Choose a decoder for the `HeicDecoder` port: a libvips/libheif build with libde265 in a worker, or an image service (e.g. Cloudflare Images). Dev and CI decode a test container only.
+- [ ] **Cloudflare Stream (P4-5):** when the account exists, set `VIDEO_HOST=cloudflare_stream`, `CLOUDFLARE_STREAM_ACCOUNT_ID`, `CLOUDFLARE_STREAM_API_TOKEN`; the adapter is a stub until then (links only).
+- [ ] **Uploader names are shown to other guests** next to their published photos (behind the site password). Confirm, or ask for photos without names.

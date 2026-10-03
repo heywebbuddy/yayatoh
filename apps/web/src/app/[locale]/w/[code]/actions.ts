@@ -30,6 +30,24 @@ export async function unlockSiteAction(
   _prev: UnlockState,
   form: FormData,
 ): Promise<UnlockState> {
+  return unlock(code, form, '');
+}
+
+/** M4.5b: the same gate on the gallery and slideshow pages, coming back to that page. */
+export async function unlockSiteThenAction(
+  code: string,
+  then: 'gallery' | 'slideshow',
+  _prev: UnlockState,
+  form: FormData,
+): Promise<UnlockState> {
+  return unlock(code, form, then === 'gallery' ? '/gallery' : '/slideshow');
+}
+
+async function unlock(
+  code: string,
+  form: FormData,
+  then: '' | '/gallery' | '/slideshow',
+): Promise<UnlockState> {
   const stamp = Date.now();
   const password = String(form.get('password') ?? '').slice(0, SITE_PASSWORD_MAX * 4);
   const target = await guestSiteTarget(code);
@@ -59,5 +77,5 @@ export async function unlockSiteAction(
   }
   if (!access) return { error: 'wrong', stamp, ...(limit.allowed ? {} : { challenge: true }) };
   await rememberSiteAccess(code, access);
-  return redirect({ href: `/w/${code}`, locale });
+  return redirect({ href: `/w/${code}${then}`, locale });
 }

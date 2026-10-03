@@ -19,6 +19,7 @@ export {
 } from './fixtures.ts';
 export { type GuestCheckinScenario, guestCheckinScenario } from './guest-checkin.ts';
 export { type GuestSeatScenario, guestSeatScenario } from './guest-seat-finder.ts';
+export { enableGallery, guestGalleryPhoto, guestSiteAccess, hostGalleryPhoto, putToSlot } from './gallery.ts';
 export { GUEST_SITE_PASSWORD, type GuestSiteScenario, guestSiteScenario } from './guest-site.ts';
 export { quietDevice, revokeDevice } from './live.ts';
 export {
