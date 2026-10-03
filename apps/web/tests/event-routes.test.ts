@@ -91,7 +91,8 @@ describe('event console route sweep (M4.2a)', () => {
     if (calls.length === 0) {
       // Helpers that load for a page (the program pages) take the section themselves; the
       // Badges helper loads its own section (asserted in the next test).
-      if (section === 'badges') expect(src).toMatch(/loadBadgesPage\(org, event\)/);
+      // M5.5b's printing pages load through `loadPrintingPage`, which goes through `loadBadgesPage`.
+      if (section === 'badges') expect(src).toMatch(/load(Badges|Printing)Page\(org, event\)/);
       else expect(src).toMatch(/loadProgramPage\(org, event, '(sessions|speakers|exhibitors|sponsors)'\)/);
       return;
     }
@@ -101,6 +102,12 @@ describe('event console route sweep (M4.2a)', () => {
   it('the Badges page helper loads the badges section', () => {
     const src = readFileSync(join(__dirname, '../src/server/badges.ts'), 'utf8');
     expect([...src.matchAll(/loadEvent\(([^)]*)\)/g)].map((m) => m[1])).toEqual(["org, event, 'badges'"]);
+  });
+
+  it('the printing pages helper loads through the Badges page helper (M5.5b)', () => {
+    const src = readFileSync(join(__dirname, '../src/server/printing.ts'), 'utf8');
+    expect(src).not.toMatch(/loadEvent(Base)?\(/);
+    expect([...src.matchAll(/loadBadgesPage\(([^)]*)\)/g)].map((m) => m[1])).toEqual(['org, event']);
   });
 
   it('the placeholder page resolves only nav items, gated by who may open them', () => {
