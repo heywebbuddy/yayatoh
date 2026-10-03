@@ -97,7 +97,7 @@ export default async function RegistrationFormPage({
         description={t('description')}
         actions={
           form ? (
-            <p className="text-caption text-zinc-600">
+            <p className="text-caption text-ink-2">
               {t('summary', {
                 version: form.version,
                 submitted: form.submitted,
@@ -108,7 +108,7 @@ export default async function RegistrationFormPage({
         }
       />
       {ev.status === 'published' && pages.length > 0 ? (
-        <p className="text-body text-zinc-600">
+        <p className="text-body text-ink-2">
           {t('publicLink')}{' '}
           <Link href={`/events/${ev.slug}/registration-form`} className="underline underline-offset-2">
             {t('publicLinkText')}
@@ -132,8 +132,8 @@ export default async function RegistrationFormPage({
                     <div className="flex flex-wrap items-start gap-3">
                       <div className="flex min-w-0 flex-1 flex-col">
                         <h3 className="text-section">{t('pageNumbered', { n: pi + 1, title: p.title })}</h3>
-                        {p.description ? <p className="text-body text-zinc-600">{p.description}</p> : null}
-                        <p className="text-caption text-zinc-600">
+                        {p.description ? <p className="text-body text-ink-2">{p.description}</p> : null}
+                        <p className="text-caption text-ink-2">
                           {[audience(p.registrationTypes), conditionText(p.showIf) ?? t('shownAlways')].join(
                             ' · ',
                           )}
@@ -166,14 +166,14 @@ export default async function RegistrationFormPage({
                     </div>
                     <ol
                       aria-label={t('questionsOf', { title: p.title })}
-                      className="flex list-none flex-col divide-y divide-zinc-100 rounded-card border border-zinc-200 p-0"
+                      className="flex list-none flex-col divide-y divide-line rounded-card border border-line p-0"
                     >
                       {p.fields.map((f, fi) => (
                         <li key={f.key} className="flex flex-col gap-2 px-4 py-3">
                           <div className="flex flex-wrap items-center gap-3">
                             <span className="flex min-w-0 flex-1 flex-col">
                               <span>{f.label}</span>
-                              <span className="text-caption text-zinc-600">
+                              <span className="text-caption text-ink-2">
                                 {[
                                   t(`types.${f.type}`),
                                   f.required ? t('requiredBadge') : null,
@@ -212,7 +212,7 @@ export default async function RegistrationFormPage({
                             ) : null}
                           </div>
                           {canWrite ? (
-                            <details className="rounded-card bg-zinc-50 px-3 py-2">
+                            <details className="rounded-card bg-surface-2 px-3 py-2">
                               <summary className="min-h-6 cursor-pointer text-body">
                                 {t('questionSettings', { label: f.label })}
                               </summary>
@@ -235,7 +235,7 @@ export default async function RegistrationFormPage({
                     </ol>
                     {canWrite ? (
                       <>
-                        <details className="rounded-card border border-zinc-200 px-4 py-3">
+                        <details className="rounded-card border border-line px-4 py-3">
                           <summary className="min-h-6 cursor-pointer text-body">
                             {t('pageSettings', { title: p.title })}
                           </summary>
@@ -252,7 +252,7 @@ export default async function RegistrationFormPage({
                             />
                           </div>
                         </details>
-                        <details className="rounded-card border border-zinc-200 px-4 py-3">
+                        <details className="rounded-card border border-line px-4 py-3">
                           <summary className="min-h-6 cursor-pointer text-body">
                             {t('addQuestionTo', { title: p.title })}
                           </summary>
@@ -315,7 +315,7 @@ export default async function RegistrationFormPage({
           {canWrite ? (
             <JobTitlesForm action={bind(setJobTitlesAction)} titles={jobTitles} />
           ) : jobTitles.length === 0 ? (
-            <p className="text-body text-zinc-600">{t('jobTitlesEmpty')}</p>
+            <p className="text-body text-ink-2">{t('jobTitlesEmpty')}</p>
           ) : (
             <ul className="flex list-disc flex-col gap-1 ps-5">
               {jobTitles.map((j) => (

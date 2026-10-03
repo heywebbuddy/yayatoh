@@ -183,11 +183,16 @@ test('the page lays out with logical properties (right to left)', async ({ page 
   const who = await page.getByText('Omar Ops · Admin', { exact: true }).boundingBox();
   const product = await page.locator('header').getByText('Yayatoh staff', { exact: true }).boundingBox();
   expect(nav && who && product).toBeTruthy();
-  // `ms-auto` pushes "signed in as" to the inline end: the left side when right to left. Batch 3c
-  // merge: the staff nav now fills a row of its own (openSignup, incidents, front door,
-  // maintenance…), so the reference is the product name at the inline start of the header.
-  if (who && product && (page.viewportSize()?.width ?? 0) >= 1024)
-    expect(who.x + who.width).toBeLessThan(product.x);
+  // ADR 0022: on wide screens the staff sidebar sits at the inline start, so right to left it is
+  // on the right, and the console's content (the page heading) lies to its left.
+  const width = page.viewportSize()?.width ?? 0;
+  if (nav && who && product && width >= 1024) {
+    expect(nav.x).toBeGreaterThan(width / 2);
+    const heading = await page.getByRole('heading', { level: 1 }).boundingBox();
+    expect((heading?.x ?? 0) + (heading?.width ?? 0)).toBeLessThan(nav.x);
+    // Within the sidebar, text starts at the right edge: the product name is right-aligned.
+    expect(product.x + product.width).toBeGreaterThan(nav.x + nav.width / 2);
+  }
   const overflow = await page.evaluate(
     () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
   );

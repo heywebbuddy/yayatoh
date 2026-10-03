@@ -1,9 +1,9 @@
 import { executeQuery } from '@yayatoh/kernel';
 import { type SpeakerChangeDto, speakerChangesQuery } from '@yayatoh/program';
-import { Card, EmptyState, PageHeader, StatusDot } from '@yayatoh/ui';
+import { Alert, Card, EmptyState, PageHeader, StatusDot } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { Crumbs } from '@/components/crumbs.tsx';
 import { DecideForm } from '@/components/portal-admin-forms.tsx';
-import { Link } from '@/i18n/navigation.ts';
 import { formatMoment } from '@/lib/portal-format.ts';
 import { ports } from '@/server/ports.ts';
 import { loadProgramPage } from '@/server/program.ts';
@@ -31,6 +31,7 @@ export default async function SpeakerChangesPage({
   setRequestLocale(locale);
   const { data, ev, canWrite } = await loadProgramPage(org, event, 'speakers');
   const t = await getTranslations('speakerChanges');
+  const tn = await getTranslations('nav');
   const tf = await getTranslations('speakerChanges.fields');
   const { pending, decided } = await executeQuery(speakerChangesQuery, { eventId: ev.id }, data.ctx, ports);
   const target = (c: SpeakerChangeDto) =>
@@ -41,14 +42,14 @@ export default async function SpeakerChangesPage({
     <dl className="flex flex-col gap-3">
       {c.changes.map((x) => (
         <div key={x.field} className="flex flex-col gap-1">
-          <dt className="text-caption font-medium text-zinc-700">{tf(x.field)}</dt>
+          <dt className="text-caption font-medium text-ink-2">{tf(x.field)}</dt>
           <dd className="grid gap-2 md:grid-cols-2">
-            <div className="rounded-card border border-zinc-200 bg-zinc-50 p-2">
-              <p className="text-label uppercase text-zinc-500">{t('before')}</p>
+            <div className="rounded-tile border border-line bg-surface-2 px-3.5 py-3">
+              <p className="text-label uppercase text-ink-2">{t('before')}</p>
               <p className="whitespace-pre-line break-words text-body">{show(x.before, t('empty'))}</p>
             </div>
-            <div className="rounded-card border border-zinc-300 bg-white p-2">
-              <p className="text-label uppercase text-zinc-500">{t('after')}</p>
+            <div className="rounded-tile border border-primary bg-primary-soft px-3.5 py-3">
+              <p className="text-label uppercase text-ink-2">{t('after')}</p>
               <p className="whitespace-pre-line break-words text-body">{show(x.after, t('empty'))}</p>
             </div>
           </dd>
@@ -56,7 +57,7 @@ export default async function SpeakerChangesPage({
       ))}
       {c.photoFileId ? (
         <div className="flex flex-col gap-1">
-          <dt className="text-caption font-medium text-zinc-700">{tf('photo')}</dt>
+          <dt className="text-caption font-medium text-ink-2">{tf('photo')}</dt>
           <dd>
             <a
               href={`/api/portal-files/${org}/${c.photoFileId}`}
@@ -74,15 +75,20 @@ export default async function SpeakerChangesPage({
   return (
     <>
       <PageHeader
-        eyebrow={
-          <Link href={`/o/${org}/e/${event}/speakers`} className="text-caption underline underline-offset-2">
-            {t('back')}
-          </Link>
+        breadcrumb={
+          <Crumbs
+            items={[
+              { label: data.org.name, href: `/o/${org}` },
+              { label: ev.name, href: `/o/${org}/e/${event}` },
+              { label: tn('speakers'), href: `/o/${org}/e/${event}/speakers` },
+              { label: t('title') },
+            ]}
+          />
         }
         title={t('title')}
         description={t('subtitle')}
       />
-      {canWrite ? null : <p className="text-body text-zinc-500">{t('viewerNotice')}</p>}
+      {canWrite ? null : <Alert tone="info" title={t('viewerNotice')} />}
       <section aria-labelledby="pending-heading" className="flex flex-col gap-3">
         <h2 id="pending-heading" className="text-section">
           {t('pendingHeading', { count: pending.length })}
@@ -95,12 +101,12 @@ export default async function SpeakerChangesPage({
               <li key={c.id}>
                 <Card className="flex flex-col gap-3">
                   <h3 className="text-body font-medium">{target(c)}</h3>
-                  <p className="text-caption text-zinc-600">
+                  <p className="text-caption text-ink-2">
                     {t('sentAt', { date: formatMoment(c.createdAt, locale, ev.timezone) })}
                   </p>
                   {diff(c)}
                   {c.stale.length ? (
-                    <p className="text-caption text-pink-700">
+                    <p className="text-caption text-danger">
                       {t('stale', { fields: c.stale.map((f) => tf(f)).join(', ') })}
                     </p>
                   ) : null}
@@ -125,7 +131,7 @@ export default async function SpeakerChangesPage({
           {t('decidedHeading')}
         </h2>
         {decided.length === 0 ? (
-          <p className="text-body text-zinc-600">{t('noneDecided')}</p>
+          <p className="text-body text-ink-2">{t('noneDecided')}</p>
         ) : (
           <ul className="flex list-none flex-col gap-2 p-0">
             {decided.map((c) => (
@@ -136,7 +142,7 @@ export default async function SpeakerChangesPage({
                   label={c.status === 'approved' ? t('approved') : t('rejected')}
                 />
                 {c.decidedAt ? (
-                  <span className="text-caption text-zinc-600">
+                  <span className="text-caption text-ink-2">
                     {formatMoment(c.decidedAt, locale, ev.timezone)}
                   </span>
                 ) : null}

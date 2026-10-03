@@ -237,7 +237,9 @@ describe('seat finder settings (M1.7e)', () => {
     expect(await settings(true, 'code')).toEqual({ publicMap: true, mode: 'code' });
     // The venue map: the plan as drawn and the lookup mode, nothing about people.
     const map = await executeQuery(publicVenueMapQuery, { eventId }, anon(), ports);
-    expect(Object.keys(map ?? {}).sort()).toEqual(['doc', 'mode']);
+    // M4.2b: plus the published table sponsors (none here).
+    expect(Object.keys(map ?? {}).sort()).toEqual(['doc', 'mode', 'sponsors']);
+    expect(map?.sponsors).toEqual([]);
     expect(map?.doc.items.map((i) => (i.kind === 'object' ? i.objectType : i.kind))).toEqual([
       'stage',
       'entrance',
@@ -408,7 +410,15 @@ describe('one-time codes', () => {
     expect(mine).toEqual({
       found: true,
       seats: [
-        { seatUuid: table.seats[2]?.id, itemId: table.id, itemKind: 'table', itemLabel: '1', seatLabel: '3' },
+        {
+          seatUuid: table.seats[2]?.id,
+          itemId: table.id,
+          itemKind: 'table',
+          itemLabel: '1',
+          seatLabel: '3',
+          sponsor: null,
+          sponsorLogoUrl: null,
+        },
       ],
       unseated: 0,
     });

@@ -37,10 +37,7 @@ export default async function NewEntryPage({
           />
         </Card>
       ) : (
-        <p
-          role="alert"
-          className="rounded-card border border-zinc-200 bg-white px-4 py-3 text-body text-zinc-700"
-        >
+        <p role="alert" className="rounded-card border border-line bg-surface px-4 py-3 text-body text-ink-2">
           {t('notAllowed')}
         </p>
       )}

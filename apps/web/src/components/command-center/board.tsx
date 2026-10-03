@@ -1,7 +1,7 @@
 'use client';
 
 import { moveWidget, type WidgetChannel, type WidgetKey } from '@yayatoh/command-center/client';
-import { Button, Card, cx, Label, StatusDot } from '@yayatoh/ui';
+import { Button, Card, cx, Skeleton, SkeletonText, StatusDot } from '@yayatoh/ui';
 import { ArrowDown, ArrowUp, Eye, EyeOff, GripVertical } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -305,7 +305,7 @@ export function CommandCenterBoard({
         />
       ))}
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h2 id="cc-widgets" className="text-section">
+        <h2 id="cc-widgets" className="text-card">
           {t('widgets')}
         </h2>
         <div className="flex flex-wrap items-center gap-3">
@@ -334,14 +334,14 @@ export function CommandCenterBoard({
       <p
         role="status"
         aria-live="polite"
-        className={cx('text-caption', failed ? 'text-pink-700' : 'text-zinc-600')}
+        className={cx('text-caption', failed ? 'text-danger' : 'text-ink-2')}
       >
         {message}
       </p>
       {visible.length === 0 ? (
         <Card className="text-center">
           <p className="text-section">{t('empty.title')}</p>
-          <p className="text-body text-zinc-600">{t('empty.description')}</p>
+          <p className="text-body text-ink-2">{t('empty.description')}</p>
         </Card>
       ) : (
         <ol
@@ -358,16 +358,14 @@ export function CommandCenterBoard({
             >
               <Card className="flex h-full flex-col gap-3">
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <h3 className="m-0">
-                    <Label>{title(k)}</Label>
-                  </h3>
+                  <h3 className="m-0 text-body font-bold tracking-normal text-ink-2">{title(k)}</h3>
                   {customizing ? (
                     <div className="flex items-center gap-1">
                       <span
                         draggable
                         onDragStart={() => setDragging(k)}
                         onDragEnd={() => setDragging(null)}
-                        className="inline-flex size-7 cursor-grab items-center justify-center rounded-pill text-zinc-500"
+                        className="inline-flex size-8 cursor-grab items-center justify-center rounded-[10px] text-ink-2 hover:bg-surface-3"
                         title={t('drag', { widget: title(k) })}
                         aria-hidden="true"
                       >
@@ -406,9 +404,13 @@ export function CommandCenterBoard({
                   ) : null}
                 </div>
                 {data[k] === undefined ? (
-                  <p className="text-caption text-zinc-500">{t('loading')}</p>
+                  <div role="status" className="flex flex-col gap-3">
+                    <span className="sr-only">{t('loading')}</span>
+                    <Skeleton className="h-9 w-1/2" />
+                    <SkeletonText lines={2} />
+                  </div>
                 ) : data[k] === null ? (
-                  <p className="text-caption text-zinc-600">{t('unavailable')}</p>
+                  <p className="text-caption text-ink-2">{t('unavailable')}</p>
                 ) : (
                   <WidgetBody widget={k} data={data[k]} ctx={ctx} controls={controls(k)} />
                 )}
@@ -436,7 +438,7 @@ export function CommandCenterBoard({
                 ))}
             </ul>
           ) : (
-            <p className="text-caption text-zinc-600">{t('hiddenNone')}</p>
+            <p className="text-caption text-ink-2">{t('hiddenNone')}</p>
           )}
         </section>
       ) : null}

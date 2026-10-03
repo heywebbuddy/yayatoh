@@ -13,6 +13,8 @@ import * as commandCenter from '@yayatoh/command-center';
 import * as crm from '@yayatoh/crm';
 import { withTenant } from '@yayatoh/db';
 import { closePools } from '@yayatoh/db/testing';
+import * as donations from '@yayatoh/donations';
+import * as engagement from '@yayatoh/engagement';
 import * as events from '@yayatoh/events';
 import * as forms from '@yayatoh/forms';
 import * as guests from '@yayatoh/guests';
@@ -94,6 +96,9 @@ const MODULES = {
   checkin,
   cms,
   crm,
+  engagement,
+  // M4.8a: gifts, campaigns and the gift CSV.
+  donations,
   events,
   forms,
   marketplace,
@@ -180,6 +185,8 @@ describe('impersonation: the pipeline refuses money, export and delete (M1.2e)',
         'surveys.startResponsesCsv',
         // Waitlist CSV (M3.10a).
         'orders.startWaitlistCsv',
+        // Gift CSV (M4.8a).
+        'donations.startGiftsCsv',
       ]),
     );
     const files = [...queries.values()].filter((q) => q.category === 'export').map((q) => q.name);
@@ -193,6 +200,7 @@ describe('impersonation: the pipeline refuses money, export and delete (M1.2e)',
         'reports.disputeEvidencePacket',
         'surveys.responsesCsvFile',
         'orders.waitlistCsvFile',
+        'donations.giftsCsvFile',
       ]),
     );
     const money = flagged.filter((c) => c.category === 'money').map((c) => c.name);
@@ -208,6 +216,9 @@ describe('impersonation: the pipeline refuses money, export and delete (M1.2e)',
         'payments.recordTransfer',
         'payments.recordTransferReversal',
         'payments.releaseDueSettlements',
+        // M5.1d: recording an invoice payment, voiding an invoice.
+        'orders.recordInvoicePayment',
+        'orders.voidInvoice',
       ]),
     );
     expect(flagged.filter((c) => c.category === 'delete').map((c) => c.name)).toEqual(
@@ -222,6 +233,8 @@ describe('impersonation: the pipeline refuses money, export and delete (M1.2e)',
         'media.removeSpeakerPhoto',
         'media.removeExhibitorLogo',
         'media.removeSponsorLogo',
+        // Live polls (M5.7a).
+        'engagement.deletePoll',
         'program.deleteSession',
         'cms.deleteEntry',
         // Account erasure's per-org part (M1.14e; run by the platform, never as a member).
@@ -233,6 +246,10 @@ describe('impersonation: the pipeline refuses money, export and delete (M1.2e)',
         'orders.removePush',
         // A date's own seating chart goes, with the guests seated on it (M1.7g).
         'seating.removeDateChart',
+        // A giving level (M4.8a; its gifts stay).
+        'donations.deleteLevel',
+        // The daily retention pass erases donors of lapsed gifts (M4.8a; platform only).
+        'donations.retention',
       ]),
     );
   });

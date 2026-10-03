@@ -2,7 +2,8 @@ import { addAttendeeLabelsTx, eventAttendeesTx, participationAttendeesTx } from 
 import { admittedTicketIdsTx } from '@yayatoh/checkin';
 import { contactByIdTx } from '@yayatoh/crm';
 import { type TenantTx, withTenant } from '@yayatoh/db';
-import { seriesEditionsTx } from '@yayatoh/events';
+import { findEventTx, seriesEditionsTx } from '@yayatoh/events';
+import { partyAnsweredTx, queuePartyMessageTx } from '@yayatoh/guests';
 import {
   type CommandPorts,
   type Ctx,
@@ -10,19 +11,22 @@ import {
   DomainError,
   type DomainEvent,
   executeCommand,
+  formatMoney,
   isDomainError,
+  money,
   requireOrg,
 } from '@yayatoh/kernel';
 import { hasPushDeviceTx } from '@yayatoh/notifications';
+import { invoiceFactsTx, invoicePath } from '@yayatoh/orders';
 import { type Notifier, tenantCommand } from '@yayatoh/platform';
 import { attendeeSeatLabelsTx } from '@yayatoh/seating';
 import { answeredEventSurveyTx, sendSurveyStepTx } from '@yayatoh/surveys';
-import { and, asc, eq, lte } from 'drizzle-orm';
+import { and, asc, eq, isNotNull, isNull, lte } from 'drizzle-orm';
 import { z } from 'zod';
 import { conditionHolds, factNeeded, type PersonFacts } from './domain/conditions.ts';
 import { fillPlaceholders, isMessageAction, type StepCondition } from './domain/journey.ts';
 import { MAX_ATTEMPTS, retryAt } from './domain/timing.ts';
-import { enrollTx, eventAnchorsTx, settleRunsTx } from './lifecycle.ts';
+import { cancelRunsTx, enrollTx, eventAnchorsTx, runsOfParty, settleRunsTx } from './lifecycle.ts';
 import { journeyRuns, journeySteps, journeys, scheduledActions } from './schema.ts';
 
 /**
@@ -41,6 +45,11 @@ import { journeyRuns, journeySteps, journeys, scheduledActions } from './schema.
 
 export interface RunnerDeps {
   readonly notifier: Notifier;
+  /**
+   * The app's origin, for links in messages (M4.1f RSVP reminders carry the party's link; M5.1d
+   * invoice reminders link to the buyer's invoice page). None: no link.
+   */
+  readonly appOrigin?: string;
 }
 
 /** The failure alert (outbox): subscribe to `automations.journey_step_failed@1`. */
@@ -97,14 +106,22 @@ async function doStepTx(
   a: typeof scheduledActions.$inferSelect,
   run: typeof journeyRuns.$inferSelect,
   step: typeof journeySteps.$inferSelect,
-): Promise<{ status: 'done' | 'skipped'; outcome: string }> {
+): Promise<{ status: 'done' | 'skipped' | 'cancelled'; outcome: string }> {
+  if (a.partyId) return partyStepTx(tx, ctx, deps, a, step);
+  const contactId = a.contactId;
+  if (!contactId) throw new DomainError('internal', 'A step without a person');
+  // M5.1d: an invoice reminder only while the invoice is still open with something due.
+  const invoice =
+    run.trigger === 'invoice_issued' && run.orderId ? await invoiceFactsTx(tx, run.orderId) : null;
+  if (run.trigger === 'invoice_issued' && (invoice?.status !== 'open' || invoice.balanceMinor <= 0))
+    return { status: 'skipped', outcome: 'invoice_settled' };
   const condition = step.condition as StepCondition | null;
   if (condition) {
-    const facts = await personFactsTx(tx, a.eventId, run.occurrenceId, a.contactId, factNeeded(condition));
+    const facts = await personFactsTx(tx, a.eventId, run.occurrenceId, contactId, factNeeded(condition));
     if (!conditionHolds(condition, facts)) return { status: 'skipped', outcome: 'condition_not_met' };
   }
   if (step.action === 'label') {
-    const places = (await participationAttendeesTx(tx, a.eventId, [a.contactId])).filter(
+    const places = (await participationAttendeesTx(tx, a.eventId, [contactId])).filter(
       (p) => p.status === 'active',
     );
     if (places.length === 0) return { status: 'skipped', outcome: 'not_attending' };
@@ -120,7 +137,7 @@ async function doStepTx(
       : { status: 'skipped', outcome: 'too_many_labels' };
   }
   if (step.action === 'survey') {
-    const person = (await eventAttendeesTx(tx, a.eventId)).find((p) => p.contactId === a.contactId);
+    const person = (await eventAttendeesTx(tx, a.eventId)).find((p) => p.contactId === contactId);
     if (!person) return { status: 'skipped', outcome: 'not_attending' };
     const r = await sendSurveyStepTx(tx, ctx, emit, a.eventId, { attendeeId: person.id });
     return r.status === 'invited'
@@ -128,7 +145,7 @@ async function doStepTx(
       : { status: 'skipped', outcome: r.reason };
   }
   if (!isMessageAction(step.action)) throw new DomainError('internal', `Unknown step action ${step.action}`);
-  const person = await contactByIdTx(tx, a.contactId);
+  const person = await contactByIdTx(tx, contactId);
   if (!person) return { status: 'skipped', outcome: 'no_address' };
   const anchors = await eventAnchorsTx(tx, a.eventId, run.occurrenceId);
   if (!anchors) return { status: 'skipped', outcome: 'event_missing' };
@@ -143,7 +160,22 @@ async function doStepTx(
     timeStyle: 'short',
     timeZone: anchors.timeZone,
   }).format(anchors.eventStart);
-  const values = { name: person.name ?? '', event: anchors.eventName, when };
+  const ev = invoice ? await findEventTx(tx, a.eventId) : null;
+  const values = {
+    name: person.name ?? '',
+    event: anchors.eventName,
+    when,
+    ...(invoice
+      ? {
+          invoice: invoice.label,
+          balance: formatMoney(money(invoice.balanceMinor, invoice.currency), run.locale),
+          due: new Intl.DateTimeFormat(run.locale, { dateStyle: 'long', timeZone: 'UTC' }).format(
+            new Date(`${invoice.dueOn}T00:00:00Z`),
+          ),
+          link: deps.appOrigin && ev ? `${deps.appOrigin}${invoicePath(ev.slug, invoice.invoiceId)}` : '',
+        }
+      : {}),
+  };
   const r = await deps.notifier.enqueue(tx, {
     kind: 'automations.message',
     channels: [channel],
@@ -169,13 +201,61 @@ async function doStepTx(
   return { status: 'done', outcome: r.queued > 0 ? 'queued' : 'already_queued' };
 }
 
+/**
+ * A step of a party run (M4.1f RSVP reminders): once the party answered, the run stops (the step
+ * and every later one are cancelled, `responded`); otherwise the party's reminder is queued on
+ * the step's channel through guests (transactional, quiet hours in the event's timezone), under
+ * the action's key. A party without an address on that channel is skipped.
+ */
+async function partyStepTx(
+  tx: TenantTx,
+  ctx: Ctx,
+  deps: RunnerDeps,
+  a: typeof scheduledActions.$inferSelect,
+  step: typeof journeySteps.$inferSelect,
+): Promise<{ status: 'done' | 'skipped' | 'cancelled'; outcome: string }> {
+  const partyId = a.partyId as string;
+  if (await partyAnsweredTx(tx, partyId)) {
+    await cancelRunsTx(tx, runsOfParty(a.eventId, partyId), 'responded', ctx.now);
+    return { status: 'cancelled', outcome: 'responded' };
+  }
+  if (step.action !== 'email' && step.action !== 'sms') return { status: 'skipped', outcome: 'unsupported' };
+  if (!deps.appOrigin) throw new DomainError('internal', 'RSVP reminders need the app origin');
+  const r = await queuePartyMessageTx(
+    tx,
+    { notifier: deps.notifier, appOrigin: deps.appOrigin },
+    {
+      orgId: requireOrg(ctx),
+      now: ctx.now,
+      eventId: a.eventId,
+      partyId,
+      kind: 'reminder',
+      channel: step.action,
+      dedupeKey: a.idempotencyKey,
+    },
+  );
+  return r.queued ? { status: 'done', outcome: 'queued' } : { status: 'skipped', outcome: r.reason };
+}
+
 /** Run one due step (system actor only). Returns `busy` when another runner holds it or it isn't due. */
 export function runScheduledActionCommand(deps: RunnerDeps) {
+  return stepCommand(deps, 'automations.runScheduledAction', 'marketing', false);
+}
+
+/**
+ * Run one due step of a party run (M4.1f RSVP reminders): the same runner under the `guests`
+ * entitlement, so a wedding org without the marketing module still gets its reminders.
+ */
+export function runPartyActionCommand(deps: RunnerDeps) {
+  return stepCommand(deps, 'automations.runPartyAction', 'guests', true);
+}
+
+function stepCommand(deps: RunnerDeps, name: string, entitlement: 'marketing' | 'guests', party: boolean) {
   return tenantCommand({
-    name: 'automations.runScheduledAction',
+    name,
     input: z.object({ actionId: z.uuid() }),
     output: RunOutput,
-    entitlement: 'marketing',
+    entitlement,
     permission: 'platform:automations.run',
     handler: async ({ input, ctx, tx, emit }): Promise<RunOutcome & { journeyId?: string }> => {
       const [a] = await tx
@@ -186,6 +266,7 @@ export function runScheduledActionCommand(deps: RunnerDeps) {
             eq(scheduledActions.id, input.actionId),
             eq(scheduledActions.status, 'pending'),
             lte(scheduledActions.dueAt, ctx.now),
+            party ? isNotNull(scheduledActions.partyId) : isNull(scheduledActions.partyId),
           ),
         )
         .for('update', { skipLocked: true });
@@ -365,24 +446,33 @@ export async function runDueActions(
   const now = opts.now ?? new Date();
   const ctx = createCtx({ orgId, actor: { type: 'system', name: 'automations.runner' }, now });
   const result: RunDueResult = { enrolled: 0, done: 0, skipped: 0, cancelled: 0, retried: 0, failed: 0 };
+  // Without the marketing module only party runs (M4.1f RSVP reminders, the guests module) run.
+  let marketing = true;
   try {
     result.enrolled = (await executeCommand(enrollEventTimeCommand, {}, ctx, ports)).enrolled;
   } catch (err) {
     if (!isDomainError(err) || err.code !== 'module_not_enabled') throw err;
-    return result;
+    marketing = false;
   }
   const due = await withTenant(ctx, (tx) =>
     tx
-      .select({ id: scheduledActions.id })
+      .select({ id: scheduledActions.id, partyId: scheduledActions.partyId })
       .from(scheduledActions)
-      .where(and(eq(scheduledActions.status, 'pending'), lte(scheduledActions.dueAt, now)))
+      .where(
+        and(
+          eq(scheduledActions.status, 'pending'),
+          lte(scheduledActions.dueAt, now),
+          marketing ? undefined : isNotNull(scheduledActions.partyId),
+        ),
+      )
       .orderBy(asc(scheduledActions.dueAt), asc(scheduledActions.id))
       .limit(opts.limit ?? 200),
   );
   const command = runScheduledActionCommand(deps);
-  for (const { id } of due) {
+  const partyCommand = runPartyActionCommand(deps);
+  for (const { id, partyId } of due) {
     try {
-      const r = await executeCommand(command, { actionId: id }, ctx, ports);
+      const r = await executeCommand(partyId ? partyCommand : command, { actionId: id }, ctx, ports);
       if (r.status === 'done') result.done += 1;
       else if (r.status === 'skipped') result.skipped += 1;
       else if (r.status === 'cancelled') result.cancelled += 1;

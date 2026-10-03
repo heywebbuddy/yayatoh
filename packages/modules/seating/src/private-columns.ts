@@ -18,4 +18,6 @@ export const privateColumns = columnPrivacy('seating', {
   seating_rules: { kind: 'vocab', severity: 'vocab', params: internal() },
   // A sub-event's own drawing (M4.1c): the host's, shown to nobody outside the console yet.
   sub_event_charts: { doc: internal(), checksum: 'vocab' },
+  // M4.2b hosted tables: guests see the sponsor once the host publishes it (seat finder, map).
+  table_sponsors: { sponsor_name: 'public', logo_url: 'public' },
 });

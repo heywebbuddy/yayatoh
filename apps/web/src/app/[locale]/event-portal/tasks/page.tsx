@@ -1,5 +1,5 @@
 import { PORTAL_FILE_MAX_BYTES } from '@yayatoh/media';
-import { Card, EmptyState, StatusDot } from '@yayatoh/ui';
+import { Card, EmptyState, StatusPill } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { completeTaskAction } from '@/app/[locale]/event-portal/actions.ts';
@@ -50,20 +50,20 @@ export default async function SpeakerTasksPage({ params }: { params: Promise<{ l
               <li key={x.assigneeId}>
                 <Card className="flex flex-col gap-3">
                   <div className="flex flex-wrap items-center justify-between gap-2">
-                    <h2 className="text-section">{x.title}</h2>
-                    <StatusDot
-                      status={x.status === 'done' ? 'success' : overdue ? 'danger' : 'neutral'}
+                    <h2 className="m-0 text-card text-ink">{x.title}</h2>
+                    <StatusPill
+                      tone={x.status === 'done' ? 'success' : overdue ? 'danger' : 'waiting'}
                       label={x.status === 'done' ? t('done') : overdue ? t('overdue') : t('open')}
                     />
                   </div>
-                  <p className="text-caption text-zinc-600">
+                  <p className="text-caption text-ink-2">
                     {x.status === 'done' && x.completedAt
                       ? t('completedOn', { date: formatMoment(x.completedAt, locale, tz) })
                       : t('due', { date: formatMoment(x.dueAt, locale, tz) })}
                   </p>
                   {x.instructions ? <p className="whitespace-pre-line text-body">{x.instructions}</p> : null}
                   {x.fileName ? (
-                    <p className="text-caption text-zinc-600">{t('yourFile', { name: x.fileName })}</p>
+                    <p className="text-caption text-ink-2">{t('yourFile', { name: x.fileName })}</p>
                   ) : null}
                   {x.status === 'open' && x.kind === 'upload' ? (
                     <PortalFileUpload
@@ -79,7 +79,7 @@ export default async function SpeakerTasksPage({ params }: { params: Promise<{ l
                     />
                   ) : null}
                   {x.kind === 'agreement' && x.agreementText ? (
-                    <div className="max-h-64 overflow-y-auto rounded-card border border-zinc-200 bg-zinc-50 p-3">
+                    <div className="max-h-64 overflow-y-auto rounded-card border border-line bg-surface-2 p-3">
                       <p className="whitespace-pre-line text-body">{x.agreementText}</p>
                     </div>
                   ) : null}

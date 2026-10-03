@@ -28,7 +28,7 @@
 ## Consequences
 - An axe violation is one of the M0.5 gate canaries.
 - 6 of the 13 locales are UCS-2 for SMS, which affects segment counting.
-- Fonts need CJK, Devanagari and Arabic fallbacks (ADR 0018).
+- Fonts need CJK, Devanagari and Arabic fallbacks. Since ADR 0022 the UI face is Manrope (Latin, Cyrillic), with self-hosted IBM Plex Sans Arabic and Noto Sans Devanagari loaded by `unicode-range`, and Noto Sans JP / SC / TC (then the platform CJK face) for Chinese and Japanese. All fonts are served from our origin through `next/font`, so the CSP is unchanged.
 - Translation ownership and launch locales are open decision D27.
 
 ## Revisit when

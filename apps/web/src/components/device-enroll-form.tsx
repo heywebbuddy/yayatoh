@@ -36,15 +36,10 @@ export function DeviceEnrollForm({
         </div>
         {staff.length > 0 ? (
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="device-assigned" className="text-caption text-zinc-600">
+            <label htmlFor="device-assigned" className="text-[13px] font-bold text-ink">
               {t('devices.handedTo')}
             </label>
-            <select
-              id="device-assigned"
-              name="assignedUserId"
-              defaultValue=""
-              className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
-            >
+            <select id="device-assigned" name="assignedUserId" defaultValue="" className="field">
               <option value="">{t('devices.orgDevice')}</option>
               {staff.map((m) => (
                 <option key={m.id} value={m.id}>
@@ -60,9 +55,9 @@ export function DeviceEnrollForm({
       </form>
       <div aria-live="polite">
         {state.kind === 'enrolled' ? (
-          <div className="flex flex-col gap-2 rounded-card border border-zinc-200 bg-zinc-50 p-4">
+          <div className="flex flex-col gap-2 rounded-card border border-line bg-surface-2 p-4">
             <p className="text-body">{t('devices.tokenOnce', { label: state.label })}</p>
-            <code className="break-all rounded-card bg-white px-3 py-2 font-mono text-caption">
+            <code className="break-all rounded-card bg-surface px-3 py-2 font-mono text-caption">
               {state.token}
             </code>
             <p className="text-body">{t('devices.linkHint')}</p>

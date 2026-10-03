@@ -1,12 +1,12 @@
 import { boothSize } from '@yayatoh/floorplan';
 import { executeQuery } from '@yayatoh/kernel';
 import { type BoothDto, boothPlanQuery } from '@yayatoh/program';
-import { Button, Card, Chip, EmptyState, PageHeader } from '@yayatoh/ui';
+import { Alert, Button, Card, Chip, EmptyState, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { BoothDragAssign } from '@/components/booth-drag-assign.tsx';
 import { BoothMap } from '@/components/booth-map.tsx';
+import { Crumbs } from '@/components/crumbs.tsx';
 import { type FieldSpec, ProgramForm, ScheduleWarning } from '@/components/program-form.tsx';
-import { Link } from '@/i18n/navigation.ts';
 import { boothWarningMessages } from '@/server/booths.ts';
 import { ports } from '@/server/ports.ts';
 import { loadProgramPage } from '@/server/program.ts';
@@ -35,10 +35,10 @@ export default async function BoothsPage({ params }: Params) {
   const { data, ev, program, canWrite } = await loadProgramPage(org, event, 'exhibitors');
   const plan = await executeQuery(boothPlanQuery, { eventId: ev.id }, data.ctx, ports);
   const t = await getTranslations('booths');
+  const tn = await getTranslations('nav');
   const tp = await getTranslations('program');
   const nameOf = (id: string) => program.exhibitors.find((x) => x.id === id)?.name ?? '—';
   const warnings = await boothWarningMessages(plan, nameOf);
-  const base = `/o/${org}/e/${event}`;
   const errors = {
     number: t('errors.number'),
     taken: t('errors.taken'),
@@ -97,16 +97,21 @@ export default async function BoothsPage({ params }: Params) {
   };
   return (
     <>
-      <nav aria-label={t('breadcrumb')}>
-        <Link
-          href={`${base}/exhibitors`}
-          className="inline-flex min-h-6 items-center text-caption text-zinc-600"
-        >
-          {t('back')}
-        </Link>
-      </nav>
-      <PageHeader title={t('title')} description={t('subtitle')} />
-      {canWrite ? null : <p className="text-body text-zinc-500">{tp('viewerNotice')}</p>}
+      <PageHeader
+        breadcrumb={
+          <Crumbs
+            items={[
+              { label: data.org.name, href: `/o/${org}` },
+              { label: ev.name, href: `/o/${org}/e/${event}` },
+              { label: tn('exhibitors'), href: `/o/${org}/e/${event}/exhibitors` },
+              { label: t('title') },
+            ]}
+          />
+        }
+        title={t('title')}
+        description={t('subtitle')}
+      />
+      {canWrite ? null : <Alert tone="info" title={tp('viewerNotice')} />}
 
       {warnings.length ? (
         <section aria-labelledby="booth-warnings-heading" className="flex flex-col gap-2">
@@ -159,9 +164,9 @@ export default async function BoothsPage({ params }: Params) {
                     <h3 className="text-body font-medium">{t('boothNamed', { number: b.number })}</h3>
                     {b.category ? <Chip tone="neutral">{b.category}</Chip> : null}
                   </div>
-                  <p className="text-caption text-zinc-600">{size(b)}</p>
+                  <p className="text-caption text-ink-2">{size(b)}</p>
                   {b.exhibitors.length === 0 ? (
-                    <p className="text-caption text-zinc-500">{t('unassigned')}</p>
+                    <p className="text-caption text-ink-2">{t('unassigned')}</p>
                   ) : (
                     <ul
                       className="flex list-none flex-col gap-1 p-0"
@@ -170,7 +175,7 @@ export default async function BoothsPage({ params }: Params) {
                       {b.exhibitors.map((e) => (
                         <li key={e.exhibitorId} className="flex flex-wrap items-center gap-2">
                           <span className="text-body">{nameOf(e.exhibitorId)}</span>
-                          <span className="text-caption text-zinc-600">
+                          <span className="text-caption text-ink-2">
                             {e.isPrimary ? t('primary') : t('coExhibitor')}
                           </span>
                           {canWrite ? (
@@ -194,8 +199,8 @@ export default async function BoothsPage({ params }: Params) {
                     </ul>
                   )}
                   {canWrite ? (
-                    <details className="border-t border-zinc-100 pt-2">
-                      <summary className="min-h-6 cursor-pointer text-caption text-zinc-600">
+                    <details className="border-t border-line pt-2">
+                      <summary className="min-h-6 cursor-pointer text-caption text-ink-2">
                         {t('editNamed', { number: b.number })}
                       </summary>
                       <div className="flex flex-col gap-3 pt-3">
@@ -261,7 +266,7 @@ export default async function BoothsPage({ params }: Params) {
                   }}
                 />
               ) : (
-                <p className="text-body text-zinc-600">{t('assignNeeds')}</p>
+                <p className="text-body text-ink-2">{t('assignNeeds')}</p>
               )}
             </Card>
           </section>

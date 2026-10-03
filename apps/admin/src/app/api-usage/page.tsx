@@ -13,13 +13,13 @@ export default async function ApiUsagePage() {
   return (
     <Shell staff={staff}>
       <PageHeader title={t('title')} description={t('description')} />
-      <p className="text-body text-zinc-600">{t('summary', { versions: clients.length })}</p>
+      <p className="text-body text-ink-2">{t('summary', { versions: clients.length })}</p>
       <Card className="p-0">
         {/* biome-ignore lint/a11y/noNoninteractiveTabindex: a scroll container must be focusable (axe scrollable-region-focusable) */}
         <section className="overflow-x-auto" tabIndex={0} aria-label={t('title')}>
           <table className="w-full text-start text-caption">
             <caption className="sr-only">{t('title')}</caption>
-            <thead className="text-zinc-500">
+            <thead className="text-ink-2">
               <tr>
                 {(['route', 'client', 'version', 'requests', 'lastDay'] as const).map((k) => (
                   <th
@@ -35,7 +35,7 @@ export default async function ApiUsagePage() {
             <tbody>
               {rows.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-4 py-8 text-center text-zinc-500">
+                  <td colSpan={5} className="px-4 py-8 text-center text-ink-2">
                     {t('empty')}
                   </td>
                 </tr>
@@ -43,7 +43,7 @@ export default async function ApiUsagePage() {
                 rows.map((r) => (
                   <tr
                     key={`${r.method} ${r.route} ${r.client} ${r.appVersion}`}
-                    className="border-t border-zinc-100"
+                    className="border-t border-line"
                   >
                     <td className="px-4 py-1.5 font-mono">
                       {r.method} {r.route}

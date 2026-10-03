@@ -83,7 +83,7 @@ export default async function CancelWizardPage({
                   />
                   <span className="flex flex-col">
                     <span>{t('wizard.cancelOption')}</span>
-                    <span className="text-caption text-zinc-500">
+                    <span className="text-caption text-ink-2">
                       {canRefund ? t('wizard.cancelHint') : t('wizard.cancelNoRefundHint')}
                     </span>
                   </span>
@@ -100,7 +100,7 @@ export default async function CancelWizardPage({
                   />
                   <span className="flex flex-col">
                     <span>{t('wizard.postponeOption')}</span>
-                    <span className="text-caption text-zinc-500">{t('wizard.postponeHint')}</span>
+                    <span className="text-caption text-ink-2">{t('wizard.postponeHint')}</span>
                   </span>
                 </label>
               ) : null}
@@ -137,7 +137,7 @@ export default async function CancelWizardPage({
                 ] as const
               ).map(([k, v]) => (
                 <div key={k} className="flex flex-col">
-                  <dt className="text-caption text-zinc-600">{t(`wizard.${k}`)}</dt>
+                  <dt className="text-caption text-ink-2">{t(`wizard.${k}`)}</dt>
                   <dd className="font-mono text-body tabular-nums">{v}</dd>
                 </div>
               ))}
@@ -292,7 +292,7 @@ async function RunCard({
             status={run.status === 'done' ? 'success' : run.status === 'paused' ? 'warning' : 'info'}
             label={t(`status.${run.status}`)}
           />
-          <span className="text-caption text-zinc-600">
+          <span className="text-caption text-ink-2">
             {t('started', { date: when.format(run.createdAt) })}
           </span>
         </div>
@@ -301,7 +301,7 @@ async function RunCard({
             value={run.processed}
             max={Math.max(run.total, 1)}
             aria-label={t('progressLabel')}
-            className="h-2 w-full accent-zinc-900"
+            className="h-2 w-full accent-primary"
           />
           <p className="text-body" aria-live="polite">
             {t('progress', { processed: run.processed, total: run.total })}
@@ -310,17 +310,17 @@ async function RunCard({
         <dl className="grid grid-cols-2 gap-x-6 gap-y-2 md:grid-cols-5">
           {counts.map(([k, v]) => (
             <div key={k} className="flex flex-col">
-              <dt className="text-caption text-zinc-600">{t(k)}</dt>
+              <dt className="text-caption text-ink-2">{t(k)}</dt>
               <dd className="font-mono text-body tabular-nums">{v}</dd>
             </div>
           ))}
           <div className="flex flex-col">
-            <dt className="text-caption text-zinc-600">{t('amount')}</dt>
+            <dt className="text-caption text-ink-2">{t('amount')}</dt>
             <dd className="font-mono text-body tabular-nums">{fmt(run.refundedMinor)}</dd>
           </div>
         </dl>
-        {run.status === 'running' ? <p className="text-caption text-zinc-600">{t('working')}</p> : null}
-        {run.status === 'paused' ? <p className="text-caption text-zinc-600">{t('paused')}</p> : null}
+        {run.status === 'running' ? <p className="text-caption text-ink-2">{t('working')}</p> : null}
+        {run.status === 'paused' ? <p className="text-caption text-ink-2">{t('paused')}</p> : null}
         {run.status !== 'done' ? (
           <StepUpForm
             action={steerRunAction.bind(
@@ -350,7 +350,7 @@ async function RunCard({
           )
         ) : null}
         {run.reconciliation && run.reconciliation.receivableMinor > 0 ? (
-          <p className="text-caption text-zinc-600">
+          <p className="text-caption text-ink-2">
             {t('receivable', { amount: fmt(run.reconciliation.receivableMinor) })}
           </p>
         ) : null}
