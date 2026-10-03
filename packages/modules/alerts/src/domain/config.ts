@@ -58,6 +58,8 @@ export const RULE_KEYS = [
   // Batch 3e merge: failed campaign sends (M3.6b) and dispute evidence deadlines (M3.10c).
   'campaignFailed',
   'disputeDeadline',
+  // M4.8e: pledges still unpaid 14 days after the event (P4-12).
+  'pledgesUnpaid',
 ] as const;
 export type RuleKey = (typeof RULE_KEYS)[number];
 
@@ -129,6 +131,7 @@ export const RULES: Readonly<Record<RuleKey, RuleDef>> = {
   automationFailed: rule('automationFailed', 'org', 'messaging', 'messages:read', '/messaging'),
   campaignFailed: rule('campaignFailed', 'org', 'messaging', 'marketing:read', '/campaigns'),
   disputeDeadline: rule('disputeDeadline', 'org', 'payments', 'finance:read', '/disputes'),
+  pledgesUnpaid: rule('pledgesUnpaid', 'event', 'payments', 'orders:read', '/e/{event}/donations/pledges'),
 };
 
 export const isRuleKey = (v: string): v is RuleKey => (RULE_KEYS as readonly string[]).includes(v);

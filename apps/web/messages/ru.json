@@ -76,9 +76,9 @@
         "org-status": "{status, select, suspended {Yayatoh приостановил эту организацию} reactivated {Эта организация снова в сети} other {Yayatoh закрыл эту организацию}}"
       },
       "alerts": {
-        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {{countWords} участник без места} few {{countWords} участника без мест} many {{countWords} участников без мест} other {{countWords} участника без мест}}} undistributed {{count, plural, one {{countWords} купленный билет не передан} few {{countWords} купленных билета не переданы} many {{countWords} купленных билетов не переданы} other {{countWords} купленного билета не передано}}} paymentsFailed {{count, plural, one {{countWords} платёж не прошёл} few {{countWords} платежа не прошли} many {{countWords} платежей не прошли} other {{countWords} платежа не прошло}}} paymentsStuck {{count, plural, one {{countWords} платёж завис} few {{countWords} платежа зависли} many {{countWords} платежей зависли} other {{countWords} платежа зависло}}} refundSurge {{count, plural, one {{countWords} возврат за последний час} few {{countWords} возврата за последний час} many {{countWords} возвратов за последний час} other {{countWords} возврата за последний час}}} devicesOffline {{count, plural, one {{countWords} устройство регистрации не в сети} few {{countWords} устройства регистрации не в сети} many {{countWords} устройств регистрации не в сети} other {{countWords} устройства регистрации не в сети}}} devicesLowBattery {{count, plural, one {{countWords} устройство регистрации с низким зарядом} few {{countWords} устройства регистрации с низким зарядом} many {{countWords} устройств регистрации с низким зарядом} other {{countWords} устройства регистрации с низким зарядом}}} devicesBacklog {{count, plural, one {{countWords} устройство регистрации ждёт синхронизации сканов} few {{countWords} устройства регистрации ждут синхронизации сканов} many {{countWords} устройств регистрации ждут синхронизации сканов} other {{countWords} устройства регистрации ждут синхронизации сканов}}} capacityNear {Площадка заполнена на {count} %} capacityFull {Площадка заполнена полностью ({count} %)} sellOut {Продано {count} % билетов} salesPace {Продажи билетов идут на {count} % от целевого темпа} readiness {{count, plural, one {{countWords} шаг настройки блокирует мероприятие} few {{countWords} шага настройки блокируют мероприятие} many {{countWords} шагов настройки блокируют мероприятие} other {{countWords} шага настройки блокируют мероприятие}}} domain {{count, plural, one {{countWords} собственный домен с проблемой} few {{countWords} собственных домена с проблемами} many {{countWords} собственных доменов с проблемами} other {{countWords} собственного домена с проблемами}}} payoutsPastDue {{count, plural, one {{countWords} требование к счёту выплат просрочено} few {{countWords} требования к счёту выплат просрочены} many {{countWords} требований к счёту выплат просрочены} other {{countWords} требования к счёту выплат просрочено}}} deliverability {Доставляемость писем требует внимания} automationFailed {{count, plural, one {{countWords} сообщение или массовое действие сегодня не выполнено} few {{countWords} сообщения или массовых действия сегодня не выполнены} many {{countWords} сообщений или массовых действий сегодня не выполнены} other {{countWords} сообщения или массового действия сегодня не выполнено}}} assistanceOverdue {{count, plural, one {{countWords} запрос помощи ждёт слишком долго} few {{countWords} запроса помощи ждут слишком долго} many {{countWords} запросов помощи ждут слишком долго} other {{countWords} запроса помощи ждут слишком долго}}} campaignFailed {{count, plural, one {{countWords} рассылка сегодня не удалась} few {{countWords} рассылки сегодня не удались} many {{countWords} рассылок сегодня не удались} other {{countWords} рассылки сегодня не удалось}}} disputeDeadline {{count, plural, one {По {countWords} спору скоро нужны доказательства} few {По {countWords} спорам скоро нужны доказательства} many {По {countWords} спорам скоро нужны доказательства} other {По {countWords} спора скоро нужны доказательства}}} other {Оповещение}}",
-        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {{countWords} участник без места} few {{countWords} участника без мест} many {{countWords} участников без мест} other {{countWords} участника без мест}}} undistributed {{count, plural, one {{countWords} купленный билет не передан} few {{countWords} купленных билета не переданы} many {{countWords} купленных билетов не переданы} other {{countWords} купленного билета не передано}}} paymentsFailed {{count, plural, one {{countWords} платёж не прошёл} few {{countWords} платежа не прошли} many {{countWords} платежей не прошли} other {{countWords} платежа не прошло}}} paymentsStuck {{count, plural, one {{countWords} платёж завис} few {{countWords} платежа зависли} many {{countWords} платежей зависли} other {{countWords} платежа зависло}}} refundSurge {{count, plural, one {{countWords} возврат за последний час} few {{countWords} возврата за последний час} many {{countWords} возвратов за последний час} other {{countWords} возврата за последний час}}} devicesOffline {{count, plural, one {{countWords} устройство регистрации не в сети} few {{countWords} устройства регистрации не в сети} many {{countWords} устройств регистрации не в сети} other {{countWords} устройства регистрации не в сети}}} devicesLowBattery {{count, plural, one {{countWords} устройство регистрации с низким зарядом} few {{countWords} устройства регистрации с низким зарядом} many {{countWords} устройств регистрации с низким зарядом} other {{countWords} устройства регистрации с низким зарядом}}} devicesBacklog {{count, plural, one {{countWords} устройство регистрации ждёт синхронизации сканов} few {{countWords} устройства регистрации ждут синхронизации сканов} many {{countWords} устройств регистрации ждут синхронизации сканов} other {{countWords} устройства регистрации ждут синхронизации сканов}}} capacityNear {Площадка заполнена на {count} %} capacityFull {Площадка заполнена полностью ({count} %)} sellOut {Продано {count} % билетов} salesPace {Продажи билетов идут на {count} % от целевого темпа} readiness {{count, plural, one {{countWords} шаг настройки блокирует мероприятие} few {{countWords} шага настройки блокируют мероприятие} many {{countWords} шагов настройки блокируют мероприятие} other {{countWords} шага настройки блокируют мероприятие}}} domain {{count, plural, one {{countWords} собственный домен с проблемой} few {{countWords} собственных домена с проблемами} many {{countWords} собственных доменов с проблемами} other {{countWords} собственного домена с проблемами}}} payoutsPastDue {{count, plural, one {{countWords} требование к счёту выплат просрочено} few {{countWords} требования к счёту выплат просрочены} many {{countWords} требований к счёту выплат просрочены} other {{countWords} требования к счёту выплат просрочено}}} deliverability {Доставляемость писем требует внимания} automationFailed {{count, plural, one {{countWords} сообщение или массовое действие сегодня не выполнено} few {{countWords} сообщения или массовых действия сегодня не выполнены} many {{countWords} сообщений или массовых действий сегодня не выполнены} other {{countWords} сообщения или массового действия сегодня не выполнено}}} assistanceOverdue {{count, plural, one {{countWords} запрос помощи ждёт слишком долго} few {{countWords} запроса помощи ждут слишком долго} many {{countWords} запросов помощи ждут слишком долго} other {{countWords} запроса помощи ждут слишком долго}}} campaignFailed {{count, plural, one {{countWords} рассылка сегодня не удалась} few {{countWords} рассылки сегодня не удались} many {{countWords} рассылок сегодня не удались} other {{countWords} рассылки сегодня не удалось}}} disputeDeadline {{count, plural, one {По {countWords} спору скоро нужны доказательства} few {По {countWords} спорам скоро нужны доказательства} many {По {countWords} спорам скоро нужны доказательства} other {По {countWords} спора скоро нужны доказательства}}} other {Оповещение}}",
-        "alert-urgent-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {{countWords} участник без места} few {{countWords} участника без мест} many {{countWords} участников без мест} other {{countWords} участника без мест}}} undistributed {{count, plural, one {{countWords} купленный билет не передан} few {{countWords} купленных билета не переданы} many {{countWords} купленных билетов не переданы} other {{countWords} купленного билета не передано}}} paymentsFailed {{count, plural, one {{countWords} платёж не прошёл} few {{countWords} платежа не прошли} many {{countWords} платежей не прошли} other {{countWords} платежа не прошло}}} paymentsStuck {{count, plural, one {{countWords} платёж завис} few {{countWords} платежа зависли} many {{countWords} платежей зависли} other {{countWords} платежа зависло}}} refundSurge {{count, plural, one {{countWords} возврат за последний час} few {{countWords} возврата за последний час} many {{countWords} возвратов за последний час} other {{countWords} возврата за последний час}}} devicesOffline {{count, plural, one {{countWords} устройство регистрации не в сети} few {{countWords} устройства регистрации не в сети} many {{countWords} устройств регистрации не в сети} other {{countWords} устройства регистрации не в сети}}} devicesLowBattery {{count, plural, one {{countWords} устройство регистрации с низким зарядом} few {{countWords} устройства регистрации с низким зарядом} many {{countWords} устройств регистрации с низким зарядом} other {{countWords} устройства регистрации с низким зарядом}}} devicesBacklog {{count, plural, one {{countWords} устройство регистрации ждёт синхронизации сканов} few {{countWords} устройства регистрации ждут синхронизации сканов} many {{countWords} устройств регистрации ждут синхронизации сканов} other {{countWords} устройства регистрации ждут синхронизации сканов}}} capacityNear {Площадка заполнена на {count} %} capacityFull {Площадка заполнена полностью ({count} %)} sellOut {Продано {count} % билетов} salesPace {Продажи билетов идут на {count} % от целевого темпа} readiness {{count, plural, one {{countWords} шаг настройки блокирует мероприятие} few {{countWords} шага настройки блокируют мероприятие} many {{countWords} шагов настройки блокируют мероприятие} other {{countWords} шага настройки блокируют мероприятие}}} domain {{count, plural, one {{countWords} собственный домен с проблемой} few {{countWords} собственных домена с проблемами} many {{countWords} собственных доменов с проблемами} other {{countWords} собственного домена с проблемами}}} payoutsPastDue {{count, plural, one {{countWords} требование к счёту выплат просрочено} few {{countWords} требования к счёту выплат просрочены} many {{countWords} требований к счёту выплат просрочены} other {{countWords} требования к счёту выплат просрочено}}} deliverability {Доставляемость писем требует внимания} automationFailed {{count, plural, one {{countWords} сообщение или массовое действие сегодня не выполнено} few {{countWords} сообщения или массовых действия сегодня не выполнены} many {{countWords} сообщений или массовых действий сегодня не выполнены} other {{countWords} сообщения или массового действия сегодня не выполнено}}} assistanceOverdue {{count, plural, one {{countWords} запрос помощи ждёт слишком долго} few {{countWords} запроса помощи ждут слишком долго} many {{countWords} запросов помощи ждут слишком долго} other {{countWords} запроса помощи ждут слишком долго}}} campaignFailed {{count, plural, one {{countWords} рассылка сегодня не удалась} few {{countWords} рассылки сегодня не удались} many {{countWords} рассылок сегодня не удались} other {{countWords} рассылки сегодня не удалось}}} disputeDeadline {{count, plural, one {По {countWords} спору скоро нужны доказательства} few {По {countWords} спорам скоро нужны доказательства} many {По {countWords} спорам скоро нужны доказательства} other {По {countWords} спора скоро нужны доказательства}}} other {Оповещение}}"
+        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {{countWords} участник без места} few {{countWords} участника без мест} many {{countWords} участников без мест} other {{countWords} участника без мест}}} undistributed {{count, plural, one {{countWords} купленный билет не передан} few {{countWords} купленных билета не переданы} many {{countWords} купленных билетов не переданы} other {{countWords} купленного билета не передано}}} paymentsFailed {{count, plural, one {{countWords} платёж не прошёл} few {{countWords} платежа не прошли} many {{countWords} платежей не прошли} other {{countWords} платежа не прошло}}} paymentsStuck {{count, plural, one {{countWords} платёж завис} few {{countWords} платежа зависли} many {{countWords} платежей зависли} other {{countWords} платежа зависло}}} refundSurge {{count, plural, one {{countWords} возврат за последний час} few {{countWords} возврата за последний час} many {{countWords} возвратов за последний час} other {{countWords} возврата за последний час}}} devicesOffline {{count, plural, one {{countWords} устройство регистрации не в сети} few {{countWords} устройства регистрации не в сети} many {{countWords} устройств регистрации не в сети} other {{countWords} устройства регистрации не в сети}}} devicesLowBattery {{count, plural, one {{countWords} устройство регистрации с низким зарядом} few {{countWords} устройства регистрации с низким зарядом} many {{countWords} устройств регистрации с низким зарядом} other {{countWords} устройства регистрации с низким зарядом}}} devicesBacklog {{count, plural, one {{countWords} устройство регистрации ждёт синхронизации сканов} few {{countWords} устройства регистрации ждут синхронизации сканов} many {{countWords} устройств регистрации ждут синхронизации сканов} other {{countWords} устройства регистрации ждут синхронизации сканов}}} capacityNear {Площадка заполнена на {count} %} capacityFull {Площадка заполнена полностью ({count} %)} sellOut {Продано {count} % билетов} salesPace {Продажи билетов идут на {count} % от целевого темпа} readiness {{count, plural, one {{countWords} шаг настройки блокирует мероприятие} few {{countWords} шага настройки блокируют мероприятие} many {{countWords} шагов настройки блокируют мероприятие} other {{countWords} шага настройки блокируют мероприятие}}} domain {{count, plural, one {{countWords} собственный домен с проблемой} few {{countWords} собственных домена с проблемами} many {{countWords} собственных доменов с проблемами} other {{countWords} собственного домена с проблемами}}} payoutsPastDue {{count, plural, one {{countWords} требование к счёту выплат просрочено} few {{countWords} требования к счёту выплат просрочены} many {{countWords} требований к счёту выплат просрочены} other {{countWords} требования к счёту выплат просрочено}}} deliverability {Доставляемость писем требует внимания} automationFailed {{count, plural, one {{countWords} сообщение или массовое действие сегодня не выполнено} few {{countWords} сообщения или массовых действия сегодня не выполнены} many {{countWords} сообщений или массовых действий сегодня не выполнены} other {{countWords} сообщения или массового действия сегодня не выполнено}}} assistanceOverdue {{count, plural, one {{countWords} запрос помощи ждёт слишком долго} few {{countWords} запроса помощи ждут слишком долго} many {{countWords} запросов помощи ждут слишком долго} other {{countWords} запроса помощи ждут слишком долго}}} campaignFailed {{count, plural, one {{countWords} рассылка сегодня не удалась} few {{countWords} рассылки сегодня не удались} many {{countWords} рассылок сегодня не удались} other {{countWords} рассылки сегодня не удалось}}} disputeDeadline {{count, plural, one {По {countWords} спору скоро нужны доказательства} few {По {countWords} спорам скоро нужны доказательства} many {По {countWords} спорам скоро нужны доказательства} other {По {countWords} спора скоро нужны доказательства}}} pledgesUnpaid {{count, plural, one {{countWords} обещание пожертвования не оплачено через 14 дней после мероприятия} few {{countWords} обещания пожертвования не оплачены через 14 дней после мероприятия} many {{countWords} обещаний пожертвования не оплачены через 14 дней после мероприятия} other {{countWords} обещания пожертвования не оплачены через 14 дней после мероприятия}}} other {Оповещение}}",
+        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {{countWords} участник без места} few {{countWords} участника без мест} many {{countWords} участников без мест} other {{countWords} участника без мест}}} undistributed {{count, plural, one {{countWords} купленный билет не передан} few {{countWords} купленных билета не переданы} many {{countWords} купленных билетов не переданы} other {{countWords} купленного билета не передано}}} paymentsFailed {{count, plural, one {{countWords} платёж не прошёл} few {{countWords} платежа не прошли} many {{countWords} платежей не прошли} other {{countWords} платежа не прошло}}} paymentsStuck {{count, plural, one {{countWords} платёж завис} few {{countWords} платежа зависли} many {{countWords} платежей зависли} other {{countWords} платежа зависло}}} refundSurge {{count, plural, one {{countWords} возврат за последний час} few {{countWords} возврата за последний час} many {{countWords} возвратов за последний час} other {{countWords} возврата за последний час}}} devicesOffline {{count, plural, one {{countWords} устройство регистрации не в сети} few {{countWords} устройства регистрации не в сети} many {{countWords} устройств регистрации не в сети} other {{countWords} устройства регистрации не в сети}}} devicesLowBattery {{count, plural, one {{countWords} устройство регистрации с низким зарядом} few {{countWords} устройства регистрации с низким зарядом} many {{countWords} устройств регистрации с низким зарядом} other {{countWords} устройства регистрации с низким зарядом}}} devicesBacklog {{count, plural, one {{countWords} устройство регистрации ждёт синхронизации сканов} few {{countWords} устройства регистрации ждут синхронизации сканов} many {{countWords} устройств регистрации ждут синхронизации сканов} other {{countWords} устройства регистрации ждут синхронизации сканов}}} capacityNear {Площадка заполнена на {count} %} capacityFull {Площадка заполнена полностью ({count} %)} sellOut {Продано {count} % билетов} salesPace {Продажи билетов идут на {count} % от целевого темпа} readiness {{count, plural, one {{countWords} шаг настройки блокирует мероприятие} few {{countWords} шага настройки блокируют мероприятие} many {{countWords} шагов настройки блокируют мероприятие} other {{countWords} шага настройки блокируют мероприятие}}} domain {{count, plural, one {{countWords} собственный домен с проблемой} few {{countWords} собственных домена с проблемами} many {{countWords} собственных доменов с проблемами} other {{countWords} собственного домена с проблемами}}} payoutsPastDue {{count, plural, one {{countWords} требование к счёту выплат просрочено} few {{countWords} требования к счёту выплат просрочены} many {{countWords} требований к счёту выплат просрочены} other {{countWords} требования к счёту выплат просрочено}}} deliverability {Доставляемость писем требует внимания} automationFailed {{count, plural, one {{countWords} сообщение или массовое действие сегодня не выполнено} few {{countWords} сообщения или массовых действия сегодня не выполнены} many {{countWords} сообщений или массовых действий сегодня не выполнены} other {{countWords} сообщения или массового действия сегодня не выполнено}}} assistanceOverdue {{count, plural, one {{countWords} запрос помощи ждёт слишком долго} few {{countWords} запроса помощи ждут слишком долго} many {{countWords} запросов помощи ждут слишком долго} other {{countWords} запроса помощи ждут слишком долго}}} campaignFailed {{count, plural, one {{countWords} рассылка сегодня не удалась} few {{countWords} рассылки сегодня не удались} many {{countWords} рассылок сегодня не удались} other {{countWords} рассылки сегодня не удалось}}} disputeDeadline {{count, plural, one {По {countWords} спору скоро нужны доказательства} few {По {countWords} спорам скоро нужны доказательства} many {По {countWords} спорам скоро нужны доказательства} other {По {countWords} спора скоро нужны доказательства}}} pledgesUnpaid {{count, plural, one {{countWords} обещание пожертвования не оплачено через 14 дней после мероприятия} few {{countWords} обещания пожертвования не оплачены через 14 дней после мероприятия} many {{countWords} обещаний пожертвования не оплачены через 14 дней после мероприятия} other {{countWords} обещания пожертвования не оплачены через 14 дней после мероприятия}}} other {Оповещение}}",
+        "alert-urgent-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {{countWords} участник без места} few {{countWords} участника без мест} many {{countWords} участников без мест} other {{countWords} участника без мест}}} undistributed {{count, plural, one {{countWords} купленный билет не передан} few {{countWords} купленных билета не переданы} many {{countWords} купленных билетов не переданы} other {{countWords} купленного билета не передано}}} paymentsFailed {{count, plural, one {{countWords} платёж не прошёл} few {{countWords} платежа не прошли} many {{countWords} платежей не прошли} other {{countWords} платежа не прошло}}} paymentsStuck {{count, plural, one {{countWords} платёж завис} few {{countWords} платежа зависли} many {{countWords} платежей зависли} other {{countWords} платежа зависло}}} refundSurge {{count, plural, one {{countWords} возврат за последний час} few {{countWords} возврата за последний час} many {{countWords} возвратов за последний час} other {{countWords} возврата за последний час}}} devicesOffline {{count, plural, one {{countWords} устройство регистрации не в сети} few {{countWords} устройства регистрации не в сети} many {{countWords} устройств регистрации не в сети} other {{countWords} устройства регистрации не в сети}}} devicesLowBattery {{count, plural, one {{countWords} устройство регистрации с низким зарядом} few {{countWords} устройства регистрации с низким зарядом} many {{countWords} устройств регистрации с низким зарядом} other {{countWords} устройства регистрации с низким зарядом}}} devicesBacklog {{count, plural, one {{countWords} устройство регистрации ждёт синхронизации сканов} few {{countWords} устройства регистрации ждут синхронизации сканов} many {{countWords} устройств регистрации ждут синхронизации сканов} other {{countWords} устройства регистрации ждут синхронизации сканов}}} capacityNear {Площадка заполнена на {count} %} capacityFull {Площадка заполнена полностью ({count} %)} sellOut {Продано {count} % билетов} salesPace {Продажи билетов идут на {count} % от целевого темпа} readiness {{count, plural, one {{countWords} шаг настройки блокирует мероприятие} few {{countWords} шага настройки блокируют мероприятие} many {{countWords} шагов настройки блокируют мероприятие} other {{countWords} шага настройки блокируют мероприятие}}} domain {{count, plural, one {{countWords} собственный домен с проблемой} few {{countWords} собственных домена с проблемами} many {{countWords} собственных доменов с проблемами} other {{countWords} собственного домена с проблемами}}} payoutsPastDue {{count, plural, one {{countWords} требование к счёту выплат просрочено} few {{countWords} требования к счёту выплат просрочены} many {{countWords} требований к счёту выплат просрочены} other {{countWords} требования к счёту выплат просрочено}}} deliverability {Доставляемость писем требует внимания} automationFailed {{count, plural, one {{countWords} сообщение или массовое действие сегодня не выполнено} few {{countWords} сообщения или массовых действия сегодня не выполнены} many {{countWords} сообщений или массовых действий сегодня не выполнены} other {{countWords} сообщения или массового действия сегодня не выполнено}}} assistanceOverdue {{count, plural, one {{countWords} запрос помощи ждёт слишком долго} few {{countWords} запроса помощи ждут слишком долго} many {{countWords} запросов помощи ждут слишком долго} other {{countWords} запроса помощи ждут слишком долго}}} campaignFailed {{count, plural, one {{countWords} рассылка сегодня не удалась} few {{countWords} рассылки сегодня не удались} many {{countWords} рассылок сегодня не удались} other {{countWords} рассылки сегодня не удалось}}} disputeDeadline {{count, plural, one {По {countWords} спору скоро нужны доказательства} few {По {countWords} спорам скоро нужны доказательства} many {По {countWords} спорам скоро нужны доказательства} other {По {countWords} спора скоро нужны доказательства}}} pledgesUnpaid {{count, plural, one {{countWords} обещание пожертвования не оплачено через 14 дней после мероприятия} few {{countWords} обещания пожертвования не оплачены через 14 дней после мероприятия} many {{countWords} обещаний пожертвования не оплачены через 14 дней после мероприятия} other {{countWords} обещания пожертвования не оплачены через 14 дней после мероприятия}}} other {Оповещение}}"
       }
     },
     "kinds": {
@@ -181,7 +181,10 @@
       },
       "donations": {
         "receipt": "Квитанция о пожертвовании",
-        "year-end-statement": "Годовая сводка пожертвований"
+        "year-end-statement": "Годовая сводка пожертвований",
+        "pledge-summary": "Сводка обещания",
+        "pledge-invoice": "Счёт по обещанию",
+        "pledge-reminder": "Напоминание об обещании"
       },
       "guests": {
         "invitation": "Свадебное приглашение",
@@ -935,14 +938,23 @@
     "orgUnavailable": "Этот организатор сейчас не продаёт билеты. Уже купленные билеты остаются действительными.",
     "riskBlocked": "Мы не можем принять этот заказ. Свяжитесь с организатором.",
     "creditInvalid": "Этот код баланса недействителен или уже использован.",
-    "creditNotApplicable": "Этот баланс нельзя использовать для этих билетов."
+    "creditNotApplicable": "Этот баланс нельзя использовать для этих билетов.",
+    "saveCardForGiving": "Сохранить мою карту для пожертвований этим вечером (это делается на следующей странице; без вашего согласия там ничего не сохраняется)"
   },
   "fakePay": {
     "eyebrow": "Тестовая оплата",
     "title": "Оплата заказа",
     "description": "Это тестовая страница оплаты. Реальные деньги не списываются.",
     "pay": "Оплатить (тест)",
-    "decline": "Смоделировать отклонённую карту"
+    "decline": "Смоделировать отклонённую карту",
+    "setupTitle": "Настройка тестовой карты",
+    "setupDescription": "Заменяет защищённую форму карты платёжного провайдера. Настоящая карта не сохраняется.",
+    "testCard": "Тестовая карта",
+    "card4242": "4242 · всегда списывается",
+    "card0002": "0002 · всегда отклоняется",
+    "card9995": "9995 · отклоняет первое списание",
+    "saveCard": "Сохранить карту (тест)",
+    "failSetup": "Имитировать неудачную настройку"
   },
   "order": {
     "eyebrow": "Ваш заказ",
@@ -6685,7 +6697,8 @@
       "automationFailed": "Открыть состояние рассылок",
       "campaignFailed": "Открыть рассылки",
       "disputeDeadline": "Открыть споры",
-      "assistanceOverdue": "Открыть запросы помощи"
+      "assistanceOverdue": "Открыть запросы помощи",
+      "pledgesUnpaid": "Открыть обещания"
     },
     "rules": {
       "unseated": "{count, plural, one {{countWords} участник без места} few {{countWords} участника без мест} many {{countWords} участников без мест} other {{countWords} участника без мест}}",
@@ -6707,7 +6720,8 @@
       "automationFailed": "{count, plural, one {{countWords} сообщение или массовое действие сегодня не выполнено} few {{countWords} сообщения или массовых действия сегодня не выполнены} many {{countWords} сообщений или массовых действий сегодня не выполнены} other {{countWords} сообщения или массового действия сегодня не выполнено}}",
       "campaignFailed": "{count, plural, one {{countWords} рассылка сегодня не удалась} few {{countWords} рассылки сегодня не удались} many {{countWords} рассылок сегодня не удались} other {{countWords} рассылки сегодня не удалось}}",
       "disputeDeadline": "{count, plural, one {По {countWords} спору скоро нужны доказательства} few {По {countWords} спорам скоро нужны доказательства} many {По {countWords} спорам скоро нужны доказательства} other {По {countWords} спора скоро нужны доказательства}}",
-      "assistanceOverdue": "{count, plural, one {{countWords} запрос помощи ждёт слишком долго} few {{countWords} запроса помощи ждут слишком долго} many {{countWords} запросов помощи ждут слишком долго} other {{countWords} запроса помощи ждут слишком долго}}"
+      "assistanceOverdue": "{count, plural, one {{countWords} запрос помощи ждёт слишком долго} few {{countWords} запроса помощи ждут слишком долго} many {{countWords} запросов помощи ждут слишком долго} other {{countWords} запроса помощи ждут слишком долго}}",
+      "pledgesUnpaid": "{count, plural, one {{countWords} обещание пожертвования не оплачено через 14 дней после мероприятия} few {{countWords} обещания пожертвования не оплачены через 14 дней после мероприятия} many {{countWords} обещаний пожертвования не оплачены через 14 дней после мероприятия} other {{countWords} обещания пожертвования не оплачены через 14 дней после мероприятия}}"
     },
     "widget": {
       "title": "Оповещения",
@@ -8972,7 +8986,8 @@
       "openConsole": "Открыть пульт",
       "openSpotter": "Отмечать таблички",
       "openPaddles": "Номера табличек",
-      "openScreen": "Живой экран"
+      "openScreen": "Живой экран",
+      "openPledges": "Обещания и сбор"
     },
     "paddles": {
       "title": "Номера табличек",
@@ -11397,7 +11412,8 @@
     "unseated": "Пока без места: {names}",
     "guestOf": "Гость {name}",
     "keep": "Эта страница всегда показывает ваш текущий стол: ссылка и QR-код из приглашения не меняются, когда вас пересаживают.",
-    "toRsvp": "Назад к вашему ответу"
+    "toRsvp": "Назад к вашему ответу",
+    "saveCard": "Сохраните карту для пожертвований этим вечером"
   },
   "scanGuests": {
     "view": "Гости",
@@ -11916,5 +11932,164 @@
       "seats": "Места"
     },
     "openHub": "Открыть страницу гостя: программа, места и билеты"
+  },
+  "savedCard": {
+    "metaTitle": "Сохраните карту на этот вечер",
+    "title": "Сохраните карту для пожертвований этим вечером",
+    "intro": "Сохраните карту один раз на своём телефоне и жертвуйте в течение вечера одним касанием. Сейчас ничего не списывается.",
+    "introParty": "Для {party}: сохраните карту один раз на своём телефоне и жертвуйте в течение вечера одним касанием. Обещанные суммы списываются на следующее утро. Сейчас ничего не списывается.",
+    "unavailableTitle": "Сохранение карты недоступно",
+    "unavailableBody": "Сейчас это мероприятие не принимает онлайн-пожертвования. Вы можете пожертвовать на месте.",
+    "formLabel": "Сохранить карту",
+    "formTitle": "Ваши данные",
+    "name": "Полное имя",
+    "email": "Электронная почта",
+    "emailHint": "Сюда придут сводка ваших обещаний и квитанции.",
+    "consentLabel": "Я разрешаю сохранить эту карту на этот вечер",
+    "consent": "{org} может сохранить эту карту у своего платёжного провайдера и списывать с неё только пожертвования, которые я выберу, и обещанные мной суммы на {event}. Обещания списываются утром после мероприятия; сначала я получаю сводку. Карта удаляется через 30 дней после мероприятия, и я могу удалить её на этой странице в любое время.",
+    "privacy": "Данные карты передаются напрямую платёжному провайдеру. Мы никогда не видим и не храним номер вашей карты.",
+    "save": "Сохранить мою карту",
+    "saving": "Открываем защищённую форму карты…",
+    "savedTitle": "Ваша карта сохранена на этот вечер",
+    "savedBody": "{brand} с последними цифрами {last4} готова для пожертвований одним касанием на этом мероприятии.",
+    "card": "Карта",
+    "giveNow": "Пожертвовать",
+    "remove": "Удалить мою карту",
+    "removeHint": "Удаление отменяет ещё не выполненные списания; обещания по-прежнему можно оплатить по ссылке.",
+    "removed": "Ваша карта удалена. С неё ничего не будет списано.",
+    "pending": "Мы подтверждаем вашу карту у платёжного провайдера. Обновите страницу чуть позже.",
+    "failed": "Не удалось сохранить карту. Попробуйте ещё раз или используйте другую карту.",
+    "fromCheckout": "Спасибо, заказ оформлен. Билеты придут на электронную почту.",
+    "oneTapTitle": "Пожертвуйте сохранённой картой",
+    "oneTapBody": "Одно касание — и сумма спишется с карты {brand} с последними цифрами {last4}. Сразу после этого вы увидите подтверждение.",
+    "oneTapFailed": "Это пожертвование не прошло. Попробуйте ещё раз или воспользуйтесь формой ниже.",
+    "oneTapGive": "Пожертвовать {amount} · {name}",
+    "manageCard": "Управление сохранённой картой",
+    "errors": {
+      "name": "Введите полное имя.",
+      "email": "Введите действительный адрес электронной почты.",
+      "consent": "Отметьте поле, чтобы разрешить сохранение карты.",
+      "event_over": "Мероприятие закончилось, поэтому сохранить карту уже нельзя.",
+      "not_connected": "Сейчас это мероприятие не принимает онлайн-пожертвования.",
+      "link": "Эта ссылка больше не действует. Попросите у организатора новую."
+    }
+  },
+  "pledgePay": {
+    "metaTitle": "Ваше обещание",
+    "title": "Ваше обещание на {amount}",
+    "subtitle": "{level} · {campaign}. Спасибо за вашу щедрость.",
+    "stateTitle": "Статус",
+    "status": {
+      "scheduled": "Списание с карты запланировано",
+      "charging": "Идёт списание",
+      "invoiced": "Ожидает оплаты",
+      "paid": "Оплачено",
+      "paid_offline": "Оплачено",
+      "written_off": "Закрыто"
+    },
+    "card": "Карта",
+    "cardScheduled": "Мы спишем сумму с карты {brand} с последними цифрами {last4} {when}.",
+    "charging": "С вашей карты прямо сейчас списывается сумма. Обновите страницу чуть позже.",
+    "due": "Оплатите до {date}.",
+    "thanks": "Оплачено полностью. Спасибо! Квитанция придёт на электронную почту.",
+    "closed": "Это обещание закрыто. Больше ничего не нужно платить.",
+    "payNow": "Оплатить {amount} сейчас",
+    "payAnotherWay": "Оплатить {amount} сейчас другим способом",
+    "anotherWayHint": "Оплата сейчас отменяет списание с карты. Хотите использовать другую карту? Оплатите ею сейчас.",
+    "errors": {
+      "charging": "С вашей карты сейчас списывается сумма, поэтому этот платёж не был начат.",
+      "settled": "Это обещание уже оплачено.",
+      "no_email": "Введите адрес электронной почты, чтобы оплатить.",
+      "rate_limited": "Слишком много попыток. Подождите минуту и попробуйте ещё раз.",
+      "not_connected": "Онлайн-оплата сейчас недоступна. Спросите у организатора, как оплатить.",
+      "generic": "Что-то пошло не так. Попробуйте ещё раз.",
+      "email": "Введите действительный адрес электронной почты."
+    },
+    "email": "Почта для квитанции",
+    "emailHint": "Квитанция придёт на этот адрес."
+  },
+  "pledges": {
+    "title": "Обещания пожертвований",
+    "subtitle": "Все обещания с аукциона табличек и то, как они собираются.",
+    "viewerNotice": "Вы видите обещания. Финансовые роли закрывают вечер, отмечают платежи и списывают обещания.",
+    "pledged": "Обещано",
+    "paid": "Оплачено",
+    "owed": "Осталось оплатить",
+    "writtenOffTotal": "Списано",
+    "cardsSaved": "Сохранено карт",
+    "emptyTitle": "Пока нет обещаний",
+    "emptyDescription": "Обещания появятся здесь, когда секретарь подтвердит таблички на аукционе.",
+    "closeTitle": "{count, plural, one {# обещание к отправке} few {# обещания к отправке} many {# обещаний к отправке} other {# обещания к отправке}}",
+    "closeBody": "При закрытии вечера каждый жертвователь получает сводку. Обещания с сохранённой картой списываются завтра в 09:00 по часовому поясу мероприятия; остальные получают ссылку на оплату со сроком 30 дней и напоминания до оплаты.",
+    "close": "Закрыть вечер и отправить сводки",
+    "closed": "Сводки отправлены: {cards, plural, one {# обещание будет списано с сохранённой карты} few {# обещания будут списаны с сохранённых карт} many {# обещаний будут списаны с сохранённых карт} other {# обещания будут списаны с сохранённых карт}}, {invoices, plural, one {# обещание получило ссылку на оплату} few {# обещания получили ссылки на оплату} many {# обещаний получили ссылки на оплату} other {# обещания получили ссылки на оплату}}.",
+    "caption": "Обещания и их сбор",
+    "columns": {
+      "paddle": "Табличка",
+      "holder": "Жертвователь",
+      "level": "Уровень",
+      "amount": "Сумма",
+      "status": "Статус",
+      "detail": "Подробности",
+      "actions": "Действия"
+    },
+    "status": {
+      "open": "Не отправлено",
+      "scheduled": "Списание с карты запланировано",
+      "charging": "Идёт списание",
+      "invoiced": "Ссылка на оплату отправлена",
+      "paid": "Оплачено",
+      "paid_offline": "Оплачено офлайн",
+      "written_off": "Списано"
+    },
+    "cardLabel": "{brand} ·{last4}",
+    "card": "Карта",
+    "detail": {
+      "open": "Ждёт закрытия вечера.",
+      "scheduled": "{card}, {when}",
+      "charging": "{card}, идёт списание",
+      "invoiced": "Срок оплаты: {date}.",
+      "declined": "{count, plural, one {Карта отклонена # раз.} few {Карта отклонена # раза.} many {Карта отклонена # раз.} other {Карта отклонена # раза.}}",
+      "noEmail": "Нет адреса электронной почты: отправьте ссылку на оплату сами.",
+      "paidCard": "Списано с {card}",
+      "paidLink": "Оплачено по ссылке"
+    },
+    "methods": {
+      "check": "Чек",
+      "wire": "Банковский перевод",
+      "stock": "Акции",
+      "daf": "Фонд под управлением жертвователя",
+      "cash": "Наличные",
+      "other": "Другое"
+    },
+    "recordPayment": "Отметить платёж",
+    "method": "Способ оплаты",
+    "chooseMethod": "Выберите…",
+    "reference": "Номер или ссылка (необязательно)",
+    "receivedOn": "Дата получения",
+    "noteOptional": "Заметка (необязательно)",
+    "recordSubmit": "Отметить платёж по табличке {paddle}",
+    "recorded": "Платёж отмечен. Напоминания и списание с карты остановлены.",
+    "writeOff": "Списать",
+    "writeOffNote": "Причина списания",
+    "writeOffSubmit": "Списать обещание по табличке {paddle}",
+    "writtenOff": "Обещание на {amount} списано.",
+    "errors": {
+      "charging": "С карты сейчас списывается сумма. Попробуйте через несколько минут.",
+      "settled": "Это обещание уже оплачено.",
+      "future": "Дата не может быть в будущем.",
+      "method": "Выберите способ оплаты.",
+      "receivedOn": "Введите дату получения.",
+      "note": "Укажите, почему обещание списывается.",
+      "generic": "Что-то пошло не так. Попробуйте ещё раз."
+    },
+    "qr": {
+      "label": "QR-код для сохранения карты для пожертвований этим вечером",
+      "checkinTitle": "Сохранение карты на регистрации",
+      "checkinBody": "Покажите гостям этот код после регистрации: они сохранят карту на своём телефоне и смогут жертвовать одним касанием этим вечером.",
+      "tableTitle": "Сохранение карты за столами",
+      "tableBody": "Распечатайте этот код на табличках для столов: гости сохранят карту на своём телефоне для пожертвований одним касанием и для обещаний."
+    },
+    "payLink": "Ссылка на оплату для таблички {paddle}"
   }
 }

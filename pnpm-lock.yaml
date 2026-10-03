@@ -1072,6 +1072,9 @@ importers:
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../../db
+      '@yayatoh/donations':
+        specifier: workspace:*
+        version: link:../donations
       '@yayatoh/events':
         specifier: workspace:*
         version: link:../events
@@ -1657,9 +1660,15 @@ importers:
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../kernel
+      '@yayatoh/notifications':
+        specifier: workspace:*
+        version: link:../notifications
       '@yayatoh/orders':
         specifier: workspace:*
         version: link:../orders
+      '@yayatoh/payments':
+        specifier: workspace:*
+        version: link:../payments
       '@yayatoh/pdf':
         specifier: workspace:*
         version: link:../../pdf

@@ -26,7 +26,13 @@ import { JOBS, subscribers } from './registry.ts';
 import { relayOnce } from './relay.ts';
 import { runRetention } from './retention.ts';
 import { runSettlements } from './settlements.ts';
-import { alertDisputeDeadlines, sweepEnrollments, sweepExpiredHolds, sweepWaitlists } from './sweeper.ts';
+import {
+  alertDisputeDeadlines,
+  collectDuePledges,
+  sweepEnrollments,
+  sweepExpiredHolds,
+  sweepWaitlists,
+} from './sweeper.ts';
 import { startWorker } from './worker.ts';
 import { runYearEndStatements } from './year-end.ts';
 
@@ -146,6 +152,23 @@ setInterval(() => {
       settling = false;
     });
 }, 10 * 60_000).unref();
+
+// Pledge collection (M4.8e): saved-card charges due the morning after the night is closed,
+// one retry after a decline, expired cards removed; every 5 minutes (leader only).
+let collecting = false;
+setInterval(() => {
+  if (!payments || !release || stopping || collecting) return;
+  collecting = true;
+  collectDuePledges(payments)
+    .then((r) => {
+      if (r.charged || r.declined || r.invoiced || r.cardsRemoved)
+        console.info(JSON.stringify({ job: 'pledge-collection', ...r }));
+    })
+    .catch((err) => console.error('pledge collection', err))
+    .finally(() => {
+      collecting = false;
+    });
+}, 5 * 60_000).unref();
 
 // Mass refunds (M3.10b): queue a batch job for each running run every 3 s (leader only); the
 // exclusive queue keeps one job per run, and a paused run is simply not queued.

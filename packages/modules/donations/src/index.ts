@@ -19,6 +19,15 @@ export {
   saveCharityProfileCommand,
   verifyCharityCommand,
 } from './charity.ts';
+// M4.8e: cards on file and pledge collection.
+export {
+  ATTEMPT_KINDS,
+  CARD_SOURCES,
+  CARD_STATUSES,
+  COLLECTION_STATUSES,
+  OFFLINE_METHODS,
+  UNPAID_ALERT_DAYS,
+} from './domain/collection.ts';
 // M4.8d live giving screen: the thermometer for the room's projectors (signed link, realtime
 // channel, reconnect snapshot), QR-to-give, names only for donors who opted in (P4-13).
 export {
@@ -118,6 +127,7 @@ export {
   publicGiving,
   startGiftCommand,
 } from './gifts.ts';
+export { CARD_CONSENT_VERSION } from './legal/card-consent.ts';
 export { RECEIPT_COPY, RECEIPT_COPY_VERSION, type ReceiptCopy } from './legal/receipt-copy.ts';
 export {
   AssignPaddleInput,
@@ -157,6 +167,31 @@ export {
   paddlesQuery,
   releasePaddleCommand,
 } from './paddles.ts';
+export {
+  applyCardChargeToOrder,
+  ClaimedChargeDto,
+  type CollectRunResult,
+  claimPledgeChargesCommand,
+  closePledgesCommand,
+  collectPledges,
+  PledgeCollectionDto,
+  PledgePayResult,
+  PledgeRowDto,
+  PublicPledgeDto,
+  pledgeCollectionQuery,
+  pledgeMailer,
+  pledgeOutcomesSubscriber,
+  pledgePaymentInput,
+  pledgePayToken,
+  pledgePayUrl,
+  publicPledge,
+  recordPledgePaymentCommand,
+  settleCardChargeCommand,
+  startPledgePaymentCommand,
+  unpaidPledgeEventIdsTx,
+  unpaidPledgeFactsTx,
+  writeOffPledgeCommand,
+} from './pledge-collection.ts';
 export { privateColumns } from './private-columns.ts';
 export {
   type ReceiptDocInput,
@@ -208,3 +243,20 @@ export {
   ScreenStateDto,
 } from './screen-dto.ts';
 export { type ScreenClaim, signScreenToken, verifyScreenToken } from './screen-link.ts';
+export {
+  applyCardSetupCommand,
+  attachCardSetupCommand,
+  CardChargeDto,
+  CardSetupDto,
+  expireSavedCardsCommand,
+  GiveWithCardResult,
+  giveWithSavedCardCommand,
+  partyCardTarget,
+  removeSavedCardCommand,
+  SavedCardViewDto,
+  StartCardSetupInput,
+  savedCardIdFromToken,
+  savedCardToken,
+  savedCardView,
+  startCardSetupCommand,
+} from './saved-cards.ts';

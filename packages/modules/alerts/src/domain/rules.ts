@@ -32,6 +32,9 @@ export interface EventFacts {
   /** M3.3b: help requests still unassigned past their SLA, and how many of them are urgent. */
   readonly assistanceOverdue: number;
   readonly assistanceUrgent: number;
+  /** M4.8e: confirmed pledges unpaid 14 days after the event (0 before then), and their sum. */
+  readonly unpaidPledges?: number;
+  readonly unpaidPledgesMinor?: number;
 }
 
 /** Everything the org rules read. */
@@ -85,6 +88,9 @@ export function evaluateEventRules(
   t: Thresholds = THRESHOLDS,
 ): Partial<Record<RuleKey, Firing>> {
   const out: Partial<Record<RuleKey, Firing>> = {};
+  // Pledges are owed after the event, whatever happened to it since (P4-12).
+  if (f.unpaidPledges && f.unpaidPledges > 0)
+    out.pledgesUnpaid = fire('warning', f.unpaidPledges, { amountMinor: f.unpaidPledgesMinor ?? 0 });
   if (!['draft', 'published', 'postponed'].includes(f.status)) return out;
   const mode: EventMode = eventMode(now, f.startsAt, f.endsAt);
   if (mode === 'wrap') return out;

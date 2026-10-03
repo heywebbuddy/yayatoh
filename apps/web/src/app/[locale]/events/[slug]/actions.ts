@@ -290,7 +290,10 @@ export async function checkoutAction(
   const { order, manageToken, payment: flow } = result;
   // M3.8a: where the order came from (tracked-link click or UTM landing); never blocks checkout.
   await recordCheckoutAttribution(target.orgId, order.id);
-  const orderPath = `/orders/${manageToken}`;
+  // M4.8e (P4-14): "Save my card for tonight's giving" sends the buyer on to the card page after
+  // paying (the card is saved on its own, with its own consent; never from the ticket payment).
+  const orderPath =
+    form.get('saveCardForGiving') === '1' ? `/events/${slug}/card?src=checkout` : `/orders/${manageToken}`;
   if (order.status === 'paid') return redirect({ href: orderPath, locale });
 
   const origin = process.env.BETTER_AUTH_URL ?? 'http://localhost:3000';

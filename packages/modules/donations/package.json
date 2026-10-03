@@ -11,7 +11,8 @@
     "./giving": "./src/domain/giving.ts",
     "./paddles": "./src/domain/paddles.ts",
     "./paddle-queue": "./src/domain/paddle-queue.ts",
-    "./screen": "./src/domain/screen.ts"
+    "./screen": "./src/domain/screen.ts",
+    "./collection": "./src/domain/collection.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"
@@ -23,7 +24,9 @@
     "@yayatoh/events": "workspace:*",
     "@yayatoh/guests": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
+    "@yayatoh/notifications": "workspace:*",
     "@yayatoh/orders": "workspace:*",
+    "@yayatoh/payments": "workspace:*",
     "@yayatoh/pdf": "workspace:*",
     "@yayatoh/platform": "workspace:*",
     "@yayatoh/tenancy": "workspace:*",

@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import { catchUpGifts, publicGiving, QR_PLACES } from '@yayatoh/donations';
+import { catchUpGifts, publicGiving, QR_PLACES, savedCardView } from '@yayatoh/donations';
 import { checkoutTarget, publicEventBySlug } from '@yayatoh/events';
 import { formatMoney, money } from '@yayatoh/kernel';
 import { buttonClass, EmptyState, Label, ProgressBar } from '@yayatoh/ui';
@@ -8,9 +8,11 @@ import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation.ts';
 import { pageLocale } from '@/server/locale.ts';
+import { deviceCardToken } from '@/server/saved-card.ts';
 import { giveAction } from './actions.ts';
 import { GiveForm } from './give-form.tsx';
 import { GiveFrame, GiveHero } from './give-frame.tsx';
+import { OneTap } from './one-tap.tsx';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('donations.give');
@@ -19,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 type Params = {
   params: Promise<{ locale: string; slug: string }>;
-  searchParams: Promise<{ c?: string; via?: string }>;
+  searchParams: Promise<{ c?: string; via?: string; tap?: string }>;
 };
 
 const UUID = /^[0-9a-f-]{36}$/;
@@ -38,9 +40,13 @@ export default async function GivePage({ params, searchParams }: Params) {
   const t = await getTranslations('donations.give');
   await catchUpGifts(target.orgId);
   const giving = await publicGiving(target.orgId, target.eventId);
-  const { c, via } = await searchParams;
+  const { c, via, tap } = await searchParams;
   // M4.8d: opened from a QR code on the room's screen or a table card (the gift is a QR gift).
   const qr = (QR_PLACES as readonly string[]).includes(via ?? '') ? `&via=${via}` : '';
+  // M4.8e: the card this device saved for this event (P4-14), for one-tap gifts.
+  const cardToken = await deviceCardToken(target.eventId);
+  const saved = cardToken ? await savedCardView(target.orgId, cardToken) : null;
+  const card = saved?.status === 'active' && saved.eventId === target.eventId ? saved : null;
   const campaign =
     (c && UUID.test(c) ? giving.campaigns.find((x) => x.id === c) : undefined) ?? giving.campaigns[0] ?? null;
   const fmt = (minor: number, currency: string) => formatMoney(money(minor, currency), locale);
@@ -96,6 +102,9 @@ export default async function GivePage({ params, searchParams }: Params) {
                 </Link>
               ))}
             </nav>
+          ) : null}
+          {card && campaign.levels.length ? (
+            <OneTap slug={slug} campaign={campaign} card={card} locale={locale} failed={tap === 'failed'} />
           ) : null}
           <GiveForm
             key={campaign.id}

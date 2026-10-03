@@ -1,7 +1,8 @@
+import { partyCardTarget, publicGiving } from '@yayatoh/donations';
 import { rsvpLinkRef } from '@yayatoh/guests';
 import { createCtx, executeQuery, isDomainError } from '@yayatoh/kernel';
 import { partySeatsQuery } from '@yayatoh/seating';
-import { EmptyState, Label, PageHeader } from '@yayatoh/ui';
+import { buttonClass, EmptyState, Label, PageHeader } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
@@ -50,6 +51,10 @@ export default async function PartySeatPage({
   const person = (p: { name: string | null; guestOf: string | null }) =>
     p.name ?? t('guestOf', { name: p.guestOf ?? '' });
   const seated = view.charts.some((c) => c.places.length > 0);
+  // M4.8e: at a gala taking gifts, the place card's QR also offers saving a card for the night.
+  const party = await partyCardTarget(ref.orgId, token);
+  const giving = party ? await publicGiving(ref.orgId, party.eventId) : null;
+  const cardOpen = Boolean(giving?.available && giving.campaigns.length);
 
   return (
     <main
@@ -138,6 +143,14 @@ export default async function PartySeatPage({
             );
           })
         : null}
+      {cardOpen ? (
+        <Link
+          href={`/rsvp/${encodeURIComponent(token)}/card`}
+          className={buttonClass('primary', 'lg', 'self-start')}
+        >
+          {t('saveCard')}
+        </Link>
+      ) : null}
       <p className="m-0 text-caption text-ink-2">{t('keep')}</p>
       <Link
         href={`/rsvp/${encodeURIComponent(token)}`}

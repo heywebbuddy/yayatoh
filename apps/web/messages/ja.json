@@ -76,9 +76,9 @@
         "org-status": "{status, select, suspended {Yayatoh がこの組織を停止しました} reactivated {この組織が再開しました} other {Yayatoh がこの組織を閉鎖しました}}"
       },
       "alerts": {
-        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords}人の参加者に座席がありません}}} undistributed {{count, plural, other {購入済みチケット{countWords}枚が配布されていません}}} paymentsFailed {{count, plural, other {{countWords}件の支払いが失敗しました}}} paymentsStuck {{count, plural, other {{countWords}件の支払いが止まっています}}} refundSurge {{count, plural, other {直近1時間で{countWords}件の返金}}} devicesOffline {{count, plural, other {{countWords}台のチェックイン端末がオフラインです}}} devicesLowBattery {{count, plural, other {{countWords}台のチェックイン端末のバッテリー残量が少なくなっています}}} devicesBacklog {{count, plural, other {{countWords}台のチェックイン端末に同期待ちのスキャンがあります}}} capacityNear {会場は{count}%埋まっています} capacityFull {会場は満員です（{count}%）} sellOut {チケットの{count}%が売れました} salesPace {チケット販売は目標ペースの{count}%です} readiness {{count, plural, other {{countWords}件の設定手順がこのイベントを妨げています}}} domain {{count, plural, other {{countWords}件のカスタムドメインに問題があります}}} payoutsPastDue {{count, plural, other {受取アカウントの要件{countWords}件が期限切れです}}} deliverability {メールの到達率に注意が必要です} automationFailed {{count, plural, other {本日{countWords}件のメッセージまたは一括操作が失敗しました}}} assistanceOverdue {{count, plural, other {{countWords}件のヘルプ依頼が長く待たされています}}} campaignFailed {{count, plural, other {本日{countWords}件のキャンペーン配信が失敗しました}}} disputeDeadline {{count, plural, other {{countWords}件の異議申し立てに間もなく証拠の提出が必要です}}} other {アラート}}",
-        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords}人の参加者に座席がありません}}} undistributed {{count, plural, other {購入済みチケット{countWords}枚が配布されていません}}} paymentsFailed {{count, plural, other {{countWords}件の支払いが失敗しました}}} paymentsStuck {{count, plural, other {{countWords}件の支払いが止まっています}}} refundSurge {{count, plural, other {直近1時間で{countWords}件の返金}}} devicesOffline {{count, plural, other {{countWords}台のチェックイン端末がオフラインです}}} devicesLowBattery {{count, plural, other {{countWords}台のチェックイン端末のバッテリー残量が少なくなっています}}} devicesBacklog {{count, plural, other {{countWords}台のチェックイン端末に同期待ちのスキャンがあります}}} capacityNear {会場は{count}%埋まっています} capacityFull {会場は満員です（{count}%）} sellOut {チケットの{count}%が売れました} salesPace {チケット販売は目標ペースの{count}%です} readiness {{count, plural, other {{countWords}件の設定手順がこのイベントを妨げています}}} domain {{count, plural, other {{countWords}件のカスタムドメインに問題があります}}} payoutsPastDue {{count, plural, other {受取アカウントの要件{countWords}件が期限切れです}}} deliverability {メールの到達率に注意が必要です} automationFailed {{count, plural, other {本日{countWords}件のメッセージまたは一括操作が失敗しました}}} assistanceOverdue {{count, plural, other {{countWords}件のヘルプ依頼が長く待たされています}}} campaignFailed {{count, plural, other {本日{countWords}件のキャンペーン配信が失敗しました}}} disputeDeadline {{count, plural, other {{countWords}件の異議申し立てに間もなく証拠の提出が必要です}}} other {アラート}}",
-        "alert-urgent-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords}人の参加者に座席がありません}}} undistributed {{count, plural, other {購入済みチケット{countWords}枚が配布されていません}}} paymentsFailed {{count, plural, other {{countWords}件の支払いが失敗しました}}} paymentsStuck {{count, plural, other {{countWords}件の支払いが止まっています}}} refundSurge {{count, plural, other {直近1時間で{countWords}件の返金}}} devicesOffline {{count, plural, other {{countWords}台のチェックイン端末がオフラインです}}} devicesLowBattery {{count, plural, other {{countWords}台のチェックイン端末のバッテリー残量が少なくなっています}}} devicesBacklog {{count, plural, other {{countWords}台のチェックイン端末に同期待ちのスキャンがあります}}} capacityNear {会場は{count}%埋まっています} capacityFull {会場は満員です（{count}%）} sellOut {チケットの{count}%が売れました} salesPace {チケット販売は目標ペースの{count}%です} readiness {{count, plural, other {{countWords}件の設定手順がこのイベントを妨げています}}} domain {{count, plural, other {{countWords}件のカスタムドメインに問題があります}}} payoutsPastDue {{count, plural, other {受取アカウントの要件{countWords}件が期限切れです}}} deliverability {メールの到達率に注意が必要です} automationFailed {{count, plural, other {本日{countWords}件のメッセージまたは一括操作が失敗しました}}} assistanceOverdue {{count, plural, other {{countWords}件のヘルプ依頼が長く待たされています}}} campaignFailed {{count, plural, other {本日{countWords}件のキャンペーン配信が失敗しました}}} disputeDeadline {{count, plural, other {{countWords}件の異議申し立てに間もなく証拠の提出が必要です}}} other {アラート}}"
+        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords}人の参加者に座席がありません}}} undistributed {{count, plural, other {購入済みチケット{countWords}枚が配布されていません}}} paymentsFailed {{count, plural, other {{countWords}件の支払いが失敗しました}}} paymentsStuck {{count, plural, other {{countWords}件の支払いが止まっています}}} refundSurge {{count, plural, other {直近1時間で{countWords}件の返金}}} devicesOffline {{count, plural, other {{countWords}台のチェックイン端末がオフラインです}}} devicesLowBattery {{count, plural, other {{countWords}台のチェックイン端末のバッテリー残量が少なくなっています}}} devicesBacklog {{count, plural, other {{countWords}台のチェックイン端末に同期待ちのスキャンがあります}}} capacityNear {会場は{count}%埋まっています} capacityFull {会場は満員です（{count}%）} sellOut {チケットの{count}%が売れました} salesPace {チケット販売は目標ペースの{count}%です} readiness {{count, plural, other {{countWords}件の設定手順がこのイベントを妨げています}}} domain {{count, plural, other {{countWords}件のカスタムドメインに問題があります}}} payoutsPastDue {{count, plural, other {受取アカウントの要件{countWords}件が期限切れです}}} deliverability {メールの到達率に注意が必要です} automationFailed {{count, plural, other {本日{countWords}件のメッセージまたは一括操作が失敗しました}}} assistanceOverdue {{count, plural, other {{countWords}件のヘルプ依頼が長く待たされています}}} campaignFailed {{count, plural, other {本日{countWords}件のキャンペーン配信が失敗しました}}} disputeDeadline {{count, plural, other {{countWords}件の異議申し立てに間もなく証拠の提出が必要です}}} pledgesUnpaid {{count, plural, other {イベントから14日経っても{countWords}件の寄付のお約束が未払いです}}} other {アラート}}",
+        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords}人の参加者に座席がありません}}} undistributed {{count, plural, other {購入済みチケット{countWords}枚が配布されていません}}} paymentsFailed {{count, plural, other {{countWords}件の支払いが失敗しました}}} paymentsStuck {{count, plural, other {{countWords}件の支払いが止まっています}}} refundSurge {{count, plural, other {直近1時間で{countWords}件の返金}}} devicesOffline {{count, plural, other {{countWords}台のチェックイン端末がオフラインです}}} devicesLowBattery {{count, plural, other {{countWords}台のチェックイン端末のバッテリー残量が少なくなっています}}} devicesBacklog {{count, plural, other {{countWords}台のチェックイン端末に同期待ちのスキャンがあります}}} capacityNear {会場は{count}%埋まっています} capacityFull {会場は満員です（{count}%）} sellOut {チケットの{count}%が売れました} salesPace {チケット販売は目標ペースの{count}%です} readiness {{count, plural, other {{countWords}件の設定手順がこのイベントを妨げています}}} domain {{count, plural, other {{countWords}件のカスタムドメインに問題があります}}} payoutsPastDue {{count, plural, other {受取アカウントの要件{countWords}件が期限切れです}}} deliverability {メールの到達率に注意が必要です} automationFailed {{count, plural, other {本日{countWords}件のメッセージまたは一括操作が失敗しました}}} assistanceOverdue {{count, plural, other {{countWords}件のヘルプ依頼が長く待たされています}}} campaignFailed {{count, plural, other {本日{countWords}件のキャンペーン配信が失敗しました}}} disputeDeadline {{count, plural, other {{countWords}件の異議申し立てに間もなく証拠の提出が必要です}}} pledgesUnpaid {{count, plural, other {イベントから14日経っても{countWords}件の寄付のお約束が未払いです}}} other {アラート}}",
+        "alert-urgent-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords}人の参加者に座席がありません}}} undistributed {{count, plural, other {購入済みチケット{countWords}枚が配布されていません}}} paymentsFailed {{count, plural, other {{countWords}件の支払いが失敗しました}}} paymentsStuck {{count, plural, other {{countWords}件の支払いが止まっています}}} refundSurge {{count, plural, other {直近1時間で{countWords}件の返金}}} devicesOffline {{count, plural, other {{countWords}台のチェックイン端末がオフラインです}}} devicesLowBattery {{count, plural, other {{countWords}台のチェックイン端末のバッテリー残量が少なくなっています}}} devicesBacklog {{count, plural, other {{countWords}台のチェックイン端末に同期待ちのスキャンがあります}}} capacityNear {会場は{count}%埋まっています} capacityFull {会場は満員です（{count}%）} sellOut {チケットの{count}%が売れました} salesPace {チケット販売は目標ペースの{count}%です} readiness {{count, plural, other {{countWords}件の設定手順がこのイベントを妨げています}}} domain {{count, plural, other {{countWords}件のカスタムドメインに問題があります}}} payoutsPastDue {{count, plural, other {受取アカウントの要件{countWords}件が期限切れです}}} deliverability {メールの到達率に注意が必要です} automationFailed {{count, plural, other {本日{countWords}件のメッセージまたは一括操作が失敗しました}}} assistanceOverdue {{count, plural, other {{countWords}件のヘルプ依頼が長く待たされています}}} campaignFailed {{count, plural, other {本日{countWords}件のキャンペーン配信が失敗しました}}} disputeDeadline {{count, plural, other {{countWords}件の異議申し立てに間もなく証拠の提出が必要です}}} pledgesUnpaid {{count, plural, other {イベントから14日経っても{countWords}件の寄付のお約束が未払いです}}} other {アラート}}"
       }
     },
     "kinds": {
@@ -181,7 +181,10 @@
       },
       "donations": {
         "receipt": "寄付の領収書",
-        "year-end-statement": "年間寄付明細書"
+        "year-end-statement": "年間寄付明細書",
+        "pledge-summary": "寄付のお約束のまとめ",
+        "pledge-invoice": "寄付のお約束の請求書",
+        "pledge-reminder": "寄付のお約束のリマインダー"
       },
       "guests": {
         "invitation": "結婚式の招待状",
@@ -935,14 +938,23 @@
     "orgUnavailable": "この主催者は現在チケットを販売していません。購入済みのチケットは引き続き有効です。",
     "riskBlocked": "このご注文はお受けできませんでした。主催者にお問い合わせください。",
     "creditInvalid": "このストアクレジットコードは無効か、使用済みです。",
-    "creditNotApplicable": "このストアクレジットはこれらのチケットには使えません。"
+    "creditNotApplicable": "このストアクレジットはこれらのチケットには使えません。",
+    "saveCardForGiving": "今夜の寄付のためにカードを保存する（次のページで行います。そこで同意しない限り何も保存されません）"
   },
   "fakePay": {
     "eyebrow": "テスト決済",
     "title": "ご注文のお支払い",
     "description": "これはテスト用の決済ページです。実際のお金は動きません。",
     "pay": "今すぐ支払う（テスト）",
-    "decline": "カード拒否をシミュレート"
+    "decline": "カード拒否をシミュレート",
+    "setupTitle": "テストカードの設定",
+    "setupDescription": "決済代行会社の安全なカード入力フォームの代わりです。実際のカードは保存されません。",
+    "testCard": "テストカード",
+    "card4242": "4242 · 常に請求成功",
+    "card0002": "0002 · 常に拒否",
+    "card9995": "9995 · 最初の請求を拒否",
+    "saveCard": "カードを保存（テスト）",
+    "failSetup": "設定の失敗をシミュレート"
   },
   "order": {
     "eyebrow": "ご注文",
@@ -6685,7 +6697,8 @@
       "automationFailed": "メッセージ状況を開く",
       "campaignFailed": "キャンペーンを開く",
       "disputeDeadline": "異議申し立てを開く",
-      "assistanceOverdue": "ヘルプ依頼を開く"
+      "assistanceOverdue": "ヘルプ依頼を開く",
+      "pledgesUnpaid": "寄付のお約束を開く"
     },
     "rules": {
       "unseated": "{count, plural, other {{countWords}人の参加者に座席がありません}}",
@@ -6707,7 +6720,8 @@
       "automationFailed": "{count, plural, other {本日{countWords}件のメッセージまたは一括操作が失敗しました}}",
       "campaignFailed": "{count, plural, other {本日{countWords}件のキャンペーン配信が失敗しました}}",
       "disputeDeadline": "{count, plural, other {{countWords}件の異議申し立てに間もなく証拠の提出が必要です}}",
-      "assistanceOverdue": "{count, plural, other {{countWords}件のヘルプ依頼が長く待たされています}}"
+      "assistanceOverdue": "{count, plural, other {{countWords}件のヘルプ依頼が長く待たされています}}",
+      "pledgesUnpaid": "{count, plural, other {イベントから14日経っても{countWords}件の寄付のお約束が未払いです}}"
     },
     "widget": {
       "title": "アラート",
@@ -8972,7 +8986,8 @@
       "openConsole": "コンソールを開く",
       "openSpotter": "パドルを記録",
       "openPaddles": "パドル番号",
-      "openScreen": "ライブスクリーン"
+      "openScreen": "ライブスクリーン",
+      "openPledges": "寄付のお約束と回収"
     },
     "paddles": {
       "title": "パドル番号",
@@ -11397,7 +11412,8 @@
     "unseated": "まだ席がない方：{names}",
     "guestOf": "{name}さんのお連れ様",
     "keep": "このページには常に現在のテーブルが表示されます。主催者が席を変更しても、招待状のリンクとQRコードは変わりません。",
-    "toRsvp": "出欠の回答に戻る"
+    "toRsvp": "出欠の回答に戻る",
+    "saveCard": "今夜の寄付のためにカードを保存"
   },
   "scanGuests": {
     "view": "ゲスト",
@@ -11916,5 +11932,164 @@
       "seats": "お席"
     },
     "openHub": "ゲストページを開く：プログラム、お席、チケット"
+  },
+  "savedCard": {
+    "metaTitle": "今夜のためにカードを保存",
+    "title": "今夜の寄付のためにカードを保存",
+    "intro": "ご自身のスマートフォンでカードを一度保存すれば、今夜はワンタップで寄付できます。今は何も請求されません。",
+    "introParty": "{party} の皆さまへ：ご自身のスマートフォンでカードを一度保存すれば、今夜はワンタップで寄付できます。寄付のお約束は翌朝に請求されます。今は何も請求されません。",
+    "unavailableTitle": "カードの保存は受け付けていません",
+    "unavailableBody": "このイベントでは現在オンライン寄付を受け付けていません。会場では寄付できます。",
+    "formLabel": "カードを保存",
+    "formTitle": "お客様の情報",
+    "name": "氏名",
+    "email": "メールアドレス",
+    "emailHint": "寄付のお約束のまとめと領収書はこちらに届きます。",
+    "consentLabel": "今夜のためにこのカードを保存することを承認します",
+    "consent": "{org} は、このカードを決済代行会社に保存し、{event} で私が選んだ寄付と私が約束した寄付に限って請求できます。寄付のお約束はイベント翌朝に請求され、その前にまとめが届きます。カードはイベントの30日後に削除され、このページからいつでも削除できます。",
+    "privacy": "カード情報は決済代行会社に直接送られます。当社がカード番号を見たり保存したりすることはありません。",
+    "save": "カードを保存する",
+    "saving": "安全なカード入力フォームを開いています…",
+    "savedTitle": "今夜のためにカードが保存されました",
+    "savedBody": "末尾 {last4} の {brand} で、このイベントでワンタップ寄付ができます。",
+    "card": "カード",
+    "giveNow": "今すぐ寄付する",
+    "remove": "カードを削除する",
+    "removeHint": "削除すると、まだ行われていない請求はすべて取り消されます。寄付のお約束はリンクからお支払いいただけます。",
+    "removed": "カードを削除しました。請求されることはありません。",
+    "pending": "決済代行会社でカードを確認しています。しばらくしてから更新してください。",
+    "failed": "カードを保存できませんでした。もう一度お試しいただくか、別のカードをお使いください。",
+    "fromCheckout": "ありがとうございます。ご注文が完了しました。チケットはメールで届きます。",
+    "oneTapTitle": "保存したカードで寄付する",
+    "oneTapBody": "ワンタップで末尾 {last4} の {brand} に請求されます。すぐに確認画面が表示されます。",
+    "oneTapFailed": "この寄付は完了しませんでした。もう一度お試しいただくか、下のフォームをお使いください。",
+    "oneTapGive": "{amount} を寄付 · {name}",
+    "manageCard": "保存したカードを管理",
+    "errors": {
+      "name": "氏名を入力してください。",
+      "email": "有効なメールアドレスを入力してください。",
+      "consent": "カードの保存を承認するにはチェックを入れてください。",
+      "event_over": "このイベントは終了したため、カードを保存できません。",
+      "not_connected": "このイベントでは現在オンライン寄付を受け付けていません。",
+      "link": "このリンクは無効になりました。主催者に新しいリンクを依頼してください。"
+    }
+  },
+  "pledgePay": {
+    "metaTitle": "寄付のお約束",
+    "title": "{amount} の寄付のお約束",
+    "subtitle": "{level} · {campaign}。ご厚意に感謝いたします。",
+    "stateTitle": "状況",
+    "status": {
+      "scheduled": "カード請求予定",
+      "charging": "請求処理中",
+      "invoiced": "お支払い待ち",
+      "paid": "支払い済み",
+      "paid_offline": "支払い済み",
+      "written_off": "終了"
+    },
+    "card": "カード",
+    "cardScheduled": "{when}に末尾 {last4} の {brand} へ請求します。",
+    "charging": "現在カードに請求しています。しばらくしてから更新してください。",
+    "due": "{date}までにお支払いください。",
+    "thanks": "全額お支払いいただきました。ありがとうございます！領収書はメールで届きます。",
+    "closed": "この寄付のお約束は終了しました。お支払いいただく金額はありません。",
+    "payNow": "今すぐ {amount} を支払う",
+    "payAnotherWay": "別の方法で今すぐ {amount} を支払う",
+    "anotherWayHint": "今お支払いいただくとカードへの請求は取り消されます。別のカードを使いたい場合は、そのカードで今お支払いください。",
+    "errors": {
+      "charging": "現在カードに請求しているため、このお支払いは開始されませんでした。",
+      "settled": "この寄付のお約束はすでに精算済みです。",
+      "no_email": "お支払いにはメールアドレスを入力してください。",
+      "rate_limited": "試行回数が多すぎます。1分ほど待ってからもう一度お試しください。",
+      "not_connected": "現在オンラインでのお支払いはできません。お支払い方法は主催者にお問い合わせください。",
+      "generic": "問題が発生しました。もう一度お試しください。",
+      "email": "有効なメールアドレスを入力してください。"
+    },
+    "email": "領収書の送付先メールアドレス",
+    "emailHint": "領収書はこちらに送られます。"
+  },
+  "pledges": {
+    "title": "寄付のお約束",
+    "subtitle": "パドルオークションでのすべてのお約束と、その回収状況です。",
+    "viewerNotice": "お約束を閲覧できます。夜の締め、支払いの記録、貸し倒れ処理は財務ロールが行います。",
+    "pledged": "お約束額",
+    "paid": "支払い済み",
+    "owed": "未払い",
+    "writtenOffTotal": "貸し倒れ",
+    "cardsSaved": "保存されたカード",
+    "emptyTitle": "まだお約束はありません",
+    "emptyDescription": "記録係がパドルオークションでパドルを確定すると、ここにお約束が表示されます。",
+    "closeTitle": "{count, plural, other {送信待ちのお約束 # 件}}",
+    "closeBody": "夜を締めると、各寄付者にまとめが届きます。カードを保存したお約束は明日 09:00（イベントのタイムゾーン）に請求され、それ以外には支払期限30日の支払いリンクが届き、支払いまでリマインダーが送られます。",
+    "close": "夜を締めてまとめを送信",
+    "closed": "まとめを送信しました：保存カードへの請求 {cards, plural, other {# 件}}、支払いリンクの送信 {invoices, plural, other {# 件}}。",
+    "caption": "寄付のお約束と回収状況",
+    "columns": {
+      "paddle": "パドル",
+      "holder": "寄付者",
+      "level": "レベル",
+      "amount": "金額",
+      "status": "状況",
+      "detail": "詳細",
+      "actions": "操作"
+    },
+    "status": {
+      "open": "未送信",
+      "scheduled": "カード請求予定",
+      "charging": "請求処理中",
+      "invoiced": "支払いリンク送信済み",
+      "paid": "支払い済み",
+      "paid_offline": "オフラインで支払い済み",
+      "written_off": "貸し倒れ"
+    },
+    "cardLabel": "{brand} ·{last4}",
+    "card": "カード",
+    "detail": {
+      "open": "夜の締めを待っています。",
+      "scheduled": "{card}、{when}",
+      "charging": "{card}、請求処理中",
+      "invoiced": "期限 {date}。",
+      "declined": "{count, plural, other {カードが # 回拒否されました。}}",
+      "noEmail": "メールアドレスがありません：支払いリンクを直接お伝えください。",
+      "paidCard": "{card} に請求済み",
+      "paidLink": "リンクで支払い済み"
+    },
+    "methods": {
+      "check": "小切手",
+      "wire": "銀行振込",
+      "stock": "株式",
+      "daf": "寄付者助言基金（DAF）",
+      "cash": "現金",
+      "other": "その他"
+    },
+    "recordPayment": "支払いを記録",
+    "method": "支払い方法",
+    "chooseMethod": "選択…",
+    "reference": "参照番号（任意）",
+    "receivedOn": "受領日",
+    "noteOptional": "メモ（任意）",
+    "recordSubmit": "パドル {paddle} の支払いを記録",
+    "recorded": "支払いを記録しました。リマインダーとカード請求は停止しました。",
+    "writeOff": "貸し倒れ処理",
+    "writeOffNote": "貸し倒れ処理の理由",
+    "writeOffSubmit": "パドル {paddle} のお約束を貸し倒れ処理",
+    "writtenOff": "{amount} のお約束を貸し倒れ処理しました。",
+    "errors": {
+      "charging": "現在カードに請求しています。数分後にもう一度お試しください。",
+      "settled": "このお約束はすでに精算済みです。",
+      "future": "未来の日付は指定できません。",
+      "method": "支払い方法を選んでください。",
+      "receivedOn": "受領日を入力してください。",
+      "note": "貸し倒れ処理の理由を入力してください。",
+      "generic": "問題が発生しました。もう一度お試しください。"
+    },
+    "qr": {
+      "label": "今夜の寄付のためにカードを保存するQRコード",
+      "checkinTitle": "チェックイン時のカード保存",
+      "checkinBody": "チェックイン後のゲストにこのコードを見せてください。ご自身のスマートフォンでカードを保存し、今夜ワンタップで寄付できます。",
+      "tableTitle": "テーブルでのカード保存",
+      "tableBody": "このコードをテーブルカードに印刷してください。ゲストはご自身のスマートフォンでカードを保存し、ワンタップ寄付やお約束に使えます。"
+    },
+    "payLink": "パドル {paddle} の支払いリンク"
   }
 }

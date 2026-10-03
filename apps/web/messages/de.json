@@ -76,9 +76,9 @@
         "org-status": "{status, select, suspended {Yayatoh hat diese Organisation gesperrt} reactivated {Diese Organisation ist wieder online} other {Yayatoh hat diese Organisation geschlossen}}"
       },
       "alerts": {
-        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {Ein Teilnehmer hat keinen Sitzplatz} other {{countWords} Teilnehmende haben keinen Sitzplatz}}} undistributed {{count, plural, one {Ein gekauftes Ticket wurde nicht weitergegeben} other {{countWords} gekaufte Tickets wurden nicht weitergegeben}}} paymentsFailed {{count, plural, one {Eine Zahlung ist fehlgeschlagen} other {{countWords} Zahlungen sind fehlgeschlagen}}} paymentsStuck {{count, plural, one {Eine Zahlung hängt fest} other {{countWords} Zahlungen hängen fest}}} refundSurge {{count, plural, one {Eine Erstattung in der letzten Stunde} other {{countWords} Erstattungen in der letzten Stunde}}} devicesOffline {{count, plural, one {Ein Check-in-Gerät ist offline} other {{countWords} Check-in-Geräte sind offline}}} devicesLowBattery {{count, plural, one {Ein Check-in-Gerät hat einen schwachen Akku} other {{countWords} Check-in-Geräte haben einen schwachen Akku}}} devicesBacklog {{count, plural, one {Ein Check-in-Gerät hat Scans, die auf die Synchronisierung warten} other {{countWords} Check-in-Geräte haben Scans, die auf die Synchronisierung warten}}} capacityNear {Der Veranstaltungsort ist zu {count} % voll} capacityFull {Der Veranstaltungsort ist voll ({count} %)} sellOut {{count} % der Tickets sind verkauft} salesPace {Der Ticketverkauf liegt bei {count} % des Zieltempos} readiness {{count, plural, one {Ein Einrichtungsschritt blockiert diese Veranstaltung} other {{countWords} Einrichtungsschritte blockieren diese Veranstaltung}}} domain {{count, plural, one {Eine eigene Domain hat ein Problem} other {{countWords} eigene Domains haben ein Problem}}} payoutsPastDue {{count, plural, one {Eine Anforderung des Auszahlungskontos ist überfällig} other {{countWords} Anforderungen des Auszahlungskontos sind überfällig}}} deliverability {Die E-Mail-Zustellbarkeit braucht Aufmerksamkeit} automationFailed {{count, plural, one {Eine Nachricht oder Sammelaktion ist heute fehlgeschlagen} other {{countWords} Nachrichten oder Sammelaktionen sind heute fehlgeschlagen}}} assistanceOverdue {{count, plural, one {Eine Hilfeanfrage wartet zu lange} other {{countWords} Hilfeanfragen warten zu lange}}} campaignFailed {{count, plural, one {Ein Kampagnenversand ist heute fehlgeschlagen} other {{countWords} Kampagnenversände sind heute fehlgeschlagen}}} disputeDeadline {{count, plural, one {Eine Rückbuchung braucht bald Nachweise} other {{countWords} Rückbuchungen brauchen bald Nachweise}}} other {Warnung}}",
-        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {Ein Teilnehmer hat keinen Sitzplatz} other {{countWords} Teilnehmende haben keinen Sitzplatz}}} undistributed {{count, plural, one {Ein gekauftes Ticket wurde nicht weitergegeben} other {{countWords} gekaufte Tickets wurden nicht weitergegeben}}} paymentsFailed {{count, plural, one {Eine Zahlung ist fehlgeschlagen} other {{countWords} Zahlungen sind fehlgeschlagen}}} paymentsStuck {{count, plural, one {Eine Zahlung hängt fest} other {{countWords} Zahlungen hängen fest}}} refundSurge {{count, plural, one {Eine Erstattung in der letzten Stunde} other {{countWords} Erstattungen in der letzten Stunde}}} devicesOffline {{count, plural, one {Ein Check-in-Gerät ist offline} other {{countWords} Check-in-Geräte sind offline}}} devicesLowBattery {{count, plural, one {Ein Check-in-Gerät hat einen schwachen Akku} other {{countWords} Check-in-Geräte haben einen schwachen Akku}}} devicesBacklog {{count, plural, one {Ein Check-in-Gerät hat Scans, die auf die Synchronisierung warten} other {{countWords} Check-in-Geräte haben Scans, die auf die Synchronisierung warten}}} capacityNear {Der Veranstaltungsort ist zu {count} % voll} capacityFull {Der Veranstaltungsort ist voll ({count} %)} sellOut {{count} % der Tickets sind verkauft} salesPace {Der Ticketverkauf liegt bei {count} % des Zieltempos} readiness {{count, plural, one {Ein Einrichtungsschritt blockiert diese Veranstaltung} other {{countWords} Einrichtungsschritte blockieren diese Veranstaltung}}} domain {{count, plural, one {Eine eigene Domain hat ein Problem} other {{countWords} eigene Domains haben ein Problem}}} payoutsPastDue {{count, plural, one {Eine Anforderung des Auszahlungskontos ist überfällig} other {{countWords} Anforderungen des Auszahlungskontos sind überfällig}}} deliverability {Die E-Mail-Zustellbarkeit braucht Aufmerksamkeit} automationFailed {{count, plural, one {Eine Nachricht oder Sammelaktion ist heute fehlgeschlagen} other {{countWords} Nachrichten oder Sammelaktionen sind heute fehlgeschlagen}}} assistanceOverdue {{count, plural, one {Eine Hilfeanfrage wartet zu lange} other {{countWords} Hilfeanfragen warten zu lange}}} campaignFailed {{count, plural, one {Ein Kampagnenversand ist heute fehlgeschlagen} other {{countWords} Kampagnenversände sind heute fehlgeschlagen}}} disputeDeadline {{count, plural, one {Eine Rückbuchung braucht bald Nachweise} other {{countWords} Rückbuchungen brauchen bald Nachweise}}} other {Warnung}}",
-        "alert-urgent-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {Ein Teilnehmer hat keinen Sitzplatz} other {{countWords} Teilnehmende haben keinen Sitzplatz}}} undistributed {{count, plural, one {Ein gekauftes Ticket wurde nicht weitergegeben} other {{countWords} gekaufte Tickets wurden nicht weitergegeben}}} paymentsFailed {{count, plural, one {Eine Zahlung ist fehlgeschlagen} other {{countWords} Zahlungen sind fehlgeschlagen}}} paymentsStuck {{count, plural, one {Eine Zahlung hängt fest} other {{countWords} Zahlungen hängen fest}}} refundSurge {{count, plural, one {Eine Erstattung in der letzten Stunde} other {{countWords} Erstattungen in der letzten Stunde}}} devicesOffline {{count, plural, one {Ein Check-in-Gerät ist offline} other {{countWords} Check-in-Geräte sind offline}}} devicesLowBattery {{count, plural, one {Ein Check-in-Gerät hat einen schwachen Akku} other {{countWords} Check-in-Geräte haben einen schwachen Akku}}} devicesBacklog {{count, plural, one {Ein Check-in-Gerät hat Scans, die auf die Synchronisierung warten} other {{countWords} Check-in-Geräte haben Scans, die auf die Synchronisierung warten}}} capacityNear {Der Veranstaltungsort ist zu {count} % voll} capacityFull {Der Veranstaltungsort ist voll ({count} %)} sellOut {{count} % der Tickets sind verkauft} salesPace {Der Ticketverkauf liegt bei {count} % des Zieltempos} readiness {{count, plural, one {Ein Einrichtungsschritt blockiert diese Veranstaltung} other {{countWords} Einrichtungsschritte blockieren diese Veranstaltung}}} domain {{count, plural, one {Eine eigene Domain hat ein Problem} other {{countWords} eigene Domains haben ein Problem}}} payoutsPastDue {{count, plural, one {Eine Anforderung des Auszahlungskontos ist überfällig} other {{countWords} Anforderungen des Auszahlungskontos sind überfällig}}} deliverability {Die E-Mail-Zustellbarkeit braucht Aufmerksamkeit} automationFailed {{count, plural, one {Eine Nachricht oder Sammelaktion ist heute fehlgeschlagen} other {{countWords} Nachrichten oder Sammelaktionen sind heute fehlgeschlagen}}} assistanceOverdue {{count, plural, one {Eine Hilfeanfrage wartet zu lange} other {{countWords} Hilfeanfragen warten zu lange}}} campaignFailed {{count, plural, one {Ein Kampagnenversand ist heute fehlgeschlagen} other {{countWords} Kampagnenversände sind heute fehlgeschlagen}}} disputeDeadline {{count, plural, one {Eine Rückbuchung braucht bald Nachweise} other {{countWords} Rückbuchungen brauchen bald Nachweise}}} other {Warnung}}"
+        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {Ein Teilnehmer hat keinen Sitzplatz} other {{countWords} Teilnehmende haben keinen Sitzplatz}}} undistributed {{count, plural, one {Ein gekauftes Ticket wurde nicht weitergegeben} other {{countWords} gekaufte Tickets wurden nicht weitergegeben}}} paymentsFailed {{count, plural, one {Eine Zahlung ist fehlgeschlagen} other {{countWords} Zahlungen sind fehlgeschlagen}}} paymentsStuck {{count, plural, one {Eine Zahlung hängt fest} other {{countWords} Zahlungen hängen fest}}} refundSurge {{count, plural, one {Eine Erstattung in der letzten Stunde} other {{countWords} Erstattungen in der letzten Stunde}}} devicesOffline {{count, plural, one {Ein Check-in-Gerät ist offline} other {{countWords} Check-in-Geräte sind offline}}} devicesLowBattery {{count, plural, one {Ein Check-in-Gerät hat einen schwachen Akku} other {{countWords} Check-in-Geräte haben einen schwachen Akku}}} devicesBacklog {{count, plural, one {Ein Check-in-Gerät hat Scans, die auf die Synchronisierung warten} other {{countWords} Check-in-Geräte haben Scans, die auf die Synchronisierung warten}}} capacityNear {Der Veranstaltungsort ist zu {count} % voll} capacityFull {Der Veranstaltungsort ist voll ({count} %)} sellOut {{count} % der Tickets sind verkauft} salesPace {Der Ticketverkauf liegt bei {count} % des Zieltempos} readiness {{count, plural, one {Ein Einrichtungsschritt blockiert diese Veranstaltung} other {{countWords} Einrichtungsschritte blockieren diese Veranstaltung}}} domain {{count, plural, one {Eine eigene Domain hat ein Problem} other {{countWords} eigene Domains haben ein Problem}}} payoutsPastDue {{count, plural, one {Eine Anforderung des Auszahlungskontos ist überfällig} other {{countWords} Anforderungen des Auszahlungskontos sind überfällig}}} deliverability {Die E-Mail-Zustellbarkeit braucht Aufmerksamkeit} automationFailed {{count, plural, one {Eine Nachricht oder Sammelaktion ist heute fehlgeschlagen} other {{countWords} Nachrichten oder Sammelaktionen sind heute fehlgeschlagen}}} assistanceOverdue {{count, plural, one {Eine Hilfeanfrage wartet zu lange} other {{countWords} Hilfeanfragen warten zu lange}}} campaignFailed {{count, plural, one {Ein Kampagnenversand ist heute fehlgeschlagen} other {{countWords} Kampagnenversände sind heute fehlgeschlagen}}} disputeDeadline {{count, plural, one {Eine Rückbuchung braucht bald Nachweise} other {{countWords} Rückbuchungen brauchen bald Nachweise}}} pledgesUnpaid {{count, plural, one {Eine Zusage ist 14 Tage nach der Veranstaltung noch offen} other {{countWords} Zusagen sind 14 Tage nach der Veranstaltung noch offen}}} other {Warnung}}",
+        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {Ein Teilnehmer hat keinen Sitzplatz} other {{countWords} Teilnehmende haben keinen Sitzplatz}}} undistributed {{count, plural, one {Ein gekauftes Ticket wurde nicht weitergegeben} other {{countWords} gekaufte Tickets wurden nicht weitergegeben}}} paymentsFailed {{count, plural, one {Eine Zahlung ist fehlgeschlagen} other {{countWords} Zahlungen sind fehlgeschlagen}}} paymentsStuck {{count, plural, one {Eine Zahlung hängt fest} other {{countWords} Zahlungen hängen fest}}} refundSurge {{count, plural, one {Eine Erstattung in der letzten Stunde} other {{countWords} Erstattungen in der letzten Stunde}}} devicesOffline {{count, plural, one {Ein Check-in-Gerät ist offline} other {{countWords} Check-in-Geräte sind offline}}} devicesLowBattery {{count, plural, one {Ein Check-in-Gerät hat einen schwachen Akku} other {{countWords} Check-in-Geräte haben einen schwachen Akku}}} devicesBacklog {{count, plural, one {Ein Check-in-Gerät hat Scans, die auf die Synchronisierung warten} other {{countWords} Check-in-Geräte haben Scans, die auf die Synchronisierung warten}}} capacityNear {Der Veranstaltungsort ist zu {count} % voll} capacityFull {Der Veranstaltungsort ist voll ({count} %)} sellOut {{count} % der Tickets sind verkauft} salesPace {Der Ticketverkauf liegt bei {count} % des Zieltempos} readiness {{count, plural, one {Ein Einrichtungsschritt blockiert diese Veranstaltung} other {{countWords} Einrichtungsschritte blockieren diese Veranstaltung}}} domain {{count, plural, one {Eine eigene Domain hat ein Problem} other {{countWords} eigene Domains haben ein Problem}}} payoutsPastDue {{count, plural, one {Eine Anforderung des Auszahlungskontos ist überfällig} other {{countWords} Anforderungen des Auszahlungskontos sind überfällig}}} deliverability {Die E-Mail-Zustellbarkeit braucht Aufmerksamkeit} automationFailed {{count, plural, one {Eine Nachricht oder Sammelaktion ist heute fehlgeschlagen} other {{countWords} Nachrichten oder Sammelaktionen sind heute fehlgeschlagen}}} assistanceOverdue {{count, plural, one {Eine Hilfeanfrage wartet zu lange} other {{countWords} Hilfeanfragen warten zu lange}}} campaignFailed {{count, plural, one {Ein Kampagnenversand ist heute fehlgeschlagen} other {{countWords} Kampagnenversände sind heute fehlgeschlagen}}} disputeDeadline {{count, plural, one {Eine Rückbuchung braucht bald Nachweise} other {{countWords} Rückbuchungen brauchen bald Nachweise}}} pledgesUnpaid {{count, plural, one {Eine Zusage ist 14 Tage nach der Veranstaltung noch offen} other {{countWords} Zusagen sind 14 Tage nach der Veranstaltung noch offen}}} other {Warnung}}",
+        "alert-urgent-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {Ein Teilnehmer hat keinen Sitzplatz} other {{countWords} Teilnehmende haben keinen Sitzplatz}}} undistributed {{count, plural, one {Ein gekauftes Ticket wurde nicht weitergegeben} other {{countWords} gekaufte Tickets wurden nicht weitergegeben}}} paymentsFailed {{count, plural, one {Eine Zahlung ist fehlgeschlagen} other {{countWords} Zahlungen sind fehlgeschlagen}}} paymentsStuck {{count, plural, one {Eine Zahlung hängt fest} other {{countWords} Zahlungen hängen fest}}} refundSurge {{count, plural, one {Eine Erstattung in der letzten Stunde} other {{countWords} Erstattungen in der letzten Stunde}}} devicesOffline {{count, plural, one {Ein Check-in-Gerät ist offline} other {{countWords} Check-in-Geräte sind offline}}} devicesLowBattery {{count, plural, one {Ein Check-in-Gerät hat einen schwachen Akku} other {{countWords} Check-in-Geräte haben einen schwachen Akku}}} devicesBacklog {{count, plural, one {Ein Check-in-Gerät hat Scans, die auf die Synchronisierung warten} other {{countWords} Check-in-Geräte haben Scans, die auf die Synchronisierung warten}}} capacityNear {Der Veranstaltungsort ist zu {count} % voll} capacityFull {Der Veranstaltungsort ist voll ({count} %)} sellOut {{count} % der Tickets sind verkauft} salesPace {Der Ticketverkauf liegt bei {count} % des Zieltempos} readiness {{count, plural, one {Ein Einrichtungsschritt blockiert diese Veranstaltung} other {{countWords} Einrichtungsschritte blockieren diese Veranstaltung}}} domain {{count, plural, one {Eine eigene Domain hat ein Problem} other {{countWords} eigene Domains haben ein Problem}}} payoutsPastDue {{count, plural, one {Eine Anforderung des Auszahlungskontos ist überfällig} other {{countWords} Anforderungen des Auszahlungskontos sind überfällig}}} deliverability {Die E-Mail-Zustellbarkeit braucht Aufmerksamkeit} automationFailed {{count, plural, one {Eine Nachricht oder Sammelaktion ist heute fehlgeschlagen} other {{countWords} Nachrichten oder Sammelaktionen sind heute fehlgeschlagen}}} assistanceOverdue {{count, plural, one {Eine Hilfeanfrage wartet zu lange} other {{countWords} Hilfeanfragen warten zu lange}}} campaignFailed {{count, plural, one {Ein Kampagnenversand ist heute fehlgeschlagen} other {{countWords} Kampagnenversände sind heute fehlgeschlagen}}} disputeDeadline {{count, plural, one {Eine Rückbuchung braucht bald Nachweise} other {{countWords} Rückbuchungen brauchen bald Nachweise}}} pledgesUnpaid {{count, plural, one {Eine Zusage ist 14 Tage nach der Veranstaltung noch offen} other {{countWords} Zusagen sind 14 Tage nach der Veranstaltung noch offen}}} other {Warnung}}"
       }
     },
     "kinds": {
@@ -181,7 +181,10 @@
       },
       "donations": {
         "receipt": "Spendenquittung",
-        "year-end-statement": "Jährliche Spendenübersicht"
+        "year-end-statement": "Jährliche Spendenübersicht",
+        "pledge-summary": "Zusammenfassung der Zusage",
+        "pledge-invoice": "Rechnung zur Zusage",
+        "pledge-reminder": "Erinnerung an die Zusage"
       },
       "guests": {
         "invitation": "Hochzeitseinladung",
@@ -935,14 +938,23 @@
     "orgUnavailable": "Dieser Veranstalter verkauft gerade keine Tickets. Bereits gekaufte Tickets bleiben gültig.",
     "riskBlocked": "Diese Bestellung können wir nicht annehmen. Bitte wende dich an den Veranstalter.",
     "creditInvalid": "Dieser Guthabencode ist ungültig oder wurde bereits eingelöst.",
-    "creditNotApplicable": "Dieses Guthaben kann für diese Tickets nicht verwendet werden."
+    "creditNotApplicable": "Dieses Guthaben kann für diese Tickets nicht verwendet werden.",
+    "saveCardForGiving": "Meine Karte für die Spenden heute Abend speichern (das erledigen Sie auf der nächsten Seite; ohne Ihre Zustimmung dort wird nichts gespeichert)"
   },
   "fakePay": {
     "eyebrow": "Testzahlung",
     "title": "Bestellung bezahlen",
     "description": "Dies ist eine Testzahlungsseite. Es fließt kein echtes Geld.",
     "pay": "Jetzt bezahlen (Test)",
-    "decline": "Abgelehnte Karte simulieren"
+    "decline": "Abgelehnte Karte simulieren",
+    "setupTitle": "Testkarte einrichten",
+    "setupDescription": "Platzhalter für das sichere Kartenformular des Zahlungsanbieters. Es wird keine echte Karte gespeichert.",
+    "testCard": "Testkarte",
+    "card4242": "4242 · wird immer belastet",
+    "card0002": "0002 · wird immer abgelehnt",
+    "card9995": "9995 · lehnt die erste Belastung ab",
+    "saveCard": "Karte speichern (Test)",
+    "failSetup": "Fehlgeschlagene Einrichtung simulieren"
   },
   "order": {
     "eyebrow": "Deine Bestellung",
@@ -6685,7 +6697,8 @@
       "automationFailed": "Nachrichtenstatus öffnen",
       "campaignFailed": "Kampagnen öffnen",
       "disputeDeadline": "Rückbuchungen öffnen",
-      "assistanceOverdue": "Hilfeanfragen öffnen"
+      "assistanceOverdue": "Hilfeanfragen öffnen",
+      "pledgesUnpaid": "Zusagen öffnen"
     },
     "rules": {
       "unseated": "{count, plural, one {Ein Teilnehmer hat keinen Sitzplatz} other {{countWords} Teilnehmende haben keinen Sitzplatz}}",
@@ -6707,7 +6720,8 @@
       "automationFailed": "{count, plural, one {Eine Nachricht oder Sammelaktion ist heute fehlgeschlagen} other {{countWords} Nachrichten oder Sammelaktionen sind heute fehlgeschlagen}}",
       "campaignFailed": "{count, plural, one {Ein Kampagnenversand ist heute fehlgeschlagen} other {{countWords} Kampagnenversände sind heute fehlgeschlagen}}",
       "disputeDeadline": "{count, plural, one {Eine Rückbuchung braucht bald Nachweise} other {{countWords} Rückbuchungen brauchen bald Nachweise}}",
-      "assistanceOverdue": "{count, plural, one {Eine Hilfeanfrage wartet zu lange} other {{countWords} Hilfeanfragen warten zu lange}}"
+      "assistanceOverdue": "{count, plural, one {Eine Hilfeanfrage wartet zu lange} other {{countWords} Hilfeanfragen warten zu lange}}",
+      "pledgesUnpaid": "{count, plural, one {Eine Zusage ist 14 Tage nach der Veranstaltung noch offen} other {{countWords} Zusagen sind 14 Tage nach der Veranstaltung noch offen}}"
     },
     "widget": {
       "title": "Warnungen",
@@ -8972,7 +8986,8 @@
       "openConsole": "Konsole öffnen",
       "openSpotter": "Nummern erfassen",
       "openPaddles": "Bieternummern",
-      "openScreen": "Live-Bildschirm"
+      "openScreen": "Live-Bildschirm",
+      "openPledges": "Zusagen und Einzug"
     },
     "paddles": {
       "title": "Bieternummern",
@@ -11397,7 +11412,8 @@
     "unseated": "Noch ohne Platz: {names}",
     "guestOf": "Begleitung von {name}",
     "keep": "Diese Seite zeigt immer Ihren aktuellen Tisch: Der Link und der QR-Code auf Ihrer Einladung ändern sich nicht, wenn die Gastgeber Sie umsetzen.",
-    "toRsvp": "Zurück zu Ihrer Rückmeldung"
+    "toRsvp": "Zurück zu Ihrer Rückmeldung",
+    "saveCard": "Karte für die Spenden heute Abend speichern"
   },
   "scanGuests": {
     "view": "Gäste",
@@ -11916,5 +11932,164 @@
       "seats": "Plätze"
     },
     "openHub": "Deine Gästeseite öffnen: Programm, Plätze und Tickets"
+  },
+  "savedCard": {
+    "metaTitle": "Karte für heute Abend speichern",
+    "title": "Karte für die Spenden heute Abend speichern",
+    "intro": "Speichern Sie Ihre Karte einmal auf Ihrem eigenen Handy und spenden Sie dann im Laufe des Abends mit einem Tipp. Jetzt wird nichts belastet.",
+    "introParty": "Für {party}: Speichern Sie Ihre Karte einmal auf Ihrem eigenen Handy und spenden Sie dann im Laufe des Abends mit einem Tipp. Ihre Zusagen werden am nächsten Morgen belastet. Jetzt wird nichts belastet.",
+    "unavailableTitle": "Karten können nicht gespeichert werden",
+    "unavailableBody": "Diese Veranstaltung nimmt gerade keine Online-Spenden an. Sie können vor Ort spenden.",
+    "formLabel": "Karte speichern",
+    "formTitle": "Ihre Angaben",
+    "name": "Vollständiger Name",
+    "email": "E-Mail",
+    "emailHint": "Ihre Zusammenfassung und Quittungen gehen an diese Adresse.",
+    "consentLabel": "Ich erlaube, diese Karte für heute Abend zu speichern",
+    "consent": "{org} darf diese Karte bei seinem Zahlungsanbieter speichern und sie nur für Spenden belasten, die ich wähle, und für Zusagen, die ich bei {event} mache. Zusagen werden am Morgen nach der Veranstaltung belastet; vorher erhalte ich eine Zusammenfassung. Die Karte wird 30 Tage nach der Veranstaltung entfernt, und ich kann sie jederzeit auf dieser Seite entfernen.",
+    "privacy": "Ihre Kartendaten gehen direkt an den Zahlungsanbieter. Wir sehen und speichern Ihre Kartennummer nie.",
+    "save": "Meine Karte speichern",
+    "saving": "Das sichere Kartenformular wird geöffnet…",
+    "savedTitle": "Ihre Karte ist für heute Abend gespeichert",
+    "savedBody": "{brand} mit Endziffern {last4} ist bereit für Spenden mit einem Tipp bei dieser Veranstaltung.",
+    "card": "Karte",
+    "giveNow": "Jetzt spenden",
+    "remove": "Meine Karte entfernen",
+    "removeHint": "Durch das Entfernen entfällt jede noch nicht erfolgte Belastung; Zusagen können Sie weiterhin per Link bezahlen.",
+    "removed": "Ihre Karte wurde entfernt. Sie wird nicht belastet.",
+    "pending": "Wir bestätigen Ihre Karte beim Zahlungsanbieter. Laden Sie die Seite gleich neu.",
+    "failed": "Ihre Karte konnte nicht gespeichert werden. Versuchen Sie es erneut oder nutzen Sie eine andere Karte.",
+    "fromCheckout": "Danke, Ihre Bestellung ist abgeschlossen. Ihre Tickets kommen per E-Mail.",
+    "oneTapTitle": "Mit Ihrer gespeicherten Karte spenden",
+    "oneTapBody": "Ein Tipp belastet {brand} mit Endziffern {last4}. Danach sehen Sie gleich eine Bestätigung.",
+    "oneTapFailed": "Diese Spende hat nicht geklappt. Versuchen Sie es erneut oder nutzen Sie das Formular unten.",
+    "oneTapGive": "{amount} spenden · {name}",
+    "manageCard": "Meine gespeicherte Karte verwalten",
+    "errors": {
+      "name": "Geben Sie Ihren vollständigen Namen ein.",
+      "email": "Geben Sie eine gültige E-Mail-Adresse ein.",
+      "consent": "Setzen Sie das Häkchen, um das Speichern Ihrer Karte zu erlauben.",
+      "event_over": "Diese Veranstaltung ist vorbei, daher können keine Karten mehr gespeichert werden.",
+      "not_connected": "Diese Veranstaltung nimmt gerade keine Online-Spenden an.",
+      "link": "Dieser Link ist nicht mehr gültig. Bitten Sie den Gastgeber um einen neuen."
+    }
+  },
+  "pledgePay": {
+    "metaTitle": "Ihre Zusage",
+    "title": "Ihre Zusage über {amount}",
+    "subtitle": "{level} · {campaign}. Vielen Dank für Ihre Großzügigkeit.",
+    "stateTitle": "Status",
+    "status": {
+      "scheduled": "Kartenbelastung geplant",
+      "charging": "Wird belastet",
+      "invoiced": "Zahlung ausstehend",
+      "paid": "Bezahlt",
+      "paid_offline": "Bezahlt",
+      "written_off": "Abgeschlossen"
+    },
+    "card": "Karte",
+    "cardScheduled": "Wir belasten {brand} mit Endziffern {last4} am {when}.",
+    "charging": "Ihre Karte wird gerade belastet. Laden Sie die Seite gleich neu.",
+    "due": "Bitte zahlen Sie bis {date}.",
+    "thanks": "Vollständig bezahlt. Vielen Dank! Ihre Quittung kommt per E-Mail.",
+    "closed": "Diese Zusage ist abgeschlossen. Es ist nichts mehr offen.",
+    "payNow": "{amount} jetzt bezahlen",
+    "payAnotherWay": "{amount} jetzt anders bezahlen",
+    "anotherWayHint": "Wenn Sie jetzt bezahlen, entfällt die Kartenbelastung. Sie möchten eine andere Karte nutzen? Bezahlen Sie jetzt damit.",
+    "errors": {
+      "charging": "Ihre Karte wird gerade belastet, daher wurde diese Zahlung nicht gestartet.",
+      "settled": "Diese Zusage ist bereits beglichen.",
+      "no_email": "Geben Sie Ihre E-Mail-Adresse ein, um zu bezahlen.",
+      "rate_limited": "Zu viele Versuche. Warten Sie eine Minute und versuchen Sie es erneut.",
+      "not_connected": "Online-Zahlung ist gerade nicht möglich. Fragen Sie den Gastgeber, wie Sie zahlen können.",
+      "generic": "Etwas ist schiefgelaufen. Versuchen Sie es erneut.",
+      "email": "Geben Sie eine gültige E-Mail-Adresse ein."
+    },
+    "email": "E-Mail für Ihre Quittung",
+    "emailHint": "Ihre Quittung geht an diese Adresse."
+  },
+  "pledges": {
+    "title": "Zusagen",
+    "subtitle": "Jede Zusage aus der Paddelauktion und wie sie eingezogen wird.",
+    "viewerNotice": "Sie sehen die Zusagen. Finanzrollen schließen den Abend ab, erfassen Zahlungen und schreiben Zusagen ab.",
+    "pledged": "Zugesagt",
+    "paid": "Bezahlt",
+    "owed": "Noch offen",
+    "writtenOffTotal": "Abgeschrieben",
+    "cardsSaved": "Gespeicherte Karten",
+    "emptyTitle": "Noch keine Zusagen",
+    "emptyDescription": "Zusagen erscheinen hier, sobald die Protokollführung Paddel in der Paddelauktion bestätigt.",
+    "closeTitle": "{count, plural, one {# Zusage zu versenden} other {# Zusagen zu versenden}}",
+    "closeBody": "Beim Abschluss des Abends erhält jede spendende Person eine Zusammenfassung. Zusagen mit gespeicherter Karte werden morgen um 09:00 in der Zeitzone der Veranstaltung belastet; die übrigen erhalten einen Zahlungslink, fällig in 30 Tagen, mit Erinnerungen bis zur Zahlung.",
+    "close": "Abend abschließen und Zusammenfassungen senden",
+    "closed": "Zusammenfassungen gesendet: {cards, plural, one {# Zusage wird einer gespeicherten Karte belastet} other {# Zusagen werden gespeicherten Karten belastet}} und {invoices, plural, one {# Zusage hat einen Zahlungslink erhalten} other {# Zusagen haben Zahlungslinks erhalten}}.",
+    "caption": "Zusagen und ihr Einzug",
+    "columns": {
+      "paddle": "Paddel",
+      "holder": "Spender",
+      "level": "Stufe",
+      "amount": "Betrag",
+      "status": "Status",
+      "detail": "Details",
+      "actions": "Aktionen"
+    },
+    "status": {
+      "open": "Nicht gesendet",
+      "scheduled": "Kartenbelastung geplant",
+      "charging": "Wird belastet",
+      "invoiced": "Zahlungslink gesendet",
+      "paid": "Bezahlt",
+      "paid_offline": "Offline bezahlt",
+      "written_off": "Abgeschrieben"
+    },
+    "cardLabel": "{brand} ·{last4}",
+    "card": "Karte",
+    "detail": {
+      "open": "Wartet auf den Abschluss des Abends.",
+      "scheduled": "{card} am {when}",
+      "charging": "{card}, Belastung läuft",
+      "invoiced": "Fällig am {date}.",
+      "declined": "{count, plural, one {Karte einmal abgelehnt.} other {Karte #-mal abgelehnt.}}",
+      "noEmail": "Keine E-Mail hinterlegt: Teilen Sie den Zahlungslink selbst.",
+      "paidCard": "Belastet auf {card}",
+      "paidLink": "Per Link bezahlt"
+    },
+    "methods": {
+      "check": "Scheck",
+      "wire": "Überweisung",
+      "stock": "Aktien",
+      "daf": "Spenderberatener Fonds (DAF)",
+      "cash": "Bargeld",
+      "other": "Sonstiges"
+    },
+    "recordPayment": "Zahlung erfassen",
+    "method": "Zahlungsweg",
+    "chooseMethod": "Auswählen…",
+    "reference": "Referenz (optional)",
+    "receivedOn": "Erhalten am",
+    "noteOptional": "Notiz (optional)",
+    "recordSubmit": "Zahlung für Paddel {paddle} erfassen",
+    "recorded": "Zahlung erfasst. Erinnerungen und eine etwaige Kartenbelastung wurden gestoppt.",
+    "writeOff": "Abschreiben",
+    "writeOffNote": "Grund für die Abschreibung",
+    "writeOffSubmit": "Zusage von Paddel {paddle} abschreiben",
+    "writtenOff": "Zusage über {amount} abgeschrieben.",
+    "errors": {
+      "charging": "Die Karte wird gerade belastet. Versuchen Sie es in ein paar Minuten erneut.",
+      "settled": "Diese Zusage ist bereits beglichen.",
+      "future": "Das Datum darf nicht in der Zukunft liegen.",
+      "method": "Wählen Sie den Zahlungsweg.",
+      "receivedOn": "Geben Sie das Eingangsdatum ein.",
+      "note": "Geben Sie an, warum die Zusage abgeschrieben wird.",
+      "generic": "Etwas ist schiefgelaufen. Versuchen Sie es erneut."
+    },
+    "qr": {
+      "label": "QR-Code zum Speichern einer Karte für die Spenden heute Abend",
+      "checkinTitle": "Karte speichern beim Check-in",
+      "checkinBody": "Zeigen Sie Gästen diesen Code nach dem Check-in: Sie speichern auf ihrem eigenen Handy eine Karte für Spenden mit einem Tipp heute Abend.",
+      "tableTitle": "Karte speichern an den Tischen",
+      "tableBody": "Drucken Sie diesen Code auf Tischkarten: Gäste speichern auf ihrem eigenen Handy eine Karte für Spenden mit einem Tipp und für Zusagen."
+    },
+    "payLink": "Zahlungslink für Paddel {paddle}"
   }
 }

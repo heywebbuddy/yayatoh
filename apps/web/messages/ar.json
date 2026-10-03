@@ -76,9 +76,9 @@
         "org-status": "{status, select, suspended {علّقت Yayatoh هذه المؤسسة} reactivated {عادت هذه المؤسسة إلى العمل} other {أغلقت Yayatoh هذه المؤسسة}}"
       },
       "alerts": {
-        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, zero {لا يوجد حاضرون بلا مقاعد} one {حاضر واحد ليس لديه مقعد} two {حاضران ليس لديهما مقعد} few {{countWords} حاضرين ليس لديهم مقاعد} many {{countWords} حاضرًا ليس لديهم مقاعد} other {{countWords} حاضر ليس لديهم مقاعد}}} undistributed {{count, plural, zero {لا توجد تذاكر مشتراة غير موزعة} one {تذكرة مشتراة واحدة لم تُوزَّع} two {تذكرتان مشتراتان لم تُوزَّعا} few {{countWords} تذاكر مشتراة لم تُوزَّع} many {{countWords} تذكرة مشتراة لم تُوزَّع} other {{countWords} تذكرة مشتراة لم تُوزَّع}}} paymentsFailed {{count, plural, zero {لا توجد مدفوعات فاشلة} one {فشلت دفعة واحدة} two {فشلت دفعتان} few {فشلت {countWords} دفعات} many {فشلت {countWords} دفعة} other {فشلت {countWords} دفعة}}} paymentsStuck {{count, plural, zero {لا توجد مدفوعات عالقة} one {دفعة واحدة عالقة} two {دفعتان عالقتان} few {{countWords} دفعات عالقة} many {{countWords} دفعة عالقة} other {{countWords} دفعة عالقة}}} refundSurge {{count, plural, zero {لا استردادات في الساعة الأخيرة} one {استرداد واحد في الساعة الأخيرة} two {استردادان في الساعة الأخيرة} few {{countWords} استردادات في الساعة الأخيرة} many {{countWords} استردادًا في الساعة الأخيرة} other {{countWords} استرداد في الساعة الأخيرة}}} devicesOffline {{count, plural, zero {لا توجد أجهزة تسجيل دخول غير متصلة} one {جهاز تسجيل دخول واحد غير متصل} two {جهازا تسجيل دخول غير متصلين} few {{countWords} أجهزة تسجيل دخول غير متصلة} many {{countWords} جهازًا لتسجيل الدخول غير متصل} other {{countWords} جهاز تسجيل دخول غير متصل}}} devicesLowBattery {{count, plural, zero {لا توجد أجهزة ببطارية منخفضة} one {جهاز تسجيل دخول واحد بطاريته منخفضة} two {جهازا تسجيل دخول بطاريتهما منخفضة} few {{countWords} أجهزة تسجيل دخول بطارياتها منخفضة} many {{countWords} جهازًا لتسجيل الدخول بطارياتها منخفضة} other {{countWords} جهاز تسجيل دخول بطارياتها منخفضة}}} devicesBacklog {{count, plural, zero {لا توجد عمليات مسح بانتظار المزامنة} one {جهاز تسجيل دخول واحد لديه عمليات مسح بانتظار المزامنة} two {جهازا تسجيل دخول لديهما عمليات مسح بانتظار المزامنة} few {{countWords} أجهزة تسجيل دخول لديها عمليات مسح بانتظار المزامنة} many {{countWords} جهازًا لتسجيل الدخول لديها عمليات مسح بانتظار المزامنة} other {{countWords} جهاز تسجيل دخول لديها عمليات مسح بانتظار المزامنة}}} capacityNear {المكان ممتلئ بنسبة {count}٪} capacityFull {بلغ المكان سعته القصوى ({count}٪)} sellOut {بيع {count}٪ من التذاكر} salesPace {مبيعات التذاكر عند {count}٪ من الوتيرة المستهدفة} readiness {{count, plural, zero {لا توجد خطوات إعداد معلقة} one {خطوة إعداد واحدة تعيق هذه الفعالية} two {خطوتا إعداد تعيقان هذه الفعالية} few {{countWords} خطوات إعداد تعيق هذه الفعالية} many {{countWords} خطوة إعداد تعيق هذه الفعالية} other {{countWords} خطوة إعداد تعيق هذه الفعالية}}} domain {{count, plural, zero {لا توجد مشكلات في النطاقات} one {نطاق مخصص واحد به مشكلة} two {نطاقان مخصصان بهما مشكلة} few {{countWords} نطاقات مخصصة بها مشكلة} many {{countWords} نطاقًا مخصصًا به مشكلة} other {{countWords} نطاق مخصص به مشكلة}}} payoutsPastDue {{count, plural, zero {لا متطلبات متأخرة} one {متطلب واحد لحساب الدفعات متأخر} two {متطلبان لحساب الدفعات متأخران} few {{countWords} متطلبات لحساب الدفعات متأخرة} many {{countWords} متطلبًا لحساب الدفعات متأخرًا} other {{countWords} متطلب لحساب الدفعات متأخر}}} deliverability {قابلية تسليم البريد الإلكتروني تحتاج إلى اهتمام} automationFailed {{count, plural, zero {لا إخفاقات اليوم} one {فشلت رسالة أو إجراء جماعي واحد اليوم} two {فشلت رسالتان أو إجراءان جماعيان اليوم} few {فشلت {countWords} رسائل أو إجراءات جماعية اليوم} many {فشلت {countWords} رسالة أو إجراءً جماعيًا اليوم} other {فشلت {countWords} رسالة أو إجراء جماعي اليوم}}} assistanceOverdue {{count, plural, zero {لا توجد طلبات مساعدة متأخرة} one {طلب مساعدة واحد انتظر طويلًا} two {طلبا مساعدة انتظرا طويلًا} few {{countWords} طلبات مساعدة انتظرت طويلًا} many {{countWords} طلبًا للمساعدة انتظر طويلًا} other {{countWords} طلب مساعدة انتظر طويلًا}}} campaignFailed {{count, plural, zero {لا إخفاقات في الحملات اليوم} one {فشل إرسال حملة واحدة اليوم} two {فشل إرسال حملتين اليوم} few {فشل إرسال {countWords} حملات اليوم} many {فشل إرسال {countWords} حملة اليوم} other {فشل إرسال {countWords} حملة اليوم}}} disputeDeadline {{count, plural, zero {لا نزاعات تحتاج إلى أدلة} one {نزاع واحد يحتاج إلى أدلة قريبًا} two {نزاعان يحتاجان إلى أدلة قريبًا} few {{countWords} نزاعات تحتاج إلى أدلة قريبًا} many {{countWords} نزاعًا يحتاج إلى أدلة قريبًا} other {{countWords} نزاع يحتاج إلى أدلة قريبًا}}} other {تنبيه}}",
-        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, zero {لا يوجد حاضرون بلا مقاعد} one {حاضر واحد ليس لديه مقعد} two {حاضران ليس لديهما مقعد} few {{countWords} حاضرين ليس لديهم مقاعد} many {{countWords} حاضرًا ليس لديهم مقاعد} other {{countWords} حاضر ليس لديهم مقاعد}}} undistributed {{count, plural, zero {لا توجد تذاكر مشتراة غير موزعة} one {تذكرة مشتراة واحدة لم تُوزَّع} two {تذكرتان مشتراتان لم تُوزَّعا} few {{countWords} تذاكر مشتراة لم تُوزَّع} many {{countWords} تذكرة مشتراة لم تُوزَّع} other {{countWords} تذكرة مشتراة لم تُوزَّع}}} paymentsFailed {{count, plural, zero {لا توجد مدفوعات فاشلة} one {فشلت دفعة واحدة} two {فشلت دفعتان} few {فشلت {countWords} دفعات} many {فشلت {countWords} دفعة} other {فشلت {countWords} دفعة}}} paymentsStuck {{count, plural, zero {لا توجد مدفوعات عالقة} one {دفعة واحدة عالقة} two {دفعتان عالقتان} few {{countWords} دفعات عالقة} many {{countWords} دفعة عالقة} other {{countWords} دفعة عالقة}}} refundSurge {{count, plural, zero {لا استردادات في الساعة الأخيرة} one {استرداد واحد في الساعة الأخيرة} two {استردادان في الساعة الأخيرة} few {{countWords} استردادات في الساعة الأخيرة} many {{countWords} استردادًا في الساعة الأخيرة} other {{countWords} استرداد في الساعة الأخيرة}}} devicesOffline {{count, plural, zero {لا توجد أجهزة تسجيل دخول غير متصلة} one {جهاز تسجيل دخول واحد غير متصل} two {جهازا تسجيل دخول غير متصلين} few {{countWords} أجهزة تسجيل دخول غير متصلة} many {{countWords} جهازًا لتسجيل الدخول غير متصل} other {{countWords} جهاز تسجيل دخول غير متصل}}} devicesLowBattery {{count, plural, zero {لا توجد أجهزة ببطارية منخفضة} one {جهاز تسجيل دخول واحد بطاريته منخفضة} two {جهازا تسجيل دخول بطاريتهما منخفضة} few {{countWords} أجهزة تسجيل دخول بطارياتها منخفضة} many {{countWords} جهازًا لتسجيل الدخول بطارياتها منخفضة} other {{countWords} جهاز تسجيل دخول بطارياتها منخفضة}}} devicesBacklog {{count, plural, zero {لا توجد عمليات مسح بانتظار المزامنة} one {جهاز تسجيل دخول واحد لديه عمليات مسح بانتظار المزامنة} two {جهازا تسجيل دخول لديهما عمليات مسح بانتظار المزامنة} few {{countWords} أجهزة تسجيل دخول لديها عمليات مسح بانتظار المزامنة} many {{countWords} جهازًا لتسجيل الدخول لديها عمليات مسح بانتظار المزامنة} other {{countWords} جهاز تسجيل دخول لديها عمليات مسح بانتظار المزامنة}}} capacityNear {المكان ممتلئ بنسبة {count}٪} capacityFull {بلغ المكان سعته القصوى ({count}٪)} sellOut {بيع {count}٪ من التذاكر} salesPace {مبيعات التذاكر عند {count}٪ من الوتيرة المستهدفة} readiness {{count, plural, zero {لا توجد خطوات إعداد معلقة} one {خطوة إعداد واحدة تعيق هذه الفعالية} two {خطوتا إعداد تعيقان هذه الفعالية} few {{countWords} خطوات إعداد تعيق هذه الفعالية} many {{countWords} خطوة إعداد تعيق هذه الفعالية} other {{countWords} خطوة إعداد تعيق هذه الفعالية}}} domain {{count, plural, zero {لا توجد مشكلات في النطاقات} one {نطاق مخصص واحد به مشكلة} two {نطاقان مخصصان بهما مشكلة} few {{countWords} نطاقات مخصصة بها مشكلة} many {{countWords} نطاقًا مخصصًا به مشكلة} other {{countWords} نطاق مخصص به مشكلة}}} payoutsPastDue {{count, plural, zero {لا متطلبات متأخرة} one {متطلب واحد لحساب الدفعات متأخر} two {متطلبان لحساب الدفعات متأخران} few {{countWords} متطلبات لحساب الدفعات متأخرة} many {{countWords} متطلبًا لحساب الدفعات متأخرًا} other {{countWords} متطلب لحساب الدفعات متأخر}}} deliverability {قابلية تسليم البريد الإلكتروني تحتاج إلى اهتمام} automationFailed {{count, plural, zero {لا إخفاقات اليوم} one {فشلت رسالة أو إجراء جماعي واحد اليوم} two {فشلت رسالتان أو إجراءان جماعيان اليوم} few {فشلت {countWords} رسائل أو إجراءات جماعية اليوم} many {فشلت {countWords} رسالة أو إجراءً جماعيًا اليوم} other {فشلت {countWords} رسالة أو إجراء جماعي اليوم}}} assistanceOverdue {{count, plural, zero {لا توجد طلبات مساعدة متأخرة} one {طلب مساعدة واحد انتظر طويلًا} two {طلبا مساعدة انتظرا طويلًا} few {{countWords} طلبات مساعدة انتظرت طويلًا} many {{countWords} طلبًا للمساعدة انتظر طويلًا} other {{countWords} طلب مساعدة انتظر طويلًا}}} campaignFailed {{count, plural, zero {لا إخفاقات في الحملات اليوم} one {فشل إرسال حملة واحدة اليوم} two {فشل إرسال حملتين اليوم} few {فشل إرسال {countWords} حملات اليوم} many {فشل إرسال {countWords} حملة اليوم} other {فشل إرسال {countWords} حملة اليوم}}} disputeDeadline {{count, plural, zero {لا نزاعات تحتاج إلى أدلة} one {نزاع واحد يحتاج إلى أدلة قريبًا} two {نزاعان يحتاجان إلى أدلة قريبًا} few {{countWords} نزاعات تحتاج إلى أدلة قريبًا} many {{countWords} نزاعًا يحتاج إلى أدلة قريبًا} other {{countWords} نزاع يحتاج إلى أدلة قريبًا}}} other {تنبيه}}",
-        "alert-urgent-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, zero {لا يوجد حاضرون بلا مقاعد} one {حاضر واحد ليس لديه مقعد} two {حاضران ليس لديهما مقعد} few {{countWords} حاضرين ليس لديهم مقاعد} many {{countWords} حاضرًا ليس لديهم مقاعد} other {{countWords} حاضر ليس لديهم مقاعد}}} undistributed {{count, plural, zero {لا توجد تذاكر مشتراة غير موزعة} one {تذكرة مشتراة واحدة لم تُوزَّع} two {تذكرتان مشتراتان لم تُوزَّعا} few {{countWords} تذاكر مشتراة لم تُوزَّع} many {{countWords} تذكرة مشتراة لم تُوزَّع} other {{countWords} تذكرة مشتراة لم تُوزَّع}}} paymentsFailed {{count, plural, zero {لا توجد مدفوعات فاشلة} one {فشلت دفعة واحدة} two {فشلت دفعتان} few {فشلت {countWords} دفعات} many {فشلت {countWords} دفعة} other {فشلت {countWords} دفعة}}} paymentsStuck {{count, plural, zero {لا توجد مدفوعات عالقة} one {دفعة واحدة عالقة} two {دفعتان عالقتان} few {{countWords} دفعات عالقة} many {{countWords} دفعة عالقة} other {{countWords} دفعة عالقة}}} refundSurge {{count, plural, zero {لا استردادات في الساعة الأخيرة} one {استرداد واحد في الساعة الأخيرة} two {استردادان في الساعة الأخيرة} few {{countWords} استردادات في الساعة الأخيرة} many {{countWords} استردادًا في الساعة الأخيرة} other {{countWords} استرداد في الساعة الأخيرة}}} devicesOffline {{count, plural, zero {لا توجد أجهزة تسجيل دخول غير متصلة} one {جهاز تسجيل دخول واحد غير متصل} two {جهازا تسجيل دخول غير متصلين} few {{countWords} أجهزة تسجيل دخول غير متصلة} many {{countWords} جهازًا لتسجيل الدخول غير متصل} other {{countWords} جهاز تسجيل دخول غير متصل}}} devicesLowBattery {{count, plural, zero {لا توجد أجهزة ببطارية منخفضة} one {جهاز تسجيل دخول واحد بطاريته منخفضة} two {جهازا تسجيل دخول بطاريتهما منخفضة} few {{countWords} أجهزة تسجيل دخول بطارياتها منخفضة} many {{countWords} جهازًا لتسجيل الدخول بطارياتها منخفضة} other {{countWords} جهاز تسجيل دخول بطارياتها منخفضة}}} devicesBacklog {{count, plural, zero {لا توجد عمليات مسح بانتظار المزامنة} one {جهاز تسجيل دخول واحد لديه عمليات مسح بانتظار المزامنة} two {جهازا تسجيل دخول لديهما عمليات مسح بانتظار المزامنة} few {{countWords} أجهزة تسجيل دخول لديها عمليات مسح بانتظار المزامنة} many {{countWords} جهازًا لتسجيل الدخول لديها عمليات مسح بانتظار المزامنة} other {{countWords} جهاز تسجيل دخول لديها عمليات مسح بانتظار المزامنة}}} capacityNear {المكان ممتلئ بنسبة {count}٪} capacityFull {بلغ المكان سعته القصوى ({count}٪)} sellOut {بيع {count}٪ من التذاكر} salesPace {مبيعات التذاكر عند {count}٪ من الوتيرة المستهدفة} readiness {{count, plural, zero {لا توجد خطوات إعداد معلقة} one {خطوة إعداد واحدة تعيق هذه الفعالية} two {خطوتا إعداد تعيقان هذه الفعالية} few {{countWords} خطوات إعداد تعيق هذه الفعالية} many {{countWords} خطوة إعداد تعيق هذه الفعالية} other {{countWords} خطوة إعداد تعيق هذه الفعالية}}} domain {{count, plural, zero {لا توجد مشكلات في النطاقات} one {نطاق مخصص واحد به مشكلة} two {نطاقان مخصصان بهما مشكلة} few {{countWords} نطاقات مخصصة بها مشكلة} many {{countWords} نطاقًا مخصصًا به مشكلة} other {{countWords} نطاق مخصص به مشكلة}}} payoutsPastDue {{count, plural, zero {لا متطلبات متأخرة} one {متطلب واحد لحساب الدفعات متأخر} two {متطلبان لحساب الدفعات متأخران} few {{countWords} متطلبات لحساب الدفعات متأخرة} many {{countWords} متطلبًا لحساب الدفعات متأخرًا} other {{countWords} متطلب لحساب الدفعات متأخر}}} deliverability {قابلية تسليم البريد الإلكتروني تحتاج إلى اهتمام} automationFailed {{count, plural, zero {لا إخفاقات اليوم} one {فشلت رسالة أو إجراء جماعي واحد اليوم} two {فشلت رسالتان أو إجراءان جماعيان اليوم} few {فشلت {countWords} رسائل أو إجراءات جماعية اليوم} many {فشلت {countWords} رسالة أو إجراءً جماعيًا اليوم} other {فشلت {countWords} رسالة أو إجراء جماعي اليوم}}} assistanceOverdue {{count, plural, zero {لا توجد طلبات مساعدة متأخرة} one {طلب مساعدة واحد انتظر طويلًا} two {طلبا مساعدة انتظرا طويلًا} few {{countWords} طلبات مساعدة انتظرت طويلًا} many {{countWords} طلبًا للمساعدة انتظر طويلًا} other {{countWords} طلب مساعدة انتظر طويلًا}}} campaignFailed {{count, plural, zero {لا إخفاقات في الحملات اليوم} one {فشل إرسال حملة واحدة اليوم} two {فشل إرسال حملتين اليوم} few {فشل إرسال {countWords} حملات اليوم} many {فشل إرسال {countWords} حملة اليوم} other {فشل إرسال {countWords} حملة اليوم}}} disputeDeadline {{count, plural, zero {لا نزاعات تحتاج إلى أدلة} one {نزاع واحد يحتاج إلى أدلة قريبًا} two {نزاعان يحتاجان إلى أدلة قريبًا} few {{countWords} نزاعات تحتاج إلى أدلة قريبًا} many {{countWords} نزاعًا يحتاج إلى أدلة قريبًا} other {{countWords} نزاع يحتاج إلى أدلة قريبًا}}} other {تنبيه}}"
+        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, zero {لا يوجد حاضرون بلا مقاعد} one {حاضر واحد ليس لديه مقعد} two {حاضران ليس لديهما مقعد} few {{countWords} حاضرين ليس لديهم مقاعد} many {{countWords} حاضرًا ليس لديهم مقاعد} other {{countWords} حاضر ليس لديهم مقاعد}}} undistributed {{count, plural, zero {لا توجد تذاكر مشتراة غير موزعة} one {تذكرة مشتراة واحدة لم تُوزَّع} two {تذكرتان مشتراتان لم تُوزَّعا} few {{countWords} تذاكر مشتراة لم تُوزَّع} many {{countWords} تذكرة مشتراة لم تُوزَّع} other {{countWords} تذكرة مشتراة لم تُوزَّع}}} paymentsFailed {{count, plural, zero {لا توجد مدفوعات فاشلة} one {فشلت دفعة واحدة} two {فشلت دفعتان} few {فشلت {countWords} دفعات} many {فشلت {countWords} دفعة} other {فشلت {countWords} دفعة}}} paymentsStuck {{count, plural, zero {لا توجد مدفوعات عالقة} one {دفعة واحدة عالقة} two {دفعتان عالقتان} few {{countWords} دفعات عالقة} many {{countWords} دفعة عالقة} other {{countWords} دفعة عالقة}}} refundSurge {{count, plural, zero {لا استردادات في الساعة الأخيرة} one {استرداد واحد في الساعة الأخيرة} two {استردادان في الساعة الأخيرة} few {{countWords} استردادات في الساعة الأخيرة} many {{countWords} استردادًا في الساعة الأخيرة} other {{countWords} استرداد في الساعة الأخيرة}}} devicesOffline {{count, plural, zero {لا توجد أجهزة تسجيل دخول غير متصلة} one {جهاز تسجيل دخول واحد غير متصل} two {جهازا تسجيل دخول غير متصلين} few {{countWords} أجهزة تسجيل دخول غير متصلة} many {{countWords} جهازًا لتسجيل الدخول غير متصل} other {{countWords} جهاز تسجيل دخول غير متصل}}} devicesLowBattery {{count, plural, zero {لا توجد أجهزة ببطارية منخفضة} one {جهاز تسجيل دخول واحد بطاريته منخفضة} two {جهازا تسجيل دخول بطاريتهما منخفضة} few {{countWords} أجهزة تسجيل دخول بطارياتها منخفضة} many {{countWords} جهازًا لتسجيل الدخول بطارياتها منخفضة} other {{countWords} جهاز تسجيل دخول بطارياتها منخفضة}}} devicesBacklog {{count, plural, zero {لا توجد عمليات مسح بانتظار المزامنة} one {جهاز تسجيل دخول واحد لديه عمليات مسح بانتظار المزامنة} two {جهازا تسجيل دخول لديهما عمليات مسح بانتظار المزامنة} few {{countWords} أجهزة تسجيل دخول لديها عمليات مسح بانتظار المزامنة} many {{countWords} جهازًا لتسجيل الدخول لديها عمليات مسح بانتظار المزامنة} other {{countWords} جهاز تسجيل دخول لديها عمليات مسح بانتظار المزامنة}}} capacityNear {المكان ممتلئ بنسبة {count}٪} capacityFull {بلغ المكان سعته القصوى ({count}٪)} sellOut {بيع {count}٪ من التذاكر} salesPace {مبيعات التذاكر عند {count}٪ من الوتيرة المستهدفة} readiness {{count, plural, zero {لا توجد خطوات إعداد معلقة} one {خطوة إعداد واحدة تعيق هذه الفعالية} two {خطوتا إعداد تعيقان هذه الفعالية} few {{countWords} خطوات إعداد تعيق هذه الفعالية} many {{countWords} خطوة إعداد تعيق هذه الفعالية} other {{countWords} خطوة إعداد تعيق هذه الفعالية}}} domain {{count, plural, zero {لا توجد مشكلات في النطاقات} one {نطاق مخصص واحد به مشكلة} two {نطاقان مخصصان بهما مشكلة} few {{countWords} نطاقات مخصصة بها مشكلة} many {{countWords} نطاقًا مخصصًا به مشكلة} other {{countWords} نطاق مخصص به مشكلة}}} payoutsPastDue {{count, plural, zero {لا متطلبات متأخرة} one {متطلب واحد لحساب الدفعات متأخر} two {متطلبان لحساب الدفعات متأخران} few {{countWords} متطلبات لحساب الدفعات متأخرة} many {{countWords} متطلبًا لحساب الدفعات متأخرًا} other {{countWords} متطلب لحساب الدفعات متأخر}}} deliverability {قابلية تسليم البريد الإلكتروني تحتاج إلى اهتمام} automationFailed {{count, plural, zero {لا إخفاقات اليوم} one {فشلت رسالة أو إجراء جماعي واحد اليوم} two {فشلت رسالتان أو إجراءان جماعيان اليوم} few {فشلت {countWords} رسائل أو إجراءات جماعية اليوم} many {فشلت {countWords} رسالة أو إجراءً جماعيًا اليوم} other {فشلت {countWords} رسالة أو إجراء جماعي اليوم}}} assistanceOverdue {{count, plural, zero {لا توجد طلبات مساعدة متأخرة} one {طلب مساعدة واحد انتظر طويلًا} two {طلبا مساعدة انتظرا طويلًا} few {{countWords} طلبات مساعدة انتظرت طويلًا} many {{countWords} طلبًا للمساعدة انتظر طويلًا} other {{countWords} طلب مساعدة انتظر طويلًا}}} campaignFailed {{count, plural, zero {لا إخفاقات في الحملات اليوم} one {فشل إرسال حملة واحدة اليوم} two {فشل إرسال حملتين اليوم} few {فشل إرسال {countWords} حملات اليوم} many {فشل إرسال {countWords} حملة اليوم} other {فشل إرسال {countWords} حملة اليوم}}} disputeDeadline {{count, plural, zero {لا نزاعات تحتاج إلى أدلة} one {نزاع واحد يحتاج إلى أدلة قريبًا} two {نزاعان يحتاجان إلى أدلة قريبًا} few {{countWords} نزاعات تحتاج إلى أدلة قريبًا} many {{countWords} نزاعًا يحتاج إلى أدلة قريبًا} other {{countWords} نزاع يحتاج إلى أدلة قريبًا}}} pledgesUnpaid {{count, plural, zero {لا تعهّدات غير مدفوعة} one {تعهّد واحد لم يُدفع بعد 14 يومًا من الفعالية} two {تعهّدان لم يُدفعا بعد 14 يومًا من الفعالية} few {{countWords} تعهّدات لم تُدفع بعد 14 يومًا من الفعالية} many {{countWords} تعهّدًا لم يُدفع بعد 14 يومًا من الفعالية} other {{countWords} تعهّد لم يُدفع بعد 14 يومًا من الفعالية}}} other {تنبيه}}",
+        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, zero {لا يوجد حاضرون بلا مقاعد} one {حاضر واحد ليس لديه مقعد} two {حاضران ليس لديهما مقعد} few {{countWords} حاضرين ليس لديهم مقاعد} many {{countWords} حاضرًا ليس لديهم مقاعد} other {{countWords} حاضر ليس لديهم مقاعد}}} undistributed {{count, plural, zero {لا توجد تذاكر مشتراة غير موزعة} one {تذكرة مشتراة واحدة لم تُوزَّع} two {تذكرتان مشتراتان لم تُوزَّعا} few {{countWords} تذاكر مشتراة لم تُوزَّع} many {{countWords} تذكرة مشتراة لم تُوزَّع} other {{countWords} تذكرة مشتراة لم تُوزَّع}}} paymentsFailed {{count, plural, zero {لا توجد مدفوعات فاشلة} one {فشلت دفعة واحدة} two {فشلت دفعتان} few {فشلت {countWords} دفعات} many {فشلت {countWords} دفعة} other {فشلت {countWords} دفعة}}} paymentsStuck {{count, plural, zero {لا توجد مدفوعات عالقة} one {دفعة واحدة عالقة} two {دفعتان عالقتان} few {{countWords} دفعات عالقة} many {{countWords} دفعة عالقة} other {{countWords} دفعة عالقة}}} refundSurge {{count, plural, zero {لا استردادات في الساعة الأخيرة} one {استرداد واحد في الساعة الأخيرة} two {استردادان في الساعة الأخيرة} few {{countWords} استردادات في الساعة الأخيرة} many {{countWords} استردادًا في الساعة الأخيرة} other {{countWords} استرداد في الساعة الأخيرة}}} devicesOffline {{count, plural, zero {لا توجد أجهزة تسجيل دخول غير متصلة} one {جهاز تسجيل دخول واحد غير متصل} two {جهازا تسجيل دخول غير متصلين} few {{countWords} أجهزة تسجيل دخول غير متصلة} many {{countWords} جهازًا لتسجيل الدخول غير متصل} other {{countWords} جهاز تسجيل دخول غير متصل}}} devicesLowBattery {{count, plural, zero {لا توجد أجهزة ببطارية منخفضة} one {جهاز تسجيل دخول واحد بطاريته منخفضة} two {جهازا تسجيل دخول بطاريتهما منخفضة} few {{countWords} أجهزة تسجيل دخول بطارياتها منخفضة} many {{countWords} جهازًا لتسجيل الدخول بطارياتها منخفضة} other {{countWords} جهاز تسجيل دخول بطارياتها منخفضة}}} devicesBacklog {{count, plural, zero {لا توجد عمليات مسح بانتظار المزامنة} one {جهاز تسجيل دخول واحد لديه عمليات مسح بانتظار المزامنة} two {جهازا تسجيل دخول لديهما عمليات مسح بانتظار المزامنة} few {{countWords} أجهزة تسجيل دخول لديها عمليات مسح بانتظار المزامنة} many {{countWords} جهازًا لتسجيل الدخول لديها عمليات مسح بانتظار المزامنة} other {{countWords} جهاز تسجيل دخول لديها عمليات مسح بانتظار المزامنة}}} capacityNear {المكان ممتلئ بنسبة {count}٪} capacityFull {بلغ المكان سعته القصوى ({count}٪)} sellOut {بيع {count}٪ من التذاكر} salesPace {مبيعات التذاكر عند {count}٪ من الوتيرة المستهدفة} readiness {{count, plural, zero {لا توجد خطوات إعداد معلقة} one {خطوة إعداد واحدة تعيق هذه الفعالية} two {خطوتا إعداد تعيقان هذه الفعالية} few {{countWords} خطوات إعداد تعيق هذه الفعالية} many {{countWords} خطوة إعداد تعيق هذه الفعالية} other {{countWords} خطوة إعداد تعيق هذه الفعالية}}} domain {{count, plural, zero {لا توجد مشكلات في النطاقات} one {نطاق مخصص واحد به مشكلة} two {نطاقان مخصصان بهما مشكلة} few {{countWords} نطاقات مخصصة بها مشكلة} many {{countWords} نطاقًا مخصصًا به مشكلة} other {{countWords} نطاق مخصص به مشكلة}}} payoutsPastDue {{count, plural, zero {لا متطلبات متأخرة} one {متطلب واحد لحساب الدفعات متأخر} two {متطلبان لحساب الدفعات متأخران} few {{countWords} متطلبات لحساب الدفعات متأخرة} many {{countWords} متطلبًا لحساب الدفعات متأخرًا} other {{countWords} متطلب لحساب الدفعات متأخر}}} deliverability {قابلية تسليم البريد الإلكتروني تحتاج إلى اهتمام} automationFailed {{count, plural, zero {لا إخفاقات اليوم} one {فشلت رسالة أو إجراء جماعي واحد اليوم} two {فشلت رسالتان أو إجراءان جماعيان اليوم} few {فشلت {countWords} رسائل أو إجراءات جماعية اليوم} many {فشلت {countWords} رسالة أو إجراءً جماعيًا اليوم} other {فشلت {countWords} رسالة أو إجراء جماعي اليوم}}} assistanceOverdue {{count, plural, zero {لا توجد طلبات مساعدة متأخرة} one {طلب مساعدة واحد انتظر طويلًا} two {طلبا مساعدة انتظرا طويلًا} few {{countWords} طلبات مساعدة انتظرت طويلًا} many {{countWords} طلبًا للمساعدة انتظر طويلًا} other {{countWords} طلب مساعدة انتظر طويلًا}}} campaignFailed {{count, plural, zero {لا إخفاقات في الحملات اليوم} one {فشل إرسال حملة واحدة اليوم} two {فشل إرسال حملتين اليوم} few {فشل إرسال {countWords} حملات اليوم} many {فشل إرسال {countWords} حملة اليوم} other {فشل إرسال {countWords} حملة اليوم}}} disputeDeadline {{count, plural, zero {لا نزاعات تحتاج إلى أدلة} one {نزاع واحد يحتاج إلى أدلة قريبًا} two {نزاعان يحتاجان إلى أدلة قريبًا} few {{countWords} نزاعات تحتاج إلى أدلة قريبًا} many {{countWords} نزاعًا يحتاج إلى أدلة قريبًا} other {{countWords} نزاع يحتاج إلى أدلة قريبًا}}} pledgesUnpaid {{count, plural, zero {لا تعهّدات غير مدفوعة} one {تعهّد واحد لم يُدفع بعد 14 يومًا من الفعالية} two {تعهّدان لم يُدفعا بعد 14 يومًا من الفعالية} few {{countWords} تعهّدات لم تُدفع بعد 14 يومًا من الفعالية} many {{countWords} تعهّدًا لم يُدفع بعد 14 يومًا من الفعالية} other {{countWords} تعهّد لم يُدفع بعد 14 يومًا من الفعالية}}} other {تنبيه}}",
+        "alert-urgent-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, zero {لا يوجد حاضرون بلا مقاعد} one {حاضر واحد ليس لديه مقعد} two {حاضران ليس لديهما مقعد} few {{countWords} حاضرين ليس لديهم مقاعد} many {{countWords} حاضرًا ليس لديهم مقاعد} other {{countWords} حاضر ليس لديهم مقاعد}}} undistributed {{count, plural, zero {لا توجد تذاكر مشتراة غير موزعة} one {تذكرة مشتراة واحدة لم تُوزَّع} two {تذكرتان مشتراتان لم تُوزَّعا} few {{countWords} تذاكر مشتراة لم تُوزَّع} many {{countWords} تذكرة مشتراة لم تُوزَّع} other {{countWords} تذكرة مشتراة لم تُوزَّع}}} paymentsFailed {{count, plural, zero {لا توجد مدفوعات فاشلة} one {فشلت دفعة واحدة} two {فشلت دفعتان} few {فشلت {countWords} دفعات} many {فشلت {countWords} دفعة} other {فشلت {countWords} دفعة}}} paymentsStuck {{count, plural, zero {لا توجد مدفوعات عالقة} one {دفعة واحدة عالقة} two {دفعتان عالقتان} few {{countWords} دفعات عالقة} many {{countWords} دفعة عالقة} other {{countWords} دفعة عالقة}}} refundSurge {{count, plural, zero {لا استردادات في الساعة الأخيرة} one {استرداد واحد في الساعة الأخيرة} two {استردادان في الساعة الأخيرة} few {{countWords} استردادات في الساعة الأخيرة} many {{countWords} استردادًا في الساعة الأخيرة} other {{countWords} استرداد في الساعة الأخيرة}}} devicesOffline {{count, plural, zero {لا توجد أجهزة تسجيل دخول غير متصلة} one {جهاز تسجيل دخول واحد غير متصل} two {جهازا تسجيل دخول غير متصلين} few {{countWords} أجهزة تسجيل دخول غير متصلة} many {{countWords} جهازًا لتسجيل الدخول غير متصل} other {{countWords} جهاز تسجيل دخول غير متصل}}} devicesLowBattery {{count, plural, zero {لا توجد أجهزة ببطارية منخفضة} one {جهاز تسجيل دخول واحد بطاريته منخفضة} two {جهازا تسجيل دخول بطاريتهما منخفضة} few {{countWords} أجهزة تسجيل دخول بطارياتها منخفضة} many {{countWords} جهازًا لتسجيل الدخول بطارياتها منخفضة} other {{countWords} جهاز تسجيل دخول بطارياتها منخفضة}}} devicesBacklog {{count, plural, zero {لا توجد عمليات مسح بانتظار المزامنة} one {جهاز تسجيل دخول واحد لديه عمليات مسح بانتظار المزامنة} two {جهازا تسجيل دخول لديهما عمليات مسح بانتظار المزامنة} few {{countWords} أجهزة تسجيل دخول لديها عمليات مسح بانتظار المزامنة} many {{countWords} جهازًا لتسجيل الدخول لديها عمليات مسح بانتظار المزامنة} other {{countWords} جهاز تسجيل دخول لديها عمليات مسح بانتظار المزامنة}}} capacityNear {المكان ممتلئ بنسبة {count}٪} capacityFull {بلغ المكان سعته القصوى ({count}٪)} sellOut {بيع {count}٪ من التذاكر} salesPace {مبيعات التذاكر عند {count}٪ من الوتيرة المستهدفة} readiness {{count, plural, zero {لا توجد خطوات إعداد معلقة} one {خطوة إعداد واحدة تعيق هذه الفعالية} two {خطوتا إعداد تعيقان هذه الفعالية} few {{countWords} خطوات إعداد تعيق هذه الفعالية} many {{countWords} خطوة إعداد تعيق هذه الفعالية} other {{countWords} خطوة إعداد تعيق هذه الفعالية}}} domain {{count, plural, zero {لا توجد مشكلات في النطاقات} one {نطاق مخصص واحد به مشكلة} two {نطاقان مخصصان بهما مشكلة} few {{countWords} نطاقات مخصصة بها مشكلة} many {{countWords} نطاقًا مخصصًا به مشكلة} other {{countWords} نطاق مخصص به مشكلة}}} payoutsPastDue {{count, plural, zero {لا متطلبات متأخرة} one {متطلب واحد لحساب الدفعات متأخر} two {متطلبان لحساب الدفعات متأخران} few {{countWords} متطلبات لحساب الدفعات متأخرة} many {{countWords} متطلبًا لحساب الدفعات متأخرًا} other {{countWords} متطلب لحساب الدفعات متأخر}}} deliverability {قابلية تسليم البريد الإلكتروني تحتاج إلى اهتمام} automationFailed {{count, plural, zero {لا إخفاقات اليوم} one {فشلت رسالة أو إجراء جماعي واحد اليوم} two {فشلت رسالتان أو إجراءان جماعيان اليوم} few {فشلت {countWords} رسائل أو إجراءات جماعية اليوم} many {فشلت {countWords} رسالة أو إجراءً جماعيًا اليوم} other {فشلت {countWords} رسالة أو إجراء جماعي اليوم}}} assistanceOverdue {{count, plural, zero {لا توجد طلبات مساعدة متأخرة} one {طلب مساعدة واحد انتظر طويلًا} two {طلبا مساعدة انتظرا طويلًا} few {{countWords} طلبات مساعدة انتظرت طويلًا} many {{countWords} طلبًا للمساعدة انتظر طويلًا} other {{countWords} طلب مساعدة انتظر طويلًا}}} campaignFailed {{count, plural, zero {لا إخفاقات في الحملات اليوم} one {فشل إرسال حملة واحدة اليوم} two {فشل إرسال حملتين اليوم} few {فشل إرسال {countWords} حملات اليوم} many {فشل إرسال {countWords} حملة اليوم} other {فشل إرسال {countWords} حملة اليوم}}} disputeDeadline {{count, plural, zero {لا نزاعات تحتاج إلى أدلة} one {نزاع واحد يحتاج إلى أدلة قريبًا} two {نزاعان يحتاجان إلى أدلة قريبًا} few {{countWords} نزاعات تحتاج إلى أدلة قريبًا} many {{countWords} نزاعًا يحتاج إلى أدلة قريبًا} other {{countWords} نزاع يحتاج إلى أدلة قريبًا}}} pledgesUnpaid {{count, plural, zero {لا تعهّدات غير مدفوعة} one {تعهّد واحد لم يُدفع بعد 14 يومًا من الفعالية} two {تعهّدان لم يُدفعا بعد 14 يومًا من الفعالية} few {{countWords} تعهّدات لم تُدفع بعد 14 يومًا من الفعالية} many {{countWords} تعهّدًا لم يُدفع بعد 14 يومًا من الفعالية} other {{countWords} تعهّد لم يُدفع بعد 14 يومًا من الفعالية}}} other {تنبيه}}"
       }
     },
     "kinds": {
@@ -181,7 +181,10 @@
       },
       "donations": {
         "receipt": "إيصال تبرّع",
-        "year-end-statement": "كشف التبرعات السنوي"
+        "year-end-statement": "كشف التبرعات السنوي",
+        "pledge-summary": "ملخّص التعهّد",
+        "pledge-invoice": "فاتورة التعهّد",
+        "pledge-reminder": "تذكير بالتعهّد"
       },
       "guests": {
         "invitation": "دعوة زفاف",
@@ -935,14 +938,23 @@
     "orgUnavailable": "لا يبيع هذا المنظّم التذاكر حاليًا. تبقى التذاكر التي تم شراؤها صالحة.",
     "riskBlocked": "تعذّر قبول هذا الطلب. يُرجى التواصل مع المنظِّم.",
     "creditInvalid": "رمز الرصيد هذا غير صالح أو استُخدم بالكامل.",
-    "creditNotApplicable": "لا يمكن استخدام هذا الرصيد لهذه التذاكر."
+    "creditNotApplicable": "لا يمكن استخدام هذا الرصيد لهذه التذاكر.",
+    "saveCardForGiving": "احفظ بطاقتي لتبرعات هذه الليلة (ستفعل ذلك في الصفحة التالية، ولن يُحفظ شيء دون موافقتك هناك)"
   },
   "fakePay": {
     "eyebrow": "دفع تجريبي",
     "title": "ادفع قيمة طلبك",
     "description": "هذه صفحة دفع تجريبية. لا تُحوَّل أي أموال حقيقية.",
     "pay": "ادفع الآن (تجريبي)",
-    "decline": "محاكاة رفض البطاقة"
+    "decline": "محاكاة رفض البطاقة",
+    "setupTitle": "إعداد بطاقة تجريبية",
+    "setupDescription": "بديل لنموذج البطاقة الآمن لدى مزوّد الدفع. لا تُحفظ أي بطاقة حقيقية.",
+    "testCard": "بطاقة تجريبية",
+    "card4242": "4242 · يتم الخصم دائمًا",
+    "card0002": "0002 · تُرفض دائمًا",
+    "card9995": "9995 · ترفض الخصم الأول",
+    "saveCard": "احفظ البطاقة (تجربة)",
+    "failSetup": "محاكاة فشل الإعداد"
   },
   "order": {
     "eyebrow": "طلبك",
@@ -6685,7 +6697,8 @@
       "automationFailed": "افتح حالة المراسلة",
       "campaignFailed": "افتح الحملات",
       "disputeDeadline": "افتح النزاعات",
-      "assistanceOverdue": "افتح طلبات المساعدة"
+      "assistanceOverdue": "افتح طلبات المساعدة",
+      "pledgesUnpaid": "افتح التعهّدات"
     },
     "rules": {
       "unseated": "{count, plural, zero {لا يوجد حاضرون بلا مقاعد} one {حاضر واحد ليس لديه مقعد} two {حاضران ليس لديهما مقعد} few {{countWords} حاضرين ليس لديهم مقاعد} many {{countWords} حاضرًا ليس لديهم مقاعد} other {{countWords} حاضر ليس لديهم مقاعد}}",
@@ -6707,7 +6720,8 @@
       "automationFailed": "{count, plural, zero {لا إخفاقات اليوم} one {فشلت رسالة أو إجراء جماعي واحد اليوم} two {فشلت رسالتان أو إجراءان جماعيان اليوم} few {فشلت {countWords} رسائل أو إجراءات جماعية اليوم} many {فشلت {countWords} رسالة أو إجراءً جماعيًا اليوم} other {فشلت {countWords} رسالة أو إجراء جماعي اليوم}}",
       "campaignFailed": "{count, plural, zero {لا إخفاقات في الحملات اليوم} one {فشل إرسال حملة واحدة اليوم} two {فشل إرسال حملتين اليوم} few {فشل إرسال {countWords} حملات اليوم} many {فشل إرسال {countWords} حملة اليوم} other {فشل إرسال {countWords} حملة اليوم}}",
       "disputeDeadline": "{count, plural, zero {لا نزاعات تحتاج إلى أدلة} one {نزاع واحد يحتاج إلى أدلة قريبًا} two {نزاعان يحتاجان إلى أدلة قريبًا} few {{countWords} نزاعات تحتاج إلى أدلة قريبًا} many {{countWords} نزاعًا يحتاج إلى أدلة قريبًا} other {{countWords} نزاع يحتاج إلى أدلة قريبًا}}",
-      "assistanceOverdue": "{count, plural, zero {لا توجد طلبات مساعدة متأخرة} one {طلب مساعدة واحد انتظر طويلًا} two {طلبا مساعدة انتظرا طويلًا} few {{countWords} طلبات مساعدة انتظرت طويلًا} many {{countWords} طلبًا للمساعدة انتظر طويلًا} other {{countWords} طلب مساعدة انتظر طويلًا}}"
+      "assistanceOverdue": "{count, plural, zero {لا توجد طلبات مساعدة متأخرة} one {طلب مساعدة واحد انتظر طويلًا} two {طلبا مساعدة انتظرا طويلًا} few {{countWords} طلبات مساعدة انتظرت طويلًا} many {{countWords} طلبًا للمساعدة انتظر طويلًا} other {{countWords} طلب مساعدة انتظر طويلًا}}",
+      "pledgesUnpaid": "{count, plural, zero {لا تعهّدات غير مدفوعة} one {تعهّد واحد لم يُدفع بعد 14 يومًا من الفعالية} two {تعهّدان لم يُدفعا بعد 14 يومًا من الفعالية} few {{countWords} تعهّدات لم تُدفع بعد 14 يومًا من الفعالية} many {{countWords} تعهّدًا لم يُدفع بعد 14 يومًا من الفعالية} other {{countWords} تعهّد لم يُدفع بعد 14 يومًا من الفعالية}}"
     },
     "widget": {
       "title": "التنبيهات",
@@ -8972,7 +8986,8 @@
       "openConsole": "فتح لوحة التحكم",
       "openSpotter": "تسجيل المضارب",
       "openPaddles": "أرقام المضارب",
-      "openScreen": "الشاشة المباشرة"
+      "openScreen": "الشاشة المباشرة",
+      "openPledges": "التعهّدات والتحصيل"
     },
     "paddles": {
       "title": "أرقام المضارب",
@@ -11397,7 +11412,8 @@
     "unseated": "لم يُخصَّص لهم مقعد بعد: {names}",
     "guestOf": "ضيف {name}",
     "keep": "تعرض هذه الصفحة طاولتك الحالية دائمًا: الرابط ورمز QR في دعوتك لا يتغيّران عندما ينقلك المضيفون.",
-    "toRsvp": "العودة إلى ردّك"
+    "toRsvp": "العودة إلى ردّك",
+    "saveCard": "احفظ بطاقة لتبرعات هذه الليلة"
   },
   "scanGuests": {
     "view": "الضيوف",
@@ -11916,5 +11932,164 @@
       "seats": "المقاعد"
     },
     "openHub": "افتح صفحة الضيف: البرنامج والمقاعد والتذاكر"
+  },
+  "savedCard": {
+    "metaTitle": "احفظ بطاقة لهذه الليلة",
+    "title": "احفظ بطاقة لتبرعات هذه الليلة",
+    "intro": "احفظ بطاقتك مرة واحدة على هاتفك، ثم تبرّع بلمسة واحدة خلال الأمسية. لن يُخصم أي مبلغ الآن.",
+    "introParty": "لـ {party}: احفظ بطاقتك مرة واحدة على هاتفك، ثم تبرّع بلمسة واحدة خلال الأمسية. تُخصم تعهّداتك صباح اليوم التالي. لن يُخصم أي مبلغ الآن.",
+    "unavailableTitle": "حفظ البطاقات غير متاح",
+    "unavailableBody": "لا تستقبل هذه الفعالية تبرعات عبر الإنترنت حاليًا. ما زال بإمكانك التبرع في الفعالية.",
+    "formLabel": "حفظ بطاقة",
+    "formTitle": "بياناتك",
+    "name": "الاسم الكامل",
+    "email": "البريد الإلكتروني",
+    "emailHint": "يصلك ملخّص تعهّداتك وإيصالاتك على هذا العنوان.",
+    "consentLabel": "أوافق على حفظ هذه البطاقة لهذه الليلة",
+    "consent": "يجوز لـ {org} حفظ هذه البطاقة لدى مزوّد الدفع الخاص بها وخصم المبالغ منها فقط مقابل التبرعات التي أختارها والتعهّدات التي أقدّمها في {event}. تُخصم التعهّدات صباح اليوم التالي للفعالية، وأتلقى ملخّصًا قبل ذلك. تُزال البطاقة بعد 30 يومًا من الفعالية، ويمكنني إزالتها في أي وقت من هذه الصفحة.",
+    "privacy": "تذهب بيانات بطاقتك مباشرة إلى مزوّد الدفع. لا نرى رقم بطاقتك ولا نحتفظ به أبدًا.",
+    "save": "احفظ بطاقتي",
+    "saving": "جارٍ فتح نموذج البطاقة الآمن…",
+    "savedTitle": "تم حفظ بطاقتك لهذه الليلة",
+    "savedBody": "بطاقة {brand} المنتهية بـ {last4} جاهزة للتبرع بلمسة واحدة في هذه الفعالية.",
+    "card": "بطاقة",
+    "giveNow": "تبرّع الآن",
+    "remove": "أزل بطاقتي",
+    "removeHint": "إزالة البطاقة تلغي أي خصم لم يتم بعد، ويمكنك دفع التعهّدات عبر الرابط.",
+    "removed": "تمت إزالة بطاقتك. لن يُخصم منها أي مبلغ.",
+    "pending": "نؤكّد بطاقتك لدى مزوّد الدفع. حدّث الصفحة بعد لحظات.",
+    "failed": "تعذّر حفظ بطاقتك. حاول مرة أخرى أو استخدم بطاقة أخرى.",
+    "fromCheckout": "شكرًا، اكتمل طلبك. تصلك تذاكرك عبر البريد الإلكتروني.",
+    "oneTapTitle": "تبرّع ببطاقتك المحفوظة",
+    "oneTapBody": "لمسة واحدة تخصم من بطاقة {brand} المنتهية بـ {last4}. سترى تأكيدًا مباشرة بعدها.",
+    "oneTapFailed": "لم يكتمل هذا التبرع. حاول مرة أخرى أو استخدم النموذج أدناه.",
+    "oneTapGive": "تبرّع بمبلغ {amount} · {name}",
+    "manageCard": "إدارة بطاقتي المحفوظة",
+    "errors": {
+      "name": "أدخل اسمك الكامل.",
+      "email": "أدخل بريدًا إلكترونيًا صالحًا.",
+      "consent": "حدّد المربع للموافقة على حفظ بطاقتك.",
+      "event_over": "انتهت هذه الفعالية، لذا لم يعد ممكنًا حفظ البطاقات لها.",
+      "not_connected": "لا تستقبل هذه الفعالية تبرعات عبر الإنترنت حاليًا.",
+      "link": "لم يعد هذا الرابط صالحًا. اطلب رابطًا جديدًا من المضيف."
+    }
+  },
+  "pledgePay": {
+    "metaTitle": "تعهّدك",
+    "title": "تعهّدك بمبلغ {amount}",
+    "subtitle": "{level} · {campaign}. شكرًا على كرمك.",
+    "stateTitle": "الحالة",
+    "status": {
+      "scheduled": "خصم البطاقة مجدول",
+      "charging": "جارٍ الخصم",
+      "invoiced": "بانتظار الدفع",
+      "paid": "مدفوع",
+      "paid_offline": "مدفوع",
+      "written_off": "مغلق"
+    },
+    "card": "بطاقة",
+    "cardScheduled": "سنخصم المبلغ من بطاقة {brand} المنتهية بـ {last4} في {when}.",
+    "charging": "يجري الآن الخصم من بطاقتك. حدّث الصفحة بعد لحظات.",
+    "due": "يُرجى الدفع قبل {date}.",
+    "thanks": "تم الدفع بالكامل. شكرًا لك! يصلك إيصالك عبر البريد الإلكتروني.",
+    "closed": "هذا التعهّد مغلق. لا يوجد أي مبلغ مستحق.",
+    "payNow": "ادفع {amount} الآن",
+    "payAnotherWay": "ادفع {amount} الآن بطريقة أخرى",
+    "anotherWayHint": "الدفع الآن يلغي خصم البطاقة. هل تريد استخدام بطاقة أخرى؟ ادفع بها الآن.",
+    "errors": {
+      "charging": "يجري الآن الخصم من بطاقتك، لذا لم تبدأ هذه الدفعة.",
+      "settled": "تمت تسوية هذا التعهّد بالفعل.",
+      "no_email": "أدخل بريدك الإلكتروني للدفع.",
+      "rate_limited": "محاولات كثيرة. انتظر دقيقة ثم حاول مرة أخرى.",
+      "not_connected": "الدفع عبر الإنترنت غير متاح حاليًا. اسأل المضيف عن طريقة الدفع.",
+      "generic": "حدث خطأ ما. حاول مرة أخرى.",
+      "email": "أدخل بريدًا إلكترونيًا صالحًا."
+    },
+    "email": "البريد الإلكتروني لإيصالك",
+    "emailHint": "نرسل الإيصال إلى هذا العنوان."
+  },
+  "pledges": {
+    "title": "التعهّدات",
+    "subtitle": "كل تعهّد من مزاد اللوحات وطريقة تحصيله.",
+    "viewerNotice": "يمكنك رؤية التعهّدات. أدوار المالية تغلق الأمسية وتسجّل المدفوعات وتشطب التعهّدات.",
+    "pledged": "المتعهَّد به",
+    "paid": "المدفوع",
+    "owed": "المتبقي",
+    "writtenOffTotal": "المشطوب",
+    "cardsSaved": "البطاقات المحفوظة",
+    "emptyTitle": "لا توجد تعهّدات بعد",
+    "emptyDescription": "تظهر التعهّدات هنا عندما يؤكّد المسجّل اللوحات في المزاد.",
+    "closeTitle": "{count, plural, zero {لا تعهّدات للإرسال} one {تعهّد واحد للإرسال} two {تعهّدان للإرسال} few {# تعهّدات للإرسال} many {# تعهّدًا للإرسال} other {# تعهّد للإرسال}}",
+    "closeBody": "عند إغلاق الأمسية يتلقى كل متبرّع ملخّصًا. تُخصم التعهّدات ذات البطاقة المحفوظة غدًا الساعة 09:00 بتوقيت الفعالية، ويتلقى الباقون رابط دفع مستحقًا خلال 30 يومًا مع تذكيرات حتى الدفع.",
+    "close": "أغلق الأمسية وأرسل الملخّصات",
+    "closed": "أُرسلت الملخّصات: {cards, plural, zero {لا تعهّدات ستُخصم من بطاقات محفوظة} one {تعهّد واحد سيُخصم من بطاقة محفوظة} two {تعهّدان سيُخصمان من بطاقات محفوظة} few {# تعهّدات ستُخصم من بطاقات محفوظة} many {# تعهّدًا سيُخصم من بطاقات محفوظة} other {# تعهّد سيُخصم من بطاقات محفوظة}}، و{invoices, plural, zero {لا تعهّدات تلقّت روابط دفع} one {تعهّد واحد تلقّى رابط دفع} two {تعهّدان تلقّيا روابط دفع} few {# تعهّدات تلقّت روابط دفع} many {# تعهّدًا تلقّى روابط دفع} other {# تعهّد تلقّى روابط دفع}}.",
+    "caption": "التعهّدات وتحصيلها",
+    "columns": {
+      "paddle": "اللوحة",
+      "holder": "المتبرّع",
+      "level": "المستوى",
+      "amount": "المبلغ",
+      "status": "الحالة",
+      "detail": "التفاصيل",
+      "actions": "الإجراءات"
+    },
+    "status": {
+      "open": "لم يُرسل",
+      "scheduled": "خصم البطاقة مجدول",
+      "charging": "جارٍ الخصم",
+      "invoiced": "أُرسل رابط الدفع",
+      "paid": "مدفوع",
+      "paid_offline": "مدفوع خارج الإنترنت",
+      "written_off": "مشطوب"
+    },
+    "cardLabel": "{brand} ·{last4}",
+    "card": "بطاقة",
+    "detail": {
+      "open": "بانتظار إغلاق الأمسية.",
+      "scheduled": "{card} في {when}",
+      "charging": "{card}، الخصم جارٍ",
+      "invoiced": "مستحق في {date}.",
+      "declined": "{count, plural, zero {لم تُرفض البطاقة.} one {رُفضت البطاقة مرة واحدة.} two {رُفضت البطاقة مرتين.} few {رُفضت البطاقة # مرات.} many {رُفضت البطاقة # مرة.} other {رُفضت البطاقة # مرة.}}",
+      "noEmail": "لا يوجد بريد إلكتروني مسجّل: شارك رابط الدفع بنفسك.",
+      "paidCard": "خُصم من {card}",
+      "paidLink": "دُفع عبر الرابط"
+    },
+    "methods": {
+      "check": "شيك",
+      "wire": "حوالة مصرفية",
+      "stock": "أسهم",
+      "daf": "صندوق يوجّهه المتبرّع",
+      "cash": "نقدًا",
+      "other": "أخرى"
+    },
+    "recordPayment": "تسجيل دفعة",
+    "method": "طريقة الدفع",
+    "chooseMethod": "اختر…",
+    "reference": "المرجع (اختياري)",
+    "receivedOn": "تاريخ الاستلام",
+    "noteOptional": "ملاحظة (اختيارية)",
+    "recordSubmit": "سجّل دفعة اللوحة {paddle}",
+    "recorded": "سُجّلت الدفعة. توقفت التذكيرات وأي خصم من البطاقة.",
+    "writeOff": "شطب",
+    "writeOffNote": "سبب الشطب",
+    "writeOffSubmit": "اشطب تعهّد اللوحة {paddle}",
+    "writtenOff": "شُطب تعهّد بمبلغ {amount}.",
+    "errors": {
+      "charging": "يجري الآن الخصم من البطاقة. حاول مرة أخرى بعد بضع دقائق.",
+      "settled": "تمت تسوية هذا التعهّد بالفعل.",
+      "future": "لا يمكن أن يكون التاريخ في المستقبل.",
+      "method": "اختر طريقة الدفع.",
+      "receivedOn": "أدخل تاريخ الاستلام.",
+      "note": "اكتب سبب شطب التعهّد.",
+      "generic": "حدث خطأ ما. حاول مرة أخرى."
+    },
+    "qr": {
+      "label": "رمز QR لحفظ بطاقة لتبرعات هذه الليلة",
+      "checkinTitle": "حفظ البطاقة عند تسجيل الدخول",
+      "checkinBody": "اعرض هذا الرمز على الضيوف بعد تسجيل دخولهم: يحفظون بطاقة على هواتفهم للتبرع بلمسة واحدة هذه الليلة.",
+      "tableTitle": "حفظ البطاقة على الطاولات",
+      "tableBody": "اطبع هذا الرمز على بطاقات الطاولات: يحفظ الضيوف بطاقة على هواتفهم للتبرع بلمسة واحدة ولتعهّداتهم."
+    },
+    "payLink": "رابط الدفع للوحة {paddle}"
   }
 }

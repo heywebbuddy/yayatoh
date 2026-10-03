@@ -2481,6 +2481,7 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   await receiptRows(org.id, event.id, ga.id, checkout.order.id, ctx);
   await paddleRaiseRows(event.id, party.id, ctx);
   await screenRows(event.id, ctx);
+  await pledgeCollectionRows(org.id, event.id, party.id);
   return {
     org,
     ownerId,
@@ -2706,6 +2707,41 @@ async function screenRows(eventId: string, ctx: (o?: Partial<Ctx>) => Ctx) {
     ctx(),
     ports,
   );
+}
+
+/**
+ * M4.8e cards on file and pledge collection (isolation coverage of saved cards, collections and
+ * attempts): the fixture party's active saved card, its pledge invoiced after a declined charge,
+ * and that charge's try on the fixture's lapsed gift order. Written as the flow leaves them
+ * (the fixture org is not connected, so no provider is involved).
+ */
+async function pledgeCollectionRows(orgId: string, eventId: string, partyId: string) {
+  await withTenant(systemCtx(orgId), async (tx) => {
+    const [card] = await tx.execute<{ id: string }>(sql`insert into donations.saved_cards (org_id, event_id,
+      party_id, name, email, source, status, provider, connected_account_id, provider_setup_id, customer_id,
+      payment_method_id, brand, last4, exp_month, exp_year, consent_version, consented_at, activated_at,
+      remove_after) values (${orgId}, ${eventId}, ${partyId}, 'Fixture Holder', 'holder@example.test', 'party',
+      'active', 'fake', 'fakeacct_fixture', 'fakeseti_fixture', 'fakecus_fixture', 'fakepm_ok_fixture', 'visa',
+      '4242', 12, 2030, 'fixture', now(), now(), now() + interval '400 days') returning id`);
+    const [pl] = await tx.execute<{ id: string; campaign_id: string }>(
+      sql`select id, campaign_id from donations.pledges where event_id = ${eventId} limit 1`,
+    );
+    const [gift] = await tx.execute<{ id: string; order_id: string }>(
+      sql`select id, order_id from donations.gifts where event_id = ${eventId} limit 1`,
+    );
+    if (!card || !pl || !gift)
+      throw new Error('fixture: pledge collection rows need a card, a pledge and a gift');
+    const [c] = await tx.execute<{
+      id: string;
+    }>(sql`insert into donations.pledge_collections (org_id, event_id,
+      campaign_id, pledge_id, amount_minor, currency, donor_name, donor_email, status, saved_card_id,
+      card_attempts, invoiced_at, due_on, note, offline_reference) values (${orgId}, ${eventId},
+      ${pl.campaign_id}, ${pl.id}, 100000, 'USD', 'Fixture Holder', 'holder@example.test', 'invoiced',
+      ${card.id}, 1, now(), current_date + 30, 'Called the donor', 'n/a') returning id`);
+    await tx.execute(sql`insert into donations.pledge_attempts (org_id, collection_id, kind, attempt, gift_id,
+      order_id, status, decline_code, settled_at) values (${orgId}, ${c?.id}, 'card', 1, ${gift.id},
+      ${gift.order_id}, 'failed', 'card_declined', now())`);
+  });
 }
 
 /** English headers for attendee exports (the console passes its own locale's). */
