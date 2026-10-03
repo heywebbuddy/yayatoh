@@ -240,3 +240,4 @@ export {
   teamEventBySlugQuery,
 } from './team.ts';
 export { eventsOverTx } from './timings.ts';
+export { eventListingFactsTx } from './listing-facts.ts';

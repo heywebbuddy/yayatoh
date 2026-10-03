@@ -79,6 +79,8 @@ export const INTERNAL_EVENTS: Readonly<Record<string, InternalReason>> = {
   'integrations.connection_connected@1': 'platform',
   'integrations.connection_revoked@1': 'platform',
   'invitation.created@1': 'platform',
+  // M6.14a: the search index follows the listings projection.
+  'marketplace.listing_changed@1': 'workflow',
   'marketplace.site_settings_changed@1': 'platform',
   'media.asset_added@1': 'content',
   'media.asset_removed@1': 'content',

@@ -24,3 +24,4 @@ export {
   submitReviewCommand,
   unhideReviewCommand,
 } from './reviews.ts';
+export { REVIEW_VISIBILITY_EVENTS, visibleReviewCountTx } from './popularity.ts';

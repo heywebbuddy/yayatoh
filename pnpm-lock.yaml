@@ -2113,12 +2113,18 @@ importers:
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../../platform
+      '@yayatoh/reviews':
+        specifier: workspace:*
+        version: link:../reviews
       '@yayatoh/tenancy':
         specifier: workspace:*
         version: link:../tenancy
       '@yayatoh/ticketing':
         specifier: workspace:*
         version: link:../ticketing
+      '@yayatoh/venues':
+        specifier: workspace:*
+        version: link:../venues
       drizzle-orm:
         specifier: 'catalog:'
         version: 0.45.3(@opentelemetry/api@1.9.0)(kysely@0.29.6)(pg@8.23.0)(postgres@3.4.9)

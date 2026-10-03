@@ -1,4 +1,4 @@
-import { columnPrivacy } from '@yayatoh/db';
+import { columnPrivacy, internal } from '@yayatoh/db';
 
 /**
  * Column privacy of the `marketplace` schema (roadmap §9 canary leak test; see `columnPrivacy` in
@@ -22,7 +22,11 @@ export const privateColumns = columnPrivacy('marketplace', {
     org_slug: 'public',
     org_name: 'public',
     canonical_host: 'public',
+    // M6.14a: the platform category (search facet).
+    category: 'vocab',
   },
+  // M6.14a: why staff hid or showed a listing (staff only; the audit log has the history).
+  listing_moderation: { reason: internal() },
   // Sent to every browser in the widget's CSP frame-ancestors.
   site_settings: { embed_origins: 'public' },
 });
