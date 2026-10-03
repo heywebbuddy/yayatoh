@@ -49,3 +49,6 @@ needs, and on the day who has arrived. The alert engine tells them at the right 
 | Role visibility (door never sees revenue; no RSVP or meals for the door) | `packages/modules/command-center/tests/social.test.ts`, `social-pack.int.test.ts` ("who may see them"), `social-pack.spec.ts` (door test, 403 on direct calls) |
 | Tenant isolation | `social-pack.int.test.ts` ("tenant isolation") |
 | Keyboard, axe light and dark, Arabic RTL | `social-pack.spec.ts` |
+
+### 6. Gate (2026-10-03)
+`pnpm verify` green (lint, check:modules, typecheck 59/59, unit 2731/2731, integration 1541/1541). E2E on 375/768/1280: `social-pack` 12/12; related `command-center`, `alerts`, `guest-checkin`, `live-mode`, `marketing-analytics`, `theme`, `rsvp`: 144 passed, 0 failed.
