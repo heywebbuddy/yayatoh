@@ -108,4 +108,6 @@ No new outbox events.
 - [ ] In a second tab, Guests → Edit Luis X → Add a plus-one: the first tab's queue shows "Guest of Luis X".
 
 ### Gate (2026-10-03)
-See the final commit's report.
+- Base: `origin/m0.5-foundation-ey5gqp` + `origin/merge/next-3h` (which already carries next-3g, design-v2, M4.2b and M4.1d with their conflicts resolved); re-merged the latest build branch, next-3h and next-3g before the gate (clean).
+- `pnpm lint`, `pnpm check:modules`, typecheck 59/59 (`--concurrency=2`), unit 2696/2696 (201 files), integration 1509/1509 (165 files).
+- E2E at 375/768/1280 (`--workers=2`): `guest-seating` 18 passed; `seating`, `seat-assignment`, `party-guests`, `social-workspace` 60 passed; earlier on this branch `seat-rules`, `seat-move` (with seating/seat-assignment: 39), `rsvp`, `realtime`, `seat-finder` (with party-guests: 81), `gala-tables`, `guest-import`, `guest-invites`, `rsvp-questions` (72) all passed.
