@@ -252,3 +252,67 @@ Behind the `donations` entitlement. Tax-deductible receipts need a verified prof
 
 ### 16. Owner tasks
 `docs/owner-inbox.md` → M4.8b: counsel reviews `receipt-copy.ts` (and the translations), run the IRS download job monthly, the staff role for verification, receipts after refunds, donor data requests and receipt retention.
+
+## M4.8f — matching gifts (done)
+
+### 1. Goal and users
+Hosts of a gala let a sponsor match the room's gifts: "Every gift doubled up to $25,000" (P4-17). The match is computed from confirmed gifts and shown on the console (the Donations tab, the Matching gifts page and the paddle-raise console's live channel) and on the public giving page; the room's thermometer screen (M4.8d) takes the same payload. When the host closes it, the sponsor's match becomes its own pledge, collected like any other (M4.8e). Charities also export the donors whose employers match gifts.
+
+### 2. References
+`docs/plans/phase-4.md` §6 (row M4.8f, P4-12, P4-13, P4-17); M4.8a (gifts), M4.8c (pledges); CLAUDE.md (tenancy, commands, money, time).
+
+### 3. Scope
+- **Challenge match:** sponsor (name and optional email, host only), an optional public name ("a generous sponsor" when empty), one campaign, a window (timestamptz, entered in the event's time zone; start included, end excluded), a ratio (`ratio_percent`: 50, 100 = 1:1, 200, 300 offered; 1–1,000 stored), a cap ($1.00–$10,000,000.00), the campaign's currency. At most 20 per campaign.
+- **What counts:** paid online gifts of the campaign whose payment landed in the window, each less what was refunded of it (a refund takes the covered fee first, then the gift), and confirmed (not cancelled) paddle pledges confirmed in the window. Sponsors' own match pledges never count. Matched = ⌊eligible × ratio ⁄ 100⌋, never above the cap (exact integer arithmetic). Nothing is stored while a match runs: every view computes it.
+- **States:** `active` (shown as Scheduled / Live / Window ended by the clock), `closed`, `cancelled`. Close (only once started): the window ends now if it was still running, `matched_minor` is stored, and a pledge (`source = 'match'`, no call, entry or paddle) is recorded for the amount when it is above zero. Cancel: only while active; nothing is pledged.
+- **After the close:** a refund of a matched gift (`order.refunded@1` → `donations.gift-refunds`) or a voided paddle pledge brings the sponsor's pledge down with the match, never up; at zero it is cancelled (P4-12: never ask more than pledged).
+- **Employer matching list:** CSV of the event's paid gifts that name an employer, sorted by employer: employer, donor, email, date (event time zone), campaign, amount less refunds; fully refunded gifts left out. Bulk export: `attendees:export`, a recent step-up, audited, refused while staff act as a member.
+- **UI:** `Donations → Matching gifts` (`/o/{org}/e/{event}/donations/matches`): the matches with progress, Close / Cancel, the add form, the employer list; a card on the Donations tab with the running matches; a banner on the giving page for each live match.
+
+**Not yet / later:** editing a running match (cancel and add again); a per-donor matching limit; linking the sponsor to a guest or party (for card-on-file collection, M4.8e); the room's screen itself (M4.8d, which reads `LiveMatchDto` from the console channel or `publicGiving`); a paid matching-gift database integration (Double the Donation, P4-17, owner's call); refunds lowering campaign totals (M4.8g reconciliation).
+
+### 4. `touches:`
+`packages/modules/donations` (new `domain/matches.ts`, `schema-matches.ts`, `match-dto.ts`, `match-progress.ts`, `matches.ts`, `employer-export.ts`; appended to `schema-paddles.ts`, `domain/paddles.ts`, `paddle-dto.ts`, `paddle-live.ts`, `paddle-raise.ts`, `dto.ts`, `gifts.ts`, `index.ts`, `private-columns.ts`), `packages/db/drizzle/0114_*.sql`, `packages/testing` (fixture rows, ports bulk action), `apps/worker` (subscriber, bulk action), `apps/web` (matches page, actions, export route, Donations card, giving page banner, bulk registry, messages in 13 locales).
+
+### 5. Data model
+- `donations.matches` (tenant, FORCE RLS): event, campaign (FK), sponsor name/email (personal), public name, ratio, cap, currency, window, status, `matched_minor`, `closed_at`, `cancelled_at`; checks on every column; `(org_id, event_id)` → `events.events` (hand-written, no cascade: it may carry a pledge).
+- `donations.gift_refunds` (tenant, FORCE RLS): one row per provider refund of a gift's order (`unique (org_id, refund_id)`: replays count once); `(org_id, refund_id)` → `orders.refunds` (hand-written).
+- `donations.pledges` (M4.8c): `call_id`, `entry_id`, `paddle_number` nullable; new `match_id` (FK, partial unique); `source in ('paddle', 'match')` with a shape check (NOT VALID + VALIDATE on the existing table).
+
+### 6. API diff
+None on `/v1`. The paddle console's live payload (`ConsoleLiveDto`) and the public giving payload (`PublicCampaignDto.matches`) gain the running matches (`LiveMatchDto`: terms, phase, matched, remaining, public name; never the sponsor's contact).
+
+### 7. Events
+Consumes `order.refunded@1` (`donations.gift-refunds`). Emits none (the console channel is published in each write's transaction).
+
+### 8. Entitlements and flags
+`donations`. Permissions: `events:write` (create, close, cancel), `orders:read` (read), `attendees:export` (employer list).
+
+### 9. ELT impact
+None (no legacy equivalent).
+
+### 10. Acceptance criteria
+| ID | Criterion | Test |
+|---|---|---|
+| AC-M4.8f-01 | A 1:1 match capped at $25,000 stops at the cap exactly | unit `packages/modules/donations/tests/matches.test.ts` ("stops at the cap exactly"); int `packages/testing/tests/matching-gifts.int.test.ts` ("doubles confirmed gifts in the window and stops at the cap exactly"); e2e `apps/web/e2e/matching-gifts.spec.ts` ("a 1:1 match capped at $25,000…") |
+| AC-M4.8f-02 | A refunded gift reduces the match (partial refunds: the covered fee first) | unit (`matchableAmount`); int ("a refunded gift reduces the match", "a refund takes the covered fee first"); e2e (refund on the order page, $24,100) |
+| AC-M4.8f-03 | Closing makes the sponsor's match its own pledge; later refunds bring it down, never up; at zero it is cancelled; replays count once | int ("closing records…", "gifts after the close…", "refunding everything…"); e2e (pledge recorded, persisted) |
+| AC-M4.8f-04 | Only confirmed gifts count: paid online gifts and confirmed paddle pledges in the window and campaign; a voided paddle pledge lowers a closed match | int ("confirmed paddle pledges count…", "another campaign never counts", windows) |
+| AC-M4.8f-05 | Window and ratio: scheduled matches cannot close, past windows match nothing, 2:1 triples | unit (phases, ratios); int ("a match before its window…", "a 2:1 match…"); e2e (scheduled, tripled) |
+| AC-M4.8f-06 | Shown on the console and the giving page; public payload has no sponsor contact | int ("the console and the giving page show it"); e2e (Donations card, giving page banner, no email in HTML) |
+| AC-M4.8f-07 | Employer matching list export (step-up, permission, net of refunds, sorted, own org only) | int ("the employer matching list"); e2e (CSV after step-up) |
+| AC-M4.8f-08 | Every validation message, empty states, success messages, persistence after reload | e2e ("every validation message…", main journey) |
+| AC-M4.8f-09 | Permissions and isolation: viewers read only (hidden controls; 404 export), other orgs see nothing; both new tables in the isolation fixture | int ("viewers see matches…"); `isolation.int.test.ts`, `canary.int.test.ts` (fixture `matchRows`); e2e viewer |
+| AC-M4.8f-10 | Keyboard only, axe light and dark on every new screen, Arabic RTL | e2e ("keyboard only…", "Arabic…", `expectAccessibleBothModes` throughout) |
+
+### 11. Security and privacy
+The sponsor's name and email are personal columns, shown only to the host; screens and the giving page show the public name the host entered (or "a generous sponsor"). No donor reaches a match payload. The employer list carries donors' names and emails, so it is a step-up bulk export like the gift list. Audit rows carry terms and amounts, never contacts.
+
+### 12. Performance budget
+A match's progress reads the campaign's paid gifts, their refunds and paddle pledges once per page (indexed by campaign); galas have hundreds to a few thousand gifts.
+
+### 13. Rollout
+Behind `donations`. Collection of the sponsor's pledge arrives with M4.8e.
+
+### 14. Build notes (2026-10-03)
+Built on the build branch + `merge/next-3g` + `merge/next-3h` + `agent/m4.8c` (unmerged; the pledges changes depend on its migration landing first).

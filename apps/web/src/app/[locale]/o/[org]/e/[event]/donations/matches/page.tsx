@@ -40,7 +40,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t('title') };
 }
 
-type Tone = 'success' | 'info' | 'neutral' | 'warning';
+type Tone = 'success' | 'info' | 'neutral' | 'waiting';
 
 /**
  * Matching gifts of an event (M4.8f, P4-17): challenge matches (a sponsor matches a campaign's
@@ -124,7 +124,8 @@ export default async function MatchesPage({
     match_cancelled: t('errors.cancelled'),
   };
   const now = new Date();
-  const start = new Date(Math.ceil(now.getTime() / 900_000) * 900_000);
+  // A new match runs from now (to the minute) for four hours unless the host changes it.
+  const start = new Date(Math.floor(now.getTime() / 60_000) * 60_000);
   const fields: FieldSpec[] = [
     {
       kind: 'select',
@@ -194,7 +195,7 @@ export default async function MatchesPage({
           ? { tone: 'success', label: t('phase.live') }
           : m.phase === 'scheduled'
             ? { tone: 'info', label: t('phase.scheduled') }
-            : { tone: 'warning', label: t('phase.ended') };
+            : { tone: 'waiting', label: t('phase.ended') };
   return (
     <>
       <PageHeader breadcrumb={crumbs} title={t('title')} description={t('subtitle')} />
