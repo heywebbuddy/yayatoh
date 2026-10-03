@@ -354,7 +354,8 @@
     "marketingAnalytics": "行銷分析",
     "badges": "名牌",
     "orgAnalytics": "數據分析",
-    "integrations": "整合"
+    "integrations": "整合",
+    "virtual": "直播設定"
   },
   "vocab": {
     "attendee": "參加者",
@@ -14952,6 +14953,121 @@
         "not_connected": "此聊天已關閉。"
       },
       "reported": "謝謝。主辦單位和 Yayatoh 會審核你的檢舉；這位訪客已無法再傳訊息給你的攤位。"
+    }
+  },
+  "virtual": {
+    "setup": {
+      "title": "直播設定",
+      "description": "在線直播 {event} 的場次：選擇活動的舉辦方式與可觀看的人，並為每個場次設定直播。",
+      "providerOff": "此處尚不支援直播",
+      "providerOffHint": "影音服務商帳戶就緒後，Yayatoh 會開啟直播。你的設定會保留。",
+      "fakeProvider": "測試直播：此處使用替代影音服務商，不會播出任何內容。",
+      "readOnly": "你可以查看直播設定。只有編輯者可以變更。",
+      "totalViewers": "觀眾",
+      "totalMinutes": "觀看分鐘數",
+      "deliveryTitle": "舉辦方式",
+      "deliveryLegend": "這個活動如何舉辦？",
+      "saveDelivery": "儲存舉辦方式",
+      "deliverySaved": "已儲存舉辦方式。",
+      "accessTitle": "誰可以觀看",
+      "accessHint": "選擇每種票券包含的內容。直播依用量計費，因此只有含線上觀看的票券才能觀看。",
+      "inPersonNote": "這個活動為實體舉辦，因此不直播任何場次。選擇「線上」或「實體與線上並行」即可設定直播。",
+      "noTicketTypes": "尚無票券類型",
+      "noTicketTypesHint": "新增票券類型或報名通行證，然後選擇哪些可以線上觀看。",
+      "defaultNote": "尚未選擇：套用活動的預設值。",
+      "saveAccess": "儲存",
+      "saveAccessLabel": "儲存 {name} 的觀看權限",
+      "accessSaved": "已儲存 {name} 的觀看權限。",
+      "sessionsTitle": "場次直播",
+      "noSessions": "尚無場次",
+      "noSessionsHint": "在議程中新增場次，然後為每個場次設定直播。",
+      "addSessions": "前往場次",
+      "session": "場次",
+      "stream": "直播",
+      "streamNone": "無直播",
+      "streamOn": "已開啟",
+      "streamOff": "已關閉",
+      "viewers": "觀眾",
+      "minutes": "觀看分鐘數",
+      "checkedIn": "線上報到",
+      "actions": "操作",
+      "createStream": "設定直播",
+      "createStreamLabel": "為 {title} 設定直播",
+      "showKey": "顯示串流金鑰",
+      "showKeyLabel": "顯示 {title} 的串流金鑰",
+      "turnOff": "關閉",
+      "turnOn": "開啟",
+      "turnOffLabel": "關閉 {title} 的直播",
+      "turnOnLabel": "開啟 {title} 的直播",
+      "ingestUrl": "伺服器",
+      "streamKey": "串流金鑰",
+      "keyWarning": "任何擁有此金鑰的人都能以你的活動名義推流。請妥善保密。",
+      "streamCreated": "{title} 的直播已就緒。",
+      "streamOnSaved": "{title} 的直播已開啟。",
+      "streamOffSaved": "{title} 的直播已關閉。",
+      "delivery": {
+        "in_person": "實體",
+        "online": "線上",
+        "hybrid": "實體與線上並行"
+      },
+      "deliveryHint": {
+        "in_person": "所有人到場參加，不進行直播。",
+        "online": "所有人在線上觀看。除非你變更，票券皆包含線上觀看。",
+        "hybrid": "部分人到場，部分人在線上。請在下方選擇哪些票券可以觀看。"
+      },
+      "access": {
+        "in_person": "僅實體",
+        "virtual": "僅線上",
+        "both": "實體與線上"
+      }
+    },
+    "errors": {
+      "in_person_event": "這個活動為實體舉辦。請先選擇「線上」或「實體與線上並行」。",
+      "video_off": "此處尚不支援直播。",
+      "in_person_only": "這張票券僅限實體參加。",
+      "stream_off": "這個直播已關閉。",
+      "provider_changed": "影音服務商已更換。請重新設定這個直播。",
+      "views_per_hour": "嘗試次數過多。請等幾分鐘後再試。",
+      "invalid_token": "這個觀看連結已過期。請重新開始觀看。",
+      "ticket_void": "這張票券已失效。"
+    },
+    "watch": {
+      "metaTitle": "線上觀看",
+      "title": "線上觀看",
+      "greeting": "{name}，你好。請選擇要觀看的場次。",
+      "inPersonOnly": "你的票券僅限實體參加",
+      "inPersonOnlyHint": "這張票券不包含線上觀看。如需線上觀看，請聯絡主辦單位。",
+      "noSessionsTitle": "尚無直播",
+      "noSessionsHint": "主辦單位開啟直播後，場次會顯示在這裡。請在開始前再來看看。",
+      "watched": "{count, plural, =0 {尚未觀看} other {已觀看 # 分鐘}}",
+      "watchSession": "觀看",
+      "watchLabel": "觀看 {title}",
+      "orderLink": "線上觀看",
+      "orderLinkLabel": "使用票券 {serial} 線上觀看"
+    },
+    "player": {
+      "countNote": "直播播放期間，你的觀看時間每分鐘計算一次。",
+      "back": "所有場次",
+      "heading": "播放器",
+      "testPattern": "測試直播：此環境不播出任何影片。",
+      "ready": "按「開始觀看」即可開始。",
+      "pause": "暫停",
+      "resume": "繼續",
+      "play": "開始觀看",
+      "playing": "播放中",
+      "paused": "已暫停",
+      "starting": "正在開始…",
+      "watched": "{count, plural, =0 {尚未觀看} other {已觀看 # 分鐘}}",
+      "errors": {
+        "in_person_only": "你的票券僅限實體參加。",
+        "stream_off": "主辦單位已關閉這個直播。",
+        "views_per_hour": "嘗試次數過多。請等幾分鐘後再試。",
+        "invalid_token": "本次觀看已過期。請再次按「開始觀看」。",
+        "ticket_void": "這張票券已失效。",
+        "video_off": "目前無法直播。",
+        "not_found": "這個場次目前沒有直播。",
+        "generic": "發生問題。請再試一次。"
+      }
     }
   }
 }

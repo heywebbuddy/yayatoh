@@ -262,3 +262,28 @@ async function assertStillWatchingTx(tx: TenantTx, eventId: string, ticketId: st
   const chosen = (await accessChoicesTx(tx, eventId)).get(t.ticketTypeId) ?? null;
   if (!mayWatch(effectiveAccess(ev.attendanceMode, chosen))) throw forbidden('in_person_only');
 }
+
+/**
+ * Which of an order's tickets may watch (their type includes virtual access on an online or
+ * hybrid event): the order page shows those a "Watch online" link. The web passes the tickets of
+ * an order whose manage link it verified; nothing else is returned.
+ */
+export const watchableTicketsQuery = tenantQuery({
+  name: 'virtual.watchableTickets',
+  input: z.object({ eventId: z.uuid(), ticketIds: z.array(z.uuid()).max(500) }),
+  output: z.array(z.uuid()),
+  entitlement: 'virtual',
+  permission: 'public:virtual',
+  handler: async ({ input, tx }) => {
+    const ev = await eventOrThrowTx(tx, input.eventId);
+    if (ev.attendanceMode === 'in_person' || !WATCHABLE.has(ev.status)) return [];
+    const chosen = await accessChoicesTx(tx, ev.id);
+    const out: string[] = [];
+    for (const id of input.ticketIds) {
+      const t = await ticketForScanTx(tx, { id });
+      if (t?.eventId !== ev.id || t.status !== 'active') continue;
+      if (mayWatch(effectiveAccess(ev.attendanceMode, chosen.get(t.ticketTypeId) ?? null))) out.push(t.id);
+    }
+    return out;
+  },
+});

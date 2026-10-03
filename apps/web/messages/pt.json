@@ -354,7 +354,8 @@
     "marketingAnalytics": "Análise de marketing",
     "badges": "Crachás",
     "orgAnalytics": "Análises",
-    "integrations": "Integrações"
+    "integrations": "Integrações",
+    "virtual": "Transmissão"
   },
   "vocab": {
     "attendee": "Participante",
@@ -14952,6 +14953,121 @@
         "not_connected": "Esta conversa está fechada."
       },
       "reported": "Obrigado. O organizador e a Yayatoh vão analisar sua denúncia; este visitante não pode mais escrever para o seu estande."
+    }
+  },
+  "virtual": {
+    "setup": {
+      "title": "Configurar transmissão",
+      "description": "Transmita online as sessões de {event}: escolha o formato do evento, quem pode assistir e configure uma transmissão ao vivo para cada sessão.",
+      "providerOff": "A transmissão ainda não está disponível aqui",
+      "providerOffHint": "A Yayatoh ativa a transmissão assim que a conta do provedor de vídeo estiver pronta. Suas configurações são mantidas.",
+      "fakeProvider": "Transmissão de teste: aqui é usado um provedor de vídeo substituto, então nada é transmitido.",
+      "readOnly": "Você pode ver a configuração da transmissão. Somente editores podem alterá-la.",
+      "totalViewers": "Espectadores",
+      "totalMinutes": "Minutos assistidos",
+      "deliveryTitle": "Formato",
+      "deliveryLegend": "Qual é o formato deste evento?",
+      "saveDelivery": "Salvar formato",
+      "deliverySaved": "Formato salvo.",
+      "accessTitle": "Quem pode assistir",
+      "accessHint": "Escolha o que cada tipo de ingresso inclui. A transmissão é medida, então só ingressos com acesso online podem assistir.",
+      "inPersonNote": "Este evento é presencial, então nenhuma sessão é transmitida. Escolha Online ou Híbrido para configurar transmissões.",
+      "noTicketTypes": "Ainda não há tipos de ingresso",
+      "noTicketTypesHint": "Adicione tipos de ingresso ou passes de inscrição e depois escolha quais podem assistir online.",
+      "defaultNote": "Ainda não escolhido: vale o padrão do evento.",
+      "saveAccess": "Salvar",
+      "saveAccessLabel": "Salvar acesso para {name}",
+      "accessSaved": "Acesso salvo para {name}.",
+      "sessionsTitle": "Transmissões das sessões",
+      "noSessions": "Ainda não há sessões",
+      "noSessionsHint": "Adicione sessões à programação e depois configure uma transmissão para cada uma.",
+      "addSessions": "Ir para sessões",
+      "session": "Sessão",
+      "stream": "Transmissão",
+      "streamNone": "Sem transmissão",
+      "streamOn": "Ligada",
+      "streamOff": "Desligada",
+      "viewers": "Espectadores",
+      "minutes": "Minutos assistidos",
+      "checkedIn": "Check-ins virtuais",
+      "actions": "Ações",
+      "createStream": "Configurar transmissão",
+      "createStreamLabel": "Configurar uma transmissão para {title}",
+      "showKey": "Mostrar chave de transmissão",
+      "showKeyLabel": "Mostrar a chave de transmissão de {title}",
+      "turnOff": "Desligar",
+      "turnOn": "Ligar",
+      "turnOffLabel": "Desligar a transmissão de {title}",
+      "turnOnLabel": "Ligar a transmissão de {title}",
+      "ingestUrl": "Servidor",
+      "streamKey": "Chave de transmissão",
+      "keyWarning": "Qualquer pessoa com esta chave pode transmitir como o seu evento. Mantenha-a em sigilo.",
+      "streamCreated": "Transmissão pronta para {title}.",
+      "streamOnSaved": "A transmissão de {title} está ligada.",
+      "streamOffSaved": "A transmissão de {title} está desligada.",
+      "delivery": {
+        "in_person": "Presencial",
+        "online": "Online",
+        "hybrid": "Híbrido"
+      },
+      "deliveryHint": {
+        "in_person": "Todos participam no local. Nada é transmitido.",
+        "online": "Todos assistem online. Os ingressos incluem acesso online, a menos que você mude isso.",
+        "hybrid": "Alguns participam presencialmente, outros online. Escolha abaixo quais ingressos podem assistir."
+      },
+      "access": {
+        "in_person": "Somente presencial",
+        "virtual": "Somente online",
+        "both": "Presencial e online"
+      }
+    },
+    "errors": {
+      "in_person_event": "Este evento é presencial. Escolha primeiro Online ou Híbrido.",
+      "video_off": "A transmissão ainda não está disponível aqui.",
+      "in_person_only": "Este ingresso é somente para participação presencial.",
+      "stream_off": "Esta transmissão está desligada.",
+      "provider_changed": "O provedor de vídeo mudou. Configure esta transmissão novamente.",
+      "views_per_hour": "Muitas tentativas. Aguarde alguns minutos e tente novamente.",
+      "invalid_token": "Este link de reprodução expirou. Comece a assistir novamente.",
+      "ticket_void": "Este ingresso não é mais válido."
+    },
+    "watch": {
+      "metaTitle": "Assistir online",
+      "title": "Assistir online",
+      "greeting": "Olá, {name}. Escolha uma sessão para assistir.",
+      "inPersonOnly": "Seu ingresso é para participação presencial",
+      "inPersonOnlyHint": "Assistir online não está incluído neste ingresso. Fale com o organizador se precisar de acesso online.",
+      "noSessionsTitle": "Nada está sendo transmitido ainda",
+      "noSessionsHint": "As sessões aparecem aqui quando o organizador liga a transmissão delas. Volte perto do início.",
+      "watched": "{count, plural, =0 {Ainda não assistido} one {# minuto assistido} other {# minutos assistidos}}",
+      "watchSession": "Assistir",
+      "watchLabel": "Assistir {title}",
+      "orderLink": "Assistir online",
+      "orderLinkLabel": "Assistir online com o ingresso {serial}"
+    },
+    "player": {
+      "countNote": "Seu tempo assistido conta uma vez por minuto enquanto a transmissão estiver em reprodução.",
+      "back": "Todas as sessões",
+      "heading": "Player",
+      "testPattern": "Transmissão de teste: nenhum vídeo é transmitido neste ambiente.",
+      "ready": "Pressione Começar a assistir para iniciar.",
+      "pause": "Pausar",
+      "resume": "Retomar",
+      "play": "Começar a assistir",
+      "playing": "Reproduzindo",
+      "paused": "Pausado",
+      "starting": "Iniciando…",
+      "watched": "{count, plural, =0 {Ainda não assistido} one {# minuto assistido} other {# minutos assistidos}}",
+      "errors": {
+        "in_person_only": "Seu ingresso é somente para participação presencial.",
+        "stream_off": "O organizador desligou esta transmissão.",
+        "views_per_hour": "Muitas tentativas. Aguarde alguns minutos e tente novamente.",
+        "invalid_token": "Esta reprodução expirou. Pressione Começar a assistir novamente.",
+        "ticket_void": "Este ingresso não é mais válido.",
+        "video_off": "A transmissão não está disponível no momento.",
+        "not_found": "Esta sessão não está sendo transmitida agora.",
+        "generic": "Algo deu errado. Tente novamente."
+      }
     }
   }
 }

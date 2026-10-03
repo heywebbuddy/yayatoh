@@ -18,6 +18,7 @@ import { refundPolicyLines } from '@/lib/refund-policy-text.ts';
 import { helpLinksForOrder } from '@/server/assistance.ts';
 import { getPdfRenderer } from '@/server/pdf.ts';
 import { scheduleSummary } from '@/server/schedule.ts';
+import { watchLinksForOrder } from '@/server/virtual.ts';
 import { webPushPublicKey } from '@/server/web-push.ts';
 import {
   removeOrderDeviceAction,
@@ -71,6 +72,13 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
   // M3.3b: each ticket's help link (the seat finder's "Need help" at the event).
   const helpLinks = holderTarget
     ? await helpLinksForOrder(
+        holderTarget,
+        order.tickets.map((tk) => tk.id),
+      )
+    : new Map<string, string>();
+  // M6.9a: tickets that include online access link to their watch page.
+  const watchLinks = holderTarget
+    ? await watchLinksForOrder(
         holderTarget,
         order.tickets.map((tk) => tk.id),
       )
@@ -232,6 +240,15 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
                     <p className="text-body font-medium">{t('order.seatLabel', { seat: tk.seatLabel })}</p>
                   ) : null}
                   <p className="text-caption">{tk.holderName}</p>
+                  {watchLinks.get(tk.id) ? (
+                    <Link
+                      href={watchLinks.get(tk.id) as string}
+                      className={buttonClass('primary')}
+                      aria-label={t('virtual.watch.orderLinkLabel', { serial: tk.serial })}
+                    >
+                      {t('virtual.watch.orderLink')}
+                    </Link>
+                  ) : null}
                   {helpLinks.get(tk.id) ? (
                     <Link
                       href={helpLinks.get(tk.id) as string}

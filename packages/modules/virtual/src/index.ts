@@ -57,4 +57,5 @@ export {
   viewerQuery,
   virtualAttended,
   virtualTicketToken,
+  watchableTicketsQuery,
 } from './viewer.ts';

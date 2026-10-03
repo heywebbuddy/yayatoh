@@ -354,7 +354,8 @@
     "marketingAnalytics": "Marketing analytics",
     "badges": "Badges",
     "orgAnalytics": "Analytics",
-    "integrations": "Integrations"
+    "integrations": "Integrations",
+    "virtual": "Stream setup"
   },
   "vocab": {
     "attendee": "Attendee",
@@ -14952,6 +14953,121 @@
         "not_connected": "This chat is closed."
       },
       "reported": "Thanks. The organizer and Yayatoh will review your report; this visitor can't write to your booth any more."
+    }
+  },
+  "virtual": {
+    "setup": {
+      "title": "Stream setup",
+      "description": "Stream the sessions of {event} online: choose how the event is delivered, who can watch, and set up a live stream for each session.",
+      "providerOff": "Streaming isn't available here yet",
+      "providerOffHint": "Yayatoh turns streaming on once the video provider account is ready. Your settings are kept.",
+      "fakeProvider": "Test streaming: a stand-in video provider is used here, so nothing is broadcast.",
+      "readOnly": "You can see the streaming setup. Only editors can change it.",
+      "totalViewers": "Viewers",
+      "totalMinutes": "Minutes watched",
+      "deliveryTitle": "Delivery",
+      "deliveryLegend": "How is this event delivered?",
+      "saveDelivery": "Save delivery",
+      "deliverySaved": "Delivery saved.",
+      "accessTitle": "Who can watch",
+      "accessHint": "Choose what each ticket type includes. Streaming is metered, so only tickets with online access can watch.",
+      "inPersonNote": "This event is in person, so no session is streamed. Choose Online or Hybrid to set up streams.",
+      "noTicketTypes": "No ticket types yet",
+      "noTicketTypesHint": "Add ticket types or registration passes, then choose which of them can watch online.",
+      "defaultNote": "Not chosen yet: the event's default applies.",
+      "saveAccess": "Save",
+      "saveAccessLabel": "Save access for {name}",
+      "accessSaved": "Access saved for {name}.",
+      "sessionsTitle": "Session streams",
+      "noSessions": "No sessions yet",
+      "noSessionsHint": "Add sessions to the program, then set up a stream for each one.",
+      "addSessions": "Go to sessions",
+      "session": "Session",
+      "stream": "Stream",
+      "streamNone": "No stream",
+      "streamOn": "On",
+      "streamOff": "Off",
+      "viewers": "Viewers",
+      "minutes": "Minutes watched",
+      "checkedIn": "Virtual check-ins",
+      "actions": "Actions",
+      "createStream": "Set up stream",
+      "createStreamLabel": "Set up a stream for {title}",
+      "showKey": "Show stream key",
+      "showKeyLabel": "Show the stream key for {title}",
+      "turnOff": "Turn off",
+      "turnOn": "Turn on",
+      "turnOffLabel": "Turn off the stream for {title}",
+      "turnOnLabel": "Turn on the stream for {title}",
+      "ingestUrl": "Server",
+      "streamKey": "Stream key",
+      "keyWarning": "Anyone with this key can broadcast as your event. Keep it private.",
+      "streamCreated": "Stream ready for {title}.",
+      "streamOnSaved": "The stream for {title} is on.",
+      "streamOffSaved": "The stream for {title} is off.",
+      "delivery": {
+        "in_person": "In person",
+        "online": "Online",
+        "hybrid": "Hybrid"
+      },
+      "deliveryHint": {
+        "in_person": "Everyone attends at the venue. Nothing is streamed.",
+        "online": "Everyone watches online. Tickets include online access unless you change it.",
+        "hybrid": "Some attend in person, some online. Choose below which tickets can watch."
+      },
+      "access": {
+        "in_person": "In person only",
+        "virtual": "Online only",
+        "both": "In person and online"
+      }
+    },
+    "errors": {
+      "in_person_event": "This event is in person. Choose Online or Hybrid first.",
+      "video_off": "Streaming isn't available here yet.",
+      "in_person_only": "This ticket is for in-person attendance only.",
+      "stream_off": "This stream is turned off.",
+      "provider_changed": "The video provider changed. Set up this stream again.",
+      "views_per_hour": "Too many tries. Wait a few minutes and try again.",
+      "invalid_token": "This viewing link has expired. Start watching again.",
+      "ticket_void": "This ticket is no longer valid."
+    },
+    "watch": {
+      "metaTitle": "Watch online",
+      "title": "Watch online",
+      "greeting": "Hi {name}. Choose a session to watch.",
+      "inPersonOnly": "Your ticket is for in-person attendance",
+      "inPersonOnlyHint": "Watching online isn't included in this ticket. Contact the organizer if you need online access.",
+      "noSessionsTitle": "Nothing is streaming yet",
+      "noSessionsHint": "Sessions appear here once the organizer turns their stream on. Come back closer to the start.",
+      "watched": "{count, plural, =0 {Not watched yet} one {Watched # minute} other {Watched # minutes}}",
+      "watchSession": "Watch",
+      "watchLabel": "Watch {title}",
+      "orderLink": "Watch online",
+      "orderLinkLabel": "Watch online with ticket {serial}"
+    },
+    "player": {
+      "countNote": "Your watch time counts once a minute while the stream plays.",
+      "back": "All sessions",
+      "heading": "Player",
+      "testPattern": "Test stream: no video is broadcast in this environment.",
+      "ready": "Press Start watching to begin.",
+      "pause": "Pause",
+      "resume": "Resume",
+      "play": "Start watching",
+      "playing": "Playing",
+      "paused": "Paused",
+      "starting": "Starting…",
+      "watched": "{count, plural, =0 {Not watched yet} one {Watched # minute} other {Watched # minutes}}",
+      "errors": {
+        "in_person_only": "Your ticket is for in-person attendance only.",
+        "stream_off": "The organizer turned this stream off.",
+        "views_per_hour": "Too many tries. Wait a few minutes and try again.",
+        "invalid_token": "This viewing expired. Press Start watching again.",
+        "ticket_void": "This ticket is no longer valid.",
+        "video_off": "Streaming isn't available right now.",
+        "not_found": "This session isn't streaming right now.",
+        "generic": "Something went wrong. Try again."
+      }
     }
   }
 }

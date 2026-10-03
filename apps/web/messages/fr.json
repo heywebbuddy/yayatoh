@@ -354,7 +354,8 @@
     "marketingAnalytics": "Analyses marketing",
     "badges": "Badges",
     "orgAnalytics": "Analyses",
-    "integrations": "Intégrations"
+    "integrations": "Intégrations",
+    "virtual": "Diffusion"
   },
   "vocab": {
     "attendee": "Participant",
@@ -14952,6 +14953,121 @@
         "not_connected": "Cette discussion est fermée."
       },
       "reported": "Merci. L’organisateur et Yayatoh vont examiner votre signalement ; ce visiteur ne peut plus écrire à votre stand."
+    }
+  },
+  "virtual": {
+    "setup": {
+      "title": "Configurer la diffusion",
+      "description": "Diffusez en ligne les sessions de {event} : choisissez le format de l’événement, qui peut regarder, et configurez un direct pour chaque session.",
+      "providerOff": "La diffusion n’est pas encore disponible ici",
+      "providerOffHint": "Yayatoh active la diffusion dès que le compte du fournisseur vidéo est prêt. Vos réglages sont conservés.",
+      "fakeProvider": "Diffusion de test : un fournisseur vidéo de remplacement est utilisé ici, rien n’est diffusé.",
+      "readOnly": "Vous pouvez voir la configuration de la diffusion. Seuls les éditeurs peuvent la modifier.",
+      "totalViewers": "Spectateurs",
+      "totalMinutes": "Minutes regardées",
+      "deliveryTitle": "Format",
+      "deliveryLegend": "Sous quel format se déroule cet événement ?",
+      "saveDelivery": "Enregistrer le format",
+      "deliverySaved": "Format enregistré.",
+      "accessTitle": "Qui peut regarder",
+      "accessHint": "Choisissez ce que comprend chaque type de billet. La diffusion est comptabilisée : seuls les billets avec accès en ligne peuvent regarder.",
+      "inPersonNote": "Cet événement est en présentiel, aucune session n’est donc diffusée. Choisissez En ligne ou Hybride pour configurer des directs.",
+      "noTicketTypes": "Aucun type de billet pour l’instant",
+      "noTicketTypesHint": "Ajoutez des types de billets ou des pass d’inscription, puis choisissez lesquels peuvent regarder en ligne.",
+      "defaultNote": "Pas encore choisi : le réglage par défaut de l’événement s’applique.",
+      "saveAccess": "Enregistrer",
+      "saveAccessLabel": "Enregistrer l’accès pour {name}",
+      "accessSaved": "Accès enregistré pour {name}.",
+      "sessionsTitle": "Directs des sessions",
+      "noSessions": "Aucune session pour l’instant",
+      "noSessionsHint": "Ajoutez des sessions au programme, puis configurez un direct pour chacune.",
+      "addSessions": "Aller aux sessions",
+      "session": "Session",
+      "stream": "Direct",
+      "streamNone": "Pas de direct",
+      "streamOn": "Activé",
+      "streamOff": "Désactivé",
+      "viewers": "Spectateurs",
+      "minutes": "Minutes regardées",
+      "checkedIn": "Enregistrements virtuels",
+      "actions": "Actions",
+      "createStream": "Configurer le direct",
+      "createStreamLabel": "Configurer un direct pour {title}",
+      "showKey": "Afficher la clé de diffusion",
+      "showKeyLabel": "Afficher la clé de diffusion de {title}",
+      "turnOff": "Désactiver",
+      "turnOn": "Activer",
+      "turnOffLabel": "Désactiver le direct de {title}",
+      "turnOnLabel": "Activer le direct de {title}",
+      "ingestUrl": "Serveur",
+      "streamKey": "Clé de diffusion",
+      "keyWarning": "Toute personne disposant de cette clé peut diffuser au nom de votre événement. Gardez-la secrète.",
+      "streamCreated": "Direct prêt pour {title}.",
+      "streamOnSaved": "Le direct de {title} est activé.",
+      "streamOffSaved": "Le direct de {title} est désactivé.",
+      "delivery": {
+        "in_person": "En présentiel",
+        "online": "En ligne",
+        "hybrid": "Hybride"
+      },
+      "deliveryHint": {
+        "in_person": "Tout le monde vient sur place. Rien n’est diffusé.",
+        "online": "Tout le monde regarde en ligne. Les billets incluent l’accès en ligne, sauf si vous le changez.",
+        "hybrid": "Certains viennent sur place, d’autres en ligne. Choisissez ci-dessous quels billets peuvent regarder."
+      },
+      "access": {
+        "in_person": "Présentiel uniquement",
+        "virtual": "En ligne uniquement",
+        "both": "Présentiel et en ligne"
+      }
+    },
+    "errors": {
+      "in_person_event": "Cet événement est en présentiel. Choisissez d’abord En ligne ou Hybride.",
+      "video_off": "La diffusion n’est pas encore disponible ici.",
+      "in_person_only": "Ce billet est réservé à la participation sur place.",
+      "stream_off": "Ce direct est désactivé.",
+      "provider_changed": "Le fournisseur vidéo a changé. Configurez à nouveau ce direct.",
+      "views_per_hour": "Trop de tentatives. Patientez quelques minutes et réessayez.",
+      "invalid_token": "Ce lien de lecture a expiré. Relancez la lecture.",
+      "ticket_void": "Ce billet n’est plus valide."
+    },
+    "watch": {
+      "metaTitle": "Regarder en ligne",
+      "title": "Regarder en ligne",
+      "greeting": "Bonjour {name}. Choisissez une session à regarder.",
+      "inPersonOnly": "Votre billet est pour une participation sur place",
+      "inPersonOnlyHint": "Regarder en ligne n’est pas inclus dans ce billet. Contactez l’organisateur si vous avez besoin d’un accès en ligne.",
+      "noSessionsTitle": "Rien n’est diffusé pour l’instant",
+      "noSessionsHint": "Les sessions apparaissent ici dès que l’organisateur active leur direct. Revenez peu avant le début.",
+      "watched": "{count, plural, =0 {Pas encore regardé} one {# minute regardée} other {# minutes regardées}}",
+      "watchSession": "Regarder",
+      "watchLabel": "Regarder {title}",
+      "orderLink": "Regarder en ligne",
+      "orderLinkLabel": "Regarder en ligne avec le billet {serial}"
+    },
+    "player": {
+      "countNote": "Votre temps de visionnage est compté une fois par minute pendant la lecture.",
+      "back": "Toutes les sessions",
+      "heading": "Lecteur",
+      "testPattern": "Direct de test : aucune vidéo n’est diffusée dans cet environnement.",
+      "ready": "Appuyez sur Commencer à regarder pour démarrer.",
+      "pause": "Pause",
+      "resume": "Reprendre",
+      "play": "Commencer à regarder",
+      "playing": "En lecture",
+      "paused": "En pause",
+      "starting": "Démarrage…",
+      "watched": "{count, plural, =0 {Pas encore regardé} one {# minute regardée} other {# minutes regardées}}",
+      "errors": {
+        "in_person_only": "Votre billet est réservé à la participation sur place.",
+        "stream_off": "L’organisateur a désactivé ce direct.",
+        "views_per_hour": "Trop de tentatives. Patientez quelques minutes et réessayez.",
+        "invalid_token": "Cette lecture a expiré. Appuyez à nouveau sur Commencer à regarder.",
+        "ticket_void": "Ce billet n’est plus valide.",
+        "video_off": "La diffusion n’est pas disponible pour le moment.",
+        "not_found": "Cette session n’est pas diffusée pour le moment.",
+        "generic": "Une erreur est survenue. Réessayez."
+      }
     }
   }
 }
