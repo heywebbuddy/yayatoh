@@ -283,3 +283,38 @@ export {
   tablePartiesTx,
   tablePartyTx,
 } from './tables.ts';
+// M4.5a guest website: blocks, the password gate, the public page.
+export {
+  emptyContent,
+  MAX_BLOCK_ITEMS,
+  MAX_SITE_BLOCKS,
+  normalizeSitePassword,
+  passwordProblem,
+  programSubEvents,
+  readContent,
+  SITE_PASSWORD_MAX,
+  SITE_PASSWORD_MIN,
+  siteAccessToken,
+  siteAccessValid,
+} from './domain/site.ts';
+export { SITE_BLOCK_KINDS, SITE_STATUSES, type SiteBlockKind, type SiteStatus } from './schema.ts';
+export {
+  addGuestSiteBlockCommand,
+  GuestSiteDto,
+  guestSitePublishedQuery,
+  guestSiteQuery,
+  guestSiteTarget,
+  moveGuestSiteBlockCommand,
+  PublicGuestSiteDto,
+  PublicSiteBlockDto,
+  publicGuestSiteQuery,
+  publishGuestSiteCommand,
+  removeGuestSiteBlockCommand,
+  SaveGuestSiteInput,
+  SiteBlockDto,
+  saveGuestSiteCommand,
+  setGuestSitePasswordCommand,
+  UpdateGuestSiteBlockInput,
+  unlockGuestSiteQuery,
+  updateGuestSiteBlockCommand,
+} from './site.ts';

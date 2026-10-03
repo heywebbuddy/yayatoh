@@ -650,3 +650,78 @@ export const inviteMessages = tenantTable(
     }).onDelete('cascade'),
   ],
 );
+
+/* ---------------------------------------------------------------- M4.5a guest website ---- */
+
+export const SITE_STATUSES = ['draft', 'published'] as const;
+export type SiteStatus = (typeof SITE_STATUSES)[number];
+/** `program` is built from the event's sub-events; the others hold the host's own content. */
+export const SITE_BLOCK_KINDS = ['text', 'program', 'travel', 'registry', 'faq'] as const;
+export type SiteBlockKind = (typeof SITE_BLOCK_KINDS)[number];
+
+/**
+ * An event's guest website (M4.5a, P4-3c): one per event, at `/w/{code}` behind a password.
+ * Only a scrypt hash of the password is kept; `password_version` goes up on every change so every
+ * visitor's access cookie stops working at once. A published site always has a password. Never
+ * listed on the marketplace: nothing here emits domain events or reaches a projection.
+ */
+export const sites = tenantTable(
+  guestsSchema,
+  'sites',
+  {
+    eventId: uuid('event_id').notNull(),
+    code: text('code').notNull(),
+    status: text('status').notNull().default('draft'),
+    title: text('title').notNull(),
+    intro: text('intro'),
+    /** The language the host writes in (the page marks the content with it). */
+    contentLocale: text('content_locale').notNull().default('en'),
+    passwordHash: text('password_hash'),
+    passwordVersion: integer('password_version').notNull().default(0),
+    publishedAt: timestamp('published_at', { withTimezone: true }),
+  },
+  (t) => [
+    uniqueIndex('sites_org_event_key').on(t.orgId, t.eventId),
+    uniqueIndex('sites_code_key').on(t.code),
+    check('sites_code_check', sql`code ~ '^[0-9A-Z]{8}$'`),
+    check('sites_status_check', inList('status', SITE_STATUSES)),
+    check('sites_title_length', sql`length(title) between 1 and 120`),
+    check('sites_intro_length', sql`intro is null or length(intro) between 1 and 1000`),
+    check('sites_locale_check', sql`content_locale ~ '^[a-z]{2}(-[A-Z]{2})?$'`),
+    check(
+      'sites_password_hash_check',
+      sql`password_hash is null or password_hash ~ '^scrypt\\$16384\\$8\\$1\\$[A-Za-z0-9_-]{22}\\$[A-Za-z0-9_-]{43}$'`,
+    ),
+    check('sites_password_version_check', sql`password_version >= 0`),
+    check('sites_published_check', sql`status <> 'published' or (password_hash is not null and published_at is not null)`),
+  ],
+);
+
+/**
+ * The site's blocks, in the host's order (`position` 0…n-1, moved one step at a time). `content`
+ * is the kind's JSON (`domain/site.ts`), checked on every write and read back item by item.
+ */
+export const siteBlocks = tenantTable(
+  guestsSchema,
+  'site_blocks',
+  {
+    eventId: uuid('event_id').notNull(),
+    siteId: uuid('site_id').notNull(),
+    kind: text('kind').notNull(),
+    position: integer('position').notNull().default(0),
+    heading: text('heading'),
+    content: jsonb('content').notNull().default({}),
+  },
+  (t) => [
+    index('site_blocks_org_site_idx').on(t.orgId, t.siteId, t.position),
+    check('site_blocks_kind_check', inList('kind', SITE_BLOCK_KINDS)),
+    check('site_blocks_heading_length', sql`heading is null or length(heading) between 1 and 120`),
+    check('site_blocks_position_check', sql`position >= 0`),
+    check('site_blocks_content_check', sql`jsonb_typeof(content) = 'object'`),
+    foreignKey({
+      name: 'site_blocks_site_fk',
+      columns: [t.orgId, t.siteId],
+      foreignColumns: [sites.orgId, sites.id],
+    }).onDelete('cascade'),
+  ],
+);
