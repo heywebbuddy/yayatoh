@@ -288,7 +288,10 @@ test.describe('guest hub (M4.7a)', () => {
       headers: { 'x-yy-intl-scope': 'hub' },
     });
     expect(await rsvp.text()).toContain('Please answer for {name}');
-    const robots = await (await page.request.get('/robots.txt')).text();
+    // Every public host's robots.txt keeps crawlers out (the marketplace host here).
+    const robots = await (
+      await page.request.get('/robots.txt', { headers: { host: 'yayatoh.localhost:3100' } })
+    ).text();
     expect(robots).toContain('Disallow: /hub/');
   });
 
