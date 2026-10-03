@@ -462,7 +462,10 @@ describe('org overview', () => {
       tickets: { sold: 2, capacity: 40 },
     });
     // Marketing: tickets, no money.
-    expect(await row(as('marketing', now))).toMatchObject({ sales: null, tickets: { sold: 2, capacity: 40 } });
+    expect(await row(as('marketing', now))).toMatchObject({
+      sales: null,
+      tickets: { sold: 2, capacity: 40 },
+    });
     // A read-only viewer (ops, with orders:read) sees the figures; an org scanner (the door at org
     // level) gets no overview at all, so no money.
     expect(await row(as('viewer', now))).toMatchObject({ sales: [{ currency: 'USD', total: 5000 }] });

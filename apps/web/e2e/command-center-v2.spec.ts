@@ -169,10 +169,9 @@ test.describe('Command Center v2 (U4)', () => {
       'href',
       `${base}/details#details-venue`,
     );
-    await expect(page.getByTestId('cc-todo').getByRole('link', { name: /Short description written/ })).toHaveAttribute(
-      'href',
-      `${base}/content#tagline-heading`,
-    );
+    await expect(
+      page.getByTestId('cc-todo').getByRole('link', { name: /Short description written/ }),
+    ).toHaveAttribute('href', `${base}/content#tagline-heading`);
 
     // The alerts tile is the real engine's: all clear, with the way to the alert list.
     const alerts = page.getByTestId('cc-widget-alerts');
@@ -198,7 +197,10 @@ test.describe('Command Center v2 (U4)', () => {
 
     // The checklist's other link lands on its section too.
     await page.goto(`${base}/command-center`);
-    await page.getByTestId('cc-todo').getByRole('link', { name: /Short description written/ }).click();
+    await page
+      .getByTestId('cc-todo')
+      .getByRole('link', { name: /Short description written/ })
+      .click();
     await expect(page).toHaveURL(new RegExp(`${base}/content#tagline-heading$`));
     await expect(page.locator('#tagline-heading')).toBeInViewport();
 
