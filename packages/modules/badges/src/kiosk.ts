@@ -505,7 +505,7 @@ export const kioskJobBadgeQuery = tenantQuery({
       .select({ source: printJobs.source, eventId: printJobs.eventId })
       .from(printJobs)
       .where(eq(printJobs.id, jobId));
-    if (!j || j.source !== 'kiosk' || j.eventId !== input.eventId)
+    if (j?.source !== 'kiosk' || j.eventId !== input.eventId)
       throw new DomainError('not_found', 'Print job not found');
     const b = await jobBadgeTx(tx, ctx, jobId, true);
     return { html: b.html, title: b.title };

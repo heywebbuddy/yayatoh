@@ -62,6 +62,8 @@ export class ScanSyncError extends Error {
 
 export interface ScanOutcome {
   readonly scanId: string;
+  /** The ticket the code resolved to on this device (kiosk self-print looks its badge up by it). */
+  readonly ticketId?: string | null;
   readonly verdict: OfflineVerdict;
   readonly holderName: string | null;
   readonly typeName: string | null;
@@ -137,6 +139,51 @@ export interface HelpRequest {
   readonly createdAt: string;
   readonly dueAt: string;
   readonly overdue: boolean;
+}
+
+/** Kiosk self-print (M5.5c): one attendee's badge as the kiosk may show it. */
+export interface KioskBadge {
+  readonly ticketId: string;
+  readonly name: string;
+  readonly company: string;
+  readonly jobTitle: string;
+  readonly typeName: string;
+  readonly status: 'ready' | 'printed' | 'desk';
+  /** Proof for printing, from the server (absent when read from the offline snapshot). */
+  readonly pass?: string;
+}
+
+/** What the kiosk keeps sealed on the device to keep working offline (M5.5c). */
+export interface KioskSnapshot {
+  readonly eventId: string;
+  readonly emailCodes: boolean;
+  readonly adapter: 'browser' | 'printnode';
+  readonly asOf: string;
+  readonly badges: KioskBadge[];
+}
+
+export type KioskPrintResult =
+  | {
+      readonly status: 'printing';
+      readonly jobId: string;
+      readonly adapter: 'browser' | 'printnode';
+      readonly pdfToken: string | null;
+      readonly failed?: boolean;
+    }
+  | { readonly status: 'printed' | 'desk' | 'queued' }
+  | { readonly status: 'error'; readonly code: string };
+
+export type KioskVerifyResult =
+  | { readonly status: 'ok'; readonly badge: KioskBadge; readonly checkInCode: string }
+  | { readonly status: 'desk' | 'locked' | 'expired' }
+  | { readonly status: 'wrong'; readonly attemptsLeft: number }
+  | { readonly status: 'error'; readonly code: string };
+
+interface QueuedKioskPrint {
+  readonly ticketId: string;
+  readonly code: string;
+  readonly requestKey: string;
+  readonly locale: string;
 }
 
 export interface KioskConfig {
@@ -364,6 +411,7 @@ export class ScanClient {
     await queueAdd(scan);
     return {
       scanId: scan.scanId,
+      ticketId: ticketId ?? null,
       verdict,
       holderName: row?.holderName ?? null,
       typeName: row?.typeName ?? null,
@@ -472,6 +520,8 @@ export class ScanClient {
     await kvSet('kioskExited', k.startedAt);
     this.kiosk = null;
     await kvSet('kiosk', null);
+    this.kioskPrint = null;
+    await kvSet('kioskBadges', null);
     await this.reportKioskExit(k.startedAt).catch(() => undefined);
   }
 
@@ -570,9 +620,158 @@ export class ScanClient {
     return (await fetch('/api/scan/push', { method: 'DELETE', ...this.api })).ok;
   }
 
+  // --- Kiosk self-print (M5.5c) -------------------------------------------------------------------
+
+  /** The self-print snapshot, or null when self-print is off for this kiosk (or never fetched). */
+  kioskPrint: KioskSnapshot | null = null;
+
+  private async kioskPost<T>(body: Record<string, unknown>): Promise<T | { code: string }> {
+    let res: Response;
+    try {
+      res = await fetch('/api/scan/kiosk/badges', {
+        method: 'POST',
+        ...this.api,
+        body: JSON.stringify({ ...body, eventId: this.config.eventId }),
+      });
+    } catch {
+      return { code: 'offline' };
+    }
+    const json = (await res.json().catch(() => ({}))) as Record<string, unknown>;
+    if (res.ok) return json as T;
+    const reason = (json.details as { reason?: string } | undefined)?.reason;
+    return { code: reason ?? (typeof json.code === 'string' ? json.code : `http_${res.status}`) };
+  }
+
+  /** Load the sealed self-print snapshot (offline start). */
+  async loadKioskPrint(): Promise<void> {
+    const sealed = await kvGet<{ iv: Uint8Array; data: ArrayBuffer } | null>('kioskBadges');
+    this.kioskPrint = sealed ? await openJson<KioskSnapshot>(this.config.token, sealed) : null;
+  }
+
+  /**
+   * Refresh the self-print snapshot (when the kiosk starts, every sync, and on reconnect). Self-print
+   * turned off clears it; offline keeps the last one.
+   */
+  async syncKioskPrint(): Promise<KioskSnapshot | null> {
+    if (!this.kiosk) return this.kioskPrint;
+    try {
+      const res = await fetch(
+        `/api/scan/kiosk/badges?eventId=${encodeURIComponent(this.config.eventId)}`,
+        this.api,
+      );
+      if (res.status === 403 || res.status === 404) {
+        this.kioskPrint = null;
+        await kvSet('kioskBadges', null);
+      } else if (res.ok) {
+        this.kioskPrint = (await res.json()) as KioskSnapshot;
+        await kvSet('kioskBadges', await sealJson(this.config.token, this.kioskPrint));
+      }
+    } catch {
+      // Offline: keep the last snapshot.
+    }
+    return this.kioskPrint;
+  }
+
+  /**
+   * The badge of the attendee whose code was just scanned: from the server (fresh, with the proof
+   * to print), or offline from the snapshot by the ticket the manifest resolved. Never by search.
+   */
+  async kioskBadgeFor(code: string, ticketId: string | null): Promise<KioskBadge | { code: string } | null> {
+    const r = await this.kioskPost<KioskBadge>({ action: 'lookup', code });
+    if (!('code' in r)) return r;
+    if (r.code === 'offline') {
+      const b = ticketId ? this.kioskPrint?.badges.find((x) => x.ticketId === ticketId) : undefined;
+      return b ?? null;
+    }
+    return r.code === 'not_found' ? null : r;
+  }
+
+  /** Ask for an emailed code (the answer is the same whether or not anything was sent). */
+  kioskEmailCode(email: string, locale: string): Promise<{ challengeId: string } | { code: string }> {
+    return this.kioskPost<{ challengeId: string }>({ action: 'email', email, locale });
+  }
+
+  async kioskVerifyCode(challengeId: string, code: string): Promise<KioskVerifyResult> {
+    const r = await this.kioskPost<KioskVerifyResult>({ action: 'verify', challengeId, code });
+    return 'code' in r && !('status' in r) ? { status: 'error', code: r.code } : (r as KioskVerifyResult);
+  }
+
+  /**
+   * Print the identified attendee's badge. Offline, the print waits on the device (sealed, with the
+   * code that proves it) and goes out on reconnect; the server still logs it once.
+   */
+  async kioskPrintBadge(input: {
+    ticketId: string;
+    pass?: string;
+    code?: string;
+    locale: string;
+  }): Promise<KioskPrintResult> {
+    const requestKey = `kiosk-${uuidv7()}`;
+    const r = await this.kioskPost<KioskPrintResult>({ action: 'print', ...input, requestKey });
+    if ('code' in r && !('status' in r)) {
+      if (r.code === 'offline' && input.code) {
+        const queue = await this.kioskPrintQueue();
+        queue.push({ ticketId: input.ticketId, code: input.code, requestKey, locale: input.locale });
+        await kvSet('kioskPrints', await sealJson(this.config.token, queue));
+        await this.markKioskPrinted(input.ticketId);
+        return { status: 'queued' };
+      }
+      return { status: 'error', code: r.code };
+    }
+    const result = r as KioskPrintResult;
+    if (result.status === 'printing' || result.status === 'printed')
+      await this.markKioskPrinted(input.ticketId);
+    return result;
+  }
+
+  private async kioskPrintQueue(): Promise<QueuedKioskPrint[]> {
+    const sealed = await kvGet<{ iv: Uint8Array; data: ArrayBuffer } | null>('kioskPrints');
+    return sealed ? await openJson<QueuedKioskPrint[]>(this.config.token, sealed) : [];
+  }
+
+  async kioskPrintsWaiting(): Promise<number> {
+    return (await this.kioskPrintQueue()).length;
+  }
+
+  /** Send prints made offline (one at a time, each once); returns the browser jobs to print here. */
+  async flushKioskPrints(): Promise<KioskPrintResult[]> {
+    const queue = await this.kioskPrintQueue();
+    const done: KioskPrintResult[] = [];
+    const left: QueuedKioskPrint[] = [];
+    for (const q of queue) {
+      const r = await this.kioskPost<KioskPrintResult>({ action: 'print', ...q });
+      if ('code' in r && !('status' in r) && r.code === 'offline') left.push(q);
+      else if (!('code' in r)) done.push(r as KioskPrintResult);
+    }
+    await kvSet('kioskPrints', left.length ? await sealJson(this.config.token, left) : null);
+    return done;
+  }
+
+  private async markKioskPrinted(ticketId: string) {
+    const s = this.kioskPrint;
+    if (!s) return;
+    this.kioskPrint = {
+      ...s,
+      badges: s.badges.map((b) => (b.ticketId === ticketId ? { ...b, status: 'printed' as const } : b)),
+    };
+    await kvSet('kioskBadges', await sealJson(this.config.token, this.kioskPrint));
+  }
+
+  /** The PDF of a browser print job this kiosk just made (for its own print dialog). */
+  async kioskBadgePdf(pdfToken: string): Promise<Blob | null> {
+    try {
+      const qs = new URLSearchParams({ eventId: this.config.eventId, token: pdfToken });
+      const res = await fetch(`/api/scan/kiosk/badges/pdf?${qs}`, this.api);
+      return res.ok ? await res.blob() : null;
+    } catch {
+      return null;
+    }
+  }
+
   async wipe(): Promise<void> {
     this.snapshot = null;
     this.kiosk = null;
+    this.kioskPrint = null;
     this.index();
     await wipeAll();
   }

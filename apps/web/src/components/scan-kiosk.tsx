@@ -3,6 +3,7 @@
 import { Button } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { KioskSelfPrint, type SelfPrintStart } from '@/components/scan-kiosk-print.tsx';
 import type { ScanClient, ScanOutcome } from '@/scan/client.ts';
 import { markScanFeedback, markScanStart } from '@/scan/feedback.ts';
 import { PIN_MAX_ATTEMPTS, pinLockedUntil, verifyPinHash } from '@/scan/kiosk-pin.ts';
@@ -29,6 +30,7 @@ export function KioskScreen({
   hasCamera: boolean;
 }) {
   const t = useTranslations('scanKiosk');
+  const tp = useTranslations('kioskPrint');
   const [last, setLast] = useState<{ outcome: ScanOutcome; mark: string } | null>(null);
   const [camera, setCamera] = useState(false);
   const [cameraError, setCameraError] = useState(false);
@@ -37,6 +39,43 @@ export function KioskScreen({
   const video = useRef<HTMLVideoElement>(null);
   const seq = useRef(0);
   const place = client.checkpoints.find((c) => c.id === client.kiosk?.checkpointId)?.name ?? null;
+  // M5.5c self-print: on when the organizer turned it on (the sealed snapshot says so offline too).
+  const [selfPrint, setSelfPrint] = useState(client.kioskPrint !== null);
+  const [emailCodes, setEmailCodes] = useState(client.kioskPrint?.emailCodes ?? false);
+  const [visit, setVisit] = useState<SelfPrintStart | null>(null);
+  const [laterPdf, setLaterPdf] = useState<string | null>(null);
+  const laterFrame = useRef<HTMLIFrameElement>(null);
+
+  // The self-print snapshot: loaded sealed at once, refreshed every 30 s and on reconnect, when
+  // prints made offline are also sent (browser jobs then print here).
+  useEffect(() => {
+    let stop = false;
+    const refresh = async () => {
+      const snap = await client.syncKioskPrint();
+      if (stop) return;
+      setSelfPrint(snap !== null);
+      setEmailCodes(snap?.emailCodes ?? false);
+      for (const r of await client.flushKioskPrints())
+        if (r.status === 'printing' && r.pdfToken) {
+          const pdf = await client.kioskBadgePdf(r.pdfToken);
+          if (pdf && !stop) setLaterPdf(URL.createObjectURL(pdf));
+        }
+    };
+    void client.loadKioskPrint().then(() => {
+      if (stop) return;
+      setSelfPrint(client.kioskPrint !== null);
+      setEmailCodes(client.kioskPrint?.emailCodes ?? false);
+      void refresh();
+    });
+    const id = window.setInterval(() => void refresh(), 30_000);
+    const onOnline = () => void refresh();
+    window.addEventListener('online', onOnline);
+    return () => {
+      stop = true;
+      window.clearInterval(id);
+      window.removeEventListener('online', onOnline);
+    };
+  }, [client]);
 
   const scan = useCallback(
     async (code: string) => {
@@ -46,19 +85,30 @@ export function KioskScreen({
       const outcome = await client.scan(code);
       setLast({ outcome, mark });
       afterScan();
+      // Self-print: a guest who got in (now or earlier) checks their badge and prints it.
+      const v = outcome.server ?? outcome.verdict;
+      if (selfPrint && (OK.has(v) || AGAIN.has(v)))
+        setVisit({ kind: 'scan', code: code.trim(), ticketId: outcome.ticketId ?? null });
     },
-    [client, afterScan],
+    [client, afterScan, selfPrint],
   );
+
+  const endVisit = useCallback(() => {
+    setVisit(null);
+    setLast(null);
+    window.setTimeout(() => input.current?.focus(), 0);
+  }, []);
   // Feedback is on screen once React has painted the verdict.
   useEffect(() => {
     if (!last) return;
     const raf = requestAnimationFrame(() => markScanFeedback(last.mark));
-    const clear = window.setTimeout(() => setLast(null), 6_000);
+    // During a self-print visit the verdict stays until the visit ends.
+    const clear = visit ? 0 : window.setTimeout(() => setLast(null), 6_000);
     return () => {
       cancelAnimationFrame(raf);
       window.clearTimeout(clear);
     };
-  }, [last]);
+  }, [last, visit]);
 
   const onCameraError = useCallback(() => {
     setCamera(false);
@@ -74,46 +124,58 @@ export function KioskScreen({
         <h1 className="text-display">{t('welcome', { event: client.eventName ?? '' })}</h1>
         {place ? <p className="text-title text-ink-2">{t('entrance', { place })}</p> : null}
       </header>
-      <form
-        className="flex flex-col gap-4"
-        onSubmit={(e) => {
-          e.preventDefault();
-          const value = input.current?.value ?? '';
-          if (input.current) input.current.value = '';
-          void scan(value);
-          input.current?.focus();
-        }}
-      >
-        <label htmlFor="kiosk-code" className="text-title">
-          {t('instruction')}
-        </label>
-        <input
-          ref={input}
-          id="kiosk-code"
-          required
-          // biome-ignore lint/a11y/noAutofocus: a kiosk exists to receive scans.
-          autoFocus
-          autoComplete="off"
-          autoCapitalize="characters"
-          spellCheck={false}
-          className="min-h-20 w-full rounded-panel border-2 border-line-strong bg-surface px-6 text-center font-mono text-[32px] tracking-[0.08em]"
-        />
-        <div className="flex flex-wrap justify-center gap-4">
-          <Button type="submit" className="min-h-16 min-w-48 text-title">
-            {t('checkIn')}
-          </Button>
-          {hasCamera ? (
-            <Button
-              type="button"
-              variant="secondary"
-              className="min-h-16 min-w-48 text-title"
-              onClick={() => setCamera((v) => !v)}
-            >
-              {camera ? t('stopCamera') : t('camera')}
+      {visit ? null : (
+        <form
+          className="flex flex-col gap-4"
+          onSubmit={(e) => {
+            e.preventDefault();
+            const value = input.current?.value ?? '';
+            if (input.current) input.current.value = '';
+            void scan(value);
+            input.current?.focus();
+          }}
+        >
+          <label htmlFor="kiosk-code" className="text-title">
+            {t('instruction')}
+          </label>
+          <input
+            ref={input}
+            id="kiosk-code"
+            required
+            // biome-ignore lint/a11y/noAutofocus: a kiosk exists to receive scans.
+            autoFocus
+            autoComplete="off"
+            autoCapitalize="characters"
+            spellCheck={false}
+            className="min-h-20 w-full rounded-panel border-2 border-line-strong bg-surface px-6 text-center font-mono text-[32px] tracking-[0.08em]"
+          />
+          <div className="flex flex-wrap justify-center gap-4">
+            <Button type="submit" className="min-h-16 min-w-48 text-title">
+              {t('checkIn')}
             </Button>
-          ) : null}
-        </div>
-      </form>
+            {hasCamera ? (
+              <Button
+                type="button"
+                variant="secondary"
+                className="min-h-16 min-w-48 text-title"
+                onClick={() => setCamera((v) => !v)}
+              >
+                {camera ? t('stopCamera') : t('camera')}
+              </Button>
+            ) : null}
+            {selfPrint && emailCodes ? (
+              <Button
+                type="button"
+                variant="ghost"
+                className="min-h-16 min-w-48 text-title"
+                onClick={() => setVisit({ kind: 'email' })}
+              >
+                {tp('useEmail')}
+              </Button>
+            ) : null}
+          </div>
+        </form>
+      )}
       {cameraError ? <p className="text-center text-body text-danger">{t('cameraFailed')}</p> : null}
       {camera ? (
         <video
@@ -142,6 +204,36 @@ export function KioskScreen({
           </div>
         ) : null}
       </div>
+      {visit ? (
+        <KioskSelfPrint
+          client={client}
+          start={visit}
+          onDone={endVisit}
+          onCheckIn={async (code) => {
+            const mark = `kiosk-${++seq.current}`;
+            markScanStart(mark);
+            const outcome = await client.scan(code);
+            setLast({ outcome, mark });
+            afterScan();
+          }}
+        />
+      ) : null}
+      {laterPdf ? (
+        // A badge printed offline, now that the kiosk is back online.
+        <iframe
+          ref={laterFrame}
+          src={laterPdf}
+          title={tp('pdfFrame')}
+          className="pointer-events-none fixed size-px opacity-0"
+          onLoad={() => {
+            try {
+              laterFrame.current?.contentWindow?.print();
+            } catch {
+              // No print dialog here: the desk reprints from the log.
+            }
+          }}
+        />
+      ) : null}
       <div className="mt-auto flex justify-end">
         {pinOpen ? (
           <PinPad

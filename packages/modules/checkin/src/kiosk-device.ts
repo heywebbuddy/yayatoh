@@ -24,7 +24,7 @@ export async function requireKioskDeviceTx(
     })
     .from(devices)
     .where(and(eq(devices.id, deviceId), isNull(devices.revokedAt)));
-  if (!d || d.mode !== 'kiosk' || d.eventId !== eventId || !d.startedAt)
+  if (d?.mode !== 'kiosk' || d.eventId !== eventId || !d.startedAt)
     throw new DomainError('forbidden', 'Not a kiosk at this event', { reason: 'not_kiosk' });
   return { deviceId, checkpointId: d.checkpointId, startedAt: d.startedAt };
 }

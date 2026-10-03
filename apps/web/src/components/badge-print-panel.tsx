@@ -110,7 +110,15 @@ export async function BadgePrintPanel({
         <Alert tone="info" title={t('balanceDue')} />
       ) : state.hasTemplate ? (
         <ProgramForm
-          action={printBadgeAction.bind(null, org, event, ticketId, back, randomUUID(), overrideToken ?? null)}
+          action={printBadgeAction.bind(
+            null,
+            org,
+            event,
+            ticketId,
+            back,
+            randomUUID(),
+            overrideToken ?? null,
+          )}
           idPrefix={`print-${ticketId}`}
           fields={[
             {

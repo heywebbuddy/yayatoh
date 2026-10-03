@@ -45,6 +45,7 @@ export {
   signalSubject,
 } from './fraud-rules.ts';
 export { chatReportSignals, checkoutRiskSignals, fraudSignalAlerts } from './fraud-sources.ts';
+export { requireKioskDeviceTx } from './kiosk-device.ts';
 export {
   admittedTodayByCheckpointTx,
   capacityFactsTx,
@@ -165,4 +166,3 @@ export {
   verifyKioskPin,
 } from './staff-mode.ts';
 export { type CheckinScope, type CheckinSeriesFact, checkinFactsTx, checkinSeriesTx } from './stats.ts';
-export { requireKioskDeviceTx } from './kiosk-device.ts';
