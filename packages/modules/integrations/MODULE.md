@@ -54,3 +54,16 @@ Slack, Mailchimp, HubSpot, Klaviyo) with `defineConnector` in `src/connectors/` 
   queues `integrations.sync` (exclusive per connection); the dev drain (`/api/dev/integrations/run`)
   runs `runDueSyncs`. Events: `integrations.connection_connected@1`,
   `integrations.connection_revoked@1`, `integrations.sync_completed@1` (ids, codes and counts).
+
+**Salesforce (M6.5b, `src/connectors/salesforce/`)**
+- Objects in order: `contacts` ↔ Contact and `leads` ↔ Lead (both ways), then `campaigns` (one per
+  non-draft event), `campaign_members` (registered → Registered, checked in → Attended) and
+  `sponsor_opportunities` (program sponsors and their deals) out. A person linked to a Salesforce
+  Contact is updated there; everyone else goes out as a Lead, so nobody is created twice.
+- Yayatoh's records are upserted by the external id `Yayatoh_Id__c`; the pull skips records last
+  modified by the connection's own integration user (`LastModifiedById`, the origin stamp).
+- **Consent:** only people whose latest email marketing consent is `granted` and whose address is
+  not unsubscribed or suppressed are pushed, and their campaign memberships with them. A Salesforce
+  email opt-out withdraws consent here; Salesforce never grants it.
+- Amounts leave as Salesforce decimals (major units) converted from integer minor units at the
+  boundary. The fake org (`fake.ts`) mirrors Salesforce's validation for dev and CI.
