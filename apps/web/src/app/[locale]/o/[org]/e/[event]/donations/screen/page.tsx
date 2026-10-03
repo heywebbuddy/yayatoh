@@ -135,15 +135,22 @@ export default async function ScreenPage({
                     <CardHeader as="h2" title={t('linkTitle')} />
                     <p className="m-0 text-body text-ink-2">{t('linkBody')}</p>
                     <ScreenLink url={link} />
-                    <div className="flex flex-col gap-1.5">
-                      <RaiseActionButton
-                        action={rotateScreenAction.bind(null, org, event)}
-                        label={t('rotate')}
-                        className="self-start"
-                        testId="rotate-link"
-                      />
-                      <p className="m-0 text-caption text-ink-2">{t('rotateHint')}</p>
-                    </div>
+                    {/* Replacing stops the projector: a second, deliberate step (native disclosure). */}
+                    <details>
+                      <summary className={buttonClass('secondary', 'md', 'self-start cursor-pointer')}>
+                        {t('rotate')}
+                      </summary>
+                      <div className="mt-3 flex flex-col gap-2">
+                        <p className="m-0 text-body text-ink-2">{t('rotateHint')}</p>
+                        <RaiseActionButton
+                          action={rotateScreenAction.bind(null, org, event)}
+                          label={t('rotateConfirm')}
+                          variant="danger"
+                          className="self-start"
+                          testId="rotate-link"
+                        />
+                      </div>
+                    </details>
                   </Card>
                 ) : null}
                 <Card size="panel" className="flex flex-col gap-3" data-testid="screen-giving">

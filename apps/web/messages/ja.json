@@ -8988,7 +8988,8 @@
       "cardsLink": "テーブルカードを印刷",
       "errors": {
         "campaign": "このイベントのキャンペーンを選んでください。"
-      }
+      },
+      "rotateConfirm": "置き換える(古いリンクのスクリーンは停止します)"
     },
     "screenCards": {
       "title": "テーブルカード",

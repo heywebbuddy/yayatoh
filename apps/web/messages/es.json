@@ -8988,7 +8988,8 @@
       "cardsLink": "Imprimir tarjetas de mesa",
       "errors": {
         "campaign": "Elige una campaña de este evento."
-      }
+      },
+      "rotateConfirm": "Reemplazarlo (las pantallas con el enlace anterior se detienen)"
     },
     "screenCards": {
       "title": "Tarjetas de mesa",

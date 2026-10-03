@@ -8988,7 +8988,8 @@
       "cardsLink": "Imprimer les cartes de table",
       "errors": {
         "campaign": "Choisissez une campagne de cet événement."
-      }
+      },
+      "rotateConfirm": "Le remplacer (les écrans sur l’ancien lien s’arrêtent)"
     },
     "screenCards": {
       "title": "Cartes de table",

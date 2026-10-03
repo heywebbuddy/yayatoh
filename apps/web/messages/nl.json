@@ -8988,7 +8988,8 @@
       "cardsLink": "Tafelkaarten afdrukken",
       "errors": {
         "campaign": "Kies een campagne van dit evenement."
-      }
+      },
+      "rotateConfirm": "Nu vervangen (schermen met de oude link stoppen)"
     },
     "screenCards": {
       "title": "Tafelkaarten",

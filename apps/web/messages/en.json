@@ -8988,7 +8988,8 @@
       "cardsLink": "Print table cards",
       "errors": {
         "campaign": "Choose a campaign of this event."
-      }
+      },
+      "rotateConfirm": "Replace it (screens on the old link stop)"
     },
     "screenCards": {
       "title": "Table cards",

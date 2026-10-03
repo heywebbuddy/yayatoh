@@ -8988,7 +8988,8 @@
       "cardsLink": "打印桌卡",
       "errors": {
         "campaign": "请选择本活动的筹款活动。"
-      }
+      },
+      "rotateConfirm": "立即替换(旧链接上的大屏将停止)"
     },
     "screenCards": {
       "title": "桌卡",

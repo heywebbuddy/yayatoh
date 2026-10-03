@@ -8988,7 +8988,8 @@
       "cardsLink": "Tischkarten drucken",
       "errors": {
         "campaign": "Wählen Sie eine Kampagne dieser Veranstaltung."
-      }
+      },
+      "rotateConfirm": "Jetzt ersetzen (Bildschirme mit dem alten Link stoppen)"
     },
     "screenCards": {
       "title": "Tischkarten",

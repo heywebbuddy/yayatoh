@@ -8988,7 +8988,8 @@
       "cardsLink": "Stampa i segnatavolo",
       "errors": {
         "campaign": "Scegli una campagna di questo evento."
-      }
+      },
+      "rotateConfirm": "Sostituiscilo (gli schermi con il vecchio link si fermano)"
     },
     "screenCards": {
       "title": "Segnatavolo",

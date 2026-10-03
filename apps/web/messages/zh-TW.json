@@ -8988,7 +8988,8 @@
       "cardsLink": "列印桌卡",
       "errors": {
         "campaign": "請選擇本活動的募款活動。"
-      }
+      },
+      "rotateConfirm": "立即更換(舊連結上的大螢幕將停止)"
     },
     "screenCards": {
       "title": "桌卡",

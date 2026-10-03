@@ -89,7 +89,6 @@ export default async function ScreenCardsPage({
         >
           {Array.from({ length: CARDS }, (_, i) => (
             <li
-              // biome-ignore lint/suspicious/noArrayIndexKey: identical printed copies
               key={i}
               data-testid="table-card"
               className="flex break-inside-avoid flex-col items-center gap-3 rounded-panel border border-dashed border-line-strong bg-white p-6 text-center text-black print:rounded-none"
