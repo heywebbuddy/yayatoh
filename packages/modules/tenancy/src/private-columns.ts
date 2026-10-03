@@ -27,6 +27,8 @@ export const privateColumns = columnPrivacy('tenancy', {
     signup_mode: 'vocab',
     completed_by: internal(undefined, { where: 'completed_at is not null' }),
   },
+  // Agency grants (M6.7a): the granted role ceiling.
+  org_access_grants: { role: 'vocab' },
   org_relationships: { kind: 'vocab', source: 'vocab' },
   // Staff status changes (M1.3f): the reason and who made it stay in the staff console.
   org_status_changes: {

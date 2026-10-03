@@ -30,6 +30,8 @@ export const MODULE_KEYS = [
   'badges',
   'gallery',
   'website',
+  /** Agency v1 (M6.7a, P6-13): the agency's Clients | Events | Marketing | Reports pages. */
+  'agency',
 ] as const;
 export type ModuleKey = (typeof MODULE_KEYS)[number];
 

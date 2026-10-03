@@ -30,7 +30,7 @@ export {
   runBulkOperation,
 } from './bulk.ts';
 export { tenantCommand, tenantQuery } from './commands/define.ts';
-export { createCommandPorts, type PolicyPorts, recentStepUp, withImpersonator } from './commands/ports.ts';
+export { createCommandPorts, type PolicyPorts, recentStepUp, withAgency, withImpersonator } from './commands/ports.ts';
 export {
   addressHash,
   type ErasedAddress,

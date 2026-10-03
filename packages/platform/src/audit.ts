@@ -28,6 +28,9 @@ export const AUDIT_DETAIL_KEYS = [
   'reason',
   /** `staff:<id>` when platform staff acted as the member (M1.2e). */
   'impersonatedBy',
+  /** `org:<id>` of the agency when a user acted through an agency grant (M6.7a), and the grant. */
+  'viaAgency',
+  'agencyGrantId',
 ] as const;
 
 const Detail = z.union([z.string().max(80), z.number(), z.boolean()]);
