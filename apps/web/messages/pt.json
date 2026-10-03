@@ -155,7 +155,9 @@
       "alerts": {
         "alert": "Alerta",
         "alert-text": "SMS de alerta",
-        "alert-urgent-text": "SMS de alerta urgente"
+        "alert-urgent-text": "SMS de alerta urgente",
+        "metric": "Regra de alerta",
+        "metric-now": "Regra de alerta (enviada na hora)"
       },
       "campaigns": {
         "test": "Teste de campanha"
@@ -191,6 +193,9 @@
         "request-code": "Código do pedido de privacidade",
         "archive-ready": "Arquivo de dados pessoais pronto",
         "erasure-done": "Recibo de apagamento"
+      },
+      "analytics": {
+        "report": "Relatório agendado"
       }
     },
     "status": {
@@ -6885,7 +6890,9 @@
       "automationFailed": "Abrir a saúde das mensagens",
       "campaignFailed": "Abrir as campanhas",
       "disputeDeadline": "Abrir as contestações",
-      "assistanceOverdue": "Abrir os pedidos de ajuda"
+      "assistanceOverdue": "Abrir os pedidos de ajuda",
+      "metricRule": "Abrir as regras de alerta",
+      "metricRuleFinance": "Abrir as regras de alerta"
     },
     "rules": {
       "unseated": "{count, plural, one {{countWords} participante não tem lugar} other {{countWords} participantes não têm lugar}}",
@@ -6907,7 +6914,9 @@
       "automationFailed": "{count, plural, one {{countWords} mensagem ou ação em massa falhou hoje} other {{countWords} mensagens ou ações em massa falharam hoje}}",
       "campaignFailed": "{count, plural, one {{countWords} envio de campanha falhou hoje} other {{countWords} envios de campanha falharam hoje}}",
       "disputeDeadline": "{count, plural, one {{countWords} contestação precisa de provas em breve} other {{countWords} contestações precisam de provas em breve}}",
-      "assistanceOverdue": "{count, plural, one {{countWords} pedido de ajuda está esperando demais} other {{countWords} pedidos de ajuda estão esperando demais}}"
+      "assistanceOverdue": "{count, plural, one {{countWords} pedido de ajuda está esperando demais} other {{countWords} pedidos de ajuda estão esperando demais}}",
+      "metricRule": "A regra de alerta “{title}” foi acionada",
+      "metricRuleFinance": "A regra de alerta “{title}” foi acionada"
     },
     "widget": {
       "title": "Alertas",
@@ -12308,6 +12317,277 @@
       "body": "{name} é um provedor de teste. Se você permitir, o Yayatoh poderá ler e gravar o seguinte em seu nome:",
       "allow": "Permitir",
       "deny": "Negar"
+    }
+  },
+  "analyticsPro": {
+    "tabs": {
+      "label": "Seções de análise",
+      "overview": "Visão geral",
+      "explore": "Explorar",
+      "alerts": "Regras de alerta",
+      "reports": "Relatórios"
+    },
+    "explore": {
+      "title": "Explorar",
+      "description": "Escolha uma medida e como detalhá-la. A atribuição mostra quais campanhas, canais e fontes levaram a vendas.",
+      "form": "Escolha o que mostrar",
+      "measure": "Medida",
+      "groupCounts": "Contagens",
+      "groupMoney": "Dinheiro",
+      "groupAttribution": "Atribuição",
+      "measures": {
+        "registrations": "Inscrições",
+        "tickets": "Ingressos vendidos (líquidos)",
+        "comp_tickets": "Ingressos gratuitos",
+        "refunded_tickets": "Ingressos reembolsados",
+        "checkins": "Check-ins",
+        "no_shows": "Ausências",
+        "attributed_orders": "Pedidos atribuídos",
+        "gross": "Pago",
+        "refunds": "Reembolsado",
+        "net": "Vendas líquidas",
+        "attributed_revenue": "Receita atribuída"
+      },
+      "dimension": "Detalhar por",
+      "dimensions": {
+        "period": "Período",
+        "event": "Evento",
+        "channel": "Canal",
+        "source": "Fonte",
+        "campaign": "Campanha"
+      },
+      "model": "Modelo de atribuição",
+      "modelHint": "Usado apenas para pedidos e receita atribuídos.",
+      "models": {
+        "first": "Primeiro contato",
+        "last": "Último contato",
+        "linear": "Linear (partes iguais)"
+      },
+      "range": "Período",
+      "ranges": {
+        "7d": "Últimos 7 dias",
+        "30d": "Últimos 30 dias",
+        "90d": "Últimos 90 dias",
+        "365d": "Últimos 12 meses",
+        "custom": "Datas personalizadas"
+      },
+      "from": "De",
+      "to": "Até",
+      "customHint": "Usado quando o período é “Datas personalizadas”.",
+      "granularity": "Mostrar por",
+      "granularities": {
+        "day": "Dia",
+        "week": "Semana",
+        "month": "Mês"
+      },
+      "event": "Evento",
+      "allEvents": "Todos os eventos",
+      "apply": "Mostrar",
+      "errors": {
+        "touch_dimension": "Canal, fonte e campanha só funcionam com pedidos ou receita atribuídos.",
+        "custom_needs_dates": "Informe as duas datas para um período personalizado.",
+        "from_after_to": "A data final é anterior à inicial.",
+        "range_too_long": "Escolha um período de até dois anos.",
+        "invalid_date": "Informe as datas como ano, mês e dia."
+      },
+      "resultsCaption": "{measure} por {dimension}, de {from} a {to}",
+      "total": "Total",
+      "none": "Nenhum",
+      "unnamedCampaign": "Campanha sem nome",
+      "weekOf": "Semana de {day}",
+      "currency": "Moeda",
+      "value": "Valor",
+      "truncated": "Mostrando as primeiras 500 linhas. Escolha um período menor ou um único evento para ver o restante.",
+      "emptyTitle": "Nada para mostrar com essa escolha",
+      "emptyBody": "Não há dados dessa medida neste período. Tente um período maior, outro evento ou outra medida.",
+      "emptyAction": "Mostrar os últimos 12 meses",
+      "export": "Exportar CSV",
+      "exportLabel": "Exportar estes resultados como arquivo CSV",
+      "timeZoneNote": "Os dias são dias corridos em {timeZone}, o fuso horário da sua organização.",
+      "attributionNote": "A atribuição divide cada pedido atribuído entre as visitas que levaram a ele dentro da sua janela de atribuição: links rastreados clicados, acessos com valores UTM e outros sites que enviaram o comprador. Primeiro contato credita a primeira visita, último contato a última, e linear divide o pedido em partes iguais (o centavo que sobrar vai para a última visita). A receita é o que o comprador pagou, por moeda; pedidos sem visita registrada não são atribuídos.",
+      "saveTitle": "Salvar esta visualização",
+      "viewName": "Nome",
+      "save": "Salvar visualização",
+      "saved": "Visualização salva",
+      "viewErrors": {
+        "name": "Informe um nome com até 80 caracteres.",
+        "name_taken": "Você já tem uma visualização com este nome.",
+        "too_many_views": "Você tem 50 visualizações salvas. Exclua uma primeiro."
+      },
+      "views": "Suas visualizações salvas",
+      "noViews": "Nenhuma visualização salva ainda. Escolha acima o que mostrar e salve aqui para voltar com um clique.",
+      "deleteView": "Excluir",
+      "deleteViewLabel": "Excluir a visualização {name}",
+      "deleted": "Visualização excluída"
+    },
+    "rules": {
+      "title": "Regras de alerta",
+      "description": "Seja avisado quando um número passar de um limite. Os alertas das regras chegam à sua equipe pelos Alertas, como os já existentes.",
+      "createTitle": "Nova regra de alerta",
+      "editTitle": "Editar regra de alerta",
+      "name": "Nome",
+      "nameHint": "Aparece no alerta e no e-mail dele.",
+      "measure": "Medida",
+      "measures": {
+        "registrations": "Inscrições",
+        "tickets": "Ingressos vendidos (líquidos)",
+        "refunded_tickets": "Ingressos reembolsados",
+        "checkins": "Check-ins",
+        "gross": "Pago",
+        "refunds": "Reembolsado",
+        "net": "Vendas líquidas"
+      },
+      "condition": "Quando",
+      "conditions": {
+        "above": "for pelo menos",
+        "below": "for menor que",
+        "rise": "subir pelo menos (%)",
+        "drop": "cair pelo menos (%)"
+      },
+      "threshold": "Limite",
+      "thresholdHint": "Uma contagem, um valor para dinheiro ou uma porcentagem para altas e quedas (comparado ao período anterior).",
+      "window": "Em",
+      "windows": {
+        "d1": "Hoje",
+        "d7": "Os últimos 7 dias",
+        "d14": "Os últimos 14 dias",
+        "d30": "Os últimos 30 dias"
+      },
+      "currency": "Moeda",
+      "currencyHint": "Regras de dinheiro comparam uma moeda.",
+      "noCurrency": "Não é dinheiro",
+      "event": "Evento",
+      "allEvents": "Todos os eventos",
+      "severity": "Gravidade",
+      "severities": {
+        "info": "Informação",
+        "warning": "Aviso",
+        "critical": "Crítica"
+      },
+      "quietHours": "Respeitar o horário de silêncio",
+      "quietHoursHint": "E-mail e push aguardam até as 8:00 no fuso horário de cada destinatário quando a regra é acionada entre 21:00 e 8:00. Alertas no app aparecem na hora.",
+      "create": "Criar regra",
+      "save": "Salvar alterações",
+      "back": "Voltar às regras de alerta",
+      "created": "Regra criada",
+      "saved": "Alterações salvas",
+      "list": "Suas regras",
+      "emptyTitle": "Nenhuma regra de alerta ainda",
+      "emptyBody": "Crie uma regra acima, por exemplo “Reembolsos de hoje são pelo menos 10”. Você será alertado assim que isso acontecer.",
+      "columns": {
+        "name": "Regra",
+        "condition": "Condição",
+        "status": "Status",
+        "lastValue": "Última leitura",
+        "actions": "Ações"
+      },
+      "summary": "{measure} {condition} {threshold} · {window}",
+      "status": {
+        "firing": "Acionada",
+        "ok": "OK",
+        "off": "Desligada",
+        "new": "Ainda não verificada"
+      },
+      "edit": "Editar",
+      "editLabel": "Editar {name}",
+      "turnOff": "Desligar",
+      "turnOn": "Ligar",
+      "turnOffLabel": "Desligar {name}",
+      "turnOnLabel": "Ligar {name}",
+      "delete": "Excluir",
+      "deleteLabel": "Excluir {name}",
+      "deleted": "Regra excluída",
+      "turnedOff": "Regra desligada",
+      "turnedOn": "Regra ligada",
+      "readOnly": "Você pode ver estas regras. Proprietários, administradores, gerentes e o financeiro podem alterá-las.",
+      "errors": {
+        "name": "Informe um nome com até 80 caracteres.",
+        "name_taken": "Já existe uma regra com este nome.",
+        "threshold": "Informe um número igual ou maior que 0.",
+        "percent_range": "Informe uma porcentagem entre 1 e 1000.",
+        "currency_required": "Escolha uma moeda para uma regra de dinheiro.",
+        "too_many_rules": "Você tem 50 regras. Exclua uma primeiro."
+      }
+    },
+    "reports": {
+      "title": "Relatórios agendados",
+      "description": "Um PDF das suas análises por e-mail todo dia, semana ou mês, contado no fuso horário da sua organização.",
+      "createTitle": "Novo relatório agendado",
+      "editTitle": "Editar relatório agendado",
+      "name": "Nome",
+      "frequency": "Frequência",
+      "frequencies": {
+        "daily": "Todo dia (números de ontem)",
+        "weekly": "Toda segunda-feira (semana passada, de segunda a domingo)",
+        "monthly": "No dia 1º (mês passado)"
+      },
+      "frequencyShort": {
+        "daily": "Diário",
+        "weekly": "Semanal",
+        "monthly": "Mensal"
+      },
+      "sendHour": "Enviar às",
+      "sendHourHint": "Horário em {timeZone}.",
+      "event": "Evento",
+      "allEvents": "Todos os eventos",
+      "recipients": "Enviar para",
+      "recipientsHint": "Membros que podem ver pedidos. A receita aparece no PDF só para quem pode ver o financeiro; cada PDF fica no idioma de quem o lê.",
+      "you": "{name} (você)",
+      "create": "Agendar relatório",
+      "save": "Salvar alterações",
+      "back": "Voltar aos relatórios agendados",
+      "created": "Relatório agendado",
+      "saved": "Alterações salvas",
+      "list": "Agendamentos",
+      "emptyTitle": "Nenhum relatório agendado ainda",
+      "emptyBody": "Agende um acima: ele chega por e-mail uma vez por período, com um link para o PDF.",
+      "columns": {
+        "name": "Relatório",
+        "frequency": "Frequência",
+        "next": "Próximo envio",
+        "recipients": "Destinatários",
+        "status": "Status",
+        "actions": "Ações"
+      },
+      "recipientsCount": "{count, plural, one {# membro} many {# membros} other {# membros}}",
+      "status": {
+        "on": "Ligado",
+        "off": "Desligado"
+      },
+      "edit": "Editar",
+      "editLabel": "Editar {name}",
+      "turnOff": "Desligar",
+      "turnOn": "Ligar",
+      "turnOffLabel": "Desligar {name}",
+      "turnOnLabel": "Ligar {name}",
+      "delete": "Excluir",
+      "deleteLabel": "Excluir {name}",
+      "deleted": "Agendamento excluído",
+      "turnedOff": "Agendamento desligado",
+      "turnedOn": "Agendamento ligado",
+      "recent": "Relatórios recentes",
+      "recentEmpty": "Nenhum relatório foi enviado ainda. O primeiro sai no próximo horário de envio.",
+      "recentColumns": {
+        "report": "Relatório",
+        "period": "Período",
+        "status": "Status",
+        "file": "PDF"
+      },
+      "runStatus": {
+        "pending": "Aguardando",
+        "sent": "Enviado",
+        "failed": "Falhou"
+      },
+      "download": "Baixar PDF",
+      "downloadLabel": "Baixar {name} de {period} (PDF)",
+      "notReady": "Não está pronto",
+      "errors": {
+        "name": "Informe um nome com até 80 caracteres.",
+        "name_taken": "Já existe um agendamento com este nome.",
+        "recipients": "Escolha pelo menos um membro.",
+        "bad_recipient": "Escolha membros que podem ver pedidos.",
+        "too_many_schedules": "Você tem 25 agendamentos. Exclua um primeiro."
+      }
     }
   }
 }

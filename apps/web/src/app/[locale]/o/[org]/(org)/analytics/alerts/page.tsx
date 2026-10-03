@@ -68,7 +68,7 @@ export default async function AlertRulesPage({
       measure: t(`measures.${r.measure}`),
       condition: t(`conditions.${r.condition}`),
       threshold: thresholdShown(r),
-      window: t(`windows.d${r.windowDays}` as 'windows.d1').toLowerCase(),
+      window: t(`windows.d${r.windowDays}` as 'windows.d1'),
     });
   const status = (r: AlertRuleDto) =>
     !r.enabled ? 'off' : r.state === 'firing' ? 'firing' : r.state === 'ok' ? 'ok' : 'new';

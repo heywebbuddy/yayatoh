@@ -12481,7 +12481,7 @@
         "lastValue": "Latest reading",
         "actions": "Actions"
       },
-      "summary": "{measure} {condition} {threshold}, {window}",
+      "summary": "{measure} {condition} {threshold} · {window}",
       "status": {
         "firing": "Firing",
         "ok": "OK",

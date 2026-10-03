@@ -155,7 +155,9 @@
       "alerts": {
         "alert": "Melding",
         "alert-text": "Meldings-sms",
-        "alert-urgent-text": "Dringende meldingssms"
+        "alert-urgent-text": "Dringende meldingssms",
+        "metric": "Waarschuwingsregel",
+        "metric-now": "Waarschuwingsregel (meteen verstuurd)"
       },
       "campaigns": {
         "test": "Campagnetest"
@@ -191,6 +193,9 @@
         "request-code": "Code voor privacyverzoek",
         "archive-ready": "Archief met persoonsgegevens klaar",
         "erasure-done": "Bewijs van wissing"
+      },
+      "analytics": {
+        "report": "Gepland rapport"
       }
     },
     "status": {
@@ -6885,7 +6890,9 @@
       "automationFailed": "Berichtenstatus openen",
       "campaignFailed": "Campagnes openen",
       "disputeDeadline": "Geschillen openen",
-      "assistanceOverdue": "Hulpvragen openen"
+      "assistanceOverdue": "Hulpvragen openen",
+      "metricRule": "Waarschuwingsregels openen",
+      "metricRuleFinance": "Waarschuwingsregels openen"
     },
     "rules": {
       "unseated": "{count, plural, one {Eén deelnemer heeft geen plaats} other {{countWords} deelnemers hebben geen plaats}}",
@@ -6907,7 +6914,9 @@
       "automationFailed": "{count, plural, one {Eén bericht of bulkactie is vandaag mislukt} other {{countWords} berichten of bulkacties zijn vandaag mislukt}}",
       "campaignFailed": "{count, plural, one {Eén campagneverzending is vandaag mislukt} other {{countWords} campagneverzendingen zijn vandaag mislukt}}",
       "disputeDeadline": "{count, plural, one {Eén geschil heeft binnenkort bewijs nodig} other {{countWords} geschillen hebben binnenkort bewijs nodig}}",
-      "assistanceOverdue": "{count, plural, one {{countWords} hulpvraag wacht te lang} other {{countWords} hulpvragen wachten te lang}}"
+      "assistanceOverdue": "{count, plural, one {{countWords} hulpvraag wacht te lang} other {{countWords} hulpvragen wachten te lang}}",
+      "metricRule": "Waarschuwingsregel ‘{title}’ is afgegaan",
+      "metricRuleFinance": "Waarschuwingsregel ‘{title}’ is afgegaan"
     },
     "widget": {
       "title": "Meldingen",
@@ -12308,6 +12317,277 @@
       "body": "{name} is een testaanbieder. Als je toestaat, mag Yayatoh namens jou het volgende lezen en schrijven:",
       "allow": "Toestaan",
       "deny": "Weigeren"
+    }
+  },
+  "analyticsPro": {
+    "tabs": {
+      "label": "Analyseonderdelen",
+      "overview": "Overzicht",
+      "explore": "Verkennen",
+      "alerts": "Waarschuwingsregels",
+      "reports": "Rapporten"
+    },
+    "explore": {
+      "title": "Verkennen",
+      "description": "Kies een maatstaf en hoe je die uitsplitst. Attributie laat zien welke campagnes, kanalen en bronnen tot verkopen hebben geleid.",
+      "form": "Kies wat je wilt zien",
+      "measure": "Maatstaf",
+      "groupCounts": "Aantallen",
+      "groupMoney": "Geld",
+      "groupAttribution": "Attributie",
+      "measures": {
+        "registrations": "Registraties",
+        "tickets": "Verkochte tickets (netto)",
+        "comp_tickets": "Gratis tickets",
+        "refunded_tickets": "Terugbetaalde tickets",
+        "checkins": "Check-ins",
+        "no_shows": "Niet verschenen",
+        "attributed_orders": "Toegeschreven bestellingen",
+        "gross": "Betaald",
+        "refunds": "Terugbetaald",
+        "net": "Nettoverkoop",
+        "attributed_revenue": "Toegeschreven omzet"
+      },
+      "dimension": "Uitsplitsen naar",
+      "dimensions": {
+        "period": "Periode",
+        "event": "Evenement",
+        "channel": "Kanaal",
+        "source": "Bron",
+        "campaign": "Campagne"
+      },
+      "model": "Attributiemodel",
+      "modelHint": "Alleen voor toegeschreven bestellingen en omzet.",
+      "models": {
+        "first": "Eerste contact",
+        "last": "Laatste contact",
+        "linear": "Lineair (gelijk verdeeld)"
+      },
+      "range": "Periode",
+      "ranges": {
+        "7d": "Laatste 7 dagen",
+        "30d": "Laatste 30 dagen",
+        "90d": "Laatste 90 dagen",
+        "365d": "Laatste 12 maanden",
+        "custom": "Eigen datums"
+      },
+      "from": "Van",
+      "to": "Tot",
+      "customHint": "Gebruikt als de periode ‘Eigen datums’ is.",
+      "granularity": "Tonen per",
+      "granularities": {
+        "day": "Dag",
+        "week": "Week",
+        "month": "Maand"
+      },
+      "event": "Evenement",
+      "allEvents": "Alle evenementen",
+      "apply": "Tonen",
+      "errors": {
+        "touch_dimension": "Kanaal, bron en campagne werken alleen met toegeschreven bestellingen of omzet.",
+        "custom_needs_dates": "Vul beide datums in voor een eigen periode.",
+        "from_after_to": "De einddatum ligt vóór de begindatum.",
+        "range_too_long": "Kies een periode van hoogstens twee jaar.",
+        "invalid_date": "Vul datums in als jaar, maand en dag."
+      },
+      "resultsCaption": "{measure} per {dimension}, {from} tot {to}",
+      "total": "Totaal",
+      "none": "Geen",
+      "unnamedCampaign": "Naamloze campagne",
+      "weekOf": "Week van {day}",
+      "currency": "Valuta",
+      "value": "Waarde",
+      "truncated": "De eerste 500 rijen worden getoond. Kies een kortere periode of één evenement om de rest te zien.",
+      "emptyTitle": "Niets te tonen voor deze keuze",
+      "emptyBody": "Er zijn geen gegevens voor deze maatstaf in deze periode. Probeer een langere periode, een ander evenement of een andere maatstaf.",
+      "emptyAction": "De laatste 12 maanden tonen",
+      "export": "CSV exporteren",
+      "exportLabel": "Deze resultaten als CSV-bestand exporteren",
+      "timeZoneNote": "Dagen zijn kalenderdagen in {timeZone}, de tijdzone van je organisatie.",
+      "attributionNote": "Attributie verdeelt elke toegeschreven bestelling over de bezoeken die er binnen je attributievenster toe leidden: aangeklikte trackinglinks, bezoeken met UTM-waarden en andere sites die de koper stuurden. Eerste contact schrijft hem toe aan het eerste bezoek, laatste contact aan het laatste, en lineair verdeelt de bestelling gelijk (een overgebleven cent gaat naar het laatste bezoek). Omzet is wat de koper betaalde, per valuta; bestellingen zonder vastgelegd bezoek worden niet toegeschreven.",
+      "saveTitle": "Deze weergave opslaan",
+      "viewName": "Naam",
+      "save": "Weergave opslaan",
+      "saved": "Weergave opgeslagen",
+      "viewErrors": {
+        "name": "Vul een naam van maximaal 80 tekens in.",
+        "name_taken": "Je hebt al een weergave met deze naam.",
+        "too_many_views": "Je hebt 50 opgeslagen weergaven. Verwijder er eerst een."
+      },
+      "views": "Je opgeslagen weergaven",
+      "noViews": "Nog geen opgeslagen weergaven. Kies hierboven wat je wilt zien en sla het hier op om er met één klik naar terug te gaan.",
+      "deleteView": "Verwijderen",
+      "deleteViewLabel": "Weergave {name} verwijderen",
+      "deleted": "Weergave verwijderd"
+    },
+    "rules": {
+      "title": "Waarschuwingsregels",
+      "description": "Krijg een melding als een getal een grens passeert. Regelwaarschuwingen bereiken je team via Waarschuwingen, net als de ingebouwde.",
+      "createTitle": "Nieuwe waarschuwingsregel",
+      "editTitle": "Waarschuwingsregel bewerken",
+      "name": "Naam",
+      "nameHint": "Staat in de waarschuwing en de e-mail ervan.",
+      "measure": "Maatstaf",
+      "measures": {
+        "registrations": "Registraties",
+        "tickets": "Verkochte tickets (netto)",
+        "refunded_tickets": "Terugbetaalde tickets",
+        "checkins": "Check-ins",
+        "gross": "Betaald",
+        "refunds": "Terugbetaald",
+        "net": "Nettoverkoop"
+      },
+      "condition": "Als die",
+      "conditions": {
+        "above": "minstens is",
+        "below": "onder ligt",
+        "rise": "met minstens (%) stijgt",
+        "drop": "met minstens (%) daalt"
+      },
+      "threshold": "Drempel",
+      "thresholdHint": "Een aantal, een bedrag voor geld of een percentage voor stijgingen en dalingen (vergeleken met de periode ervoor).",
+      "window": "Over",
+      "windows": {
+        "d1": "Vandaag",
+        "d7": "De laatste 7 dagen",
+        "d14": "De laatste 14 dagen",
+        "d30": "De laatste 30 dagen"
+      },
+      "currency": "Valuta",
+      "currencyHint": "Geldregels vergelijken één valuta.",
+      "noCurrency": "Geen geld",
+      "event": "Evenement",
+      "allEvents": "Alle evenementen",
+      "severity": "Ernst",
+      "severities": {
+        "info": "Info",
+        "warning": "Waarschuwing",
+        "critical": "Kritiek"
+      },
+      "quietHours": "Stille uren respecteren",
+      "quietHoursHint": "E-mail en push wachten tot 8:00 in de tijdzone van elke ontvanger als de regel tussen 21:00 en 8:00 afgaat. Meldingen in de app verschijnen meteen.",
+      "create": "Regel maken",
+      "save": "Wijzigingen opslaan",
+      "back": "Terug naar waarschuwingsregels",
+      "created": "Regel gemaakt",
+      "saved": "Wijzigingen opgeslagen",
+      "list": "Je regels",
+      "emptyTitle": "Nog geen waarschuwingsregels",
+      "emptyBody": "Maak hierboven een regel, bijvoorbeeld ‘Terugbetalingen vandaag zijn minstens 10’. Je krijgt een melding zodra dat klopt.",
+      "columns": {
+        "name": "Regel",
+        "condition": "Voorwaarde",
+        "status": "Status",
+        "lastValue": "Laatste meting",
+        "actions": "Acties"
+      },
+      "summary": "{measure} {condition} {threshold} · {window}",
+      "status": {
+        "firing": "Afgegaan",
+        "ok": "OK",
+        "off": "Uit",
+        "new": "Nog niet gecontroleerd"
+      },
+      "edit": "Bewerken",
+      "editLabel": "{name} bewerken",
+      "turnOff": "Uitzetten",
+      "turnOn": "Aanzetten",
+      "turnOffLabel": "{name} uitzetten",
+      "turnOnLabel": "{name} aanzetten",
+      "delete": "Verwijderen",
+      "deleteLabel": "{name} verwijderen",
+      "deleted": "Regel verwijderd",
+      "turnedOff": "Regel uitgezet",
+      "turnedOn": "Regel aangezet",
+      "readOnly": "Je kunt deze regels zien. Eigenaren, beheerders, managers en financiën kunnen ze wijzigen.",
+      "errors": {
+        "name": "Vul een naam van maximaal 80 tekens in.",
+        "name_taken": "Er bestaat al een regel met deze naam.",
+        "threshold": "Vul een getal van 0 of meer in.",
+        "percent_range": "Vul een percentage tussen 1 en 1000 in.",
+        "currency_required": "Kies een valuta voor een geldregel.",
+        "too_many_rules": "Je hebt 50 regels. Verwijder er eerst een."
+      }
+    },
+    "reports": {
+      "title": "Geplande rapporten",
+      "description": "Een pdf van je analyses per e-mail, elke dag, week of maand, geteld in de tijdzone van je organisatie.",
+      "createTitle": "Nieuw gepland rapport",
+      "editTitle": "Gepland rapport bewerken",
+      "name": "Naam",
+      "frequency": "Hoe vaak",
+      "frequencies": {
+        "daily": "Elke dag (cijfers van gisteren)",
+        "weekly": "Elke maandag (vorige week, maandag tot zondag)",
+        "monthly": "Op de 1e (vorige maand)"
+      },
+      "frequencyShort": {
+        "daily": "Dagelijks",
+        "weekly": "Wekelijks",
+        "monthly": "Maandelijks"
+      },
+      "sendHour": "Versturen om",
+      "sendHourHint": "Tijd in {timeZone}.",
+      "event": "Evenement",
+      "allEvents": "Alle evenementen",
+      "recipients": "Versturen naar",
+      "recipientsHint": "Leden die bestellingen kunnen zien. Omzet staat alleen in de pdf voor wie financiën kan zien; elke pdf is in de taal van de lezer.",
+      "you": "{name} (jij)",
+      "create": "Rapport plannen",
+      "save": "Wijzigingen opslaan",
+      "back": "Terug naar geplande rapporten",
+      "created": "Rapport gepland",
+      "saved": "Wijzigingen opgeslagen",
+      "list": "Planningen",
+      "emptyTitle": "Nog geen geplande rapporten",
+      "emptyBody": "Plan er hierboven een: het komt één keer per periode per e-mail, met een link naar de pdf.",
+      "columns": {
+        "name": "Rapport",
+        "frequency": "Hoe vaak",
+        "next": "Volgende verzending",
+        "recipients": "Ontvangers",
+        "status": "Status",
+        "actions": "Acties"
+      },
+      "recipientsCount": "{count, plural, one {# lid} other {# leden}}",
+      "status": {
+        "on": "Aan",
+        "off": "Uit"
+      },
+      "edit": "Bewerken",
+      "editLabel": "{name} bewerken",
+      "turnOff": "Uitzetten",
+      "turnOn": "Aanzetten",
+      "turnOffLabel": "{name} uitzetten",
+      "turnOnLabel": "{name} aanzetten",
+      "delete": "Verwijderen",
+      "deleteLabel": "{name} verwijderen",
+      "deleted": "Planning verwijderd",
+      "turnedOff": "Planning uitgezet",
+      "turnedOn": "Planning aangezet",
+      "recent": "Recente rapporten",
+      "recentEmpty": "Er is nog geen rapport verstuurd. Het eerste gaat op het volgende verzendmoment de deur uit.",
+      "recentColumns": {
+        "report": "Rapport",
+        "period": "Periode",
+        "status": "Status",
+        "file": "Pdf"
+      },
+      "runStatus": {
+        "pending": "Wacht",
+        "sent": "Verstuurd",
+        "failed": "Mislukt"
+      },
+      "download": "Pdf downloaden",
+      "downloadLabel": "{name} voor {period} downloaden (pdf)",
+      "notReady": "Niet klaar",
+      "errors": {
+        "name": "Vul een naam van maximaal 80 tekens in.",
+        "name_taken": "Er bestaat al een planning met deze naam.",
+        "recipients": "Kies minstens één lid.",
+        "bad_recipient": "Kies leden die bestellingen kunnen zien.",
+        "too_many_schedules": "Je hebt 25 planningen. Verwijder er eerst een."
+      }
     }
   }
 }
