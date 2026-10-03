@@ -221,6 +221,9 @@ export const PLATFORM_PREFIXES: readonly string[] = [
   '/privacy-request',
   '/developers',
   '/webhook-portal',
+  // Batch 3k merge: a buyer's order link (`/orders/{token}`: M5.2b's schedule and M5.10a's
+  // conference hub with its manifest). The legacy app has no `/orders` page.
+  '/orders',
 ];
 
 /**
@@ -259,6 +262,18 @@ export const PLATFORM_FILES: ReadonlySet<string> = new Set([
   '/scan-sw.js',
   '/scan-icon.svg',
   '/scan.webmanifest',
+  // Batch 3k merge: the guest hub's (M4.7a) and the conference hub's (M5.10a) service workers and
+  // install icons, served next to their pages.
+  '/hub-sw.js',
+  '/hub-icon.svg',
+  '/hub-icon-192.png',
+  '/hub-icon-512.png',
+  '/hub-icon-maskable-512.png',
+  '/conference-hub-sw.js',
+  '/conference-hub-icon.svg',
+  '/conference-hub-icon-192.png',
+  '/conference-hub-icon-512.png',
+  '/conference-hub-icon-maskable-512.png',
 ]);
 
 export function isPlatformPath(path: string): boolean {

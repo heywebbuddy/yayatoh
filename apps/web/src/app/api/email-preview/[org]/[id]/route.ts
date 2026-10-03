@@ -1,6 +1,7 @@
-import { createCtx, executeQuery, isDomainError } from '@yayatoh/kernel';
+import { executeQuery, isDomainError } from '@yayatoh/kernel';
 import { emailPreviewQuery, PREVIEW_HEADERS } from '@yayatoh/notifications';
 import { resolveOrgSlug } from '@yayatoh/tenancy';
+import { orgActor } from '@/server/org-actor.ts';
 import { ports } from '@/server/ports.ts';
 import { getSession, sessionOpensOrg } from '@/server/session.ts';
 
@@ -22,16 +23,10 @@ export async function GET(_req: Request, { params }: { params: Promise<{ org: st
   if (!session) return notFound();
   const resolved = await resolveOrgSlug(org);
   if (!resolved) return notFound();
-  // Staff acting as a member (M1.2e) see only the org they started from.
-  const imp = session.impersonation;
-  if (imp && imp.orgId !== resolved.orgId) return notFound();
-  // M6.5a: a session made by an org's single sign-on opens that org only.
-  if (!sessionOpensOrg(session, resolved.orgId)) return notFound();
-  const ctx = createCtx({
-    orgId: resolved.orgId,
-    actor: { type: 'user', userId: session.userId },
-    impersonatedBy: imp ? { staffUserId: imp.staffUserId, impersonationId: imp.id } : null,
-  });
+  // A member, or (M6.7a) an agency acting through the client's live grant.
+  const actor = await orgActor(resolved.orgId, session);
+  if (!actor) return notFound();
+  const ctx = actor.ctx;
   try {
     const { html } = await executeQuery(emailPreviewQuery, { id }, ctx, ports);
     return new Response(html, { headers: PREVIEW_HEADERS });

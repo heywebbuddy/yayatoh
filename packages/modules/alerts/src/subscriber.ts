@@ -10,6 +10,7 @@ import { and, isNotNull, lt, ne } from 'drizzle-orm';
 import { z } from 'zod';
 import { eventMode, THRESHOLDS } from './domain/config.ts';
 import { type AlertChange, type AlertDeps, evaluateEventAlertsTx, evaluateOrgAlertsTx } from './engine.ts';
+import { applyMetricRuleTx, METRIC_RULE_EVENT, sweepMetricAlertsTx } from './metric-rules.ts';
 import { alerts, type SignalKind, signals } from './schema.ts';
 
 /** M4.6a: RSVP deadlines this far back still bring their (future) event into the sweep. */
@@ -92,10 +93,14 @@ export const ALERT_TRIGGER_EVENTS = [
   'badges.printer_online@1',
   'program.sponsor_package.activated@1',
   'program.sponsor_package.cancelled@1',
+  // Batch 3k merge: a lead captured (M5.6b) can clear "exhibitors without leads".
+  'leads.captured@1',
   // M4.6a: a party answered its RSVP, or the deadline moved (guest additions and seating changes
   // emit nothing: the sweep picks them up).
   'guests.party_responded@1',
   'guests.rsvp_deadline_set@1',
+  // M6.2b: an organizer-authored rule changed state (analytics, same tier, through the outbox).
+  'analytics.alert_rule_evaluated@1',
   // Batch 3l merge: integration runs that failed and connections revoked at the provider
   // (signals), and plan subscription changes (past due / unpaid are read from billing).
   'integrations.sync_completed@1',
@@ -187,6 +192,10 @@ export function alertEvaluator(deps: AlertDeps): Subscriber {
     events: ALERT_TRIGGER_EVENTS,
     handle: async (tx, event) => {
       const ctx = createCtx({ orgId: event.orgId, actor: { type: 'system', name: 'alerts.evaluator' } });
+      if (event.type === METRIC_RULE_EVENT) {
+        await applyMetricRuleTx(tx, ctx, event, deps);
+        return;
+      }
       const kind = signalOf(event);
       if (kind)
         await tx
@@ -270,7 +279,11 @@ export async function evaluateOrgNow(
       ...(await withTenant(ctx, async (tx) => {
         // Signals outlive the rules' 24-hour window by a few days, then go (batch 3e).
         await tx.delete(signals).where(lt(signals.occurredAt, new Date(now.getTime() - SIGNAL_TTL_MS)));
-        return evaluateOrgAlertsTx(tx, ctx, deps, now);
+        return [
+          ...(await evaluateOrgAlertsTx(tx, ctx, deps, now)),
+          // M6.2b: organizer rules' snoozes and acknowledgements time out like the others.
+          ...(await sweepMetricAlertsTx(tx, ctx, deps, now)),
+        ];
       })),
     );
   return changes;

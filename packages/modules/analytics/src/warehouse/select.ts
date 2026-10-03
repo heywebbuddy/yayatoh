@@ -61,5 +61,6 @@ export function lazyWarehouse(env: Record<string, string | undefined> = process.
     dailyTotals: (scope, range) => get().dailyTotals(scope, range),
     eventTotals: (scope, range) => get().eventTotals(scope, range),
     eventStates: (scope, range) => get().eventStates(scope, range),
+    attributionTotals: (scope, range) => get().attributionTotals(scope, range),
   };
 }

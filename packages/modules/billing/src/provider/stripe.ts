@@ -5,6 +5,9 @@ import {
   type CatalogFeature,
   type CatalogPrice,
   type CatalogProduct,
+  meterEventName,
+  type PlanChangeRequest,
+  type ProviderChangePreview,
   SUBSCRIPTION_STATUSES,
   type SubscriptionStatus,
 } from './port.ts';
@@ -57,8 +60,123 @@ export function stripeBillingProvider(opts: StripeBillingOptions): BillingProvid
     return out;
   }
 
+  /** The price behind a lookup key (`tier_pro_month_usd`). */
+  async function priceFor(lookupKey: string): Promise<Stripe.Price> {
+    const found = await stripe.prices.list({ lookup_keys: [lookupKey], active: true, limit: 1 });
+    const price = found.data[0];
+    if (!price) throw new Error(`No active Stripe price with lookup key ${lookupKey}`);
+    return price;
+  }
+
+  /** The subscription's single item (one plan price per subscription). */
+  async function itemOf(subscriptionId: string): Promise<Stripe.SubscriptionItem> {
+    const sub = await stripe.subscriptions.retrieve(subscriptionId);
+    const item = sub.items.data[0];
+    if (!item) throw new Error('The subscription has no item');
+    return item;
+  }
+
+  const sum = (xs: readonly { amount: number }[] | null | undefined) =>
+    (xs ?? []).reduce((n, x) => n + x.amount, 0);
+
+  async function preview(i: PlanChangeRequest): Promise<ProviderChangePreview> {
+    const price = await priceFor(i.priceLookupKey);
+    const prorationDate = Math.floor(i.at.getTime() / 1000);
+    const inv = await stripe.invoices.createPreview({
+      customer: i.customerId,
+      automatic_tax: { enabled: true },
+      ...(i.subscription
+        ? {
+            subscription: i.subscription.id,
+            subscription_details: {
+              items: [{ id: (await itemOf(i.subscription.id)).id, price: price.id }],
+              proration_behavior: 'always_invoice' as const,
+              proration_date: prorationDate,
+            },
+          }
+        : { subscription_details: { items: [{ price: price.id }] } }),
+    });
+    const lines = inv.lines?.data ?? [];
+    const credit = -lines.filter((l) => l.amount < 0).reduce((n, l) => n + l.amount, 0);
+    const charge = lines.filter((l) => l.amount > 0).reduce((n, l) => n + l.amount, 0);
+    return {
+      currency: inv.currency.toUpperCase(),
+      creditMinor: credit,
+      chargeMinor: charge,
+      discountMinor: sum(inv.total_discount_amounts),
+      taxMinor: sum(inv.total_taxes),
+      amountDueMinor: inv.amount_due,
+      creditBalanceMinor: Math.max(0, -inv.total),
+      nextRenewalMinor: price.unit_amount ?? 0,
+      nextRenewalAt: i.subscription?.currentPeriodEnd ?? null,
+    };
+  }
+
   return {
     name: 'stripe',
+
+    previewPlanChange: preview,
+
+    async changePlan(i) {
+      const price = await priceFor(i.priceLookupKey);
+      const discounts = i.coupon ? [{ coupon: i.coupon }] : undefined;
+      if (i.subscription) {
+        const item = await itemOf(i.subscription.id);
+        const sub = await stripe.subscriptions.update(
+          i.subscription.id,
+          {
+            items: [{ id: item.id, price: price.id }],
+            proration_behavior: 'always_invoice',
+            proration_date: Math.floor(i.at.getTime() / 1000),
+            automatic_tax: { enabled: true },
+            payment_behavior: 'pending_if_incomplete',
+          },
+          { idempotencyKey: i.idempotencyKey },
+        );
+        return { subscriptionId: sub.id };
+      }
+      const sub = await stripe.subscriptions.create(
+        {
+          customer: i.customerId,
+          items: [{ price: price.id }],
+          automatic_tax: { enabled: true },
+          payment_behavior: 'default_incomplete',
+          ...(discounts ? { discounts } : {}),
+        },
+        { idempotencyKey: i.idempotencyKey },
+      );
+      return { subscriptionId: sub.id };
+    },
+
+    async payOutstanding(i) {
+      const open = await stripe.invoices.list({
+        customer: i.customerId,
+        subscription: i.subscription.id,
+        status: 'open',
+        limit: 1,
+      });
+      const invoice = open.data[0];
+      if (!invoice?.id) return { paid: true };
+      const paid = await stripe.invoices.pay(invoice.id, {}, { idempotencyKey: i.idempotencyKey });
+      return { paid: paid.status === 'paid' };
+    },
+
+    async reportUsage(r) {
+      await stripe.billing.meterEvents.create({
+        event_name: meterEventName(r.meter),
+        payload: { stripe_customer_id: r.customerId, value: String(r.quantity) },
+        identifier: r.identifier,
+        timestamp: Math.floor(r.timestamp.getTime() / 1000),
+      });
+    },
+
+    async setDiscount(i) {
+      await stripe.subscriptions.update(
+        i.subscriptionId,
+        { discounts: i.coupon ? [{ coupon: i.coupon }] : '' },
+        { idempotencyKey: i.idempotencyKey },
+      );
+    },
 
     async listCatalog() {
       const products: CatalogProduct[] = [];

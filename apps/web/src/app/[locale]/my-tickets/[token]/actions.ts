@@ -1,6 +1,7 @@
 'use server';
 
 import { executeCommand, isDomainError } from '@yayatoh/kernel';
+import { setExhibitorEmailSharingCommand, withdrawLeadEmailCommand } from '@yayatoh/leads';
 import {
   cancelHolderTransferCommand,
   giveTicketCommand,
@@ -87,6 +88,40 @@ export async function cancelHolderTransferAction(
   if (!h) return { ok: false, code: 'not_found' };
   try {
     await executeCommand(cancelHolderTransferCommand, { linkId: h.id, transferId }, h.ctx, ports);
+  } catch (err) {
+    return failure(err);
+  }
+  revalidatePath(`/my-tickets/${token}`);
+  return success();
+}
+
+/** M5.6b: the holder stops sharing their email with one exhibitor that scanned their badge. */
+export async function withdrawLeadEmailAction(
+  token: string,
+  leadId: string,
+  _prev: SupportState,
+): Promise<SupportState> {
+  const h = await holderContext(token);
+  if (!h) return { ok: false, code: 'not_found' };
+  try {
+    await executeCommand(withdrawLeadEmailCommand, { linkId: h.id, leadId }, h.ctx, ports);
+  } catch (err) {
+    return failure(err);
+  }
+  revalidatePath(`/my-tickets/${token}`);
+  return success();
+}
+
+/** M5.6b: whether exhibitors who scan the holder's badge from now on receive their email. */
+export async function setLeadSharingAction(
+  token: string,
+  share: boolean,
+  _prev: SupportState,
+): Promise<SupportState> {
+  const h = await holderContext(token);
+  if (!h) return { ok: false, code: 'not_found' };
+  try {
+    await executeCommand(setExhibitorEmailSharingCommand, { linkId: h.id, share }, h.ctx, ports);
   } catch (err) {
     return failure(err);
   }

@@ -339,6 +339,21 @@
     "badges.kiosk-code": {
       "subject": "{code} is je code voor de badgekiosk van {eventName}",
       "intro": "Voer {code} in bij de badgekiosk om je gegevens te controleren en je badge af te drukken. De code werkt één keer en verloopt over {minutes, plural, one {# minuut} other {# minuten}}. Heb je hem niet aangevraagd? Dan kun je deze e-mail negeren."
+    },
+    "alerts.metric": {
+      "subject": "Waarschuwingsregel ‘{title}’ is afgegaan",
+      "intro": "{reading, select, none {Je waarschuwingsregel ‘{title}’ staat bij {org} nog steeds af.} other {Je waarschuwingsregel ‘{title}’ is afgegaan bij {org}: {reading} in {windowDays, plural, one {de afgelopen dag} other {de afgelopen # dagen}}.}} Open hem om hem te bevestigen of uit te stellen.",
+      "cta": "Waarschuwing openen"
+    },
+    "alerts.metric-now": {
+      "subject": "Waarschuwingsregel ‘{title}’ is afgegaan",
+      "intro": "{reading, select, none {Je waarschuwingsregel ‘{title}’ staat bij {org} nog steeds af.} other {Je waarschuwingsregel ‘{title}’ is afgegaan bij {org}: {reading} in {windowDays, plural, one {de afgelopen dag} other {de afgelopen # dagen}}.}} Open hem om hem te bevestigen of uit te stellen.",
+      "cta": "Waarschuwing openen"
+    },
+    "analytics.report": {
+      "subject": "Je rapport ‘{name}’: {period}",
+      "intro": "Het rapport ‘{name}’ van {org} voor {period} staat klaar. Open het om de pdf te downloaden.",
+      "cta": "Pdf downloaden"
     }
   },
   "roles": {

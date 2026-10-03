@@ -60,6 +60,8 @@ export {
 export * from './dto.ts';
 // M4.8b: ticket type prices for fair-market values and the quid-pro-quo notice (donations).
 export { type TicketTypePrice, ticketTypePricesTx } from './fair-value-facts.ts';
+// M5.6b lead retrieval: holder link tickets ("who scanned me") and ticket holders.
+export { holderLinkTicketsTx, ticketHoldersTx } from './holder-leads.ts';
 export {
   currentFaceMinor,
   holdInventoryTx,

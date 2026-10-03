@@ -51,7 +51,11 @@
       "coupon": "クーポン",
       "page": "ページまたはブログ記事"
     },
-    "help": "ヘルプ"
+    "help": "ヘルプ",
+    "clientsSection": "クライアント",
+    "viaAgency": "{agency} 経由",
+    "agencyBadgeLabel": "{agency} の代理として {org} で作業しています",
+    "backToAgency": "{agency} に戻る"
   },
   "notifications": {
     "open": "通知",
@@ -172,7 +176,9 @@
       "alerts": {
         "alert": "アラート",
         "alert-text": "アラートSMS",
-        "alert-urgent-text": "緊急アラートSMS"
+        "alert-urgent-text": "緊急アラートSMS",
+        "metric": "アラートルール",
+        "metric-now": "アラートルール（即時送信）"
       },
       "campaigns": {
         "test": "キャンペーンのテスト"
@@ -217,6 +223,9 @@
       },
       "badges": {
         "kiosk-code": "バッジキオスクのコード"
+      },
+      "analytics": {
+        "report": "定期レポート"
       }
     },
     "status": {
@@ -385,7 +394,9 @@
     "webhooks": "Webhook",
     "sandboxes": "サンドボックス",
     "notifications": "通知",
-    "sso": "シングルサインオン"
+    "sso": "シングルサインオン",
+    "agency": "クライアント",
+    "agencies": "代理店"
   },
   "vocab": {
     "attendee": "参加者",
@@ -414,7 +425,13 @@
     "box_office": "チケット窓口",
     "scanner": "入場スキャン担当",
     "viewer": "閲覧のみ",
-    "collaborator": "イベント協力者"
+    "collaborator": "イベント協力者",
+    "agency_manager": "代理店マネージャー",
+    "agency_manager_finance": "代理店マネージャー（財務）",
+    "agency_marketing": "代理店マーケティング",
+    "agency_marketing_finance": "代理店マーケティング（財務）",
+    "agency_viewer": "代理店閲覧者",
+    "agency_viewer_finance": "代理店閲覧者（財務）"
   },
   "profiles": {
     "wedding": "結婚式",
@@ -762,7 +779,8 @@
     "reference": "参照番号: {id}",
     "rateLimitedRetry": "試行回数が多すぎます。{minutes, plural, other {#分}}後にもう一度お試しください。",
     "impersonation_blocked": "メンバーとして操作中のスタッフはこれを実行できません。返金・支払い・エクスポート・削除・本人確認は無効です。",
-    "read_only_freeze": "定期メンテナンス中のため変更は一時停止しています。何も保存されていません。終了後にもう一度お試しください。"
+    "read_only_freeze": "定期メンテナンス中のため変更は一時停止しています。何も保存されていません。終了後にもう一度お試しください。",
+    "read_only_billing": "サブスクリプションのお支払いまで、この組織は読み取り専用です。何も保存・削除されていません。"
   },
   "notFound": {
     "title": "ページが見つかりません",
@@ -2146,7 +2164,8 @@
       "cards": "カードと書き出し",
       "selection": "おまかせ座席",
       "channels": "チャネル",
-      "revisions": "履歴"
+      "revisions": "履歴",
+      "solver": "自動配席"
     },
     "assign": {
       "title": "ゲストの割り当て",
@@ -2729,6 +2748,134 @@
       "isCurrent": "これが現在の座席表です。",
       "restore": "第 {number} 版を復元",
       "restoredNotice": "第 {number} 版を復元しました。現在の座席表は第 {now} 版です。"
+    },
+    "solver": {
+      "title": "配席ルールとプランナー",
+      "description": "ルールを設定すると、まだ席のないゲスト全員にプランナーがテーブルを提案します。提案を確認し、1卓ずつまたはすべて確定してください。手動で配席したゲストは動かしません。",
+      "rules": {
+        "heading": "ルール",
+        "listLabel": "配席ルール",
+        "empty": "まだルールはありません。下で追加するか、ルールなしでプランナーを実行してください。その場合も各テーブルの席数は守られます。",
+        "hard": "必須",
+        "soft": "推奨",
+        "badge": "{strength}・重み {weight}",
+        "strength": "種類",
+        "strengthHint": "提案が必須ルールを破ることはありません。推奨ルールはできる限り守られ、破るごとに重みの分だけ減点されます。",
+        "weight": "重み",
+        "weightHint": "1〜10。重みが大きい推奨ルールほど優先されます。",
+        "save": "保存",
+        "remove": "削除",
+        "saved": "ルールを保存しました。",
+        "removed": "ルールを削除しました。",
+        "added": "ルールを追加しました。",
+        "editLabel": "ルールを変更: {rule}",
+        "kinds": {
+          "keep_together": "同じテーブルにする",
+          "keep_apart": "別のテーブルにする",
+          "vip_near_stage": "VIPをステージの近くに",
+          "access_near_exit": "配慮が必要な方を出口の近くに",
+          "table_max": "1卓の上限"
+        },
+        "add": {
+          "heading": "ルールを追加",
+          "kind": "ルール",
+          "by": "対象",
+          "byEach": "各グループ",
+          "byParty": "1つのグループ",
+          "byTag": "タグが付いた全員",
+          "bySide": "同じ側の全員",
+          "party": "グループ",
+          "tag": "タグ",
+          "side": "側",
+          "choose": "選択…",
+          "together": "同じテーブルにする",
+          "first": "1つ目のグループ",
+          "second": "2つ目のグループ",
+          "accessTag": "配慮が必要な方のタグ",
+          "accessHint": "このタグのグループは出口または入口に最も近いテーブルに座ります。アクセシビリティに関する回答は非公開のままです。",
+          "max": "1卓の最大人数",
+          "vipHint": "VIPグループはステージに最も近いテーブルに座ります。",
+          "submit": "ルールを追加"
+        },
+        "errors": {
+          "value": "ルールの対象を選んでください。",
+          "same": "異なる2つのグループを選んでください。",
+          "weight": "1〜10の重みを入力してください。",
+          "max": "1〜40の数を入力してください。",
+          "duplicate": "このイベントには同じルールがすでにあります。",
+          "tooMany": "1つのイベントのルールは50件までです。",
+          "unknownParty": "そのグループはこのゲストリストにありません。"
+        },
+        "describe": {
+          "togetherParty": "各グループを同じテーブルに",
+          "togetherTag": "タグ「{value}」の全員を同じテーブルに",
+          "togetherSide": "{value}側を同じテーブルに",
+          "apart": "{a}と{b}を別のテーブルに",
+          "targetParty": "{value}",
+          "targetTag": "タグ「{value}」の全員",
+          "targetSide": "{value}側",
+          "vip": "VIPグループをステージの近くに",
+          "access": "タグ「{tag}」のゲストを出口の近くに",
+          "tableMax": "1卓 {max} 人まで"
+        }
+      },
+      "run": {
+        "heading": "提案",
+        "queue": "まだ席のないゲスト: {count, plural, other {# 人}}。{fixed, plural, =0 {まだ誰も配席されていません。} other {手動で配席した # 人はそのままです。}}",
+        "nothing": "全員の席が決まっています。提案することはありません。",
+        "seed": "配置番号",
+        "seedHint": "同じ番号からは常に同じ提案が出ます。",
+        "seedError": "1〜1,000,000の整数を入力してください。",
+        "start": "配席を提案",
+        "cancel": "停止",
+        "again": "別の配置を試す",
+        "running": "提案を作成中… {percent}%",
+        "progress": "提案の進行状況",
+        "cancelled": "停止しました。何も提案されていません。",
+        "failed": "プランナーが予期せず停止しました。もう一度お試しください。"
+      },
+      "summary": {
+        "heading": "概要",
+        "done": "{seconds} 秒で提案ができました(配置 {seed})。",
+        "seated": "{count, plural, other {# 人}}を{tables, plural, other {# 卓}}に配席。{queue, plural, =0 {待ちリストには誰も残っていません} other {待ちリストに # 人}}。",
+        "hardOk": "必須ルールはすべて守られています。",
+        "hardBroken": "{count, plural, other {# 件の必須ルールが破られています}}。確定する前に提案を変更してください。",
+        "soft": "推奨ルール: 減点 {penalty}(0が最良)。",
+        "ruleLine": "{rule}: {count, plural, =0 {守られています} other {# 件の違反}}",
+        "issues": {
+          "no_stage": "プランにステージがないため、「VIPをステージの近くに」は適用できません。",
+          "no_exit": "プランに出口も入口もないため、「配慮が必要な方を出口の近くに」は適用できません。",
+          "group_too_big": "{size} 人のグループはどのテーブル({room} 席)よりも大きいため、できるだけ少ないテーブルに分けます。",
+          "too_few_seats": "配席するゲストは {size} 人ですが空席は {room} 席だけです。一部は待ちリストに残ります。",
+          "no_room": "プランにテーブルも列もありません。"
+        }
+      },
+      "tables": {
+        "heading": "提案されたテーブル",
+        "none": "提案されたテーブルはありません。",
+        "region": "テーブル {label}",
+        "fill": "提案 {proposed}・配席済み {seated}・空き {free}/{capacity}",
+        "overFull": "空席より {count, plural, other {# 人}}多くなっています。",
+        "broken": "必須ルール違反: {rules}",
+        "over": "席数より多いゲスト",
+        "accept": "テーブル {label} を確定",
+        "acceptAll": "すべてのテーブルを確定",
+        "fixFirst": "先に警告のあるテーブルを直してください。",
+        "acceptedTable": "テーブル {label} を確定しました: {count, plural, other {# 人}}を配席。",
+        "acceptedAll": "提案を確定しました: {count, plural, other {# 人}}を配席。",
+        "queueHeading": "待ちリスト",
+        "guest": "{name}({party})",
+        "moveLabel": "{name} のテーブル",
+        "queueOption": "待ちリストに残す",
+        "optionFree": "テーブル {label}(空き {free})",
+        "toEditor": "配席エディターを開く"
+      },
+      "acceptErrors": {
+        "already_seated": "この提案に含まれる方がその間に手動で配席されました。もう一度提案してください。",
+        "declined": "この提案に含まれるゲストが欠席を回答しました。もう一度提案してください。",
+        "hard_rule": "確定すると必須ルールに違反します。",
+        "cant_fit": "そのテーブルにはあと {fits} 人しか座れません。"
+      }
     }
   },
   "venueMap": {
@@ -7435,7 +7582,9 @@
       "guestsUnseated": "ゲストの席を決める",
       "mealsMissing": "出欠の回答を開く",
       "integrationFailed": "連携の受信トレイを開く",
-      "billingPastDue": "プランと請求を開く"
+      "billingPastDue": "プランと請求を開く",
+      "metricRule": "アラートルールを開く",
+      "metricRuleFinance": "アラートルールを開く"
     },
     "rules": {
       "unseated": "{count, plural, other {{countWords}人の参加者に座席がありません}}",
@@ -7473,7 +7622,9 @@
       "guestsUnseated": "{count, plural, other {{countWords}人のゲストにテーブルがありません}}",
       "mealsMissing": "{count, plural, other {出席する{countWords}人のゲストが料理を選んでいません}}",
       "integrationFailed": "{count, plural, other {本日{countWords}件の連携の問題（同期の失敗または接続の切断）}}",
-      "billingPastDue": "{count, plural, other {プランの支払いが{countWords}件延滞しています}}"
+      "billingPastDue": "{count, plural, other {プランの支払いが{countWords}件延滞しています}}",
+      "metricRule": "アラートルール「{title}」が発動しました",
+      "metricRuleFinance": "アラートルール「{title}」が発動しました"
     },
     "widget": {
       "title": "アラート",
@@ -15129,7 +15280,74 @@
       "ai_seating": "AI 座席配置",
       "analytics_pro": "高度な分析"
     },
-    "findOwner": "オーナーまたは管理者を探す"
+    "findOwner": "オーナーまたは管理者を探す",
+    "usageLink": "使用量",
+    "renewalReceived": "更新の通知を受け取りました",
+    "dunning": {
+      "graceTitle": "サブスクリプションの支払いが完了しませんでした",
+      "graceBody": "{date}まではすべて通常どおり使えます。変更を続けるにはそれまでにお支払いください。その後はお支払いまで組織が読み取り専用になります。",
+      "readOnlyTitle": "この組織は読み取り専用です",
+      "readOnlyBody": "サブスクリプションの支払いに失敗したため、変更は一時停止しています。何も削除されていません。すべての閲覧、データのエクスポート、入口でのチケットのスキャンは引き続きできます。お支払いいただくとすぐに変更できるようになります。",
+      "payNow": "今すぐ支払う",
+      "askOwner": "この組織のオーナーまたは管理者に支払いを依頼してください。",
+      "paidTitle": "お支払いを受け付けました",
+      "paidBody": "ありがとうございます。組織の全員が再び変更できるようになりました。",
+      "declinedTitle": "お支払いが完了しませんでした",
+      "declinedBody": "何も変更されていません。請求プロバイダーに登録されたカードを確認して、もう一度お試しください。",
+      "payError": "支払いを開始できませんでした。しばらくしてからもう一度お試しください。"
+    },
+    "change": {
+      "title": "プランを変更",
+      "description": "アップグレードとダウングレードはすぐに反映されます。支払いまたはクレジットは、現在の請求期間の残りの分だけです。",
+      "discountCharity": "認証済みの慈善団体プロフィールにより、すべてのプランが{percent}%割引になります。",
+      "discountStaff": "あなたの組織にはすべてのプランで{percent}%の非営利割引が適用されます。",
+      "legend": "プラン",
+      "offer": "{plan}：{interval, select, year {年額} other {月額}} {price}",
+      "direction": {
+        "upgrade": "アップグレード",
+        "downgrade": "ダウングレード",
+        "switch": "切り替え",
+        "start": "開始"
+      },
+      "turnsOff": "{count, plural, other {# 個のモジュールがオフになります}}",
+      "chooseError": "プレビューするプランを選んでください。",
+      "preview": "変更をプレビュー",
+      "previewTitle": "{plan}に変更",
+      "previewLead": {
+        "upgrade": "アップグレードします。現在の請求期間の残りについて、今日お支払いいただく金額は次のとおりです。",
+        "downgrade": "ダウングレードします。現在のプランの未使用分はクレジットになります。",
+        "switch": "同じ価格のプランに切り替えます。",
+        "start": "サブスクリプションは今日から始まります。"
+      },
+      "rows": {
+        "charge": "新しいプラン（期間の残り）",
+        "credit": "未使用分のクレジット",
+        "discount": "非営利割引",
+        "tax": "税金",
+        "due": "本日のお支払い"
+      },
+      "creditKept": "{amount}のクレジットは次回以降の請求に使われます。",
+      "nextRenewal": "その後、{date}に{amount}。",
+      "nextRenewalNoDate": "その後、期間ごとに{amount}。",
+      "taxNote": "税金は、組織の請求情報をもとに請求プロバイダーが計算します。",
+      "removedTitle": "{count, plural, other {# 個のモジュールがオフになります}}",
+      "removedBody": "データは保持されます。これらを含むプランに変更すれば、元のまま戻ります。",
+      "confirmRemoved": "{count, plural, other {これらのモジュールがオフになることを理解しました}}",
+      "confirmError": "続けるには、オフになるモジュールを確認してください。",
+      "confirm": "変更を確定",
+      "cancel": "今のプランのままにする",
+      "doneTitle": "プラン変更を送信しました",
+      "doneBody": "請求プロバイダーが変更を確認しました。プランとモジュールは下に更新されています。",
+      "errorTitle": "プランは変更されませんでした",
+      "errors": {
+        "billing_off": "この組織では請求が有効になっていません。",
+        "same_plan": "すでにこのプランをご利用中です。",
+        "validation_failed": "提供されているプランから選んでください。",
+        "provider": "請求プロバイダーが変更を受け付けませんでした。請求は発生していません。もう一度お試しください。",
+        "forbidden": "プランを変更できるのはオーナーと管理者だけです。",
+        "other": "問題が発生しました。何も変更されていません。"
+      }
+    }
   },
   "billingPortal": {
     "eyebrow": "テスト請求",
@@ -15139,7 +15357,11 @@
     "switch": "プランを変更",
     "cancel": "サブスクリプションを解約",
     "back": "変更せずに戻る",
-    "chooseError": "変更先のプランを選択してください。"
+    "chooseError": "変更先のプランを選択してください。",
+    "noSubscriptionError": "この顧客にはまだサブスクリプションがありません。先にプランを選んでください。",
+    "renewalLegend": "更新",
+    "failRenewal": "更新の支払いを失敗させる",
+    "stopRetrying": "支払いの再試行を止める"
   },
   "seatingLibrary": {
     "title": "座席表ライブラリ",
@@ -16269,6 +16491,686 @@
       "claimed_elsewhere": "このドメインは別の組織によってすでに検証されています。",
       "sso_unavailable": "このデプロイメントではシングルサインオンを利用できません。",
       "last_owner": "組織には少なくとも 1 人のオーナーが必要です。"
+    }
+  },
+  "leads": {
+    "portal": {
+      "heading": "リード獲得",
+      "window": "獲得は{opens}に開始し、{closes}に終了します（イベントの現地時刻）。メモとエクスポートは{until}まで利用できます。",
+      "termsNeededAdmin": "チームがリードを獲得できるよう、下のリード規約に同意してください。",
+      "termsNeededStaff": "リードを獲得するには、出展者の管理者がリード規約に同意する必要があります。",
+      "why": {
+        "unlicensed": "まだリードライセンスがありません。出展者の管理者に依頼してください。",
+        "over_allowance": "あなたのライセンスは出展者の割り当て数を超えています。管理者に回収または追加購入を依頼してください。"
+      },
+      "open": "リード獲得を開く"
+    },
+    "license": {
+      "licensed": "ライセンスあり",
+      "unlicensed": "ライセンスなし",
+      "over_allowance": "割り当て超過"
+    },
+    "capture": {
+      "not_open": "獲得はまだ開始前",
+      "open": "獲得受付中",
+      "closed": "獲得終了"
+    },
+    "terms": {
+      "heading": "リード規約",
+      "v1": "参加者のバッジをスキャンすると、受け取れるのは氏名・役職・会社名のみで、メールアドレスは本人が共有に同意した場合に限られます。これらのデータの責任は貴社が負います。本イベントでの会話のフォローアップにのみ使用し、安全に保管し、求められた場合は削除してください。参加者はスキャンされたことを確認でき、メールアドレスの共有を停止できます。",
+      "accepted": "リード規約に同意済み",
+      "acceptLabel": "同意",
+      "accept": "{exhibitor}を代表してリード規約に同意します",
+      "submit": "リード規約に同意する",
+      "acceptRequired": "リード規約に同意するにはチェックを入れてください。"
+    },
+    "settings": {
+      "heading": "評価項目と公開範囲",
+      "qualifiers": "評価項目",
+      "qualifiersHint": "1行に1つ、最大10個（例: 予算承認済み）。チームが各リードでチェックします。",
+      "visibility": "リードを閲覧できる人",
+      "teamVisibility": "スタッフはチーム全体のリードを閲覧できる（オフの場合は自分がスキャンしたリードのみ）",
+      "save": "リード設定を保存",
+      "saved": "リード設定を保存しました。",
+      "qualifiersInvalid": "各評価項目は60文字以内にしてください。",
+      "tooMany": "評価項目は最大10個までです。"
+    },
+    "export": {
+      "heading": "リードのエクスポート",
+      "ready": "確認できました。リードをダウンロードできます。",
+      "count": "{count, plural, =0 {リードはまだありません} other {#件のリード}}",
+      "hint": "安全のため、ダウンロード前にご本人確認用のコードをメールでお送りします。",
+      "download": "リードをダウンロード（CSV）",
+      "ended": "このイベントのリードへのアクセスは終了しました。",
+      "columns": {
+        "name": "氏名",
+        "jobTitle": "役職",
+        "company": "会社名",
+        "email": "メールアドレス",
+        "rating": "評価",
+        "qualifiers": "評価項目",
+        "notes": "メモ",
+        "capturedAt": "スキャン日時",
+        "scannedBy": "スキャンした人",
+        "scans": "スキャン回数",
+        "sharedFields": "共有された項目",
+        "emailConsentVersion": "メール同意のバージョン"
+      }
+    },
+    "confirm": {
+      "title": "ご本人確認",
+      "intro": "リードをダウンロードするには、{email}にお送りするコードで確認してください。"
+    },
+    "attendee": {
+      "heading": "自分のバッジをスキャンした出展者",
+      "emptyTitle": "まだ誰もバッジをスキャンしていません",
+      "emptyDescription": "出展者がバッジをスキャンすると、ここに表示されます。",
+      "scannedAt": "{time}にスキャン",
+      "emailShared": "メールアドレス共有済み",
+      "emailWithdrawn": "メールアドレスの共有を停止",
+      "emailNotShared": "メールアドレスは共有されていません",
+      "withdraw": "{exhibitor}とのメールアドレス共有を停止",
+      "withdrawn": "完了しました。相手はあなたのメールアドレスを見られなくなりました。",
+      "sharingOn": "バッジをスキャンした出展者はあなたのメールアドレスを受け取ります。",
+      "sharingOff": "バッジをスキャンした出展者はあなたのメールアドレスを受け取りません。",
+      "sharingHint": "氏名・役職・会社名は常に共有されます。電話番号や住所は共有されません。",
+      "turnOff": "出展者とのメールアドレス共有を停止",
+      "turnOn": "バッジをスキャンした出展者とメールアドレスを共有する",
+      "saved": "保存しました。"
+    },
+    "app": {
+      "pageTitle": "リード獲得",
+      "loading": "読み込み中…",
+      "signedOutTitle": "リードを獲得するにはサインインしてください",
+      "signedOutDescription": "このデバイスで出展者招待メールのサインインリンクを開き、リード獲得に戻ってください。",
+      "openPortal": "出展者ポータルへ",
+      "title": "{exhibitor}のリード",
+      "online": "オンライン",
+      "offline": "オフライン: スキャンはこのデバイスに保存されます",
+      "queued": "{count, plural, =0 {すべて同期済み} other {#件のスキャンが同期待ち}}",
+      "modes": "リード獲得の表示",
+      "viewScan": "スキャン",
+      "viewLeads": "{count, plural, =0 {リード} other {リード（#）}}",
+      "blockedTitle": "現在リードを獲得できません",
+      "blocked": {
+        "unlicensed": "リードライセンスがありません。出展者の管理者に依頼してください。",
+        "over_allowance": "あなたのライセンスは出展者の割り当て数を超えています。管理者に確認してください。",
+        "termsAdmin": "まず出展者ポータルでリード規約に同意してください。",
+        "termsStaff": "まず出展者の管理者がリード規約に同意する必要があります。",
+        "notOpen": "獲得は{time}に開始します。",
+        "closed": "獲得は{time}に終了しました。リードの閲覧と編集は引き続き可能です。"
+      },
+      "codeLabel": "バッジのコード",
+      "codeHint": "バッジのQRコードをスキャンするか、その下に印刷されたコードを入力してください。",
+      "save": "リードを保存",
+      "camera": "カメラでスキャン",
+      "stopCamera": "カメラを停止",
+      "cameraFailed": "カメラを起動できませんでした。バッジのコードを入力してください。",
+      "refusals": {
+        "no_license": "リードライセンスがありません。出展者の管理者に依頼してください。",
+        "over_allowance": "あなたのライセンスは出展者の割り当て数を超えています。スキャンはこのデバイスで待機しています。",
+        "terms_not_accepted": "リード規約にまだ同意されていません。スキャンはこのデバイスで待機しています。",
+        "access_ended": "このイベントのリードへのアクセスは終了しました。",
+        "other": "問題が発生しました。スキャンはこのデバイスで待機しています。もう一度お試しください。"
+      },
+      "result": {
+        "queued": "このデバイスに保存しました",
+        "queuedHint": "同期後に詳細が表示されます。",
+        "refused": "保存されませんでした",
+        "captured": "リードを保存しました",
+        "rescanned": "既存のリード: スキャンを追加しました"
+      },
+      "reasons": {
+        "invalid": "このバッジを読み取れません。コードを確認してもう一度お試しください。",
+        "wrong_event": "このバッジは別のイベントのものです。",
+        "not_open": "獲得の開始前にスキャンされました。",
+        "closed": "獲得の終了後にスキャンされました。"
+      },
+      "emailWithdrawn": "参加者が{time}にメールアドレスの共有を停止しました",
+      "emailNotShared": "メールアドレスは共有されていません",
+      "capturedAt": "{time}にスキャン{count, plural, =1 {} other { · #回}}",
+      "scannedBy": "{email}",
+      "editLabel": "リードの詳細",
+      "rating": "評価",
+      "ratings": {
+        "hot": "ホット",
+        "warm": "ウォーム",
+        "cold": "コールド",
+        "none": "評価なし"
+      },
+      "qualifiers": "評価項目",
+      "notes": "メモ",
+      "saveDetails": "詳細を保存",
+      "saved": "保存しました。",
+      "savedQueued": "スキャンと一緒に保存しました。オンラインになると同期されます。",
+      "needsConnection": "このリードの変更を保存するにはインターネットに接続してください。",
+      "saveFailed": "保存できませんでした。もう一度お試しください。",
+      "accessEnded": "このイベントのリードへのアクセスは終了しました。",
+      "scope": {
+        "all": "{exhibitor}のすべてのリード",
+        "team": "チームのリード",
+        "own": "自分のリード"
+      },
+      "emptyTitle": "リードはまだありません",
+      "emptyDescription": "「スキャン」タブでバッジをスキャンして、最初のリードを保存しましょう。",
+      "search": "リードを検索",
+      "noMatch": "検索に一致するリードはありません。",
+      "edit": "{name}を編集"
+    }
+  },
+  "conferenceHub": {
+    "metaTitle": "カンファレンスハブ",
+    "eyebrow": "あなたのカンファレンスハブ",
+    "for": "{name} さん",
+    "whose": "誰のハブか",
+    "orderLink": "カンファレンスハブを開く",
+    "orderLinkHint": "プログラム、マイスケジュール、バッジ、カレンダーをスマートフォンで。",
+    "noRegistrantTitle": "この注文には登録がありません",
+    "noRegistrantDescription": "カンファレンスハブは登録に紐づいています。登録に使った注文を開いてください。",
+    "backToOrder": "注文に戻る",
+    "offline": "オフラインです。スマートフォンに保存されたコピーを表示しています。",
+    "privateLink": "このページは非公開です。リンクを知っている人は誰でも閲覧し、スケジュールを変更できます。共有しないでください。",
+    "tabs": {
+      "label": "ハブのセクション",
+      "today": "今日",
+      "schedule": "マイスケジュール",
+      "agenda": "プログラム",
+      "badge": "バッジ"
+    },
+    "today": {
+      "now": "開催中",
+      "next": "次のセッション",
+      "fromSchedule": "あなたのスケジュールより。",
+      "fromAgenda": "プログラムより。セッションにスターを付けて自分用にしましょう。",
+      "nothingNow": "現在開催中のものはありません。",
+      "nothingNextTitle": "まもなく始まるものはありません",
+      "nothingNextDescription": "プログラムを見て、セッションにスターを付けたり任意セッションに申し込んだりしましょう。",
+      "openAgenda": "プログラムを開く",
+      "pollsAndQa": "投票と質問",
+      "more": "ツール",
+      "badgeTitle": "あなたのバッジ",
+      "badgeDescription": "入場時とセッションのチェックイン時にQRコードを提示してください。",
+      "showBadge": "バッジを表示",
+      "networkingTitle": "ネットワーキング",
+      "networkingDescription": "他の参加者を探してつながり、ミーティングを予約できます。",
+      "openNetworking": "ネットワーキングを開く",
+      "calendarTitle": "カレンダー",
+      "calendarDescription": "スケジュールをスマートフォンのカレンダーに追加します。セッションの時間が変わると更新されます。",
+      "openCalendar": "カレンダーに追加"
+    },
+    "summary": "申込済み: {enrolled} · お気に入り: {favorites} · 重複: {conflicts}",
+    "agendaIntro": "参加したいセッションにスターを付けましょう。任意セッションは申し込みが必要です。",
+    "conflict": "{titles} と重複",
+    "emptyScheduleTitle": "スケジュールは空です",
+    "emptyScheduleDescription": "プログラムでセッションにスターを付けるか、任意セッションに申し込むと、ここに表示されます。",
+    "emptyAgendaTitle": "まだセッションがありません",
+    "emptyAgendaDescription": "主催者はまだあなたの登録向けのセッションを追加していません。後でもう一度確認してください。",
+    "favorite": {
+      "star": "スターを付ける",
+      "starred": "スター済み",
+      "starNamed": "{title} にスターを付ける",
+      "unstarNamed": "{title} のスターを外す",
+      "pill": "お気に入り",
+      "added": "{title} をスケジュールに追加しました。",
+      "removed": "{title} をスケジュールから外しました。",
+      "replaced": "スターを付けました。重複していたお気に入りを外しました: {count}",
+      "tooMany": "スターを付けられる上限に達しました。先にどれかのスターを外してください。",
+      "conflictTitle": "スケジュールと重複しています",
+      "conflictEnrolled": "{title}（申込済み）",
+      "conflictFavorite": "{title}（スター済み）",
+      "keepBoth": "両方残す",
+      "replace": "置き換える",
+      "cancel": "キャンセル"
+    },
+    "calendar": {
+      "title": "カレンダーフィード",
+      "description": "一度登録するだけで、カレンダーアプリがフィードを更新するので、セッションの時間が変わればカレンダーでも変わります。申込済みのセッションは確定、スターを付けたものは仮として表示されます。",
+      "subscribe": "カレンダーで購読",
+      "download": ".ics をダウンロード",
+      "linkLabel": "フィードのリンク（非公開）",
+      "copy": "リンクをコピー",
+      "copied": "リンクをコピーしました。",
+      "replace": "リンクを変更",
+      "replaceConfirmTitle": "カレンダーのリンクを変更しますか？",
+      "replaceConfirmBody": "現在のリンクは、それを使っているすべてのカレンダーですぐに使えなくなります。新しいリンクで購読し直してください。",
+      "replaceConfirm": "リンクを変更",
+      "cancel": "キャンセル",
+      "replaced": "完了しました。古いリンクは使えません。新しいリンクで購読してください。"
+    },
+    "install": {
+      "title": "スマートフォンに保存",
+      "button": "ホーム画面に追加",
+      "installed": "このハブはホーム画面にあります。",
+      "done": "ホーム画面に追加しました。",
+      "help": "iPhone・iPad: 共有をタップし、ホーム画面に追加を選びます。Android: ブラウザのメニューを開き、アプリをインストールまたはホーム画面に追加を選びます。"
+    },
+    "badge": {
+      "title": "あなたのバッジ",
+      "qrLabel": "{name} さんのバッジのQRコード",
+      "shortCode": "コード",
+      "hint": "入場時は画面の明るさを上げてください。",
+      "noneTitle": "まだバッジがありません",
+      "noneDescription": "登録が確定すると、ここにバッジが表示されます。"
+    }
+  },
+  "billingUsage": {
+    "title": "使用量",
+    "subtitle": "組織がメーター別に使用した量：メッセージ、AIクレジット、スキャン端末。",
+    "breadcrumb": "パンくずリスト",
+    "period": "今月：{start}〜{end}（{zone}）",
+    "filterLabel": "メーター",
+    "allMeters": "すべてのメーター",
+    "meter": {
+      "email": "メール",
+      "sms": "SMS",
+      "whatsapp": "WhatsApp",
+      "ai_credits": "AIクレジット",
+      "devices": "スキャン端末"
+    },
+    "unit": {
+      "email": "{count, plural, other {# 通のメールを送信}}",
+      "sms": "{count, plural, other {# セグメントのSMS}}",
+      "whatsapp": "{count, plural, other {# 件のメッセージを送信}}",
+      "ai_credits": "{count, plural, other {# クレジットを使用}}",
+      "devices": "{count, plural, other {# 台の端末を登録}}"
+    },
+    "reportingTitle": "使用量は請求プロバイダーに送信されます",
+    "reportingBody": "{count, plural, =0 {これまでの分はすべて送信済みです。} other {# 件の記録が送信待ちです。}}",
+    "countingTitle": "使用量は記録されますが、請求はありません",
+    "countingBody": "この組織では請求が有効になっていないため、使用量はここで記録されるだけです。",
+    "currentTitle": "今月",
+    "currentDescription": "組織のタイムゾーンで集計しています。",
+    "historyTitle": "過去の月",
+    "historyDescription": "使用があった直近12か月。",
+    "emptyTitle": "まだ使用量はありません",
+    "emptyBody": "メールやSMSを送信したり、AIで下書きしたり、スキャン端末を登録したりすると、ここに使用量が表示されます。",
+    "historyEmpty": "過去の月に使用はありません。",
+    "month": "月"
+  },
+  "billingBanner": {
+    "label": "請求",
+    "graceTitle": "サブスクリプションの支払いが完了しませんでした",
+    "graceBody": "{date}まではすべて使えます。その後はお支払いまで組織が読み取り専用になります。",
+    "readOnlyTitle": "この組織は読み取り専用です",
+    "readOnlyBody": "サブスクリプションの支払いに失敗しました。何も削除されていません。閲覧、エクスポート、チケットのスキャンはできますが、お支払いまで変更は停止しています。",
+    "action": "プランと請求"
+  },
+  "agencies": {
+    "title": "代理店",
+    "subtitle": "代理店にイベントの作業を任せられます。アクセスはいつでも取り消せます。代理店があなたのお金を支払ったり受け取ったりすることはありません。",
+    "noAccessTitle": "代理店を管理できるのはオーナーと管理者だけです",
+    "noAccessDescription": "この組織のオーナーまたは管理者に、代理店へのアクセス付与を依頼してください。",
+    "grantTitle": "代理店にアクセスを付与",
+    "agency": "代理店のアドレス",
+    "agencyHint": "代理店から伝えられたアドレス（例: bloom-events）。",
+    "agencyRequired": "代理店のアドレスを入力してください。",
+    "agencyUnknown": "このアドレスの代理店はありません。代理店に確認してください。",
+    "agencySelf": "代理店は自分自身にアクセスを付与できません。",
+    "agencyTaken": "この代理店はすでにアクセスできます。",
+    "role": "代理店ができること",
+    "roleManager": "イベントの管理",
+    "roleManagerHint": "イベント、ゲスト、チェックイン、メッセージの作成と編集。返金、販売、メンバー、設定は不可。",
+    "roleMarketing": "マーケティング",
+    "roleMarketingHint": "キャンペーン、オーディエンス、メッセージ、イベントの閲覧。",
+    "roleViewer": "閲覧のみ",
+    "roleViewerHint": "イベント、注文、ゲストの閲覧。何も変更しません。",
+    "finance": "代理店にお金の情報の閲覧も許可する",
+    "financeHint": "入金、財務レポート、元帳を閲覧のみ。オンにしない限りオフです。",
+    "grant": "アクセスを付与",
+    "granted": "{agency} はこの組織で作業できるようになりました。",
+    "listTitle": "アクセスできる代理店",
+    "empty": "アクセスできる代理店はありません。代理店と仕事をするときは上でアクセスを付与してください。",
+    "emptyReadOnly": "アクセスできる代理店はありません。",
+    "agencyColumn": "代理店",
+    "roleColumn": "アクセス",
+    "financeColumn": "お金",
+    "grantedColumn": "開始",
+    "actions": "操作",
+    "financeOn": "閲覧可",
+    "financeOff": "アクセスなし",
+    "revoke": "取り消す",
+    "revokeNamed": "{agency} のアクセスを取り消す",
+    "revoked": "{agency} はアクセスできなくなりました。",
+    "financeEnable": "お金を許可",
+    "financeEnableNamed": "{agency} にお金の閲覧を許可",
+    "financeDisable": "お金を停止",
+    "financeDisableNamed": "{agency} のお金の閲覧を停止",
+    "historyTitle": "過去のアクセス",
+    "revokedColumn": "終了",
+    "unknownAgency": "Yayatoh にいない代理店",
+    "roleLabel": "{role, select, manager {イベントの管理} marketing {マーケティング} viewer {閲覧のみ} other {アクセス}}"
+  },
+  "agency": {
+    "title": "クライアント",
+    "subtitle": "{agency} にアクセスを付与したすべてのクライアント。数値はスナップショットから取得されます。最新にするには更新してください。",
+    "tabs": "代理店のセクション",
+    "tab": {
+      "clients": "クライアント",
+      "events": "イベント",
+      "marketing": "マーケティング",
+      "reports": "レポート"
+    },
+    "refresh": "数値を更新",
+    "refreshed": "{count, plural, other {# 件のクライアント}}の数値を更新しました。",
+    "notRefreshed": "未更新",
+    "emptyTitle": "クライアントはまだいません",
+    "emptyDescription": "クライアントに Yayatoh コンソールの「代理店」を開いて {address} にアクセスを付与するよう依頼してください。",
+    "noAccessTitle": "代理店ページは代理店のメンバー向けです",
+    "noAccessDescription": "{agency} のオーナーにアクセスを依頼してください。",
+    "client": "クライアント",
+    "nextEvent": "次のイベント",
+    "noNextEvent": "予定なし",
+    "upcoming": "今後のイベント",
+    "orders": "注文",
+    "tickets": "チケット",
+    "checkins": "チェックイン済み",
+    "checkinRate": "チェックイン率",
+    "open": "開く",
+    "openNamed": "{client} を開く",
+    "finance": "お金を含む",
+    "eventsTitle": "全クライアントのイベント",
+    "eventsEmpty": "クライアントにはまだ今後または最近のイベントがありません。",
+    "event": "イベント",
+    "starts": "開始",
+    "status": "ステータス",
+    "gross": "総売上",
+    "grossHidden": "非共有",
+    "grossHiddenHint": "総売上は、お金の閲覧を許可したクライアントにのみ表示されます。",
+    "openEventNamed": "{client} の {event} を開く",
+    "marketingTitle": "マーケティング（過去 30 日）",
+    "marketingEmpty": "クライアントはまだいません。",
+    "campaigns": "キャンペーン",
+    "sends": "送信",
+    "deliveries": "配信",
+    "clicks": "クリック",
+    "uniqueClickers": "クリックした人",
+    "conversion": "コンバージョン",
+    "reportsTitle": "全クライアントの合計",
+    "clientsCount": "クライアント",
+    "eventsTotal": "イベント",
+    "revenue": "総売上",
+    "revenueFrom": "お金を共有している {count, plural, other {# 件のクライアント}}から",
+    "revenueNone": "お金を共有しているクライアントはいません。",
+    "perClient": "クライアント別",
+    "eventStatus": {
+      "draft": "下書き",
+      "published": "公開中",
+      "postponed": "延期",
+      "cancelled": "中止",
+      "completed": "終了",
+      "archived": "アーカイブ済み"
+    },
+    "refreshedAt": "更新日時"
+  },
+  "analyticsPro": {
+    "tabs": {
+      "label": "アナリティクスのセクション",
+      "overview": "概要",
+      "explore": "探索",
+      "alerts": "アラートルール",
+      "reports": "レポート"
+    },
+    "explore": {
+      "title": "探索",
+      "description": "指標と内訳の方法を選びます。アトリビューションは、どのキャンペーン・チャネル・参照元が売上につながったかを示します。",
+      "form": "表示する内容を選ぶ",
+      "measure": "指標",
+      "groupCounts": "件数",
+      "groupMoney": "金額",
+      "groupAttribution": "アトリビューション",
+      "measures": {
+        "registrations": "申込数",
+        "tickets": "販売チケット（純数）",
+        "comp_tickets": "無料チケット",
+        "refunded_tickets": "返金済みチケット",
+        "checkins": "チェックイン",
+        "no_shows": "不参加",
+        "attributed_orders": "アトリビューション対象の注文",
+        "gross": "支払額",
+        "refunds": "返金額",
+        "net": "純売上",
+        "attributed_revenue": "アトリビューション売上"
+      },
+      "dimension": "内訳",
+      "dimensions": {
+        "period": "期間",
+        "event": "イベント",
+        "channel": "チャネル",
+        "source": "参照元",
+        "campaign": "キャンペーン"
+      },
+      "model": "アトリビューションモデル",
+      "modelHint": "アトリビューション対象の注文と売上にのみ使います。",
+      "models": {
+        "first": "ファーストタッチ",
+        "last": "ラストタッチ",
+        "linear": "線形（均等配分）"
+      },
+      "range": "期間",
+      "ranges": {
+        "7d": "過去 7 日間",
+        "30d": "過去 30 日間",
+        "90d": "過去 90 日間",
+        "365d": "過去 12 か月",
+        "custom": "日付を指定"
+      },
+      "from": "開始日",
+      "to": "終了日",
+      "customHint": "期間が「日付を指定」のときに使います。",
+      "granularity": "表示単位",
+      "granularities": {
+        "day": "日",
+        "week": "週",
+        "month": "月"
+      },
+      "event": "イベント",
+      "allEvents": "すべてのイベント",
+      "apply": "表示",
+      "errors": {
+        "touch_dimension": "チャネル・参照元・キャンペーンは、アトリビューション対象の注文または売上でのみ使えます。",
+        "custom_needs_dates": "期間を指定するには両方の日付を入力してください。",
+        "from_after_to": "終了日が開始日より前です。",
+        "range_too_long": "2 年以内の期間を選んでください。",
+        "invalid_date": "日付は年・月・日の形式で入力してください。"
+      },
+      "resultsCaption": "{dimension}別の{measure}（{from}〜{to}）",
+      "total": "合計",
+      "none": "なし",
+      "unnamedCampaign": "名前のないキャンペーン",
+      "weekOf": "{day} の週",
+      "currency": "通貨",
+      "value": "値",
+      "truncated": "最初の 500 行を表示しています。残りを見るには期間を短くするか、イベントを 1 つ選んでください。",
+      "emptyTitle": "この選択では表示するものがありません",
+      "emptyBody": "この期間のこの指標のデータはありません。期間を長くするか、別のイベントや指標を試してください。",
+      "emptyAction": "過去 12 か月を表示",
+      "export": "CSV をエクスポート",
+      "exportLabel": "この結果を CSV ファイルとしてエクスポート",
+      "timeZoneNote": "日付は組織のタイムゾーン {timeZone} の暦日です。",
+      "attributionNote": "アトリビューションは、アトリビューション期間内に注文につながった訪問（クリックされたトラッキングリンク、UTM 付きの訪問、購入者を送った他サイト）に各注文を配分します。ファーストタッチは最初の訪問に、ラストタッチは最後の訪問に計上し、線形は注文を均等に分けます（端数の 1 セントは最後の訪問へ）。売上は購入者が支払った額で、通貨ごとに集計します。訪問が記録されていない注文は対象外です。",
+      "saveTitle": "このビューを保存",
+      "viewName": "名前",
+      "save": "ビューを保存",
+      "saved": "ビューを保存しました",
+      "viewErrors": {
+        "name": "80 文字以内で名前を入力してください。",
+        "name_taken": "同じ名前のビューがすでにあります。",
+        "too_many_views": "保存済みビューが 50 件あります。先に 1 件削除してください。"
+      },
+      "views": "保存したビュー",
+      "noViews": "保存したビューはまだありません。上で表示内容を選び、ここに保存すればワンクリックで戻れます。",
+      "deleteView": "削除",
+      "deleteViewLabel": "ビュー「{name}」を削除",
+      "deleted": "ビューを削除しました"
+    },
+    "rules": {
+      "title": "アラートルール",
+      "description": "数値がしきい値を超えたら通知します。ルールのアラートは、組み込みのものと同じくアラート機能でチームに届きます。",
+      "createTitle": "新しいアラートルール",
+      "editTitle": "アラートルールを編集",
+      "name": "名前",
+      "nameHint": "アラートとそのメールに表示されます。",
+      "measure": "指標",
+      "measures": {
+        "registrations": "申込数",
+        "tickets": "販売チケット（純数）",
+        "refunded_tickets": "返金済みチケット",
+        "checkins": "チェックイン",
+        "gross": "支払額",
+        "refunds": "返金額",
+        "net": "純売上"
+      },
+      "condition": "条件",
+      "conditions": {
+        "above": "以上",
+        "below": "未満",
+        "rise": "以上増加（%）",
+        "drop": "以上減少（%）"
+      },
+      "threshold": "しきい値",
+      "thresholdHint": "件数、金額、または増減の割合（直前の期間との比較）。",
+      "window": "対象期間",
+      "windows": {
+        "d1": "今日",
+        "d7": "過去 7 日間",
+        "d14": "過去 14 日間",
+        "d30": "過去 30 日間"
+      },
+      "currency": "通貨",
+      "currencyHint": "金額のルールは 1 つの通貨で比較します。",
+      "noCurrency": "金額以外",
+      "event": "イベント",
+      "allEvents": "すべてのイベント",
+      "severity": "重要度",
+      "severities": {
+        "info": "情報",
+        "warning": "警告",
+        "critical": "重大"
+      },
+      "quietHours": "夜間の通知を控える",
+      "quietHoursHint": "ルールが 21:00〜8:00 に発動した場合、メールとプッシュは各受信者のタイムゾーンで 8:00 まで待ちます。アプリ内のアラートはすぐに表示されます。",
+      "create": "ルールを作成",
+      "save": "変更を保存",
+      "back": "アラートルールに戻る",
+      "created": "ルールを作成しました",
+      "saved": "変更を保存しました",
+      "list": "ルール一覧",
+      "emptyTitle": "アラートルールはまだありません",
+      "emptyBody": "上でルールを作成してください（例：「今日の返金が 10 件以上」）。条件を満たした時点でお知らせします。",
+      "columns": {
+        "name": "ルール",
+        "condition": "条件",
+        "status": "状態",
+        "lastValue": "最新の値",
+        "actions": "操作"
+      },
+      "summary": "{measure}が{window}で{threshold}{condition}",
+      "status": {
+        "firing": "発動中",
+        "ok": "正常",
+        "off": "オフ",
+        "new": "未確認"
+      },
+      "edit": "編集",
+      "editLabel": "{name} を編集",
+      "turnOff": "オフにする",
+      "turnOn": "オンにする",
+      "turnOffLabel": "{name} をオフにする",
+      "turnOnLabel": "{name} をオンにする",
+      "delete": "削除",
+      "deleteLabel": "{name} を削除",
+      "deleted": "ルールを削除しました",
+      "turnedOff": "ルールをオフにしました",
+      "turnedOn": "ルールをオンにしました",
+      "readOnly": "これらのルールは閲覧のみ可能で、変更はできません。",
+      "errors": {
+        "name": "80 文字以内で名前を入力してください。",
+        "name_taken": "同じ名前のルールがすでにあります。",
+        "threshold": "0 以上の数値を入力してください。",
+        "percent_range": "1〜1000 の割合を入力してください。",
+        "currency_required": "金額のルールには通貨を選んでください。",
+        "too_many_rules": "ルールが 50 件あります。先に 1 件削除してください。"
+      }
+    },
+    "reports": {
+      "title": "定期レポート",
+      "description": "アナリティクスの PDF を毎日・毎週・毎月メールで送ります。集計は組織のタイムゾーンで行います。",
+      "createTitle": "新しい定期レポート",
+      "editTitle": "定期レポートを編集",
+      "name": "名前",
+      "frequency": "頻度",
+      "frequencies": {
+        "daily": "毎日（前日の数値）",
+        "weekly": "毎週月曜（先週の月曜〜日曜）",
+        "monthly": "毎月 1 日（先月）"
+      },
+      "frequencyShort": {
+        "daily": "毎日",
+        "weekly": "毎週",
+        "monthly": "毎月"
+      },
+      "sendHour": "送信時刻",
+      "sendHourHint": "{timeZone} の時刻です。",
+      "event": "イベント",
+      "allEvents": "すべてのイベント",
+      "recipients": "送信先",
+      "recipientsHint": "注文を閲覧できるメンバー。売上は経理を閲覧できる人の PDF にのみ含まれ、各 PDF は読む人の言語で作成されます。",
+      "you": "{name}（あなた）",
+      "create": "レポートを予約",
+      "save": "変更を保存",
+      "back": "定期レポートに戻る",
+      "created": "レポートを予約しました",
+      "saved": "変更を保存しました",
+      "list": "スケジュール",
+      "emptyTitle": "定期レポートはまだありません",
+      "emptyBody": "上で予約してください。期間ごとに 1 回、PDF へのリンク付きでメールが届きます。",
+      "columns": {
+        "name": "レポート",
+        "frequency": "頻度",
+        "next": "次回送信",
+        "recipients": "受信者",
+        "status": "状態",
+        "actions": "操作"
+      },
+      "recipientsCount": "{count, plural, other {# 人のメンバー}}",
+      "status": {
+        "on": "オン",
+        "off": "オフ"
+      },
+      "edit": "編集",
+      "editLabel": "{name} を編集",
+      "turnOff": "オフにする",
+      "turnOn": "オンにする",
+      "turnOffLabel": "{name} をオフにする",
+      "turnOnLabel": "{name} をオンにする",
+      "delete": "削除",
+      "deleteLabel": "{name} を削除",
+      "deleted": "スケジュールを削除しました",
+      "turnedOff": "スケジュールをオフにしました",
+      "turnedOn": "スケジュールをオンにしました",
+      "recent": "最近のレポート",
+      "recentEmpty": "まだレポートは送信されていません。最初のレポートは次の送信時刻に送られます。",
+      "recentColumns": {
+        "report": "レポート",
+        "period": "期間",
+        "status": "状態",
+        "file": "PDF"
+      },
+      "runStatus": {
+        "pending": "待機中",
+        "sent": "送信済み",
+        "failed": "失敗"
+      },
+      "download": "PDF をダウンロード",
+      "downloadLabel": "{period} の {name} をダウンロード（PDF）",
+      "notReady": "準備中",
+      "errors": {
+        "name": "80 文字以内で名前を入力してください。",
+        "name_taken": "同じ名前のスケジュールがすでにあります。",
+        "recipients": "メンバーを 1 人以上選んでください。",
+        "bad_recipient": "注文を閲覧できるメンバーを選んでください。",
+        "too_many_schedules": "スケジュールが 25 件あります。先に 1 件削除してください。"
+      }
     }
   }
 }

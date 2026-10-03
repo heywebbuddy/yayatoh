@@ -48,6 +48,7 @@ export default async function BestAvailablePage({
         finder={data.modules.has('seat_finder')}
         selection
         guests={data.modules.has('guests')}
+        solver={data.modules.has('guests') && data.modules.has('ai_seating')}
       />
       {!page ? (
         <EmptyState

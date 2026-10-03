@@ -204,7 +204,7 @@ touches:
   - packages/modules/orders/src/{schema-addons,addon-orders,index,private-columns}.ts, commands/checkout.ts (3-line hook)
   - packages/modules/registration/src/{comp-codes,index}.ts
   - packages/modules/billing/src/addons.ts (lead_retrieval key)
-  - packages/db/drizzle/0103_motionless_drax.sql
+  - packages/db/drizzle/0114_sudden_night_thrasher.sql
   - packages/testing/src/fixtures.ts
   - apps/web/src/app/[locale]/o/[org]/e/[event]/sponsors/{page.tsx,packages/**,deliverables/**}
   - apps/web/src/app/[locale]/o/[org]/e/[event]/exhibitors/{page.tsx,licenses/**}
@@ -230,7 +230,7 @@ touches:
 
 All new tables via `tenantTable()` (FORCE RLS, NULLIF policy, org-leading indexes, composite FKs),
 fixture rows for both orgs, every text/jsonb/text[] column in `private-columns.ts` (the comp code is
-`holder`). **Migration** `0103_motionless_drax.sql` (renumber at merge), expand only. Hand-written:
+`holder`). **Migration** `0114_sudden_night_thrasher.sql` (renumber at merge), expand only. Hand-written:
 the two new CHECKs on `exhibitor_settings` added `NOT VALID` then validated; composite
 `(org_id, event_id) → events.events` FKs (cascade) for the seven new program tables;
 `sponsor_profiles_exhibitor_fk` with `ON DELETE SET NULL ("exhibitor_id")`;

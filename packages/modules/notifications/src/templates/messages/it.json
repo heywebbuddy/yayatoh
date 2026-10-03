@@ -339,6 +339,21 @@
     "badges.kiosk-code": {
       "subject": "{code} è il tuo codice per il chiosco badge di {eventName}",
       "intro": "Inserisci {code} nel chiosco badge per controllare i tuoi dati e stampare il badge. Il codice vale una volta e scade tra {minutes, plural, one {# minuto} other {# minuti}}. Se non l'hai richiesto, ignora questa email."
+    },
+    "alerts.metric": {
+      "subject": "La regola di avviso «{title}» è scattata",
+      "intro": "{reading, select, none {La tua regola di avviso «{title}» è ancora attiva per {org}.} other {La tua regola di avviso «{title}» è scattata per {org}: {reading} {windowDays, plural, one {nell’ultimo giorno} other {negli ultimi # giorni}}.}} Aprila per confermarla o posticiparla.",
+      "cta": "Apri l’avviso"
+    },
+    "alerts.metric-now": {
+      "subject": "La regola di avviso «{title}» è scattata",
+      "intro": "{reading, select, none {La tua regola di avviso «{title}» è ancora attiva per {org}.} other {La tua regola di avviso «{title}» è scattata per {org}: {reading} {windowDays, plural, one {nell’ultimo giorno} other {negli ultimi # giorni}}.}} Aprila per confermarla o posticiparla.",
+      "cta": "Apri l’avviso"
+    },
+    "analytics.report": {
+      "subject": "Il tuo report «{name}»: {period}",
+      "intro": "Il report «{name}» di {org} per {period} è pronto. Aprilo per scaricare il PDF.",
+      "cta": "Scarica il PDF"
     }
   },
   "roles": {

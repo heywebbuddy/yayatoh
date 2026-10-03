@@ -339,6 +339,21 @@
     "badges.kiosk-code": {
       "subject": "{code} é o seu código para o quiosque de crachás de {eventName}",
       "intro": "Introduza {code} no quiosque de crachás para confirmar os seus dados e imprimir o seu crachá. O código funciona uma vez e expira em {minutes, plural, one {# minuto} other {# minutos}}. Se não o pediu, pode ignorar este e-mail."
+    },
+    "alerts.metric": {
+      "subject": "A regra de alerta “{title}” foi acionada",
+      "intro": "{reading, select, none {Sua regra de alerta “{title}” continua acionada em {org}.} other {Sua regra de alerta “{title}” foi acionada em {org}: {reading} {windowDays, plural, one {no último dia} other {nos últimos # dias}}.}} Abra para confirmar ou adiar.",
+      "cta": "Abrir o alerta"
+    },
+    "alerts.metric-now": {
+      "subject": "A regra de alerta “{title}” foi acionada",
+      "intro": "{reading, select, none {Sua regra de alerta “{title}” continua acionada em {org}.} other {Sua regra de alerta “{title}” foi acionada em {org}: {reading} {windowDays, plural, one {no último dia} other {nos últimos # dias}}.}} Abra para confirmar ou adiar.",
+      "cta": "Abrir o alerta"
+    },
+    "analytics.report": {
+      "subject": "Seu relatório “{name}”: {period}",
+      "intro": "O relatório “{name}” de {org} para {period} está pronto. Abra para baixar o PDF.",
+      "cta": "Baixar o PDF"
     }
   },
   "roles": {

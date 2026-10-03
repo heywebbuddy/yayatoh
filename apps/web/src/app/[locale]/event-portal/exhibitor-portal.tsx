@@ -1,6 +1,7 @@
 import { boothInboxQuery } from '@yayatoh/engagement';
 import type { PortalPrincipal } from '@yayatoh/events';
 import { executeQuery, isDomainError } from '@yayatoh/kernel';
+import { leadSetupQuery } from '@yayatoh/leads';
 import { portalExhibitorLogoQuery } from '@yayatoh/media';
 import { exhibitorPortalQuery, portalLeadLicensesQuery } from '@yayatoh/program';
 import {
@@ -27,6 +28,7 @@ import { portalRequestCtx } from '@/server/portal.ts';
 import { ports } from '@/server/ports.ts';
 import { inviteStaffAction, revokeStaffAction, saveProfileAction } from './exhibitor-actions.ts';
 import { LeadLicensesSection } from './lead-licenses-section.tsx';
+import { LeadsSection } from './leads-section.tsx';
 
 const LOGO_RESULTS = ['saved', 'alt', 'file', 'too_large', 'unsupported', 'failed'] as const;
 type LogoResult = (typeof LOGO_RESULTS)[number];
@@ -42,15 +44,19 @@ export async function ExhibitorPortal({
   locale,
   logoParam,
   paid = false,
+  exportReady = false,
 }: {
   principal: PortalPrincipal;
   locale: string;
   logoParam: string | undefined;
   paid?: boolean;
+  exportReady?: boolean;
 }) {
   const ctx = await portalRequestCtx(principal);
   const view = await executeQuery(exhibitorPortalQuery, {}, ctx, ports);
   const leads = await executeQuery(portalLeadLicensesQuery, {}, ctx, ports);
+  // M5.6b: lead capture (license, window, terms, settings, export).
+  const leadSetup = await executeQuery(leadSetupQuery, {}, ctx, ports);
   const logo = await executeQuery(portalExhibitorLogoQuery, {}, ctx, ports);
   // M5.8b: booth chat (its state and what's unread).
   // Hidden when the org has no live sessions module (booth chat runs under `sessions`).
@@ -317,6 +323,8 @@ export async function ExhibitorPortal({
       ) : null}
 
       <LeadLicensesSection leads={leads} locale={locale} eventName={view.event.name} paid={paid} />
+
+      <LeadsSection setup={leadSetup} locale={locale} exportReady={exportReady} />
 
       <section aria-labelledby="tasks-heading" className="flex flex-col gap-3">
         <SectionHeader id="tasks-heading" title={t('tasksHeading')} />

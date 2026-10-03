@@ -85,6 +85,10 @@ export const RULE_KEYS = [
   'rsvpPending',
   'guestsUnseated',
   'mealsMissing',
+  // M6.2b: organizer-authored alert rules (measured by analytics, delivered through the outbox),
+  // one alert per rule (scope `m:{ruleId}`); money rules only reach members who see finance.
+  'metricRule',
+  'metricRuleFinance',
   // Batch 3l merge: failed or revoked integration connections (M6.4–M6.5) and an unpaid plan (M6.6).
   'integrationFailed',
   'billingPastDue',
@@ -93,8 +97,11 @@ export type RuleKey = (typeof RULE_KEYS)[number];
 
 export interface RuleDef {
   readonly key: RuleKey;
-  /** Event rules are evaluated per event (grouped by rule + event); org rules once per org. */
-  readonly scope: 'event' | 'org';
+  /**
+   * Event rules are evaluated per event (grouped by rule + event); org rules once per org;
+   * `custom` (M6.2b): organizer rules, one alert per rule, driven by the analytics outbox event.
+   */
+  readonly scope: 'event' | 'org' | 'custom';
   readonly category: AlertCategory;
   /** Who may see the alert (and so be told about it). */
   readonly permission: string;
@@ -107,7 +114,7 @@ export interface RuleDef {
 
 const rule = (
   key: RuleKey,
-  scope: 'event' | 'org',
+  scope: 'event' | 'org' | 'custom',
   category: AlertCategory,
   permission: string,
   fix: string,
@@ -216,9 +223,15 @@ export const RULES: Readonly<Record<RuleKey, RuleDef>> = {
   rsvpPending: rule('rsvpPending', 'event', 'attendees', 'guests:read', '/e/{event}/guests/rsvp'),
   guestsUnseated: rule('guestsUnseated', 'event', 'attendees', 'guests:read', '/e/{event}/seating/guests'),
   mealsMissing: rule('mealsMissing', 'event', 'attendees', 'guests:read', '/e/{event}/guests/answers'),
+  metricRule: rule('metricRule', 'custom', 'sales', 'orders:read', '/analytics/alerts'),
+  metricRuleFinance: rule('metricRuleFinance', 'custom', 'payments', 'finance:read', '/analytics/alerts'),
   integrationFailed: rule('integrationFailed', 'org', 'setup', 'integrations:read', '/integrations/errors'),
   billingPastDue: rule('billingPastDue', 'org', 'payments', 'billing:read', '/plan'),
 };
+
+/** M6.2b: the custom rules (organizer-authored) and the scope key of one rule's alert. */
+export const METRIC_RULES = ['metricRule', 'metricRuleFinance'] as const satisfies readonly RuleKey[];
+export const metricScopeKey = (ruleId: string) => `m:${ruleId}`;
 
 export const isRuleKey = (v: string): v is RuleKey => (RULE_KEYS as readonly string[]).includes(v);
 

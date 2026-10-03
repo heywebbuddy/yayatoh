@@ -16,6 +16,7 @@ import { WebPushControl } from '@/components/web-push-control.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { refundPolicyLines } from '@/lib/refund-policy-text.ts';
 import { helpLinksForOrder } from '@/server/assistance.ts';
+import { hasConferenceHub } from '@/server/conference-hub.ts';
 import { getPdfRenderer } from '@/server/pdf.ts';
 import { scheduleSummary } from '@/server/schedule.ts';
 import { watchLinksForOrder } from '@/server/virtual.ts';
@@ -85,6 +86,8 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
     : new Map<string, string>();
   // M5.2b: a registration with sessions links to the attendee's schedule.
   const schedule = await scheduleSummary(token);
+  // M5.10a: a registration links to the attendee's conference hub (agenda, schedule, badge).
+  const hub = await hasConferenceHub(token);
   // M4.2b: tables bought in this order, each with its claim link for naming the guests.
   const tables = await orderTablesByManageToken(token);
   const sinceFmt = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeZone: order.event.timezone });
@@ -198,6 +201,14 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
         <Link href={`/orders/${token}/schedule`} className={buttonClass('secondary', 'lg', 'self-start')}>
           {t('mySchedule.open')}
         </Link>
+      ) : null}
+      {hub ? (
+        <div className="flex flex-col gap-1">
+          <Link href={`/orders/${token}/hub`} className={buttonClass('secondary', 'lg', 'self-start')}>
+            {t('conferenceHub.orderLink')}
+          </Link>
+          <p className="m-0 text-caption text-ink-2">{t('conferenceHub.orderLinkHint')}</p>
+        </div>
       ) : null}
       {order.tickets.length > 0 ? (
         <section aria-labelledby="tickets-heading" className="flex flex-col gap-4">

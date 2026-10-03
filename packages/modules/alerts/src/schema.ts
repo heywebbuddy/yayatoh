@@ -55,6 +55,8 @@ export const alerts = tenantTable(
     notifyCount: integer('notify_count').notNull().default(0),
     reopenCount: integer('reopen_count').notNull().default(0),
     evaluatedAt: ts('evaluated_at').notNull().defaultNow(),
+    /** M6.2b: an organizer rule's name (custom rules only; the organizer's own words). */
+    title: text('title'),
   },
   (t) => [
     uniqueIndex('alerts_org_rule_scope_key').on(t.orgId, t.rule, t.scopeKey),
@@ -64,7 +66,11 @@ export const alerts = tenantTable(
     check('alerts_category_check', inList('category', ALERT_CATEGORIES)),
     check('alerts_severity_check', inList('severity', SEVERITIES)),
     check('alerts_state_check', inList('state', ALERT_STATES)),
-    check('alerts_scope_check', sql`scope_key = coalesce(event_id::text, 'org')`),
+    check(
+      'alerts_scope_check',
+      sql`scope_key = coalesce(event_id::text, 'org') or (rule in ('metricRule', 'metricRuleFinance') and event_id is null and scope_key ~ '^m:[0-9a-f-]{36}$')`,
+    ),
+    check('alerts_title_check', sql`title is null or length(title) between 1 and 80`),
     check('alerts_count_check', sql`count >= 0 and notify_count >= 0 and reopen_count >= 0`),
     check('alerts_params_check', sql`jsonb_typeof(params) = 'object'`),
     check('alerts_snooze_check', sql`state <> 'snoozed' or snoozed_until is not null`),

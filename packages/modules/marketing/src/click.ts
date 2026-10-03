@@ -13,6 +13,7 @@ export {
   verifyClickToken,
 } from './domain/click-token.ts';
 export { type DestinationProblem, destinationProblem, redirectTarget } from './domain/destination.ts';
+export { referralUtm } from './domain/referral.ts';
 export {
   cleanUtmValue,
   decodeUtmCookie,

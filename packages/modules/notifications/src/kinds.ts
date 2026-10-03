@@ -468,6 +468,29 @@ export const KINDS = {
     urgent: true,
     params: ['rule', 'count', 'severity', 'eventName'],
   },
+  // M6.2b: an organizer-authored alert rule (analytics) fired, through the alerts engine's
+  // routing (in-app, email, push; no texts). `alerts.metric` waits out quiet hours in the
+  // recipient's time zone (the rule's default); `alerts.metric-now` goes at once.
+  'alerts.metric': {
+    category: 'transactional',
+    channels: ['in_app', 'email', 'push'],
+    urgent: false,
+    params: ['title', 'reading', 'windowDays', 'severity'],
+  },
+  'alerts.metric-now': {
+    category: 'transactional',
+    channels: ['in_app', 'email', 'push'],
+    urgent: true,
+    params: ['title', 'reading', 'windowDays', 'severity'],
+  },
+  // M6.2b: a scheduled analytics report (PDF) for a period is ready; the button opens it in the
+  // console (members only; the PDF is in the member's language).
+  'analytics.report': {
+    category: 'transactional',
+    channels: ['in_app', 'email'],
+    urgent: true,
+    params: ['name', 'period'],
+  },
   'notifications.test': {
     category: 'transactional',
     channels: ['in_app', 'push'],

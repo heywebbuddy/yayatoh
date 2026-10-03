@@ -1,4 +1,6 @@
 export { addContactCommand } from './add-contact.ts';
+// M5.6b: the consent row behind an exhibitor email share (status and version).
+export { currentConsentEntryTx } from './consent-entry.ts';
 export {
   type ConsentInput,
   consentSummaryTx,

@@ -339,6 +339,21 @@
     "badges.kiosk-code": {
       "subject": "{code} は {eventName} のバッジキオスク用コードです",
       "intro": "バッジキオスクで {code} を入力すると、登録内容を確認してバッジを印刷できます。コードは1回限り有効で、{minutes, plural, other {#分}}後に期限切れになります。心当たりがない場合は、このメールを無視してください。"
+    },
+    "alerts.metric": {
+      "subject": "アラートルール「{title}」が発動しました",
+      "intro": "{reading, select, none {{org} のアラートルール「{title}」は発動中のままです。} other {{org} のアラートルール「{title}」が発動しました：直近 {windowDays, plural, other {# 日間}}で {reading}。}} 開いて確認するか、スヌーズしてください。",
+      "cta": "アラートを開く"
+    },
+    "alerts.metric-now": {
+      "subject": "アラートルール「{title}」が発動しました",
+      "intro": "{reading, select, none {{org} のアラートルール「{title}」は発動中のままです。} other {{org} のアラートルール「{title}」が発動しました：直近 {windowDays, plural, other {# 日間}}で {reading}。}} 開いて確認するか、スヌーズしてください。",
+      "cta": "アラートを開く"
+    },
+    "analytics.report": {
+      "subject": "レポート「{name}」：{period}",
+      "intro": "{org} のレポート「{name}」（{period}）の準備ができました。開いて PDF をダウンロードしてください。",
+      "cta": "PDF をダウンロード"
     }
   },
   "roles": {

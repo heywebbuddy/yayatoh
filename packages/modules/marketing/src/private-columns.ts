@@ -35,4 +35,11 @@ export const privateColumns = columnPrivacy('marketing', {
     first_utm_campaign: internal(),
   },
   attribution_settings: { updated_by: internal() },
+  // M6.2b: an order's touch path (console-only like the attribution record).
+  attribution_touches: {
+    kind: 'vocab',
+    source: internal(),
+    medium: internal(),
+    campaign: internal(),
+  },
 });

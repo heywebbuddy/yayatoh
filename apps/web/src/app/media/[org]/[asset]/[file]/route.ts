@@ -1,8 +1,7 @@
-import { createCtx } from '@yayatoh/kernel';
 import { CONTENT_TYPES, FILE_NAME, readVariant, serveTarget, type VariantFormat } from '@yayatoh/media';
 import { publicUnderlayShown } from '@yayatoh/seating';
-import { memberRole } from '@yayatoh/tenancy';
-import { getSession, sessionOpensOrg } from '@/server/session.ts';
+import { orgActor } from '@/server/org-actor.ts';
+import { getSession } from '@/server/session.ts';
 import { currentAccess } from '@/server/visitor.ts';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
@@ -47,9 +46,9 @@ async function allowedPrivately(orgId: string, eventId: string | null, visibilit
   }
   const session = await getSession();
   if (!session) return false;
-  // Staff acting as a member (M1.2e) see only the org they started from.
-  if (!sessionOpensOrg(session, orgId)) return false;
-  return (await memberRole(createCtx({ orgId, actor: { type: 'user', userId: session.userId } }))) !== null;
+  // Staff acting as a member (M1.2e) see only the org they started from; an agency (M6.7a) sees
+  // the client's private images while its grant is live.
+  return (await orgActor(orgId, session)) !== null;
 }
 
 export async function GET(

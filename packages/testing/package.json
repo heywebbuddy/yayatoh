@@ -11,6 +11,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@yayatoh/agency": "workspace:*",
     "@yayatoh/ai": "workspace:*",
     "@yayatoh/alerts": "workspace:*",
     "@yayatoh/analytics": "workspace:*",
@@ -38,6 +39,7 @@
     "@yayatoh/guests": "workspace:*",
     "@yayatoh/integrations": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
+    "@yayatoh/leads": "workspace:*",
     "@yayatoh/marketing": "workspace:*",
     "@yayatoh/marketplace": "workspace:*",
     "@yayatoh/media": "workspace:*",

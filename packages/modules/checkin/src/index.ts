@@ -99,12 +99,14 @@ export {
 // M5.8b: networking chat reports → chat_abuse signals.
 export { networkChatSignal, networkChatSignals } from './network-chat-signals.ts';
 export { privateColumns } from './private-columns.ts';
+// M5.6b: lead capture reads a badge the way the door does (yy1, short code, legacy QR).
 export {
   admissionsForTicketsTx,
   admittedTicketIdsSql,
   admittedTicketIdsTx,
   CheckinStatusDto,
   checkinStatusQuery,
+  resolveCode,
   ScanOutcomeDto,
   scanLogForTicketsTx,
   scanTicketCommand,

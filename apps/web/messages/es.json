@@ -51,7 +51,11 @@
       "coupon": "Cupón",
       "page": "Página o entrada de blog"
     },
-    "help": "Ayuda"
+    "help": "Ayuda",
+    "clientsSection": "Clientes",
+    "viaAgency": "vía {agency}",
+    "agencyBadgeLabel": "Estás trabajando en {org} para {agency}",
+    "backToAgency": "Volver a {agency}"
   },
   "notifications": {
     "open": "Notificaciones",
@@ -172,7 +176,9 @@
       "alerts": {
         "alert": "Alerta",
         "alert-text": "SMS de alerta",
-        "alert-urgent-text": "SMS de alerta urgente"
+        "alert-urgent-text": "SMS de alerta urgente",
+        "metric": "Regla de alerta",
+        "metric-now": "Regla de alerta (envío inmediato)"
       },
       "campaigns": {
         "test": "Prueba de campaña"
@@ -217,6 +223,9 @@
       },
       "badges": {
         "kiosk-code": "Código del quiosco de credenciales"
+      },
+      "analytics": {
+        "report": "Informe programado"
       }
     },
     "status": {
@@ -385,7 +394,9 @@
     "webhooks": "Webhooks",
     "sandboxes": "Entornos de prueba",
     "notifications": "Notificaciones",
-    "sso": "Inicio de sesión único"
+    "sso": "Inicio de sesión único",
+    "agency": "Clientes",
+    "agencies": "Agencias"
   },
   "vocab": {
     "attendee": "Asistente",
@@ -414,7 +425,13 @@
     "box_office": "Taquilla",
     "scanner": "Control de acceso",
     "viewer": "Solo lectura",
-    "collaborator": "Colaborador de evento"
+    "collaborator": "Colaborador de evento",
+    "agency_manager": "Gestor de agencia",
+    "agency_manager_finance": "Gestor de agencia (finanzas)",
+    "agency_marketing": "Marketing de agencia",
+    "agency_marketing_finance": "Marketing de agencia (finanzas)",
+    "agency_viewer": "Lector de agencia",
+    "agency_viewer_finance": "Lector de agencia (finanzas)"
   },
   "profiles": {
     "wedding": "Boda",
@@ -762,7 +779,8 @@
     "reference": "Referencia: {id}",
     "rateLimitedRetry": "Demasiados intentos. Vuelve a intentarlo en {minutes, plural, one {# minuto} other {# minutos}}.",
     "impersonation_blocked": "El personal que actúa como miembro no puede hacer esto: los reembolsos, pagos, exportaciones, eliminaciones y confirmaciones están desactivados.",
-    "read_only_freeze": "Los cambios están en pausa durante el mantenimiento programado. No se guardó nada; inténtalo de nuevo cuando termine."
+    "read_only_freeze": "Los cambios están en pausa durante el mantenimiento programado. No se guardó nada; inténtalo de nuevo cuando termine.",
+    "read_only_billing": "Esta organización está en solo lectura hasta que se pague su suscripción. No se guardó ni se borró nada."
   },
   "notFound": {
     "title": "Página no encontrada",
@@ -2146,7 +2164,8 @@
       "cards": "Tarjetas y exportaciones",
       "selection": "Mejor disponible",
       "channels": "Canales",
-      "revisions": "Revisiones"
+      "revisions": "Revisiones",
+      "solver": "Sentar automáticamente"
     },
     "assign": {
       "title": "Asignar invitados",
@@ -2729,6 +2748,134 @@
       "isCurrent": "Este es el plano tal como está ahora.",
       "restore": "Restaurar la revisión {number}",
       "restoredNotice": "Revisión {number} restaurada. El plano actual es la revisión {now}."
+    },
+    "solver": {
+      "title": "Reglas de asientos y planificador",
+      "description": "Define reglas, deja que el planificador proponga una mesa para todos los invitados sin asiento, revisa la propuesta y acepta una mesa o todas. Los invitados que sentaste a mano nunca se mueven.",
+      "rules": {
+        "heading": "Reglas",
+        "listLabel": "Reglas de asientos",
+        "empty": "Aún no hay reglas. Añade una abajo o ejecuta el planificador sin reglas: igualmente mantiene cada mesa dentro de sus asientos.",
+        "hard": "Obligatoria",
+        "soft": "Flexible",
+        "badge": "{strength} · peso {weight}",
+        "strength": "Tipo",
+        "strengthHint": "Una propuesta nunca incumple una regla obligatoria. Las flexibles se cumplen cuando se puede; cada incumplimiento cuesta su peso.",
+        "weight": "Peso",
+        "weightHint": "De 1 a 10. Las reglas flexibles con más peso importan más.",
+        "save": "Guardar",
+        "remove": "Quitar",
+        "saved": "Regla guardada.",
+        "removed": "Regla quitada.",
+        "added": "Regla añadida.",
+        "editLabel": "Cambiar regla: {rule}",
+        "kinds": {
+          "keep_together": "Mantener juntos",
+          "keep_apart": "Mantener separados",
+          "vip_near_stage": "VIP más cerca del escenario",
+          "access_near_exit": "Accesibilidad cerca de las salidas",
+          "table_max": "Máximo por mesa"
+        },
+        "add": {
+          "heading": "Añadir una regla",
+          "kind": "Regla",
+          "by": "Quién",
+          "byEach": "Cada grupo",
+          "byParty": "Un grupo",
+          "byTag": "Todos con una etiqueta",
+          "bySide": "Todos de un lado",
+          "party": "Grupo",
+          "tag": "Etiqueta",
+          "side": "Lado",
+          "choose": "Elegir…",
+          "together": "Mantener juntos",
+          "first": "Primer grupo",
+          "second": "Segundo grupo",
+          "accessTag": "Etiqueta para necesidades de accesibilidad",
+          "accessHint": "Los grupos con esta etiqueta se sientan en las mesas más cercanas a una salida o entrada. Las respuestas sobre accesibilidad siguen siendo privadas.",
+          "max": "Personas por mesa como máximo",
+          "vipHint": "Los grupos VIP se sientan en las mesas más cercanas al escenario.",
+          "submit": "Añadir regla"
+        },
+        "errors": {
+          "value": "Elige a quién se aplica la regla.",
+          "same": "Elige dos grupos distintos.",
+          "weight": "Introduce un peso de 1 a 10.",
+          "max": "Introduce un número de 1 a 40.",
+          "duplicate": "Este evento ya tiene esa regla.",
+          "tooMany": "Un evento puede tener como máximo 50 reglas.",
+          "unknownParty": "Ese grupo no está en esta lista de invitados."
+        },
+        "describe": {
+          "togetherParty": "Mantener juntos a cada grupo",
+          "togetherTag": "Mantener juntos a todos con la etiqueta «{value}»",
+          "togetherSide": "Mantener junto el lado {value}",
+          "apart": "Mantener a {a} separados de {b}",
+          "targetParty": "{value}",
+          "targetTag": "todos con la etiqueta «{value}»",
+          "targetSide": "el lado {value}",
+          "vip": "Grupos VIP más cerca del escenario",
+          "access": "Invitados con la etiqueta «{tag}» cerca de una salida",
+          "tableMax": "Como máximo {max} personas por mesa"
+        }
+      },
+      "run": {
+        "heading": "Propuesta",
+        "queue": "{count, plural, one {# invitado} other {# invitados}} por sentar. {fixed, plural, =0 {Aún no hay nadie sentado.} one {# invitado sentado a mano se queda donde está.} other {# invitados sentados a mano se quedan donde están.}}",
+        "nothing": "Todos tienen asiento. No hay nada que proponer.",
+        "seed": "Número de disposición",
+        "seedHint": "El mismo número siempre da la misma propuesta.",
+        "seedError": "Introduce un número entero de 1 a 1.000.000.",
+        "start": "Proponer asientos",
+        "cancel": "Detener",
+        "again": "Probar otra disposición",
+        "running": "Preparando una propuesta… {percent} %",
+        "progress": "Progreso de la propuesta",
+        "cancelled": "Detenido. No se propuso nada.",
+        "failed": "El planificador se detuvo inesperadamente. Inténtalo de nuevo."
+      },
+      "summary": {
+        "heading": "Resumen",
+        "done": "Propuesta lista en {seconds} s (disposición {seed}).",
+        "seated": "{count, plural, one {# invitado} other {# invitados}} en {tables, plural, one {# mesa} other {# mesas}}; {queue, plural, =0 {nadie queda en la cola} one {# invitado queda en la cola} other {# invitados quedan en la cola}}.",
+        "hardOk": "No se incumple ninguna regla obligatoria.",
+        "hardBroken": "{count, plural, one {Se incumple # regla obligatoria} other {Se incumplen # reglas obligatorias}}. Cambia la propuesta antes de aceptarla.",
+        "soft": "Reglas flexibles: penalización {penalty} (0 es lo mejor).",
+        "ruleLine": "{rule}: {count, plural, =0 {cumplida} one {# incumplimiento} other {# incumplimientos}}",
+        "issues": {
+          "no_stage": "El plano no tiene escenario, así que «VIP más cerca del escenario» no se puede aplicar.",
+          "no_exit": "El plano no tiene salida ni entrada, así que «Accesibilidad cerca de las salidas» no se puede aplicar.",
+          "group_too_big": "Un grupo de {size} es más grande que cualquier mesa ({room} asientos). Se reparte en el menor número de mesas posible.",
+          "too_few_seats": "Hay {size} invitados por sentar pero solo {room} asientos libres: algunos quedan en la cola.",
+          "no_room": "El plano no tiene mesas ni filas."
+        }
+      },
+      "tables": {
+        "heading": "Mesas propuestas",
+        "none": "No se propone ninguna mesa.",
+        "region": "Mesa {label}",
+        "fill": "{proposed} propuestos · {seated} sentados · {free} de {capacity} libres",
+        "overFull": "{count, plural, one {# invitado de más} other {# invitados de más}} para los asientos libres.",
+        "broken": "Incumple una regla obligatoria: {rules}",
+        "over": "Más invitados que asientos",
+        "accept": "Aceptar la mesa {label}",
+        "acceptAll": "Aceptar todas las mesas",
+        "fixFirst": "Corrige primero las mesas con una advertencia.",
+        "acceptedTable": "Mesa {label} aceptada: {count, plural, one {# invitado sentado} other {# invitados sentados}}.",
+        "acceptedAll": "Propuesta aceptada: {count, plural, one {# invitado sentado} other {# invitados sentados}}.",
+        "queueHeading": "En la cola",
+        "guest": "{name} ({party})",
+        "moveLabel": "Mesa para {name}",
+        "queueOption": "Dejar en la cola",
+        "optionFree": "Mesa {label} ({free} libres)",
+        "toEditor": "Abrir el editor de asientos"
+      },
+      "acceptErrors": {
+        "already_seated": "Alguien de esta propuesta fue sentado a mano mientras tanto. Vuelve a proponer.",
+        "declined": "Un invitado de esta propuesta ha rechazado la invitación. Vuelve a proponer.",
+        "hard_rule": "Aceptar esto incumpliría una regla obligatoria.",
+        "cant_fit": "Solo caben {fits} más en esa mesa."
+      }
     }
   },
   "venueMap": {
@@ -7435,7 +7582,9 @@
       "guestsUnseated": "Sentar a los invitados",
       "mealsMissing": "Abrir las respuestas RSVP",
       "integrationFailed": "Abrir la bandeja de integraciones",
-      "billingPastDue": "Abrir plan y facturación"
+      "billingPastDue": "Abrir plan y facturación",
+      "metricRule": "Abrir las reglas de alerta",
+      "metricRuleFinance": "Abrir las reglas de alerta"
     },
     "rules": {
       "unseated": "{count, plural, one {Un asistente no tiene asiento} other {{countWords} asistentes no tienen asiento}}",
@@ -7473,7 +7622,9 @@
       "guestsUnseated": "{count, plural, one {Un invitado no tiene mesa} other {{countWords} invitados no tienen mesa}}",
       "mealsMissing": "{count, plural, one {Un invitado que asiste no ha elegido menú} other {{countWords} invitados que asisten no han elegido menú}}",
       "integrationFailed": "{count, plural, one {{countWords} problema de integración hoy (una sincronización fallida o una conexión perdida)} other {{countWords} problemas de integración hoy (sincronizaciones fallidas o conexiones perdidas)}}",
-      "billingPastDue": "{count, plural, one {El pago del plan está vencido} other {{countWords} pagos del plan están vencidos}}"
+      "billingPastDue": "{count, plural, one {El pago del plan está vencido} other {{countWords} pagos del plan están vencidos}}",
+      "metricRule": "La regla de alerta «{title}» se ha activado",
+      "metricRuleFinance": "La regla de alerta «{title}» se ha activado"
     },
     "widget": {
       "title": "Alertas",
@@ -15129,7 +15280,74 @@
       "ai_seating": "Asientos con IA",
       "analytics_pro": "Analítica avanzada"
     },
-    "findOwner": "Buscar un propietario o administrador"
+    "findOwner": "Buscar un propietario o administrador",
+    "usageLink": "Uso",
+    "renewalReceived": "Actualización de renovación recibida",
+    "dunning": {
+      "graceTitle": "El pago de tu suscripción no se completó",
+      "graceBody": "Todo funciona con normalidad hasta el {date}. Paga antes para seguir haciendo cambios; después, la organización pasa a solo lectura hasta que se pague.",
+      "readOnlyTitle": "Esta organización está en solo lectura",
+      "readOnlyBody": "El pago de la suscripción falló, así que los cambios están en pausa. No se ha borrado nada: puedes ver todo, exportar tus datos y escanear entradas en la puerta. Paga para recuperar los cambios al instante.",
+      "payNow": "Pagar ahora",
+      "askOwner": "Pide a un propietario o administrador de esta organización que pague.",
+      "paidTitle": "Pago recibido",
+      "paidBody": "Gracias. Los cambios vuelven a estar activos para todos en la organización.",
+      "declinedTitle": "El pago no se completó",
+      "declinedBody": "No cambió nada. Revisa la tarjeta registrada en tu proveedor de facturación e inténtalo de nuevo.",
+      "payError": "No se pudo iniciar el pago. Inténtalo de nuevo en un momento."
+    },
+    "change": {
+      "title": "Cambiar de plan",
+      "description": "Las mejoras y reducciones se aplican al instante. Solo pagas o recibes crédito por lo que queda de este periodo de facturación.",
+      "discountCharity": "Tu perfil de organización benéfica verificado te da un {percent} % de descuento en todos los planes.",
+      "discountStaff": "Tu organización tiene un descuento sin ánimo de lucro del {percent} % en todos los planes.",
+      "legend": "Planes",
+      "offer": "{plan}: {price} {interval, select, year {al año} other {al mes}}",
+      "direction": {
+        "upgrade": "Mejora",
+        "downgrade": "Reducción",
+        "switch": "Cambio",
+        "start": "Inicio"
+      },
+      "turnsOff": "{count, plural, one {Desactiva # módulo} other {Desactiva # módulos}}",
+      "chooseError": "Elige un plan para ver la vista previa.",
+      "preview": "Ver vista previa",
+      "previewTitle": "Cambiar a {plan}",
+      "previewLead": {
+        "upgrade": "Estás mejorando tu plan. Esto es lo que pagas hoy por el resto de este periodo de facturación.",
+        "downgrade": "Estás reduciendo tu plan. El tiempo no usado de tu plan actual se abona.",
+        "switch": "Cambias a un plan con el mismo precio.",
+        "start": "Tu suscripción empieza hoy."
+      },
+      "rows": {
+        "charge": "Nuevo plan, resto del periodo",
+        "credit": "Crédito por el tiempo no usado",
+        "discount": "Descuento sin ánimo de lucro",
+        "tax": "Impuestos",
+        "due": "A pagar hoy"
+      },
+      "creditKept": "Se guardan {amount} de crédito para tus próximas facturas.",
+      "nextRenewal": "Después, {amount} el {date}.",
+      "nextRenewalNoDate": "Después, {amount} cada periodo.",
+      "taxNote": "Los impuestos los calcula el proveedor de facturación a partir de los datos de facturación de tu organización.",
+      "removedTitle": "{count, plural, one {Se desactiva # módulo} other {Se desactivan # módulos}}",
+      "removedBody": "Sus datos se conservan. Vuelven tal como estaban si cambias a un plan que los incluya.",
+      "confirmRemoved": "{count, plural, one {Entiendo que este módulo se desactiva} other {Entiendo que estos módulos se desactivan}}",
+      "confirmError": "Confirma los módulos que se desactivan para continuar.",
+      "confirm": "Confirmar cambio",
+      "cancel": "Mantener mi plan",
+      "doneTitle": "Cambio de plan enviado",
+      "doneBody": "Tu proveedor de facturación confirmó el cambio. Tu plan y tus módulos están actualizados abajo.",
+      "errorTitle": "No se cambió el plan",
+      "errors": {
+        "billing_off": "La facturación no está activa para esta organización.",
+        "same_plan": "Ya tienes este plan.",
+        "validation_failed": "Elige un plan de los que se ofrecen.",
+        "provider": "El proveedor de facturación no aceptó el cambio. No se cobró nada; inténtalo de nuevo.",
+        "forbidden": "Solo los propietarios y administradores pueden cambiar el plan.",
+        "other": "Algo salió mal. No se cambió nada."
+      }
+    }
   },
   "billingPortal": {
     "eyebrow": "Facturación de prueba",
@@ -15139,7 +15357,11 @@
     "switch": "Cambiar de plan",
     "cancel": "Cancelar la suscripción",
     "back": "Volver sin cambios",
-    "chooseError": "Elige el plan al que quieres cambiar."
+    "chooseError": "Elige el plan al que quieres cambiar.",
+    "noSubscriptionError": "Este cliente aún no tiene suscripción. Elige primero un plan.",
+    "renewalLegend": "Renovación",
+    "failRenewal": "Hacer fallar el pago de renovación",
+    "stopRetrying": "Dejar de reintentar el pago"
   },
   "seatingLibrary": {
     "title": "Biblioteca de planos",
@@ -16269,6 +16491,686 @@
       "claimed_elsewhere": "Otra organización ya ha verificado este dominio.",
       "sso_unavailable": "El inicio de sesión único no está disponible en esta implementación.",
       "last_owner": "La organización necesita al menos un propietario."
+    }
+  },
+  "leads": {
+    "portal": {
+      "heading": "Captura de contactos",
+      "window": "La captura abre el {opens} y cierra el {closes} (hora del evento). Las notas y la exportación siguen disponibles hasta el {until}.",
+      "termsNeededAdmin": "Acepta las condiciones de contactos a continuación para que tu equipo pueda capturar contactos.",
+      "termsNeededStaff": "El administrador de tu expositor debe aceptar las condiciones de contactos antes de que puedas capturarlos.",
+      "why": {
+        "unlicensed": "Todavía no tienes una licencia de contactos. Pídesela al administrador de tu expositor.",
+        "over_allowance": "Tu licencia supera el cupo de tu expositor. Pide al administrador que retire una o compre más."
+      },
+      "open": "Abrir la captura de contactos"
+    },
+    "license": {
+      "licensed": "Con licencia",
+      "unlicensed": "Sin licencia",
+      "over_allowance": "Por encima del cupo"
+    },
+    "capture": {
+      "not_open": "Captura aún no abierta",
+      "open": "Captura abierta",
+      "closed": "Captura cerrada"
+    },
+    "terms": {
+      "heading": "Condiciones de contactos",
+      "v1": "Al escanear la acreditación de un asistente, recibes solo su nombre, cargo y empresa, y su correo solo si aceptó compartirlo. Tu empresa pasa a ser responsable de estos datos: úsalos solo para dar seguimiento a tu conversación en este evento, mantenlos seguros y elimínalos cuando te lo pidan. Los asistentes pueden ver que los escaneaste y dejar de compartir su correo.",
+      "accepted": "Condiciones de contactos aceptadas",
+      "acceptLabel": "Aceptación",
+      "accept": "Acepto las condiciones de contactos en nombre de {exhibitor}",
+      "submit": "Aceptar las condiciones de contactos",
+      "acceptRequired": "Marca la casilla para aceptar las condiciones de contactos."
+    },
+    "settings": {
+      "heading": "Calificadores y visibilidad",
+      "qualifiers": "Calificadores",
+      "qualifiersHint": "Uno por línea, hasta 10 (por ejemplo: Presupuesto aprobado). Tu equipo los marca en cada contacto.",
+      "visibility": "Quién ve los contactos",
+      "teamVisibility": "El personal ve los contactos de todo el equipo (si no, solo los que escaneó)",
+      "save": "Guardar la configuración de contactos",
+      "saved": "Configuración de contactos guardada.",
+      "qualifiersInvalid": "Cada calificador puede tener como máximo 60 caracteres.",
+      "tooMany": "Puedes tener como máximo 10 calificadores."
+    },
+    "export": {
+      "heading": "Exportar contactos",
+      "ready": "Confirmado. Ya puedes descargar tus contactos.",
+      "count": "{count, plural, =0 {Aún no hay contactos} one {# contacto} other {# contactos}}",
+      "hint": "Por tu seguridad, te enviamos un código por correo para confirmar que eres tú antes de la descarga.",
+      "download": "Descargar contactos (CSV)",
+      "ended": "El acceso a los contactos de este evento ha terminado.",
+      "columns": {
+        "name": "Nombre",
+        "jobTitle": "Cargo",
+        "company": "Empresa",
+        "email": "Correo",
+        "rating": "Valoración",
+        "qualifiers": "Calificadores",
+        "notes": "Notas",
+        "capturedAt": "Escaneado el",
+        "scannedBy": "Escaneado por",
+        "scans": "Escaneos",
+        "sharedFields": "Campos compartidos",
+        "emailConsentVersion": "Versión del consentimiento de correo"
+      }
+    },
+    "confirm": {
+      "title": "Confirma que eres tú",
+      "intro": "Para descargar tus contactos, confirma con un código que enviamos a {email}."
+    },
+    "attendee": {
+      "heading": "Quién escaneó mi acreditación",
+      "emptyTitle": "Nadie ha escaneado tu acreditación todavía",
+      "emptyDescription": "Cuando un expositor escanee tu acreditación, lo verás aquí.",
+      "scannedAt": "Escaneado el {time}",
+      "emailShared": "Tiene tu correo",
+      "emailWithdrawn": "Se dejó de compartir el correo",
+      "emailNotShared": "Correo no compartido",
+      "withdraw": "Dejar de compartir mi correo con {exhibitor}",
+      "withdrawn": "Listo. Ya no ven tu correo.",
+      "sharingOn": "Los expositores que escanean tu acreditación reciben tu correo.",
+      "sharingOff": "Los expositores que escanean tu acreditación no reciben tu correo.",
+      "sharingHint": "Siempre reciben tu nombre, cargo y empresa. Nunca tu teléfono ni tu dirección.",
+      "turnOff": "Dejar de compartir mi correo con los expositores",
+      "turnOn": "Compartir mi correo con los expositores que escaneen mi acreditación",
+      "saved": "Guardado."
+    },
+    "app": {
+      "pageTitle": "Captura de contactos",
+      "loading": "Cargando…",
+      "signedOutTitle": "Inicia sesión para capturar contactos",
+      "signedOutDescription": "Abre en este dispositivo el enlace de acceso del correo de invitación de expositor y vuelve a la captura de contactos.",
+      "openPortal": "Ir al portal de expositores",
+      "title": "Contactos de {exhibitor}",
+      "online": "En línea",
+      "offline": "Sin conexión: los escaneos se guardan en este dispositivo",
+      "queued": "{count, plural, =0 {Todo sincronizado} one {# escaneo pendiente de sincronizar} other {# escaneos pendientes de sincronizar}}",
+      "modes": "Vistas de la captura de contactos",
+      "viewScan": "Escanear",
+      "viewLeads": "{count, plural, =0 {Contactos} other {Contactos (#)}}",
+      "blockedTitle": "Ahora no puedes capturar contactos",
+      "blocked": {
+        "unlicensed": "No tienes licencia de contactos. Pídesela al administrador de tu expositor.",
+        "over_allowance": "Tu licencia supera el cupo de tu expositor. Consulta al administrador.",
+        "termsAdmin": "Primero acepta las condiciones de contactos en el portal de expositores.",
+        "termsStaff": "El administrador de tu expositor debe aceptar primero las condiciones de contactos.",
+        "notOpen": "La captura abre el {time}.",
+        "closed": "La captura cerró el {time}. Aún puedes leer y editar tus contactos."
+      },
+      "codeLabel": "Código de la acreditación",
+      "codeHint": "Escanea el QR de la acreditación o escribe el código impreso debajo.",
+      "save": "Guardar contacto",
+      "camera": "Escanear con la cámara",
+      "stopCamera": "Detener la cámara",
+      "cameraFailed": "No se pudo iniciar la cámara. Escribe el código de la acreditación.",
+      "refusals": {
+        "no_license": "No tienes licencia de contactos. Pídesela al administrador de tu expositor.",
+        "over_allowance": "Tu licencia supera el cupo de tu expositor. Tus escaneos esperan en este dispositivo.",
+        "terms_not_accepted": "Las condiciones de contactos aún no se han aceptado. Tus escaneos esperan en este dispositivo.",
+        "access_ended": "El acceso a los contactos de este evento ha terminado.",
+        "other": "Algo salió mal. Tus escaneos esperan en este dispositivo; inténtalo de nuevo."
+      },
+      "result": {
+        "queued": "Guardado en este dispositivo",
+        "queuedHint": "Los detalles aparecen al sincronizar.",
+        "refused": "No guardado",
+        "captured": "Contacto guardado",
+        "rescanned": "Ya era un contacto: escaneo añadido"
+      },
+      "reasons": {
+        "invalid": "No se puede leer esta acreditación. Revisa el código e inténtalo de nuevo.",
+        "wrong_event": "Esta acreditación es de otro evento.",
+        "not_open": "Se escaneó antes de que abriera la captura.",
+        "closed": "Se escaneó después de que cerrara la captura."
+      },
+      "emailWithdrawn": "El asistente dejó de compartir su correo el {time}",
+      "emailNotShared": "Correo no compartido",
+      "capturedAt": "Escaneado el {time}{count, plural, one {} other { · # escaneos}}",
+      "scannedBy": "por {email}",
+      "editLabel": "Detalles del contacto",
+      "rating": "Valoración",
+      "ratings": {
+        "hot": "Caliente",
+        "warm": "Tibio",
+        "cold": "Frío",
+        "none": "Sin valoración"
+      },
+      "qualifiers": "Calificadores",
+      "notes": "Notas",
+      "saveDetails": "Guardar detalles",
+      "saved": "Guardado.",
+      "savedQueued": "Guardado con el escaneo. Se sincroniza cuando tengas conexión.",
+      "needsConnection": "Conéctate a internet para guardar cambios en este contacto.",
+      "saveFailed": "No se pudo guardar. Inténtalo de nuevo.",
+      "accessEnded": "El acceso a los contactos de este evento ha terminado.",
+      "scope": {
+        "all": "Todos los contactos de {exhibitor}",
+        "team": "Los contactos de tu equipo",
+        "own": "Tus contactos"
+      },
+      "emptyTitle": "Aún no hay contactos",
+      "emptyDescription": "Escanea una acreditación en la pestaña Escanear para guardar tu primer contacto.",
+      "search": "Buscar contactos",
+      "noMatch": "Ningún contacto coincide con tu búsqueda.",
+      "edit": "Editar a {name}"
+    }
+  },
+  "conferenceHub": {
+    "metaTitle": "Espacio del congreso",
+    "eyebrow": "Tu espacio del congreso",
+    "for": "Para {name}",
+    "whose": "Espacio de quién",
+    "orderLink": "Abrir mi espacio del congreso",
+    "orderLinkHint": "Agenda, tu horario, tu acreditación y tu calendario, en el móvil.",
+    "noRegistrantTitle": "No hay inscripción en este pedido",
+    "noRegistrantDescription": "El espacio del congreso pertenece a una inscripción. Abre el pedido con el que te inscribiste.",
+    "backToOrder": "Volver a mi pedido",
+    "offline": "No tienes conexión. Esta es la copia guardada en tu móvil.",
+    "privateLink": "Esta página es privada: cualquiera con su enlace puede verla y cambiar tu horario. No la compartas.",
+    "tabs": {
+      "label": "Secciones del espacio",
+      "today": "Hoy",
+      "schedule": "Mi horario",
+      "agenda": "Agenda",
+      "badge": "Acreditación"
+    },
+    "today": {
+      "now": "Ahora mismo",
+      "next": "A continuación",
+      "fromSchedule": "Según tu horario.",
+      "fromAgenda": "Según la agenda. Marca sesiones con una estrella para hacerla tuya.",
+      "nothingNow": "No hay nada ahora mismo.",
+      "nothingNextTitle": "Nada próximamente",
+      "nothingNextDescription": "Explora la agenda para marcar sesiones e inscribirte en las opcionales.",
+      "openAgenda": "Abrir la agenda",
+      "pollsAndQa": "Encuestas y preguntas",
+      "more": "Tus herramientas",
+      "badgeTitle": "Tu acreditación",
+      "badgeDescription": "Muestra el código QR en la entrada y en el registro de las sesiones.",
+      "showBadge": "Mostrar mi acreditación",
+      "networkingTitle": "Networking",
+      "networkingDescription": "Encuentra a otros asistentes, conecta y reserva reuniones.",
+      "openNetworking": "Abrir networking",
+      "calendarTitle": "Tu calendario",
+      "calendarDescription": "Añade tu horario al calendario del móvil. Se actualiza cuando las sesiones cambian de hora.",
+      "openCalendar": "Añadir a mi calendario"
+    },
+    "summary": "Inscripciones: {enrolled} · Favoritas: {favorites} · Solapamientos: {conflicts}",
+    "agendaIntro": "Marca las sesiones a las que quieres ir. Las sesiones opcionales requieren inscripción.",
+    "conflict": "Se solapa con {titles}",
+    "emptyScheduleTitle": "Tu horario está vacío",
+    "emptyScheduleDescription": "Marca sesiones en la agenda o inscríbete en las opcionales y aparecerán aquí.",
+    "emptyAgendaTitle": "Todavía no hay sesiones",
+    "emptyAgendaDescription": "El organizador aún no ha añadido sesiones para tu inscripción. Vuelve pronto.",
+    "favorite": {
+      "star": "Marcar",
+      "starred": "Marcada",
+      "starNamed": "Marcar {title}",
+      "unstarNamed": "Quitar la estrella de {title}",
+      "pill": "Favorita",
+      "added": "{title} está en tu horario.",
+      "removed": "{title} ya no está en tu horario.",
+      "replaced": "Marcada. Favoritas solapadas eliminadas: {count}.",
+      "tooMany": "Has marcado el máximo de sesiones permitido. Quita una estrella primero.",
+      "conflictTitle": "Se solapa con tu horario",
+      "conflictEnrolled": "{title} (inscrito)",
+      "conflictFavorite": "{title} (marcada)",
+      "keepBoth": "Mantener ambas",
+      "replace": "Reemplazar",
+      "cancel": "Cancelar"
+    },
+    "calendar": {
+      "title": "Calendario suscrito",
+      "description": "Suscríbete una vez: tu aplicación de calendario actualiza el enlace, así que si una sesión cambia de hora, también cambia en tu calendario. Las sesiones con inscripción aparecen como confirmadas y las marcadas como provisionales.",
+      "subscribe": "Suscribirme en mi calendario",
+      "download": "Descargar .ics",
+      "linkLabel": "Enlace del calendario (privado)",
+      "copy": "Copiar enlace",
+      "copied": "Enlace copiado.",
+      "replace": "Reemplazar el enlace",
+      "replaceConfirmTitle": "¿Reemplazar el enlace del calendario?",
+      "replaceConfirmBody": "El enlace actual deja de funcionar al instante en todos los calendarios que lo usan. Vuelve a suscribirte con el nuevo enlace.",
+      "replaceConfirm": "Reemplazar el enlace",
+      "cancel": "Cancelar",
+      "replaced": "Hecho. El enlace anterior ya no funciona: suscríbete con el nuevo."
+    },
+    "install": {
+      "title": "Tenlo en tu móvil",
+      "button": "Añadir a la pantalla de inicio",
+      "installed": "Este espacio está en tu pantalla de inicio.",
+      "done": "Añadido a tu pantalla de inicio.",
+      "help": "En iPhone o iPad: toca Compartir y luego Añadir a pantalla de inicio. En Android: abre el menú del navegador y elige Instalar aplicación o Añadir a pantalla de inicio."
+    },
+    "badge": {
+      "title": "Tu acreditación",
+      "qrLabel": "Código QR de la acreditación de {name}",
+      "shortCode": "Código",
+      "hint": "Sube el brillo de la pantalla en la entrada.",
+      "noneTitle": "Aún no hay acreditación",
+      "noneDescription": "Tu acreditación aparecerá aquí cuando se confirme tu inscripción."
+    }
+  },
+  "billingUsage": {
+    "title": "Uso",
+    "subtitle": "Lo que usó tu organización, por medidor: mensajes, créditos de IA y dispositivos de escaneo.",
+    "breadcrumb": "Ruta de navegación",
+    "period": "Este mes: del {start} al {end} ({zone})",
+    "filterLabel": "Medidores",
+    "allMeters": "Todos los medidores",
+    "meter": {
+      "email": "Correo",
+      "sms": "SMS",
+      "whatsapp": "WhatsApp",
+      "ai_credits": "Créditos de IA",
+      "devices": "Dispositivos de escaneo"
+    },
+    "unit": {
+      "email": "{count, plural, one {# correo enviado} other {# correos enviados}}",
+      "sms": "{count, plural, one {# segmento de texto} other {# segmentos de texto}}",
+      "whatsapp": "{count, plural, one {# mensaje enviado} other {# mensajes enviados}}",
+      "ai_credits": "{count, plural, one {# crédito usado} other {# créditos usados}}",
+      "devices": "{count, plural, one {# dispositivo registrado} other {# dispositivos registrados}}"
+    },
+    "reportingTitle": "El uso se envía a tu proveedor de facturación",
+    "reportingBody": "{count, plural, =0 {Todo lo registrado hasta ahora ya se envió.} one {# registro está pendiente de envío.} other {# registros están pendientes de envío.}}",
+    "countingTitle": "El uso se cuenta, no se cobra nada",
+    "countingBody": "La facturación no está activa para esta organización, así que el uso solo se cuenta aquí.",
+    "currentTitle": "Este mes",
+    "currentDescription": "Contado en la zona horaria de tu organización.",
+    "historyTitle": "Meses anteriores",
+    "historyDescription": "Los últimos 12 meses con uso.",
+    "emptyTitle": "Aún no hay uso",
+    "emptyBody": "El uso aparece aquí cuando envías correos o textos, redactas con IA o registras dispositivos de escaneo.",
+    "historyEmpty": "Sin uso en meses anteriores.",
+    "month": "Mes"
+  },
+  "billingBanner": {
+    "label": "Facturación",
+    "graceTitle": "El pago de tu suscripción no se completó",
+    "graceBody": "Todo funciona hasta el {date}. Después, la organización pasa a solo lectura hasta que se pague.",
+    "readOnlyTitle": "Esta organización está en solo lectura",
+    "readOnlyBody": "El pago de la suscripción falló. No se ha borrado nada: puedes ver, exportar y escanear entradas, pero los cambios están en pausa hasta que se pague.",
+    "action": "Plan y facturación"
+  },
+  "agencies": {
+    "title": "Agencias",
+    "subtitle": "Deja que una agencia trabaje en tus eventos. Puedes retirar el acceso en cualquier momento, y la agencia nunca paga ni recibe tu dinero.",
+    "noAccessTitle": "Solo los propietarios y administradores gestionan agencias",
+    "noAccessDescription": "Pide a un propietario o administrador de esta organización que dé acceso a una agencia.",
+    "grantTitle": "Dar acceso a una agencia",
+    "agency": "Dirección de la agencia",
+    "agencyHint": "La dirección que te dio la agencia, por ejemplo bloom-events.",
+    "agencyRequired": "Introduce la dirección de la agencia.",
+    "agencyUnknown": "Ninguna agencia tiene esta dirección. Compruébala con la agencia.",
+    "agencySelf": "Una agencia no puede darse acceso a sí misma.",
+    "agencyTaken": "Esta agencia ya tiene acceso.",
+    "role": "Qué puede hacer la agencia",
+    "roleManager": "Gestionar eventos",
+    "roleManagerHint": "Crear y editar eventos, invitados, check-in y mensajes. Sin reembolsos, ventas, miembros ni ajustes.",
+    "roleMarketing": "Marketing",
+    "roleMarketingHint": "Campañas, audiencias y mensajes, y leer eventos.",
+    "roleViewer": "Solo ver",
+    "roleViewerHint": "Leer eventos, pedidos e invitados. No cambia nada.",
+    "finance": "Permitir también que la agencia lea nuestro dinero",
+    "financeHint": "Pagos, informes financieros y el libro contable, solo lectura. Desactivado salvo que lo actives.",
+    "grant": "Dar acceso",
+    "granted": "{agency} ya puede trabajar en esta organización.",
+    "listTitle": "Agencias con acceso",
+    "empty": "Ninguna agencia tiene acceso. Da acceso a una arriba cuando trabajes con una agencia.",
+    "emptyReadOnly": "Ninguna agencia tiene acceso.",
+    "agencyColumn": "Agencia",
+    "roleColumn": "Acceso",
+    "financeColumn": "Dinero",
+    "grantedColumn": "Desde",
+    "actions": "Acciones",
+    "financeOn": "Puede leer",
+    "financeOff": "Sin acceso",
+    "revoke": "Retirar",
+    "revokeNamed": "Retirar el acceso de {agency}",
+    "revoked": "{agency} ya no tiene acceso.",
+    "financeEnable": "Permitir dinero",
+    "financeEnableNamed": "Permitir que {agency} lea nuestro dinero",
+    "financeDisable": "Bloquear dinero",
+    "financeDisableNamed": "Impedir que {agency} lea nuestro dinero",
+    "historyTitle": "Accesos anteriores",
+    "revokedColumn": "Terminó",
+    "unknownAgency": "La agencia ya no está en Yayatoh",
+    "roleLabel": "{role, select, manager {Gestionar eventos} marketing {Marketing} viewer {Solo ver} other {Acceso}}"
+  },
+  "agency": {
+    "title": "Clientes",
+    "subtitle": "Todos los clientes que dieron acceso a {agency}. Las cifras salen de instantáneas: actualízalas para ponerlas al día.",
+    "tabs": "Secciones de la agencia",
+    "tab": {
+      "clients": "Clientes",
+      "events": "Eventos",
+      "marketing": "Marketing",
+      "reports": "Informes"
+    },
+    "refresh": "Actualizar cifras",
+    "refreshed": "Cifras actualizadas para {count, plural, =0 {ningún cliente} one {# cliente} other {# clientes}}.",
+    "notRefreshed": "Aún sin actualizar",
+    "emptyTitle": "Aún no hay clientes",
+    "emptyDescription": "Pide a tu cliente que abra Agencias en su consola de Yayatoh y dé acceso a {address}.",
+    "noAccessTitle": "Las páginas de agencia son para miembros de la agencia",
+    "noAccessDescription": "Pide acceso a un propietario de {agency}.",
+    "client": "Cliente",
+    "nextEvent": "Próximo evento",
+    "noNextEvent": "Nada programado",
+    "upcoming": "Próximos eventos",
+    "orders": "Pedidos",
+    "tickets": "Entradas",
+    "checkins": "Registrados",
+    "checkinRate": "Tasa de check-in",
+    "open": "Abrir",
+    "openNamed": "Abrir {client}",
+    "finance": "con dinero",
+    "eventsTitle": "Eventos de todos los clientes",
+    "eventsEmpty": "Tus clientes aún no tienen eventos próximos ni recientes.",
+    "event": "Evento",
+    "starts": "Empieza",
+    "status": "Estado",
+    "gross": "Ventas brutas",
+    "grossHidden": "No compartido",
+    "grossHiddenHint": "Las ventas brutas solo aparecen para los clientes que te dejan leer su dinero.",
+    "openEventNamed": "Abrir {event} de {client}",
+    "marketingTitle": "Marketing, últimos 30 días",
+    "marketingEmpty": "Aún no hay clientes.",
+    "campaigns": "Campañas",
+    "sends": "Enviados",
+    "deliveries": "Entregados",
+    "clicks": "Clics",
+    "uniqueClickers": "Personas que hicieron clic",
+    "conversion": "Conversión",
+    "reportsTitle": "Totales de todos los clientes",
+    "clientsCount": "Clientes",
+    "eventsTotal": "Eventos",
+    "revenue": "Ventas brutas",
+    "revenueFrom": "De {count, plural, one {# cliente} other {# clientes}} que comparten su dinero",
+    "revenueNone": "Ningún cliente comparte su dinero contigo.",
+    "perClient": "Por cliente",
+    "eventStatus": {
+      "draft": "Borrador",
+      "published": "Publicado",
+      "postponed": "Aplazado",
+      "cancelled": "Cancelado",
+      "completed": "Finalizado",
+      "archived": "Archivado"
+    },
+    "refreshedAt": "Actualizado"
+  },
+  "analyticsPro": {
+    "tabs": {
+      "label": "Secciones de análisis",
+      "overview": "Resumen",
+      "explore": "Explorar",
+      "alerts": "Reglas de alerta",
+      "reports": "Informes"
+    },
+    "explore": {
+      "title": "Explorar",
+      "description": "Elige una medida y cómo desglosarla. La atribución muestra qué campañas, canales y fuentes llevaron a ventas.",
+      "form": "Elige qué mostrar",
+      "measure": "Medida",
+      "groupCounts": "Recuentos",
+      "groupMoney": "Dinero",
+      "groupAttribution": "Atribución",
+      "measures": {
+        "registrations": "Inscripciones",
+        "tickets": "Entradas vendidas (netas)",
+        "comp_tickets": "Entradas gratuitas",
+        "refunded_tickets": "Entradas reembolsadas",
+        "checkins": "Registros de entrada",
+        "no_shows": "Ausencias",
+        "attributed_orders": "Pedidos atribuidos",
+        "gross": "Pagado",
+        "refunds": "Reembolsado",
+        "net": "Ventas netas",
+        "attributed_revenue": "Ingresos atribuidos"
+      },
+      "dimension": "Desglosar por",
+      "dimensions": {
+        "period": "Periodo",
+        "event": "Evento",
+        "channel": "Canal",
+        "source": "Fuente",
+        "campaign": "Campaña"
+      },
+      "model": "Modelo de atribución",
+      "modelHint": "Solo se usa para pedidos e ingresos atribuidos.",
+      "models": {
+        "first": "Primer contacto",
+        "last": "Último contacto",
+        "linear": "Lineal (a partes iguales)"
+      },
+      "range": "Periodo",
+      "ranges": {
+        "7d": "Últimos 7 días",
+        "30d": "Últimos 30 días",
+        "90d": "Últimos 90 días",
+        "365d": "Últimos 12 meses",
+        "custom": "Fechas personalizadas"
+      },
+      "from": "Desde",
+      "to": "Hasta",
+      "customHint": "Se usa cuando el periodo es «Fechas personalizadas».",
+      "granularity": "Mostrar por",
+      "granularities": {
+        "day": "Día",
+        "week": "Semana",
+        "month": "Mes"
+      },
+      "event": "Evento",
+      "allEvents": "Todos los eventos",
+      "apply": "Mostrar",
+      "errors": {
+        "touch_dimension": "Canal, fuente y campaña solo funcionan con pedidos o ingresos atribuidos.",
+        "custom_needs_dates": "Introduce ambas fechas para un periodo personalizado.",
+        "from_after_to": "La fecha final es anterior a la inicial.",
+        "range_too_long": "Elige un periodo de dos años o menos.",
+        "invalid_date": "Introduce las fechas como año, mes y día."
+      },
+      "resultsCaption": "{measure} por {dimension}, del {from} al {to}",
+      "total": "Total",
+      "none": "Ninguno",
+      "unnamedCampaign": "Campaña sin nombre",
+      "weekOf": "Semana del {day}",
+      "currency": "Moneda",
+      "value": "Valor",
+      "truncated": "Se muestran las primeras 500 filas. Elige un periodo más corto o un solo evento para ver el resto.",
+      "emptyTitle": "No hay nada que mostrar con esta elección",
+      "emptyBody": "No hay datos de esta medida en este periodo. Prueba con un periodo más largo, otro evento u otra medida.",
+      "emptyAction": "Mostrar los últimos 12 meses",
+      "export": "Exportar CSV",
+      "exportLabel": "Exportar estos resultados como archivo CSV",
+      "timeZoneNote": "Los días son días naturales en {timeZone}, la zona horaria de tu organización.",
+      "attributionNote": "La atribución reparte cada pedido atribuido entre las visitas que llevaron a él dentro de tu ventana de atribución: enlaces rastreados en los que se hizo clic, llegadas con valores UTM y otros sitios que enviaron al comprador. Primer contacto acredita la primera visita, último contacto la última, y lineal divide el pedido a partes iguales (el céntimo sobrante va a la última visita). Los ingresos son lo que pagó el comprador, por moneda; los pedidos sin ninguna visita registrada no se atribuyen.",
+      "saveTitle": "Guardar esta vista",
+      "viewName": "Nombre",
+      "save": "Guardar vista",
+      "saved": "Vista guardada",
+      "viewErrors": {
+        "name": "Introduce un nombre de hasta 80 caracteres.",
+        "name_taken": "Ya tienes una vista con este nombre.",
+        "too_many_views": "Tienes 50 vistas guardadas. Elimina una primero."
+      },
+      "views": "Tus vistas guardadas",
+      "noViews": "Aún no hay vistas guardadas. Elige qué mostrar arriba y guárdalo aquí para volver con un clic.",
+      "deleteView": "Eliminar",
+      "deleteViewLabel": "Eliminar la vista {name}",
+      "deleted": "Vista eliminada"
+    },
+    "rules": {
+      "title": "Reglas de alerta",
+      "description": "Recibe un aviso cuando un número cruce un límite. Las alertas de reglas llegan a tu equipo por Alertas, como las integradas.",
+      "createTitle": "Nueva regla de alerta",
+      "editTitle": "Editar regla de alerta",
+      "name": "Nombre",
+      "nameHint": "Se muestra en la alerta y en su correo.",
+      "measure": "Medida",
+      "measures": {
+        "registrations": "Inscripciones",
+        "tickets": "Entradas vendidas (netas)",
+        "refunded_tickets": "Entradas reembolsadas",
+        "checkins": "Registros de entrada",
+        "gross": "Pagado",
+        "refunds": "Reembolsado",
+        "net": "Ventas netas"
+      },
+      "condition": "Cuando",
+      "conditions": {
+        "above": "es al menos",
+        "below": "está por debajo de",
+        "rise": "sube al menos (%)",
+        "drop": "baja al menos (%)"
+      },
+      "threshold": "Umbral",
+      "thresholdHint": "Un recuento, un importe para dinero o un porcentaje para subidas y bajadas (frente al periodo anterior).",
+      "window": "Durante",
+      "windows": {
+        "d1": "Hoy",
+        "d7": "Los últimos 7 días",
+        "d14": "Los últimos 14 días",
+        "d30": "Los últimos 30 días"
+      },
+      "currency": "Moneda",
+      "currencyHint": "Las reglas de dinero comparan una sola moneda.",
+      "noCurrency": "No es dinero",
+      "event": "Evento",
+      "allEvents": "Todos los eventos",
+      "severity": "Gravedad",
+      "severities": {
+        "info": "Información",
+        "warning": "Advertencia",
+        "critical": "Crítica"
+      },
+      "quietHours": "Respetar las horas de silencio",
+      "quietHoursHint": "El correo y las notificaciones push esperan hasta las 8:00 en la zona horaria de cada destinatario si la regla se activa entre las 21:00 y las 8:00. Las alertas en la aplicación se muestran al momento.",
+      "create": "Crear regla",
+      "save": "Guardar cambios",
+      "back": "Volver a las reglas de alerta",
+      "created": "Regla creada",
+      "saved": "Cambios guardados",
+      "list": "Tus reglas",
+      "emptyTitle": "Aún no hay reglas de alerta",
+      "emptyBody": "Crea una regla arriba, por ejemplo «Los reembolsos de hoy son al menos 10». Recibirás una alerta en cuanto se cumpla.",
+      "columns": {
+        "name": "Regla",
+        "condition": "Condición",
+        "status": "Estado",
+        "lastValue": "Última lectura",
+        "actions": "Acciones"
+      },
+      "summary": "{measure} {condition} {threshold} · {window}",
+      "status": {
+        "firing": "Activada",
+        "ok": "Correcta",
+        "off": "Desactivada",
+        "new": "Aún sin comprobar"
+      },
+      "edit": "Editar",
+      "editLabel": "Editar {name}",
+      "turnOff": "Desactivar",
+      "turnOn": "Activar",
+      "turnOffLabel": "Desactivar {name}",
+      "turnOnLabel": "Activar {name}",
+      "delete": "Eliminar",
+      "deleteLabel": "Eliminar {name}",
+      "deleted": "Regla eliminada",
+      "turnedOff": "Regla desactivada",
+      "turnedOn": "Regla activada",
+      "readOnly": "Puedes ver estas reglas, pero no cambiarlas.",
+      "errors": {
+        "name": "Introduce un nombre de hasta 80 caracteres.",
+        "name_taken": "Ya existe una regla con este nombre.",
+        "threshold": "Introduce un número de 0 o más.",
+        "percent_range": "Introduce un porcentaje entre 1 y 1000.",
+        "currency_required": "Elige una moneda para una regla de dinero.",
+        "too_many_rules": "Tienes 50 reglas. Elimina una primero."
+      }
+    },
+    "reports": {
+      "title": "Informes programados",
+      "description": "Un PDF de tus análisis por correo cada día, semana o mes, contado en la zona horaria de tu organización.",
+      "createTitle": "Nuevo informe programado",
+      "editTitle": "Editar informe programado",
+      "name": "Nombre",
+      "frequency": "Frecuencia",
+      "frequencies": {
+        "daily": "Cada día (cifras de ayer)",
+        "weekly": "Cada lunes (la semana pasada, de lunes a domingo)",
+        "monthly": "El día 1 (el mes pasado)"
+      },
+      "frequencyShort": {
+        "daily": "Diario",
+        "weekly": "Semanal",
+        "monthly": "Mensual"
+      },
+      "sendHour": "Enviar a las",
+      "sendHourHint": "Hora en {timeZone}.",
+      "event": "Evento",
+      "allEvents": "Todos los eventos",
+      "recipients": "Enviar a",
+      "recipientsHint": "Miembros que pueden ver pedidos. Los ingresos aparecen en el PDF solo para quienes pueden ver finanzas; cada PDF está en el idioma de su lector.",
+      "you": "{name} (tú)",
+      "create": "Programar informe",
+      "save": "Guardar cambios",
+      "back": "Volver a los informes programados",
+      "created": "Informe programado",
+      "saved": "Cambios guardados",
+      "list": "Programaciones",
+      "emptyTitle": "Aún no hay informes programados",
+      "emptyBody": "Programa uno arriba: llega por correo una vez por periodo, con un enlace a su PDF.",
+      "columns": {
+        "name": "Informe",
+        "frequency": "Frecuencia",
+        "next": "Próximo envío",
+        "recipients": "Destinatarios",
+        "status": "Estado",
+        "actions": "Acciones"
+      },
+      "recipientsCount": "{count, plural, one {# miembro} many {# miembros} other {# miembros}}",
+      "status": {
+        "on": "Activado",
+        "off": "Desactivado"
+      },
+      "edit": "Editar",
+      "editLabel": "Editar {name}",
+      "turnOff": "Desactivar",
+      "turnOn": "Activar",
+      "turnOffLabel": "Desactivar {name}",
+      "turnOnLabel": "Activar {name}",
+      "delete": "Eliminar",
+      "deleteLabel": "Eliminar {name}",
+      "deleted": "Programación eliminada",
+      "turnedOff": "Programación desactivada",
+      "turnedOn": "Programación activada",
+      "recent": "Informes recientes",
+      "recentEmpty": "Aún no se ha enviado ningún informe. El primero sale en la próxima hora de envío.",
+      "recentColumns": {
+        "report": "Informe",
+        "period": "Periodo",
+        "status": "Estado",
+        "file": "PDF"
+      },
+      "runStatus": {
+        "pending": "En espera",
+        "sent": "Enviado",
+        "failed": "Falló"
+      },
+      "download": "Descargar PDF",
+      "downloadLabel": "Descargar {name} de {period} (PDF)",
+      "notReady": "No está listo",
+      "errors": {
+        "name": "Introduce un nombre de hasta 80 caracteres.",
+        "name_taken": "Ya existe una programación con este nombre.",
+        "recipients": "Elige al menos un miembro.",
+        "bad_recipient": "Elige miembros que puedan ver pedidos.",
+        "too_many_schedules": "Tienes 25 programaciones. Elimina una primero."
+      }
     }
   }
 }

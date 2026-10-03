@@ -1,8 +1,9 @@
 import { withTenant } from '@yayatoh/db';
 import type { CommandPorts, Ctx } from '@yayatoh/kernel';
 import { and, eq } from 'drizzle-orm';
+import { type AgencyAccess, agencyAccess } from './commands/agency.ts';
 import { apiKeyScopes } from './commands/api-keys.ts';
-import { eventRoleCan, type OrgRole, roleCan } from './domain/permissions.ts';
+import { type ConsoleRole, eventRoleCan, type OrgRole, roleCan } from './domain/permissions.ts';
 import { memberships } from './schema.ts';
 
 /** The actor's role in the context org, or null. Read under the tenant's RLS. */
@@ -17,6 +18,32 @@ export async function memberRole(ctx: Ctx): Promise<OrgRole | null> {
       .where(and(eq(memberships.orgId, orgId), eq(memberships.userId, userId))),
   );
   return (row?.role as OrgRole | undefined) ?? null;
+}
+
+/**
+ * The actor's role in the context org for the console: their membership, or (M6.7a) the console
+ * role of the live agency grant they act through. Both are read fresh on every call, so a revoked
+ * grant or removed membership counts at once. `agency` is the grant when that is the source.
+ */
+export async function consoleRole(
+  ctx: Ctx,
+): Promise<{ role: ConsoleRole; agency: AgencyAccess | null } | null> {
+  const member = await memberRole(ctx);
+  if (member) return { role: member, agency: null };
+  const agency = await agencyAccess(ctx);
+  return agency ? { role: agency.consoleRole, agency } : null;
+}
+
+/**
+ * The agency console role for this context, or null (M6.7a): the live grant must exist and be the
+ * one the context says it acts through (`ctx.viaAgency`), so every audit row names it.
+ */
+async function agencyRole(ctx: Ctx): Promise<ConsoleRole | null> {
+  if (!ctx.viaAgency) return null;
+  const agency = await agencyAccess(ctx);
+  if (!agency || agency.grantId !== ctx.viaAgency.grantId || agency.agencyOrgId !== ctx.viaAgency.agencyOrgId)
+    return null;
+  return agency.consoleRole;
 }
 
 /** Event roles of the actor for one event; implemented by the events module (a port: tier 1 can't read tier 2). */
@@ -70,7 +97,12 @@ export function createOrgAuthorizer(
         return scopes.includes(permission) || scopes.includes(SCOPE_FOR[permission] ?? permission);
       }
       const role = await memberRole(ctx);
-      if (role === null) return false;
+      if (role === null) {
+        // M6.7a: a member of an agency acting through the client's live grant. Event-scoped roles
+        // never apply to agency access.
+        const agency = await agencyRole(ctx);
+        return agency !== null && roleCan(agency, permission);
+      }
       if (roleCan(role, permission)) return true;
       const eventId = eventIdOf(input);
       if (!eventId || !deps.eventRoles) return false;

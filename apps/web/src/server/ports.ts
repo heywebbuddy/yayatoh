@@ -1,7 +1,7 @@
 import { attendeesContactOwner } from '@yayatoh/attendees';
 import { participationContactOwner } from '@yayatoh/audiences';
 import { automationsContactOwner } from '@yayatoh/automations';
-import { billingEntitlements } from '@yayatoh/billing';
+import { billingEntitlements, billingReadOnlyGate, composeOrgGates } from '@yayatoh/billing';
 import { campaignsContactOwner } from '@yayatoh/campaigns';
 import { checkinContactOwner, setSessionAccessSource } from '@yayatoh/checkin';
 import { registerContactReferenceOwners } from '@yayatoh/crm';
@@ -21,7 +21,7 @@ import { registrationSessionAccess } from '@yayatoh/registration';
 import { setOccupantDirectory, setPartyCredentials } from '@yayatoh/seating';
 import { configureSso, ssoRuntimeFromEnv } from '@yayatoh/sso';
 import { surveysContactOwner } from '@yayatoh/surveys';
-import { createOrgAuthorizer, orgStatusGate } from '@yayatoh/tenancy';
+import { createOrgAuthorizer, memberRoleTx, orgStatusGate } from '@yayatoh/tenancy';
 import { configureVirtual, videoProviderFromEnv } from '@yayatoh/virtual';
 import { configureWebhooks, fakeResolver, webhookPublisherFromEnv } from '@yayatoh/webhooks';
 import { DATA_SUBJECT_CONTRIBUTORS } from './data-subjects.ts';
@@ -32,7 +32,9 @@ export const ports = createCommandPorts({
   entitlements: billingEntitlements,
   authorizer: createOrgAuthorizer({ eventRoles: eventRolesOf }),
   // A suspended or terminated org is read-only for its members and the public (M1.3f).
-  orgGate: orgStatusGate,
+  // M6.6b: after a failed renewal and its grace period, the org's members and API keys are
+  // read-only until it pays (billing dormant: no read at all).
+  orgGate: composeOrgGates(orgStatusGate, billingReadOnlyGate({ memberRole: memberRoleTx })),
 });
 
 // AWS KMS arrives with the owner's AWS account; until then dev/preview/CI use the local vault.

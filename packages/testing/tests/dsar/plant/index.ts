@@ -13,6 +13,7 @@ import { plantEvents } from './events.ts';
 import { plantForms } from './forms.ts';
 import { plantGallery } from './gallery.ts';
 import { plantGuests } from './guests.ts';
+import { plantLeads } from './leads.ts';
 import { plantMarketing } from './marketing.ts';
 import { plantMedia } from './media.ts';
 import { plantMessaging } from './messaging.ts';
@@ -63,6 +64,8 @@ export const PLANTERS: readonly (readonly [string, Planter])[] = [
   ['donations-collection', plantDonationsCollection],
   ['cfp', plantCfp],
   ['gallery', plantGallery],
+  // Batch 3k merge: an exhibitor's lead (M5.6b).
+  ['leads', plantLeads],
 ];
 
 /** Plant the person in every module of one org; returns the tables written. */

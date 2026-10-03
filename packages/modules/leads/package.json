@@ -1,0 +1,37 @@
+{
+  "name": "@yayatoh/leads",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "yayatoh": {
+    "tier": 6
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./rules": "./src/domain/rules.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@yayatoh/badges": "workspace:*",
+    "@yayatoh/checkin": "workspace:*",
+    "@yayatoh/contracts": "workspace:*",
+    "@yayatoh/crm": "workspace:*",
+    "@yayatoh/csv": "workspace:*",
+    "@yayatoh/db": "workspace:*",
+    "@yayatoh/events": "workspace:*",
+    "@yayatoh/kernel": "workspace:*",
+    "@yayatoh/platform": "workspace:*",
+    "@yayatoh/program": "workspace:*",
+    "@yayatoh/registration": "workspace:*",
+    "@yayatoh/ticketing": "workspace:*",
+    "drizzle-orm": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@yayatoh/config": "workspace:*",
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
+  }
+}

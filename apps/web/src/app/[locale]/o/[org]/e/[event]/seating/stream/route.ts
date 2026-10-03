@@ -1,8 +1,9 @@
 import { eventRolesOf, getEventBySlugQuery, teamEventBySlugQuery } from '@yayatoh/events';
-import { createCtx, executeQuery, isDomainError } from '@yayatoh/kernel';
+import { executeQuery, isDomainError } from '@yayatoh/kernel';
 import { seatingLiveAccessQuery } from '@yayatoh/seating';
-import { eventRolesOpenSection, memberRole, resolveOrgSlug, roleCan } from '@yayatoh/tenancy';
+import { eventRolesOpenSection, resolveOrgSlug, roleCan } from '@yayatoh/tenancy';
 import type { NextRequest } from 'next/server';
+import { orgActor } from '@/server/org-actor.ts';
 import { ports } from '@/server/ports.ts';
 import { seatStreamResponse } from '@/server/realtime.ts';
 import { getSession, sessionOpensOrg } from '@/server/session.ts';
@@ -20,16 +21,11 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ org:
   if (!session) return new Response(null, { status: 401 });
   const resolved = await resolveOrgSlug(org);
   if (!resolved || resolved.status === 'terminated') return new Response(null, { status: 404 });
-  // Staff acting as a member (M1.2e) see only the org they started from.
-  const imp = session.impersonation;
-  if (!sessionOpensOrg(session, resolved.orgId)) return new Response(null, { status: 404 });
-  const ctx = createCtx({
-    orgId: resolved.orgId,
-    actor: { type: 'user', userId: session.userId },
-    impersonatedBy: imp ? { staffUserId: imp.staffUserId, impersonationId: imp.id } : null,
-  });
-  const role = await memberRole(ctx);
-  if (!role) return new Response(null, { status: 404 });
+  // Staff acting as a member (M1.2e) see only the org they started from; an agency (M6.7a) acts
+  // through the client's live grant.
+  const actor = await orgActor(resolved.orgId, session);
+  if (!actor) return new Response(null, { status: 404 });
+  const { ctx, role } = actor;
   try {
     // M4.2a: someone on the event's team (a co-host or planner) reads it through their role; a
     // collaborator must hold a role that opens Seating.

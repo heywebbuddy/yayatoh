@@ -15,6 +15,7 @@ import {
 } from 'drizzle-orm/pg-core';
 import { CHANNEL_KINDS, CODE_CHANNEL_KINDS } from './domain/channels.ts';
 import { SEAT_STATUSES } from './domain/seat-state.ts';
+import { SOLVER_RULE_KINDS, SOLVER_STRENGTHS } from './domain/solver-rules.ts';
 
 export const seatingSchema = pgSchema('seating');
 
@@ -544,5 +545,36 @@ export const layoutRevisions = tenantTable(
     ),
     check('layout_revisions_number_check', sql`number >= 1`),
     check('layout_revisions_restore_check', sql`(kind = 'restore') = (restored_from is not null)`),
+  ],
+);
+
+/**
+ * Seating solver rules (M6.12a, decision P6-10): the host's rules for the tabu-search proposal
+ * (`domain/solver-rules.ts`): keep together, keep apart, VIP nearest the stage, accessibility
+ * near exits, a table maximum; each hard or soft with a weight (1–10). Per event: every chart of
+ * the event reads the same rules. `params` holds the rule's targets (a party id, a tag or a side).
+ */
+export const solverRules = tenantTable(
+  seatingSchema,
+  'solver_rules',
+  {
+    eventId: uuid('event_id').notNull(),
+    kind: text('kind').notNull(),
+    strength: text('strength').notNull().default('soft'),
+    weight: integer('weight').notNull().default(5),
+    params: jsonb('params').notNull().default(sql`'{}'::jsonb`),
+  },
+  (t) => [
+    index('solver_rules_org_event_idx').on(t.orgId, t.eventId, t.createdAt),
+    check(
+      'solver_rules_kind_check',
+      sql.raw(`kind in (${SOLVER_RULE_KINDS.map((s) => `'${s}'`).join(', ')})`),
+    ),
+    check(
+      'solver_rules_strength_check',
+      sql.raw(`strength in (${SOLVER_STRENGTHS.map((s) => `'${s}'`).join(', ')})`),
+    ),
+    check('solver_rules_weight_check', sql`weight between 1 and 10`),
+    check('solver_rules_params_check', sql`jsonb_typeof(params) = 'object'`),
   ],
 );

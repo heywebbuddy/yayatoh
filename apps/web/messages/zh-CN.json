@@ -51,7 +51,11 @@
       "coupon": "优惠券",
       "page": "页面或博客文章"
     },
-    "help": "帮助"
+    "help": "帮助",
+    "clientsSection": "客户",
+    "viaAgency": "通过 {agency}",
+    "agencyBadgeLabel": "你正在为 {agency} 在 {org} 中工作",
+    "backToAgency": "返回 {agency}"
   },
   "notifications": {
     "open": "通知",
@@ -172,7 +176,9 @@
       "alerts": {
         "alert": "提醒",
         "alert-text": "提醒短信",
-        "alert-urgent-text": "紧急警报短信"
+        "alert-urgent-text": "紧急警报短信",
+        "metric": "提醒规则",
+        "metric-now": "提醒规则（立即发送）"
       },
       "campaigns": {
         "test": "营销活动测试"
@@ -217,6 +223,9 @@
       },
       "badges": {
         "kiosk-code": "胸牌自助机验证码"
+      },
+      "analytics": {
+        "report": "定期报告"
       }
     },
     "status": {
@@ -385,7 +394,9 @@
     "webhooks": "Webhook",
     "sandboxes": "沙盒",
     "notifications": "通知",
-    "sso": "单点登录"
+    "sso": "单点登录",
+    "agency": "客户",
+    "agencies": "代理机构"
   },
   "vocab": {
     "attendee": "参会者",
@@ -414,7 +425,13 @@
     "box_office": "售票处",
     "scanner": "检票员",
     "viewer": "只读",
-    "collaborator": "活动协作者"
+    "collaborator": "活动协作者",
+    "agency_manager": "代理机构经理",
+    "agency_manager_finance": "代理机构经理（财务）",
+    "agency_marketing": "代理机构营销",
+    "agency_marketing_finance": "代理机构营销（财务）",
+    "agency_viewer": "代理机构查看者",
+    "agency_viewer_finance": "代理机构查看者（财务）"
   },
   "profiles": {
     "wedding": "婚礼",
@@ -762,7 +779,8 @@
     "reference": "参考编号：{id}",
     "rateLimitedRetry": "尝试次数过多。请在 {minutes, plural, other {# 分钟}}后重试。",
     "impersonation_blocked": "以成员身份操作的工作人员无法执行此操作：退款、付款、导出、删除和身份确认均已关闭。",
-    "read_only_freeze": "计划维护期间更改已暂停。未保存任何内容；请在维护结束后重试。"
+    "read_only_freeze": "计划维护期间更改已暂停。未保存任何内容；请在维护结束后重试。",
+    "read_only_billing": "在订阅付款之前，此组织为只读。没有保存或删除任何内容。"
   },
   "notFound": {
     "title": "页面未找到",
@@ -2146,7 +2164,8 @@
       "cards": "桌卡与导出",
       "selection": "最佳可选座位",
       "channels": "渠道",
-      "revisions": "版本"
+      "revisions": "版本",
+      "solver": "自动排座"
     },
     "assign": {
       "title": "安排宾客",
@@ -2729,6 +2748,134 @@
       "isCurrent": "这就是当前的座位图。",
       "restore": "恢复版本 {number}",
       "restoredNotice": "已恢复版本 {number}。当前座位图为版本 {now}。"
+    },
+    "solver": {
+      "title": "座位规则与排座器",
+      "description": "设置规则后,排座器会为每位尚未入座的宾客推荐桌位。检查方案后,可逐桌或全部确认。您手动安排的宾客永远不会被移动。",
+      "rules": {
+        "heading": "规则",
+        "listLabel": "座位规则",
+        "empty": "还没有规则。请在下方添加,或不设规则直接运行排座器:它仍会让每桌人数不超过座位数。",
+        "hard": "硬性",
+        "soft": "弹性",
+        "badge": "{strength} · 权重 {weight}",
+        "strength": "类型",
+        "strengthHint": "方案绝不会违反硬性规则。弹性规则尽量遵守;每次违反按其权重计分。",
+        "weight": "权重",
+        "weightHint": "1 到 10。权重越高的弹性规则越重要。",
+        "save": "保存",
+        "remove": "删除",
+        "saved": "规则已保存。",
+        "removed": "规则已删除。",
+        "added": "规则已添加。",
+        "editLabel": "修改规则:{rule}",
+        "kinds": {
+          "keep_together": "安排在一起",
+          "keep_apart": "分开安排",
+          "vip_near_stage": "VIP 最靠近舞台",
+          "access_near_exit": "无障碍需求靠近出口",
+          "table_max": "每桌上限"
+        },
+        "add": {
+          "heading": "添加规则",
+          "kind": "规则",
+          "by": "对象",
+          "byEach": "每个宾客组",
+          "byParty": "一个宾客组",
+          "byTag": "带某个标签的所有人",
+          "bySide": "某一方的所有人",
+          "party": "宾客组",
+          "tag": "标签",
+          "side": "一方",
+          "choose": "请选择…",
+          "together": "安排在一起",
+          "first": "第一组",
+          "second": "第二组",
+          "accessTag": "无障碍需求标签",
+          "accessHint": "带此标签的宾客组会安排在离出口或入口最近的桌位。无障碍相关的回答保持私密。",
+          "max": "每桌最多人数",
+          "vipHint": "VIP 宾客组会安排在离舞台最近的桌位。",
+          "submit": "添加规则"
+        },
+        "errors": {
+          "value": "请选择规则适用的对象。",
+          "same": "请选择两个不同的组。",
+          "weight": "请输入 1 到 10 的权重。",
+          "max": "请输入 1 到 40 的数字。",
+          "duplicate": "此活动已有这条规则。",
+          "tooMany": "每个活动最多 50 条规则。",
+          "unknownParty": "该宾客组不在此宾客名单中。"
+        },
+        "describe": {
+          "togetherParty": "每个宾客组坐在一起",
+          "togetherTag": "所有带“{value}”标签的人坐在一起",
+          "togetherSide": "{value}方坐在一起",
+          "apart": "{a}与{b}分开",
+          "targetParty": "{value}",
+          "targetTag": "所有带“{value}”标签的人",
+          "targetSide": "{value}方",
+          "vip": "VIP 宾客组最靠近舞台",
+          "access": "带“{tag}”标签的宾客靠近出口",
+          "tableMax": "每桌最多 {max} 人"
+        }
+      },
+      "run": {
+        "heading": "方案",
+        "queue": "尚有 {count, plural, other {# 位宾客}}待安排。{fixed, plural, =0 {还没有人入座。} other {手动安排的 # 位宾客保持不动。}}",
+        "nothing": "所有人都已入座,无需推荐。",
+        "seed": "排列编号",
+        "seedHint": "相同的编号总是得到相同的方案。",
+        "seedError": "请输入 1 到 1,000,000 的整数。",
+        "start": "推荐座位",
+        "cancel": "停止",
+        "again": "换一种排列",
+        "running": "正在生成方案… {percent}%",
+        "progress": "方案进度",
+        "cancelled": "已停止,没有生成方案。",
+        "failed": "排座器意外停止,请重试。"
+      },
+      "summary": {
+        "heading": "摘要",
+        "done": "方案已在 {seconds} 秒内完成(排列 {seed})。",
+        "seated": "{count, plural, other {# 位宾客}}安排在{tables, plural, other { # 桌}};{queue, plural, =0 {候补队列中无人} other {候补队列中还有 # 位}}。",
+        "hardOk": "没有违反任何硬性规则。",
+        "hardBroken": "{count, plural, other {违反了 # 条硬性规则}}。确认前请修改方案。",
+        "soft": "弹性规则:扣分 {penalty}(0 为最佳)。",
+        "ruleLine": "{rule}:{count, plural, =0 {已遵守} other {# 次违反}}",
+        "issues": {
+          "no_stage": "平面图没有舞台,因此“VIP 最靠近舞台”无法生效。",
+          "no_exit": "平面图没有出口或入口,因此“无障碍需求靠近出口”无法生效。",
+          "group_too_big": "一组 {size} 人比任何一桌({room} 个座位)都多,会尽量分到最少的桌。",
+          "too_few_seats": "需安排 {size} 位宾客,但只有 {room} 个空位:部分宾客将留在候补队列。",
+          "no_room": "平面图中没有桌子或排。"
+        }
+      },
+      "tables": {
+        "heading": "推荐的桌位",
+        "none": "没有推荐的桌位。",
+        "region": "第 {label} 桌",
+        "fill": "推荐 {proposed} · 已入座 {seated} · 空位 {free}/{capacity}",
+        "overFull": "比空位多出 {count, plural, other {# 位}}宾客。",
+        "broken": "违反硬性规则:{rules}",
+        "over": "宾客多于座位",
+        "accept": "确认第 {label} 桌",
+        "acceptAll": "确认所有桌位",
+        "fixFirst": "请先修正带警告的桌位。",
+        "acceptedTable": "第 {label} 桌已确认:{count, plural, other {# 位宾客}}已入座。",
+        "acceptedAll": "方案已确认:{count, plural, other {# 位宾客}}已入座。",
+        "queueHeading": "候补队列",
+        "guest": "{name}({party})",
+        "moveLabel": "{name} 的桌位",
+        "queueOption": "留在候补队列",
+        "optionFree": "第 {label} 桌(空 {free})",
+        "toEditor": "打开排座编辑器"
+      },
+      "acceptErrors": {
+        "already_seated": "此方案中有人在此期间被手动安排了座位。请重新推荐。",
+        "declined": "此方案中有宾客已婉拒。请重新推荐。",
+        "hard_rule": "确认此方案会违反硬性规则。",
+        "cant_fit": "该桌只能再坐 {fits} 人。"
+      }
     }
   },
   "venueMap": {
@@ -7435,7 +7582,9 @@
       "guestsUnseated": "安排宾客座位",
       "mealsMissing": "打开回复详情",
       "integrationFailed": "打开集成收件箱",
-      "billingPastDue": "打开套餐与账单"
+      "billingPastDue": "打开套餐与账单",
+      "metricRule": "打开提醒规则",
+      "metricRuleFinance": "打开提醒规则"
     },
     "rules": {
       "unseated": "{count, plural, other {{countWords} 位参会者没有座位}}",
@@ -7473,7 +7622,9 @@
       "guestsUnseated": "{count, plural, other {{countWords} 位宾客没有桌位}}",
       "mealsMissing": "{count, plural, other {{countWords} 位出席宾客尚未选择餐点}}",
       "integrationFailed": "{count, plural, other {今天有 {countWords} 个集成问题（同步失败或连接丢失）}}",
-      "billingPastDue": "{count, plural, other {有 {countWords} 笔套餐付款已逾期}}"
+      "billingPastDue": "{count, plural, other {有 {countWords} 笔套餐付款已逾期}}",
+      "metricRule": "提醒规则“{title}”已触发",
+      "metricRuleFinance": "提醒规则“{title}”已触发"
     },
     "widget": {
       "title": "提醒",
@@ -15129,7 +15280,74 @@
       "ai_seating": "AI 排座",
       "analytics_pro": "高级分析"
     },
-    "findOwner": "查找所有者或管理员"
+    "findOwner": "查找所有者或管理员",
+    "usageLink": "用量",
+    "renewalReceived": "已收到续订更新",
+    "dunning": {
+      "graceTitle": "你的订阅付款未成功",
+      "graceBody": "在 {date} 之前一切照常。请在此之前付款以继续进行更改；之后组织将变为只读，直到付款为止。",
+      "readOnlyTitle": "此组织为只读",
+      "readOnlyBody": "订阅付款失败，因此更改已暂停。没有删除任何内容：你仍然可以查看所有内容、导出数据，并在入口扫描门票。付款后可立即恢复更改。",
+      "payNow": "立即付款",
+      "askOwner": "请让此组织的所有者或管理员付款。",
+      "paidTitle": "已收到付款",
+      "paidBody": "谢谢。组织中的所有人都可以再次进行更改。",
+      "declinedTitle": "付款未成功",
+      "declinedBody": "没有任何更改。请检查你在账单服务商处登记的银行卡，然后重试。",
+      "payError": "无法开始付款。请稍后重试。"
+    },
+    "change": {
+      "title": "更改套餐",
+      "description": "升级和降级立即生效。你只需为本计费周期的剩余时间付款或获得抵扣。",
+      "discountCharity": "你已验证的慈善机构资料让你在所有套餐上享受 {percent}% 折扣。",
+      "discountStaff": "你的组织在所有套餐上享受 {percent}% 的非营利折扣。",
+      "legend": "套餐",
+      "offer": "{plan}：{interval, select, year {每年} other {每月}} {price}",
+      "direction": {
+        "upgrade": "升级",
+        "downgrade": "降级",
+        "switch": "切换",
+        "start": "开始"
+      },
+      "turnsOff": "{count, plural, other {将关闭 # 个模块}}",
+      "chooseError": "请选择要预览的套餐。",
+      "preview": "预览更改",
+      "previewTitle": "更改为{plan}",
+      "previewLead": {
+        "upgrade": "你正在升级。以下是你今天为本计费周期剩余时间支付的金额。",
+        "downgrade": "你正在降级。当前套餐未使用的时间将作为抵扣额度。",
+        "switch": "你将切换到价格相同的套餐。",
+        "start": "你的订阅从今天开始。"
+      },
+      "rows": {
+        "charge": "新套餐，周期剩余时间",
+        "credit": "未使用时间的抵扣",
+        "discount": "非营利折扣",
+        "tax": "税费",
+        "due": "今日应付"
+      },
+      "creditKept": "{amount} 的抵扣额度将保留用于之后的账单。",
+      "nextRenewal": "之后于 {date} 支付 {amount}。",
+      "nextRenewalNoDate": "之后每个周期 {amount}。",
+      "taxNote": "税费由账单服务商根据你组织的账单信息计算。",
+      "removedTitle": "{count, plural, other {将关闭 # 个模块}}",
+      "removedBody": "它们的数据会保留。如果你更改为包含它们的套餐，它们会原样恢复。",
+      "confirmRemoved": "{count, plural, other {我了解这些模块将被关闭}}",
+      "confirmError": "请确认将关闭的模块后继续。",
+      "confirm": "确认更改",
+      "cancel": "保留我的套餐",
+      "doneTitle": "已提交套餐更改",
+      "doneBody": "你的账单服务商已确认更改。你的套餐和模块已在下方更新。",
+      "errorTitle": "套餐未更改",
+      "errors": {
+        "billing_off": "此组织未启用账单。",
+        "same_plan": "你已在使用此套餐。",
+        "validation_failed": "请选择提供的套餐之一。",
+        "provider": "账单服务商未接受此更改。未扣任何费用；请重试。",
+        "forbidden": "只有所有者和管理员可以更改套餐。",
+        "other": "出了点问题。没有任何更改。"
+      }
+    }
   },
   "billingPortal": {
     "eyebrow": "测试计费",
@@ -15139,7 +15357,11 @@
     "switch": "更换套餐",
     "cancel": "取消订阅",
     "back": "不做更改并返回",
-    "chooseError": "请选择要更换到的套餐。"
+    "chooseError": "请选择要更换到的套餐。",
+    "noSubscriptionError": "此客户还没有订阅。请先选择套餐。",
+    "renewalLegend": "续订",
+    "failRenewal": "让续订付款失败",
+    "stopRetrying": "停止重试付款"
   },
   "seatingLibrary": {
     "title": "座位图库",
@@ -16269,6 +16491,686 @@
       "claimed_elsewhere": "另一个组织已验证此域名。",
       "sso_unavailable": "此部署不支持单点登录。",
       "last_owner": "组织至少需要一位所有者。"
+    }
+  },
+  "leads": {
+    "portal": {
+      "heading": "潜在客户采集",
+      "window": "采集于 {opens} 开启，{closes} 关闭（活动当地时间）。备注和导出可使用至 {until}。",
+      "termsNeededAdmin": "请先在下方接受潜在客户条款，团队才能采集潜在客户。",
+      "termsNeededStaff": "展商管理员需要先接受潜在客户条款，你才能采集潜在客户。",
+      "why": {
+        "unlicensed": "你还没有潜在客户许可。请向展商管理员申请。",
+        "over_allowance": "你的许可超出了展商的配额。请让管理员收回一个许可或购买更多。"
+      },
+      "open": "打开潜在客户采集"
+    },
+    "license": {
+      "licensed": "已授权",
+      "unlicensed": "无许可",
+      "over_allowance": "超出配额"
+    },
+    "capture": {
+      "not_open": "采集尚未开启",
+      "open": "采集已开启",
+      "closed": "采集已关闭"
+    },
+    "terms": {
+      "heading": "潜在客户条款",
+      "v1": "扫描参会者的胸牌时，你只会收到其姓名、职位和公司；仅当其同意分享时才会收到电子邮箱。贵公司将对这些数据负责：仅用于跟进你们在本次活动中的交流，妥善保管，并在对方要求时删除。参会者可以看到你扫描了他们，并可以停止分享电子邮箱。",
+      "accepted": "已接受潜在客户条款",
+      "acceptLabel": "同意",
+      "accept": "我代表 {exhibitor} 接受潜在客户条款",
+      "submit": "接受潜在客户条款",
+      "acceptRequired": "请勾选以接受潜在客户条款。"
+    },
+    "settings": {
+      "heading": "资格项与可见范围",
+      "qualifiers": "资格项",
+      "qualifiersHint": "每行一个，最多 10 个（例如：预算已批准）。团队会在每条潜在客户上勾选。",
+      "visibility": "谁能看到潜在客户",
+      "teamVisibility": "员工可查看整个团队的潜在客户（否则只能看到自己扫描的）",
+      "save": "保存潜在客户设置",
+      "saved": "潜在客户设置已保存。",
+      "qualifiersInvalid": "每个资格项最多 60 个字符。",
+      "tooMany": "最多只能有 10 个资格项。"
+    },
+    "export": {
+      "heading": "导出潜在客户",
+      "ready": "已确认。现在可以下载潜在客户。",
+      "count": "{count, plural, =0 {暂无潜在客户} other {# 条潜在客户}}",
+      "hint": "为保障安全，下载前我们会通过电子邮件向你发送验证码以确认身份。",
+      "download": "下载潜在客户（CSV）",
+      "ended": "本活动的潜在客户访问已结束。",
+      "columns": {
+        "name": "姓名",
+        "jobTitle": "职位",
+        "company": "公司",
+        "email": "电子邮箱",
+        "rating": "评级",
+        "qualifiers": "资格项",
+        "notes": "备注",
+        "capturedAt": "扫描时间",
+        "scannedBy": "扫描人",
+        "scans": "扫描次数",
+        "sharedFields": "已分享字段",
+        "emailConsentVersion": "邮箱同意版本"
+      }
+    },
+    "confirm": {
+      "title": "确认是你本人",
+      "intro": "要下载潜在客户，请使用我们发送到 {email} 的验证码进行确认。"
+    },
+    "attendee": {
+      "heading": "谁扫描了我的胸牌",
+      "emptyTitle": "还没有人扫描你的胸牌",
+      "emptyDescription": "展商扫描你的胸牌后，会显示在这里。",
+      "scannedAt": "扫描于 {time}",
+      "emailShared": "已获得你的邮箱",
+      "emailWithdrawn": "已停止分享邮箱",
+      "emailNotShared": "未分享邮箱",
+      "withdraw": "停止与 {exhibitor} 分享我的邮箱",
+      "withdrawn": "已完成。对方将无法再看到你的邮箱。",
+      "sharingOn": "扫描你胸牌的展商会收到你的电子邮箱。",
+      "sharingOff": "扫描你胸牌的展商不会收到你的电子邮箱。",
+      "sharingHint": "他们总会收到你的姓名、职位和公司，但绝不会收到你的电话或地址。",
+      "turnOff": "停止与展商分享我的邮箱",
+      "turnOn": "与扫描我胸牌的展商分享我的邮箱",
+      "saved": "已保存。"
+    },
+    "app": {
+      "pageTitle": "潜在客户采集",
+      "loading": "正在加载…",
+      "signedOutTitle": "登录后即可采集潜在客户",
+      "signedOutDescription": "请在此设备上打开展商邀请邮件中的登录链接，然后返回潜在客户采集。",
+      "openPortal": "前往展商门户",
+      "title": "{exhibitor} 的潜在客户",
+      "online": "在线",
+      "offline": "离线：扫描将保存在此设备上",
+      "queued": "{count, plural, =0 {已全部同步} other {# 次扫描等待同步}}",
+      "modes": "潜在客户采集视图",
+      "viewScan": "扫描",
+      "viewLeads": "{count, plural, =0 {潜在客户} other {潜在客户（#）}}",
+      "blockedTitle": "你目前无法采集潜在客户",
+      "blocked": {
+        "unlicensed": "你没有潜在客户许可。请向展商管理员申请。",
+        "over_allowance": "你的许可超出了展商的配额。请联系管理员。",
+        "termsAdmin": "请先在展商门户中接受潜在客户条款。",
+        "termsStaff": "展商管理员需要先接受潜在客户条款。",
+        "notOpen": "采集将于 {time} 开启。",
+        "closed": "采集已于 {time} 关闭。你仍可查看和编辑潜在客户。"
+      },
+      "codeLabel": "胸牌代码",
+      "codeHint": "扫描胸牌上的二维码，或输入其下方印的代码。",
+      "save": "保存潜在客户",
+      "camera": "用相机扫描",
+      "stopCamera": "关闭相机",
+      "cameraFailed": "无法启动相机。请输入胸牌代码。",
+      "refusals": {
+        "no_license": "你没有潜在客户许可。请向展商管理员申请。",
+        "over_allowance": "你的许可超出了展商的配额。扫描记录保留在此设备上。",
+        "terms_not_accepted": "尚未接受潜在客户条款。扫描记录保留在此设备上。",
+        "access_ended": "本活动的潜在客户访问已结束。",
+        "other": "出现问题。扫描记录保留在此设备上，请重试。"
+      },
+      "result": {
+        "queued": "已保存在此设备上",
+        "queuedHint": "同步后将显示详情。",
+        "refused": "未保存",
+        "captured": "潜在客户已保存",
+        "rescanned": "已是潜在客户：已添加扫描"
+      },
+      "reasons": {
+        "invalid": "无法读取此胸牌。请检查代码后重试。",
+        "wrong_event": "此胸牌属于其他活动。",
+        "not_open": "扫描时采集尚未开启。",
+        "closed": "扫描时采集已关闭。"
+      },
+      "emailWithdrawn": "参会者已于 {time} 停止分享邮箱",
+      "emailNotShared": "未分享邮箱",
+      "capturedAt": "扫描于 {time}{count, plural, =1 {} other { · # 次}}",
+      "scannedBy": "扫描人：{email}",
+      "editLabel": "潜在客户详情",
+      "rating": "评级",
+      "ratings": {
+        "hot": "热",
+        "warm": "温",
+        "cold": "冷",
+        "none": "未评级"
+      },
+      "qualifiers": "资格项",
+      "notes": "备注",
+      "saveDetails": "保存详情",
+      "saved": "已保存。",
+      "savedQueued": "已随扫描保存，联网后同步。",
+      "needsConnection": "请连接互联网以保存此潜在客户的更改。",
+      "saveFailed": "保存失败，请重试。",
+      "accessEnded": "本活动的潜在客户访问已结束。",
+      "scope": {
+        "all": "{exhibitor} 的全部潜在客户",
+        "team": "你团队的潜在客户",
+        "own": "你的潜在客户"
+      },
+      "emptyTitle": "暂无潜在客户",
+      "emptyDescription": "在“扫描”标签中扫描胸牌，保存你的第一条潜在客户。",
+      "search": "搜索潜在客户",
+      "noMatch": "没有符合搜索条件的潜在客户。",
+      "edit": "编辑 {name}"
+    }
+  },
+  "conferenceHub": {
+    "metaTitle": "会议中心",
+    "eyebrow": "你的会议中心",
+    "for": "{name} 的会议中心",
+    "whose": "谁的会议中心",
+    "orderLink": "打开我的会议中心",
+    "orderLinkHint": "议程、你的日程、胸牌和日历，尽在手机上。",
+    "noRegistrantTitle": "此订单中没有报名",
+    "noRegistrantDescription": "会议中心属于一个报名。请打开你报名时的订单。",
+    "backToOrder": "返回我的订单",
+    "offline": "你已离线。这是保存在手机上的副本。",
+    "privateLink": "此页面为私密页面：任何拥有链接的人都可以查看并更改你的日程。请勿分享。",
+    "tabs": {
+      "label": "会议中心栏目",
+      "today": "今天",
+      "schedule": "我的日程",
+      "agenda": "议程",
+      "badge": "胸牌"
+    },
+    "today": {
+      "now": "正在进行",
+      "next": "接下来",
+      "fromSchedule": "来自你的日程。",
+      "fromAgenda": "来自议程。为场次加星标，打造你自己的日程。",
+      "nothingNow": "目前没有进行中的场次。",
+      "nothingNextTitle": "近期没有安排",
+      "nothingNextDescription": "浏览议程，为场次加星标并报名可选场次。",
+      "openAgenda": "打开议程",
+      "pollsAndQa": "投票与问答",
+      "more": "你的工具",
+      "badgeTitle": "你的胸牌",
+      "badgeDescription": "在入口和场次签到时出示二维码。",
+      "showBadge": "显示我的胸牌",
+      "networkingTitle": "社交",
+      "networkingDescription": "寻找其他参会者，建立联系并预约会面。",
+      "openNetworking": "打开社交",
+      "calendarTitle": "你的日历",
+      "calendarDescription": "将你的日程添加到手机日历。场次时间变动时会自动更新。",
+      "openCalendar": "添加到我的日历"
+    },
+    "summary": "已报名：{enrolled} · 收藏：{favorites} · 时间冲突：{conflicts}",
+    "agendaIntro": "为想参加的场次加星标。可选场次需要报名。",
+    "conflict": "与 {titles} 时间冲突",
+    "emptyScheduleTitle": "你的日程是空的",
+    "emptyScheduleDescription": "在议程中为场次加星标，或报名可选场次，它们会显示在这里。",
+    "emptyAgendaTitle": "暂无场次",
+    "emptyAgendaDescription": "主办方尚未为你的报名添加场次。请稍后再来查看。",
+    "favorite": {
+      "star": "加星标",
+      "starred": "已加星标",
+      "starNamed": "为 {title} 加星标",
+      "unstarNamed": "取消 {title} 的星标",
+      "pill": "收藏",
+      "added": "{title} 已加入你的日程。",
+      "removed": "{title} 已从你的日程移除。",
+      "replaced": "已加星标。已移除冲突的收藏：{count}。",
+      "tooMany": "收藏的场次已达上限。请先取消一个星标。",
+      "conflictTitle": "与你的日程时间冲突",
+      "conflictEnrolled": "{title}（已报名）",
+      "conflictFavorite": "{title}（已收藏）",
+      "keepBoth": "两个都保留",
+      "replace": "替换",
+      "cancel": "取消"
+    },
+    "calendar": {
+      "title": "日历订阅",
+      "description": "只需订阅一次：日历应用会刷新订阅，场次时间变动后你的日历也会同步变动。已报名的场次显示为已确认，加星标的显示为暂定。",
+      "subscribe": "在我的日历中订阅",
+      "download": "下载 .ics",
+      "linkLabel": "订阅链接（私密）",
+      "copy": "复制链接",
+      "copied": "链接已复制。",
+      "replace": "更换链接",
+      "replaceConfirmTitle": "更换日历链接？",
+      "replaceConfirmBody": "当前链接会立即在所有使用它的日历中失效。请用新链接重新订阅。",
+      "replaceConfirm": "更换链接",
+      "cancel": "取消",
+      "replaced": "已完成。旧链接已失效：请用新链接订阅。"
+    },
+    "install": {
+      "title": "保存到手机",
+      "button": "添加到主屏幕",
+      "installed": "此会议中心已在你的主屏幕上。",
+      "done": "已添加到主屏幕。",
+      "help": "iPhone 或 iPad：点按“共享”，然后选择“添加到主屏幕”。Android：打开浏览器菜单，然后选择“安装应用”或“添加到主屏幕”。"
+    },
+    "badge": {
+      "title": "你的胸牌",
+      "qrLabel": "{name} 的胸牌二维码",
+      "shortCode": "代码",
+      "hint": "在入口处请调高屏幕亮度。",
+      "noneTitle": "暂无胸牌",
+      "noneDescription": "报名确认后，你的胸牌会显示在这里。"
+    }
+  },
+  "billingUsage": {
+    "title": "用量",
+    "subtitle": "你的组织按计量项的使用情况：消息、AI 额度和扫描设备。",
+    "breadcrumb": "面包屑导航",
+    "period": "本月：{start} 至 {end}（{zone}）",
+    "filterLabel": "计量项",
+    "allMeters": "所有计量项",
+    "meter": {
+      "email": "电子邮件",
+      "sms": "短信",
+      "whatsapp": "WhatsApp",
+      "ai_credits": "AI 额度",
+      "devices": "扫描设备"
+    },
+    "unit": {
+      "email": "{count, plural, other {已发送 # 封邮件}}",
+      "sms": "{count, plural, other {# 条短信分段}}",
+      "whatsapp": "{count, plural, other {已发送 # 条消息}}",
+      "ai_credits": "{count, plural, other {已使用 # 个额度}}",
+      "devices": "{count, plural, other {已登记 # 台设备}}"
+    },
+    "reportingTitle": "用量会发送给你的账单服务商",
+    "reportingBody": "{count, plural, =0 {目前的用量都已发送。} other {有 # 条记录等待发送。}}",
+    "countingTitle": "用量会被统计，不会收费",
+    "countingBody": "此组织未启用账单，因此用量只在这里统计。",
+    "currentTitle": "本月",
+    "currentDescription": "按你组织的时区统计。",
+    "historyTitle": "之前的月份",
+    "historyDescription": "最近 12 个有用量的月份。",
+    "emptyTitle": "暂无用量",
+    "emptyBody": "当你发送邮件或短信、用 AI 起草或登记扫描设备时，用量会显示在这里。",
+    "historyEmpty": "之前的月份没有用量。",
+    "month": "月份"
+  },
+  "billingBanner": {
+    "label": "账单",
+    "graceTitle": "你的订阅付款未成功",
+    "graceBody": "在 {date} 之前一切照常。之后组织将变为只读，直到付款为止。",
+    "readOnlyTitle": "此组织为只读",
+    "readOnlyBody": "订阅付款失败。没有删除任何内容：你可以查看、导出和扫描门票，但在付款前更改已暂停。",
+    "action": "套餐与账单"
+  },
+  "agencies": {
+    "title": "代理机构",
+    "subtitle": "让代理机构为你的活动工作。你可以随时撤销访问，代理机构永远不会支付或收取你的钱。",
+    "noAccessTitle": "只有所有者和管理员可以管理代理机构",
+    "noAccessDescription": "请让此组织的所有者或管理员为代理机构授予访问权限。",
+    "grantTitle": "为代理机构授予访问权限",
+    "agency": "代理机构地址",
+    "agencyHint": "代理机构给你的地址，例如 bloom-events。",
+    "agencyRequired": "请输入代理机构的地址。",
+    "agencyUnknown": "没有代理机构使用此地址。请与代理机构核实。",
+    "agencySelf": "代理机构不能给自己授予访问权限。",
+    "agencyTaken": "此代理机构已有访问权限。",
+    "role": "代理机构可以做什么",
+    "roleManager": "管理活动",
+    "roleManagerHint": "创建和编辑活动、来宾、签到和消息。不含退款、销售、成员或设置。",
+    "roleMarketing": "营销",
+    "roleMarketingHint": "营销活动、受众和消息，以及查看活动。",
+    "roleViewer": "仅查看",
+    "roleViewerHint": "查看活动、订单和来宾。不做任何更改。",
+    "finance": "同时允许代理机构查看我们的资金",
+    "financeHint": "打款、财务报告和账本，仅可查看。除非你开启，否则关闭。",
+    "grant": "授予访问权限",
+    "granted": "{agency} 现在可以在此组织中工作。",
+    "listTitle": "有访问权限的代理机构",
+    "empty": "没有代理机构拥有访问权限。与代理机构合作时，请在上方为其授予访问权限。",
+    "emptyReadOnly": "没有代理机构拥有访问权限。",
+    "agencyColumn": "代理机构",
+    "roleColumn": "访问权限",
+    "financeColumn": "资金",
+    "grantedColumn": "开始于",
+    "actions": "操作",
+    "financeOn": "可查看",
+    "financeOff": "无访问权限",
+    "revoke": "撤销",
+    "revokeNamed": "撤销 {agency} 的访问权限",
+    "revoked": "{agency} 已不再拥有访问权限。",
+    "financeEnable": "允许资金",
+    "financeEnableNamed": "允许 {agency} 查看我们的资金",
+    "financeDisable": "停止资金",
+    "financeDisableNamed": "停止 {agency} 查看我们的资金",
+    "historyTitle": "过往访问",
+    "revokedColumn": "结束于",
+    "unknownAgency": "代理机构已不在 Yayatoh",
+    "roleLabel": "{role, select, manager {管理活动} marketing {营销} viewer {仅查看} other {访问权限}}"
+  },
+  "agency": {
+    "title": "客户",
+    "subtitle": "所有向 {agency} 授予访问权限的客户。数据来自快照：刷新即可更新。",
+    "tabs": "代理机构栏目",
+    "tab": {
+      "clients": "客户",
+      "events": "活动",
+      "marketing": "营销",
+      "reports": "报告"
+    },
+    "refresh": "刷新数据",
+    "refreshed": "已刷新 {count, plural, other {# 个客户}}的数据。",
+    "notRefreshed": "尚未刷新",
+    "emptyTitle": "还没有客户",
+    "emptyDescription": "请让你的客户在其 Yayatoh 控制台中打开“代理机构”，并为 {address} 授予访问权限。",
+    "noAccessTitle": "代理机构页面仅供代理机构成员使用",
+    "noAccessDescription": "请向 {agency} 的所有者申请访问权限。",
+    "client": "客户",
+    "nextEvent": "下一个活动",
+    "noNextEvent": "暂无安排",
+    "upcoming": "即将举行的活动",
+    "orders": "订单",
+    "tickets": "门票",
+    "checkins": "已签到",
+    "checkinRate": "签到率",
+    "open": "打开",
+    "openNamed": "打开 {client}",
+    "finance": "含资金",
+    "eventsTitle": "所有客户的活动",
+    "eventsEmpty": "你的客户还没有即将举行或最近的活动。",
+    "event": "活动",
+    "starts": "开始",
+    "status": "状态",
+    "gross": "总销售额",
+    "grossHidden": "未共享",
+    "grossHiddenHint": "只有允许你查看其资金的客户才会显示总销售额。",
+    "openEventNamed": "打开 {client} 的 {event}",
+    "marketingTitle": "营销，最近 30 天",
+    "marketingEmpty": "还没有客户。",
+    "campaigns": "营销活动",
+    "sends": "已发送",
+    "deliveries": "已送达",
+    "clicks": "点击",
+    "uniqueClickers": "点击过的人",
+    "conversion": "转化率",
+    "reportsTitle": "所有客户合计",
+    "clientsCount": "客户",
+    "eventsTotal": "活动",
+    "revenue": "总销售额",
+    "revenueFrom": "来自 {count, plural, other {# 个}}共享资金的客户",
+    "revenueNone": "没有客户与你共享其资金。",
+    "perClient": "按客户",
+    "eventStatus": {
+      "draft": "草稿",
+      "published": "已发布",
+      "postponed": "已延期",
+      "cancelled": "已取消",
+      "completed": "已结束",
+      "archived": "已归档"
+    },
+    "refreshedAt": "刷新时间"
+  },
+  "analyticsPro": {
+    "tabs": {
+      "label": "分析版块",
+      "overview": "概览",
+      "explore": "探索",
+      "alerts": "提醒规则",
+      "reports": "报告"
+    },
+    "explore": {
+      "title": "探索",
+      "description": "选择一个指标及其细分方式。归因会显示哪些活动、渠道和来源带来了销售。",
+      "form": "选择要显示的内容",
+      "measure": "指标",
+      "groupCounts": "数量",
+      "groupMoney": "金额",
+      "groupAttribution": "归因",
+      "measures": {
+        "registrations": "报名数",
+        "tickets": "售出门票（净数）",
+        "comp_tickets": "免费门票",
+        "refunded_tickets": "已退款门票",
+        "checkins": "签到",
+        "no_shows": "未到场",
+        "attributed_orders": "归因订单",
+        "gross": "已付款",
+        "refunds": "已退款",
+        "net": "净销售额",
+        "attributed_revenue": "归因收入"
+      },
+      "dimension": "细分维度",
+      "dimensions": {
+        "period": "期间",
+        "event": "活动",
+        "channel": "渠道",
+        "source": "来源",
+        "campaign": "营销活动"
+      },
+      "model": "归因模型",
+      "modelHint": "仅用于归因订单和收入。",
+      "models": {
+        "first": "首次触点",
+        "last": "末次触点",
+        "linear": "线性（平均分配）"
+      },
+      "range": "期间",
+      "ranges": {
+        "7d": "最近 7 天",
+        "30d": "最近 30 天",
+        "90d": "最近 90 天",
+        "365d": "最近 12 个月",
+        "custom": "自定义日期"
+      },
+      "from": "从",
+      "to": "到",
+      "customHint": "期间为“自定义日期”时使用。",
+      "granularity": "显示单位",
+      "granularities": {
+        "day": "天",
+        "week": "周",
+        "month": "月"
+      },
+      "event": "活动",
+      "allEvents": "全部活动",
+      "apply": "显示",
+      "errors": {
+        "touch_dimension": "渠道、来源和营销活动仅适用于归因订单或收入。",
+        "custom_needs_dates": "自定义期间请填写两个日期。",
+        "from_after_to": "结束日期早于开始日期。",
+        "range_too_long": "请选择两年以内的期间。",
+        "invalid_date": "请按年、月、日填写日期。"
+      },
+      "resultsCaption": "按{dimension}的{measure}，{from} 至 {to}",
+      "total": "合计",
+      "none": "无",
+      "unnamedCampaign": "未命名的营销活动",
+      "weekOf": "{day} 那一周",
+      "currency": "货币",
+      "value": "数值",
+      "truncated": "仅显示前 500 行。选择更短的期间或单个活动以查看其余内容。",
+      "emptyTitle": "此选择没有可显示的内容",
+      "emptyBody": "此期间没有该指标的数据。请尝试更长的期间、其他活动或其他指标。",
+      "emptyAction": "显示最近 12 个月",
+      "export": "导出 CSV",
+      "exportLabel": "将这些结果导出为 CSV 文件",
+      "timeZoneNote": "日期按 {timeZone}（你所在组织的时区）的自然日计算。",
+      "attributionNote": "归因会把每个归因订单分配给你的归因窗口内促成它的访问：被点击的追踪链接、带 UTM 参数的访问以及引导买家过来的其他网站。首次触点计入第一次访问，末次触点计入最后一次访问，线性模型平均分配订单（剩余的 1 分计入最后一次访问）。收入是买家支付的金额，按货币分别计算；没有记录到访问的订单不参与归因。",
+      "saveTitle": "保存此视图",
+      "viewName": "名称",
+      "save": "保存视图",
+      "saved": "视图已保存",
+      "viewErrors": {
+        "name": "请输入不超过 80 个字符的名称。",
+        "name_taken": "你已经有同名的视图。",
+        "too_many_views": "你已有 50 个保存的视图，请先删除一个。"
+      },
+      "views": "你保存的视图",
+      "noViews": "还没有保存的视图。在上方选择要显示的内容，然后保存到这里，一键即可返回。",
+      "deleteView": "删除",
+      "deleteViewLabel": "删除视图 {name}",
+      "deleted": "视图已删除"
+    },
+    "rules": {
+      "title": "提醒规则",
+      "description": "当某个数字越过界限时收到提醒。规则提醒会像内置提醒一样，通过“提醒”发送给你的团队。",
+      "createTitle": "新建提醒规则",
+      "editTitle": "编辑提醒规则",
+      "name": "名称",
+      "nameHint": "显示在提醒及其邮件中。",
+      "measure": "指标",
+      "measures": {
+        "registrations": "报名数",
+        "tickets": "售出门票（净数）",
+        "refunded_tickets": "已退款门票",
+        "checkins": "签到",
+        "gross": "已付款",
+        "refunds": "已退款",
+        "net": "净销售额"
+      },
+      "condition": "当它",
+      "conditions": {
+        "above": "至少为",
+        "below": "低于",
+        "rise": "上升至少（%）",
+        "drop": "下降至少（%）"
+      },
+      "threshold": "阈值",
+      "thresholdHint": "数量、金额，或上升和下降的百分比（与前一期间相比）。",
+      "window": "统计范围",
+      "windows": {
+        "d1": "今天",
+        "d7": "最近 7 天",
+        "d14": "最近 14 天",
+        "d30": "最近 30 天"
+      },
+      "currency": "货币",
+      "currencyHint": "金额规则只比较一种货币。",
+      "noCurrency": "非金额",
+      "event": "活动",
+      "allEvents": "全部活动",
+      "severity": "严重程度",
+      "severities": {
+        "info": "信息",
+        "warning": "警告",
+        "critical": "严重"
+      },
+      "quietHours": "遵守免打扰时段",
+      "quietHoursHint": "如果规则在 21:00 至 8:00 之间触发，邮件和推送会等到每位收件人所在时区的 8:00 再发送。应用内提醒会立即显示。",
+      "create": "创建规则",
+      "save": "保存更改",
+      "back": "返回提醒规则",
+      "created": "规则已创建",
+      "saved": "更改已保存",
+      "list": "你的规则",
+      "emptyTitle": "还没有提醒规则",
+      "emptyBody": "在上方创建一条规则，例如“今天的退款至少 10 笔”。一旦条件成立就会提醒你。",
+      "columns": {
+        "name": "规则",
+        "condition": "条件",
+        "status": "状态",
+        "lastValue": "最新读数",
+        "actions": "操作"
+      },
+      "summary": "{window}{measure}{condition}{threshold}",
+      "status": {
+        "firing": "已触发",
+        "ok": "正常",
+        "off": "已关闭",
+        "new": "尚未检查"
+      },
+      "edit": "编辑",
+      "editLabel": "编辑 {name}",
+      "turnOff": "关闭",
+      "turnOn": "开启",
+      "turnOffLabel": "关闭 {name}",
+      "turnOnLabel": "开启 {name}",
+      "delete": "删除",
+      "deleteLabel": "删除 {name}",
+      "deleted": "规则已删除",
+      "turnedOff": "规则已关闭",
+      "turnedOn": "规则已开启",
+      "readOnly": "你可以查看这些规则，但不能修改。",
+      "errors": {
+        "name": "请输入不超过 80 个字符的名称。",
+        "name_taken": "已存在同名规则。",
+        "threshold": "请输入 0 或更大的数字。",
+        "percent_range": "请输入 1 到 1000 之间的百分比。",
+        "currency_required": "请为金额规则选择货币。",
+        "too_many_rules": "你已有 50 条规则，请先删除一条。"
+      }
+    },
+    "reports": {
+      "title": "定期报告",
+      "description": "每天、每周或每月通过邮件发送分析 PDF，按你所在组织的时区统计。",
+      "createTitle": "新建定期报告",
+      "editTitle": "编辑定期报告",
+      "name": "名称",
+      "frequency": "频率",
+      "frequencies": {
+        "daily": "每天（昨天的数据）",
+        "weekly": "每周一（上周，周一至周日）",
+        "monthly": "每月 1 日（上个月）"
+      },
+      "frequencyShort": {
+        "daily": "每天",
+        "weekly": "每周",
+        "monthly": "每月"
+      },
+      "sendHour": "发送时间",
+      "sendHourHint": "{timeZone} 时间。",
+      "event": "活动",
+      "allEvents": "全部活动",
+      "recipients": "发送给",
+      "recipientsHint": "可以查看订单的成员。只有能查看财务的人，其 PDF 中才包含收入；每份 PDF 使用阅读者的语言。",
+      "you": "{name}（你）",
+      "create": "安排报告",
+      "save": "保存更改",
+      "back": "返回定期报告",
+      "created": "报告已安排",
+      "saved": "更改已保存",
+      "list": "计划",
+      "emptyTitle": "还没有定期报告",
+      "emptyBody": "在上方安排一份：每个期间会通过邮件发送一次，并附上 PDF 的链接。",
+      "columns": {
+        "name": "报告",
+        "frequency": "频率",
+        "next": "下次发送",
+        "recipients": "收件人",
+        "status": "状态",
+        "actions": "操作"
+      },
+      "recipientsCount": "{count, plural, other {# 位成员}}",
+      "status": {
+        "on": "开启",
+        "off": "关闭"
+      },
+      "edit": "编辑",
+      "editLabel": "编辑 {name}",
+      "turnOff": "关闭",
+      "turnOn": "开启",
+      "turnOffLabel": "关闭 {name}",
+      "turnOnLabel": "开启 {name}",
+      "delete": "删除",
+      "deleteLabel": "删除 {name}",
+      "deleted": "计划已删除",
+      "turnedOff": "计划已关闭",
+      "turnedOn": "计划已开启",
+      "recent": "最近的报告",
+      "recentEmpty": "尚未发送任何报告。第一份将在下次发送时间发出。",
+      "recentColumns": {
+        "report": "报告",
+        "period": "期间",
+        "status": "状态",
+        "file": "PDF"
+      },
+      "runStatus": {
+        "pending": "等待中",
+        "sent": "已发送",
+        "failed": "失败"
+      },
+      "download": "下载 PDF",
+      "downloadLabel": "下载 {period} 的 {name}（PDF）",
+      "notReady": "尚未就绪",
+      "errors": {
+        "name": "请输入不超过 80 个字符的名称。",
+        "name_taken": "已存在同名计划。",
+        "recipients": "请至少选择一位成员。",
+        "bad_recipient": "请选择可以查看订单的成员。",
+        "too_many_schedules": "你已有 25 个计划，请先删除一个。"
+      }
     }
   }
 }

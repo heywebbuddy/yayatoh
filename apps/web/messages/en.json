@@ -51,7 +51,11 @@
       "coupon": "Coupon",
       "page": "Page or blog post"
     },
-    "help": "Help"
+    "help": "Help",
+    "clientsSection": "Clients",
+    "viaAgency": "via {agency}",
+    "agencyBadgeLabel": "You are working in {org} for {agency}",
+    "backToAgency": "Back to {agency}"
   },
   "notifications": {
     "open": "Notifications",
@@ -172,7 +176,9 @@
       "alerts": {
         "alert": "Alert",
         "alert-text": "Alert text",
-        "alert-urgent-text": "Urgent alert text"
+        "alert-urgent-text": "Urgent alert text",
+        "metric": "Alert rule",
+        "metric-now": "Alert rule (sent at once)"
       },
       "campaigns": {
         "test": "Campaign test"
@@ -217,6 +223,9 @@
       },
       "badges": {
         "kiosk-code": "Badge kiosk code"
+      },
+      "analytics": {
+        "report": "Scheduled report"
       }
     },
     "status": {
@@ -385,7 +394,9 @@
     "webhooks": "Webhooks",
     "sandboxes": "Sandboxes",
     "notifications": "Notifications",
-    "sso": "Single sign-on"
+    "sso": "Single sign-on",
+    "agency": "Clients",
+    "agencies": "Agencies"
   },
   "vocab": {
     "attendee": "Attendee",
@@ -414,7 +425,13 @@
     "box_office": "Box office",
     "scanner": "Scanner",
     "viewer": "Viewer",
-    "collaborator": "Event collaborator"
+    "collaborator": "Event collaborator",
+    "agency_manager": "Agency manager",
+    "agency_manager_finance": "Agency manager (finance)",
+    "agency_marketing": "Agency marketing",
+    "agency_marketing_finance": "Agency marketing (finance)",
+    "agency_viewer": "Agency viewer",
+    "agency_viewer_finance": "Agency viewer (finance)"
   },
   "profiles": {
     "wedding": "Wedding",
@@ -762,7 +779,8 @@
     "reference": "Reference: {id}",
     "rateLimitedRetry": "Too many attempts. Try again in {minutes, plural, one {# minute} other {# minutes}}.",
     "impersonation_blocked": "Staff acting as a member can't do this: refunds, payouts, exports, deletions and confirmations are turned off.",
-    "read_only_freeze": "Changes are paused during scheduled maintenance. Nothing was saved; try again when it ends."
+    "read_only_freeze": "Changes are paused during scheduled maintenance. Nothing was saved; try again when it ends.",
+    "read_only_billing": "This organization is read-only until its subscription is paid. Nothing was saved or deleted."
   },
   "notFound": {
     "title": "Page not found",
@@ -2146,7 +2164,8 @@
       "cards": "Cards and exports",
       "selection": "Best available",
       "channels": "Channels",
-      "revisions": "Revisions"
+      "revisions": "Revisions",
+      "solver": "Auto-seat"
     },
     "assign": {
       "title": "Assign guests",
@@ -2729,6 +2748,134 @@
       "isCurrent": "This is the plan as it is now.",
       "restore": "Restore revision {number}",
       "restoredNotice": "Revision {number} restored. The plan now is revision {now}."
+    },
+    "solver": {
+      "title": "Seating rules and solver",
+      "description": "Set rules, let the solver propose a table for everyone still unseated, review the proposal and accept one table or all. Guests you seated by hand never move.",
+      "rules": {
+        "heading": "Rules",
+        "listLabel": "Seating rules",
+        "empty": "No rules yet. Add one below, or run the solver without rules: it still keeps every table within its seats.",
+        "hard": "Hard",
+        "soft": "Soft",
+        "badge": "{strength} · weight {weight}",
+        "strength": "Strength",
+        "strengthHint": "A proposal never breaks a hard rule. Soft rules are kept when they can be; each break costs its weight.",
+        "weight": "Weight",
+        "weightHint": "1 to 10. Soft rules with a higher weight matter more.",
+        "save": "Save",
+        "remove": "Remove",
+        "saved": "Rule saved.",
+        "removed": "Rule removed.",
+        "added": "Rule added.",
+        "editLabel": "Change rule: {rule}",
+        "kinds": {
+          "keep_together": "Keep together",
+          "keep_apart": "Keep apart",
+          "vip_near_stage": "VIP nearest the stage",
+          "access_near_exit": "Accessibility needs near exits",
+          "table_max": "Table maximum"
+        },
+        "add": {
+          "heading": "Add a rule",
+          "kind": "Rule",
+          "by": "Who",
+          "byEach": "Each party",
+          "byParty": "A party",
+          "byTag": "Everyone with a tag",
+          "bySide": "Everyone on a side",
+          "party": "Party",
+          "tag": "Tag",
+          "side": "Side",
+          "choose": "Choose…",
+          "together": "Keep together",
+          "first": "First group",
+          "second": "Second group",
+          "accessTag": "Tag for accessibility needs",
+          "accessHint": "Parties with this tag sit at the tables nearest an exit or entrance. Answers to accessibility questions stay private.",
+          "max": "People per table at most",
+          "vipHint": "VIP parties sit at the tables nearest the stage.",
+          "submit": "Add rule"
+        },
+        "errors": {
+          "value": "Choose who the rule is about.",
+          "same": "Choose two different groups.",
+          "weight": "Enter a weight from 1 to 10.",
+          "max": "Enter a number from 1 to 40.",
+          "duplicate": "This event already has that rule.",
+          "tooMany": "An event can have at most 50 rules.",
+          "unknownParty": "That party isn't on this guest list."
+        },
+        "describe": {
+          "togetherParty": "Keep each party together",
+          "togetherTag": "Keep everyone tagged “{value}” together",
+          "togetherSide": "Keep the {value} side together",
+          "apart": "Keep {a} apart from {b}",
+          "targetParty": "{value}",
+          "targetTag": "everyone tagged “{value}”",
+          "targetSide": "the {value} side",
+          "vip": "VIP parties nearest the stage",
+          "access": "Guests tagged “{tag}” nearest an exit",
+          "tableMax": "At most {max} people per table"
+        }
+      },
+      "run": {
+        "heading": "Proposal",
+        "queue": "{count, plural, one {# guest} other {# guests}} still to seat. {fixed, plural, =0 {Nobody is seated yet.} one {# guest seated by hand stays where they are.} other {# guests seated by hand stay where they are.}}",
+        "nothing": "Everyone is seated. There is nothing to propose.",
+        "seed": "Arrangement number",
+        "seedHint": "The same number always gives the same proposal.",
+        "seedError": "Enter a whole number from 1 to 1,000,000.",
+        "start": "Propose seating",
+        "cancel": "Stop",
+        "again": "Try another arrangement",
+        "running": "Working on a proposal… {percent}%",
+        "progress": "Proposal progress",
+        "cancelled": "Stopped. Nothing was proposed.",
+        "failed": "The solver stopped unexpectedly. Try again."
+      },
+      "summary": {
+        "heading": "Summary",
+        "done": "Proposal ready in {seconds} s (arrangement {seed}).",
+        "seated": "{count, plural, one {# guest} other {# guests}} at {tables, plural, one {# table} other {# tables}}; {queue, plural, =0 {nobody left in the queue} one {# guest left in the queue} other {# guests left in the queue}}.",
+        "hardOk": "No hard rule is broken.",
+        "hardBroken": "{count, plural, one {# hard rule is broken} other {# hard rules are broken}}. Change the proposal before accepting.",
+        "soft": "Soft rules: penalty {penalty} (0 is best).",
+        "ruleLine": "{rule}: {count, plural, =0 {kept} one {# break} other {# breaks}}",
+        "issues": {
+          "no_stage": "The plan has no stage, so “VIP nearest the stage” can't apply.",
+          "no_exit": "The plan has no exit or entrance, so “Accessibility needs near exits” can't apply.",
+          "group_too_big": "A group of {size} is bigger than any table ({room} seats). It is kept on as few tables as possible.",
+          "too_few_seats": "{size} guests to seat but only {room} free seats: some stay in the queue.",
+          "no_room": "The plan has no tables or rows."
+        }
+      },
+      "tables": {
+        "heading": "Proposed tables",
+        "none": "No table is proposed.",
+        "region": "Table {label}",
+        "fill": "{proposed} proposed · {seated} seated · {free} of {capacity} free",
+        "overFull": "{count, plural, one {# guest too many} other {# guests too many}} for the free seats.",
+        "broken": "Breaks a hard rule: {rules}",
+        "over": "More guests than seats",
+        "accept": "Accept table {label}",
+        "acceptAll": "Accept all tables",
+        "fixFirst": "Fix the tables marked with a warning first.",
+        "acceptedTable": "Table {label} accepted: {count, plural, one {# guest} other {# guests}} seated.",
+        "acceptedAll": "Proposal accepted: {count, plural, one {# guest} other {# guests}} seated.",
+        "queueHeading": "Left in the queue",
+        "guest": "{name} ({party})",
+        "moveLabel": "Table for {name}",
+        "queueOption": "Leave in the queue",
+        "optionFree": "Table {label} ({free} free)",
+        "toEditor": "Open the seating editor"
+      },
+      "acceptErrors": {
+        "already_seated": "Someone in this proposal was seated by hand meanwhile. Propose again.",
+        "declined": "A guest in this proposal has declined. Propose again.",
+        "hard_rule": "Accepting this would break a hard rule.",
+        "cant_fit": "Only {fits} more fit at that table."
+      }
     }
   },
   "venueMap": {
@@ -7435,7 +7582,9 @@
       "guestsUnseated": "Seat guests",
       "mealsMissing": "Open RSVP answers",
       "integrationFailed": "Open the integrations inbox",
-      "billingPastDue": "Open plan and billing"
+      "billingPastDue": "Open plan and billing",
+      "metricRule": "Open alert rules",
+      "metricRuleFinance": "Open alert rules"
     },
     "rules": {
       "unseated": "{count, plural, one {{countWords} attendee does not have a seat} other {{countWords} attendees do not have seats}}",
@@ -7473,7 +7622,9 @@
       "guestsUnseated": "{count, plural, one {{countWords} guest does not have a table} other {{countWords} guests do not have a table}}",
       "mealsMissing": "{count, plural, one {{countWords} attending guest has not chosen a meal} other {{countWords} attending guests have not chosen a meal}}",
       "integrationFailed": "{count, plural, one {{countWords} integration problem today (a failed sync or a lost connection)} other {{countWords} integration problems today (failed syncs or lost connections)}}",
-      "billingPastDue": "{count, plural, one {The plan payment is past due} other {{countWords} plan payments are past due}}"
+      "billingPastDue": "{count, plural, one {The plan payment is past due} other {{countWords} plan payments are past due}}",
+      "metricRule": "Alert rule “{title}” is firing",
+      "metricRuleFinance": "Alert rule “{title}” is firing"
     },
     "widget": {
       "title": "Alerts",
@@ -15129,7 +15280,74 @@
       "ai_seating": "AI seating",
       "analytics_pro": "Advanced analytics"
     },
-    "findOwner": "Find an owner or admin"
+    "findOwner": "Find an owner or admin",
+    "usageLink": "Usage",
+    "renewalReceived": "Renewal update received",
+    "dunning": {
+      "graceTitle": "Your subscription payment didn't go through",
+      "graceBody": "Everything works as usual until {date}. Pay before then to keep making changes; after that the organization becomes read-only until it's paid.",
+      "readOnlyTitle": "This organization is read-only",
+      "readOnlyBody": "The subscription payment failed, so changes are paused. Nothing has been deleted: you can still look at everything, export your data, and scan tickets at the door. Pay to restore changes at once.",
+      "payNow": "Pay now",
+      "askOwner": "Ask an owner or admin of this organization to pay.",
+      "paidTitle": "Payment received",
+      "paidBody": "Thank you. Changes are back on for everyone in the organization.",
+      "declinedTitle": "The payment didn't go through",
+      "declinedBody": "Nothing changed. Check the card on file with your billing provider, then try again.",
+      "payError": "The payment couldn't be started. Try again in a moment."
+    },
+    "change": {
+      "title": "Change plan",
+      "description": "Upgrades and downgrades take effect at once. You pay or are credited only for the rest of this billing period.",
+      "discountCharity": "Your verified charity profile gives you {percent}% off every plan.",
+      "discountStaff": "Your organization gets a {percent}% nonprofit discount on every plan.",
+      "legend": "Plans",
+      "offer": "{plan}: {price} {interval, select, year {a year} other {a month}}",
+      "direction": {
+        "upgrade": "Upgrade",
+        "downgrade": "Downgrade",
+        "switch": "Switch",
+        "start": "Start"
+      },
+      "turnsOff": "{count, plural, one {Turns off # module} other {Turns off # modules}}",
+      "chooseError": "Choose a plan to preview.",
+      "preview": "Preview change",
+      "previewTitle": "Change to {plan}",
+      "previewLead": {
+        "upgrade": "You're upgrading. Here is what you pay today for the rest of this billing period.",
+        "downgrade": "You're downgrading. Unused time on your current plan is credited.",
+        "switch": "You're switching plans at the same price.",
+        "start": "Your subscription starts today."
+      },
+      "rows": {
+        "charge": "New plan, rest of the period",
+        "credit": "Credit for unused time",
+        "discount": "Nonprofit discount",
+        "tax": "Tax",
+        "due": "Due today"
+      },
+      "creditKept": "{amount} of credit is kept for your next invoices.",
+      "nextRenewal": "Then {amount} on {date}.",
+      "nextRenewalNoDate": "Then {amount} each period.",
+      "taxNote": "Tax is calculated by the billing provider from your organization's billing details.",
+      "removedTitle": "{count, plural, one {# module turns off} other {# modules turn off}}",
+      "removedBody": "Their data is kept. They come back as they were if you change to a plan that includes them.",
+      "confirmRemoved": "{count, plural, one {I understand this module turns off} other {I understand these modules turn off}}",
+      "confirmError": "Confirm the modules that turn off to continue.",
+      "confirm": "Confirm change",
+      "cancel": "Keep my plan",
+      "doneTitle": "Plan change sent",
+      "doneBody": "Your billing provider confirmed the change. Your plan and modules are updated below.",
+      "errorTitle": "The plan wasn't changed",
+      "errors": {
+        "billing_off": "Billing isn't active for this organization.",
+        "same_plan": "You're already on this plan.",
+        "validation_failed": "Choose a plan that is offered.",
+        "provider": "The billing provider didn't accept the change. Nothing was charged; try again.",
+        "forbidden": "Only owners and admins can change the plan.",
+        "other": "Something went wrong. Nothing was changed."
+      }
+    }
   },
   "billingPortal": {
     "eyebrow": "Test billing",
@@ -15139,7 +15357,11 @@
     "switch": "Switch plan",
     "cancel": "Cancel subscription",
     "back": "Back without changes",
-    "chooseError": "Choose a plan to switch to."
+    "chooseError": "Choose a plan to switch to.",
+    "noSubscriptionError": "This customer has no subscription yet. Choose a plan first.",
+    "renewalLegend": "Renewal",
+    "failRenewal": "Fail the renewal payment",
+    "stopRetrying": "Stop retrying the payment"
   },
   "seatingLibrary": {
     "title": "Seating library",
@@ -16269,6 +16491,686 @@
       "claimed_elsewhere": "Another organization has already verified this domain.",
       "sso_unavailable": "Single sign-on isn't available on this deployment.",
       "last_owner": "The organization needs at least one owner."
+    }
+  },
+  "leads": {
+    "portal": {
+      "heading": "Lead capture",
+      "window": "Capture opens {opens} and closes {closes} (event time). Notes and export stay open until {until}.",
+      "termsNeededAdmin": "Accept the lead terms below before your team can capture leads.",
+      "termsNeededStaff": "Your exhibitor admin needs to accept the lead terms before you can capture leads.",
+      "why": {
+        "unlicensed": "You don't have a lead license yet. Ask your exhibitor admin for one.",
+        "over_allowance": "Your license is beyond your exhibitor's allowance. Ask your exhibitor admin to take one back or buy more."
+      },
+      "open": "Open lead capture"
+    },
+    "license": {
+      "licensed": "Licensed",
+      "unlicensed": "No license",
+      "over_allowance": "Over the allowance"
+    },
+    "capture": {
+      "not_open": "Capture not open yet",
+      "open": "Capture open",
+      "closed": "Capture closed"
+    },
+    "terms": {
+      "heading": "Lead terms",
+      "v1": "When you scan an attendee's badge, you receive only their name, job title and company, and their email only if they agreed to share it. Your company becomes responsible for this data: use it only to follow up on your conversation at this event, keep it secure, and delete it when asked. Attendees can see that you scanned them and can stop sharing their email.",
+      "accepted": "Lead terms accepted",
+      "acceptLabel": "Agreement",
+      "accept": "I accept the lead terms on behalf of {exhibitor}",
+      "submit": "Accept the lead terms",
+      "acceptRequired": "Tick the box to accept the lead terms."
+    },
+    "settings": {
+      "heading": "Qualifiers and visibility",
+      "qualifiers": "Qualifiers",
+      "qualifiersHint": "One per line, up to 10 (for example: Budget approved). Your team ticks them on each lead.",
+      "visibility": "Who sees leads",
+      "teamVisibility": "Staff see the whole team's leads (otherwise only the leads they scanned)",
+      "save": "Save lead settings",
+      "saved": "Lead settings saved.",
+      "qualifiersInvalid": "Each qualifier can be at most 60 characters.",
+      "tooMany": "You can have at most 10 qualifiers."
+    },
+    "export": {
+      "heading": "Export leads",
+      "ready": "Confirmed. You can download your leads now.",
+      "count": "{count, plural, =0 {No leads yet} one {# lead} other {# leads}}",
+      "hint": "For your security, we email you a code to confirm it's you before the download.",
+      "download": "Download leads (CSV)",
+      "ended": "Lead access has ended for this event.",
+      "columns": {
+        "name": "Name",
+        "jobTitle": "Job title",
+        "company": "Company",
+        "email": "Email",
+        "rating": "Rating",
+        "qualifiers": "Qualifiers",
+        "notes": "Notes",
+        "capturedAt": "Scanned at",
+        "scannedBy": "Scanned by",
+        "scans": "Scans",
+        "sharedFields": "Shared fields",
+        "emailConsentVersion": "Email consent version"
+      }
+    },
+    "confirm": {
+      "title": "Confirm it's you",
+      "intro": "To download your leads, confirm with a code we email to {email}."
+    },
+    "attendee": {
+      "heading": "Who scanned my badge",
+      "emptyTitle": "Nobody has scanned your badge yet",
+      "emptyDescription": "When an exhibitor scans your badge, you'll see them here.",
+      "scannedAt": "Scanned {time}",
+      "emailShared": "Has your email",
+      "emailWithdrawn": "Email sharing stopped",
+      "emailNotShared": "Email not shared",
+      "withdraw": "Stop sharing my email with {exhibitor}",
+      "withdrawn": "Done. They no longer see your email.",
+      "sharingOn": "Exhibitors who scan your badge receive your email.",
+      "sharingOff": "Exhibitors who scan your badge don't receive your email.",
+      "sharingHint": "They always receive your name, job title and company. Never your phone or address.",
+      "turnOff": "Stop sharing my email with exhibitors",
+      "turnOn": "Share my email with exhibitors who scan my badge",
+      "saved": "Saved."
+    },
+    "app": {
+      "pageTitle": "Lead capture",
+      "loading": "Loading…",
+      "signedOutTitle": "Sign in to capture leads",
+      "signedOutDescription": "Open the sign-in link from your exhibitor invitation email on this device, then come back to lead capture.",
+      "openPortal": "Go to the exhibitor portal",
+      "title": "Leads for {exhibitor}",
+      "online": "Online",
+      "offline": "Offline: scans are saved on this device",
+      "queued": "{count, plural, =0 {All synced} one {# scan waiting to sync} other {# scans waiting to sync}}",
+      "modes": "Lead capture views",
+      "viewScan": "Scan",
+      "viewLeads": "{count, plural, =0 {Leads} other {Leads (#)}}",
+      "blockedTitle": "You can't capture leads right now",
+      "blocked": {
+        "unlicensed": "You don't have a lead license. Ask your exhibitor admin for one.",
+        "over_allowance": "Your license is beyond your exhibitor's allowance. Ask your exhibitor admin.",
+        "termsAdmin": "Accept the lead terms in the exhibitor portal first.",
+        "termsStaff": "Your exhibitor admin needs to accept the lead terms first.",
+        "notOpen": "Capture opens {time}.",
+        "closed": "Capture closed {time}. You can still read and edit your leads."
+      },
+      "codeLabel": "Badge code",
+      "codeHint": "Scan the QR on the badge, or type the code printed under it.",
+      "save": "Save lead",
+      "camera": "Scan with camera",
+      "stopCamera": "Stop camera",
+      "cameraFailed": "The camera couldn't start. Type the badge code instead.",
+      "refusals": {
+        "no_license": "You don't have a lead license. Ask your exhibitor admin for one.",
+        "over_allowance": "Your license is beyond your exhibitor's allowance. Your scans wait on this device.",
+        "terms_not_accepted": "The lead terms aren't accepted yet. Your scans wait on this device.",
+        "access_ended": "Lead access has ended for this event.",
+        "other": "Something went wrong. Your scans wait on this device; try again."
+      },
+      "result": {
+        "queued": "Saved on this device",
+        "queuedHint": "The details appear once it syncs.",
+        "refused": "Not saved",
+        "captured": "Lead saved",
+        "rescanned": "Already a lead: scan added"
+      },
+      "reasons": {
+        "invalid": "This badge can't be read. Check the code and try again.",
+        "wrong_event": "This badge is for another event.",
+        "not_open": "It was scanned before capture opened.",
+        "closed": "It was scanned after capture closed."
+      },
+      "emailWithdrawn": "Email sharing stopped by the attendee on {time}",
+      "emailNotShared": "Email not shared",
+      "capturedAt": "Scanned {time}{count, plural, one {} other { · # scans}}",
+      "scannedBy": "by {email}",
+      "editLabel": "Lead details",
+      "rating": "Rating",
+      "ratings": {
+        "hot": "Hot",
+        "warm": "Warm",
+        "cold": "Cold",
+        "none": "No rating"
+      },
+      "qualifiers": "Qualifiers",
+      "notes": "Notes",
+      "saveDetails": "Save details",
+      "saved": "Saved.",
+      "savedQueued": "Saved with the scan. It syncs when you're online.",
+      "needsConnection": "Connect to the internet to save changes to this lead.",
+      "saveFailed": "Couldn't save. Try again.",
+      "accessEnded": "Lead access has ended for this event.",
+      "scope": {
+        "all": "All leads of {exhibitor}",
+        "team": "Your team's leads",
+        "own": "Your leads"
+      },
+      "emptyTitle": "No leads yet",
+      "emptyDescription": "Scan a badge on the Scan tab to save your first lead.",
+      "search": "Search leads",
+      "noMatch": "No lead matches your search.",
+      "edit": "Edit {name}"
+    }
+  },
+  "conferenceHub": {
+    "metaTitle": "Conference hub",
+    "eyebrow": "Your conference hub",
+    "for": "For {name}",
+    "whose": "Whose hub",
+    "orderLink": "Open my conference hub",
+    "orderLinkHint": "Agenda, your schedule, your badge and calendar, on your phone.",
+    "noRegistrantTitle": "No registration on this order",
+    "noRegistrantDescription": "The conference hub belongs to a registration. Open the order you registered with.",
+    "backToOrder": "Back to my order",
+    "offline": "You're offline. This is the copy saved on your phone.",
+    "privateLink": "This page is private: anyone with its link can see it and change your schedule. Don't share it.",
+    "tabs": {
+      "label": "Hub sections",
+      "today": "Today",
+      "schedule": "My schedule",
+      "agenda": "Agenda",
+      "badge": "Badge"
+    },
+    "today": {
+      "now": "Happening now",
+      "next": "Up next",
+      "fromSchedule": "From your schedule.",
+      "fromAgenda": "From the agenda. Star sessions to make it yours.",
+      "nothingNow": "Nothing on right now.",
+      "nothingNextTitle": "Nothing coming up soon",
+      "nothingNextDescription": "Browse the agenda to star sessions and enrol in optional ones.",
+      "openAgenda": "Open the agenda",
+      "pollsAndQa": "Polls and Q&A",
+      "more": "Your tools",
+      "badgeTitle": "Your badge",
+      "badgeDescription": "Show the QR code at the door and at session check-in.",
+      "showBadge": "Show my badge",
+      "networkingTitle": "Networking",
+      "networkingDescription": "Find other attendees, connect and book meetings.",
+      "openNetworking": "Open networking",
+      "calendarTitle": "Your calendar",
+      "calendarDescription": "Add your schedule to your phone's calendar. It updates when sessions move.",
+      "openCalendar": "Add to my calendar"
+    },
+    "summary": "{enrolled, plural, one {# enrolled session} other {# enrolled sessions}} · {favorites, plural, one {# favorite} other {# favorites}} · {conflicts, plural, =0 {no overlaps} one {# overlapping session} other {# overlapping sessions}}",
+    "agendaIntro": "Star the sessions you want to attend. Optional sessions need enrolment.",
+    "conflict": "Overlaps {titles}",
+    "emptyScheduleTitle": "Your schedule is empty",
+    "emptyScheduleDescription": "Star sessions in the agenda, or enrol in optional ones, and they appear here.",
+    "emptyAgendaTitle": "No sessions yet",
+    "emptyAgendaDescription": "The organizer hasn't added sessions for your registration yet. Check back soon.",
+    "favorite": {
+      "star": "Star",
+      "starred": "Starred",
+      "starNamed": "Star {title}",
+      "unstarNamed": "Remove the star from {title}",
+      "pill": "Favorite",
+      "added": "{title} is on your schedule.",
+      "removed": "{title} is off your schedule.",
+      "replaced": "{count, plural, one {Starred. # overlapping favorite removed.} other {Starred. # overlapping favorites removed.}}",
+      "tooMany": "You've starred the most sessions allowed. Remove a star first.",
+      "conflictTitle": "This overlaps your schedule",
+      "conflictEnrolled": "{title} (enrolled)",
+      "conflictFavorite": "{title} (starred)",
+      "keepBoth": "Keep both",
+      "replace": "Replace",
+      "cancel": "Cancel"
+    },
+    "calendar": {
+      "title": "Calendar feed",
+      "description": "Subscribe once: your calendar app refreshes the feed, so a moved session moves in your calendar too. Enrolled sessions show as confirmed, starred ones as tentative.",
+      "subscribe": "Subscribe in my calendar",
+      "download": "Download .ics",
+      "linkLabel": "Feed link (private)",
+      "copy": "Copy link",
+      "copied": "Link copied.",
+      "replace": "Replace the link",
+      "replaceConfirmTitle": "Replace the calendar link?",
+      "replaceConfirmBody": "The current link stops working at once, in every calendar that uses it. Subscribe again with the new link.",
+      "replaceConfirm": "Replace the link",
+      "cancel": "Cancel",
+      "replaced": "Done. The old link no longer works: subscribe with the new one."
+    },
+    "install": {
+      "title": "Keep it on your phone",
+      "button": "Add to home screen",
+      "installed": "This hub is on your home screen.",
+      "done": "Added to your home screen.",
+      "help": "On iPhone or iPad: tap Share, then Add to Home Screen. On Android: open the browser menu, then Install app or Add to Home screen."
+    },
+    "badge": {
+      "title": "Your badge",
+      "qrLabel": "Badge QR code for {name}",
+      "shortCode": "Code",
+      "hint": "Turn up your screen brightness at the door.",
+      "noneTitle": "No badge yet",
+      "noneDescription": "Your badge appears here once your registration is confirmed."
+    }
+  },
+  "billingUsage": {
+    "title": "Usage",
+    "subtitle": "What your organization used, by meter: messages, AI credits and scan devices.",
+    "breadcrumb": "Breadcrumb",
+    "period": "This month: {start} to {end} ({zone})",
+    "filterLabel": "Meters",
+    "allMeters": "All meters",
+    "meter": {
+      "email": "Email",
+      "sms": "SMS",
+      "whatsapp": "WhatsApp",
+      "ai_credits": "AI credits",
+      "devices": "Scan devices"
+    },
+    "unit": {
+      "email": "{count, plural, one {# email sent} other {# emails sent}}",
+      "sms": "{count, plural, one {# text segment} other {# text segments}}",
+      "whatsapp": "{count, plural, one {# message sent} other {# messages sent}}",
+      "ai_credits": "{count, plural, one {# credit used} other {# credits used}}",
+      "devices": "{count, plural, one {# device enrolled} other {# devices enrolled}}"
+    },
+    "reportingTitle": "Usage is sent to your billing provider",
+    "reportingBody": "{count, plural, =0 {Everything so far has been sent.} one {# record is waiting to be sent.} other {# records are waiting to be sent.}}",
+    "countingTitle": "Usage is counted, nothing is charged",
+    "countingBody": "Billing isn't active for this organization, so usage is only counted here.",
+    "currentTitle": "This month",
+    "currentDescription": "Counted in your organization's time zone.",
+    "historyTitle": "Earlier months",
+    "historyDescription": "The last 12 months with usage.",
+    "emptyTitle": "No usage yet",
+    "emptyBody": "Usage appears here when you send emails or texts, draft with AI, or enroll scan devices.",
+    "historyEmpty": "No usage in earlier months.",
+    "month": "Month"
+  },
+  "billingBanner": {
+    "label": "Billing",
+    "graceTitle": "Your subscription payment didn't go through",
+    "graceBody": "Everything works until {date}. After that the organization becomes read-only until it's paid.",
+    "readOnlyTitle": "This organization is read-only",
+    "readOnlyBody": "The subscription payment failed. Nothing has been deleted: you can look, export and scan tickets, but changes are paused until it's paid.",
+    "action": "Plan and billing"
+  },
+  "agencies": {
+    "title": "Agencies",
+    "subtitle": "Let an agency work on your events. You can take access away at any time, and the agency never pays or receives your money.",
+    "noAccessTitle": "Only owners and admins manage agencies",
+    "noAccessDescription": "Ask an owner or admin of this organization to give an agency access.",
+    "grantTitle": "Give an agency access",
+    "agency": "Agency address",
+    "agencyHint": "The address the agency gave you, for example bloom-events.",
+    "agencyRequired": "Enter the agency’s address.",
+    "agencyUnknown": "No agency has this address. Check it with the agency.",
+    "agencySelf": "An agency can’t give access to itself.",
+    "agencyTaken": "This agency already has access.",
+    "role": "What the agency can do",
+    "roleManager": "Manage events",
+    "roleManagerHint": "Create and edit events, guests, check-in and messages. No refunds, sales, members or settings.",
+    "roleMarketing": "Marketing",
+    "roleMarketingHint": "Campaigns, audiences and messages, and read events.",
+    "roleViewer": "View only",
+    "roleViewerHint": "Read events, orders and guests. Changes nothing.",
+    "finance": "Also let the agency read our money",
+    "financeHint": "Payouts, finance reports and the ledger, read-only. Off unless you turn it on.",
+    "grant": "Give access",
+    "granted": "{agency} can now work in this organization.",
+    "listTitle": "Agencies with access",
+    "empty": "No agency has access. Give one access above when you work with an agency.",
+    "emptyReadOnly": "No agency has access.",
+    "agencyColumn": "Agency",
+    "roleColumn": "Access",
+    "financeColumn": "Money",
+    "grantedColumn": "Since",
+    "actions": "Actions",
+    "financeOn": "Can read",
+    "financeOff": "No access",
+    "revoke": "Revoke",
+    "revokeNamed": "Revoke access for {agency}",
+    "revoked": "{agency} no longer has access.",
+    "financeEnable": "Allow money",
+    "financeEnableNamed": "Let {agency} read our money",
+    "financeDisable": "Stop money",
+    "financeDisableNamed": "Stop {agency} reading our money",
+    "historyTitle": "Past access",
+    "revokedColumn": "Ended",
+    "unknownAgency": "Agency no longer on Yayatoh",
+    "roleLabel": "{role, select, manager {Manage events} marketing {Marketing} viewer {View only} other {Access}}"
+  },
+  "agency": {
+    "title": "Clients",
+    "subtitle": "Every client who gave {agency} access. Numbers come from snapshots: refresh to bring them up to date.",
+    "tabs": "Agency sections",
+    "tab": {
+      "clients": "Clients",
+      "events": "Events",
+      "marketing": "Marketing",
+      "reports": "Reports"
+    },
+    "refresh": "Refresh numbers",
+    "refreshed": "Numbers refreshed for {count, plural, =0 {no clients} one {# client} other {# clients}}.",
+    "notRefreshed": "Not refreshed yet",
+    "emptyTitle": "No clients yet",
+    "emptyDescription": "Ask your client to open Agencies in their Yayatoh console and give access to {address}.",
+    "noAccessTitle": "Agency pages are for agency members",
+    "noAccessDescription": "Ask an owner of {agency} for access.",
+    "client": "Client",
+    "nextEvent": "Next event",
+    "noNextEvent": "Nothing scheduled",
+    "upcoming": "Upcoming events",
+    "orders": "Orders",
+    "tickets": "Tickets",
+    "checkins": "Checked in",
+    "checkinRate": "Check-in rate",
+    "open": "Open",
+    "openNamed": "Open {client}",
+    "finance": "with money",
+    "eventsTitle": "Events across clients",
+    "eventsEmpty": "No upcoming or recent events at your clients yet.",
+    "event": "Event",
+    "starts": "Starts",
+    "status": "Status",
+    "gross": "Gross sales",
+    "grossHidden": "Not shared",
+    "grossHiddenHint": "Gross sales show only for clients who let you read their money.",
+    "openEventNamed": "Open {event} at {client}",
+    "marketingTitle": "Marketing, last 30 days",
+    "marketingEmpty": "No clients yet.",
+    "campaigns": "Campaigns",
+    "sends": "Sent",
+    "deliveries": "Delivered",
+    "clicks": "Clicks",
+    "uniqueClickers": "People who clicked",
+    "conversion": "Conversion",
+    "reportsTitle": "Totals across clients",
+    "clientsCount": "Clients",
+    "eventsTotal": "Events",
+    "revenue": "Gross sales",
+    "revenueFrom": "{count, plural, one {# client shares} other {# clients share}} their money with you",
+    "revenueNone": "No client shares their money with you.",
+    "perClient": "By client",
+    "eventStatus": {
+      "draft": "Draft",
+      "published": "Published",
+      "postponed": "Postponed",
+      "cancelled": "Cancelled",
+      "completed": "Completed",
+      "archived": "Archived"
+    },
+    "refreshedAt": "Refreshed"
+  },
+  "analyticsPro": {
+    "tabs": {
+      "label": "Analytics sections",
+      "overview": "Overview",
+      "explore": "Explore",
+      "alerts": "Alert rules",
+      "reports": "Reports"
+    },
+    "explore": {
+      "title": "Explore",
+      "description": "Pick a measure and how to break it down. Attribution shows which campaigns, channels and sources led to sales.",
+      "form": "Choose what to show",
+      "measure": "Measure",
+      "groupCounts": "Counts",
+      "groupMoney": "Money",
+      "groupAttribution": "Attribution",
+      "measures": {
+        "registrations": "Registrations",
+        "tickets": "Tickets sold (net)",
+        "comp_tickets": "Free tickets",
+        "refunded_tickets": "Refunded tickets",
+        "checkins": "Check-ins",
+        "no_shows": "No-shows",
+        "attributed_orders": "Attributed orders",
+        "gross": "Paid",
+        "refunds": "Refunded",
+        "net": "Net sales",
+        "attributed_revenue": "Attributed revenue"
+      },
+      "dimension": "Break down by",
+      "dimensions": {
+        "period": "Period",
+        "event": "Event",
+        "channel": "Channel",
+        "source": "Source",
+        "campaign": "Campaign"
+      },
+      "model": "Attribution model",
+      "modelHint": "Used for attributed orders and revenue only.",
+      "models": {
+        "first": "First touch",
+        "last": "Last touch",
+        "linear": "Linear (shared equally)"
+      },
+      "range": "Period",
+      "ranges": {
+        "7d": "Last 7 days",
+        "30d": "Last 30 days",
+        "90d": "Last 90 days",
+        "365d": "Last 12 months",
+        "custom": "Custom dates"
+      },
+      "from": "From",
+      "to": "To",
+      "customHint": "Used when the period is “Custom dates”.",
+      "granularity": "Show by",
+      "granularities": {
+        "day": "Day",
+        "week": "Week",
+        "month": "Month"
+      },
+      "event": "Event",
+      "allEvents": "All events",
+      "apply": "Show",
+      "errors": {
+        "touch_dimension": "Channel, source and campaign work only with attributed orders or revenue.",
+        "custom_needs_dates": "Enter both dates for a custom period.",
+        "from_after_to": "The end date is before the start date.",
+        "range_too_long": "Choose a period of two years or less.",
+        "invalid_date": "Enter dates as year, month and day."
+      },
+      "resultsCaption": "{measure} by {dimension}, {from} to {to}",
+      "total": "Total",
+      "none": "None",
+      "unnamedCampaign": "Unnamed campaign",
+      "weekOf": "Week of {day}",
+      "currency": "Currency",
+      "value": "Value",
+      "truncated": "Showing the first 500 rows. Choose a shorter period or one event to see the rest.",
+      "emptyTitle": "Nothing to show for this choice",
+      "emptyBody": "There is no data for this measure in this period. Try a longer period, another event or another measure.",
+      "emptyAction": "Show the last 12 months",
+      "export": "Export CSV",
+      "exportLabel": "Export these results as a CSV file",
+      "timeZoneNote": "Days are calendar days in {timeZone}, your organization’s time zone.",
+      "attributionNote": "Attribution shares each attributed order among the visits that led to it inside your attribution window: tracked links clicked, landings with UTM values and other sites that sent the buyer. First touch credits the first visit, last touch the last one, and linear splits the order equally (any leftover cent goes to the last visit). Revenue is what the buyer paid, per currency; orders with no recorded visit are not attributed.",
+      "saveTitle": "Save this view",
+      "viewName": "Name",
+      "save": "Save view",
+      "saved": "View saved",
+      "viewErrors": {
+        "name": "Enter a name of up to 80 characters.",
+        "name_taken": "You already have a view with this name.",
+        "too_many_views": "You have 50 saved views. Delete one first."
+      },
+      "views": "Your saved views",
+      "noViews": "No saved views yet. Choose what to show above, then save it here to come back in one click.",
+      "deleteView": "Delete",
+      "deleteViewLabel": "Delete the view {name}",
+      "deleted": "View deleted"
+    },
+    "rules": {
+      "title": "Alert rules",
+      "description": "Get told when a number crosses a line. Rule alerts go to your team through Alerts, like the built-in ones.",
+      "createTitle": "New alert rule",
+      "editTitle": "Edit alert rule",
+      "name": "Name",
+      "nameHint": "Shown in the alert and its email.",
+      "measure": "Measure",
+      "measures": {
+        "registrations": "Registrations",
+        "tickets": "Tickets sold (net)",
+        "refunded_tickets": "Refunded tickets",
+        "checkins": "Check-ins",
+        "gross": "Paid",
+        "refunds": "Refunded",
+        "net": "Net sales"
+      },
+      "condition": "When it",
+      "conditions": {
+        "above": "is at least",
+        "below": "is below",
+        "rise": "rises by at least (%)",
+        "drop": "drops by at least (%)"
+      },
+      "threshold": "Threshold",
+      "thresholdHint": "A count, an amount for money, or a percentage for rises and drops (compared with the period before).",
+      "window": "Over",
+      "windows": {
+        "d1": "Today",
+        "d7": "The last 7 days",
+        "d14": "The last 14 days",
+        "d30": "The last 30 days"
+      },
+      "currency": "Currency",
+      "currencyHint": "Money rules compare one currency.",
+      "noCurrency": "Not money",
+      "event": "Event",
+      "allEvents": "All events",
+      "severity": "Severity",
+      "severities": {
+        "info": "Info",
+        "warning": "Warning",
+        "critical": "Critical"
+      },
+      "quietHours": "Respect quiet hours",
+      "quietHoursHint": "Email and push wait until 8:00 in each recipient’s time zone when the rule fires between 21:00 and 8:00. In-app alerts show at once.",
+      "create": "Create rule",
+      "save": "Save changes",
+      "back": "Back to alert rules",
+      "created": "Rule created",
+      "saved": "Changes saved",
+      "list": "Your rules",
+      "emptyTitle": "No alert rules yet",
+      "emptyBody": "Create a rule above, for example “Refunds today are at least 10”. You’ll be alerted the moment it’s true.",
+      "columns": {
+        "name": "Rule",
+        "condition": "Condition",
+        "status": "Status",
+        "lastValue": "Latest reading",
+        "actions": "Actions"
+      },
+      "summary": "{measure} {condition} {threshold} · {window}",
+      "status": {
+        "firing": "Firing",
+        "ok": "OK",
+        "off": "Off",
+        "new": "Not checked yet"
+      },
+      "edit": "Edit",
+      "editLabel": "Edit {name}",
+      "turnOff": "Turn off",
+      "turnOn": "Turn on",
+      "turnOffLabel": "Turn off {name}",
+      "turnOnLabel": "Turn on {name}",
+      "delete": "Delete",
+      "deleteLabel": "Delete {name}",
+      "deleted": "Rule deleted",
+      "turnedOff": "Rule turned off",
+      "turnedOn": "Rule turned on",
+      "readOnly": "You can see these rules but not change them.",
+      "errors": {
+        "name": "Enter a name of up to 80 characters.",
+        "name_taken": "A rule with this name already exists.",
+        "threshold": "Enter a number of 0 or more.",
+        "percent_range": "Enter a percentage between 1 and 1000.",
+        "currency_required": "Choose a currency for a money rule.",
+        "too_many_rules": "You have 50 rules. Delete one first."
+      }
+    },
+    "reports": {
+      "title": "Scheduled reports",
+      "description": "A PDF of your analytics by email every day, week or month, counted in your organization’s time zone.",
+      "createTitle": "New scheduled report",
+      "editTitle": "Edit scheduled report",
+      "name": "Name",
+      "frequency": "How often",
+      "frequencies": {
+        "daily": "Every day (yesterday’s figures)",
+        "weekly": "Every Monday (last week, Monday to Sunday)",
+        "monthly": "On the 1st (last month)"
+      },
+      "frequencyShort": {
+        "daily": "Daily",
+        "weekly": "Weekly",
+        "monthly": "Monthly"
+      },
+      "sendHour": "Send at",
+      "sendHourHint": "Time in {timeZone}.",
+      "event": "Event",
+      "allEvents": "All events",
+      "recipients": "Send to",
+      "recipientsHint": "Members who can see orders. Revenue is in the PDF only for those who can see finance; each PDF is in its reader’s language.",
+      "you": "{name} (you)",
+      "create": "Schedule report",
+      "save": "Save changes",
+      "back": "Back to scheduled reports",
+      "created": "Report scheduled",
+      "saved": "Changes saved",
+      "list": "Schedules",
+      "emptyTitle": "No scheduled reports yet",
+      "emptyBody": "Schedule one above: it arrives by email once per period, with a link to its PDF.",
+      "columns": {
+        "name": "Report",
+        "frequency": "How often",
+        "next": "Next send",
+        "recipients": "Recipients",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "recipientsCount": "{count, plural, one {# member} other {# members}}",
+      "status": {
+        "on": "On",
+        "off": "Off"
+      },
+      "edit": "Edit",
+      "editLabel": "Edit {name}",
+      "turnOff": "Turn off",
+      "turnOn": "Turn on",
+      "turnOffLabel": "Turn off {name}",
+      "turnOnLabel": "Turn on {name}",
+      "delete": "Delete",
+      "deleteLabel": "Delete {name}",
+      "deleted": "Schedule deleted",
+      "turnedOff": "Schedule turned off",
+      "turnedOn": "Schedule turned on",
+      "recent": "Recent reports",
+      "recentEmpty": "No report has been sent yet. The first one goes out at the next send time.",
+      "recentColumns": {
+        "report": "Report",
+        "period": "Period",
+        "status": "Status",
+        "file": "PDF"
+      },
+      "runStatus": {
+        "pending": "Waiting",
+        "sent": "Sent",
+        "failed": "Failed"
+      },
+      "download": "Download PDF",
+      "downloadLabel": "Download {name} for {period} (PDF)",
+      "notReady": "Not ready",
+      "errors": {
+        "name": "Enter a name of up to 80 characters.",
+        "name_taken": "A schedule with this name already exists.",
+        "recipients": "Choose at least one member.",
+        "bad_recipient": "Choose members who can see orders.",
+        "too_many_schedules": "You have 25 schedules. Delete one first."
+      }
     }
   }
 }

@@ -8,7 +8,16 @@ import {
   setMyAlertPhoneCommand,
   setSalesTargetCommand,
 } from '@yayatoh/alerts';
-import { backfillOrgNow, catchUpWarehouse, postgresWarehouse } from '@yayatoh/analytics';
+import {
+  backfillOrgNow,
+  catchUpWarehouse,
+  createAlertRuleCommand,
+  createReportScheduleCommand,
+  periodContaining,
+  postgresWarehouse,
+  runReportPeriod,
+  saveViewCommand,
+} from '@yayatoh/analytics';
 import {
   assignCommand as assistanceAssignCommand,
   addNoteCommand as assistanceNoteCommand,
@@ -47,6 +56,7 @@ import {
 import {
   applyBillingEventCommand,
   linkBillingCustomerCommand,
+  recordUsageTx,
   setEntitlementOverrideCommand,
   setFeeOverrideCommand,
   setLegacyFeesCommand,
@@ -89,7 +99,13 @@ import {
   saveWidgetLayoutCommand,
   setModeOverrideCommand,
 } from '@yayatoh/command-center';
-import { mergeContactsCommand, recordTimelineTx, scanDuplicatesCommand, upsertContactTx } from '@yayatoh/crm';
+import {
+  mergeContactsCommand,
+  recordTermConsentTx,
+  recordTimelineTx,
+  scanDuplicatesCommand,
+  upsertContactTx,
+} from '@yayatoh/crm';
 import { withTenant } from '@yayatoh/db';
 import {
   armLevelCommand,
@@ -198,6 +214,12 @@ import {
   sheetsRemoteRows,
 } from '@yayatoh/integrations';
 import { type Ctx, createCtx, executeCommand, executeQuery, uuidv7 } from '@yayatoh/kernel';
+import {
+  acceptLeadTermsCommand,
+  LEAD_TERMS_VERSION,
+  saveLeadSettingsCommand,
+  syncLeadScansCommand,
+} from '@yayatoh/leads';
 import {
   attributeOrderCommand,
   createTrackedLinkCommand,
@@ -332,6 +354,7 @@ import {
 } from '@yayatoh/reports';
 import { reportReviewCommand, submitReviewCommand } from '@yayatoh/reviews';
 import {
+  addSolverRuleCommand,
   allotSeatsCommand,
   assignSeatsCommand,
   giveSubEventOwnChartCommand,
@@ -1650,6 +1673,24 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     { slug: `${slug}-affiliate`, name: `${name} Affiliate` },
     ports,
   );
+  // M6.7a: the org grants an agency (its own org and owner) viewer access, and holds agency
+  // snapshots of its affiliate (isolation coverage: the agency tables are owned by the agency org).
+  const agencyOrg = await createOrganization(
+    userCtx(uuidv7()),
+    { slug: `${slug}-agency`, name: `${name} Agency`, kind: 'agency' },
+    ports,
+  );
+  await withTenant(systemCtx(org.id), async (tx) => {
+    await tx.execute(
+      sql`insert into tenancy.org_access_grants (org_id, agency_org_id, role, granted_by) values (${org.id}, ${agencyOrg.id}, 'viewer', ${ownerId})`,
+    );
+    await tx.execute(sql`insert into agency.client_snapshots (org_id, client_org_id, grant_id, events_total,
+      next_event_name, revenue, with_finance, refreshed_at)
+      values (${org.id}, ${affiliate.id}, ${uuidv7()}, 1, 'Affiliate Gala', '{"USD": 1000}'::jsonb, true, now())`);
+    await tx.execute(sql`insert into agency.event_snapshots (org_id, client_org_id, event_id, name, slug, status, starts_at,
+      ends_at, timezone, currency, refreshed_at) values (${org.id}, ${affiliate.id}, ${uuidv7()}, 'Affiliate Gala',
+      'affiliate-gala', 'published', now(), now() + interval '3 hours', 'America/New_York', 'USD', now())`);
+  });
   await withTenant(systemCtx(org.id), async (tx) => {
     await tx.execute(
       sql`insert into tenancy.org_relationships (org_id, child_org_id, kind, source) values (${org.id}, ${affiliate.id}, 'host_affiliate', 'fixture')`,
@@ -1874,6 +1915,49 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     exhibitorCtx,
     ports,
   );
+  // M5.6b lead retrieval: the admin accepts the lead terms, sets qualifiers, and captures the
+  // fixture's first ticket at the event (every leads table gets a row).
+  const atEvent = portalCtx(exhibitorPrincipal, 'en', event.startsAt);
+  // The holder agreed to share their email with exhibitors (P5-8), so the lead carries one.
+  await withTenant(systemCtx(org.id), async (tx) => {
+    const [h] = await tx.execute<{ holder_email: string }>(
+      sql`select holder_email from ticketing.tickets where id = ${issued?.id ?? ''}`,
+    );
+    await recordTermConsentTx(tx, systemCtx(org.id), {
+      email: h?.holder_email ?? '',
+      name: null,
+      term: 'exhibitor_email_sharing',
+      version: 1,
+      evidence: 'fixture:registration_form',
+    });
+  });
+  await executeCommand(acceptLeadTermsCommand, { version: LEAD_TERMS_VERSION }, atEvent, ports);
+  await executeCommand(
+    saveLeadSettingsCommand,
+    { qualifiers: ['Budget', 'Demo'], teamVisibility: false },
+    atEvent,
+    ports,
+  );
+  const leadSync = await executeCommand(
+    syncLeadScansCommand,
+    {
+      scans: [
+        {
+          scanId: `fixture-lead-${slug}`,
+          code: issued?.short_code ?? '',
+          capturedAt: event.startsAt,
+          offline: true,
+          rating: 'hot',
+          qualifiers: ['Demo'],
+          notes: 'Wants a demo',
+        },
+      ],
+    },
+    atEvent,
+    ports,
+  );
+  if (leadSync.results[0]?.status !== 'captured' || !leadSync.results[0].lead?.email)
+    throw new Error('fixture: lead not captured with its email');
   // M5.2a: agenda model v2 on the weekly event (so the launch event's agenda stays live): a
   // session type, a pick-one group with an optional workshop in it, one claimed place and one
   // group pick, a speaker with an email (the CSV import's match key), and a published agenda.
@@ -2170,6 +2254,18 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
       );
     }
   }
+  // M5.10a conference hub: a fixture ticket stars the event's first session and has replaced its
+  // calendar feed link once (version 2).
+  await withTenant(systemCtx(org.id), async (tx) => {
+    await tx.execute(sql`insert into registration.session_favorites (org_id, event_id, session_id, registrant_id)
+      select ${org.id}, ${event.id}, s.id, t.id
+      from program.sessions s, ticketing.tickets t
+      where s.event_id = ${event.id} and t.order_id = ${checkout.order.id}
+      order by s.starts_at, t.id limit 1`);
+    await tx.execute(sql`insert into registration.calendar_feeds (org_id, event_id, registrant_id, version)
+      select ${org.id}, ${event.id}, t.id, 2 from ticketing.tickets t
+      where t.order_id = ${checkout.order.id} order by t.id limit 1`);
+  });
   // M4.1a: a party with a named guest (sealed answers, linked to a guest-list entry), a child and
   // an unnamed plus-one; then an edit and a move, so every history action has rows.
   const party = await executeCommand(
@@ -2333,6 +2429,13 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
       ],
     },
     deviceCtx,
+    ports,
+  );
+  // M6.12a seating solver (isolation coverage): a keep-together rule for every party.
+  await executeCommand(
+    addSolverRuleCommand,
+    { eventId: event.id, spec: { kind: 'keep_together', params: { group: { by: 'party' } } } },
+    ctx(),
     ports,
   );
   // M4.1b: a pasted guest list staged, checked and imported (a household with a plus-one and a
@@ -2622,6 +2725,44 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   // then one backfill run (rows in every analytics table for the isolation suite).
   await catchUpWarehouse(org.id);
   await backfillOrgNow(org.id, postgresWarehouse);
+  // M6.2b: the fixture order's touch path and attribution rollups come from the attribution
+  // record and the warehouse above; plus the owner's explorer view, an alert rule, a report
+  // schedule and one sent period (its run, PDF and message): rows in every new table.
+  await executeCommand(
+    saveViewCommand,
+    {
+      name: 'Linear revenue by source',
+      measure: 'attributed_revenue',
+      dimension: 'source',
+      model: 'linear',
+      range: '30d',
+    },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    createAlertRuleCommand,
+    {
+      name: 'Registrations today',
+      measure: 'registrations',
+      condition: 'above',
+      threshold: 1000,
+      windowDays: 1,
+    },
+    ctx(),
+    ports,
+  );
+  const reportSchedule = await executeCommand(
+    createReportScheduleCommand,
+    { name: 'Daily summary', frequency: 'daily', recipients: [ownerId] },
+    ctx(),
+    ports,
+  );
+  await runReportPeriod(org.id, reportSchedule.id, periodContaining('daily', '2027-10-01'), {
+    notifier: createNotifier(),
+    renderer: { render: async () => new TextEncoder().encode('%PDF-1.7 fixture report') },
+    userLocales: async () => new Map(),
+  });
   // M3.2b alert engine: the fixture event's unseated ticket holders raise an alert (evaluated as
   // the worker would, a day before the event), the owner acknowledges it; one routing row, the
   // owner's alert number and a sales target (isolation coverage of every alerts table).
@@ -3011,6 +3152,23 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ports,
   );
   await runSync(org.id, sheets.connectionId, { auth: fakeAuth }, ports, { force: true });
+  // M6.6b meters and plan changes (isolation coverage of usage_records and plan_changes): one
+  // device's usage from a (synthetic) outbox event, and an in-app plan change as recorded.
+  await withTenant(systemCtx(org.id), async (tx) => {
+    await recordUsageTx(tx, {
+      id: uuidv7(),
+      orgId: org.id,
+      type: 'device.enrolled',
+      version: 1,
+      payload: { orgId: org.id, deviceId: uuidv7() },
+      occurredAt: new Date(billedAt.getTime() + 1000).toISOString(),
+    });
+    await tx.execute(sql`insert into billing.plan_changes
+      (org_id, from_plan_key, to_plan_key, price_lookup_key, direction, currency, amount_due_minor,
+       tax_minor, discount_minor, status, requested_by, idempotency_key)
+      values (${org.id}, 'launch_standard', 'tier_pro', 'tier_pro_month_usd', 'start', 'USD', 10692,
+       792, 0, 'submitted', ${`user:${ownerId}`}, ${`fixture:${uuidv7()}`})`);
+  });
   // M6.2a again: the warehouse catches up on the outbox of the rows added after its first run
   // (donations, matches, imports), as the worker would, so a later backfill changes nothing.
   await catchUpWarehouse(org.id);

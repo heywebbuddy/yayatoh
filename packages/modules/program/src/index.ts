@@ -134,6 +134,8 @@ export {
   planAssignment,
   staffAllowance,
 } from './domain/exhibitors.ts';
+// M5.6b: lead capture checks the person's license against the allowance.
+export { type LeadSeatStanding, leadSeatStanding } from './domain/lead-seat.ts';
 export {
   changeDiff,
   changedValues,
@@ -196,6 +198,8 @@ export {
   saveExhibitorSettingsCommand,
   staffInvited,
 } from './exhibitor-portal.ts';
+// M5.10a: when sessions last changed (the attendee's calendar feed).
+export { sessionStampsTx } from './hub.ts';
 export {
   activateLicensePurchaseTx,
   attachLicenseOrderTx,
@@ -209,6 +213,7 @@ export {
   reserveLeadLicensesTx,
   saveLeadLicenseSettingsCommand,
 } from './lead-licenses.ts';
+export { eventHasExhibitorsTx, exhibitorNamesTx, leadSeatStandingTx } from './lead-seat.ts';
 export {
   createExhibitorCommand,
   createSpeakerCommand,
