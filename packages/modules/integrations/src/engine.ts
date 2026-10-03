@@ -1037,7 +1037,12 @@ export async function runSync(
   try {
     if ((await deps.auth.check(ref)) === 'revoked')
       return finish('failed', { errorCode: 'auth_revoked', revoked: true });
-    const io: SyncIO = { client: deps.auth.client(ref), origin: originStamp(connectionId), now };
+    const io: SyncIO = {
+      client: deps.auth.client(ref),
+      origin: originStamp(connectionId),
+      now,
+      read: (fn) => withTenant(ctx, fn),
+    };
     for (const object of connector.objects) {
       await pullObject(ctx, ports, connector, object, io, runId, connectionId);
       try {

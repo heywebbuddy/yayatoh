@@ -46,6 +46,11 @@ export interface SyncIO {
   /** This connection's origin stamp: write it on provider records where the API allows (loop guard). */
   readonly origin: string;
   readonly now: Date;
+  /**
+   * M6.9b: read Yayatoh data in the org's tenant transaction (read only, outside any command), so
+   * a pull can scope its provider calls to what is linked here (Zoom: the webinars to report on).
+   */
+  readonly read: <T>(fn: (tx: TenantTx) => Promise<T>) => Promise<T>;
 }
 
 export interface PullSide {

@@ -55,6 +55,14 @@ export {
   demoRemoteUpdate,
 } from './connectors/demo.ts';
 export { CONNECTORS, connectorByKey, offeredConnectors } from './connectors/index.ts';
+// M6.9b: the Zoom connector and its fake API's dev controls.
+export {
+  ZOOM_REPORT_PAGE,
+  zoomConnector,
+  zoomFakeAttend,
+  zoomFakeProvider,
+  zoomFakeRegistrants,
+} from './connectors/zoom.ts';
 export * from './domain/mapping.ts';
 export * from './domain/sync.ts';
 export {

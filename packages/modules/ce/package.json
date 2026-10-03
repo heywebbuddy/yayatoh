@@ -1,27 +1,33 @@
 {
-  "name": "@yayatoh/integrations",
+  "name": "@yayatoh/ce",
   "version": "0.0.0",
   "private": true,
   "type": "module",
   "yayatoh": {
-    "tier": 6
+    "tier": 5
   },
   "exports": {
-    ".": "./src/index.ts",
-    "./client": "./src/client.ts"
+    ".": "./src/index.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@yayatoh/billing": "workspace:*",
+    "@yayatoh/checkin": "workspace:*",
     "@yayatoh/contracts": "workspace:*",
-    "@yayatoh/crm": "workspace:*",
     "@yayatoh/db": "workspace:*",
+    "@yayatoh/events": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
+    "@yayatoh/orders": "workspace:*",
+    "@yayatoh/pdf": "workspace:*",
     "@yayatoh/platform": "workspace:*",
+    "@yayatoh/program": "workspace:*",
+    "@yayatoh/tenancy": "workspace:*",
+    "@yayatoh/ticketing": "workspace:*",
+    "@yayatoh/ui": "workspace:*",
     "@yayatoh/virtual": "workspace:*",
     "drizzle-orm": "catalog:",
+    "intl-messageformat": "11.2.15",
     "zod": "catalog:"
   },
   "devDependencies": {

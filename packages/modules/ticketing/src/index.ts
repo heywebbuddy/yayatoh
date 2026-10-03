@@ -60,6 +60,8 @@ export {
 export * from './dto.ts';
 // M4.8b: ticket type prices for fair-market values and the quid-pro-quo notice (donations).
 export { type TicketTypePrice, ticketTypePricesTx } from './fair-value-facts.ts';
+// M6.9b: an event's active ticket holders (Zoom registrants, CE certificates).
+export { eventHoldersTx } from './holder-facts.ts';
 export {
   currentFaceMinor,
   holdInventoryTx,
