@@ -523,11 +523,11 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] Registration always asks buyers for the emailed code (M1.5f), even when an org turned the checkout email check off, so "email domain" eligibility means a proved address. Confirm or relax.
 - **M5.1c decision emails (`legal-copy`, pending owner):** the approval and denial email wording (13 locales) and the defaults chosen per the roadmap: substitution closes 24 h before the start (per type, 0–720 h), one +1 guest per host (1–10), member lists up to 5,000 addresses. Review when convenient.
 
-## Design system v2 (2026-10-02, pending owner)
-- [ ] **Event workspace navigation.** The approved Guests artboard puts the org menu in the sidebar and the event's sections in a top tab row. The build keeps the event's sections in the sidebar (conferences have ~20 sections; one list beats two navigations with the same names for keyboard and screen-reader users) and uses segmented tabs inside sections. Confirm, or ask for the artboard's tab IA (ADR 0022 "Shells").
-- [ ] **Dark primary fill.** `#7B5CFF` gives white button text 4.36:1; buttons use `#6C4CF2` (5.3:1) and `#7B5CFF` stays for glows, rings and the active sidebar tile. Confirm.
-- [ ] **CJK fonts** are not self-hosted (5–9 MB per face); Chinese and Japanese use Noto Sans JP/SC/TC when installed, then the platform face. Confirm, or approve per-locale font CSS.
-- [ ] **Required-field marker.** No asterisk on required labels (the browser announces "required"; errors say what is missing). Confirm or ask for "(optional)" markers on optional fields instead.
+## Design system v2 (2026-10-02, approved 2026-10-02 — see docs/decisions.md)
+- [x] **Event workspace navigation.** The approved Guests artboard puts the org menu in the sidebar and the event's sections in a top tab row. The build keeps the event's sections in the sidebar (conferences have ~20 sections; one list beats two navigations with the same names for keyboard and screen-reader users) and uses segmented tabs inside sections. Confirm, or ask for the artboard's tab IA (ADR 0022 "Shells").
+- [x] **Dark primary fill.** `#7B5CFF` gives white button text 4.36:1; buttons use `#6C4CF2` (5.3:1) and `#7B5CFF` stays for glows, rings and the active sidebar tile. Confirm.
+- [x] **CJK fonts** are not self-hosted (5–9 MB per face); Chinese and Japanese use Noto Sans JP/SC/TC when installed, then the platform face. Confirm, or approve per-locale font CSS.
+- [x] **Required-field marker.** No asterisk on required labels (the browser announces "required"; errors say what is missing). Confirm or ask for "(optional)" markers on optional fields instead.
 
 ## M5.2b — session enrollment and waitlists (2026-10-02, pending owner)
 - [ ] Offer window default when an event chooses "offer the place" instead of auto-enrol: 4 hours (15 minutes to 48 hours allowed; offers always end at the 24 h close). Auto-enrol stays the default (P5-9).

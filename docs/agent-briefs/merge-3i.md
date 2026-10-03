@@ -17,6 +17,8 @@ The orchestrator lists the final set in your launch prompt (only builders that r
 6. `origin/agent/m6.6a`: billing foundation, dormant (billing tier 1, entitlements)
 7. `origin/agent/m6.11a`: best-available and the ADA engine (seating, ticketing)
 8. `origin/agent/m6.11b`: seat channels, layout revisions, the layout library (stacked on m6.11a)
+9. `origin/agent/m6.2a`: analytics warehouse (Postgres rollups default, Tinybird adapter as a fake), cross-event dashboards (new `analytics` module)
+10. `origin/agent/m6.4a`: integrations framework (Nango port as a fake, connections, mappings, sync engine, errors inbox; new `integrations` module)
 
 Each branch's last commit message is its report (migrations, hand edits, owner items): read it before merging. A branch without a report is not in your list. Stacked branches already contain their base; merge the base first anyway so conflicts are resolved once.
 
@@ -24,6 +26,8 @@ Each branch's last commit message is its report (migrations, hand edits, owner i
 - M6.1c: after merging design v2, two e2e tests (including "Arabic (RTL): duplicates") fail on desktop-1280 only, because the v2 Table's sticky `<thead>` intercepts the click. Fix the table (pointer events / scroll margin) or the page, not the test.
 - M6.11b: its full integration run caught `seating.deleteChannel` missing from the impersonation sweep; confirm the fix is in and the sweep covers every new seating command.
 - The retention.int and badges.int full-suite timeouts should be gone after 3f and 3h; if either reappears, root-cause it.
+
+**Parallel batch:** batch 3j (Phase 4/5) runs at the same time on the same base. Whichever of you finishes second must merge the newest build branch (with the other batch landed), renumber migrations on top of it and rerun the gate. Say in your report whether 3j had landed.
 
 ## Merge procedure
 Follow the "Merge procedure (house rules)" section of `docs/agent-briefs/merge-3e.md` exactly:
@@ -41,6 +45,7 @@ Shared code (the builders appended in parallel; keep one coherent version and sa
 - `api-v1` and `openapi.json`: M6.3a, M6.3b, plus any `/v1` additions from M6.1x
 - `billing` and entitlement keys: M6.6a, M6.3a (rate limits per entitlement), M6.11a (`advanced_seating`)
 - `seating` and `ticketing`: M6.11a, M6.11b
+- `analytics` (M6.2a) and `integrations` (M6.4a): new modules; check their tiers, the DSAR contributor list and the leak canary
 
 ## Design v2
 Every builder in this batch merged `agent/design-v2` only if it applied cleanly; several did not. After each merge, make the branch's screens use the v2 components and patterns (PageHeader, Tabs, StatusPill, EmptyState, Skeleton, Toast, Table, form patterns, shells) and pass the check-modules design-tokens gate. Run `expectAccessible` in both modes on the new screens. Keep every e2e assertion (switch selectors to roles or labels where a class changed).
