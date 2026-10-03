@@ -11,7 +11,7 @@ import {
   verifyManifestScope,
 } from '@yayatoh/checkin-engine';
 import { uuidv7 } from '@yayatoh/kernel';
-import { applyDoorVerdict, sessionOccupancy } from './session-door.ts';
+import { applyDoorVerdict, type DoorLogEntry, pruneDoorLog, sessionOccupancy } from './session-door.ts';
 import {
   kvGet,
   kvSet,
@@ -189,6 +189,8 @@ export class ScanClient {
   private inRoom = new Set<string>();
   /** M5.6a: at a session door, scanning people in or out. */
   direction: 'in' | 'out' = 'in';
+  /** M5.6a: this device's door scans the manifest's room counts don't include yet. */
+  private doorLog: DoorLogEntry[] = [];
   /** server time − device time, measured at each sync (within the manifest request's round trip). */
   clockOffsetMs = 0;
   /** Where this device stands (an entrance or zone), or null for the whole event. */
@@ -264,6 +266,7 @@ export class ScanClient {
     if (admitted) this.admitted = new Set(await openJson<string[]>(this.config.token, admitted));
     const inRoom = await kvGet<{ iv: Uint8Array; data: ArrayBuffer }>('inRoom');
     if (inRoom) this.inRoom = new Set(await openJson<string[]>(this.config.token, inRoom));
+    this.doorLog = (await kvGet<DoorLogEntry[]>('doorLog')) ?? [];
     this.clockOffsetMs = (await kvGet<number>('clockOffsetMs')) ?? 0;
     this.checkpointId = (await kvGet<string | null>('checkpointId')) ?? null;
     this.kiosk = (await kvGet<KioskConfig | null>('kiosk')) ?? null;
@@ -305,7 +308,7 @@ export class ScanClient {
   async roomCount(): Promise<{ occupied: number; capacity: number | null } | null> {
     const door = this.sessionDoor;
     if (!door || !this.snapshot) return null;
-    const occ = sessionOccupancy(this.snapshot.header, await queueAll());
+    const occ = sessionOccupancy(this.snapshot.header, this.doorLog);
     const gate = this.snapshot.header.scope?.sessionGates?.find((g) => g.checkpointId === door.checkpointId);
     return { occupied: occ.get(door.sessionId) ?? 0, capacity: gate?.capacity ?? null };
   }
@@ -370,6 +373,8 @@ export class ScanClient {
     };
     this.byLegacy = legacyIndex(this.byId.values());
     await this.persist();
+    this.doorLog = pruneDoorLog(this.doorLog, header.serverTime);
+    await kvSet('doorLog', this.doorLog);
   }
 
   /** Decide locally (instant), record, queue; the flush that follows may refine it. */
@@ -386,7 +391,7 @@ export class ScanClient {
         admitted: this.admitted,
         lastSyncAt: new Date(this.snapshot.lastSyncAt),
         inRoom: this.inRoom,
-        occupancy: door ? sessionOccupancy(this.snapshot.header, await queueAll()) : new Map(),
+        occupancy: door ? sessionOccupancy(this.snapshot.header, this.doorLog) : new Map(),
       },
       code,
       now,
@@ -408,6 +413,10 @@ export class ScanClient {
       ...(door ? { direction: this.direction } : {}),
     };
     await queueAdd(scan);
+    if (door) {
+      this.doorLog.push({ scanId: scan.scanId, verdict, checkpointId: door.checkpointId, syncedAt: null });
+      await kvSet('doorLog', this.doorLog);
+    }
     return {
       scanId: scan.scanId,
       code: code.trim(),
@@ -443,6 +452,16 @@ export class ScanClient {
       };
       for (const r of body.results) out.set(r.scanId, { result: r.result, openSignals: r.openSignals ?? 0 });
       await queueRemove(batch.map((c) => c.scanId));
+      // Door scans now count on the server: the next manifest made after this includes them.
+      const at = new Date(Date.now() + this.clockOffsetMs).toISOString();
+      if (this.doorLog.some((e) => !e.syncedAt && out.has(e.scanId))) {
+        this.doorLog = this.doorLog.map((e) =>
+          !e.syncedAt && out.has(e.scanId)
+            ? { ...e, verdict: out.get(e.scanId)?.result ?? e.verdict, syncedAt: at }
+            : e,
+        );
+        await kvSet('doorLog', this.doorLog);
+      }
     }
     return out;
   });
@@ -479,6 +498,17 @@ export class ScanClient {
     const row = body.ticket ? this.byShort.get(body.ticket.shortCode) : undefined;
     if (door && row && applyDoorVerdict(this.inRoom, body.result, row.ticketId, door.sessionId))
       await this.persistInRoom();
+    if (door && body.result === 'entered') {
+      // Counted on the server now; the next manifest includes it.
+      const at = new Date(Date.now() + this.clockOffsetMs).toISOString();
+      this.doorLog.push({
+        scanId: uuidv7(),
+        verdict: 'entered',
+        checkpointId: door.checkpointId,
+        syncedAt: at,
+      });
+      await kvSet('doorLog', this.doorLog);
+    }
     return { result: body.result };
   }
 

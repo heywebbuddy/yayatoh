@@ -102,7 +102,7 @@ export function SessionOverride({
       onSubmit={(e) => {
         e.preventDefault();
         if (reason.trim().length < 3) {
-          setError(t('checkin.overrideNoteRequired'));
+          setError(t('sessionCheckin.reasonRequired'));
           return;
         }
         const gates = [...new Set([...waived, gate])];

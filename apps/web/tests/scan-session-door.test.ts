@@ -1,6 +1,11 @@
 import { inRoomKey, type ManifestHeader } from '@yayatoh/checkin-engine';
 import { describe, expect, it } from 'vitest';
-import { applyDoorVerdict, GATE_OF_RESULT, sessionOccupancy } from '../src/scan/session-door.ts';
+import {
+  applyDoorVerdict,
+  GATE_OF_RESULT,
+  pruneDoorLog,
+  sessionOccupancy,
+} from '../src/scan/session-door.ts';
 
 const header: Pick<ManifestHeader, 'sessions' | 'checkpoints'> = {
   checkpoints: [
@@ -14,20 +19,34 @@ const header: Pick<ManifestHeader, 'sessions' | 'checkpoints'> = {
 describe('Scan PWA session doors (M5.6a)', () => {
   it('the room count is the manifest’s plus this device’s queued entries minus its exits', () => {
     const occ = sessionOccupancy(header, [
-      { verdict: 'entered', checkpointId: 'door-a' },
-      { verdict: 'entered', checkpointId: 'door-b' },
-      { verdict: 'scanned_out', checkpointId: 'door-a' },
-      { verdict: 'capacity', checkpointId: 'door-a' },
-      { verdict: 'admit', checkpointId: 'gate' },
+      { scanId: '1', verdict: 'entered', checkpointId: 'door-a' },
+      { scanId: '2', verdict: 'entered', checkpointId: 'door-b' },
+      { scanId: '3', verdict: 'scanned_out', checkpointId: 'door-a' },
+      { scanId: '4', verdict: 'capacity', checkpointId: 'door-a' },
+      { scanId: '5', verdict: 'admit', checkpointId: 'gate' },
     ]);
     expect(occ.get('s1')).toBe(4);
-    expect(sessionOccupancy(header, [{ verdict: 'scanned_out', checkpointId: 'door-a' }]).get('s1')).toBe(2);
+    expect(
+      sessionOccupancy(header, [{ scanId: '1', verdict: 'scanned_out', checkpointId: 'door-a' }]).get('s1'),
+    ).toBe(2);
     expect(sessionOccupancy({ checkpoints: [], sessions: [] }, []).size).toBe(0);
+  });
+
+  it('a manifest made after a scan synced already counts it; queued and later-synced scans stay', () => {
+    const log = [
+      { scanId: 'a', verdict: 'entered', checkpointId: 'door-a', syncedAt: '2027-01-01T10:00:00Z' },
+      { scanId: 'b', verdict: 'entered', checkpointId: 'door-a', syncedAt: '2027-01-01T10:05:00Z' },
+      { scanId: 'c', verdict: 'entered', checkpointId: 'door-a', syncedAt: null },
+    ];
+    expect(pruneDoorLog(log, '2027-01-01T10:01:00Z').map((e) => e.scanId)).toEqual(['b', 'c']);
+    expect(pruneDoorLog(log, '2027-01-01T10:10:00Z').map((e) => e.scanId)).toEqual(['c']);
   });
 
   it('never goes below zero', () => {
     const empty = { ...header, sessions: [] };
-    expect(sessionOccupancy(empty, [{ verdict: 'scanned_out', checkpointId: 'door-a' }]).get('s1')).toBe(0);
+    expect(
+      sessionOccupancy(empty, [{ scanId: '1', verdict: 'scanned_out', checkpointId: 'door-a' }]).get('s1'),
+    ).toBe(0);
   });
 
   it('in and out move the in-room set; refusals do not', () => {

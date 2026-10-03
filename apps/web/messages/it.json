@@ -10941,7 +10941,8 @@
     "print": "Stampa",
     "flyerQr": "Codice QR per il check-in a {title}",
     "flyerCall": "Scansiona per il check-in",
-    "flyerHint": "Apri la fotocamera, scansiona il codice e digita il codice del tuo biglietto o badge."
+    "flyerHint": "Apri la fotocamera, scansiona il codice e digita il codice del tuo biglietto o badge.",
+    "reasonRequired": "Indica un motivo (almeno 3 caratteri) per farlo entrare."
   },
   "selfCheckin": {
     "metaTitle": "Check-in alla sessione",

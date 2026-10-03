@@ -10941,7 +10941,8 @@
     "print": "Imprimir",
     "flyerQr": "Código QR para registrarse en {title}",
     "flyerCall": "Escanea para registrarte",
-    "flyerHint": "Abre la cámara, escanea el código y escribe el código de tu entrada o acreditación."
+    "flyerHint": "Abre la cámara, escanea el código y escribe el código de tu entrada o acreditación.",
+    "reasonRequired": "Indica un motivo (al menos 3 caracteres) para dejarle entrar."
   },
   "selfCheckin": {
     "metaTitle": "Check-in de sesión",

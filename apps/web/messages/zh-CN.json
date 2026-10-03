@@ -10941,7 +10941,8 @@
     "print": "打印",
     "flyerQr": "签到 {title} 的二维码",
     "flyerCall": "扫码签到",
-    "flyerHint": "打开相机扫描二维码，然后输入门票或胸牌上的代码。"
+    "flyerHint": "打开相机扫描二维码，然后输入门票或胸牌上的代码。",
+    "reasonRequired": "请填写放行原因（至少 3 个字符）。"
   },
   "selfCheckin": {
     "metaTitle": "场次签到",

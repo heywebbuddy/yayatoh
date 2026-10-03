@@ -228,9 +228,11 @@ export function Scanner({
             <p className="text-body">
               {state.code === 'override_note'
                 ? t('checkin.overrideNoteRequired')
-                : state.code === 'nothing_to_override'
-                  ? t('sessionCheckin.nothingToOverride')
-                  : t(errorMessageKey(state.code))}
+                : state.code === 'session_reason'
+                  ? t('sessionCheckin.reasonRequired')
+                  : state.code === 'nothing_to_override'
+                    ? t('sessionCheckin.nothingToOverride')
+                    : t(errorMessageKey(state.code))}
             </p>
           </div>
         ) : null}
@@ -272,6 +274,7 @@ export function Scanner({
       {state.kind === 'outcome' && GATE_OF[state.outcome.result] && state.outcome.ticket ? (
         <form
           action={formAction}
+          noValidate
           aria-label={t('sessionCheckin.overrideLabel')}
           className="flex flex-col gap-3 rounded-panel border border-line p-4"
         >

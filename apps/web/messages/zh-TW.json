@@ -10941,7 +10941,8 @@
     "print": "列印",
     "flyerQr": "報到 {title} 的 QR 碼",
     "flyerCall": "掃描以報到",
-    "flyerHint": "開啟相機掃描 QR 碼，然後輸入門票或識別證上的代碼。"
+    "flyerHint": "開啟相機掃描 QR 碼，然後輸入門票或識別證上的代碼。",
+    "reasonRequired": "請填寫放行原因（至少 3 個字元）。"
   },
   "selfCheckin": {
     "metaTitle": "場次報到",

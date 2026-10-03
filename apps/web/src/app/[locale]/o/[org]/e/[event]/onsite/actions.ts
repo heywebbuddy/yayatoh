@@ -61,7 +61,7 @@ export async function scanAction(
   // M5.6a: let someone into a session past a refusing gate (staff override, with a reason).
   if (form.get('intent') === 'session_override') {
     const reason = String(form.get('note') ?? '').trim();
-    if (reason.length < 3) return { kind: 'error', code: 'override_note', seq };
+    if (reason.length < 3) return { kind: 'error', code: 'session_reason', seq };
     const gates = String(form.get('gates') ?? '')
       .split(',')
       .filter((g): g is (typeof SESSION_GATES)[number] => (SESSION_GATES as readonly string[]).includes(g));

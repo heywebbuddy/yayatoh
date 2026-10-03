@@ -10941,7 +10941,8 @@
     "print": "Print",
     "flyerQr": "QR code to check in to {title}",
     "flyerCall": "Scan to check in",
-    "flyerHint": "Open the camera, scan the code, and type the code on your ticket or badge."
+    "flyerHint": "Open the camera, scan the code, and type the code on your ticket or badge.",
+    "reasonRequired": "Give a reason (at least 3 characters) to let them in."
   },
   "selfCheckin": {
     "metaTitle": "Session check-in",

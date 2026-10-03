@@ -10941,7 +10941,8 @@
     "print": "Afdrukken",
     "flyerQr": "QR-code om in te checken bij {title}",
     "flyerCall": "Scan om in te checken",
-    "flyerHint": "Open de camera, scan de code en typ de code van je ticket of badge."
+    "flyerHint": "Open de camera, scan de code en typ de code van je ticket of badge.",
+    "reasonRequired": "Geef een reden (minstens 3 tekens) om iemand binnen te laten."
   },
   "selfCheckin": {
     "metaTitle": "Sessie-check-in",

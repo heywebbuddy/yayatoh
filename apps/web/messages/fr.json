@@ -10941,7 +10941,8 @@
     "print": "Imprimer",
     "flyerQr": "Code QR pour s’enregistrer à {title}",
     "flyerCall": "Scannez pour vous enregistrer",
-    "flyerHint": "Ouvrez l’appareil photo, scannez le code et saisissez le code de votre billet ou badge."
+    "flyerHint": "Ouvrez l’appareil photo, scannez le code et saisissez le code de votre billet ou badge.",
+    "reasonRequired": "Indiquez un motif (au moins 3 caractères) pour faire entrer la personne."
   },
   "selfCheckin": {
     "metaTitle": "Enregistrement à la session",

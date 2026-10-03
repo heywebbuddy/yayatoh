@@ -10941,7 +10941,8 @@
     "print": "Imprimir",
     "flyerQr": "Código QR para fazer check-in em {title}",
     "flyerCall": "Leia para fazer check-in",
-    "flyerHint": "Abra a câmera, leia o código e digite o código do seu ingresso ou crachá."
+    "flyerHint": "Abra a câmera, leia o código e digite o código do seu ingresso ou crachá.",
+    "reasonRequired": "Informe um motivo (pelo menos 3 caracteres) para deixar entrar."
   },
   "selfCheckin": {
     "metaTitle": "Check-in na sessão",
