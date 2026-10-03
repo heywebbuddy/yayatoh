@@ -1,10 +1,11 @@
 import { defineSerializer } from '@yayatoh/contracts';
 import type { TenantTx } from '@yayatoh/db';
-import { type Ctx, DomainError, requireOrg, uuidv7 } from '@yayatoh/kernel';
+import { type CommandPorts, type Ctx, DomainError, executeQuery, requireOrg, uuidv7 } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { memberRoleTx, organizationDefaultsTx, roleCan } from '@yayatoh/tenancy';
 import { desc, eq } from 'drizzle-orm';
 import { z } from 'zod';
+import type { IntegrationAuth } from '../auth/port.ts';
 import { connectionTx } from '../connections.ts';
 import {
   type connections,
@@ -14,6 +15,7 @@ import {
   slackMessages,
   slackSettings,
 } from '../schema.ts';
+import { listSlackChannels, type SlackChannel } from './api.ts';
 import { DIGEST_TIME, nextDigestAt } from './schedule.ts';
 
 /**
@@ -256,3 +258,38 @@ export const queueSlackTestCommand = tenantCommand({
     data: { messageId: r.messageId },
   }),
 });
+
+/**
+ * The port reference of an active Slack connection, for the channel picker's call through the
+ * port (server side only: `slackChannelsFor`; never rendered).
+ */
+export const slackAuthRefQuery = tenantQuery({
+  name: 'integrations.slackAuthRef',
+  input: z.object({ connectionId: z.uuid() }),
+  output: z.object({ authConnectionId: z.string() }).nullable(),
+  entitlement: 'integrations',
+  permission: 'integrations:read',
+  handler: async ({ input, tx }) => {
+    const c = await slackConnectionTx(tx, input.connectionId);
+    return c.status === 'active' && c.authConnectionId ? { authConnectionId: c.authConnectionId } : null;
+  },
+});
+
+/** The workspace's channels for the picker (through the port; null when the connection is not active). */
+export async function slackChannelsFor(
+  connectionId: string,
+  ctx: Ctx,
+  ports: CommandPorts<TenantTx>,
+  auth: IntegrationAuth,
+): Promise<SlackChannel[] | null> {
+  const ref = await executeQuery(slackAuthRefQuery, { connectionId }, ctx, ports);
+  if (!ref) return null;
+  return listSlackChannels(
+    auth.client({
+      orgId: requireOrg(ctx),
+      connectionId,
+      providerConfigKey: SLACK_CONNECTOR,
+      authConnectionId: ref.authConnectionId,
+    }),
+  );
+}

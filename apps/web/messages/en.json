@@ -3706,7 +3706,9 @@
       "orders_refund": "Refund orders",
       "attendees_read": "Read attendees",
       "attendees_write": "Change attendees and resend tickets",
-      "checkin_scan": "Scan tickets"
+      "checkin_scan": "Scan tickets",
+      "contacts_write": "Add contacts",
+      "webhooks_subscribe": "Subscribe automation hooks (Zapier triggers)"
     },
     "expiry": "Expires",
     "expiryHint": "An expiring key must be rotated before it ends. Shorter is safer.",
@@ -12073,6 +12075,9 @@
     "connectors": {
       "demo": {
         "description": "A sandbox contacts app for trying integrations: contacts sync both ways with your CRM. Test environments only."
+      },
+      "slack": {
+        "description": "Alerts and a daily digest in a Slack channel you pick. Messages name events, never people's emails, phones or amounts unless you opt in."
       }
     },
     "sandboxBadge": "Sandbox",
@@ -12308,6 +12313,154 @@
       "body": "{name} is a test provider. Allowing lets Yayatoh read and write the following on your behalf:",
       "allow": "Allow",
       "deny": "Deny"
+    },
+    "zapier": {
+      "title": "Zapier",
+      "cardDescription": "Start Zaps when orders are paid, tickets are checked in or registrations come in, and register people or add contacts from thousands of apps.",
+      "apiKeyBadge": "Uses an API key",
+      "setUp": "Set up",
+      "setUpNamed": "Set up Zapier",
+      "description": "Zapier connects with one of your API keys. Give the key the scopes below; the triggers Zapier turns on are listed here.",
+      "createKey": "Create an API key",
+      "reviewTitle": "The Yayatoh app on Zapier is in review",
+      "reviewBody": "Until Zapier lists it, your account team can send you an invite link to it.",
+      "noApiAccess": "API access isn't part of your plan, so Zapier can't connect yet.",
+      "scopesTitle": "API key scopes",
+      "scopesHelp": "Each trigger and action needs its scope on the key you give Zapier.",
+      "allScopes": "A key with these scopes covers everything:",
+      "partsCaption": "Triggers and actions with the scope each one needs",
+      "part": "Trigger or action",
+      "kind": "Type",
+      "scope": "Scope",
+      "parts": {
+        "order_paid": "Order paid",
+        "ticket_admitted": "Ticket checked in",
+        "registration_submitted": "Registration form submitted",
+        "event_published": "Event published",
+        "create_registration": "Create registration",
+        "add_contact": "Add contact",
+        "check_in": "Check in ticket",
+        "event_list": "Event picker"
+      },
+      "kinds": {
+        "trigger": "Trigger",
+        "action": "Action",
+        "picker": "Used by actions"
+      },
+      "keysTitle": "Your API keys",
+      "keysHelp": "Live keys and whether they cover every scope Zapier needs.",
+      "noKeysTitle": "No live API keys yet",
+      "noKeysDescription": "Create a key with the scopes above, then paste it into Zapier with your organization's short name.",
+      "keysCaption": "Live API keys and their Zapier coverage",
+      "keyName": "Key",
+      "key": "Starts with",
+      "coverage": "For Zapier",
+      "ready": "Ready for Zapier",
+      "partial": "{count, plural, one {Missing # scope} other {Missing # scopes}}",
+      "missing": "Missing: {scopes}",
+      "hooksTitle": "Active Zapier triggers",
+      "hooksHelp": "Zaps that are on and listening. Turning a Zap off removes its trigger here.",
+      "hooksCaption": "Triggers Zapier has subscribed",
+      "hooksEmpty": "No Zaps are listening yet. Turn on a Zap that starts with a Yayatoh trigger.",
+      "event": "Event type",
+      "host": "Delivered to",
+      "otherKey": "A removed key",
+      "created": "Turned on"
+    },
+    "slack": {
+      "title": "Slack",
+      "description": "Pick a channel for alerts and the daily digest. Messages name events and counts; never emails or phone numbers.",
+      "settingsTitle": "Channel and messages",
+      "saved": "Slack settings saved.",
+      "invalid": "Some details need fixing.",
+      "channel": "Channel",
+      "channelHint": "Only channels the Yayatoh app is in can be picked. In Slack, add the app to a channel first.",
+      "channelPlaceholder": "Choose a channel",
+      "private": "private",
+      "notInChannel": "app not in channel",
+      "alerts": "Send alerts",
+      "alertsHint": "Alerts from your dashboard, as they happen.",
+      "severity": "Alerts to send",
+      "severities": {
+        "info": "All alerts",
+        "warning": "Warnings and critical alerts",
+        "critical": "Critical alerts only"
+      },
+      "digest": "Send a daily digest",
+      "digestHint": "Yesterday's orders, tickets and check-ins, and today's events.",
+      "digestTime": "Digest time",
+      "digestTimeHint": "Your organization's time zone ({zone}).",
+      "finance": "Include amounts in the digest",
+      "financeHint": "Only you can switch this on: you connected Slack and can see finances. Everyone in the channel will see the amounts.",
+      "noAmounts": "The digest shows counts, not amounts. Only the person who connected Slack, with finance access, can add amounts.",
+      "save": "Save Slack settings",
+      "fieldError": {
+        "invalid": "Check this value.",
+        "channel": {
+          "required": "Choose a channel.",
+          "unknown": "That channel isn't in the workspace any more. Choose another.",
+          "not_in_channel": "The Yayatoh app isn't in that channel. Add it in Slack, then choose it."
+        },
+        "digestTime": {
+          "required": "Choose a time for the digest.",
+          "invalid": "Enter a time like 08:00."
+        },
+        "severity": {
+          "invalid": "Choose which alerts to send."
+        },
+        "finance": {
+          "finance_owner_only": "Only the person who connected Slack, with finance access, can add amounts."
+        }
+      },
+      "error": {
+        "unavailable": "Slack isn't available here.",
+        "provider_unavailable": "Slack couldn't be reached. Try again in a few minutes.",
+        "validation_failed": "Some details need fixing.",
+        "forbidden": "You don't have access to this.",
+        "module_not_enabled": "Integrations aren't in your plan.",
+        "not_found": "We couldn't find that.",
+        "invalid_state": "That can't be done right now.",
+        "no_channel": "Choose a channel and save first.",
+        "auth_revoked": "Slack no longer accepts this connection. Reconnect Slack.",
+        "connection_inactive": "Not sent: the connection was paused or disconnected.",
+        "send_failed": "The message couldn't be sent. It will be retried.",
+        "not_in_channel": "The Yayatoh app isn't in that channel. Add it in Slack, then try again.",
+        "channel_not_found": "That channel no longer exists. Choose another.",
+        "pii_blocked": "Not sent: it would have included personal data.",
+        "render_failed": "The message couldn't be prepared. It will be retried.",
+        "nothing_to_send": "Nothing to send any more.",
+        "impersonation_blocked": "Staff acting as a member can't change this.",
+        "read_only_freeze": "Changes are paused during scheduled maintenance. Try again when it ends.",
+        "internal": "Something went wrong on our side.",
+        "other": "Not sent ({code})."
+      },
+      "testSent": "Test alert sent to #{channel}.",
+      "channelsFailed": "Slack's channel list couldn't be loaded. Try again in a few minutes.",
+      "inactive": "Settings are available while Slack is connected and active.",
+      "previewTitle": "Test alert for #{channel}",
+      "previewHelp": "This is what the channel will see.",
+      "nextDigest": "Next digest: {when}",
+      "sendTest": "Send test alert",
+      "messagesTitle": "Recent Slack messages",
+      "messagesEmpty": "Nothing sent yet.",
+      "messages": {
+        "when": "When",
+        "kind": "Message",
+        "status": "Status",
+        "detail": "Detail"
+      },
+      "kinds": {
+        "alert": "Alert",
+        "digest": "Daily digest",
+        "test": "Test alert"
+      },
+      "statuses": {
+        "pending": "Waiting",
+        "sending": "Sending",
+        "sent": "Sent",
+        "failed": "Failed",
+        "cancelled": "Not sent"
+      }
     }
   },
   "formControls": {

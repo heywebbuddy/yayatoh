@@ -3706,7 +3706,9 @@
       "orders_refund": "订单退款",
       "attendees_read": "读取参会者",
       "attendees_write": "修改参会者并重新发送门票",
-      "checkin_scan": "扫描门票"
+      "checkin_scan": "扫描门票",
+      "contacts_write": "添加联系人",
+      "webhooks_subscribe": "订阅自动化钩子（Zapier 触发器）"
     },
     "expiry": "过期时间",
     "expiryHint": "会过期的密钥必须在到期前轮换。有效期越短越安全。",
@@ -12073,6 +12075,9 @@
     "connectors": {
       "demo": {
         "description": "用于试用集成的测试联系人应用：联系人与你的 CRM 双向同步。仅限测试环境。"
+      },
+      "slack": {
+        "description": "在你选择的 Slack 频道中发送提醒和每日摘要。消息只提及活动名称，除非你开启，否则不会包含邮箱、电话或金额。"
       }
     },
     "sandboxBadge": "测试",
@@ -12308,6 +12313,154 @@
       "body": "{name} 是测试服务商。允许后，Yayatoh 可以代表你读取和写入以下内容：",
       "allow": "允许",
       "deny": "拒绝"
+    },
+    "zapier": {
+      "title": "Zapier",
+      "cardDescription": "在订单付款、门票签到或收到报名时启动 Zap，并从数千个应用中为活动报名或添加联系人。",
+      "apiKeyBadge": "使用 API 密钥",
+      "setUp": "设置",
+      "setUpNamed": "设置 Zapier",
+      "description": "Zapier 通过你的一个 API 密钥连接。请为密钥授予下列权限；Zapier 开启的触发器会列在这里。",
+      "createKey": "创建 API 密钥",
+      "reviewTitle": "Zapier 上的 Yayatoh 应用正在审核中",
+      "reviewBody": "在 Zapier 上架之前，你的客户团队可以向你发送邀请链接。",
+      "noApiAccess": "你的套餐不含 API 访问，因此 Zapier 暂时无法连接。",
+      "scopesTitle": "API 密钥权限",
+      "scopesHelp": "交给 Zapier 的密钥需要具备每个触发器和操作对应的权限。",
+      "allScopes": "具备以下权限的密钥可覆盖全部功能：",
+      "partsCaption": "触发器和操作及各自所需的权限",
+      "part": "触发器或操作",
+      "kind": "类型",
+      "scope": "权限",
+      "parts": {
+        "order_paid": "订单已付款",
+        "ticket_admitted": "门票已签到",
+        "registration_submitted": "报名表已提交",
+        "event_published": "活动已发布",
+        "create_registration": "创建报名",
+        "add_contact": "添加联系人",
+        "check_in": "门票签到",
+        "event_list": "活动选择器"
+      },
+      "kinds": {
+        "trigger": "触发器",
+        "action": "操作",
+        "picker": "供操作使用"
+      },
+      "keysTitle": "你的 API 密钥",
+      "keysHelp": "有效的密钥，以及它们是否覆盖 Zapier 所需的全部权限。",
+      "noKeysTitle": "还没有有效的 API 密钥",
+      "noKeysDescription": "创建一个具备上述权限的密钥，然后将它和你组织的简称一起粘贴到 Zapier。",
+      "keysCaption": "有效的 API 密钥及其对 Zapier 的覆盖情况",
+      "keyName": "密钥",
+      "key": "开头",
+      "coverage": "用于 Zapier",
+      "ready": "可用于 Zapier",
+      "partial": "{count, plural, other {缺少 # 项权限}}",
+      "missing": "缺少：{scopes}",
+      "hooksTitle": "已启用的 Zapier 触发器",
+      "hooksHelp": "已开启并等待事件的 Zap。关闭 Zap 后，其触发器会从这里消失。",
+      "hooksCaption": "Zapier 已订阅的触发器",
+      "hooksEmpty": "还没有等待事件的 Zap。开启一个以 Yayatoh 触发器开头的 Zap。",
+      "event": "事件类型",
+      "host": "发送至",
+      "otherKey": "已删除的密钥",
+      "created": "开启时间"
+    },
+    "slack": {
+      "title": "Slack",
+      "description": "选择用于提醒和每日摘要的频道。消息只包含活动和数量，绝不包含邮箱或电话号码。",
+      "settingsTitle": "频道与消息",
+      "saved": "Slack 设置已保存。",
+      "invalid": "有些信息需要修改。",
+      "channel": "频道",
+      "channelHint": "只能选择 Yayatoh 应用所在的频道。请先在 Slack 中将应用添加到频道。",
+      "channelPlaceholder": "选择频道",
+      "private": "私密",
+      "notInChannel": "应用不在频道中",
+      "alerts": "发送提醒",
+      "alertsHint": "仪表板的提醒，一发生就发送。",
+      "severity": "要发送的提醒",
+      "severities": {
+        "info": "所有提醒",
+        "warning": "警告和严重提醒",
+        "critical": "仅严重提醒"
+      },
+      "digest": "发送每日摘要",
+      "digestHint": "昨天的订单、门票和签到，以及今天的活动。",
+      "digestTime": "摘要时间",
+      "digestTimeHint": "你组织的时区（{zone}）。",
+      "finance": "在摘要中包含金额",
+      "financeHint": "只有你可以开启：你连接了 Slack 并且可以查看财务。频道中的所有人都会看到金额。",
+      "noAmounts": "摘要显示数量而不是金额。只有连接 Slack 且拥有财务权限的人才能添加金额。",
+      "save": "保存 Slack 设置",
+      "fieldError": {
+        "invalid": "请检查此值。",
+        "channel": {
+          "required": "请选择频道。",
+          "unknown": "该频道已不在工作区中。请选择其他频道。",
+          "not_in_channel": "Yayatoh 应用不在该频道中。请先在 Slack 中添加应用，然后再选择该频道。"
+        },
+        "digestTime": {
+          "required": "请选择摘要时间。",
+          "invalid": "请输入类似 08:00 的时间。"
+        },
+        "severity": {
+          "invalid": "请选择要发送的提醒。"
+        },
+        "finance": {
+          "finance_owner_only": "只有连接 Slack 且拥有财务权限的人才能添加金额。"
+        }
+      },
+      "error": {
+        "unavailable": "此处无法使用 Slack。",
+        "provider_unavailable": "无法连接 Slack。请几分钟后重试。",
+        "validation_failed": "有些信息需要修改。",
+        "forbidden": "你无权执行此操作。",
+        "module_not_enabled": "你的套餐不含集成。",
+        "not_found": "未找到。",
+        "invalid_state": "现在无法执行此操作。",
+        "no_channel": "请先选择频道并保存。",
+        "auth_revoked": "Slack 已不再接受此连接。请重新连接 Slack。",
+        "connection_inactive": "未发送：连接已暂停或断开。",
+        "send_failed": "消息无法发送，将会重试。",
+        "not_in_channel": "Yayatoh 应用不在该频道中。请在 Slack 中添加后重试。",
+        "channel_not_found": "该频道已不存在。请选择其他频道。",
+        "pii_blocked": "未发送：消息会包含个人信息。",
+        "render_failed": "无法准备消息，将会重试。",
+        "nothing_to_send": "已没有需要发送的内容。",
+        "impersonation_blocked": "以成员身份操作的员工无法更改此项。",
+        "read_only_freeze": "计划维护期间暂停更改。请在维护结束后重试。",
+        "internal": "我们这边出了问题。",
+        "other": "未发送（{code}）。"
+      },
+      "testSent": "测试提醒已发送到 #{channel}。",
+      "channelsFailed": "无法加载 Slack 频道列表。请几分钟后重试。",
+      "inactive": "Slack 已连接且处于启用状态时才能使用设置。",
+      "previewTitle": "发送到 #{channel} 的测试提醒",
+      "previewHelp": "频道中会看到这样的内容。",
+      "nextDigest": "下一次摘要：{when}",
+      "sendTest": "发送测试提醒",
+      "messagesTitle": "最近的 Slack 消息",
+      "messagesEmpty": "还没有发送任何消息。",
+      "messages": {
+        "when": "时间",
+        "kind": "消息",
+        "status": "状态",
+        "detail": "详情"
+      },
+      "kinds": {
+        "alert": "提醒",
+        "digest": "每日摘要",
+        "test": "测试提醒"
+      },
+      "statuses": {
+        "pending": "等待中",
+        "sending": "发送中",
+        "sent": "已发送",
+        "failed": "失败",
+        "cancelled": "未发送"
+      }
     }
   },
   "formControls": {

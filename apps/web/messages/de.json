@@ -3706,7 +3706,9 @@
       "orders_refund": "Bestellungen erstatten",
       "attendees_read": "Teilnehmende lesen",
       "attendees_write": "Teilnehmende ändern und Tickets erneut senden",
-      "checkin_scan": "Tickets scannen"
+      "checkin_scan": "Tickets scannen",
+      "contacts_write": "Kontakte hinzufügen",
+      "webhooks_subscribe": "Automatisierungs-Hooks abonnieren (Zapier-Auslöser)"
     },
     "expiry": "Läuft ab",
     "expiryHint": "Ein ablaufender Schlüssel muss vorher rotiert werden. Kürzer ist sicherer.",
@@ -12073,6 +12075,9 @@
     "connectors": {
       "demo": {
         "description": "Eine Sandbox-Kontakte-App zum Ausprobieren: Kontakte werden in beide Richtungen mit deinem CRM abgeglichen. Nur in Testumgebungen."
+      },
+      "slack": {
+        "description": "Warnungen und eine tägliche Zusammenfassung in einem Slack-Kanal Ihrer Wahl. Nachrichten nennen Veranstaltungen, nie E-Mails, Telefonnummern oder Beträge, außer Sie schalten sie ein."
       }
     },
     "sandboxBadge": "Sandbox",
@@ -12308,6 +12313,154 @@
       "body": "{name} ist ein Testanbieter. Wenn du zustimmst, darf Yayatoh in deinem Namen Folgendes lesen und schreiben:",
       "allow": "Zulassen",
       "deny": "Ablehnen"
+    },
+    "zapier": {
+      "title": "Zapier",
+      "cardDescription": "Starten Sie Zaps, wenn Bestellungen bezahlt, Tickets eingecheckt oder Anmeldungen eingehen, und melden Sie Personen an oder fügen Sie Kontakte aus Tausenden Apps hinzu.",
+      "apiKeyBadge": "Nutzt einen API-Schlüssel",
+      "setUp": "Einrichten",
+      "setUpNamed": "Zapier einrichten",
+      "description": "Zapier verbindet sich mit einem Ihrer API-Schlüssel. Geben Sie dem Schlüssel die unten genannten Berechtigungen; die von Zapier aktivierten Auslöser stehen hier.",
+      "createKey": "API-Schlüssel erstellen",
+      "reviewTitle": "Die Yayatoh-App auf Zapier wird geprüft",
+      "reviewBody": "Bis Zapier sie listet, kann Ihr Account-Team Ihnen einen Einladungslink senden.",
+      "noApiAccess": "API-Zugriff ist nicht Teil Ihres Tarifs, daher kann sich Zapier noch nicht verbinden.",
+      "scopesTitle": "Berechtigungen des API-Schlüssels",
+      "scopesHelp": "Jeder Auslöser und jede Aktion braucht seine Berechtigung auf dem Schlüssel für Zapier.",
+      "allScopes": "Ein Schlüssel mit diesen Berechtigungen deckt alles ab:",
+      "partsCaption": "Auslöser und Aktionen mit der jeweils nötigen Berechtigung",
+      "part": "Auslöser oder Aktion",
+      "kind": "Art",
+      "scope": "Berechtigung",
+      "parts": {
+        "order_paid": "Bestellung bezahlt",
+        "ticket_admitted": "Ticket eingecheckt",
+        "registration_submitted": "Anmeldeformular gesendet",
+        "event_published": "Veranstaltung veröffentlicht",
+        "create_registration": "Anmeldung erstellen",
+        "add_contact": "Kontakt hinzufügen",
+        "check_in": "Ticket einchecken",
+        "event_list": "Veranstaltungsauswahl"
+      },
+      "kinds": {
+        "trigger": "Auslöser",
+        "action": "Aktion",
+        "picker": "Von Aktionen genutzt"
+      },
+      "keysTitle": "Ihre API-Schlüssel",
+      "keysHelp": "Aktive Schlüssel und ob sie alle Berechtigungen abdecken, die Zapier braucht.",
+      "noKeysTitle": "Noch keine aktiven API-Schlüssel",
+      "noKeysDescription": "Erstellen Sie einen Schlüssel mit den Berechtigungen oben und fügen Sie ihn mit dem Kurznamen Ihrer Organisation in Zapier ein.",
+      "keysCaption": "Aktive API-Schlüssel und ihre Abdeckung für Zapier",
+      "keyName": "Schlüssel",
+      "key": "Beginnt mit",
+      "coverage": "Für Zapier",
+      "ready": "Bereit für Zapier",
+      "partial": "{count, plural, one {# Berechtigung fehlt} other {# Berechtigungen fehlen}}",
+      "missing": "Fehlt: {scopes}",
+      "hooksTitle": "Aktive Zapier-Auslöser",
+      "hooksHelp": "Zaps, die eingeschaltet sind und lauschen. Wird ein Zap ausgeschaltet, verschwindet sein Auslöser hier.",
+      "hooksCaption": "Auslöser, die Zapier abonniert hat",
+      "hooksEmpty": "Noch lauscht kein Zap. Schalten Sie einen Zap mit einem Yayatoh-Auslöser ein.",
+      "event": "Ereignistyp",
+      "host": "Zugestellt an",
+      "otherKey": "Ein entfernter Schlüssel",
+      "created": "Eingeschaltet"
+    },
+    "slack": {
+      "title": "Slack",
+      "description": "Wählen Sie einen Kanal für Warnungen und die tägliche Zusammenfassung. Nachrichten nennen Veranstaltungen und Zahlen, nie E-Mails oder Telefonnummern.",
+      "settingsTitle": "Kanal und Nachrichten",
+      "saved": "Slack-Einstellungen gespeichert.",
+      "invalid": "Einige Angaben müssen korrigiert werden.",
+      "channel": "Kanal",
+      "channelHint": "Nur Kanäle, in denen die Yayatoh-App ist, können gewählt werden. Fügen Sie die App in Slack zuerst dem Kanal hinzu.",
+      "channelPlaceholder": "Kanal wählen",
+      "private": "privat",
+      "notInChannel": "App nicht im Kanal",
+      "alerts": "Warnungen senden",
+      "alertsHint": "Warnungen aus Ihrem Dashboard, sobald sie auftreten.",
+      "severity": "Zu sendende Warnungen",
+      "severities": {
+        "info": "Alle Warnungen",
+        "warning": "Warnungen und kritische Warnungen",
+        "critical": "Nur kritische Warnungen"
+      },
+      "digest": "Tägliche Zusammenfassung senden",
+      "digestHint": "Bestellungen, Tickets und Check-ins von gestern und die Veranstaltungen von heute.",
+      "digestTime": "Uhrzeit der Zusammenfassung",
+      "digestTimeHint": "Zeitzone Ihrer Organisation ({zone}).",
+      "finance": "Beträge in die Zusammenfassung aufnehmen",
+      "financeHint": "Nur Sie können das einschalten: Sie haben Slack verbunden und sehen die Finanzen. Alle im Kanal sehen die Beträge.",
+      "noAmounts": "Die Zusammenfassung zeigt Zahlen, keine Beträge. Nur wer Slack verbunden hat und Finanzzugriff hat, kann Beträge hinzufügen.",
+      "save": "Slack-Einstellungen speichern",
+      "fieldError": {
+        "invalid": "Prüfen Sie diesen Wert.",
+        "channel": {
+          "required": "Wählen Sie einen Kanal.",
+          "unknown": "Diesen Kanal gibt es im Workspace nicht mehr. Wählen Sie einen anderen.",
+          "not_in_channel": "Die Yayatoh-App ist nicht in diesem Kanal. Fügen Sie sie in Slack hinzu und wählen Sie ihn dann."
+        },
+        "digestTime": {
+          "required": "Wählen Sie eine Uhrzeit für die Zusammenfassung.",
+          "invalid": "Geben Sie eine Uhrzeit wie 08:00 ein."
+        },
+        "severity": {
+          "invalid": "Wählen Sie, welche Warnungen gesendet werden."
+        },
+        "finance": {
+          "finance_owner_only": "Nur wer Slack verbunden hat und Finanzzugriff hat, kann Beträge hinzufügen."
+        }
+      },
+      "error": {
+        "unavailable": "Slack ist hier nicht verfügbar.",
+        "provider_unavailable": "Slack war nicht erreichbar. Versuchen Sie es in ein paar Minuten erneut.",
+        "validation_failed": "Einige Angaben müssen korrigiert werden.",
+        "forbidden": "Sie haben keinen Zugriff darauf.",
+        "module_not_enabled": "Integrationen sind nicht in Ihrem Tarif enthalten.",
+        "not_found": "Das wurde nicht gefunden.",
+        "invalid_state": "Das ist gerade nicht möglich.",
+        "no_channel": "Wählen Sie zuerst einen Kanal und speichern Sie.",
+        "auth_revoked": "Slack akzeptiert diese Verbindung nicht mehr. Verbinden Sie Slack neu.",
+        "connection_inactive": "Nicht gesendet: Die Verbindung wurde pausiert oder getrennt.",
+        "send_failed": "Die Nachricht konnte nicht gesendet werden. Sie wird erneut versucht.",
+        "not_in_channel": "Die Yayatoh-App ist nicht in diesem Kanal. Fügen Sie sie in Slack hinzu und versuchen Sie es erneut.",
+        "channel_not_found": "Diesen Kanal gibt es nicht mehr. Wählen Sie einen anderen.",
+        "pii_blocked": "Nicht gesendet: Sie hätte personenbezogene Daten enthalten.",
+        "render_failed": "Die Nachricht konnte nicht vorbereitet werden. Sie wird erneut versucht.",
+        "nothing_to_send": "Nichts mehr zu senden.",
+        "impersonation_blocked": "Mitarbeitende, die als Mitglied handeln, können das nicht ändern.",
+        "read_only_freeze": "Änderungen sind während der geplanten Wartung pausiert. Versuchen Sie es danach erneut.",
+        "internal": "Bei uns ist etwas schiefgelaufen.",
+        "other": "Nicht gesendet ({code})."
+      },
+      "testSent": "Testwarnung an #{channel} gesendet.",
+      "channelsFailed": "Die Kanalliste von Slack konnte nicht geladen werden. Versuchen Sie es in ein paar Minuten erneut.",
+      "inactive": "Die Einstellungen sind verfügbar, solange Slack verbunden und aktiv ist.",
+      "previewTitle": "Testwarnung für #{channel}",
+      "previewHelp": "So sieht es der Kanal.",
+      "nextDigest": "Nächste Zusammenfassung: {when}",
+      "sendTest": "Testwarnung senden",
+      "messagesTitle": "Letzte Slack-Nachrichten",
+      "messagesEmpty": "Noch nichts gesendet.",
+      "messages": {
+        "when": "Wann",
+        "kind": "Nachricht",
+        "status": "Status",
+        "detail": "Details"
+      },
+      "kinds": {
+        "alert": "Warnung",
+        "digest": "Tägliche Zusammenfassung",
+        "test": "Testwarnung"
+      },
+      "statuses": {
+        "pending": "Wartet",
+        "sending": "Wird gesendet",
+        "sent": "Gesendet",
+        "failed": "Fehlgeschlagen",
+        "cancelled": "Nicht gesendet"
+      }
     }
   },
   "formControls": {

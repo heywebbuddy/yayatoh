@@ -151,6 +151,8 @@ export {
   SlackPanelDto,
   SlackSettingsDto,
   saveSlackSettingsCommand,
+  slackAuthRefQuery,
+  slackChannelsFor,
   slackPanelQuery,
   slackPanelSerializer,
 } from './slack/settings.ts';

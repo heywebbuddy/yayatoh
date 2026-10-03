@@ -3706,7 +3706,9 @@
       "orders_refund": "注文の返金",
       "attendees_read": "参加者の閲覧",
       "attendees_write": "参加者の変更とチケットの再送",
-      "checkin_scan": "チケットのスキャン"
+      "checkin_scan": "チケットのスキャン",
+      "contacts_write": "連絡先の追加",
+      "webhooks_subscribe": "自動化フックの登録（Zapier トリガー）"
     },
     "expiry": "有効期限",
     "expiryHint": "期限のあるキーは期限前にローテーションが必要です。短いほど安全です。",
@@ -12073,6 +12075,9 @@
     "connectors": {
       "demo": {
         "description": "連携を試すためのテスト用連絡先アプリです。連絡先が CRM と双方向に同期されます。テスト環境のみ。"
+      },
+      "slack": {
+        "description": "選んだ Slack チャンネルにアラートと日次ダイジェストを送ります。メッセージにはイベント名が入り、メールアドレス・電話番号・金額は有効にしない限り入りません。"
       }
     },
     "sandboxBadge": "テスト",
@@ -12308,6 +12313,154 @@
       "body": "{name} はテスト用のプロバイダーです。許可すると、Yayatoh があなたに代わって次の内容を読み書きできるようになります。",
       "allow": "許可",
       "deny": "拒否"
+    },
+    "zapier": {
+      "title": "Zapier",
+      "cardDescription": "注文の支払い、チケットのチェックイン、申し込みの受付で Zap を開始し、数千のアプリから参加登録や連絡先の追加ができます。",
+      "apiKeyBadge": "API キーを使用",
+      "setUp": "設定する",
+      "setUpNamed": "Zapier を設定する",
+      "description": "Zapier は API キーのいずれかで接続します。キーに下記の権限を付けてください。Zapier が有効にしたトリガーはここに表示されます。",
+      "createKey": "API キーを作成",
+      "reviewTitle": "Zapier の Yayatoh アプリは審査中です",
+      "reviewBody": "Zapier に掲載されるまでは、担当チームから招待リンクをお送りできます。",
+      "noApiAccess": "API アクセスがプランに含まれていないため、Zapier はまだ接続できません。",
+      "scopesTitle": "API キーの権限",
+      "scopesHelp": "各トリガーとアクションには、Zapier に渡すキーにそれぞれの権限が必要です。",
+      "allScopes": "次の権限を持つキーですべてに対応できます:",
+      "partsCaption": "トリガーとアクション、それぞれに必要な権限",
+      "part": "トリガーまたはアクション",
+      "kind": "種類",
+      "scope": "権限",
+      "parts": {
+        "order_paid": "注文の支払い",
+        "ticket_admitted": "チケットのチェックイン",
+        "registration_submitted": "申込フォームの送信",
+        "event_published": "イベントの公開",
+        "create_registration": "参加登録を作成",
+        "add_contact": "連絡先を追加",
+        "check_in": "チケットをチェックイン",
+        "event_list": "イベント選択"
+      },
+      "kinds": {
+        "trigger": "トリガー",
+        "action": "アクション",
+        "picker": "アクションで使用"
+      },
+      "keysTitle": "API キー",
+      "keysHelp": "有効なキーと、Zapier に必要な権限をすべて持っているかどうか。",
+      "noKeysTitle": "有効な API キーはまだありません",
+      "noKeysDescription": "上記の権限でキーを作成し、組織の短い名前と一緒に Zapier に貼り付けてください。",
+      "keysCaption": "有効な API キーと Zapier への対応状況",
+      "keyName": "キー",
+      "key": "先頭",
+      "coverage": "Zapier 用",
+      "ready": "Zapier に対応",
+      "partial": "{count, plural, other {権限が # 個不足}}",
+      "missing": "不足: {scopes}",
+      "hooksTitle": "有効な Zapier トリガー",
+      "hooksHelp": "オンになっていて待機中の Zap です。Zap をオフにすると、そのトリガーはここから消えます。",
+      "hooksCaption": "Zapier が登録したトリガー",
+      "hooksEmpty": "待機中の Zap はまだありません。Yayatoh のトリガーで始まる Zap をオンにしてください。",
+      "event": "イベントの種類",
+      "host": "送信先",
+      "otherKey": "削除されたキー",
+      "created": "オンにした日時"
+    },
+    "slack": {
+      "title": "Slack",
+      "description": "アラートと日次ダイジェストを送るチャンネルを選びます。メッセージにはイベントと件数が入り、メールアドレスや電話番号は入りません。",
+      "settingsTitle": "チャンネルとメッセージ",
+      "saved": "Slack の設定を保存しました。",
+      "invalid": "修正が必要な項目があります。",
+      "channel": "チャンネル",
+      "channelHint": "Yayatoh アプリが参加しているチャンネルだけを選べます。先に Slack でアプリをチャンネルに追加してください。",
+      "channelPlaceholder": "チャンネルを選択",
+      "private": "非公開",
+      "notInChannel": "アプリ未参加",
+      "alerts": "アラートを送信",
+      "alertsHint": "ダッシュボードのアラートを発生時に送ります。",
+      "severity": "送信するアラート",
+      "severities": {
+        "info": "すべてのアラート",
+        "warning": "警告と重大なアラート",
+        "critical": "重大なアラートのみ"
+      },
+      "digest": "日次ダイジェストを送信",
+      "digestHint": "前日の注文・チケット・チェックインと、当日のイベント。",
+      "digestTime": "ダイジェストの時刻",
+      "digestTimeHint": "組織のタイムゾーン（{zone}）。",
+      "finance": "ダイジェストに金額を含める",
+      "financeHint": "これをオンにできるのはあなただけです（Slack を接続し、財務情報を閲覧できるため）。チャンネルの全員に金額が表示されます。",
+      "noAmounts": "ダイジェストには件数が表示され、金額は表示されません。金額を追加できるのは、Slack を接続し財務の権限を持つ人だけです。",
+      "save": "Slack の設定を保存",
+      "fieldError": {
+        "invalid": "この値を確認してください。",
+        "channel": {
+          "required": "チャンネルを選んでください。",
+          "unknown": "そのチャンネルはワークスペースにもうありません。別のチャンネルを選んでください。",
+          "not_in_channel": "Yayatoh アプリはそのチャンネルに参加していません。Slack で追加してから選んでください。"
+        },
+        "digestTime": {
+          "required": "ダイジェストの時刻を選んでください。",
+          "invalid": "08:00 のように時刻を入力してください。"
+        },
+        "severity": {
+          "invalid": "送信するアラートを選んでください。"
+        },
+        "finance": {
+          "finance_owner_only": "金額を追加できるのは、Slack を接続し財務の権限を持つ人だけです。"
+        }
+      },
+      "error": {
+        "unavailable": "ここでは Slack を利用できません。",
+        "provider_unavailable": "Slack に接続できませんでした。数分後にもう一度お試しください。",
+        "validation_failed": "修正が必要な項目があります。",
+        "forbidden": "この操作を行う権限がありません。",
+        "module_not_enabled": "連携はプランに含まれていません。",
+        "not_found": "見つかりませんでした。",
+        "invalid_state": "現在この操作はできません。",
+        "no_channel": "先にチャンネルを選んで保存してください。",
+        "auth_revoked": "Slack がこの接続を受け付けなくなりました。Slack を再接続してください。",
+        "connection_inactive": "未送信: 接続が一時停止または解除されました。",
+        "send_failed": "メッセージを送信できませんでした。再試行されます。",
+        "not_in_channel": "Yayatoh アプリはそのチャンネルに参加していません。Slack で追加してからもう一度お試しください。",
+        "channel_not_found": "そのチャンネルはもう存在しません。別のチャンネルを選んでください。",
+        "pii_blocked": "未送信: 個人情報が含まれるため送信しませんでした。",
+        "render_failed": "メッセージを準備できませんでした。再試行されます。",
+        "nothing_to_send": "送信するものはもうありません。",
+        "impersonation_blocked": "メンバーとして操作中のスタッフはこれを変更できません。",
+        "read_only_freeze": "定期メンテナンス中は変更を停止しています。終了後にもう一度お試しください。",
+        "internal": "こちら側で問題が発生しました。",
+        "other": "未送信（{code}）。"
+      },
+      "testSent": "#{channel} にテストアラートを送信しました。",
+      "channelsFailed": "Slack のチャンネル一覧を読み込めませんでした。数分後にもう一度お試しください。",
+      "inactive": "設定は Slack が接続中で有効なときに利用できます。",
+      "previewTitle": "#{channel} へのテストアラート",
+      "previewHelp": "チャンネルにはこのように表示されます。",
+      "nextDigest": "次のダイジェスト: {when}",
+      "sendTest": "テストアラートを送信",
+      "messagesTitle": "最近の Slack メッセージ",
+      "messagesEmpty": "まだ何も送信していません。",
+      "messages": {
+        "when": "日時",
+        "kind": "メッセージ",
+        "status": "状態",
+        "detail": "詳細"
+      },
+      "kinds": {
+        "alert": "アラート",
+        "digest": "日次ダイジェスト",
+        "test": "テストアラート"
+      },
+      "statuses": {
+        "pending": "待機中",
+        "sending": "送信中",
+        "sent": "送信済み",
+        "failed": "失敗",
+        "cancelled": "未送信"
+      }
     }
   },
   "formControls": {
