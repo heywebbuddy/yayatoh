@@ -84,6 +84,7 @@ describe('page types and headers', () => {
     expect(pageTypeOf('/sign-in')).toBe('console');
     expect(pageTypeOf('/checkout/fake')).toBe('checkout');
     expect(pageTypeOf('/my-tickets/tok')).toBe('token');
+    expect(pageTypeOf('/tv/yytv_tok')).toBe('token');
     expect(pageTypeOf('/orders/tok')).toBe('token');
     expect(pageTypeOf('/scan')).toBe('scan');
     expect(pageTypeOf('/events/jazz')).toBe('public');

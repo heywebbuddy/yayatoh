@@ -416,6 +416,214 @@ Lakeside Jazz Night 有需要注意的事項。點按鈕開啟處理頁面。
 }
 `;
 
+exports[`renderMessage: every kind in all 13 locales > alerts.alert-urgent-text · ar 1`] = `
+{
+  "subject": "بلغ المكان سعته القصوى (100٪)",
+  "text": "بلغ المكان سعته القصوى (100٪)
+
+مرحبًا،
+
+هناك ما يحتاج إلى انتباه في Lakeside Jazz Night. يفتح الزر الصفحة التي تعالجه.
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.alert-urgent-text · de 1`] = `
+{
+  "subject": "Der Veranstaltungsort ist voll (100 %)",
+  "text": "Der Veranstaltungsort ist voll (100 %)
+
+Hallo,
+
+Bei Lakeside Jazz Night braucht etwas Aufmerksamkeit. Die Schaltfläche öffnet die Seite, die es behebt.
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.alert-urgent-text · en 1`] = `
+{
+  "subject": "The venue is at capacity (100% full)",
+  "text": "The venue is at capacity (100% full)
+
+Hello,
+
+This needs attention at Lakeside Jazz Night. The button opens the page that fixes it.
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.alert-urgent-text · es 1`] = `
+{
+  "subject": "El recinto está lleno (100 %)",
+  "text": "El recinto está lleno (100 %)
+
+Hola:
+
+Algo necesita atención en Lakeside Jazz Night. El botón abre la página que lo soluciona.
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.alert-urgent-text · fr 1`] = `
+{
+  "subject": "Le lieu est complet (100 %)",
+  "text": "Le lieu est complet (100 %)
+
+Bonjour,
+
+Quelque chose demande votre attention pour Lakeside Jazz Night. Le bouton ouvre la page qui le règle.
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.alert-urgent-text · hi 1`] = `
+{
+  "subject": "स्थल पूरी तरह भर गया है (100%)",
+  "text": "स्थल पूरी तरह भर गया है (100%)
+
+नमस्ते,
+
+Lakeside Jazz Night में किसी चीज़ पर ध्यान देने की ज़रूरत है। बटन वह पेज खोलता है जो इसे ठीक करता है।
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.alert-urgent-text · it 1`] = `
+{
+  "subject": "La sede è al completo (100%)",
+  "text": "La sede è al completo (100%)
+
+Ciao,
+
+Qualcosa richiede attenzione per Lakeside Jazz Night. Il pulsante apre la pagina che lo risolve.
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.alert-urgent-text · ja 1`] = `
+{
+  "subject": "会場は満員です（100%）",
+  "text": "会場は満員です（100%）
+
+こんにちは。
+
+Lakeside Jazz Nightで対応が必要なことがあります。ボタンから解決するページを開けます。
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.alert-urgent-text · nl 1`] = `
+{
+  "subject": "De locatie is vol (100%)",
+  "text": "De locatie is vol (100%)
+
+Hallo,
+
+Er vraagt iets aandacht bij Lakeside Jazz Night. De knop opent de pagina die het oplost.
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.alert-urgent-text · pt 1`] = `
+{
+  "subject": "O local está lotado (100%)",
+  "text": "O local está lotado (100%)
+
+Olá!
+
+Algo precisa de atenção em Lakeside Jazz Night. O botão abre a página que resolve isso.
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.alert-urgent-text · ru 1`] = `
+{
+  "subject": "Площадка заполнена полностью (100 %)",
+  "text": "Площадка заполнена полностью (100 %)
+
+Здравствуйте!
+
+На мероприятии «Lakeside Jazz Night» что-то требует внимания. Кнопка откроет страницу, где это можно исправить.
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.alert-urgent-text · zh-CN 1`] = `
+{
+  "subject": "场地已满员（100%）",
+  "text": "场地已满员（100%）
+
+您好：
+
+Lakeside Jazz Night 有需要关注的事项。点击按钮打开处理页面。
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > alerts.alert-urgent-text · zh-TW 1`] = `
+{
+  "subject": "場地已額滿（100%）",
+  "text": "場地已額滿（100%）
+
+您好：
+
+Lakeside Jazz Night 有需要注意的事項。點按鈕開啟處理頁面。
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
 exports[`renderMessage: every kind in all 13 locales > attendees.message · ar 1`] = `
 {
   "subject": "Parking update",

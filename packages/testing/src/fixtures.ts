@@ -9,6 +9,14 @@ import {
   setSalesTargetCommand,
 } from '@yayatoh/alerts';
 import {
+  assignCommand as assistanceAssignCommand,
+  addNoteCommand as assistanceNoteCommand,
+  queueQuery as assistanceQueueQuery,
+  assistanceTicketToken,
+  guestRequestCommand,
+  staffRequestCommand,
+} from '@yayatoh/assistance';
+import {
   attendeeImportBulk,
   attendeeLabelBulk,
   stageImportCommand,
@@ -36,6 +44,8 @@ import {
   createCheckpointCommand,
   enrollDeviceCommand,
   heartbeatCommand,
+  markQuietDevicesTx,
+  reportPresenceCommand,
   scanTicketCommand,
   setDetectionSettingsCommand,
   stageStaffAlertPushesTx,
@@ -53,7 +63,11 @@ import {
   submitContactRequestCommand,
   submitHelpFeedbackCommand,
 } from '@yayatoh/cms';
-import { saveWidgetLayoutCommand, setModeOverrideCommand } from '@yayatoh/command-center';
+import {
+  createDisplayLinkCommand,
+  saveWidgetLayoutCommand,
+  setModeOverrideCommand,
+} from '@yayatoh/command-center';
 import { withTenant } from '@yayatoh/db';
 import {
   addRecurringOccurrencesCommand,
@@ -725,7 +739,9 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   await executeCommand(revokeApiKeyCommand, { apiKeyId: retired.id }, ctx(), ports);
   // One admission (and its scan) at event time, so the check-in tables are covered.
   const [issued] = await withTenant(systemCtx(org.id), (tx) =>
-    tx.execute<{ short_code: string }>(sql`select short_code from ticketing.tickets order by serial limit 1`),
+    tx.execute<{ id: string; short_code: string }>(
+      sql`select id, short_code from ticketing.tickets order by serial limit 1`,
+    ),
   );
   // Two entrances: admitted at one, shown at the other a minute later → a `two_entrances` signal.
   const gate = async (name: string) =>
@@ -1986,6 +2002,40 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ports,
   );
   // M3.2a Command Center: the owner's own layout and a manual mode (isolation coverage).
+  // Guest assistance (M3.3b): a guest asks for help with their ticket's link, the door device asks
+  // for backup, the owner takes the guest's request and writes a note (every assistance table).
+  await executeCommand(
+    guestRequestCommand,
+    {
+      eventId: event.id,
+      ticketToken: assistanceTicketToken(issued?.id ?? ''),
+      reason: 'seat',
+      note: 'Someone is in my seat',
+      location: 'Row C',
+    },
+    createCtx({ orgId: org.id, now: new Date('2027-10-14T15:05:00Z') }),
+    ports,
+  );
+  await executeCommand(
+    staffRequestCommand,
+    { eventId: event.id, reason: 'backup', note: 'Long line', checkpointId: mainGate },
+    deviceCtx,
+    ports,
+  );
+  const [guestAsk] = await executeQuery(assistanceQueueQuery, { eventId: event.id }, ctx(), ports);
+  if (!guestAsk) throw new Error('fixture: no help request');
+  await executeCommand(
+    assistanceAssignCommand,
+    { eventId: event.id, requestId: guestAsk.id, assignee: 'me' },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    assistanceNoteCommand,
+    { eventId: event.id, requestId: guestAsk.id, body: 'On my way' },
+    ctx(),
+    ports,
+  );
   await executeCommand(
     saveWidgetLayoutCommand,
     { eventId: event.id, order: ['sales', 'readiness'], hidden: ['timeline'] },
@@ -2052,6 +2102,17 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ports,
   );
   await runOrgCampaigns(org.id, ports);
+  // M3.3a live mode: the owner at the main gate (staff presence), a TV display link, and the door
+  // device's transitions (its first heartbeat above recorded "online"; it went quiet since).
+  await executeCommand(
+    reportPresenceCommand,
+    { eventId: event.id, checkpointId: mainGate },
+    ctx({ now: new Date('2027-10-14T15:02:00Z') }),
+    ports,
+  );
+  await executeCommand(createDisplayLinkCommand, { eventId: event.id, label: 'Lobby screen' }, ctx(), ports);
+  const quietCtx = { ...systemCtx(org.id), now: new Date('2027-10-14T15:30:00Z') };
+  await withTenant(quietCtx, (tx) => markQuietDevicesTx(tx, quietCtx, 90_000));
   // M3.1a: the metrics projector (snapshots, sharded counter, time series, lag samples) and the
   // analytics sink over this org's outbox, as the worker would.
   await catchUpMetrics(org.id);
