@@ -22,8 +22,8 @@ const MIN = 60_000;
  * delivery, access and streams through the console), free registration with a full pass and a
  * day pass, two sessions ("Opening keynote" and "Closing panel", both now) and two registrants:
  * Ana (full pass) and Ben (day pass). Returns the console path, the sessions, and each person's
- * order manage token, watch path and ticket type name. 404 unless dev auth is on; never in
- * production.
+ * order manage token, watch path and ticket type name (`sessions=0`: no sessions). 404 unless dev
+ * auth is on; never in production.
  */
 export async function POST(req: NextRequest) {
   if (!devAuthEnabled()) return new NextResponse(null, { status: 404 });
@@ -59,7 +59,8 @@ export async function POST(req: NextRequest) {
     );
   await executeCommand(transitionEventCommand, { eventId: ev.id, transition: 'publish' }, ctx, ports);
   const sessions: { id: string; title: string }[] = [];
-  for (const title of ['Opening keynote', 'Closing panel']) {
+  const titles = form.get('sessions') === '0' ? [] : ['Opening keynote', 'Closing panel'];
+  for (const title of titles) {
     const r = await executeCommand(
       createSessionCommand,
       { eventId: ev.id, title, startsAt: new Date(now - 10 * MIN), endsAt: new Date(now + 110 * MIN) },
