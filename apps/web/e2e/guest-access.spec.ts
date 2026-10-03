@@ -1,5 +1,12 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { continueToPayment, expectAccessible, lastEmailedCode, signIn, wrongCode } from './helpers.ts';
+import {
+  continueToPayment,
+  expectAccessible,
+  lastEmailedCode,
+  pickOption,
+  signIn,
+  wrongCode,
+} from './helpers.ts';
 import { addTicketType, createGala, publishEvent, unique } from './seating-helpers.ts';
 
 /**
@@ -29,7 +36,7 @@ async function freeEvent(page: Page, what: string) {
 
 /** Fill the checkout form for one free pass (no submit). */
 async function fillCheckout(guest: Page, name: string, email: string) {
-  await guest.getByLabel('Quantity — Free pass').selectOption('1');
+  await pickOption(guest.getByLabel('Quantity — Free pass'), '1');
   await guest.getByLabel('Full name').fill(name);
   await guest.getByLabel('Email for your tickets').fill(email);
 }
@@ -210,7 +217,7 @@ test.describe('guest checkout with an emailed code', () => {
     const email = emailFor('arabic');
     await guest.goto(`/ar/events/${slug}`);
     await expect(guest.locator('html')).toHaveAttribute('dir', 'rtl');
-    await guest.locator('select[name^="qty:"]').first().selectOption('1');
+    await pickOption(guest.locator('[role="combobox"][data-name^="qty:"]').first(), '1');
     await guest.locator('#name').fill('ليلى');
     await guest.locator('#email').fill(email);
     await guest.locator('#email').press('Enter');

@@ -1,7 +1,7 @@
 'use client';
 
 import { CHANNEL_KINDS } from '@yayatoh/seating/client';
-import { Alert, Button } from '@yayatoh/ui';
+import { Alert, Button, DateTimePicker, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { type FormEvent, startTransition, useActionState, useEffect, useId, useRef } from 'react';
 import type {
@@ -76,13 +76,13 @@ export function ChannelForm({
           <label htmlFor={`${id}-kind`} className="text-caption text-ink-2">
             {t('kindLabel')}
           </label>
-          <select name="kind" defaultValue={initial?.kind ?? 'promoter'} className={field} {...input('kind')}>
+          <Select name="kind" defaultValue={initial?.kind ?? 'promoter'} className={field} {...input('kind')}>
             {CHANNEL_KINDS.map((k) => (
               <option key={k} value={k}>
                 {t(`kind.${k}`)}
               </option>
             ))}
-          </select>
+          </Select>
           <p id={`${id}-kind-hint`} className="text-caption text-ink-2">
             {t('kindHint')}
           </p>
@@ -127,9 +127,8 @@ export function ChannelForm({
           <label htmlFor={`${id}-releaseAt`} className="text-caption text-ink-2">
             {t('releaseLabel')}
           </label>
-          <input
+          <DateTimePicker
             name="releaseAt"
-            type="datetime-local"
             defaultValue={initial?.releaseAt ?? ''}
             className={field}
             {...input('releaseAt')}
@@ -203,7 +202,7 @@ export function AllotForm({
         <label htmlFor={`${id}-channel`} className="text-caption text-ink-2">
           {t('allotTo')}
         </label>
-        <select
+        <Select
           id={`${id}-channel`}
           name="channelId"
           defaultValue={channels[0]?.id ?? ''}
@@ -216,7 +215,7 @@ export function AllotForm({
             </option>
           ))}
           <option value="">{t('everyChannel')}</option>
-        </select>
+        </Select>
       </div>
       <fieldset
         className="flex flex-col gap-1.5"

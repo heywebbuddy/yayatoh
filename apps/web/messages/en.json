@@ -14953,5 +14953,24 @@
       },
       "reported": "Thanks. The organizer and Yayatoh will review your report; this visitor can't write to your booth any more."
     }
+  },
+  "formControls": {
+    "search": "Search",
+    "noResults": "No matches",
+    "loading": "Loading…",
+    "remove": "Remove {label}",
+    "create": "Create “{query}”",
+    "clear": "Clear",
+    "chooseDate": "Choose a date",
+    "chooseTime": "Choose a time",
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month",
+    "today": "Today",
+    "invalidDate": "Enter a date like {example}",
+    "invalidTime": "Enter a time like {example}",
+    "tooEarly": "Choose a date on or after {date}",
+    "tooLate": "Choose a date on or before {date}",
+    "timeZoneNote": "Times in {zone}",
+    "selected": "Selected"
   }
 }

@@ -14953,5 +14953,24 @@
       },
       "reported": "Спасибо. Организатор и Yayatoh рассмотрят вашу жалобу; этот посетитель больше не может писать вашему стенду."
     }
+  },
+  "formControls": {
+    "search": "Поиск",
+    "noResults": "Ничего не найдено",
+    "loading": "Загрузка…",
+    "remove": "Удалить {label}",
+    "create": "Создать «{query}»",
+    "clear": "Очистить",
+    "chooseDate": "Выберите дату",
+    "chooseTime": "Выберите время",
+    "previousMonth": "Предыдущий месяц",
+    "nextMonth": "Следующий месяц",
+    "today": "Сегодня",
+    "invalidDate": "Введите дату, например {example}",
+    "invalidTime": "Введите время, например {example}",
+    "tooEarly": "Выберите дату не раньше {date}",
+    "tooLate": "Выберите дату не позже {date}",
+    "timeZoneNote": "Время: {zone}",
+    "selected": "Выбрано"
   }
 }

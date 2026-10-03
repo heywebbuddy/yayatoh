@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { continueToPayment, expectAccessible, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, pickOption, signIn } from './helpers.ts';
 
 // A fresh event per run: its checkout questions must not leak into other specs' purchases.
 test.describe('checkout questions', () => {
@@ -32,7 +32,7 @@ test.describe('checkout questions', () => {
     await page.getByRole('button', { name: 'Add guest counts (kids, seated, standing)' }).click();
     await expect(page.getByRole('listitem').filter({ hasText: 'Standing guests' })).toBeVisible();
     await page.getByLabel('Question', { exact: true }).fill('Meal choice');
-    await page.getByLabel('Answer type').selectOption('select');
+    await pickOption(page.getByLabel('Answer type'), 'select');
     await page.getByLabel('Choices').fill('Vegetarian\nChicken');
     await page.getByLabel('Answer required').check();
     await page.getByRole('button', { name: 'Add question' }).click();
@@ -43,10 +43,10 @@ test.describe('checkout questions', () => {
     const slug = base.split('/').pop();
     const guest = await (await browser.newContext()).newPage();
     await guest.goto(`/events/${slug}`);
-    await guest.getByLabel('Quantity — Entry').selectOption('2');
+    await pickOption(guest.getByLabel('Quantity — Entry'), '2');
     await expect(guest.getByRole('group', { name: 'A few questions from the organizer' })).toBeVisible();
     await guest.getByLabel('Kids (optional)').fill('2');
-    await guest.getByLabel('Meal choice').selectOption({ label: 'Vegetarian' });
+    await pickOption(guest.getByLabel('Meal choice'), { label: 'Vegetarian' });
     await guest.getByLabel('Full name').fill(`Grace ${stamp}`);
     await guest.getByLabel('Email for your tickets').fill(`grace+${stamp}@example.test`);
     await expectAccessible(guest);

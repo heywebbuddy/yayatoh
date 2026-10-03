@@ -14953,5 +14953,24 @@
       },
       "reported": "شكرًا. سيراجع المنظّم وYayatoh بلاغك؛ لم يعد بإمكان هذا الزائر مراسلة جناحك."
     }
+  },
+  "formControls": {
+    "search": "بحث",
+    "noResults": "لا توجد نتائج",
+    "loading": "جارٍ التحميل…",
+    "remove": "إزالة {label}",
+    "create": "إنشاء «{query}»",
+    "clear": "مسح",
+    "chooseDate": "اختر تاريخًا",
+    "chooseTime": "اختر وقتًا",
+    "previousMonth": "الشهر السابق",
+    "nextMonth": "الشهر التالي",
+    "today": "اليوم",
+    "invalidDate": "أدخل تاريخًا مثل {example}",
+    "invalidTime": "أدخل وقتًا مثل {example}",
+    "tooEarly": "اختر تاريخًا في {date} أو بعده",
+    "tooLate": "اختر تاريخًا في {date} أو قبله",
+    "timeZoneNote": "الأوقات بتوقيت {zone}",
+    "selected": "محدد"
   }
 }

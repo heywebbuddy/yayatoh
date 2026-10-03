@@ -1,4 +1,4 @@
-import type { InputHTMLAttributes, ReactNode, SelectHTMLAttributes, TextareaHTMLAttributes } from 'react';
+import type { InputHTMLAttributes, ReactNode, TextareaHTMLAttributes } from 'react';
 import { cx } from '../cx.ts';
 
 /** The field look (ADR 0022): `field` is a utility in styles.css; sizes `field-sm`, `field-lg`. */
@@ -109,45 +109,6 @@ export function Input({ id, label, hint, error, className, fieldSize = 'md', ...
         {...rest}
       />
       <FieldMessage id={inputId} error={error} hint={hint} />
-    </div>
-  );
-}
-
-export interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
-  label?: string;
-  hint?: string;
-  error?: string;
-  fieldSize?: 'sm' | 'md' | 'lg';
-}
-
-export function Select({
-  id,
-  label,
-  hint,
-  error,
-  className,
-  fieldSize = 'md',
-  children,
-  ...rest
-}: SelectProps) {
-  const selectId = id ?? rest.name ?? '';
-  return (
-    <div className="flex flex-col gap-1.5">
-      {label ? (
-        <FieldLabel htmlFor={selectId} required={rest.required}>
-          {label}
-        </FieldLabel>
-      ) : null}
-      <select
-        id={selectId || undefined}
-        aria-invalid={error ? true : undefined}
-        aria-describedby={describedBy(selectId, error, hint)}
-        className={fieldClass(fieldSize, cx('w-full pe-9', className))}
-        {...rest}
-      >
-        {children}
-      </select>
-      <FieldMessage id={selectId} error={error} hint={hint} />
     </div>
   );
 }

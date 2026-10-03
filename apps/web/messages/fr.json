@@ -14953,5 +14953,24 @@
       },
       "reported": "Merci. L’organisateur et Yayatoh vont examiner votre signalement ; ce visiteur ne peut plus écrire à votre stand."
     }
+  },
+  "formControls": {
+    "search": "Rechercher",
+    "noResults": "Aucun résultat",
+    "loading": "Chargement…",
+    "remove": "Retirer {label}",
+    "create": "Créer « {query} »",
+    "clear": "Effacer",
+    "chooseDate": "Choisir une date",
+    "chooseTime": "Choisir une heure",
+    "previousMonth": "Mois précédent",
+    "nextMonth": "Mois suivant",
+    "today": "Aujourd’hui",
+    "invalidDate": "Saisissez une date comme {example}",
+    "invalidTime": "Saisissez une heure comme {example}",
+    "tooEarly": "Choisissez une date à partir du {date}",
+    "tooLate": "Choisissez une date jusqu’au {date}",
+    "timeZoneNote": "Heures en {zone}",
+    "selected": "Sélectionné"
   }
 }

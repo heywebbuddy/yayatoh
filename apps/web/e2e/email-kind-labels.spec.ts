@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
 import { EMAIL_KINDS } from '@yayatoh/notifications';
-import { expectAccessible, signIn } from './helpers.ts';
+import { expectAccessible, inOptions, pickOption, signIn } from './helpers.ts';
 
 /**
  * Owner-reported bug: the Emails page threw next-intl MISSING_MESSAGE for kinds added after the
@@ -32,13 +32,13 @@ for (const locale of ['en', 'ar'] as const) {
     expect(res?.status()).toBe(200);
     await expect(page.locator('html')).toHaveAttribute('dir', locale === 'ar' ? 'rtl' : 'ltr');
 
-    const picker = page.locator('select#template-kind');
+    const picker = page.locator('#template-kind');
     await expect(picker).toBeVisible();
-    const values = await picker
-      .locator('option')
-      .evaluateAll((os) => os.map((o) => (o as HTMLOptionElement).value));
+    const [values, texts] = await inOptions(picker, async (list) => [
+      await list.getByRole('option').evaluateAll((os) => os.map((o) => o.getAttribute('data-value'))),
+      (await list.getByRole('option').allTextContents()).map((t) => t.trim()),
+    ]);
     expect(values).toEqual([...EMAIL_KINDS]);
-    const texts = (await picker.locator('option').allTextContents()).map((t) => t.trim());
     const expected = labels(locale);
     expect(expected.every((l) => typeof l === 'string' && l.trim() !== '')).toBe(true);
     expect(texts).toEqual(expected);
@@ -47,7 +47,7 @@ for (const locale of ['en', 'ar'] as const) {
 
     // Each previously missing kind opens with its label in the editing heading.
     for (const kind of ['ticketing.ticket-cancelled', 'orders.waitlist-offer'] as const) {
-      await picker.selectOption(kind);
+      await pickOption(picker, kind);
       // Keyboard: Enter on the form's Open button.
       await page.locator('form[method="get"] button[type="submit"]').focus();
       await page.keyboard.press('Enter');
