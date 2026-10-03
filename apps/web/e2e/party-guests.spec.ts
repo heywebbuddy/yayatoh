@@ -1,5 +1,5 @@
 import { expect, type Locator, type Page, test } from '@playwright/test';
-import { expectAccessible, signIn } from './helpers.ts';
+import { expectAccessible, pickOption, signIn, stepOption } from './helpers.ts';
 
 const VIEWER = 'jordan@lakeside.test';
 const ORG = '/o/lakeside-events';
@@ -20,8 +20,8 @@ function chicagoDate(days: number): string {
 async function createWedding(page: Page, name: string): Promise<string> {
   await page.goto(`${ORG}/events/new`);
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Event type').selectOption('wedding');
-  await page.getByLabel('Time zone').selectOption(TZ);
+  await pickOption(page.getByLabel('Event type'), 'wedding');
+  await pickOption(page.getByLabel('Time zone'), TZ);
   await page.getByLabel('Starts', { exact: true }).fill(`${chicagoDate(60)}T16:00`);
   await page.getByLabel('Ends', { exact: true }).fill(`${chicagoDate(60)}T23:00`);
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -43,7 +43,7 @@ async function addParty(
   if (p.vip) await add.getByRole('checkbox', { name: 'VIP' }).check();
   if (p.tags) await add.getByLabel('Tags').fill(p.tags);
   if (p.paper)
-    await add.getByLabel('Entered from').selectOption({ label: 'Paper reply (entered for the guest)' });
+    await pickOption(add.getByLabel('Entered from'), { label: 'Paper reply (entered for the guest)' });
   await add.getByRole('button', { name: 'Add party' }).click();
   await expect(add.getByText('Party added.')).toBeVisible();
   await expect(party(page, p.name)).toBeVisible();
@@ -66,11 +66,11 @@ async function addGuest(
   const form = await open(p, page, `Add a guest to ${partyName}`);
   await form.getByLabel('First name').fill(g.first);
   if (g.last) await form.getByLabel('Last name').fill(g.last);
-  if (g.age) await form.getByLabel('Age').selectOption({ label: g.age });
+  if (g.age) await pickOption(form.getByLabel('Age'), { label: g.age });
   if (g.meal) await form.getByLabel('Meal').fill(g.meal);
   if (g.dietary) await form.getByLabel('Dietary needs').fill(g.dietary);
   if (g.paper)
-    await form.getByLabel('Entered from').selectOption({ label: 'Paper reply (entered for the guest)' });
+    await pickOption(form.getByLabel('Entered from'), { label: 'Paper reply (entered for the guest)' });
   await form.getByRole('button', { name: 'Add guest' }).click();
   await expect(form.getByText('Guest added.')).toBeVisible();
   await expect(p.getByText([g.first, g.last].filter(Boolean).join(' '), { exact: true })).toBeVisible();
@@ -150,7 +150,8 @@ test.describe('guests: parties, guests and plus-ones (M4.1a)', () => {
     await addGuest(page, garcias, { first: 'Luis', last: 'Garcia', meal: 'Beef', dietary: 'No nuts' });
     await addGuest(page, garcias, { first: 'Sofi', last: 'Garcia', age: 'Child', paper: true });
     await expect(g.locator('span', { hasText: /^Primary contact$/ })).toHaveCount(1);
-    await expect(g.locator('span', { hasText: /^Child$/ })).toBeVisible();
+    // The age badge (not the "Age" field's own text, inside its combobox).
+    await expect(g.locator('span:not([role="combobox"] *)', { hasText: /^Child$/ })).toBeVisible();
     await expect(g.locator('dd', { hasText: 'No nuts' })).toBeVisible();
 
     // A placeholder plus-one, named later.
@@ -183,7 +184,7 @@ test.describe('guests: parties, guests and plus-ones (M4.1a)', () => {
     const min = await open(k, page, 'Edit Min Kim');
     await min.getByRole('button', { name: 'Move', exact: true }).click();
     await expect(min.getByText('Choose another party to move them to.')).toBeVisible();
-    await min.getByLabel('Move Min Kim to').selectOption({ label: garcias });
+    await pickOption(min.getByLabel('Move Min Kim to'), { label: garcias });
     await min.getByRole('button', { name: 'Move', exact: true }).click();
     await expect(g.getByText('Min Kim', { exact: true })).toBeVisible();
     await expect(k.getByText('No guests in this party yet.')).toBeVisible();
@@ -241,7 +242,7 @@ test.describe('guests: parties, guests and plus-ones (M4.1a)', () => {
     await page.reload();
 
     const search = page.getByRole('search', { name: 'Filter parties' });
-    await search.getByLabel('Side').selectOption('Groom');
+    await pickOption(search.getByLabel('Side'), 'Groom');
     await search.getByRole('button', { name: 'Apply' }).click();
     await expect(page.getByText('1 party matches')).toBeVisible();
     await expect(party(page, `Baker ${s}`)).toBeVisible();
@@ -250,7 +251,7 @@ test.describe('guests: parties, guests and plus-ones (M4.1a)', () => {
 
     await page.getByRole('link', { name: 'Clear filters' }).click();
     await expect(page.getByText('2 parties', { exact: true })).toBeVisible();
-    await page.getByRole('search', { name: 'Filter parties' }).getByLabel('Tag').selectOption('Family');
+    await pickOption(page.getByRole('search', { name: 'Filter parties' }).getByLabel('Tag'), 'Family');
     await page.getByRole('search', { name: 'Filter parties' }).getByRole('button', { name: 'Apply' }).click();
     await expect(party(page, `Adams ${s}`)).toBeVisible();
     await expect(party(page, `Baker ${s}`)).toHaveCount(0);
@@ -313,9 +314,8 @@ test.describe('guests: parties, guests and plus-ones (M4.1a)', () => {
     await page.keyboard.press('Enter');
     await expect(keys.getByText('Guest of Kay Board', { exact: true })).toBeVisible();
     const kay2 = await open(keys, page, 'Edit Kay Board');
-    await kay2.getByLabel('Move Kay Board to').focus();
-    await page.keyboard.press('ArrowDown');
-    await expect(kay2.getByLabel('Move Kay Board to')).not.toHaveValue('');
+    await stepOption(kay2.getByLabel('Move Kay Board to'));
+    await expect(kay2.getByLabel('Move Kay Board to')).not.toHaveAttribute('data-value', '');
     await page.keyboard.press('Tab');
     await expect(kay2.getByRole('button', { name: 'Move', exact: true })).toBeFocused();
     await page.keyboard.press('Enter');

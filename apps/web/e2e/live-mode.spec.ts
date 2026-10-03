@@ -3,7 +3,7 @@ import { closePools } from '@yayatoh/db';
 import { localKeyVault, setKeyVault } from '@yayatoh/platform';
 import { resolveOrgSlug } from '@yayatoh/tenancy';
 import { quietDevice, revokeDevice } from '@yayatoh/testing';
-import { continueToPayment, expectAccessible, newUser, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, newUser, pickOption, signIn } from './helpers.ts';
 
 /**
  * Command Center live mode (M3.3a): the live feed updating as the door scans (filters, pause and
@@ -45,7 +45,7 @@ async function liveEvent(page: Page, browser: Browser, prefix: string, tickets: 
   await signIn(page);
   await page.goto(`/o/${ORG}/events/new`);
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Time zone').selectOption('America/Chicago');
+  await pickOption(page.getByLabel('Time zone'), 'America/Chicago');
   await page.getByLabel('Starts', { exact: true }).fill(chicago(-1));
   await page.getByLabel('Ends', { exact: true }).fill(chicago(3));
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -64,7 +64,7 @@ async function liveEvent(page: Page, browser: Browser, prefix: string, tickets: 
   const guest = await guestContext.newPage();
   const email = `live+${stamp()}@example.test`;
   await guest.goto(`/events/${base.split('/').pop()}`);
-  await guest.getByLabel('Quantity — Door pass').selectOption(String(tickets));
+  await pickOption(guest.getByLabel('Quantity — Door pass'), String(tickets));
   await guest.getByLabel('Full name').fill(`Lina ${stamp()}`);
   await guest.getByLabel('Email for your tickets').fill(email);
   await continueToPayment(guest, email);
@@ -77,7 +77,7 @@ async function liveEvent(page: Page, browser: Browser, prefix: string, tickets: 
   const setup = page.getByRole('region', { name: 'Entrances and zones' });
   // Capacity is validated: a whole number from 1, or empty.
   await setup.getByLabel('Name', { exact: true }).fill('North gate');
-  await setup.getByLabel('Type').selectOption({ label: 'Entrance' });
+  await pickOption(setup.getByLabel('Type'), { label: 'Entrance' });
   await setup.getByLabel('Capacity (optional)').fill('0');
   await setup.getByRole('button', { name: 'Add', exact: true }).click();
   await expect(setup.getByText('Enter a whole number from 1 to 1,000,000, or leave it empty.')).toBeVisible();
@@ -98,7 +98,7 @@ async function doorScreen(browser: Browser, base: string, gate: string, email?: 
   const page = await context.newPage();
   await signIn(page, email);
   await page.goto(`${base}/onsite`);
-  await page.getByLabel('Scanning at').selectOption({ label: gate });
+  await pickOption(page.getByLabel('Scanning at'), { label: gate });
   return { context, page };
 }
 
@@ -154,9 +154,9 @@ test.describe('Command Center live mode (M3.3a)', () => {
     const feedWidget = page.getByTestId('cc-widget-liveFeed');
     // No scans yet (alerts about the event may already be listed); a filter shows its empty state.
     await expect(feed(page)).toHaveCount(0);
-    await feedWidget.getByLabel('Outcome').selectOption('reentry');
+    await pickOption(feedWidget.getByLabel('Outcome'), 'reentry');
     await expect(feedWidget).toContainText('Nothing matches these filters yet.');
-    await feedWidget.getByLabel('Outcome').selectOption('');
+    await pickOption(feedWidget.getByLabel('Outcome'), '');
     // Setting up the entrances on the door screen counted as being at the doors (the whole event).
     await expect(page.getByTestId('cc-presence')).toContainText('On the door screen · Whole event');
     // M3.3b's help queue fills the assistance slot (batch 3g merge): none open yet.
@@ -190,13 +190,13 @@ test.describe('Command Center live mode (M3.3a)', () => {
     // Filter by outcome with the keyboard: only duplicates; then by entrance; then everything.
     const outcome = feedWidget.getByLabel('Outcome');
     await outcome.focus();
-    await outcome.selectOption('duplicate');
+    await pickOption(outcome, 'duplicate');
     await expect(feed(page)).toHaveCount(1);
     await expect(feed(page).first()).toContainText('Duplicate');
-    await outcome.selectOption('');
-    await feedWidget.getByLabel('Entrance').selectOption({ label: 'South gate' });
+    await pickOption(outcome, '');
+    await pickOption(feedWidget.getByLabel('Entrance'), { label: 'South gate' });
     await expect(feedWidget).toContainText('Nothing matches these filters yet.');
-    await feedWidget.getByLabel('Entrance').selectOption('');
+    await pickOption(feedWidget.getByLabel('Entrance'), '');
     await expect(feed(page)).toHaveCount(3);
 
     // Pause (keyboard): a new scan doesn't move the feed, the status says there's news; resume.
@@ -388,7 +388,7 @@ test.describe('Command Center live mode (M3.3a)', () => {
     await newUser(door, { join: [`${ORG}:viewer`], name });
     await page.goto(`${base}/onsite/staff`);
     const add = page.getByRole('region', { name: 'Add door staff' });
-    await add.getByLabel('Team member').selectOption({ label: name });
+    await pickOption(add.getByLabel('Team member'), { label: name });
     await add.getByRole('button', { name: 'Add door staff' }).click();
     await expect(add.getByRole('status')).toHaveText('Saved.');
     // The owner scans a ticket twice: a duplicate the door sees without a link into orders.

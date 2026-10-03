@@ -26,6 +26,7 @@ import {
   Label,
   PageHeader,
   Pagination,
+  Select,
   Skeleton,
   StatusDot,
 } from '@yayatoh/ui';
@@ -256,7 +257,7 @@ async function EventList({
             <label htmlFor="filter-category" className="text-[13px] font-bold text-ink">
               {t('eventFilters.category')}
             </label>
-            <select
+            <Select
               id="filter-category"
               name="category"
               defaultValue={filters.category ?? ''}
@@ -268,13 +269,13 @@ async function EventList({
                   {t(`categories.${c}`)}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
           <div className="flex flex-col gap-1.5">
             <label htmlFor="filter-tag" className="text-[13px] font-bold text-ink">
               {t('eventFilters.tag')}
             </label>
-            <select
+            <Select
               id="filter-tag"
               name="tag"
               defaultValue={filters.tag?.toLowerCase() ?? ''}
@@ -286,7 +287,7 @@ async function EventList({
                   {tag.tag}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
           <button type="submit" className={buttonClass('secondary')}>
             {t('eventFilters.apply')}

@@ -1,4 +1,4 @@
-import { Alert, Button, Card, PageHeader, StatusDot } from '@yayatoh/ui';
+import { Alert, Button, Card, DateTimePicker, PageHeader, StatusDot } from '@yayatoh/ui';
 import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { Shell } from '@/components/shell.tsx';
@@ -152,12 +152,7 @@ export default async function MaintenancePage({
             {t('start.confirmPlatform')}
           </label>
           <Labelled id="freeze-end" label={t('start.expectedEnd')}>
-            <input
-              id="freeze-end"
-              name="expectedEndAt"
-              type="datetime-local"
-              className={`${field} max-w-xs`}
-            />
+            <DateTimePicker id="freeze-end" name="expectedEndAt" className={`${field} max-w-xs`} />
           </Labelled>
           <Labelled id="freeze-reason" label={t('reason')}>
             <input
