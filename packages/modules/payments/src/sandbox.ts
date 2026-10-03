@@ -68,5 +68,21 @@ export function sandboxSafeProvider(opts: {
     listBalanceTransactions(i) {
       return live.listBalanceTransactions(i);
     },
+    // Batch 3j merge: M4.8e's cards on file follow the same rule (a sandbox org's card is the
+    // fake's; a fake-minted account, card or customer always goes back to the fake).
+    async createCardSetup(i) {
+      return (byId(i.connectedAccountId) ?? (await byOrg(i.orgId))).createCardSetup(i);
+    },
+    async chargeSavedCard(i) {
+      return (
+        byId(i.paymentMethodId) ??
+        byId(i.customerId) ??
+        byId(i.connectedAccountId) ??
+        (await byOrg(i.orgId))
+      ).chargeSavedCard(i);
+    },
+    async detachSavedCard(i) {
+      return (byId(i.paymentMethodId) ?? byId(i.connectedAccountId) ?? live).detachSavedCard(i);
+    },
   };
 }

@@ -88,7 +88,13 @@ export default async function ChannelsPage({
   return (
     <>
       <PageHeader title={t('title')} description={t('description')} />
-      <SeatingTabs base={base} active="channels" finder={data.modules.has('seat_finder')} selection />
+      <SeatingTabs
+        base={base}
+        active="channels"
+        finder={data.modules.has('seat_finder')}
+        selection
+        guests={data.modules.has('guests')}
+      />
       {!seating ? (
         <EmptyState
           title={t('noPlan')}

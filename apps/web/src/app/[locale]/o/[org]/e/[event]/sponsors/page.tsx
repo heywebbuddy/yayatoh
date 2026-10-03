@@ -1,10 +1,11 @@
 import type { SponsorDto } from '@yayatoh/program';
-import { Button, Card, EmptyState, PageHeader } from '@yayatoh/ui';
+import { Button, buttonClass, Card, EmptyState, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Markdown } from '@/components/markdown.tsx';
 import { MediaUploader } from '@/components/media-uploader.tsx';
 import { type FieldSpec, ProgramForm } from '@/components/program-form.tsx';
 import { ProgramThumb } from '@/components/program-thumb.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import { defaultProgramAlt } from '@/lib/program-media.ts';
 import { programMediaPanels } from '@/server/media.ts';
 import { loadProgramPage } from '@/server/program.ts';
@@ -33,6 +34,7 @@ export default async function SponsorsPage({
   );
   const t = await getTranslations();
   const tp = await getTranslations('program');
+  const ts = await getTranslations('sponsorship');
   const errors = {
     name: tp('errors.name'),
     'conflict.name': tp('errors.nameTaken'),
@@ -64,7 +66,21 @@ export default async function SponsorsPage({
   ];
   return (
     <>
-      <PageHeader title={t('nav.sponsors')} description={tp('sponsorsSubtitle')} />
+      <PageHeader
+        title={t('nav.sponsors')}
+        description={tp('sponsorsSubtitle')}
+        actions={
+          // M5.4b: package terms and sponsors' packages, and the deliverables checklist.
+          <nav aria-label={ts('subnav')} className="flex flex-wrap gap-2.5">
+            <Link href={`/o/${org}/e/${event}/sponsors/packages`} className={buttonClass('secondary')}>
+              {ts('packagesLink')}
+            </Link>
+            <Link href={`/o/${org}/e/${event}/sponsors/deliverables`} className={buttonClass('secondary')}>
+              {ts('deliverablesLink')}
+            </Link>
+          </nav>
+        }
+      />
       {canWrite ? null : <p className="text-body text-ink-2">{tp('viewerNotice')}</p>}
       <section aria-labelledby="tiers-heading" className="flex flex-col gap-3">
         <h2 id="tiers-heading" className="text-section">

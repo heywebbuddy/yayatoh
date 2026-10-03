@@ -18,9 +18,11 @@ interface Base {
 }
 export type FieldSpec =
   | (Base & {
-      readonly kind: 'text' | 'url' | 'number' | 'datetime-local';
+      readonly kind: 'text' | 'url' | 'number' | 'datetime-local' | 'date';
       readonly defaultValue?: string;
       readonly maxLength?: number;
+      /** Number fields: the lowest value (default 1). */
+      readonly min?: number;
       /** Completions offered while typing (a datalist). */
       readonly suggestions?: readonly string[];
     })
@@ -188,7 +190,7 @@ export function ProgramForm({
             maxLength={f.maxLength}
             defaultValue={f.defaultValue}
             error={error}
-            {...(f.kind === 'number' ? { min: 1, inputMode: 'numeric' as const } : {})}
+            {...(f.kind === 'number' ? { min: f.min ?? 1, inputMode: 'numeric' as const } : {})}
             {...(f.suggestions?.length ? { list: `${id(f.name)}-list`, autoComplete: 'off' } : {})}
           />
         );

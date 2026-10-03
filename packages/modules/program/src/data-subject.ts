@@ -12,10 +12,12 @@ import {
   type SubjectRefs,
 } from '@yayatoh/platform';
 import { asc, eq, inArray, isNotNull, or, sql } from 'drizzle-orm';
+import type { AnyPgColumn } from 'drizzle-orm/pg-core';
 import { z } from 'zod';
 import { PublicSessionDto } from './dto.ts';
 import { agendaHash, snapshotOf } from './public-session.ts';
 import { agendaPublications, speakerContacts, speakers } from './schema.ts';
+import { cfpCoSpeakers, cfpReviewers, cfpSubmissions } from './schema-cfp.ts';
 import { portalTaskAssignees, portalTasks, speakerChanges } from './schema-portal.ts';
 
 /**
@@ -49,6 +51,9 @@ async function assigneeIdsTx(tx: TenantTx, speakerIds: readonly string[], accoun
   return rows.map((r) => r.id);
 }
 
+/** `erased+<id>@erased.invalid`: unique per row (a call's proposals are unique per address and title). */
+const erasedAddress = (id: AnyPgColumn) => sql`'erased+' || ${id}::text || '@erased.invalid'`;
+
 const SnapshotSession = PublicSessionDto.extend({ startsAt: z.coerce.date(), endsAt: z.coerce.date() });
 
 /**
@@ -57,6 +62,10 @@ const SnapshotSession = PublicSessionDto.extend({ startsAt: z.coerce.date(), end
  * title, company, bio, links) no longer names them, the published agenda snapshot shows the
  * placeholder, and their contact address, portal proposals and task uploads' names go (media
  * deletes the files and the photo). Exhibitors and sponsors are companies, not data subjects.
+ *
+ * Batch 3j merge (M5.3b call for papers): proposals the person submitted, co-speaker places and
+ * reviewer seats under their address are exported and, on erasure, lose the name, address, job
+ * title, company and bio (the talk's title and abstract stay with the organizer's review).
  */
 export const programDataSubjects = defineDataSubjectContributor({
   module: 'program',
@@ -67,6 +76,13 @@ export const programDataSubjects = defineDataSubjectContributor({
     'program.portal_task_assignees': REDACT,
     'program.agenda_publications': REDACT,
     'program.portal_tasks': notSubject('task titles, instructions and agreement texts the organizer writes'),
+    'program.cfp_submissions': REDACT,
+    'program.cfp_co_speakers': REDACT,
+    'program.cfp_reviewers': REDACT,
+    'program.sponsor_deliverables': notSubject(
+      'owner_name is a free-text team label the organizer types ("Production team"), never keyed to a person',
+    ),
+    'program.sponsor_grants': notSubject('comp_code is a promo code the sponsor shares; it names no one'),
   },
   async resolve(tx, s): Promise<SubjectRefs> {
     const ids = await speakerIdsTx(tx, s);
@@ -127,7 +143,42 @@ export const programDataSubjects = defineDataSubjectContributor({
           .where(inArray(portalTaskAssignees.id, tasks))
           .orderBy(asc(portalTasks.dueAt))
       : [];
-    return { sections: { speakers: profiles, proposals, tasks: answers } };
+    const cfp = await tx
+      .select()
+      .from(cfpSubmissions)
+      .where(eq(cfpSubmissions.speakerEmail, s.email))
+      .orderBy(asc(cfpSubmissions.createdAt));
+    const coSpeaking = await tx
+      .select({ name: cfpCoSpeakers.name, email: cfpCoSpeakers.email, title: cfpSubmissions.title })
+      .from(cfpCoSpeakers)
+      .innerJoin(cfpSubmissions, eq(cfpSubmissions.id, cfpCoSpeakers.submissionId))
+      .where(eq(cfpCoSpeakers.email, s.email));
+    const reviewing = await tx
+      .select({ eventId: cfpReviewers.eventId, name: cfpReviewers.name, email: cfpReviewers.email })
+      .from(cfpReviewers)
+      .where(eq(cfpReviewers.email, s.email));
+    return {
+      sections: {
+        speakers: profiles,
+        proposals,
+        tasks: answers,
+        callForPapers: cfp.map((x) => ({
+          eventId: x.eventId,
+          status: x.status,
+          title: x.title,
+          abstract: x.abstract,
+          speakerName: x.speakerName,
+          speakerEmail: x.speakerEmail,
+          speakerTitle: x.speakerTitle,
+          speakerCompany: x.speakerCompany,
+          speakerBio: x.speakerBio,
+          submittedAt: x.createdAt,
+          decidedAt: x.decidedAt,
+        })),
+        coSpeaking,
+        reviewing,
+      },
+    };
   },
   async erase(tx, s, ctx): Promise<SubjectErasure> {
     const now = ctx.now;
@@ -200,8 +251,33 @@ export const programDataSubjects = defineDataSubjectContributor({
         snapshots += 1;
       }
     }
+    const cfp = await tx
+      .update(cfpSubmissions)
+      .set({
+        speakerName: ERASED_NAME,
+        speakerEmail: erasedAddress(cfpSubmissions.id),
+        speakerTitle: null,
+        speakerCompany: null,
+        speakerBio: '',
+        updatedAt: now,
+      })
+      .where(eq(cfpSubmissions.speakerEmail, s.email))
+      .returning({ id: cfpSubmissions.id });
+    const coSpeakers = await tx
+      .update(cfpCoSpeakers)
+      .set({ name: ERASED_NAME, email: erasedAddress(cfpCoSpeakers.id) })
+      .where(eq(cfpCoSpeakers.email, s.email))
+      .returning({ id: cfpCoSpeakers.id });
+    const reviewers = await tx
+      .update(cfpReviewers)
+      .set({ name: ERASED_NAME, email: erasedAddress(cfpReviewers.id) })
+      .where(eq(cfpReviewers.email, s.email))
+      .returning({ id: cfpReviewers.id });
     return {
       erased: {
+        'program.cfp_submissions': cfp.length,
+        'program.cfp_co_speakers': coSpeakers.length,
+        'program.cfp_reviewers': reviewers.length,
         'program.speakers': profiles.length,
         'program.speaker_contacts': contacts.length,
         'program.speaker_changes': changes.length,
