@@ -6354,6 +6354,67 @@
         "window": "पिछले {days} दिनों में {sent, plural, one {# ईमेल} other {# ईमेल}}",
         "over": "{domains, plural, one {# भेजने वाला डोमेन} other {# भेजने वाले डोमेन}} और {campaigns, plural, one {# अभियान} other {# अभियान}} सीमा से ऊपर",
         "open": "ईमेल डिलीवरेबिलिटी खोलें"
+      },
+      "sessionLevel": {
+        "none": "कोई सीमा नहीं",
+        "ok": "{near}% से कम",
+        "near": "लगभग भरा ({near}% या अधिक)",
+        "over": "भरा हुआ"
+      },
+      "sessionAttendance": {
+        "title": "सत्र कक्ष",
+        "running": "{count, plural, one {# सत्र चल रहा है} other {# सत्र चल रहे हैं}}",
+        "nearlyFull": "{count, plural, one {# लगभग भरा} other {# लगभग भरे}}",
+        "kiosks": "{count, plural, one {# कियोस्क ऑफ़लाइन} other {# कियोस्क ऑफ़लाइन}}",
+        "none": "अभी या अगले एक घंटे में कोई सत्र नहीं। सत्र द्वार सत्र चेक-इन पेज पर सेट किए जाते हैं।",
+        "table": "अभी और अगले सत्र",
+        "session": "सत्र",
+        "in": "कक्ष में",
+        "capacity": "स्थान",
+        "status": "स्थिति",
+        "until": "{time} तक",
+        "starts": "{time} पर शुरू",
+        "meter": "{title}: उपयोग किए गए स्थान",
+        "more": "{count, plural, one {और # अन्य} other {और # अन्य}}",
+        "open": "सत्र चेक-इन खोलें"
+      },
+      "sessionFill": {
+        "title": "सत्र भराव",
+        "none": "अभी किसी सत्र में स्थान सीमित नहीं हैं। यहाँ भराव देखने के लिए किसी सत्र की क्षमता सेट करें।",
+        "nearlyFull": "{count, plural, one {{limited} में से # सत्र {near}% या अधिक भरा है} other {{limited} में से # सत्र {near}% या अधिक भरे हैं}}",
+        "full": "{count, plural, one {# भरा} other {# भरे}}",
+        "waiting": "{count, plural, one {# व्यक्ति प्रतीक्षा में} other {# लोग प्रतीक्षा में}}",
+        "longLines": "{count, plural, one {{max} से लंबी # सूची} other {{max} से लंबी # सूचियाँ}}",
+        "roomsTooSmall": "{count, plural, one {# बहुत छोटे कक्ष में} other {# बहुत छोटे कक्षों में}}",
+        "table": "सबसे भरे सत्र",
+        "session": "सत्र",
+        "enrolled": "आरक्षित स्थान",
+        "waitingHeader": "प्रतीक्षा में",
+        "status": "स्थिति",
+        "roomSmall": "कक्ष बहुत छोटा",
+        "ofCapacity": "{capacity} में से {enrolled}",
+        "open": "सत्र नामांकन खोलें"
+      },
+      "exhibitorActivity": {
+        "title": "प्रदर्शक",
+        "none": "अभी कोई प्रदर्शक नहीं। उनके बूथ स्टाफ़ और लीड यहाँ देखने के लिए उन्हें जोड़ें।",
+        "add": "प्रदर्शक जोड़ें",
+        "staffed": "{total} में से {staffed} प्रदर्शकों के पास बूथ स्टाफ़ है",
+        "people": "{count, plural, one {# व्यक्ति आमंत्रित} other {# लोग आमंत्रित}}",
+        "leads": "{count, plural, one {# लीड} other {# लीड}}",
+        "withoutLeads": "{count, plural, one {बिना लीड के # प्रदर्शक} other {बिना लीड के # प्रदर्शक}}",
+        "leadsPending": "लीड संग्रह चालू होने पर लीड की संख्या यहाँ दिखेगी।",
+        "top": "सबसे अधिक लीड",
+        "open": "प्रदर्शक पोर्टल खोलें"
+      },
+      "sponsorActivity": {
+        "title": "प्रायोजक",
+        "none": "अभी कोई प्रायोजक नहीं। उनके डिलिवरेबल यहाँ देखने के लिए पैकेज और प्रायोजक जोड़ें।",
+        "add": "प्रायोजक जोड़ें",
+        "total": "{count, plural, one {# प्रायोजक} other {# प्रायोजक}}",
+        "overdue": "{count, plural, one {# डिलिवरेबल विलंबित} other {# डिलिवरेबल विलंबित}}",
+        "deliverablesPending": "प्रायोजक पैकेज चालू होने पर डिलिवरेबल यहाँ दिखेंगे।",
+        "open": "प्रायोजक खोलें"
       }
     },
     "openScanner": "स्कैनर खोलें",
@@ -6471,7 +6532,17 @@
       "automationFailed": "मैसेजिंग स्थिति खोलें",
       "campaignFailed": "अभियान खोलें",
       "disputeDeadline": "विवाद खोलें",
-      "assistanceOverdue": "सहायता अनुरोध खोलें"
+      "assistanceOverdue": "सहायता अनुरोध खोलें",
+      "sessionsNearCapacity": "सत्र खोलें",
+      "sessionWaitlists": "सत्र नामांकन खोलें",
+      "roomsTooSmall": "सत्र खोलें",
+      "exhibitorsNoLeads": "प्रदर्शक खोलें",
+      "exhibitorsNoStaff": "प्रदर्शक पोर्टल खोलें",
+      "speakerTasksOverdue": "वक्ता कार्य खोलें",
+      "deliverablesOverdue": "प्रायोजक खोलें",
+      "printersKiosksOffline": "ऑनसाइट सेटअप खोलें",
+      "approvalBacklog": "आवेदन खोलें",
+      "invoicesOverdue": "चालान खोलें"
     },
     "rules": {
       "unseated": "{count, plural, one {{countWords} उपस्थित व्यक्ति के पास सीट नहीं है} other {{countWords} उपस्थित लोगों के पास सीट नहीं है}}",
@@ -6493,7 +6564,17 @@
       "automationFailed": "{count, plural, one {{countWords} संदेश या बल्क कार्रवाई आज विफल रही} other {{countWords} संदेश या बल्क कार्रवाइयाँ आज विफल रहीं}}",
       "campaignFailed": "{count, plural, one {{countWords} अभियान भेजना आज विफल रहा} other {{countWords} अभियान भेजना आज विफल रहे}}",
       "disputeDeadline": "{count, plural, one {{countWords} विवाद के लिए जल्द ही सबूत चाहिए} other {{countWords} विवादों के लिए जल्द ही सबूत चाहिए}}",
-      "assistanceOverdue": "{count, plural, one {{countWords} सहायता अनुरोध बहुत देर से प्रतीक्षा में है} other {{countWords} सहायता अनुरोध बहुत देर से प्रतीक्षा में हैं}}"
+      "assistanceOverdue": "{count, plural, one {{countWords} सहायता अनुरोध बहुत देर से प्रतीक्षा में है} other {{countWords} सहायता अनुरोध बहुत देर से प्रतीक्षा में हैं}}",
+      "sessionsNearCapacity": "{count, plural, one {{countWords} सत्र 95 % क्षमता से ऊपर है} other {{countWords} सत्र 95 % क्षमता से ऊपर हैं}}",
+      "sessionWaitlists": "{count, plural, one {{countWords} सत्र की प्रतीक्षा सूची लंबी है} other {{countWords} सत्रों की प्रतीक्षा सूचियाँ लंबी हैं}}",
+      "roomsTooSmall": "{count, plural, one {{countWords} सत्र में कमरे की सीटों से अधिक स्थान आरक्षित हैं} other {{countWords} सत्रों में कमरों की सीटों से अधिक स्थान आरक्षित हैं}}",
+      "exhibitorsNoLeads": "{count, plural, one {{countWords} प्रदर्शक के पास कोई लीड नहीं है} other {{countWords} प्रदर्शकों के पास कोई लीड नहीं है}}",
+      "exhibitorsNoStaff": "{count, plural, one {{countWords} प्रदर्शक ने बूथ स्टाफ़ को आमंत्रित नहीं किया है} other {{countWords} प्रदर्शकों ने बूथ स्टाफ़ को आमंत्रित नहीं किया है}}",
+      "speakerTasksOverdue": "{count, plural, one {{countWords} वक्ता कार्य की समय-सीमा निकल गई है} other {{countWords} वक्ता कार्यों की समय-सीमा निकल गई है}}",
+      "deliverablesOverdue": "{count, plural, one {{countWords} प्रायोजक डिलिवरेबल की समय-सीमा निकल गई है} other {{countWords} प्रायोजक डिलिवरेबल की समय-सीमा निकल गई है}}",
+      "printersKiosksOffline": "{count, plural, one {{countWords} बैज प्रिंटर या कियोस्क ऑफ़लाइन है} other {{countWords} बैज प्रिंटर या कियोस्क ऑफ़लाइन हैं}}",
+      "approvalBacklog": "{count, plural, one {{countWords} आवेदन निर्णय की प्रतीक्षा में है} other {{countWords} आवेदन निर्णय की प्रतीक्षा में हैं}}",
+      "invoicesOverdue": "{count, plural, one {{countWords} चालान की नियत तारीख निकल गई है} other {{countWords} चालानों की नियत तारीख निकल गई है}}"
     },
     "widget": {
       "title": "अलर्ट",
@@ -6540,7 +6621,8 @@
       "door": "प्रवेश और डिवाइस",
       "sales": "बिक्री",
       "setup": "सेटअप और डोमेन",
-      "messaging": "मैसेजिंग"
+      "messaging": "मैसेजिंग",
+      "conference": "सत्र, प्रदर्शक और प्रायोजक"
     },
     "channels": {
       "in_app": "ऐप में",

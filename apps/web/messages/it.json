@@ -6354,6 +6354,67 @@
         "window": "{sent, plural, one {# email} many {# email} other {# email}} negli ultimi {days} giorni",
         "over": "{domains, plural, one {# dominio di invio} many {# domini di invio} other {# domini di invio}} e {campaigns, plural, one {# campagna} many {# campagne} other {# campagne}} oltre le soglie",
         "open": "Apri la recapitabilità delle email"
+      },
+      "sessionLevel": {
+        "none": "Senza limite",
+        "ok": "Sotto il {near}%",
+        "near": "Quasi piena ({near}% o più)",
+        "over": "Piena"
+      },
+      "sessionAttendance": {
+        "title": "Sale delle sessioni",
+        "running": "{count, plural, one {# sessione in corso} other {# sessioni in corso}}",
+        "nearlyFull": "{count, plural, one {# quasi piena} other {# quasi piene}}",
+        "kiosks": "{count, plural, one {# chiosco offline} other {# chioschi offline}}",
+        "none": "Nessuna sessione ora o nella prossima ora. Gli ingressi delle sessioni si configurano nella pagina del check-in delle sessioni.",
+        "table": "Sessioni ora e a seguire",
+        "session": "Sessione",
+        "in": "In sala",
+        "capacity": "Posti",
+        "status": "Stato",
+        "until": "fino alle {time}",
+        "starts": "inizia alle {time}",
+        "meter": "{title}: posti occupati",
+        "more": "{count, plural, one {e altre #} other {e altre #}}",
+        "open": "Apri il check-in delle sessioni"
+      },
+      "sessionFill": {
+        "title": "Riempimento sessioni",
+        "none": "Nessuna sessione limita ancora i posti. Imposta una capienza per seguirne il riempimento qui.",
+        "nearlyFull": "{count, plural, one {# sessione su {limited} è piena al {near}% o più} other {# sessioni su {limited} sono piene al {near}% o più}}",
+        "full": "{count, plural, one {# piena} other {# piene}}",
+        "waiting": "{count, plural, one {# persona in attesa} other {# persone in attesa}}",
+        "longLines": "{count, plural, one {# lista oltre {max}} other {# liste oltre {max}}}",
+        "roomsTooSmall": "{count, plural, one {# in una sala troppo piccola} other {# in sale troppo piccole}}",
+        "table": "Sessioni più piene",
+        "session": "Sessione",
+        "enrolled": "Posti occupati",
+        "waitingHeader": "In attesa",
+        "status": "Stato",
+        "roomSmall": "Sala troppo piccola",
+        "ofCapacity": "{enrolled} su {capacity}",
+        "open": "Apri le iscrizioni alle sessioni"
+      },
+      "exhibitorActivity": {
+        "title": "Espositori",
+        "none": "Ancora nessun espositore. Aggiungili per seguire qui il personale di stand e i contatti.",
+        "add": "Aggiungi espositori",
+        "staffed": "{staffed} espositori su {total} hanno personale di stand",
+        "people": "{count, plural, one {# persona invitata} other {# persone invitate}}",
+        "leads": "{count, plural, one {# contatto} other {# contatti}}",
+        "withoutLeads": "{count, plural, one {# espositore senza contatti} other {# espositori senza contatti}}",
+        "leadsPending": "I contatti compariranno qui quando la raccolta contatti sarà attiva.",
+        "top": "Più contatti",
+        "open": "Apri il portale espositori"
+      },
+      "sponsorActivity": {
+        "title": "Sponsor",
+        "none": "Ancora nessuno sponsor. Aggiungi pacchetti e sponsor per seguire qui le loro consegne.",
+        "add": "Aggiungi sponsor",
+        "total": "{count, plural, one {# sponsor} other {# sponsor}}",
+        "overdue": "{count, plural, one {# consegna scaduta} other {# consegne scadute}}",
+        "deliverablesPending": "Le consegne compariranno qui quando i pacchetti sponsor saranno attivi.",
+        "open": "Apri gli sponsor"
       }
     },
     "openScanner": "Apri scanner",
@@ -6471,7 +6532,17 @@
       "automationFailed": "Apri lo stato dei messaggi",
       "campaignFailed": "Apri le campagne",
       "disputeDeadline": "Apri le contestazioni",
-      "assistanceOverdue": "Apri le richieste di aiuto"
+      "assistanceOverdue": "Apri le richieste di aiuto",
+      "sessionsNearCapacity": "Apri le sessioni",
+      "sessionWaitlists": "Apri le iscrizioni alle sessioni",
+      "roomsTooSmall": "Apri le sessioni",
+      "exhibitorsNoLeads": "Apri gli espositori",
+      "exhibitorsNoStaff": "Apri il portale espositori",
+      "speakerTasksOverdue": "Apri le attività dei relatori",
+      "deliverablesOverdue": "Apri gli sponsor",
+      "printersKiosksOffline": "Apri la configurazione in loco",
+      "approvalBacklog": "Apri le candidature",
+      "invoicesOverdue": "Apri le fatture"
     },
     "rules": {
       "unseated": "{count, plural, one {Un partecipante non ha un posto} other {{countWords} partecipanti non hanno un posto}}",
@@ -6493,7 +6564,17 @@
       "automationFailed": "{count, plural, one {Un messaggio o un’azione di massa non è riuscito oggi} other {{countWords} messaggi o azioni di massa non sono riusciti oggi}}",
       "campaignFailed": "{count, plural, one {Un invio di campagna non è riuscito oggi} other {{countWords} invii di campagna non sono riusciti oggi}}",
       "disputeDeadline": "{count, plural, one {Una contestazione richiede presto delle prove} other {{countWords} contestazioni richiedono presto delle prove}}",
-      "assistanceOverdue": "{count, plural, one {{countWords} richiesta di aiuto aspetta da troppo} other {{countWords} richieste di aiuto aspettano da troppo}}"
+      "assistanceOverdue": "{count, plural, one {{countWords} richiesta di aiuto aspetta da troppo} other {{countWords} richieste di aiuto aspettano da troppo}}",
+      "sessionsNearCapacity": "{count, plural, one {{countWords} sessione supera il 95 % della capienza} other {{countWords} sessioni superano il 95 % della capienza}}",
+      "sessionWaitlists": "{count, plural, one {{countWords} sessione ha una lista d’attesa lunga} other {{countWords} sessioni hanno liste d’attesa lunghe}}",
+      "roomsTooSmall": "{count, plural, one {{countWords} sessione ha più posti occupati di quelli della sua sala} other {{countWords} sessioni hanno più posti occupati di quelli delle loro sale}}",
+      "exhibitorsNoLeads": "{count, plural, one {{countWords} espositore non ha contatti} other {{countWords} espositori non hanno contatti}}",
+      "exhibitorsNoStaff": "{count, plural, one {{countWords} espositore non ha invitato personale di stand} other {{countWords} espositori non hanno invitato personale di stand}}",
+      "speakerTasksOverdue": "{count, plural, one {{countWords} attività dei relatori è scaduta} other {{countWords} attività dei relatori sono scadute}}",
+      "deliverablesOverdue": "{count, plural, one {{countWords} consegna dello sponsor è scaduta} other {{countWords} consegne degli sponsor sono scadute}}",
+      "printersKiosksOffline": "{count, plural, one {{countWords} stampante di badge o chiosco è offline} other {{countWords} stampanti di badge o chioschi sono offline}}",
+      "approvalBacklog": "{count, plural, one {{countWords} candidatura attende una decisione} other {{countWords} candidature attendono una decisione}}",
+      "invoicesOverdue": "{count, plural, one {{countWords} fattura è scaduta} other {{countWords} fatture sono scadute}}"
     },
     "widget": {
       "title": "Avvisi",
@@ -6540,7 +6621,8 @@
       "door": "Ingresso e dispositivi",
       "sales": "Vendite",
       "setup": "Configurazione e domini",
-      "messaging": "Messaggi"
+      "messaging": "Messaggi",
+      "conference": "Sessioni, espositori e sponsor"
     },
     "channels": {
       "in_app": "Nell’app",

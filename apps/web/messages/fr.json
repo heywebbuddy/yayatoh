@@ -6354,6 +6354,67 @@
         "window": "{sent, plural, one {# e-mail} many {# e-mails} other {# e-mails}} sur les {days} derniers jours",
         "over": "{domains, plural, one {# domaine d’envoi} many {# domaines d’envoi} other {# domaines d’envoi}} et {campaigns, plural, one {# campagne} many {# campagnes} other {# campagnes}} au-delà des seuils",
         "open": "Ouvrir la délivrabilité des e-mails"
+      },
+      "sessionLevel": {
+        "none": "Sans limite",
+        "ok": "Sous {near} %",
+        "near": "Presque pleine ({near} % ou plus)",
+        "over": "Pleine"
+      },
+      "sessionAttendance": {
+        "title": "Salles des sessions",
+        "running": "{count, plural, one {# session en cours} other {# sessions en cours}}",
+        "nearlyFull": "{count, plural, one {# presque pleine} other {# presque pleines}}",
+        "kiosks": "{count, plural, one {# borne hors ligne} other {# bornes hors ligne}}",
+        "none": "Aucune session maintenant ni dans l'heure. Les portes de session se configurent sur la page d'enregistrement des sessions.",
+        "table": "Sessions en cours et à venir",
+        "session": "Session",
+        "in": "Dans la salle",
+        "capacity": "Places",
+        "status": "État",
+        "until": "jusqu'à {time}",
+        "starts": "commence à {time}",
+        "meter": "{title} : places occupées",
+        "more": "{count, plural, one {et # de plus} other {et # de plus}}",
+        "open": "Ouvrir l'enregistrement des sessions"
+      },
+      "sessionFill": {
+        "title": "Remplissage des sessions",
+        "none": "Aucune session ne limite encore ses places. Définissez une capacité pour suivre son remplissage ici.",
+        "nearlyFull": "{count, plural, one {# session sur {limited} est remplie à {near} % ou plus} other {# sessions sur {limited} sont remplies à {near} % ou plus}}",
+        "full": "{count, plural, one {# pleine} other {# pleines}}",
+        "waiting": "{count, plural, one {# personne en attente} other {# personnes en attente}}",
+        "longLines": "{count, plural, one {# liste de plus de {max}} other {# listes de plus de {max}}}",
+        "roomsTooSmall": "{count, plural, one {# dans une salle trop petite} other {# dans des salles trop petites}}",
+        "table": "Sessions les plus remplies",
+        "session": "Session",
+        "enrolled": "Places réservées",
+        "waitingHeader": "En attente",
+        "status": "État",
+        "roomSmall": "Salle trop petite",
+        "ofCapacity": "{enrolled} sur {capacity}",
+        "open": "Ouvrir les inscriptions aux sessions"
+      },
+      "exhibitorActivity": {
+        "title": "Exposants",
+        "none": "Aucun exposant pour l’instant. Ajoutez-en pour suivre ici leur personnel de stand et leurs contacts.",
+        "add": "Ajouter des exposants",
+        "staffed": "{staffed} exposants sur {total} ont du personnel de stand",
+        "people": "{count, plural, one {# personne invitée} other {# personnes invitées}}",
+        "leads": "{count, plural, one {# contact} other {# contacts}}",
+        "withoutLeads": "{count, plural, one {# exposant sans contact} other {# exposants sans contact}}",
+        "leadsPending": "Les contacts apparaîtront ici une fois la collecte de contacts activée.",
+        "top": "Le plus de contacts",
+        "open": "Ouvrir le portail exposants"
+      },
+      "sponsorActivity": {
+        "title": "Sponsors",
+        "none": "Aucun sponsor pour l’instant. Ajoutez des formules et des sponsors pour suivre ici leurs livrables.",
+        "add": "Ajouter des sponsors",
+        "total": "{count, plural, one {# sponsor} other {# sponsors}}",
+        "overdue": "{count, plural, one {# livrable en retard} other {# livrables en retard}}",
+        "deliverablesPending": "Les livrables apparaîtront ici une fois les formules de sponsoring activées.",
+        "open": "Ouvrir les sponsors"
       }
     },
     "openScanner": "Ouvrir le scanner",
@@ -6471,7 +6532,17 @@
       "automationFailed": "Ouvrir l’état de la messagerie",
       "campaignFailed": "Ouvrir les campagnes",
       "disputeDeadline": "Ouvrir les litiges",
-      "assistanceOverdue": "Ouvrir les demandes d’aide"
+      "assistanceOverdue": "Ouvrir les demandes d’aide",
+      "sessionsNearCapacity": "Ouvrir les sessions",
+      "sessionWaitlists": "Ouvrir les inscriptions aux sessions",
+      "roomsTooSmall": "Ouvrir les sessions",
+      "exhibitorsNoLeads": "Ouvrir les exposants",
+      "exhibitorsNoStaff": "Ouvrir le portail exposants",
+      "speakerTasksOverdue": "Ouvrir les tâches des intervenants",
+      "deliverablesOverdue": "Ouvrir les sponsors",
+      "printersKiosksOffline": "Ouvrir la configuration sur place",
+      "approvalBacklog": "Ouvrir les candidatures",
+      "invoicesOverdue": "Ouvrir les factures"
     },
     "rules": {
       "unseated": "{count, plural, one {Un participant n’a pas de place} other {{countWords} participants n’ont pas de place}}",
@@ -6493,7 +6564,17 @@
       "automationFailed": "{count, plural, one {Un message ou une action groupée a échoué aujourd’hui} other {{countWords} messages ou actions groupées ont échoué aujourd’hui}}",
       "campaignFailed": "{count, plural, one {Un envoi de campagne a échoué aujourd’hui} other {{countWords} envois de campagne ont échoué aujourd’hui}}",
       "disputeDeadline": "{count, plural, one {Un litige demande bientôt des preuves} other {{countWords} litiges demandent bientôt des preuves}}",
-      "assistanceOverdue": "{count, plural, one {{countWords} demande d’aide attend depuis trop longtemps} other {{countWords} demandes d’aide attendent depuis trop longtemps}}"
+      "assistanceOverdue": "{count, plural, one {{countWords} demande d’aide attend depuis trop longtemps} other {{countWords} demandes d’aide attendent depuis trop longtemps}}",
+      "sessionsNearCapacity": "{count, plural, one {{countWords} session dépasse 95 % de sa capacité} other {{countWords} sessions dépassent 95 % de leur capacité}}",
+      "sessionWaitlists": "{count, plural, one {{countWords} session a une longue liste d'attente} other {{countWords} sessions ont de longues listes d'attente}}",
+      "roomsTooSmall": "{count, plural, one {{countWords} session a plus de places réservées que sa salle ne compte de sièges} other {{countWords} sessions ont plus de places réservées que leurs salles ne comptent de sièges}}",
+      "exhibitorsNoLeads": "{count, plural, one {{countWords} exposant n'a aucun contact} other {{countWords} exposants n'ont aucun contact}}",
+      "exhibitorsNoStaff": "{count, plural, one {{countWords} exposant n'a invité aucun personnel de stand} other {{countWords} exposants n'ont invité aucun personnel de stand}}",
+      "speakerTasksOverdue": "{count, plural, one {{countWords} tâche d’intervenant est en retard} other {{countWords} tâches d’intervenants sont en retard}}",
+      "deliverablesOverdue": "{count, plural, one {{countWords} livrable de sponsor est en retard} other {{countWords} livrables de sponsors sont en retard}}",
+      "printersKiosksOffline": "{count, plural, one {{countWords} imprimante de badges ou borne est hors ligne} other {{countWords} imprimantes de badges ou bornes sont hors ligne}}",
+      "approvalBacklog": "{count, plural, one {{countWords} candidature attend une décision} other {{countWords} candidatures attendent une décision}}",
+      "invoicesOverdue": "{count, plural, one {{countWords} facture est en retard} other {{countWords} factures sont en retard}}"
     },
     "widget": {
       "title": "Alertes",
@@ -6540,7 +6621,8 @@
       "door": "Accueil et appareils",
       "sales": "Ventes",
       "setup": "Configuration et domaines",
-      "messaging": "Messagerie"
+      "messaging": "Messagerie",
+      "conference": "Sessions, exposants et sponsors"
     },
     "channels": {
       "in_app": "Dans l’app",

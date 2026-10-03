@@ -70,6 +70,7 @@ import {
   transferMailer,
   walletPassSync,
 } from '@yayatoh/ticketing';
+import { conferenceSources } from './conference-sources.ts';
 import { webhookAdapter } from './delivery-webhooks.ts';
 // The composition root registers the key vault (message params and manage links are encrypted).
 import { ports } from './ports.ts';
@@ -135,7 +136,7 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     waitlistMailer({ notifier, appOrigin }),
     // M4.2b: a purchased table's claim link to its buyer.
     tableNamingMailer({ notifier, appOrigin }),
-    alertEvaluator({ notifier }),
+    alertEvaluator({ notifier, conference: conferenceSources() }),
     // M3.7a: journeys enroll, follow date changes and cancellations (their steps run below).
     ...journeySubscribers(),
     // M5.1a: its offers (waitlist.offered) are mailed in the same drain.
@@ -206,13 +207,17 @@ export async function drainOrgMessages(
   // The live device watchdog (M3.3a), as the worker would run it now. Unless the org-wide pass
   // follows anyway, it evaluates the events the quiet devices were working at (not every event of
   // the org: in the shared e2e org that slowed every drain, batch 3g merge).
-  await watchQuietDevices(orgId, { notifier }, { evaluate: opts.sweep ? false : 'devices' });
+  await watchQuietDevices(
+    orgId,
+    { notifier, conference: conferenceSources() },
+    { evaluate: opts.sweep ? false : 'devices' },
+  );
   // The alert engine's scheduled pass (M3.2b), as the worker's sweep would run it now: only when
   // asked (`sweep`). The alerts evaluator above already re-evaluates what the drained events
   // touched; the org-wide pass re-checks every upcoming event and re-notifies unacknowledged
   // alerts, which in a shared e2e org (hundreds of events, never acknowledged) made every other
   // suite's drain dispatch that backlog (batch 3d merge).
-  if (opts.sweep) await evaluateOrgNow(orgId, { notifier });
+  if (opts.sweep) await evaluateOrgNow(orgId, { notifier, conference: conferenceSources() });
   const deps: DispatchDeps = {
     // Web push goes through the real adapter (VAPID + aes128gcm); in dev/CI the only endpoints
     // it may reach besides real push services are the fake push service on this origin.
