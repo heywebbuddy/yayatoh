@@ -1,5 +1,6 @@
 import { DEVICE_ONLINE_WINDOW_MS, deviceEventIdTx, markQuietDevicesTx } from '@yayatoh/checkin';
 import { type TenantTx, withTenant } from '@yayatoh/db';
+import { unpaidPledgeEventIdsTx } from '@yayatoh/donations';
 import { findEventTx, upcomingEventIdsTx } from '@yayatoh/events';
 import { type Ctx, createCtx } from '@yayatoh/kernel';
 import { orderMetricRefTx, refundMetricRefTx } from '@yayatoh/orders';
@@ -180,6 +181,10 @@ export async function evaluateOrgNow(
       new Date(now.getTime() + 30 * 86_400_000),
     ),
   );
+  // M4.8e: events over for 14 days with pledges still unpaid (planning cadence).
+  if (full)
+    for (const id of await withTenant(ctx, (tx) => unpaidPledgeEventIdsTx(tx, now)))
+      if (!ids.includes(id)) ids.push(id);
   const changes: AlertChange[] = [];
   // Alerts of events outside the window (moved, cancelled, over) still resolve.
   const stale = await withTenant(ctx, async (tx) => {

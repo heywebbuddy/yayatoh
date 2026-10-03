@@ -132,3 +132,11 @@ ALTER TABLE "donations"."saved_cards" ADD CONSTRAINT "saved_cards_guest_fk" FORE
 ALTER TABLE "donations"."pledge_collections" ADD CONSTRAINT "pledge_collections_event_fk" FOREIGN KEY ("org_id","event_id") REFERENCES "events"."events"("org_id","id");--> statement-breakpoint
 ALTER TABLE "donations"."pledge_attempts" ADD CONSTRAINT "pledge_attempts_order_fk" FOREIGN KEY ("org_id","order_id") REFERENCES "orders"."orders"("org_id","id");
 -- hand-written: end
+--> statement-breakpoint
+-- M4.8e: the alert engine's new rule (pledgesUnpaid). The widened CHECK on the existing table is
+-- added NOT VALID, then validated (no long lock).
+ALTER TABLE "alerts"."alerts" DROP CONSTRAINT "alerts_rule_check";
+--> statement-breakpoint
+ALTER TABLE "alerts"."alerts" ADD CONSTRAINT "alerts_rule_check" CHECK (rule in ('unseated', 'undistributed', 'paymentsFailed', 'paymentsStuck', 'refundSurge', 'devicesOffline', 'devicesLowBattery', 'devicesBacklog', 'capacityNear', 'capacityFull', 'sellOut', 'salesPace', 'readiness', 'assistanceOverdue', 'domain', 'payoutsPastDue', 'deliverability', 'automationFailed', 'campaignFailed', 'disputeDeadline', 'pledgesUnpaid')) NOT VALID;
+--> statement-breakpoint
+ALTER TABLE "alerts"."alerts" VALIDATE CONSTRAINT "alerts_rule_check";

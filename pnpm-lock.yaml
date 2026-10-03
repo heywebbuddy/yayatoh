@@ -1060,6 +1060,9 @@ importers:
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../../db
+      '@yayatoh/donations':
+        specifier: workspace:*
+        version: link:../donations
       '@yayatoh/events':
         specifier: workspace:*
         version: link:../events

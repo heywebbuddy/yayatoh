@@ -176,6 +176,7 @@ export {
   recordPledgePaymentCommand,
   settleCardChargeCommand,
   startPledgePaymentCommand,
+  unpaidPledgeEventIdsTx,
   unpaidPledgeFactsTx,
   writeOffPledgeCommand,
 } from './pledge-collection.ts';

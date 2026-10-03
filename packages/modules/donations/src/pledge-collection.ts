@@ -958,6 +958,30 @@ export async function unpaidPledgeFactsTx(
   return { count: r?.n ?? 0, amountMinor: Number(r?.sum ?? 0), currency: r?.currency ?? null };
 }
 
+/**
+ * Events with pledges still unpaid 14 days after they ended (the alerts sweep evaluates them
+ * although they are over). At most 200, newest pledges first.
+ */
+export async function unpaidPledgeEventIdsTx(tx: TenantTx, now: Date): Promise<string[]> {
+  const rows = await tx
+    .selectDistinct({ eventId: pledges.eventId })
+    .from(pledges)
+    .leftJoin(pledgeCollections, eq(pledgeCollections.pledgeId, pledges.id))
+    .where(
+      and(
+        eq(pledges.status, 'confirmed'),
+        or(isNull(pledgeCollections.id), inArray(pledgeCollections.status, [...OPEN_COLLECTION_STATUSES])),
+      ),
+    )
+    .limit(200);
+  const out: string[] = [];
+  for (const r of rows) {
+    const event = await findEventTx(tx, r.eventId);
+    if (event && now.getTime() >= unpaidAlertFrom(event.endsAt).getTime()) out.push(r.eventId);
+  }
+  return out;
+}
+
 // ── messages ──────────────────────────────────────────────────────────────────────────────
 
 const ClosedPayload = z.object({ orgId: z.uuid(), eventId: z.uuid(), collectionIds: z.array(z.uuid()) });

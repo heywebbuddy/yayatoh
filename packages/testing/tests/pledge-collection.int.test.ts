@@ -1,3 +1,4 @@
+import { evaluateOrgNow } from '@yayatoh/alerts';
 import { withTenant } from '@yayatoh/db';
 import { closePools } from '@yayatoh/db/testing';
 import {
@@ -46,7 +47,7 @@ import {
   signFakeSetupWebhook,
   signFakeWebhook,
 } from '@yayatoh/payments';
-import { catchUpSubscriber } from '@yayatoh/platform';
+import { catchUpSubscriber, memoryNotifier } from '@yayatoh/platform';
 import { sql } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { type OrgFixture, ports, systemCtx, twoOrgs, userCtx } from '../src/index.ts';
@@ -787,6 +788,25 @@ describe('the unpaid alert facts', () => {
     expect(f.count).toBeGreaterThanOrEqual(2);
     expect(f.amountMinor).toBeGreaterThan(0);
     expect(f.currency).toBe('USD');
+  });
+
+  it('the alert engine raises "pledges unpaid" for the event 14 days after it, on the pledges page', async () => {
+    const { notifier } = memoryNotifier();
+    await evaluateOrgNow(
+      a.org.id,
+      { notifier },
+      { now: new Date(gala.endsAt.getTime() + 15 * 86_400_000), full: true },
+    );
+    const [alert] = await q<{
+      rule: string;
+      count: number;
+      event_id: string;
+      state: string;
+      params: Record<string, number>;
+    }>(a, sql`select rule, count, event_id, state, params from alerts.alerts where rule = 'pledgesUnpaid'`);
+    expect(alert).toMatchObject({ rule: 'pledgesUnpaid', event_id: gala.eventId, state: 'open' });
+    expect(alert?.count).toBeGreaterThanOrEqual(2);
+    expect(alert?.params.amountMinor).toBeGreaterThan(0);
   });
 });
 
