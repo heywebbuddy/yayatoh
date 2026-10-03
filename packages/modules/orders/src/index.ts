@@ -234,6 +234,8 @@ export {
   parseGuestLinkToken,
   resendAt,
 } from './guest/otp.ts';
+// M5.2b: the manage token behind a session-schedule email link.
+export { orderManageTokenTx } from './manage-link.ts';
 export { buyerFactsTx, orderRefTx } from './participation.ts';
 export { orderPaymentStateTx } from './payment-state.ts';
 export { privateColumns } from './private-columns.ts';

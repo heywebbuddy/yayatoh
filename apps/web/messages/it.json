@@ -166,7 +166,9 @@
       },
       "registration": {
         "approved": "Iscrizione approvata",
-        "denied": "Richiesta di iscrizione respinta"
+        "denied": "Richiesta di iscrizione respinta",
+        "session-enrolled": "Posto in sessione (iscritto dalla lista d'attesa)",
+        "session-offer": "Offerta di un posto in sessione"
       },
       "portal": {
         "invite": "Invito al portale",
@@ -677,7 +679,10 @@
     "eyebrow": "Solo sviluppo",
     "title": "Scegli un profilo",
     "description": "Utenti di prova per ambienti locali e di anteprima. L’accesso reale arriva con M1.2.",
-    "signIn": "Accedi"
+    "signIn": "Accedi",
+    "newcomer": "Nuovo account senza organizzazione: registrazione e configurazione iniziale",
+    "staff": "Staff Yayatoh: usa la console di amministrazione su :3001",
+    "openAdmin": "Apri la console di amministrazione"
   },
   "errors": {
     "validation_failed": "Alcuni dati devono essere corretti.",
@@ -3681,7 +3686,8 @@
       "website": "Inserisci un indirizzo web che inizi con https:// o http://.",
       "position": "Inserisci un ordine da 1 a 99.",
       "tier": "Scegli un livello.",
-      "tierInUse": "Sposta o elimina prima gli sponsor di questo livello."
+      "tierInUse": "Sposta o elimina prima gli sponsor di questo livello.",
+      "capacityBelowEnrolled": "Più persone hanno già un posto. Rimuovi prima delle iscrizioni o mantieni una capienza più alta."
     },
     "warnings": {
       "room_overlap": "{room} è prenotata anche per «{other}» in questo orario.",
@@ -7549,6 +7555,7 @@
       "byApplication": "Su candidatura",
       "registerGroup": "Registri più persone? Registra un gruppo"
     },
+    "openEnrollment": "Iscrizione alle sessioni e liste d'attesa",
     "applicant": {
       "metaTitle": "La tua registrazione",
       "title": {
@@ -9346,5 +9353,110 @@
       "questionNotAllowed": "Quella domanda non può essere stampata sui badge."
     },
     "elements": "Elementi su questo lato"
+  },
+  "enrollment": {
+    "title": "Iscrizione alle sessioni",
+    "subtitle": "Posti e liste d'attesa delle sessioni facoltative, come avanza la lista e quali sessioni dà ogni accesso.",
+    "backToRegistration": "Torna alla registrazione",
+    "viewerNotice": "Puoi vedere le iscrizioni. Solo chi può modificare l'evento può cambiarle.",
+    "sessions": "Sessioni facoltative",
+    "closeRule": "Le liste d'attesa avanzano fino a 24 ore prima dell'inizio di ogni sessione. Dopo, un posto libero va a chi si iscrive per primo.",
+    "emptyTitle": "Ancora nessuna sessione facoltativa",
+    "emptyDescription": "Rendi facoltativa una sessione nella pagina Sessioni e dalle una capienza. I partecipanti si iscrivono poi dal loro programma.",
+    "openSessions": "Vai alle sessioni",
+    "group": "Scegline una: {name}",
+    "places": "{enrolled} posti occupati su {capacity}",
+    "placesUnlimited": "{enrolled} iscritti · nessun limite",
+    "waitlist": "Lista d'attesa: {waiting} in attesa, {offered} con offerta",
+    "noWaitlist": "Nessuno in lista d'attesa",
+    "enrollmentClosed": "Iscrizioni chiuse",
+    "closesAt": "La lista d'attesa avanza fino al {when}",
+    "closed": "Lista d'attesa chiusa (meno di 24 ore)",
+    "promoteNow": "Fai avanzare ora: {title}",
+    "settings": "Quando si libera un posto",
+    "promotion": "Avanzamento della lista d'attesa",
+    "promotionAuto": "Iscrivi automaticamente la persona successiva",
+    "promotionOffer": "Offri il posto alla persona successiva per un tempo limitato",
+    "offerMinutes": "Durata dell'offerta (minuti)",
+    "offerMinutesHint": "Da 15 a 2.880 minuti. Le offerte terminano sempre quando la lista d'attesa si chiude.",
+    "offerSummary": "Il posto viene offerto alla persona successiva per {minutes, plural, one {# minuto} other {# minuti}}.",
+    "saveSettings": "Salva impostazione della lista d'attesa",
+    "saved": "Salvato.",
+    "items": "Sessioni date da ogni accesso",
+    "itemsHint": "Un pass senza sessioni spuntate dà tutte le sessioni. Un extra dà solo le sessioni spuntate.",
+    "allSessions": "Dà tutte le sessioni",
+    "noSessions": "Non dà sessioni",
+    "someSessions": "{count, plural, one {Dà # sessione} other {Dà # sessioni}}",
+    "chooseSessions": "Scegli le sessioni per {name}",
+    "itemSessions": "Sessioni date da {name}",
+    "saveItem": "Salva le sessioni di {name}",
+    "errors": {
+      "offerMinutes": "Inserisci un numero di minuti da 15 a 2.880.",
+      "promotion": "Scegli come avanza la lista d'attesa.",
+      "sessionIds": "Scegli sessioni di questo evento.",
+      "promotion_closed": "La lista d'attesa è chiusa: si ferma 24 ore prima dell'inizio della sessione."
+    },
+    "promotedCount": "{count, plural, =0 {Nessuno è potuto avanzare.} one {# persona avanzata dalla lista d'attesa.} other {# persone avanzate dalla lista d'attesa.}}"
+  },
+  "mySchedule": {
+    "open": "Il mio programma",
+    "eyebrow": "Il mio programma",
+    "for": "Programma di {name}",
+    "backToOrder": "Torna al mio ordine",
+    "whose": "Di chi è il programma",
+    "noRegistrantTitle": "Nessuna registrazione in questo ordine",
+    "noRegistrantDescription": "Le sessioni sono legate a una registrazione. Apri l'ordine con cui ti sei registrato per vedere il tuo programma.",
+    "emptyTitle": "Ancora nessuna sessione",
+    "emptyDescription": "L'organizzatore non ha ancora aggiunto sessioni a cui puoi partecipare. Ricontrolla più vicino all'evento.",
+    "summary": "{included, plural, one {# sessione inclusa} other {# sessioni incluse}} · {enrolled, plural, one {# iscrizione} other {# iscrizioni}} · {waiting, plural, one {# lista d'attesa} other {# liste d'attesa}}",
+    "pickOne": "scegline una: {group}",
+    "state": {
+      "included": "Inclusa nella tua registrazione",
+      "enrolled": "Sei iscritto",
+      "offered": "Un posto è tuo fino al {until}",
+      "waiting": "Lista d'attesa: posizione {position}",
+      "open": "Posti disponibili",
+      "full": "Al completo: puoi entrare in lista d'attesa",
+      "waitlist_closed": "Al completo. La lista d'attesa si è chiusa 24 ore prima della sessione.",
+      "closed": "Iscrizioni chiuse",
+      "started": "Già iniziata"
+    },
+    "enrol": "Iscriviti",
+    "enrolNamed": "Iscriviti a {title}",
+    "join": "Entra in lista d'attesa",
+    "joinNamed": "Entra in lista d'attesa per {title}",
+    "drop": "Annulla iscrizione",
+    "dropNamed": "Annulla iscrizione a {title}",
+    "leave": "Esci dalla lista d'attesa",
+    "leaveNamed": "Esci dalla lista d'attesa per {title}",
+    "accept": "Accetta il posto",
+    "acceptNamed": "Accetta il posto in {title}",
+    "decline": "Rifiuta",
+    "declineNamed": "Rifiuta il posto in {title}",
+    "replace": "Sostituisci {other}",
+    "keepBoth": "Tienile entrambe",
+    "conflict": {
+      "overlap": "{title} si sovrappone a {other}, a cui sei iscritto. Sostituiscila o scegli un'altra sessione.",
+      "group": "Hai già scelto {other} in «{group}», dove puoi scegliere una sola sessione. Passare a {title}?"
+    },
+    "done": {
+      "enrolled": "Sei iscritto a {title}.",
+      "waiting": "Sei in lista d'attesa per {title}: posizione {position}. Se si libera un posto, ti scriveremo.",
+      "offered": "Un posto in {title} è tuo: accettalo prima che l'offerta scada.",
+      "dropped": "Hai annullato l'iscrizione a {title}.",
+      "left": "Sei uscito dalla lista d'attesa per {title}.",
+      "declined": "Hai rifiutato il posto in {title}.",
+      "accepted": "Il posto in {title} è tuo."
+    },
+    "refused": {
+      "not_available": "La tua registrazione non include {title}.",
+      "closed": "Le iscrizioni a {title} sono chiuse.",
+      "started": "{title} è già iniziata.",
+      "included": "{title} è inclusa: non serve iscriversi.",
+      "keep_both_capped": "Entrambe le sessioni hanno posti limitati, quindi non puoi tenerle entrambe. Sostituisci {other} o scegli un'altra sessione.",
+      "waitlist_closed": "{title} è al completo e la sua lista d'attesa si è chiusa 24 ore prima della sessione.",
+      "offer_ended": "L'offerta per {title} è scaduta.",
+      "full": "{title} si è appena riempita. Riprova per entrare in lista d'attesa."
+    }
   }
 }

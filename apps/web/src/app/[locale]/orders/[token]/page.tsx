@@ -12,6 +12,7 @@ import { Link } from '@/i18n/navigation.ts';
 import { refundPolicyLines } from '@/lib/refund-policy-text.ts';
 import { helpLinksForOrder } from '@/server/assistance.ts';
 import { getPdfRenderer } from '@/server/pdf.ts';
+import { scheduleSummary } from '@/server/schedule.ts';
 import { webPushPublicKey } from '@/server/web-push.ts';
 import {
   removeOrderDeviceAction,
@@ -67,6 +68,8 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
         order.tickets.map((tk) => tk.id),
       )
     : new Map<string, string>();
+  // M5.2b: a registration with sessions links to the attendee's schedule.
+  const schedule = await scheduleSummary(token);
   const sinceFmt = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeZone: order.event.timezone });
   return (
     <main id="main" className="mx-auto flex min-h-dvh max-w-xl flex-col gap-6 px-6 py-16">
@@ -140,6 +143,11 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
           </ul>
         </section>
       ) : null}
+      {schedule ? (
+        <Link href={`/orders/${token}/schedule`} className={buttonClass('secondary', 'lg', 'self-start')}>
+          {t('mySchedule.open')}
+        </Link>
+      ) : null}
       {order.tickets.length > 0 ? (
         <section aria-labelledby="tickets-heading" className="flex flex-col gap-4">
           <h2 id="tickets-heading" className="text-section">
@@ -166,7 +174,7 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
                   <TicketQr
                     code={tk.code}
                     label={t('order.qrLabel', { serial: tk.serial })}
-                    className="size-60 rounded-tag text-black"
+                    className="size-60 rounded-tag text-ink"
                   />
                   <p className="text-caption text-ink-2">
                     {t('order.shortCode')}{' '}

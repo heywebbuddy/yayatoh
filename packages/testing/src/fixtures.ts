@@ -215,6 +215,7 @@ import {
   saveReasonTemplateCommand,
   seedRegistrationDefaultsCommand,
   setCellCommand,
+  setEnrollmentSettingsCommand,
   setTypeRulesCommand,
 } from '@yayatoh/registration';
 import {
@@ -1787,6 +1788,26 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
       createCtx({ orgId: org.id, actor: { type: 'anonymous' } }),
       ports,
     );
+  }
+  // M5.2b session enrollment: the full pass lists the event's first session, the event's waitlist
+  // offers places (2 h), and one fixture ticket waits in that session's line (raw inserts: no
+  // place is held, so the counter is unchanged).
+  if (fullPass) {
+    await executeCommand(
+      setEnrollmentSettingsCommand,
+      { eventId: event.id, promotion: 'offer', offerMinutes: 120 },
+      ctx(),
+      ports,
+    );
+    await withTenant(systemCtx(org.id), async (tx) => {
+      await tx.execute(sql`insert into registration.item_sessions (org_id, event_id, admission_item_id, session_id)
+        select ${org.id}, ${event.id}, ${fullPass.id}, id from program.sessions where event_id = ${event.id} limit 1`);
+      await tx.execute(sql`insert into registration.session_enrollments
+          (org_id, event_id, session_id, registrant_id, order_id, status, position_at)
+        select ${org.id}, ${event.id}, s.id, t.id, t.order_id, 'waiting', now()
+        from program.sessions s, ticketing.tickets t
+        where s.event_id = ${event.id} and t.order_id = ${checkout.order.id} limit 1`);
+    });
   }
   // M4.1a: a party with a named guest (sealed answers, linked to a guest-list entry), a child and
   // an unnamed plus-one; then an edit and a move, so every history action has rows.

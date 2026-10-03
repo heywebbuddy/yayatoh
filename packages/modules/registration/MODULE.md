@@ -71,3 +71,32 @@ add registrations, approvals, groups, invoices (M5.1c/d) and session enrollments
 - **+1:** a type of `kind = 'guest'` is never sold directly or listed publicly; a confirmed host adds guests from
   their own link (up to `guests_per_host`), paid by the host in its own order, linked by `host_registrant_id`.
 - **Events:** `registration.registrant.{applied,approved,denied,confirmed,substituted}@1` (ids only).
+
+**Session enrollment and waitlists (M5.2b)** — `src/enrollment.ts`, pure rules in `src/domain/enrollment.ts`:
+- **A registrant is their admission ticket** (`registrant_id` → `ticketing.tickets`; one per registrant since M5.1a, so an
+  M5.1c substitution keeps the enrollments). The attendee's credential is the order's manage link (`myScheduleQuery`,
+  `enrollSessionCommand`, `dropSessionCommand`, `acceptSessionOfferCommand`; `public:enrollment`).
+- **Availability by admission item** (`item_sessions`): an `admission` item listing nothing gives every session; a listing
+  gives only those; an `add_on` gives only what it lists. A registrant's items are their pass and the order's add-ons.
+- **Atomic claim**: every decision runs under the session's counter row lock (`lockEnrollableSessionTx`, program) and a
+  per-registrant advisory lock; places move only through program's `claimSessionPlaceTx` / `releaseSessionPlaceTx`, whose
+  CHECK (`enrolled <= capacity`) is the last line of defence. Sessions are locked in id order (no deadlocks on swaps).
+- **Conflicts**: a pick-one group allows one pick (program's `session_group_picks` is the DB guard); overlapping sessions
+  (half-open) are refused with the session in the way (`conflict`, reason `overlap` / `one_per_group`), replaced on
+  request (`choice: 'replace'`), or kept both only when neither has a capacity (P5-9, `keep_both`).
+- **The line** (`session_enrollments.status = 'waiting'`, FIFO by `(position_at, id)`): a full session's line is joined
+  only without conflicts and until the close. A free place belongs to the line first (enrolling promotes before it
+  decides). Promotion (`planPromotion`) re-checks each person (still registered, still given the session, no overlap or
+  group pick) and passes over for good (`skipped`, with the reason) whoever no longer fits, so it never loops. Per event
+  (`enrollment_settings`, default `auto`): `auto` enrols at once; `offer` holds the place as an offer for `offer_minutes`
+  (never past the close), accepted from the schedule; the sweeper expires lapsed offers.
+- **P5-9 close**: promotion stops 24 h before the session starts (`promotionOpen`); then a free place goes to whoever
+  enrols first, and the line takes nobody new (`waitlist_closed`). "Promote now" is refused after the close.
+- **Organizer** (`events:write`): `setEnrollmentSettingsCommand`, `setItemSessionsCommand`, `promoteSessionNowCommand`;
+  `enrollmentOverviewQuery` (`events:read`): per session places, waiting, offered, the close time.
+- **Workers**: `sweepEnrollmentsCommand` (`platform:registration.sweep`, every 30 s after the waitlist sweeper);
+  `registrationEnrollment()` ends a cancelled or refunded registrant's sessions (`tickets.cancelled@1`,
+  `order.refunded@1`) and promotes; `enrollmentMailer` emails promotions (`registration.session-enrolled`,
+  `registration.session-offer`). Event: `registration.session.promoted@1` (`{ eventId, sessionId, enrollmentId,
+  registrantId, status, offer }`).
+- Entitlement `registration` for every command and query.

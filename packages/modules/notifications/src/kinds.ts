@@ -211,6 +211,19 @@ export const KINDS = {
     urgent: false,
     params: ['url', 'name', 'eventName', 'passName'],
   },
+  // Session waitlist promotion (M5.2b, P5-9): enrolled at once, or offered a place until a time.
+  'registration.session-enrolled': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: ['url', 'name', 'eventName', 'sessionTitle', 'startsAt', 'timeZone'],
+  },
+  'registration.session-offer': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['url', 'name', 'eventName', 'sessionTitle', 'startsAt', 'until', 'timeZone'],
+  },
   // Registration form save and resume (M5.1b): the person asked for their link.
   'forms.resume': {
     category: 'transactional',

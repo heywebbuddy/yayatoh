@@ -47,7 +47,13 @@ import {
   subscribes,
 } from '@yayatoh/platform';
 import { taskReminderMailer } from '@yayatoh/program';
-import { decisionMailer, registrantLifecycle, registrationCapacity } from '@yayatoh/registration';
+import {
+  decisionMailer,
+  enrollmentMailer,
+  registrantLifecycle,
+  registrationCapacity,
+  registrationEnrollment,
+} from '@yayatoh/registration';
 import { surveyMailer } from '@yayatoh/surveys';
 import { impersonationNotice, invitationMailer, orgStatusNotice } from '@yayatoh/tenancy';
 import {
@@ -128,6 +134,9 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     // M5.1c: registrants follow their orders; approval and denial emails.
     registrantLifecycle(),
     decisionMailer({ notifier, appOrigin }),
+    // M5.2b: cancelled registrants free their session places; promotions are mailed.
+    registrationEnrollment(),
+    enrollmentMailer({ notifier, appOrigin }),
   ];
 }
 

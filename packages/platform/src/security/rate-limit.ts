@@ -345,6 +345,14 @@ export const RATE_LIMIT_POLICIES = {
     identity: { limit: 3, windowMs: 24 * 60 * MIN },
     ipCeiling: { limit: 20, windowMs: 60 * MIN },
   },
+  /** Session enrollment from "My schedule" (M5.2b): enrol, join or leave a line, drop, accept;
+   * identity = the order's manage token. Generous: people build their schedule in one sitting. */
+  sessionEnrollment: {
+    device: { limit: 60, windowMs: 10 * MIN },
+    anonymousIp: { limit: 120, windowMs: 10 * MIN },
+    identity: { limit: 120, windowMs: 60 * MIN },
+    ipCeiling: { limit: 900, windowMs: 10 * MIN },
+  },
   /** CSP violation reports. */
   cspReport: {
     device: { limit: 60, windowMs: MIN },

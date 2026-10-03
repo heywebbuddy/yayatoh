@@ -483,3 +483,9 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **Dark primary fill.** `#7B5CFF` gives white button text 4.36:1; buttons use `#6C4CF2` (5.3:1) and `#7B5CFF` stays for glows, rings and the active sidebar tile. Confirm.
 - [ ] **CJK fonts** are not self-hosted (5–9 MB per face); Chinese and Japanese use Noto Sans JP/SC/TC when installed, then the platform face. Confirm, or approve per-locale font CSS.
 - [ ] **Required-field marker.** No asterisk on required labels (the browser announces "required"; errors say what is missing). Confirm or ask for "(optional)" markers on optional fields instead.
+
+## M5.2b — session enrollment and waitlists (2026-10-02, pending owner)
+- [ ] Offer window default when an event chooses "offer the place" instead of auto-enrol: 4 hours (15 minutes to 48 hours allowed; offers always end at the 24 h close). Auto-enrol stays the default (P5-9).
+- [ ] After the 24 h close, a place that frees up goes to whoever enrols first from their schedule and the waitlist takes nobody new (until M5.6's door line). Confirm, or keep the line open without promotion.
+- [ ] "Keep both" for overlapping sessions is offered only when neither session has a capacity (P5-9 as written). Confirm.
+- [ ] A registrant is their admission ticket; in a group order (M5.1c) the order's add-ons give their sessions to every registrant of that order. Confirm or ask for per-person add-ons.

@@ -66,6 +66,8 @@ export default async function SessionsPage({
     startsAt: tp('errors.startsAt'),
     endsAt: tp('errors.endsAt'),
     capacity: tp('errors.capacity'),
+    // M5.2b: a capacity below the places people hold.
+    capacity_below_enrolled: tp('errors.capacityBelowEnrolled'),
     outside_date: tp('errors.outside_date'),
     cancelled: tp('errors.cancelled'),
     unknown: tp('errors.unknown'),

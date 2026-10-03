@@ -35,4 +35,7 @@ export const privateColumns = columnPrivacy('registration', {
   },
   type_members: { email: personal('email'), source: 'vocab' },
   reason_templates: { decision: 'vocab', label: internal(), body: internal() },
+  // M5.2b: session enrollment states and settings are vocabularies; who changed a setting is internal.
+  enrollment_settings: { promotion: 'vocab', updated_by: internal() },
+  session_enrollments: { status: 'vocab', promoted_by: 'vocab', skip_reason: 'vocab' },
 });

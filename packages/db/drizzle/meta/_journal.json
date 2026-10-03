@@ -729,6 +729,13 @@
       "when": 1790984579575,
       "tag": "0103_aspiring_mad_thinker",
       "breakpoints": true
+    },
+    {
+      "idx": 104,
+      "version": "7",
+      "when": 1790985406991,
+      "tag": "0104_regular_landau",
+      "breakpoints": true
     }
   ]
 }

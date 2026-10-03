@@ -166,7 +166,9 @@
       },
       "registration": {
         "approved": "Inscripción aprobada",
-        "denied": "Solicitud de inscripción rechazada"
+        "denied": "Solicitud de inscripción rechazada",
+        "session-enrolled": "Plaza en sesión (inscrito desde la lista de espera)",
+        "session-offer": "Oferta de plaza en sesión"
       },
       "portal": {
         "invite": "Invitación al portal",
@@ -677,7 +679,10 @@
     "eyebrow": "Solo desarrollo",
     "title": "Elige un perfil",
     "description": "Usuarios de prueba para entornos locales y de vista previa. El inicio de sesión real llega con M1.2.",
-    "signIn": "Iniciar sesión"
+    "signIn": "Iniciar sesión",
+    "newcomer": "Cuenta nueva sin organización: registro e incorporación",
+    "staff": "Equipo de Yayatoh: usa la consola de administración en :3001",
+    "openAdmin": "Abrir la consola de administración"
   },
   "errors": {
     "validation_failed": "Hay datos que corregir.",
@@ -3681,7 +3686,8 @@
       "website": "Escribe una dirección web que empiece por https:// o http://.",
       "position": "Escribe un orden del 1 al 99.",
       "tier": "Elige un nivel.",
-      "tierInUse": "Mueve o elimina primero los patrocinadores de este nivel."
+      "tierInUse": "Mueve o elimina primero los patrocinadores de este nivel.",
+      "capacityBelowEnrolled": "Hay más personas con plaza. Quita inscripciones primero o mantén una capacidad mayor."
     },
     "warnings": {
       "room_overlap": "{room} también está reservada para «{other}» a esa hora.",
@@ -7549,6 +7555,7 @@
       "byApplication": "Por solicitud",
       "registerGroup": "¿Inscribes a varias personas? Inscribe a un grupo"
     },
+    "openEnrollment": "Inscripción a sesiones y listas de espera",
     "applicant": {
       "metaTitle": "Tu inscripción",
       "title": {
@@ -9346,5 +9353,110 @@
       "questionNotAllowed": "Esa pregunta no se puede imprimir en las credenciales."
     },
     "elements": "Elementos de este lado"
+  },
+  "enrollment": {
+    "title": "Inscripción a sesiones",
+    "subtitle": "Plazas y listas de espera de las sesiones opcionales, cómo avanza la lista y qué sesiones da cada acceso.",
+    "backToRegistration": "Volver al registro",
+    "viewerNotice": "Puedes ver las inscripciones. Solo quienes pueden editar el evento pueden cambiarlas.",
+    "sessions": "Sesiones opcionales",
+    "closeRule": "Las listas de espera avanzan hasta 24 horas antes de cada sesión. Después, una plaza libre es para quien se inscriba primero.",
+    "emptyTitle": "Aún no hay sesiones opcionales",
+    "emptyDescription": "Marca una sesión como opcional en la página Sesiones y dale una capacidad. Los asistentes se inscriben desde su agenda.",
+    "openSessions": "Ir a Sesiones",
+    "group": "Elige una: {name}",
+    "places": "{enrolled} de {capacity} plazas ocupadas",
+    "placesUnlimited": "{enrolled} inscritos · sin límite",
+    "waitlist": "Lista de espera: {waiting} esperando, {offered} con oferta",
+    "noWaitlist": "Nadie en la lista de espera",
+    "enrollmentClosed": "Inscripción cerrada",
+    "closesAt": "La lista de espera avanza hasta {when}",
+    "closed": "Lista de espera cerrada (faltan menos de 24 horas)",
+    "promoteNow": "Avanzar ahora: {title}",
+    "settings": "Cuando se libera una plaza",
+    "promotion": "Avance de la lista de espera",
+    "promotionAuto": "Inscribir automáticamente a la siguiente persona",
+    "promotionOffer": "Ofrecer la plaza a la siguiente persona por un tiempo limitado",
+    "offerMinutes": "Plazo de la oferta (minutos)",
+    "offerMinutesHint": "De 15 a 2.880 minutos. Las ofertas siempre terminan cuando se cierra la lista de espera.",
+    "offerSummary": "Se ofrece la plaza a la siguiente persona durante {minutes, plural, one {# minuto} other {# minutos}}.",
+    "saveSettings": "Guardar ajuste de la lista de espera",
+    "saved": "Guardado.",
+    "items": "Sesiones que da cada acceso",
+    "itemsHint": "Un pase sin sesiones marcadas da todas las sesiones. Un extra da solo las sesiones marcadas.",
+    "allSessions": "Da todas las sesiones",
+    "noSessions": "No da sesiones",
+    "someSessions": "{count, plural, one {Da # sesión} other {Da # sesiones}}",
+    "chooseSessions": "Elegir sesiones para {name}",
+    "itemSessions": "Sesiones que da {name}",
+    "saveItem": "Guardar sesiones de {name}",
+    "errors": {
+      "offerMinutes": "Escribe un número de minutos de 15 a 2.880.",
+      "promotion": "Elige cómo avanza la lista de espera.",
+      "sessionIds": "Elige sesiones de este evento.",
+      "promotion_closed": "La lista de espera se cerró: termina 24 horas antes de que empiece la sesión."
+    },
+    "promotedCount": "{count, plural, =0 {No se pudo avanzar a nadie.} one {# persona avanzó desde la lista de espera.} other {# personas avanzaron desde la lista de espera.}}"
+  },
+  "mySchedule": {
+    "open": "Mi agenda",
+    "eyebrow": "Mi agenda",
+    "for": "Agenda de {name}",
+    "backToOrder": "Volver a mi pedido",
+    "whose": "De quién es la agenda",
+    "noRegistrantTitle": "Este pedido no tiene registro",
+    "noRegistrantDescription": "Las sesiones van con un registro. Abre el pedido con el que te registraste para ver tu agenda.",
+    "emptyTitle": "Aún no hay sesiones",
+    "emptyDescription": "El organizador todavía no ha añadido sesiones a las que puedas ir. Vuelve más cerca del evento.",
+    "summary": "{included, plural, one {# sesión incluida} other {# sesiones incluidas}} · {enrolled, plural, one {# inscrita} other {# inscritas}} · {waiting, plural, one {# lista de espera} other {# listas de espera}}",
+    "pickOne": "elige una: {group}",
+    "state": {
+      "included": "Incluida en tu registro",
+      "enrolled": "Estás inscrito",
+      "offered": "Tienes una plaza hasta {until}",
+      "waiting": "Lista de espera: puesto {position}",
+      "open": "Hay plazas",
+      "full": "Completa: puedes unirte a la lista de espera",
+      "waitlist_closed": "Completa. La lista de espera se cerró 24 horas antes de la sesión.",
+      "closed": "Inscripción cerrada",
+      "started": "Ya empezó"
+    },
+    "enrol": "Inscribirme",
+    "enrolNamed": "Inscribirme en {title}",
+    "join": "Unirme a la lista de espera",
+    "joinNamed": "Unirme a la lista de espera de {title}",
+    "drop": "Darme de baja",
+    "dropNamed": "Darme de baja de {title}",
+    "leave": "Salir de la lista de espera",
+    "leaveNamed": "Salir de la lista de espera de {title}",
+    "accept": "Aceptar la plaza",
+    "acceptNamed": "Aceptar la plaza en {title}",
+    "decline": "Rechazar",
+    "declineNamed": "Rechazar la plaza en {title}",
+    "replace": "Reemplazar {other}",
+    "keepBoth": "Mantener ambas",
+    "conflict": {
+      "overlap": "{title} coincide con {other}, en la que estás inscrito. Reemplázala o elige otra sesión.",
+      "group": "Ya elegiste {other} en «{group}», y ahí solo puedes elegir una sesión. ¿Cambiar a {title}?"
+    },
+    "done": {
+      "enrolled": "Te inscribiste en {title}.",
+      "waiting": "Estás en la lista de espera de {title}: puesto {position}. Si se libera una plaza, te escribiremos.",
+      "offered": "Tienes una plaza en {title}: acéptala antes de que termine la oferta.",
+      "dropped": "Te diste de baja de {title}.",
+      "left": "Saliste de la lista de espera de {title}.",
+      "declined": "Rechazaste la plaza en {title}.",
+      "accepted": "La plaza en {title} es tuya."
+    },
+    "refused": {
+      "not_available": "Tu registro no incluye {title}.",
+      "closed": "La inscripción a {title} está cerrada.",
+      "started": "{title} ya empezó.",
+      "included": "{title} está incluida: no hace falta inscribirse.",
+      "keep_both_capped": "Las dos sesiones tienen plazas limitadas, así que no puedes mantener ambas. Reemplaza {other} o elige otra sesión.",
+      "waitlist_closed": "{title} está completa y su lista de espera se cerró 24 horas antes de la sesión.",
+      "offer_ended": "La oferta para {title} terminó.",
+      "full": "{title} se acaba de llenar. Vuelve a intentarlo para unirte a la lista de espera."
+    }
   }
 }

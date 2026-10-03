@@ -185,6 +185,13 @@ export default async function RegistrationPage({
       >
         {canWrite ? tf('openBuilder') : tf('openReadOnly')}
       </Link>
+      {/* M5.2b: session enrollment and waitlists. */}
+      <Link
+        href={`/o/${org}/e/${event}/registration/enrollment`}
+        className="self-start text-body underline underline-offset-2"
+      >
+        {t('openEnrollment')}
+      </Link>
       {canWrite ? null : <p className="text-body text-ink-2">{t('viewerNotice')}</p>}
       <p className="text-caption text-ink-2">
         {setup.pack.active

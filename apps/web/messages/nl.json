@@ -166,7 +166,9 @@
       },
       "registration": {
         "approved": "Registratie goedgekeurd",
-        "denied": "Registratieaanvraag afgewezen"
+        "denied": "Registratieaanvraag afgewezen",
+        "session-enrolled": "Sessieplek (ingeschreven vanaf de wachtlijst)",
+        "session-offer": "Aanbod van een sessieplek"
       },
       "portal": {
         "invite": "Portaaluitnodiging",
@@ -677,7 +679,10 @@
     "eyebrow": "Alleen ontwikkeling",
     "title": "Kies een persona",
     "description": "Testgebruikers voor lokale en previewomgevingen. Echt inloggen komt met M1.2.",
-    "signIn": "Inloggen"
+    "signIn": "Inloggen",
+    "newcomer": "Nieuw account zonder organisatie: aanmelden en onboarding",
+    "staff": "Yayatoh-medewerker: gebruik de beheerconsole op :3001",
+    "openAdmin": "Beheerconsole openen"
   },
   "errors": {
     "validation_failed": "Sommige gegevens moeten worden aangepast.",
@@ -3681,7 +3686,8 @@
       "website": "Vul een webadres in dat begint met https:// of http://.",
       "position": "Vul een volgorde van 1 tot 99 in.",
       "tier": "Kies een niveau.",
-      "tierInUse": "Verplaats of verwijder eerst de sponsors van dit niveau."
+      "tierInUse": "Verplaats of verwijder eerst de sponsors van dit niveau.",
+      "capacityBelowEnrolled": "Er hebben meer mensen een plek. Haal eerst inschrijvingen weg of houd een hogere capaciteit."
     },
     "warnings": {
       "room_overlap": "{room} is op dit tijdstip ook geboekt voor ‘{other}’.",
@@ -7549,6 +7555,7 @@
       "byApplication": "Op aanvraag",
       "registerGroup": "Registreer je meerdere mensen? Registreer een groep"
     },
+    "openEnrollment": "Inschrijving voor sessies en wachtlijsten",
     "applicant": {
       "metaTitle": "Je registratie",
       "title": {
@@ -9346,5 +9353,110 @@
       "questionNotAllowed": "Die vraag kan niet op badges worden geprint."
     },
     "elements": "Elementen aan deze kant"
+  },
+  "enrollment": {
+    "title": "Inschrijving voor sessies",
+    "subtitle": "Plekken en wachtlijsten van optionele sessies, hoe de wachtlijst doorschuift en welke sessies elk toegangsitem geeft.",
+    "backToRegistration": "Terug naar registratie",
+    "viewerNotice": "Je kunt de inschrijvingen bekijken. Alleen wie het evenement mag bewerken, kan ze wijzigen.",
+    "sessions": "Optionele sessies",
+    "closeRule": "Wachtlijsten schuiven door tot 24 uur voor het begin van elke sessie. Daarna gaat een vrije plek naar wie zich het eerst inschrijft.",
+    "emptyTitle": "Nog geen optionele sessies",
+    "emptyDescription": "Maak een sessie optioneel op de pagina Sessies en geef haar een capaciteit. Deelnemers schrijven zich dan in via hun programma.",
+    "openSessions": "Naar Sessies",
+    "group": "Kies er één: {name}",
+    "places": "{enrolled} van {capacity} plekken bezet",
+    "placesUnlimited": "{enrolled} ingeschreven · geen limiet",
+    "waitlist": "Wachtlijst: {waiting} wachtend, {offered} aangeboden",
+    "noWaitlist": "Niemand op de wachtlijst",
+    "enrollmentClosed": "Inschrijving gesloten",
+    "closesAt": "Wachtlijst schuift door tot {when}",
+    "closed": "Wachtlijst gesloten (minder dan 24 uur te gaan)",
+    "promoteNow": "Nu doorschuiven: {title}",
+    "settings": "Als er een plek vrijkomt",
+    "promotion": "Doorschuiven van de wachtlijst",
+    "promotionAuto": "De volgende persoon automatisch inschrijven",
+    "promotionOffer": "De plek een beperkte tijd aanbieden aan de volgende persoon",
+    "offerMinutes": "Aanbodtermijn (minuten)",
+    "offerMinutesHint": "15 tot 2.880 minuten. Aanbiedingen eindigen altijd als de wachtlijst sluit.",
+    "offerSummary": "De volgende persoon krijgt de plek {minutes, plural, one {# minuut} other {# minuten}} aangeboden.",
+    "saveSettings": "Wachtlijstinstelling opslaan",
+    "saved": "Opgeslagen.",
+    "items": "Sessies per toegangsitem",
+    "itemsHint": "Een pas zonder aangevinkte sessie geeft alle sessies. Een extra geeft alleen de aangevinkte sessies.",
+    "allSessions": "Geeft alle sessies",
+    "noSessions": "Geeft geen sessies",
+    "someSessions": "{count, plural, one {Geeft # sessie} other {Geeft # sessies}}",
+    "chooseSessions": "Sessies kiezen voor {name}",
+    "itemSessions": "Sessies die {name} geeft",
+    "saveItem": "Sessies voor {name} opslaan",
+    "errors": {
+      "offerMinutes": "Vul een aantal minuten in van 15 tot 2.880.",
+      "promotion": "Kies hoe de wachtlijst doorschuift.",
+      "sessionIds": "Kies sessies van dit evenement.",
+      "promotion_closed": "De wachtlijst is gesloten: ze stopt 24 uur voor het begin van de sessie."
+    },
+    "promotedCount": "{count, plural, =0 {Niemand kon doorschuiven.} one {# persoon doorgeschoven vanaf de wachtlijst.} other {# personen doorgeschoven vanaf de wachtlijst.}}"
+  },
+  "mySchedule": {
+    "open": "Mijn programma",
+    "eyebrow": "Mijn programma",
+    "for": "Programma van {name}",
+    "backToOrder": "Terug naar mijn bestelling",
+    "whose": "Wiens programma",
+    "noRegistrantTitle": "Geen registratie in deze bestelling",
+    "noRegistrantDescription": "Sessies horen bij een registratie. Open de bestelling waarmee je je hebt geregistreerd om je programma te zien.",
+    "emptyTitle": "Nog geen sessies",
+    "emptyDescription": "De organisator heeft nog geen sessies toegevoegd die je kunt bijwonen. Kijk dichter bij het evenement nog eens.",
+    "summary": "{included, plural, one {# inbegrepen sessie} other {# inbegrepen sessies}} · {enrolled, plural, one {# ingeschreven} other {# ingeschreven}} · {waiting, plural, one {# wachtlijst} other {# wachtlijsten}}",
+    "pickOne": "kies er één: {group}",
+    "state": {
+      "included": "Inbegrepen in je registratie",
+      "enrolled": "Je bent ingeschreven",
+      "offered": "Een plek is voor jou tot {until}",
+      "waiting": "Wachtlijst: nummer {position}",
+      "open": "Plekken vrij",
+      "full": "Vol: je kunt op de wachtlijst",
+      "waitlist_closed": "Vol. De wachtlijst sloot 24 uur voor de sessie.",
+      "closed": "Inschrijving gesloten",
+      "started": "Al begonnen"
+    },
+    "enrol": "Inschrijven",
+    "enrolNamed": "Inschrijven voor {title}",
+    "join": "Op de wachtlijst",
+    "joinNamed": "Op de wachtlijst voor {title}",
+    "drop": "Uitschrijven",
+    "dropNamed": "Uitschrijven voor {title}",
+    "leave": "Wachtlijst verlaten",
+    "leaveNamed": "Wachtlijst verlaten voor {title}",
+    "accept": "Plek accepteren",
+    "acceptNamed": "Plek accepteren in {title}",
+    "decline": "Afslaan",
+    "declineNamed": "Plek afslaan in {title}",
+    "replace": "{other} vervangen",
+    "keepBoth": "Allebei houden",
+    "conflict": {
+      "overlap": "{title} overlapt met {other}, waarvoor je bent ingeschreven. Vervang die of kies een andere sessie.",
+      "group": "Je koos al {other} in ‘{group}’, en daar kun je één sessie kiezen. Overstappen naar {title}?"
+    },
+    "done": {
+      "enrolled": "Je bent ingeschreven voor {title}.",
+      "waiting": "Je staat op de wachtlijst voor {title}: nummer {position}. Komt er een plek vrij, dan mailen we je.",
+      "offered": "Een plek in {title} is voor jou: accepteer hem voordat het aanbod afloopt.",
+      "dropped": "Je hebt je uitgeschreven voor {title}.",
+      "left": "Je hebt de wachtlijst voor {title} verlaten.",
+      "declined": "Je hebt de plek in {title} afgeslagen.",
+      "accepted": "De plek in {title} is van jou."
+    },
+    "refused": {
+      "not_available": "Je registratie geeft geen toegang tot {title}.",
+      "closed": "De inschrijving voor {title} is gesloten.",
+      "started": "{title} is al begonnen.",
+      "included": "{title} is inbegrepen: inschrijven is niet nodig.",
+      "keep_both_capped": "Beide sessies hebben beperkte plekken, dus je kunt ze niet allebei houden. Vervang {other} of kies een andere sessie.",
+      "waitlist_closed": "{title} is vol en de wachtlijst sloot 24 uur voor de sessie.",
+      "offer_ended": "Het aanbod voor {title} is afgelopen.",
+      "full": "{title} is net vol. Probeer het opnieuw om op de wachtlijst te komen."
+    }
   }
 }
