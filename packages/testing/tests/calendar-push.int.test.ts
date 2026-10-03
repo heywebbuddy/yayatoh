@@ -44,6 +44,7 @@ import {
 } from '@yayatoh/registration';
 import { sql } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { eraseNow, exportNow } from '../src/dsar/helpers.ts';
 import { bareOrg, fakeAuth, type OrgFixture, ports, systemCtx, twoOrgs, userCtx } from '../src/index.ts';
 
 /**
@@ -140,23 +141,25 @@ const move = (org: Org, c: Conf, s: { id: string; title: string }, h: number, ti
 interface Person {
   token: string;
   id: string;
+  email: string;
 }
 async function registrant(org: Org, c: Conf): Promise<Person> {
   n += 1;
+  const email = `cal${tag}${n}@example.test`;
   const r = await executeCommand(
     startRegistrationCommand,
     {
       eventId: c.ev.id,
       registrationTypeId: c.member,
       itemIds: [c.fullPass],
-      buyer: { email: `cal${tag}${n}@example.test`, name: `Calendar Person ${n}` },
+      buyer: { email, name: `Calendar Person ${n}` },
     },
     anon(org),
     ports,
   );
   const [reg] = await withTenant(systemCtx(org.orgId), (tx) => registrantsOfLinkTx(tx, r.manageToken));
   if (!reg) throw new Error('no registrant');
-  return { token: r.manageToken, id: reg.id };
+  return { token: r.manageToken, id: reg.id, email };
 }
 
 /** The console's connect for the org calendar (begin, the fake consent's Allow, complete). */
@@ -377,6 +380,44 @@ describe('removals (M6.5c)', () => {
     );
     await sync(org, cal.connectionId);
     expect(titles(cal.account)).toEqual([]);
+  });
+});
+
+describe('erasure (batch 3l merge)', () => {
+  it('erasing a registrant deletes their personal calendar connection and its links; others keep theirs', async () => {
+    const org = await bareOrg(`cal-${tag}-erase`, 'Calendar Erase');
+    const c = await conference(org);
+    await session(org, c, 'Plenary', 2, 'included');
+    const [p, q] = [await registrant(org, c), await registrant(org, c)];
+    const mine = await connectPersonal(org, p);
+    const theirs = await connectPersonal(org, q);
+    await sync(org, mine.connectionId);
+    await sync(org, theirs.connectionId);
+    const links = (connectionId: string) =>
+      withTenant(systemCtx(org.orgId), async (tx) => {
+        const r = await tx.execute<{ n: number }>(
+          sql`select count(*)::int as n from integrations.record_links where connection_id = ${connectionId}`,
+        );
+        return r[0]?.n ?? 0;
+      });
+    const exists = (connectionId: string) =>
+      withTenant(systemCtx(org.orgId), async (tx) => {
+        const r = await tx.execute<{ n: number }>(
+          sql`select count(*)::int as n from integrations.connections where id = ${connectionId}`,
+        );
+        return (r[0]?.n ?? 0) > 0;
+      });
+    expect(await links(mine.connectionId)).toBe(1);
+    const { modules } = await exportNow(p.email, org.ctx());
+    expect(modules.integrations).toMatchObject({
+      personalConnections: [{ connector: 'google_calendar_personal' }],
+    });
+    const r = await eraseNow(p.email, org.ctx());
+    expect(r).toBeTruthy();
+    expect(await exists(mine.connectionId)).toBe(false);
+    expect(await links(mine.connectionId)).toBe(0);
+    expect(await exists(theirs.connectionId)).toBe(true);
+    expect(await links(theirs.connectionId)).toBe(1);
   });
 });
 

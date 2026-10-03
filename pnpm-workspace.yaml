@@ -28,6 +28,11 @@ catalog:
   vitest: 5.0.2
   zod: 4.6.5
 
+# Batch 3l merge: one @opentelemetry/api, so drizzle-orm (an optional peer) resolves to one instance
+# in every package (apps/zapier's tests pass drizzle SQL into @yayatoh/db's transactions).
+overrides:
+  "@opentelemetry/api": 1.9.1
+
 allowBuilds:
   "@node-rs/argon2": true
   "@parcel/watcher": false
