@@ -39,9 +39,10 @@ export interface ConferenceSources {
 }
 
 /**
- * The sources that are on this build (batch 3j merge): sponsor deliverables (M5.4b) and badge
- * printers (M5.5b). Leads (M5.6b) are not built yet, so `exhibitorLeads` stays unconnected. The
- * worker and the web app pass these (the web's dev fake answers first for events it was told about).
+ * The sources this module reads itself (batch 3j merge): sponsor deliverables (M5.4b) and badge
+ * printers (M5.5b). Leads (M5.6b) sit in a same-tier module, so the worker and the web app add
+ * `exhibitorLeads` themselves (batch 3k merge; the web's dev fake answers first for events it was
+ * told about).
  */
 export const connectedConferenceSources: ConferenceSources = {
   overdueDeliverables: (tx, eventId, now) => overdueDeliverableCountTx(tx, eventId, now),

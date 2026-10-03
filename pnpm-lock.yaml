@@ -742,6 +742,9 @@ importers:
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../packages/kernel
+      '@yayatoh/leads':
+        specifier: workspace:*
+        version: link:../../packages/modules/leads
       '@yayatoh/marketplace':
         specifier: workspace:*
         version: link:../../packages/modules/marketplace

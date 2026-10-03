@@ -1,4 +1,4 @@
-import { alertEvaluator, connectedConferenceSources } from '@yayatoh/alerts';
+import { alertEvaluator, type ConferenceSources, connectedConferenceSources } from '@yayatoh/alerts';
 import { warehouseFromEnv, warehouseIngestor } from '@yayatoh/analytics';
 import { attendeeMessageMailer } from '@yayatoh/attendees';
 import { contactSignalsSubscriber, participationProjector } from '@yayatoh/audiences';
@@ -26,6 +26,7 @@ import { engagementActivity } from '@yayatoh/engagement';
 import { findEventTx, portalInviteMailer } from '@yayatoh/events';
 import { registrationResumeMailer } from '@yayatoh/forms';
 import { invitationMailer as guestInvitationMailer } from '@yayatoh/guests';
+import { exhibitorLeadCountsTx } from '@yayatoh/leads';
 import { listingsProjector } from '@yayatoh/marketplace';
 import { programMediaCleaner, speakerPhotoApprover, subjectErasedMediaCleaner } from '@yayatoh/media';
 import {
@@ -84,6 +85,14 @@ import { syncJob } from './integrations.ts';
 import { defineJob } from './jobs.ts';
 import { journeyJob } from './journeys.ts';
 
+/**
+ * M5.9a's conference sources on the worker: the alerts module's own (deliverables, printers) plus
+ * leads per exhibitor (M5.6b, same tier as alerts, so the app connects it; batch 3k merge).
+ */
+export const workerConferenceSources: ConferenceSources = {
+  ...connectedConferenceSources,
+  exhibitorLeads: exhibitorLeadCountsTx,
+};
 export const heartbeat = defineJob({
   name: 'platform.heartbeat',
   scope: 'platform',
@@ -200,7 +209,7 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     // M3.2: device presence for the Command Center's device widgets (events in pre-show or live).
     deviceBoardPublisher(),
     // M3.2b: the alert engine re-evaluates what each outbox event touched (sends through notifications).
-    alertEvaluator({ notifier, conference: connectedConferenceSources }),
+    alertEvaluator({ notifier, conference: workerConferenceSources }),
     // M4.8a: gift orders' outcomes (paid, failed, lapsed) move their gifts.
     giftOutcomesSubscriber,
     giftRefundsSubscriber,

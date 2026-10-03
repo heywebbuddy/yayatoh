@@ -79,6 +79,8 @@ export const INTERNAL_EVENTS: Readonly<Record<string, InternalReason>> = {
   'integrations.connection_connected@1': 'platform',
   'integrations.connection_revoked@1': 'platform',
   'invitation.created@1': 'platform',
+  'leads.captured@1': 'personal',
+  'leads.email_withdrawn@1': 'personal',
   'marketplace.site_settings_changed@1': 'platform',
   'media.asset_added@1': 'content',
   'media.asset_removed@1': 'content',

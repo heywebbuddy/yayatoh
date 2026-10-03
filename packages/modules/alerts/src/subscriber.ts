@@ -92,6 +92,8 @@ export const ALERT_TRIGGER_EVENTS = [
   'badges.printer_online@1',
   'program.sponsor_package.activated@1',
   'program.sponsor_package.cancelled@1',
+  // Batch 3k merge: a lead captured (M5.6b) can clear "exhibitors without leads".
+  'leads.captured@1',
   // M4.6a: a party answered its RSVP, or the deadline moved (guest additions and seating changes
   // emit nothing: the sweep picks them up).
   'guests.party_responded@1',

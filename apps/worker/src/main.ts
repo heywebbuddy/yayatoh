@@ -1,4 +1,3 @@
-import { connectedConferenceSources } from '@yayatoh/alerts';
 import { warehouseFromEnv } from '@yayatoh/analytics';
 import { printNodeFromEnv } from '@yayatoh/badges';
 import { billingEnabled, billingProviderFromEnv } from '@yayatoh/billing';
@@ -33,7 +32,7 @@ import {
 } from './notifications.ts';
 import { PRINTER_WATCHDOG_MS, PRINTNODE_POLL_MS, pollPrintNode, runPrinterWatchdog } from './printers.ts';
 import { runReconciliation } from './reconciliation.ts';
-import { JOBS, subscribers } from './registry.ts';
+import { JOBS, subscribers, workerConferenceSources } from './registry.ts';
 import { relayOnce } from './relay.ts';
 import { runRetention } from './retention.ts';
 import { runSettlements } from './settlements.ts';
@@ -426,8 +425,9 @@ setTimeout(stateYearEnd, 15 * 60_000).unref();
 setInterval(stateYearEnd, 24 * 3_600_000).unref();
 
 // Alert engine (M3.2b): live and pre-show events every 30 s, everything else every 5 minutes (leader only).
-// Batch 3j merge: M5.9a's conference pack reads sponsor deliverables and badge printers.
-const alertDeps = { notifier: createNotifier(), conference: connectedConferenceSources };
+// Batch 3j merge: M5.9a's conference pack reads sponsor deliverables and badge printers (and, since
+// the batch 3k merge, leads).
+const alertDeps = { notifier: createNotifier(), conference: workerConferenceSources };
 let sweepingAlerts = false;
 let alertTicks = 0;
 setInterval(() => {

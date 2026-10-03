@@ -43,6 +43,7 @@
     "@yayatoh/guests": "workspace:*",
     "@yayatoh/integrations": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
+    "@yayatoh/leads": "workspace:*",
     "@yayatoh/marketplace": "workspace:*",
     "@yayatoh/media": "workspace:*",
     "@yayatoh/messaging": "workspace:*",
