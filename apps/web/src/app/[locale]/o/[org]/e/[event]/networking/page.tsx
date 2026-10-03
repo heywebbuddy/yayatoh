@@ -160,17 +160,19 @@ export default async function NetworkingConsolePage({ params }: Params) {
       ) : null}
 
       {matchmaking ? (
-        <Card className="flex flex-col gap-3" aria-labelledby="net-matchmaking">
-          <h2 id="net-matchmaking" className="text-section">
-            {tr('networking.matchmaking.title')}
-          </h2>
-          <MatchmakingCard
-            listed={matchmaking.listed}
-            embedded={matchmaking.embedded}
-            enabled={aiDrafter() !== null}
-            canWrite={canWrite}
-            refresh={refreshMatchmakingAction.bind(null, org, event)}
-          />
+        <Card>
+          <section aria-labelledby="net-matchmaking" className="flex flex-col gap-3">
+            <h2 id="net-matchmaking" className="text-section">
+              {tr('networking.matchmaking.title')}
+            </h2>
+            <MatchmakingCard
+              listed={matchmaking.listed}
+              embedded={matchmaking.embedded}
+              enabled={aiDrafter() !== null}
+              canWrite={canWrite}
+              refresh={refreshMatchmakingAction.bind(null, org, event)}
+            />
+          </section>
         </Card>
       ) : null}
       <section aria-labelledby="net-locations" className="flex flex-col gap-3">

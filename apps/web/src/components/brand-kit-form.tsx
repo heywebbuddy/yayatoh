@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 import { useActionState, useEffect, useRef } from 'react';
 import { errorMessageKey } from '@/lib/errors.ts';
 import { type FormState, INITIAL_FORM_STATE } from '@/lib/form-state.ts';
+import { keepValues } from '@/lib/keep-values.ts';
 
 interface Kit {
   readonly name: string;
@@ -57,7 +58,7 @@ export function BrandKitForm({
 
   return (
     <div className="flex flex-col gap-3 pt-3">
-      <form ref={formRef} action={action} noValidate className="flex flex-col gap-4">
+      <form ref={formRef} onSubmit={keepValues(action)} noValidate className="flex flex-col gap-4">
         <div className="grid gap-4 sm:grid-cols-2">
           <Input
             id={id('name')}
