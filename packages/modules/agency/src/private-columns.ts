@@ -6,7 +6,8 @@ import { columnPrivacy, internal } from '@yayatoh/db';
  * slugs are the client's, shown to its agency only.
  */
 export const privateColumns = columnPrivacy('agency', {
-  client_snapshots: { next_event_name: internal(), revenue: internal() },
+  // Revenue exists only with the client's finance opt-in (CHECK `with_finance or revenue is null`).
+  client_snapshots: { next_event_name: internal(), revenue: internal(undefined, { where: 'with_finance' }) },
   event_snapshots: {
     name: internal(),
     slug: internal(),

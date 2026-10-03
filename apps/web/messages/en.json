@@ -10972,7 +10972,7 @@
     "clientsCount": "Clients",
     "eventsTotal": "Events",
     "revenue": "Gross sales",
-    "revenueFrom": "From {count, plural, one {# client} other {# clients}} who share their money",
+    "revenueFrom": "{count, plural, one {# client shares} other {# clients share}} their money with you",
     "revenueNone": "No client shares their money with you.",
     "perClient": "By client",
     "eventStatus": {
