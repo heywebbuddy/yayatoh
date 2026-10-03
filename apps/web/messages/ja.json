@@ -769,7 +769,8 @@
     "reference": "参照番号: {id}",
     "rateLimitedRetry": "試行回数が多すぎます。{minutes, plural, other {#分}}後にもう一度お試しください。",
     "impersonation_blocked": "メンバーとして操作中のスタッフはこれを実行できません。返金・支払い・エクスポート・削除・本人確認は無効です。",
-    "read_only_freeze": "定期メンテナンス中のため変更は一時停止しています。何も保存されていません。終了後にもう一度お試しください。"
+    "read_only_freeze": "定期メンテナンス中のため変更は一時停止しています。何も保存されていません。終了後にもう一度お試しください。",
+    "read_only_billing": "サブスクリプションのお支払いまで、この組織は読み取り専用です。何も保存・削除されていません。"
   },
   "notFound": {
     "title": "ページが見つかりません",
@@ -12950,7 +12951,74 @@
       "ai_seating": "AI 座席配置",
       "analytics_pro": "高度な分析"
     },
-    "findOwner": "オーナーまたは管理者を探す"
+    "findOwner": "オーナーまたは管理者を探す",
+    "usageLink": "使用量",
+    "renewalReceived": "更新の通知を受け取りました",
+    "dunning": {
+      "graceTitle": "サブスクリプションの支払いが完了しませんでした",
+      "graceBody": "{date}まではすべて通常どおり使えます。変更を続けるにはそれまでにお支払いください。その後はお支払いまで組織が読み取り専用になります。",
+      "readOnlyTitle": "この組織は読み取り専用です",
+      "readOnlyBody": "サブスクリプションの支払いに失敗したため、変更は一時停止しています。何も削除されていません。すべての閲覧、データのエクスポート、入口でのチケットのスキャンは引き続きできます。お支払いいただくとすぐに変更できるようになります。",
+      "payNow": "今すぐ支払う",
+      "askOwner": "この組織のオーナーまたは管理者に支払いを依頼してください。",
+      "paidTitle": "お支払いを受け付けました",
+      "paidBody": "ありがとうございます。組織の全員が再び変更できるようになりました。",
+      "declinedTitle": "お支払いが完了しませんでした",
+      "declinedBody": "何も変更されていません。請求プロバイダーに登録されたカードを確認して、もう一度お試しください。",
+      "payError": "支払いを開始できませんでした。しばらくしてからもう一度お試しください。"
+    },
+    "change": {
+      "title": "プランを変更",
+      "description": "アップグレードとダウングレードはすぐに反映されます。支払いまたはクレジットは、現在の請求期間の残りの分だけです。",
+      "discountCharity": "認証済みの慈善団体プロフィールにより、すべてのプランが{percent}%割引になります。",
+      "discountStaff": "あなたの組織にはすべてのプランで{percent}%の非営利割引が適用されます。",
+      "legend": "プラン",
+      "offer": "{plan}：{interval, select, year {年額} other {月額}} {price}",
+      "direction": {
+        "upgrade": "アップグレード",
+        "downgrade": "ダウングレード",
+        "switch": "切り替え",
+        "start": "開始"
+      },
+      "turnsOff": "{count, plural, other {# 個のモジュールがオフになります}}",
+      "chooseError": "プレビューするプランを選んでください。",
+      "preview": "変更をプレビュー",
+      "previewTitle": "{plan}に変更",
+      "previewLead": {
+        "upgrade": "アップグレードします。現在の請求期間の残りについて、今日お支払いいただく金額は次のとおりです。",
+        "downgrade": "ダウングレードします。現在のプランの未使用分はクレジットになります。",
+        "switch": "同じ価格のプランに切り替えます。",
+        "start": "サブスクリプションは今日から始まります。"
+      },
+      "rows": {
+        "charge": "新しいプラン（期間の残り）",
+        "credit": "未使用分のクレジット",
+        "discount": "非営利割引",
+        "tax": "税金",
+        "due": "本日のお支払い"
+      },
+      "creditKept": "{amount}のクレジットは次回以降の請求に使われます。",
+      "nextRenewal": "その後、{date}に{amount}。",
+      "nextRenewalNoDate": "その後、期間ごとに{amount}。",
+      "taxNote": "税金は、組織の請求情報をもとに請求プロバイダーが計算します。",
+      "removedTitle": "{count, plural, other {# 個のモジュールがオフになります}}",
+      "removedBody": "データは保持されます。これらを含むプランに変更すれば、元のまま戻ります。",
+      "confirmRemoved": "{count, plural, other {これらのモジュールがオフになることを理解しました}}",
+      "confirmError": "続けるには、オフになるモジュールを確認してください。",
+      "confirm": "変更を確定",
+      "cancel": "今のプランのままにする",
+      "doneTitle": "プラン変更を送信しました",
+      "doneBody": "請求プロバイダーが変更を確認しました。プランとモジュールは下に更新されています。",
+      "errorTitle": "プランは変更されませんでした",
+      "errors": {
+        "billing_off": "この組織では請求が有効になっていません。",
+        "same_plan": "すでにこのプランをご利用中です。",
+        "validation_failed": "提供されているプランから選んでください。",
+        "provider": "請求プロバイダーが変更を受け付けませんでした。請求は発生していません。もう一度お試しください。",
+        "forbidden": "プランを変更できるのはオーナーと管理者だけです。",
+        "other": "問題が発生しました。何も変更されていません。"
+      }
+    }
   },
   "billingPortal": {
     "eyebrow": "テスト請求",
@@ -12960,7 +13028,11 @@
     "switch": "プランを変更",
     "cancel": "サブスクリプションを解約",
     "back": "変更せずに戻る",
-    "chooseError": "変更先のプランを選択してください。"
+    "chooseError": "変更先のプランを選択してください。",
+    "noSubscriptionError": "この顧客にはまだサブスクリプションがありません。先にプランを選んでください。",
+    "renewalLegend": "更新",
+    "failRenewal": "更新の支払いを失敗させる",
+    "stopRetrying": "支払いの再試行を止める"
   },
   "seatingLibrary": {
     "title": "座席表ライブラリ",
@@ -15403,5 +15475,47 @@
       "archived": "アーカイブ済み"
     },
     "refreshedAt": "更新日時"
+  },
+  "billingUsage": {
+    "title": "使用量",
+    "subtitle": "組織がメーター別に使用した量：メッセージ、AIクレジット、スキャン端末。",
+    "breadcrumb": "パンくずリスト",
+    "period": "今月：{start}〜{end}（{zone}）",
+    "filterLabel": "メーター",
+    "allMeters": "すべてのメーター",
+    "meter": {
+      "email": "メール",
+      "sms": "SMS",
+      "whatsapp": "WhatsApp",
+      "ai_credits": "AIクレジット",
+      "devices": "スキャン端末"
+    },
+    "unit": {
+      "email": "{count, plural, other {# 通のメールを送信}}",
+      "sms": "{count, plural, other {# セグメントのSMS}}",
+      "whatsapp": "{count, plural, other {# 件のメッセージを送信}}",
+      "ai_credits": "{count, plural, other {# クレジットを使用}}",
+      "devices": "{count, plural, other {# 台の端末を登録}}"
+    },
+    "reportingTitle": "使用量は請求プロバイダーに送信されます",
+    "reportingBody": "{count, plural, =0 {これまでの分はすべて送信済みです。} other {# 件の記録が送信待ちです。}}",
+    "countingTitle": "使用量は記録されますが、請求はありません",
+    "countingBody": "この組織では請求が有効になっていないため、使用量はここで記録されるだけです。",
+    "currentTitle": "今月",
+    "currentDescription": "組織のタイムゾーンで集計しています。",
+    "historyTitle": "過去の月",
+    "historyDescription": "使用があった直近12か月。",
+    "emptyTitle": "まだ使用量はありません",
+    "emptyBody": "メールやSMSを送信したり、AIで下書きしたり、スキャン端末を登録したりすると、ここに使用量が表示されます。",
+    "historyEmpty": "過去の月に使用はありません。",
+    "month": "月"
+  },
+  "billingBanner": {
+    "label": "請求",
+    "graceTitle": "サブスクリプションの支払いが完了しませんでした",
+    "graceBody": "{date}まではすべて使えます。その後はお支払いまで組織が読み取り専用になります。",
+    "readOnlyTitle": "この組織は読み取り専用です",
+    "readOnlyBody": "サブスクリプションの支払いに失敗しました。何も削除されていません。閲覧、エクスポート、チケットのスキャンはできますが、お支払いまで変更は停止しています。",
+    "action": "プランと請求"
   }
 }

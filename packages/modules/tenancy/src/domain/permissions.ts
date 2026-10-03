@@ -96,6 +96,11 @@ export const PERMISSIONS = [
   'integrations:manage',
   /** An agency org's Clients | Events | Marketing | Reports pages, read from its snapshots (M6.7a). */
   'agency:read',
+  /**
+   * Change the org's subscription plan and pay a failed renewal (M6.6b). Owners and admins; finance
+   * sees the plan and usage (`billing:read`) but doesn't change it.
+   */
+  'billing:manage',
 ] as const;
 export type Permission = (typeof PERMISSIONS)[number];
 

@@ -769,7 +769,8 @@
     "reference": "参考编号：{id}",
     "rateLimitedRetry": "尝试次数过多。请在 {minutes, plural, other {# 分钟}}后重试。",
     "impersonation_blocked": "以成员身份操作的工作人员无法执行此操作：退款、付款、导出、删除和身份确认均已关闭。",
-    "read_only_freeze": "计划维护期间更改已暂停。未保存任何内容；请在维护结束后重试。"
+    "read_only_freeze": "计划维护期间更改已暂停。未保存任何内容；请在维护结束后重试。",
+    "read_only_billing": "在订阅付款之前，此组织为只读。没有保存或删除任何内容。"
   },
   "notFound": {
     "title": "页面未找到",
@@ -12950,7 +12951,74 @@
       "ai_seating": "AI 排座",
       "analytics_pro": "高级分析"
     },
-    "findOwner": "查找所有者或管理员"
+    "findOwner": "查找所有者或管理员",
+    "usageLink": "用量",
+    "renewalReceived": "已收到续订更新",
+    "dunning": {
+      "graceTitle": "你的订阅付款未成功",
+      "graceBody": "在 {date} 之前一切照常。请在此之前付款以继续进行更改；之后组织将变为只读，直到付款为止。",
+      "readOnlyTitle": "此组织为只读",
+      "readOnlyBody": "订阅付款失败，因此更改已暂停。没有删除任何内容：你仍然可以查看所有内容、导出数据，并在入口扫描门票。付款后可立即恢复更改。",
+      "payNow": "立即付款",
+      "askOwner": "请让此组织的所有者或管理员付款。",
+      "paidTitle": "已收到付款",
+      "paidBody": "谢谢。组织中的所有人都可以再次进行更改。",
+      "declinedTitle": "付款未成功",
+      "declinedBody": "没有任何更改。请检查你在账单服务商处登记的银行卡，然后重试。",
+      "payError": "无法开始付款。请稍后重试。"
+    },
+    "change": {
+      "title": "更改套餐",
+      "description": "升级和降级立即生效。你只需为本计费周期的剩余时间付款或获得抵扣。",
+      "discountCharity": "你已验证的慈善机构资料让你在所有套餐上享受 {percent}% 折扣。",
+      "discountStaff": "你的组织在所有套餐上享受 {percent}% 的非营利折扣。",
+      "legend": "套餐",
+      "offer": "{plan}：{interval, select, year {每年} other {每月}} {price}",
+      "direction": {
+        "upgrade": "升级",
+        "downgrade": "降级",
+        "switch": "切换",
+        "start": "开始"
+      },
+      "turnsOff": "{count, plural, other {将关闭 # 个模块}}",
+      "chooseError": "请选择要预览的套餐。",
+      "preview": "预览更改",
+      "previewTitle": "更改为{plan}",
+      "previewLead": {
+        "upgrade": "你正在升级。以下是你今天为本计费周期剩余时间支付的金额。",
+        "downgrade": "你正在降级。当前套餐未使用的时间将作为抵扣额度。",
+        "switch": "你将切换到价格相同的套餐。",
+        "start": "你的订阅从今天开始。"
+      },
+      "rows": {
+        "charge": "新套餐，周期剩余时间",
+        "credit": "未使用时间的抵扣",
+        "discount": "非营利折扣",
+        "tax": "税费",
+        "due": "今日应付"
+      },
+      "creditKept": "{amount} 的抵扣额度将保留用于之后的账单。",
+      "nextRenewal": "之后于 {date} 支付 {amount}。",
+      "nextRenewalNoDate": "之后每个周期 {amount}。",
+      "taxNote": "税费由账单服务商根据你组织的账单信息计算。",
+      "removedTitle": "{count, plural, other {将关闭 # 个模块}}",
+      "removedBody": "它们的数据会保留。如果你更改为包含它们的套餐，它们会原样恢复。",
+      "confirmRemoved": "{count, plural, other {我了解这些模块将被关闭}}",
+      "confirmError": "请确认将关闭的模块后继续。",
+      "confirm": "确认更改",
+      "cancel": "保留我的套餐",
+      "doneTitle": "已提交套餐更改",
+      "doneBody": "你的账单服务商已确认更改。你的套餐和模块已在下方更新。",
+      "errorTitle": "套餐未更改",
+      "errors": {
+        "billing_off": "此组织未启用账单。",
+        "same_plan": "你已在使用此套餐。",
+        "validation_failed": "请选择提供的套餐之一。",
+        "provider": "账单服务商未接受此更改。未扣任何费用；请重试。",
+        "forbidden": "只有所有者和管理员可以更改套餐。",
+        "other": "出了点问题。没有任何更改。"
+      }
+    }
   },
   "billingPortal": {
     "eyebrow": "测试计费",
@@ -12960,7 +13028,11 @@
     "switch": "更换套餐",
     "cancel": "取消订阅",
     "back": "不做更改并返回",
-    "chooseError": "请选择要更换到的套餐。"
+    "chooseError": "请选择要更换到的套餐。",
+    "noSubscriptionError": "此客户还没有订阅。请先选择套餐。",
+    "renewalLegend": "续订",
+    "failRenewal": "让续订付款失败",
+    "stopRetrying": "停止重试付款"
   },
   "seatingLibrary": {
     "title": "座位图库",
@@ -15403,5 +15475,47 @@
       "archived": "已归档"
     },
     "refreshedAt": "刷新时间"
+  },
+  "billingUsage": {
+    "title": "用量",
+    "subtitle": "你的组织按计量项的使用情况：消息、AI 额度和扫描设备。",
+    "breadcrumb": "面包屑导航",
+    "period": "本月：{start} 至 {end}（{zone}）",
+    "filterLabel": "计量项",
+    "allMeters": "所有计量项",
+    "meter": {
+      "email": "电子邮件",
+      "sms": "短信",
+      "whatsapp": "WhatsApp",
+      "ai_credits": "AI 额度",
+      "devices": "扫描设备"
+    },
+    "unit": {
+      "email": "{count, plural, other {已发送 # 封邮件}}",
+      "sms": "{count, plural, other {# 条短信分段}}",
+      "whatsapp": "{count, plural, other {已发送 # 条消息}}",
+      "ai_credits": "{count, plural, other {已使用 # 个额度}}",
+      "devices": "{count, plural, other {已登记 # 台设备}}"
+    },
+    "reportingTitle": "用量会发送给你的账单服务商",
+    "reportingBody": "{count, plural, =0 {目前的用量都已发送。} other {有 # 条记录等待发送。}}",
+    "countingTitle": "用量会被统计，不会收费",
+    "countingBody": "此组织未启用账单，因此用量只在这里统计。",
+    "currentTitle": "本月",
+    "currentDescription": "按你组织的时区统计。",
+    "historyTitle": "之前的月份",
+    "historyDescription": "最近 12 个有用量的月份。",
+    "emptyTitle": "暂无用量",
+    "emptyBody": "当你发送邮件或短信、用 AI 起草或登记扫描设备时，用量会显示在这里。",
+    "historyEmpty": "之前的月份没有用量。",
+    "month": "月份"
+  },
+  "billingBanner": {
+    "label": "账单",
+    "graceTitle": "你的订阅付款未成功",
+    "graceBody": "在 {date} 之前一切照常。之后组织将变为只读，直到付款为止。",
+    "readOnlyTitle": "此组织为只读",
+    "readOnlyBody": "订阅付款失败。没有删除任何内容：你可以查看、导出和扫描门票，但在付款前更改已暂停。",
+    "action": "套餐与账单"
   }
 }

@@ -4,6 +4,7 @@ import { warehouseFromEnv, warehouseIngestor } from '@yayatoh/analytics';
 import { attendeeMessageMailer } from '@yayatoh/attendees';
 import { contactSignalsSubscriber, participationProjector } from '@yayatoh/audiences';
 import { journeySubscribers } from '@yayatoh/automations';
+import { billingUsageMeter, nonprofitDiscountFromCharity } from '@yayatoh/billing';
 import { campaignsTimeline } from '@yayatoh/campaigns';
 import {
   chatReportSignals,
@@ -215,6 +216,10 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     pledgeMailer({ notifier, appOrigin }),
     // M6.7a: a client's grant snapshots it for its agency at once (and a revoke removes it).
     agencySnapshotSubscriber,
+    // M6.6b: the billing meters (messaging, AI credits, devices) count usage from the outbox, and a
+    // verified charity profile gives the org the nonprofit discount.
+    billingUsageMeter(),
+    nonprofitDiscountFromCharity(),
   ];
 }
 

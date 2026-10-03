@@ -777,3 +777,11 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **Revoking during a cutover freeze** waits for the freeze to end, because the freeze refuses every command except scans and provider completions. Say if revoke should be allowed during a freeze.
 - [ ] **Snapshots refresh** when a grant changes and when the agency clicks "Refresh numbers". A scheduled refresh is listed under "Later". Gross sales show only for clients who opted in.
 - [ ] **Agency terms (`legal-copy`):** the agency agreement terms (grants, no commission in v1) are still to be written (phase-6 plan §5).
+
+## M6.6b — meters, plan changes and dunning (2026-10-03, pending owner)
+- [ ] **Grace period and who is read-only.** A failed renewal gives **14 days** of grace (Stripe's default retry window), then the org is read-only until it pays; it is read-only at once if Stripe stops retrying. Read-only means the org's **members and API keys** can't change anything; **ticket buyers, guests, speaker/exhibitor portals and the door keep working**, and members can still look, export, pay, change plan and use their personal settings. Nothing is ever deleted. Confirm, or choose a different grace or a stricter rule (e.g. pause ticket sales too). Labels: `payments`, `tenancy`.
+- [ ] **Nonprofit discount: 20 % off the plan** (research figure), automatic for orgs with a verified charity profile (M4.8b), or by staff for others (churches, associations). Applies to the plan price only, not metered usage. Confirm the percentage and scope; create the coupon `nonprofit` in Stripe when billing goes live.
+- [ ] **Meters to create in Stripe** when billing goes live: `yayatoh_email`, `yayatoh_sms` (segments), `yayatoh_whatsapp`, `yayatoh_ai_credits` (refunds count negative), `yayatoh_devices` (enrollments), all "sum"; then their prices (D22, D16, D12). Usage before an org's first subscription is never billed.
+- [ ] **Stripe Tax**: previews, plan changes and new subscriptions ask Stripe for automatic tax; turn on Stripe Tax and register where needed. Dev and CI use a flat 8 % placeholder.
+- [ ] **Who changes the plan**: owners and admins (new permission `billing:manage`); finance sees plan and usage only. Confirm.
+

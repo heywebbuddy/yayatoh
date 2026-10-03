@@ -6410,7 +6410,7 @@
             }
           },
           "403": {
-            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -6485,7 +6485,7 @@
             }
           },
           "403": {
-            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -6567,7 +6567,7 @@
             }
           },
           "403": {
-            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -6644,7 +6644,7 @@
             }
           },
           "403": {
-            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -6714,7 +6714,7 @@
             }
           },
           "403": {
-            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -6791,7 +6791,7 @@
             }
           },
           "403": {
-            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -6868,7 +6868,7 @@
             }
           },
           "403": {
-            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -8044,7 +8044,7 @@
             }
           },
           "403": {
-            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -8177,7 +8177,7 @@
             }
           },
           "403": {
-            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -8310,7 +8310,7 @@
             }
           },
           "403": {
-            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -8430,7 +8430,7 @@
             }
           },
           "403": {
-            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -8563,7 +8563,7 @@
             }
           },
           "403": {
-            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -8683,7 +8683,7 @@
             }
           },
           "403": {
-            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -8816,7 +8816,7 @@
             }
           },
           "403": {
-            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -8925,7 +8925,7 @@
             }
           },
           "403": {
-            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -9047,7 +9047,7 @@
             }
           },
           "403": {
-            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -9156,7 +9156,7 @@
             }
           },
           "403": {
-            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -9251,7 +9251,7 @@
             }
           },
           "403": {
-            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -9370,7 +9370,7 @@
             }
           },
           "403": {
-            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -9485,7 +9485,7 @@
             }
           },
           "403": {
-            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -9621,7 +9621,7 @@
             }
           },
           "403": {
-            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -9747,7 +9747,7 @@
             }
           },
           "403": {
-            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -9895,7 +9895,7 @@
             }
           },
           "403": {
-            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -10031,7 +10031,7 @@
             }
           },
           "403": {
-            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -10157,7 +10157,7 @@
             }
           },
           "403": {
-            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -10315,7 +10315,7 @@
             }
           },
           "403": {
-            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -10567,7 +10567,7 @@
             }
           },
           "403": {
-            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -10673,7 +10673,7 @@
             }
           },
           "403": {
-            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -10801,7 +10801,7 @@
             }
           },
           "403": {
-            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -10981,7 +10981,7 @@
             }
           },
           "403": {
-            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -11098,7 +11098,7 @@
             }
           },
           "403": {
-            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -11218,7 +11218,7 @@
             }
           },
           "403": {
-            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -11346,7 +11346,7 @@
             }
           },
           "403": {
-            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -11504,7 +11504,7 @@
             }
           },
           "403": {
-            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -11662,7 +11662,7 @@
             }
           },
           "403": {
-            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -11820,7 +11820,7 @@
             }
           },
           "403": {
-            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -11978,7 +11978,7 @@
             }
           },
           "403": {
-            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -12136,7 +12136,7 @@
             }
           },
           "403": {
-            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -12288,7 +12288,7 @@
             }
           },
           "403": {
-            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -12415,7 +12415,7 @@
             }
           },
           "403": {
-            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
             "content": {
               "application/problem+json": {
                 "schema": {

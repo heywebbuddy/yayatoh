@@ -13,6 +13,80 @@ export interface BillingProvider {
   createCustomer(i: { orgId: string; idempotencyKey: string }): Promise<{ customerId: string }>;
   /** Verify a webhook on its raw body and normalize it; throws when the signature is wrong. */
   verifyWebhook(rawBody: string, headers: Headers): Promise<BillingEvent>;
+  /** M6.6b: what changing (or starting) the subscription would cost now (the invoice preview). */
+  previewPlanChange(i: PlanChangeRequest): Promise<ProviderChangePreview>;
+  /**
+   * M6.6b: change the subscription's price with proration (or start one). The provider's webhooks,
+   * not this call's answer, then move the org's plan and modules.
+   */
+  changePlan(i: PlanChangeRequest & { idempotencyKey: string }): Promise<{ subscriptionId: string }>;
+  /** M6.6b: pay the subscription's open invoice now (after a failed renewal). */
+  payOutstanding(i: {
+    customerId: string;
+    subscription: CurrentSubscription;
+    idempotencyKey: string;
+  }): Promise<{ paid: boolean }>;
+  /** M6.6b: one usage record to a meter; `identifier` deduplicates retries at the provider. */
+  reportUsage(i: UsageReport): Promise<void>;
+  /** M6.6b: put the nonprofit coupon on the subscription, or take it off (`coupon: null`). */
+  setDiscount(i: { subscriptionId: string; coupon: CouponId | null; idempotencyKey: string }): Promise<void>;
+}
+
+/** Meters (M6.6b, P6-7): messaging per channel (D16), AI credits (D12), Scan PWA devices. */
+export const METERS = ['email', 'sms', 'whatsapp', 'ai_credits', 'devices'] as const;
+export type Meter = (typeof METERS)[number];
+
+/** The provider's meter event name for a meter (`yayatoh_sms`). */
+export const meterEventName = (m: Meter) => `yayatoh_${m}`;
+
+/** Coupons the platform applies (M6.6b): the nonprofit discount. */
+export type CouponId = 'nonprofit';
+
+/** The org's live subscription as we last heard it from the provider's webhooks. */
+export interface CurrentSubscription {
+  readonly id: string;
+  readonly priceLookupKey: string | null;
+  readonly currentPeriodEnd: Date | null;
+}
+
+export interface PlanChangeRequest {
+  readonly customerId: string;
+  /** The live subscription, or null to start one. */
+  readonly subscription: CurrentSubscription | null;
+  /** The target price's lookup key (`tier_pro_month_usd`). */
+  readonly priceLookupKey: string;
+  /** Prorate as of this time (the preview and the change use the same instant). */
+  readonly at: Date;
+  /** The coupon the customer has (the provider knows it too; the fake needs to be told). */
+  readonly coupon: CouponId | null;
+}
+
+/** The provider's invoice preview for a plan change, in integer minor units. */
+export interface ProviderChangePreview {
+  readonly currency: string;
+  /** Unused time on the current price, credited. */
+  readonly creditMinor: number;
+  /** The rest of the period on the new price. */
+  readonly chargeMinor: number;
+  readonly discountMinor: number;
+  /** Tax as the provider's tax setting computes it (Stripe Tax; a flat rate in the fake). */
+  readonly taxMinor: number;
+  /** Charged now. */
+  readonly amountDueMinor: number;
+  /** A downgrade's leftover credit, kept for the next invoices. */
+  readonly creditBalanceMinor: number;
+  readonly nextRenewalMinor: number;
+  readonly nextRenewalAt: Date | null;
+}
+
+export interface UsageReport {
+  readonly customerId: string;
+  readonly meter: Meter;
+  /** Units (a refund of AI credits is negative). */
+  readonly quantity: number;
+  /** Deduplication key at the provider (our usage record's id). */
+  readonly identifier: string;
+  readonly timestamp: Date;
 }
 
 export const BILLING_PROVIDERS = ['fake', 'stripe'] as const;

@@ -769,7 +769,8 @@
     "reference": "Referencia: {id}",
     "rateLimitedRetry": "Demasiados intentos. Vuelve a intentarlo en {minutes, plural, one {# minuto} other {# minutos}}.",
     "impersonation_blocked": "El personal que actúa como miembro no puede hacer esto: los reembolsos, pagos, exportaciones, eliminaciones y confirmaciones están desactivados.",
-    "read_only_freeze": "Los cambios están en pausa durante el mantenimiento programado. No se guardó nada; inténtalo de nuevo cuando termine."
+    "read_only_freeze": "Los cambios están en pausa durante el mantenimiento programado. No se guardó nada; inténtalo de nuevo cuando termine.",
+    "read_only_billing": "Esta organización está en solo lectura hasta que se pague su suscripción. No se guardó ni se borró nada."
   },
   "notFound": {
     "title": "Página no encontrada",
@@ -12950,7 +12951,74 @@
       "ai_seating": "Asientos con IA",
       "analytics_pro": "Analítica avanzada"
     },
-    "findOwner": "Buscar un propietario o administrador"
+    "findOwner": "Buscar un propietario o administrador",
+    "usageLink": "Uso",
+    "renewalReceived": "Actualización de renovación recibida",
+    "dunning": {
+      "graceTitle": "El pago de tu suscripción no se completó",
+      "graceBody": "Todo funciona con normalidad hasta el {date}. Paga antes para seguir haciendo cambios; después, la organización pasa a solo lectura hasta que se pague.",
+      "readOnlyTitle": "Esta organización está en solo lectura",
+      "readOnlyBody": "El pago de la suscripción falló, así que los cambios están en pausa. No se ha borrado nada: puedes ver todo, exportar tus datos y escanear entradas en la puerta. Paga para recuperar los cambios al instante.",
+      "payNow": "Pagar ahora",
+      "askOwner": "Pide a un propietario o administrador de esta organización que pague.",
+      "paidTitle": "Pago recibido",
+      "paidBody": "Gracias. Los cambios vuelven a estar activos para todos en la organización.",
+      "declinedTitle": "El pago no se completó",
+      "declinedBody": "No cambió nada. Revisa la tarjeta registrada en tu proveedor de facturación e inténtalo de nuevo.",
+      "payError": "No se pudo iniciar el pago. Inténtalo de nuevo en un momento."
+    },
+    "change": {
+      "title": "Cambiar de plan",
+      "description": "Las mejoras y reducciones se aplican al instante. Solo pagas o recibes crédito por lo que queda de este periodo de facturación.",
+      "discountCharity": "Tu perfil de organización benéfica verificado te da un {percent} % de descuento en todos los planes.",
+      "discountStaff": "Tu organización tiene un descuento sin ánimo de lucro del {percent} % en todos los planes.",
+      "legend": "Planes",
+      "offer": "{plan}: {price} {interval, select, year {al año} other {al mes}}",
+      "direction": {
+        "upgrade": "Mejora",
+        "downgrade": "Reducción",
+        "switch": "Cambio",
+        "start": "Inicio"
+      },
+      "turnsOff": "{count, plural, one {Desactiva # módulo} other {Desactiva # módulos}}",
+      "chooseError": "Elige un plan para ver la vista previa.",
+      "preview": "Ver vista previa",
+      "previewTitle": "Cambiar a {plan}",
+      "previewLead": {
+        "upgrade": "Estás mejorando tu plan. Esto es lo que pagas hoy por el resto de este periodo de facturación.",
+        "downgrade": "Estás reduciendo tu plan. El tiempo no usado de tu plan actual se abona.",
+        "switch": "Cambias a un plan con el mismo precio.",
+        "start": "Tu suscripción empieza hoy."
+      },
+      "rows": {
+        "charge": "Nuevo plan, resto del periodo",
+        "credit": "Crédito por el tiempo no usado",
+        "discount": "Descuento sin ánimo de lucro",
+        "tax": "Impuestos",
+        "due": "A pagar hoy"
+      },
+      "creditKept": "Se guardan {amount} de crédito para tus próximas facturas.",
+      "nextRenewal": "Después, {amount} el {date}.",
+      "nextRenewalNoDate": "Después, {amount} cada periodo.",
+      "taxNote": "Los impuestos los calcula el proveedor de facturación a partir de los datos de facturación de tu organización.",
+      "removedTitle": "{count, plural, one {Se desactiva # módulo} other {Se desactivan # módulos}}",
+      "removedBody": "Sus datos se conservan. Vuelven tal como estaban si cambias a un plan que los incluya.",
+      "confirmRemoved": "{count, plural, one {Entiendo que este módulo se desactiva} other {Entiendo que estos módulos se desactivan}}",
+      "confirmError": "Confirma los módulos que se desactivan para continuar.",
+      "confirm": "Confirmar cambio",
+      "cancel": "Mantener mi plan",
+      "doneTitle": "Cambio de plan enviado",
+      "doneBody": "Tu proveedor de facturación confirmó el cambio. Tu plan y tus módulos están actualizados abajo.",
+      "errorTitle": "No se cambió el plan",
+      "errors": {
+        "billing_off": "La facturación no está activa para esta organización.",
+        "same_plan": "Ya tienes este plan.",
+        "validation_failed": "Elige un plan de los que se ofrecen.",
+        "provider": "El proveedor de facturación no aceptó el cambio. No se cobró nada; inténtalo de nuevo.",
+        "forbidden": "Solo los propietarios y administradores pueden cambiar el plan.",
+        "other": "Algo salió mal. No se cambió nada."
+      }
+    }
   },
   "billingPortal": {
     "eyebrow": "Facturación de prueba",
@@ -12960,7 +13028,11 @@
     "switch": "Cambiar de plan",
     "cancel": "Cancelar la suscripción",
     "back": "Volver sin cambios",
-    "chooseError": "Elige el plan al que quieres cambiar."
+    "chooseError": "Elige el plan al que quieres cambiar.",
+    "noSubscriptionError": "Este cliente aún no tiene suscripción. Elige primero un plan.",
+    "renewalLegend": "Renovación",
+    "failRenewal": "Hacer fallar el pago de renovación",
+    "stopRetrying": "Dejar de reintentar el pago"
   },
   "seatingLibrary": {
     "title": "Biblioteca de planos",
@@ -15403,5 +15475,47 @@
       "archived": "Archivado"
     },
     "refreshedAt": "Actualizado"
+  },
+  "billingUsage": {
+    "title": "Uso",
+    "subtitle": "Lo que usó tu organización, por medidor: mensajes, créditos de IA y dispositivos de escaneo.",
+    "breadcrumb": "Ruta de navegación",
+    "period": "Este mes: del {start} al {end} ({zone})",
+    "filterLabel": "Medidores",
+    "allMeters": "Todos los medidores",
+    "meter": {
+      "email": "Correo",
+      "sms": "SMS",
+      "whatsapp": "WhatsApp",
+      "ai_credits": "Créditos de IA",
+      "devices": "Dispositivos de escaneo"
+    },
+    "unit": {
+      "email": "{count, plural, one {# correo enviado} other {# correos enviados}}",
+      "sms": "{count, plural, one {# segmento de texto} other {# segmentos de texto}}",
+      "whatsapp": "{count, plural, one {# mensaje enviado} other {# mensajes enviados}}",
+      "ai_credits": "{count, plural, one {# crédito usado} other {# créditos usados}}",
+      "devices": "{count, plural, one {# dispositivo registrado} other {# dispositivos registrados}}"
+    },
+    "reportingTitle": "El uso se envía a tu proveedor de facturación",
+    "reportingBody": "{count, plural, =0 {Todo lo registrado hasta ahora ya se envió.} one {# registro está pendiente de envío.} other {# registros están pendientes de envío.}}",
+    "countingTitle": "El uso se cuenta, no se cobra nada",
+    "countingBody": "La facturación no está activa para esta organización, así que el uso solo se cuenta aquí.",
+    "currentTitle": "Este mes",
+    "currentDescription": "Contado en la zona horaria de tu organización.",
+    "historyTitle": "Meses anteriores",
+    "historyDescription": "Los últimos 12 meses con uso.",
+    "emptyTitle": "Aún no hay uso",
+    "emptyBody": "El uso aparece aquí cuando envías correos o textos, redactas con IA o registras dispositivos de escaneo.",
+    "historyEmpty": "Sin uso en meses anteriores.",
+    "month": "Mes"
+  },
+  "billingBanner": {
+    "label": "Facturación",
+    "graceTitle": "El pago de tu suscripción no se completó",
+    "graceBody": "Todo funciona hasta el {date}. Después, la organización pasa a solo lectura hasta que se pague.",
+    "readOnlyTitle": "Esta organización está en solo lectura",
+    "readOnlyBody": "El pago de la suscripción falló. No se ha borrado nada: puedes ver, exportar y escanear entradas, pero los cambios están en pausa hasta que se pague.",
+    "action": "Plan y facturación"
   }
 }

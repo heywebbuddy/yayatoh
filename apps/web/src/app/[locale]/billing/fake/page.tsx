@@ -3,7 +3,7 @@ import { Alert, Button, buttonClass, Card, Label, PageHeader, Radio } from '@yay
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { testBillingSecret } from '@/server/billing.ts';
-import { changeTestPlan } from './actions.ts';
+import { changeTestPlan, simulateRenewal } from './actions.ts';
 
 /**
  * Stand-in for the billing provider's portal (M6.6a; development and CI only, a 404 elsewhere).
@@ -32,6 +32,7 @@ export default async function FakeBillingPortal({
     <main id="main" className="mx-auto flex min-h-dvh max-w-md flex-col justify-center gap-6 px-6 py-16">
       <PageHeader eyebrow={<Label>{t('eyebrow')}</Label>} title={t('title')} description={t('description')} />
       {sp.error === 'choose' ? <Alert tone="danger" title={t('chooseError')} /> : null}
+      {sp.error === 'nosub' ? <Alert tone="danger" title={t('noSubscriptionError')} /> : null}
       <Card size="panel" className="flex flex-col gap-4">
         <form action={changeTestPlan.bind(null, p, 'switch')} className="flex flex-col gap-4">
           <fieldset className="m-0 flex flex-col gap-1 border-0 p-0">
@@ -55,6 +56,20 @@ export default async function FakeBillingPortal({
             {t('cancel')}
           </Button>
         </form>
+        {/* M6.6b: what the provider sends when a renewal's payment fails, then after its last retry. */}
+        <fieldset className="m-0 flex flex-col gap-2 border-0 p-0">
+          <legend className="mb-2 text-label uppercase text-ink-2">{t('renewalLegend')}</legend>
+          <form action={simulateRenewal.bind(null, p, 'fail')}>
+            <Button type="submit" variant="secondary" className="w-full">
+              {t('failRenewal')}
+            </Button>
+          </form>
+          <form action={simulateRenewal.bind(null, p, 'give_up')}>
+            <Button type="submit" variant="secondary" className="w-full">
+              {t('stopRetrying')}
+            </Button>
+          </form>
+        </fieldset>
         <a href={sp.return} className={buttonClass('ghost', 'md', 'w-full')}>
           {t('back')}
         </a>

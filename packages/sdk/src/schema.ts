@@ -3736,7 +3736,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -3799,7 +3799,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -3864,7 +3864,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -3931,7 +3931,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -4000,7 +4000,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -4544,7 +4544,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -4609,7 +4609,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -4697,7 +4697,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -4838,7 +4838,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -4910,7 +4910,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -4985,7 +4985,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -5085,7 +5085,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -5160,7 +5160,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -5257,7 +5257,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -5334,7 +5334,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -5441,7 +5441,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -5523,7 +5523,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -5602,7 +5602,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -5674,7 +5674,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -5751,7 +5751,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -5855,7 +5855,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -5959,7 +5959,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -6063,7 +6063,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -6167,7 +6167,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -6271,7 +6271,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -6380,7 +6380,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -6462,7 +6462,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -6537,7 +6537,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -6610,7 +6610,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -6714,7 +6714,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -6796,7 +6796,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -6875,7 +6875,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -6952,7 +6952,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -7022,7 +7022,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -7099,7 +7099,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -7196,7 +7196,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -7273,7 +7273,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -7377,7 +7377,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -7484,7 +7484,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -7561,7 +7561,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
