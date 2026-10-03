@@ -64,7 +64,8 @@ async function eventReferencesTx(tx: TenantTx, eventId: string): Promise<Set<str
 
 /**
  * What to ask the provider for (M4.8g): the connected accounts the event's gifts were charged on
- * (and the org's current one), and the window from a day before its first gift to a day ahead.
+ * (and the org's current one), and the window from a week before its first gift to a day ahead
+ * (a gift's charge can be dated before the gift row by the provider's clock or a retried webhook).
  */
 export const donationReconTargetQuery = tenantQuery({
   name: 'donations.reconTarget',
@@ -87,7 +88,7 @@ export const donationReconTargetQuery = tenantQuery({
     const start = first?.at ? new Date(first.at) : ctx.now;
     return {
       accountIds: [...accounts].sort(),
-      from: new Date(start.getTime() - DAY_MS),
+      from: new Date(start.getTime() - 7 * DAY_MS),
       to: new Date(ctx.now.getTime() + DAY_MS),
     };
   },
