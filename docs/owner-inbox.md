@@ -547,3 +547,12 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **Who records offline payments and voids invoices:** `orders:refund` (owners, admins, finance), the existing money permission; box office and managers can't. Confirm, or ask for a separate `invoices:manage` permission.
 - [ ] **Invoice wording (`legal-copy`):** the invoice email, the PDF (terms line "Net 30, due no later than 7 days before the event", "Issued by {org} through Yayatoh"), the buyer's invoice page and the reminder template (13 locales). Late-payment wording is deliberately neutral (P5-5: the registration stands). Our PDF is not a tax invoice (no tax lines or seller tax ids yet).
 - [ ] **Door and badge overrides:** any scanner may admit a balance-due ticket with a reason (audited); badge desk staff (`attendees:write`) may print one. Confirm, or restrict to supervisors.
+
+## M6.7a — agency v1 (2026-10-03, pending owner)
+- [ ] **What a grant can carry:** a ceiling of `manager`, `marketing` or `viewer`, never owner, admin or finance. Even "Manage events" leaves out refunds, box-office sales, attendee exports, members, API keys, settings, the audit log and privacy requests. The client's money opt-in adds read-only finance and billing pages. Confirm, or widen it, for example to allow attendee exports.
+- [ ] **Money tables** (rows refused to agency users without the opt-in): every `payments` table, plus invoices and credit notes. Plans, modules and fee terms stay readable so the console keeps working. Confirm the list.
+- [ ] **Who in the agency gets access:** every member of the agency org except collaborators. Per-team or per-person grants wait for M6.8b.
+- [ ] **Agency orgs** are orgs of kind `agency` with the `agency` entitlement. Staff switch the entitlement on per org in the admin console (P6-13). Agency sign-up has no self-serve path yet.
+- [ ] **Revoking during a cutover freeze** waits for the freeze to end, because the freeze refuses every command except scans and provider completions. Say if revoke should be allowed during a freeze.
+- [ ] **Snapshots refresh** when a grant changes and when the agency clicks "Refresh numbers". A scheduled refresh is listed under "Later". Gross sales show only for clients who opted in.
+- [ ] **Agency terms (`legal-copy`):** the agency agreement terms (grants, no commission in v1) are still to be written (phase-6 plan §5).
