@@ -7,12 +7,13 @@ import {
 } from '@yayatoh/donations';
 import { executeQuery, formatMoney, money, utcToZonedInput } from '@yayatoh/kernel';
 import { catchUpSubscriber } from '@yayatoh/platform';
-import { Alert, Card, EmptyState, PageHeader, StatCard, StatusPill, Table } from '@yayatoh/ui';
+import { Alert, buttonClass, Card, EmptyState, PageHeader, StatCard, StatusPill, Table } from '@yayatoh/ui';
 import { HandCoins } from 'lucide-react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Crumbs } from '@/components/crumbs.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import { RaiseActionButton, RaiseAnnouncer } from '../paddle-raise/action-button.tsx';
@@ -124,6 +125,11 @@ export default async function PledgesPage({
             icon={<HandCoins strokeWidth={2} />}
             title={t('emptyTitle')}
             description={t('emptyDescription')}
+            action={
+              <Link href={`${base}/paddle-raise`} className={buttonClass('primary', 'md')}>
+                {tn('donations')}
+              </Link>
+            }
           />
         ) : (
           <>

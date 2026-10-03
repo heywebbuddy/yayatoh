@@ -1,12 +1,13 @@
 import { boothSize } from '@yayatoh/floorplan';
 import { executeQuery } from '@yayatoh/kernel';
 import { type BoothDto, boothPlanQuery } from '@yayatoh/program';
-import { Alert, Button, Card, Chip, EmptyState, PageHeader } from '@yayatoh/ui';
+import { Alert, Button, buttonClass, Card, Chip, EmptyState, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { BoothDragAssign } from '@/components/booth-drag-assign.tsx';
 import { BoothMap } from '@/components/booth-map.tsx';
 import { Crumbs } from '@/components/crumbs.tsx';
 import { type FieldSpec, ProgramForm, ScheduleWarning } from '@/components/program-form.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import { boothWarningMessages } from '@/server/booths.ts';
 import { ports } from '@/server/ports.ts';
 import { loadProgramPage } from '@/server/program.ts';
@@ -129,7 +130,24 @@ export default async function BoothsPage({ params }: Params) {
           {t('mapHeading')}
         </h2>
         {plan.booths.length === 0 ? (
-          <EmptyState title={t('emptyTitle')} description={t('emptyDescription')} />
+          <EmptyState
+            title={t('emptyTitle')}
+            description={canWrite ? t('emptyDescription') : t('emptyViewer')}
+            action={
+              canWrite ? (
+                <Link
+                  href={`/o/${org}/e/${event}/exhibitors/booths#adding-booth`}
+                  className={buttonClass('primary', 'md')}
+                >
+                  {t('emptyAction')}
+                </Link>
+              ) : (
+                <Link href={`/o/${org}/e/${event}/exhibitors`} className={buttonClass('primary', 'md')}>
+                  {t('back')}
+                </Link>
+              )
+            }
+          />
         ) : canWrite && program.exhibitors.length ? (
           <BoothDragAssign
             booths={plan.booths.map((b) => ({ ...b, taken: b.exhibitors.length > 0 }))}
@@ -270,9 +288,9 @@ export default async function BoothsPage({ params }: Params) {
               )}
             </Card>
           </section>
-          <section aria-labelledby="add-booth-heading">
+          <section id="adding-booth" aria-labelledby="adding-booth-heading">
             <Card size="panel" className="flex flex-col gap-3">
-              <h2 id="add-booth-heading" className="text-section">
+              <h2 id="adding-booth-heading" className="text-section">
                 {t('addBooth')}
               </h2>
               <ProgramForm

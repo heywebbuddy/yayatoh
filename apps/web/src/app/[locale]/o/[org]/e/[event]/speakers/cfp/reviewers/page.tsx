@@ -1,9 +1,10 @@
 import { executeQuery } from '@yayatoh/kernel';
 import { type CfpReviewerDto, cfpOverviewQuery } from '@yayatoh/program';
-import { Alert, Card, EmptyState, StatusPill, Table } from '@yayatoh/ui';
+import { Alert, buttonClass, Card, EmptyState, StatusPill, Table } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { ActionButtonForm } from '@/components/portal-admin-forms.tsx';
 import { ProgramForm } from '@/components/program-form.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import { ports } from '@/server/ports.ts';
 import { loadProgramPage } from '@/server/program.ts';
 import { addReviewerAction, revokeReviewerAction } from '../actions.ts';
@@ -83,7 +84,21 @@ export default async function CfpReviewersPage({
         </h2>
         <p className="text-caption text-ink-2">{t('reviewersHint')}</p>
         {view.reviewers.length === 0 ? (
-          <EmptyState title={t('noReviewersTitle')} description={t('noReviewersDescription')} />
+          <EmptyState
+            title={t('noReviewersTitle')}
+            description={t('noReviewersDescription')}
+            action={
+              canWrite ? (
+                <a href="#add-reviewer-heading" className={buttonClass('primary', 'md')}>
+                  {t('addReviewer')}
+                </a>
+              ) : (
+                <Link href={`/o/${org}/e/${event}/speakers/cfp`} className={buttonClass('secondary', 'md')}>
+                  {t('submissionsHeading')}
+                </Link>
+              )
+            }
+          />
         ) : (
           <Table
             caption={t('reviewersCaption')}

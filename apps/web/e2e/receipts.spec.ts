@@ -135,7 +135,7 @@ test.describe('charity profile and receipts (M4.8b)', () => {
   }) => {
     const g = await gala(page);
     await page.goto(`/o/${g.org}/settings`);
-    await page.getByRole('link', { name: 'Charity profile' }).click();
+    await page.locator('#main').getByRole('link', { name: 'Charity profile' }).click();
     await expect(page.getByRole('heading', { name: 'Charity profile', level: 1 })).toBeVisible();
     await expect(page.getByText('No charity profile yet')).toBeVisible();
     await expectAccessibleBothModes(page);

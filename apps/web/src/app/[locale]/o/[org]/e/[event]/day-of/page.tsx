@@ -49,7 +49,15 @@ export default async function DayOfPage({
     return (
       <>
         <PageHeader title={tt(navLabelKey(profile, item))} />
-        <EmptyState title={t('noAccessTitle')} description={t('noAccessDescription')} />
+        <EmptyState
+          title={t('noAccessTitle')}
+          description={t('noAccessDescription')}
+          action={
+            <Link href={`/o/${org}/e/${event}`} className={buttonClass('primary', 'md')}>
+              {tt('emptyActions.eventHome')}
+            </Link>
+          }
+        />
       </>
     );
   const sp = await searchParams;
@@ -138,7 +146,15 @@ export default async function DayOfPage({
             </form>
             {q ? (
               day.matches.length === 0 ? (
-                <EmptyState title={t('noMatchTitle')} description={t('noMatchDescription')} />
+                <EmptyState
+                  title={t('noMatchTitle')}
+                  description={t('noMatchDescription')}
+                  action={
+                    <Link href={`${base}/day-of`} className={buttonClass('secondary', 'md')}>
+                      {tt('emptyActions.clearSearch')}
+                    </Link>
+                  }
+                />
               ) : (
                 <ul className="m-0 flex list-none flex-col gap-2 p-0" aria-label={t('matches')}>
                   {day.matches.map((g) => (
@@ -189,7 +205,23 @@ export default async function DayOfPage({
             stackOnPhone
             rows={day.arrivals}
             rowKey={(r) => r.guestId}
-            empty={<EmptyState title={t('noArrivalsTitle')} description={t('noArrivalsDescription')} />}
+            empty={
+              <EmptyState
+                title={t('noArrivalsTitle')}
+                description={t('noArrivalsDescription')}
+                action={
+                  canCheckIn ? (
+                    <a href="#dayof-find" className={buttonClass('secondary', 'md')}>
+                      {t('findTitle')}
+                    </a>
+                  ) : (
+                    <Link href={base} className={buttonClass('secondary', 'md')}>
+                      {tt('emptyActions.eventHome')}
+                    </Link>
+                  )
+                }
+              />
+            }
             columns={[
               { key: 'time', header: t('colTime'), cell: (r) => time.format(r.arrivedAt) },
               {
@@ -235,7 +267,15 @@ export default async function DayOfPage({
               }
             />
           ) : day.unseated.length === 0 ? (
-            <EmptyState title={t('allSeatedTitle')} description={t('allSeatedDescription')} />
+            <EmptyState
+              title={t('allSeatedTitle')}
+              description={t('allSeatedDescription')}
+              action={
+                <Link href={`${base}/seating/guests`} className={buttonClass('secondary', 'md')}>
+                  {tt('nav.seating')}
+                </Link>
+              }
+            />
           ) : (
             <Card className="flex flex-col gap-3">
               <ul className="m-0 flex list-none flex-col gap-2 p-0" data-testid="unseated">
@@ -268,7 +308,17 @@ export default async function DayOfPage({
             stackOnPhone
             rows={day.meals}
             rowKey={(r) => r.meal ?? '∅'}
-            empty={<EmptyState title={t('noMealsTitle')} description={t('noMealsDescription')} />}
+            empty={
+              <EmptyState
+                title={t('noMealsTitle')}
+                description={t('noMealsDescription')}
+                action={
+                  <Link href={`${base}/guests`} className={buttonClass('secondary', 'md')}>
+                    {tt('nav.guests')}
+                  </Link>
+                }
+              />
+            }
             columns={[
               { key: 'meal', header: t('colMeal'), cell: (r) => r.meal ?? t('noMeal') },
               { key: 'guests', header: t('colGuests'), align: 'end', cell: (r) => n(r.guests) },
@@ -284,7 +334,15 @@ export default async function DayOfPage({
             </h2>
             <p className="text-body text-ink-2">{t('kiosksHint')}</p>
             {devices.length === 0 ? (
-              <EmptyState title={t('noDevicesTitle')} description={t('noDevicesDescription')} />
+              <EmptyState
+                title={t('noDevicesTitle')}
+                description={t('noDevicesDescription')}
+                action={
+                  <Link href={`${base}/onsite`} className={buttonClass('secondary', 'md')}>
+                    {tt('nav.onsite')}
+                  </Link>
+                }
+              />
             ) : (
               <ul className="m-0 flex list-none flex-col gap-3 p-0">
                 {devices.map((d) => (

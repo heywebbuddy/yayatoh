@@ -90,6 +90,17 @@ export default async function SponsorDeliverablesPage({ params }: Params) {
           <EmptyState
             title={t('noDeliverablesTitle')}
             description={q.sponsors.length ? t('noDeliverablesDescription') : t('noSponsorsDescription')}
+            action={
+              q.sponsors.length ? (
+                <a href="#add-deliverable-heading" className={buttonClass('primary', 'md')}>
+                  {t('addDeliverable')}
+                </a>
+              ) : (
+                <Link href={`${base}/sponsors`} className={buttonClass('primary', 'md')}>
+                  {tn('sponsors')}
+                </Link>
+              )
+            }
           />
         ) : (
           <ul className="m-0 flex list-none flex-col gap-2 p-0">

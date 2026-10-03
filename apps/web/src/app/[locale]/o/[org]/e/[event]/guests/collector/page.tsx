@@ -7,7 +7,17 @@ import {
 import { executeQuery } from '@yayatoh/kernel';
 import { qrPath } from '@yayatoh/pdf';
 import { isProfileKey, navIncludes, navLabelKey, PROFILES } from '@yayatoh/platform';
-import { Alert, Button, Card, CardHeader, EmptyState, PageHeader, Select, StatusPill } from '@yayatoh/ui';
+import {
+  Alert,
+  Button,
+  buttonClass,
+  Card,
+  CardHeader,
+  EmptyState,
+  PageHeader,
+  Select,
+  StatusPill,
+} from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { PrintButton } from '@/components/print-button.tsx';
@@ -204,7 +214,24 @@ export default async function CollectorPage({
           {t('queueTitle', { count: queue.pending.length })}
         </h2>
         {queue.pending.length === 0 ? (
-          <EmptyState title={t('emptyTitle')} description={settings.enabled ? t('emptyOn') : t('emptyOff')} />
+          <EmptyState
+            title={t('emptyTitle')}
+            description={settings.enabled ? t('emptyOn') : t('emptyOff')}
+            action={
+              settings.enabled || canWrite ? (
+                <Link
+                  href={`${base}/collector#collector-link-heading`}
+                  className={buttonClass('primary', 'md')}
+                >
+                  {settings.enabled ? t('shareLink') : t('setUpLink')}
+                </Link>
+              ) : (
+                <Link href={base} className={buttonClass('primary', 'md')}>
+                  {t('back')}
+                </Link>
+              )
+            }
+          />
         ) : (
           <ul className="m-0 flex list-none flex-col gap-4 p-0">
             {queue.pending.map((s) => (

@@ -34,7 +34,24 @@
     "breadcrumb": "Breadcrumb",
     "closeMenu": "Close menu",
     "eventSections": "Event sections",
-    "allEvents": "Events"
+    "allEvents": "Events",
+    "sections": {
+      "events": "Events",
+      "audience": "Audience & marketing",
+      "money": "Money",
+      "site": "Site & content",
+      "settings": "Settings"
+    },
+    "create": {
+      "label": "Create",
+      "event": "Event",
+      "series": "Series",
+      "template": "Template",
+      "venue": "Venue",
+      "coupon": "Coupon",
+      "page": "Page or blog post"
+    },
+    "help": "Help"
   },
   "notifications": {
     "open": "Notifications",
@@ -290,7 +307,9 @@
       "bounced": "Bounced: the address does not exist",
       "soft_bounced": "Bounced for now (mailbox full or unavailable)",
       "complained": "Marked as spam by the recipient"
-    }
+    },
+    "emptyAction": "Choose what you’re notified about",
+    "choosePreferences": "Choose what you're notified about"
   },
   "nav": {
     "home": "Home",
@@ -354,7 +373,14 @@
     "marketingAnalytics": "Marketing analytics",
     "badges": "Badges",
     "orgAnalytics": "Analytics",
-    "integrations": "Integrations"
+    "integrations": "Integrations",
+    "seatingLibrary": "Seating library",
+    "coupons": "Coupons",
+    "charity": "Charity profile",
+    "plan": "Plan & billing",
+    "webhooks": "Webhooks",
+    "sandboxes": "Sandboxes",
+    "notifications": "Notifications"
   },
   "vocab": {
     "attendee": "Attendee",
@@ -414,7 +440,11 @@
     "seriesFilter": "Filter events by series",
     "allEvents": "All events",
     "seriesEmptyTitle": "No events in {name} yet",
-    "seriesEmptyDescription": "Add an event to this series from the event's Dates page."
+    "seriesEmptyDescription": "Add an event to this series from the event's Dates page.",
+    "showEveryEvent": "Show every event",
+    "doorTitle": "Scanning happens in the Scan app",
+    "doorDescription": "Your role checks tickets at the door. Open the Scan app on this device to start.",
+    "openScan": "Open the Scan app"
   },
   "team": {
     "subtitle": "{count, plural, one {# member} other {# members}}",
@@ -459,7 +489,8 @@
     "readiness": "Event readiness",
     "readinessPercent": "{value}% ready",
     "noSalesTitle": "No sales yet",
-    "noSalesDescription": "Registrations, sales and seating appear here once tickets are on sale."
+    "noSalesDescription": "Registrations, sales and seating appear here once tickets are on sale.",
+    "toTicketsOrders": "Go to Tickets & Orders"
   },
   "kpi": {
     "registrations": "Registrations",
@@ -576,7 +607,10 @@
     "anyDistribution": "Any distribution",
     "distributionFilter": {
       "pending": "Waiting to be passed on"
-    }
+    },
+    "emptyUpload": "Upload a list from a CSV file",
+    "toTicketsOrders": "Go to Tickets & Orders",
+    "backToEvent": "Back to the event overview"
   },
   "attendeeStatus": {
     "paid": "Paid",
@@ -615,7 +649,8 @@
   },
   "section": {
     "comingTitle": "This area is being built",
-    "comingDescription": "It arrives in a later milestone. Your navigation already reflects your plan and event type."
+    "comingDescription": "It arrives in a later milestone. Your navigation already reflects your plan and event type.",
+    "backToEvent": "Back to the event overview"
   },
   "publicEvent": {
     "nav": "Event",
@@ -794,7 +829,8 @@
   },
   "orgPicker": {
     "emptyTitle": "You're not in an organization yet",
-    "emptyDescription": "Ask an owner to invite you, or wait for your invitation email."
+    "emptyDescription": "Ask an owner to invite you, or wait for your invitation email.",
+    "myTickets": "Go to my tickets"
   },
   "invite": {
     "eyebrow": "Invitation",
@@ -890,7 +926,8 @@
     "validDatesHint": "Leave all unticked to sell for every date.",
     "dates": "Dates",
     "allDates": "All dates",
-    "someDates": "{count, plural, one {# date} other {# dates}}"
+    "someDates": "{count, plural, one {# date} other {# dates}}",
+    "emptyAction": "Set up tickets"
   },
   "checkout": {
     "quantity": "Quantity",
@@ -1068,7 +1105,8 @@
     "buyer": "Buyer",
     "items": "Tickets",
     "total": "Total",
-    "status": "Status"
+    "status": "Status",
+    "emptyAction": "Open the event page"
   },
   "promo": {
     "title": "Promo codes",
@@ -1095,7 +1133,8 @@
     "resumeCode": "Resume {code}",
     "addTitle": "Add a promo code",
     "add": "Add code",
-    "added": "Promo code added."
+    "added": "Promo code added.",
+    "emptyAction": "Create a code"
   },
   "questions": {
     "title": "Checkout questions",
@@ -1130,7 +1169,8 @@
     "moveUp": "Move {label} up",
     "moveDown": "Move {label} down",
     "remove": "Remove {label}",
-    "answers": "Answers"
+    "answers": "Answers",
+    "emptyAction": "Write a question"
   },
   "checkin": {
     "title": "Check-in",
@@ -1180,7 +1220,9 @@
     "overrideNote": "Reason for admitting",
     "overrideHint": "Saved in the activity log with your name, e.g. “PO approved, payment on its way”.",
     "overrideSubmit": "Admit anyway",
-    "overrideNoteRequired": "Give a reason (at least 3 characters) to admit with a balance due."
+    "overrideNoteRequired": "Give a reason (at least 3 characters) to admit with a balance due.",
+    "backToEvent": "Back to the event",
+    "scanFirst": "Scan the first ticket"
   },
   "checkinLive": {
     "state": {
@@ -1293,7 +1335,8 @@
     "attendees": "People",
     "orders": "Orders",
     "ticketCode": "Ticket {code}",
-    "orderRef": "Ref {ref}"
+    "orderRef": "Ref {ref}",
+    "browseEvents": "Browse your events"
   },
   "bulk": {
     "formLabel": "Bulk actions",
@@ -1439,7 +1482,8 @@
       "too_many_columns": "The file has more than 50 columns.",
       "cell_too_long": "A cell is longer than 1,000 characters.",
       "unterminated_quote": "The file has an unclosed quote, so it can't be read as CSV."
-    }
+    },
+    "backToEvent": "Back to the event overview"
   },
   "distribution": {
     "title": "Send this ticket",
@@ -1560,7 +1604,8 @@
     "activityLink": "Activity log",
     "privacyLink": "Privacy requests",
     "charityLink": "Charity profile",
-    "planLink": "Plan and modules"
+    "planLink": "Plan and modules",
+    "findOwner": "Find an owner or admin"
   },
   "legal": {
     "platform": "Yayatoh",
@@ -2382,7 +2427,10 @@
       "seatNumbersHint": "Seat numbers in the chosen rows and tables, e.g. 1-4, 9. Leave it empty for all their seats.",
       "allot": "Allot seats",
       "allotted": "{count, plural, =0 {No seats changed.} one {# seat allotted.} other {# seats allotted.}}",
-      "freed": "{count, plural, =0 {No seats were in a channel.} one {# seat is open to every channel again.} other {# seats are open to every channel again.}}"
+      "freed": "{count, plural, =0 {No seats were in a channel.} one {# seat is open to every channel again.} other {# seats are open to every channel again.}}",
+      "emptyReadOnly": "Channels appear here once an editor adds them.",
+      "addFirst": "Add the first channel",
+      "noSeatsHint": "Add rows or tables on the plan, then allot their seats here."
     },
     "revisions": {
       "title": "Plan revisions",
@@ -2886,7 +2934,8 @@
         "channel": "Channel",
         "bookedAt": "Booked at",
         "paidAt": "Paid at"
-      }
+      },
+      "showAll": "Show all bookings"
     },
     "org": {
       "title": "Sales",
@@ -2911,8 +2960,13 @@
       "byEvent": "Sales by event",
       "event": "Event",
       "emptyTitle": "No sales in this period",
-      "emptyDescription": "Pick a longer period, or share an event page to start selling."
-    }
+      "emptyDescription": "Pick a longer period, or share an event page to start selling.",
+      "toEvents": "See your events",
+      "showAllTime": "Show all time"
+    },
+    "backToEvent": "Back to the event overview",
+    "toTicketsOrders": "Go to Tickets & Orders",
+    "toSalesReport": "Open the sales overview"
   },
   "activity": {
     "title": "Activity",
@@ -2961,7 +3015,10 @@
     },
     "pagination": "Activity pages",
     "newest": "Newest",
-    "older": "Older entries"
+    "older": "Older entries",
+    "findOwner": "Find an owner or admin",
+    "showAll": "Show all activity",
+    "toEvents": "Go to your events"
   },
   "privacy": {
     "title": "Privacy requests",
@@ -2978,7 +3035,8 @@
     "result": {
       "title": "What this organization holds about {email}",
       "noneTitle": "Nothing found for this email",
-      "noneDescription": "No record in this organization uses this address. You can still open a request to answer the person formally."
+      "noneDescription": "No record in this organization uses this address. You can still open a request to answer the person formally.",
+      "searchAgain": "Search another address"
     },
     "errors": {
       "invalidEmail": "Enter a valid email address.",
@@ -3049,7 +3107,8 @@
       "due": "Due",
       "overdue": "Overdue",
       "action": "Action",
-      "review": "Review"
+      "review": "Review",
+      "emptyAction": "Look someone up by email"
     },
     "closed": {
       "title": "Closed requests",
@@ -3086,7 +3145,8 @@
       "holdings": {
         "title": "What this organization holds",
         "empty": "Nothing is held about this person",
-        "emptyHint": "You can still fulfil the request: the person gets a formal answer that nothing is held."
+        "emptyHint": "You can still fulfil the request: the person gets a formal answer that nothing is held.",
+        "emptyAction": "Answer the request"
       },
       "export": {
         "title": "Send them a copy",
@@ -3174,7 +3234,8 @@
       "invitations": "Team invitations",
       "networkProfiles": "Networking profiles",
       "chatMessages": "Chat messages sent"
-    }
+    },
+    "findOwner": "Find an owner or admin"
   },
   "privacyNotice": {
     "eyebrow": "Yayatoh",
@@ -3353,9 +3414,13 @@
       "eventDate": "Event date",
       "guests": "Guests",
       "markHandled": "Mark as handled",
-      "markNew": "Mark as new"
+      "markNew": "Mark as new",
+      "openPublic": "Open the public venue page",
+      "editListing": "Edit directory listing"
     },
-    "layoutLibrary": "Seating library"
+    "layoutLibrary": "Seating library",
+    "emptyAction": "Add your first venue",
+    "emptyViewerAction": "Browse the venue directory"
   },
   "details": {
     "title": "Event details",
@@ -3510,7 +3575,9 @@
     "sectionAdded": "Section added.",
     "sectionSaved": "Section saved.",
     "addSection": "Add section",
-    "saveSection": "Save section"
+    "saveSection": "Save section",
+    "emptyAction": "Add your first section",
+    "backToEvent": "Back to the event overview"
   },
   "dates": {
     "title": "Dates",
@@ -3609,7 +3676,8 @@
       "event_finished": "The dates of a finished or cancelled event can't change.",
       "cancelled": "A cancelled date can't be changed.",
       "invalid_count": "Enter a number of dates from 1 to 366."
-    }
+    },
+    "backToEvent": "Back to the event overview"
   },
   "copy": {
     "title": "Duplicate & template",
@@ -3631,7 +3699,8 @@
     "openTemplates": "Open templates",
     "saveTemplate": "Save template",
     "nameTaken": "That name is already used. Choose another.",
-    "invalid": "Check this value."
+    "invalid": "Check this value.",
+    "backToEvent": "Back to the event overview"
   },
   "series": {
     "title": "Series",
@@ -3652,7 +3721,8 @@
     "create": "Create series",
     "created": "Series created.",
     "slugTaken": "A series with this name already exists. Try a slightly different name.",
-    "nameInvalid": "Enter a name of 2 to 160 characters."
+    "nameInvalid": "Enter a name of 2 to 160 characters.",
+    "startFirst": "Start your first series"
   },
   "templates": {
     "title": "Templates",
@@ -3664,7 +3734,8 @@
     "deleteFor": "Delete the template {name}",
     "use": "Create an event from {name}",
     "timezone": "Times are in {timezone}.",
-    "createEvent": "Create event"
+    "createEvent": "Create event",
+    "pickEvent": "Pick an event to save"
   },
   "publicSeries": {
     "eyebrow": "A series by {org}",
@@ -3780,7 +3851,9 @@
     "unpublish": "Unpublish {title}",
     "pinOne": "Pin {title}",
     "unpinOne": "Unpin {title}",
-    "delete": "Delete {title}"
+    "delete": "Delete {title}",
+    "emptyAction": "Write your first announcement",
+    "toSections": "Read the page sections"
   },
   "holder": {
     "joinTitle": "Join online",
@@ -3807,7 +3880,8 @@
     "title": "Access",
     "subtitle": "Private information for ticket holders, the online join link, and access codes.",
     "viewerTitle": "Only editors can see this",
-    "viewerDescription": "Private information and access codes are shown only to people who can edit the event."
+    "viewerDescription": "Private information and access codes are shown only to people who can edit the event.",
+    "backToEvent": "Back to the event overview"
   },
   "privateInfo": {
     "heading": "Private information",
@@ -3862,7 +3936,8 @@
     "new": "New access code",
     "create": "Create code",
     "created": "Access code created.",
-    "unlockLink": "Invited guests open {url} and enter their code."
+    "unlockLink": "Invited guests open {url} and enter their code.",
+    "emptyAction": "Create your first code"
   },
   "conversation": {
     "inboxTitle": "Messages",
@@ -3915,7 +3990,9 @@
       "blocked": "This conversation is blocked.",
       "blocked_by_contact": "This person blocked messages from your organization.",
       "you_blocked": "Unblock the organizer to write to them."
-    }
+    },
+    "emptyAction": "Go to your events",
+    "showAll": "Show all conversations"
   },
   "apiKeys": {
     "title": "API keys",
@@ -4123,7 +4200,8 @@
       "copy": "Copy snippet",
       "copied": "Copied.",
       "emptyTitle": "No public events yet",
-      "emptyDescription": "Publish an event to get its widget snippet."
+      "emptyDescription": "Publish an event to get its widget snippet.",
+      "toEvents": "Go to your events"
     },
     "navPages": {
       "title": "Site navigation",
@@ -4163,7 +4241,8 @@
     "resolveNote": "Why is {reference} resolved?",
     "noteTooShort": "Write a note of at least 3 characters.",
     "alreadyResolved": "Someone already resolved this difference.",
-    "resolve": "Resolve"
+    "resolve": "Resolve",
+    "emptyAction": "See the daily checks"
   },
   "risk": {
     "flagged": "Flagged at checkout",
@@ -4232,7 +4311,9 @@
     "customized": "Customized emails",
     "noneTitle": "No customized emails yet",
     "noneDescription": "Every email uses Yayatoh’s default copy.",
-    "changed": "Changed"
+    "changed": "Changed",
+    "noneAction": "Customize an email",
+    "noneActionViewer": "Read the default copy"
   },
   "setupGuide": {
     "title": "Setup guide",
@@ -4370,7 +4451,15 @@
       "outside_event": "This session is outside the event's start and end."
     },
     "photoAfterSave": "You can add a photo after saving the speaker.",
-    "logoAfterSave": "You can add a logo after saving."
+    "logoAfterSave": "You can add a logo after saving.",
+    "emptyExhibitorsAction": "Add your first exhibitor",
+    "backToEvent": "Back to the event",
+    "emptySessionsReadOnly": "Sessions appear here once an editor adds them.",
+    "addFirstSession": "Add the first session",
+    "emptySpeakersReadOnly": "Speakers appear here once an editor adds them.",
+    "addFirstSpeaker": "Add the first speaker",
+    "emptyTiersReadOnly": "Sponsor tiers and their sponsors appear here once an editor adds them.",
+    "addFirstTier": "Add the first tier"
   },
   "aiDraft": {
     "title": "Draft with AI",
@@ -4582,7 +4671,10 @@
     "readOnly": "Only owners and admins can change door staff.",
     "byCheckpoint": "Door staff by checkpoint",
     "nobody": "Nobody assigned",
-    "manage": "Manage door staff"
+    "manage": "Manage door staff",
+    "emptyReadOnly": "Door staff appear here once an owner or admin adds them.",
+    "addFirst": "Add the first door staff member",
+    "openCheckin": "Open the check-in screen"
   },
   "signals": {
     "title": "Fraud signals",
@@ -4626,7 +4718,9 @@
       "save": "Save rules",
       "saved": "Rules saved.",
       "current": "Flags a device doing more than {rate} scans a minute, and a ticket moving faster than {kmh} km/h between checkpoints."
-    }
+    },
+    "showAll": "Show all signals",
+    "reviewDetection": "Review detection settings"
   },
   "security": {
     "metaTitle": "Account security",
@@ -4911,7 +5005,11 @@
       "survey_exists": "This survey already exists.",
       "messaging_paused": "Yayatoh support paused messaging for your organization.",
       "form_invalid": "One of the questions isn't valid."
-    }
+    },
+    "sendFirst": "Send it to attendees",
+    "questionsEmptyReadOnly": "Questions appear here once an editor adds them.",
+    "addFirstQuestion": "Add the first question",
+    "browseSurveys": "Browse other surveys"
   },
   "survey": {
     "metaTitle": "Survey",
@@ -5010,7 +5108,8 @@
     "emptyDescription": "Seat guests on the plan, then print this list for the door.",
     "tableSeat": "Table {item} · Seat {seat}",
     "rowSeat": "Row {item} · Seat {seat}",
-    "unseated": "{count, plural, one {# guest has no seat yet and is not on the poster.} other {# guests have no seat yet and are not on the poster.}}"
+    "unseated": "{count, plural, one {# guest has no seat yet and is not on the poster.} other {# guests have no seat yet and are not on the poster.}}",
+    "toPlan": "Go to the seating plan"
   },
   "webPush": {
     "title": "Push notifications",
@@ -5174,7 +5273,10 @@
       "body": "It disappears from your site at once. This can't be undone.",
       "confirm": "Yes, delete",
       "cancel": "Cancel"
-    }
+    },
+    "emptyActionPost": "Write your first post",
+    "emptyActionPage": "Write your first page",
+    "findOwner": "Find an owner or admin"
   },
   "cmsPublic": {
     "blog": "Blog",
@@ -5234,7 +5336,10 @@
       "reasonError": "Give a reason (3 to 300 characters).",
       "hide": "Hide review",
       "unhide": "Show review",
-      "dismissReports": "Dismiss reports"
+      "dismissReports": "Dismiss reports",
+      "showAll": "Show all reviews",
+      "seeOrders": "See tickets and orders",
+      "backToEvent": "Back to the event"
     },
     "form": {
       "rating": "Your rating",
@@ -5862,7 +5967,10 @@
     },
     "peopleLink": "People",
     "duplicatesLink": "Possible duplicates",
-    "insights": "Contact insights"
+    "insights": "Contact insights",
+    "emptyAction": "Pick a template",
+    "emptyViewer": "Audiences your team saves for campaigns appear here.",
+    "findOwner": "Find an owner or admin"
   },
   "refundOps": {
     "timeline": {
@@ -5965,7 +6073,16 @@
         "succeeded": "refunded",
         "failed": "refund failed"
       },
-      "age": "{days, plural, =0 {{hours, plural, one {# hour} other {# hours}}} one {# day} other {# days}}"
+      "age": "{days, plural, =0 {{hours, plural, one {# hour} other {# hours}}} one {# day} other {# days}}",
+      "emptyHint": {
+        "open": "Buyers ask for refunds from their order page. Their requests wait here for your answer.",
+        "approved": "Requests you approve are listed here with their refund status.",
+        "declined": "Requests you decline are listed here."
+      },
+      "emptyAction": {
+        "open": "See approved requests",
+        "other": "Back to open requests"
+      }
     },
     "buyer": {
       "title": "Refund",
@@ -6181,7 +6298,9 @@
         "offerHours": "Enter between 0.25 and 168 hours.",
         "not_enough_stock": "Not enough tickets are free for this offer.",
         "not_on_sale": "This pass or date is not on sale."
-      }
+      },
+      "viewEventPage": "View the event page",
+      "backToEvent": "Back to the event"
     }
   },
   "pricingPage": {
@@ -6426,7 +6545,11 @@
     "categorySlugHint": "Leave empty to derive it from the name. It can't change later.",
     "translations": "Name in other languages",
     "translationsError": "Check the translated names.",
-    "categoryHasArticles": "Move or delete this category's articles first."
+    "categoryHasArticles": "Move or delete this category's articles first.",
+    "emptyViewer": "Articles appear here once your team writes them.",
+    "emptyNeedsCategoryAction": "Add a category first",
+    "emptyArticlesAction": "Write the first article",
+    "emptyCategoriesAction": "Add the first category"
   },
   "siteConsole": {
     "title": "Marketing site",
@@ -6478,7 +6601,8 @@
       "partnership": "Partnerships",
       "other": "Other"
     },
-    "markHandled": "Mark as handled"
+    "markHandled": "Mark as handled",
+    "noRequestsAction": "Open the contact page"
   },
   "parties": {
     "subtitle": "Parties (couples, families, households) and the guests in each. Dietary, accessibility and address details are private to your team.",
@@ -6639,7 +6763,10 @@
       "plusOneMoves": "A plus-one moves with the guest who brought them."
     },
     "email": "Email",
-    "phone": "Phone"
+    "phone": "Phone",
+    "emptyAction": "Add your first party",
+    "backToEvent": "Back to the event overview",
+    "showAll": "Show all parties"
   },
   "eventRoles": {
     "co_host": "Co-host",
@@ -6656,14 +6783,18 @@
     "inviteTitle": "Invite to this event",
     "emptyTitle": "No co-hosts or planners yet",
     "emptyDescription": "Invite someone by email. They get access to this event only.",
-    "revokeFor": "Withdraw the invitation for {email}"
+    "revokeFor": "Withdraw the invitation for {email}",
+    "emptyReadOnly": "Co-hosts and planners appear here once an owner, admin or co-host invites them.",
+    "inviteFirst": "Invite someone",
+    "backToEvent": "Back to the event"
   },
   "myEvents": {
     "title": "Your events",
     "description": "The events you help with at {org}.",
     "emptyTitle": "No events right now",
     "emptyDescription": "When someone invites you to an event, it appears here.",
-    "open": "Open {name}"
+    "open": "Open {name}",
+    "myTickets": "Go to my tickets"
   },
   "starters": {
     "title": "Starter templates",
@@ -6753,7 +6884,8 @@
     "overviewTruncated": "Showing the first {shown} of {total} events (live first).",
     "overviewEmpty": {
       "title": "Nothing to watch right now",
-      "description": "Events show up here while they're being planned, on the day and for a week after."
+      "description": "Events show up here while they're being planned, on the day and for a week after.",
+      "action": "Go to your events"
     },
     "columns": {
       "event": "Event",
@@ -6817,7 +6949,9 @@
     "unavailable": "This widget couldn't load.",
     "noAccess": {
       "title": "No Command Center for your role",
-      "description": "Ask an owner or admin for access to this event."
+      "description": "Ask an owner or admin for access to this event.",
+      "action": "Find an owner or admin",
+      "backToEvent": "Back to the event overview"
     },
     "empty": {
       "title": "No widgets shown",
@@ -7113,7 +7247,8 @@
       "revokeLabel": "Turn off {label}",
       "readOnly": "Read-only",
       "statusOn": "On",
-      "statusOff": "Off"
+      "statusOff": "Off",
+      "emptyAction": "Create a screen link"
     }
   },
   "alerts": {
@@ -7136,7 +7271,10 @@
       "activeTitle": "No alerts right now",
       "activeDescription": "When something needs attention at one of your events, it shows up here and your team is told.",
       "resolvedTitle": "No resolved alerts yet",
-      "resolvedDescription": "Alerts resolve by themselves once the problem is fixed."
+      "resolvedDescription": "Alerts resolve by themselves once the problem is fixed.",
+      "allEventsAction": "Show alerts for every event",
+      "settingsAction": "Choose who gets alerts",
+      "currentAction": "Show current alerts"
     },
     "severity": {
       "info": "Info",
@@ -7743,7 +7881,10 @@
       "test_too_many": "Enter up to 5 addresses.",
       "test_invalid_email": "Check the email addresses.",
       "unknown": "Something went wrong."
-    }
+    },
+    "emptyAction": "Name your first campaign",
+    "emptyViewer": "Campaigns your team creates appear here, with their audience and results.",
+    "findOwner": "Find an owner or admin"
   },
   "journeys": {
     "title": "Journeys",
@@ -7937,7 +8078,10 @@
         "active": "In progress",
         "completed": "Completed",
         "cancelled": "Cancelled"
-      }
+      },
+      "emptyDescription": "People are listed here once the trigger puts them on this journey while it is on.",
+      "showEveryone": "Show everyone",
+      "reviewSteps": "Review the steps"
     },
     "run": {
       "metaTitle": "Journey history",
@@ -8134,7 +8278,8 @@
       "update": "Save changes",
       "create": "Create macro",
       "archive": "Archive {name}",
-      "archived": "Macro archived."
+      "archived": "Macro archived.",
+      "noneAction": "Write your first macro"
     },
     "holder": {
       "title": "Transfer this ticket",
@@ -8204,7 +8349,15 @@
       "noDeadline": "No deadline",
       "overdue": "Past the deadline",
       "hoursLeft": "{hours, plural, =0 {Less than an hour left} one {# hour left} other {# hours left}}",
-      "daysLeft": "{days, plural, one {# day left} other {# days left}}"
+      "daysLeft": "{days, plural, one {# day left} other {# days left}}",
+      "emptyHint": {
+        "open": "When a buyer’s bank opens a chargeback on one of your orders, it appears here with its evidence deadline.",
+        "closed": "Disputes move here once they are won, lost or withdrawn."
+      },
+      "emptyAction": {
+        "open": "See closed disputes",
+        "closed": "Back to open disputes"
+      }
     },
     "claim": {
       "intro": "{from} is transferring this ticket to {to}. Claim it with the email address it was sent to: you get your own QR code and the old one stops working.",
@@ -8642,7 +8795,13 @@
         "same_person": "Enter someone else.",
         "not_confirmed": "Only confirmed registrants can be replaced.",
         "too_many": "An event can have up to 50 templates."
-      }
+      },
+      "clearFilters": "Clear filters",
+      "openSetup": "Open registration setup",
+      "showWaiting": "Show waiting applications",
+      "noTemplatesHint": "Save reasons you send often, then pick one when you approve or deny.",
+      "writeFirstTemplate": "Write the first template",
+      "backToEvent": "Back to the event"
     },
     "rules": {
       "title": "Applications, guests and name changes",
@@ -8873,7 +9032,9 @@
     "submittedTitle": "Thank you, you're registered",
     "submittedDescription": "Thanks, {name}. Your answers were sent to the organizer.",
     "expiredTitle": "This link has expired",
-    "expiredDescription": "Links to continue a registration work for 14 days after the last save. Start again from the event page."
+    "expiredDescription": "Links to continue a registration work for 14 days after the last save. Start again from the event page.",
+    "emptyReadOnly": "The form's pages appear here once an editor adds them.",
+    "addFirstPage": "Add the first page"
   },
   "agenda": {
     "publishing": {
@@ -9014,7 +9175,8 @@
         "cell_too_long": "A cell is too long.",
         "unterminated_quote": "A quoted value never ends. Check the file's quotes.",
         "missing_columns": "The file needs the columns title, starts and ends."
-      }
+      },
+      "backToEvent": "Back to the event"
     }
   },
   "guestImport": {
@@ -9265,7 +9427,11 @@
       "not_invited": "This guest isn't invited to that sub-event.",
       "sub_event_has_chart": "It already has its own chart.",
       "no_chart": "There's no chart to copy yet. Create the event's plan on the Seating page, or choose a saved floor plan."
-    }
+    },
+    "emptyAction": "Add your first sub-event",
+    "backToEvent": "Back to the event overview",
+    "matrixToSubEvents": "Go to sub-events",
+    "matrixAddGuests": "Add guests to the list"
   },
   "donations": {
     "console": {
@@ -9366,7 +9532,12 @@
       },
       "receiptsTitle": "Tax receipts",
       "receiptsBody": "Donors get a receipt by email for every payment. Set fair-market values for gala tickets and see every receipt.",
-      "receiptsLink": "Open tax receipts"
+      "receiptsLink": "Open tax receipts",
+      "emptyCampaignsAction": "Start your first campaign",
+      "backToEvent": "Back to the event overview",
+      "noGiftsDescription": "Paid gifts appear here with the name each donor chose, the amount and the campaign.",
+      "shareGivingPage": "Share the giving page",
+      "toCampaigns": "Review your campaigns"
     },
     "give": {
       "metaTitle": "Give",
@@ -9507,7 +9678,9 @@
         "ticket": "Tickets"
       },
       "notDeductible": "Not deductible",
-      "pdf": "Download {number}"
+      "pdf": "Download {number}",
+      "addTicketTypes": "Add ticket types",
+      "backToEvent": "Back to the event overview"
     },
     "raiseCard": {
       "cardTitle": "Paddle raise",
@@ -10211,7 +10384,9 @@
       "pastDue": "The due date must be in the future.",
       "agreementText": "An agreement needs its text.",
       "tooMany": "This event has the most tasks allowed (50)."
-    }
+    },
+    "emptyReadOnly": "Tasks for speakers appear here once an editor creates them.",
+    "createFirst": "Create the first task"
   },
   "exhibitorPortal": {
     "eyebrow": "Exhibitor portal",
@@ -10398,7 +10573,9 @@
       "shared_booth": "Booth {booth} is shared by {count} exhibitors.",
       "several_booths": "{exhibitor} is at more than one booth.",
       "category_mismatch": "{exhibitor} is at booth {booth}, whose category ({category}) isn't one of theirs."
-    }
+    },
+    "emptyAction": "Add your first booth",
+    "emptyViewer": "The organizers haven't placed any booths yet."
   },
   "exhibitorMap": {
     "pageTitle": "Exhibitor map",
@@ -10468,7 +10645,9 @@
       "openTitle": "No open help requests",
       "openDescription": "New requests from guests and door staff appear here as they come in.",
       "closedTitle": "Nothing closed yet",
-      "closedDescription": "Resolved and cancelled requests are listed here."
+      "closedDescription": "Resolved and cancelled requests are listed here.",
+      "toCommandCenter": "Open the Command Center",
+      "showOpen": "Show open requests"
     },
     "title": "#{number} · {reason}",
     "number": "#{number}",
@@ -10641,7 +10820,8 @@
       "urgent": "Urgent",
       "waiting": "Waiting for someone",
       "unassigned": "Unassigned"
-    }
+    },
+    "backToEvent": "Back to the event overview"
   },
   "marketingAnalytics": {
     "title": "Marketing analytics",
@@ -10944,7 +11124,9 @@
     "overrideNote": "Reason for printing",
     "overrideHint": "Saved in the activity log with your name.",
     "printAnyway": "Print anyway",
-    "overrideNoteRequired": "Give a reason (at least 3 characters)."
+    "overrideNoteRequired": "Give a reason (at least 3 characters).",
+    "emptyAction": "Create your first template",
+    "backToEvent": "Back to the event overview"
   },
   "invoices": {
     "status": {
@@ -11123,7 +11305,10 @@
     "submit": "Send for verification",
     "saveAndReview": "Save and send for review",
     "saved": "Saved. Yayatoh will review it.",
-    "viewerNotice": "Only owners and admins can change the charity profile."
+    "viewerNotice": "Only owners and admins can change the charity profile.",
+    "seePlan": "See your plan",
+    "findOwner": "Find an owner or admin",
+    "addDetails": "Add the charity details"
   },
   "rsvp": {
     "metaTitle": "Your RSVP",
@@ -11412,7 +11597,9 @@
     "submittedValue": "Sent",
     "nothingToMerge": "Nothing new to take: merging closes the submission.",
     "mergeSubmit": "Merge into {party}",
-    "merged": "Merged."
+    "merged": "Merged.",
+    "shareLink": "Share your collector link",
+    "setUpLink": "Set up the collector link"
   },
   "invitations": {
     "link": "Invitations: send by email and text",
@@ -11675,7 +11862,10 @@
       "count": "Questions shown: {shown} of {total}",
       "none": "This guest sees no questions.",
       "label": "Questions this guest sees"
-    }
+    },
+    "emptyDescription": "Questions you add appear on each guest's RSVP form, such as meal choices or song requests.",
+    "emptyAction": "Add your first question",
+    "emptyViewerAction": "See the RSVP form preview"
   },
   "rsvpAnswers": {
     "link": "RSVP answers",
@@ -11884,7 +12074,13 @@
         "offStage": "Poll removed from stage.",
         "deleted": "Poll deleted.",
         "rotated": "New big-screen link ready. Old links stopped working."
-      }
+      },
+      "shareAudienceLink": "Share the audience link",
+      "reviewWaiting": "Review waiting questions",
+      "checkSettings": "Check the Q&A settings",
+      "noPollsViewer": "Polls appear here once an editor adds them.",
+      "createFirstPoll": "Create the first poll",
+      "howToJoin": "See how attendees join"
     },
     "presenter": {
       "metaTitle": "Presenter view",
@@ -12068,7 +12264,8 @@
       "label": "Search by name, email or company",
       "submit": "Search",
       "noneTitle": "No one matches",
-      "noneDescription": "Nobody's name, email or company contains “{q}”. Try a shorter search."
+      "noneDescription": "Nobody's name, email or company contains “{q}”. Try a shorter search.",
+      "clear": "Clear the search"
     },
     "emptyTitle": "No people yet",
     "emptyDescription": "People appear here when they buy tickets, register or are added to a guest list.",
@@ -12131,7 +12328,9 @@
       "emptyTitle": "Nothing here yet",
       "emptyDescription": "Orders, check-ins, campaigns, messages and surveys appear here as they happen.",
       "listLabel": "Timeline of {name}",
-      "older": "Older"
+      "older": "Older",
+      "showEverything": "Show everything",
+      "backToPeople": "Back to everyone"
     },
     "kinds": {
       "order_paid": "Order paid",
@@ -12210,7 +12409,8 @@
       "errors": {
         "noneSelected": "Select at least one pair to merge.",
         "tooMany": "Select at most 50 pairs at a time."
-      }
+      },
+      "toPeople": "See everyone"
     },
     "reasons": {
       "email": "Same email address",
@@ -12246,7 +12446,8 @@
       "withdrawn": "Opted out",
       "unknown_legacy": "Unknown (imported)",
       "none": "No consent"
-    }
+    },
+    "toEvents": "Go to your events"
   },
   "contactStats": {
     "title": "Contact",
@@ -12401,7 +12602,10 @@
     "deleteNamed": "Delete sandbox {name}",
     "deleteWarning": "It closes for good: its pages go offline, its members and keys lose access.",
     "deleteConfirm": "Delete for good",
-    "deleteConfirmNamed": "Delete sandbox {name} for good"
+    "deleteConfirmNamed": "Delete sandbox {name} for good",
+    "findOwner": "Find an owner or admin",
+    "inSandboxAction": "Try the API in this sandbox",
+    "emptyAction": "Set up your first sandbox"
   },
   "webhooks": {
     "title": "Webhooks",
@@ -12535,7 +12739,8 @@
       "succeeded": "Delivered",
       "failed": "Failed",
       "at": "Time"
-    }
+    },
+    "emptyAction": "Add your first endpoint"
   },
   "developers": {
     "brand": "Yayatoh Developers",
@@ -12704,7 +12909,8 @@
       "advanced_seating": "Advanced seating",
       "ai_seating": "AI seating",
       "analytics_pro": "Advanced analytics"
-    }
+    },
+    "findOwner": "Find an owner or admin"
   },
   "billingPortal": {
     "eyebrow": "Test billing",
@@ -13081,7 +13287,8 @@
       "body": "{name} is a test provider. Allowing lets Yayatoh read and write the following on your behalf:",
       "allow": "Allow",
       "deny": "Deny"
-    }
+    },
+    "webhooksAction": "Set up a webhook"
   },
   "guestSeats": {
     "placeAt": {
@@ -14972,5 +15179,82 @@
     "tooLate": "Choose a date on or before {date}",
     "timeZoneNote": "Times in {zone}",
     "selected": "Selected"
+  },
+  "emptyActions": {
+    "seeEvents": "See your events",
+    "eventHome": "Go to the event home",
+    "clearSearch": "Clear the search"
+  },
+  "coupons": {
+    "title": "Coupons",
+    "description": "Promo codes give buyers a discount at checkout. Each code belongs to one event: pick the event to see or add its codes.",
+    "emptyTitle": "No events to add codes to",
+    "emptyDescription": "Promo codes live on an event's Tickets & orders page. Create an event first, then add its codes.",
+    "emptyAction": "Create an event",
+    "caption": "Events and their promo codes",
+    "event": "Event",
+    "when": "Date",
+    "status": "Status",
+    "codes": "Promo codes",
+    "manage": "Manage codes",
+    "view": "View codes",
+    "manageFor": "Promo codes for {name}"
+  },
+  "howItWorks": {
+    "docLink": "Read the guide",
+    "hide": "Hide",
+    "show": "Show",
+    "domains": {
+      "title": "How custom domains work",
+      "intro": "Show your event pages on your own address (for example tickets.yourbrand.com) instead of a Yayatoh link. Your Yayatoh address keeps working too.",
+      "step1": "Add a domain you own. We'll ask you to confirm it's you.",
+      "step2": "Copy the DNS records we show into your domain provider's settings.",
+      "step3": "We check the records automatically. It can take up to a day.",
+      "step4": "Once verified, we set up the security certificate (HTTPS) and the domain goes live."
+    },
+    "templates": {
+      "title": "How templates work",
+      "intro": "A template saves an event's setup (tickets, questions, sections and page content) so your next event starts ready. Events made from a template are drafts with no sales.",
+      "step1": "Open an event that's set up the way you like.",
+      "step2": "Choose Duplicate & template, then save it as a template.",
+      "step3": "Come back here to create new events from it, or start from a starter template below."
+    },
+    "series": {
+      "title": "How series work",
+      "intro": "A series groups related events (a tour, a season, a festival) under one public page that lists the upcoming dates.",
+      "step1": "Create the series with a name and a short description.",
+      "step2": "Open each event's Dates page and add it to the series.",
+      "step3": "Share the series' public page. It updates as you add events."
+    },
+    "payouts": {
+      "title": "How payouts work",
+      "intro": "Ticket money reaches your bank in payouts. Connect a payout account once; the figures below show what is on its way and when.",
+      "step1": "Connect your payout account and verify your business details.",
+      "step2": "Sell tickets. Each sale, less fees and refunds, adds to your balance.",
+      "step3": "Depending on your account, money is paid out as you sell or after the event, with a small reserve held for refunds and disputes.",
+      "step4": "Each payout is sent to your bank and listed here with its date and amount."
+    },
+    "sending": {
+      "title": "How email sending works",
+      "intro": "Emails to your buyers and guests go out from Yayatoh by default. Verify your own domain so they come from your address and reach the inbox.",
+      "step1": "Add your sending domain (for example mail.yourbrand.com).",
+      "step2": "Copy the DNS records we show into your domain provider's settings.",
+      "step3": "Check the records here. Verification usually takes a few minutes.",
+      "step4": "Once verified, your emails are sent from your own domain."
+    },
+    "eventType": {
+      "title": "Event types and categories",
+      "intro": "The event type decides which sections an event has: a wedding gets guests, RSVP and seating; a conference gets sessions, speakers and badges. The category helps people find public events.",
+      "step1": "Pick the type closest to your event when you create it.",
+      "step2": "Choose a category and add tags on the event's Details page.",
+      "step3": "Not sure? Choose Other: it has the common sections, and you can add details later."
+    },
+    "coupons": {
+      "title": "How promo codes work",
+      "intro": "A promo code takes a percentage or an amount off each ticket's price, before fees. Each code belongs to one event.",
+      "step1": "Pick the event below and open its promo codes.",
+      "step2": "Add a code with its discount and, if you like, a limit and dates.",
+      "step3": "Share the code. Buyers enter it at checkout and each use is counted."
+    }
   }
 }

@@ -59,7 +59,21 @@ export default async function AudiencesPage({
         }
       />
       {segments.length === 0 ? (
-        <EmptyState title={t('emptyTitle')} description={t('emptyDescription')} />
+        <EmptyState
+          title={t('emptyTitle')}
+          description={canSave ? t('emptyDescription') : t('emptyViewer')}
+          action={
+            canSave ? (
+              <Link href="#templates-heading" className={buttonClass('secondary', 'md')}>
+                {t('emptyAction')}
+              </Link>
+            ) : (
+              <Link href={`/o/${org}/team`} className={buttonClass('primary', 'md')}>
+                {t('findOwner')}
+              </Link>
+            )
+          }
+        />
       ) : (
         <Table
           caption={t('caption')}

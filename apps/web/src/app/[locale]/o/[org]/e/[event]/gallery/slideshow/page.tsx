@@ -1,7 +1,7 @@
 import { GALLERY_CHANNEL, hostSlidesQuery } from '@yayatoh/gallery';
 import { executeQuery, requireOrg } from '@yayatoh/kernel';
 import { isProfileKey, navIncludes, realtimeChannelName } from '@yayatoh/platform';
-import { PageHeader } from '@yayatoh/ui';
+import { buttonClass, PageHeader } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { GallerySlideshow } from '@/components/gallery/slideshow.tsx';
@@ -46,6 +46,11 @@ export default async function GallerySlideshowPage({
         stream={`/api/realtime/${encodeURIComponent(channel)}`}
         reload={hostSlidesAction.bind(null, org, event)}
         title={t('title')}
+        emptyAction={
+          <Link href={`/o/${org}/e/${event}/gallery`} className={buttonClass('primary', 'md')}>
+            {t('backToGallery')}
+          </Link>
+        }
       />
     </>
   );

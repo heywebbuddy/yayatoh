@@ -10,10 +10,11 @@ import {
 } from '@yayatoh/guests';
 import { executeQuery } from '@yayatoh/kernel';
 import { isProfileKey, navIncludes, navLabelKey, PROFILES } from '@yayatoh/platform';
-import { Alert, Card, CardHeader, EmptyState, PageHeader, StatusPill } from '@yayatoh/ui';
+import { Alert, buttonClass, Card, CardHeader, EmptyState, PageHeader, StatusPill } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { type FieldSpec, ProgramForm } from '@/components/program-form.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import { CopyLink } from '../guests/rsvp/copy-link.tsx';
@@ -306,7 +307,21 @@ export default async function WebsitePage({
           {t('blocksTitle', { count: site.blocks.length })}
         </h2>
         {site.blocks.length === 0 ? (
-          <EmptyState title={t('emptyTitle')} description={canWrite ? t('emptyWrite') : t('emptyRead')} />
+          <EmptyState
+            title={t('emptyTitle')}
+            description={canWrite ? t('emptyWrite') : t('emptyRead')}
+            action={
+              canWrite ? (
+                <a href="#site-add-heading" className={buttonClass('primary', 'md')}>
+                  {t('addTitle')}
+                </a>
+              ) : (
+                <Link href={`/o/${org}/e/${event}`} className={buttonClass('secondary', 'md')}>
+                  {tr('emptyActions.eventHome')}
+                </Link>
+              )
+            }
+          />
         ) : (
           <ol className="m-0 flex list-none flex-col gap-4 p-0">
             {site.blocks.map((b, i) => {

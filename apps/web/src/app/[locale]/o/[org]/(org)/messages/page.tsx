@@ -1,7 +1,7 @@
 import { executeQuery } from '@yayatoh/kernel';
 import { threadsQuery } from '@yayatoh/messaging';
 import { roleCan } from '@yayatoh/tenancy';
-import { Card, Chip, cx, EmptyState, PageHeader } from '@yayatoh/ui';
+import { buttonClass, Card, Chip, cx, EmptyState, PageHeader } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
@@ -56,7 +56,21 @@ export default async function MessagesPage({
         ))}
       </nav>
       {threads.length === 0 ? (
-        <EmptyState title={t('emptyTitle')} description={t('emptyDescription')} />
+        <EmptyState
+          title={t('emptyTitle')}
+          description={t('emptyDescription')}
+          action={
+            filter === 'all' ? (
+              <Link href={`/o/${org}`} className={buttonClass('primary', 'md')}>
+                {t('emptyAction')}
+              </Link>
+            ) : (
+              <Link href={`/o/${org}/messages`} className={buttonClass('primary', 'md')}>
+                {t('showAll')}
+              </Link>
+            )
+          }
+        />
       ) : (
         <Card className="p-2">
           <ul className="flex list-none flex-col p-0">

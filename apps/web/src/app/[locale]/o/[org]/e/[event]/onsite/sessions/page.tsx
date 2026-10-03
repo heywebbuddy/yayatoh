@@ -41,7 +41,15 @@ export default async function SessionCheckinPage({
     return (
       <>
         <PageHeader title={t('sessionCheckin.title')} />
-        <EmptyState title={t('checkin.noAccessTitle')} description={t('checkin.noAccessDescription')} />
+        <EmptyState
+          title={t('checkin.noAccessTitle')}
+          description={t('checkin.noAccessDescription')}
+          action={
+            <Link href={`/o/${org}/e/${event}`} className={buttonClass('primary', 'md')}>
+              {t('emptyActions.eventHome')}
+            </Link>
+          }
+        />
       </>
     );
   }
@@ -68,6 +76,17 @@ export default async function SessionCheckinPage({
           <EmptyState
             title={t('sessionCheckin.emptyTitle')}
             description={t(manage ? 'sessionCheckin.emptyManage' : 'sessionCheckin.emptyScan')}
+            action={
+              manage ? (
+                <a href="#session-door-add-heading" className={buttonClass('primary', 'md')}>
+                  {t('sessionCheckin.setUp')}
+                </a>
+              ) : (
+                <Link href={`/o/${org}/e/${event}`} className={buttonClass('secondary', 'md')}>
+                  {t('emptyActions.eventHome')}
+                </Link>
+              )
+            }
           />
         ) : (
           <ul className="flex list-none flex-col gap-3 p-0">
