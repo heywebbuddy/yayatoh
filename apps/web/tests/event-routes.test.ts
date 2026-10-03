@@ -71,6 +71,8 @@ const SECTION_OF: Record<string, string> = {
   engagement: 'sessions',
   // M5.8a: networking is reached from Sessions and opens with it.
   networking: 'sessions',
+  // M6.9a: stream setup (conference nav, the `virtual` module).
+  virtual: 'virtual',
 };
 
 describe('event console route sweep (M4.2a)', () => {

@@ -39,6 +39,7 @@ import { privateColumns as templates } from '@yayatoh/templates';
 import { privateColumns as tenancy } from '@yayatoh/tenancy';
 import { privateColumns as ticketing } from '@yayatoh/ticketing';
 import { privateColumns as venues } from '@yayatoh/venues';
+import { privateColumns as virtual } from '@yayatoh/virtual';
 import { privateColumns as webhooks } from '@yayatoh/webhooks';
 
 /**
@@ -87,6 +88,7 @@ export const COLUMN_PRIVACY: readonly SchemaPrivacy[] = [
   tenancy,
   ticketing,
   venues,
+  virtual,
   webhooks,
 ];
 
