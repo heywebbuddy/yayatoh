@@ -186,6 +186,9 @@
       "guests": {
         "invitation": "Faire-part de mariage",
         "rsvp-reminder": "Rappel de réponse"
+      },
+      "badges": {
+        "kiosk-code": "Code de la borne de badges"
       }
     },
     "status": {

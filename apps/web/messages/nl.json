@@ -186,6 +186,9 @@
       "guests": {
         "invitation": "Huwelijksuitnodiging",
         "rsvp-reminder": "Herinnering om te reageren"
+      },
+      "badges": {
+        "kiosk-code": "Code voor de badgekiosk"
       }
     },
     "status": {

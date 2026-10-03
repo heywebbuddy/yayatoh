@@ -186,6 +186,9 @@
       "guests": {
         "invitation": "婚礼邀请",
         "rsvp-reminder": "回复提醒"
+      },
+      "badges": {
+        "kiosk-code": "胸牌自助机验证码"
       }
     },
     "status": {

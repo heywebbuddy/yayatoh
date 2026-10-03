@@ -186,6 +186,9 @@
       "guests": {
         "invitation": "دعوة زفاف",
         "rsvp-reminder": "تذكير بالرد"
+      },
+      "badges": {
+        "kiosk-code": "رمز كشك الشارات"
       }
     },
     "status": {

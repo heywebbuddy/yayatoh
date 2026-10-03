@@ -186,6 +186,9 @@
       "guests": {
         "invitation": "Wedding invitation",
         "rsvp-reminder": "RSVP reminder"
+      },
+      "badges": {
+        "kiosk-code": "Badge kiosk code"
       }
     },
     "status": {

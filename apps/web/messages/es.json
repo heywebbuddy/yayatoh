@@ -186,6 +186,9 @@
       "guests": {
         "invitation": "Invitación de boda",
         "rsvp-reminder": "Recordatorio de confirmación"
+      },
+      "badges": {
+        "kiosk-code": "Código del quiosco de credenciales"
       }
     },
     "status": {

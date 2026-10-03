@@ -186,6 +186,9 @@
       "guests": {
         "invitation": "Convite de casamento",
         "rsvp-reminder": "Lembrete de resposta"
+      },
+      "badges": {
+        "kiosk-code": "Código do quiosque de crachás"
       }
     },
     "status": {

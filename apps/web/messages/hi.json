@@ -186,6 +186,9 @@
       "guests": {
         "invitation": "विवाह निमंत्रण",
         "rsvp-reminder": "जवाब का अनुस्मारक"
+      },
+      "badges": {
+        "kiosk-code": "बैज कियोस्क कोड"
       }
     },
     "status": {

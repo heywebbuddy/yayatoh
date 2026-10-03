@@ -186,6 +186,9 @@
       "guests": {
         "invitation": "結婚式の招待状",
         "rsvp-reminder": "出欠のリマインダー"
+      },
+      "badges": {
+        "kiosk-code": "バッジキオスクのコード"
       }
     },
     "status": {

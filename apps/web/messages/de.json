@@ -186,6 +186,9 @@
       "guests": {
         "invitation": "Hochzeitseinladung",
         "rsvp-reminder": "Erinnerung an die Antwort"
+      },
+      "badges": {
+        "kiosk-code": "Code für das Badge-Terminal"
       }
     },
     "status": {

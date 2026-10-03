@@ -47,10 +47,8 @@ export default async function PrintingPage({
   const { locale, org, event } = await params;
   const sp = await searchParams;
   setRequestLocale(locale);
-  const { data, ev, printing, kiosk, canWrite, canPrint, platformPrintNode } = await loadPrintingPage(
-    org,
-    event,
-  );
+  const page = await loadPrintingPage(org, event);
+  const { data, ev, printing, kiosk, canWrite, canPrint, platformPrintNode } = page;
   const kind = PRINT_KINDS.find((k) => k === sp.kind);
   const log = await executeQuery(
     printLogQuery,

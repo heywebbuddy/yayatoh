@@ -186,6 +186,9 @@
       "guests": {
         "invitation": "Invito di nozze",
         "rsvp-reminder": "Promemoria di risposta"
+      },
+      "badges": {
+        "kiosk-code": "Codice del chiosco badge"
       }
     },
     "status": {

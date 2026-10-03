@@ -186,6 +186,9 @@
       "guests": {
         "invitation": "Свадебное приглашение",
         "rsvp-reminder": "Напоминание об ответе"
+      },
+      "badges": {
+        "kiosk-code": "Код киоска бейджей"
       }
     },
     "status": {

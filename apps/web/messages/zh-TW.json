@@ -186,6 +186,9 @@
       "guests": {
         "invitation": "婚禮邀請",
         "rsvp-reminder": "回覆提醒"
+      },
+      "badges": {
+        "kiosk-code": "名牌自助機驗證碼"
       }
     },
     "status": {
