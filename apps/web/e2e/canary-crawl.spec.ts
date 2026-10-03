@@ -11,6 +11,7 @@ import {
   type Fetched,
   findCanaries,
   formatLeaks,
+  GUEST_SITE_ALLOW,
   type Leak,
   leaksIn,
   V1_ALLOW,
@@ -115,6 +116,37 @@ test.describe('canary leak crawl (roadmap §9)', () => {
     await expect(page.getByRole('heading', { name: 'Fixture Fund', level: 1 })).toBeVisible();
     expect(formatLeaks(r.leaks)).toBe('no canary leaks');
     expect(r.errors).toEqual([]);
+  });
+
+  test('the guest website: the locked gate carries no canary; unlocked, only the site and its program (M4.5a)', async ({
+    page,
+  }) => {
+    // The acceptance "the leak crawler finds no guest data": the canary org's site is published
+    // behind a password; every guest, party, answer and contact column of the org is a canary.
+    const c = canary();
+    const leaks: Leak[] = [];
+    const gate = [`${MARKET}/w/${c.guestSite.code}`, `${MARKET}/ar/w/${c.guestSite.code}`];
+    for (const url of gate) {
+      const res = await browserFetch(page, url);
+      expect(res?.status, url).toBe(200);
+      leaks.push(...leaksIn(url, `${res?.body ?? ''}\n${res?.extra ?? ''}`, { kind: 'public' }));
+    }
+    await page.goto(gate[0] as string);
+    await page.getByLabel('Password').fill(c.guestSite.password);
+    await page.getByRole('button', { name: 'Open the website' }).click();
+    await expect(page.getByRole('navigation', { name: 'On this page' })).toBeVisible();
+    const surface = { kind: 'scoped' as const, allow: GUEST_SITE_ALLOW };
+    let shown = 0;
+    for (const url of gate) {
+      const res = await browserFetch(page, url);
+      expect(res?.status, url).toBe(200);
+      const text = `${res?.body ?? ''}\n${res?.extra ?? ''}`;
+      // The unlocked page really shows the canary org's site (its title and program are canaries).
+      shown += findCanaries(text).length;
+      leaks.push(...leaksIn(url, text, surface));
+    }
+    expect(shown).toBeGreaterThan(0);
+    expect(formatLeaks(leaks)).toBe('no canary leaks');
   });
 
   test('/v1 public endpoints and unauthenticated org endpoints carry no canary', async ({ request }) => {
