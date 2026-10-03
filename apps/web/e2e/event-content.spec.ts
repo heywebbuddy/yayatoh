@@ -109,7 +109,7 @@ test.describe('page content, announcements and access (M1.4d)', () => {
     await expect(sectionRows).toHaveCount(1);
 
     // A schedule with a bad time: the error names the line; the typed text is kept.
-    await pickOption(add.getByLabel('Section type'), 'schedule');
+    await pickOption(add.getByRole('combobox', { name: 'Section type' }), 'schedule');
     await add.getByLabel('Section title').fill('Programme');
     await add.getByLabel('Schedule', { exact: true }).fill('18:00 | Doors\n25:00 | Too late');
     await add.getByRole('button', { name: 'Add section' }).click();
@@ -122,7 +122,7 @@ test.describe('page content, announcements and access (M1.4d)', () => {
     await expect(sectionRows).toHaveCount(2);
 
     // FAQ: an answer is required.
-    await pickOption(add.getByLabel('Section type'), 'faq');
+    await pickOption(add.getByRole('combobox', { name: 'Section type' }), 'faq');
     await add.getByLabel('Section title').fill('FAQ');
     await add.getByLabel('Questions and answers').fill('Is there parking?');
     await add.getByRole('button', { name: 'Add section' }).click();
