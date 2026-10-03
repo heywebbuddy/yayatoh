@@ -7,7 +7,7 @@ import {
 import { executeQuery } from '@yayatoh/kernel';
 import { qrPath } from '@yayatoh/pdf';
 import { isProfileKey, navIncludes, navLabelKey, PROFILES } from '@yayatoh/platform';
-import { Alert, Button, Card, CardHeader, EmptyState, PageHeader, StatusPill } from '@yayatoh/ui';
+import { Alert, Button, Card, CardHeader, EmptyState, PageHeader, Select, StatusPill } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { PrintButton } from '@/components/print-button.tsx';
@@ -240,13 +240,13 @@ export default async function CollectorPage({
                               <label htmlFor={`merge-${s.id}`} className="text-[13px] font-bold text-ink">
                                 {t('mergeInto')}
                               </label>
-                              <select id={`merge-${s.id}`} name="party" className="field pe-9">
+                              <Select id={`merge-${s.id}`} name="party" className="field pe-9">
                                 {list.partyOptions.map((p) => (
                                   <option key={p.id} value={p.id}>
                                     {p.name}
                                   </option>
                                 ))}
-                              </select>
+                              </Select>
                             </div>
                             <Button type="submit" variant="secondary">
                               {t('compare', { household: s.household ?? '' })}

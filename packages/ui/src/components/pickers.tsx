@@ -102,7 +102,8 @@ export interface TimeZonePickerProps extends Omit<SelectProps, 'options' | 'chil
 /** TimeZonePicker (U1): searchable IANA zones, grouped by region, with the current offset. */
 export function TimeZonePicker(props: TimeZonePickerProps) {
   const { locale } = useUiLocale();
-  const current = props.value ?? props.defaultValue;
+  const raw = props.value ?? props.defaultValue;
+  const current = raw === undefined ? undefined : String(raw);
   const options = useMemo(
     () => timeZoneOptions(locale, new Date(), current ? [current] : []),
     [locale, current],
@@ -180,7 +181,8 @@ export interface CurrencyPickerProps extends Omit<SelectProps, 'options' | 'chil
 /** CurrencyPicker (U1): searchable ISO 4217 list with symbol and localized name. */
 export function CurrencyPicker({ currencies, ...props }: CurrencyPickerProps) {
   const { locale } = useUiLocale();
-  const current = props.value ?? props.defaultValue;
+  const raw = props.value ?? props.defaultValue;
+  const current = raw === undefined ? undefined : String(raw);
   const options = useMemo(() => {
     const all = currencyOptions(locale, current ? [current] : []);
     if (!currencies) return all;
@@ -193,8 +195,8 @@ export function CurrencyPicker({ currencies, ...props }: CurrencyPickerProps) {
   return (
     <Select
       {...props}
-      value={props.value?.toUpperCase()}
-      defaultValue={props.defaultValue?.toUpperCase()}
+      value={props.value === undefined ? undefined : String(props.value).toUpperCase()}
+      defaultValue={props.defaultValue === undefined ? undefined : String(props.defaultValue).toUpperCase()}
       options={options}
       searchable
     />

@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
-import { expectAccessible, signIn } from './helpers.ts';
+import { expectAccessible, pickOption, signIn, stepOption } from './helpers.ts';
 import { addGuests, createGala, quickPlan, unique } from './seating-helpers.ts';
 
 const VIEWER = 'jordan@lakeside.test';
@@ -16,7 +16,7 @@ async function seatedGuest(page: Page, what: string) {
   await addGuests(page, base, [guest]);
   await page.goto(`${base}/seating/assign`);
   await page.getByRole('checkbox', { name: guest }).check();
-  await page.getByLabel('Table or row').selectOption({ label: 'Table 1 — 4 of 4 free' });
+  await pickOption(page.getByLabel('Table or row'), { label: 'Table 1 — 4 of 4 free' });
   await page.getByRole('button', { name: 'Seat them' }).click();
   await expect(feedback(page)).toHaveText('Seated 1 person at Table 1.');
   await expect(queue(page)).toHaveCount(0);
@@ -46,15 +46,13 @@ test.describe('moving seated guests (M1.7f)', () => {
       'Choose a table or row.',
     );
     // By keyboard: Table 2, its first free seat, Move.
-    await item.focus();
-    await page.keyboard.press('ArrowDown');
-    await page.keyboard.press('ArrowDown');
-    await expect(item.locator('option:checked')).toHaveText('Table 2 — 4 of 4 free');
+    await stepOption(item, 2);
+    await expect(item).toHaveText('Table 2 — 4 of 4 free');
     await page.keyboard.press('Tab');
     const seat = form.getByLabel('Seat', { exact: true });
     await expect(seat).toBeFocused();
-    await page.keyboard.press('ArrowDown');
-    await expect(seat.locator('option:checked')).toHaveText('Table 2 · 1');
+    await stepOption(seat);
+    await expect(seat).toHaveText('Table 2 · 1');
     await page.keyboard.press('Tab');
     await expect(form.getByRole('button', { name: 'Move' })).toBeFocused();
     await page.keyboard.press('Enter');

@@ -2,7 +2,7 @@ import { type Browser, expect, type Page, test } from '@playwright/test';
 import { closePools } from '@yayatoh/db';
 import { resolveOrgSlug } from '@yayatoh/tenancy';
 import { type RsvpScenario, rsvpScenario } from '@yayatoh/testing';
-import { expectAccessibleBothModes, passHumanCheck, signIn } from './helpers.ts';
+import { expectAccessibleBothModes, passHumanCheck, pickOption, signIn } from './helpers.ts';
 
 // Batch 3h merge: axe runs in light and dark on every screen now (twice the checks), so these long
 // journeys get more than the default 30 s.
@@ -194,7 +194,7 @@ test.describe('Contact collector (M4.1f)', () => {
     await page.goto(`${guests(s)}/collector`);
     await expect(page.getByRole('heading', { name: 'Waiting for you (2)' })).toBeVisible();
     const card = page.getByRole('article', { name: 'Garcia family' });
-    await card.getByLabel('Merge into party').selectOption({ label: 'Garcia' });
+    await pickOption(card.getByLabel('Merge into party'), { label: 'Garcia' });
     await card.getByRole('button', { name: 'Compare and merge Garcia family' }).click();
     await expect(page.getByRole('heading', { name: 'Merge Garcia family', level: 1 })).toBeVisible();
     const table = page.getByRole('table', { name: 'The party Garcia next to the submission' });
@@ -202,7 +202,7 @@ test.describe('Contact collector (M4.1f)', () => {
     await expectAccessibleBothModes(page);
     // The party has no address or email: the submitted ones are offered; Sofía is new.
     await expect(page.getByLabel('Email', { exact: true })).toHaveValue('use');
-    await page.getByLabel('Address', { exact: true }).selectOption('keep');
+    await pickOption(page.getByLabel('Address', { exact: true }), 'keep');
     await expect(page.getByRole('checkbox', { name: 'Sofía García' })).toBeChecked();
     await page.getByRole('button', { name: 'Merge into Garcia' }).click();
     await expect(page.getByTestId('collector-done').getByText('Merged into Garcia.')).toBeVisible();
@@ -338,7 +338,7 @@ test.describe('Invitations (M4.1f)', () => {
     await page.getByRole('textbox', { name: 'Mobile phone' }).fill('+1 312 555 0101');
     await page.getByRole('button', { name: 'Save contact details' }).click();
     await expect(page.getByRole('status').filter({ hasText: 'Contact details saved.' })).toBeVisible();
-    await page.getByLabel('Invitation language').selectOption('es');
+    await pickOption(page.getByLabel('Invitation language'), 'es');
     await page.getByRole('button', { name: 'Save the language' }).click();
     await expect(page.getByRole('status').filter({ hasText: 'Language saved.' })).toBeVisible();
     await expectAccessibleBothModes(page);
@@ -356,7 +356,7 @@ test.describe('Invitations (M4.1f)', () => {
     );
     await expect(page.getByTestId('preview-subject')).toHaveText(`You're invited: ${s.eventName}`);
     await expectAccessibleBothModes(page);
-    await page.locator('#invite-lang').selectOption('es');
+    await pickOption(page.locator('#invite-lang'), 'es');
     await page.getByRole('button', { name: 'Show this language' }).click();
     await expect(page.getByTestId('preview-subject')).toHaveText(`Estás invitado: ${s.eventName}`);
     await page.getByLabel('Email subject').fill('');
@@ -434,7 +434,7 @@ test.describe('Invitations (M4.1f)', () => {
 
     await page.goto(`${guests(s)}/invitations`);
     await expect(page.getByTestId('reminders-state')).toHaveText('Off.');
-    await page.getByLabel('Reminders', { exact: true }).selectOption({ label: 'On' });
+    await pickOption(page.getByLabel('Reminders', { exact: true }), { label: 'On' });
     await page.getByLabel('Days before the deadline').fill('0, 200');
     await page.getByRole('button', { name: 'Save reminders' }).click();
     await expect(
@@ -450,7 +450,7 @@ test.describe('Invitations (M4.1f)', () => {
     );
     await expect(page.getByLabel('Days before the deadline')).toHaveValue('14, 3');
     await expectAccessibleBothModes(page);
-    await page.getByLabel('Reminders', { exact: true }).selectOption({ label: 'Off' });
+    await pickOption(page.getByLabel('Reminders', { exact: true }), { label: 'Off' });
     await page.getByRole('button', { name: 'Save reminders' }).click();
     await expect(page.getByRole('status').filter({ hasText: 'Reminders saved.' })).toBeVisible();
     await page.reload();

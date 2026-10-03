@@ -25,7 +25,24 @@
         "noExplicitAny": "error",
         "noConsole": { "level": "error", "options": { "allow": ["error", "warn", "info"] } }
       },
-      "correctness": { "noUnusedImports": "error", "noUnusedVariables": "error" }
+      "correctness": { "noUnusedImports": "error", "noUnusedVariables": "error" },
+      "a11y": {
+        "noLabelWithoutControl": {
+          "level": "error",
+          "options": {
+            "inputComponents": [
+              "Select",
+              "UiSelect",
+              "Combobox",
+              "DatePicker",
+              "DateTimePicker",
+              "TimePicker",
+              "TimeZonePicker",
+              "CurrencyPicker"
+            ]
+          }
+        }
+      }
     }
   },
   "assist": { "actions": { "source": { "organizeImports": "on" } } }
