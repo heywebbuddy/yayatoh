@@ -506,3 +506,8 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **Anonymous questions:** allowed by default; the name behind an anonymous question is **not kept** by default ("Nobody sees them"); organizers can switch a session to "Moderators can see them" (askers are told). Confirm the defaults.
 - [ ] **Limits:** 5 questions per person per session per 10 minutes, 300 characters a question, 50 polls and 2,000 questions per session, word clouds keep 300 distinct words. Big-screen links never expire on their own (organizers replace them to revoke). Confirm or adjust.
 - [ ] **Questions and tallies are kept with the event** (no separate retention yet; only an optional typed name is personal). Decide a retention period if wanted.
+
+## M4.1e — RSVP questions (2026-10-02, pending owner)
+- [ ] One meal question per event (one `guests.meal` per guest). Weddings with a rehearsal-dinner menu and a reception menu would need a second meal per guest: say if you want it.
+- [ ] Private answers (dietary, accessibility, private questions) are never shown back on the guest's RSVP page; leaving one blank keeps the earlier answer, and only the hosts can clear it. Confirm.
+- [ ] Exporting answers needs `attendees:export` (owners, admins, managers, event managers, co-hosts); the private columns need the new `attendees:export_private` (owners, admins, co-hosts). Managers export without private columns; planners can't export. Confirm or widen.

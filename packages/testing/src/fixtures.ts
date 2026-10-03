@@ -121,8 +121,10 @@ import {
   markRsvpViewedCommand,
   moveGuestCommand,
   partyRsvpQuery,
+  publishRsvpQuestionsCommand,
   readGuestTable,
   recordSubEventResponseCommand,
+  saveMenuOptionCommand,
   setInvitationsCommand,
   setRsvpSettingsCommand,
   stageGuestImportCommand,
@@ -2263,6 +2265,50 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     markRsvpViewedCommand,
     { token: partyLink.token ?? '' },
     createCtx({ orgId: org.id, now: new Date(event.startsAt.getTime() - 30 * 86_400_000) }),
+    ports,
+  );
+  // M4.1e: the event's menu (the host's meal "Fish" is on it) and RSVP questions: a meal choice
+  // for the reception, a dietary question saved to the sealed fields, and a conditional question
+  // (isolation coverage of `menu_options` and `rsvp` forms).
+  for (const option of [
+    { label: 'Fish', notes: 'Contains shellfish' },
+    { label: 'Vegetarian', notes: 'Vegan on request' },
+  ])
+    await executeCommand(saveMenuOptionCommand, { eventId: event.id, ...option }, ctx(), ports);
+  await executeCommand(
+    publishRsvpQuestionsCommand,
+    {
+      eventId: event.id,
+      definition: {
+        questions: [
+          {
+            key: 'meal',
+            type: 'meal',
+            label: 'Reception: meal choice',
+            subEventId: reception.id,
+            required: true,
+            showIf: { '==': [{ var: 'attending' }, true] },
+          },
+          {
+            key: 'dietary',
+            type: 'long_text',
+            label: 'Allergies or dietary needs',
+            sensitive: true,
+            binding: 'dietary',
+          },
+          {
+            key: 'song',
+            type: 'short_text',
+            label: 'Ceremony: song request',
+            subEventId: ceremony.id,
+            showIf: {
+              and: [{ '==': [{ var: 'attending' }, true] }, { '==': [{ var: 'age_class' }, 'adult'] }],
+            },
+          },
+        ],
+      },
+    },
+    ctx(),
     ports,
   );
   return {

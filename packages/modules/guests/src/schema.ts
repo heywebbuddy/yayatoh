@@ -459,3 +459,30 @@ export const partyRsvp = tenantTable(
     }).onDelete('cascade'),
   ],
 );
+
+/* -------------------------------------------------------------- M4.1e: the event's menu ---- */
+
+/**
+ * The event's menu (M4.1e): what an RSVP meal question offers, with dietary notes ("Vegetarian,
+ * contains nuts"), in the host's order. A guest's choice is written to `guests.meal` as the
+ * option's label, so a rename renames it on every guest who chose it; an option someone chose
+ * can't be removed. Labels are unique per event (case-insensitive). `(org_id, event_id)` references
+ * `events.events` through a hand-written foreign key (cascade).
+ */
+export const menuOptions = tenantTable(
+  guestsSchema,
+  'menu_options',
+  {
+    eventId: uuid('event_id').notNull(),
+    label: text('label').notNull(),
+    notes: text('notes'),
+    position: integer('position').notNull().default(0),
+  },
+  (t) => [
+    index('menu_options_org_event_idx').on(t.orgId, t.eventId, t.position),
+    uniqueIndex('menu_options_org_event_label_key').on(t.orgId, t.eventId, sql`lower(${t.label})`),
+    check('menu_options_label_length', sql`length(label) between 1 and 80`),
+    check('menu_options_notes_length', sql`notes is null or length(notes) between 1 and 200`),
+    check('menu_options_position_check', sql`position >= 0`),
+  ],
+);

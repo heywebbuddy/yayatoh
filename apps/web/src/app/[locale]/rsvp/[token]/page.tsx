@@ -1,4 +1,9 @@
-import { markRsvpViewedCommand, publicRsvpQuery, rsvpLinkRef } from '@yayatoh/guests';
+import {
+  markRsvpViewedCommand,
+  publicRsvpQuery,
+  publicRsvpQuestionsQuery,
+  rsvpLinkRef,
+} from '@yayatoh/guests';
 import { createCtx, executeCommand, executeQuery, isDomainError } from '@yayatoh/kernel';
 import { Alert, Card, Label, PageHeader } from '@yayatoh/ui';
 import type { Metadata } from 'next';
@@ -43,6 +48,9 @@ export default async function RsvpPage({
     await executeCommand(markRsvpViewedCommand, { token }, ctx, ports).catch((err) => {
       if (!isDomainError(err)) throw err;
     });
+  // M4.1e: the hosts' questions (nothing private comes back, only that it was given).
+  const questions =
+    view.state === 'open' ? await executeQuery(publicRsvpQuestionsQuery, { token }, ctx, ports) : null;
   const { thanks } = await searchParams;
   const t = await getTranslations('rsvp');
 
@@ -162,6 +170,11 @@ export default async function RsvpPage({
                   firstName: g.firstName ?? '',
                   lastName: g.lastName ?? '',
                 }))}
+              questions={
+                questions?.questions.length
+                  ? { questions: questions.questions, menu: questions.menu, guests: questions.guests }
+                  : undefined
+              }
             />
           </>
         )

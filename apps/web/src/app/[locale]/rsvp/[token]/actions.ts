@@ -11,6 +11,8 @@ export interface RsvpFormState {
   readonly code: string | null;
   /** The guest a refusal is about (its answers or its name get the message and the focus). */
   readonly guestId?: string;
+  /** M4.1e: the question a refusal is about (with `guestId`). */
+  readonly question?: string;
   readonly stamp?: number;
 }
 
@@ -32,9 +34,17 @@ export async function submitRsvpAction(
   if (!ref) return { code: 'unknown_link', stamp: Date.now() };
   const answers: { guestId: string; subEventId: string; status: 'attending' | 'declined' }[] = [];
   const names = new Map<string, { firstName: string; lastName: string | null }>();
+  // M4.1e: `q:{guestId}:{key}` (several values for a multiple choice).
+  const questions = new Map<string, Record<string, string | string[]>>();
   for (const [key, raw] of form.entries()) {
     const value = String(raw);
     const [kind, a, b] = key.split(':');
+    if (kind === 'q' && a && b && UUID.test(a) && /^[a-z][a-z0-9_]{0,39}$/.test(b)) {
+      const mine = questions.get(a) ?? {};
+      const prev = mine[b];
+      mine[b] = prev === undefined ? value : [...(Array.isArray(prev) ? prev : [prev]), value];
+      questions.set(a, mine);
+    }
     if (kind === 'a' && a && b && UUID.test(a) && UUID.test(b) && STATUSES.has(value))
       answers.push({ subEventId: a, guestId: b, status: value as 'attending' | 'declined' });
     if (kind === 'p' && a && UUID.test(a) && (b === 'first' || b === 'last')) {
@@ -50,16 +60,22 @@ export async function submitRsvpAction(
   try {
     await executeCommand(
       submitRsvpCommand,
-      { token, answers, plusOnes: [...names].map(([guestId, n]) => ({ guestId, ...n })) },
+      {
+        token,
+        answers,
+        plusOnes: [...names].map(([guestId, n]) => ({ guestId, ...n })),
+        questions: [...questions].map(([guestId, a]) => ({ guestId, answers: a })),
+      },
       createCtx({ orgId: ref.orgId, locale }),
       ports,
     );
   } catch (err) {
     if (!isDomainError(err)) throw err;
-    const d = (err.details ?? {}) as { reason?: unknown; guestId?: unknown };
+    const d = (err.details ?? {}) as { reason?: unknown; guestId?: unknown; question?: unknown };
     return {
       code: typeof d.reason === 'string' ? d.reason : err.code,
       ...(typeof d.guestId === 'string' ? { guestId: d.guestId } : {}),
+      ...(typeof d.question === 'string' ? { question: d.question } : {}),
       stamp: Date.now(),
     };
   }

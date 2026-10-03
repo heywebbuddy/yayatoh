@@ -24,6 +24,12 @@ import {
 import { recordHistoryTx } from './guests.ts';
 import { assertInvitedTx } from './invitations.ts';
 import {
+  applyRsvpQuestionsTx,
+  PublicRsvpQuestionsDto,
+  publicRsvpQuestionsTx,
+  QuestionAnswersInput,
+} from './rsvp-questions.ts';
+import {
   afterAnswersTx,
   ensurePartyRsvpTx,
   ensureSettingsTx,
@@ -659,6 +665,8 @@ export const submitRsvpCommand = tenantCommand({
       .min(1)
       .max(400),
     plusOnes: z.array(PlusOneInput).max(20).default([]),
+    /** M4.1e: each guest's answers to the event's RSVP questions (`applyRsvpQuestionsTx`). */
+    questions: QuestionAnswersInput,
   }),
   output: z.object({ attending: z.int(), declined: z.int() }),
   entitlement: 'guests',
@@ -746,6 +754,13 @@ export const submitRsvpCommand = tenantCommand({
       .update(partyRsvp)
       .set({ viewedAt: row.viewedAt ?? ctx.now, updatedAt: ctx.now })
       .where(eq(partyRsvp.id, row.id));
+    // M4.1e: the questions, checked against what each guest sees once the statuses are in.
+    await applyRsvpQuestionsTx(tx, ctx, {
+      eventId,
+      partyId,
+      statuses: input.answers,
+      input: input.questions,
+    });
     await recordHistoryTx(tx, ctx, [{ eventId, partyId, action: 'rsvp_submitted', source: 'rsvp' }]);
     return afterAnswersTx(tx, ctx, emit, eventId, partyId, { submitted: true });
   },
@@ -753,7 +768,12 @@ export const submitRsvpCommand = tenantCommand({
     action: 'guests.rsvp.submit',
     targetType: 'party_rsvp',
     targetId: null,
-    data: { answers: input.answers.length, attending: r?.attending, declined: r?.declined },
+    data: {
+      answers: input.answers.length,
+      attending: r?.attending,
+      declined: r?.declined,
+      questions: input.questions.length,
+    },
   }),
 });
 
@@ -817,4 +837,22 @@ export const findRsvpByNameCommand = tenantCommand({
     targetId: input.eventId,
     data: { found: r?.status === 'found' },
   }),
+});
+
+/**
+ * M4.1e: the questions the party's page asks each of its invited guests, with their context and
+ * earlier non-private answers (`publicRsvpQuestionsTx`). Nothing for an expired link.
+ */
+export const publicRsvpQuestionsQuery = tenantQuery({
+  name: 'guests.publicRsvpQuestions',
+  input: z.object({ token: Token }),
+  output: PublicRsvpQuestionsDto,
+  entitlement: 'guests',
+  permission: 'public:rsvp',
+  handler: async ({ input, ctx, tx }) => {
+    const row = await linkPartyTx(tx, input.token);
+    if (row.linkExpiresAt.getTime() <= ctx.now.getTime())
+      return { version: 0, questions: [], menu: [], guests: [] };
+    return publicRsvpQuestionsTx(tx, ctx, { eventId: row.eventId, partyId: row.partyId });
+  },
 });

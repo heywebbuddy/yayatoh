@@ -61,4 +61,9 @@ export const privateColumns = columnPrivacy('guests', {
   rsvp_settings: {
     lookup_code: internal('code'),
   },
+  // M4.1e: the event's menu, offered to invited guests by the RSVP meal question (never public).
+  menu_options: {
+    label: internal(),
+    notes: internal(),
+  },
 });

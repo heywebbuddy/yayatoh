@@ -386,6 +386,18 @@ export default async function GuestsPage({
       >
         {t('rsvpHost.link')}
       </Link>
+      <Link
+        href={`/o/${org}/e/${event}/guests/questions`}
+        className="inline-flex min-h-8 items-center self-start rounded-[10px] text-body font-bold text-primary-ink underline-offset-2 hover:underline"
+      >
+        {t('rsvpQuestions.link')}
+      </Link>
+      <Link
+        href={`/o/${org}/e/${event}/guests/answers`}
+        className="inline-flex min-h-8 items-center self-start rounded-[10px] text-body font-bold text-primary-ink underline-offset-2 hover:underline"
+      >
+        {t('rsvpAnswers.link')}
+      </Link>
       {canWrite ? null : <p className="text-body text-ink-2">{tp('viewerNotice')}</p>}
 
       <section aria-labelledby="guest-counts-heading" className="flex flex-col gap-3">

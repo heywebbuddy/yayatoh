@@ -453,3 +453,103 @@ A lookup reads the event's named guests once (≤ 3,000) and compares in memory;
 - [ ] Set the deadline in the past: the page is read-only; **Reopen RSVP** for one party from the Guests page menu.
 - [ ] As `jordan@lakeside.test` (viewer): states only, no links, QR codes or PINs.
 
+
+## M4.1e — RSVP questions (done)
+
+### 1. Goal and users
+Hosts ask each guest of a household what they need to know (meal, dietary needs, a song request…),
+for the whole event or one sub-event, and only when it applies (only if attending, only for adults,
+only if a plus-one is named, only after an earlier answer). The party answers on its RSVP page, guest
+by guest, after saying who comes. The meal lands on the guest; dietary and accessibility answers go
+into the guest's sealed private fields. Hosts see meal counts per sub-event and export the answers.
+
+### 2. References
+- **Plan:** `docs/plans/phase-4.md` Wave B, M4.1e; P4-3 (dietary and accessibility answers encrypted, never marketing).
+- **Reused:** the forms engine (versioned definitions, the safe JsonLogic subset, server-side checks, KeyVault envelope for private answers; M5.1b's `logicVars`/`isEmptyAnswer`), M4.1d's RSVP page and `guests.submitRsvp`, the guest's sealed fields (M4.1a), the bulk export framework (step-up, `bulk.start` audit).
+
+### 3. Scope
+**In (built):**
+- **The `rsvp` form kind** (`@yayatoh/forms`, `rsvp.ts`, client-safe): questions with the checkout types plus `meal` (a choice among the event's menu options), an optional sub-event (`subEventId`), an optional write-back (`binding`: `dietary` or `accessibility`; text only; always private), and a condition (`showIf`) on the guest's context (`attending` — the question's sub-event, or any for an event-wide question —, `age_class`, `is_plus_one`, `plus_one_named`) and earlier answers. One meal question per form; reserved keys refused; conditions read earlier questions only. `rsvpVisible` decides what a guest sees (browser, preview and server agree); `checkRsvpAnswers` is the server's authority: it **rejects** an answer to a question the guest can't see (`hidden_answer`, naming the guest and the question), enforces required ones, normalizes answers (a meal must be a menu option). Storage (`rsvp-forms.ts`): one form per event, immutable versions, one response per guest (`respondent_type = 'guest'`; the newest answer replaces the earlier one), private answers sealed in one envelope; write-back answers are not stored there.
+- **The menu** (`guests.menu_options`): label (unique per event, case-insensitive) and dietary notes, in order. A rename renames the meal of every guest who chose it (history `guest_updated` / `meal`); an option someone chose can't be removed (`menu_option_in_use`). Max 30.
+- **Commands and queries** (`guests`, entitlement `guests`): `guests.saveMenuOption`, `guests.removeMenuOption` (`delete`), `guests.publishRsvpQuestions` (sub-events of the event only; a meal needs a menu; `expectedVersion` → `stale_version`) with `guests:write`; `guests.menu`, `guests.rsvpQuestions`, `guests.mealCounts` with `guests:read`; `guests.publicRsvpQuestions` (`public:rsvp`, by link: questions without write-back targets, the menu, per invited guest their context and earlier **non-private** answers, and only *which* private questions were answered). `guests.submitRsvp` takes `questions: [{ guestId, answers }]` (additive) and applies them in its transaction after the statuses and plus-one names (`applyRsvpQuestionsTx`).
+- **Write-back:** meal → `guests.meal` (the option's label); dietary / accessibility → the sealed private fields (merged with the address, email and phone already there). A private answer left blank keeps the earlier one (the page never shows it back); history names the fields (`meal`, `dietary`, `accessibility`, `rsvpAnswers`), never values. Removing a guest or a party deletes their answers.
+- **RSVP page:** after the attendance pairs, "A few questions": one group per invited, named guest whose questions apply, updating as the household picks Attending / Can't attend and names a plus-one; native inputs, 44 px rows, meal options with their notes, "Private: only the hosts see this", required questions checked before sending (focus on the question) and again by the server (its refusal names the guest and the question).
+- **Host UI:** `/guests/questions`: the menu (add with notes, rename, remove) and the question builder (type, options, help, sub-event, save-to, required, private, conditions as tick boxes plus "an earlier answer is…"; move up/down and remove by buttons; a dependent question can't be moved above or left without what it reads) with a **live preview** for a sample guest (attending, age, named plus-one; questions show and hide as you change them) and one primary action, **Publish questions** (a new version; parties that answered keep theirs). `/guests/answers`: meal counts per sub-event (attending guests by meal, "other", "no meal yet"), parties answered, and **Export answers (CSV)**. Links from the Guests and RSVP pages. Viewers read both pages (no controls).
+- **Export:** bulk actions `guests.rsvpAnswersCsv` (`attendees:export`: party, guest, age, status per sub-event, meal, non-private answers) and `guests.rsvpAnswersPrivateCsv` (new permission **`attendees:export_private`**: owners, admins, co-hosts; adds private answers, dietary and accessibility). Step-up, `bulk.start` audit (counts and `private: true|false` only), refused while staff act as a member; the download route serves only this event's operations to members still holding the permission.
+
+**Later / not yet:**
+- The caterer exports (M4.3b) and invitations sending (M4.1f) — out of scope.
+- More than one meal question (e.g. rehearsal dinner and reception menus): one `guests.meal` per guest today (pending owner).
+- A guest clearing a private answer they gave before (blank keeps it; hosts can clear it on the Guests page).
+- Showing a party's question answers on the read-only page after the deadline; answers in the host's per-party page.
+- Menu reordering (options keep the order they were added in).
+- Design system v2: `origin/agent/design-v2` conflicts outside this branch's files (messages, journal, helpers), so it was not merged; the new screens use today's `@yayatoh/ui` primitives (local `MenuEditor`/`QuestionsBuilder` in the questions folder and `components/rsvp-question-field.tsx`).
+
+### 4. `touches:`
+```yaml
+touches:
+  - packages/modules/forms/src/{rsvp.ts,rsvp-forms.ts}          # new
+  - packages/modules/forms/src/{schema.ts,index.ts,ui.ts}       # kind `rsvp`, respondent `guest`, exports
+  - packages/modules/forms/{MODULE.md,tests/rsvp.test.ts}
+  - packages/modules/guests/src/rsvp-questions.ts                # new
+  - packages/modules/guests/src/{schema.ts,private-columns.ts,index.ts}   # appended (menu_options)
+  - packages/modules/guests/src/rsvp.ts                          # submitRsvp `questions`, publicRsvpQuestions
+  - packages/modules/guests/src/guests.ts                        # removals delete answers; seal/unseal exported
+  - packages/modules/guests/{package.json,MODULE.md}
+  - packages/modules/tenancy/src/domain/permissions.ts (+ tests)  # attendees:export_private
+  - packages/db/drizzle/0100_flaky_shen.sql (+ meta)
+  - packages/testing/src/{fixtures.ts,rsvp-questions.ts,index.ts,ports.ts}, packages/testing/tests/rsvp-questions.int.test.ts
+  - apps/web/src/server/bulk.ts, apps/worker/src/bulk.ts          # the two export actions registered
+  - apps/web/src/components/rsvp-question-field.tsx               # new (page + preview)
+  - apps/web/src/app/[locale]/rsvp/[token]/{page.tsx,household-form.tsx,actions.ts}
+  - apps/web/src/app/[locale]/o/[org]/e/[event]/guests/{questions/**,answers/**}   # new
+  - apps/web/src/app/[locale]/o/[org]/e/[event]/guests/{page.tsx,rsvp/page.tsx}   # links
+  - apps/web/messages/*.json      # rsvp.questions*, rsvp.errors.*, rsvpQuestion.*, rsvpQuestions.*, rsvpAnswers.*
+  - apps/web/e2e/rsvp-questions.spec.ts
+```
+
+### 5. Data model
+| Table | Change | Notes |
+|---|---|---|
+| `guests.menu_options` | new | `event_id`, `label` (1–80, unique per event case-insensitive), `notes` (≤ 200), `position`; `(org_id, event_id)` → events cascade (hand-written) |
+| `forms.forms` | `forms_kind_check` widened | + `rsvp` (NOT VALID + VALIDATE) |
+| `forms.form_responses` | `form_responses_respondent_type_check` widened | + `guest` (NOT VALID + VALIDATE) |
+
+**RLS notes:** `menu_options` is a `tenantTable()` (ENABLE + FORCE RLS, NULLIF policy, org-leading indexes, org-scoped unique); fixture rows for both orgs (menu + questions); `label` and `notes` declared `internal`.
+
+**Migration:** `0100_flaky_shen.sql` (expand only; renumber at merge). Hand edits: the two widened CHECKs as `NOT VALID` + `VALIDATE CONSTRAINT`; a hand-written block with the `menu_options_event_fk` composite foreign key to `events.events` (cascade).
+
+### 6. API diff
+- **`/v1`:** none. **`/api/v2`:** none.
+- **Routes:** `/o/{org}/e/{event}/guests/questions`, `/guests/answers`, `/guests/answers/exports/{op}` (console). The RSVP page posts `q:{guestId}:{key}` fields.
+
+### 7. Events
+None (the answers ride `guests.submitRsvp`; nothing reaches the outbox but M4.1d's ids-and-counts event).
+
+### 8. Entitlements and flags
+`guests` module. New permission `attendees:export_private`.
+
+### 10. Acceptance criteria
+| ID | Given / When / Then | Test |
+|---|---|---|
+| AC-M4.1e-01 | Conditional questions show and validate correctly in fixtures (attending, adults, named plus-one, earlier answers; sub-event scope; required) | `packages/modules/forms/tests/rsvp.test.ts`; int `rsvp-questions.int.test.ts` ("conditional questions per guest…"); e2e `apps/web/e2e/rsvp-questions.spec.ts` (builder preview, household page) |
+| AC-M4.1e-02 | Answers to hidden questions are rejected server-side, naming the guest and question; nothing is written | int ("answers to hidden questions are rejected…", "an unnamed plus-one gets no questions…"); unit ("rejects answers to hidden questions…") |
+| AC-M4.1e-03 | The meal choice lands on the guest; a menu rename follows | int ("a household of three…", "menu…"); e2e ("a household of three answers…": meal on the Guests page) |
+| AC-M4.1e-04 | Dietary answers are sealed and never appear in logs, audit data, history, outbox or public payloads | int ("a household of three…": plaintext search over guests, responses, history, audit, domain events; page payload), ("answers export…": audit); e2e (page never shows it back) |
+| AC-M4.1e-05 | Build questions with a condition (validation, preview, publish, persisted) | e2e ("the host builds questions with conditions…") |
+| AC-M4.1e-06 | A household of three answers, one declines; meal counts update | e2e ("a household of three answers, one declines…"); int (counts before and after a change) |
+| AC-M4.1e-07 | Export: CSV with step-up; private columns only for allowed roles | int ("step-up; private columns only…"); e2e ("the answers export asks for a step-up…") |
+| AC-M4.1e-08 | Viewer can't edit questions (controls hidden; commands refused) | e2e ("viewers see the questions…"); int ("viewers read questions…") |
+| AC-M4.1e-09 | Isolation; impersonation (removal and export refused); read-only freeze | int ("another org's event…", "staff acting as a member…", "a read-only freeze…"); `isolation.int.test.ts` (fixture rows) |
+| AC-M4.1e-10 | Keyboard only, axe, Arabic RTL | e2e ("keyboard only…", "Arabic…"; `expectAccessible` on every screen and state) |
+
+### 11. Security and privacy
+- Write-back answers live only in the guest's sealed fields; other private answers in the response's KeyVault envelope. The party's page never receives a private answer, only which private questions were answered.
+- Audit data: counts (questions, conditional, guests answered) and `private: true|false` for exports. History: field names only.
+- The export with private columns needs `attendees:export_private` and a recent step-up; staff acting as a member can't export.
+
+### 15. Demo checklist (M4.1e)
+- [ ] As `pani@lakeside.test`, open a wedding → **Guests → RSVP questions**: add menu options with notes; add "Reception: meal choice" (Meal, Reception, required, only attending), "Allergies" (Long text, saved as dietary needs), "Song request" (Ceremony, only attending adults); try the preview (child, not attending); **Publish questions**.
+- [ ] Open a party's RSVP link: say who comes; the questions appear per guest; send without a meal (named), then with.
+- [ ] **RSVP answers**: meal counts for the reception; **Export answers (CSV)** (confirm it's you) and download.
+- [ ] As `jordan@lakeside.test`: the questions and counts, no controls, no export.
