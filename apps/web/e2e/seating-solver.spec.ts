@@ -166,6 +166,17 @@ test.describe('seating rules and solver (M6.12a)', () => {
     await page.keyboard.press('Enter');
     await expect(page.getByText('Rule saved.')).toBeVisible();
     await expect(rules(page).getByText('Hard · weight 3')).toBeVisible();
+
+    // Remove the VIP rule, by keyboard: it's gone after a reload too.
+    await page
+      .getByRole('form', { name: 'Change rule: VIP parties nearest the stage' })
+      .getByRole('button', { name: 'Remove' })
+      .focus();
+    await page.keyboard.press('Enter');
+    await expect(page.getByText('Rule removed.')).toBeVisible();
+    await page.reload();
+    await expect(rules(page).getByText('VIP parties nearest the stage')).toHaveCount(0);
+    await expect(rules(page).getByRole('listitem')).toHaveCount(2);
     await expectAccessible(page);
 
     // A bad arrangement number, then run.

@@ -260,6 +260,7 @@ export const removeSolverRuleCommand = tenantCommand({
   output: z.object({ removed: z.boolean() }),
   entitlement: 'ai_seating',
   permission: 'seating:write',
+  category: 'delete',
   handler: async ({ input, tx }) => {
     const gone = await tx
       .delete(solverRules)
