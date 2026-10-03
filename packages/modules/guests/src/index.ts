@@ -290,6 +290,7 @@ export {
 export {
   type MealDietaryCounts,
   mealDietaryCountsTx,
+  rsvpDeadlineEventIdsTx,
   type SocialFacts,
   socialFactsTx,
 } from './social-facts.ts';

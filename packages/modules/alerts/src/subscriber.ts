@@ -1,14 +1,18 @@
 import { DEVICE_ONLINE_WINDOW_MS, deviceEventIdTx, markQuietDevicesTx } from '@yayatoh/checkin';
 import { type TenantTx, withTenant } from '@yayatoh/db';
 import { findEventTx, upcomingEventIdsTx } from '@yayatoh/events';
+import { rsvpDeadlineEventIdsTx } from '@yayatoh/guests';
 import { type Ctx, createCtx } from '@yayatoh/kernel';
 import { orderMetricRefTx, refundMetricRefTx } from '@yayatoh/orders';
 import { catchUpSubscriber, defineSubscriber, type PublishedEvent, type Subscriber } from '@yayatoh/platform';
 import { and, isNotNull, lt, ne } from 'drizzle-orm';
 import { z } from 'zod';
-import { eventMode } from './domain/config.ts';
+import { eventMode, THRESHOLDS } from './domain/config.ts';
 import { type AlertChange, type AlertDeps, evaluateEventAlertsTx, evaluateOrgAlertsTx } from './engine.ts';
 import { alerts, type SignalKind, signals } from './schema.ts';
+
+/** M4.6a: RSVP deadlines this far back still bring their (future) event into the sweep. */
+const RSVP_LOOKBACK_MS = 120 * 86_400_000;
 
 /** How long a reported failure is kept (the rules count the last 24 hours). */
 const SIGNAL_TTL_MS = 7 * 86_400_000;
@@ -177,13 +181,22 @@ export async function evaluateOrgNow(
   const ctx: Ctx = opts.now ? { ...base, now: opts.now } : base;
   const now = ctx.now;
   const full = opts.full !== false;
-  const ids = await withTenant(ctx, (tx) =>
-    upcomingEventIdsTx(
+  const ids = await withTenant(ctx, async (tx) => {
+    const upcoming = await upcomingEventIdsTx(
       tx,
       new Date(now.getTime() - 2 * 3_600_000),
       new Date(now.getTime() + 30 * 86_400_000),
-    ),
-  );
+    );
+    if (!full) return upcoming;
+    // M4.6a: events further out whose RSVP deadline is near (or recently passed) are planning
+    // events the RSVP rule still watches.
+    const rsvp = await rsvpDeadlineEventIdsTx(
+      tx,
+      new Date(now.getTime() - RSVP_LOOKBACK_MS),
+      new Date(now.getTime() + THRESHOLDS.rsvpWarnBeforeMs),
+    );
+    return [...new Set([...upcoming, ...rsvp])];
+  });
   const changes: AlertChange[] = [];
   // Alerts of events outside the window (moved, cancelled, over) still resolve.
   const stale = await withTenant(ctx, async (tx) => {

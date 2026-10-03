@@ -267,6 +267,9 @@ export const WIDGET_META: Readonly<Record<WidgetKey, WidgetMeta>> = {
   // M4.6a social pack. Counts and guest names only (never a private answer); no money, so the
   // door may see seating and arrivals (it checks guests in and shows them to their tables). All
   // four need the guest list (the `guests` module): without it there is nothing to count.
+  // Seating and arrivals need `events:read` like the other door widgets (door staff hold no
+  // `guests:read`; they see the same names on the Scan PWA's guest check-in); RSVP and meals
+  // need `guests:read`.
   rsvp: {
     key: 'rsvp',
     module: 'guests',
@@ -280,7 +283,7 @@ export const WIDGET_META: Readonly<Record<WidgetKey, WidgetMeta>> = {
   guestSeating: {
     key: 'guestSeating',
     module: 'guests',
-    permission: 'guests:read',
+    permission: 'events:read',
     roles: ['owner', 'ops', 'door'],
     profiles: SOCIAL,
     modes: ['planning', 'pre_show', 'live'],
@@ -300,7 +303,7 @@ export const WIDGET_META: Readonly<Record<WidgetKey, WidgetMeta>> = {
   arrivals: {
     key: 'arrivals',
     module: 'guests',
-    permission: 'guests:read',
+    permission: 'events:read',
     roles: ['owner', 'ops', 'door'],
     profiles: SOCIAL,
     modes: ['pre_show', 'live', 'wrap'],

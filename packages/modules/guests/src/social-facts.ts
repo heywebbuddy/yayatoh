@@ -1,11 +1,11 @@
 import type { TenantTx } from '@yayatoh/db';
-import { and, eq, isNotNull } from 'drizzle-orm';
+import { and, between, eq, isNotNull } from 'drizzle-orm';
 import { type MealTally, mealTally, type RsvpPendingCounts, rsvpPendingCounts } from './domain/social.ts';
 import { unseal } from './guests.ts';
 import { rsvpDeadlineTx } from './invite-delivery.ts';
 import { menuTx } from './rsvp-questions.ts';
 import { rsvpFactsTx } from './rsvp-state.ts';
-import { partyRsvp } from './schema.ts';
+import { partyRsvp, rsvpSettings } from './schema.ts';
 import { wholeEventStatus } from './seating-occupants.ts';
 
 /**
@@ -100,4 +100,17 @@ export async function mealDietaryCountsTx(
     dietary,
     accessibility,
   };
+}
+
+/**
+ * Events whose RSVP deadline falls between `from` and `to` (M4.6a): the alert sweep evaluates
+ * them even when the event itself is further out than its usual window, so "RSVP pending" is
+ * raised at deadline −7 d for a wedding two months away.
+ */
+export async function rsvpDeadlineEventIdsTx(tx: TenantTx, from: Date, to: Date): Promise<string[]> {
+  const rows = await tx
+    .select({ eventId: rsvpSettings.eventId })
+    .from(rsvpSettings)
+    .where(between(rsvpSettings.deadline, from, to));
+  return rows.map((r) => r.eventId);
 }

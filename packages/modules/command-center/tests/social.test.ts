@@ -28,8 +28,16 @@ describe('M4.6a social Command Center pack', () => {
         false,
       );
       expect(WIDGET_META[k].revenue).toBeFalsy();
-      expect(WIDGET_META[k].permission).toBe('guests:read');
     }
+  });
+
+  it('RSVP and meals need guests:read; seating and arrivals the door widgets’ events:read', () => {
+    expect(PACK.map((k) => WIDGET_META[k].permission)).toEqual([
+      'guests:read',
+      'events:read',
+      'guests:read',
+      'events:read',
+    ]);
   });
 
   it('the door sees guest seating and arrivals (never RSVP chasing or meals); finance and marketing none', () => {
