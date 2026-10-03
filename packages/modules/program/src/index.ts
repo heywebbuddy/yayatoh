@@ -213,3 +213,12 @@ export {
   programOwnerDeleted,
   programOwnerTx,
 } from './shared.ts';
+// M5.9a: the conference Command Center pack's counts (alert rules and widgets read these).
+export {
+  type ExhibitorStaffing,
+  exhibitorStaffingTx,
+  overdueSpeakerTasksTx,
+  type SessionFill,
+  sessionFillTx,
+  sponsorTierCountsTx,
+} from './conference-facts.ts';

@@ -20,12 +20,14 @@ import {
 } from './domain/config.ts';
 import { type Firing, type PlanAction, planAlert, planNotifies, stateAfter } from './domain/lifecycle.ts';
 import { evaluateEventRules, evaluateOrgRules } from './domain/rules.ts';
-import { eventFactsTx, orgFactsTx } from './facts.ts';
+import { type ConferenceSources, eventFactsTx, orgFactsTx } from './facts.ts';
 import { alertHistory, alerts, memberSettings, routing } from './schema.ts';
 
 /** What the engine needs from the composition root. */
 export interface AlertDeps {
   readonly notifier: Notifier;
+  /** M5.9a: leads, sponsor deliverables and printers (modules not on this build yet). */
+  readonly conference?: ConferenceSources;
 }
 
 /** One alert that changed in an evaluation (for callers, tests and logs). */
@@ -285,7 +287,7 @@ export async function evaluateEventAlertsTx(
   now: Date = ctx.now,
 ): Promise<AlertChange[]> {
   await lockScopeTx(tx, requireOrg(ctx), eventId);
-  const gathered = await eventFactsTx(tx, eventId, now);
+  const gathered = await eventFactsTx(tx, eventId, now, deps.conference);
   if (!gathered) return [];
   const firing = evaluateEventRules(gathered.facts, now);
   return reconcileTx(tx, ctx, { eventId, event: gathered.event, rules: EVENT_RULES }, firing, deps, now);

@@ -1081,6 +1081,12 @@ importers:
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../../platform
+      '@yayatoh/program':
+        specifier: workspace:*
+        version: link:../program
+      '@yayatoh/registration':
+        specifier: workspace:*
+        version: link:../registration
       '@yayatoh/seating':
         specifier: workspace:*
         version: link:../seating

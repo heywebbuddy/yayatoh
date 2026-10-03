@@ -135,3 +135,5 @@ export {
   updateAdmissionItemCommand,
   updateRegistrationTypeCommand,
 } from './setup.ts';
+// M5.9a: the conference Command Center pack's counts (alert rules and widgets read these).
+export { approvalBacklogTx, sessionWaitlistsTx } from './conference-facts.ts';
