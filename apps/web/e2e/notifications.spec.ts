@@ -1,5 +1,12 @@
 import { expect, type Page, test } from '@playwright/test';
-import { continueToPayment, expectAccessible, OPEN_HOUSE, signIn, WEDDING_OWNER } from './helpers.ts';
+import {
+  continueToPayment,
+  expectAccessible,
+  OPEN_HOUSE,
+  pickOption,
+  signIn,
+  WEDDING_OWNER,
+} from './helpers.ts';
 
 interface Captured {
   to: string;
@@ -40,7 +47,7 @@ test.describe('notifications: emails sent and the message log', () => {
 
     const guest = await (await browser.newContext()).newPage();
     await guest.goto('/events/lakeside-open-house');
-    await guest.getByLabel(`Quantity — ${pass}`).selectOption('2');
+    await pickOption(guest.getByLabel(`Quantity — ${pass}`), '2');
     await guest.getByLabel('Full name').fill(buyer);
     await guest.getByLabel('Email for your tickets').fill(email);
     await continueToPayment(guest, email);
@@ -87,7 +94,7 @@ test.describe('notifications: emails sent and the message log', () => {
     await signIn(page, WEDDING_OWNER);
     await page.goto('/o/rosewood-weddings/events/new');
     await page.getByLabel('Event name', { exact: true }).fill(`Quiet night ${stamp}`);
-    await page.getByLabel('Event type').selectOption('other');
+    await pickOption(page.getByLabel('Event type'), 'other');
     await page.getByLabel('Starts', { exact: true }).fill('2027-11-01T18:00');
     await page.getByLabel('Ends', { exact: true }).fill('2027-11-01T22:00');
     await page.getByRole('button', { name: 'Create draft' }).click();
@@ -105,7 +112,7 @@ test.describe('notifications: emails sent and the message log', () => {
     await box.getByLabel("Buyer's name").fill(`Quinn ${stamp}`);
     await box.getByLabel(/Buyer's email/).fill(`quinn+${stamp}@example.test`);
     await box.getByLabel(new RegExp(`^Quiet ${stamp}`)).fill('1');
-    await box.getByLabel('Paid by').selectOption('zelle');
+    await pickOption(box.getByLabel('Paid by'), 'zelle');
     await box.getByRole('button', { name: 'Record sale' }).click();
     await expect(box.getByText('Sale recorded. The tickets are on their way.')).toBeVisible();
     await box.getByRole('link', { name: 'Open the order' }).click();
@@ -144,7 +151,7 @@ test.describe('notifications: one-click unsubscribe', () => {
     await page.reload();
     const bulk = page.getByRole('form', { name: 'Bulk actions' });
     await bulk.getByLabel('The 1 matching').check();
-    await bulk.getByLabel('Action').selectOption({ label: 'Send email' });
+    await pickOption(bulk.getByLabel('Action'), { label: 'Send email' });
     await bulk.getByLabel('Subject').fill(`Parking ${stamp}`);
     await bulk.getByLabel('Message').fill('Use lot C.');
     await bulk.getByRole('button', { name: 'Apply' }).click();

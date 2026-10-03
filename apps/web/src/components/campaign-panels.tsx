@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button } from '@yayatoh/ui';
+import { Alert, Button, DateTimePicker, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState, useId, useState } from 'react';
 import type { CampaignFormState } from '@/app/[locale]/o/[org]/(org)/campaigns/actions.ts';
@@ -103,7 +103,7 @@ export function AudiencePanel({
           <label htmlFor={`${uid}-segment`} className="text-[13px] font-bold text-ink">
             {t('savedAudience')}
           </label>
-          <select
+          <Select
             id={`${uid}-segment`}
             name="segmentId"
             defaultValue={current?.kind === 'segment' ? current.segmentId : ''}
@@ -117,7 +117,7 @@ export function AudiencePanel({
                 {s.name}
               </option>
             ))}
-          </select>
+          </Select>
           {errors.segmentId ? (
             <p id={`${uid}-segment-error`} className="text-caption text-danger">
               {t('errors.chooseAudience')}
@@ -130,7 +130,7 @@ export function AudiencePanel({
             <label htmlFor={`${uid}-template`} className="text-[13px] font-bold text-ink">
               {t('template')}
             </label>
-            <select
+            <Select
               id={`${uid}-template`}
               name="templateKey"
               defaultValue={current?.kind === 'template' ? current.templateKey : 'registeredNotCheckedIn'}
@@ -141,13 +141,13 @@ export function AudiencePanel({
                   {t(`templates.${k}`)}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
           <div className="flex flex-col gap-1.5">
             <label htmlFor={`${uid}-event`} className="text-[13px] font-bold text-ink">
               {t('templateEvent')}
             </label>
-            <select
+            <Select
               id={`${uid}-event`}
               name="eventId"
               defaultValue={current?.kind === 'template' ? current.eventId : ''}
@@ -161,7 +161,7 @@ export function AudiencePanel({
                   {e.name} · {e.date}
                 </option>
               ))}
-            </select>
+            </Select>
             {errors.eventId ? (
               <p id={`${uid}-event-error`} className="text-caption text-danger">
                 {t('errors.chooseEvent')}
@@ -245,10 +245,9 @@ export function SendPanel({
           <label htmlFor="schedule-at" className="text-[13px] font-bold text-ink">
             {t('scheduleAt')}
           </label>
-          <input
+          <DateTimePicker
             id="schedule-at"
             name="at"
-            type="datetime-local"
             aria-invalid={atErr ? true : undefined}
             aria-describedby={`schedule-at-hint${atErr ? ' schedule-at-error' : ''}`}
             className={FIELD}
@@ -370,13 +369,13 @@ export function NewCampaignForm({ action }: { action: Action }) {
         <label htmlFor="new-campaign-channel" className="text-[13px] font-bold text-ink">
           {t('channel')}
         </label>
-        <select id="new-campaign-channel" name="channel" defaultValue="email" className={FIELD}>
+        <Select id="new-campaign-channel" name="channel" defaultValue="email" className={FIELD}>
           {(['email', 'sms', 'whatsapp'] as const).map((c) => (
             <option key={c} value={c}>
               {t(`channels.${c}`)}
             </option>
           ))}
-        </select>
+        </Select>
       </div>
       <Button type="submit" disabled={pending}>
         {t('create')}

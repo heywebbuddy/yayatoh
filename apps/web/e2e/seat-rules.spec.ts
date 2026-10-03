@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
-import { continueToPayment, expectAccessible, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, pickOption, signIn } from './helpers.ts';
 import {
   addGuests,
   createGala,
@@ -214,8 +214,8 @@ test.describe('seating rules (M1.7f)', () => {
       ),
     ).toBeVisible();
     await page.getByRole('checkbox', { name: ann }).check();
-    await page.getByLabel('Table or row').selectOption({ label: 'Table 1 — 4 of 4 free' });
-    await page.getByLabel('Seat', { exact: true }).selectOption({ label: 'Table 1 · 1 · accessible' });
+    await pickOption(page.getByLabel('Table or row'), { label: 'Table 1 — 4 of 4 free' });
+    await pickOption(page.getByLabel('Seat', { exact: true }), { label: 'Table 1 · 1 · accessible' });
     await page.getByRole('button', { name: 'Seat them' }).click();
     const feedback = page.locator('[aria-live="polite"]').getByRole('status');
     await expect(feedback).toHaveText(
@@ -229,8 +229,8 @@ test.describe('seating rules (M1.7f)', () => {
     await expect(page.getByText('Seating rules saved.')).toBeVisible();
     await page.goto(`${base}/seating/assign`);
     await page.getByRole('checkbox', { name: ben }).check();
-    await page.getByLabel('Table or row').selectOption({ label: 'Table 1 — 4 of 4 free' });
-    await page.getByLabel('Seat', { exact: true }).selectOption({ label: 'Table 1 · 1 · accessible' });
+    await pickOption(page.getByLabel('Table or row'), { label: 'Table 1 — 4 of 4 free' });
+    await pickOption(page.getByLabel('Seat', { exact: true }), { label: 'Table 1 · 1 · accessible' });
     const confirm = page.getByLabel('This guest needs an accessible seat');
     await expect(confirm).toBeVisible();
     await page.getByRole('button', { name: 'Seat them' }).click();

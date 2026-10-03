@@ -75,6 +75,8 @@ export interface DatePickerProps {
   autoFocus?: boolean;
   'aria-label'?: string;
   'aria-describedby'?: string;
+  /** A form-level error on this field (e.g. "the end is before the start"). */
+  'aria-invalid'?: boolean | 'true' | 'false';
   'data-testid'?: string;
 }
 
@@ -609,7 +611,7 @@ function Picker({ kind, ...p }: DatePickerProps & { kind: Kind }) {
   const buttonLabel = kind === 'time' ? strings.chooseTime : strings.chooseDate;
 
   return (
-    <div className="flex flex-col gap-1.5">
+    <div className="flex min-w-0 flex-col gap-1.5">
       {label ? (
         <label htmlFor={inputId} className="text-[13px] font-bold text-ink">
           {label}
@@ -630,7 +632,9 @@ function Picker({ kind, ...p }: DatePickerProps & { kind: Kind }) {
             disabled={disabled}
             // biome-ignore lint/a11y/noAutofocus: passed through from the call site, as on a native input
             autoFocus={autoFocus}
-            aria-invalid={shownError ? true : undefined}
+            aria-invalid={
+              shownError || p['aria-invalid'] === true || p['aria-invalid'] === 'true' ? true : undefined
+            }
             aria-describedby={describedBy}
             aria-label={p['aria-label']}
             data-testid={p['data-testid']}
@@ -669,7 +673,7 @@ function Picker({ kind, ...p }: DatePickerProps & { kind: Kind }) {
         {timeZone ? (
           <span
             id={zoneId}
-            className="inline-flex min-h-7 shrink-0 items-center rounded-tag bg-surface-2 px-2 text-caption font-semibold text-ink-2"
+            className="inline-flex min-h-7 shrink-0 items-center rounded-tag border border-line px-2 text-caption font-semibold text-ink-2"
           >
             <span className="sr-only">{fill(strings.timeZoneNote, { zone: timeZone })} </span>
             <span aria-hidden="true">{zoneNote(timeZone, locale)}</span>

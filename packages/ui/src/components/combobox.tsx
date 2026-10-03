@@ -114,6 +114,20 @@ export function Combobox({
     });
   }, [options, selectedOptions]);
 
+  // A form reset returns to the default values.
+  const defaultsRef = useRef(asArray(defaultValue));
+  defaultsRef.current = asArray(defaultValue);
+  useEffect(() => {
+    const f = input.current?.form;
+    if (!f) return;
+    const onReset = () => {
+      setInner(defaultsRef.current);
+      setQuery('');
+    };
+    f.addEventListener('reset', onReset);
+    return () => f.removeEventListener('reset', onReset);
+  }, []);
+
   // Async options, debounced; an older answer never overwrites a newer one.
   useEffect(() => {
     if (!loadOptions || !open) return;
@@ -211,7 +225,7 @@ export function Combobox({
   const describedBy = error ? `${inputId}-error` : hint ? `${inputId}-hint` : undefined;
 
   return (
-    <div className="flex flex-col gap-1.5">
+    <div className="flex min-w-0 flex-col gap-1.5">
       {label ? (
         <label id={labelId} htmlFor={inputId} className="text-[13px] font-bold text-ink">
           {label}

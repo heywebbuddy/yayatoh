@@ -9,6 +9,7 @@ import {
   type KeyboardEvent,
   type ReactElement,
   type ReactNode,
+  type Ref,
   useCallback,
   useEffect,
   useId,
@@ -133,12 +134,17 @@ export function SearchIcon() {
 
 /** The trigger's look: our chevron inside the field, centred, 12 px from the end (UX principle 1). */
 export function selectTriggerClass(size: 'sm' | 'md' | 'lg' = 'md', className?: string): string {
+  // Classes carried over from a native select may not undo the chevron's room: inline padding
+  // stays ours, and a width of the caller's replaces our full width.
+  const own = (className ?? '').split(/\s+/).filter((c) => c && !/^(?:[\w-]+:)*(?:px|pe|pr|pl|ps)-/.test(c));
+  const width = own.some((c) => /^(?:[\w-]+:)*w-/.test(c));
   return fieldClass(
     size,
     cx(
-      'field-chevron group relative flex w-full cursor-pointer appearance-none items-center text-start',
+      'field-chevron group relative flex cursor-pointer appearance-none items-center text-start',
+      !width && 'w-full',
       'disabled:cursor-not-allowed',
-      className,
+      own.join(' '),
     ),
   );
 }
@@ -154,9 +160,9 @@ export interface SelectProps
   label?: ReactNode;
   hint?: ReactNode;
   error?: ReactNode;
-  /** Controlled value. */
-  value?: string;
-  defaultValue?: string;
+  /** Controlled value (numbers are submitted as their string, as on a native select). */
+  value?: string | number;
+  defaultValue?: string | number;
   onValueChange?: (value: string) => void;
   /** Submit the enclosing form after a choice (the "change → submit" filters). */
   submitOnChange?: boolean;
@@ -179,6 +185,8 @@ export interface SelectProps
   wrapperClassName?: string;
   autoFocus?: boolean;
   title?: string;
+  /** The trigger (to move focus to the field). */
+  ref?: Ref<HTMLButtonElement>;
 }
 
 /**
@@ -194,8 +202,8 @@ export function Select({
   label,
   hint,
   error,
-  value: controlled,
-  defaultValue,
+  value: controlledRaw,
+  defaultValue: defaultRaw,
   onValueChange,
   submitOnChange,
   options: given,
@@ -210,9 +218,13 @@ export function Select({
   wrapperClassName,
   autoFocus,
   title,
+  ref,
   ...aria
 }: SelectProps) {
   const { strings } = useUiLocale();
+  const controlled =
+    controlledRaw === undefined || controlledRaw === null ? undefined : String(controlledRaw);
+  const defaultValue = defaultRaw === undefined || defaultRaw === null ? undefined : String(defaultRaw);
   const auto = useId();
   const triggerId = id ?? name ?? `select-${auto}`;
   const listId = `${triggerId}-list`;
@@ -225,7 +237,14 @@ export function Select({
   const [inner, setInner] = useState(() =>
     initialValue(all, undefined, defaultValue ?? parsed.selected ?? parsed.hidden[0]?.value),
   );
-  const value = controlled ?? inner;
+  // Like a native select: an uncontrolled value that matches no option (options that arrived
+  // later, or a removed one) falls back to the first enabled option, unless a placeholder is meant.
+  const known = (v: string) => all.some((o) => o.value === v) || parsed.hidden.some((o) => o.value === v);
+  const value =
+    controlled ??
+    (known(inner) || (inner === '' && placeholder !== undefined) || !all.length
+      ? inner
+      : initialValue(all, undefined, undefined));
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [active, setActive] = useState(-1);
@@ -263,6 +282,22 @@ export function Select({
     close(focus);
   };
 
+  // A form reset (React resets a form after its action runs) returns to the default, as a
+  // native select does.
+  const resetTo = initialValue(all, undefined, defaultValue ?? parsed.selected ?? parsed.hidden[0]?.value);
+  const resetRef = useRef(resetTo);
+  resetRef.current = resetTo;
+  useEffect(() => {
+    const f = valueInput.current?.form;
+    if (!f) return;
+    const onReset = () => {
+      setInner(resetRef.current);
+      setInvalid(false);
+    };
+    f.addEventListener('reset', onReset);
+    return () => f.removeEventListener('reset', onReset);
+  }, []);
+
   // Submit after React has written the new value into the hidden input.
   useEffect(() => {
     if (!pendingSubmit.current) return;
@@ -299,7 +334,11 @@ export function Select({
     const t = typed.current;
     t.buffer = now - t.at > 700 ? key : t.buffer + key;
     t.at = now;
-    return typeahead(list, t.buffer, from);
+    const i = typeahead(list, t.buffer, from);
+    if (i >= 0 || t.buffer.length === 1) return i;
+    // No option starts with the whole buffer: start again from this key.
+    t.buffer = key;
+    return typeahead(list, key, from);
   };
 
   const navKeys: Record<string, ListKey> = {
@@ -320,20 +359,15 @@ export function Select({
       } else if (e.key === 'Home' || e.key === 'End') {
         e.preventDefault();
         openList(e.key === 'Home' ? 'first' : 'last');
-      } else if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      } else if (e.key.length === 1 && e.key !== ' ' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        // Closed: type-ahead chooses directly, as a native select does (open the list to search).
+        e.preventDefault();
         const i = onTypeahead(
           e.key,
           all,
-          Math.max(
-            active,
-            all.findIndex((o) => o.value === value),
-          ),
+          all.findIndex((o) => o.value === value),
         );
-        e.preventDefault();
-        if (withSearch) {
-          openList(i >= 0 ? i : undefined);
-          setQuery(e.key);
-        } else openList(i >= 0 ? i : undefined);
+        if (i >= 0) choose(all[i]);
       }
       return;
     }
@@ -427,7 +461,7 @@ export function Select({
   const shownText = current ? current.text : textOf(placeholder);
 
   return (
-    <div className={cx('relative flex flex-col gap-1.5', wrapperClassName)}>
+    <div className={cx('relative flex min-w-0 flex-col gap-1.5', wrapperClassName)}>
       {label ? (
         <label id={labelId} htmlFor={triggerId} className="text-[13px] font-bold text-ink">
           {label}
@@ -436,7 +470,11 @@ export function Select({
       <div className="relative">
         <button
           {...aria}
-          ref={trigger}
+          ref={(el) => {
+            trigger.current = el;
+            if (typeof ref === 'function') ref(el);
+            else if (ref) ref.current = el;
+          }}
           id={triggerId}
           type="button"
           role="combobox"
@@ -535,7 +573,7 @@ export function Select({
           </div>
         </div>
       ) : (
-        <div id={listId} role="listbox" hidden aria-label={aria['aria-label']} />
+        <div id={listId} role="listbox" hidden />
       )}
       <FieldMessage id={triggerId} error={error} hint={hint} />
     </div>

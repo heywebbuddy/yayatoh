@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, Input } from '@yayatoh/ui';
+import { Alert, Button, Input, Select } from '@yayatoh/ui';
 import type { VenueDto } from '@yayatoh/venues';
 import { useTranslations } from 'next-intl';
 import { useActionState } from 'react';
@@ -102,7 +102,7 @@ export function VenueForm({
           <label htmlFor="venue-timezone" className="text-[13px] font-bold text-ink">
             {t('timezone')}
           </label>
-          <select
+          <Select
             id="venue-timezone"
             name="timezone"
             defaultValue={venue?.timezone ?? defaultTimezone}
@@ -115,7 +115,7 @@ export function VenueForm({
                 {z.replace(/_/g, ' ')}
               </option>
             ))}
-          </select>
+          </Select>
           {bad.has('timezone') ? (
             <p id="venue-timezone-error" className="text-caption text-danger">
               {t('errors.timezone')}

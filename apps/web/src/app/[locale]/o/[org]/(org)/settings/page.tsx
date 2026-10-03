@@ -7,7 +7,7 @@ import {
   legalPagesQuery,
   roleCan,
 } from '@yayatoh/tenancy';
-import { buttonClass, Card, EmptyState, light, PageHeader } from '@yayatoh/ui';
+import { buttonClass, Card, EmptyState, light, PageHeader, Select } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { BrandColorField } from '@/components/brand-color-field.tsx';
 import { MediaUploader } from '@/components/media-uploader.tsx';
@@ -174,24 +174,24 @@ export default async function SettingsPage({
             {labelled(
               'org-locale',
               t('settings.general.locale'),
-              <select id="org-locale" name="defaultLocale" defaultValue={o.defaultLocale} className={field}>
+              <Select id="org-locale" name="defaultLocale" defaultValue={o.defaultLocale} className={field}>
                 {LOCALES.map((l) => (
                   <option key={l} value={l}>
                     {new Intl.DisplayNames([l], { type: 'language' }).of(l) ?? l}
                   </option>
                 ))}
-              </select>,
+              </Select>,
             )}
             {labelled(
               'org-timezone',
               t('settings.general.timezone'),
-              <select id="org-timezone" name="timezone" defaultValue={o.timezone} className={field}>
+              <Select id="org-timezone" name="timezone" defaultValue={o.timezone} className={field}>
                 {zones.map((z) => (
                   <option key={z} value={z}>
                     {z}
                   </option>
                 ))}
-              </select>,
+              </Select>,
             )}
             {labelled(
               'org-country',

@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, Card, Input } from '@yayatoh/ui';
+import { Alert, Button, Card, Input, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { type FormEvent, type ReactNode, startTransition, useActionState } from 'react';
 import type { WaitlistActionState } from '@/app/[locale]/waitlist/[token]/actions.ts';
@@ -88,13 +88,13 @@ export function WaitlistOfferForm({
           <label htmlFor="offer-quantity" className="text-[13px] font-bold text-ink">
             {t('quantity')}
           </label>
-          <select id="offer-quantity" name="quantity" defaultValue={String(quantity)} className="field w-28">
+          <Select id="offer-quantity" name="quantity" defaultValue={String(quantity)} className="field w-28">
             {Array.from({ length: quantity - min + 1 }, (_, i) => min + i).map((n) => (
               <option key={n} value={n}>
                 {n}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
         <Input
           name="name"

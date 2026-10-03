@@ -644,3 +644,10 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **RSVP pending levels:** warning from RSVP deadline −7 days, critical from −1 day, and it stays critical after the deadline until the event starts (so late answers keep being chased). No deadline set: no alert (the widget still shows the count). Confirm, or say if it should stop at the deadline.
 - [ ] **Guests without a table** (not declined, on a guest floor plan) alert in the last 7 days before the event (critical in the last day and while it runs). **Missing meals** (attending guests without a meal, events with a menu) alert in the last 7 days. Both thresholds are ours; say if you want other windows.
 - [ ] **Door staff see guest names** on the Command Center's guest seating and arrivals widgets (the same names they see on the Scan PWA's guest check-in); RSVP chasing and meals stay with hosts and planners (`guests:read`). Dietary and accessibility needs show as counts only, for everyone. Confirm.
+
+## U1 — form controls (2026-10-03, pending owner)
+- [ ] **Built with these defaults; say if any should change:**
+  - **Type-ahead on a closed dropdown chooses straight away**, as the browser's own select did (the keyboard paths and habits stay the same). To search, open the list (Enter, ↓ or a click); lists of more than 8 options open with a search box.
+  - **Event time zone in the create-event wizard** is now the full IANA list, grouped by region with the current offset, instead of the 13 zones the wizard offered. Values are unchanged (IANA names).
+  - **Arabic digits in the date and time pickers:** dates and times show Arabic-Indic digits (٠٥/١١/٢٠٢٦) in Arabic, as the U1 spec asks. The rest of the app still formats numbers with Western digits in Arabic (the CLDR default); say if you want one rule everywhere.
+  - **Typed dates** use the reader's locale order (11/05/2026 in English, 05.11.2026 in German). ISO (2026-11-05) always works too.

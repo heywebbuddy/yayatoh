@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, Input, SkeletonCard } from '@yayatoh/ui';
+import { Alert, Button, Input, Select, SkeletonCard } from '@yayatoh/ui';
 import { useFormatter, useTranslations } from 'next-intl';
 import { useCallback, useEffect, useId, useState } from 'react';
 import { StepUpProvider, useStepUp } from '@/components/step-up.tsx';
@@ -284,7 +284,7 @@ function DeviceCard({
                 <label htmlFor={`${id}-move`} className="text-[13px] font-bold text-ink">
                   {t('moveTo', { label: d.label })}
                 </label>
-                <select
+                <Select
                   id={`${id}-move`}
                   name="checkpointId"
                   defaultValue={d.checkpointId ?? ''}
@@ -296,7 +296,7 @@ function DeviceCard({
                       {c.name}
                     </option>
                   ))}
-                </select>
+                </Select>
               </div>
               <Button type="submit" variant="secondary" disabled={busy}>
                 {t('move')}
@@ -393,13 +393,13 @@ function DeviceCard({
                 <label htmlFor={`${id}-kiosk`} className="text-[13px] font-bold text-ink">
                   {t('kioskEntrance', { label: d.label })}
                 </label>
-                <select id={`${id}-kiosk`} name="kioskCheckpointId" className="field">
+                <Select id={`${id}-kiosk`} name="kioskCheckpointId" className="field">
                   {entrances.map((c) => (
                     <option key={c.id} value={c.id}>
                       {c.name}
                     </option>
                   ))}
-                </select>
+                </Select>
               </div>
             ) : null}
             <Input

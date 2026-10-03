@@ -5,6 +5,7 @@ import {
   confirmStepUp,
   expectAccessibleBothModes,
   newUser,
+  pickOption,
   stepUpDialog,
 } from './helpers.ts';
 
@@ -133,7 +134,7 @@ test.describe('donations (M4.8a)', () => {
     // Closing the campaign takes it off the giving page.
     await page.getByText('Edit Scholarship Fund').click();
     const edit = page.getByRole('listitem').filter({ hasText: 'Edit Scholarship Fund' });
-    await edit.getByLabel('Status').selectOption('closed');
+    await pickOption(edit.getByLabel('Status'), 'closed');
     await edit.getByRole('button', { name: 'Save' }).click();
     await expect(edit.getByText('Saved.')).toBeVisible();
     await page.goto(`/events/${g.slug}/give`);
@@ -181,7 +182,7 @@ test.describe('donations (M4.8a)', () => {
     await give.click();
     await expect(guest.getByText('Choose how your name appears.')).toBeVisible();
     await guest.getByRole('radio', { name: 'Give anonymously' }).check();
-    await guest.getByLabel('Dedication').selectOption('memory');
+    await pickOption(guest.getByLabel('Dedication'), 'memory');
     await give.click();
     await expect(guest.getByText('Enter the name of the person you are honoring.')).toBeVisible();
     await guest.getByLabel('In memory of (name)').fill('Grandpa Joe');

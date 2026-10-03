@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  Button,
   Combobox,
   CurrencyPicker,
   DatePicker,
@@ -94,7 +95,7 @@ export function FormControlsDemo({ id }: { id: string }) {
         </Select>
         <Select id={`err-${id}`} name="ticket" label={C.errorLabel} error={C.error} defaultValue="">
           <option value="">—</option>
-          <option value="ga">GA</option>
+          <option value="ga">{C.ga}</option>
         </Select>
         <Select id={`dis-sel-${id}`} name="locked" label={C.disabled} disabled defaultValue="published">
           {C.statuses.map((s) => (
@@ -126,6 +127,19 @@ export function FormControlsDemo({ id }: { id: string }) {
         <TimeZonePicker id={`tz-${id}`} name="timezone" label={C.zone} defaultValue="Europe/Paris" />
         <CurrencyPicker id={`cur-${id}`} name="currency" label={C.currency} defaultValue="EUR" />
       </div>
+      <form aria-label={C.resetForm} className="grid items-end gap-4 md:grid-cols-3">
+        <Select id={`rs-${id}`} name="rs-status" label={C.status} defaultValue="draft">
+          {C.statuses.map((s) => (
+            <option key={s} value={s.toLowerCase()}>
+              {s}
+            </option>
+          ))}
+        </Select>
+        <DatePicker id={`rs-date-${id}`} name="rs-date" label={C.date} defaultValue="2026-11-05" />
+        <Button type="reset" variant="secondary">
+          {C.reset}
+        </Button>
+      </form>
     </div>
   );
 }

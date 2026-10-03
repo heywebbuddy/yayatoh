@@ -62,11 +62,16 @@ export function useFloatingPanel(
       p.style.left = `${left}px`;
     };
     place();
+    // Inside a wrapping <label>, a click in the panel must not reach the label: its activation
+    // would click the trigger again and reopen the list.
+    const keepFromLabel = (e: MouseEvent) => e.preventDefault();
+    p.addEventListener('click', keepFromLabel);
     const ro = typeof ResizeObserver === 'function' ? new ResizeObserver(place) : null;
     ro?.observe(p);
     window.addEventListener('resize', place);
     window.addEventListener('scroll', place, true);
     return () => {
+      p.removeEventListener('click', keepFromLabel);
       ro?.disconnect();
       window.removeEventListener('resize', place);
       window.removeEventListener('scroll', place, true);
