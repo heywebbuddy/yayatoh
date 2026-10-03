@@ -872,11 +872,23 @@ export const myMeetingQuery = tenantQuery({
 
 /* ------------------------------------------------------------------------ block, report ---- */
 
-/** Block someone (M5.8b chat reports block too): insert the block and cut every tie. */
+/**
+ * Block someone (M5.8b chat reports block too): insert the block and cut every tie. Callers hold
+ * the blocker's profile FOR UPDATE (`viewerTx(…, true)`) or the pair's locks (chat reports), which
+ * a chat send's FOR NO KEY UPDATE waits on, so a send either committed before this or sees the
+ * block. The block is stamped when it is written (`clock_timestamp()`, batch 3u merge), not when
+ * its transaction began, so "a message stored after the block" means exactly that.
+ */
 export async function blockTx(tx: TenantTx, ctx: Ctx, me: ProfileRow, otherId: string) {
   await tx
     .insert(networkBlocks)
-    .values({ orgId: requireOrg(ctx), eventId: me.eventId, blockerId: me.id, blockedId: otherId })
+    .values({
+      orgId: requireOrg(ctx),
+      eventId: me.eventId,
+      blockerId: me.id,
+      blockedId: otherId,
+      createdAt: sql`clock_timestamp()`,
+    })
     .onConflictDoNothing();
   await severTx(tx, ctx, me.id, otherId);
 }
