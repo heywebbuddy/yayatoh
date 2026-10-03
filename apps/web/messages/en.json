@@ -11047,8 +11047,11 @@
       "notFound": "We couldn't find a badge for that ticket here.",
       "wrongDetails": "No problem: the desk will correct your details and print your badge.",
       "printFailed": "The printer didn't take your badge. The desk will print it for you.",
-      "locked": "Too many wrong codes. The desk will help you."
+      "locked": "Too many wrong codes. The desk will help you.",
+      "offline": "The kiosk is offline right now. The desk will print your badge."
     },
-    "pdfFrame": "Your badge, for printing"
+    "readyTitle": "Your badge is ready to print",
+    "readyHint": "Open it and choose Print, then collect it from the printer.",
+    "openBadge": "Open my badge to print"
   }
 }

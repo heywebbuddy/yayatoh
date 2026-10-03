@@ -11047,8 +11047,11 @@
       "notFound": "Nous n'avons pas trouvé de badge pour ce billet ici.",
       "wrongDetails": "Pas de souci : l'accueil corrigera vos informations et imprimera votre badge.",
       "printFailed": "L'imprimante n'a pas pris votre badge. L'accueil l'imprimera pour vous.",
-      "locked": "Trop de codes erronés. L'accueil va vous aider."
+      "locked": "Trop de codes erronés. L'accueil va vous aider.",
+      "offline": "La borne est hors ligne pour le moment. L'accueil imprimera votre badge."
     },
-    "pdfFrame": "Votre badge, à imprimer"
+    "readyTitle": "Votre badge est prêt à imprimer",
+    "readyHint": "Ouvrez-le, choisissez Imprimer, puis récupérez-le à l'imprimante.",
+    "openBadge": "Ouvrir mon badge pour l'imprimer"
   }
 }

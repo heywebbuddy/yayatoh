@@ -11047,8 +11047,11 @@
       "notFound": "Não encontrámos aqui um crachá para esse bilhete.",
       "wrongDetails": "Sem problema: o balcão corrige os seus dados e imprime o crachá.",
       "printFailed": "A impressora não aceitou o seu crachá. O balcão vai imprimi-lo.",
-      "locked": "Demasiados códigos errados. O balcão vai ajudá-lo."
+      "locked": "Demasiados códigos errados. O balcão vai ajudá-lo.",
+      "offline": "O quiosque está offline neste momento. O balcão vai imprimir o seu crachá."
     },
-    "pdfFrame": "O seu crachá, para imprimir"
+    "readyTitle": "O seu crachá está pronto a imprimir",
+    "readyHint": "Abra-o, escolha Imprimir e recolha-o na impressora.",
+    "openBadge": "Abrir o meu crachá para imprimir"
   }
 }

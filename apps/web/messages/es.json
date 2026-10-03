@@ -11047,8 +11047,11 @@
       "notFound": "No encontramos aquí una credencial para esa entrada.",
       "wrongDetails": "Sin problema: el mostrador corregirá tus datos e imprimirá tu credencial.",
       "printFailed": "La impresora no aceptó tu credencial. El mostrador la imprimirá por ti.",
-      "locked": "Demasiados códigos incorrectos. El mostrador te ayudará."
+      "locked": "Demasiados códigos incorrectos. El mostrador te ayudará.",
+      "offline": "El quiosco está sin conexión. El mostrador imprimirá tu credencial."
     },
-    "pdfFrame": "Tu credencial, para imprimir"
+    "readyTitle": "Tu credencial está lista para imprimir",
+    "readyHint": "Ábrela, elige Imprimir y recógela en la impresora.",
+    "openBadge": "Abrir mi credencial para imprimir"
   }
 }

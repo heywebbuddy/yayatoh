@@ -11047,8 +11047,11 @@
       "notFound": "We vonden hier geen badge voor dat ticket.",
       "wrongDetails": "Geen probleem: de balie past je gegevens aan en drukt je badge af.",
       "printFailed": "De printer heeft je badge niet aangenomen. De balie drukt hem voor je af.",
-      "locked": "Te veel foute codes. De balie helpt je verder."
+      "locked": "Te veel foute codes. De balie helpt je verder.",
+      "offline": "De kiosk is nu offline. De balie drukt je badge af."
     },
-    "pdfFrame": "Je badge, om af te drukken"
+    "readyTitle": "Je badge is klaar om af te drukken",
+    "readyHint": "Open hem, kies Afdrukken en haal hem op bij de printer.",
+    "openBadge": "Mijn badge openen om af te drukken"
   }
 }

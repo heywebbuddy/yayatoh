@@ -1,7 +1,7 @@
 'use client';
 
 import { isKioskCodeShape, isKioskEmail, KIOSK_DONE_MS, KIOSK_IDLE_MS } from '@yayatoh/badges/client';
-import { Alert, Button, Input } from '@yayatoh/ui';
+import { Alert, Button, buttonClass, Input } from '@yayatoh/ui';
 import { useLocale, useTranslations } from 'next-intl';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { KioskBadge, KioskPrintResult, ScanClient } from '@/scan/client.ts';
@@ -16,8 +16,11 @@ type Step =
   | { s: 'email'; error?: string }
   | { s: 'code'; challengeId: string; email: string; error?: string }
   | { s: 'details'; badge: KioskBadge; code: string | null }
-  | { s: 'done'; message: 'printing' | 'queued'; pdf: boolean }
-  | { s: 'desk'; why: 'desk' | 'printed' | 'notFound' | 'wrongDetails' | 'printFailed' | 'locked' };
+  | { s: 'done'; message: 'printing' | 'ready' | 'queued' }
+  | {
+      s: 'desk';
+      why: 'desk' | 'printed' | 'notFound' | 'wrongDetails' | 'printFailed' | 'locked' | 'offline';
+    };
 
 const BIG = 'min-h-16 min-w-48 text-title';
 
@@ -44,7 +47,6 @@ export function KioskSelfPrint({
   const [step, setStep] = useState<Step>(start.kind === 'email' ? { s: 'email' } : { s: 'loading' });
   const [busy, setBusy] = useState(false);
   const heading = useRef<HTMLHeadingElement>(null);
-  const frame = useRef<HTMLIFrameElement>(null);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
 
   // A minute without a touch ends the visit; a finished print or a desk message after a few seconds.
@@ -133,20 +135,22 @@ export function KioskSelfPrint({
       ...(code ? { code } : {}),
       locale,
     });
-    if (r.status === 'printing' && r.adapter === 'browser' && r.pdfToken) {
-      const pdf = await client.kioskBadgePdf(r.pdfToken);
-      if (pdf) setPdfUrl(URL.createObjectURL(pdf));
-    }
+    // The kiosk's own print dialog (P5-2 stage 1): the badge PDF, opened by the attendee to print.
+    let pdf: Blob | null = null;
+    if (r.status === 'printing' && r.adapter === 'browser' && r.pdfToken)
+      pdf = await client.kioskBadgePdf(r.pdfToken);
     setBusy(false);
-    if (r.status === 'printing')
-      setStep(
-        r.failed
-          ? { s: 'desk', why: 'printFailed' }
-          : { s: 'done', message: 'printing', pdf: r.adapter === 'browser' },
-      );
-    else if (r.status === 'queued') setStep({ s: 'done', message: 'queued', pdf: false });
+    if (r.status === 'printing') {
+      if (r.failed || (r.adapter === 'browser' && !pdf)) setStep({ s: 'desk', why: 'printFailed' });
+      else if (pdf) {
+        setPdfUrl(URL.createObjectURL(pdf));
+        setStep({ s: 'done', message: 'ready' });
+      } else setStep({ s: 'done', message: 'printing' });
+    } else if (r.status === 'queued') setStep({ s: 'done', message: 'queued' });
     else if (r.status === 'printed') setStep({ s: 'desk', why: 'printed' });
-    else setStep({ s: 'desk', why: r.status === 'desk' ? 'desk' : 'printFailed' });
+    else if (r.status === 'desk') setStep({ s: 'desk', why: 'desk' });
+    else
+      setStep({ s: 'desk', why: r.status === 'error' && r.code === 'offline' ? 'offline' : 'printFailed' });
   }
 
   return (
@@ -311,12 +315,32 @@ export function KioskSelfPrint({
             className="text-display text-success"
             data-kiosk-done={step.message}
           >
-            {t(step.message === 'printing' ? 'printingTitle' : 'queuedTitle')}
+            {t(`${step.message}Title`)}
           </h2>
-          <p className="text-title">{t(step.message === 'printing' ? 'printingHint' : 'queuedHint')}</p>
-          <Button type="button" size="lg" className={`${BIG} self-start`} onClick={onDone}>
-            {t('done')}
-          </Button>
+          <p className="text-title">{t(`${step.message}Hint`)}</p>
+          <div className="flex flex-wrap gap-4">
+            {step.message === 'ready' && pdfUrl ? (
+              <a
+                href={pdfUrl}
+                target="_blank"
+                rel="noopener"
+                className={`${buttonClass('primary', 'lg')} ${BIG}`}
+                data-kiosk-pdf
+                onClick={touch}
+              >
+                {t('openBadge')}
+              </a>
+            ) : null}
+            <Button
+              type="button"
+              variant={step.message === 'ready' ? 'secondary' : 'primary'}
+              size="lg"
+              className={BIG}
+              onClick={onDone}
+            >
+              {t('done')}
+            </Button>
+          </div>
         </div>
       ) : null}
 
@@ -330,24 +354,6 @@ export function KioskSelfPrint({
             {t('done')}
           </Button>
         </div>
-      ) : null}
-
-      {pdfUrl ? (
-        // The badge PDF in the kiosk's own print dialog (kiosk-printing browsers print it silently).
-        <iframe
-          ref={frame}
-          src={pdfUrl}
-          title={t('pdfFrame')}
-          data-kiosk-pdf="loaded"
-          className="pointer-events-none fixed size-px opacity-0"
-          onLoad={() => {
-            try {
-              frame.current?.contentWindow?.print();
-            } catch {
-              // A browser without a print dialog here: the desk can reprint from the log.
-            }
-          }}
-        />
       ) : null}
     </section>
   );

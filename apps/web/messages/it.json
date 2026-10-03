@@ -11047,8 +11047,11 @@
       "notFound": "Non abbiamo trovato qui un badge per quel biglietto.",
       "wrongDetails": "Nessun problema: il banco correggerà i tuoi dati e stamperà il badge.",
       "printFailed": "La stampante non ha accettato il badge. Lo stamperà il banco.",
-      "locked": "Troppi codici errati. Il banco ti aiuterà."
+      "locked": "Troppi codici errati. Il banco ti aiuterà.",
+      "offline": "Il chiosco è offline in questo momento. Il banco stamperà il tuo badge."
     },
-    "pdfFrame": "Il tuo badge, da stampare"
+    "readyTitle": "Il tuo badge è pronto da stampare",
+    "readyHint": "Aprilo, scegli Stampa e ritiralo dalla stampante.",
+    "openBadge": "Apri il mio badge per stamparlo"
   }
 }

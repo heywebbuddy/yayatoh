@@ -709,7 +709,9 @@ export class ScanClient {
     const requestKey = `kiosk-${uuidv7()}`;
     const r = await this.kioskPost<KioskPrintResult>({ action: 'print', ...input, requestKey });
     if ('code' in r && !('status' in r)) {
-      if (r.code === 'offline' && input.code) {
+      // Offline, only a PrintNode kiosk queues the print (it prints at the printer later; a print
+      // dialog needs the attendee still standing here).
+      if (r.code === 'offline' && input.code && this.kioskPrint?.adapter === 'printnode') {
         const queue = await this.kioskPrintQueue();
         queue.push({ ticketId: input.ticketId, code: input.code, requestKey, locale: input.locale });
         await kvSet('kioskPrints', await sealJson(this.config.token, queue));
@@ -733,7 +735,7 @@ export class ScanClient {
     return (await this.kioskPrintQueue()).length;
   }
 
-  /** Send prints made offline (one at a time, each once); returns the browser jobs to print here. */
+  /** Send prints made offline (one at a time, each once; PrintNode prints them). */
   async flushKioskPrints(): Promise<KioskPrintResult[]> {
     const queue = await this.kioskPrintQueue();
     const done: KioskPrintResult[] = [];

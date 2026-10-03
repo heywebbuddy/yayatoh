@@ -43,11 +43,9 @@ export function KioskScreen({
   const [selfPrint, setSelfPrint] = useState(client.kioskPrint !== null);
   const [emailCodes, setEmailCodes] = useState(client.kioskPrint?.emailCodes ?? false);
   const [visit, setVisit] = useState<SelfPrintStart | null>(null);
-  const [laterPdf, setLaterPdf] = useState<string | null>(null);
-  const laterFrame = useRef<HTMLIFrameElement>(null);
 
   // The self-print snapshot: loaded sealed at once, refreshed every 30 s and on reconnect, when
-  // prints made offline are also sent (browser jobs then print here).
+  // prints made offline are also sent.
   useEffect(() => {
     let stop = false;
     const refresh = async () => {
@@ -55,11 +53,8 @@ export function KioskScreen({
       if (stop) return;
       setSelfPrint(snap !== null);
       setEmailCodes(snap?.emailCodes ?? false);
-      for (const r of await client.flushKioskPrints())
-        if (r.status === 'printing' && r.pdfToken) {
-          const pdf = await client.kioskBadgePdf(r.pdfToken);
-          if (pdf && !stop) setLaterPdf(URL.createObjectURL(pdf));
-        }
+      // Prints made offline go to the PrintNode printer (only PrintNode kiosks queue them).
+      await client.flushKioskPrints();
     };
     void client.loadKioskPrint().then(() => {
       if (stop) return;
@@ -215,22 +210,6 @@ export function KioskScreen({
             const outcome = await client.scan(code);
             setLast({ outcome, mark });
             afterScan();
-          }}
-        />
-      ) : null}
-      {laterPdf ? (
-        // A badge printed offline, now that the kiosk is back online.
-        <iframe
-          ref={laterFrame}
-          src={laterPdf}
-          title={tp('pdfFrame')}
-          className="pointer-events-none fixed size-px opacity-0"
-          onLoad={() => {
-            try {
-              laterFrame.current?.contentWindow?.print();
-            } catch {
-              // No print dialog here: the desk reprints from the log.
-            }
           }}
         />
       ) : null}

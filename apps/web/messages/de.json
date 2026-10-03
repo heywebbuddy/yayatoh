@@ -11047,8 +11047,11 @@
       "notFound": "Wir haben hier kein Badge zu diesem Ticket gefunden.",
       "wrongDetails": "Kein Problem: Der Counter korrigiert Ihre Angaben und druckt Ihr Badge.",
       "printFailed": "Der Drucker hat Ihr Badge nicht angenommen. Der Counter druckt es für Sie.",
-      "locked": "Zu viele falsche Codes. Der Counter hilft Ihnen weiter."
+      "locked": "Zu viele falsche Codes. Der Counter hilft Ihnen weiter.",
+      "offline": "Das Terminal ist gerade offline. Der Counter druckt Ihr Badge."
     },
-    "pdfFrame": "Ihr Badge zum Drucken"
+    "readyTitle": "Ihr Badge ist druckbereit",
+    "readyHint": "Öffnen Sie es, wählen Sie Drucken und holen Sie es am Drucker ab.",
+    "openBadge": "Mein Badge zum Drucken öffnen"
   }
 }
