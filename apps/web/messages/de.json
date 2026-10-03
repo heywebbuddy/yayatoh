@@ -1742,7 +1742,6 @@
         "add": "Fügen Sie jeden Eintrag unten genau wie angezeigt hinzu. Entfernen Sie andere A- oder CNAME-Einträge mit demselben Namen.",
         "back": "Kommen Sie hierher zurück und wählen Sie „Jetzt prüfen“."
       },
-      "copyColumn": "Kopieren",
       "copyName": "Name des {type}-Eintrags",
       "copyValue": "Wert des {type}-Eintrags",
       "copy": "Kopieren",

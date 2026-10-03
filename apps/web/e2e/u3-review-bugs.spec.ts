@@ -88,24 +88,24 @@ test.describe('U3: blog and page links resolve on every host class', () => {
     browser,
   }) => {
     const s = stamp();
-    await signIn(page);
+    // A fresh org: the seeded ones get custom domains from other specs running in parallel.
+    const user = await newUser(page, { org: true, twoFactor: true });
+    const org = `/o/${user.orgSlug}`;
+    const base = `${DEV}/organizers/${user.orgSlug}`;
     const title = `Dev post ${s}`;
-    const slug = await publishEntry(page, DEV, ORG, 'post', title);
-    await expect(viewOnSite(page)).toHaveAttribute('href', `${DEV}/organizers/lakeside-events/blogs/${slug}`);
-    await opensPublicly(browser, `${DEV}/organizers/lakeside-events/blogs/${slug}`, title);
+    const slug = await publishEntry(page, DEV, org, 'post', title);
+    await expect(viewOnSite(page)).toHaveAttribute('href', `${base}/blogs/${slug}`);
+    await opensPublicly(browser, `${base}/blogs/${slug}`, title);
     // Following the link from the console lands on the public post.
     await viewOnSite(page).click();
-    await expect(page).toHaveURL(`${DEV}/organizers/lakeside-events/blogs/${slug}`);
+    await expect(page).toHaveURL(`${base}/blogs/${slug}`);
     await expect(page.getByRole('heading', { level: 1, name: title })).toBeVisible();
     await expectAccessible(page);
 
     const pageTitle = `Dev page ${s}`;
-    const pageSlug = await publishEntry(page, DEV, ORG, 'page', pageTitle);
-    await expect(viewOnSite(page)).toHaveAttribute(
-      'href',
-      `${DEV}/organizers/lakeside-events/pages/${pageSlug}`,
-    );
-    await opensPublicly(browser, `${DEV}/organizers/lakeside-events/pages/${pageSlug}`, pageTitle);
+    const pageSlug = await publishEntry(page, DEV, org, 'page', pageTitle);
+    await expect(viewOnSite(page)).toHaveAttribute('href', `${base}/pages/${pageSlug}`);
+    await opensPublicly(browser, `${base}/pages/${pageSlug}`, pageTitle);
   });
 
   test('apex marketplace: from the dashboard host the link is the apex organizer page /o/{org}/…', async ({
@@ -113,22 +113,22 @@ test.describe('U3: blog and page links resolve on every host class', () => {
     browser,
   }) => {
     const s = stamp();
-    // Sign in on the dashboard host as the persona form does (its redirect names the server's own
-    // origin locally, so post from the page and keep this host's cookie).
+    // A fresh org whose owner is signed in on the dashboard host (the dev tool, posted from a
+    // page there so the session cookie belongs to that host).
     await page.goto(`${APP}/dev/login`);
-    const status = await page.evaluate(async () => {
-      const body = new URLSearchParams({ email: 'pani@lakeside.test', locale: 'en' });
-      const r = await fetch('/api/dev/login', { method: 'POST', body, redirect: 'manual' });
-      return r.type === 'opaqueredirect' ? 303 : r.status;
+    const orgSlug = await page.evaluate(async () => {
+      const body = new URLSearchParams({ org: 'new', twoFactor: '1' });
+      const r = await fetch('/api/dev/user', { method: 'POST', body });
+      return ((await r.json()) as { orgSlug: string }).orgSlug;
     });
-    expect(status).toBe(303);
+    expect(orgSlug).toBeTruthy();
     const title = `Apex post ${s}`;
-    const slug = await publishEntry(page, APP, ORG, 'post', title);
+    const slug = await publishEntry(page, APP, `/o/${orgSlug}`, 'post', title);
     // The configured apex (yayatoh.com) with this request's port; the same path on a marketplace
     // host (yayatoh.localhost locally) is the public post.
     const href = await viewOnSite(page).getAttribute('href');
-    expect(href).toBe(`http://yayatoh.com:${PORT}/o/lakeside-events/blogs/${slug}`);
-    await opensPublicly(browser, `${APEX}/o/lakeside-events/blogs/${slug}`, title);
+    expect(href).toBe(`http://yayatoh.com:${PORT}/o/${orgSlug}/blogs/${slug}`);
+    await opensPublicly(browser, `${APEX}/o/${orgSlug}/blogs/${slug}`, title);
   });
 
   test('managed subdomain and custom domain: the tenant site at root paths', async ({ page, browser }) => {

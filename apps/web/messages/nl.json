@@ -1742,7 +1742,6 @@
         "add": "Voeg elk record hieronder precies zo toe. Verwijder andere A- of CNAME-records met dezelfde naam.",
         "back": "Kom hier terug en kies Nu controleren."
       },
-      "copyColumn": "Kopiëren",
       "copyName": "naam van het {type}-record",
       "copyValue": "waarde van het {type}-record",
       "copy": "Kopiëren",

@@ -1742,7 +1742,6 @@
         "add": "按显示内容准确添加下面的每条记录。删除同名的其他 A 或 CNAME 记录。",
         "back": "回到这里并选择“立即检查”。"
       },
-      "copyColumn": "复制",
       "copyName": "{type} 记录的名称",
       "copyValue": "{type} 记录的值",
       "copy": "复制",

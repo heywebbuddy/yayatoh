@@ -82,11 +82,8 @@ export async function ConnectWizard({
                     <th scope="col" className="py-1 pe-4 text-start font-normal">
                       {t('recordName')}
                     </th>
-                    <th scope="col" className="py-1 pe-4 text-start font-normal">
-                      {t('recordValue')}
-                    </th>
                     <th scope="col" className="py-1 text-start font-normal">
-                      <span className="sr-only">{t('wizard.copyColumn')}</span>
+                      {t('recordValue')}
                     </th>
                   </tr>
                 </thead>
@@ -94,18 +91,22 @@ export async function ConnectWizard({
                   {d.records.map((r, i) => (
                     <tr key={`${r.type}:${r.name}`} className="border-t border-line">
                       <td className="py-1.5 pe-4 align-top font-mono">{r.type}</td>
-                      <td className="py-1.5 pe-4 align-top font-mono break-all" dir="ltr">
-                        {r.name}
-                      </td>
-                      <td className="py-1.5 pe-4 align-top font-mono break-all" dir="ltr">
-                        {r.value}
-                      </td>
-                      <td className="py-1.5 align-top">
-                        <span className="flex flex-wrap gap-2">
+                      <td className="py-1.5 pe-4 align-top">
+                        <span className="flex flex-col items-start gap-1.5">
+                          <span className="font-mono break-all" dir="ltr">
+                            {r.name}
+                          </span>
                           <CopyValue
                             value={r.name}
                             label={t('wizard.copyName', { type: recordLabel(r, i) })}
                           />
+                        </span>
+                      </td>
+                      <td className="py-1.5 align-top">
+                        <span className="flex flex-col items-start gap-1.5">
+                          <span className="font-mono break-all" dir="ltr">
+                            {r.value}
+                          </span>
                           <CopyValue
                             value={r.value}
                             label={t('wizard.copyValue', { type: recordLabel(r, i) })}

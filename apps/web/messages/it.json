@@ -1742,7 +1742,6 @@
         "add": "Aggiungi ogni record qui sotto esattamente come mostrato. Rimuovi altri record A o CNAME con lo stesso nome.",
         "back": "Torna qui e seleziona Controlla ora."
       },
-      "copyColumn": "Copia",
       "copyName": "nome del record {type}",
       "copyValue": "valore del record {type}",
       "copy": "Copia",

@@ -1742,7 +1742,6 @@
         "add": "Ajoutez chaque enregistrement ci-dessous exactement comme affiché. Supprimez les autres enregistrements A ou CNAME portant le même nom.",
         "back": "Revenez ici et sélectionnez Vérifier maintenant."
       },
-      "copyColumn": "Copier",
       "copyName": "nom de l'enregistrement {type}",
       "copyValue": "valeur de l'enregistrement {type}",
       "copy": "Copier",

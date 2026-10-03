@@ -1742,7 +1742,6 @@
         "add": "Adicione cada registro abaixo exatamente como aparece. Remova outros registros A ou CNAME com o mesmo nome.",
         "back": "Volte aqui e selecione Verificar agora."
       },
-      "copyColumn": "Copiar",
       "copyName": "nome do registro {type}",
       "copyValue": "valor do registro {type}",
       "copy": "Copiar",
