@@ -119,9 +119,12 @@ export function parseJsonReply(raw: string): unknown {
   }
 }
 
+/** Drafts never carry HTML: tags are dropped before the Markdown sanitizer sees the text. */
+const stripTags = (s: string) => s.replace(/<\/?[a-zA-Z][^>]*>/g, '');
+
 const oneLine = (s: string, max: number) =>
   cut(
-    markdownToPlainText(sanitizeMarkdown(s, 4000))
+    markdownToPlainText(sanitizeMarkdown(stripTags(s), 4000))
       .replace(/\s+/g, ' ')
       .replace(/^["'“”«»]+|["'“”«»]+$/g, '')
       .trim(),
@@ -136,7 +139,7 @@ function cut(s: string, max: number): string {
 }
 
 const plain = (s: string, max: number) =>
-  cut(markdownToPlainText(sanitizeMarkdown(s, 8000)).replace(/[ \t]+/g, ' ').trim(), max);
+  cut(markdownToPlainText(sanitizeMarkdown(stripTags(s), 8000)).replace(/[ \t]+/g, ' ').trim(), max);
 
 export const CampaignDraftDto = z.object({
   subject: z.string().min(1).max(150),
@@ -208,7 +211,7 @@ export function cleanPageDraft(raw: string): PageDraftDto {
   const draft = {
     title: oneLine(p.data.title, 120),
     excerpt: oneLine(p.data.excerpt, 280),
-    body: sanitizeMarkdown(p.data.body.replace(/^#{1,6}\s+/gm, ''), 8000),
+    body: sanitizeMarkdown(stripTags(p.data.body).replace(/^#{1,6}\s+/gm, ''), 8000),
   };
   const ok = PageDraftDto.safeParse(draft);
   if (!ok.success) throw new AiOutputError('page content');

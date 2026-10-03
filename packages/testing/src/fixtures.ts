@@ -1,5 +1,5 @@
 import { createECDH } from 'node:crypto';
-import { draftEventCopy, fakeDrafter } from '@yayatoh/ai';
+import { draftEventCopy, fakeDrafter, saveBrandKitCommand } from '@yayatoh/ai';
 import {
   acknowledgeAlertCommand,
   evaluateEventAlertsTx,
@@ -1948,6 +1948,13 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ports,
   );
   await draftEventCopy(ctx(), ports, fakeDrafter, { eventId: event.id, kind: 'tagline' });
+  // M6.12b: a brand kit (isolation coverage of ai.brand_kits).
+  await executeCommand(
+    saveBrandKitCommand,
+    { name: `${name} voice`, voice: 'Warm, local, never pushy.', tone: 'friendly', keywords: 'community, lakeside', avoid: 'cheap', isDefault: true },
+    ctx(),
+    ports,
+  );
   // M5.1a registration: the default types and items (activating the conference pack), a code-only
   // and a domain-only type, one cell per type, and a capacity claim.
   await executeCommand(seedRegistrationDefaultsCommand, { eventId: event.id, names: {} }, ctx(), ports);
