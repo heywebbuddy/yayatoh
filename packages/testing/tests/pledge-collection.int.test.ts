@@ -828,11 +828,12 @@ describe('tenant isolation', () => {
         ports,
       ),
     ).rejects.toMatchObject({ code: 'not_found' });
-    // B's own page lists B's pledges only (its fixture pledge).
+    // B's own page lists B's paddle pledges only (its fixture pledge; a sponsor's match pledge,
+    // M4.8f, is not collected here).
     const view = await executeQuery(pledgeCollectionQuery, { eventId: b.event.id }, b.ctx(), ports);
     const [own] = await q<{ n: number }>(
       b,
-      sql`select count(*)::int as n from donations.pledges where status = 'confirmed'`,
+      sql`select count(*)::int as n from donations.pledges where status = 'confirmed' and source = 'paddle'`,
     );
     expect(view.rows).toHaveLength(own?.n ?? -1);
   });
