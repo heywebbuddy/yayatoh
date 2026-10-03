@@ -42,7 +42,7 @@ let seats: Seats;
 beforeAll(async () => {
   ({ a, b } = await twoOrgs());
   // The fixture streams its first session already; these tests use two sessions of their own.
-  const sessions = [];
+  const sessions: { session: { id: string } }[] = [];
   for (const n of [1, 2])
     sessions.push(
       await executeCommand(
