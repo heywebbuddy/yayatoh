@@ -215,7 +215,7 @@ CREATE POLICY "credit_notes_agency_money_guard" ON "orders"."credit_notes" AS RE
 CREATE POLICY "credit_note_applications_agency_money_guard" ON "orders"."credit_note_applications" AS RESTRICTIVE FOR ALL TO "app_user" USING ((SELECT tenancy.money_access_allowed())) WITH CHECK ((SELECT tenancy.money_access_allowed()));
 -- hand-written: end
 --> statement-breakpoint
--- hand-written: begin (batch 3k merge: the money tables batches 3i-3k added get the same guard: M4.8g's gift reconciliation, M4.8e's saved cards and charge attempts, M6.6a/b's subscription, plan changes, usage and provider events. Plans, modules, fee terms and org_billing stay readable: entitlements and the read-only billing gate need them)
+-- hand-written: begin (batch 3k merge: the money tables batches 3i-3k added get the same guard: M4.8g's gift reconciliation, M4.8e's saved cards and charge attempts, M6.6a/b's plan changes, usage and provider events. Plans, modules, fee terms, org_billing and subscriptions stay readable: entitlements and the read-only billing gate need them)
 CREATE POLICY "recon_runs_agency_money_guard" ON "donations"."recon_runs" AS RESTRICTIVE FOR ALL TO "app_user" USING ((SELECT tenancy.money_access_allowed())) WITH CHECK ((SELECT tenancy.money_access_allowed()));
 --> statement-breakpoint
 CREATE POLICY "recon_items_agency_money_guard" ON "donations"."recon_items" AS RESTRICTIVE FOR ALL TO "app_user" USING ((SELECT tenancy.money_access_allowed())) WITH CHECK ((SELECT tenancy.money_access_allowed()));
@@ -225,8 +225,6 @@ CREATE POLICY "recon_payouts_agency_money_guard" ON "donations"."recon_payouts" 
 CREATE POLICY "saved_cards_agency_money_guard" ON "donations"."saved_cards" AS RESTRICTIVE FOR ALL TO "app_user" USING ((SELECT tenancy.money_access_allowed())) WITH CHECK ((SELECT tenancy.money_access_allowed()));
 --> statement-breakpoint
 CREATE POLICY "pledge_attempts_agency_money_guard" ON "donations"."pledge_attempts" AS RESTRICTIVE FOR ALL TO "app_user" USING ((SELECT tenancy.money_access_allowed())) WITH CHECK ((SELECT tenancy.money_access_allowed()));
---> statement-breakpoint
-CREATE POLICY "subscriptions_agency_money_guard" ON "billing"."subscriptions" AS RESTRICTIVE FOR ALL TO "app_user" USING ((SELECT tenancy.money_access_allowed())) WITH CHECK ((SELECT tenancy.money_access_allowed()));
 --> statement-breakpoint
 CREATE POLICY "plan_changes_agency_money_guard" ON "billing"."plan_changes" AS RESTRICTIVE FOR ALL TO "app_user" USING ((SELECT tenancy.money_access_allowed())) WITH CHECK ((SELECT tenancy.money_access_allowed()));
 --> statement-breakpoint

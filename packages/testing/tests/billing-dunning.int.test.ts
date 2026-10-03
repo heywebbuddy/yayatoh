@@ -209,6 +209,14 @@ describe('dunning to read-only (M6.6b acceptance)', () => {
     const buyer = createCtx({ orgId: a.org.id, actor: { type: 'user', userId: uuidv7() } });
     expect(await check(buyer, 'orders.checkout')).toBeNull();
     expect(await check(createCtx({ orgId: a.org.id }), 'orders.checkout')).toBeNull();
+    // Batch 3k merge: someone acting through an agency grant (M6.7a) is no member, yet read-only too.
+    const viaAgency = createCtx({
+      orgId: a.org.id,
+      actor: { type: 'user', userId: uuidv7() },
+      viaAgency: { grantId: uuidv7(), agencyOrgId: uuidv7() },
+    });
+    expect(await check(viaAgency, 'program.createTrack')).toBe('read_only_billing');
+    expect(await check(viaAgency, 'reports.startAttendeeExport', 'export')).toBeNull();
     // The other org is untouched.
     expect((await standing(b)).standing).toBe('good');
     expect(await codeOf(track(b))).toBeNull();

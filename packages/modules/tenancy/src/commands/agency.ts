@@ -383,9 +383,9 @@ export async function agencyClientGrantsTx(tx: TenantTx): Promise<AgencyClientGr
  * enforces it in the database from the transaction's org and user. Every `payments` table is one
  * (the isolation test checks the schema against this list), plus invoices and credit notes, and
  * (batch 3k merge) the donations reconciliation, saved cards and charge attempts and the billing
- * subscription, plan changes, usage and provider events. Plans, modules, fee terms and
- * `billing.org_billing` are not: the console needs them to work (entitlements, fee previews, the
- * read-only billing gate).
+ * plan changes, usage and provider events. Plans, modules, fee terms, `billing.org_billing` and
+ * `billing.subscriptions` are not: the console needs them to work (entitlements, which read the
+ * live subscription once billing is on, fee previews, the read-only billing gate).
  */
 export const MONEY_TABLES = [
   'payments.disputes',
@@ -402,13 +402,13 @@ export const MONEY_TABLES = [
   'orders.credit_notes',
   'orders.credit_note_applications',
   // Batch 3k merge: money tables added by batches 3i-3k (gift reconciliation against the connected
-  // account, saved cards and their charge attempts, the org's own subscription with the platform).
+  // account, saved cards and their charge attempts, the org's plan changes, usage and provider
+  // events with the platform).
   'donations.recon_runs',
   'donations.recon_items',
   'donations.recon_payouts',
   'donations.saved_cards',
   'donations.pledge_attempts',
-  'billing.subscriptions',
   'billing.plan_changes',
   'billing.usage_records',
   'billing.provider_events',

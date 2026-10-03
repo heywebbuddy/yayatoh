@@ -111,6 +111,14 @@ beforeAll(async () => {
     ports,
   );
   strangerAgencyId = other.id;
+  // Batch 3k merge: M6.6a puts every Phase 6 key, `agency` included, on `launch_standard` (P6-13,
+  // free in beta), so this agency has the entitlement taken away to stay one without it.
+  await executeCommand(
+    setEntitlementOverrideCommand,
+    { moduleKey: 'agency', effect: 'revoke', reason: 'agency fixture without the entitlement' },
+    systemCtx(strangerAgencyId),
+    ports,
+  );
 }, 240_000);
 afterAll(closePools);
 
