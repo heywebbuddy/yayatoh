@@ -785,3 +785,10 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **Stripe Tax**: previews, plan changes and new subscriptions ask Stripe for automatic tax; turn on Stripe Tax and register where needed. Dev and CI use a flat 8 % placeholder.
 - [ ] **Who changes the plan**: owners and admins (new permission `billing:manage`); finance sees plan and usage only. Confirm.
 
+
+## M6.8a — agency v2 money (2026-10-03, pending owner)
+- [ ] **Owner approval before main:** a `payments` + `tenancy` + `db-migration` change (fake provider only; no live keys; `PAYMENTS_PROVIDER` never set to `stripe`).
+- [ ] **Default commission rate (P6-8, yours):** 10 % of the organizer's share of each `platform_mor` sale (`DEFAULT_AGENCY_COMMISSION_BPS = 1000`, placeholder). Staff change one client's rate with `billing.setAgencyCommission` (0–50 %), new sales only. Confirm the default, and whether the base should be the organizer's share (today) or the gross.
+- [ ] **Commission scope:** only `platform_mor` (separate charges & transfers) earns commission; `organizer_mor` direct charges don't (it would need an application-fee split). No reserve is kept on commission (the organizer's 5 % reserve is unchanged). Confirm, or ask for either.
+- [ ] **What "the agency pays" means while billing is dormant:** a covered client gets the agency's plan modules on top of its own; nothing is charged to anyone until prices exist (D22). Decide how an agency's subscription is priced for covered clients (per client, seats, a tier).
+- [ ] **Switching it on:** set `AGENCY_V2_ENABLED=1` (flag `agency_v2`) per environment; it applies to agency orgs with the `agency` entitlement (on every plan in beta; staff can revoke it per org). Live commission waits for live Stripe.
