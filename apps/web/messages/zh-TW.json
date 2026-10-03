@@ -1979,7 +1979,8 @@
       "assign": "安排賓客",
       "finder": "座位查詢",
       "rules": "規則",
-      "guests": "安排賓客座位"
+      "guests": "安排賓客座位",
+      "cards": "桌卡與匯出"
     },
     "assign": {
       "title": "安排賓客",
@@ -2298,6 +2299,86 @@
         "noGuests": "請至少選擇一位賓客。",
         "noPlace": "請選擇桌子或排。",
         "dropMiss": "請把這組放到桌子或排上。"
+      }
+    },
+    "cards": {
+      "title": "桌卡與匯出",
+      "description": "列印座位卡、引座卡和桌號卡，並下載依桌排列的座位表和給外燴的餐點數量。",
+      "print": {
+        "heading": "列印卡片",
+        "kind": "卡片類型",
+        "paper": "紙張尺寸",
+        "language": "卡片語言",
+        "submit": "下載 PDF",
+        "started": "正在產生 PDF，稍後即會下載。",
+        "toSeat": "安排賓客入座",
+        "empty": {
+          "place": "還沒有賓客入座，因此沒有可列印的座位卡。請先安排賓客入座。",
+          "escort": "還沒有賓客入座，因此沒有可列印的引座卡。請先安排賓客入座。",
+          "table": "此平面圖還沒有桌子或排，因此沒有可列印的桌號卡。"
+        }
+      },
+      "kinds": {
+        "place": "座位卡",
+        "escort": "引座卡",
+        "table": "桌號卡"
+      },
+      "hints": {
+        "place": "{count, plural, =0 {尚無卡片} other {# 張}}：每位已入座賓客一張，對摺立卡",
+        "escort": "{count, plural, =0 {尚無卡片} other {# 張}}：每桌每組賓客一張，放在入口",
+        "table": "{count, plural, =0 {尚無卡片} other {# 張}}：每桌一張，整頁對摺"
+      },
+      "papers": {
+        "a4": "A4",
+        "letter": "美式 Letter",
+        "a5": "A5",
+        "legal": "美式 Legal"
+      },
+      "exports": {
+        "heading": "匯出",
+        "chart": "依桌座位表",
+        "chartHint": "每位賓客一列：桌號、組別、年齡、餐點和回覆。",
+        "meals": "外燴餐點數量",
+        "mealsHint": "每桌餐點數量，含兒童、嬰兒和合計。不計已婉拒的賓客。",
+        "csv": "CSV",
+        "xlsx": "Excel (XLSX)",
+        "download": "以 {format} 格式下載{name}",
+        "note": "匯出操作會記錄在稽核日誌中。"
+      },
+      "doc": {
+        "title": {
+          "place": "座位卡",
+          "escort": "引座卡",
+          "table": "桌號卡"
+        },
+        "yourTable": "您的桌號",
+        "guestOf": "{name} 的同伴",
+        "hostedBy": "由 {name} 贊助"
+      },
+      "file": {
+        "place": "桌號",
+        "guest": "賓客",
+        "party": "組別",
+        "age": "年齡",
+        "meal": "餐點",
+        "reply": "回覆",
+        "ageClass": {
+          "adult": "成人",
+          "child": "兒童",
+          "infant": "嬰兒"
+        },
+        "status": {
+          "attending": "出席",
+          "pending": "待回覆",
+          "declined": "婉拒"
+        },
+        "notSeated": "未入座",
+        "notChosen": "未選擇",
+        "children": "兒童",
+        "infants": "嬰兒",
+        "total": "合計",
+        "sheetChart": "座位表",
+        "sheetMeals": "餐點數量"
       }
     }
   },

@@ -1979,7 +1979,8 @@
       "assign": "Assegna ospiti",
       "finder": "Trova posto",
       "rules": "Regole",
-      "guests": "Disponi gli ospiti"
+      "guests": "Disponi gli ospiti",
+      "cards": "Segnaposto ed esportazioni"
     },
     "assign": {
       "title": "Assegna ospiti",
@@ -2298,6 +2299,86 @@
         "noGuests": "Scegli almeno un ospite.",
         "noPlace": "Scegli un tavolo o una fila.",
         "dropMiss": "Rilascia il gruppo su un tavolo o una fila."
+      }
+    },
+    "cards": {
+      "title": "Segnaposto ed esportazioni",
+      "description": "Stampa segnaposto, cartoncini tableau e cartelli dei tavoli, e scarica il piano dei tavoli e il conteggio dei menù per il catering.",
+      "print": {
+        "heading": "Stampa i cartoncini",
+        "kind": "Tipo di cartoncino",
+        "paper": "Formato carta",
+        "language": "Lingua dei cartoncini",
+        "submit": "Scarica PDF",
+        "started": "Stiamo preparando il PDF: il download parte tra un attimo.",
+        "toSeat": "Fai sedere gli ospiti",
+        "empty": {
+          "place": "Nessun ospite è ancora seduto, quindi non ci sono segnaposto da stampare. Fai prima sedere gli ospiti.",
+          "escort": "Nessun ospite è ancora seduto, quindi non ci sono cartoncini tableau da stampare. Fai prima sedere gli ospiti.",
+          "table": "Questa piantina non ha ancora tavoli o file, quindi non ci sono cartelli da stampare."
+        }
+      },
+      "kinds": {
+        "place": "Segnaposto",
+        "escort": "Cartoncini tableau",
+        "table": "Cartelli dei tavoli"
+      },
+      "hints": {
+        "place": "{count, plural, =0 {Ancora nessun cartoncino} one {# cartoncino} other {# cartoncini}}: uno per ogni ospite seduto, piegato a metà",
+        "escort": "{count, plural, =0 {Ancora nessun cartoncino} one {# cartoncino} other {# cartoncini}}: uno per gruppo a ogni tavolo, per l'ingresso",
+        "table": "{count, plural, =0 {Ancora nessun cartoncino} one {# cartoncino} other {# cartoncini}}: uno per tavolo, un foglio piegato a metà"
+      },
+      "papers": {
+        "a4": "A4",
+        "letter": "Lettera USA",
+        "a5": "A5",
+        "legal": "Legale USA"
+      },
+      "exports": {
+        "heading": "Esportazioni",
+        "chart": "Piano dei tavoli per tavolo",
+        "chartHint": "Una riga per ospite: tavolo, gruppo, età, menù e risposta.",
+        "meals": "Conteggio dei menù per il catering",
+        "mealsHint": "Menù per tavolo, con bambini, neonati e totali. Chi ha declinato non è contato.",
+        "csv": "CSV",
+        "xlsx": "Excel (XLSX)",
+        "download": "Scarica {name} in formato {format}",
+        "note": "Le esportazioni sono registrate nel registro di controllo."
+      },
+      "doc": {
+        "title": {
+          "place": "Segnaposto",
+          "escort": "Cartoncini tableau",
+          "table": "Cartelli dei tavoli"
+        },
+        "yourTable": "Il tuo tavolo",
+        "guestOf": "Accompagnatore di {name}",
+        "hostedBy": "Offerto da {name}"
+      },
+      "file": {
+        "place": "Tavolo",
+        "guest": "Ospite",
+        "party": "Gruppo",
+        "age": "Età",
+        "meal": "Menù",
+        "reply": "Risposta",
+        "ageClass": {
+          "adult": "Adulto",
+          "child": "Bambino",
+          "infant": "Neonato"
+        },
+        "status": {
+          "attending": "Partecipa",
+          "pending": "In attesa di risposta",
+          "declined": "Non partecipa"
+        },
+        "notSeated": "Senza posto",
+        "notChosen": "Non scelto",
+        "children": "Bambini",
+        "infants": "Neonati",
+        "total": "Totale",
+        "sheetChart": "Piano dei tavoli",
+        "sheetMeals": "Conteggio menù"
       }
     }
   },

@@ -489,6 +489,9 @@ importers:
       '@yayatoh/crm':
         specifier: workspace:*
         version: link:../../packages/modules/crm
+      '@yayatoh/csv':
+        specifier: workspace:*
+        version: link:../../packages/csv
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../../packages/db
@@ -2424,9 +2427,15 @@ importers:
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../kernel
+      '@yayatoh/pdf':
+        specifier: workspace:*
+        version: link:../../pdf
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../../platform
+      '@yayatoh/ui':
+        specifier: workspace:*
+        version: link:../../ui
       drizzle-orm:
         specifier: 'catalog:'
         version: 0.45.3(@opentelemetry/api@1.9.0)(kysely@0.29.6)(pg@8.23.0)(postgres@3.4.9)
@@ -2440,6 +2449,9 @@ importers:
       '@yayatoh/config':
         specifier: workspace:*
         version: link:../../config
+      pdfjs-dist:
+        specifier: 5.4.296
+        version: 5.4.296
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
