@@ -11027,8 +11027,7 @@
     "unseatedCount": "{count, plural, one {# person in your party doesn't have a table yet.} other {# people in your party don't have a table yet.}}",
     "again": "Look up someone else",
     "mapTitle": "Venue map",
-    "mapFor": "Venue map: {name}",
-    "guideFor": "Venue guide: {name}"
+    "mapFor": "Venue map: {name}"
   },
   "partySeats": {
     "metaTitle": "Your table",

@@ -2070,7 +2070,8 @@
       "modeNow": "Suche: {mode}",
       "modeShort": {
         "code": "Code per E-Mail",
-        "name": "vollständiger Name"
+        "name": "vollständiger Name",
+        "pin": "vollständiger Name und PIN der Einladung"
       },
       "notPublic": "Die Veranstaltung ist nicht veröffentlicht (oder privat), daher können Gäste den Platzfinder noch nicht öffnen.",
       "settingsTitle": "Gäste",
@@ -2081,11 +2082,13 @@
       "mode": "Wie Gäste ihren Platz suchen",
       "modeOption": {
         "code": "Mit einem Code per E-Mail (empfohlen)",
-        "name": "Sofort, mit dem vollständigen Namen"
+        "name": "Sofort, mit dem vollständigen Namen",
+        "pin": "Mit vollständigem Namen und der PIN auf ihrer Einladung"
       },
       "modeHint": {
         "code": "Nur wer die E-Mails des Gastes lesen kann, sieht seinen Platz, und niemand kann herausfinden, wer auf der Liste steht.",
-        "name": "Schneller am Eingang, aber jeder, der den vollständigen Namen eines Gastes kennt, sieht, wo er sitzt."
+        "name": "Schneller am Eingang, aber jeder, der den vollständigen Namen eines Gastes kennt, sieht, wo er sitzt.",
+        "pin": "Gäste geben ihren vollständigen Namen und die 6-stellige PIN von der Einladung ihrer Gruppe ein. Sie sehen ihren Tisch, nie den Namen einer anderen Person, und niemand kann herausfinden, wer auf der Liste steht."
       },
       "readOnly": "Sie können diese Einstellungen sehen, aber nicht ändern.",
       "shareTitle": "Teilen",
@@ -2093,7 +2096,10 @@
       "openPublic": "Platzfinder öffnen",
       "poster": "Platzfinder-Plakat drucken",
       "closedNote": "Der Platzfinder ist geschlossen. Gäste, die das Plakat scannen, werden gebeten, später wiederzukommen.",
-      "namePoster": "Namensliste drucken"
+      "namePoster": "Namensliste drucken",
+      "partyLinksTitle": "Links der Gruppen",
+      "partyLinksHint": "Der Einladungslink und QR-Code jeder Gruppe öffnet auch ihre eigene Tischseite: ihren Tisch auf dem Lageplan und wer mit ihnen sitzt. Der QR-Code bleibt gleich, wenn Sie die Gruppe an einen anderen Tisch setzen.",
+      "partyLinksAction": "Links und QR-Codes der Gruppen"
     },
     "map": {
       "zoomIn": "Vergrößern",
@@ -2338,7 +2344,11 @@
       "bottom": "Unten auf dem Plan",
       "bottom-right": "Unten rechts auf dem Plan"
     },
-    "yours": "{count, plural, one {Ihr Platz: {seats}} other {Ihre Plätze: {seats}}}"
+    "yours": "{count, plural, one {Ihr Platz: {seats}} other {Ihre Plätze: {seats}}}",
+    "yourPlace": {
+      "table": "Ihr Tisch",
+      "row": "Ihre Reihe"
+    }
   },
   "seatFinder": {
     "eyebrow": "Platzfinder",
@@ -2389,9 +2399,15 @@
       "challengeUnavailable": "Zu viele Anfragen von diesem Gerät. Bitte warten Sie eine Minute und versuchen Sie es erneut.",
       "closed": "Der Platzfinder ist für diese Veranstaltung nicht geöffnet.",
       "internal": "Bei uns ist etwas schiefgelaufen.",
-      "rateLimited": "Zu viele Codes angefordert. Versuchen Sie es in {minutes, plural, one {# Minute} other {# Minuten}} erneut."
+      "rateLimited": "Zu viele Codes angefordert. Versuchen Sie es in {minutes, plural, one {# Minute} other {# Minuten}} erneut.",
+      "noMatch": "Wir haben keinen Tisch für diesen Namen und diese PIN gefunden. Prüfen Sie beides auf Ihrer Einladung oder fragen Sie einen Gastgeber.",
+      "invalidPin": "Geben Sie die 6-stellige PIN von Ihrer Einladung ein.",
+      "pinRateLimited": "Zu viele Suchen von diesem Gerät. Versuchen Sie es in {minutes, plural, one {# Minute} other {# Minuten}} erneut."
     },
-    "hostedBy": "Gesponsert von {sponsor}"
+    "hostedBy": "Gesponsert von {sponsor}",
+    "pinIntro": "Geben Sie Ihren vollständigen Namen wie auf Ihrer Einladung und die darauf gedruckte 6-stellige PIN ein.",
+    "pin": "PIN von Ihrer Einladung",
+    "findByPin": "Meinen Tisch finden"
   },
   "seatFinderPoster": {
     "pageTitle": "Platzfinder-Plakat",
@@ -2404,7 +2420,8 @@
     "step2Code": "Geben Sie Ihre E-Mail-Adresse ein – wir senden Ihnen einen Code.",
     "step2Name": "Geben Sie Ihren vollständigen Namen ein.",
     "step3": "Sehen Sie Ihren Tisch und Platz auf dem Lageplan.",
-    "orVisit": "Oder öffnen Sie"
+    "orVisit": "Oder öffnen Sie",
+    "step2Pin": "Geben Sie Ihren vollständigen Namen und die PIN von Ihrer Einladung ein."
   },
   "reports": {
     "title": "Analyse",
@@ -10162,7 +10179,10 @@
     },
     "questionsTitle": "Ein paar Fragen",
     "questionsHint": "Die Gastgeber möchten ein wenig mehr wissen. Als privat markierte Antworten sehen nur die Gastgeber.",
-    "questionsFor": "Fragen für {name}"
+    "questionsFor": "Fragen für {name}",
+    "seatTitle": "Finden Sie Ihren Tisch",
+    "seatHint": "Sehen Sie, wo Sie auf dem Lageplan sitzen und wer an Ihrem Tisch ist.",
+    "seatLink": "Meinen Tisch zeigen"
   },
   "rsvpFind": {
     "metaTitle": "Einladung finden",
@@ -10272,7 +10292,13 @@
     "reopenFor": "Rückmeldung für {party} wieder öffnen",
     "createLinkFor": "Rückmeldelink für {party} erstellen",
     "copy": "Link kopieren",
-    "copied": "Link kopiert."
+    "copied": "Link kopiert.",
+    "seatTitle": "QR-Code der Tischseite",
+    "seatHint": "Dieser QR-Code öffnet die Tischseite von {party}: ihren Tisch auf dem Lageplan und wer mit ihnen sitzt. Er bleibt gleich, wenn Sie die Gruppe umsetzen, deshalb können Sie ihn auf Tisch- oder Platzkarten drucken.",
+    "seatQrLabel": "QR-Code zur Tischseite von {party}",
+    "seatLinkLabel": "Link zur Tischseite von {party}",
+    "seatClosed": "Gäste sehen ihren Tisch, sobald Sie die Platzsuche öffnen (Bestuhlung → Platzsuche).",
+    "seatScan": "Scannen, um Ihren Tisch zu finden"
   },
   "collector": {
     "metaTitle": "Ihre Kontaktdaten teilen",
@@ -10987,5 +11013,39 @@
       "offer_ended": "Das Angebot für {title} ist abgelaufen.",
       "full": "{title} ist gerade voll geworden. Versuche es erneut, um auf die Warteliste zu kommen."
     }
+  },
+  "guestSeats": {
+    "placeAt": {
+      "table": "Tisch {item}",
+      "row": "Reihe {item}"
+    },
+    "wholeEvent": "Sitzplan",
+    "resultTitle": "{count, plural, one {Ihr Tisch} other {Ihre Tische}}",
+    "partyCount": "{count, plural, one {# Person Ihrer Gruppe sitzt hier} other {# Personen Ihrer Gruppe sitzen hier}}",
+    "noTableTitle": "Ihr Tisch steht noch nicht fest",
+    "noTable": "Die Gastgeber arbeiten noch am Sitzplan. Schauen Sie kurz vor dem Tag wieder vorbei oder fragen Sie einen Gastgeber.",
+    "unseatedCount": "{count, plural, one {# Person Ihrer Gruppe hat noch keinen Tisch.} other {# Personen Ihrer Gruppe haben noch keinen Tisch.}}",
+    "again": "Jemand anderen suchen",
+    "mapTitle": "Lageplan",
+    "mapFor": "Lageplan: {name}"
+  },
+  "partySeats": {
+    "metaTitle": "Ihr Tisch",
+    "title": "Wo {party} sitzt",
+    "intro": "Ihr Tisch auf dem Lageplan und wer mit Ihnen sitzt.",
+    "closedTitle": "Der Sitzplan ist noch nicht fertig",
+    "closed": "Die Gastgeber haben den Sitzplan noch nicht freigegeben. Behalten Sie diese Seite oder den QR-Code auf Ihrer Einladung: Sie zeigt Ihren Tisch, sobald er freigegeben ist.",
+    "noChartsTitle": "Ihr Tisch steht noch nicht fest",
+    "noCharts": "Die Gastgeber arbeiten noch am Sitzplan. Diese Seite zeigt Ihren Tisch, sobald er feststeht.",
+    "yourParty": "Aus Ihrer Gruppe",
+    "tablemates": {
+      "table": "Ebenfalls an diesem Tisch",
+      "row": "Ebenfalls in dieser Reihe"
+    },
+    "noTablemates": "Hier sitzt noch niemand sonst.",
+    "unseated": "Noch ohne Platz: {names}",
+    "guestOf": "Begleitung von {name}",
+    "keep": "Diese Seite zeigt immer Ihren aktuellen Tisch: Der Link und der QR-Code auf Ihrer Einladung ändern sich nicht, wenn die Gastgeber Sie umsetzen.",
+    "toRsvp": "Zurück zu Ihrer Rückmeldung"
   }
 }
