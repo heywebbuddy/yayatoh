@@ -1,6 +1,6 @@
 # UX review 1 — organizer feedback plan
 
-Status: **draft for the owner** (2026-10-03). Source: `Yayatoh_organizer_review.docx`, one organizer's review of the build branch with 9 screenshots. The headline complaint: **UX is not good across the whole app.**
+Status: **approved by the owner** (2026-10-03): UX-1 to UX-6 as recommended. Source: `Yayatoh_organizer_review.docx`, one organizer's review of the build branch with 9 screenshots. The headline complaint: **UX is not good across the whole app.**
 
 Each point was checked against the code (build branch at 784d0b6c, 2026-10-03). There are three kinds of finding:
 - **Bug**: built, but broken.
