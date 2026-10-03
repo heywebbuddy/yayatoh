@@ -397,8 +397,7 @@ export function TeamForm({
           id={`${idPrefix}-person`}
           name="person"
           label={t('team.person')}
-          placeholder={t('team.choosePerson')}
-          defaultValue={f.value('person') ?? ''}
+          defaultValue={f.value('person') ?? people[0]?.id ?? ''}
           error={f.error('person')}
           options={people.map((p) => ({ value: p.id, label: p.name, text: p.name }))}
         />
@@ -441,8 +440,7 @@ export function DayOfForm({
           id={`${idPrefix}-dayof-person`}
           name="person"
           label={t('team.person')}
-          placeholder={t('team.choosePerson')}
-          defaultValue={f.value('person') ?? ''}
+          defaultValue={f.value('person') ?? people[0]?.id ?? ''}
           error={f.error('person')}
           options={people.map((p) => ({ value: p.id, label: p.name, text: p.name }))}
         />
@@ -451,8 +449,7 @@ export function DayOfForm({
           name="event"
           label={t('team.event')}
           hint={t('team.windowHint')}
-          placeholder={t('team.chooseEvent')}
-          defaultValue={f.value('event') ?? ''}
+          defaultValue={f.value('event') ?? events[0]?.id ?? ''}
           error={f.error('event')}
           options={events.map((e) => ({ value: e.id, label: e.label, text: e.label }))}
         />

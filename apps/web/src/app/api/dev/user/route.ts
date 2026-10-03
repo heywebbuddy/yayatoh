@@ -5,6 +5,7 @@ import { createEventCommand, transitionEventCommand } from '@yayatoh/events';
 import { createCtx, executeCommand } from '@yayatoh/kernel';
 import { catchUpListings, updateSiteSettingsCommand } from '@yayatoh/marketplace';
 import { applyAccountEventCommand, recordPayoutAccountCommand } from '@yayatoh/payments';
+import { saveTemplateCommand } from '@yayatoh/templates';
 import {
   AGREEMENT_DOCUMENTS,
   acceptAgreementCommand,
@@ -38,6 +39,8 @@ import { devAuthEnabled } from '@/server/session.ts';
  *   charges, M4.8a), as if onboarding had finished.
  * - `org=agency` (M6.7a): create an agency organization the account owns, with the `agency`
  *   entitlement (staff switch it on per org, P6-13); `orgName` names it.
+ * - `template=1` (with `org=agency`, M6.8b): the agency also has an event with a ticket type, saved
+ *   as a template (its name comes back as `templateName`), to publish to clients.
  */
 export async function POST(req: NextRequest) {
   const devPassword = process.env.DEV_PERSONA_PASSWORD;
@@ -62,6 +65,7 @@ export async function POST(req: NextRequest) {
 
   let orgSlug: string | null = null;
   let eventSlug: string | null = null;
+  let templateName: string | null = null;
   if (form.get('org') === 'agency') {
     const org = await createOrganization(
       createCtx({ actor: { type: 'user', userId: user.id } }),
@@ -75,6 +79,7 @@ export async function POST(req: NextRequest) {
       createCtx({ orgId: org.id, actor: { type: 'system', name: 'dev.test-user' } }),
       ports,
     );
+    if (form.get('template') === '1') templateName = await agencyTemplate(org.id, user.id, stamp);
   }
   if (form.get('org') === 'new') {
     const org = await createOrganization(
@@ -134,11 +139,39 @@ export async function POST(req: NextRequest) {
     email,
     orgSlug,
     eventSlug,
+    templateName,
     setupKey: secret ? setupKey(secret) : null,
     backupCodes,
   });
   for (const c of cookies) res.headers.append('set-cookie', c);
   return res;
+}
+
+/** M6.8b: an agency's draft event with a pass, saved as a template; returns the template's name. */
+async function agencyTemplate(orgId: string, userId: string, stamp: string): Promise<string> {
+  const ctx = createCtx({ orgId, actor: { type: 'user', userId }, stepUpAt: new Date() });
+  const starts = new Date(Date.now() + 45 * 86_400_000);
+  const event = await executeCommand(
+    createEventCommand,
+    {
+      name: `Agency Gala ${stamp}`,
+      slug: `agency-gala-${stamp}`,
+      timezone: 'America/New_York',
+      startsAt: starts.toISOString(),
+      endsAt: new Date(starts.getTime() + 4 * 3_600_000).toISOString(),
+    },
+    ctx,
+    ports,
+  );
+  await executeCommand(
+    createTicketTypeCommand,
+    { eventId: event.id, name: 'Gala seat', priceMinor: 12_500, quantityTotal: 200 },
+    ctx,
+    ports,
+  );
+  const name = `Gala kit ${stamp}`;
+  await executeCommand(saveTemplateCommand, { eventId: event.id, name }, ctx, ports);
+  return name;
 }
 
 /** A public, published event with a free and a paid pass in a fresh org (see `event=published`). */

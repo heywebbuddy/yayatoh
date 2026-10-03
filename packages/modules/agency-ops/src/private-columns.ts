@@ -7,7 +7,12 @@ import { columnPrivacy, internal } from '@yayatoh/db';
  */
 export const privateColumns = columnPrivacy('agency_ops', {
   template_settings: { private_notes: internal(), private_parts: 'vocab' },
-  brand_kits: { name: internal(), brand_color: 'public', private_notes: internal() },
+  // Private notes exist only on the agency's own kits (CHECK), never on a received copy.
+  brand_kits: {
+    name: internal(),
+    brand_color: 'public',
+    private_notes: internal(undefined, { where: 'received_from_agency_org_id is null' }),
+  },
   publications: { kind: 'vocab', status: 'vocab', error_code: 'vocab' },
   received_items: { kind: 'vocab' },
   fanouts: {
