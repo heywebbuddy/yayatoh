@@ -256,6 +256,16 @@
       "intro": "{org} wacht nog op ‘{title}’ voor {eventName}. Uiterlijk: {until}.",
       "cta": "Mijn taken openen"
     },
+    "donations.receipt": {
+      "subject": "{deductible, select, yes {Uw donatiebewijs van {org}} other {Uw betalingsbewijs van {org}}}",
+      "intro": "Dank voor uw betaling van {amount} voor {eventName}. Uw bewijs staat hieronder. Bewaar het, of de pdf-kopie, bij uw administratie.",
+      "cta": "Pdf-bewijs downloaden"
+    },
+    "donations.year-end-statement": {
+      "subject": "Uw giftenoverzicht {year} van {org}",
+      "intro": "Dank dat u {org} in {year} hebt gesteund. Uw overzicht van aftrekbare betalingen staat hieronder en als pdf.",
+      "cta": "Pdf-overzicht downloaden"
+    },
     "guests.invitation": {
       "subject": "{subject}",
       "intro": "{message}",

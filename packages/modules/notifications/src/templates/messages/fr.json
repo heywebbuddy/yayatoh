@@ -256,6 +256,16 @@
       "intro": "{org} attend toujours « {title} » pour {eventName}. Échéance : {until}.",
       "cta": "Ouvrir mes tâches"
     },
+    "donations.receipt": {
+      "subject": "{deductible, select, yes {Votre reçu de don de {org}} other {Votre reçu de paiement de {org}}}",
+      "intro": "Merci pour votre paiement de {amount} pour {eventName}. Votre reçu figure ci-dessous. Conservez-le, ou sa copie PDF, avec vos documents.",
+      "cta": "Télécharger le reçu PDF"
+    },
+    "donations.year-end-statement": {
+      "subject": "Votre relevé des dons {year} de {org}",
+      "intro": "Merci d’avoir soutenu {org} en {year}. Votre relevé des paiements déductibles des impôts figure ci-dessous et en PDF.",
+      "cta": "Télécharger le relevé PDF"
+    },
     "guests.invitation": {
       "subject": "{subject}",
       "intro": "{message}",

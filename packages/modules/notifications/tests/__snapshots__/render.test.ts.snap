@@ -1365,6 +1365,552 @@ exports[`renderMessage: every kind in all 13 locales > campaigns.test · zh-TW 1
 }
 `;
 
+exports[`renderMessage: every kind in all 13 locales > donations.receipt · ar 1`] = `
+{
+  "subject": "إيصال تبرّعك من Lakeside Events",
+  "text": "إيصال تبرّعك من Lakeside Events
+
+مرحبًا Amina Diallo،
+
+شكرًا على دفعتك البالغة ‏500.00 US$ مقابل Harbor Arts Gala. إيصالك أدناه. احتفظ به أو بنسخة PDF مع سجلاتك.
+
+Receipt number: R-00007
+Amount paid: $500.00
+Tax-deductible amount: $350.00
+
+تنزيل الإيصال بصيغة PDF: https://app.yayatoh.test/receipts/sample
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.receipt · de 1`] = `
+{
+  "subject": "Ihre Spendenquittung von Lakeside Events",
+  "text": "Ihre Spendenquittung von Lakeside Events
+
+Hallo Amina Diallo,
+
+Danke für Ihre Zahlung von 500,00 $ für Harbor Arts Gala. Ihr Beleg steht unten. Bewahren Sie ihn oder die PDF-Kopie bei Ihren Unterlagen auf.
+
+Receipt number: R-00007
+Amount paid: $500.00
+Tax-deductible amount: $350.00
+
+PDF-Beleg herunterladen: https://app.yayatoh.test/receipts/sample
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.receipt · en 1`] = `
+{
+  "subject": "Your donation receipt from Lakeside Events",
+  "text": "Your donation receipt from Lakeside Events
+
+Hi Amina Diallo,
+
+Thank you for your payment of $500.00 for Harbor Arts Gala. Your receipt is below. Keep it, or the PDF copy, with your records.
+
+Receipt number: R-00007
+Amount paid: $500.00
+Tax-deductible amount: $350.00
+
+Download the PDF receipt: https://app.yayatoh.test/receipts/sample
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.receipt · es 1`] = `
+{
+  "subject": "Tu recibo de donación de Lakeside Events",
+  "text": "Tu recibo de donación de Lakeside Events
+
+Hola, Amina Diallo:
+
+Gracias por tu pago de 500,00 US$ para Harbor Arts Gala. Tu recibo está a continuación. Guárdalo, o su copia en PDF, con tus registros.
+
+Receipt number: R-00007
+Amount paid: $500.00
+Tax-deductible amount: $350.00
+
+Descargar el recibo en PDF: https://app.yayatoh.test/receipts/sample
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.receipt · fr 1`] = `
+{
+  "subject": "Votre reçu de don de Lakeside Events",
+  "text": "Votre reçu de don de Lakeside Events
+
+Bonjour Amina Diallo,
+
+Merci pour votre paiement de 500,00 $US pour Harbor Arts Gala. Votre reçu figure ci-dessous. Conservez-le, ou sa copie PDF, avec vos documents.
+
+Receipt number: R-00007
+Amount paid: $500.00
+Tax-deductible amount: $350.00
+
+Télécharger le reçu PDF: https://app.yayatoh.test/receipts/sample
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.receipt · hi 1`] = `
+{
+  "subject": "Lakeside Events की ओर से आपकी दान रसीद",
+  "text": "Lakeside Events की ओर से आपकी दान रसीद
+
+नमस्ते Amina Diallo,
+
+Harbor Arts Gala के लिए $500.00 के भुगतान के लिए धन्यवाद। आपकी रसीद नीचे है। इसे या इसकी PDF प्रति को अपने रिकॉर्ड के साथ रखें।
+
+Receipt number: R-00007
+Amount paid: $500.00
+Tax-deductible amount: $350.00
+
+PDF रसीद डाउनलोड करें: https://app.yayatoh.test/receipts/sample
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.receipt · it 1`] = `
+{
+  "subject": "La tua ricevuta di donazione da Lakeside Events",
+  "text": "La tua ricevuta di donazione da Lakeside Events
+
+Ciao Amina Diallo,
+
+Grazie per il tuo pagamento di 500,00 USD per Harbor Arts Gala. La ricevuta è qui sotto. Conservala, o la copia PDF, con i tuoi documenti.
+
+Receipt number: R-00007
+Amount paid: $500.00
+Tax-deductible amount: $350.00
+
+Scarica la ricevuta PDF: https://app.yayatoh.test/receipts/sample
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.receipt · ja 1`] = `
+{
+  "subject": "Lakeside Eventsからの寄付の領収書",
+  "text": "Lakeside Eventsからの寄付の領収書
+
+Amina Diallo 様
+
+Harbor Arts Galaへの$500.00のお支払いをありがとうございます。領収書は以下のとおりです。この領収書またはPDFの控えを記録として保管してください。
+
+Receipt number: R-00007
+Amount paid: $500.00
+Tax-deductible amount: $350.00
+
+PDFの領収書をダウンロード: https://app.yayatoh.test/receipts/sample
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.receipt · nl 1`] = `
+{
+  "subject": "Uw donatiebewijs van Lakeside Events",
+  "text": "Uw donatiebewijs van Lakeside Events
+
+Hoi Amina Diallo,
+
+Dank voor uw betaling van US$ 500,00 voor Harbor Arts Gala. Uw bewijs staat hieronder. Bewaar het, of de pdf-kopie, bij uw administratie.
+
+Receipt number: R-00007
+Amount paid: $500.00
+Tax-deductible amount: $350.00
+
+Pdf-bewijs downloaden: https://app.yayatoh.test/receipts/sample
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.receipt · pt 1`] = `
+{
+  "subject": "Seu recibo de doação de Lakeside Events",
+  "text": "Seu recibo de doação de Lakeside Events
+
+Olá, Amina Diallo!
+
+Obrigado pelo seu pagamento de US$ 500,00 para Harbor Arts Gala. O seu recibo está abaixo. Guarde-o, ou a cópia em PDF, com os seus registros.
+
+Receipt number: R-00007
+Amount paid: $500.00
+Tax-deductible amount: $350.00
+
+Baixar o recibo em PDF: https://app.yayatoh.test/receipts/sample
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.receipt · ru 1`] = `
+{
+  "subject": "Квитанция о пожертвовании от Lakeside Events",
+  "text": "Квитанция о пожертвовании от Lakeside Events
+
+Здравствуйте, Amina Diallo!
+
+Спасибо за ваш платёж в размере 500,00 $ за Harbor Arts Gala. Квитанция приведена ниже. Сохраните её или PDF-копию вместе с вашими документами.
+
+Receipt number: R-00007
+Amount paid: $500.00
+Tax-deductible amount: $350.00
+
+Скачать квитанцию в PDF: https://app.yayatoh.test/receipts/sample
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.receipt · zh-CN 1`] = `
+{
+  "subject": "来自 Lakeside Events 的捐赠收据",
+  "text": "来自 Lakeside Events 的捐赠收据
+
+Amina Diallo，您好：
+
+感谢您为 Harbor Arts Gala 支付 US$500.00。您的收据如下。请将其或 PDF 副本与您的记录一起保存。
+
+Receipt number: R-00007
+Amount paid: $500.00
+Tax-deductible amount: $350.00
+
+下载 PDF 收据: https://app.yayatoh.test/receipts/sample
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.receipt · zh-TW 1`] = `
+{
+  "subject": "來自 Lakeside Events 的捐款收據",
+  "text": "來自 Lakeside Events 的捐款收據
+
+Amina Diallo，您好：
+
+感謝您為 Harbor Arts Gala 支付 US$500.00。您的收據如下。請將其或 PDF 副本與您的紀錄一併保存。
+
+Receipt number: R-00007
+Amount paid: $500.00
+Tax-deductible amount: $350.00
+
+下載 PDF 收據: https://app.yayatoh.test/receipts/sample
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.year-end-statement · ar 1`] = `
+{
+  "subject": "كشف تبرعاتك لعام 2027 من Lakeside Events",
+  "text": "كشف تبرعاتك لعام 2027 من Lakeside Events
+
+مرحبًا Amina Diallo،
+
+شكرًا لدعمك Lakeside Events في عام 2027. كشف مدفوعاتك القابلة للخصم الضريبي أدناه وبصيغة PDF.
+
+Total tax-deductible amount for 2027: $1,350.00.
+
+تنزيل الكشف بصيغة PDF: https://app.yayatoh.test/statements/sample
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.year-end-statement · de 1`] = `
+{
+  "subject": "Ihre Spendenübersicht 2027 von Lakeside Events",
+  "text": "Ihre Spendenübersicht 2027 von Lakeside Events
+
+Hallo Amina Diallo,
+
+Danke, dass Sie Lakeside Events im Jahr 2027 unterstützt haben. Ihre Übersicht der steuerlich absetzbaren Zahlungen steht unten und als PDF.
+
+Total tax-deductible amount for 2027: $1,350.00.
+
+PDF-Übersicht herunterladen: https://app.yayatoh.test/statements/sample
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.year-end-statement · en 1`] = `
+{
+  "subject": "Your 2027 giving statement from Lakeside Events",
+  "text": "Your 2027 giving statement from Lakeside Events
+
+Hi Amina Diallo,
+
+Thank you for supporting Lakeside Events in 2027. Your statement of tax-deductible payments is below, and as a PDF.
+
+Total tax-deductible amount for 2027: $1,350.00.
+
+Download the PDF statement: https://app.yayatoh.test/statements/sample
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.year-end-statement · es 1`] = `
+{
+  "subject": "Tu resumen de donaciones de 2027 de Lakeside Events",
+  "text": "Tu resumen de donaciones de 2027 de Lakeside Events
+
+Hola, Amina Diallo:
+
+Gracias por apoyar a Lakeside Events en 2027. Tu resumen de pagos deducibles de impuestos está a continuación y en PDF.
+
+Total tax-deductible amount for 2027: $1,350.00.
+
+Descargar el resumen en PDF: https://app.yayatoh.test/statements/sample
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.year-end-statement · fr 1`] = `
+{
+  "subject": "Votre relevé des dons 2027 de Lakeside Events",
+  "text": "Votre relevé des dons 2027 de Lakeside Events
+
+Bonjour Amina Diallo,
+
+Merci d’avoir soutenu Lakeside Events en 2027. Votre relevé des paiements déductibles des impôts figure ci-dessous et en PDF.
+
+Total tax-deductible amount for 2027: $1,350.00.
+
+Télécharger le relevé PDF: https://app.yayatoh.test/statements/sample
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.year-end-statement · hi 1`] = `
+{
+  "subject": "Lakeside Events की ओर से आपका 2027 का दान विवरण",
+  "text": "Lakeside Events की ओर से आपका 2027 का दान विवरण
+
+नमस्ते Amina Diallo,
+
+2027 में Lakeside Events का समर्थन करने के लिए धन्यवाद। आपके कर-कटौती योग्य भुगतानों का विवरण नीचे और PDF में है।
+
+Total tax-deductible amount for 2027: $1,350.00.
+
+PDF विवरण डाउनलोड करें: https://app.yayatoh.test/statements/sample
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.year-end-statement · it 1`] = `
+{
+  "subject": "Il tuo riepilogo donazioni 2027 da Lakeside Events",
+  "text": "Il tuo riepilogo donazioni 2027 da Lakeside Events
+
+Ciao Amina Diallo,
+
+Grazie per aver sostenuto Lakeside Events nel 2027. Il riepilogo dei pagamenti deducibili è qui sotto e in PDF.
+
+Total tax-deductible amount for 2027: $1,350.00.
+
+Scarica il riepilogo PDF: https://app.yayatoh.test/statements/sample
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.year-end-statement · ja 1`] = `
+{
+  "subject": "Lakeside Eventsからの2027年 寄付明細書",
+  "text": "Lakeside Eventsからの2027年 寄付明細書
+
+Amina Diallo 様
+
+2027年にLakeside Eventsをご支援いただきありがとうございます。税控除対象のお支払いの明細は以下とPDFのとおりです。
+
+Total tax-deductible amount for 2027: $1,350.00.
+
+PDFの明細書をダウンロード: https://app.yayatoh.test/statements/sample
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.year-end-statement · nl 1`] = `
+{
+  "subject": "Uw giftenoverzicht 2027 van Lakeside Events",
+  "text": "Uw giftenoverzicht 2027 van Lakeside Events
+
+Hoi Amina Diallo,
+
+Dank dat u Lakeside Events in 2027 hebt gesteund. Uw overzicht van aftrekbare betalingen staat hieronder en als pdf.
+
+Total tax-deductible amount for 2027: $1,350.00.
+
+Pdf-overzicht downloaden: https://app.yayatoh.test/statements/sample
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.year-end-statement · pt 1`] = `
+{
+  "subject": "Seu extrato de doações de 2027 de Lakeside Events",
+  "text": "Seu extrato de doações de 2027 de Lakeside Events
+
+Olá, Amina Diallo!
+
+Obrigado por apoiar Lakeside Events em 2027. O extrato dos seus pagamentos dedutíveis de impostos está abaixo e em PDF.
+
+Total tax-deductible amount for 2027: $1,350.00.
+
+Baixar o extrato em PDF: https://app.yayatoh.test/statements/sample
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.year-end-statement · ru 1`] = `
+{
+  "subject": "Сводка пожертвований за 2027 год от Lakeside Events",
+  "text": "Сводка пожертвований за 2027 год от Lakeside Events
+
+Здравствуйте, Amina Diallo!
+
+Спасибо, что поддержали Lakeside Events в 2027 году. Сводка платежей, подлежащих налоговому вычету, приведена ниже и в PDF.
+
+Total tax-deductible amount for 2027: $1,350.00.
+
+Скачать сводку в PDF: https://app.yayatoh.test/statements/sample
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.year-end-statement · zh-CN 1`] = `
+{
+  "subject": "来自 Lakeside Events 的 2027 年捐赠明细",
+  "text": "来自 Lakeside Events 的 2027 年捐赠明细
+
+Amina Diallo，您好：
+
+感谢您在 2027 年支持 Lakeside Events。您的可抵税付款明细如下，并附 PDF。
+
+Total tax-deductible amount for 2027: $1,350.00.
+
+下载 PDF 明细: https://app.yayatoh.test/statements/sample
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.year-end-statement · zh-TW 1`] = `
+{
+  "subject": "來自 Lakeside Events 的 2027 年捐款明細",
+  "text": "來自 Lakeside Events 的 2027 年捐款明細
+
+Amina Diallo，您好：
+
+感謝您在 2027 年支持 Lakeside Events。您的可抵稅付款明細如下，並附 PDF。
+
+Total tax-deductible amount for 2027: $1,350.00.
+
+下載 PDF 明細: https://app.yayatoh.test/statements/sample
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
 exports[`renderMessage: every kind in all 13 locales > events.postponed · ar 1`] = `
 {
   "subject": "تأجيل Lakeside Jazz Night",

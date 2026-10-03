@@ -2,6 +2,7 @@ import { tenantTable } from '@yayatoh/db';
 import { type SQL, sql } from 'drizzle-orm';
 import {
   bigint,
+  boolean,
   check,
   foreignKey,
   index,
@@ -19,6 +20,7 @@ import {
   GIFT_STATUSES,
   TRIBUTE_KINDS,
 } from './domain/giving.ts';
+import { CHARITY_STATUSES, EXEMPT_KINDS, RECEIPT_KINDS } from './domain/receipts.ts';
 
 export const donationsSchema = pgSchema('donations');
 
@@ -148,5 +150,208 @@ export const gifts = tenantTable(
       sql`tribute_recipient is null or length(tribute_recipient) between 1 and 120`,
     ),
     check('gifts_tribute_note_length', sql`tribute_note is null or length(tribute_note) between 1 and 500`),
+  ],
+);
+
+// ── M4.8b: charity profile, fair-market values, receipts and year-end statements ──────────────
+
+/**
+ * The org's charity profile (M4.8b, P4-11): one per org. Legal name, EIN and how it is exempt
+ * (its own 501(c)(3) status, or a fiscal sponsor's, whose name and EIN then print on receipts).
+ * Saving it sends it to staff review (`pending`, a new `version`); staff verify it against the
+ * IRS exempt-organization list (`irs_*` is what the list said at verification) or reject it with a
+ * note. Only a `verified` profile issues tax-deductible receipts. A charity's legal name, EIN and
+ * address are public record (they print on every receipt).
+ */
+export const charityProfiles = tenantTable(
+  donationsSchema,
+  'charity_profiles',
+  {
+    legalName: text('legal_name').notNull(),
+    ein: text('ein').notNull(),
+    exemptKind: text('exempt_kind').notNull(),
+    sponsorName: text('sponsor_name'),
+    sponsorEin: text('sponsor_ein'),
+    address: text('address'),
+    status: text('status').notNull().default('pending'),
+    version: integer('version').notNull().default(1),
+    submittedAt: ts('submitted_at').notNull(),
+    reviewedAt: ts('reviewed_at'),
+    reviewedBy: text('reviewed_by'),
+    reviewNote: text('review_note'),
+    irsName: text('irs_name'),
+    irsCity: text('irs_city'),
+    irsState: text('irs_state'),
+    irsDeductibility: text('irs_deductibility'),
+  },
+  (t) => [
+    uniqueIndex('charity_profiles_org_key').on(t.orgId),
+    index('charity_profiles_org_status_idx').on(t.orgId, t.status),
+    check('charity_profiles_legal_name_length', sql`length(legal_name) between 1 and 200`),
+    check('charity_profiles_ein_check', sql`ein ~ '^[0-9]{2}-[0-9]{7}$'`),
+    check('charity_profiles_exempt_kind_check', inList('exempt_kind', EXEMPT_KINDS)),
+    check(
+      'charity_profiles_sponsor_check',
+      sql`(exempt_kind = 'fiscal_sponsor') = (sponsor_name is not null and sponsor_ein is not null) and (exempt_kind = 'fiscal_sponsor' or (sponsor_name is null and sponsor_ein is null))`,
+    ),
+    check(
+      'charity_profiles_sponsor_name_length',
+      sql`sponsor_name is null or length(sponsor_name) between 1 and 200`,
+    ),
+    check(
+      'charity_profiles_sponsor_ein_check',
+      sql`sponsor_ein is null or sponsor_ein ~ '^[0-9]{2}-[0-9]{7}$'`,
+    ),
+    check('charity_profiles_address_length', sql`address is null or length(address) between 1 and 300`),
+    check('charity_profiles_status_check', inList('status', CHARITY_STATUSES)),
+    check('charity_profiles_version_check', sql`version >= 1`),
+    check(
+      'charity_profiles_review_check',
+      sql`(status = 'pending') = (reviewed_at is null) and (status <> 'verified' or irs_name is not null)`,
+    ),
+    check(
+      'charity_profiles_review_note_length',
+      sql`review_note is null or length(review_note) between 1 and 500`,
+    ),
+  ],
+);
+
+/**
+ * A ticket type's fair-market value (M4.8b, P4-11): the good-faith value of what a ticket buyer
+ * receives (a gala dinner), and what it is. Receipts deduct it; ticket pages over $75 show the
+ * quid-pro-quo notice. `(org_id, ticket_type_id)` references `ticketing.ticket_types` (a lower tier)
+ * through a hand-written foreign key (cascade: the value goes with its ticket type).
+ */
+export const ticketFairValues = tenantTable(
+  donationsSchema,
+  'ticket_fair_values',
+  {
+    eventId: uuid('event_id').notNull(),
+    ticketTypeId: uuid('ticket_type_id').notNull(),
+    fmvMinor: minor('fmv_minor').notNull(),
+    currency: text('currency').notNull(),
+    description: text('description'),
+  },
+  (t) => [
+    uniqueIndex('ticket_fair_values_org_type_key').on(t.orgId, t.ticketTypeId),
+    index('ticket_fair_values_org_event_idx').on(t.orgId, t.eventId),
+    check('ticket_fair_values_fmv_check', sql`fmv_minor >= 0 and fmv_minor <= 100000000`),
+    check('ticket_fair_values_currency_check', sql`currency ~ '^[A-Z]{3}$'`),
+    check(
+      'ticket_fair_values_description_length',
+      sql`description is null or length(description) between 1 and 200`,
+    ),
+  ],
+);
+
+/** The per-org receipt counter: numbers are gap-free per org, taken under this row's lock. */
+export const receiptSequences = tenantTable(
+  donationsSchema,
+  'receipt_sequences',
+  { lastNumber: integer('last_number').notNull().default(0) },
+  (t) => [
+    uniqueIndex('receipt_sequences_org_key').on(t.orgId),
+    check('receipt_sequences_last_check', sql`last_number >= 0`),
+  ],
+);
+
+/**
+ * A receipt (M4.8b, P4-11): one per paid order, a gift's or a ticket order's whose ticket types
+ * carry a fair-market value. Immutable once issued: the charity's details and the wording version
+ * are snapshots. `deductible` false is a plain "This payment is not tax-deductible" receipt
+ * (unverified org, platform as merchant of record, or not USD). The donor's name and email are
+ * personal; receipts go only to that email. `(org_id, order_id)` and `(org_id, event_id)`
+ * reference `orders.orders` and `events.events` through hand-written foreign keys.
+ */
+export const receipts = tenantTable(
+  donationsSchema,
+  'receipts',
+  {
+    eventId: uuid('event_id').notNull(),
+    orderId: uuid('order_id').notNull(),
+    giftId: uuid('gift_id'),
+    number: integer('number').notNull(),
+    kind: text('kind').notNull(),
+    deductible: boolean('deductible').notNull(),
+    donorName: text('donor_name').notNull(),
+    donorEmail: text('donor_email').notNull(),
+    locale: text('locale').notNull().default('en'),
+    currency: text('currency').notNull(),
+    amountMinor: minor('amount_minor').notNull(),
+    fmvMinor: minor('fmv_minor').notNull(),
+    deductibleMinor: minor('deductible_minor').notNull(),
+    goods: text('goods'),
+    charityName: text('charity_name').notNull(),
+    charityEin: text('charity_ein'),
+    sponsorName: text('sponsor_name'),
+    sponsorEin: text('sponsor_ein'),
+    charityAddress: text('charity_address'),
+    paidAt: ts('paid_at').notNull(),
+    taxYear: integer('tax_year').notNull(),
+    copyVersion: text('copy_version').notNull(),
+  },
+  (t) => [
+    uniqueIndex('receipts_org_order_key').on(t.orgId, t.orderId),
+    uniqueIndex('receipts_org_number_key').on(t.orgId, t.number),
+    index('receipts_org_event_created_idx').on(t.orgId, t.eventId, t.createdAt),
+    index('receipts_org_year_email_idx').on(t.orgId, t.taxYear, t.donorEmail),
+    check('receipts_number_check', sql`number >= 1`),
+    check('receipts_kind_check', inList('kind', RECEIPT_KINDS)),
+    check('receipts_currency_check', sql`currency ~ '^[A-Z]{3}$'`),
+    check(
+      'receipts_amounts_check',
+      sql`amount_minor >= 0 and fmv_minor >= 0 and deductible_minor >= 0 and deductible_minor <= amount_minor`,
+    ),
+    check('receipts_deductible_check', sql`deductible or deductible_minor = 0`),
+    check('receipts_charity_check', sql`not deductible or charity_ein is not null`),
+    check('receipts_donor_name_length', sql`length(donor_name) between 1 and 120`),
+    check('receipts_donor_email_check', sql`donor_email = lower(donor_email) and length(donor_email) <= 254`),
+    check('receipts_goods_length', sql`goods is null or length(goods) between 1 and 2000`),
+    check('receipts_charity_name_length', sql`length(charity_name) between 1 and 200`),
+    check('receipts_tax_year_check', sql`tax_year between 2000 and 2200`),
+  ],
+);
+
+/**
+ * A donor's year-end giving statement (M4.8b, P4-11): one per org, tax year (the org's timezone),
+ * donor email and currency, totalling that year's tax-deductible receipts exactly. Written by the
+ * worker's daily pass in the new year (`donations.yearEndStatements`) and mailed to the donor.
+ */
+export const yearEndStatements = tenantTable(
+  donationsSchema,
+  'year_end_statements',
+  {
+    taxYear: integer('tax_year').notNull(),
+    donorEmail: text('donor_email').notNull(),
+    donorName: text('donor_name').notNull(),
+    locale: text('locale').notNull().default('en'),
+    currency: text('currency').notNull(),
+    receiptCount: integer('receipt_count').notNull(),
+    amountMinor: minor('amount_minor').notNull(),
+    fmvMinor: minor('fmv_minor').notNull(),
+    deductibleMinor: minor('deductible_minor').notNull(),
+    charityName: text('charity_name').notNull(),
+    charityEin: text('charity_ein').notNull(),
+    sponsorName: text('sponsor_name'),
+    sponsorEin: text('sponsor_ein'),
+    charityAddress: text('charity_address'),
+    copyVersion: text('copy_version').notNull(),
+  },
+  (t) => [
+    uniqueIndex('year_end_statements_org_year_email_key').on(t.orgId, t.taxYear, t.donorEmail, t.currency),
+    index('year_end_statements_org_year_idx').on(t.orgId, t.taxYear),
+    check('year_end_statements_tax_year_check', sql`tax_year between 2000 and 2200`),
+    check('year_end_statements_currency_check', sql`currency ~ '^[A-Z]{3}$'`),
+    check('year_end_statements_count_check', sql`receipt_count >= 1`),
+    check(
+      'year_end_statements_amounts_check',
+      sql`amount_minor >= 0 and fmv_minor >= 0 and deductible_minor >= 0 and deductible_minor <= amount_minor`,
+    ),
+    check(
+      'year_end_statements_donor_email_check',
+      sql`donor_email = lower(donor_email) and length(donor_email) <= 254`,
+    ),
+    check('year_end_statements_donor_name_length', sql`length(donor_name) between 1 and 120`),
+    check('year_end_statements_charity_name_length', sql`length(charity_name) between 1 and 200`),
   ],
 );

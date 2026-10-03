@@ -256,6 +256,16 @@
       "intro": "ما زالت {org} بانتظار «{title}» لـ {eventName}. الموعد النهائي: {until}.",
       "cta": "فتح مهامي"
     },
+    "donations.receipt": {
+      "subject": "{deductible, select, yes {إيصال تبرّعك من {org}} other {إيصال دفعتك من {org}}}",
+      "intro": "شكرًا على دفعتك البالغة {amount} مقابل {eventName}. إيصالك أدناه. احتفظ به أو بنسخة PDF مع سجلاتك.",
+      "cta": "تنزيل الإيصال بصيغة PDF"
+    },
+    "donations.year-end-statement": {
+      "subject": "كشف تبرعاتك لعام {year} من {org}",
+      "intro": "شكرًا لدعمك {org} في عام {year}. كشف مدفوعاتك القابلة للخصم الضريبي أدناه وبصيغة PDF.",
+      "cta": "تنزيل الكشف بصيغة PDF"
+    },
     "guests.invitation": {
       "subject": "{subject}",
       "intro": "{message}",

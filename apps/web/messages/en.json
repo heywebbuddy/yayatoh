@@ -178,6 +178,10 @@
       "program": {
         "task-reminder": "Task reminder"
       },
+      "donations": {
+        "receipt": "Donation receipt",
+        "year-end-statement": "Year-end giving statement"
+      },
       "guests": {
         "invitation": "Wedding invitation",
         "rsvp-reminder": "RSVP reminder"
@@ -1471,7 +1475,8 @@
       "ownerOnly": "An owner or admin needs to accept this."
     },
     "activityLink": "Activity log",
-    "privacyLink": "Privacy requests"
+    "privacyLink": "Privacy requests",
+    "charityLink": "Charity profile"
   },
   "legal": {
     "platform": "Yayatoh",
@@ -8513,7 +8518,10 @@
         "amountTaken": "This campaign already has a level with that amount.",
         "tooMany": "That is the most this campaign or event can have.",
         "description": "The description is too long."
-      }
+      },
+      "receiptsTitle": "Tax receipts",
+      "receiptsBody": "Donors get a receipt by email for every payment. Set fair-market values for gala tickets and see every receipt.",
+      "receiptsLink": "Open tax receipts"
     },
     "give": {
       "metaTitle": "Give",
@@ -8590,6 +8598,69 @@
       "failed": "The payment wasn’t completed and nothing was charged.",
       "tryAgain": "Try again",
       "backToEvent": "Back to the event"
+    },
+    "receipts": {
+      "title": "Tax receipts",
+      "subtitle": "One receipt per payment, emailed to the donor with a PDF.",
+      "back": "Back to Donations",
+      "noAccessTitle": "You can’t see receipts",
+      "noAccessDescription": "Ask an owner or admin for access to orders.",
+      "charityTitle": "Charity profile",
+      "charity": {
+        "none": "No charity profile",
+        "pending": "Waiting for verification",
+        "verified": "Verified 501(c)(3)",
+        "rejected": "Not verified"
+      },
+      "charityBody": {
+        "none": "Receipts say “This payment is not tax-deductible” until your charity profile is verified.",
+        "pending": "Receipts say “This payment is not tax-deductible” until Yayatoh verifies your charity profile.",
+        "verified": "Receipts show the tax-deductible amount of each payment.",
+        "rejected": "Receipts say “This payment is not tax-deductible”. Fix your charity profile to send it for review again."
+      },
+      "charityLink": "View the charity profile",
+      "charityStart": "Add a charity profile",
+      "fmvTitle": "Fair-market values",
+      "fmvIntro": "The good-faith value of what a ticket buyer receives, such as dinner. Receipts deduct it from the price, and ticket pages over $75 show how much is tax-deductible. Tickets without a value get no receipt.",
+      "noTypesTitle": "No tickets yet",
+      "noTypesDescription": "Add ticket types to this event, then set their fair-market values here.",
+      "priceFrom": "From {price}",
+      "noValue": "No fair-market value: buyers get no receipt.",
+      "valueLine": "Fair-market value {fmv} · {goods}",
+      "goodsUnnamed": "goods or services",
+      "noticePreview": "Ticket page notice: {notice}",
+      "setValueFor": "Set the fair-market value of {name}",
+      "fmv": "Fair-market value ({currency})",
+      "fmvHint": "Per ticket. Enter 0 if buyers receive nothing of value.",
+      "goods": "What buyers receive (optional)",
+      "goodsHint": "For example: Dinner and entertainment.",
+      "save": "Save value",
+      "saved": "Saved.",
+      "clear": "Remove the value of {name}",
+      "cleared": "Removed.",
+      "errors": {
+        "amount": "Enter an amount, for example 150 or 150.50.",
+        "description": "Keep it under 200 characters."
+      },
+      "viewerNotice": "You can view receipts. Ask an owner or admin to change fair-market values.",
+      "receiptsTitle": "Receipts issued",
+      "receiptsCaption": "Receipts issued for this event, newest first",
+      "noReceipts": "No receipts yet. Donors get one by email when a gift or a ticket with a fair-market value is paid.",
+      "columns": {
+        "number": "No.",
+        "date": "Paid",
+        "donor": "Donor",
+        "kind": "For",
+        "amount": "Amount",
+        "deductible": "Tax-deductible",
+        "pdf": "PDF"
+      },
+      "kind": {
+        "gift": "Gift",
+        "ticket": "Tickets"
+      },
+      "notDeductible": "Not deductible",
+      "pdf": "Download {number}"
     }
   },
   "galaTables": {
@@ -9656,6 +9727,50 @@
       "stale": "Someone else saved this template meanwhile. Reload the page to see their version.",
       "questionNotAllowed": "That question can't be printed on badges."
     }
+  },
+  "charity": {
+    "title": "Charity profile",
+    "description": "The details that print on your tax receipts. Yayatoh checks them against the IRS list of tax-exempt organizations.",
+    "unavailableTitle": "Charity profiles aren’t on your plan",
+    "unavailableDescription": "Ask Yayatoh support to turn on donations for your organization.",
+    "legalName": "Legal name",
+    "legalNameHint": "Exactly as the IRS lists it.",
+    "ein": "EIN",
+    "einHint": "Your 9-digit Employer Identification Number, for example 12-3456789.",
+    "exemptKind": "Tax-exempt status",
+    "exempt501c3": "Our own 501(c)(3) status",
+    "exemptSponsor": "Through a fiscal sponsor",
+    "sponsorName": "Fiscal sponsor’s legal name",
+    "sponsorHint": "Only with a fiscal sponsor: its name and EIN print on your receipts.",
+    "sponsorEin": "Fiscal sponsor’s EIN",
+    "address": "Mailing address (optional)",
+    "addressHint": "Printed on receipts.",
+    "errors": {
+      "legalName": "Enter the legal name (up to 200 characters).",
+      "ein": "Enter a valid 9-digit EIN, for example 12-3456789.",
+      "sponsorName": "Enter the fiscal sponsor’s legal name.",
+      "sponsorEin": "Enter the fiscal sponsor’s 9-digit EIN.",
+      "address": "Keep the address under 300 characters."
+    },
+    "statusTitle": "Verification",
+    "emptyTitle": "No charity profile yet",
+    "emptyDescription": "Add your legal name and EIN below. Once Yayatoh verifies them, your receipts become tax-deductible.",
+    "emptyViewer": "An owner or admin can add the charity details.",
+    "status": {
+      "pending": "Waiting for Yayatoh to verify",
+      "verified": "Verified 501(c)(3)",
+      "rejected": "Not verified"
+    },
+    "pendingBody": "Sent for review on {at}. Until it is verified, receipts say “This payment is not tax-deductible”.",
+    "verifiedBody": "Verified against the IRS list on {at}. Receipts for gifts and for tickets with a fair-market value are tax-deductible.",
+    "rejectedBody": "Yayatoh couldn’t verify these details. Fix them and save to send them for review again.",
+    "reviewNote": "Note from Yayatoh",
+    "receiptsNote": "Changing any detail sends the profile for review again.",
+    "detailsTitle": "Details",
+    "submit": "Send for verification",
+    "saveAndReview": "Save and send for review",
+    "saved": "Saved. Yayatoh will review it.",
+    "viewerNotice": "Only owners and admins can change the charity profile."
   },
   "rsvp": {
     "metaTitle": "Your RSVP",

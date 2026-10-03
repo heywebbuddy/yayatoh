@@ -256,6 +256,16 @@
       "intro": "{org}は{eventName}の「{title}」をまだお待ちしています。期限：{until}。",
       "cta": "タスクを開く"
     },
+    "donations.receipt": {
+      "subject": "{deductible, select, yes {{org}からの寄付の領収書} other {{org}からのお支払いの領収書}}",
+      "intro": "{eventName}への{amount}のお支払いをありがとうございます。領収書は以下のとおりです。この領収書またはPDFの控えを記録として保管してください。",
+      "cta": "PDFの領収書をダウンロード"
+    },
+    "donations.year-end-statement": {
+      "subject": "{org}からの{year}年 寄付明細書",
+      "intro": "{year}年に{org}をご支援いただきありがとうございます。税控除対象のお支払いの明細は以下とPDFのとおりです。",
+      "cta": "PDFの明細書をダウンロード"
+    },
     "guests.invitation": {
       "subject": "{subject}",
       "intro": "{message}",

@@ -421,6 +421,20 @@ export const KINDS = {
     urgent: true,
     params: [],
   },
+  // M4.8b: a donation receipt (one per payment) and the year-end giving statement, to the donor
+  // only. The receipt's own wording (`body`) is the donations module's legal-copy template.
+  'donations.receipt': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: ['url', 'name', 'eventName', 'amountMinor', 'currency', 'deductible', 'body'],
+  },
+  'donations.year-end-statement': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: ['url', 'name', 'year', 'amountMinor', 'currency', 'body'],
+  },
 } as const satisfies Record<string, KindDefinition>;
 
 export type MessageKind = keyof typeof KINDS;

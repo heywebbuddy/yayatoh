@@ -1,5 +1,6 @@
 import {
   Activity,
+  BadgeCheck,
   Building2,
   ChartColumn,
   DoorOpen,
@@ -52,6 +53,13 @@ export async function Shell({ staff, children }: { staff: Staff; children: React
       show: staff.can('openSignup'),
     },
     { href: '/people', label: t('people'), icon: <UserRoundSearch {...I} />, show: staff.can('privacy') },
+    // M4.8b: charity profiles waiting for verification against the IRS list.
+    {
+      href: '/charities',
+      label: t('charities'),
+      icon: <BadgeCheck {...I} />,
+      show: staff.can('charities'),
+    },
     {
       href: '/messaging',
       label: paused ? t('messagingCount', { count: paused }) : t('messaging'),

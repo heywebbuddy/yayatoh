@@ -256,6 +256,16 @@
       "intro": "{org} is still waiting for “{title}” for {eventName}. Due: {until}.",
       "cta": "Open my tasks"
     },
+    "donations.receipt": {
+      "subject": "{deductible, select, yes {Your donation receipt from {org}} other {Your payment receipt from {org}}}",
+      "intro": "Thank you for your payment of {amount} for {eventName}. Your receipt is below. Keep it, or the PDF copy, with your records.",
+      "cta": "Download the PDF receipt"
+    },
+    "donations.year-end-statement": {
+      "subject": "Your {year} giving statement from {org}",
+      "intro": "Thank you for supporting {org} in {year}. Your statement of tax-deductible payments is below, and as a PDF.",
+      "cta": "Download the PDF statement"
+    },
     "guests.invitation": {
       "subject": "{subject}",
       "intro": "{message}",

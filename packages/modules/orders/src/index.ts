@@ -270,6 +270,8 @@ export {
   ordersForContactTx,
   searchOrdersQuery,
 } from './queries.ts';
+// M4.8b: the facts a donation or ticket receipt needs (donations module).
+export { type ReceiptOrderFacts, receiptOrderFactsTx } from './receipt-facts.ts';
 export {
   type MassRefundSlice,
   type RefundOutcome,

@@ -178,6 +178,10 @@
       "program": {
         "task-reminder": "Taakherinnering"
       },
+      "donations": {
+        "receipt": "Donatiebewijs",
+        "year-end-statement": "Jaaroverzicht van giften"
+      },
       "guests": {
         "invitation": "Huwelijksuitnodiging",
         "rsvp-reminder": "Herinnering om te reageren"
@@ -1471,7 +1475,8 @@
       "ownerOnly": "Een eigenaar of beheerder moet dit accepteren."
     },
     "activityLink": "Activiteitenlogboek",
-    "privacyLink": "Privacyverzoeken"
+    "privacyLink": "Privacyverzoeken",
+    "charityLink": "Goededoelenprofiel"
   },
   "legal": {
     "platform": "Yayatoh",
@@ -8513,7 +8518,10 @@
         "amountTaken": "Deze campagne heeft al een niveau met dat bedrag.",
         "tooMany": "Meer kan deze campagne of dit evenement niet hebben.",
         "description": "De beschrijving is te lang."
-      }
+      },
+      "receiptsTitle": "Belastingbewijzen",
+      "receiptsBody": "Donateurs krijgen voor elke betaling een bewijs per e-mail. Stel marktwaarden in voor galatickets en bekijk alle bewijzen.",
+      "receiptsLink": "Belastingbewijzen openen"
     },
     "give": {
       "metaTitle": "Geven",
@@ -8590,6 +8598,69 @@
       "failed": "De betaling is niet voltooid en er is niets afgeschreven.",
       "tryAgain": "Opnieuw proberen",
       "backToEvent": "Terug naar het evenement"
+    },
+    "receipts": {
+      "title": "Belastingbewijzen",
+      "subtitle": "Eén bewijs per betaling, per e-mail met een pdf naar de donateur.",
+      "back": "Terug naar Donaties",
+      "noAccessTitle": "Je kunt de bewijzen niet zien",
+      "noAccessDescription": "Vraag een eigenaar of beheerder om toegang tot bestellingen.",
+      "charityTitle": "Goededoelenprofiel",
+      "charity": {
+        "none": "Geen goededoelenprofiel",
+        "pending": "Wacht op controle",
+        "verified": "501(c)(3) gecontroleerd",
+        "rejected": "Niet gecontroleerd"
+      },
+      "charityBody": {
+        "none": "Op bewijzen staat ‘Deze betaling is niet aftrekbaar’ totdat je goededoelenprofiel is gecontroleerd.",
+        "pending": "Op bewijzen staat ‘Deze betaling is niet aftrekbaar’ totdat Yayatoh je goededoelenprofiel heeft gecontroleerd.",
+        "verified": "Bewijzen tonen het aftrekbare bedrag van elke betaling.",
+        "rejected": "Op bewijzen staat ‘Deze betaling is niet aftrekbaar’. Pas je goededoelenprofiel aan om het opnieuw te laten controleren."
+      },
+      "charityLink": "Goededoelenprofiel bekijken",
+      "charityStart": "Goededoelenprofiel toevoegen",
+      "fmvTitle": "Marktwaarden",
+      "fmvIntro": "De te goeder trouw geschatte waarde van wat een ticketkoper krijgt, zoals een diner. Bewijzen trekken die van de prijs af, en ticketpagina’s boven $ 75 tonen hoeveel aftrekbaar is. Tickets zonder waarde krijgen geen bewijs.",
+      "noTypesTitle": "Nog geen tickets",
+      "noTypesDescription": "Voeg tickettypes toe aan dit evenement en stel hier hun marktwaarde in.",
+      "priceFrom": "Vanaf {price}",
+      "noValue": "Geen marktwaarde: kopers krijgen geen bewijs.",
+      "valueLine": "Marktwaarde {fmv} · {goods}",
+      "goodsUnnamed": "goederen of diensten",
+      "noticePreview": "Melding op de ticketpagina: {notice}",
+      "setValueFor": "Marktwaarde van {name} instellen",
+      "fmv": "Marktwaarde ({currency})",
+      "fmvHint": "Per ticket. Vul 0 in als kopers niets van waarde krijgen.",
+      "goods": "Wat kopers krijgen (optioneel)",
+      "goodsHint": "Bijvoorbeeld: Diner en entertainment.",
+      "save": "Waarde opslaan",
+      "saved": "Opgeslagen.",
+      "clear": "Waarde van {name} verwijderen",
+      "cleared": "Verwijderd.",
+      "errors": {
+        "amount": "Vul een bedrag in, bijvoorbeeld 150 of 150.50.",
+        "description": "Maximaal 200 tekens."
+      },
+      "viewerNotice": "Je kunt bewijzen bekijken. Vraag een eigenaar of beheerder om marktwaarden te wijzigen.",
+      "receiptsTitle": "Uitgegeven bewijzen",
+      "receiptsCaption": "Uitgegeven bewijzen voor dit evenement, nieuwste eerst",
+      "noReceipts": "Nog geen bewijzen. Donateurs krijgen er een per e-mail zodra een gift of een ticket met een marktwaarde is betaald.",
+      "columns": {
+        "number": "Nr.",
+        "date": "Betaald",
+        "donor": "Donateur",
+        "kind": "Voor",
+        "amount": "Bedrag",
+        "deductible": "Aftrekbaar",
+        "pdf": "PDF"
+      },
+      "kind": {
+        "gift": "Gift",
+        "ticket": "Tickets"
+      },
+      "notDeductible": "Niet aftrekbaar",
+      "pdf": "{number} downloaden"
     }
   },
   "galaTables": {
@@ -9656,6 +9727,50 @@
       "questionNotAllowed": "Die vraag kan niet op badges worden geprint."
     },
     "elements": "Elementen aan deze kant"
+  },
+  "charity": {
+    "title": "Goededoelenprofiel",
+    "description": "De gegevens op je belastingbewijzen. Yayatoh controleert ze met de IRS-lijst van belastingvrije organisaties.",
+    "unavailableTitle": "Goededoelenprofielen zitten niet in je abonnement",
+    "unavailableDescription": "Vraag Yayatoh-support om donaties voor je organisatie aan te zetten.",
+    "legalName": "Officiële naam",
+    "legalNameHint": "Precies zoals de IRS die vermeldt.",
+    "ein": "EIN",
+    "einHint": "Je Employer Identification Number van 9 cijfers, bijvoorbeeld 12-3456789.",
+    "exemptKind": "Belastingvrijstelling",
+    "exempt501c3": "Onze eigen 501(c)(3)-status",
+    "exemptSponsor": "Via een fiscale sponsor",
+    "sponsorName": "Officiële naam van de fiscale sponsor",
+    "sponsorHint": "Alleen met een fiscale sponsor: de naam en EIN van de sponsor staan op je bewijzen.",
+    "sponsorEin": "EIN van de fiscale sponsor",
+    "address": "Postadres (optioneel)",
+    "addressHint": "Staat op de bewijzen.",
+    "errors": {
+      "legalName": "Vul de officiële naam in (maximaal 200 tekens).",
+      "ein": "Vul een geldig EIN van 9 cijfers in, bijvoorbeeld 12-3456789.",
+      "sponsorName": "Vul de officiële naam van de fiscale sponsor in.",
+      "sponsorEin": "Vul het EIN van 9 cijfers van de fiscale sponsor in.",
+      "address": "Het adres mag hoogstens 300 tekens zijn."
+    },
+    "statusTitle": "Controle",
+    "emptyTitle": "Nog geen goededoelenprofiel",
+    "emptyDescription": "Vul hieronder je officiële naam en EIN in. Zodra Yayatoh ze heeft gecontroleerd, zijn je bewijzen aftrekbaar.",
+    "emptyViewer": "Een eigenaar of beheerder kan de gegevens invullen.",
+    "status": {
+      "pending": "Wacht op controle door Yayatoh",
+      "verified": "501(c)(3) gecontroleerd",
+      "rejected": "Niet gecontroleerd"
+    },
+    "pendingBody": "Op {at} ter controle verstuurd. Tot de controle staat op bewijzen ‘Deze betaling is niet aftrekbaar’.",
+    "verifiedBody": "Op {at} gecontroleerd met de IRS-lijst. Bewijzen voor giften en voor tickets met een marktwaarde zijn aftrekbaar.",
+    "rejectedBody": "Yayatoh kon deze gegevens niet controleren. Pas ze aan en sla op om ze opnieuw te laten controleren.",
+    "reviewNote": "Opmerking van Yayatoh",
+    "receiptsNote": "Elke wijziging stuurt het profiel opnieuw ter controle.",
+    "detailsTitle": "Gegevens",
+    "submit": "Ter controle versturen",
+    "saveAndReview": "Opslaan en ter controle versturen",
+    "saved": "Opgeslagen. Yayatoh controleert het.",
+    "viewerNotice": "Alleen eigenaren en beheerders kunnen het goededoelenprofiel wijzigen."
   },
   "rsvp": {
     "metaTitle": "Jouw reactie",

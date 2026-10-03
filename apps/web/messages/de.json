@@ -178,6 +178,10 @@
       "program": {
         "task-reminder": "Aufgabenerinnerung"
       },
+      "donations": {
+        "receipt": "Spendenquittung",
+        "year-end-statement": "Jährliche Spendenübersicht"
+      },
       "guests": {
         "invitation": "Hochzeitseinladung",
         "rsvp-reminder": "Erinnerung an die Antwort"
@@ -1471,7 +1475,8 @@
       "ownerOnly": "Eine Inhaberin, ein Inhaber oder ein Admin muss dies akzeptieren."
     },
     "activityLink": "Aktivitätsprotokoll",
-    "privacyLink": "Datenschutzanfragen"
+    "privacyLink": "Datenschutzanfragen",
+    "charityLink": "Gemeinnützigkeitsprofil"
   },
   "legal": {
     "platform": "Yayatoh",
@@ -8513,7 +8518,10 @@
         "amountTaken": "Diese Kampagne hat bereits eine Stufe mit diesem Betrag.",
         "tooMany": "Mehr sind für diese Kampagne oder Veranstaltung nicht möglich.",
         "description": "Die Beschreibung ist zu lang."
-      }
+      },
+      "receiptsTitle": "Spendenquittungen",
+      "receiptsBody": "Spender erhalten für jede Zahlung eine Quittung per E-Mail. Legen Sie Marktwerte für Gala-Tickets fest und sehen Sie alle Quittungen.",
+      "receiptsLink": "Spendenquittungen öffnen"
     },
     "give": {
       "metaTitle": "Spenden",
@@ -8590,6 +8598,69 @@
       "failed": "Die Zahlung wurde nicht abgeschlossen und nichts wurde belastet.",
       "tryAgain": "Erneut versuchen",
       "backToEvent": "Zurück zur Veranstaltung"
+    },
+    "receipts": {
+      "title": "Spendenquittungen",
+      "subtitle": "Eine Quittung pro Zahlung, per E-Mail mit PDF an den Spender.",
+      "back": "Zurück zu Spenden",
+      "noAccessTitle": "Sie können keine Quittungen sehen",
+      "noAccessDescription": "Bitten Sie einen Inhaber oder Admin um Zugriff auf Bestellungen.",
+      "charityTitle": "Gemeinnützigkeitsprofil",
+      "charity": {
+        "none": "Kein Gemeinnützigkeitsprofil",
+        "pending": "Wartet auf Prüfung",
+        "verified": "501(c)(3) geprüft",
+        "rejected": "Nicht geprüft"
+      },
+      "charityBody": {
+        "none": "Auf Quittungen steht „Diese Zahlung ist steuerlich nicht absetzbar“, bis Ihr Gemeinnützigkeitsprofil geprüft ist.",
+        "pending": "Auf Quittungen steht „Diese Zahlung ist steuerlich nicht absetzbar“, bis Yayatoh Ihr Gemeinnützigkeitsprofil geprüft hat.",
+        "verified": "Quittungen zeigen den steuerlich absetzbaren Betrag jeder Zahlung.",
+        "rejected": "Auf Quittungen steht „Diese Zahlung ist steuerlich nicht absetzbar“. Korrigieren Sie Ihr Gemeinnützigkeitsprofil, um es erneut prüfen zu lassen."
+      },
+      "charityLink": "Gemeinnützigkeitsprofil ansehen",
+      "charityStart": "Gemeinnützigkeitsprofil anlegen",
+      "fmvTitle": "Marktwerte",
+      "fmvIntro": "Der nach bestem Wissen geschätzte Wert dessen, was Ticketkäufer erhalten, etwa ein Abendessen. Quittungen ziehen ihn vom Preis ab, und Ticketseiten über 75 $ zeigen, wie viel absetzbar ist. Tickets ohne Wert erhalten keine Quittung.",
+      "noTypesTitle": "Noch keine Tickets",
+      "noTypesDescription": "Legen Sie Tickettypen für diese Veranstaltung an und tragen Sie hier ihre Marktwerte ein.",
+      "priceFrom": "Ab {price}",
+      "noValue": "Kein Marktwert: Käufer erhalten keine Quittung.",
+      "valueLine": "Marktwert {fmv} · {goods}",
+      "goodsUnnamed": "Waren oder Leistungen",
+      "noticePreview": "Hinweis auf der Ticketseite: {notice}",
+      "setValueFor": "Marktwert von {name} festlegen",
+      "fmv": "Marktwert ({currency})",
+      "fmvHint": "Pro Ticket. 0, wenn Käufer nichts von Wert erhalten.",
+      "goods": "Was Käufer erhalten (optional)",
+      "goodsHint": "Zum Beispiel: Abendessen und Unterhaltung.",
+      "save": "Wert speichern",
+      "saved": "Gespeichert.",
+      "clear": "Wert von {name} entfernen",
+      "cleared": "Entfernt.",
+      "errors": {
+        "amount": "Geben Sie einen Betrag ein, zum Beispiel 150 oder 150.50.",
+        "description": "Höchstens 200 Zeichen."
+      },
+      "viewerNotice": "Sie können Quittungen ansehen. Bitten Sie einen Inhaber oder Admin, Marktwerte zu ändern.",
+      "receiptsTitle": "Ausgestellte Quittungen",
+      "receiptsCaption": "Für diese Veranstaltung ausgestellte Quittungen, neueste zuerst",
+      "noReceipts": "Noch keine Quittungen. Spender erhalten eine per E-Mail, sobald eine Spende oder ein Ticket mit Marktwert bezahlt ist.",
+      "columns": {
+        "number": "Nr.",
+        "date": "Bezahlt",
+        "donor": "Spender",
+        "kind": "Für",
+        "amount": "Betrag",
+        "deductible": "Absetzbar",
+        "pdf": "PDF"
+      },
+      "kind": {
+        "gift": "Spende",
+        "ticket": "Tickets"
+      },
+      "notDeductible": "Nicht absetzbar",
+      "pdf": "{number} herunterladen"
     }
   },
   "galaTables": {
@@ -9656,6 +9727,50 @@
       "questionNotAllowed": "Diese Frage kann nicht auf Badges gedruckt werden."
     },
     "elements": "Elemente auf dieser Seite"
+  },
+  "charity": {
+    "title": "Gemeinnützigkeitsprofil",
+    "description": "Die Angaben auf Ihren Spendenquittungen. Yayatoh prüft sie anhand der IRS-Liste steuerbefreiter Organisationen.",
+    "unavailableTitle": "Gemeinnützigkeitsprofile sind nicht in Ihrem Tarif enthalten",
+    "unavailableDescription": "Bitten Sie den Yayatoh-Support, Spenden für Ihre Organisation freizuschalten.",
+    "legalName": "Offizieller Name",
+    "legalNameHint": "Genau wie beim IRS eingetragen.",
+    "ein": "EIN",
+    "einHint": "Ihre 9-stellige Employer Identification Number, zum Beispiel 12-3456789.",
+    "exemptKind": "Steuerbefreiung",
+    "exempt501c3": "Unser eigener 501(c)(3)-Status",
+    "exemptSponsor": "Über einen Fiscal Sponsor",
+    "sponsorName": "Offizieller Name des Fiscal Sponsors",
+    "sponsorHint": "Nur mit Fiscal Sponsor: Name und EIN des Sponsors stehen auf Ihren Quittungen.",
+    "sponsorEin": "EIN des Fiscal Sponsors",
+    "address": "Postanschrift (optional)",
+    "addressHint": "Steht auf den Quittungen.",
+    "errors": {
+      "legalName": "Geben Sie den offiziellen Namen ein (bis zu 200 Zeichen).",
+      "ein": "Geben Sie eine gültige 9-stellige EIN ein, zum Beispiel 12-3456789.",
+      "sponsorName": "Geben Sie den offiziellen Namen des Fiscal Sponsors ein.",
+      "sponsorEin": "Geben Sie die 9-stellige EIN des Fiscal Sponsors ein.",
+      "address": "Die Adresse darf höchstens 300 Zeichen lang sein."
+    },
+    "statusTitle": "Prüfung",
+    "emptyTitle": "Noch kein Gemeinnützigkeitsprofil",
+    "emptyDescription": "Tragen Sie unten Ihren offiziellen Namen und Ihre EIN ein. Sobald Yayatoh sie geprüft hat, sind Ihre Quittungen steuerlich absetzbar.",
+    "emptyViewer": "Inhaber oder Admins können die Angaben eintragen.",
+    "status": {
+      "pending": "Wartet auf Prüfung durch Yayatoh",
+      "verified": "501(c)(3) geprüft",
+      "rejected": "Nicht geprüft"
+    },
+    "pendingBody": "Am {at} zur Prüfung gesendet. Bis zur Prüfung steht auf Quittungen „Diese Zahlung ist steuerlich nicht absetzbar“.",
+    "verifiedBody": "Am {at} mit der IRS-Liste geprüft. Quittungen für Spenden und für Tickets mit Marktwert sind steuerlich absetzbar.",
+    "rejectedBody": "Yayatoh konnte diese Angaben nicht prüfen. Korrigieren Sie sie und speichern Sie, um sie erneut prüfen zu lassen.",
+    "reviewNote": "Hinweis von Yayatoh",
+    "receiptsNote": "Jede Änderung schickt das Profil erneut zur Prüfung.",
+    "detailsTitle": "Angaben",
+    "submit": "Zur Prüfung senden",
+    "saveAndReview": "Speichern und zur Prüfung senden",
+    "saved": "Gespeichert. Yayatoh prüft es.",
+    "viewerNotice": "Nur Inhaber und Admins können das Gemeinnützigkeitsprofil ändern."
   },
   "rsvp": {
     "metaTitle": "Deine Rückmeldung",

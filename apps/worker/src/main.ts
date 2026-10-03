@@ -28,6 +28,7 @@ import { runRetention } from './retention.ts';
 import { runSettlements } from './settlements.ts';
 import { alertDisputeDeadlines, sweepEnrollments, sweepExpiredHolds, sweepWaitlists } from './sweeper.ts';
 import { startWorker } from './worker.ts';
+import { runYearEndStatements } from './year-end.ts';
 
 const connectionString = process.env.JOBS_DATABASE_URL;
 if (!connectionString) throw new Error('JOBS_DATABASE_URL is not set (see .env.example)');
@@ -279,6 +280,24 @@ const retain = () => {
 };
 setTimeout(retain, 10 * 60_000).unref();
 setInterval(retain, 24 * 3_600_000).unref();
+
+// Year-end giving statements (M4.8b): daily, first run 15 minutes after start (leader only). Each
+// org's previous calendar year in its own timezone; donors already stated are skipped.
+let stating = false;
+const stateYearEnd = () => {
+  if (!release || stopping || stating) return;
+  stating = true;
+  runYearEndStatements()
+    .then((r) => {
+      if (r.issued || r.failed) console.info(JSON.stringify({ job: 'donations.year-end', ...r }));
+    })
+    .catch((err) => console.error('year-end statements', err))
+    .finally(() => {
+      stating = false;
+    });
+};
+setTimeout(stateYearEnd, 15 * 60_000).unref();
+setInterval(stateYearEnd, 24 * 3_600_000).unref();
 
 // Alert engine (M3.2b): live and pre-show events every 30 s, everything else every 5 minutes (leader only).
 const alertDeps = { notifier: createNotifier() };

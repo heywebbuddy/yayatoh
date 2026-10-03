@@ -194,6 +194,19 @@ export default async function DonationsPage({
         )
       ) : null}
       {canWrite ? null : <p className="text-body text-ink-2">{t('viewerNotice')}</p>}
+      {/* M4.8b: the charity profile's receipts, fair-market values and the receipts issued. */}
+      {can('orders:read') ? (
+        <Card className="flex flex-col gap-2">
+          <h2 className="m-0 text-card">{t('receiptsTitle')}</h2>
+          <p className="m-0 text-body text-ink-2">{t('receiptsBody')}</p>
+          <Link
+            href={`/o/${org}/e/${event}/donations/receipts`}
+            className="inline-flex min-h-8 items-center self-start text-body font-bold text-primary-ink underline-offset-2 hover:underline"
+          >
+            {t('receiptsLink')}
+          </Link>
+        </Card>
+      ) : null}
 
       <section aria-labelledby="campaigns-heading" className="flex flex-col gap-3">
         <h2 id="campaigns-heading" className="text-section">

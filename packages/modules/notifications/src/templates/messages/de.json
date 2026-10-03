@@ -256,6 +256,16 @@
       "intro": "{org} wartet noch auf „{title}“ für {eventName}. Fällig: {until}.",
       "cta": "Meine Aufgaben öffnen"
     },
+    "donations.receipt": {
+      "subject": "{deductible, select, yes {Ihre Spendenquittung von {org}} other {Ihr Zahlungsbeleg von {org}}}",
+      "intro": "Danke für Ihre Zahlung von {amount} für {eventName}. Ihr Beleg steht unten. Bewahren Sie ihn oder die PDF-Kopie bei Ihren Unterlagen auf.",
+      "cta": "PDF-Beleg herunterladen"
+    },
+    "donations.year-end-statement": {
+      "subject": "Ihre Spendenübersicht {year} von {org}",
+      "intro": "Danke, dass Sie {org} im Jahr {year} unterstützt haben. Ihre Übersicht der steuerlich absetzbaren Zahlungen steht unten und als PDF.",
+      "cta": "PDF-Übersicht herunterladen"
+    },
     "guests.invitation": {
       "subject": "{subject}",
       "intro": "{message}",

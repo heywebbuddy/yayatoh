@@ -202,6 +202,10 @@ export const PLATFORM_PREFIXES: readonly string[] = [
   // Batch 3h merge: M4.2b's signed table claim link (`/tables/{token}`), where a buyer names the
   // guests of a gala table.
   '/tables',
+  // M4.8b: a donor's tax receipt and year-end statement PDFs (`/receipts/{org}/{token}`,
+  // `/statements/{org}/{token}`).
+  '/receipts',
+  '/statements',
 ];
 
 /**

@@ -178,6 +178,10 @@
       "program": {
         "task-reminder": "Rappel de tâche"
       },
+      "donations": {
+        "receipt": "Reçu de don",
+        "year-end-statement": "Relevé annuel des dons"
+      },
       "guests": {
         "invitation": "Faire-part de mariage",
         "rsvp-reminder": "Rappel de réponse"
@@ -1471,7 +1475,8 @@
       "ownerOnly": "Un propriétaire ou un administrateur doit l’accepter."
     },
     "activityLink": "Journal d’activité",
-    "privacyLink": "Demandes de confidentialité"
+    "privacyLink": "Demandes de confidentialité",
+    "charityLink": "Profil caritatif"
   },
   "legal": {
     "platform": "Yayatoh",
@@ -8513,7 +8518,10 @@
         "amountTaken": "Cette campagne a déjà un niveau de ce montant.",
         "tooMany": "C’est le maximum pour cette campagne ou cet événement.",
         "description": "La description est trop longue."
-      }
+      },
+      "receiptsTitle": "Reçus fiscaux",
+      "receiptsBody": "Les donateurs reçoivent un reçu par e-mail pour chaque paiement. Définissez la juste valeur marchande des billets du gala et consultez tous les reçus.",
+      "receiptsLink": "Ouvrir les reçus fiscaux"
     },
     "give": {
       "metaTitle": "Faire un don",
@@ -8590,6 +8598,69 @@
       "failed": "Le paiement n’a pas abouti et rien n’a été débité.",
       "tryAgain": "Réessayer",
       "backToEvent": "Retour à l’événement"
+    },
+    "receipts": {
+      "title": "Reçus fiscaux",
+      "subtitle": "Un reçu par paiement, envoyé au donateur par e-mail avec un PDF.",
+      "back": "Retour aux dons",
+      "noAccessTitle": "Vous ne pouvez pas voir les reçus",
+      "noAccessDescription": "Demandez l’accès aux commandes à un propriétaire ou à un administrateur.",
+      "charityTitle": "Profil caritatif",
+      "charity": {
+        "none": "Aucun profil caritatif",
+        "pending": "En attente de vérification",
+        "verified": "501(c)(3) vérifiée",
+        "rejected": "Non vérifié"
+      },
+      "charityBody": {
+        "none": "Les reçus indiquent « Ce paiement n’est pas déductible des impôts » tant que votre profil caritatif n’est pas vérifié.",
+        "pending": "Les reçus indiquent « Ce paiement n’est pas déductible des impôts » tant que Yayatoh n’a pas vérifié votre profil caritatif.",
+        "verified": "Les reçus indiquent le montant déductible de chaque paiement.",
+        "rejected": "Les reçus indiquent « Ce paiement n’est pas déductible des impôts ». Corrigez votre profil caritatif pour le renvoyer en vérification."
+      },
+      "charityLink": "Voir le profil caritatif",
+      "charityStart": "Ajouter un profil caritatif",
+      "fmvTitle": "Justes valeurs marchandes",
+      "fmvIntro": "La valeur estimée de bonne foi de ce que reçoit l’acheteur d’un billet, comme un dîner. Les reçus la déduisent du prix, et les pages des billets de plus de 75 $ indiquent la part déductible. Les billets sans valeur ne donnent pas de reçu.",
+      "noTypesTitle": "Pas encore de billets",
+      "noTypesDescription": "Ajoutez des types de billets à cet événement, puis définissez ici leur juste valeur marchande.",
+      "priceFrom": "À partir de {price}",
+      "noValue": "Pas de juste valeur marchande : les acheteurs ne reçoivent pas de reçu.",
+      "valueLine": "Juste valeur marchande {fmv} · {goods}",
+      "goodsUnnamed": "biens ou services",
+      "noticePreview": "Mention sur la page des billets : {notice}",
+      "setValueFor": "Définir la juste valeur marchande de {name}",
+      "fmv": "Juste valeur marchande ({currency})",
+      "fmvHint": "Par billet. Saisissez 0 si l’acheteur ne reçoit rien de valeur.",
+      "goods": "Ce que reçoivent les acheteurs (facultatif)",
+      "goodsHint": "Par exemple : Dîner et spectacle.",
+      "save": "Enregistrer la valeur",
+      "saved": "Enregistré.",
+      "clear": "Retirer la valeur de {name}",
+      "cleared": "Retirée.",
+      "errors": {
+        "amount": "Saisissez un montant, par exemple 150 ou 150.50.",
+        "description": "200 caractères maximum."
+      },
+      "viewerNotice": "Vous pouvez voir les reçus. Demandez à un propriétaire ou à un administrateur de modifier les justes valeurs marchandes.",
+      "receiptsTitle": "Reçus émis",
+      "receiptsCaption": "Reçus émis pour cet événement, du plus récent au plus ancien",
+      "noReceipts": "Pas encore de reçus. Les donateurs en reçoivent un par e-mail quand un don ou un billet avec une juste valeur marchande est payé.",
+      "columns": {
+        "number": "N°",
+        "date": "Payé",
+        "donor": "Donateur",
+        "kind": "Pour",
+        "amount": "Montant",
+        "deductible": "Déductible",
+        "pdf": "PDF"
+      },
+      "kind": {
+        "gift": "Don",
+        "ticket": "Billets"
+      },
+      "notDeductible": "Non déductible",
+      "pdf": "Télécharger {number}"
     }
   },
   "galaTables": {
@@ -9656,6 +9727,50 @@
       "questionNotAllowed": "Cette question ne peut pas être imprimée sur les badges."
     },
     "elements": "Éléments de cette face"
+  },
+  "charity": {
+    "title": "Profil caritatif",
+    "description": "Les informations imprimées sur vos reçus fiscaux. Yayatoh les vérifie avec la liste de l’IRS des organisations exonérées d’impôt.",
+    "unavailableTitle": "Les profils caritatifs ne sont pas inclus dans votre offre",
+    "unavailableDescription": "Demandez au support Yayatoh d’activer les dons pour votre organisation.",
+    "legalName": "Nom légal",
+    "legalNameHint": "Exactement comme l’IRS l’indique.",
+    "ein": "EIN",
+    "einHint": "Votre numéro d’identification d’employeur à 9 chiffres, par exemple 12-3456789.",
+    "exemptKind": "Statut d’exonération",
+    "exempt501c3": "Notre propre statut 501(c)(3)",
+    "exemptSponsor": "Par un parrain fiscal",
+    "sponsorName": "Nom légal du parrain fiscal",
+    "sponsorHint": "Uniquement avec un parrain fiscal : son nom et son EIN figurent sur vos reçus.",
+    "sponsorEin": "EIN du parrain fiscal",
+    "address": "Adresse postale (facultatif)",
+    "addressHint": "Imprimée sur les reçus.",
+    "errors": {
+      "legalName": "Saisissez le nom légal (200 caractères maximum).",
+      "ein": "Saisissez un EIN valide à 9 chiffres, par exemple 12-3456789.",
+      "sponsorName": "Saisissez le nom légal du parrain fiscal.",
+      "sponsorEin": "Saisissez l’EIN à 9 chiffres du parrain fiscal.",
+      "address": "L’adresse doit faire moins de 300 caractères."
+    },
+    "statusTitle": "Vérification",
+    "emptyTitle": "Pas encore de profil caritatif",
+    "emptyDescription": "Ajoutez votre nom légal et votre EIN ci-dessous. Une fois vérifiés par Yayatoh, vos reçus deviennent déductibles des impôts.",
+    "emptyViewer": "Un propriétaire ou un administrateur peut ajouter les informations caritatives.",
+    "status": {
+      "pending": "En attente de vérification par Yayatoh",
+      "verified": "501(c)(3) vérifiée",
+      "rejected": "Non vérifié"
+    },
+    "pendingBody": "Envoyé pour vérification le {at}. Tant qu’il n’est pas vérifié, les reçus indiquent « Ce paiement n’est pas déductible des impôts ».",
+    "verifiedBody": "Vérifié avec la liste de l’IRS le {at}. Les reçus des dons et des billets avec une juste valeur marchande sont déductibles des impôts.",
+    "rejectedBody": "Yayatoh n’a pas pu vérifier ces informations. Corrigez-les et enregistrez pour les renvoyer en vérification.",
+    "reviewNote": "Note de Yayatoh",
+    "receiptsNote": "Toute modification renvoie le profil en vérification.",
+    "detailsTitle": "Informations",
+    "submit": "Envoyer pour vérification",
+    "saveAndReview": "Enregistrer et envoyer en vérification",
+    "saved": "Enregistré. Yayatoh va le vérifier.",
+    "viewerNotice": "Seuls les propriétaires et les administrateurs peuvent modifier le profil caritatif."
   },
   "rsvp": {
     "metaTitle": "Votre réponse",

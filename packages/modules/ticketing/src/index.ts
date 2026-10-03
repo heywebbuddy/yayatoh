@@ -57,6 +57,8 @@ export {
   ticketsDsarTx,
 } from './dsar.ts';
 export * from './dto.ts';
+// M4.8b: ticket type prices for fair-market values and the quid-pro-quo notice (donations).
+export { type TicketTypePrice, ticketTypePricesTx } from './fair-value-facts.ts';
 export {
   currentFaceMinor,
   holdInventoryTx,

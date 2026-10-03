@@ -236,6 +236,9 @@ describe('who serves a request', () => {
       '/events/summit/give',
       '/events/summit/give/thanks',
       '/ar/events/summit/give',
+      // M4.8b: receipt and year-end statement PDFs.
+      '/receipts/0190a0b0-0000-7000-8000-000000000001/abc~sig',
+      '/statements/0190a0b0-0000-7000-8000-000000000001/abc~sig',
     ]) {
       expect(isPlatformPath(new URL(p, 'https://x').pathname) || decide(p).owner === 'next').toBe(true);
       expect(decide(p, flags(), { legacy: true })).toEqual({

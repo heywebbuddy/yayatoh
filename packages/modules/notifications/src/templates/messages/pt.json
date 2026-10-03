@@ -256,6 +256,16 @@
       "intro": "{org} ainda aguarda “{title}” para {eventName}. Prazo: {until}.",
       "cta": "Abrir minhas tarefas"
     },
+    "donations.receipt": {
+      "subject": "{deductible, select, yes {Seu recibo de doação de {org}} other {Seu recibo de pagamento de {org}}}",
+      "intro": "Obrigado pelo seu pagamento de {amount} para {eventName}. O seu recibo está abaixo. Guarde-o, ou a cópia em PDF, com os seus registros.",
+      "cta": "Baixar o recibo em PDF"
+    },
+    "donations.year-end-statement": {
+      "subject": "Seu extrato de doações de {year} de {org}",
+      "intro": "Obrigado por apoiar {org} em {year}. O extrato dos seus pagamentos dedutíveis de impostos está abaixo e em PDF.",
+      "cta": "Baixar o extrato em PDF"
+    },
     "guests.invitation": {
       "subject": "{subject}",
       "intro": "{message}",
