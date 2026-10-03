@@ -126,3 +126,56 @@ export {
   yearEndStatementsCommand,
 } from './receipts.ts';
 export { giftRetentionCommand, LAPSED_GIFT_DAYS, redactLapsedGiftsTx } from './retention.ts';
+// M4.8c paddle raise: paddles, the console, spotters' entries and the recorder's pledges.
+export {
+  BULK_SCOPES,
+  CALL_STATUSES,
+  DEFAULT_PADDLE_START,
+  ENTRY_REFUSALS,
+  ENTRY_STATUSES,
+  type EntryOutcome,
+  type EntryRefusal,
+  type EntryStatus,
+  MAX_SYNC_BATCH,
+  PADDLE_MAX,
+  PADDLE_MIN,
+  parsePaddleNumber,
+} from './domain/paddles.ts';
+export {
+  AssignPaddleInput,
+  BulkAssignInput,
+  type CallDto,
+  ConsoleLiveDto,
+  EntryOutcomeDto,
+  PADDLE_CONSOLE_CHANNEL,
+  PADDLE_REALTIME_CHANNELS,
+  type PaddleConsoleDto,
+  type PaddleDto,
+  type PaddleReviewDto,
+  type PaddlesViewDto,
+  type RaiseTotalsDto,
+  RecordPaddlesInput,
+  RecordPaddlesOutput,
+  type ReviewEntryDto,
+  SPOTTER_CHANNEL,
+  SpotterStateDto,
+} from './paddle-dto.ts';
+export { consoleLiveTx, spotterStateTx } from './paddle-live.ts';
+export {
+  armLevelCommand,
+  closeCallCommand,
+  confirmEntriesCommand,
+  paddleConsoleQuery,
+  paddleReviewQuery,
+  recordPaddlesCommand,
+  spotterStateQuery,
+  undoPaddleStepCommand,
+  voidEntryCommand,
+} from './paddle-raise.ts';
+export {
+  assignPaddleCommand,
+  bulkAssignPaddlesCommand,
+  paddleEventTx,
+  paddlesQuery,
+  releasePaddleCommand,
+} from './paddles.ts';
