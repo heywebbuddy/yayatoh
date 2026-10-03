@@ -1,5 +1,5 @@
 import { type Browser, type BrowserContext, expect, type Page, test } from '@playwright/test';
-import { continueToPayment, expectAccessible, newUser, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, expectPicked, newUser, pickOption, signIn } from './helpers.ts';
 
 const PORT = Number(process.env.E2E_PORT ?? 3100);
 const VIEWER = 'jordan@lakeside.test';
@@ -117,9 +117,10 @@ test.describe('Command Center (M3.2a)', () => {
     await expect(page.getByTestId('cc-tickets-sold')).toHaveText('0');
     await expect(page.getByTestId('cc-widget-tickets')).toContainText('of 10');
     const blocking = page.getByTestId('cc-blocking');
-    await expect(blocking.getByRole('link', { name: 'Venue added' })).toHaveAttribute(
+    // U4: the checklist links to the exact field that fixes the item.
+    await expect(blocking.getByRole('link', { name: /^Venue added/ })).toHaveAttribute(
       'href',
-      `${base}/details`,
+      `${base}/details#details-venue`,
     );
     await expect(page.getByTestId('cc-widget-alerts')).toContainText('No open alerts.');
     await expect(page.getByTestId('cc-widget-timeline')).toContainText('Pre-show starts');
@@ -342,10 +343,15 @@ test.describe('Command Center (M3.2a)', () => {
     await setClock(context, null);
     await page.reload();
     await expect(page.getByTestId('cc-mode')).toHaveText('Planning');
-    const select = page.getByLabel('Set the mode');
-    await expect(select.locator('option:checked')).toHaveText('Automatic (Planning)');
+    // U4: the mode control is the design-system select (U1), in the hero strip.
+    const select = page.getByRole('combobox', { name: 'Set the mode' });
+    await expectPicked(select, 'auto');
+    await expect(select).toHaveText('Automatic (Planning)');
     await select.focus();
-    await select.selectOption('live');
+    await page.keyboard.press('Enter');
+    await page.keyboard.type('Live');
+    await page.keyboard.press('Enter');
+    await expectPicked(select, 'live');
     await page.getByRole('button', { name: 'Set mode' }).focus();
     await page.keyboard.press('Enter');
     await expect(page.getByText('Mode updated.')).toBeVisible();
@@ -366,7 +372,7 @@ test.describe('Command Center (M3.2a)', () => {
     await expect(page).toHaveURL(new RegExp(`${base}/command-center$`));
 
     // Back to automatic.
-    await page.getByLabel('Set the mode').selectOption('auto');
+    await pickOption(page.getByRole('combobox', { name: 'Set the mode' }), 'auto');
     await page.getByRole('button', { name: 'Set mode' }).click();
     await expect(page.getByText('Mode updated.')).toBeVisible();
     await expect(page.getByTestId('cc-mode')).toHaveText('Planning');

@@ -2,11 +2,8 @@
 
 import {
   boardSpans,
-  type CcRole,
-  type HeroAlert,
   type KpiKey,
   moveWidget,
-  nextAction,
   type WidgetChannel,
   type WidgetKey,
 } from '@yayatoh/command-center/client';
@@ -14,11 +11,10 @@ import { Button, Card, cx, Skeleton, SkeletonText, StatusDot } from '@yayatoh/ui
 import { ArrowDown, ArrowUp, Eye, EyeOff, GripVertical } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { type ReactNode, useCallback, useEffect, useRef, useState, useTransition } from 'react';
+import { useCallback, useEffect, useRef, useState, useTransition } from 'react';
 import { useRealtime } from '@/lib/use-realtime.ts';
-import { type HeroLinks, HeroStrip } from './hero.tsx';
+import { type HeroView, useHeroFeed } from './hero.tsx';
 import { KpiRow } from './kpis.tsx';
-import type { ModeView } from './mode-panel.tsx';
 import { WidgetBody } from './widgets.tsx';
 
 interface Slot {
@@ -75,23 +71,6 @@ function ChannelWatch({
   return null;
 }
 
-/** What the hero strip needs (U4): the mode, and what the member's role lets the next action use. */
-export interface HeroView {
-  readonly mode: ModeView;
-  readonly role: CcRole;
-  readonly canScan: boolean;
-  readonly revenue: boolean;
-  /** The readiness widget feeds the next action (roles and modes with readiness). */
-  readonly readiness: boolean;
-  /** The alerts widget feeds the next action. */
-  readonly alerts: boolean;
-}
-
-type ReadinessData = {
-  blocking: { key: string; path: string; field: string | null }[];
-  todo: { key: string; path: string; field: string | null }[];
-};
-
 /**
  * The Command Center board (M3.2a): the member's widgets for the current mode, kept current over
  * each widget's realtime channel (or every 30 s when the member can't follow it), and arranged by
@@ -116,8 +95,7 @@ export function CommandCenterBoard({
   reset,
   kpis,
   hero,
-  links,
-  heroControls,
+  alertsHref,
 }: {
   slots: readonly Slot[];
   channels: Readonly<Record<string, readonly WidgetChannel[]>>;
@@ -132,10 +110,10 @@ export function CommandCenterBoard({
   save: (order: string[], hidden: string[]) => Promise<LayoutResult>;
   reset: () => Promise<LayoutResult>;
   kpis: readonly KpiKey[];
-  hero: HeroView;
-  links: HeroLinks;
-  /** The mode control (owners and staff who can edit the event). */
-  heroControls?: ReactNode;
+  /** Which reads feed the hero's next action (it sits outside the board: `CommandCenterShell`). */
+  hero: Pick<HeroView, 'readiness' | 'alerts'>;
+  /** The org's alert list for this event. */
+  alertsHref: string;
 }) {
   const t = useTranslations('commandCenter');
   const router = useRouter();
@@ -320,20 +298,16 @@ export function CommandCenterBoard({
       setStreams((m) => (m[c] === s ? m : { ...m, [c]: s })),
     [],
   );
-  const ctx = { locale, timeZone, base, alertsHref: links.alerts };
+  const ctx = { locale, timeZone, base, alertsHref };
   const spans = boardSpans(visible.map((k) => size.get(k) ?? 'sm'));
-  const alertList = hero.alerts
-    ? ((data.alerts as { alerts?: HeroAlert[] } | null | undefined)?.alerts ?? null)
-    : null;
-  const readiness = hero.readiness ? ((data.readiness as ReadinessData | null | undefined) ?? null) : null;
-  const action = nextAction({
-    mode: hero.mode.mode,
-    role: hero.role,
-    alerts: alertList,
-    readiness,
-    canScan: hero.canScan,
-    revenue: hero.revenue,
-  });
+  // Fresh readiness and alerts reads go up to the hero's next action.
+  const feed = useHeroFeed();
+  useEffect(() => {
+    if (feed && data.readiness !== undefined) feed('readiness', data.readiness);
+  }, [feed, data.readiness]);
+  useEffect(() => {
+    if (feed && data.alerts !== undefined) feed('alerts', data.alerts);
+  }, [feed, data.alerts]);
   const controls = (k: WidgetKey) => ({
     params: params[k] ?? {},
     setParams: (next: Params) => {
@@ -360,16 +334,6 @@ export function CommandCenterBoard({
 
   return (
     <>
-      <HeroStrip
-        mode={hero.mode}
-        timeZone={timeZone}
-        locale={locale}
-        serverNow={serverNow}
-        action={action}
-        links={links}
-      >
-        {heroControls}
-      </HeroStrip>
       <KpiRow keys={kpis} data={data} locale={locale} />
       <section aria-labelledby="cc-widgets" className="flex flex-col gap-4">
         {followed.map((c) => (

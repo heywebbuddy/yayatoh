@@ -10,6 +10,7 @@ import { buttonClass, EmptyState, PageHeader, Tag } from '@yayatoh/ui';
 import { MonitorPlay, ScanLine } from 'lucide-react';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { CommandCenterBoard } from '@/components/command-center/board.tsx';
+import { CommandCenterShell } from '@/components/command-center/hero.tsx';
 import { ModeOverrideForm } from '@/components/command-center/mode-panel.tsx';
 import { Crumbs, eventWhen } from '@/components/crumbs.tsx';
 import { Link } from '@/i18n/navigation.ts';
@@ -80,6 +81,7 @@ export default async function CommandCenterPage({
     modules: data.modules,
   });
   const base = `/o/${org}/e/${event}`;
+  const alertsHref = `/o/${org}/alerts?event=${ev.id}`;
   return (
     <div
       className="flex flex-col gap-6"
@@ -125,26 +127,7 @@ export default async function CommandCenterPage({
           </>
         }
       />
-      <CommandCenterBoard
-        key={`${view.mode.mode}:${slots.map((s) => `${s.key}${s.hidden ? '-' : ''}`).join(',')}`}
-        slots={slots}
-        channels={Object.fromEntries(
-          [...new Set([...slots.map((s) => s.key), ...read])].map((k) => [
-            k,
-            followedChannels(WIDGET_META[k]),
-          ]),
-        )}
-        urls={channels}
-        initial={initial}
-        widgetUrl={`/api/command-center/${org}/${event}`}
-        base={base}
-        locale={locale}
-        timeZone={view.timeZone}
-        serverNow={ctx.now.toISOString()}
-        nextChangeAt={view.mode.nextChangeAt}
-        save={saveLayoutAction.bind(null, org, event)}
-        reset={resetLayoutAction.bind(null, org, event)}
-        kpis={kpis}
+      <CommandCenterShell
         hero={{
           mode: view.mode,
           role: view.role,
@@ -152,17 +135,41 @@ export default async function CommandCenterPage({
           revenue: kpis.includes('sales'),
           ...hero,
         }}
-        links={{
-          base,
-          publicPage: `/events/${ev.slug}`,
-          alerts: `/o/${org}/alerts?event=${ev.id}`,
-        }}
-        heroControls={
+        links={{ base, publicPage: `/events/${ev.slug}`, alerts: alertsHref }}
+        timeZone={view.timeZone}
+        locale={locale}
+        serverNow={ctx.now.toISOString()}
+        initial={{ readiness: initial.readiness, alerts: initial.alerts }}
+        controls={
           view.canOverride ? (
             <ModeOverrideForm mode={view.mode} action={setModeAction.bind(null, org, event)} />
           ) : null
         }
-      />
+      >
+        <CommandCenterBoard
+          key={`${view.mode.mode}:${slots.map((s) => `${s.key}${s.hidden ? '-' : ''}`).join(',')}`}
+          slots={slots}
+          channels={Object.fromEntries(
+            [...new Set([...slots.map((s) => s.key), ...read])].map((k) => [
+              k,
+              followedChannels(WIDGET_META[k]),
+            ]),
+          )}
+          urls={channels}
+          initial={initial}
+          widgetUrl={`/api/command-center/${org}/${event}`}
+          base={base}
+          locale={locale}
+          timeZone={view.timeZone}
+          serverNow={ctx.now.toISOString()}
+          nextChangeAt={view.mode.nextChangeAt}
+          save={saveLayoutAction.bind(null, org, event)}
+          reset={resetLayoutAction.bind(null, org, event)}
+          kpis={kpis}
+          hero={hero}
+          alertsHref={alertsHref}
+        />
+      </CommandCenterShell>
     </div>
   );
 }

@@ -1,11 +1,18 @@
 'use client';
 
-import { countdown, durationParts, type NextAction } from '@yayatoh/command-center/client';
+import {
+  type CcRole,
+  countdown,
+  durationParts,
+  type HeroAlert,
+  type NextAction,
+  nextAction,
+} from '@yayatoh/command-center/client';
 import { countWords } from '@yayatoh/notifications/numbers';
 import { buttonClass, Card, cx, StatusPill } from '@yayatoh/ui';
 import { ArrowRight, CalendarClock } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { type ReactNode, useEffect, useState } from 'react';
+import { createContext, type ReactNode, useCallback, useContext, useEffect, useState } from 'react';
 import { Link } from '@/i18n/navigation.ts';
 import { type ModeView, useModeNote } from './mode-panel.tsx';
 
@@ -155,5 +162,90 @@ export function HeroStrip({
         ) : null}
       </Card>
     </section>
+  );
+}
+
+/** What the hero needs (U4): the mode, and what the member's role lets the next action use. */
+export interface HeroView {
+  readonly mode: ModeView;
+  readonly role: CcRole;
+  readonly canScan: boolean;
+  readonly revenue: boolean;
+  /** The readiness widget feeds the next action (roles and modes with readiness). */
+  readonly readiness: boolean;
+  /** The alerts widget feeds the next action. */
+  readonly alerts: boolean;
+}
+
+type ReadinessData = {
+  blocking: { key: string; path: string; field: string | null }[];
+  todo: { key: string; path: string; field: string | null }[];
+};
+
+/** The board reports its latest readiness and alerts reads here (they drive the next action). */
+const HeroFeed = createContext<((key: 'readiness' | 'alerts', data: unknown) => void) | null>(null);
+
+export function useHeroFeed() {
+  return useContext(HeroFeed);
+}
+
+/**
+ * The Command Center's frame (U4): the hero strip on top and the board below. It stays mounted
+ * when the board re-renders for a new mode or layout, so the mode control keeps its "Mode
+ * updated." message; the board feeds it each fresh readiness and alerts read.
+ */
+export function CommandCenterShell({
+  hero,
+  links,
+  timeZone,
+  locale,
+  serverNow,
+  initial,
+  controls,
+  children,
+}: {
+  hero: HeroView;
+  links: HeroLinks;
+  timeZone: string;
+  locale: string;
+  serverNow: string;
+  initial: { readiness?: unknown; alerts?: unknown };
+  controls?: ReactNode;
+  children: ReactNode;
+}) {
+  const [feed, setFeed] = useState<{ readiness?: unknown; alerts?: unknown }>(initial);
+  // A server refresh (new mode, new layout) brings fresh reads.
+  useEffect(() => setFeed(initial), [initial]);
+  const report = useCallback(
+    (key: 'readiness' | 'alerts', data: unknown) =>
+      setFeed((f) => (f[key] === data ? f : { ...f, [key]: data })),
+    [],
+  );
+  const alerts = hero.alerts
+    ? ((feed.alerts as { alerts?: HeroAlert[] } | null | undefined)?.alerts ?? null)
+    : null;
+  const readiness = hero.readiness ? ((feed.readiness as ReadinessData | null | undefined) ?? null) : null;
+  const action = nextAction({
+    mode: hero.mode.mode,
+    role: hero.role,
+    alerts,
+    readiness,
+    canScan: hero.canScan,
+    revenue: hero.revenue,
+  });
+  return (
+    <HeroFeed.Provider value={report}>
+      <HeroStrip
+        mode={hero.mode}
+        timeZone={timeZone}
+        locale={locale}
+        serverNow={serverNow}
+        action={action}
+        links={links}
+      >
+        {controls}
+      </HeroStrip>
+      {children}
+    </HeroFeed.Provider>
   );
 }
