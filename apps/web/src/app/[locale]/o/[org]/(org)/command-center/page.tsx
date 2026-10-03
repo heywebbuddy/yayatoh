@@ -187,6 +187,7 @@ export default async function CommandCenterOverviewPage({
               rowKey={(e) => e.eventId}
               rows={overview.events.filter((e) => e.mode === m)}
               columns={columns}
+              stackOnPhone
             />
           </section>
         ))

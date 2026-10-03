@@ -35,14 +35,22 @@ async function choose(field: Locator, value: string | { label: string }) {
 }
 
 /** A published Chicago event with a $25 pass (120 places) and `n` sold. */
-async function newEvent(page: Page, browser: Browser, name: string, startH: number, endH: number, n = 0) {
-  await page.goto('/o/lakeside-events/events/new');
+async function newEvent(
+  page: Page,
+  browser: Browser,
+  name: string,
+  startH: number,
+  endH: number,
+  n = 0,
+  org = 'lakeside-events',
+) {
+  await page.goto(`/o/${org}/events/new`);
   await page.getByLabel('Event name', { exact: true }).fill(name);
   await choose(page.getByLabel('Time zone'), 'America/Chicago');
   await page.getByLabel('Starts', { exact: true }).fill(chicago(startH));
   await page.getByLabel('Ends', { exact: true }).fill(chicago(endH));
   await page.getByRole('button', { name: 'Create draft' }).click();
-  await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+$/);
+  await expect(page).toHaveURL(new RegExp(`/o/${org}/e/[a-z0-9-]+$`));
   const base = new URL(page.url()).pathname;
   await page.getByRole('button', { name: 'Publish' }).click();
   await expect(page.getByText('Published ·')).toBeVisible();
@@ -326,10 +334,12 @@ test.describe('Command Center v2 (U4)', () => {
     page,
     browser,
   }) => {
-    await signIn(page);
+    // A fresh org with payouts, so its overview lists only this test's events.
+    const owner = await newUser(page, { org: true, twoFactor: true, event: 'published', payouts: 'active' });
+    const org = owner.orgSlug as string;
     const name = `CCv2 Overview ${stamp()}`;
-    const { base } = await newEvent(page, browser, name, 48, 52, 2);
-    await page.goto('/o/lakeside-events/command-center');
+    const { base } = await newEvent(page, browser, name, 48, 52, 2, org);
+    await page.goto(`/o/${org}/command-center`);
     await expect(page.getByRole('heading', { level: 1, name: 'Command Center' })).toBeVisible();
     // Counts per mode on top, packed.
     for (const m of ['live', 'pre_show', 'planning', 'wrap'])
@@ -352,7 +362,7 @@ test.describe('Command Center v2 (U4)', () => {
     await expect(page).toHaveURL(new RegExp(`${base}/command-center$`));
 
     // Arabic.
-    await page.goto('/ar/o/lakeside-events/command-center');
+    await page.goto(`/ar/o/${org}/command-center`);
     await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
     await expect(page.getByRole('heading', { level: 2, name: /^قيد التخطيط/ })).toBeVisible();
     await expectAccessible(page);
