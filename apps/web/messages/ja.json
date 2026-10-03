@@ -1503,7 +1503,7 @@
       "timezone": "タイムゾーン",
       "country": "国（2文字のコード）",
       "countryHint": "例：US、GB、NG",
-      "currency": "デフォルトの通貨（3文字のコード）",
+      "currency": "デフォルトの通貨",
       "currencyHint": "新しいイベントはこの通貨で作成されます。作成済みのイベントの通貨は変わりません。"
     },
     "brand": {

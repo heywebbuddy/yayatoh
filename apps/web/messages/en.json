@@ -1503,7 +1503,7 @@
       "timezone": "Time zone",
       "country": "Country (2-letter code)",
       "countryHint": "For example US, GB or NG.",
-      "currency": "Default currency (3-letter code)",
+      "currency": "Default currency",
       "currencyHint": "New events start with this currency. Events you already created keep theirs."
     },
     "brand": {

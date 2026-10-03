@@ -1503,7 +1503,7 @@
       "timezone": "Tijdzone",
       "country": "Land (code van 2 letters)",
       "countryHint": "Bijvoorbeeld US, GB of NG.",
-      "currency": "Standaardvaluta (code van 3 letters)",
+      "currency": "Standaardvaluta",
       "currencyHint": "Nieuwe evenementen starten met deze valuta. Evenementen die je al hebt aangemaakt, houden die van hen."
     },
     "brand": {

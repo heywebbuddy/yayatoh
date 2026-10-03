@@ -1503,7 +1503,7 @@
       "timezone": "Fuseau horaire",
       "country": "Pays (code à 2 lettres)",
       "countryHint": "Par exemple US, GB ou NG.",
-      "currency": "Devise par défaut (code à 3 lettres)",
+      "currency": "Devise par défaut",
       "currencyHint": "Les nouveaux événements utilisent cette devise. Les événements déjà créés conservent la leur."
     },
     "brand": {

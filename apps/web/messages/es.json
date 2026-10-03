@@ -1503,7 +1503,7 @@
       "timezone": "Zona horaria",
       "country": "País (código de 2 letras)",
       "countryHint": "Por ejemplo, US, GB o NG.",
-      "currency": "Moneda predeterminada (código de 3 letras)",
+      "currency": "Moneda predeterminada",
       "currencyHint": "Los eventos nuevos empiezan con esta moneda. Los eventos que ya creaste conservan la suya."
     },
     "brand": {

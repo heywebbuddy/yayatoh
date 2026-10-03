@@ -1503,7 +1503,7 @@
       "timezone": "時區",
       "country": "國家/地區（2 位字母代碼）",
       "countryHint": "例如 US、GB 或 NG。",
-      "currency": "預設貨幣（3 位字母代碼）",
+      "currency": "預設貨幣",
       "currencyHint": "新活動將使用此貨幣。已建立的活動會保留原有貨幣。"
     },
     "brand": {

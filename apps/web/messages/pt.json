@@ -1503,7 +1503,7 @@
       "timezone": "Fuso horário",
       "country": "País (código de 2 letras)",
       "countryHint": "Por exemplo, US, GB ou NG.",
-      "currency": "Moeda padrão (código de 3 letras)",
+      "currency": "Moeda padrão",
       "currencyHint": "Novos eventos começam com esta moeda. Os eventos que você já criou mantêm a deles."
     },
     "brand": {

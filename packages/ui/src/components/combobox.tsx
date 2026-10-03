@@ -47,6 +47,12 @@ export interface ComboboxProps {
   'data-testid'?: string;
 }
 
+/**
+ * Stable defaults: a fresh `[]` per render would re-run the effect that merges known options on
+ * every render, and its state update would render again (React error #185 after any re-render).
+ */
+const NO_OPTIONS: readonly ListOption[] = [];
+
 const asArray = (v: string | readonly string[] | undefined): string[] =>
   v === undefined ? [] : typeof v === 'string' ? (v ? [v] : []) : [...v];
 
@@ -69,14 +75,14 @@ export function Combobox({
   label,
   hint,
   error,
-  options = [],
+  options = NO_OPTIONS,
   loadOptions,
   multiple = false,
   value: controlled,
   defaultValue,
   onValueChange,
   onCreate,
-  selectedOptions = [],
+  selectedOptions = NO_OPTIONS,
   placeholder,
   required,
   disabled,

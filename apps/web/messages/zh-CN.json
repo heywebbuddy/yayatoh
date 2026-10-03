@@ -1503,7 +1503,7 @@
       "timezone": "时区",
       "country": "国家/地区（2 位字母代码）",
       "countryHint": "例如 US、GB 或 NG。",
-      "currency": "默认货币（3 位字母代码）",
+      "currency": "默认货币",
       "currencyHint": "新活动将使用此货币。已创建的活动保留原有货币。"
     },
     "brand": {

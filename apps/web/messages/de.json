@@ -1503,7 +1503,7 @@
       "timezone": "Zeitzone",
       "country": "Land (Code mit 2 Buchstaben)",
       "countryHint": "Zum Beispiel US, GB oder NG.",
-      "currency": "Standardwährung (Code mit 3 Buchstaben)",
+      "currency": "Standardwährung",
       "currencyHint": "Neue Events starten mit dieser Währung. Bereits erstellte Events behalten ihre."
     },
     "brand": {

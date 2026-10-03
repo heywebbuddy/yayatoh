@@ -2,7 +2,7 @@
 
 import { Alert, Button, Combobox, CurrencyPicker, DateTimePicker, Input, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
-import { useActionState, useEffect, useRef, useState } from 'react';
+import { useActionState, useEffect, useMemo, useRef, useState } from 'react';
 import { errorMessageKey } from '@/lib/errors.ts';
 import { type FormState, INITIAL_FORM_STATE } from '@/lib/form-state.ts';
 
@@ -28,6 +28,10 @@ export function CouponForm({
   const [kind, setKind] = useState('percent');
   const [scope, setScope] = useState('all');
   const ref = useRef<HTMLFormElement>(null);
+  const eventOptions = useMemo(
+    () => events.map((e) => ({ value: e.id, label: e.name, text: e.name, hint: e.currency })),
+    [events],
+  );
   useEffect(() => {
     if (state.ok) {
       ref.current?.reset();
@@ -114,7 +118,7 @@ export function CouponForm({
           label={t('events')}
           hint={t('eventsHint')}
           error={fieldError('eventIds')}
-          options={events.map((e) => ({ value: e.id, label: e.name, text: e.name, hint: e.currency }))}
+          options={eventOptions}
           placeholder={t('eventsPlaceholder')}
         />
       ) : (
