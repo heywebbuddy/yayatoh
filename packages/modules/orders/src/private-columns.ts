@@ -7,6 +7,8 @@ import { columnPrivacy, holder, internal, personal, secret } from '@yayatoh/db';
 export const privateColumns = columnPrivacy('orders', {
   // A snapshot of the ticket type's public name.
   order_items: { name: 'public' },
+  // M5.4b add-on lines (a sponsor package or lead licenses): what the organizer sells, by name.
+  addon_items: { kind: 'vocab', name: 'public', currency: 'vocab' },
   orders: {
     status: 'vocab',
     buyer_email: personal('email'),
