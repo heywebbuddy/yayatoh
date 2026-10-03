@@ -50,4 +50,24 @@ export const privateColumns = columnPrivacy('program', {
   exhibitor_profiles: { links: 'public', categories: 'public' },
   exhibitor_profile_changes: { proposed: internal('json'), status: 'vocab', reason: internal() },
   booths: { number: 'public', category: 'public' },
+  // M5.3b: call for papers. Proposals are unpublished (an accepted one is copied into the public
+  // speaker and session columns); people's details, reviews and decisions are between the
+  // organizer, the reviewers they assign and the submitter.
+  cfp_calls: { status: 'vocab', intro: 'public' },
+  cfp_submissions: {
+    status: 'vocab',
+    title: internal(),
+    abstract: internal(),
+    speaker_name: personal(),
+    speaker_email: personal('email'),
+    speaker_title: personal(),
+    speaker_company: personal(),
+    speaker_bio: personal(),
+    locale: 'vocab',
+    decided_by: internal(),
+    decision_note: internal(),
+  },
+  cfp_co_speakers: { name: personal(), email: personal('email') },
+  cfp_reviewers: { name: personal(), email: personal('email') },
+  cfp_reviews: { comment: internal() },
 });

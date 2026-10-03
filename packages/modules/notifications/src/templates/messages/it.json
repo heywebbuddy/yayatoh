@@ -309,6 +309,18 @@
       "subject": "Promemoria: il tuo impegno di {amount} con {org}",
       "intro": "Grazie ancora per il tuo impegno di {amount} a {eventName}. La scadenza è il {dueOn}. Se hai già pagato, ignora questa email.",
       "cta": "Paga il mio impegno"
+    },
+    "program.cfp-received": {
+      "subject": "Abbiamo ricevuto la tua proposta «{title}»",
+      "intro": "Grazie per aver proposto «{title}» per {eventName}. {org} la valuterà e ti invierà la decisione via email."
+    },
+    "program.cfp-accepted": {
+      "subject": "La tua proposta «{title}» è stata accettata",
+      "intro": "Buone notizie: {org} ha accettato «{title}» per {eventName}. Gli organizzatori condivideranno presto l’orario della tua sessione.{hasNote, select, yes { Nota degli organizzatori: {note}} other {}}"
+    },
+    "program.cfp-rejected": {
+      "subject": "Sulla tua proposta «{title}»",
+      "intro": "Grazie per aver proposto «{title}» per {eventName}. Questa volta {org} non ha potuto includerla nel programma.{hasNote, select, yes { Nota degli organizzatori: {note}} other {}}"
     }
   },
   "roles": {
@@ -326,7 +338,8 @@
     "speaker": "relatore",
     "exhibitor_admin": "amministratore espositore",
     "exhibitor_staff": "staff espositore",
-    "sponsor_contact": "referente sponsor"
+    "sponsor_contact": "referente sponsor",
+    "cfp_reviewer": "revisore della call for papers"
   },
   "account": {
     "deleted": {

@@ -309,6 +309,18 @@
       "subject": "تذكير: تعهّدك بمبلغ {amount} لـ {org}",
       "intro": "شكرًا مجددًا على تعهّدك بمبلغ {amount} في {eventName}. موعد استحقاقه {dueOn}. إذا كنت قد دفعت بالفعل، فتجاهل هذه الرسالة.",
       "cta": "دفع تعهّدي"
+    },
+    "program.cfp-received": {
+      "subject": "استلمنا مقترحك «{title}»",
+      "intro": "شكرًا لتقديمك «{title}» إلى {eventName}. ستراجعه {org} وترسل إليك القرار بالبريد الإلكتروني."
+    },
+    "program.cfp-accepted": {
+      "subject": "تم قبول مقترحك «{title}»",
+      "intro": "أخبار سارة: قبلت {org} «{title}» في {eventName}. سيرسل إليك المنظمون موعد جلستك قريبًا.{hasNote, select, yes { ملاحظة من المنظمين: {note}} other {}}"
+    },
+    "program.cfp-rejected": {
+      "subject": "بخصوص مقترحك «{title}»",
+      "intro": "شكرًا لتقديمك «{title}» إلى {eventName}. لم تتمكن {org} من إدراجه في البرنامج هذه المرة.{hasNote, select, yes { ملاحظة من المنظمين: {note}} other {}}"
     }
   },
   "roles": {
@@ -326,7 +338,8 @@
     "speaker": "متحدث",
     "exhibitor_admin": "مسؤول العارض",
     "exhibitor_staff": "فريق العارض",
-    "sponsor_contact": "جهة اتصال الراعي"
+    "sponsor_contact": "جهة اتصال الراعي",
+    "cfp_reviewer": "مراجع طلبات المشاركة بالأوراق"
   },
   "account": {
     "deleted": {

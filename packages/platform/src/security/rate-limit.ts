@@ -251,6 +251,13 @@ export const RATE_LIMIT_POLICIES = {
     anonymousIp: { limit: 60, windowMs: 10 * MIN },
     ipCeiling: { limit: 600, windowMs: 10 * MIN },
   },
+  /** M5.3b: sending a call-for-papers proposal (public form, per device, IP and submitter email). */
+  cfpSubmit: {
+    device: { limit: 10, windowMs: 10 * MIN },
+    anonymousIp: { limit: 20, windowMs: 10 * MIN },
+    identity: { limit: 10, windowMs: 60 * MIN },
+    ipCeiling: { limit: 200, windowMs: 10 * MIN },
+  },
   /**
    * Registration forms (M5.1b): starting one (creates a draft) and asking for the resume link
    * (sends an email; also capped per respondent by the forms module).

@@ -309,6 +309,18 @@
       "subject": "提醒：您對 {org} 認捐的 {amount}",
       "intro": "再次感謝您在 {eventName} 認捐 {amount}。付款期限為 {dueOn}。如果您已付款，請忽略此郵件。",
       "cta": "支付我的認捐"
+    },
+    "program.cfp-received": {
+      "subject": "我們已收到您的提案「{title}」",
+      "intro": "感謝您為 {eventName} 提交「{title}」。{org} 將進行審查，並以電子郵件通知結果。"
+    },
+    "program.cfp-accepted": {
+      "subject": "您的提案「{title}」已獲接受",
+      "intro": "好消息：{org} 已接受您為 {eventName} 提交的「{title}」。主辦單位將盡快告知您的場次時間。{hasNote, select, yes { 主辦單位留言：{note}} other {}}"
+    },
+    "program.cfp-rejected": {
+      "subject": "關於您的提案「{title}」",
+      "intro": "感謝您為 {eventName} 提交「{title}」。很遺憾，{org} 這次未能將其納入議程。{hasNote, select, yes { 主辦單位留言：{note}} other {}}"
     }
   },
   "roles": {
@@ -326,7 +338,8 @@
     "speaker": "講者",
     "exhibitor_admin": "參展商管理員",
     "exhibitor_staff": "參展商工作人員",
-    "sponsor_contact": "贊助商聯絡人"
+    "sponsor_contact": "贊助商聯絡人",
+    "cfp_reviewer": "徵稿審查員"
   },
   "account": {
     "deleted": {

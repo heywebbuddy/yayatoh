@@ -309,6 +309,18 @@
       "subject": "याद दिलाना: {org} को {amount} का आपका संकल्प",
       "intro": "{eventName} में {amount} के संकल्प के लिए फिर से धन्यवाद। इसकी नियत तारीख {dueOn} है। अगर आप भुगतान कर चुके हैं, तो इस ईमेल को अनदेखा करें।",
       "cta": "मेरा संकल्प चुकाएँ"
+    },
+    "program.cfp-received": {
+      "subject": "हमें आपका प्रस्ताव “{title}” मिल गया है",
+      "intro": "{eventName} के लिए “{title}” प्रस्तावित करने के लिए धन्यवाद। {org} इसकी समीक्षा करेगा और निर्णय आपको ईमेल करेगा।"
+    },
+    "program.cfp-accepted": {
+      "subject": "आपका प्रस्ताव “{title}” स्वीकार कर लिया गया है",
+      "intro": "अच्छी खबर: {org} ने {eventName} के लिए “{title}” स्वीकार कर लिया है। आयोजक जल्द ही आपके सत्र का समय बताएँगे।{hasNote, select, yes { आयोजकों का संदेश: {note}} other {}}"
+    },
+    "program.cfp-rejected": {
+      "subject": "आपके प्रस्ताव “{title}” के बारे में",
+      "intro": "{eventName} के लिए “{title}” प्रस्तावित करने के लिए धन्यवाद। इस बार {org} इसे कार्यक्रम में शामिल नहीं कर सका।{hasNote, select, yes { आयोजकों का संदेश: {note}} other {}}"
     }
   },
   "roles": {
@@ -326,7 +338,8 @@
     "speaker": "वक्ता",
     "exhibitor_admin": "प्रदर्शक एडमिन",
     "exhibitor_staff": "प्रदर्शक स्टाफ़",
-    "sponsor_contact": "प्रायोजक संपर्क"
+    "sponsor_contact": "प्रायोजक संपर्क",
+    "cfp_reviewer": "कॉल फ़ॉर पेपर्स समीक्षक"
   },
   "account": {
     "deleted": {

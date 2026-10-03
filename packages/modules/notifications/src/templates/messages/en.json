@@ -309,6 +309,18 @@
       "subject": "Reminder: your pledge of {amount} to {org}",
       "intro": "Thank you again for your pledge of {amount} at {eventName}. It is due on {dueOn}. If you have already paid, please ignore this email.",
       "cta": "Pay my pledge"
+    },
+    "program.cfp-received": {
+      "subject": "We received your proposal “{title}”",
+      "intro": "Thank you for proposing “{title}” for {eventName}. {org} will review it and email you the decision."
+    },
+    "program.cfp-accepted": {
+      "subject": "Your proposal “{title}” was accepted",
+      "intro": "Good news: {org} accepted “{title}” for {eventName}. The organizers will share your session time soon.{hasNote, select, yes { Note from the organizers: {note}} other {}}"
+    },
+    "program.cfp-rejected": {
+      "subject": "About your proposal “{title}”",
+      "intro": "Thank you for proposing “{title}” for {eventName}. {org} could not include it in the program this time.{hasNote, select, yes { Note from the organizers: {note}} other {}}"
     }
   },
   "roles": {
@@ -326,7 +338,8 @@
     "speaker": "speaker",
     "exhibitor_admin": "exhibitor admin",
     "exhibitor_staff": "exhibitor staff",
-    "sponsor_contact": "sponsor contact"
+    "sponsor_contact": "sponsor contact",
+    "cfp_reviewer": "call-for-papers reviewer"
   },
   "account": {
     "deleted": {

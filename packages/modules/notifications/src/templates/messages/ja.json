@@ -309,6 +309,18 @@
       "subject": "リマインダー：{org}への{amount}のお約束",
       "intro": "{eventName}での{amount}のお約束に改めて感謝いたします。お支払い期限は{dueOn}です。お支払い済みの場合は、このメールは無視してください。",
       "cta": "お約束の金額を支払う"
+    },
+    "program.cfp-received": {
+      "subject": "ご提案「{title}」を受け付けました",
+      "intro": "{eventName}への「{title}」のご提案ありがとうございます。{org}が審査し、結果をメールでお知らせします。"
+    },
+    "program.cfp-accepted": {
+      "subject": "ご提案「{title}」が採択されました",
+      "intro": "うれしいお知らせです。{org}は{eventName}で「{title}」を採択しました。セッションの日時は主催者から近日中にお知らせします。{hasNote, select, yes { 主催者からのメッセージ：{note}} other {}}"
+    },
+    "program.cfp-rejected": {
+      "subject": "ご提案「{title}」について",
+      "intro": "{eventName}への「{title}」のご提案ありがとうございます。今回、{org}はプログラムに含めることができませんでした。{hasNote, select, yes { 主催者からのメッセージ：{note}} other {}}"
     }
   },
   "roles": {
@@ -326,7 +338,8 @@
     "speaker": "登壇者",
     "exhibitor_admin": "出展者管理者",
     "exhibitor_staff": "出展者スタッフ",
-    "sponsor_contact": "スポンサー担当者"
+    "sponsor_contact": "スポンサー担当者",
+    "cfp_reviewer": "講演募集の審査員"
   },
   "account": {
     "deleted": {

@@ -855,6 +855,13 @@
       "when": 1791021031251,
       "tag": "0121_medical_santa_claus",
       "breakpoints": true
+    },
+    {
+      "idx": 122,
+      "version": "7",
+      "when": 1791021091467,
+      "tag": "0122_abandoned_spot",
+      "breakpoints": true
     }
   ]
 }

@@ -41,7 +41,7 @@ import {
 } from '@yayatoh/orders';
 import { payoutDestinationMailer } from '@yayatoh/payments';
 import { type Subscriber, signLinkToken } from '@yayatoh/platform';
-import { portalSpeakerCleanup, taskReminderMailer } from '@yayatoh/program';
+import { cfpMailer, portalSpeakerCleanup, taskReminderMailer } from '@yayatoh/program';
 import {
   decisionMailer,
   enrollmentMailer,
@@ -125,6 +125,7 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     // M5.3a speaker portal: invitations, task reminders, approved photos.
     portalInviteMailer({ notifier, appOrigin }),
     taskReminderMailer({ notifier, appOrigin }),
+    cfpMailer({ notifier }),
     speakerPhotoApprover(),
     portalSpeakerCleanup(),
     surveyMailer({ notifier, appOrigin }),

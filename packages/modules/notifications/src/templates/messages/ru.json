@@ -309,6 +309,18 @@
       "subject": "Напоминание: ваше обещание {amount} для {org}",
       "intro": "Ещё раз спасибо за обещание пожертвовать {amount} на {eventName}. Срок оплаты — {dueOn}. Если вы уже оплатили, просто проигнорируйте это письмо.",
       "cta": "Оплатить обещание"
+    },
+    "program.cfp-received": {
+      "subject": "Мы получили вашу заявку «{title}»",
+      "intro": "Спасибо за заявку «{title}» на {eventName}. {org} рассмотрит её и сообщит решение по электронной почте."
+    },
+    "program.cfp-accepted": {
+      "subject": "Ваша заявка «{title}» принята",
+      "intro": "Хорошие новости: {org} принимает «{title}» на {eventName}. Организаторы скоро сообщат время вашего выступления.{hasNote, select, yes { Комментарий организаторов: {note}} other {}}"
+    },
+    "program.cfp-rejected": {
+      "subject": "О вашей заявке «{title}»",
+      "intro": "Спасибо за заявку «{title}» на {eventName}. В этот раз {org} не смогли включить её в программу.{hasNote, select, yes { Комментарий организаторов: {note}} other {}}"
     }
   },
   "roles": {
@@ -326,7 +338,8 @@
     "speaker": "спикер",
     "exhibitor_admin": "администратор экспонента",
     "exhibitor_staff": "сотрудник экспонента",
-    "sponsor_contact": "контакт спонсора"
+    "sponsor_contact": "контакт спонсора",
+    "cfp_reviewer": "рецензент заявок на доклады"
   },
   "account": {
     "deleted": {

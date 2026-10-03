@@ -309,6 +309,18 @@
       "subject": "Herinnering: je toezegging van {amount} aan {org}",
       "intro": "Nogmaals bedankt voor je toezegging van {amount} bij {eventName}. Die vervalt op {dueOn}. Heb je al betaald, negeer deze e-mail dan.",
       "cta": "Mijn toezegging betalen"
+    },
+    "program.cfp-received": {
+      "subject": "We hebben je voorstel ‘{title}’ ontvangen",
+      "intro": "Bedankt voor je voorstel ‘{title}’ voor {eventName}. {org} beoordeelt het en mailt je het besluit."
+    },
+    "program.cfp-accepted": {
+      "subject": "Je voorstel ‘{title}’ is geaccepteerd",
+      "intro": "Goed nieuws: {org} heeft ‘{title}’ voor {eventName} geaccepteerd. De organisatoren laten je binnenkort weten wanneer je sessie is.{hasNote, select, yes { Bericht van de organisatoren: {note}} other {}}"
+    },
+    "program.cfp-rejected": {
+      "subject": "Over je voorstel ‘{title}’",
+      "intro": "Bedankt voor je voorstel ‘{title}’ voor {eventName}. {org} kon het deze keer niet in het programma opnemen.{hasNote, select, yes { Bericht van de organisatoren: {note}} other {}}"
     }
   },
   "roles": {
@@ -326,7 +338,8 @@
     "speaker": "spreker",
     "exhibitor_admin": "exposantbeheerder",
     "exhibitor_staff": "exposantmedewerker",
-    "sponsor_contact": "sponsorcontact"
+    "sponsor_contact": "sponsorcontact",
+    "cfp_reviewer": "beoordelaar van de call for papers"
   },
   "account": {
     "deleted": {

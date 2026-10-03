@@ -309,6 +309,18 @@
       "subject": "Erinnerung: Ihre Zusage über {amount} an {org}",
       "intro": "Nochmals vielen Dank für Ihre Zusage über {amount} bei {eventName}. Sie ist am {dueOn} fällig. Wenn Sie bereits bezahlt haben, ignorieren Sie diese E-Mail bitte.",
       "cta": "Meine Zusage bezahlen"
+    },
+    "program.cfp-received": {
+      "subject": "Wir haben Ihren Vorschlag „{title}“ erhalten",
+      "intro": "Danke für Ihren Vorschlag „{title}“ für {eventName}. {org} prüft ihn und schickt Ihnen die Entscheidung per E-Mail."
+    },
+    "program.cfp-accepted": {
+      "subject": "Ihr Vorschlag „{title}“ wurde angenommen",
+      "intro": "Gute Nachrichten: {org} hat „{title}“ für {eventName} angenommen. Die Veranstalter teilen Ihnen bald die Zeit Ihrer Session mit.{hasNote, select, yes { Hinweis der Veranstalter: {note}} other {}}"
+    },
+    "program.cfp-rejected": {
+      "subject": "Zu Ihrem Vorschlag „{title}“",
+      "intro": "Danke für Ihren Vorschlag „{title}“ für {eventName}. {org} konnte ihn diesmal leider nicht ins Programm aufnehmen.{hasNote, select, yes { Hinweis der Veranstalter: {note}} other {}}"
     }
   },
   "roles": {
@@ -326,7 +338,8 @@
     "speaker": "Speaker",
     "exhibitor_admin": "Aussteller-Admin",
     "exhibitor_staff": "Aussteller-Team",
-    "sponsor_contact": "Sponsor-Kontakt"
+    "sponsor_contact": "Sponsor-Kontakt",
+    "cfp_reviewer": "Gutachter des Call for Papers"
   },
   "account": {
     "deleted": {

@@ -52,7 +52,7 @@ import {
   type Subscriber,
   subscribes,
 } from '@yayatoh/platform';
-import { taskReminderMailer } from '@yayatoh/program';
+import { cfpMailer, taskReminderMailer } from '@yayatoh/program';
 import {
   decisionMailer,
   enrollmentMailer,
@@ -155,6 +155,8 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     // M4.8e: pledge payments settle their pledges; the donor's summary, invoice and reminders.
     pledgeOutcomesSubscriber,
     pledgeMailer({ notifier, appOrigin }),
+    // M5.3b: call-for-papers receipts and decisions.
+    cfpMailer({ notifier }),
   ];
 }
 

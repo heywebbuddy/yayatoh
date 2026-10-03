@@ -5,8 +5,10 @@ import { PortalChangeStatus } from '@/components/portal-change-status.tsx';
 import { PortalShell, PortalSignedOut } from '@/components/portal-shell.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatMoment, formatSessionTime } from '@/lib/portal-format.ts';
+import { loadReviewerPortal } from '@/server/cfp-portal.ts';
 import { currentPortalPrincipal, loadSpeakerPortal } from '@/server/portal.ts';
 import { ExhibitorPortal } from './exhibitor-portal.tsx';
+import { ReviewerHome } from './reviewer-portal.tsx';
 
 export async function generateMetadata({
   params,
@@ -14,9 +16,14 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const exhibitor = (await currentPortalPrincipal())?.subjectKind === 'exhibitor';
-  const t = await getTranslations({ locale, namespace: exhibitor ? 'exhibitorPortal' : 'speakerPortal' });
-  return { title: t('title'), robots: { index: false, follow: false } };
+  const kind = (await currentPortalPrincipal())?.subjectKind;
+  const namespace =
+    kind === 'exhibitor' ? 'exhibitorPortal' : kind === 'cfp_reviewer' ? 'cfpReview' : 'speakerPortal';
+  const t = await getTranslations({ locale, namespace });
+  return {
+    title: t(namespace === 'cfpReview' ? 'portalTitle' : 'title'),
+    robots: { index: false, follow: false },
+  };
 }
 
 /**
@@ -36,6 +43,11 @@ export default async function SpeakerPortalPage({
   const principal = await currentPortalPrincipal();
   if (principal?.subjectKind === 'exhibitor')
     return <ExhibitorPortal principal={principal} locale={locale} logoParam={(await searchParams).logo} />;
+  // M5.3b: a call-for-papers reviewer sees the proposals assigned to them.
+  if (principal?.subjectKind === 'cfp_reviewer') {
+    const reviewer = await loadReviewerPortal();
+    if (reviewer) return <ReviewerHome data={reviewer.data} />;
+  }
   const portal = await loadSpeakerPortal();
   if (!portal) return <PortalSignedOut signedOut={Boolean((await searchParams).signedOut)} />;
   const { data } = portal;
