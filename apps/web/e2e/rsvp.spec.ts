@@ -8,6 +8,10 @@ import { type RsvpScenario, rsvpScenario } from '@yayatoh/testing';
 import { prepareZXingModule, readBarcodes } from 'zxing-wasm/reader';
 import { expectAccessible, expectAccessibleBothModes, passHumanCheck, signIn } from './helpers.ts';
 
+// Batch 3h merge: axe runs in light and dark on every screen now (twice the checks), so these long
+// journeys get more than the default 30 s.
+test.describe.configure({ timeout: 120_000 });
+
 /**
  * M4.1d: the RSVP flow. A party answers on its own mobile-first page, reached by its link, the
  * QR code of the same link, or the paper fallback (exact full name + PIN, rate limited with the

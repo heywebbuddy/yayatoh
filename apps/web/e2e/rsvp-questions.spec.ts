@@ -4,6 +4,10 @@ import { resolveOrgSlug } from '@yayatoh/tenancy';
 import { type RsvpQuestionsScenario, rsvpQuestionsScenario } from '@yayatoh/testing';
 import { ageSession, confirmStepUp, expectAccessibleBothModes, personaCode, signIn } from './helpers.ts';
 
+// Batch 3h merge: axe runs in light and dark on every screen now (twice the checks), so these long
+// journeys get more than the default 30 s.
+test.describe.configure({ timeout: 120_000 });
+
 /**
  * M4.1e: RSVP questions. The host builds questions with conditions (live preview, menu with
  * dietary notes), a household of three answers them per guest (one declines), the meal lands on

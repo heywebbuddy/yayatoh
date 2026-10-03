@@ -8,6 +8,10 @@ import {
   stepUpDialog,
 } from './helpers.ts';
 
+// Batch 3h merge: axe runs in light and dark on every screen now (twice the checks), so these long
+// journeys get more than the default 30 s.
+test.describe.configure({ timeout: 120_000 });
+
 /**
  * M4.8a donations: the gala Donations tab (campaigns, levels, gifts, CSV), the public giving page
  * (levels or an own amount, fee cover, tribute, how the name appears, employer), the payment as a
