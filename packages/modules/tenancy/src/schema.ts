@@ -3,8 +3,10 @@ import { sql } from 'drizzle-orm';
 import {
   boolean,
   check,
+  date,
   foreignKey,
   index,
+  integer,
   jsonb,
   pgSchema,
   text,
@@ -55,6 +57,12 @@ export const organizations = tenantTable(
     logoPath: text('logo_path'),
     logoAlt: text('logo_alt'),
     legacyInstance: text('legacy_instance'),
+    /**
+     * M6.3a: a sandbox org (linked to `sandbox_parent_org_id`, which owns the link in
+     * `tenancy.sandbox_orgs`). Fake payments only, never on the marketplace, a SANDBOX banner.
+     */
+    sandbox: boolean('sandbox').notNull().default(false),
+    sandboxParentOrgId: uuid('sandbox_parent_org_id'),
   },
   () => [
     uniqueIndex('organizations_slug_key').on(sql`slug`),
@@ -62,6 +70,10 @@ export const organizations = tenantTable(
     check('organizations_kind_check', inList('kind', ORG_KINDS)),
     check('organizations_status_check', inList('status', ORG_STATUSES)),
     check('organizations_currency_check', sql`currency ~ '^[A-Z]{3}$'`),
+    check(
+      'organizations_sandbox_parent_check',
+      sql`sandbox = (sandbox_parent_org_id is not null) and (sandbox_parent_org_id is null or sandbox_parent_org_id <> id)`,
+    ),
     check('organizations_brand_color_check', sql`brand_color is null or brand_color ~ '^#[0-9a-f]{6}$'`),
     check(
       'organizations_logo_check',
@@ -337,6 +349,10 @@ export const apiKeys = tenantTable(
     revokedBy: uuid('revoked_by'),
     /** A test key (`yy_test_…`): read-only, non-personal scopes only (`TEST_KEY_SCOPES`). */
     sandbox: boolean('sandbox').notNull().default(false),
+    /** M6.3a: the key stops working at this instant (null: no expiry). Rotation sets it on the old key. */
+    expiresAt: timestamp('expires_at', { withTimezone: true }),
+    /** M6.3a: the key that replaced this one (rotation); this one works until `expires_at`. */
+    replacedById: uuid('replaced_by_id'),
   },
   (t) => [
     uniqueIndex('api_keys_key_hash_key').on(t.keyHash),
@@ -421,6 +437,65 @@ export const orgOnboarding = tenantTable(
     check('org_onboarding_completed_check', sql`(completed_at is null) = (completed_by is null)`),
     foreignKey({
       name: 'org_onboarding_org_fk',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+  ],
+);
+
+/**
+ * M6.3a: requests per API key per day (the org's timezone day), with errors (status ≥ 400) and
+ * refusals for the rate limit. `audited_at` is set once the day's summary is in the audit log.
+ */
+export const apiKeyUsageDaily = tenantTable(
+  tenancy,
+  'api_key_usage_daily',
+  {
+    apiKeyId: uuid('api_key_id').notNull(),
+    day: date('day', { mode: 'string' }).notNull(),
+    requests: integer('requests').notNull().default(0),
+    errors: integer('errors').notNull().default(0),
+    rateLimited: integer('rate_limited').notNull().default(0),
+    auditedAt: timestamp('audited_at', { withTimezone: true }),
+  },
+  (t) => [
+    uniqueIndex('api_key_usage_daily_org_key_day_key').on(t.orgId, t.apiKeyId, t.day),
+    index('api_key_usage_daily_org_day_idx').on(t.orgId, t.day),
+    check(
+      'api_key_usage_daily_counts_check',
+      sql`requests >= 0 and errors between 0 and requests and rate_limited between 0 and errors`,
+    ),
+    foreignKey({
+      name: 'api_key_usage_daily_key_fk',
+      columns: [t.orgId, t.apiKeyId],
+      foreignColumns: [apiKeys.orgId, apiKeys.id],
+    }).onDelete('cascade'),
+  ],
+);
+
+/**
+ * M6.3a: sandbox orgs created from this (parent) org. The parent owns the link; the sandbox org
+ * row carries `sandbox` and its parent. `deleted_at`: the sandbox was deleted (closed, members
+ * removed, keys revoked).
+ */
+export const sandboxOrgs = tenantTable(
+  tenancy,
+  'sandbox_orgs',
+  {
+    sandboxOrgId: uuid('sandbox_org_id').notNull(),
+    name: text('name').notNull(),
+    slug: text('slug').notNull(),
+    createdBy: uuid('created_by'),
+    deletedAt: timestamp('deleted_at', { withTimezone: true }),
+    deletedBy: uuid('deleted_by'),
+  },
+  (t) => [
+    uniqueIndex('sandbox_orgs_sandbox_org_key').on(t.sandboxOrgId),
+    index('sandbox_orgs_org_created_idx').on(t.orgId, t.createdAt),
+    check('sandbox_orgs_name_length', sql`length(name) between 1 and 60`),
+    check('sandbox_orgs_not_self', sql`sandbox_org_id <> org_id`),
+    foreignKey({
+      name: 'sandbox_orgs_org_fk',
       columns: [t.orgId],
       foreignColumns: [organizations.id],
     }).onDelete('cascade'),
