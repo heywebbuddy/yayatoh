@@ -309,7 +309,7 @@ test.describe('webhooks console (M6.3b)', () => {
   test('the API keys page links to webhooks', async ({ page }) => {
     await signIn(page);
     await page.goto('/o/lakeside-events/api-keys');
-    await page.getByRole('link', { name: 'Webhooks', exact: true }).click();
+    await page.locator('#main').getByRole('link', { name: 'Webhooks', exact: true }).click();
     await expect(page).toHaveURL(/\/o\/lakeside-events\/webhooks$/);
   });
 });
