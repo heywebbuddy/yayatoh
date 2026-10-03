@@ -1,7 +1,7 @@
 import { listEventsQuery, listSeriesQuery, type SeriesDto } from '@yayatoh/events';
 import { executeQuery } from '@yayatoh/kernel';
 import { roleCan } from '@yayatoh/tenancy';
-import { Button, buttonClass, Card, EmptyState, PageHeader, Table } from '@yayatoh/ui';
+import { Alert, Button, buttonClass, Card, EmptyState, PageHeader, Table } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { SeriesForm } from '@/components/series-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
@@ -11,8 +11,15 @@ import { ports } from '@/server/ports.ts';
 import { createSeriesAction, deleteSeriesAction } from './actions.ts';
 
 /** M1.4b: the org's series (tours, seasons) with their public pages. */
-export default async function SeriesPage({ params }: { params: Promise<{ locale: string; org: string }> }) {
+export default async function SeriesPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ locale: string; org: string }>;
+  searchParams: Promise<{ deleted?: string }>;
+}) {
   const { locale, org } = await params;
+  const { deleted } = await searchParams;
   setRequestLocale(locale);
   const data = await loadConsole(org);
   const t = await getTranslations();
@@ -25,6 +32,11 @@ export default async function SeriesPage({ params }: { params: Promise<{ locale:
   return (
     <>
       <PageHeader title={t('series.title')} description={t('series.description')} />
+      {deleted ? (
+        <div role="status">
+          <Alert tone="info" title={t('seriesPage.deleted')} />
+        </div>
+      ) : null}
       {series.length === 0 ? (
         <EmptyState title={t('series.emptyTitle')} description={t('series.emptyDescription')} />
       ) : (
@@ -38,7 +50,13 @@ export default async function SeriesPage({ params }: { params: Promise<{ locale:
               header: t('series.name'),
               cell: (r) => (
                 <span className="flex flex-col">
-                  <span>{r.name}</span>
+                  {/* U7: the series page (its events, adding and removing them, the next event). */}
+                  <Link
+                    href={`/o/${org}/series/${r.slug}`}
+                    className="font-semibold underline underline-offset-2"
+                  >
+                    {r.name}
+                  </Link>
                   {r.description ? <span className="text-caption text-ink-2">{r.description}</span> : null}
                 </span>
               ),

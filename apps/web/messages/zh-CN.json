@@ -3380,7 +3380,7 @@
     "title": "系列",
     "description": "将活动归入巡演、演出季或节庆。每个系列都有公开页面，列出即将举行的活动。",
     "emptyTitle": "还没有系列",
-    "emptyDescription": "先创建系列，再在各活动的“场次”页面将其加入。",
+    "emptyDescription": "在下方创建系列，或在创建活动时为系列命名。",
     "caption": "系列",
     "name": "名称",
     "descriptionField": "描述（可选）",
@@ -12328,5 +12328,80 @@
     "tooLate": "请选择 {date} 或之前的日期",
     "timeZoneNote": "{zone} 时间",
     "selected": "已选择"
+  },
+  "seriesField": {
+    "label": "系列（可选）",
+    "hint": "将此活动与其他活动归入巡演或季度。输入新名称即可创建系列。",
+    "none": "不属于系列",
+    "newOption": "新系列：{name}",
+    "summary": "系列",
+    "errors": {
+      "taken": "已有同名系列。请从列表中选择它。",
+      "missing": "该系列已不存在。请选择其他系列。",
+      "name": "请输入 2 到 160 个字符的系列名称。"
+    }
+  },
+  "seriesLink": {
+    "partOf": "属于{name}"
+  },
+  "seriesPage": {
+    "back": "全部系列",
+    "tabs": {
+      "label": "系列视图",
+      "events": "活动",
+      "details": "详情"
+    },
+    "columns": {
+      "event": "活动",
+      "status": "状态",
+      "dates": "日期",
+      "sales": "销售",
+      "actions": "操作"
+    },
+    "sold": "{count, plural, other {已售 {n} 张票}}",
+    "noSales": "暂无销售",
+    "remove": "移出系列",
+    "removeFor": "将{name}移出系列",
+    "createNext": "创建系列中的下一场活动",
+    "createIn": "在此系列中创建活动",
+    "added": "活动已加入系列。",
+    "removed": "活动已移出系列。活动本身没有变化。",
+    "deleted": "系列已删除。其活动没有变化。",
+    "eventsHeading": "{count, plural, other {# 场活动}}",
+    "emptyTitle": "此系列中还没有活动",
+    "emptyDescription": "在此系列中创建活动，或添加已有的活动。",
+    "emptyReadOnly": "加入此系列的活动会显示在这里。",
+    "caption": "{name}的活动",
+    "add": {
+      "heading": "添加已有活动",
+      "label": "活动",
+      "placeholder": "选择活动",
+      "hint": "属于其他系列的活动会移到此系列。",
+      "option": "{name} · {when}",
+      "optionMoves": "{name} · {when}（在{series}中）",
+      "required": "请选择要添加的活动。",
+      "submit": "加入系列"
+    },
+    "next": {
+      "back": "返回{name}",
+      "title": "创建系列中的下一场活动",
+      "description": "{name}中的新草稿，沿用最新一场活动的设置。",
+      "copies": "复制{name}（{when}）的设置、票种、问题和座位图。订单、参会者和签到记录不会复制。",
+      "name": "活动名称",
+      "startsAt": "开始",
+      "startsAtHint": "使用活动所在时区（{zone}）。",
+      "nameInvalid": "请输入 2 到 160 个字符的名称。",
+      "startInvalid": "请输入有效的开始日期和时间。",
+      "submit": "创建草稿"
+    },
+    "details": {
+      "heading": "系列详情",
+      "address": "公开页面：",
+      "saved": "系列已保存。",
+      "save": "保存更改",
+      "deleteHeading": "删除系列",
+      "deleteHint": "删除系列会移除其公开页面。其活动会保留，不再属于任何系列。",
+      "delete": "删除系列"
+    }
   }
 }

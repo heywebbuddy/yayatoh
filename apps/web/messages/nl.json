@@ -3380,7 +3380,7 @@
     "title": "Reeksen",
     "description": "Groepeer evenementen in tours, seizoenen of festivals. Elke reeks heeft een openbare pagina met de komende evenementen.",
     "emptyTitle": "Nog geen reeksen",
-    "emptyDescription": "Maak een reeks en voeg er evenementen aan toe via de pagina Data van elk evenement.",
+    "emptyDescription": "Maak hieronder een reeks, of geef er een naam aan bij het maken van een evenement.",
     "caption": "Reeksen",
     "name": "Naam",
     "descriptionField": "Beschrijving (optioneel)",
@@ -12328,5 +12328,80 @@
     "tooLate": "Kies een datum op of voor {date}",
     "timeZoneNote": "Tijden in {zone}",
     "selected": "Geselecteerd"
+  },
+  "seriesField": {
+    "label": "Reeks (optioneel)",
+    "hint": "Groepeer dit evenement met andere in een tour of seizoen. Typ een nieuwe naam om er een te maken.",
+    "none": "Geen reeks",
+    "newOption": "Nieuwe reeks: {name}",
+    "summary": "Reeks",
+    "errors": {
+      "taken": "Er bestaat al een reeks met deze naam. Kies die uit de lijst.",
+      "missing": "Die reeks bestaat niet meer. Kies een andere.",
+      "name": "Vul een reeksnaam van 2 tot 160 tekens in."
+    }
+  },
+  "seriesLink": {
+    "partOf": "Onderdeel van {name}"
+  },
+  "seriesPage": {
+    "back": "Alle reeksen",
+    "tabs": {
+      "label": "Weergaven van de reeks",
+      "events": "Evenementen",
+      "details": "Details"
+    },
+    "columns": {
+      "event": "Evenement",
+      "status": "Status",
+      "dates": "Data",
+      "sales": "Verkoop",
+      "actions": "Acties"
+    },
+    "sold": "{count, plural, one {{n} ticket verkocht} other {{n} tickets verkocht}}",
+    "noSales": "Nog geen verkoop",
+    "remove": "Uit de reeks halen",
+    "removeFor": "{name} uit de reeks halen",
+    "createNext": "Volgend evenement in de reeks maken",
+    "createIn": "Evenement in deze reeks maken",
+    "added": "Evenement aan de reeks toegevoegd.",
+    "removed": "Evenement uit de reeks gehaald. Het evenement zelf blijft hetzelfde.",
+    "deleted": "Reeks verwijderd. De evenementen blijven hetzelfde.",
+    "eventsHeading": "{count, plural, one {# evenement} other {# evenementen}}",
+    "emptyTitle": "Nog geen evenementen in deze reeks",
+    "emptyDescription": "Maak een evenement in deze reeks of voeg een bestaand evenement toe.",
+    "emptyReadOnly": "Evenementen in deze reeks verschijnen hier.",
+    "caption": "Evenementen in {name}",
+    "add": {
+      "heading": "Bestaand evenement toevoegen",
+      "label": "Evenement",
+      "placeholder": "Kies een evenement",
+      "hint": "Een evenement uit een andere reeks verhuist naar deze.",
+      "option": "{name} · {when}",
+      "optionMoves": "{name} · {when} (in {series})",
+      "required": "Kies een evenement om toe te voegen.",
+      "submit": "Aan reeks toevoegen"
+    },
+    "next": {
+      "back": "Terug naar {name}",
+      "title": "Volgend evenement in de reeks maken",
+      "description": "Een nieuw concept in {name} met de opzet van het laatste evenement.",
+      "copies": "Neemt de instellingen, tickettypes, vragen en zaalplattegrond over van {name} ({when}). Bestellingen, deelnemers en check-ins blijven achter.",
+      "name": "Naam van het evenement",
+      "startsAt": "Begint",
+      "startsAtHint": "In de tijdzone van het evenement ({zone}).",
+      "nameInvalid": "Vul een naam van 2 tot 160 tekens in.",
+      "startInvalid": "Vul een geldige begindatum en -tijd in.",
+      "submit": "Concept maken"
+    },
+    "details": {
+      "heading": "Gegevens van de reeks",
+      "address": "Openbare pagina:",
+      "saved": "Reeks opgeslagen.",
+      "save": "Wijzigingen opslaan",
+      "deleteHeading": "Reeks verwijderen",
+      "deleteHint": "Als je de reeks verwijdert, verdwijnt de openbare pagina. De evenementen blijven, zonder reeks.",
+      "delete": "Reeks verwijderen"
+    }
   }
 }

@@ -3380,7 +3380,7 @@
     "title": "Reihen",
     "description": "Fasse Events zu Tourneen, Saisons oder Festivals zusammen. Jede Reihe hat eine öffentliche Seite mit ihren kommenden Events.",
     "emptyTitle": "Noch keine Reihen",
-    "emptyDescription": "Lege eine Reihe an und füge ihr dann Events über deren Seite „Termine“ hinzu.",
+    "emptyDescription": "Lege unten eine Serie an oder benenne eine beim Anlegen einer Veranstaltung.",
     "caption": "Reihen",
     "name": "Name",
     "descriptionField": "Beschreibung (optional)",
@@ -12328,5 +12328,80 @@
     "tooLate": "Wähle ein Datum bis {date}",
     "timeZoneNote": "Zeiten in {zone}",
     "selected": "Ausgewählt"
+  },
+  "seriesField": {
+    "label": "Serie (optional)",
+    "hint": "Fasse diese Veranstaltung mit anderen zu einer Tour oder Saison zusammen. Gib einen neuen Namen ein, um eine Serie anzulegen.",
+    "none": "Keine Serie",
+    "newOption": "Neue Serie: {name}",
+    "summary": "Serie",
+    "errors": {
+      "taken": "Eine Serie mit diesem Namen gibt es schon. Wähle sie stattdessen aus der Liste.",
+      "missing": "Diese Serie gibt es nicht mehr. Wähle eine andere.",
+      "name": "Gib einen Seriennamen mit 2 bis 160 Zeichen ein."
+    }
+  },
+  "seriesLink": {
+    "partOf": "Teil von {name}"
+  },
+  "seriesPage": {
+    "back": "Alle Serien",
+    "tabs": {
+      "label": "Ansichten der Serie",
+      "events": "Veranstaltungen",
+      "details": "Details"
+    },
+    "columns": {
+      "event": "Veranstaltung",
+      "status": "Status",
+      "dates": "Termine",
+      "sales": "Verkäufe",
+      "actions": "Aktionen"
+    },
+    "sold": "{count, plural, one {{n} Ticket verkauft} other {{n} Tickets verkauft}}",
+    "noSales": "Noch keine Verkäufe",
+    "remove": "Aus der Serie entfernen",
+    "removeFor": "{name} aus der Serie entfernen",
+    "createNext": "Nächste Veranstaltung der Serie anlegen",
+    "createIn": "Veranstaltung in dieser Serie anlegen",
+    "added": "Veranstaltung zur Serie hinzugefügt.",
+    "removed": "Veranstaltung aus der Serie entfernt. Die Veranstaltung selbst bleibt unverändert.",
+    "deleted": "Serie gelöscht. Ihre Veranstaltungen bleiben unverändert.",
+    "eventsHeading": "{count, plural, one {# Veranstaltung} other {# Veranstaltungen}}",
+    "emptyTitle": "Noch keine Veranstaltungen in dieser Serie",
+    "emptyDescription": "Lege eine Veranstaltung in dieser Serie an oder füge eine vorhandene hinzu.",
+    "emptyReadOnly": "Veranstaltungen dieser Serie erscheinen hier.",
+    "caption": "Veranstaltungen in {name}",
+    "add": {
+      "heading": "Vorhandene Veranstaltung hinzufügen",
+      "label": "Veranstaltung",
+      "placeholder": "Veranstaltung wählen",
+      "hint": "Eine Veranstaltung aus einer anderen Serie wechselt in diese.",
+      "option": "{name} · {when}",
+      "optionMoves": "{name} · {when} (in {series})",
+      "required": "Wähle eine Veranstaltung zum Hinzufügen.",
+      "submit": "Zur Serie hinzufügen"
+    },
+    "next": {
+      "back": "Zurück zu {name}",
+      "title": "Nächste Veranstaltung der Serie anlegen",
+      "description": "Ein neuer Entwurf in {name} mit der Einrichtung der letzten Veranstaltung.",
+      "copies": "Übernimmt Einstellungen, Ticketarten, Fragen und Sitzplan von {name} ({when}). Bestellungen, Teilnehmende und Check-ins bleiben zurück.",
+      "name": "Name der Veranstaltung",
+      "startsAt": "Beginn",
+      "startsAtHint": "In der Zeitzone der Veranstaltung ({zone}).",
+      "nameInvalid": "Gib einen Namen mit 2 bis 160 Zeichen ein.",
+      "startInvalid": "Gib ein gültiges Startdatum mit Uhrzeit ein.",
+      "submit": "Entwurf anlegen"
+    },
+    "details": {
+      "heading": "Details der Serie",
+      "address": "Öffentliche Seite:",
+      "saved": "Serie gespeichert.",
+      "save": "Änderungen speichern",
+      "deleteHeading": "Serie löschen",
+      "deleteHint": "Beim Löschen der Serie verschwindet ihre öffentliche Seite. Ihre Veranstaltungen bleiben bestehen, ohne Serie.",
+      "delete": "Serie löschen"
+    }
   }
 }

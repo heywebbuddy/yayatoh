@@ -3380,7 +3380,7 @@
     "title": "シリーズ",
     "description": "イベントをツアー、シーズン、フェスティバルにまとめます。各シリーズには今後のイベントを表示する公開ページがあります。",
     "emptyTitle": "シリーズはまだありません",
-    "emptyDescription": "シリーズを作成し、各イベントの「日程」ページから追加してください。",
+    "emptyDescription": "下でシリーズを作成するか、イベント作成時に名前を付けてください。",
     "caption": "シリーズ",
     "name": "名前",
     "descriptionField": "説明（任意）",
@@ -12328,5 +12328,80 @@
     "tooLate": "{date} 以前の日付を選んでください",
     "timeZoneNote": "{zone} の時刻",
     "selected": "選択済み"
+  },
+  "seriesField": {
+    "label": "シリーズ（任意）",
+    "hint": "このイベントをツアーやシーズンとして他のイベントとまとめます。新しい名前を入力すると作成できます。",
+    "none": "シリーズなし",
+    "newOption": "新しいシリーズ: {name}",
+    "summary": "シリーズ",
+    "errors": {
+      "taken": "この名前のシリーズはすでにあります。一覧から選んでください。",
+      "missing": "そのシリーズはもうありません。別のシリーズを選んでください。",
+      "name": "シリーズ名は2〜160文字で入力してください。"
+    }
+  },
+  "seriesLink": {
+    "partOf": "{name}の一部"
+  },
+  "seriesPage": {
+    "back": "すべてのシリーズ",
+    "tabs": {
+      "label": "シリーズの表示",
+      "events": "イベント",
+      "details": "詳細"
+    },
+    "columns": {
+      "event": "イベント",
+      "status": "ステータス",
+      "dates": "日程",
+      "sales": "販売",
+      "actions": "操作"
+    },
+    "sold": "{count, plural, other {{n}枚販売}}",
+    "noSales": "まだ販売はありません",
+    "remove": "シリーズから外す",
+    "removeFor": "{name}をシリーズから外す",
+    "createNext": "シリーズの次のイベントを作成",
+    "createIn": "このシリーズにイベントを作成",
+    "added": "イベントをシリーズに追加しました。",
+    "removed": "イベントをシリーズから外しました。イベント自体は変わりません。",
+    "deleted": "シリーズを削除しました。イベントは変わりません。",
+    "eventsHeading": "{count, plural, other {#件のイベント}}",
+    "emptyTitle": "このシリーズにはまだイベントがありません",
+    "emptyDescription": "このシリーズにイベントを作成するか、既存のイベントを追加してください。",
+    "emptyReadOnly": "このシリーズに追加したイベントがここに表示されます。",
+    "caption": "{name}のイベント",
+    "add": {
+      "heading": "既存のイベントを追加",
+      "label": "イベント",
+      "placeholder": "イベントを選択",
+      "hint": "別のシリーズにあるイベントはこのシリーズに移ります。",
+      "option": "{name} · {when}",
+      "optionMoves": "{name} · {when}（{series}）",
+      "required": "追加するイベントを選んでください。",
+      "submit": "シリーズに追加"
+    },
+    "next": {
+      "back": "{name}に戻る",
+      "title": "シリーズの次のイベントを作成",
+      "description": "最新のイベントの設定を引き継いだ{name}の新しい下書きです。",
+      "copies": "{name}（{when}）の設定、チケット種別、質問、座席表をコピーします。注文、参加者、チェックインはコピーしません。",
+      "name": "イベント名",
+      "startsAt": "開始",
+      "startsAtHint": "イベントのタイムゾーン（{zone}）で入力します。",
+      "nameInvalid": "名前は2〜160文字で入力してください。",
+      "startInvalid": "有効な開始日時を入力してください。",
+      "submit": "下書きを作成"
+    },
+    "details": {
+      "heading": "シリーズの詳細",
+      "address": "公開ページ:",
+      "saved": "シリーズを保存しました。",
+      "save": "変更を保存",
+      "deleteHeading": "シリーズを削除",
+      "deleteHint": "シリーズを削除すると公開ページもなくなります。イベントはシリーズに属さない状態で残ります。",
+      "delete": "シリーズを削除"
+    }
   }
 }
