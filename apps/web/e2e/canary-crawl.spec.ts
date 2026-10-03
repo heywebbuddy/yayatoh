@@ -15,6 +15,7 @@ import {
   leaksIn,
   V1_ALLOW,
 } from '@yayatoh/testing/canary';
+import { lastEmailedCode } from './helpers.ts';
 
 /**
  * The canary leak crawl (roadmap §9, M1.11 "the canary crawler finds nothing"). The global setup
@@ -225,6 +226,48 @@ test.describe('canary leak crawl (roadmap §9)', () => {
       expect(text, url).toContain('How do fixtures stay isolated?');
       leaks.push(...leaksIn(url, text, { kind: 'public' }));
     }
+    expect(formatLeaks(leaks)).toBe('no canary leaks');
+  });
+
+  test('networking: an opted-in attendee’s pages never show who opted out (or anything private)', async ({
+    page,
+  }) => {
+    // M5.8a: the canary org's fixture event has networking on; its second person opted out, so
+    // every profile column of theirs is a canary. Sign in (the emailed code) as the opted-in one
+    // and crawl every networking page they can reach: nothing private may appear.
+    const c = canary();
+    const email = c.networkEmail;
+    expect(email).not.toBeNull();
+    const base = `${MARKET}/events/${c.event.slug}/network`;
+    await page.goto(base);
+    await page.getByLabel('Your email', { exact: true }).fill(email ?? '');
+    await page.getByRole('button', { name: 'Email me a code' }).click();
+    await page
+      .getByLabel('Verification code', { exact: true })
+      .fill(await lastEmailedCode(page, email ?? ''));
+    await page.getByRole('button', { name: 'Sign in', exact: true }).click();
+    await expect(page.getByRole('navigation', { name: 'Networking sections' })).toBeVisible();
+    const leaks: Leak[] = [];
+    const seen: string[] = [];
+    for (const url of [
+      base,
+      `${base}?q=canary`,
+      `${base}?q=Ben`,
+      `${base}?q=__`,
+      `${base}/connections`,
+      `${base}/meetings`,
+      `${base}/profile`,
+      `${MARKET}/ar/events/${c.event.slug}/network`,
+      `${MARKET}/ar/events/${c.event.slug}/network/profile`,
+    ]) {
+      const f = await browserFetch(page, url);
+      expect(f?.status, url).toBe(200);
+      seen.push(`${f?.body ?? ''}\n${f?.extra ?? ''}`);
+      leaks.push(...leaksIn(url, `${f?.body ?? ''}\n${f?.extra ?? ''}`, { kind: 'public' }));
+    }
+    // The crawl is live: the attendee's own profile is there; the one who opted out is not.
+    expect(seen.join('\n')).toContain('Ana Fixture');
+    expect(seen.join('\n')).not.toContain('Ben Fixture');
     expect(formatLeaks(leaks)).toBe('no canary leaks');
   });
 
