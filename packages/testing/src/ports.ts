@@ -9,14 +9,16 @@ import { audienceExportAction, participationContactOwner } from '@yayatoh/audien
 import { automationsContactOwner } from '@yayatoh/automations';
 import { billingEntitlements } from '@yayatoh/billing';
 import { campaignsContactOwner } from '@yayatoh/campaigns';
-import { checkinContactOwner } from '@yayatoh/checkin';
+import { checkinContactOwner, setSessionAccessSource } from '@yayatoh/checkin';
 import { recordTermConsentTx, registerContactReferenceOwners } from '@yayatoh/crm';
-import { giftsExportAction } from '@yayatoh/donations';
+import { employerExportAction, giftsExportAction } from '@yayatoh/donations';
 import { eventRolesOf } from '@yayatoh/events';
 import { submitRegistrationFormCommand } from '@yayatoh/forms';
 import {
   guestImportAction,
   guestsContactOwner,
+  guestsOccupantDirectory,
+  guestsPartyCredentials,
   rsvpAnswersExportAction,
   rsvpAnswersPrivateExportAction,
 } from '@yayatoh/guests';
@@ -31,9 +33,9 @@ import {
   runBulkOperation,
   setKeyVault,
 } from '@yayatoh/platform';
-import { registrationDecideAction } from '@yayatoh/registration';
+import { registrationDecideAction, registrationSessionAccess } from '@yayatoh/registration';
 import { attendeeExportAction, bookingsExportAction } from '@yayatoh/reports';
-import { seatAssignAction } from '@yayatoh/seating';
+import { seatAssignAction, setOccupantDirectory, setPartyCredentials } from '@yayatoh/seating';
 import { surveyExportAction, surveysContactOwner } from '@yayatoh/surveys';
 import { createOrgAuthorizer, orgStatusGate } from '@yayatoh/tenancy';
 import { ticketResendAction } from '@yayatoh/ticketing';
@@ -57,6 +59,13 @@ export const ports = createCommandPorts({
 // Tests get a per-run local key vault (ticket signing keys are envelope-encrypted). Integration
 // runs share one key across files (the global setup provides it); unit runs draw their own.
 setKeyVault(localKeyVault(process.env.LOCAL_KMS_KEY ?? randomBytes(32).toString('hex')));
+// M4.3a: guest seating reads the guest list through seating's OccupantDirectory port.
+setOccupantDirectory(guestsOccupantDirectory);
+// M4.4a: the guest seat finder's party links and PINs (seating's PartyCredentials port).
+setPartyCredentials(guestsPartyCredentials);
+
+// M5.6a: session doors learn registrations and enrollments from the registration module.
+setSessionAccessSource(registrationSessionAccess);
 
 // M6.1c: every module's data-subject contributor, as the web registers them.
 registerDataSubjectContributors(DATA_SUBJECT_CONTRIBUTORS);
@@ -87,6 +96,7 @@ export const BULK_ACTIONS = [
   rsvpAnswersExportAction,
   rsvpAnswersPrivateExportAction,
   giftsExportAction,
+  employerExportAction,
 ] as const;
 export const bulkStep = bulkStepCommand(BULK_ACTIONS);
 export const runBulk = (orgId: string, operationId: string, budgetMs?: number) =>

@@ -534,3 +534,28 @@ export const contactScores = tenantTable(
     check('contact_scores_seen_check', sql`last_seen_at is null or last_seen_at >= first_seen_at`),
   ],
 );
+
+/**
+ * M5.7b: each contact's engagement score at one event, kept current by the `engagement` module
+ * (scans, polls, Q&A, feedback, enrollments × the org's weights). Audiences read it through the
+ * segment condition `engagement`; crm never computes it.
+ */
+export const eventEngagement = tenantTable(
+  crmSchema,
+  'event_engagement',
+  {
+    contactId: uuid('contact_id').notNull(),
+    eventId: uuid('event_id').notNull(),
+    score: integer('score').notNull().default(0),
+  },
+  (t) => [
+    uniqueIndex('event_engagement_org_contact_event_key').on(t.orgId, t.contactId, t.eventId),
+    index('event_engagement_org_event_score_idx').on(t.orgId, t.eventId, t.score),
+    foreignKey({
+      name: 'event_engagement_contact_fk',
+      columns: [t.orgId, t.contactId],
+      foreignColumns: [contacts.orgId, contacts.id],
+    }).onDelete('cascade'),
+    check('event_engagement_score_check', sql`score >= 0`),
+  ],
+);

@@ -97,7 +97,7 @@ add registrations, approvals, groups, invoices (M5.1c/d) and session enrollments
 - **Workers**: `sweepEnrollmentsCommand` (`platform:registration.sweep`, every 30 s after the waitlist sweeper);
   `registrationEnrollment()` ends a cancelled or refunded registrant's sessions (`tickets.cancelled@1`,
   `order.refunded@1`) and promotes; `enrollmentMailer` emails promotions (`registration.session-enrolled`,
-  `registration.session-offer`). Event: `registration.session.promoted@1` (`{ eventId, sessionId, enrollmentId,
+  `registration.session-offer`). Events: `registration.session.enrollment_changed@1` (`{ eventId, sessionId, registrantId, status: enrolled | dropped }`, M5.7b: a place taken directly or by an accepted offer, or dropped) and `registration.session.promoted@1` (`{ eventId, sessionId, enrollmentId,
   registrantId, status, offer }`).
 - Entitlement `registration` for every command and query.
 

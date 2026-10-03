@@ -182,6 +182,22 @@ export const LifetimeValueCondition = z
   })
   .strict();
 
+/** Highest engagement score a condition accepts (scores are weighted counts, M5.7b). */
+export const MAX_ENGAGEMENT_SCORE = 1_000_000;
+
+/**
+ * M5.7b: the contact's engagement score (scans, polls, Q&A, feedback, enrollments weighted by the
+ * org's weights), summed over the events in scope, compared with a value.
+ */
+export const EngagementCondition = z
+  .object({
+    type: z.literal('engagement'),
+    scope: SegmentScope,
+    op: z.enum(COMPARISONS),
+    value: z.int().min(0).max(MAX_ENGAGEMENT_SCORE),
+  })
+  .strict();
+
 export const SegmentCondition = z.discriminatedUnion('type', [
   ParticipationCondition,
   SpendCondition,
@@ -191,6 +207,7 @@ export const SegmentCondition = z.discriminatedUnion('type', [
   SeenCondition,
   StatsCondition,
   LifetimeValueCondition,
+  EngagementCondition,
 ]);
 export type SegmentCondition = z.infer<typeof SegmentCondition>;
 export type SegmentConditionInput = z.input<typeof SegmentCondition>;
@@ -203,6 +220,7 @@ export const CONDITION_TYPES = [
   'seen',
   'stats',
   'ltv',
+  'engagement',
 ] as const;
 export type ConditionType = (typeof CONDITION_TYPES)[number];
 

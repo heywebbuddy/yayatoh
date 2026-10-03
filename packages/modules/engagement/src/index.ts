@@ -1,4 +1,40 @@
 // M5.7a: live polls and moderated Q&A per program session.
+
+// M5.8b: networking chat (1:1 between connections and meeting parties, booth chat, moderation).
+export {
+  blockBoothCommand,
+  boothThreadQuery,
+  chatInboxQuery,
+  chatReported,
+  chatStarted,
+  chatThreadQuery,
+  markChatReadCommand,
+  ReportChatInput,
+  reportChatCommand,
+  SendBoothInput,
+  SendChatInput,
+  sendBoothMessageCommand,
+  sendChatMessageCommand,
+} from './chat/attendee.ts';
+export {
+  chatConsoleQuery,
+  moderateChatReportCommand,
+  removeChatMessageCommand,
+  restoreBoothChatCommand,
+} from './chat/console.ts';
+export * from './chat/dto.ts';
+export {
+  blockVisitorCommand,
+  boothChatThreadQuery,
+  boothInboxQuery,
+  markBoothReadCommand,
+  replyBoothChatCommand,
+  reportVisitorCommand,
+  setBoothChatCommand,
+} from './chat/exhibitor.ts';
+export { BOOTH_CHAT_CHANNEL, CHAT_CHANNEL, CHAT_REALTIME_CHANNELS } from './chat/realtime.ts';
+export { chatReportsForReviewTx, chatRetentionCommand, reviewChatReportCommand } from './chat/review.ts';
+export { attendeeChatChannel, chatAttachAllowed, exhibitorChatChannel } from './chat/stream.ts';
 export {
   CreatePollInput,
   closePollCommand,
@@ -19,6 +55,37 @@ export {
 } from './commands.ts';
 // M6.1c: data-subject requests (questions signed with the person's full name).
 export { engagementDataSubjects } from './data-subject.ts';
+export {
+  BOOTH_PER_MINUTE,
+  CHAT_MESSAGE_MAX,
+  CHAT_PAGE,
+  CHAT_PER_HOUR,
+  CHAT_PER_MINUTE,
+  CHAT_RETENTION_MONTHS,
+  type ChatRefusal,
+  chatRefusal,
+  chatRetentionCutoff,
+  NEW_CHATS_PER_HOUR,
+  normalizeChatBody,
+  UNANSWERED_LIMIT,
+} from './domain/chat.ts';
+// M5.8a: networking (directory, connections, meetings, block and report).
+export {
+  DIRECTORY_PAGE,
+  escapeLike,
+  freeTable,
+  INTEREST_MAX_LENGTH,
+  icsEscape,
+  MAX_INTERESTS,
+  MAX_LOCATION_CAPACITY,
+  MAX_PENDING_REQUESTS,
+  MAX_SLOT_MINUTES,
+  MAX_SLOT_SERIES,
+  MIN_SLOT_MINUTES,
+  meetingIcs,
+  normalizeInterests,
+  slotSeries,
+} from './domain/networking.ts';
 export {
   type BallotProblem,
   ballotKeys,
@@ -44,6 +111,16 @@ export {
   QUESTION_MAX_LENGTH,
   QUESTION_RATE,
 } from './domain/questions.ts';
+// M5.7b: engagement events and scores.
+export {
+  type Counts,
+  DEFAULT_WEIGHTS,
+  engagementScore,
+  MAX_WEIGHT,
+  normalizeCounts,
+  sessionScore,
+  type Weights,
+} from './domain/score.ts';
 export {
   type DisplayClaim,
   PARTICIPANT_KEY,
@@ -52,6 +129,50 @@ export {
   verifyDisplayToken,
 } from './domain/tokens.ts';
 export * from './dto.ts';
+export {
+  blockedQuery,
+  blockPersonCommand,
+  cancelMeetingCommand,
+  DirectoryInput,
+  directoryQuery,
+  myConnectionsQuery,
+  myMeetingQuery,
+  myMeetingsQuery,
+  networkHomeQuery,
+  OptInInput,
+  optInCommand,
+  optOutCommand,
+  personQuery,
+  ReportInput,
+  RequestConnectionInput,
+  RequestMeetingInput,
+  reportPersonCommand,
+  requestConnectionCommand,
+  requestMeetingCommand,
+  respondConnectionCommand,
+  respondMeetingCommand,
+  UpdateProfileInput,
+  unblockPersonCommand,
+  updateProfileCommand,
+  withdrawConnectionCommand,
+} from './networking/attendee.ts';
+export {
+  AddSlotsInput,
+  addMeetingSlotsCommand,
+  deleteMeetingLocationCommand,
+  deleteMeetingSlotCommand,
+  networkConsoleQuery,
+  resolveReportCommand,
+  restoreProfileCommand,
+  SaveLocationInput,
+  saveMeetingLocationCommand,
+  UpdateNetworkSettingsInput,
+  updateNetworkSettingsCommand,
+} from './networking/console.ts';
+// Batch 3j merge: networking and chat in data-subject requests (read and erased by privacy, tier 6).
+export { eraseNetworkingDsarTx, networkingDsarTx } from './networking/dsar.ts';
+export * from './networking/dto.ts';
+export { networkingEvent, networkingOpen } from './networking/public.ts';
 export {
   AskInput,
   askQuestionCommand,
@@ -72,10 +193,47 @@ export { ENGAGEMENT_REALTIME_CHANNELS, LIVE_CHANNEL, MODERATION_CHANNEL } from '
 export {
   ANONYMOUS_IDENTITY,
   type AnonymousIdentity,
+  CHAT_KINDS,
+  CHAT_MODERATION_STATES,
+  CHAT_REVIEW_STATES,
+  type ChatKind,
+  CONNECTION_STATES,
+  type ConnectionState,
+  ENGAGEMENT_KINDS,
+  type EngagementKind,
+  LOCATION_KINDS,
+  type LocationKind,
+  MEETING_STATES,
+  type MeetingState,
   POLL_KINDS,
   POLL_STATES,
   type PollKind,
   type PollState,
   QUESTION_STATES,
   type QuestionState,
+  REPORT_REASONS,
+  REPORT_STATES,
+  type ReportReason,
+  type ReportState,
 } from './schema.ts';
+export {
+  Account,
+  AttendeeScoreDto,
+  applyEngagementEventTx,
+  catchUpEngagement,
+  ENGAGEMENT_SOURCE_EVENTS,
+  type EngagementFact,
+  EventScoresDto,
+  engagementActivity,
+  eventScoresQuery,
+  forgetEngagementTx,
+  recordEngagementTx,
+  rescoreTx,
+  resetScoreWeightsCommand,
+  SCORES_SHOWN,
+  SessionScoreDto,
+  scoreWeightsQuery,
+  setScoreWeightsCommand,
+  WeightsDto,
+  weightsTx,
+} from './scores.ts';

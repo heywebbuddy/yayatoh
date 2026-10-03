@@ -1,6 +1,13 @@
 import { readFileSync } from 'node:fs';
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { continueToPayment, expectAccessible, lastEmailedCode, OPEN_HOUSE, signIn, WEDDING_OWNER } from './helpers.ts';
+import {
+  continueToPayment,
+  expectAccessible,
+  lastEmailedCode,
+  OPEN_HOUSE,
+  signIn,
+  WEDDING_OWNER,
+} from './helpers.ts';
 
 /**
  * M1.14c / M6.1c privacy: data-subject requests in the organizer console (find, open a request,

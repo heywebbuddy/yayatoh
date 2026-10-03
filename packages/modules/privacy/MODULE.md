@@ -43,4 +43,11 @@ their exported `*DsarTx` / retention functions, inside the caller's tenant trans
   files and the connector-hook subscriber tells M6.4 integrations (`privacy.subject_erased@1`).
 - Events emitted: `privacy.subject_erased@1` (request id, subject SHA-256, media asset ids).
 
+- Networking and chat (M5.8a/b): covered by engagement's data-subject contributor (batch 3u
+  merge; batch 3j had moved privacy to tier 6 to call engagement directly, which M6.1c's
+  contributors made unnecessary, so privacy stays tier 5). The access document lists the person's
+  networking profiles, the notes on requests they sent, the reports they filed and the chat
+  messages they sent; erasure redacts and opts out their profiles, clears those notes and report
+  details, and deletes the chat messages they sent.
+
 **Public surface:** `.` only.
