@@ -140,7 +140,7 @@ function RuleRow({
             id={`${id}-strength`}
             label={t('strength')}
             value={strength}
-            onChange={(e) => setStrength(e.target.value as Strength)}
+            onValueChange={(v) => setStrength(v as Strength)}
           >
             <option value="hard">{t('hard')}</option>
             <option value="soft">{t('soft')}</option>
@@ -199,8 +199,8 @@ function TargetPicker({
         id={`${id}-by`}
         label={t('by')}
         value={by}
-        onChange={(e) => {
-          onBy(e.target.value as By | 'each');
+        onValueChange={(v) => {
+          onBy(v as By | 'each');
           onValue('');
         }}
       >
@@ -214,7 +214,7 @@ function TargetPicker({
           id={`${id}-value`}
           label={t('party')}
           value={value}
-          onChange={(e) => onValue(e.target.value)}
+          onValueChange={(v) => onValue(v)}
           error={error}
         >
           <option value="">{t('choose')}</option>
@@ -383,8 +383,8 @@ export function SolverRules({
             id={`${id}-kind`}
             label={t('add.kind')}
             value={kind}
-            onChange={(e) => {
-              setKind(e.target.value as SolverRuleKind);
+            onValueChange={(v) => {
+              setKind(v as SolverRuleKind);
               setErrors({});
             }}
           >

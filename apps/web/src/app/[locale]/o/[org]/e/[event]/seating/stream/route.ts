@@ -6,7 +6,7 @@ import type { NextRequest } from 'next/server';
 import { orgActor } from '@/server/org-actor.ts';
 import { ports } from '@/server/ports.ts';
 import { seatStreamResponse } from '@/server/realtime.ts';
-import { getSession, sessionOpensOrg } from '@/server/session.ts';
+import { getSession } from '@/server/session.ts';
 
 export const dynamic = 'force-dynamic';
 

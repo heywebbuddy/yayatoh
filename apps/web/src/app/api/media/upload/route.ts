@@ -10,7 +10,7 @@ import {
 import { revalidatePath } from 'next/cache';
 import { orgActor } from '@/server/org-actor.ts';
 import { ports } from '@/server/ports.ts';
-import { getSession, sessionOpensOrg } from '@/server/session.ts';
+import { getSession } from '@/server/session.ts';
 
 /** Room for the multipart envelope and the text fields around the file. */
 const ENVELOPE_BYTES = 64 * 1024;

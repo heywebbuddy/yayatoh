@@ -8,7 +8,7 @@ import {
   type SolverProblem,
   type SolverRuleSpec,
 } from '@yayatoh/seating/client';
-import { Alert, Badge, Button, fieldClass, Input, ProgressBar } from '@yayatoh/ui';
+import { Alert, Badge, Button, Input, ProgressBar, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import {
   type FormEvent,
@@ -468,11 +468,12 @@ function GuestRow({
     <li className="flex flex-wrap items-center justify-between gap-2">
       <span className="text-body text-ink">{label}</span>
       {canWrite ? (
-        <select
+        <Select
           aria-label={t('moveLabel', { name: name?.name ?? '?' })}
           value={value}
-          onChange={(e) => onMove(guestId, e.target.value)}
-          className={fieldClass('sm', 'w-auto pe-9')}
+          onValueChange={(v) => onMove(guestId, v)}
+          fieldSize="sm"
+          className="w-auto"
         >
           <option value="">{t('queueOption')}</option>
           {options.map((p) => (
@@ -480,7 +481,7 @@ function GuestRow({
               {t('optionFree', { label: p.label, free: p.free })}
             </option>
           ))}
-        </select>
+        </Select>
       ) : null}
     </li>
   );

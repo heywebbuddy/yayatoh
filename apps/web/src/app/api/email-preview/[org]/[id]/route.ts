@@ -3,7 +3,7 @@ import { emailPreviewQuery, PREVIEW_HEADERS } from '@yayatoh/notifications';
 import { resolveOrgSlug } from '@yayatoh/tenancy';
 import { orgActor } from '@/server/org-actor.ts';
 import { ports } from '@/server/ports.ts';
-import { getSession, sessionOpensOrg } from '@/server/session.ts';
+import { getSession } from '@/server/session.ts';
 
 /**
  * A stored email preview (M1.10d), framed by the announcement composer and the template editor.

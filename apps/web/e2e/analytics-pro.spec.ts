@@ -4,7 +4,7 @@ import { closePools } from '@yayatoh/db';
 import { localKeyVault, setKeyVault } from '@yayatoh/platform';
 import { resolveOrgSlug } from '@yayatoh/tenancy';
 import { ATTRIBUTION_FIXTURE, attributionScenario } from '@yayatoh/testing';
-import { expectAccessibleBothModes, newUser } from './helpers.ts';
+import { expectAccessibleBothModes, expectPicked, inOptions, newUser, pickOption } from './helpers.ts';
 
 const kms = process.env.LOCAL_KMS_KEY;
 if (kms) setKeyVault(localKeyVault(kms));
@@ -44,7 +44,7 @@ const row = (page: Page, label: string) => results(page).locator('tbody tr').fil
 
 async function explore(page: Page, opts: Record<string, string>) {
   for (const [label, value] of Object.entries(opts))
-    await page.getByLabel(label, { exact: true }).selectOption(value);
+    await pickOption(page.getByLabel(label, { exact: true }), value);
   await page.getByTestId('explore-apply').click();
 }
 
@@ -92,7 +92,7 @@ test.describe('explorer and attribution (M6.2b)', () => {
     await expect(row(page, 'email')).toContainText('1.16');
     await expect(row(page, 'Total')).toContainText('3.00');
     await page.reload();
-    await expect(page.getByLabel('Measure', { exact: true })).toHaveValue('attributed_orders');
+    await expectPicked(page.getByLabel('Measure', { exact: true }), 'attributed_orders');
     await expect(row(page, 'Total')).toContainText('3.00');
     expect(ATTRIBUTION_FIXTURE.attributedMinor).toBe(4000);
   });
@@ -165,14 +165,16 @@ test.describe('explorer and attribution (M6.2b)', () => {
     const { page: viewer } = await member(browser, slug, 'viewer');
     await viewer.goto(`/o/${slug}/analytics/explore`);
     const measure = viewer.getByLabel('Measure', { exact: true });
-    await expect(measure.locator('option[value="attributed_revenue"]')).toHaveCount(0);
-    await expect(measure.locator('option[value="gross"]')).toHaveCount(0);
-    await expect(measure.locator('option[value="attributed_orders"]')).toHaveCount(1);
+    await inOptions(measure, async (list) => {
+      await expect(list.locator('[role="option"][data-value="attributed_revenue"]')).toHaveCount(0);
+      await expect(list.locator('[role="option"][data-value="gross"]')).toHaveCount(0);
+      await expect(list.locator('[role="option"][data-value="attributed_orders"]')).toHaveCount(1);
+    });
     // A money URL falls back to counts; nothing shows money.
     await viewer.goto(
       `/o/${slug}/analytics/explore?measure=attributed_revenue&dim=source&event=${s.eventId}`,
     );
-    await expect(measure).toHaveValue('registrations');
+    await expectPicked(measure, 'registrations');
     expect(await viewer.locator('main').innerText()).not.toMatch(/\$|USD/);
     const csv = await viewer.request.get(`/o/${slug}/analytics/explore/export?measure=gross&dim=event`);
     expect(await csv.text()).not.toMatch(/USD/);
@@ -209,12 +211,12 @@ test.describe('organizer alert rules (M6.2b)', () => {
     // Keyboard only: type the name, then walk the fields.
     await page.getByLabel('Name', { exact: true }).focus();
     await page.keyboard.type(name);
-    await page.getByLabel('Measure', { exact: true }).selectOption('registrations');
-    await page.getByLabel('When it', { exact: true }).selectOption('above');
+    await pickOption(page.getByLabel('Measure', { exact: true }), 'registrations');
+    await pickOption(page.getByLabel('When it', { exact: true }), 'above');
     await page.getByLabel('Threshold', { exact: true }).focus();
     await page.keyboard.type('3');
-    await page.getByLabel('Over', { exact: true }).selectOption('1');
-    await page.getByLabel('Event', { exact: true }).selectOption(s.eventId);
+    await pickOption(page.getByLabel('Over', { exact: true }), '1');
+    await pickOption(page.getByLabel('Event', { exact: true }), s.eventId);
     await page.getByTestId('alert-rule-submit').focus();
     await page.keyboard.press('Enter');
     await expect(page.getByRole('status').getByText('Rule created')).toBeVisible();
@@ -269,17 +271,17 @@ test.describe('organizer alert rules (M6.2b)', () => {
     await page.getByTestId('alert-rule-submit').click();
     await expect(page.getByText('Enter a number of 0 or more.')).toBeVisible();
     await expect(page.getByLabel('Threshold', { exact: true })).toHaveAttribute('aria-invalid', 'true');
-    await page.getByLabel('When it', { exact: true }).selectOption('rise');
+    await pickOption(page.getByLabel('When it', { exact: true }), 'rise');
     await page.getByLabel('Threshold', { exact: true }).fill('5000');
     await page.getByTestId('alert-rule-submit').click();
     await expect(page.getByText('Enter a percentage between 1 and 1000.')).toBeVisible();
-    await page.getByLabel('When it', { exact: true }).selectOption('above');
-    await page.getByLabel('Measure', { exact: true }).selectOption('net');
+    await pickOption(page.getByLabel('When it', { exact: true }), 'above');
+    await pickOption(page.getByLabel('Measure', { exact: true }), 'net');
     await page.getByLabel('Threshold', { exact: true }).fill('12.50');
     await page.getByTestId('alert-rule-submit').click();
     await expect(page.getByText('Choose a currency for a money rule.')).toBeVisible();
     await expect(page.getByLabel('Currency', { exact: true })).toHaveAttribute('aria-invalid', 'true');
-    await page.getByLabel('Currency', { exact: true }).selectOption('USD');
+    await pickOption(page.getByLabel('Currency', { exact: true }), 'USD');
     await page.getByTestId('alert-rule-submit').click();
     await expect(page.getByRole('status').getByText('Rule created')).toBeVisible();
     await expect(page.locator('tbody tr').filter({ hasText: name })).toContainText('$12.50');
@@ -300,9 +302,9 @@ test.describe('organizer alert rules (M6.2b)', () => {
       [`Money ${stamp}`, 'gross', '100', 'USD'],
     ] as const) {
       await page.getByLabel('Name', { exact: true }).fill(name);
-      await page.getByLabel('Measure', { exact: true }).selectOption(measure);
+      await pickOption(page.getByLabel('Measure', { exact: true }), measure);
       await page.getByLabel('Threshold', { exact: true }).fill(threshold);
-      if (currency) await page.getByLabel('Currency', { exact: true }).selectOption(currency);
+      if (currency) await pickOption(page.getByLabel('Currency', { exact: true }), currency);
       await page.getByTestId('alert-rule-submit').click();
       await expect(page.getByRole('status').getByText('Rule created')).toBeVisible();
     }
@@ -343,8 +345,8 @@ test.describe('scheduled PDF reports (M6.2b)', () => {
     const name = `Weekly sales ${stampOf()}`;
     await page.getByLabel('Name', { exact: true }).focus();
     await page.keyboard.type(name);
-    await page.getByLabel('How often', { exact: true }).selectOption('weekly');
-    await page.getByLabel('Send at', { exact: true }).selectOption('7');
+    await pickOption(page.getByLabel('How often', { exact: true }), 'weekly');
+    await pickOption(page.getByLabel('Send at', { exact: true }), '7');
     // The owner is ticked already.
     await expect(page.getByRole('checkbox', { name: /\(you\)/ })).toBeChecked();
     await page.getByTestId('report-schedule-submit').focus();
@@ -385,11 +387,11 @@ test.describe('scheduled PDF reports (M6.2b)', () => {
     // Open the edit page from its link with a full load (a change made while the client
     // navigation is still settling could be reset; people are never that fast).
     await page.goto((await sched.getByRole('link', { name: `Edit ${name}` }).getAttribute('href')) as string);
-    await expect(page.getByLabel('How often', { exact: true })).toHaveValue('weekly');
+    await expectPicked(page.getByLabel('How often', { exact: true }), 'weekly');
     // Fully loaded: a change made before hydration would be reset to the saved value.
     await page.waitForLoadState('load');
-    await page.getByLabel('How often', { exact: true }).selectOption('monthly');
-    await expect(page.getByLabel('How often', { exact: true })).toHaveValue('monthly');
+    await pickOption(page.getByLabel('How often', { exact: true }), 'monthly');
+    await expectPicked(page.getByLabel('How often', { exact: true }), 'monthly');
     await page.getByTestId('report-schedule-submit').click();
     await expect(page.getByRole('status').getByText('Changes saved')).toBeVisible();
     await expect(sched).toContainText('Monthly');

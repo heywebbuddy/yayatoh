@@ -1,5 +1,11 @@
 import { expect, type Page, test } from '@playwright/test';
-import { expectAccessible, expectAccessibleBothModes, signIn } from './helpers.ts';
+import {
+  expectAccessible,
+  expectAccessibleBothModes,
+  pickOption,
+  pickWithKeyboard,
+  signIn,
+} from './helpers.ts';
 import { quickPlan } from './seating-helpers.ts';
 
 /**
@@ -27,8 +33,8 @@ function chicagoDate(days: number): string {
 async function createWedding(page: Page, name: string): Promise<string> {
   await page.goto(`${ORG}/events/new`);
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Event type').selectOption('wedding');
-  await page.getByLabel('Time zone').selectOption(TZ);
+  await pickOption(page.getByLabel('Event type'), 'wedding');
+  await pickOption(page.getByLabel('Time zone'), TZ);
   await page.getByLabel('Starts', { exact: true }).fill(`${chicagoDate(60)}T16:00`);
   await page.getByLabel('Ends', { exact: true }).fill(`${chicagoDate(60)}T23:00`);
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -73,11 +79,9 @@ async function smallWedding(page: Page, name: string) {
 const rules = (page: Page) => page.getByRole('list', { name: 'Seating rules' });
 const addForm = (page: Page) => page.getByRole('form', { name: 'Add a rule' });
 
-/** Choose an option of a select by keyboard: focus it, then pick (Playwright's selectOption). */
+/** Choose an option of a select by keyboard: focus it, open the list, move to it, Enter (U1). */
 async function choose(page: Page, label: string, option: string, scope = addForm(page)) {
-  const select = scope.getByLabel(label, { exact: true });
-  await select.focus();
-  await select.selectOption({ label: option });
+  await pickWithKeyboard(scope.getByLabel(label, { exact: true }), { label: option });
 }
 
 async function submitRule(page: Page) {
@@ -87,10 +91,7 @@ async function submitRule(page: Page) {
 
 /** Choose a proposed table for a guest by its label ("Table 2"), whatever its free count. */
 async function pickTable(page: Page, guest: string, table: string) {
-  const select = page.getByLabel(`Table for ${guest}`);
-  await select.focus();
-  const value = await select.locator('option', { hasText: `${table} (` }).getAttribute('value');
-  await select.selectOption(value ?? '');
+  await pickOption(page.getByLabel(`Table for ${guest}`), { label: new RegExp(`^${table} \\(`) });
 }
 
 async function openSolver(page: Page, base: string) {
@@ -206,9 +207,7 @@ test.describe('seating rules and solver (M6.12a)', () => {
     await expectAccessibleBothModes(page);
 
     // Edit by list: Raj back to the queue, by keyboard.
-    const raj = page.getByLabel('Table for Raj X');
-    await raj.focus();
-    await raj.selectOption({ label: 'Leave in the queue' });
+    await pickWithKeyboard(page.getByLabel('Table for Raj X'), { label: 'Leave in the queue' });
     await expect(page.getByRole('region', { name: 'Left in the queue' })).toContainText('Raj X (Patel)');
     await expect(page.getByText('5 guests at 2 tables; 1 guest left in the queue.')).toBeVisible();
 
@@ -258,10 +257,9 @@ test.describe('seating rules and solver (M6.12a)', () => {
     await other.goto(`${base}/seating/guests`);
     await other.getByRole('checkbox', { name: 'Select everyone in Chen' }).check();
     const target = chenLabel === 'Table 3' ? 'Table 2' : 'Table 3';
-    await other
-      .getByLabel('Table or row', { exact: true })
-      .first()
-      .selectOption({ label: `${target} — 4 of 4 free` });
+    await pickOption(other.getByLabel('Table or row', { exact: true }).first(), {
+      label: `${target} — 4 of 4 free`,
+    });
     await other.getByRole('button', { name: 'Seat selected guests' }).click();
     await expect(other.getByText(`Seated 3 guests at ${target}.`)).toBeVisible();
     await other.close();
@@ -272,7 +270,7 @@ test.describe('seating rules and solver (M6.12a)', () => {
       page.getByText('Someone in this proposal was seated by hand meanwhile. Propose again.'),
     ).toBeVisible();
     await page.goto(`${base}/seating/guests`);
-    await page.getByLabel('Table to show').selectOption({ label: `${target} — 1 of 4 free` });
+    await pickOption(page.getByLabel('Table to show'), { label: `${target} — 1 of 4 free` });
     await expect(page.getByRole('region', { name: target, exact: true })).toContainText('Mei X');
   });
 

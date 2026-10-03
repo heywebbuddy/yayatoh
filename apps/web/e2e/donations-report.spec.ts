@@ -6,6 +6,7 @@ import {
   expectAccessible,
   expectAccessibleBothModes,
   newUser,
+  pickOption,
   stepUpDialog,
 } from './helpers.ts';
 
@@ -194,7 +195,7 @@ test.describe('donations report and reconciliation (M4.8g)', () => {
     await ageSession(page);
     await page.goto(g.report);
     const exporter = page.getByRole('region', { name: 'Export for your donor CRM' });
-    await exporter.getByLabel('Columns for').selectOption('salesforce_npsp');
+    await pickOption(exporter.getByLabel('Columns for'), 'salesforce_npsp');
     await exporter.getByRole('button', { name: 'Export donors' }).click();
     await expect(stepUpDialog(page)).toBeVisible();
     await confirmStepUp(page, codeForKey(g.setupKey));
@@ -212,8 +213,8 @@ test.describe('donations report and reconciliation (M4.8g)', () => {
     await expectAccessibleBothModes(page);
 
     // The same export as an Excel workbook, in this language's columns.
-    await exporter.getByLabel('Columns for').selectOption('generic');
-    await exporter.getByLabel('File type').selectOption('xlsx');
+    await pickOption(exporter.getByLabel('Columns for'), 'generic');
+    await pickOption(exporter.getByLabel('File type'), 'xlsx');
     await exporter.getByRole('button', { name: 'Export donors' }).click();
     await expect(page.getByText('Donor export (Excel)')).toBeVisible();
     const xlsx = await page.request.get(

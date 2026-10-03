@@ -1,5 +1,12 @@
 import { type Browser, type BrowserContext, expect, type Page, test } from '@playwright/test';
-import { continueToPayment, expectAccessible, expectAccessibleBothModes, signIn } from './helpers.ts';
+import {
+  continueToPayment,
+  expectAccessible,
+  expectAccessibleBothModes,
+  expectPicked,
+  pickOption,
+  signIn,
+} from './helpers.ts';
 
 /**
  * M5.5c kiosk self-print: the organizer turns it on for an event (keyboard, persisted, viewer sees
@@ -33,8 +40,8 @@ function chicago(offsetH: number): string {
 async function conferenceNow(page: Page, name: string) {
   await page.goto(`${ORG}/events/new`);
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Event type').selectOption('conference');
-  await page.getByLabel('Time zone').selectOption(TZ);
+  await pickOption(page.getByLabel('Event type'), 'conference');
+  await pickOption(page.getByLabel('Time zone'), TZ);
   await page.getByLabel('Starts', { exact: true }).fill(chicago(-1));
   await page.getByLabel('Ends', { exact: true }).fill(chicago(4));
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -68,7 +75,7 @@ async function register(browser: Browser, slug: string, name: string): Promise<G
   const guest = await ctx.newPage();
   const email = `kiosk+${name.split(' ')[0]?.toLowerCase()}${Date.now()}@example.test`;
   await guest.goto(`/events/${slug}`);
-  await guest.getByLabel('Quantity — Delegate').selectOption('1');
+  await pickOption(guest.getByLabel('Quantity — Delegate'), '1');
   await guest.getByLabel('Full name').fill(name);
   await guest.getByLabel('Email for your tickets').fill(email);
   await continueToPayment(guest, email);
@@ -136,7 +143,7 @@ async function enableKioskPrint(page: Page, base: string) {
   await page.keyboard.press('Space');
   await expect(enabled).toBeChecked();
   await expect(section.getByLabel(/Use your email/)).toBeChecked();
-  await expect(section.getByLabel('Kiosks print to')).toHaveValue('');
+  await expectPicked(section.getByLabel('Kiosks print to'), '');
   await section.getByRole('button', { name: 'Save kiosk settings' }).focus();
   await page.keyboard.press('Enter');
   await expect(section.getByText('Kiosk settings saved.')).toBeVisible();

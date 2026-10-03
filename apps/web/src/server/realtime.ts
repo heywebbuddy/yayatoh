@@ -57,7 +57,7 @@ import {
 } from '@yayatoh/seating';
 import { orgActor } from './org-actor.ts';
 import { ports } from './ports.ts';
-import { getSession, sessionOpensOrg } from './session.ts';
+import { getSession } from './session.ts';
 
 /**
  * Realtime for the web app (M3.1b): one registry of channels, one in-process hub, one Postgres

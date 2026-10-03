@@ -3,7 +3,7 @@ import { portalFileQuery } from '@yayatoh/media';
 import { resolveOrgSlug } from '@yayatoh/tenancy';
 import { orgActor } from '@/server/org-actor.ts';
 import { ports } from '@/server/ports.ts';
-import { getSession, sessionOpensOrg } from '@/server/session.ts';
+import { getSession } from '@/server/session.ts';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 const notFound = () => new Response('Not found', { status: 404, headers: { 'cache-control': 'no-store' } });
