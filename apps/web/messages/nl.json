@@ -11215,5 +11215,170 @@
       "notForSale": "Extra licenties zijn niet te koop.",
       "pending": "Er wacht al een aankoop op betaling."
     }
+  },
+  "leads": {
+    "portal": {
+      "heading": "Leads vastleggen",
+      "window": "Vastleggen opent op {opens} en sluit op {closes} (tijd van het evenement). Notities en export blijven beschikbaar tot {until}.",
+      "termsNeededAdmin": "Accepteer hieronder de leadvoorwaarden voordat je team leads kan vastleggen.",
+      "termsNeededStaff": "De beheerder van je exposant moet de leadvoorwaarden accepteren voordat je leads kunt vastleggen.",
+      "why": {
+        "unlicensed": "Je hebt nog geen leadlicentie. Vraag er een aan de beheerder van je exposant.",
+        "over_allowance": "Je licentie valt buiten het tegoed van je exposant. Vraag de beheerder er een in te trekken of meer te kopen."
+      },
+      "open": "Leads vastleggen openen"
+    },
+    "license": {
+      "licensed": "Gelicentieerd",
+      "unlicensed": "Geen licentie",
+      "over_allowance": "Boven het tegoed"
+    },
+    "capture": {
+      "not_open": "Vastleggen nog niet open",
+      "open": "Vastleggen open",
+      "closed": "Vastleggen gesloten"
+    },
+    "terms": {
+      "heading": "Leadvoorwaarden",
+      "v1": "Als je de badge van een deelnemer scant, ontvang je alleen naam, functie en bedrijf, en het e-mailadres alleen als de deelnemer heeft ingestemd met delen. Je bedrijf wordt verantwoordelijk voor deze gegevens: gebruik ze alleen om je gesprek op dit evenement op te volgen, bewaar ze veilig en verwijder ze op verzoek. Deelnemers zien dat je ze hebt gescand en kunnen stoppen met het delen van hun e-mailadres.",
+      "accepted": "Leadvoorwaarden geaccepteerd",
+      "acceptLabel": "Akkoord",
+      "accept": "Ik accepteer de leadvoorwaarden namens {exhibitor}",
+      "submit": "Leadvoorwaarden accepteren",
+      "acceptRequired": "Vink het vakje aan om de leadvoorwaarden te accepteren."
+    },
+    "settings": {
+      "heading": "Kwalificaties en zichtbaarheid",
+      "qualifiers": "Kwalificaties",
+      "qualifiersHint": "Eén per regel, maximaal 10 (bijvoorbeeld: Budget goedgekeurd). Je team vinkt ze aan bij elke lead.",
+      "visibility": "Wie leads ziet",
+      "teamVisibility": "Medewerkers zien de leads van het hele team (anders alleen de leads die ze zelf scanden)",
+      "save": "Leadinstellingen opslaan",
+      "saved": "Leadinstellingen opgeslagen.",
+      "qualifiersInvalid": "Elke kwalificatie mag maximaal 60 tekens hebben.",
+      "tooMany": "Je kunt maximaal 10 kwalificaties hebben."
+    },
+    "export": {
+      "heading": "Leads exporteren",
+      "ready": "Bevestigd. Je kunt je leads nu downloaden.",
+      "count": "{count, plural, =0 {Nog geen leads} one {# lead} other {# leads}}",
+      "hint": "Voor je veiligheid mailen we je vóór de download een code om te bevestigen dat jij het bent.",
+      "download": "Leads downloaden (CSV)",
+      "ended": "De toegang tot leads van dit evenement is beëindigd.",
+      "columns": {
+        "name": "Naam",
+        "jobTitle": "Functie",
+        "company": "Bedrijf",
+        "email": "E-mail",
+        "rating": "Beoordeling",
+        "qualifiers": "Kwalificaties",
+        "notes": "Notities",
+        "capturedAt": "Gescand op",
+        "scannedBy": "Gescand door",
+        "scans": "Scans",
+        "sharedFields": "Gedeelde velden",
+        "emailConsentVersion": "Versie e-mailtoestemming"
+      }
+    },
+    "confirm": {
+      "title": "Bevestig dat jij het bent",
+      "intro": "Bevestig met een code die we naar {email} mailen om je leads te downloaden."
+    },
+    "attendee": {
+      "heading": "Wie mijn badge heeft gescand",
+      "emptyTitle": "Nog niemand heeft je badge gescand",
+      "emptyDescription": "Als een exposant je badge scant, zie je dat hier.",
+      "scannedAt": "Gescand op {time}",
+      "emailShared": "Heeft je e-mailadres",
+      "emailWithdrawn": "Delen van e-mailadres gestopt",
+      "emailNotShared": "E-mailadres niet gedeeld",
+      "withdraw": "Mijn e-mailadres niet meer delen met {exhibitor}",
+      "withdrawn": "Klaar. Ze zien je e-mailadres niet meer.",
+      "sharingOn": "Exposanten die je badge scannen, ontvangen je e-mailadres.",
+      "sharingOff": "Exposanten die je badge scannen, ontvangen je e-mailadres niet.",
+      "sharingHint": "Ze ontvangen altijd je naam, functie en bedrijf. Nooit je telefoonnummer of adres.",
+      "turnOff": "Mijn e-mailadres niet meer delen met exposanten",
+      "turnOn": "Mijn e-mailadres delen met exposanten die mijn badge scannen",
+      "saved": "Opgeslagen."
+    },
+    "app": {
+      "pageTitle": "Leads vastleggen",
+      "loading": "Laden…",
+      "signedOutTitle": "Meld je aan om leads vast te leggen",
+      "signedOutDescription": "Open op dit apparaat de aanmeldlink uit je uitnodiging als exposant en kom daarna terug naar leads vastleggen.",
+      "openPortal": "Naar het exposantenportaal",
+      "title": "Leads van {exhibitor}",
+      "online": "Online",
+      "offline": "Offline: scans worden op dit apparaat bewaard",
+      "queued": "{count, plural, =0 {Alles gesynchroniseerd} one {# scan wacht op synchronisatie} other {# scans wachten op synchronisatie}}",
+      "modes": "Weergaven van leads vastleggen",
+      "viewScan": "Scannen",
+      "viewLeads": "{count, plural, =0 {Leads} other {Leads (#)}}",
+      "blockedTitle": "Je kunt nu geen leads vastleggen",
+      "blocked": {
+        "unlicensed": "Je hebt geen leadlicentie. Vraag er een aan de beheerder van je exposant.",
+        "over_allowance": "Je licentie valt buiten het tegoed van je exposant. Vraag het je beheerder.",
+        "termsAdmin": "Accepteer eerst de leadvoorwaarden in het exposantenportaal.",
+        "termsStaff": "De beheerder van je exposant moet eerst de leadvoorwaarden accepteren.",
+        "notOpen": "Vastleggen opent op {time}.",
+        "closed": "Vastleggen is gesloten op {time}. Je kunt je leads nog lezen en bewerken."
+      },
+      "codeLabel": "Badgecode",
+      "codeHint": "Scan de QR-code op de badge of typ de code die eronder staat.",
+      "save": "Lead opslaan",
+      "camera": "Scannen met camera",
+      "stopCamera": "Camera stoppen",
+      "cameraFailed": "De camera kon niet starten. Typ de badgecode.",
+      "refusals": {
+        "no_license": "Je hebt geen leadlicentie. Vraag er een aan de beheerder van je exposant.",
+        "over_allowance": "Je licentie valt buiten het tegoed van je exposant. Je scans wachten op dit apparaat.",
+        "terms_not_accepted": "De leadvoorwaarden zijn nog niet geaccepteerd. Je scans wachten op dit apparaat.",
+        "access_ended": "De toegang tot leads van dit evenement is beëindigd.",
+        "other": "Er ging iets mis. Je scans wachten op dit apparaat; probeer het opnieuw."
+      },
+      "result": {
+        "queued": "Opgeslagen op dit apparaat",
+        "queuedHint": "De gegevens verschijnen na synchronisatie.",
+        "refused": "Niet opgeslagen",
+        "captured": "Lead opgeslagen",
+        "rescanned": "Al een lead: scan toegevoegd"
+      },
+      "reasons": {
+        "invalid": "Deze badge kan niet worden gelezen. Controleer de code en probeer het opnieuw.",
+        "wrong_event": "Deze badge hoort bij een ander evenement.",
+        "not_open": "Hij is gescand voordat vastleggen openging.",
+        "closed": "Hij is gescand nadat vastleggen sloot."
+      },
+      "emailWithdrawn": "Delen van e-mailadres gestopt door de deelnemer op {time}",
+      "emailNotShared": "E-mailadres niet gedeeld",
+      "capturedAt": "Gescand op {time}{count, plural, one {} other { · # scans}}",
+      "scannedBy": "door {email}",
+      "editLabel": "Leadgegevens",
+      "rating": "Beoordeling",
+      "ratings": {
+        "hot": "Warm",
+        "warm": "Lauw",
+        "cold": "Koud",
+        "none": "Geen beoordeling"
+      },
+      "qualifiers": "Kwalificaties",
+      "notes": "Notities",
+      "saveDetails": "Gegevens opslaan",
+      "saved": "Opgeslagen.",
+      "savedQueued": "Opgeslagen bij de scan. Wordt gesynchroniseerd zodra je online bent.",
+      "needsConnection": "Maak verbinding met internet om wijzigingen aan deze lead op te slaan.",
+      "saveFailed": "Opslaan mislukt. Probeer het opnieuw.",
+      "accessEnded": "De toegang tot leads van dit evenement is beëindigd.",
+      "scope": {
+        "all": "Alle leads van {exhibitor}",
+        "team": "De leads van je team",
+        "own": "Jouw leads"
+      },
+      "emptyTitle": "Nog geen leads",
+      "emptyDescription": "Scan een badge op het tabblad Scannen om je eerste lead op te slaan.",
+      "search": "Leads zoeken",
+      "noMatch": "Geen lead komt overeen met je zoekopdracht.",
+      "edit": "{name} bewerken"
+    }
   }
 }

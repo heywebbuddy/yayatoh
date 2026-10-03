@@ -165,6 +165,7 @@ export {
   portalPrincipalTx,
   portalSiteByToken,
   portalSiteToken,
+  portalStepUpInviteToken,
   requestPortalChallenge,
   resendPortalInvitations,
   revokePortalAccountTx,

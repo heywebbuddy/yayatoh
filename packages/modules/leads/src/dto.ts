@@ -93,6 +93,8 @@ export const syncResultSerializer = defineSerializer('leads.sync', SyncResultDto
 
 /** The attendee's view: who scanned their badge (exhibitor names and dates only). */
 export const WhoScannedMeDto = z.object({
+  /** The event has exhibitors (otherwise the page leaves the section out). */
+  hasExhibitors: z.boolean(),
   emailSharing: z.boolean(),
   scans: z.array(
     z.object({

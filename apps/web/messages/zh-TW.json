@@ -11215,5 +11215,170 @@
       "notForSale": "額外授權不販售。",
       "pending": "已有一筆購買正在等待付款。"
     }
+  },
+  "leads": {
+    "portal": {
+      "heading": "潛在客戶蒐集",
+      "window": "蒐集於 {opens} 開放，{closes} 關閉（活動當地時間）。備註與匯出可使用至 {until}。",
+      "termsNeededAdmin": "請先在下方接受潛在客戶條款，團隊才能蒐集潛在客戶。",
+      "termsNeededStaff": "參展商管理員需要先接受潛在客戶條款，你才能蒐集潛在客戶。",
+      "why": {
+        "unlicensed": "你還沒有潛在客戶授權。請向參展商管理員申請。",
+        "over_allowance": "你的授權超出參展商的配額。請管理員收回一個授權或購買更多。"
+      },
+      "open": "開啟潛在客戶蒐集"
+    },
+    "license": {
+      "licensed": "已授權",
+      "unlicensed": "未授權",
+      "over_allowance": "超出配額"
+    },
+    "capture": {
+      "not_open": "蒐集尚未開放",
+      "open": "蒐集開放中",
+      "closed": "蒐集已關閉"
+    },
+    "terms": {
+      "heading": "潛在客戶條款",
+      "v1": "掃描參加者的識別證時，你只會收到其姓名、職稱和公司；僅在對方同意分享時才會收到電子郵件地址。貴公司將對這些資料負責：僅用於後續聯繫你們在本活動中的交流，妥善保管，並在對方要求時刪除。參加者可以看到你掃描了他們，並可停止分享電子郵件地址。",
+      "accepted": "已接受潛在客戶條款",
+      "acceptLabel": "同意",
+      "accept": "我代表 {exhibitor} 接受潛在客戶條款",
+      "submit": "接受潛在客戶條款",
+      "acceptRequired": "請勾選以接受潛在客戶條款。"
+    },
+    "settings": {
+      "heading": "資格條件與可見範圍",
+      "qualifiers": "資格條件",
+      "qualifiersHint": "每行一個，最多 10 個（例如：預算已核准）。團隊會在每筆潛在客戶上勾選。",
+      "visibility": "誰能看到潛在客戶",
+      "teamVisibility": "工作人員可查看整個團隊的潛在客戶（否則只能看到自己掃描的）",
+      "save": "儲存潛在客戶設定",
+      "saved": "潛在客戶設定已儲存。",
+      "qualifiersInvalid": "每個資格條件最多 60 個字元。",
+      "tooMany": "最多只能有 10 個資格條件。"
+    },
+    "export": {
+      "heading": "匯出潛在客戶",
+      "ready": "已確認。現在可以下載潛在客戶。",
+      "count": "{count, plural, =0 {尚無潛在客戶} other {# 筆潛在客戶}}",
+      "hint": "為保障安全，下載前我們會以電子郵件寄送驗證碼確認你的身分。",
+      "download": "下載潛在客戶（CSV）",
+      "ended": "本活動的潛在客戶存取已結束。",
+      "columns": {
+        "name": "姓名",
+        "jobTitle": "職稱",
+        "company": "公司",
+        "email": "電子郵件",
+        "rating": "評等",
+        "qualifiers": "資格條件",
+        "notes": "備註",
+        "capturedAt": "掃描時間",
+        "scannedBy": "掃描者",
+        "scans": "掃描次數",
+        "sharedFields": "已分享欄位",
+        "emailConsentVersion": "電子郵件同意版本"
+      }
+    },
+    "confirm": {
+      "title": "確認是你本人",
+      "intro": "若要下載潛在客戶，請使用我們寄到 {email} 的驗證碼確認。"
+    },
+    "attendee": {
+      "heading": "誰掃描了我的識別證",
+      "emptyTitle": "還沒有人掃描你的識別證",
+      "emptyDescription": "參展商掃描你的識別證後，會顯示在這裡。",
+      "scannedAt": "掃描於 {time}",
+      "emailShared": "已取得你的電子郵件",
+      "emailWithdrawn": "已停止分享電子郵件",
+      "emailNotShared": "未分享電子郵件",
+      "withdraw": "停止與 {exhibitor} 分享我的電子郵件",
+      "withdrawn": "完成。對方將無法再看到你的電子郵件。",
+      "sharingOn": "掃描你識別證的參展商會收到你的電子郵件地址。",
+      "sharingOff": "掃描你識別證的參展商不會收到你的電子郵件地址。",
+      "sharingHint": "他們一律會收到你的姓名、職稱和公司，但絕不會收到你的電話或地址。",
+      "turnOff": "停止與參展商分享我的電子郵件",
+      "turnOn": "與掃描我識別證的參展商分享我的電子郵件",
+      "saved": "已儲存。"
+    },
+    "app": {
+      "pageTitle": "潛在客戶蒐集",
+      "loading": "載入中…",
+      "signedOutTitle": "登入後即可蒐集潛在客戶",
+      "signedOutDescription": "請在此裝置上開啟參展商邀請信中的登入連結，再回到潛在客戶蒐集。",
+      "openPortal": "前往參展商入口網站",
+      "title": "{exhibitor} 的潛在客戶",
+      "online": "連線中",
+      "offline": "離線：掃描會儲存在此裝置上",
+      "queued": "{count, plural, =0 {已全部同步} other {# 次掃描等待同步}}",
+      "modes": "潛在客戶蒐集檢視",
+      "viewScan": "掃描",
+      "viewLeads": "{count, plural, =0 {潛在客戶} other {潛在客戶（#）}}",
+      "blockedTitle": "你目前無法蒐集潛在客戶",
+      "blocked": {
+        "unlicensed": "你沒有潛在客戶授權。請向參展商管理員申請。",
+        "over_allowance": "你的授權超出參展商的配額。請洽管理員。",
+        "termsAdmin": "請先在參展商入口網站接受潛在客戶條款。",
+        "termsStaff": "參展商管理員需要先接受潛在客戶條款。",
+        "notOpen": "蒐集將於 {time} 開放。",
+        "closed": "蒐集已於 {time} 關閉。你仍可查看與編輯潛在客戶。"
+      },
+      "codeLabel": "識別證代碼",
+      "codeHint": "掃描識別證上的 QR 碼，或輸入其下方印的代碼。",
+      "save": "儲存潛在客戶",
+      "camera": "用相機掃描",
+      "stopCamera": "關閉相機",
+      "cameraFailed": "無法啟動相機。請輸入識別證代碼。",
+      "refusals": {
+        "no_license": "你沒有潛在客戶授權。請向參展商管理員申請。",
+        "over_allowance": "你的授權超出參展商的配額。掃描記錄保留在此裝置上。",
+        "terms_not_accepted": "尚未接受潛在客戶條款。掃描記錄保留在此裝置上。",
+        "access_ended": "本活動的潛在客戶存取已結束。",
+        "other": "發生問題。掃描記錄保留在此裝置上，請再試一次。"
+      },
+      "result": {
+        "queued": "已儲存在此裝置上",
+        "queuedHint": "同步後會顯示詳細資料。",
+        "refused": "未儲存",
+        "captured": "已儲存潛在客戶",
+        "rescanned": "已是潛在客戶：已加入掃描"
+      },
+      "reasons": {
+        "invalid": "無法讀取此識別證。請檢查代碼後再試一次。",
+        "wrong_event": "此識別證屬於其他活動。",
+        "not_open": "掃描時蒐集尚未開放。",
+        "closed": "掃描時蒐集已關閉。"
+      },
+      "emailWithdrawn": "參加者已於 {time} 停止分享電子郵件",
+      "emailNotShared": "未分享電子郵件",
+      "capturedAt": "掃描於 {time}{count, plural, =1 {} other { · # 次}}",
+      "scannedBy": "掃描者：{email}",
+      "editLabel": "潛在客戶詳細資料",
+      "rating": "評等",
+      "ratings": {
+        "hot": "熱",
+        "warm": "溫",
+        "cold": "冷",
+        "none": "未評等"
+      },
+      "qualifiers": "資格條件",
+      "notes": "備註",
+      "saveDetails": "儲存詳細資料",
+      "saved": "已儲存。",
+      "savedQueued": "已隨掃描儲存，連線後同步。",
+      "needsConnection": "請連上網路以儲存此潛在客戶的變更。",
+      "saveFailed": "無法儲存，請再試一次。",
+      "accessEnded": "本活動的潛在客戶存取已結束。",
+      "scope": {
+        "all": "{exhibitor} 的所有潛在客戶",
+        "team": "你團隊的潛在客戶",
+        "own": "你的潛在客戶"
+      },
+      "emptyTitle": "尚無潛在客戶",
+      "emptyDescription": "在「掃描」分頁掃描識別證，儲存你的第一筆潛在客戶。",
+      "search": "搜尋潛在客戶",
+      "noMatch": "沒有符合搜尋條件的潛在客戶。",
+      "edit": "編輯 {name}"
+    }
   }
 }

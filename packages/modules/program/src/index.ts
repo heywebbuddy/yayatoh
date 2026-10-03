@@ -153,7 +153,7 @@ export {
   reserveLeadLicensesTx,
   saveLeadLicenseSettingsCommand,
 } from './lead-licenses.ts';
-export { exhibitorNamesTx, leadSeatStandingTx } from './lead-seat.ts';
+export { eventHasExhibitorsTx, exhibitorNamesTx, leadSeatStandingTx } from './lead-seat.ts';
 export {
   createExhibitorCommand,
   createSpeakerCommand,

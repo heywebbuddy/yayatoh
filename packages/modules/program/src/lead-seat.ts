@@ -47,3 +47,13 @@ export async function exhibitorNamesTx(tx: TenantTx, ids: readonly string[]): Pr
     .where(inArray(exhibitors.id, [...ids]));
   return new Map(rows.map((r) => [r.id, r.name]));
 }
+
+/** M5.6b: whether an event has exhibitors (the attendee's "who scanned me" shows only then). */
+export async function eventHasExhibitorsTx(tx: TenantTx, eventId: string): Promise<boolean> {
+  const [row] = await tx
+    .select({ id: exhibitors.id })
+    .from(exhibitors)
+    .where(eq(exhibitors.eventId, eventId))
+    .limit(1);
+  return Boolean(row);
+}

@@ -11215,5 +11215,170 @@
       "notForSale": "Le licenze extra non sono in vendita.",
       "pending": "Un acquisto è già in attesa di pagamento."
     }
+  },
+  "leads": {
+    "portal": {
+      "heading": "Acquisizione contatti",
+      "window": "L’acquisizione apre il {opens} e chiude il {closes} (ora dell’evento). Note ed esportazione restano disponibili fino al {until}.",
+      "termsNeededAdmin": "Accetta qui sotto le condizioni dei contatti prima che il tuo team possa acquisirli.",
+      "termsNeededStaff": "L’amministratore del tuo espositore deve accettare le condizioni dei contatti prima che tu possa acquisirli.",
+      "why": {
+        "unlicensed": "Non hai ancora una licenza contatti. Chiedila all’amministratore del tuo espositore.",
+        "over_allowance": "La tua licenza supera la quota del tuo espositore. Chiedi all’amministratore di ritirarne una o di acquistarne altre."
+      },
+      "open": "Apri l’acquisizione contatti"
+    },
+    "license": {
+      "licensed": "Con licenza",
+      "unlicensed": "Senza licenza",
+      "over_allowance": "Oltre la quota"
+    },
+    "capture": {
+      "not_open": "Acquisizione non ancora aperta",
+      "open": "Acquisizione aperta",
+      "closed": "Acquisizione chiusa"
+    },
+    "terms": {
+      "heading": "Condizioni dei contatti",
+      "v1": "Quando scansioni il badge di un partecipante, ricevi solo nome, ruolo e azienda, e l’email solo se ha accettato di condividerla. La tua azienda diventa responsabile di questi dati: usali solo per dare seguito alla conversazione avuta a questo evento, proteggili e cancellali su richiesta. I partecipanti vedono che li hai scansionati e possono smettere di condividere la loro email.",
+      "accepted": "Condizioni dei contatti accettate",
+      "acceptLabel": "Accettazione",
+      "accept": "Accetto le condizioni dei contatti per conto di {exhibitor}",
+      "submit": "Accetta le condizioni dei contatti",
+      "acceptRequired": "Seleziona la casella per accettare le condizioni dei contatti."
+    },
+    "settings": {
+      "heading": "Qualificatori e visibilità",
+      "qualifiers": "Qualificatori",
+      "qualifiersHint": "Uno per riga, fino a 10 (ad esempio: Budget approvato). Il tuo team li spunta su ogni contatto.",
+      "visibility": "Chi vede i contatti",
+      "teamVisibility": "Lo staff vede i contatti di tutto il team (altrimenti solo quelli che ha scansionato)",
+      "save": "Salva le impostazioni dei contatti",
+      "saved": "Impostazioni dei contatti salvate.",
+      "qualifiersInvalid": "Ogni qualificatore può avere al massimo 60 caratteri.",
+      "tooMany": "Puoi avere al massimo 10 qualificatori."
+    },
+    "export": {
+      "heading": "Esporta i contatti",
+      "ready": "Confermato. Ora puoi scaricare i tuoi contatti.",
+      "count": "{count, plural, =0 {Ancora nessun contatto} one {# contatto} other {# contatti}}",
+      "hint": "Per la tua sicurezza, prima del download ti inviamo un codice via email per confermare che sei tu.",
+      "download": "Scarica i contatti (CSV)",
+      "ended": "L’accesso ai contatti di questo evento è terminato.",
+      "columns": {
+        "name": "Nome",
+        "jobTitle": "Ruolo",
+        "company": "Azienda",
+        "email": "Email",
+        "rating": "Valutazione",
+        "qualifiers": "Qualificatori",
+        "notes": "Note",
+        "capturedAt": "Scansionato il",
+        "scannedBy": "Scansionato da",
+        "scans": "Scansioni",
+        "sharedFields": "Campi condivisi",
+        "emailConsentVersion": "Versione del consenso email"
+      }
+    },
+    "confirm": {
+      "title": "Conferma che sei tu",
+      "intro": "Per scaricare i tuoi contatti, conferma con un codice che inviamo a {email}."
+    },
+    "attendee": {
+      "heading": "Chi ha scansionato il mio badge",
+      "emptyTitle": "Nessuno ha ancora scansionato il tuo badge",
+      "emptyDescription": "Quando un espositore scansiona il tuo badge, lo vedrai qui.",
+      "scannedAt": "Scansionato il {time}",
+      "emailShared": "Ha la tua email",
+      "emailWithdrawn": "Condivisione email interrotta",
+      "emailNotShared": "Email non condivisa",
+      "withdraw": "Smetti di condividere la mia email con {exhibitor}",
+      "withdrawn": "Fatto. Non vede più la tua email.",
+      "sharingOn": "Gli espositori che scansionano il tuo badge ricevono la tua email.",
+      "sharingOff": "Gli espositori che scansionano il tuo badge non ricevono la tua email.",
+      "sharingHint": "Ricevono sempre nome, ruolo e azienda. Mai il telefono o l’indirizzo.",
+      "turnOff": "Smetti di condividere la mia email con gli espositori",
+      "turnOn": "Condividi la mia email con gli espositori che scansionano il mio badge",
+      "saved": "Salvato."
+    },
+    "app": {
+      "pageTitle": "Acquisizione contatti",
+      "loading": "Caricamento…",
+      "signedOutTitle": "Accedi per acquisire contatti",
+      "signedOutDescription": "Apri su questo dispositivo il link di accesso dell’email di invito espositore, poi torna all’acquisizione contatti.",
+      "openPortal": "Vai al portale espositori",
+      "title": "Contatti di {exhibitor}",
+      "online": "Online",
+      "offline": "Offline: le scansioni sono salvate su questo dispositivo",
+      "queued": "{count, plural, =0 {Tutto sincronizzato} one {# scansione da sincronizzare} other {# scansioni da sincronizzare}}",
+      "modes": "Viste dell’acquisizione contatti",
+      "viewScan": "Scansiona",
+      "viewLeads": "{count, plural, =0 {Contatti} other {Contatti (#)}}",
+      "blockedTitle": "Ora non puoi acquisire contatti",
+      "blocked": {
+        "unlicensed": "Non hai una licenza contatti. Chiedila all’amministratore del tuo espositore.",
+        "over_allowance": "La tua licenza supera la quota del tuo espositore. Rivolgiti all’amministratore.",
+        "termsAdmin": "Accetta prima le condizioni dei contatti nel portale espositori.",
+        "termsStaff": "L’amministratore del tuo espositore deve prima accettare le condizioni dei contatti.",
+        "notOpen": "L’acquisizione apre il {time}.",
+        "closed": "L’acquisizione ha chiuso il {time}. Puoi ancora leggere e modificare i tuoi contatti."
+      },
+      "codeLabel": "Codice del badge",
+      "codeHint": "Scansiona il QR del badge o digita il codice stampato sotto.",
+      "save": "Salva contatto",
+      "camera": "Scansiona con la fotocamera",
+      "stopCamera": "Ferma la fotocamera",
+      "cameraFailed": "Impossibile avviare la fotocamera. Digita il codice del badge.",
+      "refusals": {
+        "no_license": "Non hai una licenza contatti. Chiedila all’amministratore del tuo espositore.",
+        "over_allowance": "La tua licenza supera la quota del tuo espositore. Le scansioni restano su questo dispositivo.",
+        "terms_not_accepted": "Le condizioni dei contatti non sono ancora accettate. Le scansioni restano su questo dispositivo.",
+        "access_ended": "L’accesso ai contatti di questo evento è terminato.",
+        "other": "Qualcosa è andato storto. Le scansioni restano su questo dispositivo; riprova."
+      },
+      "result": {
+        "queued": "Salvato su questo dispositivo",
+        "queuedHint": "I dettagli compaiono dopo la sincronizzazione.",
+        "refused": "Non salvato",
+        "captured": "Contatto salvato",
+        "rescanned": "Già un contatto: scansione aggiunta"
+      },
+      "reasons": {
+        "invalid": "Impossibile leggere questo badge. Controlla il codice e riprova.",
+        "wrong_event": "Questo badge è di un altro evento.",
+        "not_open": "È stato scansionato prima dell’apertura dell’acquisizione.",
+        "closed": "È stato scansionato dopo la chiusura dell’acquisizione."
+      },
+      "emailWithdrawn": "Il partecipante ha interrotto la condivisione dell’email il {time}",
+      "emailNotShared": "Email non condivisa",
+      "capturedAt": "Scansionato il {time}{count, plural, one {} other { · # scansioni}}",
+      "scannedBy": "da {email}",
+      "editLabel": "Dettagli del contatto",
+      "rating": "Valutazione",
+      "ratings": {
+        "hot": "Caldo",
+        "warm": "Tiepido",
+        "cold": "Freddo",
+        "none": "Nessuna valutazione"
+      },
+      "qualifiers": "Qualificatori",
+      "notes": "Note",
+      "saveDetails": "Salva i dettagli",
+      "saved": "Salvato.",
+      "savedQueued": "Salvato con la scansione. Si sincronizza quando sei online.",
+      "needsConnection": "Connettiti a internet per salvare le modifiche a questo contatto.",
+      "saveFailed": "Salvataggio non riuscito. Riprova.",
+      "accessEnded": "L’accesso ai contatti di questo evento è terminato.",
+      "scope": {
+        "all": "Tutti i contatti di {exhibitor}",
+        "team": "I contatti del tuo team",
+        "own": "I tuoi contatti"
+      },
+      "emptyTitle": "Ancora nessun contatto",
+      "emptyDescription": "Scansiona un badge nella scheda Scansiona per salvare il tuo primo contatto.",
+      "search": "Cerca contatti",
+      "noMatch": "Nessun contatto corrisponde alla ricerca.",
+      "edit": "Modifica {name}"
+    }
   }
 }

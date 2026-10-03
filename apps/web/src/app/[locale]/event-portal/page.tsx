@@ -34,7 +34,7 @@ export default async function SpeakerPortalPage({
   searchParams,
 }: {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ signedOut?: string; logo?: string; paid?: string }>;
+  searchParams: Promise<{ signedOut?: string; logo?: string; paid?: string; export?: string }>;
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
@@ -46,6 +46,7 @@ export default async function SpeakerPortalPage({
         locale={locale}
         logoParam={(await searchParams).logo}
         paid={(await searchParams).paid === '1'}
+        exportReady={(await searchParams).export === 'ready'}
       />
     );
   // M5.4b: a sponsor contact sees the sponsor portal.

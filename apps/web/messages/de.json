@@ -11215,5 +11215,170 @@
       "notForSale": "Zusätzliche Lizenzen werden nicht verkauft.",
       "pending": "Ein Kauf wartet bereits auf Zahlung."
     }
+  },
+  "leads": {
+    "portal": {
+      "heading": "Lead-Erfassung",
+      "window": "Die Erfassung öffnet am {opens} und schließt am {closes} (Veranstaltungszeit). Notizen und Export bleiben bis {until} verfügbar.",
+      "termsNeededAdmin": "Akzeptieren Sie unten die Lead-Bedingungen, bevor Ihr Team Leads erfassen kann.",
+      "termsNeededStaff": "Ihr Aussteller-Admin muss die Lead-Bedingungen akzeptieren, bevor Sie Leads erfassen können.",
+      "why": {
+        "unlicensed": "Sie haben noch keine Lead-Lizenz. Fragen Sie Ihren Aussteller-Admin danach.",
+        "over_allowance": "Ihre Lizenz liegt über dem Kontingent Ihres Ausstellers. Bitten Sie Ihren Aussteller-Admin, eine zurückzunehmen oder weitere zu kaufen."
+      },
+      "open": "Lead-Erfassung öffnen"
+    },
+    "license": {
+      "licensed": "Lizenziert",
+      "unlicensed": "Keine Lizenz",
+      "over_allowance": "Über dem Kontingent"
+    },
+    "capture": {
+      "not_open": "Erfassung noch nicht geöffnet",
+      "open": "Erfassung geöffnet",
+      "closed": "Erfassung geschlossen"
+    },
+    "terms": {
+      "heading": "Lead-Bedingungen",
+      "v1": "Wenn Sie das Namensschild einer teilnehmenden Person scannen, erhalten Sie nur Name, Berufsbezeichnung und Unternehmen, die E-Mail-Adresse nur, wenn die Person der Weitergabe zugestimmt hat. Ihr Unternehmen wird für diese Daten verantwortlich: Nutzen Sie sie nur, um an Ihr Gespräch auf dieser Veranstaltung anzuknüpfen, schützen Sie sie und löschen Sie sie auf Anfrage. Teilnehmende sehen, dass Sie sie gescannt haben, und können die Weitergabe ihrer E-Mail-Adresse beenden.",
+      "accepted": "Lead-Bedingungen akzeptiert",
+      "acceptLabel": "Zustimmung",
+      "accept": "Ich akzeptiere die Lead-Bedingungen im Namen von {exhibitor}",
+      "submit": "Lead-Bedingungen akzeptieren",
+      "acceptRequired": "Setzen Sie das Häkchen, um die Lead-Bedingungen zu akzeptieren."
+    },
+    "settings": {
+      "heading": "Qualifizierungen und Sichtbarkeit",
+      "qualifiers": "Qualifizierungen",
+      "qualifiersHint": "Eine pro Zeile, höchstens 10 (zum Beispiel: Budget genehmigt). Ihr Team hakt sie bei jedem Lead ab.",
+      "visibility": "Wer Leads sieht",
+      "teamVisibility": "Mitarbeitende sehen die Leads des ganzen Teams (sonst nur die selbst gescannten)",
+      "save": "Lead-Einstellungen speichern",
+      "saved": "Lead-Einstellungen gespeichert.",
+      "qualifiersInvalid": "Jede Qualifizierung darf höchstens 60 Zeichen lang sein.",
+      "tooMany": "Sie können höchstens 10 Qualifizierungen haben."
+    },
+    "export": {
+      "heading": "Leads exportieren",
+      "ready": "Bestätigt. Sie können Ihre Leads jetzt herunterladen.",
+      "count": "{count, plural, =0 {Noch keine Leads} one {# Lead} other {# Leads}}",
+      "hint": "Zu Ihrer Sicherheit senden wir Ihnen vor dem Download einen Code per E-Mail, um zu bestätigen, dass Sie es sind.",
+      "download": "Leads herunterladen (CSV)",
+      "ended": "Der Zugriff auf Leads ist für diese Veranstaltung beendet.",
+      "columns": {
+        "name": "Name",
+        "jobTitle": "Berufsbezeichnung",
+        "company": "Unternehmen",
+        "email": "E-Mail",
+        "rating": "Bewertung",
+        "qualifiers": "Qualifizierungen",
+        "notes": "Notizen",
+        "capturedAt": "Gescannt am",
+        "scannedBy": "Gescannt von",
+        "scans": "Scans",
+        "sharedFields": "Geteilte Felder",
+        "emailConsentVersion": "Version der E-Mail-Einwilligung"
+      }
+    },
+    "confirm": {
+      "title": "Bestätigen Sie, dass Sie es sind",
+      "intro": "Um Ihre Leads herunterzuladen, bestätigen Sie mit einem Code, den wir an {email} senden."
+    },
+    "attendee": {
+      "heading": "Wer mein Namensschild gescannt hat",
+      "emptyTitle": "Noch niemand hat Ihr Namensschild gescannt",
+      "emptyDescription": "Wenn ein Aussteller Ihr Namensschild scannt, sehen Sie ihn hier.",
+      "scannedAt": "Gescannt am {time}",
+      "emailShared": "Hat Ihre E-Mail-Adresse",
+      "emailWithdrawn": "E-Mail-Weitergabe beendet",
+      "emailNotShared": "E-Mail-Adresse nicht geteilt",
+      "withdraw": "Meine E-Mail-Adresse nicht mehr mit {exhibitor} teilen",
+      "withdrawn": "Erledigt. Ihre E-Mail-Adresse ist dort nicht mehr sichtbar.",
+      "sharingOn": "Aussteller, die Ihr Namensschild scannen, erhalten Ihre E-Mail-Adresse.",
+      "sharingOff": "Aussteller, die Ihr Namensschild scannen, erhalten Ihre E-Mail-Adresse nicht.",
+      "sharingHint": "Sie erhalten immer Ihren Namen, Ihre Berufsbezeichnung und Ihr Unternehmen. Nie Ihre Telefonnummer oder Adresse.",
+      "turnOff": "Meine E-Mail-Adresse nicht mehr mit Ausstellern teilen",
+      "turnOn": "Meine E-Mail-Adresse mit Ausstellern teilen, die mein Namensschild scannen",
+      "saved": "Gespeichert."
+    },
+    "app": {
+      "pageTitle": "Lead-Erfassung",
+      "loading": "Wird geladen…",
+      "signedOutTitle": "Melden Sie sich an, um Leads zu erfassen",
+      "signedOutDescription": "Öffnen Sie den Anmeldelink aus Ihrer Aussteller-Einladung auf diesem Gerät und kehren Sie dann zur Lead-Erfassung zurück.",
+      "openPortal": "Zum Aussteller-Portal",
+      "title": "Leads für {exhibitor}",
+      "online": "Online",
+      "offline": "Offline: Scans werden auf diesem Gerät gespeichert",
+      "queued": "{count, plural, =0 {Alles synchronisiert} one {# Scan wartet auf Synchronisierung} other {# Scans warten auf Synchronisierung}}",
+      "modes": "Ansichten der Lead-Erfassung",
+      "viewScan": "Scannen",
+      "viewLeads": "{count, plural, =0 {Leads} other {Leads (#)}}",
+      "blockedTitle": "Sie können gerade keine Leads erfassen",
+      "blocked": {
+        "unlicensed": "Sie haben keine Lead-Lizenz. Fragen Sie Ihren Aussteller-Admin danach.",
+        "over_allowance": "Ihre Lizenz liegt über dem Kontingent Ihres Ausstellers. Fragen Sie Ihren Aussteller-Admin.",
+        "termsAdmin": "Akzeptieren Sie zuerst die Lead-Bedingungen im Aussteller-Portal.",
+        "termsStaff": "Ihr Aussteller-Admin muss zuerst die Lead-Bedingungen akzeptieren.",
+        "notOpen": "Die Erfassung öffnet am {time}.",
+        "closed": "Die Erfassung wurde am {time} geschlossen. Sie können Ihre Leads weiterhin lesen und bearbeiten."
+      },
+      "codeLabel": "Code des Namensschilds",
+      "codeHint": "Scannen Sie den QR-Code auf dem Namensschild oder geben Sie den darunter gedruckten Code ein.",
+      "save": "Lead speichern",
+      "camera": "Mit Kamera scannen",
+      "stopCamera": "Kamera stoppen",
+      "cameraFailed": "Die Kamera konnte nicht starten. Geben Sie stattdessen den Code ein.",
+      "refusals": {
+        "no_license": "Sie haben keine Lead-Lizenz. Fragen Sie Ihren Aussteller-Admin danach.",
+        "over_allowance": "Ihre Lizenz liegt über dem Kontingent Ihres Ausstellers. Ihre Scans warten auf diesem Gerät.",
+        "terms_not_accepted": "Die Lead-Bedingungen sind noch nicht akzeptiert. Ihre Scans warten auf diesem Gerät.",
+        "access_ended": "Der Zugriff auf Leads ist für diese Veranstaltung beendet.",
+        "other": "Etwas ist schiefgelaufen. Ihre Scans warten auf diesem Gerät; versuchen Sie es erneut."
+      },
+      "result": {
+        "queued": "Auf diesem Gerät gespeichert",
+        "queuedHint": "Die Details erscheinen nach der Synchronisierung.",
+        "refused": "Nicht gespeichert",
+        "captured": "Lead gespeichert",
+        "rescanned": "Bereits ein Lead: Scan hinzugefügt"
+      },
+      "reasons": {
+        "invalid": "Dieses Namensschild kann nicht gelesen werden. Prüfen Sie den Code und versuchen Sie es erneut.",
+        "wrong_event": "Dieses Namensschild gehört zu einer anderen Veranstaltung.",
+        "not_open": "Es wurde gescannt, bevor die Erfassung geöffnet war.",
+        "closed": "Es wurde gescannt, nachdem die Erfassung geschlossen war."
+      },
+      "emailWithdrawn": "E-Mail-Weitergabe am {time} von der teilnehmenden Person beendet",
+      "emailNotShared": "E-Mail-Adresse nicht geteilt",
+      "capturedAt": "Gescannt am {time}{count, plural, one {} other { · # Scans}}",
+      "scannedBy": "von {email}",
+      "editLabel": "Lead-Details",
+      "rating": "Bewertung",
+      "ratings": {
+        "hot": "Heiß",
+        "warm": "Warm",
+        "cold": "Kalt",
+        "none": "Keine Bewertung"
+      },
+      "qualifiers": "Qualifizierungen",
+      "notes": "Notizen",
+      "saveDetails": "Details speichern",
+      "saved": "Gespeichert.",
+      "savedQueued": "Mit dem Scan gespeichert. Wird synchronisiert, sobald Sie online sind.",
+      "needsConnection": "Stellen Sie eine Internetverbindung her, um Änderungen an diesem Lead zu speichern.",
+      "saveFailed": "Speichern fehlgeschlagen. Versuchen Sie es erneut.",
+      "accessEnded": "Der Zugriff auf Leads ist für diese Veranstaltung beendet.",
+      "scope": {
+        "all": "Alle Leads von {exhibitor}",
+        "team": "Die Leads Ihres Teams",
+        "own": "Ihre Leads"
+      },
+      "emptyTitle": "Noch keine Leads",
+      "emptyDescription": "Scannen Sie im Tab „Scannen“ ein Namensschild, um Ihren ersten Lead zu speichern.",
+      "search": "Leads durchsuchen",
+      "noMatch": "Kein Lead passt zu Ihrer Suche.",
+      "edit": "{name} bearbeiten"
+    }
   }
 }

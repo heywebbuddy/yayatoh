@@ -11215,5 +11215,170 @@
       "notForSale": "Licenças extras não estão à venda.",
       "pending": "Já há uma compra aguardando pagamento."
     }
+  },
+  "leads": {
+    "portal": {
+      "heading": "Captação de leads",
+      "window": "A captação abre em {opens} e fecha em {closes} (horário do evento). Notas e exportação ficam disponíveis até {until}.",
+      "termsNeededAdmin": "Aceite abaixo os termos de leads para que sua equipe possa captar leads.",
+      "termsNeededStaff": "O administrador do seu expositor precisa aceitar os termos de leads antes que você possa captar leads.",
+      "why": {
+        "unlicensed": "Você ainda não tem uma licença de leads. Peça uma ao administrador do seu expositor.",
+        "over_allowance": "Sua licença excede a cota do seu expositor. Peça ao administrador para retirar uma ou comprar mais."
+      },
+      "open": "Abrir a captação de leads"
+    },
+    "license": {
+      "licensed": "Com licença",
+      "unlicensed": "Sem licença",
+      "over_allowance": "Acima da cota"
+    },
+    "capture": {
+      "not_open": "Captação ainda não aberta",
+      "open": "Captação aberta",
+      "closed": "Captação encerrada"
+    },
+    "terms": {
+      "heading": "Termos de leads",
+      "v1": "Ao escanear o crachá de um participante, você recebe apenas nome, cargo e empresa, e o e-mail somente se a pessoa concordou em compartilhá-lo. Sua empresa passa a ser responsável por esses dados: use-os apenas para dar continuidade à conversa neste evento, mantenha-os seguros e exclua-os quando solicitado. Os participantes veem que você os escaneou e podem deixar de compartilhar o e-mail.",
+      "accepted": "Termos de leads aceitos",
+      "acceptLabel": "Concordância",
+      "accept": "Aceito os termos de leads em nome de {exhibitor}",
+      "submit": "Aceitar os termos de leads",
+      "acceptRequired": "Marque a caixa para aceitar os termos de leads."
+    },
+    "settings": {
+      "heading": "Qualificadores e visibilidade",
+      "qualifiers": "Qualificadores",
+      "qualifiersHint": "Um por linha, até 10 (por exemplo: Orçamento aprovado). Sua equipe os marca em cada lead.",
+      "visibility": "Quem vê os leads",
+      "teamVisibility": "A equipe vê os leads de todo o time (caso contrário, só os que escaneou)",
+      "save": "Salvar configurações de leads",
+      "saved": "Configurações de leads salvas.",
+      "qualifiersInvalid": "Cada qualificador pode ter no máximo 60 caracteres.",
+      "tooMany": "Você pode ter no máximo 10 qualificadores."
+    },
+    "export": {
+      "heading": "Exportar leads",
+      "ready": "Confirmado. Você já pode baixar seus leads.",
+      "count": "{count, plural, =0 {Nenhum lead ainda} one {# lead} other {# leads}}",
+      "hint": "Para sua segurança, enviamos um código por e-mail para confirmar que é você antes do download.",
+      "download": "Baixar leads (CSV)",
+      "ended": "O acesso aos leads deste evento terminou.",
+      "columns": {
+        "name": "Nome",
+        "jobTitle": "Cargo",
+        "company": "Empresa",
+        "email": "E-mail",
+        "rating": "Classificação",
+        "qualifiers": "Qualificadores",
+        "notes": "Notas",
+        "capturedAt": "Escaneado em",
+        "scannedBy": "Escaneado por",
+        "scans": "Leituras",
+        "sharedFields": "Campos compartilhados",
+        "emailConsentVersion": "Versão do consentimento de e-mail"
+      }
+    },
+    "confirm": {
+      "title": "Confirme que é você",
+      "intro": "Para baixar seus leads, confirme com um código que enviamos para {email}."
+    },
+    "attendee": {
+      "heading": "Quem escaneou meu crachá",
+      "emptyTitle": "Ninguém escaneou seu crachá ainda",
+      "emptyDescription": "Quando um expositor escanear seu crachá, ele aparecerá aqui.",
+      "scannedAt": "Escaneado em {time}",
+      "emailShared": "Tem seu e-mail",
+      "emailWithdrawn": "Compartilhamento de e-mail interrompido",
+      "emailNotShared": "E-mail não compartilhado",
+      "withdraw": "Parar de compartilhar meu e-mail com {exhibitor}",
+      "withdrawn": "Pronto. Eles não veem mais seu e-mail.",
+      "sharingOn": "Expositores que escaneiam seu crachá recebem seu e-mail.",
+      "sharingOff": "Expositores que escaneiam seu crachá não recebem seu e-mail.",
+      "sharingHint": "Eles sempre recebem seu nome, cargo e empresa. Nunca seu telefone ou endereço.",
+      "turnOff": "Parar de compartilhar meu e-mail com expositores",
+      "turnOn": "Compartilhar meu e-mail com expositores que escanearem meu crachá",
+      "saved": "Salvo."
+    },
+    "app": {
+      "pageTitle": "Captação de leads",
+      "loading": "Carregando…",
+      "signedOutTitle": "Entre para captar leads",
+      "signedOutDescription": "Abra neste dispositivo o link de acesso do e-mail de convite de expositor e volte para a captação de leads.",
+      "openPortal": "Ir para o portal do expositor",
+      "title": "Leads de {exhibitor}",
+      "online": "On-line",
+      "offline": "Off-line: as leituras ficam salvas neste dispositivo",
+      "queued": "{count, plural, =0 {Tudo sincronizado} one {# leitura aguardando sincronização} other {# leituras aguardando sincronização}}",
+      "modes": "Visualizações da captação de leads",
+      "viewScan": "Escanear",
+      "viewLeads": "{count, plural, =0 {Leads} other {Leads (#)}}",
+      "blockedTitle": "Você não pode captar leads agora",
+      "blocked": {
+        "unlicensed": "Você não tem licença de leads. Peça uma ao administrador do seu expositor.",
+        "over_allowance": "Sua licença excede a cota do seu expositor. Fale com o administrador.",
+        "termsAdmin": "Aceite primeiro os termos de leads no portal do expositor.",
+        "termsStaff": "O administrador do seu expositor precisa aceitar primeiro os termos de leads.",
+        "notOpen": "A captação abre em {time}.",
+        "closed": "A captação encerrou em {time}. Você ainda pode ler e editar seus leads."
+      },
+      "codeLabel": "Código do crachá",
+      "codeHint": "Escaneie o QR do crachá ou digite o código impresso abaixo dele.",
+      "save": "Salvar lead",
+      "camera": "Escanear com a câmera",
+      "stopCamera": "Parar a câmera",
+      "cameraFailed": "Não foi possível iniciar a câmera. Digite o código do crachá.",
+      "refusals": {
+        "no_license": "Você não tem licença de leads. Peça uma ao administrador do seu expositor.",
+        "over_allowance": "Sua licença excede a cota do seu expositor. Suas leituras aguardam neste dispositivo.",
+        "terms_not_accepted": "Os termos de leads ainda não foram aceitos. Suas leituras aguardam neste dispositivo.",
+        "access_ended": "O acesso aos leads deste evento terminou.",
+        "other": "Algo deu errado. Suas leituras aguardam neste dispositivo; tente novamente."
+      },
+      "result": {
+        "queued": "Salvo neste dispositivo",
+        "queuedHint": "Os detalhes aparecem após a sincronização.",
+        "refused": "Não salvo",
+        "captured": "Lead salvo",
+        "rescanned": "Já é um lead: leitura adicionada"
+      },
+      "reasons": {
+        "invalid": "Não foi possível ler este crachá. Verifique o código e tente novamente.",
+        "wrong_event": "Este crachá é de outro evento.",
+        "not_open": "Foi escaneado antes de a captação abrir.",
+        "closed": "Foi escaneado depois de a captação fechar."
+      },
+      "emailWithdrawn": "O participante parou de compartilhar o e-mail em {time}",
+      "emailNotShared": "E-mail não compartilhado",
+      "capturedAt": "Escaneado em {time}{count, plural, one {} other { · # leituras}}",
+      "scannedBy": "por {email}",
+      "editLabel": "Detalhes do lead",
+      "rating": "Classificação",
+      "ratings": {
+        "hot": "Quente",
+        "warm": "Morno",
+        "cold": "Frio",
+        "none": "Sem classificação"
+      },
+      "qualifiers": "Qualificadores",
+      "notes": "Notas",
+      "saveDetails": "Salvar detalhes",
+      "saved": "Salvo.",
+      "savedQueued": "Salvo com a leitura. Sincroniza quando você estiver on-line.",
+      "needsConnection": "Conecte-se à internet para salvar alterações neste lead.",
+      "saveFailed": "Não foi possível salvar. Tente novamente.",
+      "accessEnded": "O acesso aos leads deste evento terminou.",
+      "scope": {
+        "all": "Todos os leads de {exhibitor}",
+        "team": "Os leads da sua equipe",
+        "own": "Seus leads"
+      },
+      "emptyTitle": "Nenhum lead ainda",
+      "emptyDescription": "Escaneie um crachá na aba Escanear para salvar seu primeiro lead.",
+      "search": "Buscar leads",
+      "noMatch": "Nenhum lead corresponde à sua busca.",
+      "edit": "Editar {name}"
+    }
   }
 }

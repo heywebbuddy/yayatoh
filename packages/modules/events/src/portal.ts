@@ -775,3 +775,17 @@ export function portalInviteMailer(deps: { notifier: Notifier; appOrigin: string
     },
   });
 }
+
+/**
+ * M5.6b step-up for a signed-in portal person: their current invitation token, so the one sign-in
+ * flow can email them a fresh code (a new sign-in is the re-authentication). Null when gone.
+ */
+export async function portalStepUpInviteToken(orgId: string, accountId: string): Promise<string | null> {
+  const [a] = await withTenant(systemCtx(orgId), (tx) =>
+    tx
+      .select({ v: portalAccounts.inviteVersion })
+      .from(portalAccounts)
+      .where(and(eq(portalAccounts.id, accountId), isNull(portalAccounts.revokedAt))),
+  );
+  return a ? portalInviteToken(orgId, accountId, a.v) : null;
+}

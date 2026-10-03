@@ -9,7 +9,7 @@ import {
 import type { TenantTx } from '@yayatoh/db';
 import { type Ctx, DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
-import { exhibitorNamesTx } from '@yayatoh/program';
+import { eventHasExhibitorsTx, exhibitorNamesTx } from '@yayatoh/program';
 import { holderLinkTicketsTx } from '@yayatoh/ticketing';
 import { and, desc, eq, inArray } from 'drizzle-orm';
 import { z } from 'zod';
@@ -54,6 +54,7 @@ export const whoScannedMeQuery = tenantQuery({
     const { link, rows } = await myLeadsTx(tx, ctx, input.linkId);
     const names = await exhibitorNamesTx(tx, [...new Set(rows.map((r) => r.exhibitorId))]);
     return whoScannedMeSerializer.serialize({
+      hasExhibitors: rows.length > 0 || (await eventHasExhibitorsTx(tx, link.eventId)),
       emailSharing: await sharingTx(tx, link.email),
       scans: rows.map((r) => ({
         leadId: r.id,

@@ -11215,5 +11215,170 @@
       "notForSale": "Extra licenses are not for sale.",
       "pending": "A purchase is already waiting for payment."
     }
+  },
+  "leads": {
+    "portal": {
+      "heading": "Lead capture",
+      "window": "Capture opens {opens} and closes {closes} (event time). Notes and export stay open until {until}.",
+      "termsNeededAdmin": "Accept the lead terms below before your team can capture leads.",
+      "termsNeededStaff": "Your exhibitor admin needs to accept the lead terms before you can capture leads.",
+      "why": {
+        "unlicensed": "You don't have a lead license yet. Ask your exhibitor admin for one.",
+        "over_allowance": "Your license is beyond your exhibitor's allowance. Ask your exhibitor admin to take one back or buy more."
+      },
+      "open": "Open lead capture"
+    },
+    "license": {
+      "licensed": "Licensed",
+      "unlicensed": "No license",
+      "over_allowance": "Over the allowance"
+    },
+    "capture": {
+      "not_open": "Capture not open yet",
+      "open": "Capture open",
+      "closed": "Capture closed"
+    },
+    "terms": {
+      "heading": "Lead terms",
+      "v1": "When you scan an attendee's badge, you receive only their name, job title and company, and their email only if they agreed to share it. Your company becomes responsible for this data: use it only to follow up on your conversation at this event, keep it secure, and delete it when asked. Attendees can see that you scanned them and can stop sharing their email.",
+      "accepted": "Lead terms accepted",
+      "acceptLabel": "Agreement",
+      "accept": "I accept the lead terms on behalf of {exhibitor}",
+      "submit": "Accept the lead terms",
+      "acceptRequired": "Tick the box to accept the lead terms."
+    },
+    "settings": {
+      "heading": "Qualifiers and visibility",
+      "qualifiers": "Qualifiers",
+      "qualifiersHint": "One per line, up to 10 (for example: Budget approved). Your team ticks them on each lead.",
+      "visibility": "Who sees leads",
+      "teamVisibility": "Staff see the whole team's leads (otherwise only the leads they scanned)",
+      "save": "Save lead settings",
+      "saved": "Lead settings saved.",
+      "qualifiersInvalid": "Each qualifier can be at most 60 characters.",
+      "tooMany": "You can have at most 10 qualifiers."
+    },
+    "export": {
+      "heading": "Export leads",
+      "ready": "Confirmed. You can download your leads now.",
+      "count": "{count, plural, =0 {No leads yet} one {# lead} other {# leads}}",
+      "hint": "For your security, we email you a code to confirm it's you before the download.",
+      "download": "Download leads (CSV)",
+      "ended": "Lead access has ended for this event.",
+      "columns": {
+        "name": "Name",
+        "jobTitle": "Job title",
+        "company": "Company",
+        "email": "Email",
+        "rating": "Rating",
+        "qualifiers": "Qualifiers",
+        "notes": "Notes",
+        "capturedAt": "Scanned at",
+        "scannedBy": "Scanned by",
+        "scans": "Scans",
+        "sharedFields": "Shared fields",
+        "emailConsentVersion": "Email consent version"
+      }
+    },
+    "confirm": {
+      "title": "Confirm it's you",
+      "intro": "To download your leads, confirm with a code we email to {email}."
+    },
+    "attendee": {
+      "heading": "Who scanned my badge",
+      "emptyTitle": "Nobody has scanned your badge yet",
+      "emptyDescription": "When an exhibitor scans your badge, you'll see them here.",
+      "scannedAt": "Scanned {time}",
+      "emailShared": "Has your email",
+      "emailWithdrawn": "Email sharing stopped",
+      "emailNotShared": "Email not shared",
+      "withdraw": "Stop sharing my email with {exhibitor}",
+      "withdrawn": "Done. They no longer see your email.",
+      "sharingOn": "Exhibitors who scan your badge receive your email.",
+      "sharingOff": "Exhibitors who scan your badge don't receive your email.",
+      "sharingHint": "They always receive your name, job title and company. Never your phone or address.",
+      "turnOff": "Stop sharing my email with exhibitors",
+      "turnOn": "Share my email with exhibitors who scan my badge",
+      "saved": "Saved."
+    },
+    "app": {
+      "pageTitle": "Lead capture",
+      "loading": "Loading…",
+      "signedOutTitle": "Sign in to capture leads",
+      "signedOutDescription": "Open the sign-in link from your exhibitor invitation email on this device, then come back to lead capture.",
+      "openPortal": "Go to the exhibitor portal",
+      "title": "Leads for {exhibitor}",
+      "online": "Online",
+      "offline": "Offline: scans are saved on this device",
+      "queued": "{count, plural, =0 {All synced} one {# scan waiting to sync} other {# scans waiting to sync}}",
+      "modes": "Lead capture views",
+      "viewScan": "Scan",
+      "viewLeads": "{count, plural, =0 {Leads} other {Leads (#)}}",
+      "blockedTitle": "You can't capture leads right now",
+      "blocked": {
+        "unlicensed": "You don't have a lead license. Ask your exhibitor admin for one.",
+        "over_allowance": "Your license is beyond your exhibitor's allowance. Ask your exhibitor admin.",
+        "termsAdmin": "Accept the lead terms in the exhibitor portal first.",
+        "termsStaff": "Your exhibitor admin needs to accept the lead terms first.",
+        "notOpen": "Capture opens {time}.",
+        "closed": "Capture closed {time}. You can still read and edit your leads."
+      },
+      "codeLabel": "Badge code",
+      "codeHint": "Scan the QR on the badge, or type the code printed under it.",
+      "save": "Save lead",
+      "camera": "Scan with camera",
+      "stopCamera": "Stop camera",
+      "cameraFailed": "The camera couldn't start. Type the badge code instead.",
+      "refusals": {
+        "no_license": "You don't have a lead license. Ask your exhibitor admin for one.",
+        "over_allowance": "Your license is beyond your exhibitor's allowance. Your scans wait on this device.",
+        "terms_not_accepted": "The lead terms aren't accepted yet. Your scans wait on this device.",
+        "access_ended": "Lead access has ended for this event.",
+        "other": "Something went wrong. Your scans wait on this device; try again."
+      },
+      "result": {
+        "queued": "Saved on this device",
+        "queuedHint": "The details appear once it syncs.",
+        "refused": "Not saved",
+        "captured": "Lead saved",
+        "rescanned": "Already a lead: scan added"
+      },
+      "reasons": {
+        "invalid": "This badge can't be read. Check the code and try again.",
+        "wrong_event": "This badge is for another event.",
+        "not_open": "It was scanned before capture opened.",
+        "closed": "It was scanned after capture closed."
+      },
+      "emailWithdrawn": "Email sharing stopped by the attendee on {time}",
+      "emailNotShared": "Email not shared",
+      "capturedAt": "Scanned {time}{count, plural, one {} other { · # scans}}",
+      "scannedBy": "by {email}",
+      "editLabel": "Lead details",
+      "rating": "Rating",
+      "ratings": {
+        "hot": "Hot",
+        "warm": "Warm",
+        "cold": "Cold",
+        "none": "No rating"
+      },
+      "qualifiers": "Qualifiers",
+      "notes": "Notes",
+      "saveDetails": "Save details",
+      "saved": "Saved.",
+      "savedQueued": "Saved with the scan. It syncs when you're online.",
+      "needsConnection": "Connect to the internet to save changes to this lead.",
+      "saveFailed": "Couldn't save. Try again.",
+      "accessEnded": "Lead access has ended for this event.",
+      "scope": {
+        "all": "All leads of {exhibitor}",
+        "team": "Your team's leads",
+        "own": "Your leads"
+      },
+      "emptyTitle": "No leads yet",
+      "emptyDescription": "Scan a badge on the Scan tab to save your first lead.",
+      "search": "Search leads",
+      "noMatch": "No lead matches your search.",
+      "edit": "Edit {name}"
+    }
   }
 }
