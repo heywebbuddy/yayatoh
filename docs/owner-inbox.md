@@ -757,3 +757,9 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **Card saving at guest check-in (M4.8e on M4.4b):** right after a guest is checked in on the Scan PWA (and on the day-of page), while the event takes gifts online, staff show the event's card-saving code (`/events/{slug}/card?src=checkin`), not the party's own link: a party's link is a credential to its RSVP, so it is not put on door devices. A card saved there is matched to the guest's pledges by email.
 - [ ] **Badge printing with a balance due (M5.1d on M5.5b):** a print job for a registration whose invoice is unpaid needs the same audited override as before (10 minutes, this ticket); the override now opens the logged print page.
 - [ ] **Conference alerts read sponsor deliverables (M5.4b) and badge printers (M5.5b)** now that both are built; leads (M5.6b) are still not connected.
+
+## M6.9a — virtual v1 (2026-10-03, pending owner)
+- [ ] **Mux account (P6-9):** create the Mux account, a signing key for signed playback and an API access token. Put `VIDEO_PROVIDER=mux`, `MUX_SIGNING_KEY_ID` and `MUX_SIGNING_PRIVATE_KEY` (base64 of the PEM) in Doppler; the Video API calls (creating live streams, reading stream keys) are a stub until then, so production streaming stays off.
+- [ ] **Defaults:** a hybrid event's ticket types are in person until the organizer gives them online access; an online event's are online. A playback token lives 10 minutes (the player renews it); at most 60 viewings per ticket per session per hour. Confirm or adjust.
+- [ ] **Metering and markup (D24):** watch time is counted per attendee per minute (`viewer-minutes`); set the resale price per viewer-minute when billing meters (M6.6b) go live.
+- [ ] **Virtual-only tickets at the door:** check-in does not refuse a virtual-only ticket yet. Say if the door should refuse them (planned as a check-in port in M6.9b).
