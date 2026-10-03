@@ -186,6 +186,11 @@
       "guests": {
         "invitation": "Invitación de boda",
         "rsvp-reminder": "Recordatorio de confirmación"
+      },
+      "privacy": {
+        "request-code": "Código de solicitud de privacidad",
+        "archive-ready": "Archivo de datos personales listo",
+        "erasure-done": "Recibo de supresión"
       }
     },
     "status": {
@@ -1494,7 +1499,8 @@
   "legal": {
     "platform": "Yayatoh",
     "updated": "Última actualización: {date}",
-    "organizerPages": "Políticas de {org}"
+    "organizerPages": "Políticas de {org}",
+    "privacyRequest": "Pide una copia de tus datos o que se borren"
   },
   "setup": {
     "title": "Prepárate para vender · {done} de {total} listos",
@@ -2493,70 +2499,199 @@
   },
   "privacy": {
     "title": "Solicitudes de privacidad",
-    "description": "Responde a quienes preguntan qué datos tienes sobre ellos o piden ser olvidados. Cada solicitud queda registrada.",
+    "description": "Responde a quienes piden una copia de los datos que tienes sobre ellos o piden ser olvidados. Cada solicitud vence a los 30 días y queda registrada.",
     "noticeLink": "Aviso de privacidad de Yayatoh",
     "noAccessTitle": "Solo propietarios y administradores pueden gestionar solicitudes de privacidad",
-    "noAccessDescription": "Pide a un propietario o administrador de esta organización que ayude con una solicitud sobre los datos de alguien.",
+    "noAccessDescription": "Pide a un propietario o administrador de esta organización que te ayude con una solicitud sobre los datos de una persona.",
     "find": {
       "title": "Buscar a una persona",
-      "hint": "Busca por correo en contactos, pedidos, entradas, listas de invitados, respuestas y registros de acceso.",
+      "hint": "Busca por correo en todo lo que guarda esta organización: contactos, pedidos, entradas, listas de invitados, formularios, mensajes, ponentes y más.",
       "email": "Correo electrónico",
       "submit": "Buscar"
     },
     "result": {
       "title": "Lo que esta organización tiene sobre {email}",
       "noneTitle": "No se encontró nada para este correo",
-      "noneDescription": "Ningún contacto, pedido, entrada o invitado usa esta dirección en esta organización."
-    },
-    "categories": {
-      "contacts": "Registros de contacto",
-      "consents": "Registros de consentimiento",
-      "orders": "Pedidos",
-      "paidOrders": "Pedidos pagados (se conservan para contabilidad)",
-      "tickets": "Entradas",
-      "activeTickets": "Entradas válidas",
-      "claims": "Enlaces de transferencia de entradas",
-      "holderLinks": "Enlaces de acceso a entradas",
-      "attendees": "Entradas en listas de invitados",
-      "answers": "Respuestas del pago",
-      "admissions": "Registros de acceso",
-      "invitations": "Invitaciones al equipo"
-    },
-    "export": {
-      "title": "Exportar sus datos",
-      "hint": "Un archivo JSON con todo lo anterior para enviarlo a la persona. Se elimina a los 7 días.",
-      "submit": "Exportar datos (JSON)",
-      "download": "Descargar el archivo",
-      "running": "Preparando el archivo… recarga la página en un momento."
-    },
-    "erase": {
-      "title": "Borrar a esta persona",
-      "what": "Su nombre, correo, teléfono, respuestas y enlaces se eliminan de contactos, pedidos, entradas y listas de invitados, y se borran los archivos exportados que los mencionan.",
-      "holds": "{paid, plural, =0 {No hay pedidos pagados que conservar.} one {Se conserva # pedido pagado para impuestos y contabilidad, sin su nombre ni correo.} other {Se conservan # pedidos pagados para impuestos y contabilidad, sin su nombre ni correo.}}",
-      "tickets": "{active, plural, =0 {No tiene entradas válidas.} one {# entrada válida sigue siendo válida, sin nombre.} other {# entradas válidas siguen siendo válidas, sin nombre.}}",
-      "final": "No se puede deshacer.",
-      "confirm": "Escribe {email} para confirmar",
-      "submit": "Borrar datos personales",
-      "done": "Borrado. {records, plural, one {Se anonimizó o eliminó # registro} other {Se anonimizaron o eliminaron # registros}}; {kept, plural, =0 {no se conservó ningún pedido pagado} one {se conservó # pedido pagado sin datos personales} other {se conservaron # pedidos pagados sin datos personales}}."
+      "noneDescription": "Ningún registro de esta organización usa esta dirección. Aun así, puedes abrir una solicitud para responder formalmente a la persona."
     },
     "errors": {
       "invalidEmail": "Introduce un correo electrónico válido.",
       "confirmMismatch": "No coincide. Escribe el mismo correo para confirmar.",
-      "nothingHeld": "Ya no se guarda nada sobre este correo."
-    },
-    "history": {
-      "title": "Solicitudes anteriores",
-      "caption": "Solicitudes de privacidad, las más recientes primero",
-      "empty": "Aún no hay solicitudes.",
-      "when": "Cuándo",
-      "kind": "Solicitud",
-      "subject": "Persona",
-      "by": "Gestionada por",
-      "records": "Registros"
+      "kindRequired": "Elige qué pide la persona.",
+      "reasonRequired": "Indica un motivo de al menos 3 caracteres.",
+      "closed": "Esta solicitud ya está cerrada."
     },
     "kinds": {
-      "access": "Acceso (exportación)",
+      "access": "Acceso (copia)",
       "erasure": "Supresión"
+    },
+    "modules": {
+      "crm": "Contactos y consentimiento",
+      "orders": "Pedidos y listas de espera",
+      "ticketing": "Entradas",
+      "attendees": "Entradas en listas de invitados",
+      "forms": "Respuestas de formularios",
+      "checkin": "Registros de acceso",
+      "tenancy": "Invitaciones al equipo",
+      "notifications": "Mensajes enviados",
+      "seating": "Buscador de asientos",
+      "alerts": "Ajustes de alertas",
+      "guests": "Invitados de bodas y fiestas",
+      "messaging": "Conversaciones",
+      "assistance": "Solicitudes de ayuda",
+      "program": "Datos de ponentes",
+      "events": "Cuentas del portal",
+      "media": "Archivos subidos",
+      "cms": "Mensajes del formulario de contacto",
+      "venues": "Solicitudes de presupuesto de recintos",
+      "reviews": "Reseñas",
+      "payments": "Disputas de pago",
+      "surveys": "Respuestas de encuestas",
+      "registration": "Inscripciones",
+      "badges": "Credenciales",
+      "automations": "Recorridos",
+      "campaigns": "Envíos de campañas",
+      "audiences": "Audiencias",
+      "marketing": "Atribución de marketing",
+      "reports": "Eventos de analítica",
+      "privacy": "Solicitudes de privacidad",
+      "platform": "Exportaciones y registros del sistema",
+      "donations": "Donaciones y recibos",
+      "engagement": "Preguntas de preguntas y respuestas en directo"
+    },
+    "open": {
+      "title": "Abrir una solicitud",
+      "hint": "Has confirmado quién lo pide. La solicitud vence en 30 días; la resuelves en su propia página.",
+      "kind": "¿Qué pide la persona?",
+      "access": "Una copia de sus datos (acceso)",
+      "accessHint": "Un ZIP firmado con todo lo que se guarda sobre ella.",
+      "erasure": "Borrar sus datos (supresión)",
+      "erasureHint": "La elimina de todas partes, salvo los registros que la ley te obliga a conservar.",
+      "submit": "Abrir la solicitud",
+      "existing": "Ya hay una solicitud abierta para esta persona.",
+      "review": "Revisar la solicitud abierta"
+    },
+    "queue": {
+      "title": "Solicitudes abiertas",
+      "caption": "Solicitudes de privacidad abiertas, primero las que vencen antes",
+      "emptyTitle": "No hay solicitudes abiertas",
+      "empty": "Cuando alguien pregunte por sus datos, búscalo arriba y abre una solicitud. Las personas también pueden pedirlo desde tu aviso de privacidad.",
+      "person": "Persona",
+      "kind": "Solicitud",
+      "source": "Origen",
+      "opened": "Abierta",
+      "due": "Vence",
+      "overdue": "Vencida",
+      "action": "Acción",
+      "review": "Revisar"
+    },
+    "closed": {
+      "title": "Solicitudes cerradas",
+      "caption": "Solicitudes resueltas y retiradas, las más recientes primero",
+      "empty": "Aún no hay solicitudes cerradas.",
+      "when": "Cerrada",
+      "status": "Estado",
+      "records": "Registros"
+    },
+    "statuses": {
+      "open": "Abierta",
+      "completed": "Resuelta",
+      "cancelled": "Retirada"
+    },
+    "sources": {
+      "staff": "El equipo, en nombre de la persona",
+      "self": "La persona (correo confirmado)"
+    },
+    "request": {
+      "titleAccess": "Solicitud de acceso",
+      "titleErasure": "Solicitud de supresión",
+      "openedNotice": "Solicitud abierta. Vence el {date}.",
+      "cancelledNotice": "Solicitud retirada.",
+      "fields": {
+        "kind": "Solicitud",
+        "source": "Origen",
+        "opened": "Abierta",
+        "due": "Vence el",
+        "verified": "Correo confirmado",
+        "completed": "Resuelta",
+        "cancelled": "Retirada",
+        "reason": "Motivo"
+      },
+      "holdings": {
+        "title": "Lo que tiene esta organización",
+        "empty": "No se guarda nada sobre esta persona",
+        "emptyHint": "Aun así puedes resolver la solicitud: la persona recibe una respuesta formal de que no se guarda nada."
+      },
+      "export": {
+        "title": "Enviarle una copia",
+        "hint": "Un ZIP con un archivo JSON por cada parte de Yayatoh y sus archivos, firmado para que cualquiera pueda comprobar que no se ha modificado. Se puede descargar durante 7 días.",
+        "submit": "Crear el archivo comprimido",
+        "done": "El archivo comprimido está listo.",
+        "notified": "Hemos enviado a la persona un enlace de descarga por correo.",
+        "until": "Disponible hasta el {date}.",
+        "download": "Descargar el archivo comprimido (ZIP)",
+        "expired": "El archivo comprimido caducó y se eliminó. Abre una nueva solicitud si la persona necesita otra copia."
+      },
+      "erase": {
+        "title": "Borrar a esta persona",
+        "what": "Su nombre, correo, teléfono, respuestas, mensajes y enlaces se eliminan de todas las partes de Yayatoh, y se borran los archivos exportados que la mencionan.",
+        "holds": "Los pedidos pagados, las notas de crédito, las disputas de pago y el historial de consentimiento se conservan cuando la ley lo exige, sin su nombre ni correo, y se indican en el comprobante.",
+        "files": "Sus archivos subidos y los archivos comprimidos anteriores se eliminan del almacenamiento.",
+        "final": "No se puede deshacer.",
+        "confirm": "Escribe {email} para confirmar",
+        "submit": "Borrar datos personales",
+        "done": "Borrado. El comprobante firmado de abajo indica qué se borró, qué se conservó y por qué."
+      },
+      "cancel": {
+        "title": "Retirar la solicitud",
+        "hint": "Si la persona la retiró o no era auténtica. El motivo queda registrado con la solicitud.",
+        "reason": "Motivo",
+        "submit": "Retirar solicitud"
+      },
+      "receipt": {
+        "title": "Comprobante de supresión",
+        "erased": "Borrado",
+        "held": "Conservado por obligación legal",
+        "noneErased": "No hubo nada que borrar.",
+        "noneHeld": "No hubo que conservar nada.",
+        "table": "Datos",
+        "action": "Qué se hizo",
+        "rows": "Registros",
+        "ref": "Registro",
+        "basis": "Motivo de conservación",
+        "until": "Se conserva hasta",
+        "files": "{count, plural, =0 {No se eliminó ningún archivo almacenado.} one {Se eliminó # archivo almacenado.} other {Se eliminaron # archivos almacenados.}}",
+        "suppressed": "La dirección está en la lista de borrados de toda la plataforma: ninguna organización puede volver a enviarle marketing salvo que la persona dé su consentimiento.",
+        "connectors": "{count, plural, =0 {No fue necesario avisar a ningún servicio conectado.} one {Servicio conectado al que también se pidió borrar a la persona: {names}.} other {Servicios conectados a los que también se pidió borrar a la persona: {names}.}}",
+        "signature": "Firmado con la clave Ed25519 {key}.",
+        "download": "Descargar el comprobante (PDF)",
+        "notified": "Hemos enviado a la persona un enlace a este comprobante por correo.",
+        "actions": {
+          "delete": "Eliminado",
+          "redact": "Datos personales eliminados",
+          "hold": "Conservado, sin datos personales"
+        },
+        "bases": {
+          "tax_accounting": "Registros fiscales y contables (7 años)",
+          "payment_dispute": "Pruebas para una disputa de pago",
+          "accountability": "Prueba de que se atendió la solicitud"
+        }
+      }
+    },
+    "pdf": {
+      "title": "Comprobante de supresión",
+      "request": "Solicitud",
+      "person": "Persona",
+      "source": "Solicitado por",
+      "requested": "Solicitado el",
+      "due": "Vence el",
+      "completed": "Borrado el",
+      "signatureTitle": "Firma",
+      "algorithm": "Algoritmo",
+      "keyId": "ID de clave",
+      "digest": "SHA-256 del comprobante",
+      "signature": "Firma (base64)",
+      "footer": "Emitido por Yayatoh para {org}. La firma cubre los datos del comprobante; compruébala con la clave pública de abajo."
     }
   },
   "privacyNotice": {
@@ -11143,5 +11278,37 @@
     "orgEmptyTitle": "Aún no hay actividad de contactos",
     "orgEmptyDescription": "Las estadísticas aparecen a medida que las personas se registran, hacen check-in, asisten a sesiones y abren campañas.",
     "orgEmptyAction": "Ir a tus eventos"
+  },
+  "privacyRequest": {
+    "title": "Consulta sobre tus datos personales",
+    "description": "Pide a {org} una copia de los datos personales que tiene sobre ti, o que los borre. Responde en un plazo de 30 días. Primero te enviamos un código por correo para comprobar que la dirección es tuya.",
+    "notice": "Lee el aviso de privacidad de {org}",
+    "kindLegend": "¿Qué quieres?",
+    "access": "Una copia de mis datos",
+    "accessHint": "Recibes un enlace a un archivo ZIP con todo lo que se guarda sobre ti.",
+    "erasure": "Borrar mis datos",
+    "erasureHint": "{org} te elimina de sus registros, salvo lo que la ley le obliga a conservar (como los pedidos pagados, por motivos fiscales).",
+    "email": "Tu correo electrónico",
+    "emailHint": "La dirección que usaste con este organizador.",
+    "submit": "Enviarme un código",
+    "sent": "Hemos enviado un código de 6 dígitos a {email}. Introdúcelo para confirmar tu solicitud. Es válido durante 10 minutos.",
+    "resent": "Hemos enviado un código nuevo a {email}.",
+    "codeLabel": "Código de confirmación",
+    "confirm": "Confirmar mi solicitud",
+    "resend": "Enviar un código nuevo",
+    "changeEmail": "Usar otra dirección",
+    "doneTitle": "Solicitud recibida",
+    "doneBody": "{org} responderá antes del {date}. Tu referencia es {reference}. Recibirás un correo cuando esté resuelta.",
+    "existingBody": "Ya tienes una solicitud abierta con {org}. Vence el {date}; tu referencia es {reference}.",
+    "errors": {
+      "invalidEmail": "Introduce un correo electrónico válido.",
+      "kindRequired": "Elige una copia de tus datos o la supresión.",
+      "rateLimited": "{minutes, plural, one {Demasiados intentos. Inténtalo de nuevo en # minuto.} other {Demasiados intentos. Inténtalo de nuevo en # minutos.}}",
+      "codeFormat": "Introduce los 6 dígitos del correo.",
+      "wrong": "{count, plural, =0 {Ese código no es correcto. Pide un código nuevo.} one {Ese código no es correcto. Te queda # intento.} other {Ese código no es correcto. Te quedan # intentos.}}",
+      "locked": "Demasiados códigos incorrectos. Pide un código nuevo.",
+      "expired": "Ese código ha caducado o ya se usó. Pide un código nuevo.",
+      "generic": "Algo salió mal. Inténtalo de nuevo."
+    }
   }
 }

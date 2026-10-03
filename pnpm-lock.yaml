@@ -2203,6 +2203,9 @@ importers:
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../kernel
+      '@yayatoh/media':
+        specifier: workspace:*
+        version: link:../media
       '@yayatoh/notifications':
         specifier: workspace:*
         version: link:../notifications

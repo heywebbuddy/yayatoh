@@ -125,6 +125,7 @@ export {
 } from './commands/support-macros.ts';
 // M6.1a: contact merges move this module's references (ADR 0023).
 export { ordersContactOwner } from './contact-merge.ts';
+export { ordersDataSubjects } from './data-subject.ts';
 export {
   creditableMinor,
   creditNoteAmount,

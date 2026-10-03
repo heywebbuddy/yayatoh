@@ -17,7 +17,7 @@ import { findEventTx, portalInviteMailer } from '@yayatoh/events';
 import { registrationResumeMailer } from '@yayatoh/forms';
 import { invitationMailer as guestInvitationMailer } from '@yayatoh/guests';
 import { listingsProjector } from '@yayatoh/marketplace';
-import { programMediaCleaner, speakerPhotoApprover } from '@yayatoh/media';
+import { programMediaCleaner, speakerPhotoApprover, subjectErasedMediaCleaner } from '@yayatoh/media';
 import {
   announcementMailer,
   contactWroteNotifier,
@@ -42,6 +42,7 @@ import {
 } from '@yayatoh/orders';
 import { payoutDestinationMailer } from '@yayatoh/payments';
 import { type Subscriber, signLinkToken } from '@yayatoh/platform';
+import { erasureConnectorNotifier } from '@yayatoh/privacy';
 import { portalSpeakerCleanup, taskReminderMailer } from '@yayatoh/program';
 import {
   decisionMailer,
@@ -125,6 +126,9 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     // (M3.2b) replaces `derivedStaffAlerts` here and in apps/web/src/server/scan-staff.ts.
     staffAlertsSubscriber(derivedStaffAlerts),
     programMediaCleaner(),
+    // M6.1c: an erasure's stored files, then the connector hooks (M6.4), after it committed.
+    subjectErasedMediaCleaner(),
+    erasureConnectorNotifier(),
     // M5.3a speaker portal: invitations, task reminders, approved photos.
     portalInviteMailer({ notifier, appOrigin }),
     taskReminderMailer({ notifier, appOrigin }),

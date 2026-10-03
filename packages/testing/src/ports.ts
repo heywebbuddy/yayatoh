@@ -27,16 +27,17 @@ import {
   bulkStepCommand,
   createCommandPorts,
   localKeyVault,
+  registerDataSubjectContributors,
   runBulkOperation,
   setKeyVault,
 } from '@yayatoh/platform';
-import { dsarExportAction } from '@yayatoh/privacy';
 import { registrationDecideAction } from '@yayatoh/registration';
 import { attendeeExportAction, bookingsExportAction } from '@yayatoh/reports';
 import { seatAssignAction } from '@yayatoh/seating';
 import { surveyExportAction, surveysContactOwner } from '@yayatoh/surveys';
 import { createOrgAuthorizer, orgStatusGate } from '@yayatoh/tenancy';
 import { ticketResendAction } from '@yayatoh/ticketing';
+import { DATA_SUBJECT_CONTRIBUTORS } from './dsar/contributors.ts';
 
 /** The same composition the apps use: billing entitlements + tenancy authorizer. */
 export const ports = createCommandPorts({
@@ -50,6 +51,9 @@ export const ports = createCommandPorts({
 // runs share one key across files (the global setup provides it); unit runs draw their own.
 setKeyVault(localKeyVault(process.env.LOCAL_KMS_KEY ?? randomBytes(32).toString('hex')));
 
+// M6.1c: every module's data-subject contributor, as the web registers them.
+registerDataSubjectContributors(DATA_SUBJECT_CONTRIBUTORS);
+
 /** The bulk actions the apps register, and the step command built from them. */
 export const BULK_ACTIONS = [
   attendeeLabelAction,
@@ -58,7 +62,6 @@ export const BULK_ACTIONS = [
   attendeeExportAction,
   bookingsExportAction,
   auditExportAction,
-  dsarExportAction,
   seatAssignAction,
   ticketResendAction,
   ticketCancelAction,

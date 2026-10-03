@@ -99,6 +99,7 @@ export {
   suspensionHistoryQuery,
   suspensionsQuery,
 } from './commands/suspensions.ts';
+export { tenancyDataSubjects } from './data-subject.ts';
 export { AGREEMENT_DOCUMENTS, type AgreementDocument, PLATFORM_AGREEMENTS } from './domain/agreements.ts';
 export { signInvitation } from './domain/invitation-token.ts';
 export {

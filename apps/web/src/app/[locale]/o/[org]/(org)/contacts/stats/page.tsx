@@ -141,7 +141,7 @@ export default async function ContactInsightsPage({
                 {t('lifetimeValue')}
               </h2>
               {value.currencies.length === 0 ? (
-                <p className="text-body text-zinc-500">{t('noSpendOrg')}</p>
+                <p className="text-body text-ink-2">{t('noSpendOrg')}</p>
               ) : (
                 <Table
                   caption={t('lifetimeValue')}

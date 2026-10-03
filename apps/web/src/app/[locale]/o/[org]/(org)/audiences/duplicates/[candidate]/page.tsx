@@ -87,7 +87,7 @@ export default async function ComparePage({
               {label(i + 1)}
               {r.id === pair.defaultTargetId ? ' ' : null}
               {r.id === pair.defaultTargetId ? (
-                <span className="ms-2 text-caption text-zinc-600">{t('compare.older')}</span>
+                <span className="ms-2 text-caption text-ink-2">{t('compare.older')}</span>
               ) : null}
             </h2>
             <dl className="flex flex-col gap-1">
@@ -103,11 +103,8 @@ export default async function ComparePage({
                   ['history', t('compare.entries', { count: r.timelineEntries })],
                 ] as const
               ).map(([k, v]) => (
-                <div
-                  key={k}
-                  className="flex items-baseline justify-between gap-3 border-b border-zinc-100 py-1"
-                >
-                  <dt className="text-body text-zinc-600">{t(`fields.${k}`)}</dt>
+                <div key={k} className="flex items-baseline justify-between gap-3 border-b border-line py-1">
+                  <dt className="text-body text-ink-2">{t(`fields.${k}`)}</dt>
                   <dd className="text-body break-all text-end">{v ?? t('fields.empty')}</dd>
                 </div>
               ))}
@@ -129,7 +126,7 @@ export default async function ComparePage({
           {' · '}
           {t('compare.consentSms', { status: consentWord(merged.sms) })}
         </p>
-        <p className="text-caption text-zinc-600">{t('compare.consentRule')}</p>
+        <p className="text-caption text-ink-2">{t('compare.consentRule')}</p>
       </Card>
 
       {canMerge && open ? (
@@ -141,7 +138,7 @@ export default async function ComparePage({
           >
             <fieldset className="flex flex-col gap-2">
               <legend className="text-section">{t('compare.keepLegend')}</legend>
-              <p className="text-caption text-zinc-600">{t('compare.keepHint')}</p>
+              <p className="text-caption text-ink-2">{t('compare.keepHint')}</p>
               {records.map((r, i) => (
                 <label key={r.id} className="flex min-h-11 items-center gap-3">
                   <input
@@ -183,7 +180,7 @@ export default async function ComparePage({
               <Button type="submit" className="self-start">
                 {t('merge.submit')}
               </Button>
-              <p className="text-caption text-zinc-600">{t('merge.hint')}</p>
+              <p className="text-caption text-ink-2">{t('merge.hint')}</p>
             </div>
           </PeopleActionForm>
           <PeopleActionForm action={dismissPairAction.bind(null, org, pair.id)} messages={{}}>

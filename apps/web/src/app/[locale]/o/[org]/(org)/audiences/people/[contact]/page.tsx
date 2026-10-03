@@ -18,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
-const field = 'min-h-10 w-full rounded-pill border border-zinc-200 bg-white px-4 text-body';
+const field = 'min-h-10 w-full rounded-pill border border-line bg-white px-4 text-body';
 
 /**
  * One person (M6.1a): their record, the merges into it (undo for 30 days) and the timeline, one
@@ -134,8 +134,8 @@ export default async function PersonPage({
               ['added', day.format(c.createdAt)],
             ] as const
           ).map(([k, v]) => (
-            <div key={k} className="flex items-baseline justify-between gap-3 border-b border-zinc-100 py-1">
-              <dt className="text-body text-zinc-600">{t(`fields.${k}`)}</dt>
+            <div key={k} className="flex items-baseline justify-between gap-3 border-b border-line py-1">
+              <dt className="text-body text-ink-2">{t(`fields.${k}`)}</dt>
               <dd className="text-body break-all text-end">{v ?? t('fields.empty')}</dd>
             </div>
           ))}
@@ -159,7 +159,7 @@ export default async function PersonPage({
                   <Card className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                     <div className="flex flex-col gap-1">
                       <p className="text-body">{t('merges.line', { who, when: day.format(m.mergedAt) })}</p>
-                      <p className="text-caption text-zinc-600">
+                      <p className="text-caption text-ink-2">
                         {m.status === 'undone' && m.undoneAt
                           ? t('merges.undoneOn', { when: day.format(m.undoneAt) })
                           : t('merges.moved', { moved: m.moved })}
@@ -190,7 +190,7 @@ export default async function PersonPage({
         </h2>
         <form method="get" className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:items-end">
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="timeline-kind" className="text-caption text-zinc-600">
+            <label htmlFor="timeline-kind" className="text-caption text-ink-2">
               {t('timeline.kind')}
             </label>
             <select id="timeline-kind" name="kind" defaultValue={kind ?? ''} className={field}>
@@ -203,7 +203,7 @@ export default async function PersonPage({
             </select>
           </div>
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="timeline-event" className="text-caption text-zinc-600">
+            <label htmlFor="timeline-event" className="text-caption text-ink-2">
               {t('timeline.event')}
             </label>
             <select id="timeline-event" name="event" defaultValue={eventId ?? ''} className={field}>
@@ -231,11 +231,11 @@ export default async function PersonPage({
               <li
                 key={r.id}
                 data-testid="timeline-entry"
-                className="flex flex-col gap-1 rounded-card border border-zinc-200 bg-white px-4 py-3 sm:flex-row sm:items-baseline sm:justify-between"
+                className="flex flex-col gap-1 rounded-card border border-line bg-white px-4 py-3 sm:flex-row sm:items-baseline sm:justify-between"
               >
                 <div className="flex flex-col gap-0.5">
                   <span className="text-body font-medium">{t(`kinds.${r.kind}`)}</span>
-                  <span className="text-caption text-zinc-600">
+                  <span className="text-caption text-ink-2">
                     {[r.eventName, r.label].filter(Boolean).join(' · ')}
                   </span>
                 </div>
@@ -245,7 +245,7 @@ export default async function PersonPage({
                       {formatMoney(money(r.amountMinor, r.currency), locale)}
                     </span>
                   ) : null}
-                  <time dateTime={r.occurredAt.toISOString()} className="text-caption text-zinc-600">
+                  <time dateTime={r.occurredAt.toISOString()} className="text-caption text-ink-2">
                     {at.format(r.occurredAt)}
                   </time>
                 </div>

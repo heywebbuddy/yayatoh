@@ -16,6 +16,7 @@ export {
 } from './checkpoints.ts';
 // M6.1a: contact merges move this module's references (ADR 0023).
 export { checkinContactOwner } from './contact-merge.ts';
+export { checkinDataSubjects } from './data-subject.ts';
 export {
   DEVICE_ONLINE_WINDOW_MS,
   DeviceDto,

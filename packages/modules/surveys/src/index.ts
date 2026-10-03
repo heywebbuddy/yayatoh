@@ -1,5 +1,6 @@
 // M6.1a: contact merges move this module's references (ADR 0023).
 export { surveysContactOwner } from './contact-merge.ts';
+export { surveysDataSubjects } from './data-subject.ts';
 export {
   answerCell,
   type NpsSummary,

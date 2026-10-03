@@ -99,7 +99,7 @@ export default async function DuplicatesPage({
               {[r.a, r.b].map((p) => (
                 <span key={p.id} className="flex flex-col">
                   <span className="text-body">{who(p)}</span>
-                  <span className="text-caption break-all text-zinc-600">{p.email}</span>
+                  <span className="text-caption break-all text-ink-2">{p.email}</span>
                 </span>
               ))}
             </div>
@@ -146,7 +146,7 @@ export default async function DuplicatesPage({
           ) : undefined
         }
       />
-      <p className="text-caption text-zinc-600" data-testid="last-scan">
+      <p className="text-caption text-ink-2" data-testid="last-scan">
         {queue.lastScanAt
           ? t('duplicates.lastScan', { when: when.format(queue.lastScanAt) })
           : t('duplicates.neverScanned')}
@@ -195,7 +195,7 @@ export default async function DuplicatesPage({
             <Button type="submit" variant="secondary" className="self-start">
               {t('duplicates.mergeSelected')}
             </Button>
-            <p className="text-caption text-zinc-600">{t('duplicates.mergeSelectedHint')}</p>
+            <p className="text-caption text-ink-2">{t('duplicates.mergeSelectedHint')}</p>
           </div>
         </PeopleActionForm>
       ) : (

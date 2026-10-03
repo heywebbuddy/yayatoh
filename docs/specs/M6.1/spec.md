@@ -3,7 +3,7 @@
 - **Milestone:** M6.1 (roadmap Phase 6; `docs/plans/phase-6.md` Wave 1: M6.1a merge and timeline, M6.1b contact stats, M6.1c DSAR propagation)
 - **Status:** M6.1a built (pending owner review)
 - **Risk tags:** `db-migration`, `tenancy`
-- **Related ADRs:** 0022 (Phase 6 module layout, written here), 0008 (outbox), 0021 (Phase 5 layout)
+- **Related ADRs:** 0023 (Phase 6 module layout, written here), 0008 (outbox), 0021 (Phase 5 layout)
 
 ## M6.1a — CRM merge and timeline
 
@@ -200,3 +200,44 @@ worker job, not the migration.
   dev-drain change, brief), re-ran lint, check:modules, typecheck of platform and web, and the
   contact-stats, outbox-processed and audiences integration files: green.
 - Builder report: the final commit message on `agent/m6.1b`.
+
+## M6.1c — DSAR propagation
+
+**Goal (phase-6 plan, M6.1c):** one request exports or erases a person across every module, projection, file and connector hook, with a signed receipt, legal holds (orders and tax records kept per D11) and an audit trail.
+
+### What was built
+- **The port** (`@yayatoh/platform`, `src/data-subject.ts`): `DataSubjectContributor` with `tables` (every `schema.table` it covers and what erasure does there: `DELETE`, `REDACT`, `hold(basis)`, `notSubject(why)`), `resolve` (the person's record ids by kind, run to a fixpoint so modules can use ids other modules found), `export` (allowlisted sections plus files) and `erase` (rows changed per table, held rows, media assets to delete after commit). Each module exports `<module>DataSubjects`; the apps register them (`registerDataSubjectContributors`, like the contact-reference owners of ADR 0023): `apps/web/src/server/data-subjects.ts` and `packages/testing/src/dsar/contributors.ts`. Legal hold bases: `tax_accounting` (orders, credit notes; 7 years per D11), `payment_dispute`, `accountability` (consent history, the request records). Connector hooks (`registerErasureConnectorHooks`, none until M6.4) are called after commit from the outbox event `privacy.subject_erased@1` (subscriber `privacy.connector-hooks`).
+- **Contributors for 27 modules plus the platform**: crm (incl. M6.1a merges/duplicates/timeline and M6.1b scores/signals), orders, ticketing, attendees, forms (incl. survey answers), checkin, tenancy, notifications, seating, alerts, guests, messaging, assistance, program, events, media, cms, venues, reviews, payments, surveys, registration, badges, automations, campaigns, marketing, privacy, and the platform's own records (export files, bulk parameters and undo data, idempotency replays, the realtime log, the outbox log). Modules with nothing about a person (audiences segments, reports analytics, command-center, ai, billing, templates, marketplace) declare nothing.
+- **The request** (`privacy.dsar_requests` grows): one open request per person per org (partial unique index), `status` open/completed/cancelled, `source` staff/self, `due_at` = opened + 30 days (overdue flagged), `verified_at` for self-service, the address sealed with the org's key vault while open and cleared when it closes. Commands: `privacy.openRequest`, `privacy.submitSelfRequest` (system actor after an emailed code), `privacy.exportSubject` (step-up, category export), `privacy.eraseSubject` (step-up, category delete, the address typed again), `privacy.cancelRequest` (reason); queries `privacy.requests`, `privacy.request`, `privacy.findSubject` (counts per module), `privacy.archiveFile`, `privacy.selfArchiveFile`, `privacy.selfReceipt`.
+- **Export**: one ZIP (`yayatoh.dsar-archive/1`): `data/<module>.json` per module, `files/<module>/…` (portal uploads, speaker photos), `manifest.json` (every file with its SHA-256), `manifest.sig` (Ed25519) and `signing-key.pem`; `verifyArchive` checks it. Stored in the media store under `{org}/{request}/0-{hash}.zip` for 7 days (retention deletes it).
+- **Erase**: every contributor in one tenant transaction (registration order, the platform last), the address added to the platform-wide erased list, a signed receipt (`yayatoh.dsar-receipt/1`: tables erased with action and rows, held rows with basis and end date, files deleted, connectors told, key id; no personal data — a masked hint and the SHA-256). Media files go after commit (`media.subject-erased-cleanup`). Append-only logs are redacted through SECURITY DEFINER functions scoped to the caller's org: the outbox (`platform.redact_subject_events`, string values only), provider event diagnostics (`notifications.redact_message_event_details`), the realtime log (`platform.purge_subject_realtime`).
+- **Receipt PDF** (`@yayatoh/pdf` `dsarReceiptHtml`, Gotenberg), rendered on demand in the reader's language with the signature, digest and public key.
+- **Console** (`/o/[org]/privacy`): find a person (counts per module), open an access or erasure request, the queue (open by due date, overdue pill; closed), the request page (holdings, the one fulfilling action, withdraw with a reason, the receipt with erased/held tables and the PDF, the archive download).
+- **Self-service** (`/privacy-request/[org]`, linked from the org's privacy notice): choose a copy or erasure, prove the address with the emailed code (M1.5f guest codes, scoped to the org; own pending cookie), get a reference and the due date. When staff fulfil it the person is emailed the archive link (7 days) or the receipt link (`privacy.archive-ready`, `privacy.erasure-done`; signed tokens, no address in the URL).
+
+### Decisions (pending the owner where marked)
+- Orchestration stays in `privacy` (tier 5, M1.14c's home) with the port in `platform` (tier 0) so every module, at any tier, can contribute; ADR 0023 suggested crm for DSAR receipts — the request record already lived in `privacy`, so it stays there.
+- Org suppression rows (unsubscribes, SMS STOP) are deleted on erasure: the platform-wide erased list stops email marketing; a re-entered phone needs fresh consent (crm ledger). **Pending owner**: a hashed phone suppression list like the email one.
+- A wedding guest's sub-event names are in their archive (they see them on their RSVP page).
+- Self-service requests are verified with the site sign-in code purpose (`sign_in`, scoped to the org); no new guest-code purpose.
+- Local signing key derived from `APP_TOKEN_SECRET` (HKDF → Ed25519) in dev/CI; **pending owner**: a KMS asymmetric key in production (owner inbox).
+
+### Later / not yet
+- Self-service on tenant hosts (`{slug}.yayatoh.events/privacy-request`) and from My tickets.
+- Identity verification beyond the address for erasures of high-value accounts; partial erasure (one module).
+- The connector hooks themselves (M6.4: Mailchimp, HubSpot …).
+- An overdue alert in the Command Center alert engine.
+- Badge batch PDFs of other people that shared a batch with the person are regenerated by the organizer (the batch is failed or expired).
+
+### Acceptance
+| Criterion | Test |
+|---|---|
+| The canary person is gone from every table and projection except legally held rows, which are listed in the receipt | `packages/testing/tests/dsar-canary.int.test.ts` (planted in every covered table of two orgs incl. the outbox; erased in A; scan of every text/json/array/bytea column; held rows exist and are listed; B untouched) |
+| The coverage test fails on a new PII table with no contributor (canary) | `packages/testing/tests/dsar-coverage.test.ts` (planted `donations.donors`), `apps/web/tests/data-subjects.test.ts` (the web registers every contributor) |
+| One request per person per org, staff or self (verified email), due in 30 days, status | `packages/testing/tests/privacy.int.test.ts` (request describe), `apps/web/e2e/privacy.spec.ts` (console and public) |
+| Export: one signed ZIP with a manifest, JSON per module plus files | `privacy.int.test.ts` (archive verify, tamper check, allowlist), `canary.int.test.ts` (no secrets or internal columns in the archive), `privacy.spec.ts` (download) |
+| Erase: modules, projections, media files, connector hooks, legal holds | `dsar-canary.int.test.ts`, `privacy.int.test.ts` (ledger untouched, archive file deleted after commit, hooks subscriber) |
+| Signed receipt PDF | `privacy.int.test.ts` (signature verifies, a change breaks it), `privacy.spec.ts` (PDF download) |
+| Isolation | `dsar-canary.int.test.ts`, `privacy.int.test.ts`, `isolation.int.test.ts` (fixture rows for both orgs: a fulfilled access request and an open erasure request) |
+| Impersonation and freeze | `impersonation.int.test.ts` (export/erase/download refused for staff acting as a member), `freeze.int.test.ts` (every privacy command refused during the read-only freeze), `step-up.int.test.ts` |
+| E2E: request, export download, erase, receipt; keyboard only, axe, RTL | `apps/web/e2e/privacy.spec.ts`, `apps/web/e2e/account-privacy.spec.ts` |

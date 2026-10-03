@@ -19,6 +19,7 @@ export {
   upsertContactsTx,
   upsertContactTx,
 } from './contacts.ts';
+export { crmDataSubjects } from './data-subject.ts';
 export { consentRegivenSinceTx, contactDsarTx, eraseContactDsarTx, unlinkContactUserTx } from './dsar.ts';
 // M6.1a: duplicates, merge with undo, the person timeline.
 export {
