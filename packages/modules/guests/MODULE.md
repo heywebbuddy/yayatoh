@@ -46,3 +46,9 @@ Wedding and gala guest data (Phase 4, M4.1a): parties (households), the guests i
 
 **Gala tables (M4.2b)**
 - A purchased table (`ticketing.table_units`, same tier: a reference only) has at most one party (`parties.table_unit_id`, partial unique): the buyer's company or the sponsor. Each named seat is a guest of that party holding the seat's ticket (`guests.ticket_id`, one guest per ticket) and its attendee; history source `table_link` (the buyer's claim link) or `manual` (the host). `tablePartyTx`, `addTableGuestTx`, `guestsByTicketTx` and `tablePartiesTx` run in the caller's transaction (orders, which locks the table and reissues the ticket); this module never reads tickets. The guest's email is sealed with the private answers.
+
+**Guest website (M4.5a)**
+- One `sites` row per event (address code, draft/published, title, intro, writing language, **scrypt hash** of the password, `password_version`) and ordered `site_blocks` (text, program, travel, registry, faq; content checked per kind in `domain/site.ts`, read back item by item). A published site always has a password (P4-3c).
+- The program shows the sub-events everyone is invited to, or the host's explicit pick; never a guest, party, answer or contact detail. Public reads go through `PublicGuestSiteDto` only; the locked state carries the event's name alone.
+- The tenant comes from the address (`guests.site_target`, SECURITY DEFINER, published sites of live orgs, ids only). Access is an HMAC of the site and its password version (`siteAccessToken`); a new password locks everyone out. The web action rate-limits password tries (`guestSitePassword`) with the human check.
+- Never on the marketplace: nothing here emits domain events. Writes need `guests:write` with the `website` entitlement; audit data names fields only (never content or the password).
