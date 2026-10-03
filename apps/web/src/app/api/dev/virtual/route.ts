@@ -70,7 +70,13 @@ export async function POST(req: NextRequest) {
     sessions.push({ id: r.session.id, title });
   }
   const anon = createCtx({ orgId: org.orgId });
-  const registered: { name: string; token: string; ticketId: string; ticketTypeId: string }[] = [];
+  const registered: {
+    name: string;
+    email: string;
+    token: string;
+    ticketId: string;
+    ticketTypeId: string;
+  }[] = [];
   for (const [who, pass] of [
     ['Ana', 'full_pass'],
     ['Ben', 'day_pass'],
@@ -85,7 +91,13 @@ export async function POST(req: NextRequest) {
     const order = await orderByManageToken(r.manageToken);
     const tk = order?.tickets[0];
     if (!tk) return NextResponse.json({ error: 'no_ticket' }, { status: 500 });
-    registered.push({ name: who, token: r.manageToken, ticketId: tk.id, ticketTypeId: tk.ticketTypeId });
+    registered.push({
+      name: who,
+      email,
+      token: r.manageToken,
+      ticketId: tk.id,
+      ticketTypeId: tk.ticketTypeId,
+    });
   }
   const types = (await executeQuery(virtualSetupQuery, { eventId: ev.id }, ctx, ports)).ticketTypes;
   return NextResponse.json({
@@ -94,6 +106,8 @@ export async function POST(req: NextRequest) {
     sessions,
     people: registered.map((p) => ({
       name: p.name,
+      // M6.10a: the holder's address (the Zoom webhook test matches attendance by it).
+      email: p.email,
       token: p.token,
       watch: watchPath(ev.slug, p.ticketId),
       ticketType: types.find((t) => t.ticketTypeId === p.ticketTypeId)?.name ?? null,
