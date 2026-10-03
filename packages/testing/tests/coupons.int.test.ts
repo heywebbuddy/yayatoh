@@ -59,7 +59,13 @@ afterAll(closePools);
 
 const coupon = (input: Record<string, unknown>, org = a) =>
   executeCommand(createCouponCommand, input, org.ctx(), ports);
-const buy = (event: { id: string; ga: string }, code: string | undefined, who = 'buyer', org = a, quantity = 1) =>
+const buy = (
+  event: { id: string; ga: string },
+  code: string | undefined,
+  who = 'buyer',
+  org = a,
+  quantity = 1,
+) =>
   executeCommand(
     startCheckoutCommand,
     {
@@ -94,7 +100,13 @@ describe('org-wide coupons', () => {
   });
 
   it('a chosen-events coupon applies only to its events', async () => {
-    await coupon({ code: 'ONLYONE', kind: 'percent', percentBps: 2500, scope: 'events', eventIds: [ev.one.id] });
+    await coupon({
+      code: 'ONLYONE',
+      kind: 'percent',
+      percentBps: 2500,
+      scope: 'events',
+      eventIds: [ev.one.id],
+    });
     await expect(buy(ev.one, 'ONLYONE', 'chosen1')).resolves.toMatchObject({
       order: { discountMinor: 1000 },
     });
@@ -109,7 +121,14 @@ describe('org-wide coupons', () => {
     expect(euro.order).toMatchObject({ currency: 'EUR', discountMinor: 400 });
     // Chosen events in another currency are refused when the coupon is made.
     await expect(
-      coupon({ code: 'BADMIX', kind: 'amount', amountMinor: 500, currency: 'USD', scope: 'events', eventIds: [ev.euro.id] }),
+      coupon({
+        code: 'BADMIX',
+        kind: 'amount',
+        amountMinor: 500,
+        currency: 'USD',
+        scope: 'events',
+        eventIds: [ev.euro.id],
+      }),
     ).rejects.toMatchObject({ code: 'validation_failed', details: { reason: 'currency_mismatch' } });
   });
 
@@ -134,8 +153,7 @@ describe('org-wide coupons', () => {
       Array.from({ length: 30 }, (_, i) => buy(i % 2 ? ev.one : ev.two, 'LAST3', `race${i}`)),
     );
     expect(results.filter((r) => r.status === 'fulfilled')).toHaveLength(3);
-    for (const r of results)
-      if (r.status === 'rejected') expect(r.reason).toMatchObject(invalid);
+    for (const r of results) if (r.status === 'rejected') expect(r.reason).toMatchObject(invalid);
     expect(await used('LAST3')).toBe(3);
   });
 
@@ -157,11 +175,20 @@ describe('org-wide coupons', () => {
   });
 
   it('an expired hold gives back both the use and the buyer’s share', async () => {
-    await coupon({ code: 'ONCE', kind: 'amount', amountMinor: 500, currency: 'USD', maxRedemptions: 1, perBuyerLimit: 1 });
+    await coupon({
+      code: 'ONCE',
+      kind: 'amount',
+      amountMinor: 500,
+      currency: 'USD',
+      maxRedemptions: 1,
+      perBuyerLimit: 1,
+    });
     await buy(ev.one, 'ONCE', 'lapser');
     expect(await used('ONCE')).toBe(1);
     await withTenant(a.ctx(), (tx) =>
-      tx.execute(sql`update orders.orders set expires_at = now() - interval '1 minute' where promo_code = 'ONCE'`),
+      tx.execute(
+        sql`update orders.orders set expires_at = now() - interval '1 minute' where promo_code = 'ONCE'`,
+      ),
     );
     await executeCommand(expireOrdersCommand, {}, systemCtx(a.org.id), ports);
     expect(await used('ONCE')).toBe(0);
@@ -200,11 +227,19 @@ describe('org-wide coupons', () => {
     await expect(coupon({ code: 'NOAMT', kind: 'amount', amountMinor: 500 })).rejects.toMatchObject({
       code: 'validation_failed',
     });
-    await expect(coupon({ code: 'NOEVENTS', kind: 'percent', percentBps: 500, scope: 'events' })).rejects.toMatchObject({
+    await expect(
+      coupon({ code: 'NOEVENTS', kind: 'percent', percentBps: 500, scope: 'events' }),
+    ).rejects.toMatchObject({
       code: 'validation_failed',
     });
     await expect(
-      coupon({ code: 'BACKWARDS', kind: 'percent', percentBps: 500, startsAt: '2030-01-02', endsAt: '2030-01-01' }),
+      coupon({
+        code: 'BACKWARDS',
+        kind: 'percent',
+        percentBps: 500,
+        startsAt: '2030-01-02',
+        endsAt: '2030-01-01',
+      }),
     ).rejects.toMatchObject({ code: 'validation_failed' });
     await expect(
       coupon({ code: 'OTHERORG', kind: 'percent', percentBps: 500, scope: 'events', eventIds: [bEvent.id] }),

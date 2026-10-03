@@ -218,5 +218,6 @@ export const listOrgPromoCodesQuery = tenantQuery({
   output: z.array(PromoCodeDto),
   entitlement: 'ticketing',
   permission: 'events:read',
-  handler: async ({ tx }) => tx.select().from(promoCodes).orderBy(asc(promoCodes.code), asc(promoCodes.createdAt)),
+  handler: async ({ tx }) =>
+    tx.select().from(promoCodes).orderBy(asc(promoCodes.code), asc(promoCodes.createdAt)),
 });

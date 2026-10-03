@@ -1,6 +1,6 @@
+import { CurrencyCode } from '@yayatoh/contracts';
 import type { TenantTx } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
-import { CurrencyCode } from '@yayatoh/contracts';
 import { DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { and, asc, count, eq, isNull, or, sql } from 'drizzle-orm';
@@ -135,10 +135,7 @@ export async function releaseCouponTx(tx: TenantTx, orderId: string, now: Date):
  * if one is left (never over the total limit; the per-buyer limit does not undo a payment).
  */
 export async function reclaimCouponTx(tx: TenantTx, orderId: string, now: Date): Promise<void> {
-  const [r] = await tx
-    .select()
-    .from(couponRedemptions)
-    .where(eq(couponRedemptions.orderId, orderId));
+  const [r] = await tx.select().from(couponRedemptions).where(eq(couponRedemptions.orderId, orderId));
   if (!r?.releasedAt) return;
   const taken = await tx
     .update(coupons)
@@ -216,7 +213,11 @@ export const CreateCouponInput = z
 
 /** A code is one thing per org: an org coupon or an event's promo code, never both. */
 async function codeTakenTx(tx: TenantTx, code: string): Promise<boolean> {
-  const [p] = await tx.select({ id: promoCodes.id }).from(promoCodes).where(eq(promoCodes.code, code)).limit(1);
+  const [p] = await tx
+    .select({ id: promoCodes.id })
+    .from(promoCodes)
+    .where(eq(promoCodes.code, code))
+    .limit(1);
   if (p) return true;
   const [c] = await tx.select({ id: coupons.id }).from(coupons).where(eq(coupons.code, code)).limit(1);
   return Boolean(c);
@@ -234,10 +235,14 @@ export const createCouponCommand = tenantCommand({
       const event = await findEventTx(tx, id);
       if (!event) throw new DomainError('validation_failed', 'Unknown event', { field: 'eventIds' });
       if (input.kind === 'amount' && event.currency !== input.currency)
-        throw new DomainError('validation_failed', 'An amount coupon applies only to events in its currency', {
-          field: 'eventIds',
-          reason: 'currency_mismatch',
-        });
+        throw new DomainError(
+          'validation_failed',
+          'An amount coupon applies only to events in its currency',
+          {
+            field: 'eventIds',
+            reason: 'currency_mismatch',
+          },
+        );
     }
     if (await codeTakenTx(tx, input.code))
       throw new DomainError('conflict', 'That code already exists', { field: 'code' });

@@ -43,18 +43,25 @@ const setCurrency = (eventId: string, currency: string, ctx = a.ctx()) =>
 const buy = (e: { id: string; ga: string }, who = 'buyer') =>
   executeCommand(
     startCheckoutCommand,
-    { eventId: e.id, items: [{ ticketTypeId: e.ga, quantity: 1 }], buyer: { email: `${who}@example.test`, name: who } },
+    {
+      eventId: e.id,
+      items: [{ ticketTypeId: e.ga, quantity: 1 }],
+      buyer: { email: `${who}@example.test`, name: who },
+    },
     createCtx({ orgId: a.org.id }),
     ports,
   );
 const currencies = (eventId: string) =>
   withTenant(a.ctx(), async (tx) => {
-    const one = async (q: ReturnType<typeof sql>) =>
-      (await tx.execute<{ c: string }>(q)).map((r) => r.c);
+    const one = async (q: ReturnType<typeof sql>) => (await tx.execute<{ c: string }>(q)).map((r) => r.c);
     return {
       event: await one(sql`select currency as c from events.events where id = ${eventId}`),
-      ticketTypes: await one(sql`select distinct currency as c from ticketing.ticket_types where event_id = ${eventId}`),
-      promos: await one(sql`select distinct currency as c from ticketing.promo_codes where event_id = ${eventId}`),
+      ticketTypes: await one(
+        sql`select distinct currency as c from ticketing.ticket_types where event_id = ${eventId}`,
+      ),
+      promos: await one(
+        sql`select distinct currency as c from ticketing.promo_codes where event_id = ${eventId}`,
+      ),
       orders: await one(sql`select distinct currency as c from orders.orders where event_id = ${eventId}`),
     };
   });
@@ -78,7 +85,12 @@ describe('event currency', () => {
     );
     const changed = await setCurrency(e.id, 'GBP');
     expect(changed.currency).toBe('GBP');
-    expect(await currencies(e.id)).toEqual({ event: ['GBP'], ticketTypes: ['GBP'], promos: ['GBP'], orders: [] });
+    expect(await currencies(e.id)).toEqual({
+      event: ['GBP'],
+      ticketTypes: ['GBP'],
+      promos: ['GBP'],
+      orders: [],
+    });
     // Same currency again is a no-op.
     await expect(setCurrency(e.id, 'GBP')).resolves.toMatchObject({ currency: 'GBP' });
   });
@@ -91,7 +103,12 @@ describe('event currency', () => {
       code: 'invalid_state',
       details: { reason: 'currency_locked', field: 'currency' },
     });
-    expect(await currencies(e.id)).toEqual({ event: ['USD'], ticketTypes: ['USD'], promos: [], orders: ['USD'] });
+    expect(await currencies(e.id)).toEqual({
+      event: ['USD'],
+      ticketTypes: ['USD'],
+      promos: [],
+      orders: ['USD'],
+    });
   });
 
   it('a change racing checkouts never leaves an order in another currency than its event', async () => {

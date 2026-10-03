@@ -604,7 +604,14 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   // U9: an org coupon for the event and a (released) redemption by the paid order's buyer.
   const coupon = await executeCommand(
     createCouponCommand,
-    { code: 'FIXTUREORG', kind: 'amount', amountMinor: 500, currency: 'USD', scope: 'events', eventIds: [event.id] },
+    {
+      code: 'FIXTUREORG',
+      kind: 'amount',
+      amountMinor: 500,
+      currency: 'USD',
+      scope: 'events',
+      eventIds: [event.id],
+    },
     ctx(),
     ports,
   );

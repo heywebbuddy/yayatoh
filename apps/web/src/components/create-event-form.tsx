@@ -1,6 +1,15 @@
 'use client';
 
-import { Alert, Button, Card, DateTimePicker, Input, Select, TimeZonePicker } from '@yayatoh/ui';
+import {
+  Alert,
+  Button,
+  Card,
+  CurrencyPicker,
+  DateTimePicker,
+  Input,
+  Select,
+  TimeZonePicker,
+} from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState, useState } from 'react';
 import type { CreateEventState } from '@/app/[locale]/o/[org]/(org)/events/new/actions.ts';
@@ -13,7 +22,7 @@ export function CreateEventForm({
   defaults,
 }: {
   action: (prev: CreateEventState, form: FormData) => Promise<CreateEventState>;
-  defaults: { profile: string; timezone: string };
+  defaults: { profile: string; timezone: string; currency: string };
 }) {
   const t = useTranslations();
   const [state, formAction, pending] = useActionState(action, { code: null });
@@ -59,6 +68,16 @@ export function CreateEventForm({
             hint={t('newEvent.localTimeHint')}
           />
           <DateTimePicker name="endsAt" required label={t('newEvent.endsAt')} />
+          <CurrencyPicker
+            id="currency"
+            name="currency"
+            required
+            defaultValue={defaults.currency}
+            label={t('newEvent.currency')}
+            hint={t('newEvent.currencyHint')}
+            className={selectClass}
+          />
+          <div aria-hidden="true" className="hidden sm:block" />
           <Input name="venueName" maxLength={160} label={t('newEvent.venue')} />
           <Input name="city" maxLength={120} label={t('newEvent.city')} />
         </div>

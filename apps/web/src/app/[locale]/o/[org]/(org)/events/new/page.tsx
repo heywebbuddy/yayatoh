@@ -31,7 +31,7 @@ export default async function NewEventPage({ params }: { params: Promise<{ local
       />
       <CreateEventForm
         action={createEventAction.bind(null, org)}
-        defaults={{ profile: data.profile, timezone: data.org.timezone }}
+        defaults={{ profile: data.profile, timezone: data.org.timezone, currency: data.org.currency }}
       />
     </>
   );

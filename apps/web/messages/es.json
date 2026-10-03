@@ -348,7 +348,8 @@
     "marketingAnalytics": "Analítica de marketing",
     "badges": "Credenciales",
     "orgAnalytics": "Analítica",
-    "integrations": "Integraciones"
+    "integrations": "Integraciones",
+    "coupons": "Cupones"
   },
   "vocab": {
     "attendee": "Asistente",
@@ -840,7 +841,9 @@
     "submit": "Crear borrador",
     "slugTaken": "Ya existe un evento con este nombre. Prueba con un nombre ligeramente distinto.",
     "fromTemplate": "Empezar con una plantilla",
-    "guided": "Creación guiada (3 pasos)"
+    "guided": "Creación guiada (3 pasos)",
+    "currency": "Moneda",
+    "currencyHint": "La usan las entradas, el pago y los informes. Puedes cambiarla hasta el primer pedido."
   },
   "tickets": {
     "subtitle": "Tipos de entrada, precios e inventario. Todos los precios que ven los compradores incluyen las tarifas.",
@@ -984,7 +987,8 @@
     "seatChannel": "Algunos de esos asientos están reservados para otro canal de venta. Elige otros asientos.",
     "channelInvalid": "Este código de venta no es válido para este evento. Vuelve a abrir la página del evento sin él, o pregunta a quien te dio el enlace.",
     "channelNotice": "Estás comprando a través de {name}: los asientos reservados para {name} también están abiertos para ti.",
-    "channelLinkInvalid": "Este enlace de venta no es válido para este evento. Aún puedes elegir entre los asientos abiertos a todos."
+    "channelLinkInvalid": "Este enlace de venta no es válido para este evento. Aún puedes elegir entre los asientos abiertos a todos.",
+    "couponBuyerLimit": "Ya has usado este código tantas veces como permite."
   },
   "fakePay": {
     "eyebrow": "Pago de prueba",
@@ -1080,7 +1084,8 @@
     "resumeCode": "Reanudar {code}",
     "addTitle": "Añadir un código promocional",
     "add": "Añadir código",
-    "added": "Código promocional añadido."
+    "added": "Código promocional añadido.",
+    "orgCoupons": "Los cupones de toda la organización también valen aquí. <link>Ver todos los códigos</link>"
   },
   "questions": {
     "title": "Preguntas del pago",
@@ -3152,7 +3157,13 @@
       "unlisted": "No listado (solo con enlace)",
       "private": "Privado (código de acceso)"
     },
-    "visibilityHint": "Los eventos no listados solo se abren con el enlace. Los privados necesitan un código de acceso que desbloquee la página del evento."
+    "visibilityHint": "Los eventos no listados solo se abren con el enlace. Los privados necesitan un código de acceso que desbloquee la página del evento.",
+    "currencyTitle": "Moneda",
+    "currency": "Moneda del evento",
+    "currencyHint": "Los precios y códigos promocionales conservan sus importes en la nueva moneda. Se bloquea con el primer pedido.",
+    "currencyLocked": "Bloqueada: este evento ya tiene pedidos, así que su moneda no puede cambiar.",
+    "currencySaved": "Moneda guardada.",
+    "currencySave": "Guardar moneda"
   },
   "directory": {
     "title": "Directorio de recintos",
@@ -4208,7 +4219,9 @@
       "ticketPrice": "Escribe un precio como 25 o 25.00.",
       "ticketQuantity": "Indica cuántas hay a la venta (al menos 1).",
       "generic": "Revisa este campo."
-    }
+    },
+    "currency": "Moneda",
+    "currencyHint": "La usan las entradas, el pago y los informes. Puedes cambiarla hasta el primer pedido."
   },
   "eventMedia": {
     "title": "Imágenes",
@@ -12328,5 +12341,73 @@
     "tooLate": "Elige una fecha hasta el {date}",
     "timeZoneNote": "Horas en {zone}",
     "selected": "Seleccionado"
+  },
+  "coupons": {
+    "title": "Cupones",
+    "description": "Códigos de descuento para todos tus eventos o los que elijas, junto con los códigos promocionales de cada evento en la misma lista.",
+    "listTitle": "Todos los códigos",
+    "emptyTitle": "Aún no hay códigos",
+    "emptyDescription": "Añade un cupón abajo para dar un descuento en tus eventos.",
+    "code": "Código",
+    "type": "Tipo",
+    "typeCoupon": "Cupón de la organización",
+    "typeEvent": "Código del evento",
+    "appliesTo": "Se aplica a",
+    "discount": "Descuento",
+    "percentOff": "{value} de descuento",
+    "amountOff": "{amount} de descuento por entrada",
+    "uses": "Usos",
+    "perBuyerShort": "Por comprador",
+    "valid": "Válido",
+    "until": "Hasta {date}",
+    "from": "Desde {date}",
+    "always": "Sin fecha de fin",
+    "status": "Estado",
+    "active": "Activo",
+    "paused": "En pausa",
+    "actions": "Acciones",
+    "pause": "Pausar",
+    "resume": "Reanudar",
+    "pauseCode": "Pausar {code}",
+    "resumeCode": "Reanudar {code}",
+    "newTitle": "Añadir un cupón",
+    "kind": "Tipo de descuento",
+    "percent": "Porcentaje de descuento",
+    "amount": "Importe fijo de descuento",
+    "percentValue": "Porcentaje",
+    "amountValue": "Descuento por entrada",
+    "percentHint": "Por ejemplo 20 para un 20 % de descuento por entrada, antes de comisiones.",
+    "amountHint": "Por ejemplo 5 para 5,00 de descuento por entrada, antes de comisiones.",
+    "currency": "Moneda del importe",
+    "currencyHint": "El cupón solo vale en eventos con esta moneda.",
+    "scope": "Se aplica a",
+    "scopeAll": "Todos los eventos",
+    "scopeEvents": "Eventos elegidos",
+    "events": "Eventos",
+    "eventsHint": "Escribe para buscar un evento. Elige uno o varios.",
+    "eventsPlaceholder": "Buscar un evento",
+    "maxUses": "Usos totales (opcional)",
+    "maxUsesHint": "En todos los eventos. Déjalo vacío para no limitar.",
+    "perBuyer": "Usos por comprador (opcional)",
+    "perBuyerHint": "Se cuentan por el correo del comprador.",
+    "startsAt": "Empieza",
+    "endsAt": "Caduca",
+    "optional": "Opcional, en la zona horaria de tu organización.",
+    "added": "Cupón añadido.",
+    "add": "Añadir cupón",
+    "errors": {
+      "code": "Usa de 3 a 32 letras, dígitos, - o _.",
+      "codeTaken": "Ese código ya lo usa un cupón o un código promocional de un evento.",
+      "value": "Introduce un descuento, como 20 o 5,00.",
+      "percentBps": "Introduce un porcentaje entre 0,01 y 100.",
+      "amountMinor": "Introduce un importe mayor que cero.",
+      "currency": "Elige una moneda.",
+      "currencyMismatch": "Un cupón de importe solo vale en eventos con su moneda. Quita los eventos con otras monedas o usa un porcentaje.",
+      "eventIds": "Elige al menos un evento.",
+      "maxRedemptions": "Introduce un número entero de 1 o más.",
+      "perBuyerLimit": "Introduce un número entero de 1 o más.",
+      "startsAt": "Introduce una fecha y hora válidas.",
+      "endsAt": "La caducidad debe ser posterior al inicio."
+    }
   }
 }

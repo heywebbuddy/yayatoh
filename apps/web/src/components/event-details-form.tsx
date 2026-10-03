@@ -2,7 +2,7 @@
 
 import type { EventDetailsDto } from '@yayatoh/events';
 import { ATTENDANCE_MODES, EVENT_CATEGORIES } from '@yayatoh/events/ui';
-import { Alert, Button, Input, Select } from '@yayatoh/ui';
+import { Alert, Button, CurrencyPicker, Input, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState } from 'react';
 import { errorMessageKey } from '@/lib/errors.ts';
@@ -173,6 +173,55 @@ export function VanityForm({
       <Button type="submit" variant="secondary" disabled={pending} className="self-start">
         {t('vanitySave')}
       </Button>
+    </form>
+  );
+}
+
+/**
+ * U9 (UX-6): the event's own currency. It can change until the first order; after that the
+ * picker is read-only and says why (the server refuses a change too).
+ */
+export function EventCurrencyForm({
+  action,
+  currency,
+  locked,
+  disabled,
+}: {
+  action: (prev: FormState, form: FormData) => Promise<FormState>;
+  currency: string;
+  locked: boolean;
+  disabled: boolean;
+}) {
+  const t = useTranslations('details');
+  const te = useTranslations();
+  const [state, formAction, pending] = useActionState(action, INITIAL_FORM_STATE);
+  const error = state.code
+    ? state.reason === 'currency_locked'
+      ? t('currencyLocked')
+      : te(errorMessageKey(state.code))
+    : undefined;
+  const readOnly = locked || disabled;
+  return (
+    <form action={formAction} onSubmit={keepValues(formAction)} className="flex flex-col gap-3">
+      <CurrencyPicker
+        id="event-currency"
+        name="currency"
+        required
+        defaultValue={currency}
+        disabled={readOnly}
+        label={t('currency')}
+        hint={locked ? t('currencyLocked') : t('currencyHint')}
+        error={error}
+        className="field sm:max-w-sm"
+      />
+      <div aria-live="polite">
+        {state.ok && !pending ? <Alert tone="info" title={t('currencySaved')} /> : null}
+      </div>
+      {readOnly ? null : (
+        <Button type="submit" variant="secondary" disabled={pending} className="self-start">
+          {t('currencySave')}
+        </Button>
+      )}
     </form>
   );
 }

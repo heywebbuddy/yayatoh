@@ -7,7 +7,16 @@ import {
   legalPagesQuery,
   roleCan,
 } from '@yayatoh/tenancy';
-import { buttonClass, Card, EmptyState, light, PageHeader, Select, TimeZonePicker } from '@yayatoh/ui';
+import {
+  buttonClass,
+  Card,
+  CurrencyPicker,
+  EmptyState,
+  light,
+  PageHeader,
+  Select,
+  TimeZonePicker,
+} from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { BrandColorField } from '@/components/brand-color-field.tsx';
 import { MediaUploader } from '@/components/media-uploader.tsx';
@@ -208,12 +217,10 @@ export default async function SettingsPage({
             {labelled(
               'org-currency',
               t('settings.general.currency'),
-              <input
+              <CurrencyPicker
                 id="org-currency"
                 name="currency"
                 required
-                pattern="[A-Za-z]{3}"
-                maxLength={3}
                 defaultValue={o.currency}
                 aria-describedby="org-currency-hint"
                 className={field}

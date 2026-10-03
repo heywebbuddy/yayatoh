@@ -348,7 +348,8 @@
     "marketingAnalytics": "Analisi di marketing",
     "badges": "Badge",
     "orgAnalytics": "Analisi",
-    "integrations": "Integrazioni"
+    "integrations": "Integrazioni",
+    "coupons": "Coupon"
   },
   "vocab": {
     "attendee": "Partecipante",
@@ -840,7 +841,9 @@
     "submit": "Crea bozza",
     "slugTaken": "Esiste già un evento con questo nome. Prova con un nome leggermente diverso.",
     "fromTemplate": "Parti da un modello",
-    "guided": "Creazione guidata (3 passaggi)"
+    "guided": "Creazione guidata (3 passaggi)",
+    "currency": "Valuta",
+    "currencyHint": "La usano biglietti, pagamento e report. Puoi cambiarla fino al primo ordine."
   },
   "tickets": {
     "subtitle": "Tipi di biglietto, prezzi e disponibilità. Ogni prezzo mostrato agli acquirenti include le commissioni.",
@@ -984,7 +987,8 @@
     "seatChannel": "Alcuni di quei posti sono riservati a un altro canale di vendita. Scegli altri posti.",
     "channelInvalid": "Questo codice di vendita non è valido per questo evento. Riapri la pagina dell’evento senza codice, o chiedi a chi ti ha dato il link.",
     "channelNotice": "Stai acquistando tramite {name}: anche i posti riservati a {name} sono disponibili per te.",
-    "channelLinkInvalid": "Questo link di vendita non è valido per questo evento. Puoi comunque scegliere tra i posti aperti a tutti."
+    "channelLinkInvalid": "Questo link di vendita non è valido per questo evento. Puoi comunque scegliere tra i posti aperti a tutti.",
+    "couponBuyerLimit": "Hai già usato questo codice tutte le volte consentite."
   },
   "fakePay": {
     "eyebrow": "Pagamento di prova",
@@ -1080,7 +1084,8 @@
     "resumeCode": "Riattiva {code}",
     "addTitle": "Aggiungi un codice promozionale",
     "add": "Aggiungi codice",
-    "added": "Codice promozionale aggiunto."
+    "added": "Codice promozionale aggiunto.",
+    "orgCoupons": "Anche i coupon dell'organizzazione valgono qui. <link>Vedi tutti i codici</link>"
   },
   "questions": {
     "title": "Domande al checkout",
@@ -3152,7 +3157,13 @@
       "unlisted": "Non in elenco (solo con link)",
       "private": "Privato (codice di accesso)"
     },
-    "visibilityHint": "Gli eventi non in elenco sono raggiungibili solo tramite link. Gli eventi privati richiedono un codice di accesso che sblocca la pagina dell’evento."
+    "visibilityHint": "Gli eventi non in elenco sono raggiungibili solo tramite link. Gli eventi privati richiedono un codice di accesso che sblocca la pagina dell’evento.",
+    "currencyTitle": "Valuta",
+    "currency": "Valuta dell'evento",
+    "currencyHint": "Prezzi dei biglietti e codici promozionali mantengono gli importi nella nuova valuta. Si blocca con il primo ordine.",
+    "currencyLocked": "Bloccata: questo evento ha già ordini, quindi la valuta non può cambiare.",
+    "currencySaved": "Valuta salvata.",
+    "currencySave": "Salva valuta"
   },
   "directory": {
     "title": "Directory delle location",
@@ -4208,7 +4219,9 @@
       "ticketPrice": "Inserisci un prezzo come 25 o 25.00.",
       "ticketQuantity": "Indica quanti sono in vendita (almeno 1).",
       "generic": "Controlla questo campo."
-    }
+    },
+    "currency": "Valuta",
+    "currencyHint": "La usano biglietti, pagamento e report. Puoi cambiarla fino al primo ordine."
   },
   "eventMedia": {
     "title": "Immagini",
@@ -12328,5 +12341,73 @@
     "tooLate": "Scegli una data entro il {date}",
     "timeZoneNote": "Orari in {zone}",
     "selected": "Selezionato"
+  },
+  "coupons": {
+    "title": "Coupon",
+    "description": "Codici sconto per tutti i tuoi eventi o quelli che scegli, con i codici promozionali di ogni evento nella stessa lista.",
+    "listTitle": "Tutti i codici",
+    "emptyTitle": "Ancora nessun codice",
+    "emptyDescription": "Aggiungi un coupon qui sotto per offrire uno sconto sui tuoi eventi.",
+    "code": "Codice",
+    "type": "Tipo",
+    "typeCoupon": "Coupon dell'organizzazione",
+    "typeEvent": "Codice dell'evento",
+    "appliesTo": "Si applica a",
+    "discount": "Sconto",
+    "percentOff": "{value} di sconto",
+    "amountOff": "{amount} di sconto per biglietto",
+    "uses": "Utilizzi",
+    "perBuyerShort": "Per acquirente",
+    "valid": "Validità",
+    "until": "Fino al {date}",
+    "from": "Dal {date}",
+    "always": "Senza scadenza",
+    "status": "Stato",
+    "active": "Attivo",
+    "paused": "In pausa",
+    "actions": "Azioni",
+    "pause": "Metti in pausa",
+    "resume": "Riprendi",
+    "pauseCode": "Metti in pausa {code}",
+    "resumeCode": "Riprendi {code}",
+    "newTitle": "Aggiungi un coupon",
+    "kind": "Tipo di sconto",
+    "percent": "Sconto percentuale",
+    "amount": "Sconto di importo fisso",
+    "percentValue": "Percentuale",
+    "amountValue": "Sconto per biglietto",
+    "percentHint": "Per esempio 20 per il 20% di sconto per biglietto, prima delle commissioni.",
+    "amountHint": "Per esempio 5 per 5,00 di sconto per biglietto, prima delle commissioni.",
+    "currency": "Valuta dell'importo",
+    "currencyHint": "Il coupon vale solo per eventi in questa valuta.",
+    "scope": "Si applica a",
+    "scopeAll": "Tutti gli eventi",
+    "scopeEvents": "Eventi scelti",
+    "events": "Eventi",
+    "eventsHint": "Digita per trovare un evento. Scegline uno o più.",
+    "eventsPlaceholder": "Trova un evento",
+    "maxUses": "Utilizzi totali (facoltativo)",
+    "maxUsesHint": "Su tutti gli eventi. Lascia vuoto per nessun limite.",
+    "perBuyer": "Utilizzi per acquirente (facoltativo)",
+    "perBuyerHint": "Contati in base all'email dell'acquirente.",
+    "startsAt": "Inizio",
+    "endsAt": "Scadenza",
+    "optional": "Facoltativo, nel fuso orario della tua organizzazione.",
+    "added": "Coupon aggiunto.",
+    "add": "Aggiungi coupon",
+    "errors": {
+      "code": "Usa da 3 a 32 lettere, cifre, - o _.",
+      "codeTaken": "Questo codice è già usato da un coupon o da un codice promozionale di un evento.",
+      "value": "Inserisci uno sconto, come 20 o 5,00.",
+      "percentBps": "Inserisci una percentuale tra 0,01 e 100.",
+      "amountMinor": "Inserisci un importo maggiore di zero.",
+      "currency": "Scegli una valuta.",
+      "currencyMismatch": "Un coupon a importo vale solo per eventi nella sua valuta. Rimuovi gli eventi in altre valute o usa una percentuale.",
+      "eventIds": "Scegli almeno un evento.",
+      "maxRedemptions": "Inserisci un numero intero pari o superiore a 1.",
+      "perBuyerLimit": "Inserisci un numero intero pari o superiore a 1.",
+      "startsAt": "Inserisci una data e un'ora valide.",
+      "endsAt": "La scadenza deve essere dopo l'inizio."
+    }
   }
 }

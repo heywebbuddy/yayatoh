@@ -29,6 +29,8 @@ const ORG_NAV: readonly NavItem[] = [
   { key: 'refundRequests', path: 'refund-requests', group: 'overview', module: 'ticketing', icon: 'undo' },
   { key: 'disputes', path: 'disputes', group: 'overview', module: 'ticketing', icon: 'shield-alert' },
   { key: 'supportMacros', path: 'macros', group: 'overview', module: 'ticketing', icon: 'zap' },
+  // U9 (UX-5): org-wide coupons and every event's promo codes in one list.
+  { key: 'coupons', path: 'coupons', group: 'overview', module: 'ticketing', icon: 'tag' },
   { key: 'venues', path: 'venues', group: 'build', module: 'core', icon: 'building' },
   { key: 'team', path: 'team', group: 'build', module: 'core', icon: 'users' },
   { key: 'series', path: 'series', group: 'build', module: 'core', icon: 'layers' },
@@ -68,6 +70,7 @@ const NEEDS: Readonly<Record<string, string>> = {
   refundRequests: 'orders:read',
   disputes: 'finance:read',
   supportMacros: 'orders:support',
+  coupons: 'events:read',
   finance: 'finance:read',
   activity: 'audit:read',
   privacy: 'privacy:manage',

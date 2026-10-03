@@ -21,7 +21,25 @@ export {
   updateTicketTypeCommand,
   updateTicketTypeTx,
 } from './commands/ticket-types.ts';
+export { ticketingContactOwner } from './contact-merge.ts';
 export { instantiateTicketTypesTx, TicketTypesSnapshot, ticketTypesSnapshotTx } from './copy.ts';
+export {
+  COUPON_BUYER_LIMIT,
+  CouponDto,
+  type CouponRow,
+  CreateCouponInput,
+  claimCouponTx,
+  couponAppliesTo,
+  couponLive,
+  couponRule,
+  createCouponCommand,
+  listCouponsQuery,
+  type ResolvedCode,
+  reclaimCouponTx,
+  releaseCouponTx,
+  resolveCodeTx,
+  setCouponActiveCommand,
+} from './coupons.ts';
 export { ticketingDataSubjects } from './data-subject.ts';
 export {
   CLAIM_PURPOSE,
@@ -111,10 +129,10 @@ export {
   CreatePromoCodeInput,
   claimPromoTx,
   createPromoCodeCommand,
+  type DiscountRule,
   listOrgPromoCodesQuery,
   listPromoCodesQuery,
   normalizePromoCode,
-  type DiscountRule,
   PromoCodeDto,
   releasePromoTx,
   resolvePromoTx,
@@ -122,8 +140,8 @@ export {
 } from './promo.ts';
 export { publicTicketTypes } from './public.ts';
 export {
-  FEE_MODES,
   COUPON_SCOPES,
+  FEE_MODES,
   PROMO_KINDS,
   TICKET_STATUSES,
   TICKET_TYPE_MANAGERS,
@@ -171,21 +189,3 @@ export {
   walletPassSync,
   walletSerial,
 } from './wallet.ts';
-export {
-  COUPON_BUYER_LIMIT,
-  CouponDto,
-  type CouponRow,
-  CreateCouponInput,
-  claimCouponTx,
-  couponAppliesTo,
-  couponLive,
-  couponRule,
-  createCouponCommand,
-  listCouponsQuery,
-  reclaimCouponTx,
-  releaseCouponTx,
-  type ResolvedCode,
-  resolveCodeTx,
-  setCouponActiveCommand,
-} from './coupons.ts';
-export { ticketingContactOwner } from './contact-merge.ts';

@@ -132,30 +132,32 @@ export function CheckoutForm({
                           ? t('checkout.chooseTickets')
                           : state.reason === 'promo_invalid'
                             ? t('checkout.promoInvalid')
-                            : state.reason === 'credit_invalid'
-                              ? t('checkout.creditInvalid')
-                              : state.reason === 'credit_not_applicable'
-                                ? t('checkout.creditNotApplicable')
-                                : state.reason === 'donation_amount'
-                                  ? t('checkout.donationTooLow')
-                                  : state.reason === 'form_invalid'
-                                    ? t('checkout.questionsInvalid')
-                                    : state.reason === 'choose_date'
-                                      ? t('checkout.chooseDate')
-                                      : state.reason === 'date_sold_out'
-                                        ? t('checkout.dateSoldOut')
-                                        : ['date_cancelled', 'date_passed', 'wrong_date'].includes(
-                                              state.reason ?? '',
-                                            )
-                                          ? t('checkout.dateUnavailable')
-                                          : state.reason === 'checkout_paused'
-                                            ? t('publicEvent.salesPausedTitle')
-                                            : state.reason === 'risk_blocked'
-                                              ? t('checkout.riskBlocked')
-                                              : state.reason === 'org_suspended' ||
-                                                  state.reason === 'org_terminated'
-                                                ? t('checkout.orgUnavailable')
-                                                : t(errorMessageKey(state.code));
+                            : state.reason === 'coupon_buyer_limit'
+                              ? t('checkout.couponBuyerLimit')
+                              : state.reason === 'credit_invalid'
+                                ? t('checkout.creditInvalid')
+                                : state.reason === 'credit_not_applicable'
+                                  ? t('checkout.creditNotApplicable')
+                                  : state.reason === 'donation_amount'
+                                    ? t('checkout.donationTooLow')
+                                    : state.reason === 'form_invalid'
+                                      ? t('checkout.questionsInvalid')
+                                      : state.reason === 'choose_date'
+                                        ? t('checkout.chooseDate')
+                                        : state.reason === 'date_sold_out'
+                                          ? t('checkout.dateSoldOut')
+                                          : ['date_cancelled', 'date_passed', 'wrong_date'].includes(
+                                                state.reason ?? '',
+                                              )
+                                            ? t('checkout.dateUnavailable')
+                                            : state.reason === 'checkout_paused'
+                                              ? t('publicEvent.salesPausedTitle')
+                                              : state.reason === 'risk_blocked'
+                                                ? t('checkout.riskBlocked')
+                                                : state.reason === 'org_suspended' ||
+                                                    state.reason === 'org_terminated'
+                                                  ? t('checkout.orgUnavailable')
+                                                  : t(errorMessageKey(state.code));
   return (
     <form action={formAction} onSubmit={onSubmit} className="@container flex min-w-0 flex-1 flex-col gap-4">
       {occurrenceId ? <input type="hidden" name="occurrenceId" value={occurrenceId} /> : null}

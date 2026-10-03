@@ -40,7 +40,8 @@ export async function createEventAction(
     endsAt: zonedTimeToUtc(get('endsAt'), timezone),
     venueName: get('venueName') || null,
     city: get('city') || null,
-    currency: data.org.currency,
+    // U9 (UX-6): the event's own currency, the org default unless the form chose another.
+    currency: get('currency').toUpperCase() || data.org.currency,
   });
   // With the form's request key the create is idempotent: a repeated submit gets the same event.
   const run = () =>
@@ -86,6 +87,7 @@ const WIZARD_STEP: Readonly<Record<string, number>> = {
   attendanceMode: 1,
   ticketName: 2,
   ticketPrice: 2,
+  currency: 2,
   ticketQuantity: 2,
 };
 
@@ -117,6 +119,7 @@ export async function guidedCreateAction(
     ? (get('attendanceMode') as (typeof ATTENDANCE_MODES)[number])
     : 'in_person';
   const venueId = get('venueId') || null;
+  const currency = get('currency').toUpperCase() || data.org.currency;
   let startsAt: Date;
   let endsAt: Date;
   try {
@@ -141,7 +144,7 @@ export async function guidedCreateAction(
       return wizardError('validation_failed', 'ticketQuantity');
     let priceMinor: number;
     try {
-      priceMinor = moneyFromDecimal(ticketPrice || '0', data.org.currency).amount;
+      priceMinor = moneyFromDecimal(ticketPrice || '0', currency).amount;
     } catch {
       return wizardError('validation_failed', 'ticketPrice');
     }
@@ -156,7 +159,7 @@ export async function guidedCreateAction(
     endsAt,
     venueName: venueId ? null : get('venueName') || null,
     city: venueId ? null : get('city') || null,
-    currency: data.org.currency,
+    currency,
   };
   let slug: string;
   try {

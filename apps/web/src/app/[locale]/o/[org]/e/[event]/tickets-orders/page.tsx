@@ -568,6 +568,16 @@ export default async function TicketsPage({
         <h2 id="promo-heading" className="text-section">
           {t('promo.title')}
         </h2>
+        {/* U9 (UX-5): org-wide coupons apply here too; one list shows every code. */}
+        <p className="text-caption text-ink-2">
+          {t.rich('promo.orgCoupons', {
+            link: (chunks) => (
+              <Link href={`/o/${org}/coupons`} className="underline underline-offset-2">
+                {chunks}
+              </Link>
+            ),
+          })}
+        </p>
         {promos.length === 0 ? (
           <EmptyState title={t('promo.emptyTitle')} description={t('promo.emptyDescription')} />
         ) : (

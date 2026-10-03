@@ -348,7 +348,8 @@
     "marketingAnalytics": "マーケティング分析",
     "badges": "バッジ",
     "orgAnalytics": "アナリティクス",
-    "integrations": "連携"
+    "integrations": "連携",
+    "coupons": "クーポン"
   },
   "vocab": {
     "attendee": "参加者",
@@ -840,7 +841,9 @@
     "submit": "下書きを作成",
     "slugTaken": "同じ名前のイベントがすでにあります。少し違う名前をお試しください。",
     "fromTemplate": "テンプレートから始める",
-    "guided": "ガイド付き作成(3ステップ)"
+    "guided": "ガイド付き作成(3ステップ)",
+    "currency": "通貨",
+    "currencyHint": "チケット、決済、レポートで使われます。最初の注文までは変更できます。"
   },
   "tickets": {
     "subtitle": "チケット種別、価格、在庫を管理します。購入者に表示される価格はすべて手数料込みです。",
@@ -984,7 +987,8 @@
     "seatChannel": "選んだ席の一部は別の販売チャネル用に確保されています。ほかの席を選んでください。",
     "channelInvalid": "この販売コードはこのイベントでは使えません。コードなしでイベントページを開き直すか、リンクをくれた人に確認してください。",
     "channelNotice": "{name} 経由で購入しています。{name} 用に確保された席も選べます。",
-    "channelLinkInvalid": "この販売リンクはこのイベントでは使えません。どなたでも選べる席からは引き続き選べます。"
+    "channelLinkInvalid": "この販売リンクはこのイベントでは使えません。どなたでも選べる席からは引き続き選べます。",
+    "couponBuyerLimit": "このコードは利用できる回数をすでに使い切っています。"
   },
   "fakePay": {
     "eyebrow": "テスト決済",
@@ -1080,7 +1084,8 @@
     "resumeCode": "{code}を再開",
     "addTitle": "プロモコードを追加",
     "add": "コードを追加",
-    "added": "プロモコードを追加しました。"
+    "added": "プロモコードを追加しました。",
+    "orgCoupons": "組織全体のクーポンもここで使えます。<link>すべてのコードを見る</link>"
   },
   "questions": {
     "title": "購入時の質問",
@@ -3152,7 +3157,13 @@
       "unlisted": "限定公開（リンクのみ）",
       "private": "非公開（アクセスコード）"
     },
-    "visibilityHint": "限定公開のイベントはリンクからのみアクセスできます。非公開のイベントには、イベントページのロックを解除するアクセスコードが必要です。"
+    "visibilityHint": "限定公開のイベントはリンクからのみアクセスできます。非公開のイベントには、イベントページのロックを解除するアクセスコードが必要です。",
+    "currencyTitle": "通貨",
+    "currency": "イベントの通貨",
+    "currencyHint": "チケット価格とプロモコードは金額をそのまま新しい通貨で保持します。最初の注文が入るとロックされます。",
+    "currencyLocked": "ロック中：このイベントにはすでに注文があるため、通貨を変更できません。",
+    "currencySaved": "通貨を保存しました。",
+    "currencySave": "通貨を保存"
   },
   "directory": {
     "title": "会場ディレクトリ",
@@ -4208,7 +4219,9 @@
       "ticketPrice": "25や25.00のように価格を入力してください。",
       "ticketQuantity": "販売数を入力してください(1以上)。",
       "generic": "この項目を確認してください。"
-    }
+    },
+    "currency": "通貨",
+    "currencyHint": "チケット、決済、レポートで使われます。最初の注文までは変更できます。"
   },
   "eventMedia": {
     "title": "画像",
@@ -12328,5 +12341,73 @@
     "tooLate": "{date} 以前の日付を選んでください",
     "timeZoneNote": "{zone} の時刻",
     "selected": "選択済み"
+  },
+  "coupons": {
+    "title": "クーポン",
+    "description": "すべてのイベントまたは選んだイベントで使える割引コード。各イベントのプロモコードも同じ一覧に表示されます。",
+    "listTitle": "すべてのコード",
+    "emptyTitle": "コードはまだありません",
+    "emptyDescription": "下でクーポンを追加すると、イベント全体で割引を提供できます。",
+    "code": "コード",
+    "type": "種類",
+    "typeCoupon": "組織クーポン",
+    "typeEvent": "イベントコード",
+    "appliesTo": "対象",
+    "discount": "割引",
+    "percentOff": "{value}引き",
+    "amountOff": "チケット1枚につき{amount}引き",
+    "uses": "利用数",
+    "perBuyerShort": "購入者ごと",
+    "valid": "有効期間",
+    "until": "{date}まで",
+    "from": "{date}から",
+    "always": "終了日なし",
+    "status": "状態",
+    "active": "有効",
+    "paused": "一時停止中",
+    "actions": "操作",
+    "pause": "一時停止",
+    "resume": "再開",
+    "pauseCode": "{code}を一時停止",
+    "resumeCode": "{code}を再開",
+    "newTitle": "クーポンを追加",
+    "kind": "割引の種類",
+    "percent": "割合で割引",
+    "amount": "定額で割引",
+    "percentValue": "割合",
+    "amountValue": "チケット1枚あたりの割引額",
+    "percentHint": "例：手数料前にチケット1枚あたり20%引きなら20。",
+    "amountHint": "例：手数料前にチケット1枚あたり5.00引きなら5。",
+    "currency": "金額の通貨",
+    "currencyHint": "このクーポンはこの通貨のイベントでのみ使えます。",
+    "scope": "対象",
+    "scopeAll": "すべてのイベント",
+    "scopeEvents": "選んだイベント",
+    "events": "イベント",
+    "eventsHint": "入力してイベントを検索します。1つ以上選んでください。",
+    "eventsPlaceholder": "イベントを検索",
+    "maxUses": "合計利用回数（任意）",
+    "maxUsesHint": "すべてのイベントの合計。空欄なら無制限です。",
+    "perBuyer": "購入者ごとの利用回数（任意）",
+    "perBuyerHint": "購入者のメールアドレスで数えます。",
+    "startsAt": "開始",
+    "endsAt": "有効期限",
+    "optional": "任意。組織のタイムゾーンで入力します。",
+    "added": "クーポンを追加しました。",
+    "add": "クーポンを追加",
+    "errors": {
+      "code": "3〜32文字の英字、数字、- または _ を使ってください。",
+      "codeTaken": "このコードはすでにクーポンかイベントのプロモコードで使われています。",
+      "value": "20 や 5.00 のように割引を入力してください。",
+      "percentBps": "0.01〜100 の割合を入力してください。",
+      "amountMinor": "0 より大きい金額を入力してください。",
+      "currency": "通貨を選んでください。",
+      "currencyMismatch": "定額クーポンは同じ通貨のイベントでのみ使えます。別の通貨のイベントを外すか、割合を使ってください。",
+      "eventIds": "イベントを1つ以上選んでください。",
+      "maxRedemptions": "1 以上の整数を入力してください。",
+      "perBuyerLimit": "1 以上の整数を入力してください。",
+      "startsAt": "正しい日時を入力してください。",
+      "endsAt": "有効期限は開始より後にしてください。"
+    }
   }
 }

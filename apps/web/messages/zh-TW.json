@@ -348,7 +348,8 @@
     "marketingAnalytics": "行銷分析",
     "badges": "名牌",
     "orgAnalytics": "數據分析",
-    "integrations": "整合"
+    "integrations": "整合",
+    "coupons": "優惠券"
   },
   "vocab": {
     "attendee": "參加者",
@@ -840,7 +841,9 @@
     "submit": "建立草稿",
     "slugTaken": "已有同名活動。請改用稍有不同的名稱。",
     "fromTemplate": "從範本開始",
-    "guided": "引導式建立(3 步)"
+    "guided": "引導式建立(3 步)",
+    "currency": "幣別",
+    "currencyHint": "票券、結帳和報表都會使用此幣別。在第一筆訂單之前可以更改。"
   },
   "tickets": {
     "subtitle": "管理票種、價格與庫存。買家看到的所有價格皆已包含費用。",
@@ -984,7 +987,8 @@
     "seatChannel": "其中部分座位保留給其他銷售通路。請選擇其他座位。",
     "channelInvalid": "此銷售碼不適用於本活動。請不帶銷售碼重新開啟活動頁面，或詢問給你連結的人。",
     "channelNotice": "你正透過 {name} 購買：保留給 {name} 的座位也向你開放。",
-    "channelLinkInvalid": "此銷售連結不適用於本活動。你仍可從向所有人開放的座位中選擇。"
+    "channelLinkInvalid": "此銷售連結不適用於本活動。你仍可從向所有人開放的座位中選擇。",
+    "couponBuyerLimit": "你使用此代碼的次數已達上限。"
   },
   "fakePay": {
     "eyebrow": "測試付款",
@@ -1080,7 +1084,8 @@
     "resumeCode": "恢復{code}",
     "addTitle": "新增優惠碼",
     "add": "新增優惠碼",
-    "added": "已新增優惠碼。"
+    "added": "已新增優惠碼。",
+    "orgCoupons": "組織通用優惠券在這裡同樣適用。<link>查看所有代碼</link>"
   },
   "questions": {
     "title": "結帳問題",
@@ -3152,7 +3157,13 @@
       "unlisted": "不公開列出（僅限連結）",
       "private": "私人（存取碼）"
     },
-    "visibilityHint": "不公開列出的活動只能透過連結開啟。私人活動需要存取碼才能解鎖活動頁面。"
+    "visibilityHint": "不公開列出的活動只能透過連結開啟。私人活動需要存取碼才能解鎖活動頁面。",
+    "currencyTitle": "幣別",
+    "currency": "活動幣別",
+    "currencyHint": "票價和優惠碼在新幣別下保留原有金額。第一筆訂單成立後即鎖定。",
+    "currencyLocked": "已鎖定：此活動已有訂單，因此無法更改幣別。",
+    "currencySaved": "幣別已儲存。",
+    "currencySave": "儲存幣別"
   },
   "directory": {
     "title": "場地目錄",
@@ -4208,7 +4219,9 @@
       "ticketPrice": "請輸入如 25 或 25.00 的價格。",
       "ticketQuantity": "請填寫出售數量(至少 1)。",
       "generic": "請檢查此字段。"
-    }
+    },
+    "currency": "幣別",
+    "currencyHint": "票券、結帳和報表都會使用此幣別。在第一筆訂單之前可以更改。"
   },
   "eventMedia": {
     "title": "圖片",
@@ -12328,5 +12341,73 @@
     "tooLate": "請選擇 {date} 或之前的日期",
     "timeZoneNote": "{zone} 時間",
     "selected": "已選取"
+  },
+  "coupons": {
+    "title": "優惠券",
+    "description": "適用於所有活動或所選活動的折扣碼，每個活動自己的優惠碼也在同一份清單中。",
+    "listTitle": "所有代碼",
+    "emptyTitle": "還沒有代碼",
+    "emptyDescription": "在下方新增優惠券，為你的活動提供折扣。",
+    "code": "代碼",
+    "type": "類型",
+    "typeCoupon": "組織優惠券",
+    "typeEvent": "活動代碼",
+    "appliesTo": "適用於",
+    "discount": "折扣",
+    "percentOff": "減 {value}",
+    "amountOff": "每張票減 {amount}",
+    "uses": "使用次數",
+    "perBuyerShort": "每位買家",
+    "valid": "有效期間",
+    "until": "至 {date}",
+    "from": "自 {date} 起",
+    "always": "無結束日期",
+    "status": "狀態",
+    "active": "啟用",
+    "paused": "已暫停",
+    "actions": "操作",
+    "pause": "暫停",
+    "resume": "恢復",
+    "pauseCode": "暫停 {code}",
+    "resumeCode": "恢復 {code}",
+    "newTitle": "新增優惠券",
+    "kind": "折扣類型",
+    "percent": "按百分比折扣",
+    "amount": "按固定金額折扣",
+    "percentValue": "百分比",
+    "amountValue": "每張票折扣金額",
+    "percentHint": "例如輸入 20 表示每張票在手續費前減 20%。",
+    "amountHint": "例如輸入 5 表示每張票在手續費前減 5.00。",
+    "currency": "金額幣別",
+    "currencyHint": "此優惠券僅適用於使用此幣別的活動。",
+    "scope": "適用於",
+    "scopeAll": "所有活動",
+    "scopeEvents": "所選活動",
+    "events": "活動",
+    "eventsHint": "輸入以尋找活動。可選擇一個或多個。",
+    "eventsPlaceholder": "尋找活動",
+    "maxUses": "總使用次數（選填）",
+    "maxUsesHint": "所有活動合計。留空表示不限。",
+    "perBuyer": "每位買家使用次數（選填）",
+    "perBuyerHint": "依買家的電子郵件地址計算。",
+    "startsAt": "開始",
+    "endsAt": "到期",
+    "optional": "選填，依你組織的時區。",
+    "added": "已新增優惠券。",
+    "add": "新增優惠券",
+    "errors": {
+      "code": "請使用 3–32 個字母、數字、- 或 _。",
+      "codeTaken": "此代碼已被某個優惠券或活動優惠碼使用。",
+      "value": "請輸入折扣，例如 20 或 5.00。",
+      "percentBps": "請輸入 0.01 到 100 之間的百分比。",
+      "amountMinor": "請輸入大於零的金額。",
+      "currency": "請選擇幣別。",
+      "currencyMismatch": "固定金額優惠券僅適用於相同幣別的活動。請移除其他幣別的活動，或改用百分比。",
+      "eventIds": "請至少選擇一個活動。",
+      "maxRedemptions": "請輸入 1 或更大的整數。",
+      "perBuyerLimit": "請輸入 1 或更大的整數。",
+      "startsAt": "請輸入有效的日期和時間。",
+      "endsAt": "到期時間必須晚於開始時間。"
+    }
   }
 }

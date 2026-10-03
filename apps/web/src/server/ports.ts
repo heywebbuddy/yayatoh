@@ -9,7 +9,6 @@ import { eventRolesOf } from '@yayatoh/events';
 import { guestsContactOwner } from '@yayatoh/guests';
 import { notificationsContactOwner } from '@yayatoh/notifications';
 import { ordersContactOwner } from '@yayatoh/orders';
-import { ticketingContactOwner } from '@yayatoh/ticketing';
 import {
   createCommandPorts,
   localKeyVault,
@@ -19,6 +18,7 @@ import {
 import { defaultResolver } from '@yayatoh/platform/ssrf';
 import { surveysContactOwner } from '@yayatoh/surveys';
 import { createOrgAuthorizer, orgStatusGate } from '@yayatoh/tenancy';
+import { ticketingContactOwner } from '@yayatoh/ticketing';
 import { configureWebhooks, fakeResolver, webhookPublisherFromEnv } from '@yayatoh/webhooks';
 import { DATA_SUBJECT_CONTRIBUTORS } from './data-subjects.ts';
 

@@ -274,7 +274,10 @@ export const coupons = tenantTable(
       'coupons_value_check',
       sql`(kind = 'percent' and percent_bps between 1 and 10000 and amount_minor is null and currency is null) or (kind = 'amount' and amount_minor > 0 and percent_bps is null and currency ~ '^[A-Z]{3}$')`,
     ),
-    check('coupons_scope_check', sql`(scope = 'all' and cardinality(event_ids) = 0) or (scope = 'events' and cardinality(event_ids) >= 1)`),
+    check(
+      'coupons_scope_check',
+      sql`(scope = 'all' and cardinality(event_ids) = 0) or (scope = 'events' and cardinality(event_ids) >= 1)`,
+    ),
     check(
       'coupons_redemptions_check',
       sql`redeemed_count >= 0 and (max_redemptions is null or (max_redemptions >= 1 and redeemed_count <= max_redemptions))`,

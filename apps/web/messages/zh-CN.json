@@ -348,7 +348,8 @@
     "marketingAnalytics": "营销分析",
     "badges": "胸卡",
     "orgAnalytics": "数据分析",
-    "integrations": "集成"
+    "integrations": "集成",
+    "coupons": "优惠券"
   },
   "vocab": {
     "attendee": "参会者",
@@ -840,7 +841,9 @@
     "submit": "创建草稿",
     "slugTaken": "已存在同名活动。请换一个稍有不同的名称。",
     "fromTemplate": "从模板开始",
-    "guided": "引导式创建(3 步)"
+    "guided": "引导式创建(3 步)",
+    "currency": "货币",
+    "currencyHint": "门票、结账和报表都使用该货币。在第一笔订单之前可以更改。"
   },
   "tickets": {
     "subtitle": "管理票种、价格和库存。买家看到的所有价格均已包含费用。",
@@ -984,7 +987,8 @@
     "seatChannel": "其中部分座位为其他销售渠道保留。请选择其他座位。",
     "channelInvalid": "此销售码不适用于本活动。请不带销售码重新打开活动页面，或询问给你链接的人。",
     "channelNotice": "你正在通过 {name} 购买：为 {name} 保留的座位也向你开放。",
-    "channelLinkInvalid": "此销售链接不适用于本活动。你仍可从向所有人开放的座位中选择。"
+    "channelLinkInvalid": "此销售链接不适用于本活动。你仍可从向所有人开放的座位中选择。",
+    "couponBuyerLimit": "你使用此代码的次数已达上限。"
   },
   "fakePay": {
     "eyebrow": "测试付款",
@@ -1080,7 +1084,8 @@
     "resumeCode": "恢复{code}",
     "addTitle": "添加优惠码",
     "add": "添加优惠码",
-    "added": "已添加优惠码。"
+    "added": "已添加优惠码。",
+    "orgCoupons": "组织通用优惠券在这里同样适用。<link>查看所有代码</link>"
   },
   "questions": {
     "title": "结账问题",
@@ -3152,7 +3157,13 @@
       "unlisted": "不公开列出（仅限链接）",
       "private": "私密（访问码）"
     },
-    "visibilityHint": "不公开列出的活动只能通过链接访问。私密活动需要访问码来解锁活动页面。"
+    "visibilityHint": "不公开列出的活动只能通过链接访问。私密活动需要访问码来解锁活动页面。",
+    "currencyTitle": "货币",
+    "currency": "活动货币",
+    "currencyHint": "门票价格和优惠码在新货币下保持原有金额。第一笔订单后将锁定。",
+    "currencyLocked": "已锁定：此活动已有订单，因此无法更改货币。",
+    "currencySaved": "货币已保存。",
+    "currencySave": "保存货币"
   },
   "directory": {
     "title": "场地目录",
@@ -4208,7 +4219,9 @@
       "ticketPrice": "请输入如 25 或 25.00 的价格。",
       "ticketQuantity": "请填写出售数量(至少 1)。",
       "generic": "请检查此字段。"
-    }
+    },
+    "currency": "货币",
+    "currencyHint": "门票、结账和报表都使用该货币。在第一笔订单之前可以更改。"
   },
   "eventMedia": {
     "title": "图片",
@@ -12328,5 +12341,73 @@
     "tooLate": "请选择 {date} 或之前的日期",
     "timeZoneNote": "{zone} 时间",
     "selected": "已选择"
+  },
+  "coupons": {
+    "title": "优惠券",
+    "description": "适用于所有活动或所选活动的折扣码，每个活动自己的优惠码也在同一列表中。",
+    "listTitle": "所有代码",
+    "emptyTitle": "还没有代码",
+    "emptyDescription": "在下方添加优惠券，为你的活动提供折扣。",
+    "code": "代码",
+    "type": "类型",
+    "typeCoupon": "组织优惠券",
+    "typeEvent": "活动代码",
+    "appliesTo": "适用于",
+    "discount": "折扣",
+    "percentOff": "减 {value}",
+    "amountOff": "每张门票减 {amount}",
+    "uses": "使用次数",
+    "perBuyerShort": "每位买家",
+    "valid": "有效期",
+    "until": "截至 {date}",
+    "from": "自 {date} 起",
+    "always": "无结束日期",
+    "status": "状态",
+    "active": "启用",
+    "paused": "已暂停",
+    "actions": "操作",
+    "pause": "暂停",
+    "resume": "恢复",
+    "pauseCode": "暂停 {code}",
+    "resumeCode": "恢复 {code}",
+    "newTitle": "添加优惠券",
+    "kind": "折扣类型",
+    "percent": "按百分比减",
+    "amount": "按固定金额减",
+    "percentValue": "百分比",
+    "amountValue": "每张门票减免金额",
+    "percentHint": "例如输入 20 表示每张门票在收费前减 20%。",
+    "amountHint": "例如输入 5 表示每张门票在收费前减 5.00。",
+    "currency": "金额货币",
+    "currencyHint": "该优惠券仅适用于使用此货币的活动。",
+    "scope": "适用于",
+    "scopeAll": "所有活动",
+    "scopeEvents": "所选活动",
+    "events": "活动",
+    "eventsHint": "输入以查找活动。可选择一个或多个。",
+    "eventsPlaceholder": "查找活动",
+    "maxUses": "总使用次数（可选）",
+    "maxUsesHint": "所有活动合计。留空表示不限。",
+    "perBuyer": "每位买家使用次数（可选）",
+    "perBuyerHint": "按买家的电子邮件地址计算。",
+    "startsAt": "开始",
+    "endsAt": "到期",
+    "optional": "可选，按你组织的时区。",
+    "added": "优惠券已添加。",
+    "add": "添加优惠券",
+    "errors": {
+      "code": "请使用 3–32 个字母、数字、- 或 _。",
+      "codeTaken": "此代码已被某个优惠券或活动优惠码使用。",
+      "value": "请输入折扣，例如 20 或 5.00。",
+      "percentBps": "请输入 0.01 到 100 之间的百分比。",
+      "amountMinor": "请输入大于零的金额。",
+      "currency": "请选择货币。",
+      "currencyMismatch": "固定金额优惠券仅适用于相同货币的活动。请移除其他货币的活动，或改用百分比。",
+      "eventIds": "请至少选择一个活动。",
+      "maxRedemptions": "请输入 1 或更大的整数。",
+      "perBuyerLimit": "请输入 1 或更大的整数。",
+      "startsAt": "请输入有效的日期和时间。",
+      "endsAt": "到期时间必须晚于开始时间。"
+    }
   }
 }
