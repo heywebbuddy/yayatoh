@@ -18,9 +18,14 @@ export async function withTenant<T>(ctx: Ctx, fn: (tx: TenantTx) => Promise<T>):
   const orgId = ctx.orgId;
   if (!orgId || !UUID.test(orgId)) throw new DomainError('forbidden', 'Tenant context required');
   const actor = ctx.actor.type === 'user' ? ctx.actor.userId : '';
+  // M6.7a: a user acting through an agency grant. The money tables' row policy
+  // (`tenancy.money_access_allowed()`) refuses their rows unless that grant is live and the client
+  // opted in to finance.
+  const grant = ctx.viaAgency?.grantId ?? '';
+  if (grant && !UUID.test(grant)) throw new DomainError('forbidden', 'Invalid agency grant');
   return pool('app').db.transaction(async (tx) => {
     await tx.execute(
-      sql`select set_config('app.org_id', ${orgId}, true), set_config('app.actor_id', ${actor}, true), set_config('app.request_id', ${ctx.requestId}, true)`,
+      sql`select set_config('app.org_id', ${orgId}, true), set_config('app.actor_id', ${actor}, true), set_config('app.request_id', ${ctx.requestId}, true), set_config('app.agency_grant_id', ${grant}, true)`,
     );
     return fn(tx as unknown as TenantTx);
   });

@@ -3,6 +3,7 @@ import {
   Award,
   Bell,
   BellRing,
+  Briefcase,
   Building2,
   Calendar,
   CalendarCheck,
@@ -15,6 +16,7 @@ import {
   FlaskConical,
   Gauge,
   Globe,
+  Handshake,
   Heart,
   History,
   House,
@@ -104,6 +106,9 @@ const ICONS: Record<string, LucideIcon> = {
   flask: FlaskConical,
   'bell-ring': BellRing,
   webhook: Webhook,
+  // M6.7a: the agency's Clients pages and a client's Agencies page.
+  briefcase: Briefcase,
+  handshake: Handshake,
 };
 
 export function Icon({ name, className = 'size-4' }: { name: string; className?: string }) {

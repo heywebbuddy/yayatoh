@@ -3,7 +3,7 @@ import type { TenantTx } from '@yayatoh/db';
 import { type EventDto, eventRoleGrantsTx, findEventTx } from '@yayatoh/events';
 import { type Ctx, DomainError } from '@yayatoh/kernel';
 import { isProfileKey, type ProfileKey } from '@yayatoh/platform';
-import { eventRoleCan, memberRoleTx, type OrgRole, roleCan } from '@yayatoh/tenancy';
+import { agencyAccessTx, type ConsoleRole, eventRoleCan, memberRoleTx, roleCan } from '@yayatoh/tenancy';
 import { type CcRole, commandCenterRole } from './domain/roles.ts';
 import type { WidgetScope } from './domain/widgets.ts';
 
@@ -18,6 +18,24 @@ export interface CallerScope extends WidgetScope {
 }
 
 /**
+ * The caller's org role: their membership, or (M6.7a) the live agency grant the context acts
+ * through. `orgRole` is the role the Command Center maps (the grant's role for an agency), and
+ * `consoleRole` the one permissions are read from (the agency console role, finance-gated).
+ */
+async function callerRoleTx(
+  tx: TenantTx,
+  ctx: Ctx,
+  userId: string,
+): Promise<{ orgRole: string; consoleRole: ConsoleRole } | null> {
+  const member = await memberRoleTx(tx, userId);
+  if (member) return { orgRole: member, consoleRole: member };
+  if (!ctx.viaAgency) return null;
+  const agency = await agencyAccessTx(tx);
+  if (!agency || agency.grantId !== ctx.viaAgency.grantId) return null;
+  return { orgRole: agency.role, consoleRole: agency.consoleRole };
+}
+
+/**
  * The caller's Command Center role for one event: their membership (under the org's RLS), their
  * live event roles, the org's modules and the event's profile. Only signed-in members have one.
  */
@@ -26,10 +44,15 @@ export async function callerScopeTx(tx: TenantTx, ctx: Ctx, eventId: string): Pr
   const userId = ctx.actor.userId;
   const event = await findEventTx(tx, eventId);
   if (!event) throw new DomainError('not_found', 'Event not found');
-  const orgRole = await memberRoleTx(tx, userId);
-  const eventRoles = (await eventRoleGrantsTx(tx, eventId, userId, ctx.now)).map((g) => g.role);
+  const caller = await callerRoleTx(tx, ctx, userId);
+  const orgRole = caller?.orgRole ?? null;
+  // Event roles never apply to agency access.
+  const eventRoles =
+    caller && caller.orgRole === caller.consoleRole
+      ? (await eventRoleGrantsTx(tx, eventId, userId, ctx.now)).map((g) => g.role)
+      : [];
   const role = commandCenterRole(orgRole, eventRoles);
-  if (!orgRole || !role) throw new DomainError('forbidden', 'Not a member');
+  if (!caller || !orgRole || !role) throw new DomainError('forbidden', 'Not a member');
   const modules = await effectiveModulesTx(tx);
   return {
     event,
@@ -39,7 +62,7 @@ export async function callerScopeTx(tx: TenantTx, ctx: Ctx, eventId: string): Pr
     role,
     modules,
     profile: profileOf(event),
-    canWrite: roleCan(orgRole as OrgRole, 'events:write') || eventRoleCan(eventRoles, 'events:write'),
+    canWrite: roleCan(caller.consoleRole, 'events:write') || eventRoleCan(eventRoles, 'events:write'),
   };
 }
 
@@ -49,10 +72,10 @@ export async function orgScopeTx(
   ctx: Ctx,
 ): Promise<{ role: CcRole; orgRole: string; modules: Set<string> }> {
   if (ctx.actor.type !== 'user') throw new DomainError('forbidden', 'The Command Center is for members');
-  const orgRole = await memberRoleTx(tx, ctx.actor.userId);
-  const role = commandCenterRole(orgRole, []);
-  if (!orgRole || !role) throw new DomainError('forbidden', 'Not a member');
-  return { role, orgRole, modules: await effectiveModulesTx(tx) };
+  const caller = await callerRoleTx(tx, ctx, ctx.actor.userId);
+  const role = commandCenterRole(caller?.orgRole ?? null, []);
+  if (!caller || !role) throw new DomainError('forbidden', 'Not a member');
+  return { role, orgRole: caller.orgRole, modules: await effectiveModulesTx(tx) };
 }
 
 export const profileOf = (event: Pick<EventDto, 'profile'>): ProfileKey =>

@@ -75,6 +75,7 @@ export {
   FINANCE_KEYS,
   FinanceReportDto,
 } from './metrics/event-report.ts';
+export { type EventHeadline, eventHeadlineTx } from './metrics/headline.ts';
 export {
   OrgReportDto,
   orgFinanceQuery,
