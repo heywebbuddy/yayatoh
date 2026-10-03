@@ -279,9 +279,10 @@ describe('solver (M6.12a)', () => {
       const rand = seededRandom(seed);
       const places = ballroom(4 + Math.floor(rand() * 10), 2 + Math.floor(rand() * 9));
       const guests = guestList(10 + Math.floor(rand() * 90), seed + 100);
+      const lockShare = rand();
       const fixed: Record<string, string> = {};
       for (const g of guests)
-        if (rand() < rand()) fixed[g.id] = places[Math.floor(rand() * places.length)]?.itemId ?? '';
+        if (rand() < lockShare) fixed[g.id] = places[Math.floor(rand() * places.length)]?.itemId ?? '';
       const rules = [
         rule({ kind: 'keep_together', params: { group: { by: 'party' } } }, rand() < 0.5 ? 'hard' : 'soft'),
         rule({ kind: 'vip_near_stage', params: {} }, rand() < 0.5 ? 'hard' : 'soft'),
