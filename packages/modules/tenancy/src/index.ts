@@ -57,6 +57,14 @@ export {
   revokeEventInvitationTx,
   revokeInvitationCommand,
 } from './commands/invitations.ts';
+export {
+  type EnsureOutcome,
+  ensureManagedMembershipTx,
+  type ManagedRole,
+  membershipRoleTx,
+  type RemoveOutcome,
+  removeManagedMembershipTx,
+} from './commands/managed-members.ts';
 export { addMemberCommand, changeMemberRoleCommand, removeMemberCommand } from './commands/members.ts';
 export {
   completeOnboardingCommand,

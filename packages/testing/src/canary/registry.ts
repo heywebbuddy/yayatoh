@@ -34,6 +34,7 @@ import { privateColumns as registration } from '@yayatoh/registration';
 import { privateColumns as reports } from '@yayatoh/reports';
 import { privateColumns as reviews } from '@yayatoh/reviews';
 import { privateColumns as seating } from '@yayatoh/seating';
+import { privateColumns as sso } from '@yayatoh/sso';
 import { privateColumns as surveys } from '@yayatoh/surveys';
 import { privateColumns as templates } from '@yayatoh/templates';
 import { privateColumns as tenancy } from '@yayatoh/tenancy';
@@ -87,6 +88,7 @@ export const COLUMN_PRIVACY: readonly SchemaPrivacy[] = [
   tenancy,
   ticketing,
   venues,
+  sso,
   webhooks,
 ];
 

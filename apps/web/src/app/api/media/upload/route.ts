@@ -9,7 +9,7 @@ import {
 } from '@yayatoh/media';
 import { revalidatePath } from 'next/cache';
 import { ports } from '@/server/ports.ts';
-import { getSession } from '@/server/session.ts';
+import { getSession, sessionOpensOrg } from '@/server/session.ts';
 
 /** Room for the multipart envelope and the text fields around the file. */
 const ENVELOPE_BYTES = 64 * 1024;
@@ -56,6 +56,8 @@ export async function POST(req: Request): Promise<Response> {
   // Staff acting as a member (M1.2e) work in that org only, and every write names them.
   const imp = session.impersonation;
   if (imp && imp.orgId !== ticket.orgId) return refuse(403, 'forbidden');
+  // M6.5a: a session made by an org's single sign-on opens that org only.
+  if (!sessionOpensOrg(session, ticket.orgId)) return refuse(403, 'forbidden');
   const ctx = createCtx({
     orgId: ticket.orgId,
     actor: { type: 'user', userId: session.userId },

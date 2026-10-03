@@ -21,7 +21,8 @@ import { getImpersonation, isImpersonationActive } from './impersonation.ts';
 import type { AuthMailer } from './mailer.ts';
 import { hashPassword, needsRehash, verifyPassword } from './password.ts';
 import { revokeAllRefreshTokens } from './refresh-tokens.ts';
-import { authSchema, securityEvents, twoFactors } from './schema.ts';
+import { authSchema, securityEvents, sessions, twoFactors } from './schema.ts';
+import { isPlatformStaff } from './sso.ts';
 import { devPersonaTotpSecret, matchTotpStep } from './totp.ts';
 import { isTrustedDevice, revokeAllTrustedDevices } from './trusted-devices.ts';
 
@@ -136,7 +137,7 @@ async function startChallenge(ctx: Any, data: { session: { token: string }; user
 }
 
 /** A pending second step for a person: the signed `two_factor` cookie and its attempt counter. */
-async function openChallenge(ctx: Any, userId: string) {
+async function openChallenge(ctx: Any, userId: string): Promise<string> {
   const cookie = ctx.context.createAuthCookie('two_factor', { maxAge: CHALLENGE_MAX_AGE_S });
   const identifier = `2fa-${generateRandomString(20)}`;
   const expiresAt = new Date(Date.now() + CHALLENGE_MAX_AGE_S * 1000);
@@ -147,6 +148,42 @@ async function openChallenge(ctx: Any, userId: string) {
     expiresAt,
   });
   await ctx.setSignedCookie(cookie.name, identifier, ctx.context.secret, cookie.attributes);
+  return identifier;
+}
+
+/**
+ * M6.5a: a sign-in challenge opened by single sign-on remembers the org (and whether the person is
+ * platform staff) next to the challenge, so the session made once the code is right is bound to
+ * that org, and a trusted device never skips a staff member's code.
+ */
+const ssoMarkerKey = (identifier: string) => `yy-sso-challenge:${identifier}`;
+interface SsoMarker {
+  readonly orgId: string;
+  readonly staff: boolean;
+}
+
+async function ssoMarkerOf(ctx: Any): Promise<{ key: string; marker: SsoMarker } | null> {
+  const cookie = ctx.context.createAuthCookie('two_factor');
+  const identifier = await ctx.getSignedCookie(cookie.name, ctx.context.secret);
+  if (!identifier) return null;
+  const key = ssoMarkerKey(identifier);
+  const v = await ctx.context.internalAdapter.findVerificationValue(key);
+  if (!v || new Date(v.expiresAt) <= new Date()) return null;
+  return { key, marker: JSON.parse(v.value) as SsoMarker };
+}
+
+/** After a passed challenge: a session from single sign-on opens its org only. */
+async function bindSsoSession(ctx: Any) {
+  const fresh = ctx.context.newSession;
+  if (!fresh) return;
+  const found = await ssoMarkerOf(ctx);
+  if (!found) return;
+  await identityDatabase()
+    .update(sessions)
+    .set({ ssoOrgId: found.marker.orgId })
+    .where(eq(sessions.token, fresh.session.token));
+  await ctx.context.internalAdapter.deleteVerificationByIdentifier(found.key);
+  await audit(fresh.user.id, 'sso.signed_in', { method: 'challenge' });
 }
 
 async function audit(userId: string, action: string, data: Record<string, unknown>) {
@@ -306,6 +343,7 @@ function handoffPlugin() {
 }
 
 const SocialSessionBody = z.object({ userId: z.string().uuid() });
+const SsoSessionBody = z.object({ userId: z.string().uuid(), orgId: z.string().uuid() });
 const TrustedBody = z.object({ cookie: z.string().max(200).nullish(), host: z.string().max(300) });
 
 /**
@@ -336,6 +374,46 @@ function signInExtrasPlugin() {
           return ctx.json({ challenge: false });
         },
       ),
+      /**
+       * M6.5a: an SSO sign-in the app resolved to a person and an org (the IdP's answer checked,
+       * the address in a domain the org verified, the membership in place) becomes a session bound
+       * to that org. People with two-step verification and all platform staff answer the code first
+       * (D14: SSO never replaces it); staff without it are refused.
+       */
+      ssoSession: createAuthEndpoint(
+        '/sso/session',
+        { method: 'POST', body: SsoSessionBody },
+        async (ctx) => {
+          const user = await ctx.context.internalAdapter.findUserById(ctx.body.userId);
+          if (!user || (user as { deletedAt?: Date | null }).deletedAt)
+            throw new APIError('BAD_REQUEST', { code: 'UNKNOWN_USER', message: 'unknown user' });
+          const twoFactor = Boolean((user as { twoFactorEnabled?: boolean | null }).twoFactorEnabled);
+          const staff = await isPlatformStaff(user.id);
+          if (staff && !twoFactor) {
+            await audit(user.id, 'sso.refused', { by: 'staff_two_factor_required' });
+            throw new APIError('FORBIDDEN', {
+              code: 'STAFF_TWO_FACTOR_REQUIRED',
+              message: 'staff must use two-step verification',
+            });
+          }
+          if (twoFactor) {
+            const identifier = await openChallenge(ctx, user.id);
+            const marker: SsoMarker = { orgId: ctx.body.orgId, staff };
+            await ctx.context.internalAdapter.createVerificationValue({
+              identifier: ssoMarkerKey(identifier),
+              value: JSON.stringify(marker),
+              expiresAt: new Date(Date.now() + CHALLENGE_MAX_AGE_S * 1000),
+            });
+            return ctx.json({ challenge: true });
+          }
+          const session = await ctx.context.internalAdapter.createSession(user.id, false, {
+            ssoOrgId: ctx.body.orgId,
+          });
+          await setSessionCookie(ctx, { session, user });
+          await audit(user.id, 'sso.signed_in', { method: 'idp' });
+          return ctx.json({ challenge: false });
+        },
+      ),
       redeemTrustedDevice: createAuthEndpoint(
         '/trusted-device/redeem',
         { method: 'POST', body: TrustedBody },
@@ -348,13 +426,21 @@ function signInExtrasPlugin() {
           const userId: string | undefined =
             pending && new Date(pending.expiresAt) > new Date() ? pending.value : undefined;
           if (!identifier || !userId) return ctx.json({ ok: false });
+          // M6.5a: a staff member's SSO sign-in always takes the code; other SSO sign-ins stay bound.
+          const sso = await ssoMarkerOf(ctx);
+          if (sso?.marker.staff) return ctx.json({ ok: false });
           const trusted = await isTrustedDevice({ cookie: ctx.body.cookie, userId, host: ctx.body.host });
           if (!trusted) return ctx.json({ ok: false });
           const user = await ctx.context.internalAdapter.findUserById(userId);
           if (!user) return ctx.json({ ok: false });
           await ctx.context.internalAdapter.deleteVerificationByIdentifier(identifier);
           await ctx.context.internalAdapter.deleteVerificationByIdentifier(`2fa-attempts-${identifier}`);
-          const session = await ctx.context.internalAdapter.createSession(user.id, false);
+          const session = await ctx.context.internalAdapter.createSession(
+            user.id,
+            false,
+            sso ? { ssoOrgId: sso.marker.orgId } : undefined,
+          );
+          if (sso) await ctx.context.internalAdapter.deleteVerificationByIdentifier(sso.key);
           await setSessionCookie(ctx, { session, user });
           ctx.setCookie(cookie.name, '', { ...cookie.attributes, maxAge: 0 });
           await audit(user.id, 'two_factor.skipped_trusted_device', {
@@ -417,6 +503,8 @@ export function createAuth(opts: AuthOptions) {
         // The host the session belongs to (M1.2d) and the impersonation behind it (M1.2e).
         host: { type: 'string', required: false, input: false },
         impersonationId: { type: 'string', required: false, input: false },
+        // M6.5a: the org whose single sign-on made this session (it opens that org only).
+        ssoOrgId: { type: 'string', required: false, input: false },
       },
     },
     databaseHooks: {
@@ -474,6 +562,7 @@ export function createAuth(opts: AuthOptions) {
           (ctx.path.startsWith('/two-factor/') ||
             ctx.path.startsWith('/handoff/') ||
             ctx.path.startsWith('/social/') ||
+            ctx.path.startsWith('/sso/') ||
             ctx.path.startsWith('/trusted-device/'))
         )
           throw new APIError('NOT_FOUND');
@@ -517,6 +606,12 @@ export function createAuth(opts: AuthOptions) {
         }
         // Replay protection: the authenticator code's time step is spent with the sign-in.
         if (ctx.path === '/two-factor/verify-totp' && fresh) await spendTotpStep(ctx, opts.totpReplayExempt);
+        // M6.5a: a challenge opened by single sign-on binds the new session to the org.
+        if (
+          (ctx.path === '/two-factor/verify-totp' || ctx.path === '/two-factor/verify-backup-code') &&
+          ctx.context.newSession
+        )
+          await bindSsoSession(ctx);
         // Audit: a sign-in challenge passed (with the authenticator or a backup code).
         if (
           (ctx.path === '/two-factor/verify-totp' || ctx.path === '/two-factor/verify-backup-code') &&

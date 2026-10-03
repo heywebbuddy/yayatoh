@@ -2,7 +2,7 @@ import { createCtx, executeQuery, isDomainError } from '@yayatoh/kernel';
 import { portalFileQuery } from '@yayatoh/media';
 import { resolveOrgSlug } from '@yayatoh/tenancy';
 import { ports } from '@/server/ports.ts';
-import { getSession } from '@/server/session.ts';
+import { getSession, sessionOpensOrg } from '@/server/session.ts';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 const notFound = () => new Response('Not found', { status: 404, headers: { 'cache-control': 'no-store' } });
@@ -21,6 +21,8 @@ export async function GET(_req: Request, { params }: { params: Promise<{ org: st
   if (!resolved) return notFound();
   const imp = session.impersonation;
   if (imp && imp.orgId !== resolved.orgId) return notFound();
+  // M6.5a: a session made by an org's single sign-on opens that org only.
+  if (!sessionOpensOrg(session, resolved.orgId)) return notFound();
   const ctx = createCtx({
     orgId: resolved.orgId,
     actor: { type: 'user', userId: session.userId },

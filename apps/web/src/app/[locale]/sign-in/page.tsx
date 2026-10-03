@@ -7,6 +7,7 @@ import { Link } from '@/i18n/navigation.ts';
 import { humanCheckWidget } from '@/server/human-check.ts';
 import { devAuthEnabled, ownSession } from '@/server/session.ts';
 import { enabledSocialProviders } from '@/server/social.ts';
+import { ssoAvailable } from '@/server/sso.ts';
 import { verifiedTenantReturn } from '@/server/tenant-return.ts';
 
 /** Messages after a Google/Apple sign-in came back without signing in (M1.2f). */
@@ -25,10 +26,11 @@ export default async function SignInPage({
     signedOut?: string;
     social?: string;
     reset?: string;
+    sso?: string;
   }>;
 }) {
   const { locale } = await params;
-  const { next, challenge, return: returnUrl, state, signedOut, social, reset } = await searchParams;
+  const { next, challenge, return: returnUrl, state, signedOut, social, reset, sso } = await searchParams;
   setRequestLocale(locale);
   const t = await getTranslations('signIn');
   // Only same-site relative paths are accepted as a post-sign-in destination (no open redirect).
@@ -56,6 +58,7 @@ export default async function SignInPage({
         />
         {signedOut === 'everywhere' ? <Alert tone="info" title={t('signedOutEverywhere')} /> : null}
         {reset === 'done' ? <Alert tone="info" title={t('passwordReset')} /> : null}
+        {sso === 'other_org' ? <Alert tone="info" title={t('ssoOtherOrg')} /> : null}
         {socialMessage ? <Alert title={t(`social.${socialMessage}`)} /> : null}
         <Card size="panel">
           {handoff && session ? (
@@ -81,6 +84,11 @@ export default async function SignInPage({
             </div>
           )}
         </Card>
+        {challenge !== '1' && !(handoff && session) && ssoAvailable() ? (
+          <Link href="/sign-in/sso" className={buttonClass('secondary', 'md', 'self-center')}>
+            {t('ssoLink')}
+          </Link>
+        ) : null}
         {devAuthEnabled() ? (
           <Link href="/dev/login" className={buttonClass('ghost', 'sm', 'self-center')}>
             {t('devPersonas')}

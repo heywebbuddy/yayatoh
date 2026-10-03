@@ -5,7 +5,7 @@ import { eventRolesOpenSection, memberRole, resolveOrgSlug, roleCan } from '@yay
 import type { NextRequest } from 'next/server';
 import { ports } from '@/server/ports.ts';
 import { seatStreamResponse } from '@/server/realtime.ts';
-import { getSession } from '@/server/session.ts';
+import { getSession, sessionOpensOrg } from '@/server/session.ts';
 
 export const dynamic = 'force-dynamic';
 
@@ -22,7 +22,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ org:
   if (!resolved || resolved.status === 'terminated') return new Response(null, { status: 404 });
   // Staff acting as a member (M1.2e) see only the org they started from.
   const imp = session.impersonation;
-  if (imp && imp.orgId !== resolved.orgId) return new Response(null, { status: 404 });
+  if (!sessionOpensOrg(session, resolved.orgId)) return new Response(null, { status: 404 });
   const ctx = createCtx({
     orgId: resolved.orgId,
     actor: { type: 'user', userId: session.userId },

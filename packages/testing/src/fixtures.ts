@@ -349,6 +349,20 @@ import {
   setVipTableCommand,
 } from '@yayatoh/seating';
 import {
+  addDomainCommand,
+  checkDomainCommand,
+  completeSsoLoginCommand,
+  createScimTokenCommand,
+  FAKE_IDP_CERTIFICATE,
+  publishFakeTxt,
+  recordConnectionTestCommand,
+  saveConnectionCommand,
+  scimCreateGroupCommand,
+  scimCreateUserCommand,
+  scimCtx,
+  setConnectionStatusCommand,
+} from '@yayatoh/sso';
+import {
   createSurveyCommand,
   sendSurveyCommand,
   submitSurveyResponseCommand,
@@ -2875,6 +2889,9 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ctx(),
     ports,
   );
+  // M6.5a single sign-on and SCIM: a SAML connection tested and active for a verified domain, a
+  // SCIM token, a SCIM user (the viewer) in a group, and the viewer's IdP identity link.
+  await ssoFixture(org.id, slug, viewerId, ctx);
   // M6.6a billing (isolation coverage of org_billing, subscriptions, org_entitlements and
   // provider_events): legacy fees grandfathered, a fake billing customer, and a Pro subscription
   // whose synced entitlements are every module key (so the org's modules match launch_standard
@@ -3515,4 +3532,71 @@ async function guestSiteRows(eventId: string, ctx: () => Ctx) {
   }
   await executeCommand(setGuestSitePasswordCommand, { ...ev, password: FIXTURE_SITE_PASSWORD }, ctx(), ports);
   await executeCommand(publishGuestSiteCommand, { ...ev, published: true }, ctx(), ports);
+}
+
+/** The fixture org's single sign-on domain (verified through the fake DNS). */
+export const ssoFixtureDomain = (slug: string) => `${slug}.sso.test`;
+
+/**
+ * M6.5a: rows in every `sso` table for an org: a SAML connection (the fake IdP's metadata values),
+ * a verified domain, a passed test and activation, a SCIM token, the viewer as a SCIM user in a
+ * group, and the viewer's IdP identity link.
+ */
+async function ssoFixture(orgId: string, slug: string, viewerId: string, ctx: (o?: Partial<Ctx>) => Ctx) {
+  const domain = ssoFixtureDomain(slug);
+  const conn = await executeCommand(
+    saveConnectionCommand,
+    {
+      protocol: 'saml',
+      name: 'Fixture IdP',
+      defaultRole: 'viewer',
+      jit: true,
+      entityId: `https://idp.${domain}/idp`,
+      ssoUrl: `https://idp.${domain}/sso/saml`,
+      certificate: FAKE_IDP_CERTIFICATE,
+    },
+    ctx(),
+    ports,
+  );
+  const d = await executeCommand(addDomainCommand, { domain }, ctx(), ports);
+  publishFakeTxt(d.record.name, d.record.value);
+  await executeCommand(checkDomainCommand, { domainId: d.id }, ctx(), ports);
+  await executeCommand(recordConnectionTestCommand, { connectionId: conn.id, ok: true }, ctx(), ports);
+  await executeCommand(setConnectionStatusCommand, { status: 'active' }, ctx(), ports);
+  const token = await executeCommand(createScimTokenCommand, {}, ctx(), ports);
+  const scim = scimCtx(orgId, token.id);
+  const baseUrl = 'https://app.yayatoh.test/api/scim/v2';
+  const user = await executeCommand(
+    scimCreateUserCommand,
+    {
+      userId: viewerId,
+      baseUrl,
+      fields: {
+        userName: `viewer@${domain}`,
+        email: `viewer@${domain}`,
+        externalId: `ext-${slug}`,
+        displayName: 'Fixture Viewer',
+        givenName: 'Fixture',
+        familyName: 'Viewer',
+        active: true,
+      },
+    },
+    scim,
+    ports,
+  );
+  await executeCommand(
+    scimCreateGroupCommand,
+    {
+      baseUrl,
+      fields: { displayName: 'Fixture group', externalId: `grp-${slug}`, members: [user.resource.id] },
+    },
+    scim,
+    ports,
+  );
+  await executeCommand(
+    completeSsoLoginCommand,
+    { connectionId: conn.id, subject: `subject-${slug}`, email: `viewer@${domain}`, userId: viewerId },
+    createCtx({ orgId, actor: { type: 'system', name: 'sso.login' } }),
+    ports,
+  );
 }

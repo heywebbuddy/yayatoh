@@ -2,7 +2,7 @@ import { createCtx, executeQuery, isDomainError } from '@yayatoh/kernel';
 import { emailPreviewQuery, PREVIEW_HEADERS } from '@yayatoh/notifications';
 import { resolveOrgSlug } from '@yayatoh/tenancy';
 import { ports } from '@/server/ports.ts';
-import { getSession } from '@/server/session.ts';
+import { getSession, sessionOpensOrg } from '@/server/session.ts';
 
 /**
  * A stored email preview (M1.10d), framed by the announcement composer and the template editor.
@@ -25,6 +25,8 @@ export async function GET(_req: Request, { params }: { params: Promise<{ org: st
   // Staff acting as a member (M1.2e) see only the org they started from.
   const imp = session.impersonation;
   if (imp && imp.orgId !== resolved.orgId) return notFound();
+  // M6.5a: a session made by an org's single sign-on opens that org only.
+  if (!sessionOpensOrg(session, resolved.orgId)) return notFound();
   const ctx = createCtx({
     orgId: resolved.orgId,
     actor: { type: 'user', userId: session.userId },

@@ -42,6 +42,7 @@ import {
 import { registrationDecideAction, registrationSessionAccess } from '@yayatoh/registration';
 import { attendeeExportAction, bookingsExportAction } from '@yayatoh/reports';
 import { seatAssignAction, setOccupantDirectory, setPartyCredentials } from '@yayatoh/seating';
+import { configureSso, fakeIdentityProvider, fakeMetadataFetcher, fakeTxtResolver } from '@yayatoh/sso';
 import { surveyExportAction, surveysContactOwner } from '@yayatoh/surveys';
 import { createOrgAuthorizer, orgStatusGate } from '@yayatoh/tenancy';
 import { ticketResendAction } from '@yayatoh/ticketing';
@@ -82,6 +83,14 @@ export const webhookPublisher: FakePublisher = fakePublisher({
   store: memoryWebhookStore(),
 });
 configureWebhooks({ publisher: webhookPublisher, resolver: fakeResolver });
+
+/** M6.5a: single sign-on and SCIM run against the fake IdP, fake DNS and fake metadata. */
+export const FAKE_IDP_SEED = randomBytes(32).toString('hex');
+configureSso({
+  idp: fakeIdentityProvider({ seed: FAKE_IDP_SEED, idpUrl: 'https://app.yayatoh.test/auth/sso/fake' }),
+  resolveTxt: fakeTxtResolver,
+  fetchMetadata: fakeMetadataFetcher,
+});
 
 /** The bulk actions the apps register, and the step command built from them. */
 export const BULK_ACTIONS = [
