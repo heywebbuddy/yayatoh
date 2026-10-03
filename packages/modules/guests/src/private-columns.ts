@@ -1,4 +1,4 @@
-import { columnPrivacy, internal, personal } from '@yayatoh/db';
+import { columnPrivacy, holder, internal, personal, secret } from '@yayatoh/db';
 
 /**
  * Column privacy of the `guests` schema (roadmap §9 canary leak test; see `columnPrivacy` in
@@ -91,5 +91,22 @@ export const privateColumns = columnPrivacy('guests', {
     channel: 'vocab',
     dedupe_key: internal(),
     locale: 'vocab',
+  },
+  // M4.5a: the guest website. Its content is for people holding the password (P4-3c), never
+  // public; the address is in the site's URL and names no one (the password is the gate).
+  sites: {
+    code: 'public',
+    status: 'vocab',
+    title: holder(),
+    intro: holder(),
+    content_locale: 'vocab',
+    password_hash: secret('none', {
+      why: 'a scrypt hash held to its format by a CHECK; no DTO has a field for it (site.test.ts)',
+    }),
+  },
+  site_blocks: {
+    kind: 'vocab',
+    heading: holder(),
+    content: holder(),
   },
 });

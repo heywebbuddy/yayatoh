@@ -200,15 +200,20 @@ test.describe('badges (M5.5a)', () => {
     // One page per badge (a 4×3 fold-over sheet each): the page tree counts 3.
     expect(bytes.toString('latin1')).toMatch(/\/Count 3\b/);
 
-    // One badge for the desk.
+    // One badge for the desk (M5.5b: printed through the print log, then opened as a PDF).
     const one = page.getByRole('region', { name: 'One badge' });
     await one.getByLabel('Name or ticket number').fill('Ada');
     await one.getByRole('button', { name: 'Find' }).click();
-    const badgeLink = page.getByRole('link', { name: 'Badge PDF for Ada Lovelace' });
+    const badgeLink = page.getByRole('link', { name: 'Print badge for Ada Lovelace' });
     await expect(badgeLink).toBeVisible();
-    const oneHref = (await badgeLink.getAttribute('href')) ?? '';
+    await badgeLink.click();
+    await page.getByRole('button', { name: 'Print badge for Ada Lovelace' }).click();
+    const pdfLink = page.getByRole('link', { name: 'Open badge PDF for Ada Lovelace' });
+    await expect(pdfLink).toBeVisible();
+    const oneHref = (await pdfLink.getAttribute('href')) ?? '';
     const onePdf = await page.request.get(oneHref);
     expect(onePdf.headers()['content-type']).toBe('application/pdf');
+    await page.goto(`${base}/badges`);
     const downloadHref = (await ready.getByRole('link', { name: 'Download PDF' }).getAttribute('href')) ?? '';
 
     // A viewer can preview (page, designer, sample PDF) but every write is hidden and refused.

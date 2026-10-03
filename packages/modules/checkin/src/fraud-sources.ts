@@ -63,7 +63,7 @@ export const signalRaisedEvent = (s: {
 });
 
 /** Insert a signal raised by a source event (once per event) and announce it on the outbox. */
-async function raiseFromSourceTx(
+export async function raiseFromSourceTx(
   tx: TenantTx,
   subscriber: string,
   s: MappedSignal & {

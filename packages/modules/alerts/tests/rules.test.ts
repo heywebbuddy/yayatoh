@@ -282,3 +282,24 @@ describe('catalogue', () => {
     expect(THRESHOLDS.snoozeMinutes).toEqual([60, 240, 1440]);
   });
 });
+
+describe('pledges unpaid after the event (M4.8e, P4-12)', () => {
+  it('fires on any unpaid pledge counted (the facts count only from 14 days after), with the sum', () => {
+    const over = { startsAt: at(-20 * 24 * HOUR), endsAt: at(-20 * 24 * HOUR + 4 * HOUR) };
+    expect(fired({ ...over, unpaidPledges: 0 }).pledgesUnpaid).toBeUndefined();
+    const r = fired({ ...over, unpaidPledges: 12, unpaidPledgesMinor: 1_850_000 }).pledgesUnpaid;
+    expect(r).toMatchObject({
+      severity: 'warning',
+      count: 12,
+      params: { count: 12, amountMinor: 1_850_000 },
+    });
+  });
+  it('still fires once the event is completed or cancelled: the pledges are still owed', () => {
+    expect(
+      fired({ status: 'completed', unpaidPledges: 1, unpaidPledgesMinor: 100 }).pledgesUnpaid?.count,
+    ).toBe(1);
+  });
+  it('its fix is the event pledges page', () => {
+    expect(fixPath('pledgesUnpaid', 'gala')).toBe('/e/gala/donations/pledges');
+  });
+});

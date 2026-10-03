@@ -25,7 +25,7 @@ import {
 } from '@yayatoh/ui';
 import { ArrowLeft, ChartColumn, MessageCircleQuestion, ThumbsUp } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useActionState, useEffect, useId, useRef, useState, useTransition } from 'react';
+import { type ReactNode, useActionState, useEffect, useId, useRef, useState, useTransition } from 'react';
 import type { LiveActionState } from '@/app/[locale]/events/[slug]/live/[session]/actions.ts';
 import { Link } from '@/i18n/navigation.ts';
 import { initialsOf } from '@/lib/initials.ts';
@@ -65,6 +65,7 @@ export function ParticipantView({
   vote,
   ask,
   upvote,
+  feedback,
 }: {
   eventName: string;
   eventHref: string;
@@ -76,6 +77,8 @@ export function ParticipantView({
   vote: Vote;
   ask: Ask;
   upvote: Upvote;
+  /** M5.7b: the session-end feedback prompt, when there is one. */
+  feedback?: ReactNode;
 }) {
   const t = useTranslations('engagement');
   const { state, stream } = useLiveState(streamUrl, initial);
@@ -98,6 +101,7 @@ export function ParticipantView({
         description={t('participant.description')}
         actions={<StreamBadge state={stream} />}
       />
+      {feedback}
       <section aria-labelledby="live-polls-heading" className="flex flex-col gap-4">
         <h2 id="live-polls-heading" className="m-0 text-section text-ink">
           {t('participant.pollsHeading')}

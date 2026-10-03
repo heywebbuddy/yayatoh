@@ -156,6 +156,21 @@ export const StartCheckoutInput = z.object({
     .default([]),
   /** Seated events: the chosen seats (their ticket types come from the seat map). */
   seats: z.array(z.uuid()).max(50).default([]),
+  /**
+   * M6.11a: the seats best available held for this buyer (its token); the order takes them over
+   * instead of `seats`.
+   */
+  seatHold: z
+    .string()
+    .regex(/^[A-Za-z0-9_-]{32}$/)
+    .optional(),
+  /** M6.11a: the buyer says someone in the party needs a wheelchair-accessible seat. */
+  accessibleNeed: z.boolean().default(false),
+  /**
+   * M6.11b: a sponsor's or promoter's sales code (their link carries it): seated orders go through
+   * that channel and may take its allotted seats. An unknown code is refused.
+   */
+  channelCode: z.string().trim().max(40).optional(),
   /** Multi-date events (M1.4b): the chosen date; required when the event has dates. */
   occurrenceId: z.uuid().optional(),
   buyer: z.object({

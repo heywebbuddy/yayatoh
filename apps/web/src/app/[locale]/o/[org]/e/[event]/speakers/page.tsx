@@ -37,6 +37,7 @@ export default async function SpeakersPage({
   );
   // M5.3a speaker portal: access per speaker, and links to proposed changes and the task board.
   const ts = await getTranslations('speakerAccess');
+  const tcfp = await getTranslations('cfp');
   const access = await executeQuery(speakerAccessQuery, { eventId: ev.id }, data.ctx, ports);
   const changes = await executeQuery(speakerChangesQuery, { eventId: ev.id }, data.ctx, ports);
   const errors = {
@@ -99,6 +100,9 @@ export default async function SpeakersPage({
             </Link>
             <Link href={`/o/${org}/e/${event}/speakers/tasks`} className={buttonClass('secondary')}>
               {ts('tasksLink')}
+            </Link>
+            <Link href={`/o/${org}/e/${event}/speakers/cfp`} className={buttonClass('secondary')}>
+              {tcfp('title')}
             </Link>
           </nav>
         }

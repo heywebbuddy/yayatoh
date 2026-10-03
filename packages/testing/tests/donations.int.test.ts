@@ -476,6 +476,8 @@ describe('gifts on a connected org', () => {
         'goalMinor',
         'id',
         'levels',
+        // M4.8f: the campaign's running challenge matches (terms and progress only).
+        'matches',
         'maxGiftMinor',
         'minGiftMinor',
         'name',

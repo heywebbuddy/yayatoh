@@ -132,6 +132,8 @@ export async function organizationPublicTx(
   primaryHostManaged: boolean;
   /** The org's IANA timezone (dates on its public pages that belong to no event). */
   timezone: string;
+  /** M6.3a: a sandbox org (never on the marketplace). */
+  sandbox: boolean;
 } | null> {
   const [o] = await tx
     .select({
@@ -143,6 +145,7 @@ export async function organizationPublicTx(
       logoAlt: organizations.logoAlt,
       poweredByVisible: organizations.poweredByVisible,
       timezone: organizations.timezone,
+      sandbox: organizations.sandbox,
     })
     .from(organizations)
     .where(eq(organizations.id, orgId));
