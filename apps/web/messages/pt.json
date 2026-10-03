@@ -935,14 +935,23 @@
     "orgUnavailable": "Este organizador não está vendendo ingressos no momento. Os ingressos já comprados continuam válidos.",
     "riskBlocked": "Não foi possível aceitar este pedido. Entre em contacto com o organizador.",
     "creditInvalid": "Esse código de crédito na loja não é válido ou já foi usado.",
-    "creditNotApplicable": "Esse crédito na loja não pode ser usado nestes ingressos."
+    "creditNotApplicable": "Esse crédito na loja não pode ser usado nestes ingressos.",
+    "saveCardForGiving": "Salvar meu cartão para as doações de hoje à noite (você fará isso na próxima página; nada é salvo sem o seu consentimento lá)"
   },
   "fakePay": {
     "eyebrow": "Pagamento de teste",
     "title": "Pague seu pedido",
     "description": "Esta é uma página de pagamento de teste. Nenhum dinheiro real é movimentado.",
     "pay": "Pagar agora (teste)",
-    "decline": "Simular um cartão recusado"
+    "decline": "Simular um cartão recusado",
+    "setupTitle": "Configuração de cartão de teste",
+    "setupDescription": "Substitui o formulário seguro de cartão do provedor de pagamentos. Nenhum cartão real é salvo.",
+    "testCard": "Cartão de teste",
+    "card4242": "4242 · sempre cobra",
+    "card0002": "0002 · sempre recusa",
+    "card9995": "9995 · recusa a primeira cobrança",
+    "saveCard": "Salvar cartão (teste)",
+    "failSetup": "Simular uma configuração com falha"
   },
   "order": {
     "eyebrow": "Seu pedido",
@@ -8885,7 +8894,8 @@
       "cardBody": "Dê números de raquete aos convidados, chame os níveis pelo console, deixe os observadores registrarem as raquetes erguidas no celular e confirme as promessas.",
       "openConsole": "Abrir o console",
       "openSpotter": "Registrar raquetes",
-      "openPaddles": "Números de raquete"
+      "openPaddles": "Números de raquete",
+      "openPledges": "Compromissos e cobrança"
     },
     "paddles": {
       "title": "Números de raquete",
@@ -11237,6 +11247,162 @@
     "unseated": "Ainda sem lugar: {names}",
     "guestOf": "Acompanhante de {name}",
     "keep": "Esta página sempre mostra sua mesa atual: o link e o código QR do seu convite não mudam quando os anfitriões mudam você de lugar.",
-    "toRsvp": "Voltar à sua resposta"
+    "toRsvp": "Voltar à sua resposta",
+    "saveCard": "Salve um cartão para as doações de hoje à noite"
+  },
+  "savedCard": {
+    "metaTitle": "Salve um cartão para hoje à noite",
+    "title": "Salve um cartão para as doações de hoje à noite",
+    "intro": "Salve seu cartão uma vez no seu próprio celular e doe com um toque durante a noite. Nada é cobrado agora.",
+    "introParty": "Para {party}: salve seu cartão uma vez no seu próprio celular e doe com um toque durante a noite. Os compromissos que você fizer são cobrados na manhã seguinte. Nada é cobrado agora.",
+    "unavailableTitle": "Não é possível salvar cartões",
+    "unavailableBody": "Este evento não está recebendo doações on-line agora. Você ainda pode doar no evento.",
+    "formLabel": "Salvar um cartão",
+    "formTitle": "Seus dados",
+    "name": "Nome completo",
+    "email": "E-mail",
+    "emailHint": "O resumo dos seus compromissos e os recibos vão para cá.",
+    "consentLabel": "Autorizo salvar este cartão para hoje à noite",
+    "consent": "{org} pode salvar este cartão no seu provedor de pagamentos e cobrá-lo apenas pelas doações que eu escolher e pelos compromissos que eu fizer em {event}. Os compromissos são cobrados na manhã seguinte ao evento; antes recebo um resumo. O cartão é removido 30 dias após o evento, e posso removê-lo a qualquer momento nesta página.",
+    "privacy": "Os dados do seu cartão vão direto para o provedor de pagamentos. Nunca vemos nem guardamos o número do seu cartão.",
+    "save": "Salvar meu cartão",
+    "saving": "Abrindo o formulário seguro do cartão…",
+    "savedTitle": "Seu cartão está salvo para hoje à noite",
+    "savedBody": "O {brand} final {last4} está pronto para doar com um toque neste evento.",
+    "card": "Cartão",
+    "giveNow": "Doar agora",
+    "remove": "Remover meu cartão",
+    "removeHint": "Remover cancela qualquer cobrança ainda não feita; você ainda pode pagar os compromissos pelo link.",
+    "removed": "Seu cartão foi removido. Ele não será cobrado.",
+    "pending": "Estamos confirmando seu cartão com o provedor de pagamentos. Atualize em instantes.",
+    "failed": "Não foi possível salvar seu cartão. Tente de novo ou use outro cartão.",
+    "fromCheckout": "Obrigado, seu pedido está concluído. Seus ingressos chegam por e-mail.",
+    "oneTapTitle": "Doe com seu cartão salvo",
+    "oneTapBody": "Um toque cobra o {brand} final {last4}. Você verá uma confirmação logo em seguida.",
+    "oneTapFailed": "Essa doação não foi concluída. Tente de novo ou use o formulário abaixo.",
+    "oneTapGive": "Doar {amount} · {name}",
+    "manageCard": "Gerenciar meu cartão salvo",
+    "errors": {
+      "name": "Informe seu nome completo.",
+      "email": "Informe um e-mail válido.",
+      "consent": "Marque a caixa para autorizar salvar seu cartão.",
+      "event_over": "Este evento terminou, então não é mais possível salvar cartões.",
+      "not_connected": "Este evento não está recebendo doações on-line agora.",
+      "link": "Este link não é mais válido. Peça um novo ao organizador."
+    }
+  },
+  "pledgePay": {
+    "metaTitle": "Seu compromisso",
+    "title": "Seu compromisso de {amount}",
+    "subtitle": "{level} · {campaign}. Obrigado pela sua generosidade.",
+    "stateTitle": "Status",
+    "status": {
+      "scheduled": "Cobrança no cartão agendada",
+      "charging": "Cobrando",
+      "invoiced": "Aguardando pagamento",
+      "paid": "Pago",
+      "paid_offline": "Pago",
+      "written_off": "Encerrado"
+    },
+    "card": "Cartão",
+    "cardScheduled": "Vamos cobrar o {brand} final {last4} em {when}.",
+    "charging": "Seu cartão está sendo cobrado agora. Atualize em instantes.",
+    "due": "Pague até {date}.",
+    "thanks": "Pago integralmente. Obrigado! Seu recibo chega por e-mail.",
+    "closed": "Este compromisso está encerrado. Não há mais nada a pagar.",
+    "payNow": "Pagar {amount} agora",
+    "payAnotherWay": "Pagar {amount} agora de outra forma",
+    "anotherWayHint": "Pagar agora cancela a cobrança no cartão. Quer usar outro cartão? Pague agora com ele.",
+    "errors": {
+      "charging": "Seu cartão está sendo cobrado agora, por isso este pagamento não foi iniciado.",
+      "settled": "Este compromisso já está quitado.",
+      "no_email": "Precisamos de um e-mail para este compromisso. Peça ao organizador para adicionar.",
+      "rate_limited": "Muitas tentativas. Aguarde um minuto e tente de novo.",
+      "not_connected": "O pagamento on-line não está disponível agora. Pergunte ao organizador como pagar.",
+      "generic": "Algo deu errado. Tente de novo."
+    }
+  },
+  "pledges": {
+    "title": "Compromissos",
+    "subtitle": "Cada compromisso do leilão de raquetes e como está sendo cobrado.",
+    "viewerNotice": "Você pode ver os compromissos. As funções financeiras fecham a noite, registram pagamentos e dão baixa em compromissos.",
+    "pledged": "Comprometido",
+    "paid": "Pago",
+    "owed": "Ainda devido",
+    "writtenOffTotal": "Baixado",
+    "cardsSaved": "Cartões salvos",
+    "emptyTitle": "Ainda não há compromissos",
+    "emptyDescription": "Os compromissos aparecem aqui quando quem registra confirma raquetes no leilão.",
+    "closeTitle": "{count, plural, one {# compromisso para enviar} other {# compromissos para enviar}}",
+    "closeBody": "Ao fechar a noite, cada doador recebe um resumo. Compromissos com cartão salvo são cobrados amanhã às 09:00 no fuso horário do evento; os demais recebem um link de pagamento com vencimento em 30 dias e lembretes até o pagamento.",
+    "close": "Fechar a noite e enviar os resumos",
+    "closed": "Resumos enviados: {cards, plural, one {# compromisso será cobrado de um cartão salvo} other {# compromissos serão cobrados de cartões salvos}} e {invoices, plural, one {# compromisso recebeu um link de pagamento} other {# compromissos receberam links de pagamento}}.",
+    "caption": "Compromissos e sua cobrança",
+    "columns": {
+      "paddle": "Raquete",
+      "holder": "Doador",
+      "level": "Nível",
+      "amount": "Valor",
+      "status": "Status",
+      "detail": "Detalhes",
+      "actions": "Ações"
+    },
+    "status": {
+      "open": "Não enviado",
+      "scheduled": "Cobrança no cartão agendada",
+      "charging": "Cobrando",
+      "invoiced": "Link de pagamento enviado",
+      "paid": "Pago",
+      "paid_offline": "Pago off-line",
+      "written_off": "Baixado"
+    },
+    "cardLabel": "{brand} ·{last4}",
+    "card": "Cartão",
+    "detail": {
+      "open": "Aguardando o fechamento da noite.",
+      "scheduled": "{card} em {when}",
+      "charging": "{card}, cobrança em andamento",
+      "invoiced": "Vence em {date}.",
+      "declined": "{count, plural, one {Cartão recusado uma vez.} other {Cartão recusado # vezes.}}",
+      "noEmail": "Nenhum e-mail registrado: compartilhe você mesmo o link de pagamento.",
+      "paidCard": "Cobrado de {card}",
+      "paidLink": "Pago pelo link"
+    },
+    "methods": {
+      "check": "Cheque",
+      "wire": "Transferência",
+      "stock": "Ações",
+      "daf": "Fundo aconselhado pelo doador",
+      "cash": "Dinheiro",
+      "other": "Outro"
+    },
+    "recordPayment": "Registrar um pagamento",
+    "method": "Forma de pagamento",
+    "chooseMethod": "Escolha…",
+    "reference": "Referência (opcional)",
+    "receivedOn": "Recebido em",
+    "noteOptional": "Observação (opcional)",
+    "recordSubmit": "Registrar o pagamento da raquete {paddle}",
+    "recorded": "Pagamento registrado. Lembretes e qualquer cobrança no cartão foram interrompidos.",
+    "writeOff": "Dar baixa",
+    "writeOffNote": "Por que está sendo baixado",
+    "writeOffSubmit": "Dar baixa no compromisso da raquete {paddle}",
+    "writtenOff": "Compromisso de {amount} baixado.",
+    "errors": {
+      "charging": "O cartão está sendo cobrado agora. Tente de novo em alguns minutos.",
+      "settled": "Este compromisso já está quitado.",
+      "future": "A data não pode estar no futuro.",
+      "method": "Escolha a forma de pagamento.",
+      "receivedOn": "Informe a data de recebimento.",
+      "note": "Escreva por que o compromisso está sendo baixado.",
+      "generic": "Algo deu errado. Tente de novo."
+    },
+    "qr": {
+      "label": "Código QR para salvar um cartão para as doações de hoje à noite",
+      "checkinTitle": "Salvar cartão no check-in",
+      "checkinBody": "Mostre este código aos convidados depois do check-in: eles salvam um cartão no próprio celular para doar com um toque hoje à noite.",
+      "tableTitle": "Salvar cartão nas mesas",
+      "tableBody": "Imprima este código nos cartões de mesa: os convidados salvam um cartão no próprio celular para doar com um toque e para seus compromissos."
+    }
   }
 }

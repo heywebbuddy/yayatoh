@@ -528,3 +528,19 @@ export const giveWithSavedCardCommand = tenantCommand({
     data: { eventId: input.eventId, campaignId: input.campaignId, amountMinor: r.amountMinor },
   }),
 });
+
+/** The party behind a link and its event (the party's card page, reached by its QR code). */
+export async function partyCardTarget(
+  orgId: string,
+  token: string,
+): Promise<{ eventId: string; eventName: string; slug: string; partyName: string } | null> {
+  const ctx = createCtx({ orgId, actor: { type: 'system', name: 'donations.saved-card' } });
+  return withTenant(ctx, async (tx) => {
+    const party = await guestsPartyCredentials.partyByLinkTx(tx, token, ctx.now);
+    if (!party) return null;
+    const event = await findEventTx(tx, party.eventId);
+    return event
+      ? { eventId: event.id, eventName: event.name, slug: event.slug, partyName: party.partyName }
+      : null;
+  });
+}

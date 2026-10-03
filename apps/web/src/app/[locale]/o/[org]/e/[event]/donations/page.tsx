@@ -307,6 +307,15 @@ export default async function DonationsPage({
                 {tp('openPaddles')}
               </Link>
             ) : null}
+            {/* M4.8e: pledge collection and saved cards. */}
+            {can('orders:read') ? (
+              <Link
+                href={`/o/${org}/e/${event}/donations/pledges`}
+                className={buttonClass('secondary', 'sm')}
+              >
+                {tp('openPledges')}
+              </Link>
+            ) : null}
           </div>
         </Card>
       ) : null}

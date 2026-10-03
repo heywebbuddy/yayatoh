@@ -25,6 +25,7 @@ import { formatNumber } from '@/lib/format.ts';
 import { realtimeUrl } from '@/lib/realtime-url.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
+import { CardSavingQr } from '../donations/pledges/card-qr.tsx';
 import {
   checkpointArchivedAction,
   createCheckpointAction,
@@ -146,6 +147,10 @@ export default async function OnsitePage({
         scoped={scope.checkpointIds !== null}
         presenceUrl={`/api/command-center/${org}/${event}/presence`}
       />
+      {/* M4.8e: at a gala with an open campaign, the desk shows guests the card-saving QR code. */}
+      {data.modules.has('donations') ? (
+        <CardSavingQr orgId={data.org.id} eventId={ev.id} slug={ev.slug} source="checkin" />
+      ) : null}
       {status.signals.length > 0 ? (
         <section
           aria-labelledby="signals-heading"

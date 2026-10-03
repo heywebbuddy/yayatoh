@@ -935,14 +935,23 @@
     "orgUnavailable": "Questo organizzatore non sta vendendo biglietti in questo momento. I biglietti già acquistati restano validi.",
     "riskBlocked": "Non possiamo accettare questo ordine. Contatta l’organizzatore.",
     "creditInvalid": "Questo codice credito negozio non è valido o è già stato usato.",
-    "creditNotApplicable": "Questo credito negozio non può essere usato per questi biglietti."
+    "creditNotApplicable": "Questo credito negozio non può essere usato per questi biglietti.",
+    "saveCardForGiving": "Salva la mia carta per le donazioni di stasera (lo farai nella pagina successiva; non si salva nulla senza il tuo consenso lì)"
   },
   "fakePay": {
     "eyebrow": "Pagamento di prova",
     "title": "Paga il tuo ordine",
     "description": "Questa è una pagina di pagamento di prova. Non viene addebitato denaro reale.",
     "pay": "Paga ora (prova)",
-    "decline": "Simula una carta rifiutata"
+    "decline": "Simula una carta rifiutata",
+    "setupTitle": "Configurazione carta di prova",
+    "setupDescription": "Sostituisce il modulo sicuro della carta del fornitore di pagamenti. Non viene salvata alcuna carta reale.",
+    "testCard": "Carta di prova",
+    "card4242": "4242 · addebito sempre riuscito",
+    "card0002": "0002 · sempre rifiutata",
+    "card9995": "9995 · rifiuta il primo addebito",
+    "saveCard": "Salva carta (prova)",
+    "failSetup": "Simula una configurazione non riuscita"
   },
   "order": {
     "eyebrow": "Il tuo ordine",
@@ -8885,7 +8894,8 @@
       "cardBody": "Dai ai ospiti i numeri di paletta, chiama i livelli dalla console, lascia che gli osservatori registrino le palette alzate sul telefono e conferma gli impegni.",
       "openConsole": "Apri la console",
       "openSpotter": "Registra palette",
-      "openPaddles": "Numeri di paletta"
+      "openPaddles": "Numeri di paletta",
+      "openPledges": "Impegni e incasso"
     },
     "paddles": {
       "title": "Numeri di paletta",
@@ -11237,6 +11247,162 @@
     "unseated": "Ancora senza posto: {names}",
     "guestOf": "Ospite di {name}",
     "keep": "Questa pagina mostra sempre il tuo tavolo attuale: il link e il codice QR del tuo invito non cambiano quando i padroni di casa ti spostano.",
-    "toRsvp": "Torna alla tua risposta"
+    "toRsvp": "Torna alla tua risposta",
+    "saveCard": "Salva una carta per le donazioni di stasera"
+  },
+  "savedCard": {
+    "metaTitle": "Salva una carta per stasera",
+    "title": "Salva una carta per le donazioni di stasera",
+    "intro": "Salva la tua carta una volta sul tuo telefono e dona con un tocco durante la serata. Ora non viene addebitato nulla.",
+    "introParty": "Per {party}: salva la tua carta una volta sul tuo telefono e dona con un tocco durante la serata. Gli impegni che prendi vengono addebitati la mattina dopo. Ora non viene addebitato nulla.",
+    "unavailableTitle": "Il salvataggio della carta non è aperto",
+    "unavailableBody": "Questo evento al momento non accetta donazioni online. Puoi comunque donare all’evento.",
+    "formLabel": "Salva una carta",
+    "formTitle": "I tuoi dati",
+    "name": "Nome e cognome",
+    "email": "Email",
+    "emailHint": "Qui ricevi il riepilogo dei tuoi impegni e le ricevute.",
+    "consentLabel": "Autorizzo il salvataggio di questa carta per stasera",
+    "consent": "{org} può salvare questa carta presso il suo fornitore di pagamenti e addebitarla solo per le donazioni che scelgo e gli impegni che prendo a {event}. Gli impegni vengono addebitati la mattina dopo l’evento; prima ricevo un riepilogo. La carta viene rimossa 30 giorni dopo l’evento e posso rimuoverla in qualsiasi momento da questa pagina.",
+    "privacy": "I dati della carta vanno direttamente al fornitore di pagamenti. Non vediamo né conserviamo mai il numero della tua carta.",
+    "save": "Salva la mia carta",
+    "saving": "Apertura del modulo sicuro della carta…",
+    "savedTitle": "La tua carta è salvata per stasera",
+    "savedBody": "La {brand} che termina con {last4} è pronta per donare con un tocco a questo evento.",
+    "card": "Carta",
+    "giveNow": "Dona ora",
+    "remove": "Rimuovi la mia carta",
+    "removeHint": "Rimuoverla annulla ogni addebito non ancora effettuato; puoi comunque pagare gli impegni tramite link.",
+    "removed": "La tua carta è stata rimossa. Non verrà addebitata.",
+    "pending": "Stiamo confermando la tua carta con il fornitore di pagamenti. Aggiorna tra un attimo.",
+    "failed": "Non è stato possibile salvare la tua carta. Riprova o usa un’altra carta.",
+    "fromCheckout": "Grazie, il tuo ordine è completo. I biglietti arrivano via email.",
+    "oneTapTitle": "Dona con la carta salvata",
+    "oneTapBody": "Un tocco addebita la {brand} che termina con {last4}. Subito dopo vedrai una conferma.",
+    "oneTapFailed": "Questa donazione non è andata a buon fine. Riprova o usa il modulo qui sotto.",
+    "oneTapGive": "Dona {amount} · {name}",
+    "manageCard": "Gestisci la mia carta salvata",
+    "errors": {
+      "name": "Inserisci nome e cognome.",
+      "email": "Inserisci un indirizzo email valido.",
+      "consent": "Seleziona la casella per autorizzare il salvataggio della carta.",
+      "event_over": "Questo evento è terminato: non è più possibile salvare carte.",
+      "not_connected": "Questo evento al momento non accetta donazioni online.",
+      "link": "Questo link non è più valido. Chiedine uno nuovo all’organizzatore."
+    }
+  },
+  "pledgePay": {
+    "metaTitle": "Il tuo impegno",
+    "title": "Il tuo impegno di {amount}",
+    "subtitle": "{level} · {campaign}. Grazie per la tua generosità.",
+    "stateTitle": "Stato",
+    "status": {
+      "scheduled": "Addebito su carta programmato",
+      "charging": "Addebito in corso",
+      "invoiced": "In attesa di pagamento",
+      "paid": "Pagato",
+      "paid_offline": "Pagato",
+      "written_off": "Chiuso"
+    },
+    "card": "Carta",
+    "cardScheduled": "Addebiteremo la {brand} che termina con {last4} il {when}.",
+    "charging": "Stiamo addebitando la tua carta proprio ora. Aggiorna tra un attimo.",
+    "due": "Paga entro il {date}.",
+    "thanks": "Pagato per intero. Grazie! La ricevuta arriva via email.",
+    "closed": "Questo impegno è chiuso. Non è dovuto altro.",
+    "payNow": "Paga {amount} ora",
+    "payAnotherWay": "Paga {amount} ora in un altro modo",
+    "anotherWayHint": "Pagando ora annulli l’addebito sulla carta. Vuoi usare un’altra carta? Paga ora con quella.",
+    "errors": {
+      "charging": "Stiamo addebitando la tua carta proprio ora, quindi questo pagamento non è stato avviato.",
+      "settled": "Questo impegno è già saldato.",
+      "no_email": "Serve un’email per questo impegno. Chiedi all’organizzatore di aggiungerla.",
+      "rate_limited": "Troppi tentativi. Attendi un minuto e riprova.",
+      "not_connected": "Il pagamento online non è disponibile ora. Chiedi all’organizzatore come pagare.",
+      "generic": "Qualcosa è andato storto. Riprova."
+    }
+  },
+  "pledges": {
+    "title": "Impegni",
+    "subtitle": "Ogni impegno dell’asta con palette e come viene incassato.",
+    "viewerNotice": "Puoi vedere gli impegni. I ruoli finanza chiudono la serata, registrano i pagamenti e stralciano gli impegni.",
+    "pledged": "Promesso",
+    "paid": "Pagato",
+    "owed": "Ancora dovuto",
+    "writtenOffTotal": "Stralciato",
+    "cardsSaved": "Carte salvate",
+    "emptyTitle": "Ancora nessun impegno",
+    "emptyDescription": "Gli impegni compaiono qui quando chi registra conferma le palette nell’asta.",
+    "closeTitle": "{count, plural, one {# impegno da inviare} other {# impegni da inviare}}",
+    "closeBody": "Chiudendo la serata ogni donatore riceve un riepilogo. Gli impegni con una carta salvata vengono addebitati domani alle 09:00 nel fuso orario dell’evento; gli altri ricevono un link di pagamento con scadenza a 30 giorni e promemoria fino al pagamento.",
+    "close": "Chiudi la serata e invia i riepiloghi",
+    "closed": "Riepiloghi inviati: {cards, plural, one {# impegno sarà addebitato su una carta salvata} other {# impegni saranno addebitati su carte salvate}} e {invoices, plural, one {# impegno ha ricevuto un link di pagamento} other {# impegni hanno ricevuto link di pagamento}}.",
+    "caption": "Impegni e incasso",
+    "columns": {
+      "paddle": "Paletta",
+      "holder": "Donatore",
+      "level": "Livello",
+      "amount": "Importo",
+      "status": "Stato",
+      "detail": "Dettagli",
+      "actions": "Azioni"
+    },
+    "status": {
+      "open": "Non inviato",
+      "scheduled": "Addebito su carta programmato",
+      "charging": "Addebito in corso",
+      "invoiced": "Link di pagamento inviato",
+      "paid": "Pagato",
+      "paid_offline": "Pagato offline",
+      "written_off": "Stralciato"
+    },
+    "cardLabel": "{brand} ·{last4}",
+    "card": "Carta",
+    "detail": {
+      "open": "In attesa della chiusura della serata.",
+      "scheduled": "{card} il {when}",
+      "charging": "{card}, addebito in corso",
+      "invoiced": "Scadenza {date}.",
+      "declined": "{count, plural, one {Carta rifiutata una volta.} other {Carta rifiutata # volte.}}",
+      "noEmail": "Nessuna email registrata: condividi tu il link di pagamento.",
+      "paidCard": "Addebitato su {card}",
+      "paidLink": "Pagato tramite link"
+    },
+    "methods": {
+      "check": "Assegno",
+      "wire": "Bonifico",
+      "stock": "Azioni",
+      "daf": "Fondo consigliato dal donatore",
+      "cash": "Contanti",
+      "other": "Altro"
+    },
+    "recordPayment": "Registra un pagamento",
+    "method": "Modalità di pagamento",
+    "chooseMethod": "Scegli…",
+    "reference": "Riferimento (facoltativo)",
+    "receivedOn": "Ricevuto il",
+    "noteOptional": "Nota (facoltativa)",
+    "recordSubmit": "Registra il pagamento della paletta {paddle}",
+    "recorded": "Pagamento registrato. Promemoria ed eventuale addebito sulla carta sono stati fermati.",
+    "writeOff": "Stralcia",
+    "writeOffNote": "Motivo dello stralcio",
+    "writeOffSubmit": "Stralcia l’impegno della paletta {paddle}",
+    "writtenOff": "Impegno di {amount} stralciato.",
+    "errors": {
+      "charging": "La carta è in fase di addebito. Riprova tra qualche minuto.",
+      "settled": "Questo impegno è già saldato.",
+      "future": "La data non può essere nel futuro.",
+      "method": "Scegli la modalità di pagamento.",
+      "receivedOn": "Inserisci la data di ricezione.",
+      "note": "Scrivi perché l’impegno viene stralciato.",
+      "generic": "Qualcosa è andato storto. Riprova."
+    },
+    "qr": {
+      "label": "Codice QR per salvare una carta per le donazioni di stasera",
+      "checkinTitle": "Salvataggio carta al check-in",
+      "checkinBody": "Mostra questo codice agli ospiti dopo il check-in: salvano una carta sul proprio telefono per donare con un tocco stasera.",
+      "tableTitle": "Salvataggio carta sui tavoli",
+      "tableBody": "Stampa questo codice sui segnatavolo: gli ospiti salvano una carta sul proprio telefono per donare con un tocco e per i loro impegni."
+    }
   }
 }

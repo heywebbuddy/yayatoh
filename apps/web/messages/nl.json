@@ -935,14 +935,23 @@
     "orgUnavailable": "Deze organisator verkoopt op dit moment geen tickets. Al gekochte tickets blijven geldig.",
     "riskBlocked": "We kunnen deze bestelling niet aannemen. Neem contact op met de organisator.",
     "creditInvalid": "Die tegoedcode is niet geldig of al gebruikt.",
-    "creditNotApplicable": "Dat tegoed kan niet voor deze tickets worden gebruikt."
+    "creditNotApplicable": "Dat tegoed kan niet voor deze tickets worden gebruikt.",
+    "saveCardForGiving": "Mijn kaart bewaren voor het geven van vanavond (dat doe je op de volgende pagina; zonder je toestemming daar wordt niets bewaard)"
   },
   "fakePay": {
     "eyebrow": "Testbetaling",
     "title": "Betaal je bestelling",
     "description": "Dit is een testbetaalpagina. Er wordt geen echt geld overgemaakt.",
     "pay": "Nu betalen (test)",
-    "decline": "Geweigerde kaart simuleren"
+    "decline": "Geweigerde kaart simuleren",
+    "setupTitle": "Testkaart instellen",
+    "setupDescription": "Vervangt het beveiligde kaartformulier van de betaalprovider. Er wordt geen echte kaart bewaard.",
+    "testCard": "Testkaart",
+    "card4242": "4242 · wordt altijd afgeschreven",
+    "card0002": "0002 · altijd geweigerd",
+    "card9995": "9995 · weigert de eerste afschrijving",
+    "saveCard": "Kaart bewaren (test)",
+    "failSetup": "Mislukte instelling simuleren"
   },
   "order": {
     "eyebrow": "Je bestelling",
@@ -8885,7 +8894,8 @@
       "cardBody": "Geef gasten bordnummers, roep niveaus af vanuit de console, laat spotters opgestoken bordjes op hun telefoon noteren en bevestig toezeggingen.",
       "openConsole": "Console openen",
       "openSpotter": "Bordjes noteren",
-      "openPaddles": "Bordnummers"
+      "openPaddles": "Bordnummers",
+      "openPledges": "Toezeggingen en inning"
     },
     "paddles": {
       "title": "Bordnummers",
@@ -11237,6 +11247,162 @@
     "unseated": "Nog zonder plaats: {names}",
     "guestOf": "Gast van {name}",
     "keep": "Deze pagina toont altijd je huidige tafel: de link en de QR-code op je uitnodiging veranderen niet als je wordt verplaatst.",
-    "toRsvp": "Terug naar je antwoord"
+    "toRsvp": "Terug naar je antwoord",
+    "saveCard": "Bewaar een kaart voor het geven van vanavond"
+  },
+  "savedCard": {
+    "metaTitle": "Bewaar een kaart voor vanavond",
+    "title": "Bewaar een kaart voor het geven van vanavond",
+    "intro": "Bewaar je kaart één keer op je eigen telefoon en geef tijdens de avond met één tik. Er wordt nu niets afgeschreven.",
+    "introParty": "Voor {party}: bewaar je kaart één keer op je eigen telefoon en geef tijdens de avond met één tik. Je toezeggingen worden de volgende ochtend afgeschreven. Er wordt nu niets afgeschreven.",
+    "unavailableTitle": "Kaarten bewaren is niet geopend",
+    "unavailableBody": "Dit evenement neemt nu geen online giften aan. Je kunt nog steeds geven op het evenement.",
+    "formLabel": "Kaart bewaren",
+    "formTitle": "Je gegevens",
+    "name": "Volledige naam",
+    "email": "E-mail",
+    "emailHint": "Je overzicht van toezeggingen en je ontvangstbewijzen komen hier.",
+    "consentLabel": "Ik geef toestemming om deze kaart voor vanavond te bewaren",
+    "consent": "{org} mag deze kaart bij zijn betaalprovider bewaren en er alleen giften die ik kies en toezeggingen die ik bij {event} doe van afschrijven. Toezeggingen worden de ochtend na het evenement afgeschreven; ik krijg eerst een overzicht. De kaart wordt 30 dagen na het evenement verwijderd en ik kan hem op elk moment op deze pagina verwijderen.",
+    "privacy": "Je kaartgegevens gaan rechtstreeks naar de betaalprovider. Wij zien of bewaren je kaartnummer nooit.",
+    "save": "Mijn kaart bewaren",
+    "saving": "Het beveiligde kaartformulier wordt geopend…",
+    "savedTitle": "Je kaart is bewaard voor vanavond",
+    "savedBody": "{brand} eindigend op {last4} is klaar om met één tik te geven bij dit evenement.",
+    "card": "Kaart",
+    "giveNow": "Nu geven",
+    "remove": "Mijn kaart verwijderen",
+    "removeHint": "Verwijderen annuleert elke afschrijving die nog niet is gedaan; toezeggingen kun je nog steeds via een link betalen.",
+    "removed": "Je kaart is verwijderd. Er wordt niets van afgeschreven.",
+    "pending": "We bevestigen je kaart bij de betaalprovider. Vernieuw zo meteen.",
+    "failed": "Je kaart kon niet worden bewaard. Probeer het opnieuw of gebruik een andere kaart.",
+    "fromCheckout": "Bedankt, je bestelling is klaar. Je tickets komen per e-mail.",
+    "oneTapTitle": "Geef met je bewaarde kaart",
+    "oneTapBody": "Eén tik schrijft af van {brand} eindigend op {last4}. Je ziet meteen een bevestiging.",
+    "oneTapFailed": "Die gift is niet gelukt. Probeer het opnieuw of gebruik het formulier hieronder.",
+    "oneTapGive": "{amount} geven · {name}",
+    "manageCard": "Mijn bewaarde kaart beheren",
+    "errors": {
+      "name": "Vul je volledige naam in.",
+      "email": "Vul een geldig e-mailadres in.",
+      "consent": "Vink het vakje aan om het bewaren van je kaart toe te staan.",
+      "event_over": "Dit evenement is voorbij, dus er kunnen geen kaarten meer worden bewaard.",
+      "not_connected": "Dit evenement neemt nu geen online giften aan.",
+      "link": "Deze link is niet meer geldig. Vraag de organisator om een nieuwe."
+    }
+  },
+  "pledgePay": {
+    "metaTitle": "Je toezegging",
+    "title": "Je toezegging van {amount}",
+    "subtitle": "{level} · {campaign}. Bedankt voor je vrijgevigheid.",
+    "stateTitle": "Status",
+    "status": {
+      "scheduled": "Kaartafschrijving gepland",
+      "charging": "Wordt afgeschreven",
+      "invoiced": "Wacht op betaling",
+      "paid": "Betaald",
+      "paid_offline": "Betaald",
+      "written_off": "Afgesloten"
+    },
+    "card": "Kaart",
+    "cardScheduled": "We schrijven af van {brand} eindigend op {last4} op {when}.",
+    "charging": "Je kaart wordt nu afgeschreven. Vernieuw zo meteen.",
+    "due": "Betaal uiterlijk {date}.",
+    "thanks": "Volledig betaald. Bedankt! Je ontvangstbewijs komt per e-mail.",
+    "closed": "Deze toezegging is afgesloten. Er staat niets meer open.",
+    "payNow": "Nu {amount} betalen",
+    "payAnotherWay": "Nu {amount} op een andere manier betalen",
+    "anotherWayHint": "Als je nu betaalt, vervalt de kaartafschrijving. Wil je een andere kaart gebruiken? Betaal er nu mee.",
+    "errors": {
+      "charging": "Je kaart wordt nu afgeschreven, daarom is deze betaling niet gestart.",
+      "settled": "Deze toezegging is al voldaan.",
+      "no_email": "We hebben een e-mailadres nodig voor deze toezegging. Vraag de organisator er een toe te voegen.",
+      "rate_limited": "Te veel pogingen. Wacht een minuut en probeer het opnieuw.",
+      "not_connected": "Online betalen is nu niet mogelijk. Vraag de organisator hoe je kunt betalen.",
+      "generic": "Er ging iets mis. Probeer het opnieuw."
+    }
+  },
+  "pledges": {
+    "title": "Toezeggingen",
+    "subtitle": "Elke toezegging uit de bordjesveiling en hoe die wordt geïnd.",
+    "viewerNotice": "Je ziet de toezeggingen. Financiële rollen sluiten de avond af, registreren betalingen en schrijven toezeggingen af.",
+    "pledged": "Toegezegd",
+    "paid": "Betaald",
+    "owed": "Nog open",
+    "writtenOffTotal": "Afgeschreven",
+    "cardsSaved": "Bewaarde kaarten",
+    "emptyTitle": "Nog geen toezeggingen",
+    "emptyDescription": "Toezeggingen verschijnen hier zodra de notulist bordjes in de bordjesveiling bevestigt.",
+    "closeTitle": "{count, plural, one {# toezegging te versturen} other {# toezeggingen te versturen}}",
+    "closeBody": "Bij het afsluiten van de avond krijgt elke gever een overzicht. Toezeggingen met een bewaarde kaart worden morgen om 09:00 in de tijdzone van het evenement afgeschreven; de rest krijgt een betaallink met 30 dagen termijn en herinneringen tot betaling.",
+    "close": "Avond afsluiten en overzichten versturen",
+    "closed": "Overzichten verstuurd: {cards, plural, one {# toezegging wordt van een bewaarde kaart afgeschreven} other {# toezeggingen worden van bewaarde kaarten afgeschreven}} en {invoices, plural, one {# toezegging kreeg een betaallink} other {# toezeggingen kregen betaallinks}}.",
+    "caption": "Toezeggingen en inning",
+    "columns": {
+      "paddle": "Bordje",
+      "holder": "Gever",
+      "level": "Niveau",
+      "amount": "Bedrag",
+      "status": "Status",
+      "detail": "Details",
+      "actions": "Acties"
+    },
+    "status": {
+      "open": "Niet verstuurd",
+      "scheduled": "Kaartafschrijving gepland",
+      "charging": "Wordt afgeschreven",
+      "invoiced": "Betaallink verstuurd",
+      "paid": "Betaald",
+      "paid_offline": "Offline betaald",
+      "written_off": "Afgeschreven"
+    },
+    "cardLabel": "{brand} ·{last4}",
+    "card": "Kaart",
+    "detail": {
+      "open": "Wacht tot de avond is afgesloten.",
+      "scheduled": "{card} op {when}",
+      "charging": "{card}, afschrijving bezig",
+      "invoiced": "Te betalen op {date}.",
+      "declined": "{count, plural, one {Kaart één keer geweigerd.} other {Kaart # keer geweigerd.}}",
+      "noEmail": "Geen e-mail bekend: deel de betaallink zelf.",
+      "paidCard": "Afgeschreven van {card}",
+      "paidLink": "Betaald via link"
+    },
+    "methods": {
+      "check": "Cheque",
+      "wire": "Overschrijving",
+      "stock": "Aandelen",
+      "daf": "Donor-advised fund",
+      "cash": "Contant",
+      "other": "Anders"
+    },
+    "recordPayment": "Betaling registreren",
+    "method": "Betaalwijze",
+    "chooseMethod": "Kies…",
+    "reference": "Referentie (optioneel)",
+    "receivedOn": "Ontvangen op",
+    "noteOptional": "Notitie (optioneel)",
+    "recordSubmit": "Betaling voor bordje {paddle} registreren",
+    "recorded": "Betaling geregistreerd. Herinneringen en een eventuele kaartafschrijving zijn gestopt.",
+    "writeOff": "Afschrijven",
+    "writeOffNote": "Waarom het wordt afgeschreven",
+    "writeOffSubmit": "Toezegging van bordje {paddle} afschrijven",
+    "writtenOff": "Toezegging van {amount} afgeschreven.",
+    "errors": {
+      "charging": "De kaart wordt nu afgeschreven. Probeer het over een paar minuten opnieuw.",
+      "settled": "Deze toezegging is al voldaan.",
+      "future": "De datum mag niet in de toekomst liggen.",
+      "method": "Kies de betaalwijze.",
+      "receivedOn": "Vul de ontvangstdatum in.",
+      "note": "Schrijf waarom de toezegging wordt afgeschreven.",
+      "generic": "Er ging iets mis. Probeer het opnieuw."
+    },
+    "qr": {
+      "label": "QR-code om een kaart te bewaren voor het geven van vanavond",
+      "checkinTitle": "Kaart bewaren bij het inchecken",
+      "checkinBody": "Laat gasten deze code zien na het inchecken: ze bewaren een kaart op hun eigen telefoon om vanavond met één tik te geven.",
+      "tableTitle": "Kaart bewaren aan de tafels",
+      "tableBody": "Druk deze code af op tafelkaartjes: gasten bewaren een kaart op hun eigen telefoon om met één tik te geven en voor hun toezeggingen."
+    }
   }
 }

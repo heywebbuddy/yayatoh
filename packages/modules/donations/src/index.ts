@@ -222,6 +222,7 @@ export {
   expireSavedCardsCommand,
   GiveWithCardResult,
   giveWithSavedCardCommand,
+  partyCardTarget,
   removeSavedCardCommand,
   SavedCardViewDto,
   StartCardSetupInput,

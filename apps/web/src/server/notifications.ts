@@ -11,7 +11,7 @@ import {
   staffAlertsSubscriber,
 } from '@yayatoh/checkin';
 import { withTenant } from '@yayatoh/db';
-import { receiptIssuer, statementMailer } from '@yayatoh/donations';
+import { pledgeMailer, pledgeOutcomesSubscriber, receiptIssuer, statementMailer } from '@yayatoh/donations';
 import { findEventTx, portalInviteMailer } from '@yayatoh/events';
 import { registrationResumeMailer } from '@yayatoh/forms';
 import { invitationMailer as guestInvitationMailer } from '@yayatoh/guests';
@@ -152,6 +152,9 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     // M4.8b: receipts per paid gift or charity-ticket order, and year-end statements (as in the worker).
     receiptIssuer({ notifier, appOrigin }),
     statementMailer({ notifier, appOrigin }),
+    // M4.8e: pledge payments settle their pledges; the donor's summary, invoice and reminders.
+    pledgeOutcomesSubscriber,
+    pledgeMailer({ notifier, appOrigin }),
   ];
 }
 

@@ -935,14 +935,23 @@
     "orgUnavailable": "该主办方目前未在售票。已购买的门票仍然有效。",
     "riskBlocked": "我们无法接受此订单。请联系主办方。",
     "creditInvalid": "该店铺余额代码无效或已用完。",
-    "creditNotApplicable": "该店铺余额不能用于这些门票。"
+    "creditNotApplicable": "该店铺余额不能用于这些门票。",
+    "saveCardForGiving": "为今晚的捐赠保存我的银行卡（在下一页完成；未经您在那里同意，不会保存任何信息）"
   },
   "fakePay": {
     "eyebrow": "测试付款",
     "title": "支付订单",
     "description": "这是测试付款页面，不会产生真实扣款。",
     "pay": "立即付款（测试）",
-    "decline": "模拟银行卡被拒"
+    "decline": "模拟银行卡被拒",
+    "setupTitle": "测试银行卡设置",
+    "setupDescription": "代替支付服务商的安全银行卡表单。不会保存真实的银行卡。",
+    "testCard": "测试银行卡",
+    "card4242": "4242 · 始终扣款成功",
+    "card0002": "0002 · 始终被拒",
+    "card9995": "9995 · 首次扣款被拒",
+    "saveCard": "保存银行卡（测试）",
+    "failSetup": "模拟设置失败"
   },
   "order": {
     "eyebrow": "你的订单",
@@ -8885,7 +8894,8 @@
       "cardBody": "为宾客分配号码牌，从控制台叫出捐赠档位，让观察员在手机上记录举起的号码牌，并确认认捐。",
       "openConsole": "打开控制台",
       "openSpotter": "记录号码牌",
-      "openPaddles": "号码牌"
+      "openPaddles": "号码牌",
+      "openPledges": "认捐与收款"
     },
     "paddles": {
       "title": "号码牌",
@@ -11237,6 +11247,162 @@
     "unseated": "尚未安排座位：{names}",
     "guestOf": "{name} 的同伴",
     "keep": "此页面始终显示您当前的桌位：即使主人调整了您的座位，请柬上的链接和二维码也不会变。",
-    "toRsvp": "返回您的回复"
+    "toRsvp": "返回您的回复",
+    "saveCard": "为今晚的捐赠保存银行卡"
+  },
+  "savedCard": {
+    "metaTitle": "为今晚保存银行卡",
+    "title": "为今晚的捐赠保存银行卡",
+    "intro": "在您自己的手机上保存一次银行卡，整个晚上即可一键捐赠。现在不会扣款。",
+    "introParty": "致 {party}：在您自己的手机上保存一次银行卡，整个晚上即可一键捐赠。您的认捐将在第二天早上扣款。现在不会扣款。",
+    "unavailableTitle": "暂不支持保存银行卡",
+    "unavailableBody": "本活动目前不接受在线捐赠。您仍可在现场捐赠。",
+    "formLabel": "保存银行卡",
+    "formTitle": "您的信息",
+    "name": "姓名",
+    "email": "电子邮箱",
+    "emailHint": "认捐摘要和收据将发送到此邮箱。",
+    "consentLabel": "我授权为今晚保存这张银行卡",
+    "consent": "{org} 可将此卡保存在其支付服务商处，且仅可就我在 {event} 选择的捐款和作出的认捐扣款。认捐将在活动次日早上扣款，扣款前我会收到摘要。此卡将在活动结束 30 天后删除，我也可以随时在本页删除。",
+    "privacy": "您的银行卡信息直接发送给支付服务商。我们从不查看或保存您的卡号。",
+    "save": "保存我的银行卡",
+    "saving": "正在打开安全的银行卡表单…",
+    "savedTitle": "您的银行卡已为今晚保存",
+    "savedBody": "尾号 {last4} 的 {brand} 已可在本活动中一键捐赠。",
+    "card": "银行卡",
+    "giveNow": "立即捐赠",
+    "remove": "删除我的银行卡",
+    "removeHint": "删除后将取消所有尚未进行的扣款；认捐仍可通过链接支付。",
+    "removed": "您的银行卡已删除，不会再被扣款。",
+    "pending": "我们正在与支付服务商确认您的银行卡。请稍后刷新。",
+    "failed": "无法保存您的银行卡。请重试或使用其他银行卡。",
+    "fromCheckout": "谢谢，您的订单已完成。门票将通过电子邮件发送。",
+    "oneTapTitle": "用已保存的银行卡捐赠",
+    "oneTapBody": "一键即从尾号 {last4} 的 {brand} 扣款，随后会立即显示确认。",
+    "oneTapFailed": "这笔捐赠未能完成。请重试，或使用下方表单。",
+    "oneTapGive": "捐赠 {amount} · {name}",
+    "manageCard": "管理我保存的银行卡",
+    "errors": {
+      "name": "请输入您的姓名。",
+      "email": "请输入有效的电子邮箱。",
+      "consent": "请勾选此框以授权保存您的银行卡。",
+      "event_over": "本活动已结束，无法再保存银行卡。",
+      "not_connected": "本活动目前不接受在线捐赠。",
+      "link": "此链接已失效。请向主办方索取新链接。"
+    }
+  },
+  "pledgePay": {
+    "metaTitle": "您的认捐",
+    "title": "您认捐的 {amount}",
+    "subtitle": "{level} · {campaign}。感谢您的慷慨。",
+    "stateTitle": "状态",
+    "status": {
+      "scheduled": "已安排银行卡扣款",
+      "charging": "正在扣款",
+      "invoiced": "等待付款",
+      "paid": "已付款",
+      "paid_offline": "已付款",
+      "written_off": "已关闭"
+    },
+    "card": "银行卡",
+    "cardScheduled": "我们将于 {when} 从尾号 {last4} 的 {brand} 扣款。",
+    "charging": "正在从您的银行卡扣款。请稍后刷新。",
+    "due": "请在 {date} 前付款。",
+    "thanks": "已全额付款。谢谢！收据将通过电子邮件发送。",
+    "closed": "此认捐已关闭，无需再付款。",
+    "payNow": "立即支付 {amount}",
+    "payAnotherWay": "立即以其他方式支付 {amount}",
+    "anotherWayHint": "现在付款将取消银行卡扣款。想用另一张卡？现在就用它付款。",
+    "errors": {
+      "charging": "正在从您的银行卡扣款，因此未发起此次付款。",
+      "settled": "此认捐已结清。",
+      "no_email": "此认捐需要电子邮箱。请让主办方添加。",
+      "rate_limited": "尝试次数过多。请等待一分钟后重试。",
+      "not_connected": "目前无法在线付款。请向主办方询问付款方式。",
+      "generic": "出了点问题。请重试。"
+    }
+  },
+  "pledges": {
+    "title": "认捐",
+    "subtitle": "举牌认捐中的每笔认捐及其收款情况。",
+    "viewerNotice": "您可以查看认捐。财务角色负责结束当晚、登记付款和核销认捐。",
+    "pledged": "认捐总额",
+    "paid": "已付款",
+    "owed": "尚欠",
+    "writtenOffTotal": "已核销",
+    "cardsSaved": "已保存的银行卡",
+    "emptyTitle": "暂无认捐",
+    "emptyDescription": "记录员在举牌认捐中确认号牌后，认捐会显示在这里。",
+    "closeTitle": "{count, plural, other {待发送认捐 # 笔}}",
+    "closeBody": "结束当晚后，每位捐赠者都会收到摘要。已保存银行卡的认捐将于明天 09:00（活动时区）扣款；其他认捐会收到 30 天内到期的付款链接，并在付款前收到提醒。",
+    "close": "结束当晚并发送摘要",
+    "closed": "摘要已发送：{cards, plural, other {# 笔认捐将从已保存的银行卡扣款}}，{invoices, plural, other {# 笔认捐已收到付款链接}}。",
+    "caption": "认捐及其收款",
+    "columns": {
+      "paddle": "号牌",
+      "holder": "捐赠者",
+      "level": "级别",
+      "amount": "金额",
+      "status": "状态",
+      "detail": "详情",
+      "actions": "操作"
+    },
+    "status": {
+      "open": "未发送",
+      "scheduled": "已安排银行卡扣款",
+      "charging": "正在扣款",
+      "invoiced": "已发送付款链接",
+      "paid": "已付款",
+      "paid_offline": "线下已付款",
+      "written_off": "已核销"
+    },
+    "cardLabel": "{brand} ·{last4}",
+    "card": "银行卡",
+    "detail": {
+      "open": "等待结束当晚。",
+      "scheduled": "{card}，{when}",
+      "charging": "{card}，正在扣款",
+      "invoiced": "到期日 {date}。",
+      "declined": "{count, plural, other {银行卡被拒 # 次。}}",
+      "noEmail": "没有登记邮箱：请自行分享付款链接。",
+      "paidCard": "已从 {card} 扣款",
+      "paidLink": "已通过链接付款"
+    },
+    "methods": {
+      "check": "支票",
+      "wire": "电汇",
+      "stock": "股票",
+      "daf": "捐赠者建议基金",
+      "cash": "现金",
+      "other": "其他"
+    },
+    "recordPayment": "登记付款",
+    "method": "付款方式",
+    "chooseMethod": "请选择…",
+    "reference": "参考号（可选）",
+    "receivedOn": "收款日期",
+    "noteOptional": "备注（可选）",
+    "recordSubmit": "登记号牌 {paddle} 的付款",
+    "recorded": "付款已登记。提醒和银行卡扣款已停止。",
+    "writeOff": "核销",
+    "writeOffNote": "核销原因",
+    "writeOffSubmit": "核销号牌 {paddle} 的认捐",
+    "writtenOff": "已核销 {amount} 的认捐。",
+    "errors": {
+      "charging": "正在从银行卡扣款。请几分钟后重试。",
+      "settled": "此认捐已结清。",
+      "future": "日期不能是将来。",
+      "method": "请选择付款方式。",
+      "receivedOn": "请输入收款日期。",
+      "note": "请写明核销原因。",
+      "generic": "出了点问题。请重试。"
+    },
+    "qr": {
+      "label": "为今晚的捐赠保存银行卡的二维码",
+      "checkinTitle": "签到时保存银行卡",
+      "checkinBody": "宾客签到后向其出示此二维码：他们可在自己的手机上保存银行卡，今晚一键捐赠。",
+      "tableTitle": "在餐桌上保存银行卡",
+      "tableBody": "将此二维码印在桌卡上：宾客可在自己的手机上保存银行卡，用于一键捐赠和认捐。"
+    }
   }
 }

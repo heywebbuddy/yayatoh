@@ -935,14 +935,23 @@
     "orgUnavailable": "該主辦方目前未在售票。已購買的票券仍然有效。",
     "riskBlocked": "我們無法接受此訂單。請聯絡主辦單位。",
     "creditInvalid": "此商店餘額代碼無效或已用完。",
-    "creditNotApplicable": "此商店餘額不能用於這些票券。"
+    "creditNotApplicable": "此商店餘額不能用於這些票券。",
+    "saveCardForGiving": "為今晚的捐贈儲存我的信用卡（在下一頁完成；未經您在那裡同意，不會儲存任何資訊）"
   },
   "fakePay": {
     "eyebrow": "測試付款",
     "title": "支付訂單",
     "description": "這是測試付款頁面，不會產生真實扣款。",
     "pay": "立即付款（測試）",
-    "decline": "模擬信用卡遭拒"
+    "decline": "模擬信用卡遭拒",
+    "setupTitle": "測試信用卡設置",
+    "setupDescription": "代替支付服務商的安全信用卡表單。不會儲存真實的信用卡。",
+    "testCard": "測試信用卡",
+    "card4242": "4242 · 始終扣款成功",
+    "card0002": "0002 · 始終被拒",
+    "card9995": "9995 · 首次扣款被拒",
+    "saveCard": "儲存信用卡（測試）",
+    "failSetup": "模擬設置失敗"
   },
   "order": {
     "eyebrow": "你的訂單",
@@ -8885,7 +8894,8 @@
       "cardBody": "為賓客分配號碼牌，從控制台叫出捐贈檔位，讓觀察員在手機上記錄舉起的號碼牌，並確認認捐。",
       "openConsole": "開啟控制台",
       "openSpotter": "記錄號碼牌",
-      "openPaddles": "號碼牌"
+      "openPaddles": "號碼牌",
+      "openPledges": "認捐與收款"
     },
     "paddles": {
       "title": "號碼牌",
@@ -11237,6 +11247,162 @@
     "unseated": "尚未安排座位：{names}",
     "guestOf": "{name} 的同伴",
     "keep": "此頁面一律顯示您目前的桌位：即使主人調整了您的座位，喜帖上的連結和 QR 碼也不會改變。",
-    "toRsvp": "返回您的回覆"
+    "toRsvp": "返回您的回覆",
+    "saveCard": "為今晚的捐贈儲存信用卡"
+  },
+  "savedCard": {
+    "metaTitle": "為今晚儲存信用卡",
+    "title": "為今晚的捐贈儲存信用卡",
+    "intro": "在您自己的手機上儲存一次信用卡，整個晚上即可一鍵捐贈。現在不會扣款。",
+    "introParty": "致 {party}：在您自己的手機上儲存一次信用卡，整個晚上即可一鍵捐贈。您的認捐將在第二天早上扣款。現在不會扣款。",
+    "unavailableTitle": "暫不支援儲存信用卡",
+    "unavailableBody": "本活動目前不接受線上捐贈。您仍可在現場捐贈。",
+    "formLabel": "儲存信用卡",
+    "formTitle": "您的資訊",
+    "name": "姓名",
+    "email": "電子郵件",
+    "emailHint": "認捐摘要和收據將發送到此電子郵件。",
+    "consentLabel": "我授權為今晚儲存這張信用卡",
+    "consent": "{org} 可將此卡儲存在其支付服務商處，且僅可就我在 {event} 選擇的捐款和作出的認捐扣款。認捐將在活動次日早上扣款，扣款前我會收到摘要。此卡將在活動結束 30 天後刪除，我也可以隨時在本頁刪除。",
+    "privacy": "您的信用卡資訊直接發送給支付服務商。我們從不查看或儲存您的卡號。",
+    "save": "儲存我的信用卡",
+    "saving": "正在打開安全的信用卡表單…",
+    "savedTitle": "您的信用卡已為今晚儲存",
+    "savedBody": "尾號 {last4} 的 {brand} 已可在本活動中一鍵捐贈。",
+    "card": "信用卡",
+    "giveNow": "立即捐贈",
+    "remove": "刪除我的信用卡",
+    "removeHint": "刪除後將取消所有尚未進行的扣款；認捐仍可透過連結支付。",
+    "removed": "您的信用卡已刪除，不會再被扣款。",
+    "pending": "我們正在與支付服務商確認您的信用卡。請稍後重新整理。",
+    "failed": "無法儲存您的信用卡。請重試或使用其他信用卡。",
+    "fromCheckout": "謝謝，您的訂單已完成。票券將透過電子郵件發送。",
+    "oneTapTitle": "用已儲存的信用卡捐贈",
+    "oneTapBody": "一鍵即從尾號 {last4} 的 {brand} 扣款，隨後會立即顯示確認。",
+    "oneTapFailed": "這筆捐贈未能完成。請重試，或使用下方表單。",
+    "oneTapGive": "捐贈 {amount} · {name}",
+    "manageCard": "管理我儲存的信用卡",
+    "errors": {
+      "name": "請輸入您的姓名。",
+      "email": "請輸入有效的電子郵件。",
+      "consent": "請勾選此框以授權儲存您的信用卡。",
+      "event_over": "本活動已結束，無法再儲存信用卡。",
+      "not_connected": "本活動目前不接受線上捐贈。",
+      "link": "此連結已失效。請向主辦方索取新連結。"
+    }
+  },
+  "pledgePay": {
+    "metaTitle": "您的認捐",
+    "title": "您認捐的 {amount}",
+    "subtitle": "{level} · {campaign}。感謝您的慷慨。",
+    "stateTitle": "状態",
+    "status": {
+      "scheduled": "已安排信用卡扣款",
+      "charging": "正在扣款",
+      "invoiced": "等待付款",
+      "paid": "已付款",
+      "paid_offline": "已付款",
+      "written_off": "已關閉"
+    },
+    "card": "信用卡",
+    "cardScheduled": "我們將於 {when} 從尾號 {last4} 的 {brand} 扣款。",
+    "charging": "正在從您的信用卡扣款。請稍後重新整理。",
+    "due": "請在 {date} 前付款。",
+    "thanks": "已全額付款。謝謝！收據將透過電子郵件發送。",
+    "closed": "此認捐已關閉，無需再付款。",
+    "payNow": "立即支付 {amount}",
+    "payAnotherWay": "立即以其他方式支付 {amount}",
+    "anotherWayHint": "現在付款將取消信用卡扣款。想用另一張卡？現在就用它付款。",
+    "errors": {
+      "charging": "正在從您的信用卡扣款，因此未發起此次付款。",
+      "settled": "此認捐已結清。",
+      "no_email": "此認捐需要電子郵件。請讓主辦方添加。",
+      "rate_limited": "尝試次數過多。請等待一分鐘後重試。",
+      "not_connected": "目前無法線上付款。請向主辦方询問付款方式。",
+      "generic": "出了點問題。請重試。"
+    }
+  },
+  "pledges": {
+    "title": "認捐",
+    "subtitle": "舉牌認捐中的每筆認捐及其收款情況。",
+    "viewerNotice": "您可以查看認捐。財務角色負責結束當晚、登記付款和沖銷認捐。",
+    "pledged": "認捐总額",
+    "paid": "已付款",
+    "owed": "尚欠",
+    "writtenOffTotal": "已沖銷",
+    "cardsSaved": "已儲存的信用卡",
+    "emptyTitle": "暫無認捐",
+    "emptyDescription": "記录員在舉牌認捐中確認號牌後，認捐會顯示在這裡。",
+    "closeTitle": "{count, plural, other {待發送認捐 # 筆}}",
+    "closeBody": "結束當晚後，每位捐贈者都會收到摘要。已儲存信用卡的認捐將於明天 09:00（活動時區）扣款；其他認捐會收到 30 天內到期的付款連結，並在付款前收到提醒。",
+    "close": "結束當晚並發送摘要",
+    "closed": "摘要已發送：{cards, plural, other {# 筆認捐將從已儲存的信用卡扣款}}，{invoices, plural, other {# 筆認捐已收到付款連結}}。",
+    "caption": "認捐及其收款",
+    "columns": {
+      "paddle": "號牌",
+      "holder": "捐贈者",
+      "level": "級別",
+      "amount": "金額",
+      "status": "状態",
+      "detail": "詳情",
+      "actions": "操作"
+    },
+    "status": {
+      "open": "未發送",
+      "scheduled": "已安排信用卡扣款",
+      "charging": "正在扣款",
+      "invoiced": "已發送付款連結",
+      "paid": "已付款",
+      "paid_offline": "線下已付款",
+      "written_off": "已沖銷"
+    },
+    "cardLabel": "{brand} ·{last4}",
+    "card": "信用卡",
+    "detail": {
+      "open": "等待結束當晚。",
+      "scheduled": "{card}，{when}",
+      "charging": "{card}，正在扣款",
+      "invoiced": "到期日 {date}。",
+      "declined": "{count, plural, other {信用卡被拒 # 次。}}",
+      "noEmail": "没有登記電子郵件：請自行分享付款連結。",
+      "paidCard": "已從 {card} 扣款",
+      "paidLink": "已透過連結付款"
+    },
+    "methods": {
+      "check": "支票",
+      "wire": "電匯",
+      "stock": "股票",
+      "daf": "捐贈者建議基金",
+      "cash": "現金",
+      "other": "其他"
+    },
+    "recordPayment": "登記付款",
+    "method": "付款方式",
+    "chooseMethod": "請選擇…",
+    "reference": "參考號（可選）",
+    "receivedOn": "收款日期",
+    "noteOptional": "備註（可選）",
+    "recordSubmit": "登記號牌 {paddle} 的付款",
+    "recorded": "付款已登記。提醒和信用卡扣款已停止。",
+    "writeOff": "沖銷",
+    "writeOffNote": "沖銷原因",
+    "writeOffSubmit": "沖銷號牌 {paddle} 的認捐",
+    "writtenOff": "已沖銷 {amount} 的認捐。",
+    "errors": {
+      "charging": "正在從信用卡扣款。請几分鐘後重試。",
+      "settled": "此認捐已結清。",
+      "future": "日期不能是將來。",
+      "method": "請選擇付款方式。",
+      "receivedOn": "請輸入收款日期。",
+      "note": "請寫明沖銷原因。",
+      "generic": "出了點問題。請重試。"
+    },
+    "qr": {
+      "label": "為今晚的捐贈儲存信用卡的QR 碼",
+      "checkinTitle": "簽到時儲存信用卡",
+      "checkinBody": "賓客簽到後向其出示此QR 碼：他們可在自己的手機上儲存信用卡，今晚一鍵捐贈。",
+      "tableTitle": "在餐桌上儲存信用卡",
+      "tableBody": "將此QR 碼印在桌卡上：賓客可在自己的手機上儲存信用卡，用於一鍵捐贈和認捐。"
+    }
   }
 }
