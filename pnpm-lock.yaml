@@ -432,6 +432,9 @@ importers:
       '@yayatoh/api-v1':
         specifier: workspace:*
         version: link:../../packages/api-v1
+      '@yayatoh/assistance':
+        specifier: workspace:*
+        version: link:../../packages/modules/assistance
       '@yayatoh/attendees':
         specifier: workspace:*
         version: link:../../packages/modules/attendees
@@ -1021,6 +1024,9 @@ importers:
 
   packages/modules/alerts:
     dependencies:
+      '@yayatoh/assistance':
+        specifier: workspace:*
+        version: link:../assistance
       '@yayatoh/checkin':
         specifier: workspace:*
         version: link:../checkin
@@ -1051,6 +1057,49 @@ importers:
       '@yayatoh/seating':
         specifier: workspace:*
         version: link:../seating
+      '@yayatoh/tenancy':
+        specifier: workspace:*
+        version: link:../tenancy
+      '@yayatoh/ticketing':
+        specifier: workspace:*
+        version: link:../ticketing
+      drizzle-orm:
+        specifier: 'catalog:'
+        version: 0.45.3(@opentelemetry/api@1.9.0)(kysely@0.29.6)(pg@8.23.0)(postgres@3.4.9)
+      zod:
+        specifier: 'catalog:'
+        version: 4.6.5
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.19.0
+      '@yayatoh/config':
+        specifier: workspace:*
+        version: link:../../config
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  packages/modules/assistance:
+    dependencies:
+      '@yayatoh/checkin':
+        specifier: workspace:*
+        version: link:../checkin
+      '@yayatoh/contracts':
+        specifier: workspace:*
+        version: link:../../contracts
+      '@yayatoh/db':
+        specifier: workspace:*
+        version: link:../../db
+      '@yayatoh/events':
+        specifier: workspace:*
+        version: link:../events
+      '@yayatoh/kernel':
+        specifier: workspace:*
+        version: link:../../kernel
+      '@yayatoh/platform':
+        specifier: workspace:*
+        version: link:../../platform
       '@yayatoh/tenancy':
         specifier: workspace:*
         version: link:../tenancy
@@ -1450,6 +1499,9 @@ importers:
 
   packages/modules/command-center:
     dependencies:
+      '@yayatoh/assistance':
+        specifier: workspace:*
+        version: link:../assistance
       '@yayatoh/billing':
         specifier: workspace:*
         version: link:../billing
@@ -1468,6 +1520,9 @@ importers:
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../kernel
+      '@yayatoh/marketing':
+        specifier: workspace:*
+        version: link:../marketing
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../../platform
@@ -1650,6 +1705,9 @@ importers:
       '@yayatoh/contracts':
         specifier: workspace:*
         version: link:../../contracts
+      '@yayatoh/csv':
+        specifier: workspace:*
+        version: link:../../csv
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../../db
@@ -1659,12 +1717,18 @@ importers:
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../kernel
+      '@yayatoh/notifications':
+        specifier: workspace:*
+        version: link:../notifications
       '@yayatoh/orders':
         specifier: workspace:*
         version: link:../orders
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../../platform
+      '@yayatoh/tenancy':
+        specifier: workspace:*
+        version: link:../tenancy
       drizzle-orm:
         specifier: 'catalog:'
         version: 0.45.3(@opentelemetry/api@1.9.0)(kysely@0.29.6)(pg@8.23.0)(postgres@3.4.9)
@@ -2544,6 +2608,9 @@ importers:
       '@yayatoh/alerts':
         specifier: workspace:*
         version: link:../modules/alerts
+      '@yayatoh/assistance':
+        specifier: workspace:*
+        version: link:../modules/assistance
       '@yayatoh/attendees':
         specifier: workspace:*
         version: link:../modules/attendees

@@ -5,6 +5,19 @@ export {
   userPreferencesTx,
 } from './account-data.ts';
 export {
+  CAMPAIGN_DEDUPE_PREFIX,
+  campaignDedupeKey,
+  campaignSendStatsTx,
+  DELIVERABILITY_THRESHOLDS,
+  type DeliverabilityBreakdown,
+  type DeliverabilityVerdict,
+  deliverabilityBreakdownTx,
+  deliverabilityVerdict,
+  PLATFORM_SENDER_DOMAIN,
+  rateBps,
+  type SendTally,
+} from './deliverability.ts';
+export {
   DELIVERY_SIGNATURE_TOLERANCE_S,
   DeliveryEvent,
   type DeliveryWebhookAdapter,
@@ -418,8 +431,10 @@ export {
   readDevMailbox,
   readFakePushes,
   recordFakePush,
+  releaseDevDeliveryEvent,
   type SendResult,
   type SmsTransport,
+  settleDevDeliveryEvents,
   type Transports,
   takeDevDeliveryEvents,
   type WhatsAppTransport,

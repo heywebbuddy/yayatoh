@@ -93,7 +93,13 @@ export const RULES: readonly Rule[] = [
     re: /(?<![\w:])(?:[0-9a-f]{1,4}:){7}[0-9a-f]{1,4}(?![\w:])|(?<![\w:])(?:[0-9a-f]{1,4}:){2,6}:(?:[0-9a-f]{1,4}(?::[0-9a-f]{1,4})*)?(?![\w:])/gi,
     confirm: (m) => /[a-f]/i.test(m) || m.split(':').filter(Boolean).length >= 3,
   },
-  { kind: 'card_number', re: /(?<![\d-])\d(?:[ -]?\d){12,18}(?![\d-])/g, confirm: luhn },
+  // Not inside a longer token: a hex digest (SHA256SUMS) or an id can hold a Luhn-valid run of
+  // digits (batch 3g merge: a bundle's checksum line was flagged on 2026-10-03).
+  {
+    kind: 'card_number',
+    re: /(?<![\dA-Za-z_-])\d(?:[ -]?\d){12,18}(?![\dA-Za-z_-])/g,
+    confirm: luhn,
+  },
 ];
 
 export interface Finding {

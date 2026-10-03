@@ -69,8 +69,9 @@
         "org-status": "{status, select, suspended {Yayatoh a suspendu cette organisation} reactivated {Cette organisation est de nouveau en ligne} other {Yayatoh a fermé cette organisation}}"
       },
       "alerts": {
-        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {Un participant n’a pas de place} other {{countWords} participants n’ont pas de place}}} undistributed {{count, plural, one {Un billet acheté n’a pas été distribué} other {{countWords} billets achetés n’ont pas été distribués}}} paymentsFailed {{count, plural, one {Un paiement a échoué} other {{countWords} paiements ont échoué}}} paymentsStuck {{count, plural, one {Un paiement est bloqué} other {{countWords} paiements sont bloqués}}} refundSurge {{count, plural, one {Un remboursement au cours de la dernière heure} other {{countWords} remboursements au cours de la dernière heure}}} devicesOffline {{count, plural, one {Un appareil de contrôle est hors ligne} other {{countWords} appareils de contrôle sont hors ligne}}} devicesLowBattery {{count, plural, one {Un appareil de contrôle a une batterie faible} other {{countWords} appareils de contrôle ont une batterie faible}}} devicesBacklog {{count, plural, one {Un appareil de contrôle a des scans en attente de synchronisation} other {{countWords} appareils de contrôle ont des scans en attente de synchronisation}}} capacityNear {Le lieu est rempli à {count} %} capacityFull {Le lieu est complet ({count} %)} sellOut {{count} % des billets sont vendus} salesPace {Les ventes de billets sont à {count} % du rythme visé} readiness {{count, plural, one {Une étape de préparation bloque cet événement} other {{countWords} étapes de préparation bloquent cet événement}}} domain {{count, plural, one {Un domaine personnalisé a un problème} other {{countWords} domaines personnalisés ont un problème}}} payoutsPastDue {{count, plural, one {Une exigence du compte de versement est en retard} other {{countWords} exigences du compte de versement sont en retard}}} deliverability {La délivrabilité des e-mails demande votre attention} automationFailed {{count, plural, one {Un message ou une action groupée a échoué aujourd’hui} other {{countWords} messages ou actions groupées ont échoué aujourd’hui}}} campaignFailed {{count, plural, one {Un envoi de campagne a échoué aujourd’hui} other {{countWords} envois de campagne ont échoué aujourd’hui}}} disputeDeadline {{count, plural, one {Un litige demande bientôt des preuves} other {{countWords} litiges demandent bientôt des preuves}}} other {Alerte}}",
-        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {Un participant n’a pas de place} other {{countWords} participants n’ont pas de place}}} undistributed {{count, plural, one {Un billet acheté n’a pas été distribué} other {{countWords} billets achetés n’ont pas été distribués}}} paymentsFailed {{count, plural, one {Un paiement a échoué} other {{countWords} paiements ont échoué}}} paymentsStuck {{count, plural, one {Un paiement est bloqué} other {{countWords} paiements sont bloqués}}} refundSurge {{count, plural, one {Un remboursement au cours de la dernière heure} other {{countWords} remboursements au cours de la dernière heure}}} devicesOffline {{count, plural, one {Un appareil de contrôle est hors ligne} other {{countWords} appareils de contrôle sont hors ligne}}} devicesLowBattery {{count, plural, one {Un appareil de contrôle a une batterie faible} other {{countWords} appareils de contrôle ont une batterie faible}}} devicesBacklog {{count, plural, one {Un appareil de contrôle a des scans en attente de synchronisation} other {{countWords} appareils de contrôle ont des scans en attente de synchronisation}}} capacityNear {Le lieu est rempli à {count} %} capacityFull {Le lieu est complet ({count} %)} sellOut {{count} % des billets sont vendus} salesPace {Les ventes de billets sont à {count} % du rythme visé} readiness {{count, plural, one {Une étape de préparation bloque cet événement} other {{countWords} étapes de préparation bloquent cet événement}}} domain {{count, plural, one {Un domaine personnalisé a un problème} other {{countWords} domaines personnalisés ont un problème}}} payoutsPastDue {{count, plural, one {Une exigence du compte de versement est en retard} other {{countWords} exigences du compte de versement sont en retard}}} deliverability {La délivrabilité des e-mails demande votre attention} automationFailed {{count, plural, one {Un message ou une action groupée a échoué aujourd’hui} other {{countWords} messages ou actions groupées ont échoué aujourd’hui}}} campaignFailed {{count, plural, one {Un envoi de campagne a échoué aujourd’hui} other {{countWords} envois de campagne ont échoué aujourd’hui}}} disputeDeadline {{count, plural, one {Un litige demande bientôt des preuves} other {{countWords} litiges demandent bientôt des preuves}}} other {Alerte}}"
+        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {Un participant n’a pas de place} other {{countWords} participants n’ont pas de place}}} undistributed {{count, plural, one {Un billet acheté n’a pas été distribué} other {{countWords} billets achetés n’ont pas été distribués}}} paymentsFailed {{count, plural, one {Un paiement a échoué} other {{countWords} paiements ont échoué}}} paymentsStuck {{count, plural, one {Un paiement est bloqué} other {{countWords} paiements sont bloqués}}} refundSurge {{count, plural, one {Un remboursement au cours de la dernière heure} other {{countWords} remboursements au cours de la dernière heure}}} devicesOffline {{count, plural, one {Un appareil de contrôle est hors ligne} other {{countWords} appareils de contrôle sont hors ligne}}} devicesLowBattery {{count, plural, one {Un appareil de contrôle a une batterie faible} other {{countWords} appareils de contrôle ont une batterie faible}}} devicesBacklog {{count, plural, one {Un appareil de contrôle a des scans en attente de synchronisation} other {{countWords} appareils de contrôle ont des scans en attente de synchronisation}}} capacityNear {Le lieu est rempli à {count} %} capacityFull {Le lieu est complet ({count} %)} sellOut {{count} % des billets sont vendus} salesPace {Les ventes de billets sont à {count} % du rythme visé} readiness {{count, plural, one {Une étape de préparation bloque cet événement} other {{countWords} étapes de préparation bloquent cet événement}}} domain {{count, plural, one {Un domaine personnalisé a un problème} other {{countWords} domaines personnalisés ont un problème}}} payoutsPastDue {{count, plural, one {Une exigence du compte de versement est en retard} other {{countWords} exigences du compte de versement sont en retard}}} deliverability {La délivrabilité des e-mails demande votre attention} automationFailed {{count, plural, one {Un message ou une action groupée a échoué aujourd’hui} other {{countWords} messages ou actions groupées ont échoué aujourd’hui}}} assistanceOverdue {{count, plural, one {{countWords} demande d’aide attend depuis trop longtemps} other {{countWords} demandes d’aide attendent depuis trop longtemps}}} campaignFailed {{count, plural, one {Un envoi de campagne a échoué aujourd’hui} other {{countWords} envois de campagne ont échoué aujourd’hui}}} disputeDeadline {{count, plural, one {Un litige demande bientôt des preuves} other {{countWords} litiges demandent bientôt des preuves}}} other {Alerte}}",
+        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {Un participant n’a pas de place} other {{countWords} participants n’ont pas de place}}} undistributed {{count, plural, one {Un billet acheté n’a pas été distribué} other {{countWords} billets achetés n’ont pas été distribués}}} paymentsFailed {{count, plural, one {Un paiement a échoué} other {{countWords} paiements ont échoué}}} paymentsStuck {{count, plural, one {Un paiement est bloqué} other {{countWords} paiements sont bloqués}}} refundSurge {{count, plural, one {Un remboursement au cours de la dernière heure} other {{countWords} remboursements au cours de la dernière heure}}} devicesOffline {{count, plural, one {Un appareil de contrôle est hors ligne} other {{countWords} appareils de contrôle sont hors ligne}}} devicesLowBattery {{count, plural, one {Un appareil de contrôle a une batterie faible} other {{countWords} appareils de contrôle ont une batterie faible}}} devicesBacklog {{count, plural, one {Un appareil de contrôle a des scans en attente de synchronisation} other {{countWords} appareils de contrôle ont des scans en attente de synchronisation}}} capacityNear {Le lieu est rempli à {count} %} capacityFull {Le lieu est complet ({count} %)} sellOut {{count} % des billets sont vendus} salesPace {Les ventes de billets sont à {count} % du rythme visé} readiness {{count, plural, one {Une étape de préparation bloque cet événement} other {{countWords} étapes de préparation bloquent cet événement}}} domain {{count, plural, one {Un domaine personnalisé a un problème} other {{countWords} domaines personnalisés ont un problème}}} payoutsPastDue {{count, plural, one {Une exigence du compte de versement est en retard} other {{countWords} exigences du compte de versement sont en retard}}} deliverability {La délivrabilité des e-mails demande votre attention} automationFailed {{count, plural, one {Un message ou une action groupée a échoué aujourd’hui} other {{countWords} messages ou actions groupées ont échoué aujourd’hui}}} assistanceOverdue {{count, plural, one {{countWords} demande d’aide attend depuis trop longtemps} other {{countWords} demandes d’aide attendent depuis trop longtemps}}} campaignFailed {{count, plural, one {Un envoi de campagne a échoué aujourd’hui} other {{countWords} envois de campagne ont échoué aujourd’hui}}} disputeDeadline {{count, plural, one {Un litige demande bientôt des preuves} other {{countWords} litiges demandent bientôt des preuves}}} other {Alerte}}",
+        "alert-urgent-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {Un participant n’a pas de place} other {{countWords} participants n’ont pas de place}}} undistributed {{count, plural, one {Un billet acheté n’a pas été distribué} other {{countWords} billets achetés n’ont pas été distribués}}} paymentsFailed {{count, plural, one {Un paiement a échoué} other {{countWords} paiements ont échoué}}} paymentsStuck {{count, plural, one {Un paiement est bloqué} other {{countWords} paiements sont bloqués}}} refundSurge {{count, plural, one {Un remboursement au cours de la dernière heure} other {{countWords} remboursements au cours de la dernière heure}}} devicesOffline {{count, plural, one {Un appareil de contrôle est hors ligne} other {{countWords} appareils de contrôle sont hors ligne}}} devicesLowBattery {{count, plural, one {Un appareil de contrôle a une batterie faible} other {{countWords} appareils de contrôle ont une batterie faible}}} devicesBacklog {{count, plural, one {Un appareil de contrôle a des scans en attente de synchronisation} other {{countWords} appareils de contrôle ont des scans en attente de synchronisation}}} capacityNear {Le lieu est rempli à {count} %} capacityFull {Le lieu est complet ({count} %)} sellOut {{count} % des billets sont vendus} salesPace {Les ventes de billets sont à {count} % du rythme visé} readiness {{count, plural, one {Une étape de préparation bloque cet événement} other {{countWords} étapes de préparation bloquent cet événement}}} domain {{count, plural, one {Un domaine personnalisé a un problème} other {{countWords} domaines personnalisés ont un problème}}} payoutsPastDue {{count, plural, one {Une exigence du compte de versement est en retard} other {{countWords} exigences du compte de versement sont en retard}}} deliverability {La délivrabilité des e-mails demande votre attention} automationFailed {{count, plural, one {Un message ou une action groupée a échoué aujourd’hui} other {{countWords} messages ou actions groupées ont échoué aujourd’hui}}} assistanceOverdue {{count, plural, one {{countWords} demande d’aide attend depuis trop longtemps} other {{countWords} demandes d’aide attendent depuis trop longtemps}}} campaignFailed {{count, plural, one {Un envoi de campagne a échoué aujourd’hui} other {{countWords} envois de campagne ont échoué aujourd’hui}}} disputeDeadline {{count, plural, one {Un litige demande bientôt des preuves} other {{countWords} litiges demandent bientôt des preuves}}} other {Alerte}}"
       }
     },
     "kinds": {
@@ -144,7 +145,8 @@
       },
       "alerts": {
         "alert": "Alerte",
-        "alert-text": "SMS d’alerte"
+        "alert-text": "SMS d’alerte",
+        "alert-urgent-text": "SMS d’alerte urgente"
       },
       "campaigns": {
         "test": "Test de campagne"
@@ -314,6 +316,8 @@
     "journeys": "Parcours",
     "disputes": "Litiges",
     "supportMacros": "Macros d’assistance",
+    "assistance": "Demandes d’aide",
+    "marketingAnalytics": "Analyses marketing",
     "badges": "Badges"
   },
   "vocab": {
@@ -1160,7 +1164,11 @@
     "latitude": "Latitude",
     "longitude": "Longitude",
     "locationError": "Saisissez la latitude (−90 à 90) et la longitude (−180 à 180) en chiffres, ou laissez les deux vides.",
-    "located": "à {lat}, {lng}"
+    "located": "à {lat}, {lng}",
+    "capacity": "Jauge (facultatif)",
+    "capacityHint": "Le nombre de personnes que la zone peut accueillir, pour les jauges.",
+    "capacityError": "Saisissez un nombre entier de 1 à 1 000 000, ou laissez vide.",
+    "holds": "{count, plural, one {accueille #} other {accueille #}}"
   },
   "search": {
     "title": "Recherche",
@@ -6140,8 +6148,172 @@
         "title": "Accès"
       },
       "deviceBoard": {
-        "title": "Tableau des appareils"
+        "title": "Tableau des appareils",
+        "lastScan": "dernier scan {time}",
+        "appVersion": "appli {version}"
+      },
+      "liveFeed": {
+        "title": "Fil en direct",
+        "filters": "Filtrer le fil",
+        "entrance": "Entrée",
+        "allEntrances": "Toutes les entrées",
+        "device": "Appareil",
+        "allDevices": "Tous les appareils",
+        "outcome": "Résultat",
+        "allOutcomes": "Tout",
+        "filter": {
+          "checkin": "Entrées validées",
+          "reentry": "Réentrées",
+          "duplicate": "Doublons",
+          "invalid": "Scans refusés",
+          "device": "Événements d’appareils",
+          "alert": "Alertes"
+        },
+        "pause": "Mettre en pause",
+        "resume": "Reprendre",
+        "paused": "En pause. Le fil n’est pas mis à jour.",
+        "pausedNews": "En pause. Il y a du nouveau : reprenez pour le voir.",
+        "none": "Rien pour l’instant. Les scans, appareils et alertes s’affichent ici au fil de l’eau.",
+        "noneFiltered": "Rien ne correspond encore à ces filtres.",
+        "listLabel": "Activité récente, la plus récente en premier",
+        "offline": "scanné hors ligne",
+        "unknownDevice": "Un appareil",
+        "alert": "Alerte {state, select, resolved {résolue} other {ouverte}} : {title}",
+        "deviceEvent": "{device} {change, select, online {est de nouveau en ligne} offline {est hors ligne} low_battery {a une batterie faible} revoked {a été révoqué} wiped {a été effacé} other {a changé}}",
+        "kind": {
+          "checkin": "{reason, select, granted {Accès à la zone accordé} provisional {Entré (à confirmer)} other {Entrée validée}}",
+          "reentry": "Réentrée",
+          "duplicate": "{reason, select, duplicate_offline {Doublon (scanné hors ligne)} other {Doublon : déjà entré}}",
+          "invalid": "Refusé : {reason, select, invalid {code non valide} void {billet annulé} wrong_event {billet d’un autre événement} not_today {non valable aujourd’hui} outside_window {hors des horaires de l’événement} wrong_date {pour une autre date} superseded {code remplacé} no_access {pas d’accès à cette zone} wrong_checkpoint {mauvaise entrée} other {refusé}}"
+        }
+      },
+      "checkinSpeed": {
+        "title": "Rythme des entrées",
+        "rateLabel": "scans par minute ({minutes} dernières minutes)",
+        "medianGapValue": "{value} s entre deux scans (médiane)",
+        "remaining": "{count, plural, one {# invité encore attendu} other {# invités encore attendus}}",
+        "queueValue": "{count, plural, =0 {tous les invités attendus sont entrés} one {environ # minute pour faire entrer tout le monde} other {environ # minutes pour faire entrer tout le monde}}",
+        "queueStopped": "aucun scan ces 5 dernières minutes",
+        "chartTitle": "Entrées par minute, 15 dernières minutes",
+        "showTable": "Afficher en tableau",
+        "minute": "Minute",
+        "checkedIn": "Entrés",
+        "byEntrance": "Par entrée",
+        "byDevice": "Par appareil",
+        "entrance": "Entrée",
+        "device": "Appareil",
+        "perMinute": "Scans par minute",
+        "medianGap": "Temps entre deux scans",
+        "queue": "Temps pour tout faire entrer",
+        "seconds": "{value} s",
+        "minutes": "{count, plural, one {# min} other {# min}}",
+        "notMoving": "À l’arrêt",
+        "noEntrance": "Aucune entrée choisie",
+        "noDevice": "Écran d’accueil"
+      },
+      "scanIssues": {
+        "title": "Doublons et scans refusés",
+        "summary": "Aujourd’hui : {duplicates, plural, one {# doublon} other {# doublons}}, {refused, plural, one {# scan refusé} other {# scans refusés}}",
+        "byReason": "Par motif",
+        "none": "Aucun doublon ni scan refusé aujourd’hui.",
+        "recent": "Les plus récents",
+        "openOrder": "Ouvrir la commande",
+        "reason": {
+          "admitted": "Entrée validée",
+          "granted": "Accès à la zone accordé",
+          "provisional": "Entré (à confirmer)",
+          "duplicate": "Déjà entré",
+          "duplicate_offline": "Doublon (scanné hors ligne)",
+          "invalid": "Code non valide",
+          "void": "Billet annulé",
+          "wrong_event": "Billet d’un autre événement",
+          "not_today": "Non valable aujourd’hui",
+          "outside_window": "Hors des horaires de l’événement",
+          "wrong_date": "Pour une autre date",
+          "superseded": "Code remplacé",
+          "no_access": "Pas d’accès à cette zone",
+          "wrong_checkpoint": "Mauvaise entrée",
+          "other": "Autre"
+        }
+      },
+      "capacity": {
+        "title": "Jauge",
+        "venue": "{inside} présents sur {capacity}",
+        "venueNoCap": "{inside} présents (aucune jauge définie)",
+        "meter": "{name} : jauge utilisée",
+        "event": "Événement",
+        "out": "{count, plural, one {# sortie enregistrée} other {# sorties enregistrées}}",
+        "left": "{count, plural, one {# place restante} other {# places restantes}}",
+        "areas": "Par zone",
+        "area": "Zone",
+        "in": "Présents",
+        "capacity": "Jauge",
+        "leftHeader": "Restant",
+        "status": "État",
+        "level": {
+          "none": "Aucune jauge définie",
+          "ok": "Sous {near} %",
+          "near": "Presque plein ({near} % ou plus)",
+          "over": "Jauge atteinte ou dépassée"
+        }
+      },
+      "staffPresence": {
+        "title": "Équipe aux entrées",
+        "none": "Personne n’est connecté aux entrées pour l’instant.",
+        "unknown": "Membre de l’équipe",
+        "onDevice": "Sur {device}",
+        "onDoorScreen": "Sur l’écran d’accueil",
+        "wholeEvent": "Tout l’événement",
+        "since": "depuis {time}"
+      },
+      "assistance": {
+        "title": "Aide aux invités"
+      },
+      "campaigns": {
+        "title": "Résultats des campagnes",
+        "summary": "{orders, plural, one {# commande} many {# commandes} other {# commandes}} · {clicks, plural, one {# clic} many {# clics} other {# clics}} · {conversion} de conversion",
+        "firstTouch": "Premier contact : {orders, plural, one {# commande} many {# commandes} other {# commandes}}, {amount}",
+        "chartTitle": "Revenus au dernier contact par campagne",
+        "campaign": "Campagne",
+        "clicks": "Clics",
+        "orders": "Commandes",
+        "revenue": "Revenus",
+        "unnamed": "(aucune)",
+        "none": "Pas encore de campagne ni de lien suivi pour cet événement.",
+        "more": "{count, plural, one {et # autre campagne} many {et # autres campagnes} other {et # autres campagnes}}",
+        "open": "Ouvrir les analyses marketing"
+      },
+      "deliverability": {
+        "title": "Délivrabilité des e-mails",
+        "paused": "Messages en pause (plaintes)",
+        "attention": "À surveiller",
+        "healthy": "Dans les seuils",
+        "rates": "Rebonds {bounce} · plaintes {complaint}",
+        "window": "{sent, plural, one {# e-mail} many {# e-mails} other {# e-mails}} sur les {days} derniers jours",
+        "over": "{domains, plural, one {# domaine d’envoi} many {# domaines d’envoi} other {# domaines d’envoi}} et {campaigns, plural, one {# campagne} many {# campagnes} other {# campagnes}} au-delà des seuils",
+        "open": "Ouvrir la délivrabilité des e-mails"
       }
+    },
+    "tv": {
+      "open": "Mode TV",
+      "title": "Mode TV",
+      "back": "Retour au centre de commande",
+      "description": "Tableaux en lecture seule pour les écrans de {event}. Toute personne ayant un lien voit le tableau sans se connecter : il n’affiche donc jamais d’argent ni de noms d’invités.",
+      "noAccessTitle": "Pas de mode TV pour votre rôle",
+      "noAccess": "Demandez l’accès à un propriétaire ou un administrateur.",
+      "newTitle": "Nouveau lien d’écran",
+      "label": "Nom de l’écran",
+      "labelHint": "Par exemple Écran du hall ou Moniteur porte B.",
+      "labelError": "Donnez un nom à l’écran (60 caractères maximum).",
+      "create": "Créer le lien",
+      "createdOnce": "Lien pour {label}. Ouvrez-le maintenant sur l’écran : il n’est affiché qu’une fois.",
+      "listTitle": "Liens d’écran",
+      "emptyTitle": "Aucun lien d’écran pour l’instant",
+      "emptyDescription": "Créez-en un pour afficher le tableau en direct sur un écran du lieu.",
+      "createdAt": "Créé {time}",
+      "revokedAt": "Désactivé {time}",
+      "revoke": "Désactiver",
+      "revokeLabel": "Désactiver {label}"
     }
   },
   "alerts": {
@@ -6229,8 +6401,9 @@
       "readiness": "Ouvrir le guide de configuration",
       "domain": "Corriger les domaines",
       "payoutsPastDue": "Mettre à jour le compte de versement",
-      "deliverability": "Ouvrir l’état de la messagerie",
+      "deliverability": "Ouvrir la liste de suppression",
       "automationFailed": "Ouvrir l’état de la messagerie",
+      "assistanceOverdue": "Ouvrir les demandes d’aide",
       "campaignFailed": "Ouvrir les campagnes",
       "disputeDeadline": "Ouvrir les litiges"
     },
@@ -6252,6 +6425,7 @@
       "payoutsPastDue": "{count, plural, one {Une exigence du compte de versement est en retard} other {{countWords} exigences du compte de versement sont en retard}}",
       "deliverability": "La délivrabilité des e-mails demande votre attention",
       "automationFailed": "{count, plural, one {Un message ou une action groupée a échoué aujourd’hui} other {{countWords} messages ou actions groupées ont échoué aujourd’hui}}",
+      "assistanceOverdue": "{count, plural, one {{countWords} demande d’aide attend depuis trop longtemps} other {{countWords} demandes d’aide attendent depuis trop longtemps}}",
       "campaignFailed": "{count, plural, one {Un envoi de campagne a échoué aujourd’hui} other {{countWords} envois de campagne ont échoué aujourd’hui}}",
       "disputeDeadline": "{count, plural, one {Un litige demande bientôt des preuves} other {{countWords} litiges demandent bientôt des preuves}}"
     },
@@ -6367,7 +6541,9 @@
       "backlogTitle": "Scans en attente",
       "backlogBody": "{label} a {count} scans en attente de synchronisation.",
       "capacityNearTitle": "Presque complet",
-      "capacityNearBody": "{percent} % des invités attendus sont entrés."
+      "capacityNearBody": "{percent} % des invités attendus sont entrés.",
+      "assistanceTitle": "Aide nécessaire maintenant",
+      "assistanceBody": "Demande d’aide urgente {label}. Ouvrez Personnel pour la prendre."
     },
     "supervisorSignIn": "Le mode superviseur nécessite qu’un superviseur soit connecté sur ce téléphone.",
     "signIn": "Se connecter en tant que superviseur",
@@ -7349,7 +7525,6 @@
     "publicLink": "On le remplit sur",
     "publicLinkText": "le formulaire d’inscription public",
     "openBuilder": "Modifier le formulaire d’inscription",
-    "openReadOnly": "Voir le formulaire d’inscription",
     "pagesTitle": "Pages",
     "emptyTitle": "Aucune page pour l’instant",
     "emptyDescription": "Ajoutez une première page, puis ses questions. Les pages peuvent être limitées à des types d’inscription ou n’apparaître qu’après certaines réponses.",
@@ -7501,7 +7676,8 @@
     "submittedTitle": "Merci, vous êtes inscrit·e",
     "submittedDescription": "Merci, {name}. Vos réponses ont été envoyées à l’organisateur.",
     "expiredTitle": "Ce lien a expiré",
-    "expiredDescription": "Les liens pour reprendre une inscription fonctionnent 14 jours après le dernier enregistrement. Recommencez depuis la page de l’événement."
+    "expiredDescription": "Les liens pour reprendre une inscription fonctionnent 14 jours après le dernier enregistrement. Recommencez depuis la page de l’événement.",
+    "openReadOnly": "Voir le formulaire d’inscription"
   },
   "agenda": {
     "publishing": {
@@ -8316,6 +8492,360 @@
     "exhibitor": "Exposant",
     "category": "Catégorie",
     "available": "Disponible"
+  },
+  "tv": {
+    "offTitle": "Ce lien d’écran est désactivé",
+    "offDescription": "Demandez un nouveau lien à l’équipe de l’événement.",
+    "eyebrow": "En direct aux entrées",
+    "updated": "Mis à jour {time}",
+    "stale": "Hors ligne, dernière mise à jour {time}",
+    "fullScreen": "Plein écran",
+    "checkedIn": "Entrés aujourd’hui",
+    "ofValid": "{total} billets sur {valid} validés",
+    "capacity": "Jauge",
+    "inside": "{inside} présents sur {capacity}",
+    "insideNoCap": "{inside} présents",
+    "level": {
+      "none": "Aucune jauge définie",
+      "ok": "Il reste de la place",
+      "near": "Presque plein",
+      "over": "Complet"
+    },
+    "speed": "Scans par minute",
+    "perMinute": "{minutes, plural, =0 {Tous les invités attendus sont entrés} one {Environ # minute pour faire entrer tout le monde} other {Environ # minutes pour faire entrer tout le monde}}",
+    "perMinuteStopped": "Aucun scan ces 5 dernières minutes",
+    "devices": "Appareils en ligne",
+    "devicesValue": "{online} sur {total}",
+    "issues": "Aujourd’hui aux entrées",
+    "issuesValue": "{duplicates, plural, one {# doublon} other {# doublons}}, {refused, plural, one {# scan refusé} other {# scans refusés}}",
+    "entrances": "Par entrée",
+    "entrance": "Entrée",
+    "entrancePerMinute": "Par minute",
+    "entranceQueue": "Pour tout faire entrer",
+    "noEntrance": "Aucune entrée choisie",
+    "minutes": "{count, plural, one {# min} other {# min}}",
+    "chartTitle": "Entrées par minute, 15 dernières minutes",
+    "showTable": "Afficher en tableau",
+    "minute": "Minute",
+    "checkedInColumn": "Entrés"
+  },
+  "assistance": {
+    "pageTitle": "Demandes d’aide",
+    "description": "Demandes « Besoin d’aide » des participants depuis le localisateur de places et demandes du personnel d’accueil pour {event}, les plus urgentes d’abord.",
+    "noAccessTitle": "Pas d’accès aux demandes d’aide",
+    "noAccess": "Votre rôle ne permet pas de voir les demandes d’aide de cet événement.",
+    "statusLabel": "Afficher les demandes",
+    "tab": {
+      "open": "Ouvertes",
+      "closed": "Fermées"
+    },
+    "readOnly": "Vous voyez les demandes ; votre rôle ne permet pas de les prendre ni de les modifier.",
+    "empty": {
+      "openTitle": "Aucune demande d’aide ouverte",
+      "openDescription": "Les nouvelles demandes des participants et du personnel d’accueil apparaissent ici dès leur arrivée.",
+      "closedTitle": "Rien de fermé pour l’instant",
+      "closedDescription": "Les demandes résolues et annulées sont listées ici."
+    },
+    "title": "n° {number} · {reason}",
+    "number": "n° {number}",
+    "reason": {
+      "seat": "Problème de place",
+      "accessibility": "Accessibilité",
+      "medical": "Médical",
+      "lost_item": "Objet perdu",
+      "other": "Autre chose",
+      "backup": "Renfort",
+      "supervisor": "Un responsable",
+      "security": "Sécurité",
+      "device": "Problème d’appareil"
+    },
+    "priority": {
+      "urgent": "Urgent",
+      "high": "Priorité haute",
+      "normal": "Priorité normale"
+    },
+    "state": {
+      "new": "En attente",
+      "assigned": "Attribuée",
+      "in_progress": "En cours",
+      "resolved": "Résolue",
+      "cancelled": "Annulée"
+    },
+    "mineState": "À vous",
+    "overdue": "En retard",
+    "sla": {
+      "takeWithin": "À prendre d’ici {time}",
+      "overdueBy": "En retard de {time}"
+    },
+    "source": {
+      "guest": "D’un participant",
+      "staff": "Du personnel d’accueil"
+    },
+    "askedAt": "Demandée à {time}",
+    "unassigned": "Personne ne l’a encore",
+    "assignedTo": "Avec {name}",
+    "aDevice": "un scanner",
+    "you": "vous",
+    "unknownPerson": "un ancien membre de l’équipe",
+    "guest": {
+      "title": "Besoin d’aide ?",
+      "description": "Dites au personnel de l’événement ce dont vous avez besoin. Il viendra à vous.",
+      "closedTitle": "Les demandes d’aide sont fermées",
+      "closedDescription": "Cet événement ne prend pas de demandes d’aide ici. Adressez-vous à un membre du personnel à proximité.",
+      "invalidTitle": "Ce lien de billet n’est pas valable pour cet événement",
+      "invalidDescription": "Ouvrez le localisateur de places depuis le lien de votre billet, ou adressez-vous à un membre du personnel à proximité.",
+      "back": "Retour au localisateur de places",
+      "reasonLegend": "Pour quoi avez-vous besoin d’aide ?",
+      "emergencyTitle": "En cas d’urgence, appelez les secours maintenant",
+      "emergencyBody": "Si quelqu’un est gravement blessé ou en danger, appelez d’abord le numéro d’urgence local (112 en Europe, 911 aux États-Unis), puis envoyez cette demande pour que le personnel vous trouve.",
+      "locationLabel": "Où êtes-vous ? (facultatif)",
+      "locationHint": "Votre place, rangée, table ou un repère à proximité.",
+      "noteLabel": "Autre chose que le personnel devrait savoir ? (facultatif)",
+      "privacy": "Seul le personnel de l’événement voit ceci, pour vous aider. Ce n’est jamais utilisé à des fins marketing.",
+      "submit": "Demander de l’aide",
+      "errors": {
+        "reason": "Choisissez pour quoi vous avez besoin d’aide.",
+        "noteTooLong": "La note doit faire moins de 500 caractères.",
+        "locationTooLong": "L’emplacement doit faire moins de 120 caractères.",
+        "invalidTicket": "Ce lien de billet n’est pas valable pour cet événement.",
+        "tooMany": "Vous avez déjà 3 demandes en attente. Le personnel arrive.",
+        "rateLimited": "Trop de demandes depuis cet appareil. Réessayez dans {minutes, plural, one {# minute} other {# minutes}}.",
+        "closed": "Cet événement ne prend pas de demandes d’aide pour le moment.",
+        "internal": "Un problème est survenu. Adressez-vous à un membre du personnel à proximité."
+      },
+      "statusTitle": "Demande d’aide n° {number}",
+      "askedAbout": "Votre demande : {reason}",
+      "state": {
+        "new": "En attente du personnel",
+        "assigned": "Un membre du personnel arrive",
+        "in_progress": "Un membre du personnel est avec vous",
+        "resolved": "Résolue",
+        "cancelled": "Fermée par le personnel"
+      },
+      "stateHint": {
+        "new": "Votre demande est dans la file. Restez où vous êtes si possible.",
+        "assigned": "Un membre de l’équipe a votre demande et arrive.",
+        "in_progress": "Le personnel vous aide en ce moment.",
+        "resolved": "Le personnel a marqué votre demande comme résolue. Redemandez si vous avez encore besoin d’aide.",
+        "cancelled": "Le personnel a fermé votre demande. Redemandez si vous avez encore besoin d’aide."
+      },
+      "lastUpdate": "Dernière mise à jour {time}",
+      "emergencyShort": "En cas d’urgence, appelez maintenant le numéro d’urgence local.",
+      "refresh": "Actualiser le statut",
+      "needHelp": "Besoin d’aide ?",
+      "needTicketLink": "Ouvrez le localisateur de places depuis le lien de votre billet pour demander de l’aide au personnel.",
+      "needHelpHint": "Demandez de l’aide au personnel pour votre place, l’accessibilité, un problème médical ou un objet perdu.",
+      "askButton": "Demander de l’aide",
+      "ticketLink": "Sur place : trouver votre place ou demander de l’aide",
+      "ticketLinkLabel": "Trouver votre place ou demander de l’aide sur place (billet {serial})"
+    },
+    "where": "Où : {place}",
+    "atEntrance": "À {name}",
+    "fromDevice": "Envoyée depuis {device}",
+    "activityTitle": "{count, plural, one {# mise à jour} other {# mises à jour}}",
+    "actor": {
+      "guest": "Le participant",
+      "member": "Un membre de l’équipe",
+      "device": "Un scanner",
+      "system": "Le système"
+    },
+    "activity": {
+      "created": "{who} a demandé de l’aide",
+      "assigned": "{who} l’a confiée à {to}",
+      "started": "{who} a commencé",
+      "resolved": "{who} l’a résolue",
+      "cancelled": "{who} l’a annulée",
+      "note": "{who} : {note}"
+    },
+    "take": "La prendre",
+    "takeLabel": "Prendre {title}",
+    "start": "Commencer",
+    "startLabel": "Commencer {title}",
+    "resolve": "Résoudre",
+    "resolveLabel": "Résoudre {title}",
+    "cancel": "Annuler la demande",
+    "cancelLabel": "Annuler {title}",
+    "assign": "Attribuer",
+    "assignLabel": "Attribuer {title} à",
+    "choosePerson": "Choisir une personne",
+    "noteLabel": "Note sur {title}",
+    "addNote": "Ajouter une note",
+    "done": {
+      "take": "Vous avez pris {title}.",
+      "assign": "{title} est attribuée.",
+      "start": "{title} est en cours.",
+      "resolve": "{title} est résolue.",
+      "cancel": "{title} est annulée.",
+      "note": "Note ajoutée à {title}."
+    },
+    "changed": "Cette demande a changé entre-temps. La liste est à jour ; réessayez.",
+    "failed": "Cela n’a pas fonctionné. Réessayez.",
+    "errors": {
+      "assignee": "Choisissez à qui la confier.",
+      "note": "Écrivez d’abord une note."
+    },
+    "live": {
+      "connecting": "Connexion…",
+      "live": "En direct",
+      "offline": "Hors ligne — rechargez pour la dernière version"
+    },
+    "widget": {
+      "waiting": "En attente",
+      "assigned": "Attribuées",
+      "inProgress": "En cours",
+      "overdue": "En retard",
+      "none": "Aucune demande d’aide ouverte.",
+      "open": "Ouvrir les demandes d’aide"
+    },
+    "scan": {
+      "queueTitle": "Demandes d’aide",
+      "loading": "Chargement des demandes d’aide…",
+      "unavailable": "Les demandes d’aide ne peuvent pas être chargées pour le moment.",
+      "none": "Aucune demande d’aide ouverte.",
+      "askTitle": "Demander de l’aide",
+      "askHint": "Votre demande est envoyée à l’équipe de l’événement avec cet appareil et l’entrée où il scanne.",
+      "reasonLabel": "De quoi avez-vous besoin ?",
+      "noteLabel": "Note (facultatif)",
+      "send": "Envoyer la demande",
+      "sent": "Demande d’aide n° {number} envoyée.",
+      "offline": "Vous êtes hors ligne. Réessayez quand l’appareil sera de nouveau en ligne.",
+      "invalid": "Choisissez ce dont vous avez besoin."
+    },
+    "guestLine": "{name} · billet {ticket}"
+  },
+  "marketingAnalytics": {
+    "title": "Analyses marketing",
+    "description": "Ce que vos campagnes, canaux et liens suivis ont rapporté : messages envoyés, clics, puis commandes et revenus, au premier et au dernier contact.",
+    "rangeLegend": "Période",
+    "from": "Du",
+    "to": "Au",
+    "apply": "Appliquer",
+    "rangeNote": "Jours en {timeZone}. Les commandes comptent le jour où elles ont été passées ; les revenus sont en {currency}.",
+    "rangeErrors": {
+      "invalid_date": "Saisissez des dates valides.",
+      "from_after_to": "La date de début doit être antérieure ou égale à la date de fin.",
+      "range_too_long": "Choisissez une période de 366 jours au plus."
+    },
+    "summaryLabel": "Totaux de la période",
+    "figures": {
+      "sends": "Envoyés",
+      "deliveries": "Distribués",
+      "clicks": "Clics",
+      "uniqueClickers": "Visiteurs uniques",
+      "lastOrders": "Commandes (dernier contact)",
+      "lastRevenue": "Revenus (dernier contact)",
+      "firstOrders": "Commandes (premier contact)",
+      "firstRevenue": "Revenus (premier contact)",
+      "conversion": "Conversion"
+    },
+    "otherCurrency": "{count, plural, one {# commande était dans une autre devise : comptée, mais pas dans les revenus.} many {# commandes étaient dans d’autres devises : comptées, mais pas dans les revenus.} other {# commandes étaient dans d’autres devises : comptées, mais pas dans les revenus.}}",
+    "viewLabel": "Regrouper les résultats par",
+    "view": {
+      "campaign": "Campagnes",
+      "channel": "Canaux",
+      "link": "Liens"
+    },
+    "chartTitle": {
+      "campaign": "Revenus au dernier contact par campagne",
+      "channel": "Revenus au dernier contact par canal",
+      "link": "Revenus au dernier contact par lien"
+    },
+    "showData": "Afficher les données",
+    "tableCaption": {
+      "campaign": "Campagnes : envois, clics, commandes et revenus",
+      "channel": "Canaux : envois, clics, commandes et revenus",
+      "link": "Liens suivis : clics, commandes et revenus"
+    },
+    "columns": {
+      "name": "Nom"
+    },
+    "kind": {
+      "campaign": "Campagne de messages",
+      "utm": "Campagne UTM"
+    },
+    "unnamed": "(aucune)",
+    "empty": "Rien pour l’instant. Créez des liens suivis sur la page Liens suivis d’un événement, ou envoyez une campagne.",
+    "creditNote": "Chaque commande compte une fois pour son premier contact et une fois pour son dernier. La conversion correspond aux commandes au dernier contact par clic.",
+    "export": "Exporter en CSV",
+    "deliverabilityLink": "Délivrabilité des e-mails",
+    "deliverabilityTeaser": "Taux de rebond et de plaintes pour votre organisation, chaque domaine d’envoi et chaque campagne.",
+    "openDeliverability": "Ouvrir la délivrabilité des e-mails",
+    "csv": {
+      "name": "Nom",
+      "event": "Événement",
+      "source": "Source",
+      "medium": "Support",
+      "campaign": "Campagne",
+      "code": "Code du lien",
+      "sends": "Envoyés",
+      "deliveries": "Distribués",
+      "clicks": "Clics",
+      "uniqueClickers": "Visiteurs uniques",
+      "firstTouchOrders": "Commandes au premier contact",
+      "firstTouchRevenueMinor": "Revenus au premier contact (unités mineures)",
+      "lastTouchOrders": "Commandes au dernier contact",
+      "lastTouchRevenueMinor": "Revenus au dernier contact (unités mineures)",
+      "otherCurrencyOrders": "Commandes dans d’autres devises",
+      "conversionPct": "Conversion (%)",
+      "currency": "Devise",
+      "total": "Total"
+    },
+    "detail": {
+      "title": "Résultats de la campagne",
+      "back": "Retour aux analyses marketing",
+      "figuresLabel": "Totaux de la campagne sur la période",
+      "deliveryTitle": "Distribution",
+      "sent": "Envoyés",
+      "delivered": "Distribués",
+      "bounced": "Rebonds",
+      "complained": "Plaintes",
+      "bounceRate": "Taux de rebond",
+      "complaintRate": "Taux de plaintes",
+      "linksTitle": "Liens suivis",
+      "ordersTitle": "Commandes générées",
+      "noOrders": "Aucune commande sur cette période.",
+      "order": "Commande",
+      "event": "Événement",
+      "credit": "Attribution",
+      "total": "Total",
+      "placed": "Passée le",
+      "touch": {
+        "first": "Premier contact",
+        "last": "Dernier contact",
+        "both": "Premier et dernier contact"
+      }
+    },
+    "deliverability": {
+      "title": "Délivrabilité des e-mails",
+      "description": "Taux de rebond et de plaintes sur les {days} derniers jours pour votre organisation, chaque domaine d’envoi et chaque campagne. Au-delà d’un seuil, votre équipe reçoit une alerte.",
+      "back": "Retour aux analyses marketing",
+      "paused": "Les messages sont en pause : le taux de plaintes a atteint {rate} ({complaints} sur {sent} e-mails) le {since}.",
+      "pausedBody": "Les messages facultatifs attendent que le support Yayatoh lève la pause. Retirez d’abord de vos listes les adresses qui se sont plaintes.",
+      "alertOpen": "{state, select, acknowledged {Alerte de délivrabilité : prise en compte} snoozed {Alerte de délivrabilité : reportée} other {Alerte de délivrabilité : ouverte}}",
+      "alertBody": "{domains, plural, one {# domaine d’envoi} many {# domaines d’envoi} other {# domaines d’envoi}} et {campaigns, plural, one {# campagne} many {# campagnes} other {# campagnes}} au-delà des seuils.",
+      "openSuppressions": "Ouvrir la liste de suppression",
+      "openAlerts": "Ouvrir les alertes",
+      "thresholds": "Seuils d’alerte : rebonds à partir de {bounce}, ou plaintes à partir de {complaint}, dès {min} e-mails envoyés en {days} jours.",
+      "orgTitle": "Votre organisation",
+      "domainsTitle": "Domaines d’envoi",
+      "campaignsTitle": "Campagnes",
+      "scope": "Organisation",
+      "domain": "Domaine",
+      "campaign": "Campagne",
+      "sent": "Envoyés",
+      "delivered": "Distribués",
+      "bounceRate": "Taux de rebond",
+      "complaintRate": "Taux de plaintes",
+      "status": "État",
+      "statusOver": "Au-delà d’un seuil",
+      "statusOk": "Dans les seuils",
+      "statusFew": "Moins de {min} e-mails : trop peu pour juger",
+      "platformSender": "{domain} (expéditeur partagé Yayatoh)",
+      "unrecorded": "Non enregistré (envoyé avant le suivi des domaines)",
+      "unnamedCampaign": "Campagne sans nom",
+      "noEmail": "Aucun e-mail au cours des {days} derniers jours.",
+      "noCampaigns": "Aucun e-mail de campagne au cours des {days} derniers jours."
+    }
   },
   "badges": {
     "subtitle": "Concevez des badges, choisissez-en un par type de billet et imprimez-les en PDF : tous d’un coup avant l’événement, ou un par un à l’accueil.",
