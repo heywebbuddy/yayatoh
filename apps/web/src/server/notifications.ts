@@ -151,20 +151,23 @@ export async function drainOrgMessages(
   // until a pass consumes nothing new (bounded).
   let journeySteps = 0;
   for (let pass = 0; pass < 4; pass++) {
-    const events = await withTenant(ctx, (tx) => recentEventsTx(tx, orgId, types, 6 * 3600_000));
-    // What each subscriber already handled, in one read (batch 3g merge: one transaction per
-    // event and subscriber made drains of the shared e2e org slow); consumeEvent still guards.
-    const done = await withTenant(ctx, (tx) =>
-      processedPairsTx(
-        tx,
-        subs.map((s) => s.name),
-        events.map((e) => e.id),
-      ),
-    );
+    const { events, done } = await withTenant(ctx, async (tx) => {
+      const recent = await recentEventsTx(tx, orgId, types, 6 * 3600_000);
+      return {
+        events: recent,
+        done: await processedPairsTx(
+          tx,
+          recent.map((e) => e.id),
+        ),
+      };
+    });
     let fresh = 0;
     for (const event of events) {
+      // Pairs handled before are skipped in bulk: in the shared e2e org a transaction per
+      // (event, subscriber) pair made one drain outlast its caller's 30 s (batch 3f merge).
+      // consumeEvent still guards the rest (a concurrent drain or worker never double-applies).
       for (const s of subs)
-        if (subscribes(s, event) && !done.has(`${s.name}|${event.id}`) && (await consumeEvent(s, event)))
+        if (subscribes(s, event) && !done.has(`${s.name} ${event.id}`) && (await consumeEvent(s, event)))
           fresh += 1;
     }
     consumed += fresh;
