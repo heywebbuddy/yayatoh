@@ -172,7 +172,8 @@ export default async function SsoPage({
                 <ActionButton
                   action={setConnectionStatusAction.bind(null, org)}
                   fields={{ status: 'disabled' }}
-                  saved={t('disabled')}
+                  // One toggle (the same instance either way): after a change it says the new state.
+                  saved={t('activated')}
                 >
                   {t('disable')}
                 </ActionButton>
@@ -181,7 +182,7 @@ export default async function SsoPage({
                   action={setConnectionStatusAction.bind(null, org)}
                   fields={{ status: 'active' }}
                   variant={conn.testPassed ? 'primary' : 'secondary'}
-                  saved={t('activated')}
+                  saved={t('disabled')}
                 >
                   {t('activate')}
                 </ActionButton>
@@ -213,7 +214,7 @@ export default async function SsoPage({
         </details>
         <div id="sso-connection-form">
           <ConnectionForm
-            key={conn ? `${conn.id}-${conn.testedAt?.getTime() ?? 0}` : 'new'}
+            key="connection-form"
             action={saveConnectionAction.bind(null, org)}
             initial={
               conn

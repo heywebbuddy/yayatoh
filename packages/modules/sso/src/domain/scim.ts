@@ -27,13 +27,15 @@ export type ScimErrorType =
 
 /** An error the SCIM endpoint answers with (RFC 7644 §3.12). `detail` never echoes input. */
 export class ScimError extends Error {
-  constructor(
-    readonly status: 400 | 401 | 403 | 404 | 409 | 413 | 500 | 501,
-    readonly detail: string,
-    readonly scimType?: ScimErrorType,
-  ) {
+  readonly status: 400 | 401 | 403 | 404 | 409 | 413 | 500 | 501;
+  readonly detail: string;
+  readonly scimType: ScimErrorType | undefined;
+  constructor(status: ScimError['status'], detail: string, scimType?: ScimErrorType) {
     super(detail);
     this.name = 'ScimError';
+    this.status = status;
+    this.detail = detail;
+    this.scimType = scimType;
   }
 }
 

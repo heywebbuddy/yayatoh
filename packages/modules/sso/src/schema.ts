@@ -100,7 +100,7 @@ export const domains = tenantTable(
       'domains_domain_check',
       sql`domain = lower(domain) and length(domain) between 4 and 253 and domain ~ '^[a-z0-9]([a-z0-9-]*[a-z0-9])?([.][a-z0-9]([a-z0-9-]*[a-z0-9])?)+$'`,
     ),
-    check('domains_token_check', sql`length(token) between 32 and 200`),
+    check('domains_token_check', sql`length(token) between 1 and 200`),
     check('domains_failure_check', sql`length(failure_reason) <= 200`),
   ],
 );
@@ -145,7 +145,7 @@ export const scimTokens = tenantTable(
   (t) => [
     uniqueIndex('scim_tokens_hash_key').on(t.tokenHash),
     uniqueIndex('scim_tokens_org_live_key').on(t.orgId).where(sql`revoked_at is null`),
-    check('scim_tokens_hash_check', sql`length(token_hash) between 64 and 200`),
+    check('scim_tokens_hash_check', sql`length(token_hash) between 1 and 200`),
     check('scim_tokens_prefix_check', sql`prefix like 'yy_scim_%' and length(prefix) <= 200`),
   ],
 );

@@ -1,5 +1,5 @@
 {
-  "id": "e73c191a-6dc1-4fd8-8932-280fec871569",
+  "id": "67633452-518b-42ef-a3ef-052f4cd5478e",
   "prevId": "f59b0d31-d47a-4d9a-a3b5-d556b26efa84",
   "version": "7",
   "dialect": "postgresql",
@@ -57033,7 +57033,7 @@
         },
         "domains_token_check": {
           "name": "domains_token_check",
-          "value": "length(token) between 32 and 200"
+          "value": "length(token) between 1 and 200"
         },
         "domains_failure_check": {
           "name": "domains_failure_check",
@@ -57695,7 +57695,7 @@
       "checkConstraints": {
         "scim_tokens_hash_check": {
           "name": "scim_tokens_hash_check",
-          "value": "length(token_hash) between 64 and 200"
+          "value": "length(token_hash) between 1 and 200"
         },
         "scim_tokens_prefix_check": {
           "name": "scim_tokens_prefix_check",

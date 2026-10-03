@@ -77,6 +77,7 @@ export async function saveConnectionAction(
     defaultRole: (text(form, 'defaultRole') || 'viewer') as 'viewer',
     jit: form.get('jit') === 'on',
   };
+  if (!common.name) return { kind: 'error', code: 'validation_failed', fields: ['name'] };
   let input: SaveConnectionInput;
   if (protocol === 'oidc') {
     input = {
@@ -108,7 +109,6 @@ export async function saveConnectionAction(
             : null;
     if (missing) return { kind: 'error', code: 'validation_failed', fields: [missing] };
   }
-  if (!common.name) return { kind: 'error', code: 'validation_failed', fields: ['name'] };
   return run(org, (data) => executeCommand(saveConnectionCommand, input, data.ctx, ports));
 }
 

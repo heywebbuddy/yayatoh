@@ -1,4 +1,3 @@
-import 'server-only';
 import { createHmac } from 'node:crypto';
 
 /** The fake IdP's signing seed (M6.5a): derived from BETTER_AUTH_SECRET; never in production. */

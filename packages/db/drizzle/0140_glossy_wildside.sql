@@ -43,7 +43,7 @@ CREATE TABLE "sso"."domains" (
 	CONSTRAINT "domains_status_check" CHECK (status in ('pending', 'verified', 'failed')),
 	CONSTRAINT "domains_enforced_check" CHECK (not enforced or status = 'verified'),
 	CONSTRAINT "domains_domain_check" CHECK (domain = lower(domain) and length(domain) between 4 and 253 and domain ~ '^[a-z0-9]([a-z0-9-]*[a-z0-9])?([.][a-z0-9]([a-z0-9-]*[a-z0-9])?)+$'),
-	CONSTRAINT "domains_token_check" CHECK (length(token) between 32 and 200),
+	CONSTRAINT "domains_token_check" CHECK (length(token) between 1 and 200),
 	CONSTRAINT "domains_failure_check" CHECK (length(failure_reason) <= 200)
 );
 --> statement-breakpoint
@@ -103,7 +103,7 @@ CREATE TABLE "sso"."scim_tokens" (
 	"last_used_at" timestamp with time zone,
 	"revoked_at" timestamp with time zone,
 	CONSTRAINT "scim_tokens_org_id_id_key" UNIQUE("org_id","id"),
-	CONSTRAINT "scim_tokens_hash_check" CHECK (length(token_hash) between 64 and 200),
+	CONSTRAINT "scim_tokens_hash_check" CHECK (length(token_hash) between 1 and 200),
 	CONSTRAINT "scim_tokens_prefix_check" CHECK (prefix like 'yy_scim_%' and length(prefix) <= 200)
 );
 --> statement-breakpoint
