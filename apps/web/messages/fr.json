@@ -7433,7 +7433,9 @@
       "invoicesOverdue": "Ouvrir les factures",
       "rsvpPending": "Ouvrir les réponses",
       "guestsUnseated": "Placer les invités",
-      "mealsMissing": "Ouvrir les réponses RSVP"
+      "mealsMissing": "Ouvrir les réponses RSVP",
+      "integrationFailed": "Ouvrir la boîte des intégrations",
+      "billingPastDue": "Ouvrir l’offre et la facturation"
     },
     "rules": {
       "unseated": "{count, plural, one {Un participant n’a pas de place} other {{countWords} participants n’ont pas de place}}",
@@ -7469,7 +7471,9 @@
       "invoicesOverdue": "{count, plural, one {{countWords} facture est en retard} other {{countWords} factures sont en retard}}",
       "rsvpPending": "{count, plural, one {Un invité n’a pas répondu à l’invitation} other {{countWords} invités n’ont pas répondu à l’invitation}}",
       "guestsUnseated": "{count, plural, one {Un invité n’a pas de table} other {{countWords} invités n’ont pas de table}}",
-      "mealsMissing": "{count, plural, one {Un invité présent n’a pas choisi de repas} other {{countWords} invités présents n’ont pas choisi de repas}}"
+      "mealsMissing": "{count, plural, one {Un invité présent n’a pas choisi de repas} other {{countWords} invités présents n’ont pas choisi de repas}}",
+      "integrationFailed": "{count, plural, one {Un problème d’intégration aujourd’hui (une synchronisation échouée ou une connexion perdue)} other {{countWords} problèmes d’intégration aujourd’hui (synchronisations échouées ou connexions perdues)}}",
+      "billingPastDue": "{count, plural, one {Le paiement de l’offre est en retard} other {{countWords} paiements de l’offre sont en retard}}"
     },
     "widget": {
       "title": "Alertes",

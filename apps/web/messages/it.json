@@ -7433,7 +7433,9 @@
       "invoicesOverdue": "Apri le fatture",
       "rsvpPending": "Apri le risposte",
       "guestsUnseated": "Assegna i tavoli",
-      "mealsMissing": "Apri le risposte RSVP"
+      "mealsMissing": "Apri le risposte RSVP",
+      "integrationFailed": "Apri la casella delle integrazioni",
+      "billingPastDue": "Apri piano e fatturazione"
     },
     "rules": {
       "unseated": "{count, plural, one {Un partecipante non ha un posto} other {{countWords} partecipanti non hanno un posto}}",
@@ -7469,7 +7471,9 @@
       "invoicesOverdue": "{count, plural, one {{countWords} fattura è scaduta} other {{countWords} fatture sono scadute}}",
       "rsvpPending": "{count, plural, one {Un invitato non ha risposto all’invito} other {{countWords} invitati non hanno risposto all’invito}}",
       "guestsUnseated": "{count, plural, one {Un invitato non ha un tavolo} other {{countWords} invitati non hanno un tavolo}}",
-      "mealsMissing": "{count, plural, one {Un invitato presente non ha scelto il pasto} other {{countWords} invitati presenti non hanno scelto il pasto}}"
+      "mealsMissing": "{count, plural, one {Un invitato presente non ha scelto il pasto} other {{countWords} invitati presenti non hanno scelto il pasto}}",
+      "integrationFailed": "{count, plural, one {{countWords} problema di integrazione oggi (una sincronizzazione non riuscita o una connessione persa)} other {{countWords} problemi di integrazione oggi (sincronizzazioni non riuscite o connessioni perse)}}",
+      "billingPastDue": "{count, plural, one {Il pagamento del piano è scaduto} other {{countWords} pagamenti del piano sono scaduti}}"
     },
     "widget": {
       "title": "Avvisi",

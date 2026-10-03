@@ -1,5 +1,6 @@
 import { assistanceOverdueTx } from '@yayatoh/assistance';
 import { offlinePrinterCountTx } from '@yayatoh/badges';
+import { subscriptionPaymentProblemsTx } from '@yayatoh/billing';
 import { checkinFactsTx, deviceHealthTx, kiosksOfflineTx, sessionsInRoomTx } from '@yayatoh/checkin';
 import type { TenantTx } from '@yayatoh/db';
 import { unpaidPledgeFactsTx } from '@yayatoh/donations';
@@ -198,20 +199,25 @@ async function socialEventFactsTx(
 /** Gather the org-level facts (domains, payout account, email deliverability, failures). */
 export async function orgFactsTx(tx: TenantTx, now: Date): Promise<OrgFacts> {
   const since = new Date(now.getTime() - THRESHOLDS.automationWindowMs);
-  const [domains, due, mail, breakdown, lastDay, bulk, journeys, campaigns, disputes] = await Promise.all([
-    domainProblemsTx(tx, now, THRESHOLDS.sslGraceMs),
-    payoutRequirementsPastDueTx(tx),
-    deliverabilityFactsTx(tx, now, THRESHOLDS.deliverabilityWindowMs),
-    deliverabilityBreakdownTx(tx, now, THRESHOLDS.deliverabilityWindowMs),
-    deliverabilityFactsTx(tx, now, THRESHOLDS.automationWindowMs),
-    failedBulkOperationsTx(tx, since),
-    signalCountTx(tx, 'journey_step_failed', since),
-    signalCountTx(tx, 'campaign_send_failed', since),
-    disputeDeadlineFactsTx(tx, now, {
-      soonMs: THRESHOLDS.disputeSoonMs,
-      criticalMs: THRESHOLDS.disputeCriticalMs,
-    }),
-  ]);
+  const [domains, due, mail, breakdown, lastDay, bulk, journeys, campaigns, disputes, runs, revoked, plan] =
+    await Promise.all([
+      domainProblemsTx(tx, now, THRESHOLDS.sslGraceMs),
+      payoutRequirementsPastDueTx(tx),
+      deliverabilityFactsTx(tx, now, THRESHOLDS.deliverabilityWindowMs),
+      deliverabilityBreakdownTx(tx, now, THRESHOLDS.deliverabilityWindowMs),
+      deliverabilityFactsTx(tx, now, THRESHOLDS.automationWindowMs),
+      failedBulkOperationsTx(tx, since),
+      signalCountTx(tx, 'journey_step_failed', since),
+      signalCountTx(tx, 'campaign_send_failed', since),
+      disputeDeadlineFactsTx(tx, now, {
+        soonMs: THRESHOLDS.disputeSoonMs,
+        criticalMs: THRESHOLDS.disputeCriticalMs,
+      }),
+      // Batch 3l merge: integration failures (signals) and the plan's payment state (billing).
+      signalCountTx(tx, 'integration_run_failed', since),
+      signalCountTx(tx, 'integration_revoked', since),
+      subscriptionPaymentProblemsTx(tx),
+    ]);
   return {
     domainsFailed: domains.failed,
     domainsSslPending: domains.sslPending,
@@ -231,6 +237,10 @@ export async function orgFactsTx(tx: TenantTx, now: Date): Promise<OrgFacts> {
     failedCampaignSends: campaigns,
     disputesDueSoon: disputes.soon,
     disputesDueCritical: disputes.critical,
+    failedIntegrationRuns: runs,
+    revokedIntegrations: revoked,
+    subscriptionsPastDue: plan.pastDue,
+    subscriptionsUnpaid: plan.unpaid,
   };
 }
 

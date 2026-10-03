@@ -7433,7 +7433,9 @@
       "invoicesOverdue": "افتح الفواتير",
       "rsvpPending": "افتح الردود",
       "guestsUnseated": "أجلِس الضيوف",
-      "mealsMissing": "افتح إجابات الدعوة"
+      "mealsMissing": "افتح إجابات الدعوة",
+      "integrationFailed": "افتح صندوق التكاملات",
+      "billingPastDue": "افتح الخطة والفوترة"
     },
     "rules": {
       "unseated": "{count, plural, zero {لا يوجد حاضرون بلا مقاعد} one {حاضر واحد ليس لديه مقعد} two {حاضران ليس لديهما مقعد} few {{countWords} حاضرين ليس لديهم مقاعد} many {{countWords} حاضرًا ليس لديهم مقاعد} other {{countWords} حاضر ليس لديهم مقاعد}}",
@@ -7469,7 +7471,9 @@
       "invoicesOverdue": "{count, plural, zero {لا توجد فواتير متأخرة} one {فاتورة واحدة متأخرة} two {فاتورتان متأخرتان} few {{countWords} فواتير متأخرة} many {{countWords} فاتورة متأخرة} other {{countWords} فاتورة متأخرة}}",
       "rsvpPending": "{count, plural, zero {لا يوجد ضيوف لم يردّوا على الدعوة} one {ضيف واحد لم يردّ على الدعوة} two {ضيفان لم يردّا على الدعوة} few {{countWords} ضيوف لم يردّوا على الدعوة} many {{countWords} ضيفًا لم يردّوا على الدعوة} other {{countWords} ضيف لم يردّوا على الدعوة}}",
       "guestsUnseated": "{count, plural, zero {لا يوجد ضيوف بلا طاولة} one {ضيف واحد بلا طاولة} two {ضيفان بلا طاولة} few {{countWords} ضيوف بلا طاولة} many {{countWords} ضيفًا بلا طاولة} other {{countWords} ضيف بلا طاولة}}",
-      "mealsMissing": "{count, plural, zero {لا يوجد ضيوف حاضرون بلا وجبة} one {ضيف حاضر واحد لم يختر وجبة} two {ضيفان حاضران لم يختارا وجبة} few {{countWords} ضيوف حاضرين لم يختاروا وجبة} many {{countWords} ضيفًا حاضرًا لم يختاروا وجبة} other {{countWords} ضيف حاضر لم يختاروا وجبة}}"
+      "mealsMissing": "{count, plural, zero {لا يوجد ضيوف حاضرون بلا وجبة} one {ضيف حاضر واحد لم يختر وجبة} two {ضيفان حاضران لم يختارا وجبة} few {{countWords} ضيوف حاضرين لم يختاروا وجبة} many {{countWords} ضيفًا حاضرًا لم يختاروا وجبة} other {{countWords} ضيف حاضر لم يختاروا وجبة}}",
+      "integrationFailed": "{count, plural, zero {لا مشكلات في التكاملات اليوم} one {مشكلة تكامل واحدة اليوم (مزامنة فاشلة أو اتصال مفقود)} two {مشكلتا تكامل اليوم (مزامنة فاشلة أو اتصال مفقود)} few {{countWords} مشكلات تكامل اليوم (مزامنات فاشلة أو اتصالات مفقودة)} many {{countWords} مشكلة تكامل اليوم (مزامنات فاشلة أو اتصالات مفقودة)} other {{countWords} مشكلة تكامل اليوم (مزامنات فاشلة أو اتصالات مفقودة)}}",
+      "billingPastDue": "{count, plural, zero {لا دفعات متأخرة للخطة} one {دفعة الخطة متأخرة} two {دفعتان للخطة متأخرتان} few {{countWords} دفعات للخطة متأخرة} many {{countWords} دفعة للخطة متأخرة} other {{countWords} دفعة للخطة متأخرة}}"
     },
     "widget": {
       "title": "التنبيهات",

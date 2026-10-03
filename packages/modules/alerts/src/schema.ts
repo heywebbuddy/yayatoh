@@ -143,7 +143,13 @@ export const memberSettings = tenantTable(
  * the org rules can count them in their window like any other source. Written only by the
  * `alerts.evaluator` subscriber (exactly once per event); kept 7 days.
  */
-export const SIGNAL_KINDS = ['journey_step_failed', 'campaign_send_failed'] as const;
+export const SIGNAL_KINDS = [
+  'journey_step_failed',
+  'campaign_send_failed',
+  // Batch 3l merge: integration runs that failed and connections revoked at the provider (M6.4a).
+  'integration_run_failed',
+  'integration_revoked',
+] as const;
 export type SignalKind = (typeof SIGNAL_KINDS)[number];
 
 export const signals = tenantTable(

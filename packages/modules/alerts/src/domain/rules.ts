@@ -129,6 +129,16 @@ export interface OrgFacts {
   /** Open disputes with evidence due within the warning / critical windows (M3.10c). */
   readonly disputesDueSoon: number;
   readonly disputesDueCritical: number;
+  /**
+   * Batch 3l merge: integration runs that failed (M6.4a `integrations.sync_completed@1` with
+   * status `failed`) and connections the provider revoked (`integrations.connection_revoked@1`)
+   * in the window. Absent: none.
+   */
+  readonly failedIntegrationRuns?: number;
+  readonly revokedIntegrations?: number;
+  /** Batch 3l merge: the org's plan subscriptions now `past_due` / `unpaid` (M6.6). Absent: none. */
+  readonly subscriptionsPastDue?: number;
+  readonly subscriptionsUnpaid?: number;
 }
 
 const pct = (part: number, whole: number) => (whole > 0 ? Math.floor((part * 100) / whole) : 0);
@@ -375,5 +385,16 @@ export function evaluateOrgRules(f: OrgFacts, t: Thresholds = THRESHOLDS): Parti
     out.disputeDeadline = fire(f.disputesDueCritical > 0 ? 'critical' : 'warning', f.disputesDueSoon, {
       critical: f.disputesDueCritical,
     });
+  // Batch 3l merge: a revoked connection stops every sync until someone reconnects (critical);
+  // failed runs retry on their own (warning).
+  const runs = f.failedIntegrationRuns ?? 0;
+  const revoked = f.revokedIntegrations ?? 0;
+  if (runs + revoked >= t.integrationFailedMin)
+    out.integrationFailed = fire(revoked > 0 ? 'critical' : 'warning', runs + revoked, { runs, revoked });
+  // An unpaid plan is about to lose its paid modules (critical); past due is still being retried.
+  const pastDue = f.subscriptionsPastDue ?? 0;
+  const unpaid = f.subscriptionsUnpaid ?? 0;
+  if (pastDue + unpaid > 0)
+    out.billingPastDue = fire(unpaid > 0 ? 'critical' : 'warning', pastDue + unpaid, { pastDue, unpaid });
   return out;
 }

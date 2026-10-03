@@ -7433,7 +7433,9 @@
       "invoicesOverdue": "Abrir faturas",
       "rsvpPending": "Abrir as respostas",
       "guestsUnseated": "Sentar os convidados",
-      "mealsMissing": "Abrir as respostas RSVP"
+      "mealsMissing": "Abrir as respostas RSVP",
+      "integrationFailed": "Abrir a caixa de integrações",
+      "billingPastDue": "Abrir plano e faturação"
     },
     "rules": {
       "unseated": "{count, plural, one {{countWords} participante não tem lugar} other {{countWords} participantes não têm lugar}}",
@@ -7469,7 +7471,9 @@
       "invoicesOverdue": "{count, plural, one {{countWords} fatura está vencida} other {{countWords} faturas estão vencidas}}",
       "rsvpPending": "{count, plural, one {{countWords} convidado não respondeu ao convite} other {{countWords} convidados não responderam ao convite}}",
       "guestsUnseated": "{count, plural, one {{countWords} convidado não tem mesa} other {{countWords} convidados não têm mesa}}",
-      "mealsMissing": "{count, plural, one {{countWords} convidado confirmado não escolheu a refeição} other {{countWords} convidados confirmados não escolheram a refeição}}"
+      "mealsMissing": "{count, plural, one {{countWords} convidado confirmado não escolheu a refeição} other {{countWords} convidados confirmados não escolheram a refeição}}",
+      "integrationFailed": "{count, plural, one {{countWords} problema de integração hoje (uma sincronização falhada ou uma conexão perdida)} other {{countWords} problemas de integração hoje (sincronizações falhadas ou conexões perdidas)}}",
+      "billingPastDue": "{count, plural, one {O pagamento do plano está em atraso} other {{countWords} pagamentos do plano estão em atraso}}"
     },
     "widget": {
       "title": "Alertas",

@@ -7433,7 +7433,9 @@
       "invoicesOverdue": "चालान खोलें",
       "rsvpPending": "RSVP खोलें",
       "guestsUnseated": "मेहमानों को बैठाएँ",
-      "mealsMissing": "RSVP जवाब खोलें"
+      "mealsMissing": "RSVP जवाब खोलें",
+      "integrationFailed": "इंटीग्रेशन इनबॉक्स खोलें",
+      "billingPastDue": "प्लान और बिलिंग खोलें"
     },
     "rules": {
       "unseated": "{count, plural, one {{countWords} उपस्थित व्यक्ति के पास सीट नहीं है} other {{countWords} उपस्थित लोगों के पास सीट नहीं है}}",
@@ -7469,7 +7471,9 @@
       "invoicesOverdue": "{count, plural, one {{countWords} चालान की नियत तारीख निकल गई है} other {{countWords} चालानों की नियत तारीख निकल गई है}}",
       "rsvpPending": "{count, plural, one {{countWords} मेहमान ने RSVP का जवाब नहीं दिया है} other {{countWords} मेहमानों ने RSVP का जवाब नहीं दिया है}}",
       "guestsUnseated": "{count, plural, one {{countWords} मेहमान के पास टेबल नहीं है} other {{countWords} मेहमानों के पास टेबल नहीं है}}",
-      "mealsMissing": "{count, plural, one {{countWords} आने वाले मेहमान ने भोजन नहीं चुना है} other {{countWords} आने वाले मेहमानों ने भोजन नहीं चुना है}}"
+      "mealsMissing": "{count, plural, one {{countWords} आने वाले मेहमान ने भोजन नहीं चुना है} other {{countWords} आने वाले मेहमानों ने भोजन नहीं चुना है}}",
+      "integrationFailed": "{count, plural, one {आज {countWords} इंटीग्रेशन समस्या (विफल सिंक या टूटा कनेक्शन)} other {आज {countWords} इंटीग्रेशन समस्याएँ (विफल सिंक या टूटे कनेक्शन)}}",
+      "billingPastDue": "{count, plural, one {प्लान का भुगतान बकाया है} other {{countWords} प्लान भुगतान बकाया हैं}}"
     },
     "widget": {
       "title": "अलर्ट",

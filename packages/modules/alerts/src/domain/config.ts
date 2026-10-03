@@ -85,6 +85,9 @@ export const RULE_KEYS = [
   'rsvpPending',
   'guestsUnseated',
   'mealsMissing',
+  // Batch 3l merge: failed or revoked integration connections (M6.4–M6.5) and an unpaid plan (M6.6).
+  'integrationFailed',
+  'billingPastDue',
 ] as const;
 export type RuleKey = (typeof RULE_KEYS)[number];
 
@@ -213,6 +216,8 @@ export const RULES: Readonly<Record<RuleKey, RuleDef>> = {
   rsvpPending: rule('rsvpPending', 'event', 'attendees', 'guests:read', '/e/{event}/guests/rsvp'),
   guestsUnseated: rule('guestsUnseated', 'event', 'attendees', 'guests:read', '/e/{event}/seating/guests'),
   mealsMissing: rule('mealsMissing', 'event', 'attendees', 'guests:read', '/e/{event}/guests/answers'),
+  integrationFailed: rule('integrationFailed', 'org', 'setup', 'integrations:read', '/integrations/errors'),
+  billingPastDue: rule('billingPastDue', 'org', 'payments', 'billing:read', '/plan'),
 };
 
 export const isRuleKey = (v: string): v is RuleKey => (RULE_KEYS as readonly string[]).includes(v);
@@ -270,6 +275,8 @@ export const THRESHOLDS = {
   automationMin: 1,
   /** A campaign send that failed (M3.6b) in the last 24 hours (the same window). */
   campaignFailedMin: 1,
+  /** Batch 3l merge: a failed integration run or a revoked connection in the last 24 hours (the same window). */
+  integrationFailedMin: 1,
   /** Open disputes whose evidence is due within 3 days; critical within 1 day (M3.10c levels). */
   disputeSoonMs: 72 * 3_600_000,
   disputeCriticalMs: 24 * 3_600_000,

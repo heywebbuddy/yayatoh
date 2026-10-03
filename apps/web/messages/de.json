@@ -7433,7 +7433,9 @@
       "invoicesOverdue": "Rechnungen öffnen",
       "rsvpPending": "Antworten öffnen",
       "guestsUnseated": "Gäste platzieren",
-      "mealsMissing": "RSVP-Antworten öffnen"
+      "mealsMissing": "RSVP-Antworten öffnen",
+      "integrationFailed": "Integrations-Posteingang öffnen",
+      "billingPastDue": "Tarif und Abrechnung öffnen"
     },
     "rules": {
       "unseated": "{count, plural, one {Ein Teilnehmer hat keinen Sitzplatz} other {{countWords} Teilnehmende haben keinen Sitzplatz}}",
@@ -7469,7 +7471,9 @@
       "invoicesOverdue": "{count, plural, one {Eine Rechnung ist überfällig} other {{countWords} Rechnungen sind überfällig}}",
       "rsvpPending": "{count, plural, one {Ein Gast hat noch nicht auf die Einladung geantwortet} other {{countWords} Gäste haben noch nicht auf die Einladung geantwortet}}",
       "guestsUnseated": "{count, plural, one {Ein Gast hat keinen Tisch} other {{countWords} Gäste haben keinen Tisch}}",
-      "mealsMissing": "{count, plural, one {Ein zusagender Gast hat kein Essen gewählt} other {{countWords} zusagende Gäste haben kein Essen gewählt}}"
+      "mealsMissing": "{count, plural, one {Ein zusagender Gast hat kein Essen gewählt} other {{countWords} zusagende Gäste haben kein Essen gewählt}}",
+      "integrationFailed": "{count, plural, one {{countWords} Integrationsproblem heute (fehlgeschlagene Synchronisierung oder verlorene Verbindung)} other {{countWords} Integrationsprobleme heute (fehlgeschlagene Synchronisierungen oder verlorene Verbindungen)}}",
+      "billingPastDue": "{count, plural, one {Die Zahlung für den Tarif ist überfällig} other {{countWords} Tarifzahlungen sind überfällig}}"
     },
     "widget": {
       "title": "Warnungen",

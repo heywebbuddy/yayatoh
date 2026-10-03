@@ -7433,7 +7433,9 @@
       "invoicesOverdue": "Facturen openen",
       "rsvpPending": "Reacties openen",
       "guestsUnseated": "Gasten plaatsen",
-      "mealsMissing": "RSVP-antwoorden openen"
+      "mealsMissing": "RSVP-antwoorden openen",
+      "integrationFailed": "Integratie-inbox openen",
+      "billingPastDue": "Abonnement en facturatie openen"
     },
     "rules": {
       "unseated": "{count, plural, one {Eén deelnemer heeft geen plaats} other {{countWords} deelnemers hebben geen plaats}}",
@@ -7469,7 +7471,9 @@
       "invoicesOverdue": "{count, plural, one {{countWords} factuur is te laat} other {{countWords} facturen zijn te laat}}",
       "rsvpPending": "{count, plural, one {Eén gast heeft nog niet gereageerd op de uitnodiging} other {{countWords} gasten hebben nog niet gereageerd op de uitnodiging}}",
       "guestsUnseated": "{count, plural, one {Eén gast heeft geen tafel} other {{countWords} gasten hebben geen tafel}}",
-      "mealsMissing": "{count, plural, one {Eén aanwezige gast heeft geen maaltijd gekozen} other {{countWords} aanwezige gasten hebben geen maaltijd gekozen}}"
+      "mealsMissing": "{count, plural, one {Eén aanwezige gast heeft geen maaltijd gekozen} other {{countWords} aanwezige gasten hebben geen maaltijd gekozen}}",
+      "integrationFailed": "{count, plural, one {{countWords} integratieprobleem vandaag (een mislukte synchronisatie of een verbroken koppeling)} other {{countWords} integratieproblemen vandaag (mislukte synchronisaties of verbroken koppelingen)}}",
+      "billingPastDue": "{count, plural, one {De betaling van het abonnement is achterstallig} other {{countWords} abonnementsbetalingen zijn achterstallig}}"
     },
     "widget": {
       "title": "Meldingen",

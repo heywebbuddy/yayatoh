@@ -7433,7 +7433,9 @@
       "invoicesOverdue": "Открыть счета",
       "rsvpPending": "Открыть ответы",
       "guestsUnseated": "Рассадить гостей",
-      "mealsMissing": "Открыть ответы на приглашение"
+      "mealsMissing": "Открыть ответы на приглашение",
+      "integrationFailed": "Открыть входящие интеграций",
+      "billingPastDue": "Открыть тариф и оплату"
     },
     "rules": {
       "unseated": "{count, plural, one {{countWords} участник без места} few {{countWords} участника без мест} many {{countWords} участников без мест} other {{countWords} участника без мест}}",
@@ -7469,7 +7471,9 @@
       "invoicesOverdue": "{count, plural, one {{countWords} счёт просрочен} few {{countWords} счёта просрочены} many {{countWords} счетов просрочено} other {{countWords} счёта просрочены}}",
       "rsvpPending": "{count, plural, one {{countWords} гость не ответил на приглашение} few {{countWords} гостя не ответили на приглашение} many {{countWords} гостей не ответили на приглашение} other {{countWords} гостя не ответили на приглашение}}",
       "guestsUnseated": "{count, plural, one {{countWords} гость без стола} few {{countWords} гостя без стола} many {{countWords} гостей без стола} other {{countWords} гостя без стола}}",
-      "mealsMissing": "{count, plural, one {{countWords} гость, который придёт, не выбрал блюдо} few {{countWords} гостя, которые придут, не выбрали блюдо} many {{countWords} гостей, которые придут, не выбрали блюдо} other {{countWords} гостя, которые придут, не выбрали блюдо}}"
+      "mealsMissing": "{count, plural, one {{countWords} гость, который придёт, не выбрал блюдо} few {{countWords} гостя, которые придут, не выбрали блюдо} many {{countWords} гостей, которые придут, не выбрали блюдо} other {{countWords} гостя, которые придут, не выбрали блюдо}}",
+      "integrationFailed": "{count, plural, one {Сегодня {countWords} проблема с интеграциями (сбой синхронизации или потерянное подключение)} few {Сегодня {countWords} проблемы с интеграциями (сбои синхронизации или потерянные подключения)} many {Сегодня {countWords} проблем с интеграциями (сбои синхронизации или потерянные подключения)} other {Сегодня {countWords} проблемы с интеграциями (сбои синхронизации или потерянные подключения)}}",
+      "billingPastDue": "{count, plural, one {Оплата тарифа просрочена} few {{countWords} платежа за тариф просрочены} many {{countWords} платежей за тариф просрочены} other {{countWords} платежа за тариф просрочены}}"
     },
     "widget": {
       "title": "Оповещения",

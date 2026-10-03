@@ -7433,7 +7433,9 @@
       "invoicesOverdue": "打开发票",
       "rsvpPending": "打开回复",
       "guestsUnseated": "安排宾客座位",
-      "mealsMissing": "打开回复详情"
+      "mealsMissing": "打开回复详情",
+      "integrationFailed": "打开集成收件箱",
+      "billingPastDue": "打开套餐与账单"
     },
     "rules": {
       "unseated": "{count, plural, other {{countWords} 位参会者没有座位}}",
@@ -7469,7 +7471,9 @@
       "invoicesOverdue": "{count, plural, other {{countWords}张发票已逾期}}",
       "rsvpPending": "{count, plural, other {{countWords} 位宾客尚未回复出席邀请}}",
       "guestsUnseated": "{count, plural, other {{countWords} 位宾客没有桌位}}",
-      "mealsMissing": "{count, plural, other {{countWords} 位出席宾客尚未选择餐点}}"
+      "mealsMissing": "{count, plural, other {{countWords} 位出席宾客尚未选择餐点}}",
+      "integrationFailed": "{count, plural, other {今天有 {countWords} 个集成问题（同步失败或连接丢失）}}",
+      "billingPastDue": "{count, plural, other {有 {countWords} 笔套餐付款已逾期}}"
     },
     "widget": {
       "title": "提醒",

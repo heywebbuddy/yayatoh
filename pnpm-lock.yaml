@@ -1175,6 +1175,9 @@ importers:
       '@yayatoh/badges':
         specifier: workspace:*
         version: link:../badges
+      '@yayatoh/billing':
+        specifier: workspace:*
+        version: link:../billing
       '@yayatoh/checkin':
         specifier: workspace:*
         version: link:../checkin

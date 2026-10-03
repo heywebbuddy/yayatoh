@@ -96,13 +96,30 @@ export const ALERT_TRIGGER_EVENTS = [
   // emit nothing: the sweep picks them up).
   'guests.party_responded@1',
   'guests.rsvp_deadline_set@1',
+  // Batch 3l merge: integration runs that failed and connections revoked at the provider
+  // (signals), and plan subscription changes (past due / unpaid are read from billing).
+  'integrations.sync_completed@1',
+  'integrations.connection_revoked@1',
+  'billing.subscription_changed@1',
 ] as const;
 
 /** Outbox events that are themselves what an org rule counts (one `alerts.signals` row each). */
 const SIGNAL_OF: Readonly<Record<string, SignalKind>> = {
   'automations.journey_step_failed': 'journey_step_failed',
   'campaigns.send_failed': 'campaign_send_failed',
+  'integrations.connection_revoked': 'integration_revoked',
 };
+
+const SyncCompleted = z.object({ status: z.string() });
+
+/** The signal an outbox event reports, if any (a sync run counts only when it failed). */
+function signalOf(event: Pick<PublishedEvent, 'type' | 'payload'>): SignalKind | undefined {
+  if (event.type === 'integrations.sync_completed')
+    return SyncCompleted.safeParse(event.payload).data?.status === 'failed'
+      ? 'integration_run_failed'
+      : undefined;
+  return SIGNAL_OF[event.type];
+}
 
 const WithEvent = z.object({ eventId: z.uuid() });
 const WithOrder = z.object({ orderId: z.uuid() });
@@ -134,7 +151,11 @@ export async function alertTargetsTx(
     }
     return { eventIds: around, org: false };
   }
-  if (/^(domain|payouts|messaging|org|bulk|automations|campaigns|payments)\./.test(event.type)) {
+  if (
+    /^(domain|payouts|messaging|org|bulk|automations|campaigns|payments|integrations|billing)\./.test(
+      event.type,
+    )
+  ) {
     const withEvent = WithEvent.safeParse(p);
     return { eventIds: withEvent.success ? [withEvent.data.eventId] : [], org: true };
   }
@@ -166,7 +187,7 @@ export function alertEvaluator(deps: AlertDeps): Subscriber {
     events: ALERT_TRIGGER_EVENTS,
     handle: async (tx, event) => {
       const ctx = createCtx({ orgId: event.orgId, actor: { type: 'system', name: 'alerts.evaluator' } });
-      const kind = SIGNAL_OF[event.type];
+      const kind = signalOf(event);
       if (kind)
         await tx
           .insert(signals)

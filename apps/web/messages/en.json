@@ -7433,7 +7433,9 @@
       "invoicesOverdue": "Open invoices",
       "rsvpPending": "Open RSVPs",
       "guestsUnseated": "Seat guests",
-      "mealsMissing": "Open RSVP answers"
+      "mealsMissing": "Open RSVP answers",
+      "integrationFailed": "Open the integrations inbox",
+      "billingPastDue": "Open plan and billing"
     },
     "rules": {
       "unseated": "{count, plural, one {{countWords} attendee does not have a seat} other {{countWords} attendees do not have seats}}",
@@ -7469,7 +7471,9 @@
       "invoicesOverdue": "{count, plural, one {{countWords} invoice is overdue} other {{countWords} invoices are overdue}}",
       "rsvpPending": "{count, plural, one {{countWords} guest has not responded to RSVP} other {{countWords} guests have not responded to RSVP}}",
       "guestsUnseated": "{count, plural, one {{countWords} guest does not have a table} other {{countWords} guests do not have a table}}",
-      "mealsMissing": "{count, plural, one {{countWords} attending guest has not chosen a meal} other {{countWords} attending guests have not chosen a meal}}"
+      "mealsMissing": "{count, plural, one {{countWords} attending guest has not chosen a meal} other {{countWords} attending guests have not chosen a meal}}",
+      "integrationFailed": "{count, plural, one {{countWords} integration problem today (a failed sync or a lost connection)} other {{countWords} integration problems today (failed syncs or lost connections)}}",
+      "billingPastDue": "{count, plural, one {The plan payment is past due} other {{countWords} plan payments are past due}}"
     },
     "widget": {
       "title": "Alerts",

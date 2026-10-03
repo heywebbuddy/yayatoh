@@ -7433,7 +7433,9 @@
       "invoicesOverdue": "開啟發票",
       "rsvpPending": "開啟回覆",
       "guestsUnseated": "安排賓客座位",
-      "mealsMissing": "開啟回覆詳情"
+      "mealsMissing": "開啟回覆詳情",
+      "integrationFailed": "開啟整合收件匣",
+      "billingPastDue": "開啟方案與帳單"
     },
     "rules": {
       "unseated": "{count, plural, other {{countWords} 位參加者沒有座位}}",
@@ -7469,7 +7471,9 @@
       "invoicesOverdue": "{count, plural, other {{countWords}張發票已逾期}}",
       "rsvpPending": "{count, plural, other {{countWords} 位賓客尚未回覆出席邀請}}",
       "guestsUnseated": "{count, plural, other {{countWords} 位賓客沒有桌位}}",
-      "mealsMissing": "{count, plural, other {{countWords} 位出席賓客尚未選擇餐點}}"
+      "mealsMissing": "{count, plural, other {{countWords} 位出席賓客尚未選擇餐點}}",
+      "integrationFailed": "{count, plural, other {今天有 {countWords} 個整合問題（同步失敗或連線中斷）}}",
+      "billingPastDue": "{count, plural, other {有 {countWords} 筆方案付款已逾期}}"
     },
     "widget": {
       "title": "警示",

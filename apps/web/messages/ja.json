@@ -7433,7 +7433,9 @@
       "invoicesOverdue": "請求書を開く",
       "rsvpPending": "出欠を開く",
       "guestsUnseated": "ゲストの席を決める",
-      "mealsMissing": "出欠の回答を開く"
+      "mealsMissing": "出欠の回答を開く",
+      "integrationFailed": "連携の受信トレイを開く",
+      "billingPastDue": "プランと請求を開く"
     },
     "rules": {
       "unseated": "{count, plural, other {{countWords}人の参加者に座席がありません}}",
@@ -7469,7 +7471,9 @@
       "invoicesOverdue": "{count, plural, other {{countWords}件の請求書が支払期限を過ぎています}}",
       "rsvpPending": "{count, plural, other {{countWords}人のゲストが出欠に回答していません}}",
       "guestsUnseated": "{count, plural, other {{countWords}人のゲストにテーブルがありません}}",
-      "mealsMissing": "{count, plural, other {出席する{countWords}人のゲストが料理を選んでいません}}"
+      "mealsMissing": "{count, plural, other {出席する{countWords}人のゲストが料理を選んでいません}}",
+      "integrationFailed": "{count, plural, other {本日{countWords}件の連携の問題（同期の失敗または接続の切断）}}",
+      "billingPastDue": "{count, plural, other {プランの支払いが{countWords}件延滞しています}}"
     },
     "widget": {
       "title": "アラート",
