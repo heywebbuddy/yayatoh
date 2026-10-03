@@ -7,6 +7,7 @@ import {
   checkoutRiskSignals,
   derivedStaffAlerts,
   fraudSignalAlerts,
+  networkChatSignals,
   staffAlertsSubscriber,
 } from '@yayatoh/checkin';
 import { deviceBoardPublisher, publishMetricsChangedTx } from '@yayatoh/command-center';
@@ -110,6 +111,8 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     // M1.9e: checkout risk outcomes and chat reports become fraud signals; high ones alert.
     checkoutRiskSignals(),
     chatReportSignals(),
+    // M5.8b: networking chat reports about attendees.
+    networkChatSignals(),
     fraudSignalAlerts({ notifier }),
     // M3.4a: staff alerts for the Scan PWA (web push per device). The Command Center alert engine
     // (M3.2b) replaces `derivedStaffAlerts` here and in apps/web/src/server/scan-staff.ts.

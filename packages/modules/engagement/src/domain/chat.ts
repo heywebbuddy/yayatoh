@@ -79,4 +79,5 @@ export function chatRetentionCutoff(now: Date): Date {
 }
 
 /** A message as a report excerpt shows it. */
-export const clipExcerpt = (s: string) => (s.length > EXCERPT_CHARS ? `${s.slice(0, EXCERPT_CHARS - 1)}…` : s);
+export const clipExcerpt = (s: string) =>
+  s.length > EXCERPT_CHARS ? `${s.slice(0, EXCERPT_CHARS - 1)}…` : s;

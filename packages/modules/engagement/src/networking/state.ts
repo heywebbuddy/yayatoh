@@ -9,6 +9,7 @@ import {
   networkBlocks,
   networkConnections,
   networkProfiles,
+  networkReports,
   networkSettings,
 } from '../schema.ts';
 import { eventOf } from '../state.ts';
@@ -134,6 +135,22 @@ export async function leaveNetworkTx(tx: TenantTx, ctx: Ctx, profileId: string):
       ),
     );
   await cancelMeetingsTx(tx, ctx, or(eq(meetings.requesterId, profileId), eq(meetings.inviteeId, profileId)));
+}
+
+/**
+ * The organizer hides a person (a report, M5.8a; a chat report, M5.8b): out of every list, every
+ * open report about them closed as `hidden`, their waiting requests and meetings ahead ended.
+ */
+export async function hideProfileTx(tx: TenantTx, ctx: Ctx, profileId: string, by: string | null) {
+  await tx
+    .update(networkProfiles)
+    .set({ hiddenAt: ctx.now, hiddenBy: by, updatedAt: ctx.now })
+    .where(and(eq(networkProfiles.id, profileId), sql`hidden_at is null`));
+  await tx
+    .update(networkReports)
+    .set({ status: 'hidden', resolvedAt: ctx.now, resolvedBy: by, updatedAt: ctx.now })
+    .where(and(eq(networkReports.reportedId, profileId), eq(networkReports.status, 'open')));
+  await leaveNetworkTx(tx, ctx, profileId);
 }
 
 /** Cancel pending and accepted meetings (matching `where`) whose slot has not started. */

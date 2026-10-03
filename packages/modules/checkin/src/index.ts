@@ -70,6 +70,8 @@ export {
   scanWindowTx,
   staffPresenceTx,
 } from './live.ts';
+// M5.8b: networking chat reports → chat_abuse signals.
+export { networkChatSignal, networkChatSignals } from './network-chat-signals.ts';
 export { privateColumns } from './private-columns.ts';
 export {
   admissionsForTicketsTx,

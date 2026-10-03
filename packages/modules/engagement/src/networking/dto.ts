@@ -129,7 +129,12 @@ export const MeetingIcsDto = z.object({ filename: z.string(), ics: z.string() })
 
 /* --------------------------------------------------------------------------- console ---- */
 
-export const NetworkSettingsDto = z.object({ enabled: z.boolean(), meetingsEnabled: z.boolean() });
+export const NetworkSettingsDto = z.object({
+  enabled: z.boolean(),
+  meetingsEnabled: z.boolean(),
+  /** M5.8b: chat between connections and meeting parties, and booth chat. */
+  chatEnabled: z.boolean(),
+});
 export type NetworkSettingsDto = z.infer<typeof NetworkSettingsDto>;
 
 export const ConsoleLocationDto = LocationRefDto.extend({

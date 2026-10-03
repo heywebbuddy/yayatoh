@@ -869,7 +869,8 @@ export const myMeetingQuery = tenantQuery({
 
 /* ------------------------------------------------------------------------ block, report ---- */
 
-async function blockTx(tx: TenantTx, ctx: Ctx, me: ProfileRow, otherId: string) {
+/** Block someone (M5.8b chat reports block too): insert the block and cut every tie. */
+export async function blockTx(tx: TenantTx, ctx: Ctx, me: ProfileRow, otherId: string) {
   await tx
     .insert(networkBlocks)
     .values({ orgId: requireOrg(ctx), eventId: me.eventId, blockerId: me.id, blockedId: otherId })

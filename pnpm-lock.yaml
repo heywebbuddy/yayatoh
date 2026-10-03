@@ -271,6 +271,9 @@ importers:
       '@yayatoh/donations':
         specifier: workspace:*
         version: link:../../packages/modules/donations
+      '@yayatoh/engagement':
+        specifier: workspace:*
+        version: link:../../packages/modules/engagement
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../packages/kernel
@@ -685,6 +688,9 @@ importers:
       '@yayatoh/donations':
         specifier: workspace:*
         version: link:../../packages/modules/donations
+      '@yayatoh/engagement':
+        specifier: workspace:*
+        version: link:../../packages/modules/engagement
       '@yayatoh/events':
         specifier: workspace:*
         version: link:../../packages/modules/events

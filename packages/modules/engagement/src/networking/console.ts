@@ -23,7 +23,7 @@ import {
 } from '../schema.ts';
 import { eventOf } from '../state.ts';
 import { ConsoleReportDto, NetworkConsoleDto, NetworkSettingsDto } from './dto.ts';
-import { leaveNetworkTx, networkSettingsTx } from './state.ts';
+import { hideProfileTx, networkSettingsTx } from './state.ts';
 
 /**
  * Networking for organizers (M5.8a): turn it on, meeting locations (booths and meeting points with
@@ -106,7 +106,11 @@ export const networkConsoleQuery = tenantQuery({
       .orderBy(sql`lower(${networkProfiles.displayName})`);
     const sum = (f: (b: (typeof booked)[number]) => boolean) => booked.filter(f).reduce((a, b) => a + b.n, 0);
     return {
-      settings: { enabled: s?.enabled ?? false, meetingsEnabled: s?.meetingsEnabled ?? true },
+      settings: {
+        enabled: s?.enabled ?? false,
+        meetingsEnabled: s?.meetingsEnabled ?? true,
+        chatEnabled: s?.chatEnabled ?? true,
+      },
       stats: await counts(tx, input.eventId),
       locations: locations.map((l) => ({
         id: l.id,
@@ -146,6 +150,8 @@ export const UpdateNetworkSettingsInput = z.object({
   ...Event,
   enabled: z.boolean(),
   meetingsEnabled: z.boolean(),
+  /** M5.8b: chat on or off (left as it is when omitted). */
+  chatEnabled: z.boolean().optional(),
 });
 
 export const updateNetworkSettingsCommand = tenantCommand({
@@ -163,20 +169,30 @@ export const updateNetworkSettingsCommand = tenantCommand({
         eventId: input.eventId,
         enabled: input.enabled,
         meetingsEnabled: input.meetingsEnabled,
+        ...(input.chatEnabled === undefined ? {} : { chatEnabled: input.chatEnabled }),
       })
       .onConflictDoUpdate({
         target: [networkSettings.orgId, networkSettings.eventId],
-        set: { enabled: input.enabled, meetingsEnabled: input.meetingsEnabled, updatedAt: ctx.now },
+        set: {
+          enabled: input.enabled,
+          meetingsEnabled: input.meetingsEnabled,
+          ...(input.chatEnabled === undefined ? {} : { chatEnabled: input.chatEnabled }),
+          updatedAt: ctx.now,
+        },
       })
       .returning();
     if (!row) throw new DomainError('internal');
-    return { enabled: row.enabled, meetingsEnabled: row.meetingsEnabled };
+    return { enabled: row.enabled, meetingsEnabled: row.meetingsEnabled, chatEnabled: row.chatEnabled };
   },
   audit: (input) => ({
     action: 'engagement.network.settings',
     targetType: 'event',
     targetId: input.eventId,
-    data: { enabled: input.enabled, meetingsEnabled: input.meetingsEnabled },
+    data: {
+      enabled: input.enabled,
+      meetingsEnabled: input.meetingsEnabled,
+      ...(input.chatEnabled === undefined ? {} : { chatEnabled: input.chatEnabled }),
+    },
   }),
 });
 
@@ -394,15 +410,7 @@ export const resolveReportCommand = tenantCommand({
         .where(eq(networkReports.id, r.id));
       return { ok: true as const };
     }
-    await tx
-      .update(networkProfiles)
-      .set({ hiddenAt: ctx.now, hiddenBy: by, updatedAt: ctx.now })
-      .where(and(eq(networkProfiles.id, r.reportedId), sql`hidden_at is null`));
-    await tx
-      .update(networkReports)
-      .set({ status: 'hidden', resolvedAt: ctx.now, resolvedBy: by, updatedAt: ctx.now })
-      .where(and(eq(networkReports.reportedId, r.reportedId), eq(networkReports.status, 'open')));
-    await leaveNetworkTx(tx, ctx, r.reportedId);
+    await hideProfileTx(tx, ctx, r.reportedId, by);
     return { ok: true as const };
   },
   audit: (input) => ({

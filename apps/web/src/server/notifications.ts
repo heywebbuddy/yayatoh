@@ -7,6 +7,7 @@ import {
   chatReportSignals,
   checkoutRiskSignals,
   fraudSignalAlerts,
+  networkChatSignals,
   sendStaffAlertPushes,
   staffAlertsSubscriber,
 } from '@yayatoh/checkin';
@@ -121,6 +122,8 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     orgStatusNotice({ notifier, appOrigin }),
     checkoutRiskSignals(),
     chatReportSignals(),
+    // M5.8b: networking chat reports about attendees.
+    networkChatSignals(),
     fraudSignalAlerts({ notifier }),
     // M3.4a: staff alerts for the Scan PWA (web push per device).
     staffAlertsSubscriber(staffAlertSource),

@@ -19,7 +19,9 @@ const quiet = { lastMinute: 0, lastHour: 0, newChatsLastHour: 0, startsChat: fal
 describe('chatRefusal (rate limits, P5-3)', () => {
   it('lets an ordinary message through', () => {
     expect(chatRefusal(quiet)).toBeNull();
-    expect(chatRefusal({ ...quiet, lastMinute: CHAT_PER_MINUTE - 1, lastHour: CHAT_PER_HOUR - 1 })).toBeNull();
+    expect(
+      chatRefusal({ ...quiet, lastMinute: CHAT_PER_MINUTE - 1, lastHour: CHAT_PER_HOUR - 1 }),
+    ).toBeNull();
   });
   it('refuses a burst within a minute, then within an hour', () => {
     expect(chatRefusal({ ...quiet, lastMinute: CHAT_PER_MINUTE })).toBe('too_fast');
@@ -73,9 +75,13 @@ describe('directPair', () => {
 describe('chat retention (D11: 24 months after the event)', () => {
   it('cuts off 24 calendar months back', () => {
     expect(CHAT_RETENTION_MONTHS).toBe(24);
-    expect(chatRetentionCutoff(new Date('2026-10-03T12:00:00Z')).toISOString()).toBe('2024-10-03T12:00:00.000Z');
+    expect(chatRetentionCutoff(new Date('2026-10-03T12:00:00Z')).toISOString()).toBe(
+      '2024-10-03T12:00:00.000Z',
+    );
     // Month ends clamp instead of rolling over (29 Feb has no twin two years back).
-    expect(chatRetentionCutoff(new Date('2028-02-29T00:00:00Z')).toISOString()).toBe('2026-02-28T00:00:00.000Z');
+    expect(chatRetentionCutoff(new Date('2028-02-29T00:00:00Z')).toISOString()).toBe(
+      '2026-02-28T00:00:00.000Z',
+    );
   });
 });
 
