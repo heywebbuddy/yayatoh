@@ -1,7 +1,7 @@
 # Spec: M6.5 — Enterprise integrations
 
 - **Milestone:** M6.5 (roadmap §10 Phase 6; Phase 6 plan `docs/plans/phase-6.md`, decisions P6-1, P6-4, P6-6, P6-13)
-- **Status:** M6.5d built (2026-10-03), on the M6.4a integrations framework, behind the `integrations` module key and the `IntegrationAuth` port (fake QuickBooks and Xero in dev and CI; Nango's `quickbooks` and `xero` integrations in production once the owner registers the apps).
+- **Status:** M6.5d built (2026-10-03; local gate after merging merge/next-3v: lint, check:modules, typecheck 63/63, unit 3530/3533 and integration 1979/1980 — the four failures are in merge/next-3v itself, see the report; accounting e2e 15/15 and integrations e2e 18/18 on three viewports), on the M6.4a integrations framework, behind the `integrations` module key and the `IntegrationAuth` port (fake QuickBooks and Xero in dev and CI; Nango's `quickbooks` and `xero` integrations in production once the owner registers the apps).
 - **Risk tags:** `payments` (reads the payments ledger and gifts; posts money summaries to the org's books), `db-migration`, `tenancy`
 - **Related ADRs:** 0008 (outbox), 0018/0022 (tokens, design v2)
 
