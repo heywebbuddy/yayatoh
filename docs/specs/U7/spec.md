@@ -24,7 +24,7 @@ Review point 9: create-event had no series field (an event joined a series later
 - Sales on the series page are all-time (no period picker); a series-level total and trend could follow with the reports track.
 - "Create next event" copies the latest event by start date; choosing which event to copy is not offered.
 - Reordering events inside a series (they sort by start).
-- The U1 Combobox's default `selectedOptions = []` is a new array each render and sits in the deps of its option-sync effect, so it re-renders in a loop (React #185 after a server-action re-render). The Series field passes a stable `selectedOptions`; the component itself should be fixed in `packages/ui` (reported for U1).
+- The U1 Combobox's default `selectedOptions = []` is a new array each render and sits in the deps of its option-sync effect, so it re-renders in a loop (React error 185 after a server-action re-render). The Series field passes a stable `selectedOptions`; the component itself should be fixed in `packages/ui` (reported for U1).
 
 ## Acceptance (U7)
 

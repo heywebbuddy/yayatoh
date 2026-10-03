@@ -10,7 +10,7 @@ export const NEW_SERIES = 'new:';
 export const NO_SERIES = 'none';
 /**
  * Passed explicitly: the Combobox's default (a new `[]` each render) is in the deps of its option
- * sync effect, so every render scheduled another (React #185 after a server action re-render).
+ * sync effect, so every render scheduled another (React error 185, maximum update depth, after a server action re-render).
  */
 const NO_SELECTED: readonly ListOption[] = [];
 
