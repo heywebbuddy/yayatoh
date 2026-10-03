@@ -152,7 +152,7 @@ export function SolverProposal({
     start(solverProblem, n);
   };
 
-  const send = (itemIds: string[]) =>
+  const send = (itemIds: string[], all = false) =>
     startTransition(async () => {
       if (!layout) return;
       const chosen = itemIds.map((itemId) => ({ itemId, guestIds: layout.proposedAt.get(itemId) ?? [] }));
@@ -162,10 +162,9 @@ export function SolverProposal({
         const label = names.places.find((p) => p.itemId === itemIds[0])?.label ?? '';
         setFeedback({
           tone: 'success',
-          text:
-            itemIds.length === 1
-              ? t('tables.acceptedTable', { label, count: r.seated ?? 0 })
-              : t('tables.acceptedAll', { count: r.seated ?? 0 }),
+          text: all
+            ? t('tables.acceptedAll', { count: r.seated ?? 0 })
+            : t('tables.acceptedTable', { label, count: r.seated ?? 0 }),
         });
         setSeats((s) => {
           if (!s) return s;
@@ -301,7 +300,12 @@ export function SolverProposal({
             <div>
               <Button
                 type="button"
-                onClick={() => send(layout.tables.map((p) => p.itemId))}
+                onClick={() =>
+                  send(
+                    layout.tables.map((p) => p.itemId),
+                    true,
+                  )
+                }
                 disabled={pending || anyBlocked || listSeats !== live}
               >
                 {t('tables.acceptAll')}
