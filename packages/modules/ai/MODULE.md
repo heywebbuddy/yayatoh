@@ -1,6 +1,6 @@
 # ai (tier 6)
 
-AI drafting for event copy (M1.4f) and the per-org AI credits ledger (decision D12: a small free allowance per org, metered at M6.6). Owns Postgres schema `ai`.
+AI drafting for event copy (M1.4f) and the per-org AI credits ledger (decision D12: a small free allowance per org, metered at M6.6). M6.12b adds AI v2: drafts for campaigns, site pages and agendas in a tone and a brand kit, audience suggestions in the segment DSL, and matchmaking embeddings for networking. Owns Postgres schema `ai`.
 
 **Invariants**
 - `AiDrafter` is a port. `fakeDrafter` (deterministic) serves dev, CI and previews; `anthropicDrafter` is a stub until the owner's provider account exists (owner inbox). `drafterFromEnv` returns null in production without a provider: drafting is off, and nothing is debited.
@@ -9,3 +9,11 @@ AI drafting for event copy (M1.4f) and the per-org AI credits ledger (decision D
 - The free allowance (`FREE_MONTHLY_CREDITS`, pending owner) tops the balance **up to** the allowance at the first use in each UTC month; extra credits granted on top are kept.
 - One draft costs one credit. A provider failure, a timeout or an unusable draft refunds it (once per debit, enforced by a unique index).
 - Drafting needs `events:write` and the `ai` entitlement; reading the balance `events:read`. Staff adjustments (`ai.adjustCredits`) are platform-only.
+
+**AI v2 (M6.12b)**
+- **The port** (`AiDrafter`) gains `compose` (a v2 draft: one JSON object back) and `embed` (one 512-number vector per text). `fakeDrafter` is deterministic (tone openers, the brand kit's first word, hashed bag-of-words embeddings); `anthropicDrafter` is still a stub, and Claude has no embeddings endpoint (owner inbox: an embeddings provider). Organizer text (brief, brand voice, event facts) travels in one escaped `<organizer_data>` block the model is told never to obey (`buildComposePrompt`).
+- **Replies are cleaned and validated, never trusted**: campaigns become plain text (no HTML, no merge braces), pages the Markdown subset, agenda sessions are kept only inside the event's wall-clock start and end, in order and without overlaps; an audience suggestion must parse as a `SegmentDefinition` and may reference only the org's own events that were offered (`cleanAudienceSuggestion`). Unusable output is `invalid_state` / `ai_output`.
+- **Nothing is saved, sent or published by AI.** Every result is a preview: the campaign editor applies it to unsaved state, a page becomes a *draft* entry through `createEntryCommand`, chosen agenda sessions go through `createSessionCommand`, an audience opens in the builder and is saved there.
+- **Every call is charged**: one credit per call through a spend command whose permission is the feature's (`messagingCredits` = `messages:send` for campaigns and audiences, `contentCredits` = `marketing:write` for pages, `eventCredits` = `events:write` for agendas and embeddings), refunded once on failure (`chargedCall`). The ledger's `ai.credits_spent@1` / `ai.credits_refunded@1` feed M6.6b's `ai_credits` meter, so meter rows equal ledger debits and refunds exactly. `draft_kind` records the purpose (`AI_PURPOSES`).
+- **Brand kits** (`ai.brand_kits`): name (unique per org, case-insensitive), voice, default tone, up to 12 words to use and to avoid, at most one default (partial unique index), at most 20 per org. Read `marketing:read`, write `marketing:write`. A draft names a kit by id; RLS makes another org's kit `not_found`.
+- **Matchmaking** (`refreshMatchmaking`): asks engagement for listed profiles without an embedding (`pendingEmbeddingsQuery`: opted in, not hidden, attending; public fields only, never names or emails), embeds them in batches of 64 (one credit each, at most 10 calls per refresh) and stores them through `storeEmbeddingsCommand`, which skips anyone who left meanwhile. The ai module never touches engagement's tables.

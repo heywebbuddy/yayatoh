@@ -1,7 +1,7 @@
 # Local development
 
 1. **Tooling:** Node 24 and pnpm 12 (`corepack enable`). In cloud sessions run `.claude/cloud-setup.sh`.
-2. **Services:** `docker compose up -d` starts Postgres 18, Redis 7, Mailpit (UI on http://localhost:8025) and Gotenberg for ticket PDFs (set `GOTENBERG_URL=http://localhost:3300`).
+2. **Services:** `docker compose up -d` starts Postgres 18 (the `pgvector/pgvector:pg18` image: matchmaking needs pgvector; an older `postgres:18` volume works once you switch the image and run `pnpm db:bootstrap`), Redis 7, Mailpit (UI on http://localhost:8025) and Gotenberg for ticket PDFs (set `GOTENBERG_URL=http://localhost:3300`).
 3. **Install:** `pnpm install`.
 4. **Environment:** copy `.env.example` to `.env` (git-ignored) and fill in local values:
    - `ADMIN_DATABASE_URL` — the compose superuser on the `yayatoh` database, e.g. `postgres://postgres:<LOCAL_POSTGRES_PASSWORD>@localhost:5432/yayatoh`.

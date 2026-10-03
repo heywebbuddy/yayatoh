@@ -410,20 +410,20 @@ test.describe('AI v2 (M6.12b)', () => {
     await page.goto(`${base}/networking`);
     const card = page.getByRole('region', { name: 'Match suggestions' });
     await expect(card.getByTestId('matchmaking-status')).toHaveText(
-      'Suggestions ready for 0 of 3 people in the directory.',
+      'Suggestions ready for 0 of 3 listed people.',
     );
     await expectAccessibleBothModes(page);
     await card.getByRole('button', { name: 'Update suggestions (3 people waiting)' }).focus();
     await page.keyboard.press('Enter');
     await expect(card.getByText('Suggestions ready for 3 more people.')).toBeVisible();
     await expect(card.getByTestId('matchmaking-status')).toHaveText(
-      'Suggestions ready for 3 of 3 people in the directory.',
+      'Suggestions ready for 3 of 3 listed people.',
     );
     await expect(card.getByRole('button', { name: 'Suggestions are up to date' })).toBeDisabled();
 
     // Ana sees Ben first (shared interests), and never Dee (not opted in).
     await a.reload();
-    const suggested = a.getByRole('list', { name: 'Suggested people' });
+    const suggested = a.getByRole('list', { name: 'Suggested matches' });
     await expect(suggested.getByRole('listitem').first()).toContainText(ben);
     await expect(suggested.getByRole('listitem').first()).toContainText('You both like: AI');
     await expect(suggested).not.toContainText(dee);
@@ -439,10 +439,10 @@ test.describe('AI v2 (M6.12b)', () => {
     await c.getByRole('button', { name: 'Leave networking' }).click();
     await expect(c.getByText("You're not in the directory")).toBeVisible();
     await a.goto(network);
-    await expect(a.getByRole('list', { name: 'Suggested people' })).not.toContainText(cy);
+    await expect(a.getByRole('list', { name: 'Suggested matches' })).not.toContainText(cy);
     await page.reload();
     await expect(card.getByTestId('matchmaking-status')).toHaveText(
-      'Suggestions ready for 2 of 2 people in the directory.',
+      'Suggestions ready for 2 of 2 listed people.',
     );
 
     // Arabic, right to left (attendee and console).

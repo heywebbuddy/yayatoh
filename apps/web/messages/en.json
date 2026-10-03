@@ -15178,7 +15178,7 @@
     "matchmaking": {
       "title": "Match suggestions",
       "explainer": "Attendees who opted in see people with similar profiles. Only what they chose to show is used; people who opt out are removed at once.",
-      "status": "Suggestions ready for {embedded} of {listed, plural, one {# person} other {# people}} in the directory.",
+      "status": "Suggestions ready for {embedded} of {listed, plural, one {# listed person} other {# listed people}}.",
       "unavailable": "AI is not switched on for this site, so suggestions can't be prepared.",
       "refresh": "{count, plural, one {Update suggestions (# person waiting)} other {Update suggestions (# people waiting)}}",
       "upToDate": "Suggestions are up to date",
@@ -15189,7 +15189,7 @@
       "title": "Suggested for you",
       "none": "No suggestions yet. Check back as more people join.",
       "why": "People whose profiles are close to yours. Only people who opted in appear here.",
-      "listLabel": "Suggested people",
+      "listLabel": "Suggested matches",
       "score": "{score}% match",
       "shared": "You both like: {interests}"
     }
