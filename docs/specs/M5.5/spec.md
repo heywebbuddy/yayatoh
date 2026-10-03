@@ -180,3 +180,8 @@ can't settle (a reprint, a balance due, a registration still waiting, wrong deta
 | AC5 | Offline snapshot: details from the sealed snapshot; PrintNode prints queue, print-dialog kiosks send to the desk | `kiosk-print.spec.ts`, `kiosk-print.int.test.ts` (snapshot) |
 | AC6 | Settings: off by default, organizer only, keyboard, persisted, viewer sees no controls; axe light/dark; Arabic RTL | `kiosk-print.spec.ts` |
 | AC7 | Isolation: both orgs have kiosk settings and a kiosk code in the fixture | `isolation.int.test.ts` |
+
+### 5. Gate results (M5.5c)
+`pnpm verify` green on the merged branch (build branch with batch 3h, M5.5b): lint, check:modules,
+typecheck 59/59, unit 2730/2730 (12 new), integration 1534/1534 (18 new). E2E on 375/768/1280:
+`kiosk-print.spec.ts` 6/6, with `badge-printing`, `staff-mode`, `invoices` and `badges` 63/63 in all.
