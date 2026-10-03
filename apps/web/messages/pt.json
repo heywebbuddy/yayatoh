@@ -51,7 +51,11 @@
       "coupon": "Cupom",
       "page": "Página ou post do blog"
     },
-    "help": "Ajuda"
+    "help": "Ajuda",
+    "clientsSection": "Clientes",
+    "viaAgency": "via {agency}",
+    "agencyBadgeLabel": "Você está trabalhando em {org} para {agency}",
+    "backToAgency": "Voltar para {agency}"
   },
   "notifications": {
     "open": "Notificações",
@@ -380,7 +384,9 @@
     "plan": "Plano e cobrança",
     "webhooks": "Webhooks",
     "sandboxes": "Sandboxes",
-    "notifications": "Notificações"
+    "notifications": "Notificações",
+    "agency": "Clientes",
+    "agencies": "Agências"
   },
   "vocab": {
     "attendee": "Participante",
@@ -409,7 +415,13 @@
     "box_office": "Bilheteria",
     "scanner": "Controle de acesso",
     "viewer": "Somente leitura",
-    "collaborator": "Colaborador do evento"
+    "collaborator": "Colaborador do evento",
+    "agency_manager": "Gestor da agência",
+    "agency_manager_finance": "Gestor da agência (finanças)",
+    "agency_marketing": "Marketing da agência",
+    "agency_marketing_finance": "Marketing da agência (finanças)",
+    "agency_viewer": "Leitor da agência",
+    "agency_viewer_finance": "Leitor da agência (finanças)"
   },
   "profiles": {
     "wedding": "Casamento",
@@ -3043,7 +3055,8 @@
       "confirmMismatch": "Não corresponde. Escreva o mesmo endereço de email para confirmar.",
       "kindRequired": "Escolha o que a pessoa pede.",
       "reasonRequired": "Indique um motivo com pelo menos 3 caracteres.",
-      "closed": "Este pedido já está fechado."
+      "closed": "Este pedido já está fechado.",
+      "nothingHeld": "Já não existe nada guardado sobre este email."
     },
     "kinds": {
       "access": "Acesso (cópia)",
@@ -3235,7 +3248,34 @@
       "networkProfiles": "Perfis de networking",
       "chatMessages": "Mensagens de chat enviadas"
     },
-    "findOwner": "Encontrar um proprietário ou administrador"
+    "findOwner": "Encontrar um proprietário ou administrador",
+    "export": {
+      "title": "Exportar os dados",
+      "hint": "Um ficheiro JSON com tudo o que está acima, para enviar à pessoa. É eliminado após 7 dias.",
+      "submit": "Exportar dados (JSON)",
+      "download": "Transferir o ficheiro",
+      "running": "A preparar o ficheiro… recarregue a página daqui a pouco."
+    },
+    "erase": {
+      "title": "Apagar esta pessoa",
+      "what": "O nome, email, telefone, respostas e ligações são removidos de contactos, encomendas, bilhetes e listas de convidados, e os ficheiros exportados que os mencionam são eliminados.",
+      "holds": "{paid, plural, =0 {Não há encomendas pagas a guardar.} one {# encomenda paga é guardada para impostos e contabilidade, sem nome nem email.} other {# encomendas pagas são guardadas para impostos e contabilidade, sem nome nem email.}}",
+      "tickets": "{active, plural, =0 {Não tem bilhetes válidos.} one {# bilhete válido continua válido, sem nome.} other {# bilhetes válidos continuam válidos, sem nome.}}",
+      "final": "Não é possível anular.",
+      "confirm": "Escreva {email} para confirmar",
+      "submit": "Apagar dados pessoais",
+      "done": "Apagado. {records, plural, one {# registo foi anonimizado ou eliminado} other {# registos foram anonimizados ou eliminados}}; {kept, plural, =0 {nenhuma encomenda paga guardada} one {# encomenda paga guardada sem dados pessoais} other {# encomendas pagas guardadas sem dados pessoais}}."
+    },
+    "history": {
+      "title": "Pedidos anteriores",
+      "caption": "Pedidos de privacidade, mais recentes primeiro",
+      "empty": "Ainda sem pedidos.",
+      "when": "Quando",
+      "kind": "Pedido",
+      "subject": "Pessoa",
+      "by": "Tratado por",
+      "records": "Registos"
+    }
   },
   "privacyNotice": {
     "eyebrow": "Yayatoh",
@@ -15256,5 +15296,112 @@
       "step2": "Adicione um código com o desconto e, se quiser, um limite e datas.",
       "step3": "Compartilhe o código. Os compradores o inserem no checkout e cada uso é contado."
     }
+  },
+  "agencies": {
+    "title": "Agências",
+    "subtitle": "Deixe uma agência trabalhar nos seus eventos. Você pode retirar o acesso a qualquer momento, e a agência nunca paga nem recebe o seu dinheiro.",
+    "noAccessTitle": "Só proprietários e administradores gerenciam agências",
+    "noAccessDescription": "Peça a um proprietário ou administrador desta organização para dar acesso a uma agência.",
+    "grantTitle": "Dar acesso a uma agência",
+    "agency": "Endereço da agência",
+    "agencyHint": "O endereço que a agência lhe deu, por exemplo bloom-events.",
+    "agencyRequired": "Informe o endereço da agência.",
+    "agencyUnknown": "Nenhuma agência tem este endereço. Confirme com a agência.",
+    "agencySelf": "Uma agência não pode dar acesso a si mesma.",
+    "agencyTaken": "Esta agência já tem acesso.",
+    "role": "O que a agência pode fazer",
+    "roleManager": "Gerenciar eventos",
+    "roleManagerHint": "Criar e editar eventos, convidados, check-in e mensagens. Sem reembolsos, vendas, membros ou configurações.",
+    "roleMarketing": "Marketing",
+    "roleMarketingHint": "Campanhas, públicos e mensagens, e ler eventos.",
+    "roleViewer": "Só visualizar",
+    "roleViewerHint": "Ler eventos, pedidos e convidados. Não altera nada.",
+    "finance": "Deixar a agência ler também o nosso dinheiro",
+    "financeHint": "Repasses, relatórios financeiros e o livro-razão, só leitura. Desativado a menos que você ative.",
+    "grant": "Dar acesso",
+    "granted": "{agency} já pode trabalhar nesta organização.",
+    "listTitle": "Agências com acesso",
+    "empty": "Nenhuma agência tem acesso. Dê acesso a uma acima quando trabalhar com uma agência.",
+    "emptyReadOnly": "Nenhuma agência tem acesso.",
+    "agencyColumn": "Agência",
+    "roleColumn": "Acesso",
+    "financeColumn": "Dinheiro",
+    "grantedColumn": "Desde",
+    "actions": "Ações",
+    "financeOn": "Pode ler",
+    "financeOff": "Sem acesso",
+    "revoke": "Revogar",
+    "revokeNamed": "Revogar o acesso de {agency}",
+    "revoked": "{agency} não tem mais acesso.",
+    "financeEnable": "Permitir dinheiro",
+    "financeEnableNamed": "Deixar {agency} ler o nosso dinheiro",
+    "financeDisable": "Bloquear dinheiro",
+    "financeDisableNamed": "Impedir {agency} de ler o nosso dinheiro",
+    "historyTitle": "Acessos anteriores",
+    "revokedColumn": "Encerrado",
+    "unknownAgency": "Agência fora da Yayatoh",
+    "roleLabel": "{role, select, manager {Gerenciar eventos} marketing {Marketing} viewer {Só visualizar} other {Acesso}}"
+  },
+  "agency": {
+    "title": "Clientes",
+    "subtitle": "Todos os clientes que deram acesso a {agency}. Os números vêm de instantâneos: atualize para deixá-los em dia.",
+    "tabs": "Seções da agência",
+    "tab": {
+      "clients": "Clientes",
+      "events": "Eventos",
+      "marketing": "Marketing",
+      "reports": "Relatórios"
+    },
+    "refresh": "Atualizar números",
+    "refreshed": "Números atualizados para {count, plural, =0 {nenhum cliente} one {# cliente} other {# clientes}}.",
+    "notRefreshed": "Ainda não atualizado",
+    "emptyTitle": "Ainda não há clientes",
+    "emptyDescription": "Peça ao seu cliente para abrir Agências no console da Yayatoh e dar acesso a {address}.",
+    "noAccessTitle": "As páginas da agência são para membros da agência",
+    "noAccessDescription": "Peça acesso a um proprietário de {agency}.",
+    "client": "Cliente",
+    "nextEvent": "Próximo evento",
+    "noNextEvent": "Nada agendado",
+    "upcoming": "Próximos eventos",
+    "orders": "Pedidos",
+    "tickets": "Ingressos",
+    "checkins": "Check-ins",
+    "checkinRate": "Taxa de check-in",
+    "open": "Abrir",
+    "openNamed": "Abrir {client}",
+    "finance": "com dinheiro",
+    "eventsTitle": "Eventos de todos os clientes",
+    "eventsEmpty": "Seus clientes ainda não têm eventos próximos ou recentes.",
+    "event": "Evento",
+    "starts": "Início",
+    "status": "Status",
+    "gross": "Vendas brutas",
+    "grossHidden": "Não compartilhado",
+    "grossHiddenHint": "As vendas brutas aparecem só para clientes que deixam você ler o dinheiro deles.",
+    "openEventNamed": "Abrir {event} de {client}",
+    "marketingTitle": "Marketing, últimos 30 dias",
+    "marketingEmpty": "Ainda não há clientes.",
+    "campaigns": "Campanhas",
+    "sends": "Enviados",
+    "deliveries": "Entregues",
+    "clicks": "Cliques",
+    "uniqueClickers": "Pessoas que clicaram",
+    "conversion": "Conversão",
+    "reportsTitle": "Totais de todos os clientes",
+    "clientsCount": "Clientes",
+    "eventsTotal": "Eventos",
+    "revenue": "Vendas brutas",
+    "revenueFrom": "De {count, plural, one {# cliente} other {# clientes}} que compartilham o dinheiro",
+    "revenueNone": "Nenhum cliente compartilha o dinheiro com você.",
+    "perClient": "Por cliente",
+    "eventStatus": {
+      "draft": "Rascunho",
+      "published": "Publicado",
+      "postponed": "Adiado",
+      "cancelled": "Cancelado",
+      "completed": "Concluído",
+      "archived": "Arquivado"
+    },
+    "refreshedAt": "Atualizado"
   }
 }

@@ -51,7 +51,11 @@
       "coupon": "クーポン",
       "page": "ページまたはブログ記事"
     },
-    "help": "ヘルプ"
+    "help": "ヘルプ",
+    "clientsSection": "クライアント",
+    "viaAgency": "{agency} 経由",
+    "agencyBadgeLabel": "{agency} の代理として {org} で作業しています",
+    "backToAgency": "{agency} に戻る"
   },
   "notifications": {
     "open": "通知",
@@ -380,7 +384,9 @@
     "plan": "プランと請求",
     "webhooks": "Webhook",
     "sandboxes": "サンドボックス",
-    "notifications": "通知"
+    "notifications": "通知",
+    "agency": "クライアント",
+    "agencies": "代理店"
   },
   "vocab": {
     "attendee": "参加者",
@@ -409,7 +415,13 @@
     "box_office": "チケット窓口",
     "scanner": "入場スキャン担当",
     "viewer": "閲覧のみ",
-    "collaborator": "イベント協力者"
+    "collaborator": "イベント協力者",
+    "agency_manager": "代理店マネージャー",
+    "agency_manager_finance": "代理店マネージャー（財務）",
+    "agency_marketing": "代理店マーケティング",
+    "agency_marketing_finance": "代理店マーケティング（財務）",
+    "agency_viewer": "代理店閲覧者",
+    "agency_viewer_finance": "代理店閲覧者（財務）"
   },
   "profiles": {
     "wedding": "結婚式",
@@ -3043,7 +3055,8 @@
       "confirmMismatch": "一致しません。確認のため同じメールアドレスを入力してください。",
       "kindRequired": "本人が何を求めているか選んでください。",
       "reasonRequired": "理由を3文字以上で入力してください。",
-      "closed": "この請求はすでに完了しています。"
+      "closed": "この請求はすでに完了しています。",
+      "nothingHeld": "このメールアドレスに関するデータはもう保有していません。"
     },
     "kinds": {
       "access": "開示（コピー）",
@@ -3235,7 +3248,34 @@
       "networkProfiles": "ネットワーキングのプロフィール",
       "chatMessages": "送信したチャットメッセージ"
     },
-    "findOwner": "オーナーまたは管理者を探す"
+    "findOwner": "オーナーまたは管理者を探す",
+    "export": {
+      "title": "データをエクスポート",
+      "hint": "上記すべてを含む JSON ファイルです。本人に送付してください。7日後に削除されます。",
+      "submit": "データをエクスポート（JSON）",
+      "download": "ファイルをダウンロード",
+      "running": "ファイルを準備中です…少ししてからページを再読み込みしてください。"
+    },
+    "erase": {
+      "title": "この人のデータを消去",
+      "what": "氏名、メール、電話番号、回答、リンクが連絡先・注文・チケット・ゲストリストから削除され、本人を含むエクスポートファイルも削除されます。",
+      "holds": "{paid, plural, =0 {保持が必要な支払い済みの注文はありません。} other {支払い済みの注文#件は、税務・会計のため氏名とメールを除いて保持されます。}}",
+      "tickets": "{active, plural, =0 {有効なチケットはありません。} other {有効なチケット#枚は、名前なしで引き続き有効です。}}",
+      "final": "元に戻すことはできません。",
+      "confirm": "確認のため {email} と入力してください",
+      "submit": "個人データを消去",
+      "done": "消去しました。{records, plural, other {#件の記録}}を匿名化または削除しました。{kept, plural, =0 {保持した支払い済み注文はありません} other {支払い済みの注文#件を個人データなしで保持しました}}。"
+    },
+    "history": {
+      "title": "過去の請求",
+      "caption": "プライバシー請求（新しい順）",
+      "empty": "まだ請求はありません。",
+      "when": "日時",
+      "kind": "請求",
+      "subject": "対象者",
+      "by": "対応者",
+      "records": "記録数"
+    }
   },
   "privacyNotice": {
     "eyebrow": "Yayatoh",
@@ -15256,5 +15296,112 @@
       "step2": "割引内容を指定してコードを追加します。必要に応じて上限と期間も設定できます。",
       "step3": "コードを共有しましょう。購入者が決済時に入力し、利用回数が記録されます。"
     }
+  },
+  "agencies": {
+    "title": "代理店",
+    "subtitle": "代理店にイベントの作業を任せられます。アクセスはいつでも取り消せます。代理店があなたのお金を支払ったり受け取ったりすることはありません。",
+    "noAccessTitle": "代理店を管理できるのはオーナーと管理者だけです",
+    "noAccessDescription": "この組織のオーナーまたは管理者に、代理店へのアクセス付与を依頼してください。",
+    "grantTitle": "代理店にアクセスを付与",
+    "agency": "代理店のアドレス",
+    "agencyHint": "代理店から伝えられたアドレス（例: bloom-events）。",
+    "agencyRequired": "代理店のアドレスを入力してください。",
+    "agencyUnknown": "このアドレスの代理店はありません。代理店に確認してください。",
+    "agencySelf": "代理店は自分自身にアクセスを付与できません。",
+    "agencyTaken": "この代理店はすでにアクセスできます。",
+    "role": "代理店ができること",
+    "roleManager": "イベントの管理",
+    "roleManagerHint": "イベント、ゲスト、チェックイン、メッセージの作成と編集。返金、販売、メンバー、設定は不可。",
+    "roleMarketing": "マーケティング",
+    "roleMarketingHint": "キャンペーン、オーディエンス、メッセージ、イベントの閲覧。",
+    "roleViewer": "閲覧のみ",
+    "roleViewerHint": "イベント、注文、ゲストの閲覧。何も変更しません。",
+    "finance": "代理店にお金の情報の閲覧も許可する",
+    "financeHint": "入金、財務レポート、元帳を閲覧のみ。オンにしない限りオフです。",
+    "grant": "アクセスを付与",
+    "granted": "{agency} はこの組織で作業できるようになりました。",
+    "listTitle": "アクセスできる代理店",
+    "empty": "アクセスできる代理店はありません。代理店と仕事をするときは上でアクセスを付与してください。",
+    "emptyReadOnly": "アクセスできる代理店はありません。",
+    "agencyColumn": "代理店",
+    "roleColumn": "アクセス",
+    "financeColumn": "お金",
+    "grantedColumn": "開始",
+    "actions": "操作",
+    "financeOn": "閲覧可",
+    "financeOff": "アクセスなし",
+    "revoke": "取り消す",
+    "revokeNamed": "{agency} のアクセスを取り消す",
+    "revoked": "{agency} はアクセスできなくなりました。",
+    "financeEnable": "お金を許可",
+    "financeEnableNamed": "{agency} にお金の閲覧を許可",
+    "financeDisable": "お金を停止",
+    "financeDisableNamed": "{agency} のお金の閲覧を停止",
+    "historyTitle": "過去のアクセス",
+    "revokedColumn": "終了",
+    "unknownAgency": "Yayatoh にいない代理店",
+    "roleLabel": "{role, select, manager {イベントの管理} marketing {マーケティング} viewer {閲覧のみ} other {アクセス}}"
+  },
+  "agency": {
+    "title": "クライアント",
+    "subtitle": "{agency} にアクセスを付与したすべてのクライアント。数値はスナップショットから取得されます。最新にするには更新してください。",
+    "tabs": "代理店のセクション",
+    "tab": {
+      "clients": "クライアント",
+      "events": "イベント",
+      "marketing": "マーケティング",
+      "reports": "レポート"
+    },
+    "refresh": "数値を更新",
+    "refreshed": "{count, plural, other {# 件のクライアント}}の数値を更新しました。",
+    "notRefreshed": "未更新",
+    "emptyTitle": "クライアントはまだいません",
+    "emptyDescription": "クライアントに Yayatoh コンソールの「代理店」を開いて {address} にアクセスを付与するよう依頼してください。",
+    "noAccessTitle": "代理店ページは代理店のメンバー向けです",
+    "noAccessDescription": "{agency} のオーナーにアクセスを依頼してください。",
+    "client": "クライアント",
+    "nextEvent": "次のイベント",
+    "noNextEvent": "予定なし",
+    "upcoming": "今後のイベント",
+    "orders": "注文",
+    "tickets": "チケット",
+    "checkins": "チェックイン済み",
+    "checkinRate": "チェックイン率",
+    "open": "開く",
+    "openNamed": "{client} を開く",
+    "finance": "お金を含む",
+    "eventsTitle": "全クライアントのイベント",
+    "eventsEmpty": "クライアントにはまだ今後または最近のイベントがありません。",
+    "event": "イベント",
+    "starts": "開始",
+    "status": "ステータス",
+    "gross": "総売上",
+    "grossHidden": "非共有",
+    "grossHiddenHint": "総売上は、お金の閲覧を許可したクライアントにのみ表示されます。",
+    "openEventNamed": "{client} の {event} を開く",
+    "marketingTitle": "マーケティング（過去 30 日）",
+    "marketingEmpty": "クライアントはまだいません。",
+    "campaigns": "キャンペーン",
+    "sends": "送信",
+    "deliveries": "配信",
+    "clicks": "クリック",
+    "uniqueClickers": "クリックした人",
+    "conversion": "コンバージョン",
+    "reportsTitle": "全クライアントの合計",
+    "clientsCount": "クライアント",
+    "eventsTotal": "イベント",
+    "revenue": "総売上",
+    "revenueFrom": "お金を共有している {count, plural, other {# 件のクライアント}}から",
+    "revenueNone": "お金を共有しているクライアントはいません。",
+    "perClient": "クライアント別",
+    "eventStatus": {
+      "draft": "下書き",
+      "published": "公開中",
+      "postponed": "延期",
+      "cancelled": "中止",
+      "completed": "終了",
+      "archived": "アーカイブ済み"
+    },
+    "refreshedAt": "更新日時"
   }
 }

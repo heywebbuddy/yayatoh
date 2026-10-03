@@ -26,6 +26,8 @@ export default async function OrgLayout({
     can: (p) => roleCan(data.role, p),
     modules: data.modules,
     contentOrg: isPlatformContentOrg(data.org.slug),
+    agencyOrg: data.org.kind === 'agency',
+    viaAgency: Boolean(data.agency),
   }).map((s) => ({
     key: s.key,
     label: t(`shell.sections.${s.key}`),

@@ -23,6 +23,7 @@
     "printnode": "node scripts/printnode.ts"
   },
   "dependencies": {
+    "@yayatoh/agency": "workspace:*",
     "@yayatoh/alerts": "workspace:*",
     "@yayatoh/analytics": "workspace:*",
     "@yayatoh/attendees": "workspace:*",

@@ -1,6 +1,7 @@
-import type { ORG_ROLES } from '../schema.ts';
+import type { AGENCY_GRANT_ROLES, ORG_ROLES } from '../schema.ts';
 
 export type OrgRole = (typeof ORG_ROLES)[number];
+export type AgencyGrantRole = (typeof AGENCY_GRANT_ROLES)[number];
 
 /** Org-level permissions. Event-scoped roles arrive with events (M1.4). */
 export const PERMISSIONS = [
@@ -93,6 +94,8 @@ export const PERMISSIONS = [
    * (M6.4a). Org data leaves through them: owners and admins only.
    */
   'integrations:manage',
+  /** An agency org's Clients | Events | Marketing | Reports pages, read from its snapshots (M6.7a). */
+  'agency:read',
 ] as const;
 export type Permission = (typeof PERMISSIONS)[number];
 
@@ -131,6 +134,7 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'tables:read',
     'tables:write',
     'integrations:read',
+    'agency:read',
   ],
   finance: [
     'org:read',
@@ -154,6 +158,7 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'marketing:write',
     'messages:read',
     'messages:send',
+    'agency:read',
   ],
   box_office: [
     'org:read',
@@ -187,6 +192,7 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'event_team:read',
     'assistance:read',
     'tables:read',
+    'agency:read',
   ],
   /**
    * M4.2a: someone who works on specific events only (a co-host or planner invited to one event).
@@ -237,8 +243,63 @@ export function roleRequiresTwoFactor(role: string): boolean {
   return (TWO_FACTOR_ROLES as readonly string[]).includes(role);
 }
 
-export function roleCan(role: OrgRole, permission: string): boolean {
-  return (ROLE_PERMISSIONS[role] as readonly string[]).includes(permission);
+/**
+ * What an agency grant never carries into a client org (M6.7a, P6-8), whatever its role:
+ * platform powers, money and billing (unless the client opts in with `finance`), the client's
+ * members, API keys, audit log, privacy requests, org settings, refunds and box-office sales (both
+ * write the money tables), attendee exports (contact data leaving the client) and the client's own
+ * agency pages.
+ */
+const AGENCY_NEVER =
+  /^(platform|payouts|billing|members|api_keys|audit|privacy|finance|disputes|agency):|^orders:(refund|sell)|^org:update$|^attendees:export/;
+
+/** What a client's finance opt-in adds to a grant (read-only: no refunds, payouts or disputes). */
+export const AGENCY_FINANCE_PERMISSIONS = ['finance:read', 'billing:read'] as const;
+
+/**
+ * The console role of someone acting in a client org through an agency grant: the granted role,
+ * with `_finance` when the client opted in to its money tables. Not stored anywhere: derived from
+ * the live grant on every request.
+ */
+export type AgencyConsoleRole = `agency_${AgencyGrantRole}` | `agency_${AgencyGrantRole}_finance`;
+export const AGENCY_CONSOLE_ROLES = [
+  'agency_manager',
+  'agency_manager_finance',
+  'agency_marketing',
+  'agency_marketing_finance',
+  'agency_viewer',
+  'agency_viewer_finance',
+] as const satisfies readonly AgencyConsoleRole[];
+
+/** A member's org role, or an agency grant's console role. */
+export type ConsoleRole = OrgRole | AgencyConsoleRole;
+
+export const agencyConsoleRole = (role: AgencyGrantRole, finance: boolean): AgencyConsoleRole =>
+  finance ? `agency_${role}_finance` : `agency_${role}`;
+
+export const isAgencyConsoleRole = (role: string): role is AgencyConsoleRole =>
+  (AGENCY_CONSOLE_ROLES as readonly string[]).includes(role);
+
+const agencyPermissions = (role: AgencyGrantRole, finance: boolean): readonly string[] => [
+  ...ROLE_PERMISSIONS[role].filter((p) => !AGENCY_NEVER.test(p)),
+  ...(finance ? AGENCY_FINANCE_PERMISSIONS : []),
+];
+
+/** Permissions of each agency console role (the granted role's, minus `AGENCY_NEVER`). */
+export const AGENCY_ROLE_PERMISSIONS: Readonly<Record<AgencyConsoleRole, readonly string[]>> = {
+  agency_manager: agencyPermissions('manager', false),
+  agency_manager_finance: agencyPermissions('manager', true),
+  agency_marketing: agencyPermissions('marketing', false),
+  agency_marketing_finance: agencyPermissions('marketing', true),
+  agency_viewer: agencyPermissions('viewer', false),
+  agency_viewer_finance: agencyPermissions('viewer', true),
+};
+
+export function roleCan(role: ConsoleRole, permission: string): boolean {
+  const list: readonly string[] = isAgencyConsoleRole(role)
+    ? AGENCY_ROLE_PERMISSIONS[role]
+    : ROLE_PERMISSIONS[role];
+  return list.includes(permission);
 }
 
 /**

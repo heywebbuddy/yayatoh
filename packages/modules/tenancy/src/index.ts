@@ -1,4 +1,28 @@
-export { createOrgAuthorizer, type EventRoleResolver, memberRole, orgAuthorizer } from './authorizer.ts';
+export {
+  consoleRole,
+  createOrgAuthorizer,
+  type EventRoleResolver,
+  memberRole,
+  orgAuthorizer,
+} from './authorizer.ts';
+export {
+  type AgencyAccess,
+  type AgencyClientGrant,
+  AgencyClientOrgDto,
+  AgencyGrantDto,
+  agencyAccess,
+  agencyAccessTx,
+  agencyClientGrantsTx,
+  GrantAgencyAccessInput,
+  grantAgencyAccessCommand,
+  listAgencyGrantsQuery,
+  liveAgencyGrantTx,
+  MONEY_TABLES,
+  myAgencyClients,
+  revokeAgencyGrantCommand,
+  UpdateAgencyGrantInput,
+  updateAgencyGrantCommand,
+} from './commands/agency.ts';
 export {
   ApiUsageDto,
   apiUsageQuery,
@@ -152,11 +176,19 @@ export {
   restoredOrgStatus,
 } from './domain/org-status.ts';
 export {
+  AGENCY_CONSOLE_ROLES,
+  AGENCY_FINANCE_PERMISSIONS,
+  AGENCY_ROLE_PERMISSIONS,
+  type AgencyConsoleRole,
+  type AgencyGrantRole,
+  agencyConsoleRole,
+  type ConsoleRole,
   EVENT_ROLE_PERMISSIONS,
   EVENT_ROLE_SECTIONS,
   eventRoleCan,
   eventRolesOpenSection,
   GRANTABLE_ORG_ROLES,
+  isAgencyConsoleRole,
   type OrgRole,
   PERMISSIONS,
   type Permission,
@@ -209,6 +241,7 @@ export {
   twoFactorRequiredBy,
 } from './queries.ts';
 export {
+  AGENCY_GRANT_ROLES,
   API_KEY_SCOPES,
   type ApiKeyScope,
   DOMAIN_STATUSES,

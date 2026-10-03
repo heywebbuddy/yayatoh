@@ -21,6 +21,8 @@ export interface OrgNavItem {
   readonly contentOrgOnly?: boolean;
   /** Other first path segments this item owns (pages reached from it, e.g. `contacts`). */
   readonly owns?: readonly string[];
+  /** M6.7a: shown only in agency orgs (the agency's Clients pages). */
+  readonly agencyOrgOnly?: boolean;
 }
 
 export interface OrgNavSection {
@@ -34,6 +36,15 @@ export const ORG_SECTIONS: readonly OrgNavSection[] = [
     items: [
       // The home lists the org's events; creating one (`events/new`) starts there or in Create.
       { key: 'home', path: '', icon: 'home', module: 'core', owns: ['events'] },
+      // M6.7a: an agency org's Clients | Events | Marketing | Reports (entitlement `agency`).
+      {
+        key: 'agency',
+        path: 'agency',
+        icon: 'briefcase',
+        module: 'agency',
+        needs: 'agency:read',
+        agencyOrgOnly: true,
+      },
       { key: 'commandCenter', path: 'command-center', icon: 'gauge', module: 'core', needs: 'events:read' },
       // M3.2b: the alert engine's alerts, with the open count as the badge.
       { key: 'alerts', path: 'alerts', icon: 'bell', module: 'core', needs: 'events:read' },
@@ -130,6 +141,8 @@ export const ORG_SECTIONS: readonly OrgNavSection[] = [
     items: [
       { key: 'settings', path: 'settings', icon: 'settings', module: 'core', needs: 'org:update' },
       { key: 'team', path: 'team', icon: 'users', module: 'core', needs: 'members:read' },
+      // M6.7a: agencies the org gave access to.
+      { key: 'agencies', path: 'agencies', icon: 'handshake', module: 'core', needs: 'members:read' },
       { key: 'plan', path: 'plan', icon: 'credit-card', module: 'core', needs: 'billing:read' },
       { key: 'sendingSetup', path: 'sending', icon: 'send', module: 'core', needs: 'org:update' },
       {
@@ -169,7 +182,30 @@ export interface OrgNavAccess {
   readonly can: (permission: string) => boolean;
   readonly modules: ReadonlySet<string>;
   readonly contentOrg: boolean;
+  /** M6.7a: the org is an agency (its Clients pages show). */
+  readonly agencyOrg?: boolean;
+  /** M6.7a: the member acts through an agency grant (the client's own pages hide). */
+  readonly viaAgency?: boolean;
 }
+
+/**
+ * M6.7a: what someone acting through an agency grant may open besides `needs`. Org settings,
+ * the team, domains, the public site, payouts, sending setup, API keys and the CMS are the
+ * client's own: an agency role holds none of these permissions, and the pages refuse it too.
+ */
+const AGENCY_NEEDS: Readonly<Record<string, string>> = {
+  team: 'members:read',
+  domains: 'org:update',
+  publicSite: 'org:update',
+  siteContent: 'org:update',
+  helpCenter: 'org:update',
+  marketingSite: 'org:update',
+  payouts: 'payouts:manage',
+  settings: 'org:update',
+  emails: 'org:update',
+  sendingSetup: 'org:update',
+  apiKeys: 'api_keys:manage',
+};
 
 /**
  * The sections this member sees: items for modules the org has, permissions the role holds and
@@ -184,7 +220,9 @@ export function visibleOrgSections(access: OrgNavAccess): OrgNavSection[] {
         access.modules.has(i.module) &&
         (access.role !== 'collaborator' || i.key === 'home') &&
         (!i.needs || access.can(i.needs)) &&
-        (!i.contentOrgOnly || access.contentOrg),
+        (!i.contentOrgOnly || access.contentOrg) &&
+        (!i.agencyOrgOnly || access.agencyOrg === true) &&
+        (!access.viaAgency || !AGENCY_NEEDS[i.key] || access.can(AGENCY_NEEDS[i.key] as string)),
     ),
   })).filter((s) => s.items.length > 0);
 }

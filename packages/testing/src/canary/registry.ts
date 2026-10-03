@@ -1,3 +1,4 @@
+import { privateColumns as agency } from '@yayatoh/agency';
 import { privateColumns as ai } from '@yayatoh/ai';
 import { privateColumns as alerts } from '@yayatoh/alerts';
 import { privateColumns as analytics } from '@yayatoh/analytics';
@@ -47,6 +48,8 @@ import { privateColumns as webhooks } from '@yayatoh/webhooks';
  * (`tests/column-privacy.test.ts`) names the exact line to add when a column is missing.
  */
 export const COLUMN_PRIVACY: readonly SchemaPrivacy[] = [
+  // M6.7a: the agency's client and event snapshots.
+  agency,
   ai,
   alerts,
   analytics,

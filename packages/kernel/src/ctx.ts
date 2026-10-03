@@ -31,6 +31,18 @@ export interface Ctx {
    * satisfied, and every audit row names the staff member next to the member.
    */
   readonly impersonatedBy: Impersonator | null;
+  /**
+   * Set while a user acts in a client org through an agency grant (M6.7a): the grant and the
+   * agency org it belongs to. The authorizer re-reads the grant on every check (it must still be
+   * live and match), and every audit row names the agency and the grant next to the user.
+   */
+  readonly viaAgency: AgencyAct | null;
+}
+
+/** The agency grant a user acts through in a client org (M6.7a). */
+export interface AgencyAct {
+  readonly grantId: string;
+  readonly agencyOrgId: string;
 }
 
 /** The staff member behind an impersonated session. */
@@ -48,6 +60,7 @@ export interface CtxInit {
   stepUpAt?: Date | null;
   idempotencyKey?: string | null;
   impersonatedBy?: Impersonator | null;
+  viaAgency?: AgencyAct | null;
 }
 
 const ANONYMOUS: Actor = { type: 'anonymous' };
@@ -62,6 +75,7 @@ export function createCtx(init: CtxInit = {}): Ctx {
     stepUpAt: init.stepUpAt ?? null,
     idempotencyKey: init.idempotencyKey ?? null,
     impersonatedBy: init.impersonatedBy ?? null,
+    viaAgency: init.viaAgency ?? null,
   });
 }
 
