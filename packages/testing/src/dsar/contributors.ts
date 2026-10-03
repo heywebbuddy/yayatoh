@@ -25,6 +25,7 @@ import { programDataSubjects } from '@yayatoh/program';
 import { registrationDataSubjects } from '@yayatoh/registration';
 import { reviewsDataSubjects } from '@yayatoh/reviews';
 import { seatingDataSubjects } from '@yayatoh/seating';
+import { ssoDataSubjects } from '@yayatoh/sso';
 import { surveysDataSubjects } from '@yayatoh/surveys';
 import { tenancyDataSubjects } from '@yayatoh/tenancy';
 import { ticketingDataSubjects } from '@yayatoh/ticketing';
@@ -50,6 +51,7 @@ export const DATA_SUBJECT_CONTRIBUTORS = [
   guestsDataSubjects,
   messagingDataSubjects,
   assistanceDataSubjects,
+  ssoDataSubjects,
   programDataSubjects,
   eventsDataSubjects,
   mediaDataSubjects,

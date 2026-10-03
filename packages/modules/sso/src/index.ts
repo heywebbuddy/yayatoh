@@ -13,6 +13,7 @@ export {
   setConnectionStatusCommand,
   ssoSettingsQuery,
 } from './connections.ts';
+export { ssoDataSubjects } from './data-subject.ts';
 export {
   certificateInfo,
   certificateProblem,
