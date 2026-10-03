@@ -149,6 +149,7 @@ export const setSponsorDeliverableDoneCommand = tenantCommand({
 
 export const deleteSponsorDeliverableCommand = tenantCommand({
   name: 'program.deleteSponsorDeliverable',
+  category: 'delete',
   input: z.object({ eventId: z.uuid(), deliverableId: z.uuid() }),
   output: z.object({ deleted: z.boolean() }),
   entitlement: 'sponsors',
