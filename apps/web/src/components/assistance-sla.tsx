@@ -36,7 +36,7 @@ export function SlaTimer({
     <span
       data-testid="sla-timer"
       data-overdue={left < 0 ? 'true' : 'false'}
-      className={`tabular-nums ${left < 0 ? 'font-medium text-pink-700' : 'text-zinc-700'}`}
+      className={`tabular-nums ${left < 0 ? 'font-medium text-danger' : 'text-ink-2'}`}
     >
       {left < 0 ? t('overdueBy', { time: clock(left) }) : t('takeWithin', { time: clock(left) })}
     </span>

@@ -1,7 +1,7 @@
 import { evaluateOrgNow, listAlertsQuery } from '@yayatoh/alerts';
 import { campaignsWidget, deliverabilityWidget } from '@yayatoh/command-center';
 import { withTenant } from '@yayatoh/db';
-import { closePools } from '@yayatoh/db/testing';
+import { adminClient, closePools } from '@yayatoh/db/testing';
 import { assignEventRoleCommand } from '@yayatoh/events';
 import { createCtx, executeCommand, executeQuery, uuidv7 } from '@yayatoh/kernel';
 import {
@@ -384,6 +384,23 @@ describe('Command Center tiles', () => {
       paused: false,
       windowDays: 7,
     });
+  });
+
+  it('counts today in the org’s zone even when the event’s zone is a day behind (batch 3h merge)', async () => {
+    // The report reads its day range in the org's zone; the tile used to name "today" in the
+    // event's zone, so between the two midnights today's orders fell outside the range. These
+    // zones are 26 hours apart, so the event's today is always behind the org's.
+    const o = await bareOrg(`mkz-${uuidv7().slice(-8)}`, 'Kiribati Marketing');
+    const admin = adminClient();
+    try {
+      await admin`update tenancy.organizations set timezone = 'Pacific/Kiritimati' where id = ${o.orgId}`;
+      const z = await marketingScenario(o.orgId);
+      await admin`update events.events set timezone = 'Etc/GMT+12' where id = ${z.eventId}`;
+      const t = await executeQuery(campaignsWidget(null).loader, { eventId: z.eventId }, o.ctx(), ports);
+      expect(t.totals).toMatchObject({ orders: 3, revenueMinor: 10_000 });
+    } finally {
+      await admin.end();
+    }
   });
 
   it('the door never gets revenue; viewers and scanners are refused', async () => {

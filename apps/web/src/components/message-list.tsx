@@ -18,12 +18,10 @@ export function MessageList({ messages, label }: { messages: readonly ListedMess
           key={m.key}
           className={cx(
             'flex max-w-[85%] flex-col gap-1 rounded-card border px-4 py-3',
-            m.direction === 'out'
-              ? 'self-end border-zinc-200 bg-zinc-50'
-              : 'self-start border-zinc-200 bg-white',
+            m.direction === 'out' ? 'self-end border-line bg-surface-2' : 'self-start border-line bg-surface',
           )}
         >
-          <p className="text-caption text-zinc-500">
+          <p className="text-caption text-ink-2">
             {m.author} · {m.when}
           </p>
           {m.subject ? <p className="text-body font-medium">{m.subject}</p> : null}

@@ -13,6 +13,7 @@ export const PRIVATE_PATHS = [
   '/orders/',
   '/my-tickets/',
   '/claim/',
+  '/tables/',
   '/portal/',
   '/event-portal',
   '/scan',

@@ -22,8 +22,7 @@ export async function Pagination({
     const s = q.toString();
     return s ? `${path}?${s}` : path;
   };
-  const link =
-    'inline-flex min-h-10 items-center rounded-pill border border-zinc-200 bg-white px-4 text-body';
+  const link = 'inline-flex min-h-10 items-center rounded-pill border border-line bg-surface px-4 text-body';
   return (
     <nav aria-label={t('label')} className="flex flex-wrap items-center justify-between gap-3">
       {page > 1 ? (
@@ -33,7 +32,7 @@ export async function Pagination({
       ) : (
         <span />
       )}
-      <p className="text-caption text-zinc-600" aria-current="page">
+      <p className="text-caption text-ink-2" aria-current="page">
         {t('status', { page, count: pageCount })}
       </p>
       {page < pageCount ? (

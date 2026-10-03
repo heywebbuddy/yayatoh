@@ -226,7 +226,7 @@ export function WebPushControl({
 
   return (
     <div className="flex flex-col gap-4">
-      <p className="text-body text-zinc-600">{hint}</p>
+      <p className="text-body text-ink-2">{hint}</p>
       <p className="text-body font-medium">{explain}</p>
       {status === 'off' ? (
         <Button type="button" onClick={turnOn} disabled={busy} className="self-start">
@@ -247,9 +247,9 @@ export function WebPushControl({
         <div className="flex flex-col gap-2">
           <h3 className="text-body font-medium">{t('devices')}</h3>
           {devices.length === 0 ? (
-            <p className="text-body text-zinc-600">{t('devicesNone')}</p>
+            <p className="text-body text-ink-2">{t('devicesNone')}</p>
           ) : (
-            <ul aria-label={t('devices')} className="flex list-none flex-col divide-y divide-zinc-100 p-0">
+            <ul aria-label={t('devices')} className="flex list-none flex-col divide-y divide-line p-0">
               {devices.map((d) => {
                 const label = d.label ?? t('unknownDevice');
                 return (
@@ -261,10 +261,10 @@ export function WebPushControl({
                       <span>
                         {label}
                         {d.ref && d.ref === thisRef ? (
-                          <span className="ms-2 text-caption text-zinc-500">{t('thisDevice')}</span>
+                          <span className="ms-2 text-caption text-ink-2">{t('thisDevice')}</span>
                         ) : null}
                       </span>
-                      <span className="text-caption text-zinc-500">{t('since', { date: d.since })}</span>
+                      <span className="text-caption text-ink-2">{t('since', { date: d.since })}</span>
                     </span>
                     <form action={removeAction}>
                       <input type="hidden" name="deviceId" value={d.id} />

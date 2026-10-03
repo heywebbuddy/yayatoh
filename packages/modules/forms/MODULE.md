@@ -16,3 +16,8 @@ Organizer-defined questions: event checkout questions, survey questions (M3.9a, 
 - Consent questions pin a crm consent term and version; checked boxes are recorded through the `recordConsent` port (`@yayatoh/crm` `recordTermConsentTx`) on submit, unchecked ones record nothing.
 - `forms.job_titles` (the org's list) and `forms.companies` (names submitted, counted; suggested only from two respondents up).
 - Publishing takes an optional `expectedVersion`: a publish from a stale version is a `conflict` (`stale_version`).
+
+**RSVP questions (M4.1e, kind `rsvp`)**
+- One form per event; questions with the checkout types plus `meal` (the guests module's menu supplies the options), an optional sub-event, an optional write-back (`dietary` / `accessibility`, text only, always private) and a condition on the guest's context (`attending`, `age_class`, `is_plus_one`, `plus_one_named`) or earlier answers. One meal question; context keys are reserved.
+- `rsvpVisible` (client-safe) decides what a guest sees; `checkRsvpAnswers` is the server's authority and **rejects** answers to questions the guest can't see. Unnamed plus-ones and uninvited guests see nothing.
+- Responses are per guest (`respondent_type = 'guest'`, an id the guests module owns): the newest replaces the earlier one; private answers in one KeyVault envelope; write-back answers are not stored here (the guest owns them). The guests module runs all of this inside its own commands.

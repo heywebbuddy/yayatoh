@@ -31,3 +31,8 @@ The lightweight event program (M1.4f): tracks, rooms, sessions, speakers, exhibi
 - Booths: numbers unique per event (case-insensitive); at most one primary per booth (the first by default; removing the primary promotes the longest-standing co-exhibitor). Overlaps, shared booths, several booths and category mismatches are warnings.
 - Public reads (`publicExhibitorMap`, `publicProgram`) leave out unlisted exhibitors and go through allowlist serializers.
 - Events: `program.exhibitor.staff_invited@1`, `program.booth.assigned@1`.
+
+**Enrollment reads (M5.2b)** — `src/enrollment.ts`: `enrollableSessionsTx` / `enrollableSessionsByIdTx` (a session's
+times, room, admission, group and counter) and `lockEnrollableSessionTx` (the counter row lock every enrollment decision
+takes) for registration's enrollment, which never touches the `program` schema. `updateSession` refuses a capacity below
+the places held (`invalid_state`, reason `capacity_below_enrolled`).

@@ -44,8 +44,8 @@ export async function MyTeamEvents({
                   <Label>
                     {t(`profiles.${e.profile}`)} · {e.roles.map((r) => t(`eventRoles.${r}`)).join(', ')}
                   </Label>
-                  <h2 className="text-[22px] leading-tight font-light tracking-[-0.03em]">{e.name}</h2>
-                  <p className="text-body text-zinc-500">
+                  <h2 className="text-[22px] leading-tight font-extrabold tracking-[-0.03em]">{e.name}</h2>
+                  <p className="text-body text-ink-2">
                     {formatEventDateRange(e.startsAt.toISOString(), e.endsAt.toISOString(), {
                       locale,
                       currency: 'USD',

@@ -42,16 +42,19 @@ export function TicketTypeForm({
         defaultValue={10}
         label={t('tickets.maxPerOrder')}
       />
+      <Input
+        name="tableSize"
+        type="number"
+        min={2}
+        max={20}
+        label={t('galaTables.tableSize')}
+        hint={t('galaTables.tableSizeHint')}
+      />
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="feeMode" className="text-caption text-zinc-600">
+        <label htmlFor="feeMode" className="text-[13px] font-bold text-ink">
           {t('tickets.feeMode')}
         </label>
-        <select
-          id="feeMode"
-          name="feeMode"
-          defaultValue="pass_on"
-          className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
-        >
+        <select id="feeMode" name="feeMode" defaultValue="pass_on" className="field">
           <option value="pass_on">{t('tickets.passOn')}</option>
           <option value="absorb">{t('tickets.absorb')}</option>
         </select>
@@ -66,7 +69,7 @@ export function TicketTypeForm({
       />
       <Input name="earlyEndsAt" type="datetime-local" label={t('tickets.earlyEndsAt')} />
       <div className="flex flex-col gap-1.5 md:col-span-2">
-        <label htmlFor="accessDates" className="text-caption text-zinc-600">
+        <label htmlFor="accessDates" className="text-[13px] font-bold text-ink">
           {t('tickets.accessDates')}
         </label>
         <textarea
@@ -75,15 +78,15 @@ export function TicketTypeForm({
           rows={3}
           maxLength={2000}
           aria-describedby="accessDates-hint"
-          className="rounded-card border border-zinc-200 bg-white px-4 py-2.5 font-mono text-body"
+          className="rounded-card border border-line bg-surface px-4 py-2.5 font-mono text-body"
         />
-        <p id="accessDates-hint" className="text-caption text-zinc-500">
+        <p id="accessDates-hint" className="text-caption text-ink-2">
           {t('tickets.accessDatesHint')}
         </p>
       </div>
       {dates.length > 0 ? (
         <fieldset className="flex flex-col gap-2 md:col-span-2">
-          <legend className="text-caption text-zinc-600">{t('tickets.validDates')}</legend>
+          <legend className="text-[13px] font-bold text-ink">{t('tickets.validDates')}</legend>
           <ul className="flex max-h-56 list-none flex-col gap-1 overflow-y-auto p-0">
             {dates.map((d) => (
               <li key={d.id}>
@@ -92,28 +95,33 @@ export function TicketTypeForm({
                     type="checkbox"
                     name="occurrenceIds"
                     value={d.id}
-                    className="size-5 shrink-0 accent-ink"
+                    className="size-5 shrink-0 accent-primary"
                   />
                   {d.label}
                 </label>
               </li>
             ))}
           </ul>
-          <p className="text-caption text-zinc-500">{t('tickets.validDatesHint')}</p>
+          <p className="text-caption text-ink-2">{t('tickets.validDatesHint')}</p>
         </fieldset>
       ) : null}
       <label className="flex min-h-6 items-start gap-2.5 text-body md:col-span-2">
-        <input type="checkbox" name="isDonation" value="1" className="mt-0.5 size-5 shrink-0 accent-ink" />
+        <input
+          type="checkbox"
+          name="isDonation"
+          value="1"
+          className="mt-0.5 size-5 shrink-0 accent-primary"
+        />
         <span>
           {t('tickets.isDonation')}
-          <span className="block text-caption text-zinc-500">{t('tickets.isDonationHint')}</span>
+          <span className="block text-caption text-ink-2">{t('tickets.isDonationHint')}</span>
         </span>
       </label>
       <label className="flex min-h-6 items-start gap-2.5 text-body md:col-span-2">
-        <input type="checkbox" name="hidden" value="1" className="mt-0.5 size-5 shrink-0 accent-ink" />
+        <input type="checkbox" name="hidden" value="1" className="mt-0.5 size-5 shrink-0 accent-primary" />
         <span>
           {t('tickets.hiddenOption')}
-          <span className="block text-caption text-zinc-500">{t('tickets.hiddenOptionHint')}</span>
+          <span className="block text-caption text-ink-2">{t('tickets.hiddenOptionHint')}</span>
         </span>
       </label>
       <div className="flex flex-col gap-2 md:col-span-2">
