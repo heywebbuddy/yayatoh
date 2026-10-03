@@ -80,25 +80,20 @@ export const queueSlackDigestsCommand = tenantCommand({
     const orgId = requireOrg(ctx);
     const zone = (await organizationBrandTx(tx, orgId))?.timezone ?? 'UTC';
     const due = await tx
-      .select({ settings: slackSettings })
+      .select()
       .from(slackSettings)
-      .innerJoin(
-        connections,
-        and(eq(connections.orgId, slackSettings.orgId), eq(connections.id, slackSettings.connectionId)),
-      )
       .where(
         and(
           eq(slackSettings.digestEnabled, true),
           isNotNull(slackSettings.channelId),
           lte(slackSettings.digestNextAt, ctx.now),
-          eq(connections.status, 'active'),
-          eq(connections.connector, SLACK_CONNECTOR),
+          sql`exists (select 1 from ${connections} c where c.org_id = ${slackSettings.orgId} and c.id = ${slackSettings.connectionId} and c.status = 'active' and c.connector = ${SLACK_CONNECTOR})`,
         ),
       )
-      .for('update', { of: slackSettings });
+      .for('update');
     let queued = 0;
     let skipped = 0;
-    for (const { settings: s } of due) {
+    for (const s of due) {
       if (!s.digestNextAt || !s.channelId) continue;
       if (ctx.now.getTime() - s.digestNextAt.getTime() <= STALE_DIGEST_MS) {
         const day = localDay(s.digestNextAt, zone);
@@ -159,23 +154,10 @@ export const claimSlackMessagesCommand = tenantCommand({
       )
       .returning({ id: slackMessages.id });
     const due = await tx
-      .select({ m: slackMessages, c: connections, s: slackSettings })
+      .select()
       .from(slackMessages)
-      .innerJoin(
-        connections,
-        and(eq(connections.orgId, slackMessages.orgId), eq(connections.id, slackMessages.connectionId)),
-      )
-      .leftJoin(
-        slackSettings,
-        and(
-          eq(slackSettings.orgId, slackMessages.orgId),
-          eq(slackSettings.connectionId, slackMessages.connectionId),
-        ),
-      )
       .where(
         and(
-          eq(connections.status, 'active'),
-          isNotNull(connections.authConnectionId),
           input.connectionId ? eq(slackMessages.connectionId, input.connectionId) : undefined,
           or(
             and(
@@ -184,11 +166,21 @@ export const claimSlackMessagesCommand = tenantCommand({
             ),
             and(eq(slackMessages.status, 'sending'), lte(slackMessages.leaseUntil, ctx.now)),
           ),
+          sql`exists (select 1 from ${connections} c where c.org_id = ${slackMessages.orgId} and c.id = ${slackMessages.connectionId} and c.status = 'active' and c.auth_connection_id is not null)`,
         ),
       )
       .orderBy(asc(slackMessages.createdAt), asc(slackMessages.id))
       .limit(SLACK_CLAIM_BATCH)
-      .for('update', { of: slackMessages, skipLocked: true });
+      .for('update', { skipLocked: true });
+    const ids = [...new Set(due.map((m) => m.connectionId))];
+    const [conns, sets] = ids.length
+      ? await Promise.all([
+          tx.select().from(connections).where(inArray(connections.id, ids)),
+          tx.select().from(slackSettings).where(inArray(slackSettings.connectionId, ids)),
+        ])
+      : [[], []];
+    const connOf = new Map(conns.map((c) => [c.id, c]));
+    const setOf = new Map(sets.map((x) => [x.connectionId, x]));
     if (due.length)
       await tx
         .update(slackMessages)
@@ -201,21 +193,21 @@ export const claimSlackMessagesCommand = tenantCommand({
         .where(
           inArray(
             slackMessages.id,
-            due.map((d) => d.m.id),
+            due.map((m) => m.id),
           ),
         );
     return {
       cancelled: cancelled.length,
-      messages: due.map(({ m, c, s }) => ({
+      messages: due.map((m) => ({
         id: m.id,
         connectionId: m.connectionId,
-        authConnectionId: c.authConnectionId ?? '',
-        connectedBy: c.connectedBy,
+        authConnectionId: connOf.get(m.connectionId)?.authConnectionId ?? '',
+        connectedBy: connOf.get(m.connectionId)?.connectedBy ?? null,
         channelId: m.channelId,
         kind: m.kind as ClaimedMessage['kind'],
         payload: m.payload,
-        includeFinance: s?.includeFinance ?? false,
-        financeOptedBy: s?.financeOptedBy ?? null,
+        includeFinance: setOf.get(m.connectionId)?.includeFinance ?? false,
+        financeOptedBy: setOf.get(m.connectionId)?.financeOptedBy ?? null,
       })),
     };
   },

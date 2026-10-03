@@ -158,7 +158,7 @@ import {
   updatePartyGuestCommand,
   validateGuestImportCommand,
 } from '@yayatoh/guests';
-import { runSync } from '@yayatoh/integrations';
+import { queueSlackTestCommand, runSync, saveSlackSettingsCommand } from '@yayatoh/integrations';
 import { type Ctx, createCtx, executeCommand, executeQuery, uuidv7 } from '@yayatoh/kernel';
 import {
   attributeOrderCommand,
@@ -326,7 +326,7 @@ import {
 import { createVenueCommand, submitQuoteRequestCommand } from '@yayatoh/venues';
 import { createEndpointCommand } from '@yayatoh/webhooks';
 import { sql } from 'drizzle-orm';
-import { connectDemo, fakeAuth } from './integrations.ts';
+import { connectDemo, connectSlack, fakeAuth } from './integrations.ts';
 import { catchUpTimeline } from './merge.ts';
 import { ports, runBulk, submitRegistrationForm } from './ports.ts';
 
@@ -2614,6 +2614,24 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   // mappings, cursors, a run, record links and the demo's broken record in the errors inbox).
   const demo = await connectDemo(ctx());
   await runSync(org.id, demo.connectionId, { auth: fakeAuth }, ports);
+  // M6.4c: Slack connected through the fake port, its channel and digest set, a test alert queued.
+  const slack = await connectSlack(ctx());
+  await executeCommand(
+    saveSlackSettingsCommand,
+    {
+      connectionId: slack.connectionId,
+      channelId: 'C01GENERAL',
+      channelName: 'general',
+      alertsEnabled: true,
+      alertMinSeverity: 'warning',
+      digestEnabled: true,
+      digestTime: '08:00',
+      includeFinance: false,
+    },
+    ctx(),
+    ports,
+  );
+  await executeCommand(queueSlackTestCommand, { connectionId: slack.connectionId }, ctx(), ports);
   return {
     org,
     ownerId,
