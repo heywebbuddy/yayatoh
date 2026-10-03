@@ -11,8 +11,9 @@ import {
   uniqueIndex,
   uuid,
 } from 'drizzle-orm/pg-core';
-import { CALL_STATUSES, ENTRY_STATUSES, PADDLE_MAX, PADDLE_MIN, PLEDGE_STATUSES } from './domain/paddles.ts';
+import { CALL_STATUSES, ENTRY_STATUSES, PADDLE_MAX, PADDLE_MIN, PLEDGE_SOURCES, PLEDGE_STATUSES } from './domain/paddles.ts';
 import { campaigns, donationsSchema } from './schema.ts';
+import { matches } from './schema-matches.ts';
 
 /**
  * M4.8c paddle raise. Every table belongs to one event of the org; `(org_id, event_id)` references
@@ -123,7 +124,8 @@ export const paddleEntries = tenantTable(
 
 /**
  * A pledge from the paddle raise: the recorder confirmed an entry (one pledge per entry). A promise,
- * never a charge (P4-12): collection arrives with M4.8e. The holder (guest or party) is kept for
+ * never a charge (P4-12): collection arrives with M4.8e. M4.8f adds the sponsor's pledge for a
+ * challenge match (source `match`: no call, entry or paddle; one per match). The holder (guest or party) is kept for
  * receipts and follow-up; amounts are private to the organizer.
  */
 export const pledges = tenantTable(
@@ -132,9 +134,12 @@ export const pledges = tenantTable(
   {
     eventId: uuid('event_id').notNull(),
     campaignId: uuid('campaign_id').notNull(),
-    callId: uuid('call_id').notNull(),
-    entryId: uuid('entry_id').notNull(),
-    paddleNumber: integer('paddle_number').notNull(),
+    /** The call, entry and paddle of a paddle pledge (none for a sponsor's match, M4.8f). */
+    callId: uuid('call_id'),
+    entryId: uuid('entry_id'),
+    paddleNumber: integer('paddle_number'),
+    /** M4.8f: the challenge match a `match` pledge is the sponsor's promise for. */
+    matchId: uuid('match_id'),
     guestId: uuid('guest_id'),
     partyId: uuid('party_id'),
     amountMinor: minor('amount_minor').notNull(),
@@ -146,6 +151,7 @@ export const pledges = tenantTable(
   },
   (t) => [
     uniqueIndex('pledges_org_entry_key').on(t.orgId, t.entryId),
+    uniqueIndex('pledges_org_match_key').on(t.orgId, t.matchId).where(sql`match_id is not null`),
     index('pledges_org_event_status_idx').on(t.orgId, t.eventId, t.status),
     index('pledges_org_campaign_idx').on(t.orgId, t.campaignId),
     foreignKey({
@@ -164,7 +170,16 @@ export const pledges = tenantTable(
       foreignColumns: [paddleEntries.orgId, paddleEntries.id],
     }),
     check('pledges_status_check', inList('status', PLEDGE_STATUSES)),
-    check('pledges_source_check', sql`source = 'paddle'`),
+    foreignKey({
+      name: 'pledges_match_fk',
+      columns: [t.orgId, t.matchId],
+      foreignColumns: [matches.orgId, matches.id],
+    }),
+    check('pledges_source_check', inList('source', PLEDGE_SOURCES)),
+    check(
+      'pledges_source_shape_check',
+      sql`(source = 'paddle' and call_id is not null and entry_id is not null and paddle_number is not null and match_id is null) or (source = 'match' and match_id is not null and call_id is null and entry_id is null and paddle_number is null)`,
+    ),
     check('pledges_amount_check', sql`amount_minor > 0`),
     check('pledges_currency_check', sql`currency ~ '^[A-Z]{3}$'`),
     check('pledges_cancelled_check', sql`(status = 'cancelled') = (cancelled_at is not null)`),
