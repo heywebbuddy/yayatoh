@@ -131,6 +131,8 @@ export {
   SeatGroupDto,
   seatGroupsQuery,
 } from './groups.ts';
+// M4.4b: every guest's tables for the day of (check-in, kiosk, A–Z board, host view).
+export { type GuestPlace, type GuestPlaces, guestPlacesTx } from './guest-day-of.ts';
 export {
   findGuestSeatByPinCommand,
   GuestSeatResultDto,

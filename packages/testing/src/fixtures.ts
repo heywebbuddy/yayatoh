@@ -45,6 +45,7 @@ import {
   enrollDeviceCommand,
   heartbeatCommand,
   markQuietDevicesTx,
+  recordGuestArrivalsCommand,
   reportPresenceCommand,
   scanTicketCommand,
   setDetectionSettingsCommand,
@@ -2027,6 +2028,24 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     setVipTableCommand,
     { eventId: event.id, subEventId: reception.id, itemId: rowA, vip: true },
     ctx(),
+    ports,
+  );
+  // M4.4b guest check-in (isolation coverage): the door device checks the host in.
+  await executeCommand(
+    recordGuestArrivalsCommand,
+    {
+      eventId: event.id,
+      arrivals: [
+        {
+          clientId: uuidv7(),
+          guestId: host.id,
+          deviceTs: new Date('2027-10-14T14:56:00Z'),
+          clockOffsetMs: 0,
+          source: 'scanner',
+        },
+      ],
+    },
+    deviceCtx,
     ports,
   );
   // M4.1b: a pasted guest list staged, checked and imported (a household with a plus-one and a

@@ -1563,6 +1563,11 @@ export interface components {
             url: string;
             width: number;
         };
+        /**
+         * @description What the kiosk shows (M4.4b): ticket self check-in, guest check-in by name, or the A–Z table board. Absent: tickets.
+         * @enum {string}
+         */
+        KioskKind: "tickets" | "guests" | "board";
         Link: {
             label: string;
             url: string;
@@ -2668,6 +2673,7 @@ export interface operations {
                             checkpointId: string | null;
                             /** Format: uuid */
                             eventId: string;
+                            kind?: components["schemas"]["KioskKind"];
                             pinHash: string;
                             /** Format: date-time */
                             startedAt: string;

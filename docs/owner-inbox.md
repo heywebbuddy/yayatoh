@@ -566,3 +566,10 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **Tablemates** show only on the party's own page (reached by its link), as the names the host typed (first and last name; an unnamed plus-one is "Guest of …"); declined guests are left out. Envelope names are used for the party's own heading only. Confirm, or say if you want a per-guest "display name" field.
 - [ ] **The seat page needs the seat finder open** (Seating → Seat finder → "Show guests the venue map and seat finder"); until then it says the seating isn't ready yet. The public PIN page also needs the event published and not private (like every seat finder page today; the party page works for private weddings).
 - [ ] **PIN lookup limits:** the M1.14 `rsvpLookup` policy (5 per device per 10 minutes, 100 per event per 15 minutes, IP ceiling), then the human check; plus the seat finder's own 30 a minute per device. The RSVP fallback and the seat finder count separately. Confirm.
+
+## M4.4b — kiosk, TV board and check-in (2026-10-03, pending owner)
+- [ ] **"Labels" = the host's party labels.** The plan says "check-in by name or party with labels"; we read "labels" as the guest list's free-text labels (filter chips), not printed name labels. Printing badges/labels at check-in is M5.5. Say if you meant printing.
+- [ ] **Guest kiosk without a PIN.** At the venue a guest finds their table by typing their exact full name (one guest, not declined); nothing is ever listed, and misses get one answer. M4.4a's remote PIN mode still needs the invitation PIN. Say if the kiosk should ask for the PIN too.
+- [ ] **The A–Z board shows names publicly at the venue** (seated guests who haven't declined, as the host wrote them, with their table). It runs only on a device the host starts as the board. Say if you want first name + initial instead.
+- [ ] **Day-of needs the check-in module.** The wedding nav's Day-of item requires `checkin`, which isn't among the wedding profile's default modules; orgs with check-in (all current plans) see it. Say if weddings should get `checkin` by default.
+

@@ -16,6 +16,7 @@ import {
 
 type Loaded = Extract<SupervisorLoad, { state: 'ok' }>;
 type Device = Loaded['view']['devices'][number];
+type KioskKind = 'tickets' | 'guests' | 'board';
 
 /**
  * Supervisor mode (M3.4a): a signed-in supervisor sees every device of the org and can force a
@@ -195,6 +196,8 @@ function DeviceCard({
   const [pinError, setPinError] = useState<string | null>(null);
   const [confirmRevoke, setConfirmRevoke] = useState(false);
   const [busy, setBusy] = useState(false);
+  /** M4.4b: what the kiosk will show (the board stands at no entrance). */
+  const [kind, setKind] = useState<KioskKind>('tickets');
   const names = new Map(checkpoints.map((c) => [c.id, c.name]));
   const actionable = d.where !== 'elsewhere';
 
@@ -233,6 +236,9 @@ function DeviceCard({
           {d.label}
           {isSelf ? ` · ${t('thisDevice')}` : ''}
           {d.mode === 'kiosk' ? ` · ${t('kiosk')}` : ''}
+          {d.mode === 'kiosk' && d.kioskKind && d.kioskKind !== 'tickets'
+            ? ` · ${t(d.kioskKind === 'guests' ? 'kindGuests' : 'kindBoard')}`
+            : ''}
         </h3>
         <p className="flex flex-wrap gap-x-3 text-caption text-ink-2">
           <span className={d.online ? 'text-success' : 'text-danger'}>
@@ -358,14 +364,31 @@ function DeviceCard({
                   action: 'kiosk_start',
                   eventId,
                   deviceId: d.id,
-                  checkpointId: String(f.get('kioskCheckpointId') ?? '') || null,
+                  checkpointId: kind === 'board' ? null : String(f.get('kioskCheckpointId') ?? '') || null,
                   pin,
+                  kind,
                 },
-                t('kioskStarted', { label: d.label }),
+                t(kind === 'board' ? 'boardStarted' : 'kioskStarted', { label: d.label }),
               );
             }}
           >
-            {entrances.length > 0 ? (
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor={`${id}-kind`} className="text-[13px] font-bold text-ink">
+                {t('kioskKind', { label: d.label })}
+              </label>
+              <select
+                id={`${id}-kind`}
+                name="kind"
+                value={kind}
+                onChange={(e) => setKind(e.target.value as KioskKind)}
+                className="field"
+              >
+                <option value="tickets">{t('kindTickets')}</option>
+                <option value="guests">{t('kindGuests')}</option>
+                <option value="board">{t('kindBoard')}</option>
+              </select>
+            </div>
+            {entrances.length > 0 && kind !== 'board' ? (
               <div className="flex flex-col gap-1.5">
                 <label htmlFor={`${id}-kiosk`} className="text-[13px] font-bold text-ink">
                   {t('kioskEntrance', { label: d.label })}

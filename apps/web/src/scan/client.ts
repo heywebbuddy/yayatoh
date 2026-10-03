@@ -11,6 +11,7 @@ import {
   verifyManifestScope,
 } from '@yayatoh/checkin-engine';
 import { uuidv7 } from '@yayatoh/kernel';
+import { GuestBook } from './guests.ts';
 import {
   kvGet,
   kvSet,
@@ -144,6 +145,8 @@ export interface KioskConfig {
   readonly checkpointId: string | null;
   readonly pinHash: string;
   readonly startedAt: string;
+  /** M4.4b: what the kiosk shows; absent (older servers) = tickets. */
+  readonly kind?: 'tickets' | 'guests' | 'board';
 }
 
 /** What a heartbeat changed on this device. */
@@ -179,7 +182,12 @@ export class ScanClient {
   /** Kiosk mode (M3.4a), or null: set by a supervisor, left with the PIN. */
   kiosk: KioskConfig | null = null;
 
-  constructor(readonly config: ScanConfig) {}
+  /** M4.4b: the event's guests (check-in by name or party, the guest kiosk, the A–Z board). */
+  readonly guests: GuestBook;
+
+  constructor(readonly config: ScanConfig) {
+    this.guests = new GuestBook(config.eventId, config.token);
+  }
 
   get token(): string {
     return this.config.token;
@@ -248,6 +256,7 @@ export class ScanClient {
     this.clockOffsetMs = (await kvGet<number>('clockOffsetMs')) ?? 0;
     this.checkpointId = (await kvGet<string | null>('checkpointId')) ?? null;
     this.kiosk = (await kvGet<KioskConfig | null>('kiosk')) ?? null;
+    await this.guests.load();
     return true;
   }
 
@@ -330,6 +339,8 @@ export class ScanClient {
     };
     this.byLegacy = legacyIndex(this.byId.values());
     await this.persist();
+    // M4.4b: the guest list for check-in by name, the guest kiosk and the board.
+    await this.guests.sync();
   }
 
   /** Decide locally (instant), record, queue; the flush that follows may refine it. */
@@ -371,8 +382,9 @@ export class ScanClient {
     };
   }
 
+  /** Ticket scans and guest check-ins waiting to sync. */
   async queueDepth(): Promise<number> {
-    return (await queueAll()).length;
+    return (await queueAll()).length + this.guests.queued;
   }
 
   /**
@@ -396,6 +408,7 @@ export class ScanClient {
       for (const r of body.results) out.set(r.scanId, { result: r.result, openSignals: r.openSignals ?? 0 });
       await queueRemove(batch.map((c) => c.scanId));
     }
+    if (this.guests.queued) await this.guests.flush();
     return out;
   });
 

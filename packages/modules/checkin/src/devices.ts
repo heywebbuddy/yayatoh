@@ -30,7 +30,7 @@ import {
 import { and, eq, gte, isNull, lte, sql } from 'drizzle-orm';
 import { checkpointsTx, raiseSignalTx, TWO_ENTRANCES_WINDOW_MS } from './checkpoints.ts';
 import { withOccurrenceTx } from './occurrence.ts';
-import { admissions, CHECKPOINT_KINDS, devices, type ScanResult, scans } from './schema.ts';
+import { admissions, CHECKPOINT_KINDS, devices, KIOSK_KINDS, type ScanResult, scans } from './schema.ts';
 import { checkVelocityTx, openHighSignalCountTx } from './signals.ts';
 import { deviceScanScopeTx, scopeAllowsCheckpoint } from './staff.ts';
 
@@ -219,6 +219,8 @@ export const heartbeatCommand = tenantCommand({
         checkpointId: z.uuid().nullable(),
         pinHash: z.string(),
         startedAt: z.date(),
+        /** M4.4b: what the kiosk shows. */
+        kind: z.enum(KIOSK_KINDS),
       })
       .nullable(),
   }),

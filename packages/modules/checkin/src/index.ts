@@ -45,6 +45,24 @@ export {
   signalSubject,
 } from './fraud-rules.ts';
 export { chatReportSignals, checkoutRiskSignals, fraudSignalAlerts } from './fraud-sources.ts';
+// M4.4b: guest check-in by name or party, the guest kiosk and A–Z board snapshot, the day-of view.
+export {
+  ARRIVAL_RESULTS,
+  type ArrivalResult,
+  DAY_OF_ARRIVALS_SHOWN,
+  DAY_OF_MATCHES,
+  DayOfDto,
+  dayOfQuery,
+  GuestArrivalsInput,
+  GuestArrivalsResult,
+  GuestSnapshotDto,
+  guestArrivedTx,
+  guestSnapshotQuery,
+  MAX_ARRIVALS_PER_SYNC,
+  markGuestsArrivedCommand,
+  recordGuestArrivalsCommand,
+  undoGuestArrivalCommand,
+} from './guest-checkin.ts';
 export {
   admittedTodayByCheckpointTx,
   capacityFactsTx,
@@ -83,6 +101,8 @@ export {
   undoAdmissionCommand,
 } from './scan.ts';
 export {
+  ARRIVAL_SOURCES,
+  type ArrivalSource,
   CHECKPOINT_KINDS,
   type CheckpointKind,
   DEVICE_EVENT_KINDS,
@@ -97,6 +117,8 @@ export {
   type FraudSignalKind,
   type FraudSource,
   type FraudStatus,
+  KIOSK_KINDS,
+  type KioskKind,
   SCAN_RESULTS,
   type ScanResult,
   STAFF_ALERT_KINDS,
@@ -142,6 +164,7 @@ export {
   exitKioskCommand,
   hashKioskPin,
   KIOSK_PIN_ITERATIONS,
+  kioskKindOf,
   requestDeviceSyncCommand,
   revokeDeviceCommand,
   type StaffAlertSource,

@@ -15,6 +15,8 @@ export {
   setCollectorCommand,
   submitContactCommand,
 } from './collector.ts';
+// M4.4b: names for the day of (check-in, kiosk, A–Z board).
+export { guestNamesTx } from './day-of.ts';
 export {
   type CollectorMember,
   type CollectorPayload,
