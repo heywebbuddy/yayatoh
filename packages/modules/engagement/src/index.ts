@@ -108,6 +108,7 @@ export {
   updateNetworkSettingsCommand,
 } from './networking/console.ts';
 export * from './networking/dto.ts';
+export { networkingEvent, networkingOpen } from './networking/public.ts';
 export {
   AskInput,
   askQuestionCommand,

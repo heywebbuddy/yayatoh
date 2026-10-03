@@ -1,5 +1,5 @@
 import { publicTaxNotices, taxNoticeText } from '@yayatoh/donations';
-import { liveSessionIds } from '@yayatoh/engagement';
+import { liveSessionIds, networkingOpen } from '@yayatoh/engagement';
 import {
   accessTarget,
   checkoutTarget,
@@ -135,6 +135,11 @@ export async function PublicEventView({
     publicTarget && fullProgram.sessions.length > 0
       ? await liveSessionIds(publicTarget.orgId, publicTarget.eventId)
       : [];
+  // M5.8a: networking is on (its pages live on the marketplace host, not the org's own site).
+  const networking =
+    publicTarget && !orgId && !embedded
+      ? await networkingOpen(publicTarget.orgId, publicTarget.eventId)
+      : false;
   // M5.4a: the exhibitor map page exists once the event has booths.
   const exhibitorMap =
     contentTarget && fullProgram.exhibitors.length > 0
@@ -481,6 +486,12 @@ export async function PublicEventView({
               <a href="#agenda" className={navLink}>
                 {t('publicEvent.agenda')}
               </a>
+            ) : null}
+            {networking ? (
+              // M5.8a: the event's networking (on the marketplace host only).
+              <Link href={`/events/${slug}/network`} className={navLink}>
+                {t('networking.publicLink')}
+              </Link>
             ) : null}
           </nav>
           <div className="flex flex-wrap items-center gap-2">
