@@ -1,5 +1,5 @@
 import { expect, type Locator, type Page, test } from '@playwright/test';
-import { expectAccessible, expectAccessibleBothModes, pickOption, signIn } from './helpers.ts';
+import { expectAccessible, expectAccessibleBothModes, inOptions, pickOption, signIn } from './helpers.ts';
 import { quickPlan } from './seating-helpers.ts';
 
 /**
@@ -248,8 +248,8 @@ test.describe('guest seating editor (M4.3a)', () => {
     await pickOption(page.getByLabel('Table to show'), { label: 'Table 2 — 4 of 4 free' });
     await details(page, 'Table 2').getByRole('checkbox', { name: 'VIP zone' }).check();
     await expect(page.getByText('Table 2 is now a VIP zone.')).toBeVisible();
-    await expect(page.getByLabel('Table or row', { exact: true }).first()).toContainText(
-      'Table 2 — 4 of 4 free · VIP zone',
+    await inOptions(page.getByLabel('Table or row', { exact: true }).first(), (list) =>
+      expect(list).toContainText('Table 2 — 4 of 4 free · VIP zone'),
     );
 
     // The bride's side as one group: filter, tick both parties, seat them together.
