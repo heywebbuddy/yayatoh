@@ -2957,6 +2957,9 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ports,
   );
   await runSync(org.id, sheets.connectionId, { auth: fakeAuth }, ports, { force: true });
+  // M6.2a again: the warehouse catches up on the outbox of the rows added after its first run
+  // (donations, matches, imports), as the worker would, so a later backfill changes nothing.
+  await catchUpWarehouse(org.id);
   return {
     org,
     ownerId,
