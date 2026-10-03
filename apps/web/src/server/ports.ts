@@ -5,6 +5,7 @@ import { billingEntitlements } from '@yayatoh/billing';
 import { campaignsContactOwner } from '@yayatoh/campaigns';
 import { checkinContactOwner, setSessionAccessSource } from '@yayatoh/checkin';
 import { registerContactReferenceOwners } from '@yayatoh/crm';
+import { engagementContactOwner } from '@yayatoh/engagement';
 import { eventRolesOf } from '@yayatoh/events';
 import { guestsContactOwner, guestsOccupantDirectory, guestsPartyCredentials } from '@yayatoh/guests';
 import { integrationsContactOwner } from '@yayatoh/integrations';
@@ -50,6 +51,7 @@ registerContactReferenceOwners([
   surveysContactOwner,
   campaignsContactOwner,
   automationsContactOwner,
+  engagementContactOwner,
   participationContactOwner,
   // M6.4d: consent changes reported by marketing tools.
   integrationsContactOwner,
