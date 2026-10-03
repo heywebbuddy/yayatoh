@@ -59,6 +59,7 @@
     "@yayatoh/surveys": "workspace:*",
     "@yayatoh/tenancy": "workspace:*",
     "@yayatoh/ticketing": "workspace:*",
+    "@yayatoh/virtual": "workspace:*",
     "@yayatoh/webhooks": "workspace:*",
     "drizzle-orm": "catalog:",
     "pg-boss": "catalog:",

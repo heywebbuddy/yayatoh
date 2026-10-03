@@ -183,6 +183,8 @@ export const PROFILES: Readonly<Record<ProfileKey, Profile>> = {
       item('speakers', 'build', 'speakers', 'mic'),
       item('exhibitors', 'build', 'exhibitors', 'store'),
       item('sponsors', 'build', 'sponsors', 'award'),
+      // M6.9a: stream setup for online and hybrid sessions (the `virtual` module).
+      item('virtual', 'build', 'virtual', 'video'),
       marketing,
       // M5.5a: badge templates and batch PDFs, before the door.
       item('badges', 'run', 'badges', 'id-card'),

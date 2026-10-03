@@ -134,6 +134,7 @@ export {
   STAFF_PUSH_KINDS,
   type StaffAlertKind,
   type StaffPushKind,
+  VIRTUAL_CHECKPOINT_KIND,
 } from './schema.ts';
 // M5.6a: session check-in (gates, scan in/out, overrides, attendance, self check-in flyers).
 export {
@@ -223,3 +224,11 @@ export {
 export { type CheckinScope, type CheckinSeriesFact, checkinFactsTx, checkinSeriesTx } from './stats.ts';
 // M6.1a: the person timeline's facts from this module (crm projection).
 export { checkinTimeline } from './timeline.ts';
+// M6.9a: the virtual checkpoint (watching a session's stream checks the ticket in).
+export {
+  VirtualCheckpointDto,
+  virtualAttendanceSubscriber,
+  virtualCheckpointName,
+  virtualCheckpointsQuery,
+  virtualCheckpointTx,
+} from './virtual-attendance.ts';

@@ -12,6 +12,7 @@ import {
   networkChatSignals,
   sendStaffAlertPushes,
   staffAlertsSubscriber,
+  virtualAttendanceSubscriber,
 } from '@yayatoh/checkin';
 import { withTenant } from '@yayatoh/db';
 import { pledgeMailer, pledgeOutcomesSubscriber, receiptIssuer, statementMailer } from '@yayatoh/donations';
@@ -135,6 +136,8 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     chatReportSignals(),
     // M5.8b: networking chat reports about attendees.
     networkChatSignals(),
+    // M6.9a: the virtual checkpoint (as in the worker).
+    virtualAttendanceSubscriber(),
     fraudSignalAlerts({ notifier }),
     // M3.4a: staff alerts for the Scan PWA (web push per device).
     staffAlertsSubscriber(staffAlertSource),

@@ -67,6 +67,7 @@
     "@yayatoh/ticketing": "workspace:*",
     "@yayatoh/ui": "workspace:*",
     "@yayatoh/venues": "workspace:*",
+    "@yayatoh/virtual": "workspace:*",
     "@yayatoh/webhooks": "workspace:*",
     "geist": "1.7.2",
     "hono": "catalog:",
