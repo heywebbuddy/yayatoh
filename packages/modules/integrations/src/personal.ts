@@ -37,7 +37,10 @@ export const PersonalCalendarDto = z.object({
   syncing: z.boolean(),
 });
 export type PersonalCalendarDto = z.infer<typeof PersonalCalendarDto>;
-export const personalCalendarSerializer = defineSerializer('integrations.personalCalendar', PersonalCalendarDto);
+export const personalCalendarSerializer = defineSerializer(
+  'integrations.personalCalendar',
+  PersonalCalendarDto,
+);
 
 type Row = typeof connections.$inferSelect;
 
@@ -88,7 +91,8 @@ export const personalCalendarQuery = tenantQuery({
       state,
       connectedAt: state === 'off' ? null : (live?.connectedAt ?? null),
       lastSyncAt: state === 'off' ? null : (live?.lastSyncAt ?? null),
-      lastSyncStatus: state === 'off' ? null : ((live?.lastSyncStatus as PersonalCalendarDto['lastSyncStatus']) ?? null),
+      lastSyncStatus:
+        state === 'off' ? null : ((live?.lastSyncStatus as PersonalCalendarDto['lastSyncStatus']) ?? null),
       entries: state === 'active' || state === 'paused' ? (entries?.n ?? 0) : 0,
       syncing: Boolean(busy),
     });

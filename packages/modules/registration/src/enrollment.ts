@@ -1063,10 +1063,7 @@ export async function calendarScheduleTx(
   return {
     eventId: r.eventId,
     sessionIds: all
-      .filter(
-        (s) =>
-          available.has(s.sessionId) && (s.admission === 'included' || enrolled.has(s.sessionId)),
-      )
+      .filter((s) => available.has(s.sessionId) && (s.admission === 'included' || enrolled.has(s.sessionId)))
       .map((s) => s.sessionId),
   };
 }

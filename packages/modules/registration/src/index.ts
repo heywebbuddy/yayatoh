@@ -55,6 +55,7 @@ export * from './domain/matrix.ts';
 export * from './dto.ts';
 export {
   acceptSessionOfferCommand,
+  calendarScheduleTx,
   dropSessionCommand,
   dropTx,
   EnrollInput,
@@ -62,14 +63,13 @@ export {
   enrollmentsOfRegistrantTx,
   enrollSessionCommand,
   enrollTx,
+  linkRegistrantTx,
   myScheduleQuery,
   type PromotionResult,
   promoteSessionNowCommand,
   promoteSessionTx,
   type Registrant,
   registrantsOfLinkTx,
-  calendarScheduleTx,
-  linkRegistrantTx,
   registrationEnrollment,
   setEnrollmentSettingsCommand,
   setItemSessionsCommand,

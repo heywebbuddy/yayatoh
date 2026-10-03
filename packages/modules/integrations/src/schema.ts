@@ -70,9 +70,7 @@ export const connections = tenantTable(
     uniqueIndex('connections_org_connector_subject_live_key')
       .on(t.orgId, t.connector, sql`coalesce(registrant_id, '00000000-0000-0000-0000-000000000000'::uuid)`)
       .where(sql`status in ('pending', 'active', 'paused')`),
-    index('connections_org_registrant_idx')
-      .on(t.orgId, t.registrantId)
-      .where(sql`registrant_id is not null`),
+    index('connections_org_registrant_idx').on(t.orgId, t.registrantId).where(sql`registrant_id is not null`),
     index('connections_org_created_idx').on(t.orgId, t.createdAt),
     index('connections_next_sync_idx').on(t.nextSyncAt, t.orgId).where(sql`status = 'active'`),
     check('connections_connector_check', sql`connector ~ '^[a-z][a-z0-9_]{1,39}$'`),

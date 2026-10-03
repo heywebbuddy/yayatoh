@@ -288,7 +288,13 @@ export const beginConnectCommand = tenantCommand({
     }
     const [row] = await tx
       .insert(connections)
-      .values({ orgId, connector: c.key, status: 'pending', syncIntervalMinutes: initialInterval(c), ...pending })
+      .values({
+        orgId,
+        connector: c.key,
+        status: 'pending',
+        syncIntervalMinutes: initialInterval(c),
+        ...pending,
+      })
       .returning({ id: connections.id });
     if (!row) throw new DomainError('internal');
     return { connectionId: row.id, state };

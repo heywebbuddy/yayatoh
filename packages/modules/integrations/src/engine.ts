@@ -579,8 +579,7 @@ export const pushPageCommand = tenantCommand({
           );
         resolved.push(key);
         counts.pushed += 1;
-      }
-      else if (r.outcome === 'failed') {
+      } else if (r.outcome === 'failed') {
         await recordErrorTx(tx, ctx, {
           connectionId: connection.id,
           runId: run.id,

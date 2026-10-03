@@ -137,9 +137,14 @@ export const googleCalendarFakeProvider: FakeProvider = {
     if (key && d.keys[key]) return d.keys[key] as ProviderResponse;
     const found = id ? d.events.find((e) => e.id === id) : undefined;
     if (req.method === 'GET' && !id)
-      return { status: 200, body: { items: d.events.filter((e) => e.status !== 'cancelled').map(eventView) } };
+      return {
+        status: 200,
+        body: { items: d.events.filter((e) => e.status !== 'cancelled').map(eventView) },
+      };
     if (req.method === 'GET')
-      return found ? { status: 200, body: eventView(found) } : { status: 404, body: { error: { code: 404 } } };
+      return found
+        ? { status: 200, body: eventView(found) }
+        : { status: 404, body: { error: { code: 404 } } };
     if (req.method === 'POST' && !id) {
       const body = (req.body ?? {}) as Record<string, unknown>;
       const bad = invalidBody(body);
@@ -148,7 +153,10 @@ export const googleCalendarFakeProvider: FakeProvider = {
       if (wanted && !/^[a-v0-9]{5,1024}$/.test(wanted))
         return { status: 400, body: { error: { code: 400, message: 'Invalid resource id value.' } } };
       if (wanted && d.events.some((e) => e.id === wanted))
-        return { status: 409, body: { error: { code: 409, message: 'The requested identifier already exists.' } } };
+        return {
+          status: 409,
+          body: { error: { code: 409, message: 'The requested identifier already exists.' } },
+        };
       const e: FakeCalendarEvent = {
         id: wanted ?? sha256(`${account.authConnectionId}|${d.seq}|${Math.random()}`).slice(0, 26),
         status: 'confirmed',
@@ -309,7 +317,8 @@ const personalSessions: Pick<PushSide, 'changes' | 'read'> = {
 };
 
 /** The stable Google event id for one connection's entry of one session (lowercase hex). */
-export const calendarEventId = (origin: string, localId: string) => sha256(`${origin}|${localId}`).slice(0, 40);
+export const calendarEventId = (origin: string, localId: string) =>
+  sha256(`${origin}|${localId}`).slice(0, 40);
 
 function eventBody(io: SyncIO, localId: string, values: Readonly<Record<string, unknown>>) {
   const tz = String(values.time_zone ?? '');
@@ -327,7 +336,8 @@ function eventBody(io: SyncIO, localId: string, values: Readonly<Record<string, 
 
 const sent = (body: unknown) => {
   const b = body as { id?: unknown; etag?: unknown };
-  if (typeof b?.id !== 'string' || typeof b.etag !== 'string') throw new Error('The provider answered without an id');
+  if (typeof b?.id !== 'string' || typeof b.etag !== 'string')
+    throw new Error('The provider answered without an id');
   return { externalId: b.id, version: b.etag };
 };
 
