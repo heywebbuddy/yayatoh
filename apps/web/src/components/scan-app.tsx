@@ -3,7 +3,10 @@
 import { Button, cx, Input, Tabs, tabClass } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { GuestKioskScreen, TableBoardScreen } from '@/components/scan-guest-kiosk.tsx';
+import { GuestCheckinPanel } from '@/components/scan-guests.tsx';
 import { KioskScreen } from '@/components/scan-kiosk.tsx';
+import { SessionDoorControls, SessionOverride } from '@/components/scan-session-door.tsx';
 import { StaffPanel } from '@/components/scan-staff.tsx';
 import { SupervisorPanel } from '@/components/scan-supervisor.tsx';
 import { SignalBanner } from '@/components/signal-banner.tsx';
@@ -20,7 +23,7 @@ import { followChannel } from '@/scan/stream.ts';
 import { useCameraScan } from '@/scan/use-camera.ts';
 
 type Phase = 'boot' | 'setup' | 'ready' | 'wiped';
-type View = 'scan' | 'staff' | 'supervisor';
+type View = 'scan' | 'guests' | 'staff' | 'supervisor';
 
 /** Local verdicts and server results share the door screen's `checkin.result.*` messages. */
 const RESULT_KEY: Record<string, string> = {
@@ -39,6 +42,14 @@ const RESULT_KEY: Record<string, string> = {
   granted: 'granted',
   no_access: 'no_access',
   wrong_checkpoint: 'wrong_checkpoint',
+  balance_due: 'balance_due',
+  // M5.6a session doors.
+  entered: 'entered',
+  scanned_out: 'scanned_out',
+  not_in_room: 'not_in_room',
+  not_enrolled: 'not_enrolled',
+  admission_level: 'admission_level',
+  capacity: 'capacity',
 };
 
 const TONE: Record<string, string> = {
@@ -49,6 +60,10 @@ const TONE: Record<string, string> = {
   not_today: 'border-warning bg-warning-soft text-warning',
   wrong_date: 'border-warning bg-warning-soft text-warning',
   outside_window: 'border-warning bg-warning-soft text-warning',
+  entered: 'border-success bg-success-soft text-success',
+  scanned_out: 'border-success bg-success-soft text-success',
+  not_in_room: 'border-warning bg-warning-soft text-warning',
+  capacity: 'border-warning bg-warning-soft text-warning',
 };
 const tone = (key: string) => TONE[key] ?? 'border-danger bg-danger-soft text-danger';
 
@@ -65,6 +80,8 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
   const [queue, setQueue] = useState(0);
   const [tickets, setTickets] = useState(0);
   const [lastSync, setLastSync] = useState<Date | null>(null);
+  /** Bumped whenever the guest snapshot or this device's guest check-ins change (M4.4b). */
+  const [guestsVersion, setGuestsVersion] = useState(0);
   const [last, setLast] = useState<ScanOutcome | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [camera, setCamera] = useState(false);
@@ -89,6 +106,7 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
     setTickets(c.ticketCount);
     setLastSync(c.lastSyncAt);
     setQueue(await c.queueDepth());
+    setGuestsVersion((v) => v + 1);
   }, []);
 
   /** Pull the list and push the queue; any failure just means we stay offline for now. */
@@ -320,6 +338,25 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
     );
   }
 
+  const afterGuestChange = () => {
+    if (!client) return;
+    void refresh(client);
+    if (navigator.onLine) void syncNow(client);
+  };
+  const leaveKiosk = () => {
+    if (client) void client.leaveKiosk().then(() => setKiosk(false));
+  };
+  if (client && kiosk && client.kiosk?.kind === 'guests')
+    return (
+      <GuestKioskScreen
+        client={client}
+        version={guestsVersion}
+        afterCheckIn={afterGuestChange}
+        onExit={leaveKiosk}
+      />
+    );
+  if (client && kiosk && client.kiosk?.kind === 'board')
+    return <TableBoardScreen client={client} version={guestsVersion} onExit={leaveKiosk} />;
   if (client && kiosk && client.kiosk)
     return (
       <KioskScreen
@@ -339,6 +376,8 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
   const resultKey = shown ? (RESULT_KEY[shown] ?? 'invalid') : null;
   const views: { key: View; label: string }[] = [
     { key: 'scan', label: t('scanStaff.viewScan') },
+    // M4.4b: guest check-in by name or party, when the event has a guest list.
+    ...(client?.guests.available ? [{ key: 'guests' as const, label: t('scanGuests.view') }] : []),
     { key: 'staff', label: t('scanStaff.viewStaff') },
     { key: 'supervisor', label: t('scanStaff.viewSupervisor') },
   ];
@@ -371,6 +410,9 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
           </button>
         ))}
       </Tabs>
+      {client && view === 'guests' ? (
+        <GuestCheckinPanel client={client} version={guestsVersion} afterChange={afterGuestChange} />
+      ) : null}
       {client && view === 'staff' ? (
         <StaffPanel
           client={client}
@@ -412,6 +454,13 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
                 ))}
               </select>
             </div>
+          ) : null}
+          {client?.sessionDoor ? (
+            <SessionDoorControls
+              client={client}
+              refreshKey={`${queue}:${last?.scanId ?? ''}:${last?.server ?? ''}:${checkpointId}`}
+              onDirection={() => input.current?.focus()}
+            />
           ) : null}
           <form
             className="flex flex-wrap items-end gap-3"
@@ -487,11 +536,30 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
                     {last.typeName ? ` · ${last.typeName}` : ''}
                   </p>
                 ) : null}
+                {resultKey === 'not_enrolled' ||
+                resultKey === 'admission_level' ||
+                resultKey === 'capacity' ? (
+                  <p className="text-body">
+                    {t(`sessionCheckin.gateHint.${resultKey === 'not_enrolled' ? 'enrollment' : resultKey}`)}
+                  </p>
+                ) : null}
                 <p className="text-caption">{last.server ? t('scan.confirmed') : t('scan.pending')}</p>
                 <SignalBanner count={last.openSignals ?? 0} />
               </div>
             ) : null}
           </div>
+          {client && last ? (
+            <SessionOverride
+              client={client}
+              outcome={last}
+              online={online}
+              onDone={(result) => {
+                setLast((prev) => (prev ? { ...prev, server: result } : prev));
+                void refresh(client);
+                input.current?.focus();
+              }}
+            />
+          ) : null}
         </ScanView>
       ) : null}
     </div>

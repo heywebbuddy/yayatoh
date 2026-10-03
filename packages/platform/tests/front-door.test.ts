@@ -242,6 +242,35 @@ describe('who serves a request', () => {
       // M5.1d: the buyer's invoice and its PDF.
       '/events/summit/invoice/abc~sig',
       '/events/summit/invoice/abc~sig/pdf',
+      // Batch 3j merge: the guest website and gallery, the guest hub, a party's seat and card pages,
+      // the giving screen, card saving and pledge pay links, the call for papers, networking and
+      // chat, and the session self check-in flyer.
+      '/w/ABCD2345',
+      '/w/ABCD2345/gallery',
+      '/ar/w/ABCD2345/slideshow',
+      '/hub/abc~sig',
+      '/hub/abc~sig/manifest',
+      '/hub/abc~sig/pass/apple',
+      '/rsvp/abc~sig/seat',
+      '/rsvp/abc~sig/card',
+      '/giving-screen/org~event~1~sig',
+      '/api/donations/screen/org~event~1~sig',
+      '/events/summit/card',
+      '/events/summit/pledge/abc~sig',
+      '/events/summit/cfp',
+      '/ar/events/summit/cfp',
+      '/events/summit/network',
+      '/events/summit/network/people/0190a0b0-0000-7000-8000-000000000001',
+      '/events/summit/network/connections',
+      '/events/summit/network/meetings',
+      '/events/summit/network/meetings/0190a0b0-0000-7000-8000-000000000001/ics',
+      '/events/summit/network/profile',
+      '/events/summit/network/booths/0190a0b0-0000-7000-8000-000000000001',
+      '/events/summit/network/chat',
+      '/events/summit/network/chat/stream',
+      '/events/summit/network/chat/0190a0b0-0000-7000-8000-000000000001',
+      '/session-checkin/abcdefghijklmnopqrstuvwxyz012345',
+      '/api/gallery/file/abc~sig',
     ]) {
       expect(isPlatformPath(new URL(p, 'https://x').pathname) || decide(p).owner === 'next').toBe(true);
       expect(decide(p, flags(), { legacy: true })).toEqual({
@@ -261,6 +290,11 @@ describe('who serves a request', () => {
     expect(isPlatformPath('/events/summit/live')).toBe(false);
     expect(isPlatformPath('/events/summit/give/other')).toBe(false);
     expect(isPlatformPath('/displays')).toBe(false);
+    expect(isPlatformPath('/events/summit/cards')).toBe(false);
+    expect(isPlatformPath('/events/summit/pledge')).toBe(false);
+    expect(isPlatformPath('/events/summit/network/other')).toBe(false);
+    expect(isPlatformPath('/events/summit/network/people/a/b')).toBe(false);
+    expect(isPlatformPath('/giving-screens')).toBe(false);
   });
 });
 

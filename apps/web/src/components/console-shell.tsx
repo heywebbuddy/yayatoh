@@ -225,7 +225,7 @@ export async function ConsoleShell({
       <div className="flex min-w-0 flex-1 flex-col gap-5 px-4 pt-4 pb-12 md:px-6 lg:px-1.5 lg:pt-1.5">
         <ImpersonationBanner session={data.session} locale={data.ctx.locale} timeZone={data.org.timezone} />
         <MaintenanceBanner orgId={data.org.id} locale={data.ctx.locale} timeZone={data.org.timezone} />
-        <OrgStatusBanner status={data.org.status} />
+        <OrgStatusBanner status={data.org.status} sandbox={data.org.sandbox} />
         <IncidentBanner variant="console" />
         <header className="relative z-30 flex flex-wrap items-center gap-2.5">
           <MobileNav openLabel={t('menu')} closeLabel={t('closeMenu')}>

@@ -1,4 +1,4 @@
-import { eventDay, ruleResult, zoneAllows } from '@yayatoh/checkin-engine';
+import { eventDay, OK_RESULTS, ruleResult, zoneAllows } from '@yayatoh/checkin-engine';
 import type { TenantTx } from '@yayatoh/db';
 import { eventStaffTx, findEventTx } from '@yayatoh/events';
 import { DomainError, requireOrg } from '@yayatoh/kernel';
@@ -23,6 +23,7 @@ import {
 import { scanningDeviceOf } from './live.ts';
 import { withOccurrenceTx } from './occurrence.ts';
 import { admissions, checkpoints, SCAN_RESULTS, type ScanResult, scans } from './schema.ts';
+import { sessionDoorTx, sessionScanTx } from './session-doors.ts';
 import { checkVelocityTx, FraudSignalDto, fraudSignalsTx, openHighSignalCountTx } from './signals.ts';
 import { actorScanScopeTx, scopeAllowsCheckpoint } from './staff.ts';
 
@@ -46,6 +47,8 @@ export const ScanOutcomeDto = z.object({
    * banner to fetch a supervisor. A count only; 0 when no ticket is described.
    */
   openSignals: z.int(),
+  /** M5.6a session doors: how long the visit lasted (a scan out). */
+  dwellMs: z.int().nullable().optional(),
 });
 export type ScanOutcomeDto = z.infer<typeof ScanOutcomeDto>;
 
@@ -82,6 +85,8 @@ export const scanTicketCommand = tenantCommand({
     clientScanId: z.string().trim().min(8).max(80).optional(),
     /** Where the scanner stands. An entrance admits; a zone checks the pass includes it. */
     checkpointId: z.uuid().optional(),
+    /** M5.6a session doors: scanning people in (default) or out. */
+    direction: z.enum(['in', 'out']).default('in'),
   }),
   output: ScanOutcomeDto,
   entitlement: 'checkin',
@@ -121,7 +126,26 @@ export const scanTicketCommand = tenantCommand({
     let result: ScanResult = verdict === 'ok' ? 'admitted' : verdict;
     let admissionId: string | null = null;
     let firstAdmittedAt: Date | null = null;
-    if (verdict === 'ok' && ticket && checkpoint?.kind === 'zone') {
+    let stay: number | null = null;
+    if (checkpoint?.kind === 'session' && verdict === 'ok') {
+      // M5.6a: a session door records attendance (never an event admission) behind its gates.
+      const door = await sessionDoorTx(tx, checkpoint);
+      if (!door || !ticket) result = 'invalid';
+      else {
+        const s = await sessionScanTx(tx, emit, {
+          orgId,
+          door,
+          ticket,
+          at: ctx.now,
+          direction: input.direction,
+          deviceId,
+          scannedBy,
+        });
+        result = s.result;
+        firstAdmittedAt = s.firstInAt;
+        stay = s.dwellMs;
+      }
+    } else if (verdict === 'ok' && ticket && checkpoint?.kind === 'zone') {
       // Zones admit nobody to the event; they only check the pass includes the zone.
       result = zoneAllows(checkpoint, ticket.ticketTypeId) ? 'granted' : 'no_access';
     } else if (
@@ -220,7 +244,7 @@ export const scanTicketCommand = tenantCommand({
       checkpointId: checkpoint?.id ?? null,
     });
     // The live feed (M3.3a) follows scans nobody was let in by too: the outcome group only.
-    if (!['admitted', 'granted', 'provisional'].includes(result))
+    if (!OK_RESULTS.has(result))
       await publishRealtimeTx(tx, orgId, CHECKINS_CHANNEL, {
         eventId: event.id,
         event: 'scan',
@@ -256,6 +280,7 @@ export const scanTicketCommand = tenantCommand({
       admissionId,
       firstAdmittedAt,
       openSignals: described && ticket ? await openHighSignalCountTx(tx, ticket) : 0,
+      ...(stay !== null ? { dwellMs: stay } : {}),
     };
   },
   audit: (input, r) => ({

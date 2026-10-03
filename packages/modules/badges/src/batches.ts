@@ -380,24 +380,50 @@ export const singleBadgeQuery = tenantQuery({
   entitlement: 'badges',
   permission: 'attendees:write',
   handler: async ({ input, ctx, tx }) => {
-    const ev = await eventOfTx(tx, input.eventId);
-    const tickets = await badgeTicketsTx(tx, { eventId: input.eventId, ticketIds: [input.ticketId] });
-    const t = tickets[0];
-    if (!t) throw new DomainError('not_found', 'Ticket not found');
     // M5.1d: a balance is due on its invoice: printed only after an audited staff override.
-    if (t.paymentDue && !overrideAllows(input.overrideToken, t.id, ctx.now))
+    const [t] = await badgeTicketsTx(tx, { eventId: input.eventId, ticketIds: [input.ticketId] });
+    if (t?.paymentDue && !overrideAllows(input.overrideToken, t.id, ctx.now))
       throw new DomainError('invalid_state', 'A balance is due on this registration', {
         reason: 'balance_due',
       });
-    const rows = await badgeRowsTx(tx, input.eventId, tickets, await currentVersionMapTx(tx, input.eventId));
-    if (rows.length === 0)
-      throw new DomainError('invalid_state', 'Create a badge template first', { reason: 'no_template' });
-    return {
-      html: await renderInputTx(tx, requireOrg(ctx), ev.name, input.locale, rows),
-      holderName: t.holderName,
-    };
+    const one = await oneBadgeHtmlTx(tx, requireOrg(ctx), input.eventId, input.ticketId, input.locale);
+    return { html: one.html, holderName: one.holderName };
   },
 });
+
+/**
+ * One active ticket's badge HTML with the template it prints with now (the desk, the attendee
+ * page and M5.5b print jobs). Not found for a voided or foreign ticket.
+ */
+export async function oneBadgeHtmlTx(
+  tx: TenantTx,
+  orgId: string,
+  eventId: string,
+  ticketId: string,
+  locale: string,
+): Promise<{ html: string; holderName: string; eventName: string }> {
+  const ev = await eventOfTx(tx, eventId);
+  const tickets = await badgeTicketsTx(tx, { eventId, ticketIds: [ticketId] });
+  const t = tickets[0];
+  if (!t) throw new DomainError('not_found', 'Ticket not found');
+  const rows = await badgeRowsTx(tx, eventId, tickets, await currentVersionMapTx(tx, eventId));
+  if (rows.length === 0)
+    throw new DomainError('invalid_state', 'Create a badge template first', { reason: 'no_template' });
+  return {
+    html: await renderInputTx(tx, orgId, ev.name, locale, rows),
+    holderName: t.holderName,
+    eventName: ev.name,
+  };
+}
+
+/** Whether this ticket would print a badge now (active, and a template applies to its type). */
+export async function badgePrintableTx(tx: TenantTx, eventId: string, ticketId: string) {
+  const tickets = await badgeTicketsTx(tx, { eventId, ticketIds: [ticketId] });
+  const t = tickets[0];
+  if (!t) return null;
+  const map = await currentVersionMapTx(tx, eventId);
+  return { ticket: t, hasTemplate: versionFor(map, t.ticketTypeId) !== null };
+}
 
 /** The event's tickets for the one-badge picker (name and pass; no email). */
 export const badgeTicketsQuery = tenantQuery({

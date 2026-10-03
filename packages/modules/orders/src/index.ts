@@ -1,3 +1,10 @@
+// M5.4b: add-on orders (sponsor packages, extra lead licenses).
+export {
+  addonItemTx,
+  payAddonOrderTx,
+  startLeadLicenseCheckoutCommand,
+  startSponsorPackageCheckoutCommand,
+} from './addon-orders.ts';
 export {
   BOOKING_FILTERS,
   BookingDto,
@@ -123,6 +130,16 @@ export {
   saveSupportMacroCommand,
   supportMacrosQuery,
 } from './commands/support-macros.ts';
+// M6.1a: contact merges move this module's references (ADR 0023).
+export { ordersContactOwner } from './contact-merge.ts';
+// M6.2a: per-day facts of one event for the analytics warehouse.
+export {
+  type DailyRefundFact,
+  type DailySalesFact,
+  dailyRefundFactsTx,
+  dailySalesFactsTx,
+} from './daily-facts.ts';
+export { ordersDataSubjects } from './data-subject.ts';
 export {
   creditableMinor,
   creditNoteAmount,
@@ -296,6 +313,8 @@ export {
   parseGuestLinkToken,
   resendAt,
 } from './guest/otp.ts';
+// M5.9a: overdue invoices for the conference Command Center pack (a count).
+export { overdueInvoicesTx } from './invoice-facts.ts';
 export { invoiceMailer } from './invoice-mailer.ts';
 // M5.2b: the manage token behind a session-schedule email link.
 export { orderManageTokenTx } from './manage-link.ts';
@@ -371,6 +390,8 @@ export {
   tableNamingMailer,
   tableNamingPath,
 } from './tables.ts';
+// M6.1a: the person timeline's facts from this module (crm projection).
+export { ordersTimeline } from './timeline.ts';
 export {
   declineWaitlistOfferCommand,
   eraseWaitlistDsarTx,

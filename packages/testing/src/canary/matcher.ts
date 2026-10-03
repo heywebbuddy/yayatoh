@@ -1,5 +1,5 @@
 import type { ColumnId } from './registry.ts';
-import { codeColumns, PHONE_PREFIX, phoneColumns, privateColumnList } from './registry.ts';
+import { codeColumns, PHONE_PREFIX, PLANTED_SECRETS, phoneColumns, privateColumnList } from './registry.ts';
 
 export type LeakClass = 'secret' | 'personal' | 'internal' | 'holder' | 'unknown';
 
@@ -36,7 +36,10 @@ let classes: Map<ColumnId, LeakClass> | null = null;
 let phones: ColumnId[] | null = null;
 let codes: ColumnId[] | null = null;
 const classOf = (id: ColumnId): LeakClass => {
-  classes ??= new Map(privateColumnList().map((c) => [c.id, c.rule.class]));
+  classes ??= new Map([
+    ...privateColumnList().map((c): [ColumnId, LeakClass] => [c.id, c.rule.class]),
+    ...PLANTED_SECRETS.map((id): [ColumnId, LeakClass] => [id, 'secret']),
+  ]);
   return classes.get(id) ?? 'unknown';
 };
 

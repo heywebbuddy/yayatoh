@@ -202,6 +202,45 @@ export const KINDS = {
     urgent: false,
     params: ['url', 'eventName', 'title', 'until', 'timeZone'],
   },
+  // M6.1c data-subject requests: the self-service confirmation code (sent at once by the web app,
+  // never queued, like guest.sign-in), then the archive link or the erasure receipt link.
+  'privacy.request-code': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['code', 'minutes', 'kind'],
+  },
+  'privacy.archive-ready': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['url', 'days'],
+  },
+  'privacy.erasure-done': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['url'],
+  },
+  // M5.3b: call for papers — the proposal arrived, and the decision (to every speaker on it).
+  'program.cfp-received': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: ['eventName', 'title'],
+  },
+  'program.cfp-accepted': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: ['eventName', 'title', 'note', 'hasNote'],
+  },
+  'program.cfp-rejected': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: ['eventName', 'title', 'note', 'hasNote'],
+  },
   'guest.waitlist-code': {
     category: 'transactional',
     channels: ['email'],
@@ -441,6 +480,38 @@ export const KINDS = {
     channels: ['email'],
     urgent: false,
     params: ['url', 'name', 'year', 'amountMinor', 'currency', 'body'],
+  },
+  // M4.8e: pledge collection (P4-12), to the donor only. The summary after the night is closed
+  // (the card and the charge time, or the pay links and the due date), the invoice when a card
+  // charge falls back to a pay link, and the reminders (cancelled the moment it is paid).
+  'donations.pledge-summary': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: [
+      'url',
+      'name',
+      'eventName',
+      'amountMinor',
+      'currency',
+      'mode',
+      'card',
+      'chargeAt',
+      'dueOn',
+      'body',
+    ],
+  },
+  'donations.pledge-invoice': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: ['url', 'name', 'eventName', 'amountMinor', 'currency', 'reason', 'dueOn'],
+  },
+  'donations.pledge-reminder': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: ['url', 'name', 'eventName', 'amountMinor', 'currency', 'dueOn', 'step'],
   },
 } as const satisfies Record<string, KindDefinition>;
 

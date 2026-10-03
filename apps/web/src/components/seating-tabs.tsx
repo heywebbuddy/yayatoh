@@ -4,18 +4,34 @@ import { Link } from '@/i18n/navigation.ts';
 
 /**
  * The Seating page's views: the plan (editor, prices), assigning guests (M1.7d), the seating
- * rules (M1.7f) and, when the org has the seat_finder module, the public seat finder and its
- * poster (M1.7e).
+ * rules (M1.7f), best available and companion seats (M6.11a, with advanced seating) and, when
+ * the org has the seat_finder module, the public seat finder and its poster (M1.7e). M6.11b (with
+ * advanced seating): sales channels and allotments, and the plan's revisions.
  */
 export function SeatingTabs({
   base,
   active,
   finder = false,
+  selection = false,
   date = null,
+  guests = false,
 }: {
   base: string;
-  active: 'plan' | 'assign' | 'rules' | 'finder';
+  active:
+    | 'plan'
+    | 'assign'
+    | 'guests'
+    | 'cards'
+    | 'rules'
+    | 'selection'
+    | 'channels'
+    | 'revisions'
+    | 'finder';
   finder?: boolean;
+  /** M6.11a: the org has advanced seating (best available and companion seats). */
+  selection?: boolean;
+  /** The org has the guests module: the guest seating editor (M4.3a), cards and exports (M4.3b). */
+  guests?: boolean;
   /** The date whose chart the plan and guest views show (M1.7g); kept when switching views. */
   date?: string | null;
 }) {
@@ -24,7 +40,16 @@ export function SeatingTabs({
   const tabs = [
     { key: 'plan', href: `${base}${q}` },
     { key: 'assign', href: `${base}/assign${q}` },
+    ...(guests
+      ? ([
+          { key: 'guests', href: `${base}/guests` },
+          { key: 'cards', href: `${base}/cards` },
+        ] as const)
+      : []),
     { key: 'rules', href: `${base}/rules` },
+    ...(selection ? [{ key: 'selection', href: `${base}/best-available` } as const] : []),
+    ...(selection ? [{ key: 'channels', href: `${base}/channels` } as const] : []),
+    ...(selection ? [{ key: 'revisions', href: `${base}/revisions${q}` } as const] : []),
     ...(finder ? [{ key: 'finder', href: `${base}/finder` } as const] : []),
   ] as const;
   return (

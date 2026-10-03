@@ -1,7 +1,7 @@
 'use server';
 
 import { executeCommand, isDomainError } from '@yayatoh/kernel';
-import { createApiKeyCommand, revokeApiKeyCommand } from '@yayatoh/tenancy';
+import { createApiKeyCommand, revokeApiKeyCommand, rotateApiKeyCommand } from '@yayatoh/tenancy';
 import { revalidatePath } from 'next/cache';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
@@ -27,8 +27,16 @@ export async function createApiKeyAction(
   const name = String(form.get('name') ?? '').trim();
   const scopes = form.getAll('scope').map(String);
   const mode = form.get('mode') === 'test' ? 'test' : 'live';
+  // M6.3a: the lifetime (days), or no expiry.
+  const expiry = String(form.get('expiresInDays') ?? 'never');
+  const expiresInDays = expiry === 'never' ? null : Number(expiry);
   try {
-    const r = await executeCommand(createApiKeyCommand, { name, scopes, mode }, data.ctx, ports);
+    const r = await executeCommand(
+      createApiKeyCommand,
+      { name, scopes, mode, expiresInDays },
+      data.ctx,
+      ports,
+    );
     revalidatePath(`/o/${org}/api-keys`);
     return { kind: 'created', name: r.name, key: r.key, sandbox: r.sandbox };
   } catch (err) {
@@ -55,4 +63,38 @@ export async function revokeApiKeyAction(
     return { code: isDomainError(err) ? err.code : 'internal' };
   }
   revalidatePath(`/o/${org}/api-keys`);
+}
+
+export type RotateKeyState =
+  | { readonly kind: 'idle' }
+  | {
+      readonly kind: 'rotated';
+      readonly name: string;
+      readonly key: string;
+      /** When the old key stops (ISO), or null when it stopped at once. */
+      readonly previousUntil: string | null;
+    }
+  | { readonly kind: 'error'; readonly code: string };
+
+/** Rotate a key (M6.3a, step-up): the new secret comes back once, here. */
+export async function rotateApiKeyAction(
+  org: string,
+  apiKeyId: string,
+  _prev: RotateKeyState,
+  form: FormData,
+): Promise<RotateKeyState> {
+  const data = await loadConsole(org);
+  const overlapHours = Number(form.get('overlapHours') ?? 24);
+  try {
+    const r = await executeCommand(rotateApiKeyCommand, { apiKeyId, overlapHours }, data.ctx, ports);
+    revalidatePath(`/o/${org}/api-keys`);
+    return {
+      kind: 'rotated',
+      name: r.name,
+      key: r.key,
+      previousUntil: overlapHours > 0 ? r.previousExpiresAt.toISOString() : null,
+    };
+  } catch (err) {
+    return { kind: 'error', code: isDomainError(err) ? err.code : 'internal' };
+  }
 }
