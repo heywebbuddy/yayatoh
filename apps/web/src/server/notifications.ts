@@ -23,6 +23,8 @@ import {
   FAKE_DELIVERY_SIGNATURE_HEADER,
   fakeDeliverySecret,
   handleProviderWebhook,
+  releaseDevDeliveryEvent,
+  settleDevDeliveryEvents,
   takeDevDeliveryEvents,
   withWebPush,
 } from '@yayatoh/notifications';
@@ -213,18 +215,26 @@ export async function drainOrgMessages(
   // The fake provider's reports go through the same webhook pipeline (verified, deduplicated,
   // counted in provider health) as a real provider's.
   const adapter = webhookAdapter('email', 'fake');
-  if (adapter)
+  if (adapter) {
     for (const d of takeDevDeliveryEvents()) {
-      const out = await handleProviderWebhook(
-        adapter,
-        {
-          rawBody: d.body,
-          headers: new Headers({ [FAKE_DELIVERY_SIGNATURE_HEADER]: d.signature }),
-          url: `${appOrigin}/api/webhooks/email/fake`,
-        },
-        ports,
-      );
-      reports += out.result?.recorded ?? 0;
+      try {
+        const out = await handleProviderWebhook(
+          adapter,
+          {
+            rawBody: d.body,
+            headers: new Headers({ [FAKE_DELIVERY_SIGNATURE_HEADER]: d.signature }),
+            url: `${appOrigin}/api/webhooks/email/fake`,
+          },
+          ports,
+        );
+        reports += out.result?.recorded ?? 0;
+      } finally {
+        releaseDevDeliveryEvent(d.claimed);
+      }
     }
+    // A drain running at the same time may have taken this drain's reports: wait until they are
+    // recorded (batch 3g merge; messaging-followups.spec.ts read a bounce before it was).
+    await settleDevDeliveryEvents();
+  }
   return { consumed, journeySteps, sent, reports };
 }
