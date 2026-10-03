@@ -185,6 +185,14 @@ export {
   setPartyContactCommand,
   setPartyLocaleCommand,
 } from './invites.ts';
+// M4.8c paddle raise: who can hold a paddle, and their names for the organizer.
+export {
+  type PaddleHolderGuest,
+  type PaddleHolderParty,
+  paddleHolderNamesTx,
+  paddleHoldersTx,
+  paddleHolderTx,
+} from './paddle-holders.ts';
 export { privateColumns } from './private-columns.ts';
 export {
   createRsvpLinksCommand,

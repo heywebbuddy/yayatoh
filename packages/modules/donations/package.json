@@ -8,7 +8,9 @@
   },
   "exports": {
     ".": "./src/index.ts",
-    "./giving": "./src/domain/giving.ts"
+    "./giving": "./src/domain/giving.ts",
+    "./paddles": "./src/domain/paddles.ts",
+    "./paddle-queue": "./src/domain/paddle-queue.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"
@@ -18,6 +20,7 @@
     "@yayatoh/csv": "workspace:*",
     "@yayatoh/db": "workspace:*",
     "@yayatoh/events": "workspace:*",
+    "@yayatoh/guests": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
     "@yayatoh/orders": "workspace:*",
     "@yayatoh/pdf": "workspace:*",

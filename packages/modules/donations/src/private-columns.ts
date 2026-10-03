@@ -82,4 +82,20 @@ export const privateColumns = columnPrivacy('donations', {
     charity_address: 'public',
     copy_version: 'vocab',
   },
+  // M4.8c paddle raise. A call copies its level's public name. Who spotted an entry is staff data;
+  // paddle numbers and amounts are numbers (organizer views only, P4-13).
+  paddle_calls: {
+    level_name: 'public',
+    currency: 'vocab',
+    status: 'vocab',
+  },
+  paddle_entries: {
+    status: 'vocab',
+    spotter_user_id: internal(),
+  },
+  pledges: {
+    currency: 'vocab',
+    status: 'vocab',
+    source: 'vocab',
+  },
 });
