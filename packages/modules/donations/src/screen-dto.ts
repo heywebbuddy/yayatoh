@@ -23,7 +23,13 @@ export const ScreenStateDto = z.object({
 });
 export type ScreenStateDto = z.infer<typeof ScreenStateDto>;
 
-export const EMPTY_SCREEN: ScreenStateDto = { campaign: null, totalMinor: 0, gifts: 0, calling: null, thanks: [] };
+export const EMPTY_SCREEN: ScreenStateDto = {
+  campaign: null,
+  totalMinor: 0,
+  gifts: 0,
+  calling: null,
+  thanks: [],
+};
 
 export const SaveScreenInput = z.object({
   eventId: z.uuid(),

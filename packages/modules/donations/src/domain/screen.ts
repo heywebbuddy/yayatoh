@@ -28,7 +28,8 @@ export function screenName(g: {
 
 /** The thermometer's fill: whole percent of the goal (0–100), and whether the goal is reached. */
 export function thermometer(totalMinor: number, goalMinor: number): { percent: number; reached: boolean } {
-  if (!Number.isFinite(totalMinor) || totalMinor <= 0 || !(goalMinor > 0)) return { percent: 0, reached: false };
+  if (!Number.isFinite(totalMinor) || totalMinor <= 0 || !(goalMinor > 0))
+    return { percent: 0, reached: false };
   const reached = totalMinor >= goalMinor;
   return { percent: reached ? 100 : Math.min(99, Math.floor((totalMinor * 100) / goalMinor)), reached };
 }

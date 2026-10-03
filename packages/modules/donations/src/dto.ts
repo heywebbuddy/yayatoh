@@ -1,5 +1,11 @@
 import { z } from 'zod';
-import { CAMPAIGN_STATUSES, DISPLAY_AS, GIFT_SOURCES, GIFT_STATUSES, TRIBUTE_KINDS } from './domain/giving.ts';
+import {
+  CAMPAIGN_STATUSES,
+  DISPLAY_AS,
+  GIFT_SOURCES,
+  GIFT_STATUSES,
+  TRIBUTE_KINDS,
+} from './domain/giving.ts';
 
 const Money = z.int().positive().max(100_000_000);
 const Text = (max: number) => z.string().trim().min(1).max(max);

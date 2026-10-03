@@ -78,9 +78,9 @@ import {
   createLevelCommand as createGivingLevelCommand,
   issueReceiptTx,
   paddleConsoleQuery,
-  saveScreenCommand,
   recordPaddlesCommand,
   saveCharityProfileCommand,
+  saveScreenCommand,
   setFairValueCommand,
   verifyCharityCommand,
 } from '@yayatoh/donations';
@@ -2650,7 +2650,12 @@ async function screenRows(eventId: string, ctx: (o?: Partial<Ctx>) => Ctx) {
   const view = await executeQuery(paddleConsoleQuery, { eventId }, ctx(), ports);
   const campaign = view.campaigns[0];
   if (!campaign) throw new Error('fixture: no campaign for the screen');
-  await executeCommand(saveScreenCommand, { eventId, campaignId: campaign.id, showNames: true }, ctx(), ports);
+  await executeCommand(
+    saveScreenCommand,
+    { eventId, campaignId: campaign.id, showNames: true },
+    ctx(),
+    ports,
+  );
 }
 
 /** English headers for attendee exports (the console passes its own locale's). */

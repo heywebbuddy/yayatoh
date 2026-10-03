@@ -6,6 +6,8 @@ import { asc, eq, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { campaignOfEventTx } from './campaigns.ts';
 import { paddleEventTx } from './paddles.ts';
+import { campaigns } from './schema.ts';
+import { screens } from './schema-screens.ts';
 import {
   GIVING_SCREEN_CHANNEL,
   SaveScreenInput,
@@ -14,8 +16,6 @@ import {
 } from './screen-dto.ts';
 import { verifyScreenToken } from './screen-link.ts';
 import { publishScreenStateTx, screenRowTx, screenStateTx } from './screen-live.ts';
-import { campaigns } from './schema.ts';
-import { screens } from './schema-screens.ts';
 
 /**
  * The live giving screen (M4.8d): a thermometer for the room's projectors, opened from a signed

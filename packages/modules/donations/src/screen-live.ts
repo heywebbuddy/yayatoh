@@ -3,10 +3,10 @@ import { publishRealtimeTx } from '@yayatoh/platform';
 import { and, desc, eq, inArray, ne, sql } from 'drizzle-orm';
 import type { DisplayAs } from './domain/giving.ts';
 import { SCREEN_THANKS_MAX, screenName } from './domain/screen.ts';
-import { EMPTY_SCREEN, GIVING_SCREEN_CHANNEL, type ScreenStateDto } from './screen-dto.ts';
 import { campaigns, gifts } from './schema.ts';
 import { paddleCalls, paddleEntries } from './schema-paddles.ts';
 import { screens } from './schema-screens.ts';
+import { EMPTY_SCREEN, GIVING_SCREEN_CHANNEL, type ScreenStateDto } from './screen-dto.ts';
 
 /** Paddle entries that count towards a level (the console's rule, `callTotals`). */
 const COUNTED = ['recorded', 'confirmed'];
@@ -28,7 +28,12 @@ export async function screenStateTx(tx: TenantTx, eventId: string): Promise<Scre
   const screen = await screenRowTx(tx, eventId);
   if (!screen) return EMPTY_SCREEN;
   const [campaign] = await tx
-    .select({ id: campaigns.id, name: campaigns.name, goalMinor: campaigns.goalMinor, currency: campaigns.currency })
+    .select({
+      id: campaigns.id,
+      name: campaigns.name,
+      goalMinor: campaigns.goalMinor,
+      currency: campaigns.currency,
+    })
     .from(campaigns)
     .where(and(eq(campaigns.id, screen.campaignId), eq(campaigns.eventId, eventId)));
   if (!campaign) return EMPTY_SCREEN;
