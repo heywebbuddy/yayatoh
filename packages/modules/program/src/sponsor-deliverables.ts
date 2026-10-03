@@ -3,7 +3,13 @@ import { DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { and, asc, eq, sql } from 'drizzle-orm';
 import { z } from 'zod';
-import { dueAtFromDate, dueDateOf, isCalendarDate, isOverdue, overdueDeliverables } from './domain/sponsorship.ts';
+import {
+  dueAtFromDate,
+  dueDateOf,
+  isCalendarDate,
+  isOverdue,
+  overdueDeliverables,
+} from './domain/sponsorship.ts';
 import { sponsors } from './schema.ts';
 import { DELIVERABLE_OWNERS, sponsorDeliverables } from './schema-sponsors.ts';
 import { eventOf } from './shared.ts';
@@ -36,10 +42,7 @@ export const toDeliverable = (d: Row, sponsorName: string, timeZone: string, now
   fromPackage: d.fromPackage,
 });
 
-const DueDate = z
-  .string()
-  .trim()
-  .refine(isCalendarDate, 'must be a date (YYYY-MM-DD)');
+const DueDate = z.string().trim().refine(isCalendarDate, 'must be a date (YYYY-MM-DD)');
 
 async function deliverableTx(tx: TenantTx, eventId: string, id: string) {
   const [row] = await tx
@@ -78,7 +81,10 @@ export const addSponsorDeliverableCommand = tenantCommand({
       .where(and(eq(sponsors.id, input.sponsorId), eq(sponsors.eventId, input.eventId)))
       .for('update');
     if (!s)
-      throw new DomainError('validation_failed', 'Unknown sponsor', { field: 'sponsorId', reason: 'unknown' });
+      throw new DomainError('validation_failed', 'Unknown sponsor', {
+        field: 'sponsorId',
+        reason: 'unknown',
+      });
     const [{ n } = { n: 0 }] = await tx
       .select({ n: sql<number>`count(*)::int` })
       .from(sponsorDeliverables)
@@ -122,7 +128,12 @@ export const setSponsorDeliverableDoneCommand = tenantCommand({
       .update(sponsorDeliverables)
       .set(
         input.done
-          ? { status, completedAt: d.completedAt ?? ctx.now, completedBy: d.completedBy ?? 'organizer', updatedAt: ctx.now }
+          ? {
+              status,
+              completedAt: d.completedAt ?? ctx.now,
+              completedBy: d.completedBy ?? 'organizer',
+              updatedAt: ctx.now,
+            }
           : { status, completedAt: null, completedBy: null, updatedAt: ctx.now },
       )
       .where(eq(sponsorDeliverables.id, d.id));
@@ -176,7 +187,12 @@ export const sponsorDeliverablesQuery = tenantQuery({
       .where(eq(sponsorDeliverables.eventId, input.eventId))
       .orderBy(asc(sponsorDeliverables.dueAt), asc(sponsorDeliverables.title), asc(sponsorDeliverables.id));
     const all = rows.map((d) => toDeliverable(d, names.get(d.sponsorId) ?? '', event.timezone, ctx.now));
-    return { timezone: event.timezone, sponsors: list, deliverables: all, overdue: overdueDeliverables(all, ctx.now) };
+    return {
+      timezone: event.timezone,
+      sponsors: list,
+      deliverables: all,
+      overdue: overdueDeliverables(all, ctx.now),
+    };
   },
 });
 
@@ -199,7 +215,12 @@ export const portalSetDeliverableDoneCommand = tenantCommand({
       .update(sponsorDeliverables)
       .set(
         input.done
-          ? { status, completedAt: d.completedAt ?? ctx.now, completedBy: d.completedBy ?? 'sponsor', updatedAt: ctx.now }
+          ? {
+              status,
+              completedAt: d.completedAt ?? ctx.now,
+              completedBy: d.completedBy ?? 'sponsor',
+              updatedAt: ctx.now,
+            }
           : { status, completedAt: null, completedBy: null, updatedAt: ctx.now },
       )
       .where(eq(sponsorDeliverables.id, d.id));

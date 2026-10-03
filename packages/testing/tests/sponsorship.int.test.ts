@@ -4,9 +4,9 @@ import {
   createEventCommand,
   createPortalSession,
   type EventDto,
-  transitionEventCommand,
   portalCtx,
   portalPrincipalBySession,
+  transitionEventCommand,
 } from '@yayatoh/events';
 import { type Ctx, createCtx, executeCommand, executeQuery, isDomainError } from '@yayatoh/kernel';
 import {
@@ -112,7 +112,12 @@ async function exhibitorAdmin(name: string) {
   const x = await executeCommand(createExhibitorCommand, { eventId: ev.id, name }, a.ctx(), ports);
   const inv = await executeCommand(
     inviteExhibitorMemberCommand,
-    { eventId: ev.id, exhibitorId: x.id, email: `admin+${uniq()}@exhibitor.example`, role: 'exhibitor_admin' },
+    {
+      eventId: ev.id,
+      exhibitorId: x.id,
+      email: `admin+${uniq()}@exhibitor.example`,
+      role: 'exhibitor_admin',
+    },
     a.ctx(),
     ports,
   );
@@ -138,7 +143,10 @@ async function pay(orderId: string, amountMinor: number) {
     orgId: a.org.id,
     orderId,
   };
-  return { event, result: await executeCommand(applyProviderEventCommand, event, systemCtx(a.org.id), ports) };
+  return {
+    event,
+    result: await executeCommand(applyProviderEventCommand, event, systemCtx(a.org.id), ports),
+  };
 }
 
 const compSubscriber = sponsorCompCodes();
@@ -184,7 +192,12 @@ beforeAll(async () => {
     a.ctx(),
     ports,
   );
-  gold = await executeCommand(createSponsorTierCommand, { eventId: ev.id, name: 'Gold', position: 1 }, a.ctx(), ports);
+  gold = await executeCommand(
+    createSponsorTierCommand,
+    { eventId: ev.id, name: 'Gold', position: 1 },
+    a.ctx(),
+    ports,
+  );
   silver = await executeCommand(
     createSponsorTierCommand,
     { eventId: ev.id, name: 'Silver', position: 2 },
@@ -193,7 +206,13 @@ beforeAll(async () => {
   );
   await executeCommand(
     saveSponsorPackageCommand,
-    { eventId: ev.id, tierId: gold.id, ...goldTerms, logoPlacements: [...goldTerms.logoPlacements], deliverables: [...goldTerms.deliverables] },
+    {
+      eventId: ev.id,
+      tierId: gold.id,
+      ...goldTerms,
+      logoPlacements: [...goldTerms.logoPlacements],
+      deliverables: [...goldTerms.deliverables],
+    },
     a.ctx(),
     ports,
   );
@@ -225,7 +244,14 @@ describe('sponsor packages (M5.4b)', () => {
     await rejects(
       executeCommand(
         saveSponsorPackageCommand,
-        { ...goldTerms, eventId: ev.id, tierId: gold.id, priceMinor: null, logoPlacements: [], deliverables: [] },
+        {
+          ...goldTerms,
+          eventId: ev.id,
+          tierId: gold.id,
+          priceMinor: null,
+          logoPlacements: [],
+          deliverables: [],
+        },
         a.ctx(),
         ports,
       ),
@@ -244,7 +270,14 @@ describe('sponsor packages (M5.4b)', () => {
     await expect(
       executeCommand(
         saveSponsorPackageCommand,
-        { ...goldTerms, eventId: ev.id, tierId: gold.id, compRegistrations: 501, logoPlacements: [], deliverables: [] },
+        {
+          ...goldTerms,
+          eventId: ev.id,
+          tierId: gold.id,
+          compRegistrations: 501,
+          logoPlacements: [],
+          deliverables: [],
+        },
         a.ctx(),
         ports,
       ),
@@ -260,9 +293,9 @@ describe('sponsor packages (M5.4b)', () => {
       a.ctx(),
       ports,
     );
-    const before = (await executeQuery(exhibitorPortalAdminQuery, { eventId: ev.id }, a.ctx(), ports)).exhibitors.find(
-      (x) => x.exhibitorId === acme.exhibitor.id,
-    );
+    const before = (
+      await executeQuery(exhibitorPortalAdminQuery, { eventId: ev.id }, a.ctx(), ports)
+    ).exhibitors.find((x) => x.exhibitorId === acme.exhibitor.id);
     expect(before?.staff.allowance).toBe(5);
 
     // The portal offers both packages while the sponsor holds none.
@@ -276,7 +309,12 @@ describe('sponsor packages (M5.4b)', () => {
       { ...ctx, idempotencyKey: crypto.randomUUID() } as Ctx,
       ports,
     );
-    expect(checkout.order).toMatchObject({ status: 'reserved', totalMinor: 500_000, currency: 'USD', items: [] });
+    expect(checkout.order).toMatchObject({
+      status: 'reserved',
+      totalMinor: 500_000,
+      currency: 'USD',
+      items: [],
+    });
     // Waiting for payment: no allowances yet, and no second purchase.
     const waiting = await executeQuery(sponsorPortalQuery, {}, ctx, ports);
     expect(waiting.grant).toBeNull();
@@ -317,27 +355,39 @@ describe('sponsor packages (M5.4b)', () => {
     ]);
 
     // Exhibitor badges: base 5 + 4. Lead licenses: 1 included + 3.
-    const staff = (await executeQuery(exhibitorPortalAdminQuery, { eventId: ev.id }, a.ctx(), ports)).exhibitors.find(
-      (x) => x.exhibitorId === acme.exhibitor.id,
-    );
+    const staff = (
+      await executeQuery(exhibitorPortalAdminQuery, { eventId: ev.id }, a.ctx(), ports)
+    ).exhibitors.find((x) => x.exhibitorId === acme.exhibitor.id);
     expect(staff?.staff.allowance).toBe(9);
-    const lic = (await executeQuery(leadLicensesAdminQuery, { eventId: ev.id }, a.ctx(), ports)).exhibitors.find(
-      (x) => x.exhibitorId === acme.exhibitor.id,
-    );
+    const lic = (
+      await executeQuery(leadLicensesAdminQuery, { eventId: ev.id }, a.ctx(), ports)
+    ).exhibitors.find((x) => x.exhibitorId === acme.exhibitor.id);
     expect(lic?.licenses).toMatchObject({ included: 1, fromPackages: 3, purchased: 0, allowance: 4 });
     expect(lic?.staffBadges).toEqual({ base: 5, fromPackages: 4 });
-    expect((await executeQuery(exhibitorPortalQuery, {}, acme.ctx, ports)).staff?.allowance.allowance).toBe(9);
+    expect((await executeQuery(exhibitorPortalQuery, {}, acme.ctx, ports)).staff?.allowance.allowance).toBe(
+      9,
+    );
 
     // One session slot.
     const s1 = await executeCommand(
       createSessionCommand,
-      { eventId: ev.id, title: `Keynote ${uniq()}`, startsAt: ev.startsAt, endsAt: new Date(ev.startsAt.getTime() + HOUR) },
+      {
+        eventId: ev.id,
+        title: `Keynote ${uniq()}`,
+        startsAt: ev.startsAt,
+        endsAt: new Date(ev.startsAt.getTime() + HOUR),
+      },
       a.ctx(),
       ports,
     );
     const s2 = await executeCommand(
       createSessionCommand,
-      { eventId: ev.id, title: `Panel ${uniq()}`, startsAt: ev.startsAt, endsAt: new Date(ev.startsAt.getTime() + HOUR) },
+      {
+        eventId: ev.id,
+        title: `Panel ${uniq()}`,
+        startsAt: ev.startsAt,
+        endsAt: new Date(ev.startsAt.getTime() + HOUR),
+      },
       a.ctx(),
       ports,
     );
@@ -378,27 +428,46 @@ describe('sponsor packages (M5.4b)', () => {
     // Changing Gold later never changes what was bought.
     await executeCommand(
       saveSponsorPackageCommand,
-      { ...goldTerms, eventId: ev.id, tierId: gold.id, compRegistrations: 99, logoPlacements: [], deliverables: [] },
+      {
+        ...goldTerms,
+        eventId: ev.id,
+        tierId: gold.id,
+        compRegistrations: 99,
+        logoPlacements: [],
+        deliverables: [],
+      },
       a.ctx(),
       ports,
     );
-    expect((await executeQuery(sponsorPortalQuery, {}, ctx, ports)).grant?.allowances.compRegistrations).toBe(10);
+    expect((await executeQuery(sponsorPortalQuery, {}, ctx, ports)).grant?.allowances.compRegistrations).toBe(
+      10,
+    );
     await executeCommand(
       saveSponsorPackageCommand,
-      { eventId: ev.id, tierId: gold.id, ...goldTerms, logoPlacements: [...goldTerms.logoPlacements], deliverables: [...goldTerms.deliverables] },
+      {
+        eventId: ev.id,
+        tierId: gold.id,
+        ...goldTerms,
+        logoPlacements: [...goldTerms.logoPlacements],
+        deliverables: [...goldTerms.deliverables],
+      },
       a.ctx(),
       ports,
     );
 
     // The money: the ledger has the sale, and one `order.addon_paid@1`.
-    const paid = await withTenant(systemCtx(a.org.id), (tx) => recentEventsTx(tx, a.org.id, ['order.addon_paid'], HOUR));
+    const paid = await withTenant(systemCtx(a.org.id), (tx) =>
+      recentEventsTx(tx, a.org.id, ['order.addon_paid'], HOUR),
+    );
     expect(paid.filter((e) => e.aggregateId === checkout.order.id)).toHaveLength(1);
     expect(paid.find((e) => e.aggregateId === checkout.order.id)?.payload).toMatchObject({
       kind: 'sponsor_package',
       totalMinor: 500_000,
     });
     const ledger = await withTenant(systemCtx(a.org.id), (tx) =>
-      tx.execute<{ n: number }>(sql`select count(*)::int as n from payments.journal_entries where ref_id = ${checkout.order.id}`),
+      tx.execute<{ n: number }>(
+        sql`select count(*)::int as n from payments.journal_entries where ref_id = ${checkout.order.id}`,
+      ),
     );
     expect(ledger[0]?.n).toBeGreaterThan(0);
 
@@ -423,9 +492,19 @@ describe('sponsor packages (M5.4b)', () => {
   it('a package sells at most its quantity: a held purchase takes the place until its hold lapses', async () => {
     const first = await sponsorWithContact(`First ${uniq()}`, silver.id);
     const second = await sponsorWithContact(`Second ${uniq()}`, silver.id);
-    await executeCommand(startSponsorPackageCheckoutCommand, { tierId: silver.id, locale: 'en' }, first.ctx, ports);
+    await executeCommand(
+      startSponsorPackageCheckoutCommand,
+      { tierId: silver.id, locale: 'en' },
+      first.ctx,
+      ports,
+    );
     await rejects(
-      executeCommand(startSponsorPackageCheckoutCommand, { tierId: silver.id, locale: 'en' }, second.ctx, ports),
+      executeCommand(
+        startSponsorPackageCheckoutCommand,
+        { tierId: silver.id, locale: 'en' },
+        second.ctx,
+        ports,
+      ),
       'invalid_state',
       'sold_out',
     );
@@ -459,9 +538,18 @@ describe('sponsor packages (M5.4b)', () => {
       ports,
     );
     const p = await executeQuery(sponsorPortalQuery, {}, ctx, ports);
-    expect(p.grant).toMatchObject({ source: 'organizer', priceMinor: 0, allowances: { compRegistrations: 10 } });
+    expect(p.grant).toMatchObject({
+      source: 'organizer',
+      priceMinor: 0,
+      allowances: { compRegistrations: 10 },
+    });
     await rejects(
-      executeCommand(grantSponsorPackageCommand, { eventId: ev.id, sponsorId: sponsor.id, tierId: silver.id }, a.ctx(), ports),
+      executeCommand(
+        grantSponsorPackageCommand,
+        { eventId: ev.id, sponsorId: sponsor.id, tierId: silver.id },
+        a.ctx(),
+        ports,
+      ),
       'conflict',
       'already_granted',
     );
@@ -483,7 +571,13 @@ describe('sponsor packages (M5.4b)', () => {
     const other = await sponsorWithContact(`Other ${uniq()}`);
     const d = await executeCommand(
       addSponsorDeliverableCommand,
-      { eventId: ev.id, sponsorId: other.sponsor.id, title: 'Ad copy', owner: 'sponsor', dueDate: '2030-04-01' },
+      {
+        eventId: ev.id,
+        sponsorId: other.sponsor.id,
+        title: 'Ad copy',
+        owner: 'sponsor',
+        dueDate: '2030-04-01',
+      },
       a.ctx(),
       ports,
     );
@@ -511,13 +605,20 @@ describe('sponsor packages (M5.4b)', () => {
       'not_found',
     );
     // A revoked contact is out.
-    await executeCommand(revokeSponsorContactCommand, { eventId: ev.id, accountId: mine.accountId }, a.ctx(), ports);
+    await executeCommand(
+      revokeSponsorContactCommand,
+      { eventId: ev.id, accountId: mine.accountId },
+      a.ctx(),
+      ports,
+    );
     await rejects(executeQuery(sponsorPortalQuery, {}, mine.ctx, ports), 'forbidden');
   });
 
   it('the organizer side needs events:write; a viewer is refused', async () => {
     const viewer = userCtx(a.viewerId, a.org.id);
-    expect((await executeQuery(sponsorshipAdminQuery, { eventId: ev.id }, viewer, ports)).packages.length).toBe(2);
+    expect(
+      (await executeQuery(sponsorshipAdminQuery, { eventId: ev.id }, viewer, ports)).packages.length,
+    ).toBe(2);
     await rejects(
       executeCommand(
         saveSponsorPackageCommand,
@@ -529,7 +630,12 @@ describe('sponsor packages (M5.4b)', () => {
     );
     const s = await newSponsor(`Viewer target ${uniq()}`);
     await rejects(
-      executeCommand(grantSponsorPackageCommand, { eventId: ev.id, sponsorId: s.id, tierId: gold.id }, viewer, ports),
+      executeCommand(
+        grantSponsorPackageCommand,
+        { eventId: ev.id, sponsorId: s.id, tierId: gold.id },
+        viewer,
+        ports,
+      ),
       'forbidden',
     );
     await rejects(
@@ -567,13 +673,40 @@ describe('sponsor deliverables (M5.4b)', () => {
       a.ctx(),
       ports,
     );
-    const tier = await executeCommand(createSponsorTierCommand, { eventId: tz.id, name: 'Gold', position: 1 }, a.ctx(), ports);
-    const acme = await executeCommand(createSponsorCommand, { eventId: tz.id, tierId: tier.id, name: 'Acme' }, a.ctx(), ports);
-    const globex = await executeCommand(createSponsorCommand, { eventId: tz.id, tierId: tier.id, name: 'Globex' }, a.ctx(), ports);
-    const add = (sponsorId: string, title: string, dueDate: string, owner: 'sponsor' | 'organizer' = 'sponsor') =>
+    const tier = await executeCommand(
+      createSponsorTierCommand,
+      { eventId: tz.id, name: 'Gold', position: 1 },
+      a.ctx(),
+      ports,
+    );
+    const acme = await executeCommand(
+      createSponsorCommand,
+      { eventId: tz.id, tierId: tier.id, name: 'Acme' },
+      a.ctx(),
+      ports,
+    );
+    const globex = await executeCommand(
+      createSponsorCommand,
+      { eventId: tz.id, tierId: tier.id, name: 'Globex' },
+      a.ctx(),
+      ports,
+    );
+    const add = (
+      sponsorId: string,
+      title: string,
+      dueDate: string,
+      owner: 'sponsor' | 'organizer' = 'sponsor',
+    ) =>
       executeCommand(
         addSponsorDeliverableCommand,
-        { eventId: tz.id, sponsorId, title, owner, ownerName: owner === 'organizer' ? 'Production' : null, dueDate },
+        {
+          eventId: tz.id,
+          sponsorId,
+          title,
+          owner,
+          ownerName: owner === 'organizer' ? 'Production' : null,
+          dueDate,
+        },
         a.ctx(),
         ports,
       );
@@ -583,7 +716,12 @@ describe('sponsor deliverables (M5.4b)', () => {
     const today = await add(globex.id, 'Booth staff names', '2030-05-12');
     const done = await add(acme.id, 'Invoice', '2030-05-01');
     await add(globex.id, 'Slides', '2030-05-20');
-    await executeCommand(setSponsorDeliverableDoneCommand, { eventId: tz.id, deliverableId: done.id, done: true }, a.ctx(), ports);
+    await executeCommand(
+      setSponsorDeliverableDoneCommand,
+      { eventId: tz.id, deliverableId: done.id, done: true },
+      a.ctx(),
+      ports,
+    );
     // Invalid dates are refused.
     await expect(
       executeCommand(
@@ -596,10 +734,18 @@ describe('sponsor deliverables (M5.4b)', () => {
 
     // 23:59 on May 12 in Chicago: May 12 is still on time, the earlier ones are overdue.
     const lateMay12 = new Date(dueAtFromDate('2030-05-12', TZ).getTime() - 60_000);
-    const q1 = await executeQuery(sponsorDeliverablesQuery, { eventId: tz.id }, a.ctx({ now: lateMay12 }), ports);
+    const q1 = await executeQuery(
+      sponsorDeliverablesQuery,
+      { eventId: tz.id },
+      a.ctx({ now: lateMay12 }),
+      ports,
+    );
     expect(q1.overdue.map((d) => d.id)).toEqual([banner.id, ad.id, logo.id]);
     expect(q1.overdue.map((d) => d.sponsorName)).toEqual(['Globex', 'Acme', 'Acme']);
-    expect(q1.deliverables.find((d) => d.id === today.id)).toMatchObject({ overdue: false, dueDate: '2030-05-12' });
+    expect(q1.deliverables.find((d) => d.id === today.id)).toMatchObject({
+      overdue: false,
+      dueDate: '2030-05-12',
+    });
     // One minute later (midnight in Chicago) May 12 is overdue too.
     const q2 = await executeQuery(
       sponsorDeliverablesQuery,
@@ -609,18 +755,55 @@ describe('sponsor deliverables (M5.4b)', () => {
     );
     expect(q2.overdue.map((d) => d.id)).toEqual([banner.id, ad.id, logo.id, today.id]);
     // Ticking one off takes it off the list; deleting removes it.
-    await executeCommand(setSponsorDeliverableDoneCommand, { eventId: tz.id, deliverableId: ad.id, done: true }, a.ctx(), ports);
-    await executeCommand(deleteSponsorDeliverableCommand, { eventId: tz.id, deliverableId: banner.id }, a.ctx(), ports);
-    const q3 = await executeQuery(sponsorDeliverablesQuery, { eventId: tz.id }, a.ctx({ now: lateMay12 }), ports);
+    await executeCommand(
+      setSponsorDeliverableDoneCommand,
+      { eventId: tz.id, deliverableId: ad.id, done: true },
+      a.ctx(),
+      ports,
+    );
+    await executeCommand(
+      deleteSponsorDeliverableCommand,
+      { eventId: tz.id, deliverableId: banner.id },
+      a.ctx(),
+      ports,
+    );
+    const q3 = await executeQuery(
+      sponsorDeliverablesQuery,
+      { eventId: tz.id },
+      a.ctx({ now: lateMay12 }),
+      ports,
+    );
     expect(q3.overdue.map((d) => d.id)).toEqual([logo.id]);
-    expect(q3.deliverables.find((d) => d.id === ad.id)).toMatchObject({ status: 'done', completedBy: 'organizer' });
+    expect(q3.deliverables.find((d) => d.id === ad.id)).toMatchObject({
+      status: 'done',
+      completedBy: 'organizer',
+    });
     // Reopening puts it back.
-    await executeCommand(setSponsorDeliverableDoneCommand, { eventId: tz.id, deliverableId: ad.id, done: false }, a.ctx(), ports);
-    const q4 = await executeQuery(sponsorDeliverablesQuery, { eventId: tz.id }, a.ctx({ now: lateMay12 }), ports);
+    await executeCommand(
+      setSponsorDeliverableDoneCommand,
+      { eventId: tz.id, deliverableId: ad.id, done: false },
+      a.ctx(),
+      ports,
+    );
+    const q4 = await executeQuery(
+      sponsorDeliverablesQuery,
+      { eventId: tz.id },
+      a.ctx({ now: lateMay12 }),
+      ports,
+    );
     expect(q4.overdue.map((d) => d.id)).toEqual([ad.id, logo.id]);
     // The sponsoring admin page counts them per sponsor.
-    const admin = await executeQuery(sponsorshipAdminQuery, { eventId: tz.id }, a.ctx({ now: lateMay12 }), ports);
-    expect(admin.sponsors.find((s) => s.id === acme.id)?.deliverables).toEqual({ open: 2, done: 1, overdue: 2 });
+    const admin = await executeQuery(
+      sponsorshipAdminQuery,
+      { eventId: tz.id },
+      a.ctx({ now: lateMay12 }),
+      ports,
+    );
+    expect(admin.sponsors.find((s) => s.id === acme.id)?.deliverables).toEqual({
+      open: 2,
+      done: 1,
+      overdue: 2,
+    });
   });
 
   it('a sponsor contact ticks off only the sponsor’s own deliverables', async () => {
@@ -633,12 +816,23 @@ describe('sponsor deliverables (M5.4b)', () => {
     );
     const theirs = await executeCommand(
       addSponsorDeliverableCommand,
-      { eventId: ev.id, sponsorId: sponsor.id, title: 'Stage banner', owner: 'organizer', dueDate: '2030-04-01' },
+      {
+        eventId: ev.id,
+        sponsorId: sponsor.id,
+        title: 'Stage banner',
+        owner: 'organizer',
+        dueDate: '2030-04-01',
+      },
       a.ctx(),
       ports,
     );
     expect(
-      await executeCommand(portalSetDeliverableDoneCommand, { deliverableId: own.id, done: true }, ctx, ports),
+      await executeCommand(
+        portalSetDeliverableDoneCommand,
+        { deliverableId: own.id, done: true },
+        ctx,
+        ports,
+      ),
     ).toMatchObject({ status: 'done' });
     await rejects(
       executeCommand(portalSetDeliverableDoneCommand, { deliverableId: theirs.id, done: true }, ctx, ports),
@@ -646,7 +840,10 @@ describe('sponsor deliverables (M5.4b)', () => {
     );
     const view = await executeQuery(sponsorPortalQuery, {}, ctx, ports);
     expect(view.deliverables.find((d) => d.id === own.id)).toMatchObject({ status: 'done', overdue: false });
-    expect(view.deliverables.find((d) => d.id === theirs.id)).toMatchObject({ status: 'open', owner: 'organizer' });
+    expect(view.deliverables.find((d) => d.id === theirs.id)).toMatchObject({
+      status: 'open',
+      owner: 'organizer',
+    });
   });
 });
 
@@ -659,8 +856,18 @@ describe('lead licenses (M5.4b, P5-4)', () => {
       ports,
     );
     const x = await exhibitorAdmin(`Leads ${uniq()}`);
-    const staff = await executeCommand(portalInviteStaffCommand, { email: `s1+${uniq()}@x.example` }, x.ctx, ports);
-    const staff2 = await executeCommand(portalInviteStaffCommand, { email: `s2+${uniq()}@x.example` }, x.ctx, ports);
+    const staff = await executeCommand(
+      portalInviteStaffCommand,
+      { email: `s1+${uniq()}@x.example` },
+      x.ctx,
+      ports,
+    );
+    const staff2 = await executeCommand(
+      portalInviteStaffCommand,
+      { email: `s2+${uniq()}@x.example` },
+      x.ctx,
+      ports,
+    );
     expect((await executeQuery(portalLeadLicensesQuery, {}, x.ctx, ports)).licenses).toMatchObject({
       included: 1,
       allowance: 1,
@@ -684,7 +891,12 @@ describe('lead licenses (M5.4b, P5-4)', () => {
       a.ctx(),
       ports,
     );
-    const order = await executeCommand(startLeadLicenseCheckoutCommand, { quantity: 2, locale: 'en' }, x.ctx, ports);
+    const order = await executeCommand(
+      startLeadLicenseCheckoutCommand,
+      { quantity: 2, locale: 'en' },
+      x.ctx,
+      ports,
+    );
     expect(order.order).toMatchObject({ totalMinor: 50_000, status: 'reserved' });
     // Waiting for payment adds nothing.
     expect((await executeQuery(portalLeadLicensesQuery, {}, x.ctx, ports)).licenses.allowance).toBe(1);
@@ -730,13 +942,20 @@ describe('lead licenses (M5.4b, P5-4)', () => {
     const x = await exhibitorAdmin(`Race ${uniq()}`);
     await executeCommand(
       setSponsorExhibitorCommand,
-      { eventId: ev.id, sponsorId: (await newSponsor(`Race sponsor ${uniq()}`)).id, exhibitorId: x.exhibitor.id },
+      {
+        eventId: ev.id,
+        sponsorId: (await newSponsor(`Race sponsor ${uniq()}`)).id,
+        exhibitorId: x.exhibitor.id,
+      },
       a.ctx(),
       ports,
     );
     const people = [];
     for (let i = 0; i < 5; i++)
-      people.push((await executeCommand(portalInviteStaffCommand, { email: `r${i}+${uniq()}@x.example` }, x.ctx, ports)).member.id);
+      people.push(
+        (await executeCommand(portalInviteStaffCommand, { email: `r${i}+${uniq()}@x.example` }, x.ctx, ports))
+          .member.id,
+      );
     const results = await Promise.allSettled(
       [x.accountId, ...people].map((accountId) =>
         executeCommand(portalAssignLeadLicenseCommand, { accountId }, x.ctx, ports),
@@ -770,7 +989,12 @@ describe('sponsor contacts and staff badges from packages (M5.4b)', () => {
   it('staff invites stop at the base allowance plus the package’s badges', async () => {
     const x = await exhibitorAdmin(`Badges ${uniq()}`);
     const s = await newSponsor(`Badge sponsor ${uniq()}`);
-    await executeCommand(setSponsorExhibitorCommand, { eventId: ev.id, sponsorId: s.id, exhibitorId: x.exhibitor.id }, a.ctx(), ports);
+    await executeCommand(
+      setSponsorExhibitorCommand,
+      { eventId: ev.id, sponsorId: s.id, exhibitorId: x.exhibitor.id },
+      a.ctx(),
+      ports,
+    );
     // Another sponsor can't claim the same exhibitor.
     await rejects(
       executeCommand(
@@ -789,7 +1013,12 @@ describe('sponsor contacts and staff badges from packages (M5.4b)', () => {
       'invalid_state',
       'allowance_reached',
     );
-    await executeCommand(grantSponsorPackageCommand, { eventId: ev.id, sponsorId: s.id, tierId: gold.id }, a.ctx(), ports);
+    await executeCommand(
+      grantSponsorPackageCommand,
+      { eventId: ev.id, sponsorId: s.id, tierId: gold.id },
+      a.ctx(),
+      ports,
+    );
     for (let i = 0; i < 4; i++)
       await executeCommand(portalInviteStaffCommand, { email: `c${i}+${uniq()}@x.example` }, x.ctx, ports);
     await rejects(
@@ -802,7 +1031,12 @@ describe('sponsor contacts and staff badges from packages (M5.4b)', () => {
   it('contacts: invited once per address, emailed through the outbox', async () => {
     const s = await newSponsor(`Contacts ${uniq()}`);
     const email = `one+${uniq()}@sponsor.example`;
-    const inv = await executeCommand(inviteSponsorContactCommand, { eventId: ev.id, sponsorId: s.id, email }, a.ctx(), ports);
+    const inv = await executeCommand(
+      inviteSponsorContactCommand,
+      { eventId: ev.id, sponsorId: s.id, email },
+      a.ctx(),
+      ports,
+    );
     expect(inv.contact).toMatchObject({ status: 'pending', email });
     await rejects(
       executeCommand(inviteSponsorContactCommand, { eventId: ev.id, sponsorId: s.id, email }, a.ctx(), ports),
@@ -812,7 +1046,9 @@ describe('sponsor contacts and staff badges from packages (M5.4b)', () => {
     const events = await withTenant(systemCtx(a.org.id), (tx) =>
       recentEventsTx(tx, a.org.id, ['portal.account_invited'], HOUR),
     );
-    expect(events.find((e) => e.aggregateId === inv.contact.id)?.payload).toMatchObject({ role: 'sponsor_contact' });
+    expect(events.find((e) => e.aggregateId === inv.contact.id)?.payload).toMatchObject({
+      role: 'sponsor_contact',
+    });
   });
 });
 
@@ -846,7 +1082,12 @@ describe('comp registration codes (M5.4b)', () => {
         ports,
       );
     await executeCommand(transitionEventCommand, { eventId: conf.id, transition: 'publish' }, a.ctx(), ports);
-    const tier = await executeCommand(createSponsorTierCommand, { eventId: conf.id, name: 'Gold', position: 1 }, a.ctx(), ports);
+    const tier = await executeCommand(
+      createSponsorTierCommand,
+      { eventId: conf.id, name: 'Gold', position: 1 },
+      a.ctx(),
+      ports,
+    );
     await executeCommand(
       saveSponsorPackageCommand,
       {
@@ -863,16 +1104,26 @@ describe('comp registration codes (M5.4b)', () => {
       a.ctx(),
       ports,
     );
-    const s = await executeCommand(createSponsorCommand, { eventId: conf.id, tierId: tier.id, name: 'Acme' }, a.ctx(), ports);
-    await executeCommand(grantSponsorPackageCommand, { eventId: conf.id, sponsorId: s.id, tierId: tier.id }, a.ctx(), ports);
+    const s = await executeCommand(
+      createSponsorCommand,
+      { eventId: conf.id, tierId: tier.id, name: 'Acme' },
+      a.ctx(),
+      ports,
+    );
+    await executeCommand(
+      grantSponsorPackageCommand,
+      { eventId: conf.id, sponsorId: s.id, tierId: tier.id },
+      a.ctx(),
+      ports,
+    );
     await drainCompCodes();
     // Twice is fine: one code per grant.
     await drainCompCodes();
     const admin = await executeQuery(sponsorshipAdminQuery, { eventId: conf.id }, a.ctx(), ports);
     const code = admin.sponsors[0]?.grant?.compCode ?? '';
     expect(code).toMatch(/^COMP-/);
-    const codes = (await executeQuery(listPromoCodesQuery, { eventId: conf.id }, a.ctx(), ports)).filter((p) =>
-      p.code.startsWith('COMP-'),
+    const codes = (await executeQuery(listPromoCodesQuery, { eventId: conf.id }, a.ctx(), ports)).filter(
+      (p) => p.code.startsWith('COMP-'),
     );
     expect(codes).toHaveLength(1);
     const register = (email: string, itemIds: string[]) =>

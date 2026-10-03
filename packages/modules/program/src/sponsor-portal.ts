@@ -2,7 +2,7 @@ import { tenantQuery } from '@yayatoh/platform';
 import { and, asc, eq, inArray } from 'drizzle-orm';
 import { z } from 'zod';
 import { exhibitors, sessions, sponsorTiers } from './schema.ts';
-import { sponsorDeliverables, sponsorGrants, sponsoredSessions, sponsorProfiles } from './schema-sponsors.ts';
+import { sponsorDeliverables, sponsoredSessions, sponsorGrants, sponsorProfiles } from './schema-sponsors.ts';
 import { eventOf } from './shared.ts';
 import { sponsorPrincipalTx } from './sponsor-allowances.ts';
 import { toDeliverable } from './sponsor-deliverables.ts';
@@ -25,14 +25,22 @@ export const sponsorPortalQuery = tenantQuery({
     const { principal: me, sponsor } = await sponsorPrincipalTx(tx, ctx);
     const event = await eventOf(tx, me.eventId);
     const [tier] = await tx.select().from(sponsorTiers).where(eq(sponsorTiers.id, sponsor.tierId));
-    const [profile] = await tx.select().from(sponsorProfiles).where(eq(sponsorProfiles.sponsorId, sponsor.id));
+    const [profile] = await tx
+      .select()
+      .from(sponsorProfiles)
+      .where(eq(sponsorProfiles.sponsorId, sponsor.id));
     const [exhibitor] = profile?.exhibitorId
-      ? await tx.select({ name: exhibitors.name }).from(exhibitors).where(eq(exhibitors.id, profile.exhibitorId))
+      ? await tx
+          .select({ name: exhibitors.name })
+          .from(exhibitors)
+          .where(eq(exhibitors.id, profile.exhibitorId))
       : [];
     const grants = await tx
       .select()
       .from(sponsorGrants)
-      .where(and(eq(sponsorGrants.sponsorId, sponsor.id), inArray(sponsorGrants.status, ['active', 'pending'])));
+      .where(
+        and(eq(sponsorGrants.sponsorId, sponsor.id), inArray(sponsorGrants.status, ['active', 'pending'])),
+      );
     const active = grants.find((g) => g.status === 'active') ?? null;
     const pending =
       grants.find((g) => g.status === 'pending' && g.holdUntil !== null && g.holdUntil > ctx.now) ?? null;
@@ -84,12 +92,12 @@ export const sponsorPortalQuery = tenantQuery({
                 : [],
             ),
       deliverables: deliverables.map((d) => {
-        const { sponsorId: _s, sponsorName: _n, completedBy: _c, ...rest } = toDeliverable(
-          d,
-          sponsor.name,
-          event.timezone,
-          ctx.now,
-        );
+        const {
+          sponsorId: _s,
+          sponsorName: _n,
+          completedBy: _c,
+          ...rest
+        } = toDeliverable(d, sponsor.name, event.timezone, ctx.now);
         return rest;
       }),
     });

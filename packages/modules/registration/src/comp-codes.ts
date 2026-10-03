@@ -1,6 +1,6 @@
 import { randomInt } from 'node:crypto';
 import type { TenantTx } from '@yayatoh/db';
-import { createCtx, type Ctx, DomainError } from '@yayatoh/kernel';
+import { type Ctx, createCtx, DomainError } from '@yayatoh/kernel';
 import { defineSubscriber, type Subscriber, tenantQuery } from '@yayatoh/platform';
 import {
   activeGrantOfSponsorTx,
@@ -60,7 +60,8 @@ const run = <T>(handler: unknown, args: Args) =>
 /** Make (once) the comp code of an active grant. Exported for the subscriber and tests. */
 export async function makeCompCodeTx(tx: TenantTx, ctx: Ctx, grantId: string): Promise<string | null> {
   const g = await grantCompStateTx(tx, grantId);
-  if (!g || g.status !== 'active' || g.compCode || g.compRegistrations === 0) return g?.compCode ?? null;
+  if (!g) return null;
+  if (g.status !== 'active' || g.compCode || g.compRegistrations === 0) return g.compCode;
   const passes = await admissionPassesTx(tx, g.eventId);
   for (let attempt = 0; attempt < 5; attempt++) {
     const code = compCode();

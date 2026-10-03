@@ -23,8 +23,8 @@ import {
   LOGO_PLACEMENTS,
   type LogoPlacement,
   sponsorDeliverables,
-  sponsorGrants,
   sponsoredSessions,
+  sponsorGrants,
   sponsorPackages,
   sponsorProfiles,
 } from './schema-sponsors.ts';
@@ -67,8 +67,7 @@ const Email = z
   .max(254)
   .regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'must be an email address');
 
-const templatesOf = (v: unknown): DeliverableTemplateDto[] =>
-  z.array(DeliverableTemplate).catch([]).parse(v);
+const templatesOf = (v: unknown): DeliverableTemplateDto[] => z.array(DeliverableTemplate).catch([]).parse(v);
 
 export const allowancesOf = (r: {
   compRegistrations: number;
@@ -153,8 +152,7 @@ async function packageTx(tx: TenantTx, eventId: string, tierId: string, lock = f
     .from(sponsorPackages)
     .where(and(eq(sponsorPackages.tierId, tierId), eq(sponsorPackages.eventId, eventId)));
   const [row] = await (lock ? q.for('update') : q);
-  if (!row)
-    throw new DomainError('invalid_state', 'This package has no terms yet', { reason: 'no_terms' });
+  if (!row) throw new DomainError('invalid_state', 'This package has no terms yet', { reason: 'no_terms' });
   return row;
 }
 
@@ -196,10 +194,7 @@ async function currentGrantsTx(tx: TenantTx, sponsorId: string, now: Date) {
  * `program.sponsor_package.activated@1` is emitted.
  */
 async function activateEffectsTx(tx: TenantTx, ctx: Ctx, g: GrantRow, event: EventDto, emit: Emit) {
-  await tx
-    .update(sponsors)
-    .set({ tierId: g.tierId, updatedAt: ctx.now })
-    .where(eq(sponsors.id, g.sponsorId));
+  await tx.update(sponsors).set({ tierId: g.tierId, updatedAt: ctx.now }).where(eq(sponsors.id, g.sponsorId));
   const [pkg] = await tx.select().from(sponsorPackages).where(eq(sponsorPackages.tierId, g.tierId));
   const templates = templatesOf(pkg?.deliverables);
   if (templates.length)
@@ -304,7 +299,9 @@ export const grantSponsorPackageCommand = tenantCommand({
     const pkg = await packageTx(tx, input.eventId, input.tierId, true);
     const { active, pending } = await currentGrantsTx(tx, input.sponsorId, ctx.now);
     if (active)
-      throw new DomainError('conflict', 'This sponsor already holds a package', { reason: 'already_granted' });
+      throw new DomainError('conflict', 'This sponsor already holds a package', {
+        reason: 'already_granted',
+      });
     if (pending)
       throw new DomainError('invalid_state', 'A purchase is waiting for payment', {
         reason: 'purchase_pending',
@@ -567,7 +564,10 @@ export const assignSponsoredSessionCommand = tenantCommand({
       .from(sessions)
       .where(and(eq(sessions.id, input.sessionId), eq(sessions.eventId, input.eventId)));
     if (!s)
-      throw new DomainError('validation_failed', 'Unknown session', { field: 'sessionId', reason: 'unknown' });
+      throw new DomainError('validation_failed', 'Unknown session', {
+        field: 'sessionId',
+        reason: 'unknown',
+      });
     const [taken] = await tx
       .select()
       .from(sponsoredSessions)
@@ -635,7 +635,11 @@ export async function packagesOfTx(tx: TenantTx, eventId: string, now: Date): Pr
     .orderBy(asc(sponsorTiers.position), asc(sponsorTiers.name));
   const terms = await tx.select().from(sponsorPackages).where(eq(sponsorPackages.eventId, eventId));
   const grants = await tx
-    .select({ tierId: sponsorGrants.tierId, status: sponsorGrants.status, holdUntil: sponsorGrants.holdUntil })
+    .select({
+      tierId: sponsorGrants.tierId,
+      status: sponsorGrants.status,
+      holdUntil: sponsorGrants.holdUntil,
+    })
     .from(sponsorGrants)
     .where(eq(sponsorGrants.eventId, eventId));
   return tiers.map((t) => {
@@ -684,7 +688,10 @@ export const sponsorshipAdminQuery = tenantQuery({
       .where(
         and(eq(sponsorGrants.eventId, input.eventId), inArray(sponsorGrants.status, ['active', 'pending'])),
       );
-    const profiles = await tx.select().from(sponsorProfiles).where(eq(sponsorProfiles.eventId, input.eventId));
+    const profiles = await tx
+      .select()
+      .from(sponsorProfiles)
+      .where(eq(sponsorProfiles.eventId, input.eventId));
     const xs = await tx
       .select({ id: exhibitors.id, name: exhibitors.name })
       .from(exhibitors)
@@ -698,7 +705,11 @@ export const sponsorshipAdminQuery = tenantQuery({
       .orderBy(asc(sessions.startsAt), asc(sessions.title));
     const contacts = await portalAccountsTx(tx, input.eventId, 'sponsor', ctx.now);
     const deliverables = await tx
-      .select({ sponsorId: sponsorDeliverables.sponsorId, status: sponsorDeliverables.status, dueAt: sponsorDeliverables.dueAt })
+      .select({
+        sponsorId: sponsorDeliverables.sponsorId,
+        status: sponsorDeliverables.status,
+        dueAt: sponsorDeliverables.dueAt,
+      })
       .from(sponsorDeliverables)
       .where(eq(sponsorDeliverables.eventId, input.eventId));
     return {
@@ -758,8 +769,7 @@ export async function reserveSponsorPackageTx(
   const pkg = await packageTx(tx, principal.eventId, input.tierId, true).catch(() => null);
   if (!pkg?.onSale || pkg.priceMinor === null) throw new DomainError('not_found', 'Package not found');
   const { active, pending } = await currentGrantsTx(tx, sponsor.id, ctx.now);
-  if (active)
-    throw new DomainError('conflict', 'You already hold a package', { reason: 'already_granted' });
+  if (active) throw new DomainError('conflict', 'You already hold a package', { reason: 'already_granted' });
   if (pending)
     throw new DomainError('invalid_state', 'A purchase is waiting for payment', {
       reason: 'purchase_pending',
@@ -851,9 +861,7 @@ export async function attachCompCodeTx(
   const rows = await tx
     .update(sponsorGrants)
     .set({ compCode: code.code, compPromoCodeId: code.promoCodeId })
-    .where(
-      and(eq(sponsorGrants.id, grantId), eq(sponsorGrants.status, 'active'), sql`comp_code is null`),
-    )
+    .where(and(eq(sponsorGrants.id, grantId), eq(sponsorGrants.status, 'active'), sql`comp_code is null`))
     .returning({ id: sponsorGrants.id });
   return rows.length > 0;
 }

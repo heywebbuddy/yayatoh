@@ -183,7 +183,9 @@ import {
 } from '@yayatoh/platform';
 import { dsarExportBulk } from '@yayatoh/privacy';
 import {
+  addSponsorDeliverableCommand,
   assignBoothCommand,
+  assignSponsoredSessionCommand,
   claimSessionPlaceTx,
   createExhibitorCommand,
   createPortalTaskCommand,
@@ -192,19 +194,14 @@ import {
   createSessionGroupCommand,
   createSessionTypeCommand,
   createSpeakerCommand,
-  addSponsorDeliverableCommand,
-  assignSponsoredSessionCommand,
   createSponsorCommand,
-  grantSponsorPackageCommand,
-  inviteSponsorContactCommand,
-  portalAssignLeadLicenseCommand,
-  saveLeadLicenseSettingsCommand,
-  saveSponsorPackageCommand,
-  setSponsorExhibitorCommand,
   createSponsorTierCommand,
   createTrackCommand,
+  grantSponsorPackageCommand,
   inviteExhibitorMemberCommand,
   inviteSpeakerCommand,
+  inviteSponsorContactCommand,
+  portalAssignLeadLicenseCommand,
   portalInviteStaffCommand,
   portalSaveProfileCommand,
   proposeProfileChangeCommand,
@@ -213,7 +210,10 @@ import {
   saveBoothCommand,
   saveExhibitorListingCommand,
   saveExhibitorSettingsCommand,
+  saveLeadLicenseSettingsCommand,
+  saveSponsorPackageCommand,
   setSessionAgendaCommand,
+  setSponsorExhibitorCommand,
   speakerPortalQuery,
 } from '@yayatoh/program';
 import {
@@ -1643,12 +1643,7 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ctx(),
     ports,
   );
-  await executeCommand(
-    startLeadLicenseCheckoutCommand,
-    { quantity: 2, locale: 'en' },
-    exhibitorCtx,
-    ports,
-  );
+  await executeCommand(startLeadLicenseCheckoutCommand, { quantity: 2, locale: 'en' }, exhibitorCtx, ports);
   await executeCommand(
     portalAssignLeadLicenseCommand,
     { accountId: exhibitorInvite.member.id },

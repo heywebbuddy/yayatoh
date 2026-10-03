@@ -58,7 +58,11 @@ async function livePeopleTx(tx: TenantTx, ctx: Ctx, eventId: string, exhibitorId
 async function seatsTx(tx: TenantTx, ctx: Ctx, eventId: string, exhibitorId: string) {
   const live = new Set((await livePeopleTx(tx, ctx, eventId, exhibitorId)).map((a) => a.id));
   const rows = await tx.select().from(leadLicenses).where(eq(leadLicenses.exhibitorId, exhibitorId));
-  return { live, seats: rows.filter((r) => live.has(r.accountId)), stale: rows.filter((r) => !live.has(r.accountId)) };
+  return {
+    live,
+    seats: rows.filter((r) => live.has(r.accountId)),
+    stale: rows.filter((r) => !live.has(r.accountId)),
+  };
 }
 
 async function purchasedTx(tx: TenantTx, exhibitorId: string) {
@@ -66,7 +70,9 @@ async function purchasedTx(tx: TenantTx, exhibitorId: string) {
     await tx
       .select({ quantity: leadLicensePurchases.quantity })
       .from(leadLicensePurchases)
-      .where(and(eq(leadLicensePurchases.exhibitorId, exhibitorId), eq(leadLicensePurchases.status, 'active')))
+      .where(
+        and(eq(leadLicensePurchases.exhibitorId, exhibitorId), eq(leadLicensePurchases.status, 'active')),
+      )
   ).map((r) => r.quantity);
 }
 
@@ -80,7 +86,11 @@ export async function leadLicenseUseTx(
   const settings = await leadLicenseSettingsTx(tx, eventId);
   const fromPackages = await packageLicensesTx(tx, exhibitorId);
   const purchased = await purchasedTx(tx, exhibitorId);
-  const allowance = leadLicenseAllowance({ included: settings.includedLeadLicenses, fromPackages, purchased });
+  const allowance = leadLicenseAllowance({
+    included: settings.includedLeadLicenses,
+    fromPackages,
+    purchased,
+  });
   const { seats } = await seatsTx(tx, ctx, eventId, exhibitorId);
   const sum = (xs: number[]) => xs.reduce((n, x) => n + x, 0);
   return {
@@ -205,7 +215,11 @@ export const portalAssignLeadLicenseCommand = tenantCommand({
   permission: 'portal:exhibitor_admin',
   handler: async ({ input, ctx, tx }) => {
     const { principal, exhibitor } = await exhibitorPrincipalTx(tx, ctx, 'admin');
-    await tx.select({ id: exhibitors.id }).from(exhibitors).where(eq(exhibitors.id, exhibitor.id)).for('update');
+    await tx
+      .select({ id: exhibitors.id })
+      .from(exhibitors)
+      .where(eq(exhibitors.id, exhibitor.id))
+      .for('update');
     const { live, seats, stale } = await seatsTx(tx, ctx, principal.eventId, exhibitor.id);
     // Another exhibitor's people, revoked people and unknown ids look the same.
     if (!live.has(input.accountId)) throw new DomainError('not_found');
@@ -287,10 +301,16 @@ export async function reserveLeadLicensesTx(
   input: { quantity: number },
 ): Promise<AddonOfferDto> {
   const { principal, exhibitor } = await exhibitorPrincipalTx(tx, ctx, 'admin');
-  await tx.select({ id: exhibitors.id }).from(exhibitors).where(eq(exhibitors.id, exhibitor.id)).for('update');
+  await tx
+    .select({ id: exhibitors.id })
+    .from(exhibitors)
+    .where(eq(exhibitors.id, exhibitor.id))
+    .for('update');
   const settings = await leadLicenseSettingsTx(tx, principal.eventId);
   if (settings.leadLicensePriceMinor === null)
-    throw new DomainError('invalid_state', 'Extra lead licenses are not for sale', { reason: 'not_for_sale' });
+    throw new DomainError('invalid_state', 'Extra lead licenses are not for sale', {
+      reason: 'not_for_sale',
+    });
   const [live] = await tx
     .select({ id: leadLicensePurchases.id })
     .from(leadLicensePurchases)
@@ -302,7 +322,9 @@ export async function reserveLeadLicensesTx(
       ),
     );
   if (live)
-    throw new DomainError('invalid_state', 'A purchase is waiting for payment', { reason: 'purchase_pending' });
+    throw new DomainError('invalid_state', 'A purchase is waiting for payment', {
+      reason: 'purchase_pending',
+    });
   const bought = (await purchasedTx(tx, exhibitor.id)).reduce((n, q) => n + q, 0);
   if (bought + input.quantity > MAX_PURCHASED_LICENSES)
     throw new DomainError('validation_failed', 'Too many licenses', {
@@ -361,4 +383,3 @@ export async function activateLicensePurchaseTx(
     .where(eq(leadLicensePurchases.id, p.id));
   return 'activated';
 }
-

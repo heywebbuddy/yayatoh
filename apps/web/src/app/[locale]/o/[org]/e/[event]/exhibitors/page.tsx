@@ -74,6 +74,9 @@ export default async function ExhibitorsPage({
             <Link href={`/o/${org}/e/${event}/exhibitors/booths`} className={buttonClass('secondary')}>
               {tx('boothsLink')}
             </Link>
+            <Link href={`/o/${org}/e/${event}/exhibitors/licenses`} className={buttonClass('secondary')}>
+              {tx('licensesLink')}
+            </Link>
           </nav>
         }
       />

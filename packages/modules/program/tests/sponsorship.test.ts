@@ -68,7 +68,16 @@ describe('package allowances (M5.4b)', () => {
         now,
       ),
     ).toBe(1);
-    expect(packagesLeft(1, [{ status: 'active', holdUntil: null }, { status: 'active', holdUntil: null }], now)).toBe(0);
+    expect(
+      packagesLeft(
+        1,
+        [
+          { status: 'active', holdUntil: null },
+          { status: 'active', holdUntil: null },
+        ],
+        now,
+      ),
+    ).toBe(0);
   });
 });
 

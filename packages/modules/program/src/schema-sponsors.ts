@@ -247,7 +247,9 @@ export const leadLicensePurchases = tenantTable(
     activatedAt: ts('activated_at'),
   },
   (t) => [
-    uniqueIndex('lead_license_purchases_org_order_key').on(t.orgId, t.orderId).where(sql`order_id is not null`),
+    uniqueIndex('lead_license_purchases_org_order_key')
+      .on(t.orgId, t.orderId)
+      .where(sql`order_id is not null`),
     index('lead_license_purchases_org_exhibitor_idx').on(t.orgId, t.exhibitorId, t.status),
     orgFk('lead_license_purchases_exhibitor_fk', [t.orgId, t.exhibitorId], exhibitors).onDelete('cascade'),
     check('lead_license_purchases_quantity_check', sql`quantity between 1 and 100`),

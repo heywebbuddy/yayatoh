@@ -6,14 +6,6 @@ export {
   registrationCapacity,
   syncOrderClaimTx,
 } from './capacity.ts';
-// M5.4b: sponsor comp registration codes.
-export {
-  compCode,
-  isCompCode,
-  makeCompCodeTx,
-  sponsorCompCodes,
-  sponsorCompUsageQuery,
-} from './comp-codes.ts';
 export {
   eligibilityOf,
   hasRegistration,
@@ -23,6 +15,14 @@ export {
   StartRegistrationInput,
   startRegistrationCommand,
 } from './checkout.ts';
+// M5.4b: sponsor comp registration codes.
+export {
+  compCode,
+  isCompCode,
+  makeCompCodeTx,
+  sponsorCompCodes,
+  sponsorCompUsageQuery,
+} from './comp-codes.ts';
 export * from './domain/capacity.ts';
 export * from './domain/eligibility.ts';
 export * from './domain/matrix.ts';
