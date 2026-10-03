@@ -995,6 +995,13 @@
       "when": 1791062479243,
       "tag": "0141_massive_tusk",
       "breakpoints": true
+    },
+    {
+      "idx": 142,
+      "version": "7",
+      "when": 1791063488679,
+      "tag": "0142_tan_golden_guardian",
+      "breakpoints": true
     }
   ]
 }

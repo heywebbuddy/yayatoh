@@ -104,7 +104,7 @@ and posted again**, never edited, so the books always say what the ledger says.
 | E2E: connect (fake), map accounts, post a day, correct it and see the repost; keyboard only; axe both themes; RTL | `apps/web/e2e/accounting.spec.ts` (5 tests × 3 viewports) |
 
 ### 5. Migration
-`packages/db/drizzle/0140_good_blonde_phantom.sql` (renumbered at merge): `integrations.account_maps`
+`packages/db/drizzle/0142_tan_golden_guardian.sql` (renumbered at merge): `integrations.account_maps`
 and `integrations.accounting_journals` (generated: FORCE RLS, policies, org-leading indexes,
 composite FKs to `connections`, a self FK from a reversal to its journal). No hand edits. Additive
 only.
