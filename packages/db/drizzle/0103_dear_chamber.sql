@@ -198,21 +198,25 @@ INSERT INTO billing.plan_modules (plan_key, module_key)
 SELECT key, 'integrations' FROM billing.plans
 ON CONFLICT DO NOTHING;
 --> statement-breakpoint
--- The sync scheduler (worker leader, platform_reader): connections with work now — a queued run,
--- a scheduled sync that is due, or a failed record whose retry is due. Ids only.
+-- The sync scheduler (worker leader, platform_reader): connections with work now — a queued run
+-- (asked for by a person: first), a scheduled sync that is due, or a failed record whose retry is
+-- due. Ids only.
 CREATE FUNCTION integrations.connections_with_sync_work(p_limit integer)
 RETURNS TABLE (org_id uuid, connection_id uuid)
 LANGUAGE sql STABLE SECURITY DEFINER SET search_path = pg_catalog AS $$
-  SELECT c.org_id, c.id FROM integrations.connections c
-  WHERE c.status = 'active' AND (
-    c.next_sync_at <= now()
-    OR EXISTS (SELECT 1 FROM integrations.sync_runs r
-               WHERE r.org_id = c.org_id AND r.connection_id = c.id AND r.status = 'queued')
+  SELECT w.org_id, w.id FROM (
+    SELECT c.org_id, c.id, c.next_sync_at,
+      EXISTS (SELECT 1 FROM integrations.sync_runs r
+              WHERE r.org_id = c.org_id AND r.connection_id = c.id AND r.status = 'queued') AS queued
+    FROM integrations.connections c
+    WHERE c.status = 'active'
+  ) w
+  WHERE w.queued
+    OR w.next_sync_at <= now()
     OR EXISTS (SELECT 1 FROM integrations.sync_errors e
-               WHERE e.org_id = c.org_id AND e.connection_id = c.id AND e.status = 'open'
+               WHERE e.org_id = w.org_id AND e.connection_id = w.id AND e.status = 'open'
                  AND e.next_retry_at <= now())
-  )
-  ORDER BY c.next_sync_at NULLS FIRST
+  ORDER BY w.queued DESC, w.next_sync_at NULLS FIRST
   LIMIT p_limit
 $$;
 --> statement-breakpoint
