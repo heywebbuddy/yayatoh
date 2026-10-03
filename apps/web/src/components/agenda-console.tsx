@@ -64,7 +64,7 @@ export async function AgendaPublishing({
           </h2>
           <Label>{t(`badge.${p.state}`)}</Label>
         </div>
-        <p className="text-body text-zinc-600" role="status">
+        <p className="text-body text-ink-2" role="status">
           {t(`state.${p.state}`, { version: p.version, date })}
         </p>
         {canWrite ? (
@@ -132,7 +132,7 @@ export async function SessionAgendaLine({
   ].filter(Boolean);
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <p className="text-caption text-zinc-600" data-agenda-line>
+      <p className="text-caption text-ink-2" data-agenda-line>
         {parts.join(' · ')}
       </p>
       {roomTooSmall ? <Label>{t('roomTooSmallLabel')}</Label> : null}
@@ -202,11 +202,8 @@ export async function SessionAgendaForm({
     },
   ];
   return (
-    <section
-      aria-label={t('summary', { title })}
-      className="flex flex-col gap-3 border-t border-zinc-100 pt-3"
-    >
-      <h5 className="text-caption font-medium text-zinc-700">{t('summary', { title })}</h5>
+    <section aria-label={t('summary', { title })} className="flex flex-col gap-3 border-t border-line pt-3">
+      <h5 className="text-caption font-medium text-ink-2">{t('summary', { title })}</h5>
       <ProgramForm
         action={setSessionAgendaAction.bind(null, org, event, sessionId)}
         fields={fields}
@@ -244,13 +241,13 @@ export async function TypesAndGroups({
           {t('types.heading')}
         </h2>
         {agenda.types.length === 0 ? (
-          <p className="text-body text-zinc-500">{t('types.empty')}</p>
+          <p className="text-body text-ink-2">{t('types.empty')}</p>
         ) : (
           <ul className="flex list-none flex-col gap-1 p-0">
             {agenda.types.map((x) => (
               <li
                 key={x.id}
-                className="flex flex-wrap items-center justify-between gap-2 border-b border-zinc-100 py-1"
+                className="flex flex-wrap items-center justify-between gap-2 border-b border-line py-1"
               >
                 <span className="text-body">{x.name}</span>
                 {canWrite ? (
@@ -274,7 +271,7 @@ export async function TypesAndGroups({
                 <Button type="submit" variant="secondary">
                   {t('types.addStandard')}
                 </Button>
-                <p className="text-caption text-zinc-500">{t('types.standardHint')}</p>
+                <p className="text-caption text-ink-2">{t('types.standardHint')}</p>
               </form>
             ) : null}
             <ProgramForm
@@ -293,19 +290,15 @@ export async function TypesAndGroups({
         <h2 id="session-groups-heading" className="text-section">
           {t('groups.heading')}
         </h2>
-        <p className="text-caption text-zinc-500">{t('groups.intro')}</p>
+        <p className="text-caption text-ink-2">{t('groups.intro')}</p>
         {agenda.groups.length === 0 ? (
-          <p className="text-body text-zinc-500">{t('groups.empty')}</p>
+          <p className="text-body text-ink-2">{t('groups.empty')}</p>
         ) : (
           <ul className="flex list-none flex-col gap-2 p-0">
             {agenda.groups.map((g) => (
-              <li
-                key={g.id}
-                className="flex flex-col gap-1 border-b border-zinc-100 pb-2"
-                data-group={g.name}
-              >
+              <li key={g.id} className="flex flex-col gap-1 border-b border-line pb-2" data-group={g.name}>
                 <span className="text-body font-medium">{g.name}</span>
-                <span className="text-caption text-zinc-600">
+                <span className="text-caption text-ink-2">
                   {t('groups.sessions', { count: g.sessionIds.length })}
                   {g.sessionIds.length > 0 ? `: ${g.sessionIds.map(titleOf).join(', ')}` : ''}
                 </span>

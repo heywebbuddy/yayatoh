@@ -53,12 +53,12 @@ export default async function GuestHelpStatusPage({
         <p role="status" className="flex items-center gap-2 text-section" data-testid="guest-help-state">
           <StatusDot status={DOT[status.state]} label={t(`guest.state.${status.state}`)} />
         </p>
-        <p className="text-body text-zinc-700">{t(`guest.stateHint.${status.state}`)}</p>
-        <p className="text-caption text-zinc-600">
+        <p className="text-body text-ink-2">{t(`guest.stateHint.${status.state}`)}</p>
+        <p className="text-caption text-ink-2">
           {t('guest.lastUpdate', { time: when.format(status.updatedAt) })}
         </p>
       </Card>
-      <p className="text-body text-zinc-700">{t('guest.emergencyShort')}</p>
+      <p className="text-body text-ink-2">{t('guest.emergencyShort')}</p>
       <div className="flex flex-wrap gap-3">
         <RefreshStatus label={t('guest.refresh')} />
         <Link href={`/events/${slug}/seat-finder`} className={buttonClass('secondary')}>

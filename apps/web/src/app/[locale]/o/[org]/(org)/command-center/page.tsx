@@ -42,7 +42,7 @@ export default async function CommandCenterOverviewPage({
     <>
       <PageHeader title={t('overviewTitle')} description={t('overviewDescription')} />
       {overview.total > overview.events.length ? (
-        <p className="text-caption text-zinc-600">
+        <p className="text-caption text-ink-2">
           {t('overviewTruncated', { shown: overview.events.length, total: overview.total })}
         </p>
       ) : null}
@@ -72,7 +72,7 @@ export default async function CommandCenterOverviewPage({
               cell: (e) => (
                 <span className="inline-flex flex-wrap items-center gap-2" data-testid="cc-overview-mode">
                   <StatusDot status={DOT[e.mode]} label={t(`mode.${e.mode}`)} live={e.mode === 'live'} />
-                  {e.overridden ? <span className="text-caption text-zinc-500">{t('manual')}</span> : null}
+                  {e.overridden ? <span className="text-caption text-ink-2">{t('manual')}</span> : null}
                 </span>
               ),
             },

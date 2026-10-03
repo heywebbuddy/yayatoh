@@ -63,7 +63,7 @@ export function PortalSignInForm({
             pending={pending || Boolean(state.done)}
             idPrefix="portal-sign-in"
           />
-          <p className="text-caption text-zinc-600">{t('portalSignIn.orLink')}</p>
+          <p className="text-caption text-ink-2">{t('portalSignIn.orLink')}</p>
         </>
       ) : null}
       <div aria-live="assertive">{error ? <Alert title={error} /> : null}</div>
@@ -222,7 +222,7 @@ export function PortalFileUpload({
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-3" noValidate>
       <div className="flex flex-col gap-1.5">
-        <label htmlFor={fieldId} className="text-caption text-zinc-600">
+        <label htmlFor={fieldId} className="text-[13px] font-bold text-ink">
           {label}
         </label>
         <input
@@ -232,14 +232,14 @@ export function PortalFileUpload({
           accept={accept}
           aria-invalid={state.error ? true : undefined}
           aria-describedby={state.error ? `${fieldId}-error` : `${fieldId}-hint`}
-          className="min-h-10 rounded-card border border-zinc-200 bg-white px-3 py-2 text-body"
+          className="field w-full py-3 leading-relaxed"
         />
         {state.error ? (
-          <p id={`${fieldId}-error`} className="text-caption text-pink-700">
+          <p id={`${fieldId}-error`} className="text-caption text-danger">
             {state.error}
           </p>
         ) : (
-          <p id={`${fieldId}-hint`} className="text-caption text-zinc-500">
+          <p id={`${fieldId}-hint`} className="text-caption text-ink-2">
             {hint}
           </p>
         )}

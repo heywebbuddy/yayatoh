@@ -117,7 +117,7 @@ export function DecideForm({
   return (
     <form action={formAction} className="flex flex-col gap-3">
       <div className="flex flex-col gap-1.5">
-        <label htmlFor={`${id}-note`} className="text-caption text-zinc-600">
+        <label htmlFor={`${id}-note`} className="text-[13px] font-bold text-ink">
           {noteLabel}
         </label>
         <textarea
@@ -125,7 +125,7 @@ export function DecideForm({
           name="note"
           rows={2}
           maxLength={500}
-          className="rounded-card border border-zinc-200 bg-white px-4 py-2 text-body"
+          className="field w-full py-3 leading-relaxed"
         />
       </div>
       <div className="flex flex-wrap gap-2">

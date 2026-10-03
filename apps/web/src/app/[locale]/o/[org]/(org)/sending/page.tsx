@@ -85,11 +85,11 @@ export default async function SendingSetupPage({
           <Card className="flex flex-col gap-4">
             <p className="text-body">{t('noDomain')}</p>
             {!available ? (
-              <p className="text-caption text-zinc-600">{t('unavailable')}</p>
+              <p className="text-caption text-ink-2">{t('unavailable')}</p>
             ) : canEdit ? (
               <SendingDomainForm action={addSendingDomainAction.bind(null, org)} />
             ) : (
-              <p className="text-caption text-zinc-600">{t('readOnly')}</p>
+              <p className="text-caption text-ink-2">{t('readOnly')}</p>
             )}
           </Card>
         ) : (
@@ -129,12 +129,12 @@ export default async function SendingSetupPage({
             />
             {records.length ? (
               <div className="flex flex-col gap-2">
-                <p className="text-caption text-zinc-600">{t('recordsIntro')}</p>
+                <p className="text-caption text-ink-2">{t('recordsIntro')}</p>
                 <div className="overflow-x-auto">
                   <table className="w-full text-start text-caption">
                     <caption className="sr-only">{t('recordsCaption', { domain: d.domain })}</caption>
                     <thead>
-                      <tr className="text-zinc-500">
+                      <tr className="text-ink-2">
                         {(['recordType', 'recordName', 'recordValue', 'recordFor'] as const).map((k) => (
                           <th key={k} scope="col" className="py-1 pe-4 text-start font-normal">
                             {t(k)}
@@ -144,7 +144,7 @@ export default async function SendingSetupPage({
                     </thead>
                     <tbody>
                       {records.map((r) => (
-                        <tr key={`${r.type}:${r.name}:${r.value}`} className="border-t border-zinc-100">
+                        <tr key={`${r.type}:${r.name}:${r.value}`} className="border-t border-line">
                           <td className="py-1.5 pe-4 align-top font-mono">{r.type}</td>
                           <td className="py-1.5 pe-4 align-top font-mono break-all" dir="ltr">
                             {r.name}
@@ -161,7 +161,7 @@ export default async function SendingSetupPage({
               </div>
             ) : null}
             {d.lastCheckedAt ? (
-              <p className="text-caption text-zinc-500">
+              <p className="text-caption text-ink-2">
                 {t('lastChecked', { when: when.format(d.lastCheckedAt) })}
               </p>
             ) : null}
@@ -179,7 +179,7 @@ export default async function SendingSetupPage({
                 </form>
               </div>
             ) : (
-              <p className="text-caption text-zinc-600">{t('readOnly')}</p>
+              <p className="text-caption text-ink-2">{t('readOnly')}</p>
             )}
           </Card>
         )}
@@ -191,7 +191,7 @@ export default async function SendingSetupPage({
         </h2>
         <Card className="flex flex-col gap-3">
           <dl className="grid grid-cols-1 gap-x-6 gap-y-2 text-body sm:grid-cols-[auto_1fr]">
-            <dt className="text-zinc-600">{t('smsSender')}</dt>
+            <dt className="text-ink-2">{t('smsSender')}</dt>
             <dd>
               {setup.sms.dedicated
                 ? t('ownNumber', {
@@ -201,7 +201,7 @@ export default async function SendingSetupPage({
             </dd>
             {setup.sms.dedicated && setup.sms.campaignStatus ? (
               <>
-                <dt className="text-zinc-600">{t('campaign')}</dt>
+                <dt className="text-ink-2">{t('campaign')}</dt>
                 <dd>
                   <StatusDot
                     status={CAMPAIGN_DOT[setup.sms.campaignStatus]}
@@ -210,7 +210,7 @@ export default async function SendingSetupPage({
                 </dd>
               </>
             ) : null}
-            <dt className="text-zinc-600">{t('whatsappSender')}</dt>
+            <dt className="text-ink-2">{t('whatsappSender')}</dt>
             <dd>
               {setup.whatsapp.dedicated
                 ? t(`route.${setup.whatsapp.provider === 'whatsapp_gateway' ? 'gateway' : 'cloud'}`)
@@ -222,7 +222,7 @@ export default async function SendingSetupPage({
               ) : null}
             </dd>
           </dl>
-          <p className="text-caption text-zinc-600">
+          <p className="text-caption text-ink-2">
             {setup.sms.dedicated && !setup.sms.active ? t('campaignPending') : t('textsNote')}
           </p>
         </Card>
@@ -232,7 +232,7 @@ export default async function SendingSetupPage({
         <h2 id="fallback-heading" className="text-section">
           {t('fallbackTitle')}
         </h2>
-        <p className="text-body text-zinc-600">{t('fallbackDescription')}</p>
+        <p className="text-body text-ink-2">{t('fallbackDescription')}</p>
         <Table
           caption={t('fallbackCaption')}
           rowKey={(f) => f.category}

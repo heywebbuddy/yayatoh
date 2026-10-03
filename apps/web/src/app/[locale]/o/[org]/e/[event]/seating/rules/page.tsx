@@ -80,7 +80,7 @@ export default async function SeatingRulesPage({
                 <SeatingRulesForm rules={rules} action={seatingRulesAction.bind(null, org, event)} />
               </Card>
             ) : (
-              <p className="text-body text-zinc-600">{t('rules.readOnly')}</p>
+              <p className="text-body text-ink-2">{t('rules.readOnly')}</p>
             )}
           </section>
         </>

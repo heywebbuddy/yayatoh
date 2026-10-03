@@ -27,7 +27,7 @@ export function ReportForm({
   }, [open]);
   if (state.ok)
     return (
-      <p className="text-caption text-zinc-600" role="status">
+      <p className="text-caption text-ink-2" role="status">
         {t('thanks')}
       </p>
     );
@@ -39,23 +39,18 @@ export function ReportForm({
       </Button>
     );
   return (
-    <form action={formAction} className="flex flex-col gap-2 rounded-card border border-zinc-200 p-3">
-      <label htmlFor={`${id}-reason`} className="text-caption text-zinc-600">
+    <form action={formAction} className="flex flex-col gap-2 rounded-card border border-line p-3">
+      <label htmlFor={`${id}-reason`} className="text-[13px] font-bold text-ink">
         {t('reason')}
       </label>
-      <select
-        ref={firstRef}
-        id={`${id}-reason`}
-        name="reason"
-        className="min-h-10 rounded-pill border border-zinc-200 bg-white px-3 text-body"
-      >
+      <select ref={firstRef} id={`${id}-reason`} name="reason" className="field px-3">
         {REPORT_REASONS.map((r) => (
           <option key={r} value={r}>
             {tr(r)}
           </option>
         ))}
       </select>
-      <label htmlFor={`${id}-note`} className="text-caption text-zinc-600">
+      <label htmlFor={`${id}-note`} className="text-[13px] font-bold text-ink">
         {t('note')}
       </label>
       <textarea
@@ -63,7 +58,7 @@ export function ReportForm({
         name="note"
         rows={2}
         maxLength={500}
-        className="rounded-card border border-zinc-200 bg-white px-4 py-2 text-body"
+        className="rounded-card border border-line bg-surface px-4 py-2 text-body"
       />
       <div className="flex flex-wrap gap-2">
         <Button type="submit" size="sm" disabled={pending}>

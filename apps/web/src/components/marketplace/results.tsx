@@ -45,10 +45,10 @@ export async function MarketplaceResults({
       <SearchForm action={path} locale={locale} params={params} cities={cities} />
       <section aria-labelledby="results-heading" className="flex flex-col gap-4">
         <div className="flex flex-wrap items-baseline justify-between gap-2">
-          <h2 id="results-heading" className="text-[28px] font-normal tracking-[-0.03em]">
+          <h2 id="results-heading" className="text-[28px] font-extrabold tracking-[-0.03em]">
             {filtered ? t('results') : t('upcoming')}
           </h2>
-          <p className="text-caption text-zinc-600" role="status">
+          <p className="text-caption text-ink-2" role="status">
             {t('count', { count: results.total })}
           </p>
         </div>

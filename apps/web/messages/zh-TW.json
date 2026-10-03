@@ -27,7 +27,14 @@
     "yourOrganizations": "你的組織",
     "organization": "組織",
     "signOut": "登出",
-    "security": "帳戶安全"
+    "security": "帳戶安全",
+    "menuSection": "選單",
+    "accountSection": "帳戶",
+    "newEvent": "新增活動",
+    "breadcrumb": "麵包屑導覽",
+    "closeMenu": "關閉選單",
+    "eventSections": "活動區塊",
+    "allEvents": "活動"
   },
   "notifications": {
     "open": "通知",
@@ -572,7 +579,10 @@
   },
   "common": {
     "comingSoon": "將於後續里程碑推出",
-    "loading": "載入中…"
+    "loading": "載入中…",
+    "close": "關閉",
+    "retry": "重試",
+    "select": "選取"
   },
   "section": {
     "comingTitle": "此區域正在建置中",
@@ -641,6 +651,7 @@
     "speakerPageTitle": "演講嘉賓",
     "gallery": "相簿",
     "register": "報名",
+    "hostedBy": "主辦單位",
     "exhibitorMap": "參展商地圖"
   },
   "portal": {
@@ -1418,7 +1429,8 @@
       "placeholder": "#rrggbb",
       "preview": "購票",
       "ratio": "文字對比度 {ratio}:1。",
-      "tooLight": "此顏色在白色頁面上偏淺（{ratio}:1），按鈕可能不易看清。請嘗試較深的顏色。"
+      "tooLight": "此顏色在白色頁面上偏淺（{ratio}:1），按鈕可能不易看清。請嘗試較深的顏色。",
+      "tooDark": "在深色主題下，此顏色相對頁面偏暗（{ratio}:1），按鈕可能不易看清。請嘗試較淺的顏色。"
     },
     "legal": {
       "title": "你的法律頁面",
@@ -2619,7 +2631,9 @@
     "clear": "清除篩選",
     "noneTitle": "沒有符合篩選條件的活動",
     "noneDescription": "試試其他類別或標籤，或清除篩選條件。",
-    "tags": "標籤"
+    "tags": "標籤",
+    "search": "依名稱搜尋",
+    "showing": "共 {total, plural, other {# 個活動}}，第 {from}–{to} 個"
   },
   "venues": {
     "title": "場地",
@@ -6294,6 +6308,7 @@
         "open": "開啟電子郵件送達率"
       }
     },
+    "openScanner": "開啟掃描器",
     "tv": {
       "open": "電視模式",
       "title": "電視模式",
@@ -6313,7 +6328,10 @@
       "createdAt": "建立於 {time}",
       "revokedAt": "停用於 {time}",
       "revoke": "停用",
-      "revokeLabel": "停用 {label}"
+      "revokeLabel": "停用 {label}",
+      "readOnly": "唯讀",
+      "statusOn": "已開啟",
+      "statusOff": "已關閉"
     }
   },
   "alerts": {
@@ -6403,9 +6421,9 @@
       "payoutsPastDue": "更新收款帳戶",
       "deliverability": "開啟封鎖名單",
       "automationFailed": "開啟訊息狀態",
-      "assistanceOverdue": "開啟求助請求",
       "campaignFailed": "開啟行銷活動",
-      "disputeDeadline": "開啟爭議佇列"
+      "disputeDeadline": "開啟爭議佇列",
+      "assistanceOverdue": "開啟求助請求"
     },
     "rules": {
       "unseated": "{count, plural, other {{countWords} 位參加者沒有座位}}",
@@ -6425,9 +6443,9 @@
       "payoutsPastDue": "{count, plural, other {收款帳戶有 {countWords} 項要求已逾期}}",
       "deliverability": "電子郵件送達率需要注意",
       "automationFailed": "{count, plural, other {今天有 {countWords} 則訊息或批次操作失敗}}",
-      "assistanceOverdue": "{count, plural, other {{countWords} 個求助請求等待過久}}",
       "campaignFailed": "{count, plural, other {今天有 {countWords} 次行銷活動傳送失敗}}",
-      "disputeDeadline": "{count, plural, other {有 {countWords} 起爭議需要盡快提交證據}}"
+      "disputeDeadline": "{count, plural, other {有 {countWords} 起爭議需要盡快提交證據}}",
+      "assistanceOverdue": "{count, plural, other {{countWords} 個求助請求等待過久}}"
     },
     "widget": {
       "title": "警示",
@@ -7525,6 +7543,7 @@
     "publicLink": "填寫地址：",
     "publicLinkText": "公開報名表",
     "openBuilder": "編輯報名表",
+    "openReadOnly": "查看報名表單",
     "pagesTitle": "頁面",
     "emptyTitle": "還沒有頁面",
     "emptyDescription": "先新增第一個頁面，再新增問題。頁面可以限定於某些報名類型，或只在特定回答後顯示。",
@@ -7676,8 +7695,7 @@
     "submittedTitle": "謝謝，你已完成報名",
     "submittedDescription": "謝謝，{name}。你的回答已傳送給主辦方。",
     "expiredTitle": "此連結已過期",
-    "expiredDescription": "繼續報名的連結在最後一次儲存後 14 天內有效。請從活動頁面重新開始。",
-    "openReadOnly": "查看報名表單"
+    "expiredDescription": "繼續報名的連結在最後一次儲存後 14 天內有效。請從活動頁面重新開始。"
   },
   "agenda": {
     "publishing": {
@@ -8070,6 +8088,12 @@
       "sub_event_has_chart": "它已有專用座位圖。",
       "no_chart": "尚無可複製的座位圖。請在座位頁面建立活動座位圖，或選擇已儲存的平面圖。"
     }
+  },
+  "theme": {
+    "label": "顏色主題",
+    "light": "淺色",
+    "dark": "深色",
+    "system": "跟隨系統"
   },
   "speakerPortal": {
     "title": "講者入口網站",
@@ -8711,7 +8735,13 @@
       "offline": "你目前離線。裝置恢復連線後請再試一次。",
       "invalid": "請選擇你需要什麼。"
     },
-    "guestLine": "{name} · 票券 {ticket}"
+    "guestLine": "{name} · 票券 {ticket}",
+    "stats": {
+      "open": "未結請求",
+      "urgent": "緊急",
+      "waiting": "等待處理",
+      "unassigned": "未指派"
+    }
   },
   "marketingAnalytics": {
     "title": "行銷分析",
@@ -8736,7 +8766,8 @@
       "lastRevenue": "營收（最後接觸）",
       "firstOrders": "訂單（首次接觸）",
       "firstRevenue": "營收（首次接觸）",
-      "conversion": "轉換率"
+      "conversion": "轉換率",
+      "deliveredShare": "已送達占已傳送"
     },
     "otherCurrency": "{count, plural, other {# 筆訂單使用其他貨幣：已計數，但未計入營收。}}",
     "viewLabel": "結果分組方式",

@@ -2,7 +2,7 @@
 
 import type { FloorplanDoc, Item } from '@yayatoh/floorplan';
 import type { LiveSeatState } from '@yayatoh/seating/client';
-import { color, status as statusColor } from '@yayatoh/ui';
+import { paper } from '@yayatoh/ui';
 import type Konva from 'konva';
 import { memo } from 'react';
 import { Circle, Group, Layer, Line, Rect, Stage, Text } from 'react-konva';
@@ -18,11 +18,11 @@ const snap = (v: number) => Math.round(v / SNAP_CM) * SNAP_CM;
 
 /** Seat colours by state (M1.7f: a guest's seat is shown apart from a blocked one). */
 export const SEAT_FILL: Record<SeatStatus, string> = {
-  available: color.white,
-  held: statusColor.warning,
-  sold: color.zinc[700],
-  assigned: color.accent[900],
-  blocked: statusColor.danger,
+  available: paper.free,
+  held: paper.held,
+  sold: paper.sold,
+  assigned: paper.selected,
+  blocked: paper.blocked,
 };
 
 const styleCache = new Map<string, DotStyle>();
@@ -32,7 +32,7 @@ function seatStyle(state: SeatStatus, accessible: boolean): DotStyle {
   if (!s) {
     s = {
       fill: SEAT_FILL[state],
-      stroke: accessible ? color.accent[900] : color.zinc[500],
+      stroke: accessible ? paper.selected : paper.outline,
       strokeWidth: accessible ? 6 : 2,
     };
     styleCache.set(key, s);
@@ -88,7 +88,7 @@ export default function SeatingCanvas({
       <div onKeyDown={(e) => e.stopPropagation()}>
         <PanZoomControls view={view} />
       </div>
-      <div ref={box} className="w-full overflow-hidden rounded-card border border-zinc-200 bg-zinc-50">
+      <div ref={box} className="w-full overflow-hidden rounded-card border border-line bg-surface-2">
         <Stage
           width={width}
           height={view.height}
@@ -110,17 +110,17 @@ export default function SeatingCanvas({
             <Rect
               width={doc.width}
               height={doc.height}
-              fill={color.white}
-              stroke={color.zinc[300]}
+              fill={paper.free}
+              stroke={paper.taken}
               strokeWidth={4}
               listening={false}
             />
             {doc.underlay ? <UnderlayImage underlay={doc.underlay} /> : null}
             {marks.map((m) => (
               <Group key={m.label} x={m.x} y={m.y} listening={false}>
-                <Line points={[-40, 0, 40, 0]} stroke={color.accent[900]} strokeWidth={6 / view.scale} />
-                <Line points={[0, -40, 0, 40]} stroke={color.accent[900]} strokeWidth={6 / view.scale} />
-                <Text text={m.label} x={12} y={-56} fontSize={44} fill={color.accent[900]} />
+                <Line points={[-40, 0, 40, 0]} stroke={paper.selected} strokeWidth={6 / view.scale} />
+                <Line points={[0, -40, 0, 40]} stroke={paper.selected} strokeWidth={6 / view.scale} />
+                <Text text={m.label} x={12} y={-56} fontSize={44} fill={paper.selected} />
               </Group>
             ))}
             {doc.items.map((item) => (
@@ -167,7 +167,7 @@ const PlanItem = memo(
     onSelect: (id: string | null, additive: boolean) => void;
     onMove: (id: string, x: number, y: number) => void;
   }) {
-    const outline = isSelected ? color.accent[900] : color.zinc[400];
+    const outline = isSelected ? paper.selected : paper.outline;
     const common = {
       x: item.x,
       y: item.y,
@@ -195,7 +195,7 @@ const PlanItem = memo(
           <Rect
             width={item.width}
             height={item.height}
-            fill={color.zinc[200]}
+            fill={paper.floor}
             stroke={outline}
             strokeWidth={isSelected ? 8 : 3}
             cornerRadius={12}
@@ -205,7 +205,7 @@ const PlanItem = memo(
             x={16}
             y={16}
             fontSize={48}
-            fill={color.zinc[700]}
+            fill={paper.sold}
             listening={false}
           />
         </Group>
@@ -217,7 +217,7 @@ const PlanItem = memo(
           item.shape === 'round' ? (
             <Circle
               radius={item.width / 2}
-              fill={color.zinc[100]}
+              fill={paper.floor}
               stroke={outline}
               strokeWidth={isSelected ? 8 : 3}
             />
@@ -227,7 +227,7 @@ const PlanItem = memo(
               y={-item.height / 2}
               width={item.width}
               height={item.height}
-              fill={color.zinc[100]}
+              fill={paper.floor}
               stroke={outline}
               strokeWidth={isSelected ? 8 : 3}
             />
@@ -252,7 +252,7 @@ const PlanItem = memo(
           width={item.kind === 'row' ? 70 : 80}
           align={item.kind === 'row' ? 'right' : 'center'}
           fontSize={40}
-          fill={color.ink}
+          fill={paper.label}
           listening={false}
         />
         <SeatDots

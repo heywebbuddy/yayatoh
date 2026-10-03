@@ -36,17 +36,15 @@ export function SignalItem({
     <Card className="flex flex-col gap-2" data-signal={s.kind}>
       <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
         <StatusDot status={SEVERITY_DOT[s.severity]} label={t(`signals.severity.${s.severity}`)} />
-        <span className="text-caption text-zinc-600">{when.format(s.at)}</span>
-        <span className="text-caption text-zinc-600">{t(`fraudSignals.source.${s.source}`)}</span>
-        <span className="text-caption text-zinc-600" data-signal-status={s.status}>
+        <span className="text-caption text-ink-2">{when.format(s.at)}</span>
+        <span className="text-caption text-ink-2">{t(`fraudSignals.source.${s.source}`)}</span>
+        <span className="text-caption text-ink-2" data-signal-status={s.status}>
           {t(`signals.status.${s.status}`)}
         </span>
       </div>
       <p className="text-body">{what}</p>
       {s.resolutionNote ? (
-        <p className="text-caption text-zinc-600">
-          {t('fraudSignals.note.shown', { note: s.resolutionNote })}
-        </p>
+        <p className="text-caption text-ink-2">{t('fraudSignals.note.shown', { note: s.resolutionNote })}</p>
       ) : null}
       {orderHref || threadHref ? (
         <p className="flex flex-wrap gap-x-4 text-caption">

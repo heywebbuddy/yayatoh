@@ -386,9 +386,9 @@ export default async function AttendeesPage({
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div className="flex flex-col gap-1.5">
             <Label>{real.name}</Label>
-            <h1 className="flex items-baseline gap-3 text-[32px] leading-[1.1] font-light tracking-[-0.04em] md:text-title">
+            <h1 className="flex items-baseline gap-3 text-[32px] leading-[1.1] font-extrabold tracking-[-0.04em] md:text-title">
               {title}
-              <span className="font-mono text-[15px] text-zinc-500">
+              <span className="font-mono text-[15px] text-ink-2">
                 {formatNumber(ev.segments[0]?.count ?? 0, locale)}
               </span>
             </h1>
@@ -412,7 +412,7 @@ export default async function AttendeesPage({
         </div>
 
         {!demo && canWrite && data.modules.has('attendees') ? (
-          <details className="group rounded-card border border-zinc-200 bg-white px-4 py-3">
+          <details className="group rounded-card border border-line bg-surface px-4 py-3">
             <summary className="flex min-h-8 cursor-pointer list-none items-center text-body [&::-webkit-details-marker]:hidden">
               {t('actions.addAttendee', { term: t(term(profile, 'attendee')) })}
             </summary>
@@ -431,10 +431,10 @@ export default async function AttendeesPage({
                   <Link
                     href={href({ segment: s.key, a: undefined })}
                     aria-current={active ? 'page' : undefined}
-                    className={`inline-flex min-h-9 items-center gap-2 rounded-pill border px-3.5 text-[13px] whitespace-nowrap ${active ? 'border-ink bg-ink text-white' : 'border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50'}`}
+                    className={`inline-flex min-h-9 items-center gap-2 rounded-pill border px-3.5 text-[13px] whitespace-nowrap ${active ? 'border-ink bg-tag text-white' : 'border-line bg-surface text-ink-2 hover:bg-surface-2'}`}
                   >
                     {t(`segments.${s.key}`)}
-                    <span className={`font-mono text-[11px] ${active ? 'text-white/70' : 'text-zinc-500'}`}>
+                    <span className={`font-mono text-[11px] ${active ? 'text-white/70' : 'text-ink-2'}`}>
                       {formatNumber(s.count, locale)}
                     </span>
                   </Link>
@@ -463,12 +463,7 @@ export default async function AttendeesPage({
                 <label htmlFor="attendee-source" className="sr-only">
                   {t('attendees.source')}
                 </label>
-                <select
-                  id="attendee-source"
-                  name="source"
-                  defaultValue={source ?? ''}
-                  className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
-                >
+                <select id="attendee-source" name="source" defaultValue={source ?? ''} className="field">
                   <option value="">{t('attendees.anySource')}</option>
                   {ATTENDEE_SOURCES.map((x) => (
                     <option key={x} value={x}>
@@ -479,12 +474,7 @@ export default async function AttendeesPage({
                 <label htmlFor="attendee-status" className="sr-only">
                   {t('attendees.status')}
                 </label>
-                <select
-                  id="attendee-status"
-                  name="status"
-                  defaultValue={status ?? ''}
-                  className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
-                >
+                <select id="attendee-status" name="status" defaultValue={status ?? ''} className="field">
                   <option value="">{t('attendees.anyStatus')}</option>
                   {ATTENDEE_STATUSES.map((x) => (
                     <option key={x} value={x}>
@@ -501,7 +491,7 @@ export default async function AttendeesPage({
                       id="attendee-type"
                       name="type"
                       defaultValue={ticketTypeId ?? ''}
-                      className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
+                      className="field"
                     >
                       <option value="">{t('attendees.anyTicketType')}</option>
                       {ticketTypes.map((x) => (
@@ -517,7 +507,7 @@ export default async function AttendeesPage({
                       id="attendee-checkin"
                       name="checkin"
                       defaultValue={checkedIn ?? ''}
-                      className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
+                      className="field"
                     >
                       <option value="">{t('attendees.anyCheckIn')}</option>
                       {CHECKED_IN_FILTERS.map((x) => (
@@ -533,7 +523,7 @@ export default async function AttendeesPage({
                       id="attendee-distribution"
                       name="distribution"
                       defaultValue={distribution ?? ''}
-                      className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
+                      className="field"
                     >
                       <option value="">{t('attendees.anyDistribution')}</option>
                       {DISTRIBUTION_FILTERS.map((x) => (
@@ -566,10 +556,10 @@ export default async function AttendeesPage({
                         a: undefined,
                       })}
                       aria-current={on ? 'true' : undefined}
-                      className={`inline-flex min-h-8 items-center gap-2 rounded-pill border px-3 text-[13px] ${on ? 'border-ink bg-ink text-white' : 'border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50'}`}
+                      className={`inline-flex min-h-8 items-center gap-2 rounded-pill border px-3 text-[13px] ${on ? 'border-ink bg-tag text-white' : 'border-line bg-surface text-ink-2 hover:bg-surface-2'}`}
                     >
                       {l.label}
-                      <span className={`font-mono text-[11px] ${on ? 'text-white/70' : 'text-zinc-500'}`}>
+                      <span className={`font-mono text-[11px] ${on ? 'text-white/70' : 'text-ink-2'}`}>
                         {formatNumber(l.count, locale)}
                       </span>
                     </Link>
@@ -583,7 +573,7 @@ export default async function AttendeesPage({
         {op && opKind ? (
           <section
             aria-labelledby="bulk-status-heading"
-            className="flex flex-col gap-2 rounded-panel border border-zinc-200 bg-white px-5 py-4"
+            className="flex flex-col gap-2 rounded-panel border border-line bg-surface px-5 py-4"
           >
             {opActive ? <AutoRefresh seconds={2} /> : null}
             <h2 id="bulk-status-heading" className="text-section">
@@ -596,7 +586,7 @@ export default async function AttendeesPage({
                 processed: formatNumber(op.processed, locale),
                 total: formatNumber(op.total, locale),
               })}
-              className="h-2 w-full accent-ink"
+              className="h-2 w-full accent-primary"
             />
             <p className="text-body" role="status">
               {opKind === 'export' && op.status === 'done'
@@ -617,7 +607,7 @@ export default async function AttendeesPage({
                         })}
             </p>
             {failureCodes.length ? (
-              <ul className="flex list-none flex-col gap-1 p-0 text-caption text-pink-700">
+              <ul className="flex list-none flex-col gap-1 p-0 text-caption text-danger">
                 {failureCodes.map(([code, n]) => (
                   <li key={code}>
                     {t('bulk.failure', {
@@ -629,7 +619,7 @@ export default async function AttendeesPage({
               </ul>
             ) : null}
             {warningCodes.length ? (
-              <ul className="flex list-none flex-col gap-1 p-0 text-caption text-zinc-700">
+              <ul className="flex list-none flex-col gap-1 p-0 text-caption text-ink-2">
                 {warningCodes.map(([code, n]) => (
                   <li key={code}>
                     {t(`bulk.warning.${code === 'ada_kept_back' ? code : 'other'}`, { count: n })}
@@ -660,7 +650,7 @@ export default async function AttendeesPage({
         {sp.bulkError ? (
           <p
             role="alert"
-            className="rounded-card border border-pink-700 bg-pink-50 px-4 py-3 text-body text-pink-700"
+            className="rounded-card border border-danger bg-danger-soft px-4 py-3 text-body text-danger"
           >
             {t(errorMessageKey(sp.bulkError))}
           </p>
@@ -670,7 +660,7 @@ export default async function AttendeesPage({
             id="bulk-form"
             action={bulkAction.bind(null, org, event)}
             aria-label={t('bulk.formLabel')}
-            className="flex flex-wrap items-end gap-3 rounded-card border border-zinc-200 bg-white px-4 py-3"
+            className="flex flex-wrap items-end gap-3 rounded-card border border-line bg-surface px-4 py-3"
           >
             <input type="hidden" name="f_q" value={q} />
             {labels.map((l) => (
@@ -689,12 +679,12 @@ export default async function AttendeesPage({
                   name="scope"
                   value="selected"
                   defaultChecked
-                  className="size-5 accent-ink"
+                  className="size-5 accent-primary"
                 />
                 {t('bulk.selected')}
               </label>
               <label className="flex min-h-6 items-center gap-2 text-body">
-                <input type="radio" name="scope" value="all" className="size-5 accent-ink" />
+                <input type="radio" name="scope" value="all" className="size-5 accent-primary" />
                 {t('bulk.allMatching', { count: live.total, formatted: formatNumber(live.total, locale) })}
               </label>
             </fieldset>
@@ -738,7 +728,7 @@ export default async function AttendeesPage({
                           name="ids"
                           value={r.id}
                           aria-label={t('bulk.selectOne', { name: r.name })}
-                          className="size-5 accent-ink"
+                          className="size-5 accent-primary"
                         />
                       ),
                     },
@@ -754,8 +744,8 @@ export default async function AttendeesPage({
                   >
                     <Avatar initials={initials(r.name)} label={r.name} size={28} />
                     <span className="flex flex-col">
-                      <span className="text-zinc-900">{r.name}</span>
-                      <span className="text-caption text-zinc-500">{r.company}</span>
+                      <span className="text-ink">{r.name}</span>
+                      <span className="text-caption text-ink-2">{r.company}</span>
                       {liveById.get(r.id)?.labels.length ? (
                         <span className="mt-1 flex flex-wrap gap-1">
                           {liveById.get(r.id)?.labels.map((l) => (
@@ -782,7 +772,7 @@ export default async function AttendeesPage({
         )}
         {hasReal && live.total > 0 ? (
           <nav aria-label={t('attendees.pages')} className="flex flex-wrap items-center gap-3">
-            <p className="text-caption text-zinc-500">
+            <p className="text-caption text-ink-2">
               {t('attendees.showing', {
                 from: formatNumber(from, locale),
                 to: formatNumber(to, locale),
@@ -818,26 +808,26 @@ export default async function AttendeesPage({
               <Link
                 href={href({ a: undefined })}
                 aria-label={t('attendees.closeProfile')}
-                className="flex size-8 items-center justify-center rounded-pill hover:bg-zinc-100"
+                className="flex size-8 items-center justify-center rounded-pill hover:bg-surface-3"
               >
-                <X aria-hidden="true" className="size-4" strokeWidth={1.6} />
+                <X aria-hidden="true" className="size-4" strokeWidth={2} />
               </Link>
             </div>
             <div className="flex items-center gap-3">
               <Avatar initials={initials(selected.name)} label={selected.name} size={48} />
               <div className="flex flex-col">
-                <p className="text-[22px] leading-tight font-light tracking-[-0.03em]">{selected.name}</p>
-                <p className="text-body text-zinc-500">{selected.company}</p>
+                <p className="text-[22px] leading-tight font-extrabold tracking-[-0.03em]">{selected.name}</p>
+                <p className="text-body text-ink-2">{selected.company}</p>
               </div>
             </div>
             <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-body">
-              <dt className="text-zinc-500">{t('attendees.ticketType')}</dt>
+              <dt className="text-ink-2">{t('attendees.ticketType')}</dt>
               <dd className="m-0">{selected.ticketType}</dd>
-              <dt className="text-zinc-500">{t('attendees.order')}</dt>
+              <dt className="text-ink-2">{t('attendees.order')}</dt>
               <dd className="m-0 font-mono text-caption">{selected.order}</dd>
-              <dt className="text-zinc-500">{t('attendees.seat')}</dt>
+              <dt className="text-ink-2">{t('attendees.seat')}</dt>
               <dd className="m-0">{selected.seat ?? '—'}</dd>
-              <dt className="text-zinc-500">{t('attendees.status')}</dt>
+              <dt className="text-ink-2">{t('attendees.status')}</dt>
               <dd className="m-0">
                 <StatusDot
                   status={STATUS_DOT[selected.status]}
@@ -847,7 +837,7 @@ export default async function AttendeesPage({
             </dl>
             {hasReal ? (
               <section aria-labelledby="labels-heading" className="flex flex-col gap-2">
-                <h2 id="labels-heading" className="text-caption text-zinc-500">
+                <h2 id="labels-heading" className="text-caption text-ink-2">
                   {t('labels.title')}
                 </h2>
                 {selectedLabels.length ? (
@@ -855,7 +845,7 @@ export default async function AttendeesPage({
                     {selectedLabels.map((l) => (
                       <li
                         key={l}
-                        className="inline-flex items-center gap-1 rounded-pill border border-zinc-200 bg-zinc-50 ps-3 text-[13px]"
+                        className="inline-flex items-center gap-1 rounded-pill border border-line bg-surface-2 ps-3 text-[13px]"
                       >
                         {l}
                         {canWrite ? (
@@ -863,9 +853,9 @@ export default async function AttendeesPage({
                             <button
                               type="submit"
                               aria-label={t('labels.remove', { label: l })}
-                              className="flex size-7 items-center justify-center rounded-pill hover:bg-zinc-200"
+                              className="flex size-7 items-center justify-center rounded-pill hover:bg-line"
                             >
-                              <X aria-hidden="true" className="size-3.5" strokeWidth={1.6} />
+                              <X aria-hidden="true" className="size-3.5" strokeWidth={2} />
                             </button>
                           </form>
                         ) : (
@@ -875,7 +865,7 @@ export default async function AttendeesPage({
                     ))}
                   </ul>
                 ) : (
-                  <p className="text-caption text-zinc-500">{t('labels.none')}</p>
+                  <p className="text-caption text-ink-2">{t('labels.none')}</p>
                 )}
                 {canWrite ? (
                   <LabelForm
@@ -887,10 +877,10 @@ export default async function AttendeesPage({
             ) : null}
             {hasReal && selectedTicketId && canWrite ? (
               <section aria-labelledby="send-ticket-heading" className="flex flex-col gap-2">
-                <h2 id="send-ticket-heading" className="text-caption text-zinc-500">
+                <h2 id="send-ticket-heading" className="text-caption text-ink-2">
                   {t('distribution.title')}
                 </h2>
-                <p className="text-caption text-zinc-500">{t('distribution.hint')}</p>
+                <p className="text-caption text-ink-2">{t('distribution.hint')}</p>
                 {openClaim ? (
                   <div className="flex flex-wrap items-center gap-2 text-caption">
                     <span>
@@ -914,19 +904,19 @@ export default async function AttendeesPage({
             ) : null}
             {timeline && timeline.items.length > 0 ? (
               <section aria-labelledby="history-heading" className="flex flex-col gap-2">
-                <h2 id="history-heading" className="text-caption text-zinc-500">
+                <h2 id="history-heading" className="text-caption text-ink-2">
                   {t('timeline.title', { count: timeline.events })}
                 </h2>
                 <ol className="flex list-none flex-col gap-1.5 p-0 text-caption">
                   {timeline.items.slice(0, 12).map((i, n) => (
                     <li key={`${i.kind}-${i.at.toISOString()}-${n}`} className="flex flex-col">
-                      <span className="text-zinc-900">
+                      <span className="text-ink">
                         {t(`timeline.kind.${i.kind}`)}
                         {i.kind === 'order' && i.amountMinor !== null && i.currency
                           ? ` · ${formatMoney(money(i.amountMinor, i.currency), locale)}`
                           : ''}
                       </span>
-                      <span className="text-zinc-500">
+                      <span className="text-ink-2">
                         {i.eventName} · {when.format(i.at)}
                       </span>
                     </li>
