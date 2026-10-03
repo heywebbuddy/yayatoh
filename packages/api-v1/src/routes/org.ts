@@ -1,12 +1,14 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi';
 import {
   createEventCommand,
+  type EventDto,
+  eventLabelsQuery,
   getEventQuery,
   listEventsQuery,
   transitionEventCommand,
   updateEventCommand,
 } from '@yayatoh/events';
-import { executeCommand, executeQuery } from '@yayatoh/kernel';
+import { type Ctx, executeCommand, executeQuery } from '@yayatoh/kernel';
 import { getOrganizationQuery } from '@yayatoh/tenancy';
 import { createTicketTypeCommand, listTicketTypesQuery, updateTicketTypeCommand } from '@yayatoh/ticketing';
 import type { V1Deps, V1Env } from '../context.ts';
@@ -86,6 +88,15 @@ const CreateTicketTypeBody = z
 const UpdateTicketTypeBody = z.object(TicketTypeFields).partial().openapi('UpdateTicketTypeRequest');
 
 const EventPage = pageSchema(Event, 'EventPage');
+const EventListQuery = PageQuery.extend({
+  tag: z
+    .string()
+    .trim()
+    .min(1)
+    .max(40)
+    .optional()
+    .openapi({ description: 'Only events with this tag (case-insensitive).', example: 'outdoor' }),
+});
 const TicketTypeList = listSchema(TicketType, 'TicketTypeList');
 
 const routes = {
@@ -108,9 +119,9 @@ const routes = {
     tags: ['events'],
     summary: 'Events by start time (scope `events:read`)',
     description:
-      'The organization’s events by start time, every status and visibility.\n\nScope `events:read`.',
+      'The organization’s events by start time, every status and visibility. `tag` narrows the list to events with that tag.\n\nScope `events:read`.',
     security: orgSecurity,
-    request: { params: OrgParam, query: PageQuery },
+    request: { params: OrgParam, query: EventListQuery },
     responses: { 200: json(EventPage, 'A page of events'), ...problems },
   }),
   createEvent: createRoute({
@@ -207,25 +218,30 @@ const routes = {
 
 export function orgRoutes(deps: V1Deps) {
   const { ports } = deps;
+  /** U8: events with their tags and category (one query for a page). */
+  const labelled = async (ctx: Ctx, rows: readonly EventDto[]) => {
+    const labels = await executeQuery(eventLabelsQuery, { eventIds: rows.map((e) => e.id) }, ctx, ports);
+    return rows.map((e) => ({
+      ...e,
+      category: labels[e.id]?.category ?? null,
+      tags: labels[e.id]?.tags ?? [],
+    }));
+  };
+  const one = async (ctx: Ctx, e: EventDto) => (await labelled(ctx, [e]))[0];
   return new OpenAPIHono<V1Env>()
     .openapi(routes.org, async (c) =>
       c.json(toWire(Organization, await executeQuery(getOrganizationQuery, {}, c.get('ctx'), ports)), 200),
     )
     .openapi(routes.listEvents, async (c) => {
-      const { limit, cursor } = c.req.valid('query');
+      const { limit, cursor, tag } = c.req.valid('query');
       const rows = await executeQuery(
         listEventsQuery,
-        { limit: limit + 1, after: decodeCursor(cursor) },
+        { limit: limit + 1, after: decodeCursor(cursor), ...(tag ? { tag } : {}) },
         c.get('ctx'),
         ports,
       );
-      return c.json(
-        toWire(
-          EventPage,
-          pageOf(rows, limit, (e) => ({ at: e.startsAt, id: e.id })),
-        ),
-        200,
-      );
+      const page = pageOf(rows, limit, (e) => ({ at: e.startsAt, id: e.id }));
+      return c.json(toWire(EventPage, { ...page, data: await labelled(c.get('ctx'), page.data) }), 200);
     })
     .openapi(routes.createEvent, async (c) => {
       const e = await executeCommand(
@@ -234,7 +250,7 @@ export function orgRoutes(deps: V1Deps) {
         c.get('ctx'),
         ports,
       );
-      return c.json(toWire(Event, e), 201);
+      return c.json(toWire(Event, await one(c.get('ctx'), e)), 201);
     })
     .openapi(routes.getEvent, async (c) => {
       const e = await executeQuery(
@@ -243,7 +259,7 @@ export function orgRoutes(deps: V1Deps) {
         c.get('ctx'),
         ports,
       );
-      return c.json(toWire(Event, e), 200);
+      return c.json(toWire(Event, await one(c.get('ctx'), e)), 200);
     })
     .openapi(routes.updateEvent, async (c) => {
       const e = await executeCommand(
@@ -252,7 +268,7 @@ export function orgRoutes(deps: V1Deps) {
         c.get('ctx'),
         ports,
       );
-      return c.json(toWire(Event, e), 200);
+      return c.json(toWire(Event, await one(c.get('ctx'), e)), 200);
     })
     .openapi(routes.publishEvent, async (c) => {
       const e = await executeCommand(
@@ -261,7 +277,7 @@ export function orgRoutes(deps: V1Deps) {
         c.get('ctx'),
         ports,
       );
-      return c.json(toWire(Event, e), 200);
+      return c.json(toWire(Event, await one(c.get('ctx'), e)), 200);
     })
     .openapi(routes.listTicketTypes, async (c) => {
       // A foreign or unknown event is a 404, not an empty list.
