@@ -323,7 +323,12 @@ export function stripePaymentProvider(opts: StripeProviderOptions): PaymentProvi
 
     async chargeSavedCard(i: ChargeSavedCardInput): Promise<ChargeSavedCardResult> {
       if (i.amount.amount <= 0) throw new Error('charge amount must be positive');
-      const metadata = { orgId: i.orgId, orderId: i.orderId, fundsFlow: 'organizer_mor', yayatoh_ref: `order:${i.orderId}` };
+      const metadata = {
+        orgId: i.orgId,
+        orderId: i.orderId,
+        fundsFlow: 'organizer_mor',
+        yayatoh_ref: `order:${i.orderId}`,
+      };
       try {
         const pi = await stripe.paymentIntents.create(
           {

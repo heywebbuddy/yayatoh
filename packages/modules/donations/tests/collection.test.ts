@@ -15,17 +15,25 @@ const NY = 'America/New_York';
 describe('chargeTimeFor (P4-12: the next morning at 09:00 in the event zone)', () => {
   it('closing at 23:30 local charges at 09:00 the next day', () => {
     // 2027-05-01 23:30 EDT = 2027-05-02 03:30Z
-    expect(chargeTimeFor(new Date('2027-05-02T03:30:00Z'), NY).toISOString()).toBe('2027-05-02T13:00:00.000Z');
+    expect(chargeTimeFor(new Date('2027-05-02T03:30:00Z'), NY).toISOString()).toBe(
+      '2027-05-02T13:00:00.000Z',
+    );
   });
   it('closing after midnight (01:00) still charges that morning at 09:00', () => {
-    expect(chargeTimeFor(new Date('2027-05-02T05:00:00Z'), NY).toISOString()).toBe('2027-05-02T13:00:00.000Z');
+    expect(chargeTimeFor(new Date('2027-05-02T05:00:00Z'), NY).toISOString()).toBe(
+      '2027-05-02T13:00:00.000Z',
+    );
   });
   it('closing at 05:00 local gives at least six hours: 09:00 the day after', () => {
-    expect(chargeTimeFor(new Date('2027-05-02T09:00:00Z'), NY).toISOString()).toBe('2027-05-03T13:00:00.000Z');
+    expect(chargeTimeFor(new Date('2027-05-02T09:00:00Z'), NY).toISOString()).toBe(
+      '2027-05-03T13:00:00.000Z',
+    );
   });
   it('follows the zone across a DST change', () => {
     // 2027-03-13 22:00 EST → 2027-03-14 09:00 EDT (13:00Z)
-    expect(chargeTimeFor(new Date('2027-03-14T03:00:00Z'), NY).toISOString()).toBe('2027-03-14T13:00:00.000Z');
+    expect(chargeTimeFor(new Date('2027-03-14T03:00:00Z'), NY).toISOString()).toBe(
+      '2027-03-14T13:00:00.000Z',
+    );
   });
   it('another zone', () => {
     expect(chargeTimeFor(new Date('2027-05-01T20:00:00Z'), 'Europe/Paris').toISOString()).toBe(
@@ -74,7 +82,9 @@ describe('cardForHolder (no consent, no charge)', () => {
     ...over,
   });
   it('no card for the holder → null', () => {
-    expect(cardForHolder([card({ partyId: 'p2' })], { guestId: null, partyId: 'p1', email: null })).toBeNull();
+    expect(
+      cardForHolder([card({ partyId: 'p2' })], { guestId: null, partyId: 'p1', email: null }),
+    ).toBeNull();
     expect(cardForHolder([], { guestId: 'g', partyId: 'p', email: 'a@b.test' })).toBeNull();
   });
   it("matches the guest, the guest's party, or the party; the newest wins", () => {
@@ -85,10 +95,12 @@ describe('cardForHolder (no consent, no charge)', () => {
   });
   it('falls back to the holder email (case-insensitive) only when no card is linked', () => {
     const byEmail = card({ id: 'e', email: 'Ada@Example.test' });
-    expect(cardForHolder([byEmail], { guestId: null, partyId: 'p1', email: 'ada@example.test' })?.id).toBe('e');
-    const linked = card({ id: 'l', partyId: 'p1', activatedAt: new Date('2027-05-01T01:00:00Z') });
-    expect(cardForHolder([byEmail, linked], { guestId: null, partyId: 'p1', email: 'ada@example.test' })?.id).toBe(
-      'l',
+    expect(cardForHolder([byEmail], { guestId: null, partyId: 'p1', email: 'ada@example.test' })?.id).toBe(
+      'e',
     );
+    const linked = card({ id: 'l', partyId: 'p1', activatedAt: new Date('2027-05-01T01:00:00Z') });
+    expect(
+      cardForHolder([byEmail, linked], { guestId: null, partyId: 'p1', email: 'ada@example.test' })?.id,
+    ).toBe('l');
   });
 });

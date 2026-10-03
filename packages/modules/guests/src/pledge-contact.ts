@@ -28,7 +28,10 @@ export async function paddleHolderContactTx(
     }
   }
   if (!partyId) return { partyId: null, email, locale: 'en' };
-  const [p] = await tx.select({ id: parties.id }).from(parties).where(and(eq(parties.id, partyId)));
+  const [p] = await tx
+    .select({ id: parties.id })
+    .from(parties)
+    .where(and(eq(parties.id, partyId)));
   if (!p) return { partyId: null, email, locale: 'en' };
   email ??= (await partyAddressesTx(tx, orgId, partyId)).email;
   const [invite] = await tx

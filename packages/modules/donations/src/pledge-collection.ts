@@ -3,8 +3,8 @@ import { findEventTx } from '@yayatoh/events';
 import { paddleHolderContactTx, paddleHolderNamesTx } from '@yayatoh/guests';
 import {
   type CommandPorts,
-  createCtx,
   type Ctx,
+  createCtx,
   DomainError,
   executeCommand,
   isDomainError,
@@ -39,9 +39,9 @@ import {
 } from './domain/collection.ts';
 import { giftToken } from './gifts.ts';
 import { type CardChargeDto, cardGiftTx, expireSavedCardsCommand, usableCardTx } from './saved-cards.ts';
-import { paddleCalls, pledges } from './schema-paddles.ts';
-import { pledgeAttempts, pledgeCollections, savedCards } from './schema-collection.ts';
 import { campaigns, gifts } from './schema.ts';
+import { pledgeAttempts, pledgeCollections, savedCards } from './schema-collection.ts';
+import { paddleCalls, pledges } from './schema-paddles.ts';
 
 /**
  * M4.8e pledge collection (P4-12). A pledge is a promise, never a charge, until the host closes
@@ -57,12 +57,14 @@ type CollectionRow = typeof pledgeCollections.$inferSelect;
 
 const PAY_PURPOSE = 'donations.pledge_pay';
 export const pledgePayToken = (collectionId: string) => signLinkToken(PAY_PURPOSE, collectionId);
-const collectionIdFromToken = (token: string) => (token.length > 200 ? null : verifyLinkToken(PAY_PURPOSE, token));
+const collectionIdFromToken = (token: string) =>
+  token.length > 200 ? null : verifyLinkToken(PAY_PURPOSE, token);
 /** The donor's pay page (also "change the card or pay another way" in the summary). */
 export const pledgePayUrl = (appOrigin: string, slug: string, collectionId: string) =>
   `${appOrigin.replace(/\/$/, '')}/events/${slug}/pledge/${encodeURIComponent(pledgePayToken(collectionId))}`;
 
-const reminderKeys = (collectionId: string) => REMINDER_DAYS.map((_, i) => `pledge-reminder:${collectionId}:${i + 1}`);
+const reminderKeys = (collectionId: string) =>
+  REMINDER_DAYS.map((_, i) => `pledge-reminder:${collectionId}:${i + 1}`);
 
 /** Settled: stop the reminders still queued for it. */
 async function stopRemindersTx(tx: TenantTx, collectionId: string, reason: string, now: Date) {
@@ -116,7 +118,10 @@ async function holdersTx(
     guestIds: rows.flatMap((r) => (r.guestId ? [r.guestId] : [])),
     partyIds: rows.flatMap((r) => (r.partyId ? [r.partyId] : [])),
   });
-  const out = new Map<string, { name: string; partyId: string | null; email: string | null; locale: string }>();
+  const out = new Map<
+    string,
+    { name: string; partyId: string | null; email: string | null; locale: string }
+  >();
   for (const r of rows) {
     const key = r.guestId ?? r.partyId ?? `paddle:${r.paddleNumber}`;
     if (out.has(key)) continue;
@@ -150,17 +155,16 @@ async function unclosedPledgesTx(tx: TenantTx, eventId: string, pledgeIds?: read
       currency: pledges.currency,
     })
     .from(pledges)
-    .leftJoin(pledgeCollections, eq(pledgeCollections.pledgeId, pledges.id))
     .where(
       and(
         eq(pledges.eventId, eventId),
         eq(pledges.status, 'confirmed'),
-        isNull(pledgeCollections.id),
+        sql`not exists (select 1 from ${pledgeCollections} where ${pledgeCollections.pledgeId} = ${pledges.id})`,
         pledgeIds ? inArray(pledges.id, [...pledgeIds]) : undefined,
       ),
     )
     .orderBy(asc(pledges.confirmedAt), asc(pledges.id))
-    .for('update', { of: pledges });
+    .for('update');
 }
 
 /**
@@ -280,7 +284,9 @@ export const claimPledgeChargesCommand = tenantCommand({
     let invoiced = 0;
     for (const c of due) {
       const event = await eventOrThrowTx(tx, c.eventId);
-      const [card] = c.savedCardId ? await tx.select().from(savedCards).where(eq(savedCards.id, c.savedCardId)) : [];
+      const [card] = c.savedCardId
+        ? await tx.select().from(savedCards).where(eq(savedCards.id, c.savedCardId))
+        : [];
       if (c.status === 'charging') {
         // Replay the claimed try: the same order, the same key.
         const [a] = await tx
@@ -294,7 +300,10 @@ export const claimPledgeChargesCommand = tenantCommand({
             ),
           );
         if (a && card?.customerId && card.paymentMethodId) {
-          await tx.update(pledgeCollections).set({ claimedAt: ctx.now }).where(eq(pledgeCollections.id, c.id));
+          await tx
+            .update(pledgeCollections)
+            .set({ claimedAt: ctx.now })
+            .where(eq(pledgeCollections.id, c.id));
           charges.push({
             collectionId: c.id,
             attemptId: a.id,
@@ -381,7 +390,10 @@ async function markPaidTx(tx: TenantTx, collectionId: string, now: Date) {
     .update(pledgeCollections)
     .set({ status: 'paid', paidAt: now, claimedAt: null, updatedAt: now })
     .where(
-      and(eq(pledgeCollections.id, collectionId), inArray(pledgeCollections.status, [...OPEN_COLLECTION_STATUSES])),
+      and(
+        eq(pledgeCollections.id, collectionId),
+        inArray(pledgeCollections.status, [...OPEN_COLLECTION_STATUSES]),
+      ),
     )
     .returning({ id: pledgeCollections.id });
   await stopRemindersTx(tx, collectionId, 'pledge_paid', now);
@@ -404,9 +416,17 @@ export const settleCardChargeCommand = tenantCommand({
   entitlement: null,
   permission: 'platform:donations.collect',
   handler: async ({ input, ctx, tx, emit }) => {
-    const [a] = await tx.select().from(pledgeAttempts).where(eq(pledgeAttempts.id, input.attemptId)).for('update');
+    const [a] = await tx
+      .select()
+      .from(pledgeAttempts)
+      .where(eq(pledgeAttempts.id, input.attemptId))
+      .for('update');
     if (!a || a.kind !== 'card') throw new DomainError('not_found', 'Attempt not found');
-    const [c] = await tx.select().from(pledgeCollections).where(eq(pledgeCollections.id, a.collectionId)).for('update');
+    const [c] = await tx
+      .select()
+      .from(pledgeCollections)
+      .where(eq(pledgeCollections.id, a.collectionId))
+      .for('update');
     if (!c) throw new DomainError('not_found', 'Collection not found');
     if (input.status === 'succeeded') {
       if (a.status === 'pending')
@@ -419,7 +439,12 @@ export const settleCardChargeCommand = tenantCommand({
     if (a.status !== 'pending') return { outcome: 'unchanged' as const };
     await tx
       .update(pledgeAttempts)
-      .set({ status: 'failed', declineCode: input.declineCode ?? 'declined', settledAt: ctx.now, updatedAt: ctx.now })
+      .set({
+        status: 'failed',
+        declineCode: input.declineCode ?? 'declined',
+        settledAt: ctx.now,
+        updatedAt: ctx.now,
+      })
       .where(eq(pledgeAttempts.id, a.id));
     if (c.status !== 'charging' || c.cardAttempts !== a.attempt) return { outcome: 'unchanged' as const };
     const next = afterDecline(c.cardAttempts, ctx.now);
@@ -454,7 +479,11 @@ export const pledgeOutcomesSubscriber = defineSubscriber({
   events: ['order.donation_paid@1', 'order.payment_failed@1', 'order.expired@1'],
   handle: async (tx, event) => {
     const p = OrderOutcome.parse(event.payload);
-    const [a] = await tx.select().from(pledgeAttempts).where(eq(pledgeAttempts.orderId, p.orderId)).for('update');
+    const [a] = await tx
+      .select()
+      .from(pledgeAttempts)
+      .where(eq(pledgeAttempts.orderId, p.orderId))
+      .for('update');
     if (!a) return;
     const at = event.occurredAt ? new Date(event.occurredAt) : new Date();
     if (event.type === 'order.donation_paid') {
@@ -515,7 +544,8 @@ export const startPledgePaymentCommand = tenantCommand({
       throw new DomainError('invalid_state', 'Your card is being charged', { reason: 'charging' });
     if (c.status !== 'scheduled' && c.status !== 'invoiced')
       throw new DomainError('invalid_state', 'This pledge is settled', { reason: 'settled' });
-    if (!c.donorEmail) throw new DomainError('invalid_state', 'No email for this pledge', { reason: 'no_email' });
+    if (!c.donorEmail)
+      throw new DomainError('invalid_state', 'No email for this pledge', { reason: 'no_email' });
     const event = await eventOrThrowTx(tx, c.eventId);
     if (c.status === 'scheduled') await invoiceTx(tx, emit, c, 'pay_link', ctx.now, event.timezone);
     const [campaign] = await tx.select().from(campaigns).where(eq(campaigns.id, c.campaignId));
@@ -702,7 +732,12 @@ async function settleByHostTx(
     .update(pledgeCollections)
     .set({ ...set, claimedAt: null, settledBy: by, updatedAt: ctx.now })
     .where(eq(pledgeCollections.id, row.id));
-  await stopRemindersTx(tx, row.id, set.status === 'paid_offline' ? 'pledge_paid' : 'pledge_written_off', ctx.now);
+  await stopRemindersTx(
+    tx,
+    row.id,
+    set.status === 'paid_offline' ? 'pledge_paid' : 'pledge_written_off',
+    ctx.now,
+  );
   return row.id;
 }
 
@@ -934,7 +969,9 @@ const InvoicedPayload = z.object({
 });
 
 const money = (minor: number, currency: string, locale: string) =>
-  new Intl.NumberFormat(locale, { style: 'currency', currency }).format(minor / 10 ** fractionDigits(currency));
+  new Intl.NumberFormat(locale, { style: 'currency', currency }).format(
+    minor / 10 ** fractionDigits(currency),
+  );
 const fractionDigits = (currency: string) =>
   new Intl.NumberFormat('en', { style: 'currency', currency }).resolvedOptions().maximumFractionDigits ?? 2;
 const when = (at: Date, locale: string, timeZone: string) =>
@@ -950,7 +987,13 @@ const day = (d: string, locale: string) =>
  * go to the donor only and are deduplicated per collection.
  */
 export function pledgeMailer(deps: { notifier: Notifier; appOrigin: string }) {
-  async function remindersTx(tx: TenantTx, c: CollectionRow, slug: string, eventName: string, timeZone: string) {
+  async function remindersTx(
+    tx: TenantTx,
+    c: CollectionRow,
+    slug: string,
+    eventName: string,
+    timeZone: string,
+  ) {
     if (!c.donorEmail || !c.invoicedAt || !c.dueOn) return;
     const plan = invoicePlan(c.invoicedAt, timeZone);
     const keys = reminderKeys(c.id);
@@ -983,7 +1026,12 @@ export function pledgeMailer(deps: { notifier: Notifier; appOrigin: string }) {
         const ev = await findEventTx(tx, p.eventId);
         if (!ev) return;
         const rows = await tx
-          .select({ c: pledgeCollections, levelName: paddleCalls.levelName, brand: savedCards.brand, last4: savedCards.last4 })
+          .select({
+            c: pledgeCollections,
+            levelName: paddleCalls.levelName,
+            brand: savedCards.brand,
+            last4: savedCards.last4,
+          })
           .from(pledgeCollections)
           .innerJoin(pledges, eq(pledges.id, pledgeCollections.pledgeId))
           .innerJoin(paddleCalls, eq(paddleCalls.id, pledges.callId))
@@ -1011,7 +1059,13 @@ export function pledgeMailer(deps: { notifier: Notifier; appOrigin: string }) {
             .join('\n');
           await deps.notifier.enqueue(tx, {
             kind: 'donations.pledge-summary',
-            to: { email: c.donorEmail ?? '', name: c.donorName, userId: null, locale: c.locale, timeZone: ev.timezone },
+            to: {
+              email: c.donorEmail ?? '',
+              name: c.donorName,
+              userId: null,
+              locale: c.locale,
+              timeZone: ev.timezone,
+            },
             params: {
               url: pledgePayUrl(deps.appOrigin, ev.slug, c.id),
               name: c.donorName,
@@ -1038,7 +1092,13 @@ export function pledgeMailer(deps: { notifier: Notifier; appOrigin: string }) {
       if (p.reason !== 'pay_link' && c.dueOn)
         await deps.notifier.enqueue(tx, {
           kind: 'donations.pledge-invoice',
-          to: { email: c.donorEmail, name: c.donorName, userId: null, locale: c.locale, timeZone: ev.timezone },
+          to: {
+            email: c.donorEmail,
+            name: c.donorName,
+            userId: null,
+            locale: c.locale,
+            timeZone: ev.timezone,
+          },
           params: {
             url: pledgePayUrl(deps.appOrigin, ev.slug, c.id),
             name: c.donorName,
@@ -1071,7 +1131,11 @@ export async function applyCardChargeToOrder(
   ports: CommandPorts<TenantTx>,
   now?: Date,
 ) {
-  const ctx = createCtx({ orgId, actor: { type: 'system', name: 'donations.card-charge' }, ...(now ? { now } : {}) });
+  const ctx = createCtx({
+    orgId,
+    actor: { type: 'system', name: 'donations.card-charge' },
+    ...(now ? { now } : {}),
+  });
   await executeCommand(
     attachPaymentCommand,
     { orderId: charge.orderId, provider: providerName, providerPaymentId: result.providerPaymentId },

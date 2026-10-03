@@ -13,7 +13,12 @@ export async function offlinePledgeTotalsTx(tx: TenantTx, campaignIds: readonly 
       n: sql<number>`count(*)::int`,
     })
     .from(pledgeCollections)
-    .where(and(inArray(pledgeCollections.campaignId, [...campaignIds]), eq(pledgeCollections.status, 'paid_offline')))
+    .where(
+      and(
+        inArray(pledgeCollections.campaignId, [...campaignIds]),
+        eq(pledgeCollections.status, 'paid_offline'),
+      ),
+    )
     .groupBy(pledgeCollections.campaignId))
     out.set(r.campaignId, { raisedMinor: Number(r.sum), count: r.n });
   return out;

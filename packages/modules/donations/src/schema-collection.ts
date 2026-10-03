@@ -20,8 +20,8 @@ import {
   COLLECTION_STATUSES,
   OFFLINE_METHODS,
 } from './domain/collection.ts';
-import { pledges } from './schema-paddles.ts';
 import { campaigns, donationsSchema, gifts } from './schema.ts';
+import { pledges } from './schema-paddles.ts';
 
 /**
  * M4.8e cards on file and pledge collection (P4-12, P4-14). `(org_id, event_id)` references
@@ -149,12 +149,15 @@ export const pledgeCollections = tenantTable(
       'pledge_collections_card_check',
       sql`status not in ('scheduled', 'charging') or (saved_card_id is not null and charge_at is not null)`,
     ),
-    check('pledge_collections_invoice_check', sql`status <> 'invoiced' or (invoiced_at is not null and due_on is not null)`),
     check(
-      'pledge_collections_offline_check',
-      sql`(status = 'paid_offline') = (offline_method is not null)`,
+      'pledge_collections_invoice_check',
+      sql`status <> 'invoiced' or (invoiced_at is not null and due_on is not null)`,
     ),
-    check('pledge_collections_offline_method_check', sql`offline_method is null or ${inList('offline_method', OFFLINE_METHODS)}`),
+    check('pledge_collections_offline_check', sql`(status = 'paid_offline') = (offline_method is not null)`),
+    check(
+      'pledge_collections_offline_method_check',
+      sql`offline_method is null or ${inList('offline_method', OFFLINE_METHODS)}`,
+    ),
     check('pledge_collections_paid_check', sql`(status in ('paid', 'paid_offline')) = (paid_at is not null)`),
     check('pledge_collections_written_off_check', sql`status <> 'written_off' or note is not null`),
     check('pledge_collections_attempts_check', sql`card_attempts between 0 and 2`),

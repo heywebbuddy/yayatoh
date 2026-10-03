@@ -254,7 +254,11 @@ export async function campaignTotalsTx(tx: TenantTx, campaignIds: readonly strin
   // M4.8e: pledges the host recorded as paid offline count like paid gifts (P4-12).
   for (const [campaignId, o] of await offlinePledgeTotalsTx(tx, campaignIds)) {
     const t = out.get(campaignId) ?? { raisedMinor: 0, giftCount: 0, feeCoverMinor: 0 };
-    out.set(campaignId, { ...t, raisedMinor: t.raisedMinor + o.raisedMinor, giftCount: t.giftCount + o.count });
+    out.set(campaignId, {
+      ...t,
+      raisedMinor: t.raisedMinor + o.raisedMinor,
+      giftCount: t.giftCount + o.count,
+    });
   }
   return out;
 }

@@ -83,7 +83,9 @@ describe('fake provider — cards on file (M4.8e)', () => {
   });
 
   it('refuses a non-positive charge', async () => {
-    await expect(fake().chargeSavedCard({ ...charge('fakepm_ok_1'), amount: { amount: 0, currency: 'USD' } })).rejects.toThrow();
+    await expect(
+      fake().chargeSavedCard({ ...charge('fakepm_ok_1'), amount: { amount: 0, currency: 'USD' } }),
+    ).rejects.toThrow();
   });
 });
 
@@ -117,7 +119,10 @@ describe('Stripe adapter — cards on file (M4.8e)', () => {
       idempotencyKey: `card:${CARD}`,
       returnUrl: 'https://app.test/back',
     });
-    expect(out).toEqual({ providerSetupId: 'cs_setup_1', redirectUrl: 'https://checkout.stripe.com/c/setup' });
+    expect(out).toEqual({
+      providerSetupId: 'cs_setup_1',
+      redirectUrl: 'https://checkout.stripe.com/c/setup',
+    });
     const [cus, session] = calls;
     expect(cus?.account).toBe('acct_org');
     expect(session?.account).toBe('acct_org');
@@ -129,7 +134,9 @@ describe('Stripe adapter — cards on file (M4.8e)', () => {
 
   it('charges off-session with confirm, exactly the amount, under the order key', async () => {
     const { provider, calls } = fakeStripe({
-      'POST /v1/payment_intents': () => ({ json: { id: 'pi_1', object: 'payment_intent', status: 'succeeded' } }),
+      'POST /v1/payment_intents': () => ({
+        json: { id: 'pi_1', object: 'payment_intent', status: 'succeeded' },
+      }),
     });
     const out = await provider.chargeSavedCard({ ...charge('pm_1'), connectedAccountId: 'acct_org' });
     expect(out).toEqual({ providerPaymentId: 'pi_1', status: 'succeeded' });
@@ -168,7 +175,11 @@ describe('Stripe adapter — cards on file (M4.8e)', () => {
           object: 'setup_intent',
           status: 'succeeded',
           customer: 'cus_1',
-          payment_method: { id: 'pm_1', object: 'payment_method', card: { brand: 'visa', last4: '4242', exp_month: 12, exp_year: 2030 } },
+          payment_method: {
+            id: 'pm_1',
+            object: 'payment_method',
+            card: { brand: 'visa', last4: '4242', exp_month: 12, exp_year: 2030 },
+          },
         },
       }),
     });

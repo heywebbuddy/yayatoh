@@ -69,11 +69,11 @@ export {
 export type {
   AccountEvent,
   BalanceTransaction,
+  BalanceTransactionKind,
   ChargeSavedCardInput,
   ChargeSavedCardResult,
-  CreateCardSetupInput,
-  BalanceTransactionKind,
   ConnectAccountState,
+  CreateCardSetupInput,
   CreatePaymentInput,
   CreatePaymentResult,
   DisputeEvent,

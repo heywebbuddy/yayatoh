@@ -1,7 +1,7 @@
 import { type TenantTx, withTenant } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
 import { guestsPartyCredentials } from '@yayatoh/guests';
-import { createCtx, type Ctx, DomainError, requireOrg, uuidv7 } from '@yayatoh/kernel';
+import { type Ctx, createCtx, DomainError, requireOrg, uuidv7 } from '@yayatoh/kernel';
 import { startDonationOrderTx } from '@yayatoh/orders';
 import { claimProviderEventTx, fundsFlowTx } from '@yayatoh/payments';
 import { signLinkToken, tenantCommand, verifyLinkToken } from '@yayatoh/platform';
@@ -12,8 +12,8 @@ import { CARD_SOURCES, CARD_STATUSES, cardRemoveAfter } from './domain/collectio
 import { DISPLAY_AS, giftAmountProblem } from './domain/giving.ts';
 import { giftToken } from './gifts.ts';
 import { CARD_CONSENT_VERSION } from './legal/card-consent.ts';
-import { savedCards } from './schema-collection.ts';
 import { gifts, levels } from './schema.ts';
+import { savedCards } from './schema-collection.ts';
 
 /**
  * M4.8e cards on file (P4-14): opt-in only, always on the guest's own device. A saved card is
@@ -143,9 +143,7 @@ export const attachCardSetupCommand = tenantCommand({
     const rows = await tx
       .update(savedCards)
       .set({ provider: input.provider, providerSetupId: input.providerSetupId, updatedAt: ctx.now })
-      .where(
-        and(eq(savedCards.id, input.cardId), eq(savedCards.status, 'pending')),
-      )
+      .where(and(eq(savedCards.id, input.cardId), eq(savedCards.status, 'pending')))
       .returning({ id: savedCards.id, setup: savedCards.providerSetupId });
     return { attached: rows.length === 1 };
   },
@@ -184,17 +182,24 @@ export const applyCardSetupCommand = tenantCommand({
   entitlement: null,
   permission: 'platform:payments.webhook',
   handler: async ({ input, ctx, tx }) => {
-    if (!(await claimProviderEventTx(tx, input))) return { outcome: 'duplicate' as const, status: 'unchanged' };
+    if (!(await claimProviderEventTx(tx, input)))
+      return { outcome: 'duplicate' as const, status: 'unchanged' };
     const cardId = z.uuid().safeParse(input.reference);
     if (!cardId.success) return { outcome: 'ignored' as const, status: 'unknown' };
     const [card] = await tx.select().from(savedCards).where(eq(savedCards.id, cardId.data)).for('update');
-    if (!card || card.status !== 'pending') return { outcome: 'ignored' as const, status: card?.status ?? 'unknown' };
+    if (!card || card.status !== 'pending')
+      return { outcome: 'ignored' as const, status: card?.status ?? 'unknown' };
     if (card.providerSetupId && card.providerSetupId !== input.providerSetupId)
       throw new DomainError('conflict', 'Setup does not match the card');
     if (input.type === 'setup.failed' || !input.customerId || !input.paymentMethodId) {
       await tx
         .update(savedCards)
-        .set({ status: 'failed', provider: input.provider, providerSetupId: input.providerSetupId, updatedAt: ctx.now })
+        .set({
+          status: 'failed',
+          provider: input.provider,
+          providerSetupId: input.providerSetupId,
+          updatedAt: ctx.now,
+        })
         .where(eq(savedCards.id, card.id));
       return { outcome: 'applied' as const, status: 'failed' };
     }
@@ -296,7 +301,12 @@ export const expireSavedCardsCommand = tenantCommand({
     await tx
       .update(savedCards)
       .set({ status: 'removed', removedAt: ctx.now, updatedAt: ctx.now })
-      .where(inArray(savedCards.id, due.map((c) => c.id)));
+      .where(
+        inArray(
+          savedCards.id,
+          due.map((c) => c.id),
+        ),
+      );
     return { detach: due.map(detachOf).filter((d): d is NonNullable<typeof d> => d !== null) };
   },
   audit: (_i, r) => ({
@@ -324,7 +334,12 @@ export async function savedCardView(orgId: string, token: string): Promise<Saved
   const ctx = createCtx({ orgId, actor: { type: 'system', name: 'donations.saved-card' } });
   return withTenant(ctx, async (tx) => {
     const [c] = await tx
-      .select({ eventId: savedCards.eventId, status: savedCards.status, brand: savedCards.brand, last4: savedCards.last4 })
+      .select({
+        eventId: savedCards.eventId,
+        status: savedCards.status,
+        brand: savedCards.brand,
+        last4: savedCards.last4,
+      })
       .from(savedCards)
       .where(eq(savedCards.id, id));
     return c ? SavedCardViewDto.parse(c) : null;
@@ -366,7 +381,14 @@ export async function cardGiftTx(
     campaign: { id: string; name: string };
     levelId: string | null;
     amountMinor: number;
-    card: { name: string; email: string; locale: string; connectedAccountId: string; customerId: string; paymentMethodId: string };
+    card: {
+      name: string;
+      email: string;
+      locale: string;
+      connectedAccountId: string;
+      customerId: string;
+      paymentMethodId: string;
+    };
     displayAs: (typeof DISPLAY_AS)[number];
     description: string;
   },
@@ -384,7 +406,9 @@ export async function cardGiftTx(
   });
   // A card on another account than the org's current one cannot be charged there.
   if (started.payment.connectedAccountId !== input.card.connectedAccountId)
-    throw new DomainError('invalid_state', 'The card was saved on another account', { reason: 'card_account' });
+    throw new DomainError('invalid_state', 'The card was saved on another account', {
+      reason: 'card_account',
+    });
   await tx.insert(gifts).values({
     id: giftId,
     orgId,

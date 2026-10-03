@@ -98,16 +98,21 @@ export function invoicePlan(invoicedAt: Date, timeZone: string) {
 }
 
 /** What follows a declined charge: one retry a day later, then a pay link (P4-12). */
-export function afterDecline(attempts: number, at: Date): { next: 'retry'; chargeAt: Date } | { next: 'invoice' } {
+export function afterDecline(
+  attempts: number,
+  at: Date,
+): { next: 'retry'; chargeAt: Date } | { next: 'invoice' } {
   return attempts < MAX_CARD_ATTEMPTS
     ? { next: 'retry', chargeAt: new Date(at.getTime() + RETRY_AFTER_HOURS * 3_600_000) }
     : { next: 'invoice' };
 }
 
 /** Pledges are "unpaid after the event" once this instant passes. */
-export const unpaidAlertFrom = (eventEndsAt: Date) => new Date(eventEndsAt.getTime() + UNPAID_ALERT_DAYS * DAY);
+export const unpaidAlertFrom = (eventEndsAt: Date) =>
+  new Date(eventEndsAt.getTime() + UNPAID_ALERT_DAYS * DAY);
 /** A saved card is removed after this instant. */
-export const cardRemoveAfter = (eventEndsAt: Date) => new Date(eventEndsAt.getTime() + CARD_REMOVE_DAYS * DAY);
+export const cardRemoveAfter = (eventEndsAt: Date) =>
+  new Date(eventEndsAt.getTime() + CARD_REMOVE_DAYS * DAY);
 
 export interface CardCandidate {
   readonly id: string;

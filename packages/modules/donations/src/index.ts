@@ -19,6 +19,15 @@ export {
   saveCharityProfileCommand,
   verifyCharityCommand,
 } from './charity.ts';
+// M4.8e: cards on file and pledge collection.
+export {
+  ATTEMPT_KINDS,
+  CARD_SOURCES,
+  CARD_STATUSES,
+  COLLECTION_STATUSES,
+  OFFLINE_METHODS,
+  UNPAID_ALERT_DAYS,
+} from './domain/collection.ts';
 export {
   CAMPAIGN_STATUSES,
   type CampaignStatus,
@@ -106,6 +115,7 @@ export {
   publicGiving,
   startGiftCommand,
 } from './gifts.ts';
+export { CARD_CONSENT_VERSION } from './legal/card-consent.ts';
 export { RECEIPT_COPY, RECEIPT_COPY_VERSION, type ReceiptCopy } from './legal/receipt-copy.ts';
 export {
   AssignPaddleInput,
@@ -145,6 +155,30 @@ export {
   paddlesQuery,
   releasePaddleCommand,
 } from './paddles.ts';
+export {
+  applyCardChargeToOrder,
+  ClaimedChargeDto,
+  type CollectRunResult,
+  claimPledgeChargesCommand,
+  closePledgesCommand,
+  collectPledges,
+  PledgeCollectionDto,
+  PledgePayResult,
+  PledgeRowDto,
+  PublicPledgeDto,
+  pledgeCollectionQuery,
+  pledgeMailer,
+  pledgeOutcomesSubscriber,
+  pledgePaymentInput,
+  pledgePayToken,
+  pledgePayUrl,
+  publicPledge,
+  recordPledgePaymentCommand,
+  settleCardChargeCommand,
+  startPledgePaymentCommand,
+  unpaidPledgeFactsTx,
+  writeOffPledgeCommand,
+} from './pledge-collection.ts';
 export { privateColumns } from './private-columns.ts';
 export {
   type ReceiptDocInput,
@@ -179,40 +213,6 @@ export {
   yearEndStatementsCommand,
 } from './receipts.ts';
 export { giftRetentionCommand, LAPSED_GIFT_DAYS, redactLapsedGiftsTx } from './retention.ts';
-// M4.8e: cards on file and pledge collection.
-export {
-  ATTEMPT_KINDS,
-  CARD_SOURCES,
-  CARD_STATUSES,
-  COLLECTION_STATUSES,
-  OFFLINE_METHODS,
-  UNPAID_ALERT_DAYS,
-} from './domain/collection.ts';
-export { CARD_CONSENT_VERSION } from './legal/card-consent.ts';
-export {
-  applyCardChargeToOrder,
-  ClaimedChargeDto,
-  type CollectRunResult,
-  claimPledgeChargesCommand,
-  closePledgesCommand,
-  collectPledges,
-  PledgeCollectionDto,
-  PledgePayResult,
-  PledgeRowDto,
-  PublicPledgeDto,
-  pledgeCollectionQuery,
-  pledgeMailer,
-  pledgeOutcomesSubscriber,
-  pledgePaymentInput,
-  pledgePayToken,
-  pledgePayUrl,
-  publicPledge,
-  recordPledgePaymentCommand,
-  settleCardChargeCommand,
-  startPledgePaymentCommand,
-  unpaidPledgeFactsTx,
-  writeOffPledgeCommand,
-} from './pledge-collection.ts';
 export {
   applyCardSetupCommand,
   attachCardSetupCommand,
@@ -223,9 +223,9 @@ export {
   giveWithSavedCardCommand,
   removeSavedCardCommand,
   SavedCardViewDto,
+  StartCardSetupInput,
   savedCardIdFromToken,
   savedCardToken,
   savedCardView,
-  StartCardSetupInput,
   startCardSetupCommand,
 } from './saved-cards.ts';
