@@ -55,7 +55,9 @@ test.describe('conference hub (M5.10a)', () => {
     const f = await fixture(page, `Hub Today ${stamp()}`);
     const me = first(f);
     await page.goto(`/orders/${me.token}`);
-    await expect(page.getByText('Agenda, your schedule, your badge and calendar, on your phone.')).toBeVisible();
+    await expect(
+      page.getByText('Agenda, your schedule, your badge and calendar, on your phone.'),
+    ).toBeVisible();
     await press(page.getByRole('link', { name: 'Open my conference hub' }));
     await expect(page).toHaveURL(new RegExp(`/orders/${me.token}/hub$`));
     await expect(page.getByRole('heading', { level: 1 })).toContainText('Hub Today');
@@ -121,13 +123,19 @@ test.describe('conference hub (M5.10a)', () => {
     await expectAccessibleBothModes(page);
     await press(talk.getByRole('button', { name: 'Cancel' }));
     await expect(talk.getByText('This overlaps your schedule')).toHaveCount(0);
-    await expect(page.getByRole('button', { name: 'Star Parallel talk' })).toHaveAttribute('aria-pressed', 'false');
+    await expect(page.getByRole('button', { name: 'Star Parallel talk' })).toHaveAttribute(
+      'aria-pressed',
+      'false',
+    );
 
     // Again, and replace: the panel loses its star.
     await press(page.getByRole('button', { name: 'Star Parallel talk' }));
     await press(talk.getByRole('button', { name: 'Replace' }));
     await expect(talk.getByText('Starred. 1 overlapping favorite removed.')).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Star Morning panel' })).toHaveAttribute('aria-pressed', 'false');
+    await expect(page.getByRole('button', { name: 'Star Morning panel' })).toHaveAttribute(
+      'aria-pressed',
+      'false',
+    );
 
     // Persisted after a reload; star the panel again and keep both.
     await page.reload();
@@ -165,7 +173,9 @@ test.describe('conference hub (M5.10a)', () => {
     await press(page.getByRole('link', { name: 'Today' }));
     await expect(page.getByText('From your schedule.')).toBeVisible();
     await expect(page.getByText('Nothing on right now.')).toBeVisible();
-    await expect(page.getByRole('region', { name: 'Up next' }).getByRole('heading', { name: 'Morning panel' })).toBeVisible();
+    await expect(
+      page.getByRole('region', { name: 'Up next' }).getByRole('heading', { name: 'Morning panel' }),
+    ).toBeVisible();
   });
 
   test('calendar feed: subscribe, it follows a moved session, an unchanged feed is 304, replacing the link revokes it', async ({
@@ -178,7 +188,9 @@ test.describe('conference hub (M5.10a)', () => {
     if (!keynote) throw new Error('no keynote');
     await page.goto(`/orders/${me.token}/hub?view=agenda`);
     await press(page.getByRole('button', { name: 'Star Opening keynote' }));
-    await expect(card(page, 'Opening keynote').getByText('Opening keynote is on your schedule.')).toBeVisible();
+    await expect(
+      card(page, 'Opening keynote').getByText('Opening keynote is on your schedule.'),
+    ).toBeVisible();
     await page.goto(`/orders/${me.token}/hub`);
     await press(page.getByRole('link', { name: 'Add to my calendar' }));
     await expect(page).toHaveURL(/view=schedule#calendar$/);
@@ -240,7 +252,9 @@ test.describe('conference hub (M5.10a)', () => {
     await expect(page.getByText('Replace the calendar link?')).toBeVisible();
     await expectAccessibleBothModes(page);
     await press(page.getByRole('button', { name: 'Replace the link' }));
-    await expect(page.getByText('Done. The old link no longer works: subscribe with the new one.')).toBeVisible();
+    await expect(
+      page.getByText('Done. The old link no longer works: subscribe with the new one.'),
+    ).toBeVisible();
     await expect(field).not.toHaveValue(url);
     const fresh = await field.inputValue();
     expect((await ics()).status).toBe(404);
@@ -269,7 +283,8 @@ test.describe('conference hub (M5.10a)', () => {
     });
     expect(m.name).toContain('Hub Install');
     expect(m.start_url).toMatch(new RegExp(`^/orders/${me.token}/hub\\?registrant=[0-9a-f-]{36}$`));
-    for (const icon of m.icons as { src: string }[]) expect((await page.request.get(icon.src)).status()).toBe(200);
+    for (const icon of m.icons as { src: string }[])
+      expect((await page.request.get(icon.src)).status()).toBe(200);
     const scope = await page.evaluate(async () => {
       for (let i = 0; i < 50; i++) {
         const reg = await navigator.serviceWorker.getRegistration(location.pathname);

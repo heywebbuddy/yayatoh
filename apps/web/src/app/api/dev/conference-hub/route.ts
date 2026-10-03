@@ -37,7 +37,8 @@ export async function POST(req: NextRequest) {
   if (form.get('action') === 'move') {
     const eventId = String(form.get('eventId') ?? '');
     const sessionId = String(form.get('sessionId') ?? '');
-    if (!UUID.test(eventId) || !UUID.test(sessionId)) return NextResponse.json({ error: 'bad' }, { status: 400 });
+    if (!UUID.test(eventId) || !UUID.test(sessionId))
+      return NextResponse.json({ error: 'bad' }, { status: 400 });
     const by = Number(form.get('minutes') ?? 60) * 60_000;
     const startsAt = new Date(String(form.get('startsAt')));
     const endsAt = new Date(String(form.get('endsAt')));
@@ -106,7 +107,11 @@ export async function POST(req: NextRequest) {
         ctx,
         ports,
       );
-      sessions[title] = { id: res.session.id, startsAt: startsAt.toISOString(), endsAt: endsAt.toISOString() };
+      sessions[title] = {
+        id: res.session.id,
+        startsAt: startsAt.toISOString(),
+        endsAt: endsAt.toISOString(),
+      };
       return res.session;
     };
     const keynote = await session('Opening keynote', -0.5, 1.5);

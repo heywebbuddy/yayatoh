@@ -117,6 +117,8 @@ export {
   saveExhibitorSettingsCommand,
   staffInvited,
 } from './exhibitor-portal.ts';
+// M5.10a: when sessions last changed (the attendee's calendar feed).
+export { sessionStampsTx } from './hub.ts';
 export {
   createExhibitorCommand,
   createSpeakerCommand,
@@ -206,5 +208,3 @@ export {
   programOwnerDeleted,
   programOwnerTx,
 } from './shared.ts';
-// M5.10a: when sessions last changed (the attendee's calendar feed).
-export { sessionStampsTx } from './hub.ts';

@@ -116,7 +116,6 @@ for (const view of ['today', 'agenda'] as const)
       body: JSON.stringify({ median: m, runs }, null, 2),
       contentType: 'application/json',
     });
-    console.log(`conference hub (${view}) lighthouse median`, JSON.stringify(m));
     const failing = [...new Set(runs.flatMap((r) => r.failing))].join(', ') || 'none';
     expect
       .soft(m.performance, 'performance score (median)')
