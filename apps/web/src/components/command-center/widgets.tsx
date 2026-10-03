@@ -4,6 +4,7 @@ import type { WidgetKey } from '@yayatoh/command-center/client';
 import { formatMoney, money } from '@yayatoh/kernel';
 import { countWords } from '@yayatoh/notifications/numbers';
 import { BarChart, cx, ProgressBar, ProgressRing, StatusDot, Timeline as TimelineList } from '@yayatoh/ui';
+import { Circle, CircleCheck } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
 import { Link } from '@/i18n/navigation.ts';
@@ -30,12 +31,24 @@ import {
   type StaffPresence,
   StaffPresenceBody,
 } from './live-widgets.tsx';
+import {
+  type Arrivals,
+  ArrivalsBody,
+  type GuestSeating,
+  GuestSeatingBody,
+  type Meals,
+  MealsBody,
+  type Rsvp,
+  RsvpBody,
+} from './social-widgets.tsx';
 
 /** Widget bodies (M3.2a). Each renders one loader's allowlisted DTO; nothing else reaches them. */
 interface Ctx {
   readonly locale: string;
   readonly timeZone: string;
   readonly base: string;
+  /** U4: the org's alert list for this event (the alerts tile's way in). */
+  readonly alertsHref?: string;
 }
 
 /** What the board lets a widget control (M3.3a): its options (the feed's filters) and pausing. */
@@ -47,12 +60,12 @@ export interface WidgetControls {
   readonly togglePause: () => void;
 }
 
+type ReadinessItem = { key: string; path: string; field: string | null; done: boolean; blocking: boolean };
 type Readiness = {
   score: number;
   done: number;
   total: number;
-  blocking: { key: string; path: string }[];
-  todo: { key: string; path: string }[];
+  items: ReadinessItem[];
 };
 type Sales = { lines: { currency: string; total: number; today: number; refunds: number }[]; orders: number };
 type Tickets = { sold: number; comp: number; capacity: number };
@@ -177,36 +190,67 @@ function Meter({
   return max > 0 ? <ProgressBar value={Math.min(value, max)} max={max} label={label} tone={tone} /> : null;
 }
 
+/** The page and field that fix a readiness item (U4: `{path}#{field}`). */
+export function readinessHref(base: string, r: { path: string; field: string | null }): string {
+  return `${r.path ? `${base}/${r.path}` : base}${r.field ? `#${r.field}` : ''}`;
+}
+
+/**
+ * Readiness as a checklist (U4): every item, done or not; the open ones link to the exact field
+ * that fixes them. Items that block selling come first, under their own heading.
+ */
 function ReadinessBody({ d, c }: { d: Readiness; c: Ctx }) {
   const t = useTranslations('commandCenter.widget.readiness');
   const tr = useTranslations('readiness');
-  const item = (r: { key: string; path: string }) => (
-    <li key={r.key}>
-      <Link
-        href={r.path ? `${c.base}/${r.path}` : c.base}
-        className="inline-flex min-h-7 items-center text-body font-semibold text-primary-ink underline-offset-2 hover:underline"
-      >
-        {tr(r.key)}
-      </Link>
+  const item = (r: ReadinessItem) => (
+    <li key={r.key} className="flex min-h-7 items-center gap-2" data-done={r.done}>
+      {r.done ? (
+        <CircleCheck aria-hidden="true" className="size-5 shrink-0 text-success" strokeWidth={2} />
+      ) : (
+        <Circle aria-hidden="true" className="size-5 shrink-0 text-ink-3" strokeWidth={2} />
+      )}
+      {r.done ? (
+        <span className="text-body text-ink-2">
+          {tr(r.key)}
+          <span className="sr-only"> ({tr('done')})</span>
+        </span>
+      ) : (
+        <Link
+          href={readinessHref(c.base, r)}
+          className="inline-flex min-h-6 items-center text-body font-semibold text-primary-ink underline-offset-2 hover:underline"
+        >
+          {tr(r.key)}
+          <span className="sr-only"> ({tr('todo')})</span>
+        </Link>
+      )}
     </li>
   );
+  const blocking = d.items.filter((r) => r.blocking);
+  const other = d.items.filter((r) => !r.blocking);
   return (
     <div className="flex flex-wrap items-start gap-4">
-      <ProgressRing value={d.score} label={t('score', { score: d.score })} />
-      <div className="flex min-w-40 flex-1 flex-col gap-2">
-        {d.blocking.length === 0 && d.todo.length === 0 ? <p className="text-body">{t('allDone')}</p> : null}
-        {d.blocking.length > 0 ? (
+      <div className="flex flex-col items-center gap-1">
+        <ProgressRing value={d.score} label={t('score', { score: d.score })} />
+        <p className="m-0 text-caption text-ink-2" data-testid="cc-readiness-count">
+          {t('count', { done: d.done, total: d.total })}
+        </p>
+      </div>
+      <div className="flex min-w-40 flex-1 flex-col gap-3">
+        {d.done === d.total ? <p className="m-0 text-body">{t('allDone')}</p> : null}
+        {blocking.length > 0 ? (
           <div className="flex flex-col gap-1">
-            <h4 className="m-0 text-caption font-bold tracking-normal text-danger">{t('blocking')}</h4>
-            <ul className="flex list-none flex-col gap-1 p-0" data-testid="cc-blocking">
-              {d.blocking.map(item)}
+            <h4 className="m-0 text-caption font-bold tracking-normal text-ink-2">{t('required')}</h4>
+            <ul className="m-0 flex list-none flex-col gap-1 p-0" data-testid="cc-blocking">
+              {blocking.map(item)}
             </ul>
           </div>
         ) : null}
-        {d.todo.length > 0 ? (
+        {other.length > 0 ? (
           <div className="flex flex-col gap-1">
-            <h4 className="m-0 text-caption font-bold tracking-normal text-ink-2">{t('todo')}</h4>
-            <ul className="flex list-none flex-col gap-1 p-0">{d.todo.map(item)}</ul>
+            <h4 className="m-0 text-caption font-bold tracking-normal text-ink-2">{t('recommended')}</h4>
+            <ul className="m-0 flex list-none flex-col gap-1 p-0" data-testid="cc-todo">
+              {other.map(item)}
+            </ul>
           </div>
         ) : null}
       </div>
@@ -511,43 +555,68 @@ function AlertsBody({ d, c }: { d: Alerts; c: Ctx }) {
   const t = useTranslations('commandCenter.widget.alerts');
   const ta = useTranslations('alerts');
   if (d.engine === 'pending') return <p className="text-body text-ink-2">{t('pending')}</p>;
-  if (d.alerts.length === 0) return <p className="text-body text-ink-2">{t('none')}</p>;
+  // U4: an empty tile says what it watches and where the history is, never a bare placeholder.
+  if (d.alerts.length === 0)
+    return (
+      <div className="flex flex-col gap-2" data-testid="cc-alerts-clear">
+        <StatusDot status="success" label={t('none')} />
+        <p className="m-0 text-caption text-ink-2">{t('watching')}</p>
+        {c.alertsHref ? (
+          <Link
+            href={c.alertsHref}
+            className="inline-flex min-h-6 items-center self-start text-body underline underline-offset-2"
+          >
+            {t('viewAll')}
+          </Link>
+        ) : null}
+      </div>
+    );
   // Alert fix paths are org-relative (M3.2b); the board's base is the event's.
   const orgBase = c.base.replace(/\/e\/[^/]+$/, '');
   return (
-    <ul className="flex list-none flex-col gap-2 p-0">
-      {d.alerts.map((a) => {
-        const title = ta(`rules.${a.rule}`, { count: a.count, countWords: countWords(a.count, c.locale) });
-        return (
-          <li key={a.id} className="flex gap-3 rounded-tile border border-line bg-surface-2 p-3">
-            <span
-              aria-hidden="true"
-              className={cx(
-                'flex size-9 shrink-0 items-center justify-center rounded-[12px] font-extrabold',
-                a.severity === 'critical' && 'bg-danger-soft text-danger',
-                a.severity === 'warning' && 'bg-warning-soft text-warning',
-                a.severity === 'info' && 'bg-primary-soft text-primary-ink',
-              )}
-            >
-              !
-            </span>
-            <div className="flex min-w-0 flex-col gap-1">
-              {a.href ? (
-                <Link
-                  href={`${orgBase}${a.href}`}
-                  className="text-body font-bold text-ink underline-offset-2 hover:underline"
-                >
-                  {title}
-                </Link>
-              ) : (
-                <span className="text-body font-bold text-ink">{title}</span>
-              )}
-              <StatusDot status={SEVERITY_DOT[a.severity]} label={ta(`severity.${a.severity}`)} />
-            </div>
-          </li>
-        );
-      })}
-    </ul>
+    <div className="flex flex-col gap-2">
+      <ul className="m-0 flex list-none flex-col gap-2 p-0">
+        {d.alerts.map((a) => {
+          const title = ta(`rules.${a.rule}`, { count: a.count, countWords: countWords(a.count, c.locale) });
+          return (
+            <li key={a.id} className="flex gap-3 rounded-tile border border-line bg-surface-2 p-3">
+              <span
+                aria-hidden="true"
+                className={cx(
+                  'flex size-9 shrink-0 items-center justify-center rounded-[12px] font-extrabold',
+                  a.severity === 'critical' && 'bg-danger-soft text-danger',
+                  a.severity === 'warning' && 'bg-warning-soft text-warning',
+                  a.severity === 'info' && 'bg-primary-soft text-primary-ink',
+                )}
+              >
+                !
+              </span>
+              <div className="flex min-w-0 flex-col gap-1">
+                {a.href ? (
+                  <Link
+                    href={`${orgBase}${a.href}`}
+                    className="text-body font-bold text-ink underline-offset-2 hover:underline"
+                  >
+                    {title}
+                  </Link>
+                ) : (
+                  <span className="text-body font-bold text-ink">{title}</span>
+                )}
+                <StatusDot status={SEVERITY_DOT[a.severity]} label={ta(`severity.${a.severity}`)} />
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+      {c.alertsHref ? (
+        <Link
+          href={c.alertsHref}
+          className="inline-flex min-h-6 items-center self-start text-body underline underline-offset-2"
+        >
+          {t('viewAll')}
+        </Link>
+      ) : null}
+    </div>
   );
 }
 
@@ -654,5 +723,14 @@ export function WidgetBody({
       return <ExhibitorActivityBody d={data as ExhibitorActivity} c={ctx} />;
     case 'sponsorActivity':
       return <SponsorActivityBody d={data as SponsorActivity} c={ctx} />;
+
+    case 'rsvp':
+      return <RsvpBody d={data as Rsvp} c={ctx} />;
+    case 'guestSeating':
+      return <GuestSeatingBody d={data as GuestSeating} c={ctx} />;
+    case 'meals':
+      return <MealsBody d={data as Meals} c={ctx} />;
+    case 'arrivals':
+      return <ArrivalsBody d={data as Arrivals} c={ctx} />;
   }
 }

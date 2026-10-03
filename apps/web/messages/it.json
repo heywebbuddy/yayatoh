@@ -6936,7 +6936,9 @@
       "event": "Evento",
       "mode": "Modalità",
       "starts": "Inizio",
-      "readiness": "Preparazione"
+      "readiness": "Preparazione",
+      "sales": "Vendite",
+      "tickets": "Biglietti"
     },
     "manual": "Impostata a mano",
     "role": {
@@ -7007,9 +7009,10 @@
       "readiness": {
         "title": "Preparazione",
         "score": "Preparazione {score}%",
-        "blocking": "Bloccante",
-        "todo": "Da fare inoltre",
-        "allDone": "Tutto pronto."
+        "allDone": "Tutto pronto.",
+        "count": "{done} su {total} fatti",
+        "required": "Necessario per vendere",
+        "recommended": "Consigliato"
       },
       "sales": {
         "title": "Vendite",
@@ -7056,7 +7059,9 @@
       "alerts": {
         "title": "Avvisi",
         "pending": "Gli avvisi compariranno qui quando le regole di avviso saranno attive.",
-        "none": "Nessun avviso aperto."
+        "none": "Nessun avviso aperto.",
+        "watching": "Le regole di avviso controllano vendite, pagamenti, dispositivi, capienza e ospiti, e compaiono qui.",
+        "viewAll": "Vedi tutti gli avvisi"
       },
       "entrances": {
         "title": "Ingressi"
@@ -7207,6 +7212,52 @@
         "over": "{domains, plural, one {# dominio di invio} many {# domini di invio} other {# domini di invio}} e {campaigns, plural, one {# campagna} many {# campagne} other {# campagne}} oltre le soglie",
         "open": "Apri la recapitabilità delle email"
       },
+      "rsvp": {
+        "title": "Risposte",
+        "allAnswered": "Tutti gli invitati hanno risposto.",
+        "noneInvited": "Nessuno è ancora invitato a un momento dell’evento.",
+        "responded": "{responded} invitati su {invited} hanno risposto",
+        "meter": "Risposte ricevute",
+        "parties": "Nuclei senza risposta: {count}",
+        "notSent": "Invito non ancora inviato: {count}",
+        "deadline": "Scadenza risposte: {date}",
+        "noDeadline": "Nessuna scadenza per le risposte",
+        "open": "Apri le risposte"
+      },
+      "guestSeating": {
+        "title": "Tavoli degli invitati",
+        "noChart": "Ancora nessuna piantina per gli invitati. Scegline una in Posti.",
+        "noGuests": "Ancora nessun invitato da sistemare.",
+        "allSeated": "Ogni invitato che non ha declinato ha un tavolo.",
+        "seated": "{seated} invitati su {guests} hanno un tavolo",
+        "listLabel": "Invitati senza tavolo",
+        "guestOf": "Accompagnatore di {name}",
+        "more": "+{count} altri",
+        "open": "Assegna i tavoli"
+      },
+      "meals": {
+        "title": "Pasti ed esigenze alimentari",
+        "attending": "Presenti: {count}",
+        "noneAttending": "I pasti si contano quando gli invitati confermano.",
+        "caption": "Pasti degli invitati presenti",
+        "colMeal": "Pasto",
+        "colGuests": "Invitati",
+        "other": "Altra scelta",
+        "none": "Nessun pasto scelto",
+        "dietary": "Esigenze alimentari: {count}",
+        "accessibility": "Esigenze di accessibilità: {count}",
+        "open": "Apri le risposte RSVP"
+      },
+      "arrivals": {
+        "title": "Arrivi degli invitati",
+        "arrivedOf": "Sono arrivati {arrived} invitati attesi su {expected}",
+        "notArrived": "Non ancora arrivati: {count}",
+        "none": "Non è ancora arrivato nessuno.",
+        "noExpected": "Ancora nessun invitato atteso.",
+        "recent": "Ultimi arrivi",
+        "guestOf": "Accompagnatore di {name}",
+        "open": "Apri la vista del giorno"
+      },
       "sessionLevel": {
         "none": "Senza limite",
         "ok": "Sotto il {near}%",
@@ -7294,6 +7345,49 @@
       "statusOn": "Attivo",
       "statusOff": "Disattivato",
       "emptyAction": "Crea un link per schermo"
+    },
+    "hero": {
+      "startsIn": "Inizia tra {duration}",
+      "endsIn": "Termina tra {duration}",
+      "ended": "Terminato {duration} fa",
+      "nextLabel": "Prossimo passo",
+      "blocking": "Necessario prima di poter vendere",
+      "next": {
+        "readiness": "Completa: {item}",
+        "scanner": "Registra gli ospiti all’ingresso",
+        "publicPage": "Tutto pronto. Guarda la pagina dell’evento come la vedono gli ospiti.",
+        "report": "È finito. Guarda com’è andata.",
+        "none": "Al momento non serve nulla."
+      },
+      "do": {
+        "alert": "Risolvi",
+        "readiness": "Fallo ora",
+        "scanner": "Inizia a scansionare",
+        "publicPage": "Vedi la pagina dell’evento",
+        "report": "Apri il report"
+      }
+    },
+    "kpi": {
+      "title": "Dati chiave",
+      "sales": "Vendite",
+      "salesToday": "{amount} oggi",
+      "tickets": "Biglietti venduti",
+      "ofCapacity": "su {capacity}",
+      "noCapacity": "Nessun biglietto ancora in vendita",
+      "checkins": "Registrati",
+      "ofValid": "su {valid} biglietti validi",
+      "alerts": "Avvisi aperti",
+      "allClear": "Tutto a posto",
+      "needsYou": "Serve il tuo intervento",
+      "critical": "{count, plural, =0 {Nessuno critico} one {# critico} other {# critici}}"
+    },
+    "soldOf": "{sold} su {capacity}",
+    "overviewCounts": "Eventi per modalità",
+    "overviewGroup": {
+      "live": "Dal vivo ({count})",
+      "pre_show": "Pre-evento ({count})",
+      "planning": "In pianificazione ({count})",
+      "wrap": "In chiusura ({count})"
     }
   },
   "alerts": {
@@ -7389,6 +7483,9 @@
       "campaignFailed": "Apri le campagne",
       "disputeDeadline": "Apri le contestazioni",
       "assistanceOverdue": "Apri le richieste di aiuto",
+      "rsvpPending": "Apri le risposte",
+      "guestsUnseated": "Assegna i tavoli",
+      "mealsMissing": "Apri le risposte RSVP",
       "pledgesUnpaid": "Apri gli impegni",
       "sessionsNearCapacity": "Apri le sessioni",
       "sessionWaitlists": "Apri le iscrizioni alle sessioni",
@@ -7422,6 +7519,9 @@
       "campaignFailed": "{count, plural, one {Un invio di campagna non è riuscito oggi} other {{countWords} invii di campagna non sono riusciti oggi}}",
       "disputeDeadline": "{count, plural, one {Una contestazione richiede presto delle prove} other {{countWords} contestazioni richiedono presto delle prove}}",
       "assistanceOverdue": "{count, plural, one {{countWords} richiesta di aiuto aspetta da troppo} other {{countWords} richieste di aiuto aspettano da troppo}}",
+      "rsvpPending": "{count, plural, one {Un invitato non ha risposto all’invito} other {{countWords} invitati non hanno risposto all’invito}}",
+      "guestsUnseated": "{count, plural, one {Un invitato non ha un tavolo} other {{countWords} invitati non hanno un tavolo}}",
+      "mealsMissing": "{count, plural, one {Un invitato presente non ha scelto il pasto} other {{countWords} invitati presenti non hanno scelto il pasto}}",
       "pledgesUnpaid": "{count, plural, one {Un impegno non è ancora pagato 14 giorni dopo l’evento} other {{countWords} impegni non sono ancora pagati 14 giorni dopo l’evento}}",
       "sessionsNearCapacity": "{count, plural, one {{countWords} sessione supera il 95 % della capienza} other {{countWords} sessioni superano il 95 % della capienza}}",
       "sessionWaitlists": "{count, plural, one {{countWords} sessione ha una lista d’attesa lunga} other {{countWords} sessioni hanno liste d’attesa lunghe}}",

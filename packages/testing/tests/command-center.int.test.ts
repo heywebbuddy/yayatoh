@@ -411,7 +411,7 @@ describe('manual mode', () => {
 });
 
 describe('org overview', () => {
-  it('lists current events, live first, with readiness for roles that see it and no money', async () => {
+  it('lists current events, live first, with readiness for roles that see it', async () => {
     const liveEvent = await newEvent(a, 'Overview live CC');
     await executeCommand(setModeOverrideCommand, { eventId: liveEvent, mode: 'live' }, a.ctx(), ports);
     const o = await executeQuery(
@@ -429,7 +429,9 @@ describe('org overview', () => {
     });
     const planning = o.events.find((e) => e.mode === 'planning');
     expect(planning?.readiness).toEqual(expect.any(Number));
-    expect(JSON.stringify(o)).not.toMatch(/sales|gross|revenue|Minor/);
+    // U4 (owner-approved UX plan): the overview now carries money per event, by role.
+    expect(o.events[0]?.sales).toEqual([{ currency: 'USD', total: 0 }]);
+    expect(o.events[0]?.tickets).toEqual({ sold: 0, capacity: 0 });
     // Finance sees no readiness; other orgs' events never appear.
     const fin = await executeQuery(
       orgOverviewQuery,
@@ -441,6 +443,62 @@ describe('org overview', () => {
     expect(fin.events.every((e) => e.readiness === null)).toBe(true);
     const other = await executeQuery(orgOverviewQuery, {}, b.ctx(), ports);
     expect(other.events.map((e) => e.eventId)).not.toContain(liveEvent);
+  });
+  it('shows each event’s sales and tickets only to roles that read money (U4)', async () => {
+    const now = { now: new Date('2028-05-01T00:00:00Z') };
+    const eventId = await newEvent(a, 'Overview money CC');
+    const ga = await typeOf(a, eventId, 'GA', 2500, 40);
+    await publish(a, eventId);
+    await buy(a, eventId, [{ ticketTypeId: ga, quantity: 2 }], 'Overviewmoney', { pay: 'succeed' });
+    await catchUpMetrics(a.org.id);
+    const row = async (ctx: ReturnType<typeof a.ctx>) =>
+      (await executeQuery(orgOverviewQuery, {}, ctx, ports)).events.find((e) => e.eventId === eventId);
+    expect(await row(a.ctx(now))).toMatchObject({
+      sales: [{ currency: 'USD', total: 5000 }],
+      tickets: { sold: 2, capacity: 40 },
+    });
+    expect(await row(as('finance', now))).toMatchObject({
+      sales: [{ currency: 'USD', total: 5000 }],
+      tickets: { sold: 2, capacity: 40 },
+    });
+    // Marketing: tickets, no money.
+    expect(await row(as('marketing', now))).toMatchObject({
+      sales: null,
+      tickets: { sold: 2, capacity: 40 },
+    });
+    // A read-only viewer (ops, with orders:read) sees the figures; an org scanner (the door at org
+    // level) gets no overview at all, so no money.
+    expect(await row(as('viewer', now))).toMatchObject({ sales: [{ currency: 'USD', total: 5000 }] });
+    await expect(executeQuery(orgOverviewQuery, {}, as('scanner', now), ports)).rejects.toMatchObject({
+      code: 'forbidden',
+    });
+  });
+});
+
+describe('U4 KPI row', () => {
+  it('names the KPIs per role; the door never gets sales', async () => {
+    const kpis = async (ctx: ReturnType<typeof a.ctx>) =>
+      (await executeQuery(eventViewQuery, { eventId: a.event.id }, ctx, ports)).kpis;
+    expect(await kpis(a.ctx())).toEqual(['sales', 'tickets', 'checkins', 'alerts']);
+    expect(await kpis(as('finance'))).toEqual(['sales', 'tickets', 'alerts']);
+    expect(await kpis(as('marketing'))).toEqual(['tickets', 'alerts']);
+    // The fixture viewer is door staff on the fixture event.
+    expect(await kpis(userCtx(a.viewerId, a.org.id))).toEqual(['checkins', 'alerts']);
+  });
+
+  it('serves the readiness checklist with every item and the field that fixes it', async () => {
+    const eventId = await newEvent(a, 'Checklist CC');
+    const r = await load(readinessWidget, eventId);
+    expect(r.items.length).toBe(r.total);
+    expect(r.items.filter((i) => i.done).length).toBe(r.done);
+    expect(r.items.find((i) => i.key === 'venueSet')).toMatchObject({
+      done: false,
+      blocking: true,
+      path: 'details',
+      field: 'details-venue',
+    });
+    expect(r.blocking.find((x) => x.key === 'ticketsCreated')?.field).toBe('add-ticket-type-heading');
+    expect(r.items.find((i) => i.key === 'detailsAdded')).toMatchObject({ done: true, field: null });
   });
 });
 

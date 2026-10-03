@@ -44,6 +44,11 @@ export interface ReadinessRule {
   readonly done: boolean;
   readonly path: string;
   /**
+   * U4: the id of the field (or the add form) on that page that fixes it, so a checklist link
+   * lands on it (`{path}#{field}`); null when the page itself is the fix.
+   */
+  readonly field: string | null;
+  /**
    * M4.2a: the page that fixes it is a placeholder (the feature is not built yet): the item is
    * shown as "coming soon", links to that placeholder and never counts toward readiness.
    */
@@ -83,38 +88,58 @@ export const READINESS_KEYS = [
   'published',
 ] as const;
 
+/**
+ * U4 deep links: the element on the fixing page each item lands on (an input, or the heading of
+ * the form that adds the missing thing). `apps/web/tests/readiness-fields.test.ts` checks each id
+ * is on its page.
+ */
+export const READINESS_FIELDS: Readonly<Record<(typeof READINESS_KEYS)[number], string | null>> = {
+  detailsAdded: null,
+  venueSet: 'details-venue',
+  taglineWritten: 'tagline-heading',
+  descriptionAdded: 'add-section-heading',
+  datesUpcoming: 'add-date-heading',
+  ticketsCreated: 'add-ticket-type-heading',
+  agendaAdded: 'new-session-title',
+  speakersAdded: 'new-speaker-name',
+  guestsAdded: 'new-party',
+  rsvpDeadlineSet: null,
+  floorPlanChosen: 'quick-heading',
+  guestSitePublished: null,
+  tablesSponsors: 'sold-heading',
+  published: 'event-action-publish',
+};
+
+const fieldOf = (key: string): string | null =>
+  (READINESS_FIELDS as Readonly<Record<string, string | null>>)[key] ?? null;
+
 export function readinessRules(f: ReadinessFacts): ReadinessRule[] {
+  const rule = (key: string, done: boolean, path: string): ReadinessRule => ({
+    key,
+    done,
+    path,
+    field: fieldOf(key),
+  });
   const rules: ReadinessRule[] = [
-    { key: 'detailsAdded', done: f.name.trim().length > 0 && f.endsAt > f.startsAt, path: '' },
-    { key: 'venueSet', done: Boolean(f.venueName) || f.attendanceMode === 'online', path: 'details' },
-    { key: 'taglineWritten', done: Boolean(f.tagline?.trim()), path: 'content' },
-    { key: 'descriptionAdded', done: f.descriptionSections > 0, path: 'content' },
-    {
-      key: 'datesUpcoming',
-      done: f.totalDates > 0 ? f.upcomingDates > 0 : f.endsAt > f.now,
-      path: 'dates',
-    },
+    rule('detailsAdded', f.name.trim().length > 0 && f.endsAt > f.startsAt, ''),
+    rule('venueSet', Boolean(f.venueName) || f.attendanceMode === 'online', 'details'),
+    rule('taglineWritten', Boolean(f.tagline?.trim()), 'content'),
+    rule('descriptionAdded', f.descriptionSections > 0, 'content'),
+    rule('datesUpcoming', f.totalDates > 0 ? f.upcomingDates > 0 : f.endsAt > f.now, 'dates'),
   ];
-  if (f.nav.has('ticketsOrders'))
-    rules.push({ key: 'ticketsCreated', done: f.ticketTypes > 0, path: 'tickets-orders' });
-  if (f.nav.has('sessions')) rules.push({ key: 'agendaAdded', done: f.sessions > 0, path: 'sessions' });
-  if (f.nav.has('speakers')) rules.push({ key: 'speakersAdded', done: f.speakers > 0, path: 'speakers' });
+  if (f.nav.has('ticketsOrders')) rules.push(rule('ticketsCreated', f.ticketTypes > 0, 'tickets-orders'));
+  if (f.nav.has('sessions')) rules.push(rule('agendaAdded', f.sessions > 0, 'sessions'));
+  if (f.nav.has('speakers')) rules.push(rule('speakersAdded', f.speakers > 0, 'speakers'));
   for (const key of f.checklist ?? []) {
     const item = PROFILE_ITEMS[key];
     if (!item) continue;
     const comingSoon = (PLACEHOLDER_SECTIONS as readonly string[]).includes(item.path);
     rules.push({
-      key,
-      done: !comingSoon && item.done(f),
-      path: item.path,
+      ...rule(key, !comingSoon && item.done(f), item.path),
       ...(comingSoon ? { comingSoon } : {}),
     });
   }
-  rules.push({
-    key: 'published',
-    done: ['published', 'postponed', 'completed'].includes(f.status),
-    path: '',
-  });
+  rules.push(rule('published', ['published', 'postponed', 'completed'].includes(f.status), ''));
   return rules;
 }
 
@@ -147,6 +172,8 @@ export interface ReadinessScore {
   readonly blocking: readonly ReadinessRule[];
   /** Other rules not done yet. */
   readonly todo: readonly ReadinessRule[];
+  /** U4 checklist: every counted rule in rule order, done or not, blocking ones marked. */
+  readonly items: readonly (ReadinessRule & { readonly blocking: boolean })[];
 }
 
 export function readinessScore(all: readonly ReadinessRule[]): ReadinessScore {
@@ -163,5 +190,6 @@ export function readinessScore(all: readonly ReadinessRule[]): ReadinessScore {
     total: rules.length,
     blocking: open.filter((r) => weight(r) === 2),
     todo: open.filter((r) => weight(r) === 1),
+    items: rules.map((r) => ({ ...r, blocking: weight(r) === 2 })),
   };
 }

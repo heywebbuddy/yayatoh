@@ -6936,7 +6936,9 @@
       "event": "活動",
       "mode": "模式",
       "starts": "開始時間",
-      "readiness": "準備度"
+      "readiness": "準備度",
+      "sales": "銷售額",
+      "tickets": "票券"
     },
     "manual": "手動設定",
     "role": {
@@ -7007,9 +7009,10 @@
       "readiness": {
         "title": "準備度",
         "score": "準備度 {score}%",
-        "blocking": "阻礙項目",
-        "todo": "其他待辦",
-        "allDone": "一切就緒。"
+        "allDone": "一切就緒。",
+        "count": "已完成 {done}/{total}",
+        "required": "開賣必需",
+        "recommended": "建議完成"
       },
       "sales": {
         "title": "銷售額",
@@ -7056,7 +7059,9 @@
       "alerts": {
         "title": "提醒",
         "pending": "啟用提醒規則後，提醒會顯示在這裡。",
-        "none": "沒有未處理的提醒。"
+        "none": "沒有未處理的提醒。",
+        "watching": "警示規則會監控銷售、付款、裝置、容量和來賓，並在此顯示。",
+        "viewAll": "查看所有警示"
       },
       "entrances": {
         "title": "入口"
@@ -7207,6 +7212,52 @@
         "over": "超過門檻：{domains, plural, other {# 個寄件網域}}，{campaigns, plural, other {# 個活動}}",
         "open": "開啟電子郵件送達率"
       },
+      "rsvp": {
+        "title": "出席回覆",
+        "allAnswered": "所有受邀賓客都已回覆。",
+        "noneInvited": "尚未邀請任何人參加分場活動。",
+        "responded": "{invited} 位受邀賓客中已有 {responded} 位回覆",
+        "meter": "已收到的回覆",
+        "parties": "未回覆的家庭：{count}",
+        "notSent": "尚未寄出邀請：{count}",
+        "deadline": "回覆截止：{date}",
+        "noDeadline": "未設定回覆截止日期",
+        "open": "開啟回覆"
+      },
+      "guestSeating": {
+        "title": "賓客座位",
+        "noChart": "還沒有賓客平面圖。請在座位中選擇一個。",
+        "noGuests": "暫時沒有需要安排座位的賓客。",
+        "allSeated": "每位未婉拒的賓客都有桌位。",
+        "seated": "{guests} 位賓客中有 {seated} 位已有桌位",
+        "listLabel": "沒有桌位的賓客",
+        "guestOf": "{name} 的同伴",
+        "more": "另外 {count} 位",
+        "open": "安排賓客座位"
+      },
+      "meals": {
+        "title": "餐點與飲食需求",
+        "attending": "出席：{count}",
+        "noneAttending": "賓客確認出席後才會統計餐點。",
+        "caption": "出席賓客的餐點",
+        "colMeal": "餐點",
+        "colGuests": "賓客",
+        "other": "其他選擇",
+        "none": "未選擇餐點",
+        "dietary": "飲食需求：{count}",
+        "accessibility": "無障礙需求：{count}",
+        "open": "開啟回覆詳情"
+      },
+      "arrivals": {
+        "title": "賓客到場",
+        "arrivedOf": "{expected} 位預期賓客中已到 {arrived} 位",
+        "notArrived": "尚未到場：{count}",
+        "none": "還沒有人到場。",
+        "noExpected": "暫無預期到場的賓客。",
+        "recent": "最近到場",
+        "guestOf": "{name} 的同伴",
+        "open": "開啟當天檢視"
+      },
       "sessionLevel": {
         "none": "不限名額",
         "ok": "低於 {near}%",
@@ -7294,6 +7345,49 @@
       "statusOn": "已開啟",
       "statusOff": "已關閉",
       "emptyAction": "建立螢幕連結"
+    },
+    "hero": {
+      "startsIn": "{duration}後開始",
+      "endsIn": "{duration}後結束",
+      "ended": "已於{duration}前結束",
+      "nextLabel": "下一步",
+      "blocking": "開賣前必須完成",
+      "next": {
+        "readiness": "待完成：{item}",
+        "scanner": "在門口為來賓報到",
+        "publicPage": "一切就緒。以來賓視角查看活動頁面。",
+        "report": "活動已結束。看看成效如何。",
+        "none": "目前沒有需要處理的事項。"
+      },
+      "do": {
+        "alert": "去處理",
+        "readiness": "立即完成",
+        "scanner": "開始掃描",
+        "publicPage": "查看活動頁面",
+        "report": "開啟報告"
+      }
+    },
+    "kpi": {
+      "title": "關鍵數據",
+      "sales": "銷售額",
+      "salesToday": "今日 {amount}",
+      "tickets": "已售票券",
+      "ofCapacity": "共 {capacity}",
+      "noCapacity": "尚無販售中的票券",
+      "checkins": "已報到",
+      "ofValid": "共 {valid} 張有效票券",
+      "alerts": "未處理警示",
+      "allClear": "一切正常",
+      "needsYou": "需要處理",
+      "critical": "{count, plural, =0 {無嚴重警示} other {# 個嚴重}}"
+    },
+    "soldOf": "{sold}/{capacity}",
+    "overviewCounts": "依模式分類的活動",
+    "overviewGroup": {
+      "live": "進行中（{count}）",
+      "pre_show": "開場前（{count}）",
+      "planning": "籌備中（{count}）",
+      "wrap": "收尾中（{count}）"
     }
   },
   "alerts": {
@@ -7389,6 +7483,9 @@
       "campaignFailed": "開啟行銷活動",
       "disputeDeadline": "開啟爭議佇列",
       "assistanceOverdue": "開啟求助請求",
+      "rsvpPending": "開啟回覆",
+      "guestsUnseated": "安排賓客座位",
+      "mealsMissing": "開啟回覆詳情",
       "pledgesUnpaid": "開啟認捐",
       "sessionsNearCapacity": "開啟場次",
       "sessionWaitlists": "開啟場次報名",
@@ -7422,6 +7519,9 @@
       "campaignFailed": "{count, plural, other {今天有 {countWords} 次行銷活動傳送失敗}}",
       "disputeDeadline": "{count, plural, other {有 {countWords} 起爭議需要盡快提交證據}}",
       "assistanceOverdue": "{count, plural, other {{countWords} 個求助請求等待過久}}",
+      "rsvpPending": "{count, plural, other {{countWords} 位賓客尚未回覆出席邀請}}",
+      "guestsUnseated": "{count, plural, other {{countWords} 位賓客沒有桌位}}",
+      "mealsMissing": "{count, plural, other {{countWords} 位出席賓客尚未選擇餐點}}",
       "pledgesUnpaid": "{count, plural, other {活動結束 14 天後仍有 {countWords} 筆認捐未付款}}",
       "sessionsNearCapacity": "{count, plural, other {{countWords}個場次已超過容量的 95 %}}",
       "sessionWaitlists": "{count, plural, other {{countWords}個場次的候補名單過長}}",

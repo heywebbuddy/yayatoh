@@ -6936,7 +6936,9 @@
       "event": "الفعالية",
       "mode": "الوضع",
       "starts": "البداية",
-      "readiness": "الجاهزية"
+      "readiness": "الجاهزية",
+      "sales": "المبيعات",
+      "tickets": "التذاكر"
     },
     "manual": "مضبوط يدويًا",
     "role": {
@@ -7007,9 +7009,10 @@
       "readiness": {
         "title": "الجاهزية",
         "score": "الجاهزية {score}%",
-        "blocking": "عوائق",
-        "todo": "مهام أخرى",
-        "allDone": "كل شيء جاهز."
+        "allDone": "كل شيء جاهز.",
+        "count": "تم {done} من {total}",
+        "required": "مطلوب للبيع",
+        "recommended": "موصى به"
       },
       "sales": {
         "title": "المبيعات",
@@ -7056,7 +7059,9 @@
       "alerts": {
         "title": "التنبيهات",
         "pending": "ستظهر التنبيهات هنا عند تفعيل قواعد التنبيه.",
-        "none": "لا توجد تنبيهات مفتوحة."
+        "none": "لا توجد تنبيهات مفتوحة.",
+        "watching": "تراقب قواعد التنبيه المبيعات والمدفوعات والأجهزة والسعة والضيوف، وتظهر هنا.",
+        "viewAll": "عرض كل التنبيهات"
       },
       "entrances": {
         "title": "المداخل"
@@ -7207,6 +7212,52 @@
         "over": "فوق الحدود: {domains, plural, zero {لا نطاقات إرسال} one {نطاق إرسال واحد} two {نطاقا إرسال} few {# نطاقات إرسال} many {# نطاق إرسال} other {# نطاق إرسال}} و{campaigns, plural, zero {لا حملات} one {حملة واحدة} two {حملتان} few {# حملات} many {# حملة} other {# حملة}}",
         "open": "افتح قابلية تسليم البريد"
       },
+      "rsvp": {
+        "title": "الردود على الدعوة",
+        "allAnswered": "ردّ جميع المدعوين.",
+        "noneInvited": "لم تتم دعوة أي شخص إلى فقرة بعد.",
+        "responded": "ردّ {responded} من {invited} من الضيوف المدعوين",
+        "meter": "الردود المستلمة",
+        "parties": "عائلات لم تردّ: {count}",
+        "notSent": "لم تُرسل الدعوة بعد: {count}",
+        "deadline": "آخر موعد للرد: {date}",
+        "noDeadline": "لم يُحدَّد آخر موعد للرد",
+        "open": "افتح الردود"
+      },
+      "guestSeating": {
+        "title": "جلوس الضيوف",
+        "noChart": "لا يوجد مخطط قاعة للضيوف بعد. اختر واحدًا في المقاعد.",
+        "noGuests": "لا يوجد ضيوف لإجلاسهم بعد.",
+        "allSeated": "لكل ضيف لم يعتذر طاولة.",
+        "seated": "لدى {seated} من {guests} ضيفًا طاولة",
+        "listLabel": "ضيوف بلا طاولة",
+        "guestOf": "مرافق {name}",
+        "more": "+{count} آخرون",
+        "open": "أجلِس الضيوف"
+      },
+      "meals": {
+        "title": "الوجبات والاحتياجات الغذائية",
+        "attending": "الحاضرون: {count}",
+        "noneAttending": "تُحسب الوجبات عندما يؤكد الضيوف حضورهم.",
+        "caption": "وجبات الضيوف الحاضرين",
+        "colMeal": "الوجبة",
+        "colGuests": "الضيوف",
+        "other": "اختيار آخر",
+        "none": "لم تُختر وجبة",
+        "dietary": "احتياجات غذائية: {count}",
+        "accessibility": "احتياجات الوصول: {count}",
+        "open": "افتح إجابات الدعوة"
+      },
+      "arrivals": {
+        "title": "وصول الضيوف",
+        "arrivedOf": "وصل {arrived} من {expected} من الضيوف المتوقعين",
+        "notArrived": "لم يصلوا بعد: {count}",
+        "none": "لم يصل أحد بعد.",
+        "noExpected": "لا يُتوقع حضور ضيوف بعد.",
+        "recent": "آخر الواصلين",
+        "guestOf": "مرافق {name}",
+        "open": "افتح عرض يوم الحفل"
+      },
       "sessionLevel": {
         "none": "بلا حد",
         "ok": "أقل من {near}%",
@@ -7294,6 +7345,49 @@
       "statusOn": "مفعّل",
       "statusOff": "متوقف",
       "emptyAction": "أنشئ رابط شاشة"
+    },
+    "hero": {
+      "startsIn": "يبدأ خلال {duration}",
+      "endsIn": "ينتهي خلال {duration}",
+      "ended": "انتهى منذ {duration}",
+      "nextLabel": "الخطوة التالية",
+      "blocking": "مطلوب قبل أن تتمكن من البيع",
+      "next": {
+        "readiness": "أكمل: {item}",
+        "scanner": "سجّل دخول الضيوف عند الباب",
+        "publicPage": "كل شيء جاهز. اطّلع على صفحة الفعالية كما يراها الضيوف.",
+        "report": "انتهت الفعالية. اطّلع على النتائج.",
+        "none": "لا شيء يحتاج إليك الآن."
+      },
+      "do": {
+        "alert": "عالِج",
+        "readiness": "أصلحه الآن",
+        "scanner": "ابدأ المسح",
+        "publicPage": "عرض صفحة الفعالية",
+        "report": "افتح التقرير"
+      }
+    },
+    "kpi": {
+      "title": "الأرقام الرئيسية",
+      "sales": "المبيعات",
+      "salesToday": "{amount} اليوم",
+      "tickets": "التذاكر المباعة",
+      "ofCapacity": "من {capacity}",
+      "noCapacity": "لا توجد تذاكر معروضة للبيع بعد",
+      "checkins": "تم تسجيل الدخول",
+      "ofValid": "من {valid} تذكرة صالحة",
+      "alerts": "التنبيهات المفتوحة",
+      "allClear": "كل شيء على ما يرام",
+      "needsYou": "يحتاج إليك",
+      "critical": "{count, plural, =0 {لا شيء حرج} zero {لا شيء حرج} one {تنبيه حرج واحد} two {تنبيهان حرجان} few {# تنبيهات حرجة} many {# تنبيهًا حرجًا} other {# تنبيه حرج}}"
+    },
+    "soldOf": "{sold} من {capacity}",
+    "overviewCounts": "الفعاليات حسب الوضع",
+    "overviewGroup": {
+      "live": "مباشر ({count})",
+      "pre_show": "ما قبل العرض ({count})",
+      "planning": "قيد التخطيط ({count})",
+      "wrap": "في مرحلة الختام ({count})"
     }
   },
   "alerts": {
@@ -7389,6 +7483,9 @@
       "campaignFailed": "افتح الحملات",
       "disputeDeadline": "افتح النزاعات",
       "assistanceOverdue": "افتح طلبات المساعدة",
+      "rsvpPending": "افتح الردود",
+      "guestsUnseated": "أجلِس الضيوف",
+      "mealsMissing": "افتح إجابات الدعوة",
       "pledgesUnpaid": "افتح التعهّدات",
       "sessionsNearCapacity": "افتح الجلسات",
       "sessionWaitlists": "افتح التسجيل في الجلسات",
@@ -7422,6 +7519,9 @@
       "campaignFailed": "{count, plural, zero {لا إخفاقات في الحملات اليوم} one {فشل إرسال حملة واحدة اليوم} two {فشل إرسال حملتين اليوم} few {فشل إرسال {countWords} حملات اليوم} many {فشل إرسال {countWords} حملة اليوم} other {فشل إرسال {countWords} حملة اليوم}}",
       "disputeDeadline": "{count, plural, zero {لا نزاعات تحتاج إلى أدلة} one {نزاع واحد يحتاج إلى أدلة قريبًا} two {نزاعان يحتاجان إلى أدلة قريبًا} few {{countWords} نزاعات تحتاج إلى أدلة قريبًا} many {{countWords} نزاعًا يحتاج إلى أدلة قريبًا} other {{countWords} نزاع يحتاج إلى أدلة قريبًا}}",
       "assistanceOverdue": "{count, plural, zero {لا توجد طلبات مساعدة متأخرة} one {طلب مساعدة واحد انتظر طويلًا} two {طلبا مساعدة انتظرا طويلًا} few {{countWords} طلبات مساعدة انتظرت طويلًا} many {{countWords} طلبًا للمساعدة انتظر طويلًا} other {{countWords} طلب مساعدة انتظر طويلًا}}",
+      "rsvpPending": "{count, plural, zero {لا يوجد ضيوف لم يردّوا على الدعوة} one {ضيف واحد لم يردّ على الدعوة} two {ضيفان لم يردّا على الدعوة} few {{countWords} ضيوف لم يردّوا على الدعوة} many {{countWords} ضيفًا لم يردّوا على الدعوة} other {{countWords} ضيف لم يردّوا على الدعوة}}",
+      "guestsUnseated": "{count, plural, zero {لا يوجد ضيوف بلا طاولة} one {ضيف واحد بلا طاولة} two {ضيفان بلا طاولة} few {{countWords} ضيوف بلا طاولة} many {{countWords} ضيفًا بلا طاولة} other {{countWords} ضيف بلا طاولة}}",
+      "mealsMissing": "{count, plural, zero {لا يوجد ضيوف حاضرون بلا وجبة} one {ضيف حاضر واحد لم يختر وجبة} two {ضيفان حاضران لم يختارا وجبة} few {{countWords} ضيوف حاضرين لم يختاروا وجبة} many {{countWords} ضيفًا حاضرًا لم يختاروا وجبة} other {{countWords} ضيف حاضر لم يختاروا وجبة}}",
       "pledgesUnpaid": "{count, plural, zero {لا تعهّدات غير مدفوعة} one {تعهّد واحد لم يُدفع بعد 14 يومًا من الفعالية} two {تعهّدان لم يُدفعا بعد 14 يومًا من الفعالية} few {{countWords} تعهّدات لم تُدفع بعد 14 يومًا من الفعالية} many {{countWords} تعهّدًا لم يُدفع بعد 14 يومًا من الفعالية} other {{countWords} تعهّد لم يُدفع بعد 14 يومًا من الفعالية}}",
       "sessionsNearCapacity": "{count, plural, zero {لا توجد جلسات تجاوزت 95 % من سعتها} one {جلسة واحدة تجاوزت 95 % من سعتها} two {جلستان تجاوزتا 95 % من سعتهما} few {{countWords} جلسات تجاوزت 95 % من سعتها} many {{countWords} جلسة تجاوزت 95 % من سعتها} other {{countWords} جلسة تجاوزت 95 % من سعتها}}",
       "sessionWaitlists": "{count, plural, zero {لا توجد جلسات بقوائم انتظار طويلة} one {جلسة واحدة لديها قائمة انتظار طويلة} two {جلستان لديهما قوائم انتظار طويلة} few {{countWords} جلسات لديها قوائم انتظار طويلة} many {{countWords} جلسة لديها قوائم انتظار طويلة} other {{countWords} جلسة لديها قوائم انتظار طويلة}}",

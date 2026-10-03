@@ -6936,7 +6936,9 @@
       "event": "इवेंट",
       "mode": "मोड",
       "starts": "शुरुआत",
-      "readiness": "तैयारी"
+      "readiness": "तैयारी",
+      "sales": "बिक्री",
+      "tickets": "टिकट"
     },
     "manual": "हाथ से सेट",
     "role": {
@@ -7007,9 +7009,10 @@
       "readiness": {
         "title": "तैयारी",
         "score": "तैयारी {score}%",
-        "blocking": "रुकावटें",
-        "todo": "और भी करना है",
-        "allDone": "सब तैयार है।"
+        "allDone": "सब तैयार है।",
+        "count": "{total} में से {done} पूरे",
+        "required": "बेचने के लिए ज़रूरी",
+        "recommended": "सुझाया गया"
       },
       "sales": {
         "title": "बिक्री",
@@ -7056,7 +7059,9 @@
       "alerts": {
         "title": "अलर्ट",
         "pending": "अलर्ट नियम चालू होने पर अलर्ट यहाँ दिखेंगे।",
-        "none": "कोई खुला अलर्ट नहीं।"
+        "none": "कोई खुला अलर्ट नहीं।",
+        "watching": "अलर्ट नियम बिक्री, भुगतान, डिवाइस, क्षमता और मेहमानों पर नज़र रखते हैं और यहाँ दिखते हैं।",
+        "viewAll": "सभी अलर्ट देखें"
       },
       "entrances": {
         "title": "प्रवेश द्वार"
@@ -7207,6 +7212,52 @@
         "over": "{domains, plural, one {# भेजने वाला डोमेन} other {# भेजने वाले डोमेन}} और {campaigns, plural, one {# अभियान} other {# अभियान}} सीमा से ऊपर",
         "open": "ईमेल डिलीवरेबिलिटी खोलें"
       },
+      "rsvp": {
+        "title": "RSVP",
+        "allAnswered": "सभी आमंत्रित मेहमानों ने जवाब दे दिया है।",
+        "noneInvited": "अभी तक किसी को किसी उप-कार्यक्रम में आमंत्रित नहीं किया गया है।",
+        "responded": "{invited} आमंत्रित मेहमानों में से {responded} ने जवाब दिया है",
+        "meter": "मिले जवाब",
+        "parties": "जवाब बाकी वाले परिवार: {count}",
+        "notSent": "निमंत्रण अभी नहीं भेजा गया: {count}",
+        "deadline": "RSVP की अंतिम तिथि: {date}",
+        "noDeadline": "RSVP की कोई अंतिम तिथि तय नहीं",
+        "open": "RSVP खोलें"
+      },
+      "guestSeating": {
+        "title": "मेहमानों की बैठक",
+        "noChart": "मेहमानों के लिए अभी कोई फ़्लोर प्लान नहीं है। सीटिंग में एक चुनें।",
+        "noGuests": "अभी बैठाने के लिए कोई मेहमान नहीं।",
+        "allSeated": "मना न करने वाले हर मेहमान के पास टेबल है।",
+        "seated": "{guests} मेहमानों में से {seated} के पास टेबल है",
+        "listLabel": "बिना टेबल वाले मेहमान",
+        "guestOf": "{name} के मेहमान",
+        "more": "+{count} और",
+        "open": "मेहमानों को बैठाएँ"
+      },
+      "meals": {
+        "title": "भोजन और आहार ज़रूरतें",
+        "attending": "आ रहे हैं: {count}",
+        "noneAttending": "मेहमानों के हाँ कहने पर भोजन गिना जाता है।",
+        "caption": "आने वाले मेहमानों का भोजन",
+        "colMeal": "भोजन",
+        "colGuests": "मेहमान",
+        "other": "अन्य विकल्प",
+        "none": "भोजन नहीं चुना",
+        "dietary": "आहार संबंधी ज़रूरतें: {count}",
+        "accessibility": "सुलभता ज़रूरतें: {count}",
+        "open": "RSVP जवाब खोलें"
+      },
+      "arrivals": {
+        "title": "मेहमानों का आगमन",
+        "arrivedOf": "{expected} अपेक्षित मेहमानों में से {arrived} आ चुके हैं",
+        "notArrived": "अभी नहीं आए: {count}",
+        "none": "अभी तक कोई नहीं आया है।",
+        "noExpected": "अभी कोई मेहमान अपेक्षित नहीं है।",
+        "recent": "हाल में आए",
+        "guestOf": "{name} के मेहमान",
+        "open": "आज का दृश्य खोलें"
+      },
       "sessionLevel": {
         "none": "कोई सीमा नहीं",
         "ok": "{near}% से कम",
@@ -7294,6 +7345,49 @@
       "statusOn": "चालू",
       "statusOff": "बंद",
       "emptyAction": "स्क्रीन लिंक बनाएँ"
+    },
+    "hero": {
+      "startsIn": "{duration} में शुरू",
+      "endsIn": "{duration} में समाप्त",
+      "ended": "{duration} पहले समाप्त",
+      "nextLabel": "अगला कदम",
+      "blocking": "बेचने से पहले ज़रूरी",
+      "next": {
+        "readiness": "पूरा करें: {item}",
+        "scanner": "दरवाज़े पर मेहमानों को चेक-इन करें",
+        "publicPage": "सब तैयार है। इवेंट पेज को मेहमानों की तरह देखें।",
+        "report": "इवेंट समाप्त हो गया। देखें कैसा रहा।",
+        "none": "अभी आपकी ज़रूरत किसी चीज़ को नहीं है।"
+      },
+      "do": {
+        "alert": "हल करें",
+        "readiness": "अभी ठीक करें",
+        "scanner": "स्कैन शुरू करें",
+        "publicPage": "इवेंट पेज देखें",
+        "report": "रिपोर्ट खोलें"
+      }
+    },
+    "kpi": {
+      "title": "मुख्य आंकड़े",
+      "sales": "बिक्री",
+      "salesToday": "आज {amount}",
+      "tickets": "बिके टिकट",
+      "ofCapacity": "{capacity} में से",
+      "noCapacity": "अभी कोई टिकट बिक्री पर नहीं",
+      "checkins": "चेक-इन हुए",
+      "ofValid": "{valid} मान्य टिकटों में से",
+      "alerts": "खुले अलर्ट",
+      "allClear": "सब ठीक है",
+      "needsYou": "आपकी ज़रूरत है",
+      "critical": "{count, plural, =0 {कोई गंभीर नहीं} one {# गंभीर} other {# गंभीर}}"
+    },
+    "soldOf": "{capacity} में से {sold}",
+    "overviewCounts": "मोड के अनुसार इवेंट",
+    "overviewGroup": {
+      "live": "लाइव ({count})",
+      "pre_show": "प्री-शो ({count})",
+      "planning": "योजना में ({count})",
+      "wrap": "समापन में ({count})"
     }
   },
   "alerts": {
@@ -7389,6 +7483,9 @@
       "campaignFailed": "अभियान खोलें",
       "disputeDeadline": "विवाद खोलें",
       "assistanceOverdue": "सहायता अनुरोध खोलें",
+      "rsvpPending": "RSVP खोलें",
+      "guestsUnseated": "मेहमानों को बैठाएँ",
+      "mealsMissing": "RSVP जवाब खोलें",
       "pledgesUnpaid": "संकल्प खोलें",
       "sessionsNearCapacity": "सत्र खोलें",
       "sessionWaitlists": "सत्र नामांकन खोलें",
@@ -7422,6 +7519,9 @@
       "campaignFailed": "{count, plural, one {{countWords} अभियान भेजना आज विफल रहा} other {{countWords} अभियान भेजना आज विफल रहे}}",
       "disputeDeadline": "{count, plural, one {{countWords} विवाद के लिए जल्द ही सबूत चाहिए} other {{countWords} विवादों के लिए जल्द ही सबूत चाहिए}}",
       "assistanceOverdue": "{count, plural, one {{countWords} सहायता अनुरोध बहुत देर से प्रतीक्षा में है} other {{countWords} सहायता अनुरोध बहुत देर से प्रतीक्षा में हैं}}",
+      "rsvpPending": "{count, plural, one {{countWords} मेहमान ने RSVP का जवाब नहीं दिया है} other {{countWords} मेहमानों ने RSVP का जवाब नहीं दिया है}}",
+      "guestsUnseated": "{count, plural, one {{countWords} मेहमान के पास टेबल नहीं है} other {{countWords} मेहमानों के पास टेबल नहीं है}}",
+      "mealsMissing": "{count, plural, one {{countWords} आने वाले मेहमान ने भोजन नहीं चुना है} other {{countWords} आने वाले मेहमानों ने भोजन नहीं चुना है}}",
       "pledgesUnpaid": "{count, plural, one {{countWords} संकल्प कार्यक्रम के 14 दिन बाद भी बकाया है} other {{countWords} संकल्प कार्यक्रम के 14 दिन बाद भी बकाया हैं}}",
       "sessionsNearCapacity": "{count, plural, one {{countWords} सत्र 95 % क्षमता से ऊपर है} other {{countWords} सत्र 95 % क्षमता से ऊपर हैं}}",
       "sessionWaitlists": "{count, plural, one {{countWords} सत्र की प्रतीक्षा सूची लंबी है} other {{countWords} सत्रों की प्रतीक्षा सूचियाँ लंबी हैं}}",

@@ -6936,7 +6936,9 @@
       "event": "Event",
       "mode": "Mode",
       "starts": "Starts",
-      "readiness": "Readiness"
+      "readiness": "Readiness",
+      "sales": "Sales",
+      "tickets": "Tickets"
     },
     "manual": "Set by hand",
     "role": {
@@ -7007,9 +7009,10 @@
       "readiness": {
         "title": "Readiness",
         "score": "Readiness {score}%",
-        "blocking": "Blocking",
-        "todo": "Also to do",
-        "allDone": "Ready to go."
+        "allDone": "Ready to go.",
+        "count": "{done} of {total} done",
+        "required": "Needed to sell",
+        "recommended": "Recommended"
       },
       "sales": {
         "title": "Sales",
@@ -7056,7 +7059,9 @@
       "alerts": {
         "title": "Alerts",
         "pending": "Alerts will appear here once alert rules are switched on.",
-        "none": "No open alerts."
+        "none": "No open alerts.",
+        "watching": "Alert rules watch sales, payments, devices, capacity and guests, and show up here.",
+        "viewAll": "See all alerts"
       },
       "entrances": {
         "title": "Entrances"
@@ -7207,6 +7212,52 @@
         "over": "{domains, plural, one {# sending domain} other {# sending domains}} and {campaigns, plural, one {# campaign} other {# campaigns}} over the thresholds",
         "open": "Open email deliverability"
       },
+      "rsvp": {
+        "title": "RSVP",
+        "allAnswered": "Everyone invited has responded.",
+        "noneInvited": "No one has been invited to a sub-event yet.",
+        "responded": "{responded} of {invited} invited guests have responded",
+        "meter": "Responses received",
+        "parties": "Parties still to answer: {count}",
+        "notSent": "Not sent an invitation yet: {count}",
+        "deadline": "RSVP deadline: {date}",
+        "noDeadline": "No RSVP deadline set",
+        "open": "Open RSVPs"
+      },
+      "guestSeating": {
+        "title": "Guest seating",
+        "noChart": "No guest floor plan yet. Choose one in Seating.",
+        "noGuests": "No guests to seat yet.",
+        "allSeated": "Every guest who hasn’t declined has a table.",
+        "seated": "{seated} of {guests} guests have a table",
+        "listLabel": "Guests without a table",
+        "guestOf": "Guest of {name}",
+        "more": "+{count} more",
+        "open": "Seat guests"
+      },
+      "meals": {
+        "title": "Meals and dietary needs",
+        "attending": "Attending: {count}",
+        "noneAttending": "Meals are counted once guests say yes.",
+        "caption": "Meals of attending guests",
+        "colMeal": "Meal",
+        "colGuests": "Guests",
+        "other": "Other choice",
+        "none": "No meal chosen",
+        "dietary": "Dietary requirements: {count}",
+        "accessibility": "Accessibility needs: {count}",
+        "open": "Open RSVP answers"
+      },
+      "arrivals": {
+        "title": "Guest arrivals",
+        "arrivedOf": "{arrived} of {expected} expected guests have arrived",
+        "notArrived": "Not here yet: {count}",
+        "none": "No one has arrived yet.",
+        "noExpected": "No guests are expected yet.",
+        "recent": "Latest arrivals",
+        "guestOf": "Guest of {name}",
+        "open": "Open the day-of view"
+      },
       "sessionLevel": {
         "none": "No limit",
         "ok": "Below {near}%",
@@ -7294,6 +7345,49 @@
       "statusOn": "On",
       "statusOff": "Off",
       "emptyAction": "Create a screen link"
+    },
+    "hero": {
+      "startsIn": "Starts in {duration}",
+      "endsIn": "Ends in {duration}",
+      "ended": "Ended {duration} ago",
+      "nextLabel": "Next step",
+      "blocking": "Needed before you can sell",
+      "next": {
+        "readiness": "Finish: {item}",
+        "scanner": "Check guests in at the door",
+        "publicPage": "All set. See the event page as guests do.",
+        "report": "It’s over. See how it went.",
+        "none": "Nothing needs you right now."
+      },
+      "do": {
+        "alert": "Resolve",
+        "readiness": "Fix it now",
+        "scanner": "Start scanning",
+        "publicPage": "View event page",
+        "report": "Open the report"
+      }
+    },
+    "kpi": {
+      "title": "Key figures",
+      "sales": "Sales",
+      "salesToday": "{amount} today",
+      "tickets": "Tickets sold",
+      "ofCapacity": "of {capacity}",
+      "noCapacity": "No tickets on sale yet",
+      "checkins": "Checked in",
+      "ofValid": "of {valid} valid tickets",
+      "alerts": "Open alerts",
+      "allClear": "All clear",
+      "needsYou": "Needs you",
+      "critical": "{count, plural, =0 {None critical} one {# critical} other {# critical}}"
+    },
+    "soldOf": "{sold} of {capacity}",
+    "overviewCounts": "Events by mode",
+    "overviewGroup": {
+      "live": "Live ({count})",
+      "pre_show": "Pre-show ({count})",
+      "planning": "Being planned ({count})",
+      "wrap": "Wrapping up ({count})"
     }
   },
   "alerts": {
@@ -7389,6 +7483,9 @@
       "campaignFailed": "Open campaigns",
       "disputeDeadline": "Open the dispute queue",
       "assistanceOverdue": "Open the help queue",
+      "rsvpPending": "Open RSVPs",
+      "guestsUnseated": "Seat guests",
+      "mealsMissing": "Open RSVP answers",
       "pledgesUnpaid": "Open the pledges",
       "sessionsNearCapacity": "Open sessions",
       "sessionWaitlists": "Open session enrollment",
@@ -7422,6 +7519,9 @@
       "campaignFailed": "{count, plural, one {{countWords} campaign send failed today} other {{countWords} campaign sends failed today}}",
       "disputeDeadline": "{count, plural, one {{countWords} dispute needs evidence soon} other {{countWords} disputes need evidence soon}}",
       "assistanceOverdue": "{count, plural, one {{countWords} help request has waited too long} other {{countWords} help requests have waited too long}}",
+      "rsvpPending": "{count, plural, one {{countWords} guest has not responded to RSVP} other {{countWords} guests have not responded to RSVP}}",
+      "guestsUnseated": "{count, plural, one {{countWords} guest does not have a table} other {{countWords} guests do not have a table}}",
+      "mealsMissing": "{count, plural, one {{countWords} attending guest has not chosen a meal} other {{countWords} attending guests have not chosen a meal}}",
       "pledgesUnpaid": "{count, plural, one {{countWords} pledge is still unpaid 14 days after the event} other {{countWords} pledges are still unpaid 14 days after the event}}",
       "sessionsNearCapacity": "{count, plural, one {{countWords} session is over 95 % capacity} other {{countWords} sessions are over 95 % capacity}}",
       "sessionWaitlists": "{count, plural, one {{countWords} session has a long waiting line} other {{countWords} sessions have long waiting lines}}",

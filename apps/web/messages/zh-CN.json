@@ -6936,7 +6936,9 @@
       "event": "活动",
       "mode": "模式",
       "starts": "开始时间",
-      "readiness": "准备度"
+      "readiness": "准备度",
+      "sales": "销售额",
+      "tickets": "门票"
     },
     "manual": "手动设置",
     "role": {
@@ -7007,9 +7009,10 @@
       "readiness": {
         "title": "准备度",
         "score": "准备度 {score}%",
-        "blocking": "阻碍项",
-        "todo": "其他待办",
-        "allDone": "一切就绪。"
+        "allDone": "一切就绪。",
+        "count": "已完成 {done}/{total}",
+        "required": "开售必需",
+        "recommended": "建议完成"
       },
       "sales": {
         "title": "销售额",
@@ -7056,7 +7059,9 @@
       "alerts": {
         "title": "提醒",
         "pending": "启用提醒规则后，提醒会显示在这里。",
-        "none": "没有未处理的提醒。"
+        "none": "没有未处理的提醒。",
+        "watching": "警报规则会监控销售、付款、设备、容量和来宾，并在此显示。",
+        "viewAll": "查看全部警报"
       },
       "entrances": {
         "title": "入口"
@@ -7207,6 +7212,52 @@
         "over": "超过阈值：{domains, plural, other {# 个发件域名}}，{campaigns, plural, other {# 个活动}}",
         "open": "打开邮件送达率"
       },
+      "rsvp": {
+        "title": "出席回复",
+        "allAnswered": "所有受邀宾客都已回复。",
+        "noneInvited": "尚未邀请任何人参加分场活动。",
+        "responded": "{invited} 位受邀宾客中已有 {responded} 位回复",
+        "meter": "已收到的回复",
+        "parties": "未回复的家庭：{count}",
+        "notSent": "尚未发送邀请：{count}",
+        "deadline": "回复截止：{date}",
+        "noDeadline": "未设置回复截止日期",
+        "open": "打开回复"
+      },
+      "guestSeating": {
+        "title": "宾客座位",
+        "noChart": "还没有宾客平面图。请在座位中选择一个。",
+        "noGuests": "暂时没有需要安排座位的宾客。",
+        "allSeated": "每位未婉拒的宾客都有桌位。",
+        "seated": "{guests} 位宾客中有 {seated} 位已有桌位",
+        "listLabel": "没有桌位的宾客",
+        "guestOf": "{name} 的同伴",
+        "more": "另外 {count} 位",
+        "open": "安排宾客座位"
+      },
+      "meals": {
+        "title": "餐点与饮食需求",
+        "attending": "出席：{count}",
+        "noneAttending": "宾客确认出席后才会统计餐点。",
+        "caption": "出席宾客的餐点",
+        "colMeal": "餐点",
+        "colGuests": "宾客",
+        "other": "其他选择",
+        "none": "未选择餐点",
+        "dietary": "饮食需求：{count}",
+        "accessibility": "无障碍需求：{count}",
+        "open": "打开回复详情"
+      },
+      "arrivals": {
+        "title": "宾客到场",
+        "arrivedOf": "{expected} 位预期宾客中已到 {arrived} 位",
+        "notArrived": "尚未到场：{count}",
+        "none": "还没有人到场。",
+        "noExpected": "暂无预期到场的宾客。",
+        "recent": "最近到场",
+        "guestOf": "{name} 的同伴",
+        "open": "打开当天视图"
+      },
       "sessionLevel": {
         "none": "不限名额",
         "ok": "低于 {near}%",
@@ -7294,6 +7345,49 @@
       "statusOn": "已开启",
       "statusOff": "已关闭",
       "emptyAction": "创建屏幕链接"
+    },
+    "hero": {
+      "startsIn": "{duration}后开始",
+      "endsIn": "{duration}后结束",
+      "ended": "已于{duration}前结束",
+      "nextLabel": "下一步",
+      "blocking": "开售前必须完成",
+      "next": {
+        "readiness": "待完成：{item}",
+        "scanner": "在门口为来宾签到",
+        "publicPage": "一切就绪。以来宾视角查看活动页面。",
+        "report": "活动已结束。看看效果如何。",
+        "none": "目前没有需要处理的事项。"
+      },
+      "do": {
+        "alert": "去处理",
+        "readiness": "立即完成",
+        "scanner": "开始扫码",
+        "publicPage": "查看活动页面",
+        "report": "打开报告"
+      }
+    },
+    "kpi": {
+      "title": "关键数据",
+      "sales": "销售额",
+      "salesToday": "今日 {amount}",
+      "tickets": "已售门票",
+      "ofCapacity": "共 {capacity}",
+      "noCapacity": "尚无在售门票",
+      "checkins": "已签到",
+      "ofValid": "共 {valid} 张有效门票",
+      "alerts": "未处理警报",
+      "allClear": "一切正常",
+      "needsYou": "需要处理",
+      "critical": "{count, plural, =0 {无严重警报} other {# 个严重}}"
+    },
+    "soldOf": "{sold}/{capacity}",
+    "overviewCounts": "按模式分类的活动",
+    "overviewGroup": {
+      "live": "进行中（{count}）",
+      "pre_show": "开场前（{count}）",
+      "planning": "筹备中（{count}）",
+      "wrap": "收尾中（{count}）"
     }
   },
   "alerts": {
@@ -7389,6 +7483,9 @@
       "campaignFailed": "打开营销活动",
       "disputeDeadline": "打开争议队列",
       "assistanceOverdue": "打开求助请求",
+      "rsvpPending": "打开回复",
+      "guestsUnseated": "安排宾客座位",
+      "mealsMissing": "打开回复详情",
       "pledgesUnpaid": "打开认捐",
       "sessionsNearCapacity": "打开分会场",
       "sessionWaitlists": "打开分会场报名",
@@ -7422,6 +7519,9 @@
       "campaignFailed": "{count, plural, other {今天有 {countWords} 次营销活动发送失败}}",
       "disputeDeadline": "{count, plural, other {有 {countWords} 起争议需要尽快提交证据}}",
       "assistanceOverdue": "{count, plural, other {{countWords} 个求助请求等待过久}}",
+      "rsvpPending": "{count, plural, other {{countWords} 位宾客尚未回复出席邀请}}",
+      "guestsUnseated": "{count, plural, other {{countWords} 位宾客没有桌位}}",
+      "mealsMissing": "{count, plural, other {{countWords} 位出席宾客尚未选择餐点}}",
       "pledgesUnpaid": "{count, plural, other {活动结束 14 天后仍有 {countWords} 笔认捐未付款}}",
       "sessionsNearCapacity": "{count, plural, other {{countWords}个分会场已超过容量的 95 %}}",
       "sessionWaitlists": "{count, plural, other {{countWords}个分会场的候补名单过长}}",

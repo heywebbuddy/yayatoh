@@ -35,10 +35,12 @@ export {
   userCtx,
 } from './fixtures.ts';
 export { enableGallery, guestGalleryPhoto, guestSiteAccess, hostGalleryPhoto, putToSlot } from './gallery.ts';
+
 export { type GuestCheckinScenario, guestCheckinScenario } from './guest-checkin.ts';
 export { type GuestHubScenario, guestHubScenario, partyHub } from './guest-hub.ts';
 export { type GuestSeatScenario, guestSeatScenario } from './guest-seat-finder.ts';
 export { GUEST_SITE_PASSWORD, type GuestSiteScenario, guestSiteScenario } from './guest-site.ts';
+
 export { connectDemo, fakeAuth } from './integrations.ts';
 export { quietDevice, revokeDevice } from './live.ts';
 export {
@@ -73,4 +75,10 @@ export {
   rsvpQuestionsScenario,
   standardRsvpQuestions,
 } from './rsvp-questions.ts';
+export {
+  SOCIAL_FIXTURE,
+  type SocialPackParty,
+  type SocialPackScenario,
+  socialPackScenario,
+} from './social-pack.ts';
 export { warehouseScenario } from './warehouse.ts';

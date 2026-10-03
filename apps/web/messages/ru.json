@@ -6936,7 +6936,9 @@
       "event": "Событие",
       "mode": "Режим",
       "starts": "Начало",
-      "readiness": "Готовность"
+      "readiness": "Готовность",
+      "sales": "Продажи",
+      "tickets": "Билеты"
     },
     "manual": "Задан вручную",
     "role": {
@@ -7007,9 +7009,10 @@
       "readiness": {
         "title": "Готовность",
         "score": "Готовность {score}%",
-        "blocking": "Блокирует",
-        "todo": "Ещё сделать",
-        "allDone": "Всё готово."
+        "allDone": "Всё готово.",
+        "count": "Готово {done} из {total}",
+        "required": "Нужно для продаж",
+        "recommended": "Рекомендуется"
       },
       "sales": {
         "title": "Продажи",
@@ -7056,7 +7059,9 @@
       "alerts": {
         "title": "Оповещения",
         "pending": "Оповещения появятся здесь, когда будут включены правила оповещений.",
-        "none": "Открытых оповещений нет."
+        "none": "Открытых оповещений нет.",
+        "watching": "Правила оповещений следят за продажами, платежами, устройствами, вместимостью и гостями и показываются здесь.",
+        "viewAll": "Все оповещения"
       },
       "entrances": {
         "title": "Входы"
@@ -7207,6 +7212,52 @@
         "over": "Выше порогов: {domains, plural, one {# домен отправки} few {# домена отправки} many {# доменов отправки} other {# домена отправки}} и {campaigns, plural, one {# кампания} few {# кампании} many {# кампаний} other {# кампании}}",
         "open": "Открыть доставляемость писем"
       },
+      "rsvp": {
+        "title": "Ответы гостей",
+        "allAnswered": "Все приглашённые ответили.",
+        "noneInvited": "Пока никто не приглашён ни на одну часть события.",
+        "responded": "Ответили {responded} из {invited} приглашённых",
+        "meter": "Полученные ответы",
+        "parties": "Семьи без ответа: {count}",
+        "notSent": "Приглашение ещё не отправлено: {count}",
+        "deadline": "Ответить до: {date}",
+        "noDeadline": "Срок ответа не задан",
+        "open": "Открыть ответы"
+      },
+      "guestSeating": {
+        "title": "Рассадка гостей",
+        "noChart": "Плана зала для гостей пока нет. Выберите его в разделе «Рассадка».",
+        "noGuests": "Пока некого рассаживать.",
+        "allSeated": "У каждого гостя, который не отказался, есть стол.",
+        "seated": "Стол есть у {seated} из {guests} гостей",
+        "listLabel": "Гости без стола",
+        "guestOf": "Гость {name}",
+        "more": "Ещё {count}",
+        "open": "Рассадить гостей"
+      },
+      "meals": {
+        "title": "Блюда и питание",
+        "attending": "Придут: {count}",
+        "noneAttending": "Блюда считаются, когда гости отвечают «да».",
+        "caption": "Блюда гостей, которые придут",
+        "colMeal": "Блюдо",
+        "colGuests": "Гости",
+        "other": "Другой выбор",
+        "none": "Блюдо не выбрано",
+        "dietary": "Особое питание: {count}",
+        "accessibility": "Нужна доступность: {count}",
+        "open": "Открыть ответы на приглашение"
+      },
+      "arrivals": {
+        "title": "Прибытие гостей",
+        "arrivedOf": "Пришли {arrived} из {expected} ожидаемых гостей",
+        "notArrived": "Ещё не пришли: {count}",
+        "none": "Пока никто не пришёл.",
+        "noExpected": "Гостей пока не ждут.",
+        "recent": "Недавно пришли",
+        "guestOf": "Гость {name}",
+        "open": "Открыть день события"
+      },
       "sessionLevel": {
         "none": "Без ограничения",
         "ok": "Ниже {near}%",
@@ -7294,6 +7345,49 @@
       "statusOn": "Включено",
       "statusOff": "Выключено",
       "emptyAction": "Создать ссылку для экрана"
+    },
+    "hero": {
+      "startsIn": "Начало через {duration}",
+      "endsIn": "Окончание через {duration}",
+      "ended": "Завершилось {duration} назад",
+      "nextLabel": "Следующий шаг",
+      "blocking": "Нужно до начала продаж",
+      "next": {
+        "readiness": "Завершите: {item}",
+        "scanner": "Регистрируйте гостей на входе",
+        "publicPage": "Всё готово. Посмотрите страницу события глазами гостей.",
+        "report": "Событие завершилось. Посмотрите итоги.",
+        "none": "Сейчас ничего не требует вашего внимания."
+      },
+      "do": {
+        "alert": "Исправить",
+        "readiness": "Сделать сейчас",
+        "scanner": "Начать сканирование",
+        "publicPage": "Открыть страницу события",
+        "report": "Открыть отчёт"
+      }
+    },
+    "kpi": {
+      "title": "Ключевые показатели",
+      "sales": "Продажи",
+      "salesToday": "{amount} сегодня",
+      "tickets": "Продано билетов",
+      "ofCapacity": "из {capacity}",
+      "noCapacity": "Билеты ещё не продаются",
+      "checkins": "Зарегистрировано",
+      "ofValid": "из {valid} действительных билетов",
+      "alerts": "Открытые оповещения",
+      "allClear": "Всё в порядке",
+      "needsYou": "Нужно ваше внимание",
+      "critical": "{count, plural, =0 {Нет критических} one {# критическое} few {# критических} many {# критических} other {# критического}}"
+    },
+    "soldOf": "{sold} из {capacity}",
+    "overviewCounts": "События по режимам",
+    "overviewGroup": {
+      "live": "Идут сейчас ({count})",
+      "pre_show": "Накануне ({count})",
+      "planning": "Планируются ({count})",
+      "wrap": "Завершаются ({count})"
     }
   },
   "alerts": {
@@ -7389,6 +7483,9 @@
       "campaignFailed": "Открыть рассылки",
       "disputeDeadline": "Открыть споры",
       "assistanceOverdue": "Открыть запросы помощи",
+      "rsvpPending": "Открыть ответы",
+      "guestsUnseated": "Рассадить гостей",
+      "mealsMissing": "Открыть ответы на приглашение",
       "pledgesUnpaid": "Открыть обещания",
       "sessionsNearCapacity": "Открыть сессии",
       "sessionWaitlists": "Открыть запись на сессии",
@@ -7422,6 +7519,9 @@
       "campaignFailed": "{count, plural, one {{countWords} рассылка сегодня не удалась} few {{countWords} рассылки сегодня не удались} many {{countWords} рассылок сегодня не удались} other {{countWords} рассылки сегодня не удалось}}",
       "disputeDeadline": "{count, plural, one {По {countWords} спору скоро нужны доказательства} few {По {countWords} спорам скоро нужны доказательства} many {По {countWords} спорам скоро нужны доказательства} other {По {countWords} спора скоро нужны доказательства}}",
       "assistanceOverdue": "{count, plural, one {{countWords} запрос помощи ждёт слишком долго} few {{countWords} запроса помощи ждут слишком долго} many {{countWords} запросов помощи ждут слишком долго} other {{countWords} запроса помощи ждут слишком долго}}",
+      "rsvpPending": "{count, plural, one {{countWords} гость не ответил на приглашение} few {{countWords} гостя не ответили на приглашение} many {{countWords} гостей не ответили на приглашение} other {{countWords} гостя не ответили на приглашение}}",
+      "guestsUnseated": "{count, plural, one {{countWords} гость без стола} few {{countWords} гостя без стола} many {{countWords} гостей без стола} other {{countWords} гостя без стола}}",
+      "mealsMissing": "{count, plural, one {{countWords} гость, который придёт, не выбрал блюдо} few {{countWords} гостя, которые придут, не выбрали блюдо} many {{countWords} гостей, которые придут, не выбрали блюдо} other {{countWords} гостя, которые придут, не выбрали блюдо}}",
       "pledgesUnpaid": "{count, plural, one {{countWords} обещание пожертвования не оплачено через 14 дней после мероприятия} few {{countWords} обещания пожертвования не оплачены через 14 дней после мероприятия} many {{countWords} обещаний пожертвования не оплачены через 14 дней после мероприятия} other {{countWords} обещания пожертвования не оплачены через 14 дней после мероприятия}}",
       "sessionsNearCapacity": "{count, plural, one {{countWords} сессия заполнена более чем на 95 %} few {{countWords} сессии заполнены более чем на 95 %} many {{countWords} сессий заполнены более чем на 95 %} other {{countWords} сессии заполнены более чем на 95 %}}",
       "sessionWaitlists": "{count, plural, one {У {countWords} сессии длинная очередь} few {У {countWords} сессий длинные очереди} many {У {countWords} сессий длинные очереди} other {У {countWords} сессии длинные очереди}}",

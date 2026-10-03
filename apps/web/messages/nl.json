@@ -6936,7 +6936,9 @@
       "event": "Evenement",
       "mode": "Modus",
       "starts": "Begint",
-      "readiness": "Gereedheid"
+      "readiness": "Gereedheid",
+      "sales": "Verkoop",
+      "tickets": "Tickets"
     },
     "manual": "Handmatig ingesteld",
     "role": {
@@ -7007,9 +7009,10 @@
       "readiness": {
         "title": "Gereedheid",
         "score": "Gereedheid {score}%",
-        "blocking": "Blokkerend",
-        "todo": "Ook nog te doen",
-        "allDone": "Klaar om te beginnen."
+        "allDone": "Klaar om te beginnen.",
+        "count": "{done} van {total} klaar",
+        "required": "Nodig om te verkopen",
+        "recommended": "Aanbevolen"
       },
       "sales": {
         "title": "Verkoop",
@@ -7056,7 +7059,9 @@
       "alerts": {
         "title": "Meldingen",
         "pending": "Meldingen verschijnen hier zodra meldingsregels aan staan.",
-        "none": "Geen open meldingen."
+        "none": "Geen open meldingen.",
+        "watching": "Meldingsregels bewaken verkoop, betalingen, apparaten, capaciteit en gasten, en verschijnen hier.",
+        "viewAll": "Alle meldingen bekijken"
       },
       "entrances": {
         "title": "Ingangen"
@@ -7207,6 +7212,52 @@
         "over": "{domains, plural, one {# verzenddomein} other {# verzenddomeinen}} en {campaigns, plural, one {# campagne} other {# campagnes}} boven de drempels",
         "open": "E-mailbezorgbaarheid openen"
       },
+      "rsvp": {
+        "title": "Reacties",
+        "allAnswered": "Iedereen die is uitgenodigd heeft gereageerd.",
+        "noneInvited": "Er is nog niemand uitgenodigd voor een onderdeel.",
+        "responded": "{responded} van {invited} uitgenodigde gasten hebben gereageerd",
+        "meter": "Ontvangen reacties",
+        "parties": "Huishoudens zonder reactie: {count}",
+        "notSent": "Uitnodiging nog niet verstuurd: {count}",
+        "deadline": "Reageren kan tot: {date}",
+        "noDeadline": "Geen reactietermijn ingesteld",
+        "open": "Reacties openen"
+      },
+      "guestSeating": {
+        "title": "Tafelindeling",
+        "noChart": "Nog geen plattegrond voor gasten. Kies er een bij Plaatsen.",
+        "noGuests": "Nog geen gasten om te plaatsen.",
+        "allSeated": "Elke gast die niet heeft afgezegd, heeft een tafel.",
+        "seated": "{seated} van {guests} gasten hebben een tafel",
+        "listLabel": "Gasten zonder tafel",
+        "guestOf": "Gast van {name}",
+        "more": "+{count} meer",
+        "open": "Gasten plaatsen"
+      },
+      "meals": {
+        "title": "Maaltijden en dieetwensen",
+        "attending": "Aanwezig: {count}",
+        "noneAttending": "Maaltijden worden geteld zodra gasten ja zeggen.",
+        "caption": "Maaltijden van aanwezige gasten",
+        "colMeal": "Maaltijd",
+        "colGuests": "Gasten",
+        "other": "Andere keuze",
+        "none": "Geen maaltijd gekozen",
+        "dietary": "Dieetwensen: {count}",
+        "accessibility": "Toegankelijkheidsbehoeften: {count}",
+        "open": "RSVP-antwoorden openen"
+      },
+      "arrivals": {
+        "title": "Aankomst van gasten",
+        "arrivedOf": "{arrived} van {expected} verwachte gasten zijn er",
+        "notArrived": "Nog niet hier: {count}",
+        "none": "Er is nog niemand aangekomen.",
+        "noExpected": "Er worden nog geen gasten verwacht.",
+        "recent": "Laatst aangekomen",
+        "guestOf": "Gast van {name}",
+        "open": "Dagoverzicht openen"
+      },
       "sessionLevel": {
         "none": "Geen limiet",
         "ok": "Onder {near}%",
@@ -7294,6 +7345,49 @@
       "statusOn": "Aan",
       "statusOff": "Uit",
       "emptyAction": "Maak een schermlink"
+    },
+    "hero": {
+      "startsIn": "Begint over {duration}",
+      "endsIn": "Eindigt over {duration}",
+      "ended": "{duration} geleden afgelopen",
+      "nextLabel": "Volgende stap",
+      "blocking": "Nodig voordat je kunt verkopen",
+      "next": {
+        "readiness": "Afronden: {item}",
+        "scanner": "Gasten inchecken bij de deur",
+        "publicPage": "Alles klaar. Bekijk de eventpagina zoals gasten die zien.",
+        "report": "Het is voorbij. Bekijk hoe het ging.",
+        "none": "Er is nu niets dat je aandacht nodig heeft."
+      },
+      "do": {
+        "alert": "Oplossen",
+        "readiness": "Nu regelen",
+        "scanner": "Begin met scannen",
+        "publicPage": "Eventpagina bekijken",
+        "report": "Rapport openen"
+      }
+    },
+    "kpi": {
+      "title": "Kerncijfers",
+      "sales": "Verkoop",
+      "salesToday": "{amount} vandaag",
+      "tickets": "Verkochte tickets",
+      "ofCapacity": "van {capacity}",
+      "noCapacity": "Nog geen tickets te koop",
+      "checkins": "Ingecheckt",
+      "ofValid": "van {valid} geldige tickets",
+      "alerts": "Open meldingen",
+      "allClear": "Alles in orde",
+      "needsYou": "Actie nodig",
+      "critical": "{count, plural, =0 {Geen kritiek} one {# kritiek} other {# kritiek}}"
+    },
+    "soldOf": "{sold} van {capacity}",
+    "overviewCounts": "Events per modus",
+    "overviewGroup": {
+      "live": "Live ({count})",
+      "pre_show": "Voorafgaand ({count})",
+      "planning": "In voorbereiding ({count})",
+      "wrap": "In afronding ({count})"
     }
   },
   "alerts": {
@@ -7389,6 +7483,9 @@
       "campaignFailed": "Campagnes openen",
       "disputeDeadline": "Geschillen openen",
       "assistanceOverdue": "Hulpvragen openen",
+      "rsvpPending": "Reacties openen",
+      "guestsUnseated": "Gasten plaatsen",
+      "mealsMissing": "RSVP-antwoorden openen",
       "pledgesUnpaid": "Toezeggingen openen",
       "sessionsNearCapacity": "Sessies openen",
       "sessionWaitlists": "Sessie-inschrijving openen",
@@ -7422,6 +7519,9 @@
       "campaignFailed": "{count, plural, one {Eén campagneverzending is vandaag mislukt} other {{countWords} campagneverzendingen zijn vandaag mislukt}}",
       "disputeDeadline": "{count, plural, one {Eén geschil heeft binnenkort bewijs nodig} other {{countWords} geschillen hebben binnenkort bewijs nodig}}",
       "assistanceOverdue": "{count, plural, one {{countWords} hulpvraag wacht te lang} other {{countWords} hulpvragen wachten te lang}}",
+      "rsvpPending": "{count, plural, one {Eén gast heeft nog niet gereageerd op de uitnodiging} other {{countWords} gasten hebben nog niet gereageerd op de uitnodiging}}",
+      "guestsUnseated": "{count, plural, one {Eén gast heeft geen tafel} other {{countWords} gasten hebben geen tafel}}",
+      "mealsMissing": "{count, plural, one {Eén aanwezige gast heeft geen maaltijd gekozen} other {{countWords} aanwezige gasten hebben geen maaltijd gekozen}}",
       "pledgesUnpaid": "{count, plural, one {Eén toezegging is 14 dagen na het evenement nog niet betaald} other {{countWords} toezeggingen zijn 14 dagen na het evenement nog niet betaald}}",
       "sessionsNearCapacity": "{count, plural, one {{countWords} sessie zit boven 95 % van de capaciteit} other {{countWords} sessies zitten boven 95 % van de capaciteit}}",
       "sessionWaitlists": "{count, plural, one {{countWords} sessie heeft een lange wachtlijst} other {{countWords} sessies hebben lange wachtlijsten}}",
