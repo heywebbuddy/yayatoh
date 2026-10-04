@@ -39,7 +39,6 @@ export default async function UsagePage({
   const t = await getTranslations('billingUsage');
   const te = await getTranslations('emptyActions');
   const tp = await getTranslations('billingPlan');
-  const tn = await getTranslations('nav');
   const breadcrumb = (
     <Breadcrumb
       label={t('breadcrumb')}

@@ -67,9 +67,9 @@ export {
   shortLinksQuery,
 } from './commands/short-links.ts';
 export { EventSettingsSnapshot, eventSettingsTx, insertEventCopyTx } from './copy.ts';
+export { insertSectionsTx, SectionsSnapshot, sectionsSnapshotTx } from './copy-content.ts';
 // M6.5b: events for CRM connectors (Salesforce campaigns).
 export { type CrmEventRow, crmEventRowsTx } from './crm-event-rows.ts';
-export { insertSectionsTx, SectionsSnapshot, sectionsSnapshotTx } from './copy-content.ts';
 export { eventsDataSubjects } from './data-subject.ts';
 // M6.9a: an event's delivery (attendance) mode for the virtual module.
 export { type EventDeliveryFacts, eventDeliveryTx } from './delivery.ts';

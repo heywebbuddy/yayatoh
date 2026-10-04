@@ -145,8 +145,6 @@ export {
   splitName,
 } from './connectors/salesforce/objects.ts';
 export { slackConnector } from './connectors/slack.ts';
-export { integrationsDataSubjects } from './data-subject.ts';
-export * from './domain/calendar.ts';
 // M6.9b: the Zoom connector and its fake API's dev controls.
 export {
   ZOOM_REPORT_PAGE,
@@ -155,6 +153,8 @@ export {
   zoomFakeProvider,
   zoomFakeRegistrants,
 } from './connectors/zoom.ts';
+export { integrationsDataSubjects } from './data-subject.ts';
+export * from './domain/calendar.ts';
 export * from './domain/mapping.ts';
 export * from './domain/sync.ts';
 export {
