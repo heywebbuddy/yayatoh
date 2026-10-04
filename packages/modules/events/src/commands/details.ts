@@ -156,7 +156,8 @@ export const setEventDetailsCommand = tenantCommand({
 /** The org's tags (for filters and suggestions), each once in its first-used spelling. */
 export const orgTagsQuery = tenantQuery({
   name: 'events.orgTags',
-  input: z.object({}),
+  /** `eventId`: the event being edited, so its event-scoped roles may read the suggestions. */
+  input: z.object({ eventId: z.uuid().optional() }),
   output: z.array(z.object({ key: z.string(), tag: z.string(), count: z.number().int() })),
   entitlement: 'core',
   permission: 'events:read',

@@ -25,8 +25,8 @@ export default async function EventDetailsPage({
     executeQuery(eventDetailsQuery, { eventId: ev.id }, data.ctx, ports),
     executeQuery(listVenuesQuery, { eventId: ev.id }, data.ctx, ports),
     executeQuery(shortLinksQuery, { eventId: ev.id }, data.ctx, ports),
-    executeQuery(orgCategoriesQuery, { includeHidden: true }, data.ctx, ports),
-    executeQuery(orgTagsQuery, {}, data.ctx, ports),
+    executeQuery(orgCategoriesQuery, { includeHidden: true, eventId: ev.id }, data.ctx, ports),
+    executeQuery(orgTagsQuery, { eventId: ev.id }, data.ctx, ports),
   ]);
   // U8: hidden categories leave the picker, except the one this event already has.
   const te = await getTranslations();

@@ -6961,6 +6961,11 @@
         "explain": {
           "co_host": "Alles zu dieser Veranstaltung: Gäste, Zusagen, Sitzplätze, Website, Galerie, Nachrichten und der große Tag. Kann den Rest des Teams einladen."
         }
+      },
+      "commandCenter": {
+        "kpi": {
+          "ofValid": "von {valid} Gästen"
+        }
       }
     },
     "gala": {

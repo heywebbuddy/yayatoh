@@ -6961,6 +6961,11 @@
         "explain": {
           "co_host": "Todo sobre este evento: invitados, RSVP, asientos, sitio web, galería, mensajes y el gran día. Puede invitar al resto del equipo."
         }
+      },
+      "commandCenter": {
+        "kpi": {
+          "ofValid": "de {valid} invitados"
+        }
       }
     },
     "gala": {

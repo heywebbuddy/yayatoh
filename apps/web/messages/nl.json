@@ -6961,6 +6961,11 @@
         "explain": {
           "co_host": "Alles over dit evenement: gasten, RSVP, plaatsen, website, galerij, berichten en de grote dag. Kan de rest van het team uitnodigen."
         }
+      },
+      "commandCenter": {
+        "kpi": {
+          "ofValid": "van {valid} gasten"
+        }
       }
     },
     "gala": {
