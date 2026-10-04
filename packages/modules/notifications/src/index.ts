@@ -94,6 +94,8 @@ export {
   orderMessagesQuery,
   sendTestNotificationCommand,
 } from './inbox.ts';
+// M6.4d: unsubscribes and cleaned addresses reported by connected marketing tools.
+export { suppressAddressFromIntegrationTx, suppressFromIntegrationTx } from './integration-suppressions.ts';
 export {
   type Category,
   defaultPreference,
@@ -373,6 +375,7 @@ export {
   CATEGORIES,
   DELIVERY_STATES,
   FALLBACK_REASONS,
+  INTEGRATION_SUPPRESSION_SOURCES,
   MESSAGE_CHANNELS,
   MESSAGE_PROVIDERS,
   MESSAGE_STATUSES,

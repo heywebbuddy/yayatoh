@@ -106,3 +106,17 @@ Slack, Mailchimp, HubSpot, Klaviyo) with `defineConnector` in `src/connectors/` 
   kind). Unsent rows are superseded freely; an uncertain failure blocks its day until its retry
   (same key) settles. Days from the mapping's first day to yesterday; integer minor units, sent as
   exact decimals. Xero takes its base currency only (`currency_unsupported`).
+
+**M6.4d — Mailchimp, Klaviyo, HubSpot** (`src/audience/`, `src/connectors/{mailchimp,klaviyo,hubspot}`)
+- **Consent first** (`audience/consent.ts`): only `subscribed` contacts (express email marketing
+  consent; no unsubscribe, address suppression or erasure since) are ever created at a provider;
+  contacts already there get the unsubscribe / opt-out; list members who leave the audience are
+  archived. The status is computed from the crm ledger, notifications suppressions and platform
+  erased addresses (`audience/state.ts`), never from the mapping; `send` refuses a non-subscriber.
+- **Inbound** (`audience/inbound.ts`): unsubscribe → consent withdrawn (evidence
+  `integration:<connector>:<connection>`) + marketing suppression with the provider as `source`;
+  cleaned → address suppression `hard_bounce`; complaint → both. Never a grant. Recorded once per
+  provider record and version in `consent_changes` (merges move it: `integrationsContactOwner`).
+- `audience_syncs`: one per Mailchimp/Klaviyo connection (segment or everyone with consent, the
+  provider list); `saveAudienceSync` is an `export` command. Pulled records are linked before the
+  engine reads them back (`linkPulledTx`), so a change that came in is never sent back.

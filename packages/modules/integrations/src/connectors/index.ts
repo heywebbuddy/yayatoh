@@ -3,6 +3,9 @@ import { demoConnector } from './demo.ts';
 import { eventbriteConnector } from './eventbrite/index.ts';
 import { googleCalendarConnector, googleCalendarPersonalConnector } from './google-calendar.ts';
 import { googleSheetsConnector } from './google-sheets/index.ts';
+import { hubspotConnector } from './hubspot/index.ts';
+import { klaviyoConnector } from './klaviyo/index.ts';
+import { mailchimpConnector } from './mailchimp/index.ts';
 import { quickbooksConnector } from './quickbooks.ts';
 import { salesforceConnector } from './salesforce/index.ts';
 import { slackConnector } from './slack.ts';
@@ -30,6 +33,10 @@ export const CONNECTORS: readonly ConnectorDefinition[] = [
   // M6.5d: accounting (daily summary journals).
   quickbooksConnector,
   xeroConnector,
+  // M6.4d (P6-4 order: Mailchimp and HubSpot, then Klaviyo).
+  mailchimpConnector,
+  hubspotConnector,
+  klaviyoConnector,
 ];
 
 export function connectorByKey(key: string): ConnectorDefinition | null {

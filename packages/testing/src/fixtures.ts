@@ -214,6 +214,7 @@ import {
   queueSlackTestCommand,
   runSync,
   saveAccountMapCommand,
+  saveAudienceSyncCommand,
   saveSlackSettingsCommand,
   sheetLinksQuery,
   sheetsRemoteEdit,
@@ -446,6 +447,7 @@ import {
   connectAccounting,
   connectConnector,
   connectDemo,
+  connectFake,
   connectSlack,
   fakeAccountMap,
   fakeAuth,
@@ -3395,8 +3397,18 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     now: new Date(Date.now() + 24 * 60 * 60_000),
     force: true,
   });
-  // M6.2a again: the warehouse catches up on the outbox of the rows added after its first run
-  // (donations, matches, imports), as the worker would, so a later backfill changes nothing.
+  // M6.4d: Mailchimp connected with an audience (everyone with consent) and synced once: its
+  // audience settings and the consent change its seed unsubscribe brings in.
+  const mailchimp = await connectFake(ctx(), 'mailchimp');
+  await executeCommand(
+    saveAudienceSyncCommand,
+    { connectionId: mailchimp.connectionId, segmentId: null, listId: 'mc_list_main', listName: 'Newsletter' },
+    ctx(),
+    ports,
+  );
+  await runSync(org.id, mailchimp.connectionId, { auth: fakeAuth }, ports);
+  // Batch 3k merge: the warehouse catches up once more on what the fixture did after its backfill
+  // (M4.8f's gift refund, among others), as the worker would, so it is current when tests start.
   await catchUpWarehouse(org.id);
   return {
     org,

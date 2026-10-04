@@ -8,6 +8,7 @@ import { registerContactReferenceOwners } from '@yayatoh/crm';
 import { engagementContactOwner } from '@yayatoh/engagement';
 import { eventRolesOf } from '@yayatoh/events';
 import { guestsContactOwner, guestsOccupantDirectory, guestsPartyCredentials } from '@yayatoh/guests';
+import { integrationsContactOwner } from '@yayatoh/integrations';
 import { notificationsContactOwner } from '@yayatoh/notifications';
 import { ordersContactOwner } from '@yayatoh/orders';
 import {
@@ -66,6 +67,8 @@ registerContactReferenceOwners([
   automationsContactOwner,
   engagementContactOwner,
   participationContactOwner,
+  // M6.4d: consent changes reported by marketing tools.
+  integrationsContactOwner,
 ]);
 // M6.3b: outbound webhooks through Svix, or the fake (dev, preview, CI) until the owner's account.
 const webhookPublisher = webhookPublisherFromEnv(

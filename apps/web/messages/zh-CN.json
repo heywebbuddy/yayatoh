@@ -15836,6 +15836,15 @@
       },
       "xero": {
         "description": "每天把销售、费用、退款、付款和捐款的汇总日记账分录过账到 Xero。"
+      },
+      "mailchimp": {
+        "description": "将受众连同合并字段发送到 Mailchimp 列表。退订和退信地址会作为同意变更返回。"
+      },
+      "hubspot": {
+        "description": "双向同步联系人，并将你的活动作为营销活动发送到 HubSpot，包含报名和签到。"
+      },
+      "klaviyo": {
+        "description": "将受众发送到 Klaviyo 列表。退订、退信和垃圾邮件投诉会作为同意变更返回。"
       }
     },
     "sandboxBadge": "测试",
@@ -15867,7 +15876,10 @@
       "sessions": "场次",
       "registrants": "研讨会登记者",
       "participants": "研讨会出席",
-      "journals": "每日分录"
+      "journals": "每日分录",
+      "members": "列表成员",
+      "marketing_events": "营销活动",
+      "event_attendance": "报名与出席"
     },
     "fields": {
       "email": "电子邮件",
@@ -15912,7 +15924,11 @@
       "time_zone": "时区",
       "webinar_id": "研讨会 ID",
       "joined_at": "加入时间",
-      "left_at": "离开时间"
+      "left_at": "离开时间",
+      "subscription": "订阅变更",
+      "email_opt_out": "已退订邮件",
+      "venue": "场地",
+      "cancelled": "已取消"
     },
     "status": {
       "none": "未连接",
@@ -16473,6 +16489,60 @@
         "failed": "未过账",
         "superseded": "已替换"
       }
+    },
+    "marketing": {
+      "consentRule": "同意优先：只发送同意接收营销邮件的联系人，退订或退信始终优先。有人在这里退订后，下一次同步也会在对方那里将其退订。",
+      "audience": {
+        "title": "受众",
+        "help": "选择发送到 {name} 的人员以及他们加入的列表。",
+        "saved": "受众已保存。下一次同步会发送。",
+        "segmentMissing": "已保存的受众已被删除，因此不会发送新人员。请选择其他受众。",
+        "segment": "发送对象",
+        "list": "{name} 列表",
+        "everyone": "所有同意接收营销邮件的人",
+        "savedSegment": "已保存的受众",
+        "emptyTitle": "尚未选择受众",
+        "emptyManage": "选择要发送的人员和他们加入的 {name} 列表。保存前不会发送任何内容。",
+        "emptyRead": "由所有者或管理员选择发送对象。在此之前不会发送任何内容。",
+        "formLabel": "选择受众和列表",
+        "save": "保存受众",
+        "feedback": {
+          "list_required": "请选择一个列表。",
+          "provider_unavailable": "无法从服务商加载列表。请几分钟后重试。",
+          "validation_failed": "该受众已不存在。请选择其他受众。",
+          "forbidden": "你无权访问此内容。",
+          "invalid_state": "目前无法设置此连接。",
+          "not_found": "找不到该内容。",
+          "read_only_freeze": "计划维护期间暂停更改。维护结束后请重试。",
+          "internal": "我们这边出了点问题。"
+        },
+        "chooseNow": "选择受众",
+        "allIntegrations": "所有集成"
+      },
+      "hubspot": {
+        "title": "与 HubSpot 同步的内容",
+        "contacts": "联系人按下方的字段映射双向同步。来自 HubSpot 的联系人永远不会带着同意进入；在 HubSpot 退订会在这里将其退订。",
+        "events": "每个已发布的活动都会成为 HubSpot 营销活动，取消也会同步发送。",
+        "attendance": "为同意接收营销邮件的联系人发送报名、签到和取消。"
+      },
+      "changes": {
+        "title": "来自 {name} 的同意变更",
+        "help": "从 {name} 返回的退订、退信地址和投诉，以及它们在这里造成的变更。",
+        "caption": "来自 {name} 的同意变更",
+        "empty": "{name} 还没有返回任何内容。",
+        "who": "联系人",
+        "change": "在服务商处",
+        "applied": "在这里的变更",
+        "when": "时间",
+        "withdrawn": "已撤回同意",
+        "suppressed": "已屏蔽",
+        "already": "已是最新",
+        "kinds": {
+          "unsubscribed": "已退订",
+          "cleaned": "地址退信",
+          "complained": "垃圾邮件投诉"
+        }
+      }
     }
   },
   "kioskPrint": {
@@ -16893,7 +16963,7 @@
     "protocolOidc": "OpenID Connect",
     "protocolOidcHint": "任何支持 OpenID Connect 登录的提供商。",
     "name": "名称",
-    "nameHint": "向团队显示，例如“Acme Okta”。",
+    "nameHint": "向团队显示，例如“Northwind Okta”。",
     "samlSource": "你想如何输入提供商的详细信息？",
     "sourceXml": "粘贴元数据 XML",
     "sourceUrl": "元数据 URL",

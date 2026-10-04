@@ -46,6 +46,7 @@ export {
   connectAccounting,
   connectConnector,
   connectDemo,
+  connectFake,
   connectSlack,
   connectZoom,
   fakeAccountMap,

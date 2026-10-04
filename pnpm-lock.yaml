@@ -2301,6 +2301,9 @@ importers:
       '@yayatoh/attendees':
         specifier: workspace:*
         version: link:../attendees
+      '@yayatoh/audiences':
+        specifier: workspace:*
+        version: link:../audiences
       '@yayatoh/billing':
         specifier: workspace:*
         version: link:../billing
