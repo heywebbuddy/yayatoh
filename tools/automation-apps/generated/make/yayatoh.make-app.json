@@ -3853,7 +3853,7 @@
     {
       "name": "listEvents",
       "label": "Events by start time",
-      "description": "The organization’s events by start time, every status and visibility.",
+      "description": "The organization’s events by start time, every status and visibility. `tag` narrows the list to events with that tag.",
       "typeName": "search",
       "connection": "yayatoh",
       "scope": "events:read",
@@ -3865,7 +3865,7 @@
       "communication": {
         "url": "/events",
         "method": "GET",
-        "qs": "{{pick(parameters, 'limit')}}",
+        "qs": "{{pick(parameters, 'limit', 'tag')}}",
         "response": {
           "iterate": "{{body.data}}",
           "output": "{{item}}"
@@ -3885,6 +3885,13 @@
           "type": "number",
           "required": false,
           "help": "Page size (1–100)."
+        },
+        {
+          "name": "tag",
+          "label": "Tag",
+          "type": "text",
+          "required": false,
+          "help": "Only events with this tag (case-insensitive)."
         }
       ]
     },

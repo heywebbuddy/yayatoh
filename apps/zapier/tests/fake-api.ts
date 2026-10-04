@@ -87,6 +87,9 @@ const EVENT = {
   country: 'US',
   currency: 'USD',
   publishedAt: '2030-01-10T15:00:00.000Z',
+  // Batch 3m merge: U8's category and tags on /v1 events (3v).
+  category: 'arts_culture',
+  tags: ['gala'],
 };
 
 async function readJson(req: IncomingMessage): Promise<Record<string, unknown> | null> {
