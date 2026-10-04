@@ -111,6 +111,14 @@ beforeAll(async () => {
     ports,
   );
   strangerAgencyId = other.id;
+  // Every module key is on the default plan since M6.6a (P6-13: free in beta), so this agency is
+  // made to lack the `agency` entitlement explicitly (as staff can, per org).
+  await executeCommand(
+    setEntitlementOverrideCommand,
+    { moduleKey: 'agency', effect: 'revoke', reason: 'agency fixture without the entitlement' },
+    systemCtx(strangerAgencyId),
+    ports,
+  );
 }, 240_000);
 afterAll(closePools);
 
