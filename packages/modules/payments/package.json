@@ -17,6 +17,7 @@
     "stripe:test-clocks": "node scripts/stripe-test-clocks.ts"
   },
   "dependencies": {
+    "@yayatoh/billing": "workspace:*",
     "@yayatoh/contracts": "workspace:*",
     "@yayatoh/db": "workspace:*",
     "@yayatoh/events": "workspace:*",

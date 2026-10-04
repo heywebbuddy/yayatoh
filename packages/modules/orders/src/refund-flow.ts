@@ -1,6 +1,10 @@
 import { type TenantTx, withTenant } from '@yayatoh/db';
 import { type CommandPorts, type Ctx, createCtx, executeCommand, requireOrg } from '@yayatoh/kernel';
-import { type PaymentProvider, recordTransferReversalCommand } from '@yayatoh/payments';
+import {
+  type PaymentProvider,
+  recordCommissionReversalCommand,
+  recordTransferReversalCommand,
+} from '@yayatoh/payments';
 import { eq } from 'drizzle-orm';
 import type { z } from 'zod';
 import { nextMassRefundStepCommand, settleMassRefundItemCommand } from './commands/mass-refunds.ts';
@@ -97,6 +101,31 @@ export async function refundAtProvider(
         reversalId: rev.reversalId,
         amountMinor: done.reversal.amountMinor,
         currency: done.reversal.currency,
+      },
+      ctx,
+      ports,
+    );
+  }
+  // M6.8a: the agency's share comes back from its commission transfer, by an explicit reversal too.
+  const cr = done.commissionReversal;
+  if (cr) {
+    const rev = await provider.reverseTransfer({
+      transferId: cr.transferId,
+      amount: { amount: cr.amountMinor, currency: cr.currency },
+      idempotencyKey: `commission_reversal:${started.refundId}`,
+      orgId: requireOrg(ctx),
+    });
+    await executeCommand(
+      recordCommissionReversalCommand,
+      {
+        refundId: started.refundId,
+        orderId: cr.orderId,
+        eventId: cr.eventId,
+        agencyOrgId: cr.agencyOrgId,
+        outcome: rev.status,
+        reversalId: rev.reversalId,
+        amountMinor: cr.amountMinor,
+        currency: cr.currency,
       },
       ctx,
       ports,

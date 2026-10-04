@@ -203,6 +203,8 @@ describe('read-only freeze (M2.5a)', () => {
       'checkin.syncScans',
       'checkin.undoAdmission',
       'orders.completeRefund',
+      // M6.8a: records the explicit reversal of an agency's commission transfer the provider made.
+      'payments.recordCommissionReversal',
       'payments.recordTransferReversal',
     ]);
   });

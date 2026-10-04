@@ -376,3 +376,61 @@ export const planChanges = tenantTable(
     check('plan_changes_tax_check', sql`tax_minor >= 0 and discount_minor >= 0`),
   ],
 );
+
+export const AGENCY_BILLING_END_REASONS = ['client', 'agency', 'grant_revoked', 'staff'] as const;
+
+/**
+ * M6.8a (agency v2, flag `agency_v2`): an agency's offer to pay for a client's plan. Owned by the
+ * **agency**; one live offer per client. The client sees it through `billing.agency_offers_for_me()`.
+ */
+export const agencyBillingOffers = tenantTable(
+  billing,
+  'agency_billing_offers',
+  {
+    clientOrgId: uuid('client_org_id').notNull(),
+    offeredBy: uuid('offered_by'),
+    withdrawnAt: timestamp('withdrawn_at', { withTimezone: true }),
+    withdrawnBy: uuid('withdrawn_by'),
+  },
+  (t) => [
+    uniqueIndex('agency_billing_offers_org_client_live_key')
+      .on(t.orgId, t.clientOrgId)
+      .where(sql`withdrawn_at is null`),
+    index('agency_billing_offers_org_created_idx').on(t.orgId, t.createdAt),
+    check('agency_billing_offers_not_self', sql`client_org_id <> org_id`),
+  ],
+);
+
+/**
+ * M6.8a: the client's acceptance of an agency's offer (agency billing). Owned by the **client**;
+ * one live row per client. While it is live, its grant is live and the agency still offers (and
+ * has `agency_v2`), the agency's plan covers the client and the agency earns `commission_bps` of
+ * the organizer's share of each `platform_mor` sale, as a second transfer at release. The rate is
+ * fixed per row (staff change it; the owner sets the default, P6-8). Ended rows stay as history.
+ */
+export const agencyBilling = tenantTable(
+  billing,
+  'agency_billing',
+  {
+    grantId: uuid('grant_id').notNull(),
+    agencyOrgId: uuid('agency_org_id').notNull(),
+    commissionBps: integer('commission_bps').notNull(),
+    acceptedBy: uuid('accepted_by'),
+    acceptedAt: timestamp('accepted_at', { withTimezone: true }).notNull(),
+    endedAt: timestamp('ended_at', { withTimezone: true }),
+    endedBy: uuid('ended_by'),
+    endReason: text('end_reason'),
+  },
+  (t) => [
+    uniqueIndex('agency_billing_org_live_key').on(t.orgId).where(sql`ended_at is null`),
+    index('agency_billing_org_accepted_idx').on(t.orgId, t.acceptedAt),
+    check('agency_billing_commission_check', sql`commission_bps between 0 and 5000`),
+    check('agency_billing_not_self', sql`agency_org_id <> org_id`),
+    check(
+      'agency_billing_end_check',
+      sql.raw(
+        `(ended_at is null) = (end_reason is null) and (end_reason is null or end_reason in (${AGENCY_BILLING_END_REASONS.map((r) => `'${r}'`).join(', ')}))`,
+      ),
+    ),
+  ],
+);

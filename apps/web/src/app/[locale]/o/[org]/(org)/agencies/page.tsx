@@ -9,6 +9,7 @@ import { formatDate } from '@/lib/format.ts';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import { grantAgencyAction, revokeAgencyAction, setAgencyFinanceAction } from './actions.ts';
+import { AgencyBillingSection } from './agency-billing-section.tsx';
 import { AgencyGrantForm } from './agency-grant-form.tsx';
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -26,14 +27,15 @@ export default async function AgenciesPage({
   searchParams,
 }: {
   params: Promise<{ locale: string; org: string }>;
-  searchParams: Promise<{ revoked?: string }>;
+  searchParams: Promise<{ revoked?: string; billing?: string }>;
 }) {
   const { locale, org } = await params;
-  const { revoked } = await searchParams;
+  const { revoked, billing } = await searchParams;
   setRequestLocale(locale);
   const data = await loadConsole(org);
   const t = await getTranslations('agencies');
   const tb = await getTranslations('billingPlan');
+  const tab = await getTranslations('agencyBilling');
   if (!roleCan(data.role, 'members:read'))
     return (
       <>
@@ -60,6 +62,9 @@ export default async function AgenciesPage({
     <>
       <PageHeader title={t('title')} description={t('subtitle')} />
       {justRevoked ? <Alert tone="success" title={t('revoked', { agency: nameOf(justRevoked) })} /> : null}
+      {billing === 'accepted' || billing === 'ended' ? (
+        <Alert tone="success" title={tab(billing === 'accepted' ? 'accepted' : 'ended')} />
+      ) : null}
       {manage ? <AgencyGrantForm action={grantAgencyAction.bind(null, org)} /> : null}
       <Table
         caption={t('listTitle')}
@@ -130,6 +135,15 @@ export default async function AgenciesPage({
               ]
             : []),
         ]}
+      />
+      <AgencyBillingSection
+        org={org}
+        ctx={data.ctx}
+        locale={locale}
+        timeZone={data.org.timezone}
+        names={new Map([...grants.revoked, ...grants.live].map((g) => [g.agencyOrgId, nameOf(g)] as const))}
+        manage={roleCan(data.role, 'billing:manage')}
+        finance={roleCan(data.role, 'finance:read')}
       />
       {grants.revoked.length > 0 ? (
         <Table

@@ -3270,7 +3270,8 @@
       "confirmMismatch": "Non corrisponde. Digita lo stesso indirizzo email per confermare.",
       "kindRequired": "Scegli cosa chiede la persona.",
       "reasonRequired": "Indica un motivo di almeno 3 caratteri.",
-      "closed": "Questa richiesta è già chiusa."
+      "closed": "Questa richiesta è già chiusa.",
+      "nothingHeld": "Non è più conservato nulla su questa email."
     },
     "kinds": {
       "access": "Accesso (copia)",
@@ -3462,6 +3463,33 @@
       "invitations": "Inviti al team",
       "networkProfiles": "Profili di networking",
       "chatMessages": "Messaggi di chat inviati"
+    },
+    "export": {
+      "title": "Esporta i suoi dati",
+      "hint": "Un file JSON con tutto quanto sopra, da inviare alla persona. Viene eliminato dopo 7 giorni.",
+      "submit": "Esporta dati (JSON)",
+      "download": "Scarica il file",
+      "running": "Preparazione del file… ricarica la pagina tra poco."
+    },
+    "erase": {
+      "title": "Cancella questa persona",
+      "what": "Nome, email, telefono, risposte e link vengono rimossi da contatti, ordini, biglietti e liste ospiti, e i file esportati che li menzionano vengono eliminati.",
+      "holds": "{paid, plural, =0 {Nessun ordine pagato da conservare.} one {# ordine pagato viene conservato per fisco e contabilità, senza nome né email.} other {# ordini pagati vengono conservati per fisco e contabilità, senza nome né email.}}",
+      "tickets": "{active, plural, =0 {Non ha biglietti validi.} one {# biglietto valido resta valido, senza nome.} other {# biglietti validi restano validi, senza nome.}}",
+      "final": "Non si può annullare.",
+      "confirm": "Digita {email} per confermare",
+      "submit": "Cancella i dati personali",
+      "done": "Cancellato. {records, plural, one {# record è stato oscurato o eliminato} other {# record sono stati oscurati o eliminati}}; {kept, plural, =0 {nessun ordine pagato conservato} one {# ordine pagato conservato senza dati personali} other {# ordini pagati conservati senza dati personali}}."
+    },
+    "history": {
+      "title": "Richieste precedenti",
+      "caption": "Richieste privacy, dalla più recente",
+      "empty": "Ancora nessuna richiesta.",
+      "when": "Quando",
+      "kind": "Richiesta",
+      "subject": "Persona",
+      "by": "Gestita da",
+      "records": "Record"
     }
   },
   "privacyNotice": {
@@ -3995,7 +4023,8 @@
     "restore": "Ripristina",
     "restoreFor": "Ripristina il modello {name}",
     "archivedTitle": "Modelli archiviati ({count})",
-    "archivedHint": "I modelli archiviati non compaiono in nessun selettore. Gli eventi creati da essi restano invariati."
+    "archivedHint": "I modelli archiviati non compaiono in nessun selettore. Gli eventi creati da essi restano invariati.",
+    "pickEvent": "Scegli un evento da salvare"
   },
   "publicSeries": {
     "eyebrow": "Una serie di {org}",
@@ -16499,7 +16528,14 @@
       "perBuyerLimit": "Inserisci un numero intero pari o superiore a 1.",
       "startsAt": "Inserisci una data e un'ora valide.",
       "endsAt": "La scadenza deve essere dopo l'inizio."
-    }
+    },
+    "caption": "Eventi e relativi codici promozionali",
+    "event": "Evento",
+    "when": "Data",
+    "codes": "Codici promozionali",
+    "manage": "Gestisci codici",
+    "view": "Vedi codici",
+    "manageFor": "Codici promozionali di {name}"
   },
   "howItWorks": {
     "docLink": "Leggi la guida",
@@ -17047,7 +17083,8 @@
     "emptyTitle": "Ancora nessun utilizzo",
     "emptyBody": "L'utilizzo compare qui quando invii email o SMS, scrivi bozze con l'IA o registri dispositivi di scansione.",
     "historyEmpty": "Nessun utilizzo nei mesi precedenti.",
-    "month": "Mese"
+    "month": "Mese",
+    "backToPlan": "Torna a Piano e fatturazione"
   },
   "billingBanner": {
     "label": "Fatturazione",
@@ -17100,7 +17137,8 @@
     "historyTitle": "Accessi precedenti",
     "revokedColumn": "Terminato",
     "unknownAgency": "Agenzia non più su Yayatoh",
-    "roleLabel": "{role, select, manager {Gestire gli eventi} marketing {Marketing} viewer {Solo visualizzazione} other {Accesso}}"
+    "roleLabel": "{role, select, manager {Gestire gli eventi} marketing {Marketing} viewer {Solo visualizzazione} other {Accesso}}",
+    "homeAction": "Vai alla home dell'organizzazione"
   },
   "agency": {
     "title": "Clienti",
@@ -17110,7 +17148,8 @@
       "clients": "Clienti",
       "events": "Eventi",
       "marketing": "Marketing",
-      "reports": "Report"
+      "reports": "Report",
+      "billing": "Fatturazione"
     },
     "refresh": "Aggiorna i numeri",
     "refreshed": "Numeri aggiornati per {count, plural, =0 {nessun cliente} one {# cliente} other {# clienti}}.",
@@ -17162,7 +17201,10 @@
       "completed": "Concluso",
       "archived": "Archiviato"
     },
-    "refreshedAt": "Aggiornato"
+    "refreshedAt": "Aggiornato",
+    "homeAction": "Vai alla home dell'organizzazione",
+    "helpAction": "Scopri come funzionano le agenzie",
+    "seeClients": "Vedi i tuoi clienti"
   },
   "analyticsPro": {
     "tabs": {
@@ -18050,5 +18092,64 @@
     "statusHandled": "Gestito",
     "markHandled": "Segna come gestito",
     "markHandledFor": "Segna come gestito il messaggio di {name}"
+  },
+  "agencyBilling": {
+    "title": "Fatturazione dell'agenzia",
+    "clientIntro": "Un'agenzia a cui hai dato accesso può pagare il tuo piano Yayatoh. In cambio riceve una commissione su ogni vendita di biglietti: una quota di ciò che la vendita ti paga, inviata all'agenzia con un bonifico separato quando il denaro dell'evento viene sbloccato. I rimborsi recuperano la commissione in proporzione.",
+    "offerTitle": "{agency} si offre di pagare il tuo piano",
+    "offerBody": "{agency} pagherà il tuo piano Yayatoh e riceverà da ora il {rate} di ciò che ti paga ogni vendita di biglietti. Puoi interrompere in qualsiasi momento.",
+    "accept": "Accetta",
+    "acceptNamed": "Accetta l'offerta di {agency} di pagare il tuo piano",
+    "activeTitle": "{agency} paga il tuo piano",
+    "activeBody": "Commissione: {rate} di ciò che ti paga ogni vendita di biglietti. Accettata il {date}.",
+    "inForce": "In vigore",
+    "paused": "In pausa",
+    "pausedBody": "Non in vigore ora: {agency} ha ritirato l'offerta o non ha più accesso. Si applica il tuo piano e non viene trattenuta alcuna commissione.",
+    "stop": "Interrompi la fatturazione dell'agenzia",
+    "noOffers": "Nessuna agenzia si offre di pagare il tuo piano. Un'agenzia con accesso può offrirlo dalla sua pagina Fatturazione.",
+    "readOnly": "Solo proprietari e amministratori possono accettare o interrompere la fatturazione dell'agenzia.",
+    "accepted": "Fatturazione dell'agenzia attiva: ora l'agenzia paga il tuo piano.",
+    "ended": "Fatturazione dell'agenzia interrotta. Si applica di nuovo il tuo piano.",
+    "statementTitle": "Estratto delle commissioni",
+    "statementIntro": "Ogni movimento di commissione, dal libro mastro. Gli importi positivi sono guadagnati o pagati all'agenzia; quelli negativi sono stati recuperati dopo i rimborsi.",
+    "entriesCaption": "Movimenti di commissione",
+    "statementEmptyClient": "Ancora nessuna commissione. Compare dopo la prima vendita mentre un'agenzia paga il tuo piano.",
+    "statementEmptyAgency": "Ancora nessuna commissione. Compare quando un cliente che ha accettato la tua offerta vende biglietti.",
+    "totalEarned": "Commissione guadagnata",
+    "totalPending": "In attesa di sblocco",
+    "totalPaid": "Trasferita",
+    "totalOwed": "Dovuta dopo i rimborsi",
+    "dateColumn": "Data",
+    "entryColumn": "Movimento",
+    "agencyColumn": "Agenzia",
+    "clientColumn": "Cliente",
+    "amountColumn": "Importo",
+    "kind": {
+      "accrued": "Commissione su una vendita",
+      "reversed": "Recuperata dopo un rimborso",
+      "clawback": "Dovuta dopo un rimborso",
+      "transferred": "Trasferita all'agenzia",
+      "netted": "Compensata su un bonifico",
+      "clawback_paid": "Stornata da un bonifico"
+    },
+    "unknownAgency": "Agenzia precedente",
+    "unknownClient": "Cliente precedente",
+    "clientsTitle": "Clienti",
+    "agencyIntro": "Offriti di pagare il piano Yayatoh di un cliente. Quando accetta, ricevi il {rate} di ciò che gli paga ogni vendita di biglietti, con un bonifico separato allo sblocco del denaro dell'evento.",
+    "statusColumn": "Fatturazione dell'agenzia",
+    "actionsColumn": "Azioni",
+    "statusNone": "Non offerta",
+    "statusOffered": "Offerta",
+    "statusActive": "Paga · {rate} di commissione",
+    "offer": "Offriti di pagare il piano",
+    "offerNamed": "Offriti di pagare il piano di {client}",
+    "withdraw": "Ritira l'offerta",
+    "withdrawNamed": "Ritira l'offerta a {client}",
+    "offered": "Offerta inviata a {client}. Si applica quando la accetta.",
+    "withdrawn": "Offerta a {client} ritirata.",
+    "noClientsTitle": "Ancora nessun cliente",
+    "noClients": "I clienti danno accesso alla tua agenzia dalla loro pagina Agenzie, con il tuo indirizzo {address}.",
+    "managerReadOnly": "Solo proprietari e amministratori dell'agenzia possono fare o ritirare offerte.",
+    "noStatementAccess": "L'estratto delle commissioni è per proprietari, amministratori e finanza dell'agenzia."
   }
 }

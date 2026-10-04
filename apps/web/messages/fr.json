@@ -3270,7 +3270,8 @@
       "confirmMismatch": "Cela ne correspond pas. Saisissez la même adresse e-mail pour confirmer.",
       "kindRequired": "Choisissez ce que demande la personne.",
       "reasonRequired": "Indiquez un motif d’au moins 3 caractères.",
-      "closed": "Cette demande est déjà clôturée."
+      "closed": "Cette demande est déjà clôturée.",
+      "nothingHeld": "Plus aucune donnée n’est conservée pour cette adresse."
     },
     "kinds": {
       "access": "Accès (copie)",
@@ -3462,6 +3463,33 @@
       "invitations": "Invitations d'équipe",
       "networkProfiles": "Profils de networking",
       "chatMessages": "Messages de chat envoyés"
+    },
+    "export": {
+      "title": "Exporter ses données",
+      "hint": "Un fichier JSON avec tout ce qui précède, à envoyer à la personne. Il est supprimé après 7 jours.",
+      "submit": "Exporter les données (JSON)",
+      "download": "Télécharger le fichier",
+      "running": "Préparation du fichier… rechargez la page dans un instant."
+    },
+    "erase": {
+      "title": "Effacer cette personne",
+      "what": "Son nom, son e-mail, son téléphone, ses réponses et ses liens sont retirés des contacts, commandes, billets et listes d’invités, et les fichiers exportés qui le mentionnent sont supprimés.",
+      "holds": "{paid, plural, =0 {Aucune commande payée à conserver.} one {# commande payée est conservée pour les impôts et la comptabilité, sans nom ni e-mail.} other {# commandes payées sont conservées pour les impôts et la comptabilité, sans nom ni e-mail.}}",
+      "tickets": "{active, plural, =0 {Aucun billet valide.} one {# billet valide reste valide, sans nom.} other {# billets valides restent valides, sans nom.}}",
+      "final": "Cette action est irréversible.",
+      "confirm": "Saisissez {email} pour confirmer",
+      "submit": "Effacer les données personnelles",
+      "done": "Effacé. {records, plural, one {# enregistrement a été anonymisé ou supprimé} other {# enregistrements ont été anonymisés ou supprimés}} ; {kept, plural, =0 {aucune commande payée conservée} one {# commande payée conservée sans données personnelles} other {# commandes payées conservées sans données personnelles}}."
+    },
+    "history": {
+      "title": "Demandes précédentes",
+      "caption": "Demandes de confidentialité, des plus récentes aux plus anciennes",
+      "empty": "Aucune demande pour l’instant.",
+      "when": "Quand",
+      "kind": "Demande",
+      "subject": "Personne",
+      "by": "Traitée par",
+      "records": "Enregistrements"
     }
   },
   "privacyNotice": {
@@ -3995,7 +4023,8 @@
     "restore": "Restaurer",
     "restoreFor": "Restaurer le modèle {name}",
     "archivedTitle": "Modèles archivés ({count})",
-    "archivedHint": "Les modèles archivés n'apparaissent dans aucun sélecteur. Les événements créés à partir d'eux ne changent pas."
+    "archivedHint": "Les modèles archivés n'apparaissent dans aucun sélecteur. Les événements créés à partir d'eux ne changent pas.",
+    "pickEvent": "Choisir un événement à enregistrer"
   },
   "publicSeries": {
     "eyebrow": "Une série de {org}",
@@ -16499,7 +16528,14 @@
       "perBuyerLimit": "Saisissez un nombre entier supérieur ou égal à 1.",
       "startsAt": "Saisissez une date et une heure valides.",
       "endsAt": "L'expiration doit être après le début."
-    }
+    },
+    "caption": "Événements et leurs codes promo",
+    "event": "Événement",
+    "when": "Date",
+    "codes": "Codes promo",
+    "manage": "Gérer les codes",
+    "view": "Voir les codes",
+    "manageFor": "Codes promo de {name}"
   },
   "howItWorks": {
     "docLink": "Lire le guide",
@@ -17047,7 +17083,8 @@
     "emptyTitle": "Aucune utilisation pour l'instant",
     "emptyBody": "L'utilisation apparaît ici quand vous envoyez des e-mails ou des SMS, rédigez avec l'IA ou enregistrez des appareils de scan.",
     "historyEmpty": "Aucune utilisation les mois précédents.",
-    "month": "Mois"
+    "month": "Mois",
+    "backToPlan": "Retour à Forfait et facturation"
   },
   "billingBanner": {
     "label": "Facturation",
@@ -17100,7 +17137,8 @@
     "historyTitle": "Accès passés",
     "revokedColumn": "Terminé",
     "unknownAgency": "Agence plus présente sur Yayatoh",
-    "roleLabel": "{role, select, manager {Gérer les événements} marketing {Marketing} viewer {Lecture seule} other {Accès}}"
+    "roleLabel": "{role, select, manager {Gérer les événements} marketing {Marketing} viewer {Lecture seule} other {Accès}}",
+    "homeAction": "Aller à l'accueil de l'organisation"
   },
   "agency": {
     "title": "Clients",
@@ -17110,7 +17148,8 @@
       "clients": "Clients",
       "events": "Événements",
       "marketing": "Marketing",
-      "reports": "Rapports"
+      "reports": "Rapports",
+      "billing": "Facturation"
     },
     "refresh": "Actualiser les chiffres",
     "refreshed": "Chiffres actualisés pour {count, plural, =0 {aucun client} one {# client} other {# clients}}.",
@@ -17162,7 +17201,10 @@
       "completed": "Terminé",
       "archived": "Archivé"
     },
-    "refreshedAt": "Actualisé"
+    "refreshedAt": "Actualisé",
+    "homeAction": "Aller à l'accueil de l'organisation",
+    "helpAction": "Découvrir le fonctionnement des agences",
+    "seeClients": "Voir vos clients"
   },
   "analyticsPro": {
     "tabs": {
@@ -18050,5 +18092,64 @@
     "statusHandled": "Traité",
     "markHandled": "Marquer comme traité",
     "markHandledFor": "Marquer le message de {name} comme traité"
+  },
+  "agencyBilling": {
+    "title": "Facturation par l'agence",
+    "clientIntro": "Une agence à laquelle vous avez donné accès peut payer votre forfait Yayatoh. En échange, elle reçoit une commission sur chaque vente de billets : une part de ce que la vente vous verse, envoyée à l'agence par un virement distinct lors de la libération des fonds de l'événement. Les remboursements reprennent la commission au prorata.",
+    "offerTitle": "{agency} propose de payer votre forfait",
+    "offerBody": "{agency} paiera votre forfait Yayatoh et recevra désormais {rate} de ce que chaque vente de billets vous verse. Vous pouvez arrêter à tout moment.",
+    "accept": "Accepter",
+    "acceptNamed": "Accepter l'offre de {agency} de payer votre forfait",
+    "activeTitle": "{agency} paie votre forfait",
+    "activeBody": "Commission : {rate} de ce que chaque vente de billets vous verse. Acceptée le {date}.",
+    "inForce": "En vigueur",
+    "paused": "Suspendue",
+    "pausedBody": "Pas en vigueur pour l'instant : {agency} a retiré son offre ou n'a plus accès. Votre propre forfait s'applique et aucune commission n'est prélevée.",
+    "stop": "Arrêter la facturation par l'agence",
+    "noOffers": "Aucune agence ne propose de payer votre forfait. Une agence ayant accès peut le proposer depuis sa page Facturation.",
+    "readOnly": "Seuls les propriétaires et administrateurs peuvent accepter ou arrêter la facturation par l'agence.",
+    "accepted": "Facturation par l'agence activée : l'agence paie désormais votre forfait.",
+    "ended": "Facturation par l'agence arrêtée. Votre propre forfait s'applique à nouveau.",
+    "statementTitle": "Relevé des commissions",
+    "statementIntro": "Chaque mouvement de commission, tiré du grand livre. Les montants positifs sont gagnés ou versés à l'agence ; les négatifs ont été repris après des remboursements.",
+    "entriesCaption": "Écritures de commission",
+    "statementEmptyClient": "Aucune commission pour l'instant. Elle apparaît après la première vente pendant qu'une agence paie votre forfait.",
+    "statementEmptyAgency": "Aucune commission pour l'instant. Elle apparaît quand un client ayant accepté votre offre vend des billets.",
+    "totalEarned": "Commission gagnée",
+    "totalPending": "En attente de libération",
+    "totalPaid": "Virée",
+    "totalOwed": "Due après remboursements",
+    "dateColumn": "Date",
+    "entryColumn": "Écriture",
+    "agencyColumn": "Agence",
+    "clientColumn": "Client",
+    "amountColumn": "Montant",
+    "kind": {
+      "accrued": "Commission sur une vente",
+      "reversed": "Reprise après un remboursement",
+      "clawback": "Due après un remboursement",
+      "transferred": "Virée à l'agence",
+      "netted": "Compensée sur un virement",
+      "clawback_paid": "Annulée sur un virement"
+    },
+    "unknownAgency": "Ancienne agence",
+    "unknownClient": "Ancien client",
+    "clientsTitle": "Clients",
+    "agencyIntro": "Proposez de payer le forfait Yayatoh d'un client. Dès qu'il accepte, vous recevez {rate} de ce que chacune de ses ventes de billets lui verse, par un virement distinct à la libération des fonds de l'événement.",
+    "statusColumn": "Facturation par l'agence",
+    "actionsColumn": "Actions",
+    "statusNone": "Non proposée",
+    "statusOffered": "Proposée",
+    "statusActive": "Paie · {rate} de commission",
+    "offer": "Proposer de payer le forfait",
+    "offerNamed": "Proposer de payer le forfait de {client}",
+    "withdraw": "Retirer l'offre",
+    "withdrawNamed": "Retirer l'offre faite à {client}",
+    "offered": "Offre envoyée à {client}. Elle s'applique dès son acceptation.",
+    "withdrawn": "Offre à {client} retirée.",
+    "noClientsTitle": "Aucun client pour l'instant",
+    "noClients": "Les clients donnent accès à votre agence depuis leur page Agences, avec votre adresse {address}.",
+    "managerReadOnly": "Seuls les propriétaires et administrateurs de l'agence peuvent faire ou retirer des offres.",
+    "noStatementAccess": "Le relevé des commissions est réservé aux propriétaires, administrateurs et finances de l'agence."
   }
 }

@@ -3,7 +3,7 @@ import { type CommandPorts, type Ctx, DomainError, requireOrg } from '@yayatoh/k
 import { isModuleKey, tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { sql } from 'drizzle-orm';
 import { z } from 'zod';
-import { billingEnabled } from './provider/flag.ts';
+import { agencyV2Enabled, billingEnabled } from './provider/flag.ts';
 import { LIVE_SUBSCRIPTION_STATUSES } from './provider/port.ts';
 import { entitlementOverrides } from './schema.ts';
 
@@ -17,7 +17,12 @@ export const DEFAULT_PLAN = 'launch_standard';
  * org out of its console). With billing off this is exactly the pre-billing query.
  */
 export async function effectiveModulesTx(tx: TenantTx): Promise<Set<string>> {
-  const rows = billingEnabled()
+  const LIVE = billingEnabled();
+  // M6.8a (flag `agency_v2`): the plan of an agency that pays for this org (agency billing in force).
+  const COVER = agencyV2Enabled()
+    ? sql`union select module_key from billing.agency_cover_modules(${LIVE})`
+    : sql``;
+  const rows = LIVE
     ? await tx.execute<{ module_key: string }>(sql`
     with plan as (
       select coalesce((select plan_key from billing.org_plans limit 1), ${DEFAULT_PLAN}) as key
@@ -44,6 +49,7 @@ export async function effectiveModulesTx(tx: TenantTx): Promise<Set<string>> {
       union
       select module_key from billing.entitlement_overrides
       where effect = 'grant' and (expires_at is null or expires_at > now())
+      ${COVER}
     )
     except
     select module_key from billing.entitlement_overrides
@@ -57,6 +63,7 @@ export async function effectiveModulesTx(tx: TenantTx): Promise<Set<string>> {
       union
       select module_key from billing.entitlement_overrides
       where effect = 'grant' and (expires_at is null or expires_at > now())
+      ${COVER}
     )
     except
     select module_key from billing.entitlement_overrides

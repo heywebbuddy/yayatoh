@@ -3270,7 +3270,8 @@
       "confirmMismatch": "一致しません。確認のため同じメールアドレスを入力してください。",
       "kindRequired": "本人が何を求めているか選んでください。",
       "reasonRequired": "理由を3文字以上で入力してください。",
-      "closed": "この請求はすでに完了しています。"
+      "closed": "この請求はすでに完了しています。",
+      "nothingHeld": "このメールアドレスに関するデータはもう保有していません。"
     },
     "kinds": {
       "access": "開示（コピー）",
@@ -3462,6 +3463,33 @@
       "invitations": "チームへの招待",
       "networkProfiles": "ネットワーキングのプロフィール",
       "chatMessages": "送信したチャットメッセージ"
+    },
+    "export": {
+      "title": "データをエクスポート",
+      "hint": "上記すべてを含む JSON ファイルです。本人に送付してください。7日後に削除されます。",
+      "submit": "データをエクスポート（JSON）",
+      "download": "ファイルをダウンロード",
+      "running": "ファイルを準備中です…少ししてからページを再読み込みしてください。"
+    },
+    "erase": {
+      "title": "この人のデータを消去",
+      "what": "氏名、メール、電話番号、回答、リンクが連絡先・注文・チケット・ゲストリストから削除され、本人を含むエクスポートファイルも削除されます。",
+      "holds": "{paid, plural, =0 {保持が必要な支払い済みの注文はありません。} other {支払い済みの注文#件は、税務・会計のため氏名とメールを除いて保持されます。}}",
+      "tickets": "{active, plural, =0 {有効なチケットはありません。} other {有効なチケット#枚は、名前なしで引き続き有効です。}}",
+      "final": "元に戻すことはできません。",
+      "confirm": "確認のため {email} と入力してください",
+      "submit": "個人データを消去",
+      "done": "消去しました。{records, plural, other {#件の記録}}を匿名化または削除しました。{kept, plural, =0 {保持した支払い済み注文はありません} other {支払い済みの注文#件を個人データなしで保持しました}}。"
+    },
+    "history": {
+      "title": "過去の請求",
+      "caption": "プライバシー請求（新しい順）",
+      "empty": "まだ請求はありません。",
+      "when": "日時",
+      "kind": "請求",
+      "subject": "対象者",
+      "by": "対応者",
+      "records": "記録数"
     }
   },
   "privacyNotice": {
@@ -3995,7 +4023,8 @@
     "restore": "復元",
     "restoreFor": "テンプレート「{name}」を復元",
     "archivedTitle": "アーカイブ済みのテンプレート（{count}）",
-    "archivedHint": "アーカイブ済みのテンプレートはどの選択肢にも表示されません。作成済みのイベントは変わりません。"
+    "archivedHint": "アーカイブ済みのテンプレートはどの選択肢にも表示されません。作成済みのイベントは変わりません。",
+    "pickEvent": "保存するイベントを選ぶ"
   },
   "publicSeries": {
     "eyebrow": "{org}のシリーズ",
@@ -16499,7 +16528,14 @@
       "perBuyerLimit": "1 以上の整数を入力してください。",
       "startsAt": "正しい日時を入力してください。",
       "endsAt": "有効期限は開始より後にしてください。"
-    }
+    },
+    "caption": "イベントとプロモコード",
+    "event": "イベント",
+    "when": "日付",
+    "codes": "プロモコード",
+    "manage": "コードを管理",
+    "view": "コードを見る",
+    "manageFor": "{name} のプロモコード"
   },
   "howItWorks": {
     "docLink": "ガイドを読む",
@@ -17047,7 +17083,8 @@
     "emptyTitle": "まだ使用量はありません",
     "emptyBody": "メールやSMSを送信したり、AIで下書きしたり、スキャン端末を登録したりすると、ここに使用量が表示されます。",
     "historyEmpty": "過去の月に使用はありません。",
-    "month": "月"
+    "month": "月",
+    "backToPlan": "プランと請求に戻る"
   },
   "billingBanner": {
     "label": "請求",
@@ -17100,7 +17137,8 @@
     "historyTitle": "過去のアクセス",
     "revokedColumn": "終了",
     "unknownAgency": "Yayatoh にいない代理店",
-    "roleLabel": "{role, select, manager {イベントの管理} marketing {マーケティング} viewer {閲覧のみ} other {アクセス}}"
+    "roleLabel": "{role, select, manager {イベントの管理} marketing {マーケティング} viewer {閲覧のみ} other {アクセス}}",
+    "homeAction": "組織のホームへ"
   },
   "agency": {
     "title": "クライアント",
@@ -17110,7 +17148,8 @@
       "clients": "クライアント",
       "events": "イベント",
       "marketing": "マーケティング",
-      "reports": "レポート"
+      "reports": "レポート",
+      "billing": "請求"
     },
     "refresh": "数値を更新",
     "refreshed": "{count, plural, other {# 件のクライアント}}の数値を更新しました。",
@@ -17162,7 +17201,10 @@
       "completed": "終了",
       "archived": "アーカイブ済み"
     },
-    "refreshedAt": "更新日時"
+    "refreshedAt": "更新日時",
+    "homeAction": "組織のホームへ",
+    "helpAction": "代理店の仕組みを読む",
+    "seeClients": "クライアントを見る"
   },
   "analyticsPro": {
     "tabs": {
@@ -18050,5 +18092,64 @@
     "statusHandled": "対応済み",
     "markHandled": "対応済みにする",
     "markHandledFor": "{name} さんのメッセージを対応済みにする"
+  },
+  "agencyBilling": {
+    "title": "代理店による支払い",
+    "clientIntro": "アクセスを許可した代理店は、あなたの Yayatoh プランを支払うことができます。その代わりに、代理店はチケット販売ごとに手数料を受け取ります。販売であなたに支払われる金額の一部で、イベントの資金がリリースされる際に代理店へ別の送金として送られます。払い戻しの際は手数料が比例して戻されます。",
+    "offerTitle": "{agency} があなたのプランの支払いを申し出ています",
+    "offerBody": "{agency} があなたの Yayatoh プランを支払い、今後は各チケット販売であなたに支払われる金額の {rate} を受け取ります。いつでも停止できます。",
+    "accept": "承諾",
+    "acceptNamed": "{agency} によるプラン支払いの申し出を承諾",
+    "activeTitle": "{agency} があなたのプランを支払っています",
+    "activeBody": "手数料：各チケット販売であなたに支払われる金額の {rate}。{date} に承諾。",
+    "inForce": "有効",
+    "paused": "一時停止中",
+    "pausedBody": "現在は無効です：{agency} が申し出を取り下げたか、アクセスがなくなりました。あなた自身のプランが適用され、手数料は差し引かれません。",
+    "stop": "代理店による支払いを停止",
+    "noOffers": "あなたのプランの支払いを申し出ている代理店はありません。アクセスのある代理店は、自身の請求ページから申し出ることができます。",
+    "readOnly": "代理店による支払いの承諾と停止は、オーナーと管理者のみが行えます。",
+    "accepted": "代理店による支払いが有効になりました。代理店があなたのプランを支払います。",
+    "ended": "代理店による支払いを停止しました。あなた自身のプランが再び適用されます。",
+    "statementTitle": "手数料明細",
+    "statementIntro": "元帳から取得したすべての手数料の動き。正の金額は代理店が得た、または支払われた額、負の金額は払い戻し後に戻された額です。",
+    "entriesCaption": "手数料の記録",
+    "statementEmptyClient": "まだ手数料はありません。代理店がプランを支払っている間の最初のチケット販売後に表示されます。",
+    "statementEmptyAgency": "まだ手数料はありません。申し出を承諾したクライアントがチケットを販売すると表示されます。",
+    "totalEarned": "獲得手数料",
+    "totalPending": "リリース待ち",
+    "totalPaid": "送金済み",
+    "totalOwed": "払い戻し後の未返済額",
+    "dateColumn": "日付",
+    "entryColumn": "記録",
+    "agencyColumn": "代理店",
+    "clientColumn": "クライアント",
+    "amountColumn": "金額",
+    "kind": {
+      "accrued": "販売の手数料",
+      "reversed": "払い戻し後に返金",
+      "clawback": "払い戻し後の未返済",
+      "transferred": "代理店へ送金",
+      "netted": "送金で相殺",
+      "clawback_paid": "送金から戻し"
+    },
+    "unknownAgency": "以前の代理店",
+    "unknownClient": "以前のクライアント",
+    "clientsTitle": "クライアント",
+    "agencyIntro": "クライアントの Yayatoh プランの支払いを申し出ます。クライアントが承諾すると、各チケット販売でクライアントに支払われる金額の {rate} を、イベントの資金がリリースされる際に別の送金で受け取ります。",
+    "statusColumn": "代理店による支払い",
+    "actionsColumn": "操作",
+    "statusNone": "未申し出",
+    "statusOffered": "申し出済み",
+    "statusActive": "支払い中・手数料 {rate}",
+    "offer": "プランの支払いを申し出る",
+    "offerNamed": "{client} のプランの支払いを申し出る",
+    "withdraw": "申し出を取り下げる",
+    "withdrawNamed": "{client} への申し出を取り下げる",
+    "offered": "{client} に申し出を送りました。承諾されると適用されます。",
+    "withdrawn": "{client} への申し出を取り下げました。",
+    "noClientsTitle": "まだクライアントはいません",
+    "noClients": "クライアントは自身の代理店ページで、あなたのアドレス {address} を使って代理店にアクセスを許可します。",
+    "managerReadOnly": "申し出の作成と取り下げは、代理店のオーナーと管理者のみが行えます。",
+    "noStatementAccess": "手数料明細は代理店のオーナー、管理者、財務担当者向けです。"
   }
 }

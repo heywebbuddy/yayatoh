@@ -3270,7 +3270,8 @@
       "confirmMismatch": "不匹配。请输入相同的邮箱地址以确认。",
       "kindRequired": "请选择此人提出的请求类型。",
       "reasonRequired": "请填写至少 3 个字符的原因。",
-      "closed": "此请求已关闭。"
+      "closed": "此请求已关闭。",
+      "nothingHeld": "已不再持有此邮箱的任何数据。"
     },
     "kinds": {
       "access": "访问（副本）",
@@ -3462,6 +3463,33 @@
       "invitations": "团队邀请",
       "networkProfiles": "社交名片",
       "chatMessages": "已发送的聊天消息"
+    },
+    "export": {
+      "title": "导出其数据",
+      "hint": "包含以上全部内容的 JSON 文件，供您发送给本人。7 天后删除。",
+      "submit": "导出数据（JSON）",
+      "download": "下载文件",
+      "running": "正在准备文件……请稍后刷新页面。"
+    },
+    "erase": {
+      "title": "抹除此人",
+      "what": "其姓名、邮箱、电话、回答和链接将从联系人、订单、门票和宾客名单中移除，提及此人的导出文件也会被删除。",
+      "holds": "{paid, plural, =0 {没有需要保留的已付款订单。} other {# 个已付款订单将为税务和会计保留，但不含姓名和邮箱。}}",
+      "tickets": "{active, plural, =0 {没有有效门票。} other {# 张有效门票仍然有效，但不含姓名。}}",
+      "final": "此操作无法撤销。",
+      "confirm": "输入 {email} 以确认",
+      "submit": "抹除个人数据",
+      "done": "已抹除。{records, plural, other {# 条记录}}已脱敏或删除；{kept, plural, =0 {未保留已付款订单} other {已保留 # 个不含个人数据的已付款订单}}。"
+    },
+    "history": {
+      "title": "过往请求",
+      "caption": "隐私请求，最新在前",
+      "empty": "暂无请求。",
+      "when": "时间",
+      "kind": "请求",
+      "subject": "对象",
+      "by": "处理人",
+      "records": "记录数"
     }
   },
   "privacyNotice": {
@@ -3995,7 +4023,8 @@
     "restore": "恢复",
     "restoreFor": "恢复模板 {name}",
     "archivedTitle": "已归档的模板（{count}）",
-    "archivedHint": "已归档的模板不会出现在任何选择列表中。用它们创建的活动不受影响。"
+    "archivedHint": "已归档的模板不会出现在任何选择列表中。用它们创建的活动不受影响。",
+    "pickEvent": "选择要保存的活动"
   },
   "publicSeries": {
     "eyebrow": "{org} 的系列",
@@ -16499,7 +16528,14 @@
       "perBuyerLimit": "请输入 1 或更大的整数。",
       "startsAt": "请输入有效的日期和时间。",
       "endsAt": "到期时间必须晚于开始时间。"
-    }
+    },
+    "caption": "活动及其促销代码",
+    "event": "活动",
+    "when": "日期",
+    "codes": "促销代码",
+    "manage": "管理代码",
+    "view": "查看代码",
+    "manageFor": "{name} 的促销代码"
   },
   "howItWorks": {
     "docLink": "阅读指南",
@@ -17047,7 +17083,8 @@
     "emptyTitle": "暂无用量",
     "emptyBody": "当你发送邮件或短信、用 AI 起草或登记扫描设备时，用量会显示在这里。",
     "historyEmpty": "之前的月份没有用量。",
-    "month": "月份"
+    "month": "月份",
+    "backToPlan": "返回套餐与付费"
   },
   "billingBanner": {
     "label": "账单",
@@ -17100,7 +17137,8 @@
     "historyTitle": "过往访问",
     "revokedColumn": "结束于",
     "unknownAgency": "代理机构已不在 Yayatoh",
-    "roleLabel": "{role, select, manager {管理活动} marketing {营销} viewer {仅查看} other {访问权限}}"
+    "roleLabel": "{role, select, manager {管理活动} marketing {营销} viewer {仅查看} other {访问权限}}",
+    "homeAction": "前往组织主页"
   },
   "agency": {
     "title": "客户",
@@ -17110,7 +17148,8 @@
       "clients": "客户",
       "events": "活动",
       "marketing": "营销",
-      "reports": "报告"
+      "reports": "报告",
+      "billing": "付费"
     },
     "refresh": "刷新数据",
     "refreshed": "已刷新 {count, plural, other {# 个客户}}的数据。",
@@ -17162,7 +17201,10 @@
       "completed": "已结束",
       "archived": "已归档"
     },
-    "refreshedAt": "刷新时间"
+    "refreshedAt": "刷新时间",
+    "homeAction": "前往组织主页",
+    "helpAction": "了解代理机构如何运作",
+    "seeClients": "查看您的客户"
   },
   "analyticsPro": {
     "tabs": {
@@ -18050,5 +18092,64 @@
     "statusHandled": "已处理",
     "markHandled": "标记为已处理",
     "markHandledFor": "将 {name} 的消息标记为已处理"
+  },
+  "agencyBilling": {
+    "title": "代理机构付费",
+    "clientIntro": "您授予访问权限的代理机构可以支付您的 Yayatoh 套餐。作为回报，它从每笔门票销售中获得佣金：即该销售支付给您的金额的一部分，在活动资金释放时以单独转账发送给代理机构。退款会按比例收回佣金。",
+    "offerTitle": "{agency} 提出支付您的套餐",
+    "offerBody": "{agency} 将支付您的 Yayatoh 套餐，并从现在起获得每笔门票销售支付给您金额的 {rate}。您可以随时停止。",
+    "accept": "接受",
+    "acceptNamed": "接受 {agency} 支付您套餐的提议",
+    "activeTitle": "{agency} 正在支付您的套餐",
+    "activeBody": "佣金：每笔门票销售支付给您金额的 {rate}。于 {date} 接受。",
+    "inForce": "生效中",
+    "paused": "已暂停",
+    "pausedBody": "当前未生效：{agency} 已撤回提议或不再拥有访问权限。适用您自己的套餐，不收取佣金。",
+    "stop": "停止代理机构付费",
+    "noOffers": "没有代理机构提出支付您的套餐。拥有访问权限的代理机构可在其付费页面提出。",
+    "readOnly": "只有所有者和管理员可以接受或停止代理机构付费。",
+    "accepted": "代理机构付费已开启：代理机构现在支付您的套餐。",
+    "ended": "代理机构付费已停止。您自己的套餐重新适用。",
+    "statementTitle": "佣金对账单",
+    "statementIntro": "来自分类账的每一笔佣金变动。正数为已赚取或已支付给代理机构的金额；负数为退款后收回的金额。",
+    "entriesCaption": "佣金条目",
+    "statementEmptyClient": "暂无佣金。在代理机构支付您套餐期间，首笔门票销售后会显示。",
+    "statementEmptyAgency": "暂无佣金。接受您提议的客户售出门票后会显示。",
+    "totalEarned": "已赚佣金",
+    "totalPending": "等待释放",
+    "totalPaid": "已转账",
+    "totalOwed": "退款后应退还",
+    "dateColumn": "日期",
+    "entryColumn": "条目",
+    "agencyColumn": "代理机构",
+    "clientColumn": "客户",
+    "amountColumn": "金额",
+    "kind": {
+      "accrued": "销售佣金",
+      "reversed": "退款后收回",
+      "clawback": "退款后应退还",
+      "transferred": "已转账给代理机构",
+      "netted": "从转账中抵扣",
+      "clawback_paid": "从转账中冲回"
+    },
+    "unknownAgency": "原代理机构",
+    "unknownClient": "原客户",
+    "clientsTitle": "客户",
+    "agencyIntro": "提出支付客户的 Yayatoh 套餐。客户接受后，您将获得其每笔门票销售支付给客户金额的 {rate}，在活动资金释放时以单独转账支付。",
+    "statusColumn": "代理机构付费",
+    "actionsColumn": "操作",
+    "statusNone": "未提出",
+    "statusOffered": "已提出",
+    "statusActive": "付费中 · 佣金 {rate}",
+    "offer": "提出支付套餐",
+    "offerNamed": "提出支付 {client} 的套餐",
+    "withdraw": "撤回提议",
+    "withdrawNamed": "撤回给 {client} 的提议",
+    "offered": "已向 {client} 发送提议。对方接受后生效。",
+    "withdrawn": "已撤回给 {client} 的提议。",
+    "noClientsTitle": "暂无客户",
+    "noClients": "客户在其代理机构页面使用您的地址 {address} 向您的代理机构授予访问权限。",
+    "managerReadOnly": "只有代理机构的所有者和管理员可以提出或撤回提议。",
+    "noStatementAccess": "佣金对账单仅供代理机构的所有者、管理员和财务人员查看。"
   }
 }

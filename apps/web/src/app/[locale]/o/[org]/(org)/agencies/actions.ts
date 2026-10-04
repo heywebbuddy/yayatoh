@@ -1,5 +1,6 @@
 'use server';
 
+import { acceptAgencyBillingCommand, endAgencyBillingCommand } from '@yayatoh/billing';
 import { executeCommand, isDomainError } from '@yayatoh/kernel';
 import {
   AGENCY_GRANT_ROLES,
@@ -92,4 +93,35 @@ export async function setAgencyFinanceAction(
     return { code: isDomainError(err) ? err.code : 'internal' };
   }
   revalidatePath(`/o/${org}/agencies`);
+}
+
+/** M6.8a: accept an agency's offer to pay the plan (step-up); the page confirms it. */
+export async function acceptAgencyBillingAction(
+  org: string,
+  agencyOrgId: string,
+  _form?: FormData,
+): Promise<{ code: string } | undefined> {
+  const data = await loadConsole(org);
+  try {
+    await executeCommand(acceptAgencyBillingCommand, { agencyOrgId }, data.ctx, ports);
+  } catch (err) {
+    return { code: isDomainError(err) ? err.code : 'internal' };
+  }
+  revalidatePath(`/o/${org}/agencies`);
+  redirect({ href: `/o/${org}/agencies?billing=accepted`, locale: await getLocale() });
+}
+
+/** M6.8a: stop agency billing (no step-up: like revoking, stopping is one click). */
+export async function endAgencyBillingAction(
+  org: string,
+  _form?: FormData,
+): Promise<{ code: string } | undefined> {
+  const data = await loadConsole(org);
+  try {
+    await executeCommand(endAgencyBillingCommand, {}, data.ctx, ports);
+  } catch (err) {
+    return { code: isDomainError(err) ? err.code : 'internal' };
+  }
+  revalidatePath(`/o/${org}/agencies`);
+  redirect({ href: `/o/${org}/agencies?billing=ended`, locale: await getLocale() });
 }

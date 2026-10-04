@@ -3270,7 +3270,8 @@
       "confirmMismatch": "That doesn’t match. Type the same email address to confirm.",
       "kindRequired": "Choose what the person asks for.",
       "reasonRequired": "Give a reason of at least 3 characters.",
-      "closed": "This request is already closed."
+      "closed": "This request is already closed.",
+      "nothingHeld": "Nothing is held about this email any more."
     },
     "kinds": {
       "access": "Access (copy)",
@@ -3462,6 +3463,33 @@
       "invitations": "Team invitations",
       "networkProfiles": "Networking profiles",
       "chatMessages": "Chat messages sent"
+    },
+    "export": {
+      "title": "Export their data",
+      "hint": "A JSON file with everything above, for you to send to the person. It is deleted after 7 days.",
+      "submit": "Export data (JSON)",
+      "download": "Download the file",
+      "running": "Preparing the file… reload the page in a moment."
+    },
+    "erase": {
+      "title": "Erase this person",
+      "what": "Their name, email, phone, answers and links are removed from contacts, orders, tickets and guest lists, and export files that mention them are deleted.",
+      "holds": "{paid, plural, =0 {No paid orders need to be kept.} one {# paid order is kept for tax and accounting, without their name or email.} other {# paid orders are kept for tax and accounting, without their name or email.}}",
+      "tickets": "{active, plural, =0 {They have no valid tickets.} one {# valid ticket stays valid, without a name.} other {# valid tickets stay valid, without a name.}}",
+      "final": "This can’t be undone.",
+      "confirm": "Type {email} to confirm",
+      "submit": "Erase personal data",
+      "done": "Erased. {records, plural, one {# record was} other {# records were}} redacted or deleted; {kept, plural, =0 {no paid orders were kept} one {# paid order was kept without personal data} other {# paid orders were kept without personal data}}."
+    },
+    "history": {
+      "title": "Past requests",
+      "caption": "Privacy requests, newest first",
+      "empty": "No requests yet.",
+      "when": "When",
+      "kind": "Request",
+      "subject": "Person",
+      "by": "Handled by",
+      "records": "Records"
     }
   },
   "privacyNotice": {
@@ -3995,7 +4023,8 @@
     "restore": "Restore",
     "restoreFor": "Restore the template {name}",
     "archivedTitle": "Archived templates ({count})",
-    "archivedHint": "Archived templates are hidden from every picker. Events made from them are unchanged."
+    "archivedHint": "Archived templates are hidden from every picker. Events made from them are unchanged.",
+    "pickEvent": "Pick an event to save"
   },
   "publicSeries": {
     "eyebrow": "A series by {org}",
@@ -16499,7 +16528,14 @@
       "perBuyerLimit": "Enter a whole number of 1 or more.",
       "startsAt": "Enter a valid date and time.",
       "endsAt": "The expiry must be after the start."
-    }
+    },
+    "caption": "Events and their promo codes",
+    "event": "Event",
+    "when": "Date",
+    "codes": "Promo codes",
+    "manage": "Manage codes",
+    "view": "View codes",
+    "manageFor": "Promo codes for {name}"
   },
   "howItWorks": {
     "docLink": "Read the guide",
@@ -17047,7 +17083,8 @@
     "emptyTitle": "No usage yet",
     "emptyBody": "Usage appears here when you send emails or texts, draft with AI, or enroll scan devices.",
     "historyEmpty": "No usage in earlier months.",
-    "month": "Month"
+    "month": "Month",
+    "backToPlan": "Back to Plan & billing"
   },
   "billingBanner": {
     "label": "Billing",
@@ -17100,7 +17137,8 @@
     "historyTitle": "Past access",
     "revokedColumn": "Ended",
     "unknownAgency": "Agency no longer on Yayatoh",
-    "roleLabel": "{role, select, manager {Manage events} marketing {Marketing} viewer {View only} other {Access}}"
+    "roleLabel": "{role, select, manager {Manage events} marketing {Marketing} viewer {View only} other {Access}}",
+    "homeAction": "Go to the organization home"
   },
   "agency": {
     "title": "Clients",
@@ -17110,7 +17148,8 @@
       "clients": "Clients",
       "events": "Events",
       "marketing": "Marketing",
-      "reports": "Reports"
+      "reports": "Reports",
+      "billing": "Billing"
     },
     "refresh": "Refresh numbers",
     "refreshed": "Numbers refreshed for {count, plural, =0 {no clients} one {# client} other {# clients}}.",
@@ -17162,7 +17201,10 @@
       "completed": "Completed",
       "archived": "Archived"
     },
-    "refreshedAt": "Refreshed"
+    "refreshedAt": "Refreshed",
+    "homeAction": "Go to the organization home",
+    "helpAction": "Read how agencies work",
+    "seeClients": "See your clients"
   },
   "analyticsPro": {
     "tabs": {
@@ -18050,5 +18092,64 @@
     "statusHandled": "Handled",
     "markHandled": "Mark handled",
     "markHandledFor": "Mark the message from {name} handled"
+  },
+  "agencyBilling": {
+    "title": "Agency billing",
+    "clientIntro": "An agency you gave access to can pay your Yayatoh plan. In return it receives a commission on each ticket sale: a share of what the sale pays you, sent to the agency as its own transfer when the event's money is released. Refunds take the commission back in proportion.",
+    "offerTitle": "{agency} offers to pay your plan",
+    "offerBody": "{agency} will pay your Yayatoh plan and receive {rate} of what each ticket sale pays you from now on. You can stop at any time.",
+    "accept": "Accept",
+    "acceptNamed": "Accept the offer from {agency} to pay your plan",
+    "activeTitle": "{agency} pays your plan",
+    "activeBody": "Commission: {rate} of what each ticket sale pays you. Accepted on {date}.",
+    "inForce": "In force",
+    "paused": "Paused",
+    "pausedBody": "Not in force right now: {agency} withdrew its offer or no longer has access. Your own plan applies and no commission is taken.",
+    "stop": "Stop agency billing",
+    "noOffers": "No agency offers to pay your plan. An agency you gave access to can offer it from its Billing page.",
+    "readOnly": "Only owners and admins can accept or stop agency billing.",
+    "accepted": "Agency billing is on: the agency now pays your plan.",
+    "ended": "Agency billing stopped. Your own plan applies again.",
+    "statementTitle": "Commission statement",
+    "statementIntro": "Every commission movement, from the ledger. Positive amounts are earned or paid to the agency; negative amounts were taken back after refunds.",
+    "entriesCaption": "Commission entries",
+    "statementEmptyClient": "No commission yet. It appears after the first ticket sale while an agency pays your plan.",
+    "statementEmptyAgency": "No commission yet. It appears after a client that accepted your offer sells tickets.",
+    "totalEarned": "Commission earned",
+    "totalPending": "Waiting for release",
+    "totalPaid": "Transferred",
+    "totalOwed": "Owed back after refunds",
+    "dateColumn": "Date",
+    "entryColumn": "Entry",
+    "agencyColumn": "Agency",
+    "clientColumn": "Client",
+    "amountColumn": "Amount",
+    "kind": {
+      "accrued": "Commission on a sale",
+      "reversed": "Taken back after a refund",
+      "clawback": "Owed back after a refund",
+      "transferred": "Transferred to the agency",
+      "netted": "Netted from a transfer",
+      "clawback_paid": "Reversed from a transfer"
+    },
+    "unknownAgency": "Former agency",
+    "unknownClient": "Former client",
+    "clientsTitle": "Clients",
+    "agencyIntro": "Offer to pay a client's Yayatoh plan. Once the client accepts, you receive {rate} of what each of its ticket sales pays it, as a separate transfer when the event's money is released.",
+    "statusColumn": "Agency billing",
+    "actionsColumn": "Actions",
+    "statusNone": "Not offered",
+    "statusOffered": "Offered",
+    "statusActive": "Paying · {rate} commission",
+    "offer": "Offer to pay plan",
+    "offerNamed": "Offer to pay the plan of {client}",
+    "withdraw": "Withdraw offer",
+    "withdrawNamed": "Withdraw the offer to {client}",
+    "offered": "Offer sent to {client}. It applies once they accept.",
+    "withdrawn": "Offer to {client} withdrawn.",
+    "noClientsTitle": "No clients yet",
+    "noClients": "Clients give your agency access from their Agencies page, using your address {address}.",
+    "managerReadOnly": "Only the agency's owners and admins can make or withdraw offers.",
+    "noStatementAccess": "The commission statement is for the agency's owners, admins and finance."
   }
 }

@@ -3270,7 +3270,8 @@
       "confirmMismatch": "Dat komt niet overeen. Typ hetzelfde e-mailadres om te bevestigen.",
       "kindRequired": "Kies wat de persoon vraagt.",
       "reasonRequired": "Geef een reden van minstens 3 tekens.",
-      "closed": "Dit verzoek is al gesloten."
+      "closed": "Dit verzoek is al gesloten.",
+      "nothingHeld": "Er wordt niets meer over dit e-mailadres bewaard."
     },
     "kinds": {
       "access": "Inzage (kopie)",
@@ -3462,6 +3463,33 @@
       "invitations": "Teamuitnodigingen",
       "networkProfiles": "Netwerkprofielen",
       "chatMessages": "Verzonden chatberichten"
+    },
+    "export": {
+      "title": "Gegevens exporteren",
+      "hint": "Een JSON-bestand met alles hierboven, om naar de persoon te sturen. Het wordt na 7 dagen verwijderd.",
+      "submit": "Gegevens exporteren (JSON)",
+      "download": "Bestand downloaden",
+      "running": "Het bestand wordt voorbereid… laad de pagina zo opnieuw."
+    },
+    "erase": {
+      "title": "Deze persoon wissen",
+      "what": "Naam, e-mail, telefoon, antwoorden en links worden verwijderd uit contacten, bestellingen, tickets en gastenlijsten, en exportbestanden waarin de persoon voorkomt worden gewist.",
+      "holds": "{paid, plural, =0 {Er hoeven geen betaalde bestellingen bewaard te worden.} one {# betaalde bestelling wordt bewaard voor belasting en boekhouding, zonder naam of e-mail.} other {# betaalde bestellingen worden bewaard voor belasting en boekhouding, zonder naam of e-mail.}}",
+      "tickets": "{active, plural, =0 {Er zijn geen geldige tickets.} one {# geldig ticket blijft geldig, zonder naam.} other {# geldige tickets blijven geldig, zonder naam.}}",
+      "final": "Dit kan niet ongedaan worden gemaakt.",
+      "confirm": "Typ {email} om te bevestigen",
+      "submit": "Persoonsgegevens wissen",
+      "done": "Gewist. {records, plural, one {# record is} other {# records zijn}} geanonimiseerd of verwijderd; {kept, plural, =0 {geen betaalde bestellingen bewaard} one {# betaalde bestelling bewaard zonder persoonsgegevens} other {# betaalde bestellingen bewaard zonder persoonsgegevens}}."
+    },
+    "history": {
+      "title": "Eerdere verzoeken",
+      "caption": "Privacyverzoeken, nieuwste eerst",
+      "empty": "Nog geen verzoeken.",
+      "when": "Wanneer",
+      "kind": "Verzoek",
+      "subject": "Persoon",
+      "by": "Afgehandeld door",
+      "records": "Records"
     }
   },
   "privacyNotice": {
@@ -3995,7 +4023,8 @@
     "restore": "Herstellen",
     "restoreFor": "Sjabloon {name} herstellen",
     "archivedTitle": "Gearchiveerde sjablonen ({count})",
-    "archivedHint": "Gearchiveerde sjablonen staan in geen enkele keuzelijst. Evenementen die ervan zijn gemaakt, blijven ongewijzigd."
+    "archivedHint": "Gearchiveerde sjablonen staan in geen enkele keuzelijst. Evenementen die ervan zijn gemaakt, blijven ongewijzigd.",
+    "pickEvent": "Kies een evenement om op te slaan"
   },
   "publicSeries": {
     "eyebrow": "Een reeks van {org}",
@@ -16499,7 +16528,14 @@
       "perBuyerLimit": "Vul een geheel getal van 1 of meer in.",
       "startsAt": "Vul een geldige datum en tijd in.",
       "endsAt": "Het verlopen moet na het begin liggen."
-    }
+    },
+    "caption": "Evenementen en hun kortingscodes",
+    "event": "Evenement",
+    "when": "Datum",
+    "codes": "Kortingscodes",
+    "manage": "Codes beheren",
+    "view": "Codes bekijken",
+    "manageFor": "Kortingscodes voor {name}"
   },
   "howItWorks": {
     "docLink": "Lees de handleiding",
@@ -17047,7 +17083,8 @@
     "emptyTitle": "Nog geen gebruik",
     "emptyBody": "Gebruik verschijnt hier als je e-mails of sms'jes verstuurt, met AI conceptteksten maakt of scanapparaten registreert.",
     "historyEmpty": "Geen gebruik in eerdere maanden.",
-    "month": "Maand"
+    "month": "Maand",
+    "backToPlan": "Terug naar Abonnement en facturering"
   },
   "billingBanner": {
     "label": "Facturatie",
@@ -17100,7 +17137,8 @@
     "historyTitle": "Eerdere toegang",
     "revokedColumn": "Beëindigd",
     "unknownAgency": "Bureau niet meer op Yayatoh",
-    "roleLabel": "{role, select, manager {Evenementen beheren} marketing {Marketing} viewer {Alleen bekijken} other {Toegang}}"
+    "roleLabel": "{role, select, manager {Evenementen beheren} marketing {Marketing} viewer {Alleen bekijken} other {Toegang}}",
+    "homeAction": "Naar de startpagina van de organisatie"
   },
   "agency": {
     "title": "Klanten",
@@ -17110,7 +17148,8 @@
       "clients": "Klanten",
       "events": "Evenementen",
       "marketing": "Marketing",
-      "reports": "Rapporten"
+      "reports": "Rapporten",
+      "billing": "Facturering"
     },
     "refresh": "Cijfers vernieuwen",
     "refreshed": "Cijfers vernieuwd voor {count, plural, =0 {geen klanten} one {# klant} other {# klanten}}.",
@@ -17162,7 +17201,10 @@
       "completed": "Afgerond",
       "archived": "Gearchiveerd"
     },
-    "refreshedAt": "Vernieuwd"
+    "refreshedAt": "Vernieuwd",
+    "homeAction": "Naar de startpagina van de organisatie",
+    "helpAction": "Lees hoe bureaus werken",
+    "seeClients": "Je klanten bekijken"
   },
   "analyticsPro": {
     "tabs": {
@@ -18050,5 +18092,64 @@
     "statusHandled": "Afgehandeld",
     "markHandled": "Markeren als afgehandeld",
     "markHandledFor": "Bericht van {name} markeren als afgehandeld"
+  },
+  "agencyBilling": {
+    "title": "Facturering via bureau",
+    "clientIntro": "Een bureau waaraan je toegang hebt gegeven kan je Yayatoh-abonnement betalen. In ruil krijgt het commissie op elke ticketverkoop: een deel van wat de verkoop jou uitbetaalt, als eigen overboeking naar het bureau wanneer het geld van het evenement wordt vrijgegeven. Terugbetalingen halen de commissie naar verhouding terug.",
+    "offerTitle": "{agency} biedt aan je abonnement te betalen",
+    "offerBody": "{agency} betaalt je Yayatoh-abonnement en krijgt vanaf nu {rate} van wat elke ticketverkoop jou uitbetaalt. Je kunt op elk moment stoppen.",
+    "accept": "Accepteren",
+    "acceptNamed": "Het aanbod van {agency} accepteren om je abonnement te betalen",
+    "activeTitle": "{agency} betaalt je abonnement",
+    "activeBody": "Commissie: {rate} van wat elke ticketverkoop jou uitbetaalt. Geaccepteerd op {date}.",
+    "inForce": "Actief",
+    "paused": "Gepauzeerd",
+    "pausedBody": "Nu niet actief: {agency} heeft het aanbod ingetrokken of heeft geen toegang meer. Je eigen abonnement geldt en er wordt geen commissie ingehouden.",
+    "stop": "Facturering via bureau stoppen",
+    "noOffers": "Geen bureau biedt aan je abonnement te betalen. Een bureau met toegang kan het aanbieden vanaf zijn factureringspagina.",
+    "readOnly": "Alleen eigenaren en beheerders kunnen facturering via een bureau accepteren of stoppen.",
+    "accepted": "Facturering via bureau is actief: het bureau betaalt nu je abonnement.",
+    "ended": "Facturering via bureau gestopt. Je eigen abonnement geldt weer.",
+    "statementTitle": "Commissieoverzicht",
+    "statementIntro": "Elke commissiebeweging, uit het grootboek. Positieve bedragen zijn verdiend of aan het bureau betaald; negatieve zijn na terugbetalingen teruggehaald.",
+    "entriesCaption": "Commissieboekingen",
+    "statementEmptyClient": "Nog geen commissie. Die verschijnt na de eerste ticketverkoop terwijl een bureau je abonnement betaalt.",
+    "statementEmptyAgency": "Nog geen commissie. Die verschijnt zodra een klant die je aanbod accepteerde tickets verkoopt.",
+    "totalEarned": "Verdiende commissie",
+    "totalPending": "Wacht op vrijgave",
+    "totalPaid": "Overgemaakt",
+    "totalOwed": "Verschuldigd na terugbetalingen",
+    "dateColumn": "Datum",
+    "entryColumn": "Boeking",
+    "agencyColumn": "Bureau",
+    "clientColumn": "Klant",
+    "amountColumn": "Bedrag",
+    "kind": {
+      "accrued": "Commissie op een verkoop",
+      "reversed": "Teruggehaald na een terugbetaling",
+      "clawback": "Verschuldigd na een terugbetaling",
+      "transferred": "Overgemaakt naar het bureau",
+      "netted": "Verrekend met een overboeking",
+      "clawback_paid": "Teruggeboekt van een overboeking"
+    },
+    "unknownAgency": "Voormalig bureau",
+    "unknownClient": "Voormalige klant",
+    "clientsTitle": "Klanten",
+    "agencyIntro": "Bied aan het Yayatoh-abonnement van een klant te betalen. Zodra de klant accepteert, krijg je {rate} van wat elke ticketverkoop hem uitbetaalt, als aparte overboeking bij de vrijgave van het evenementgeld.",
+    "statusColumn": "Facturering via bureau",
+    "actionsColumn": "Acties",
+    "statusNone": "Niet aangeboden",
+    "statusOffered": "Aangeboden",
+    "statusActive": "Betaalt · {rate} commissie",
+    "offer": "Aanbieden abonnement te betalen",
+    "offerNamed": "Aanbieden het abonnement van {client} te betalen",
+    "withdraw": "Aanbod intrekken",
+    "withdrawNamed": "Het aanbod aan {client} intrekken",
+    "offered": "Aanbod verstuurd naar {client}. Het geldt zodra het wordt geaccepteerd.",
+    "withdrawn": "Aanbod aan {client} ingetrokken.",
+    "noClientsTitle": "Nog geen klanten",
+    "noClients": "Klanten geven je bureau toegang vanaf hun pagina Bureaus, met je adres {address}.",
+    "managerReadOnly": "Alleen eigenaren en beheerders van het bureau kunnen aanbiedingen doen of intrekken.",
+    "noStatementAccess": "Het commissieoverzicht is voor eigenaren, beheerders en financiën van het bureau."
   }
 }

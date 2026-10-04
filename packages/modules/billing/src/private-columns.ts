@@ -37,4 +37,6 @@ export const privateColumns = columnPrivacy('billing', {
     requested_by: internal(),
     idempotency_key: internal(),
   },
+  agency_billing_offers: {},
+  agency_billing: { end_reason: 'vocab' },
 });

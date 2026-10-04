@@ -96,6 +96,8 @@ describe('who sees which sections', () => {
     expect(sectionsOf('owner')).toEqual([...ORG_SECTION_KEYS]);
     const all = ORG_SECTIONS.flatMap((s) => s.items.map((i) => i.key));
     expect(keysOf('owner', true, { agencyOrg: true })).toEqual(all);
+    // M6.7a: the agency's Clients pages show in agency orgs only.
+    expect(keysOf('owner', true)).not.toContain('agency');
     expect(keysOf('owner')).not.toContain('helpCenter');
     expect(keysOf('owner')).not.toContain('marketingSite');
     expect(keysOf('owner')).not.toContain('agency');

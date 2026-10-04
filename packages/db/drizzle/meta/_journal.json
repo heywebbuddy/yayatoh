@@ -1114,6 +1114,13 @@
       "when": 1791067755932,
       "tag": "0158_strange_madripoor",
       "breakpoints": true
+    },
+    {
+      "idx": 159,
+      "version": "7",
+      "when": 1791067755933,
+      "tag": "0159_lean_hex",
+      "breakpoints": true
     }
   ]
 }

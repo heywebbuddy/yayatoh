@@ -3270,7 +3270,8 @@
       "confirmMismatch": "Das stimmt nicht überein. Geben Sie zur Bestätigung dieselbe E-Mail-Adresse ein.",
       "kindRequired": "Wählen Sie, was die Person verlangt.",
       "reasonRequired": "Geben Sie einen Grund mit mindestens 3 Zeichen an.",
-      "closed": "Diese Anfrage ist bereits abgeschlossen."
+      "closed": "Diese Anfrage ist bereits abgeschlossen.",
+      "nothingHeld": "Zu dieser E-Mail ist nichts mehr gespeichert."
     },
     "kinds": {
       "access": "Auskunft (Kopie)",
@@ -3462,6 +3463,33 @@
       "invitations": "Team-Einladungen",
       "networkProfiles": "Networking-Profile",
       "chatMessages": "Gesendete Chatnachrichten"
+    },
+    "export": {
+      "title": "Daten exportieren",
+      "hint": "Eine JSON-Datei mit allem oben Genannten, die Sie der Person schicken können. Sie wird nach 7 Tagen gelöscht.",
+      "submit": "Daten exportieren (JSON)",
+      "download": "Datei herunterladen",
+      "running": "Die Datei wird vorbereitet … laden Sie die Seite gleich neu."
+    },
+    "erase": {
+      "title": "Diese Person löschen",
+      "what": "Name, E-Mail, Telefon, Antworten und Links werden aus Kontakten, Bestellungen, Tickets und Gästelisten entfernt, und Exportdateien, in denen die Person vorkommt, werden gelöscht.",
+      "holds": "{paid, plural, =0 {Es müssen keine bezahlten Bestellungen aufbewahrt werden.} one {# bezahlte Bestellung wird für Steuer und Buchhaltung aufbewahrt, ohne Name und E-Mail.} other {# bezahlte Bestellungen werden für Steuer und Buchhaltung aufbewahrt, ohne Name und E-Mail.}}",
+      "tickets": "{active, plural, =0 {Keine gültigen Tickets vorhanden.} one {# gültiges Ticket bleibt gültig, ohne Namen.} other {# gültige Tickets bleiben gültig, ohne Namen.}}",
+      "final": "Das kann nicht rückgängig gemacht werden.",
+      "confirm": "Geben Sie zur Bestätigung {email} ein",
+      "submit": "Personenbezogene Daten löschen",
+      "done": "Gelöscht. {records, plural, one {# Eintrag wurde} other {# Einträge wurden}} geschwärzt oder gelöscht; {kept, plural, =0 {keine bezahlten Bestellungen aufbewahrt} one {# bezahlte Bestellung ohne personenbezogene Daten aufbewahrt} other {# bezahlte Bestellungen ohne personenbezogene Daten aufbewahrt}}."
+    },
+    "history": {
+      "title": "Frühere Anfragen",
+      "caption": "Datenschutzanfragen, neueste zuerst",
+      "empty": "Noch keine Anfragen.",
+      "when": "Wann",
+      "kind": "Anfrage",
+      "subject": "Person",
+      "by": "Bearbeitet von",
+      "records": "Einträge"
     }
   },
   "privacyNotice": {
@@ -3995,7 +4023,8 @@
     "restore": "Wiederherstellen",
     "restoreFor": "Vorlage {name} wiederherstellen",
     "archivedTitle": "Archivierte Vorlagen ({count})",
-    "archivedHint": "Archivierte Vorlagen erscheinen in keiner Auswahl. Daraus erstellte Veranstaltungen bleiben unverändert."
+    "archivedHint": "Archivierte Vorlagen erscheinen in keiner Auswahl. Daraus erstellte Veranstaltungen bleiben unverändert.",
+    "pickEvent": "Veranstaltung zum Speichern wählen"
   },
   "publicSeries": {
     "eyebrow": "Eine Reihe von {org}",
@@ -16499,7 +16528,14 @@
       "perBuyerLimit": "Geben Sie eine ganze Zahl ab 1 ein.",
       "startsAt": "Geben Sie ein gültiges Datum und eine Uhrzeit ein.",
       "endsAt": "Der Ablauf muss nach dem Beginn liegen."
-    }
+    },
+    "caption": "Veranstaltungen und ihre Aktionscodes",
+    "event": "Veranstaltung",
+    "when": "Datum",
+    "codes": "Aktionscodes",
+    "manage": "Codes verwalten",
+    "view": "Codes ansehen",
+    "manageFor": "Aktionscodes für {name}"
   },
   "howItWorks": {
     "docLink": "Anleitung lesen",
@@ -17047,7 +17083,8 @@
     "emptyTitle": "Noch keine Nutzung",
     "emptyBody": "Die Nutzung erscheint hier, wenn Sie E-Mails oder SMS senden, mit KI entwerfen oder Scan-Geräte registrieren.",
     "historyEmpty": "Keine Nutzung in früheren Monaten.",
-    "month": "Monat"
+    "month": "Monat",
+    "backToPlan": "Zurück zu Tarif & Abrechnung"
   },
   "billingBanner": {
     "label": "Abrechnung",
@@ -17100,7 +17137,8 @@
     "historyTitle": "Früherer Zugriff",
     "revokedColumn": "Beendet",
     "unknownAgency": "Agentur nicht mehr bei Yayatoh",
-    "roleLabel": "{role, select, manager {Events verwalten} marketing {Marketing} viewer {Nur ansehen} other {Zugriff}}"
+    "roleLabel": "{role, select, manager {Events verwalten} marketing {Marketing} viewer {Nur ansehen} other {Zugriff}}",
+    "homeAction": "Zur Startseite der Organisation"
   },
   "agency": {
     "title": "Kunden",
@@ -17110,7 +17148,8 @@
       "clients": "Kunden",
       "events": "Events",
       "marketing": "Marketing",
-      "reports": "Berichte"
+      "reports": "Berichte",
+      "billing": "Abrechnung"
     },
     "refresh": "Zahlen aktualisieren",
     "refreshed": "Zahlen aktualisiert für {count, plural, =0 {keine Kunden} one {# Kunden} other {# Kunden}}.",
@@ -17162,7 +17201,10 @@
       "completed": "Abgeschlossen",
       "archived": "Archiviert"
     },
-    "refreshedAt": "Aktualisiert"
+    "refreshedAt": "Aktualisiert",
+    "homeAction": "Zur Startseite der Organisation",
+    "helpAction": "Lesen, wie Agenturen funktionieren",
+    "seeClients": "Ihre Kunden ansehen"
   },
   "analyticsPro": {
     "tabs": {
@@ -18050,5 +18092,64 @@
     "statusHandled": "Erledigt",
     "markHandled": "Als erledigt markieren",
     "markHandledFor": "Nachricht von {name} als erledigt markieren"
+  },
+  "agencyBilling": {
+    "title": "Agenturabrechnung",
+    "clientIntro": "Eine Agentur, der Sie Zugriff gegeben haben, kann Ihren Yayatoh-Tarif bezahlen. Dafür erhält sie bei jedem Ticketverkauf eine Provision: einen Anteil dessen, was der Verkauf Ihnen auszahlt, als eigene Überweisung an die Agentur, wenn das Geld der Veranstaltung freigegeben wird. Erstattungen holen die Provision anteilig zurück.",
+    "offerTitle": "{agency} bietet an, Ihren Tarif zu bezahlen",
+    "offerBody": "{agency} bezahlt Ihren Yayatoh-Tarif und erhält ab jetzt {rate} dessen, was Ihnen jeder Ticketverkauf auszahlt. Sie können jederzeit beenden.",
+    "accept": "Annehmen",
+    "acceptNamed": "Angebot von {agency} annehmen, Ihren Tarif zu bezahlen",
+    "activeTitle": "{agency} bezahlt Ihren Tarif",
+    "activeBody": "Provision: {rate} dessen, was Ihnen jeder Ticketverkauf auszahlt. Angenommen am {date}.",
+    "inForce": "Aktiv",
+    "paused": "Pausiert",
+    "pausedBody": "Derzeit nicht aktiv: {agency} hat das Angebot zurückgezogen oder keinen Zugriff mehr. Ihr eigener Tarif gilt, und es wird keine Provision einbehalten.",
+    "stop": "Agenturabrechnung beenden",
+    "noOffers": "Keine Agentur bietet an, Ihren Tarif zu bezahlen. Eine Agentur mit Zugriff kann es auf ihrer Abrechnungsseite anbieten.",
+    "readOnly": "Nur Inhaber und Administratoren können die Agenturabrechnung annehmen oder beenden.",
+    "accepted": "Agenturabrechnung ist aktiv: Die Agentur bezahlt jetzt Ihren Tarif.",
+    "ended": "Agenturabrechnung beendet. Ihr eigener Tarif gilt wieder.",
+    "statementTitle": "Provisionsabrechnung",
+    "statementIntro": "Jede Provisionsbewegung aus dem Hauptbuch. Positive Beträge sind verdient oder an die Agentur gezahlt; negative wurden nach Erstattungen zurückgeholt.",
+    "entriesCaption": "Provisionsbuchungen",
+    "statementEmptyClient": "Noch keine Provision. Sie erscheint nach dem ersten Ticketverkauf, während eine Agentur Ihren Tarif bezahlt.",
+    "statementEmptyAgency": "Noch keine Provision. Sie erscheint, sobald ein Kunde, der Ihr Angebot angenommen hat, Tickets verkauft.",
+    "totalEarned": "Verdiente Provision",
+    "totalPending": "Wartet auf Freigabe",
+    "totalPaid": "Überwiesen",
+    "totalOwed": "Nach Erstattungen geschuldet",
+    "dateColumn": "Datum",
+    "entryColumn": "Buchung",
+    "agencyColumn": "Agentur",
+    "clientColumn": "Kunde",
+    "amountColumn": "Betrag",
+    "kind": {
+      "accrued": "Provision auf einen Verkauf",
+      "reversed": "Nach einer Erstattung zurückgeholt",
+      "clawback": "Nach einer Erstattung geschuldet",
+      "transferred": "An die Agentur überwiesen",
+      "netted": "Mit einer Überweisung verrechnet",
+      "clawback_paid": "Von einer Überweisung zurückgebucht"
+    },
+    "unknownAgency": "Ehemalige Agentur",
+    "unknownClient": "Ehemaliger Kunde",
+    "clientsTitle": "Kunden",
+    "agencyIntro": "Bieten Sie an, den Yayatoh-Tarif eines Kunden zu bezahlen. Sobald der Kunde annimmt, erhalten Sie {rate} dessen, was ihm jeder Ticketverkauf auszahlt, als separate Überweisung bei Freigabe des Veranstaltungsgelds.",
+    "statusColumn": "Agenturabrechnung",
+    "actionsColumn": "Aktionen",
+    "statusNone": "Nicht angeboten",
+    "statusOffered": "Angeboten",
+    "statusActive": "Zahlt · {rate} Provision",
+    "offer": "Tarifzahlung anbieten",
+    "offerNamed": "Anbieten, den Tarif von {client} zu bezahlen",
+    "withdraw": "Angebot zurückziehen",
+    "withdrawNamed": "Angebot an {client} zurückziehen",
+    "offered": "Angebot an {client} gesendet. Es gilt, sobald angenommen.",
+    "withdrawn": "Angebot an {client} zurückgezogen.",
+    "noClientsTitle": "Noch keine Kunden",
+    "noClients": "Kunden geben Ihrer Agentur auf ihrer Agenturen-Seite Zugriff, mit Ihrer Adresse {address}.",
+    "managerReadOnly": "Nur Inhaber und Administratoren der Agentur können Angebote machen oder zurückziehen.",
+    "noStatementAccess": "Die Provisionsabrechnung ist für Inhaber, Administratoren und Finanzen der Agentur."
   }
 }

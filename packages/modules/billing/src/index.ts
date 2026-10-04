@@ -5,6 +5,21 @@ export {
   ensureEventAddonTx,
   eventAddonTx,
 } from './addons.ts';
+export {
+  type AgencyBilledClientDto,
+  type AgencyBillingInForce,
+  acceptAgencyBillingCommand,
+  agencyBilledClientsQuery,
+  agencyBillingActiveTx,
+  agencyBillingGrantRevoked,
+  type ClientAgencyBillingDto,
+  clientAgencyBillingQuery,
+  DEFAULT_AGENCY_COMMISSION_BPS,
+  endAgencyBillingCommand,
+  offerAgencyBillingCommand,
+  setAgencyCommissionCommand,
+  withdrawAgencyBillingOfferCommand,
+} from './agency-billing.ts';
 export { PLACEHOLDER_PLANS, type PlaceholderPlan } from './catalog.ts';
 export { type CatalogSyncPayload, catalogSyncPayload } from './catalog-sync.ts';
 export {
@@ -112,6 +127,7 @@ export {
   fakeSubscriptionId,
   signFakeBillingEvent,
 } from './provider/fake.ts';
+export { agencyV2Enabled } from './provider/flag.ts';
 export {
   BILLING_PROVIDERS,
   type BillingEvent,
