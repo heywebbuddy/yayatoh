@@ -290,7 +290,7 @@ describe('connection settings (M6.5a)', () => {
     ).toMatchObject({
       reason: 'domain_required',
     });
-  });
+  }, 120_000); // two org fixtures in one test
 });
 
 describe('domain verification', () => {
