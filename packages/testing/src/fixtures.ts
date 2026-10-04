@@ -3560,7 +3560,8 @@ async function matchRows(orgId: string, eventId: string, ctx: (o?: Partial<Ctx>)
     await tx.execute(sql`insert into donations.gift_refunds (org_id, gift_id, refund_id, amount_minor, currency,
       refunded_at) select org_id, id, ${refundId}, 1000, 'USD', now() from donations.gifts
       where event_id = ${eventId} limit 1`);
-    // The refund command's outbox event, so the analytics warehouse sees the refund live too.
+    // Batch 3k merge: the outbox event a refund always comes with, so projections fed by the
+    // outbox (M6.2a's warehouse) see it like the reports do (the gift refund above is idempotent).
     const [r] = await tx.execute<{ order_id: string }>(
       sql`select order_id from orders.refunds where id = ${refundId}`,
     );
