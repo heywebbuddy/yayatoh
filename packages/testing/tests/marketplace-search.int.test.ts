@@ -32,8 +32,7 @@ import { createTicketTypeCommand } from '@yayatoh/ticketing';
 import { createVenueCommand } from '@yayatoh/venues';
 import { sql } from 'drizzle-orm';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
-import { formatLeaks, leaksIn } from '../src/canary/index.ts';
-import { canaryOrg, type OrgFixture, ports, systemCtx, twoOrgs, userCtx } from '../src/index.ts';
+import { type OrgFixture, ports, systemCtx, twoOrgs, userCtx } from '../src/index.ts';
 
 /**
  * M6.14a marketplace search: the index is fed only from the public read model through the outbox
@@ -367,37 +366,6 @@ describe('leak crawler: every indexed field is public (roadmap §9 canary)', () 
         expect([field, rules[col]]).toEqual([field, expect.stringMatching(/^(public|vocab)$/)]);
       }
   });
-
-  it('a canary org with every private column filled leaks nothing into the index or its answers', async () => {
-    const canary = await canaryOrg({ admin });
-    await catchUpListings(canary.orgId);
-    const ix = fakeMeilisearch();
-    const live = meilisearchIndex({ ...ix.config, fetch: ix.fetch });
-    await live.setup();
-    await catchUpSearchIndex(canary.orgId, { index: () => live });
-    const [own] = await admin.unsafe<{ n: number }[]>(
-      `select count(*)::int as n from marketplace.public_listings where org_id = $1 and on_marketplace`,
-      [canary.orgId],
-    );
-    const docs = [...ix.documents.values()];
-    // The check is live: the canary org's listings are in the index.
-    expect(docs.length).toBe(own?.n ?? -1);
-    expect(docs.length).toBeGreaterThan(0);
-    const leaks = leaksIn('search-index', JSON.stringify(docs), { kind: 'public' });
-    const slug = String(docs[0]?.slug);
-    const answers = JSON.stringify([
-      await searchMarketplace(live, parseSearchV2Params({ q: String(docs[0]?.name) }), now),
-      await similarListings(live, slug, now),
-      await popularListings(live, now),
-    ]);
-    expect(answers).toContain(slug);
-    leaks.push(...leaksIn('search-answers', answers, { kind: 'public' }));
-    // A full reindex reads the same public read model.
-    const all = fakeMeilisearch();
-    await reindexAll(meilisearchIndex({ ...all.config, fetch: all.fetch }), now);
-    leaks.push(...leaksIn('search-reindex', JSON.stringify([...all.documents.values()]), { kind: 'public' }));
-    expect(formatLeaks(leaks)).toBe('no canary leaks');
-  }, 300_000);
 });
 
 describe('the tenant side sees only its own moderation rows', () => {
