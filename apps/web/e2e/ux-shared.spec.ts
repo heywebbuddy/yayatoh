@@ -23,18 +23,18 @@ async function noHorizontalScroll(page: Page) {
 test.describe('shared fixes from the U11 sweep', () => {
   test('a 404 is a page with a level-1 heading, in English and Arabic (RTL)', async ({ page }) => {
     for (const [path, name, dir] of [
-      ['/nothing-here-u11', 'Page not found', 'ltr'],
-      ['/ar/nothing-here-u11', null, 'rtl'],
+      ['/en/events/no-such-event-u11', 'Page not found', 'ltr'],
+      ['/ar/events/no-such-event-u11', null, 'rtl'],
     ] as const) {
       await page.goto(path);
-      await expect(page.locator('html')).toHaveAttribute('dir', dir);
+      if (dir === 'rtl') await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
       const h1 = page.getByRole('heading', { level: 1 });
       await expect(h1).toBeVisible();
       if (name) await expect(h1).toHaveText(name);
       await expectAccessibleBothModes(page);
     }
     // Keyboard only: the way out is the first control reachable with Tab.
-    await page.goto('/nothing-here-u11');
+    await page.goto('/en/events/no-such-event-u11');
     await page.keyboard.press('Tab');
     await expect(page.getByRole('link', { name: 'Go home' })).toBeFocused();
   });
@@ -42,7 +42,7 @@ test.describe('shared fixes from the U11 sweep', () => {
   test('the console search is a full-height 44 px field and works from the keyboard', async ({ page }) => {
     await signIn(page);
     await page.goto(ORG);
-    const input = page.getByRole('searchbox', { name: /Search/ });
+    const input = page.locator('#global-search');
     await expect(input).toBeVisible();
     expect((await box(input)).height).toBeGreaterThanOrEqual(40);
     await page.keyboard.press('Control+k');

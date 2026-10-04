@@ -136,14 +136,14 @@
   "app": "admin",
   "actor": "staff",
   "pattern": "/tenants/[id]",
-  "path": "/tenants/01a106ed-80bb-787e-86fb-10076907cfef",
+  "path": "/tenants/01a10776-a254-7b1c-8be4-ca35e4dd8222",
   "status": 200
  },
  {
   "app": "admin",
   "actor": "staff",
   "pattern": "/tenants/[id]/messaging",
-  "path": "/tenants/01a106ed-80bb-787e-86fb-10076907cfef/messaging",
+  "path": "/tenants/01a10776-a254-7b1c-8be4-ca35e4dd8222/messaging",
   "status": 200
  },
  {
@@ -503,7 +503,7 @@
   "app": "web",
   "actor": "agency",
   "pattern": "/o/[org]/agency",
-  "path": "/o/e2e-mutv4fw7268679/agency",
+  "path": "/o/e2e-mutyz3e90c9ee7/agency",
   "status": 200
  },
  {
@@ -524,7 +524,7 @@
   "app": "web",
   "actor": "agency",
   "pattern": "/o/[org]/agency/events",
-  "path": "/o/e2e-mutv4fw7268679/agency/events",
+  "path": "/o/e2e-mutyz3e90c9ee7/agency/events",
   "status": 200
  },
  {
@@ -538,14 +538,14 @@
   "app": "web",
   "actor": "agency",
   "pattern": "/o/[org]/agency/marketing",
-  "path": "/o/e2e-mutv4fw7268679/agency/marketing",
+  "path": "/o/e2e-mutyz3e90c9ee7/agency/marketing",
   "status": 200
  },
  {
   "app": "web",
   "actor": "agency",
   "pattern": "/o/[org]/agency/reports",
-  "path": "/o/e2e-mutv4fw7268679/agency/reports",
+  "path": "/o/e2e-mutyz3e90c9ee7/agency/reports",
   "status": 200
  },
  {

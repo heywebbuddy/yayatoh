@@ -1,0 +1,22 @@
+[
+ {
+  "link": "web:/t/lakeside-events/sign-in",
+  "from": "/t/lakeside-events/events/lakeside-open-house"
+ },
+ {
+  "link": "web:/t/lakeside-events/privacy",
+  "from": "/t/lakeside-events"
+ },
+ {
+  "link": "web:/t/lakeside-events/sub-processors",
+  "from": "/t/lakeside-events"
+ },
+ {
+  "link": "web:/t/lakeside-events/help",
+  "from": "/t/lakeside-events"
+ },
+ {
+  "link": "web:/t/lakeside-events/status",
+  "from": "/t/lakeside-events"
+ }
+]

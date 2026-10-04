@@ -406,7 +406,7 @@ const MAIN_SCREENS: { name: string; path: string; actor: ActorKey }[] = [
   { name: 'seating-library', path: `/o/${ORG}/seating-library`, actor: 'owner' },
   { name: 'public-event', path: `/events/${EVENT}`, actor: 'visitor' },
   { name: 'marketplace-home', path: '/', actor: 'visitor' },
-  { name: 'not-found', path: '/nothing-here', actor: 'visitor' },
+  { name: 'not-found', path: '/events/no-such-event-u11', actor: 'visitor' },
 ];
 test('main screens before/after shots', async ({ browser }) => {
   test.skip(!process.env.UX_SHOTS, 'set UX_SHOTS=before|after');

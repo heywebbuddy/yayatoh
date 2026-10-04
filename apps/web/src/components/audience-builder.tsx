@@ -383,7 +383,7 @@ function Templates({
         ))}
       </fieldset>
       <div className="flex flex-wrap items-end gap-3">
-        <label className="flex flex-col gap-1.5 text-[13px] font-bold text-ink">
+        <label className="flex max-w-full min-w-0 flex-col gap-1.5 text-[13px] font-bold text-ink">
           {key === 'lastYearNotThisYear' ? t('templates.thisYearsEvent') : t('templates.event')}
           <Select className={SELECT} value={eventId} onValueChange={(v) => setEventId(v)}>
             {events.length === 0 ? <option value="">{t('templates.noEvents')}</option> : null}
