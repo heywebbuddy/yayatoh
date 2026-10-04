@@ -2,7 +2,10 @@
 
 import { DEFAULT_LOCALE } from '@yayatoh/contracts';
 import {
+  ACCOUNT_CATEGORIES,
+  type AccountMap,
   beginConnectCommand,
+  chartOfAccounts,
   completeConnectCommand,
   connectionDetailQuery,
   connectorByKey,
@@ -14,6 +17,7 @@ import {
   offeredConnectors,
   requestSyncCommand,
   retryErrorsCommand,
+  saveAccountMapCommand,
   saveMappingCommand,
   setConnectionPausedCommand,
   setSyncIntervalCommand,
@@ -291,4 +295,69 @@ export async function dismissErrorsAction(org: string, form: FormData): Promise<
     return back(org, '/errors', { error: codeOf(err) });
   }
   return back(org, '/errors', { dismissed: String(r.dismissed) });
+}
+
+// ── M6.5d: accounting ──────────────────────────────────────────────────────────────────────
+
+export interface AccountMapState {
+  readonly status: 'idle' | 'saved' | 'error';
+  readonly version?: number;
+  readonly code?: string;
+  /** Problems per field: a category (`sales`, …) or `startsOn`. */
+  readonly issues?: readonly { readonly field: string; readonly code: string }[];
+}
+
+/**
+ * Save the chart-of-accounts mapping (a new version). Each chosen account is looked up in the
+ * provider's chart now (through the port), so only accounts the books really have are stored.
+ */
+export async function saveAccountMapAction(
+  org: string,
+  connectionId: string,
+  _prev: AccountMapState,
+  form: FormData,
+): Promise<AccountMapState> {
+  const data = await loadConsole(org);
+  const auth = integrationAuth();
+  if (!auth || !UUID.test(connectionId)) return { status: 'error', code: 'unavailable' };
+  let chart: Awaited<ReturnType<typeof chartOfAccounts>>;
+  try {
+    chart = await chartOfAccounts(data.ctx, ports, auth, connectionId);
+  } catch (err) {
+    return { status: 'error', code: codeOf(err) };
+  }
+  if (!chart) return { status: 'error', code: 'provider_unavailable' };
+  const issues: { field: string; code: string }[] = [];
+  const accounts: Partial<AccountMap> = {};
+  for (const category of ACCOUNT_CATEGORIES) {
+    const id = String(form.get(`account.${category}`) ?? '');
+    const found = chart.find((a) => a.id === id);
+    if (!id) issues.push({ field: category, code: 'missing' });
+    else if (!found) issues.push({ field: category, code: 'unknown_account' });
+    else accounts[category] = found;
+  }
+  const startsOn = String(form.get('startsOn') ?? '');
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(startsOn)) issues.push({ field: 'startsOn', code: 'missing_date' });
+  if (issues.length) return { status: 'error', code: 'validation_failed', issues };
+  try {
+    const saved = await executeCommand(
+      saveAccountMapCommand,
+      { connectionId, accounts: accounts as AccountMap, startsOn },
+      data.ctx,
+      ports,
+    );
+    revalidatePath(`/o/${org}/integrations/${connectionId}`);
+    return { status: 'saved', version: saved.version };
+  } catch (err) {
+    if (!isDomainError(err)) throw err;
+    const raw = (err.details?.issues as { path?: string; code?: string; field?: string }[] | undefined) ?? [];
+    return {
+      status: 'error',
+      code: err.code,
+      issues: raw.map((i) => ({
+        field: i.field ?? (i.path ?? '').replace(/^accounts\./, ''),
+        code: i.code ?? err.code,
+      })),
+    };
+  }
 }

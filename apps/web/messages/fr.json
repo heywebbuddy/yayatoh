@@ -15508,6 +15508,12 @@
       },
       "google_calendar": {
         "description": "Chaque session de vos événements en cours dans un Google Agenda, toujours à jour : les sessions déplacées suivent et les sessions annulées disparaissent. Les horaires s'affichent dans le fuseau horaire de chaque événement."
+      },
+      "quickbooks": {
+        "description": "Passez chaque jour une écriture récapitulative de vos ventes, frais, remboursements, versements et dons dans QuickBooks Online."
+      },
+      "xero": {
+        "description": "Passez chaque jour une écriture récapitulative de vos ventes, frais, remboursements, versements et dons dans Xero."
       }
     },
     "sandboxBadge": "Test",
@@ -15536,7 +15542,8 @@
       "campaigns": "Campagnes",
       "campaign_members": "Membres de campagne",
       "sponsor_opportunities": "Opportunités de sponsoring",
-      "sessions": "Sessions"
+      "sessions": "Sessions",
+      "journals": "Écritures quotidiennes"
     },
     "fields": {
       "email": "E-mail",
@@ -15738,7 +15745,14 @@
       "conflict": "Entre en conflit avec un enregistrement déjà dans Yayatoh",
       "not_found": "Un élément nécessaire n’est pas encore là",
       "validation_failed": "Yayatoh ne l’a pas accepté",
-      "remove_failed": "Impossible de supprimer chez le fournisseur"
+      "remove_failed": "Impossible de supprimer chez le fournisseur",
+      "currency_unsupported": "Votre comptabilité n'accepte que sa devise de base",
+      "post_failed": "Impossible de passer l'écriture dans votre comptabilité",
+      "http_400": "Votre comptabilité l'a refusée : vérifiez les comptes associés",
+      "http_429": "Le fournisseur nous a demandé de ralentir",
+      "http_503": "Le fournisseur est indisponible pour le moment",
+      "no_organisation": "Aucune organisation trouvée pour cette connexion",
+      "account_code_missing": "Un compte associé n'a pas de numéro"
     },
     "inbox": {
       "title": "Erreurs d’intégration",
@@ -16055,6 +16069,83 @@
       "object": "Type",
       "count": "Enregistrements",
       "empty": "Rien n’est encore lié. Les enregistrements sont liés au fil des synchronisations."
+    },
+    "accounting": {
+      "mapTitle": "Plan comptable",
+      "mapHelp": "Choisissez où va chaque ligne de l'écriture récapitulative quotidienne dans votre comptabilité. Les jours sont passés une fois terminés, dans le fuseau horaire de votre organisation.",
+      "notMapped": "Associez vos comptes pour commencer à passer les écritures quotidiennes.",
+      "version": "Version {version} · écritures à partir du {day}",
+      "chartUnavailable": "Impossible de charger votre plan comptable depuis {name}. Réessayez dans un instant.",
+      "chooseAccount": "Choisir un compte",
+      "categories": {
+        "sales": {
+          "label": "Ventes de billets",
+          "hint": "Crédité des ventes brutes de billets du jour."
+        },
+        "donations": {
+          "label": "Dons",
+          "hint": "Crédité des dons en ligne du jour."
+        },
+        "refunds": {
+          "label": "Remboursements",
+          "hint": "Débité de ce qui a été remboursé aux acheteurs et aux donateurs."
+        },
+        "fees": {
+          "label": "Frais Yayatoh",
+          "hint": "Débité des frais de plateforme du jour, moins les frais rendus."
+        },
+        "payouts": {
+          "label": "Versements",
+          "hint": "Le compte bancaire sur lequel arrivent les versements de Yayatoh."
+        },
+        "clearing": {
+          "label": "Compte d'attente",
+          "hint": "Contient l'argent que Yayatoh ou votre prestataire de paiement garde pour vous. Il équilibre chaque écriture."
+        }
+      },
+      "startsOn": "Passer les jours à partir du",
+      "startsOnHint": "Le premier jour à passer, jusqu'à un an en arrière.",
+      "save": "Enregistrer l'association des comptes",
+      "saved": "Association des comptes enregistrée en version {version}. La prochaine synchronisation l'utilisera.",
+      "invalid": "Cette association ne peut pas encore être enregistrée. Vérifiez les champs signalés.",
+      "saveFailed": "L'association n'a pas pu être enregistrée. Réessayez dans un instant.",
+      "issue": {
+        "missing": "Choisissez un compte pour {field}.",
+        "unknown_account": "Ce compte n'existe plus dans votre comptabilité. Choisissez-en un autre pour {field}.",
+        "clearing_shared": "Le compte d'attente ne peut pas aussi servir pour {field}.",
+        "starts_in_future": "Choisissez aujourd'hui ou un jour antérieur.",
+        "starts_too_early": "Choisissez un jour de l'année écoulée.",
+        "missing_date": "Indiquez le premier jour à passer.",
+        "other": "Vérifiez ce champ."
+      },
+      "journalsTitle": "Écritures quotidiennes",
+      "journalsHelp": "Une écriture par jour et par devise. Un jour qui change après avoir été passé est contrepassé puis repassé, jamais modifié.",
+      "journalsCaption": "Écritures récapitulatives quotidiennes envoyées à votre comptabilité",
+      "waiting": "{count, plural, one {# écriture attend d'être envoyée.} many {# écritures attendent d'être envoyées.} other {# écritures attendent d'être envoyées.}}",
+      "emptyTitle": "Pas encore d'écritures",
+      "emptyMapped": "Les jours sont passés une fois terminés, à la prochaine synchronisation.",
+      "emptyUnmapped": "Associez vos comptes, puis synchronisez pour passer les jours depuis votre premier jour.",
+      "emptyMapAction": "Associer les comptes",
+      "emptyPostAction": "Chercher les jours à passer",
+      "emptyBackAction": "Retour aux intégrations",
+      "columns": {
+        "day": "Jour",
+        "currency": "Devise",
+        "kind": "Écriture",
+        "amount": "Montant",
+        "status": "Statut",
+        "reference": "Référence dans votre comptabilité"
+      },
+      "kinds": {
+        "journal": "Écriture · révision {revision}",
+        "reversal": "Contrepassation de la révision {revision}"
+      },
+      "status": {
+        "pending": "En attente",
+        "posted": "Passée",
+        "failed": "Non passée",
+        "superseded": "Remplacée"
+      }
     }
   },
   "kioskPrint": {

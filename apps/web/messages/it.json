@@ -15508,6 +15508,12 @@
       },
       "google_calendar": {
         "description": "Ogni sessione dei tuoi eventi attivi in un Google Calendar, sempre aggiornata: le sessioni spostate si spostano e quelle annullate spariscono. Gli orari sono nel fuso orario di ogni evento."
+      },
+      "quickbooks": {
+        "description": "Registra ogni giorno una scrittura riepilogativa di vendite, commissioni, rimborsi, pagamenti e donazioni in QuickBooks Online."
+      },
+      "xero": {
+        "description": "Registra ogni giorno una scrittura riepilogativa di vendite, commissioni, rimborsi, pagamenti e donazioni in Xero."
       }
     },
     "sandboxBadge": "Prova",
@@ -15536,7 +15542,8 @@
       "campaigns": "Campagne",
       "campaign_members": "Membri della campagna",
       "sponsor_opportunities": "Opportunità di sponsorizzazione",
-      "sessions": "Sessioni"
+      "sessions": "Sessioni",
+      "journals": "Scritture giornaliere"
     },
     "fields": {
       "email": "Email",
@@ -15738,7 +15745,14 @@
       "conflict": "Va in conflitto con un record già presente in Yayatoh",
       "not_found": "Manca ancora qualcosa che serve",
       "validation_failed": "Yayatoh non l’ha accettato",
-      "remove_failed": "Impossibile rimuoverlo presso il provider"
+      "remove_failed": "Impossibile rimuoverlo presso il provider",
+      "currency_unsupported": "La tua contabilità accetta solo la sua valuta di base",
+      "post_failed": "Impossibile registrarla nella tua contabilità",
+      "http_400": "La tua contabilità l'ha rifiutata: controlla i conti associati",
+      "http_429": "Il fornitore ci ha chiesto di rallentare",
+      "http_503": "Il fornitore non è disponibile al momento",
+      "no_organisation": "Nessuna organizzazione trovata per questa connessione",
+      "account_code_missing": "Un conto associato non ha un codice"
     },
     "inbox": {
       "title": "Errori di integrazione",
@@ -16055,6 +16069,83 @@
       "object": "Tipo",
       "count": "Record",
       "empty": "Ancora nulla di collegato. I record si collegano man mano che si sincronizzano."
+    },
+    "accounting": {
+      "mapTitle": "Piano dei conti",
+      "mapHelp": "Scegli dove va ogni riga della scrittura riepilogativa giornaliera nella tua contabilità. I giorni vengono registrati alla loro fine, nel fuso orario della tua organizzazione.",
+      "notMapped": "Associa i tuoi conti per iniziare a registrare le scritture giornaliere.",
+      "version": "Versione {version} · registrazione dal {day}",
+      "chartUnavailable": "Non è stato possibile caricare il piano dei conti da {name}. Riprova tra poco.",
+      "chooseAccount": "Scegli un conto",
+      "categories": {
+        "sales": {
+          "label": "Vendita biglietti",
+          "hint": "Accreditato con le vendite lorde di biglietti del giorno."
+        },
+        "donations": {
+          "label": "Donazioni",
+          "hint": "Accreditato con le donazioni online del giorno."
+        },
+        "refunds": {
+          "label": "Rimborsi",
+          "hint": "Addebitato con quanto rimborsato ad acquirenti e donatori."
+        },
+        "fees": {
+          "label": "Commissioni Yayatoh",
+          "hint": "Addebitato con le commissioni di piattaforma del giorno, al netto di quelle restituite."
+        },
+        "payouts": {
+          "label": "Pagamenti",
+          "hint": "Il conto bancario su cui arrivano i pagamenti di Yayatoh."
+        },
+        "clearing": {
+          "label": "Conto transitorio",
+          "hint": "Contiene il denaro che Yayatoh o il tuo processore custodisce per te. Pareggia ogni scrittura."
+        }
+      },
+      "startsOn": "Registra i giorni dal",
+      "startsOnHint": "Il primo giorno da registrare, fino a un anno fa.",
+      "save": "Salva associazione dei conti",
+      "saved": "Associazione dei conti salvata come versione {version}. La prossima sincronizzazione la userà.",
+      "invalid": "Questa associazione non può ancora essere salvata. Controlla i campi evidenziati.",
+      "saveFailed": "Impossibile salvare l'associazione. Riprova tra poco.",
+      "issue": {
+        "missing": "Scegli un conto per {field}.",
+        "unknown_account": "Quel conto non è più nella tua contabilità. Scegline un altro per {field}.",
+        "clearing_shared": "Il conto transitorio non può essere usato anche per {field}.",
+        "starts_in_future": "Scegli oggi o un giorno precedente.",
+        "starts_too_early": "Scegli un giorno nell'ultimo anno.",
+        "missing_date": "Inserisci il primo giorno da registrare.",
+        "other": "Controlla questo campo."
+      },
+      "journalsTitle": "Scritture giornaliere",
+      "journalsHelp": "Una scrittura per giorno e valuta. Un giorno che cambia dopo la registrazione viene stornato e registrato di nuovo, mai modificato.",
+      "journalsCaption": "Scritture riepilogative giornaliere inviate alla tua contabilità",
+      "waiting": "{count, plural, one {# scrittura è in attesa di invio.} many {# scritture sono in attesa di invio.} other {# scritture sono in attesa di invio.}}",
+      "emptyTitle": "Ancora nessuna scrittura",
+      "emptyMapped": "I giorni vengono registrati alla loro fine, alla prossima sincronizzazione.",
+      "emptyUnmapped": "Associa i tuoi conti, poi sincronizza per registrare i giorni dal primo giorno.",
+      "emptyMapAction": "Associa i conti",
+      "emptyPostAction": "Cerca giorni da registrare",
+      "emptyBackAction": "Torna alle integrazioni",
+      "columns": {
+        "day": "Giorno",
+        "currency": "Valuta",
+        "kind": "Voce",
+        "amount": "Importo",
+        "status": "Stato",
+        "reference": "Riferimento nella tua contabilità"
+      },
+      "kinds": {
+        "journal": "Scrittura · revisione {revision}",
+        "reversal": "Storno della revisione {revision}"
+      },
+      "status": {
+        "pending": "In attesa",
+        "posted": "Registrata",
+        "failed": "Non registrata",
+        "superseded": "Sostituita"
+      }
     }
   },
   "kioskPrint": {

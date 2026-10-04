@@ -204,10 +204,12 @@ import {
   validateGuestImportCommand,
 } from '@yayatoh/guests';
 import {
+  dayIn,
   fakeIntegrations,
   linkEventSheet,
   queueSlackTestCommand,
   runSync,
+  saveAccountMapCommand,
   saveSlackSettingsCommand,
   sheetLinksQuery,
   sheetsRemoteEdit,
@@ -422,7 +424,14 @@ import { createVenueCommand, submitQuoteRequestCommand } from '@yayatoh/venues';
 import { createEndpointCommand } from '@yayatoh/webhooks';
 import { sql } from 'drizzle-orm';
 import { enableGallery, guestGalleryPhoto, guestSiteAccess, hostGalleryPhoto } from './gallery.ts';
-import { connectConnector, connectDemo, connectSlack, fakeAuth } from './integrations.ts';
+import {
+  connectAccounting,
+  connectConnector,
+  connectDemo,
+  connectSlack,
+  fakeAccountMap,
+  fakeAuth,
+} from './integrations.ts';
 import { catchUpTimeline } from './merge.ts';
 import { networkingFixture } from './networking.ts';
 import { ports, runBulk, submitRegistrationForm } from './ports.ts';
@@ -3168,6 +3177,23 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
        tax_minor, discount_minor, status, requested_by, idempotency_key)
       values (${org.id}, 'launch_standard', 'tier_pro', 'tier_pro_month_usd', 'start', 'USD', 10692,
        792, 0, 'submitted', ${`user:${ownerId}`}, ${`fixture:${uuidv7()}`})`);
+  });
+  // M6.5d: QuickBooks (fake) with the accounts mapped from today, and today's ledger posted as a
+  // daily summary journal by a run "as of" tomorrow (a day is posted once it has ended).
+  const books = await connectAccounting(ctx(), 'quickbooks');
+  await executeCommand(
+    saveAccountMapCommand,
+    {
+      connectionId: books.connectionId,
+      accounts: fakeAccountMap('quickbooks'),
+      startsOn: dayIn(new Date(), 'America/Chicago'),
+    },
+    ctx(),
+    ports,
+  );
+  await runSync(org.id, books.connectionId, { auth: fakeAuth }, ports, {
+    now: new Date(Date.now() + 24 * 60 * 60_000),
+    force: true,
   });
   // M6.2a again: the warehouse catches up on the outbox of the rows added after its first run
   // (donations, matches, imports), as the worker would, so a later backfill changes nothing.

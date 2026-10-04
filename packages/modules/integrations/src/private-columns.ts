@@ -62,4 +62,17 @@ export const privateColumns = columnPrivacy('integrations', {
   // M6.4b: the values of a last-writer conflict (names, emails, labels of attendees).
   sync_conflicts: { field: 'vocab', kept: personal(), lost: personal() },
   sheet_links: { spreadsheet_id: internal('code'), title: internal(), status: 'vocab' },
+  // M6.5d accounting: provider account ids and names, and daily totals (no person in them).
+  account_maps: { accounts: internal() },
+  accounting_journals: {
+    currency: 'vocab',
+    kind: 'vocab',
+    status: 'vocab',
+    summary: internal(),
+    summary_key: internal(),
+    lines: internal(),
+    idempotency_key: internal(),
+    external_id: internal(),
+    last_error_code: 'vocab',
+  },
 });

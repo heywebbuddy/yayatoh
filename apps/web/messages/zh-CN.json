@@ -15508,6 +15508,12 @@
       },
       "google_calendar": {
         "description": "将进行中活动的每个场次同步到 Google 日历并保持最新：调整的场次会随之移动，取消的场次会被移除。时间按各活动的时区显示。"
+      },
+      "quickbooks": {
+        "description": "每天把销售、费用、退款、付款和捐款的汇总日记账分录过账到 QuickBooks Online。"
+      },
+      "xero": {
+        "description": "每天把销售、费用、退款、付款和捐款的汇总日记账分录过账到 Xero。"
       }
     },
     "sandboxBadge": "测试",
@@ -15536,7 +15542,8 @@
       "campaigns": "营销活动",
       "campaign_members": "营销活动成员",
       "sponsor_opportunities": "赞助业务机会",
-      "sessions": "场次"
+      "sessions": "场次",
+      "journals": "每日分录"
     },
     "fields": {
       "email": "电子邮件",
@@ -15738,7 +15745,14 @@
       "conflict": "与 Yayatoh 中已有的记录冲突",
       "not_found": "所需的内容还不在这里",
       "validation_failed": "Yayatoh 未接受",
-      "remove_failed": "无法在服务方处删除"
+      "remove_failed": "无法在服务方处删除",
+      "currency_unsupported": "你的账簿只接受其本位币",
+      "post_failed": "无法过账到你的账簿",
+      "http_400": "你的账簿拒绝了它：请检查映射的科目",
+      "http_429": "提供方要求我们放慢速度",
+      "http_503": "提供方目前不可用",
+      "no_organisation": "未找到此连接对应的组织",
+      "account_code_missing": "某个映射的科目没有代码"
     },
     "inbox": {
       "title": "集成错误",
@@ -16055,6 +16069,83 @@
       "object": "类型",
       "count": "记录",
       "empty": "尚未关联任何内容。记录会在同步时关联。"
+    },
+    "accounting": {
+      "mapTitle": "会计科目表",
+      "mapHelp": "选择每日汇总分录的每一行记入账簿中的哪个科目。每天结束后按你组织的时区过账。",
+      "notMapped": "映射科目后即可开始过账每日分录。",
+      "version": "版本 {version} · 自 {day} 起过账",
+      "chartUnavailable": "无法从 {name} 加载你的会计科目表。请稍后重试。",
+      "chooseAccount": "选择科目",
+      "categories": {
+        "sales": {
+          "label": "门票销售",
+          "hint": "按当天门票销售总额贷记。"
+        },
+        "donations": {
+          "label": "捐款",
+          "hint": "按当天在线捐款贷记。"
+        },
+        "refunds": {
+          "label": "退款",
+          "hint": "按退还给购买者和捐款人的金额借记。"
+        },
+        "fees": {
+          "label": "Yayatoh 费用",
+          "hint": "按当天平台费用（扣除退还的费用）借记。"
+        },
+        "payouts": {
+          "label": "付款",
+          "hint": "接收 Yayatoh 付款的银行账户。"
+        },
+        "clearing": {
+          "label": "过渡科目",
+          "hint": "记录 Yayatoh 或支付处理方为你保管的资金，用于平衡每笔分录。"
+        }
+      },
+      "startsOn": "开始过账日期",
+      "startsOnHint": "第一个过账的日期，最早一年前。",
+      "save": "保存科目映射",
+      "saved": "科目映射已保存为版本 {version}。下次同步将使用它过账。",
+      "invalid": "此映射尚不能保存。请检查标出的字段。",
+      "saveFailed": "无法保存映射。请稍后重试。",
+      "issue": {
+        "missing": "请为“{field}”选择科目。",
+        "unknown_account": "该科目已不在你的账簿中。请为“{field}”另选一个。",
+        "clearing_shared": "过渡科目不能同时用于“{field}”。",
+        "starts_in_future": "请选择今天或更早的日期。",
+        "starts_too_early": "请选择过去一年内的日期。",
+        "missing_date": "请输入第一个过账的日期。",
+        "other": "请检查此字段。"
+      },
+      "journalsTitle": "每日分录",
+      "journalsHelp": "每天每种货币一笔分录。过账后发生变化的日期会被冲销后重新过账，绝不直接修改。",
+      "journalsCaption": "发送到你账簿的每日汇总分录",
+      "waiting": "{count, plural, other {# 笔分录等待发送。}}",
+      "emptyTitle": "还没有分录",
+      "emptyMapped": "每天结束后，会在下次同步时过账。",
+      "emptyUnmapped": "先映射科目，再同步，即可过账自第一天以来的日期。",
+      "emptyMapAction": "映射科目",
+      "emptyPostAction": "检查待过账的日期",
+      "emptyBackAction": "返回集成",
+      "columns": {
+        "day": "日期",
+        "currency": "货币",
+        "kind": "分录",
+        "amount": "金额",
+        "status": "状态",
+        "reference": "账簿中的参考号"
+      },
+      "kinds": {
+        "journal": "分录 · 修订 {revision}",
+        "reversal": "冲销修订 {revision}"
+      },
+      "status": {
+        "pending": "等待中",
+        "posted": "已过账",
+        "failed": "未过账",
+        "superseded": "已替换"
+      }
     }
   },
   "kioskPrint": {

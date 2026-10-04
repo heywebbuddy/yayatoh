@@ -1,6 +1,7 @@
 import type { TenantTx } from '@yayatoh/db';
 import type { Ctx, DomainEvent } from '@yayatoh/kernel';
 import type { ModuleKey } from '@yayatoh/platform';
+import type { ProviderAccount } from '../accounting/domain.ts';
 import type { FakeProvider } from '../auth/fake.ts';
 import type { ProviderClient } from '../auth/port.ts';
 import { FIELD_KEY, type FieldSpec, type MappingRule, validateMapping } from '../domain/mapping.ts';
@@ -162,6 +163,39 @@ export interface ObjectDefinition {
   readonly push?: PushSide;
 }
 
+/** One balanced journal as an accounting connector sends it (M6.5d). */
+export interface JournalToPost {
+  /** `YYYY-MM-DD` (the org's day). */
+  readonly day: string;
+  readonly currency: string;
+  /** The currency's minor-unit exponent (amounts go to the provider as exact decimals). */
+  readonly exponent: number;
+  /** A short reference (QuickBooks DocNumber, at most 21 characters). */
+  readonly reference: string;
+  readonly memo: string;
+  /** Debit positive, credit negative, integer minor units; they sum to zero. */
+  readonly lines: readonly {
+    readonly accountId: string;
+    readonly accountCode: string | null;
+    readonly amountMinor: number;
+    readonly description: string;
+  }[];
+  /** The same for the same org, day, currency and revision: a retried post lands once. */
+  readonly idempotencyKey: string;
+}
+
+/**
+ * An accounting connector's side (M6.5d, P6-6): the org's chart of accounts and posting one
+ * daily summary journal. The engine builds the journals (`accounting/run.ts`); the connector only
+ * talks to its provider.
+ */
+export interface AccountingSide {
+  /** The org's active accounts at the provider. */
+  listAccounts(io: SyncIO): Promise<ProviderAccount[]>;
+  /** Post one journal; returns the provider's id for it. */
+  postJournal(io: SyncIO, journal: JournalToPost): Promise<{ readonly externalId: string }>;
+}
+
 export interface ConnectorDefinition {
   /** Stable key (`demo`, `eventbrite`, …): stored on connections. */
   readonly key: string;
@@ -206,6 +240,8 @@ export interface ConnectorDefinition {
   readonly audience?: 'org' | 'registrant';
   /** How often a new connection syncs (minutes, one of `SYNC_INTERVALS`); default 60. */
   readonly defaultSyncIntervalMinutes?: number;
+  /** Accounting connectors (M6.5d): daily summary journals instead of (or besides) objects. */
+  readonly accounting?: AccountingSide;
 }
 
 const CONNECTOR_KEY = /^[a-z][a-z0-9_]{1,39}$/;
@@ -213,7 +249,7 @@ const CONNECTOR_KEY = /^[a-z][a-z0-9_]{1,39}$/;
 /** Define a connector. Checks keys and that each side's default mapping is valid. */
 export function defineConnector(def: ConnectorDefinition): ConnectorDefinition {
   if (!CONNECTOR_KEY.test(def.key)) throw new Error(`Connector key must be snake_case: ${def.key}`);
-  if (def.objects.length === 0 && def.purpose !== 'notifications')
+  if (def.objects.length === 0 && def.purpose !== 'notifications' && !def.accounting)
     throw new Error(`Connector ${def.key} has no objects`);
   const seen = new Set<string>();
   for (const o of def.objects) {
