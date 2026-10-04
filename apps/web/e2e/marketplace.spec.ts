@@ -288,6 +288,9 @@ test.describe('tenant sites (M1.11a)', () => {
       .getByRole('listitem')
       .filter({ hasText: host });
     await mine.getByRole('button', { name: `Check now ${host}` }).click();
+    // Batch 3m merge: U3's connect wizard has a step named "Primary" too, so wait for the check
+    // to finish (the wizard closes once the domain is active) before reading the Primary badge.
+    await expect(mine.getByRole('region', { name: `Connect ${host}` })).toHaveCount(0);
     await expect(mine.getByText('Primary', { exact: true })).toBeVisible();
     try {
       await page.goto(`http://rosewood-weddings.yayatoh.events:${PORT}/?from=managed`);
