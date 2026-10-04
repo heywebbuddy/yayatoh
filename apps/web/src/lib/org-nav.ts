@@ -28,14 +28,6 @@ export interface OrgNavItem {
   readonly agencyOrgOnly?: boolean;
   /** Other first path segments this item owns (pages reached from it, e.g. `contacts`). */
   readonly owns?: readonly string[];
-  /**
-   * M6.7a: the permission someone acting through an agency grant also needs. Org settings, the
-   * team, domains, the public site, payouts, sending setup, API keys and the CMS are the client's
-   * own: an agency role holds none of these, and the pages refuse it too.
-   */
-  readonly agencyNeeds?: string;
-  /** M6.7a: shown only in an agency org (its Clients | Events | Marketing | Reports). */
-  readonly agencyOrgOnly?: boolean;
 }
 
 export interface OrgNavSection {

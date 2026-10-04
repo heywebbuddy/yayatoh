@@ -15,8 +15,9 @@ permissions:
 
 env:
   # next build type-checks the whole web app in one process; the default ~2 GB heap ran out
-  # once M1.4e–M1.6e landed. Runners have 16 GB.
-  NODE_OPTIONS: --max-old-space-size=6144
+  # once M1.4e–M1.6e landed. Runners have 16 GB. Batch 3m: the worker's tsc needs about 6.6 GB
+  # (every module it composes) and ran out at 6 GB.
+  NODE_OPTIONS: --max-old-space-size=8192
 
 jobs:
   checks:
