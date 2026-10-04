@@ -40,7 +40,7 @@ export async function AgencyBillingSection({
   const t = await getTranslations('agencyBilling');
   const state = await executeQuery(clientAgencyBillingQuery, {}, ctx, ports);
   const statement = finance ? await executeQuery(clientCommissionStatementQuery, {}, ctx, ports) : null;
-  if (!agencyV2Enabled() && !state.current && (statement?.entries.length ?? 0) === 0) return null;
+  if (!(await agencyV2Enabled()) && !state.current && (statement?.entries.length ?? 0) === 0) return null;
   const nameOf = (id: string) => names.get(id) ?? t('unknownAgency');
   const when = (d: Date) =>
     formatDate(

@@ -18,8 +18,11 @@ provider runs in dev and CI, and live commission waits for live Stripe (P6-8).
 
 ### 2. Scope (built)
 
-**Flag and entitlement.** `agency_v2` is an environment flag, `AGENCY_V2_ENABLED` (unset = off, like
-`BILLING_ENABLED`): off, no offer can be made or accepted, no agency covers a client and no
+**Flag and entitlement.** `agency_v2` is the platform switch in `platform.flags` that M6.8b's
+operations also use (batch 3m merge: M6.8a was built with an environment variable,
+`AGENCY_V2_ENABLED`, replaced so one audited staff switch turns all of agency v2 on or off from the
+next request; `billing.agencyV2EnabledTx`, and inside `effectiveModulesTx` the same SQL
+`platform.flag_enabled('agency_v2')`). Off, no offer can be made or accepted, no agency covers a client and no
 commission accrues (commission already earned is still released and reversed, so money in flight
 is never stranded). It applies to agency orgs with the `agency` entitlement (P6-13; free on every
 plan in beta, staff revoke it per org). A module key `agency_v2` was tried and dropped: M6.6a's

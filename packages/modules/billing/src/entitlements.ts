@@ -3,7 +3,7 @@ import { type CommandPorts, type Ctx, DomainError, requireOrg } from '@yayatoh/k
 import { isModuleKey, tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { sql } from 'drizzle-orm';
 import { z } from 'zod';
-import { agencyV2Enabled, billingEnabled } from './provider/flag.ts';
+import { billingEnabled } from './provider/flag.ts';
 import { LIVE_SUBSCRIPTION_STATUSES } from './provider/port.ts';
 import { entitlementOverrides } from './schema.ts';
 
@@ -18,10 +18,9 @@ export const DEFAULT_PLAN = 'launch_standard';
  */
 export async function effectiveModulesTx(tx: TenantTx): Promise<Set<string>> {
   const LIVE = billingEnabled();
-  // M6.8a (flag `agency_v2`): the plan of an agency that pays for this org (agency billing in force).
-  const COVER = agencyV2Enabled()
-    ? sql`union select module_key from billing.agency_cover_modules(${LIVE})`
-    : sql``;
+  // M6.8a: the plan of an agency that pays for this org (agency billing in force), only while the
+  // platform switch `agency_v2` is on (read in the same statement: no extra round trip).
+  const COVER = sql`union select module_key from billing.agency_cover_modules(${LIVE}) where platform.flag_enabled('agency_v2')`;
   const rows = LIVE
     ? await tx.execute<{ module_key: string }>(sql`
     with plan as (

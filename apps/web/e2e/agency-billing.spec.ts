@@ -1,3 +1,5 @@
+import { execFileSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import { type Browser, expect, type Page, test } from '@playwright/test';
 import {
   continueToPayment,
@@ -10,7 +12,7 @@ import {
 } from './helpers.ts';
 
 /**
- * M6.8a Agency v2 money (flag `agency_v2`, on in the e2e server): an agency offers to pay a client's
+ * M6.8a Agency v2 money (platform switch `agency_v2`, turned on below): an agency offers to pay a client's
  * plan, the client accepts, a ticket sale earns the agency its commission, and a refund takes it
  * back; both sides read their commission statement. Every test makes its own agency and client.
  * Transfers at release and explicit transfer reversals are covered by
@@ -73,6 +75,15 @@ async function buySupporter(browser: Browser, eventSlug: string, buyer: string, 
   await expect(guest).toHaveURL(/\/orders\/[A-Za-z0-9_-]{43}$/);
   await guest.close();
 }
+
+// Batch 3m merge: M6.8a and M6.8b share the platform switch `agency_v2`; the staff CLI turns it on
+// (it stays on: nothing else depends on it being off).
+test.beforeAll(() => {
+  execFileSync('node', ['scripts/agency-v2.ts', '--on', '--reason', 'e2e run', '--by', 'staff:e2e'], {
+    cwd: fileURLToPath(new URL('../../worker/', import.meta.url)),
+    env: process.env,
+  });
+});
 
 test.describe('agency v2 money (M6.8a)', () => {
   test.setTimeout(300_000);

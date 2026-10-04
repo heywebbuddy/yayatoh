@@ -1,13 +1,12 @@
-import { isUniqueViolation, type TenantTx } from '@yayatoh/db';
+import { isUniqueViolation, type TenantTx, withoutTenant } from '@yayatoh/db';
 import { type Ctx, DomainError, type DomainEvent, requireOrg } from '@yayatoh/kernel';
 import { defineSubscriber, tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { and, desc, eq, isNull, sql } from 'drizzle-orm';
 import { z } from 'zod';
-import { agencyV2Enabled } from './provider/flag.ts';
 import { AGENCY_BILLING_END_REASONS, agencyBilling, agencyBillingOffers } from './schema.ts';
 
 /**
- * Agency v2 money, part 1 (M6.8a, P6-8, flag `agency_v2` = `AGENCY_V2_ENABLED`): **the agency pays
+ * Agency v2 money, part 1 (M6.8a, P6-8, behind the platform switch `agency_v2`): **the agency pays
  * for clients.** An agency org with the `agency` entitlement offers to pay a client's plan; the
  * client (owner or admin)
  * accepts. While that holds (the client's grant to the agency is live, the offer stands, the agency
@@ -38,8 +37,24 @@ export interface AgencyBillingInForce {
   readonly commissionBps: number;
 }
 
+/**
+ * Agency v2 (M6.8a money and M6.8b operations, P6-8) is behind one platform switch, `agency_v2`
+ * (`platform.flags`; staff change it with `platform.set_flag` or the worker's `agency-v2` CLI, and it
+ * applies from the next request). Off: no offer can be made or accepted, no agency covers a client
+ * and no commission accrues; commission already earned is still released and reversed.
+ */
+export async function agencyV2EnabledTx(tx: TenantTx): Promise<boolean> {
+  const [r] = await tx.execute<{ on: boolean }>(sql`select platform.flag_enabled('agency_v2') as on`);
+  return r?.on === true;
+}
+
+/** Is agency v2 switched on (pages and tabs)? */
+export function agencyV2Enabled(): Promise<boolean> {
+  return withoutTenant((tx) => agencyV2EnabledTx(tx));
+}
+
 export async function agencyBillingActiveTx(tx: TenantTx): Promise<AgencyBillingInForce | null> {
-  if (!agencyV2Enabled()) return null;
+  if (!(await agencyV2EnabledTx(tx))) return null;
   const [r] = await tx.execute<{
     billing_id: string;
     agency_org_id: string;
@@ -61,8 +76,8 @@ const userOf = (ctx: Ctx) => (ctx.actor.type === 'user' ? ctx.actor.userId : nul
 // --- The agency's side -------------------------------------------------------------------------
 
 /** The refusal while the `agency_v2` flag is off. */
-function requireAgencyV2() {
-  if (!agencyV2Enabled())
+async function requireAgencyV2(tx: TenantTx) {
+  if (!(await agencyV2EnabledTx(tx)))
     throw new DomainError('module_not_enabled', 'Agency billing is not available yet', {
       module: 'agency_v2',
     });
@@ -79,7 +94,7 @@ export const offerAgencyBillingCommand = tenantCommand({
   // A standing promise to pay another org's plan, like a plan change.
   stepUp: true,
   handler: async ({ input, ctx, tx, emit }) => {
-    requireAgencyV2();
+    await requireAgencyV2(tx);
     const orgId = requireOrg(ctx);
     const [live] = await tx.execute<{ ok: boolean }>(
       sql`select billing.agency_client_live(${input.clientOrgId}) as ok`,
@@ -249,7 +264,7 @@ export const clientAgencyBillingQuery = tenantQuery({
   entitlement: null,
   permission: 'members:read',
   handler: async ({ tx }) => {
-    const offers = agencyV2Enabled()
+    const offers = (await agencyV2EnabledTx(tx))
       ? await tx.execute<{ agency_org_id: string; grant_id: string; offered_at: Date }>(
           sql`select agency_org_id, grant_id, offered_at from billing.agency_offers_for_me()`,
         )
@@ -281,7 +296,7 @@ export const acceptAgencyBillingCommand = tenantCommand({
   stepUp: true,
   handler: async ({ input, ctx, tx, emit }) => {
     const orgId = requireOrg(ctx);
-    requireAgencyV2();
+    await requireAgencyV2(tx);
     const acceptedBy = userOf(ctx);
     if (!acceptedBy) throw new DomainError('forbidden', 'Only a member can accept agency billing');
     const [offer] = await tx.execute<{ grant_id: string }>(

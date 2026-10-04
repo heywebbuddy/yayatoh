@@ -11,7 +11,7 @@ import {
   withdrawAgencyBillingOfferCommand,
 } from '@yayatoh/billing';
 import { withTenant } from '@yayatoh/db';
-import { closePools } from '@yayatoh/db/testing';
+import { adminClient, closePools } from '@yayatoh/db/testing';
 import { createEventCommand, transitionEventCommand } from '@yayatoh/events';
 import { createCtx, executeCommand, executeQuery, isDomainError, uuidv7 } from '@yayatoh/kernel';
 import {
@@ -249,13 +249,19 @@ beforeAll(async () => {
   ).id;
 }, 240_000);
 afterAll(async () => {
-  delete process.env.AGENCY_V2_ENABLED;
   await closePools();
 });
 
+/** The platform switch `agency_v2` (batch 3m merge: M6.8a and M6.8b share it; staff set it). */
+async function setAgencyV2(on: boolean) {
+  const db = adminClient();
+  await db`select platform.set_flag('agency_v2', ${on}, 'test:agency-money', 'agency v2 money integration tests')`;
+  await db.end();
+}
+
 describe('agency v2: the agency pays for clients (M6.8a)', () => {
-  it('is off behind the agency_v2 flag (AGENCY_V2_ENABLED unset): no offer, nothing in force', async () => {
-    delete process.env.AGENCY_V2_ENABLED;
+  it('is off behind the agency_v2 switch: no offer, nothing in force', async () => {
+    await setAgencyV2(false);
     expect(
       await errCode(executeCommand(offerAgencyBillingCommand, { clientOrgId: a.org.id }, agencyCtx(), ports)),
     ).toBe('module_not_enabled');
@@ -266,7 +272,7 @@ describe('agency v2: the agency pays for clients (M6.8a)', () => {
       offers: [],
       inForce: false,
     });
-    process.env.AGENCY_V2_ENABLED = '1';
+    await setAgencyV2(true);
   });
 
   it('needs the agency entitlement to offer, the agency’s offer to accept, and a member with billing:manage', async () => {

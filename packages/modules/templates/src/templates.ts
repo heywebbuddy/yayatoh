@@ -282,4 +282,4 @@ export const listTemplatesQuery = tenantQuery({
 });
 
 /** M6.8b: the DTO of a template row (copies made for agency clients). */
-export const templateDtoOf = (r: typeof eventTemplates.$inferSelect): TemplateDto => toDto(r);
+export const templateDtoOf = (r: typeof eventTemplates.$inferSelect): TemplateDto => toTemplateDto(r);

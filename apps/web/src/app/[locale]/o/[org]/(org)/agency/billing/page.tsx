@@ -35,7 +35,7 @@ export default async function AgencyBillingPage({
   const { locale, org } = await params;
   const { offered, withdrawn } = await searchParams;
   setRequestLocale(locale);
-  if (!agencyV2Enabled()) notFound();
+  if (!(await agencyV2Enabled())) notFound();
   const { data, canRead } = await loadAgency(org);
   if (!canRead) return null;
   const t = await getTranslations('agencyBilling');

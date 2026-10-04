@@ -12,6 +12,8 @@ export {
   agencyBilledClientsQuery,
   agencyBillingActiveTx,
   agencyBillingGrantRevoked,
+  agencyV2Enabled,
+  agencyV2EnabledTx,
   type ClientAgencyBillingDto,
   clientAgencyBillingQuery,
   DEFAULT_AGENCY_COMMISSION_BPS,
@@ -127,7 +129,6 @@ export {
   fakeSubscriptionId,
   signFakeBillingEvent,
 } from './provider/fake.ts';
-export { agencyV2Enabled } from './provider/flag.ts';
 export {
   BILLING_PROVIDERS,
   type BillingEvent,
