@@ -13,6 +13,7 @@ The whole web e2e suite takes about 3 hours in one session. From now on a merge 
 
 ## Helper session (one shard)
 - Check out exactly the SHA in `e2e-ready/<batch>`, follow `merge-3e.md` environment steps 1–5 (fresh DB), build web and admin, run `cd apps/web && npx playwright test --shard=<N>/3 --reporter=line`.
+- Start Playwright in the background writing to a log file, then poll it yourself in the same turn with short foreground commands (`sleep 240; tail -n 5 <log>`, each under 10 minutes) until it finishes. **Never end your turn while the run is going**: an ended turn is not woken up again (two helpers stalled this way on Oct 4).
 - Never change product or test code. For each failing test, rerun it alone once and record both results.
 - Push one commit with `e2e-result.md` to `e2e-result/<batch>-s<N>` (create the branch from the SHA; force-push allowed only on this result branch). Then stop.
 
