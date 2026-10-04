@@ -57,6 +57,9 @@ test.describe('guest website: the host (M4.5a)', () => {
   test('builds the site from blocks: every validation named, publish needs a password, saved after a reload', async ({
     page,
   }) => {
+    // A long journey with twelve axe passes (about 20 s alone): its own budget, like the other long
+    // journeys, so a busy whole-suite run doesn't cut it off at the 30 s default.
+    test.setTimeout(60_000);
     const s = await wedding();
     await signIn(page);
     await page.goto(editor(s));
