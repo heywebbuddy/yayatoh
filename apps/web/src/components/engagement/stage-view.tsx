@@ -97,7 +97,8 @@ export function StageView({
   const toggle = (pressed: boolean) =>
     hc
       ? cx(
-          'inline-flex min-h-11 items-center gap-2 rounded-control border-2 border-white px-[18px] text-body font-bold',
+          // No colour fade in high contrast (same as the giving screen's toggles).
+          'inline-flex min-h-11 items-center gap-2 rounded-control border-2 border-white px-[18px] text-body font-bold transition-none',
           pressed ? 'bg-white text-black' : 'bg-black text-white',
         )
       : buttonClass(pressed ? 'primary' : 'secondary');

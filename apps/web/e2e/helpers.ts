@@ -144,23 +144,6 @@ export async function expectAccessible(page: Page) {
   // After a Server Action re-render, Next streams metadata back in: wait for the title (a page
   // without one still fails here) so axe never judges that in-between moment.
   await expect(page).toHaveTitle(/\S/);
-  // Buttons, links and fields fade colour and background over 150 ms (packages/ui styles.css), and
-  // so does everything when the theme switches: let running transitions finish so axe judges the
-  // settled colours, not a half-faded pressed button (batch 3v: giving-screen's High contrast
-  // toggle). Endless animations (spinners) are not transitions and are not waited for.
-  // Capped at 1 s: a transition that never runs to its end (an element the browser stops
-  // rendering) must not hang the check.
-  await page.evaluate(() =>
-    Promise.race([
-      Promise.all(
-        document
-          .getAnimations()
-          .filter((a) => a instanceof CSSTransition)
-          .map((a) => a.finished.catch(() => undefined)),
-      ),
-      new Promise((done) => setTimeout(done, 1_000)),
-    ]),
-  );
   const results = await new AxeBuilder({ page })
     .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
     // Fully sandboxed frames (email previews) run no scripts, so axe can't enter them and may
