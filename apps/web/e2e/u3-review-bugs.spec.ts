@@ -307,7 +307,7 @@ test.describe('U3: domains — step-up that completes, and the connect wizard', 
     // Arabic: right-to-left, accessible.
     await page.goto(`/ar${org}/domains`);
     await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
-    await expect(page.getByRole('heading', { name: 'كيف يعمل' })).toBeVisible();
+    await expect(page.getByText('كيف تعمل النطاقات المخصصة')).toBeVisible();
     await expect(page.getByRole('region', { name: `ربط ${broken}` })).toBeVisible();
     await expectAccessibleBothModes(page);
     await noHorizontalScroll(page);
