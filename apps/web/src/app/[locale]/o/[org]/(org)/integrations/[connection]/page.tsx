@@ -4,6 +4,7 @@ import {
   GOOGLE_SHEETS,
   isImporter,
   linkedCountsQuery,
+  isMarketingConnector,
   mappingFields,
   openErrorCountQuery,
   SYNC_INTERVALS,
@@ -32,6 +33,7 @@ import { AccountingSection } from './accounting.tsx';
 import { MappingForm } from './mapping-form.tsx';
 import { SheetsSection } from './sheets-section.tsx';
 import { SlackPanel } from './slack-panel.tsx';
+import { MarketingSection } from './marketing-section.tsx';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('integrations');
@@ -58,6 +60,8 @@ export default async function ConnectionPage({
     slack?: string;
     channel?: string;
     slackError?: string;
+    /** M6.4d: the audience form's outcome. */
+    audience?: string;
   }>;
 }) {
   const { locale, org, connection: connectionId } = await params;
@@ -278,6 +282,20 @@ export default async function ConnectionPage({
           canManage={canManage}
           active={c.status === 'active'}
           confirm={sp.confirm ?? null}
+        />
+      ) : null}
+      {isMarketingConnector(connector.key) && (live || c.status === 'revoked') ? (
+        <MarketingSection
+          org={org}
+          connector={connector.key}
+          name={connector.name}
+          connectionId={c.id}
+          ctx={data.ctx}
+          locale={locale}
+          timezone={data.org.timezone}
+          canManage={canManage}
+          active={c.status === 'active'}
+          feedback={sp.audience ?? null}
         />
       ) : null}
       {connector.accounting ? (

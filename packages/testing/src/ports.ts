@@ -28,6 +28,7 @@ import {
   rsvpAnswersExportAction,
   rsvpAnswersPrivateExportAction,
 } from '@yayatoh/guests';
+import { integrationsContactOwner } from '@yayatoh/integrations';
 import { notificationsContactOwner } from '@yayatoh/notifications';
 import { ordersContactOwner, ticketCancelAction, waitlistExportAction } from '@yayatoh/orders';
 import {
@@ -144,5 +145,7 @@ export const CONTACT_REFERENCE_OWNERS = [
   automationsContactOwner,
   engagementContactOwner,
   participationContactOwner,
+  // M6.4d: consent changes reported by marketing tools.
+  integrationsContactOwner,
 ] as const;
 registerContactReferenceOwners(CONTACT_REFERENCE_OWNERS);

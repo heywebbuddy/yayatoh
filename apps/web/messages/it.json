@@ -15514,6 +15514,15 @@
       },
       "xero": {
         "description": "Registra ogni giorno una scrittura riepilogativa di vendite, commissioni, rimborsi, pagamenti e donazioni in Xero."
+      },
+      "mailchimp": {
+        "description": "Invia un pubblico a una lista Mailchimp con campi di unione. Disiscrizioni e indirizzi non recapitabili tornano come modifiche del consenso."
+      },
+      "hubspot": {
+        "description": "Sincronizza i contatti in entrambe le direzioni e invia i tuoi eventi a HubSpot come eventi di marketing con iscrizioni e check-in."
+      },
+      "klaviyo": {
+        "description": "Invia un pubblico a una lista Klaviyo. Disiscrizioni, rimbalzi e segnalazioni di spam tornano come modifiche del consenso."
       }
     },
     "sandboxBadge": "Prova",
@@ -15543,7 +15552,10 @@
       "campaign_members": "Membri della campagna",
       "sponsor_opportunities": "Opportunità di sponsorizzazione",
       "sessions": "Sessioni",
-      "journals": "Scritture giornaliere"
+      "journals": "Scritture giornaliere",
+      "members": "Membri della lista",
+      "marketing_events": "Eventi di marketing",
+      "event_attendance": "Iscrizioni e presenze"
     },
     "fields": {
       "email": "Email",
@@ -15585,7 +15597,11 @@
       "currency_iso_code": "Codice valuta",
       "event_name": "Evento",
       "room": "Sala",
-      "time_zone": "Fuso orario"
+      "time_zone": "Fuso orario",
+      "subscription": "Modifica dell’iscrizione",
+      "email_opt_out": "Disiscritto dalle email",
+      "venue": "Luogo",
+      "cancelled": "Annullato"
     },
     "status": {
       "none": "Non collegata",
@@ -16145,6 +16161,60 @@
         "posted": "Registrata",
         "failed": "Non registrata",
         "superseded": "Sostituita"
+      }
+    },
+    "marketing": {
+      "consentRule": "Prima il consenso: vengono inviati solo i contatti con consenso alle email di marketing, e una disiscrizione o un rimbalzo prevale sempre. Quando qualcuno si disiscrive qui, la sincronizzazione successiva lo disiscrive anche lì.",
+      "audience": {
+        "title": "Pubblico",
+        "help": "Scegli chi viene inviato a {name} e a quale lista si unisce.",
+        "saved": "Pubblico salvato. La prossima sincronizzazione lo invia.",
+        "segmentMissing": "Il pubblico salvato è stato eliminato, quindi nessun nuovo contatto viene inviato. Scegli un altro pubblico.",
+        "segment": "Chi viene inviato",
+        "list": "Lista {name}",
+        "everyone": "Tutti con consenso alle email di marketing",
+        "savedSegment": "Un pubblico salvato",
+        "emptyTitle": "Nessun pubblico scelto",
+        "emptyManage": "Scegli chi inviare e la lista {name} a cui si unisce. Non viene inviato nulla finché non salvi.",
+        "emptyRead": "Un proprietario o un amministratore sceglie chi inviare. Fino ad allora non viene inviato nulla.",
+        "formLabel": "Scegli pubblico e lista",
+        "save": "Salva pubblico",
+        "feedback": {
+          "list_required": "Scegli una lista.",
+          "provider_unavailable": "Impossibile caricare le liste dal fornitore. Riprova tra qualche minuto.",
+          "validation_failed": "Quel pubblico non esiste più. Scegline un altro.",
+          "forbidden": "Non hai accesso a questo.",
+          "invalid_state": "Questa connessione non può essere configurata ora.",
+          "not_found": "Non lo abbiamo trovato.",
+          "read_only_freeze": "Le modifiche sono sospese durante la manutenzione programmata. Riprova al termine.",
+          "internal": "Qualcosa è andato storto da parte nostra."
+        },
+        "chooseNow": "Scegli il pubblico",
+        "allIntegrations": "Tutte le integrazioni"
+      },
+      "hubspot": {
+        "title": "Cosa si sincronizza con HubSpot",
+        "contacts": "I contatti si sincronizzano in entrambe le direzioni con la mappatura dei campi qui sotto. I contatti da HubSpot non arrivano mai con consenso; una disiscrizione in HubSpot li disiscrive qui.",
+        "events": "Ogni evento pubblicato diventa un evento di marketing HubSpot, e viene inviato anche un annullamento.",
+        "attendance": "Iscrizioni, check-in e cancellazioni vengono inviati per i contatti con consenso alle email di marketing."
+      },
+      "changes": {
+        "title": "Modifiche del consenso da {name}",
+        "help": "Disiscrizioni, indirizzi non recapitabili e segnalazioni tornati da {name}, e cosa hanno cambiato qui.",
+        "caption": "Modifiche del consenso da {name}",
+        "empty": "Da {name} non è ancora tornato nulla.",
+        "who": "Contatto",
+        "change": "Presso il fornitore",
+        "applied": "Cambiato qui",
+        "when": "Quando",
+        "withdrawn": "Consenso revocato",
+        "suppressed": "Bloccato",
+        "already": "Già aggiornato",
+        "kinds": {
+          "unsubscribed": "Disiscritto",
+          "cleaned": "Indirizzo non recapitabile",
+          "complained": "Segnalazione di spam"
+        }
       }
     }
   },

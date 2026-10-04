@@ -7,6 +7,9 @@ import { quickbooksConnector } from './quickbooks.ts';
 import { salesforceConnector } from './salesforce/index.ts';
 import { slackConnector } from './slack.ts';
 import { xeroConnector } from './xero.ts';
+import { hubspotConnector } from './hubspot/index.ts';
+import { klaviyoConnector } from './klaviyo/index.ts';
+import { mailchimpConnector } from './mailchimp/index.ts';
 
 /**
  * Every connector (M6.4a). M6.4b–d append theirs here (Eventbrite, Google Sheets, Zapier, Slack,
@@ -27,6 +30,10 @@ export const CONNECTORS: readonly ConnectorDefinition[] = [
   // M6.5d: accounting (daily summary journals).
   quickbooksConnector,
   xeroConnector,
+  // M6.4d (P6-4 order: Mailchimp and HubSpot, then Klaviyo).
+  mailchimpConnector,
+  hubspotConnector,
+  klaviyoConnector,
 ];
 
 export function connectorByKey(key: string): ConnectorDefinition | null {

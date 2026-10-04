@@ -5,6 +5,9 @@ import {
   fakeCalendarAllEvents,
   fakeIntegrations,
   fakeSlackMessages,
+  hubspotRemoteOptOut,
+  klaviyoRemoteSet,
+  mailchimpRemoteSet,
   SALESFORCE,
   SALESFORCE_BAD_RECORD,
   salesforceRemoteEdit,
@@ -33,7 +36,8 @@ function accountOf(connectionId: string) {
  * `sheet-delete`; rows are found by their Email cell) — or read what a fake Slack channel
  * received (M6.4c `slack-messages`: channel and text only) or a fake Google Calendar's entries
  * (M6.5c `calendar`: titles, times, zones, status and how many writes each had). 404 unless dev
- * auth is on and the port is the fake.
+ * auth is on and the port is the fake. M6.4d: `unsubscribe`, `clean` or `complain` an address
+ * (`email`, and `list` for Mailchimp and Klaviyo).
  */
 export async function POST(req: NextRequest) {
   if (!enabled()) return new NextResponse(null, { status: 404 });
@@ -58,6 +62,32 @@ export async function POST(req: NextRequest) {
       })),
     });
   if (action === 'revoke') fakeIntegrations.revokeAtProvider(account.authConnectionId);
+  else if (action === 'unsubscribe' || action === 'clean' || action === 'complain') {
+    // M6.4d: the person unsubscribes (or the address bounces, or they complain) in the marketing
+    // tool itself; the next sync brings it back as a consent change.
+    const email = String(form.get('email') ?? '')
+      .trim()
+      .toLowerCase();
+    const list = String(form.get('list') ?? '');
+    if (!/^[^@\s]+@[^@\s]+$/.test(email) || email.length > 320)
+      return NextResponse.json({ error: 'bad_email' }, { status: 400 });
+    const key = account.providerConfigKey;
+    if (key !== 'hubspot' && !/^[A-Za-z0-9_-]{1,100}$/.test(list))
+      return NextResponse.json({ error: 'bad_list' }, { status: 400 });
+    if (key === 'mailchimp')
+      mailchimpRemoteSet(account, list, email, action === 'clean' ? 'cleaned' : 'unsubscribed');
+    else if (key === 'klaviyo')
+      klaviyoRemoteSet(
+        account,
+        list,
+        email,
+        action === 'clean' ? 'cleaned' : action === 'complain' ? 'complained' : 'unsubscribed',
+      );
+    else if (key === 'hubspot' && action === 'unsubscribe') {
+      if (!hubspotRemoteOptOut(account, email))
+        return NextResponse.json({ error: 'unknown_contact' }, { status: 404 });
+    } else return NextResponse.json({ error: 'unknown_action' }, { status: 400 });
+  }
   // M6.5b: the fake Salesforce org's contact without an email gets one.
   else if (action === 'fix' && account.providerConfigKey === SALESFORCE)
     salesforceRemoteEdit(account, 'Contact', SALESFORCE_BAD_RECORD, {

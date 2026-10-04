@@ -917,3 +917,13 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
   Confirm, or ask for corrections to be posted on the day they are noticed instead.
 - [ ] **Xero multi-currency:** Xero manual journals take the base currency only; days in other
   currencies wait in the errors inbox (`currency_unsupported`). Say if you need multi-currency Xero.
+
+
+## M6.4d — Mailchimp, HubSpot and Klaviyo (2026-10-03, pending owner)
+- [ ] **Accounts (owner only, when you want them live):** register OAuth apps with Mailchimp, HubSpot (a public app with the contacts, marketing events and communication preferences scopes) and Klaviyo, and add them as Nango integrations `mailchimp`, `hubspot` and `klaviyo`. Until then the three run on fakes in dev, CI and previews only (`INTEGRATIONS_AUTH_PROVIDER`, names only in `.env.example`).
+  - **Consent is never granted from a provider.** A re-subscribe in Mailchimp, Klaviyo or HubSpot changes nothing here; someone who unsubscribed at Mailchimp re-subscribes through Mailchimp's own form (its API refuses it).
+  - **People we didn't know** (an unsubscribe in a list, a HubSpot contact) become contacts without consent; an unsubscribe also suppresses them here, so the suppression holds if they register later.
+  - **A list member who leaves the chosen audience is archived** at Mailchimp / removed from the Klaviyo list, not unsubscribed (their consent here is unchanged).
+  - **A cleaned (hard-bounced) address** suppresses every email here, transactional included (as our own bounces do), but leaves the consent ledger unchanged; a spam complaint withdraws consent too.
+  - **HubSpot:** every published (non-draft) event becomes a HubSpot marketing event; registrations, check-ins and cancellations are sent only for contacts with email marketing consent; contacts HubSpot already has are kept up to date even without consent here (never created without it).
+  - **Erasure:** an erased contact is unsubscribed (lists) or opted out (HubSpot) on the next run, not deleted at the provider yet (the erasure hook is "later").

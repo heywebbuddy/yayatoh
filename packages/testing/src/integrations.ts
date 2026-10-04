@@ -122,3 +122,6 @@ export function fakeAccountMap(connector: 'quickbooks' | 'xero'): AccountMap {
         clearing: pick('a1b2-610'),
       };
 }
+
+/** M6.4d's name for `connectConnector` (Mailchimp, Klaviyo, HubSpot through their fakes). */
+export const connectFake = connectConnector;
