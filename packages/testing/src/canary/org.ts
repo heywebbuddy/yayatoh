@@ -355,9 +355,12 @@ async function fill(admin: CanaryAdmin, orgId: string): Promise<Record<string, n
         path: `'/' || $2 || ${suffix}`,
         'key-prefix': `left(t.${col}, 8) || $2 || ${suffix}`,
         code: `'CANARY_${String(codes.indexOf(c.id)).padStart(2, '0')}_' || r.n::text || left($2, 0)`,
+        // Batch 3m merge: idempotent for arrays too (a refill appended again and again, until a
+        // bounded array such as M6.5d's journal lines broke its CHECK on a reused e2e database).
         json: `case jsonb_typeof(t.${col})
                  when 'object' then t.${col} || jsonb_build_object('__canary', $2 || ${suffix})
-                 when 'array' then t.${col} || jsonb_build_array($2 || ${suffix})
+                 when 'array' then case when t.${col} @> jsonb_build_array($2 || ${suffix}) then t.${col}
+                   else t.${col} || jsonb_build_array($2 || ${suffix}) end
                  else jsonb_build_object('__canary', $2 || ${suffix}) end`,
         // Idempotent (a refill on a reused org must not grow the array).
         array: `case when ($2 || ${suffix}) = any(coalesce(t.${col}, '{}')) then t.${col}
