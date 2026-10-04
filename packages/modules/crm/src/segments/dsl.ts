@@ -133,6 +133,22 @@ export const SeenCondition = z
   .refine((v) => v.from !== null || v.to !== null, { message: 'A date is required', path: ['from'] })
   .refine((v) => !v.from || !v.to || v.from <= v.to, { message: 'from must not be after to', path: ['to'] });
 
+/** Highest engagement score a condition accepts (scores are weighted counts, M5.7b). */
+export const MAX_ENGAGEMENT_SCORE = 1_000_000;
+
+/**
+ * M5.7b: the contact's engagement score (scans, polls, Q&A, feedback, enrollments weighted by the
+ * org's weights), summed over the events in scope, compared with a value.
+ */
+export const EngagementCondition = z
+  .object({
+    type: z.literal('engagement'),
+    scope: SegmentScope,
+    op: z.enum(COMPARISONS),
+    value: z.int().min(0).max(MAX_ENGAGEMENT_SCORE),
+  })
+  .strict();
+
 /**
  * M6.1b contact stats: engagement score (0–100), no-show propensity (percent, 0–100), sessions
  * attended, campaigns opened, and the org's RFM quintiles (1–5). `rfmMonetary` ranks spending,
@@ -179,22 +195,6 @@ export const LifetimeValueCondition = z
     currency: z.string().regex(/^[A-Z]{3}$/),
     op: z.enum(COMPARISONS),
     amountMinor: z.int().min(0).max(1_000_000_000_000),
-  })
-  .strict();
-
-/** Highest engagement score a condition accepts (scores are weighted counts, M5.7b). */
-export const MAX_ENGAGEMENT_SCORE = 1_000_000;
-
-/**
- * M5.7b: the contact's engagement score (scans, polls, Q&A, feedback, enrollments weighted by the
- * org's weights), summed over the events in scope, compared with a value.
- */
-export const EngagementCondition = z
-  .object({
-    type: z.literal('engagement'),
-    scope: SegmentScope,
-    op: z.enum(COMPARISONS),
-    value: z.int().min(0).max(MAX_ENGAGEMENT_SCORE),
   })
   .strict();
 

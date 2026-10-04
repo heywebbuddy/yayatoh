@@ -56,7 +56,8 @@ self.addEventListener('fetch', (event) => {
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
-  const isScanPage = req.mode === 'navigate' && /\/scan\/?$/.test(url.pathname);
+  // M5.6b: lead mode (/scan/leads) is a scanner page too (network first, cached for offline).
+  const isScanPage = req.mode === 'navigate' && /\/scan(\/leads)?\/?$/.test(url.pathname);
   const isStatic = url.pathname.startsWith('/_next/static/') || url.pathname.startsWith('/scan');
   if (!isScanPage && !isStatic) return;
   event.respondWith(

@@ -211,16 +211,19 @@ export const PLATFORM_PREFIXES: readonly string[] = [
   // `/statements/{org}/{token}`).
   '/receipts',
   '/statements',
+  // Batch 3j merge: M4.8d's room giving screen (`/giving-screen/{token}`, a signed projector link)
+  // and M5.6a's self check-in flyer page (`/session-checkin/{token}`). Only the new app has them.
+  '/giving-screen',
+  '/session-checkin',
   // Batch 3i merge: M6.1c's self-service privacy requests and the archive/receipt links emailed
   // to the person (`/privacy-request/{org}`, `…/archive/{token}`, `…/receipt/{token}`), M6.3b's
   // public developer docs (`/developers/…`) and the webhook portal link (`/webhook-portal/{token}`).
   '/privacy-request',
   '/developers',
   '/webhook-portal',
-  // Batch 3j merge: M4.8d's room giving screen (`/giving-screen/{token}`, a signed projector link)
-  // and M5.6a's self check-in flyer page (`/session-checkin/{token}`). Only the new app has them.
-  '/giving-screen',
-  '/session-checkin',
+  // Batch 3k merge: a buyer's order link (`/orders/{token}`: M5.2b's schedule and M5.10a's
+  // conference hub with its manifest). The legacy app has no `/orders` page.
+  '/orders',
 ];
 
 /**
@@ -259,6 +262,18 @@ export const PLATFORM_FILES: ReadonlySet<string> = new Set([
   '/scan-sw.js',
   '/scan-icon.svg',
   '/scan.webmanifest',
+  // Batch 3k merge: the guest hub's (M4.7a) and the conference hub's (M5.10a) service workers and
+  // install icons, served next to their pages.
+  '/hub-sw.js',
+  '/hub-icon.svg',
+  '/hub-icon-192.png',
+  '/hub-icon-512.png',
+  '/hub-icon-maskable-512.png',
+  '/conference-hub-sw.js',
+  '/conference-hub-icon.svg',
+  '/conference-hub-icon-192.png',
+  '/conference-hub-icon-512.png',
+  '/conference-hub-icon-maskable-512.png',
 ]);
 
 export function isPlatformPath(path: string): boolean {

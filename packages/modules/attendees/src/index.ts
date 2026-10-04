@@ -59,3 +59,5 @@ export { activeAttendeeByEmailTx, activeEventContactsTx } from './networking.ts'
 export { attendeeContactIdsTx, emitAttendeesChangedTx, participationAttendeesTx } from './participation.ts';
 export { privateColumns } from './private-columns.ts';
 export { ATTENDEE_SOURCES, ATTENDEE_STATUSES, IMPORT_FIELDS, type ImportField } from './schema.ts';
+// M6.4b: attendee rows for two-way syncs (Google Sheets).
+export { type AttendeeSyncRow, attendeeSyncRowTx, attendeesChangedSinceTx } from './sync-rows.ts';

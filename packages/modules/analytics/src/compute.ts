@@ -2,8 +2,10 @@ import { createHash } from 'node:crypto';
 import { checkinFactsTx, dailyCheckinFactsTx } from '@yayatoh/checkin';
 import type { TenantTx } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
-import { dailyRefundFactsTx, dailySalesFactsTx } from '@yayatoh/orders';
+import { eventTouchPathsTx } from '@yayatoh/marketing';
+import { dailyRefundFactsTx, dailySalesFactsTx, soldOrderDaysTx } from '@yayatoh/orders';
 import { ticketTypeStatsTx } from '@yayatoh/ticketing';
+import { attributionRowsOf, foldAttribution } from './attribution/models.ts';
 import type { DailyMetric } from './schema.ts';
 import { type DailyRow, type EventSnapshot, sortDaily } from './warehouse/port.ts';
 
@@ -36,6 +38,8 @@ export function foldDaily(rows: readonly DailyRow[]): DailyRow[] {
  * - `refunded_tickets` and `refunds` (per currency) by the day the refund succeeded;
  * - `checkins`: each ticket with a live admission, on the day of its first one.
  * The state (valid tickets, tickets checked in, end) feeds no-shows. A missing event → `state: null`.
+ * M6.2b: `attribution` — every model's share of each attributed sold order (marketing's touch
+ * paths), by payment day, the same orders and days as `orders`.
  */
 export async function computeEventSnapshotTx(
   tx: TenantTx,
@@ -43,7 +47,7 @@ export async function computeEventSnapshotTx(
   timeZone: string,
 ): Promise<EventSnapshot> {
   const event = await findEventTx(tx, eventId);
-  if (!event) return { eventId, timeZone, daily: [], state: null };
+  if (!event) return { eventId, timeZone, daily: [], state: null, attribution: [] };
   const rows: DailyRow[] = [];
   const add = (day: string, metric: DailyMetric, value: number, currency = '') =>
     rows.push({ day, metric, currency, value });
@@ -59,9 +63,14 @@ export async function computeEventSnapshotTx(
   for (const c of await dailyCheckinFactsTx(tx, eventId, timeZone)) add(c.day, 'checkins', c.tickets);
   const types = await ticketTypeStatsTx(tx, eventId);
   const { tickets: checkedIn } = await checkinFactsTx(tx, { eventId });
+  const paths = await eventTouchPathsTx(tx, eventId);
+  const attribution = paths.length
+    ? attributionRowsOf(await soldOrderDaysTx(tx, eventId, timeZone), paths)
+    : [];
   return {
     eventId,
     timeZone,
+    attribution,
     daily: foldDaily(rows),
     state: {
       startsAt: event.startsAt,
@@ -88,6 +97,22 @@ export function hashSnapshot(s: EventSnapshot): string {
           s.state.checkedIn,
         ]
       : null,
+    // M6.2b: only when there is attribution, so the hashes of events without any stay as they were.
+    ...(s.attribution?.length
+      ? {
+          a: foldAttribution(s.attribution).map((r) => [
+            r.day,
+            r.model,
+            r.source,
+            r.medium,
+            r.campaign,
+            r.linkId,
+            r.currency,
+            r.creditBps,
+            r.revenueMinor,
+          ]),
+        }
+      : {}),
   });
   return createHash('sha256').update(canonical).digest('hex');
 }

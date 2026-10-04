@@ -1,9 +1,9 @@
 import type { TenantTx } from '@yayatoh/db';
 import {
   type DataSubject,
+  DELETE,
   defineDataSubjectContributor,
   ERASED_NAME,
-  REDACT,
   refsOf,
   type SubjectErasure,
 } from '@yayatoh/platform';
@@ -11,9 +11,9 @@ import { and, asc, eq, inArray, sql } from 'drizzle-orm';
 import { items, uploaders } from './schema.ts';
 
 /**
- * The person's full names (first and last: at least two words) as other modules resolved them.
- * A guest uploader is only the name they typed on the guest site; a single word ("Sam") would
- * match other guests and is never used.
+ * The person's full names (at least two words) as other modules resolved them. A guest uploads
+ * behind the site's password under the name they type, with no address: the name is the only
+ * link, and a single word ("Sam") would match other people, so it is never used.
  */
 const fullNames = (s: DataSubject) => [
   ...new Set(
@@ -23,7 +23,7 @@ const fullNames = (s: DataSubject) => [
   ),
 ];
 
-async function uploaderRowsTx(tx: TenantTx, s: DataSubject) {
+async function guestUploadersTx(tx: TenantTx, s: DataSubject) {
   const names = fullNames(s);
   if (names.length === 0) return [];
   return tx
@@ -34,61 +34,50 @@ async function uploaderRowsTx(tx: TenantTx, s: DataSubject) {
 }
 
 /**
- * gallery's part of a data-subject request (M4.5b, wired at the batch 3u merge). Guest uploaders
- * signed with the person's full name: their name and the captions of what they uploaded are
- * exported; on erasure the uploader shows as "Erased" and the captions go. The photos stay in the
- * host's event gallery (the host moderates and removes them; removing deletes the files). Host
- * uploaders are members (tenancy covers them); settings and variants hold nothing about a person.
+ * gallery's part of a data-subject request (M6.1c, for M4.5b; batch 3j merge). Guests' uploads
+ * under the person's full name: exported (name, captions, kind, state, video links) and, on
+ * erasure, deleted with their files' records (the signed file links stop at once; the photo was
+ * theirs to give). Host uploads are the organizer's.
  */
 export const galleryDataSubjects = defineDataSubjectContributor({
   module: 'gallery',
   tables: {
-    'gallery.uploaders': REDACT,
-    'gallery.items': REDACT,
+    'gallery.uploaders': DELETE,
+    'gallery.items': DELETE,
   },
   async export(tx, s) {
-    const people = await uploaderRowsTx(tx, s);
-    const uploaded = people.length
-      ? await tx
-          .select()
-          .from(items)
-          .where(
-            inArray(
-              items.uploaderId,
-              people.map((u) => u.id),
-            ),
-          )
-          .orderBy(asc(items.createdAt))
+    const who = await guestUploadersTx(tx, s);
+    const ids = who.map((u) => u.id);
+    const theirs = ids.length
+      ? await tx.select().from(items).where(inArray(items.uploaderId, ids)).orderBy(asc(items.createdAt))
       : [];
     return {
       sections: {
-        uploaders: people.map((u) => ({ eventId: u.eventId, displayName: u.displayName })),
-        uploads: uploaded.map((i) => ({
+        uploaders: who.map((u) => ({
+          eventId: u.eventId,
+          displayName: u.displayName,
+          createdAt: u.createdAt,
+        })),
+        items: theirs.map((i) => ({
           eventId: i.eventId,
           kind: i.kind,
           status: i.status,
           caption: i.caption,
           videoProvider: i.videoProvider,
           videoId: i.videoId,
-          uploadedAt: i.createdAt,
-          publishedAt: i.publishedAt,
+          createdAt: i.createdAt,
         })),
       },
     };
   },
-  async erase(tx, s, ctx): Promise<SubjectErasure> {
-    const ids = (await uploaderRowsTx(tx, s)).map((u) => u.id);
-    if (ids.length === 0) return { erased: {} };
-    const captions = await tx
-      .update(items)
-      .set({ caption: null, updatedAt: ctx.now })
-      .where(and(inArray(items.uploaderId, ids), sql`${items.caption} is not null`))
-      .returning({ id: items.id });
+  async erase(tx, s): Promise<SubjectErasure> {
+    const ids = (await guestUploadersTx(tx, s)).map((u) => u.id);
+    if (ids.length === 0) return { erased: { 'gallery.uploaders': 0, 'gallery.items': 0 } };
+    const gone = await tx.delete(items).where(inArray(items.uploaderId, ids)).returning({ id: items.id });
     const people = await tx
-      .update(uploaders)
-      .set({ displayName: ERASED_NAME, updatedAt: ctx.now })
+      .delete(uploaders)
       .where(inArray(uploaders.id, ids))
       .returning({ id: uploaders.id });
-    return { erased: { 'gallery.uploaders': people.length, 'gallery.items': captions.length } };
+    return { erased: { 'gallery.uploaders': people.length, 'gallery.items': gone.length } };
   },
 });

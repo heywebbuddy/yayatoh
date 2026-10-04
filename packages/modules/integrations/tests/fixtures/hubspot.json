@@ -1,0 +1,51 @@
+{
+  "_comment": "Response shapes of the HubSpot CRM v3 API as documented (POST /crm/v3/objects/contacts/search, POST /marketing/v3/marketing-events/events). Hand-recorded from the public reference, with fake data.",
+  "search": {
+    "total": 2,
+    "results": [
+      {
+        "id": "512",
+        "properties": {
+          "createdate": "2026-01-03T00:00:00.000Z",
+          "email": "opted.out@example.test",
+          "firstname": "Opted",
+          "hs_object_id": "512",
+          "hs_email_optout": "true",
+          "lastmodifieddate": "2026-03-04T10:11:12.345Z",
+          "lastname": "Out",
+          "company": "Example Org"
+        },
+        "createdAt": "2026-01-03T00:00:00.000Z",
+        "updatedAt": "2026-03-04T10:11:12.345Z",
+        "archived": false
+      },
+      {
+        "id": "513",
+        "properties": {
+          "email": "kept@example.test",
+          "firstname": "Kept",
+          "lastname": null,
+          "hs_object_id": "513",
+          "lastmodifieddate": "2026-03-04T10:12:00.000Z"
+        },
+        "createdAt": "2026-01-03T00:00:00.000Z",
+        "updatedAt": "2026-03-04T10:12:00.000Z",
+        "archived": false
+      }
+    ],
+    "paging": { "next": { "after": "2", "link": "?after=2" } }
+  },
+  "marketingEvent": {
+    "eventName": "Spring Gala",
+    "eventType": "In person",
+    "startDateTime": "2026-05-01T18:00:00Z",
+    "endDateTime": "2026-05-01T22:00:00Z",
+    "eventOrganizer": "Example Org",
+    "eventCancelled": false,
+    "externalEventId": "0191d6a8-0000-7000-8000-000000000001",
+    "objectId": "58237132332",
+    "registrants": 0,
+    "attendees": 0,
+    "cancellations": 0
+  }
+}

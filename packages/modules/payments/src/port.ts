@@ -198,6 +198,19 @@ export interface PaymentProvider {
    */
   listBalanceTransactions(input: { from: Date; to: Date }): Promise<readonly BalanceTransaction[] | null>;
   /**
+   * Donations reconciliation (M4.8g): the movements of an organizer's connected account in
+   * `[from, to)` (direct charges, refunds, payouts…), attributed through the platform's metadata,
+   * with the provider's fee and the payout each one was paid out in. `null` when the adapter
+   * cannot list them (the fake provider without a store).
+   */
+  listConnectedBalanceTransactions(input: {
+    connectedAccountId: string;
+    from: Date;
+    to: Date;
+  }): Promise<readonly ConnectedBalanceTransaction[] | null>;
+  /** The connected account's payouts created in `[from, to)` (M4.8g); `null` as above. */
+  listPayouts(input: { connectedAccountId: string; from: Date; to: Date }): Promise<readonly Payout[] | null>;
+  /**
    * Cards on file (M4.8e, P4-14): a hosted step where the guest saves a card for later off-session
    * gifts on the organizer's connected account (a SetupIntent with `usage: off_session`). The
    * outcome arrives as a `SetupEvent` webhook carrying `reference`. Idempotent per key.
@@ -277,6 +290,42 @@ export interface BalanceTransaction {
    * `refund:<id>`, `settlement:<id>` (a transfer), `reversal:<refundId>`, `dispute:<providerId>`.
    */
   readonly reference: string | null;
+}
+
+export const CONNECTED_TRANSACTION_KINDS = ['charge', 'refund', 'dispute', 'payout', 'other'] as const;
+export type ConnectedTransactionKind = (typeof CONNECTED_TRANSACTION_KINDS)[number];
+
+/** One movement of a connected account's balance (Stripe `balance_transactions` on the account). */
+export interface ConnectedBalanceTransaction {
+  readonly id: string;
+  readonly kind: ConnectedTransactionKind;
+  /** Signed gross effect on the account's balance; integer minor units. */
+  readonly amountMinor: number;
+  /** The provider's own fee on it (positive, taken from the balance). */
+  readonly feeMinor: number;
+  /** `amountMinor - feeMinor`: what reaches the payout. */
+  readonly netMinor: number;
+  readonly currency: string;
+  readonly occurredAt: Date;
+  /** `order:<id>` (a charge) or `refund:<refundId>`, when the platform tagged the object. */
+  readonly reference: string | null;
+  /** The payout that paid it out, once there is one. */
+  readonly payoutId: string | null;
+}
+
+export const PAYOUT_STATUSES = ['pending', 'in_transit', 'paid', 'failed', 'canceled'] as const;
+export type PayoutStatus = (typeof PAYOUT_STATUSES)[number];
+
+/** A payout from a connected account to the organizer's bank, normalized. */
+export interface Payout {
+  readonly id: string;
+  /** Net amount sent to the bank; integer minor units. */
+  readonly amountMinor: number;
+  readonly currency: string;
+  readonly status: PayoutStatus;
+  readonly createdAt: Date;
+  /** The day the bank receives it (`YYYY-MM-DD`, UTC as the provider states it). */
+  readonly arrivalDate: string;
 }
 
 export interface RefundInput {

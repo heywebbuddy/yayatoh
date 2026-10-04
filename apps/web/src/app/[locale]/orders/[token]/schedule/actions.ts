@@ -29,6 +29,8 @@ async function run(
   try {
     const out = await fn(createCtx({ orgId }));
     revalidatePath(`/orders/${token}/schedule`);
+    // M5.10a: the conference hub shows the same sessions.
+    revalidatePath(`/orders/${token}/hub`);
     return { ok: true, code: null, stamp: Date.now(), ...out };
   } catch (err) {
     if (!isDomainError(err)) throw err;

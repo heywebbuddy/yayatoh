@@ -1,4 +1,5 @@
 export { ALERT_FIXTURE, type AlertScenario, alertScenario } from './alerts.ts';
+export { ATTRIBUTION_FIXTURE, type AttributionScenario, attributionScenario } from './attribution.ts';
 export {
   AUDIENCE_EDITIONS,
   type AudiencePerson,
@@ -29,19 +30,26 @@ export {
   FIXTURE_SITE_PASSWORD,
   fixtureBuyerAccount,
   type OrgFixture,
+  ssoFixtureDomain,
   staleCtx,
   systemCtx,
   twoOrgs,
   userCtx,
 } from './fixtures.ts';
 export { enableGallery, guestGalleryPhoto, guestSiteAccess, hostGalleryPhoto, putToSlot } from './gallery.ts';
-
 export { type GuestCheckinScenario, guestCheckinScenario } from './guest-checkin.ts';
 export { type GuestHubScenario, guestHubScenario, partyHub } from './guest-hub.ts';
 export { type GuestSeatScenario, guestSeatScenario } from './guest-seat-finder.ts';
 export { GUEST_SITE_PASSWORD, type GuestSiteScenario, guestSiteScenario } from './guest-site.ts';
-
-export { connectDemo, fakeAuth } from './integrations.ts';
+export {
+  connectAccounting,
+  connectConnector,
+  connectDemo,
+  connectFake,
+  connectSlack,
+  fakeAccountMap,
+  fakeAuth,
+} from './integrations.ts';
 export { quietDevice, revokeDevice } from './live.ts';
 export {
   bareOrg,
@@ -64,6 +72,7 @@ export {
   BULK_ACTIONS,
   bulkStep,
   CONTACT_REFERENCE_OWNERS,
+  FAKE_IDP_SEED,
   ports,
   runBulk,
   submitRegistrationForm,
@@ -75,6 +84,8 @@ export {
   rsvpQuestionsScenario,
   standardRsvpQuestions,
 } from './rsvp-questions.ts';
+// M6.5b: connect the Salesforce connector against its fake org.
+export { connectSalesforce } from './salesforce.ts';
 export {
   SOCIAL_FIXTURE,
   type SocialPackParty,

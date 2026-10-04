@@ -577,7 +577,11 @@ function AlertsBody({ d, c }: { d: Alerts; c: Ctx }) {
     <div className="flex flex-col gap-2">
       <ul className="m-0 flex list-none flex-col gap-2 p-0">
         {d.alerts.map((a) => {
-          const title = ta(`rules.${a.rule}`, { count: a.count, countWords: countWords(a.count, c.locale) });
+          const title = ta(`rules.${a.rule}`, {
+            count: a.count,
+            countWords: countWords(a.count, c.locale),
+            title: '',
+          });
           return (
             <li key={a.id} className="flex gap-3 rounded-tile border border-line bg-surface-2 p-3">
               <span
@@ -723,7 +727,6 @@ export function WidgetBody({
       return <ExhibitorActivityBody d={data as ExhibitorActivity} c={ctx} />;
     case 'sponsorActivity':
       return <SponsorActivityBody d={data as SponsorActivity} c={ctx} />;
-
     case 'rsvp':
       return <RsvpBody d={data as Rsvp} c={ctx} />;
     case 'guestSeating':

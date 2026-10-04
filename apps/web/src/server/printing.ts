@@ -1,5 +1,11 @@
 import 'server-only';
-import { type BadgePrinter, printingSetupQuery, printNodeFromEnv, sendPrintJob } from '@yayatoh/badges';
+import {
+  type BadgePrinter,
+  kioskSettingsQuery,
+  printingSetupQuery,
+  printNodeFromEnv,
+  sendPrintJob,
+} from '@yayatoh/badges';
 import { type Ctx, executeQuery } from '@yayatoh/kernel';
 import { loadBadgesPage } from './badges.ts';
 import { getPdfRenderer } from './pdf.ts';
@@ -21,7 +27,9 @@ export function getPrintNode(): BadgePrinter | null {
 export async function loadPrintingPage(org: string, event: string) {
   const page = await loadBadgesPage(org, event);
   const printing = await executeQuery(printingSetupQuery, { eventId: page.ev.id }, page.data.ctx, ports);
-  return { ...page, printing, canPrint: page.canPrintOne, platformPrintNode: getPrintNode() !== null };
+  // M5.5c: kiosk self-print settings.
+  const kiosk = await executeQuery(kioskSettingsQuery, { eventId: page.ev.id }, page.data.ctx, ports);
+  return { ...page, printing, kiosk, canPrint: page.canPrintOne, platformPrintNode: getPrintNode() !== null };
 }
 
 /** Hand a queued PrintNode job over now (render, submit, record): the desk sees the outcome at once. */

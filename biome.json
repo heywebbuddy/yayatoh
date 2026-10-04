@@ -9,6 +9,7 @@
       "!**/*.md",
       "!**/next-env.d.ts",
       "!**/openapi.json",
+      "!tools/automation-apps/generated",
       "!packages/sdk/src/schema.ts",
       "!packages/modules/media/fixtures"
     ]

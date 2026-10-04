@@ -1,6 +1,7 @@
-import { createCtx, executeQuery, isDomainError } from '@yayatoh/kernel';
+import { executeQuery, isDomainError } from '@yayatoh/kernel';
 import { portalFileQuery } from '@yayatoh/media';
 import { resolveOrgSlug } from '@yayatoh/tenancy';
+import { orgActor } from '@/server/org-actor.ts';
 import { ports } from '@/server/ports.ts';
 import { getSession } from '@/server/session.ts';
 
@@ -19,13 +20,10 @@ export async function GET(_req: Request, { params }: { params: Promise<{ org: st
   if (!session) return new Response('Sign in required', { status: 401 });
   const resolved = await resolveOrgSlug(org);
   if (!resolved) return notFound();
-  const imp = session.impersonation;
-  if (imp && imp.orgId !== resolved.orgId) return notFound();
-  const ctx = createCtx({
-    orgId: resolved.orgId,
-    actor: { type: 'user', userId: session.userId },
-    impersonatedBy: imp ? { staffUserId: imp.staffUserId, impersonationId: imp.id } : null,
-  });
+  // A member, or (M6.7a) an agency acting through the client's live grant.
+  const actor = await orgActor(resolved.orgId, session);
+  if (!actor) return notFound();
+  const ctx = actor.ctx;
   try {
     const f = await executeQuery(portalFileQuery, { fileId: file }, ctx, ports);
     const inline = f.contentType.startsWith('image/');

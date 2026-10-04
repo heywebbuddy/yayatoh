@@ -1,7 +1,6 @@
 ALTER TABLE "alerts"."alerts" DROP CONSTRAINT "alerts_rule_check";--> statement-breakpoint
 -- hand-written: begin
 -- M4.6a: the widened rule CHECK on an existing table, added NOT VALID (no long lock), then validated.
--- (Batch 3v merge: the rule list is M5.9a's conference list on the base plus M4.6a's three social rules.)
 ALTER TABLE "alerts"."alerts" ADD CONSTRAINT "alerts_rule_check" CHECK (rule in ('unseated', 'undistributed', 'paymentsFailed', 'paymentsStuck', 'refundSurge', 'devicesOffline', 'devicesLowBattery', 'devicesBacklog', 'capacityNear', 'capacityFull', 'sellOut', 'salesPace', 'readiness', 'assistanceOverdue', 'domain', 'payoutsPastDue', 'deliverability', 'automationFailed', 'campaignFailed', 'disputeDeadline', 'pledgesUnpaid', 'sessionsNearCapacity', 'sessionWaitlists', 'roomsTooSmall', 'exhibitorsNoLeads', 'exhibitorsNoStaff', 'speakerTasksOverdue', 'deliverablesOverdue', 'printersKiosksOffline', 'approvalBacklog', 'invoicesOverdue', 'rsvpPending', 'guestsUnseated', 'mealsMissing')) NOT VALID;--> statement-breakpoint
 ALTER TABLE "alerts"."alerts" VALIDATE CONSTRAINT "alerts_rule_check";
 -- hand-written: end

@@ -3,6 +3,7 @@ import {
   completeConnectCommand,
   connectorByKey,
   failConnectCommand,
+  isImporter,
   pendingConnectionQuery,
 } from '@yayatoh/integrations';
 import { executeCommand, executeQuery } from '@yayatoh/kernel';
@@ -75,5 +76,8 @@ export async function GET(req: Request, { params }: { params: Promise<{ locale: 
   } catch {
     return go('', { error: 'expired' });
   }
-  return go(`/${pending.connectionId}`, { connected: '1' });
+  // M6.4b: an importer goes on to its wizard (preview, then import).
+  return go(isImporter(def) ? `/${pending.connectionId}/import` : `/${pending.connectionId}`, {
+    connected: '1',
+  });
 }

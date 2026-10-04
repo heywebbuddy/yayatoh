@@ -303,3 +303,50 @@ describe('pledges unpaid after the event (M4.8e, P4-12)', () => {
     expect(fixPath('pledgesUnpaid', 'gala')).toBe('/e/gala/donations/pledges');
   });
 });
+
+describe('org rules fed by batch 3l (integrations, billing)', () => {
+  const ok: OrgFacts = {
+    domainsFailed: 0,
+    domainsSslPending: 0,
+    primaryDomainAffected: false,
+    payoutRequirementsDue: 0,
+    emailsSent: 1000,
+    bounced: 0,
+    complained: 0,
+    messagingAutoPaused: false,
+    failedMessages: 0,
+    failedBulkActions: 0,
+    failedJourneySteps: 0,
+    failedCampaignSends: 0,
+    disputesDueSoon: 0,
+    disputesDueCritical: 0,
+  };
+  it('nothing without failures (and absent facts count as none)', () => {
+    expect(
+      evaluateOrgRules({
+        ...ok,
+        failedIntegrationRuns: 0,
+        revokedIntegrations: 0,
+        subscriptionsPastDue: 0,
+        subscriptionsUnpaid: 0,
+      }),
+    ).toEqual({});
+  });
+  it('integrations: a failed run is a warning, a revoked connection critical', () => {
+    expect(evaluateOrgRules({ ...ok, failedIntegrationRuns: 1 }).integrationFailed).toMatchObject({
+      severity: 'warning',
+      count: 1,
+      params: { runs: 1, revoked: 0 },
+    });
+    expect(
+      evaluateOrgRules({ ...ok, failedIntegrationRuns: 2, revokedIntegrations: 1 }).integrationFailed,
+    ).toMatchObject({ severity: 'critical', count: 3, params: { runs: 2, revoked: 1 } });
+  });
+  it('billing: past due is a warning, unpaid critical', () => {
+    expect(evaluateOrgRules({ ...ok, subscriptionsPastDue: 1 }).billingPastDue?.severity).toBe('warning');
+    expect(evaluateOrgRules({ ...ok, subscriptionsUnpaid: 1 }).billingPastDue).toMatchObject({
+      severity: 'critical',
+      count: 1,
+    });
+  });
+});

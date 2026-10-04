@@ -46,8 +46,9 @@ export default async function SeatFinderSettingsPage({
         base={base}
         active="finder"
         finder
-        selection={data.modules.has('advanced_seating')}
         guests={data.modules.has('guests')}
+        selection={data.modules.has('advanced_seating')}
+        solver={data.modules.has('guests') && data.modules.has('ai_seating')}
       />
       {!settings ? (
         <EmptyState

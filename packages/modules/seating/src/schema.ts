@@ -15,6 +15,7 @@ import {
 } from 'drizzle-orm/pg-core';
 import { CHANNEL_KINDS, CODE_CHANNEL_KINDS } from './domain/channels.ts';
 import { SEAT_STATUSES } from './domain/seat-state.ts';
+import { SOLVER_RULE_KINDS, SOLVER_STRENGTHS } from './domain/solver-rules.ts';
 
 export const seatingSchema = pgSchema('seating');
 
@@ -327,6 +328,54 @@ export const tableSponsors = tenantTable(
     ),
   ],
 );
+
+/**
+ * Guest seating (M4.3a): a guest of the guests module (wedding or gala guest, plus-ones
+ * included) sits at a table or row of a chart. The chart is the event plan (`sub_event_id` null)
+ * or the chart a sub-event uses (its own, its date's, else the event plan: a ceremony in rows and
+ * a reception at tables are seated separately). A table-level place: no seat of the plan is held,
+ * so guest seating never changes what is on sale. One place per guest per chart.
+ * `(org_id, guest_id)` references `guests.guests` and `(org_id, event_id, sub_event_id)`
+ * `guests.sub_events` (same tier: hand-written foreign keys, a reference only, never an import);
+ * a guest or sub-event that goes takes its places with it.
+ */
+export const guestSeats = tenantTable(
+  seatingSchema,
+  'guest_seats',
+  {
+    eventId: uuid('event_id').notNull(),
+    /** The sub-event whose chart this is; null = the event plan. */
+    subEventId: uuid('sub_event_id'),
+    guestId: uuid('guest_id').notNull(),
+    /** The table (or row) item of the chart's document. */
+    itemId: uuid('item_id').notNull(),
+  },
+  (t) => [
+    uniqueIndex('guest_seats_org_event_plan_guest_key')
+      .on(t.orgId, t.eventId, t.guestId)
+      .where(sql`sub_event_id is null`),
+    uniqueIndex('guest_seats_org_sub_event_guest_key')
+      .on(t.orgId, t.subEventId, t.guestId)
+      .where(sql`sub_event_id is not null`),
+    index('guest_seats_org_event_item_idx').on(t.orgId, t.eventId, t.subEventId, t.itemId),
+    index('guest_seats_org_guest_idx').on(t.orgId, t.guestId),
+  ],
+);
+
+/**
+ * VIP zones for guest seating (M4.3a): the host marks a table or row of the event's charts as a
+ * VIP zone (item ids are kept by chart copies, so one row covers every chart, like
+ * `table_sponsors`). A table in a VIP section of the plan document is a VIP zone too.
+ */
+export const vipTables = tenantTable(
+  seatingSchema,
+  'vip_tables',
+  {
+    eventId: uuid('event_id').notNull(),
+    itemId: uuid('item_id').notNull(),
+  },
+  (t) => [uniqueIndex('vip_tables_org_event_item_key').on(t.orgId, t.eventId, t.itemId)],
+);
 /**
  * Best available (M6.11a): whether buyers and the box office may ask for "best available"
  * instead of choosing seats, and the organizer's section scores (`{ sectionId: 0–100 }`, higher
@@ -500,49 +549,32 @@ export const layoutRevisions = tenantTable(
 );
 
 /**
- * Guest seating (M4.3a): a guest of the guests module (wedding or gala guest, plus-ones
- * included) sits at a table or row of a chart. The chart is the event plan (`sub_event_id` null)
- * or the chart a sub-event uses (its own, its date's, else the event plan: a ceremony in rows and
- * a reception at tables are seated separately). A table-level place: no seat of the plan is held,
- * so guest seating never changes what is on sale. One place per guest per chart.
- * `(org_id, guest_id)` references `guests.guests` and `(org_id, event_id, sub_event_id)`
- * `guests.sub_events` (same tier: hand-written foreign keys, a reference only, never an import);
- * a guest or sub-event that goes takes its places with it.
+ * Seating solver rules (M6.12a, decision P6-10): the host's rules for the tabu-search proposal
+ * (`domain/solver-rules.ts`): keep together, keep apart, VIP nearest the stage, accessibility
+ * near exits, a table maximum; each hard or soft with a weight (1–10). Per event: every chart of
+ * the event reads the same rules. `params` holds the rule's targets (a party id, a tag or a side).
  */
-export const guestSeats = tenantTable(
+export const solverRules = tenantTable(
   seatingSchema,
-  'guest_seats',
+  'solver_rules',
   {
     eventId: uuid('event_id').notNull(),
-    /** The sub-event whose chart this is; null = the event plan. */
-    subEventId: uuid('sub_event_id'),
-    guestId: uuid('guest_id').notNull(),
-    /** The table (or row) item of the chart's document. */
-    itemId: uuid('item_id').notNull(),
+    kind: text('kind').notNull(),
+    strength: text('strength').notNull().default('soft'),
+    weight: integer('weight').notNull().default(5),
+    params: jsonb('params').notNull().default(sql`'{}'::jsonb`),
   },
   (t) => [
-    uniqueIndex('guest_seats_org_event_plan_guest_key')
-      .on(t.orgId, t.eventId, t.guestId)
-      .where(sql`sub_event_id is null`),
-    uniqueIndex('guest_seats_org_sub_event_guest_key')
-      .on(t.orgId, t.subEventId, t.guestId)
-      .where(sql`sub_event_id is not null`),
-    index('guest_seats_org_event_item_idx').on(t.orgId, t.eventId, t.subEventId, t.itemId),
-    index('guest_seats_org_guest_idx').on(t.orgId, t.guestId),
+    index('solver_rules_org_event_idx').on(t.orgId, t.eventId, t.createdAt),
+    check(
+      'solver_rules_kind_check',
+      sql.raw(`kind in (${SOLVER_RULE_KINDS.map((s) => `'${s}'`).join(', ')})`),
+    ),
+    check(
+      'solver_rules_strength_check',
+      sql.raw(`strength in (${SOLVER_STRENGTHS.map((s) => `'${s}'`).join(', ')})`),
+    ),
+    check('solver_rules_weight_check', sql`weight between 1 and 10`),
+    check('solver_rules_params_check', sql`jsonb_typeof(params) = 'object'`),
   ],
-);
-
-/**
- * VIP zones for guest seating (M4.3a): the host marks a table or row of the event's charts as a
- * VIP zone (item ids are kept by chart copies, so one row covers every chart, like
- * `table_sponsors`). A table in a VIP section of the plan document is a VIP zone too.
- */
-export const vipTables = tenantTable(
-  seatingSchema,
-  'vip_tables',
-  {
-    eventId: uuid('event_id').notNull(),
-    itemId: uuid('item_id').notNull(),
-  },
-  (t) => [uniqueIndex('vip_tables_org_event_item_key').on(t.orgId, t.eventId, t.itemId)],
 );

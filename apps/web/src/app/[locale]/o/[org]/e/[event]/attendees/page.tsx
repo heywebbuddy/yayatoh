@@ -379,6 +379,11 @@ export default async function AttendeesPage({
     selectedRecord && roleCan(data.role, 'contacts:read')
       ? await executeQuery(contactTimelineQuery, { attendeeId: selectedRecord.id }, data.ctx, ports)
       : null;
+  // M5.5b onsite reprint: the badge panel, where the event prints badges and the member works the desk.
+  const badgePrinting =
+    hasReal && selectedTicketId && canWrite && opens('badges') && data.modules.has('badges')
+      ? await executeQuery(printingSetupQuery, { eventId: real.id }, data.ctx, ports)
+      : null;
   // M6.1b: the person's stats in the timeline header (money only for finance).
   const timelineStats = timeline
     ? await executeQuery(contactStatsQuery, { contactId: timeline.contactId }, data.ctx, ports)
@@ -386,11 +391,6 @@ export default async function AttendeesPage({
   const timelineValue =
     timeline && roleCan(data.role, 'finance:read')
       ? await executeQuery(contactValueQuery, { contactId: timeline.contactId }, data.ctx, ports)
-      : null;
-  // M5.5b onsite reprint: the badge panel, where the event prints badges and the member works the desk.
-  const badgePrinting =
-    hasReal && selectedTicketId && canWrite && opens('badges') && data.modules.has('badges')
-      ? await executeQuery(printingSetupQuery, { eventId: real.id }, data.ctx, ports)
       : null;
   const when = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeZone: real.timezone });
   const filtered = Boolean(

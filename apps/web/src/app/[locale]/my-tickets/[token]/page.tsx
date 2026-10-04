@@ -7,6 +7,7 @@ import { ClaimLinkForm } from '@/components/claim-link-form.tsx';
 import { HolderContent } from '@/components/holder-content.tsx';
 import { ConfirmButton, HolderTransferForm } from '@/components/support-tools.tsx';
 import { TicketQr } from '@/components/ticket-qr.tsx';
+import { WhoScannedMe } from '@/components/who-scanned-me.tsx';
 import { formatEventDateRange } from '@/lib/format.ts';
 import { ports } from '@/server/ports.ts';
 import { cancelHolderTransferAction, giveTicketAction, holderTransferAction } from './actions.ts';
@@ -134,6 +135,7 @@ export default async function MyTicketsPage({
           ))}
         </ul>
       )}
+      <WhoScannedMe token={token} holder={h} locale={locale} timeZone={data.event.timezone} />
       {data.tickets.length > 0 && h.ctx.orgId ? (
         <HolderContent
           target={{ orgId: h.ctx.orgId, eventId: data.event.id }}

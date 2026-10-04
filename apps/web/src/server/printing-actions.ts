@@ -4,6 +4,7 @@ import {
   archivePrinterCommand,
   createPrinterCommand,
   printerHeartbeatCommand,
+  setKioskSettingsCommand,
   startPrintJobCommand,
 } from '@yayatoh/badges';
 import { executeCommand, isDomainError } from '@yayatoh/kernel';
@@ -125,4 +126,32 @@ export async function printBadgeAction(
       ? `/o/${org}/e/${event}/attendees?a=${back.attendeeId}&printed=${jobId}#badge-heading`
       : `/o/${org}/e/${event}/badges/print/${ticketId}?printed=${jobId}`;
   return redirect({ href, locale });
+}
+
+/** M5.5c: kiosk self-print on or off, where kiosks print, and whether email codes work. */
+export async function setKioskSettingsAction(
+  org: string,
+  event: string,
+  _prev: ProgramFormState,
+  form: FormData,
+): Promise<ProgramFormState> {
+  const { data, event: ev } = await loadEvent(org, event, 'badges');
+  const options = new Set(form.getAll('options').map(String));
+  try {
+    await executeCommand(
+      setKioskSettingsCommand,
+      {
+        eventId: ev.id,
+        enabled: options.has('enabled'),
+        emailCodes: options.has('emailCodes'),
+        printerId: textOrNull(form, 'printerId'),
+      },
+      data.ctx,
+      ports,
+    );
+  } catch (err) {
+    return failure(err);
+  }
+  revalidatePath(printingPage(org, event), 'page');
+  return success();
 }

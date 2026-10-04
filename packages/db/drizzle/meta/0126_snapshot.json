@@ -59493,9 +59493,9 @@
       },
       "isRLSEnabled": true
     },
-    "seating.vip_tables": {
-      "name": "vip_tables",
-      "schema": "seating",
+    "checkin.guest_arrivals": {
+      "name": "guest_arrivals",
+      "schema": "checkin",
       "columns": {
         "id": {
           "name": "id",
@@ -59530,16 +59530,46 @@
           "primaryKey": false,
           "notNull": true
         },
-        "item_id": {
-          "name": "item_id",
+        "guest_id": {
+          "name": "guest_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "arrived_at": {
+          "name": "arrived_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "source": {
+          "name": "source",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "device_id": {
+          "name": "device_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "recorded_by": {
+          "name": "recorded_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "client_id": {
+          "name": "client_id",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
         }
       },
       "indexes": {
-        "vip_tables_org_id_idx": {
-          "name": "vip_tables_org_id_idx",
+        "guest_arrivals_org_id_idx": {
+          "name": "guest_arrivals_org_id_idx",
           "columns": [
             {
               "expression": "org_id",
@@ -59553,8 +59583,50 @@
           "method": "btree",
           "with": {}
         },
-        "vip_tables_org_event_item_key": {
-          "name": "vip_tables_org_event_item_key",
+        "guest_arrivals_org_guest_key": {
+          "name": "guest_arrivals_org_guest_key",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "guest_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "guest_arrivals_org_client_key": {
+          "name": "guest_arrivals_org_client_key",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "client_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "guest_arrivals_org_event_at_idx": {
+          "name": "guest_arrivals_org_event_at_idx",
           "columns": [
             {
               "expression": "org_id",
@@ -59569,7 +59641,360 @@
               "nulls": "last"
             },
             {
-              "expression": "item_id",
+              "expression": "arrived_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "guest_arrivals_org_id_id_key": {
+          "name": "guest_arrivals_org_id_id_key",
+          "nullsNotDistinct": false,
+          "columns": [
+            "org_id",
+            "id"
+          ]
+        }
+      },
+      "policies": {
+        "guest_arrivals_tenant_isolation": {
+          "name": "guest_arrivals_tenant_isolation",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "app_user"
+          ],
+          "using": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)",
+          "withCheck": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)"
+        }
+      },
+      "checkConstraints": {
+        "guest_arrivals_source_check": {
+          "name": "guest_arrivals_source_check",
+          "value": "source in ('scanner', 'kiosk', 'host')"
+        },
+        "guest_arrivals_device_check": {
+          "name": "guest_arrivals_device_check",
+          "value": "source <> 'host' or device_id is null"
+        }
+      },
+      "isRLSEnabled": true
+    },
+    "guests.site_blocks": {
+      "name": "site_blocks",
+      "schema": "guests",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "uuidv7()"
+        },
+        "org_id": {
+          "name": "org_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "event_id": {
+          "name": "event_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "site_id": {
+          "name": "site_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "kind": {
+          "name": "kind",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "position": {
+          "name": "position",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "heading": {
+          "name": "heading",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "content": {
+          "name": "content",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::jsonb"
+        }
+      },
+      "indexes": {
+        "site_blocks_org_id_idx": {
+          "name": "site_blocks_org_id_idx",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "site_blocks_org_site_idx": {
+          "name": "site_blocks_org_site_idx",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "site_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "position",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "site_blocks_site_fk": {
+          "name": "site_blocks_site_fk",
+          "tableFrom": "site_blocks",
+          "tableTo": "sites",
+          "schemaTo": "guests",
+          "columnsFrom": [
+            "org_id",
+            "site_id"
+          ],
+          "columnsTo": [
+            "org_id",
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "site_blocks_org_id_id_key": {
+          "name": "site_blocks_org_id_id_key",
+          "nullsNotDistinct": false,
+          "columns": [
+            "org_id",
+            "id"
+          ]
+        }
+      },
+      "policies": {
+        "site_blocks_tenant_isolation": {
+          "name": "site_blocks_tenant_isolation",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "app_user"
+          ],
+          "using": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)",
+          "withCheck": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)"
+        }
+      },
+      "checkConstraints": {
+        "site_blocks_kind_check": {
+          "name": "site_blocks_kind_check",
+          "value": "kind in ('text', 'program', 'travel', 'registry', 'faq')"
+        },
+        "site_blocks_heading_length": {
+          "name": "site_blocks_heading_length",
+          "value": "heading is null or length(heading) between 1 and 120"
+        },
+        "site_blocks_position_check": {
+          "name": "site_blocks_position_check",
+          "value": "position >= 0"
+        },
+        "site_blocks_content_check": {
+          "name": "site_blocks_content_check",
+          "value": "jsonb_typeof(content) = 'object'"
+        }
+      },
+      "isRLSEnabled": true
+    },
+    "guests.sites": {
+      "name": "sites",
+      "schema": "guests",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "uuidv7()"
+        },
+        "org_id": {
+          "name": "org_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "event_id": {
+          "name": "event_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "code": {
+          "name": "code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'draft'"
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "intro": {
+          "name": "intro",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "content_locale": {
+          "name": "content_locale",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'en'"
+        },
+        "password_hash": {
+          "name": "password_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "password_version": {
+          "name": "password_version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "published_at": {
+          "name": "published_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "sites_org_id_idx": {
+          "name": "sites_org_id_idx",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "sites_org_event_key": {
+          "name": "sites_org_event_key",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "event_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "sites_code_key": {
+          "name": "sites_code_key",
+          "columns": [
+            {
+              "expression": "code",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -59584,8 +60009,8 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "vip_tables_org_id_id_key": {
-          "name": "vip_tables_org_id_id_key",
+        "sites_org_id_id_key": {
+          "name": "sites_org_id_id_key",
           "nullsNotDistinct": false,
           "columns": [
             "org_id",
@@ -59594,8 +60019,8 @@
         }
       },
       "policies": {
-        "vip_tables_tenant_isolation": {
-          "name": "vip_tables_tenant_isolation",
+        "sites_tenant_isolation": {
+          "name": "sites_tenant_isolation",
           "as": "PERMISSIVE",
           "for": "ALL",
           "to": [
@@ -59605,7 +60030,40 @@
           "withCheck": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)"
         }
       },
-      "checkConstraints": {},
+      "checkConstraints": {
+        "sites_code_check": {
+          "name": "sites_code_check",
+          "value": "code ~ '^[0-9A-Z]{8}$'"
+        },
+        "sites_status_check": {
+          "name": "sites_status_check",
+          "value": "status in ('draft', 'published')"
+        },
+        "sites_title_length": {
+          "name": "sites_title_length",
+          "value": "length(title) between 1 and 120"
+        },
+        "sites_intro_length": {
+          "name": "sites_intro_length",
+          "value": "intro is null or length(intro) between 1 and 1000"
+        },
+        "sites_locale_check": {
+          "name": "sites_locale_check",
+          "value": "content_locale ~ '^[a-z]{2}(-[A-Z]{2})?$'"
+        },
+        "sites_password_hash_check": {
+          "name": "sites_password_hash_check",
+          "value": "password_hash is null or password_hash ~ '^scrypt\\$16384\\$8\\$1\\$[A-Za-z0-9_-]{22}\\$[A-Za-z0-9_-]{43}$'"
+        },
+        "sites_password_version_check": {
+          "name": "sites_password_version_check",
+          "value": "password_version >= 0"
+        },
+        "sites_published_check": {
+          "name": "sites_published_check",
+          "value": "status <> 'published' or (password_hash is not null and published_at is not null)"
+        }
+      },
       "isRLSEnabled": true
     },
     "seating.guest_seats": {
@@ -59818,9 +60276,9 @@
       "checkConstraints": {},
       "isRLSEnabled": true
     },
-    "checkin.guest_arrivals": {
-      "name": "guest_arrivals",
-      "schema": "checkin",
+    "seating.vip_tables": {
+      "name": "vip_tables",
+      "schema": "seating",
       "columns": {
         "id": {
           "name": "id",
@@ -59855,46 +60313,16 @@
           "primaryKey": false,
           "notNull": true
         },
-        "guest_id": {
-          "name": "guest_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "arrived_at": {
-          "name": "arrived_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "source": {
-          "name": "source",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "device_id": {
-          "name": "device_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "recorded_by": {
-          "name": "recorded_by",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "client_id": {
-          "name": "client_id",
+        "item_id": {
+          "name": "item_id",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
         }
       },
       "indexes": {
-        "guest_arrivals_org_id_idx": {
-          "name": "guest_arrivals_org_id_idx",
+        "vip_tables_org_id_idx": {
+          "name": "vip_tables_org_id_idx",
           "columns": [
             {
               "expression": "org_id",
@@ -59908,50 +60336,8 @@
           "method": "btree",
           "with": {}
         },
-        "guest_arrivals_org_guest_key": {
-          "name": "guest_arrivals_org_guest_key",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "guest_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "guest_arrivals_org_client_key": {
-          "name": "guest_arrivals_org_client_key",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "client_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "guest_arrivals_org_event_at_idx": {
-          "name": "guest_arrivals_org_event_at_idx",
+        "vip_tables_org_event_item_key": {
+          "name": "vip_tables_org_event_item_key",
           "columns": [
             {
               "expression": "org_id",
@@ -59966,185 +60352,7 @@
               "nulls": "last"
             },
             {
-              "expression": "arrived_at",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "guest_arrivals_org_id_id_key": {
-          "name": "guest_arrivals_org_id_id_key",
-          "nullsNotDistinct": false,
-          "columns": [
-            "org_id",
-            "id"
-          ]
-        }
-      },
-      "policies": {
-        "guest_arrivals_tenant_isolation": {
-          "name": "guest_arrivals_tenant_isolation",
-          "as": "PERMISSIVE",
-          "for": "ALL",
-          "to": [
-            "app_user"
-          ],
-          "using": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)",
-          "withCheck": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)"
-        }
-      },
-      "checkConstraints": {
-        "guest_arrivals_source_check": {
-          "name": "guest_arrivals_source_check",
-          "value": "source in ('scanner', 'kiosk', 'host')"
-        },
-        "guest_arrivals_device_check": {
-          "name": "guest_arrivals_device_check",
-          "value": "source <> 'host' or device_id is null"
-        }
-      },
-      "isRLSEnabled": true
-    },
-    "guests.sites": {
-      "name": "sites",
-      "schema": "guests",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "uuidv7()"
-        },
-        "org_id": {
-          "name": "org_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "event_id": {
-          "name": "event_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "code": {
-          "name": "code",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "status": {
-          "name": "status",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'draft'"
-        },
-        "title": {
-          "name": "title",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "intro": {
-          "name": "intro",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "content_locale": {
-          "name": "content_locale",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'en'"
-        },
-        "password_hash": {
-          "name": "password_hash",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "password_version": {
-          "name": "password_version",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 0
-        },
-        "published_at": {
-          "name": "published_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {
-        "sites_org_id_idx": {
-          "name": "sites_org_id_idx",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "sites_org_event_key": {
-          "name": "sites_org_event_key",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "event_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "sites_code_key": {
-          "name": "sites_code_key",
-          "columns": [
-            {
-              "expression": "code",
+              "expression": "item_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -60159,8 +60367,8 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "sites_org_id_id_key": {
-          "name": "sites_org_id_id_key",
+        "vip_tables_org_id_id_key": {
+          "name": "vip_tables_org_id_id_key",
           "nullsNotDistinct": false,
           "columns": [
             "org_id",
@@ -60169,8 +60377,8 @@
         }
       },
       "policies": {
-        "sites_tenant_isolation": {
-          "name": "sites_tenant_isolation",
+        "vip_tables_tenant_isolation": {
+          "name": "vip_tables_tenant_isolation",
           "as": "PERMISSIVE",
           "for": "ALL",
           "to": [
@@ -60180,215 +60388,7 @@
           "withCheck": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)"
         }
       },
-      "checkConstraints": {
-        "sites_code_check": {
-          "name": "sites_code_check",
-          "value": "code ~ '^[0-9A-Z]{8}$'"
-        },
-        "sites_status_check": {
-          "name": "sites_status_check",
-          "value": "status in ('draft', 'published')"
-        },
-        "sites_title_length": {
-          "name": "sites_title_length",
-          "value": "length(title) between 1 and 120"
-        },
-        "sites_intro_length": {
-          "name": "sites_intro_length",
-          "value": "intro is null or length(intro) between 1 and 1000"
-        },
-        "sites_locale_check": {
-          "name": "sites_locale_check",
-          "value": "content_locale ~ '^[a-z]{2}(-[A-Z]{2})?$'"
-        },
-        "sites_password_hash_check": {
-          "name": "sites_password_hash_check",
-          "value": "password_hash is null or password_hash ~ '^scrypt\\$16384\\$8\\$1\\$[A-Za-z0-9_-]{22}\\$[A-Za-z0-9_-]{43}$'"
-        },
-        "sites_password_version_check": {
-          "name": "sites_password_version_check",
-          "value": "password_version >= 0"
-        },
-        "sites_published_check": {
-          "name": "sites_published_check",
-          "value": "status <> 'published' or (password_hash is not null and published_at is not null)"
-        }
-      },
-      "isRLSEnabled": true
-    },
-    "guests.site_blocks": {
-      "name": "site_blocks",
-      "schema": "guests",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "uuidv7()"
-        },
-        "org_id": {
-          "name": "org_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "event_id": {
-          "name": "event_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "site_id": {
-          "name": "site_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "kind": {
-          "name": "kind",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "position": {
-          "name": "position",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 0
-        },
-        "heading": {
-          "name": "heading",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "content": {
-          "name": "content",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'{}'::jsonb"
-        }
-      },
-      "indexes": {
-        "site_blocks_org_id_idx": {
-          "name": "site_blocks_org_id_idx",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "site_blocks_org_site_idx": {
-          "name": "site_blocks_org_site_idx",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "site_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "position",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "site_blocks_site_fk": {
-          "name": "site_blocks_site_fk",
-          "tableFrom": "site_blocks",
-          "tableTo": "sites",
-          "schemaTo": "guests",
-          "columnsFrom": [
-            "org_id",
-            "site_id"
-          ],
-          "columnsTo": [
-            "org_id",
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "site_blocks_org_id_id_key": {
-          "name": "site_blocks_org_id_id_key",
-          "nullsNotDistinct": false,
-          "columns": [
-            "org_id",
-            "id"
-          ]
-        }
-      },
-      "policies": {
-        "site_blocks_tenant_isolation": {
-          "name": "site_blocks_tenant_isolation",
-          "as": "PERMISSIVE",
-          "for": "ALL",
-          "to": [
-            "app_user"
-          ],
-          "using": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)",
-          "withCheck": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)"
-        }
-      },
-      "checkConstraints": {
-        "site_blocks_kind_check": {
-          "name": "site_blocks_kind_check",
-          "value": "kind in ('text', 'program', 'travel', 'registry', 'faq')"
-        },
-        "site_blocks_heading_length": {
-          "name": "site_blocks_heading_length",
-          "value": "heading is null or length(heading) between 1 and 120"
-        },
-        "site_blocks_position_check": {
-          "name": "site_blocks_position_check",
-          "value": "position >= 0"
-        },
-        "site_blocks_content_check": {
-          "name": "site_blocks_content_check",
-          "value": "jsonb_typeof(content) = 'object'"
-        }
-      },
+      "checkConstraints": {},
       "isRLSEnabled": true
     }
   },

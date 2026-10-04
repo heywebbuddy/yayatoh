@@ -188,6 +188,7 @@ export async function sendGuestEmail(input: {
     | 'privacy.request-code'
     | 'privacy.archive-ready'
     | 'privacy.erasure-done'
+    | 'badges.kiosk-code'
   >;
   readonly to: string;
   readonly locale: string;

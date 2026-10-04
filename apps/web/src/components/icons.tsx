@@ -3,6 +3,7 @@ import {
   Award,
   Bell,
   BellRing,
+  Briefcase,
   Building2,
   Calendar,
   CalendarCheck,
@@ -16,6 +17,7 @@ import {
   FlaskConical,
   Gauge,
   Globe,
+  Handshake,
   HardDrive,
   Heart,
   History,
@@ -115,6 +117,9 @@ const ICONS: Record<string, LucideIcon> = {
   wallet: Wallet,
   'chart-column': ChartColumn,
   percent: Percent,
+  // M6.7a: the agency's Clients pages and a client's Agencies page.
+  briefcase: Briefcase,
+  handshake: Handshake,
 };
 
 export function Icon({ name, className = 'size-4' }: { name: string; className?: string }) {

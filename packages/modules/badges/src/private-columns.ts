@@ -1,4 +1,4 @@
-import { columnPrivacy, internal, personal } from '@yayatoh/db';
+import { columnPrivacy, internal, personal, secret } from '@yayatoh/db';
 
 /**
  * Column privacy of the `badges` schema (roadmap §9 canary leak test). Templates are organizer
@@ -38,5 +38,12 @@ export const privateColumns = columnPrivacy('badges', {
     request_key: internal(),
     provider_job_id: internal(),
     error_code: 'vocab',
+  },
+  // M5.5c kiosk self-print: challenges keep only the code's HMAC (settings have no text columns).
+  kiosk_challenges: {
+    outcome: 'vocab',
+    code_hash: secret('none', {
+      why: 'CHECK requires a 43-char base64url HMAC; never in a response (kiosk-print.int.test)',
+    }),
   },
 });

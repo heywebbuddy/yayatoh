@@ -355,6 +355,12 @@ export const staffAlertPushes = tenantTable(
 
 export const CHECKPOINT_KINDS = ['entrance', 'zone', 'session'] as const;
 export type CheckpointKind = (typeof CHECKPOINT_KINDS)[number];
+/**
+ * M6.9a: a session's virtual checkpoint, where watching the stream checks a ticket in. Created
+ * by the `checkin.virtual-attendance` subscriber, never by organizers, and never scanned: every
+ * checkpoint list and scan lookup leaves it out.
+ */
+export const VIRTUAL_CHECKPOINT_KIND = 'virtual';
 
 /**
  * Where scanning happens at an event. An entrance admits to the event (one admission per ticket
@@ -386,8 +392,8 @@ export const checkpoints = tenantTable(
   (t) => [
     uniqueIndex('checkpoints_org_event_name_key').on(t.orgId, t.eventId, t.name),
     check('checkpoints_capacity_check', sql`capacity is null or capacity between 1 and 1000000`),
-    check('checkpoints_kind_check', sql`kind in ('entrance', 'zone', 'session')`),
-    check('checkpoints_session_check', sql`(kind = 'session') = (session_id is not null)`),
+    check('checkpoints_kind_check', sql`kind in ('entrance', 'zone', 'session', 'virtual')`),
+    check('checkpoints_session_check', sql`(kind in ('session', 'virtual')) = (session_id is not null)`),
     check(
       'checkpoints_self_checkin_check',
       sql`self_checkin_token is null or (kind = 'session' and self_checkin_token ~ '^[A-Za-z0-9_-]{32}$')`,
@@ -396,6 +402,8 @@ export const checkpoints = tenantTable(
       .on(t.selfCheckinToken)
       .where(sql`self_checkin_token is not null`),
     index('checkpoints_org_session_idx').on(t.orgId, t.sessionId).where(sql`session_id is not null`),
+    // M6.9a: one virtual checkpoint per session.
+    uniqueIndex('checkpoints_org_virtual_session_key').on(t.orgId, t.sessionId).where(sql`kind = 'virtual'`),
     check(
       'checkpoints_location_check',
       sql`(latitude is null) = (longitude is null) and (latitude is null or (latitude between -90 and 90 and longitude between -180 and 180))`,
@@ -624,5 +632,32 @@ export const sessionAttendance = tenantTable(
       'session_attendance_override_check',
       sql`override_gates <@ array['enrollment', 'admission_level', 'capacity']::text[] and (source = 'override') = (cardinality(override_gates) > 0) and (override_reason is null) = (source <> 'override') and (override_reason is null or char_length(override_reason) between 3 and 300)`,
     ),
+  ],
+);
+
+/**
+ * M6.9a: a ticket checked in at a session's virtual checkpoint by watching its stream (the
+ * virtual module's `virtual.attended@1`: the ticket's first counted minute). Once per ticket and
+ * checkpoint; minutes stay in the virtual module.
+ */
+export const virtualAttendance = tenantTable(
+  checkinSchema,
+  'virtual_attendance',
+  {
+    eventId: uuid('event_id').notNull(),
+    checkpointId: uuid('checkpoint_id').notNull(),
+    sessionId: uuid('session_id').notNull(),
+    ticketId: uuid('ticket_id').notNull(),
+    firstAt: ts('first_at').notNull(),
+  },
+  (t) => [
+    uniqueIndex('virtual_attendance_org_checkpoint_ticket_key').on(t.orgId, t.checkpointId, t.ticketId),
+    index('virtual_attendance_org_event_idx').on(t.orgId, t.eventId),
+    index('virtual_attendance_org_ticket_idx').on(t.orgId, t.ticketId),
+    foreignKey({
+      name: 'virtual_attendance_checkpoint_fk',
+      columns: [t.orgId, t.checkpointId],
+      foreignColumns: [checkpoints.orgId, checkpoints.id],
+    }).onDelete('cascade'),
   ],
 );

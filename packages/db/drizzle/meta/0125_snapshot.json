@@ -59493,9 +59493,9 @@
       },
       "isRLSEnabled": true
     },
-    "seating.vip_tables": {
-      "name": "vip_tables",
-      "schema": "seating",
+    "checkin.guest_arrivals": {
+      "name": "guest_arrivals",
+      "schema": "checkin",
       "columns": {
         "id": {
           "name": "id",
@@ -59530,16 +59530,46 @@
           "primaryKey": false,
           "notNull": true
         },
-        "item_id": {
-          "name": "item_id",
+        "guest_id": {
+          "name": "guest_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "arrived_at": {
+          "name": "arrived_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "source": {
+          "name": "source",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "device_id": {
+          "name": "device_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "recorded_by": {
+          "name": "recorded_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "client_id": {
+          "name": "client_id",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
         }
       },
       "indexes": {
-        "vip_tables_org_id_idx": {
-          "name": "vip_tables_org_id_idx",
+        "guest_arrivals_org_id_idx": {
+          "name": "guest_arrivals_org_id_idx",
           "columns": [
             {
               "expression": "org_id",
@@ -59553,8 +59583,50 @@
           "method": "btree",
           "with": {}
         },
-        "vip_tables_org_event_item_key": {
-          "name": "vip_tables_org_event_item_key",
+        "guest_arrivals_org_guest_key": {
+          "name": "guest_arrivals_org_guest_key",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "guest_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "guest_arrivals_org_client_key": {
+          "name": "guest_arrivals_org_client_key",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "client_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "guest_arrivals_org_event_at_idx": {
+          "name": "guest_arrivals_org_event_at_idx",
           "columns": [
             {
               "expression": "org_id",
@@ -59569,13 +59641,13 @@
               "nulls": "last"
             },
             {
-              "expression": "item_id",
+              "expression": "arrived_at",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
             }
           ],
-          "isUnique": true,
+          "isUnique": false,
           "concurrently": false,
           "method": "btree",
           "with": {}
@@ -59584,8 +59656,8 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "vip_tables_org_id_id_key": {
-          "name": "vip_tables_org_id_id_key",
+        "guest_arrivals_org_id_id_key": {
+          "name": "guest_arrivals_org_id_id_key",
           "nullsNotDistinct": false,
           "columns": [
             "org_id",
@@ -59594,8 +59666,8 @@
         }
       },
       "policies": {
-        "vip_tables_tenant_isolation": {
-          "name": "vip_tables_tenant_isolation",
+        "guest_arrivals_tenant_isolation": {
+          "name": "guest_arrivals_tenant_isolation",
           "as": "PERMISSIVE",
           "for": "ALL",
           "to": [
@@ -59605,7 +59677,16 @@
           "withCheck": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)"
         }
       },
-      "checkConstraints": {},
+      "checkConstraints": {
+        "guest_arrivals_source_check": {
+          "name": "guest_arrivals_source_check",
+          "value": "source in ('scanner', 'kiosk', 'host')"
+        },
+        "guest_arrivals_device_check": {
+          "name": "guest_arrivals_device_check",
+          "value": "source <> 'host' or device_id is null"
+        }
+      },
       "isRLSEnabled": true
     },
     "seating.guest_seats": {
@@ -59818,9 +59899,9 @@
       "checkConstraints": {},
       "isRLSEnabled": true
     },
-    "checkin.guest_arrivals": {
-      "name": "guest_arrivals",
-      "schema": "checkin",
+    "seating.vip_tables": {
+      "name": "vip_tables",
+      "schema": "seating",
       "columns": {
         "id": {
           "name": "id",
@@ -59855,46 +59936,16 @@
           "primaryKey": false,
           "notNull": true
         },
-        "guest_id": {
-          "name": "guest_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "arrived_at": {
-          "name": "arrived_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "source": {
-          "name": "source",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "device_id": {
-          "name": "device_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "recorded_by": {
-          "name": "recorded_by",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "client_id": {
-          "name": "client_id",
+        "item_id": {
+          "name": "item_id",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
         }
       },
       "indexes": {
-        "guest_arrivals_org_id_idx": {
-          "name": "guest_arrivals_org_id_idx",
+        "vip_tables_org_id_idx": {
+          "name": "vip_tables_org_id_idx",
           "columns": [
             {
               "expression": "org_id",
@@ -59908,50 +59959,8 @@
           "method": "btree",
           "with": {}
         },
-        "guest_arrivals_org_guest_key": {
-          "name": "guest_arrivals_org_guest_key",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "guest_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "guest_arrivals_org_client_key": {
-          "name": "guest_arrivals_org_client_key",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "client_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "guest_arrivals_org_event_at_idx": {
-          "name": "guest_arrivals_org_event_at_idx",
+        "vip_tables_org_event_item_key": {
+          "name": "vip_tables_org_event_item_key",
           "columns": [
             {
               "expression": "org_id",
@@ -59966,13 +59975,13 @@
               "nulls": "last"
             },
             {
-              "expression": "arrived_at",
+              "expression": "item_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
             }
           ],
-          "isUnique": false,
+          "isUnique": true,
           "concurrently": false,
           "method": "btree",
           "with": {}
@@ -59981,8 +59990,8 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "guest_arrivals_org_id_id_key": {
-          "name": "guest_arrivals_org_id_id_key",
+        "vip_tables_org_id_id_key": {
+          "name": "vip_tables_org_id_id_key",
           "nullsNotDistinct": false,
           "columns": [
             "org_id",
@@ -59991,8 +60000,8 @@
         }
       },
       "policies": {
-        "guest_arrivals_tenant_isolation": {
-          "name": "guest_arrivals_tenant_isolation",
+        "vip_tables_tenant_isolation": {
+          "name": "vip_tables_tenant_isolation",
           "as": "PERMISSIVE",
           "for": "ALL",
           "to": [
@@ -60002,16 +60011,7 @@
           "withCheck": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)"
         }
       },
-      "checkConstraints": {
-        "guest_arrivals_source_check": {
-          "name": "guest_arrivals_source_check",
-          "value": "source in ('scanner', 'kiosk', 'host')"
-        },
-        "guest_arrivals_device_check": {
-          "name": "guest_arrivals_device_check",
-          "value": "source <> 'host' or device_id is null"
-        }
-      },
+      "checkConstraints": {},
       "isRLSEnabled": true
     }
   },

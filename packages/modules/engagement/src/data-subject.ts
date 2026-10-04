@@ -42,11 +42,11 @@ async function questionRowsTx(tx: TenantTx, s: DataSubject) {
  * (the audience saw the question; its text stays with the session). Polls, ballots and upvotes
  * are keyed by HMACs and hold nothing about a person.
  *
- * Networking and chat (M5.8a/b, wired at the batch 3u merge): the person's profiles (keyed by
- * their crm contacts), the notes on requests and meetings they asked for, the reports they filed
- * and the chat messages they sent are exported; on erasure their profiles are redacted and opted
- * out (the other side's connections, meetings and blocks keep their meaning), those notes and
- * report details are cleared and the chat messages they sent are deleted.
+ * Batch 3j merge (M5.8a/b networking and chat, by the person's crm contacts): their profiles,
+ * the notes on requests they sent, the reports they filed and the chat messages they sent are
+ * exported; erasure redacts and opts out the profiles (the other side's connections, meetings and
+ * blocks keep their meaning), clears those notes and details, and deletes the messages they sent
+ * (the conversation and the other side's messages stay).
  */
 export const engagementDataSubjects = defineDataSubjectContributor({
   module: 'engagement',
@@ -61,10 +61,15 @@ export const engagementDataSubjects = defineDataSubjectContributor({
   },
   async export(tx, s) {
     const rows = await questionRowsTx(tx, s);
-    const networking = await networkingDsarTx(tx, refsOf(s, 'contact'));
+    const net = await networkingDsarTx(tx, refsOf(s, 'contact'));
     return {
       sections: {
-        ...networking,
+        networkProfiles: net.profiles,
+        networkRequestNotes: net.requestNotes,
+        meetingNotes: net.meetingNotes,
+        networkReports: net.reports,
+        chatMessages: net.chatMessages,
+        chatReports: net.chatReports,
         questions: rows.map((q) => ({
           eventId: q.eventId,
           sessionId: q.sessionId,
@@ -79,17 +84,17 @@ export const engagementDataSubjects = defineDataSubjectContributor({
     };
   },
   async erase(tx, s, ctx): Promise<SubjectErasure> {
-    const networking = await eraseNetworkingDsarTx(tx, refsOf(s, 'contact'));
-    const erased = {
-      'engagement.network_profiles': networking.profiles,
-      'engagement.network_connections': networking.connections,
-      'engagement.meetings': networking.meetings,
-      'engagement.network_reports': networking.reports,
-      'engagement.chat_reports': networking.chatReports,
-      'engagement.chat_messages': networking.chatMessages,
+    const n = await eraseNetworkingDsarTx(tx, refsOf(s, 'contact'));
+    const net = {
+      'engagement.network_profiles': n.profiles,
+      'engagement.network_connections': n.connections,
+      'engagement.meetings': n.meetings,
+      'engagement.network_reports': n.reports,
+      'engagement.chat_reports': n.chatReports,
+      'engagement.chat_messages': n.chatMessages,
     };
     const ids = (await questionRowsTx(tx, s)).map((q) => q.id);
-    if (ids.length === 0) return { erased: { ...erased, 'engagement.questions': 0 } };
+    if (ids.length === 0) return { erased: { 'engagement.questions': 0, ...net } };
     const unseen = await tx
       .delete(questions)
       .where(and(inArray(questions.id, ids), ne(questions.state, 'approved')))
@@ -99,6 +104,6 @@ export const engagementDataSubjects = defineDataSubjectContributor({
       .set({ authorName: null, anonymous: true, updatedAt: ctx.now })
       .where(inArray(questions.id, ids))
       .returning({ id: questions.id });
-    return { erased: { ...erased, 'engagement.questions': unseen.length + shown.length } };
+    return { erased: { 'engagement.questions': unseen.length + shown.length, ...net } };
   },
 });

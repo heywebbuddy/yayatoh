@@ -13,6 +13,7 @@ import {
   networkChatSignals,
   sendStaffAlertPushes,
   staffAlertsSubscriber,
+  virtualAttendanceSubscriber,
 } from '@yayatoh/checkin';
 import { withTenant } from '@yayatoh/db';
 import { pledgeMailer, pledgeOutcomesSubscriber, receiptIssuer, statementMailer } from '@yayatoh/donations';
@@ -20,6 +21,7 @@ import { engagementActivity } from '@yayatoh/engagement';
 import { findEventTx, portalInviteMailer } from '@yayatoh/events';
 import { registrationResumeMailer } from '@yayatoh/forms';
 import { invitationMailer as guestInvitationMailer } from '@yayatoh/guests';
+import { slackAlertsSubscriber } from '@yayatoh/integrations';
 import { createCtx } from '@yayatoh/kernel';
 import {
   announcementMailer,
@@ -138,6 +140,8 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     chatReportSignals(),
     // M5.8b: networking chat reports about attendees.
     networkChatSignals(),
+    // M6.9a: the virtual checkpoint (as in the worker).
+    virtualAttendanceSubscriber(),
     fraudSignalAlerts({ notifier }),
     // M3.4a: staff alerts for the Scan PWA (web push per device).
     staffAlertsSubscriber(staffAlertSource),
@@ -153,6 +157,8 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     // M4.2b: a purchased table's claim link to its buyer.
     tableNamingMailer({ notifier, appOrigin }),
     alertEvaluator({ notifier, conference: conferenceSources() }),
+    // M6.4c: alerts it sent are queued for Slack channels (the Slack dispatch posts them).
+    slackAlertsSubscriber,
     // M3.7a: journeys enroll, follow date changes and cancellations (their steps run below).
     ...journeySubscribers(),
     // M5.1a: its offers (waitlist.offered) are mailed in the same drain.
@@ -173,17 +179,17 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     // M4.8b: receipts per paid gift or charity-ticket order, and year-end statements (as in the worker).
     receiptIssuer({ notifier, appOrigin }),
     statementMailer({ notifier, appOrigin }),
+    // M4.8e: pledge payments settle their pledges; the donor's summary, invoice and reminders.
+    pledgeOutcomesSubscriber,
+    pledgeMailer({ notifier, appOrigin }),
+    // M5.3b: call-for-papers receipts and decisions.
+    cfpMailer({ notifier }),
     // M6.1a: the person timeline (crm projection), as in the worker.
     ordersTimeline(),
     checkinTimeline(),
     messagingTimeline(),
     surveysTimeline(),
     campaignsTimeline(),
-    // M4.8e: pledge payments settle their pledges; the donor's summary, invoice and reminders.
-    pledgeOutcomesSubscriber,
-    pledgeMailer({ notifier, appOrigin }),
-    // M5.3b: call-for-papers receipts and decisions.
-    cfpMailer({ notifier }),
   ];
 }
 

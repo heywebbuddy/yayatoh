@@ -27,4 +27,6 @@ export const privateColumns = columnPrivacy('seating', {
   seat_channels: { kind: 'vocab', name: internal(), code: internal('code') },
   // M6.11b: every saved plan of a chart (the console's history; an event's live plan is public).
   layout_revisions: { kind: 'vocab', doc: internal(), checksum: 'vocab' },
+  // M6.12a solver rules: closed kinds and strengths; params name a party, a tag or a side (console only).
+  solver_rules: { kind: 'vocab', strength: 'vocab', params: internal() },
 });

@@ -51,10 +51,22 @@ export * from './domain/capacity.ts';
 export * from './domain/eligibility.ts';
 // M5.2b: session enrollment and the session waitlist.
 export * from './domain/enrollment.ts';
+// M5.10a: the attendee conference hub (favorites, personal schedule, signed calendar feed).
+export {
+  calendarFeedIcs,
+  FAVORITE_CHOICES,
+  type FavoriteChoice,
+  MAX_FAVORITES,
+  nowAndNext,
+  overlaps,
+  signFeedToken,
+  verifyFeedToken,
+} from './domain/hub.ts';
 export * from './domain/matrix.ts';
 export * from './dto.ts';
 export {
   acceptSessionOfferCommand,
+  calendarScheduleTx,
   dropSessionCommand,
   dropTx,
   EnrollInput,
@@ -62,6 +74,7 @@ export {
   enrollmentsOfRegistrantTx,
   enrollSessionCommand,
   enrollTx,
+  linkRegistrantTx,
   myScheduleQuery,
   type PromotionResult,
   promoteSessionNowCommand,
@@ -84,6 +97,18 @@ export {
   substituteByPayerCommand,
   substituteRegistrantCommand,
 } from './groups.ts';
+export {
+  calendarFeedQuery,
+  calendarFeedTarget,
+  conferenceHubQuery,
+  FavoriteInput,
+  favoriteSessionCommand,
+  rotateCalendarFeedCommand,
+} from './hub.ts';
+export * from './hub-dto.ts';
+export { hasWaitingRegistrationTx } from './kiosk.ts';
+// M5.6b: a registrant's company and job title for lead capture.
+export { registrantProfilesByTicketTx } from './lead-person.ts';
 export { decisionDedupeKey, decisionMailer, registrantLifecycle } from './lifecycle.ts';
 // M5.1d: pay later by invoice per type (P5-5).
 export {

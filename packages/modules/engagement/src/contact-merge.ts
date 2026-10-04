@@ -8,25 +8,24 @@ import { rescoreTx } from './scores.ts';
 const EVENTS = 'engagement.engagement_events';
 const PROFILES = 'engagement.network_profiles';
 
-/** Recompute both people's engagement scores at the events whose log rows moved. */
-async function rescoreBothTx(tx: TenantTx, ctx: Ctx, eventIds: readonly string[], contacts: string[]) {
-  for (const eventId of new Set(eventIds)) await rescoreTx(tx, ctx, eventId, contacts);
+/** Rescore both people at every event a move touched (scores are recomputed from the log). */
+async function rescoreBothTx(tx: TenantTx, ctx: Ctx, eventIds: readonly string[], who: readonly string[]) {
+  for (const eventId of new Set(eventIds)) await rescoreTx(tx, ctx, eventId, [...who]);
 }
 
 /**
- * Contact merges (M6.1a, ADR 0023; wired at the batch 3u merge for M5.7b and M5.8a): a merged
- * duplicate's engagement log rows (M5.7b scores) and networking profiles (M5.8a) move to the person
- * who stays, and both people's scores are recomputed from the log (crm's `event_engagement` stays a
- * projection). A log row the other record already has (same kind and source) and a profile at an
- * event where the other record has one (one profile per person per event) stay on the duplicate
- * (kept). An undo moves exactly the recorded rows back and rescores. Only this module writes its
- * tables.
+ * Contact merges (M6.1a, ADR 0023; batch 3j merge for M5.7b and M5.8a). A merged duplicate's
+ * engagement facts move to the person who stays, except a fact both already have (the same kind
+ * and source counts once): it stays on the duplicate (kept). Their scores are recomputed at the
+ * events concerned. A networking profile moves unless the person who stays already has one at
+ * that event (one profile per person and event): then it stays on the duplicate (kept). An undo
+ * moves exactly the recorded rows back and rescores. Only this module writes its tables.
  */
 export const engagementContactOwner: ContactReferenceOwner = {
   module: 'engagement',
   columns: [`${EVENTS}.contact_id`, `${PROFILES}.contact_id`],
   move: async (tx, ctx, step) => {
-    const events = await tx.execute<{ id: string; event_id: string }>(sql`
+    const facts = await tx.execute<{ id: string; event_id: string }>(sql`
       update engagement.engagement_events e set contact_id = ${step.toContactId}
       where e.contact_id = ${step.fromContactId}
         and not exists (
@@ -44,18 +43,19 @@ export const engagementContactOwner: ContactReferenceOwner = {
     await rescoreBothTx(
       tx,
       ctx,
-      events.map((e) => e.event_id),
+      facts.map((f) => f.event_id),
       [step.fromContactId, step.toContactId],
     );
     const count = async (t: typeof engagementEvents | typeof networkProfiles) =>
       (
         await tx.select({ n: sql<number>`count(*)::int` }).from(t).where(eq(t.contactId, step.fromContactId))
       )[0]?.n ?? 0;
+    const moved: MovedRow[] = [
+      ...facts.map((r) => ({ table: EVENTS, id: r.id })),
+      ...profiles.map((r) => ({ table: PROFILES, id: r.id })),
+    ];
     return {
-      moved: [
-        ...events.map((r): MovedRow => ({ table: EVENTS, id: r.id })),
-        ...profiles.map((r): MovedRow => ({ table: PROFILES, id: r.id })),
-      ],
+      moved,
       kept: { [EVENTS]: await count(engagementEvents), [PROFILES]: await count(networkProfiles) },
     };
   },
@@ -80,7 +80,7 @@ export const engagementContactOwner: ContactReferenceOwner = {
     if (pr.length > 0) {
       const rows = await tx
         .update(networkProfiles)
-        .set({ contactId: step.fromContactId, updatedAt: ctx.now })
+        .set({ contactId: step.fromContactId })
         .where(and(eq(networkProfiles.contactId, step.toContactId), inArray(networkProfiles.id, pr)))
         .returning({ id: networkProfiles.id });
       out.push(...rows.map((r) => ({ table: PROFILES, id: r.id })));

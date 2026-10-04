@@ -11,6 +11,7 @@ import {
   uniqueIndex,
   uuid,
 } from 'drizzle-orm/pg-core';
+import { MAX_TOUCHES, TOUCH_KINDS } from './domain/touches.ts';
 import { ATTRIBUTION_MODELS, MAX_WINDOW_DAYS, MIN_WINDOW_DAYS } from './domain/window.ts';
 
 export const marketingSchema = pgSchema('marketing');
@@ -174,5 +175,48 @@ export const attributionSettings = tenantTable(
       'attribution_settings_window_check',
       sql.raw(`window_days between ${MIN_WINDOW_DAYS} and ${MAX_WINDOW_DAYS}`),
     ),
+  ],
+);
+
+/**
+ * M6.2b: the touch path of an attributed order, written with its attribution record (at most
+ * `MAX_TOUCHES` per order, in time order). `click`: a counting click and its tracked link;
+ * `utm`: a landing with UTM values; `referral`: a landing from another site (source = its host).
+ * The multi-touch models (first, last, linear) in the analytics warehouse read these paths.
+ * Records made before M6.2b have no rows: their first and last touch stand in.
+ */
+export const attributionTouches = tenantTable(
+  marketingSchema,
+  'attribution_touches',
+  {
+    orderId: uuid('order_id').notNull(),
+    position: integer('position').notNull(),
+    kind: text('kind').notNull(),
+    at: timestamp('at', { withTimezone: true }).notNull(),
+    linkId: uuid('link_id'),
+    /** The M3.6b campaign that made the link (click touches). */
+    campaignId: uuid('campaign_id'),
+    source: text('source').notNull(),
+    medium: text('medium'),
+    campaign: text('campaign'),
+  },
+  (t) => [
+    uniqueIndex('attribution_touches_org_order_position_key').on(t.orgId, t.orderId, t.position),
+    foreignKey({
+      name: 'attribution_touches_attribution_fk',
+      columns: [t.orgId, t.orderId],
+      foreignColumns: [attributions.orgId, attributions.orderId],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'attribution_touches_link_fk',
+      columns: [t.orgId, t.linkId],
+      foreignColumns: [trackingLinks.orgId, trackingLinks.id],
+    }),
+    check('attribution_touches_kind_check', sql.raw(`kind in (${list(TOUCH_KINDS)})`)),
+    check('attribution_touches_link_check', sql`(kind = 'click') = (link_id is not null)`),
+    check('attribution_touches_position_check', sql.raw(`position between 0 and ${MAX_TOUCHES - 1}`)),
+    check('attribution_touches_source_check', sql`length(source) between 1 and 255`),
+    check('attribution_touches_medium_check', utm('medium')),
+    check('attribution_touches_campaign_check', utm('campaign')),
   ],
 );

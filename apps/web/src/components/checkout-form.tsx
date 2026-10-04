@@ -48,10 +48,10 @@ export function CheckoutForm({
   occurrenceId = null,
   seatStream = null,
   timeZone,
+  cardForGiving = false,
   bestSeats = null,
   advancedSeating = false,
   channel = null,
-  cardForGiving = false,
 }: {
   /** M4.8e: the event takes gifts tonight; offer to save a card for them after paying (P4-14). */
   cardForGiving?: boolean;

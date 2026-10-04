@@ -119,20 +119,24 @@ async function registrantsOfOrderTx(tx: TenantTx, orderId: string, eventId: stri
 }
 
 /** A registrant by admission ticket id (the line's re-check), or null when it is gone. */
-async function registrantByIdTx(tx: TenantTx, ticketId: string): Promise<Registrant | null> {
+export async function registrantByIdTx(tx: TenantTx, ticketId: string): Promise<Registrant | null> {
   const [t] = await ticketsByIdsTx(tx, [ticketId]);
   if (t?.status !== 'active' || !t.orderId) return null;
   return (await registrantsOfOrderTx(tx, t.orderId, t.eventId)).find((r) => r.id === ticketId) ?? null;
 }
 
 /** The order behind a manage link and its registrants (none: `not_found`, like a wrong link). */
-async function orderRegistrantsTx(tx: TenantTx, token: string) {
+export async function orderRegistrantsTx(tx: TenantTx, token: string) {
   const order = await orderHoldingTx(tx, token);
   if (!order) throw new DomainError('not_found');
   return { order, registrants: await registrantsOfOrderTx(tx, order.orderId, order.eventId) };
 }
 
-async function registrantOfLinkTx(tx: TenantTx, token: string, registrantId: string): Promise<Registrant> {
+export async function registrantOfLinkTx(
+  tx: TenantTx,
+  token: string,
+  registrantId: string,
+): Promise<Registrant> {
   const { registrants } = await orderRegistrantsTx(tx, token);
   const r = registrants.find((x) => x.id === registrantId);
   if (!r) throw new DomainError('not_found');
@@ -158,7 +162,7 @@ async function itemAccessTx(tx: TenantTx, items: Registrant['items']): Promise<I
   }));
 }
 
-async function availableTx(tx: TenantTx, r: Registrant, allSessionIds: readonly string[]) {
+export async function availableTx(tx: TenantTx, r: Registrant, allSessionIds: readonly string[]) {
   return availableSessions(await itemAccessTx(tx, r.items), allSessionIds);
 }
 
@@ -170,7 +174,7 @@ const slotOf = (s: EnrollableSession): SessionSlot => ({
   groupId: s.groupId,
 });
 
-async function liveEntriesTx(tx: TenantTx, registrantId: string): Promise<EntryRow[]> {
+export async function liveEntriesTx(tx: TenantTx, registrantId: string): Promise<EntryRow[]> {
   return tx
     .select()
     .from(sessionEnrollments)
@@ -386,7 +390,7 @@ async function lockAllTx(tx: TenantTx, ids: readonly string[]) {
   return out;
 }
 
-const positionOf = async (tx: TenantTx, e: Pick<EntryRow, 'sessionId' | 'positionAt' | 'id'>) => {
+export const positionOf = async (tx: TenantTx, e: Pick<EntryRow, 'sessionId' | 'positionAt' | 'id'>) => {
   const [row] = await tx
     .select({ n: sql<number>`count(*)::int` })
     .from(sessionEnrollments)
@@ -658,7 +662,7 @@ export const acceptSessionOfferCommand = tenantCommand({
 
 /* ---------------------------------------------------------------- the attendee's page ---- */
 
-function stateOf(s: EnrollableSession, entry: EntryRow | undefined, now: Date): MySessionDto['state'] {
+export function stateOf(s: EnrollableSession, entry: EntryRow | undefined, now: Date): MySessionDto['state'] {
   if (s.admission === 'included') return 'included';
   if (entry) return entry.status as 'enrolled' | 'waiting' | 'offered';
   if (now.getTime() >= s.startsAt.getTime()) return 'started';
@@ -1038,4 +1042,42 @@ export async function enrollmentsOfRegistrantTx(tx: TenantTx, registrantId: stri
 /** Registrants of an order by its manage link (the web's page picks one). */
 export async function registrantsOfLinkTx(tx: TenantTx, token: string) {
   return (await orderRegistrantsTx(tx, token)).registrants;
+}
+
+/**
+ * M6.5c: a registrant's personal schedule for calendar push (integrations): the sessions their
+ * items include plus the optional ones they are enrolled in (not waitlists or open offers). Null
+ * when the registrant is gone (cancelled or refunded ticket): their calendar entries are removed.
+ */
+export async function calendarScheduleTx(
+  tx: TenantTx,
+  registrantId: string,
+): Promise<{ readonly eventId: string; readonly sessionIds: readonly string[] } | null> {
+  const r = await registrantByIdTx(tx, registrantId);
+  if (!r) return null;
+  const all = await enrollableSessionsTx(tx, r.eventId);
+  const available = await availableTx(
+    tx,
+    r,
+    all.map((s) => s.sessionId),
+  );
+  const enrolled = new Set(
+    (await liveEntriesTx(tx, r.id)).filter((e) => e.status === 'enrolled').map((e) => e.sessionId),
+  );
+  return {
+    eventId: r.eventId,
+    sessionIds: all
+      .filter((s) => available.has(s.sessionId) && (s.admission === 'included' || enrolled.has(s.sessionId)))
+      .map((s) => s.sessionId),
+  };
+}
+
+/** M6.5c: one registrant of a manage link (its order's), or `not_found` like a wrong link. */
+export async function linkRegistrantTx(
+  tx: TenantTx,
+  token: string,
+  registrantId: string,
+): Promise<{ readonly registrantId: string; readonly eventId: string }> {
+  const r = await registrantOfLinkTx(tx, token, registrantId);
+  return { registrantId: r.id, eventId: r.eventId };
 }

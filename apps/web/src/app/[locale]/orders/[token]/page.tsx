@@ -16,8 +16,10 @@ import { WebPushControl } from '@/components/web-push-control.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { refundPolicyLines } from '@/lib/refund-policy-text.ts';
 import { helpLinksForOrder } from '@/server/assistance.ts';
+import { hasConferenceHub } from '@/server/conference-hub.ts';
 import { getPdfRenderer } from '@/server/pdf.ts';
 import { scheduleSummary } from '@/server/schedule.ts';
+import { watchLinksForOrder } from '@/server/virtual.ts';
 import { webPushPublicKey } from '@/server/web-push.ts';
 import {
   removeOrderDeviceAction,
@@ -75,8 +77,17 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
         order.tickets.map((tk) => tk.id),
       )
     : new Map<string, string>();
+  // M6.9a: tickets that include online access link to their watch page.
+  const watchLinks = holderTarget
+    ? await watchLinksForOrder(
+        holderTarget,
+        order.tickets.map((tk) => tk.id),
+      )
+    : new Map<string, string>();
   // M5.2b: a registration with sessions links to the attendee's schedule.
   const schedule = await scheduleSummary(token);
+  // M5.10a: a registration links to the attendee's conference hub (agenda, schedule, badge).
+  const hub = await hasConferenceHub(token);
   // M4.2b: tables bought in this order, each with its claim link for naming the guests.
   const tables = await orderTablesByManageToken(token);
   const sinceFmt = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeZone: order.event.timezone });
@@ -191,6 +202,14 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
           {t('mySchedule.open')}
         </Link>
       ) : null}
+      {hub ? (
+        <div className="flex flex-col gap-1">
+          <Link href={`/orders/${token}/hub`} className={buttonClass('secondary', 'lg', 'self-start')}>
+            {t('conferenceHub.orderLink')}
+          </Link>
+          <p className="m-0 text-caption text-ink-2">{t('conferenceHub.orderLinkHint')}</p>
+        </div>
+      ) : null}
       {order.tickets.length > 0 ? (
         <section aria-labelledby="tickets-heading" className="flex flex-col gap-4">
           <h2 id="tickets-heading" className="text-section">
@@ -232,6 +251,15 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
                     <p className="text-body font-medium">{t('order.seatLabel', { seat: tk.seatLabel })}</p>
                   ) : null}
                   <p className="text-caption">{tk.holderName}</p>
+                  {watchLinks.get(tk.id) ? (
+                    <Link
+                      href={watchLinks.get(tk.id) as string}
+                      className={buttonClass('primary')}
+                      aria-label={t('virtual.watch.orderLinkLabel', { serial: tk.serial })}
+                    >
+                      {t('virtual.watch.orderLink')}
+                    </Link>
+                  ) : null}
                   {helpLinks.get(tk.id) ? (
                     <Link
                       href={helpLinks.get(tk.id) as string}

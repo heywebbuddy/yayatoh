@@ -28,6 +28,8 @@ export default async function FakeCheckout({
     currency,
     returnUrl: sp.return,
     ...(sp.acct && sp.fee ? { fee: sp.fee } : {}),
+    // M4.8g: the charge itself lands on the connected account (its balance and payouts).
+    ...(sp.acct ? { acct: sp.acct } : {}),
   };
   return (
     <main id="main" className="mx-auto flex min-h-dvh max-w-md flex-col justify-center gap-6 px-6 py-16">

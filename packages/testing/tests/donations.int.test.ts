@@ -330,13 +330,16 @@ describe('gifts on a connected org', () => {
         tribute: { kind: 'memory', name: 'Grandpa Joe' },
       }),
     ]);
-    // No tickets for a gift; the ledger has nothing for the platform (application fee 0).
+    // No tickets for a gift; the ledger moves nothing for the platform (application fee 0): no
+    // postings, only the gift's memo entry (M4.8g, for reports and reconciliation).
     const [extra] = await withTenant(systemCtx(a.org.id), (tx) =>
-      tx.execute<{ tickets: number; journals: number }>(sql`select
+      tx.execute<{ tickets: number; postings: number; kinds: string[] }>(sql`select
         (select count(*)::int from ticketing.tickets where order_id = ${r.orderId}) as tickets,
-        (select count(*)::int from payments.journal_entries where ref_id = ${r.orderId}) as journals`),
+        (select count(*)::int from payments.postings p join payments.journal_entries j on j.id = p.journal_id
+          where j.ref_id = ${r.orderId}) as postings,
+        (select coalesce(array_agg(kind), '{}') from payments.journal_entries where ref_id = ${r.orderId}) as kinds`),
     );
-    expect(extra).toEqual({ tickets: 0, journals: 0 });
+    expect(extra).toEqual({ tickets: 0, postings: 0, kinds: ['donation_memo'] });
     // The thank-you page: status and amount only.
     expect(await giftReceipt(a.org.id, a.event.id, r.giftToken)).toEqual({
       status: 'paid',

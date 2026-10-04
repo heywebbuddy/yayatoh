@@ -19,6 +19,10 @@ export {
   saveCharityProfileCommand,
   verifyCharityCommand,
 } from './charity.ts';
+// M6.5d: online giving per day and currency (accounting summaries).
+export { type DonationDayTotals, donationDailyTotalsTx } from './daily-totals.ts';
+// M4.8d live giving screen: the thermometer for the room's projectors (signed link, realtime
+// channel, reconnect snapshot), QR-to-give, names only for donors who opted in (P4-13).
 // M6.1c: data-subject requests (export and erasure) for gifts, receipts and statements.
 export { donationsDataSubjects } from './data-subject.ts';
 // M4.8e: cards on file and pledge collection.
@@ -30,8 +34,20 @@ export {
   OFFLINE_METHODS,
   UNPAID_ALERT_DAYS,
 } from './domain/collection.ts';
-// M4.8d live giving screen: the thermometer for the room's projectors (signed link, realtime
-// channel, reconnect snapshot), QR-to-give, names only for donors who opted in (P4-13).
+// M4.8g reporting, exports and reconciliation: the report per source, level, match and donor
+// (pledged vs collected vs written off), the donor CRM exports (CSV and Excel) and the
+// reconciliation of gifts against the charity's connected account and its payouts.
+export {
+  CRM_COLUMNS,
+  CRM_LAYOUTS,
+  type CrmLayout,
+  decimalAmount,
+  EXPORT_FIELDS,
+  type ExportField,
+  exportHeaders,
+  exportRow,
+  splitName,
+} from './domain/crm.ts';
 export {
   CAMPAIGN_STATUSES,
   type CampaignStatus,
@@ -101,6 +117,21 @@ export {
   taxYearOf,
   ticketReceiptAmounts,
 } from './domain/receipts.ts';
+export {
+  RECON_ITEM_KINDS,
+  RECON_ITEM_STATUSES,
+  type ReconDiff,
+  reconcileDonations,
+  reconTotals,
+} from './domain/reconcile.ts';
+export {
+  type DonationLine,
+  LINE_METHODS,
+  type LineMethod,
+  lineNet,
+  REPORT_SOURCES,
+  type ReportSource,
+} from './domain/report.ts';
 export {
   givingQrQuery,
   QR_PLACES,
@@ -257,6 +288,32 @@ export {
   statementUrl,
   yearEndStatementsCommand,
 } from './receipts.ts';
+export {
+  DonationReconRunDto,
+  donationReconciliationQuery,
+  donationReconTargetQuery,
+  RecordDonationReconciliationInput,
+  reconcileEventDonations,
+  recordDonationReconciliationCommand,
+  resolveDonationReconItemCommand,
+} from './reconciliation.ts';
+export { DONOR_ROWS_MAX, donationFactsTx, donationReportQuery } from './report.ts';
+export {
+  DonationReconciliationDto,
+  DonationReportDto,
+  ReconItemDto,
+  ReconPayoutDto,
+  ReportTotalsDto,
+} from './report-dto.ts';
+export {
+  DONOR_XLSX_CONTENT_TYPE,
+  DonorExportParams,
+  donorCsvExportAction,
+  donorCsvExportBulk,
+  donorXlsxExportAction,
+  donorXlsxExportBulk,
+  donorXlsxFile,
+} from './report-export.ts';
 export { giftRetentionCommand, LAPSED_GIFT_DAYS, redactLapsedGiftsTx } from './retention.ts';
 export {
   applyCardSetupCommand,

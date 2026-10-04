@@ -1,0 +1,22 @@
+# M6.2b — one model's attribution per event, day and touch. Per-org JWT with fixed org_id (the
+# adapter also checks every row). The newest version of each event comes from yy_daily_rollups.
+
+NODE latest
+SQL >
+    %
+    SELECT event_id, max(version) AS v FROM yy_daily_rollups
+    WHERE org_id = {{ String(org_id, required=True) }}
+    GROUP BY event_id
+
+NODE endpoint
+SQL >
+    %
+    SELECT org_id, event_id, day, source, medium, campaign, link_id, currency,
+      sum(credit_bps) AS credit_bps, sum(revenue_minor) AS revenue_minor
+    FROM yy_attribution_rollups r
+    INNER JOIN latest l ON r.event_id = l.event_id AND r.version = l.v
+    WHERE r.org_id = {{ String(org_id, required=True) }}
+      AND r.model = {{ String(model, required=True) }}
+      AND r.day BETWEEN {{ Date(from, required=True) }} AND {{ Date(to, required=True) }}
+      {% if defined(event_id) %} AND r.event_id = {{ String(event_id) }} {% end %}
+    GROUP BY org_id, event_id, day, source, medium, campaign, link_id, currency

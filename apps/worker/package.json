@@ -23,6 +23,7 @@
     "printnode": "node scripts/printnode.ts"
   },
   "dependencies": {
+    "@yayatoh/agency": "workspace:*",
     "@yayatoh/alerts": "workspace:*",
     "@yayatoh/analytics": "workspace:*",
     "@yayatoh/attendees": "workspace:*",
@@ -44,6 +45,7 @@
     "@yayatoh/guests": "workspace:*",
     "@yayatoh/integrations": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
+    "@yayatoh/leads": "workspace:*",
     "@yayatoh/marketplace": "workspace:*",
     "@yayatoh/media": "workspace:*",
     "@yayatoh/messaging": "workspace:*",
@@ -60,6 +62,7 @@
     "@yayatoh/surveys": "workspace:*",
     "@yayatoh/tenancy": "workspace:*",
     "@yayatoh/ticketing": "workspace:*",
+    "@yayatoh/virtual": "workspace:*",
     "@yayatoh/webhooks": "workspace:*",
     "drizzle-orm": "catalog:",
     "pg-boss": "catalog:",

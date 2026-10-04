@@ -13,6 +13,8 @@ import { eventsDataSubjects } from '@yayatoh/events';
 import { formsDataSubjects } from '@yayatoh/forms';
 import { galleryDataSubjects } from '@yayatoh/gallery';
 import { guestsDataSubjects } from '@yayatoh/guests';
+import { integrationsDataSubjects } from '@yayatoh/integrations';
+import { leadsDataSubjects } from '@yayatoh/leads';
 import { marketingDataSubjects } from '@yayatoh/marketing';
 import { mediaDataSubjects } from '@yayatoh/media';
 import { messagingDataSubjects } from '@yayatoh/messaging';
@@ -25,10 +27,12 @@ import { programDataSubjects } from '@yayatoh/program';
 import { registrationDataSubjects } from '@yayatoh/registration';
 import { reviewsDataSubjects } from '@yayatoh/reviews';
 import { seatingDataSubjects } from '@yayatoh/seating';
+import { ssoDataSubjects } from '@yayatoh/sso';
 import { surveysDataSubjects } from '@yayatoh/surveys';
 import { tenancyDataSubjects } from '@yayatoh/tenancy';
 import { ticketingDataSubjects } from '@yayatoh/ticketing';
 import { venuesDataSubjects } from '@yayatoh/venues';
+import { virtualDataSubjects } from '@yayatoh/virtual';
 
 /**
  * Every module's data-subject contributor (M6.1c), in the order erasure runs them (resolving
@@ -50,19 +54,24 @@ export const DATA_SUBJECT_CONTRIBUTORS = [
   guestsDataSubjects,
   messagingDataSubjects,
   assistanceDataSubjects,
+  ssoDataSubjects,
   programDataSubjects,
   eventsDataSubjects,
   mediaDataSubjects,
   cmsDataSubjects,
   venuesDataSubjects,
+  virtualDataSubjects,
   reviewsDataSubjects,
   paymentsDataSubjects,
   surveysDataSubjects,
   registrationDataSubjects,
+  // M6.4b: sync conflict values in the integrations errors inbox.
+  integrationsDataSubjects,
   donationsDataSubjects,
   engagementDataSubjects,
   galleryDataSubjects,
   badgesDataSubjects,
+  leadsDataSubjects,
   automationsDataSubjects,
   campaignsDataSubjects,
   marketingDataSubjects,

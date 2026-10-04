@@ -1,14 +1,15 @@
 import 'server-only';
 import { effectiveModules } from '@yayatoh/billing';
 import { type EventDto, eventRolesOf, getEventBySlugQuery, teamEventBySlugQuery } from '@yayatoh/events';
-import { createCtx, executeQuery, isDomainError } from '@yayatoh/kernel';
+import { executeQuery, isDomainError } from '@yayatoh/kernel';
 import { listMediaQuery } from '@yayatoh/media';
 import { isProfileKey, type ProfileKey, profileOpensSection } from '@yayatoh/platform';
+import { ssoRequiredFor } from '@yayatoh/sso';
 import {
   eventRoleCan,
   eventRolesOpenSection,
   getOrganizationQuery,
-  memberRole,
+  myAgencyClients,
   myOrganizations,
   resolveOrgSlug,
   roleCan,
@@ -18,8 +19,9 @@ import { notFound } from 'next/navigation';
 import { getLocale } from 'next-intl/server';
 import { cache } from 'react';
 import { redirect } from '@/i18n/navigation.ts';
+import { orgActor } from './org-actor.ts';
 import { ports } from './ports.ts';
-import { getSession } from './session.ts';
+import { getSession, sessionOpensOrg, sessionOrgScope } from './session.ts';
 
 /**
  * Everything the console needs for one org, loaded once per request. The org comes from the
@@ -27,6 +29,12 @@ import { getSession } from './session.ts';
  * the org's existence is not revealed. Owners, admins and finance (in any org) must turn on
  * two-step verification first: every console sends them to set it up (M1.2c). Server Actions
  * load the console too, so the same rule covers every write.
+ *
+ * M6.7a: a member of an agency reaches a client org through the client's live grant instead of a
+ * membership. `role` is then the grant's console role (`agency_manager`, …), `ctx` carries the
+ * grant (`viaAgency`: the authorizer re-checks it, audit rows name it) and `agency` names the
+ * agency for the "via Agency" badge. Grants are read on every request: a revoked one is a 404 on
+ * the next. `clients` are the client orgs the user reaches this way (the org switcher).
  */
 export const loadConsoleBase = cache(async (orgSlug: string) => {
   const locale = await getLocale();
@@ -36,22 +44,35 @@ export const loadConsoleBase = cache(async (orgSlug: string) => {
   const allOrgs = await myOrganizations(session.userId);
   // Staff acting as a member (M1.2e) see only the org they started from; their own sign-in asked
   // for the second step, so the member's set-up requirement doesn't apply to them.
-  const orgs = imp ? allOrgs.filter((o) => o.orgId === imp.orgId) : allOrgs;
+  // M6.5a: a session from an org's single sign-on opens that org only.
+  const scope = sessionOrgScope(session);
+  const orgs = scope ? allOrgs.filter((o) => o.orgId === scope) : allOrgs;
   if (!imp && !session.twoFactorEnabled && orgs.some((o) => roleRequiresTwoFactor(o.role)))
+    return redirect({ href: '/account/security?required=1', locale });
+  const clients = imp ? [] : await myAgencyClients(session.userId);
+  // M6.7a: a client's finance opt-in opens its money to the agency: the same rule as finance members.
+  if (!imp && !session.twoFactorEnabled && clients.some((c) => c.finance))
     return redirect({ href: '/account/security?required=1', locale });
   const resolved = await resolveOrgSlug(orgSlug);
   if (!resolved) notFound();
   if (imp && resolved.orgId !== imp.orgId) notFound();
-  const ctx = createCtx({
-    orgId: resolved.orgId,
-    actor: { type: 'user', userId: session.userId },
-    locale,
-    stepUpAt: session.stepUpAt,
-    impersonatedBy: imp ? { staffUserId: imp.staffUserId, impersonationId: imp.id } : null,
-  });
-  const role = await memberRole(ctx);
+  // Another org than the one whose IdP signed this session in: sign in again to open it.
+  if (!sessionOpensOrg(session, resolved.orgId))
+    return redirect({
+      href: `/sign-in?${new URLSearchParams({ next: `/o/${orgSlug}`, sso: 'other_org' })}`,
+      locale,
+    });
+  const actor = await orgActor(resolved.orgId, session, { locale });
   // A closed org (M1.3f) stays open to its owners only, read-only, so they can take their data out.
-  if (!role || (resolved.status === 'terminated' && role !== 'owner')) notFound();
+  if (!actor || (resolved.status === 'terminated' && actor.role !== 'owner')) notFound();
+  const { ctx, role, agency } = actor;
+  // M6.5a: the org requires its single sign-on for this member's address (owners are exempt).
+  if (
+    !imp &&
+    session.ssoOrgId !== resolved.orgId &&
+    (await ssoRequiredFor({ orgId: resolved.orgId, userId: session.userId, email: session.email }))
+  )
+    return redirect({ href: '/sign-in/sso?error=sso_required', locale });
   const [org, modules, logos] = await Promise.all([
     executeQuery(getOrganizationQuery, {}, ctx, ports),
     effectiveModules(ctx),
@@ -59,7 +80,19 @@ export const loadConsoleBase = cache(async (orgSlug: string) => {
     executeQuery(listMediaQuery, { ownerType: 'org', ownerId: resolved.orgId, slot: 'logo' }, ctx, ports),
   ]);
   const profile: ProfileKey = isProfileKey(org.defaultProfile) ? org.defaultProfile : 'other';
-  return { session, ctx, org, role, modules, orgs, profile, logo: logos[0] ?? null };
+  return {
+    session,
+    ctx,
+    org,
+    role,
+    modules,
+    orgs,
+    profile,
+    logo: logos[0] ?? null,
+    /** The agency the user acts for here (M6.7a "via Agency" badge), or null for a member. */
+    agency: agency ? { name: agency.agencyName, slug: agency.agencySlug, finance: agency.finance } : null,
+    clients,
+  };
 });
 
 export type ConsoleData = Awaited<ReturnType<typeof loadConsoleBase>>;

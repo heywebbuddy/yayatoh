@@ -1,4 +1,3 @@
-import { connectedConferenceSources } from '@yayatoh/alerts';
 import { warehouseFromEnv } from '@yayatoh/analytics';
 import { printNodeFromEnv } from '@yayatoh/badges';
 import { billingEnabled, billingProviderFromEnv } from '@yayatoh/billing';
@@ -11,8 +10,10 @@ import { purgeRealtimeMessages } from '@yayatoh/platform';
 import { setOccupantDirectory } from '@yayatoh/seating';
 import { fakeDomainProvider } from '@yayatoh/tenancy';
 import { sweepAlerts } from './alerts.ts';
+import { analyticsTickJob, enqueueAnalyticsTicks } from './analytics-pro.ts';
 import { badgeBatchJob, enqueueDueBadgeBatches } from './badges.ts';
 import { syncBillingCatalog } from './billing-catalog.ts';
+import { runBillingPass } from './billing-usage.ts';
 import { runDueBulkOperations } from './bulk.ts';
 import { bossRelease, campaignReleaseJob, campaignTick } from './campaigns.ts';
 import { enqueueContactStats } from './contact-stats.ts';
@@ -20,7 +21,7 @@ import { DEVICE_WATCHDOG_MS, runDeviceWatchdog } from './device-watchdog.ts';
 import { domainRecheckJob } from './domains.ts';
 import { enqueueDuplicateScans } from './duplicates.ts';
 import { endExpiredImpersonations } from './impersonations.ts';
-import { enqueueSyncWork } from './integrations.ts';
+import { enqueueSlackWork, enqueueSyncWork } from './integrations.ts';
 import { enqueueJourneyWork } from './journeys.ts';
 import { enqueueDueMassRefunds, massRefundJob } from './mass-refunds.ts';
 import {
@@ -33,7 +34,7 @@ import {
 } from './notifications.ts';
 import { PRINTER_WATCHDOG_MS, PRINTNODE_POLL_MS, pollPrintNode, runPrinterWatchdog } from './printers.ts';
 import { runReconciliation } from './reconciliation.ts';
-import { JOBS, subscribers } from './registry.ts';
+import { JOBS, subscribers, workerConferenceSources } from './registry.ts';
 import { relayOnce } from './relay.ts';
 import { runRetention } from './retention.ts';
 import { runSettlements } from './settlements.ts';
@@ -89,6 +90,13 @@ const jobs = [
   campaignReleaseJob,
   // M6.2a: warehouse backfills, a page at a time at each run's pace.
   backfillJob(warehouseFromEnv()),
+  // M6.2b: organizer alert rules and scheduled PDF reports (reports wait while Gotenberg is unset).
+  analyticsTickJob({
+    notifier: createNotifier(),
+    renderer: gotenbergUrl ? gotenbergRenderer({ url: gotenbergUrl, timeoutMs: 60_000 }) : null,
+    userLocales,
+    warehouse: warehouseFromEnv(),
+  }),
   ...(payments ? [massRefundJob(payments)] : []),
   ...(gotenbergUrl ? [badgeBatchJob(gotenbergRenderer({ url: gotenbergUrl, timeoutMs: 60_000 }))] : []),
 ];
@@ -238,7 +246,8 @@ let queueingSyncs = false;
 setInterval(() => {
   if (!release || stopping || queueingSyncs) return;
   queueingSyncs = true;
-  enqueueSyncWork(boss)
+  // M6.4c: and one Slack job per org with due messages or digests (exclusive per org).
+  Promise.all([enqueueSyncWork(boss), enqueueSlackWork(boss)])
     .catch((err) => console.error('integrations', err))
     .finally(() => {
       queueingSyncs = false;
@@ -256,16 +265,6 @@ setInterval(() => {
       queueingBadges = false;
     });
 }, 3_000).unref();
-
-// Contact stats (M6.1b): a rescore of every org with contacts shortly after start (the backfill)
-// and then daily, so registrations whose events have ended count as attended or no-shows
-// (leader only; the exclusive queue keeps one job per org).
-const queueContactStats = () => {
-  if (!release || stopping) return;
-  enqueueContactStats(boss).catch((err) => console.error('contact stats', err));
-};
-setTimeout(queueContactStats, 2 * 60_000).unref();
-setInterval(queueContactStats, 24 * 3_600_000).unref();
 
 // Badge printers (M5.5b): every 5 s the leader turns printers silent for 90 s offline (one
 // `badges.printer_offline@1` each); every 30 s it asks PrintNode (the fake in dev and CI) which of
@@ -294,6 +293,15 @@ setInterval(() => {
       pollingPrintNode = false;
     });
 }, PRINTNODE_POLL_MS).unref();
+// Contact stats (M6.1b): a rescore of every org with contacts shortly after start (the backfill)
+// and then daily, so registrations whose events have ended count as attended or no-shows
+// (leader only; the exclusive queue keeps one job per org).
+const queueContactStats = () => {
+  if (!release || stopping) return;
+  enqueueContactStats(boss).catch((err) => console.error('contact stats', err));
+};
+setTimeout(queueContactStats, 2 * 60_000).unref();
+setInterval(queueContactStats, 24 * 3_600_000).unref();
 
 // Daily reconciliation (M1.6e): the previous UTC day, hourly attempts (idempotent per org and
 // day, so only the first run of a day does work), leader only. The fake provider without a
@@ -330,6 +338,22 @@ const syncCatalog = () => {
 };
 setTimeout(syncCatalog, 60_000).unref();
 setInterval(syncCatalog, 3_600_000).unref();
+
+// Billing meters and discounts (M6.6b): every 5 minutes while billing is on (leader only), send
+// new usage records to the provider's meters and push changed nonprofit discounts.
+let billingPass = false;
+setInterval(() => {
+  if (!billingProvider || !release || stopping || billingPass) return;
+  billingPass = true;
+  runBillingPass(billingProvider)
+    .then((r) => {
+      if (r.reported || r.failed || r.discounts) console.info(JSON.stringify({ job: 'billing.usage', ...r }));
+    })
+    .catch((err) => console.error('billing.usage', err))
+    .finally(() => {
+      billingPass = false;
+    });
+}, 300_000).unref();
 
 // Pending custom domains (M1.3f): check them again every minute on their backoff schedule, so a
 // domain goes live without "Check now" (leader only; the fake provider until the owner's Vercel).
@@ -427,8 +451,9 @@ setTimeout(stateYearEnd, 15 * 60_000).unref();
 setInterval(stateYearEnd, 24 * 3_600_000).unref();
 
 // Alert engine (M3.2b): live and pre-show events every 30 s, everything else every 5 minutes (leader only).
-// Batch 3j merge: M5.9a's conference pack reads sponsor deliverables and badge printers.
-const alertDeps = { notifier: createNotifier(), conference: connectedConferenceSources };
+// Batch 3j merge: M5.9a's conference pack reads sponsor deliverables and badge printers (and, since
+// the batch 3k merge, leads).
+const alertDeps = { notifier: createNotifier(), conference: workerConferenceSources };
 let sweepingAlerts = false;
 let alertTicks = 0;
 setInterval(() => {
@@ -477,6 +502,19 @@ setInterval(() => {
       queueingBackfills = false;
     });
 }, 5_000).unref();
+
+// Analytics ticks (M6.2b): every minute, one job per org with alert rules or report schedules
+// (leader only; the exclusive queue keeps one per org).
+let queueingAnalytics = false;
+setInterval(() => {
+  if (!release || stopping || queueingAnalytics) return;
+  queueingAnalytics = true;
+  enqueueAnalyticsTicks(boss)
+    .catch((err) => console.error('analytics tick', err))
+    .finally(() => {
+      queueingAnalytics = false;
+    });
+}, 60_000).unref();
 
 // Realtime message log (M3.1b): keep an hour for resumptions; prune every 5 minutes (leader only).
 setInterval(() => {

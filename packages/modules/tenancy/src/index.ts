@@ -1,4 +1,28 @@
-export { createOrgAuthorizer, type EventRoleResolver, memberRole, orgAuthorizer } from './authorizer.ts';
+export {
+  consoleRole,
+  createOrgAuthorizer,
+  type EventRoleResolver,
+  memberRole,
+  orgAuthorizer,
+} from './authorizer.ts';
+export {
+  type AgencyAccess,
+  type AgencyClientGrant,
+  AgencyClientOrgDto,
+  AgencyGrantDto,
+  agencyAccess,
+  agencyAccessTx,
+  agencyClientGrantsTx,
+  GrantAgencyAccessInput,
+  grantAgencyAccessCommand,
+  listAgencyGrantsQuery,
+  liveAgencyGrantTx,
+  MONEY_TABLES,
+  myAgencyClients,
+  revokeAgencyGrantCommand,
+  UpdateAgencyGrantInput,
+  updateAgencyGrantCommand,
+} from './commands/agency.ts';
 export {
   ApiUsageDto,
   apiUsageQuery,
@@ -57,6 +81,14 @@ export {
   revokeEventInvitationTx,
   revokeInvitationCommand,
 } from './commands/invitations.ts';
+export {
+  type EnsureOutcome,
+  ensureManagedMembershipTx,
+  type ManagedRole,
+  membershipRoleTx,
+  type RemoveOutcome,
+  removeManagedMembershipTx,
+} from './commands/managed-members.ts';
 export { addMemberCommand, changeMemberRoleCommand, removeMemberCommand } from './commands/members.ts';
 export {
   completeOnboardingCommand,
@@ -152,11 +184,19 @@ export {
   restoredOrgStatus,
 } from './domain/org-status.ts';
 export {
+  AGENCY_CONSOLE_ROLES,
+  AGENCY_FINANCE_PERMISSIONS,
+  AGENCY_ROLE_PERMISSIONS,
+  type AgencyConsoleRole,
+  type AgencyGrantRole,
+  agencyConsoleRole,
+  type ConsoleRole,
   EVENT_ROLE_PERMISSIONS,
   EVENT_ROLE_SECTIONS,
   eventRoleCan,
   eventRolesOpenSection,
   GRANTABLE_ORG_ROLES,
+  isAgencyConsoleRole,
   type OrgRole,
   PERMISSIONS,
   type Permission,
@@ -201,6 +241,7 @@ export {
   myOrganizations,
   organizationBrandTx,
   organizationDefaultsTx,
+  organizationLocaleTx,
   organizationLogoTx,
   organizationNameTx,
   organizationPublicTx,
@@ -209,6 +250,7 @@ export {
   twoFactorRequiredBy,
 } from './queries.ts';
 export {
+  AGENCY_GRANT_ROLES,
   API_KEY_SCOPES,
   type ApiKeyScope,
   DOMAIN_STATUSES,

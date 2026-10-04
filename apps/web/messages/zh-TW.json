@@ -51,7 +51,11 @@
       "coupon": "優惠券",
       "page": "頁面或部落格文章"
     },
-    "help": "說明"
+    "help": "說明",
+    "clientsSection": "客戶",
+    "viaAgency": "透過 {agency}",
+    "agencyBadgeLabel": "你正在代表 {agency} 於 {org} 中工作",
+    "backToAgency": "返回 {agency}"
   },
   "notifications": {
     "open": "通知",
@@ -172,7 +176,9 @@
       "alerts": {
         "alert": "警示",
         "alert-text": "警示簡訊",
-        "alert-urgent-text": "緊急警示簡訊"
+        "alert-urgent-text": "緊急警示簡訊",
+        "metric": "提醒規則",
+        "metric-now": "提醒規則（立即傳送）"
       },
       "campaigns": {
         "test": "行銷活動測試"
@@ -214,6 +220,12 @@
         "request-code": "隱私請求驗證碼",
         "archive-ready": "個人資料封存檔已就緒",
         "erasure-done": "刪除收據"
+      },
+      "badges": {
+        "kiosk-code": "名牌自助機驗證碼"
+      },
+      "analytics": {
+        "report": "定期報告"
       },
       "cms": {
         "contact_message": "來自聯絡頁面的訊息"
@@ -377,6 +389,7 @@
     "badges": "名牌",
     "orgAnalytics": "數據分析",
     "integrations": "整合",
+    "virtual": "直播設定",
     "seatingLibrary": "座位庫",
     "coupons": "優惠券",
     "charity": "慈善檔案",
@@ -384,6 +397,9 @@
     "webhooks": "Webhook",
     "sandboxes": "沙盒",
     "notifications": "通知",
+    "sso": "單一登入",
+    "agency": "客戶",
+    "agencies": "代理商",
     "mediaLibrary": "媒體庫",
     "storage": "儲存空間",
     "moneyOverview": "總覽",
@@ -417,7 +433,13 @@
     "box_office": "售票處",
     "scanner": "驗票員",
     "viewer": "唯讀",
-    "collaborator": "活動協作者"
+    "collaborator": "活動協作者",
+    "agency_manager": "代理商經理",
+    "agency_manager_finance": "代理商經理（財務）",
+    "agency_marketing": "代理商行銷",
+    "agency_marketing_finance": "代理商行銷（財務）",
+    "agency_viewer": "代理商檢視者",
+    "agency_viewer_finance": "代理商檢視者（財務）"
   },
   "profiles": {
     "wedding": "婚禮",
@@ -765,7 +787,8 @@
     "reference": "參考編號：{id}",
     "rateLimitedRetry": "嘗試次數過多。請在 {minutes, plural, other {# 分鐘}}後再試。",
     "impersonation_blocked": "以成員身分操作的工作人員無法執行此操作：退款、付款、匯出、刪除和身分確認皆已關閉。",
-    "read_only_freeze": "計畫維護期間變更已暫停。未儲存任何內容；請在維護結束後再試一次。"
+    "read_only_freeze": "計畫維護期間變更已暫停。未儲存任何內容；請在維護結束後再試一次。",
+    "read_only_billing": "在訂閱付款之前，此組織為唯讀。沒有儲存或刪除任何內容。"
   },
   "notFound": {
     "title": "找不到頁面",
@@ -833,6 +856,43 @@
       "email_unverified": "該帳號的電子郵件尚未在服務商處驗證。請先到那裡驗證，或使用電子郵件登入。",
       "no_email": "該帳號未提供電子郵件地址，因此無法為它建立 Yayatoh 帳號。",
       "unavailable": "此登入方式目前無法使用。"
+    },
+    "ssoLink": "使用單一登入",
+    "ssoOtherOrg": "你是透過另一個組織的單一登入登入的。請重新登入以開啟此組織。",
+    "sso": {
+      "eyebrow": "單一登入",
+      "title": "使用工作帳號登入",
+      "description": "輸入你的工作電子郵件，我們會將你轉到所屬組織的登入頁面。",
+      "email": "工作電子郵件",
+      "emailHint": "你的組織必須已為此電子郵件地址設定單一登入。",
+      "continue": "繼續",
+      "back": "返回其他登入方式",
+      "errors": {
+        "invalid_email": "請輸入有效的電子郵件地址。",
+        "no_sso": "沒有組織為此電子郵件地址使用單一登入。請改用其他方式登入。",
+        "rate_limited": "嘗試次數過多。請稍候幾分鐘再試一次。",
+        "unavailable": "單一登入目前無法使用。請改用其他方式登入。"
+      },
+      "refused": {
+        "expired": "此次登入花費時間過長或已被使用。請重新開始。",
+        "cancelled": "已在你所屬組織的登入頁面取消登入。",
+        "failed": "無法透過單一登入讓你登入。請再試一次。",
+        "connection_inactive": "你所屬組織的單一登入已關閉。請洽詢管理員。",
+        "domain_not_verified": "你的組織尚未驗證此電子郵件地址的網域，因此無法讓你登入。",
+        "identity_conflict": "此工作帳號已連結至這裡的其他人。請洽詢管理員。",
+        "deprovisioned": "你的組織已移除你的存取權。請洽詢管理員。",
+        "not_provisioned": "你還沒有此組織的存取權。請要求管理員將你加入。",
+        "staff_two_factor": "平台人員必須先開啟兩步驟驗證，才能使用單一登入。",
+        "session_failed": "無法完成登入。請再試一次。",
+        "invalid_signature": "無法驗證你所屬組織傳回的登入回應。",
+        "wrong_issuer": "登入回應來自與已設定者不同的身分識別提供者。",
+        "wrong_audience": "登入回應是傳給其他應用程式的。",
+        "wrong_request": "登入回應不屬於此次登入。請重新開始。",
+        "malformed": "無法讀取登入回應。",
+        "no_email": "你所屬組織的身分識別提供者未傳送電子郵件地址。",
+        "idp_error": "你所屬組織的身分識別提供者沒有回應。請再試一次。",
+        "sso_required": "你的組織要求此電子郵件地址使用單一登入。請在此登入以繼續。"
+      }
     }
   },
   "orgPicker": {
@@ -2029,7 +2089,8 @@
     "dateSoldOut": "此場次剩餘門票不足。",
     "wrongDate": "其中一種門票不在此場次販售。",
     "dateUnavailable": "此場次已停止售票。",
-    "seatChannel": "其中部分座位保留給其他銷售通路（贊助商、推廣方或線上銷售）。請選擇其他座位。"
+    "seatChannel": "其中部分座位保留給其他銷售通路（贊助商、推廣方或線上銷售）。請選擇其他座位。",
+    "imported": "從 {source} 匯入 · 訂單 {reference}"
   },
   "seating": {
     "title": "座位",
@@ -2139,6 +2200,7 @@
       "selection": "最佳可選座位",
       "channels": "通路",
       "revisions": "版本",
+      "solver": "自動排座",
       "guests": "安排賓客座位",
       "cards": "桌卡與匯出"
     },
@@ -2522,6 +2584,134 @@
       "isCurrent": "這就是目前的座位圖。",
       "restore": "還原版本 {number}",
       "restoredNotice": "已還原版本 {number}。目前的座位圖為版本 {now}。"
+    },
+    "solver": {
+      "title": "座位規則與排座器",
+      "description": "設定規則後,排座器會為每位尚未入座的賓客建議桌位。檢查方案後,可逐桌或全部確認。您手動安排的賓客絕不會被移動。",
+      "rules": {
+        "heading": "規則",
+        "listLabel": "座位規則",
+        "empty": "還沒有規則。請在下方新增,或不設規則直接執行排座器:它仍會讓每桌人數不超過座位數。",
+        "hard": "硬性",
+        "soft": "彈性",
+        "badge": "{strength} · 權重 {weight}",
+        "strength": "類型",
+        "strengthHint": "方案絕不會違反硬性規則。彈性規則盡量遵守;每次違反按其權重計分。",
+        "weight": "權重",
+        "weightHint": "1 到 10。權重越高的彈性規則越重要。",
+        "save": "儲存",
+        "remove": "刪除",
+        "saved": "規則已儲存。",
+        "removed": "規則已刪除。",
+        "added": "規則已新增。",
+        "editLabel": "修改規則:{rule}",
+        "kinds": {
+          "keep_together": "安排在一起",
+          "keep_apart": "分開安排",
+          "vip_near_stage": "VIP 最靠近舞台",
+          "access_near_exit": "無障礙需求靠近出口",
+          "table_max": "每桌上限"
+        },
+        "add": {
+          "heading": "新增規則",
+          "kind": "規則",
+          "by": "對象",
+          "byEach": "每個賓客組",
+          "byParty": "一個賓客組",
+          "byTag": "帶某個標籤的所有人",
+          "bySide": "某一方的所有人",
+          "party": "賓客組",
+          "tag": "標籤",
+          "side": "一方",
+          "choose": "請選擇…",
+          "together": "安排在一起",
+          "first": "第一組",
+          "second": "第二組",
+          "accessTag": "無障礙需求標籤",
+          "accessHint": "帶此標籤的賓客組會安排在離出口或入口最近的桌位。無障礙相關的回答保持私密。",
+          "max": "每桌最多人數",
+          "vipHint": "VIP 賓客組會安排在離舞台最近的桌位。",
+          "submit": "新增規則"
+        },
+        "errors": {
+          "value": "請選擇規則適用的對象。",
+          "same": "請選擇兩個不同的組。",
+          "weight": "請輸入 1 到 10 的權重。",
+          "max": "請輸入 1 到 40 的數字。",
+          "duplicate": "此活動已有這條規則。",
+          "tooMany": "每個活動最多 50 條規則。",
+          "unknownParty": "該賓客組不在此賓客名單中。"
+        },
+        "describe": {
+          "togetherParty": "每個賓客組坐在一起",
+          "togetherTag": "所有帶「{value}」標籤的人坐在一起",
+          "togetherSide": "{value}方坐在一起",
+          "apart": "{a}與{b}分開",
+          "targetParty": "{value}",
+          "targetTag": "所有帶「{value}」標籤的人",
+          "targetSide": "{value}方",
+          "vip": "VIP 賓客組最靠近舞台",
+          "access": "帶「{tag}」標籤的賓客靠近出口",
+          "tableMax": "每桌最多 {max} 人"
+        }
+      },
+      "run": {
+        "heading": "方案",
+        "queue": "尚有 {count, plural, other {# 位賓客}}待安排。{fixed, plural, =0 {還沒有人入座。} other {手動安排的 # 位賓客保持不動。}}",
+        "nothing": "所有人都已入座,無需建議。",
+        "seed": "排列編號",
+        "seedHint": "相同的編號總是得到相同的方案。",
+        "seedError": "請輸入 1 到 1,000,000 的整數。",
+        "start": "建議座位",
+        "cancel": "停止",
+        "again": "換一種排列",
+        "running": "正在產生方案… {percent}%",
+        "progress": "方案進度",
+        "cancelled": "已停止,沒有產生方案。",
+        "failed": "排座器意外停止,請重試。"
+      },
+      "summary": {
+        "heading": "摘要",
+        "done": "方案已在 {seconds} 秒內完成(排列 {seed})。",
+        "seated": "{count, plural, other {# 位賓客}}安排在{tables, plural, other { # 桌}};{queue, plural, =0 {候補佇列中無人} other {候補佇列中還有 # 位}}。",
+        "hardOk": "沒有違反任何硬性規則。",
+        "hardBroken": "{count, plural, other {違反了 # 條硬性規則}}。確認前請修改方案。",
+        "soft": "彈性規則:扣分 {penalty}(0 為最佳)。",
+        "ruleLine": "{rule}:{count, plural, =0 {已遵守} other {# 次違反}}",
+        "issues": {
+          "no_stage": "平面圖沒有舞台,因此「VIP 最靠近舞台」無法生效。",
+          "no_exit": "平面圖沒有出口或入口,因此「無障礙需求靠近出口」無法生效。",
+          "group_too_big": "一組 {size} 人比任何一桌({room} 個座位)都多,會盡量分到最少的桌。",
+          "too_few_seats": "需安排 {size} 位賓客,但只有 {room} 個空位:部分賓客將留在候補佇列。",
+          "no_room": "平面圖中沒有桌子或排。"
+        }
+      },
+      "tables": {
+        "heading": "建議的桌位",
+        "none": "沒有建議的桌位。",
+        "region": "第 {label} 桌",
+        "fill": "建議 {proposed} · 已入座 {seated} · 空位 {free}/{capacity}",
+        "overFull": "比空位多出 {count, plural, other {# 位}}賓客。",
+        "broken": "違反硬性規則:{rules}",
+        "over": "賓客多於座位",
+        "accept": "確認第 {label} 桌",
+        "acceptAll": "確認所有桌位",
+        "fixFirst": "請先修正帶警告的桌位。",
+        "acceptedTable": "第 {label} 桌已確認:{count, plural, other {# 位賓客}}已入座。",
+        "acceptedAll": "方案已確認:{count, plural, other {# 位賓客}}已入座。",
+        "queueHeading": "候補佇列",
+        "guest": "{name}({party})",
+        "moveLabel": "{name} 的桌位",
+        "queueOption": "留在候補佇列",
+        "optionFree": "第 {label} 桌(空 {free})",
+        "toEditor": "開啟排座編輯器"
+      },
+      "acceptErrors": {
+        "already_seated": "此方案中有人在此期間被手動安排了座位。請重新建議。",
+        "declined": "此方案中有賓客已婉拒。請重新建議。",
+        "hard_rule": "確認此方案會違反硬性規則。",
+        "cant_fit": "該桌只能再坐 {fits} 人。"
+      }
     },
     "guestSeating": {
       "title": "安排賓客座位",
@@ -3255,22 +3445,6 @@
       "digest": "收據 SHA-256",
       "signature": "簽章（base64）",
       "footer": "由 Yayatoh 代表 {org} 核發。簽章涵蓋收據資料；請使用下方的公開金鑰驗證。"
-    },
-    "categories": {
-      "contacts": "聯絡人紀錄",
-      "consents": "同意紀錄",
-      "orders": "訂單",
-      "paidOrders": "已付款訂單（為會計保留）",
-      "tickets": "票券",
-      "activeTickets": "有效票券",
-      "claims": "票券轉讓連結",
-      "holderLinks": "票券存取連結",
-      "attendees": "賓客名單項目",
-      "answers": "結帳時的回答",
-      "admissions": "報到",
-      "invitations": "團隊邀請",
-      "networkProfiles": "社交名片",
-      "chatMessages": "已傳送的聊天訊息"
     },
     "findOwner": "尋找擁有者或管理員"
   },
@@ -4110,7 +4284,10 @@
       "orders_refund": "訂單退款",
       "attendees_read": "讀取參加者",
       "attendees_write": "修改參加者並重新寄送票券",
-      "checkin_scan": "掃描門票"
+      "checkin_scan": "掃描門票",
+      "contacts_write": "新增聯絡人",
+      "webhooks_subscribe": "訂閱自動化掛鉤（Zapier 觸發器）",
+      "webhooks_manage": "新增和移除 Webhook 端點（Make 與 n8n 觸發器）"
     },
     "expiry": "到期時間",
     "expiryHint": "會到期的金鑰必須在到期前輪替。效期越短越安全。",
@@ -7558,6 +7735,10 @@
       "rsvpPending": "開啟回覆",
       "guestsUnseated": "安排賓客座位",
       "mealsMissing": "開啟回覆詳情",
+      "integrationFailed": "開啟整合收件匣",
+      "billingPastDue": "開啟方案與帳單",
+      "metricRule": "開啟提醒規則",
+      "metricRuleFinance": "開啟提醒規則",
       "pledgesUnpaid": "開啟認捐",
       "sessionsNearCapacity": "開啟場次",
       "sessionWaitlists": "開啟場次報名",
@@ -7594,6 +7775,10 @@
       "rsvpPending": "{count, plural, other {{countWords} 位賓客尚未回覆出席邀請}}",
       "guestsUnseated": "{count, plural, other {{countWords} 位賓客沒有桌位}}",
       "mealsMissing": "{count, plural, other {{countWords} 位出席賓客尚未選擇餐點}}",
+      "integrationFailed": "{count, plural, other {今天有 {countWords} 個整合問題（同步失敗或連線中斷）}}",
+      "billingPastDue": "{count, plural, other {有 {countWords} 筆方案付款已逾期}}",
+      "metricRule": "提醒規則「{title}」已觸發",
+      "metricRuleFinance": "提醒規則「{title}」已觸發",
       "pledgesUnpaid": "{count, plural, other {活動結束 14 天後仍有 {countWords} 筆認捐未付款}}",
       "sessionsNearCapacity": "{count, plural, other {{countWords}個場次已超過容量的 95 %}}",
       "sessionWaitlists": "{count, plural, other {{countWords}個場次的候補名單過長}}",
@@ -10260,6 +10445,219 @@
       },
       "cardLink": "開啟配捐",
       "cardBody": "讓贊助方在一段時間內將捐款加倍直到上限，並匯出捐贈者的雇主以申請配捐。"
+    },
+    "report": {
+      "title": "捐贈報告",
+      "subtitle": "籌得多少、如何籌得、已收回的認捐以及每位捐贈者，並與總帳核對。",
+      "noAccessTitle": "需要財務許可權",
+      "noAccessDescription": "捐贈報告包含捐贈者姓名和金額，請向所有者、管理員或財務成員索取。",
+      "reconcileLink": "對帳",
+      "emptyTitle": "還沒有捐贈",
+      "emptyDescription": "捐贈、舉牌認捐和捐贈票一到賬就會顯示在這裡。請先在“捐贈”標籤中開啟一個活動。",
+      "backToDonations": "前往捐贈",
+      "asOf": "截至目前。匯出中的日期採用活動時區（{zone}）。",
+      "totalsTitle": "合計",
+      "totalsIn": "{currency} 合計",
+      "stats": {
+        "raised": "已籌得",
+        "raisedSub": "來自 {donors, plural, other {# 位捐贈者}}的 {count, plural, other {# 筆捐贈和付款}}",
+        "online": "刷卡收到",
+        "onlineSub": "含 {cover} 代付手續費；已退款 {refunded}",
+        "offline": "線下支付",
+        "ticketSub": "另有捐贈票 {amount}",
+        "pledged": "現場認捐",
+        "collectedLabel": "已收回的認捐",
+        "pledgedSub": "已收回 {collected} · 已核銷 {writtenOff} · 待收 {open}",
+        "matched": "贊助方配捐",
+        "matchedSub": "贊助方的認捐，另行收取"
+      },
+      "check": {
+        "title": "總帳核對",
+        "notReconciled": "尚未對帳",
+        "matches": "分毫不差",
+        "differs": "相差 {amount}",
+        "ledger": "總帳備忘分錄",
+        "provider": "Stripe 餘額（上次對帳）",
+        "none": "尚未對帳",
+        "fees": "Stripe 手續費"
+      },
+      "bySource": {
+        "title": "按來源",
+        "source": "來源",
+        "count": "捐贈",
+        "net": "實收"
+      },
+      "sources": {
+        "online": "捐贈頁面",
+        "qr": "QR 碼",
+        "paddle": "舉牌環節",
+        "ticket": "捐贈票"
+      },
+      "byLevel": {
+        "title": "按級距",
+        "empty": "還沒有使用任何級距。",
+        "level": "級距",
+        "own": "自定金額",
+        "gifts": "捐贈",
+        "giftsCell": "{count, plural, other {# 筆}} · {amount}",
+        "pledges": "舉牌認捐",
+        "pledgesCell": "{count, plural, other {# 筆認捐}} · {amount}"
+      },
+      "byMatch": {
+        "title": "按配捐",
+        "sponsor": "贊助方",
+        "campaign": "活動",
+        "status": "狀態",
+        "matched": "已配捐",
+        "matchedCell": "{matched} / {cap}"
+      },
+      "matchStatus": {
+        "active": "進行中",
+        "closed": "已結束",
+        "cancelled": "已取消"
+      },
+      "byDonor": {
+        "title": "按捐贈者",
+        "note": "匿名捐贈者已標出：你能看到是誰捐的，但切勿公開致謝或列出他們。",
+        "empty": "還沒有捐贈者。",
+        "donor": "捐贈者",
+        "anonymous": "匿名",
+        "email": "郵箱",
+        "count": "捐贈",
+        "net": "捐贈額",
+        "truncated": "這裡只列出捐贈最多的 500 位；匯出檔案包含所有人。"
+      },
+      "export": {
+        "title": "匯出到你的捐贈者 CRM",
+        "body": "每筆捐贈、線下付款和捐贈票各一行，並保留匿名標記。你需要先確認身份。",
+        "error": "匯出未能開始：{reason}",
+        "layout": "列格式",
+        "layoutHint": "CRM 格式使用該 CRM 自己的列名，匯入時無需對映。",
+        "format": "檔案型別",
+        "csv": "CSV（.csv）",
+        "xlsx": "Excel（.xlsx）",
+        "submit": "匯出捐贈者",
+        "statusCsv": "捐贈者匯出（CSV）",
+        "statusXlsx": "捐贈者匯出（Excel）"
+      },
+      "layouts": {
+        "generic": "任意電子表格（當前語言）",
+        "salesforce_npsp": "Salesforce Nonprofit（NPSP）",
+        "bloomerang": "Bloomerang",
+        "little_green_light": "Little Green Light"
+      },
+      "cardTitle": "報告與匯出",
+      "cardLink": "開啟報告",
+      "cardBody": "按來源、級距、配捐和捐贈者的合計；已收回的認捐；匯出到你的捐贈者 CRM。",
+      "cardReconcile": "與 Stripe 對帳",
+      "file": {
+        "headers": {
+          "date": "日期",
+          "firstName": "名",
+          "lastName": "姓",
+          "donor": "捐贈者",
+          "email": "郵箱",
+          "anonymous": "匿名",
+          "amount": "實收金額",
+          "gift": "捐贈額",
+          "feeCover": "代付手續費",
+          "refunded": "已退款",
+          "currency": "幣種",
+          "campaign": "活動",
+          "level": "級距",
+          "source": "來源",
+          "method": "支付方式",
+          "employer": "僱主",
+          "tribute": "致敬或紀念物件",
+          "paddle": "號碼牌",
+          "reference": "參考號"
+        },
+        "yes": "是",
+        "no": "否",
+        "sources": {
+          "online": "捐贈頁面",
+          "qr": "QR 碼",
+          "paddle": "舉牌環節",
+          "ticket": "捐贈票"
+        },
+        "methods": {
+          "card": "銀行卡",
+          "check": "支票",
+          "wire": "電匯",
+          "stock": "股票",
+          "daf": "捐贈者建議基金",
+          "cash": "現金",
+          "other": "其他"
+        },
+        "privacyTitle": "你的捐贈者只屬於你",
+        "privacy": "匯出檔案只包含本活動的捐贈者。請妥善儲存檔案，匯入後刪除。"
+      }
+    },
+    "recon": {
+      "title": "捐贈對帳",
+      "subtitle": "總帳中的本活動捐贈，與你的 Stripe 帳戶及其撥款進行比對。",
+      "noAccessTitle": "需要財務許可權",
+      "noAccessDescription": "請讓所有者、管理員或財務成員進行捐贈對帳。",
+      "errors": {
+        "note": "寫下你的發現（3 到 500 個字元）。",
+        "provider": "無法連線 Stripe，請幾分鐘後重試。"
+      },
+      "run": "立即對帳",
+      "ran": "已對帳。",
+      "reportLink": "捐贈報告",
+      "notConnectedTitle": "沒有可比對的 Stripe 帳戶",
+      "notConnectedDescription": "捐贈直接進入你已連線的 Stripe 帳戶。請在“撥款”中連線後，再回到這裡對帳。",
+      "status": {
+        "open": "未解決",
+        "resolved": "已解決",
+        "cleared": "已對平"
+      },
+      "viewerNotice": "你可以檢視對帳。所有者、管理員和財務成員負責執行對帳並處理差異。",
+      "runTitle": "最近一次對帳",
+      "lastRun": "上次對帳 {at}：{ledger} 條總帳記錄對比 {provider} 筆 Stripe 流水。",
+      "neverRun": "尚未對帳。立即對帳，將總帳與 Stripe 比對。",
+      "stats": {
+        "ledger": "總帳備忘分錄",
+        "provider": "Stripe 餘額",
+        "fees": "Stripe 手續費",
+        "unpaidOut": "尚未撥款",
+        "unpaidOutSub": "{count, plural, =0 {已全部撥款} other {# 筆流水等待撥款}}"
+      },
+      "diffsTitle": "差異",
+      "cleanTitle": "全部一致",
+      "cleanDescription": "總帳中的每筆捐贈和退款都與 Stripe 分毫不差。",
+      "allSettled": "沒有未解決的差異：都已解決或對平。",
+      "kinds": {
+        "missing_at_provider": "總帳有，Stripe 沒有",
+        "missing_in_ledger": "Stripe 有，總帳沒有",
+        "amount_mismatch": "金額不一致"
+      },
+      "ledger": "總帳",
+      "provider": "Stripe",
+      "difference": "差額",
+      "resolvedNote": "已解決：{note}",
+      "noteLabel": "你的發現",
+      "noteHint": "例如：電話退款、Stripe 調整、重複記賬。",
+      "resolve": "解決 {reference}",
+      "resolved": "已解決。",
+      "payoutsTitle": "撥款",
+      "payoutsBody": "從你的 Stripe 帳戶發出、包含本活動捐贈的撥款。一筆撥款也可能包含其他款項。",
+      "payoutsEmpty": "還沒有撥款。Stripe 會在捐贈到賬幾天後撥款。",
+      "payout": {
+        "id": "撥款",
+        "status": "狀態",
+        "arrival": "到賬日",
+        "amount": "撥款金額",
+        "donations": "本活動的捐贈",
+        "donationsCell": "{count, plural, other {# 筆流水}}：扣除 {fees} 手續費後 {net}"
+      },
+      "payoutStatus": {
+        "pending": "待處理",
+        "in_transit": "在途",
+        "paid": "已到賬",
+        "failed": "失敗",
+        "canceled": "已取消"
+      }
     }
   },
   "galaTables": {
@@ -12470,6 +12868,36 @@
       "waitlist_closed": "{title} 已滿，候補名單已在場次開始前 24 小時關閉。",
       "offer_ended": "{title} 的邀請已結束。",
       "full": "{title} 剛剛額滿。再試一次即可加入候補名單。"
+    },
+    "calendar": {
+      "title": "Google 日曆",
+      "off": "把這份行程放進您的 Google 日曆。您新增或取消的場次，以及時間或會場的任何變動，都會自動同步。",
+      "privacy": "我們只會把本活動的場次加入您的日曆，絕不讀取您的其他行程。",
+      "connect": "加入 Google 日曆",
+      "reconnect": "重新連結",
+      "pending": "正在等待 Google 確認。如果您關閉了那個視窗，請重新連結。",
+      "active": "{count, plural, =0 {正在與您的 Google 日曆同步，目前還沒有場次。} other {正在與您的 Google 日曆同步：已有 # 個場次。}}",
+      "lastSync": "上次更新：{when}",
+      "neverSynced": "首次更新正在進行。",
+      "syncNow": "立即更新",
+      "syncing": "正在更新",
+      "stop": "停止同步",
+      "stopped": "同步已關閉。已在日曆中的場次會保留。",
+      "revokedByGoogle": "Google 不再接受此連結，因此更新已停止。請重新連結以繼續。",
+      "done": {
+        "queued": "正在更新，日曆稍後就會變化。",
+        "already": "已有更新正在進行。",
+        "stopped": "已停止同步。已在日曆中的場次會保留。"
+      },
+      "notice": {
+        "connected": "已連結。您的場次稍後會出現在 Google 日曆中。",
+        "denied": "未連結 Google 日曆。",
+        "expired": "該連結已過期，請重試。",
+        "unavailable": "此活動不支援日曆同步。",
+        "provider_unavailable": "無法連線到 Google，請稍後重試。",
+        "rate_limited": "嘗試次數過多，請等幾分鐘後再試。",
+        "conflict": "您的日曆已連結。"
+      }
     }
   },
   "people": {
@@ -13127,7 +13555,74 @@
       "ai_seating": "AI 排座",
       "analytics_pro": "進階分析"
     },
-    "findOwner": "尋找擁有者或管理員"
+    "findOwner": "尋找擁有者或管理員",
+    "usageLink": "用量",
+    "renewalReceived": "已收到續訂更新",
+    "dunning": {
+      "graceTitle": "你的訂閱付款未成功",
+      "graceBody": "在 {date} 之前一切照常。請在此之前付款以繼續進行變更；之後組織將變為唯讀，直到付款為止。",
+      "readOnlyTitle": "此組織為唯讀",
+      "readOnlyBody": "訂閱付款失敗，因此變更已暫停。沒有刪除任何內容：你仍然可以檢視所有內容、匯出資料，並在入口掃描票券。付款後可立即恢復變更。",
+      "payNow": "立即付款",
+      "askOwner": "請讓此組織的擁有者或管理員付款。",
+      "paidTitle": "已收到付款",
+      "paidBody": "謝謝。組織中的所有人都可以再次進行變更。",
+      "declinedTitle": "付款未成功",
+      "declinedBody": "沒有任何變更。請檢查你在帳單服務商登記的卡片，然後再試一次。",
+      "payError": "無法開始付款。請稍後再試。"
+    },
+    "change": {
+      "title": "變更方案",
+      "description": "升級和降級立即生效。你只需為本計費週期的剩餘時間付款或取得抵扣。",
+      "discountCharity": "你已驗證的慈善機構資料讓你在所有方案上享有 {percent}% 折扣。",
+      "discountStaff": "你的組織在所有方案上享有 {percent}% 的非營利折扣。",
+      "legend": "方案",
+      "offer": "{plan}：{interval, select, year {每年} other {每月}} {price}",
+      "direction": {
+        "upgrade": "升級",
+        "downgrade": "降級",
+        "switch": "切換",
+        "start": "開始"
+      },
+      "turnsOff": "{count, plural, other {將關閉 # 個模組}}",
+      "chooseError": "請選擇要預覽的方案。",
+      "preview": "預覽變更",
+      "previewTitle": "變更為{plan}",
+      "previewLead": {
+        "upgrade": "你正在升級。以下是你今天為本計費週期剩餘時間支付的金額。",
+        "downgrade": "你正在降級。目前方案未使用的時間將作為抵扣額度。",
+        "switch": "你將切換到價格相同的方案。",
+        "start": "你的訂閱從今天開始。"
+      },
+      "rows": {
+        "charge": "新方案，週期剩餘時間",
+        "credit": "未使用時間的抵扣",
+        "discount": "非營利折扣",
+        "tax": "稅金",
+        "due": "今日應付"
+      },
+      "creditKept": "{amount} 的抵扣額度將保留給之後的帳單。",
+      "nextRenewal": "之後於 {date} 支付 {amount}。",
+      "nextRenewalNoDate": "之後每個週期 {amount}。",
+      "taxNote": "稅金由帳單服務商依你組織的帳單資料計算。",
+      "removedTitle": "{count, plural, other {將關閉 # 個模組}}",
+      "removedBody": "它們的資料會保留。如果你變更為包含它們的方案，它們會原樣恢復。",
+      "confirmRemoved": "{count, plural, other {我了解這些模組將被關閉}}",
+      "confirmError": "請確認將關閉的模組後再繼續。",
+      "confirm": "確認變更",
+      "cancel": "保留我的方案",
+      "doneTitle": "已送出方案變更",
+      "doneBody": "你的帳單服務商已確認變更。你的方案和模組已在下方更新。",
+      "errorTitle": "方案未變更",
+      "errors": {
+        "billing_off": "此組織未啟用帳單。",
+        "same_plan": "你已在使用此方案。",
+        "validation_failed": "請選擇提供的方案之一。",
+        "provider": "帳單服務商未接受此變更。未收取任何費用；請再試一次。",
+        "forbidden": "只有擁有者和管理員可以變更方案。",
+        "other": "發生問題。沒有任何變更。"
+      }
+    }
   },
   "billingPortal": {
     "eyebrow": "測試計費",
@@ -13137,7 +13632,11 @@
     "switch": "變更方案",
     "cancel": "取消訂閱",
     "back": "不變更並返回",
-    "chooseError": "請選擇要變更的方案。"
+    "chooseError": "請選擇要變更的方案。",
+    "noSubscriptionError": "此客戶尚未訂閱。請先選擇方案。",
+    "renewalLegend": "續訂",
+    "failRenewal": "讓續訂付款失敗",
+    "stopRetrying": "停止重試付款"
   },
   "seatingLibrary": {
     "title": "座位圖庫",
@@ -13269,6 +13768,36 @@
     "connectors": {
       "demo": {
         "description": "用來試用整合的測試聯絡人應用程式：聯絡人會與你的 CRM 雙向同步。僅限測試環境。"
+      },
+      "slack": {
+        "description": "在你選擇的 Slack 頻道中傳送提醒和每日摘要。訊息只提及活動名稱，除非你開啟，否則不會包含電子郵件、電話或金額。"
+      },
+      "eventbrite": {
+        "description": "從 Eventbrite 移轉活動、票種、訂單和參加者。先預覽，再匯入；隨時可再次執行以取得變更。"
+      },
+      "google_sheets": {
+        "description": "在 Google 試算表中維護活動的參加者名單。任一處的修改都會雙向同步。"
+      },
+      "salesforce": {
+        "description": "讓 Salesforce 保持同步：聯絡人和潛在客戶雙向同步，每場活動一個行銷活動並包含已報名和已報到的人，贊助商作為商機。只會傳送同意接收行銷訊息的人。"
+      },
+      "google_calendar": {
+        "description": "將進行中活動的每個場次同步到 Google 日曆並保持最新：調整的場次會跟著移動，取消的場次會被移除。時間依各活動的時區顯示。"
+      },
+      "quickbooks": {
+        "description": "每天將銷售、費用、退款、撥款與捐款的彙總日記帳分錄過帳到 QuickBooks Online。"
+      },
+      "xero": {
+        "description": "每天將銷售、費用、退款、撥款與捐款的彙總日記帳分錄過帳到 Xero。"
+      },
+      "mailchimp": {
+        "description": "將受眾連同合併欄位傳送到 Mailchimp 名單。取消訂閱和退信地址會以同意變更的形式傳回。"
+      },
+      "hubspot": {
+        "description": "雙向同步聯絡人，並將你的活動以行銷活動的形式傳送到 HubSpot，包含報名與報到。"
+      },
+      "klaviyo": {
+        "description": "將受眾傳送到 Klaviyo 名單。取消訂閱、退信和垃圾郵件檢舉會以同意變更的形式傳回。"
       }
     },
     "sandboxBadge": "測試",
@@ -13288,11 +13817,66 @@
     "readOnly": "只有擁有者和管理員可以串接或變更整合。",
     "breadcrumb": "導覽路徑",
     "objects": {
-      "contacts": "聯絡人"
+      "contacts": "聯絡人",
+      "events": "活動",
+      "ticket_classes": "票種",
+      "orders": "訂單",
+      "attendees": "參加者",
+      "leads": "潛在客戶",
+      "campaigns": "行銷活動",
+      "campaign_members": "行銷活動成員",
+      "sponsor_opportunities": "贊助商機",
+      "sessions": "場次",
+      "journals": "每日分錄",
+      "members": "名單成員",
+      "marketing_events": "行銷活動",
+      "event_attendance": "報名與出席"
     },
     "fields": {
       "email": "電子郵件",
-      "name": "姓名"
+      "name": "姓名",
+      "tagline": "標語",
+      "starts_at": "開始",
+      "ends_at": "結束",
+      "timezone": "時區",
+      "currency": "貨幣",
+      "venue_name": "場地",
+      "city": "城市",
+      "country": "國家/地區",
+      "description": "描述",
+      "price_minor": "價格（以分計）",
+      "quantity_total": "數量",
+      "hidden": "隱藏",
+      "sales_start_at": "開賣時間",
+      "sales_end_at": "停售時間",
+      "buyer_email": "買家電子郵件",
+      "buyer_name": "買家姓名",
+      "status": "狀態",
+      "subtotal_minor": "票款合計（以分計）",
+      "total_minor": "訂單合計（以分計）",
+      "placed_at": "下單時間",
+      "labels": "標籤",
+      "first_name": "名",
+      "last_name": "姓",
+      "company": "公司",
+      "title": "標題",
+      "phone": "電話",
+      "lead_source": "潛在客戶來源",
+      "start_date": "開始日期",
+      "end_date": "結束日期",
+      "stage": "階段",
+      "stage_name": "階段",
+      "close_date": "結案日期",
+      "amount": "金額",
+      "tier": "贊助等級",
+      "currency_iso_code": "貨幣代碼",
+      "event_name": "活動",
+      "room": "會場",
+      "time_zone": "時區",
+      "subscription": "訂閱變更",
+      "email_opt_out": "已取消訂閱郵件",
+      "venue": "場地",
+      "cancelled": "已取消"
     },
     "status": {
       "none": "未串接",
@@ -13339,7 +13923,9 @@
         "paused": "同步已暫停。",
         "resumed": "同步已恢復。",
         "interval": "同步排程已儲存。",
-        "disconnected": "已中斷連線。不再同步任何內容，並已在服務商端撤銷存取權限。"
+        "disconnected": "已中斷連線。不再同步任何內容，並已在服務商端撤銷存取權限。",
+        "linked": "已建立並連結試算表。下次同步時填入內容。",
+        "unlinked": "已取消連結試算表。之後不再同步；試算表保留在你的 Google 雲端硬碟中。"
       },
       "revoked": {
         "user": "已於 {when} 中斷連線。",
@@ -13443,7 +14029,21 @@
       "paused": "因暫停而停止",
       "sync_failed": "同步失敗",
       "unknown_connector": "此整合已無法使用",
-      "other": "錯誤（{code}）"
+      "other": "錯誤（{code}）",
+      "remote_deleted": "已在試算表中刪除",
+      "conflict_kept_yayatoh": "兩處都有修改：保留了 Yayatoh 的修改",
+      "conflict_kept_remote": "兩處都有修改：保留了服務方的修改",
+      "conflict": "與 Yayatoh 中已有的紀錄衝突",
+      "not_found": "所需的內容還不在這裡",
+      "validation_failed": "Yayatoh 未接受",
+      "remove_failed": "無法在服務方移除",
+      "currency_unsupported": "你的帳簿只接受其本位幣",
+      "post_failed": "無法過帳到你的帳簿",
+      "http_400": "你的帳簿拒絕了它：請檢查對應的科目",
+      "http_429": "提供者要求我們放慢速度",
+      "http_503": "提供者目前無法使用",
+      "no_organisation": "找不到此連線對應的組織",
+      "account_code_missing": "某個對應的科目沒有代碼"
     },
     "inbox": {
       "title": "整合錯誤",
@@ -13469,7 +14069,8 @@
         "pull": "從服務商讀取",
         "map": "欄位對應",
         "write": "儲存到 Yayatoh",
-        "push": "傳送到服務商"
+        "push": "傳送到服務商",
+        "conflict": "兩處都有修改"
       },
       "field": "欄位：{field}",
       "lastSeen": "最近一次出現：{when}",
@@ -13495,7 +14096,15 @@
       "retryNamed": "重試 {record}",
       "dismiss": "略過",
       "dismissNamed": "略過 {record}",
-      "more": "{count, plural, other {另有 # 筆記錄未顯示。}}"
+      "more": "{count, plural, other {另有 # 筆記錄未顯示。}}",
+      "values": "值",
+      "keptLost": "{field}：保留「{kept}」，捨棄「{lost}」",
+      "yourCall": "需要你來決定",
+      "help": {
+        "remote_deleted": "該列已在試算表中刪除。Yayatoh 名單中沒有刪除任何人。忽略即表示接受：參加者仍保留在這裡，不再與該列關聯。",
+        "conflict_kept_yayatoh": "自上次同步以來，該紀錄在兩處都有修改。保留並傳送了較晚的 Yayatoh 修改；下方服務方的值已被覆寫。",
+        "conflict_kept_remote": "自上次同步以來，該紀錄在兩處都有修改。保留了較晚的服務方修改；下方 Yayatoh 的值已被覆寫。"
+      }
     },
     "fakeConsent": {
       "title": "測試授權",
@@ -13503,9 +14112,551 @@
       "heading": "要將 {name} 串接到 Yayatoh 嗎？",
       "body": "{name} 是測試服務商。允許後，Yayatoh 可代表你讀取和寫入以下內容：",
       "allow": "允許",
-      "deny": "拒絕"
+      "deny": "拒絕",
+      "bodyNoScopes": "{name} 是測試服務方。允許後，Yayatoh 可代表你讀取帳戶資料。"
     },
-    "webhooksAction": "設定 Webhook"
+    "webhooksAction": "設定 Webhook",
+    "zapier": {
+      "title": "Zapier",
+      "cardDescription": "在訂單付款、票券報到或收到報名時啟動 Zap，並從數千個應用程式為活動報名或新增聯絡人。",
+      "apiKeyBadge": "使用 API 金鑰",
+      "setUp": "設定",
+      "setUpNamed": "設定 Zapier",
+      "description": "Zapier 透過你的一把 API 金鑰連結。請為金鑰授予下列權限；Zapier 開啟的觸發器會列在這裡。",
+      "createKey": "建立 API 金鑰",
+      "reviewTitle": "Zapier 上的 Yayatoh 應用程式正在審核中",
+      "reviewBody": "在 Zapier 上架之前，你的客戶團隊可以傳送邀請連結給你。",
+      "noApiAccess": "你的方案不含 API 存取，因此 Zapier 暫時無法連結。",
+      "scopesTitle": "API 金鑰權限",
+      "scopesHelp": "交給 Zapier 的金鑰需要具備每個觸發器和動作對應的權限。",
+      "allScopes": "具備以下權限的金鑰可涵蓋全部功能：",
+      "partsCaption": "觸發器和動作及各自所需的權限",
+      "part": "觸發器或動作",
+      "kind": "類型",
+      "scope": "權限",
+      "parts": {
+        "order_paid": "訂單已付款",
+        "ticket_admitted": "票券已報到",
+        "registration_submitted": "報名表已送出",
+        "event_published": "活動已發布",
+        "create_registration": "建立報名",
+        "add_contact": "新增聯絡人",
+        "check_in": "票券報到",
+        "event_list": "活動選擇器"
+      },
+      "kinds": {
+        "trigger": "觸發器",
+        "action": "動作",
+        "picker": "供動作使用"
+      },
+      "keysTitle": "你的 API 金鑰",
+      "keysHelp": "有效的金鑰，以及它們是否涵蓋 Zapier 所需的全部權限。",
+      "noKeysTitle": "還沒有有效的 API 金鑰",
+      "noKeysDescription": "建立一把具備上述權限的金鑰，再將它和你組織的簡稱一起貼到 Zapier。",
+      "keysCaption": "有效的 API 金鑰及其對 Zapier 的涵蓋情況",
+      "keyName": "金鑰",
+      "key": "開頭",
+      "coverage": "用於 Zapier",
+      "ready": "可用於 Zapier",
+      "partial": "{count, plural, other {缺少 # 項權限}}",
+      "missing": "缺少：{scopes}",
+      "hooksTitle": "已啟用的 Zapier 觸發器",
+      "hooksHelp": "已開啟並等待事件的 Zap。關閉 Zap 後，其觸發器會從這裡消失。",
+      "hooksCaption": "Zapier 已訂閱的觸發器",
+      "hooksEmpty": "還沒有等待事件的 Zap。開啟一個以 Yayatoh 觸發器開頭的 Zap。",
+      "event": "事件類型",
+      "host": "傳送至",
+      "otherKey": "已刪除的金鑰",
+      "created": "開啟時間"
+    },
+    "slack": {
+      "title": "Slack",
+      "description": "選擇用於提醒和每日摘要的頻道。訊息只包含活動和數量，絕不包含電子郵件或電話號碼。",
+      "settingsTitle": "頻道與訊息",
+      "saved": "Slack 設定已儲存。",
+      "invalid": "有些資訊需要修改。",
+      "channel": "頻道",
+      "channelHint": "只能選擇 Yayatoh 應用程式所在的頻道。請先在 Slack 中將應用程式加入頻道。",
+      "channelPlaceholder": "選擇頻道",
+      "private": "私人",
+      "notInChannel": "應用程式不在頻道中",
+      "alerts": "傳送提醒",
+      "alertsHint": "儀表板的提醒，一發生就傳送。",
+      "severity": "要傳送的提醒",
+      "severities": {
+        "info": "所有提醒",
+        "warning": "警告和嚴重提醒",
+        "critical": "僅嚴重提醒"
+      },
+      "digest": "傳送每日摘要",
+      "digestHint": "昨天的訂單、票券和報到，以及今天的活動。",
+      "digestTime": "摘要時間",
+      "digestTimeHint": "你組織的時區（{zone}）。",
+      "finance": "在摘要中包含金額",
+      "financeHint": "只有你可以開啟：你連結了 Slack 且可以查看財務。頻道中的所有人都會看到金額。",
+      "noAmounts": "摘要顯示數量而非金額。只有連結 Slack 且擁有財務權限的人才能加入金額。",
+      "save": "儲存 Slack 設定",
+      "fieldError": {
+        "invalid": "請檢查此值。",
+        "channel": {
+          "required": "請選擇頻道。",
+          "unknown": "該頻道已不在工作區中。請選擇其他頻道。",
+          "not_in_channel": "Yayatoh 應用程式不在該頻道中。請先在 Slack 中加入應用程式，再選擇該頻道。"
+        },
+        "digestTime": {
+          "required": "請選擇摘要時間。",
+          "invalid": "請輸入類似 08:00 的時間。"
+        },
+        "severity": {
+          "invalid": "請選擇要傳送的提醒。"
+        },
+        "finance": {
+          "finance_owner_only": "只有連結 Slack 且擁有財務權限的人才能加入金額。"
+        }
+      },
+      "error": {
+        "unavailable": "此處無法使用 Slack。",
+        "provider_unavailable": "無法連線到 Slack。請幾分鐘後再試。",
+        "validation_failed": "有些資訊需要修改。",
+        "forbidden": "你無權執行此操作。",
+        "module_not_enabled": "你的方案不含整合。",
+        "not_found": "找不到。",
+        "invalid_state": "現在無法執行此操作。",
+        "no_channel": "請先選擇頻道並儲存。",
+        "auth_revoked": "Slack 已不再接受此連結。請重新連結 Slack。",
+        "connection_inactive": "未傳送：連結已暫停或中斷。",
+        "send_failed": "訊息無法傳送，將會重試。",
+        "not_in_channel": "Yayatoh 應用程式不在該頻道中。請在 Slack 中加入後再試。",
+        "channel_not_found": "該頻道已不存在。請選擇其他頻道。",
+        "pii_blocked": "未傳送：訊息會包含個人資料。",
+        "render_failed": "無法準備訊息，將會重試。",
+        "nothing_to_send": "已沒有需要傳送的內容。",
+        "impersonation_blocked": "以成員身分操作的員工無法變更此項。",
+        "read_only_freeze": "排定維護期間暫停變更。請在維護結束後再試。",
+        "internal": "我們這邊出了問題。",
+        "other": "未傳送（{code}）。"
+      },
+      "testSent": "測試提醒已傳送到 #{channel}。",
+      "channelsFailed": "無法載入 Slack 頻道清單。請幾分鐘後再試。",
+      "inactive": "Slack 已連結且處於啟用狀態時才能使用設定。",
+      "previewTitle": "傳送到 #{channel} 的測試提醒",
+      "previewHelp": "頻道中會看到這樣的內容。",
+      "nextDigest": "下一次摘要：{when}",
+      "sendTest": "傳送測試提醒",
+      "messagesTitle": "最近的 Slack 訊息",
+      "messagesEmpty": "還沒有傳送任何訊息。",
+      "messages": {
+        "when": "時間",
+        "kind": "訊息",
+        "status": "狀態",
+        "detail": "詳情"
+      },
+      "kinds": {
+        "alert": "提醒",
+        "digest": "每日摘要",
+        "test": "測試提醒"
+      },
+      "statuses": {
+        "pending": "等待中",
+        "sending": "傳送中",
+        "sent": "已傳送",
+        "failed": "失敗",
+        "cancelled": "未傳送"
+      }
+    },
+    "import": {
+      "open": "開啟匯入",
+      "connectedDetail": "{name} 已連線。開啟匯入以預覽將移轉的內容。",
+      "noRuns": "還沒有匯入。開啟匯入以預覽並開始。",
+      "title": "從 Eventbrite 匯入",
+      "crumb": "匯入",
+      "description": "移轉活動、票種、訂單和參加者。開始匯入前不會寫入任何內容，再次執行只會取得變更。",
+      "connected": "Eventbrite 已連線。確認將移轉的內容後再匯入。",
+      "started": "匯入已開始，在背景執行：稍後重新整理即可查看結果。",
+      "alreadyRunning": "已有匯入正在執行。",
+      "stepsLabel": "匯入步驟",
+      "steps": {
+        "connect": "連線",
+        "preview": "預覽",
+        "import": "匯入",
+        "result": "結果"
+      },
+      "notActive": "此連線未啟用。重新連線後再匯入。",
+      "backToConnection": "前往連線",
+      "preview": {
+        "title": "預覽",
+        "help": "你的 Eventbrite 帳戶目前的內容，以及其中在這裡屬於新內容的數量。尚未寫入任何內容。",
+        "readOnly": "只有擁有者和管理員可以預覽並開始匯入。",
+        "caption": "匯入將移轉的內容",
+        "what": "項目",
+        "inEventbrite": "Eventbrite 中",
+        "new": "這裡新增",
+        "noEmails": "匯入的訂單會標記為已匯入：不會向任何人收費，也不會寄送收據或電子票郵件。"
+      },
+      "what": {
+        "events": "活動",
+        "ticketTypes": "票種",
+        "orders": "訂單",
+        "attendees": "參加者",
+        "revenue": "營收",
+        "refunded": "已退款訂單"
+      },
+      "refundedOrders": "{count, plural, =0 {無} other {# 筆訂單，以已退款匯入，不計營收}}",
+      "noRevenue": "無",
+      "importing": "正在匯入…",
+      "importNew": "{count, plural, other {匯入 # 筆新紀錄}}",
+      "importAgain": "再次匯入以取得變更",
+      "result": {
+        "title": "結果",
+        "none": "尚未匯入任何內容。",
+        "finished": "完成於 {when}",
+        "inProgress": "進行中",
+        "refresh": "重新整理",
+        "counts": "匯入或更新 {pulled} · 未變 {skipped} · 出錯 {failed}",
+        "seeErrors": "查看需要處理的內容",
+        "caption": "Yayatoh 目前來自 Eventbrite 的內容",
+        "inYayatoh": "Yayatoh 中",
+        "ordersValue": "{count}（已付 {paid}）",
+        "attendeesValue": "{count}（有效 {active}）",
+        "goToEvents": "前往活動"
+      }
+    },
+    "sheets": {
+      "title": "已連結的活動",
+      "help": "每個已連結活動的參加者名單都與各自的 Google 試算表同步。試算表中的修改會在下次同步時進入 Yayatoh；刪除一列不會移除任何人。",
+      "linkTitle": "連結活動",
+      "event": "活動",
+      "pickEvent": "選擇活動",
+      "chooseEvent": "選擇要將參加者放入試算表的活動。",
+      "link": "建立試算表並連結",
+      "linking": "正在建立試算表…",
+      "linkHelp": "會在你的 Google 雲端硬碟中依欄位對應的欄建立新試算表。",
+      "alreadyLinked": "該活動已有試算表。",
+      "allLinked": "每個活動都有試算表。",
+      "noEvents": "請先建立活動，再連結其參加者名單。",
+      "emptyTitle": "尚未連結活動",
+      "emptyHelp": "在上方選擇活動即可建立其試算表。",
+      "emptyReadOnly": "擁有者或管理員可在此連結活動的參加者名單。",
+      "caption": "已連結 Google 試算表的活動",
+      "sheet": "試算表",
+      "openNamed": "在 Google 試算表中開啟 {title}",
+      "linkedOn": "連結於",
+      "status": "狀態",
+      "statuses": {
+        "active": "同步中",
+        "unlinked": "已取消連結"
+      },
+      "actions": "操作",
+      "unlink": "取消連結",
+      "unlinkNamed": "取消連結 {event}",
+      "confirmUnlink": "取消連結 {event} 的試算表？",
+      "confirmUnlinkBody": "之後不再同步。試算表及其內容保留在你的 Google 雲端硬碟中，所有人仍在 Yayatoh 名單中。",
+      "keep": "保持連結"
+    },
+    "linked": {
+      "title": "已連結的記錄",
+      "description": "此整合目前保持同步的內容，依記錄類型。",
+      "caption": "依類型的已連結記錄",
+      "object": "類型",
+      "count": "記錄",
+      "empty": "尚未連結任何內容。記錄會在同步時連結。"
+    },
+    "accounting": {
+      "mapTitle": "會計科目表",
+      "mapHelp": "選擇每日彙總分錄的每一行記入帳簿中的哪個科目。每天結束後依你組織的時區過帳。",
+      "notMapped": "對應科目後即可開始過帳每日分錄。",
+      "version": "版本 {version} · 自 {day} 起過帳",
+      "chartUnavailable": "無法從 {name} 載入你的會計科目表。請稍後再試。",
+      "chooseAccount": "選擇科目",
+      "categories": {
+        "sales": {
+          "label": "票券銷售",
+          "hint": "以當天票券銷售總額貸記。"
+        },
+        "donations": {
+          "label": "捐款",
+          "hint": "以當天線上捐款貸記。"
+        },
+        "refunds": {
+          "label": "退款",
+          "hint": "以退還給購買者與捐款人的金額借記。"
+        },
+        "fees": {
+          "label": "Yayatoh 費用",
+          "hint": "以當天平台費用（扣除退還的費用）借記。"
+        },
+        "payouts": {
+          "label": "撥款",
+          "hint": "接收 Yayatoh 撥款的銀行帳戶。"
+        },
+        "clearing": {
+          "label": "暫記科目",
+          "hint": "記錄 Yayatoh 或支付處理方為你保管的資金，用來平衡每筆分錄。"
+        }
+      },
+      "startsOn": "開始過帳日期",
+      "startsOnHint": "第一個過帳的日期，最早一年前。",
+      "save": "儲存科目對應",
+      "saved": "科目對應已儲存為版本 {version}。下次同步會用它過帳。",
+      "invalid": "此對應尚無法儲存。請檢查標示的欄位。",
+      "saveFailed": "無法儲存對應。請稍後再試。",
+      "issue": {
+        "missing": "請為「{field}」選擇科目。",
+        "unknown_account": "該科目已不在你的帳簿中。請為「{field}」另選一個。",
+        "clearing_shared": "暫記科目不能同時用於「{field}」。",
+        "starts_in_future": "請選擇今天或更早的日期。",
+        "starts_too_early": "請選擇過去一年內的日期。",
+        "missing_date": "請輸入第一個過帳的日期。",
+        "other": "請檢查此欄位。"
+      },
+      "journalsTitle": "每日分錄",
+      "journalsHelp": "每天每種貨幣一筆分錄。過帳後有變動的日期會先沖銷再重新過帳，絕不直接修改。",
+      "journalsCaption": "傳送到你帳簿的每日彙總分錄",
+      "waiting": "{count, plural, other {# 筆分錄等待傳送。}}",
+      "emptyTitle": "還沒有分錄",
+      "emptyMapped": "每天結束後，會在下次同步時過帳。",
+      "emptyUnmapped": "先對應科目，再同步，即可過帳自第一天以來的日期。",
+      "emptyMapAction": "對應科目",
+      "emptyPostAction": "檢查待過帳的日期",
+      "emptyBackAction": "返回整合",
+      "columns": {
+        "day": "日期",
+        "currency": "貨幣",
+        "kind": "分錄",
+        "amount": "金額",
+        "status": "狀態",
+        "reference": "帳簿中的參考編號"
+      },
+      "kinds": {
+        "journal": "分錄 · 修訂 {revision}",
+        "reversal": "沖銷修訂 {revision}"
+      },
+      "status": {
+        "pending": "等待中",
+        "posted": "已過帳",
+        "failed": "未過帳",
+        "superseded": "已取代"
+      }
+    },
+    "marketing": {
+      "consentRule": "同意優先：只傳送同意接收行銷郵件的聯絡人，取消訂閱或退信一律優先。有人在這裡取消訂閱後，下一次同步也會在對方那裡將其取消訂閱。",
+      "audience": {
+        "title": "受眾",
+        "help": "選擇要傳送到 {name} 的人以及他們加入的名單。",
+        "saved": "已儲存受眾。下一次同步會傳送。",
+        "segmentMissing": "已儲存的受眾已被刪除，因此不會傳送新的人。請選擇其他受眾。",
+        "segment": "傳送對象",
+        "list": "{name} 名單",
+        "everyone": "所有同意接收行銷郵件的人",
+        "savedSegment": "已儲存的受眾",
+        "emptyTitle": "尚未選擇受眾",
+        "emptyManage": "選擇要傳送的人以及他們加入的 {name} 名單。儲存之前不會傳送任何內容。",
+        "emptyRead": "由擁有者或管理員選擇傳送對象。在此之前不會傳送任何內容。",
+        "formLabel": "選擇受眾和名單",
+        "save": "儲存受眾",
+        "feedback": {
+          "list_required": "請選擇名單。",
+          "provider_unavailable": "無法從服務商載入名單。請幾分鐘後再試。",
+          "validation_failed": "該受眾已不存在。請選擇其他受眾。",
+          "forbidden": "你沒有權限存取此內容。",
+          "invalid_state": "目前無法設定此連線。",
+          "not_found": "找不到該內容。",
+          "read_only_freeze": "排定維護期間暫停變更。維護結束後請再試一次。",
+          "internal": "我們這邊發生問題。"
+        },
+        "chooseNow": "選擇受眾",
+        "allIntegrations": "所有整合"
+      },
+      "hubspot": {
+        "title": "與 HubSpot 同步的內容",
+        "contacts": "聯絡人依下方的欄位對應雙向同步。來自 HubSpot 的聯絡人永遠不會帶著同意進入；在 HubSpot 取消訂閱會在這裡將其取消訂閱。",
+        "events": "每個已發布的活動都會成為 HubSpot 行銷活動，取消也會一併傳送。",
+        "attendance": "會為同意接收行銷郵件的聯絡人傳送報名、報到和取消。"
+      },
+      "changes": {
+        "title": "來自 {name} 的同意變更",
+        "help": "從 {name} 傳回的取消訂閱、退信地址和檢舉，以及它們在這裡造成的變更。",
+        "caption": "來自 {name} 的同意變更",
+        "empty": "{name} 尚未傳回任何內容。",
+        "who": "聯絡人",
+        "change": "在服務商處",
+        "applied": "在這裡的變更",
+        "when": "時間",
+        "withdrawn": "已撤回同意",
+        "suppressed": "已封鎖",
+        "already": "已是最新",
+        "kinds": {
+          "unsubscribed": "已取消訂閱",
+          "cleaned": "地址退信",
+          "complained": "垃圾郵件檢舉"
+        }
+      }
+    }
+  },
+  "kioskPrint": {
+    "useEmail": "沒帶票券？使用電子郵件",
+    "loading": "正在尋找你的名牌…",
+    "emailTitle": "使用電子郵件",
+    "emailHint": "我們會寄送 6 位數驗證碼到票券上的電子郵件地址。",
+    "emailLabel": "你的電子郵件",
+    "sendCode": "寄送驗證碼給我",
+    "cancel": "取消",
+    "emailInvalid": "請輸入你的電子郵件地址，例如 name@example.com。",
+    "emailOffline": "電子郵件驗證碼需要網路連線。請掃描票券或前往服務台。",
+    "emailLimited": "要求的驗證碼過多。請前往服務台。",
+    "emailFailed": "目前無法寄送驗證碼。請重試或前往服務台。",
+    "codeTitle": "輸入驗證碼",
+    "codeSent": "如果 {email} 持有本活動的票券，我們已寄送 6 位數驗證碼給它，10 分鐘內有效。",
+    "codeLabel": "6 位數驗證碼",
+    "confirmCode": "確認驗證碼",
+    "newCode": "重新寄送驗證碼",
+    "codeInvalid": "請輸入郵件中的 6 位數字。",
+    "codeWrong": "驗證碼不正確。{left, plural, other {還剩 # 次機會。}}",
+    "codeExpired": "驗證碼已過期。請重新寄送。",
+    "detailsTitle": "核對你的資料",
+    "detailsHint": "你的名牌上將顯示以下內容。",
+    "name": "姓名",
+    "company": "公司",
+    "jobTitle": "職稱",
+    "ticket": "票券",
+    "print": "列印我的名牌",
+    "printing": "正在列印…",
+    "wrongDetails": "資料有誤",
+    "notMe": "不是我",
+    "printingTitle": "你的名牌正在列印",
+    "printingHint": "請到印表機領取。祝你參加愉快！",
+    "queuedTitle": "你的名牌已排隊等待列印",
+    "queuedHint": "自助機已離線。恢復連線後會立即列印；如果趕時間，請前往服務台。",
+    "done": "完成",
+    "deskTitle": "請前往服務台",
+    "desk": {
+      "desk": "報到服務台會為你列印名牌。",
+      "printed": "你的名牌已經列印過。如需新的名牌，服務台可以重新列印。",
+      "notFound": "這裡找不到該票券的名牌。",
+      "wrongDetails": "沒關係：服務台會更正你的資料並列印名牌。",
+      "printFailed": "印表機未接收你的名牌。服務台會為你列印。",
+      "locked": "錯誤驗證碼過多。服務台會協助你。",
+      "offline": "自助機目前離線。服務台會為你列印名牌。"
+    },
+    "readyTitle": "你的名牌可以列印了",
+    "readyHint": "開啟後選擇「列印」，然後到印表機領取。",
+    "openBadge": "開啟我的名牌進行列印"
+  },
+  "virtual": {
+    "setup": {
+      "title": "直播設定",
+      "description": "在線直播 {event} 的場次：選擇活動的舉辦方式與可觀看的人，並為每個場次設定直播。",
+      "providerOff": "此處尚不支援直播",
+      "providerOffHint": "影音服務商帳戶就緒後，Yayatoh 會開啟直播。你的設定會保留。",
+      "fakeProvider": "測試直播：此處使用替代影音服務商，不會播出任何內容。",
+      "readOnly": "你可以查看直播設定。只有編輯者可以變更。",
+      "totalViewers": "觀眾",
+      "totalMinutes": "觀看分鐘數",
+      "deliveryTitle": "舉辦方式",
+      "deliveryLegend": "這個活動如何舉辦？",
+      "saveDelivery": "儲存舉辦方式",
+      "deliverySaved": "已儲存舉辦方式。",
+      "accessTitle": "誰可以觀看",
+      "accessHint": "選擇每種票券包含的內容。直播依用量計費，因此只有含線上觀看的票券才能觀看。",
+      "inPersonNote": "這個活動為實體舉辦，因此不直播任何場次。選擇「線上」或「實體與線上並行」即可設定直播。",
+      "noTicketTypes": "尚無票券類型",
+      "noTicketTypesHint": "新增票券類型或報名通行證，然後選擇哪些可以線上觀看。",
+      "defaultNote": "尚未選擇：套用活動的預設值。",
+      "saveAccess": "儲存",
+      "saveAccessLabel": "儲存 {name} 的觀看權限",
+      "accessSaved": "已儲存 {name} 的觀看權限。",
+      "sessionsTitle": "場次直播",
+      "noSessions": "尚無場次",
+      "noSessionsHint": "在議程中新增場次，然後為每個場次設定直播。",
+      "addSessions": "前往場次",
+      "session": "場次",
+      "stream": "直播",
+      "streamNone": "無直播",
+      "streamOn": "已開啟",
+      "streamOff": "已關閉",
+      "viewers": "觀眾",
+      "minutes": "觀看分鐘數",
+      "checkedIn": "線上報到",
+      "actions": "操作",
+      "createStream": "設定直播",
+      "createStreamLabel": "為 {title} 設定直播",
+      "showKey": "顯示串流金鑰",
+      "showKeyLabel": "顯示 {title} 的串流金鑰",
+      "turnOff": "關閉",
+      "turnOn": "開啟",
+      "turnOffLabel": "關閉 {title} 的直播",
+      "turnOnLabel": "開啟 {title} 的直播",
+      "ingestUrl": "伺服器",
+      "streamKey": "串流金鑰",
+      "keyWarning": "任何擁有此金鑰的人都能以你的活動名義推流。請妥善保密。",
+      "streamCreated": "{title} 的直播已就緒。",
+      "streamOnSaved": "{title} 的直播已開啟。",
+      "streamOffSaved": "{title} 的直播已關閉。",
+      "delivery": {
+        "in_person": "實體",
+        "online": "線上",
+        "hybrid": "實體與線上並行"
+      },
+      "deliveryHint": {
+        "in_person": "所有人到場參加，不進行直播。",
+        "online": "所有人在線上觀看。除非你變更，票券皆包含線上觀看。",
+        "hybrid": "部分人到場，部分人在線上。請在下方選擇哪些票券可以觀看。"
+      },
+      "access": {
+        "in_person": "僅實體",
+        "virtual": "僅線上",
+        "both": "實體與線上"
+      },
+      "addTicketTypes": "前往票券"
+    },
+    "errors": {
+      "in_person_event": "這個活動為實體舉辦。請先選擇「線上」或「實體與線上並行」。",
+      "video_off": "此處尚不支援直播。",
+      "in_person_only": "這張票券僅限實體參加。",
+      "stream_off": "這個直播已關閉。",
+      "provider_changed": "影音服務商已更換。請重新設定這個直播。",
+      "views_per_hour": "嘗試次數過多。請等幾分鐘後再試。",
+      "invalid_token": "這個觀看連結已過期。請重新開始觀看。",
+      "ticket_void": "這張票券已失效。"
+    },
+    "watch": {
+      "metaTitle": "線上觀看",
+      "title": "線上觀看",
+      "greeting": "{name}，你好。請選擇要觀看的場次。",
+      "inPersonOnly": "你的票券僅限實體參加",
+      "inPersonOnlyHint": "這張票券不包含線上觀看。如需線上觀看，請聯絡主辦單位。",
+      "noSessionsTitle": "尚無直播",
+      "noSessionsHint": "主辦單位開啟直播後，場次會顯示在這裡。請在開始前再來看看。",
+      "watched": "{count, plural, =0 {尚未觀看} other {已觀看 # 分鐘}}",
+      "watchSession": "觀看",
+      "watchLabel": "觀看 {title}",
+      "orderLink": "線上觀看",
+      "orderLinkLabel": "使用票券 {serial} 線上觀看"
+    },
+    "player": {
+      "countNote": "直播播放期間，你的觀看時間每分鐘計算一次。",
+      "back": "所有場次",
+      "heading": "播放器",
+      "testPattern": "測試直播：此環境不播出任何影片。",
+      "ready": "按「開始觀看」即可開始。",
+      "pause": "暫停",
+      "resume": "繼續",
+      "play": "開始觀看",
+      "playing": "播放中",
+      "paused": "已暫停",
+      "starting": "正在開始…",
+      "watched": "{count, plural, =0 {尚未觀看} other {已觀看 # 分鐘}}",
+      "errors": {
+        "in_person_only": "你的票券僅限實體參加。",
+        "stream_off": "主辦單位已關閉這個直播。",
+        "views_per_hour": "嘗試次數過多。請等幾分鐘後再試。",
+        "invalid_token": "本次觀看已過期。請再次按「開始觀看」。",
+        "ticket_void": "這張票券已失效。",
+        "video_off": "目前無法直播。",
+        "not_found": "這個場次目前沒有直播。",
+        "generic": "發生問題。請再試一次。"
+      }
+    }
   },
   "guestSeats": {
     "placeAt": {
@@ -14834,6 +15985,25 @@
       "reason_required": "請選擇重印此名牌的原因。",
       "note_required": "選擇「其他」時，請簡要說明原因。",
       "note": "備註不得超過 200 個字元。"
+    },
+    "balanceDue": "此報名有未付餘額。請在名牌頁面填寫原因後列印。",
+    "sourceKiosk": "自助機",
+    "kiosk": {
+      "heading": "自助機自助列印",
+      "hint": "參加者在報到自助機上掃描票券（或確認郵件中的驗證碼），核對資料後自行列印名牌，僅限一次。重新列印、未付餘額和仍在等候的報名由服務台處理。",
+      "on": "已開啟",
+      "off": "已關閉",
+      "printsTo": "列印到 {printer}",
+      "emailOn": "電子郵件驗證碼已開啟",
+      "emailOff": "電子郵件驗證碼已關閉",
+      "options": "自助列印",
+      "enabled": "允許參加者在自助機上列印自己的名牌",
+      "emailCodes": "提供「使用電子郵件」（寄送一次性驗證碼給票券持有人）",
+      "printer": "自助機列印到",
+      "printerHint": "自助機本身的列印對話框適用於連接在自助機上的印表機。",
+      "ownDialog": "自助機本身的列印對話框",
+      "save": "儲存自助機設定",
+      "saved": "自助機設定已儲存。"
     }
   },
   "sessionCheckin": {
@@ -15830,7 +17000,15 @@
   "emptyActions": {
     "seeEvents": "查看你的活動",
     "eventHome": "前往活動首頁",
-    "clearSearch": "清除搜尋"
+    "clearSearch": "清除搜尋",
+    "addRule": "新增規則",
+    "scheduleReport": "排程報告",
+    "linkSheet": "連結活動",
+    "connectPayouts": "連接收款",
+    "runAgain": "再次執行",
+    "agencyAddress": "查看代理商地址",
+    "clients": "查看客戶",
+    "plan": "開啟方案與帳單"
   },
   "coupons": {
     "title": "優惠券",
@@ -15981,6 +17159,861 @@
       "step1": "每張付費票券依您的方案收取手續費。免費票券不收取手續費。",
       "step2": "手續費從每筆訂單中扣除，並顯示於每筆撥款中。",
       "step3": "因退款而退還的手續費會顯示於「已退還手續費」下。"
+    }
+  },
+  "ssoFakeIdp": {
+    "eyebrow": "測試身分識別提供者",
+    "title": "模擬身分識別提供者",
+    "descriptionSaml": "僅限開發：此頁面會像你所屬組織的 SAML 身分識別提供者一樣回應。",
+    "descriptionOidc": "僅限開發：此頁面會像你所屬組織的 OpenID Connect 提供者一樣回應。",
+    "email": "提供者擔保的電子郵件地址",
+    "name": "姓名（選填）",
+    "signIn": "登入",
+    "cancel": "取消",
+    "returning": "正在返回 Yayatoh…",
+    "continue": "繼續",
+    "unknown": "此登入要求已失效。",
+    "invalidEmail": "請輸入有效的電子郵件地址。"
+  },
+  "sso": {
+    "title": "單一登入",
+    "subtitle": "讓團隊透過你的身分識別提供者登入、驗證電子郵件網域，並透過 SCIM 佈建人員。",
+    "help": "閱讀指南",
+    "noAccessTitle": "只有擁有者和管理員可以管理單一登入",
+    "noAccessDescription": "請洽詢此組織的擁有者或管理員來設定或變更單一登入。",
+    "noModuleTitle": "你的方案不包含單一登入",
+    "noModuleDescription": "單一登入和 SCIM 屬於企業版功能。",
+    "seePlan": "查看方案",
+    "unavailableTitle": "單一登入尚無法使用",
+    "unavailableDescription": "此部署目前還無法設定單一登入。",
+    "testPassed": "測試登入成功。",
+    "testPassedNext": "你可以開啟單一登入了。",
+    "testPassedDomainUnverified": "你用來登入的電子郵件地址尚不在已驗證的網域中：請在人員登入前驗證該網域。",
+    "testFailed": "測試登入失敗。",
+    "idpTitle": "身分識別提供者",
+    "status": {
+      "active": "已開啟",
+      "draft": "尚未開啟",
+      "disabled": "已關閉"
+    },
+    "protocol": "通訊協定",
+    "protocolSaml": "SAML 2.0",
+    "protocolSamlHint": "Okta、Microsoft Entra ID、Google Workspace、OneLogin、JumpCloud…",
+    "protocolOidc": "OpenID Connect",
+    "protocolOidcHint": "任何支援 OpenID Connect 登入的提供者。",
+    "name": "名稱",
+    "nameHint": "會顯示給團隊，例如「Northwind Okta」。",
+    "samlSource": "你想如何輸入提供者的詳細資料？",
+    "sourceXml": "貼上中繼資料 XML",
+    "sourceUrl": "中繼資料 URL",
+    "sourceManual": "手動輸入詳細資料",
+    "metadataXml": "中繼資料 XML",
+    "metadataXmlHint": "從身分識別提供者的應用程式設定中下載，然後貼到這裡。",
+    "metadataUrl": "中繼資料 URL",
+    "metadataUrlHint": "身分識別提供者發布其中繼資料的 https 位址。",
+    "entityId": "身分識別提供者實體 ID",
+    "ssoUrl": "登入 URL",
+    "certificate": "簽署憑證",
+    "certificateHint": "身分識別提供者用來簽署的 X.509 憑證（PEM）。",
+    "certificateSummary": "{subject}，{expires} 到期",
+    "issuer": "簽發者 URL",
+    "issuerHint": "例如 https://login.example.com。",
+    "clientId": "用戶端 ID",
+    "clientSecret": "用戶端密碼",
+    "clientSecretKeep": "留空即保留已儲存的密碼。",
+    "defaultRole": "新人員的角色",
+    "defaultRoleHint": "首次登入的人員會以此角色加入，除非 SCIM 群組指派了其他角色。",
+    "jit": "首次登入時新增人員",
+    "jitHint": "關閉：只有現有成員和提供者透過 SCIM 佈建的人員可以登入。",
+    "jitShort": "首次登入時新增人員",
+    "on": "開",
+    "off": "關",
+    "lastTest": "上次測試",
+    "lastTestPassed": "{date} 測試成功",
+    "lastTestFailed": "{date} 測試失敗",
+    "neverTested": "尚未測試",
+    "settingsChangedSinceTest": "（之後設定已變更：請重新測試）",
+    "testSignIn": "測試登入",
+    "activate": "開啟",
+    "activated": "單一登入已開啟。",
+    "disable": "關閉",
+    "disabled": "單一登入已關閉。",
+    "deleteConnection": "刪除連線",
+    "editTitle": "變更設定",
+    "createTitle": "連結你的身分識別提供者",
+    "saved": "設定已儲存。開啟單一登入前，請先執行測試登入。",
+    "fieldInvalid": "請檢查此值。",
+    "fieldRequired": "此為必填欄位。",
+    "saveChanges": "儲存變更",
+    "saveConnection": "儲存連線",
+    "emptyTitle": "尚無身分識別提供者",
+    "emptyDescription": "連結你的身分識別提供者、測試登入、驗證網域，然後開啟單一登入。",
+    "emptyAction": "連結你的身分識別提供者",
+    "spTitle": "提供給身分識別提供者的資料",
+    "spDescription": "將這些資料複製到你在身分識別提供者建立的應用程式中。",
+    "spEntityId": "實體 ID（對象）",
+    "spAcs": "判斷提示取用者服務（ACS）URL",
+    "spRedirect": "重新導向 URI（OpenID Connect）",
+    "domainsTitle": "已驗證的網域",
+    "domainsDescription": "單一登入和 SCIM 只接受已驗證網域中的電子郵件地址。發布 DNS TXT 記錄即可驗證網域。",
+    "domain": "網域",
+    "domainHint": "團隊的電子郵件網域，例如 acme.com。",
+    "domainInvalid": "請輸入網域，例如 acme.com。",
+    "domainAdded": "已新增網域。請發布其 TXT 記錄，然後進行檢查。",
+    "addDomain": "新增網域",
+    "noDomainsTitle": "尚無網域",
+    "noDomainsDescription": "新增團隊的電子郵件網域以進行驗證。",
+    "domainStatus": {
+      "verified": "已驗證",
+      "pending": "等待 DNS",
+      "failed": "未驗證"
+    },
+    "enforced": "必須使用單一登入",
+    "recordInstructions": "在網域的 DNS 中發布此 TXT 記錄，然後進行檢查。DNS 變更可能需要一段時間才會生效。",
+    "recordName": "記錄名稱",
+    "recordValue": "記錄值",
+    "verifiedOn": "已於 {date} 驗證",
+    "checkDomain": "檢查 {domain}",
+    "removeDomain": "移除 {domain}",
+    "enforce": "要求 {domain} 使用單一登入",
+    "activateNeedsDomain": "請先驗證網域，再開啟單一登入。",
+    "scimTitle": "SCIM 佈建",
+    "scimDescription": "你的身分識別提供者可以自動新增、更新和移除人員。在那裡移除某人後，其在此處的存取權會立即終止。",
+    "scimBaseUrl": "SCIM 基礎 URL",
+    "tokenStatus": "權杖 {prefix}…，建立於 {created}，上次使用於 {used}。",
+    "neverUsed": "從未使用",
+    "noToken": "尚無 SCIM 權杖。",
+    "createToken": "建立 SCIM 權杖",
+    "rotateToken": "更換權杖",
+    "revokeToken": "撤銷權杖",
+    "tokenShownOnce": "請立即複製此權杖：它不會再次顯示。請將其貼到身分識別提供者的 SCIM 設定中。",
+    "tokenLabel": "SCIM 權杖",
+    "tokenRevoked": "權杖已撤銷。佈建已停止。",
+    "scimUsers": "{active, plural, other {已佈建 # 人}}，{deprovisioned, plural, other {已取消佈建 # 人}}。",
+    "groupsTitle": "群組和角色",
+    "noGroupsTitle": "尚無群組",
+    "noGroupsDescription": "身分識別提供者透過 SCIM 推送群組後，群組會顯示在這裡。接著為每個群組選擇角色。",
+    "noGroupsAction": "複製 SCIM 基礎 URL",
+    "groupName": "群組",
+    "groupMembers": "成員",
+    "groupRole": "角色",
+    "groupRoleLabel": "{group} 的角色",
+    "groupRoleSaved": "角色已儲存。",
+    "noRole": "無角色（不變更成員）",
+    "copy": "複製",
+    "copied": "已複製",
+    "reasons": {
+      "too_large": "中繼資料過大。",
+      "invalid_metadata": "這不是 SAML 身分識別提供者的中繼資料。",
+      "no_sso_url": "中繼資料中沒有登入 URL。",
+      "no_certificate": "中繼資料中沒有簽署憑證。",
+      "metadata_unreachable": "無法從此 URL 下載中繼資料。",
+      "certificate_invalid": "這不是有效的憑證。",
+      "certificate_expired": "簽署憑證已過期。",
+      "certificate_not_yet_valid": "簽署憑證尚未生效。",
+      "discovery_failed": "無法從此簽發者讀取提供者的 OpenID 設定。",
+      "secret_missing": "請輸入用戶端密碼。",
+      "malformed": "無法讀取提供者的回應。",
+      "invalid_signature": "提供者的回應並非由已設定的提供者簽署。",
+      "wrong_issuer": "回應來自與已設定者不同的簽發者。",
+      "wrong_audience": "回應是傳給其他應用程式的：請檢查實體 ID 或用戶端 ID。",
+      "wrong_request": "回應不屬於此次測試。",
+      "expired": "回應已過期。",
+      "no_email": "提供者未傳送電子郵件地址。",
+      "idp_error": "提供者沒有回應。",
+      "cancelled": "測試登入已取消。",
+      "test_required": "請先使用目前的設定成功完成一次測試登入。",
+      "domain_required": "請先驗證網域。",
+      "protocol_change": "若要切換通訊協定，請刪除此連線。",
+      "domain_not_verified": "請先驗證該網域。",
+      "connection_inactive": "請先開啟單一登入。",
+      "domain_limit": "已達網域數量上限。",
+      "already_added": "此網域已在清單中。",
+      "record_not_found": "尚未找到 TXT 記錄。請確認已發布，然後再試一次。",
+      "lookup_failed": "DNS 查詢失敗。請幾分鐘後再試一次。",
+      "claimed_elsewhere": "另一個組織已驗證此網域。",
+      "sso_unavailable": "此部署不支援單一登入。",
+      "last_owner": "組織至少需要一位擁有者。"
+    }
+  },
+  "leads": {
+    "portal": {
+      "heading": "潛在客戶蒐集",
+      "window": "蒐集於 {opens} 開放，{closes} 關閉（活動當地時間）。備註與匯出可使用至 {until}。",
+      "termsNeededAdmin": "請先在下方接受潛在客戶條款，團隊才能蒐集潛在客戶。",
+      "termsNeededStaff": "參展商管理員需要先接受潛在客戶條款，你才能蒐集潛在客戶。",
+      "why": {
+        "unlicensed": "你還沒有潛在客戶授權。請向參展商管理員申請。",
+        "over_allowance": "你的授權超出參展商的配額。請管理員收回一個授權或購買更多。"
+      },
+      "open": "開啟潛在客戶蒐集"
+    },
+    "license": {
+      "licensed": "已授權",
+      "unlicensed": "未授權",
+      "over_allowance": "超出配額"
+    },
+    "capture": {
+      "not_open": "蒐集尚未開放",
+      "open": "蒐集開放中",
+      "closed": "蒐集已關閉"
+    },
+    "terms": {
+      "heading": "潛在客戶條款",
+      "v1": "掃描參加者的識別證時，你只會收到其姓名、職稱和公司；僅在對方同意分享時才會收到電子郵件地址。貴公司將對這些資料負責：僅用於後續聯繫你們在本活動中的交流，妥善保管，並在對方要求時刪除。參加者可以看到你掃描了他們，並可停止分享電子郵件地址。",
+      "accepted": "已接受潛在客戶條款",
+      "acceptLabel": "同意",
+      "accept": "我代表 {exhibitor} 接受潛在客戶條款",
+      "submit": "接受潛在客戶條款",
+      "acceptRequired": "請勾選以接受潛在客戶條款。"
+    },
+    "settings": {
+      "heading": "資格條件與可見範圍",
+      "qualifiers": "資格條件",
+      "qualifiersHint": "每行一個，最多 10 個（例如：預算已核准）。團隊會在每筆潛在客戶上勾選。",
+      "visibility": "誰能看到潛在客戶",
+      "teamVisibility": "工作人員可查看整個團隊的潛在客戶（否則只能看到自己掃描的）",
+      "save": "儲存潛在客戶設定",
+      "saved": "潛在客戶設定已儲存。",
+      "qualifiersInvalid": "每個資格條件最多 60 個字元。",
+      "tooMany": "最多只能有 10 個資格條件。"
+    },
+    "export": {
+      "heading": "匯出潛在客戶",
+      "ready": "已確認。現在可以下載潛在客戶。",
+      "count": "{count, plural, =0 {尚無潛在客戶} other {# 筆潛在客戶}}",
+      "hint": "為保障安全，下載前我們會以電子郵件寄送驗證碼確認你的身分。",
+      "download": "下載潛在客戶（CSV）",
+      "ended": "本活動的潛在客戶存取已結束。",
+      "columns": {
+        "name": "姓名",
+        "jobTitle": "職稱",
+        "company": "公司",
+        "email": "電子郵件",
+        "rating": "評等",
+        "qualifiers": "資格條件",
+        "notes": "備註",
+        "capturedAt": "掃描時間",
+        "scannedBy": "掃描者",
+        "scans": "掃描次數",
+        "sharedFields": "已分享欄位",
+        "emailConsentVersion": "電子郵件同意版本"
+      }
+    },
+    "confirm": {
+      "title": "確認是你本人",
+      "intro": "若要下載潛在客戶，請使用我們寄到 {email} 的驗證碼確認。"
+    },
+    "attendee": {
+      "heading": "誰掃描了我的識別證",
+      "emptyTitle": "還沒有人掃描你的識別證",
+      "emptyDescription": "參展商掃描你的識別證後，會顯示在這裡。",
+      "scannedAt": "掃描於 {time}",
+      "emailShared": "已取得你的電子郵件",
+      "emailWithdrawn": "已停止分享電子郵件",
+      "emailNotShared": "未分享電子郵件",
+      "withdraw": "停止與 {exhibitor} 分享我的電子郵件",
+      "withdrawn": "完成。對方將無法再看到你的電子郵件。",
+      "sharingOn": "掃描你識別證的參展商會收到你的電子郵件地址。",
+      "sharingOff": "掃描你識別證的參展商不會收到你的電子郵件地址。",
+      "sharingHint": "他們一律會收到你的姓名、職稱和公司，但絕不會收到你的電話或地址。",
+      "turnOff": "停止與參展商分享我的電子郵件",
+      "turnOn": "與掃描我識別證的參展商分享我的電子郵件",
+      "saved": "已儲存。"
+    },
+    "app": {
+      "pageTitle": "潛在客戶蒐集",
+      "loading": "載入中…",
+      "signedOutTitle": "登入後即可蒐集潛在客戶",
+      "signedOutDescription": "請在此裝置上開啟參展商邀請信中的登入連結，再回到潛在客戶蒐集。",
+      "openPortal": "前往參展商入口網站",
+      "title": "{exhibitor} 的潛在客戶",
+      "online": "連線中",
+      "offline": "離線：掃描會儲存在此裝置上",
+      "queued": "{count, plural, =0 {已全部同步} other {# 次掃描等待同步}}",
+      "modes": "潛在客戶蒐集檢視",
+      "viewScan": "掃描",
+      "viewLeads": "{count, plural, =0 {潛在客戶} other {潛在客戶（#）}}",
+      "blockedTitle": "你目前無法蒐集潛在客戶",
+      "blocked": {
+        "unlicensed": "你沒有潛在客戶授權。請向參展商管理員申請。",
+        "over_allowance": "你的授權超出參展商的配額。請洽管理員。",
+        "termsAdmin": "請先在參展商入口網站接受潛在客戶條款。",
+        "termsStaff": "參展商管理員需要先接受潛在客戶條款。",
+        "notOpen": "蒐集將於 {time} 開放。",
+        "closed": "蒐集已於 {time} 關閉。你仍可查看與編輯潛在客戶。"
+      },
+      "codeLabel": "識別證代碼",
+      "codeHint": "掃描識別證上的 QR 碼，或輸入其下方印的代碼。",
+      "save": "儲存潛在客戶",
+      "camera": "用相機掃描",
+      "stopCamera": "關閉相機",
+      "cameraFailed": "無法啟動相機。請輸入識別證代碼。",
+      "refusals": {
+        "no_license": "你沒有潛在客戶授權。請向參展商管理員申請。",
+        "over_allowance": "你的授權超出參展商的配額。掃描記錄保留在此裝置上。",
+        "terms_not_accepted": "尚未接受潛在客戶條款。掃描記錄保留在此裝置上。",
+        "access_ended": "本活動的潛在客戶存取已結束。",
+        "other": "發生問題。掃描記錄保留在此裝置上，請再試一次。"
+      },
+      "result": {
+        "queued": "已儲存在此裝置上",
+        "queuedHint": "同步後會顯示詳細資料。",
+        "refused": "未儲存",
+        "captured": "已儲存潛在客戶",
+        "rescanned": "已是潛在客戶：已加入掃描"
+      },
+      "reasons": {
+        "invalid": "無法讀取此識別證。請檢查代碼後再試一次。",
+        "wrong_event": "此識別證屬於其他活動。",
+        "not_open": "掃描時蒐集尚未開放。",
+        "closed": "掃描時蒐集已關閉。"
+      },
+      "emailWithdrawn": "參加者已於 {time} 停止分享電子郵件",
+      "emailNotShared": "未分享電子郵件",
+      "capturedAt": "掃描於 {time}{count, plural, =1 {} other { · # 次}}",
+      "scannedBy": "掃描者：{email}",
+      "editLabel": "潛在客戶詳細資料",
+      "rating": "評等",
+      "ratings": {
+        "hot": "熱",
+        "warm": "溫",
+        "cold": "冷",
+        "none": "未評等"
+      },
+      "qualifiers": "資格條件",
+      "notes": "備註",
+      "saveDetails": "儲存詳細資料",
+      "saved": "已儲存。",
+      "savedQueued": "已隨掃描儲存，連線後同步。",
+      "needsConnection": "請連上網路以儲存此潛在客戶的變更。",
+      "saveFailed": "無法儲存，請再試一次。",
+      "accessEnded": "本活動的潛在客戶存取已結束。",
+      "scope": {
+        "all": "{exhibitor} 的所有潛在客戶",
+        "team": "你團隊的潛在客戶",
+        "own": "你的潛在客戶"
+      },
+      "emptyTitle": "尚無潛在客戶",
+      "emptyDescription": "在「掃描」分頁掃描識別證，儲存你的第一筆潛在客戶。",
+      "search": "搜尋潛在客戶",
+      "noMatch": "沒有符合搜尋條件的潛在客戶。",
+      "edit": "編輯 {name}"
+    }
+  },
+  "conferenceHub": {
+    "metaTitle": "會議中心",
+    "eyebrow": "你的會議中心",
+    "for": "{name} 的會議中心",
+    "whose": "誰的會議中心",
+    "orderLink": "開啟我的會議中心",
+    "orderLinkHint": "議程、你的行程、名牌和行事曆，都在手機上。",
+    "noRegistrantTitle": "此訂單中沒有報名",
+    "noRegistrantDescription": "會議中心屬於一筆報名。請開啟你報名時的訂單。",
+    "backToOrder": "返回我的訂單",
+    "offline": "你目前離線。這是儲存在手機上的副本。",
+    "privateLink": "此頁面為私人頁面：任何擁有連結的人都能查看並變更你的行程。請勿分享。",
+    "tabs": {
+      "label": "會議中心區塊",
+      "today": "今天",
+      "schedule": "我的行程",
+      "agenda": "議程",
+      "badge": "名牌"
+    },
+    "today": {
+      "now": "正在進行",
+      "next": "接下來",
+      "fromSchedule": "來自你的行程。",
+      "fromAgenda": "來自議程。為場次加上星號，打造你自己的行程。",
+      "nothingNow": "目前沒有進行中的場次。",
+      "nothingNextTitle": "近期沒有安排",
+      "nothingNextDescription": "瀏覽議程，為場次加上星號並報名選修場次。",
+      "openAgenda": "開啟議程",
+      "pollsAndQa": "投票與問答",
+      "more": "你的工具",
+      "badgeTitle": "你的名牌",
+      "badgeDescription": "在入口與場次報到時出示 QR 碼。",
+      "showBadge": "顯示我的名牌",
+      "networkingTitle": "交流",
+      "networkingDescription": "尋找其他與會者，建立聯繫並預約會面。",
+      "openNetworking": "開啟交流",
+      "calendarTitle": "你的行事曆",
+      "calendarDescription": "將你的行程加入手機行事曆。場次時間變動時會自動更新。",
+      "openCalendar": "加入我的行事曆"
+    },
+    "summary": "已報名：{enrolled} · 收藏：{favorites} · 時間衝突：{conflicts}",
+    "agendaIntro": "為想參加的場次加上星號。選修場次需要報名。",
+    "conflict": "與 {titles} 時間衝突",
+    "emptyScheduleTitle": "你的行程是空的",
+    "emptyScheduleDescription": "在議程中為場次加上星號，或報名選修場次，它們就會顯示在這裡。",
+    "emptyAgendaTitle": "尚無場次",
+    "emptyAgendaDescription": "主辦單位尚未為你的報名新增場次。請稍後再來查看。",
+    "favorite": {
+      "star": "加星號",
+      "starred": "已加星號",
+      "starNamed": "為 {title} 加上星號",
+      "unstarNamed": "移除 {title} 的星號",
+      "pill": "收藏",
+      "added": "{title} 已加入你的行程。",
+      "removed": "{title} 已從你的行程移除。",
+      "replaced": "已加上星號。已移除衝突的收藏：{count}。",
+      "tooMany": "收藏的場次已達上限。請先移除一個星號。",
+      "conflictTitle": "與你的行程時間衝突",
+      "conflictEnrolled": "{title}（已報名）",
+      "conflictFavorite": "{title}（已收藏）",
+      "keepBoth": "兩者都保留",
+      "replace": "取代",
+      "cancel": "取消"
+    },
+    "calendar": {
+      "title": "行事曆訂閱",
+      "description": "只要訂閱一次：行事曆 App 會重新整理訂閱，場次時間變動時你的行事曆也會跟著變動。已報名的場次顯示為已確認，加上星號的顯示為暫定。",
+      "subscribe": "在我的行事曆中訂閱",
+      "download": "下載 .ics",
+      "linkLabel": "訂閱連結（私人）",
+      "copy": "複製連結",
+      "copied": "已複製連結。",
+      "replace": "更換連結",
+      "replaceConfirmTitle": "要更換行事曆連結嗎？",
+      "replaceConfirmBody": "目前的連結會立即在所有使用它的行事曆中失效。請用新連結重新訂閱。",
+      "replaceConfirm": "更換連結",
+      "cancel": "取消",
+      "replaced": "完成。舊連結已失效：請用新連結訂閱。"
+    },
+    "install": {
+      "title": "保存在手機上",
+      "button": "加入主畫面",
+      "installed": "此會議中心已在你的主畫面上。",
+      "done": "已加入主畫面。",
+      "help": "iPhone 或 iPad：點一下「分享」，再選「加入主畫面」。Android：開啟瀏覽器選單，再選「安裝應用程式」或「加到主畫面」。"
+    },
+    "badge": {
+      "title": "你的名牌",
+      "qrLabel": "{name} 的名牌 QR 碼",
+      "shortCode": "代碼",
+      "hint": "在入口請調高螢幕亮度。",
+      "noneTitle": "尚無名牌",
+      "noneDescription": "報名確認後，你的名牌會顯示在這裡。"
+    }
+  },
+  "billingUsage": {
+    "title": "用量",
+    "subtitle": "你的組織依計量項目的使用情況：訊息、AI 額度和掃描裝置。",
+    "breadcrumb": "導覽路徑",
+    "period": "本月：{start} 至 {end}（{zone}）",
+    "filterLabel": "計量項目",
+    "allMeters": "所有計量項目",
+    "meter": {
+      "email": "電子郵件",
+      "sms": "簡訊",
+      "whatsapp": "WhatsApp",
+      "ai_credits": "AI 額度",
+      "devices": "掃描裝置"
+    },
+    "unit": {
+      "email": "{count, plural, other {已寄出 # 封郵件}}",
+      "sms": "{count, plural, other {# 則簡訊分段}}",
+      "whatsapp": "{count, plural, other {已傳送 # 則訊息}}",
+      "ai_credits": "{count, plural, other {已使用 # 個額度}}",
+      "devices": "{count, plural, other {已登記 # 台裝置}}"
+    },
+    "reportingTitle": "用量會傳送給你的帳單服務商",
+    "reportingBody": "{count, plural, =0 {目前的用量都已傳送。} other {有 # 筆記錄等待傳送。}}",
+    "countingTitle": "用量會被計算，不會收費",
+    "countingBody": "此組織未啟用帳單，因此用量只在這裡計算。",
+    "currentTitle": "本月",
+    "currentDescription": "依你組織的時區計算。",
+    "historyTitle": "先前的月份",
+    "historyDescription": "最近 12 個有用量的月份。",
+    "emptyTitle": "尚無用量",
+    "emptyBody": "當你寄送郵件或簡訊、用 AI 起草或登記掃描裝置時，用量會顯示在這裡。",
+    "historyEmpty": "先前的月份沒有用量。",
+    "month": "月份"
+  },
+  "billingBanner": {
+    "label": "帳單",
+    "graceTitle": "你的訂閱付款未成功",
+    "graceBody": "在 {date} 之前一切照常。之後組織將變為唯讀，直到付款為止。",
+    "readOnlyTitle": "此組織為唯讀",
+    "readOnlyBody": "訂閱付款失敗。沒有刪除任何內容：你可以檢視、匯出和掃描票券，但在付款前變更已暫停。",
+    "action": "方案與帳單"
+  },
+  "agencies": {
+    "title": "代理商",
+    "subtitle": "讓代理商為你的活動工作。你可以隨時撤銷存取權，代理商絕不會支付或收取你的款項。",
+    "noAccessTitle": "只有擁有者和管理員可以管理代理商",
+    "noAccessDescription": "請此組織的擁有者或管理員為代理商授予存取權。",
+    "grantTitle": "為代理商授予存取權",
+    "agency": "代理商地址",
+    "agencyHint": "代理商提供給你的地址，例如 bloom-events。",
+    "agencyRequired": "請輸入代理商的地址。",
+    "agencyUnknown": "沒有代理商使用此地址。請向代理商確認。",
+    "agencySelf": "代理商無法為自己授予存取權。",
+    "agencyTaken": "此代理商已有存取權。",
+    "role": "代理商可以做什麼",
+    "roleManager": "管理活動",
+    "roleManagerHint": "建立和編輯活動、賓客、報到與訊息。不含退款、銷售、成員或設定。",
+    "roleMarketing": "行銷",
+    "roleMarketingHint": "行銷活動、受眾與訊息，以及檢視活動。",
+    "roleViewer": "僅檢視",
+    "roleViewerHint": "檢視活動、訂單與賓客。不做任何變更。",
+    "finance": "同時允許代理商檢視我們的款項",
+    "financeHint": "撥款、財務報表與帳本，僅供檢視。除非你開啟，否則關閉。",
+    "grant": "授予存取權",
+    "granted": "{agency} 現在可以在此組織中工作。",
+    "listTitle": "擁有存取權的代理商",
+    "empty": "沒有代理商擁有存取權。與代理商合作時，請在上方為其授予存取權。",
+    "emptyReadOnly": "沒有代理商擁有存取權。",
+    "agencyColumn": "代理商",
+    "roleColumn": "存取權",
+    "financeColumn": "款項",
+    "grantedColumn": "開始於",
+    "actions": "操作",
+    "financeOn": "可檢視",
+    "financeOff": "無存取權",
+    "revoke": "撤銷",
+    "revokeNamed": "撤銷 {agency} 的存取權",
+    "revoked": "{agency} 已不再擁有存取權。",
+    "financeEnable": "允許款項",
+    "financeEnableNamed": "允許 {agency} 檢視我們的款項",
+    "financeDisable": "停止款項",
+    "financeDisableNamed": "停止 {agency} 檢視我們的款項",
+    "historyTitle": "過往存取",
+    "revokedColumn": "結束於",
+    "unknownAgency": "代理商已不在 Yayatoh",
+    "roleLabel": "{role, select, manager {管理活動} marketing {行銷} viewer {僅檢視} other {存取權}}"
+  },
+  "agency": {
+    "title": "客戶",
+    "subtitle": "所有為 {agency} 授予存取權的客戶。數字來自快照：重新整理即可更新。",
+    "tabs": "代理商區段",
+    "tab": {
+      "clients": "客戶",
+      "events": "活動",
+      "marketing": "行銷",
+      "reports": "報表"
+    },
+    "refresh": "重新整理數字",
+    "refreshed": "已重新整理 {count, plural, other {# 位客戶}}的數字。",
+    "notRefreshed": "尚未重新整理",
+    "emptyTitle": "還沒有客戶",
+    "emptyDescription": "請你的客戶在其 Yayatoh 主控台中開啟「代理商」，並為 {address} 授予存取權。",
+    "noAccessTitle": "代理商頁面僅供代理商成員使用",
+    "noAccessDescription": "請向 {agency} 的擁有者申請存取權。",
+    "client": "客戶",
+    "nextEvent": "下一個活動",
+    "noNextEvent": "尚無安排",
+    "upcoming": "即將舉行的活動",
+    "orders": "訂單",
+    "tickets": "票券",
+    "checkins": "已報到",
+    "checkinRate": "報到率",
+    "open": "開啟",
+    "openNamed": "開啟 {client}",
+    "finance": "含款項",
+    "eventsTitle": "所有客戶的活動",
+    "eventsEmpty": "你的客戶還沒有即將舉行或最近的活動。",
+    "event": "活動",
+    "starts": "開始",
+    "status": "狀態",
+    "gross": "總銷售額",
+    "grossHidden": "未分享",
+    "grossHiddenHint": "只有允許你檢視其款項的客戶才會顯示總銷售額。",
+    "openEventNamed": "開啟 {client} 的 {event}",
+    "marketingTitle": "行銷，最近 30 天",
+    "marketingEmpty": "還沒有客戶。",
+    "campaigns": "行銷活動",
+    "sends": "已傳送",
+    "deliveries": "已送達",
+    "clicks": "點擊",
+    "uniqueClickers": "點擊過的人",
+    "conversion": "轉換率",
+    "reportsTitle": "所有客戶合計",
+    "clientsCount": "客戶",
+    "eventsTotal": "活動",
+    "revenue": "總銷售額",
+    "revenueFrom": "來自 {count, plural, other {# 位}}分享款項的客戶",
+    "revenueNone": "沒有客戶與你分享其款項。",
+    "perClient": "依客戶",
+    "eventStatus": {
+      "draft": "草稿",
+      "published": "已發布",
+      "postponed": "已延期",
+      "cancelled": "已取消",
+      "completed": "已結束",
+      "archived": "已封存"
+    },
+    "refreshedAt": "重新整理時間"
+  },
+  "analyticsPro": {
+    "tabs": {
+      "label": "分析區塊",
+      "overview": "概覽",
+      "explore": "探索",
+      "alerts": "提醒規則",
+      "reports": "報告"
+    },
+    "explore": {
+      "title": "探索",
+      "description": "選擇一個指標及其細分方式。歸因會顯示哪些活動、管道和來源帶來了銷售。",
+      "form": "選擇要顯示的內容",
+      "measure": "指標",
+      "groupCounts": "數量",
+      "groupMoney": "金額",
+      "groupAttribution": "歸因",
+      "measures": {
+        "registrations": "報名數",
+        "tickets": "售出票券（淨數）",
+        "comp_tickets": "免費票券",
+        "refunded_tickets": "已退款票券",
+        "checkins": "報到",
+        "no_shows": "未出席",
+        "attributed_orders": "歸因訂單",
+        "gross": "已付款",
+        "refunds": "已退款",
+        "net": "淨銷售額",
+        "attributed_revenue": "歸因收入"
+      },
+      "dimension": "細分維度",
+      "dimensions": {
+        "period": "期間",
+        "event": "活動",
+        "channel": "管道",
+        "source": "來源",
+        "campaign": "行銷活動"
+      },
+      "model": "歸因模型",
+      "modelHint": "僅用於歸因訂單和收入。",
+      "models": {
+        "first": "首次接觸",
+        "last": "最後接觸",
+        "linear": "線性（平均分配）"
+      },
+      "range": "期間",
+      "ranges": {
+        "7d": "最近 7 天",
+        "30d": "最近 30 天",
+        "90d": "最近 90 天",
+        "365d": "最近 12 個月",
+        "custom": "自訂日期"
+      },
+      "from": "從",
+      "to": "到",
+      "customHint": "期間為「自訂日期」時使用。",
+      "granularity": "顯示單位",
+      "granularities": {
+        "day": "天",
+        "week": "週",
+        "month": "月"
+      },
+      "event": "活動",
+      "allEvents": "所有活動",
+      "apply": "顯示",
+      "errors": {
+        "touch_dimension": "管道、來源和行銷活動僅適用於歸因訂單或收入。",
+        "custom_needs_dates": "自訂期間請填寫兩個日期。",
+        "from_after_to": "結束日期早於開始日期。",
+        "range_too_long": "請選擇兩年以內的期間。",
+        "invalid_date": "請依年、月、日填寫日期。"
+      },
+      "resultsCaption": "依{dimension}的{measure}，{from} 至 {to}",
+      "total": "合計",
+      "none": "無",
+      "unnamedCampaign": "未命名的行銷活動",
+      "weekOf": "{day} 那一週",
+      "currency": "貨幣",
+      "value": "數值",
+      "truncated": "僅顯示前 500 列。選擇較短的期間或單一活動以查看其餘內容。",
+      "emptyTitle": "此選擇沒有可顯示的內容",
+      "emptyBody": "此期間沒有該指標的資料。請嘗試較長的期間、其他活動或其他指標。",
+      "emptyAction": "顯示最近 12 個月",
+      "export": "匯出 CSV",
+      "exportLabel": "將這些結果匯出為 CSV 檔案",
+      "timeZoneNote": "日期依 {timeZone}（你所屬組織的時區）的日曆日計算。",
+      "attributionNote": "歸因會把每筆歸因訂單分配給你的歸因期間內促成它的造訪：被點擊的追蹤連結、帶 UTM 參數的造訪，以及引導買家前來的其他網站。首次接觸計入第一次造訪，最後接觸計入最後一次造訪，線性模型則平均分配訂單（剩餘的 1 分計入最後一次造訪）。收入是買家支付的金額，依貨幣分別計算；沒有記錄到造訪的訂單不參與歸因。",
+      "saveTitle": "儲存此檢視",
+      "viewName": "名稱",
+      "save": "儲存檢視",
+      "saved": "檢視已儲存",
+      "viewErrors": {
+        "name": "請輸入不超過 80 個字元的名稱。",
+        "name_taken": "你已經有同名的檢視。",
+        "too_many_views": "你已有 50 個儲存的檢視，請先刪除一個。"
+      },
+      "views": "你儲存的檢視",
+      "noViews": "還沒有儲存的檢視。在上方選擇要顯示的內容，再儲存到這裡，一鍵即可返回。",
+      "deleteView": "刪除",
+      "deleteViewLabel": "刪除檢視 {name}",
+      "deleted": "檢視已刪除"
+    },
+    "rules": {
+      "title": "提醒規則",
+      "description": "當某個數字越過界限時收到提醒。規則提醒會像內建提醒一樣，透過「提醒」傳送給你的團隊。",
+      "createTitle": "新增提醒規則",
+      "editTitle": "編輯提醒規則",
+      "name": "名稱",
+      "nameHint": "顯示在提醒及其電子郵件中。",
+      "measure": "指標",
+      "measures": {
+        "registrations": "報名數",
+        "tickets": "售出票券（淨數）",
+        "refunded_tickets": "已退款票券",
+        "checkins": "報到",
+        "gross": "已付款",
+        "refunds": "已退款",
+        "net": "淨銷售額"
+      },
+      "condition": "當它",
+      "conditions": {
+        "above": "至少為",
+        "below": "低於",
+        "rise": "上升至少（%）",
+        "drop": "下降至少（%）"
+      },
+      "threshold": "門檻",
+      "thresholdHint": "數量、金額，或上升與下降的百分比（與前一期間相比）。",
+      "window": "統計範圍",
+      "windows": {
+        "d1": "今天",
+        "d7": "最近 7 天",
+        "d14": "最近 14 天",
+        "d30": "最近 30 天"
+      },
+      "currency": "貨幣",
+      "currencyHint": "金額規則只比較一種貨幣。",
+      "noCurrency": "非金額",
+      "event": "活動",
+      "allEvents": "所有活動",
+      "severity": "嚴重程度",
+      "severities": {
+        "info": "資訊",
+        "warning": "警告",
+        "critical": "嚴重"
+      },
+      "quietHours": "遵守勿擾時段",
+      "quietHoursHint": "如果規則在 21:00 至 8:00 之間觸發，電子郵件和推播會等到每位收件人所在時區的 8:00 再傳送。應用程式內的提醒會立即顯示。",
+      "create": "建立規則",
+      "save": "儲存變更",
+      "back": "返回提醒規則",
+      "created": "規則已建立",
+      "saved": "變更已儲存",
+      "list": "你的規則",
+      "emptyTitle": "還沒有提醒規則",
+      "emptyBody": "在上方建立一條規則，例如「今天的退款至少 10 筆」。條件一成立就會提醒你。",
+      "columns": {
+        "name": "規則",
+        "condition": "條件",
+        "status": "狀態",
+        "lastValue": "最新讀數",
+        "actions": "操作"
+      },
+      "summary": "{window}{measure}{condition}{threshold}",
+      "status": {
+        "firing": "已觸發",
+        "ok": "正常",
+        "off": "已關閉",
+        "new": "尚未檢查"
+      },
+      "edit": "編輯",
+      "editLabel": "編輯 {name}",
+      "turnOff": "關閉",
+      "turnOn": "開啟",
+      "turnOffLabel": "關閉 {name}",
+      "turnOnLabel": "開啟 {name}",
+      "delete": "刪除",
+      "deleteLabel": "刪除 {name}",
+      "deleted": "規則已刪除",
+      "turnedOff": "規則已關閉",
+      "turnedOn": "規則已開啟",
+      "readOnly": "你可以查看這些規則，但不能修改。",
+      "errors": {
+        "name": "請輸入不超過 80 個字元的名稱。",
+        "name_taken": "已有同名規則。",
+        "threshold": "請輸入 0 或更大的數字。",
+        "percent_range": "請輸入 1 到 1000 之間的百分比。",
+        "currency_required": "請為金額規則選擇貨幣。",
+        "too_many_rules": "你已有 50 條規則，請先刪除一條。"
+      }
+    },
+    "reports": {
+      "title": "定期報告",
+      "description": "每天、每週或每月以電子郵件傳送分析 PDF，依你所屬組織的時區統計。",
+      "createTitle": "新增定期報告",
+      "editTitle": "編輯定期報告",
+      "name": "名稱",
+      "frequency": "頻率",
+      "frequencies": {
+        "daily": "每天（昨天的數據）",
+        "weekly": "每週一（上週，週一至週日）",
+        "monthly": "每月 1 日（上個月）"
+      },
+      "frequencyShort": {
+        "daily": "每天",
+        "weekly": "每週",
+        "monthly": "每月"
+      },
+      "sendHour": "傳送時間",
+      "sendHourHint": "{timeZone} 時間。",
+      "event": "活動",
+      "allEvents": "所有活動",
+      "recipients": "傳送給",
+      "recipientsHint": "可以查看訂單的成員。只有能查看財務的人，其 PDF 中才包含收入；每份 PDF 使用閱讀者的語言。",
+      "you": "{name}（你）",
+      "create": "排定報告",
+      "save": "儲存變更",
+      "back": "返回定期報告",
+      "created": "報告已排定",
+      "saved": "變更已儲存",
+      "list": "排程",
+      "emptyTitle": "還沒有定期報告",
+      "emptyBody": "在上方排定一份：每個期間會以電子郵件傳送一次，並附上 PDF 的連結。",
+      "columns": {
+        "name": "報告",
+        "frequency": "頻率",
+        "next": "下次傳送",
+        "recipients": "收件人",
+        "status": "狀態",
+        "actions": "操作"
+      },
+      "recipientsCount": "{count, plural, other {# 位成員}}",
+      "status": {
+        "on": "開啟",
+        "off": "關閉"
+      },
+      "edit": "編輯",
+      "editLabel": "編輯 {name}",
+      "turnOff": "關閉",
+      "turnOn": "開啟",
+      "turnOffLabel": "關閉 {name}",
+      "turnOnLabel": "開啟 {name}",
+      "delete": "刪除",
+      "deleteLabel": "刪除 {name}",
+      "deleted": "排程已刪除",
+      "turnedOff": "排程已關閉",
+      "turnedOn": "排程已開啟",
+      "recent": "最近的報告",
+      "recentEmpty": "尚未傳送任何報告。第一份將在下次傳送時間寄出。",
+      "recentColumns": {
+        "report": "報告",
+        "period": "期間",
+        "status": "狀態",
+        "file": "PDF"
+      },
+      "runStatus": {
+        "pending": "等待中",
+        "sent": "已傳送",
+        "failed": "失敗"
+      },
+      "download": "下載 PDF",
+      "downloadLabel": "下載 {period} 的 {name}（PDF）",
+      "notReady": "尚未就緒",
+      "errors": {
+        "name": "請輸入不超過 80 個字元的名稱。",
+        "name_taken": "已有同名排程。",
+        "recipients": "請至少選擇一位成員。",
+        "bad_recipient": "請選擇可以查看訂單的成員。",
+        "too_many_schedules": "你已有 25 個排程，請先刪除一個。"
+      }
     }
   },
   "mediaLibrary": {

@@ -51,7 +51,11 @@
       "coupon": "Kortingscode",
       "page": "Pagina of blogbericht"
     },
-    "help": "Help"
+    "help": "Help",
+    "clientsSection": "Klanten",
+    "viaAgency": "via {agency}",
+    "agencyBadgeLabel": "Je werkt in {org} voor {agency}",
+    "backToAgency": "Terug naar {agency}"
   },
   "notifications": {
     "open": "Meldingen",
@@ -172,7 +176,9 @@
       "alerts": {
         "alert": "Melding",
         "alert-text": "Meldings-sms",
-        "alert-urgent-text": "Dringende meldingssms"
+        "alert-urgent-text": "Dringende meldingssms",
+        "metric": "Waarschuwingsregel",
+        "metric-now": "Waarschuwingsregel (meteen verstuurd)"
       },
       "campaigns": {
         "test": "Campagnetest"
@@ -214,6 +220,12 @@
         "request-code": "Code voor privacyverzoek",
         "archive-ready": "Archief met persoonsgegevens klaar",
         "erasure-done": "Bewijs van wissing"
+      },
+      "badges": {
+        "kiosk-code": "Code voor de badgekiosk"
+      },
+      "analytics": {
+        "report": "Gepland rapport"
       },
       "cms": {
         "contact_message": "Bericht via de contactpagina"
@@ -377,6 +389,7 @@
     "badges": "Badges",
     "orgAnalytics": "Analyses",
     "integrations": "Integraties",
+    "virtual": "Streaming",
     "seatingLibrary": "Zaalplanbibliotheek",
     "coupons": "Kortingsbonnen",
     "charity": "Goededoelenprofiel",
@@ -384,6 +397,9 @@
     "webhooks": "Webhooks",
     "sandboxes": "Sandboxes",
     "notifications": "Meldingen",
+    "sso": "Single sign-on",
+    "agency": "Klanten",
+    "agencies": "Bureaus",
     "mediaLibrary": "Mediabibliotheek",
     "storage": "Opslag",
     "moneyOverview": "Overzicht",
@@ -417,7 +433,13 @@
     "box_office": "Kassa",
     "scanner": "Scanner",
     "viewer": "Alleen lezen",
-    "collaborator": "Evenementmedewerker"
+    "collaborator": "Evenementmedewerker",
+    "agency_manager": "Bureaumanager",
+    "agency_manager_finance": "Bureaumanager (financiën)",
+    "agency_marketing": "Bureaumarketing",
+    "agency_marketing_finance": "Bureaumarketing (financiën)",
+    "agency_viewer": "Bureaulezer",
+    "agency_viewer_finance": "Bureaulezer (financiën)"
   },
   "profiles": {
     "wedding": "Bruiloft",
@@ -765,7 +787,8 @@
     "reference": "Referentie: {id}",
     "rateLimitedRetry": "Te veel pogingen. Probeer het over {minutes, plural, one {# minuut} other {# minuten}} opnieuw.",
     "impersonation_blocked": "Medewerkers die als lid handelen kunnen dit niet: terugbetalingen, uitbetalingen, exports, verwijderingen en bevestigingen staan uit.",
-    "read_only_freeze": "Wijzigingen zijn gepauzeerd tijdens gepland onderhoud. Er is niets opgeslagen; probeer het opnieuw als het klaar is."
+    "read_only_freeze": "Wijzigingen zijn gepauzeerd tijdens gepland onderhoud. Er is niets opgeslagen; probeer het opnieuw als het klaar is.",
+    "read_only_billing": "Deze organisatie is alleen-lezen tot het abonnement betaald is. Er is niets opgeslagen of verwijderd."
   },
   "notFound": {
     "title": "Pagina niet gevonden",
@@ -833,6 +856,43 @@
       "email_unverified": "Het e-mailadres van dat account is niet bevestigd bij de aanbieder. Bevestig het daar of log in met je e-mail.",
       "no_email": "Dat account heeft geen e-mailadres gedeeld, dus we kunnen er geen Yayatoh-account voor maken.",
       "unavailable": "Deze inlogoptie is nu niet beschikbaar."
+    },
+    "ssoLink": "Inloggen met single sign-on",
+    "ssoOtherOrg": "Je bent ingelogd met de single sign-on van een andere organisatie. Log opnieuw in om deze organisatie te openen.",
+    "sso": {
+      "eyebrow": "Single sign-on",
+      "title": "Log in met je werkaccount",
+      "description": "Voer je zakelijke e-mailadres in. We sturen je door naar de inlogpagina van je organisatie.",
+      "email": "Zakelijk e-mailadres",
+      "emailHint": "Je organisatie moet single sign-on voor dit adres hebben ingesteld.",
+      "continue": "Doorgaan",
+      "back": "Terug naar andere manieren om in te loggen",
+      "errors": {
+        "invalid_email": "Voer een geldig e-mailadres in.",
+        "no_sso": "Geen enkele organisatie gebruikt single sign-on voor dit adres. Log op een andere manier in.",
+        "rate_limited": "Te veel pogingen. Wacht een paar minuten en probeer het opnieuw.",
+        "unavailable": "Single sign-on is nu niet beschikbaar. Log op een andere manier in."
+      },
+      "refused": {
+        "expired": "Deze inlogpoging duurde te lang of is al gebruikt. Begin opnieuw.",
+        "cancelled": "Het inloggen is geannuleerd op de inlogpagina van je organisatie.",
+        "failed": "We konden je niet inloggen met single sign-on. Probeer het opnieuw.",
+        "connection_inactive": "De single sign-on van je organisatie staat uit. Vraag het je beheerder.",
+        "domain_not_verified": "Je organisatie heeft het domein van dit adres niet geverifieerd, dus je kunt niet worden ingelogd.",
+        "identity_conflict": "Dit werkaccount is hier aan iemand anders gekoppeld. Vraag het je beheerder.",
+        "deprovisioned": "Je toegang is door je organisatie ingetrokken. Vraag het je beheerder.",
+        "not_provisioned": "Je hebt nog geen toegang tot deze organisatie. Vraag je beheerder om je toe te voegen.",
+        "staff_two_factor": "Platformmedewerkers moeten verificatie in twee stappen inschakelen voordat ze single sign-on gebruiken.",
+        "session_failed": "We konden het inloggen niet afronden. Probeer het opnieuw.",
+        "invalid_signature": "Het inlogantwoord van je organisatie kon niet worden geverifieerd.",
+        "wrong_issuer": "Het inlogantwoord kwam van een andere identiteitsprovider dan de ingestelde.",
+        "wrong_audience": "Het inlogantwoord was bedoeld voor een andere applicatie.",
+        "wrong_request": "Het inlogantwoord hoort niet bij deze inlogpoging. Begin opnieuw.",
+        "malformed": "Het inlogantwoord was niet leesbaar.",
+        "no_email": "De identiteitsprovider van je organisatie heeft geen e-mailadres meegestuurd.",
+        "idp_error": "De identiteitsprovider van je organisatie reageerde niet. Probeer het opnieuw.",
+        "sso_required": "Je organisatie vereist single sign-on voor je adres. Log hier in om door te gaan."
+      }
     }
   },
   "orgPicker": {
@@ -2029,7 +2089,8 @@
     "dateSoldOut": "Er zijn niet genoeg tickets meer voor deze datum.",
     "wrongDate": "Een van deze tickets wordt niet voor deze datum verkocht.",
     "dateUnavailable": "Deze datum is niet meer te koop.",
-    "seatChannel": "Sommige van die plaatsen zijn gereserveerd voor een ander verkoopkanaal (een sponsor, een promotor of de onlineverkoop). Kies andere plaatsen."
+    "seatChannel": "Sommige van die plaatsen zijn gereserveerd voor een ander verkoopkanaal (een sponsor, een promotor of de onlineverkoop). Kies andere plaatsen.",
+    "imported": "Geïmporteerd uit {source} · bestelling {reference}"
   },
   "seating": {
     "title": "Zitplaatsen",
@@ -2139,6 +2200,7 @@
       "selection": "Beste plaatsen",
       "channels": "Kanalen",
       "revisions": "Versies",
+      "solver": "Automatisch plaatsen",
       "guests": "Gasten plaatsen",
       "cards": "Kaarten en exports"
     },
@@ -2522,6 +2584,134 @@
       "isCurrent": "Dit is het plan zoals het nu is.",
       "restore": "Versie {number} terugzetten",
       "restoredNotice": "Versie {number} teruggezet. Het huidige plan is versie {now}."
+    },
+    "solver": {
+      "title": "Plaatsingsregels en planner",
+      "description": "Stel regels in, laat de planner een tafel voorstellen voor iedereen die nog geen plaats heeft, bekijk het voorstel en neem één tafel of alles over. Gasten die je met de hand plaatste, worden nooit verplaatst.",
+      "rules": {
+        "heading": "Regels",
+        "listLabel": "Plaatsingsregels",
+        "empty": "Nog geen regels. Voeg er hieronder een toe of start de planner zonder regels: die houdt elke tafel toch binnen haar plaatsen.",
+        "hard": "Vast",
+        "soft": "Zacht",
+        "badge": "{strength} · gewicht {weight}",
+        "strength": "Sterkte",
+        "strengthHint": "Een voorstel breekt nooit een vaste regel. Zachte regels worden gevolgd waar het kan; elke afwijking kost haar gewicht.",
+        "weight": "Gewicht",
+        "weightHint": "1 tot 10. Zachte regels met een hoger gewicht tellen zwaarder.",
+        "save": "Opslaan",
+        "remove": "Verwijderen",
+        "saved": "Regel opgeslagen.",
+        "removed": "Regel verwijderd.",
+        "added": "Regel toegevoegd.",
+        "editLabel": "Regel wijzigen: {rule}",
+        "kinds": {
+          "keep_together": "Bij elkaar houden",
+          "keep_apart": "Uit elkaar houden",
+          "vip_near_stage": "VIP's het dichtst bij het podium",
+          "access_near_exit": "Toegankelijkheid bij de uitgangen",
+          "table_max": "Maximum per tafel"
+        },
+        "add": {
+          "heading": "Regel toevoegen",
+          "kind": "Regel",
+          "by": "Wie",
+          "byEach": "Elk gezelschap",
+          "byParty": "Een gezelschap",
+          "byTag": "Iedereen met een label",
+          "bySide": "Iedereen van een kant",
+          "party": "Gezelschap",
+          "tag": "Label",
+          "side": "Kant",
+          "choose": "Kies…",
+          "together": "Bij elkaar houden",
+          "first": "Eerste groep",
+          "second": "Tweede groep",
+          "accessTag": "Label voor toegankelijkheidsbehoeften",
+          "accessHint": "Gezelschappen met dit label zitten aan de tafels het dichtst bij een uitgang of ingang. Antwoorden over toegankelijkheid blijven privé.",
+          "max": "Hoogstens personen per tafel",
+          "vipHint": "VIP-gezelschappen zitten aan de tafels het dichtst bij het podium.",
+          "submit": "Regel toevoegen"
+        },
+        "errors": {
+          "value": "Kies voor wie de regel geldt.",
+          "same": "Kies twee verschillende groepen.",
+          "weight": "Vul een gewicht van 1 tot 10 in.",
+          "max": "Vul een getal van 1 tot 40 in.",
+          "duplicate": "Dit evenement heeft die regel al.",
+          "tooMany": "Een evenement kan hoogstens 50 regels hebben.",
+          "unknownParty": "Dat gezelschap staat niet op deze gastenlijst."
+        },
+        "describe": {
+          "togetherParty": "Elk gezelschap bij elkaar houden",
+          "togetherTag": "Iedereen met het label ‘{value}’ bij elkaar houden",
+          "togetherSide": "De kant {value} bij elkaar houden",
+          "apart": "{a} uit de buurt van {b} houden",
+          "targetParty": "{value}",
+          "targetTag": "iedereen met het label ‘{value}’",
+          "targetSide": "de kant {value}",
+          "vip": "VIP-gezelschappen het dichtst bij het podium",
+          "access": "Gasten met het label ‘{tag}’ dicht bij een uitgang",
+          "tableMax": "Hoogstens {max} personen per tafel"
+        }
+      },
+      "run": {
+        "heading": "Voorstel",
+        "queue": "{count, plural, one {# gast} other {# gasten}} nog te plaatsen. {fixed, plural, =0 {Er is nog niemand geplaatst.} one {# met de hand geplaatste gast blijft zitten.} other {# met de hand geplaatste gasten blijven zitten.}}",
+        "nothing": "Iedereen heeft een plaats. Er valt niets voor te stellen.",
+        "seed": "Opstellingsnummer",
+        "seedHint": "Hetzelfde nummer geeft altijd hetzelfde voorstel.",
+        "seedError": "Vul een heel getal van 1 tot 1.000.000 in.",
+        "start": "Plaatsing voorstellen",
+        "cancel": "Stoppen",
+        "again": "Andere opstelling proberen",
+        "running": "Voorstel wordt gemaakt… {percent}%",
+        "progress": "Voortgang van het voorstel",
+        "cancelled": "Gestopt. Er is niets voorgesteld.",
+        "failed": "De planner stopte onverwacht. Probeer het opnieuw."
+      },
+      "summary": {
+        "heading": "Samenvatting",
+        "done": "Voorstel klaar in {seconds} s (opstelling {seed}).",
+        "seated": "{count, plural, one {# gast} other {# gasten}} aan {tables, plural, one {# tafel} other {# tafels}}; {queue, plural, =0 {niemand blijft in de wachtrij} one {# gast blijft in de wachtrij} other {# gasten blijven in de wachtrij}}.",
+        "hardOk": "Geen enkele vaste regel wordt gebroken.",
+        "hardBroken": "{count, plural, one {# vaste regel wordt gebroken} other {# vaste regels worden gebroken}}. Pas het voorstel aan voordat je het overneemt.",
+        "soft": "Zachte regels: strafpunten {penalty} (0 is het best).",
+        "ruleLine": "{rule}: {count, plural, =0 {gevolgd} one {# afwijking} other {# afwijkingen}}",
+        "issues": {
+          "no_stage": "De plattegrond heeft geen podium, dus ‘VIP's het dichtst bij het podium’ kan niet gelden.",
+          "no_exit": "De plattegrond heeft geen uitgang of ingang, dus ‘Toegankelijkheid bij de uitgangen’ kan niet gelden.",
+          "group_too_big": "Een groep van {size} is groter dan elke tafel ({room} plaatsen). Die wordt over zo weinig mogelijk tafels verdeeld.",
+          "too_few_seats": "{size} gasten te plaatsen maar maar {room} vrije plaatsen: sommigen blijven in de wachtrij.",
+          "no_room": "De plattegrond heeft geen tafels of rijen."
+        }
+      },
+      "tables": {
+        "heading": "Voorgestelde tafels",
+        "none": "Geen tafel voorgesteld.",
+        "region": "Tafel {label}",
+        "fill": "{proposed} voorgesteld · {seated} geplaatst · {free} van {capacity} vrij",
+        "overFull": "{count, plural, one {# gast te veel} other {# gasten te veel}} voor de vrije plaatsen.",
+        "broken": "Breekt een vaste regel: {rules}",
+        "over": "Meer gasten dan plaatsen",
+        "accept": "Tafel {label} overnemen",
+        "acceptAll": "Alle tafels overnemen",
+        "fixFirst": "Pas eerst de tafels met een waarschuwing aan.",
+        "acceptedTable": "Tafel {label} overgenomen: {count, plural, one {# gast geplaatst} other {# gasten geplaatst}}.",
+        "acceptedAll": "Voorstel overgenomen: {count, plural, one {# gast geplaatst} other {# gasten geplaatst}}.",
+        "queueHeading": "In de wachtrij",
+        "guest": "{name} ({party})",
+        "moveLabel": "Tafel voor {name}",
+        "queueOption": "In de wachtrij laten",
+        "optionFree": "Tafel {label} ({free} vrij)",
+        "toEditor": "Plaatsingseditor openen"
+      },
+      "acceptErrors": {
+        "already_seated": "Iemand uit dit voorstel is intussen met de hand geplaatst. Stel opnieuw voor.",
+        "declined": "Een gast uit dit voorstel heeft afgezegd. Stel opnieuw voor.",
+        "hard_rule": "Overnemen zou een vaste regel breken.",
+        "cant_fit": "Aan die tafel passen nog maar {fits} gasten."
+      }
     },
     "guestSeating": {
       "title": "Gasten plaatsen",
@@ -3255,22 +3445,6 @@
       "digest": "SHA-256 van het bewijs",
       "signature": "Handtekening (base64)",
       "footer": "Uitgegeven door Yayatoh voor {org}. De handtekening dekt de gegevens van het bewijs; controleer haar met de publieke sleutel hieronder."
-    },
-    "categories": {
-      "contacts": "Contactgegevens",
-      "consents": "Toestemmingen",
-      "orders": "Bestellingen",
-      "paidOrders": "Betaalde bestellingen (bewaard voor de boekhouding)",
-      "tickets": "Tickets",
-      "activeTickets": "Geldige tickets",
-      "claims": "Links voor ticketoverdracht",
-      "holderLinks": "Toegangslinks voor tickets",
-      "attendees": "Vermeldingen op gastenlijsten",
-      "answers": "Antwoorden bij het afrekenen",
-      "admissions": "Check-ins",
-      "invitations": "Teamuitnodigingen",
-      "networkProfiles": "Netwerkprofielen",
-      "chatMessages": "Verzonden chatberichten"
     },
     "findOwner": "Zoek een eigenaar of beheerder"
   },
@@ -4110,7 +4284,10 @@
       "orders_refund": "Bestellingen terugbetalen",
       "attendees_read": "Deelnemers lezen",
       "attendees_write": "Deelnemers wijzigen en tickets opnieuw versturen",
-      "checkin_scan": "Tickets scannen"
+      "checkin_scan": "Tickets scannen",
+      "contacts_write": "Contacten toevoegen",
+      "webhooks_subscribe": "Automatiseringshooks abonneren (Zapier-triggers)",
+      "webhooks_manage": "Webhook-endpoints toevoegen en verwijderen (Make- en n8n-triggers)"
     },
     "expiry": "Verloopt",
     "expiryHint": "Een sleutel die verloopt moet je vóór die tijd roteren. Korter is veiliger.",
@@ -7558,6 +7735,10 @@
       "rsvpPending": "Reacties openen",
       "guestsUnseated": "Gasten plaatsen",
       "mealsMissing": "RSVP-antwoorden openen",
+      "integrationFailed": "Integratie-inbox openen",
+      "billingPastDue": "Abonnement en facturatie openen",
+      "metricRule": "Waarschuwingsregels openen",
+      "metricRuleFinance": "Waarschuwingsregels openen",
       "pledgesUnpaid": "Toezeggingen openen",
       "sessionsNearCapacity": "Sessies openen",
       "sessionWaitlists": "Sessie-inschrijving openen",
@@ -7594,6 +7775,10 @@
       "rsvpPending": "{count, plural, one {Eén gast heeft nog niet gereageerd op de uitnodiging} other {{countWords} gasten hebben nog niet gereageerd op de uitnodiging}}",
       "guestsUnseated": "{count, plural, one {Eén gast heeft geen tafel} other {{countWords} gasten hebben geen tafel}}",
       "mealsMissing": "{count, plural, one {Eén aanwezige gast heeft geen maaltijd gekozen} other {{countWords} aanwezige gasten hebben geen maaltijd gekozen}}",
+      "integrationFailed": "{count, plural, one {{countWords} integratieprobleem vandaag (een mislukte synchronisatie of een verbroken koppeling)} other {{countWords} integratieproblemen vandaag (mislukte synchronisaties of verbroken koppelingen)}}",
+      "billingPastDue": "{count, plural, one {De betaling van het abonnement is achterstallig} other {{countWords} abonnementsbetalingen zijn achterstallig}}",
+      "metricRule": "Waarschuwingsregel ‘{title}’ is afgegaan",
+      "metricRuleFinance": "Waarschuwingsregel ‘{title}’ is afgegaan",
       "pledgesUnpaid": "{count, plural, one {Eén toezegging is 14 dagen na het evenement nog niet betaald} other {{countWords} toezeggingen zijn 14 dagen na het evenement nog niet betaald}}",
       "sessionsNearCapacity": "{count, plural, one {{countWords} sessie zit boven 95 % van de capaciteit} other {{countWords} sessies zitten boven 95 % van de capaciteit}}",
       "sessionWaitlists": "{count, plural, one {{countWords} sessie heeft een lange wachtlijst} other {{countWords} sessies hebben lange wachtlijsten}}",
@@ -10260,6 +10445,219 @@
       },
       "cardLink": "Verdubbelde giften openen",
       "cardBody": "Laat een sponsor giften in een periode verdubbelen tot een maximum, en exporteer de werkgevers van donateurs."
+    },
+    "report": {
+      "title": "Donatierapport",
+      "subtitle": "Wat er is opgehaald en hoe, geïnde toezeggingen en elke donateur, gecontroleerd tegen het grootboek.",
+      "noAccessTitle": "Financiële toegang nodig",
+      "noAccessDescription": "Vraag een eigenaar, beheerder of financieel lid om het donatierapport: het noemt donateurs en bedragen.",
+      "reconcileLink": "Afstemming",
+      "emptyTitle": "Nog geen donaties",
+      "emptyDescription": "Giften, peddeltoezeggingen en donatietickets verschijnen hier zodra ze binnenkomen. Open een campagne op het tabblad Donaties om te beginnen.",
+      "backToDonations": "Naar Donaties",
+      "asOf": "Tot nu toe. Datums in exports staan in de tijdzone van het evenement ({zone}).",
+      "totalsTitle": "Totalen",
+      "totalsIn": "Totalen in {currency}",
+      "stats": {
+        "raised": "Opgehaald",
+        "raisedSub": "{count, plural, one {# gift of betaling} other {# giften en betalingen}} van {donors, plural, one {# donateur} other {# donateurs}}",
+        "online": "Per kaart ontvangen",
+        "onlineSub": "Inclusief {cover} aan gedekte kosten; {refunded} terugbetaald",
+        "offline": "Offline betaald",
+        "ticketSub": "Plus {amount} uit donatietickets",
+        "pledged": "Toegezegd in de zaal",
+        "collectedLabel": "Geïnde toezeggingen",
+        "pledgedSub": "{collected} geïnd · {writtenOff} afgeschreven · {open} nog open",
+        "matched": "Verdubbeld door sponsors",
+        "matchedSub": "Toezeggingen van sponsors, apart geïnd"
+      },
+      "check": {
+        "title": "Grootboekcontrole",
+        "notReconciled": "Nog niet afgestemd",
+        "matches": "Klopt tot op de cent",
+        "differs": "Wijkt {amount} af",
+        "ledger": "Memoboekingen in het grootboek",
+        "provider": "Stripe-saldo (laatste afstemming)",
+        "none": "Nog niet afgestemd",
+        "fees": "Stripe-kosten"
+      },
+      "bySource": {
+        "title": "Per herkomst",
+        "source": "Herkomst",
+        "count": "Giften",
+        "net": "Ontvangen"
+      },
+      "sources": {
+        "online": "Geefpagina",
+        "qr": "QR-code",
+        "paddle": "Peddelronde",
+        "ticket": "Donatietickets"
+      },
+      "byLevel": {
+        "title": "Per niveau",
+        "empty": "Nog geen niveaus gebruikt.",
+        "level": "Niveau",
+        "own": "Eigen bedragen",
+        "gifts": "Giften",
+        "giftsCell": "{count, plural, one {# gift} other {# giften}} · {amount}",
+        "pledges": "Peddeltoezeggingen",
+        "pledgesCell": "{count, plural, one {# toezegging} other {# toezeggingen}} · {amount}"
+      },
+      "byMatch": {
+        "title": "Per verdubbeling",
+        "sponsor": "Sponsor",
+        "campaign": "Campagne",
+        "status": "Status",
+        "matched": "Verdubbeld",
+        "matchedCell": "{matched} van {cap}"
+      },
+      "matchStatus": {
+        "active": "Loopt",
+        "closed": "Afgesloten",
+        "cancelled": "Geannuleerd"
+      },
+      "byDonor": {
+        "title": "Per donateur",
+        "note": "Anonieme donateurs zijn gemarkeerd: je ziet wie gaf, maar bedank of noem ze nooit in het openbaar.",
+        "empty": "Nog geen donateurs.",
+        "donor": "Donateur",
+        "anonymous": "Anoniem",
+        "email": "E-mail",
+        "count": "Giften",
+        "net": "Gegeven",
+        "truncated": "Hier staan alleen de 500 grootste donateurs; de export bevat iedereen."
+      },
+      "export": {
+        "title": "Exporteren voor je donateurs-CRM",
+        "body": "Eén rij per gift, offline betaling en donatieticket, met de anoniem-markering. Je bevestigt eerst dat jij het bent.",
+        "error": "De export is niet gestart: {reason}",
+        "layout": "Kolommen voor",
+        "layoutHint": "CRM-indelingen gebruiken de kolomnamen van het CRM, zodat het bestand zonder koppelen wordt geïmporteerd.",
+        "format": "Bestandstype",
+        "csv": "CSV (.csv)",
+        "xlsx": "Excel (.xlsx)",
+        "submit": "Donateurs exporteren",
+        "statusCsv": "Donateursexport (CSV)",
+        "statusXlsx": "Donateursexport (Excel)"
+      },
+      "layouts": {
+        "generic": "Elk rekenblad (deze taal)",
+        "salesforce_npsp": "Salesforce Nonprofit (NPSP)",
+        "bloomerang": "Bloomerang",
+        "little_green_light": "Little Green Light"
+      },
+      "cardTitle": "Rapport en exports",
+      "cardLink": "Rapport openen",
+      "cardBody": "Totalen per herkomst, niveau, verdubbeling en donateur; geïnde toezeggingen; exports voor je donateurs-CRM.",
+      "cardReconcile": "Afstemmen met Stripe",
+      "file": {
+        "headers": {
+          "date": "Datum",
+          "firstName": "Voornaam",
+          "lastName": "Achternaam",
+          "donor": "Donateur",
+          "email": "E-mail",
+          "anonymous": "Anoniem",
+          "amount": "Ontvangen bedrag",
+          "gift": "Gift",
+          "feeCover": "Gedekte kosten",
+          "refunded": "Terugbetaald",
+          "currency": "Valuta",
+          "campaign": "Campagne",
+          "level": "Niveau",
+          "source": "Herkomst",
+          "method": "Betaalmethode",
+          "employer": "Werkgever",
+          "tribute": "Ter ere of ter nagedachtenis van",
+          "paddle": "Peddel",
+          "reference": "Referentie"
+        },
+        "yes": "Ja",
+        "no": "Nee",
+        "sources": {
+          "online": "Geefpagina",
+          "qr": "QR-code",
+          "paddle": "Peddelronde",
+          "ticket": "Donatieticket"
+        },
+        "methods": {
+          "card": "Kaart",
+          "check": "Cheque",
+          "wire": "Overboeking",
+          "stock": "Aandelen",
+          "daf": "Donateursfonds",
+          "cash": "Contant",
+          "other": "Overig"
+        },
+        "privacyTitle": "Je donateurs blijven van jou",
+        "privacy": "Exports bevatten alleen de donateurs van dit evenement. Bewaar het bestand veilig en verwijder het na het importeren."
+      }
+    },
+    "recon": {
+      "title": "Afstemming van donaties",
+      "subtitle": "De giften van het evenement in het grootboek, vergeleken met je Stripe-account en de uitbetalingen.",
+      "noAccessTitle": "Financiële toegang nodig",
+      "noAccessDescription": "Vraag een eigenaar, beheerder of financieel lid om de donaties af te stemmen.",
+      "errors": {
+        "note": "Schrijf wat je hebt gevonden (3 tot 500 tekens).",
+        "provider": "Stripe was niet bereikbaar. Probeer het over een paar minuten opnieuw."
+      },
+      "run": "Nu afstemmen",
+      "ran": "Afgestemd.",
+      "reportLink": "Donatierapport",
+      "notConnectedTitle": "Geen Stripe-account om te vergelijken",
+      "notConnectedDescription": "Giften gaan rechtstreeks naar je gekoppelde Stripe-account. Koppel het bij Uitbetalingen en stem hier af.",
+      "status": {
+        "open": "Open",
+        "resolved": "Opgelost",
+        "cleared": "Vereffend"
+      },
+      "viewerNotice": "Je kunt de afstemming bekijken. Eigenaren, beheerders en financiële leden voeren hem uit en lossen verschillen op.",
+      "runTitle": "Laatste afstemming",
+      "lastRun": "Laatst afgestemd {at}: {ledger} grootboekboekingen tegenover {provider} Stripe-bewegingen.",
+      "neverRun": "Nog niet afgestemd. Stem nu af om het grootboek met Stripe te vergelijken.",
+      "stats": {
+        "ledger": "Memoboekingen in het grootboek",
+        "provider": "Stripe-saldo",
+        "fees": "Stripe-kosten",
+        "unpaidOut": "Nog niet uitbetaald",
+        "unpaidOutSub": "{count, plural, =0 {Alles is uitbetaald} one {# beweging wacht op een uitbetaling} other {# bewegingen wachten op een uitbetaling}}"
+      },
+      "diffsTitle": "Verschillen",
+      "cleanTitle": "Alles klopt",
+      "cleanDescription": "Elke gift en terugbetaling in het grootboek klopt tot op de cent met Stripe.",
+      "allSettled": "Geen open verschillen: alles is opgelost of vereffend.",
+      "kinds": {
+        "missing_at_provider": "In het grootboek, niet bij Stripe",
+        "missing_in_ledger": "Bij Stripe, niet in het grootboek",
+        "amount_mismatch": "Bedragen wijken af"
+      },
+      "ledger": "Grootboek",
+      "provider": "Stripe",
+      "difference": "Verschil",
+      "resolvedNote": "Opgelost: {note}",
+      "noteLabel": "Wat je hebt gevonden",
+      "noteHint": "Bijvoorbeeld: telefonisch terugbetaald, correctie van Stripe, dubbele boeking.",
+      "resolve": "{reference} oplossen",
+      "resolved": "Opgelost.",
+      "payoutsTitle": "Uitbetalingen",
+      "payoutsBody": "Uitbetalingen van je Stripe-account met giften van dit evenement. Een uitbetaling kan ook ander geld bevatten.",
+      "payoutsEmpty": "Nog geen uitbetalingen. Stripe betaalt een paar dagen na binnenkomst van de giften uit.",
+      "payout": {
+        "id": "Uitbetaling",
+        "status": "Status",
+        "arrival": "Komt binnen",
+        "amount": "Uitbetaling",
+        "donations": "Giften van dit evenement",
+        "donationsCell": "{count, plural, one {# beweging} other {# bewegingen}}: {net} na {fees} kosten"
+      },
+      "payoutStatus": {
+        "pending": "In afwachting",
+        "in_transit": "Onderweg",
+        "paid": "Betaald",
+        "failed": "Mislukt",
+        "canceled": "Geannuleerd"
+      }
     }
   },
   "galaTables": {
@@ -12470,6 +12868,36 @@
       "waitlist_closed": "{title} is vol en de wachtlijst sloot 24 uur voor de sessie.",
       "offer_ended": "Het aanbod voor {title} is afgelopen.",
       "full": "{title} is net vol. Probeer het opnieuw om op de wachtlijst te komen."
+    },
+    "calendar": {
+      "title": "Google Agenda",
+      "off": "Houd dit programma bij in je Google Agenda. Sessies die je toevoegt of schrapt, en elke wijziging van tijd of zaal, volgen vanzelf.",
+      "privacy": "We zetten alleen de sessies van dit evenement in je agenda. Je andere afspraken lezen we nooit.",
+      "connect": "Toevoegen aan Google Agenda",
+      "reconnect": "Opnieuw koppelen",
+      "pending": "Wachten op bevestiging van Google. Heb je dat venster gesloten, koppel dan opnieuw.",
+      "active": "{count, plural, =0 {Synchroniseert met je Google Agenda. Er staan nog geen sessies in.} one {Synchroniseert met je Google Agenda: er staat # sessie in.} other {Synchroniseert met je Google Agenda: er staan # sessies in.}}",
+      "lastSync": "Laatst bijgewerkt {when}",
+      "neverSynced": "De eerste update is onderweg.",
+      "syncNow": "Nu bijwerken",
+      "syncing": "Update onderweg",
+      "stop": "Synchronisatie stoppen",
+      "stopped": "Synchronisatie staat uit. Sessies die al in je agenda staan, blijven daar.",
+      "revokedByGoogle": "Google accepteert deze koppeling niet meer, dus de updates zijn gestopt. Koppel opnieuw om verder te gaan.",
+      "done": {
+        "queued": "Update onderweg. Je agenda verandert zo.",
+        "already": "Er is al een update onderweg.",
+        "stopped": "Synchronisatie gestopt. Sessies die al in je agenda staan, blijven daar."
+      },
+      "notice": {
+        "connected": "Gekoppeld. Je sessies verschijnen zo in je Google Agenda.",
+        "denied": "Google Agenda is niet gekoppeld.",
+        "expired": "Die koppellink is verlopen. Probeer het opnieuw.",
+        "unavailable": "Agendasynchronisatie is niet beschikbaar voor dit evenement.",
+        "provider_unavailable": "Google was niet bereikbaar. Probeer het zo opnieuw.",
+        "rate_limited": "Te veel pogingen. Wacht een paar minuten en probeer het opnieuw.",
+        "conflict": "Je agenda is al gekoppeld."
+      }
     }
   },
   "people": {
@@ -13127,7 +13555,74 @@
       "ai_seating": "Zitplaatsen met AI",
       "analytics_pro": "Geavanceerde analyses"
     },
-    "findOwner": "Zoek een eigenaar of beheerder"
+    "findOwner": "Zoek een eigenaar of beheerder",
+    "usageLink": "Gebruik",
+    "renewalReceived": "Verlengingsupdate ontvangen",
+    "dunning": {
+      "graceTitle": "De betaling van je abonnement is mislukt",
+      "graceBody": "Alles werkt gewoon tot {date}. Betaal vóór die datum om wijzigingen te blijven maken; daarna wordt de organisatie alleen-lezen tot er betaald is.",
+      "readOnlyTitle": "Deze organisatie is alleen-lezen",
+      "readOnlyBody": "De abonnementsbetaling is mislukt, dus wijzigingen staan stil. Er is niets verwijderd: je kunt alles bekijken, je gegevens exporteren en tickets scannen bij de ingang. Betaal om wijzigingen meteen weer mogelijk te maken.",
+      "payNow": "Nu betalen",
+      "askOwner": "Vraag een eigenaar of beheerder van deze organisatie om te betalen.",
+      "paidTitle": "Betaling ontvangen",
+      "paidBody": "Bedankt. Wijzigingen zijn weer mogelijk voor iedereen in de organisatie.",
+      "declinedTitle": "De betaling is mislukt",
+      "declinedBody": "Er is niets veranderd. Controleer de kaart bij je factuuraanbieder en probeer het opnieuw.",
+      "payError": "De betaling kon niet worden gestart. Probeer het zo opnieuw."
+    },
+    "change": {
+      "title": "Abonnement wijzigen",
+      "description": "Upgrades en downgrades gaan meteen in. Je betaalt of krijgt alleen tegoed voor de rest van deze factuurperiode.",
+      "discountCharity": "Je geverifieerde goededoelenprofiel geeft je {percent}% korting op elk abonnement.",
+      "discountStaff": "Je organisatie krijgt {percent}% non-profitkorting op elk abonnement.",
+      "legend": "Abonnementen",
+      "offer": "{plan}: {price} {interval, select, year {per jaar} other {per maand}}",
+      "direction": {
+        "upgrade": "Upgrade",
+        "downgrade": "Downgrade",
+        "switch": "Wissel",
+        "start": "Start"
+      },
+      "turnsOff": "{count, plural, one {Zet # module uit} other {Zet # modules uit}}",
+      "chooseError": "Kies een abonnement om te bekijken.",
+      "preview": "Wijziging bekijken",
+      "previewTitle": "Overstappen naar {plan}",
+      "previewLead": {
+        "upgrade": "Je upgradet. Dit betaal je vandaag voor de rest van deze factuurperiode.",
+        "downgrade": "Je downgradet. Ongebruikte tijd van je huidige abonnement wordt als tegoed verrekend.",
+        "switch": "Je wisselt naar een abonnement met dezelfde prijs.",
+        "start": "Je abonnement begint vandaag."
+      },
+      "rows": {
+        "charge": "Nieuw abonnement, rest van de periode",
+        "credit": "Tegoed voor ongebruikte tijd",
+        "discount": "Non-profitkorting",
+        "tax": "Belasting",
+        "due": "Vandaag te betalen"
+      },
+      "creditKept": "{amount} tegoed blijft staan voor je volgende facturen.",
+      "nextRenewal": "Daarna {amount} op {date}.",
+      "nextRenewalNoDate": "Daarna {amount} per periode.",
+      "taxNote": "De belasting wordt berekend door de factuuraanbieder op basis van de factuurgegevens van je organisatie.",
+      "removedTitle": "{count, plural, one {# module gaat uit} other {# modules gaan uit}}",
+      "removedBody": "Hun gegevens blijven bewaard. Ze komen terug zoals ze waren als je overstapt naar een abonnement waarin ze zitten.",
+      "confirmRemoved": "{count, plural, one {Ik begrijp dat deze module uitgaat} other {Ik begrijp dat deze modules uitgaan}}",
+      "confirmError": "Bevestig de modules die uitgaan om door te gaan.",
+      "confirm": "Wijziging bevestigen",
+      "cancel": "Mijn abonnement houden",
+      "doneTitle": "Abonnementswijziging verstuurd",
+      "doneBody": "Je factuuraanbieder heeft de wijziging bevestigd. Je abonnement en modules zijn hieronder bijgewerkt.",
+      "errorTitle": "Het abonnement is niet gewijzigd",
+      "errors": {
+        "billing_off": "Facturatie is niet actief voor deze organisatie.",
+        "same_plan": "Je hebt dit abonnement al.",
+        "validation_failed": "Kies een abonnement dat wordt aangeboden.",
+        "provider": "De factuuraanbieder heeft de wijziging niet geaccepteerd. Er is niets afgeschreven; probeer het opnieuw.",
+        "forbidden": "Alleen eigenaren en beheerders kunnen het abonnement wijzigen.",
+        "other": "Er ging iets mis. Er is niets gewijzigd."
+      }
+    }
   },
   "billingPortal": {
     "eyebrow": "Testfacturering",
@@ -13137,7 +13632,11 @@
     "switch": "Abonnement wijzigen",
     "cancel": "Abonnement opzeggen",
     "back": "Terug zonder wijzigingen",
-    "chooseError": "Kies het abonnement waarnaar je wilt overstappen."
+    "chooseError": "Kies het abonnement waarnaar je wilt overstappen.",
+    "noSubscriptionError": "Deze klant heeft nog geen abonnement. Kies eerst een abonnement.",
+    "renewalLegend": "Verlenging",
+    "failRenewal": "Laat de verlengingsbetaling mislukken",
+    "stopRetrying": "Stop met opnieuw proberen"
   },
   "seatingLibrary": {
     "title": "Zaalplanbibliotheek",
@@ -13269,6 +13768,36 @@
     "connectors": {
       "demo": {
         "description": "Een test-app met contacten om integraties uit te proberen: contacten synchroniseren in beide richtingen met je CRM. Alleen in testomgevingen."
+      },
+      "slack": {
+        "description": "Meldingen en een dagelijks overzicht in een Slack-kanaal naar keuze. Berichten noemen evenementen, nooit e-mailadressen, telefoonnummers of bedragen, tenzij je dat aanzet."
+      },
+      "eventbrite": {
+        "description": "Haal je evenementen, tickettypes, bestellingen en deelnemers over van Eventbrite. Eerst een voorbeeld, dan importeren; voer het op elk moment opnieuw uit voor wijzigingen."
+      },
+      "google_sheets": {
+        "description": "Houd de deelnemerslijst van een evenement bij in een Google-spreadsheet. Wijzigingen aan beide kanten worden in twee richtingen gesynchroniseerd."
+      },
+      "salesforce": {
+        "description": "Houd Salesforce bij: contacten en leads in beide richtingen, een campagne per evenement met de ingeschreven en ingecheckte mensen, en je sponsors als opportunities. Alleen mensen die met marketing hebben ingestemd worden verstuurd."
+      },
+      "google_calendar": {
+        "description": "Elke sessie van je lopende evenementen in een Google Agenda, altijd bijgewerkt: verplaatste sessies verhuizen mee en geannuleerde verdwijnen. Tijden staan in de tijdzone van elk evenement."
+      },
+      "quickbooks": {
+        "description": "Boek elke dag een verzamelboeking van je verkopen, kosten, terugbetalingen, uitbetalingen en donaties in QuickBooks Online."
+      },
+      "xero": {
+        "description": "Boek elke dag een verzamelboeking van je verkopen, kosten, terugbetalingen, uitbetalingen en donaties in Xero."
+      },
+      "mailchimp": {
+        "description": "Stuur een doelgroep naar een Mailchimp-lijst met merge-velden. Afmeldingen en onbestelbare adressen komen terug als toestemmingswijzigingen."
+      },
+      "hubspot": {
+        "description": "Synchroniseer contacten in beide richtingen en stuur je evenementen naar HubSpot als marketingevenementen met inschrijvingen en check-ins."
+      },
+      "klaviyo": {
+        "description": "Stuur een doelgroep naar een Klaviyo-lijst. Afmeldingen, bounces en spamklachten komen terug als toestemmingswijzigingen."
       }
     },
     "sandboxBadge": "Test",
@@ -13288,11 +13817,66 @@
     "readOnly": "Alleen eigenaren en beheerders kunnen integraties koppelen of wijzigen.",
     "breadcrumb": "Kruimelpad",
     "objects": {
-      "contacts": "Contacten"
+      "contacts": "Contacten",
+      "events": "Evenementen",
+      "ticket_classes": "Tickettypes",
+      "orders": "Bestellingen",
+      "attendees": "Deelnemers",
+      "leads": "Leads",
+      "campaigns": "Campagnes",
+      "campaign_members": "Campagneleden",
+      "sponsor_opportunities": "Sponsor-opportunities",
+      "sessions": "Sessies",
+      "journals": "Dagboekingen",
+      "members": "Lijstleden",
+      "marketing_events": "Marketingevenementen",
+      "event_attendance": "Inschrijvingen en aanwezigheid"
     },
     "fields": {
       "email": "E-mail",
-      "name": "Naam"
+      "name": "Naam",
+      "tagline": "Slogan",
+      "starts_at": "Begint",
+      "ends_at": "Eindigt",
+      "timezone": "Tijdzone",
+      "currency": "Valuta",
+      "venue_name": "Locatie",
+      "city": "Plaats",
+      "country": "Land",
+      "description": "Beschrijving",
+      "price_minor": "Prijs (in centen)",
+      "quantity_total": "Aantal",
+      "hidden": "Verborgen",
+      "sales_start_at": "Verkoop start",
+      "sales_end_at": "Verkoop einde",
+      "buyer_email": "E-mail koper",
+      "buyer_name": "Naam koper",
+      "status": "Status",
+      "subtotal_minor": "Tickettotaal (in centen)",
+      "total_minor": "Besteltotaal (in centen)",
+      "placed_at": "Besteld op",
+      "labels": "Labels",
+      "first_name": "Voornaam",
+      "last_name": "Achternaam",
+      "company": "Bedrijf",
+      "title": "Titel",
+      "phone": "Telefoon",
+      "lead_source": "Leadbron",
+      "start_date": "Startdatum",
+      "end_date": "Einddatum",
+      "stage": "Fase",
+      "stage_name": "Fase",
+      "close_date": "Sluitdatum",
+      "amount": "Bedrag",
+      "tier": "Sponsorniveau",
+      "currency_iso_code": "Valutacode",
+      "event_name": "Evenement",
+      "room": "Zaal",
+      "time_zone": "Tijdzone",
+      "subscription": "Abonnementswijziging",
+      "email_opt_out": "Afgemeld voor e-mail",
+      "venue": "Locatie",
+      "cancelled": "Geannuleerd"
     },
     "status": {
       "none": "Niet gekoppeld",
@@ -13339,7 +13923,9 @@
         "paused": "Synchroniseren is gepauzeerd.",
         "resumed": "Synchroniseren staat weer aan.",
         "interval": "Synchronisatieschema opgeslagen.",
-        "disconnected": "Ontkoppeld. Er wordt niets meer gesynchroniseerd en de toegang is bij de aanbieder ingetrokken."
+        "disconnected": "Ontkoppeld. Er wordt niets meer gesynchroniseerd en de toegang is bij de aanbieder ingetrokken.",
+        "linked": "Spreadsheet gemaakt en gekoppeld. Hij wordt gevuld bij de volgende synchronisatie.",
+        "unlinked": "Spreadsheet ontkoppeld. Er wordt niets meer mee gesynchroniseerd; hij blijft in je Google Drive."
       },
       "revoked": {
         "user": "Ontkoppeld op {when}.",
@@ -13443,7 +14029,21 @@
       "paused": "Gestopt door pauzeren",
       "sync_failed": "De synchronisatie is mislukt",
       "unknown_connector": "Deze integratie is niet meer beschikbaar",
-      "other": "Fout ({code})"
+      "other": "Fout ({code})",
+      "remote_deleted": "Verwijderd in de spreadsheet",
+      "conflict_kept_yayatoh": "Op beide plekken gewijzigd: de wijziging in Yayatoh is behouden",
+      "conflict_kept_remote": "Op beide plekken gewijzigd: de wijziging bij de aanbieder is behouden",
+      "conflict": "Botst met een record dat al in Yayatoh staat",
+      "not_found": "Iets wat nodig is, ontbreekt nog",
+      "validation_failed": "Yayatoh heeft het niet geaccepteerd",
+      "remove_failed": "Kon niet worden verwijderd bij de aanbieder",
+      "currency_unsupported": "Je boekhouding accepteert alleen de basisvaluta",
+      "post_failed": "Kon niet in je boekhouding worden geboekt",
+      "http_400": "Je boekhouding weigerde het: controleer de gekoppelde rekeningen",
+      "http_429": "De aanbieder vroeg ons het rustiger aan te doen",
+      "http_503": "De aanbieder is nu niet beschikbaar",
+      "no_organisation": "Geen organisatie gevonden voor deze koppeling",
+      "account_code_missing": "Een gekoppelde rekening heeft geen nummer"
     },
     "inbox": {
       "title": "Integratiefouten",
@@ -13469,7 +14069,8 @@
         "pull": "Lezen bij de aanbieder",
         "map": "Veldkoppeling",
         "write": "Opslaan in Yayatoh",
-        "push": "Versturen naar de aanbieder"
+        "push": "Versturen naar de aanbieder",
+        "conflict": "Op beide plekken gewijzigd"
       },
       "field": "Veld: {field}",
       "lastSeen": "Laatst gezien {when}",
@@ -13495,7 +14096,15 @@
       "retryNamed": "{record} opnieuw proberen",
       "dismiss": "Negeren",
       "dismissNamed": "{record} negeren",
-      "more": "{count, plural, one {Nog # record niet getoond.} other {Nog # records niet getoond.}}"
+      "more": "{count, plural, one {Nog # record niet getoond.} other {Nog # records niet getoond.}}",
+      "values": "Waarden",
+      "keptLost": "{field}: behouden “{kept}”, verloren “{lost}”",
+      "yourCall": "Wacht op je beslissing",
+      "help": {
+        "remote_deleted": "De rij is in de spreadsheet verwijderd. Niemand is uit de lijst in Yayatoh gehaald. Negeer de melding om dat te accepteren: de deelnemer blijft hier en is niet meer aan die rij gekoppeld.",
+        "conflict_kept_yayatoh": "Dit record is sinds de laatste synchronisatie op beide plekken gewijzigd. De latere wijziging, in Yayatoh, is behouden en verzonden; de waarde bij de aanbieder hieronder is overschreven.",
+        "conflict_kept_remote": "Dit record is sinds de laatste synchronisatie op beide plekken gewijzigd. De latere wijziging, bij de aanbieder, is behouden; de waarde in Yayatoh hieronder is overschreven."
+      }
     },
     "fakeConsent": {
       "title": "Testtoestemming",
@@ -13503,9 +14112,551 @@
       "heading": "{name} koppelen aan Yayatoh?",
       "body": "{name} is een testaanbieder. Als je toestaat, mag Yayatoh namens jou het volgende lezen en schrijven:",
       "allow": "Toestaan",
-      "deny": "Weigeren"
+      "deny": "Weigeren",
+      "bodyNoScopes": "{name} is een testaanbieder. Als je toestaat, kan Yayatoh namens jou de gegevens van je account lezen."
     },
-    "webhooksAction": "Een webhook instellen"
+    "webhooksAction": "Een webhook instellen",
+    "zapier": {
+      "title": "Zapier",
+      "cardDescription": "Start Zaps als bestellingen betaald worden, tickets worden ingecheckt of inschrijvingen binnenkomen, en schrijf mensen in of voeg contacten toe vanuit duizenden apps.",
+      "apiKeyBadge": "Gebruikt een API-sleutel",
+      "setUp": "Instellen",
+      "setUpNamed": "Zapier instellen",
+      "description": "Zapier koppelt met een van je API-sleutels. Geef de sleutel de rechten hieronder; de triggers die Zapier aanzet, staan hier.",
+      "createKey": "API-sleutel maken",
+      "reviewTitle": "De Yayatoh-app op Zapier wordt beoordeeld",
+      "reviewBody": "Tot Zapier hem publiceert, kan je accountteam je een uitnodigingslink sturen.",
+      "noApiAccess": "API-toegang hoort niet bij je abonnement, dus Zapier kan nog niet koppelen.",
+      "scopesTitle": "Rechten van de API-sleutel",
+      "scopesHelp": "Elke trigger en actie heeft een eigen recht nodig op de sleutel die je Zapier geeft.",
+      "allScopes": "Een sleutel met deze rechten dekt alles:",
+      "partsCaption": "Triggers en acties met het recht dat elk nodig heeft",
+      "part": "Trigger of actie",
+      "kind": "Soort",
+      "scope": "Recht",
+      "parts": {
+        "order_paid": "Bestelling betaald",
+        "ticket_admitted": "Ticket ingecheckt",
+        "registration_submitted": "Inschrijfformulier verstuurd",
+        "event_published": "Evenement gepubliceerd",
+        "create_registration": "Inschrijving maken",
+        "add_contact": "Contact toevoegen",
+        "check_in": "Ticket inchecken",
+        "event_list": "Evenementkiezer"
+      },
+      "kinds": {
+        "trigger": "Trigger",
+        "action": "Actie",
+        "picker": "Gebruikt door acties"
+      },
+      "keysTitle": "Je API-sleutels",
+      "keysHelp": "Actieve sleutels en of ze alle rechten dekken die Zapier nodig heeft.",
+      "noKeysTitle": "Nog geen actieve API-sleutels",
+      "noKeysDescription": "Maak een sleutel met de rechten hierboven en plak die in Zapier, samen met de korte naam van je organisatie.",
+      "keysCaption": "Actieve API-sleutels en hun dekking voor Zapier",
+      "keyName": "Sleutel",
+      "key": "Begint met",
+      "coverage": "Voor Zapier",
+      "ready": "Klaar voor Zapier",
+      "partial": "{count, plural, one {# recht ontbreekt} other {# rechten ontbreken}}",
+      "missing": "Ontbreekt: {scopes}",
+      "hooksTitle": "Actieve Zapier-triggers",
+      "hooksHelp": "Zaps die aan staan en luisteren. Zet je een Zap uit, dan verdwijnt de trigger hier.",
+      "hooksCaption": "Triggers waarop Zapier is geabonneerd",
+      "hooksEmpty": "Er luistert nog geen Zap. Zet een Zap aan die begint met een Yayatoh-trigger.",
+      "event": "Soort gebeurtenis",
+      "host": "Bezorgd bij",
+      "otherKey": "Een verwijderde sleutel",
+      "created": "Aangezet"
+    },
+    "slack": {
+      "title": "Slack",
+      "description": "Kies een kanaal voor meldingen en het dagelijkse overzicht. Berichten noemen evenementen en aantallen, nooit e-mailadressen of telefoonnummers.",
+      "settingsTitle": "Kanaal en berichten",
+      "saved": "Slack-instellingen opgeslagen.",
+      "invalid": "Sommige gegevens moeten worden verbeterd.",
+      "channel": "Kanaal",
+      "channelHint": "Je kunt alleen kanalen kiezen waarin de Yayatoh-app zit. Voeg de app in Slack eerst toe aan het kanaal.",
+      "channelPlaceholder": "Kies een kanaal",
+      "private": "privé",
+      "notInChannel": "app niet in kanaal",
+      "alerts": "Meldingen sturen",
+      "alertsHint": "Meldingen van je dashboard, zodra ze gebeuren.",
+      "severity": "Welke meldingen",
+      "severities": {
+        "info": "Alle meldingen",
+        "warning": "Waarschuwingen en kritieke meldingen",
+        "critical": "Alleen kritieke meldingen"
+      },
+      "digest": "Dagelijks overzicht sturen",
+      "digestHint": "De bestellingen, tickets en check-ins van gisteren, en de evenementen van vandaag.",
+      "digestTime": "Tijd van het overzicht",
+      "digestTimeHint": "Tijdzone van je organisatie ({zone}).",
+      "finance": "Bedragen in het overzicht opnemen",
+      "financeHint": "Alleen jij kunt dit aanzetten: jij hebt Slack gekoppeld en ziet de financiën. Iedereen in het kanaal ziet de bedragen.",
+      "noAmounts": "Het overzicht toont aantallen, geen bedragen. Alleen wie Slack koppelde en financiële toegang heeft, kan bedragen toevoegen.",
+      "save": "Slack-instellingen opslaan",
+      "fieldError": {
+        "invalid": "Controleer deze waarde.",
+        "channel": {
+          "required": "Kies een kanaal.",
+          "unknown": "Dat kanaal staat niet meer in de werkruimte. Kies een ander.",
+          "not_in_channel": "De Yayatoh-app zit niet in dat kanaal. Voeg hem toe in Slack en kies het dan."
+        },
+        "digestTime": {
+          "required": "Kies een tijd voor het overzicht.",
+          "invalid": "Vul een tijd in zoals 08:00."
+        },
+        "severity": {
+          "invalid": "Kies welke meldingen je wilt sturen."
+        },
+        "finance": {
+          "finance_owner_only": "Alleen wie Slack koppelde en financiële toegang heeft, kan bedragen toevoegen."
+        }
+      },
+      "error": {
+        "unavailable": "Slack is hier niet beschikbaar.",
+        "provider_unavailable": "Slack is niet bereikbaar. Probeer het over een paar minuten opnieuw.",
+        "validation_failed": "Sommige gegevens moeten worden verbeterd.",
+        "forbidden": "Je hebt hier geen toegang toe.",
+        "module_not_enabled": "Integraties horen niet bij je abonnement.",
+        "not_found": "Dat hebben we niet gevonden.",
+        "invalid_state": "Dat kan nu niet.",
+        "no_channel": "Kies eerst een kanaal en sla op.",
+        "auth_revoked": "Slack accepteert deze koppeling niet meer. Koppel Slack opnieuw.",
+        "connection_inactive": "Niet verstuurd: de koppeling is gepauzeerd of verbroken.",
+        "send_failed": "Het bericht kon niet worden verstuurd. Het wordt opnieuw geprobeerd.",
+        "not_in_channel": "De Yayatoh-app zit niet in dat kanaal. Voeg hem toe in Slack en probeer het opnieuw.",
+        "channel_not_found": "Dat kanaal bestaat niet meer. Kies een ander.",
+        "pii_blocked": "Niet verstuurd: het zou persoonsgegevens bevatten.",
+        "render_failed": "Het bericht kon niet worden voorbereid. Het wordt opnieuw geprobeerd.",
+        "nothing_to_send": "Er valt niets meer te versturen.",
+        "impersonation_blocked": "Medewerkers die als lid handelen, kunnen dit niet wijzigen.",
+        "read_only_freeze": "Wijzigingen zijn gepauzeerd tijdens gepland onderhoud. Probeer het daarna opnieuw.",
+        "internal": "Er ging bij ons iets mis.",
+        "other": "Niet verstuurd ({code})."
+      },
+      "testSent": "Testmelding verstuurd naar #{channel}.",
+      "channelsFailed": "De kanaallijst van Slack kon niet worden geladen. Probeer het over een paar minuten opnieuw.",
+      "inactive": "Instellingen zijn beschikbaar zolang Slack gekoppeld en actief is.",
+      "previewTitle": "Testmelding voor #{channel}",
+      "previewHelp": "Dit ziet het kanaal.",
+      "nextDigest": "Volgende overzicht: {when}",
+      "sendTest": "Testmelding sturen",
+      "messagesTitle": "Recente Slack-berichten",
+      "messagesEmpty": "Nog niets verstuurd.",
+      "messages": {
+        "when": "Wanneer",
+        "kind": "Bericht",
+        "status": "Status",
+        "detail": "Details"
+      },
+      "kinds": {
+        "alert": "Melding",
+        "digest": "Dagelijks overzicht",
+        "test": "Testmelding"
+      },
+      "statuses": {
+        "pending": "Wacht",
+        "sending": "Wordt verstuurd",
+        "sent": "Verstuurd",
+        "failed": "Mislukt",
+        "cancelled": "Niet verstuurd"
+      }
+    },
+    "import": {
+      "open": "Import openen",
+      "connectedDetail": "{name} is gekoppeld. Open de import om te zien wat er wordt overgehaald.",
+      "noRuns": "Nog geen imports. Open de import voor een voorbeeld en start er een.",
+      "title": "Importeren uit Eventbrite",
+      "crumb": "Import",
+      "description": "Haal evenementen, tickettypes, bestellingen en deelnemers over. Er wordt niets geschreven tot je de import start, en opnieuw uitvoeren haalt alleen wijzigingen op.",
+      "connected": "Eventbrite is gekoppeld. Controleer wat er wordt overgehaald en importeer dan.",
+      "started": "Import gestart. Hij loopt op de achtergrond: vernieuw zo meteen om het resultaat te zien.",
+      "alreadyRunning": "Er loopt al een import.",
+      "stepsLabel": "Importstappen",
+      "steps": {
+        "connect": "Koppelen",
+        "preview": "Voorbeeld",
+        "import": "Importeren",
+        "result": "Resultaat"
+      },
+      "notActive": "Deze koppeling is niet actief. Koppel opnieuw om te importeren.",
+      "backToConnection": "Naar de koppeling",
+      "preview": {
+        "title": "Voorbeeld",
+        "help": "Wat je Eventbrite-account nu bevat en hoeveel daarvan hier nieuw is. Er wordt nog niets geschreven.",
+        "readOnly": "Alleen eigenaren en beheerders kunnen een voorbeeld zien en een import starten.",
+        "caption": "Wat de import overhaalt",
+        "what": "Wat",
+        "inEventbrite": "In Eventbrite",
+        "new": "Hier nieuw",
+        "noEmails": "Geïmporteerde bestellingen zijn gemarkeerd als geïmporteerd: niemand betaalt iets en er gaan geen bonnen of ticketmails uit."
+      },
+      "what": {
+        "events": "Evenementen",
+        "ticketTypes": "Tickettypes",
+        "orders": "Bestellingen",
+        "attendees": "Deelnemers",
+        "revenue": "Omzet",
+        "refunded": "Terugbetaalde bestellingen"
+      },
+      "refundedOrders": "{count, plural, =0 {Geen} one {# bestelling, geïmporteerd als terugbetaald, zonder omzet} other {# bestellingen, geïmporteerd als terugbetaald, zonder omzet}}",
+      "noRevenue": "Geen",
+      "importing": "Import loopt…",
+      "importNew": "{count, plural, one {# nieuw record importeren} other {# nieuwe records importeren}}",
+      "importAgain": "Opnieuw importeren voor wijzigingen",
+      "result": {
+        "title": "Resultaat",
+        "none": "Nog niets geïmporteerd.",
+        "finished": "Klaar op {when}",
+        "inProgress": "Bezig",
+        "refresh": "Vernieuwen",
+        "counts": "{pulled} geïmporteerd of bijgewerkt · {skipped} ongewijzigd · {failed} met fouten",
+        "seeErrors": "Bekijk wat aandacht nodig heeft",
+        "caption": "Wat Yayatoh nu uit Eventbrite bevat",
+        "inYayatoh": "In Yayatoh",
+        "ordersValue": "{count} ({paid} betaald)",
+        "attendeesValue": "{count} ({active} actief)",
+        "goToEvents": "Naar evenementen"
+      }
+    },
+    "sheets": {
+      "title": "Gekoppelde evenementen",
+      "help": "De deelnemerslijst van elk gekoppeld evenement synchroniseert met een eigen Google-spreadsheet. Wijzigingen in de spreadsheet komen bij de volgende synchronisatie in Yayatoh; een rij verwijderen haalt nooit iemand weg.",
+      "linkTitle": "Evenement koppelen",
+      "event": "Evenement",
+      "pickEvent": "Kies een evenement",
+      "chooseEvent": "Kies het evenement waarvan de deelnemers in de spreadsheet komen.",
+      "link": "Spreadsheet maken en koppelen",
+      "linking": "Spreadsheet wordt gemaakt…",
+      "linkHelp": "Er wordt een nieuwe spreadsheet in je Google Drive gemaakt met de kolommen uit de veldtoewijzing.",
+      "alreadyLinked": "Dat evenement heeft al een spreadsheet.",
+      "allLinked": "Elk evenement heeft een spreadsheet.",
+      "noEvents": "Maak eerst een evenement en koppel dan de deelnemerslijst.",
+      "emptyTitle": "Nog geen evenementen gekoppeld",
+      "emptyHelp": "Kies hierboven een evenement om de spreadsheet te maken.",
+      "emptyReadOnly": "Een eigenaar of beheerder kan hier de deelnemerslijst van een evenement koppelen.",
+      "caption": "Evenementen gekoppeld aan Google Spreadsheets",
+      "sheet": "Spreadsheet",
+      "openNamed": "{title} openen in Google Spreadsheets",
+      "linkedOn": "Gekoppeld",
+      "status": "Status",
+      "statuses": {
+        "active": "Synchroniseert",
+        "unlinked": "Ontkoppeld"
+      },
+      "actions": "Acties",
+      "unlink": "Ontkoppelen",
+      "unlinkNamed": "{event} ontkoppelen",
+      "confirmUnlink": "De spreadsheet van {event} ontkoppelen?",
+      "confirmUnlinkBody": "Er wordt niets meer mee gesynchroniseerd. De spreadsheet blijft met de inhoud in je Google Drive en iedereen blijft op de lijst in Yayatoh.",
+      "keep": "Gekoppeld laten"
+    },
+    "linked": {
+      "title": "Gekoppelde records",
+      "description": "Wat deze integratie tot nu toe bijhoudt, per soort record.",
+      "caption": "Gekoppelde records per soort",
+      "object": "Soort",
+      "count": "Records",
+      "empty": "Nog niets gekoppeld. Records worden gekoppeld zodra ze synchroniseren."
+    },
+    "accounting": {
+      "mapTitle": "Rekeningschema",
+      "mapHelp": "Kies waar elke regel van de dagelijkse verzamelboeking in je boekhouding komt. Dagen worden geboekt nadat ze voorbij zijn, in de tijdzone van je organisatie.",
+      "notMapped": "Koppel je rekeningen om dagboekingen te gaan boeken.",
+      "version": "Versie {version} · boekt dagen vanaf {day}",
+      "chartUnavailable": "We konden je rekeningschema niet ophalen bij {name}. Probeer het zo opnieuw.",
+      "chooseAccount": "Kies een rekening",
+      "categories": {
+        "sales": {
+          "label": "Ticketverkoop",
+          "hint": "Gecrediteerd met de bruto ticketverkoop van de dag."
+        },
+        "donations": {
+          "label": "Donaties",
+          "hint": "Gecrediteerd met de online giften van de dag."
+        },
+        "refunds": {
+          "label": "Terugbetalingen",
+          "hint": "Gedebiteerd met wat aan kopers en donateurs is terugbetaald."
+        },
+        "fees": {
+          "label": "Yayatoh-kosten",
+          "hint": "Gedebiteerd met de platformkosten van de dag, min teruggegeven kosten."
+        },
+        "payouts": {
+          "label": "Uitbetalingen",
+          "hint": "De bankrekening waarop uitbetalingen van Yayatoh binnenkomen."
+        },
+        "clearing": {
+          "label": "Tussenrekening",
+          "hint": "Houdt het geld dat Yayatoh of je betaalverwerker voor je bewaart. Brengt elke boeking in evenwicht."
+        }
+      },
+      "startsOn": "Dagen boeken vanaf",
+      "startsOnHint": "De eerste dag die wordt geboekt, tot een jaar terug.",
+      "save": "Rekeningkoppeling opslaan",
+      "saved": "Rekeningkoppeling opgeslagen als versie {version}. De volgende synchronisatie boekt ermee.",
+      "invalid": "Deze koppeling kan nog niet worden opgeslagen. Controleer de gemarkeerde velden.",
+      "saveFailed": "De koppeling kon niet worden opgeslagen. Probeer het zo opnieuw.",
+      "issue": {
+        "missing": "Kies een rekening voor {field}.",
+        "unknown_account": "Die rekening staat niet meer in je boekhouding. Kies een andere voor {field}.",
+        "clearing_shared": "De tussenrekening kan niet ook voor {field} worden gebruikt.",
+        "starts_in_future": "Kies vandaag of een eerdere dag.",
+        "starts_too_early": "Kies een dag in het afgelopen jaar.",
+        "missing_date": "Vul de eerste dag in die wordt geboekt.",
+        "other": "Controleer dit veld."
+      },
+      "journalsTitle": "Dagboekingen",
+      "journalsHelp": "Eén boeking per dag en valuta. Verandert een dag nadat hij is geboekt, dan wordt hij tegengeboekt en opnieuw geboekt, nooit gewijzigd.",
+      "journalsCaption": "Dagelijkse verzamelboekingen verstuurd naar je boekhouding",
+      "waiting": "{count, plural, one {# boeking wacht op verzending.} other {# boekingen wachten op verzending.}}",
+      "emptyTitle": "Nog geen boekingen",
+      "emptyMapped": "Dagen worden geboekt nadat ze voorbij zijn, bij de volgende synchronisatie.",
+      "emptyUnmapped": "Koppel je rekeningen en synchroniseer dan om de dagen vanaf je eerste dag te boeken.",
+      "emptyMapAction": "Rekeningen koppelen",
+      "emptyPostAction": "Zoeken naar te boeken dagen",
+      "emptyBackAction": "Terug naar integraties",
+      "columns": {
+        "day": "Dag",
+        "currency": "Valuta",
+        "kind": "Boeking",
+        "amount": "Bedrag",
+        "status": "Status",
+        "reference": "Referentie in je boekhouding"
+      },
+      "kinds": {
+        "journal": "Boeking · revisie {revision}",
+        "reversal": "Tegenboeking van revisie {revision}"
+      },
+      "status": {
+        "pending": "Wacht",
+        "posted": "Geboekt",
+        "failed": "Niet geboekt",
+        "superseded": "Vervangen"
+      }
+    },
+    "marketing": {
+      "consentRule": "Toestemming eerst: alleen contacten met toestemming voor marketingmail worden verstuurd, en een afmelding of bounce gaat altijd voor. Meldt iemand zich hier af, dan meldt de volgende synchronisatie diegene daar ook af.",
+      "audience": {
+        "title": "Doelgroep",
+        "help": "Kies wie naar {name} gaat en bij welke lijst ze komen.",
+        "saved": "Doelgroep opgeslagen. De volgende synchronisatie verstuurt hem.",
+        "segmentMissing": "De opgeslagen doelgroep is verwijderd, dus er wordt niemand nieuw verstuurd. Kies een andere doelgroep.",
+        "segment": "Wie wordt verstuurd",
+        "list": "{name}-lijst",
+        "everyone": "Iedereen met toestemming voor marketingmail",
+        "savedSegment": "Een opgeslagen doelgroep",
+        "emptyTitle": "Nog geen doelgroep gekozen",
+        "emptyManage": "Kies wie je verstuurt en bij welke {name}-lijst ze komen. Er wordt niets verstuurd tot je opslaat.",
+        "emptyRead": "Een eigenaar of beheerder kiest wie wordt verstuurd. Tot dan wordt er niets verstuurd.",
+        "formLabel": "Kies de doelgroep en lijst",
+        "save": "Doelgroep opslaan",
+        "feedback": {
+          "list_required": "Kies een lijst.",
+          "provider_unavailable": "De lijsten konden niet bij de aanbieder worden geladen. Probeer het over een paar minuten opnieuw.",
+          "validation_failed": "Die doelgroep bestaat niet meer. Kies een andere.",
+          "forbidden": "Je hebt hier geen toegang toe.",
+          "invalid_state": "Deze koppeling kan nu niet worden ingesteld.",
+          "not_found": "We konden dat niet vinden.",
+          "read_only_freeze": "Wijzigingen zijn gepauzeerd tijdens gepland onderhoud. Probeer het opnieuw als het klaar is.",
+          "internal": "Er ging bij ons iets mis."
+        },
+        "chooseNow": "Doelgroep kiezen",
+        "allIntegrations": "Alle koppelingen"
+      },
+      "hubspot": {
+        "title": "Wat met HubSpot synchroniseert",
+        "contacts": "Contacten synchroniseren in beide richtingen met de veldkoppeling hieronder. Contacten uit HubSpot komen nooit met toestemming binnen; een afmelding in HubSpot meldt ze hier af.",
+        "events": "Elk gepubliceerd evenement wordt een HubSpot-marketingevenement, en een annulering wordt ook verstuurd.",
+        "attendance": "Inschrijvingen, check-ins en annuleringen worden verstuurd voor contacten met toestemming voor marketingmail."
+      },
+      "changes": {
+        "title": "Toestemmingswijzigingen van {name}",
+        "help": "Afmeldingen, onbestelbare adressen en klachten die terugkwamen van {name}, en wat ze hier hebben veranderd.",
+        "caption": "Toestemmingswijzigingen van {name}",
+        "empty": "Er is nog niets teruggekomen van {name}.",
+        "who": "Contact",
+        "change": "Bij de aanbieder",
+        "applied": "Hier gewijzigd",
+        "when": "Wanneer",
+        "withdrawn": "Toestemming ingetrokken",
+        "suppressed": "Geblokkeerd",
+        "already": "Al bijgewerkt",
+        "kinds": {
+          "unsubscribed": "Afgemeld",
+          "cleaned": "Adres onbestelbaar",
+          "complained": "Spamklacht"
+        }
+      }
+    }
+  },
+  "kioskPrint": {
+    "useEmail": "Ticket niet bij je? Gebruik je e-mail",
+    "loading": "We zoeken je badge…",
+    "emailTitle": "Gebruik je e-mail",
+    "emailHint": "We mailen een code van 6 cijfers naar het adres op je ticket.",
+    "emailLabel": "Je e-mailadres",
+    "sendCode": "Mail me een code",
+    "cancel": "Annuleren",
+    "emailInvalid": "Vul je e-mailadres in, bijvoorbeeld naam@example.com.",
+    "emailOffline": "E-mailcodes hebben een verbinding nodig. Scan je ticket of ga naar de balie.",
+    "emailLimited": "Er zijn te veel codes aangevraagd. Ga naar de balie.",
+    "emailFailed": "We konden nu geen code sturen. Probeer het opnieuw of ga naar de balie.",
+    "codeTitle": "Vul je code in",
+    "codeSent": "Als {email} een ticket voor dit evenement heeft, hebben we er een code van 6 cijfers naartoe gemaild. Die werkt 10 minuten.",
+    "codeLabel": "Code van 6 cijfers",
+    "confirmCode": "Code bevestigen",
+    "newCode": "Nieuwe code sturen",
+    "codeInvalid": "Vul de 6 cijfers uit de e-mail in.",
+    "codeWrong": "Die code klopt niet. {left, plural, one {Nog # poging.} other {Nog # pogingen.}}",
+    "codeExpired": "Die code is verlopen. Stuur een nieuwe code.",
+    "detailsTitle": "Controleer je gegevens",
+    "detailsHint": "Dit komt er op je badge te staan.",
+    "name": "Naam",
+    "company": "Bedrijf",
+    "jobTitle": "Functie",
+    "ticket": "Ticket",
+    "print": "Mijn badge afdrukken",
+    "printing": "Bezig met afdrukken…",
+    "wrongDetails": "Er klopt iets niet",
+    "notMe": "Dit ben ik niet",
+    "printingTitle": "Je badge wordt afgedrukt",
+    "printingHint": "Haal hem op bij de printer. Veel plezier!",
+    "queuedTitle": "Je badge staat in de wachtrij",
+    "queuedHint": "De kiosk is offline. Je badge wordt afgedrukt zodra hij weer verbonden is; heb je haast, ga dan naar de balie.",
+    "done": "Klaar",
+    "deskTitle": "Ga naar de balie",
+    "desk": {
+      "desk": "De registratiebalie drukt je badge voor je af.",
+      "printed": "Je badge is al afgedrukt. Heb je een nieuwe nodig, dan drukt de balie hem opnieuw af.",
+      "notFound": "We vonden hier geen badge voor dat ticket.",
+      "wrongDetails": "Geen probleem: de balie past je gegevens aan en drukt je badge af.",
+      "printFailed": "De printer heeft je badge niet aangenomen. De balie drukt hem voor je af.",
+      "locked": "Te veel foute codes. De balie helpt je verder.",
+      "offline": "De kiosk is nu offline. De balie drukt je badge af."
+    },
+    "readyTitle": "Je badge is klaar om af te drukken",
+    "readyHint": "Open hem, kies Afdrukken en haal hem op bij de printer.",
+    "openBadge": "Mijn badge openen om af te drukken"
+  },
+  "virtual": {
+    "setup": {
+      "title": "Streaming instellen",
+      "description": "Stream de sessies van {event} online: kies hoe het evenement plaatsvindt, wie mag kijken en stel per sessie een livestream in.",
+      "providerOff": "Streaming is hier nog niet beschikbaar",
+      "providerOffHint": "Yayatoh zet streaming aan zodra het account bij de videoprovider klaar is. Je instellingen blijven bewaard.",
+      "fakeProvider": "Teststreaming: hier wordt een vervangende videoprovider gebruikt, er wordt niets uitgezonden.",
+      "readOnly": "Je kunt de streaminginstellingen bekijken. Alleen bewerkers kunnen ze wijzigen.",
+      "totalViewers": "Kijkers",
+      "totalMinutes": "Bekeken minuten",
+      "deliveryTitle": "Vorm",
+      "deliveryLegend": "Hoe vindt dit evenement plaats?",
+      "saveDelivery": "Vorm opslaan",
+      "deliverySaved": "Vorm opgeslagen.",
+      "accessTitle": "Wie mag kijken",
+      "accessHint": "Kies wat elk tickettype omvat. Streaming wordt gemeten, dus alleen tickets met online toegang kunnen kijken.",
+      "inPersonNote": "Dit evenement is op locatie, dus er wordt geen sessie gestreamd. Kies Online of Hybride om streams in te stellen.",
+      "noTicketTypes": "Nog geen tickettypes",
+      "noTicketTypesHint": "Voeg tickettypes of registratiepassen toe en kies dan welke online mogen kijken.",
+      "defaultNote": "Nog niet gekozen: de standaard van het evenement geldt.",
+      "saveAccess": "Opslaan",
+      "saveAccessLabel": "Toegang voor {name} opslaan",
+      "accessSaved": "Toegang voor {name} opgeslagen.",
+      "sessionsTitle": "Sessiestreams",
+      "noSessions": "Nog geen sessies",
+      "noSessionsHint": "Voeg sessies toe aan het programma en stel daarna voor elke sessie een stream in.",
+      "addSessions": "Naar sessies",
+      "session": "Sessie",
+      "stream": "Stream",
+      "streamNone": "Geen stream",
+      "streamOn": "Aan",
+      "streamOff": "Uit",
+      "viewers": "Kijkers",
+      "minutes": "Bekeken minuten",
+      "checkedIn": "Virtuele check-ins",
+      "actions": "Acties",
+      "createStream": "Stream instellen",
+      "createStreamLabel": "Een stream instellen voor {title}",
+      "showKey": "Streamsleutel tonen",
+      "showKeyLabel": "De streamsleutel van {title} tonen",
+      "turnOff": "Uitzetten",
+      "turnOn": "Aanzetten",
+      "turnOffLabel": "De stream van {title} uitzetten",
+      "turnOnLabel": "De stream van {title} aanzetten",
+      "ingestUrl": "Server",
+      "streamKey": "Streamsleutel",
+      "keyWarning": "Wie deze sleutel heeft, kan uitzenden als jouw evenement. Houd hem geheim.",
+      "streamCreated": "Stream klaar voor {title}.",
+      "streamOnSaved": "De stream van {title} staat aan.",
+      "streamOffSaved": "De stream van {title} staat uit.",
+      "delivery": {
+        "in_person": "Op locatie",
+        "online": "Online",
+        "hybrid": "Hybride"
+      },
+      "deliveryHint": {
+        "in_person": "Iedereen is op locatie. Er wordt niets gestreamd.",
+        "online": "Iedereen kijkt online. Tickets bevatten online toegang, tenzij je dat wijzigt.",
+        "hybrid": "Sommigen zijn op locatie, anderen online. Kies hieronder welke tickets mogen kijken."
+      },
+      "access": {
+        "in_person": "Alleen op locatie",
+        "virtual": "Alleen online",
+        "both": "Op locatie en online"
+      },
+      "addTicketTypes": "Naar tickets"
+    },
+    "errors": {
+      "in_person_event": "Dit evenement is op locatie. Kies eerst Online of Hybride.",
+      "video_off": "Streaming is hier nog niet beschikbaar.",
+      "in_person_only": "Dit ticket geldt alleen voor deelname op locatie.",
+      "stream_off": "Deze stream staat uit.",
+      "provider_changed": "De videoprovider is veranderd. Stel deze stream opnieuw in.",
+      "views_per_hour": "Te veel pogingen. Wacht een paar minuten en probeer het opnieuw.",
+      "invalid_token": "Deze kijklink is verlopen. Begin opnieuw met kijken.",
+      "ticket_void": "Dit ticket is niet meer geldig."
+    },
+    "watch": {
+      "metaTitle": "Online kijken",
+      "title": "Online kijken",
+      "greeting": "Hallo {name}. Kies een sessie om te bekijken.",
+      "inPersonOnly": "Je ticket is voor deelname op locatie",
+      "inPersonOnlyHint": "Online kijken zit niet in dit ticket. Neem contact op met de organisator als je online toegang nodig hebt.",
+      "noSessionsTitle": "Er wordt nog niets gestreamd",
+      "noSessionsHint": "Sessies verschijnen hier zodra de organisator hun stream aanzet. Kom kort voor de start terug.",
+      "watched": "{count, plural, =0 {Nog niet bekeken} one {# minuut bekeken} other {# minuten bekeken}}",
+      "watchSession": "Kijken",
+      "watchLabel": "{title} bekijken",
+      "orderLink": "Online kijken",
+      "orderLinkLabel": "Online kijken met ticket {serial}"
+    },
+    "player": {
+      "countNote": "Je kijktijd telt één keer per minuut zolang de stream speelt.",
+      "back": "Alle sessies",
+      "heading": "Speler",
+      "testPattern": "Teststream: in deze omgeving wordt geen video uitgezonden.",
+      "ready": "Druk op Begin met kijken om te starten.",
+      "pause": "Pauzeren",
+      "resume": "Hervatten",
+      "play": "Begin met kijken",
+      "playing": "Speelt af",
+      "paused": "Gepauzeerd",
+      "starting": "Starten…",
+      "watched": "{count, plural, =0 {Nog niet bekeken} one {# minuut bekeken} other {# minuten bekeken}}",
+      "errors": {
+        "in_person_only": "Je ticket geldt alleen voor deelname op locatie.",
+        "stream_off": "De organisator heeft deze stream uitgezet.",
+        "views_per_hour": "Te veel pogingen. Wacht een paar minuten en probeer het opnieuw.",
+        "invalid_token": "Deze weergave is verlopen. Druk opnieuw op Begin met kijken.",
+        "ticket_void": "Dit ticket is niet meer geldig.",
+        "video_off": "Streaming is nu niet beschikbaar.",
+        "not_found": "Deze sessie wordt nu niet gestreamd.",
+        "generic": "Er ging iets mis. Probeer het opnieuw."
+      }
+    }
   },
   "guestSeats": {
     "placeAt": {
@@ -14834,6 +15985,25 @@
       "reason_required": "Kies waarom deze badge opnieuw wordt geprint.",
       "note_required": "Geef bij ‘Anders’ in een paar woorden aan waarom.",
       "note": "Houd de notitie onder de 200 tekens."
+    },
+    "balanceDue": "Er staat een bedrag open voor deze registratie. Druk de badge af via de badgepagina met een reden.",
+    "sourceKiosk": "Kiosk",
+    "kiosk": {
+      "heading": "Zelf afdrukken bij de kiosk",
+      "hint": "Deelnemers scannen hun ticket bij een incheckkiosk (of bevestigen een gemailde code), controleren hun gegevens en drukken hun badge één keer zelf af. Herdrukken, openstaande bedragen en registraties die nog wachten gaan naar de balie.",
+      "on": "Aan",
+      "off": "Uit",
+      "printsTo": "Drukt af op {printer}",
+      "emailOn": "E-mailcodes aan",
+      "emailOff": "E-mailcodes uit",
+      "options": "Zelf afdrukken",
+      "enabled": "Deelnemers drukken hun badge zelf af bij kiosken",
+      "emailCodes": "\"Gebruik je e-mail\" aanbieden (een eenmalige code naar de tickethouder)",
+      "printer": "Kiosken drukken af op",
+      "printerHint": "Het eigen afdrukvenster van de kiosk werkt met een printer die op de kiosk is aangesloten.",
+      "ownDialog": "Het eigen afdrukvenster van de kiosk",
+      "save": "Kioskinstellingen opslaan",
+      "saved": "Kioskinstellingen opgeslagen."
     }
   },
   "sessionCheckin": {
@@ -15830,7 +17000,15 @@
   "emptyActions": {
     "seeEvents": "Je evenementen bekijken",
     "eventHome": "Naar de evenementstartpagina",
-    "clearSearch": "Zoekopdracht wissen"
+    "clearSearch": "Zoekopdracht wissen",
+    "addRule": "Regel toevoegen",
+    "scheduleReport": "Rapport inplannen",
+    "linkSheet": "Evenement koppelen",
+    "connectPayouts": "Uitbetalingen koppelen",
+    "runAgain": "Opnieuw uitvoeren",
+    "agencyAddress": "Adres van je bureau bekijken",
+    "clients": "Je klanten bekijken",
+    "plan": "Abonnement en facturatie openen"
   },
   "coupons": {
     "title": "Kortingsbonnen",
@@ -15981,6 +17159,861 @@
       "step1": "Voor elk betaald ticket gelden de kosten uit uw abonnement. Voor gratis tickets gelden geen kosten.",
       "step2": "De kosten worden van elke order ingehouden en op elke uitbetaling vermeld.",
       "step3": "Wanneer kosten bij een terugbetaling worden teruggegeven, verschijnen ze onder teruggegeven kosten."
+    }
+  },
+  "ssoFakeIdp": {
+    "eyebrow": "Test-identiteitsprovider",
+    "title": "Nep-identiteitsprovider",
+    "descriptionSaml": "Alleen voor ontwikkeling: deze pagina antwoordt zoals de SAML-identiteitsprovider van je organisatie zou doen.",
+    "descriptionOidc": "Alleen voor ontwikkeling: deze pagina antwoordt zoals de OpenID Connect-provider van je organisatie zou doen.",
+    "email": "E-mailadres waar de provider voor instaat",
+    "name": "Naam (optioneel)",
+    "signIn": "Inloggen",
+    "cancel": "Annuleren",
+    "returning": "Terug naar Yayatoh…",
+    "continue": "Doorgaan",
+    "unknown": "Dit inlogverzoek is niet meer geldig.",
+    "invalidEmail": "Voer een geldig e-mailadres in."
+  },
+  "sso": {
+    "title": "Single sign-on",
+    "subtitle": "Laat je team inloggen via je identiteitsprovider, verifieer je e-maildomeinen en richt gebruikers in met SCIM.",
+    "help": "Lees de handleiding",
+    "noAccessTitle": "Alleen eigenaren en beheerders beheren single sign-on",
+    "noAccessDescription": "Vraag een eigenaar of beheerder van deze organisatie om single sign-on in te stellen of te wijzigen.",
+    "noModuleTitle": "Single sign-on zit niet in je abonnement",
+    "noModuleDescription": "Single sign-on en SCIM horen bij de Enterprise-functies.",
+    "seePlan": "Bekijk je abonnement",
+    "unavailableTitle": "Single sign-on is nog niet beschikbaar",
+    "unavailableDescription": "Single sign-on kan op deze installatie nog niet worden ingesteld.",
+    "testPassed": "Testlogin geslaagd.",
+    "testPassedNext": "Je kunt single sign-on nu inschakelen.",
+    "testPassedDomainUnverified": "Het adres waarmee je inlogde zit nog niet in een geverifieerd domein: verifieer het domein voordat mensen inloggen.",
+    "testFailed": "Testlogin mislukt.",
+    "idpTitle": "Identiteitsprovider",
+    "status": {
+      "active": "Aan",
+      "draft": "Nog niet aan",
+      "disabled": "Uit"
+    },
+    "protocol": "Protocol",
+    "protocolSaml": "SAML 2.0",
+    "protocolSamlHint": "Okta, Microsoft Entra ID, Google Workspace, OneLogin, JumpCloud…",
+    "protocolOidc": "OpenID Connect",
+    "protocolOidcHint": "Elke provider die inloggen via OpenID Connect ondersteunt.",
+    "name": "Naam",
+    "nameHint": "Zichtbaar voor je team, bijvoorbeeld \"Northwind Okta\".",
+    "samlSource": "Hoe wil je de gegevens van de provider invoeren?",
+    "sourceXml": "Metadata-XML plakken",
+    "sourceUrl": "Metadata-URL",
+    "sourceManual": "Gegevens handmatig invoeren",
+    "metadataXml": "Metadata-XML",
+    "metadataXmlHint": "Download deze in de app-instellingen van je identiteitsprovider en plak hem hier.",
+    "metadataUrl": "Metadata-URL",
+    "metadataUrlHint": "Een https-adres waar je identiteitsprovider zijn metadata publiceert.",
+    "entityId": "Entity ID van de identiteitsprovider",
+    "ssoUrl": "Inlog-URL",
+    "certificate": "Ondertekeningscertificaat",
+    "certificateHint": "Het X.509-certificaat (PEM) waarmee je identiteitsprovider ondertekent.",
+    "certificateSummary": "{subject}, verloopt op {expires}",
+    "issuer": "Issuer-URL",
+    "issuerHint": "Bijvoorbeeld https://login.example.com.",
+    "clientId": "Client-ID",
+    "clientSecret": "Clientgeheim",
+    "clientSecretKeep": "Laat leeg om het opgeslagen geheim te behouden.",
+    "defaultRole": "Rol voor nieuwe mensen",
+    "defaultRoleHint": "Mensen die voor het eerst inloggen, krijgen deze rol, tenzij een SCIM-groep ze een andere geeft.",
+    "jit": "Mensen toevoegen bij hun eerste login",
+    "jitHint": "Uit: alleen bestaande leden en mensen die je provider via SCIM inricht, kunnen inloggen.",
+    "jitShort": "Toevoegen bij eerste login",
+    "on": "Aan",
+    "off": "Uit",
+    "lastTest": "Laatste test",
+    "lastTestPassed": "Geslaagd op {date}",
+    "lastTestFailed": "Mislukt op {date}",
+    "neverTested": "Nog niet getest",
+    "settingsChangedSinceTest": "(instellingen sindsdien gewijzigd: test opnieuw)",
+    "testSignIn": "Testlogin",
+    "activate": "Inschakelen",
+    "activated": "Single sign-on staat aan.",
+    "disable": "Uitschakelen",
+    "disabled": "Single sign-on staat uit.",
+    "deleteConnection": "Koppeling verwijderen",
+    "editTitle": "Instellingen wijzigen",
+    "createTitle": "Koppel je identiteitsprovider",
+    "saved": "Instellingen opgeslagen. Voer een testlogin uit voordat je single sign-on inschakelt.",
+    "fieldInvalid": "Controleer deze waarde.",
+    "fieldRequired": "Dit is verplicht.",
+    "saveChanges": "Wijzigingen opslaan",
+    "saveConnection": "Koppeling opslaan",
+    "emptyTitle": "Nog geen identiteitsprovider",
+    "emptyDescription": "Koppel je identiteitsprovider, test een login, verifieer een domein en schakel dan single sign-on in.",
+    "emptyAction": "Koppel je identiteitsprovider",
+    "spTitle": "Gegevens voor je identiteitsprovider",
+    "spDescription": "Kopieer deze naar de app die je bij je identiteitsprovider aanmaakt.",
+    "spEntityId": "Entity ID (audience)",
+    "spAcs": "Assertion Consumer Service (ACS)-URL",
+    "spRedirect": "Redirect-URI (OpenID Connect)",
+    "domainsTitle": "Geverifieerde domeinen",
+    "domainsDescription": "Single sign-on en SCIM accepteren alleen adressen in domeinen die je verifieert. Verifieer een domein door een DNS TXT-record te publiceren.",
+    "domain": "Domein",
+    "domainHint": "Het e-maildomein van je team, bijvoorbeeld acme.com.",
+    "domainInvalid": "Voer een domein in, zoals acme.com.",
+    "domainAdded": "Domein toegevoegd. Publiceer het TXT-record en controleer het daarna.",
+    "addDomain": "Domein toevoegen",
+    "noDomainsTitle": "Nog geen domeinen",
+    "noDomainsDescription": "Voeg het e-maildomein van je team toe om het te verifiëren.",
+    "domainStatus": {
+      "verified": "Geverifieerd",
+      "pending": "Wacht op DNS",
+      "failed": "Niet geverifieerd"
+    },
+    "enforced": "Single sign-on verplicht",
+    "recordInstructions": "Publiceer dit TXT-record in de DNS van je domein en controleer het daarna. DNS-wijzigingen kunnen even duren.",
+    "recordName": "Recordnaam",
+    "recordValue": "Recordwaarde",
+    "verifiedOn": "Geverifieerd op {date}",
+    "checkDomain": "{domain} controleren",
+    "removeDomain": "{domain} verwijderen",
+    "enforce": "Single sign-on verplichten voor {domain}",
+    "activateNeedsDomain": "Verifieer een domein om single sign-on in te schakelen.",
+    "scimTitle": "SCIM-provisioning",
+    "scimDescription": "Je identiteitsprovider kan mensen automatisch toevoegen, bijwerken en verwijderen. Wie daar wordt verwijderd, verliest hier direct de toegang.",
+    "scimBaseUrl": "SCIM-basis-URL",
+    "tokenStatus": "Token {prefix}… aangemaakt {created}, laatst gebruikt {used}.",
+    "neverUsed": "nooit",
+    "noToken": "Nog geen SCIM-token.",
+    "createToken": "SCIM-token aanmaken",
+    "rotateToken": "Token vervangen",
+    "revokeToken": "Token intrekken",
+    "tokenShownOnce": "Kopieer dit token nu: het wordt niet opnieuw getoond. Plak het in de SCIM-instellingen van je identiteitsprovider.",
+    "tokenLabel": "SCIM-token",
+    "tokenRevoked": "Token ingetrokken. Provisioning is gestopt.",
+    "scimUsers": "{active, plural, one {# persoon ingericht} other {# personen ingericht}}, {deprovisioned, plural, one {# uitgeschreven} other {# uitgeschreven}}.",
+    "groupsTitle": "Groepen en rollen",
+    "noGroupsTitle": "Nog geen groepen",
+    "noGroupsDescription": "Groepen verschijnen hier zodra je identiteitsprovider ze via SCIM doorstuurt. Kies daarna voor elke groep een rol.",
+    "noGroupsAction": "SCIM-basis-URL kopiëren",
+    "groupName": "Groep",
+    "groupMembers": "Leden",
+    "groupRole": "Rol",
+    "groupRoleLabel": "Rol voor {group}",
+    "groupRoleSaved": "Rol opgeslagen.",
+    "noRole": "Geen rol (leden niet wijzigen)",
+    "copy": "Kopiëren",
+    "copied": "Gekopieerd",
+    "reasons": {
+      "too_large": "De metadata is te groot.",
+      "invalid_metadata": "Dit is geen metadata van een SAML-identiteitsprovider.",
+      "no_sso_url": "De metadata bevat geen inlog-URL.",
+      "no_certificate": "De metadata bevat geen ondertekeningscertificaat.",
+      "metadata_unreachable": "We konden geen metadata downloaden van deze URL.",
+      "certificate_invalid": "Dit is geen geldig certificaat.",
+      "certificate_expired": "Het ondertekeningscertificaat is verlopen.",
+      "certificate_not_yet_valid": "Het ondertekeningscertificaat is nog niet geldig.",
+      "discovery_failed": "We konden de OpenID-configuratie van de provider bij deze issuer niet lezen.",
+      "secret_missing": "Voer het clientgeheim in.",
+      "malformed": "Het antwoord van de provider was niet leesbaar.",
+      "invalid_signature": "Het antwoord van de provider was niet ondertekend door de ingestelde provider.",
+      "wrong_issuer": "Het antwoord kwam van een andere issuer dan de ingestelde.",
+      "wrong_audience": "Het antwoord was bedoeld voor een andere applicatie: controleer de entity ID of client-ID.",
+      "wrong_request": "Het antwoord hoorde niet bij deze test.",
+      "expired": "Het antwoord was verlopen.",
+      "no_email": "De provider heeft geen e-mailadres meegestuurd.",
+      "idp_error": "De provider reageerde niet.",
+      "cancelled": "De testlogin is geannuleerd.",
+      "test_required": "Voer eerst een geslaagde testlogin uit met de huidige instellingen.",
+      "domain_required": "Verifieer eerst een domein.",
+      "protocol_change": "Verwijder de koppeling om van protocol te wisselen.",
+      "domain_not_verified": "Verifieer eerst het domein.",
+      "connection_inactive": "Schakel eerst single sign-on in.",
+      "domain_limit": "Je hebt het maximale aantal domeinen bereikt.",
+      "already_added": "Dit domein staat al in de lijst.",
+      "record_not_found": "We hebben het TXT-record nog niet gevonden. Controleer of het is gepubliceerd en probeer het opnieuw.",
+      "lookup_failed": "De DNS-lookup is mislukt. Probeer het over een paar minuten opnieuw.",
+      "claimed_elsewhere": "Een andere organisatie heeft dit domein al geverifieerd.",
+      "sso_unavailable": "Single sign-on is niet beschikbaar op deze installatie.",
+      "last_owner": "De organisatie heeft minstens één eigenaar nodig."
+    }
+  },
+  "leads": {
+    "portal": {
+      "heading": "Leads vastleggen",
+      "window": "Vastleggen opent op {opens} en sluit op {closes} (tijd van het evenement). Notities en export blijven beschikbaar tot {until}.",
+      "termsNeededAdmin": "Accepteer hieronder de leadvoorwaarden voordat je team leads kan vastleggen.",
+      "termsNeededStaff": "De beheerder van je exposant moet de leadvoorwaarden accepteren voordat je leads kunt vastleggen.",
+      "why": {
+        "unlicensed": "Je hebt nog geen leadlicentie. Vraag er een aan de beheerder van je exposant.",
+        "over_allowance": "Je licentie valt buiten het tegoed van je exposant. Vraag de beheerder er een in te trekken of meer te kopen."
+      },
+      "open": "Leads vastleggen openen"
+    },
+    "license": {
+      "licensed": "Gelicentieerd",
+      "unlicensed": "Geen licentie",
+      "over_allowance": "Boven het tegoed"
+    },
+    "capture": {
+      "not_open": "Vastleggen nog niet open",
+      "open": "Vastleggen open",
+      "closed": "Vastleggen gesloten"
+    },
+    "terms": {
+      "heading": "Leadvoorwaarden",
+      "v1": "Als je de badge van een deelnemer scant, ontvang je alleen naam, functie en bedrijf, en het e-mailadres alleen als de deelnemer heeft ingestemd met delen. Je bedrijf wordt verantwoordelijk voor deze gegevens: gebruik ze alleen om je gesprek op dit evenement op te volgen, bewaar ze veilig en verwijder ze op verzoek. Deelnemers zien dat je ze hebt gescand en kunnen stoppen met het delen van hun e-mailadres.",
+      "accepted": "Leadvoorwaarden geaccepteerd",
+      "acceptLabel": "Akkoord",
+      "accept": "Ik accepteer de leadvoorwaarden namens {exhibitor}",
+      "submit": "Leadvoorwaarden accepteren",
+      "acceptRequired": "Vink het vakje aan om de leadvoorwaarden te accepteren."
+    },
+    "settings": {
+      "heading": "Kwalificaties en zichtbaarheid",
+      "qualifiers": "Kwalificaties",
+      "qualifiersHint": "Eén per regel, maximaal 10 (bijvoorbeeld: Budget goedgekeurd). Je team vinkt ze aan bij elke lead.",
+      "visibility": "Wie leads ziet",
+      "teamVisibility": "Medewerkers zien de leads van het hele team (anders alleen de leads die ze zelf scanden)",
+      "save": "Leadinstellingen opslaan",
+      "saved": "Leadinstellingen opgeslagen.",
+      "qualifiersInvalid": "Elke kwalificatie mag maximaal 60 tekens hebben.",
+      "tooMany": "Je kunt maximaal 10 kwalificaties hebben."
+    },
+    "export": {
+      "heading": "Leads exporteren",
+      "ready": "Bevestigd. Je kunt je leads nu downloaden.",
+      "count": "{count, plural, =0 {Nog geen leads} one {# lead} other {# leads}}",
+      "hint": "Voor je veiligheid mailen we je vóór de download een code om te bevestigen dat jij het bent.",
+      "download": "Leads downloaden (CSV)",
+      "ended": "De toegang tot leads van dit evenement is beëindigd.",
+      "columns": {
+        "name": "Naam",
+        "jobTitle": "Functie",
+        "company": "Bedrijf",
+        "email": "E-mail",
+        "rating": "Beoordeling",
+        "qualifiers": "Kwalificaties",
+        "notes": "Notities",
+        "capturedAt": "Gescand op",
+        "scannedBy": "Gescand door",
+        "scans": "Scans",
+        "sharedFields": "Gedeelde velden",
+        "emailConsentVersion": "Versie e-mailtoestemming"
+      }
+    },
+    "confirm": {
+      "title": "Bevestig dat jij het bent",
+      "intro": "Bevestig met een code die we naar {email} mailen om je leads te downloaden."
+    },
+    "attendee": {
+      "heading": "Wie mijn badge heeft gescand",
+      "emptyTitle": "Nog niemand heeft je badge gescand",
+      "emptyDescription": "Als een exposant je badge scant, zie je dat hier.",
+      "scannedAt": "Gescand op {time}",
+      "emailShared": "Heeft je e-mailadres",
+      "emailWithdrawn": "Delen van e-mailadres gestopt",
+      "emailNotShared": "E-mailadres niet gedeeld",
+      "withdraw": "Mijn e-mailadres niet meer delen met {exhibitor}",
+      "withdrawn": "Klaar. Ze zien je e-mailadres niet meer.",
+      "sharingOn": "Exposanten die je badge scannen, ontvangen je e-mailadres.",
+      "sharingOff": "Exposanten die je badge scannen, ontvangen je e-mailadres niet.",
+      "sharingHint": "Ze ontvangen altijd je naam, functie en bedrijf. Nooit je telefoonnummer of adres.",
+      "turnOff": "Mijn e-mailadres niet meer delen met exposanten",
+      "turnOn": "Mijn e-mailadres delen met exposanten die mijn badge scannen",
+      "saved": "Opgeslagen."
+    },
+    "app": {
+      "pageTitle": "Leads vastleggen",
+      "loading": "Laden…",
+      "signedOutTitle": "Meld je aan om leads vast te leggen",
+      "signedOutDescription": "Open op dit apparaat de aanmeldlink uit je uitnodiging als exposant en kom daarna terug naar leads vastleggen.",
+      "openPortal": "Naar het exposantenportaal",
+      "title": "Leads van {exhibitor}",
+      "online": "Online",
+      "offline": "Offline: scans worden op dit apparaat bewaard",
+      "queued": "{count, plural, =0 {Alles gesynchroniseerd} one {# scan wacht op synchronisatie} other {# scans wachten op synchronisatie}}",
+      "modes": "Weergaven van leads vastleggen",
+      "viewScan": "Scannen",
+      "viewLeads": "{count, plural, =0 {Leads} other {Leads (#)}}",
+      "blockedTitle": "Je kunt nu geen leads vastleggen",
+      "blocked": {
+        "unlicensed": "Je hebt geen leadlicentie. Vraag er een aan de beheerder van je exposant.",
+        "over_allowance": "Je licentie valt buiten het tegoed van je exposant. Vraag het je beheerder.",
+        "termsAdmin": "Accepteer eerst de leadvoorwaarden in het exposantenportaal.",
+        "termsStaff": "De beheerder van je exposant moet eerst de leadvoorwaarden accepteren.",
+        "notOpen": "Vastleggen opent op {time}.",
+        "closed": "Vastleggen is gesloten op {time}. Je kunt je leads nog lezen en bewerken."
+      },
+      "codeLabel": "Badgecode",
+      "codeHint": "Scan de QR-code op de badge of typ de code die eronder staat.",
+      "save": "Lead opslaan",
+      "camera": "Scannen met camera",
+      "stopCamera": "Camera stoppen",
+      "cameraFailed": "De camera kon niet starten. Typ de badgecode.",
+      "refusals": {
+        "no_license": "Je hebt geen leadlicentie. Vraag er een aan de beheerder van je exposant.",
+        "over_allowance": "Je licentie valt buiten het tegoed van je exposant. Je scans wachten op dit apparaat.",
+        "terms_not_accepted": "De leadvoorwaarden zijn nog niet geaccepteerd. Je scans wachten op dit apparaat.",
+        "access_ended": "De toegang tot leads van dit evenement is beëindigd.",
+        "other": "Er ging iets mis. Je scans wachten op dit apparaat; probeer het opnieuw."
+      },
+      "result": {
+        "queued": "Opgeslagen op dit apparaat",
+        "queuedHint": "De gegevens verschijnen na synchronisatie.",
+        "refused": "Niet opgeslagen",
+        "captured": "Lead opgeslagen",
+        "rescanned": "Al een lead: scan toegevoegd"
+      },
+      "reasons": {
+        "invalid": "Deze badge kan niet worden gelezen. Controleer de code en probeer het opnieuw.",
+        "wrong_event": "Deze badge hoort bij een ander evenement.",
+        "not_open": "Hij is gescand voordat vastleggen openging.",
+        "closed": "Hij is gescand nadat vastleggen sloot."
+      },
+      "emailWithdrawn": "Delen van e-mailadres gestopt door de deelnemer op {time}",
+      "emailNotShared": "E-mailadres niet gedeeld",
+      "capturedAt": "Gescand op {time}{count, plural, one {} other { · # scans}}",
+      "scannedBy": "door {email}",
+      "editLabel": "Leadgegevens",
+      "rating": "Beoordeling",
+      "ratings": {
+        "hot": "Warm",
+        "warm": "Lauw",
+        "cold": "Koud",
+        "none": "Geen beoordeling"
+      },
+      "qualifiers": "Kwalificaties",
+      "notes": "Notities",
+      "saveDetails": "Gegevens opslaan",
+      "saved": "Opgeslagen.",
+      "savedQueued": "Opgeslagen bij de scan. Wordt gesynchroniseerd zodra je online bent.",
+      "needsConnection": "Maak verbinding met internet om wijzigingen aan deze lead op te slaan.",
+      "saveFailed": "Opslaan mislukt. Probeer het opnieuw.",
+      "accessEnded": "De toegang tot leads van dit evenement is beëindigd.",
+      "scope": {
+        "all": "Alle leads van {exhibitor}",
+        "team": "De leads van je team",
+        "own": "Jouw leads"
+      },
+      "emptyTitle": "Nog geen leads",
+      "emptyDescription": "Scan een badge op het tabblad Scannen om je eerste lead op te slaan.",
+      "search": "Leads zoeken",
+      "noMatch": "Geen lead komt overeen met je zoekopdracht.",
+      "edit": "{name} bewerken"
+    }
+  },
+  "conferenceHub": {
+    "metaTitle": "Congreshub",
+    "eyebrow": "Jouw congreshub",
+    "for": "Voor {name}",
+    "whose": "Wiens hub",
+    "orderLink": "Mijn congreshub openen",
+    "orderLinkHint": "Programma, je schema, je badge en agenda, op je telefoon.",
+    "noRegistrantTitle": "Geen inschrijving in deze bestelling",
+    "noRegistrantDescription": "De congreshub hoort bij een inschrijving. Open de bestelling waarmee je je hebt ingeschreven.",
+    "backToOrder": "Terug naar mijn bestelling",
+    "offline": "Je bent offline. Dit is de kopie die op je telefoon is opgeslagen.",
+    "privateLink": "Deze pagina is privé: iedereen met de link kan hem zien en je schema wijzigen. Deel hem niet.",
+    "tabs": {
+      "label": "Onderdelen van de hub",
+      "today": "Vandaag",
+      "schedule": "Mijn schema",
+      "agenda": "Programma",
+      "badge": "Badge"
+    },
+    "today": {
+      "now": "Nu bezig",
+      "next": "Hierna",
+      "fromSchedule": "Uit je schema.",
+      "fromAgenda": "Uit het programma. Geef sessies een ster om het je eigen te maken.",
+      "nothingNow": "Er is nu niets bezig.",
+      "nothingNextTitle": "Binnenkort niets gepland",
+      "nothingNextDescription": "Bekijk het programma om sessies een ster te geven en je in te schrijven voor optionele sessies.",
+      "openAgenda": "Programma openen",
+      "pollsAndQa": "Peilingen en vragen",
+      "more": "Jouw hulpmiddelen",
+      "badgeTitle": "Jouw badge",
+      "badgeDescription": "Laat de QR-code zien bij de ingang en bij de check-in van sessies.",
+      "showBadge": "Mijn badge tonen",
+      "networkingTitle": "Netwerken",
+      "networkingDescription": "Vind andere deelnemers, maak contact en plan afspraken.",
+      "openNetworking": "Netwerken openen",
+      "calendarTitle": "Jouw agenda",
+      "calendarDescription": "Zet je schema in de agenda van je telefoon. Het wordt bijgewerkt als sessies verschuiven.",
+      "openCalendar": "Aan mijn agenda toevoegen"
+    },
+    "summary": "Ingeschreven: {enrolled} · Favorieten: {favorites} · Overlappingen: {conflicts}",
+    "agendaIntro": "Geef de sessies die je wilt bijwonen een ster. Voor optionele sessies moet je je inschrijven.",
+    "conflict": "Overlapt met {titles}",
+    "emptyScheduleTitle": "Je schema is leeg",
+    "emptyScheduleDescription": "Geef sessies in het programma een ster, of schrijf je in voor optionele sessies, dan verschijnen ze hier.",
+    "emptyAgendaTitle": "Nog geen sessies",
+    "emptyAgendaDescription": "De organisator heeft nog geen sessies voor je inschrijving toegevoegd. Kom snel terug.",
+    "favorite": {
+      "star": "Ster geven",
+      "starred": "Met ster",
+      "starNamed": "{title} een ster geven",
+      "unstarNamed": "Ster van {title} verwijderen",
+      "pill": "Favoriet",
+      "added": "{title} staat in je schema.",
+      "removed": "{title} staat niet meer in je schema.",
+      "replaced": "Ster gegeven. Overlappende favorieten verwijderd: {count}.",
+      "tooMany": "Je hebt het maximale aantal sessies een ster gegeven. Verwijder eerst een ster.",
+      "conflictTitle": "Dit overlapt met je schema",
+      "conflictEnrolled": "{title} (ingeschreven)",
+      "conflictFavorite": "{title} (met ster)",
+      "keepBoth": "Beide houden",
+      "replace": "Vervangen",
+      "cancel": "Annuleren"
+    },
+    "calendar": {
+      "title": "Agendafeed",
+      "description": "Abonneer je één keer: je agenda-app vernieuwt de feed, dus een verschoven sessie verschuift ook in je agenda. Sessies waarvoor je bent ingeschreven staan als bevestigd, sessies met een ster als voorlopig.",
+      "subscribe": "Abonneren in mijn agenda",
+      "download": ".ics downloaden",
+      "linkLabel": "Feedlink (privé)",
+      "copy": "Link kopiëren",
+      "copied": "Link gekopieerd.",
+      "replace": "Link vervangen",
+      "replaceConfirmTitle": "Agendalink vervangen?",
+      "replaceConfirmBody": "De huidige link werkt meteen niet meer, in elke agenda die hem gebruikt. Abonneer je opnieuw met de nieuwe link.",
+      "replaceConfirm": "Link vervangen",
+      "cancel": "Annuleren",
+      "replaced": "Klaar. De oude link werkt niet meer: abonneer je met de nieuwe."
+    },
+    "install": {
+      "title": "Bewaar hem op je telefoon",
+      "button": "Toevoegen aan beginscherm",
+      "installed": "Deze hub staat op je beginscherm.",
+      "done": "Toegevoegd aan je beginscherm.",
+      "help": "Op iPhone of iPad: tik op Deel en dan op Zet op beginscherm. Op Android: open het browsermenu en kies App installeren of Toevoegen aan startscherm."
+    },
+    "badge": {
+      "title": "Jouw badge",
+      "qrLabel": "Badge-QR-code van {name}",
+      "shortCode": "Code",
+      "hint": "Zet bij de ingang je schermhelderheid hoger.",
+      "noneTitle": "Nog geen badge",
+      "noneDescription": "Je badge verschijnt hier zodra je inschrijving is bevestigd."
+    }
+  },
+  "billingUsage": {
+    "title": "Gebruik",
+    "subtitle": "Wat je organisatie heeft gebruikt, per meter: berichten, AI-tegoed en scanapparaten.",
+    "breadcrumb": "Kruimelpad",
+    "period": "Deze maand: {start} tot {end} ({zone})",
+    "filterLabel": "Meters",
+    "allMeters": "Alle meters",
+    "meter": {
+      "email": "E-mail",
+      "sms": "Sms",
+      "whatsapp": "WhatsApp",
+      "ai_credits": "AI-tegoed",
+      "devices": "Scanapparaten"
+    },
+    "unit": {
+      "email": "{count, plural, one {# e-mail verstuurd} other {# e-mails verstuurd}}",
+      "sms": "{count, plural, one {# sms-segment} other {# sms-segmenten}}",
+      "whatsapp": "{count, plural, one {# bericht verstuurd} other {# berichten verstuurd}}",
+      "ai_credits": "{count, plural, one {# tegoed gebruikt} other {# tegoeden gebruikt}}",
+      "devices": "{count, plural, one {# apparaat geregistreerd} other {# apparaten geregistreerd}}"
+    },
+    "reportingTitle": "Gebruik wordt naar je factuuraanbieder gestuurd",
+    "reportingBody": "{count, plural, =0 {Alles is tot nu toe verstuurd.} one {# record wacht op verzending.} other {# records wachten op verzending.}}",
+    "countingTitle": "Gebruik wordt geteld, er wordt niets in rekening gebracht",
+    "countingBody": "Facturatie is niet actief voor deze organisatie, dus gebruik wordt hier alleen geteld.",
+    "currentTitle": "Deze maand",
+    "currentDescription": "Geteld in de tijdzone van je organisatie.",
+    "historyTitle": "Eerdere maanden",
+    "historyDescription": "De laatste 12 maanden met gebruik.",
+    "emptyTitle": "Nog geen gebruik",
+    "emptyBody": "Gebruik verschijnt hier als je e-mails of sms'jes verstuurt, met AI conceptteksten maakt of scanapparaten registreert.",
+    "historyEmpty": "Geen gebruik in eerdere maanden.",
+    "month": "Maand"
+  },
+  "billingBanner": {
+    "label": "Facturatie",
+    "graceTitle": "De betaling van je abonnement is mislukt",
+    "graceBody": "Alles werkt tot {date}. Daarna wordt de organisatie alleen-lezen tot er betaald is.",
+    "readOnlyTitle": "Deze organisatie is alleen-lezen",
+    "readOnlyBody": "De abonnementsbetaling is mislukt. Er is niets verwijderd: je kunt bekijken, exporteren en tickets scannen, maar wijzigingen staan stil tot er betaald is.",
+    "action": "Abonnement en facturatie"
+  },
+  "agencies": {
+    "title": "Bureaus",
+    "subtitle": "Laat een bureau aan je evenementen werken. Je kunt de toegang op elk moment intrekken, en het bureau betaalt of ontvangt nooit je geld.",
+    "noAccessTitle": "Alleen eigenaren en beheerders beheren bureaus",
+    "noAccessDescription": "Vraag een eigenaar of beheerder van deze organisatie om een bureau toegang te geven.",
+    "grantTitle": "Een bureau toegang geven",
+    "agency": "Adres van het bureau",
+    "agencyHint": "Het adres dat het bureau je gaf, bijvoorbeeld bloom-events.",
+    "agencyRequired": "Vul het adres van het bureau in.",
+    "agencyUnknown": "Geen bureau heeft dit adres. Controleer het bij het bureau.",
+    "agencySelf": "Een bureau kan zichzelf geen toegang geven.",
+    "agencyTaken": "Dit bureau heeft al toegang.",
+    "role": "Wat het bureau mag doen",
+    "roleManager": "Evenementen beheren",
+    "roleManagerHint": "Evenementen, gasten, check-in en berichten maken en bewerken. Geen terugbetalingen, verkoop, leden of instellingen.",
+    "roleMarketing": "Marketing",
+    "roleMarketingHint": "Campagnes, doelgroepen en berichten, en evenementen lezen.",
+    "roleViewer": "Alleen bekijken",
+    "roleViewerHint": "Evenementen, bestellingen en gasten lezen. Verandert niets.",
+    "finance": "Het bureau ook ons geld laten lezen",
+    "financeHint": "Uitbetalingen, financiële rapporten en het grootboek, alleen lezen. Uit tenzij je het aanzet.",
+    "grant": "Toegang geven",
+    "granted": "{agency} kan nu in deze organisatie werken.",
+    "listTitle": "Bureaus met toegang",
+    "empty": "Geen bureau heeft toegang. Geef hierboven een bureau toegang als je met een bureau werkt.",
+    "emptyReadOnly": "Geen bureau heeft toegang.",
+    "agencyColumn": "Bureau",
+    "roleColumn": "Toegang",
+    "financeColumn": "Geld",
+    "grantedColumn": "Sinds",
+    "actions": "Acties",
+    "financeOn": "Mag lezen",
+    "financeOff": "Geen toegang",
+    "revoke": "Intrekken",
+    "revokeNamed": "Toegang van {agency} intrekken",
+    "revoked": "{agency} heeft geen toegang meer.",
+    "financeEnable": "Geld toestaan",
+    "financeEnableNamed": "{agency} ons geld laten lezen",
+    "financeDisable": "Geld blokkeren",
+    "financeDisableNamed": "{agency} ons geld niet meer laten lezen",
+    "historyTitle": "Eerdere toegang",
+    "revokedColumn": "Beëindigd",
+    "unknownAgency": "Bureau niet meer op Yayatoh",
+    "roleLabel": "{role, select, manager {Evenementen beheren} marketing {Marketing} viewer {Alleen bekijken} other {Toegang}}"
+  },
+  "agency": {
+    "title": "Klanten",
+    "subtitle": "Elke klant die {agency} toegang gaf. De cijfers komen uit momentopnamen: vernieuw ze om ze bij te werken.",
+    "tabs": "Bureauonderdelen",
+    "tab": {
+      "clients": "Klanten",
+      "events": "Evenementen",
+      "marketing": "Marketing",
+      "reports": "Rapporten"
+    },
+    "refresh": "Cijfers vernieuwen",
+    "refreshed": "Cijfers vernieuwd voor {count, plural, =0 {geen klanten} one {# klant} other {# klanten}}.",
+    "notRefreshed": "Nog niet vernieuwd",
+    "emptyTitle": "Nog geen klanten",
+    "emptyDescription": "Vraag je klant om Bureaus te openen in hun Yayatoh-console en {address} toegang te geven.",
+    "noAccessTitle": "Bureaupagina’s zijn voor leden van het bureau",
+    "noAccessDescription": "Vraag een eigenaar van {agency} om toegang.",
+    "client": "Klant",
+    "nextEvent": "Volgend evenement",
+    "noNextEvent": "Niets gepland",
+    "upcoming": "Komende evenementen",
+    "orders": "Bestellingen",
+    "tickets": "Tickets",
+    "checkins": "Ingecheckt",
+    "checkinRate": "Check-inpercentage",
+    "open": "Openen",
+    "openNamed": "{client} openen",
+    "finance": "met geld",
+    "eventsTitle": "Evenementen van alle klanten",
+    "eventsEmpty": "Je klanten hebben nog geen komende of recente evenementen.",
+    "event": "Evenement",
+    "starts": "Begint",
+    "status": "Status",
+    "gross": "Bruto-omzet",
+    "grossHidden": "Niet gedeeld",
+    "grossHiddenHint": "Bruto-omzet verschijnt alleen bij klanten die je hun geld laten lezen.",
+    "openEventNamed": "{event} van {client} openen",
+    "marketingTitle": "Marketing, laatste 30 dagen",
+    "marketingEmpty": "Nog geen klanten.",
+    "campaigns": "Campagnes",
+    "sends": "Verstuurd",
+    "deliveries": "Afgeleverd",
+    "clicks": "Klikken",
+    "uniqueClickers": "Mensen die klikten",
+    "conversion": "Conversie",
+    "reportsTitle": "Totalen van alle klanten",
+    "clientsCount": "Klanten",
+    "eventsTotal": "Evenementen",
+    "revenue": "Bruto-omzet",
+    "revenueFrom": "Van {count, plural, one {# klant} other {# klanten}} die hun geld delen",
+    "revenueNone": "Geen klant deelt zijn geld met je.",
+    "perClient": "Per klant",
+    "eventStatus": {
+      "draft": "Concept",
+      "published": "Gepubliceerd",
+      "postponed": "Uitgesteld",
+      "cancelled": "Geannuleerd",
+      "completed": "Afgerond",
+      "archived": "Gearchiveerd"
+    },
+    "refreshedAt": "Vernieuwd"
+  },
+  "analyticsPro": {
+    "tabs": {
+      "label": "Analyseonderdelen",
+      "overview": "Overzicht",
+      "explore": "Verkennen",
+      "alerts": "Waarschuwingsregels",
+      "reports": "Rapporten"
+    },
+    "explore": {
+      "title": "Verkennen",
+      "description": "Kies een maatstaf en hoe je die uitsplitst. Attributie laat zien welke campagnes, kanalen en bronnen tot verkopen hebben geleid.",
+      "form": "Kies wat je wilt zien",
+      "measure": "Maatstaf",
+      "groupCounts": "Aantallen",
+      "groupMoney": "Geld",
+      "groupAttribution": "Attributie",
+      "measures": {
+        "registrations": "Registraties",
+        "tickets": "Verkochte tickets (netto)",
+        "comp_tickets": "Gratis tickets",
+        "refunded_tickets": "Terugbetaalde tickets",
+        "checkins": "Check-ins",
+        "no_shows": "Niet verschenen",
+        "attributed_orders": "Toegeschreven bestellingen",
+        "gross": "Betaald",
+        "refunds": "Terugbetaald",
+        "net": "Nettoverkoop",
+        "attributed_revenue": "Toegeschreven omzet"
+      },
+      "dimension": "Uitsplitsen naar",
+      "dimensions": {
+        "period": "Periode",
+        "event": "Evenement",
+        "channel": "Kanaal",
+        "source": "Bron",
+        "campaign": "Campagne"
+      },
+      "model": "Attributiemodel",
+      "modelHint": "Alleen voor toegeschreven bestellingen en omzet.",
+      "models": {
+        "first": "Eerste contact",
+        "last": "Laatste contact",
+        "linear": "Lineair (gelijk verdeeld)"
+      },
+      "range": "Periode",
+      "ranges": {
+        "7d": "Laatste 7 dagen",
+        "30d": "Laatste 30 dagen",
+        "90d": "Laatste 90 dagen",
+        "365d": "Laatste 12 maanden",
+        "custom": "Eigen datums"
+      },
+      "from": "Van",
+      "to": "Tot",
+      "customHint": "Gebruikt als de periode ‘Eigen datums’ is.",
+      "granularity": "Tonen per",
+      "granularities": {
+        "day": "Dag",
+        "week": "Week",
+        "month": "Maand"
+      },
+      "event": "Evenement",
+      "allEvents": "Alle evenementen",
+      "apply": "Tonen",
+      "errors": {
+        "touch_dimension": "Kanaal, bron en campagne werken alleen met toegeschreven bestellingen of omzet.",
+        "custom_needs_dates": "Vul beide datums in voor een eigen periode.",
+        "from_after_to": "De einddatum ligt vóór de begindatum.",
+        "range_too_long": "Kies een periode van hoogstens twee jaar.",
+        "invalid_date": "Vul datums in als jaar, maand en dag."
+      },
+      "resultsCaption": "{measure} per {dimension}, {from} tot {to}",
+      "total": "Totaal",
+      "none": "Geen",
+      "unnamedCampaign": "Naamloze campagne",
+      "weekOf": "Week van {day}",
+      "currency": "Valuta",
+      "value": "Waarde",
+      "truncated": "De eerste 500 rijen worden getoond. Kies een kortere periode of één evenement om de rest te zien.",
+      "emptyTitle": "Niets te tonen voor deze keuze",
+      "emptyBody": "Er zijn geen gegevens voor deze maatstaf in deze periode. Probeer een langere periode, een ander evenement of een andere maatstaf.",
+      "emptyAction": "De laatste 12 maanden tonen",
+      "export": "CSV exporteren",
+      "exportLabel": "Deze resultaten als CSV-bestand exporteren",
+      "timeZoneNote": "Dagen zijn kalenderdagen in {timeZone}, de tijdzone van je organisatie.",
+      "attributionNote": "Attributie verdeelt elke toegeschreven bestelling over de bezoeken die er binnen je attributievenster toe leidden: aangeklikte trackinglinks, bezoeken met UTM-waarden en andere sites die de koper stuurden. Eerste contact schrijft hem toe aan het eerste bezoek, laatste contact aan het laatste, en lineair verdeelt de bestelling gelijk (een overgebleven cent gaat naar het laatste bezoek). Omzet is wat de koper betaalde, per valuta; bestellingen zonder vastgelegd bezoek worden niet toegeschreven.",
+      "saveTitle": "Deze weergave opslaan",
+      "viewName": "Naam",
+      "save": "Weergave opslaan",
+      "saved": "Weergave opgeslagen",
+      "viewErrors": {
+        "name": "Vul een naam van maximaal 80 tekens in.",
+        "name_taken": "Je hebt al een weergave met deze naam.",
+        "too_many_views": "Je hebt 50 opgeslagen weergaven. Verwijder er eerst een."
+      },
+      "views": "Je opgeslagen weergaven",
+      "noViews": "Nog geen opgeslagen weergaven. Kies hierboven wat je wilt zien en sla het hier op om er met één klik naar terug te gaan.",
+      "deleteView": "Verwijderen",
+      "deleteViewLabel": "Weergave {name} verwijderen",
+      "deleted": "Weergave verwijderd"
+    },
+    "rules": {
+      "title": "Waarschuwingsregels",
+      "description": "Krijg een melding als een getal een grens passeert. Regelwaarschuwingen bereiken je team via Waarschuwingen, net als de ingebouwde.",
+      "createTitle": "Nieuwe waarschuwingsregel",
+      "editTitle": "Waarschuwingsregel bewerken",
+      "name": "Naam",
+      "nameHint": "Staat in de waarschuwing en de e-mail ervan.",
+      "measure": "Maatstaf",
+      "measures": {
+        "registrations": "Registraties",
+        "tickets": "Verkochte tickets (netto)",
+        "refunded_tickets": "Terugbetaalde tickets",
+        "checkins": "Check-ins",
+        "gross": "Betaald",
+        "refunds": "Terugbetaald",
+        "net": "Nettoverkoop"
+      },
+      "condition": "Als die",
+      "conditions": {
+        "above": "minstens is",
+        "below": "onder ligt",
+        "rise": "met minstens (%) stijgt",
+        "drop": "met minstens (%) daalt"
+      },
+      "threshold": "Drempel",
+      "thresholdHint": "Een aantal, een bedrag voor geld of een percentage voor stijgingen en dalingen (vergeleken met de periode ervoor).",
+      "window": "Over",
+      "windows": {
+        "d1": "Vandaag",
+        "d7": "De laatste 7 dagen",
+        "d14": "De laatste 14 dagen",
+        "d30": "De laatste 30 dagen"
+      },
+      "currency": "Valuta",
+      "currencyHint": "Geldregels vergelijken één valuta.",
+      "noCurrency": "Geen geld",
+      "event": "Evenement",
+      "allEvents": "Alle evenementen",
+      "severity": "Ernst",
+      "severities": {
+        "info": "Info",
+        "warning": "Waarschuwing",
+        "critical": "Kritiek"
+      },
+      "quietHours": "Stille uren respecteren",
+      "quietHoursHint": "E-mail en push wachten tot 8:00 in de tijdzone van elke ontvanger als de regel tussen 21:00 en 8:00 afgaat. Meldingen in de app verschijnen meteen.",
+      "create": "Regel maken",
+      "save": "Wijzigingen opslaan",
+      "back": "Terug naar waarschuwingsregels",
+      "created": "Regel gemaakt",
+      "saved": "Wijzigingen opgeslagen",
+      "list": "Je regels",
+      "emptyTitle": "Nog geen waarschuwingsregels",
+      "emptyBody": "Maak hierboven een regel, bijvoorbeeld ‘Terugbetalingen vandaag zijn minstens 10’. Je krijgt een melding zodra dat klopt.",
+      "columns": {
+        "name": "Regel",
+        "condition": "Voorwaarde",
+        "status": "Status",
+        "lastValue": "Laatste meting",
+        "actions": "Acties"
+      },
+      "summary": "{measure} {condition} {threshold} · {window}",
+      "status": {
+        "firing": "Afgegaan",
+        "ok": "OK",
+        "off": "Uit",
+        "new": "Nog niet gecontroleerd"
+      },
+      "edit": "Bewerken",
+      "editLabel": "{name} bewerken",
+      "turnOff": "Uitzetten",
+      "turnOn": "Aanzetten",
+      "turnOffLabel": "{name} uitzetten",
+      "turnOnLabel": "{name} aanzetten",
+      "delete": "Verwijderen",
+      "deleteLabel": "{name} verwijderen",
+      "deleted": "Regel verwijderd",
+      "turnedOff": "Regel uitgezet",
+      "turnedOn": "Regel aangezet",
+      "readOnly": "Je kunt deze regels zien, maar niet wijzigen.",
+      "errors": {
+        "name": "Vul een naam van maximaal 80 tekens in.",
+        "name_taken": "Er bestaat al een regel met deze naam.",
+        "threshold": "Vul een getal van 0 of meer in.",
+        "percent_range": "Vul een percentage tussen 1 en 1000 in.",
+        "currency_required": "Kies een valuta voor een geldregel.",
+        "too_many_rules": "Je hebt 50 regels. Verwijder er eerst een."
+      }
+    },
+    "reports": {
+      "title": "Geplande rapporten",
+      "description": "Een pdf van je analyses per e-mail, elke dag, week of maand, geteld in de tijdzone van je organisatie.",
+      "createTitle": "Nieuw gepland rapport",
+      "editTitle": "Gepland rapport bewerken",
+      "name": "Naam",
+      "frequency": "Hoe vaak",
+      "frequencies": {
+        "daily": "Elke dag (cijfers van gisteren)",
+        "weekly": "Elke maandag (vorige week, maandag tot zondag)",
+        "monthly": "Op de 1e (vorige maand)"
+      },
+      "frequencyShort": {
+        "daily": "Dagelijks",
+        "weekly": "Wekelijks",
+        "monthly": "Maandelijks"
+      },
+      "sendHour": "Versturen om",
+      "sendHourHint": "Tijd in {timeZone}.",
+      "event": "Evenement",
+      "allEvents": "Alle evenementen",
+      "recipients": "Versturen naar",
+      "recipientsHint": "Leden die bestellingen kunnen zien. Omzet staat alleen in de pdf voor wie financiën kan zien; elke pdf is in de taal van de lezer.",
+      "you": "{name} (jij)",
+      "create": "Rapport plannen",
+      "save": "Wijzigingen opslaan",
+      "back": "Terug naar geplande rapporten",
+      "created": "Rapport gepland",
+      "saved": "Wijzigingen opgeslagen",
+      "list": "Planningen",
+      "emptyTitle": "Nog geen geplande rapporten",
+      "emptyBody": "Plan er hierboven een: het komt één keer per periode per e-mail, met een link naar de pdf.",
+      "columns": {
+        "name": "Rapport",
+        "frequency": "Hoe vaak",
+        "next": "Volgende verzending",
+        "recipients": "Ontvangers",
+        "status": "Status",
+        "actions": "Acties"
+      },
+      "recipientsCount": "{count, plural, one {# lid} other {# leden}}",
+      "status": {
+        "on": "Aan",
+        "off": "Uit"
+      },
+      "edit": "Bewerken",
+      "editLabel": "{name} bewerken",
+      "turnOff": "Uitzetten",
+      "turnOn": "Aanzetten",
+      "turnOffLabel": "{name} uitzetten",
+      "turnOnLabel": "{name} aanzetten",
+      "delete": "Verwijderen",
+      "deleteLabel": "{name} verwijderen",
+      "deleted": "Planning verwijderd",
+      "turnedOff": "Planning uitgezet",
+      "turnedOn": "Planning aangezet",
+      "recent": "Recente rapporten",
+      "recentEmpty": "Er is nog geen rapport verstuurd. Het eerste gaat op het volgende verzendmoment de deur uit.",
+      "recentColumns": {
+        "report": "Rapport",
+        "period": "Periode",
+        "status": "Status",
+        "file": "Pdf"
+      },
+      "runStatus": {
+        "pending": "Wacht",
+        "sent": "Verstuurd",
+        "failed": "Mislukt"
+      },
+      "download": "Pdf downloaden",
+      "downloadLabel": "{name} voor {period} downloaden (pdf)",
+      "notReady": "Niet klaar",
+      "errors": {
+        "name": "Vul een naam van maximaal 80 tekens in.",
+        "name_taken": "Er bestaat al een planning met deze naam.",
+        "recipients": "Kies minstens één lid.",
+        "bad_recipient": "Kies leden die bestellingen kunnen zien.",
+        "too_many_schedules": "Je hebt 25 planningen. Verwijder er eerst een."
+      }
     }
   },
   "mediaLibrary": {

@@ -133,6 +133,17 @@ export function SearchIcon() {
 }
 
 /** The trigger's look: our chevron inside the field, centred, 12 px from the end (UX principle 1). */
+/**
+ * The event a form refill dispatches on a Select's hidden input (`detail`: the value) to choose it
+ * again after React reset the form (batch 3l merge; see `apps/web/src/components/step-up.tsx`).
+ */
+export const SELECT_REFILL_EVENT = 'yy-select-refill';
+
+const valueInputs = new WeakSet<HTMLInputElement>();
+/** Whether a hidden input is a Select's value (it takes SELECT_REFILL_EVENT). */
+export const isSelectValueInput = (el: Element): boolean =>
+  el instanceof HTMLInputElement && valueInputs.has(el);
+
 export function selectTriggerClass(size: 'sm' | 'md' | 'lg' = 'md', className?: string): string {
   // Classes carried over from a native select may not undo the chevron's room: inline padding
   // stays ours, and a width of the caller's replaces our full width.
@@ -296,6 +307,26 @@ export function Select({
     };
     f.addEventListener('reset', onReset);
     return () => f.removeEventListener('reset', onReset);
+  }, []);
+
+  // Batch 3l merge: a form that puts submitted values back after React's reset (the step-up
+  // dialog's refill) sets the choice through the hidden input, as it would set a native select.
+  const refillRef = useRef<(v: string) => void>(() => {});
+  refillRef.current = (v: string) => {
+    if (controlled === undefined) setInner(v);
+    else onValueChange?.(v);
+    setInvalid(false);
+  };
+  useEffect(() => {
+    const input = valueInput.current;
+    if (!input) return;
+    valueInputs.add(input);
+    const onRefill = (e: Event) => {
+      const v = (e as CustomEvent<unknown>).detail;
+      if (typeof v === 'string') refillRef.current(v);
+    };
+    input.addEventListener(SELECT_REFILL_EVENT, onRefill);
+    return () => input.removeEventListener(SELECT_REFILL_EVENT, onRefill);
   }, []);
 
   // Submit after React has written the new value into the hidden input.

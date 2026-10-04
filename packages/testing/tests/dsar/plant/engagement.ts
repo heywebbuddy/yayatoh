@@ -17,54 +17,32 @@ export const plantEngagement: Planter = async ({ admin, orgId, person }) => {
 };
 
 /**
- * engagement networking and chat (M5.8a/b, batch 3u merge): the fixture's first networking
- * profile becomes the person's (through their crm contact), with the notes on requests and
- * meetings it asked for, the reports it filed and the chat messages it sent naming them.
+ * Batch 3j merge (M5.8a/b): the fixture event's first networking profile becomes the person's (by
+ * their crm contact), with a note on a request they sent and a chat message they sent.
  */
 export const plantNetworking: Planter = async ({ admin, orgId, person, ids }) => {
-  const tables: string[] = [];
+  if (!ids.contactId) return [];
   const [p] = await admin`
-    update engagement.network_profiles set contact_id = ${ids.contactId as string}, display_name = ${person.name},
-      company = ${`${person.lastName} Ltd`}, bio = ${`I am ${person.name}`}
+    update engagement.network_profiles set contact_id = ${ids.contactId}, display_name = ${person.name},
+      company = ${`${person.lastName} Holdings`}, bio = ${`Write to ${person.email}`}
     where id = (select id from engagement.network_profiles where org_id = ${orgId} order by created_at limit 1)
     returning id`;
-  if (!p) return tables;
-  const id = p.id as string;
-  const note = `From ${person.name}, ${person.email}`;
-  const wrote = async (table: string, rows: readonly unknown[]) => {
-    if (rows.length) tables.push(table);
-  };
-  tables.push('engagement.network_profiles');
-  await wrote(
-    'engagement.network_connections',
-    await admin`update engagement.network_connections set message = ${note}
-      where org_id = ${orgId} and requester_id = ${id} returning id`,
-  );
-  await wrote(
-    'engagement.meetings',
-    await admin`update engagement.meetings set message = ${note}
-      where org_id = ${orgId} and requester_id = ${id} returning id`,
-  );
-  await wrote(
-    'engagement.network_reports',
-    await admin`update engagement.network_reports set details = ${note}
-      where org_id = ${orgId} and reporter_id = ${id} returning id`,
-  );
-  await wrote(
-    'engagement.chat_messages',
-    await admin`update engagement.chat_messages m set body = ${note}
-      from engagement.chat_conversations c
-      where m.org_id = ${orgId} and c.id = m.conversation_id
-        and ((c.profile_a = ${id} and m.sender = 'a') or (c.profile_b = ${id} and m.sender = 'b'))
-      returning m.id`,
-  );
-  await wrote(
-    'engagement.chat_reports',
-    await admin`update engagement.chat_reports r set details = ${note}
-      from engagement.chat_conversations c
-      where r.org_id = ${orgId} and c.id = r.conversation_id
-        and ((c.profile_a = ${id} and r.reporter = 'a') or (c.profile_b = ${id} and r.reporter = 'b'))
-      returning r.id`,
-  );
+  if (!p) return [];
+  const tables = ['engagement.network_profiles'];
+  const [c] = await admin`
+    update engagement.network_connections set message = ${`Hello, ${person.name} here`}
+    where id = (select id from engagement.network_connections where org_id = ${orgId}
+      and requester_id = ${p.id as string} order by created_at limit 1)
+    returning id`;
+  if (c) tables.push('engagement.network_connections');
+  const [m] = await admin`
+    update engagement.chat_messages set body = ${`Call me, ${person.phone} (${person.lastName})`}
+    where id = (select m.id from engagement.chat_messages m
+      join engagement.chat_conversations v on v.id = m.conversation_id
+      where m.org_id = ${orgId} and ((v.profile_a = ${p.id as string} and m.sender = 'a')
+        or (v.profile_b = ${p.id as string} and m.sender = 'b'))
+      order by m.created_at limit 1)
+    returning id`;
+  if (m) tables.push('engagement.chat_messages');
   return tables;
 };

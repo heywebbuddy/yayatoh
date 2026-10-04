@@ -101,7 +101,7 @@ export const GUEST_SEATS_CHANNEL = defineRealtimeChannel({
   },
 });
 
-async function publishSeatsTx(
+export async function publishSeatsTx(
   tx: TenantTx,
   orgId: string,
   eventId: string,
@@ -191,7 +191,7 @@ async function takenByItemTx(tx: TenantTx, eventId: string): Promise<Map<string,
   return new Map(rows.map((r) => [r.itemId, Number(r.n)]));
 }
 
-const onContext = (eventId: string, subEventId: string | null) =>
+export const onContext = (eventId: string, subEventId: string | null) =>
   and(
     eq(guestSeats.eventId, eventId),
     subEventId ? eq(guestSeats.subEventId, subEventId) : isNull(guestSeats.subEventId),
@@ -377,7 +377,7 @@ export async function guestSeatingViewTx(
 /* -------------------------------------------------------------------- commands ---- */
 
 /** One host at a time per chart: capacity is checked and written under this lock. */
-const lockChartTx = (tx: TenantTx, eventId: string, subEventId: string | null) =>
+export const lockChartTx = (tx: TenantTx, eventId: string, subEventId: string | null) =>
   tx.execute(
     sql`select pg_advisory_xact_lock(hashtextextended(${`guest-seats:${eventId}:${subEventId ?? 'plan'}`}, 0))`,
   );

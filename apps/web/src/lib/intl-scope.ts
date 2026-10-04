@@ -10,13 +10,20 @@ export const INTL_SCOPE_HEADER = 'x-yy-intl-scope';
 const SCOPES = {
   /** `/hub/{token}`: the install and offline notes. */
   hub: ['hub'],
+  /**
+   * M5.10a `/orders/{token}/hub`: the conference hub's stars, calendar and install notes, the
+   * enrollment buttons (M5.2b) and error messages.
+   */
+  conferenceHub: ['conferenceHub', 'mySchedule', 'errors'],
 } as const satisfies Record<string, readonly string[]>;
 
 export type IntlScope = keyof typeof SCOPES;
 
 /** The scope of a page path (locale already stripped), or null for the full catalogue. */
 export function intlScopeOf(path: string): IntlScope | null {
-  return /^\/hub\/[^/]+\/?$/.test(path) ? 'hub' : null;
+  if (/^\/hub\/[^/]+\/?$/.test(path)) return 'hub';
+  if (/^\/orders\/[^/]+\/hub\/?$/.test(path)) return 'conferenceHub';
+  return null;
 }
 
 /** The messages a scoped page's client components get, or undefined (the full catalogue). */

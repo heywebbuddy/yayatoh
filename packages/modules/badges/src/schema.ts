@@ -290,3 +290,59 @@ export const printSettings = tenantTable(
   },
   (t) => [uniqueIndex('print_settings_org_key').on(t.orgId)],
 );
+
+/**
+ * M5.5c kiosk self-print, per event: off until the organizer turns it on. A null printer is the
+ * kiosk's own print dialog (the browser adapter); otherwise one of the event's printers.
+ */
+export const kioskSettings = tenantTable(
+  badgesSchema,
+  'kiosk_settings',
+  {
+    eventId: uuid('event_id').notNull(),
+    enabled: boolean('enabled').notNull().default(false),
+    printerId: uuid('printer_id'),
+    /** "No ticket with you? Use your email": an emailed one-time code identifies the attendee. */
+    emailCodes: boolean('email_codes').notNull().default(true),
+    updatedBy: uuid('updated_by'),
+  },
+  (t) => [
+    uniqueIndex('kiosk_settings_org_event_key').on(t.orgId, t.eventId),
+    foreignKey({
+      name: 'kiosk_settings_printer_fk',
+      columns: [t.orgId, t.printerId],
+      foreignColumns: [printers.orgId, printers.id],
+    }),
+  ],
+);
+
+/** What an emailed kiosk code leads to once confirmed (decided when it is asked for). */
+export const KIOSK_CHALLENGE_OUTCOMES = ['ticket', 'desk', 'none'] as const;
+
+/**
+ * M5.5c: one emailed kiosk code. Neither the address nor the code is kept: only the code's HMAC,
+ * the device that asked, and what the code leads to (one ticket, the desk, or nothing: an address
+ * with no registration gets no email, but the kiosk answers the same). Five wrong tries lock it.
+ */
+export const kioskChallenges = tenantTable(
+  badgesSchema,
+  'kiosk_challenges',
+  {
+    eventId: uuid('event_id').notNull(),
+    deviceId: uuid('device_id').notNull(),
+    outcome: text('outcome').notNull(),
+    ticketId: uuid('ticket_id'),
+    codeHash: text('code_hash').notNull(),
+    attempts: integer('attempts').notNull().default(0),
+    expiresAt: ts('expires_at').notNull(),
+    usedAt: ts('used_at'),
+  },
+  (t) => [
+    index('kiosk_challenges_org_device_idx').on(t.orgId, t.deviceId, t.createdAt),
+    index('kiosk_challenges_org_expires_idx').on(t.orgId, t.expiresAt),
+    check('kiosk_challenges_outcome_check', list('outcome', KIOSK_CHALLENGE_OUTCOMES)),
+    check('kiosk_challenges_ticket_check', sql`(outcome = 'ticket') = (ticket_id is not null)`),
+    check('kiosk_challenges_attempts_check', sql`attempts between 0 and 5`),
+    check('kiosk_challenges_code_hash_check', sql`code_hash ~ '^[A-Za-z0-9_-]{43}$'`),
+  ],
+);

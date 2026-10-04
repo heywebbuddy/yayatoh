@@ -365,6 +365,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/orgs/{org}/contacts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Add a contact (scope `contacts:write`)
+         * @description Finds or creates the org’s contact for the email; an existing contact keeps its name unless it had none. Records no marketing consent.
+         */
+        post: operations["addContact"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/orgs/{org}/events": {
         parameters: {
             query?: never;
@@ -717,6 +737,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/orgs/{org}/events/{eventId}/registrations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Register someone for an event (scope `attendees:write`)
+         * @description Adds a person to the event’s guest list (no ticket, no payment). One active registration per email per event: a second one is a 409.
+         */
+        post: operations["createRegistration"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/orgs/{org}/events/{eventId}/sections": {
         parameters: {
             query?: never;
@@ -833,6 +873,66 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/orgs/{org}/hooks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Subscribe a URL to one event type (scope `webhooks:subscribe`)
+         * @description A REST hook (Zapier-style): deliveries are the same signed, thin messages as Settings → Webhooks endpoints. It appears there too, where the organizer can remove it.
+         */
+        post: operations["subscribeHook"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/orgs/{org}/hooks/{hookId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Unsubscribe a REST hook (scope `webhooks:subscribe`)
+         * @description Removes a hook made through this API (never an endpoint the organizer made). A hook that is already gone answers 204 too.
+         */
+        delete: operations["unsubscribeHook"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/orgs/{org}/hooks/samples": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * A sample delivery for an event type (scope `webhooks:subscribe`)
+         * @description Example data with the delivery’s exact shape, for setting up an automation before a real event happens.
+         */
+        get: operations["listHookSamples"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/orgs/{org}/orders/{orderId}": {
         parameters: {
             query?: never;
@@ -938,6 +1038,56 @@ export interface paths {
         put?: never;
         post?: never;
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/orgs/{org}/webhook-endpoints": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The org’s webhook endpoints (scope `webhooks:manage`)
+         * @description Every webhook endpoint of the organization, oldest first: where it sends and which event types. Never the signing secret.
+         *
+         *     Scope `webhooks:manage`.
+         */
+        get: operations["listWebhookEndpoints"];
+        put?: never;
+        /**
+         * Subscribe a URL to event types (scope `webhooks:manage`)
+         * @description Adds a webhook endpoint (REST hooks: Make and n8n instant triggers call this when turned on). The URL must be https on the public internet; an org has at most 20 endpoints. Needs an `Idempotency-Key`.
+         *
+         *     Scope `webhooks:manage`.
+         */
+        post: operations["createWebhookEndpoint"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/orgs/{org}/webhook-endpoints/{endpointId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Unsubscribe: delete a webhook endpoint (scope `webhooks:manage`)
+         * @description Deletes the endpoint; no message is sent to it afterwards (Make and n8n call this when a trigger is turned off). Needs an `Idempotency-Key`.
+         *
+         *     Scope `webhooks:manage`.
+         */
+        delete: operations["deleteWebhookEndpoint"];
         options?: never;
         head?: never;
         patch?: never;
@@ -1910,6 +2060,11 @@ export interface webhooks {
 }
 export interface components {
     schemas: {
+        AddContactRequest: {
+            /** Format: email */
+            email: string;
+            name?: string | null;
+        };
         /** @description The organizer’s agenda with track and room ids and capacities. */
         Agenda: {
             days: components["schemas"]["ProgramDay"][];
@@ -1996,7 +2151,7 @@ export interface components {
             test: boolean;
         };
         /** @enum {string} */
-        ApiKeyScope: "org:read" | "events:read" | "events:write" | "orders:read" | "orders:refund" | "attendees:read" | "attendees:write" | "checkin:scan";
+        ApiKeyScope: "org:read" | "events:read" | "events:write" | "orders:read" | "orders:refund" | "attendees:read" | "attendees:write" | "checkin:scan" | "contacts:write" | "webhooks:subscribe" | "webhooks:manage";
         /** @enum {string} */
         AttendanceMode: "in_person" | "online" | "hybrid";
         Attendee: {
@@ -2136,6 +2291,12 @@ export interface components {
         };
         /** @enum {string} */
         CheckpointKind: "entrance" | "zone" | "session";
+        ContactRef: {
+            /** @description False when the org already had this email (nothing was duplicated). */
+            created: boolean;
+            /** Format: uuid */
+            id: string;
+        };
         CreateEventRequest: {
             city?: string | null;
             country?: string | null;
@@ -2152,6 +2313,12 @@ export interface components {
             timezone: string;
             venueName?: string | null;
             visibility?: components["schemas"]["EventVisibility"];
+        };
+        CreateRegistrationRequest: {
+            /** Format: email */
+            email: string;
+            labels?: string[];
+            name: string;
         };
         CreateTicketTypeRequest: {
             description?: string | null;
@@ -2171,6 +2338,19 @@ export interface components {
             salesStartAt?: string | null;
             sortOrder?: number;
             visibility?: components["schemas"]["TicketTypeVisibility"];
+        };
+        CreateWebhookEndpointRequest: {
+            /**
+             * @default
+             * @example Make: order paid
+             */
+            description: string;
+            eventTypes: components["schemas"]["SubscribableEventType"][];
+            /**
+             * @description An https URL on the public internet (Make’s or n8n’s webhook URL).
+             * @example https://hook.eu1.make.com/abc123
+             */
+            url: string;
         };
         /** @enum {string} */
         DateStatus: "scheduled" | "cancelled";
@@ -2287,6 +2467,49 @@ export interface components {
         };
         /** @enum {string} */
         HealthStatus: "ok" | "degraded";
+        Hook: {
+            /** Format: date-time */
+            createdAt: string;
+            event: components["schemas"]["HookEventType"];
+            /**
+             * Format: uuid
+             * @description Keep it to unsubscribe.
+             */
+            id: string;
+        };
+        /**
+         * @description A public event type (see the `webhooks` section).
+         * @enum {string}
+         */
+        HookEventType: "order.paid" | "order.refunded" | "order.expired" | "order.payment_failed" | "order.disputed" | "order.dispute_closed" | "tickets.cancelled" | "ticket.transferred" | "ticket.claimed" | "ticket.admitted" | "ticket.admission_undone" | "event.created" | "event.published" | "event.unpublished" | "event.postponed" | "event.rescheduled" | "event.cancelled" | "event.completed" | "event.archived" | "event.updated" | "event.occurrence_cancelled" | "ticket_type.created" | "ticket_type.updated" | "ticket_type.archived" | "form.registration_submitted" | "waitlist.joined" | "waitlist.offered" | "survey.responded" | "review.submitted" | "program.agenda_published";
+        HookSample: {
+            /** @enum {string} */
+            apiVersion: "v1";
+            /** @description The event’s thin payload. */
+            data: {
+                [key: string]: unknown;
+            };
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            occurredAt: string;
+            /** Format: uuid */
+            orgId: string;
+            type: string;
+            version: number;
+        };
+        HookSampleList: {
+            data: components["schemas"]["HookSample"][];
+        };
+        HookSubscribeRequest: {
+            event: components["schemas"]["HookEventType"];
+            /**
+             * Format: uri
+             * @description Where to deliver: https on port 443, a public host.
+             * @example https://hooks.zapier.com/hooks/standard/123/abc
+             */
+            url: string;
+        };
         /** @description The speaker’s photo (M1.4h); null when none. Public reads show it only when the event page is public. */
         Image: {
             /** @description Empty for decorative images. */
@@ -2796,6 +3019,11 @@ export interface components {
         SponsorTierList: {
             data: components["schemas"]["SponsorTier"][];
         };
+        /**
+         * @description A webhook event type (see `webhooks`).
+         * @enum {string}
+         */
+        SubscribableEventType: "order.paid" | "order.refunded" | "order.expired" | "order.payment_failed" | "order.disputed" | "order.dispute_closed" | "tickets.cancelled" | "ticket.transferred" | "ticket.claimed" | "ticket.admitted" | "ticket.admission_undone" | "event.created" | "event.published" | "event.unpublished" | "event.postponed" | "event.rescheduled" | "event.cancelled" | "event.completed" | "event.archived" | "event.updated" | "event.occurrence_cancelled" | "ticket_type.created" | "ticket_type.updated" | "ticket_type.archived" | "form.registration_submitted" | "waitlist.joined" | "waitlist.offered" | "survey.responded" | "review.submitted" | "program.agenda_published";
         TextSection: {
             content: components["schemas"]["TextSectionContent"];
             /** Format: uuid */
@@ -2989,6 +3217,27 @@ export interface components {
         };
         /** @enum {string} */
         WebhookDisputeOutcome: "won" | "lost";
+        WebhookEndpoint: {
+            /** Format: date-time */
+            createdAt: string;
+            description: string;
+            /** @description Empty: every subscribable type. */
+            eventTypes: components["schemas"]["SubscribableEventType"][];
+            /** Format: uuid */
+            id: string;
+            status: components["schemas"]["WebhookEndpointStatus"];
+            /** @description Where messages are sent (https). */
+            url: string;
+        };
+        WebhookEndpointDeleted: {
+            /** @enum {boolean} */
+            deleted: true;
+        };
+        WebhookEndpointList: {
+            data: components["schemas"]["WebhookEndpoint"][];
+        };
+        /** @enum {string} */
+        WebhookEndpointStatus: "active" | "disabled";
         WebhookEventArchivedV1: {
             /** Format: uuid */
             eventId: string;
@@ -3739,7 +3988,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -3802,7 +4051,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -3867,7 +4116,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -3934,7 +4183,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -4003,7 +4252,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -4547,7 +4796,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -4612,7 +4861,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -4700,7 +4949,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -4768,7 +5017,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -4841,7 +5090,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -4913,7 +5162,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -4988,7 +5237,109 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Conflict, invalid state, or the same Idempotency-Key is in flight */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The Idempotency-Key was used with a different request (`idempotency_key_reused`) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Read-only maintenance (`read_only_freeze`): nothing was changed; retry after `Retry-After` seconds */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    addContact: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Required on every write. Retrying with the same key returns the stored result (kept 24 h). */
+                "idempotency-key": string;
+            };
+            path: {
+                /** @description Organization id or slug */
+                org: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AddContactRequest"];
+            };
+        };
+        responses: {
+            /** @description The contact */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ContactRef"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -5090,7 +5441,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -5165,7 +5516,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -5262,7 +5613,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -5339,7 +5690,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -5446,7 +5797,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -5528,7 +5879,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -5607,7 +5958,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -5679,7 +6030,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -5756,7 +6107,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -5860,7 +6211,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -5964,7 +6315,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -6068,7 +6419,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -6172,7 +6523,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -6276,7 +6627,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -6385,7 +6736,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -6467,7 +6818,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -6542,7 +6893,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -6615,7 +6966,111 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Conflict, invalid state, or the same Idempotency-Key is in flight */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The Idempotency-Key was used with a different request (`idempotency_key_reused`) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Read-only maintenance (`read_only_freeze`): nothing was changed; retry after `Retry-After` seconds */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    createRegistration: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Required on every write. Retrying with the same key returns the stored result (kept 24 h). */
+                "idempotency-key": string;
+            };
+            path: {
+                /** @description The event id */
+                eventId: string;
+                /** @description Organization id or slug */
+                org: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateRegistrationRequest"];
+            };
+        };
+        responses: {
+            /** @description Registered */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Attendee"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -6719,7 +7174,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -6801,7 +7256,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -6880,7 +7335,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -6957,7 +7412,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -7027,7 +7482,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -7104,7 +7559,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -7160,6 +7615,274 @@ export interface operations {
             };
         };
     };
+    subscribeHook: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Required on every write. Retrying with the same key returns the stored result (kept 24 h). */
+                "idempotency-key": string;
+            };
+            path: {
+                /** @description Organization id or slug */
+                org: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["HookSubscribeRequest"];
+            };
+        };
+        responses: {
+            /** @description Subscribed */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Hook"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Conflict, invalid state, or the same Idempotency-Key is in flight */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The Idempotency-Key was used with a different request (`idempotency_key_reused`) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Read-only maintenance (`read_only_freeze`): nothing was changed; retry after `Retry-After` seconds */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    unsubscribeHook: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The hook id */
+                hookId: string;
+                /** @description Organization id or slug */
+                org: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Unsubscribed */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Conflict, invalid state, or the same Idempotency-Key is in flight */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The Idempotency-Key was used with a different request (`idempotency_key_reused`) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Read-only maintenance (`read_only_freeze`): nothing was changed; retry after `Retry-After` seconds */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    listHookSamples: {
+        parameters: {
+            query: {
+                /** @description A public event type (`HookEventType`), e.g. `order.paid`. */
+                event: string;
+            };
+            header?: never;
+            path: {
+                /** @description Organization id or slug */
+                org: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description One sample message */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HookSampleList"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
     getOrder: {
         parameters: {
             query?: never;
@@ -7201,7 +7924,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -7278,7 +8001,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -7382,7 +8105,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -7489,7 +8212,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -7566,7 +8289,7 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -7586,6 +8309,276 @@ export interface operations {
             };
             /** @description Too many requests (`rate_limited`); see `Retry-After` */
             429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    listWebhookEndpoints: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Organization id or slug */
+                org: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The endpoints */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebhookEndpointList"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    createWebhookEndpoint: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Required on every write. Retrying with the same key returns the stored result (kept 24 h). */
+                "idempotency-key": string;
+            };
+            path: {
+                /** @description Organization id or slug */
+                org: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateWebhookEndpointRequest"];
+            };
+        };
+        responses: {
+            /** @description The new endpoint */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebhookEndpoint"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Conflict, invalid state, or the same Idempotency-Key is in flight */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The Idempotency-Key was used with a different request (`idempotency_key_reused`) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Read-only maintenance (`read_only_freeze`): nothing was changed; retry after `Retry-After` seconds */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    deleteWebhookEndpoint: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Required on every write. Retrying with the same key returns the stored result (kept 24 h). */
+                "idempotency-key": string;
+            };
+            path: {
+                /** @description The endpoint id */
+                endpointId: string;
+                /** @description Organization id or slug */
+                org: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Deleted */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebhookEndpointDeleted"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Conflict, invalid state, or the same Idempotency-Key is in flight */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The Idempotency-Key was used with a different request (`idempotency_key_reused`) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Read-only maintenance (`read_only_freeze`): nothing was changed; retry after `Retry-After` seconds */
+            503: {
                 headers: {
                     [name: string]: unknown;
                 };

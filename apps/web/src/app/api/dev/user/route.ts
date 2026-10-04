@@ -1,5 +1,6 @@
 import { randomBytes } from 'node:crypto';
 import { generateTotpSecret, secretKey, setupKey, totp } from '@yayatoh/auth/totp';
+import { setEntitlementOverrideCommand } from '@yayatoh/billing';
 import { createEventCommand, transitionEventCommand } from '@yayatoh/events';
 import { createCtx, executeCommand } from '@yayatoh/kernel';
 import { catchUpListings, updateSiteSettingsCommand } from '@yayatoh/marketplace';
@@ -35,6 +36,8 @@ import { devAuthEnabled } from '@/server/session.ts';
  * - `profile=<key>` (with `event=published`): the event's profile (M4.8a: `gala` shows Donations).
  * - `payouts=active` (with `org=new`): a fake connected account, fully enabled (gifts and direct
  *   charges, M4.8a), as if onboarding had finished.
+ * - `org=agency` (M6.7a): create an agency organization the account owns, with the `agency`
+ *   entitlement (staff switch it on per org, P6-13); `orgName` names it.
  */
 export async function POST(req: NextRequest) {
   const devPassword = process.env.DEV_PERSONA_PASSWORD;
@@ -59,6 +62,20 @@ export async function POST(req: NextRequest) {
 
   let orgSlug: string | null = null;
   let eventSlug: string | null = null;
+  if (form.get('org') === 'agency') {
+    const org = await createOrganization(
+      createCtx({ actor: { type: 'user', userId: user.id } }),
+      { slug: `e2e-${stamp}`, name: String(form.get('orgName') ?? '') || `Agency ${stamp}`, kind: 'agency' },
+      ports,
+    );
+    orgSlug = org.slug;
+    await executeCommand(
+      setEntitlementOverrideCommand,
+      { moduleKey: 'agency', effect: 'grant', reason: 'dev test agency' },
+      createCtx({ orgId: org.id, actor: { type: 'system', name: 'dev.test-user' } }),
+      ports,
+    );
+  }
   if (form.get('org') === 'new') {
     const org = await createOrganization(
       createCtx({ actor: { type: 'user', userId: user.id } }),

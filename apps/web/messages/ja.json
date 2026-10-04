@@ -51,7 +51,11 @@
       "coupon": "クーポン",
       "page": "ページまたはブログ記事"
     },
-    "help": "ヘルプ"
+    "help": "ヘルプ",
+    "clientsSection": "クライアント",
+    "viaAgency": "{agency} 経由",
+    "agencyBadgeLabel": "{agency} の代理として {org} で作業しています",
+    "backToAgency": "{agency} に戻る"
   },
   "notifications": {
     "open": "通知",
@@ -172,7 +176,9 @@
       "alerts": {
         "alert": "アラート",
         "alert-text": "アラートSMS",
-        "alert-urgent-text": "緊急アラートSMS"
+        "alert-urgent-text": "緊急アラートSMS",
+        "metric": "アラートルール",
+        "metric-now": "アラートルール（即時送信）"
       },
       "campaigns": {
         "test": "キャンペーンのテスト"
@@ -214,6 +220,12 @@
         "request-code": "プライバシーリクエストのコード",
         "archive-ready": "個人データのアーカイブ準備完了",
         "erasure-done": "消去の受領書"
+      },
+      "badges": {
+        "kiosk-code": "バッジキオスクのコード"
+      },
+      "analytics": {
+        "report": "定期レポート"
       },
       "cms": {
         "contact_message": "お問い合わせページからのメッセージ"
@@ -377,6 +389,7 @@
     "badges": "バッジ",
     "orgAnalytics": "アナリティクス",
     "integrations": "連携",
+    "virtual": "配信設定",
     "seatingLibrary": "座席ライブラリ",
     "coupons": "クーポン",
     "charity": "チャリティープロフィール",
@@ -384,6 +397,9 @@
     "webhooks": "Webhook",
     "sandboxes": "サンドボックス",
     "notifications": "通知",
+    "sso": "シングルサインオン",
+    "agency": "クライアント",
+    "agencies": "代理店",
     "mediaLibrary": "メディアライブラリ",
     "storage": "ストレージ",
     "moneyOverview": "概要",
@@ -417,7 +433,13 @@
     "box_office": "チケット窓口",
     "scanner": "入場スキャン担当",
     "viewer": "閲覧のみ",
-    "collaborator": "イベント協力者"
+    "collaborator": "イベント協力者",
+    "agency_manager": "代理店マネージャー",
+    "agency_manager_finance": "代理店マネージャー（財務）",
+    "agency_marketing": "代理店マーケティング",
+    "agency_marketing_finance": "代理店マーケティング（財務）",
+    "agency_viewer": "代理店閲覧者",
+    "agency_viewer_finance": "代理店閲覧者（財務）"
   },
   "profiles": {
     "wedding": "結婚式",
@@ -765,7 +787,8 @@
     "reference": "参照番号: {id}",
     "rateLimitedRetry": "試行回数が多すぎます。{minutes, plural, other {#分}}後にもう一度お試しください。",
     "impersonation_blocked": "メンバーとして操作中のスタッフはこれを実行できません。返金・支払い・エクスポート・削除・本人確認は無効です。",
-    "read_only_freeze": "定期メンテナンス中のため変更は一時停止しています。何も保存されていません。終了後にもう一度お試しください。"
+    "read_only_freeze": "定期メンテナンス中のため変更は一時停止しています。何も保存されていません。終了後にもう一度お試しください。",
+    "read_only_billing": "サブスクリプションのお支払いまで、この組織は読み取り専用です。何も保存・削除されていません。"
   },
   "notFound": {
     "title": "ページが見つかりません",
@@ -833,6 +856,43 @@
       "email_unverified": "そのアカウントのメールアドレスはプロバイダーで確認されていません。そちらで確認するか、メールアドレスでサインインしてください。",
       "no_email": "そのアカウントはメールアドレスを共有しなかったため、Yayatohアカウントを作成できません。",
       "unavailable": "このサインイン方法は現在利用できません。"
+    },
+    "ssoLink": "シングルサインオンでサインイン",
+    "ssoOtherOrg": "別の組織のシングルサインオンでサインインしています。この組織を開くには、もう一度サインインしてください。",
+    "sso": {
+      "eyebrow": "シングルサインオン",
+      "title": "職場のアカウントでサインイン",
+      "description": "職場のメールアドレスを入力してください。組織のサインインページに移動します。",
+      "email": "職場のメールアドレス",
+      "emailHint": "このアドレスに対して、組織でシングルサインオンが設定されている必要があります。",
+      "continue": "続行",
+      "back": "他のサインイン方法に戻る",
+      "errors": {
+        "invalid_email": "有効なメールアドレスを入力してください。",
+        "no_sso": "このアドレスでシングルサインオンを使用している組織はありません。別の方法でサインインしてください。",
+        "rate_limited": "試行回数が多すぎます。数分待ってからもう一度お試しください。",
+        "unavailable": "現在シングルサインオンは利用できません。別の方法でサインインしてください。"
+      },
+      "refused": {
+        "expired": "このサインインは時間がかかりすぎたか、すでに使用されています。最初からやり直してください。",
+        "cancelled": "組織のサインインページでサインインがキャンセルされました。",
+        "failed": "シングルサインオンでサインインできませんでした。もう一度お試しください。",
+        "connection_inactive": "組織のシングルサインオンはオフになっています。管理者にお問い合わせください。",
+        "domain_not_verified": "組織がこのアドレスのドメインを検証していないため、サインインできません。",
+        "identity_conflict": "この職場のアカウントは、ここで別のユーザーにリンクされています。管理者にお問い合わせください。",
+        "deprovisioned": "組織によってアクセス権が削除されました。管理者にお問い合わせください。",
+        "not_provisioned": "この組織へのアクセス権がまだありません。管理者に追加を依頼してください。",
+        "staff_two_factor": "プラットフォームスタッフは、シングルサインオンを使用する前に 2 段階認証をオンにする必要があります。",
+        "session_failed": "サインインを完了できませんでした。もう一度お試しください。",
+        "invalid_signature": "組織からのサインイン応答を検証できませんでした。",
+        "wrong_issuer": "サインイン応答が、設定されているものとは異なる ID プロバイダーから送信されました。",
+        "wrong_audience": "サインイン応答は別のアプリケーション向けのものでした。",
+        "wrong_request": "サインイン応答がこのサインインに対応していません。最初からやり直してください。",
+        "malformed": "サインイン応答を読み取れませんでした。",
+        "no_email": "組織の ID プロバイダーからメールアドレスが送信されませんでした。",
+        "idp_error": "組織の ID プロバイダーから応答がありませんでした。もう一度お試しください。",
+        "sso_required": "組織では、このアドレスにシングルサインオンが必須です。続行するにはここでサインインしてください。"
+      }
     }
   },
   "orgPicker": {
@@ -2029,7 +2089,8 @@
     "dateSoldOut": "この日程のチケットが足りません。",
     "wrongDate": "この日程では販売していないチケットが含まれています。",
     "dateUnavailable": "この日程は販売を終了しました。",
-    "seatChannel": "選んだ席の一部は別の販売チャネル（スポンサー、プロモーター、オンライン販売）用に確保されています。ほかの席を選んでください。"
+    "seatChannel": "選んだ席の一部は別の販売チャネル（スポンサー、プロモーター、オンライン販売）用に確保されています。ほかの席を選んでください。",
+    "imported": "{source} からインポート · 注文 {reference}"
   },
   "seating": {
     "title": "座席",
@@ -2139,6 +2200,7 @@
       "selection": "おまかせ座席",
       "channels": "チャネル",
       "revisions": "履歴",
+      "solver": "自動配席",
       "guests": "ゲストの席決め",
       "cards": "カードと書き出し"
     },
@@ -2522,6 +2584,134 @@
       "isCurrent": "これが現在の座席表です。",
       "restore": "第 {number} 版を復元",
       "restoredNotice": "第 {number} 版を復元しました。現在の座席表は第 {now} 版です。"
+    },
+    "solver": {
+      "title": "配席ルールとプランナー",
+      "description": "ルールを設定すると、まだ席のないゲスト全員にプランナーがテーブルを提案します。提案を確認し、1卓ずつまたはすべて確定してください。手動で配席したゲストは動かしません。",
+      "rules": {
+        "heading": "ルール",
+        "listLabel": "配席ルール",
+        "empty": "まだルールはありません。下で追加するか、ルールなしでプランナーを実行してください。その場合も各テーブルの席数は守られます。",
+        "hard": "必須",
+        "soft": "推奨",
+        "badge": "{strength}・重み {weight}",
+        "strength": "種類",
+        "strengthHint": "提案が必須ルールを破ることはありません。推奨ルールはできる限り守られ、破るごとに重みの分だけ減点されます。",
+        "weight": "重み",
+        "weightHint": "1〜10。重みが大きい推奨ルールほど優先されます。",
+        "save": "保存",
+        "remove": "削除",
+        "saved": "ルールを保存しました。",
+        "removed": "ルールを削除しました。",
+        "added": "ルールを追加しました。",
+        "editLabel": "ルールを変更: {rule}",
+        "kinds": {
+          "keep_together": "同じテーブルにする",
+          "keep_apart": "別のテーブルにする",
+          "vip_near_stage": "VIPをステージの近くに",
+          "access_near_exit": "配慮が必要な方を出口の近くに",
+          "table_max": "1卓の上限"
+        },
+        "add": {
+          "heading": "ルールを追加",
+          "kind": "ルール",
+          "by": "対象",
+          "byEach": "各グループ",
+          "byParty": "1つのグループ",
+          "byTag": "タグが付いた全員",
+          "bySide": "同じ側の全員",
+          "party": "グループ",
+          "tag": "タグ",
+          "side": "側",
+          "choose": "選択…",
+          "together": "同じテーブルにする",
+          "first": "1つ目のグループ",
+          "second": "2つ目のグループ",
+          "accessTag": "配慮が必要な方のタグ",
+          "accessHint": "このタグのグループは出口または入口に最も近いテーブルに座ります。アクセシビリティに関する回答は非公開のままです。",
+          "max": "1卓の最大人数",
+          "vipHint": "VIPグループはステージに最も近いテーブルに座ります。",
+          "submit": "ルールを追加"
+        },
+        "errors": {
+          "value": "ルールの対象を選んでください。",
+          "same": "異なる2つのグループを選んでください。",
+          "weight": "1〜10の重みを入力してください。",
+          "max": "1〜40の数を入力してください。",
+          "duplicate": "このイベントには同じルールがすでにあります。",
+          "tooMany": "1つのイベントのルールは50件までです。",
+          "unknownParty": "そのグループはこのゲストリストにありません。"
+        },
+        "describe": {
+          "togetherParty": "各グループを同じテーブルに",
+          "togetherTag": "タグ「{value}」の全員を同じテーブルに",
+          "togetherSide": "{value}側を同じテーブルに",
+          "apart": "{a}と{b}を別のテーブルに",
+          "targetParty": "{value}",
+          "targetTag": "タグ「{value}」の全員",
+          "targetSide": "{value}側",
+          "vip": "VIPグループをステージの近くに",
+          "access": "タグ「{tag}」のゲストを出口の近くに",
+          "tableMax": "1卓 {max} 人まで"
+        }
+      },
+      "run": {
+        "heading": "提案",
+        "queue": "まだ席のないゲスト: {count, plural, other {# 人}}。{fixed, plural, =0 {まだ誰も配席されていません。} other {手動で配席した # 人はそのままです。}}",
+        "nothing": "全員の席が決まっています。提案することはありません。",
+        "seed": "配置番号",
+        "seedHint": "同じ番号からは常に同じ提案が出ます。",
+        "seedError": "1〜1,000,000の整数を入力してください。",
+        "start": "配席を提案",
+        "cancel": "停止",
+        "again": "別の配置を試す",
+        "running": "提案を作成中… {percent}%",
+        "progress": "提案の進行状況",
+        "cancelled": "停止しました。何も提案されていません。",
+        "failed": "プランナーが予期せず停止しました。もう一度お試しください。"
+      },
+      "summary": {
+        "heading": "概要",
+        "done": "{seconds} 秒で提案ができました(配置 {seed})。",
+        "seated": "{count, plural, other {# 人}}を{tables, plural, other {# 卓}}に配席。{queue, plural, =0 {待ちリストには誰も残っていません} other {待ちリストに # 人}}。",
+        "hardOk": "必須ルールはすべて守られています。",
+        "hardBroken": "{count, plural, other {# 件の必須ルールが破られています}}。確定する前に提案を変更してください。",
+        "soft": "推奨ルール: 減点 {penalty}(0が最良)。",
+        "ruleLine": "{rule}: {count, plural, =0 {守られています} other {# 件の違反}}",
+        "issues": {
+          "no_stage": "プランにステージがないため、「VIPをステージの近くに」は適用できません。",
+          "no_exit": "プランに出口も入口もないため、「配慮が必要な方を出口の近くに」は適用できません。",
+          "group_too_big": "{size} 人のグループはどのテーブル({room} 席)よりも大きいため、できるだけ少ないテーブルに分けます。",
+          "too_few_seats": "配席するゲストは {size} 人ですが空席は {room} 席だけです。一部は待ちリストに残ります。",
+          "no_room": "プランにテーブルも列もありません。"
+        }
+      },
+      "tables": {
+        "heading": "提案されたテーブル",
+        "none": "提案されたテーブルはありません。",
+        "region": "テーブル {label}",
+        "fill": "提案 {proposed}・配席済み {seated}・空き {free}/{capacity}",
+        "overFull": "空席より {count, plural, other {# 人}}多くなっています。",
+        "broken": "必須ルール違反: {rules}",
+        "over": "席数より多いゲスト",
+        "accept": "テーブル {label} を確定",
+        "acceptAll": "すべてのテーブルを確定",
+        "fixFirst": "先に警告のあるテーブルを直してください。",
+        "acceptedTable": "テーブル {label} を確定しました: {count, plural, other {# 人}}を配席。",
+        "acceptedAll": "提案を確定しました: {count, plural, other {# 人}}を配席。",
+        "queueHeading": "待ちリスト",
+        "guest": "{name}({party})",
+        "moveLabel": "{name} のテーブル",
+        "queueOption": "待ちリストに残す",
+        "optionFree": "テーブル {label}(空き {free})",
+        "toEditor": "配席エディターを開く"
+      },
+      "acceptErrors": {
+        "already_seated": "この提案に含まれる方がその間に手動で配席されました。もう一度提案してください。",
+        "declined": "この提案に含まれるゲストが欠席を回答しました。もう一度提案してください。",
+        "hard_rule": "確定すると必須ルールに違反します。",
+        "cant_fit": "そのテーブルにはあと {fits} 人しか座れません。"
+      }
     },
     "guestSeating": {
       "title": "ゲストの席決め",
@@ -3255,22 +3445,6 @@
       "digest": "受領証の SHA-256",
       "signature": "署名（base64）",
       "footer": "Yayatoh が {org} のために発行しました。署名は受領証のデータを対象とします。下の公開鍵で検証してください。"
-    },
-    "categories": {
-      "contacts": "連絡先の記録",
-      "consents": "同意の記録",
-      "orders": "注文",
-      "paidOrders": "支払い済みの注文（会計のため保持）",
-      "tickets": "チケット",
-      "activeTickets": "有効なチケット",
-      "claims": "チケット譲渡リンク",
-      "holderLinks": "チケットアクセスリンク",
-      "attendees": "ゲストリストの登録",
-      "answers": "購入時の回答",
-      "admissions": "チェックイン",
-      "invitations": "チームへの招待",
-      "networkProfiles": "ネットワーキングのプロフィール",
-      "chatMessages": "送信したチャットメッセージ"
     },
     "findOwner": "オーナーまたは管理者を探す"
   },
@@ -4110,7 +4284,10 @@
       "orders_refund": "注文の返金",
       "attendees_read": "参加者の閲覧",
       "attendees_write": "参加者の変更とチケットの再送",
-      "checkin_scan": "チケットのスキャン"
+      "checkin_scan": "チケットのスキャン",
+      "contacts_write": "連絡先の追加",
+      "webhooks_subscribe": "自動化フックの登録（Zapier トリガー）",
+      "webhooks_manage": "Webhook エンドポイントの追加と削除（Make と n8n のトリガー）"
     },
     "expiry": "有効期限",
     "expiryHint": "期限のあるキーは期限前にローテーションが必要です。短いほど安全です。",
@@ -7558,6 +7735,10 @@
       "rsvpPending": "出欠を開く",
       "guestsUnseated": "ゲストの席を決める",
       "mealsMissing": "出欠の回答を開く",
+      "integrationFailed": "連携の受信トレイを開く",
+      "billingPastDue": "プランと請求を開く",
+      "metricRule": "アラートルールを開く",
+      "metricRuleFinance": "アラートルールを開く",
       "pledgesUnpaid": "寄付のお約束を開く",
       "sessionsNearCapacity": "セッションを開く",
       "sessionWaitlists": "セッション登録を開く",
@@ -7594,6 +7775,10 @@
       "rsvpPending": "{count, plural, other {{countWords}人のゲストが出欠に回答していません}}",
       "guestsUnseated": "{count, plural, other {{countWords}人のゲストにテーブルがありません}}",
       "mealsMissing": "{count, plural, other {出席する{countWords}人のゲストが料理を選んでいません}}",
+      "integrationFailed": "{count, plural, other {本日{countWords}件の連携の問題（同期の失敗または接続の切断）}}",
+      "billingPastDue": "{count, plural, other {プランの支払いが{countWords}件延滞しています}}",
+      "metricRule": "アラートルール「{title}」が発動しました",
+      "metricRuleFinance": "アラートルール「{title}」が発動しました",
       "pledgesUnpaid": "{count, plural, other {イベントから14日経っても{countWords}件の寄付のお約束が未払いです}}",
       "sessionsNearCapacity": "{count, plural, other {{countWords}件のセッションが定員の95 %を超えています}}",
       "sessionWaitlists": "{count, plural, other {{countWords}件のセッションでキャンセル待ちが長くなっています}}",
@@ -10260,6 +10445,219 @@
       },
       "cardLink": "マッチングギフトを開く",
       "cardBody": "スポンサーが期間内の寄付を上限まで2倍にします。上乗せ申請用に寄付者の勤務先も書き出せます。"
+    },
+    "report": {
+      "title": "寄付レポート",
+      "subtitle": "集まった金額とその内訳、回収した誓約、すべての寄付者を元帳と照合して表示します。",
+      "noAccessTitle": "財務の権限が必要です",
+      "noAccessDescription": "寄付レポートには寄付者名と金額が含まれます。オーナー、管理者、財務担当に依頼してください。",
+      "reconcileLink": "照合",
+      "emptyTitle": "まだ寄付はありません",
+      "emptyDescription": "寄付、パドルの誓約、寄付チケットは届きしだいここに表示されます。まずは寄付タブでキャンペーンを開いてください。",
+      "backToDonations": "寄付へ移動",
+      "asOf": "現時点までの集計です。エクスポートの日付はイベントのタイムゾーン（{zone}）です。",
+      "totalsTitle": "合計",
+      "totalsIn": "{currency}の合計",
+      "stats": {
+        "raised": "集まった金額",
+        "raisedSub": "{donors, plural, other {#人}}の寄付者から{count, plural, other {#件}}の寄付・支払い",
+        "online": "カードでの受領",
+        "onlineSub": "負担された手数料{cover}を含む、返金{refunded}",
+        "offline": "オフラインでの支払い",
+        "ticketSub": "ほかに寄付チケット{amount}",
+        "pledged": "会場での誓約",
+        "collectedLabel": "回収済みの誓約",
+        "pledgedSub": "回収{collected}・貸倒{writtenOff}・未回収{open}",
+        "matched": "スポンサーによるマッチング",
+        "matchedSub": "スポンサーの誓約は別途回収します"
+      },
+      "check": {
+        "title": "元帳チェック",
+        "notReconciled": "未照合",
+        "matches": "1セント単位まで一致",
+        "differs": "{amount}の差異",
+        "ledger": "元帳のメモ記帳",
+        "provider": "Stripe残高（前回の照合）",
+        "none": "未照合",
+        "fees": "Stripe手数料"
+      },
+      "bySource": {
+        "title": "経路別",
+        "source": "経路",
+        "count": "寄付",
+        "net": "受領額"
+      },
+      "sources": {
+        "online": "寄付ページ",
+        "qr": "QRコード",
+        "paddle": "パドルラウンド",
+        "ticket": "寄付チケット"
+      },
+      "byLevel": {
+        "title": "レベル別",
+        "empty": "まだ使われたレベルはありません。",
+        "level": "レベル",
+        "own": "任意の金額",
+        "gifts": "寄付",
+        "giftsCell": "{count, plural, other {#件}}・{amount}",
+        "pledges": "パドルの誓約",
+        "pledgesCell": "{count, plural, other {#件}}・{amount}"
+      },
+      "byMatch": {
+        "title": "マッチング別",
+        "sponsor": "スポンサー",
+        "campaign": "キャンペーン",
+        "status": "状態",
+        "matched": "マッチング額",
+        "matchedCell": "{cap}中{matched}"
+      },
+      "matchStatus": {
+        "active": "実施中",
+        "closed": "終了",
+        "cancelled": "中止"
+      },
+      "byDonor": {
+        "title": "寄付者別",
+        "note": "匿名の寄付者には印が付いています。誰が寄付したかは見えますが、公の場で感謝したり名前を出したりしないでください。",
+        "empty": "まだ寄付者はいません。",
+        "donor": "寄付者",
+        "anonymous": "匿名",
+        "email": "メール",
+        "count": "寄付",
+        "net": "寄付額",
+        "truncated": "ここには上位500人の寄付者のみ表示します。エクスポートには全員が含まれます。"
+      },
+      "export": {
+        "title": "寄付者CRM向けにエクスポート",
+        "body": "寄付、オフライン支払い、寄付チケットごとに1行、匿名フラグも保持します。最初に本人確認を行います。",
+        "error": "エクスポートを開始できませんでした：{reason}",
+        "layout": "列の形式",
+        "layoutHint": "CRM形式ではCRM独自の列名を使うため、対応付けなしでインポートできます。",
+        "format": "ファイル形式",
+        "csv": "CSV（.csv）",
+        "xlsx": "Excel（.xlsx）",
+        "submit": "寄付者をエクスポート",
+        "statusCsv": "寄付者エクスポート（CSV）",
+        "statusXlsx": "寄付者エクスポート（Excel）"
+      },
+      "layouts": {
+        "generic": "一般的な表計算（この言語）",
+        "salesforce_npsp": "Salesforce Nonprofit（NPSP）",
+        "bloomerang": "Bloomerang",
+        "little_green_light": "Little Green Light"
+      },
+      "cardTitle": "レポートとエクスポート",
+      "cardLink": "レポートを開く",
+      "cardBody": "経路・レベル・マッチング・寄付者別の合計、回収した誓約、寄付者CRM向けのエクスポート。",
+      "cardReconcile": "Stripeと照合",
+      "file": {
+        "headers": {
+          "date": "日付",
+          "firstName": "名",
+          "lastName": "姓",
+          "donor": "寄付者",
+          "email": "メール",
+          "anonymous": "匿名",
+          "amount": "受領額",
+          "gift": "寄付額",
+          "feeCover": "負担手数料",
+          "refunded": "返金額",
+          "currency": "通貨",
+          "campaign": "キャンペーン",
+          "level": "レベル",
+          "source": "経路",
+          "method": "支払方法",
+          "employer": "勤務先",
+          "tribute": "記念・追悼の対象",
+          "paddle": "パドル",
+          "reference": "参照番号"
+        },
+        "yes": "はい",
+        "no": "いいえ",
+        "sources": {
+          "online": "寄付ページ",
+          "qr": "QRコード",
+          "paddle": "パドルラウンド",
+          "ticket": "寄付チケット"
+        },
+        "methods": {
+          "card": "カード",
+          "check": "小切手",
+          "wire": "銀行振込",
+          "stock": "株式",
+          "daf": "ドナー・アドバイズド・ファンド",
+          "cash": "現金",
+          "other": "その他"
+        },
+        "privacyTitle": "寄付者はあなたの団体のものです",
+        "privacy": "エクスポートにはこのイベントの寄付者だけが含まれます。ファイルは安全に保管し、インポート後に削除してください。"
+      }
+    },
+    "recon": {
+      "title": "寄付の照合",
+      "subtitle": "元帳にあるイベントの寄付を、Stripeアカウントとその入金と比較します。",
+      "noAccessTitle": "財務の権限が必要です",
+      "noAccessDescription": "寄付の照合はオーナー、管理者、財務担当に依頼してください。",
+      "errors": {
+        "note": "確認した内容を書いてください（3〜500文字）。",
+        "provider": "Stripeに接続できませんでした。数分後にもう一度お試しください。"
+      },
+      "run": "今すぐ照合",
+      "ran": "照合しました。",
+      "reportLink": "寄付レポート",
+      "notConnectedTitle": "比較できるStripeアカウントがありません",
+      "notConnectedDescription": "寄付は接続済みのStripeアカウントに直接入ります。入金設定で接続してから、ここで照合してください。",
+      "status": {
+        "open": "未解決",
+        "resolved": "解決済み",
+        "cleared": "一致"
+      },
+      "viewerNotice": "照合結果は閲覧できます。実行と差異の解決はオーナー、管理者、財務担当が行います。",
+      "runTitle": "前回の照合",
+      "lastRun": "前回の照合 {at}：元帳{ledger}件とStripeの取引{provider}件を比較。",
+      "neverRun": "まだ照合していません。今すぐ照合して元帳とStripeを比較しましょう。",
+      "stats": {
+        "ledger": "元帳のメモ記帳",
+        "provider": "Stripe残高",
+        "fees": "Stripe手数料",
+        "unpaidOut": "未入金",
+        "unpaidOutSub": "{count, plural, =0 {すべて入金済みです} other {#件の取引が入金待ちです}}"
+      },
+      "diffsTitle": "差異",
+      "cleanTitle": "すべて一致しています",
+      "cleanDescription": "元帳のすべての寄付と返金が、Stripeと1セント単位まで一致しています。",
+      "allSettled": "未解決の差異はありません。すべて解決済みか一致しています。",
+      "kinds": {
+        "missing_at_provider": "元帳にあり、Stripeにない",
+        "missing_in_ledger": "Stripeにあり、元帳にない",
+        "amount_mismatch": "金額が異なる"
+      },
+      "ledger": "元帳",
+      "provider": "Stripe",
+      "difference": "差額",
+      "resolvedNote": "解決済み：{note}",
+      "noteLabel": "確認した内容",
+      "noteHint": "例：電話で返金、Stripeによる調整、重複記帳。",
+      "resolve": "{reference}を解決",
+      "resolved": "解決しました。",
+      "payoutsTitle": "入金",
+      "payoutsBody": "このイベントの寄付を含む、Stripeアカウントからの入金です。入金にはほかのお金が含まれることもあります。",
+      "payoutsEmpty": "まだ入金はありません。Stripeは寄付の到着から数日後に入金します。",
+      "payout": {
+        "id": "入金",
+        "status": "状態",
+        "arrival": "着金日",
+        "amount": "入金額",
+        "donations": "このイベントの寄付",
+        "donationsCell": "{count, plural, other {#件}}：手数料{fees}差引後{net}"
+      },
+      "payoutStatus": {
+        "pending": "保留中",
+        "in_transit": "送金中",
+        "paid": "入金済み",
+        "failed": "失敗",
+        "canceled": "キャンセル"
+      }
     }
   },
   "galaTables": {
@@ -12470,6 +12868,36 @@
       "waitlist_closed": "{title}は満席で、キャンセル待ちはセッションの24時間前に終了しました。",
       "offer_ended": "{title}の案内は期限切れです。",
       "full": "{title}はちょうど満席になりました。もう一度お試しいただくとキャンセル待ちに登録できます。"
+    },
+    "calendar": {
+      "title": "Google カレンダー",
+      "off": "このスケジュールを Google カレンダーに入れておけます。追加・取り消したセッションや、時間・会場の変更は自動で反映されます。",
+      "privacy": "カレンダーに追加するのはこのイベントのセッションだけです。ほかの予定を読むことはありません。",
+      "connect": "Google カレンダーに追加",
+      "reconnect": "もう一度接続",
+      "pending": "Google の確認を待っています。そのウィンドウを閉じた場合は、もう一度接続してください。",
+      "active": "{count, plural, =0 {Google カレンダーと同期中です。まだセッションはありません。} other {Google カレンダーと同期中です：# 件のセッションがあります。}}",
+      "lastSync": "最終更新：{when}",
+      "neverSynced": "最初の更新を準備しています。",
+      "syncNow": "今すぐ更新",
+      "syncing": "更新中",
+      "stop": "同期を停止",
+      "stopped": "同期はオフです。すでにカレンダーにあるセッションはそのまま残ります。",
+      "revokedByGoogle": "Google がこの接続を受け付けなくなったため、更新が止まりました。続けるにはもう一度接続してください。",
+      "done": {
+        "queued": "更新を開始しました。まもなくカレンダーに反映されます。",
+        "already": "すでに更新中です。",
+        "stopped": "同期を停止しました。すでにカレンダーにあるセッションはそのまま残ります。"
+      },
+      "notice": {
+        "connected": "接続しました。まもなく Google カレンダーにセッションが表示されます。",
+        "denied": "Google カレンダーは接続されませんでした。",
+        "expired": "接続リンクの有効期限が切れました。もう一度お試しください。",
+        "unavailable": "このイベントではカレンダー同期を利用できません。",
+        "provider_unavailable": "Google に接続できませんでした。しばらくしてからもう一度お試しください。",
+        "rate_limited": "試行回数が多すぎます。数分待ってからもう一度お試しください。",
+        "conflict": "カレンダーはすでに接続されています。"
+      }
     }
   },
   "people": {
@@ -13127,7 +13555,74 @@
       "ai_seating": "AI 座席配置",
       "analytics_pro": "高度な分析"
     },
-    "findOwner": "オーナーまたは管理者を探す"
+    "findOwner": "オーナーまたは管理者を探す",
+    "usageLink": "使用量",
+    "renewalReceived": "更新の通知を受け取りました",
+    "dunning": {
+      "graceTitle": "サブスクリプションの支払いが完了しませんでした",
+      "graceBody": "{date}まではすべて通常どおり使えます。変更を続けるにはそれまでにお支払いください。その後はお支払いまで組織が読み取り専用になります。",
+      "readOnlyTitle": "この組織は読み取り専用です",
+      "readOnlyBody": "サブスクリプションの支払いに失敗したため、変更は一時停止しています。何も削除されていません。すべての閲覧、データのエクスポート、入口でのチケットのスキャンは引き続きできます。お支払いいただくとすぐに変更できるようになります。",
+      "payNow": "今すぐ支払う",
+      "askOwner": "この組織のオーナーまたは管理者に支払いを依頼してください。",
+      "paidTitle": "お支払いを受け付けました",
+      "paidBody": "ありがとうございます。組織の全員が再び変更できるようになりました。",
+      "declinedTitle": "お支払いが完了しませんでした",
+      "declinedBody": "何も変更されていません。請求プロバイダーに登録されたカードを確認して、もう一度お試しください。",
+      "payError": "支払いを開始できませんでした。しばらくしてからもう一度お試しください。"
+    },
+    "change": {
+      "title": "プランを変更",
+      "description": "アップグレードとダウングレードはすぐに反映されます。支払いまたはクレジットは、現在の請求期間の残りの分だけです。",
+      "discountCharity": "認証済みの慈善団体プロフィールにより、すべてのプランが{percent}%割引になります。",
+      "discountStaff": "あなたの組織にはすべてのプランで{percent}%の非営利割引が適用されます。",
+      "legend": "プラン",
+      "offer": "{plan}：{interval, select, year {年額} other {月額}} {price}",
+      "direction": {
+        "upgrade": "アップグレード",
+        "downgrade": "ダウングレード",
+        "switch": "切り替え",
+        "start": "開始"
+      },
+      "turnsOff": "{count, plural, other {# 個のモジュールがオフになります}}",
+      "chooseError": "プレビューするプランを選んでください。",
+      "preview": "変更をプレビュー",
+      "previewTitle": "{plan}に変更",
+      "previewLead": {
+        "upgrade": "アップグレードします。現在の請求期間の残りについて、今日お支払いいただく金額は次のとおりです。",
+        "downgrade": "ダウングレードします。現在のプランの未使用分はクレジットになります。",
+        "switch": "同じ価格のプランに切り替えます。",
+        "start": "サブスクリプションは今日から始まります。"
+      },
+      "rows": {
+        "charge": "新しいプラン（期間の残り）",
+        "credit": "未使用分のクレジット",
+        "discount": "非営利割引",
+        "tax": "税金",
+        "due": "本日のお支払い"
+      },
+      "creditKept": "{amount}のクレジットは次回以降の請求に使われます。",
+      "nextRenewal": "その後、{date}に{amount}。",
+      "nextRenewalNoDate": "その後、期間ごとに{amount}。",
+      "taxNote": "税金は、組織の請求情報をもとに請求プロバイダーが計算します。",
+      "removedTitle": "{count, plural, other {# 個のモジュールがオフになります}}",
+      "removedBody": "データは保持されます。これらを含むプランに変更すれば、元のまま戻ります。",
+      "confirmRemoved": "{count, plural, other {これらのモジュールがオフになることを理解しました}}",
+      "confirmError": "続けるには、オフになるモジュールを確認してください。",
+      "confirm": "変更を確定",
+      "cancel": "今のプランのままにする",
+      "doneTitle": "プラン変更を送信しました",
+      "doneBody": "請求プロバイダーが変更を確認しました。プランとモジュールは下に更新されています。",
+      "errorTitle": "プランは変更されませんでした",
+      "errors": {
+        "billing_off": "この組織では請求が有効になっていません。",
+        "same_plan": "すでにこのプランをご利用中です。",
+        "validation_failed": "提供されているプランから選んでください。",
+        "provider": "請求プロバイダーが変更を受け付けませんでした。請求は発生していません。もう一度お試しください。",
+        "forbidden": "プランを変更できるのはオーナーと管理者だけです。",
+        "other": "問題が発生しました。何も変更されていません。"
+      }
+    }
   },
   "billingPortal": {
     "eyebrow": "テスト請求",
@@ -13137,7 +13632,11 @@
     "switch": "プランを変更",
     "cancel": "サブスクリプションを解約",
     "back": "変更せずに戻る",
-    "chooseError": "変更先のプランを選択してください。"
+    "chooseError": "変更先のプランを選択してください。",
+    "noSubscriptionError": "この顧客にはまだサブスクリプションがありません。先にプランを選んでください。",
+    "renewalLegend": "更新",
+    "failRenewal": "更新の支払いを失敗させる",
+    "stopRetrying": "支払いの再試行を止める"
   },
   "seatingLibrary": {
     "title": "座席表ライブラリ",
@@ -13269,6 +13768,36 @@
     "connectors": {
       "demo": {
         "description": "連携を試すためのテスト用連絡先アプリです。連絡先が CRM と双方向に同期されます。テスト環境のみ。"
+      },
+      "slack": {
+        "description": "選んだ Slack チャンネルにアラートと日次ダイジェストを送ります。メッセージにはイベント名が入り、メールアドレス・電話番号・金額は有効にしない限り入りません。"
+      },
+      "eventbrite": {
+        "description": "Eventbrite からイベント、チケット種別、注文、参加者を移行します。まずプレビューしてからインポート。いつでも再実行して変更を取り込めます。"
+      },
+      "google_sheets": {
+        "description": "イベントの参加者リストを Google スプレッドシートで管理します。どちらで編集しても双方向に同期します。"
+      },
+      "salesforce": {
+        "description": "Salesforce と同期を保ちます。取引先責任者とリードは双方向、イベントごとに登録者とチェックイン済みの人を含むキャンペーンを作成し、スポンサーは商談として送ります。送信されるのはマーケティングに同意した人だけです。"
+      },
+      "google_calendar": {
+        "description": "開催中のイベントのすべてのセッションを Google カレンダーに常に最新の状態で表示します。移動したセッションは移動し、中止したセッションは削除されます。時刻は各イベントのタイムゾーンで表示されます。"
+      },
+      "quickbooks": {
+        "description": "売上、手数料、払い戻し、入金、寄付の日次サマリー仕訳を毎日 QuickBooks Online に計上します。"
+      },
+      "xero": {
+        "description": "売上、手数料、払い戻し、入金、寄付の日次サマリー仕訳を毎日 Xero に計上します。"
+      },
+      "mailchimp": {
+        "description": "オーディエンスをマージフィールド付きで Mailchimp のリストに送ります。配信停止と不達アドレスは同意の変更として戻ってきます。"
+      },
+      "hubspot": {
+        "description": "連絡先を双方向に同期し、イベントを申込とチェックイン付きのマーケティングイベントとして HubSpot に送ります。"
+      },
+      "klaviyo": {
+        "description": "オーディエンスを Klaviyo のリストに送ります。配信停止、バウンス、迷惑メール報告は同意の変更として戻ってきます。"
       }
     },
     "sandboxBadge": "テスト",
@@ -13288,11 +13817,66 @@
     "readOnly": "連携の接続や変更ができるのはオーナーと管理者だけです。",
     "breadcrumb": "パンくずリスト",
     "objects": {
-      "contacts": "連絡先"
+      "contacts": "連絡先",
+      "events": "イベント",
+      "ticket_classes": "チケット種別",
+      "orders": "注文",
+      "attendees": "参加者",
+      "leads": "リード",
+      "campaigns": "キャンペーン",
+      "campaign_members": "キャンペーンメンバー",
+      "sponsor_opportunities": "スポンサー商談",
+      "sessions": "セッション",
+      "journals": "日次仕訳",
+      "members": "リストのメンバー",
+      "marketing_events": "マーケティングイベント",
+      "event_attendance": "申込と出席"
     },
     "fields": {
       "email": "メール",
-      "name": "名前"
+      "name": "名前",
+      "tagline": "キャッチコピー",
+      "starts_at": "開始",
+      "ends_at": "終了",
+      "timezone": "タイムゾーン",
+      "currency": "通貨",
+      "venue_name": "会場",
+      "city": "市区町村",
+      "country": "国",
+      "description": "説明",
+      "price_minor": "価格（最小通貨単位）",
+      "quantity_total": "数量",
+      "hidden": "非表示",
+      "sales_start_at": "販売開始",
+      "sales_end_at": "販売終了",
+      "buyer_email": "購入者のメール",
+      "buyer_name": "購入者名",
+      "status": "ステータス",
+      "subtotal_minor": "チケット合計（最小通貨単位）",
+      "total_minor": "注文合計（最小通貨単位）",
+      "placed_at": "注文日",
+      "labels": "ラベル",
+      "first_name": "名",
+      "last_name": "姓",
+      "company": "会社",
+      "title": "タイトル",
+      "phone": "電話",
+      "lead_source": "リードソース",
+      "start_date": "開始日",
+      "end_date": "終了日",
+      "stage": "フェーズ",
+      "stage_name": "フェーズ",
+      "close_date": "完了予定日",
+      "amount": "金額",
+      "tier": "スポンサーランク",
+      "currency_iso_code": "通貨コード",
+      "event_name": "イベント",
+      "room": "会場",
+      "time_zone": "タイムゾーン",
+      "subscription": "購読の変更",
+      "email_opt_out": "メール配信停止",
+      "venue": "会場",
+      "cancelled": "中止"
     },
     "status": {
       "none": "未接続",
@@ -13339,7 +13923,9 @@
         "paused": "同期を一時停止しました。",
         "resumed": "同期を再開しました。",
         "interval": "同期スケジュールを保存しました。",
-        "disconnected": "切断しました。今後は何も同期されず、プロバイダー側のアクセスも取り消しました。"
+        "disconnected": "切断しました。今後は何も同期されず、プロバイダー側のアクセスも取り消しました。",
+        "linked": "シートを作成して連携しました。次回の同期で内容が入ります。",
+        "unlinked": "シートの連携を解除しました。今後は同期されません。シートは Google ドライブに残ります。"
       },
       "revoked": {
         "user": "{when} に切断しました。",
@@ -13443,7 +14029,21 @@
       "paused": "一時停止により停止",
       "sync_failed": "同期に失敗しました",
       "unknown_connector": "この連携は利用できなくなりました",
-      "other": "エラー（{code}）"
+      "other": "エラー（{code}）",
+      "remote_deleted": "シートで削除されました",
+      "conflict_kept_yayatoh": "両方で変更されました：Yayatoh の変更を残しました",
+      "conflict_kept_remote": "両方で変更されました：連携先の変更を残しました",
+      "conflict": "Yayatoh にある既存のレコードと競合しています",
+      "not_found": "必要なものがまだありません",
+      "validation_failed": "Yayatoh で受け付けられませんでした",
+      "remove_failed": "プロバイダーで削除できませんでした",
+      "currency_unsupported": "会計ソフトは基準通貨のみ受け付けます",
+      "post_failed": "会計ソフトに計上できませんでした",
+      "http_400": "会計ソフトに拒否されました。対応付けた勘定科目を確認してください",
+      "http_429": "プロバイダーから処理を遅くするよう求められました",
+      "http_503": "プロバイダーは現在利用できません",
+      "no_organisation": "この接続の組織が見つかりませんでした",
+      "account_code_missing": "対応付けた勘定科目にコードがありません"
     },
     "inbox": {
       "title": "連携エラー",
@@ -13469,7 +14069,8 @@
         "pull": "プロバイダーからの読み取り",
         "map": "対応付け",
         "write": "Yayatoh への保存",
-        "push": "プロバイダーへの送信"
+        "push": "プロバイダーへの送信",
+        "conflict": "両方で変更"
       },
       "field": "フィールド：{field}",
       "lastSeen": "最終確認 {when}",
@@ -13495,7 +14096,15 @@
       "retryNamed": "{record} を再試行",
       "dismiss": "非表示",
       "dismissNamed": "{record} を非表示",
-      "more": "{count, plural, other {ほかに # 件のレコードは表示されていません。}}"
+      "more": "{count, plural, other {ほかに # 件のレコードは表示されていません。}}",
+      "values": "値",
+      "keptLost": "{field}：残した値「{kept}」、失われた値「{lost}」",
+      "yourCall": "判断が必要です",
+      "help": {
+        "remote_deleted": "シートで行が削除されました。Yayatoh のリストからは誰も削除されていません。却下すると確定します：参加者はここに残り、その行とのひも付けが外れます。",
+        "conflict_kept_yayatoh": "前回の同期以降、このレコードは両方で変更されました。後から行われた Yayatoh の変更を残して送信し、下の連携先の値は上書きされました。",
+        "conflict_kept_remote": "前回の同期以降、このレコードは両方で変更されました。後から行われた連携先の変更を残し、下の Yayatoh の値は上書きされました。"
+      }
     },
     "fakeConsent": {
       "title": "テスト用の同意",
@@ -13503,9 +14112,551 @@
       "heading": "{name} を Yayatoh に接続しますか？",
       "body": "{name} はテスト用のプロバイダーです。許可すると、Yayatoh があなたに代わって次の内容を読み書きできるようになります。",
       "allow": "許可",
-      "deny": "拒否"
+      "deny": "拒否",
+      "bodyNoScopes": "{name} はテスト用の連携先です。許可すると、Yayatoh があなたに代わってアカウントのデータを読み取れます。"
     },
-    "webhooksAction": "Webhook を設定"
+    "webhooksAction": "Webhook を設定",
+    "zapier": {
+      "title": "Zapier",
+      "cardDescription": "注文の支払い、チケットのチェックイン、申し込みの受付で Zap を開始し、数千のアプリから参加登録や連絡先の追加ができます。",
+      "apiKeyBadge": "API キーを使用",
+      "setUp": "設定する",
+      "setUpNamed": "Zapier を設定する",
+      "description": "Zapier は API キーのいずれかで接続します。キーに下記の権限を付けてください。Zapier が有効にしたトリガーはここに表示されます。",
+      "createKey": "API キーを作成",
+      "reviewTitle": "Zapier の Yayatoh アプリは審査中です",
+      "reviewBody": "Zapier に掲載されるまでは、担当チームから招待リンクをお送りできます。",
+      "noApiAccess": "API アクセスがプランに含まれていないため、Zapier はまだ接続できません。",
+      "scopesTitle": "API キーの権限",
+      "scopesHelp": "各トリガーとアクションには、Zapier に渡すキーにそれぞれの権限が必要です。",
+      "allScopes": "次の権限を持つキーですべてに対応できます:",
+      "partsCaption": "トリガーとアクション、それぞれに必要な権限",
+      "part": "トリガーまたはアクション",
+      "kind": "種類",
+      "scope": "権限",
+      "parts": {
+        "order_paid": "注文の支払い",
+        "ticket_admitted": "チケットのチェックイン",
+        "registration_submitted": "申込フォームの送信",
+        "event_published": "イベントの公開",
+        "create_registration": "参加登録を作成",
+        "add_contact": "連絡先を追加",
+        "check_in": "チケットをチェックイン",
+        "event_list": "イベント選択"
+      },
+      "kinds": {
+        "trigger": "トリガー",
+        "action": "アクション",
+        "picker": "アクションで使用"
+      },
+      "keysTitle": "API キー",
+      "keysHelp": "有効なキーと、Zapier に必要な権限をすべて持っているかどうか。",
+      "noKeysTitle": "有効な API キーはまだありません",
+      "noKeysDescription": "上記の権限でキーを作成し、組織の短い名前と一緒に Zapier に貼り付けてください。",
+      "keysCaption": "有効な API キーと Zapier への対応状況",
+      "keyName": "キー",
+      "key": "先頭",
+      "coverage": "Zapier 用",
+      "ready": "Zapier に対応",
+      "partial": "{count, plural, other {権限が # 個不足}}",
+      "missing": "不足: {scopes}",
+      "hooksTitle": "有効な Zapier トリガー",
+      "hooksHelp": "オンになっていて待機中の Zap です。Zap をオフにすると、そのトリガーはここから消えます。",
+      "hooksCaption": "Zapier が登録したトリガー",
+      "hooksEmpty": "待機中の Zap はまだありません。Yayatoh のトリガーで始まる Zap をオンにしてください。",
+      "event": "イベントの種類",
+      "host": "送信先",
+      "otherKey": "削除されたキー",
+      "created": "オンにした日時"
+    },
+    "slack": {
+      "title": "Slack",
+      "description": "アラートと日次ダイジェストを送るチャンネルを選びます。メッセージにはイベントと件数が入り、メールアドレスや電話番号は入りません。",
+      "settingsTitle": "チャンネルとメッセージ",
+      "saved": "Slack の設定を保存しました。",
+      "invalid": "修正が必要な項目があります。",
+      "channel": "チャンネル",
+      "channelHint": "Yayatoh アプリが参加しているチャンネルだけを選べます。先に Slack でアプリをチャンネルに追加してください。",
+      "channelPlaceholder": "チャンネルを選択",
+      "private": "非公開",
+      "notInChannel": "アプリ未参加",
+      "alerts": "アラートを送信",
+      "alertsHint": "ダッシュボードのアラートを発生時に送ります。",
+      "severity": "送信するアラート",
+      "severities": {
+        "info": "すべてのアラート",
+        "warning": "警告と重大なアラート",
+        "critical": "重大なアラートのみ"
+      },
+      "digest": "日次ダイジェストを送信",
+      "digestHint": "前日の注文・チケット・チェックインと、当日のイベント。",
+      "digestTime": "ダイジェストの時刻",
+      "digestTimeHint": "組織のタイムゾーン（{zone}）。",
+      "finance": "ダイジェストに金額を含める",
+      "financeHint": "これをオンにできるのはあなただけです（Slack を接続し、財務情報を閲覧できるため）。チャンネルの全員に金額が表示されます。",
+      "noAmounts": "ダイジェストには件数が表示され、金額は表示されません。金額を追加できるのは、Slack を接続し財務の権限を持つ人だけです。",
+      "save": "Slack の設定を保存",
+      "fieldError": {
+        "invalid": "この値を確認してください。",
+        "channel": {
+          "required": "チャンネルを選んでください。",
+          "unknown": "そのチャンネルはワークスペースにもうありません。別のチャンネルを選んでください。",
+          "not_in_channel": "Yayatoh アプリはそのチャンネルに参加していません。Slack で追加してから選んでください。"
+        },
+        "digestTime": {
+          "required": "ダイジェストの時刻を選んでください。",
+          "invalid": "08:00 のように時刻を入力してください。"
+        },
+        "severity": {
+          "invalid": "送信するアラートを選んでください。"
+        },
+        "finance": {
+          "finance_owner_only": "金額を追加できるのは、Slack を接続し財務の権限を持つ人だけです。"
+        }
+      },
+      "error": {
+        "unavailable": "ここでは Slack を利用できません。",
+        "provider_unavailable": "Slack に接続できませんでした。数分後にもう一度お試しください。",
+        "validation_failed": "修正が必要な項目があります。",
+        "forbidden": "この操作を行う権限がありません。",
+        "module_not_enabled": "連携はプランに含まれていません。",
+        "not_found": "見つかりませんでした。",
+        "invalid_state": "現在この操作はできません。",
+        "no_channel": "先にチャンネルを選んで保存してください。",
+        "auth_revoked": "Slack がこの接続を受け付けなくなりました。Slack を再接続してください。",
+        "connection_inactive": "未送信: 接続が一時停止または解除されました。",
+        "send_failed": "メッセージを送信できませんでした。再試行されます。",
+        "not_in_channel": "Yayatoh アプリはそのチャンネルに参加していません。Slack で追加してからもう一度お試しください。",
+        "channel_not_found": "そのチャンネルはもう存在しません。別のチャンネルを選んでください。",
+        "pii_blocked": "未送信: 個人情報が含まれるため送信しませんでした。",
+        "render_failed": "メッセージを準備できませんでした。再試行されます。",
+        "nothing_to_send": "送信するものはもうありません。",
+        "impersonation_blocked": "メンバーとして操作中のスタッフはこれを変更できません。",
+        "read_only_freeze": "定期メンテナンス中は変更を停止しています。終了後にもう一度お試しください。",
+        "internal": "こちら側で問題が発生しました。",
+        "other": "未送信（{code}）。"
+      },
+      "testSent": "#{channel} にテストアラートを送信しました。",
+      "channelsFailed": "Slack のチャンネル一覧を読み込めませんでした。数分後にもう一度お試しください。",
+      "inactive": "設定は Slack が接続中で有効なときに利用できます。",
+      "previewTitle": "#{channel} へのテストアラート",
+      "previewHelp": "チャンネルにはこのように表示されます。",
+      "nextDigest": "次のダイジェスト: {when}",
+      "sendTest": "テストアラートを送信",
+      "messagesTitle": "最近の Slack メッセージ",
+      "messagesEmpty": "まだ何も送信していません。",
+      "messages": {
+        "when": "日時",
+        "kind": "メッセージ",
+        "status": "状態",
+        "detail": "詳細"
+      },
+      "kinds": {
+        "alert": "アラート",
+        "digest": "日次ダイジェスト",
+        "test": "テストアラート"
+      },
+      "statuses": {
+        "pending": "待機中",
+        "sending": "送信中",
+        "sent": "送信済み",
+        "failed": "失敗",
+        "cancelled": "未送信"
+      }
+    },
+    "import": {
+      "open": "インポートを開く",
+      "connectedDetail": "{name} を接続しました。インポートを開いて、移行される内容をプレビューしてください。",
+      "noRuns": "まだインポートはありません。インポートを開いてプレビューし、開始してください。",
+      "title": "Eventbrite からインポート",
+      "crumb": "インポート",
+      "description": "イベント、チケット種別、注文、参加者を移行します。インポートを開始するまで何も書き込まれず、再実行しても変更分だけを取り込みます。",
+      "connected": "Eventbrite を接続しました。移行内容を確認してからインポートしてください。",
+      "started": "インポートを開始しました。バックグラウンドで実行されます。しばらくしてから更新して結果を確認してください。",
+      "alreadyRunning": "インポートはすでに実行中です。",
+      "stepsLabel": "インポートの手順",
+      "steps": {
+        "connect": "接続",
+        "preview": "プレビュー",
+        "import": "インポート",
+        "result": "結果"
+      },
+      "notActive": "この接続は有効ではありません。インポートするには再接続してください。",
+      "backToConnection": "接続へ移動",
+      "preview": {
+        "title": "プレビュー",
+        "help": "現在の Eventbrite アカウントの内容と、そのうちここで新しいものの数です。まだ何も書き込まれていません。",
+        "readOnly": "プレビューとインポートの開始はオーナーと管理者のみ行えます。",
+        "caption": "インポートで移行される内容",
+        "what": "項目",
+        "inEventbrite": "Eventbrite 上",
+        "new": "ここで新規",
+        "noEmails": "インポートした注文は「インポート済み」として記録されます。請求は発生せず、領収書やチケットのメールも送信されません。"
+      },
+      "what": {
+        "events": "イベント",
+        "ticketTypes": "チケット種別",
+        "orders": "注文",
+        "attendees": "参加者",
+        "revenue": "売上",
+        "refunded": "返金済みの注文"
+      },
+      "refundedOrders": "{count, plural, =0 {なし} other {# 件（返金済みとしてインポート、売上なし）}}",
+      "noRevenue": "なし",
+      "importing": "インポート実行中…",
+      "importNew": "{count, plural, other {新しいレコード # 件をインポート}}",
+      "importAgain": "再インポートして変更を取り込む",
+      "result": {
+        "title": "結果",
+        "none": "まだ何もインポートされていません。",
+        "finished": "{when} に完了",
+        "inProgress": "実行中",
+        "refresh": "更新",
+        "counts": "インポートまたは更新 {pulled} 件 · 変更なし {skipped} 件 · エラー {failed} 件",
+        "seeErrors": "確認が必要なものを見る",
+        "caption": "Yayatoh にある Eventbrite からのデータ",
+        "inYayatoh": "Yayatoh 上",
+        "ordersValue": "{count}（支払い済み {paid}）",
+        "attendeesValue": "{count}（有効 {active}）",
+        "goToEvents": "イベントへ移動"
+      }
+    },
+    "sheets": {
+      "title": "連携中のイベント",
+      "help": "連携した各イベントの参加者リストは、それぞれの Google スプレッドシートと同期します。シートでの編集は次回の同期で Yayatoh に反映され、行を削除しても誰も削除されません。",
+      "linkTitle": "イベントを連携",
+      "event": "イベント",
+      "pickEvent": "イベントを選択",
+      "chooseEvent": "参加者をシートに入れるイベントを選んでください。",
+      "link": "シートを作成して連携",
+      "linking": "シートを作成中…",
+      "linkHelp": "項目のマッピングに沿った列で、新しいシートが Google ドライブに作成されます。",
+      "alreadyLinked": "そのイベントにはすでにシートがあります。",
+      "allLinked": "すべてのイベントにシートがあります。",
+      "noEvents": "まずイベントを作成してから、参加者リストを連携してください。",
+      "emptyTitle": "連携中のイベントはまだありません",
+      "emptyHelp": "上でイベントを選ぶとシートが作成されます。",
+      "emptyReadOnly": "オーナーまたは管理者がここでイベントの参加者リストを連携できます。",
+      "caption": "Google スプレッドシートと連携中のイベント",
+      "sheet": "シート",
+      "openNamed": "{title} を Google スプレッドシートで開く",
+      "linkedOn": "連携日",
+      "status": "ステータス",
+      "statuses": {
+        "active": "同期中",
+        "unlinked": "連携解除"
+      },
+      "actions": "操作",
+      "unlink": "連携を解除",
+      "unlinkNamed": "{event} の連携を解除",
+      "confirmUnlink": "{event} のシートの連携を解除しますか？",
+      "confirmUnlinkBody": "今後は何も同期されません。シートは内容ごと Google ドライブに残り、Yayatoh のリストにも全員が残ります。",
+      "keep": "連携を続ける"
+    },
+    "linked": {
+      "title": "リンク済みのレコード",
+      "description": "この連携がこれまでに同期を保っているもの（レコードの種類別）。",
+      "caption": "種類別のリンク済みレコード",
+      "object": "種類",
+      "count": "レコード",
+      "empty": "まだリンクはありません。同期するとレコードがリンクされます。"
+    },
+    "accounting": {
+      "mapTitle": "勘定科目表",
+      "mapHelp": "日次サマリー仕訳の各行を会計ソフトのどの勘定科目に計上するかを選びます。日付は終わった後に、組織のタイムゾーンで計上されます。",
+      "notMapped": "日次仕訳の計上を始めるには、勘定科目を対応付けてください。",
+      "version": "バージョン {version} ・ {day} から計上",
+      "chartUnavailable": "{name} から勘定科目表を読み込めませんでした。しばらくしてからもう一度お試しください。",
+      "chooseAccount": "勘定科目を選択",
+      "categories": {
+        "sales": {
+          "label": "チケット売上",
+          "hint": "その日のチケット総売上を貸方に計上します。"
+        },
+        "donations": {
+          "label": "寄付",
+          "hint": "その日のオンライン寄付を貸方に計上します。"
+        },
+        "refunds": {
+          "label": "払い戻し",
+          "hint": "購入者と寄付者に払い戻した額を借方に計上します。"
+        },
+        "fees": {
+          "label": "Yayatoh 手数料",
+          "hint": "その日のプラットフォーム手数料（返金分を差し引いた額）を借方に計上します。"
+        },
+        "payouts": {
+          "label": "入金",
+          "hint": "Yayatoh からの入金を受け取る銀行口座です。"
+        },
+        "clearing": {
+          "label": "仮勘定",
+          "hint": "Yayatoh または決済代行が預かっている資金です。各仕訳の貸借を合わせます。"
+        }
+      },
+      "startsOn": "計上開始日",
+      "startsOnHint": "最初に計上する日（最大 1 年前まで）。",
+      "save": "勘定科目の対応付けを保存",
+      "saved": "勘定科目の対応付けをバージョン {version} として保存しました。次回の同期から使われます。",
+      "invalid": "この対応付けはまだ保存できません。印の付いた項目を確認してください。",
+      "saveFailed": "対応付けを保存できませんでした。しばらくしてからもう一度お試しください。",
+      "issue": {
+        "missing": "{field}の勘定科目を選んでください。",
+        "unknown_account": "その勘定科目は会計ソフトにもうありません。{field}に別の科目を選んでください。",
+        "clearing_shared": "仮勘定は{field}にも使えません。",
+        "starts_in_future": "今日またはそれ以前の日を選んでください。",
+        "starts_too_early": "過去 1 年以内の日を選んでください。",
+        "missing_date": "最初に計上する日を入力してください。",
+        "other": "この項目を確認してください。"
+      },
+      "journalsTitle": "日次仕訳",
+      "journalsHelp": "日付と通貨ごとに 1 件の仕訳です。計上後に変わった日は、編集せずに取り消して計上し直します。",
+      "journalsCaption": "会計ソフトに送った日次サマリー仕訳",
+      "waiting": "{count, plural, other {# 件の仕訳が送信待ちです。}}",
+      "emptyTitle": "仕訳はまだありません",
+      "emptyMapped": "日付は終わった後、次回の同期で計上されます。",
+      "emptyUnmapped": "勘定科目を対応付けてから同期すると、計上開始日からの日付が計上されます。",
+      "emptyMapAction": "勘定科目を対応付ける",
+      "emptyPostAction": "計上する日を確認",
+      "emptyBackAction": "連携に戻る",
+      "columns": {
+        "day": "日付",
+        "currency": "通貨",
+        "kind": "エントリー",
+        "amount": "金額",
+        "status": "状態",
+        "reference": "会計ソフトでの参照番号"
+      },
+      "kinds": {
+        "journal": "仕訳 ・ 改訂 {revision}",
+        "reversal": "改訂 {revision} の取消"
+      },
+      "status": {
+        "pending": "送信待ち",
+        "posted": "計上済み",
+        "failed": "未計上",
+        "superseded": "置き換え済み"
+      }
+    },
+    "marketing": {
+      "consentRule": "同意が最優先です。マーケティングメールに同意した連絡先だけが送られ、配信停止やバウンスが常に優先されます。ここで配信停止した人は、次の同期で先方でも配信停止になります。",
+      "audience": {
+        "title": "オーディエンス",
+        "help": "{name} に送る人と、追加するリストを選びます。",
+        "saved": "オーディエンスを保存しました。次の同期で送られます。",
+        "segmentMissing": "保存したオーディエンスが削除されたため、新しい人は送られません。別のオーディエンスを選んでください。",
+        "segment": "送る人",
+        "list": "{name} のリスト",
+        "everyone": "マーケティングメールに同意したすべての人",
+        "savedSegment": "保存したオーディエンス",
+        "emptyTitle": "オーディエンスがまだ選ばれていません",
+        "emptyManage": "送る人と、追加する {name} のリストを選んでください。保存するまで何も送られません。",
+        "emptyRead": "オーナーまたは管理者が送る人を選びます。それまで何も送られません。",
+        "formLabel": "オーディエンスとリストを選ぶ",
+        "save": "オーディエンスを保存",
+        "feedback": {
+          "list_required": "リストを選んでください。",
+          "provider_unavailable": "プロバイダーからリストを読み込めませんでした。数分後にもう一度お試しください。",
+          "validation_failed": "そのオーディエンスはもうありません。別のものを選んでください。",
+          "forbidden": "このページにアクセスする権限がありません。",
+          "invalid_state": "この接続は今は設定できません。",
+          "not_found": "見つかりませんでした。",
+          "read_only_freeze": "定期メンテナンス中は変更を停止しています。終了後にもう一度お試しください。",
+          "internal": "こちら側で問題が発生しました。"
+        },
+        "chooseNow": "オーディエンスを選ぶ",
+        "allIntegrations": "すべての連携"
+      },
+      "hubspot": {
+        "title": "HubSpot と同期する内容",
+        "contacts": "連絡先は下のフィールド対応で双方向に同期します。HubSpot から来た連絡先に同意が付くことはなく、HubSpot での配信停止はここでも配信停止になります。",
+        "events": "公開したイベントはすべて HubSpot のマーケティングイベントになり、中止も送られます。",
+        "attendance": "マーケティングメールに同意した連絡先について、申込、チェックイン、キャンセルが送られます。"
+      },
+      "changes": {
+        "title": "{name} からの同意の変更",
+        "help": "{name} から戻ってきた配信停止、不達アドレス、苦情と、それによってここで変わったこと。",
+        "caption": "{name} からの同意の変更",
+        "empty": "{name} からはまだ何も戻ってきていません。",
+        "who": "連絡先",
+        "change": "プロバイダー側",
+        "applied": "ここでの変更",
+        "when": "日時",
+        "withdrawn": "同意を撤回",
+        "suppressed": "配信停止",
+        "already": "変更なし",
+        "kinds": {
+          "unsubscribed": "配信停止",
+          "cleaned": "アドレス不達",
+          "complained": "迷惑メール報告"
+        }
+      }
+    }
+  },
+  "kioskPrint": {
+    "useEmail": "チケットをお持ちでない場合はメールで",
+    "loading": "バッジを探しています…",
+    "emailTitle": "メールで確認",
+    "emailHint": "チケットに登録されたアドレスに6桁のコードをお送りします。",
+    "emailLabel": "メールアドレス",
+    "sendCode": "コードをメールで受け取る",
+    "cancel": "キャンセル",
+    "emailInvalid": "name@example.com のようにメールアドレスを入力してください。",
+    "emailOffline": "メールのコードには接続が必要です。チケットをスキャンするか、受付へお越しください。",
+    "emailLimited": "コードの請求が多すぎます。受付へお越しください。",
+    "emailFailed": "いまコードを送れませんでした。もう一度試すか、受付へお越しください。",
+    "codeTitle": "コードを入力",
+    "codeSent": "{email} にこのイベントのチケットがあれば、6桁のコードを送信しました。有効期間は10分です。",
+    "codeLabel": "6桁のコード",
+    "confirmCode": "コードを確認",
+    "newCode": "新しいコードを送る",
+    "codeInvalid": "メールに記載の6桁を入力してください。",
+    "codeWrong": "コードが正しくありません。{left, plural, other {残り#回です。}}",
+    "codeExpired": "このコードは期限切れです。新しいコードを送ってください。",
+    "detailsTitle": "内容をご確認ください",
+    "detailsHint": "バッジにはこのように表示されます。",
+    "name": "氏名",
+    "company": "会社名",
+    "jobTitle": "役職",
+    "ticket": "チケット",
+    "print": "バッジを印刷",
+    "printing": "印刷中…",
+    "wrongDetails": "内容が違います",
+    "notMe": "本人ではありません",
+    "printingTitle": "バッジを印刷しています",
+    "printingHint": "プリンターからお受け取りください。イベントをお楽しみください！",
+    "queuedTitle": "バッジは印刷待ちです",
+    "queuedHint": "キオスクがオフラインです。接続が戻りしだい印刷されます。お急ぎの場合は受付へお越しください。",
+    "done": "完了",
+    "deskTitle": "受付へお越しください",
+    "desk": {
+      "desk": "受付でバッジを印刷します。",
+      "printed": "バッジはすでに印刷済みです。新しいものが必要な場合は、受付で再印刷できます。",
+      "notFound": "このチケットのバッジが見つかりませんでした。",
+      "wrongDetails": "ご安心ください。受付で内容を修正してバッジを印刷します。",
+      "printFailed": "プリンターがバッジを受け付けませんでした。受付で印刷します。",
+      "locked": "誤ったコードが多すぎます。受付がお手伝いします。",
+      "offline": "キオスクは現在オフラインです。受付でバッジを印刷します。"
+    },
+    "readyTitle": "バッジを印刷できます",
+    "readyHint": "開いて［印刷］を選び、プリンターからお受け取りください。",
+    "openBadge": "バッジを開いて印刷"
+  },
+  "virtual": {
+    "setup": {
+      "title": "配信設定",
+      "description": "{event} のセッションをオンライン配信します。開催形式、視聴できる人を選び、セッションごとにライブ配信を設定します。",
+      "providerOff": "ここではまだ配信を利用できません",
+      "providerOffHint": "動画プロバイダーのアカウントの準備ができ次第、Yayatoh が配信を有効にします。設定はそのまま保存されます。",
+      "fakeProvider": "テスト配信：ここでは代替の動画プロバイダーを使うため、何も配信されません。",
+      "readOnly": "配信設定を表示できます。変更できるのは編集者のみです。",
+      "totalViewers": "視聴者",
+      "totalMinutes": "視聴時間（分）",
+      "deliveryTitle": "開催形式",
+      "deliveryLegend": "このイベントの開催形式は？",
+      "saveDelivery": "開催形式を保存",
+      "deliverySaved": "開催形式を保存しました。",
+      "accessTitle": "視聴できる人",
+      "accessHint": "チケットの種類ごとに含める内容を選びます。配信は従量課金のため、オンライン視聴を含むチケットだけが視聴できます。",
+      "inPersonNote": "このイベントは会場開催のため、セッションは配信されません。配信を設定するには「オンライン」または「ハイブリッド」を選んでください。",
+      "noTicketTypes": "チケットの種類はまだありません",
+      "noTicketTypesHint": "チケットの種類または登録パスを追加してから、オンライン視聴できるものを選んでください。",
+      "defaultNote": "未選択：イベントの既定値が適用されます。",
+      "saveAccess": "保存",
+      "saveAccessLabel": "{name} の視聴設定を保存",
+      "accessSaved": "{name} の視聴設定を保存しました。",
+      "sessionsTitle": "セッションの配信",
+      "noSessions": "セッションはまだありません",
+      "noSessionsHint": "プログラムにセッションを追加してから、それぞれの配信を設定してください。",
+      "addSessions": "セッションへ",
+      "session": "セッション",
+      "stream": "配信",
+      "streamNone": "配信なし",
+      "streamOn": "オン",
+      "streamOff": "オフ",
+      "viewers": "視聴者",
+      "minutes": "視聴時間（分）",
+      "checkedIn": "オンラインチェックイン",
+      "actions": "操作",
+      "createStream": "配信を設定",
+      "createStreamLabel": "{title} の配信を設定",
+      "showKey": "ストリームキーを表示",
+      "showKeyLabel": "{title} のストリームキーを表示",
+      "turnOff": "オフにする",
+      "turnOn": "オンにする",
+      "turnOffLabel": "{title} の配信をオフにする",
+      "turnOnLabel": "{title} の配信をオンにする",
+      "ingestUrl": "サーバー",
+      "streamKey": "ストリームキー",
+      "keyWarning": "このキーを持つ人は誰でもあなたのイベントとして配信できます。公開しないでください。",
+      "streamCreated": "{title} の配信の準備ができました。",
+      "streamOnSaved": "{title} の配信はオンです。",
+      "streamOffSaved": "{title} の配信はオフです。",
+      "delivery": {
+        "in_person": "会場開催",
+        "online": "オンライン",
+        "hybrid": "ハイブリッド"
+      },
+      "deliveryHint": {
+        "in_person": "全員が会場で参加します。配信はありません。",
+        "online": "全員がオンラインで視聴します。変更しない限り、チケットにはオンライン視聴が含まれます。",
+        "hybrid": "会場参加とオンライン参加が混在します。下で視聴できるチケットを選んでください。"
+      },
+      "access": {
+        "in_person": "会場のみ",
+        "virtual": "オンラインのみ",
+        "both": "会場とオンライン"
+      },
+      "addTicketTypes": "チケットへ"
+    },
+    "errors": {
+      "in_person_event": "このイベントは会場開催です。先に「オンライン」または「ハイブリッド」を選んでください。",
+      "video_off": "ここではまだ配信を利用できません。",
+      "in_person_only": "このチケットは会場参加専用です。",
+      "stream_off": "この配信はオフになっています。",
+      "provider_changed": "動画プロバイダーが変わりました。この配信をもう一度設定してください。",
+      "views_per_hour": "試行回数が多すぎます。数分待ってからもう一度お試しください。",
+      "invalid_token": "この視聴リンクは期限切れです。もう一度視聴を始めてください。",
+      "ticket_void": "このチケットはもう有効ではありません。"
+    },
+    "watch": {
+      "metaTitle": "オンラインで視聴",
+      "title": "オンラインで視聴",
+      "greeting": "{name} さん、こんにちは。視聴するセッションを選んでください。",
+      "inPersonOnly": "お持ちのチケットは会場参加用です",
+      "inPersonOnlyHint": "このチケットにはオンライン視聴が含まれていません。オンライン視聴が必要な場合は主催者にお問い合わせください。",
+      "noSessionsTitle": "まだ配信はありません",
+      "noSessionsHint": "主催者が配信をオンにすると、ここにセッションが表示されます。開始時刻が近づいたらもう一度ご確認ください。",
+      "watched": "{count, plural, =0 {まだ視聴していません} other {# 分視聴しました}}",
+      "watchSession": "視聴する",
+      "watchLabel": "{title} を視聴する",
+      "orderLink": "オンラインで視聴",
+      "orderLinkLabel": "チケット {serial} でオンライン視聴"
+    },
+    "player": {
+      "countNote": "配信の再生中、視聴時間は 1 分ごとに 1 回カウントされます。",
+      "back": "すべてのセッション",
+      "heading": "プレーヤー",
+      "testPattern": "テスト配信：この環境では動画は配信されません。",
+      "ready": "「視聴を開始」を押して始めてください。",
+      "pause": "一時停止",
+      "resume": "再開",
+      "play": "視聴を開始",
+      "playing": "再生中",
+      "paused": "一時停止中",
+      "starting": "開始しています…",
+      "watched": "{count, plural, =0 {まだ視聴していません} other {# 分視聴しました}}",
+      "errors": {
+        "in_person_only": "お持ちのチケットは会場参加専用です。",
+        "stream_off": "主催者がこの配信をオフにしました。",
+        "views_per_hour": "試行回数が多すぎます。数分待ってからもう一度お試しください。",
+        "invalid_token": "この視聴は期限切れです。もう一度「視聴を開始」を押してください。",
+        "ticket_void": "このチケットはもう有効ではありません。",
+        "video_off": "現在、配信を利用できません。",
+        "not_found": "このセッションは現在配信されていません。",
+        "generic": "問題が発生しました。もう一度お試しください。"
+      }
+    }
   },
   "guestSeats": {
     "placeAt": {
@@ -14834,6 +15985,25 @@
       "reason_required": "このバッジを再印刷する理由を選択してください。",
       "note_required": "「その他」の場合は、理由を簡単に入力してください。",
       "note": "メモは 200 文字未満で入力してください。"
+    },
+    "balanceDue": "この登録には未払い残高があります。バッジページから理由を入力して印刷してください。",
+    "sourceKiosk": "キオスク",
+    "kiosk": {
+      "heading": "キオスクでのセルフ印刷",
+      "hint": "参加者はチェックインキオスクでチケットをスキャン（またはメールで届いたコードを確認）し、内容を確かめて自分でバッジを1回印刷します。再印刷、未払い残高、手続き待ちの登録は受付で対応します。",
+      "on": "オン",
+      "off": "オフ",
+      "printsTo": "{printer} で印刷",
+      "emailOn": "メールコード: オン",
+      "emailOff": "メールコード: オフ",
+      "options": "セルフ印刷",
+      "enabled": "参加者がキオスクで自分のバッジを印刷できるようにする",
+      "emailCodes": "「メールで確認」を表示する（チケット名義人に送る使い捨てコード）",
+      "printer": "キオスクの印刷先",
+      "printerHint": "キオスク自身の印刷ダイアログは、キオスクに接続したプリンターで使えます。",
+      "ownDialog": "キオスク自身の印刷ダイアログ",
+      "save": "キオスク設定を保存",
+      "saved": "キオスク設定を保存しました。"
     }
   },
   "sessionCheckin": {
@@ -15830,7 +17000,15 @@
   "emptyActions": {
     "seeEvents": "イベントを見る",
     "eventHome": "イベントのホームへ",
-    "clearSearch": "検索をクリア"
+    "clearSearch": "検索をクリア",
+    "addRule": "ルールを追加",
+    "scheduleReport": "レポートを予約",
+    "linkSheet": "イベントを連携",
+    "connectPayouts": "入金を接続",
+    "runAgain": "もう一度実行",
+    "agencyAddress": "代理店のアドレスを見る",
+    "clients": "クライアントを見る",
+    "plan": "プランと請求を開く"
   },
   "coupons": {
     "title": "クーポン",
@@ -15981,6 +17159,861 @@
       "step1": "有料チケットには、ご利用プランの手数料がかかります。無料チケットには手数料はかかりません。",
       "step2": "手数料は注文ごとに差し引かれ、各支払いに表示されます。",
       "step3": "返金により手数料が返還された場合は、「返還された手数料」に表示されます。"
+    }
+  },
+  "ssoFakeIdp": {
+    "eyebrow": "テスト用 ID プロバイダー",
+    "title": "模擬 ID プロバイダー",
+    "descriptionSaml": "開発専用：このページは組織の SAML ID プロバイダーと同じように応答します。",
+    "descriptionOidc": "開発専用：このページは組織の OpenID Connect プロバイダーと同じように応答します。",
+    "email": "プロバイダーが保証するメールアドレス",
+    "name": "名前（任意）",
+    "signIn": "サインイン",
+    "cancel": "キャンセル",
+    "returning": "Yayatoh に戻っています…",
+    "continue": "続行",
+    "unknown": "このサインインリクエストは無効になりました。",
+    "invalidEmail": "有効なメールアドレスを入力してください。"
+  },
+  "sso": {
+    "title": "シングルサインオン",
+    "subtitle": "チームが ID プロバイダーでサインインできるようにし、メールドメインを検証し、SCIM でユーザーをプロビジョニングします。",
+    "help": "ガイドを読む",
+    "noAccessTitle": "シングルサインオンを管理できるのはオーナーと管理者のみです",
+    "noAccessDescription": "シングルサインオンの設定や変更は、この組織のオーナーまたは管理者に依頼してください。",
+    "noModuleTitle": "シングルサインオンはご利用のプランに含まれていません",
+    "noModuleDescription": "シングルサインオンと SCIM は Enterprise 機能に含まれています。",
+    "seePlan": "プランを確認",
+    "unavailableTitle": "シングルサインオンはまだ利用できません",
+    "unavailableDescription": "このデプロイメントでは、まだシングルサインオンを設定できません。",
+    "testPassed": "テストサインインに成功しました。",
+    "testPassedNext": "シングルサインオンをオンにできます。",
+    "testPassedDomainUnverified": "サインインに使用したアドレスは、まだ検証済みのドメインにありません。ユーザーがサインインする前にドメインを検証してください。",
+    "testFailed": "テストサインインに失敗しました。",
+    "idpTitle": "ID プロバイダー",
+    "status": {
+      "active": "オン",
+      "draft": "未オン",
+      "disabled": "オフ"
+    },
+    "protocol": "プロトコル",
+    "protocolSaml": "SAML 2.0",
+    "protocolSamlHint": "Okta、Microsoft Entra ID、Google Workspace、OneLogin、JumpCloud…",
+    "protocolOidc": "OpenID Connect",
+    "protocolOidcHint": "OpenID Connect によるサインインに対応した任意のプロバイダー。",
+    "name": "名前",
+    "nameHint": "チームに表示されます。例：「Northwind Okta」",
+    "samlSource": "プロバイダーの詳細をどのように入力しますか？",
+    "sourceXml": "メタデータ XML を貼り付ける",
+    "sourceUrl": "メタデータ URL",
+    "sourceManual": "詳細を手動で入力する",
+    "metadataXml": "メタデータ XML",
+    "metadataXmlHint": "ID プロバイダーのアプリ設定からダウンロードして、ここに貼り付けてください。",
+    "metadataUrl": "メタデータ URL",
+    "metadataUrlHint": "ID プロバイダーがメタデータを公開している https アドレス。",
+    "entityId": "ID プロバイダーのエンティティ ID",
+    "ssoUrl": "サインイン URL",
+    "certificate": "署名証明書",
+    "certificateHint": "ID プロバイダーが署名に使用する X.509 証明書（PEM）。",
+    "certificateSummary": "{subject}、有効期限 {expires}",
+    "issuer": "発行者 URL",
+    "issuerHint": "例：https://login.example.com",
+    "clientId": "クライアント ID",
+    "clientSecret": "クライアントシークレット",
+    "clientSecretKeep": "保存済みのシークレットを維持するには空欄のままにしてください。",
+    "defaultRole": "新しいユーザーのロール",
+    "defaultRoleHint": "初めてサインインしたユーザーは、SCIM グループで別のロールが割り当てられない限り、このロールで参加します。",
+    "jit": "初回サインイン時にユーザーを追加",
+    "jitHint": "オフ：既存のメンバーと、プロバイダーが SCIM でプロビジョニングしたユーザーのみサインインできます。",
+    "jitShort": "初回サインイン時に追加",
+    "on": "オン",
+    "off": "オフ",
+    "lastTest": "前回のテスト",
+    "lastTestPassed": "{date} に成功",
+    "lastTestFailed": "{date} に失敗",
+    "neverTested": "未テスト",
+    "settingsChangedSinceTest": "（その後設定が変更されました：再テストしてください）",
+    "testSignIn": "テストサインイン",
+    "activate": "オンにする",
+    "activated": "シングルサインオンがオンになりました。",
+    "disable": "オフにする",
+    "disabled": "シングルサインオンがオフになりました。",
+    "deleteConnection": "接続を削除",
+    "editTitle": "設定を変更",
+    "createTitle": "ID プロバイダーを接続",
+    "saved": "設定を保存しました。シングルサインオンをオンにする前に、テストサインインを実行してください。",
+    "fieldInvalid": "この値を確認してください。",
+    "fieldRequired": "必須項目です。",
+    "saveChanges": "変更を保存",
+    "saveConnection": "接続を保存",
+    "emptyTitle": "ID プロバイダーがまだありません",
+    "emptyDescription": "ID プロバイダーを接続し、サインインをテストし、ドメインを検証してから、シングルサインオンをオンにしてください。",
+    "emptyAction": "ID プロバイダーを接続",
+    "spTitle": "ID プロバイダー用の詳細",
+    "spDescription": "ID プロバイダーで作成するアプリにこれらをコピーしてください。",
+    "spEntityId": "エンティティ ID（オーディエンス）",
+    "spAcs": "アサーションコンシューマーサービス（ACS）URL",
+    "spRedirect": "リダイレクト URI（OpenID Connect）",
+    "domainsTitle": "検証済みドメイン",
+    "domainsDescription": "シングルサインオンと SCIM は、検証済みドメインのアドレスのみを受け付けます。DNS TXT レコードを公開してドメインを検証してください。",
+    "domain": "ドメイン",
+    "domainHint": "チームのメールドメイン。例：acme.com",
+    "domainInvalid": "acme.com のようなドメインを入力してください。",
+    "domainAdded": "ドメインを追加しました。TXT レコードを公開してから確認してください。",
+    "addDomain": "ドメインを追加",
+    "noDomainsTitle": "ドメインがまだありません",
+    "noDomainsDescription": "検証するチームのメールドメインを追加してください。",
+    "domainStatus": {
+      "verified": "検証済み",
+      "pending": "DNS を待機中",
+      "failed": "未検証"
+    },
+    "enforced": "シングルサインオン必須",
+    "recordInstructions": "この TXT レコードをドメインの DNS に公開してから確認してください。DNS の変更には時間がかかる場合があります。",
+    "recordName": "レコード名",
+    "recordValue": "レコード値",
+    "verifiedOn": "{date} に検証済み",
+    "checkDomain": "{domain} を確認",
+    "removeDomain": "{domain} を削除",
+    "enforce": "{domain} にシングルサインオンを必須にする",
+    "activateNeedsDomain": "シングルサインオンをオンにするには、ドメインを検証してください。",
+    "scimTitle": "SCIM プロビジョニング",
+    "scimDescription": "ID プロバイダーがユーザーを自動的に追加、更新、削除できます。プロバイダー側でユーザーを削除すると、ここでのアクセス権も即座に失われます。",
+    "scimBaseUrl": "SCIM ベース URL",
+    "tokenStatus": "トークン {prefix}…：作成 {created}、最終使用 {used}。",
+    "neverUsed": "未使用",
+    "noToken": "SCIM トークンがまだありません。",
+    "createToken": "SCIM トークンを作成",
+    "rotateToken": "トークンを置き換え",
+    "revokeToken": "トークンを取り消し",
+    "tokenShownOnce": "このトークンを今すぐコピーしてください。再表示はされません。ID プロバイダーの SCIM 設定に貼り付けてください。",
+    "tokenLabel": "SCIM トークン",
+    "tokenRevoked": "トークンを取り消しました。プロビジョニングは停止しました。",
+    "scimUsers": "{active, plural, other {# 人をプロビジョニング済み}}、{deprovisioned, plural, other {# 人をプロビジョニング解除済み}}。",
+    "groupsTitle": "グループとロール",
+    "noGroupsTitle": "グループがまだありません",
+    "noGroupsDescription": "ID プロバイダーが SCIM でグループを送信すると、ここに表示されます。その後、各グループのロールを選択してください。",
+    "noGroupsAction": "SCIM ベース URL をコピー",
+    "groupName": "グループ",
+    "groupMembers": "メンバー",
+    "groupRole": "ロール",
+    "groupRoleLabel": "{group} のロール",
+    "groupRoleSaved": "ロールを保存しました。",
+    "noRole": "ロールなし（メンバーを変更しない）",
+    "copy": "コピー",
+    "copied": "コピーしました",
+    "reasons": {
+      "too_large": "メタデータが大きすぎます。",
+      "invalid_metadata": "これは SAML ID プロバイダーのメタデータではありません。",
+      "no_sso_url": "メタデータにサインイン URL がありません。",
+      "no_certificate": "メタデータに署名証明書がありません。",
+      "metadata_unreachable": "この URL からメタデータをダウンロードできませんでした。",
+      "certificate_invalid": "有効な証明書ではありません。",
+      "certificate_expired": "署名証明書の有効期限が切れています。",
+      "certificate_not_yet_valid": "署名証明書はまだ有効になっていません。",
+      "discovery_failed": "この発行者からプロバイダーの OpenID 構成を読み取れませんでした。",
+      "secret_missing": "クライアントシークレットを入力してください。",
+      "malformed": "プロバイダーの応答を読み取れませんでした。",
+      "invalid_signature": "プロバイダーの応答は、設定されたプロバイダーによって署名されていませんでした。",
+      "wrong_issuer": "応答が、設定されているものとは異なる発行者から送信されました。",
+      "wrong_audience": "応答は別のアプリケーション向けのものでした。エンティティ ID またはクライアント ID を確認してください。",
+      "wrong_request": "応答はこのテストに対応していませんでした。",
+      "expired": "応答の有効期限が切れていました。",
+      "no_email": "プロバイダーからメールアドレスが送信されませんでした。",
+      "idp_error": "プロバイダーから応答がありませんでした。",
+      "cancelled": "テストサインインがキャンセルされました。",
+      "test_required": "まず現在の設定でテストサインインを成功させてください。",
+      "domain_required": "まずドメインを検証してください。",
+      "protocol_change": "プロトコルを切り替えるには接続を削除してください。",
+      "domain_not_verified": "まずドメインを検証してください。",
+      "connection_inactive": "まずシングルサインオンをオンにしてください。",
+      "domain_limit": "ドメイン数の上限に達しました。",
+      "already_added": "このドメインはすでに登録されています。",
+      "record_not_found": "TXT レコードがまだ見つかりません。公開されていることを確認してから、もう一度お試しください。",
+      "lookup_failed": "DNS の参照に失敗しました。数分後にもう一度お試しください。",
+      "claimed_elsewhere": "このドメインは別の組織によってすでに検証されています。",
+      "sso_unavailable": "このデプロイメントではシングルサインオンを利用できません。",
+      "last_owner": "組織には少なくとも 1 人のオーナーが必要です。"
+    }
+  },
+  "leads": {
+    "portal": {
+      "heading": "リード獲得",
+      "window": "獲得は{opens}に開始し、{closes}に終了します（イベントの現地時刻）。メモとエクスポートは{until}まで利用できます。",
+      "termsNeededAdmin": "チームがリードを獲得できるよう、下のリード規約に同意してください。",
+      "termsNeededStaff": "リードを獲得するには、出展者の管理者がリード規約に同意する必要があります。",
+      "why": {
+        "unlicensed": "まだリードライセンスがありません。出展者の管理者に依頼してください。",
+        "over_allowance": "あなたのライセンスは出展者の割り当て数を超えています。管理者に回収または追加購入を依頼してください。"
+      },
+      "open": "リード獲得を開く"
+    },
+    "license": {
+      "licensed": "ライセンスあり",
+      "unlicensed": "ライセンスなし",
+      "over_allowance": "割り当て超過"
+    },
+    "capture": {
+      "not_open": "獲得はまだ開始前",
+      "open": "獲得受付中",
+      "closed": "獲得終了"
+    },
+    "terms": {
+      "heading": "リード規約",
+      "v1": "参加者のバッジをスキャンすると、受け取れるのは氏名・役職・会社名のみで、メールアドレスは本人が共有に同意した場合に限られます。これらのデータの責任は貴社が負います。本イベントでの会話のフォローアップにのみ使用し、安全に保管し、求められた場合は削除してください。参加者はスキャンされたことを確認でき、メールアドレスの共有を停止できます。",
+      "accepted": "リード規約に同意済み",
+      "acceptLabel": "同意",
+      "accept": "{exhibitor}を代表してリード規約に同意します",
+      "submit": "リード規約に同意する",
+      "acceptRequired": "リード規約に同意するにはチェックを入れてください。"
+    },
+    "settings": {
+      "heading": "評価項目と公開範囲",
+      "qualifiers": "評価項目",
+      "qualifiersHint": "1行に1つ、最大10個（例: 予算承認済み）。チームが各リードでチェックします。",
+      "visibility": "リードを閲覧できる人",
+      "teamVisibility": "スタッフはチーム全体のリードを閲覧できる（オフの場合は自分がスキャンしたリードのみ）",
+      "save": "リード設定を保存",
+      "saved": "リード設定を保存しました。",
+      "qualifiersInvalid": "各評価項目は60文字以内にしてください。",
+      "tooMany": "評価項目は最大10個までです。"
+    },
+    "export": {
+      "heading": "リードのエクスポート",
+      "ready": "確認できました。リードをダウンロードできます。",
+      "count": "{count, plural, =0 {リードはまだありません} other {#件のリード}}",
+      "hint": "安全のため、ダウンロード前にご本人確認用のコードをメールでお送りします。",
+      "download": "リードをダウンロード（CSV）",
+      "ended": "このイベントのリードへのアクセスは終了しました。",
+      "columns": {
+        "name": "氏名",
+        "jobTitle": "役職",
+        "company": "会社名",
+        "email": "メールアドレス",
+        "rating": "評価",
+        "qualifiers": "評価項目",
+        "notes": "メモ",
+        "capturedAt": "スキャン日時",
+        "scannedBy": "スキャンした人",
+        "scans": "スキャン回数",
+        "sharedFields": "共有された項目",
+        "emailConsentVersion": "メール同意のバージョン"
+      }
+    },
+    "confirm": {
+      "title": "ご本人確認",
+      "intro": "リードをダウンロードするには、{email}にお送りするコードで確認してください。"
+    },
+    "attendee": {
+      "heading": "自分のバッジをスキャンした出展者",
+      "emptyTitle": "まだ誰もバッジをスキャンしていません",
+      "emptyDescription": "出展者がバッジをスキャンすると、ここに表示されます。",
+      "scannedAt": "{time}にスキャン",
+      "emailShared": "メールアドレス共有済み",
+      "emailWithdrawn": "メールアドレスの共有を停止",
+      "emailNotShared": "メールアドレスは共有されていません",
+      "withdraw": "{exhibitor}とのメールアドレス共有を停止",
+      "withdrawn": "完了しました。相手はあなたのメールアドレスを見られなくなりました。",
+      "sharingOn": "バッジをスキャンした出展者はあなたのメールアドレスを受け取ります。",
+      "sharingOff": "バッジをスキャンした出展者はあなたのメールアドレスを受け取りません。",
+      "sharingHint": "氏名・役職・会社名は常に共有されます。電話番号や住所は共有されません。",
+      "turnOff": "出展者とのメールアドレス共有を停止",
+      "turnOn": "バッジをスキャンした出展者とメールアドレスを共有する",
+      "saved": "保存しました。"
+    },
+    "app": {
+      "pageTitle": "リード獲得",
+      "loading": "読み込み中…",
+      "signedOutTitle": "リードを獲得するにはサインインしてください",
+      "signedOutDescription": "このデバイスで出展者招待メールのサインインリンクを開き、リード獲得に戻ってください。",
+      "openPortal": "出展者ポータルへ",
+      "title": "{exhibitor}のリード",
+      "online": "オンライン",
+      "offline": "オフライン: スキャンはこのデバイスに保存されます",
+      "queued": "{count, plural, =0 {すべて同期済み} other {#件のスキャンが同期待ち}}",
+      "modes": "リード獲得の表示",
+      "viewScan": "スキャン",
+      "viewLeads": "{count, plural, =0 {リード} other {リード（#）}}",
+      "blockedTitle": "現在リードを獲得できません",
+      "blocked": {
+        "unlicensed": "リードライセンスがありません。出展者の管理者に依頼してください。",
+        "over_allowance": "あなたのライセンスは出展者の割り当て数を超えています。管理者に確認してください。",
+        "termsAdmin": "まず出展者ポータルでリード規約に同意してください。",
+        "termsStaff": "まず出展者の管理者がリード規約に同意する必要があります。",
+        "notOpen": "獲得は{time}に開始します。",
+        "closed": "獲得は{time}に終了しました。リードの閲覧と編集は引き続き可能です。"
+      },
+      "codeLabel": "バッジのコード",
+      "codeHint": "バッジのQRコードをスキャンするか、その下に印刷されたコードを入力してください。",
+      "save": "リードを保存",
+      "camera": "カメラでスキャン",
+      "stopCamera": "カメラを停止",
+      "cameraFailed": "カメラを起動できませんでした。バッジのコードを入力してください。",
+      "refusals": {
+        "no_license": "リードライセンスがありません。出展者の管理者に依頼してください。",
+        "over_allowance": "あなたのライセンスは出展者の割り当て数を超えています。スキャンはこのデバイスで待機しています。",
+        "terms_not_accepted": "リード規約にまだ同意されていません。スキャンはこのデバイスで待機しています。",
+        "access_ended": "このイベントのリードへのアクセスは終了しました。",
+        "other": "問題が発生しました。スキャンはこのデバイスで待機しています。もう一度お試しください。"
+      },
+      "result": {
+        "queued": "このデバイスに保存しました",
+        "queuedHint": "同期後に詳細が表示されます。",
+        "refused": "保存されませんでした",
+        "captured": "リードを保存しました",
+        "rescanned": "既存のリード: スキャンを追加しました"
+      },
+      "reasons": {
+        "invalid": "このバッジを読み取れません。コードを確認してもう一度お試しください。",
+        "wrong_event": "このバッジは別のイベントのものです。",
+        "not_open": "獲得の開始前にスキャンされました。",
+        "closed": "獲得の終了後にスキャンされました。"
+      },
+      "emailWithdrawn": "参加者が{time}にメールアドレスの共有を停止しました",
+      "emailNotShared": "メールアドレスは共有されていません",
+      "capturedAt": "{time}にスキャン{count, plural, =1 {} other { · #回}}",
+      "scannedBy": "{email}",
+      "editLabel": "リードの詳細",
+      "rating": "評価",
+      "ratings": {
+        "hot": "ホット",
+        "warm": "ウォーム",
+        "cold": "コールド",
+        "none": "評価なし"
+      },
+      "qualifiers": "評価項目",
+      "notes": "メモ",
+      "saveDetails": "詳細を保存",
+      "saved": "保存しました。",
+      "savedQueued": "スキャンと一緒に保存しました。オンラインになると同期されます。",
+      "needsConnection": "このリードの変更を保存するにはインターネットに接続してください。",
+      "saveFailed": "保存できませんでした。もう一度お試しください。",
+      "accessEnded": "このイベントのリードへのアクセスは終了しました。",
+      "scope": {
+        "all": "{exhibitor}のすべてのリード",
+        "team": "チームのリード",
+        "own": "自分のリード"
+      },
+      "emptyTitle": "リードはまだありません",
+      "emptyDescription": "「スキャン」タブでバッジをスキャンして、最初のリードを保存しましょう。",
+      "search": "リードを検索",
+      "noMatch": "検索に一致するリードはありません。",
+      "edit": "{name}を編集"
+    }
+  },
+  "conferenceHub": {
+    "metaTitle": "カンファレンスハブ",
+    "eyebrow": "あなたのカンファレンスハブ",
+    "for": "{name} さん",
+    "whose": "誰のハブか",
+    "orderLink": "カンファレンスハブを開く",
+    "orderLinkHint": "プログラム、マイスケジュール、バッジ、カレンダーをスマートフォンで。",
+    "noRegistrantTitle": "この注文には登録がありません",
+    "noRegistrantDescription": "カンファレンスハブは登録に紐づいています。登録に使った注文を開いてください。",
+    "backToOrder": "注文に戻る",
+    "offline": "オフラインです。スマートフォンに保存されたコピーを表示しています。",
+    "privateLink": "このページは非公開です。リンクを知っている人は誰でも閲覧し、スケジュールを変更できます。共有しないでください。",
+    "tabs": {
+      "label": "ハブのセクション",
+      "today": "今日",
+      "schedule": "マイスケジュール",
+      "agenda": "プログラム",
+      "badge": "バッジ"
+    },
+    "today": {
+      "now": "開催中",
+      "next": "次のセッション",
+      "fromSchedule": "あなたのスケジュールより。",
+      "fromAgenda": "プログラムより。セッションにスターを付けて自分用にしましょう。",
+      "nothingNow": "現在開催中のものはありません。",
+      "nothingNextTitle": "まもなく始まるものはありません",
+      "nothingNextDescription": "プログラムを見て、セッションにスターを付けたり任意セッションに申し込んだりしましょう。",
+      "openAgenda": "プログラムを開く",
+      "pollsAndQa": "投票と質問",
+      "more": "ツール",
+      "badgeTitle": "あなたのバッジ",
+      "badgeDescription": "入場時とセッションのチェックイン時にQRコードを提示してください。",
+      "showBadge": "バッジを表示",
+      "networkingTitle": "ネットワーキング",
+      "networkingDescription": "他の参加者を探してつながり、ミーティングを予約できます。",
+      "openNetworking": "ネットワーキングを開く",
+      "calendarTitle": "カレンダー",
+      "calendarDescription": "スケジュールをスマートフォンのカレンダーに追加します。セッションの時間が変わると更新されます。",
+      "openCalendar": "カレンダーに追加"
+    },
+    "summary": "申込済み: {enrolled} · お気に入り: {favorites} · 重複: {conflicts}",
+    "agendaIntro": "参加したいセッションにスターを付けましょう。任意セッションは申し込みが必要です。",
+    "conflict": "{titles} と重複",
+    "emptyScheduleTitle": "スケジュールは空です",
+    "emptyScheduleDescription": "プログラムでセッションにスターを付けるか、任意セッションに申し込むと、ここに表示されます。",
+    "emptyAgendaTitle": "まだセッションがありません",
+    "emptyAgendaDescription": "主催者はまだあなたの登録向けのセッションを追加していません。後でもう一度確認してください。",
+    "favorite": {
+      "star": "スターを付ける",
+      "starred": "スター済み",
+      "starNamed": "{title} にスターを付ける",
+      "unstarNamed": "{title} のスターを外す",
+      "pill": "お気に入り",
+      "added": "{title} をスケジュールに追加しました。",
+      "removed": "{title} をスケジュールから外しました。",
+      "replaced": "スターを付けました。重複していたお気に入りを外しました: {count}",
+      "tooMany": "スターを付けられる上限に達しました。先にどれかのスターを外してください。",
+      "conflictTitle": "スケジュールと重複しています",
+      "conflictEnrolled": "{title}（申込済み）",
+      "conflictFavorite": "{title}（スター済み）",
+      "keepBoth": "両方残す",
+      "replace": "置き換える",
+      "cancel": "キャンセル"
+    },
+    "calendar": {
+      "title": "カレンダーフィード",
+      "description": "一度登録するだけで、カレンダーアプリがフィードを更新するので、セッションの時間が変わればカレンダーでも変わります。申込済みのセッションは確定、スターを付けたものは仮として表示されます。",
+      "subscribe": "カレンダーで購読",
+      "download": ".ics をダウンロード",
+      "linkLabel": "フィードのリンク（非公開）",
+      "copy": "リンクをコピー",
+      "copied": "リンクをコピーしました。",
+      "replace": "リンクを変更",
+      "replaceConfirmTitle": "カレンダーのリンクを変更しますか？",
+      "replaceConfirmBody": "現在のリンクは、それを使っているすべてのカレンダーですぐに使えなくなります。新しいリンクで購読し直してください。",
+      "replaceConfirm": "リンクを変更",
+      "cancel": "キャンセル",
+      "replaced": "完了しました。古いリンクは使えません。新しいリンクで購読してください。"
+    },
+    "install": {
+      "title": "スマートフォンに保存",
+      "button": "ホーム画面に追加",
+      "installed": "このハブはホーム画面にあります。",
+      "done": "ホーム画面に追加しました。",
+      "help": "iPhone・iPad: 共有をタップし、ホーム画面に追加を選びます。Android: ブラウザのメニューを開き、アプリをインストールまたはホーム画面に追加を選びます。"
+    },
+    "badge": {
+      "title": "あなたのバッジ",
+      "qrLabel": "{name} さんのバッジのQRコード",
+      "shortCode": "コード",
+      "hint": "入場時は画面の明るさを上げてください。",
+      "noneTitle": "まだバッジがありません",
+      "noneDescription": "登録が確定すると、ここにバッジが表示されます。"
+    }
+  },
+  "billingUsage": {
+    "title": "使用量",
+    "subtitle": "組織がメーター別に使用した量：メッセージ、AIクレジット、スキャン端末。",
+    "breadcrumb": "パンくずリスト",
+    "period": "今月：{start}〜{end}（{zone}）",
+    "filterLabel": "メーター",
+    "allMeters": "すべてのメーター",
+    "meter": {
+      "email": "メール",
+      "sms": "SMS",
+      "whatsapp": "WhatsApp",
+      "ai_credits": "AIクレジット",
+      "devices": "スキャン端末"
+    },
+    "unit": {
+      "email": "{count, plural, other {# 通のメールを送信}}",
+      "sms": "{count, plural, other {# セグメントのSMS}}",
+      "whatsapp": "{count, plural, other {# 件のメッセージを送信}}",
+      "ai_credits": "{count, plural, other {# クレジットを使用}}",
+      "devices": "{count, plural, other {# 台の端末を登録}}"
+    },
+    "reportingTitle": "使用量は請求プロバイダーに送信されます",
+    "reportingBody": "{count, plural, =0 {これまでの分はすべて送信済みです。} other {# 件の記録が送信待ちです。}}",
+    "countingTitle": "使用量は記録されますが、請求はありません",
+    "countingBody": "この組織では請求が有効になっていないため、使用量はここで記録されるだけです。",
+    "currentTitle": "今月",
+    "currentDescription": "組織のタイムゾーンで集計しています。",
+    "historyTitle": "過去の月",
+    "historyDescription": "使用があった直近12か月。",
+    "emptyTitle": "まだ使用量はありません",
+    "emptyBody": "メールやSMSを送信したり、AIで下書きしたり、スキャン端末を登録したりすると、ここに使用量が表示されます。",
+    "historyEmpty": "過去の月に使用はありません。",
+    "month": "月"
+  },
+  "billingBanner": {
+    "label": "請求",
+    "graceTitle": "サブスクリプションの支払いが完了しませんでした",
+    "graceBody": "{date}まではすべて使えます。その後はお支払いまで組織が読み取り専用になります。",
+    "readOnlyTitle": "この組織は読み取り専用です",
+    "readOnlyBody": "サブスクリプションの支払いに失敗しました。何も削除されていません。閲覧、エクスポート、チケットのスキャンはできますが、お支払いまで変更は停止しています。",
+    "action": "プランと請求"
+  },
+  "agencies": {
+    "title": "代理店",
+    "subtitle": "代理店にイベントの作業を任せられます。アクセスはいつでも取り消せます。代理店があなたのお金を支払ったり受け取ったりすることはありません。",
+    "noAccessTitle": "代理店を管理できるのはオーナーと管理者だけです",
+    "noAccessDescription": "この組織のオーナーまたは管理者に、代理店へのアクセス付与を依頼してください。",
+    "grantTitle": "代理店にアクセスを付与",
+    "agency": "代理店のアドレス",
+    "agencyHint": "代理店から伝えられたアドレス（例: bloom-events）。",
+    "agencyRequired": "代理店のアドレスを入力してください。",
+    "agencyUnknown": "このアドレスの代理店はありません。代理店に確認してください。",
+    "agencySelf": "代理店は自分自身にアクセスを付与できません。",
+    "agencyTaken": "この代理店はすでにアクセスできます。",
+    "role": "代理店ができること",
+    "roleManager": "イベントの管理",
+    "roleManagerHint": "イベント、ゲスト、チェックイン、メッセージの作成と編集。返金、販売、メンバー、設定は不可。",
+    "roleMarketing": "マーケティング",
+    "roleMarketingHint": "キャンペーン、オーディエンス、メッセージ、イベントの閲覧。",
+    "roleViewer": "閲覧のみ",
+    "roleViewerHint": "イベント、注文、ゲストの閲覧。何も変更しません。",
+    "finance": "代理店にお金の情報の閲覧も許可する",
+    "financeHint": "入金、財務レポート、元帳を閲覧のみ。オンにしない限りオフです。",
+    "grant": "アクセスを付与",
+    "granted": "{agency} はこの組織で作業できるようになりました。",
+    "listTitle": "アクセスできる代理店",
+    "empty": "アクセスできる代理店はありません。代理店と仕事をするときは上でアクセスを付与してください。",
+    "emptyReadOnly": "アクセスできる代理店はありません。",
+    "agencyColumn": "代理店",
+    "roleColumn": "アクセス",
+    "financeColumn": "お金",
+    "grantedColumn": "開始",
+    "actions": "操作",
+    "financeOn": "閲覧可",
+    "financeOff": "アクセスなし",
+    "revoke": "取り消す",
+    "revokeNamed": "{agency} のアクセスを取り消す",
+    "revoked": "{agency} はアクセスできなくなりました。",
+    "financeEnable": "お金を許可",
+    "financeEnableNamed": "{agency} にお金の閲覧を許可",
+    "financeDisable": "お金を停止",
+    "financeDisableNamed": "{agency} のお金の閲覧を停止",
+    "historyTitle": "過去のアクセス",
+    "revokedColumn": "終了",
+    "unknownAgency": "Yayatoh にいない代理店",
+    "roleLabel": "{role, select, manager {イベントの管理} marketing {マーケティング} viewer {閲覧のみ} other {アクセス}}"
+  },
+  "agency": {
+    "title": "クライアント",
+    "subtitle": "{agency} にアクセスを付与したすべてのクライアント。数値はスナップショットから取得されます。最新にするには更新してください。",
+    "tabs": "代理店のセクション",
+    "tab": {
+      "clients": "クライアント",
+      "events": "イベント",
+      "marketing": "マーケティング",
+      "reports": "レポート"
+    },
+    "refresh": "数値を更新",
+    "refreshed": "{count, plural, other {# 件のクライアント}}の数値を更新しました。",
+    "notRefreshed": "未更新",
+    "emptyTitle": "クライアントはまだいません",
+    "emptyDescription": "クライアントに Yayatoh コンソールの「代理店」を開いて {address} にアクセスを付与するよう依頼してください。",
+    "noAccessTitle": "代理店ページは代理店のメンバー向けです",
+    "noAccessDescription": "{agency} のオーナーにアクセスを依頼してください。",
+    "client": "クライアント",
+    "nextEvent": "次のイベント",
+    "noNextEvent": "予定なし",
+    "upcoming": "今後のイベント",
+    "orders": "注文",
+    "tickets": "チケット",
+    "checkins": "チェックイン済み",
+    "checkinRate": "チェックイン率",
+    "open": "開く",
+    "openNamed": "{client} を開く",
+    "finance": "お金を含む",
+    "eventsTitle": "全クライアントのイベント",
+    "eventsEmpty": "クライアントにはまだ今後または最近のイベントがありません。",
+    "event": "イベント",
+    "starts": "開始",
+    "status": "ステータス",
+    "gross": "総売上",
+    "grossHidden": "非共有",
+    "grossHiddenHint": "総売上は、お金の閲覧を許可したクライアントにのみ表示されます。",
+    "openEventNamed": "{client} の {event} を開く",
+    "marketingTitle": "マーケティング（過去 30 日）",
+    "marketingEmpty": "クライアントはまだいません。",
+    "campaigns": "キャンペーン",
+    "sends": "送信",
+    "deliveries": "配信",
+    "clicks": "クリック",
+    "uniqueClickers": "クリックした人",
+    "conversion": "コンバージョン",
+    "reportsTitle": "全クライアントの合計",
+    "clientsCount": "クライアント",
+    "eventsTotal": "イベント",
+    "revenue": "総売上",
+    "revenueFrom": "お金を共有している {count, plural, other {# 件のクライアント}}から",
+    "revenueNone": "お金を共有しているクライアントはいません。",
+    "perClient": "クライアント別",
+    "eventStatus": {
+      "draft": "下書き",
+      "published": "公開中",
+      "postponed": "延期",
+      "cancelled": "中止",
+      "completed": "終了",
+      "archived": "アーカイブ済み"
+    },
+    "refreshedAt": "更新日時"
+  },
+  "analyticsPro": {
+    "tabs": {
+      "label": "アナリティクスのセクション",
+      "overview": "概要",
+      "explore": "探索",
+      "alerts": "アラートルール",
+      "reports": "レポート"
+    },
+    "explore": {
+      "title": "探索",
+      "description": "指標と内訳の方法を選びます。アトリビューションは、どのキャンペーン・チャネル・参照元が売上につながったかを示します。",
+      "form": "表示する内容を選ぶ",
+      "measure": "指標",
+      "groupCounts": "件数",
+      "groupMoney": "金額",
+      "groupAttribution": "アトリビューション",
+      "measures": {
+        "registrations": "申込数",
+        "tickets": "販売チケット（純数）",
+        "comp_tickets": "無料チケット",
+        "refunded_tickets": "返金済みチケット",
+        "checkins": "チェックイン",
+        "no_shows": "不参加",
+        "attributed_orders": "アトリビューション対象の注文",
+        "gross": "支払額",
+        "refunds": "返金額",
+        "net": "純売上",
+        "attributed_revenue": "アトリビューション売上"
+      },
+      "dimension": "内訳",
+      "dimensions": {
+        "period": "期間",
+        "event": "イベント",
+        "channel": "チャネル",
+        "source": "参照元",
+        "campaign": "キャンペーン"
+      },
+      "model": "アトリビューションモデル",
+      "modelHint": "アトリビューション対象の注文と売上にのみ使います。",
+      "models": {
+        "first": "ファーストタッチ",
+        "last": "ラストタッチ",
+        "linear": "線形（均等配分）"
+      },
+      "range": "期間",
+      "ranges": {
+        "7d": "過去 7 日間",
+        "30d": "過去 30 日間",
+        "90d": "過去 90 日間",
+        "365d": "過去 12 か月",
+        "custom": "日付を指定"
+      },
+      "from": "開始日",
+      "to": "終了日",
+      "customHint": "期間が「日付を指定」のときに使います。",
+      "granularity": "表示単位",
+      "granularities": {
+        "day": "日",
+        "week": "週",
+        "month": "月"
+      },
+      "event": "イベント",
+      "allEvents": "すべてのイベント",
+      "apply": "表示",
+      "errors": {
+        "touch_dimension": "チャネル・参照元・キャンペーンは、アトリビューション対象の注文または売上でのみ使えます。",
+        "custom_needs_dates": "期間を指定するには両方の日付を入力してください。",
+        "from_after_to": "終了日が開始日より前です。",
+        "range_too_long": "2 年以内の期間を選んでください。",
+        "invalid_date": "日付は年・月・日の形式で入力してください。"
+      },
+      "resultsCaption": "{dimension}別の{measure}（{from}〜{to}）",
+      "total": "合計",
+      "none": "なし",
+      "unnamedCampaign": "名前のないキャンペーン",
+      "weekOf": "{day} の週",
+      "currency": "通貨",
+      "value": "値",
+      "truncated": "最初の 500 行を表示しています。残りを見るには期間を短くするか、イベントを 1 つ選んでください。",
+      "emptyTitle": "この選択では表示するものがありません",
+      "emptyBody": "この期間のこの指標のデータはありません。期間を長くするか、別のイベントや指標を試してください。",
+      "emptyAction": "過去 12 か月を表示",
+      "export": "CSV をエクスポート",
+      "exportLabel": "この結果を CSV ファイルとしてエクスポート",
+      "timeZoneNote": "日付は組織のタイムゾーン {timeZone} の暦日です。",
+      "attributionNote": "アトリビューションは、アトリビューション期間内に注文につながった訪問（クリックされたトラッキングリンク、UTM 付きの訪問、購入者を送った他サイト）に各注文を配分します。ファーストタッチは最初の訪問に、ラストタッチは最後の訪問に計上し、線形は注文を均等に分けます（端数の 1 セントは最後の訪問へ）。売上は購入者が支払った額で、通貨ごとに集計します。訪問が記録されていない注文は対象外です。",
+      "saveTitle": "このビューを保存",
+      "viewName": "名前",
+      "save": "ビューを保存",
+      "saved": "ビューを保存しました",
+      "viewErrors": {
+        "name": "80 文字以内で名前を入力してください。",
+        "name_taken": "同じ名前のビューがすでにあります。",
+        "too_many_views": "保存済みビューが 50 件あります。先に 1 件削除してください。"
+      },
+      "views": "保存したビュー",
+      "noViews": "保存したビューはまだありません。上で表示内容を選び、ここに保存すればワンクリックで戻れます。",
+      "deleteView": "削除",
+      "deleteViewLabel": "ビュー「{name}」を削除",
+      "deleted": "ビューを削除しました"
+    },
+    "rules": {
+      "title": "アラートルール",
+      "description": "数値がしきい値を超えたら通知します。ルールのアラートは、組み込みのものと同じくアラート機能でチームに届きます。",
+      "createTitle": "新しいアラートルール",
+      "editTitle": "アラートルールを編集",
+      "name": "名前",
+      "nameHint": "アラートとそのメールに表示されます。",
+      "measure": "指標",
+      "measures": {
+        "registrations": "申込数",
+        "tickets": "販売チケット（純数）",
+        "refunded_tickets": "返金済みチケット",
+        "checkins": "チェックイン",
+        "gross": "支払額",
+        "refunds": "返金額",
+        "net": "純売上"
+      },
+      "condition": "条件",
+      "conditions": {
+        "above": "以上",
+        "below": "未満",
+        "rise": "以上増加（%）",
+        "drop": "以上減少（%）"
+      },
+      "threshold": "しきい値",
+      "thresholdHint": "件数、金額、または増減の割合（直前の期間との比較）。",
+      "window": "対象期間",
+      "windows": {
+        "d1": "今日",
+        "d7": "過去 7 日間",
+        "d14": "過去 14 日間",
+        "d30": "過去 30 日間"
+      },
+      "currency": "通貨",
+      "currencyHint": "金額のルールは 1 つの通貨で比較します。",
+      "noCurrency": "金額以外",
+      "event": "イベント",
+      "allEvents": "すべてのイベント",
+      "severity": "重要度",
+      "severities": {
+        "info": "情報",
+        "warning": "警告",
+        "critical": "重大"
+      },
+      "quietHours": "夜間の通知を控える",
+      "quietHoursHint": "ルールが 21:00〜8:00 に発動した場合、メールとプッシュは各受信者のタイムゾーンで 8:00 まで待ちます。アプリ内のアラートはすぐに表示されます。",
+      "create": "ルールを作成",
+      "save": "変更を保存",
+      "back": "アラートルールに戻る",
+      "created": "ルールを作成しました",
+      "saved": "変更を保存しました",
+      "list": "ルール一覧",
+      "emptyTitle": "アラートルールはまだありません",
+      "emptyBody": "上でルールを作成してください（例：「今日の返金が 10 件以上」）。条件を満たした時点でお知らせします。",
+      "columns": {
+        "name": "ルール",
+        "condition": "条件",
+        "status": "状態",
+        "lastValue": "最新の値",
+        "actions": "操作"
+      },
+      "summary": "{measure}が{window}で{threshold}{condition}",
+      "status": {
+        "firing": "発動中",
+        "ok": "正常",
+        "off": "オフ",
+        "new": "未確認"
+      },
+      "edit": "編集",
+      "editLabel": "{name} を編集",
+      "turnOff": "オフにする",
+      "turnOn": "オンにする",
+      "turnOffLabel": "{name} をオフにする",
+      "turnOnLabel": "{name} をオンにする",
+      "delete": "削除",
+      "deleteLabel": "{name} を削除",
+      "deleted": "ルールを削除しました",
+      "turnedOff": "ルールをオフにしました",
+      "turnedOn": "ルールをオンにしました",
+      "readOnly": "これらのルールは閲覧のみ可能で、変更はできません。",
+      "errors": {
+        "name": "80 文字以内で名前を入力してください。",
+        "name_taken": "同じ名前のルールがすでにあります。",
+        "threshold": "0 以上の数値を入力してください。",
+        "percent_range": "1〜1000 の割合を入力してください。",
+        "currency_required": "金額のルールには通貨を選んでください。",
+        "too_many_rules": "ルールが 50 件あります。先に 1 件削除してください。"
+      }
+    },
+    "reports": {
+      "title": "定期レポート",
+      "description": "アナリティクスの PDF を毎日・毎週・毎月メールで送ります。集計は組織のタイムゾーンで行います。",
+      "createTitle": "新しい定期レポート",
+      "editTitle": "定期レポートを編集",
+      "name": "名前",
+      "frequency": "頻度",
+      "frequencies": {
+        "daily": "毎日（前日の数値）",
+        "weekly": "毎週月曜（先週の月曜〜日曜）",
+        "monthly": "毎月 1 日（先月）"
+      },
+      "frequencyShort": {
+        "daily": "毎日",
+        "weekly": "毎週",
+        "monthly": "毎月"
+      },
+      "sendHour": "送信時刻",
+      "sendHourHint": "{timeZone} の時刻です。",
+      "event": "イベント",
+      "allEvents": "すべてのイベント",
+      "recipients": "送信先",
+      "recipientsHint": "注文を閲覧できるメンバー。売上は経理を閲覧できる人の PDF にのみ含まれ、各 PDF は読む人の言語で作成されます。",
+      "you": "{name}（あなた）",
+      "create": "レポートを予約",
+      "save": "変更を保存",
+      "back": "定期レポートに戻る",
+      "created": "レポートを予約しました",
+      "saved": "変更を保存しました",
+      "list": "スケジュール",
+      "emptyTitle": "定期レポートはまだありません",
+      "emptyBody": "上で予約してください。期間ごとに 1 回、PDF へのリンク付きでメールが届きます。",
+      "columns": {
+        "name": "レポート",
+        "frequency": "頻度",
+        "next": "次回送信",
+        "recipients": "受信者",
+        "status": "状態",
+        "actions": "操作"
+      },
+      "recipientsCount": "{count, plural, other {# 人のメンバー}}",
+      "status": {
+        "on": "オン",
+        "off": "オフ"
+      },
+      "edit": "編集",
+      "editLabel": "{name} を編集",
+      "turnOff": "オフにする",
+      "turnOn": "オンにする",
+      "turnOffLabel": "{name} をオフにする",
+      "turnOnLabel": "{name} をオンにする",
+      "delete": "削除",
+      "deleteLabel": "{name} を削除",
+      "deleted": "スケジュールを削除しました",
+      "turnedOff": "スケジュールをオフにしました",
+      "turnedOn": "スケジュールをオンにしました",
+      "recent": "最近のレポート",
+      "recentEmpty": "まだレポートは送信されていません。最初のレポートは次の送信時刻に送られます。",
+      "recentColumns": {
+        "report": "レポート",
+        "period": "期間",
+        "status": "状態",
+        "file": "PDF"
+      },
+      "runStatus": {
+        "pending": "待機中",
+        "sent": "送信済み",
+        "failed": "失敗"
+      },
+      "download": "PDF をダウンロード",
+      "downloadLabel": "{period} の {name} をダウンロード（PDF）",
+      "notReady": "準備中",
+      "errors": {
+        "name": "80 文字以内で名前を入力してください。",
+        "name_taken": "同じ名前のスケジュールがすでにあります。",
+        "recipients": "メンバーを 1 人以上選んでください。",
+        "bad_recipient": "注文を閲覧できるメンバーを選んでください。",
+        "too_many_schedules": "スケジュールが 25 件あります。先に 1 件削除してください。"
+      }
     }
   },
   "mediaLibrary": {

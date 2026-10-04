@@ -5,13 +5,18 @@ import type {
   ChargeSavedCardInput,
   ChargeSavedCardResult,
   ConnectAccountState,
+  ConnectedBalanceTransaction,
+  ConnectedTransactionKind,
   CreateCardSetupInput,
   CreatePaymentInput,
   IgnoredEvent,
   PaymentProvider,
+  Payout,
+  PayoutStatus,
   RefundInput,
   WebhookEvent,
 } from './port.ts';
+import { PAYOUT_STATUSES } from './port.ts';
 
 /** The Stripe API version this adapter is written and tested against (pinned; upgrades are deliberate). */
 export const STRIPE_API_VERSION = '2026-08-26.dahlia' as const;
@@ -20,6 +25,9 @@ export const STRIPE_API_VERSION = '2026-08-26.dahlia' as const;
 export const EVIDENCE_MAX_BYTES = 4_500_000;
 /** One reconciliation day never needs more; a larger day is reported as truncated by the caller. */
 const BALANCE_TRANSACTIONS_MAX = 10_000;
+/** Automatic payouts are created days after their movements (M4.8g). */
+const PAYOUT_LOOKAHEAD_S = 7 * 86_400;
+const PAYOUT_STATUS_SET: ReadonlySet<string> = new Set(PAYOUT_STATUSES);
 
 /** Stripe keeps a Checkout Session open for at least 30 minutes; the order hold is shorter. */
 const SESSION_MINUTES = 30;
@@ -295,6 +303,46 @@ export function stripePaymentProvider(opts: StripeProviderOptions): PaymentProvi
       return out;
     },
 
+    async listConnectedBalanceTransactions(i) {
+      // M4.8g: the connected account's own balance (direct charges, refunds, payouts), then which
+      // payout paid each one out (Stripe lists a payout's balance transactions by `payout`).
+      const account = on(i.connectedAccountId);
+      const byId = new Map<string, ConnectedBalanceTransaction>();
+      const created = { gte: Math.floor(i.from.getTime() / 1000), lt: Math.floor(i.to.getTime() / 1000) };
+      for await (const bt of stripe.balanceTransactions.list(
+        { created, limit: 100, expand: ['data.source'] },
+        account,
+      )) {
+        byId.set(bt.id, await normalizeConnected(bt, i.connectedAccountId));
+        if (byId.size >= BALANCE_TRANSACTIONS_MAX) break;
+      }
+      // Automatic payouts follow their movements by days: look a week past the window.
+      const payouts = { gte: created.gte, lt: created.lt + PAYOUT_LOOKAHEAD_S };
+      for await (const po of stripe.payouts.list({ created: payouts, limit: 100 }, account))
+        for await (const bt of stripe.balanceTransactions.list({ payout: po.id, limit: 100 }, account)) {
+          const t = byId.get(bt.id);
+          if (t) byId.set(bt.id, { ...t, payoutId: po.id });
+        }
+      return [...byId.values()];
+    },
+
+    async listPayouts(i) {
+      const out: Payout[] = [];
+      const created = { gte: Math.floor(i.from.getTime() / 1000), lt: Math.floor(i.to.getTime() / 1000) };
+      for await (const po of stripe.payouts.list({ created, limit: 100 }, on(i.connectedAccountId))) {
+        out.push({
+          id: po.id,
+          amountMinor: po.amount,
+          currency: po.currency.toUpperCase(),
+          status: (PAYOUT_STATUS_SET.has(po.status) ? po.status : 'pending') as PayoutStatus,
+          createdAt: new Date(po.created * 1000),
+          arrivalDate: new Date(po.arrival_date * 1000).toISOString().slice(0, 10),
+        });
+        if (out.length >= BALANCE_TRANSACTIONS_MAX) break;
+      }
+      return out;
+    },
+
     async createCardSetup(i: CreateCardSetupInput) {
       // M4.8e (P4-14): the card lives on the organizer's connected account, on a customer of its
       // own, saved for off-session use; the hosted step is a Checkout Session in setup mode.
@@ -416,7 +464,10 @@ export function stripePaymentProvider(opts: StripeProviderOptions): PaymentProvi
    * refund's source is the *fee*, so the reversal or refund is found by its balance transaction
    * (both found against real test-mode payloads, M1.5e3).
    */
-  async function normalizeBalanceTransaction(bt: Stripe.BalanceTransaction): Promise<BalanceTransaction> {
+  async function normalizeBalanceTransaction(
+    bt: Stripe.BalanceTransaction,
+    account: string | null = null,
+  ): Promise<BalanceTransaction> {
     const base = {
       id: bt.id,
       amountMinor: bt.amount,
@@ -442,7 +493,7 @@ export function stripePaymentProvider(opts: StripeProviderOptions): PaymentProvi
       case 'charge':
       case 'payment':
         return src?.object === 'charge'
-          ? ordered('charge', await chargeTags(src, null))
+          ? ordered('charge', await chargeTags(src, account))
           : tagged('charge', null);
       case 'refund':
       case 'payment_refund':
@@ -485,6 +536,34 @@ export function stripePaymentProvider(opts: StripeProviderOptions): PaymentProvi
         }
         return { ...base, kind: 'other', orgId: null, reference: null };
     }
+  }
+
+  /**
+   * One movement of a connected account (M4.8g), attributed like the platform's: a direct charge by
+   * its order, a refund by the reference the platform tagged on it; payouts are payouts.
+   */
+  async function normalizeConnected(
+    bt: Stripe.BalanceTransaction,
+    account: string,
+  ): Promise<ConnectedBalanceTransaction> {
+    const n = await normalizeBalanceTransaction(bt, account);
+    const kind: ConnectedTransactionKind =
+      bt.type === 'payout'
+        ? 'payout'
+        : n.kind === 'charge' || n.kind === 'refund' || n.kind === 'dispute'
+          ? n.kind
+          : 'other';
+    return {
+      id: bt.id,
+      kind,
+      amountMinor: bt.amount,
+      feeMinor: bt.fee,
+      netMinor: bt.net,
+      currency: n.currency,
+      occurredAt: n.occurredAt,
+      reference: kind === 'payout' || kind === 'other' ? null : n.reference,
+      payoutId: null,
+    };
   }
 
   /** A card-setup session's outcome (M4.8e): the saved card's references and display details. */

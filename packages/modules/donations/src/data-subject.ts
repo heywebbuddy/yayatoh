@@ -40,11 +40,11 @@ async function giftRowsTx(tx: TenantTx, s: DataSubject) {
  * anonymously on donor walls. Each kept row is listed in the receipt. Campaigns, levels and the
  * charity profile are the organizer's own.
  *
- * Batch 3u merge (M4.8d/e): cards the person saved for an event's giving lose the holder's name,
- * address and card description and are removed from the charity's customer on the next sweep
- * (`remove_after` now); pledge collections addressed to them lose the donor's name and address
- * (and the organizer's note); a matching sponsor who is the person loses the name, address and
- * public name (screens show "a generous sponsor"). Amounts stay with the campaign.
+ * Batch 3j merge (M4.8e/f): cards the person saved (by their address) are exported with their
+ * brand and last four only, and on erasure removed (never charged again; a scheduled pledge falls
+ * back to its invoice) with the name, address and card details cleared; pledge collections lose
+ * the donor's name and address (amounts and states stay with the pledge); a match they sponsored
+ * loses the sponsor's name and address (its public name is what the sponsor chose to show).
  */
 export const donationsDataSubjects = defineDataSubjectContributor({
   module: 'donations',
@@ -80,14 +80,14 @@ export const donationsDataSubjects = defineDataSubjectContributor({
     const cards = await tx
       .select()
       .from(savedCards)
-      .where(eq(savedCards.email, s.email))
+      .where(eq(sql`lower(${savedCards.email})`, s.email))
       .orderBy(asc(savedCards.createdAt));
     const collections = await tx
       .select()
       .from(pledgeCollections)
-      .where(eq(pledgeCollections.donorEmail, s.email))
+      .where(eq(sql`lower(${pledgeCollections.donorEmail})`, s.email))
       .orderBy(asc(pledgeCollections.createdAt));
-    const matched = await tx
+    const sponsored = await tx
       .select()
       .from(matches)
       .where(eq(matches.sponsorEmail, s.email))
@@ -101,11 +101,9 @@ export const donationsDataSubjects = defineDataSubjectContributor({
           status: c.status,
           brand: c.brand,
           last4: c.last4,
-          expMonth: c.expMonth,
-          expYear: c.expYear,
           consentVersion: c.consentVersion,
           consentedAt: c.consentedAt,
-          removedAt: c.removedAt,
+          createdAt: c.createdAt,
         })),
         pledgeCollections: collections.map((c) => ({
           eventId: c.eventId,
@@ -114,10 +112,10 @@ export const donationsDataSubjects = defineDataSubjectContributor({
           amountMinor: c.amountMinor,
           currency: c.currency,
           status: c.status,
-          dueOn: c.dueOn,
           paidAt: c.paidAt,
+          createdAt: c.createdAt,
         })),
-        matches: matched.map((m) => ({
+        sponsoredMatches: sponsored.map((m) => ({
           eventId: m.eventId,
           sponsorName: m.sponsorName,
           sponsorEmail: m.sponsorEmail,
@@ -125,8 +123,6 @@ export const donationsDataSubjects = defineDataSubjectContributor({
           ratioPercent: m.ratioPercent,
           capMinor: m.capMinor,
           currency: m.currency,
-          startsAt: m.startsAt,
-          endsAt: m.endsAt,
           status: m.status,
           matchedMinor: m.matchedMinor,
         })),
@@ -208,30 +204,6 @@ export const donationsDataSubjects = defineDataSubjectContributor({
         taxYear: yearEndStatements.taxYear,
         createdAt: yearEndStatements.createdAt,
       });
-    const cards = await tx
-      .update(savedCards)
-      .set({
-        name: ERASED_NAME,
-        email: ERASED_EMAIL,
-        brand: null,
-        last4: null,
-        expMonth: null,
-        expYear: null,
-        removeAfter: now,
-        updatedAt: now,
-      })
-      .where(eq(savedCards.email, s.email))
-      .returning({ id: savedCards.id });
-    const collections = await tx
-      .update(pledgeCollections)
-      .set({ donorName: ERASED_NAME, donorEmail: null, note: null, updatedAt: now })
-      .where(eq(pledgeCollections.donorEmail, s.email))
-      .returning({ id: pledgeCollections.id });
-    const matched = await tx
-      .update(matches)
-      .set({ sponsorName: ERASED_NAME, sponsorEmail: null, publicName: null, updatedAt: now })
-      .where(eq(matches.sponsorEmail, s.email))
-      .returning({ id: matches.id });
     const paid = given.filter((g) => g.status === 'paid');
     const held: HeldRecord[] = [
       ...paid.map((g) => ({
@@ -256,12 +228,34 @@ export const donationsDataSubjects = defineDataSubjectContributor({
         until: holdUntil(y.createdAt),
       })),
     ];
+    const cards = await tx
+      .update(savedCards)
+      .set({
+        name: ERASED_NAME,
+        email: erasedAddress(savedCards.id),
+        brand: null,
+        last4: null,
+        status: 'removed',
+        removedAt: sql`coalesce(${savedCards.removedAt}, ${now.toISOString()}::timestamptz)`,
+      })
+      .where(eq(sql`lower(${savedCards.email})`, s.email))
+      .returning({ id: savedCards.id });
+    const collections = await tx
+      .update(pledgeCollections)
+      .set({ donorName: ERASED_NAME, donorEmail: null })
+      .where(eq(sql`lower(${pledgeCollections.donorEmail})`, s.email))
+      .returning({ id: pledgeCollections.id });
+    const sponsored = await tx
+      .update(matches)
+      .set({ sponsorName: ERASED_NAME, sponsorEmail: null })
+      .where(eq(matches.sponsorEmail, s.email))
+      .returning({ id: matches.id });
     return {
       erased: {
         'donations.gifts': given.length - paid.length,
         'donations.saved_cards': cards.length,
         'donations.pledge_collections': collections.length,
-        'donations.matches': matched.length,
+        'donations.matches': sponsored.length,
       },
       held,
     };

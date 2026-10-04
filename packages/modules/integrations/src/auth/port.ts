@@ -26,7 +26,30 @@ export interface ProviderRequest {
   readonly body?: unknown;
   /** Sent as `Idempotency-Key` so a retried write is applied once by providers that support it. */
   readonly idempotencyKey?: string;
+  /**
+   * Extra provider headers that name no credential (M6.5d: Xero's `Xero-tenant-id`). Names are
+   * checked by `providerHeaderName`; the port attaches the credentials itself.
+   */
+  readonly headers?: Readonly<Record<string, string>>;
 }
+
+const FORBIDDEN_HEADERS = new Set([
+  'authorization',
+  'proxy-authorization',
+  'cookie',
+  'host',
+  'connection-id',
+  'provider-config-key',
+  'idempotency-key',
+  'content-type',
+  'content-length',
+]);
+
+/** Whether a connector may send this header to its provider (never a credential or a routing header). */
+export const providerHeaderName = (name: string) =>
+  /^[A-Za-z][A-Za-z0-9-]{0,62}$/.test(name) &&
+  !FORBIDDEN_HEADERS.has(name.toLowerCase()) &&
+  !/^(nango|x-forwarded|sec-)/i.test(name);
 
 export interface ProviderResponse {
   readonly status: number;

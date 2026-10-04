@@ -1,7 +1,13 @@
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative, sep } from 'node:path';
 import { MODULE_KEYS } from '@yayatoh/platform';
-import { GRANTABLE_ORG_ROLES, type OrgRole, PERMISSIONS, roleCan } from '@yayatoh/tenancy';
+import {
+  type AgencyConsoleRole,
+  GRANTABLE_ORG_ROLES,
+  type OrgRole,
+  PERMISSIONS,
+  roleCan,
+} from '@yayatoh/tenancy';
 import { describe, expect, it } from 'vitest';
 import {
   ORG_SECTION_KEYS,
@@ -30,14 +36,22 @@ function pages(dir: string): string[] {
 
 const routes = pages(ORG_DIR).map((p) => relative(ORG_DIR, p).split(sep).slice(0, -1).join('/'));
 const allModules = new Set<string>(MODULE_KEYS);
-const access = (role: OrgRole | 'collaborator', contentOrg = false) => ({
+const access = (
+  role: OrgRole | AgencyConsoleRole | 'collaborator',
+  contentOrg = false,
+  agency: { agencyOrg?: boolean; viaAgency?: boolean } = {},
+) => ({
   role,
   can: (p: string) => role !== 'collaborator' && roleCan(role, p),
   modules: allModules,
   contentOrg,
+  ...agency,
 });
-const keysOf = (role: OrgRole | 'collaborator', contentOrg = false) =>
-  visibleOrgSections(access(role, contentOrg)).flatMap((s) => s.items.map((i) => i.key));
+const keysOf = (
+  role: OrgRole | AgencyConsoleRole | 'collaborator',
+  contentOrg = false,
+  agency: { agencyOrg?: boolean; viaAgency?: boolean } = {},
+) => visibleOrgSections(access(role, contentOrg, agency)).flatMap((s) => s.items.map((i) => i.key));
 const sectionsOf = (role: OrgRole | 'collaborator') => visibleOrgSections(access(role)).map((s) => s.key);
 
 describe('org navigation route sweep', () => {
@@ -78,12 +92,23 @@ describe('org navigation route sweep', () => {
 });
 
 describe('who sees which sections', () => {
-  it('shows the owner every section and item (the CMS only in the content org)', () => {
+  it('shows the owner every section and item (the CMS only in the content org, Clients only in an agency)', () => {
     expect(sectionsOf('owner')).toEqual([...ORG_SECTION_KEYS]);
     const all = ORG_SECTIONS.flatMap((s) => s.items.map((i) => i.key));
-    expect(keysOf('owner', true)).toEqual(all);
+    expect(keysOf('owner', true, { agencyOrg: true })).toEqual(all);
     expect(keysOf('owner')).not.toContain('helpCenter');
     expect(keysOf('owner')).not.toContain('marketingSite');
+    expect(keysOf('owner')).not.toContain('agency');
+  });
+
+  it('M6.7a: an agency acting in a client org never sees the client’s own pages', () => {
+    for (const role of ['agency_manager', 'agency_marketing_finance'] as const) {
+      const via = keysOf(role, false, { viaAgency: true });
+      for (const k of ['settings', 'team', 'domains', 'publicSite', 'payouts', 'sendingSetup', 'apiKeys'])
+        expect(via).not.toContain(k);
+      expect(via).toContain('commandCenter');
+    }
+    expect(keysOf('admin')).toContain('settings');
   });
 
   it('shows the door role (scanner) only the home and their own notifications', () => {

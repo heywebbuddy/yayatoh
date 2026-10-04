@@ -11,9 +11,9 @@ import {
 } from '../schema.ts';
 
 /**
- * Data-subject requests for networking (M5.8a) and chat (M5.8b), run by engagement's data-subject
- * contributor (`data-subject.ts`, M6.1c) in the request's transaction. A person is their org
- * contacts (a networking profile is keyed by contact, one per event).
+ * Data-subject requests for networking (M5.8a) and chat (M5.8b), part of engagement's M6.1c
+ * contributor (batch 3j merge, closing M5.8a's documented gap). A person is their org contacts (a
+ * networking profile is keyed by contact, one per event), as crm resolves them (`contact` refs).
  *
  * The access document gets what the person wrote or chose to show: their profiles, the notes on
  * requests they sent, the reports they filed and the chat messages they sent. Nothing about the
@@ -162,15 +162,7 @@ export async function eraseNetworkingDsarTx(tx: TenantTx, contactIds: readonly s
   const profiles = await profilesOfTx(tx, contactIds);
   const ids = profiles.map((p) => p.id);
   if (ids.length === 0)
-    return {
-      profiles: 0,
-      notes: 0,
-      connections: 0,
-      meetings: 0,
-      reports: 0,
-      chatReports: 0,
-      chatMessages: 0,
-    };
+    return { profiles: 0, connections: 0, meetings: 0, reports: 0, chatReports: 0, chatMessages: 0 };
   await tx
     .update(networkProfiles)
     .set({
@@ -193,7 +185,7 @@ export async function eraseNetworkingDsarTx(tx: TenantTx, contactIds: readonly s
     .set({ message: null })
     .where(and(inArray(meetings.requesterId, ids), sql`${meetings.message} is not null`))
     .returning({ id: meetings.id });
-  const filed = await tx
+  const reports = await tx
     .update(networkReports)
     .set({ details: null })
     .where(and(inArray(networkReports.reporterId, ids), sql`${networkReports.details} is not null`))
@@ -203,14 +195,12 @@ export async function eraseNetworkingDsarTx(tx: TenantTx, contactIds: readonly s
     .set({ details: null })
     .where(and(filedByProfiles(ids), sql`${chatReports.details} is not null`))
     .returning({ id: chatReports.id });
-  const notes = connections.length + asked.length + filed.length + chatFiled.length;
   const deleted = await tx.delete(chatMessages).where(sentByProfiles(ids)).returning({ id: chatMessages.id });
   return {
     profiles: ids.length,
-    notes,
     connections: connections.length,
     meetings: asked.length,
-    reports: filed.length,
+    reports: reports.length,
     chatReports: chatFiled.length,
     chatMessages: deleted.length,
   };

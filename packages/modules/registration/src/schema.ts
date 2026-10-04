@@ -435,3 +435,41 @@ export const sessionEnrollments = tenantTable(
     check('session_enrollments_offer_count_check', sql`offer_count >= 0`),
   ],
 );
+
+/**
+ * M5.10a: sessions a registrant starred in the conference hub ("favorites"), apart from
+ * enrollment: a favorite holds no place. One row per registrant and session.
+ */
+export const sessionFavorites = tenantTable(
+  registrationSchema,
+  'session_favorites',
+  {
+    eventId: uuid('event_id').notNull(),
+    sessionId: uuid('session_id').notNull(),
+    registrantId: uuid('registrant_id').notNull(),
+  },
+  (t) => [
+    uniqueIndex('session_favorites_org_registrant_session_key').on(t.orgId, t.registrantId, t.sessionId),
+    index('session_favorites_org_event_idx').on(t.orgId, t.eventId),
+    index('session_favorites_org_session_idx').on(t.orgId, t.sessionId),
+  ],
+);
+
+/**
+ * M5.10a: a registrant's signed calendar feed. The feed link carries `version`; "Replace the link"
+ * bumps it, so every earlier link stops working. No row = version 1 (never replaced).
+ */
+export const calendarFeeds = tenantTable(
+  registrationSchema,
+  'calendar_feeds',
+  {
+    eventId: uuid('event_id').notNull(),
+    registrantId: uuid('registrant_id').notNull(),
+    version: integer('version').notNull().default(1),
+  },
+  (t) => [
+    uniqueIndex('calendar_feeds_org_registrant_key').on(t.orgId, t.registrantId),
+    index('calendar_feeds_org_event_idx').on(t.orgId, t.eventId),
+    check('calendar_feeds_version_check', sql`version between 1 and 1000000`),
+  ],
+);

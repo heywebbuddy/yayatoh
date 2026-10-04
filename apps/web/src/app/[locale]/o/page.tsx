@@ -2,7 +2,7 @@ import { myOrganizations } from '@yayatoh/tenancy';
 import { buttonClass, EmptyState } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Link, redirect } from '@/i18n/navigation.ts';
-import { getSession } from '@/server/session.ts';
+import { getSession, sessionOrgScope } from '@/server/session.ts';
 
 /** Entry after sign-in: open the user's first organization. */
 export default async function OrgPicker({ params }: { params: Promise<{ locale: string }> }) {
@@ -12,8 +12,9 @@ export default async function OrgPicker({ params }: { params: Promise<{ locale: 
   if (!session) return redirect({ href: '/sign-in', locale });
   const orgs = await myOrganizations(session.userId);
   // Staff acting as a member (M1.2e) open the org they started from.
-  const imp = session.impersonation;
-  const first = imp ? orgs.find((o) => o.orgId === imp.orgId) : orgs[0];
+  // M6.5a: a session from an org's single sign-on opens that org.
+  const scope = sessionOrgScope(session);
+  const first = scope ? orgs.find((o) => o.orgId === scope) : orgs[0];
   if (first) return redirect({ href: `/o/${first.slug}`, locale });
   const t = await getTranslations('orgPicker');
   return (

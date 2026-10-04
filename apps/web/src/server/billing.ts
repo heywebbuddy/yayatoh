@@ -17,7 +17,17 @@ let provider: BillingProvider | undefined;
  * production). Only used while billing is switched on (`BILLING_ENABLED`).
  */
 export function getBillingProvider(): BillingProvider {
-  provider ??= billingProviderFromEnv(process.env);
+  // The fake hands the webhooks a plan change or a payment causes straight to our own webhook
+  // processor (M6.6b): the same verification and apply path the provider's deliveries take.
+  provider ??= billingProviderFromEnv(process.env, {
+    deliver: async (d) => {
+      const out = await processBillingWebhook(d.body, new Headers(d.headers), 'fake', {
+        provider: getBillingProvider,
+        ports,
+      });
+      if (out.status !== 200) throw new Error(`fake billing webhook failed: ${out.status}`);
+    },
+  });
   return provider;
 }
 

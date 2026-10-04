@@ -1,8 +1,10 @@
-import { alertEvaluator, connectedConferenceSources } from '@yayatoh/alerts';
+import { agencySnapshotSubscriber } from '@yayatoh/agency';
+import { alertEvaluator, type ConferenceSources, connectedConferenceSources } from '@yayatoh/alerts';
 import { warehouseFromEnv, warehouseIngestor } from '@yayatoh/analytics';
 import { attendeeMessageMailer } from '@yayatoh/attendees';
 import { contactSignalsSubscriber, participationProjector } from '@yayatoh/audiences';
 import { journeySubscribers } from '@yayatoh/automations';
+import { billingUsageMeter, nonprofitDiscountFromCharity } from '@yayatoh/billing';
 import { campaignsTimeline } from '@yayatoh/campaigns';
 import {
   chatReportSignals,
@@ -12,6 +14,7 @@ import {
   fraudSignalAlerts,
   networkChatSignals,
   staffAlertsSubscriber,
+  virtualAttendanceSubscriber,
 } from '@yayatoh/checkin';
 import { orgContactNotifier } from '@yayatoh/cms';
 import { deviceBoardPublisher, publishMetricsChangedTx } from '@yayatoh/command-center';
@@ -27,6 +30,8 @@ import { engagementActivity } from '@yayatoh/engagement';
 import { findEventTx, portalInviteMailer } from '@yayatoh/events';
 import { registrationResumeMailer } from '@yayatoh/forms';
 import { invitationMailer as guestInvitationMailer } from '@yayatoh/guests';
+import { slackAlertsSubscriber } from '@yayatoh/integrations';
+import { exhibitorLeadCountsTx } from '@yayatoh/leads';
 import { listingsProjector } from '@yayatoh/marketplace';
 import { programMediaCleaner, speakerPhotoApprover, subjectErasedMediaCleaner } from '@yayatoh/media';
 import {
@@ -81,10 +86,18 @@ import { configureWebhooks, webhookPublisherFromEnv, webhookPublisherSubscriber 
 import { z } from 'zod';
 import { contactStatsJob } from './contact-stats.ts';
 import { duplicateScanJob } from './duplicates.ts';
-import { syncJob } from './integrations.ts';
+import { slackJob, syncJob } from './integrations.ts';
 import { defineJob } from './jobs.ts';
 import { journeyJob } from './journeys.ts';
 
+/**
+ * M5.9a's conference sources on the worker: the alerts module's own (deliverables, printers) plus
+ * leads per exhibitor (M5.6b, same tier as alerts, so the app connects it; batch 3k merge).
+ */
+export const workerConferenceSources: ConferenceSources = {
+  ...connectedConferenceSources,
+  exhibitorLeads: exhibitorLeadCountsTx,
+};
 export const heartbeat = defineJob({
   name: 'platform.heartbeat',
   scope: 'platform',
@@ -94,7 +107,14 @@ export const heartbeat = defineJob({
 
 /** Composition root for jobs and event subscribers. Modules register theirs here as they land. */
 // M6.4a: integration syncs (the fake port in dev/CI; off in production until Nango is configured).
-export const JOBS = [heartbeat, journeyJob(), duplicateScanJob(), contactStatsJob(), syncJob()] as const;
+export const JOBS = [
+  heartbeat,
+  journeyJob(),
+  duplicateScanJob(),
+  contactStatsJob(),
+  syncJob(),
+  slackJob(),
+] as const;
 export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] {
   const secret = env.APP_TOKEN_SECRET;
   const appOrigin = env.NEXT_PUBLIC_APP_ORIGIN;
@@ -144,6 +164,8 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     chatReportSignals(),
     // M5.8b: networking chat reports about attendees.
     networkChatSignals(),
+    // M6.9a: watching a session's stream checks the ticket in at its virtual checkpoint.
+    virtualAttendanceSubscriber(),
     fraudSignalAlerts({ notifier }),
     // M3.4a: staff alerts for the Scan PWA (web push per device). The Command Center alert engine
     // (M3.2b) replaces `derivedStaffAlerts` here and in apps/web/src/server/scan-staff.ts.
@@ -183,12 +205,12 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     sponsorCompCodes(),
     // M3.6a: contact × event participation and contact profiles for audiences.
     participationProjector(),
+    // M5.7b: door scans, answered surveys and enrollments become engagement (scores for audiences).
+    engagementActivity(),
     // M6.1a: the person timeline (crm projection), fed by each owning module.
     ...timelineSubscribers(),
     // M6.1b: sessions attended and campaigns opened feed the contact stats.
     contactSignalsSubscriber(),
-    // M5.7b: door scans, answered surveys and enrollments become engagement (scores for audiences).
-    engagementActivity(),
     listingsProjector({ onChange: (orgId) => revalidatePublicCache(appOrigin, orgId, secret) }),
     // M3.1: metric snapshots and time series, and the analytics sink (Postgres until M6.2).
     // M3.2: each projected change pings the event's Command Center (no figures on the channel).
@@ -203,18 +225,26 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     // M3.2: device presence for the Command Center's device widgets (events in pre-show or live).
     deviceBoardPublisher(),
     // M3.2b: the alert engine re-evaluates what each outbox event touched (sends through notifications).
-    alertEvaluator({ notifier, conference: connectedConferenceSources }),
+    alertEvaluator({ notifier, conference: workerConferenceSources }),
     // M4.8a: gift orders' outcomes (paid, failed, lapsed) move their gifts.
     giftOutcomesSubscriber,
     giftRefundsSubscriber,
     // M4.8b: a receipt per paid gift or charity-ticket order, and year-end statements, to the donor.
     receiptIssuer({ notifier, appOrigin }),
     statementMailer({ notifier, appOrigin }),
-    // M6.3b: public outbox events to the org's webhook endpoints (thin payloads, catalog only).
-    webhookPublisherSubscriber({ publisher: () => webhooks }),
     // M4.8e: pledge payments settle their pledges; the donor's summary, invoice and reminders.
     pledgeOutcomesSubscriber,
     pledgeMailer({ notifier, appOrigin }),
+    // M6.3b: public outbox events to the org's webhook endpoints (thin payloads, catalog only).
+    webhookPublisherSubscriber({ publisher: () => webhooks }),
+    // M6.4c: alerts the engine sent are queued for Slack channels (the Slack job posts them).
+    slackAlertsSubscriber,
+    // M6.6b: the billing meters (messaging, AI credits, devices) count usage from the outbox, and a
+    // verified charity profile gives the org the nonprofit discount.
+    billingUsageMeter(),
+    nonprofitDiscountFromCharity(),
+    // M6.7a: a client's grant snapshots it for its agency at once (and a revoke removes it).
+    agencySnapshotSubscriber,
   ];
 }
 

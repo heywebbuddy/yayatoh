@@ -51,7 +51,11 @@
       "coupon": "Gutschein",
       "page": "Seite oder Blogbeitrag"
     },
-    "help": "Hilfe"
+    "help": "Hilfe",
+    "clientsSection": "Kunden",
+    "viaAgency": "über {agency}",
+    "agencyBadgeLabel": "Sie arbeiten in {org} für {agency}",
+    "backToAgency": "Zurück zu {agency}"
   },
   "notifications": {
     "open": "Benachrichtigungen",
@@ -172,7 +176,9 @@
       "alerts": {
         "alert": "Warnung",
         "alert-text": "Warnungs-SMS",
-        "alert-urgent-text": "Dringende Warnung per SMS"
+        "alert-urgent-text": "Dringende Warnung per SMS",
+        "metric": "Alarmregel",
+        "metric-now": "Alarmregel (sofort gesendet)"
       },
       "campaigns": {
         "test": "Kampagnentest"
@@ -214,6 +220,12 @@
         "request-code": "Code für Datenschutzanfrage",
         "archive-ready": "Archiv mit personenbezogenen Daten bereit",
         "erasure-done": "Löschbestätigung"
+      },
+      "badges": {
+        "kiosk-code": "Code für das Badge-Terminal"
+      },
+      "analytics": {
+        "report": "Geplanter Bericht"
       },
       "cms": {
         "contact_message": "Nachricht über die Kontaktseite"
@@ -377,6 +389,7 @@
     "badges": "Badges",
     "orgAnalytics": "Analysen",
     "integrations": "Integrationen",
+    "virtual": "Streaming",
     "seatingLibrary": "Sitzplan-Bibliothek",
     "coupons": "Gutscheine",
     "charity": "Gemeinnützigkeitsprofil",
@@ -384,6 +397,9 @@
     "webhooks": "Webhooks",
     "sandboxes": "Sandboxes",
     "notifications": "Benachrichtigungen",
+    "sso": "Single Sign-On",
+    "agency": "Kunden",
+    "agencies": "Agenturen",
     "mediaLibrary": "Mediathek",
     "storage": "Speicher",
     "moneyOverview": "Übersicht",
@@ -417,7 +433,13 @@
     "box_office": "Kasse",
     "scanner": "Einlasskontrolle",
     "viewer": "Nur Lesen",
-    "collaborator": "Veranstaltungsmitarbeiter"
+    "collaborator": "Veranstaltungsmitarbeiter",
+    "agency_manager": "Agentur-Manager",
+    "agency_manager_finance": "Agentur-Manager (Finanzen)",
+    "agency_marketing": "Agentur-Marketing",
+    "agency_marketing_finance": "Agentur-Marketing (Finanzen)",
+    "agency_viewer": "Agentur-Betrachter",
+    "agency_viewer_finance": "Agentur-Betrachter (Finanzen)"
   },
   "profiles": {
     "wedding": "Hochzeit",
@@ -765,7 +787,8 @@
     "reference": "Referenz: {id}",
     "rateLimitedRetry": "Zu viele Versuche. Versuchen Sie es in {minutes, plural, one {# Minute} other {# Minuten}} erneut.",
     "impersonation_blocked": "Mitarbeitende, die als Mitglied handeln, können das nicht: Erstattungen, Auszahlungen, Exporte, Löschungen und Bestätigungen sind aus.",
-    "read_only_freeze": "Änderungen sind während der geplanten Wartung pausiert. Nichts wurde gespeichert; versuchen Sie es nach dem Ende erneut."
+    "read_only_freeze": "Änderungen sind während der geplanten Wartung pausiert. Nichts wurde gespeichert; versuchen Sie es nach dem Ende erneut.",
+    "read_only_billing": "Diese Organisation ist schreibgeschützt, bis ihr Abonnement bezahlt ist. Nichts wurde gespeichert oder gelöscht."
   },
   "notFound": {
     "title": "Seite nicht gefunden",
@@ -833,6 +856,43 @@
       "email_unverified": "Die E-Mail-Adresse dieses Kontos ist beim Anbieter nicht bestätigt. Bestätigen Sie sie dort oder melden Sie sich mit Ihrer E-Mail an.",
       "no_email": "Dieses Konto hat keine E-Mail-Adresse geteilt, daher können wir kein Yayatoh-Konto dafür anlegen.",
       "unavailable": "Diese Anmeldeoption ist gerade nicht verfügbar."
+    },
+    "ssoLink": "Mit Single Sign-On anmelden",
+    "ssoOtherOrg": "Sie haben sich mit dem Single Sign-On einer anderen Organisation angemeldet. Melden Sie sich erneut an, um diese Organisation zu öffnen.",
+    "sso": {
+      "eyebrow": "Single Sign-On",
+      "title": "Mit Ihrem Arbeitskonto anmelden",
+      "description": "Geben Sie Ihre geschäftliche E-Mail-Adresse ein. Wir leiten Sie zur Anmeldeseite Ihrer Organisation weiter.",
+      "email": "Geschäftliche E-Mail-Adresse",
+      "emailHint": "Ihre Organisation muss Single Sign-On für diese Adresse eingerichtet haben.",
+      "continue": "Weiter",
+      "back": "Zurück zu anderen Anmeldemethoden",
+      "errors": {
+        "invalid_email": "Geben Sie eine gültige E-Mail-Adresse ein.",
+        "no_sso": "Keine Organisation nutzt Single Sign-On für diese Adresse. Melden Sie sich auf andere Weise an.",
+        "rate_limited": "Zu viele Versuche. Warten Sie einige Minuten und versuchen Sie es erneut.",
+        "unavailable": "Single Sign-On ist derzeit nicht verfügbar. Melden Sie sich auf andere Weise an."
+      },
+      "refused": {
+        "expired": "Diese Anmeldung hat zu lange gedauert oder wurde bereits verwendet. Beginnen Sie erneut.",
+        "cancelled": "Die Anmeldung wurde auf der Anmeldeseite Ihrer Organisation abgebrochen.",
+        "failed": "Wir konnten Sie nicht per Single Sign-On anmelden. Versuchen Sie es erneut.",
+        "connection_inactive": "Das Single Sign-On Ihrer Organisation ist deaktiviert. Wenden Sie sich an Ihre Administration.",
+        "domain_not_verified": "Ihre Organisation hat die Domain dieser Adresse nicht verifiziert und kann Sie daher nicht anmelden.",
+        "identity_conflict": "Dieses Arbeitskonto ist hier mit einer anderen Person verknüpft. Wenden Sie sich an Ihre Administration.",
+        "deprovisioned": "Ihre Organisation hat Ihren Zugriff entfernt. Wenden Sie sich an Ihre Administration.",
+        "not_provisioned": "Sie haben noch keinen Zugriff auf diese Organisation. Bitten Sie Ihre Administration, Sie hinzuzufügen.",
+        "staff_two_factor": "Plattformmitarbeitende müssen die Bestätigung in zwei Schritten aktivieren, bevor sie Single Sign-On verwenden.",
+        "session_failed": "Wir konnten Ihre Anmeldung nicht abschließen. Versuchen Sie es erneut.",
+        "invalid_signature": "Die Anmeldeantwort Ihrer Organisation konnte nicht verifiziert werden.",
+        "wrong_issuer": "Die Anmeldeantwort stammt von einem anderen Identitätsanbieter als dem eingerichteten.",
+        "wrong_audience": "Die Anmeldeantwort war für eine andere Anwendung bestimmt.",
+        "wrong_request": "Die Anmeldeantwort gehört nicht zu dieser Anmeldung. Beginnen Sie erneut.",
+        "malformed": "Die Anmeldeantwort war nicht lesbar.",
+        "no_email": "Der Identitätsanbieter Ihrer Organisation hat keine E-Mail-Adresse übermittelt.",
+        "idp_error": "Der Identitätsanbieter Ihrer Organisation hat nicht geantwortet. Versuchen Sie es erneut.",
+        "sso_required": "Ihre Organisation verlangt Single Sign-On für Ihre Adresse. Melden Sie sich hier an, um fortzufahren."
+      }
     }
   },
   "orgPicker": {
@@ -2029,7 +2089,8 @@
     "dateSoldOut": "Für diesen Termin sind nicht mehr genug Tickets übrig.",
     "wrongDate": "Eines dieser Tickets wird für diesen Termin nicht verkauft.",
     "dateUnavailable": "Dieser Termin ist nicht mehr im Verkauf.",
-    "seatChannel": "Einige dieser Plätze sind für einen anderen Verkaufskanal reserviert (einen Sponsor, einen Promoter oder den Online-Verkauf). Wählen Sie andere Plätze."
+    "seatChannel": "Einige dieser Plätze sind für einen anderen Verkaufskanal reserviert (einen Sponsor, einen Promoter oder den Online-Verkauf). Wählen Sie andere Plätze.",
+    "imported": "Importiert aus {source} · Bestellung {reference}"
   },
   "seating": {
     "title": "Sitzplätze",
@@ -2139,6 +2200,7 @@
       "selection": "Bester Platz",
       "channels": "Kanäle",
       "revisions": "Versionen",
+      "solver": "Automatisch platzieren",
       "guests": "Gäste platzieren",
       "cards": "Karten und Exporte"
     },
@@ -2522,6 +2584,134 @@
       "isCurrent": "Das ist der Plan, wie er jetzt ist.",
       "restore": "Version {number} wiederherstellen",
       "restoredNotice": "Version {number} wiederhergestellt. Der aktuelle Plan ist Version {now}."
+    },
+    "solver": {
+      "title": "Sitzregeln und Planer",
+      "description": "Lege Regeln fest, lass den Planer allen noch nicht platzierten Gästen einen Tisch vorschlagen, prüfe den Vorschlag und übernimm einen Tisch oder alle. Von Hand platzierte Gäste werden nie verschoben.",
+      "rules": {
+        "heading": "Regeln",
+        "listLabel": "Sitzregeln",
+        "empty": "Noch keine Regeln. Füge unten eine hinzu oder starte den Planer ohne Regeln: Er hält trotzdem jeden Tisch innerhalb seiner Plätze.",
+        "hard": "Fest",
+        "soft": "Weich",
+        "badge": "{strength} · Gewicht {weight}",
+        "strength": "Stärke",
+        "strengthHint": "Ein Vorschlag bricht nie eine feste Regel. Weiche Regeln werden eingehalten, wenn es geht; jeder Verstoß kostet ihr Gewicht.",
+        "weight": "Gewicht",
+        "weightHint": "1 bis 10. Weiche Regeln mit höherem Gewicht zählen mehr.",
+        "save": "Speichern",
+        "remove": "Entfernen",
+        "saved": "Regel gespeichert.",
+        "removed": "Regel entfernt.",
+        "added": "Regel hinzugefügt.",
+        "editLabel": "Regel ändern: {rule}",
+        "kinds": {
+          "keep_together": "Zusammen setzen",
+          "keep_apart": "Getrennt setzen",
+          "vip_near_stage": "VIPs am nächsten zur Bühne",
+          "access_near_exit": "Barrierefreiheit nahe den Ausgängen",
+          "table_max": "Höchstzahl pro Tisch"
+        },
+        "add": {
+          "heading": "Regel hinzufügen",
+          "kind": "Regel",
+          "by": "Wer",
+          "byEach": "Jede Gruppe",
+          "byParty": "Eine Gruppe",
+          "byTag": "Alle mit einem Schlagwort",
+          "bySide": "Alle einer Seite",
+          "party": "Gruppe",
+          "tag": "Schlagwort",
+          "side": "Seite",
+          "choose": "Auswählen…",
+          "together": "Zusammen setzen",
+          "first": "Erste Gruppe",
+          "second": "Zweite Gruppe",
+          "accessTag": "Schlagwort für Barrierefreiheit",
+          "accessHint": "Gruppen mit diesem Schlagwort sitzen an den Tischen, die einem Ausgang oder Eingang am nächsten sind. Antworten zur Barrierefreiheit bleiben privat.",
+          "max": "Höchstens Personen pro Tisch",
+          "vipHint": "VIP-Gruppen sitzen an den Tischen, die der Bühne am nächsten sind.",
+          "submit": "Regel hinzufügen"
+        },
+        "errors": {
+          "value": "Wähle, für wen die Regel gilt.",
+          "same": "Wähle zwei verschiedene Gruppen.",
+          "weight": "Gib ein Gewicht von 1 bis 10 ein.",
+          "max": "Gib eine Zahl von 1 bis 40 ein.",
+          "duplicate": "Diese Veranstaltung hat diese Regel schon.",
+          "tooMany": "Eine Veranstaltung kann höchstens 50 Regeln haben.",
+          "unknownParty": "Diese Gruppe steht nicht auf dieser Gästeliste."
+        },
+        "describe": {
+          "togetherParty": "Jede Gruppe zusammen setzen",
+          "togetherTag": "Alle mit dem Schlagwort „{value}“ zusammen setzen",
+          "togetherSide": "Die Seite {value} zusammen setzen",
+          "apart": "{a} getrennt von {b} setzen",
+          "targetParty": "{value}",
+          "targetTag": "alle mit dem Schlagwort „{value}“",
+          "targetSide": "die Seite {value}",
+          "vip": "VIP-Gruppen am nächsten zur Bühne",
+          "access": "Gäste mit dem Schlagwort „{tag}“ nahe einem Ausgang",
+          "tableMax": "Höchstens {max} Personen pro Tisch"
+        }
+      },
+      "run": {
+        "heading": "Vorschlag",
+        "queue": "{count, plural, one {# Gast} other {# Gäste}} noch zu platzieren. {fixed, plural, =0 {Noch niemand ist platziert.} one {# von Hand platzierter Gast bleibt, wo er ist.} other {# von Hand platzierte Gäste bleiben, wo sie sind.}}",
+        "nothing": "Alle sind platziert. Es gibt nichts vorzuschlagen.",
+        "seed": "Anordnungsnummer",
+        "seedHint": "Dieselbe Nummer ergibt immer denselben Vorschlag.",
+        "seedError": "Gib eine ganze Zahl von 1 bis 1.000.000 ein.",
+        "start": "Sitzordnung vorschlagen",
+        "cancel": "Stopp",
+        "again": "Andere Anordnung versuchen",
+        "running": "Vorschlag wird erstellt… {percent} %",
+        "progress": "Fortschritt des Vorschlags",
+        "cancelled": "Gestoppt. Es wurde nichts vorgeschlagen.",
+        "failed": "Der Planer hat unerwartet angehalten. Versuche es erneut."
+      },
+      "summary": {
+        "heading": "Zusammenfassung",
+        "done": "Vorschlag fertig in {seconds} s (Anordnung {seed}).",
+        "seated": "{count, plural, one {# Gast} other {# Gäste}} an {tables, plural, one {# Tisch} other {# Tischen}}; {queue, plural, =0 {niemand bleibt in der Warteschlange} one {# Gast bleibt in der Warteschlange} other {# Gäste bleiben in der Warteschlange}}.",
+        "hardOk": "Keine feste Regel wird gebrochen.",
+        "hardBroken": "{count, plural, one {# feste Regel wird gebrochen} other {# feste Regeln werden gebrochen}}. Ändere den Vorschlag vor dem Übernehmen.",
+        "soft": "Weiche Regeln: Abzug {penalty} (0 ist am besten).",
+        "ruleLine": "{rule}: {count, plural, =0 {eingehalten} one {# Verstoß} other {# Verstöße}}",
+        "issues": {
+          "no_stage": "Der Plan hat keine Bühne, daher gilt „VIPs am nächsten zur Bühne“ nicht.",
+          "no_exit": "Der Plan hat keinen Ausgang oder Eingang, daher gilt „Barrierefreiheit nahe den Ausgängen“ nicht.",
+          "group_too_big": "Eine Gruppe von {size} ist größer als jeder Tisch ({room} Plätze). Sie wird auf so wenige Tische wie möglich verteilt.",
+          "too_few_seats": "{size} Gäste zu platzieren, aber nur {room} freie Plätze: Einige bleiben in der Warteschlange.",
+          "no_room": "Der Plan hat keine Tische oder Reihen."
+        }
+      },
+      "tables": {
+        "heading": "Vorgeschlagene Tische",
+        "none": "Kein Tisch vorgeschlagen.",
+        "region": "Tisch {label}",
+        "fill": "{proposed} vorgeschlagen · {seated} platziert · {free} von {capacity} frei",
+        "overFull": "{count, plural, one {# Gast zu viel} other {# Gäste zu viel}} für die freien Plätze.",
+        "broken": "Bricht eine feste Regel: {rules}",
+        "over": "Mehr Gäste als Plätze",
+        "accept": "Tisch {label} übernehmen",
+        "acceptAll": "Alle Tische übernehmen",
+        "fixFirst": "Korrigiere zuerst die Tische mit einer Warnung.",
+        "acceptedTable": "Tisch {label} übernommen: {count, plural, one {# Gast} other {# Gäste}} platziert.",
+        "acceptedAll": "Vorschlag übernommen: {count, plural, one {# Gast} other {# Gäste}} platziert.",
+        "queueHeading": "In der Warteschlange",
+        "guest": "{name} ({party})",
+        "moveLabel": "Tisch für {name}",
+        "queueOption": "In der Warteschlange lassen",
+        "optionFree": "Tisch {label} ({free} frei)",
+        "toEditor": "Sitzplan-Editor öffnen"
+      },
+      "acceptErrors": {
+        "already_seated": "Jemand aus diesem Vorschlag wurde inzwischen von Hand platziert. Schlage neu vor.",
+        "declined": "Ein Gast aus diesem Vorschlag hat abgesagt. Schlage neu vor.",
+        "hard_rule": "Das Übernehmen würde eine feste Regel brechen.",
+        "cant_fit": "An diesen Tisch passen nur noch {fits}."
+      }
     },
     "guestSeating": {
       "title": "Gäste platzieren",
@@ -3255,22 +3445,6 @@
       "digest": "SHA-256 des Belegs",
       "signature": "Signatur (base64)",
       "footer": "Ausgestellt von Yayatoh für {org}. Die Signatur deckt die Daten des Belegs ab; prüfen Sie sie mit dem öffentlichen Schlüssel unten."
-    },
-    "categories": {
-      "contacts": "Kontakteinträge",
-      "consents": "Einwilligungseinträge",
-      "orders": "Bestellungen",
-      "paidOrders": "Bezahlte Bestellungen (für die Buchhaltung aufbewahrt)",
-      "tickets": "Tickets",
-      "activeTickets": "Gültige Tickets",
-      "claims": "Links zur Ticketweitergabe",
-      "holderLinks": "Links zum Ticketzugang",
-      "attendees": "Gästelisteneinträge",
-      "answers": "Antworten beim Checkout",
-      "admissions": "Check-ins",
-      "invitations": "Team-Einladungen",
-      "networkProfiles": "Networking-Profile",
-      "chatMessages": "Gesendete Chatnachrichten"
     },
     "findOwner": "Inhaber oder Admin finden"
   },
@@ -4110,7 +4284,10 @@
       "orders_refund": "Bestellungen erstatten",
       "attendees_read": "Teilnehmende lesen",
       "attendees_write": "Teilnehmende ändern und Tickets erneut senden",
-      "checkin_scan": "Tickets scannen"
+      "checkin_scan": "Tickets scannen",
+      "contacts_write": "Kontakte hinzufügen",
+      "webhooks_subscribe": "Automatisierungs-Hooks abonnieren (Zapier-Auslöser)",
+      "webhooks_manage": "Webhook-Endpunkte hinzufügen und entfernen (Make- und n8n-Trigger)"
     },
     "expiry": "Läuft ab",
     "expiryHint": "Ein ablaufender Schlüssel muss vorher rotiert werden. Kürzer ist sicherer.",
@@ -7558,6 +7735,10 @@
       "rsvpPending": "Antworten öffnen",
       "guestsUnseated": "Gäste platzieren",
       "mealsMissing": "RSVP-Antworten öffnen",
+      "integrationFailed": "Integrations-Posteingang öffnen",
+      "billingPastDue": "Tarif und Abrechnung öffnen",
+      "metricRule": "Alarmregeln öffnen",
+      "metricRuleFinance": "Alarmregeln öffnen",
       "pledgesUnpaid": "Zusagen öffnen",
       "sessionsNearCapacity": "Sessions öffnen",
       "sessionWaitlists": "Session-Anmeldung öffnen",
@@ -7594,6 +7775,10 @@
       "rsvpPending": "{count, plural, one {Ein Gast hat noch nicht auf die Einladung geantwortet} other {{countWords} Gäste haben noch nicht auf die Einladung geantwortet}}",
       "guestsUnseated": "{count, plural, one {Ein Gast hat keinen Tisch} other {{countWords} Gäste haben keinen Tisch}}",
       "mealsMissing": "{count, plural, one {Ein zusagender Gast hat kein Essen gewählt} other {{countWords} zusagende Gäste haben kein Essen gewählt}}",
+      "integrationFailed": "{count, plural, one {{countWords} Integrationsproblem heute (fehlgeschlagene Synchronisierung oder verlorene Verbindung)} other {{countWords} Integrationsprobleme heute (fehlgeschlagene Synchronisierungen oder verlorene Verbindungen)}}",
+      "billingPastDue": "{count, plural, one {Die Zahlung für den Tarif ist überfällig} other {{countWords} Tarifzahlungen sind überfällig}}",
+      "metricRule": "Alarmregel „{title}“ wurde ausgelöst",
+      "metricRuleFinance": "Alarmregel „{title}“ wurde ausgelöst",
       "pledgesUnpaid": "{count, plural, one {Eine Zusage ist 14 Tage nach der Veranstaltung noch offen} other {{countWords} Zusagen sind 14 Tage nach der Veranstaltung noch offen}}",
       "sessionsNearCapacity": "{count, plural, one {Eine Session ist zu über 95 % ausgelastet} other {{countWords} Sessions sind zu über 95 % ausgelastet}}",
       "sessionWaitlists": "{count, plural, one {Eine Session hat eine lange Warteliste} other {{countWords} Sessions haben lange Wartelisten}}",
@@ -10260,6 +10445,219 @@
       },
       "cardLink": "Matching-Spenden öffnen",
       "cardBody": "Lassen Sie einen Sponsor Spenden in einem Zeitfenster bis zu einer Obergrenze verdoppeln, und exportieren Sie die Arbeitgeber der Spender."
+    },
+    "report": {
+      "title": "Spendenbericht",
+      "subtitle": "Was gesammelt wurde und wie, eingezogene Zusagen und alle Spender, abgeglichen mit dem Hauptbuch.",
+      "noAccessTitle": "Finanzzugriff erforderlich",
+      "noAccessDescription": "Bitte eine Inhaberin, einen Admin oder ein Finanzmitglied um den Spendenbericht: Er nennt Spender und Beträge.",
+      "reconcileLink": "Abgleich",
+      "emptyTitle": "Noch keine Spenden",
+      "emptyDescription": "Spenden, Paddle-Zusagen und Spendentickets erscheinen hier, sobald sie eingehen. Öffne auf dem Tab Spenden eine Kampagne, um zu beginnen.",
+      "backToDonations": "Zu den Spenden",
+      "asOf": "Bis jetzt. Datumsangaben in Exporten sind in der Zeitzone der Veranstaltung ({zone}).",
+      "totalsTitle": "Summen",
+      "totalsIn": "Summen in {currency}",
+      "stats": {
+        "raised": "Gesammelt",
+        "raisedSub": "{count, plural, one {# Spende oder Zahlung} other {# Spenden und Zahlungen}} von {donors, plural, one {# Spender} other {# Spendern}}",
+        "online": "Per Karte erhalten",
+        "onlineSub": "Inklusive {cover} übernommener Gebühren; {refunded} erstattet",
+        "offline": "Offline bezahlt",
+        "ticketSub": "Dazu {amount} aus Spendentickets",
+        "pledged": "Im Saal zugesagt",
+        "collectedLabel": "Eingezogene Zusagen",
+        "pledgedSub": "{collected} eingezogen · {writtenOff} abgeschrieben · {open} noch offen",
+        "matched": "Von Sponsoren verdoppelt",
+        "matchedSub": "Zusagen der Sponsoren, separat eingezogen"
+      },
+      "check": {
+        "title": "Hauptbuch-Prüfung",
+        "notReconciled": "Noch nicht abgeglichen",
+        "matches": "Stimmt auf den Cent",
+        "differs": "Weicht um {amount} ab",
+        "ledger": "Merkposten im Hauptbuch",
+        "provider": "Stripe-Saldo (letzter Abgleich)",
+        "none": "Noch nicht abgeglichen",
+        "fees": "Stripe-Gebühren"
+      },
+      "bySource": {
+        "title": "Nach Herkunft",
+        "source": "Herkunft",
+        "count": "Spenden",
+        "net": "Erhalten"
+      },
+      "sources": {
+        "online": "Spendenseite",
+        "qr": "QR-Code",
+        "paddle": "Paddle-Runde",
+        "ticket": "Spendentickets"
+      },
+      "byLevel": {
+        "title": "Nach Stufe",
+        "empty": "Noch keine Stufen genutzt.",
+        "level": "Stufe",
+        "own": "Eigene Beträge",
+        "gifts": "Spenden",
+        "giftsCell": "{count, plural, one {# Spende} other {# Spenden}} · {amount}",
+        "pledges": "Paddle-Zusagen",
+        "pledgesCell": "{count, plural, one {# Zusage} other {# Zusagen}} · {amount}"
+      },
+      "byMatch": {
+        "title": "Nach Verdopplung",
+        "sponsor": "Sponsor",
+        "campaign": "Kampagne",
+        "status": "Status",
+        "matched": "Verdoppelt",
+        "matchedCell": "{matched} von {cap}"
+      },
+      "matchStatus": {
+        "active": "Läuft",
+        "closed": "Abgeschlossen",
+        "cancelled": "Abgesagt"
+      },
+      "byDonor": {
+        "title": "Nach Spender",
+        "note": "Anonyme Spender sind markiert: Du siehst, wer gegeben hat, dankst oder nennst sie aber nie öffentlich.",
+        "empty": "Noch keine Spender.",
+        "donor": "Spender",
+        "anonymous": "Anonym",
+        "email": "E-Mail",
+        "count": "Spenden",
+        "net": "Gegeben",
+        "truncated": "Hier stehen nur die 500 größten Spender; der Export enthält alle."
+      },
+      "export": {
+        "title": "Export für dein Spender-CRM",
+        "body": "Eine Zeile pro Spende, Offline-Zahlung und Spendenticket, mit Anonym-Kennzeichen. Zuerst bestätigst du, dass du es bist.",
+        "error": "Der Export wurde nicht gestartet: {reason}",
+        "layout": "Spalten für",
+        "layoutHint": "CRM-Layouts verwenden die Spaltennamen des CRM, damit die Datei ohne Zuordnung importiert wird.",
+        "format": "Dateityp",
+        "csv": "CSV (.csv)",
+        "xlsx": "Excel (.xlsx)",
+        "submit": "Spender exportieren",
+        "statusCsv": "Spenderexport (CSV)",
+        "statusXlsx": "Spenderexport (Excel)"
+      },
+      "layouts": {
+        "generic": "Jede Tabellenkalkulation (diese Sprache)",
+        "salesforce_npsp": "Salesforce Nonprofit (NPSP)",
+        "bloomerang": "Bloomerang",
+        "little_green_light": "Little Green Light"
+      },
+      "cardTitle": "Bericht und Exporte",
+      "cardLink": "Bericht öffnen",
+      "cardBody": "Summen nach Herkunft, Stufe, Verdopplung und Spender; eingezogene Zusagen; Exporte für dein Spender-CRM.",
+      "cardReconcile": "Mit Stripe abgleichen",
+      "file": {
+        "headers": {
+          "date": "Datum",
+          "firstName": "Vorname",
+          "lastName": "Nachname",
+          "donor": "Spender",
+          "email": "E-Mail",
+          "anonymous": "Anonym",
+          "amount": "Erhaltener Betrag",
+          "gift": "Spende",
+          "feeCover": "Übernommene Gebühr",
+          "refunded": "Erstattet",
+          "currency": "Währung",
+          "campaign": "Kampagne",
+          "level": "Stufe",
+          "source": "Herkunft",
+          "method": "Zahlungsart",
+          "employer": "Arbeitgeber",
+          "tribute": "Zu Ehren oder im Gedenken an",
+          "paddle": "Paddle",
+          "reference": "Referenz"
+        },
+        "yes": "Ja",
+        "no": "Nein",
+        "sources": {
+          "online": "Spendenseite",
+          "qr": "QR-Code",
+          "paddle": "Paddle-Runde",
+          "ticket": "Spendenticket"
+        },
+        "methods": {
+          "card": "Karte",
+          "check": "Scheck",
+          "wire": "Überweisung",
+          "stock": "Aktien",
+          "daf": "Donor-Advised Fund",
+          "cash": "Bar",
+          "other": "Sonstiges"
+        },
+        "privacyTitle": "Deine Spender bleiben deine",
+        "privacy": "Exporte enthalten nur die Spender dieser Veranstaltung. Bewahre die Datei sicher auf und lösche sie nach dem Import."
+      }
+    },
+    "recon": {
+      "title": "Spendenabgleich",
+      "subtitle": "Die Spenden der Veranstaltung im Hauptbuch, verglichen mit deinem Stripe-Konto und seinen Auszahlungen.",
+      "noAccessTitle": "Finanzzugriff erforderlich",
+      "noAccessDescription": "Bitte eine Inhaberin, einen Admin oder ein Finanzmitglied, die Spenden abzugleichen.",
+      "errors": {
+        "note": "Schreib, was du gefunden hast (3 bis 500 Zeichen).",
+        "provider": "Stripe war nicht erreichbar. Versuch es in ein paar Minuten noch einmal."
+      },
+      "run": "Jetzt abgleichen",
+      "ran": "Abgeglichen.",
+      "reportLink": "Spendenbericht",
+      "notConnectedTitle": "Kein Stripe-Konto zum Vergleichen",
+      "notConnectedDescription": "Spenden gehen direkt auf dein verbundenes Stripe-Konto. Verbinde es unter Auszahlungen und gleiche dann hier ab.",
+      "status": {
+        "open": "Offen",
+        "resolved": "Geklärt",
+        "cleared": "Ausgeglichen"
+      },
+      "viewerNotice": "Du kannst den Abgleich lesen. Inhaber, Admins und Finanzmitglieder führen ihn aus und klären Abweichungen.",
+      "runTitle": "Letzter Lauf",
+      "lastRun": "Zuletzt abgeglichen {at}: {ledger} Hauptbuch-Einträge gegen {provider} Stripe-Bewegungen.",
+      "neverRun": "Noch nicht abgeglichen. Gleiche jetzt ab, um das Hauptbuch mit Stripe zu vergleichen.",
+      "stats": {
+        "ledger": "Merkposten im Hauptbuch",
+        "provider": "Stripe-Saldo",
+        "fees": "Stripe-Gebühren",
+        "unpaidOut": "Noch nicht ausgezahlt",
+        "unpaidOutSub": "{count, plural, =0 {Alles wurde ausgezahlt} one {# Bewegung wartet auf eine Auszahlung} other {# Bewegungen warten auf eine Auszahlung}}"
+      },
+      "diffsTitle": "Abweichungen",
+      "cleanTitle": "Alles stimmt",
+      "cleanDescription": "Jede Spende und Erstattung im Hauptbuch stimmt auf den Cent mit Stripe überein.",
+      "allSettled": "Keine offenen Abweichungen: Alle sind geklärt oder ausgeglichen.",
+      "kinds": {
+        "missing_at_provider": "Im Hauptbuch, nicht bei Stripe",
+        "missing_in_ledger": "Bei Stripe, nicht im Hauptbuch",
+        "amount_mismatch": "Beträge weichen ab"
+      },
+      "ledger": "Hauptbuch",
+      "provider": "Stripe",
+      "difference": "Differenz",
+      "resolvedNote": "Geklärt: {note}",
+      "noteLabel": "Was du gefunden hast",
+      "noteHint": "Zum Beispiel: telefonisch erstattet, Stripe-Korrektur, doppelter Eintrag.",
+      "resolve": "{reference} klären",
+      "resolved": "Geklärt.",
+      "payoutsTitle": "Auszahlungen",
+      "payoutsBody": "Auszahlungen von deinem Stripe-Konto mit Spenden dieser Veranstaltung. Eine Auszahlung kann auch anderes Geld enthalten.",
+      "payoutsEmpty": "Noch keine Auszahlungen. Stripe zahlt einige Tage nach Eingang der Spenden aus.",
+      "payout": {
+        "id": "Auszahlung",
+        "status": "Status",
+        "arrival": "Eingang",
+        "amount": "Auszahlung",
+        "donations": "Spenden dieser Veranstaltung",
+        "donationsCell": "{count, plural, one {# Bewegung} other {# Bewegungen}}: {net} nach {fees} Gebühren"
+      },
+      "payoutStatus": {
+        "pending": "Ausstehend",
+        "in_transit": "Unterwegs",
+        "paid": "Bezahlt",
+        "failed": "Fehlgeschlagen",
+        "canceled": "Storniert"
+      }
     }
   },
   "galaTables": {
@@ -12470,6 +12868,36 @@
       "waitlist_closed": "{title} ist ausgebucht und die Warteliste wurde 24 Stunden vor der Session geschlossen.",
       "offer_ended": "Das Angebot für {title} ist abgelaufen.",
       "full": "{title} ist gerade voll geworden. Versuche es erneut, um auf die Warteliste zu kommen."
+    },
+    "calendar": {
+      "title": "Google Kalender",
+      "off": "Halten Sie diesen Ablauf in Ihrem Google Kalender. Sessions, die Sie hinzufügen oder abwählen, und jede Änderung von Zeit oder Raum werden automatisch übernommen.",
+      "privacy": "Wir fügen Ihrem Kalender nur die Sessions dieser Veranstaltung hinzu. Ihre anderen Termine lesen wir nie.",
+      "connect": "Zu Google Kalender hinzufügen",
+      "reconnect": "Erneut verbinden",
+      "pending": "Wir warten auf die Bestätigung von Google. Falls Sie das Fenster geschlossen haben, verbinden Sie erneut.",
+      "active": "{count, plural, =0 {Wird mit Ihrem Google Kalender synchronisiert. Noch keine Sessions darin.} one {Wird mit Ihrem Google Kalender synchronisiert: # Session ist darin.} other {Wird mit Ihrem Google Kalender synchronisiert: # Sessions sind darin.}}",
+      "lastSync": "Zuletzt aktualisiert {when}",
+      "neverSynced": "Die erste Aktualisierung ist unterwegs.",
+      "syncNow": "Jetzt aktualisieren",
+      "syncing": "Aktualisierung unterwegs",
+      "stop": "Synchronisierung beenden",
+      "stopped": "Die Synchronisierung ist aus. Sessions, die schon in Ihrem Kalender sind, bleiben dort.",
+      "revokedByGoogle": "Google akzeptiert diese Verbindung nicht mehr, daher wurden die Aktualisierungen beendet. Verbinden Sie erneut, um fortzufahren.",
+      "done": {
+        "queued": "Aktualisierung unterwegs. Ihr Kalender ändert sich gleich.",
+        "already": "Eine Aktualisierung ist bereits unterwegs.",
+        "stopped": "Synchronisierung beendet. Sessions, die schon in Ihrem Kalender sind, bleiben dort."
+      },
+      "notice": {
+        "connected": "Verbunden. Ihre Sessions erscheinen gleich in Ihrem Google Kalender.",
+        "denied": "Google Kalender wurde nicht verbunden.",
+        "expired": "Dieser Verbindungslink ist abgelaufen. Versuchen Sie es erneut.",
+        "unavailable": "Die Kalendersynchronisierung ist für diese Veranstaltung nicht verfügbar.",
+        "provider_unavailable": "Google war nicht erreichbar. Versuchen Sie es gleich noch einmal.",
+        "rate_limited": "Zu viele Versuche. Warten Sie ein paar Minuten und versuchen Sie es erneut.",
+        "conflict": "Ihr Kalender ist bereits verbunden."
+      }
     }
   },
   "people": {
@@ -13127,7 +13555,74 @@
       "ai_seating": "KI-Bestuhlung",
       "analytics_pro": "Erweiterte Analysen"
     },
-    "findOwner": "Inhaber oder Admin finden"
+    "findOwner": "Inhaber oder Admin finden",
+    "usageLink": "Nutzung",
+    "renewalReceived": "Verlängerungsupdate erhalten",
+    "dunning": {
+      "graceTitle": "Die Zahlung für Ihr Abonnement ist fehlgeschlagen",
+      "graceBody": "Bis zum {date} funktioniert alles wie gewohnt. Zahlen Sie vorher, um weiter Änderungen vornehmen zu können; danach ist die Organisation schreibgeschützt, bis bezahlt ist.",
+      "readOnlyTitle": "Diese Organisation ist schreibgeschützt",
+      "readOnlyBody": "Die Abonnementzahlung ist fehlgeschlagen, daher sind Änderungen pausiert. Nichts wurde gelöscht: Sie können alles ansehen, Ihre Daten exportieren und Tickets am Einlass scannen. Zahlen Sie, um Änderungen sofort wieder zu ermöglichen.",
+      "payNow": "Jetzt bezahlen",
+      "askOwner": "Bitten Sie einen Inhaber oder Admin dieser Organisation, zu bezahlen.",
+      "paidTitle": "Zahlung eingegangen",
+      "paidBody": "Danke. Änderungen sind für alle in der Organisation wieder möglich.",
+      "declinedTitle": "Die Zahlung ist fehlgeschlagen",
+      "declinedBody": "Nichts wurde geändert. Prüfen Sie die hinterlegte Karte bei Ihrem Abrechnungsanbieter und versuchen Sie es erneut.",
+      "payError": "Die Zahlung konnte nicht gestartet werden. Versuchen Sie es gleich noch einmal."
+    },
+    "change": {
+      "title": "Plan ändern",
+      "description": "Upgrades und Downgrades gelten sofort. Sie zahlen oder erhalten eine Gutschrift nur für den Rest dieses Abrechnungszeitraums.",
+      "discountCharity": "Ihr verifiziertes Gemeinnützigkeitsprofil gibt Ihnen {percent} % Rabatt auf jeden Plan.",
+      "discountStaff": "Ihre Organisation erhält {percent} % Rabatt für Gemeinnützige auf jeden Plan.",
+      "legend": "Pläne",
+      "offer": "{plan}: {price} {interval, select, year {pro Jahr} other {pro Monat}}",
+      "direction": {
+        "upgrade": "Upgrade",
+        "downgrade": "Downgrade",
+        "switch": "Wechsel",
+        "start": "Start"
+      },
+      "turnsOff": "{count, plural, one {Schaltet # Modul ab} other {Schaltet # Module ab}}",
+      "chooseError": "Wählen Sie einen Plan für die Vorschau.",
+      "preview": "Änderung ansehen",
+      "previewTitle": "Wechsel zu {plan}",
+      "previewLead": {
+        "upgrade": "Sie führen ein Upgrade durch. So viel zahlen Sie heute für den Rest dieses Abrechnungszeitraums.",
+        "downgrade": "Sie führen ein Downgrade durch. Ungenutzte Zeit Ihres aktuellen Plans wird gutgeschrieben.",
+        "switch": "Sie wechseln zu einem Plan mit demselben Preis.",
+        "start": "Ihr Abonnement beginnt heute."
+      },
+      "rows": {
+        "charge": "Neuer Plan, Rest des Zeitraums",
+        "credit": "Gutschrift für ungenutzte Zeit",
+        "discount": "Rabatt für Gemeinnützige",
+        "tax": "Steuer",
+        "due": "Heute fällig"
+      },
+      "creditKept": "{amount} Guthaben bleiben für Ihre nächsten Rechnungen erhalten.",
+      "nextRenewal": "Danach {amount} am {date}.",
+      "nextRenewalNoDate": "Danach {amount} pro Zeitraum.",
+      "taxNote": "Die Steuer berechnet der Abrechnungsanbieter anhand der Rechnungsdaten Ihrer Organisation.",
+      "removedTitle": "{count, plural, one {# Modul wird abgeschaltet} other {# Module werden abgeschaltet}}",
+      "removedBody": "Ihre Daten bleiben erhalten. Sie kommen unverändert zurück, wenn Sie zu einem Plan wechseln, der sie enthält.",
+      "confirmRemoved": "{count, plural, one {Mir ist klar, dass dieses Modul abgeschaltet wird} other {Mir ist klar, dass diese Module abgeschaltet werden}}",
+      "confirmError": "Bestätigen Sie die abgeschalteten Module, um fortzufahren.",
+      "confirm": "Änderung bestätigen",
+      "cancel": "Plan behalten",
+      "doneTitle": "Planänderung gesendet",
+      "doneBody": "Ihr Abrechnungsanbieter hat die Änderung bestätigt. Plan und Module sind unten aktualisiert.",
+      "errorTitle": "Der Plan wurde nicht geändert",
+      "errors": {
+        "billing_off": "Die Abrechnung ist für diese Organisation nicht aktiv.",
+        "same_plan": "Sie haben diesen Plan bereits.",
+        "validation_failed": "Wählen Sie einen angebotenen Plan.",
+        "provider": "Der Abrechnungsanbieter hat die Änderung nicht angenommen. Es wurde nichts berechnet; versuchen Sie es erneut.",
+        "forbidden": "Nur Inhaber und Admins können den Plan ändern.",
+        "other": "Etwas ist schiefgelaufen. Nichts wurde geändert."
+      }
+    }
   },
   "billingPortal": {
     "eyebrow": "Testabrechnung",
@@ -13137,7 +13632,11 @@
     "switch": "Tarif wechseln",
     "cancel": "Abonnement kündigen",
     "back": "Ohne Änderung zurück",
-    "chooseError": "Wählen Sie einen Tarif, zu dem Sie wechseln möchten."
+    "chooseError": "Wählen Sie einen Tarif, zu dem Sie wechseln möchten.",
+    "noSubscriptionError": "Dieser Kunde hat noch kein Abonnement. Wählen Sie zuerst einen Plan.",
+    "renewalLegend": "Verlängerung",
+    "failRenewal": "Verlängerungszahlung fehlschlagen lassen",
+    "stopRetrying": "Zahlungsversuche beenden"
   },
   "seatingLibrary": {
     "title": "Saalplan-Bibliothek",
@@ -13269,6 +13768,36 @@
     "connectors": {
       "demo": {
         "description": "Eine Sandbox-Kontakte-App zum Ausprobieren: Kontakte werden in beide Richtungen mit deinem CRM abgeglichen. Nur in Testumgebungen."
+      },
+      "slack": {
+        "description": "Warnungen und eine tägliche Zusammenfassung in einem Slack-Kanal Ihrer Wahl. Nachrichten nennen Veranstaltungen, nie E-Mails, Telefonnummern oder Beträge, außer Sie schalten sie ein."
+      },
+      "eventbrite": {
+        "description": "Übernimm deine Veranstaltungen, Ticketarten, Bestellungen und Teilnehmenden von Eventbrite. Erst die Vorschau, dann importieren; jederzeit erneut ausführen, um Änderungen zu holen."
+      },
+      "google_sheets": {
+        "description": "Führe die Teilnehmerliste einer Veranstaltung in einer Google-Tabelle. Änderungen auf beiden Seiten werden in beide Richtungen synchronisiert."
+      },
+      "salesforce": {
+        "description": "Halten Sie Salesforce auf dem gleichen Stand: Kontakte und Leads in beide Richtungen, eine Kampagne pro Veranstaltung mit den angemeldeten und eingecheckten Personen und Ihre Sponsoren als Opportunities. Gesendet werden nur Personen, die Marketing zugestimmt haben."
+      },
+      "google_calendar": {
+        "description": "Jede Session Ihrer laufenden Veranstaltungen in einem Google Kalender, immer aktuell: verschobene Sessions wandern mit, abgesagte verschwinden. Zeiten erscheinen in der Zeitzone der jeweiligen Veranstaltung."
+      },
+      "quickbooks": {
+        "description": "Buchen Sie täglich eine Sammelbuchung Ihrer Verkäufe, Gebühren, Erstattungen, Auszahlungen und Spenden in QuickBooks Online."
+      },
+      "xero": {
+        "description": "Buchen Sie täglich eine Sammelbuchung Ihrer Verkäufe, Gebühren, Erstattungen, Auszahlungen und Spenden in Xero."
+      },
+      "mailchimp": {
+        "description": "Senden Sie eine Zielgruppe mit Merge-Feldern an eine Mailchimp-Liste. Abmeldungen und unzustellbare Adressen kommen als Einwilligungsänderungen zurück."
+      },
+      "hubspot": {
+        "description": "Kontakte in beide Richtungen synchronisieren und Ihre Veranstaltungen als Marketing-Events mit Anmeldungen und Check-ins an HubSpot senden."
+      },
+      "klaviyo": {
+        "description": "Senden Sie eine Zielgruppe an eine Klaviyo-Liste. Abmeldungen, Bounces und Spam-Beschwerden kommen als Einwilligungsänderungen zurück."
       }
     },
     "sandboxBadge": "Sandbox",
@@ -13288,11 +13817,66 @@
     "readOnly": "Nur Inhaber und Admins können Integrationen verbinden oder ändern.",
     "breadcrumb": "Brotkrümelnavigation",
     "objects": {
-      "contacts": "Kontakte"
+      "contacts": "Kontakte",
+      "events": "Veranstaltungen",
+      "ticket_classes": "Ticketarten",
+      "orders": "Bestellungen",
+      "attendees": "Teilnehmende",
+      "leads": "Leads",
+      "campaigns": "Kampagnen",
+      "campaign_members": "Kampagnenmitglieder",
+      "sponsor_opportunities": "Sponsoren-Opportunities",
+      "sessions": "Sessions",
+      "journals": "Tagesbuchungen",
+      "members": "Listenmitglieder",
+      "marketing_events": "Marketing-Events",
+      "event_attendance": "Anmeldungen und Teilnahme"
     },
     "fields": {
       "email": "E-Mail",
-      "name": "Name"
+      "name": "Name",
+      "tagline": "Slogan",
+      "starts_at": "Beginn",
+      "ends_at": "Ende",
+      "timezone": "Zeitzone",
+      "currency": "Währung",
+      "venue_name": "Veranstaltungsort",
+      "city": "Stadt",
+      "country": "Land",
+      "description": "Beschreibung",
+      "price_minor": "Preis (in Cent)",
+      "quantity_total": "Menge",
+      "hidden": "Versteckt",
+      "sales_start_at": "Verkaufsstart",
+      "sales_end_at": "Verkaufsende",
+      "buyer_email": "E-Mail der Käuferin oder des Käufers",
+      "buyer_name": "Name der Käuferin oder des Käufers",
+      "status": "Status",
+      "subtotal_minor": "Ticketsumme (in Cent)",
+      "total_minor": "Bestellsumme (in Cent)",
+      "placed_at": "Bestellt am",
+      "labels": "Labels",
+      "first_name": "Vorname",
+      "last_name": "Nachname",
+      "company": "Firma",
+      "title": "Titel",
+      "phone": "Telefon",
+      "lead_source": "Lead-Quelle",
+      "start_date": "Startdatum",
+      "end_date": "Enddatum",
+      "stage": "Phase",
+      "stage_name": "Phase",
+      "close_date": "Abschlussdatum",
+      "amount": "Betrag",
+      "tier": "Sponsorenstufe",
+      "currency_iso_code": "Währungscode",
+      "event_name": "Veranstaltung",
+      "room": "Raum",
+      "time_zone": "Zeitzone",
+      "subscription": "Abo-Änderung",
+      "email_opt_out": "E-Mail abgemeldet",
+      "venue": "Veranstaltungsort",
+      "cancelled": "Abgesagt"
     },
     "status": {
       "none": "Nicht verbunden",
@@ -13339,7 +13923,9 @@
         "paused": "Der Abgleich ist pausiert.",
         "resumed": "Der Abgleich läuft wieder.",
         "interval": "Abgleichsplan gespeichert.",
-        "disconnected": "Getrennt. Es wird nichts mehr abgeglichen und der Zugriff wurde beim Anbieter widerrufen."
+        "disconnected": "Getrennt. Es wird nichts mehr abgeglichen und der Zugriff wurde beim Anbieter widerrufen.",
+        "linked": "Tabelle erstellt und verknüpft. Sie wird bei der nächsten Synchronisierung gefüllt.",
+        "unlinked": "Tabelle getrennt. Nichts wird mehr damit synchronisiert; sie bleibt in deinem Google Drive."
       },
       "revoked": {
         "user": "Getrennt am {when}.",
@@ -13443,7 +14029,21 @@
       "paused": "Durch Pausieren gestoppt",
       "sync_failed": "Der Abgleich ist fehlgeschlagen",
       "unknown_connector": "Diese Integration ist nicht mehr verfügbar",
-      "other": "Fehler ({code})"
+      "other": "Fehler ({code})",
+      "remote_deleted": "In der Tabelle gelöscht",
+      "conflict_kept_yayatoh": "An beiden Stellen geändert: Die Änderung in Yayatoh wurde behalten",
+      "conflict_kept_remote": "An beiden Stellen geändert: Die Änderung beim Anbieter wurde behalten",
+      "conflict": "Kollidiert mit einem Eintrag, der schon in Yayatoh ist",
+      "not_found": "Etwas, das dafür nötig ist, fehlt noch",
+      "validation_failed": "Yayatoh hat es nicht angenommen",
+      "remove_failed": "Konnte beim Anbieter nicht entfernt werden",
+      "currency_unsupported": "Ihre Buchhaltung akzeptiert nur ihre Basiswährung",
+      "post_failed": "Konnte nicht in Ihre Buchhaltung gebucht werden",
+      "http_400": "Ihre Buchhaltung hat es abgelehnt: Prüfen Sie die zugeordneten Konten",
+      "http_429": "Der Anbieter hat uns gebeten, langsamer zu machen",
+      "http_503": "Der Anbieter ist gerade nicht erreichbar",
+      "no_organisation": "Für diese Verbindung wurde keine Organisation gefunden",
+      "account_code_missing": "Einem zugeordneten Konto fehlt die Kontonummer"
     },
     "inbox": {
       "title": "Integrationsfehler",
@@ -13469,7 +14069,8 @@
         "pull": "Lesen beim Anbieter",
         "map": "Zuordnung",
         "write": "Speichern in Yayatoh",
-        "push": "Senden an den Anbieter"
+        "push": "Senden an den Anbieter",
+        "conflict": "An beiden Stellen geändert"
       },
       "field": "Feld: {field}",
       "lastSeen": "Zuletzt gesehen {when}",
@@ -13495,7 +14096,15 @@
       "retryNamed": "{record} wiederholen",
       "dismiss": "Verwerfen",
       "dismissNamed": "{record} verwerfen",
-      "more": "{count, plural, one {# weiterer Datensatz nicht angezeigt.} other {# weitere Datensätze nicht angezeigt.}}"
+      "more": "{count, plural, one {# weiterer Datensatz nicht angezeigt.} other {# weitere Datensätze nicht angezeigt.}}",
+      "values": "Werte",
+      "keptLost": "{field}: behalten „{kept}“, verworfen „{lost}“",
+      "yourCall": "Braucht deine Entscheidung",
+      "help": {
+        "remote_deleted": "Die Zeile wurde in der Tabelle gelöscht. Aus der Liste in Yayatoh wurde niemand entfernt. Verwirf den Hinweis, um das zu übernehmen: Die Person bleibt hier und ist nicht mehr mit dieser Zeile verknüpft.",
+        "conflict_kept_yayatoh": "Dieser Eintrag wurde seit der letzten Synchronisierung an beiden Stellen geändert. Die spätere Änderung in Yayatoh wurde behalten und gesendet; der Wert beim Anbieter unten wurde überschrieben.",
+        "conflict_kept_remote": "Dieser Eintrag wurde seit der letzten Synchronisierung an beiden Stellen geändert. Die spätere Änderung beim Anbieter wurde behalten; der Wert in Yayatoh unten wurde überschrieben."
+      }
     },
     "fakeConsent": {
       "title": "Sandbox-Zustimmung",
@@ -13503,9 +14112,551 @@
       "heading": "{name} mit Yayatoh verbinden?",
       "body": "{name} ist ein Testanbieter. Wenn du zustimmst, darf Yayatoh in deinem Namen Folgendes lesen und schreiben:",
       "allow": "Zulassen",
-      "deny": "Ablehnen"
+      "deny": "Ablehnen",
+      "bodyNoScopes": "{name} ist ein Testanbieter. Wenn du zustimmst, darf Yayatoh die Daten deines Kontos in deinem Namen lesen."
     },
-    "webhooksAction": "Webhook einrichten"
+    "webhooksAction": "Webhook einrichten",
+    "zapier": {
+      "title": "Zapier",
+      "cardDescription": "Starten Sie Zaps, wenn Bestellungen bezahlt, Tickets eingecheckt oder Anmeldungen eingehen, und melden Sie Personen an oder fügen Sie Kontakte aus Tausenden Apps hinzu.",
+      "apiKeyBadge": "Nutzt einen API-Schlüssel",
+      "setUp": "Einrichten",
+      "setUpNamed": "Zapier einrichten",
+      "description": "Zapier verbindet sich mit einem Ihrer API-Schlüssel. Geben Sie dem Schlüssel die unten genannten Berechtigungen; die von Zapier aktivierten Auslöser stehen hier.",
+      "createKey": "API-Schlüssel erstellen",
+      "reviewTitle": "Die Yayatoh-App auf Zapier wird geprüft",
+      "reviewBody": "Bis Zapier sie listet, kann Ihr Account-Team Ihnen einen Einladungslink senden.",
+      "noApiAccess": "API-Zugriff ist nicht Teil Ihres Tarifs, daher kann sich Zapier noch nicht verbinden.",
+      "scopesTitle": "Berechtigungen des API-Schlüssels",
+      "scopesHelp": "Jeder Auslöser und jede Aktion braucht seine Berechtigung auf dem Schlüssel für Zapier.",
+      "allScopes": "Ein Schlüssel mit diesen Berechtigungen deckt alles ab:",
+      "partsCaption": "Auslöser und Aktionen mit der jeweils nötigen Berechtigung",
+      "part": "Auslöser oder Aktion",
+      "kind": "Art",
+      "scope": "Berechtigung",
+      "parts": {
+        "order_paid": "Bestellung bezahlt",
+        "ticket_admitted": "Ticket eingecheckt",
+        "registration_submitted": "Anmeldeformular gesendet",
+        "event_published": "Veranstaltung veröffentlicht",
+        "create_registration": "Anmeldung erstellen",
+        "add_contact": "Kontakt hinzufügen",
+        "check_in": "Ticket einchecken",
+        "event_list": "Veranstaltungsauswahl"
+      },
+      "kinds": {
+        "trigger": "Auslöser",
+        "action": "Aktion",
+        "picker": "Von Aktionen genutzt"
+      },
+      "keysTitle": "Ihre API-Schlüssel",
+      "keysHelp": "Aktive Schlüssel und ob sie alle Berechtigungen abdecken, die Zapier braucht.",
+      "noKeysTitle": "Noch keine aktiven API-Schlüssel",
+      "noKeysDescription": "Erstellen Sie einen Schlüssel mit den Berechtigungen oben und fügen Sie ihn mit dem Kurznamen Ihrer Organisation in Zapier ein.",
+      "keysCaption": "Aktive API-Schlüssel und ihre Abdeckung für Zapier",
+      "keyName": "Schlüssel",
+      "key": "Beginnt mit",
+      "coverage": "Für Zapier",
+      "ready": "Bereit für Zapier",
+      "partial": "{count, plural, one {# Berechtigung fehlt} other {# Berechtigungen fehlen}}",
+      "missing": "Fehlt: {scopes}",
+      "hooksTitle": "Aktive Zapier-Auslöser",
+      "hooksHelp": "Zaps, die eingeschaltet sind und lauschen. Wird ein Zap ausgeschaltet, verschwindet sein Auslöser hier.",
+      "hooksCaption": "Auslöser, die Zapier abonniert hat",
+      "hooksEmpty": "Noch lauscht kein Zap. Schalten Sie einen Zap mit einem Yayatoh-Auslöser ein.",
+      "event": "Ereignistyp",
+      "host": "Zugestellt an",
+      "otherKey": "Ein entfernter Schlüssel",
+      "created": "Eingeschaltet"
+    },
+    "slack": {
+      "title": "Slack",
+      "description": "Wählen Sie einen Kanal für Warnungen und die tägliche Zusammenfassung. Nachrichten nennen Veranstaltungen und Zahlen, nie E-Mails oder Telefonnummern.",
+      "settingsTitle": "Kanal und Nachrichten",
+      "saved": "Slack-Einstellungen gespeichert.",
+      "invalid": "Einige Angaben müssen korrigiert werden.",
+      "channel": "Kanal",
+      "channelHint": "Nur Kanäle, in denen die Yayatoh-App ist, können gewählt werden. Fügen Sie die App in Slack zuerst dem Kanal hinzu.",
+      "channelPlaceholder": "Kanal wählen",
+      "private": "privat",
+      "notInChannel": "App nicht im Kanal",
+      "alerts": "Warnungen senden",
+      "alertsHint": "Warnungen aus Ihrem Dashboard, sobald sie auftreten.",
+      "severity": "Zu sendende Warnungen",
+      "severities": {
+        "info": "Alle Warnungen",
+        "warning": "Warnungen und kritische Warnungen",
+        "critical": "Nur kritische Warnungen"
+      },
+      "digest": "Tägliche Zusammenfassung senden",
+      "digestHint": "Bestellungen, Tickets und Check-ins von gestern und die Veranstaltungen von heute.",
+      "digestTime": "Uhrzeit der Zusammenfassung",
+      "digestTimeHint": "Zeitzone Ihrer Organisation ({zone}).",
+      "finance": "Beträge in die Zusammenfassung aufnehmen",
+      "financeHint": "Nur Sie können das einschalten: Sie haben Slack verbunden und sehen die Finanzen. Alle im Kanal sehen die Beträge.",
+      "noAmounts": "Die Zusammenfassung zeigt Zahlen, keine Beträge. Nur wer Slack verbunden hat und Finanzzugriff hat, kann Beträge hinzufügen.",
+      "save": "Slack-Einstellungen speichern",
+      "fieldError": {
+        "invalid": "Prüfen Sie diesen Wert.",
+        "channel": {
+          "required": "Wählen Sie einen Kanal.",
+          "unknown": "Diesen Kanal gibt es im Workspace nicht mehr. Wählen Sie einen anderen.",
+          "not_in_channel": "Die Yayatoh-App ist nicht in diesem Kanal. Fügen Sie sie in Slack hinzu und wählen Sie ihn dann."
+        },
+        "digestTime": {
+          "required": "Wählen Sie eine Uhrzeit für die Zusammenfassung.",
+          "invalid": "Geben Sie eine Uhrzeit wie 08:00 ein."
+        },
+        "severity": {
+          "invalid": "Wählen Sie, welche Warnungen gesendet werden."
+        },
+        "finance": {
+          "finance_owner_only": "Nur wer Slack verbunden hat und Finanzzugriff hat, kann Beträge hinzufügen."
+        }
+      },
+      "error": {
+        "unavailable": "Slack ist hier nicht verfügbar.",
+        "provider_unavailable": "Slack war nicht erreichbar. Versuchen Sie es in ein paar Minuten erneut.",
+        "validation_failed": "Einige Angaben müssen korrigiert werden.",
+        "forbidden": "Sie haben keinen Zugriff darauf.",
+        "module_not_enabled": "Integrationen sind nicht in Ihrem Tarif enthalten.",
+        "not_found": "Das wurde nicht gefunden.",
+        "invalid_state": "Das ist gerade nicht möglich.",
+        "no_channel": "Wählen Sie zuerst einen Kanal und speichern Sie.",
+        "auth_revoked": "Slack akzeptiert diese Verbindung nicht mehr. Verbinden Sie Slack neu.",
+        "connection_inactive": "Nicht gesendet: Die Verbindung wurde pausiert oder getrennt.",
+        "send_failed": "Die Nachricht konnte nicht gesendet werden. Sie wird erneut versucht.",
+        "not_in_channel": "Die Yayatoh-App ist nicht in diesem Kanal. Fügen Sie sie in Slack hinzu und versuchen Sie es erneut.",
+        "channel_not_found": "Diesen Kanal gibt es nicht mehr. Wählen Sie einen anderen.",
+        "pii_blocked": "Nicht gesendet: Sie hätte personenbezogene Daten enthalten.",
+        "render_failed": "Die Nachricht konnte nicht vorbereitet werden. Sie wird erneut versucht.",
+        "nothing_to_send": "Nichts mehr zu senden.",
+        "impersonation_blocked": "Mitarbeitende, die als Mitglied handeln, können das nicht ändern.",
+        "read_only_freeze": "Änderungen sind während der geplanten Wartung pausiert. Versuchen Sie es danach erneut.",
+        "internal": "Bei uns ist etwas schiefgelaufen.",
+        "other": "Nicht gesendet ({code})."
+      },
+      "testSent": "Testwarnung an #{channel} gesendet.",
+      "channelsFailed": "Die Kanalliste von Slack konnte nicht geladen werden. Versuchen Sie es in ein paar Minuten erneut.",
+      "inactive": "Die Einstellungen sind verfügbar, solange Slack verbunden und aktiv ist.",
+      "previewTitle": "Testwarnung für #{channel}",
+      "previewHelp": "So sieht es der Kanal.",
+      "nextDigest": "Nächste Zusammenfassung: {when}",
+      "sendTest": "Testwarnung senden",
+      "messagesTitle": "Letzte Slack-Nachrichten",
+      "messagesEmpty": "Noch nichts gesendet.",
+      "messages": {
+        "when": "Wann",
+        "kind": "Nachricht",
+        "status": "Status",
+        "detail": "Details"
+      },
+      "kinds": {
+        "alert": "Warnung",
+        "digest": "Tägliche Zusammenfassung",
+        "test": "Testwarnung"
+      },
+      "statuses": {
+        "pending": "Wartet",
+        "sending": "Wird gesendet",
+        "sent": "Gesendet",
+        "failed": "Fehlgeschlagen",
+        "cancelled": "Nicht gesendet"
+      }
+    },
+    "import": {
+      "open": "Import öffnen",
+      "connectedDetail": "{name} ist verbunden. Öffne den Import, um zu sehen, was übernommen wird.",
+      "noRuns": "Noch keine Importe. Öffne den Import, um eine Vorschau zu sehen und ihn zu starten.",
+      "title": "Aus Eventbrite importieren",
+      "crumb": "Import",
+      "description": "Übernimm Veranstaltungen, Ticketarten, Bestellungen und Teilnehmende. Nichts wird geschrieben, bevor du den Import startest; ein erneuter Lauf holt nur Änderungen.",
+      "connected": "Eventbrite ist verbunden. Prüfe, was übernommen wird, und importiere dann.",
+      "started": "Import gestartet. Er läuft im Hintergrund: Lade gleich neu, um das Ergebnis zu sehen.",
+      "alreadyRunning": "Ein Import läuft bereits.",
+      "stepsLabel": "Importschritte",
+      "steps": {
+        "connect": "Verbinden",
+        "preview": "Vorschau",
+        "import": "Importieren",
+        "result": "Ergebnis"
+      },
+      "notActive": "Diese Verbindung ist nicht aktiv. Verbinde sie neu, um zu importieren.",
+      "backToConnection": "Zur Verbindung",
+      "preview": {
+        "title": "Vorschau",
+        "help": "Was dein Eventbrite-Konto jetzt enthält und wie viel davon hier neu ist. Noch wird nichts geschrieben.",
+        "readOnly": "Nur Inhaber und Admins können eine Vorschau sehen und einen Import starten.",
+        "caption": "Was der Import übernimmt",
+        "what": "Was",
+        "inEventbrite": "In Eventbrite",
+        "new": "Hier neu",
+        "noEmails": "Importierte Bestellungen sind als importiert markiert: Niemand wird belastet, und es gehen keine Belege oder Ticket-E-Mails raus."
+      },
+      "what": {
+        "events": "Veranstaltungen",
+        "ticketTypes": "Ticketarten",
+        "orders": "Bestellungen",
+        "attendees": "Teilnehmende",
+        "revenue": "Umsatz",
+        "refunded": "Erstattete Bestellungen"
+      },
+      "refundedOrders": "{count, plural, =0 {Keine} one {# Bestellung, als erstattet importiert, ohne Umsatz} other {# Bestellungen, als erstattet importiert, ohne Umsatz}}",
+      "noRevenue": "Keiner",
+      "importing": "Import läuft…",
+      "importNew": "{count, plural, one {# neuen Eintrag importieren} other {# neue Einträge importieren}}",
+      "importAgain": "Erneut importieren, um Änderungen zu holen",
+      "result": {
+        "title": "Ergebnis",
+        "none": "Noch nichts importiert.",
+        "finished": "Fertig am {when}",
+        "inProgress": "Läuft",
+        "refresh": "Neu laden",
+        "counts": "{pulled} importiert oder aktualisiert · {skipped} unverändert · {failed} mit Fehlern",
+        "seeErrors": "Sehen, was Aufmerksamkeit braucht",
+        "caption": "Was Yayatoh jetzt aus Eventbrite enthält",
+        "inYayatoh": "In Yayatoh",
+        "ordersValue": "{count} ({paid} bezahlt)",
+        "attendeesValue": "{count} ({active} aktiv)",
+        "goToEvents": "Zu den Veranstaltungen"
+      }
+    },
+    "sheets": {
+      "title": "Verknüpfte Veranstaltungen",
+      "help": "Die Teilnehmerliste jeder verknüpften Veranstaltung wird mit ihrer eigenen Google-Tabelle synchronisiert. Änderungen in der Tabelle kommen bei der nächsten Synchronisierung in Yayatoh an; eine gelöschte Zeile entfernt niemanden.",
+      "linkTitle": "Veranstaltung verknüpfen",
+      "event": "Veranstaltung",
+      "pickEvent": "Veranstaltung wählen",
+      "chooseEvent": "Wähle die Veranstaltung, deren Teilnehmende in die Tabelle kommen.",
+      "link": "Tabelle erstellen und verknüpfen",
+      "linking": "Tabelle wird erstellt…",
+      "linkHelp": "In deinem Google Drive wird eine neue Tabelle mit den Spalten aus der Feldzuordnung erstellt.",
+      "alreadyLinked": "Diese Veranstaltung hat schon eine Tabelle.",
+      "allLinked": "Jede Veranstaltung hat eine Tabelle.",
+      "noEvents": "Erstelle zuerst eine Veranstaltung und verknüpfe dann ihre Teilnehmerliste.",
+      "emptyTitle": "Noch keine Veranstaltung verknüpft",
+      "emptyHelp": "Wähle oben eine Veranstaltung, um ihre Tabelle zu erstellen.",
+      "emptyReadOnly": "Inhaber oder Admins können hier die Teilnehmerliste einer Veranstaltung verknüpfen.",
+      "caption": "Mit Google Tabellen verknüpfte Veranstaltungen",
+      "sheet": "Tabelle",
+      "openNamed": "{title} in Google Tabellen öffnen",
+      "linkedOn": "Verknüpft",
+      "status": "Status",
+      "statuses": {
+        "active": "Wird synchronisiert",
+        "unlinked": "Getrennt"
+      },
+      "actions": "Aktionen",
+      "unlink": "Trennen",
+      "unlinkNamed": "{event} trennen",
+      "confirmUnlink": "Tabelle von {event} trennen?",
+      "confirmUnlinkBody": "Danach wird nichts mehr damit synchronisiert. Die Tabelle bleibt mit ihrem Inhalt in deinem Google Drive, und alle bleiben auf der Liste in Yayatoh.",
+      "keep": "Verknüpft lassen"
+    },
+    "linked": {
+      "title": "Verknüpfte Datensätze",
+      "description": "Was diese Integration bisher abgleicht, nach Art des Datensatzes.",
+      "caption": "Verknüpfte Datensätze nach Art",
+      "object": "Art",
+      "count": "Datensätze",
+      "empty": "Noch nichts verknüpft. Datensätze werden beim Synchronisieren verknüpft."
+    },
+    "accounting": {
+      "mapTitle": "Kontenplan",
+      "mapHelp": "Legen Sie fest, wohin jede Zeile der täglichen Sammelbuchung in Ihrer Buchhaltung geht. Tage werden nach ihrem Ende gebucht, in der Zeitzone Ihrer Organisation.",
+      "notMapped": "Ordnen Sie Ihre Konten zu, um mit den Tagesbuchungen zu beginnen.",
+      "version": "Version {version} · Buchung ab {day}",
+      "chartUnavailable": "Ihr Kontenplan konnte nicht von {name} geladen werden. Versuchen Sie es gleich noch einmal.",
+      "chooseAccount": "Konto wählen",
+      "categories": {
+        "sales": {
+          "label": "Ticketverkäufe",
+          "hint": "Wird mit den Brutto-Ticketverkäufen des Tages im Haben gebucht."
+        },
+        "donations": {
+          "label": "Spenden",
+          "hint": "Wird mit den Online-Spenden des Tages im Haben gebucht."
+        },
+        "refunds": {
+          "label": "Erstattungen",
+          "hint": "Wird mit dem an Käufer und Spender Erstatteten im Soll gebucht."
+        },
+        "fees": {
+          "label": "Yayatoh-Gebühren",
+          "hint": "Wird mit den Plattformgebühren des Tages abzüglich erstatteter Gebühren im Soll gebucht."
+        },
+        "payouts": {
+          "label": "Auszahlungen",
+          "hint": "Das Bankkonto, auf dem Auszahlungen von Yayatoh eingehen."
+        },
+        "clearing": {
+          "label": "Verrechnungskonto",
+          "hint": "Enthält das Geld, das Yayatoh oder Ihr Zahlungsdienst für Sie verwahrt. Es gleicht jede Buchung aus."
+        }
+      },
+      "startsOn": "Tage buchen ab",
+      "startsOnHint": "Der erste zu buchende Tag, bis zu ein Jahr zurück.",
+      "save": "Kontenzuordnung speichern",
+      "saved": "Kontenzuordnung als Version {version} gespeichert. Die nächste Synchronisierung bucht damit.",
+      "invalid": "Diese Zuordnung kann noch nicht gespeichert werden. Prüfen Sie die markierten Felder.",
+      "saveFailed": "Die Zuordnung konnte nicht gespeichert werden. Versuchen Sie es gleich noch einmal.",
+      "issue": {
+        "missing": "Wählen Sie ein Konto für {field}.",
+        "unknown_account": "Dieses Konto gibt es in Ihrer Buchhaltung nicht mehr. Wählen Sie ein anderes für {field}.",
+        "clearing_shared": "Das Verrechnungskonto kann nicht auch für {field} verwendet werden.",
+        "starts_in_future": "Wählen Sie heute oder einen früheren Tag.",
+        "starts_too_early": "Wählen Sie einen Tag innerhalb des letzten Jahres.",
+        "missing_date": "Geben Sie den ersten zu buchenden Tag ein.",
+        "other": "Prüfen Sie dieses Feld."
+      },
+      "journalsTitle": "Tagesbuchungen",
+      "journalsHelp": "Eine Buchung pro Tag und Währung. Ändert sich ein bereits gebuchter Tag, wird er storniert und neu gebucht, nie bearbeitet.",
+      "journalsCaption": "An Ihre Buchhaltung gesendete tägliche Sammelbuchungen",
+      "waiting": "{count, plural, one {# Buchung wartet auf den Versand.} other {# Buchungen warten auf den Versand.}}",
+      "emptyTitle": "Noch keine Buchungen",
+      "emptyMapped": "Tage werden nach ihrem Ende bei der nächsten Synchronisierung gebucht.",
+      "emptyUnmapped": "Ordnen Sie Ihre Konten zu und synchronisieren Sie dann, um die Tage ab Ihrem ersten Tag zu buchen.",
+      "emptyMapAction": "Konten zuordnen",
+      "emptyPostAction": "Nach zu buchenden Tagen suchen",
+      "emptyBackAction": "Zurück zu den Integrationen",
+      "columns": {
+        "day": "Tag",
+        "currency": "Währung",
+        "kind": "Eintrag",
+        "amount": "Betrag",
+        "status": "Status",
+        "reference": "Referenz in Ihrer Buchhaltung"
+      },
+      "kinds": {
+        "journal": "Buchung · Revision {revision}",
+        "reversal": "Storno von Revision {revision}"
+      },
+      "status": {
+        "pending": "Wartet",
+        "posted": "Gebucht",
+        "failed": "Nicht gebucht",
+        "superseded": "Ersetzt"
+      }
+    },
+    "marketing": {
+      "consentRule": "Einwilligung zuerst: Nur Kontakte mit Einwilligung in Marketing-E-Mails werden gesendet, und eine Abmeldung oder ein Bounce hat immer Vorrang. Wer sich hier abmeldet, wird bei der nächsten Synchronisierung auch dort abgemeldet.",
+      "audience": {
+        "title": "Zielgruppe",
+        "help": "Wählen Sie, wer an {name} gesendet wird und welcher Liste die Personen beitreten.",
+        "saved": "Zielgruppe gespeichert. Die nächste Synchronisierung sendet sie.",
+        "segmentMissing": "Die gespeicherte Zielgruppe wurde gelöscht, daher wird niemand Neues gesendet. Wählen Sie eine andere Zielgruppe.",
+        "segment": "Wer gesendet wird",
+        "list": "{name}-Liste",
+        "everyone": "Alle mit Einwilligung in Marketing-E-Mails",
+        "savedSegment": "Eine gespeicherte Zielgruppe",
+        "emptyTitle": "Noch keine Zielgruppe gewählt",
+        "emptyManage": "Wählen Sie, wer gesendet wird und welcher {name}-Liste die Personen beitreten. Bis zum Speichern wird nichts gesendet.",
+        "emptyRead": "Inhaber oder Admins wählen, wer gesendet wird. Bis dahin wird nichts gesendet.",
+        "formLabel": "Zielgruppe und Liste wählen",
+        "save": "Zielgruppe speichern",
+        "feedback": {
+          "list_required": "Wählen Sie eine Liste.",
+          "provider_unavailable": "Die Listen konnten nicht vom Anbieter geladen werden. Versuchen Sie es in ein paar Minuten erneut.",
+          "validation_failed": "Diese Zielgruppe gibt es nicht mehr. Wählen Sie eine andere.",
+          "forbidden": "Sie haben keinen Zugriff darauf.",
+          "invalid_state": "Diese Verbindung kann gerade nicht eingerichtet werden.",
+          "not_found": "Das konnten wir nicht finden.",
+          "read_only_freeze": "Änderungen sind während der geplanten Wartung pausiert. Versuchen Sie es nach deren Ende erneut.",
+          "internal": "Bei uns ist etwas schiefgelaufen."
+        },
+        "chooseNow": "Zielgruppe wählen",
+        "allIntegrations": "Alle Integrationen"
+      },
+      "hubspot": {
+        "title": "Was mit HubSpot synchronisiert wird",
+        "contacts": "Kontakte werden mit der Feldzuordnung unten in beide Richtungen synchronisiert. Kontakte aus HubSpot kommen nie mit Einwilligung an; eine Abmeldung in HubSpot meldet sie hier ab.",
+        "events": "Jede veröffentlichte Veranstaltung wird zu einem HubSpot-Marketing-Event, und auch eine Absage wird gesendet.",
+        "attendance": "Anmeldungen, Check-ins und Stornierungen werden für Kontakte mit Einwilligung in Marketing-E-Mails gesendet."
+      },
+      "changes": {
+        "title": "Einwilligungsänderungen von {name}",
+        "help": "Abmeldungen, unzustellbare Adressen und Beschwerden, die von {name} zurückkamen, und was sie hier geändert haben.",
+        "caption": "Einwilligungsänderungen von {name}",
+        "empty": "Von {name} ist noch nichts zurückgekommen.",
+        "who": "Kontakt",
+        "change": "Beim Anbieter",
+        "applied": "Hier geändert",
+        "when": "Wann",
+        "withdrawn": "Einwilligung widerrufen",
+        "suppressed": "Gesperrt",
+        "already": "Bereits aktuell",
+        "kinds": {
+          "unsubscribed": "Abgemeldet",
+          "cleaned": "Adresse unzustellbar",
+          "complained": "Spam-Beschwerde"
+        }
+      }
+    }
+  },
+  "kioskPrint": {
+    "useEmail": "Kein Ticket dabei? Mit E-Mail weiter",
+    "loading": "Ihr Badge wird gesucht…",
+    "emailTitle": "Mit E-Mail weiter",
+    "emailHint": "Wir senden einen 6-stelligen Code an die Adresse auf Ihrem Ticket.",
+    "emailLabel": "Ihre E-Mail-Adresse",
+    "sendCode": "Code per E-Mail senden",
+    "cancel": "Abbrechen",
+    "emailInvalid": "Geben Sie Ihre E-Mail-Adresse ein, z. B. name@example.com.",
+    "emailOffline": "E-Mail-Codes brauchen eine Verbindung. Scannen Sie Ihr Ticket oder gehen Sie bitte zum Counter.",
+    "emailLimited": "Es wurden zu viele Codes angefordert. Bitte gehen Sie zum Counter.",
+    "emailFailed": "Wir konnten gerade keinen Code senden. Versuchen Sie es erneut oder gehen Sie zum Counter.",
+    "codeTitle": "Code eingeben",
+    "codeSent": "Wenn {email} ein Ticket für diese Veranstaltung hat, haben wir einen 6-stelligen Code dorthin gesendet. Er gilt 10 Minuten.",
+    "codeLabel": "6-stelliger Code",
+    "confirmCode": "Code bestätigen",
+    "newCode": "Neuen Code senden",
+    "codeInvalid": "Geben Sie die 6 Ziffern aus der E-Mail ein.",
+    "codeWrong": "Dieser Code stimmt nicht. {left, plural, one {Noch # Versuch.} other {Noch # Versuche.}}",
+    "codeExpired": "Dieser Code ist abgelaufen. Senden Sie einen neuen Code.",
+    "detailsTitle": "Prüfen Sie Ihre Angaben",
+    "detailsHint": "So steht es auf Ihrem Badge.",
+    "name": "Name",
+    "company": "Unternehmen",
+    "jobTitle": "Position",
+    "ticket": "Ticket",
+    "print": "Mein Badge drucken",
+    "printing": "Wird gedruckt…",
+    "wrongDetails": "Etwas stimmt nicht",
+    "notMe": "Das bin ich nicht",
+    "printingTitle": "Ihr Badge wird gedruckt",
+    "printingHint": "Holen Sie es am Drucker ab. Viel Spaß bei der Veranstaltung!",
+    "queuedTitle": "Ihr Badge ist in der Warteschlange",
+    "queuedHint": "Das Terminal ist offline. Ihr Badge wird gedruckt, sobald es wieder verbunden ist; wenn es eilt, gehen Sie bitte zum Counter.",
+    "done": "Fertig",
+    "deskTitle": "Bitte gehen Sie zum Counter",
+    "desk": {
+      "desk": "Der Registrierungscounter druckt Ihr Badge für Sie.",
+      "printed": "Ihr Badge wurde bereits gedruckt. Wenn Sie ein neues brauchen, druckt der Counter es erneut.",
+      "notFound": "Wir haben hier kein Badge zu diesem Ticket gefunden.",
+      "wrongDetails": "Kein Problem: Der Counter korrigiert Ihre Angaben und druckt Ihr Badge.",
+      "printFailed": "Der Drucker hat Ihr Badge nicht angenommen. Der Counter druckt es für Sie.",
+      "locked": "Zu viele falsche Codes. Der Counter hilft Ihnen weiter.",
+      "offline": "Das Terminal ist gerade offline. Der Counter druckt Ihr Badge."
+    },
+    "readyTitle": "Ihr Badge ist druckbereit",
+    "readyHint": "Öffnen Sie es, wählen Sie Drucken und holen Sie es am Drucker ab.",
+    "openBadge": "Mein Badge zum Drucken öffnen"
+  },
+  "virtual": {
+    "setup": {
+      "title": "Streaming einrichten",
+      "description": "Übertragen Sie die Sessions von {event} online: Wählen Sie die Durchführungsart, wer zusehen darf, und richten Sie für jede Session einen Livestream ein.",
+      "providerOff": "Streaming ist hier noch nicht verfügbar",
+      "providerOffHint": "Yayatoh schaltet Streaming ein, sobald das Konto beim Videoanbieter bereit ist. Ihre Einstellungen bleiben erhalten.",
+      "fakeProvider": "Test-Streaming: Hier wird ein Ersatz-Videoanbieter verwendet, es wird nichts übertragen.",
+      "readOnly": "Sie sehen die Streaming-Einrichtung. Nur Bearbeiter können sie ändern.",
+      "totalViewers": "Zuschauer",
+      "totalMinutes": "Angesehene Minuten",
+      "deliveryTitle": "Durchführung",
+      "deliveryLegend": "Wie findet diese Veranstaltung statt?",
+      "saveDelivery": "Durchführung speichern",
+      "deliverySaved": "Durchführung gespeichert.",
+      "accessTitle": "Wer zusehen darf",
+      "accessHint": "Legen Sie fest, was jede Ticketart enthält. Streaming wird gemessen, daher können nur Tickets mit Online-Zugang zusehen.",
+      "inPersonNote": "Diese Veranstaltung findet vor Ort statt, daher wird keine Session gestreamt. Wählen Sie Online oder Hybrid, um Streams einzurichten.",
+      "noTicketTypes": "Noch keine Ticketarten",
+      "noTicketTypesHint": "Fügen Sie Ticketarten oder Anmeldepässe hinzu und wählen Sie dann, welche online zusehen dürfen.",
+      "defaultNote": "Noch nicht gewählt: Es gilt die Standardeinstellung der Veranstaltung.",
+      "saveAccess": "Speichern",
+      "saveAccessLabel": "Zugang für {name} speichern",
+      "accessSaved": "Zugang für {name} gespeichert.",
+      "sessionsTitle": "Session-Streams",
+      "noSessions": "Noch keine Sessions",
+      "noSessionsHint": "Fügen Sie dem Programm Sessions hinzu und richten Sie dann für jede einen Stream ein.",
+      "addSessions": "Zu den Sessions",
+      "session": "Session",
+      "stream": "Stream",
+      "streamNone": "Kein Stream",
+      "streamOn": "An",
+      "streamOff": "Aus",
+      "viewers": "Zuschauer",
+      "minutes": "Angesehene Minuten",
+      "checkedIn": "Virtuelle Check-ins",
+      "actions": "Aktionen",
+      "createStream": "Stream einrichten",
+      "createStreamLabel": "Stream für {title} einrichten",
+      "showKey": "Stream-Schlüssel anzeigen",
+      "showKeyLabel": "Stream-Schlüssel für {title} anzeigen",
+      "turnOff": "Ausschalten",
+      "turnOn": "Einschalten",
+      "turnOffLabel": "Stream für {title} ausschalten",
+      "turnOnLabel": "Stream für {title} einschalten",
+      "ingestUrl": "Server",
+      "streamKey": "Stream-Schlüssel",
+      "keyWarning": "Wer diesen Schlüssel hat, kann als Ihre Veranstaltung senden. Halten Sie ihn geheim.",
+      "streamCreated": "Stream für {title} bereit.",
+      "streamOnSaved": "Der Stream für {title} ist an.",
+      "streamOffSaved": "Der Stream für {title} ist aus.",
+      "delivery": {
+        "in_person": "Vor Ort",
+        "online": "Online",
+        "hybrid": "Hybrid"
+      },
+      "deliveryHint": {
+        "in_person": "Alle nehmen vor Ort teil. Es wird nichts gestreamt.",
+        "online": "Alle sehen online zu. Tickets enthalten Online-Zugang, sofern Sie es nicht ändern.",
+        "hybrid": "Manche nehmen vor Ort teil, manche online. Wählen Sie unten, welche Tickets zusehen dürfen."
+      },
+      "access": {
+        "in_person": "Nur vor Ort",
+        "virtual": "Nur online",
+        "both": "Vor Ort und online"
+      },
+      "addTicketTypes": "Zu den Tickets"
+    },
+    "errors": {
+      "in_person_event": "Diese Veranstaltung findet vor Ort statt. Wählen Sie zuerst Online oder Hybrid.",
+      "video_off": "Streaming ist hier noch nicht verfügbar.",
+      "in_person_only": "Dieses Ticket gilt nur für die Teilnahme vor Ort.",
+      "stream_off": "Dieser Stream ist ausgeschaltet.",
+      "provider_changed": "Der Videoanbieter hat gewechselt. Richten Sie diesen Stream erneut ein.",
+      "views_per_hour": "Zu viele Versuche. Warten Sie ein paar Minuten und versuchen Sie es erneut.",
+      "invalid_token": "Dieser Zuschauer-Link ist abgelaufen. Starten Sie die Wiedergabe erneut.",
+      "ticket_void": "Dieses Ticket ist nicht mehr gültig."
+    },
+    "watch": {
+      "metaTitle": "Online ansehen",
+      "title": "Online ansehen",
+      "greeting": "Hallo {name}. Wählen Sie eine Session zum Ansehen.",
+      "inPersonOnly": "Ihr Ticket gilt für die Teilnahme vor Ort",
+      "inPersonOnlyHint": "Online-Zusehen ist in diesem Ticket nicht enthalten. Wenden Sie sich an den Veranstalter, wenn Sie Online-Zugang brauchen.",
+      "noSessionsTitle": "Noch wird nichts gestreamt",
+      "noSessionsHint": "Sessions erscheinen hier, sobald der Veranstalter ihren Stream einschaltet. Schauen Sie kurz vor Beginn wieder vorbei.",
+      "watched": "{count, plural, =0 {Noch nicht angesehen} one {# Minute angesehen} other {# Minuten angesehen}}",
+      "watchSession": "Ansehen",
+      "watchLabel": "{title} ansehen",
+      "orderLink": "Online ansehen",
+      "orderLinkLabel": "Mit Ticket {serial} online ansehen"
+    },
+    "player": {
+      "countNote": "Ihre Zusehzeit wird einmal pro Minute gezählt, solange der Stream läuft.",
+      "back": "Alle Sessions",
+      "heading": "Player",
+      "testPattern": "Test-Stream: In dieser Umgebung wird kein Video übertragen.",
+      "ready": "Drücken Sie „Ansehen starten“, um zu beginnen.",
+      "pause": "Pause",
+      "resume": "Fortsetzen",
+      "play": "Ansehen starten",
+      "playing": "Läuft",
+      "paused": "Pausiert",
+      "starting": "Startet…",
+      "watched": "{count, plural, =0 {Noch nicht angesehen} one {# Minute angesehen} other {# Minuten angesehen}}",
+      "errors": {
+        "in_person_only": "Ihr Ticket gilt nur für die Teilnahme vor Ort.",
+        "stream_off": "Der Veranstalter hat diesen Stream ausgeschaltet.",
+        "views_per_hour": "Zu viele Versuche. Warten Sie ein paar Minuten und versuchen Sie es erneut.",
+        "invalid_token": "Diese Wiedergabe ist abgelaufen. Drücken Sie erneut „Ansehen starten“.",
+        "ticket_void": "Dieses Ticket ist nicht mehr gültig.",
+        "video_off": "Streaming ist gerade nicht verfügbar.",
+        "not_found": "Diese Session wird gerade nicht gestreamt.",
+        "generic": "Etwas ist schiefgelaufen. Versuchen Sie es erneut."
+      }
+    }
   },
   "guestSeats": {
     "placeAt": {
@@ -14834,6 +15985,25 @@
       "reason_required": "Wählen Sie aus, warum dieses Badge erneut gedruckt wird.",
       "note_required": "Geben Sie bei „Sonstiges“ kurz den Grund an.",
       "note": "Die Notiz muss kürzer als 200 Zeichen sein."
+    },
+    "balanceDue": "Für diese Anmeldung ist ein Betrag offen. Drucken Sie das Badge auf der Badge-Seite mit einer Begründung.",
+    "sourceKiosk": "Terminal",
+    "kiosk": {
+      "heading": "Selbstdruck am Terminal",
+      "hint": "Teilnehmende scannen am Check-in-Terminal ihr Ticket (oder bestätigen einen per E-Mail gesendeten Code), prüfen ihre Angaben und drucken ihr Badge einmal selbst. Nachdrucke, offene Beträge und noch wartende Anmeldungen gehen an den Counter.",
+      "on": "An",
+      "off": "Aus",
+      "printsTo": "Druckt auf {printer}",
+      "emailOn": "E-Mail-Codes an",
+      "emailOff": "E-Mail-Codes aus",
+      "options": "Selbstdruck",
+      "enabled": "Teilnehmende drucken ihr Badge am Terminal selbst",
+      "emailCodes": "\"Mit E-Mail weiter\" anbieten (ein Einmalcode an die Person auf dem Ticket)",
+      "printer": "Terminals drucken auf",
+      "printerHint": "Der eigene Druckdialog des Terminals funktioniert mit einem am Terminal angeschlossenen Drucker.",
+      "ownDialog": "Eigener Druckdialog des Terminals",
+      "save": "Terminal-Einstellungen speichern",
+      "saved": "Terminal-Einstellungen gespeichert."
     }
   },
   "sessionCheckin": {
@@ -15830,7 +17000,15 @@
   "emptyActions": {
     "seeEvents": "Ihre Veranstaltungen ansehen",
     "eventHome": "Zur Startseite der Veranstaltung",
-    "clearSearch": "Suche zurücksetzen"
+    "clearSearch": "Suche zurücksetzen",
+    "addRule": "Regel hinzufügen",
+    "scheduleReport": "Bericht planen",
+    "linkSheet": "Veranstaltung verknüpfen",
+    "connectPayouts": "Auszahlungen verbinden",
+    "runAgain": "Erneut ausführen",
+    "agencyAddress": "Adresse Ihrer Agentur ansehen",
+    "clients": "Ihre Kunden ansehen",
+    "plan": "Tarif und Abrechnung öffnen"
   },
   "coupons": {
     "title": "Gutscheine",
@@ -15981,6 +17159,861 @@
       "step1": "Für jedes bezahlte Ticket fällt die Gebühr Ihres Tarifs an. Kostenlose Tickets sind gebührenfrei.",
       "step2": "Die Gebühr wird von jeder Bestellung einbehalten und bei jeder Auszahlung ausgewiesen.",
       "step3": "Wird die Gebühr bei einer Erstattung zurückgegeben, erscheint sie unter „Zurückgegebene Gebühren“."
+    }
+  },
+  "ssoFakeIdp": {
+    "eyebrow": "Test-Identitätsanbieter",
+    "title": "Simulierter Identitätsanbieter",
+    "descriptionSaml": "Nur für die Entwicklung: Diese Seite antwortet so, wie es der SAML-Identitätsanbieter Ihrer Organisation tun würde.",
+    "descriptionOidc": "Nur für die Entwicklung: Diese Seite antwortet so, wie es der OpenID Connect-Anbieter Ihrer Organisation tun würde.",
+    "email": "Vom Anbieter bestätigte E-Mail-Adresse",
+    "name": "Name (optional)",
+    "signIn": "Anmelden",
+    "cancel": "Abbrechen",
+    "returning": "Zurück zu Yayatoh…",
+    "continue": "Weiter",
+    "unknown": "Diese Anmeldeanfrage ist nicht mehr gültig.",
+    "invalidEmail": "Geben Sie eine gültige E-Mail-Adresse ein."
+  },
+  "sso": {
+    "title": "Single Sign-On",
+    "subtitle": "Lassen Sie Ihr Team sich über Ihren Identitätsanbieter anmelden, verifizieren Sie Ihre E-Mail-Domains und stellen Sie Personen per SCIM bereit.",
+    "help": "Anleitung lesen",
+    "noAccessTitle": "Nur Inhaber und Admins verwalten Single Sign-On",
+    "noAccessDescription": "Bitten Sie einen Inhaber oder Admin dieser Organisation, Single Sign-On einzurichten oder zu ändern.",
+    "noModuleTitle": "Single Sign-On ist nicht in Ihrem Tarif enthalten",
+    "noModuleDescription": "Single Sign-On und SCIM sind Teil der Enterprise-Funktionen.",
+    "seePlan": "Ihren Tarif ansehen",
+    "unavailableTitle": "Single Sign-On ist noch nicht verfügbar",
+    "unavailableDescription": "Single Sign-On kann in dieser Bereitstellung noch nicht eingerichtet werden.",
+    "testPassed": "Testanmeldung erfolgreich.",
+    "testPassedNext": "Sie können Single Sign-On jetzt aktivieren.",
+    "testPassedDomainUnverified": "Die Adresse, mit der Sie sich angemeldet haben, gehört noch zu keiner verifizierten Domain: Verifizieren Sie die Domain, bevor sich Personen anmelden.",
+    "testFailed": "Testanmeldung fehlgeschlagen.",
+    "idpTitle": "Identitätsanbieter",
+    "status": {
+      "active": "Aktiv",
+      "draft": "Noch nicht aktiv",
+      "disabled": "Deaktiviert"
+    },
+    "protocol": "Protokoll",
+    "protocolSaml": "SAML 2.0",
+    "protocolSamlHint": "Okta, Microsoft Entra ID, Google Workspace, OneLogin, JumpCloud…",
+    "protocolOidc": "OpenID Connect",
+    "protocolOidcHint": "Jeder Anbieter, der die Anmeldung per OpenID Connect unterstützt.",
+    "name": "Name",
+    "nameHint": "Für Ihr Team sichtbar, zum Beispiel „Northwind Okta“.",
+    "samlSource": "Wie möchten Sie die Angaben des Anbieters eingeben?",
+    "sourceXml": "Metadaten-XML einfügen",
+    "sourceUrl": "Metadaten-URL",
+    "sourceManual": "Angaben manuell eingeben",
+    "metadataXml": "Metadaten-XML",
+    "metadataXmlHint": "Laden Sie es in den App-Einstellungen Ihres Identitätsanbieters herunter und fügen Sie es hier ein.",
+    "metadataUrl": "Metadaten-URL",
+    "metadataUrlHint": "Eine https-Adresse, unter der Ihr Identitätsanbieter seine Metadaten veröffentlicht.",
+    "entityId": "Entity-ID des Identitätsanbieters",
+    "ssoUrl": "Anmelde-URL",
+    "certificate": "Signaturzertifikat",
+    "certificateHint": "Das X.509-Zertifikat (PEM), mit dem Ihr Identitätsanbieter signiert.",
+    "certificateSummary": "{subject}, läuft am {expires} ab",
+    "issuer": "Aussteller-URL",
+    "issuerHint": "Zum Beispiel https://login.example.com.",
+    "clientId": "Client-ID",
+    "clientSecret": "Client-Secret",
+    "clientSecretKeep": "Leer lassen, um das gespeicherte Secret beizubehalten.",
+    "defaultRole": "Rolle für neue Personen",
+    "defaultRoleHint": "Personen, die sich zum ersten Mal anmelden, erhalten diese Rolle, sofern ihnen keine SCIM-Gruppe eine andere zuweist.",
+    "jit": "Personen bei der ersten Anmeldung hinzufügen",
+    "jitHint": "Aus: Nur bestehende Mitglieder und Personen, die Ihr Anbieter per SCIM bereitstellt, können sich anmelden.",
+    "jitShort": "Bei erster Anmeldung hinzufügen",
+    "on": "An",
+    "off": "Aus",
+    "lastTest": "Letzter Test",
+    "lastTestPassed": "Erfolgreich am {date}",
+    "lastTestFailed": "Fehlgeschlagen am {date}",
+    "neverTested": "Noch nicht getestet",
+    "settingsChangedSinceTest": "(Einstellungen seitdem geändert: erneut testen)",
+    "testSignIn": "Anmeldung testen",
+    "activate": "Aktivieren",
+    "activated": "Single Sign-On ist aktiviert.",
+    "disable": "Deaktivieren",
+    "disabled": "Single Sign-On ist deaktiviert.",
+    "deleteConnection": "Verbindung löschen",
+    "editTitle": "Einstellungen ändern",
+    "createTitle": "Identitätsanbieter verbinden",
+    "saved": "Einstellungen gespeichert. Führen Sie eine Testanmeldung durch, bevor Sie Single Sign-On aktivieren.",
+    "fieldInvalid": "Prüfen Sie diesen Wert.",
+    "fieldRequired": "Dieses Feld ist erforderlich.",
+    "saveChanges": "Änderungen speichern",
+    "saveConnection": "Verbindung speichern",
+    "emptyTitle": "Noch kein Identitätsanbieter",
+    "emptyDescription": "Verbinden Sie Ihren Identitätsanbieter, testen Sie eine Anmeldung, verifizieren Sie eine Domain und aktivieren Sie dann Single Sign-On.",
+    "emptyAction": "Identitätsanbieter verbinden",
+    "spTitle": "Angaben für Ihren Identitätsanbieter",
+    "spDescription": "Kopieren Sie diese in die App, die Sie bei Ihrem Identitätsanbieter anlegen.",
+    "spEntityId": "Entity-ID (Audience)",
+    "spAcs": "Assertion Consumer Service (ACS)-URL",
+    "spRedirect": "Weiterleitungs-URI (OpenID Connect)",
+    "domainsTitle": "Verifizierte Domains",
+    "domainsDescription": "Single Sign-On und SCIM akzeptieren nur Adressen aus Domains, die Sie verifiziert haben. Verifizieren Sie eine Domain, indem Sie einen DNS-TXT-Eintrag veröffentlichen.",
+    "domain": "Domain",
+    "domainHint": "Die E-Mail-Domain Ihres Teams, zum Beispiel acme.com.",
+    "domainInvalid": "Geben Sie eine Domain wie acme.com ein.",
+    "domainAdded": "Domain hinzugefügt. Veröffentlichen Sie ihren TXT-Eintrag und prüfen Sie ihn dann.",
+    "addDomain": "Domain hinzufügen",
+    "noDomainsTitle": "Noch keine Domains",
+    "noDomainsDescription": "Fügen Sie die E-Mail-Domain Ihres Teams hinzu, um sie zu verifizieren.",
+    "domainStatus": {
+      "verified": "Verifiziert",
+      "pending": "Warten auf DNS",
+      "failed": "Nicht verifiziert"
+    },
+    "enforced": "Single Sign-On erforderlich",
+    "recordInstructions": "Veröffentlichen Sie diesen TXT-Eintrag im DNS Ihrer Domain und prüfen Sie ihn dann. DNS-Änderungen können eine Weile dauern.",
+    "recordName": "Name des Eintrags",
+    "recordValue": "Wert des Eintrags",
+    "verifiedOn": "Verifiziert am {date}",
+    "checkDomain": "{domain} prüfen",
+    "removeDomain": "{domain} entfernen",
+    "enforce": "Single Sign-On für {domain} verlangen",
+    "activateNeedsDomain": "Verifizieren Sie eine Domain, um Single Sign-On zu aktivieren.",
+    "scimTitle": "SCIM-Bereitstellung",
+    "scimDescription": "Ihr Identitätsanbieter kann Personen automatisch hinzufügen, aktualisieren und entfernen. Wird jemand dort entfernt, endet sein Zugriff hier sofort.",
+    "scimBaseUrl": "SCIM-Basis-URL",
+    "tokenStatus": "Token {prefix}… erstellt am {created}, zuletzt verwendet: {used}.",
+    "neverUsed": "nie",
+    "noToken": "Noch kein SCIM-Token.",
+    "createToken": "SCIM-Token erstellen",
+    "rotateToken": "Token ersetzen",
+    "revokeToken": "Token widerrufen",
+    "tokenShownOnce": "Kopieren Sie dieses Token jetzt: Es wird nicht erneut angezeigt. Fügen Sie es in die SCIM-Einstellungen Ihres Identitätsanbieters ein.",
+    "tokenLabel": "SCIM-Token",
+    "tokenRevoked": "Token widerrufen. Die Bereitstellung wurde gestoppt.",
+    "scimUsers": "{active, plural, one {# Person bereitgestellt} other {# Personen bereitgestellt}}, {deprovisioned, plural, one {# entzogen} other {# entzogen}}.",
+    "groupsTitle": "Gruppen und Rollen",
+    "noGroupsTitle": "Noch keine Gruppen",
+    "noGroupsDescription": "Gruppen erscheinen hier, sobald Ihr Identitätsanbieter sie per SCIM überträgt. Wählen Sie dann für jede eine Rolle.",
+    "noGroupsAction": "SCIM-Basis-URL kopieren",
+    "groupName": "Gruppe",
+    "groupMembers": "Mitglieder",
+    "groupRole": "Rolle",
+    "groupRoleLabel": "Rolle für {group}",
+    "groupRoleSaved": "Rolle gespeichert.",
+    "noRole": "Keine Rolle (Mitglieder nicht ändern)",
+    "copy": "Kopieren",
+    "copied": "Kopiert",
+    "reasons": {
+      "too_large": "Die Metadaten sind zu groß.",
+      "invalid_metadata": "Dies sind keine Metadaten eines SAML-Identitätsanbieters.",
+      "no_sso_url": "Die Metadaten enthalten keine Anmelde-URL.",
+      "no_certificate": "Die Metadaten enthalten kein Signaturzertifikat.",
+      "metadata_unreachable": "Wir konnten die Metadaten nicht von dieser URL herunterladen.",
+      "certificate_invalid": "Dies ist kein gültiges Zertifikat.",
+      "certificate_expired": "Das Signaturzertifikat ist abgelaufen.",
+      "certificate_not_yet_valid": "Das Signaturzertifikat ist noch nicht gültig.",
+      "discovery_failed": "Wir konnten die OpenID-Konfiguration des Anbieters bei diesem Aussteller nicht lesen.",
+      "secret_missing": "Geben Sie das Client-Secret ein.",
+      "malformed": "Die Antwort des Anbieters war nicht lesbar.",
+      "invalid_signature": "Die Antwort des Anbieters wurde nicht vom eingerichteten Anbieter signiert.",
+      "wrong_issuer": "Die Antwort stammt von einem anderen Aussteller als dem eingerichteten.",
+      "wrong_audience": "Die Antwort war für eine andere Anwendung bestimmt: Prüfen Sie die Entity-ID oder Client-ID.",
+      "wrong_request": "Die Antwort gehörte nicht zu diesem Test.",
+      "expired": "Die Antwort war abgelaufen.",
+      "no_email": "Der Anbieter hat keine E-Mail-Adresse übermittelt.",
+      "idp_error": "Der Anbieter hat nicht geantwortet.",
+      "cancelled": "Die Testanmeldung wurde abgebrochen.",
+      "test_required": "Führen Sie zuerst eine erfolgreiche Testanmeldung mit den aktuellen Einstellungen durch.",
+      "domain_required": "Verifizieren Sie zuerst eine Domain.",
+      "protocol_change": "Löschen Sie die Verbindung, um das Protokoll zu wechseln.",
+      "domain_not_verified": "Verifizieren Sie zuerst die Domain.",
+      "connection_inactive": "Aktivieren Sie zuerst Single Sign-On.",
+      "domain_limit": "Sie haben die maximale Anzahl an Domains erreicht.",
+      "already_added": "Diese Domain ist bereits aufgeführt.",
+      "record_not_found": "Wir haben den TXT-Eintrag noch nicht gefunden. Prüfen Sie, ob er veröffentlicht wurde, und versuchen Sie es erneut.",
+      "lookup_failed": "Die DNS-Abfrage ist fehlgeschlagen. Versuchen Sie es in einigen Minuten erneut.",
+      "claimed_elsewhere": "Eine andere Organisation hat diese Domain bereits verifiziert.",
+      "sso_unavailable": "Single Sign-On ist in dieser Bereitstellung nicht verfügbar.",
+      "last_owner": "Die Organisation braucht mindestens einen Inhaber."
+    }
+  },
+  "leads": {
+    "portal": {
+      "heading": "Lead-Erfassung",
+      "window": "Die Erfassung öffnet am {opens} und schließt am {closes} (Veranstaltungszeit). Notizen und Export bleiben bis {until} verfügbar.",
+      "termsNeededAdmin": "Akzeptieren Sie unten die Lead-Bedingungen, bevor Ihr Team Leads erfassen kann.",
+      "termsNeededStaff": "Ihr Aussteller-Admin muss die Lead-Bedingungen akzeptieren, bevor Sie Leads erfassen können.",
+      "why": {
+        "unlicensed": "Sie haben noch keine Lead-Lizenz. Fragen Sie Ihren Aussteller-Admin danach.",
+        "over_allowance": "Ihre Lizenz liegt über dem Kontingent Ihres Ausstellers. Bitten Sie Ihren Aussteller-Admin, eine zurückzunehmen oder weitere zu kaufen."
+      },
+      "open": "Lead-Erfassung öffnen"
+    },
+    "license": {
+      "licensed": "Lizenziert",
+      "unlicensed": "Keine Lizenz",
+      "over_allowance": "Über dem Kontingent"
+    },
+    "capture": {
+      "not_open": "Erfassung noch nicht geöffnet",
+      "open": "Erfassung geöffnet",
+      "closed": "Erfassung geschlossen"
+    },
+    "terms": {
+      "heading": "Lead-Bedingungen",
+      "v1": "Wenn Sie das Namensschild einer teilnehmenden Person scannen, erhalten Sie nur Name, Berufsbezeichnung und Unternehmen, die E-Mail-Adresse nur, wenn die Person der Weitergabe zugestimmt hat. Ihr Unternehmen wird für diese Daten verantwortlich: Nutzen Sie sie nur, um an Ihr Gespräch auf dieser Veranstaltung anzuknüpfen, schützen Sie sie und löschen Sie sie auf Anfrage. Teilnehmende sehen, dass Sie sie gescannt haben, und können die Weitergabe ihrer E-Mail-Adresse beenden.",
+      "accepted": "Lead-Bedingungen akzeptiert",
+      "acceptLabel": "Zustimmung",
+      "accept": "Ich akzeptiere die Lead-Bedingungen im Namen von {exhibitor}",
+      "submit": "Lead-Bedingungen akzeptieren",
+      "acceptRequired": "Setzen Sie das Häkchen, um die Lead-Bedingungen zu akzeptieren."
+    },
+    "settings": {
+      "heading": "Qualifizierungen und Sichtbarkeit",
+      "qualifiers": "Qualifizierungen",
+      "qualifiersHint": "Eine pro Zeile, höchstens 10 (zum Beispiel: Budget genehmigt). Ihr Team hakt sie bei jedem Lead ab.",
+      "visibility": "Wer Leads sieht",
+      "teamVisibility": "Mitarbeitende sehen die Leads des ganzen Teams (sonst nur die selbst gescannten)",
+      "save": "Lead-Einstellungen speichern",
+      "saved": "Lead-Einstellungen gespeichert.",
+      "qualifiersInvalid": "Jede Qualifizierung darf höchstens 60 Zeichen lang sein.",
+      "tooMany": "Sie können höchstens 10 Qualifizierungen haben."
+    },
+    "export": {
+      "heading": "Leads exportieren",
+      "ready": "Bestätigt. Sie können Ihre Leads jetzt herunterladen.",
+      "count": "{count, plural, =0 {Noch keine Leads} one {# Lead} other {# Leads}}",
+      "hint": "Zu Ihrer Sicherheit senden wir Ihnen vor dem Download einen Code per E-Mail, um zu bestätigen, dass Sie es sind.",
+      "download": "Leads herunterladen (CSV)",
+      "ended": "Der Zugriff auf Leads ist für diese Veranstaltung beendet.",
+      "columns": {
+        "name": "Name",
+        "jobTitle": "Berufsbezeichnung",
+        "company": "Unternehmen",
+        "email": "E-Mail",
+        "rating": "Bewertung",
+        "qualifiers": "Qualifizierungen",
+        "notes": "Notizen",
+        "capturedAt": "Gescannt am",
+        "scannedBy": "Gescannt von",
+        "scans": "Scans",
+        "sharedFields": "Geteilte Felder",
+        "emailConsentVersion": "Version der E-Mail-Einwilligung"
+      }
+    },
+    "confirm": {
+      "title": "Bestätigen Sie, dass Sie es sind",
+      "intro": "Um Ihre Leads herunterzuladen, bestätigen Sie mit einem Code, den wir an {email} senden."
+    },
+    "attendee": {
+      "heading": "Wer mein Namensschild gescannt hat",
+      "emptyTitle": "Noch niemand hat Ihr Namensschild gescannt",
+      "emptyDescription": "Wenn ein Aussteller Ihr Namensschild scannt, sehen Sie ihn hier.",
+      "scannedAt": "Gescannt am {time}",
+      "emailShared": "Hat Ihre E-Mail-Adresse",
+      "emailWithdrawn": "E-Mail-Weitergabe beendet",
+      "emailNotShared": "E-Mail-Adresse nicht geteilt",
+      "withdraw": "Meine E-Mail-Adresse nicht mehr mit {exhibitor} teilen",
+      "withdrawn": "Erledigt. Ihre E-Mail-Adresse ist dort nicht mehr sichtbar.",
+      "sharingOn": "Aussteller, die Ihr Namensschild scannen, erhalten Ihre E-Mail-Adresse.",
+      "sharingOff": "Aussteller, die Ihr Namensschild scannen, erhalten Ihre E-Mail-Adresse nicht.",
+      "sharingHint": "Sie erhalten immer Ihren Namen, Ihre Berufsbezeichnung und Ihr Unternehmen. Nie Ihre Telefonnummer oder Adresse.",
+      "turnOff": "Meine E-Mail-Adresse nicht mehr mit Ausstellern teilen",
+      "turnOn": "Meine E-Mail-Adresse mit Ausstellern teilen, die mein Namensschild scannen",
+      "saved": "Gespeichert."
+    },
+    "app": {
+      "pageTitle": "Lead-Erfassung",
+      "loading": "Wird geladen…",
+      "signedOutTitle": "Melden Sie sich an, um Leads zu erfassen",
+      "signedOutDescription": "Öffnen Sie den Anmeldelink aus Ihrer Aussteller-Einladung auf diesem Gerät und kehren Sie dann zur Lead-Erfassung zurück.",
+      "openPortal": "Zum Aussteller-Portal",
+      "title": "Leads für {exhibitor}",
+      "online": "Online",
+      "offline": "Offline: Scans werden auf diesem Gerät gespeichert",
+      "queued": "{count, plural, =0 {Alles synchronisiert} one {# Scan wartet auf Synchronisierung} other {# Scans warten auf Synchronisierung}}",
+      "modes": "Ansichten der Lead-Erfassung",
+      "viewScan": "Scannen",
+      "viewLeads": "{count, plural, =0 {Leads} other {Leads (#)}}",
+      "blockedTitle": "Sie können gerade keine Leads erfassen",
+      "blocked": {
+        "unlicensed": "Sie haben keine Lead-Lizenz. Fragen Sie Ihren Aussteller-Admin danach.",
+        "over_allowance": "Ihre Lizenz liegt über dem Kontingent Ihres Ausstellers. Fragen Sie Ihren Aussteller-Admin.",
+        "termsAdmin": "Akzeptieren Sie zuerst die Lead-Bedingungen im Aussteller-Portal.",
+        "termsStaff": "Ihr Aussteller-Admin muss zuerst die Lead-Bedingungen akzeptieren.",
+        "notOpen": "Die Erfassung öffnet am {time}.",
+        "closed": "Die Erfassung wurde am {time} geschlossen. Sie können Ihre Leads weiterhin lesen und bearbeiten."
+      },
+      "codeLabel": "Code des Namensschilds",
+      "codeHint": "Scannen Sie den QR-Code auf dem Namensschild oder geben Sie den darunter gedruckten Code ein.",
+      "save": "Lead speichern",
+      "camera": "Mit Kamera scannen",
+      "stopCamera": "Kamera stoppen",
+      "cameraFailed": "Die Kamera konnte nicht starten. Geben Sie stattdessen den Code ein.",
+      "refusals": {
+        "no_license": "Sie haben keine Lead-Lizenz. Fragen Sie Ihren Aussteller-Admin danach.",
+        "over_allowance": "Ihre Lizenz liegt über dem Kontingent Ihres Ausstellers. Ihre Scans warten auf diesem Gerät.",
+        "terms_not_accepted": "Die Lead-Bedingungen sind noch nicht akzeptiert. Ihre Scans warten auf diesem Gerät.",
+        "access_ended": "Der Zugriff auf Leads ist für diese Veranstaltung beendet.",
+        "other": "Etwas ist schiefgelaufen. Ihre Scans warten auf diesem Gerät; versuchen Sie es erneut."
+      },
+      "result": {
+        "queued": "Auf diesem Gerät gespeichert",
+        "queuedHint": "Die Details erscheinen nach der Synchronisierung.",
+        "refused": "Nicht gespeichert",
+        "captured": "Lead gespeichert",
+        "rescanned": "Bereits ein Lead: Scan hinzugefügt"
+      },
+      "reasons": {
+        "invalid": "Dieses Namensschild kann nicht gelesen werden. Prüfen Sie den Code und versuchen Sie es erneut.",
+        "wrong_event": "Dieses Namensschild gehört zu einer anderen Veranstaltung.",
+        "not_open": "Es wurde gescannt, bevor die Erfassung geöffnet war.",
+        "closed": "Es wurde gescannt, nachdem die Erfassung geschlossen war."
+      },
+      "emailWithdrawn": "E-Mail-Weitergabe am {time} von der teilnehmenden Person beendet",
+      "emailNotShared": "E-Mail-Adresse nicht geteilt",
+      "capturedAt": "Gescannt am {time}{count, plural, one {} other { · # Scans}}",
+      "scannedBy": "von {email}",
+      "editLabel": "Lead-Details",
+      "rating": "Bewertung",
+      "ratings": {
+        "hot": "Heiß",
+        "warm": "Warm",
+        "cold": "Kalt",
+        "none": "Keine Bewertung"
+      },
+      "qualifiers": "Qualifizierungen",
+      "notes": "Notizen",
+      "saveDetails": "Details speichern",
+      "saved": "Gespeichert.",
+      "savedQueued": "Mit dem Scan gespeichert. Wird synchronisiert, sobald Sie online sind.",
+      "needsConnection": "Stellen Sie eine Internetverbindung her, um Änderungen an diesem Lead zu speichern.",
+      "saveFailed": "Speichern fehlgeschlagen. Versuchen Sie es erneut.",
+      "accessEnded": "Der Zugriff auf Leads ist für diese Veranstaltung beendet.",
+      "scope": {
+        "all": "Alle Leads von {exhibitor}",
+        "team": "Die Leads Ihres Teams",
+        "own": "Ihre Leads"
+      },
+      "emptyTitle": "Noch keine Leads",
+      "emptyDescription": "Scannen Sie im Tab „Scannen“ ein Namensschild, um Ihren ersten Lead zu speichern.",
+      "search": "Leads durchsuchen",
+      "noMatch": "Kein Lead passt zu Ihrer Suche.",
+      "edit": "{name} bearbeiten"
+    }
+  },
+  "conferenceHub": {
+    "metaTitle": "Konferenz-Hub",
+    "eyebrow": "Dein Konferenz-Hub",
+    "for": "Für {name}",
+    "whose": "Wessen Hub",
+    "orderLink": "Meinen Konferenz-Hub öffnen",
+    "orderLinkHint": "Agenda, dein Zeitplan, dein Badge und Kalender auf dem Handy.",
+    "noRegistrantTitle": "Keine Anmeldung in dieser Bestellung",
+    "noRegistrantDescription": "Der Konferenz-Hub gehört zu einer Anmeldung. Öffne die Bestellung, mit der du dich angemeldet hast.",
+    "backToOrder": "Zurück zu meiner Bestellung",
+    "offline": "Du bist offline. Das ist die auf deinem Handy gespeicherte Kopie.",
+    "privateLink": "Diese Seite ist privat: Wer den Link hat, kann sie sehen und deinen Zeitplan ändern. Teile ihn nicht.",
+    "tabs": {
+      "label": "Bereiche des Hubs",
+      "today": "Heute",
+      "schedule": "Mein Zeitplan",
+      "agenda": "Agenda",
+      "badge": "Badge"
+    },
+    "today": {
+      "now": "Läuft gerade",
+      "next": "Als Nächstes",
+      "fromSchedule": "Aus deinem Zeitplan.",
+      "fromAgenda": "Aus der Agenda. Markiere Sessions mit einem Stern, um sie zu deinen zu machen.",
+      "nothingNow": "Gerade läuft nichts.",
+      "nothingNextTitle": "Demnächst nichts geplant",
+      "nothingNextDescription": "Sieh dir die Agenda an, markiere Sessions und melde dich für optionale an.",
+      "openAgenda": "Agenda öffnen",
+      "pollsAndQa": "Umfragen und Fragen",
+      "more": "Deine Werkzeuge",
+      "badgeTitle": "Dein Badge",
+      "badgeDescription": "Zeige den QR-Code am Eingang und beim Session-Check-in.",
+      "showBadge": "Mein Badge zeigen",
+      "networkingTitle": "Networking",
+      "networkingDescription": "Finde andere Teilnehmende, vernetze dich und buche Treffen.",
+      "openNetworking": "Networking öffnen",
+      "calendarTitle": "Dein Kalender",
+      "calendarDescription": "Füge deinen Zeitplan dem Kalender deines Handys hinzu. Er aktualisiert sich, wenn Sessions verschoben werden.",
+      "openCalendar": "Zu meinem Kalender hinzufügen"
+    },
+    "summary": "Angemeldet: {enrolled} · Favoriten: {favorites} · Überschneidungen: {conflicts}",
+    "agendaIntro": "Markiere die Sessions, die du besuchen möchtest. Für optionale Sessions ist eine Anmeldung nötig.",
+    "conflict": "Überschneidet sich mit {titles}",
+    "emptyScheduleTitle": "Dein Zeitplan ist leer",
+    "emptyScheduleDescription": "Markiere Sessions in der Agenda oder melde dich für optionale an, dann erscheinen sie hier.",
+    "emptyAgendaTitle": "Noch keine Sessions",
+    "emptyAgendaDescription": "Der Veranstalter hat noch keine Sessions für deine Anmeldung hinzugefügt. Schau bald wieder vorbei.",
+    "favorite": {
+      "star": "Markieren",
+      "starred": "Markiert",
+      "starNamed": "{title} markieren",
+      "unstarNamed": "Markierung von {title} entfernen",
+      "pill": "Favorit",
+      "added": "{title} ist in deinem Zeitplan.",
+      "removed": "{title} ist nicht mehr in deinem Zeitplan.",
+      "replaced": "Markiert. Entfernte überschneidende Favoriten: {count}.",
+      "tooMany": "Du hast die maximale Zahl an Sessions markiert. Entferne zuerst einen Stern.",
+      "conflictTitle": "Das überschneidet sich mit deinem Zeitplan",
+      "conflictEnrolled": "{title} (angemeldet)",
+      "conflictFavorite": "{title} (markiert)",
+      "keepBoth": "Beide behalten",
+      "replace": "Ersetzen",
+      "cancel": "Abbrechen"
+    },
+    "calendar": {
+      "title": "Kalender-Feed",
+      "description": "Einmal abonnieren: Deine Kalender-App lädt den Feed neu, sodass eine verschobene Session auch in deinem Kalender wandert. Angemeldete Sessions erscheinen als bestätigt, markierte als vorläufig.",
+      "subscribe": "In meinem Kalender abonnieren",
+      "download": ".ics herunterladen",
+      "linkLabel": "Feed-Link (privat)",
+      "copy": "Link kopieren",
+      "copied": "Link kopiert.",
+      "replace": "Link ersetzen",
+      "replaceConfirmTitle": "Kalender-Link ersetzen?",
+      "replaceConfirmBody": "Der aktuelle Link funktioniert sofort in keinem Kalender mehr. Abonniere danach mit dem neuen Link.",
+      "replaceConfirm": "Link ersetzen",
+      "cancel": "Abbrechen",
+      "replaced": "Erledigt. Der alte Link funktioniert nicht mehr: Abonniere mit dem neuen."
+    },
+    "install": {
+      "title": "Auf dem Handy behalten",
+      "button": "Zum Startbildschirm hinzufügen",
+      "installed": "Dieser Hub ist auf deinem Startbildschirm.",
+      "done": "Zum Startbildschirm hinzugefügt.",
+      "help": "Auf iPhone oder iPad: Tippe auf Teilen und dann auf Zum Home-Bildschirm. Auf Android: Öffne das Browsermenü und wähle App installieren oder Zum Startbildschirm hinzufügen."
+    },
+    "badge": {
+      "title": "Dein Badge",
+      "qrLabel": "Badge-QR-Code für {name}",
+      "shortCode": "Code",
+      "hint": "Stell am Eingang die Bildschirmhelligkeit hoch.",
+      "noneTitle": "Noch kein Badge",
+      "noneDescription": "Dein Badge erscheint hier, sobald deine Anmeldung bestätigt ist."
+    }
+  },
+  "billingUsage": {
+    "title": "Nutzung",
+    "subtitle": "Was Ihre Organisation genutzt hat, nach Zähler: Nachrichten, KI-Credits und Scan-Geräte.",
+    "breadcrumb": "Brotkrümelnavigation",
+    "period": "Dieser Monat: {start} bis {end} ({zone})",
+    "filterLabel": "Zähler",
+    "allMeters": "Alle Zähler",
+    "meter": {
+      "email": "E-Mail",
+      "sms": "SMS",
+      "whatsapp": "WhatsApp",
+      "ai_credits": "KI-Credits",
+      "devices": "Scan-Geräte"
+    },
+    "unit": {
+      "email": "{count, plural, one {# E-Mail gesendet} other {# E-Mails gesendet}}",
+      "sms": "{count, plural, one {# SMS-Segment} other {# SMS-Segmente}}",
+      "whatsapp": "{count, plural, one {# Nachricht gesendet} other {# Nachrichten gesendet}}",
+      "ai_credits": "{count, plural, one {# Credit verbraucht} other {# Credits verbraucht}}",
+      "devices": "{count, plural, one {# Gerät registriert} other {# Geräte registriert}}"
+    },
+    "reportingTitle": "Die Nutzung wird an Ihren Abrechnungsanbieter gesendet",
+    "reportingBody": "{count, plural, =0 {Bisher wurde alles gesendet.} one {# Eintrag wartet auf den Versand.} other {# Einträge warten auf den Versand.}}",
+    "countingTitle": "Die Nutzung wird gezählt, nichts wird berechnet",
+    "countingBody": "Die Abrechnung ist für diese Organisation nicht aktiv, daher wird die Nutzung nur hier gezählt.",
+    "currentTitle": "Dieser Monat",
+    "currentDescription": "Gezählt in der Zeitzone Ihrer Organisation.",
+    "historyTitle": "Frühere Monate",
+    "historyDescription": "Die letzten 12 Monate mit Nutzung.",
+    "emptyTitle": "Noch keine Nutzung",
+    "emptyBody": "Die Nutzung erscheint hier, wenn Sie E-Mails oder SMS senden, mit KI entwerfen oder Scan-Geräte registrieren.",
+    "historyEmpty": "Keine Nutzung in früheren Monaten.",
+    "month": "Monat"
+  },
+  "billingBanner": {
+    "label": "Abrechnung",
+    "graceTitle": "Die Zahlung für Ihr Abonnement ist fehlgeschlagen",
+    "graceBody": "Bis zum {date} funktioniert alles. Danach ist die Organisation schreibgeschützt, bis bezahlt ist.",
+    "readOnlyTitle": "Diese Organisation ist schreibgeschützt",
+    "readOnlyBody": "Die Abonnementzahlung ist fehlgeschlagen. Nichts wurde gelöscht: Sie können ansehen, exportieren und Tickets scannen, aber Änderungen sind bis zur Zahlung pausiert.",
+    "action": "Plan und Abrechnung"
+  },
+  "agencies": {
+    "title": "Agenturen",
+    "subtitle": "Lassen Sie eine Agentur an Ihren Events arbeiten. Sie können den Zugriff jederzeit entziehen, und die Agentur zahlt oder erhält nie Ihr Geld.",
+    "noAccessTitle": "Nur Inhaber und Admins verwalten Agenturen",
+    "noAccessDescription": "Bitten Sie einen Inhaber oder Admin dieser Organisation, einer Agentur Zugriff zu geben.",
+    "grantTitle": "Einer Agentur Zugriff geben",
+    "agency": "Adresse der Agentur",
+    "agencyHint": "Die Adresse, die Ihnen die Agentur gegeben hat, zum Beispiel bloom-events.",
+    "agencyRequired": "Geben Sie die Adresse der Agentur ein.",
+    "agencyUnknown": "Keine Agentur hat diese Adresse. Prüfen Sie sie mit der Agentur.",
+    "agencySelf": "Eine Agentur kann sich nicht selbst Zugriff geben.",
+    "agencyTaken": "Diese Agentur hat bereits Zugriff.",
+    "role": "Was die Agentur tun darf",
+    "roleManager": "Events verwalten",
+    "roleManagerHint": "Events, Gäste, Check-in und Nachrichten erstellen und bearbeiten. Keine Erstattungen, Verkäufe, Mitglieder oder Einstellungen.",
+    "roleMarketing": "Marketing",
+    "roleMarketingHint": "Kampagnen, Zielgruppen und Nachrichten sowie Events lesen.",
+    "roleViewer": "Nur ansehen",
+    "roleViewerHint": "Events, Bestellungen und Gäste lesen. Ändert nichts.",
+    "finance": "Die Agentur auch unsere Finanzen lesen lassen",
+    "financeHint": "Auszahlungen, Finanzberichte und das Hauptbuch, nur lesend. Aus, solange Sie es nicht einschalten.",
+    "grant": "Zugriff geben",
+    "granted": "{agency} kann jetzt in dieser Organisation arbeiten.",
+    "listTitle": "Agenturen mit Zugriff",
+    "empty": "Keine Agentur hat Zugriff. Geben Sie oben einer Agentur Zugriff, wenn Sie mit einer arbeiten.",
+    "emptyReadOnly": "Keine Agentur hat Zugriff.",
+    "agencyColumn": "Agentur",
+    "roleColumn": "Zugriff",
+    "financeColumn": "Finanzen",
+    "grantedColumn": "Seit",
+    "actions": "Aktionen",
+    "financeOn": "Darf lesen",
+    "financeOff": "Kein Zugriff",
+    "revoke": "Entziehen",
+    "revokeNamed": "Zugriff für {agency} entziehen",
+    "revoked": "{agency} hat keinen Zugriff mehr.",
+    "financeEnable": "Finanzen erlauben",
+    "financeEnableNamed": "{agency} unsere Finanzen lesen lassen",
+    "financeDisable": "Finanzen sperren",
+    "financeDisableNamed": "{agency} das Lesen unserer Finanzen verbieten",
+    "historyTitle": "Früherer Zugriff",
+    "revokedColumn": "Beendet",
+    "unknownAgency": "Agentur nicht mehr bei Yayatoh",
+    "roleLabel": "{role, select, manager {Events verwalten} marketing {Marketing} viewer {Nur ansehen} other {Zugriff}}"
+  },
+  "agency": {
+    "title": "Kunden",
+    "subtitle": "Alle Kunden, die {agency} Zugriff gegeben haben. Die Zahlen stammen aus Snapshots: aktualisieren Sie sie, um sie auf den neuesten Stand zu bringen.",
+    "tabs": "Agenturbereiche",
+    "tab": {
+      "clients": "Kunden",
+      "events": "Events",
+      "marketing": "Marketing",
+      "reports": "Berichte"
+    },
+    "refresh": "Zahlen aktualisieren",
+    "refreshed": "Zahlen aktualisiert für {count, plural, =0 {keine Kunden} one {# Kunden} other {# Kunden}}.",
+    "notRefreshed": "Noch nicht aktualisiert",
+    "emptyTitle": "Noch keine Kunden",
+    "emptyDescription": "Bitten Sie Ihren Kunden, in seiner Yayatoh-Konsole Agenturen zu öffnen und {address} Zugriff zu geben.",
+    "noAccessTitle": "Agenturseiten sind für Agenturmitglieder",
+    "noAccessDescription": "Bitten Sie einen Inhaber von {agency} um Zugriff.",
+    "client": "Kunde",
+    "nextEvent": "Nächstes Event",
+    "noNextEvent": "Nichts geplant",
+    "upcoming": "Kommende Events",
+    "orders": "Bestellungen",
+    "tickets": "Tickets",
+    "checkins": "Eingecheckt",
+    "checkinRate": "Check-in-Quote",
+    "open": "Öffnen",
+    "openNamed": "{client} öffnen",
+    "finance": "mit Finanzen",
+    "eventsTitle": "Events aller Kunden",
+    "eventsEmpty": "Bei Ihren Kunden gibt es noch keine kommenden oder kürzlichen Events.",
+    "event": "Event",
+    "starts": "Beginn",
+    "status": "Status",
+    "gross": "Bruttoumsatz",
+    "grossHidden": "Nicht geteilt",
+    "grossHiddenHint": "Der Bruttoumsatz erscheint nur bei Kunden, die Sie ihre Finanzen lesen lassen.",
+    "openEventNamed": "{event} bei {client} öffnen",
+    "marketingTitle": "Marketing, letzte 30 Tage",
+    "marketingEmpty": "Noch keine Kunden.",
+    "campaigns": "Kampagnen",
+    "sends": "Gesendet",
+    "deliveries": "Zugestellt",
+    "clicks": "Klicks",
+    "uniqueClickers": "Personen, die geklickt haben",
+    "conversion": "Conversion",
+    "reportsTitle": "Summen über alle Kunden",
+    "clientsCount": "Kunden",
+    "eventsTotal": "Events",
+    "revenue": "Bruttoumsatz",
+    "revenueFrom": "Von {count, plural, one {# Kunden} other {# Kunden}}, die ihre Finanzen teilen",
+    "revenueNone": "Kein Kunde teilt seine Finanzen mit Ihnen.",
+    "perClient": "Nach Kunde",
+    "eventStatus": {
+      "draft": "Entwurf",
+      "published": "Veröffentlicht",
+      "postponed": "Verschoben",
+      "cancelled": "Abgesagt",
+      "completed": "Abgeschlossen",
+      "archived": "Archiviert"
+    },
+    "refreshedAt": "Aktualisiert"
+  },
+  "analyticsPro": {
+    "tabs": {
+      "label": "Analysebereiche",
+      "overview": "Übersicht",
+      "explore": "Erkunden",
+      "alerts": "Alarmregeln",
+      "reports": "Berichte"
+    },
+    "explore": {
+      "title": "Erkunden",
+      "description": "Wähle eine Kennzahl und wie sie aufgeschlüsselt wird. Die Attribution zeigt, welche Kampagnen, Kanäle und Quellen zu Verkäufen geführt haben.",
+      "form": "Auswählen, was angezeigt wird",
+      "measure": "Kennzahl",
+      "groupCounts": "Anzahlen",
+      "groupMoney": "Geld",
+      "groupAttribution": "Attribution",
+      "measures": {
+        "registrations": "Anmeldungen",
+        "tickets": "Verkaufte Tickets (netto)",
+        "comp_tickets": "Freitickets",
+        "refunded_tickets": "Erstattete Tickets",
+        "checkins": "Check-ins",
+        "no_shows": "Nicht erschienen",
+        "attributed_orders": "Zugeordnete Bestellungen",
+        "gross": "Bezahlt",
+        "refunds": "Erstattet",
+        "net": "Nettoumsatz",
+        "attributed_revenue": "Zugeordneter Umsatz"
+      },
+      "dimension": "Aufschlüsseln nach",
+      "dimensions": {
+        "period": "Zeitraum",
+        "event": "Event",
+        "channel": "Kanal",
+        "source": "Quelle",
+        "campaign": "Kampagne"
+      },
+      "model": "Attributionsmodell",
+      "modelHint": "Nur für zugeordnete Bestellungen und Umsätze.",
+      "models": {
+        "first": "Erster Kontakt",
+        "last": "Letzter Kontakt",
+        "linear": "Linear (zu gleichen Teilen)"
+      },
+      "range": "Zeitraum",
+      "ranges": {
+        "7d": "Letzte 7 Tage",
+        "30d": "Letzte 30 Tage",
+        "90d": "Letzte 90 Tage",
+        "365d": "Letzte 12 Monate",
+        "custom": "Eigene Daten"
+      },
+      "from": "Von",
+      "to": "Bis",
+      "customHint": "Wird verwendet, wenn der Zeitraum „Eigene Daten“ ist.",
+      "granularity": "Anzeigen nach",
+      "granularities": {
+        "day": "Tag",
+        "week": "Woche",
+        "month": "Monat"
+      },
+      "event": "Event",
+      "allEvents": "Alle Events",
+      "apply": "Anzeigen",
+      "errors": {
+        "touch_dimension": "Kanal, Quelle und Kampagne funktionieren nur mit zugeordneten Bestellungen oder Umsätzen.",
+        "custom_needs_dates": "Gib für einen eigenen Zeitraum beide Daten ein.",
+        "from_after_to": "Das Enddatum liegt vor dem Startdatum.",
+        "range_too_long": "Wähle einen Zeitraum von höchstens zwei Jahren.",
+        "invalid_date": "Gib Daten als Jahr, Monat und Tag ein."
+      },
+      "resultsCaption": "{measure} nach {dimension}, {from} bis {to}",
+      "total": "Summe",
+      "none": "Keine",
+      "unnamedCampaign": "Unbenannte Kampagne",
+      "weekOf": "Woche vom {day}",
+      "currency": "Währung",
+      "value": "Wert",
+      "truncated": "Die ersten 500 Zeilen werden angezeigt. Wähle einen kürzeren Zeitraum oder ein einzelnes Event, um den Rest zu sehen.",
+      "emptyTitle": "Für diese Auswahl gibt es nichts anzuzeigen",
+      "emptyBody": "Für diese Kennzahl gibt es in diesem Zeitraum keine Daten. Versuche einen längeren Zeitraum, ein anderes Event oder eine andere Kennzahl.",
+      "emptyAction": "Die letzten 12 Monate anzeigen",
+      "export": "CSV exportieren",
+      "exportLabel": "Diese Ergebnisse als CSV-Datei exportieren",
+      "timeZoneNote": "Tage sind Kalendertage in {timeZone}, der Zeitzone deiner Organisation.",
+      "attributionNote": "Die Attribution verteilt jede zugeordnete Bestellung auf die Besuche, die innerhalb deines Attributionsfensters zu ihr geführt haben: angeklickte Tracking-Links, Aufrufe mit UTM-Werten und andere Websites, die den Käufer geschickt haben. Erster Kontakt schreibt sie dem ersten Besuch zu, letzter Kontakt dem letzten, und linear teilt die Bestellung zu gleichen Teilen (ein übrig bleibender Cent geht an den letzten Besuch). Umsatz ist, was der Käufer bezahlt hat, je Währung; Bestellungen ohne erfassten Besuch werden nicht zugeordnet.",
+      "saveTitle": "Diese Ansicht speichern",
+      "viewName": "Name",
+      "save": "Ansicht speichern",
+      "saved": "Ansicht gespeichert",
+      "viewErrors": {
+        "name": "Gib einen Namen mit höchstens 80 Zeichen ein.",
+        "name_taken": "Du hast bereits eine Ansicht mit diesem Namen.",
+        "too_many_views": "Du hast 50 gespeicherte Ansichten. Lösche zuerst eine."
+      },
+      "views": "Deine gespeicherten Ansichten",
+      "noViews": "Noch keine gespeicherten Ansichten. Wähle oben aus, was angezeigt wird, und speichere es hier, um mit einem Klick zurückzukehren.",
+      "deleteView": "Löschen",
+      "deleteViewLabel": "Ansicht {name} löschen",
+      "deleted": "Ansicht gelöscht"
+    },
+    "rules": {
+      "title": "Alarmregeln",
+      "description": "Lass dich benachrichtigen, wenn eine Zahl eine Grenze überschreitet. Regelalarme erreichen dein Team über Alarme, wie die eingebauten.",
+      "createTitle": "Neue Alarmregel",
+      "editTitle": "Alarmregel bearbeiten",
+      "name": "Name",
+      "nameHint": "Wird im Alarm und in seiner E-Mail angezeigt.",
+      "measure": "Kennzahl",
+      "measures": {
+        "registrations": "Anmeldungen",
+        "tickets": "Verkaufte Tickets (netto)",
+        "refunded_tickets": "Erstattete Tickets",
+        "checkins": "Check-ins",
+        "gross": "Bezahlt",
+        "refunds": "Erstattet",
+        "net": "Nettoumsatz"
+      },
+      "condition": "Wenn sie",
+      "conditions": {
+        "above": "mindestens ist",
+        "below": "unter",
+        "rise": "um mindestens (%) steigt",
+        "drop": "um mindestens (%) sinkt"
+      },
+      "threshold": "Schwellenwert",
+      "thresholdHint": "Eine Anzahl, ein Betrag für Geld oder ein Prozentsatz für Anstiege und Rückgänge (verglichen mit dem Zeitraum davor).",
+      "window": "Über",
+      "windows": {
+        "d1": "Heute",
+        "d7": "Die letzten 7 Tage",
+        "d14": "Die letzten 14 Tage",
+        "d30": "Die letzten 30 Tage"
+      },
+      "currency": "Währung",
+      "currencyHint": "Geldregeln vergleichen eine Währung.",
+      "noCurrency": "Kein Geld",
+      "event": "Event",
+      "allEvents": "Alle Events",
+      "severity": "Schweregrad",
+      "severities": {
+        "info": "Info",
+        "warning": "Warnung",
+        "critical": "Kritisch"
+      },
+      "quietHours": "Ruhezeiten beachten",
+      "quietHoursHint": "E-Mail und Push warten bis 8:00 Uhr in der Zeitzone jeder empfangenden Person, wenn die Regel zwischen 21:00 und 8:00 Uhr auslöst. In-App-Alarme erscheinen sofort.",
+      "create": "Regel erstellen",
+      "save": "Änderungen speichern",
+      "back": "Zurück zu den Alarmregeln",
+      "created": "Regel erstellt",
+      "saved": "Änderungen gespeichert",
+      "list": "Deine Regeln",
+      "emptyTitle": "Noch keine Alarmregeln",
+      "emptyBody": "Erstelle oben eine Regel, zum Beispiel „Erstattungen heute sind mindestens 10“. Du wirst benachrichtigt, sobald das zutrifft.",
+      "columns": {
+        "name": "Regel",
+        "condition": "Bedingung",
+        "status": "Status",
+        "lastValue": "Letzter Wert",
+        "actions": "Aktionen"
+      },
+      "summary": "{measure} {condition} {threshold} · {window}",
+      "status": {
+        "firing": "Ausgelöst",
+        "ok": "OK",
+        "off": "Aus",
+        "new": "Noch nicht geprüft"
+      },
+      "edit": "Bearbeiten",
+      "editLabel": "{name} bearbeiten",
+      "turnOff": "Ausschalten",
+      "turnOn": "Einschalten",
+      "turnOffLabel": "{name} ausschalten",
+      "turnOnLabel": "{name} einschalten",
+      "delete": "Löschen",
+      "deleteLabel": "{name} löschen",
+      "deleted": "Regel gelöscht",
+      "turnedOff": "Regel ausgeschaltet",
+      "turnedOn": "Regel eingeschaltet",
+      "readOnly": "Du kannst diese Regeln sehen, aber nicht ändern.",
+      "errors": {
+        "name": "Gib einen Namen mit höchstens 80 Zeichen ein.",
+        "name_taken": "Es gibt bereits eine Regel mit diesem Namen.",
+        "threshold": "Gib eine Zahl ab 0 ein.",
+        "percent_range": "Gib einen Prozentsatz zwischen 1 und 1000 ein.",
+        "currency_required": "Wähle eine Währung für eine Geldregel.",
+        "too_many_rules": "Du hast 50 Regeln. Lösche zuerst eine."
+      }
+    },
+    "reports": {
+      "title": "Geplante Berichte",
+      "description": "Ein PDF deiner Analysen per E-Mail jeden Tag, jede Woche oder jeden Monat, gezählt in der Zeitzone deiner Organisation.",
+      "createTitle": "Neuer geplanter Bericht",
+      "editTitle": "Geplanten Bericht bearbeiten",
+      "name": "Name",
+      "frequency": "Wie oft",
+      "frequencies": {
+        "daily": "Jeden Tag (Zahlen von gestern)",
+        "weekly": "Jeden Montag (letzte Woche, Montag bis Sonntag)",
+        "monthly": "Am 1. (letzter Monat)"
+      },
+      "frequencyShort": {
+        "daily": "Täglich",
+        "weekly": "Wöchentlich",
+        "monthly": "Monatlich"
+      },
+      "sendHour": "Senden um",
+      "sendHourHint": "Uhrzeit in {timeZone}.",
+      "event": "Event",
+      "allEvents": "Alle Events",
+      "recipients": "Senden an",
+      "recipientsHint": "Mitglieder, die Bestellungen sehen können. Umsätze stehen nur für diejenigen im PDF, die Finanzen sehen können; jedes PDF ist in der Sprache seines Lesers.",
+      "you": "{name} (du)",
+      "create": "Bericht planen",
+      "save": "Änderungen speichern",
+      "back": "Zurück zu den geplanten Berichten",
+      "created": "Bericht geplant",
+      "saved": "Änderungen gespeichert",
+      "list": "Zeitpläne",
+      "emptyTitle": "Noch keine geplanten Berichte",
+      "emptyBody": "Plane oben einen: Er kommt einmal pro Zeitraum per E-Mail, mit einem Link zu seinem PDF.",
+      "columns": {
+        "name": "Bericht",
+        "frequency": "Wie oft",
+        "next": "Nächster Versand",
+        "recipients": "Empfänger",
+        "status": "Status",
+        "actions": "Aktionen"
+      },
+      "recipientsCount": "{count, plural, one {# Mitglied} other {# Mitglieder}}",
+      "status": {
+        "on": "An",
+        "off": "Aus"
+      },
+      "edit": "Bearbeiten",
+      "editLabel": "{name} bearbeiten",
+      "turnOff": "Ausschalten",
+      "turnOn": "Einschalten",
+      "turnOffLabel": "{name} ausschalten",
+      "turnOnLabel": "{name} einschalten",
+      "delete": "Löschen",
+      "deleteLabel": "{name} löschen",
+      "deleted": "Zeitplan gelöscht",
+      "turnedOff": "Zeitplan ausgeschaltet",
+      "turnedOn": "Zeitplan eingeschaltet",
+      "recent": "Neueste Berichte",
+      "recentEmpty": "Noch wurde kein Bericht gesendet. Der erste geht zur nächsten Sendezeit raus.",
+      "recentColumns": {
+        "report": "Bericht",
+        "period": "Zeitraum",
+        "status": "Status",
+        "file": "PDF"
+      },
+      "runStatus": {
+        "pending": "Wartet",
+        "sent": "Gesendet",
+        "failed": "Fehlgeschlagen"
+      },
+      "download": "PDF herunterladen",
+      "downloadLabel": "{name} für {period} herunterladen (PDF)",
+      "notReady": "Nicht bereit",
+      "errors": {
+        "name": "Gib einen Namen mit höchstens 80 Zeichen ein.",
+        "name_taken": "Es gibt bereits einen Zeitplan mit diesem Namen.",
+        "recipients": "Wähle mindestens ein Mitglied.",
+        "bad_recipient": "Wähle Mitglieder, die Bestellungen sehen können.",
+        "too_many_schedules": "Du hast 25 Zeitpläne. Lösche zuerst einen."
+      }
     }
   },
   "mediaLibrary": {

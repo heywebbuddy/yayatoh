@@ -69,6 +69,14 @@ export {
 } from './port.ts';
 export { privateColumns } from './private-columns.ts';
 export {
+  HookDto,
+  hookSampleQuery,
+  listRestHooksQuery,
+  RestHookDto,
+  subscribeHookCommand,
+  unsubscribeHookCommand,
+} from './rest-hooks.ts';
+export {
   newWebhookSecret,
   SECRET_PREFIX,
   SIGNATURE_TOLERANCE_SECONDS,

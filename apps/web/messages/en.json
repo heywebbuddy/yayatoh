@@ -51,7 +51,11 @@
       "coupon": "Coupon",
       "page": "Page or blog post"
     },
-    "help": "Help"
+    "help": "Help",
+    "clientsSection": "Clients",
+    "viaAgency": "via {agency}",
+    "agencyBadgeLabel": "You are working in {org} for {agency}",
+    "backToAgency": "Back to {agency}"
   },
   "notifications": {
     "open": "Notifications",
@@ -172,7 +176,9 @@
       "alerts": {
         "alert": "Alert",
         "alert-text": "Alert text",
-        "alert-urgent-text": "Urgent alert text"
+        "alert-urgent-text": "Urgent alert text",
+        "metric": "Alert rule",
+        "metric-now": "Alert rule (sent at once)"
       },
       "campaigns": {
         "test": "Campaign test"
@@ -214,6 +220,12 @@
         "request-code": "Privacy request code",
         "archive-ready": "Personal data archive ready",
         "erasure-done": "Erasure receipt"
+      },
+      "badges": {
+        "kiosk-code": "Badge kiosk code"
+      },
+      "analytics": {
+        "report": "Scheduled report"
       },
       "cms": {
         "contact_message": "Contact page message"
@@ -377,6 +389,7 @@
     "badges": "Badges",
     "orgAnalytics": "Analytics",
     "integrations": "Integrations",
+    "virtual": "Stream setup",
     "seatingLibrary": "Seating library",
     "coupons": "Coupons",
     "charity": "Charity profile",
@@ -384,6 +397,9 @@
     "webhooks": "Webhooks",
     "sandboxes": "Sandboxes",
     "notifications": "Notifications",
+    "sso": "Single sign-on",
+    "agency": "Clients",
+    "agencies": "Agencies",
     "mediaLibrary": "Media library",
     "storage": "Storage",
     "moneyOverview": "Overview",
@@ -417,7 +433,13 @@
     "box_office": "Box office",
     "scanner": "Scanner",
     "viewer": "Viewer",
-    "collaborator": "Event collaborator"
+    "collaborator": "Event collaborator",
+    "agency_manager": "Agency manager",
+    "agency_manager_finance": "Agency manager (finance)",
+    "agency_marketing": "Agency marketing",
+    "agency_marketing_finance": "Agency marketing (finance)",
+    "agency_viewer": "Agency viewer",
+    "agency_viewer_finance": "Agency viewer (finance)"
   },
   "profiles": {
     "wedding": "Wedding",
@@ -765,7 +787,8 @@
     "reference": "Reference: {id}",
     "rateLimitedRetry": "Too many attempts. Try again in {minutes, plural, one {# minute} other {# minutes}}.",
     "impersonation_blocked": "Staff acting as a member can't do this: refunds, payouts, exports, deletions and confirmations are turned off.",
-    "read_only_freeze": "Changes are paused during scheduled maintenance. Nothing was saved; try again when it ends."
+    "read_only_freeze": "Changes are paused during scheduled maintenance. Nothing was saved; try again when it ends.",
+    "read_only_billing": "This organization is read-only until its subscription is paid. Nothing was saved or deleted."
   },
   "notFound": {
     "title": "Page not found",
@@ -833,6 +856,43 @@
       "email_unverified": "That account's email address isn't verified with the provider. Verify it there, or sign in with your email.",
       "no_email": "That account didn't share an email address, so we can't create a Yayatoh account for it.",
       "unavailable": "That sign-in option isn't available right now."
+    },
+    "ssoLink": "Sign in with single sign-on",
+    "ssoOtherOrg": "You signed in with another organization's single sign-on. Sign in again to open this organization.",
+    "sso": {
+      "eyebrow": "Single sign-on",
+      "title": "Sign in with your work account",
+      "description": "Enter your work email. We'll send you to your organization's sign-in page.",
+      "email": "Work email",
+      "emailHint": "Your organization must have set up single sign-on for this address.",
+      "continue": "Continue",
+      "back": "Back to other ways to sign in",
+      "errors": {
+        "invalid_email": "Enter a valid email address.",
+        "no_sso": "No organization uses single sign-on for this address. Sign in another way.",
+        "rate_limited": "Too many attempts. Wait a few minutes and try again.",
+        "unavailable": "Single sign-on isn't available right now. Sign in another way."
+      },
+      "refused": {
+        "expired": "This sign-in took too long or was already used. Start again.",
+        "cancelled": "Sign-in was cancelled at your organization's sign-in page.",
+        "failed": "We couldn't sign you in with single sign-on. Try again.",
+        "connection_inactive": "Your organization's single sign-on is turned off. Ask your administrator.",
+        "domain_not_verified": "Your organization hasn't verified the domain of this address, so it can't sign you in.",
+        "identity_conflict": "This work account is linked to someone else here. Ask your administrator.",
+        "deprovisioned": "Your access was removed by your organization. Ask your administrator.",
+        "not_provisioned": "You don't have access to this organization yet. Ask your administrator to add you.",
+        "staff_two_factor": "Platform staff must turn on two-step verification before using single sign-on.",
+        "session_failed": "We couldn't finish signing you in. Try again.",
+        "invalid_signature": "Your organization's sign-in answer couldn't be verified.",
+        "wrong_issuer": "The sign-in answer came from a different identity provider than the one set up.",
+        "wrong_audience": "The sign-in answer was meant for a different application.",
+        "wrong_request": "The sign-in answer doesn't belong to this sign-in. Start again.",
+        "malformed": "The sign-in answer was not readable.",
+        "no_email": "Your organization's identity provider didn't send an email address.",
+        "idp_error": "Your organization's identity provider didn't answer. Try again.",
+        "sso_required": "Your organization requires single sign-on for your address. Sign in here to continue."
+      }
     }
   },
   "orgPicker": {
@@ -2029,7 +2089,8 @@
     "dateSoldOut": "Not enough tickets left for this date.",
     "wrongDate": "One of these tickets isn't sold for this date.",
     "dateUnavailable": "This date is no longer on sale.",
-    "seatChannel": "Some of those seats are kept for another sales channel (a sponsor, a promoter or online sales). Choose other seats."
+    "seatChannel": "Some of those seats are kept for another sales channel (a sponsor, a promoter or online sales). Choose other seats.",
+    "imported": "Imported from {source} · order {reference}"
   },
   "seating": {
     "title": "Seating",
@@ -2139,6 +2200,7 @@
       "selection": "Best available",
       "channels": "Channels",
       "revisions": "Revisions",
+      "solver": "Auto-seat",
       "guests": "Seat guests",
       "cards": "Cards and exports"
     },
@@ -2522,6 +2584,134 @@
       "isCurrent": "This is the plan as it is now.",
       "restore": "Restore revision {number}",
       "restoredNotice": "Revision {number} restored. The plan now is revision {now}."
+    },
+    "solver": {
+      "title": "Seating rules and solver",
+      "description": "Set rules, let the solver propose a table for everyone still unseated, review the proposal and accept one table or all. Guests you seated by hand never move.",
+      "rules": {
+        "heading": "Rules",
+        "listLabel": "Seating rules",
+        "empty": "No rules yet. Add one below, or run the solver without rules: it still keeps every table within its seats.",
+        "hard": "Hard",
+        "soft": "Soft",
+        "badge": "{strength} · weight {weight}",
+        "strength": "Strength",
+        "strengthHint": "A proposal never breaks a hard rule. Soft rules are kept when they can be; each break costs its weight.",
+        "weight": "Weight",
+        "weightHint": "1 to 10. Soft rules with a higher weight matter more.",
+        "save": "Save",
+        "remove": "Remove",
+        "saved": "Rule saved.",
+        "removed": "Rule removed.",
+        "added": "Rule added.",
+        "editLabel": "Change rule: {rule}",
+        "kinds": {
+          "keep_together": "Keep together",
+          "keep_apart": "Keep apart",
+          "vip_near_stage": "VIP nearest the stage",
+          "access_near_exit": "Accessibility needs near exits",
+          "table_max": "Table maximum"
+        },
+        "add": {
+          "heading": "Add a rule",
+          "kind": "Rule",
+          "by": "Who",
+          "byEach": "Each party",
+          "byParty": "A party",
+          "byTag": "Everyone with a tag",
+          "bySide": "Everyone on a side",
+          "party": "Party",
+          "tag": "Tag",
+          "side": "Side",
+          "choose": "Choose…",
+          "together": "Keep together",
+          "first": "First group",
+          "second": "Second group",
+          "accessTag": "Tag for accessibility needs",
+          "accessHint": "Parties with this tag sit at the tables nearest an exit or entrance. Answers to accessibility questions stay private.",
+          "max": "People per table at most",
+          "vipHint": "VIP parties sit at the tables nearest the stage.",
+          "submit": "Add rule"
+        },
+        "errors": {
+          "value": "Choose who the rule is about.",
+          "same": "Choose two different groups.",
+          "weight": "Enter a weight from 1 to 10.",
+          "max": "Enter a number from 1 to 40.",
+          "duplicate": "This event already has that rule.",
+          "tooMany": "An event can have at most 50 rules.",
+          "unknownParty": "That party isn't on this guest list."
+        },
+        "describe": {
+          "togetherParty": "Keep each party together",
+          "togetherTag": "Keep everyone tagged “{value}” together",
+          "togetherSide": "Keep the {value} side together",
+          "apart": "Keep {a} apart from {b}",
+          "targetParty": "{value}",
+          "targetTag": "everyone tagged “{value}”",
+          "targetSide": "the {value} side",
+          "vip": "VIP parties nearest the stage",
+          "access": "Guests tagged “{tag}” nearest an exit",
+          "tableMax": "At most {max} people per table"
+        }
+      },
+      "run": {
+        "heading": "Proposal",
+        "queue": "{count, plural, one {# guest} other {# guests}} still to seat. {fixed, plural, =0 {Nobody is seated yet.} one {# guest seated by hand stays where they are.} other {# guests seated by hand stay where they are.}}",
+        "nothing": "Everyone is seated. There is nothing to propose.",
+        "seed": "Arrangement number",
+        "seedHint": "The same number always gives the same proposal.",
+        "seedError": "Enter a whole number from 1 to 1,000,000.",
+        "start": "Propose seating",
+        "cancel": "Stop",
+        "again": "Try another arrangement",
+        "running": "Working on a proposal… {percent}%",
+        "progress": "Proposal progress",
+        "cancelled": "Stopped. Nothing was proposed.",
+        "failed": "The solver stopped unexpectedly. Try again."
+      },
+      "summary": {
+        "heading": "Summary",
+        "done": "Proposal ready in {seconds} s (arrangement {seed}).",
+        "seated": "{count, plural, one {# guest} other {# guests}} at {tables, plural, one {# table} other {# tables}}; {queue, plural, =0 {nobody left in the queue} one {# guest left in the queue} other {# guests left in the queue}}.",
+        "hardOk": "No hard rule is broken.",
+        "hardBroken": "{count, plural, one {# hard rule is broken} other {# hard rules are broken}}. Change the proposal before accepting.",
+        "soft": "Soft rules: penalty {penalty} (0 is best).",
+        "ruleLine": "{rule}: {count, plural, =0 {kept} one {# break} other {# breaks}}",
+        "issues": {
+          "no_stage": "The plan has no stage, so “VIP nearest the stage” can't apply.",
+          "no_exit": "The plan has no exit or entrance, so “Accessibility needs near exits” can't apply.",
+          "group_too_big": "A group of {size} is bigger than any table ({room} seats). It is kept on as few tables as possible.",
+          "too_few_seats": "{size} guests to seat but only {room} free seats: some stay in the queue.",
+          "no_room": "The plan has no tables or rows."
+        }
+      },
+      "tables": {
+        "heading": "Proposed tables",
+        "none": "No table is proposed.",
+        "region": "Table {label}",
+        "fill": "{proposed} proposed · {seated} seated · {free} of {capacity} free",
+        "overFull": "{count, plural, one {# guest too many} other {# guests too many}} for the free seats.",
+        "broken": "Breaks a hard rule: {rules}",
+        "over": "More guests than seats",
+        "accept": "Accept table {label}",
+        "acceptAll": "Accept all tables",
+        "fixFirst": "Fix the tables marked with a warning first.",
+        "acceptedTable": "Table {label} accepted: {count, plural, one {# guest} other {# guests}} seated.",
+        "acceptedAll": "Proposal accepted: {count, plural, one {# guest} other {# guests}} seated.",
+        "queueHeading": "Left in the queue",
+        "guest": "{name} ({party})",
+        "moveLabel": "Table for {name}",
+        "queueOption": "Leave in the queue",
+        "optionFree": "Table {label} ({free} free)",
+        "toEditor": "Open the seating editor"
+      },
+      "acceptErrors": {
+        "already_seated": "Someone in this proposal was seated by hand meanwhile. Propose again.",
+        "declined": "A guest in this proposal has declined. Propose again.",
+        "hard_rule": "Accepting this would break a hard rule.",
+        "cant_fit": "Only {fits} more fit at that table."
+      }
     },
     "guestSeating": {
       "title": "Seat guests",
@@ -3255,22 +3445,6 @@
       "digest": "Receipt SHA-256",
       "signature": "Signature (base64)",
       "footer": "Issued by Yayatoh for {org}. The signature covers the receipt’s data; check it with the public key below."
-    },
-    "categories": {
-      "contacts": "Contact records",
-      "consents": "Consent records",
-      "orders": "Orders",
-      "paidOrders": "Paid orders (kept for accounting)",
-      "tickets": "Tickets",
-      "activeTickets": "Valid tickets",
-      "claims": "Ticket transfer links",
-      "holderLinks": "Ticket access links",
-      "attendees": "Guest list entries",
-      "answers": "Checkout answers",
-      "admissions": "Check-ins",
-      "invitations": "Team invitations",
-      "networkProfiles": "Networking profiles",
-      "chatMessages": "Chat messages sent"
     },
     "findOwner": "Find an owner or admin"
   },
@@ -4110,7 +4284,10 @@
       "orders_refund": "Refund orders",
       "attendees_read": "Read attendees",
       "attendees_write": "Change attendees and resend tickets",
-      "checkin_scan": "Scan tickets"
+      "checkin_scan": "Scan tickets",
+      "contacts_write": "Add contacts",
+      "webhooks_subscribe": "Subscribe automation hooks (Zapier triggers)",
+      "webhooks_manage": "Add and remove webhook endpoints (Make and n8n triggers)"
     },
     "expiry": "Expires",
     "expiryHint": "An expiring key must be rotated before it ends. Shorter is safer.",
@@ -7558,6 +7735,10 @@
       "rsvpPending": "Open RSVPs",
       "guestsUnseated": "Seat guests",
       "mealsMissing": "Open RSVP answers",
+      "integrationFailed": "Open the integrations inbox",
+      "billingPastDue": "Open plan and billing",
+      "metricRule": "Open alert rules",
+      "metricRuleFinance": "Open alert rules",
       "pledgesUnpaid": "Open the pledges",
       "sessionsNearCapacity": "Open sessions",
       "sessionWaitlists": "Open session enrollment",
@@ -7594,6 +7775,10 @@
       "rsvpPending": "{count, plural, one {{countWords} guest has not responded to RSVP} other {{countWords} guests have not responded to RSVP}}",
       "guestsUnseated": "{count, plural, one {{countWords} guest does not have a table} other {{countWords} guests do not have a table}}",
       "mealsMissing": "{count, plural, one {{countWords} attending guest has not chosen a meal} other {{countWords} attending guests have not chosen a meal}}",
+      "integrationFailed": "{count, plural, one {{countWords} integration problem today (a failed sync or a lost connection)} other {{countWords} integration problems today (failed syncs or lost connections)}}",
+      "billingPastDue": "{count, plural, one {The plan payment is past due} other {{countWords} plan payments are past due}}",
+      "metricRule": "Alert rule “{title}” is firing",
+      "metricRuleFinance": "Alert rule “{title}” is firing",
       "pledgesUnpaid": "{count, plural, one {{countWords} pledge is still unpaid 14 days after the event} other {{countWords} pledges are still unpaid 14 days after the event}}",
       "sessionsNearCapacity": "{count, plural, one {{countWords} session is over 95 % capacity} other {{countWords} sessions are over 95 % capacity}}",
       "sessionWaitlists": "{count, plural, one {{countWords} session has a long waiting line} other {{countWords} sessions have long waiting lines}}",
@@ -10260,6 +10445,219 @@
       },
       "cardLink": "Open matching gifts",
       "cardBody": "Let a sponsor double gifts in a window up to a cap, and export donors’ employers for matching."
+    },
+    "report": {
+      "title": "Donations report",
+      "subtitle": "What was raised and how, pledges collected, and every donor, checked against the ledger.",
+      "noAccessTitle": "Finance access needed",
+      "noAccessDescription": "Ask an owner, admin or finance member for the donations report: it names donors and amounts.",
+      "reconcileLink": "Reconciliation",
+      "emptyTitle": "No donations yet",
+      "emptyDescription": "Gifts, paddle pledges and donation tickets appear here once they come in. Open a campaign on the Donations tab to start.",
+      "backToDonations": "Go to Donations",
+      "asOf": "Up to now. Dates in exports are in the event's time zone ({zone}).",
+      "totalsTitle": "Totals",
+      "totalsIn": "Totals in {currency}",
+      "stats": {
+        "raised": "Raised",
+        "raisedSub": "{count, plural, one {# gift or payment} other {# gifts and payments}} from {donors, plural, one {# donor} other {# donors}}",
+        "online": "Received by card",
+        "onlineSub": "Includes {cover} of covered fees; {refunded} refunded",
+        "offline": "Paid offline",
+        "ticketSub": "Plus {amount} from donation tickets",
+        "pledged": "Pledged in the room",
+        "collectedLabel": "Pledges collected",
+        "pledgedSub": "{collected} collected · {writtenOff} written off · {open} still open",
+        "matched": "Matched by sponsors",
+        "matchedSub": "Sponsors' pledges, collected separately"
+      },
+      "check": {
+        "title": "Ledger check",
+        "notReconciled": "Not reconciled yet",
+        "matches": "Matches to the cent",
+        "differs": "Differs by {amount}",
+        "ledger": "Ledger memo entries",
+        "provider": "Stripe balance (last reconciled)",
+        "none": "Not reconciled yet",
+        "fees": "Stripe fees"
+      },
+      "bySource": {
+        "title": "By source",
+        "source": "Source",
+        "count": "Gifts",
+        "net": "Received"
+      },
+      "sources": {
+        "online": "Giving page",
+        "qr": "QR code",
+        "paddle": "Paddle raise",
+        "ticket": "Donation tickets"
+      },
+      "byLevel": {
+        "title": "By level",
+        "empty": "No levels used yet.",
+        "level": "Level",
+        "own": "Own amounts",
+        "gifts": "Gifts",
+        "giftsCell": "{count, plural, one {# gift} other {# gifts}} · {amount}",
+        "pledges": "Paddle pledges",
+        "pledgesCell": "{count, plural, one {# pledge} other {# pledges}} · {amount}"
+      },
+      "byMatch": {
+        "title": "By match",
+        "sponsor": "Sponsor",
+        "campaign": "Campaign",
+        "status": "Status",
+        "matched": "Matched",
+        "matchedCell": "{matched} of {cap}"
+      },
+      "matchStatus": {
+        "active": "Running",
+        "closed": "Closed",
+        "cancelled": "Cancelled"
+      },
+      "byDonor": {
+        "title": "By donor",
+        "note": "Anonymous donors are flagged: you see who gave, but never thank or list them publicly.",
+        "empty": "No donors yet.",
+        "donor": "Donor",
+        "anonymous": "Anonymous",
+        "email": "Email",
+        "count": "Gifts",
+        "net": "Given",
+        "truncated": "Only the 500 largest donors are listed here; the export has everyone."
+      },
+      "export": {
+        "title": "Export for your donor CRM",
+        "body": "One row per gift, offline payment and donation ticket, with the anonymous flag kept. You'll confirm it's you first.",
+        "error": "The export didn't start: {reason}",
+        "layout": "Columns for",
+        "layoutHint": "CRM layouts use the CRM's own column names, so the file imports without remapping.",
+        "format": "File type",
+        "csv": "CSV (.csv)",
+        "xlsx": "Excel (.xlsx)",
+        "submit": "Export donors",
+        "statusCsv": "Donor export (CSV)",
+        "statusXlsx": "Donor export (Excel)"
+      },
+      "layouts": {
+        "generic": "Any spreadsheet (this language)",
+        "salesforce_npsp": "Salesforce Nonprofit (NPSP)",
+        "bloomerang": "Bloomerang",
+        "little_green_light": "Little Green Light"
+      },
+      "cardTitle": "Report and exports",
+      "cardLink": "Open the report",
+      "cardBody": "Totals by source, level, match and donor; pledges collected; exports for your donor CRM.",
+      "cardReconcile": "Reconcile with Stripe",
+      "file": {
+        "headers": {
+          "date": "Date",
+          "firstName": "First name",
+          "lastName": "Last name",
+          "donor": "Donor",
+          "email": "Email",
+          "anonymous": "Anonymous",
+          "amount": "Amount received",
+          "gift": "Gift",
+          "feeCover": "Fee covered",
+          "refunded": "Refunded",
+          "currency": "Currency",
+          "campaign": "Campaign",
+          "level": "Level",
+          "source": "Source",
+          "method": "Payment method",
+          "employer": "Employer",
+          "tribute": "In honor or memory of",
+          "paddle": "Paddle",
+          "reference": "Reference"
+        },
+        "yes": "Yes",
+        "no": "No",
+        "sources": {
+          "online": "Giving page",
+          "qr": "QR code",
+          "paddle": "Paddle raise",
+          "ticket": "Donation ticket"
+        },
+        "methods": {
+          "card": "Card",
+          "check": "Check",
+          "wire": "Wire transfer",
+          "stock": "Stock",
+          "daf": "Donor-advised fund",
+          "cash": "Cash",
+          "other": "Other"
+        },
+        "privacyTitle": "Your donors stay yours",
+        "privacy": "Exports hold this event's donors only. Store the file safely and delete it once it's imported."
+      }
+    },
+    "recon": {
+      "title": "Donations reconciliation",
+      "subtitle": "The event's gifts in the ledger, compared with your Stripe account and its payouts.",
+      "noAccessTitle": "Finance access needed",
+      "noAccessDescription": "Ask an owner, admin or finance member to reconcile donations.",
+      "errors": {
+        "note": "Say what you found (3 to 500 characters).",
+        "provider": "Stripe couldn't be reached. Try again in a few minutes."
+      },
+      "run": "Reconcile now",
+      "ran": "Reconciled.",
+      "reportLink": "Donations report",
+      "notConnectedTitle": "No Stripe account to compare",
+      "notConnectedDescription": "Gifts go straight to your connected Stripe account. Connect it under Payouts, then reconcile here.",
+      "status": {
+        "open": "Open",
+        "resolved": "Resolved",
+        "cleared": "Cleared"
+      },
+      "viewerNotice": "You can read the reconciliation. Owners, admins and finance members run it and resolve differences.",
+      "runTitle": "Latest run",
+      "lastRun": "Last reconciled {at}: {ledger} ledger entries against {provider} Stripe movements.",
+      "neverRun": "Not reconciled yet. Reconcile now to compare the ledger with Stripe.",
+      "stats": {
+        "ledger": "Ledger memo entries",
+        "provider": "Stripe balance",
+        "fees": "Stripe fees",
+        "unpaidOut": "Not paid out yet",
+        "unpaidOutSub": "{count, plural, =0 {Everything has been paid out} one {# movement waits for a payout} other {# movements wait for a payout}}"
+      },
+      "diffsTitle": "Differences",
+      "cleanTitle": "Everything matches",
+      "cleanDescription": "Every gift and refund in the ledger matches Stripe to the cent.",
+      "allSettled": "No open differences: every one is resolved or cleared.",
+      "kinds": {
+        "missing_at_provider": "In the ledger, not at Stripe",
+        "missing_in_ledger": "At Stripe, not in the ledger",
+        "amount_mismatch": "Amounts differ"
+      },
+      "ledger": "Ledger",
+      "provider": "Stripe",
+      "difference": "Difference",
+      "resolvedNote": "Resolved: {note}",
+      "noteLabel": "What you found",
+      "noteHint": "For example: refunded by phone, Stripe adjustment, duplicate entry.",
+      "resolve": "Resolve {reference}",
+      "resolved": "Resolved.",
+      "payoutsTitle": "Payouts",
+      "payoutsBody": "Payouts from your Stripe account that carried this event's gifts. A payout can carry other money too.",
+      "payoutsEmpty": "No payouts yet. Stripe pays out a few days after gifts arrive.",
+      "payout": {
+        "id": "Payout",
+        "status": "Status",
+        "arrival": "Arrives",
+        "amount": "Payout",
+        "donations": "This event's gifts",
+        "donationsCell": "{count, plural, one {# movement} other {# movements}}: {net} after {fees} fees"
+      },
+      "payoutStatus": {
+        "pending": "Pending",
+        "in_transit": "On its way",
+        "paid": "Paid",
+        "failed": "Failed",
+        "canceled": "Cancelled"
+      }
     }
   },
   "galaTables": {
@@ -12470,6 +12868,36 @@
       "waitlist_closed": "{title} is full and its waitlist closed 24 hours before the session.",
       "offer_ended": "The offer for {title} has ended.",
       "full": "{title} just filled up. Try again to join the waitlist."
+    },
+    "calendar": {
+      "title": "Google Calendar",
+      "off": "Keep this schedule in your Google Calendar. Sessions you add or drop, and any change of time or room, follow on their own.",
+      "privacy": "We only add this event's sessions to your calendar. We never read your other events.",
+      "connect": "Add to Google Calendar",
+      "reconnect": "Connect again",
+      "pending": "Waiting for Google to confirm. If you closed that window, connect again.",
+      "active": "{count, plural, =0 {Syncing to your Google Calendar. No sessions on it yet.} one {Syncing to your Google Calendar: # session is on it.} other {Syncing to your Google Calendar: # sessions are on it.}}",
+      "lastSync": "Last updated {when}",
+      "neverSynced": "The first update is on its way.",
+      "syncNow": "Update now",
+      "syncing": "Update on its way",
+      "stop": "Stop syncing",
+      "stopped": "Syncing is off. Sessions already in your calendar stay there.",
+      "revokedByGoogle": "Google no longer accepts this connection, so updates stopped. Connect again to carry on.",
+      "done": {
+        "queued": "Update on its way. Your calendar changes in a moment.",
+        "already": "An update is already on its way.",
+        "stopped": "Syncing stopped. Sessions already in your calendar stay there."
+      },
+      "notice": {
+        "connected": "Connected. Your sessions appear in your Google Calendar in a moment.",
+        "denied": "Google Calendar wasn't connected.",
+        "expired": "That connect link expired. Try again.",
+        "unavailable": "Calendar sync isn't available for this event.",
+        "provider_unavailable": "Google couldn't be reached. Try again in a moment.",
+        "rate_limited": "Too many tries. Wait a few minutes and try again.",
+        "conflict": "Your calendar is already connected."
+      }
     }
   },
   "people": {
@@ -13127,7 +13555,74 @@
       "ai_seating": "AI seating",
       "analytics_pro": "Advanced analytics"
     },
-    "findOwner": "Find an owner or admin"
+    "findOwner": "Find an owner or admin",
+    "usageLink": "Usage",
+    "renewalReceived": "Renewal update received",
+    "dunning": {
+      "graceTitle": "Your subscription payment didn't go through",
+      "graceBody": "Everything works as usual until {date}. Pay before then to keep making changes; after that the organization becomes read-only until it's paid.",
+      "readOnlyTitle": "This organization is read-only",
+      "readOnlyBody": "The subscription payment failed, so changes are paused. Nothing has been deleted: you can still look at everything, export your data, and scan tickets at the door. Pay to restore changes at once.",
+      "payNow": "Pay now",
+      "askOwner": "Ask an owner or admin of this organization to pay.",
+      "paidTitle": "Payment received",
+      "paidBody": "Thank you. Changes are back on for everyone in the organization.",
+      "declinedTitle": "The payment didn't go through",
+      "declinedBody": "Nothing changed. Check the card on file with your billing provider, then try again.",
+      "payError": "The payment couldn't be started. Try again in a moment."
+    },
+    "change": {
+      "title": "Change plan",
+      "description": "Upgrades and downgrades take effect at once. You pay or are credited only for the rest of this billing period.",
+      "discountCharity": "Your verified charity profile gives you {percent}% off every plan.",
+      "discountStaff": "Your organization gets a {percent}% nonprofit discount on every plan.",
+      "legend": "Plans",
+      "offer": "{plan}: {price} {interval, select, year {a year} other {a month}}",
+      "direction": {
+        "upgrade": "Upgrade",
+        "downgrade": "Downgrade",
+        "switch": "Switch",
+        "start": "Start"
+      },
+      "turnsOff": "{count, plural, one {Turns off # module} other {Turns off # modules}}",
+      "chooseError": "Choose a plan to preview.",
+      "preview": "Preview change",
+      "previewTitle": "Change to {plan}",
+      "previewLead": {
+        "upgrade": "You're upgrading. Here is what you pay today for the rest of this billing period.",
+        "downgrade": "You're downgrading. Unused time on your current plan is credited.",
+        "switch": "You're switching plans at the same price.",
+        "start": "Your subscription starts today."
+      },
+      "rows": {
+        "charge": "New plan, rest of the period",
+        "credit": "Credit for unused time",
+        "discount": "Nonprofit discount",
+        "tax": "Tax",
+        "due": "Due today"
+      },
+      "creditKept": "{amount} of credit is kept for your next invoices.",
+      "nextRenewal": "Then {amount} on {date}.",
+      "nextRenewalNoDate": "Then {amount} each period.",
+      "taxNote": "Tax is calculated by the billing provider from your organization's billing details.",
+      "removedTitle": "{count, plural, one {# module turns off} other {# modules turn off}}",
+      "removedBody": "Their data is kept. They come back as they were if you change to a plan that includes them.",
+      "confirmRemoved": "{count, plural, one {I understand this module turns off} other {I understand these modules turn off}}",
+      "confirmError": "Confirm the modules that turn off to continue.",
+      "confirm": "Confirm change",
+      "cancel": "Keep my plan",
+      "doneTitle": "Plan change sent",
+      "doneBody": "Your billing provider confirmed the change. Your plan and modules are updated below.",
+      "errorTitle": "The plan wasn't changed",
+      "errors": {
+        "billing_off": "Billing isn't active for this organization.",
+        "same_plan": "You're already on this plan.",
+        "validation_failed": "Choose a plan that is offered.",
+        "provider": "The billing provider didn't accept the change. Nothing was charged; try again.",
+        "forbidden": "Only owners and admins can change the plan.",
+        "other": "Something went wrong. Nothing was changed."
+      }
+    }
   },
   "billingPortal": {
     "eyebrow": "Test billing",
@@ -13137,7 +13632,11 @@
     "switch": "Switch plan",
     "cancel": "Cancel subscription",
     "back": "Back without changes",
-    "chooseError": "Choose a plan to switch to."
+    "chooseError": "Choose a plan to switch to.",
+    "noSubscriptionError": "This customer has no subscription yet. Choose a plan first.",
+    "renewalLegend": "Renewal",
+    "failRenewal": "Fail the renewal payment",
+    "stopRetrying": "Stop retrying the payment"
   },
   "seatingLibrary": {
     "title": "Seating library",
@@ -13269,6 +13768,36 @@
     "connectors": {
       "demo": {
         "description": "A sandbox contacts app for trying integrations: contacts sync both ways with your CRM. Test environments only."
+      },
+      "slack": {
+        "description": "Alerts and a daily digest in a Slack channel you pick. Messages name events, never people's emails, phones or amounts unless you opt in."
+      },
+      "eventbrite": {
+        "description": "Bring your events, ticket types, orders and attendees over from Eventbrite. Preview first, then import; run it again any time to pick up changes."
+      },
+      "google_sheets": {
+        "description": "Keep an event's attendee list in a Google Sheet. Edits in either place sync both ways."
+      },
+      "salesforce": {
+        "description": "Keep Salesforce in step: contacts and leads both ways, a campaign for each event with the people registered and checked in, and your sponsors as opportunities. Only people who agreed to marketing are sent."
+      },
+      "google_calendar": {
+        "description": "Every session of your live events on a Google Calendar, kept up to date: moved sessions move and cancelled ones come off. Times show in each event's time zone."
+      },
+      "quickbooks": {
+        "description": "Post a daily summary journal of your sales, fees, refunds, payouts and donations to QuickBooks Online."
+      },
+      "xero": {
+        "description": "Post a daily summary journal of your sales, fees, refunds, payouts and donations to Xero."
+      },
+      "mailchimp": {
+        "description": "Send an audience to a Mailchimp audience list with merge fields. Unsubscribes and bounced addresses come back as consent changes."
+      },
+      "hubspot": {
+        "description": "Sync contacts both ways, and send your events to HubSpot as marketing events with registrations and check-ins."
+      },
+      "klaviyo": {
+        "description": "Send an audience to a Klaviyo list. Unsubscribes, bounces and spam complaints come back as consent changes."
       }
     },
     "sandboxBadge": "Sandbox",
@@ -13288,11 +13817,66 @@
     "readOnly": "Only owners and admins can connect or change integrations.",
     "breadcrumb": "Breadcrumb",
     "objects": {
-      "contacts": "Contacts"
+      "contacts": "Contacts",
+      "events": "Events",
+      "ticket_classes": "Ticket types",
+      "orders": "Orders",
+      "attendees": "Attendees",
+      "leads": "Leads",
+      "campaigns": "Campaigns",
+      "campaign_members": "Campaign members",
+      "sponsor_opportunities": "Sponsor opportunities",
+      "sessions": "Sessions",
+      "journals": "Daily journals",
+      "members": "List members",
+      "marketing_events": "Marketing events",
+      "event_attendance": "Registrations and attendance"
     },
     "fields": {
       "email": "Email",
-      "name": "Name"
+      "name": "Name",
+      "tagline": "Tagline",
+      "starts_at": "Starts",
+      "ends_at": "Ends",
+      "timezone": "Time zone",
+      "currency": "Currency",
+      "venue_name": "Venue",
+      "city": "City",
+      "country": "Country",
+      "description": "Description",
+      "price_minor": "Price (in cents)",
+      "quantity_total": "Quantity",
+      "hidden": "Hidden",
+      "sales_start_at": "Sales start",
+      "sales_end_at": "Sales end",
+      "buyer_email": "Buyer email",
+      "buyer_name": "Buyer name",
+      "status": "Status",
+      "subtotal_minor": "Ticket total (in cents)",
+      "total_minor": "Order total (in cents)",
+      "placed_at": "Ordered on",
+      "labels": "Labels",
+      "first_name": "First name",
+      "last_name": "Last name",
+      "company": "Company",
+      "title": "Title",
+      "phone": "Phone",
+      "lead_source": "Lead source",
+      "start_date": "Start date",
+      "end_date": "End date",
+      "stage": "Stage",
+      "stage_name": "Stage",
+      "close_date": "Close date",
+      "amount": "Amount",
+      "tier": "Sponsor tier",
+      "currency_iso_code": "Currency code",
+      "event_name": "Event",
+      "room": "Room",
+      "time_zone": "Time zone",
+      "subscription": "Subscription change",
+      "email_opt_out": "Opted out of email",
+      "venue": "Venue",
+      "cancelled": "Cancelled"
     },
     "status": {
       "none": "Not connected",
@@ -13339,7 +13923,9 @@
         "paused": "Syncing is paused.",
         "resumed": "Syncing is back on.",
         "interval": "Sync schedule saved.",
-        "disconnected": "Disconnected. Nothing syncs any more and access was revoked at the provider."
+        "disconnected": "Disconnected. Nothing syncs any more and access was revoked at the provider.",
+        "linked": "Sheet created and linked. It fills on the next sync.",
+        "unlinked": "Sheet unlinked. Nothing syncs with it any more; it stays in your Google Drive."
       },
       "revoked": {
         "user": "Disconnected on {when}.",
@@ -13443,7 +14029,21 @@
       "paused": "Stopped by pausing",
       "sync_failed": "The sync failed",
       "unknown_connector": "This integration is no longer available",
-      "other": "Error ({code})"
+      "other": "Error ({code})",
+      "remote_deleted": "Deleted in the sheet",
+      "conflict_kept_yayatoh": "Changed in both places: Yayatoh's change was kept",
+      "conflict_kept_remote": "Changed in both places: the provider's change was kept",
+      "conflict": "Clashes with a record already in Yayatoh",
+      "not_found": "Something it needs isn't here yet",
+      "validation_failed": "Yayatoh didn't accept it",
+      "remove_failed": "Couldn't be removed at the provider",
+      "currency_unsupported": "Your books only take their base currency",
+      "post_failed": "Couldn't be posted to your books",
+      "http_400": "Your books refused it: check the mapped accounts",
+      "http_429": "The provider asked us to slow down",
+      "http_503": "The provider is unavailable right now",
+      "no_organisation": "No organisation was found for this connection",
+      "account_code_missing": "A mapped account has no code"
     },
     "inbox": {
       "title": "Integration errors",
@@ -13469,7 +14069,8 @@
         "pull": "Reading from the provider",
         "map": "Mapping",
         "write": "Saving in Yayatoh",
-        "push": "Sending to the provider"
+        "push": "Sending to the provider",
+        "conflict": "Changed in both places"
       },
       "field": "Field: {field}",
       "lastSeen": "Last seen {when}",
@@ -13495,7 +14096,15 @@
       "retryNamed": "Retry {record}",
       "dismiss": "Dismiss",
       "dismissNamed": "Dismiss {record}",
-      "more": "{count, plural, one {# more record not shown.} other {# more records not shown.}}"
+      "more": "{count, plural, one {# more record not shown.} other {# more records not shown.}}",
+      "values": "Values",
+      "keptLost": "{field}: kept “{kept}”, lost “{lost}”",
+      "yourCall": "Needs your decision",
+      "help": {
+        "remote_deleted": "The row was deleted in the sheet. Nobody was removed from the list in Yayatoh. Dismiss to accept it: the attendee stays here and is no longer tied to that row.",
+        "conflict_kept_yayatoh": "This record changed in both places since the last sync. The later change, made in Yayatoh, was kept and sent out; the provider's value below was overwritten.",
+        "conflict_kept_remote": "This record changed in both places since the last sync. The later change, made at the provider, was kept; Yayatoh's value below was overwritten."
+      }
     },
     "fakeConsent": {
       "title": "Sandbox consent",
@@ -13503,9 +14112,551 @@
       "heading": "Connect {name} to Yayatoh?",
       "body": "{name} is a test provider. Allowing lets Yayatoh read and write the following on your behalf:",
       "allow": "Allow",
-      "deny": "Deny"
+      "deny": "Deny",
+      "bodyNoScopes": "{name} is a test provider. Allowing lets Yayatoh read your account's data on your behalf."
     },
-    "webhooksAction": "Set up a webhook"
+    "webhooksAction": "Set up a webhook",
+    "zapier": {
+      "title": "Zapier",
+      "cardDescription": "Start Zaps when orders are paid, tickets are checked in or registrations come in, and register people or add contacts from thousands of apps.",
+      "apiKeyBadge": "Uses an API key",
+      "setUp": "Set up",
+      "setUpNamed": "Set up Zapier",
+      "description": "Zapier connects with one of your API keys. Give the key the scopes below; the triggers Zapier turns on are listed here.",
+      "createKey": "Create an API key",
+      "reviewTitle": "The Yayatoh app on Zapier is in review",
+      "reviewBody": "Until Zapier lists it, your account team can send you an invite link to it.",
+      "noApiAccess": "API access isn't part of your plan, so Zapier can't connect yet.",
+      "scopesTitle": "API key scopes",
+      "scopesHelp": "Each trigger and action needs its scope on the key you give Zapier.",
+      "allScopes": "A key with these scopes covers everything:",
+      "partsCaption": "Triggers and actions with the scope each one needs",
+      "part": "Trigger or action",
+      "kind": "Type",
+      "scope": "Scope",
+      "parts": {
+        "order_paid": "Order paid",
+        "ticket_admitted": "Ticket checked in",
+        "registration_submitted": "Registration form submitted",
+        "event_published": "Event published",
+        "create_registration": "Create registration",
+        "add_contact": "Add contact",
+        "check_in": "Check in ticket",
+        "event_list": "Event picker"
+      },
+      "kinds": {
+        "trigger": "Trigger",
+        "action": "Action",
+        "picker": "Used by actions"
+      },
+      "keysTitle": "Your API keys",
+      "keysHelp": "Live keys and whether they cover every scope Zapier needs.",
+      "noKeysTitle": "No live API keys yet",
+      "noKeysDescription": "Create a key with the scopes above, then paste it into Zapier with your organization's short name.",
+      "keysCaption": "Live API keys and their Zapier coverage",
+      "keyName": "Key",
+      "key": "Starts with",
+      "coverage": "For Zapier",
+      "ready": "Ready for Zapier",
+      "partial": "{count, plural, one {Missing # scope} other {Missing # scopes}}",
+      "missing": "Missing: {scopes}",
+      "hooksTitle": "Active Zapier triggers",
+      "hooksHelp": "Zaps that are on and listening. Turning a Zap off removes its trigger here.",
+      "hooksCaption": "Triggers Zapier has subscribed",
+      "hooksEmpty": "No Zaps are listening yet. Turn on a Zap that starts with a Yayatoh trigger.",
+      "event": "Event type",
+      "host": "Delivered to",
+      "otherKey": "A removed key",
+      "created": "Turned on"
+    },
+    "slack": {
+      "title": "Slack",
+      "description": "Pick a channel for alerts and the daily digest. Messages name events and counts; never emails or phone numbers.",
+      "settingsTitle": "Channel and messages",
+      "saved": "Slack settings saved.",
+      "invalid": "Some details need fixing.",
+      "channel": "Channel",
+      "channelHint": "Only channels the Yayatoh app is in can be picked. In Slack, add the app to a channel first.",
+      "channelPlaceholder": "Choose a channel",
+      "private": "private",
+      "notInChannel": "app not in channel",
+      "alerts": "Send alerts",
+      "alertsHint": "Alerts from your dashboard, as they happen.",
+      "severity": "Alerts to send",
+      "severities": {
+        "info": "All alerts",
+        "warning": "Warnings and critical alerts",
+        "critical": "Critical alerts only"
+      },
+      "digest": "Send a daily digest",
+      "digestHint": "Yesterday's orders, tickets and check-ins, and today's events.",
+      "digestTime": "Digest time",
+      "digestTimeHint": "Your organization's time zone ({zone}).",
+      "finance": "Include amounts in the digest",
+      "financeHint": "Only you can switch this on: you connected Slack and can see finances. Everyone in the channel will see the amounts.",
+      "noAmounts": "The digest shows counts, not amounts. Only the person who connected Slack, with finance access, can add amounts.",
+      "save": "Save Slack settings",
+      "fieldError": {
+        "invalid": "Check this value.",
+        "channel": {
+          "required": "Choose a channel.",
+          "unknown": "That channel isn't in the workspace any more. Choose another.",
+          "not_in_channel": "The Yayatoh app isn't in that channel. Add it in Slack, then choose it."
+        },
+        "digestTime": {
+          "required": "Choose a time for the digest.",
+          "invalid": "Enter a time like 08:00."
+        },
+        "severity": {
+          "invalid": "Choose which alerts to send."
+        },
+        "finance": {
+          "finance_owner_only": "Only the person who connected Slack, with finance access, can add amounts."
+        }
+      },
+      "error": {
+        "unavailable": "Slack isn't available here.",
+        "provider_unavailable": "Slack couldn't be reached. Try again in a few minutes.",
+        "validation_failed": "Some details need fixing.",
+        "forbidden": "You don't have access to this.",
+        "module_not_enabled": "Integrations aren't in your plan.",
+        "not_found": "We couldn't find that.",
+        "invalid_state": "That can't be done right now.",
+        "no_channel": "Choose a channel and save first.",
+        "auth_revoked": "Slack no longer accepts this connection. Reconnect Slack.",
+        "connection_inactive": "Not sent: the connection was paused or disconnected.",
+        "send_failed": "The message couldn't be sent. It will be retried.",
+        "not_in_channel": "The Yayatoh app isn't in that channel. Add it in Slack, then try again.",
+        "channel_not_found": "That channel no longer exists. Choose another.",
+        "pii_blocked": "Not sent: it would have included personal data.",
+        "render_failed": "The message couldn't be prepared. It will be retried.",
+        "nothing_to_send": "Nothing to send any more.",
+        "impersonation_blocked": "Staff acting as a member can't change this.",
+        "read_only_freeze": "Changes are paused during scheduled maintenance. Try again when it ends.",
+        "internal": "Something went wrong on our side.",
+        "other": "Not sent ({code})."
+      },
+      "testSent": "Test alert sent to #{channel}.",
+      "channelsFailed": "Slack's channel list couldn't be loaded. Try again in a few minutes.",
+      "inactive": "Settings are available while Slack is connected and active.",
+      "previewTitle": "Test alert for #{channel}",
+      "previewHelp": "This is what the channel will see.",
+      "nextDigest": "Next digest: {when}",
+      "sendTest": "Send test alert",
+      "messagesTitle": "Recent Slack messages",
+      "messagesEmpty": "Nothing sent yet.",
+      "messages": {
+        "when": "When",
+        "kind": "Message",
+        "status": "Status",
+        "detail": "Detail"
+      },
+      "kinds": {
+        "alert": "Alert",
+        "digest": "Daily digest",
+        "test": "Test alert"
+      },
+      "statuses": {
+        "pending": "Waiting",
+        "sending": "Sending",
+        "sent": "Sent",
+        "failed": "Failed",
+        "cancelled": "Not sent"
+      }
+    },
+    "import": {
+      "open": "Open import",
+      "connectedDetail": "{name} is connected. Open the import to preview what will come over.",
+      "noRuns": "No imports yet. Open the import to preview and start one.",
+      "title": "Import from Eventbrite",
+      "crumb": "Import",
+      "description": "Bring events, ticket types, orders and attendees over. Nothing is written until you start the import, and running it again only picks up changes.",
+      "connected": "Eventbrite is connected. Check what will come over, then import.",
+      "started": "Import started. It runs in the background: refresh in a moment to see the result.",
+      "alreadyRunning": "An import is already running.",
+      "stepsLabel": "Import steps",
+      "steps": {
+        "connect": "Connect",
+        "preview": "Preview",
+        "import": "Import",
+        "result": "Result"
+      },
+      "notActive": "This connection isn't active. Reconnect it to import.",
+      "backToConnection": "Go to the connection",
+      "preview": {
+        "title": "Preview",
+        "help": "What your Eventbrite account holds now, and how much of it is new here. Nothing is written yet.",
+        "readOnly": "Only owners and admins can preview and start an import.",
+        "caption": "What the import brings over",
+        "what": "What",
+        "inEventbrite": "In Eventbrite",
+        "new": "New here",
+        "noEmails": "Imported orders are marked as imported: nobody is charged and no receipts or ticket emails go out."
+      },
+      "what": {
+        "events": "Events",
+        "ticketTypes": "Ticket types",
+        "orders": "Orders",
+        "attendees": "Attendees",
+        "revenue": "Revenue",
+        "refunded": "Refunded orders"
+      },
+      "refundedOrders": "{count, plural, =0 {None} one {# order, imported as refunded with no revenue} other {# orders, imported as refunded with no revenue}}",
+      "noRevenue": "None",
+      "importing": "Import running…",
+      "importNew": "{count, plural, one {Import # new record} other {Import # new records}}",
+      "importAgain": "Import again to pick up changes",
+      "result": {
+        "title": "Result",
+        "none": "Nothing imported yet.",
+        "finished": "Finished {when}",
+        "inProgress": "In progress",
+        "refresh": "Refresh",
+        "counts": "{pulled} imported or updated · {skipped} unchanged · {failed} with errors",
+        "seeErrors": "See what needs a look",
+        "caption": "What Yayatoh holds from Eventbrite now",
+        "inYayatoh": "In Yayatoh",
+        "ordersValue": "{count} ({paid} paid)",
+        "attendeesValue": "{count} ({active} active)",
+        "goToEvents": "Go to events"
+      }
+    },
+    "sheets": {
+      "title": "Linked events",
+      "help": "Each linked event's attendee list syncs with its own Google Sheet. Sheet edits come into Yayatoh on the next sync; deleting a row never removes anyone.",
+      "linkTitle": "Link an event",
+      "event": "Event",
+      "pickEvent": "Choose an event",
+      "chooseEvent": "Choose the event whose attendees go in the sheet.",
+      "link": "Create sheet and link",
+      "linking": "Creating the sheet…",
+      "linkHelp": "A new sheet is created in your Google Drive with the columns from the field mapping.",
+      "alreadyLinked": "That event already has a sheet.",
+      "allLinked": "Every event has a sheet.",
+      "noEvents": "Create an event first, then link its attendee list.",
+      "emptyTitle": "No events linked yet",
+      "emptyHelp": "Choose an event above to create its sheet.",
+      "emptyReadOnly": "An owner or admin can link an event's attendee list here.",
+      "caption": "Events linked to Google Sheets",
+      "sheet": "Sheet",
+      "openNamed": "Open {title} in Google Sheets",
+      "linkedOn": "Linked",
+      "status": "Status",
+      "statuses": {
+        "active": "Syncing",
+        "unlinked": "Unlinked"
+      },
+      "actions": "Actions",
+      "unlink": "Unlink",
+      "unlinkNamed": "Unlink {event}",
+      "confirmUnlink": "Unlink the sheet of {event}?",
+      "confirmUnlinkBody": "Nothing syncs with it any more. The sheet stays in your Google Drive with what it holds, and everyone stays on the list in Yayatoh.",
+      "keep": "Keep linked"
+    },
+    "linked": {
+      "title": "Linked records",
+      "description": "What this integration keeps in step so far, by kind of record.",
+      "caption": "Linked records by kind",
+      "object": "Kind",
+      "count": "Records",
+      "empty": "Nothing linked yet. Records are linked as they sync."
+    },
+    "accounting": {
+      "mapTitle": "Chart of accounts",
+      "mapHelp": "Choose where each line of the daily summary journal goes in your books. Days are posted after they end, in your organization's time zone.",
+      "notMapped": "Map your accounts to start posting daily journals.",
+      "version": "Version {version} · posting days from {day}",
+      "chartUnavailable": "We couldn't load your chart of accounts from {name}. Try again in a moment.",
+      "chooseAccount": "Choose an account",
+      "categories": {
+        "sales": {
+          "label": "Ticket sales",
+          "hint": "Credited with the day's gross ticket sales."
+        },
+        "donations": {
+          "label": "Donations",
+          "hint": "Credited with the day's online gifts."
+        },
+        "refunds": {
+          "label": "Refunds",
+          "hint": "Debited with what was refunded to buyers and donors."
+        },
+        "fees": {
+          "label": "Yayatoh fees",
+          "hint": "Debited with the day's platform fees, less fees given back."
+        },
+        "payouts": {
+          "label": "Payouts",
+          "hint": "The bank account payouts from Yayatoh land in."
+        },
+        "clearing": {
+          "label": "Clearing account",
+          "hint": "Holds the money Yayatoh or your processor keeps for you. It balances each journal."
+        }
+      },
+      "startsOn": "Post days from",
+      "startsOnHint": "The first day to post, up to a year back.",
+      "save": "Save account mapping",
+      "saved": "Account mapping saved as version {version}. The next sync posts with it.",
+      "invalid": "This mapping can't be saved yet. Check the fields marked below.",
+      "saveFailed": "The mapping couldn't be saved. Try again in a moment.",
+      "issue": {
+        "missing": "Choose an account for {field}.",
+        "unknown_account": "That account isn't in your books any more. Choose another one for {field}.",
+        "clearing_shared": "The clearing account can't also be used for {field}.",
+        "starts_in_future": "Choose today or an earlier day.",
+        "starts_too_early": "Choose a day within the last year.",
+        "missing_date": "Enter the first day to post.",
+        "other": "Check this field."
+      },
+      "journalsTitle": "Daily journals",
+      "journalsHelp": "One journal per day and currency. A day that changes after it was posted is reversed and posted again, never edited.",
+      "journalsCaption": "Daily summary journals sent to your books",
+      "waiting": "{count, plural, one {# journal is waiting to be sent.} other {# journals are waiting to be sent.}}",
+      "emptyTitle": "No journals yet",
+      "emptyMapped": "Days are posted after they end, on the next sync.",
+      "emptyUnmapped": "Map your accounts, then sync to post the days since your first day.",
+      "emptyMapAction": "Map accounts",
+      "emptyPostAction": "Check for days to post",
+      "emptyBackAction": "Back to integrations",
+      "columns": {
+        "day": "Day",
+        "currency": "Currency",
+        "kind": "Entry",
+        "amount": "Amount",
+        "status": "Status",
+        "reference": "Reference in your books"
+      },
+      "kinds": {
+        "journal": "Journal · revision {revision}",
+        "reversal": "Reversal of revision {revision}"
+      },
+      "status": {
+        "pending": "Waiting",
+        "posted": "Posted",
+        "failed": "Not posted",
+        "superseded": "Replaced"
+      }
+    },
+    "marketing": {
+      "consentRule": "Consent comes first: only contacts with email marketing consent are sent, and an unsubscribe or a bounce always wins. When someone unsubscribes here, the next sync unsubscribes them there too.",
+      "audience": {
+        "title": "Audience",
+        "help": "Choose who is sent to {name} and which list they join.",
+        "saved": "Audience saved. The next sync sends it.",
+        "segmentMissing": "The saved audience was deleted, so no one new is sent. Choose another audience.",
+        "segment": "Who is sent",
+        "list": "{name} list",
+        "everyone": "Everyone with email marketing consent",
+        "savedSegment": "A saved audience",
+        "emptyTitle": "No audience chosen yet",
+        "emptyManage": "Choose who to send and the {name} list they join. Nothing is sent until you save.",
+        "emptyRead": "An owner or admin chooses who is sent. Nothing is sent until then.",
+        "formLabel": "Choose the audience and list",
+        "save": "Save audience",
+        "feedback": {
+          "list_required": "Choose a list.",
+          "provider_unavailable": "The lists couldn't be loaded from the provider. Try again in a few minutes.",
+          "validation_failed": "That audience no longer exists. Choose another one.",
+          "forbidden": "You don't have access to this.",
+          "invalid_state": "This connection can't be set up right now.",
+          "not_found": "We couldn't find that.",
+          "read_only_freeze": "Changes are paused during scheduled maintenance. Try again when it ends.",
+          "internal": "Something went wrong on our side."
+        },
+        "chooseNow": "Choose the audience",
+        "allIntegrations": "All integrations"
+      },
+      "hubspot": {
+        "title": "What syncs with HubSpot",
+        "contacts": "Contacts sync both ways with the field mapping below. Contacts from HubSpot never arrive with consent; an opt-out in HubSpot unsubscribes them here.",
+        "events": "Every published event becomes a HubSpot marketing event, and a cancellation is sent too.",
+        "attendance": "Registrations, check-ins and cancellations are sent for contacts with email marketing consent."
+      },
+      "changes": {
+        "title": "Consent changes from {name}",
+        "help": "Unsubscribes, bounced addresses and complaints that came back from {name}, and what they changed here.",
+        "caption": "Consent changes from {name}",
+        "empty": "Nothing has come back from {name} yet.",
+        "who": "Contact",
+        "change": "In the provider",
+        "applied": "Changed here",
+        "when": "When",
+        "withdrawn": "Consent withdrawn",
+        "suppressed": "Suppressed",
+        "already": "Already up to date",
+        "kinds": {
+          "unsubscribed": "Unsubscribed",
+          "cleaned": "Address bounced",
+          "complained": "Spam complaint"
+        }
+      }
+    }
+  },
+  "kioskPrint": {
+    "useEmail": "No ticket with you? Use your email",
+    "loading": "Finding your badge…",
+    "emailTitle": "Use your email",
+    "emailHint": "We'll email a 6-digit code to the address on your ticket.",
+    "emailLabel": "Your email",
+    "sendCode": "Email me a code",
+    "cancel": "Cancel",
+    "emailInvalid": "Enter your email address, like name@example.com.",
+    "emailOffline": "Email codes need a connection. Scan your ticket, or please see the desk.",
+    "emailLimited": "Too many codes were asked for. Please see the desk.",
+    "emailFailed": "We couldn't send a code just now. Please try again or see the desk.",
+    "codeTitle": "Enter your code",
+    "codeSent": "If {email} has a ticket for this event, we've emailed a 6-digit code to it. It works for 10 minutes.",
+    "codeLabel": "6-digit code",
+    "confirmCode": "Confirm code",
+    "newCode": "Send a new code",
+    "codeInvalid": "Enter the 6 digits from the email.",
+    "codeWrong": "That code isn't right. {left, plural, one {# try left.} other {# tries left.}}",
+    "codeExpired": "That code has expired. Send a new code.",
+    "detailsTitle": "Check your details",
+    "detailsHint": "This is what your badge will say.",
+    "name": "Name",
+    "company": "Company",
+    "jobTitle": "Job title",
+    "ticket": "Ticket",
+    "print": "Print my badge",
+    "printing": "Printing…",
+    "wrongDetails": "Something's wrong",
+    "notMe": "Not me",
+    "printingTitle": "Your badge is printing",
+    "printingHint": "Collect it from the printer. Enjoy the event!",
+    "queuedTitle": "Your badge is in the queue",
+    "queuedHint": "The kiosk is offline. Your badge prints as soon as it reconnects; if you're in a hurry, please see the desk.",
+    "done": "Done",
+    "deskTitle": "Please see the desk",
+    "desk": {
+      "desk": "The registration desk will print your badge for you.",
+      "printed": "Your badge has already been printed. If you need a new one, the desk can reprint it.",
+      "notFound": "We couldn't find a badge for that ticket here.",
+      "wrongDetails": "No problem: the desk will correct your details and print your badge.",
+      "printFailed": "The printer didn't take your badge. The desk will print it for you.",
+      "locked": "Too many wrong codes. The desk will help you.",
+      "offline": "The kiosk is offline right now. The desk will print your badge."
+    },
+    "readyTitle": "Your badge is ready to print",
+    "readyHint": "Open it and choose Print, then collect it from the printer.",
+    "openBadge": "Open my badge to print"
+  },
+  "virtual": {
+    "setup": {
+      "title": "Stream setup",
+      "description": "Stream the sessions of {event} online: choose how the event is delivered, who can watch, and set up a live stream for each session.",
+      "providerOff": "Streaming isn't available here yet",
+      "providerOffHint": "Yayatoh turns streaming on once the video provider account is ready. Your settings are kept.",
+      "fakeProvider": "Test streaming: a stand-in video provider is used here, so nothing is broadcast.",
+      "readOnly": "You can see the streaming setup. Only editors can change it.",
+      "totalViewers": "Viewers",
+      "totalMinutes": "Minutes watched",
+      "deliveryTitle": "Delivery",
+      "deliveryLegend": "How is this event delivered?",
+      "saveDelivery": "Save delivery",
+      "deliverySaved": "Delivery saved.",
+      "accessTitle": "Who can watch",
+      "accessHint": "Choose what each ticket type includes. Streaming is metered, so only tickets with online access can watch.",
+      "inPersonNote": "This event is in person, so no session is streamed. Choose Online or Hybrid to set up streams.",
+      "noTicketTypes": "No ticket types yet",
+      "noTicketTypesHint": "Add ticket types or registration passes, then choose which of them can watch online.",
+      "defaultNote": "Not chosen yet: the event's default applies.",
+      "saveAccess": "Save",
+      "saveAccessLabel": "Save access for {name}",
+      "accessSaved": "Access saved for {name}.",
+      "sessionsTitle": "Session streams",
+      "noSessions": "No sessions yet",
+      "noSessionsHint": "Add sessions to the program, then set up a stream for each one.",
+      "addSessions": "Go to sessions",
+      "session": "Session",
+      "stream": "Stream",
+      "streamNone": "No stream",
+      "streamOn": "On",
+      "streamOff": "Off",
+      "viewers": "Viewers",
+      "minutes": "Minutes watched",
+      "checkedIn": "Virtual check-ins",
+      "actions": "Actions",
+      "createStream": "Set up stream",
+      "createStreamLabel": "Set up a stream for {title}",
+      "showKey": "Show stream key",
+      "showKeyLabel": "Show the stream key for {title}",
+      "turnOff": "Turn off",
+      "turnOn": "Turn on",
+      "turnOffLabel": "Turn off the stream for {title}",
+      "turnOnLabel": "Turn on the stream for {title}",
+      "ingestUrl": "Server",
+      "streamKey": "Stream key",
+      "keyWarning": "Anyone with this key can broadcast as your event. Keep it private.",
+      "streamCreated": "Stream ready for {title}.",
+      "streamOnSaved": "The stream for {title} is on.",
+      "streamOffSaved": "The stream for {title} is off.",
+      "delivery": {
+        "in_person": "In person",
+        "online": "Online",
+        "hybrid": "Hybrid"
+      },
+      "deliveryHint": {
+        "in_person": "Everyone attends at the venue. Nothing is streamed.",
+        "online": "Everyone watches online. Tickets include online access unless you change it.",
+        "hybrid": "Some attend in person, some online. Choose below which tickets can watch."
+      },
+      "access": {
+        "in_person": "In person only",
+        "virtual": "Online only",
+        "both": "In person and online"
+      },
+      "addTicketTypes": "Go to tickets"
+    },
+    "errors": {
+      "in_person_event": "This event is in person. Choose Online or Hybrid first.",
+      "video_off": "Streaming isn't available here yet.",
+      "in_person_only": "This ticket is for in-person attendance only.",
+      "stream_off": "This stream is turned off.",
+      "provider_changed": "The video provider changed. Set up this stream again.",
+      "views_per_hour": "Too many tries. Wait a few minutes and try again.",
+      "invalid_token": "This viewing link has expired. Start watching again.",
+      "ticket_void": "This ticket is no longer valid."
+    },
+    "watch": {
+      "metaTitle": "Watch online",
+      "title": "Watch online",
+      "greeting": "Hi {name}. Choose a session to watch.",
+      "inPersonOnly": "Your ticket is for in-person attendance",
+      "inPersonOnlyHint": "Watching online isn't included in this ticket. Contact the organizer if you need online access.",
+      "noSessionsTitle": "Nothing is streaming yet",
+      "noSessionsHint": "Sessions appear here once the organizer turns their stream on. Come back closer to the start.",
+      "watched": "{count, plural, =0 {Not watched yet} one {Watched # minute} other {Watched # minutes}}",
+      "watchSession": "Watch",
+      "watchLabel": "Watch {title}",
+      "orderLink": "Watch online",
+      "orderLinkLabel": "Watch online with ticket {serial}"
+    },
+    "player": {
+      "countNote": "Your watch time counts once a minute while the stream plays.",
+      "back": "All sessions",
+      "heading": "Player",
+      "testPattern": "Test stream: no video is broadcast in this environment.",
+      "ready": "Press Start watching to begin.",
+      "pause": "Pause",
+      "resume": "Resume",
+      "play": "Start watching",
+      "playing": "Playing",
+      "paused": "Paused",
+      "starting": "Starting…",
+      "watched": "{count, plural, =0 {Not watched yet} one {Watched # minute} other {Watched # minutes}}",
+      "errors": {
+        "in_person_only": "Your ticket is for in-person attendance only.",
+        "stream_off": "The organizer turned this stream off.",
+        "views_per_hour": "Too many tries. Wait a few minutes and try again.",
+        "invalid_token": "This viewing expired. Press Start watching again.",
+        "ticket_void": "This ticket is no longer valid.",
+        "video_off": "Streaming isn't available right now.",
+        "not_found": "This session isn't streaming right now.",
+        "generic": "Something went wrong. Try again."
+      }
+    }
   },
   "guestSeats": {
     "placeAt": {
@@ -14834,6 +15985,25 @@
       "reason_required": "Choose why this badge is printed again.",
       "note_required": "For “Other”, say why in a few words.",
       "note": "Keep the note under 200 characters."
+    },
+    "balanceDue": "A balance is due on this registration. Print it from the Badges page with a reason.",
+    "sourceKiosk": "Kiosk",
+    "kiosk": {
+      "heading": "Kiosk self-print",
+      "hint": "Attendees at a check-in kiosk scan their ticket (or confirm a code emailed to them), check their details and print their own badge, once. Reprints, balances due and registrations still waiting go to the desk.",
+      "on": "On",
+      "off": "Off",
+      "printsTo": "Prints to {printer}",
+      "emailOn": "Email codes on",
+      "emailOff": "Email codes off",
+      "options": "Self-print",
+      "enabled": "Let attendees print their own badge at kiosks",
+      "emailCodes": "Offer \"Use your email\" (a one-time code sent to the ticket's holder)",
+      "printer": "Kiosks print to",
+      "printerHint": "The kiosk's own print dialog works with a printer attached to the kiosk.",
+      "ownDialog": "The kiosk's own print dialog",
+      "save": "Save kiosk settings",
+      "saved": "Kiosk settings saved."
     }
   },
   "sessionCheckin": {
@@ -15830,7 +17000,15 @@
   "emptyActions": {
     "seeEvents": "See your events",
     "eventHome": "Go to the event home",
-    "clearSearch": "Clear the search"
+    "clearSearch": "Clear the search",
+    "addRule": "Add a rule",
+    "scheduleReport": "Schedule a report",
+    "linkSheet": "Link an event",
+    "connectPayouts": "Connect payouts",
+    "runAgain": "Run it again",
+    "agencyAddress": "See your agency address",
+    "clients": "See your clients",
+    "plan": "Open plan and billing"
   },
   "coupons": {
     "title": "Coupons",
@@ -15981,6 +17159,861 @@
       "step1": "Each paid ticket carries the fee in your plan. Free tickets carry no fee.",
       "step2": "The fee is taken from each order and shown on every payout.",
       "step3": "When a refund gives the fee back, it appears under fees given back."
+    }
+  },
+  "ssoFakeIdp": {
+    "eyebrow": "Test identity provider",
+    "title": "Fake identity provider",
+    "descriptionSaml": "Development only: this page answers like your organization's SAML identity provider would.",
+    "descriptionOidc": "Development only: this page answers like your organization's OpenID Connect provider would.",
+    "email": "Email the provider vouches for",
+    "name": "Name (optional)",
+    "signIn": "Sign in",
+    "cancel": "Cancel",
+    "returning": "Returning to Yayatoh…",
+    "continue": "Continue",
+    "unknown": "This sign-in request isn't valid any more.",
+    "invalidEmail": "Enter a valid email address."
+  },
+  "sso": {
+    "title": "Single sign-on",
+    "subtitle": "Let your team sign in with your identity provider, verify your email domains, and provision people with SCIM.",
+    "help": "Read the guide",
+    "noAccessTitle": "Only owners and admins manage single sign-on",
+    "noAccessDescription": "Ask an owner or admin of this organization to set up or change single sign-on.",
+    "noModuleTitle": "Single sign-on isn't part of your plan",
+    "noModuleDescription": "Single sign-on and SCIM come with the Enterprise features.",
+    "seePlan": "See your plan",
+    "unavailableTitle": "Single sign-on isn't available yet",
+    "unavailableDescription": "Single sign-on can't be set up on this deployment yet.",
+    "testPassed": "Test sign-in passed.",
+    "testPassedNext": "You can turn single sign-on on.",
+    "testPassedDomainUnverified": "The address you signed in with is not in a verified domain yet: verify the domain before people sign in.",
+    "testFailed": "Test sign-in failed.",
+    "idpTitle": "Identity provider",
+    "status": {
+      "active": "On",
+      "draft": "Not on yet",
+      "disabled": "Off"
+    },
+    "protocol": "Protocol",
+    "protocolSaml": "SAML 2.0",
+    "protocolSamlHint": "Okta, Microsoft Entra ID, Google Workspace, OneLogin, JumpCloud…",
+    "protocolOidc": "OpenID Connect",
+    "protocolOidcHint": "Any provider that supports OpenID Connect sign-in.",
+    "name": "Name",
+    "nameHint": "Shown to your team, for example \"Northwind Okta\".",
+    "samlSource": "How do you want to enter the provider's details?",
+    "sourceXml": "Paste the metadata XML",
+    "sourceUrl": "Metadata URL",
+    "sourceManual": "Enter the details by hand",
+    "metadataXml": "Metadata XML",
+    "metadataXmlHint": "Download it from your identity provider's app settings and paste it here.",
+    "metadataUrl": "Metadata URL",
+    "metadataUrlHint": "An https address where your identity provider publishes its metadata.",
+    "entityId": "Identity provider entity ID",
+    "ssoUrl": "Sign-in URL",
+    "certificate": "Signing certificate",
+    "certificateHint": "The X.509 certificate (PEM) your identity provider signs with.",
+    "certificateSummary": "{subject}, expires {expires}",
+    "issuer": "Issuer URL",
+    "issuerHint": "For example https://login.example.com.",
+    "clientId": "Client ID",
+    "clientSecret": "Client secret",
+    "clientSecretKeep": "Leave empty to keep the saved secret.",
+    "defaultRole": "Role for new people",
+    "defaultRoleHint": "People who sign in for the first time join with this role, unless a SCIM group gives them another.",
+    "jit": "Add people on their first sign-in",
+    "jitHint": "Off: only existing members and people your provider provisions with SCIM can sign in.",
+    "jitShort": "Add people on first sign-in",
+    "on": "On",
+    "off": "Off",
+    "lastTest": "Last test",
+    "lastTestPassed": "Passed on {date}",
+    "lastTestFailed": "Failed on {date}",
+    "neverTested": "Not tested yet",
+    "settingsChangedSinceTest": "(settings changed since: test again)",
+    "testSignIn": "Test sign-in",
+    "activate": "Turn on",
+    "activated": "Single sign-on is on.",
+    "disable": "Turn off",
+    "disabled": "Single sign-on is off.",
+    "deleteConnection": "Delete connection",
+    "editTitle": "Change settings",
+    "createTitle": "Connect your identity provider",
+    "saved": "Settings saved. Run a test sign-in before turning single sign-on on.",
+    "fieldInvalid": "Check this value.",
+    "fieldRequired": "This is required.",
+    "saveChanges": "Save changes",
+    "saveConnection": "Save connection",
+    "emptyTitle": "No identity provider yet",
+    "emptyDescription": "Connect your identity provider, test a sign-in, verify a domain, then turn single sign-on on.",
+    "emptyAction": "Connect your identity provider",
+    "spTitle": "Details for your identity provider",
+    "spDescription": "Copy these into the app you create at your identity provider.",
+    "spEntityId": "Entity ID (audience)",
+    "spAcs": "Assertion consumer service (ACS) URL",
+    "spRedirect": "Redirect URI (OpenID Connect)",
+    "domainsTitle": "Verified domains",
+    "domainsDescription": "Single sign-on and SCIM only accept addresses in domains you verify. Verify a domain by publishing a DNS TXT record.",
+    "domain": "Domain",
+    "domainHint": "Your team's email domain, for example acme.com.",
+    "domainInvalid": "Enter a domain such as acme.com.",
+    "domainAdded": "Domain added. Publish its TXT record, then check it.",
+    "addDomain": "Add domain",
+    "noDomainsTitle": "No domains yet",
+    "noDomainsDescription": "Add your team's email domain to verify it.",
+    "domainStatus": {
+      "verified": "Verified",
+      "pending": "Waiting for DNS",
+      "failed": "Not verified"
+    },
+    "enforced": "Single sign-on required",
+    "recordInstructions": "Publish this TXT record in your domain's DNS, then check it. DNS changes can take a while.",
+    "recordName": "Record name",
+    "recordValue": "Record value",
+    "verifiedOn": "Verified on {date}",
+    "checkDomain": "Check {domain}",
+    "removeDomain": "Remove {domain}",
+    "enforce": "Require single sign-on for {domain}",
+    "activateNeedsDomain": "Verify a domain to turn single sign-on on.",
+    "scimTitle": "SCIM provisioning",
+    "scimDescription": "Your identity provider can add, update and remove people automatically. Removing someone there ends their access here at once.",
+    "scimBaseUrl": "SCIM base URL",
+    "tokenStatus": "Token {prefix}… created {created}, last used {used}.",
+    "neverUsed": "never",
+    "noToken": "No SCIM token yet.",
+    "createToken": "Create SCIM token",
+    "rotateToken": "Replace token",
+    "revokeToken": "Revoke token",
+    "tokenShownOnce": "Copy this token now: it won't be shown again. Paste it into your identity provider's SCIM settings.",
+    "tokenLabel": "SCIM token",
+    "tokenRevoked": "Token revoked. Provisioning has stopped.",
+    "scimUsers": "{active, plural, one {# person provisioned} other {# people provisioned}}, {deprovisioned, plural, one {# deprovisioned} other {# deprovisioned}}.",
+    "groupsTitle": "Groups and roles",
+    "noGroupsTitle": "No groups yet",
+    "noGroupsDescription": "Groups appear here once your identity provider pushes them with SCIM. Then choose a role for each.",
+    "noGroupsAction": "Copy the SCIM base URL",
+    "groupName": "Group",
+    "groupMembers": "Members",
+    "groupRole": "Role",
+    "groupRoleLabel": "Role for {group}",
+    "groupRoleSaved": "Role saved.",
+    "noRole": "No role (don't change members)",
+    "copy": "Copy",
+    "copied": "Copied",
+    "reasons": {
+      "too_large": "The metadata is too large.",
+      "invalid_metadata": "This isn't SAML identity provider metadata.",
+      "no_sso_url": "The metadata has no sign-in URL.",
+      "no_certificate": "The metadata has no signing certificate.",
+      "metadata_unreachable": "We couldn't download metadata from this URL.",
+      "certificate_invalid": "This isn't a valid certificate.",
+      "certificate_expired": "The signing certificate has expired.",
+      "certificate_not_yet_valid": "The signing certificate isn't valid yet.",
+      "discovery_failed": "We couldn't read the provider's OpenID configuration at this issuer.",
+      "secret_missing": "Enter the client secret.",
+      "malformed": "The provider's answer was not readable.",
+      "invalid_signature": "The provider's answer was not signed by the configured provider.",
+      "wrong_issuer": "The answer came from a different issuer than the one set up.",
+      "wrong_audience": "The answer was meant for a different application: check the entity ID or client ID.",
+      "wrong_request": "The answer didn't belong to this test.",
+      "expired": "The answer had expired.",
+      "no_email": "The provider didn't send an email address.",
+      "idp_error": "The provider didn't answer.",
+      "cancelled": "The test sign-in was cancelled.",
+      "test_required": "Run a successful test sign-in with the current settings first.",
+      "domain_required": "Verify a domain first.",
+      "protocol_change": "Delete the connection to switch protocol.",
+      "domain_not_verified": "Verify the domain first.",
+      "connection_inactive": "Turn single sign-on on first.",
+      "domain_limit": "You've reached the limit of domains.",
+      "already_added": "This domain is already listed.",
+      "record_not_found": "We didn't find the TXT record yet. Check it was published, then try again.",
+      "lookup_failed": "The DNS lookup failed. Try again in a few minutes.",
+      "claimed_elsewhere": "Another organization has already verified this domain.",
+      "sso_unavailable": "Single sign-on isn't available on this deployment.",
+      "last_owner": "The organization needs at least one owner."
+    }
+  },
+  "leads": {
+    "portal": {
+      "heading": "Lead capture",
+      "window": "Capture opens {opens} and closes {closes} (event time). Notes and export stay open until {until}.",
+      "termsNeededAdmin": "Accept the lead terms below before your team can capture leads.",
+      "termsNeededStaff": "Your exhibitor admin needs to accept the lead terms before you can capture leads.",
+      "why": {
+        "unlicensed": "You don't have a lead license yet. Ask your exhibitor admin for one.",
+        "over_allowance": "Your license is beyond your exhibitor's allowance. Ask your exhibitor admin to take one back or buy more."
+      },
+      "open": "Open lead capture"
+    },
+    "license": {
+      "licensed": "Licensed",
+      "unlicensed": "No license",
+      "over_allowance": "Over the allowance"
+    },
+    "capture": {
+      "not_open": "Capture not open yet",
+      "open": "Capture open",
+      "closed": "Capture closed"
+    },
+    "terms": {
+      "heading": "Lead terms",
+      "v1": "When you scan an attendee's badge, you receive only their name, job title and company, and their email only if they agreed to share it. Your company becomes responsible for this data: use it only to follow up on your conversation at this event, keep it secure, and delete it when asked. Attendees can see that you scanned them and can stop sharing their email.",
+      "accepted": "Lead terms accepted",
+      "acceptLabel": "Agreement",
+      "accept": "I accept the lead terms on behalf of {exhibitor}",
+      "submit": "Accept the lead terms",
+      "acceptRequired": "Tick the box to accept the lead terms."
+    },
+    "settings": {
+      "heading": "Qualifiers and visibility",
+      "qualifiers": "Qualifiers",
+      "qualifiersHint": "One per line, up to 10 (for example: Budget approved). Your team ticks them on each lead.",
+      "visibility": "Who sees leads",
+      "teamVisibility": "Staff see the whole team's leads (otherwise only the leads they scanned)",
+      "save": "Save lead settings",
+      "saved": "Lead settings saved.",
+      "qualifiersInvalid": "Each qualifier can be at most 60 characters.",
+      "tooMany": "You can have at most 10 qualifiers."
+    },
+    "export": {
+      "heading": "Export leads",
+      "ready": "Confirmed. You can download your leads now.",
+      "count": "{count, plural, =0 {No leads yet} one {# lead} other {# leads}}",
+      "hint": "For your security, we email you a code to confirm it's you before the download.",
+      "download": "Download leads (CSV)",
+      "ended": "Lead access has ended for this event.",
+      "columns": {
+        "name": "Name",
+        "jobTitle": "Job title",
+        "company": "Company",
+        "email": "Email",
+        "rating": "Rating",
+        "qualifiers": "Qualifiers",
+        "notes": "Notes",
+        "capturedAt": "Scanned at",
+        "scannedBy": "Scanned by",
+        "scans": "Scans",
+        "sharedFields": "Shared fields",
+        "emailConsentVersion": "Email consent version"
+      }
+    },
+    "confirm": {
+      "title": "Confirm it's you",
+      "intro": "To download your leads, confirm with a code we email to {email}."
+    },
+    "attendee": {
+      "heading": "Who scanned my badge",
+      "emptyTitle": "Nobody has scanned your badge yet",
+      "emptyDescription": "When an exhibitor scans your badge, you'll see them here.",
+      "scannedAt": "Scanned {time}",
+      "emailShared": "Has your email",
+      "emailWithdrawn": "Email sharing stopped",
+      "emailNotShared": "Email not shared",
+      "withdraw": "Stop sharing my email with {exhibitor}",
+      "withdrawn": "Done. They no longer see your email.",
+      "sharingOn": "Exhibitors who scan your badge receive your email.",
+      "sharingOff": "Exhibitors who scan your badge don't receive your email.",
+      "sharingHint": "They always receive your name, job title and company. Never your phone or address.",
+      "turnOff": "Stop sharing my email with exhibitors",
+      "turnOn": "Share my email with exhibitors who scan my badge",
+      "saved": "Saved."
+    },
+    "app": {
+      "pageTitle": "Lead capture",
+      "loading": "Loading…",
+      "signedOutTitle": "Sign in to capture leads",
+      "signedOutDescription": "Open the sign-in link from your exhibitor invitation email on this device, then come back to lead capture.",
+      "openPortal": "Go to the exhibitor portal",
+      "title": "Leads for {exhibitor}",
+      "online": "Online",
+      "offline": "Offline: scans are saved on this device",
+      "queued": "{count, plural, =0 {All synced} one {# scan waiting to sync} other {# scans waiting to sync}}",
+      "modes": "Lead capture views",
+      "viewScan": "Scan",
+      "viewLeads": "{count, plural, =0 {Leads} other {Leads (#)}}",
+      "blockedTitle": "You can't capture leads right now",
+      "blocked": {
+        "unlicensed": "You don't have a lead license. Ask your exhibitor admin for one.",
+        "over_allowance": "Your license is beyond your exhibitor's allowance. Ask your exhibitor admin.",
+        "termsAdmin": "Accept the lead terms in the exhibitor portal first.",
+        "termsStaff": "Your exhibitor admin needs to accept the lead terms first.",
+        "notOpen": "Capture opens {time}.",
+        "closed": "Capture closed {time}. You can still read and edit your leads."
+      },
+      "codeLabel": "Badge code",
+      "codeHint": "Scan the QR on the badge, or type the code printed under it.",
+      "save": "Save lead",
+      "camera": "Scan with camera",
+      "stopCamera": "Stop camera",
+      "cameraFailed": "The camera couldn't start. Type the badge code instead.",
+      "refusals": {
+        "no_license": "You don't have a lead license. Ask your exhibitor admin for one.",
+        "over_allowance": "Your license is beyond your exhibitor's allowance. Your scans wait on this device.",
+        "terms_not_accepted": "The lead terms aren't accepted yet. Your scans wait on this device.",
+        "access_ended": "Lead access has ended for this event.",
+        "other": "Something went wrong. Your scans wait on this device; try again."
+      },
+      "result": {
+        "queued": "Saved on this device",
+        "queuedHint": "The details appear once it syncs.",
+        "refused": "Not saved",
+        "captured": "Lead saved",
+        "rescanned": "Already a lead: scan added"
+      },
+      "reasons": {
+        "invalid": "This badge can't be read. Check the code and try again.",
+        "wrong_event": "This badge is for another event.",
+        "not_open": "It was scanned before capture opened.",
+        "closed": "It was scanned after capture closed."
+      },
+      "emailWithdrawn": "Email sharing stopped by the attendee on {time}",
+      "emailNotShared": "Email not shared",
+      "capturedAt": "Scanned {time}{count, plural, one {} other { · # scans}}",
+      "scannedBy": "by {email}",
+      "editLabel": "Lead details",
+      "rating": "Rating",
+      "ratings": {
+        "hot": "Hot",
+        "warm": "Warm",
+        "cold": "Cold",
+        "none": "No rating"
+      },
+      "qualifiers": "Qualifiers",
+      "notes": "Notes",
+      "saveDetails": "Save details",
+      "saved": "Saved.",
+      "savedQueued": "Saved with the scan. It syncs when you're online.",
+      "needsConnection": "Connect to the internet to save changes to this lead.",
+      "saveFailed": "Couldn't save. Try again.",
+      "accessEnded": "Lead access has ended for this event.",
+      "scope": {
+        "all": "All leads of {exhibitor}",
+        "team": "Your team's leads",
+        "own": "Your leads"
+      },
+      "emptyTitle": "No leads yet",
+      "emptyDescription": "Scan a badge on the Scan tab to save your first lead.",
+      "search": "Search leads",
+      "noMatch": "No lead matches your search.",
+      "edit": "Edit {name}"
+    }
+  },
+  "conferenceHub": {
+    "metaTitle": "Conference hub",
+    "eyebrow": "Your conference hub",
+    "for": "For {name}",
+    "whose": "Whose hub",
+    "orderLink": "Open my conference hub",
+    "orderLinkHint": "Agenda, your schedule, your badge and calendar, on your phone.",
+    "noRegistrantTitle": "No registration on this order",
+    "noRegistrantDescription": "The conference hub belongs to a registration. Open the order you registered with.",
+    "backToOrder": "Back to my order",
+    "offline": "You're offline. This is the copy saved on your phone.",
+    "privateLink": "This page is private: anyone with its link can see it and change your schedule. Don't share it.",
+    "tabs": {
+      "label": "Hub sections",
+      "today": "Today",
+      "schedule": "My schedule",
+      "agenda": "Agenda",
+      "badge": "Badge"
+    },
+    "today": {
+      "now": "Happening now",
+      "next": "Up next",
+      "fromSchedule": "From your schedule.",
+      "fromAgenda": "From the agenda. Star sessions to make it yours.",
+      "nothingNow": "Nothing on right now.",
+      "nothingNextTitle": "Nothing coming up soon",
+      "nothingNextDescription": "Browse the agenda to star sessions and enrol in optional ones.",
+      "openAgenda": "Open the agenda",
+      "pollsAndQa": "Polls and Q&A",
+      "more": "Your tools",
+      "badgeTitle": "Your badge",
+      "badgeDescription": "Show the QR code at the door and at session check-in.",
+      "showBadge": "Show my badge",
+      "networkingTitle": "Networking",
+      "networkingDescription": "Find other attendees, connect and book meetings.",
+      "openNetworking": "Open networking",
+      "calendarTitle": "Your calendar",
+      "calendarDescription": "Add your schedule to your phone's calendar. It updates when sessions move.",
+      "openCalendar": "Add to my calendar"
+    },
+    "summary": "{enrolled, plural, one {# enrolled session} other {# enrolled sessions}} · {favorites, plural, one {# favorite} other {# favorites}} · {conflicts, plural, =0 {no overlaps} one {# overlapping session} other {# overlapping sessions}}",
+    "agendaIntro": "Star the sessions you want to attend. Optional sessions need enrolment.",
+    "conflict": "Overlaps {titles}",
+    "emptyScheduleTitle": "Your schedule is empty",
+    "emptyScheduleDescription": "Star sessions in the agenda, or enrol in optional ones, and they appear here.",
+    "emptyAgendaTitle": "No sessions yet",
+    "emptyAgendaDescription": "The organizer hasn't added sessions for your registration yet. Check back soon.",
+    "favorite": {
+      "star": "Star",
+      "starred": "Starred",
+      "starNamed": "Star {title}",
+      "unstarNamed": "Remove the star from {title}",
+      "pill": "Favorite",
+      "added": "{title} is on your schedule.",
+      "removed": "{title} is off your schedule.",
+      "replaced": "{count, plural, one {Starred. # overlapping favorite removed.} other {Starred. # overlapping favorites removed.}}",
+      "tooMany": "You've starred the most sessions allowed. Remove a star first.",
+      "conflictTitle": "This overlaps your schedule",
+      "conflictEnrolled": "{title} (enrolled)",
+      "conflictFavorite": "{title} (starred)",
+      "keepBoth": "Keep both",
+      "replace": "Replace",
+      "cancel": "Cancel"
+    },
+    "calendar": {
+      "title": "Calendar feed",
+      "description": "Subscribe once: your calendar app refreshes the feed, so a moved session moves in your calendar too. Enrolled sessions show as confirmed, starred ones as tentative.",
+      "subscribe": "Subscribe in my calendar",
+      "download": "Download .ics",
+      "linkLabel": "Feed link (private)",
+      "copy": "Copy link",
+      "copied": "Link copied.",
+      "replace": "Replace the link",
+      "replaceConfirmTitle": "Replace the calendar link?",
+      "replaceConfirmBody": "The current link stops working at once, in every calendar that uses it. Subscribe again with the new link.",
+      "replaceConfirm": "Replace the link",
+      "cancel": "Cancel",
+      "replaced": "Done. The old link no longer works: subscribe with the new one."
+    },
+    "install": {
+      "title": "Keep it on your phone",
+      "button": "Add to home screen",
+      "installed": "This hub is on your home screen.",
+      "done": "Added to your home screen.",
+      "help": "On iPhone or iPad: tap Share, then Add to Home Screen. On Android: open the browser menu, then Install app or Add to Home screen."
+    },
+    "badge": {
+      "title": "Your badge",
+      "qrLabel": "Badge QR code for {name}",
+      "shortCode": "Code",
+      "hint": "Turn up your screen brightness at the door.",
+      "noneTitle": "No badge yet",
+      "noneDescription": "Your badge appears here once your registration is confirmed."
+    }
+  },
+  "billingUsage": {
+    "title": "Usage",
+    "subtitle": "What your organization used, by meter: messages, AI credits and scan devices.",
+    "breadcrumb": "Breadcrumb",
+    "period": "This month: {start} to {end} ({zone})",
+    "filterLabel": "Meters",
+    "allMeters": "All meters",
+    "meter": {
+      "email": "Email",
+      "sms": "SMS",
+      "whatsapp": "WhatsApp",
+      "ai_credits": "AI credits",
+      "devices": "Scan devices"
+    },
+    "unit": {
+      "email": "{count, plural, one {# email sent} other {# emails sent}}",
+      "sms": "{count, plural, one {# text segment} other {# text segments}}",
+      "whatsapp": "{count, plural, one {# message sent} other {# messages sent}}",
+      "ai_credits": "{count, plural, one {# credit used} other {# credits used}}",
+      "devices": "{count, plural, one {# device enrolled} other {# devices enrolled}}"
+    },
+    "reportingTitle": "Usage is sent to your billing provider",
+    "reportingBody": "{count, plural, =0 {Everything so far has been sent.} one {# record is waiting to be sent.} other {# records are waiting to be sent.}}",
+    "countingTitle": "Usage is counted, nothing is charged",
+    "countingBody": "Billing isn't active for this organization, so usage is only counted here.",
+    "currentTitle": "This month",
+    "currentDescription": "Counted in your organization's time zone.",
+    "historyTitle": "Earlier months",
+    "historyDescription": "The last 12 months with usage.",
+    "emptyTitle": "No usage yet",
+    "emptyBody": "Usage appears here when you send emails or texts, draft with AI, or enroll scan devices.",
+    "historyEmpty": "No usage in earlier months.",
+    "month": "Month"
+  },
+  "billingBanner": {
+    "label": "Billing",
+    "graceTitle": "Your subscription payment didn't go through",
+    "graceBody": "Everything works until {date}. After that the organization becomes read-only until it's paid.",
+    "readOnlyTitle": "This organization is read-only",
+    "readOnlyBody": "The subscription payment failed. Nothing has been deleted: you can look, export and scan tickets, but changes are paused until it's paid.",
+    "action": "Plan and billing"
+  },
+  "agencies": {
+    "title": "Agencies",
+    "subtitle": "Let an agency work on your events. You can take access away at any time, and the agency never pays or receives your money.",
+    "noAccessTitle": "Only owners and admins manage agencies",
+    "noAccessDescription": "Ask an owner or admin of this organization to give an agency access.",
+    "grantTitle": "Give an agency access",
+    "agency": "Agency address",
+    "agencyHint": "The address the agency gave you, for example bloom-events.",
+    "agencyRequired": "Enter the agency’s address.",
+    "agencyUnknown": "No agency has this address. Check it with the agency.",
+    "agencySelf": "An agency can’t give access to itself.",
+    "agencyTaken": "This agency already has access.",
+    "role": "What the agency can do",
+    "roleManager": "Manage events",
+    "roleManagerHint": "Create and edit events, guests, check-in and messages. No refunds, sales, members or settings.",
+    "roleMarketing": "Marketing",
+    "roleMarketingHint": "Campaigns, audiences and messages, and read events.",
+    "roleViewer": "View only",
+    "roleViewerHint": "Read events, orders and guests. Changes nothing.",
+    "finance": "Also let the agency read our money",
+    "financeHint": "Payouts, finance reports and the ledger, read-only. Off unless you turn it on.",
+    "grant": "Give access",
+    "granted": "{agency} can now work in this organization.",
+    "listTitle": "Agencies with access",
+    "empty": "No agency has access. Give one access above when you work with an agency.",
+    "emptyReadOnly": "No agency has access.",
+    "agencyColumn": "Agency",
+    "roleColumn": "Access",
+    "financeColumn": "Money",
+    "grantedColumn": "Since",
+    "actions": "Actions",
+    "financeOn": "Can read",
+    "financeOff": "No access",
+    "revoke": "Revoke",
+    "revokeNamed": "Revoke access for {agency}",
+    "revoked": "{agency} no longer has access.",
+    "financeEnable": "Allow money",
+    "financeEnableNamed": "Let {agency} read our money",
+    "financeDisable": "Stop money",
+    "financeDisableNamed": "Stop {agency} reading our money",
+    "historyTitle": "Past access",
+    "revokedColumn": "Ended",
+    "unknownAgency": "Agency no longer on Yayatoh",
+    "roleLabel": "{role, select, manager {Manage events} marketing {Marketing} viewer {View only} other {Access}}"
+  },
+  "agency": {
+    "title": "Clients",
+    "subtitle": "Every client who gave {agency} access. Numbers come from snapshots: refresh to bring them up to date.",
+    "tabs": "Agency sections",
+    "tab": {
+      "clients": "Clients",
+      "events": "Events",
+      "marketing": "Marketing",
+      "reports": "Reports"
+    },
+    "refresh": "Refresh numbers",
+    "refreshed": "Numbers refreshed for {count, plural, =0 {no clients} one {# client} other {# clients}}.",
+    "notRefreshed": "Not refreshed yet",
+    "emptyTitle": "No clients yet",
+    "emptyDescription": "Ask your client to open Agencies in their Yayatoh console and give access to {address}.",
+    "noAccessTitle": "Agency pages are for agency members",
+    "noAccessDescription": "Ask an owner of {agency} for access.",
+    "client": "Client",
+    "nextEvent": "Next event",
+    "noNextEvent": "Nothing scheduled",
+    "upcoming": "Upcoming events",
+    "orders": "Orders",
+    "tickets": "Tickets",
+    "checkins": "Checked in",
+    "checkinRate": "Check-in rate",
+    "open": "Open",
+    "openNamed": "Open {client}",
+    "finance": "with money",
+    "eventsTitle": "Events across clients",
+    "eventsEmpty": "No upcoming or recent events at your clients yet.",
+    "event": "Event",
+    "starts": "Starts",
+    "status": "Status",
+    "gross": "Gross sales",
+    "grossHidden": "Not shared",
+    "grossHiddenHint": "Gross sales show only for clients who let you read their money.",
+    "openEventNamed": "Open {event} at {client}",
+    "marketingTitle": "Marketing, last 30 days",
+    "marketingEmpty": "No clients yet.",
+    "campaigns": "Campaigns",
+    "sends": "Sent",
+    "deliveries": "Delivered",
+    "clicks": "Clicks",
+    "uniqueClickers": "People who clicked",
+    "conversion": "Conversion",
+    "reportsTitle": "Totals across clients",
+    "clientsCount": "Clients",
+    "eventsTotal": "Events",
+    "revenue": "Gross sales",
+    "revenueFrom": "{count, plural, one {# client shares} other {# clients share}} their money with you",
+    "revenueNone": "No client shares their money with you.",
+    "perClient": "By client",
+    "eventStatus": {
+      "draft": "Draft",
+      "published": "Published",
+      "postponed": "Postponed",
+      "cancelled": "Cancelled",
+      "completed": "Completed",
+      "archived": "Archived"
+    },
+    "refreshedAt": "Refreshed"
+  },
+  "analyticsPro": {
+    "tabs": {
+      "label": "Analytics sections",
+      "overview": "Overview",
+      "explore": "Explore",
+      "alerts": "Alert rules",
+      "reports": "Reports"
+    },
+    "explore": {
+      "title": "Explore",
+      "description": "Pick a measure and how to break it down. Attribution shows which campaigns, channels and sources led to sales.",
+      "form": "Choose what to show",
+      "measure": "Measure",
+      "groupCounts": "Counts",
+      "groupMoney": "Money",
+      "groupAttribution": "Attribution",
+      "measures": {
+        "registrations": "Registrations",
+        "tickets": "Tickets sold (net)",
+        "comp_tickets": "Free tickets",
+        "refunded_tickets": "Refunded tickets",
+        "checkins": "Check-ins",
+        "no_shows": "No-shows",
+        "attributed_orders": "Attributed orders",
+        "gross": "Paid",
+        "refunds": "Refunded",
+        "net": "Net sales",
+        "attributed_revenue": "Attributed revenue"
+      },
+      "dimension": "Break down by",
+      "dimensions": {
+        "period": "Period",
+        "event": "Event",
+        "channel": "Channel",
+        "source": "Source",
+        "campaign": "Campaign"
+      },
+      "model": "Attribution model",
+      "modelHint": "Used for attributed orders and revenue only.",
+      "models": {
+        "first": "First touch",
+        "last": "Last touch",
+        "linear": "Linear (shared equally)"
+      },
+      "range": "Period",
+      "ranges": {
+        "7d": "Last 7 days",
+        "30d": "Last 30 days",
+        "90d": "Last 90 days",
+        "365d": "Last 12 months",
+        "custom": "Custom dates"
+      },
+      "from": "From",
+      "to": "To",
+      "customHint": "Used when the period is “Custom dates”.",
+      "granularity": "Show by",
+      "granularities": {
+        "day": "Day",
+        "week": "Week",
+        "month": "Month"
+      },
+      "event": "Event",
+      "allEvents": "All events",
+      "apply": "Show",
+      "errors": {
+        "touch_dimension": "Channel, source and campaign work only with attributed orders or revenue.",
+        "custom_needs_dates": "Enter both dates for a custom period.",
+        "from_after_to": "The end date is before the start date.",
+        "range_too_long": "Choose a period of two years or less.",
+        "invalid_date": "Enter dates as year, month and day."
+      },
+      "resultsCaption": "{measure} by {dimension}, {from} to {to}",
+      "total": "Total",
+      "none": "None",
+      "unnamedCampaign": "Unnamed campaign",
+      "weekOf": "Week of {day}",
+      "currency": "Currency",
+      "value": "Value",
+      "truncated": "Showing the first 500 rows. Choose a shorter period or one event to see the rest.",
+      "emptyTitle": "Nothing to show for this choice",
+      "emptyBody": "There is no data for this measure in this period. Try a longer period, another event or another measure.",
+      "emptyAction": "Show the last 12 months",
+      "export": "Export CSV",
+      "exportLabel": "Export these results as a CSV file",
+      "timeZoneNote": "Days are calendar days in {timeZone}, your organization’s time zone.",
+      "attributionNote": "Attribution shares each attributed order among the visits that led to it inside your attribution window: tracked links clicked, landings with UTM values and other sites that sent the buyer. First touch credits the first visit, last touch the last one, and linear splits the order equally (any leftover cent goes to the last visit). Revenue is what the buyer paid, per currency; orders with no recorded visit are not attributed.",
+      "saveTitle": "Save this view",
+      "viewName": "Name",
+      "save": "Save view",
+      "saved": "View saved",
+      "viewErrors": {
+        "name": "Enter a name of up to 80 characters.",
+        "name_taken": "You already have a view with this name.",
+        "too_many_views": "You have 50 saved views. Delete one first."
+      },
+      "views": "Your saved views",
+      "noViews": "No saved views yet. Choose what to show above, then save it here to come back in one click.",
+      "deleteView": "Delete",
+      "deleteViewLabel": "Delete the view {name}",
+      "deleted": "View deleted"
+    },
+    "rules": {
+      "title": "Alert rules",
+      "description": "Get told when a number crosses a line. Rule alerts go to your team through Alerts, like the built-in ones.",
+      "createTitle": "New alert rule",
+      "editTitle": "Edit alert rule",
+      "name": "Name",
+      "nameHint": "Shown in the alert and its email.",
+      "measure": "Measure",
+      "measures": {
+        "registrations": "Registrations",
+        "tickets": "Tickets sold (net)",
+        "refunded_tickets": "Refunded tickets",
+        "checkins": "Check-ins",
+        "gross": "Paid",
+        "refunds": "Refunded",
+        "net": "Net sales"
+      },
+      "condition": "When it",
+      "conditions": {
+        "above": "is at least",
+        "below": "is below",
+        "rise": "rises by at least (%)",
+        "drop": "drops by at least (%)"
+      },
+      "threshold": "Threshold",
+      "thresholdHint": "A count, an amount for money, or a percentage for rises and drops (compared with the period before).",
+      "window": "Over",
+      "windows": {
+        "d1": "Today",
+        "d7": "The last 7 days",
+        "d14": "The last 14 days",
+        "d30": "The last 30 days"
+      },
+      "currency": "Currency",
+      "currencyHint": "Money rules compare one currency.",
+      "noCurrency": "Not money",
+      "event": "Event",
+      "allEvents": "All events",
+      "severity": "Severity",
+      "severities": {
+        "info": "Info",
+        "warning": "Warning",
+        "critical": "Critical"
+      },
+      "quietHours": "Respect quiet hours",
+      "quietHoursHint": "Email and push wait until 8:00 in each recipient’s time zone when the rule fires between 21:00 and 8:00. In-app alerts show at once.",
+      "create": "Create rule",
+      "save": "Save changes",
+      "back": "Back to alert rules",
+      "created": "Rule created",
+      "saved": "Changes saved",
+      "list": "Your rules",
+      "emptyTitle": "No alert rules yet",
+      "emptyBody": "Create a rule above, for example “Refunds today are at least 10”. You’ll be alerted the moment it’s true.",
+      "columns": {
+        "name": "Rule",
+        "condition": "Condition",
+        "status": "Status",
+        "lastValue": "Latest reading",
+        "actions": "Actions"
+      },
+      "summary": "{measure} {condition} {threshold} · {window}",
+      "status": {
+        "firing": "Firing",
+        "ok": "OK",
+        "off": "Off",
+        "new": "Not checked yet"
+      },
+      "edit": "Edit",
+      "editLabel": "Edit {name}",
+      "turnOff": "Turn off",
+      "turnOn": "Turn on",
+      "turnOffLabel": "Turn off {name}",
+      "turnOnLabel": "Turn on {name}",
+      "delete": "Delete",
+      "deleteLabel": "Delete {name}",
+      "deleted": "Rule deleted",
+      "turnedOff": "Rule turned off",
+      "turnedOn": "Rule turned on",
+      "readOnly": "You can see these rules but not change them.",
+      "errors": {
+        "name": "Enter a name of up to 80 characters.",
+        "name_taken": "A rule with this name already exists.",
+        "threshold": "Enter a number of 0 or more.",
+        "percent_range": "Enter a percentage between 1 and 1000.",
+        "currency_required": "Choose a currency for a money rule.",
+        "too_many_rules": "You have 50 rules. Delete one first."
+      }
+    },
+    "reports": {
+      "title": "Scheduled reports",
+      "description": "A PDF of your analytics by email every day, week or month, counted in your organization’s time zone.",
+      "createTitle": "New scheduled report",
+      "editTitle": "Edit scheduled report",
+      "name": "Name",
+      "frequency": "How often",
+      "frequencies": {
+        "daily": "Every day (yesterday’s figures)",
+        "weekly": "Every Monday (last week, Monday to Sunday)",
+        "monthly": "On the 1st (last month)"
+      },
+      "frequencyShort": {
+        "daily": "Daily",
+        "weekly": "Weekly",
+        "monthly": "Monthly"
+      },
+      "sendHour": "Send at",
+      "sendHourHint": "Time in {timeZone}.",
+      "event": "Event",
+      "allEvents": "All events",
+      "recipients": "Send to",
+      "recipientsHint": "Members who can see orders. Revenue is in the PDF only for those who can see finance; each PDF is in its reader’s language.",
+      "you": "{name} (you)",
+      "create": "Schedule report",
+      "save": "Save changes",
+      "back": "Back to scheduled reports",
+      "created": "Report scheduled",
+      "saved": "Changes saved",
+      "list": "Schedules",
+      "emptyTitle": "No scheduled reports yet",
+      "emptyBody": "Schedule one above: it arrives by email once per period, with a link to its PDF.",
+      "columns": {
+        "name": "Report",
+        "frequency": "How often",
+        "next": "Next send",
+        "recipients": "Recipients",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "recipientsCount": "{count, plural, one {# member} other {# members}}",
+      "status": {
+        "on": "On",
+        "off": "Off"
+      },
+      "edit": "Edit",
+      "editLabel": "Edit {name}",
+      "turnOff": "Turn off",
+      "turnOn": "Turn on",
+      "turnOffLabel": "Turn off {name}",
+      "turnOnLabel": "Turn on {name}",
+      "delete": "Delete",
+      "deleteLabel": "Delete {name}",
+      "deleted": "Schedule deleted",
+      "turnedOff": "Schedule turned off",
+      "turnedOn": "Schedule turned on",
+      "recent": "Recent reports",
+      "recentEmpty": "No report has been sent yet. The first one goes out at the next send time.",
+      "recentColumns": {
+        "report": "Report",
+        "period": "Period",
+        "status": "Status",
+        "file": "PDF"
+      },
+      "runStatus": {
+        "pending": "Waiting",
+        "sent": "Sent",
+        "failed": "Failed"
+      },
+      "download": "Download PDF",
+      "downloadLabel": "Download {name} for {period} (PDF)",
+      "notReady": "Not ready",
+      "errors": {
+        "name": "Enter a name of up to 80 characters.",
+        "name_taken": "A schedule with this name already exists.",
+        "recipients": "Choose at least one member.",
+        "bad_recipient": "Choose members who can see orders.",
+        "too_many_schedules": "You have 25 schedules. Delete one first."
+      }
     }
   },
   "mediaLibrary": {

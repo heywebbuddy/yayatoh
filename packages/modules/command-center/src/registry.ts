@@ -61,7 +61,6 @@ export const COMMAND_CENTER_WIDGETS: WidgetRegistry = createWidgetRegistry([
   sessionFillWidget,
   exhibitorActivityWidget(null),
   sponsorActivityWidget(null),
-
   // M4.6a social pack.
   rsvpWidget,
   guestSeatingWidget,

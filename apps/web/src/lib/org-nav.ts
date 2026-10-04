@@ -21,6 +21,14 @@ export interface OrgNavItem {
   readonly contentOrgOnly?: boolean;
   /** Other first path segments this item owns (pages reached from it, e.g. `contacts`). */
   readonly owns?: readonly string[];
+  /**
+   * M6.7a: the permission someone acting through an agency grant also needs. Org settings, the
+   * team, domains, the public site, payouts, sending setup, API keys and the CMS are the client's
+   * own: an agency role holds none of these, and the pages refuse it too.
+   */
+  readonly agencyNeeds?: string;
+  /** M6.7a: shown only in an agency org (its Clients | Events | Marketing | Reports). */
+  readonly agencyOrgOnly?: boolean;
 }
 
 export interface OrgNavSection {
@@ -34,6 +42,15 @@ export const ORG_SECTIONS: readonly OrgNavSection[] = [
     items: [
       // The home lists the org's events; creating one (`events/new`) starts there or in Create.
       { key: 'home', path: '', icon: 'home', module: 'core', owns: ['events'] },
+      // M6.7a: an agency org's Clients | Events | Marketing | Reports (entitlement `agency`).
+      {
+        key: 'agency',
+        path: 'agency',
+        icon: 'briefcase',
+        module: 'agency',
+        needs: 'agency:read',
+        agencyOrgOnly: true,
+      },
       { key: 'commandCenter', path: 'command-center', icon: 'gauge', module: 'core', needs: 'events:read' },
       // M3.2b: the alert engine's alerts, with the open count as the badge.
       { key: 'alerts', path: 'alerts', icon: 'bell', module: 'core', needs: 'events:read' },
@@ -80,7 +97,14 @@ export const ORG_SECTIONS: readonly OrgNavSection[] = [
     items: [
       // U5: the Money dashboards (overview, payouts with their drill-down, sales by event, fees).
       { key: 'moneyOverview', path: 'money', icon: 'wallet', module: 'core', needs: 'finance:read' },
-      { key: 'payouts', path: 'payouts', icon: 'landmark', module: 'core', needs: 'finance:read' },
+      {
+        key: 'payouts',
+        path: 'payouts',
+        icon: 'landmark',
+        module: 'core',
+        needs: 'finance:read',
+        agencyNeeds: 'payouts:manage',
+      },
       {
         key: 'salesByEvent',
         path: 'sales-by-event',
@@ -113,12 +137,40 @@ export const ORG_SECTIONS: readonly OrgNavSection[] = [
   {
     key: 'site',
     items: [
-      { key: 'publicSite', path: 'site', icon: 'store', module: 'core', needs: 'org:update' },
-      { key: 'siteContent', path: 'content', icon: 'file-text', module: 'core', needs: 'marketing:read' },
+      {
+        key: 'publicSite',
+        path: 'site',
+        icon: 'store',
+        module: 'core',
+        needs: 'org:update',
+        agencyNeeds: 'org:update',
+      },
+      {
+        key: 'siteContent',
+        path: 'content',
+        icon: 'file-text',
+        module: 'core',
+        needs: 'marketing:read',
+        agencyNeeds: 'org:update',
+      },
       // U10: every image the org uploaded, reusable across events, venues and the program.
       { key: 'mediaLibrary', path: 'media', icon: 'image', module: 'core', needs: 'events:read' },
-      { key: 'domains', path: 'domains', icon: 'globe', module: 'core', needs: 'org:update' },
-      { key: 'emails', path: 'emails', icon: 'mail-check', module: 'core', needs: 'org:update' },
+      {
+        key: 'domains',
+        path: 'domains',
+        icon: 'globe',
+        module: 'core',
+        needs: 'org:update',
+        agencyNeeds: 'org:update',
+      },
+      {
+        key: 'emails',
+        path: 'emails',
+        icon: 'mail-check',
+        module: 'core',
+        needs: 'org:update',
+        agencyNeeds: 'org:update',
+      },
       {
         key: 'helpCenter',
         path: 'help-center',
@@ -126,6 +178,7 @@ export const ORG_SECTIONS: readonly OrgNavSection[] = [
         module: 'core',
         needs: 'marketing:write',
         contentOrgOnly: true,
+        agencyNeeds: 'org:update',
       },
       {
         key: 'marketingSite',
@@ -134,16 +187,40 @@ export const ORG_SECTIONS: readonly OrgNavSection[] = [
         module: 'core',
         needs: 'marketing:write',
         contentOrgOnly: true,
+        agencyNeeds: 'org:update',
       },
     ],
   },
   {
     key: 'settings',
     items: [
-      { key: 'settings', path: 'settings', icon: 'settings', module: 'core', needs: 'org:update' },
-      { key: 'team', path: 'team', icon: 'users', module: 'core', needs: 'members:read' },
+      {
+        key: 'settings',
+        path: 'settings',
+        icon: 'settings',
+        module: 'core',
+        needs: 'org:update',
+        agencyNeeds: 'org:update',
+      },
+      {
+        key: 'team',
+        path: 'team',
+        icon: 'users',
+        module: 'core',
+        needs: 'members:read',
+        agencyNeeds: 'members:read',
+      },
+      // M6.7a: agencies the org gave access to.
+      { key: 'agencies', path: 'agencies', icon: 'handshake', module: 'core', needs: 'members:read' },
       { key: 'plan', path: 'plan', icon: 'credit-card', module: 'core', needs: 'billing:read' },
-      { key: 'sendingSetup', path: 'sending', icon: 'send', module: 'core', needs: 'org:update' },
+      {
+        key: 'sendingSetup',
+        path: 'sending',
+        icon: 'send',
+        module: 'core',
+        needs: 'org:update',
+        agencyNeeds: 'org:update',
+      },
       // U10 (UX-3): storage usage (quota, what uses it, the largest images); platform-managed.
       { key: 'storage', path: 'storage', icon: 'hard-drive', module: 'core', needs: 'events:read' },
       {
@@ -153,7 +230,14 @@ export const ORG_SECTIONS: readonly OrgNavSection[] = [
         module: 'messaging',
         needs: 'messages:read',
       },
-      { key: 'apiKeys', path: 'api-keys', icon: 'key', module: 'core', needs: 'api_keys:manage' },
+      {
+        key: 'apiKeys',
+        path: 'api-keys',
+        icon: 'key',
+        module: 'core',
+        needs: 'api_keys:manage',
+        agencyNeeds: 'api_keys:manage',
+      },
       { key: 'webhooks', path: 'webhooks', icon: 'webhook', module: 'api_access', needs: 'webhooks:manage' },
       // M6.4a: connectors, field mapping, sync history and the errors inbox.
       {
@@ -163,6 +247,8 @@ export const ORG_SECTIONS: readonly OrgNavSection[] = [
         module: 'integrations',
         needs: 'integrations:read',
       },
+      // M6.5a: the identity provider, verified domains and SCIM provisioning.
+      { key: 'sso', path: 'sso', icon: 'lock', module: 'enterprise', needs: 'sso:manage' },
       { key: 'sandboxes', path: 'sandboxes', icon: 'flask', module: 'core', needs: 'sandbox:manage' },
       { key: 'activity', path: 'activity', icon: 'history', module: 'core', needs: 'audit:read' },
       { key: 'privacy', path: 'privacy', icon: 'shield', module: 'core', needs: 'privacy:manage' },
@@ -183,6 +269,10 @@ export interface OrgNavAccess {
   readonly can: (permission: string) => boolean;
   readonly modules: ReadonlySet<string>;
   readonly contentOrg: boolean;
+  /** M6.7a: the member acts through a client's agency grant. */
+  readonly viaAgency?: boolean;
+  /** M6.7a: this org is an agency. */
+  readonly agencyOrg?: boolean;
 }
 
 /**
@@ -198,6 +288,8 @@ export function visibleOrgSections(access: OrgNavAccess): OrgNavSection[] {
         access.modules.has(i.module) &&
         (access.role !== 'collaborator' || i.key === 'home') &&
         (!i.needs || access.can(i.needs)) &&
+        (!access.viaAgency || !i.agencyNeeds || access.can(i.agencyNeeds)) &&
+        (!i.agencyOrgOnly || access.agencyOrg === true) &&
         (!i.contentOrgOnly || access.contentOrg),
     ),
   })).filter((s) => s.items.length > 0);

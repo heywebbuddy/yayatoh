@@ -8,8 +8,9 @@ import {
   requireOrg,
 } from '@yayatoh/kernel';
 import { isModuleKey, tenantCommand, tenantQuery } from '@yayatoh/platform';
-import { and, eq, inArray } from 'drizzle-orm';
+import { and, eq, inArray, sql } from 'drizzle-orm';
 import { z } from 'zod';
+import { applyDunningTx } from './dunning.ts';
 import { DEFAULT_PLAN, effectiveModulesTx } from './entitlements.ts';
 import {
   BILLING_PROVIDERS,
@@ -123,6 +124,9 @@ export const applyBillingEventCommand = tenantCommand({
               set: { planKey, startedAt: ctx.now, updatedAt: ctx.now },
             });
       }
+      // M6.6b: a failed renewal starts the grace period; the provider giving up makes the org
+      // read-only; a payment clears it.
+      await applyDunningTx(tx, account, input, ctx.now, emit);
       emit({
         type: 'billing.subscription_changed',
         version: 1,
@@ -291,6 +295,22 @@ export async function ensureBillingCustomer(
 export async function subscriptionsTx(tx: TenantTx) {
   const rows = await tx.select().from(subscriptions);
   return rows.sort((a, b) => b.lastEventAt.getTime() - a.lastEventAt.getTime());
+}
+
+/**
+ * Batch 3l merge: the org's plan subscriptions whose payment is failing (the alert engine's
+ * `billingPastDue` rule): counts only.
+ */
+export async function subscriptionPaymentProblemsTx(
+  tx: TenantTx,
+): Promise<{ pastDue: number; unpaid: number }> {
+  const [r] = await tx
+    .select({
+      pastDue: sql<number>`count(*) filter (where ${subscriptions.status} = 'past_due')::int`,
+      unpaid: sql<number>`count(*) filter (where ${subscriptions.status} = 'unpaid')::int`,
+    })
+    .from(subscriptions);
+  return { pastDue: r?.pastDue ?? 0, unpaid: r?.unpaid ?? 0 };
 }
 
 /** The org's fee plan key (what `feeScheduleTx` charges), defaulting to the legacy plan. */

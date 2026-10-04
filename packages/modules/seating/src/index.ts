@@ -194,6 +194,13 @@ export {
   type SeatStatus,
 } from './domain/seat-state.ts';
 export {
+  SOLVER_RULE_KINDS,
+  SOLVER_STRENGTHS,
+  type SolverRule,
+  type SolverRuleKind,
+  SolverRuleSpec,
+} from './domain/solver-rules.ts';
+export {
   allocateGroupSeatsCommand,
   MAX_GROUP_SEATS,
   releaseGroupSeatsCommand,
@@ -355,6 +362,23 @@ export {
   seatLabelWithSection,
   ticketSeatLabelsQuery,
 } from './seat-labels.ts';
+// M6.12a seating rules and the solver (module ai_seating): rules, the solver's input, accepting.
+export {
+  AcceptProposalInput,
+  AcceptProposalResult,
+  AddSolverRuleInput,
+  acceptSeatingProposalCommand,
+  addSolverRuleCommand,
+  HardRuleBreachDto,
+  MAX_ACCEPT_GUESTS,
+  removeSolverRuleCommand,
+  SolverProblemDto,
+  SolverRuleDto,
+  solverProblemTx,
+  solverRulesQuery,
+  solverSetupQuery,
+  updateSolverRuleCommand,
+} from './solver.ts';
 // M4.1c: a wedding sub-event's own chart, falling back to its date's chart, then the event plan.
 export {
   giveSubEventOwnChartCommand,

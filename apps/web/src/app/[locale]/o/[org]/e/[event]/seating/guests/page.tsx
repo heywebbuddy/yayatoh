@@ -54,8 +54,9 @@ export default async function GuestSeatingPage({
         base={base}
         active="guests"
         finder={data.modules.has('seat_finder')}
-        selection={data.modules.has('advanced_seating')}
         guests
+        selection={data.modules.has('advanced_seating')}
+        solver={data.modules.has('ai_seating')}
       />
       {view.subEvents.length ? (
         <nav aria-label={t('guestSeating.chart.label')}>

@@ -121,36 +121,6 @@ export async function sweepEnrollments(): Promise<{ expired: number; promoted: n
 }
 
 /**
- * API key usage summaries (M6.3a), hourly: orgs with finished days of key usage not yet in their
- * audit log (platform_reader, audited), then one `apiKey.dailyUsage` entry per key and day under
- * each org's RLS. Each day is summarized once.
- */
-export async function summarizeApiKeyUsage(): Promise<number> {
-  const orgs = await withPlatformReader(
-    { actor: 'system:api-key-usage', reason: 'find orgs with API key usage to summarize in the audit log' },
-    (tx) =>
-      tx.execute<{ org_id: string }>(sql`
-        select distinct u.org_id from tenancy.api_key_usage_daily u
-        join tenancy.organizations o on o.id = u.org_id
-        where u.audited_at is null and u.day < (now() at time zone o.timezone)::date
-        limit 500`),
-  );
-  let total = 0;
-  for (const { org_id } of orgs) {
-    const ctx = createCtx({ orgId: org_id, actor: { type: 'system', name: 'tenancy.api-key-usage' } });
-    try {
-      for (const row of await unsummarizedApiKeyUsage(org_id)) {
-        await executeCommand(summarizeApiKeyUsageCommand, row, ctx, ports);
-        total += 1;
-      }
-    } catch (err) {
-      console.error('api key usage summaries', org_id, err);
-    }
-  }
-  return total;
-}
-
-/**
  * Pledge collection (M4.8e, P4-12), every 5 minutes: orgs with a saved-card charge due (or a
  * claimed one to replay) or a saved card past its 30 days (platform_reader, audited), then each
  * org's run under its RLS: off-session charges under each order's key (replays never charge
@@ -180,6 +150,36 @@ export async function collectDuePledges(provider: PaymentProvider) {
       total.cardsRemoved += r.cardsRemoved;
     } catch (err) {
       console.error('pledge collection', org_id, err);
+    }
+  }
+  return total;
+}
+
+/**
+ * API key usage summaries (M6.3a), hourly: orgs with finished days of key usage not yet in their
+ * audit log (platform_reader, audited), then one `apiKey.dailyUsage` entry per key and day under
+ * each org's RLS. Each day is summarized once.
+ */
+export async function summarizeApiKeyUsage(): Promise<number> {
+  const orgs = await withPlatformReader(
+    { actor: 'system:api-key-usage', reason: 'find orgs with API key usage to summarize in the audit log' },
+    (tx) =>
+      tx.execute<{ org_id: string }>(sql`
+        select distinct u.org_id from tenancy.api_key_usage_daily u
+        join tenancy.organizations o on o.id = u.org_id
+        where u.audited_at is null and u.day < (now() at time zone o.timezone)::date
+        limit 500`),
+  );
+  let total = 0;
+  for (const { org_id } of orgs) {
+    const ctx = createCtx({ orgId: org_id, actor: { type: 'system', name: 'tenancy.api-key-usage' } });
+    try {
+      for (const row of await unsummarizedApiKeyUsage(org_id)) {
+        await executeCommand(summarizeApiKeyUsageCommand, row, ctx, ports);
+        total += 1;
+      }
+    } catch (err) {
+      console.error('api key usage summaries', org_id, err);
     }
   }
   return total;

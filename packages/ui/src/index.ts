@@ -128,7 +128,9 @@ export {
   Timeline,
 } from './components/primitives.tsx';
 export {
+  isSelectValueInput,
   optionsFromChildren,
+  SELECT_REFILL_EVENT,
   Select,
   type SelectOption,
   type SelectProps,

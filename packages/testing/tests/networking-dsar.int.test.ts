@@ -13,7 +13,7 @@ import {
 } from '@yayatoh/engagement';
 import { createEventCommand, transitionEventCommand } from '@yayatoh/events';
 import { type Ctx, createCtx, executeCommand, executeQuery, uuidv7 } from '@yayatoh/kernel';
-import { findSubjectQuery } from '@yayatoh/privacy';
+import { resolveDataSubjectTx } from '@yayatoh/privacy';
 import { sql } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { eraseNow, exportNow } from '../src/dsar/helpers.ts';
@@ -22,8 +22,8 @@ import { ports } from '../src/ports.ts';
 
 /**
  * Batch 3j merge: the M5.8a privacy gap. Networking profiles, request notes, reports and chat
- * messages (M5.8a/b) were in neither the access document nor erasure. Batch 3u merge: they are part
- * of engagement's data-subject contributor (M6.1c), so a data-subject request finds, exports and
+ * messages (M5.8a/b) were in neither the access document nor erasure. engagement's M6.1c
+ * data-subject contributor now covers them (by the person's crm contacts): a request exports and
  * erases them, and only the person's own writing (never the other side's).
  */
 let a: OrgFixture;
@@ -122,34 +122,19 @@ beforeAll(async () => {
 });
 afterAll(closePools);
 
-async function exportDoc(address: string) {
-  const { modules } = await exportNow(address, a.ctx());
-  const networking = (modules.engagement ?? {}) as Record<string, unknown[]>;
-  return { text: JSON.stringify(networking), doc: { networking } };
-}
-
-/** What a data-subject export of the address holds in engagement's networking sections. */
-async function networkingCounts(address: string, org = a) {
-  const { modules } = await exportNow(address, org.ctx());
-  const doc = (modules.engagement ?? {}) as Record<string, unknown[] | undefined>;
-  return { networkProfiles: doc.profiles?.length ?? 0, chatMessages: doc.chatMessages?.length ?? 0 };
-}
-
 describe('data-subject requests cover networking and chat (M5.8a privacy gap)', () => {
-  it('finding a person counts their networking profile and the chat messages they sent', async () => {
-    const r = await executeQuery(findSubjectQuery, { email: email(0) }, a.ctx(), ports);
-    // The profile, the request note, the report and the message they sent.
-    expect(r.summary.engagement).toBe(4);
-    expect(await networkingCounts(email(0))).toEqual({ networkProfiles: 1, chatMessages: 1 });
-    // Another org holds nothing networking about this address.
-    const other = await executeQuery(findSubjectQuery, { email: email(0) }, b.ctx(), ports);
-    expect(other.summary.engagement ?? 0).toBe(0);
-    expect(await networkingCounts(email(0), b)).toEqual({ networkProfiles: 0, chatMessages: 0 });
+  it('resolving the person finds their contacts; another org finds none', async () => {
+    const mine = await withTenant(a.ctx(), (tx) => resolveDataSubjectTx(tx, a.ctx(), email(0)));
+    expect((mine.refs.contact ?? []).length).toBeGreaterThan(0);
+    const other = await withTenant(b.ctx(), (tx) => resolveDataSubjectTx(tx, b.ctx(), email(0)));
+    expect(other.refs.contact ?? []).toEqual([]);
   });
 
   it('the access document lists what the person wrote, never the other side or internal ids', async () => {
-    const { text, doc } = await exportDoc(email(0));
-    expect(doc.networking.profiles).toEqual([
+    const { modules } = await exportNow(email(0), a.ctx());
+    const doc = (modules.engagement ?? {}) as Record<string, unknown[]>;
+    const text = JSON.stringify(doc);
+    expect(doc.networkProfiles).toEqual([
       expect.objectContaining({
         eventId,
         optedIn: true,
@@ -160,11 +145,11 @@ describe('data-subject requests cover networking and chat (M5.8a privacy gap)', 
         interests: ['sailing', 'chess'],
       }),
     ]);
-    expect(doc.networking.requestNotes).toEqual([expect.objectContaining({ message: `Note from 0 ${tag}` })]);
-    expect(doc.networking.reports).toEqual([
+    expect(doc.networkRequestNotes).toEqual([expect.objectContaining({ message: `Note from 0 ${tag}` })]);
+    expect(doc.networkReports).toEqual([
       expect.objectContaining({ reason: 'spam', details: `Report by 0 ${tag}` }),
     ]);
-    expect(doc.networking.chatMessages).toEqual([
+    expect(doc.chatMessages).toEqual([
       expect.objectContaining({ body: `Message from 0 ${tag}`, removed: false }),
     ]);
     // The other people's profiles and messages are theirs: not in this person's document.
@@ -176,11 +161,11 @@ describe('data-subject requests cover networking and chat (M5.8a privacy gap)', 
 
   it('erasure redacts and opts out the profile, clears the notes and deletes only their messages', async () => {
     const r = await eraseNow(email(0), a.ctx());
-    const rows = (table: string) => r.receipt.erased.find((e) => e.table === table)?.rows ?? 0;
+    const rows = (t: string) => r.receipt.erased.find((e) => e.table === t)?.rows;
     expect(rows('engagement.network_profiles')).toBe(1);
     expect(rows('engagement.chat_messages')).toBe(1);
-    // The request note and the report's details.
-    expect(rows('engagement.network_connections') + rows('engagement.network_reports')).toBe(2);
+    expect(rows('engagement.network_connections')).toBe(1);
+    expect(rows('engagement.network_reports')).toBe(1);
     const [p] = await withTenant(systemCtx(a.org.id), (tx) =>
       tx.execute<Record<string, unknown>>(
         sql`select opted_in, display_name, headline, company, bio, interests from engagement.network_profiles where id = ${ids[0]}`,
@@ -215,7 +200,12 @@ describe('data-subject requests cover networking and chat (M5.8a privacy gap)', 
       ports,
     ).catch(() => null);
     expect(JSON.stringify(thread ?? {})).not.toContain(`Message from 0 ${tag}`);
-    // Finding the person again: nothing networking left to export.
-    expect((await networkingCounts(email(0))).chatMessages).toBe(0);
+    // Exporting the person again: nothing networking left.
+    const again = ((await exportNow(email(0), a.ctx())).modules.engagement ?? {}) as Record<
+      string,
+      unknown[]
+    >;
+    expect(again.chatMessages ?? []).toEqual([]);
+    expect(again.networkProfiles ?? []).toEqual([]);
   });
 });

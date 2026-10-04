@@ -54,3 +54,69 @@ Slack, Mailchimp, HubSpot, Klaviyo) with `defineConnector` in `src/connectors/` 
   queues `integrations.sync` (exclusive per connection); the dev drain (`/api/dev/integrations/run`)
   runs `runDueSyncs`. Events: `integrations.connection_connected@1`,
   `integrations.connection_revoked@1`, `integrations.sync_completed@1` (ids, codes and counts).
+- **Notifications connectors (M6.4c, Slack):** `purpose: 'notifications'`, no objects (no mapping);
+  their runs are health checks (`health`). Slack's settings (`slack_settings`: one channel per
+  connection, alerts at or above a severity, a daily digest at a local time in the org's zone,
+  amounts only on the connection owner's opt-in while they have `finance:read`) and its send log
+  (`slack_messages`, unique per connection, channel, kind and dedupe key: an alert sending, a local
+  day, a test). Alerts arrive from the alerts module through the outbox
+  (`alerts.alert_notified@1`, subscriber `integrations.slack-alerts`), never by import. The sender
+  (`runSlackDispatch`; worker job `integrations.slack`, exclusive per org, found through
+  `integrations.orgs_with_slack_work()`) claims with a lease, checks the connection through the
+  port, re-checks every message for personal data (`slackPiiProblems`) and marks a revoked
+  connection through the engine's run. Messages name events and counts only.
+- **Zapier (M6.4c)** is not a connector: it authenticates with an org API key. `ZAPIER_TRIGGERS`,
+  `ZAPIER_ACTIONS` and `ZAPIER_SCOPES` (`src/zapier.ts`) describe the app in `apps/zapier` for the
+  console and the app's own test.
+
+
+**Salesforce (M6.5b, `src/connectors/salesforce/`)**
+- Objects in order: `contacts` ↔ Contact and `leads` ↔ Lead (both ways), then `campaigns` (one per
+  non-draft event), `campaign_members` (registered → Registered, checked in → Attended) and
+  `sponsor_opportunities` (program sponsors and their deals) out. A person linked to a Salesforce
+  Contact is updated there; everyone else goes out as a Lead, so nobody is created twice.
+- Yayatoh's records are upserted by the external id `Yayatoh_Id__c`; the pull skips records last
+  modified by the connection's own integration user (`LastModifiedById`, the origin stamp).
+- **Consent:** only people whose latest email marketing consent is `granted` and whose address is
+  not unsubscribed or suppressed are pushed, and their campaign memberships with them. A Salesforce
+  email opt-out withdraws consent here; Salesforce never grants it.
+- Amounts leave as Salesforce decimals (major units) converted from integer minor units at the
+  boundary. The fake org (`fake.ts`) mirrors Salesforce's validation for dev and CI.
+- **Reconciling push (M6.5c):** a `PushSide` with `reconcile` lists every record it wants on each
+  pass (its cursor goes back to the start after the last page); unchanged ones are skipped by the
+  link hash, and linked records `read` no longer returns are deleted at the provider with
+  `remove` (`removed` outcome; the link goes). Calendars use it.
+- **Personal connections (M6.5c):** `audience: 'registrant'` connectors (`google_calendar_personal`)
+  belong to one registrant (`registrant_id` + `event_id`); the live slot is per (org, connector,
+  registrant). They are made from "My schedule" with the order's manage link (`personal.ts`,
+  `public:calendar` commands that re-check the registrant), never listed, offered or opened in the
+  console, and store no account label. `PushScope` tells `changes`/`read` whose records to push.
+- **Google Calendar (M6.5c):** `google_calendar` (the org's sessions) and
+  `google_calendar_personal` (a registrant's schedule) push sessions as entries in the event's
+  IANA zone under stable ids (a lost create answer is a 409, then an update); the fake Calendar
+  API (`googleCalendarFakeProvider`) backs dev and CI.
+- **Accounting (M6.5d, P6-6):** QuickBooks Online and Xero (`src/connectors/quickbooks.ts`,
+  `xero.ts`) have no objects but an `accounting` side (chart of accounts, `postJournal`). A run
+  posts **one daily summary journal per day (org time zone) and currency** from the ledger
+  (`@yayatoh/payments` `ledgerDailyTotalsTx`: memo gross, fees, refunds; transfers as payouts) and
+  giving (`@yayatoh/donations` `donationDailyTotalsTx`), mapped to the org's accounts
+  (`account_maps`, versioned; every category required, the clearing account unshared). Journals
+  (`accounting_journals`) are never edited: a changed day gets a reversal of the standing journal
+  and the next revision; the provider's idempotency key is org + day + currency + revision (+
+  kind). Unsent rows are superseded freely; an uncertain failure blocks its day until its retry
+  (same key) settles. Days from the mapping's first day to yesterday; integer minor units, sent as
+  exact decimals. Xero takes its base currency only (`currency_unsupported`).
+
+**M6.4d — Mailchimp, Klaviyo, HubSpot** (`src/audience/`, `src/connectors/{mailchimp,klaviyo,hubspot}`)
+- **Consent first** (`audience/consent.ts`): only `subscribed` contacts (express email marketing
+  consent; no unsubscribe, address suppression or erasure since) are ever created at a provider;
+  contacts already there get the unsubscribe / opt-out; list members who leave the audience are
+  archived. The status is computed from the crm ledger, notifications suppressions and platform
+  erased addresses (`audience/state.ts`), never from the mapping; `send` refuses a non-subscriber.
+- **Inbound** (`audience/inbound.ts`): unsubscribe → consent withdrawn (evidence
+  `integration:<connector>:<connection>`) + marketing suppression with the provider as `source`;
+  cleaned → address suppression `hard_bounce`; complaint → both. Never a grant. Recorded once per
+  provider record and version in `consent_changes` (merges move it: `integrationsContactOwner`).
+- `audience_syncs`: one per Mailchimp/Klaviyo connection (segment or everyone with consent, the
+  provider list); `saveAudienceSync` is an `export` command. Pulled records are linked before the
+  engine reads them back (`linkPulledTx`), so a change that came in is never sent back.

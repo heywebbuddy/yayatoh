@@ -163,6 +163,34 @@ export default async function IntegrationsPage({
               </li>
             );
           })}
+          {/* M6.4c: Zapier connects with an API key (no OAuth connection): its own page. */}
+          <li>
+            <Card className="flex h-full flex-col gap-3">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <h2 id="connector-zapier" className="m-0 text-section">
+                  {t('zapier.title')}
+                </h2>
+              </div>
+              <p className="m-0 text-body text-ink-2">{t('zapier.cardDescription')}</p>
+              <span className="inline-flex">
+                <Chip tone="neutral">{t('zapier.apiKeyBadge')}</Chip>
+              </span>
+              <div className="mt-auto flex flex-wrap items-center gap-2 pt-1">
+                {!data.modules.has('api_access') ? (
+                  <span className="inline-flex">
+                    <Chip tone="neutral">{t('notInPlan')}</Chip>
+                  </span>
+                ) : null}
+                <Link
+                  href={`/o/${org}/integrations/zapier`}
+                  className={buttonClass('secondary')}
+                  aria-label={t('zapier.setUpNamed')}
+                >
+                  {t('zapier.setUp')}
+                </Link>
+              </div>
+            </Card>
+          </li>
         </ul>
       )}
       {!canManage ? <p className="text-caption text-ink-2">{t('readOnly')}</p> : null}

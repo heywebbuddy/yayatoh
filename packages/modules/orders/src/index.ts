@@ -222,6 +222,8 @@ export {
   payDonationOrderTx,
   startDonationOrderTx,
 } from './donation-orders.ts';
+// M4.8g: ticket donations in the donations reports.
+export { type DonationTicketLine, donationTicketLinesTx } from './donation-ticket-facts.ts';
 export {
   buyerOrdersDsarTx,
   buyerOrgs,
@@ -313,6 +315,18 @@ export {
   parseGuestLinkToken,
   resendAt,
 } from './guest/otp.ts';
+// M6.4b: orders imported from another platform (the Eventbrite importer).
+export {
+  IMPORT_SOURCES,
+  IMPORTED_STATUSES,
+  type ImportedOrderInput,
+  ImportedOrdersSummaryDto,
+  type ImportSource,
+  importedOrderIdTx,
+  importedOrdersSummaryTx,
+  importOrderTx,
+  ORDER_IMPORTED_EVENT,
+} from './imported.ts';
 // M5.9a: overdue invoices for the conference Command Center pack (a count).
 export { overdueInvoicesTx } from './invoice-facts.ts';
 export { invoiceMailer } from './invoice-mailer.ts';
@@ -329,6 +343,7 @@ export {
   orderFeesTx,
   orderMoneyRowsTx,
 } from './money-facts.ts';
+export { type SoldOrderDayFact, soldOrderDaysTx } from './order-days.ts';
 export { buyerFactsTx, orderRefTx } from './participation.ts';
 export { orderPaymentStateTx } from './payment-state.ts';
 export { privateColumns } from './private-columns.ts';

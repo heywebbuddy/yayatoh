@@ -32,6 +32,9 @@ export const AUDIT_DETAIL_KEYS = [
   'day',
   'errors',
   'rateLimited',
+  /** `org:<id>` of the agency when a user acted through an agency grant (M6.7a), and the grant. */
+  'viaAgency',
+  'agencyGrantId',
 ] as const;
 
 const Detail = z.union([z.string().max(80), z.number(), z.boolean()]);

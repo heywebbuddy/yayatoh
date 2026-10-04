@@ -10,6 +10,7 @@ import { and, isNotNull, lt, ne } from 'drizzle-orm';
 import { z } from 'zod';
 import { eventMode, THRESHOLDS } from './domain/config.ts';
 import { type AlertChange, type AlertDeps, evaluateEventAlertsTx, evaluateOrgAlertsTx } from './engine.ts';
+import { applyMetricRuleTx, METRIC_RULE_EVENT, sweepMetricAlertsTx } from './metric-rules.ts';
 import { alerts, type SignalKind, signals } from './schema.ts';
 
 /** M4.6a: RSVP deadlines this far back still bring their (future) event into the sweep. */
@@ -92,17 +93,38 @@ export const ALERT_TRIGGER_EVENTS = [
   'badges.printer_online@1',
   'program.sponsor_package.activated@1',
   'program.sponsor_package.cancelled@1',
+  // Batch 3k merge: a lead captured (M5.6b) can clear "exhibitors without leads".
+  'leads.captured@1',
   // M4.6a: a party answered its RSVP, or the deadline moved (guest additions and seating changes
   // emit nothing: the sweep picks them up).
   'guests.party_responded@1',
   'guests.rsvp_deadline_set@1',
+  // M6.2b: an organizer-authored rule changed state (analytics, same tier, through the outbox).
+  'analytics.alert_rule_evaluated@1',
+  // Batch 3l merge: integration runs that failed and connections revoked at the provider
+  // (signals), and plan subscription changes (past due / unpaid are read from billing).
+  'integrations.sync_completed@1',
+  'integrations.connection_revoked@1',
+  'billing.subscription_changed@1',
 ] as const;
 
 /** Outbox events that are themselves what an org rule counts (one `alerts.signals` row each). */
 const SIGNAL_OF: Readonly<Record<string, SignalKind>> = {
   'automations.journey_step_failed': 'journey_step_failed',
   'campaigns.send_failed': 'campaign_send_failed',
+  'integrations.connection_revoked': 'integration_revoked',
 };
+
+const SyncCompleted = z.object({ status: z.string() });
+
+/** The signal an outbox event reports, if any (a sync run counts only when it failed). */
+function signalOf(event: Pick<PublishedEvent, 'type' | 'payload'>): SignalKind | undefined {
+  if (event.type === 'integrations.sync_completed')
+    return SyncCompleted.safeParse(event.payload).data?.status === 'failed'
+      ? 'integration_run_failed'
+      : undefined;
+  return SIGNAL_OF[event.type];
+}
 
 const WithEvent = z.object({ eventId: z.uuid() });
 const WithOrder = z.object({ orderId: z.uuid() });
@@ -134,7 +156,11 @@ export async function alertTargetsTx(
     }
     return { eventIds: around, org: false };
   }
-  if (/^(domain|payouts|messaging|org|bulk|automations|campaigns|payments)\./.test(event.type)) {
+  if (
+    /^(domain|payouts|messaging|org|bulk|automations|campaigns|payments|integrations|billing)\./.test(
+      event.type,
+    )
+  ) {
     const withEvent = WithEvent.safeParse(p);
     return { eventIds: withEvent.success ? [withEvent.data.eventId] : [], org: true };
   }
@@ -166,7 +192,11 @@ export function alertEvaluator(deps: AlertDeps): Subscriber {
     events: ALERT_TRIGGER_EVENTS,
     handle: async (tx, event) => {
       const ctx = createCtx({ orgId: event.orgId, actor: { type: 'system', name: 'alerts.evaluator' } });
-      const kind = SIGNAL_OF[event.type];
+      if (event.type === METRIC_RULE_EVENT) {
+        await applyMetricRuleTx(tx, ctx, event, deps);
+        return;
+      }
+      const kind = signalOf(event);
       if (kind)
         await tx
           .insert(signals)
@@ -249,7 +279,11 @@ export async function evaluateOrgNow(
       ...(await withTenant(ctx, async (tx) => {
         // Signals outlive the rules' 24-hour window by a few days, then go (batch 3e).
         await tx.delete(signals).where(lt(signals.occurredAt, new Date(now.getTime() - SIGNAL_TTL_MS)));
-        return evaluateOrgAlertsTx(tx, ctx, deps, now);
+        return [
+          ...(await evaluateOrgAlertsTx(tx, ctx, deps, now)),
+          // M6.2b: organizer rules' snoozes and acknowledgements time out like the others.
+          ...(await sweepMetricAlertsTx(tx, ctx, deps, now)),
+        ];
       })),
     );
   return changes;

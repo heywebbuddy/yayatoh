@@ -698,3 +698,72 @@ async function mergeParts(renderer: PdfRenderer, parts: readonly Uint8Array[]): 
   if (!renderer.merge) throw new Error('badges: the PDF renderer cannot merge');
   return renderer.merge(real);
 }
+
+/** What a badge says about its holder (the fields its template places; empty when not placed). */
+export interface BadgeDetails {
+  readonly firstName: string;
+  readonly lastName: string;
+  readonly company: string;
+  readonly jobTitle: string;
+}
+
+/**
+ * M5.5c: what each ticket's badge would say now, for the kiosk's "check your details". Tickets
+ * whose type has no template are missing from the map (they can't print).
+ */
+export async function badgeDetailsTx(
+  tx: TenantTx,
+  eventId: string,
+  tickets: readonly BadgeTicket[],
+): Promise<Map<string, BadgeDetails>> {
+  if (tickets.length === 0) return new Map();
+  const rows = await badgeRowsTx(tx, eventId, tickets, await currentVersionMapTx(tx, eventId));
+  return new Map(
+    rows.map((r) => [
+      r.ticket.id,
+      {
+        firstName: r.row.firstName,
+        lastName: r.row.lastName,
+        company: r.row.company,
+        jobTitle: r.row.jobTitle,
+      },
+    ]),
+  );
+}
+
+/**
+ * M5.6b lead capture: each ticket's company and job title as its badge template maps them (the
+ * organizer's mapped checkout questions, read whether or not the template prints them). Empty
+ * when no template maps them.
+ */
+export async function badgeCompanyTitleTx(
+  tx: TenantTx,
+  eventId: string,
+  tickets: readonly { readonly id: string; readonly orderId: string; readonly ticketTypeId: string }[],
+): Promise<Map<string, { company: string; jobTitle: string }>> {
+  const out = new Map<string, { company: string; jobTitle: string }>();
+  if (tickets.length === 0) return out;
+  const map = await currentVersionMapTx(tx, eventId);
+  const designs = await designsTx(
+    tx,
+    tickets.flatMap((t) => versionFor(map, t.ticketTypeId) ?? []),
+  );
+  if (![...designs.values()].some((d) => d.sources.company || d.sources.jobTitle)) return out;
+  const answers = await answersByOrderTx(
+    tx,
+    eventId,
+    tickets.map((t) => t.orderId),
+  );
+  for (const t of tickets) {
+    const v = versionFor(map, t.ticketTypeId);
+    const design = v ? designs.get(v) : undefined;
+    if (!design) continue;
+    const a = answers.get(t.orderId) ?? {};
+    const text = (key: string | null) => {
+      const x = key ? a[key] : undefined;
+      return typeof x === 'string' ? x.trim().slice(0, 200) : '';
+    };
+    out.set(t.id, { company: companyOf(design, a), jobTitle: text(design.sources.jobTitle) });
+  }
+  return out;
+}

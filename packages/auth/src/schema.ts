@@ -80,6 +80,11 @@ export const sessions = identity.table(
     impersonationId: uuid('impersonation_id').references((): AnyPgColumn => impersonations.id, {
       onDelete: 'cascade',
     }),
+    /**
+     * M6.5a: a session made by an org's single sign-on opens that org's console only (an IdP of
+     * org A never signs anyone into org B). Null for every other sign-in.
+     */
+    ssoOrgId: uuid('sso_org_id'),
   },
   (t) => [
     uniqueIndex('sessions_token_key').on(t.token),
