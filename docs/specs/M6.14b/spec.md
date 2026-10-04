@@ -76,3 +76,9 @@ another org, and re-checks the share and an active partnership (venue org live) 
 | Promoted placements are labelled as promoted | int: "promoted placements" (flag, matching only, page 1, end); e2e: "an org promotes a marketplace listing; search labels it Promoted…" |
 | E2E: venue shares a layout, organizer uses it, venue sees the usage; keyboard only, axe both themes, RTL | `apps/web/e2e/venue-portal.spec.ts` (375/768/1280) |
 | Isolation and canary for the new tables | fixtures rows for both orgs (`createOrgFixture`), `isolation.int.test.ts`, `canary.int.test.ts` |
+
+## 5. Gate (2026-10-04)
+lint, check:modules, typecheck 63/63, unit 3,454/3,454 (+3 in `marketplace/tests/promoted.test.ts`),
+integration (full run 1,955/1,958; the 3 failures fixed or fixed upstream and re-run green),
+e2e `venue-portal.spec.ts` 12/12 on 375/768/1280 plus related specs (channels-layouts,
+marketplace-search, venues, console-nav, seating) green.
