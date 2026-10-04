@@ -16,14 +16,16 @@ export interface SlackChannel {
   readonly isMember: boolean;
 }
 
-/** Slack error codes that mean the connection no longer works. */
+/**
+ * Slack error codes that mean the connection no longer works. `no_permission` is not one: it is one
+ * channel or action the app may not use, and must not revoke the whole connection.
+ */
 const AUTH_ERRORS = new Set([
   'invalid_auth',
   'not_authed',
   'token_revoked',
   'token_expired',
   'account_inactive',
-  'no_permission',
   'missing_scope',
   'team_access_not_granted',
 ]);

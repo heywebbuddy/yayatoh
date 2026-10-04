@@ -227,3 +227,48 @@ describe('integrationAuthFromEnv', () => {
     expect(integrationAuthFromEnv({ INTEGRATIONS_AUTH_PROVIDER: 'nango' })).toBeNull();
   });
 });
+
+describe('Nango proxy paths stay under /proxy (M6.x hardening)', () => {
+  const SECRET = 'nango-secret-for-tests';
+  const ref: AuthRef = {
+    orgId,
+    connectionId: 'c-1',
+    providerConfigKey: 'hubspot',
+    authConnectionId: 'conn_1',
+  };
+  const calls: string[] = [];
+  const auth = nangoIntegrationAuth({
+    secretKey: SECRET,
+    fetch: async (url) => {
+      calls.push(String(url));
+      return new Response('{}', { status: 200 });
+    },
+  });
+
+  it.each([
+    '/../connection/conn_2',
+    '/a/../../connection/conn_2',
+    '/%2e%2e/connection/conn_2',
+    '/%2E%2E%2Fconnection',
+    '/ok?x=1',
+    '/ok#frag',
+    '/a\\b',
+    '/a b',
+    '//evil.test/x',
+  ])('refuses %s without calling Nango', async (path) => {
+    calls.length = 0;
+    await expect(auth.client(ref).request({ method: 'GET', path })).rejects.toMatchObject({
+      status: 400,
+      code: 'bad_path',
+    });
+    expect(calls).toEqual([]);
+  });
+
+  it('still proxies ordinary provider paths', async () => {
+    calls.length = 0;
+    await auth
+      .client(ref)
+      .request({ method: 'GET', path: '/crm/v3/objects/contacts/123', query: { a: 'b' } });
+    expect(calls[0]).toBe('https://api.nango.dev/proxy/crm/v3/objects/contacts/123?a=b');
+  });
+});

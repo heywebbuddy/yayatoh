@@ -250,7 +250,7 @@ export default async function PersonPage({
               <li
                 key={r.id}
                 data-testid="timeline-entry"
-                className="flex flex-col gap-1 rounded-card border border-line bg-white px-4 py-3 sm:flex-row sm:items-baseline sm:justify-between"
+                className="flex flex-col gap-1 rounded-card border border-line bg-surface px-4 py-3 sm:flex-row sm:items-baseline sm:justify-between"
               >
                 <div className="flex flex-col gap-0.5">
                   <span className="text-body font-medium">{t(`kinds.${r.kind}`)}</span>

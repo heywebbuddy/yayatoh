@@ -1018,3 +1018,9 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **Postgres image `pgvector/pgvector:pg18` (infra):** CI, compose, the restore drill and cloud setup use it. Production needs the `vector` extension created by the runbook step in M6.12b's section. Locally, an existing `postgres:18` volume needs `ALTER DATABASE … REFRESH COLLATION VERSION` (different glibc) or a fresh volume (`docs/local-development.md`).
 - [ ] **CI heap 8 GB** (`NODE_OPTIONS` in `ci.yml`, was 6 GB): the worker's and admin's type checks now need about 6.6 GB. Runners have 16 GB.
 - [ ] **Front door route table v3:** M6.14a's `/search` is a moved route on yayatoh.com (legacy until staff move it); M6.9b's `/certificates/…` pages are new-app paths (the legacy app has none).
+
+## M6.X hardening (2026-10-04)
+- [ ] **Switch-on per connector:** follow `docs/runbooks/connectors.md` once each vendor account or review exists; every adapter is still a fake in dev and CI.
+- [ ] **Phase 6 security review:** read `docs/ops/security-review-phase6.md` and decide on the residual items it lists (OAuth token handling and SSO were reviewed; in-scope fixes are done).
+- [ ] **Load numbers are from a small shared VM.** Re-run `k6/api-limits.js`, `k6/sync-throughput.js` and `k6/warehouse-ingest.js` on staging before the first real tenant.
+
