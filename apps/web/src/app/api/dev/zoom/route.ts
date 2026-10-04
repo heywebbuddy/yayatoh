@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
   const connectionId = String(form.get('connection') ?? '');
   const webinar = String(form.get('webinar') ?? '');
   const account = UUID.test(connectionId) ? fakeIntegrations.accountFor(connectionId) : null;
-  if (!account || account.providerConfigKey !== 'zoom' || !/^[0-9]{9,12}$/.test(webinar))
+  if (account?.providerConfigKey !== 'zoom' || !/^[0-9]{9,12}$/.test(webinar))
     return NextResponse.json({ error: 'unknown_connection' }, { status: 404 });
   const action = String(form.get('action') ?? '');
   if (action === 'registrants')
