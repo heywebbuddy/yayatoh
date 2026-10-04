@@ -139,6 +139,11 @@ export function SearchIcon() {
  */
 export const SELECT_REFILL_EVENT = 'yy-select-refill';
 
+const valueInputs = new WeakSet<HTMLInputElement>();
+/** Whether a hidden input is a Select's value (it takes SELECT_REFILL_EVENT). */
+export const isSelectValueInput = (el: Element): boolean =>
+  el instanceof HTMLInputElement && valueInputs.has(el);
+
 export function selectTriggerClass(size: 'sm' | 'md' | 'lg' = 'md', className?: string): string {
   // Classes carried over from a native select may not undo the chevron's room: inline padding
   // stays ours, and a width of the caller's replaces our full width.
@@ -315,6 +320,7 @@ export function Select({
   useEffect(() => {
     const input = valueInput.current;
     if (!input) return;
+    valueInputs.add(input);
     const onRefill = (e: Event) => {
       const v = (e as CustomEvent<unknown>).detail;
       if (typeof v === 'string') refillRef.current(v);
@@ -547,15 +553,7 @@ export function Select({
               className="pointer-events-none absolute inset-x-0 bottom-0 h-px w-full opacity-0"
             />
           ) : (
-            <input
-              ref={valueInput}
-              type="hidden"
-              name={name}
-              form={form}
-              value={value}
-              disabled={disabled}
-              data-select-value=""
-            />
+            <input ref={valueInput} type="hidden" name={name} form={form} value={value} disabled={disabled} />
           )
         ) : (
           <input ref={valueInput} type="hidden" form={form} value={value} disabled />

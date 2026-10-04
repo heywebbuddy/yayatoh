@@ -61,14 +61,12 @@ export function GivingScreen({
       if (screen && version !== undefined && typeof v === 'number' && v > version) setReplaced(true);
     },
   });
-  // A screen whose stream was down when its link was replaced never gets the `link` message, and the
-  // old link's stream is refused (404) from then on, so it would stay "Reconnecting…" for ever.
-  // When the server refuses the stream, ask once whether this page still exists: a 404 means the
-  // link was replaced (batch 3v merge: the e2e caught it on a projector reconnecting at that moment).
+  // Batch 3l merge: a stream that drops while the link is replaced misses the `link` event and is
+  // then refused on the old link; the screen asks its own page whether the link still opens.
   useEffect(() => {
-    if (!screen || version === undefined || replaced || stream !== 'offline') return;
+    if (!screen || replaced || stream !== 'offline') return;
     let cancelled = false;
-    fetch(window.location.href, { method: 'HEAD', cache: 'no-store' })
+    void fetch(window.location.href, { method: 'HEAD', cache: 'no-store' })
       .then((r) => {
         if (!cancelled && r.status === 404) setReplaced(true);
       })
@@ -76,7 +74,7 @@ export function GivingScreen({
     return () => {
       cancelled = true;
     };
-  }, [screen, version, replaced, stream]);
+  }, [screen, replaced, stream]);
   useEffect(() => {
     // The system's own preferences turn the modes on (the toggles can still change them).
     if (defaults.contrast === undefined && window.matchMedia?.('(prefers-contrast: more)').matches)
@@ -106,8 +104,8 @@ export function GivingScreen({
   const toggle = (pressed: boolean) =>
     hc
       ? cx(
-          // No colour fade in high contrast: a half-faded pressed toggle (white on near-white) is
-          // exactly what this mode exists to avoid (batch 3v: axe caught it mid-transition).
+          // No colour transition: a pressed toggle turns white-on-black at once, so it is never
+          // shown (or checked) as black text on a background still fading from black.
           'inline-flex min-h-11 items-center gap-2 rounded-control border-2 border-white px-[18px] text-body font-bold transition-none',
           pressed ? 'bg-white text-black' : 'bg-black text-white',
         )
