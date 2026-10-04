@@ -24,7 +24,7 @@ import { configureSso, ssoRuntimeFromEnv } from '@yayatoh/sso';
 import { surveysContactOwner } from '@yayatoh/surveys';
 import { createOrgAuthorizer, memberRoleTx, orgStatusGate } from '@yayatoh/tenancy';
 import { ticketingContactOwner } from '@yayatoh/ticketing';
-import { configureVirtual, videoProviderFromEnv } from '@yayatoh/virtual';
+import { configureVirtual, videoProvidersFromEnv } from '@yayatoh/virtual';
 import { configureWebhooks, fakeResolver, webhookPublisherFromEnv } from '@yayatoh/webhooks';
 import { DATA_SUBJECT_CONTRIBUTORS } from './data-subjects.ts';
 import { fakeIdpSeed } from './sso-seed.ts';
@@ -89,5 +89,6 @@ configureSso(
   }),
 );
 
-// M6.9a: video for virtual sessions (the Mux fake outside production until the owner's account).
-configureVirtual({ provider: videoProviderFromEnv(process.env) });
+// M6.9a/M6.10a: video for virtual sessions (the Mux and Cloudflare Stream fakes outside
+// production until the owner's accounts).
+configureVirtual({ providers: videoProvidersFromEnv(process.env) });

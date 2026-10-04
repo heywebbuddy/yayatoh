@@ -1,6 +1,11 @@
 import { defineSerializer } from '@yayatoh/contracts';
 import { z } from 'zod';
 import { ACCESS_MODES, DELIVERY_MODES } from './domain/access.ts';
+import { VIDEO_PROVIDERS } from './provider/port.ts';
+
+/** M6.10a: which ingest the encoder pushes to (RTMP overflow). */
+export const INGESTS = ['primary', 'backup'] as const;
+export type Ingest = (typeof INGESTS)[number];
 
 /* ----------------------------------------------------------------------------- organizer ---- */
 
@@ -16,9 +21,12 @@ export type TicketAccessDto = z.infer<typeof TicketAccessDto>;
 
 export const StreamDto = z.object({
   id: z.uuid(),
-  provider: z.enum(['fake', 'mux']),
+  provider: z.enum(VIDEO_PROVIDERS),
   ingestUrl: z.string(),
   enabled: z.boolean(),
+  /** M6.10a: whether the provider offers a backup ingest, and which ingest is active. */
+  hasBackup: z.boolean(),
+  activeIngest: z.enum(INGESTS),
 });
 export type StreamDto = z.infer<typeof StreamDto>;
 
@@ -39,20 +47,39 @@ export const VirtualSetupDto = z.object({
   eventId: z.uuid(),
   deliveryMode: z.enum(DELIVERY_MODES),
   /** The configured provider, or null when streaming is off on this deployment. */
-  provider: z.enum(['fake', 'mux']).nullable(),
+  provider: z.enum(VIDEO_PROVIDERS).nullable(),
+  /** M6.10a: every provider a session may use here (the default first). */
+  providers: z.array(
+    z.object({ name: z.enum(VIDEO_PROVIDERS), kind: z.enum(['mux', 'cloudflare']), sandbox: z.boolean() }),
+  ),
   ticketTypes: z.array(TicketAccessDto),
   sessions: z.array(SetupSessionDto),
 });
 export type VirtualSetupDto = z.infer<typeof VirtualSetupDto>;
 export const virtualSetupSerializer = defineSerializer('virtual.setup', VirtualSetupDto);
 
-export const StreamKeyDto = z.object({ sessionId: z.uuid(), ingestUrl: z.string(), streamKey: z.string() });
+export const StreamKeyDto = z.object({
+  sessionId: z.uuid(),
+  /** The ingest the encoder should push to now (the backup one after an overflow switch). */
+  ingestUrl: z.string(),
+  streamKey: z.string(),
+  /** M6.10a: which ingest `ingestUrl` is, and the backup's address (null: none). */
+  activeIngest: z.enum(INGESTS),
+  backupIngestUrl: z.string().nullable(),
+});
 export type StreamKeyDto = z.infer<typeof StreamKeyDto>;
 
 export const StreamingUsageDto = z.object({
   /** Viewer-minutes in the period (the D24 streaming meter). */
   viewerMinutes: z.number().int().nonnegative(),
   viewers: z.number().int().nonnegative(),
+  /** M6.10a: viewer-minutes per provider (priced per provider, D24); `unknown` before M6.10a. */
+  byProvider: z.array(
+    z.object({
+      provider: z.enum([...VIDEO_PROVIDERS, 'unknown']),
+      viewerMinutes: z.number().int().nonnegative(),
+    }),
+  ),
 });
 export type StreamingUsageDto = z.infer<typeof StreamingUsageDto>;
 
@@ -84,7 +111,9 @@ export const PlaybackDto = z.object({
   token: z.string(),
   playbackUrl: z.string(),
   expiresAt: z.date(),
-  provider: z.enum(['fake', 'mux']),
+  provider: z.enum(VIDEO_PROVIDERS),
+  /** M6.10a: a fake provider (the player shows a test pattern instead of loading video). */
+  sandbox: z.boolean(),
 });
 export type PlaybackDto = z.infer<typeof PlaybackDto>;
 
@@ -107,6 +136,8 @@ export const ZoomSessionDto = z.object({
   endsAt: z.date(),
   /** The linked Zoom webinar's id, or null. */
   webinarId: z.string().nullable(),
+  /** M6.10a: Yayatoh created the webinar through the org's Zoom connection. */
+  created: z.boolean(),
   /** Holders with online access registered (or to register) for the webinar. */
   registrants: z.number().int().nonnegative(),
   /** Registered holders found in the webinar's attendance report. */

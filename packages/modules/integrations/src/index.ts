@@ -229,6 +229,7 @@ export {
   zoomFakeAttend,
   zoomFakeProvider,
   zoomFakeRegistrants,
+  zoomFakeWebinar,
 } from './connectors/zoom.ts';
 export { integrationsContactOwner } from './contact-merge.ts';
 export { integrationsDataSubjects } from './data-subject.ts';
@@ -360,3 +361,12 @@ export {
   ZAPIER_TRIGGERS,
   type ZapierPart,
 } from './zapier.ts';
+// M6.10a: create a session's Zoom webinar from Yayatoh through the org's Zoom connection.
+export {
+  activeZoomConnectionTx,
+  createZoomWebinar,
+  recordCreatedZoomWebinarCommand,
+  ZoomWebinarPlanDto,
+  zoomConnectedQuery,
+  zoomWebinarPlanQuery,
+} from './zoom-webinars.ts';

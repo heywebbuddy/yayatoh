@@ -1,5 +1,5 @@
 import { virtualCheckpointsQuery } from '@yayatoh/checkin';
-import { listConnectionsQuery } from '@yayatoh/integrations';
+import { zoomConnectedQuery } from '@yayatoh/integrations';
 import { executeQuery, isDomainError } from '@yayatoh/kernel';
 import { Alert, buttonClass, Card, EmptyState, PageHeader, StatCard, StatusPill, Table } from '@yayatoh/ui';
 import { virtualSetupQuery, zoomSetupQuery } from '@yayatoh/virtual';
@@ -10,16 +10,20 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Crumbs } from '@/components/crumbs.tsx';
 import { AccessForm, DeliveryForm, StreamControls } from '@/components/virtual/stream-setup.tsx';
 import { ZoomSyncButton, ZoomWebinarForm } from '@/components/virtual/zoom-setup.tsx';
+import { CreateWebinarButton } from '@/components/virtual/zoom-webinars.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import {
   createStreamAction,
+  createZoomWebinarAction,
   linkZoomAction,
   revealStreamKeyAction,
   setAccessAction,
   setDeliveryAction,
+  setIngestAction,
   setStreamEnabledAction,
+  switchProviderAction,
   syncZoomAction,
 } from './actions.ts';
 
@@ -52,12 +56,12 @@ export default async function VirtualPage({ params }: Params) {
       })
     : [];
   const checkedIn = new Map(checkpoints.map((c) => [c.sessionId, c.checkedIn]));
-  // M6.9b: Zoom webinars per session, and whether the org's Zoom connection is live (members who
-  // can't read integrations see the section without the connection's state).
+  // M6.9b: Zoom webinars per session, and whether the org's Zoom connection is live (M6.10a: a
+  // query anyone who reads the event may run; null without the integrations module).
   const zoomSetup = await executeQuery(zoomSetupQuery, { eventId: ev.id }, data.ctx, ports);
   const zoomConnected = data.modules.has('integrations')
-    ? await executeQuery(listConnectionsQuery, {}, data.ctx, ports)
-        .then((cs) => cs.some((c) => c.connector === 'zoom' && c.status === 'active'))
+    ? await executeQuery(zoomConnectedQuery, {}, data.ctx, ports)
+        .then((r) => r.connected)
         .catch((err) => {
           if (isDomainError(err)) return null;
           throw err;
@@ -94,7 +98,7 @@ export default async function VirtualPage({ params }: Params) {
         <Alert tone="warning" title={t('providerOff')}>
           {t('providerOffHint')}
         </Alert>
-      ) : setup.provider === 'fake' ? (
+      ) : setup.providers[0]?.sandbox ? (
         <Alert tone="info" title={t('fakeProvider')} />
       ) : null}
       {!canEdit ? <Alert tone="info" title={t('readOnly')} /> : null}
@@ -178,10 +182,20 @@ export default async function VirtualPage({ params }: Params) {
                 cell: (s) =>
                   !s.stream ? (
                     <StatusPill tone="neutral" label={t('streamNone')} />
-                  ) : s.stream.enabled ? (
-                    <StatusPill tone="success" label={t('streamOn')} />
                   ) : (
-                    <StatusPill tone="waiting" label={t('streamOff')} />
+                    <span className="flex flex-col items-start gap-1">
+                      {s.stream.enabled ? (
+                        <StatusPill tone="success" label={t('streamOn')} />
+                      ) : (
+                        <StatusPill tone="waiting" label={t('streamOff')} />
+                      )}
+                      <span className="text-caption text-ink-2" data-testid="stream-provider">
+                        {t(`providerName.${s.stream.provider}`)}
+                      </span>
+                      {s.stream.activeIngest === 'backup' ? (
+                        <StatusPill tone="waiting" label={t('backupPill')} />
+                      ) : null}
+                    </span>
                   ),
               },
               { key: 'viewers', header: t('viewers'), align: 'end', cell: (s) => nf.format(s.viewers) },
@@ -204,7 +218,19 @@ export default async function VirtualPage({ params }: Params) {
                           enabled={s.stream?.enabled ?? false}
                           canEdit={canEdit}
                           canStream={canStream}
+                          providers={setup.providers.map((p) => ({ name: p.name }))}
+                          provider={s.stream?.provider ?? null}
+                          hasBackup={s.stream?.hasBackup ?? false}
+                          activeIngest={s.stream?.activeIngest ?? 'primary'}
                           create={createStreamAction.bind(null, org, event, s.sessionId)}
+                          switchProvider={switchProviderAction.bind(null, org, event, s.sessionId)}
+                          setIngest={setIngestAction.bind(
+                            null,
+                            org,
+                            event,
+                            s.sessionId,
+                            s.stream?.activeIngest === 'backup' ? 'primary' : 'backup',
+                          )}
                           toggle={setStreamEnabledAction.bind(
                             null,
                             org,
@@ -232,9 +258,11 @@ export default async function VirtualPage({ params }: Params) {
         <p className="m-0 text-caption text-ink-2">{tz('intro')}</p>
         {zoomConnected === false ? (
           <Alert tone="info" title={tz('notConnected')}>
-            <Link href={`/o/${org}/integrations`} className="underline underline-offset-2">
-              {tz('connectLink')}
-            </Link>
+            {can('integrations:manage') ? (
+              <Link href={`/o/${org}/integrations`} className="underline underline-offset-2">
+                {tz('connectLink')}
+              </Link>
+            ) : null}
           </Alert>
         ) : null}
         {!streaming ? (
@@ -251,13 +279,24 @@ export default async function VirtualPage({ params }: Params) {
                         <span className="text-caption text-ink-2">{when.format(s.startsAt)}</span>
                       </div>
                       {s.webinarId ? (
-                        <span className="text-caption text-ink-2" data-testid="zoom-counts">
-                          {tz('counts', { registrants: s.registrants, attendees: s.attendees })}
+                        <span className="flex flex-col items-end gap-1">
+                          <span className="text-caption text-ink-2" data-testid="zoom-counts">
+                            {tz('counts', { registrants: s.registrants, attendees: s.attendees })}
+                          </span>
+                          {s.created ? <StatusPill tone="success" label={t('webinarCreatedPill')} /> : null}
                         </span>
                       ) : (
                         <StatusPill tone="neutral" label={tz('notLinked')} />
                       )}
                     </div>
+                    {/* M6.10a: or let Yayatoh create the webinar through the Zoom connection. */}
+                    {canEdit && zoomConnected ? (
+                      <CreateWebinarButton
+                        title={s.title}
+                        linked={s.webinarId !== null}
+                        create={createZoomWebinarAction.bind(null, org, event, s.sessionId)}
+                      />
+                    ) : null}
                     <ZoomWebinarForm
                       title={s.title}
                       webinarId={s.webinarId}

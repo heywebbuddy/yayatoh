@@ -45,8 +45,18 @@ interface FakeParticipant {
   duration: number;
 }
 
+interface FakeWebinar {
+  registrants: FakeRegistrant[];
+  participants: FakeParticipant[];
+  /** M6.10a: set when the webinar was created through the API. */
+  topic?: string;
+  start_time?: string;
+  duration?: number;
+  timezone?: string;
+}
+
 interface ZoomData {
-  webinars: Record<string, { registrants: FakeRegistrant[]; participants: FakeParticipant[] }>;
+  webinars: Record<string, FakeWebinar>;
   /** Idempotency-Key → the answer it got. */
   keys: Record<string, unknown>;
 }
@@ -56,6 +66,14 @@ const webinar = (a: FakeAccount, id: string) => {
   const d = data(a);
   d.webinars[id] ??= { registrants: [], participants: [] };
   return d.webinars[id];
+};
+
+/** M6.10a: a webinar created at the fake account (topic, start, duration), or null. */
+export const zoomFakeWebinar = (a: FakeAccount, webinarId: string) => {
+  const w = data(a).webinars[webinarId];
+  return w?.topic
+    ? { topic: w.topic, startTime: w.start_time, duration: w.duration, timezone: w.timezone }
+    : null;
 };
 
 /** The fake account's registrants of one webinar (dev route and tests). */
@@ -90,6 +108,39 @@ export const zoomFakeProvider: FakeProvider = {
   seed: (): ZoomData => ({ webinars: {}, keys: {} }),
   handle(account, req: ProviderRequest): ProviderResponse {
     const d = data(account);
+    // M6.10a: create a webinar (`POST /users/me/webinars`, Zoom's create-webinar call). A retry
+    // with the same Idempotency-Key gets the same webinar back.
+    if (req.path === '/users/me/webinars' && req.method === 'POST') {
+      const key = req.idempotencyKey;
+      if (key && d.keys[key]) return { status: 201, body: d.keys[key] };
+      const body = (req.body ?? {}) as Record<string, unknown>;
+      const topic = typeof body.topic === 'string' ? body.topic.trim().slice(0, 200) : '';
+      const start = typeof body.start_time === 'string' ? new Date(body.start_time) : null;
+      const duration = typeof body.duration === 'number' ? body.duration : Number.NaN;
+      if (!topic || !start || Number.isNaN(start.getTime()) || !(duration >= 1 && duration <= 1440))
+        return { status: 400, body: { code: 300, message: 'Validation Failed.' } };
+      let id = '';
+      do id = String(80_000_000_000 + Math.floor(Math.random() * 9_999_999_999));
+      while (d.webinars[id]);
+      d.webinars[id] = {
+        registrants: [],
+        participants: [],
+        topic,
+        start_time: start.toISOString(),
+        duration,
+        timezone: typeof body.timezone === 'string' ? body.timezone : 'UTC',
+      };
+      const out = {
+        id: Number(id),
+        uuid: `wu_${crypto.randomUUID().replace(/-/g, '').slice(0, 22)}`,
+        topic,
+        start_time: start.toISOString(),
+        duration,
+        join_url: `https://zoom.example.test/j/${id}`,
+      };
+      if (key) d.keys[key] = out;
+      return { status: 201, body: out };
+    }
     const reg = /^\/webinars\/([0-9]{9,12})\/registrants$/.exec(req.path);
     if (reg?.[1] && req.method === 'POST') {
       const key = req.idempotencyKey;
@@ -214,7 +265,12 @@ export const zoomConnector = defineConnector({
   key: 'zoom',
   name: 'Zoom',
   providerConfigKey: 'zoom',
-  scopes: ['webinar:write:registrant:admin', 'report:read:list_webinar_participants:admin'],
+  scopes: [
+    'webinar:write:registrant:admin',
+    'report:read:list_webinar_participants:admin',
+    // M6.10a: create webinars from Yayatoh.
+    'webinar:write:webinar:admin',
+  ],
   entitlement: 'virtual',
   availability: 'general',
   fake: zoomFakeProvider,

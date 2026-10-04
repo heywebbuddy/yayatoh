@@ -1,9 +1,9 @@
 'use client';
 
-import { Alert, Button, Radio } from '@yayatoh/ui';
+import { Alert, Button, Radio, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
-import { startTransition, useActionState, useId } from 'react';
-import type { StreamKeyState } from '@/app/[locale]/o/[org]/e/[event]/virtual/actions.ts';
+import { startTransition, useActionState, useId, useState } from 'react';
+import type { StreamKeyState, SwitchState } from '@/app/[locale]/o/[org]/e/[event]/virtual/actions.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
 import { type FormState, INITIAL_FORM_STATE } from '@/lib/form-state.ts';
 
@@ -21,12 +21,19 @@ export const VIRTUAL_REASONS = [
   'views_per_hour',
   'invalid_token',
   'ticket_void',
+  // M6.10a
+  'provider_unavailable',
+  'no_backup_ingest',
+  'zoom_not_connected',
+  'zoom_failed',
+  'integrations_off',
+  'webinar_taken',
 ] as const;
 const known = (r: string | undefined): r is (typeof VIRTUAL_REASONS)[number] =>
   !!r && (VIRTUAL_REASONS as readonly string[]).includes(r);
 const ACCESS = ['in_person', 'virtual', 'both'] as const;
 
-function Outcome({ state, saved }: { state: FormState; saved: string }) {
+export function Outcome({ state, saved }: { state: FormState; saved: string }) {
   const te = useTranslations();
   return (
     <div aria-live="polite">
@@ -126,16 +133,31 @@ export function AccessForm({
   );
 }
 
-/** A session's stream: set it up, switch it off and on, show the encoder's key. */
+/** M6.10a: a provider a session may use (its translated label comes from `virtual.setup.providerName`). */
+export interface ProviderOption {
+  readonly name: string;
+}
+
+/**
+ * A session's stream: set it up (at the chosen provider), switch it off and on, move it to another
+ * provider (M6.10a), switch the encoder to the backup ingest (M6.10a RTMP overflow), show the
+ * encoder's key.
+ */
 export function StreamControls({
   title,
   hasStream,
   enabled,
   canEdit,
   canStream,
+  providers,
+  provider,
+  hasBackup,
+  activeIngest,
   create,
   toggle,
   reveal,
+  switchProvider,
+  setIngest,
 }: {
   title: string;
   hasStream: boolean;
@@ -143,31 +165,60 @@ export function StreamControls({
   canEdit: boolean;
   /** False on an in-person event or without a video provider. */
   canStream: boolean;
-  create: Act;
+  /** Every provider a session may use (the default first). */
+  providers: readonly ProviderOption[];
+  /** The stream's provider, or null without a stream. */
+  provider: string | null;
+  hasBackup: boolean;
+  activeIngest: 'primary' | 'backup';
+  create: Save;
   toggle: Act;
   reveal: (prev: StreamKeyState) => Promise<StreamKeyState>;
+  switchProvider: (prev: SwitchState, form: FormData) => Promise<SwitchState>;
+  setIngest: Act;
 }) {
   const t = useTranslations('virtual.setup');
   const id = useId();
+  const [chosen, setChosen] = useState(provider ?? providers[0]?.name ?? '');
   const [created, createAction, creating] = useActionState(create, INITIAL_FORM_STATE);
   const [toggled, toggleAction, toggling] = useActionState(toggle, INITIAL_FORM_STATE);
   const [key, revealAction, revealing] = useActionState(reveal, INITIAL_FORM_STATE as StreamKeyState);
+  const [moved, moveAction, moving] = useActionState(switchProvider, INITIAL_FORM_STATE as SwitchState);
+  const [ingested, ingestAction, ingesting] = useActionState(setIngest, INITIAL_FORM_STATE);
   if (!canEdit) return null;
+  const label = (name: string) => t(`providerName.${name}` as 'providerName.fake');
+  const choose = providers.length > 1;
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex flex-wrap gap-2">
-        {!hasStream ? (
-          <Button
-            type="button"
-            size="sm"
-            disabled={creating || !canStream}
-            aria-label={t('createStreamLabel', { title })}
-            onClick={() => startTransition(() => createAction())}
-          >
-            {t('createStream')}
-          </Button>
-        ) : (
-          <>
+      {!hasStream ? (
+        <form action={createAction} className="flex flex-col gap-2" noValidate>
+          {choose ? (
+            <Select
+              id={`${id}-new-provider`}
+              name="provider"
+              label={t('provider')}
+              aria-label={t('providerFor', { title })}
+              fieldSize="sm"
+              value={chosen}
+              onValueChange={setChosen}
+              disabled={!canStream}
+              options={providers.map((p) => ({ value: p.name, label: label(p.name), text: label(p.name) }))}
+            />
+          ) : null}
+          <div>
+            <Button
+              type="submit"
+              size="sm"
+              disabled={creating || !canStream}
+              aria-label={t('createStreamLabel', { title })}
+            >
+              {t('createStream')}
+            </Button>
+          </div>
+        </form>
+      ) : (
+        <>
+          <div className="flex flex-wrap gap-2">
             <Button
               type="button"
               size="sm"
@@ -189,13 +240,50 @@ export function StreamControls({
             >
               {t(enabled ? 'turnOff' : 'turnOn')}
             </Button>
-          </>
-        )}
-      </div>
+            {hasBackup ? (
+              <Button
+                type="button"
+                size="sm"
+                variant="secondary"
+                disabled={ingesting}
+                aria-label={t(activeIngest === 'backup' ? 'usePrimaryLabel' : 'useBackupLabel', { title })}
+                onClick={() => startTransition(() => ingestAction())}
+              >
+                {t(activeIngest === 'backup' ? 'usePrimary' : 'useBackup')}
+              </Button>
+            ) : null}
+          </div>
+          {choose ? (
+            <form action={moveAction} className="flex flex-wrap items-end gap-2" noValidate>
+              <Select
+                id={`${id}-provider`}
+                name="provider"
+                label={t('provider')}
+                aria-label={t('providerFor', { title })}
+                fieldSize="sm"
+                value={chosen}
+                onValueChange={setChosen}
+                options={providers.map((p) => ({ value: p.name, label: label(p.name), text: label(p.name) }))}
+              />
+              <Button
+                type="submit"
+                size="sm"
+                variant="secondary"
+                disabled={moving || chosen === provider}
+                aria-label={t('switchProviderLabel', { title })}
+              >
+                {t('switchProvider')}
+              </Button>
+            </form>
+          ) : null}
+        </>
+      )}
       <div id={`${id}-key`} aria-live="polite">
         {key.streamKey ? (
           <dl className="m-0 flex flex-col gap-1 rounded-control border border-line bg-surface-2 p-3 text-caption">
-            <dt className="font-semibold text-ink">{t('ingestUrl')}</dt>
+            <dt className="font-semibold text-ink">
+              {t(key.activeIngest === 'backup' ? 'backupIngestUrl' : 'ingestUrl')}
+            </dt>
             <dd className="m-0 break-all font-mono text-ink" data-testid="ingest-url">
               {key.ingestUrl}
             </dd>
@@ -209,6 +297,15 @@ export function StreamControls({
       </div>
       <Outcome state={created} saved={t('streamCreated', { title })} />
       <Outcome state={toggled} saved={t(enabled ? 'streamOnSaved' : 'streamOffSaved', { title })} />
+      <Outcome
+        state={moved}
+        saved={
+          moved.switched === false
+            ? t('providerSame', { title, provider: label(provider ?? chosen) })
+            : t('providerSwitched', { title, provider: label(provider ?? chosen) })
+        }
+      />
+      <Outcome state={ingested} saved={t(activeIngest === 'backup' ? 'backupOn' : 'primaryOn', { title })} />
       {key.code ? <Outcome state={key} saved="" /> : null}
     </div>
   );

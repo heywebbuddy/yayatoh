@@ -1170,6 +1170,13 @@
       "when": 1791077391000,
       "tag": "0166_striped_serpent_society",
       "breakpoints": true
+    },
+    {
+      "idx": 167,
+      "version": "7",
+      "when": 1791077391001,
+      "tag": "0167_demonic_boomerang",
+      "breakpoints": true
     }
   ]
 }

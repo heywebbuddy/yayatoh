@@ -1,6 +1,6 @@
 {
-  "id": "ddd1fc67-6a46-49f7-9508-fdc69805d810",
-  "prevId": "1f5a5cde-97eb-440b-a1f1-e2141b1fa748",
+  "id": "7ca19383-62ec-4aed-b722-39643fe0d3b6",
+  "prevId": "b564d5a5-4b2a-4dfb-8658-0370736547da",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -42929,15 +42929,15 @@
           "primaryKey": false,
           "notNull": true
         },
-        "tags": {
-          "name": "tags",
+        "tag_keys": {
+          "name": "tag_keys",
           "type": "text[]",
           "primaryKey": false,
           "notNull": true,
           "default": "'{}'::text[]"
         },
-        "tag_keys": {
-          "name": "tag_keys",
+        "tags": {
+          "name": "tags",
           "type": "text[]",
           "primaryKey": false,
           "notNull": true,

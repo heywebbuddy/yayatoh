@@ -9,12 +9,26 @@
  * viewing names one ticket and one session, so a token works for its attendee and session only.
  */
 
+/**
+ * Adapters by name (M6.10a): Mux and Cloudflare Stream, each with its fake (`fake` is the fake
+ * Mux of M6.9a). A session's stream names the adapter that serves it.
+ */
+export const VIDEO_PROVIDERS = ['fake', 'mux', 'fake_cloudflare', 'cloudflare'] as const;
+export type VideoProviderName = (typeof VIDEO_PROVIDERS)[number];
+/** The service behind an adapter (what the organizer chooses per session). */
+export type VideoProviderKind = 'mux' | 'cloudflare';
+
 /** What Yayatoh keeps about a stream: none of these is a secret. */
 export interface LiveStream {
   readonly providerStreamId: string;
   readonly playbackId: string;
   /** The RTMP(S) ingest address (public; the stream key is the secret part). */
   readonly ingestUrl: string;
+  /**
+   * M6.10a RTMP overflow: the provider's backup ingest for the same stream (same key, same
+   * playback), which the organizer switches the encoder to when the primary ingest fails.
+   */
+  readonly backupIngestUrl: string | null;
 }
 
 export interface PlaybackClaims {
@@ -26,7 +40,10 @@ export interface PlaybackClaims {
 }
 
 export interface VideoProvider {
-  readonly name: 'fake' | 'mux';
+  readonly name: VideoProviderName;
+  readonly kind: VideoProviderKind;
+  /** A fake (no account, no network): dev, CI and previews. */
+  readonly sandbox: boolean;
   /** A new live stream with a signed-only playback id. Retried calls with the same key reuse it. */
   createLiveStream(input: {
     readonly orgId: string;

@@ -1,6 +1,6 @@
 {
-  "id": "97dc3952-ca83-4b53-800f-d2ee0a2682a3",
-  "prevId": "4c717cac-e7ec-40a7-8535-b8c2e46f72ba",
+  "id": "3f7aa1e0-31bf-4483-8c1c-a84f664f52a4",
+  "prevId": "a794497c-a2b5-464d-8dfd-3112beea807e",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -15660,18 +15660,18 @@
           "primaryKey": false,
           "notNull": false
         },
-        "submission_key": {
-          "name": "submission_key",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
         "source": {
           "name": "source",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
           "default": "'marketplace'"
+        },
+        "submission_key": {
+          "name": "submission_key",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {
@@ -43399,15 +43399,15 @@
           "primaryKey": false,
           "notNull": true
         },
-        "tags": {
-          "name": "tags",
+        "tag_keys": {
+          "name": "tag_keys",
           "type": "text[]",
           "primaryKey": false,
           "notNull": true,
           "default": "'{}'::text[]"
         },
-        "tag_keys": {
-          "name": "tag_keys",
+        "tags": {
+          "name": "tags",
           "type": "text[]",
           "primaryKey": false,
           "notNull": true,

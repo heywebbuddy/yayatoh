@@ -9,6 +9,11 @@ import { type VideoProvider, VideoUnavailableError } from './port.ts';
  * exists (owner inbox): it refuses, and the console says streaming is unavailable.
  */
 export const MUX_INGEST_URL = 'rtmps://global-live.mux.com:443/app';
+/**
+ * M6.10a RTMP overflow: Mux's plain-RTMP ingest on port 5222 (for networks that block 443), the
+ * same stream and key. UNVERIFIED against the owner's account until it exists.
+ */
+export const MUX_BACKUP_INGEST_URL = 'rtmp://global-live.mux.com:5222/app';
 
 export function muxVideoProvider(opts: {
   /** `MUX_SIGNING_KEY_ID`. */
@@ -28,6 +33,8 @@ export function muxVideoProvider(opts: {
     new VideoUnavailableError('The Mux Video API is not enabled yet (owner inbox: Mux account)');
   return {
     name: 'mux',
+    kind: 'mux',
+    sandbox: false,
     async createLiveStream() {
       throw notYet();
     },

@@ -10,7 +10,7 @@ import { type AccessMode, effectiveAccess, mayWatch } from './domain/access.ts';
 import { beatVerdict, MAX_SEQ, minuteOf, PLAYBACK_TTL_MS } from './domain/watch.ts';
 import { HeartbeatDto, PlaybackDto, ViewerDto } from './dto.ts';
 import { MAX_TOKEN_LENGTH } from './provider/jwt.ts';
-import { videoProvider } from './provider/registry.ts';
+import { verifyPlaybackAny, videoProvider } from './provider/registry.ts';
 import { streams, views, watchMinutes } from './schema.ts';
 
 /**
@@ -127,9 +127,8 @@ export const startPlaybackCommand = tenantCommand({
       });
     const s = await streamOfTx(tx, input.sessionId);
     if (!s || s.eventId !== input.eventId || !s.enabled) throw new DomainError('not_found');
-    const provider = videoProvider();
-    if (provider.name !== s.provider)
-      throw new DomainError('invalid_state', 'Streaming provider changed', { reason: 'provider_changed' });
+    // M6.10a: the session's own provider (the organizer may have switched it).
+    const provider = videoProvider(s.provider);
     const [recent] = await tx
       .select({ n: sql<number>`count(*)::int` })
       .from(views)
@@ -162,6 +161,7 @@ export const startPlaybackCommand = tenantCommand({
       playbackUrl: provider.playbackUrl(s.playbackId, token),
       expiresAt,
       provider: provider.name,
+      sandbox: provider.sandbox,
     };
   },
 });
@@ -169,11 +169,7 @@ export const startPlaybackCommand = tenantCommand({
 /** The org a playback token was issued in (authentic and unexpired), so a heartbeat finds it. */
 export function playbackOrg(token: string, now: Date): string | null {
   if (token.length > MAX_TOKEN_LENGTH) return null;
-  try {
-    return videoProvider().verifyPlayback(token, now)?.orgId ?? null;
-  } catch {
-    return null;
-  }
+  return verifyPlaybackAny(token, now)?.claims.orgId ?? null;
 }
 
 /** `virtual.attended@1`: the ticket's first counted minute of a session (the virtual checkpoint). */
@@ -208,12 +204,20 @@ export const heartbeatCommand = tenantCommand({
   permission: 'public:virtual',
   handler: async ({ input, ctx, tx, emit }) => {
     const orgId = requireOrg(ctx);
-    const claims = videoProvider().verifyPlayback(input.token, ctx.now);
-    if (!claims || claims.orgId !== orgId) throw forbidden('invalid_token');
+    const signed = verifyPlaybackAny(input.token, ctx.now);
+    const claims = signed?.claims;
+    if (!signed || !claims || claims.orgId !== orgId) throw forbidden('invalid_token');
     const [view] = await tx.select().from(views).where(eq(views.id, claims.viewId)).for('update');
     if (!view) throw forbidden('invalid_token');
     const [stream] = await tx.select().from(streams).where(eq(streams.id, view.streamId));
-    if (!stream || stream.playbackId !== claims.playbackId) throw forbidden('invalid_token');
+    if (!stream) throw forbidden('invalid_token');
+    // M6.10a: the organizer moved the session to another provider. The viewing's token is
+    // authentic but plays the old stream: the player starts a new viewing (the ticket keeps its
+    // access and its minutes).
+    if (stream.playbackId !== claims.playbackId || stream.provider !== signed.provider.name)
+      throw new DomainError('invalid_state', 'The stream moved to another provider', {
+        reason: 'provider_changed',
+      });
     if (!stream.enabled)
       throw new DomainError('invalid_state', 'The stream is off', { reason: 'stream_off' });
     await assertStillWatchingTx(tx, view.eventId, view.ticketId);
@@ -235,6 +239,7 @@ export const heartbeatCommand = tenantCommand({
         ticketId: view.ticketId,
         viewId: view.id,
         minute,
+        provider: stream.provider,
       })
       .onConflictDoNothing()
       .returning({ id: watchMinutes.id });
