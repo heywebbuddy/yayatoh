@@ -16403,6 +16403,9 @@
     "selected": "Выбрано"
   },
   "emptyActions": {
+    "seeEvents": "Ваши мероприятия",
+    "eventHome": "На главную мероприятия",
+    "clearSearch": "Очистить поиск",
     "addRule": "Добавить правило",
     "scheduleReport": "Запланировать отчёт",
     "linkSheet": "Связать мероприятие",
@@ -16525,7 +16528,7 @@
     "protocolOidc": "OpenID Connect",
     "protocolOidcHint": "Любой поставщик, поддерживающий вход через OpenID Connect.",
     "name": "Название",
-    "nameHint": "Видно вашей команде, например «Acme Okta».",
+    "nameHint": "Видно вашей команде, например «Northwind Okta».",
     "samlSource": "Как вы хотите указать данные поставщика?",
     "sourceXml": "Вставить XML метаданных",
     "sourceUrl": "URL метаданных",

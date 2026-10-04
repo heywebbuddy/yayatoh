@@ -16403,6 +16403,9 @@
     "selected": "चुना गया"
   },
   "emptyActions": {
+    "seeEvents": "अपने इवेंट देखें",
+    "eventHome": "इवेंट होम पर जाएँ",
+    "clearSearch": "खोज साफ़ करें",
     "addRule": "नियम जोड़ें",
     "scheduleReport": "रिपोर्ट शेड्यूल करें",
     "linkSheet": "इवेंट लिंक करें",
@@ -16525,7 +16528,7 @@
     "protocolOidc": "OpenID Connect",
     "protocolOidcHint": "कोई भी प्रोवाइडर जो OpenID Connect साइन-इन का समर्थन करता है।",
     "name": "नाम",
-    "nameHint": "आपकी टीम को दिखाया जाता है, जैसे \"Acme Okta\"।",
+    "nameHint": "आपकी टीम को दिखाया जाता है, जैसे \"Northwind Okta\"।",
     "samlSource": "आप प्रोवाइडर का विवरण कैसे दर्ज करना चाहते हैं?",
     "sourceXml": "मेटाडेटा XML पेस्ट करें",
     "sourceUrl": "मेटाडेटा URL",

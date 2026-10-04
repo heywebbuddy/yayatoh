@@ -16403,6 +16403,9 @@
     "selected": "已选择"
   },
   "emptyActions": {
+    "seeEvents": "查看你的活动",
+    "eventHome": "前往活动首页",
+    "clearSearch": "清除搜索",
     "addRule": "添加规则",
     "scheduleReport": "安排报告",
     "linkSheet": "关联活动",
@@ -16525,7 +16528,7 @@
     "protocolOidc": "OpenID Connect",
     "protocolOidcHint": "任何支持 OpenID Connect 登录的提供商。",
     "name": "名称",
-    "nameHint": "向团队显示，例如“Acme Okta”。",
+    "nameHint": "向团队显示，例如“Northwind Okta”。",
     "samlSource": "你想如何输入提供商的详细信息？",
     "sourceXml": "粘贴元数据 XML",
     "sourceUrl": "元数据 URL",

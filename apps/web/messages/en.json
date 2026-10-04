@@ -16403,6 +16403,9 @@
     "selected": "Selected"
   },
   "emptyActions": {
+    "seeEvents": "See your events",
+    "eventHome": "Go to the event home",
+    "clearSearch": "Clear the search",
     "addRule": "Add a rule",
     "scheduleReport": "Schedule a report",
     "linkSheet": "Link an event",
@@ -16525,7 +16528,7 @@
     "protocolOidc": "OpenID Connect",
     "protocolOidcHint": "Any provider that supports OpenID Connect sign-in.",
     "name": "Name",
-    "nameHint": "Shown to your team, for example \"Acme Okta\".",
+    "nameHint": "Shown to your team, for example \"Northwind Okta\".",
     "samlSource": "How do you want to enter the provider's details?",
     "sourceXml": "Paste the metadata XML",
     "sourceUrl": "Metadata URL",

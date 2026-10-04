@@ -16403,6 +16403,9 @@
     "selected": "選択済み"
   },
   "emptyActions": {
+    "seeEvents": "イベントを見る",
+    "eventHome": "イベントのホームへ",
+    "clearSearch": "検索をクリア",
     "addRule": "ルールを追加",
     "scheduleReport": "レポートを予約",
     "linkSheet": "イベントを連携",
@@ -16525,7 +16528,7 @@
     "protocolOidc": "OpenID Connect",
     "protocolOidcHint": "OpenID Connect によるサインインに対応した任意のプロバイダー。",
     "name": "名前",
-    "nameHint": "チームに表示されます。例：「Acme Okta」",
+    "nameHint": "チームに表示されます。例：「Northwind Okta」",
     "samlSource": "プロバイダーの詳細をどのように入力しますか？",
     "sourceXml": "メタデータ XML を貼り付ける",
     "sourceUrl": "メタデータ URL",

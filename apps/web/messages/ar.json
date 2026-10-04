@@ -16403,6 +16403,9 @@
     "selected": "محدد"
   },
   "emptyActions": {
+    "seeEvents": "عرض فعالياتك",
+    "eventHome": "الانتقال إلى صفحة الفعالية الرئيسية",
+    "clearSearch": "امسح البحث",
     "addRule": "أضف قاعدة",
     "scheduleReport": "جدول تقريرًا",
     "linkSheet": "اربط فعالية",
@@ -16525,7 +16528,7 @@
     "protocolOidc": "OpenID Connect",
     "protocolOidcHint": "أي مزوّد يدعم تسجيل الدخول عبر OpenID Connect.",
     "name": "الاسم",
-    "nameHint": "يظهر لفريقك، مثل \"Acme Okta\".",
+    "nameHint": "يظهر لفريقك، مثل \"Northwind Okta\".",
     "samlSource": "كيف تريد إدخال تفاصيل المزوّد؟",
     "sourceXml": "لصق XML البيانات الوصفية",
     "sourceUrl": "URL البيانات الوصفية",

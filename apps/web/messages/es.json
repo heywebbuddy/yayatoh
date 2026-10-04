@@ -16403,6 +16403,9 @@
     "selected": "Seleccionado"
   },
   "emptyActions": {
+    "seeEvents": "Ver tus eventos",
+    "eventHome": "Ir al inicio del evento",
+    "clearSearch": "Borrar la búsqueda",
     "addRule": "Añadir una regla",
     "scheduleReport": "Programar un informe",
     "linkSheet": "Vincular un evento",
@@ -16525,7 +16528,7 @@
     "protocolOidc": "OpenID Connect",
     "protocolOidcHint": "Cualquier proveedor compatible con el inicio de sesión de OpenID Connect.",
     "name": "Nombre",
-    "nameHint": "Visible para tu equipo, por ejemplo \"Acme Okta\".",
+    "nameHint": "Visible para tu equipo, por ejemplo \"Northwind Okta\".",
     "samlSource": "¿Cómo quieres introducir los datos del proveedor?",
     "sourceXml": "Pegar el XML de metadatos",
     "sourceUrl": "URL de metadatos",

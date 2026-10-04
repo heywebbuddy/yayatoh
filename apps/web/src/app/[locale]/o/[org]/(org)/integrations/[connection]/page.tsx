@@ -3,8 +3,8 @@ import {
   connectorByKey,
   GOOGLE_SHEETS,
   isImporter,
-  linkedCountsQuery,
   isMarketingConnector,
+  linkedCountsQuery,
   mappingFields,
   openErrorCountQuery,
   SYNC_INTERVALS,
@@ -31,9 +31,9 @@ import {
 import { ConnectionPill, codeText, ERROR_CODES, IntegrationTabs, RunPill } from '../parts.tsx';
 import { AccountingSection } from './accounting.tsx';
 import { MappingForm } from './mapping-form.tsx';
+import { MarketingSection } from './marketing-section.tsx';
 import { SheetsSection } from './sheets-section.tsx';
 import { SlackPanel } from './slack-panel.tsx';
-import { MarketingSection } from './marketing-section.tsx';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('integrations');

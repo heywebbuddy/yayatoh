@@ -16403,6 +16403,9 @@
     "selected": "Geselecteerd"
   },
   "emptyActions": {
+    "seeEvents": "Je evenementen bekijken",
+    "eventHome": "Naar de evenementstartpagina",
+    "clearSearch": "Zoekopdracht wissen",
     "addRule": "Regel toevoegen",
     "scheduleReport": "Rapport inplannen",
     "linkSheet": "Evenement koppelen",
@@ -16525,7 +16528,7 @@
     "protocolOidc": "OpenID Connect",
     "protocolOidcHint": "Elke provider die inloggen via OpenID Connect ondersteunt.",
     "name": "Naam",
-    "nameHint": "Zichtbaar voor je team, bijvoorbeeld \"Acme Okta\".",
+    "nameHint": "Zichtbaar voor je team, bijvoorbeeld \"Northwind Okta\".",
     "samlSource": "Hoe wil je de gegevens van de provider invoeren?",
     "sourceXml": "Metadata-XML plakken",
     "sourceUrl": "Metadata-URL",

@@ -16403,6 +16403,9 @@
     "selected": "已選取"
   },
   "emptyActions": {
+    "seeEvents": "查看你的活動",
+    "eventHome": "前往活動首頁",
+    "clearSearch": "清除搜尋",
     "addRule": "新增規則",
     "scheduleReport": "排程報告",
     "linkSheet": "連結活動",
@@ -16525,7 +16528,7 @@
     "protocolOidc": "OpenID Connect",
     "protocolOidcHint": "任何支援 OpenID Connect 登入的提供者。",
     "name": "名稱",
-    "nameHint": "會顯示給團隊，例如「Acme Okta」。",
+    "nameHint": "會顯示給團隊，例如「Northwind Okta」。",
     "samlSource": "你想如何輸入提供者的詳細資料？",
     "sourceXml": "貼上中繼資料 XML",
     "sourceUrl": "中繼資料 URL",
