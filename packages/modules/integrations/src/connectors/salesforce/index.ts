@@ -1,7 +1,7 @@
 import {
   consentedContactsChangedTx,
   crmParticipationRowsTx,
-  withdrawEmailMarketingTx,
+  withdrawGrantedEmailMarketingTx,
   writeCrmPersonTx,
 } from '@yayatoh/crm';
 import type { TenantTx } from '@yayatoh/db';
@@ -184,7 +184,7 @@ function personPull(type: 'Contact' | 'Lead', fields: readonly SfField[]): PullS
         company: str(values.company),
       });
       if (meta.record.fields[OPT_OUT.key] === true)
-        await withdrawEmailMarketingTx(tx, ctx, id, 'salesforce:email_opt_out');
+        await withdrawGrantedEmailMarketingTx(tx, ctx, id, 'salesforce:email_opt_out');
       return { localId: id };
     },
   };

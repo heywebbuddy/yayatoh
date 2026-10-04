@@ -3,13 +3,13 @@ import { demoConnector } from './demo.ts';
 import { eventbriteConnector } from './eventbrite/index.ts';
 import { googleCalendarConnector, googleCalendarPersonalConnector } from './google-calendar.ts';
 import { googleSheetsConnector } from './google-sheets/index.ts';
+import { hubspotConnector } from './hubspot/index.ts';
+import { klaviyoConnector } from './klaviyo/index.ts';
+import { mailchimpConnector } from './mailchimp/index.ts';
 import { quickbooksConnector } from './quickbooks.ts';
 import { salesforceConnector } from './salesforce/index.ts';
 import { slackConnector } from './slack.ts';
 import { xeroConnector } from './xero.ts';
-import { hubspotConnector } from './hubspot/index.ts';
-import { klaviyoConnector } from './klaviyo/index.ts';
-import { mailchimpConnector } from './mailchimp/index.ts';
 
 /**
  * Every connector (M6.4a). M6.4b–d append theirs here (Eventbrite, Google Sheets, Zapier, Slack,

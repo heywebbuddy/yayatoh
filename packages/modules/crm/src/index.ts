@@ -30,7 +30,7 @@ export {
   consentedContactsChangedTx,
   contactsWithConsentTx,
   crmParticipationRowsTx,
-  withdrawEmailMarketingTx,
+  withdrawGrantedEmailMarketingTx,
   writeCrmPersonTx,
 } from './crm-connector-sync.ts';
 export { crmDataSubjects } from './data-subject.ts';

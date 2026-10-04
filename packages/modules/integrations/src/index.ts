@@ -92,39 +92,6 @@ export {
   demoRemoteUpdate,
 } from './connectors/demo.ts';
 export {
-  HUBSPOT_SEED_CONTACT,
-  HUBSPOT_SEED_OPTED_OUT,
-  hubspotFakeProvider,
-  hubspotRemoteContacts,
-  hubspotRemoteEdit,
-  hubspotRemoteEvents,
-  hubspotRemoteOptOut,
-} from './connectors/hubspot/fake.ts';
-export { hubspotConnector, parseHubspotContact } from './connectors/hubspot/index.ts';
-export {
-  KLAVIYO_LISTS,
-  KLAVIYO_SEED_BOUNCED,
-  klaviyoFakeProvider,
-  klaviyoRemoteMembers,
-  klaviyoRemoteSet,
-} from './connectors/klaviyo/fake.ts';
-export {
-  klaviyoApi,
-  klaviyoConnector,
-  klaviyoStatus,
-  parseKlaviyoProfile,
-} from './connectors/klaviyo/index.ts';
-export {
-  MAILCHIMP_LISTS,
-  MAILCHIMP_SEED_UNSUBSCRIBED,
-  mailchimpFakeProvider,
-  mailchimpRemoteMembers,
-  mailchimpRemoteSet,
-  subscriberHash,
-} from './connectors/mailchimp/fake.ts';
-export { mailchimpApi, mailchimpConnector, parseMailchimpMember } from './connectors/mailchimp/index.ts';
-export { integrationsContactOwner } from './contact-merge.ts';
-export {
   EB_EVENTS_PAGE,
   EB_ORDERS_PAGE,
   eventbriteFakeProvider,
@@ -188,9 +155,41 @@ export {
   sheetUrl,
   unlinkSheetCommand,
 } from './connectors/google-sheets/links.ts';
+export {
+  HUBSPOT_SEED_CONTACT,
+  HUBSPOT_SEED_OPTED_OUT,
+  hubspotFakeProvider,
+  hubspotRemoteContacts,
+  hubspotRemoteEdit,
+  hubspotRemoteEvents,
+  hubspotRemoteOptOut,
+} from './connectors/hubspot/fake.ts';
+export { hubspotConnector, parseHubspotContact } from './connectors/hubspot/index.ts';
 export { CONNECTORS, connectorByKey, offeredConnectors } from './connectors/index.ts';
+export {
+  KLAVIYO_LISTS,
+  KLAVIYO_SEED_BOUNCED,
+  klaviyoFakeProvider,
+  klaviyoRemoteMembers,
+  klaviyoRemoteSet,
+} from './connectors/klaviyo/fake.ts';
+export {
+  klaviyoApi,
+  klaviyoConnector,
+  klaviyoStatus,
+  parseKlaviyoProfile,
+} from './connectors/klaviyo/index.ts';
 // M6.4b: the Eventbrite importer and Google Sheets live sync.
 export { linkedLocalIdTx } from './connectors/links.ts';
+export {
+  MAILCHIMP_LISTS,
+  MAILCHIMP_SEED_UNSUBSCRIBED,
+  mailchimpFakeProvider,
+  mailchimpRemoteMembers,
+  mailchimpRemoteSet,
+  subscriberHash,
+} from './connectors/mailchimp/fake.ts';
+export { mailchimpApi, mailchimpConnector, parseMailchimpMember } from './connectors/mailchimp/index.ts';
 export {
   type FakeBooksJournal,
   QUICKBOOKS_FAKE_ACCOUNTS,
@@ -223,6 +222,7 @@ export {
 } from './connectors/salesforce/objects.ts';
 export { slackConnector } from './connectors/slack.ts';
 export { XERO_FAKE_ACCOUNTS, xeroConnector, xeroFakeProvider, xeroJournals } from './connectors/xero.ts';
+export { integrationsContactOwner } from './contact-merge.ts';
 export { integrationsDataSubjects } from './data-subject.ts';
 export * from './domain/calendar.ts';
 export * from './domain/mapping.ts';

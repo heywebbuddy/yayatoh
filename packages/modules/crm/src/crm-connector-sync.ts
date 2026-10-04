@@ -155,7 +155,7 @@ export async function writeCrmPersonTx(
  * A CRM says the person opted out of email: withdraw their email marketing consent here (only
  * when it is currently granted, so a repeat writes nothing). Returns whether it withdrew.
  */
-export async function withdrawEmailMarketingTx(
+export async function withdrawGrantedEmailMarketingTx(
   tx: TenantTx,
   ctx: Ctx,
   contactId: string,
