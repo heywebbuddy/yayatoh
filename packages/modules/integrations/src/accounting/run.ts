@@ -132,6 +132,7 @@ export async function chartOfAccounts(
       origin: originStamp(connectionId),
       now: ctx.now,
       scope: {},
+      read: (fn) => withTenant(ctx, fn),
     };
     const accounts = await connector.accounting.listAccounts(io);
     return accounts.sort((a, b) => (a.code ?? a.name).localeCompare(b.code ?? b.name));

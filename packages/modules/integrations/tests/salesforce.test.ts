@@ -253,7 +253,14 @@ describe('the connector against the fake org', () => {
   const contacts = salesforceConnector.objects.find((o) => o.key === 'contacts');
   const io = (a: FakeAccount) => {
     const client = clientFor(a);
-    const sio: SyncIO = { client, origin: originStamp(a.connectionId), now: new Date(), scope: {} };
+    const sio: SyncIO = {
+      client,
+      origin: originStamp(a.connectionId),
+      now: new Date(),
+      scope: {},
+      // Batch 3m merge: M6.9b's tenant read; the Salesforce connector never uses it.
+      read: () => Promise.reject(new Error('no tenant reads in this unit test')),
+    };
     return { client, sio };
   };
 

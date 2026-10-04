@@ -585,6 +585,8 @@ describe('daily summary journals (M6.5d, P6-6)', () => {
       origin: 'x',
       now: new Date(),
       scope: {},
+      // Batch 3m merge: M6.9b's tenant read on SyncIO; posting a journal never uses it.
+      read: () => Promise.reject(new Error('no tenant reads when posting a journal')),
     };
     const map = fakeAccountMap('quickbooks');
     const j = {

@@ -1,5 +1,5 @@
 import { defineSerializer } from '@yayatoh/contracts';
-import type { TenantTx } from '@yayatoh/db';
+import { type TenantTx, withTenant } from '@yayatoh/db';
 import { type CommandPorts, type Ctx, DomainError, executeQuery } from '@yayatoh/kernel';
 import { importedOrdersSummaryTx } from '@yayatoh/orders';
 import { tenantQuery } from '@yayatoh/platform';
@@ -118,6 +118,7 @@ export async function eventbritePreview(
     origin: originStamp(connectionId),
     now: ctx.now,
     scope: {},
+    read: (fn) => withTenant(ctx, fn),
   };
   const [events, classes, orders] = eventbriteConnector.objects.map((o) => o.pull);
   if (!events || !classes || !orders) throw new DomainError('internal');

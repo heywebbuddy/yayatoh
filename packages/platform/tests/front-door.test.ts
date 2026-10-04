@@ -282,6 +282,10 @@ describe('who serves a request', () => {
       '/conference-hub-icon-192.png',
       '/hub-sw.js',
       '/api/calendar/org~reg~1~sig.ics',
+      // Batch 3m merge: M6.9b's CE certificate links and their public verification.
+      '/certificates/harbor-arts/abc~sig',
+      '/certificates/harbor-arts/verify',
+      '/ar/certificates/harbor-arts/verify/ABCDE-12345',
     ]) {
       expect(isPlatformPath(new URL(p, 'https://x').pathname) || decide(p).owner === 'next').toBe(true);
       expect(decide(p, flags(), { legacy: true })).toEqual({
@@ -308,6 +312,7 @@ describe('who serves a request', () => {
     expect(isPlatformPath('/giving-screens')).toBe(false);
     expect(isPlatformPath('/ordersx')).toBe(false);
     expect(isPlatformPath('/conference-hub-sw.jsx')).toBe(false);
+    expect(isPlatformPath('/certificatesx')).toBe(false);
   });
 });
 

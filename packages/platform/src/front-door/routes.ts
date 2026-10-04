@@ -224,6 +224,10 @@ export const PLATFORM_PREFIXES: readonly string[] = [
   // Batch 3k merge: a buyer's order link (`/orders/{token}`: M5.2b's schedule and M5.10a's
   // conference hub with its manifest). The legacy app has no `/orders` page.
   '/orders',
+  // Batch 3m merge: M6.9b's CE certificates (`/certificates/{org}/{token}`, the PDF or its HTML
+  // alternative) and their public verification (`/certificates/{org}/verify`, `…/verify/{code}`).
+  // The legacy app has no certificates.
+  '/certificates',
 ];
 
 /**
