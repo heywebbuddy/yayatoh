@@ -189,8 +189,10 @@ test.describe('live giving screen (M4.8d)', () => {
     });
     await expect(total(screen)).toHaveText('$1,025.00', { timeout: 3_000 });
     // An anonymous donor can't opt in at all (the box is gone).
+    // Batch 3k merge: a surname no message catalog holds (the page ships the catalog, and 3i's
+    // webhook keys contain "Secret"), so the check below still catches any part of the name.
     const eve = await giveFromPhone(browser, give, {
-      name: 'Eve Secret',
+      name: 'Eve Zephyrine',
       choice: '50',
       displayAs: 'Give anonymously',
       onScreen: false,
@@ -199,7 +201,7 @@ test.describe('live giving screen (M4.8d)', () => {
     await expect(screen.getByTestId('screen-gifts')).toHaveText('3 gifts');
     await expect(thanks(screen).getByRole('listitem')).toHaveText(['Ada Lovelace']);
     const html = await screen.content();
-    for (const secret of ['Bo Quiet', 'Eve Secret', 'Secret', '@example.test'])
+    for (const secret of ['Bo Quiet', 'Eve Zephyrine', 'Zephyrine', '@example.test'])
       expect(html).not.toContain(secret);
     await expectAccessible(screen);
 
