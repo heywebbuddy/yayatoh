@@ -20,8 +20,16 @@ const KEEP_ALIVE_MS = 600_000;
  * Needs a migrated, seeded database and YAYATOH_DEV_AUTH=1 (dev personas).
  * `PW_CHROMIUM_PATH` points at a preinstalled browser when the bundled one isn't available.
  */
+/**
+ * Visual baselines are per renderer: the bundled Chromium and the headless shell (what CI runs)
+ * rasterize text differently, which is a few percent of a snapshot's pixels with no layout change
+ * (batch 3u merge). Both sets are committed, so neither environment needs a weaker threshold.
+ */
+const RENDERER = /headless_shell/.test(process.env.PW_CHROMIUM_PATH ?? '') ? 'shell' : 'chromium';
+
 export default defineConfig({
   testDir: './e2e',
+  snapshotPathTemplate: `{testDir}/{testFileName}-snapshots/{arg}-${RENDERER}-{projectName}-{platform}{ext}`,
   // Migrates the synthetic legacy dataset (M2.2b) the legacy-migration spec checks.
   globalSetup: './e2e/global-setup.ts',
   fullyParallel: true,
