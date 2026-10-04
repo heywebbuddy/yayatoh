@@ -114,12 +114,32 @@ async function ledger(eventIds?: string[]) {
       select sum(case when j.kind in ('sale', 'organizer_collected_sale') then (j.memo->>'grossMinor')::bigint end)::text as gross,
         sum(case when j.kind = 'refund' then (j.memo->>'amountMinor')::bigint end)::text as refunds
       from payments.journal_entries j where true ${scope}`);
+    // An organizer_mor refund that gives back no platform fee posts nothing (roadmap §5.3: the money
+    // moves on the organizer's own account), so the journal cannot hold it; it is counted from the
+    // refund rows, and only those (batch 3v merge: the fixture's M4.8f gift refund is one).
+    const [o] = await tx.execute<{ refunds: string | null }>(sql`
+      select sum(r.amount_minor)::text as refunds from orders.refunds r
+      join orders.orders o on o.id = r.order_id
+      where r.status = 'succeeded' and o.funds_flow = 'organizer_mor' and r.fee_refunded_minor = 0
+        ${
+          eventIds
+            ? sql`and o.event_id = any(array[${sql.join(
+                eventIds.map((id) => sql`${id}::uuid`),
+                sql`, `,
+              )}])`
+            : sql``
+        }
+        and not exists (select 1 from payments.journal_entries j where j.kind = 'refund' and j.memo->>'refundId' = r.id::text)`);
     const [f] = await tx.execute<{ fees: string | null }>(sql`
       select (-sum(p.amount_minor))::text as fees from payments.postings p
       join payments.journal_entries j on j.id = p.journal_id
       where p.account in ('platform:platform_fee_deferred', 'platform:platform_fee_revenue')
         and j.kind in ('sale', 'refund', 'organizer_collected_sale') ${scope}`);
-    return { gross: Number(g?.gross ?? 0), refunds: Number(g?.refunds ?? 0), fees: Number(f?.fees ?? 0) };
+    return {
+      gross: Number(g?.gross ?? 0),
+      refunds: Number(g?.refunds ?? 0) + Number(o?.refunds ?? 0),
+      fees: Number(f?.fees ?? 0),
+    };
   });
 }
 
