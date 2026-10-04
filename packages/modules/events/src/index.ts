@@ -166,6 +166,7 @@ export {
 } from './domain/short-code.ts';
 export * from './dto.ts';
 export * from './dto-content.ts';
+export { eventListingFactsTx } from './listing-facts.ts';
 export {
   addOccurrencesCommand,
   addRecurringOccurrencesCommand,

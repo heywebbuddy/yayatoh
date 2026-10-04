@@ -21,7 +21,8 @@
     "contact-stats": "node scripts/contact-stats.ts",
     "irs-exempt-list": "node scripts/irs-exempt-list.ts",
     "printnode": "node scripts/printnode.ts",
-    "agency-v2": "node scripts/agency-v2.ts"
+    "agency-v2": "node scripts/agency-v2.ts",
+    "search:reindex": "node scripts/search-reindex.ts"
   },
   "dependencies": {
     "@yayatoh/agency": "workspace:*",

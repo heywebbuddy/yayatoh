@@ -1,4 +1,15 @@
 import { type AdminSql, adminClient, closePools } from '@yayatoh/db/testing';
+import {
+  catchUpListings,
+  catchUpSearchIndex,
+  fakeMeilisearch,
+  meilisearchIndex,
+  parseSearchV2Params,
+  popularListings,
+  reindexAll,
+  searchMarketplace,
+  similarListings,
+} from '@yayatoh/marketplace';
 import { keyVault } from '@yayatoh/platform';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import {
@@ -131,5 +142,38 @@ describe('canaryOrg (roadmap §9 canary fixture)', () => {
     expect(canary.pushAddresses.length).toBeGreaterThan(0);
     for (const to of canary.pushAddresses)
       expect(findCanaries(to).map((h) => h.column)).toEqual(['notifications.push_tokens.token']);
+  });
+
+  it('M6.14a: the marketplace search index and its answers carry no canary (every indexed field)', async () => {
+    await catchUpListings(canary.orgId);
+    const ix = fakeMeilisearch();
+    const index = meilisearchIndex({ ...ix.config, fetch: ix.fetch });
+    await index.setup();
+    await catchUpSearchIndex(canary.orgId, { index: () => index });
+    const [own] = await admin.unsafe<{ n: number }[]>(
+      `select count(*)::int as n from marketplace.public_listings where org_id = $1 and on_marketplace`,
+      [canary.orgId],
+    );
+    const docs = [...ix.documents.values()];
+    // The check is live: the canary org's marketplace listings are all in the index.
+    expect(docs.length).toBe(own?.n ?? -1);
+    expect(docs.length).toBeGreaterThan(0);
+    const now = new Date();
+    const slug = String(docs[0]?.slug);
+    const answers = JSON.stringify([
+      await searchMarketplace(index, parseSearchV2Params({ q: String(docs[0]?.name) }), now),
+      await similarListings(index, slug, now),
+      await popularListings(index, now),
+    ]);
+    expect(answers).toContain(slug);
+    // A full reindex reads the same public read model.
+    const all = fakeMeilisearch();
+    await reindexAll(meilisearchIndex({ ...all.config, fetch: all.fetch }), now);
+    const leaks = [
+      ...leaksIn('search-index', JSON.stringify(docs), { kind: 'public' }),
+      ...leaksIn('search-answers', answers, { kind: 'public' }),
+      ...leaksIn('search-reindex', JSON.stringify([...all.documents.values()]), { kind: 'public' }),
+    ];
+    expect(formatLeaks(leaks)).toBe('no canary leaks');
   });
 });

@@ -11,6 +11,7 @@ export {
   reviewerDisplayName,
 } from './domain/eligibility.ts';
 export * from './dto.ts';
+export { REVIEW_VISIBILITY_EVENTS, visibleReviewCountTx } from './popularity.ts';
 export { privateColumns } from './private-columns.ts';
 export {
   authorKey,

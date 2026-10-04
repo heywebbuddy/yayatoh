@@ -978,3 +978,9 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
   Confirm, or ask for corrections to be posted on the day they are noticed instead.
 - [ ] **Xero multi-currency:** Xero manual journals take the base currency only; days in other
   currencies wait in the errors inbox (`currency_unsupported`). Say if you need multi-currency Xero.
+## M6.14a — marketplace search (2026-10-03, pending owner)
+- [ ] **Meilisearch Cloud account** (P6-11; ~$30/mo starter, UNVERIFIED): create a project, then put `MEILISEARCH_URL`, `MEILISEARCH_ADMIN_KEY` (worker: writes the index) and `MEILISEARCH_SEARCH_KEY` (web: a search-only key) in Doppler (`MEILISEARCH_INDEX` optional, default `yayatoh_listings`) and run `pnpm --filter @yayatoh/worker search:reindex` once. Until then search v2 is off in production (`/search` sends visitors to `/events`, which keeps the M1.11 Postgres search); dev, CI and previews use the in-memory Meilisearch fake. The adapter follows the documented HTTP API (index, settings, documents, tasks, multi-search, `_geoRadius`, `_geoPoint`); it is UNVERIFIED against a real project.
+- [ ] **Popularity signal** for "popular events" and the popular sort: the organizer's count of reviews visible on its public event pages (public data only, D13/P6-11; no sales figures). Confirm, or name another public signal.
+- [ ] **Location precision:** the index stores a venue's coordinates rounded to 3 decimals (~100 m), for public events with a venue only (online events have none). Confirm.
+- [ ] **Price bands** (facet): free, under 25, 25–100, over 100, in the listing's own currency (coarse; no cross-currency conversion). Confirm the bands.
+- [ ] **Who moderates listings:** admins and support (`listings` staff action). Hiding takes a listing off the marketplace and its search only; the organizer's own tenant site keeps it, and the organizer is not notified yet. Confirm both.

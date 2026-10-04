@@ -34,7 +34,7 @@ import { registrationResumeMailer } from '@yayatoh/forms';
 import { invitationMailer as guestInvitationMailer } from '@yayatoh/guests';
 import { slackAlertsSubscriber } from '@yayatoh/integrations';
 import { exhibitorLeadCountsTx } from '@yayatoh/leads';
-import { listingsProjector } from '@yayatoh/marketplace';
+import { listingsProjector, searchIndexer, searchIndexFromEnv } from '@yayatoh/marketplace';
 import { programMediaCleaner, speakerPhotoApprover, subjectErasedMediaCleaner } from '@yayatoh/media';
 import {
   announcementMailer,
@@ -218,6 +218,8 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     // M6.1b: sessions attended and campaigns opened feed the contact stats.
     contactSignalsSubscriber(),
     listingsProjector({ onChange: (orgId) => revalidatePublicCache(appOrigin, orgId, secret) }),
+    // M6.14a: the marketplace search index follows the projection (Meilisearch once configured).
+    ...searchSubscribers(env, (orgId) => revalidatePublicCache(appOrigin, orgId, secret)),
     // M3.1: metric snapshots and time series, and the analytics sink (Postgres until M6.2).
     // M3.2: each projected change pings the event's Command Center (no figures on the channel).
     metricsProjector({
@@ -257,6 +259,19 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     // M6.8b: a detached client is marked on its agency's side (publications, pending fan-outs).
     agencyDetachSubscriber,
   ];
+}
+
+/**
+ * M6.14a: the search indexer, only for a real Meilisearch. The dev/CI fake lives in the web
+ * process (its dev drain feeds it), so the worker leaves those events to it.
+ */
+export function searchSubscribers(
+  env: NodeJS.ProcessEnv,
+  onChange: (orgId: string) => Promise<void>,
+): Subscriber[] {
+  const index = searchIndexFromEnv(env);
+  if (!index || index.inMemory) return [];
+  return [searchIndexer({ index: () => index, onChange })];
 }
 
 /** M6.1a: the modules that write the person timeline (the web's dev drain runs the same list). */

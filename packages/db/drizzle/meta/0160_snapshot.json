@@ -1,6 +1,6 @@
 {
-  "id": "5ead6fab-9c6b-4ea3-9a19-0d0533dddd0d",
-  "prevId": "4d2f3834-1c2b-4478-b4c7-b5bf5f33616c",
+  "id": "8e2f7b2f-7244-4f0b-997c-305ac50f1f4e",
+  "prevId": "124259ed-789c-4db9-88b7-a31fe162a0a2",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -15660,18 +15660,18 @@
           "primaryKey": false,
           "notNull": false
         },
-        "submission_key": {
-          "name": "submission_key",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
         "source": {
           "name": "source",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
           "default": "'marketplace'"
+        },
+        "submission_key": {
+          "name": "submission_key",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {

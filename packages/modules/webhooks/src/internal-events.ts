@@ -99,6 +99,8 @@ export const INTERNAL_EVENTS: Readonly<Record<string, InternalReason>> = {
   'leads.captured@1': 'personal',
   'leads.email_withdrawn@1': 'personal',
   'marketing.order_attributed@1': 'workflow',
+  // M6.14a: the search index follows the listings projection.
+  'marketplace.listing_changed@1': 'workflow',
   'marketplace.site_settings_changed@1': 'platform',
   'media.asset_added@1': 'content',
   'media.asset_removed@1': 'content',

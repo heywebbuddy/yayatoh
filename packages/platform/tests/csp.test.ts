@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { buildCsp, generateNonce, parseCsp } from '../src/security/csp.ts';
-import { pageTypeOf, securityHeaders, stripLocale } from '../src/security/headers.ts';
+import { geolocationAllowed, pageTypeOf, securityHeaders, stripLocale } from '../src/security/headers.ts';
 
 const nonce = generateNonce();
 
@@ -117,6 +117,17 @@ describe('page types and headers', () => {
     const token = securityHeaders('token', { nonce });
     expect(token['referrer-policy']).toBe('no-referrer');
     expect(token['strict-transport-security']).toBeUndefined();
+
+    expect(console['permissions-policy']).toContain('geolocation=()');
+    // M6.14a: only a public page that asks for it may use the visitor's location.
+    expect(securityHeaders('public', { nonce, geolocation: true })['permissions-policy']).toContain(
+      'geolocation=(self)',
+    );
+    expect(securityHeaders('console', { nonce, geolocation: true })['permissions-policy']).toContain(
+      'geolocation=()',
+    );
+    expect(geolocationAllowed('/search')).toBe(true);
+    expect(geolocationAllowed('/events')).toBe(false);
 
     const scan = securityHeaders('scan', { nonce });
     expect(scan['permissions-policy']).toContain('camera=(self)');

@@ -53,4 +53,10 @@ describe('staff roles (M1.3e/f)', () => {
     expect(staffCan('support', 'categories')).toBe(false);
     expect(staffCan('finance', 'categories')).toBe(false);
   });
+
+  it('M6.14a: admins and support moderate marketplace listings; finance does not', () => {
+    expect(staffCan('admin', 'listings')).toBe(true);
+    expect(staffCan('support', 'listings')).toBe(true);
+    expect(staffCan('finance', 'listings')).toBe(false);
+  });
 });
