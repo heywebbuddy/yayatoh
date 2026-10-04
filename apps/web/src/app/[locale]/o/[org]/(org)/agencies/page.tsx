@@ -1,3 +1,4 @@
+import { agencyV2Enabled, clientAgencyOpsQuery } from '@yayatoh/agency-ops';
 import { executeQuery } from '@yayatoh/kernel';
 import { listAgencyGrantsQuery, roleCan } from '@yayatoh/tenancy';
 import { Alert, Button, buttonClass, EmptyState, PageHeader, StatusPill, Table } from '@yayatoh/ui';
@@ -8,9 +9,15 @@ import { Link } from '@/i18n/navigation.ts';
 import { formatDate } from '@/lib/format.ts';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
-import { grantAgencyAction, revokeAgencyAction, setAgencyFinanceAction } from './actions.ts';
+import {
+  detachAgencyAction,
+  grantAgencyAction,
+  revokeAgencyAction,
+  setAgencyFinanceAction,
+} from './actions.ts';
 import { AgencyBillingSection } from './agency-billing-section.tsx';
 import { AgencyGrantForm } from './agency-grant-form.tsx';
+import { AgencyOpsSections } from './agency-ops-sections.tsx';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('agencies');
@@ -27,10 +34,10 @@ export default async function AgenciesPage({
   searchParams,
 }: {
   params: Promise<{ locale: string; org: string }>;
-  searchParams: Promise<{ revoked?: string; billing?: string }>;
+  searchParams: Promise<{ revoked?: string; billing?: string; detached?: string }>;
 }) {
   const { locale, org } = await params;
-  const { revoked, billing } = await searchParams;
+  const { revoked, billing, detached } = await searchParams;
   setRequestLocale(locale);
   const data = await loadConsole(org);
   const t = await getTranslations('agencies');
@@ -58,12 +65,40 @@ export default async function AgenciesPage({
     d ? formatDate(d.toISOString(), f, { year: 'numeric', month: 'short', day: 'numeric' }) : '';
   const nameOf = (g: { agencyName: string | null }) => g.agencyName ?? t('unknownAgency');
   const justRevoked = revoked ? grants.revoked.find((g) => g.id === revoked) : undefined;
+  // M6.8b: agency v2 (detach, team and day-of people, received kits) behind its switch.
+  const v2 = await agencyV2Enabled();
+  const to = await getTranslations('agencyOps');
+  const justDetached =
+    v2 && detached
+      ? (await executeQuery(clientAgencyOpsQuery, {}, data.ctx, ports)).detachments.find(
+          (d) => d.grantId === detached,
+        )
+      : undefined;
+  const agencyNames = new Map(
+    [...grants.live, ...grants.revoked].map(
+      (g) => [g.agencyOrgId, g.agencyName ?? t('unknownAgency')] as const,
+    ),
+  );
   return (
     <>
       <PageHeader title={t('title')} description={t('subtitle')} />
       {justRevoked ? <Alert tone="success" title={t('revoked', { agency: nameOf(justRevoked) })} /> : null}
       {billing === 'accepted' || billing === 'ended' ? (
         <Alert tone="success" title={tab(billing === 'accepted' ? 'accepted' : 'ended')} />
+      ) : null}
+      {justDetached ? (
+        <Alert
+          tone="success"
+          title={to('client.detached', {
+            agency: agencyNames.get(justDetached.agencyOrgId) ?? t('unknownAgency'),
+          })}
+        >
+          {to('client.detachedKept', {
+            templates: justDetached.templatesKept,
+            kits: justDetached.brandKitsKept,
+            campaigns: justDetached.campaignsKept,
+          })}
+        </Alert>
       ) : null}
       {manage ? <AgencyGrantForm action={grantAgencyAction.bind(null, org)} /> : null}
       <Table
@@ -119,6 +154,18 @@ export default async function AgenciesPage({
                           {t(g.finance ? 'financeDisable' : 'financeEnable')}
                         </Button>
                       </StepUpForm>
+                      {v2 ? (
+                        <StepUpForm action={detachAgencyAction.bind(null, org, g.id)}>
+                          <Button
+                            type="submit"
+                            variant="secondary"
+                            size="sm"
+                            aria-label={to('client.detachNamed', { agency: nameOf(g) })}
+                          >
+                            {to('client.detach')}
+                          </Button>
+                        </StepUpForm>
+                      ) : null}
                       <StepUpForm action={revokeAgencyAction.bind(null, org, g.id)}>
                         <Button
                           type="submit"
@@ -145,6 +192,18 @@ export default async function AgenciesPage({
         manage={roleCan(data.role, 'billing:manage')}
         finance={roleCan(data.role, 'finance:read')}
       />
+      {v2 ? (
+        <AgencyOpsSections
+          org={org}
+          ctx={data.ctx}
+          agencyNames={agencyNames}
+          manage={manage}
+          canApply={roleCan(data.role, 'org:update')}
+          locale={locale}
+          timeZone={data.org.timezone}
+          currency={data.org.currency}
+        />
+      ) : null}
       {grants.revoked.length > 0 ? (
         <Table
           caption={t('historyTitle')}

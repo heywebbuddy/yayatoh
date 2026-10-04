@@ -58,4 +58,6 @@ export const privateColumns = columnPrivacy('tenancy', {
   // M6.3a: daily API key usage counts (no text columns); sandbox links: the sandbox's name and
   // address are shown to the parent org's admins only.
   sandbox_orgs: { name: internal(), slug: internal() },
+  // M6.8b: agency team and day-of grants (vocabularies only; people are uuids).
+  agency_staff_grants: { kind: 'vocab', role: 'vocab' },
 });

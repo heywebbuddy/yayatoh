@@ -280,3 +280,6 @@ export const listTemplatesQuery = tenantQuery({
         .orderBy(asc(eventTemplates.name))
     ).map(toTemplateDto),
 });
+
+/** M6.8b: the DTO of a template row (copies made for agency clients). */
+export const templateDtoOf = (r: typeof eventTemplates.$inferSelect): TemplateDto => toDto(r);

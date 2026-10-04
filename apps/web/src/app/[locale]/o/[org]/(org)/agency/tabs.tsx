@@ -10,17 +10,26 @@ const TABS = [
   { key: 'events', path: '/events' },
   { key: 'marketing', path: '/marketing' },
   { key: 'reports', path: '/reports' },
-  // M6.8a (flag `agency_v2`): agency billing and the commission statement.
+] as const;
+
+/**
+ * Agency v2, shown while the platform switch `agency_v2` is on: M6.8a's billing and commission
+ * statement, M6.8b's operations.
+ */
+const V2_TABS = [
   { key: 'billing', path: '/billing' },
+  { key: 'library', path: '/library' },
+  { key: 'campaigns', path: '/campaigns' },
+  { key: 'team', path: '/team' },
 ] as const;
 
 /** Clients | Events | Marketing | Reports (vision §12). */
-export function AgencyTabs({ base, billing = false }: { base: string; billing?: boolean }) {
+export function AgencyTabs({ base, v2 = false }: { base: string; v2?: boolean }) {
   const t = useTranslations('agency');
   const pathname = usePathname();
   return (
     <Tabs label={t('tabs')}>
-      {TABS.filter((tab) => billing || tab.key !== 'billing').map((tab) => {
+      {[...TABS, ...(v2 ? V2_TABS : [])].map((tab) => {
         const active = tab.path ? pathname.endsWith(`/agency${tab.path}`) : pathname.endsWith('/agency');
         return (
           <Link

@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@yayatoh/agency": "workspace:*",
+    "@yayatoh/agency-ops": "workspace:*",
     "@yayatoh/ai": "workspace:*",
     "@yayatoh/alerts": "workspace:*",
     "@yayatoh/analytics": "workspace:*",

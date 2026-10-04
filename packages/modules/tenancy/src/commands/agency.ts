@@ -1,5 +1,5 @@
 import { isUniqueViolation, type TenantTx, withoutTenant, withTenant } from '@yayatoh/db';
-import { type Ctx, DomainError, requireOrg } from '@yayatoh/kernel';
+import { type Ctx, DomainError, type DomainEvent, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { and, desc, eq, isNull, sql } from 'drizzle-orm';
 import { z } from 'zod';
@@ -176,6 +176,42 @@ export const updateAgencyGrantCommand = tenantCommand({
 });
 
 /**
+ * Revoke a grant of the current (client) org inside its transaction (idempotent), emitting
+ * `tenancy.agency_grant_revoked@1` once. Used by the revoke command and by M6.8b's detach and
+ * handover. The agency's members lose access on their next request.
+ */
+export async function revokeAgencyGrantTx(
+  tx: TenantTx,
+  grantId: string,
+  revokedBy: string,
+  now: Date,
+  emit: (e: DomainEvent) => void,
+): Promise<AgencyGrantDto> {
+  const [current] = await tx
+    .select()
+    .from(orgAccessGrants)
+    .where(eq(orgAccessGrants.id, grantId))
+    .for('update');
+  if (!current) throw new DomainError('not_found', 'Agency access not found');
+  const profiles = await agencyProfilesTx(tx, [current.agencyOrgId]);
+  if (current.revokedAt) return toDto(current, profiles);
+  const [row] = await tx
+    .update(orgAccessGrants)
+    .set({ revokedAt: now, revokedBy, updatedAt: now })
+    .where(eq(orgAccessGrants.id, current.id))
+    .returning();
+  if (!row) throw new DomainError('internal');
+  emit({
+    type: 'tenancy.agency_grant_revoked',
+    version: 1,
+    aggregateType: 'agency_grant',
+    aggregateId: row.id,
+    payload: { grantId: row.id, clientOrgId: row.orgId, agencyOrgId: row.agencyOrgId },
+  });
+  return toDto(row, profiles);
+}
+
+/**
  * Revoke an agency's access. No step-up: taking access away must always be one click away. The
  * agency's members lose access on their next request.
  */
@@ -189,23 +225,9 @@ export const revokeAgencyGrantCommand = tenantCommand({
     const revokedBy = userOf(ctx);
     const [current] = await tx.select().from(orgAccessGrants).where(eq(orgAccessGrants.id, input.grantId));
     if (!current) throw new DomainError('not_found', 'Agency access not found');
-    const profiles = await agencyProfilesTx(tx, [current.agencyOrgId]);
-    if (current.revokedAt) return toDto(current, profiles);
-    if (!revokedBy) throw new DomainError('forbidden', 'Only a member can revoke an agency’s access');
-    const [row] = await tx
-      .update(orgAccessGrants)
-      .set({ revokedAt: ctx.now, revokedBy, updatedAt: ctx.now })
-      .where(eq(orgAccessGrants.id, current.id))
-      .returning();
-    if (!row) throw new DomainError('internal');
-    emit({
-      type: 'tenancy.agency_grant_revoked',
-      version: 1,
-      aggregateType: 'agency_grant',
-      aggregateId: row.id,
-      payload: { grantId: row.id, clientOrgId: row.orgId, agencyOrgId: row.agencyOrgId },
-    });
-    return toDto(row, profiles);
+    if (!current.revokedAt && !revokedBy)
+      throw new DomainError('forbidden', 'Only a member can revoke an agency’s access');
+    return revokeAgencyGrantTx(tx, input.grantId, revokedBy ?? current.grantedBy, ctx.now, emit);
   },
   audit: (input) => ({
     action: 'agencyGrant.revoke',

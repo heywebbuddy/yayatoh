@@ -1754,6 +1754,43 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
       select ${org.id}, g.id, ${agencyOrg.id}, 1000, ${ownerId}, now() - interval '2 days', now() - interval '1 day', 'client'
       from tenancy.org_access_grants g where g.org_id = ${org.id} and g.agency_org_id = ${agencyOrg.id}`);
   });
+  // M6.8b: agency v2 rows owned by the org: its template's private settings, a brand kit (its own)
+  // and a received copy, a publication and a fan-out with one target (as if it were an agency),
+  // a received item, a detachment, and a team place and a day-of pass under its agency grant.
+  await withTenant(systemCtx(org.id), async (tx) => {
+    const [tpl] = await tx.execute<{ id: string }>(
+      sql`select id from templates.event_templates where org_id = ${org.id} limit 1`,
+    );
+    const [g] = await tx.execute<{ id: string }>(
+      sql`select id from tenancy.org_access_grants where org_id = ${org.id} and agency_org_id = ${agencyOrg.id}`,
+    );
+    if (tpl)
+      await tx.execute(sql`insert into agency_ops.template_settings (org_id, template_id, private_notes, private_parts)
+        values (${org.id}, ${tpl.id}, 'Fixture private note', array['seating']::text[])`);
+    await tx.execute(sql`insert into agency_ops.brand_kits (org_id, name, brand_color, private_notes)
+      values (${org.id}, 'Fixture kit', '#336699', 'Fixture kit note')`);
+    await tx.execute(sql`insert into agency_ops.brand_kits (org_id, name, brand_color, received_from_agency_org_id)
+      values (${org.id}, 'Received kit', '#996633', ${agencyOrg.id})`);
+    await tx.execute(sql`insert into agency_ops.publications (org_id, kind, source_id, client_org_id, status, published_at)
+      values (${org.id}, 'template', ${uuidv7()}, ${affiliate.id}, 'published', now())`);
+    await tx.execute(sql`insert into agency_ops.received_items (org_id, kind, local_id, agency_org_id, source_id)
+      values (${org.id}, 'template', ${uuidv7()}, ${agencyOrg.id}, ${uuidv7()})`);
+    const [f] = await tx.execute<{
+      id: string;
+    }>(sql`insert into agency_ops.fanouts (org_id, name, subject, heading, body,
+      audience, mode) values (${org.id}, 'Fixture fan-out', 'Hello', 'Hello', 'Body', 'everyone', 'draft') returning id`);
+    await tx.execute(sql`insert into agency_ops.fanout_targets (org_id, fanout_id, client_org_id, status)
+      values (${org.id}, ${f?.id}, ${affiliate.id}, 'draft')`);
+    await tx.execute(sql`insert into agency_ops.detachments (org_id, agency_org_id, grant_id, initiated_by)
+      values (${org.id}, ${agencyOrg.id}, ${uuidv7()}, 'client')`);
+    if (g) {
+      await tx.execute(sql`insert into tenancy.agency_staff_grants (org_id, grant_id, agency_org_id, user_id, kind, role,
+        created_by) values (${org.id}, ${g.id}, ${agencyOrg.id}, ${uuidv7()}, 'team', 'viewer', ${ownerId})`);
+      await tx.execute(sql`insert into tenancy.agency_staff_grants (org_id, grant_id, agency_org_id, user_id, kind, role,
+        event_id, starts_at, ends_at, created_by) values (${org.id}, ${g.id}, ${agencyOrg.id}, ${uuidv7()}, 'day_of',
+        'viewer', ${event.id}, now(), now() + interval '6 hours', ${ownerId})`);
+    }
+  });
   await withTenant(systemCtx(org.id), async (tx) => {
     await tx.execute(
       sql`insert into tenancy.org_relationships (org_id, child_org_id, kind, source) values (${org.id}, ${affiliate.id}, 'host_affiliate', 'fixture')`,

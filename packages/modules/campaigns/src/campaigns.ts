@@ -329,3 +329,16 @@ export async function transitionTx(
   if (!updated) throw new DomainError('conflict', 'The campaign changed meanwhile');
   return updated;
 }
+
+/**
+ * M6.8b: the postal address new footers of this org start from (its latest campaign's), so an
+ * agency fan-out builds each client's campaign with that client's own address. Empty if none yet.
+ */
+export const postalAddressQuery = tenantQuery({
+  name: 'campaigns.postalAddress',
+  input: z.object({}),
+  output: z.object({ postalAddress: z.string() }),
+  entitlement: 'marketing',
+  permission: 'marketing:read',
+  handler: async ({ tx }) => ({ postalAddress: await lastPostalAddressTx(tx) }),
+});

@@ -18,6 +18,7 @@
     "@fontsource-variable/noto-sans-devanagari": "5.3.0",
     "@fontsource/ibm-plex-sans-arabic": "5.3.0",
     "@yayatoh/agency": "workspace:*",
+    "@yayatoh/agency-ops": "workspace:*",
     "@yayatoh/ai": "workspace:*",
     "@yayatoh/alerts": "workspace:*",
     "@yayatoh/analytics": "workspace:*",
