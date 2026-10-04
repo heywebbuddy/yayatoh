@@ -127,7 +127,12 @@ export async function chartOfAccounts(
     authConnectionId: ref.authConnectionId,
   };
   try {
-    const io: SyncIO = { client: auth.client(authRef), origin: originStamp(connectionId), now: ctx.now };
+    const io: SyncIO = {
+      client: auth.client(authRef),
+      origin: originStamp(connectionId),
+      now: ctx.now,
+      scope: {},
+    };
     const accounts = await connector.accounting.listAccounts(io);
     return accounts.sort((a, b) => (a.code ?? a.name).localeCompare(b.code ?? b.name));
   } catch (err) {

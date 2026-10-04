@@ -584,6 +584,7 @@ describe('daily summary journals (M6.5d, P6-6)', () => {
       }),
       origin: 'x',
       now: new Date(),
+      scope: {},
     };
     const map = fakeAccountMap('quickbooks');
     const j = {

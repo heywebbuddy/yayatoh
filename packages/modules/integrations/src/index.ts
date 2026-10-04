@@ -139,6 +139,13 @@ export {
 export { CONNECTORS, connectorByKey, offeredConnectors } from './connectors/index.ts';
 // M6.4b: the Eventbrite importer and Google Sheets live sync.
 export { linkedLocalIdTx } from './connectors/links.ts';
+export {
+  type FakeBooksJournal,
+  QUICKBOOKS_FAKE_ACCOUNTS,
+  quickbooksConnector,
+  quickbooksFakeProvider,
+  quickbooksJournals,
+} from './connectors/quickbooks.ts';
 // M6.5b: Salesforce (contacts and leads, campaign members per event, sponsor opportunities).
 export {
   SALESFORCE_BAD_RECORD,
@@ -163,16 +170,9 @@ export {
   splitName,
 } from './connectors/salesforce/objects.ts';
 export { slackConnector } from './connectors/slack.ts';
+export { XERO_FAKE_ACCOUNTS, xeroConnector, xeroFakeProvider, xeroJournals } from './connectors/xero.ts';
 export { integrationsDataSubjects } from './data-subject.ts';
 export * from './domain/calendar.ts';
-export {
-  type FakeBooksJournal,
-  QUICKBOOKS_FAKE_ACCOUNTS,
-  quickbooksConnector,
-  quickbooksFakeProvider,
-  quickbooksJournals,
-} from './connectors/quickbooks.ts';
-export { XERO_FAKE_ACCOUNTS, xeroConnector, xeroFakeProvider, xeroJournals } from './connectors/xero.ts';
 export * from './domain/mapping.ts';
 export * from './domain/sync.ts';
 export {

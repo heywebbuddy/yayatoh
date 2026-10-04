@@ -3,9 +3,9 @@ import { demoConnector } from './demo.ts';
 import { eventbriteConnector } from './eventbrite/index.ts';
 import { googleCalendarConnector, googleCalendarPersonalConnector } from './google-calendar.ts';
 import { googleSheetsConnector } from './google-sheets/index.ts';
+import { quickbooksConnector } from './quickbooks.ts';
 import { salesforceConnector } from './salesforce/index.ts';
 import { slackConnector } from './slack.ts';
-import { quickbooksConnector } from './quickbooks.ts';
 import { xeroConnector } from './xero.ts';
 
 /**
