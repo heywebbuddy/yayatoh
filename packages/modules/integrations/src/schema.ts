@@ -1,8 +1,10 @@
 import { tenantTable } from '@yayatoh/db';
 import { sql } from 'drizzle-orm';
 import {
+  bigint,
   boolean,
   check,
+  date,
   foreignKey,
   index,
   integer,
@@ -13,6 +15,7 @@ import {
   uniqueIndex,
   uuid,
 } from 'drizzle-orm/pg-core';
+import { JOURNAL_KINDS, JOURNAL_STATUSES } from './accounting/domain.ts';
 import { MAPPING_DIRECTIONS } from './domain/mapping.ts';
 import {
   CONNECTION_STATUSES,
@@ -475,5 +478,121 @@ export const slackMessages = tenantTable(
     check('slack_messages_sent_check', sql`(status = 'sent') = (sent_at is not null)`),
     check('slack_messages_ts_check', sql`provider_ts is null or length(provider_ts) <= 40`),
     check('slack_messages_error_check', sql`error_code is null or error_code ~ '^[a-z0-9_]{1,60}$'`),
+  ],
+);
+
+// ── M6.5d: accounting (daily summary journals to QuickBooks Online and Xero) ─────────────────
+
+/**
+ * The chart-of-accounts mapping of an accounting connection, versioned like field mappings: one
+ * provider account per category (`accounts`, with the code and name it had when chosen) and the
+ * first day to post. The newest version is in force from the next run.
+ */
+export const accountMaps = tenantTable(
+  integrationsSchema,
+  'account_maps',
+  {
+    connectionId: uuid('connection_id').notNull(),
+    version: integer('version').notNull(),
+    accounts: jsonb('accounts').$type<Record<string, unknown>>().notNull(),
+    /** The first day (org time zone) whose summary is posted. */
+    startsOn: date('starts_on', { mode: 'string' }).notNull(),
+    createdBy: uuid('created_by'),
+  },
+  (t) => [
+    uniqueIndex('account_maps_org_connection_version_key').on(t.orgId, t.connectionId, t.version),
+    foreignKey({
+      name: 'account_maps_connection_fk',
+      columns: [t.orgId, t.connectionId],
+      foreignColumns: [connections.orgId, connections.id],
+    }).onDelete('cascade'),
+    check('account_maps_version_check', sql`version between 1 and 100000`),
+    check('account_maps_accounts_check', sql`jsonb_typeof(accounts) = 'object'`),
+  ],
+);
+
+/**
+ * Daily summary journals (decision P6-6), per connection, day (org time zone) and currency. Each
+ * change to a posted day adds rows, never edits one: a `reversal` of the journal that stands and
+ * the next `journal` revision. The provider's idempotency key is org + day + currency + revision
+ * (+ kind), unique here too, so a retried send lands once. `lines` (debit positive, minor units)
+ * are exactly what was sent; `summary` the totals they came from.
+ */
+export const accountingJournals = tenantTable(
+  integrationsSchema,
+  'accounting_journals',
+  {
+    connectionId: uuid('connection_id').notNull(),
+    day: date('day', { mode: 'string' }).notNull(),
+    currency: text('currency').notNull(),
+    revision: integer('revision').notNull(),
+    kind: text('kind').notNull(),
+    /** A reversal's journal (the row it undoes). */
+    reversesId: uuid('reverses_id'),
+    status: text('status').notNull().default('pending'),
+    summary: jsonb('summary').$type<Record<string, number>>().notNull(),
+    /** The summary's identity (`summaryKey`): what a re-run compares. */
+    summaryKey: text('summary_key').notNull(),
+    lines: jsonb('lines').$type<unknown[]>().notNull(),
+    debitTotalMinor: bigint('debit_total_minor', { mode: 'number' }).notNull(),
+    mapVersion: integer('map_version').notNull(),
+    idempotencyKey: text('idempotency_key').notNull(),
+    /** The provider's id for the posted journal. */
+    externalId: text('external_id'),
+    attempts: integer('attempts').notNull().default(0),
+    /** The last failure may have reached the provider (timeout, 5xx, 429): the day waits for it. */
+    uncertain: boolean('uncertain').notNull().default(false),
+    lastErrorCode: text('last_error_code'),
+    postedAt: tsz('posted_at'),
+    runId: uuid('run_id'),
+  },
+  (t) => [
+    uniqueIndex('accounting_journals_org_key').on(t.orgId, t.idempotencyKey),
+    uniqueIndex('accounting_journals_org_revision_key').on(
+      t.orgId,
+      t.connectionId,
+      t.day,
+      t.currency,
+      t.revision,
+      t.kind,
+    ),
+    index('accounting_journals_org_connection_day_idx').on(t.orgId, t.connectionId, t.day, t.currency),
+    index('accounting_journals_org_connection_unsent_idx')
+      .on(t.orgId, t.connectionId, t.createdAt)
+      .where(sql`status in ('pending', 'failed')`),
+    foreignKey({
+      name: 'accounting_journals_connection_fk',
+      columns: [t.orgId, t.connectionId],
+      foreignColumns: [connections.orgId, connections.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'accounting_journals_reverses_fk',
+      columns: [t.orgId, t.reversesId],
+      foreignColumns: [t.orgId, t.id],
+    }),
+    check('accounting_journals_kind_check', inList('kind', JOURNAL_KINDS)),
+    check('accounting_journals_status_check', inList('status', JOURNAL_STATUSES)),
+    check('accounting_journals_reverses_check', sql`(kind = 'reversal') = (reverses_id is not null)`),
+    check('accounting_journals_currency_check', sql`currency ~ '^[A-Z]{3}$'`),
+    check('accounting_journals_revision_check', sql`revision between 1 and 100000`),
+    check(
+      'accounting_journals_lines_check',
+      sql`jsonb_typeof(lines) = 'array' and jsonb_array_length(lines) between 2 and 20`,
+    ),
+    check('accounting_journals_summary_check', sql`jsonb_typeof(summary) = 'object'`),
+    check('accounting_journals_debit_check', sql`debit_total_minor > 0`),
+    check(
+      'accounting_journals_posted_check',
+      sql`(status = 'posted') = (posted_at is not null and external_id is not null)`,
+    ),
+    check('accounting_journals_attempts_check', sql`attempts between 0 and 1000`),
+    check(
+      'accounting_journals_error_code_check',
+      sql`last_error_code is null or last_error_code ~ '^[a-z0-9_]{1,60}$'`,
+    ),
+    check(
+      'accounting_journals_external_check',
+      sql`external_id is null or length(external_id) between 1 and 255`,
+    ),
   ],
 );

@@ -3,8 +3,10 @@ import { demoConnector } from './demo.ts';
 import { eventbriteConnector } from './eventbrite/index.ts';
 import { googleCalendarConnector, googleCalendarPersonalConnector } from './google-calendar.ts';
 import { googleSheetsConnector } from './google-sheets/index.ts';
+import { quickbooksConnector } from './quickbooks.ts';
 import { salesforceConnector } from './salesforce/index.ts';
 import { slackConnector } from './slack.ts';
+import { xeroConnector } from './xero.ts';
 import { zoomConnector } from './zoom.ts';
 
 /**
@@ -25,6 +27,9 @@ export const CONNECTORS: readonly ConnectorDefinition[] = [
   googleCalendarPersonalConnector,
   // M6.9b: Zoom webinars (registrants out, attendance reports in) for virtual sessions and CE credits.
   zoomConnector,
+  // M6.5d: accounting (daily summary journals).
+  quickbooksConnector,
+  xeroConnector,
 ];
 
 export function connectorByKey(key: string): ConnectorDefinition | null {

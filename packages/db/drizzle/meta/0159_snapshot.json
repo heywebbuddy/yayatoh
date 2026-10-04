@@ -1,6 +1,6 @@
 {
-  "id": "3df6d44a-17c7-494c-b5ad-2071af884731",
-  "prevId": "f0bbdd2d-98a9-4dfd-9913-153aa6c5211e",
+  "id": "4d2f3834-1c2b-4478-b4c7-b5bf5f33616c",
+  "prevId": "8238f85b-bd88-4ef4-96d5-524c1ee94f3a",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -9705,328 +9705,6 @@
         }
       },
       "isRLSEnabled": false
-    },
-    "billing.agency_billing": {
-      "name": "agency_billing",
-      "schema": "billing",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "uuidv7()"
-        },
-        "org_id": {
-          "name": "org_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "grant_id": {
-          "name": "grant_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "agency_org_id": {
-          "name": "agency_org_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "commission_bps": {
-          "name": "commission_bps",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "accepted_by": {
-          "name": "accepted_by",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "accepted_at": {
-          "name": "accepted_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "ended_at": {
-          "name": "ended_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "ended_by": {
-          "name": "ended_by",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "end_reason": {
-          "name": "end_reason",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {
-        "agency_billing_org_id_idx": {
-          "name": "agency_billing_org_id_idx",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "agency_billing_org_live_key": {
-          "name": "agency_billing_org_live_key",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "where": "ended_at is null",
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "agency_billing_org_accepted_idx": {
-          "name": "agency_billing_org_accepted_idx",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "accepted_at",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "agency_billing_org_id_id_key": {
-          "name": "agency_billing_org_id_id_key",
-          "nullsNotDistinct": false,
-          "columns": [
-            "org_id",
-            "id"
-          ]
-        }
-      },
-      "policies": {
-        "agency_billing_tenant_isolation": {
-          "name": "agency_billing_tenant_isolation",
-          "as": "PERMISSIVE",
-          "for": "ALL",
-          "to": [
-            "app_user"
-          ],
-          "using": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)",
-          "withCheck": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)"
-        }
-      },
-      "checkConstraints": {
-        "agency_billing_commission_check": {
-          "name": "agency_billing_commission_check",
-          "value": "commission_bps between 0 and 5000"
-        },
-        "agency_billing_not_self": {
-          "name": "agency_billing_not_self",
-          "value": "agency_org_id <> org_id"
-        },
-        "agency_billing_end_check": {
-          "name": "agency_billing_end_check",
-          "value": "(ended_at is null) = (end_reason is null) and (end_reason is null or end_reason in ('client', 'agency', 'grant_revoked', 'staff'))"
-        }
-      },
-      "isRLSEnabled": true
-    },
-    "billing.agency_billing_offers": {
-      "name": "agency_billing_offers",
-      "schema": "billing",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "uuidv7()"
-        },
-        "org_id": {
-          "name": "org_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "client_org_id": {
-          "name": "client_org_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "offered_by": {
-          "name": "offered_by",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "withdrawn_at": {
-          "name": "withdrawn_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "withdrawn_by": {
-          "name": "withdrawn_by",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {
-        "agency_billing_offers_org_id_idx": {
-          "name": "agency_billing_offers_org_id_idx",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "agency_billing_offers_org_client_live_key": {
-          "name": "agency_billing_offers_org_client_live_key",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "client_org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "where": "withdrawn_at is null",
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "agency_billing_offers_org_created_idx": {
-          "name": "agency_billing_offers_org_created_idx",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "created_at",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "agency_billing_offers_org_id_id_key": {
-          "name": "agency_billing_offers_org_id_id_key",
-          "nullsNotDistinct": false,
-          "columns": [
-            "org_id",
-            "id"
-          ]
-        }
-      },
-      "policies": {
-        "agency_billing_offers_tenant_isolation": {
-          "name": "agency_billing_offers_tenant_isolation",
-          "as": "PERMISSIVE",
-          "for": "ALL",
-          "to": [
-            "app_user"
-          ],
-          "using": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)",
-          "withCheck": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)"
-        }
-      },
-      "checkConstraints": {
-        "agency_billing_offers_not_self": {
-          "name": "agency_billing_offers_not_self",
-          "value": "client_org_id <> org_id"
-        }
-      },
-      "isRLSEnabled": true
     },
     "billing.entitlement_overrides": {
       "name": "entitlement_overrides",
@@ -37893,6 +37571,567 @@
       },
       "isRLSEnabled": true
     },
+    "integrations.account_maps": {
+      "name": "account_maps",
+      "schema": "integrations",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "uuidv7()"
+        },
+        "org_id": {
+          "name": "org_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "connection_id": {
+          "name": "connection_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "version": {
+          "name": "version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "accounts": {
+          "name": "accounts",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "starts_on": {
+          "name": "starts_on",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "account_maps_org_id_idx": {
+          "name": "account_maps_org_id_idx",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "account_maps_org_connection_version_key": {
+          "name": "account_maps_org_connection_version_key",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "connection_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "version",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "account_maps_connection_fk": {
+          "name": "account_maps_connection_fk",
+          "tableFrom": "account_maps",
+          "tableTo": "connections",
+          "schemaTo": "integrations",
+          "columnsFrom": [
+            "org_id",
+            "connection_id"
+          ],
+          "columnsTo": [
+            "org_id",
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "account_maps_org_id_id_key": {
+          "name": "account_maps_org_id_id_key",
+          "nullsNotDistinct": false,
+          "columns": [
+            "org_id",
+            "id"
+          ]
+        }
+      },
+      "policies": {
+        "account_maps_tenant_isolation": {
+          "name": "account_maps_tenant_isolation",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "app_user"
+          ],
+          "using": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)",
+          "withCheck": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)"
+        }
+      },
+      "checkConstraints": {
+        "account_maps_version_check": {
+          "name": "account_maps_version_check",
+          "value": "version between 1 and 100000"
+        },
+        "account_maps_accounts_check": {
+          "name": "account_maps_accounts_check",
+          "value": "jsonb_typeof(accounts) = 'object'"
+        }
+      },
+      "isRLSEnabled": true
+    },
+    "integrations.accounting_journals": {
+      "name": "accounting_journals",
+      "schema": "integrations",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "uuidv7()"
+        },
+        "org_id": {
+          "name": "org_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "connection_id": {
+          "name": "connection_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "day": {
+          "name": "day",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "currency": {
+          "name": "currency",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "revision": {
+          "name": "revision",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "kind": {
+          "name": "kind",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "reverses_id": {
+          "name": "reverses_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'pending'"
+        },
+        "summary": {
+          "name": "summary",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "summary_key": {
+          "name": "summary_key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "lines": {
+          "name": "lines",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "debit_total_minor": {
+          "name": "debit_total_minor",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "map_version": {
+          "name": "map_version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "idempotency_key": {
+          "name": "idempotency_key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "external_id": {
+          "name": "external_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "attempts": {
+          "name": "attempts",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "uncertain": {
+          "name": "uncertain",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "last_error_code": {
+          "name": "last_error_code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "posted_at": {
+          "name": "posted_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "run_id": {
+          "name": "run_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "accounting_journals_org_id_idx": {
+          "name": "accounting_journals_org_id_idx",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "accounting_journals_org_key": {
+          "name": "accounting_journals_org_key",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "idempotency_key",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "accounting_journals_org_revision_key": {
+          "name": "accounting_journals_org_revision_key",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "connection_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "day",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "currency",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "revision",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "kind",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "accounting_journals_org_connection_day_idx": {
+          "name": "accounting_journals_org_connection_day_idx",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "connection_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "day",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "currency",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "accounting_journals_org_connection_unsent_idx": {
+          "name": "accounting_journals_org_connection_unsent_idx",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "connection_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "where": "status in ('pending', 'failed')",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "accounting_journals_connection_fk": {
+          "name": "accounting_journals_connection_fk",
+          "tableFrom": "accounting_journals",
+          "tableTo": "connections",
+          "schemaTo": "integrations",
+          "columnsFrom": [
+            "org_id",
+            "connection_id"
+          ],
+          "columnsTo": [
+            "org_id",
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "accounting_journals_reverses_fk": {
+          "name": "accounting_journals_reverses_fk",
+          "tableFrom": "accounting_journals",
+          "tableTo": "accounting_journals",
+          "schemaTo": "integrations",
+          "columnsFrom": [
+            "org_id",
+            "reverses_id"
+          ],
+          "columnsTo": [
+            "org_id",
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "accounting_journals_org_id_id_key": {
+          "name": "accounting_journals_org_id_id_key",
+          "nullsNotDistinct": false,
+          "columns": [
+            "org_id",
+            "id"
+          ]
+        }
+      },
+      "policies": {
+        "accounting_journals_tenant_isolation": {
+          "name": "accounting_journals_tenant_isolation",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "app_user"
+          ],
+          "using": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)",
+          "withCheck": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)"
+        }
+      },
+      "checkConstraints": {
+        "accounting_journals_kind_check": {
+          "name": "accounting_journals_kind_check",
+          "value": "kind in ('journal', 'reversal')"
+        },
+        "accounting_journals_status_check": {
+          "name": "accounting_journals_status_check",
+          "value": "status in ('pending', 'posted', 'failed', 'superseded')"
+        },
+        "accounting_journals_reverses_check": {
+          "name": "accounting_journals_reverses_check",
+          "value": "(kind = 'reversal') = (reverses_id is not null)"
+        },
+        "accounting_journals_currency_check": {
+          "name": "accounting_journals_currency_check",
+          "value": "currency ~ '^[A-Z]{3}$'"
+        },
+        "accounting_journals_revision_check": {
+          "name": "accounting_journals_revision_check",
+          "value": "revision between 1 and 100000"
+        },
+        "accounting_journals_lines_check": {
+          "name": "accounting_journals_lines_check",
+          "value": "jsonb_typeof(lines) = 'array' and jsonb_array_length(lines) between 2 and 20"
+        },
+        "accounting_journals_summary_check": {
+          "name": "accounting_journals_summary_check",
+          "value": "jsonb_typeof(summary) = 'object'"
+        },
+        "accounting_journals_debit_check": {
+          "name": "accounting_journals_debit_check",
+          "value": "debit_total_minor > 0"
+        },
+        "accounting_journals_posted_check": {
+          "name": "accounting_journals_posted_check",
+          "value": "(status = 'posted') = (posted_at is not null and external_id is not null)"
+        },
+        "accounting_journals_attempts_check": {
+          "name": "accounting_journals_attempts_check",
+          "value": "attempts between 0 and 1000"
+        },
+        "accounting_journals_error_code_check": {
+          "name": "accounting_journals_error_code_check",
+          "value": "last_error_code is null or last_error_code ~ '^[a-z0-9_]{1,60}$'"
+        },
+        "accounting_journals_external_check": {
+          "name": "accounting_journals_external_check",
+          "value": "external_id is null or length(external_id) between 1 and 255"
+        }
+      },
+      "isRLSEnabled": true
+    },
     "integrations.connections": {
       "name": "connections",
       "schema": "integrations",
@@ -42456,15 +42695,15 @@
           "primaryKey": false,
           "notNull": true
         },
-        "tags": {
-          "name": "tags",
+        "tag_keys": {
+          "name": "tag_keys",
           "type": "text[]",
           "primaryKey": false,
           "notNull": true,
           "default": "'{}'::text[]"
         },
-        "tag_keys": {
-          "name": "tag_keys",
+        "tags": {
+          "name": "tags",
           "type": "text[]",
           "primaryKey": false,
           "notNull": true,
@@ -54115,7 +54354,7 @@
       "checkConstraints": {
         "postings_account_check": {
           "name": "postings_account_check",
-          "value": "account in ('platform:stripe_cash', 'platform:platform_fee_deferred', 'platform:platform_fee_revenue', 'platform:processing_fee_expense', 'org:payable_held', 'org:payable_releasable', 'org:reserve', 'org:receivable', 'agency:commission_held', 'agency:commission_receivable', 'agency:commission_due', 'agency:commission_earned', 'agency:commission_paid', 'agency:commission_clawback')"
+          "value": "account in ('platform:stripe_cash', 'platform:platform_fee_deferred', 'platform:platform_fee_revenue', 'platform:processing_fee_expense', 'org:payable_held', 'org:payable_releasable', 'org:reserve', 'org:receivable')"
         },
         "postings_amount_check": {
           "name": "postings_amount_check",
@@ -54753,12 +54992,6 @@
           "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": false
-        },
-        "agency_org_id": {
-          "name": "agency_org_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
         }
       },
       "indexes": {
@@ -54847,7 +55080,7 @@
       "checkConstraints": {
         "settlements_kind_check": {
           "name": "settlements_kind_check",
-          "value": "kind in ('event', 'reserve', 'commission')"
+          "value": "kind in ('event', 'reserve')"
         },
         "settlements_status_check": {
           "name": "settlements_status_check",
@@ -54856,10 +55089,6 @@
         "settlements_amounts_check": {
           "name": "settlements_amounts_check",
           "value": "released_minor >= 0 and reserve_minor >= 0 and netted_minor >= 0 and amount_minor >= 0 and amount_minor = released_minor - reserve_minor - netted_minor"
-        },
-        "settlements_agency_check": {
-          "name": "settlements_agency_check",
-          "value": "(kind = 'commission') = (agency_org_id is not null)"
         }
       },
       "isRLSEnabled": true

@@ -35,6 +35,8 @@ export {
   splitReversal,
 } from './commission-math.ts';
 export { paymentProviderFromEnv } from './config.ts';
+// M6.5d: the ledger per day and currency (accounting summaries).
+export { type LedgerDayTotals, ledgerDailyTotalsTx } from './daily-totals.ts';
 export { paymentsDataSubjects } from './data-subject.ts';
 export { claimProviderEventTx } from './dedupe.ts';
 export {

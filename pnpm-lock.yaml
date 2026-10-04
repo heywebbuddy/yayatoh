@@ -2316,6 +2316,9 @@ importers:
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../../db
+      '@yayatoh/donations':
+        specifier: workspace:*
+        version: link:../donations
       '@yayatoh/events':
         specifier: workspace:*
         version: link:../events
@@ -2328,6 +2331,9 @@ importers:
       '@yayatoh/orders':
         specifier: workspace:*
         version: link:../orders
+      '@yayatoh/payments':
+        specifier: workspace:*
+        version: link:../payments
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../../platform

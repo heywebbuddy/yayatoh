@@ -955,3 +955,26 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **Who may use which AI feature**: campaign drafts and audience suggestions need `messages:send`; page drafts `marketing:write`; agenda drafts and matchmaking refreshes `events:write`; brand kits are read with `marketing:read` and changed with `marketing:write`. Confirm.
 - [ ] **Matchmaking is refreshed by the organizer** ("Update suggestions" on the networking console). Automatic refresh when someone opts in or edits their profile (a worker job) is a follow-up: it spends the org's credits without anyone pressing a button. Decide whether to switch it on later.
 - [ ] **Brand kits are words only** (voice, default tone, words to use and avoid). Colours and the logo stay on the organization settings; M6.8 (agency) may publish kits downward later.
+
+## M6.5d — accounting: QuickBooks Online and Xero (2026-10-03, pending owner)
+- [ ] **Accounts to create (owner only):** an Intuit developer app (QuickBooks Online Accounting
+  scope `com.intuit.quickbooks.accounting`) and a Xero app (`accounting.transactions`,
+  `accounting.settings.read`, `offline_access`), each added to Nango as the `quickbooks` and `xero`
+  integrations. Until then both run against fakes only. The endpoints are UNVERIFIED against real
+  accounts: in particular we assume Nango's QuickBooks proxy carries the company (realm) in its
+  base URL; if not, the connector needs the realm from the connection's config.
+- [ ] **Payments approval (`payments` tag):** the summaries read the payments ledger and gifts and
+  post money to the organizer's books. Owner approval needed before main.
+- [ ] **Journal shape (P6-6, built with these defaults):** sales and donations credited, refunds,
+  Yayatoh fees and payouts debited, and a **clearing account** (money Yayatoh or the processor holds
+  for the organizer) takes the balance. Donations are what the donor was charged (gift plus any fee
+  they covered). Days are posted once they end in the org's time zone; posting can start up to a
+  year back. Confirm, or say if you want fees net of refunds shown differently.
+- [ ] **Zero-fee orders leave no ledger journal** (an `organizer_mor` sale with no application fee, a
+  refund that gives no fee back): their gross is therefore missing from the summaries. Decide
+  whether payments should post memo-only journals for them (a payments change, not done here).
+- [ ] **Corrections:** a changed day is reversed and posted again on the same day, never edited. If
+  the books have closed that period, the provider refuses it and it waits in the errors inbox.
+  Confirm, or ask for corrections to be posted on the day they are noticed instead.
+- [ ] **Xero multi-currency:** Xero manual journals take the base currency only; days in other
+  currencies wait in the errors inbox (`currency_unsupported`). Say if you need multi-currency Xero.

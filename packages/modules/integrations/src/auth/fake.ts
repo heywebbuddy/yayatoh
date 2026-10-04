@@ -7,7 +7,7 @@ import type {
   ProviderResponse,
   ResolvedConnection,
 } from './port.ts';
-import { ProviderError } from './port.ts';
+import { ProviderError, providerHeaderName } from './port.ts';
 
 /**
  * The fake `IntegrationAuth` (dev, CI, previews): a consent screen on our own origin
@@ -193,6 +193,8 @@ export function fakeIntegrationAuth(providers: (key: string) => FakeProvider | n
           const a = live(ref);
           const provider = providers(ref.providerConfigKey);
           if (!a || !provider) throw new ProviderError(401, 'unknown_connection');
+          if (Object.keys(req.headers ?? {}).some((k) => !providerHeaderName(k)))
+            throw new ProviderError(400, 'bad_header');
           a.log.push({ method: req.method, path: req.path, idempotencyKey: req.idempotencyKey ?? null });
           // The port attaches the credential; a revoked account's provider refuses it and echoes the
           // token back in its error body, which never leaves this function.

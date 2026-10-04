@@ -1,5 +1,5 @@
 import type { AuthRef, AuthStatus, IntegrationAuth, ProviderClient, ResolvedConnection } from './port.ts';
-import { ProviderError } from './port.ts';
+import { ProviderError, providerHeaderName } from './port.ts';
 
 /**
  * The Nango (Cloud) adapter for `IntegrationAuth` (decision P6-4). Nango runs the OAuth dance,
@@ -127,6 +127,9 @@ export function nangoIntegrationAuth(o: NangoOptions): IntegrationAuth {
         async request(req) {
           if (!req.path.startsWith('/') || req.path.startsWith('//'))
             throw new ProviderError(400, 'bad_path');
+          const extra = Object.entries(req.headers ?? {});
+          if (extra.some(([k, v]) => !providerHeaderName(k) || /[\r\n]/.test(v)))
+            throw new ProviderError(400, 'bad_header');
           const { status, json } = await call(req.method, `/proxy${req.path}`, {
             ...(req.query ? { query: { ...req.query } } : {}),
             ...(req.body !== undefined ? { body: req.body } : {}),
@@ -135,6 +138,7 @@ export function nangoIntegrationAuth(o: NangoOptions): IntegrationAuth {
               'provider-config-key': r.providerConfigKey,
               // Nango forwards `Nango-Proxy-*` headers to the provider without the prefix.
               ...(req.idempotencyKey ? { 'nango-proxy-idempotency-key': req.idempotencyKey } : {}),
+              ...Object.fromEntries(extra.map(([k, v]) => [`nango-proxy-${k.toLowerCase()}`, v])),
             },
           });
           return { status, body: json };

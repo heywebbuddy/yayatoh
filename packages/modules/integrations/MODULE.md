@@ -95,3 +95,14 @@ Slack, Mailchimp, HubSpot, Klaviyo) with `defineConnector` in `src/connectors/` 
   `google_calendar_personal` (a registrant's schedule) push sessions as entries in the event's
   IANA zone under stable ids (a lost create answer is a 409, then an update); the fake Calendar
   API (`googleCalendarFakeProvider`) backs dev and CI.
+- **Accounting (M6.5d, P6-6):** QuickBooks Online and Xero (`src/connectors/quickbooks.ts`,
+  `xero.ts`) have no objects but an `accounting` side (chart of accounts, `postJournal`). A run
+  posts **one daily summary journal per day (org time zone) and currency** from the ledger
+  (`@yayatoh/payments` `ledgerDailyTotalsTx`: memo gross, fees, refunds; transfers as payouts) and
+  giving (`@yayatoh/donations` `donationDailyTotalsTx`), mapped to the org's accounts
+  (`account_maps`, versioned; every category required, the clearing account unshared). Journals
+  (`accounting_journals`) are never edited: a changed day gets a reversal of the standing journal
+  and the next revision; the provider's idempotency key is org + day + currency + revision (+
+  kind). Unsent rows are superseded freely; an uncertain failure blocks its day until its retry
+  (same key) settles. Days from the mapping's first day to yesterday; integer minor units, sent as
+  exact decimals. Xero takes its base currency only (`currency_unsupported`).

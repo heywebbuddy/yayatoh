@@ -208,10 +208,12 @@ import {
   validateGuestImportCommand,
 } from '@yayatoh/guests';
 import {
+  dayIn,
   fakeIntegrations,
   linkEventSheet,
   queueSlackTestCommand,
   runSync,
+  saveAccountMapCommand,
   saveSlackSettingsCommand,
   sheetLinksQuery,
   sheetsRemoteEdit,
@@ -435,7 +437,14 @@ import { createEndpointCommand } from '@yayatoh/webhooks';
 import { sql } from 'drizzle-orm';
 import { ceFixture } from './ce.ts';
 import { enableGallery, guestGalleryPhoto, guestSiteAccess, hostGalleryPhoto } from './gallery.ts';
-import { connectConnector, connectDemo, connectSlack, fakeAuth } from './integrations.ts';
+import {
+  connectAccounting,
+  connectConnector,
+  connectDemo,
+  connectSlack,
+  fakeAccountMap,
+  fakeAuth,
+} from './integrations.ts';
 import { catchUpTimeline } from './merge.ts';
 import { networkingFixture } from './networking.ts';
 import { ports, runBulk, submitRegistrationForm } from './ports.ts';
@@ -3323,6 +3332,23 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
       values (${org.id}, 'launch_standard', 'tier_pro', 'tier_pro_month_usd', 'start', 'USD', 10692,
        792, 0, 'submitted', ${`user:${ownerId}`}, ${`fixture:${uuidv7()}`})`);
   });
+  // M6.5d: QuickBooks (fake) with the accounts mapped from today, and today's ledger posted as a
+  // daily summary journal by a run "as of" tomorrow (a day is posted once it has ended).
+  const books = await connectAccounting(ctx(), 'quickbooks');
+  await executeCommand(
+    saveAccountMapCommand,
+    {
+      connectionId: books.connectionId,
+      accounts: fakeAccountMap('quickbooks'),
+      startsOn: dayIn(new Date(), 'America/Chicago'),
+    },
+    ctx(),
+    ports,
+  );
+  await runSync(org.id, books.connectionId, { auth: fakeAuth }, ports, {
+    now: new Date(Date.now() + 24 * 60 * 60_000),
+    force: true,
+  });
   // M6.2a again: the warehouse catches up on the outbox of the rows added after its first run
   // (donations, matches, imports), as the worker would, so a later backfill changes nothing.
   await catchUpWarehouse(org.id);
@@ -3688,7 +3714,8 @@ async function matchRows(orgId: string, eventId: string, ctx: (o?: Partial<Ctx>)
     await tx.execute(sql`insert into donations.gift_refunds (org_id, gift_id, refund_id, amount_minor, currency,
       refunded_at) select org_id, id, ${refundId}, 1000, 'USD', now() from donations.gifts
       where event_id = ${eventId} limit 1`);
-    // The refund command's outbox event, so the analytics warehouse sees the refund live too.
+    // Batch 3k merge: the outbox event a refund always comes with, so projections fed by the
+    // outbox (M6.2a's warehouse) see it like the reports do (the gift refund above is idempotent).
     const [r] = await tx.execute<{ order_id: string }>(
       sql`select order_id from orders.refunds where id = ${refundId}`,
     );

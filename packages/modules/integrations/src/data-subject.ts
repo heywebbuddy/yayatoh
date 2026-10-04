@@ -48,7 +48,6 @@ async function linkRowsTx(tx: TenantTx, s: DataSubject) {
       id: recordLinks.id,
       connector: connections.connector,
       objectType: recordLinks.objectType,
-      externalId: recordLinks.externalId,
       lastSyncedAt: recordLinks.lastSyncedAt,
     })
     .from(recordLinks)
@@ -103,10 +102,10 @@ export const integrationsDataSubjects = defineDataSubjectContributor({
     const personal = await personalConnectionsTx(tx, s);
     return {
       sections: {
+        // Which providers hold a copy, not the provider's record id (internal to the org's account).
         remoteLinks: links.map((l) => ({
           connector: l.connector,
           object: l.objectType,
-          externalId: l.externalId,
           lastSyncedAt: l.lastSyncedAt,
         })),
         personalConnections: personal.map((c) => ({ connector: c.connector, createdAt: c.createdAt })),
