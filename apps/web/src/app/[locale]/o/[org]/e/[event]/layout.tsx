@@ -124,10 +124,16 @@ export default async function EventLayout({
           ) : null}
           {/* U6: "Save as template" on the event header, not only under Duplicate & template. */}
           {opens('copy') && can('events:write') ? (
-            <Link href={`/o/${org}/e/${event}/copy#save-template`} className={buttonClass('secondary', 'sm')}>
+            <Link
+              href={`/o/${org}/e/${event}/copy#save-template`}
+              title={t('copy.headerSave')}
+              className={buttonClass('secondary', 'sm')}
+            >
               <CopyPlus className="size-4 shrink-0" aria-hidden="true" />
-              {/* Phones: the icon only (the name stays for screen readers). */}
-              <span className="sr-only sm:not-sr-only">{t('copy.headerSave')}</span>
+              {/* Below 2xl the icon only (the name stays for screen readers and as the tooltip): with
+                  the status pill, U2's top bar (search, Create, help, theme, notifications) keeps
+                  one row at 1280 px (batch 3v merge; a second row pushed every event page down). */}
+              <span className="sr-only 2xl:not-sr-only">{t('copy.headerSave')}</span>
             </Link>
           ) : null}
         </>

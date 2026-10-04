@@ -254,7 +254,7 @@ test.describe('guest seating editor (M4.3a)', () => {
     });
 
     // The bride's side as one group: filter, tick both parties, seat them together.
-    await pickOption(page.getByLabel('Side'), 'Bride');
+    await pickOption(page.getByLabel('Side', { exact: true }), 'Bride');
     await expect(queueParty(page, 'Chen')).toHaveCount(0);
     await page.getByRole('checkbox', { name: 'Select everyone in Garcia' }).check();
     await page.getByRole('checkbox', { name: 'Select everyone in Patel' }).check();
@@ -269,7 +269,7 @@ test.describe('guest seating editor (M4.3a)', () => {
     await expect(details(page, 'Table 1')).toContainText('Garcia is a VIP party outside a VIP zone.');
 
     // Chen (not VIP) in the VIP zone: seated with a warning.
-    await pickOption(page.getByLabel('Side'), '');
+    await pickOption(page.getByLabel('Side', { exact: true }), '');
     await page.getByRole('checkbox', { name: 'Select everyone in Chen' }).check();
     await pickOption(page.getByLabel('Table or row', { exact: true }).first(), {
       label: 'Table 2 — 4 of 4 free · VIP zone',

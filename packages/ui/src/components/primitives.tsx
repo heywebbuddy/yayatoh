@@ -30,8 +30,9 @@ export function PageHeader({
       <div className="flex min-w-0 flex-[1_1_420px] flex-col gap-2.5">
         {breadcrumb}
         {eyebrow}
-        <div className="flex flex-wrap items-center gap-3">
-          <h1 className="m-0 text-[30px] leading-[1.08] font-extrabold tracking-[-0.035em] text-ink md:text-title">
+        {/* A long unbroken name (a code, a URL) wraps instead of widening a phone screen. */}
+        <div className="flex min-w-0 flex-wrap items-center gap-3">
+          <h1 className="m-0 min-w-0 text-[30px] leading-[1.08] font-extrabold tracking-[-0.035em] break-words text-ink md:text-title">
             {title}
           </h1>
           {tag}
