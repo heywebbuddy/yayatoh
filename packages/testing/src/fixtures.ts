@@ -3207,8 +3207,8 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ports,
   );
   await runSync(org.id, mailchimp.connectionId, { auth: fakeAuth }, ports);
-  // M6.2a again: the warehouse catches up on the outbox of the rows added after its first run
-  // (donations, matches, imports), as the worker would, so a later backfill changes nothing.
+  // Batch 3k merge: the warehouse catches up once more on what the fixture did after its backfill
+  // (M4.8f's gift refund, among others), as the worker would, so it is current when tests start.
   await catchUpWarehouse(org.id);
   return {
     org,
