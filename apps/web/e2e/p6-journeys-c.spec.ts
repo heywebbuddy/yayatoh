@@ -372,7 +372,7 @@ test.describe('marketplace journey', () => {
     const results = page.getByRole('list', { name: 'Search results' });
     await expect(results.getByRole('link', { name })).toBeVisible();
     await expect(page.getByText('1 event', { exact: true })).toBeVisible();
-    await pickOption(page.getByLabel('City'), new RegExp(`Metz ${tag}`));
+    await pickOption(page.getByLabel('City'), { label: new RegExp(`Metz ${tag}`) });
     await page.getByRole('button', { name: 'Search', exact: true }).click();
     await expect(page).toHaveURL(/city=/);
     await expect(results.getByRole('link', { name })).toBeVisible();
