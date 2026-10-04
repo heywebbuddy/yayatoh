@@ -70,13 +70,15 @@ export function LeadApp() {
       try {
         results = await c.flush();
         await c.refresh();
-        setOnline(true);
+        // Batch 3m merge: a sync that started online can finish after the device went offline;
+        // the browser's own state wins over the late reply (it used to show "Online" again).
+        setOnline(navigator.onLine);
         setProblem(null);
       } catch (err) {
         if (err instanceof LeadSignedOut) setPhase('signed_out');
         else if (err instanceof LeadOffline) setOnline(false);
         else {
-          setOnline(true);
+          setOnline(navigator.onLine);
           explain(err);
         }
       }
@@ -96,7 +98,7 @@ export function LeadApp() {
       await c.load();
       try {
         await c.refresh();
-        setOnline(true);
+        setOnline(navigator.onLine);
       } catch (err) {
         if (err instanceof LeadSignedOut) {
           setPhase('signed_out');
