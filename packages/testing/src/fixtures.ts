@@ -3076,6 +3076,9 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
       values (${org.id}, 'launch_standard', 'tier_pro', 'tier_pro_month_usd', 'start', 'USD', 10692,
        792, 0, 'submitted', ${`user:${ownerId}`}, ${`fixture:${uuidv7()}`})`);
   });
+  // Batch 3k merge: the warehouse catches up once more on what the fixture did after its backfill
+  // (M4.8f's gift refund, among others), as the worker would, so it is current when tests start.
+  await catchUpWarehouse(org.id);
   return {
     org,
     ownerId,
