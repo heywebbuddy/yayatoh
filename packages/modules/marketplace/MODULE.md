@@ -42,3 +42,4 @@ settings and the legacy URL map. Owns Postgres schema `marketplace`.
 - **Moderation.** `listing_moderation` (one row per event; history in the audit log): staff
   (`platform:marketplace.moderate_listing`) hide or show a listing with a reason; the projector keeps
   a hidden listing off the marketplace through every rebuild (the tenant site keeps it).
+- **Promoted placements (M6.14b, flag `PROMOTED_PLACEMENTS`):** `promotions` (one per event, 1–30 days, only marketplace listings, never weddings). Search reads running ones through the SECURITY DEFINER `promoted_slugs(now)` and shows at most `PROMOTED_SLOTS` that match the visitor's query and filters, page 1 only, hydrated from the public read model and always labelled as promoted. Nothing is charged.

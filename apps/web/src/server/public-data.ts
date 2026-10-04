@@ -7,6 +7,8 @@ import {
   orgListings,
   orgListingTags,
   popularListings,
+  promotedPlacements,
+  promotedPlacementsEnabled,
   type SearchListingDto,
   type SearchParams,
   type SearchResultDto,
@@ -138,4 +140,16 @@ export const cachedCityCenters = () =>
     ['city-centers'],
     () => cityCenters(),
     (raw) => raw as { city: string; lat: number; lng: number }[],
+  );
+
+/** M6.14b: promoted placements matching a search (flagged; empty when off or past page 1). */
+export const cachedPromoted = (p: SearchV2Params) =>
+  publicCached(
+    'marketplace',
+    ['promoted', p],
+    async () =>
+      promotedPlacementsEnabled()
+        ? promotedPlacements(await requireIndex(), p, new Date(), { enabled: true })
+        : [],
+    (raw) => reviveItems(raw as Raw[]),
   );

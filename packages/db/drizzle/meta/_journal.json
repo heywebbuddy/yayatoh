@@ -1156,6 +1156,13 @@
       "when": 1791075083197,
       "tag": "0164_perpetual_vindicator",
       "breakpoints": true
+    },
+    {
+      "idx": 165,
+      "version": "7",
+      "when": 1791075083198,
+      "tag": "0165_striped_serpent_society",
+      "breakpoints": true
     }
   ]
 }

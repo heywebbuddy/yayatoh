@@ -2,7 +2,7 @@ import { createHash } from 'node:crypto';
 import { type TenantTx, withTenant } from '@yayatoh/db';
 import { findOccurrenceTx } from '@yayatoh/events';
 import { canonicalJson, FloorplanDoc, layoutProblems, placedSeats, seatCount } from '@yayatoh/floorplan';
-import { createCtx, DomainError, requireOrg } from '@yayatoh/kernel';
+import { type Ctx, createCtx, DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { and, asc, eq, inArray, isNotNull, isNull, ne, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
@@ -22,6 +22,7 @@ import {
   eventSeats,
   layouts,
   seatAssignments,
+  sharedLayoutUses,
 } from './schema.ts';
 
 /** An organizer's image under a plan must be one of this org's own media files (M1.7g). */
@@ -161,79 +162,7 @@ export const setEventLayoutCommand = tenantCommand({
   output: z.object({ eventId: z.uuid(), seatCount: z.int(), status: z.enum(EVENT_LAYOUT_STATUSES) }),
   entitlement: 'seating',
   permission: 'seating:write',
-  handler: async ({ input, ctx, tx }) => {
-    const orgId = requireOrg(ctx);
-    const key = await chartKeyTx(tx, input.eventId, input.occurrenceId);
-    const current = await eventLayoutTx(tx, input.eventId, key, true);
-    if (current?.status === 'locked')
-      throw new DomainError('invalid_state', 'Seats have been sold; the floor plan is locked', {
-        reason: 'layout_locked',
-      });
-    const [busy] = await tx
-      .select({ id: eventSeats.id })
-      .from(eventSeats)
-      .where(and(onChart(eventSeats, input.eventId, key), inArray(eventSeats.status, ['held', 'sold'])))
-      .limit(1);
-    if (busy) throw new DomainError('invalid_state', 'Seats are held or sold', { reason: 'seats_in_use' });
-    let raw: unknown = input.doc;
-    if (input.layoutId) {
-      const [l] = await tx.select().from(layouts).where(eq(layouts.id, input.layoutId));
-      if (!l) throw new DomainError('not_found', 'Floor plan not found');
-      raw = l.doc;
-    }
-    const { doc, checksum } = validDoc(raw, orgId);
-    // Editing keeps what was set on seats that still exist: their price category and blocks.
-    const kept = new Map(
-      (
-        await tx
-          .select({
-            seatUuid: eventSeats.seatUuid,
-            ticketTypeId: eventSeats.ticketTypeId,
-            status: eventSeats.status,
-            blockReason: eventSeats.blockReason,
-            groupLabel: eventSeats.groupLabel,
-          })
-          .from(eventSeats)
-          .where(onChart(eventSeats, input.eventId, key))
-      ).map((s) => [s.seatUuid, s]),
-    );
-    await tx.delete(eventSeats).where(onChart(eventSeats, input.eventId, key));
-    const seats = placedSeats(doc);
-    for (let i = 0; i < seats.length; i += 1000)
-      await tx.insert(eventSeats).values(
-        seats.slice(i, i + 1000).map((s) => ({
-          orgId,
-          eventId: input.eventId,
-          occurrenceId: key,
-          seatUuid: s.seatId,
-          label: s.label,
-          itemId: s.itemId,
-          sectionId: s.sectionId,
-          accessible: s.accessible,
-          ticketTypeId: kept.get(s.seatId)?.ticketTypeId ?? null,
-          status: kept.get(s.seatId)?.status === 'blocked' ? ('blocked' as const) : ('available' as const),
-          blockReason: kept.get(s.seatId)?.status === 'blocked' ? kept.get(s.seatId)?.blockReason : null,
-          groupLabel: kept.get(s.seatId)?.groupLabel ?? null,
-        })),
-      );
-    // Guests keep seats that still exist (and follow them to their table); others are unseated.
-    await reconcileAssignmentsTx(tx, input.eventId, key, ctx);
-    const values = {
-      doc,
-      checksum,
-      seatCount: seats.length,
-      sourceLayoutId: input.layoutId ?? current?.sourceLayoutId ?? null,
-      // Editing a plan that is on sale keeps it on sale.
-      status: current?.status === 'published' ? ('published' as const) : ('draft' as const),
-      updatedAt: ctx.now,
-    };
-    if (current) await tx.update(eventLayouts).set(values).where(eq(eventLayouts.id, current.id));
-    else
-      await tx.insert(eventLayouts).values({ orgId, eventId: input.eventId, occurrenceId: key, ...values });
-    // M6.11b: every save is a revision of the chart (unchanged plans are not repeated).
-    await recordRevisionTx(tx, ctx, { eventId: input.eventId, key, doc, checksum, seatCount: seats.length });
-    return { eventId: input.eventId, seatCount: seats.length, status: values.status };
-  },
+  handler: ({ input, ctx, tx }) => applyEventLayoutTx(tx, ctx, input),
   audit: (input, r) => ({
     action: 'seating.event_layout_set',
     targetType: 'event',
@@ -241,6 +170,97 @@ export const setEventLayoutCommand = tenantCommand({
     data: { seats: r?.seatCount, layoutId: input.layoutId, occurrenceId: input.occurrenceId ?? null },
   }),
 });
+
+/**
+ * The body of `seating.setEventLayout`, shared with M6.14b's copy of a venue's shared plan
+ * (`fromShared`: the plan is a document, the chart no longer names a library plan of this org).
+ * Giving the event plan one of the org's own saved plans ends a shared plan's use.
+ */
+export async function applyEventLayoutTx(
+  tx: TenantTx,
+  ctx: Ctx,
+  input: {
+    eventId: string;
+    occurrenceId?: string | null | undefined;
+    layoutId?: string | undefined;
+    doc?: unknown;
+    fromShared?: boolean;
+  },
+): Promise<{ eventId: string; seatCount: number; status: (typeof EVENT_LAYOUT_STATUSES)[number] }> {
+  const orgId = requireOrg(ctx);
+  const key = await chartKeyTx(tx, input.eventId, input.occurrenceId);
+  const current = await eventLayoutTx(tx, input.eventId, key, true);
+  if (current?.status === 'locked')
+    throw new DomainError('invalid_state', 'Seats have been sold; the floor plan is locked', {
+      reason: 'layout_locked',
+    });
+  const [busy] = await tx
+    .select({ id: eventSeats.id })
+    .from(eventSeats)
+    .where(and(onChart(eventSeats, input.eventId, key), inArray(eventSeats.status, ['held', 'sold'])))
+    .limit(1);
+  if (busy) throw new DomainError('invalid_state', 'Seats are held or sold', { reason: 'seats_in_use' });
+  let raw: unknown = input.doc;
+  if (input.layoutId) {
+    const [l] = await tx.select().from(layouts).where(eq(layouts.id, input.layoutId));
+    if (!l) throw new DomainError('not_found', 'Floor plan not found');
+    raw = l.doc;
+  }
+  const { doc, checksum } = validDoc(raw, orgId);
+  // Editing keeps what was set on seats that still exist: their price category and blocks.
+  const kept = new Map(
+    (
+      await tx
+        .select({
+          seatUuid: eventSeats.seatUuid,
+          ticketTypeId: eventSeats.ticketTypeId,
+          status: eventSeats.status,
+          blockReason: eventSeats.blockReason,
+          groupLabel: eventSeats.groupLabel,
+        })
+        .from(eventSeats)
+        .where(onChart(eventSeats, input.eventId, key))
+    ).map((s) => [s.seatUuid, s]),
+  );
+  await tx.delete(eventSeats).where(onChart(eventSeats, input.eventId, key));
+  const seats = placedSeats(doc);
+  for (let i = 0; i < seats.length; i += 1000)
+    await tx.insert(eventSeats).values(
+      seats.slice(i, i + 1000).map((s) => ({
+        orgId,
+        eventId: input.eventId,
+        occurrenceId: key,
+        seatUuid: s.seatId,
+        label: s.label,
+        itemId: s.itemId,
+        sectionId: s.sectionId,
+        accessible: s.accessible,
+        ticketTypeId: kept.get(s.seatId)?.ticketTypeId ?? null,
+        status: kept.get(s.seatId)?.status === 'blocked' ? ('blocked' as const) : ('available' as const),
+        blockReason: kept.get(s.seatId)?.status === 'blocked' ? kept.get(s.seatId)?.blockReason : null,
+        groupLabel: kept.get(s.seatId)?.groupLabel ?? null,
+      })),
+    );
+  // Guests keep seats that still exist (and follow them to their table); others are unseated.
+  await reconcileAssignmentsTx(tx, input.eventId, key, ctx);
+  const values = {
+    doc,
+    checksum,
+    seatCount: seats.length,
+    sourceLayoutId: input.fromShared ? null : (input.layoutId ?? current?.sourceLayoutId ?? null),
+    // Editing a plan that is on sale keeps it on sale.
+    status: current?.status === 'published' ? ('published' as const) : ('draft' as const),
+    updatedAt: ctx.now,
+  };
+  if (current) await tx.update(eventLayouts).set(values).where(eq(eventLayouts.id, current.id));
+  else await tx.insert(eventLayouts).values({ orgId, eventId: input.eventId, occurrenceId: key, ...values });
+  // M6.11b: every save is a revision of the chart (unchanged plans are not repeated).
+  await recordRevisionTx(tx, ctx, { eventId: input.eventId, key, doc, checksum, seatCount: seats.length });
+  // M6.14b: one of the org's own plans replaces a venue's shared plan on the event plan.
+  if (key === null && input.layoutId)
+    await tx.delete(sharedLayoutUses).where(eq(sharedLayoutUses.eventId, input.eventId));
+  return { eventId: input.eventId, seatCount: seats.length, status: values.status };
+}
 
 /** Put the event's seats on sale (draft → published). */
 export const publishEventLayoutCommand = tenantCommand({

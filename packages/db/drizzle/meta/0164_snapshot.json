@@ -1,6 +1,6 @@
 {
-  "id": "3a44710a-41b8-422a-963c-857f0ebaa252",
-  "prevId": "75df7ec5-7040-452e-9649-4834dd1dc4a0",
+  "id": "1a826edc-2cef-47c5-8912-7502efb7fdca",
+  "prevId": "06c840ed-9acb-4277-8e49-b35ac3973452",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -45570,13 +45570,13 @@
           "name": "public_listings_price_check",
           "value": "min_price_minor is null or min_price_minor <= max_price_minor"
         },
-        "public_listings_geo_check": {
-          "name": "public_listings_geo_check",
-          "value": "(latitude is null) = (longitude is null) and (latitude is null or (latitude between -90 and 90 and longitude between -180 and 180))"
-        },
         "public_listings_popularity_check": {
           "name": "public_listings_popularity_check",
           "value": "popularity >= 0"
+        },
+        "public_listings_geo_check": {
+          "name": "public_listings_geo_check",
+          "value": "(latitude is null) = (longitude is null) and (latitude is null or (latitude between -90 and 90 and longitude between -180 and 180))"
         }
       },
       "isRLSEnabled": true

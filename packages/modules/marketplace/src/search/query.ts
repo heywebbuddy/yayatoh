@@ -109,7 +109,7 @@ function whenFilter(preset: WhenPreset, now: Date): Filter {
 }
 
 /** The filters of a search, by facet (so each facet's counts can leave its own filter out). */
-function filtersOf(p: SearchV2Params, now: Date, center: (GeoPoint & { radiusKm: number }) | null) {
+export function filtersOf(p: SearchV2Params, now: Date, center: (GeoPoint & { radiusKm: number }) | null) {
   const f: Record<'base' | 'category' | 'city' | 'price' | 'when', Filter[]> = {
     base: [upcoming(now)],
     category: [],
@@ -129,7 +129,7 @@ function filtersOf(p: SearchV2Params, now: Date, center: (GeoPoint & { radiusKm:
   return f;
 }
 
-const all = (f: ReturnType<typeof filtersOf>, without?: keyof ReturnType<typeof filtersOf>) =>
+export const all = (f: ReturnType<typeof filtersOf>, without?: keyof ReturnType<typeof filtersOf>) =>
   (Object.keys(f) as (keyof typeof f)[]).filter((k) => k !== without).flatMap((k) => f[k]);
 
 function sortOf(p: SearchV2Params, center: GeoPoint | null): Sort[] {
@@ -163,7 +163,7 @@ export function resolveCenter(
   return c ? { lat: c.lat, lng: c.lng, label: c.city, radiusKm } : null;
 }
 
-async function hydrate(hits: SearchHits['hits'], now: Date): Promise<SearchListingDto[]> {
+export async function hydrate(hits: SearchHits['hits'], now: Date): Promise<SearchListingDto[]> {
   const listings = await listingsBySlugs(
     hits.map((h) => h.doc.slug),
     now,
