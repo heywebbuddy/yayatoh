@@ -152,7 +152,8 @@ REVOKE ALL ON FUNCTION seating.venue_layout_uses() FROM PUBLIC;
 GRANT EXECUTE ON FUNCTION seating.venue_layout_uses() TO app_user;
 --> statement-breakpoint
 -- Promoted placements in search: slugs of public marketplace listings (live orgs, never weddings,
--- not yet ended) with a promotion running at p_now. Search filters them by the visitor's query.
+-- not yet ended) with a promotion running at p_now, newest first. Search filters them by the
+-- visitor's query (one `slug IN` filter).
 CREATE FUNCTION marketplace.promoted_slugs(p_now timestamptz)
 RETURNS TABLE (slug text)
 LANGUAGE sql STABLE SECURITY DEFINER SET search_path = pg_catalog AS $$
@@ -162,8 +163,8 @@ LANGUAGE sql STABLE SECURITY DEFINER SET search_path = pg_catalog AS $$
   JOIN tenancy.organizations o ON o.id = l.org_id AND o.status IN ('active', 'limited')
   WHERE p.ended_at IS NULL AND p.starts_at <= p_now AND p.ends_at > p_now
     AND l.on_marketplace AND l.profile <> 'wedding' AND l.ends_at > p_now
-  ORDER BY p.starts_at, l.slug
-  LIMIT 20
+  ORDER BY p.starts_at DESC, l.slug
+  LIMIT 500
 $$;
 --> statement-breakpoint
 REVOKE ALL ON FUNCTION marketplace.promoted_slugs(timestamptz) FROM PUBLIC;

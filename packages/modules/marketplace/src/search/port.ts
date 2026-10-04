@@ -20,9 +20,14 @@ export type SortField = (typeof SORT_FIELDS)[number];
 /** Fields full-text search looks in, most important first. */
 export const SEARCHABLE_FIELDS = ['name', 'tagline', 'orgName', 'venueName', 'city'] as const;
 
+/** The most values an `in` filter carries. */
+export const MAX_IN_VALUES = 500;
+
 export type Filter =
   | { readonly field: Exclude<FilterField, 'startsAt' | 'endsAt'>; readonly eq: string }
   | { readonly field: Exclude<FilterField, 'startsAt' | 'endsAt'>; readonly ne: string }
+  /** M6.14b: the value is one of these (at most `MAX_IN_VALUES`). */
+  | { readonly field: Exclude<FilterField, 'startsAt' | 'endsAt'>; readonly in: readonly string[] }
   | { readonly field: 'startsAt' | 'endsAt'; readonly gte?: number; readonly lt?: number }
   | { readonly geo: { readonly lat: number; readonly lng: number; readonly radiusM: number } };
 

@@ -92,6 +92,8 @@ export const addVenuePartnerCommand = tenantCommand({
 
 export const removeVenuePartnerCommand = tenantCommand({
   name: 'tenancy.removeVenuePartner',
+  // Ends a cross-org relationship: never while impersonating.
+  category: 'delete',
   input: z.object({ orgId: z.uuid() }),
   output: z.object({ orgId: z.uuid() }),
   entitlement: 'advanced_seating',

@@ -65,6 +65,7 @@ export function geoDistanceM(a: { lat: number; lng: number }, b: { lat: number; 
 const NUM = '-?\\d+(?:\\.\\d+)?';
 const STR = '"(?:[^"\\\\]|\\\\.)*"';
 const COMPARE = new RegExp(`^([A-Za-z_][A-Za-z0-9_]*) (=|!=|>=|<=|>|<) (${STR}|${NUM})$`);
+const IN_LIST = new RegExp(`^([A-Za-z_][A-Za-z0-9_]*) IN \\[((?:${STR})(?:, ?${STR})*)\\]$`);
 const GEO_RADIUS = new RegExp(`^_geoRadius\\((${NUM}), ?(${NUM}), ?(${NUM})\\)$`);
 const GEO_POINT = new RegExp(`^_geoPoint\\((${NUM}), ?(${NUM})\\):(asc|desc)$`);
 const SORT = /^([A-Za-z_][A-Za-z0-9_]*):(asc|desc)$/;
@@ -86,6 +87,13 @@ function compileFilter(expr: string, filterable: readonly string[]): Predicate |
       const g = d._geo as { lat: number; lng: number } | undefined;
       return Boolean(g) && geoDistanceM(center, g as { lat: number; lng: number }) <= radius;
     };
+  }
+  const list = IN_LIST.exec(expr);
+  if (list) {
+    const [, attr = '', raw = ''] = list;
+    if (!filterable.includes(attr)) return err(400, 'invalid_search_filter', `${attr} is not filterable`);
+    const values = new Set((raw.match(new RegExp(STR, 'g')) ?? []).map((v) => fold(String(parseValue(v)))));
+    return (d) => d[attr] !== null && d[attr] !== undefined && values.has(fold(String(d[attr])));
   }
   const m = COMPARE.exec(expr);
   if (!m) return err(400, 'invalid_search_filter', `unsupported filter: ${expr}`);

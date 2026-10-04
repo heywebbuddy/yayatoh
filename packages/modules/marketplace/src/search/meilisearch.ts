@@ -3,6 +3,7 @@ import {
   FACET_FIELDS,
   FILTER_FIELDS,
   type Filter,
+  MAX_IN_VALUES,
   SEARCHABLE_FIELDS,
   type SearchHits,
   type SearchIndex,
@@ -55,7 +56,10 @@ export function toMeiliFilter(filters: readonly Filter[]): string[] {
       out.push(`_geoRadius(${filterValue(lat)}, ${filterValue(lng)}, ${filterValue(Math.round(radiusM))})`);
     } else if ('eq' in f) out.push(`${f.field} = ${filterValue(f.eq)}`);
     else if ('ne' in f) out.push(`${f.field} != ${filterValue(f.ne)}`);
-    else {
+    else if ('in' in f) {
+      if (f.in.length === 0 || f.in.length > MAX_IN_VALUES) throw new Error('in filter: 1 to 500 values');
+      out.push(`${f.field} IN [${f.in.map((v) => filterValue(v)).join(', ')}]`);
+    } else {
       if (f.gte !== undefined) out.push(`${f.field} >= ${filterValue(f.gte)}`);
       if (f.lt !== undefined) out.push(`${f.field} < ${filterValue(f.lt)}`);
     }
