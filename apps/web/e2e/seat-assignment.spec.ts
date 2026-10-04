@@ -154,13 +154,24 @@ test.describe('seat assignment (M1.7d)', () => {
     };
 
     if (test.info().project.name === 'desktop-1280') {
-      // Wide enough for both: a real mouse drag. Batch 3l merge: the console shell (U2) and the
-      // longer seating tabs push the plan below the fold at 900 px, so the window is made tall
-      // enough for the name and the plan to be on screen together, as a mouse drag needs.
-      await page.setViewportSize({ width: 1280, height: 1800 });
-      await chip(dee).scrollIntoViewIfNeeded();
-      const [c, p] = await Promise.all([canvas.boundingBox(), plan.boundingBox()]);
-      if (!c || !p) throw new Error('no plan');
+      // Wide enough for both: a real mouse drag. Batch 3k merge: with every seating view in the
+      // tab row (it wraps), the drop point can sit below the fold; scroll first so the name and the
+      // drop point are both on screen (a drag that scrolls the page midway is no drop).
+      const box = async () => {
+        const [c, p, q] = await Promise.all([
+          canvas.boundingBox(),
+          plan.boundingBox(),
+          chip(dee).boundingBox(),
+        ]);
+        if (!c || !p || !q) throw new Error('no plan');
+        return { c, p, q };
+      };
+      const before = await box();
+      const fold = (page.viewportSize()?.height ?? 900) - 40;
+      const dropY = before.c.y + (830 * before.c.width) / 1060;
+      const by = Math.min(Math.max(0, dropY - fold), Math.max(0, before.q.y - 8));
+      if (by > 0) await page.evaluate((y) => window.scrollBy(0, y), by);
+      const { c, p } = await box();
       const scale = c.width / 1060;
       await chip(dee).dragTo(plan, {
         targetPosition: { x: c.x - p.x + 730 * scale, y: c.y - p.y + 830 * scale },

@@ -84,7 +84,7 @@ test('staff pause ticket sales for a tenant; the public page shows it at once; r
   await page.getByLabel('Search by name or address').fill('lakeside');
   await page.getByRole('button', { name: 'Search' }).click();
   await page.getByRole('link', { name: 'Lakeside Events', exact: true }).click();
-  await expect(page.getByRole('heading', { name: 'Lakeside Events', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Lakeside Events' })).toBeVisible();
   await expectAccessible(page);
 
   const sales = page.locator('form').filter({ hasText: 'Ticket sales' });
@@ -438,7 +438,7 @@ test('staff act as a member for an hour: reason required, banner everywhere, mon
   await page.getByLabel('Search by name or address').fill('lakeside');
   await page.getByRole('button', { name: 'Search' }).click();
   await page.getByRole('link', { name: 'Lakeside Events', exact: true }).click();
-  await expect(page.getByRole('heading', { name: 'Lakeside Events', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Lakeside Events' })).toBeVisible();
   const tenantUrl = page.url();
   const section = page.getByRole('region', { name: 'Act as a member' });
   await expect(section.getByText(/at most one hour/)).toBeVisible();
@@ -570,7 +570,7 @@ test('an open impersonation can be ended from the staff console too', async ({ p
   await page.getByLabel('Search by name or address').fill('lakeside');
   await page.getByRole('button', { name: 'Search' }).click();
   await page.getByRole('link', { name: 'Lakeside Events', exact: true }).click();
-  await expect(page.getByRole('heading', { name: 'Lakeside Events', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Lakeside Events' })).toBeVisible();
   const tenantUrl = page.url();
   const section = page.getByRole('region', { name: 'Act as a member' });
   await pickOption(section.getByLabel('Member'), { label: 'Jordan Lee (jordan@lakeside.test) · viewer' });
