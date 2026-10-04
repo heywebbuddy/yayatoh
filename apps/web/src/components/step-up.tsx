@@ -1,7 +1,7 @@
 'use client';
 
 import type { StepUpMethod } from '@yayatoh/auth';
-import { Alert, Button, Input } from '@yayatoh/ui';
+import { Alert, Button, Input, SELECT_REFILL_EVENT } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import {
   createContext,
@@ -226,6 +226,12 @@ function refill(form: HTMLFormElement, fd: FormData) {
       continue;
     const values = fd.getAll(el.name).map(String);
     if (el instanceof HTMLInputElement) {
+      // A U1 Select keeps its choice in a hidden input: it takes the value back through an event.
+      if (el.type === 'hidden' && el.hasAttribute('data-select-value')) {
+        if (values[0] !== undefined)
+          el.dispatchEvent(new CustomEvent(SELECT_REFILL_EVENT, { detail: values[0] }));
+        continue;
+      }
       if (['file', 'hidden', 'submit', 'button', 'password'].includes(el.type)) continue;
       if (el.type === 'checkbox' || el.type === 'radio') el.checked = values.includes(el.value);
       else if (values[0] !== undefined) el.value = values[0];
