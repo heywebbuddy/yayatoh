@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
   const connectionId = String(form.get('connection') ?? '');
   const webinar = String(form.get('webinar') ?? '');
   const account = UUID.test(connectionId) ? fakeIntegrations.accountFor(connectionId) : null;
-  if (!account || account.providerConfigKey !== 'zoom' || !/^[0-9]{9,12}$/.test(webinar))
+  if (account?.providerConfigKey !== 'zoom' || !/^[0-9]{9,12}$/.test(webinar))
     return NextResponse.json({ error: 'unknown_connection' }, { status: 404 });
   const action = String(form.get('action') ?? '');
   if (action === 'registrants')
@@ -28,7 +28,11 @@ export async function POST(req: NextRequest) {
   const email = String(form.get('email') ?? '').slice(0, 320);
   const minutesAgo = Number(form.get('minutesAgo') ?? 0);
   const minutes = Number(form.get('minutes') ?? 0);
-  if (!email.includes('@') || !(minutes > 0 && minutes < 600) || !(minutesAgo >= minutes && minutesAgo < 6000))
+  if (
+    !email.includes('@') ||
+    !(minutes > 0 && minutes < 600) ||
+    !(minutesAgo >= minutes && minutesAgo < 6000)
+  )
     return NextResponse.json({ error: 'invalid' }, { status: 400 });
   const joinedAt = new Date(Date.now() - minutesAgo * MIN);
   zoomFakeAttend(account, webinar, {

@@ -44,7 +44,11 @@ export async function POST(req: NextRequest) {
   const now = Math.floor(Date.now() / MIN) * MIN;
   const at = (ms: number) => new Date(now + ms);
   const ctx = (when?: Date) =>
-    createCtx({ orgId: org.orgId, actor: { type: 'system', name: 'dev.ce' }, ...(when ? { now: when } : {}) });
+    createCtx({
+      orgId: org.orgId,
+      actor: { type: 'system', name: 'dev.ce' },
+      ...(when ? { now: when } : {}),
+    });
   const ev = await executeCommand(
     createEventCommand,
     { name, profile: 'conference', timezone: 'America/Chicago', startsAt: at(-5 * H), endsAt: at(3 * H) },
