@@ -35,6 +35,8 @@ export function LeadApp() {
   const [setup, setSetup] = useState<LeadSetup | null>(null);
   const [leads, setLeads] = useState<LeadView[]>([]);
   const [scope, setScope] = useState<'all' | 'team' | 'own'>('own');
+  // `navigator.onLine` after each answer (batch 3l merge): a reply that lands after the network
+  // dropped must not show the app online again.
   const [online, setOnline] = useState(true);
   const [queued, setQueued] = useState(0);
   const [problem, setProblem] = useState<string | null>(null);
@@ -70,13 +72,13 @@ export function LeadApp() {
       try {
         results = await c.flush();
         await c.refresh();
-        setOnline(true);
+        setOnline(navigator.onLine);
         setProblem(null);
       } catch (err) {
         if (err instanceof LeadSignedOut) setPhase('signed_out');
         else if (err instanceof LeadOffline) setOnline(false);
         else {
-          setOnline(true);
+          setOnline(navigator.onLine);
           explain(err);
         }
       }
@@ -96,7 +98,7 @@ export function LeadApp() {
       await c.load();
       try {
         await c.refresh();
-        setOnline(true);
+        setOnline(navigator.onLine);
       } catch (err) {
         if (err instanceof LeadSignedOut) {
           setPhase('signed_out');

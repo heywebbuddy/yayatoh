@@ -61,6 +61,20 @@ export function GivingScreen({
       if (screen && version !== undefined && typeof v === 'number' && v > version) setReplaced(true);
     },
   });
+  // Batch 3l merge: a stream that drops while the link is replaced misses the `link` event and is
+  // then refused on the old link; the screen asks its own page whether the link still opens.
+  useEffect(() => {
+    if (!screen || replaced || stream !== 'offline') return;
+    let cancelled = false;
+    void fetch(window.location.href, { method: 'HEAD', cache: 'no-store' })
+      .then((r) => {
+        if (!cancelled && r.status === 404) setReplaced(true);
+      })
+      .catch(() => undefined);
+    return () => {
+      cancelled = true;
+    };
+  }, [screen, replaced, stream]);
   useEffect(() => {
     // The system's own preferences turn the modes on (the toggles can still change them).
     if (defaults.contrast === undefined && window.matchMedia?.('(prefers-contrast: more)').matches)
