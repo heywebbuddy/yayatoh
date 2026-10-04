@@ -41,7 +41,7 @@ const decide = (
 
 describe('route table (M2.4a)', () => {
   it('is versioned, with unique keys and only read surfaces', () => {
-    expect(ROUTE_TABLE_VERSION).toBe(2);
+    expect(ROUTE_TABLE_VERSION).toBe(3);
     const keys = FRONT_DOOR_ROUTES.map((r) => r.key);
     expect(new Set(keys).size).toBe(keys.length);
     expect(keys).toEqual([
@@ -60,6 +60,7 @@ describe('route table (M2.4a)', () => {
       'site.contact',
       'help.center',
       'site.status',
+      'marketplace.search',
     ]);
     for (const r of FRONT_DOOR_ROUTES) expect(r.key).toMatch(/^[a-z][a-z0-9.]*$/);
   });
@@ -108,6 +109,18 @@ describe('route table (M2.4a)', () => {
       expect(matchFrontDoorRoute('abc', p, new URLSearchParams())).toBeNull();
     expect(matchFrontDoorRoute('abc', '/', new URLSearchParams())?.key).toBe('home');
     expect(matchFrontDoorRoute('abc', '/events/gala', new URLSearchParams())?.key).toBe('events.page');
+  });
+
+  it('v3: M6.14a search is a moved route on the marketplace host only, on legacy until moved', () => {
+    const q = new URLSearchParams('q=jazz');
+    expect(matchFrontDoorRoute('yay', '/search', q)?.key).toBe('marketplace.search');
+    expect(matchFrontDoorRoute('abc', '/search', q)).toBeNull();
+    expect(matchFrontDoorRoute('yay', '/search/x', q)).toBeNull();
+    expect(decide('/search?q=jazz')).toMatchObject({ owner: 'legacy', route: 'marketplace.search' });
+    expect(decide('/ar/search', flags({ 'marketplace.search': 'next' }))).toMatchObject({
+      owner: 'next',
+      route: 'marketplace.search',
+    });
   });
 
   it('v2: the M3.11 public pages are moved routes on the marketplace host only', () => {

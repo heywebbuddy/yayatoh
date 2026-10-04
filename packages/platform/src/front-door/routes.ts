@@ -16,7 +16,7 @@ import { LOCALES } from '@yayatoh/contracts';
  * table is ignored (its paths fall back to legacy). Bump `ROUTE_TABLE_VERSION` whenever a route
  * is added, removed or changes what it matches; flag changes record the version they were made on.
  */
-export const ROUTE_TABLE_VERSION = 2;
+export const ROUTE_TABLE_VERSION = 3;
 
 /** The two legacy instances (roadmap §7.4): yayatoh.com and abc.yayatoh.com. */
 export const FRONT_DOOR_INSTANCES = ['yay', 'abc'] as const;
@@ -48,8 +48,9 @@ const isSearch = (q: URLSearchParams) => SEARCH_PARAMS.some((k) => (q.get(k) ?? 
 /**
  * Version 1: read surfaces first (A1 content, A2 public reads). Version 2 (batch 3c merge): the
  * new public pages of M3.11a/b (pricing, help center, features, contact, status) on the
- * marketplace instance; like every route they stay on legacy until staff move them. Order
- * matters: first match wins.
+ * marketplace instance; like every route they stay on legacy until staff move them. Version 3
+ * (batch 3m merge): M6.14a's marketplace search page (`/search`), likewise. Order matters: first
+ * match wins.
  */
 export const FRONT_DOOR_ROUTES: readonly FrontDoorRoute[] = [
   { key: 'home', stage: 'A2', instances: ['yay', 'abc'], shapes: ['/'], matches: (p) => p === '/' },
@@ -151,6 +152,13 @@ export const FRONT_DOOR_ROUTES: readonly FrontDoorRoute[] = [
     instances: ['yay'],
     shapes: ['/status'],
     matches: (p) => p === '/status',
+  },
+  {
+    key: 'marketplace.search',
+    stage: 'A2',
+    instances: ['yay'],
+    shapes: ['/search', '/search?q=…'],
+    matches: (p) => p === '/search',
   },
 ];
 
