@@ -148,13 +148,18 @@ export async function expectAccessible(page: Page) {
   // so does everything when the theme switches: let running transitions finish so axe judges the
   // settled colours, not a half-faded pressed button (batch 3v: giving-screen's High contrast
   // toggle). Endless animations (spinners) are not transitions and are not waited for.
+  // Capped at 1 s: a transition that never runs to its end (an element the browser stops
+  // rendering) must not hang the check.
   await page.evaluate(() =>
-    Promise.all(
-      document
-        .getAnimations()
-        .filter((a) => a instanceof CSSTransition)
-        .map((a) => a.finished.catch(() => undefined)),
-    ),
+    Promise.race([
+      Promise.all(
+        document
+          .getAnimations()
+          .filter((a) => a instanceof CSSTransition)
+          .map((a) => a.finished.catch(() => undefined)),
+      ),
+      new Promise((done) => setTimeout(done, 1_000)),
+    ]),
   );
   const results = await new AxeBuilder({ page })
     .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])

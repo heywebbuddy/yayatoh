@@ -6929,7 +6929,8 @@
         "noSalesDescription": "RSVP e posti compaiono qui appena i tuoi ospiti iniziano a rispondere."
       },
       "details": {
-        "attendanceHint": "Per eventi online e ibridi, aggiungi il link in Accesso. Lo vedono solo i tuoi ospiti."
+        "attendanceHint": "Per eventi online e ibridi, aggiungi il link in Accesso. Lo vedono solo i tuoi ospiti.",
+        "currencyHint": "Prezzi e importi mantengono le loro cifre nella nuova valuta. Si blocca al primo ordine."
       },
       "dates": {
         "capacityHint": "Facoltativo. Il numero massimo di ospiti che questa data può accogliere."

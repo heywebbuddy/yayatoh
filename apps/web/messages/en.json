@@ -6929,7 +6929,8 @@
         "noSalesDescription": "RSVPs and seating appear here once your guests start answering."
       },
       "details": {
-        "attendanceHint": "For online and hybrid events, add the join link under Access. Only your guests see it."
+        "attendanceHint": "For online and hybrid events, add the join link under Access. Only your guests see it.",
+        "currencyHint": "Prices and amounts keep their figures in the new currency. It locks once the first order is placed."
       },
       "dates": {
         "capacityHint": "Optional. The most guests this date can welcome."

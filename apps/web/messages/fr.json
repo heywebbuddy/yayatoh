@@ -6929,7 +6929,8 @@
         "noSalesDescription": "Les RSVP et le placement apparaissent ici dès que vos invités répondent."
       },
       "details": {
-        "attendanceHint": "Pour les événements en ligne et hybrides, ajoutez le lien sous Accès. Seuls vos invités le voient."
+        "attendanceHint": "Pour les événements en ligne et hybrides, ajoutez le lien sous Accès. Seuls vos invités le voient.",
+        "currencyHint": "Les prix et montants gardent leurs chiffres dans la nouvelle devise. Elle est verrouillée dès la première commande."
       },
       "dates": {
         "capacityHint": "Facultatif. Le nombre maximal d'invités que cette date peut accueillir."
