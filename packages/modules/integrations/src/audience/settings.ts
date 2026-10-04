@@ -233,6 +233,12 @@ export async function providerLists(
     providerConfigKey: requireConnector(c.connector).providerConfigKey,
     authConnectionId: c.authConnectionId,
   });
-  const lists = await api.lists({ client, origin: originStamp(c.id), now: ctx.now, scope: {} });
+  const lists = await api.lists({
+    client,
+    origin: originStamp(c.id),
+    now: ctx.now,
+    scope: {},
+    read: (fn) => withTenant(ctx, fn),
+  });
   return lists.filter((l) => ListId.safeParse(l.id).success).slice(0, 200);
 }
