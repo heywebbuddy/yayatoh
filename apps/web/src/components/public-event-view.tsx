@@ -851,7 +851,10 @@ export async function PublicEventView({
                     </nav>
                   ) : null}
                   {ev.poweredByVisible ? (
-                    <Link href="/" className="self-start text-caption text-ink-2 underline">
+                    <Link
+                      href="/"
+                      className="inline-flex min-h-6 items-center self-start text-caption text-ink-2 underline"
+                    >
                       {t('publicEvent.poweredBy')}
                     </Link>
                   ) : null}

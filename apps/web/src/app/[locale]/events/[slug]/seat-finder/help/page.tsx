@@ -39,7 +39,10 @@ export default async function GuestHelpPage({
   const t = await getTranslations('assistance.guest');
   const check = await checkHelpTicket(slug, token.slice(0, 200));
   const back = (
-    <Link href={`/events/${slug}/seat-finder`} className="self-start text-caption text-ink-2 underline">
+    <Link
+      href={`/events/${slug}/seat-finder`}
+      className="inline-flex min-h-6 items-center self-start text-caption text-ink-2 underline"
+    >
       {t('back')}
     </Link>
   );

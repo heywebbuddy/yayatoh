@@ -53,3 +53,4 @@ apps/web/e2e/.generated/
 # Cutover orchestrator state and rehearsal reports (M2.5a)
 /.cutover/
 /reports/
+docs/ux/sweep/full/

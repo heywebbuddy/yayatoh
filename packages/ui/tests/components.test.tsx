@@ -22,6 +22,7 @@ import {
   PersonChip,
   ProgressBar,
   ScheduleLane,
+  SearchPill,
   Select,
   StatCard,
   StatusDot,
@@ -196,6 +197,8 @@ describe('Navigation', () => {
     expect(html).toContain('aria-current="page"');
     expect(html).toContain('href="/e"');
     expect(html).toContain('rtl:-scale-x-100');
+    // U11: a crumb link is a 24 px target
+    expect(html).toContain('min-h-6');
   });
   it('Pagination disables the missing end', () => {
     const html = renderToStaticMarkup(
@@ -238,6 +241,15 @@ describe('Layout and states', () => {
     );
     expect(err).toContain('role="alert"');
     expect(err).toContain('Try again');
+  });
+  it('EmptyState is a paragraph by default and a heading when it is the whole page (U11)', () => {
+    expect(renderToStaticMarkup(<EmptyState title="Nothing yet" />)).toContain('<p class="m-0 text-card');
+    const page = renderToStaticMarkup(<EmptyState headingLevel={1} title="Page not found" />);
+    expect(page).toMatch(/<h1 class="m-0 text-card[^"]*">Page not found<\/h1>/);
+  });
+  it('SearchPill fills its pill so the input is the full-height target (U11)', () => {
+    const html = renderToStaticMarkup(<SearchPill label="Search" name="q" />);
+    expect(html).toMatch(/<input[^>]*class="h-full /);
   });
   it('Alert tones map to roles', () => {
     expect(renderToStaticMarkup(<Alert title="Failed" />)).toContain('role="alert"');

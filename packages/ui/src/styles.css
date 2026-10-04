@@ -503,6 +503,12 @@
   progress {
     accent-color: var(--color-primary);
   }
+  /* 24 px minimum target (WCAG 2.5.8): raw checkboxes and radios never draw smaller */
+  input[type="checkbox"],
+  input[type="radio"] {
+    min-inline-size: 1.5rem;
+    min-block-size: 1.5rem;
+  }
   /* biome-ignore-start lint/complexity/noImportantStyles: reduced motion must beat every utility's transition */
   @media (prefers-reduced-motion: reduce) {
     *,

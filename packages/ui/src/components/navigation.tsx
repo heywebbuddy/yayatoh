@@ -124,7 +124,7 @@ export function Breadcrumb({
               {c.href ? (
                 <LinkC
                   href={c.href}
-                  className="rounded-tag hover:text-ink hover:underline underline-offset-2"
+                  className="inline-flex min-h-6 items-center rounded-tag hover:text-ink hover:underline underline-offset-2"
                 >
                   {c.label}
                 </LinkC>
@@ -227,7 +227,7 @@ export function SearchPill({
       <input
         id={id}
         type="search"
-        className="min-w-0 flex-1 bg-transparent text-body font-medium text-ink outline-none placeholder:text-ink-3 focus-visible:outline-none"
+        className="h-full min-w-0 flex-1 bg-transparent text-body font-medium text-ink outline-none placeholder:text-ink-3 focus-visible:outline-none"
         {...rest}
       />
       {shortcut ? <Kbd>{shortcut}</Kbd> : null}

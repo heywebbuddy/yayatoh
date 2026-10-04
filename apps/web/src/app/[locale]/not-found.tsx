@@ -12,6 +12,7 @@ export default async function NotFound() {
   return (
     <main id="main" className="mx-auto flex max-w-xl flex-col gap-4 px-6 py-24">
       <EmptyState
+        headingLevel={1}
         title={t('title')}
         description={t('description')}
         action={

@@ -152,7 +152,7 @@ export function selectTriggerClass(size: 'sm' | 'md' | 'lg' = 'md', className?: 
   return fieldClass(
     size,
     cx(
-      'field-chevron group relative flex cursor-pointer appearance-none items-center text-start',
+      'field-chevron group relative flex [max-inline-size:100%] cursor-pointer appearance-none items-center text-start',
       !width && 'w-full',
       'disabled:cursor-not-allowed',
       own.join(' '),

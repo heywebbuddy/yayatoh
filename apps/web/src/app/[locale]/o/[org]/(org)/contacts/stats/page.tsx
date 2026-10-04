@@ -82,7 +82,7 @@ export default async function ContactInsightsPage({
           title={t('orgEmptyTitle')}
           description={t('orgEmptyDescription')}
           action={
-            <Link href={`/o/${org}/events`} className="underline underline-offset-2">
+            <Link href={`/o/${org}`} className="underline underline-offset-2">
               {t('orgEmptyAction')}
             </Link>
           }
