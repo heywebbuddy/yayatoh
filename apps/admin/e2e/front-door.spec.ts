@@ -20,7 +20,12 @@ import {
  * suite forwards the front-door hosts to the local legacy stub (never a live site).
  */
 const YAY = `http://${FD_YAY_HOST}:${WEB_PORT}`;
-const ROUTE = 'content.pages';
+/**
+ * The route each project moves: the two viewports run in parallel and the flags are global, so
+ * each moves its own route (batch 3m merge: they raced on one route and saw each other's change).
+ */
+const route = () => (test.info().project.name === 'mobile-375' ? 'content.blogs' : 'content.pages');
+const routePath = (tag: string) => `/${route() === 'content.blogs' ? 'blogs' : 'pages'}/fd-${tag}`;
 
 const routesTable = (page: Page) => page.getByRole('table', { name: 'Moved routes' });
 const row = (page: Page, host: string, route: string) =>
@@ -39,8 +44,9 @@ async function moveRoute(
   await expectPicked(form.getByLabel('Host', { exact: true }), FD_YAY_HOST);
   await page.keyboard.press('Tab');
   await expect(form.getByLabel('Route', { exact: true })).toBeFocused();
-  await page.keyboard.type('content.p');
-  await expectPicked(form.getByLabel('Route', { exact: true }), ROUTE);
+  // Type-ahead to the project's route (content.pages or content.blogs).
+  await page.keyboard.type(route().slice(0, 9));
+  await expectPicked(form.getByLabel('Route', { exact: true }), route());
   await page.keyboard.press('Tab');
   // The radio group: Space checks the first choice, arrows move the choice.
   await page.keyboard.press('Space');
@@ -73,7 +79,7 @@ test('admins move a route with a step-up; the change is audited, persists and ta
   await signInStaff(page);
   // Start from legacy (reruns and the other viewport leave it there, but be sure).
   await page.goto('/front-door');
-  if (!(await row(page, FD_YAY_HOST, ROUTE).textContent())?.includes('Legacy'))
+  if (!(await row(page, FD_YAY_HOST, route()).textContent())?.includes('Legacy'))
     await moveRoute(page, 'Legacy', devPassword(), `e2e reset ${tag}`);
 
   // From the nav.
@@ -83,17 +89,19 @@ test('admins move a route with a step-up; the change is audited, persists and ta
     .getByRole('link', { name: 'Front door' })
     .click();
   await expect(page.getByRole('heading', { name: 'Front door', level: 1 })).toBeVisible();
-  await expect(page.getByText('Route table version 2.')).toBeVisible();
+  await expect(page.getByText('Route table version 3.')).toBeVisible();
   await expect(page.getByRole('list', { name: 'Legacy hosts' })).toContainText(FD_YAY_HOST);
   await expect(page.getByRole('list', { name: 'Legacy hosts' })).toContainText(
     'Legacy origin set: front door on',
   );
-  await expect(row(page, FD_YAY_HOST, ROUTE)).toContainText('Legacy');
+  await expect(row(page, FD_YAY_HOST, route())).toContainText('Legacy');
   await expectAccessible(page);
 
   // A legacy 404 on the front-door host shows up in the top list.
   const web = await webPage(browser);
-  const missing = `/missing/fd-console-${tag}`;
+  // One stable path per project: the top list shows the 25 paths with the most misses, so on a
+  // reused database a fresh one-off path can fall off it; this one's count only grows.
+  const missing = `/missing/fd-console-${test.info().project.name}`;
   expect((await web.goto(`${YAY}${missing}`))?.status()).toBe(404);
   await expect
     .poll(
@@ -111,33 +119,33 @@ test('admins move a route with a step-up; the change is audited, persists and ta
   await expect(page.getByRole('table', { name: 'Other traffic' })).toContainText('Everything else (legacy)');
 
   // Before: legacy answers the route.
-  expect(await servedBy(web, `/pages/fd-${tag}`)).toBe('legacy');
+  expect(await servedBy(web, routePath(tag))).toBe('legacy');
 
   // A wrong password changes nothing.
   await moveRoute(page, 'New app', 'not-the-password', `e2e move ${tag}`);
   await expect(
     page.getByRole('alert').filter({ hasText: "That code or password isn't right. Nothing changed." }),
   ).toBeVisible();
-  await expect(row(page, FD_YAY_HOST, ROUTE)).toContainText('Legacy');
+  await expect(row(page, FD_YAY_HOST, route())).toContainText('Legacy');
 
   // The right one moves it; the table, the audit trail and the web agree, also after a reload.
   await moveRoute(page, 'New app', devPassword(), `e2e move ${tag}`);
   await expect(page.getByRole('status').filter({ hasText: 'Route updated.' })).toBeVisible();
   await page.reload();
-  await expect(row(page, FD_YAY_HOST, ROUTE)).toContainText('New app');
-  await expect(row(page, FD_YAY_HOST, ROUTE)).toContainText('Omar');
+  await expect(row(page, FD_YAY_HOST, route())).toContainText('New app');
+  await expect(row(page, FD_YAY_HOST, route())).toContainText('Omar');
   const changes = page.getByRole('list', { name: 'Recent changes' });
   await expect(changes.getByRole('listitem').filter({ hasText: `e2e move ${tag}` })).toContainText(
-    `${FD_YAY_HOST}: ${ROUTE} from Legacy to New app`,
+    `${FD_YAY_HOST}: ${route()} from Legacy to New app`,
   );
-  await expect.poll(() => servedBy(web, `/pages/fd-${tag}`), { timeout: 5_000 }).toBe('next');
+  await expect.poll(() => servedBy(web, routePath(tag)), { timeout: 5_000 }).toBe('next');
   await expectAccessible(page);
 
   // And back.
   await moveRoute(page, 'Legacy', devPassword(), `e2e back ${tag}`);
-  await expect(row(page, FD_YAY_HOST, ROUTE)).toContainText('Legacy');
-  await expect.poll(() => servedBy(web, `/pages/fd-${tag}`), { timeout: 5_000 }).toBe('legacy');
-  await expect(web.getByRole('heading', { name: `Legacy yay /pages/fd-${tag}` })).toBeVisible();
+  await expect(row(page, FD_YAY_HOST, route())).toContainText('Legacy');
+  await expect.poll(() => servedBy(web, routePath(tag)), { timeout: 5_000 }).toBe('legacy');
+  await expect(web.getByRole('heading', { name: `Legacy yay ${routePath(tag)}` })).toBeVisible();
   await web.context().close();
 });
 
@@ -163,14 +171,14 @@ test('support sees the table but no control, and a replayed change is refused', 
 
   await replayForm(other, form, {
     host: FD_YAY_HOST,
-    route: ROUTE,
+    route: route(),
     state: 'next',
     reason: `e2e support ${tag}`,
     password: devPassword(),
   });
   await expect(other).toHaveURL(/\/not-staff$/);
   await page.reload();
-  await expect(row(page, FD_YAY_HOST, ROUTE)).toContainText('Legacy');
+  await expect(row(page, FD_YAY_HOST, route())).toContainText('Legacy');
   await expect(page.getByRole('list', { name: 'Recent changes' })).not.toContainText(`e2e support ${tag}`);
   await other.context().close();
 });
