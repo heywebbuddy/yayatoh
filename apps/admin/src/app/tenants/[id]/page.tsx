@@ -19,7 +19,7 @@ import {
   SUSPENSION_KINDS,
   suspensionHistoryQuery,
 } from '@yayatoh/tenancy';
-import { Alert, Button, Card, PageHeader, StatusDot } from '@yayatoh/ui';
+import { Alert, Button, Card, PageHeader, Select, StatusDot } from '@yayatoh/ui';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
@@ -632,22 +632,22 @@ export default async function TenantPage({
               <label htmlFor="ent-module" className="text-[13px] font-bold text-ink">
                 {t('entitlements.module')}
               </label>
-              <select id="ent-module" name="moduleKey" className={field}>
+              <Select id="ent-module" name="moduleKey" className={field}>
                 {MODULE_KEYS.map((k) => (
                   <option key={k} value={k}>
                     {k}
                   </option>
                 ))}
-              </select>
+              </Select>
             </div>
             <div className="flex flex-col gap-1.5">
               <label htmlFor="ent-effect" className="text-[13px] font-bold text-ink">
                 {t('entitlements.effect')}
               </label>
-              <select id="ent-effect" name="effect" className={field}>
+              <Select id="ent-effect" name="effect" className={field}>
                 <option value="grant">{t('entitlements.grant')}</option>
                 <option value="revoke">{t('entitlements.revoke')}</option>
-              </select>
+              </Select>
             </div>
             <Reason id="reason-ent" label={t('reason')} />
             <Button type="submit">{t('entitlements.save')}</Button>
@@ -663,7 +663,7 @@ export default async function TenantPage({
               <label htmlFor="imp-member" className="text-[13px] font-bold text-ink">
                 {t('impersonate.member')}
               </label>
-              <select id="imp-member" name="userId" required defaultValue="" className={field}>
+              <Select id="imp-member" name="userId" required defaultValue="" className={field}>
                 <option value="" disabled>
                   {t('impersonate.choose')}
                 </option>
@@ -676,7 +676,7 @@ export default async function TenantPage({
                     })}
                   </option>
                 ))}
-              </select>
+              </Select>
             </div>
             <div className="flex flex-col gap-1.5">
               <label htmlFor="imp-reason" className="text-[13px] font-bold text-ink">

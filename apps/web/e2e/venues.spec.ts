@@ -1,5 +1,5 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { expectAccessible, passHumanCheck, signIn } from './helpers.ts';
+import { expectAccessible, expectPicked, passHumanCheck, pickOption, signIn } from './helpers.ts';
 
 const VIEWER = 'jordan@lakeside.test';
 const ORG = '/o/lakeside-events';
@@ -42,7 +42,7 @@ async function createVenue(page: Page, name: string, opts: { listed?: boolean; c
 async function createEvent(page: Page, name: string) {
   await page.goto(`${ORG}/events/new`);
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Time zone').selectOption('America/Chicago');
+  await pickOption(page.getByLabel('Time zone'), 'America/Chicago');
   await page.getByLabel('Starts', { exact: true }).fill(chicago(24 * 30));
   await page.getByLabel('Ends', { exact: true }).fill(chicago(24 * 30 + 3));
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -144,13 +144,13 @@ test.describe('venues, categories and tags (M1.4c)', () => {
     await page.goto(`${base}/details`);
     await expect(page.getByRole('heading', { name: 'Event details', level: 1 })).toBeVisible();
     await expectAccessible(page);
-    await page.getByLabel('Venue').selectOption({ label: `${venue} · Chicago` });
-    await page.getByLabel('Category').selectOption({ label: 'Music' });
+    await pickOption(page.getByLabel('Venue'), { label: `${venue} · Chicago` });
+    await pickOption(page.getByLabel('Category'), { label: 'Music' });
     await page.getByLabel('Tags').fill(`${tag}, live, ${tag.toLowerCase()}`);
     await page.getByRole('button', { name: 'Save details' }).click();
     await expect(page.getByText('Details saved.')).toBeVisible();
     await page.reload();
-    await expect(page.getByLabel('Category')).toHaveValue('music');
+    await expectPicked(page.getByLabel('Category'), 'music');
     await expect(page.getByLabel('Tags')).toHaveValue(`${tag}, live`);
 
     // Too many tags: a specific message on the field.
@@ -162,19 +162,19 @@ test.describe('venues, categories and tags (M1.4c)', () => {
     // Console list: filter by tag, then by category, then clear.
     await page.goto(ORG);
     const filters = page.getByRole('search', { name: 'Filter events' });
-    await filters.getByLabel('Tag').selectOption({ label: tag });
+    await pickOption(filters.getByLabel('Tag'), { label: tag });
     await filters.getByRole('button', { name: 'Filter' }).click();
     await expect(page).toHaveURL(new RegExp(`tag=${tag.toLowerCase()}`));
     await expect(page.getByRole('heading', { name: `Loft Night ${s}` })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Lakeside Open House' })).toHaveCount(0);
     await expectAccessible(page);
-    await filters.getByLabel('Tag').selectOption('');
-    await filters.getByLabel('Category').selectOption({ label: 'Nightlife' });
+    await pickOption(filters.getByLabel('Tag'), '');
+    await pickOption(filters.getByLabel('Category'), { label: 'Nightlife' });
     await filters.getByRole('button', { name: 'Filter' }).click();
     await expect(page.getByRole('heading', { name: `Loft Night ${s}` })).toHaveCount(0);
     await page.getByRole('link', { name: 'Clear filters' }).click();
     await expect(page).toHaveURL(new RegExp(`${ORG}$`));
-    await expect(filters.getByLabel('Category')).toHaveValue('');
+    await expectPicked(filters.getByLabel('Category'), '');
     // Design v2: the list is paged (24 a page); the unfiltered list finds it by name.
     await filters.getByLabel('Search by name').fill(`Loft Night ${s}`);
     await filters.getByRole('button', { name: 'Filter' }).click();

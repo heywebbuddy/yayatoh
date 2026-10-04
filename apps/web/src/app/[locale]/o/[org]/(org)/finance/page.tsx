@@ -2,10 +2,11 @@ import { executeQuery, formatMoney, money } from '@yayatoh/kernel';
 import { creditNotesQuery, creditNoteTotalsQuery } from '@yayatoh/orders';
 import { reconciliationItemsQuery, reconciliationRunsQuery } from '@yayatoh/payments';
 import { roleCan } from '@yayatoh/tenancy';
-import { Card, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
+import { buttonClass, Card, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { ResolveItemForm } from '@/components/resolve-item-form.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import { resolveReconciliationAction } from './actions.ts';
@@ -177,7 +178,15 @@ export default async function FinancePage({ params }: { params: Promise<{ locale
           {t('openTitle')}
         </h2>
         {open.length === 0 ? (
-          <EmptyState title={t('emptyTitle')} description={t('emptyDescription')} />
+          <EmptyState
+            title={t('emptyTitle')}
+            description={t('emptyDescription')}
+            action={
+              <Link href="#runs-heading" className={buttonClass('secondary', 'md')}>
+                {t('emptyAction')}
+              </Link>
+            }
+          />
         ) : (
           <ul className="flex list-none flex-col gap-3 p-0">
             {open.map((i) => (

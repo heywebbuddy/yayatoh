@@ -24,7 +24,7 @@ export default async function ReviewsPage({
   setRequestLocale(locale);
   const raw = (await searchParams).filter;
   const filter: Filter = (REVIEW_FILTERS as readonly string[]).includes(raw ?? '') ? (raw as Filter) : 'all';
-  const { data, event: ev, can } = await loadEvent(org, event, 'reviews');
+  const { data, event: ev, can, opens } = await loadEvent(org, event, 'reviews');
   const t = await getTranslations('reviews');
   // Moderation is an events:write power (event managers included, through the event's roles).
   const canModerate = can('events:write');
@@ -72,6 +72,21 @@ export default async function ReviewsPage({
         <EmptyState
           title={t(filter === 'all' ? 'console.emptyTitle' : 'console.emptyFilteredTitle')}
           description={t('console.emptyDescription')}
+          action={
+            filter !== 'all' ? (
+              <Link href={base} className={buttonClass('primary', 'md')}>
+                {t('console.showAll')}
+              </Link>
+            ) : opens('ticketsOrders') ? (
+              <Link href={`/o/${org}/e/${event}/tickets-orders`} className={buttonClass('primary', 'md')}>
+                {t('console.seeOrders')}
+              </Link>
+            ) : (
+              <Link href={`/o/${org}/e/${event}`} className={buttonClass('primary', 'md')}>
+                {t('console.backToEvent')}
+              </Link>
+            )
+          }
         />
       ) : (
         <ul aria-label={t('console.listLabel')} className="flex list-none flex-col gap-3 p-0">

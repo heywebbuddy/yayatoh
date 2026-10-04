@@ -29,9 +29,21 @@ export {
   type StoredAlert,
   stateAfter,
 } from './domain/lifecycle.ts';
-export { type EventFacts, evaluateEventRules, evaluateOrgRules, type OrgFacts } from './domain/rules.ts';
+export {
+  type ConferenceFacts,
+  type EventFacts,
+  evaluateConferenceRules,
+  evaluateEventRules,
+  evaluateOrgRules,
+  evaluateSocialRules,
+  type OrgFacts,
+  roomTooSmall,
+  type SocialEventFacts,
+  sessionNearlyFull,
+} from './domain/rules.ts';
 export {
   ALERT_KIND,
+  ALERT_NOTIFIED_EVENT,
   ALERT_TEXT_KIND,
   ALERT_URGENT_TEXT_KIND,
   type AlertChange,
@@ -39,7 +51,21 @@ export {
   evaluateEventAlertsTx,
   evaluateOrgAlertsTx,
 } from './engine.ts';
-export { eventFactsTx, orgFactsTx } from './facts.ts';
+export {
+  type ConferenceSources,
+  conferenceFactsTx,
+  connectedConferenceSources,
+  eventFactsTx,
+  orgFactsTx,
+} from './facts.ts';
+export {
+  applyMetricRuleTx,
+  METRIC_KIND,
+  METRIC_NOW_KIND,
+  METRIC_RULE_EVENT,
+  readingText,
+  sweepMetricAlertsTx,
+} from './metric-rules.ts';
 export { privateColumns } from './private-columns.ts';
 export {
   ALERT_TRIGGER_EVENTS,

@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
-import { devPassword, expectAccessible, newUser, ownClientIp } from './helpers.ts';
+import { devPassword, expectAccessible, newUser, ownClientIp, pickOption } from './helpers.ts';
 
 /**
  * The account corner on a tenant site's event pages (M1.2f): signed out, "Sign in" goes through
@@ -74,7 +74,7 @@ test.describe('tenant event page account corner (M1.2f)', () => {
     await expect(page.getByText('No tickets yet')).toBeVisible();
     await expectAccessible(page);
     await page.goto(event);
-    await page.getByLabel('Quantity — Free entry').selectOption('1');
+    await pickOption(page.getByLabel('Quantity — Free entry'), '1');
     await page.getByLabel('Full name').fill(name);
     await page.getByLabel('Email for your tickets').fill(buyer.email);
     await page.getByRole('button', { name: 'Continue to payment' }).click();

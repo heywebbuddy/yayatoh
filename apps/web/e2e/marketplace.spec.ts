@@ -3,7 +3,7 @@ import { closePools } from '@yayatoh/db';
 import { catchUpListings } from '@yayatoh/marketplace';
 import { signLinkToken } from '@yayatoh/platform';
 import { resolveOrgSlug } from '@yayatoh/tenancy';
-import { expectAccessible, signIn } from './helpers.ts';
+import { expectAccessible, pickOption, signIn } from './helpers.ts';
 
 const PORT = Number(process.env.E2E_PORT ?? 3100);
 /** The marketplace host (yayatoh.com in production; `*.localhost` resolves to this server). */
@@ -100,14 +100,14 @@ test.describe('marketplace home and search (M1.11a)', () => {
     await expect(search.getByLabel('Search by name, place or organizer')).toHaveValue('harbor film');
 
     await page.goto('/events');
-    await search.getByLabel('City').selectOption('Paris');
+    await pickOption(search.getByLabel('City'), 'Paris');
     await search.getByRole('button', { name: 'Search' }).click();
     await expect(results.getByRole('link', { name: 'Harbor Film Night' })).toBeVisible();
     await expect(results.getByText('New York')).toHaveCount(0);
 
     await page.goto('/events');
-    await search.getByLabel('Category').selectOption('concert');
-    await search.getByLabel('Price', { exact: true }).selectOption('free');
+    await pickOption(search.getByLabel('Category'), 'concert');
+    await pickOption(search.getByLabel('Price', { exact: true }), 'free');
     await search.getByRole('button', { name: 'Search' }).click();
     await expect(results.getByRole('link', { name: 'Harbor Spring Concert' })).toBeVisible();
     await expect(results.getByRole('link', { name: 'Lakeside Jazz Night' })).toHaveCount(0);
@@ -310,8 +310,8 @@ test.describe('projection (M1.11a)', () => {
     await signIn(page, 'lee@harbor.test');
     await page.goto('/o/harbor-arts/events/new');
     await page.getByLabel('Event name', { exact: true }).fill(name);
-    await page.getByLabel('Event type').selectOption('concert');
-    await page.getByLabel('Time zone').selectOption('America/New_York');
+    await pickOption(page.getByLabel('Event type'), 'concert');
+    await pickOption(page.getByLabel('Time zone'), 'America/New_York');
     await page.getByLabel('Starts', { exact: true }).fill('2029-03-05T19:00');
     await page.getByLabel('Ends', { exact: true }).fill('2029-03-05T22:00');
     await page.getByLabel('City').fill('Boston');

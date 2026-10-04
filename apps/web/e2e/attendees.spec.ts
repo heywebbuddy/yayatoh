@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { continueToPayment, expectAccessible, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, pickOption, signIn } from './helpers.ts';
 
 test.describe('attendees: labels, filters and org-wide search', () => {
   test.use({ viewport: { width: 1280, height: 900 } });
@@ -30,7 +30,7 @@ test.describe('attendees: labels, filters and org-wide search', () => {
     const codes: string[] = [];
     for (const who of [`Ada ${stamp}`, `Bob ${stamp}`]) {
       await guest.goto(`/events/${base.split('/').pop()}`);
-      await guest.getByLabel('Quantity — Guest pass').selectOption('1');
+      await pickOption(guest.getByLabel('Quantity — Guest pass'), '1');
       await guest.getByLabel('Full name').fill(who);
       await guest
         .getByLabel('Email for your tickets')
@@ -121,7 +121,7 @@ test.describe('attendees: bulk actions and export', () => {
     const guest = await (await browser.newContext()).newPage();
     for (const who of ['Ann', 'Ben', 'Cy']) {
       await guest.goto(`/events/${base.split('/').pop()}`);
-      await guest.getByLabel('Quantity — Pass').selectOption('1');
+      await pickOption(guest.getByLabel('Quantity — Pass'), '1');
       await guest.getByLabel('Full name').fill(`${who} ${stamp}`);
       await guest.getByLabel('Email for your tickets').fill(`${who.toLowerCase()}.${stamp}@example.test`);
       await continueToPayment(guest, `${who.toLowerCase()}.${stamp}@example.test`);
@@ -132,7 +132,7 @@ test.describe('attendees: bulk actions and export', () => {
     await page.getByLabel(`Select Ann ${stamp}`).check();
     await page.getByLabel(`Select Ben ${stamp}`).check();
     const bulk = page.getByRole('form', { name: 'Bulk actions' });
-    await bulk.getByLabel('Action').selectOption({ label: 'Add label' });
+    await pickOption(bulk.getByLabel('Action'), { label: 'Add label' });
     await bulk.getByLabel('Label', { exact: true }).fill('Table 7');
     await bulk.getByRole('button', { name: 'Apply' }).click();
     const panel = page.getByRole('region', { name: 'Bulk labels' });
@@ -147,7 +147,7 @@ test.describe('attendees: bulk actions and export', () => {
 
     // Everyone matching the (empty) filter, as CSV.
     await bulk.getByLabel('All 3 matching').check();
-    await bulk.getByLabel('Action').selectOption({ label: 'Export as CSV' });
+    await pickOption(bulk.getByLabel('Action'), { label: 'Export as CSV' });
     await bulk.getByRole('button', { name: 'Apply' }).click();
     const exportPanel = page.getByRole('region', { name: 'Attendee export' });
     await expect(exportPanel).toContainText('Ready: 3 rows exported.');
@@ -200,9 +200,9 @@ test.describe('attendees: import', () => {
     await expect(page.getByRole('heading', { name: '2. Match the columns in guests.csv' })).toBeVisible();
     await expect(page.getByText('3 rows')).toBeVisible();
     // "Guest name" and "Table" aren't guessed: map them by hand.
-    await page.getByLabel('Name', { exact: true }).selectOption({ label: 'Guest name' });
-    await page.getByLabel('Email', { exact: true }).selectOption({ label: 'Email address' });
-    await page.getByLabel('Labels', { exact: true }).selectOption({ label: 'Table' });
+    await pickOption(page.getByLabel('Name', { exact: true }), { label: 'Guest name' });
+    await pickOption(page.getByLabel('Email', { exact: true }), { label: 'Email address' });
+    await pickOption(page.getByLabel('Labels', { exact: true }), { label: 'Table' });
     await page.getByLabel('Label everyone as (optional)').fill('Imported');
     await page.getByRole('button', { name: 'Check rows' }).click();
     await expect(page.getByText("2 ready to import, 1 can't be imported.")).toBeVisible();

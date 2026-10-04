@@ -3,7 +3,15 @@ import { closePools } from '@yayatoh/db';
 import { localKeyVault, setKeyVault } from '@yayatoh/platform';
 import { resolveOrgSlug } from '@yayatoh/tenancy';
 import { mergeScenario } from '@yayatoh/testing';
-import { ageSession, codeForKey, confirmStepUp, expectAccessible, newUser, signIn } from './helpers.ts';
+import {
+  ageSession,
+  codeForKey,
+  confirmStepUp,
+  expectAccessible,
+  newUser,
+  pickOption,
+  signIn,
+} from './helpers.ts';
 
 // Tickets are signed with the org's keys: seal them under the web server's key vault.
 const kms = process.env.LOCAL_KMS_KEY;
@@ -106,18 +114,18 @@ test.describe('CRM merge and timeline (M6.1a)', () => {
     // Filters (kind, event), keyboard only; persistence across a reload.
     const kind = page.getByLabel('What');
     await kind.focus();
-    await kind.selectOption({ label: 'Checked in' });
+    await pickOption(kind, { label: 'Checked in' });
     await page.getByRole('button', { name: 'Filter' }).focus();
     await page.keyboard.press('Enter');
     await expect(entries(page)).toHaveCount(1);
     await expect(entries(page).first()).toContainText(s.summitName);
-    await page.getByLabel('What').selectOption({ label: 'Everything' });
-    await page.getByLabel('Event').selectOption({ label: s.galaName });
+    await pickOption(page.getByLabel('What'), { label: 'Everything' });
+    await pickOption(page.getByLabel('Event'), { label: s.galaName });
     await page.getByRole('button', { name: 'Filter' }).click();
     await expect(entries(page)).toHaveCount(1);
     await expect(entries(page).first()).toContainText('Order paid');
-    await page.getByLabel('Event').selectOption({ label: s.summitName });
-    await page.getByLabel('What').selectOption({ label: 'Refund' });
+    await pickOption(page.getByLabel('Event'), { label: s.summitName });
+    await pickOption(page.getByLabel('What'), { label: 'Refund' });
     await page.getByRole('button', { name: 'Filter' }).click();
     await expect(page.getByText('Nothing matches these filters')).toBeVisible();
     await expectAccessible(page);

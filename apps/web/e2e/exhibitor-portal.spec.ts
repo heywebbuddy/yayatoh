@@ -1,7 +1,15 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { expectAccessible, lastEmailedCode, ownClientIp, signIn } from './helpers.ts';
+import {
+  expectAccessible,
+  expectPicked,
+  lastEmailedCode,
+  ownClientIp,
+  pickOption,
+  signIn,
+  stepOption,
+} from './helpers.ts';
 
 /**
  * M5.4a: the exhibitor portal and booths. An organizer invites an exhibitor admin, who signs in
@@ -35,8 +43,8 @@ const at = (days: number, hhmm: string) => `${chicagoDate(days)}T${hhmm}`;
 async function conference(page: Page, name: string, exhibitors: string[]) {
   await page.goto(`${ORG}/events/new`);
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Event type').selectOption('conference');
-  await page.getByLabel('Time zone').selectOption(TZ);
+  await pickOption(page.getByLabel('Event type'), 'conference');
+  await pickOption(page.getByLabel('Time zone'), TZ);
   await page.getByLabel('Starts', { exact: true }).fill(at(40, '09:00'));
   await page.getByLabel('Ends', { exact: true }).fill(at(42, '18:00'));
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -412,7 +420,7 @@ test.describe('exhibitor portal (M5.4a)', () => {
     // Assign by keyboard only: pick with the arrow keys, submit with Enter.
     const assign = page.getByRole('region', { name: 'Assign a booth' });
     await assign.getByLabel('Booth', { exact: true }).focus();
-    await expect(assign.getByLabel('Booth', { exact: true })).toHaveValue(/.+/);
+    await expectPicked(assign.getByLabel('Booth', { exact: true }), /.+/);
     await page.keyboard.press('Tab');
     await expect(assign.getByLabel('Exhibitor', { exact: true })).toBeFocused();
     await page.keyboard.press('Tab');
@@ -428,9 +436,8 @@ test.describe('exhibitor portal (M5.4a)', () => {
     await page.getByRole('button', { name: 'Assign' }).click();
     await expect(assign.getByText('That exhibitor is already at this booth.')).toBeVisible();
     // A co-exhibitor at B12 is a warning; making them primary swaps.
-    await assign.getByLabel('Exhibitor', { exact: true }).focus();
-    await page.keyboard.press('ArrowDown');
-    await expect(assign.getByLabel('Exhibitor', { exact: true })).toHaveValue(/.+/);
+    await stepOption(assign.getByLabel('Exhibitor', { exact: true }));
+    await expectPicked(assign.getByLabel('Exhibitor', { exact: true }), /.+/);
     await assign.getByRole('button', { name: 'Assign' }).click();
     await expect(assign.getByText('Assigned.')).toBeVisible();
     await page.reload();

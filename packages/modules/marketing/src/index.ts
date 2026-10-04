@@ -19,6 +19,7 @@ export {
   attributeOrderCommand,
   attributionSettingsQuery,
   attributionWindowTx,
+  ORDER_ATTRIBUTED_EVENT,
   orderAttributionQuery,
   setAttributionWindowCommand,
 } from './attribution.ts';
@@ -34,6 +35,15 @@ export {
   MAX_RANGE_DAYS,
   parseCampaignKey,
 } from './domain/analytics.ts';
+export { referralUtm } from './domain/referral.ts';
+export {
+  clickPath,
+  landingKind,
+  MAX_TOUCHES,
+  REFERRAL_MEDIUM,
+  TOUCH_KINDS,
+  type TouchKind,
+} from './domain/touches.ts';
 export {
   ATTRIBUTION_MODELS,
   type AttributionModel,
@@ -55,3 +65,4 @@ export {
 } from './links.ts';
 export { privateColumns } from './private-columns.ts';
 export { campaignClicksTx, linkDetailQuery, linkReportQuery, utmOnlyReportQuery } from './reports.ts';
+export { eventTouchPathsTx, type TouchFact, type TouchPath } from './touch-paths.ts';

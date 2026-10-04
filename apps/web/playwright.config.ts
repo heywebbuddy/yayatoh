@@ -3,6 +3,8 @@ import { defineConfig, devices } from '@playwright/test';
 import { frontDoorEnv, legacyStubServer } from './e2e/front-door-env.ts';
 
 const PORT = Number(process.env.E2E_PORT ?? 3100);
+/** Lighthouse specs (M4.7a): their own project, run alone (see `projects`). */
+const LIGHTHOUSE = /-lighthouse\.spec\.ts$/;
 /**
  * Idle keep-alive sockets stay open this long (batch 3d root cause of the ECONNRESET flakes, CI runs
  * 36573133566 and 36597004367). Node closes an idle keep-alive socket after `keepAliveTimeout`
@@ -18,8 +20,16 @@ const KEEP_ALIVE_MS = 600_000;
  * Needs a migrated, seeded database and YAYATOH_DEV_AUTH=1 (dev personas).
  * `PW_CHROMIUM_PATH` points at a preinstalled browser when the bundled one isn't available.
  */
+/**
+ * Visual baselines are per renderer: the bundled Chromium and the headless shell (what CI runs)
+ * rasterize text differently, which is a few percent of a snapshot's pixels with no layout change
+ * (batch 3u merge). Both sets are committed, so neither environment needs a weaker threshold.
+ */
+const RENDERER = /headless_shell/.test(process.env.PW_CHROMIUM_PATH ?? '') ? 'shell' : 'chromium';
+
 export default defineConfig({
   testDir: './e2e',
+  snapshotPathTemplate: `{testDir}/{testFileName}-snapshots/{arg}-${RENDERER}-{projectName}-{platform}{ext}`,
   // Migrates the synthetic legacy dataset (M2.2b) the legacy-migration spec checks.
   globalSetup: './e2e/global-setup.ts',
   fullyParallel: true,
@@ -43,9 +53,25 @@ export default defineConfig({
     },
   },
   projects: [
-    { name: 'mobile-375', use: { ...devices['Desktop Chrome'], viewport: { width: 375, height: 812 } } },
-    { name: 'tablet-768', use: { ...devices['Desktop Chrome'], viewport: { width: 768, height: 1024 } } },
-    { name: 'desktop-1280', use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 900 } } },
+    {
+      name: 'mobile-375',
+      testIgnore: LIGHTHOUSE,
+      use: { ...devices['Desktop Chrome'], viewport: { width: 375, height: 812 } },
+    },
+    {
+      name: 'tablet-768',
+      testIgnore: LIGHTHOUSE,
+      use: { ...devices['Desktop Chrome'], viewport: { width: 768, height: 1024 } },
+    },
+    {
+      name: 'desktop-1280',
+      testIgnore: LIGHTHOUSE,
+      use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 900 } },
+    },
+    // M4.7a: Lighthouse audits time the CPU, so they run alone, never beside the suite:
+    // `pnpm --filter @yayatoh/web e2e:lighthouse` (CI: after shard 5's suite). Lighthouse emulates
+    // the phone itself.
+    ...(process.env.E2E_LIGHTHOUSE ? [{ name: 'lighthouse', testMatch: LIGHTHOUSE }] : []),
   ],
   webServer: process.env.E2E_NO_SERVER
     ? undefined

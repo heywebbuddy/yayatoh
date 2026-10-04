@@ -185,7 +185,7 @@ export async function cancelBatchAction(org: string, event: string, batchId: str
 
 /**
  * M5.1d: print the badge of a registration whose invoice still has a balance: the reason is
- * audited, then the badge PDF opens with the short-lived override.
+ * audited, then the badge's print page (M5.5b, logged) prints it with the short-lived override.
  */
 export async function overrideBadgeAction(
   org: string,
@@ -207,7 +207,7 @@ export async function overrideBadgeAction(
     return failure(err);
   }
   return redirect({
-    href: `${page(org, event)}/ticket/${ticketId}?override=${encodeURIComponent(token)}`,
+    href: `${page(org, event)}/print/${ticketId}?override=${encodeURIComponent(token)}`,
     locale: await getLocale(),
   });
 }

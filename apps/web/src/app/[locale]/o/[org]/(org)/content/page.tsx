@@ -63,6 +63,17 @@ export default async function ContentPage({
         <EmptyState
           title={t(kind === 'page' ? 'emptyPagesTitle' : 'emptyPostsTitle')}
           description={t(canWrite ? 'emptyDescription' : 'emptyDescriptionViewer')}
+          action={
+            canWrite ? (
+              <Link href={`/o/${org}/content/new?kind=${kind}`} className={buttonClass('secondary', 'md')}>
+                {t(kind === 'page' ? 'emptyActionPage' : 'emptyActionPost')}
+              </Link>
+            ) : (
+              <Link href={`/o/${org}/team`} className={buttonClass('primary', 'md')}>
+                {t('findOwner')}
+              </Link>
+            )
+          }
         />
       ) : (
         <Table

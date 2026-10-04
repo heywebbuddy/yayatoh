@@ -2,7 +2,7 @@ import { onDutyStaffTx } from '@yayatoh/checkin';
 import type { TenantTx } from '@yayatoh/db';
 import type { EventDto } from '@yayatoh/events';
 import { type Ctx, requireOrg } from '@yayatoh/kernel';
-import { ALERTS_CHANNEL, type Notifier, publishRealtimeTx } from '@yayatoh/platform';
+import { ALERTS_CHANNEL, emitEvents, type Notifier, publishRealtimeTx } from '@yayatoh/platform';
 import { memberUserIdsTx, ORG_ROLES, roleCan } from '@yayatoh/tenancy';
 import { eq, sql } from 'drizzle-orm';
 import {
@@ -20,12 +20,20 @@ import {
 } from './domain/config.ts';
 import { type Firing, type PlanAction, planAlert, planNotifies, stateAfter } from './domain/lifecycle.ts';
 import { evaluateEventRules, evaluateOrgRules } from './domain/rules.ts';
-import { eventFactsTx, orgFactsTx } from './facts.ts';
+import { type ConferenceSources, eventFactsTx, orgFactsTx } from './facts.ts';
 import { alertHistory, alerts, memberSettings, routing } from './schema.ts';
 
 /** What the engine needs from the composition root. */
 export interface AlertDeps {
   readonly notifier: Notifier;
+  /** M5.9a: leads, sponsor deliverables and printers (modules not on this build yet). */
+  readonly conference?: ConferenceSources;
+}
+
+/** M6.2b: a custom rule's message (its notification kind and params). */
+export interface AlertMessage {
+  readonly kind: string;
+  readonly params: Readonly<Record<string, string | number>>;
 }
 
 /** One alert that changed in an evaluation (for callers, tests and logs). */
@@ -44,6 +52,8 @@ export const ALERT_KIND = 'alerts.alert';
 export const ALERT_TEXT_KIND = 'alerts.alert-text';
 /** M3.3a: a live-critical alert's text to on-duty staff, sent at once (no quiet hours). */
 export const ALERT_URGENT_TEXT_KIND = 'alerts.alert-urgent-text';
+/** M6.4c: an alert was sent to members (outbox, for same-tier consumers such as Slack). */
+export const ALERT_NOTIFIED_EVENT = 'alerts.alert_notified';
 
 /** The groups on-duty door staff (viewer or scanner org role) are escalated for: the door only. */
 const DOOR_ONLY_CATEGORIES: ReadonlySet<AlertCategory> = new Set(['door']);
@@ -107,6 +117,8 @@ async function notifyTx(
   event: EventDto | null,
   deps: AlertDeps,
   escalate: { liveCritical: boolean; now: Date },
+  /** M6.2b: a custom rule's own message kind and params (in-app, email and push; no texts). */
+  message?: AlertMessage,
 ): Promise<number> {
   const rule = RULES[row.rule as RuleKey];
   const saved = await savedRoutingTx(tx);
@@ -128,6 +140,8 @@ async function notifyTx(
     eventName: event?.name ?? 'none',
   };
   const href = fixPath(row.rule as RuleKey, event?.slug ?? null);
+  const kind = message?.kind ?? ALERT_KIND;
+  const sent = message ? { ...message.params } : params;
   let queued = 0;
   for (const m of await memberUserIdsTx(tx, ORG_ROLES)) {
     if (!roleCan(m.role as (typeof ORG_ROLES)[number], rule.permission)) continue;
@@ -137,6 +151,20 @@ async function notifyTx(
       doorOnly !== undefined && (!doorOnly || DOOR_ONLY_CATEGORIES.has(rule.category as AlertCategory));
     const channels = escalated ? [...new Set([...routed, 'in_app', 'push', 'sms'] as const)] : routed;
     const now = channels.filter((c) => c !== 'sms');
+    if (message) {
+      if (now.length)
+        queued += (
+          await deps.notifier.enqueue(tx, {
+            kind,
+            to: { userId: m.userId },
+            channels: now,
+            params: { ...sent, _href: href },
+            dedupeKey: `alert:${row.id}:${row.notifyCount}:${m.userId}`,
+            href,
+          })
+        ).queued;
+      continue;
+    }
     const key = `alert:${row.id}:${row.notifyCount}:${m.userId}`;
     if (now.length)
       queued += (
@@ -172,16 +200,24 @@ async function notifyTx(
  * the scope's advisory lock, so concurrent evaluations (the subscriber and the sweep) serialize;
  * every step is recomputed from the sources, so evaluating twice changes nothing.
  */
-async function reconcileTx(
+export async function reconcileTx(
   tx: TenantTx,
   ctx: Ctx,
-  scope: { eventId: string | null; event: EventDto | null; rules: readonly RuleKey[] },
+  scope: {
+    eventId: string | null;
+    event: EventDto | null;
+    rules: readonly RuleKey[];
+    /** M6.2b: a custom rule's scope (`m:{ruleId}`), its title and its own message. */
+    scopeKey?: string;
+    title?: string | null;
+    message?: AlertMessage;
+  },
   firing: Partial<Record<RuleKey, Firing>>,
   deps: AlertDeps,
   now: Date,
 ): Promise<AlertChange[]> {
   const orgId = requireOrg(ctx);
-  const scopeKey = scope.eventId ?? 'org';
+  const scopeKey = scope.scopeKey ?? scope.eventId ?? 'org';
   const stored = new Map(
     (await tx.select().from(alerts).where(eq(alerts.scopeKey, scopeKey))).map((r) => [r.rule, r]),
   );
@@ -222,6 +258,7 @@ async function reconcileTx(
           firstFiredAt: now,
           openedAt: now,
           evaluatedAt: now,
+          title: scope.title ?? null,
         })
         .returning();
       if (!inserted) continue;
@@ -230,6 +267,7 @@ async function reconcileTx(
     } else if (s) {
       const state = stateAfter(s.state as AlertState, plan) ?? s.state;
       const set: Partial<typeof alerts.$inferInsert> = { state, evaluatedAt: now, updatedAt: now };
+      if (scope.title) set.title = scope.title;
       if (f) Object.assign(set, { count: f.count, severity: f.severity, params: { ...f.params } });
       if (plan.kind === 'resolve')
         Object.assign(set, {
@@ -260,7 +298,14 @@ async function reconcileTx(
     } else continue;
     let notified = false;
     if (planNotifies(plan)) {
-      await notifyTx(tx, row, scope.event, deps, { liveCritical: f?.liveCritical ?? false, now });
+      await notifyTx(
+        tx,
+        row,
+        scope.event,
+        deps,
+        { liveCritical: f?.liveCritical ?? false, now },
+        scope.message,
+      );
       const [after] = await tx
         .update(alerts)
         .set({ lastNotifiedAt: now, notifyCount: row.notifyCount + 1 })
@@ -268,6 +313,26 @@ async function reconcileTx(
         .returning();
       if (after) row = after;
       await historyTx(tx, orgId, row, 'notified', now);
+      // M6.4c: tell same-tier consumers (Slack) through the outbox: ids, the rule, the severity,
+      // the count and the org-relative page that fixes it; never a name or a person.
+      await emitEvents(tx, ctx, [
+        {
+          type: ALERT_NOTIFIED_EVENT,
+          version: 1,
+          aggregateType: 'alert',
+          aggregateId: row.id,
+          payload: {
+            orgId,
+            alertId: row.id,
+            rule: row.rule,
+            severity: row.severity,
+            count: row.count,
+            eventId: row.eventId,
+            notifyCount: row.notifyCount,
+            href: fixPath(row.rule as RuleKey, scope.event?.slug ?? null),
+          },
+        },
+      ]);
       notified = true;
     }
     await publishAlertTx(tx, orgId, row, now);
@@ -285,7 +350,7 @@ export async function evaluateEventAlertsTx(
   now: Date = ctx.now,
 ): Promise<AlertChange[]> {
   await lockScopeTx(tx, requireOrg(ctx), eventId);
-  const gathered = await eventFactsTx(tx, eventId, now);
+  const gathered = await eventFactsTx(tx, eventId, now, deps.conference);
   if (!gathered) return [];
   const firing = evaluateEventRules(gathered.facts, now);
   return reconcileTx(tx, ctx, { eventId, event: gathered.event, rules: EVENT_RULES }, firing, deps, now);

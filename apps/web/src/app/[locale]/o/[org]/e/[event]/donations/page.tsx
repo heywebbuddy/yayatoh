@@ -4,6 +4,7 @@ import {
   donationsConsoleQuery,
   giftsExportBulk,
   type HostGiftDto,
+  matchesQuery,
 } from '@yayatoh/donations';
 import { executeQuery, formatMoney, isDomainError, money } from '@yayatoh/kernel';
 import type { BulkOperationDto } from '@yayatoh/platform';
@@ -70,11 +71,20 @@ export default async function DonationsPage({
   // Gift outcomes from the outbox (the worker relays them; dev and e2e have none).
   await catchUpGifts(data.org.id);
   const view = await executeQuery(donationsConsoleQuery, { eventId: ev.id }, data.ctx, ports);
+  // M4.8f: the running challenge matches, for the Matching gifts card.
+  const running = can('orders:read')
+    ? (await executeQuery(matchesQuery, { eventId: ev.id }, data.ctx, ports)).matches.filter(
+        (m) => m.status === 'active',
+      )
+    : [];
+  const tm = await getTranslations('donations.matches');
+  const tr = await getTranslations('donations.report');
   const t = await getTranslations('donations.console');
   const tn = await getTranslations('nav');
   const tb = await getTranslations('bulk');
   const tg = await getTranslations('donations.give');
   const te = await getTranslations();
+  const tp = await getTranslations('donations.raiseCard');
   const canWrite = can('events:write');
   const canExport = can('attendees:export');
   const fmt = (minor: number, currency = ev.currency) => formatMoney(money(minor, currency), locale);
@@ -276,6 +286,114 @@ export default async function DonationsPage({
         </Card>
       ) : null}
 
+      {/* M4.8f: challenge matches and the employer matching list. */}
+      {can('orders:read') ? (
+        <Card className="flex flex-col gap-3" data-testid="matches-card">
+          <CardHeader
+            title={tm('title')}
+            actions={
+              <Link
+                href={`/o/${org}/e/${event}/donations/matches`}
+                className={buttonClass('secondary', 'sm')}
+              >
+                {tm('cardLink')}
+              </Link>
+            }
+          />
+          <p className="m-0 text-body text-ink-2">{tm('cardBody')}</p>
+          {running.length > 0 ? (
+            <ul className="m-0 flex list-none flex-col gap-1 p-0">
+              {running.map((m) => (
+                <li key={m.id} className="text-body text-ink">
+                  <span className="font-bold">
+                    {tm('headline', {
+                      ratio: `r${m.ratioPercent}`,
+                      percent: n.format(m.ratioPercent),
+                      cap: fmt(m.capMinor, m.currency),
+                    })}
+                  </span>{' '}
+                  <span className="text-ink-2 tabular-nums">
+                    {tm('progress', {
+                      matched: fmt(m.matchedMinor, m.currency),
+                      cap: fmt(m.capMinor, m.currency),
+                    })}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+        </Card>
+      ) : null}
+
+      {/* M4.8g: the donations report, donor CRM exports and reconciliation (finance roles). */}
+      {can('finance:read') ? (
+        <Card className="flex flex-col gap-3" data-testid="report-card">
+          <CardHeader
+            title={tr('cardTitle')}
+            actions={
+              <Link href={`/o/${org}/e/${event}/donations/report`} className={buttonClass('secondary', 'sm')}>
+                {tr('cardLink')}
+              </Link>
+            }
+          />
+          <p className="m-0 text-body text-ink-2">{tr('cardBody')}</p>
+          <Link
+            href={`/o/${org}/e/${event}/donations/reconciliation`}
+            className="inline-flex min-h-6 items-center self-start text-body font-bold text-ink underline underline-offset-4"
+          >
+            {tr('cardReconcile')}
+          </Link>
+        </Card>
+      ) : null}
+
+      {/* M4.8c: the paddle raise (console, spotters, review) and the paddle numbers. */}
+      {can('orders:read') || can('checkin:scan') || can('guests:read') ? (
+        <Card className="flex flex-col gap-3" data-testid="paddle-raise-card">
+          <CardHeader as="h2" title={tp('cardTitle')} />
+          <p className="m-0 text-body text-ink-2">{tp('cardBody')}</p>
+          <div className="flex flex-wrap gap-2">
+            {can('orders:read') ? (
+              <Link
+                href={`/o/${org}/e/${event}/donations/paddle-raise`}
+                className={buttonClass('secondary', 'sm')}
+              >
+                {tp('openConsole')}
+              </Link>
+            ) : null}
+            {can('orders:read') ? (
+              <Link href={`/o/${org}/e/${event}/donations/screen`} className={buttonClass('secondary', 'sm')}>
+                {tp('openScreen')}
+              </Link>
+            ) : null}
+            {can('checkin:scan') ? (
+              <Link
+                href={`/o/${org}/e/${event}/donations/paddle-raise/spot`}
+                className={buttonClass('secondary', 'sm')}
+              >
+                {tp('openSpotter')}
+              </Link>
+            ) : null}
+            {can('guests:read') ? (
+              <Link
+                href={`/o/${org}/e/${event}/donations/paddles`}
+                className={buttonClass('secondary', 'sm')}
+              >
+                {tp('openPaddles')}
+              </Link>
+            ) : null}
+            {/* M4.8e: pledge collection and saved cards. */}
+            {can('orders:read') ? (
+              <Link
+                href={`/o/${org}/e/${event}/donations/pledges`}
+                className={buttonClass('secondary', 'sm')}
+              >
+                {tp('openPledges')}
+              </Link>
+            ) : null}
+          </div>
+        </Card>
+      ) : null}
+
       <section aria-labelledby="campaigns-heading" className="flex flex-col gap-4">
         <SectionHeader id="campaigns-heading" title={t('campaigns')} />
         {view.campaigns.length === 0 ? (
@@ -283,6 +401,20 @@ export default async function DonationsPage({
             icon={<HandHeart strokeWidth={2} />}
             title={t('emptyCampaignsTitle')}
             description={canWrite ? t('emptyCampaignsDescription') : t('emptyCampaignsViewer')}
+            action={
+              canWrite ? (
+                <Link
+                  href={`/o/${org}/e/${event}/donations#adding-campaign`}
+                  className={buttonClass('primary', 'md')}
+                >
+                  {t('emptyCampaignsAction')}
+                </Link>
+              ) : (
+                <Link href={`/o/${org}/e/${event}`} className={buttonClass('primary', 'md')}>
+                  {t('backToEvent')}
+                </Link>
+              )
+            }
           />
         ) : (
           <ol className="m-0 flex list-none flex-col gap-4 p-0">
@@ -403,9 +535,9 @@ export default async function DonationsPage({
           </ol>
         )}
         {canWrite ? (
-          <section aria-labelledby="add-campaign-heading">
+          <section id="adding-campaign" aria-labelledby="adding-campaign-heading">
             <Card size="panel" className="flex flex-col gap-4">
-              <CardHeader as="h3" id="add-campaign-heading" title={t('addCampaign')} />
+              <CardHeader as="h3" id="adding-campaign-heading" title={t('addCampaign')} />
               <ProgramForm
                 action={createCampaignAction.bind(null, org, event)}
                 fields={campaignFields()}
@@ -469,7 +601,25 @@ export default async function DonationsPage({
           </section>
         ) : null}
         {view.gifts.length === 0 ? (
-          <EmptyState icon={<Gift strokeWidth={2} />} title={t('noGifts')} />
+          <EmptyState
+            icon={<Gift strokeWidth={2} />}
+            title={t('noGifts')}
+            description={t('noGiftsDescription')}
+            action={
+              view.connected && openCampaigns.length > 0 && ev.status === 'published' ? (
+                <Link href={giving} className={buttonClass('primary', 'md')}>
+                  {t('shareGivingPage')}
+                </Link>
+              ) : (
+                <Link
+                  href={`/o/${org}/e/${event}/donations#campaigns-heading`}
+                  className={buttonClass('primary', 'md')}
+                >
+                  {t('toCampaigns')}
+                </Link>
+              )
+            }
+          />
         ) : (
           <Table<HostGiftDto>
             caption={t('giftsCaption')}

@@ -1,10 +1,11 @@
 import { executeQuery } from '@yayatoh/kernel';
 import { type PortalTaskDto, portalTaskBoardQuery } from '@yayatoh/program';
-import { Alert, Card, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
+import { Alert, buttonClass, Card, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Crumbs } from '@/components/crumbs.tsx';
 import { ActionButtonForm, RemindForm } from '@/components/portal-admin-forms.tsx';
 import { ProgramForm } from '@/components/program-form.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import { formatMoment } from '@/lib/portal-format.ts';
 import { ports } from '@/server/ports.ts';
 import { loadProgramPage } from '@/server/program.ts';
@@ -96,7 +97,21 @@ export default async function SpeakerTasksBoardPage({
           {t('listHeading', { count: tasks.length })}
         </h2>
         {tasks.length === 0 ? (
-          <EmptyState title={t('emptyTitle')} description={t('emptyDescription')} />
+          <EmptyState
+            title={t('emptyTitle')}
+            description={canWrite ? t('emptyDescription') : t('emptyReadOnly')}
+            action={
+              canWrite ? (
+                <Link href="#new-task-heading" className={buttonClass('primary', 'md')}>
+                  {t('createFirst')}
+                </Link>
+              ) : (
+                <Link href={`/o/${org}/e/${event}/speakers`} className={buttonClass('secondary', 'md')}>
+                  {t('back')}
+                </Link>
+              )
+            }
+          />
         ) : (
           <ul className="flex list-none flex-col gap-4 p-0">
             {tasks.map((task) => {

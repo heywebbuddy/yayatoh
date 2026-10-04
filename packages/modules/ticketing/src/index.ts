@@ -60,6 +60,8 @@ export {
 export * from './dto.ts';
 // M4.8b: ticket type prices for fair-market values and the quid-pro-quo notice (donations).
 export { type TicketTypePrice, ticketTypePricesTx } from './fair-value-facts.ts';
+// M5.6b lead retrieval: holder link tickets ("who scanned me") and ticket holders.
+export { holderLinkTicketsTx, ticketHoldersTx } from './holder-leads.ts';
 export {
   currentFaceMinor,
   holdInventoryTx,
@@ -95,6 +97,7 @@ export {
   ticketsForOrderTx,
   voidTicketsTx,
 } from './issue.ts';
+export { activeTicketIdForCodeTx, activeTicketShortCodeTx, activeTicketsHeldByTx } from './kiosk.ts';
 export { nameTicketHolderTx } from './naming.ts';
 export {
   activeTicketsForOccurrenceTx,
@@ -103,7 +106,13 @@ export {
   occurrenceSalesQuery,
   validForOccurrence,
 } from './occurrences.ts';
+// M5.6a: a registrant's order (add-ons) for session doors.
+export { orderSiblingsTx } from './order-siblings.ts';
+// M6.4b: ticket counts of imported orders.
+export { ticketCountsForOrdersTx } from './order-ticket-counts.ts';
 export { orderTicketIdsTx, ticketFactsTx } from './participation.ts';
+// M4.7a: a party's active tickets for its guest hub (the app passes this reader to the guests module).
+export { partyTicketsTx } from './party-tickets.ts';
 // M5.1d: tickets sold on an invoice with a balance due.
 export { paymentDueTicketIdsTx, setOrderPaymentDueTx } from './payment-due.ts';
 export { privateColumns } from './private-columns.ts';
@@ -159,6 +168,8 @@ export {
   TransferDto,
   transfersForOrderTx,
 } from './transfers.ts';
+// M6.9a: ticket type names for the virtual module's access modes.
+export { ticketTypeNamesTx } from './virtual-facts.ts';
 export {
   type FakeWalletPush,
   fakeWalletPassProvider,

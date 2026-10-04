@@ -3,10 +3,11 @@ import { listEventsQuery } from '@yayatoh/events';
 import { executeQuery } from '@yayatoh/kernel';
 import { siteSettingsQuery } from '@yayatoh/marketplace';
 import { managedHostname, roleCan } from '@yayatoh/tenancy';
-import { Card, EmptyState, PageHeader } from '@yayatoh/ui';
+import { buttonClass, Card, EmptyState, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { CopySnippet } from '@/components/copy-snippet.tsx';
 import { SettingsForm } from '@/components/settings-form.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import { widgetSnippet } from '@/lib/widget.ts';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
@@ -195,7 +196,15 @@ export default async function SitePage({ params }: { params: Promise<{ locale: s
           )}
         </Card>
         {events.length === 0 ? (
-          <EmptyState title={t('widget.emptyTitle')} description={t('widget.emptyDescription')} />
+          <EmptyState
+            title={t('widget.emptyTitle')}
+            description={t('widget.emptyDescription')}
+            action={
+              <Link href={`/o/${org}`} className={buttonClass('secondary', 'md')}>
+                {t('widget.toEvents')}
+              </Link>
+            }
+          />
         ) : (
           <ul aria-label={t('widget.snippets')} className="flex list-none flex-col gap-3 p-0">
             {events.map((e) => (

@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, Input } from '@yayatoh/ui';
+import { Alert, Button, DatePicker, Input } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState, useEffect, useRef, useState } from 'react';
 import { errorMessageKey } from '@/lib/errors.ts';
@@ -57,9 +57,8 @@ export function QuoteForm({
         error={bad.has('email') ? t('errors.email') : undefined}
       />
       <Input name="phone" type="tel" autoComplete="tel" label={t('phone')} />
-      <Input
+      <DatePicker
         name="eventDate"
-        type="date"
         label={t('eventDate')}
         error={bad.has('eventDate') ? t('errors.eventDate') : undefined}
       />

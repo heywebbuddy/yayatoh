@@ -1,9 +1,10 @@
 import { executeQuery } from '@yayatoh/kernel';
 import { type SpeakerChangeDto, speakerChangesQuery } from '@yayatoh/program';
-import { Alert, Card, EmptyState, PageHeader, StatusDot } from '@yayatoh/ui';
+import { Alert, buttonClass, Card, EmptyState, PageHeader, StatusDot } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Crumbs } from '@/components/crumbs.tsx';
 import { DecideForm } from '@/components/portal-admin-forms.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import { formatMoment } from '@/lib/portal-format.ts';
 import { ports } from '@/server/ports.ts';
 import { loadProgramPage } from '@/server/program.ts';
@@ -94,7 +95,15 @@ export default async function SpeakerChangesPage({
           {t('pendingHeading', { count: pending.length })}
         </h2>
         {pending.length === 0 ? (
-          <EmptyState title={t('emptyTitle')} description={t('emptyDescription')} />
+          <EmptyState
+            title={t('emptyTitle')}
+            description={t('emptyDescription')}
+            action={
+              <Link href={`/o/${org}/e/${event}/speakers`} className={buttonClass('primary', 'md')}>
+                {t('back')}
+              </Link>
+            }
+          />
         ) : (
           <ul className="flex list-none flex-col gap-3 p-0">
             {pending.map((c) => (

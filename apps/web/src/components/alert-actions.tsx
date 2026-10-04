@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button } from '@yayatoh/ui';
+import { Alert, Button, Select } from '@yayatoh/ui';
 import { useLocale, useTranslations } from 'next-intl';
 import { useActionState } from 'react';
 import type { AlertActionState } from '@/app/[locale]/o/[org]/(org)/alerts/actions.ts';
@@ -64,13 +64,13 @@ export function AlertActions({
                 <label htmlFor={`snooze-${alertId}`} className="text-[13px] font-bold text-ink">
                   {t('snoozeLabel')}
                 </label>
-                <select id={`snooze-${alertId}`} name="minutes" defaultValue="60" className="field">
+                <Select id={`snooze-${alertId}`} name="minutes" defaultValue="60" className="field">
                   {SNOOZE.map((m) => (
                     <option key={m} value={m}>
                       {t(`snoozeFor.m${m}`)}
                     </option>
                   ))}
-                </select>
+                </Select>
               </div>
               <Button
                 type="submit"

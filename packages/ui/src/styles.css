@@ -382,7 +382,8 @@
   border: 1px solid var(--field-border, var(--color-line-strong));
   background-color: var(--color-surface-solid);
   color: var(--color-ink);
-  padding-inline: var(--field-px, 14px);
+  padding-inline-start: var(--field-px, 14px);
+  padding-inline-end: var(--field-pe, var(--field-px, 14px));
   font-size: var(--field-fs, var(--text-body));
   font-weight: 500;
   transition-property: border-color, box-shadow, background-color;
@@ -410,6 +411,16 @@
     color: var(--color-ink-3);
     cursor: not-allowed;
   }
+}
+
+/* A select-like trigger (U1): the text stops short of our chevron, which sits 12 px from the end
+   (16 px icon + 12 px gap), at every size and in both directions. */
+@utility field-chevron {
+  --field-pe: 40px;
+}
+/* A field with a trailing icon button (date and time pickers). */
+@utility field-trailing {
+  --field-pe: 44px;
 }
 
 /* A field showing an error (when aria-invalid is not set on it). */

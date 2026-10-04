@@ -2,7 +2,7 @@
 
 import { buildRoundTable, buildRow, type FloorplanDoc, type Item, OBJECT_TYPES } from '@yayatoh/floorplan';
 import { uuidv7 } from '@yayatoh/kernel';
-import { Button } from '@yayatoh/ui';
+import { Button, Select } from '@yayatoh/ui';
 import dynamic from 'next/dynamic';
 import { useTranslations } from 'next-intl';
 import { type KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react';
@@ -246,10 +246,10 @@ export function SeatingEditor({
         >
           {t('addTable')}
         </Button>
-        <select
+        <Select
           aria-label={t('objectType')}
           value={objectType}
-          onChange={(e) => setObjectType(e.currentTarget.value as (typeof OBJECT_TYPES)[number])}
+          onValueChange={(v) => setObjectType(v as (typeof OBJECT_TYPES)[number])}
           className="field field-sm"
           disabled={locked}
         >
@@ -258,7 +258,7 @@ export function SeatingEditor({
               {t(`object.${o}`)}
             </option>
           ))}
-        </select>
+        </Select>
         <Button
           size="sm"
           variant="secondary"

@@ -292,7 +292,8 @@ async function warningsOfEvent(tx: TenantTx, eventId: string): Promise<AgendaWar
       sessionDetails,
       and(eq(sessionDetails.orgId, sessions.orgId), eq(sessionDetails.sessionId, sessions.id)),
     )
-    .where(eq(sessions.eventId, eventId));
+    // M5.3b: drafts are not placed yet.
+    .where(and(eq(sessions.eventId, eventId), eq(sessions.draft, false)));
   const roomRows = await tx
     .select({ id: rooms.id, capacity: rooms.capacity })
     .from(rooms)

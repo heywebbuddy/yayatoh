@@ -168,6 +168,13 @@ export const KINDS = {
     urgent: true,
     params: ['code', 'eventName', 'url', 'minutes'],
   },
+  /** M5.5c: a badge kiosk's one-time code, sent at once by the web app (never queued). */
+  'badges.kiosk-code': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['code', 'eventName', 'minutes'],
+  },
   /** M1.5f: sent at once by the web app (never queued: the code is never stored). */
   'guest.checkout-code': {
     category: 'transactional',
@@ -201,6 +208,25 @@ export const KINDS = {
     channels: ['email'],
     urgent: false,
     params: ['url', 'eventName', 'title', 'until', 'timeZone'],
+  },
+  // M5.3b: call for papers — the proposal arrived, and the decision (to every speaker on it).
+  'program.cfp-received': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: ['eventName', 'title'],
+  },
+  'program.cfp-accepted': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: ['eventName', 'title', 'note', 'hasNote'],
+  },
+  'program.cfp-rejected': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: ['eventName', 'title', 'note', 'hasNote'],
   },
   // M6.1c data-subject requests: the self-service confirmation code (sent at once by the web app,
   // never queued, like guest.sign-in), then the archive link or the erasure receipt link.
@@ -442,6 +468,29 @@ export const KINDS = {
     urgent: true,
     params: ['rule', 'count', 'severity', 'eventName'],
   },
+  // M6.2b: an organizer-authored alert rule (analytics) fired, through the alerts engine's
+  // routing (in-app, email, push; no texts). `alerts.metric` waits out quiet hours in the
+  // recipient's time zone (the rule's default); `alerts.metric-now` goes at once.
+  'alerts.metric': {
+    category: 'transactional',
+    channels: ['in_app', 'email', 'push'],
+    urgent: false,
+    params: ['title', 'reading', 'windowDays', 'severity'],
+  },
+  'alerts.metric-now': {
+    category: 'transactional',
+    channels: ['in_app', 'email', 'push'],
+    urgent: true,
+    params: ['title', 'reading', 'windowDays', 'severity'],
+  },
+  // M6.2b: a scheduled analytics report (PDF) for a period is ready; the button opens it in the
+  // console (members only; the PDF is in the member's language).
+  'analytics.report': {
+    category: 'transactional',
+    channels: ['in_app', 'email'],
+    urgent: true,
+    params: ['name', 'period'],
+  },
   'notifications.test': {
     category: 'transactional',
     channels: ['in_app', 'push'],
@@ -461,6 +510,38 @@ export const KINDS = {
     channels: ['email'],
     urgent: false,
     params: ['url', 'name', 'year', 'amountMinor', 'currency', 'body'],
+  },
+  // M4.8e: pledge collection (P4-12), to the donor only. The summary after the night is closed
+  // (the card and the charge time, or the pay links and the due date), the invoice when a card
+  // charge falls back to a pay link, and the reminders (cancelled the moment it is paid).
+  'donations.pledge-summary': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: [
+      'url',
+      'name',
+      'eventName',
+      'amountMinor',
+      'currency',
+      'mode',
+      'card',
+      'chargeAt',
+      'dueOn',
+      'body',
+    ],
+  },
+  'donations.pledge-invoice': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: ['url', 'name', 'eventName', 'amountMinor', 'currency', 'reason', 'dueOn'],
+  },
+  'donations.pledge-reminder': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: ['url', 'name', 'eventName', 'amountMinor', 'currency', 'dueOn', 'step'],
   },
 } as const satisfies Record<string, KindDefinition>;
 

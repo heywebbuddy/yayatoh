@@ -665,7 +665,15 @@ export const submitSurveyResponseCommand = tenantCommand({
       version: 1,
       aggregateType: 'survey',
       aggregateId: s.id,
-      payload: { orgId, surveyId: s.id, eventId: s.eventId, invitationId: inv.id },
+      payload: {
+        orgId,
+        surveyId: s.id,
+        eventId: s.eventId,
+        invitationId: inv.id,
+        // M5.7b: who answered (engagement scores) and the session a feedback survey is about.
+        contactId: inv.contactId,
+        sessionId: s.sessionId,
+      },
     });
     return { ok: true, surveyId: s.id };
   },
@@ -911,4 +919,4 @@ export async function respondedInvitationIdsTx(tx: TenantTx, eventId: string, su
   return rows.map((r) => r.id);
 }
 
-export { formSubject, surveyTx };
+export { formSubject, subjectEndsAt, surveyTx };

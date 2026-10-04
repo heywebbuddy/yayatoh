@@ -1,5 +1,5 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { continueToPayment, expectAccessible, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, pickOption, signIn } from './helpers.ts';
 
 /**
  * M1.9e fraud signals: checkout risk and chat reports join the door's signals in one model (via
@@ -47,7 +47,7 @@ async function findAlert(page: Page, name: string) {
 async function liveEvent(page: Page, name: string) {
   await page.goto('/o/lakeside-events/events/new');
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Time zone').selectOption('America/Chicago');
+  await pickOption(page.getByLabel('Time zone'), 'America/Chicago');
   await page.getByLabel('Starts', { exact: true }).fill(chicago(-1));
   await page.getByLabel('Ends', { exact: true }).fill(chicago(3));
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -75,7 +75,7 @@ async function risky(browser: Browser, base: string, stamp: string) {
   const codes: string[] = [];
   for (let i = 0; i < 5; i++) {
     await guest.goto(`/events/${base.split('/').pop()}`);
-    await guest.getByLabel('Quantity — Door pass').selectOption('1');
+    await pickOption(guest.getByLabel('Quantity — Door pass'), '1');
     await guest.getByLabel('Full name').fill(`Rapid ${stamp}`);
     await guest.getByLabel('Email for your tickets').fill(email);
     // The first checkout proves the address; this browser remembers it (M1.5f).
@@ -188,7 +188,7 @@ test.describe('fraud signals: checkout risk on the order timeline', () => {
     const base = await liveEvent(page, `Calm ${stamp}`);
     const guest = await (await browser.newContext()).newPage();
     await guest.goto(`/events/${base.split('/').pop()}`);
-    await guest.getByLabel('Quantity — Door pass').selectOption('1');
+    await pickOption(guest.getByLabel('Quantity — Door pass'), '1');
     await guest.getByLabel('Full name').fill(`Calm ${stamp}`);
     await guest.getByLabel('Email for your tickets').fill(`calm.${stamp}@example.test`);
     await continueToPayment(guest, `calm.${stamp}@example.test`);
@@ -318,7 +318,7 @@ test.describe('fraud signals: chat reports and the Signals list', () => {
     await page.goto('/o/lakeside-events/messages');
     await page.getByRole('link', { name: new RegExp(guestName) }).click();
     const safety = page.getByRole('region', { name: 'Block or report' });
-    await safety.getByLabel('Reason').selectOption('abuse');
+    await pickOption(safety.getByLabel('Reason'), 'abuse');
     await safety.getByRole('button', { name: 'Report to Yayatoh' }).click();
     await expect(safety.getByText('Thanks. Yayatoh will review this conversation.')).toBeVisible();
     await drain(page);
@@ -337,14 +337,14 @@ test.describe('fraud signals: chat reports and the Signals list', () => {
     // Filter by keyboard: kind and severity match; a status with nothing shows the empty state.
     const filter = page.getByRole('form', { name: 'Filter signals' });
     await filter.getByLabel('Kind').focus();
-    await filter.getByLabel('Kind').selectOption('chat_abuse');
-    await filter.getByLabel('Severity').selectOption('high');
+    await pickOption(filter.getByLabel('Kind'), 'chat_abuse');
+    await pickOption(filter.getByLabel('Severity'), 'high');
     await filter.getByRole('button', { name: 'Filter' }).focus();
     await page.keyboard.press('Enter');
     await expect(page).toHaveURL(/kind=chat_abuse&severity=high/);
     await expect(page.getByText('1 signal matches the filter')).toBeVisible();
     await expect(page.locator('[data-signal]')).toHaveCount(1);
-    await filter.getByLabel('Status').selectOption('dismissed');
+    await pickOption(filter.getByLabel('Status'), 'dismissed');
     await filter.getByRole('button', { name: 'Filter' }).click();
     await expect(page.getByText('No signals match', { exact: true })).toBeVisible();
     await expectAccessible(page);

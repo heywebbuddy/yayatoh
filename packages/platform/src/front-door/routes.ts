@@ -199,6 +199,11 @@ export const PLATFORM_PREFIXES: readonly string[] = [
   // new app has them.
   '/rsvp',
   '/collect',
+  // M4.5a: an event's guest website behind its password (`/w/{code}`). Only the new app has it.
+  '/w',
+  // M4.7a: a wedding party's guest hub (`/hub/{token}`: RSVP, program, seats, tickets, its manifest
+  // and wallet passes). Only the new app has it.
+  '/hub',
   // Batch 3h merge: M4.2b's signed table claim link (`/tables/{token}`), where a buyer names the
   // guests of a gala table.
   '/tables',
@@ -206,12 +211,19 @@ export const PLATFORM_PREFIXES: readonly string[] = [
   // `/statements/{org}/{token}`).
   '/receipts',
   '/statements',
+  // Batch 3j merge: M4.8d's room giving screen (`/giving-screen/{token}`, a signed projector link)
+  // and M5.6a's self check-in flyer page (`/session-checkin/{token}`). Only the new app has them.
+  '/giving-screen',
+  '/session-checkin',
   // Batch 3i merge: M6.1c's self-service privacy requests and the archive/receipt links emailed
   // to the person (`/privacy-request/{org}`, `…/archive/{token}`, `…/receipt/{token}`), M6.3b's
   // public developer docs (`/developers/…`) and the webhook portal link (`/webhook-portal/{token}`).
   '/privacy-request',
   '/developers',
   '/webhook-portal',
+  // Batch 3k merge: a buyer's order link (`/orders/{token}`: M5.2b's schedule and M5.10a's
+  // conference hub with its manifest). The legacy app has no `/orders` page.
+  '/orders',
 ];
 
 /**
@@ -221,7 +233,8 @@ export const PLATFORM_PREFIXES: readonly string[] = [
  * pages under it (`seat-finder/help`, and a request's status page `seat-finder/help/{token}`).
  * Batch 3h merge: M5.1c's group registration, applicant and group pages; M5.7a's participant
  * page for a session's live polls and Q&A (`/events/{slug}/live/{session}`); M4.8a's giving page
- * (`/events/{slug}/give`, `/events/{slug}/give/thanks`).
+ * (`/events/{slug}/give`, `/events/{slug}/give/thanks`). Batch 3j merge: M4.8e's card and pledge
+ * pages, M5.3b's call for papers and M5.8a/b's networking pages.
  */
 export const PLATFORM_PATTERNS: readonly RegExp[] = [
   /^\/events\/[^/]+\/(register|registration-form|waitlist|exhibitors)$/,
@@ -235,6 +248,13 @@ export const PLATFORM_PATTERNS: readonly RegExp[] = [
   /^\/events\/[^/]+\/give(\/thanks)?$/,
   // M5.1d: a buyer's invoice (view and pay) and its PDF.
   /^\/events\/[^/]+\/invoice\/[^/]+(\/pdf)?$/,
+  // Batch 3j merge: M4.8e's card page (saving a card for tonight's giving) and a pledge's pay link;
+  // M5.3b's call for papers; M5.8a/b's attendee networking (directory, people, connections,
+  // meetings and their ICS, the profile, booths and chat with its stream).
+  /^\/events\/[^/]+\/card$/,
+  /^\/events\/[^/]+\/pledge\/[^/]+$/,
+  /^\/events\/[^/]+\/cfp$/,
+  /^\/events\/[^/]+\/network(\/(people|booths|chat)\/[^/]+|\/(connections|meetings|profile|chat)(\/stream)?|\/meetings\/[^/]+\/ics)?$/,
 ];
 export const PLATFORM_FILES: ReadonlySet<string> = new Set([
   '/widget.js',
@@ -242,6 +262,18 @@ export const PLATFORM_FILES: ReadonlySet<string> = new Set([
   '/scan-sw.js',
   '/scan-icon.svg',
   '/scan.webmanifest',
+  // Batch 3k merge: the guest hub's (M4.7a) and the conference hub's (M5.10a) service workers and
+  // install icons, served next to their pages.
+  '/hub-sw.js',
+  '/hub-icon.svg',
+  '/hub-icon-192.png',
+  '/hub-icon-512.png',
+  '/hub-icon-maskable-512.png',
+  '/conference-hub-sw.js',
+  '/conference-hub-icon.svg',
+  '/conference-hub-icon-192.png',
+  '/conference-hub-icon-512.png',
+  '/conference-hub-icon-maskable-512.png',
 ]);
 
 export function isPlatformPath(path: string): boolean {

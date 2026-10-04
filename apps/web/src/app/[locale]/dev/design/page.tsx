@@ -21,7 +21,6 @@ import {
   ScheduleLane,
   SearchPill,
   SectionHeader,
-  Select,
   SkeletonCard,
   SkeletonText,
   StatCard,
@@ -42,6 +41,7 @@ import { notFound } from 'next/navigation';
 import { setRequestLocale } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { devAuthEnabled } from '@/server/session.ts';
+import { FormControlsDemo } from './form-controls-demo.tsx';
 import { OverlayDemo } from './overlay-demo.tsx';
 import { S } from './specimens.ts';
 
@@ -270,12 +270,6 @@ function Specimens({ id }: { id: string }) {
             defaultValue={S.fieldError.value}
             error={S.fieldError.error}
           />
-          <Select id={`tz-${id}`} label={S.select.label}>
-            {S.select.options.map((o) => (
-              <option key={o}>{o}</option>
-            ))}
-          </Select>
-          <Input id={`date-${id}`} type="date" label={S.date} />
           <Input id={`dis-${id}`} label={S.states.disabled} defaultValue={S.field.value} disabled />
           <Textarea id={`notes-${id}`} label={S.textarea.label} defaultValue={S.textarea.value} rows={2} />
         </div>
@@ -293,6 +287,10 @@ function Specimens({ id }: { id: string }) {
           ))}
           <Switch id={`sw-${id}`} label={S.switch} defaultChecked />
         </div>
+      </Block>
+
+      <Block title={S.controls.title}>
+        <FormControlsDemo id={id} />
       </Block>
 
       <Block title={S.sections.data}>

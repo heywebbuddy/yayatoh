@@ -1,7 +1,7 @@
 import { executeQuery, formatMoney, money } from '@yayatoh/kernel';
 import { DISPUTE_QUEUE_TABS, disputeQueueQuery } from '@yayatoh/reports';
 import { roleCan } from '@yayatoh/tenancy';
-import { EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
+import { buttonClass, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Link } from '@/i18n/navigation.ts';
@@ -63,7 +63,18 @@ export default async function DisputesPage({
         ))}
       </nav>
       {queue.items.length === 0 ? (
-        <EmptyState title={t(`empty.${tab}`)} />
+        <EmptyState
+          title={t(`empty.${tab}`)}
+          description={t(`emptyHint.${tab}`)}
+          action={
+            <Link
+              href={tab === 'open' ? `/o/${org}/disputes?tab=closed` : `/o/${org}/disputes`}
+              className={buttonClass('secondary', 'md')}
+            >
+              {t(`emptyAction.${tab}`)}
+            </Link>
+          }
+        />
       ) : (
         <Table
           caption={t(`caption.${tab}`)}

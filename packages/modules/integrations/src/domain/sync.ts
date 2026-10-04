@@ -16,10 +16,51 @@ export type RunStatus = (typeof RUN_STATUSES)[number];
 export const ACTIVE_RUN_STATUSES = ['queued', 'running'] as const satisfies readonly RunStatus[];
 
 /** Where in a sync an error happened (the errors inbox groups by it). */
-export const ERROR_STEPS = ['auth', 'pull', 'map', 'write', 'push'] as const;
+export const ERROR_STEPS = ['auth', 'pull', 'map', 'write', 'push', 'conflict'] as const;
 export type ErrorStep = (typeof ERROR_STEPS)[number];
 export const ERROR_STATUSES = ['open', 'resolved', 'dismissed'] as const;
 export type ErrorStatus = (typeof ERROR_STATUSES)[number];
+
+/**
+ * M6.4b: a linked record that disappeared from a snapshot provider (a deleted sheet row). The
+ * Yayatoh record stays; the inbox flags it until someone dismisses it or the row comes back.
+ */
+export const REMOTE_DELETED = 'remote_deleted';
+/** M6.4b: last-writer conflicts: which side won (the inbox keeps the losing side's values). */
+export const CONFLICT_CODES = ['conflict_kept_yayatoh', 'conflict_kept_remote'] as const;
+export type ConflictCode = (typeof CONFLICT_CODES)[number];
+/** Inbox rows a retry cannot fix (a conflict was decided; a deleted row is the organizer's call). */
+export const retryable = (e: { readonly step: string; readonly code: string }) =>
+  e.step !== 'conflict' && e.code !== REMOTE_DELETED;
+
+/** One field both sides changed, as the inbox shows it: what was kept and what was lost. */
+export interface ConflictField {
+  readonly field: string;
+  readonly kept: string;
+  readonly lost: string;
+}
+
+const shown = (v: unknown) => (v === null || v === undefined ? '' : String(v)).slice(0, 1000);
+
+/**
+ * The fields where the losing side differs from the winning one (M6.4b), compared as text over
+ * the mapped targets: these are the values the inbox shows as lost.
+ */
+export function conflictFields(
+  keys: readonly string[],
+  kept: Readonly<Record<string, unknown>>,
+  lost: Readonly<Record<string, unknown>>,
+): ConflictField[] {
+  return keys.flatMap((field) => {
+    const k = shown(kept[field]);
+    const l = shown(lost[field]);
+    return k.trim() === l.trim() ? [] : [{ field, kept: k, lost: l }];
+  });
+}
+
+/** M6.4b: a Google Sheets link of an event (unlinked ones stay as history). */
+export const SHEET_LINK_STATUSES = ['active', 'unlinked'] as const;
+export type SheetLinkStatus = (typeof SHEET_LINK_STATUSES)[number];
 
 /** Why a connection was revoked: the organizer disconnected it, or the provider refused it. */
 export const REVOKE_REASONS = ['user', 'provider'] as const;

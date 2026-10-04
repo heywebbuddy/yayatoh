@@ -77,9 +77,25 @@ export default async function PeoplePage({
       </form>
       {page.rows.length === 0 ? (
         q ? (
-          <EmptyState title={t('search.noneTitle')} description={t('search.noneDescription', { q })} />
+          <EmptyState
+            title={t('search.noneTitle')}
+            description={t('search.noneDescription', { q })}
+            action={
+              <Link href={`/o/${org}/audiences/people`} className={buttonClass('primary', 'md')}>
+                {t('search.clear')}
+              </Link>
+            }
+          />
         ) : (
-          <EmptyState title={t('emptyTitle')} description={t('emptyDescription')} />
+          <EmptyState
+            title={t('emptyTitle')}
+            description={t('emptyDescription')}
+            action={
+              <Link href={`/o/${org}`} className={buttonClass('primary', 'md')}>
+                {t('toEvents')}
+              </Link>
+            }
+          />
         )
       ) : (
         <>

@@ -48,6 +48,8 @@ export interface QueuedScan {
   readonly clockOffsetMs: number;
   readonly verdict: string;
   readonly checkpointId?: string;
+  /** M5.6a session doors: in (default) or out. */
+  readonly direction?: 'in' | 'out';
 }
 
 export const queueAdd = (scan: QueuedScan) => run('queue', 'readwrite', (s) => s.put(scan));

@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button } from '@yayatoh/ui';
+import { Alert, Button, Select } from '@yayatoh/ui';
 import { useLocale, useTranslations } from 'next-intl';
 import { useState } from 'react';
 import type { RefundState } from '@/app/[locale]/o/[org]/e/[event]/orders/[orderId]/actions.ts';
@@ -74,13 +74,13 @@ export function RefundForm({
         <label htmlFor="refund-reason" className="text-[13px] font-bold text-ink">
           {t('reason')}
         </label>
-        <select id="refund-reason" name="reason" className={field} defaultValue="requested_by_customer">
+        <Select id="refund-reason" name="reason" className={field} defaultValue="requested_by_customer">
           {REASONS.map((r) => (
             <option key={r} value={r}>
               {t(`reasons.${r}`)}
             </option>
           ))}
-        </select>
+        </Select>
         <p className="text-caption text-ink-2">{t('feePolicy')}</p>
       </div>
       <fieldset className="flex flex-col gap-2">

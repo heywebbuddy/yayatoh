@@ -5,6 +5,7 @@ import {
   defineDataSubjectContributor,
   ERASED_NAME,
   keyVault,
+  notSubject,
   REDACT,
   refsOf,
   type SubjectErasure,
@@ -141,6 +142,10 @@ export const guestsDataSubjects = defineDataSubjectContributor({
     'guests.import_rows': REDACT,
     'guests.import_batches': REDACT,
     'guests.collector_submissions': DELETE,
+    // Batch 3j merge (M4.5a): the hosts' own website copy, written by the organizer about its
+    // event; it is not a guest's record (guests' names never appear on it).
+    'guests.sites': notSubject("the hosts' website title and intro, written by the organizer"),
+    'guests.site_blocks': notSubject("the hosts' website sections (program, travel, registry, FAQ)"),
   },
   async resolve(tx, s): Promise<SubjectRefs> {
     const ids = await guestIdsTx(tx, s);

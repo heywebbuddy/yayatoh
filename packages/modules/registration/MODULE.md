@@ -97,9 +97,24 @@ add registrations, approvals, groups, invoices (M5.1c/d) and session enrollments
 - **Workers**: `sweepEnrollmentsCommand` (`platform:registration.sweep`, every 30 s after the waitlist sweeper);
   `registrationEnrollment()` ends a cancelled or refunded registrant's sessions (`tickets.cancelled@1`,
   `order.refunded@1`) and promotes; `enrollmentMailer` emails promotions (`registration.session-enrolled`,
-  `registration.session-offer`). Event: `registration.session.promoted@1` (`{ eventId, sessionId, enrollmentId,
+  `registration.session-offer`). Events: `registration.session.enrollment_changed@1` (`{ eventId, sessionId, registrantId, status: enrolled | dropped }`, M5.7b: a place taken directly or by an accepted offer, or dropped) and `registration.session.promoted@1` (`{ eventId, sessionId, enrollmentId,
   registrantId, status, offer }`).
 - Entitlement `registration` for every command and query.
 
 **M5.1d: pay later by invoice**
 - Per type (`pay_later`, `po_number` off/optional/required; `registration.setPayLater`, `events:write`); never for approval or +1 types. `registration.startCheckout` with `payLater` checks the type and the PO rule (`pay_later_off`, `po_required`), then invoices the order in the same transaction (`issueInvoiceTx`): the place counts as sold and the registrant is confirmed at once; the balance is the invoice's business. `order.voided@1` releases the claim and cancels the registrant.
+
+**M5.10a: the attendee conference hub**
+- **Favorites** (`session_favorites`, one per registrant and session) hold no place and never touch the enrollment counter.
+  `favoriteSessionCommand` (`public:enrollment`, the manage link) stars only sessions the registrant's items give; an
+  overlap with the personal schedule (enrolled, offered or starred) is refused with the sessions in the way unless the
+  attendee chose `keep_both`, or `replace` (un-stars overlapping favorites; refused while an enrolment is in the way:
+  enrolments are dropped only by `dropSessionCommand`). At most 300 per registrant. Decisions per registrant are
+  serialized by an advisory lock.
+- **Calendar feed**: a signed link `{org}~{registrant}~{version}~{hmac}` (`signFeedToken`, the app token secret, its own
+  purpose string). `calendarFeedTarget` checks the signature, then `registration.calendar_feed_target` (SECURITY
+  DEFINER: active ticket, live org, version only); `calendarFeedQuery` checks the version again under RLS. The feed
+  (`calendarFeedIcs`) carries enrolled (CONFIRMED), offered and starred (TENTATIVE) sessions: title, times, room; a
+  session keeps its UID and its SEQUENCE grows with the session's (or room's) last change, so a calendar follows a
+  moved session. `rotateCalendarFeedCommand` bumps the version (every earlier link stops).
+- `conferenceHubQuery`: the hub's allowlisted view (M5.2b states plus `favorite`, `onSchedule`, `conflicts`).

@@ -3,7 +3,7 @@ import { upsertContactTx } from '@yayatoh/crm';
 import type { TenantTx } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
 import { type Ctx, DomainError, type DomainEvent, requireOrg, uuidv7 } from '@yayatoh/kernel';
-import { fundsFlowTx, postSaleTx } from '@yayatoh/payments';
+import { fundsFlowTx, postDonationMemoTx, postSaleTx } from '@yayatoh/payments';
 import { keyVault } from '@yayatoh/platform';
 import { assertNotPausedTx } from '@yayatoh/tenancy';
 import { and, eq, inArray } from 'drizzle-orm';
@@ -151,6 +151,15 @@ export async function payDonationOrderTx(
     totalMinor: order.totalMinor,
     feeMinor: 0,
     currency: order.currency,
+  });
+  // M4.8g: the gift never touches a platform account, so the ledger keeps it as a memo entry
+  // (reports and donations reconciliation read it).
+  await postDonationMemoTx(tx, ctx, {
+    orderId: order.id,
+    eventId: order.eventId,
+    grossMinor: order.totalMinor,
+    currency: order.currency,
+    connectedAccountId: order.connectedAccountId,
   });
   emit({
     type: 'order.donation_paid',

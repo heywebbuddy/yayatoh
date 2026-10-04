@@ -1,4 +1,4 @@
-import { Card, EmptyState, StatusDot } from '@yayatoh/ui';
+import { buttonClass, Card, EmptyState, StatusDot } from '@yayatoh/ui';
 import { Link } from '@/i18n/navigation.ts';
 
 export interface AlertsListItem {
@@ -37,14 +37,24 @@ export function AlertsList({
     <Card className="flex flex-col gap-3" data-testid="alerts-list">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h2 className="text-section">{title}</h2>
-        {viewAll ? (
+        {viewAll && items.length > 0 ? (
           <Link href={viewAll.href} className="inline-flex min-h-6 items-center text-caption underline">
             {viewAll.label}
           </Link>
         ) : null}
       </div>
       {items.length === 0 ? (
-        <EmptyState title={emptyText} />
+        <EmptyState
+          title={emptyText}
+          // With nothing to list, the "view all" link moves here as the next step.
+          action={
+            viewAll ? (
+              <Link href={viewAll.href} className={buttonClass('secondary', 'md')}>
+                {viewAll.label}
+              </Link>
+            ) : undefined
+          }
+        />
       ) : (
         <ul className="flex list-none flex-col divide-y divide-line p-0">
           {items.map((a) => (

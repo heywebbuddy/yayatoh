@@ -25,3 +25,27 @@ export const plantDonations: Planter = async ({ admin, orgId, person }) => {
   if (y) tables.push('donations.year_end_statements');
   return tables;
 };
+
+/**
+ * Batch 3j merge (M4.8e/f): the fixture's saved card, pledge collection and match become the
+ * person's (by their address).
+ */
+export const plantDonationsCollection: Planter = async ({ admin, orgId, person }) => {
+  const tables: string[] = [];
+  const [c] = await admin`
+    update donations.saved_cards set name = ${person.name}, email = ${person.email}
+    where id = (select id from donations.saved_cards where org_id = ${orgId} order by created_at limit 1)
+    returning id`;
+  if (c) tables.push('donations.saved_cards');
+  const [p] = await admin`
+    update donations.pledge_collections set donor_name = ${person.name}, donor_email = ${person.email}
+    where id = (select id from donations.pledge_collections where org_id = ${orgId} order by created_at limit 1)
+    returning id`;
+  if (p) tables.push('donations.pledge_collections');
+  const [m] = await admin`
+    update donations.matches set sponsor_name = ${person.name}, sponsor_email = ${person.email}
+    where id = (select id from donations.matches where org_id = ${orgId} order by created_at limit 1)
+    returning id`;
+  if (m) tables.push('donations.matches');
+  return tables;
+};

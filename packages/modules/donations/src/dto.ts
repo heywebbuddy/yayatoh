@@ -1,5 +1,12 @@
 import { z } from 'zod';
-import { CAMPAIGN_STATUSES, DISPLAY_AS, GIFT_STATUSES, TRIBUTE_KINDS } from './domain/giving.ts';
+import {
+  CAMPAIGN_STATUSES,
+  DISPLAY_AS,
+  GIFT_SOURCES,
+  GIFT_STATUSES,
+  TRIBUTE_KINDS,
+} from './domain/giving.ts';
+import { LiveMatchDto } from './match-dto.ts';
 
 const Money = z.int().positive().max(100_000_000);
 const Text = (max: number) => z.string().trim().min(1).max(max);
@@ -106,6 +113,8 @@ export const PublicCampaignDto = z.object({
   raisedMinor: z.int(),
   giftCount: z.int(),
   levels: z.array(LevelDto),
+  /** M4.8f: the campaign's running challenge matches (terms and progress; the sponsor's public name). */
+  matches: z.array(LiveMatchDto).default([]),
 });
 export type PublicCampaignDto = z.infer<typeof PublicCampaignDto>;
 
@@ -140,6 +149,10 @@ export const StartGiftInput = z
       .nullish()
       .transform((v) => v ?? null),
     locale: z.string().min(2).max(10).default('en'),
+    /** M4.8d: thank me by name on the room's screen (P4-13; off by default, never when anonymous). */
+    showOnScreen: z.boolean().default(false),
+    /** M4.8d: the giving page opened from a QR code (screen or table card) records `qr`. */
+    source: z.enum(GIFT_SOURCES).default('online'),
   })
   .refine((v) => Boolean(v.levelId) !== Boolean(v.amountMinor), {
     message: 'Choose a level or an amount',

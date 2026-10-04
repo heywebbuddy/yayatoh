@@ -1,7 +1,7 @@
 # Spec: M6.6 — Subscription billing
 
 - **Milestone:** M6.6 (roadmap Phase 6; `docs/plans/phase-6.md` rows M6.6a, M6.6b)
-- **Status:** M6.6a built (dormant behind `BILLING_ENABLED`); M6.6b not started
+- **Status:** M6.6a and M6.6b built (dormant behind `BILLING_ENABLED`; fake provider in dev and CI)
 - **Risk tags:** db-migration, payments, tenancy
 - **Decisions:** D12, D16, D22, P6-1, P6-7, P6-13
 
@@ -92,7 +92,7 @@ provider's webhook alone (the roadmap acceptance).
 | Every P6-13 key registered | `billing-subscriptions.int.test.ts` › "registers every Phase 6 module key" |
 | E2E: plan page; simulated upgrade via the fake webhook shows a module appearing; keyboard only; axe; RTL | `apps/web/e2e/billing-plan.spec.ts` (375/768/1280) |
 
-### 4. Migration (`0103_chilly_grandmaster`, to be renumbered)
+### 4. Migration (`0113_calm_viper`, renumbered from `0103_chilly_grandmaster`)
 New tables only (expand). Global: `billing.plan_catalog`, `billing.plan_prices`, `billing.features`.
 Tenant (RLS ENABLE + FORCE, the NULLIF policy, org-leading indexes): `billing.org_billing`,
 `billing.subscriptions`, `billing.org_entitlements`, `billing.provider_events`. Hand-written
@@ -110,8 +110,127 @@ DEFINER functions `billing.org_for_customer` (app_user) and `billing.apply_catal
   webhook endpoint (`STRIPE_BILLING_WEBHOOK_SECRET`).
 
 ### 6. Not yet / later
-- M6.6b: meters (messaging, AI, devices), in-app upgrade/downgrade with proration, checkout,
-  dunning to read-only, Stripe Tax, the nonprofit discount, usage pages.
+- M6.6b (done below): meters, in-app plan changes with proration, dunning to read-only, tax, the
+  nonprofit discount, usage pages.
 - An admin screen for grandfathering and the catalog sync (the command and CLI exist).
 - A nav entry for the plan page (it is linked from Settings; the shell is left alone while design
   v2 lands).
+
+## M6.6b — Meters and plan changes (dormant) (done)
+
+### 1. Goal and users
+Meter what costs money to run (messages, AI credits, scan devices), let owners and admins change
+plan in-app with the provider's proration preview, and turn a failed renewal into a read-only
+org (never data loss) until it pays. Organizers (owners, admins, finance) see usage per meter;
+owners and admins change plans and pay. Everything stays dormant behind `BILLING_ENABLED`; the
+fake provider stands in for Stripe in dev and CI; nothing calls Stripe.
+
+### 2. What was built
+- **Meters** (`packages/modules/billing/src/meters.ts`), messaging per channel (D16), AI credits
+  (D12) and devices (P6-7):
+  - usage events on the outbox: `messaging.usage_metered@1` (the notifications dispatcher, per
+    message handed to a provider: email, SMS by segment, WhatsApp; push is free),
+    `ai.credits_spent@1` / `ai.credits_refunded@1` (the AI credits ledger; a refund counts
+    negative), and the existing `device.enrolled@1`. Payloads name the message or debit, never a
+    recipient or content.
+  - `billing.usage-meter` subscriber → `billing.usage_records`, one row per (event, meter):
+    idempotent by the outbox event id (unique key on top of the processed-events ledger), so a
+    redelivery or replay never counts twice. Usage is counted while billing is dormant too.
+  - reporting: the worker's billing pass (every 5 minutes while billing is on, leader only;
+    `apps/worker/src/billing-usage.ts`) sends unreported records to the provider's meter API
+    (`BillingProvider.reportUsage`, Stripe meter events `yayatoh_{meter}` with our record id as
+    the identifier), from the org's first subscription on and within the provider's 35-day
+    window; a record is marked only after the provider accepted it (`billing.markUsageReported`,
+    system, audited); refusals are retried and counted.
+- **Usage page** `/o/{org}/plan/usage` (owners, admins, finance; linked from the plan page): this
+  calendar month and the 12 before it, per meter, in the org's time zone (`billing.usageSummary`;
+  allowlist DTO), filter tabs per meter, whether usage is sent to the provider, empty states.
+- **In-app plan changes** (`packages/modules/billing/src/plan-change.ts`):
+  - `billing.planChangeOptions`: offered prices (catalog plans on sale; the switched-off
+    placeholders only with the fake provider outside production, like the test portal; quoted
+    prices never), each with its direction (start, upgrade, downgrade, switch) and the modules it
+    turns off and on.
+  - `previewPlanChange`: the provider's invoice preview (proration as of an instant, the coupon,
+    tax by the provider's tax setting). The fake computes it with `prorate` (integer minor units;
+    a flat 8 % stands in for Stripe Tax); Stripe uses `invoices.createPreview` with automatic tax.
+  - `billing.changePlan` (owners and admins, `billing:manage`; money category; Idempotency-Key
+    required): records the confirmed change (`billing.plan_changes`), refusing a change that turns
+    modules off unless the organizer confirmed them (`confirmRemoved`); then the provider is
+    called (`changeSubscriptionPlan`, idempotency key per change) and its webhooks, not the
+    command, move the subscription, the fee plan and the modules (the M6.6a acceptance holds).
+  - Plan page: "Change plan" picker → preview page (credit, charge, discount, tax, due today,
+    next renewal, and a warning listing the modules that turn off with a required
+    acknowledgement) → confirm; "Keep my plan" leaves it.
+- **Dunning to read-only** (`dunning-rules.ts`, `dunning.ts`):
+  - subscription webhooks move the org's dunning state (`org_billing.dunning_started_at`,
+    `grace_ends_at`, `read_only_at`): `past_due` starts a 14-day grace (once); `unpaid` (the
+    provider gave up), or the subscription ending while unpaid, makes it read-only at once;
+    `active`/`trialing` (paid) clears it. Events: `billing.dunning_started@1`,
+    `billing.read_only_started@1`, `billing.dunning_resolved@1`. The grace end needs no job: the
+    standing is computed at `now`.
+  - the read-only gate (`billingReadOnlyGate`, composed after tenancy's status gate in the web,
+    API and test ports): while read-only, writes by the org's members and API keys are refused
+    with `read_only_billing` (HTTP 403, "Nothing was saved or deleted") inside the tenant
+    transaction before the handler. Reads, exports, paying and changing the plan, personal and
+    safety actions, and door scans keep working; ticket buyers, guests, portals, devices and the
+    platform are never refused. Nothing is deleted anywhere. Billing off: no read at all.
+  - a banner on every console page of the org (grace: "works until {date}"; read-only: what
+    still works), rendered through the maintenance banner (no shell change), and a notice on the
+    plan page with **Pay now** (`billing.payOutstanding`, owners and admins, idempotent) → the
+    provider pays the open invoice and its webhook restores writes; a declined payment says so.
+  - the test billing portal (dev only) gained "Fail the renewal payment" (`past_due`) and "Stop
+    retrying the payment" (`unpaid`).
+- **Tax**: the provider's tax setting (Stripe Tax: `automatic_tax` on previews, changes and new
+  subscriptions); the fake applies a flat 8 % so previews show a tax line in dev and CI.
+- **Nonprofit discount**: a coupon (`nonprofit`, 20 % off, the research figure) applied from the
+  verified charity profile (M4.8b: `donations.charity_verified@1` sets it, a rejection removes
+  it unless staff granted it) or by staff (`billing.setNonprofitDiscount`, platform only,
+  audited). New subscriptions start with it; the worker's billing pass puts a changed discount on
+  the live subscription (`pushNonprofitDiscount`, `setDiscount`). Previews show it.
+- Permission `billing:manage` (owners and admins).
+- `BillingProvider` gained `previewPlanChange`, `changePlan`, `payOutstanding`, `reportUsage`,
+  `setDiscount`; the fake delivers the webhooks a change or payment causes through an injected
+  `deliver` (the web app hands them to its own webhook processor).
+- Dev/CI route `POST /api/dev/billing` (dev auth only): enrolls scan devices through the real
+  command, runs the usage meter and, with billing on, reports usage (e2e).
+
+### 3. Acceptance
+| Criterion | Test |
+|---|---|
+| A failed renewal makes the org read-only and never deletes data; paying restores writes | `packages/testing/tests/billing-dunning.int.test.ts` › "after the grace period the org is read-only…", "the provider giving up … paying restores writes"; e2e `billing-dunning.spec.ts` › "a failed renewal: grace, then read-only…" |
+| Meters match usage events exactly over a fixture month (no double count on replay) | `billing-meters.int.test.ts` › "over the fixture month: every meter equals the sum of its events", "a replayed or redelivered event never counts twice", "reports each record once … the provider total equals the events" |
+| A plan change still alters modules through the webhook alone | `billing-dunning.int.test.ts` › "previews the proration … a downgrade needs the modules confirmed" (modules move only when the fake provider's webhook is processed); `billing-subscriptions.int.test.ts` (M6.6a) unchanged and green |
+| Usage events from messaging, AI credits and devices | `billing-meters.int.test.ts` › "a sent message, a spent or refunded AI credit and an enrolled device each emit a usage event"; `meters.test.ts` |
+| Usage page per org: current period, history, by meter, org time zone | `billing-meters.int.test.ts` › "counts months in the org time zone…", "filters by meter…"; e2e › "usage page…" |
+| Upgrade/downgrade with the proration preview; downgrades show what turns off first | e2e › "upgrade and downgrade with the proration preview, keyboard only"; `proration.test.ts`; `fake-provider-changes.test.ts`; `stripe-billing.test.ts` (M6.6b block) |
+| Who is refused while read-only (members, API keys) and who is not (buyers, portals, devices, platform; exports, paying, door) | `dunning-rules.test.ts`; `billing-dunning.int.test.ts` › "the gate spares buyers, exports and the door" |
+| Tax through the provider's tax setting; nonprofit discount from the charity profile or staff | `stripe-billing.test.ts` (automatic tax, coupon); `billing-dunning.int.test.ts` › "nonprofit discount"; `proration.test.ts` |
+| Permissions: owners/admins change and pay; finance reads; viewers neither | `billing-dunning.int.test.ts` › permissions; e2e › "a viewer sees neither…; a finance member cannot change the plan" |
+| Billing off: nothing changes (never read-only, nothing reported, no preview) | `billing-dunning.int.test.ts` › "billing switched off…"; `billing-meters.int.test.ts` › "billing off…" |
+| E2E keyboard only, axe in both themes, RTL | `apps/web/e2e/billing-dunning.spec.ts` (375/768/1280) |
+
+### 4. Migration (`0114_shiny_moondragon`, to be renumbered)
+Expand only. New tenant tables (RLS ENABLE + FORCE, the NULLIF policy, org-leading indexes):
+`billing.usage_records` (unique per org, source event and meter), `billing.plan_changes` (unique
+per org and idempotency key). New nullable columns on `billing.org_billing`: `dunning_started_at`,
+`grace_ends_at`, `read_only_at`, `nonprofit_discount`, `discount_changed_at`,
+`discount_pushed_at`. Hand-written (between the markers): the two CHECKs on the existing
+`org_billing` table added `NOT VALID` then `VALIDATE CONSTRAINT`.
+
+### 5. Pending owner (owner inbox)
+- Grace period length (built: 14 days, Stripe's retry window) and who is read-only (built: the
+  org's members and API keys; buyers, guests and the door keep working).
+- What a read-only org's members may still do (built: look, export, pay or change the plan, door
+  scans, personal settings).
+- The nonprofit discount (built: 20 % off the plan, research figure) and whether it applies to
+  metered usage too (built: the plan only).
+- Meter prices and Stripe meters (`yayatoh_email`, `yayatoh_sms`, `yayatoh_whatsapp`,
+  `yayatoh_ai_credits`, `yayatoh_devices`, sum aggregation) when billing goes live; devices count
+  enrollments.
+- `billing:manage` is owners and admins only (finance reads the plan and usage).
+
+### 6. Not yet / later
+- Usage-based prices on the plans (the meters exist; their prices are the owner's, D22).
+- A provider-hosted payment-method update (Stripe customer portal) next to "Pay now".
+- An admin screen for the nonprofit flag (the command exists).
+- Per-meter quotas shown against usage (M3.5a's messaging quotas still apply as before).

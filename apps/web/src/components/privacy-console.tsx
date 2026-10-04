@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, Card, EmptyState, Input, Radio } from '@yayatoh/ui';
+import { Alert, Button, buttonClass, Card, EmptyState, Input, Radio } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState, useId } from 'react';
 import type { FindState, OpenState } from '@/app/[locale]/o/[org]/(org)/privacy/actions.ts';
@@ -60,6 +60,7 @@ export function PrivacyConsole({
         <form action={findAction} className="flex flex-col gap-3 sm:flex-row sm:items-start" noValidate>
           <div className="flex-1">
             <Input
+              id="privacy-find-email"
               name="email"
               type="email"
               autoComplete="off"
@@ -98,6 +99,11 @@ export function PrivacyConsole({
             <EmptyState
               title={t('privacy.result.noneTitle')}
               description={t('privacy.result.noneDescription')}
+              action={
+                <Link href="#privacy-find-email" className={buttonClass('secondary', 'md')}>
+                  {t('privacy.result.searchAgain')}
+                </Link>
+              }
             />
           )}
           {current.openRequestId ? (

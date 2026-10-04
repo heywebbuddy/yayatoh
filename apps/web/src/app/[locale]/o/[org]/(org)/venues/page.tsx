@@ -6,7 +6,6 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { VenueForm } from '@/components/venue-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatNumber } from '@/lib/format.ts';
-import { zonesWith } from '@/lib/zones.ts';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import { createVenueAction } from './actions.ts';
@@ -42,6 +41,17 @@ export default async function VenuesPage({
         <EmptyState
           title={t('emptyTitle')}
           description={canWrite ? t('emptyDescription') : t('emptyViewer')}
+          action={
+            canWrite ? (
+              <Link href={`/o/${org}/venues#new-venue`} className={buttonClass('primary', 'md')}>
+                {t('emptyAction')}
+              </Link>
+            ) : (
+              <Link href="/venues" className={buttonClass('primary', 'md')}>
+                {t('emptyViewerAction')}
+              </Link>
+            )
+          }
         />
       ) : (
         <Table
@@ -92,16 +102,12 @@ export default async function VenuesPage({
         {showArchived ? t('hideArchived') : t('showArchived')}
       </Link>
       {canWrite ? (
-        <section aria-labelledby="new-venue-heading" className="flex flex-col gap-3">
+        <section id="new-venue" aria-labelledby="new-venue-heading" className="flex flex-col gap-3">
           <h2 id="new-venue-heading" className="text-section">
             {t('new')}
           </h2>
           <Card size="panel">
-            <VenueForm
-              action={createVenueAction.bind(null, org)}
-              zones={zonesWith(data.org.timezone)}
-              defaultTimezone={data.org.timezone}
-            />
+            <VenueForm action={createVenueAction.bind(null, org)} defaultTimezone={data.org.timezone} />
           </Card>
         </section>
       ) : (

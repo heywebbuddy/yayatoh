@@ -10,3 +10,10 @@ Marketing: tracked links, click tracking and order attribution (M3.8a). Campaign
 - **Attribution.** One record per order (`attributions_org_order_key`), written by `attributeOrderCommand` right after the order is created (the checkout hook). Clicks count when they are for the order's event and inside the org's window (default 30 days, 1–90, pending owner) before the order; first touch is the earliest, last touch the latest. Without a click, the UTM values the buyer landed with (`yy_utm` cookie, first and last) give a `utm` record. The records keep the window they were made with.
 - **Reports** count sold orders only (paid, partially refunded, refunded) through the orders module's `orderOutcomesTx` facts; revenue is the gross order total per currency in integer minor units (refunds are not netted, as in M1.12's gross). Conversion is last-touch orders per click.
 - **Permissions.** Reading links and reports: `marketing:read` (owners, admins, managers, marketing, finance, viewers). Creating links and changing the window: `marketing:write`. Entitlement: `marketing`. An order's attribution record: `orders:read`.
+- **Touch paths (M6.2b).** With each attribution record, `attributeOrderCommand` writes the order's
+  touch path (`attribution_touches`): every counting click (at most 50: the first and the latest
+  49) with its link's UTM values and campaign, or the first and last landings (`utm`, or `referral`
+  for a landing from another site: the landing capture turns a foreign `Referer` host into
+  `source = host, medium = referral`; only the host is kept). It emits `marketing.order_attributed@1`
+  (ids only). `eventTouchPathsTx` serves the paths to the analytics warehouse; records made before
+  M6.2b fall back to their first and last touch.

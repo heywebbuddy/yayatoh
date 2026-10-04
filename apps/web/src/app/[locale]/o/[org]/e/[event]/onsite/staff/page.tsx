@@ -3,7 +3,7 @@ import { doorStaffQuery } from '@yayatoh/checkin';
 import { executeQuery } from '@yayatoh/kernel';
 import { composeNav, isProfileKey } from '@yayatoh/platform';
 import { listMembersQuery, roleCan } from '@yayatoh/tenancy';
-import { Button, Card, EmptyState, PageHeader } from '@yayatoh/ui';
+import { Button, buttonClass, Card, EmptyState, PageHeader } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { DoorStaffForm } from '@/components/door-staff-form.tsx';
@@ -36,7 +36,15 @@ export default async function DoorStaffPage({
     return (
       <>
         <PageHeader title={t('doorStaff.title')} />
-        <EmptyState title={t('checkin.noAccessTitle')} description={t('doorStaff.noAccess')} />
+        <EmptyState
+          title={t('checkin.noAccessTitle')}
+          description={t('doorStaff.noAccess')}
+          action={
+            <Link href={`/o/${org}/e/${event}`} className={buttonClass('primary', 'md')}>
+              {t('checkin.backToEvent')}
+            </Link>
+          }
+        />
       </>
     );
   }
@@ -63,7 +71,21 @@ export default async function DoorStaffPage({
           {t('doorStaff.listTitle')}
         </h2>
         {staff.length === 0 ? (
-          <EmptyState title={t('doorStaff.emptyTitle')} description={t('doorStaff.emptyDescription')} />
+          <EmptyState
+            title={t('doorStaff.emptyTitle')}
+            description={canManage ? t('doorStaff.emptyDescription') : t('doorStaff.emptyReadOnly')}
+            action={
+              canManage ? (
+                <Link href="#staff-add-heading" className={buttonClass('primary', 'md')}>
+                  {t('doorStaff.addFirst')}
+                </Link>
+              ) : (
+                <Link href={`/o/${org}/e/${event}/onsite`} className={buttonClass('secondary', 'md')}>
+                  {t('doorStaff.openCheckin')}
+                </Link>
+              )
+            }
+          />
         ) : (
           <ul className="flex list-none flex-col gap-3 p-0">
             {staff.map((s) => {

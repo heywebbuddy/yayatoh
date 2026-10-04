@@ -317,6 +317,15 @@ export const API_KEY_SCOPES = [
   /** Bulk attendee and ticket actions on /v1 (labels, email, resend tickets; M1.13d). */
   'attendees:write',
   'checkin:scan',
+  /** M6.4c: add contacts (/v1 `contacts`, Zapier's "Add contact"). */
+  'contacts:write',
+  /** M6.4c: subscribe and unsubscribe REST hooks (/v1 `hooks`, Zapier triggers). */
+  'webhooks:subscribe',
+  /**
+   * M6.5c: add and remove the org's webhook endpoints over /v1 (Make and n8n instant triggers
+   * subscribe themselves). Never the signing secrets, test sends or replays (console only).
+   */
+  'webhooks:manage',
 ] as const;
 export type ApiKeyScope = (typeof API_KEY_SCOPES)[number];
 
@@ -497,6 +506,48 @@ export const sandboxOrgs = tenantTable(
     foreignKey({
       name: 'sandbox_orgs_org_fk',
       columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+  ],
+);
+
+/** What a client may grant an agency (M6.7a): a ceiling, never owner, admin or finance. */
+export const AGENCY_GRANT_ROLES = ['manager', 'marketing', 'viewer'] as const;
+
+/**
+ * Agency access grants (M6.7a, P6-8). Owned by the **client** (`org_id`), who grants an agency org
+ * a role and revokes it at any time; `finance` is the client's explicit opt-in to its money
+ * tables (off by default). Members of the agency act in the client through a live grant only:
+ * the authorizer and the money tables' row policy re-read it on every request, so a revoked grant
+ * cuts access on the next one. Rows are kept after revocation (history).
+ */
+export const orgAccessGrants = tenantTable(
+  tenancy,
+  'org_access_grants',
+  {
+    agencyOrgId: uuid('agency_org_id').notNull(),
+    role: text('role').notNull(),
+    finance: boolean('finance').notNull().default(false),
+    grantedBy: uuid('granted_by').notNull(),
+    revokedAt: timestamp('revoked_at', { withTimezone: true }),
+    revokedBy: uuid('revoked_by'),
+  },
+  (t) => [
+    uniqueIndex('org_access_grants_org_agency_live_key')
+      .on(t.orgId, t.agencyOrgId)
+      .where(sql`revoked_at is null`),
+    index('org_access_grants_agency_idx').on(t.agencyOrgId).where(sql`revoked_at is null`),
+    check('org_access_grants_role_check', inList('role', AGENCY_GRANT_ROLES)),
+    check('org_access_grants_not_self', sql`agency_org_id <> org_id`),
+    check('org_access_grants_revoked_check', sql`(revoked_at is null) = (revoked_by is null)`),
+    foreignKey({
+      name: 'org_access_grants_org_fk',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'org_access_grants_agency_fk',
+      columns: [t.agencyOrgId],
       foreignColumns: [organizations.id],
     }).onDelete('cascade'),
   ],

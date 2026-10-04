@@ -1,5 +1,5 @@
 import { formatMoney, money } from '@yayatoh/kernel';
-import { buttonClass, Card, PageHeader } from '@yayatoh/ui';
+import { buttonClass, Card, DatePicker, PageHeader } from '@yayatoh/ui';
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { Shell } from '@/components/shell.tsx';
@@ -31,10 +31,9 @@ export default async function CommissionPage({
             <label htmlFor={`period-${k}`} className="text-[13px] font-bold text-ink">
               {t(k)}
             </label>
-            <input
+            <DatePicker
               id={`period-${k}`}
               name={k}
-              type="date"
               defaultValue={period[k]}
               aria-invalid={k === 'to' && period.error ? true : undefined}
               aria-describedby={k === 'to' && period.error ? 'period-error' : undefined}

@@ -3,7 +3,7 @@ import { closePools } from '@yayatoh/db';
 import { localKeyVault, setKeyVault } from '@yayatoh/platform';
 import { resolveOrgSlug } from '@yayatoh/tenancy';
 import { type ContactStatsScenario, contactStatsScenario } from '@yayatoh/testing';
-import { expectAccessible, newUser } from './helpers.ts';
+import { expectAccessible, expectPicked, inOptions, newUser, pickOption } from './helpers.ts';
 
 // Tickets are signed with the org's keys: seal them under the web server's key vault.
 const kms = process.env.LOCAL_KMS_KEY;
@@ -121,13 +121,13 @@ test.describe('contact stats (M6.1b)', () => {
     // Lifetime value: choose the condition type and add it with the keyboard.
     const type = page.getByLabel('New condition').first();
     await type.focus();
-    await type.selectOption('ltv');
+    await pickOption(type, 'ltv');
     await page.keyboard.press('Tab');
     await expect(page.getByRole('button', { name: 'Add condition' }).first()).toBeFocused();
     await page.keyboard.press('Enter');
     const ltv = page.getByRole('group', { name: 'Condition 1: Lifetime value' });
     await expect(ltv).toBeVisible();
-    await expect(ltv.getByLabel('Comparison')).toHaveValue('gt');
+    await expectPicked(ltv.getByLabel('Comparison'), 'gt');
     await ltv.getByLabel('Amount').fill('500');
     await expect(count(page)).toHaveText('3 people match');
     await expect.poll(() => previewNames(page)).toEqual(['John Doe', 'Mia Lane', 'Ray Park']);
@@ -135,11 +135,11 @@ test.describe('contact stats (M6.1b)', () => {
     await expect(count(page)).toHaveText('2 people match');
 
     // No-show propensity under 20 %.
-    await type.selectOption('stats');
+    await pickOption(type, 'stats');
     await page.getByRole('button', { name: 'Add condition' }).first().click();
     const stats = page.getByRole('group', { name: 'Condition 2: Contact stats' });
-    await stats.getByLabel('Stat').selectOption('noShowPct');
-    await stats.getByLabel('Comparison').selectOption('lt');
+    await pickOption(stats.getByLabel('Stat'), 'noShowPct');
+    await pickOption(stats.getByLabel('Comparison'), 'lt');
     // Validation: a percentage over 100 is not a condition yet.
     await stats.getByLabel('Percent').fill('120');
     await expect(page.getByText('Finish the highlighted conditions to see who matches.')).toBeVisible();
@@ -171,7 +171,7 @@ test.describe('contact stats (M6.1b)', () => {
     const { slug, s } = await orgWithJohn(page);
     // The owner saves an audience on lifetime value.
     await page.goto(`/o/${slug}/audiences/new`);
-    await page.getByLabel('New condition').first().selectOption('ltv');
+    await pickOption(page.getByLabel('New condition').first(), 'ltv');
     await page.getByRole('button', { name: 'Add condition' }).first().click();
     await page.getByRole('group', { name: 'Condition 1: Lifetime value' }).getByLabel('Amount').fill('1000');
     await expect(count(page)).toHaveText('2 people match');
@@ -197,10 +197,12 @@ test.describe('contact stats (M6.1b)', () => {
     // The builder offers no money conditions…
     await m.goto(`/o/${slug}/audiences/new`);
     const types = m.getByLabel('New condition').first();
-    await expect(types.locator('option[value="ltv"]')).toHaveCount(0);
-    await types.selectOption('stats');
+    await inOptions(types, (list) => expect(list.locator('[data-value="ltv"]')).toHaveCount(0));
+    await pickOption(types, 'stats');
     await m.getByRole('button', { name: 'Add condition' }).first().click();
-    await expect(m.getByLabel('Stat').locator('option[value="rfmMonetary"]')).toHaveCount(0);
+    await inOptions(m.getByLabel('Stat'), (list) =>
+      expect(list.locator('[data-value="rfmMonetary"]')).toHaveCount(0),
+    );
     // …and the saved money audience is refused when opened directly.
     await m.goto(savedUrl.replace(/^https?:\/\/[^/]+/, ''));
     await expect(count(m)).toHaveText("You don't have access to this.");

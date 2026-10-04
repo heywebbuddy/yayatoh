@@ -1,5 +1,26 @@
 export { legacyPayloadHash, legacyQrPayload } from '@yayatoh/ticket-crypto';
 export { clockOffsetMs } from './clock.ts';
+// M4.4b: guest check-in, the guest kiosk and the A–Z board (server and Scan PWA alike).
+export {
+  type BoardEntry,
+  type BoardGroup,
+  boardGroups,
+  boardPages,
+  correctedArrival,
+  earlierArrival,
+  type FoundGuest,
+  GUEST_SNAPSHOT_VERSION,
+  type GuestSnapshot,
+  type KioskMatch,
+  matchGuestByName,
+  normalizeName,
+  type SnapshotGuest,
+  type SnapshotGuestStatus,
+  type SnapshotParty,
+  type SnapshotPlace,
+  searchGuests,
+  snapshotLabels,
+} from './guests.ts';
 export {
   admittedKey,
   legacyIndex,
@@ -10,10 +31,12 @@ export {
   type ManifestOccurrence,
   type ManifestRow,
   type ManifestScope,
+  type ManifestSession,
   type OfflineState,
   type OfflineVerdict,
   offlineVerdict,
   SCOPE_TAG,
+  type SignedSessionGate,
   scopeAllows,
   scopeMessage,
   uuidv7Time,
@@ -30,6 +53,18 @@ export {
   type RuleVerdict,
   ruleResult,
 } from './rules.ts';
+export {
+  dwellMs,
+  GATE_RESULT,
+  gateOf,
+  inRoomKey,
+  SESSION_GATES,
+  type SessionAccessFacts,
+  type SessionGate,
+  type SessionGateRule,
+  type SessionRefusal,
+  sessionGateResult,
+} from './session.ts';
 export {
   DEFAULT_VELOCITY_RULES,
   detectVelocity,

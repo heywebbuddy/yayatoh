@@ -1,6 +1,6 @@
 import { type OrgOverviewDto, orgOverviewQuery } from '@yayatoh/command-center';
 import { executeQuery, isDomainError } from '@yayatoh/kernel';
-import { EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
+import { buttonClass, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Link } from '@/i18n/navigation.ts';
 import { commandCenterCtx } from '@/server/command-center.ts';
@@ -30,7 +30,15 @@ export default async function CommandCenterOverviewPage({
     return (
       <>
         <PageHeader title={t('overviewTitle')} />
-        <EmptyState title={t('noAccess.title')} description={t('noAccess.description')} />
+        <EmptyState
+          title={t('noAccess.title')}
+          description={t('noAccess.description')}
+          action={
+            <Link href={`/o/${org}/team`} className={buttonClass('primary', 'md')}>
+              {t('noAccess.action')}
+            </Link>
+          }
+        />
       </>
     );
   }
@@ -47,7 +55,15 @@ export default async function CommandCenterOverviewPage({
         </p>
       ) : null}
       {overview.events.length === 0 ? (
-        <EmptyState title={t('overviewEmpty.title')} description={t('overviewEmpty.description')} />
+        <EmptyState
+          title={t('overviewEmpty.title')}
+          description={t('overviewEmpty.description')}
+          action={
+            <Link href={`/o/${org}`} className={buttonClass('primary', 'md')}>
+              {t('overviewEmpty.action')}
+            </Link>
+          }
+        />
       ) : (
         <Table
           caption={t('overviewTitle')}

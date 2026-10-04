@@ -117,6 +117,8 @@ export const gifts = tenantTable(
     tributeNote: text('tribute_note'),
     locale: text('locale').notNull().default('en'),
     paidAt: ts('paid_at'),
+    /** M4.8d: the donor asked to be thanked by name on the room's screen (P4-13; off by default). */
+    showOnScreen: boolean('show_on_screen').notNull().default(false),
   },
   (t) => [
     index('gifts_org_campaign_status_idx').on(t.orgId, t.campaignId, t.status),
@@ -130,6 +132,7 @@ export const gifts = tenantTable(
     check('gifts_status_check', inList('status', GIFT_STATUSES)),
     check('gifts_source_check', inList('source', GIFT_SOURCES)),
     check('gifts_display_as_check', inList('display_as', DISPLAY_AS)),
+    check('gifts_show_on_screen_check', sql`not show_on_screen or display_as <> 'anonymous'`),
     check('gifts_amount_check', sql`amount_minor > 0 and fee_cover_minor >= 0`),
     check('gifts_currency_check', sql`currency ~ '^[A-Z]{3}$'`),
     check('gifts_paid_check', sql`(status = 'paid') = (paid_at is not null)`),

@@ -1,5 +1,5 @@
-import { publicTaxNotices, taxNoticeText } from '@yayatoh/donations';
-import { liveSessionIds } from '@yayatoh/engagement';
+import { publicGiving, publicTaxNotices, taxNoticeText } from '@yayatoh/donations';
+import { liveSessionIds, networkingOpen } from '@yayatoh/engagement';
 import {
   accessTarget,
   checkoutTarget,
@@ -142,6 +142,11 @@ export async function PublicEventView({
     publicTarget && fullProgram.sessions.length > 0
       ? await liveSessionIds(publicTarget.orgId, publicTarget.eventId)
       : [];
+  // M5.8a: networking is on (its pages live on the marketplace host, not the org's own site).
+  const networking =
+    publicTarget && !orgId && !embedded
+      ? await networkingOpen(publicTarget.orgId, publicTarget.eventId)
+      : false;
   // M5.4a: the exhibitor map page exists once the event has booths.
   const exhibitorMap =
     contentTarget && fullProgram.exhibitors.length > 0
@@ -161,6 +166,9 @@ export async function PublicEventView({
   ].filter((x) => x.value > 0);
   const unlockedPasses = real.some((p) => p.unlocked);
   const orgProfile = target ? await publicOrgProfile(target.orgId) : null;
+  // M4.8e: a campaign open tonight → the checkout offers saving a card for giving (P4-14).
+  const giving = target ? await publicGiving(target.orgId, target.eventId) : null;
+  const cardForGiving = Boolean(giving?.available && giving.campaigns.length > 0);
   // The event's refund policy (M1.6e), in the buyer's words, before they buy.
   const refundPolicy = target ? await publicRefundPolicy(target.orgId, target.eventId) : null;
   // M4.8b: a verified charity's passes over $75 with a fair-market value show the quid-pro-quo
@@ -347,6 +355,7 @@ export async function PublicEventView({
             })),
           }))}
           organizer={ev.organizerName}
+          cardForGiving={cardForGiving}
           brand={brand ? { background: brand.background, text: brand.text } : null}
           questions={questions}
           seatMap={seatMap}
@@ -515,6 +524,12 @@ export async function PublicEventView({
               <a href="#agenda" className={navLink}>
                 {t('publicEvent.agenda')}
               </a>
+            ) : null}
+            {networking ? (
+              // M5.8a: the event's networking (on the marketplace host only).
+              <Link href={`/events/${slug}/network`} className={navLink}>
+                {t('networking.publicLink')}
+              </Link>
             ) : null}
           </nav>
           <div className="flex flex-wrap items-center gap-2">

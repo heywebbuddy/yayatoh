@@ -2,7 +2,7 @@
 
 import type { EventDetailsDto } from '@yayatoh/events';
 import { ATTENDANCE_MODES, EVENT_CATEGORIES } from '@yayatoh/events/ui';
-import { Alert, Button, Input } from '@yayatoh/ui';
+import { Alert, Button, Input, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState } from 'react';
 import { errorMessageKey } from '@/lib/errors.ts';
@@ -39,7 +39,7 @@ export function EventDetailsForm({
           <label htmlFor="details-venue" className="text-[13px] font-bold text-ink">
             {t('venue')}
           </label>
-          <select
+          <Select
             id="details-venue"
             name="venueId"
             defaultValue={details.venueId ?? ''}
@@ -52,7 +52,7 @@ export function EventDetailsForm({
                 {v.city ? `${v.name} · ${v.city}` : v.name}
               </option>
             ))}
-          </select>
+          </Select>
           <p id="details-venue-hint" className="text-caption text-ink-2">
             {details.venueName && !details.venueId
               ? t('freeTextVenue', { venue: details.venueName })
@@ -63,7 +63,7 @@ export function EventDetailsForm({
           <label htmlFor="details-category" className="text-[13px] font-bold text-ink">
             {t('category')}
           </label>
-          <select
+          <Select
             id="details-category"
             name="category"
             defaultValue={details.category ?? ''}
@@ -75,7 +75,7 @@ export function EventDetailsForm({
                 {te(`categories.${c}`)}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
         <fieldset className="flex flex-col gap-2 md:col-span-2">
           <legend className="text-[13px] font-bold text-ink">{t('visibility')}</legend>

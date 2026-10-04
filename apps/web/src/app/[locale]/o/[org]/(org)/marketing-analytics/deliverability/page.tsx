@@ -15,7 +15,6 @@ import {
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { Crumbs } from '@/components/crumbs.tsx';
 import { ratePct } from '@/components/marketing-analytics.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { campaignNames } from '@/server/campaign-names.ts';
@@ -44,7 +43,6 @@ export default async function DeliverabilityPage({
   const data = await loadConsole(org);
   if (!data.modules.has('marketing') || !roleCan(data.role, 'messages:read')) notFound();
   const t = await getTranslations('marketingAnalytics.deliverability');
-  const tm = await getTranslations('marketingAnalytics');
   const [d, alerts] = await Promise.all([
     executeQuery(deliverabilityReportQuery, {}, data.ctx, ports),
     roleCan(data.role, 'events:read')
@@ -111,19 +109,7 @@ export default async function DeliverabilityPage({
   ) : null;
   return (
     <>
-      <PageHeader
-        breadcrumb={
-          <Crumbs
-            items={[
-              { label: data.org.name, href: `/o/${org}` },
-              { label: tm('title'), href: `/o/${org}/marketing-analytics` },
-              { label: t('title') },
-            ]}
-          />
-        }
-        title={t('title')}
-        description={t('description', { days: d.thresholds.windowDays })}
-      />
+      <PageHeader title={t('title')} description={t('description', { days: d.thresholds.windowDays })} />
       {d.autoPause?.active ? (
         <Alert
           title={t('paused', {

@@ -1,7 +1,7 @@
 'use client';
 
 import { REGISTRATION_FIELD_TYPES, type RegistrationFieldType, typeAllows } from '@yayatoh/forms/ui';
-import { Alert, Button, Input } from '@yayatoh/ui';
+import { Alert, Button, Input, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState, useEffect, useId, useRef, useState } from 'react';
 import { errorMessageKey } from '@/lib/errors.ts';
@@ -170,11 +170,11 @@ function ConditionFields({
             <label htmlFor={`${id}-q`} className={CAPTION}>
               {t('condQuestion')}
             </label>
-            <select
+            <Select
               id={`${id}-q`}
               name="condKey"
               value={key}
-              onChange={(e) => setKey(e.target.value)}
+              onValueChange={(v) => setKey(v)}
               className={SELECT}
             >
               {questions.map((x) => (
@@ -182,13 +182,13 @@ function ConditionFields({
                   {x.label}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
           <div className="flex flex-col gap-1.5">
             <label htmlFor={`${id}-op`} className={CAPTION}>
               {t('condOp')}
             </label>
-            <select
+            <Select
               id={`${id}-op`}
               name="condOp"
               defaultValue={simple?.op ?? 'eq'}
@@ -200,14 +200,14 @@ function ConditionFields({
                   {t(`ops.${op}`)}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
           <div className="flex flex-col gap-1.5">
             <label htmlFor={`${id}-v`} className={CAPTION}>
               {t('condValue')}
             </label>
             {q.type === 'checkbox' || q.type === 'consent' ? (
-              <select
+              <Select
                 id={`${id}-v`}
                 name="condValue"
                 defaultValue={value || 'true'}
@@ -216,9 +216,9 @@ function ConditionFields({
               >
                 <option value="true">{t('yes')}</option>
                 <option value="false">{t('no')}</option>
-              </select>
+              </Select>
             ) : q.type === 'select' || q.type === 'multi_select' ? (
-              <select
+              <Select
                 id={`${id}-v`}
                 name="condValue"
                 defaultValue={value}
@@ -230,7 +230,7 @@ function ConditionFields({
                     {o.label}
                   </option>
                 ))}
-              </select>
+              </Select>
             ) : (
               <input
                 id={`${id}-v`}
@@ -417,11 +417,11 @@ export function AddQuestionForm({
         <label htmlFor={`${id}-type`} className={CAPTION}>
           {tr('questionType')}
         </label>
-        <select
+        <Select
           id={`${id}-type`}
           name="type"
           value={type}
-          onChange={(e) => setType(e.target.value as RegistrationFieldType)}
+          onValueChange={(v) => setType(v as RegistrationFieldType)}
           className={SELECT}
         >
           {REGISTRATION_FIELD_TYPES.map((ft) => (
@@ -429,20 +429,20 @@ export function AddQuestionForm({
               {tr(`types.${ft}`)}
             </option>
           ))}
-        </select>
+        </Select>
       </div>
       {consent ? (
         <div className="flex flex-col gap-1.5">
           <label htmlFor={`${id}-term`} className={CAPTION}>
             {tr('consentTerm')}
           </label>
-          <select id={`${id}-term`} name="term" className={SELECT} aria-describedby={`${id}-term-hint`}>
+          <Select id={`${id}-term`} name="term" className={SELECT} aria-describedby={`${id}-term-hint`}>
             {terms.map((x) => (
               <option key={x.key} value={x.key}>
                 {x.label}
               </option>
             ))}
-          </select>
+          </Select>
           <p id={`${id}-term-hint`} className="text-caption text-ink-2">
             {tr('consentHint')}
           </p>
@@ -602,18 +602,13 @@ export function RegistrationPreview({
         <label htmlFor={`${id}-type`} className={CAPTION}>
           {t('previewAs')}
         </label>
-        <select
-          id={`${id}-type`}
-          value={typeId}
-          onChange={(e) => setTypeId(e.target.value)}
-          className={SELECT}
-        >
+        <Select id={`${id}-type`} value={typeId} onValueChange={(v) => setTypeId(v)} className={SELECT}>
           {types.map((ty) => (
             <option key={ty.id} value={ty.id}>
               {ty.name}
             </option>
           ))}
-        </select>
+        </Select>
       </div>
       <div aria-live="polite">
         {reach.length === 0 ? (

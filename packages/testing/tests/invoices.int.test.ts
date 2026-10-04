@@ -920,4 +920,56 @@ describe('balance due at the badge desk', () => {
       ),
     ).toBe('invalid_state:nothing_to_print');
   });
+
+  it('a logged print job (M5.5b) needs the same override; the print state says a balance is due', async () => {
+    const { badgePrintStateQuery, createTemplateCommand, overrideBalanceDueCommand, startPrintJobCommand } =
+      await import('@yayatoh/badges');
+    const c = await conference(a, { daysOut: 30 });
+    await executeCommand(
+      createTemplateCommand,
+      { eventId: c.eventId, name: 'Attendee', size: 'fold_4x3' },
+      a.ctx(),
+      ports,
+    );
+    const r = await register(c, 'printjob@corp.test');
+    const [t] = await ticketsOf(r.order.id);
+    const ticketId = t?.id as string;
+    const state = await executeQuery(badgePrintStateQuery, { eventId: c.eventId, ticketId }, a.ctx(), ports);
+    expect(state.paymentDue).toBe(true);
+    const job = (overrideToken?: string) =>
+      executeCommand(
+        startPrintJobCommand,
+        {
+          eventId: c.eventId,
+          ticketId,
+          requestKey: `print-${uuidv7()}`,
+          ...(overrideToken ? { overrideToken } : {}),
+        },
+        a.ctx(),
+        ports,
+      );
+    expect(await code(job())).toBe('invalid_state:balance_due');
+    expect(await code(job(`${Date.now() + 60_000}_${ticketId}~${'x'.repeat(43)}`))).toBe(
+      'invalid_state:balance_due',
+    );
+    // Nothing was logged for the refused prints.
+    const logged = async () =>
+      (
+        await withTenant(sys(), (tx) =>
+          tx.execute<{ n: number }>(
+            sql`select count(*)::int as n from badges.print_jobs where ticket_id = ${ticketId}`,
+          ),
+        )
+      )[0]?.n;
+    expect(await logged()).toBe(0);
+    const { token } = await executeCommand(
+      overrideBalanceDueCommand,
+      { eventId: c.eventId, ticketId, note: 'Paying by wire tomorrow.' },
+      a.ctx(),
+      ports,
+    );
+    const printed = await job(token);
+    expect(printed.kind).toBe('print');
+    expect(await logged()).toBe(1);
+  });
 });

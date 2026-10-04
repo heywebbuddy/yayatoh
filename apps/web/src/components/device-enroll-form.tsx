@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, Card, Input } from '@yayatoh/ui';
+import { Alert, Button, Card, Input, Select } from '@yayatoh/ui';
 import { useLocale, useTranslations } from 'next-intl';
 import { useActionState } from 'react';
 import type { EnrollState } from '@/app/[locale]/o/[org]/e/[event]/onsite/actions.ts';
@@ -39,14 +39,14 @@ export function DeviceEnrollForm({
             <label htmlFor="device-assigned" className="text-[13px] font-bold text-ink">
               {t('devices.handedTo')}
             </label>
-            <select id="device-assigned" name="assignedUserId" defaultValue="" className="field">
+            <Select id="device-assigned" name="assignedUserId" defaultValue="" className="field">
               <option value="">{t('devices.orgDevice')}</option>
               {staff.map((m) => (
                 <option key={m.id} value={m.id}>
                   {m.name}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
         ) : null}
         <Button type="submit" disabled={pending}>

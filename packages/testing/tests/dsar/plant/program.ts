@@ -71,3 +71,25 @@ export const plantProgram: Planter = async (p) => {
     ...(pub ? ['program.agenda_publications'] : []),
   ];
 };
+
+/** Batch 3j merge (M5.3b): a proposal, a co-speaker place and a reviewer seat under the address. */
+export const plantCfp: Planter = async ({ admin, orgId, person }) => {
+  const tables: string[] = [];
+  const [s] = await admin`
+    update program.cfp_submissions set speaker_name = ${person.name}, speaker_email = ${person.email},
+      speaker_company = ${`${person.lastName} Labs`}, speaker_bio = ${`Reach ${person.phone}`}
+    where id = (select id from program.cfp_submissions where org_id = ${orgId} order by created_at limit 1)
+    returning id`;
+  if (s) tables.push('program.cfp_submissions');
+  const [c] = await admin`
+    update program.cfp_co_speakers set name = ${person.name}, email = ${person.email}
+    where id = (select id from program.cfp_co_speakers where org_id = ${orgId} order by created_at limit 1)
+    returning id`;
+  if (c) tables.push('program.cfp_co_speakers');
+  const [r] = await admin`
+    update program.cfp_reviewers set name = ${person.name}, email = ${person.email}
+    where id = (select id from program.cfp_reviewers where org_id = ${orgId} order by created_at limit 1)
+    returning id`;
+  if (r) tables.push('program.cfp_reviewers');
+  return tables;
+};

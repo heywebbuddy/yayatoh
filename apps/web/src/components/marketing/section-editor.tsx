@@ -1,7 +1,7 @@
 'use client';
 
 import { SITE_PLACEMENTS, SLUG_MAX } from '@yayatoh/cms/ui';
-import { Alert, Button, Input } from '@yayatoh/ui';
+import { Alert, Button, Input, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState, useId, useState } from 'react';
 import { Markdown } from '@/components/markdown.tsx';
@@ -56,7 +56,7 @@ export function SectionEditor({
             <label htmlFor="section-placement" className="text-[13px] font-bold text-ink">
               {t('fields.placement')}
             </label>
-            <select
+            <Select
               id="section-placement"
               name="placement"
               defaultValue={values?.placement ?? 'home'}
@@ -67,13 +67,13 @@ export function SectionEditor({
                   {t(`placement.${p}`)}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
           <div className="flex flex-col gap-1.5">
             <label htmlFor="section-locale" className="text-[13px] font-bold text-ink">
               {t('fields.locale')}
             </label>
-            <select
+            <Select
               id="section-locale"
               name="locale"
               defaultValue={values?.locale ?? 'en'}
@@ -84,7 +84,7 @@ export function SectionEditor({
                   {l.name}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
         </>
       ) : null}

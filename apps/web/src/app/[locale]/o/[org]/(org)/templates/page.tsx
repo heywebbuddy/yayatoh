@@ -2,9 +2,11 @@ import { executeQuery } from '@yayatoh/kernel';
 import { composeNav, navLabelKey, PROFILES } from '@yayatoh/platform';
 import { listTemplatesQuery, STARTER_KEYS, STARTER_TEMPLATES } from '@yayatoh/templates';
 import { roleCan } from '@yayatoh/tenancy';
-import { Button, Card, EmptyState, Label, PageHeader } from '@yayatoh/ui';
+import { Button, buttonClass, Card, EmptyState, Label, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { CopyEventForm } from '@/components/copy-forms.tsx';
+import { HowItWorks } from '@/components/how-it-works.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import { createFromStarterAction, createFromTemplateAction, deleteTemplateAction } from './actions.ts';
@@ -24,6 +26,8 @@ export default async function TemplatesPage({
   return (
     <>
       <PageHeader title={t('templates.title')} description={t('templates.description')} />
+      {/* U2: Create › Template lands here (`#new-template`): how a template is made. */}
+      <HowItWorks topic="templates" id="new-template" />
       {/* M4.2a: starter templates. The profile presets modules, navigation and the checklist. */}
       <section aria-labelledby="starters-heading" className="flex flex-col gap-3">
         <h2 id="starters-heading" className="text-section">
@@ -73,7 +77,15 @@ export default async function TemplatesPage({
       </section>
       <h2 className="text-section">{t('starters.yours')}</h2>
       {templates.length === 0 ? (
-        <EmptyState title={t('templates.emptyTitle')} description={t('templates.emptyDescription')} />
+        <EmptyState
+          title={t('templates.emptyTitle')}
+          description={t('templates.emptyDescription')}
+          action={
+            <Link href={`/o/${org}`} className={buttonClass('secondary', 'md')}>
+              {canWrite ? t('templates.pickEvent') : t('emptyActions.seeEvents')}
+            </Link>
+          }
+        />
       ) : (
         <ul className="flex list-none flex-col gap-3.5 p-0">
           {templates.map((tpl) => (

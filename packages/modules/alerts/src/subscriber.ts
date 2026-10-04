@@ -1,14 +1,20 @@
 import { DEVICE_ONLINE_WINDOW_MS, deviceEventIdTx, markQuietDevicesTx } from '@yayatoh/checkin';
 import { type TenantTx, withTenant } from '@yayatoh/db';
+import { unpaidPledgeEventIdsTx } from '@yayatoh/donations';
 import { findEventTx, upcomingEventIdsTx } from '@yayatoh/events';
+import { rsvpDeadlineEventIdsTx } from '@yayatoh/guests';
 import { type Ctx, createCtx } from '@yayatoh/kernel';
 import { orderMetricRefTx, refundMetricRefTx } from '@yayatoh/orders';
 import { catchUpSubscriber, defineSubscriber, type PublishedEvent, type Subscriber } from '@yayatoh/platform';
 import { and, isNotNull, lt, ne } from 'drizzle-orm';
 import { z } from 'zod';
-import { eventMode } from './domain/config.ts';
+import { eventMode, THRESHOLDS } from './domain/config.ts';
 import { type AlertChange, type AlertDeps, evaluateEventAlertsTx, evaluateOrgAlertsTx } from './engine.ts';
+import { applyMetricRuleTx, METRIC_RULE_EVENT, sweepMetricAlertsTx } from './metric-rules.ts';
 import { alerts, type SignalKind, signals } from './schema.ts';
+
+/** M4.6a: RSVP deadlines this far back still bring their (future) event into the sweep. */
+const RSVP_LOOKBACK_MS = 120 * 86_400_000;
 
 /** How long a reported failure is kept (the rules count the last 24 hours). */
 const SIGNAL_TTL_MS = 7 * 86_400_000;
@@ -64,13 +70,61 @@ export const ALERT_TRIGGER_EVENTS = [
   'automations.journey_step_failed@1',
   'campaigns.send_failed@1',
   'payments.dispute_deadline_approaching@1',
+  // M5.9a conference pack: applications, session lines, exhibitor people, speaker tasks, invoices
+  // and session doors (time passing — a task or invoice falling due — is the sweep's job).
+  'registration.registrant.applied@1',
+  'registration.registrant.approved@1',
+  'registration.registrant.denied@1',
+  'registration.registrant.confirmed@1',
+  'registration.session.promoted@1',
+  'program.exhibitor.staff_invited@1',
+  'portal.account_invited@1',
+  'program.speaker_task.assigned@1',
+  'program.speaker_task.completed@1',
+  'program.speaker_task.overdue@1',
+  'order.invoiced@1',
+  'order.invoice_payment_recorded@1',
+  'order.voided@1',
+  'checkin.session_attended@1',
+  'checkin.session_left@1',
+  // Batch 3j merge: M5.5b's printer watchdog (offline once per silence, online again) and M5.4b's
+  // package activations (they add deliverables); deliverables falling due is the sweep's job.
+  'badges.printer_offline@1',
+  'badges.printer_online@1',
+  'program.sponsor_package.activated@1',
+  'program.sponsor_package.cancelled@1',
+  // Batch 3k merge: a lead captured (M5.6b) can clear "exhibitors without leads".
+  'leads.captured@1',
+  // M4.6a: a party answered its RSVP, or the deadline moved (guest additions and seating changes
+  // emit nothing: the sweep picks them up).
+  'guests.party_responded@1',
+  'guests.rsvp_deadline_set@1',
+  // M6.2b: an organizer-authored rule changed state (analytics, same tier, through the outbox).
+  'analytics.alert_rule_evaluated@1',
+  // Batch 3l merge: integration runs that failed and connections revoked at the provider
+  // (signals), and plan subscription changes (past due / unpaid are read from billing).
+  'integrations.sync_completed@1',
+  'integrations.connection_revoked@1',
+  'billing.subscription_changed@1',
 ] as const;
 
 /** Outbox events that are themselves what an org rule counts (one `alerts.signals` row each). */
 const SIGNAL_OF: Readonly<Record<string, SignalKind>> = {
   'automations.journey_step_failed': 'journey_step_failed',
   'campaigns.send_failed': 'campaign_send_failed',
+  'integrations.connection_revoked': 'integration_revoked',
 };
+
+const SyncCompleted = z.object({ status: z.string() });
+
+/** The signal an outbox event reports, if any (a sync run counts only when it failed). */
+function signalOf(event: Pick<PublishedEvent, 'type' | 'payload'>): SignalKind | undefined {
+  if (event.type === 'integrations.sync_completed')
+    return SyncCompleted.safeParse(event.payload).data?.status === 'failed'
+      ? 'integration_run_failed'
+      : undefined;
+  return SIGNAL_OF[event.type];
+}
 
 const WithEvent = z.object({ eventId: z.uuid() });
 const WithOrder = z.object({ orderId: z.uuid() });
@@ -102,7 +156,11 @@ export async function alertTargetsTx(
     }
     return { eventIds: around, org: false };
   }
-  if (/^(domain|payouts|messaging|org|bulk|automations|campaigns|payments)\./.test(event.type)) {
+  if (
+    /^(domain|payouts|messaging|org|bulk|automations|campaigns|payments|integrations|billing)\./.test(
+      event.type,
+    )
+  ) {
     const withEvent = WithEvent.safeParse(p);
     return { eventIds: withEvent.success ? [withEvent.data.eventId] : [], org: true };
   }
@@ -134,7 +192,11 @@ export function alertEvaluator(deps: AlertDeps): Subscriber {
     events: ALERT_TRIGGER_EVENTS,
     handle: async (tx, event) => {
       const ctx = createCtx({ orgId: event.orgId, actor: { type: 'system', name: 'alerts.evaluator' } });
-      const kind = SIGNAL_OF[event.type];
+      if (event.type === METRIC_RULE_EVENT) {
+        await applyMetricRuleTx(tx, ctx, event, deps);
+        return;
+      }
+      const kind = signalOf(event);
       if (kind)
         await tx
           .insert(signals)
@@ -173,13 +235,26 @@ export async function evaluateOrgNow(
   const ctx: Ctx = opts.now ? { ...base, now: opts.now } : base;
   const now = ctx.now;
   const full = opts.full !== false;
-  const ids = await withTenant(ctx, (tx) =>
-    upcomingEventIdsTx(
+  const ids = await withTenant(ctx, async (tx) => {
+    const upcoming = await upcomingEventIdsTx(
       tx,
       new Date(now.getTime() - 2 * 3_600_000),
       new Date(now.getTime() + 30 * 86_400_000),
-    ),
-  );
+    );
+    if (!full) return upcoming;
+    // M4.6a: events further out whose RSVP deadline is near (or recently passed) are planning
+    // events the RSVP rule still watches.
+    const rsvp = await rsvpDeadlineEventIdsTx(
+      tx,
+      new Date(now.getTime() - RSVP_LOOKBACK_MS),
+      new Date(now.getTime() + THRESHOLDS.rsvpWarnBeforeMs),
+    );
+    return [...new Set([...upcoming, ...rsvp])];
+  });
+  // M4.8e: events over for 14 days with pledges still unpaid (planning cadence).
+  if (full)
+    for (const id of await withTenant(ctx, (tx) => unpaidPledgeEventIdsTx(tx, now)))
+      if (!ids.includes(id)) ids.push(id);
   const changes: AlertChange[] = [];
   // Alerts of events outside the window (moved, cancelled, over) still resolve.
   const stale = await withTenant(ctx, async (tx) => {
@@ -204,7 +279,11 @@ export async function evaluateOrgNow(
       ...(await withTenant(ctx, async (tx) => {
         // Signals outlive the rules' 24-hour window by a few days, then go (batch 3e).
         await tx.delete(signals).where(lt(signals.occurredAt, new Date(now.getTime() - SIGNAL_TTL_MS)));
-        return evaluateOrgAlertsTx(tx, ctx, deps, now);
+        return [
+          ...(await evaluateOrgAlertsTx(tx, ctx, deps, now)),
+          // M6.2b: organizer rules' snoozes and acknowledgements time out like the others.
+          ...(await sweepMetricAlertsTx(tx, ctx, deps, now)),
+        ];
       })),
     );
   return changes;

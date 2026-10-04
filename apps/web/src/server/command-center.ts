@@ -9,9 +9,11 @@ import {
   COMMAND_CENTER_WIDGETS,
   campaignsWidget,
   defineWidget,
+  exhibitorActivityWidget,
   type FeedAlert,
   isWidgetKey,
   liveFeedWidget,
+  sponsorActivityWidget,
   staffPresenceWidget,
   WIDGET_META,
   type WidgetChannel,
@@ -31,18 +33,19 @@ import {
 } from '@yayatoh/platform';
 import { applyUnpublishedMetricEvents } from '@yayatoh/reports';
 import {
+  type ConsoleRole,
   eventRoleCan,
-  memberRole,
-  type OrgRole,
   resolveOrgSlug,
   roleCan,
   roleRequiresTwoFactor,
 } from '@yayatoh/tenancy';
 import { cookies } from 'next/headers';
 import { realtimeUrl } from '@/lib/realtime-url.ts';
+import { conferenceSources } from './conference-sources.ts';
 import { devAuthEnabled } from './dev.ts';
+import { orgActor } from './org-actor.ts';
 import { ports } from './ports.ts';
-import { getSession } from './session.ts';
+import { getSession, sessionOpensOrg } from './session.ts';
 
 /**
  * The web app's Command Center (M3.2a): the widget registry as composed here (the M3.2b alert
@@ -56,6 +59,9 @@ export const WIDGETS: WidgetRegistry = [
   staffPresenceWidget(memberNames),
   // Batch 3g merge: M3.8b's campaigns tile names messaging campaigns from M3.6b (same tier).
   campaignsWidget(campaignNamesTx),
+  // M5.9a: leads (M5.6b) and sponsor deliverables (M5.4b) through their ports (a dev fake today).
+  exhibitorActivityWidget(conferenceSources()?.exhibitorLeads ?? null),
+  sponsorActivityWidget(conferenceSources()?.overdueDeliverables ?? null),
 ].reduce(withWidget, COMMAND_CENTER_WIDGETS);
 
 /**
@@ -176,7 +182,7 @@ export async function widgetChannels(opts: {
   ctx: Ctx;
   orgId: string;
   eventId: string;
-  role: OrgRole;
+  role: ConsoleRole;
   modules: ReadonlySet<string>;
 }): Promise<Partial<Record<WidgetChannel, string>>> {
   const eventRoles = await eventRolesOf(opts.ctx, opts.eventId);
@@ -245,19 +251,14 @@ async function asMember(
   if (!session) return { status: 401, body: { error: 'unauthenticated' } };
   const resolved = await resolveOrgSlug(orgSlug);
   const imp = session.impersonation;
-  if (!resolved || (imp && imp.orgId !== resolved.orgId))
+  if (!resolved || !sessionOpensOrg(session, resolved.orgId))
     return { status: 404, body: { error: 'not_found' } };
-  const base = createCtx({
-    orgId: resolved.orgId,
-    actor: { type: 'user', userId: session.userId },
-    stepUpAt: session.stepUpAt,
-    impersonatedBy: imp ? { staffUserId: imp.staffUserId, impersonationId: imp.id } : null,
-  });
-  const role = await memberRole(base);
-  if (!role) return { status: 404, body: { error: 'not_found' } };
-  if (!imp && !session.twoFactorEnabled && roleRequiresTwoFactor(role))
+  // M6.7a: a member, or an agency acting through the client's live grant.
+  const actor = await orgActor(resolved.orgId, session);
+  if (!actor) return { status: 404, body: { error: 'not_found' } };
+  if (!imp && !session.twoFactorEnabled && (roleRequiresTwoFactor(actor.role) || actor.agency?.finance))
     return { status: 403, body: { error: 'two_factor_required' } };
-  const ctx = await commandCenterCtx(base);
+  const ctx = await commandCenterCtx(actor.ctx);
   try {
     const ev = await executeQuery(getEventBySlugQuery, { slug: eventSlug }, ctx, ports);
     return await fn(ctx, ev.id);

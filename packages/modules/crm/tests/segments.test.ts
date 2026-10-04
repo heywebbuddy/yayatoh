@@ -164,3 +164,34 @@ describe('segment compilation', () => {
     expect(q.params[0]).toBe(E2);
   });
 });
+
+describe('engagement condition (M5.7b)', () => {
+  const eng = (extra: Record<string, unknown> = {}) => ({
+    type: 'engagement',
+    scope: { kind: 'event', eventId: E1 },
+    op: 'gte',
+    value: 21,
+    ...extra,
+  });
+
+  it('validates a whole score from 0 to the cap with a fixed operator', () => {
+    expect(parse(def([eng()])).root.conditions[0]).toMatchObject({ type: 'engagement', value: 21 });
+    for (const bad of [{ value: -1 }, { value: 1.5 }, { value: 1_000_001 }, { op: 'like' }, { extra: true }])
+      expect(SegmentDefinition.safeParse(def([eng(bad)])).success).toBe(false);
+  });
+
+  it('sums the scores over the events in scope, value bound as a parameter', () => {
+    const q = render(parse(def([eng({ op: 'lt', value: 7 })])));
+    expect(q.sql).toContain('(select coalesce(sum(p.score), 0) from crm.event_engagement p');
+    expect(q.sql).toContain('p.contact_id = c.id and p.event_id = any(');
+    expect(q.sql).toMatch(/\) < \$\d+/);
+    expect(q.params).toEqual(expect.arrayContaining([E1, 7]));
+  });
+
+  it('is scoped like the other event conditions and is not a profile condition', () => {
+    const d = parse(def([eng({ scope: { kind: 'series', seriesId: S1 } })]));
+    expect(segmentScopes(d)).toEqual([{ kind: 'series', seriesId: S1 }]);
+    expect(usesProfileConditions(d)).toBe(false);
+    expect(render(d, { scopes: new Map([[`series:${S1}`, []]]) }).sql).toContain('and false)');
+  });
+});

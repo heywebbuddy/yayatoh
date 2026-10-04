@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button } from '@yayatoh/ui';
+import { Alert, Button, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState, useRef } from 'react';
 import { errorMessageKey } from '@/lib/errors.ts';
@@ -90,11 +90,11 @@ export function ReportForm({ action, done }: { action: Action; done?: boolean })
         <label htmlFor="report-reason" className="text-[13px] font-bold text-ink">
           {t('reportReason')}
         </label>
-        <select id="report-reason" name="reason" className="field">
+        <Select id="report-reason" name="reason" className="field">
           <option value="spam">{t('reasons.spam')}</option>
           <option value="abuse">{t('reasons.abuse')}</option>
           <option value="other">{t('reasons.other')}</option>
-        </select>
+        </Select>
       </div>
       <div className="flex flex-col gap-1.5">
         <label htmlFor="report-note" className="text-[13px] font-bold text-ink">

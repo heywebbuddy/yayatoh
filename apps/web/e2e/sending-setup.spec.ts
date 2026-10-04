@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
-import { expectAccessible, newUser } from './helpers.ts';
+import { expectAccessible, newUser, pickOption } from './helpers.ts';
 
 /**
  * M3.5b sending setup (`/o/{org}/sending`): the org's own email sending domain (added, checked
@@ -84,7 +84,7 @@ test.describe('sending setup', () => {
     const invitee = `invitee.${stamp}@example.test`;
     await page.goto(`/o/${org}/team`);
     await page.getByLabel('Email address').fill(invitee);
-    await page.getByLabel('Role', { exact: true }).selectOption('scanner');
+    await pickOption(page.getByLabel('Role', { exact: true }), 'scanner');
     await page.getByRole('button', { name: 'Send invitation' }).click();
     await expect(page.getByText('Invitation sent.')).toBeVisible();
     await drain(page, org);

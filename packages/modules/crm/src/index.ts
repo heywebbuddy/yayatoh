@@ -1,3 +1,6 @@
+export { addContactCommand } from './add-contact.ts';
+// M5.6b: the consent row behind an exhibitor email share (status and version).
+export { currentConsentEntryTx } from './consent-entry.ts';
 export {
   type ConsentInput,
   consentSummaryTx,
@@ -19,8 +22,20 @@ export {
   upsertContactsTx,
   upsertContactTx,
 } from './contacts.ts';
+// M6.5b: contacts, consent and participation for CRM connectors (Salesforce).
+export {
+  type CrmConsentRow,
+  type CrmParticipationRow,
+  type CrmPersonRow,
+  consentedContactsChangedTx,
+  contactsWithConsentTx,
+  crmParticipationRowsTx,
+  withdrawEmailMarketingTx,
+  writeCrmPersonTx,
+} from './crm-connector-sync.ts';
 export { crmDataSubjects } from './data-subject.ts';
 export { consentRegivenSinceTx, contactDsarTx, eraseContactDsarTx, unlinkContactUserTx } from './dsar.ts';
+export { contactForAccountTx, replaceEventEngagementTx } from './engagement.ts';
 // M6.1a: duplicates, merge with undo, the person timeline.
 export {
   BulkMergeDto,

@@ -83,7 +83,21 @@ export default async function WaitlistsPage({
         </Link>
       </p>
       {lists.length === 0 ? (
-        <EmptyState title={t('emptyTitle')} description={t('empty')} />
+        <EmptyState
+          title={t('emptyTitle')}
+          description={t('empty')}
+          action={
+            ['published', 'postponed', 'completed'].includes(ev.status) && ev.visibility !== 'private' ? (
+              <Link href={`/events/${ev.slug}`} className={buttonClass('primary', 'md')}>
+                {t('viewEventPage')}
+              </Link>
+            ) : (
+              <Link href={`/o/${org}/e/${event}`} className={buttonClass('primary', 'md')}>
+                {t('backToEvent')}
+              </Link>
+            )
+          }
+        />
       ) : (
         <>
           <Table

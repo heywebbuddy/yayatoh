@@ -1,6 +1,6 @@
 import { executeQuery, isDomainError } from '@yayatoh/kernel';
 import { roleCan } from '@yayatoh/tenancy';
-import { Alert, Button, Card, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
+import { Alert, Button, buttonClass, Card, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import { type DeliveryAttemptDto, endpointAttemptsQuery, getEndpointQuery } from '@yayatoh/webhooks';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
@@ -104,7 +104,7 @@ export default async function WebhookEndpointPage({
           {t('created')}
         </p>
       ) : null}
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div id="send-test" className="grid gap-4 lg:grid-cols-2">
         <TestSend action={sendTestAction.bind(null, org, endpointId)} types={TEST_TYPES} />
         <SecretPanel
           reveal={revealSecretAction.bind(null, org, endpointId)}
@@ -114,7 +114,18 @@ export default async function WebhookEndpointPage({
       {attemptsFailed ? (
         <Alert title={t('deliveriesUnavailable')} />
       ) : attempts.length === 0 ? (
-        <EmptyState title={t('noDeliveriesTitle')} description={t('noDeliveriesDescription')} />
+        <EmptyState
+          title={t('noDeliveriesTitle')}
+          description={t('noDeliveriesDescription')}
+          action={
+            <Link
+              href={`/o/${org}/webhooks/${endpointId}#send-test`}
+              className={buttonClass('primary', 'md')}
+            >
+              {t('testTitle')}
+            </Link>
+          }
+        />
       ) : (
         <Table
           caption={t('deliveriesTitle')}

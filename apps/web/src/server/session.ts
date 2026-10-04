@@ -30,7 +30,25 @@ export interface Session {
    */
   readonly stepUpAt: Date;
   readonly impersonation: SessionImpersonation | null;
+  /**
+   * M6.5a: the org whose single sign-on made this session; it opens that org only (null for every
+   * other sign-in).
+   */
+  readonly ssoOrgId: string | null;
 }
+
+/**
+ * The one org a session may open, if it is limited to one: an impersonation's org (M1.2e) or the
+ * org whose single sign-on made it (M6.5a). Null: every org the person is a member of.
+ */
+export const sessionOrgScope = (s: Pick<Session, 'impersonation' | 'ssoOrgId'>): string | null =>
+  s.impersonation?.orgId ?? s.ssoOrgId;
+
+/** Whether the session may open this org's console (membership is checked separately). */
+export const sessionOpensOrg = (s: Pick<Session, 'impersonation' | 'ssoOrgId'>, orgId: string): boolean => {
+  const scope = sessionOrgScope(s);
+  return scope === null || scope === orgId;
+};
 
 const loadSession = cache(async () => {
   // Read request headers first: it marks the route dynamic before auth is initialised, so builds
@@ -80,6 +98,7 @@ export const getSession = cache(async (): Promise<Session | null> => {
     twoFactorEnabled: Boolean((s.user as { twoFactorEnabled?: boolean | null }).twoFactorEnabled),
     stepUpAt: steppedUp && steppedUp > created ? steppedUp : created,
     impersonation,
+    ssoOrgId: (s.session as { ssoOrgId?: string | null }).ssoOrgId ?? null,
   };
 });
 

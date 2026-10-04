@@ -1,0 +1,30 @@
+{
+  "severity": {
+    "info": "情報",
+    "warning": "警告",
+    "critical": "重大"
+  },
+  "alert": {
+    "context": "{severity} · {where}",
+    "open": "Yayatoh で開く"
+  },
+  "test": {
+    "title": "{org} からのテストアラート",
+    "body": "Slack が接続されました。Yayatoh のアラートと日次ダイジェストはこのチャンネルに届きます。"
+  },
+  "digest": {
+    "title": "日次ダイジェスト · {org}",
+    "salesTitle": "販売",
+    "sales": "{orders, plural, =0 {新しい注文はありません} other {新しい注文 # 件}} · {tickets, plural, other {チケット # 枚}}",
+    "revenue": "売上: {amounts}",
+    "checkins": "{count, plural, =0 {チェックインはありません} other {チェックイン # 件}}",
+    "eventLine": "{name}: {tickets, plural, other {チケット # 枚}}",
+    "eventLineRevenue": "{name}: {tickets, plural, other {チケット # 枚}} · {amounts}",
+    "moreEvents": "{count, plural, other {ほか # 件のイベント}}",
+    "todayTitle": "今日",
+    "todayEvent": "{name} · {time}",
+    "noEventsToday": "今日のイベントはありません。",
+    "open": "ダッシュボードを開く"
+  },
+  "footer": "Yayatoh から送信。設定 → 連携 → Slack で変更できます。"
+}

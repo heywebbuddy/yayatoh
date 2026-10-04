@@ -34,7 +34,15 @@ export default async function CommandCenterPage({
     return (
       <>
         <PageHeader title={t('title')} description={ev.name} />
-        <EmptyState title={t('noAccess.title')} description={t('noAccess.description')} />
+        <EmptyState
+          title={t('noAccess.title')}
+          description={t('noAccess.description')}
+          action={
+            <Link href={`/o/${org}/e/${event}`} className={buttonClass('primary', 'md')}>
+              {t('noAccess.backToEvent')}
+            </Link>
+          }
+        />
       </>
     );
   }

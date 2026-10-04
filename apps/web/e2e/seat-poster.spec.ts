@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
-import { expectAccessible, newUser, signIn } from './helpers.ts';
+import { expectAccessible, newUser, pickOption, signIn } from './helpers.ts';
 import { createGala, publishEvent, unique } from './seating-helpers.ts';
 
 /**
@@ -37,8 +37,7 @@ async function seat(page: Page, base: string, who: string, table: string) {
   await page.goto(`${base}/seating/assign`);
   await page.getByRole('checkbox', { name: who }).check();
   const item = page.getByLabel('Table or row');
-  const option = item.locator('option', { hasText: new RegExp(`^${table} — `) });
-  await item.selectOption({ label: (await option.textContent()) ?? '' });
+  await pickOption(item, { label: new RegExp(`^${table} — `) });
   await page.getByRole('button', { name: 'Seat them' }).click();
   await expect(page.getByRole('region', { name: table, exact: true })).toContainText(who);
 }

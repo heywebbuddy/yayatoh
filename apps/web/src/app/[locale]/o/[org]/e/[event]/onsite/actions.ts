@@ -2,6 +2,7 @@
 
 import {
   admitBalanceDueCommand,
+  admitSessionOverrideCommand,
   createCheckpointCommand,
   enrollDeviceCommand,
   type ScanOutcomeDto,
@@ -10,6 +11,7 @@ import {
   setDeviceStateCommand,
   undoAdmissionCommand,
 } from '@yayatoh/checkin';
+import { SESSION_GATES } from '@yayatoh/checkin-engine';
 import { executeCommand, isDomainError } from '@yayatoh/kernel';
 import { revalidatePath } from 'next/cache';
 import { loadEvent } from '@/server/console.ts';
@@ -17,7 +19,13 @@ import { ports } from '@/server/ports.ts';
 
 export type ScanState =
   | { readonly kind: 'idle' }
-  | { readonly kind: 'outcome'; readonly outcome: ScanOutcomeDto; readonly seq: number }
+  | {
+      readonly kind: 'outcome';
+      readonly outcome: ScanOutcomeDto;
+      readonly seq: number;
+      /** M5.6a: the gates this answer's session override asked to waive. */
+      readonly override?: string[];
+    }
   | { readonly kind: 'error'; readonly code: string; readonly seq: number };
 
 export async function scanAction(
@@ -50,6 +58,39 @@ export async function scanAction(
       return { kind: 'error', code: isDomainError(err) ? err.code : 'internal', seq };
     }
   }
+  // M5.6a: let someone into a session past a refusing gate (staff override, with a reason).
+  if (form.get('intent') === 'session_override') {
+    const reason = String(form.get('note') ?? '').trim();
+    if (reason.length < 3) return { kind: 'error', code: 'session_reason', seq };
+    const gates = String(form.get('gates') ?? '')
+      .split(',')
+      .filter((g): g is (typeof SESSION_GATES)[number] => (SESSION_GATES as readonly string[]).includes(g));
+    try {
+      const outcome = await executeCommand(
+        admitSessionOverrideCommand,
+        {
+          eventId: ev.id,
+          code: String(form.get('code') ?? ''),
+          checkpointId: String(form.get('checkpointId') ?? ''),
+          gates,
+          reason,
+        },
+        data.ctx,
+        ports,
+      );
+      revalidatePath(`/o/${org}/e/${event}/onsite`);
+      return { kind: 'outcome', outcome, seq, override: gates };
+    } catch (err) {
+      const reasonCode = isDomainError(err)
+        ? (err.details as { reason?: string } | undefined)?.reason
+        : undefined;
+      return {
+        kind: 'error',
+        code: reasonCode === 'nothing_to_override' ? reasonCode : isDomainError(err) ? err.code : 'internal',
+        seq,
+      };
+    }
+  }
   try {
     const outcome = await executeCommand(
       scanTicketCommand,
@@ -59,6 +100,7 @@ export async function scanAction(
         // One id per submitted scan, so a double-submitted form is not reported as a duplicate.
         clientScanId: String(form.get('scanId') ?? '') || undefined,
         checkpointId: String(form.get('checkpointId') ?? '') || undefined,
+        direction: form.get('direction') === 'out' ? 'out' : 'in',
       },
       data.ctx,
       ports,

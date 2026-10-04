@@ -13,7 +13,7 @@ import {
 import { executeQuery } from '@yayatoh/kernel';
 import { isProfileKey, navIncludes, PROFILES } from '@yayatoh/platform';
 import { listLayoutsQuery, type SubEventChartDto, subEventChartsQuery } from '@yayatoh/seating';
-import { Card, EmptyState, PageHeader } from '@yayatoh/ui';
+import { buttonClass, Card, EmptyState, PageHeader, Select } from '@yayatoh/ui';
 import { listVenuesQuery } from '@yayatoh/venues';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
@@ -319,6 +319,20 @@ export default async function SubEventsPage({
           <EmptyState
             title={t('emptyTitle')}
             description={canWrite ? t('emptyDescription') : t('emptyViewer')}
+            action={
+              canWrite ? (
+                <Link
+                  href={`/o/${org}/e/${event}/guests/sub-events#adding-sub-event`}
+                  className={buttonClass('primary', 'md')}
+                >
+                  {t('emptyAction')}
+                </Link>
+              ) : (
+                <Link href={`/o/${org}/e/${event}`} className={buttonClass('primary', 'md')}>
+                  {t('backToEvent')}
+                </Link>
+              )
+            }
           />
         ) : (
           <ol className="flex list-none flex-col gap-3 p-0">
@@ -477,9 +491,9 @@ export default async function SubEventsPage({
       </section>
 
       {canWrite ? (
-        <section aria-labelledby="add-sub-event-heading">
+        <section id="adding-sub-event" aria-labelledby="adding-sub-event-heading">
           <Card size="panel" className="flex flex-col gap-3">
-            <h2 id="add-sub-event-heading" className="text-section">
+            <h2 id="adding-sub-event-heading" className="text-section">
               {t('add')}
             </h2>
             <p className="text-caption text-ink-2">{t('addHint')}</p>
@@ -504,6 +518,24 @@ export default async function SubEventsPage({
           <EmptyState
             title={t('matrixEmptyTitle')}
             description={subs.length === 0 ? t('matrixNoSubEvents') : t('matrixNoGuests')}
+            action={
+              subs.length === 0 ? (
+                <Link
+                  href={`/o/${org}/e/${event}/guests/sub-events#sub-events-heading`}
+                  className={buttonClass('secondary', 'md')}
+                >
+                  {t('matrixToSubEvents')}
+                </Link>
+              ) : canWrite ? (
+                <Link href={`/o/${org}/e/${event}/guests#new-party`} className={buttonClass('primary', 'md')}>
+                  {t('matrixAddGuests')}
+                </Link>
+              ) : (
+                <Link href={`/o/${org}/e/${event}`} className={buttonClass('primary', 'md')}>
+                  {t('backToEvent')}
+                </Link>
+              )
+            }
           />
         ) : (
           <>
@@ -517,33 +549,33 @@ export default async function SubEventsPage({
                   <label htmlFor="matrix-side" className="text-[13px] font-bold text-ink">
                     {tp('side')}
                   </label>
-                  <select id="matrix-side" name="side" defaultValue={side} className={control}>
+                  <Select id="matrix-side" name="side" defaultValue={side} className={control}>
                     <option value="">{tp('anySide')}</option>
                     {matrix.sides.map((v) => (
                       <option key={v} value={v}>
                         {v}
                       </option>
                     ))}
-                  </select>
+                  </Select>
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <label htmlFor="matrix-tag" className="text-[13px] font-bold text-ink">
                     {tp('tag')}
                   </label>
-                  <select id="matrix-tag" name="tag" defaultValue={tag} className={control}>
+                  <Select id="matrix-tag" name="tag" defaultValue={tag} className={control}>
                     <option value="">{tp('anyTag')}</option>
                     {matrix.tags.map((v) => (
                       <option key={v} value={v}>
                         {v}
                       </option>
                     ))}
-                  </select>
+                  </Select>
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <label htmlFor="matrix-vip" className="text-[13px] font-bold text-ink">
                     {tp('vip')}
                   </label>
-                  <select
+                  <Select
                     id="matrix-vip"
                     name="vip"
                     defaultValue={sp.vip === 'yes' || sp.vip === 'no' ? sp.vip : ''}
@@ -552,7 +584,7 @@ export default async function SubEventsPage({
                     <option value="">{tp('vipAny')}</option>
                     <option value="yes">{tp('vipOnly')}</option>
                     <option value="no">{tp('vipNot')}</option>
-                  </select>
+                  </Select>
                 </div>
                 <button type="submit" className="field">
                   {tp('apply')}
@@ -573,7 +605,18 @@ export default async function SubEventsPage({
                 : t('showingAll', { parties: matrix.parties.length, guests: shownGuests.length })}
             </p>
             {matrix.parties.length === 0 ? (
-              <EmptyState title={tp('noMatchTitle')} description={tp('noMatchDescription')} />
+              <EmptyState
+                title={tp('noMatchTitle')}
+                description={tp('noMatchDescription')}
+                action={
+                  <Link
+                    href={`/o/${org}/e/${event}/guests/sub-events#matrix-heading`}
+                    className={buttonClass('primary', 'md')}
+                  >
+                    {tp('showAll')}
+                  </Link>
+                }
+              />
             ) : (
               <>
                 <InvitationGrid

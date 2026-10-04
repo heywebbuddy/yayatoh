@@ -1,3 +1,4 @@
+import { privateColumns as agency } from '@yayatoh/agency';
 import { privateColumns as ai } from '@yayatoh/ai';
 import { privateColumns as alerts } from '@yayatoh/alerts';
 import { privateColumns as analytics } from '@yayatoh/analytics';
@@ -17,8 +18,10 @@ import { privateColumns as donations } from '@yayatoh/donations';
 import { privateColumns as engagement } from '@yayatoh/engagement';
 import { privateColumns as events } from '@yayatoh/events';
 import { privateColumns as forms } from '@yayatoh/forms';
+import { privateColumns as gallery } from '@yayatoh/gallery';
 import { privateColumns as guests } from '@yayatoh/guests';
 import { privateColumns as integrations } from '@yayatoh/integrations';
+import { privateColumns as leads } from '@yayatoh/leads';
 import { privateColumns as marketing } from '@yayatoh/marketing';
 import { privateColumns as marketplace } from '@yayatoh/marketplace';
 import { privateColumns as media } from '@yayatoh/media';
@@ -33,11 +36,13 @@ import { privateColumns as registration } from '@yayatoh/registration';
 import { privateColumns as reports } from '@yayatoh/reports';
 import { privateColumns as reviews } from '@yayatoh/reviews';
 import { privateColumns as seating } from '@yayatoh/seating';
+import { privateColumns as sso } from '@yayatoh/sso';
 import { privateColumns as surveys } from '@yayatoh/surveys';
 import { privateColumns as templates } from '@yayatoh/templates';
 import { privateColumns as tenancy } from '@yayatoh/tenancy';
 import { privateColumns as ticketing } from '@yayatoh/ticketing';
 import { privateColumns as venues } from '@yayatoh/venues';
+import { privateColumns as virtual } from '@yayatoh/virtual';
 import { privateColumns as webhooks } from '@yayatoh/webhooks';
 
 /**
@@ -46,6 +51,8 @@ import { privateColumns as webhooks } from '@yayatoh/webhooks';
  * (`tests/column-privacy.test.ts`) names the exact line to add when a column is missing.
  */
 export const COLUMN_PRIVACY: readonly SchemaPrivacy[] = [
+  // M6.7a: the agency's client and event snapshots.
+  agency,
   ai,
   alerts,
   analytics,
@@ -62,8 +69,10 @@ export const COLUMN_PRIVACY: readonly SchemaPrivacy[] = [
   crm,
   engagement,
   donations,
+  leads,
   events,
   forms,
+  gallery,
   guests,
   integrations,
   marketing,
@@ -85,6 +94,8 @@ export const COLUMN_PRIVACY: readonly SchemaPrivacy[] = [
   tenancy,
   ticketing,
   venues,
+  sso,
+  virtual,
   webhooks,
 ];
 

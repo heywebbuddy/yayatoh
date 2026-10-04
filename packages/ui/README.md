@@ -29,6 +29,18 @@ Type: `text-display`, `text-title`, `text-section`, `text-card`, `text-stat`, `t
 ## Fields
 Give every input, select and textarea the `field` class (or use `Input`, `Select`, `Textarea`): 44 px, 14 px radius, a 3:1 border, focus ring, `aria-invalid` turns it red. `field-sm` (32 px, dense tables), `field-lg` (56 px, scanner), `field-invalid` (error without `aria-invalid`). Labels are 13 px bold (`text-[13px] font-bold text-ink`); help and errors sit below (`FieldMessage`).
 
+## Form controls (U1)
+No native `<select>` or `type="date|time|datetime-local"` input outside this package (check-modules `no-native-select`). Use:
+
+| Need | Use |
+|---|---|
+| One choice from a list | `Select` — keeps the native API: `name`, `defaultValue`/`value`, `<option>`/`<optgroup>` children (or `options`), `required`, `disabled`, `error`, `hint`, `fieldSize`. `onValueChange(value)` replaces `onChange`; `submitOnChange` for filter forms that submit on change. A hidden input carries `name`, so server actions get the same value. Search appears above 8 options. |
+| Search, async, several values, "create new" | `Combobox` (`loadOptions`, `multiple` with chips, `onCreate`) |
+| Dates and times | `DatePicker`, `DateTimePicker`, `TimePicker` — same submitted strings as the native inputs (`YYYY-MM-DD`, `YYYY-MM-DDTHH:MM`, `HH:MM`); typed entry in the reader's format (ISO always works); `min`/`max`; `timeZone` shows the event zone next to the field (`valueFormat="utc"` submits the instant). |
+| Time zone, currency | `TimeZonePicker` (IANA, grouped by region, current offset), `CurrencyPicker` (ISO 4217, symbol and localized name) |
+
+The trigger draws our own chevron (16 px, `text-ink-2`) inside the field, centred, 12 px from the inline end (`field-chevron` keeps the text clear of it); it turns 180° when open and mirrors in RTL. The open list is a top-layer popover in our theme. The apps wrap the tree in `UiLocaleProvider` (root layouts) with the `formControls.*` messages and the locale. In e2e, pick with `pickOption(page.getByLabel('Status'), 'draft')` from `e2e/helpers.ts` (by value or `{ label }`), and type dates with `fill('2026-11-05')`/`fill('2026-11-05T19:00')` as before.
+
 ## Components
 | Need | Use |
 |---|---|

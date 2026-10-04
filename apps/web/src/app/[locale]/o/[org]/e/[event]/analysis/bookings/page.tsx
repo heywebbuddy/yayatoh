@@ -2,7 +2,7 @@ import { executeQuery, isDomainError } from '@yayatoh/kernel';
 import { BOOKING_FILTERS, type BookingFilter, bookingSearchQuery } from '@yayatoh/orders';
 import type { BulkOperationDto } from '@yayatoh/platform';
 import { bookingsExportBulk } from '@yayatoh/reports';
-import { Button, buttonClass, EmptyState, Input, PageHeader, StatusDot, Table } from '@yayatoh/ui';
+import { Button, buttonClass, EmptyState, Input, PageHeader, Select, StatusDot, Table } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { AutoRefresh } from '@/components/auto-refresh.tsx';
 import { fmtMoney, ReportTabs } from '@/components/reports.tsx';
@@ -32,14 +32,22 @@ export default async function BookingsPage({
   const { locale, org, event } = await params;
   setRequestLocale(locale);
   const sp = await searchParams;
-  const { data, event: ev, can } = await loadEvent(org, event, 'analysis');
+  const { data, event: ev, can, opens } = await loadEvent(org, event, 'analysis');
   const t = await getTranslations();
   const base = `/o/${org}/e/${event}/analysis`;
   if (!can('orders:read') || !data.modules.has('ticketing')) {
     return (
       <>
         <PageHeader title={t('reports.tabs.bookings')} description={ev.name} />
-        <EmptyState title={t('reports.noAccessTitle')} description={t('reports.noAccessDescription')} />
+        <EmptyState
+          title={t('reports.noAccessTitle')}
+          description={t('reports.noAccessDescription')}
+          action={
+            <Link href={`/o/${org}/e/${event}`} className={buttonClass('primary', 'md')}>
+              {t('reports.backToEvent')}
+            </Link>
+          }
+        />
       </>
     );
   }
@@ -92,13 +100,13 @@ export default async function BookingsPage({
           <label htmlFor="booking-filter" className="text-[13px] font-bold text-ink">
             {t('reports.bookings.show')}
           </label>
-          <select id="booking-filter" name="filter" defaultValue={filter} className="field">
+          <Select id="booking-filter" name="filter" defaultValue={filter} className="field">
             {BOOKING_FILTERS.map((f) => (
               <option key={f} value={f}>
                 {t(`reports.bookings.filters.${f}`)}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
         <Button type="submit" className="sm:mb-[22px]">
           {t('reports.bookings.submit')}
@@ -164,6 +172,21 @@ export default async function BookingsPage({
         <EmptyState
           title={t('reports.bookings.emptyTitle')}
           description={t('reports.bookings.emptyDescription')}
+          action={
+            q !== '' || filter !== 'all' ? (
+              <Link href={`${base}/bookings`} className={buttonClass('primary', 'md')}>
+                {t('reports.bookings.showAll')}
+              </Link>
+            ) : opens('ticketsOrders') ? (
+              <Link href={`/o/${org}/e/${event}/tickets-orders`} className={buttonClass('primary', 'md')}>
+                {t('reports.toTicketsOrders')}
+              </Link>
+            ) : (
+              <Link href={`/o/${org}/e/${event}`} className={buttonClass('primary', 'md')}>
+                {t('reports.backToEvent')}
+              </Link>
+            )
+          }
         />
       ) : (
         <Table

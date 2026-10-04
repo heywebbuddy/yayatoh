@@ -1,5 +1,12 @@
 import { expect, type Page, test } from '@playwright/test';
-import { continueToPayment, expectAccessible, signIn } from './helpers.ts';
+import {
+  continueToPayment,
+  expectAccessible,
+  expectPicked,
+  inOptions,
+  pickOption,
+  signIn,
+} from './helpers.ts';
 
 function chicago(offsetH: number): string {
   const parts = new Intl.DateTimeFormat('en-CA', {
@@ -17,7 +24,7 @@ function chicago(offsetH: number): string {
 
 async function buy(guest: Page, slug: string, type: string, name: string): Promise<string> {
   await guest.goto(`/events/${slug}`);
-  await guest.getByLabel(`Quantity — ${type}`).selectOption('1');
+  await pickOption(guest.getByLabel(`Quantity — ${type}`), '1');
   await guest.getByLabel('Full name').fill(name);
   await guest.getByLabel('Email for your tickets').fill(`${name.replace(/\s/g, '.')}@example.test`);
   await continueToPayment(guest, `${name.replace(/\s/g, '.')}@example.test`);
@@ -38,7 +45,7 @@ test.describe('entrances and zones', () => {
     await signIn(page);
     await page.goto('/o/lakeside-events/events/new');
     await page.getByLabel('Event name', { exact: true }).fill(`Gates ${stamp}`);
-    await page.getByLabel('Time zone').selectOption('America/Chicago');
+    await pickOption(page.getByLabel('Time zone'), 'America/Chicago');
     await page.getByLabel('Starts', { exact: true }).fill(chicago(-1));
     await page.getByLabel('Ends', { exact: true }).fill(chicago(3));
     await page.getByRole('button', { name: 'Create draft' }).click();
@@ -64,7 +71,7 @@ test.describe('entrances and zones', () => {
     const setup = page.getByRole('region', { name: 'Entrances and zones' });
     const add = async (name: string, kind: 'Entrance' | 'Zone', types: string[] = []) => {
       await setup.getByLabel('Name', { exact: true }).fill(name);
-      await setup.getByLabel('Type').selectOption({ label: kind });
+      await pickOption(setup.getByLabel('Type'), { label: kind });
       for (const t of types) await setup.getByLabel(t, { exact: true }).check();
       await setup.getByRole('button', { name: 'Add', exact: true }).click();
       await expect(setup.getByRole('listitem').filter({ hasText: name })).toBeVisible();
@@ -83,7 +90,7 @@ test.describe('entrances and zones', () => {
       await field.press('Enter');
     };
 
-    await where.selectOption({ label: 'VIP lounge' });
+    await pickOption(where, { label: 'VIP lounge' });
     await scan(general);
     await expect(result).toContainText("This pass doesn't include this area");
     await scan(vip);
@@ -91,15 +98,15 @@ test.describe('entrances and zones', () => {
     // The zone admits nobody to the event.
     await expect(page.getByText('0 of 2 tickets checked in today')).toBeVisible();
 
-    await where.selectOption({ label: 'North gate' });
+    await pickOption(where, { label: 'North gate' });
     await scan(general);
     await expect(result).toContainText('Welcome in');
     await expect(page.getByRole('list', { name: 'Checked in today by entrance' })).toContainText(
       'North gate · 1',
     );
     // The same pass at another gate a moment later: refused, and flagged for the team.
-    await where.selectOption({ label: 'South gate' });
-    await expect(where).toHaveValue(/.+/);
+    await pickOption(where, { label: 'South gate' });
+    await expectPicked(where, /.+/);
     await scan(general);
     await expect(result).toContainText('Already checked in');
     const signals = page.getByRole('region', { name: '1 thing to check' });
@@ -108,6 +115,8 @@ test.describe('entrances and zones', () => {
 
     await setup.getByRole('button', { name: 'Archive South gate' }).click();
     await expect(setup.getByRole('listitem').filter({ hasText: 'South gate' })).toContainText('Archived');
-    await expect(where.locator('option')).toHaveText(['Whole event', 'North gate', 'VIP lounge']);
+    await inOptions(where, (list) =>
+      expect(list.getByRole('option')).toHaveText(['Whole event', 'North gate', 'VIP lounge']),
+    );
   });
 });

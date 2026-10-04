@@ -6,8 +6,10 @@ import {
   confirmStepUp,
   continueToPayment,
   expectAccessible,
+  expectPicked,
   newUser,
   personaCode,
+  pickOption,
   signIn,
 } from './helpers.ts';
 
@@ -54,7 +56,7 @@ async function eventNow(
   const slug = org ?? 'lakeside-events';
   await page.goto(`/o/${slug}/events/new`);
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Time zone').selectOption('America/Chicago');
+  await pickOption(page.getByLabel('Time zone'), 'America/Chicago');
   await page.getByLabel('Starts', { exact: true }).fill(chicago(-1));
   await page.getByLabel('Ends', { exact: true }).fill(chicago(3));
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -73,7 +75,7 @@ async function eventNow(
   const guest = await guestContext.newPage();
   const email = `staff+${stamp()}@example.test`;
   await guest.goto(`/events/${base.split('/').pop()}`);
-  await guest.getByLabel('Quantity — Door pass').selectOption(String(tickets));
+  await pickOption(guest.getByLabel('Quantity — Door pass'), String(tickets));
   await guest.getByLabel('Full name').fill(`Stella ${stamp()}`);
   await guest.getByLabel('Email for your tickets').fill(email);
   await continueToPayment(guest, email);
@@ -86,7 +88,7 @@ async function eventNow(
   const setup = page.getByRole('region', { name: 'Entrances and zones' });
   for (const gate of ['North gate', 'South gate']) {
     await setup.getByLabel('Name', { exact: true }).fill(gate);
-    await setup.getByLabel('Type').selectOption({ label: 'Entrance' });
+    await pickOption(setup.getByLabel('Type'), { label: 'Entrance' });
     await setup.getByRole('button', { name: 'Add', exact: true }).click();
     await expect(setup.getByRole('listitem').filter({ hasText: gate })).toBeVisible();
   }
@@ -153,7 +155,7 @@ test.describe('Scan PWA staff mode (M3.4a)', () => {
     await expectAccessible(watcher.page);
 
     // The gate scans at North gate: the watcher's counts follow without a reload.
-    await gate.page.getByLabel('Scanning at').selectOption({ label: 'North gate' });
+    await pickOption(gate.page.getByLabel('Scanning at'), { label: 'North gate' });
     await scan(gate.page, ev.codes[0] as string);
     await expect(resultPanel(gate.page)).toContainText('Confirmed by the server');
     await expect(counts).toHaveText('1 of 3 checked in today', { timeout: 10_000 });
@@ -249,7 +251,7 @@ test.describe('Scan PWA staff mode (M3.4a)', () => {
     await expectAccessible(phone.page);
 
     // Move by keyboard: select the gate, then the Move button.
-    await card.getByLabel(`Move ${side} to`).selectOption({ label: 'South gate' });
+    await pickOption(card.getByLabel(`Move ${side} to`), { label: 'South gate' });
     await card.getByRole('button', { name: 'Move', exact: true }).focus();
     await phone.page.keyboard.press('Enter');
     await expect(phone.page.getByTestId('supervisor-message')).toHaveText(`${side} will scan at South gate.`);
@@ -259,7 +261,7 @@ test.describe('Scan PWA staff mode (M3.4a)', () => {
         timeout: 15_000,
       },
     );
-    await expect(gate.page.getByLabel('Scanning at')).toHaveValue(/[0-9a-f-]{36}/);
+    await expectPicked(gate.page.getByLabel('Scanning at'), /[0-9a-f-]{36}/);
 
     await card.getByRole('button', { name: 'Sync now' }).click();
     await expect(phone.page.getByTestId('supervisor-message')).toHaveText(`Sync requested for ${side}.`);
@@ -303,7 +305,7 @@ test.describe('Scan PWA staff mode (M3.4a)', () => {
     const card = phone.page
       .getByRole('listitem')
       .filter({ has: phone.page.getByRole('heading', { name: lobby }) });
-    await card.getByLabel(`Kiosk entrance for ${lobby}`).selectOption({ label: 'North gate' });
+    await pickOption(card.getByLabel(`Kiosk entrance for ${lobby}`), { label: 'North gate' });
     await card.getByLabel(`Kiosk PIN for ${lobby}`).fill('12');
     await card.getByRole('button', { name: 'Start kiosk' }).click();
     await expect(card.getByText('Enter a PIN of 4 to 8 digits.')).toBeVisible();

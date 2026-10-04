@@ -224,7 +224,21 @@ export default async function SurveyPage({
           ) : null}
         </Card>
         {s.responded === 0 ? (
-          <EmptyState title={t('noAnswers')} description={t('noAnswersHint')} />
+          <EmptyState
+            title={t('noAnswers')}
+            description={t('noAnswersHint')}
+            action={
+              canSend && !s.closed ? (
+                <Link href="#send-heading" className={buttonClass('primary', 'md')}>
+                  {t('sendFirst')}
+                </Link>
+              ) : (
+                <Link href={`/o/${org}/e/${event}/marketing`} className={buttonClass('secondary', 'md')}>
+                  {t('backToMarketing')}
+                </Link>
+              )
+            }
+          />
         ) : (
           <ol className="flex flex-col gap-3">
             {detail.report.questions.map((q) => (
@@ -358,7 +372,18 @@ export default async function SurveyPage({
         {fields.length === 0 ? (
           <EmptyState
             title={t('questionsEmpty')}
-            description={canSend ? t('questionsEmptyHint') : undefined}
+            description={canSend ? t('questionsEmptyHint') : t('questionsEmptyReadOnly')}
+            action={
+              canSend && !s.closed ? (
+                <Link href="#adding-question-heading" className={buttonClass('primary', 'md')}>
+                  {t('addFirstQuestion')}
+                </Link>
+              ) : (
+                <Link href={base} className={buttonClass('secondary', 'md')}>
+                  {t('browseSurveys')}
+                </Link>
+              )
+            }
           />
         ) : (
           <ol aria-label={t('questionsTitle')} className="flex flex-col gap-2">
@@ -416,7 +441,9 @@ export default async function SurveyPage({
         )}
         {canSend && !s.closed ? (
           <Card className="flex flex-col gap-3">
-            <h3 className="text-section">{t('addTitle')}</h3>
+            <h3 id="adding-question-heading" className="text-section">
+              {t('addTitle')}
+            </h3>
             <AddSurveyQuestionForm action={addSurveyQuestionAction.bind(null, org, event, survey)} />
           </Card>
         ) : null}

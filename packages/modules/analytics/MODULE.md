@@ -36,3 +36,27 @@ Entitlement key `analytics_pro` (P6-13, free in beta on `launch_standard`).
   across currencies.
 - **Output:** `analytics.orgDashboard` (`orders:read`) has no money field at all;
   `analytics.orgRevenue` (`finance:read`) is the only path to money. Both are allowlisted Zod DTOs.
+
+**M6.2b: attribution, explorer, alert rules, scheduled reports**
+- **Attribution rollups** (`attribution_rollups`): part of an event's snapshot (the same hash,
+  version and adapters; Tinybird datasource `yy_attribution_rollups`, pipe `yy_attribution_rows`,
+  newest version from `yy_daily_rollups`). Built from marketing's touch paths (`eventTouchPathsTx`)
+  and orders' `soldOrderDaysTx`: per payment day (org time zone), model, source, medium, campaign
+  key and link, in basis points of an order and minor units per currency. Models in
+  `attribution/models.ts` (pure): first, last, linear with whole shares and **the remainder to
+  the last touch**; every model adds up to the order exactly. `marketing.order_attributed@1`
+  re-syncs the event.
+- **Explorer** (`explorer/*`): closed vocabularies (`MEASURES`, `DIMENSIONS`, `RANGE_PRESETS`);
+  touch dimensions only with attribution measures. `analytics.explore` (`orders:read`, counts and
+  attributed orders) and `analytics.exploreMoney` (`finance:read`) are separate queries with
+  separate input enums. Saved views are per member (the caller's rows only); money views need
+  finance. CSV through `exploreCsvSerializer` (formula-safe cells).
+- **Organizer alert rules** (`rules/*`, `alert_rules`): measured from the warehouse over whole
+  days in the org's time zone; a change of state (or of the reading while firing) emits
+  `analytics.alert_rule_evaluated@1` (numbers, vocabulary and the rule name), which the alerts
+  module (same tier) applies to its own alert. Evaluating again with nothing new emits nothing.
+- **Scheduled reports** (`reports/*`): `report_runs` is unique per (schedule, period key) and
+  notifications are keyed `report:{schedule}:{period}:{member}`, so a period is sent once through
+  retries, restarts and concurrent ticks. Periods are calendar days in the org's time zone (DST
+  never skips or repeats one). The PDF is rendered outside transactions per recipient language
+  and finance visibility (`report_files`), served only to members (`reportFileQuery`).

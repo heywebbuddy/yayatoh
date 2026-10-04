@@ -1,3 +1,4 @@
+import * as agency from '@yayatoh/agency';
 import * as ai from '@yayatoh/ai';
 import * as alerts from '@yayatoh/alerts';
 import * as analytics from '@yayatoh/analytics';
@@ -61,6 +62,8 @@ import { type OrgFixture, ports, systemCtx, twoOrgs } from '../src/index.ts';
  * org-scoped freeze never touches another org; only platform_reader/migrator can switch it.
  */
 const MODULES = {
+  // M6.7a: the agency's snapshot refresh and pages.
+  agency,
   ai,
   // Batch 3d merge: M3.2b's alert engine and M3.2a's Command Center (M3.4a and M3.5b grew
   // checkin and notifications, already listed).
@@ -193,6 +196,8 @@ describe('read-only freeze (M2.5a)', () => {
     expect([...ALLOWED].sort()).toEqual([
       // M5.1d: admitting a ticket with a balance due (an audited override) is a door action too.
       'checkin.admitBalanceDue',
+      // M5.6a: letting someone into a session past a gate (an audited override) is a door action.
+      'checkin.admitSessionOverride',
       'checkin.heartbeat',
       'checkin.scanTicket',
       'checkin.syncScans',

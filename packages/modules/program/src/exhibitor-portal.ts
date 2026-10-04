@@ -15,6 +15,7 @@ import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { and, asc, eq, inArray } from 'drizzle-orm';
 import { z } from 'zod';
 import { allowanceUse, type MemberRole, type MemberStatus, staffAllowance } from './domain/exhibitors.ts';
+import { staffAllowanceWithPackages } from './domain/sponsorship.ts';
 import {
   type ExhibitorMemberDto,
   ExhibitorPortalAdminDto,
@@ -35,6 +36,7 @@ import {
 } from './schema.ts';
 import { portalTaskAssignees, portalTasks } from './schema-portal.ts';
 import { eventOf } from './shared.ts';
+import { packageBadgesTx } from './sponsor-allowances.ts';
 
 /**
  * M5.4a exhibitor portal on M5.3a's portal accounts (P5-7). An exhibitor's admins and staff are
@@ -197,9 +199,13 @@ async function inviteTx(
     throw new DomainError('invalid_state', 'Limit reached', { reason: 'too_many' });
   if (input.role === 'exhibitor_staff') {
     const use = allowanceUse(
-      staffAllowance(
-        (await exhibitorSettingsTx(tx, input.eventId)).defaultStaffAllowance,
-        (await profileTx(tx, exhibitor.id))?.staffAllowance ?? null,
+      // M5.4b: plus the exhibitor badges of the active packages of the sponsor exhibiting as it.
+      staffAllowanceWithPackages(
+        staffAllowance(
+          (await exhibitorSettingsTx(tx, input.eventId)).defaultStaffAllowance,
+          (await profileTx(tx, exhibitor.id))?.staffAllowance ?? null,
+        ),
+        await packageBadgesTx(tx, exhibitor.id),
       ),
       members,
     );
@@ -506,6 +512,8 @@ export const exhibitorPortalAdminQuery = tenantQuery({
             ),
           )
       : [];
+    const badges = new Map<string, number[]>();
+    for (const id of ids) badges.set(id, await packageBadgesTx(tx, id));
     return {
       settings,
       exhibitors: list.map((x) => {
@@ -520,7 +528,13 @@ export const exhibitorPortalAdminQuery = tenantQuery({
           categories: p?.categories ?? [],
           links: linksOf(p?.links),
           staffAllowance: p?.staffAllowance ?? null,
-          staff: allowanceUse(staffAllowance(settings.defaultStaffAllowance, p?.staffAllowance), mine),
+          staff: allowanceUse(
+            staffAllowanceWithPackages(
+              staffAllowance(settings.defaultStaffAllowance, p?.staffAllowance),
+              badges.get(x.id) ?? [],
+            ),
+            mine,
+          ),
           members: mine.filter((m) => m.status !== 'revoked'),
           pendingChange:
             change && proposed?.success
@@ -601,7 +615,10 @@ export const exhibitorPortalQuery = tenantQuery({
       staff: admin
         ? {
             allowance: allowanceUse(
-              staffAllowance(settings.defaultStaffAllowance, p?.staffAllowance),
+              staffAllowanceWithPackages(
+                staffAllowance(settings.defaultStaffAllowance, p?.staffAllowance),
+                await packageBadgesTx(tx, x.id),
+              ),
               people,
             ),
             members: people.map(({ exhibitorId: _x, ...rest }) => rest),

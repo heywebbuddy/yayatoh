@@ -35,6 +35,15 @@ export {
   type SeriesTone,
   swatchClass,
 } from './components/charts.tsx';
+export { Combobox, type ComboboxProps } from './components/combobox.tsx';
+export {
+  DatePicker,
+  type DatePickerProps,
+  DateTimePicker,
+  parseText as parseDateText,
+  TimePicker,
+} from './components/date-picker.tsx';
+export * as dates from './components/dates.ts';
 export {
   Checkbox,
   Field,
@@ -43,8 +52,6 @@ export {
   Input,
   type InputProps,
   Radio,
-  Select,
-  type SelectProps,
   Switch,
   Textarea,
   type TextareaProps,
@@ -59,6 +66,13 @@ export {
   StatusPill,
   Tag,
 } from './components/labels.tsx';
+export {
+  AUTO_SEARCH_ABOVE,
+  filterOptions,
+  type ListOption,
+  moveActive,
+  typeahead,
+} from './components/listbox.ts';
 export {
   Breadcrumb,
   type Crumb,
@@ -91,6 +105,14 @@ export {
   PersonChip,
 } from './components/people.tsx';
 export {
+  CurrencyPicker,
+  type CurrencyPickerProps,
+  currencyOptions,
+  TimeZonePicker,
+  type TimeZonePickerProps,
+  timeZoneOptions,
+} from './components/pickers.tsx';
+export {
   Alert,
   EmptyState,
   ErrorState,
@@ -105,7 +127,17 @@ export {
   Stepper,
   Timeline,
 } from './components/primitives.tsx';
+export {
+  optionsFromChildren,
+  Select,
+  type SelectOption,
+  type SelectProps,
+  selectTriggerClass,
+  textOf,
+} from './components/select.tsx';
 export { type Column, Table, type TableProps } from './components/table.tsx';
+export { UiLocaleProvider, useUiLocale } from './components/ui-locale.tsx';
+export { DEFAULT_UI_STRINGS, UI_STRING_KEYS, type UiStrings } from './components/ui-strings.ts';
 export {
   backdrops,
   brandPalette,

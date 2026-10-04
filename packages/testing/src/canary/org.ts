@@ -4,6 +4,7 @@ import { createEntryCommand, createHelpArticleCommand, createSiteSectionCommand 
 import { emptySegment } from '@yayatoh/crm';
 import { withTenant } from '@yayatoh/db';
 import { createAnnouncementCommand, getEventBySlugQuery } from '@yayatoh/events';
+import { rsvpLinkToken } from '@yayatoh/guests';
 import { executeCommand, executeQuery } from '@yayatoh/kernel';
 import { updateSiteSettingsCommand } from '@yayatoh/marketplace';
 import { announcementMailer, sendAnnouncementCommand } from '@yayatoh/messaging';
@@ -20,7 +21,7 @@ import {
   setLegalPageCommand,
 } from '@yayatoh/tenancy';
 import { sql } from 'drizzle-orm';
-import { createOrgFixture, EXPORT_PARAMS, systemCtx, userCtx } from '../fixtures.ts';
+import { createOrgFixture, EXPORT_PARAMS, FIXTURE_SITE_PASSWORD, systemCtx, userCtx } from '../fixtures.ts';
 import { ports, runBulk } from '../ports.ts';
 import {
   canaryToken,
@@ -65,8 +66,26 @@ export interface CanaryOrg {
   readonly exports: readonly CanaryFile[];
   /** Outbound messages captured through the fake transports after the fill. */
   readonly outbound: readonly { readonly channel: string; readonly payload: string }[];
+  /**
+   * Where the captured pushes went (device endpoint token and web push keys, as JSON), apart from
+   * their content.
+   */
+  readonly pushAddresses: readonly string[];
   /** Private columns filled (id → rows written). */
   readonly filled: Readonly<Record<string, number>>;
+  /** M4.5a: the fixture event's guest website (published) and its password. */
+  readonly guestSite: { readonly code: string; readonly password: string };
+  /**
+   * M5.8a: the address of the fixture event's attendee who is opted in to networking (a canary
+   * itself), to crawl the networking pages as them. Null when the event has none.
+   */
+  readonly networkEmail: string | null;
+  /**
+   * Batch 3j merge: the fixture party's signed RSVP link (its guest hub, seat and card pages are
+   * crawled as the party) and the version of the event's giving screen link (M4.8d).
+   */
+  readonly partyToken: string | null;
+  readonly screenVersion: number | null;
 }
 
 const ident = (...parts: string[]) => parts.map((p) => `"${p.replace(/"/g, '""')}"`).join('.');
@@ -125,7 +144,28 @@ export async function canaryOrg(o: {
     ports,
   );
   const exports = await generateExports(orgId, ctx, event.id, slug);
-  const outbound = await sendOutbound(orgId, ctx, event.id);
+  const { outbound, pushAddresses } = await sendOutbound(orgId, ctx, event.id);
+  const [site] = await o.admin.unsafe(
+    `select code from guests.sites where org_id = $1 and event_id = $2 and status = 'published'`,
+    [orgId, event.id],
+  );
+  if (!site) throw new Error('canary: the fixture event has no published guest website');
+  const [member] = await o.admin.unsafe(
+    `select lower(a.email) as email from engagement.network_profiles p
+     join attendees.attendees a on a.org_id = p.org_id and a.event_id = p.event_id
+       and a.contact_id = p.contact_id and a.status = 'active'
+     where p.org_id = $1 and p.event_id = $2 and p.opted_in and p.hidden_at is null
+     order by a.created_at limit 1`,
+    [orgId, event.id],
+  );
+  const [link] = await o.admin.unsafe(
+    `select link_id from guests.party_rsvp where org_id = $1 and event_id = $2 order by created_at limit 1`,
+    [orgId, event.id],
+  );
+  const [screen] = await o.admin.unsafe(
+    `select version from donations.screens where org_id = $1 and event_id = $2`,
+    [orgId, event.id],
+  );
   return {
     orgId,
     slug,
@@ -136,7 +176,12 @@ export async function canaryOrg(o: {
     deviceToken,
     exports,
     outbound,
+    pushAddresses,
     filled,
+    guestSite: { code: site.code as string, password: FIXTURE_SITE_PASSWORD },
+    networkEmail: (member?.email as string | undefined) ?? null,
+    partyToken: link ? rsvpLinkToken(link.link_id as string) : null,
+    screenVersion: screen ? Number(screen.version) : null,
   };
 }
 
@@ -484,9 +529,21 @@ async function sendOutbound(orgId: string, ctx: () => ReturnType<typeof userCtx>
     appOrigin: 'https://app.yayatoh.test',
     ignoreQuietHours: true,
   });
-  return [
+  const outbound = [
     ...mem.emails.map((m) => ({ channel: 'email', payload: JSON.stringify(m) })),
     ...mem.sms.map((m) => ({ channel: 'sms', payload: JSON.stringify(m) })),
-    ...mem.pushes.map((m) => ({ channel: 'push', payload: JSON.stringify(m) })),
+    // A push's address (the device's endpoint token and keys) is where it goes, as an email's
+    // `to` is: checked apart (`pushAddresses`). The message itself is everything else (M5.9a: the
+    // canary's first alert push, an overdue invoice routed to the owner by push).
+    ...mem.pushes.map(({ token: _token, keys: _keys, ...m }) => ({
+      channel: 'push',
+      payload: JSON.stringify(m),
+    })),
   ];
+  // The address with its web push keys (both come from the device's `push_tokens` row): the merge
+  // check asserts the address carries nothing but that row's token, so the keys stay covered.
+  return {
+    outbound,
+    pushAddresses: mem.pushes.map((m) => JSON.stringify({ token: m.token, keys: m.keys ?? null })),
+  };
 }

@@ -1,7 +1,7 @@
 'use client';
 
 import { SURVEY_FIELD_TYPES } from '@yayatoh/forms/ui';
-import { Alert, Button, Input } from '@yayatoh/ui';
+import { Alert, Button, Input, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { type FormEvent, startTransition, useActionState, useEffect, useId, useRef, useState } from 'react';
 import type { SendState } from '@/app/[locale]/o/[org]/e/[event]/marketing/surveys/actions.ts';
@@ -69,7 +69,7 @@ export function CreateSessionForm({
         <label htmlFor={`${id}-session`} className="text-[13px] font-bold text-ink">
           {t('session')}
         </label>
-        <select
+        <Select
           id={`${id}-session`}
           name="sessionId"
           defaultValue=""
@@ -83,7 +83,7 @@ export function CreateSessionForm({
               {s.title}
             </option>
           ))}
-        </select>
+        </Select>
         {bad ? (
           <p id={`${id}-error`} className="text-caption text-danger">
             {t('errors.sessionRequired')}
@@ -200,11 +200,11 @@ export function AddSurveyQuestionForm({ action }: { action: Action }) {
         <label htmlFor={`${id}-type`} className="text-[13px] font-bold text-ink">
           {t('type')}
         </label>
-        <select
+        <Select
           id={`${id}-type`}
           name="type"
           value={type}
-          onChange={(e) => setType(e.target.value)}
+          onValueChange={(v) => setType(v)}
           className={`${field} border-line`}
         >
           {SURVEY_FIELD_TYPES.map((ft) => (
@@ -212,7 +212,7 @@ export function AddSurveyQuestionForm({ action }: { action: Action }) {
               {t(`questionType.${ft}`)}
             </option>
           ))}
-        </select>
+        </Select>
       </div>
       {choice ? (
         <div className="flex flex-col gap-1.5 md:col-span-2">

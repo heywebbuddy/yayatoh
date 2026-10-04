@@ -1,7 +1,7 @@
 'use client';
 
 import { isEmptyAnswer, type RespondentPage, visibleOnPage } from '@yayatoh/forms/ui';
-import { Alert, Button, Input } from '@yayatoh/ui';
+import { Alert, Button, Input, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState, useEffect, useId, useRef, useState } from 'react';
 import type { RegistrationStartState } from '@/app/[locale]/events/[slug]/registration-form/actions.ts';
@@ -272,11 +272,11 @@ export function RegistrationFormRunner({
                   <label htmlFor={fid} className={CAPTION}>
                     {label}
                   </label>
-                  <select
+                  <Select
                     {...common}
                     name={f.key}
                     value={typeof vals[f.key] === 'string' ? (vals[f.key] as string) : ''}
-                    onChange={(e) => set(f.key, e.target.value)}
+                    onValueChange={(v) => set(f.key, v)}
                     className={`${CONTROL} ${border}`}
                   >
                     <option value="">{t('choose')}</option>
@@ -285,7 +285,7 @@ export function RegistrationFormRunner({
                         {o.label}
                       </option>
                     ))}
-                  </select>
+                  </Select>
                 </>
               );
               break;
@@ -422,11 +422,11 @@ function JobTitleField({
       <label htmlFor={fid} className={CAPTION}>
         {label}
       </label>
-      <select
+      <Select
         {...common}
         value={other ? '__other' : listed ? value : ''}
-        onChange={(e) => {
-          const v = e.target.value;
+        onValueChange={(next) => {
+          const v = next;
           setOther(v === '__other');
           onChange(v === '__other' || v === '' ? '' : v);
         }}
@@ -439,7 +439,7 @@ function JobTitleField({
           </option>
         ))}
         <option value="__other">{t('otherJobTitle')}</option>
-      </select>
+      </Select>
       {other ? (
         <Input
           id={`${fid}-other`}

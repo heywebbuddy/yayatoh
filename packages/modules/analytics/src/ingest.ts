@@ -46,6 +46,8 @@ export const WAREHOUSE_EVENT_SCHEMAS = {
   'event.postponed@1': EventScoped,
   'event.rescheduled@1': EventScoped,
   'event.cancelled@1': EventScoped,
+  // M6.2b: an order's touch path was recorded (attribution rollups).
+  'marketing.order_attributed@1': z.looseObject({ orderId: Id, eventId: Id }),
 } as const satisfies Record<string, z.ZodType<{ eventId?: string; orderId?: string }>>;
 export type WarehouseEventKey = keyof typeof WAREHOUSE_EVENT_SCHEMAS;
 export const WAREHOUSE_EVENTS = Object.keys(WAREHOUSE_EVENT_SCHEMAS) as WarehouseEventKey[];

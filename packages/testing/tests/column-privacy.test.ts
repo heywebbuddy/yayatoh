@@ -65,9 +65,9 @@ describe('column-privacy registry (roadmap §9 canary leak test)', () => {
             notes: { type: 'jsonb' },
           },
         },
-        // A schema no module declares yet (media, the original example, has since been merged).
-        'gallery.photos': {
-          schema: 'gallery',
+        // A schema no module declares yet (media and gallery, earlier examples, have since been merged).
+        'livestream.photos': {
+          schema: 'livestream',
           name: 'photos',
           columns: { org_id: { type: 'uuid' }, alt: { type: 'text' }, tags: { type: 'text[]' } },
         },
@@ -77,14 +77,14 @@ describe('column-privacy registry (roadmap §9 canary leak test)', () => {
     expect(problems.map((p) => p.id)).toEqual([
       'events.speakers.bio',
       'events.speakers.notes',
-      'gallery.photos.alt',
-      'gallery.photos.tags',
+      'livestream.photos.alt',
+      'livestream.photos.tags',
     ]);
     expect(problems[0]?.message).toContain(
       'packages/modules/events/src/private-columns.ts: under `speakers`',
     );
     expect(problems[0]?.message).toContain("bio: 'public' | 'vocab' | secret() | personal()");
-    expect(problems[2]?.message).toContain("columnPrivacy('gallery', { photos: { … } })");
+    expect(problems[2]?.message).toContain("columnPrivacy('livestream', { photos: { … } })");
     expect(problems[2]?.message).toContain('COLUMN_PRIVACY');
   });
 

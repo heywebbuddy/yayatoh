@@ -123,4 +123,13 @@ describe('canaryOrg (roadmap §9 canary fixture)', () => {
     );
     expect(formatLeaks(leaks)).toBe('no canary leaks');
   });
+
+  it('pushes go only to the org devices: their address is the only token they carry', () => {
+    // Every push the fill caused is addressed to one of the org's canary device tokens, and its
+    // address (token and web push keys) carries no other canary. The fill sends at least one push
+    // (the conference pack's overdue-invoice alert), so this never passes vacuously.
+    expect(canary.pushAddresses.length).toBeGreaterThan(0);
+    for (const to of canary.pushAddresses)
+      expect(findCanaries(to).map((h) => h.column)).toEqual(['notifications.push_tokens.token']);
+  });
 });

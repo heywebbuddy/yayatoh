@@ -19,8 +19,9 @@ export type CampaignStatus = (typeof CAMPAIGN_STATUSES)[number];
 export const GIFT_STATUSES = ['pending', 'paid', 'failed', 'expired'] as const;
 export type GiftStatus = (typeof GIFT_STATUSES)[number];
 
-/** Where a gift came from. Paddle raise, QR-to-give and auctions arrive later (P4-16). */
-export const GIFT_SOURCES = ['online'] as const;
+/** Where a gift came from: the giving page, or its QR code on a screen or table card (M4.8d). Auctions later (P4-16). */
+export const GIFT_SOURCES = ['online', 'qr'] as const;
+export type GiftSource = (typeof GIFT_SOURCES)[number];
 
 /**
  * The card processor's rate the donor may cover (P4-10): Stripe's standard US card pricing,

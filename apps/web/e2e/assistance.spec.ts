@@ -1,5 +1,5 @@
 import { type Browser, type BrowserContext, expect, type Page, test } from '@playwright/test';
-import { continueToPayment, expectAccessible, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, pickOption, signIn } from './helpers.ts';
 
 /**
  * Guest assistance (M3.3b): a guest asks for help from the seat finder with their ticket's link,
@@ -40,7 +40,7 @@ async function eventNow(page: Page, browser: Browser, prefix: string): Promise<S
   await signIn(page);
   await page.goto('/o/lakeside-events/events/new');
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Time zone').selectOption('America/Chicago');
+  await pickOption(page.getByLabel('Time zone'), 'America/Chicago');
   await page.getByLabel('Starts', { exact: true }).fill(chicago(-1));
   await page.getByLabel('Ends', { exact: true }).fill(chicago(3));
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -58,7 +58,7 @@ async function eventNow(page: Page, browser: Browser, prefix: string): Promise<S
   await page.goto(`${base}/onsite`);
   const setup = page.getByRole('region', { name: 'Entrances and zones' });
   await setup.getByLabel('Name', { exact: true }).fill('North gate');
-  await setup.getByLabel('Type').selectOption({ label: 'Entrance' });
+  await pickOption(setup.getByLabel('Type'), { label: 'Entrance' });
   await setup.getByRole('button', { name: 'Add', exact: true }).click();
   await expect(setup.getByRole('listitem').filter({ hasText: 'North gate' })).toBeVisible();
 
@@ -66,7 +66,7 @@ async function eventNow(page: Page, browser: Browser, prefix: string): Promise<S
   const guest = await guestContext.newPage();
   const email = `help+${stamp()}@example.test`;
   await guest.goto(`/events/${slug}`);
-  await guest.getByLabel('Quantity — Help pass').selectOption('1');
+  await pickOption(guest.getByLabel('Quantity — Help pass'), '1');
   await guest.getByLabel('Full name').fill(`Hana ${stamp()}`);
   await guest.getByLabel('Email for your tickets').fill(email);
   await continueToPayment(guest, email);
@@ -158,7 +158,7 @@ test.describe('Guest assistance (M3.3b)', () => {
     // Assign by keyboard: pick a person, then the Assign button.
     const assign = card.getByLabel(/^Assign #\d+ · Seat problem to$/);
     await assign.focus();
-    await assign.selectOption({ index: 1 });
+    await pickOption(assign, { index: 1 });
     await card.getByRole('button', { name: 'Assign', exact: true }).focus();
     await page.keyboard.press('Enter');
     await expect(card.getByTestId('assistance-message')).toContainText('is assigned.');
@@ -252,7 +252,7 @@ test.describe('Guest assistance (M3.3b)', () => {
     const device = await deviceContext.newPage();
     await device.goto(link);
     await expect(device.getByRole('heading', { name: ev.name })).toBeVisible();
-    await device.getByLabel('Scanning at').selectOption({ label: 'North gate' });
+    await pickOption(device.getByLabel('Scanning at'), { label: 'North gate' });
     const staff = device
       .getByRole('navigation', { name: 'Scanner mode' })
       .getByRole('button', { name: 'Staff', exact: true });
@@ -261,7 +261,7 @@ test.describe('Guest assistance (M3.3b)', () => {
     await expect(device.getByTestId('staff-help-empty')).toBeVisible();
 
     // Ask for backup by keyboard.
-    await device.getByLabel('What do you need?').selectOption('backup');
+    await pickOption(device.getByLabel('What do you need?'), 'backup');
     const note = `Long line ${stamp()}`;
     await device.getByLabel('Note (optional)').fill(note);
     await device.getByRole('button', { name: 'Send request' }).focus();

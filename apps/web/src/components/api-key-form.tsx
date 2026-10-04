@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, Card, Input } from '@yayatoh/ui';
+import { Alert, Button, Card, Input, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import type { ApiKeyState } from '@/app/[locale]/o/[org]/(org)/api-keys/actions.ts';
@@ -73,7 +73,7 @@ export function ApiKeyForm({
           <label htmlFor="api-key-expiry" className="text-caption text-ink-2">
             {t('apiKeys.expiry')}
           </label>
-          <select
+          <Select
             id="api-key-expiry"
             name="expiresInDays"
             defaultValue="90"
@@ -85,7 +85,7 @@ export function ApiKeyForm({
                 {t(`apiKeys.expiryIn.${v}`)}
               </option>
             ))}
-          </select>
+          </Select>
           <p id="api-key-expiry-hint" className="text-caption text-ink-2">
             {t('apiKeys.expiryHint')}
           </p>

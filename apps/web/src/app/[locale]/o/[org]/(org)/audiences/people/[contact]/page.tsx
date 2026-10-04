@@ -2,7 +2,7 @@ import { personTimelineQuery } from '@yayatoh/audiences';
 import { personQuery, TIMELINE_KINDS, type TimelineKind } from '@yayatoh/crm';
 import { executeQuery, formatMoney, isDomainError, money } from '@yayatoh/kernel';
 import { roleCan } from '@yayatoh/tenancy';
-import { Alert, Button, buttonClass, Card, EmptyState, PageHeader } from '@yayatoh/ui';
+import { Alert, Button, buttonClass, Card, EmptyState, PageHeader, Select } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getLocale, getTranslations, setRequestLocale } from 'next-intl/server';
@@ -193,27 +193,27 @@ export default async function PersonPage({
             <label htmlFor="timeline-kind" className="text-caption text-ink-2">
               {t('timeline.kind')}
             </label>
-            <select id="timeline-kind" name="kind" defaultValue={kind ?? ''} className={field}>
+            <Select id="timeline-kind" name="kind" defaultValue={kind ?? ''} className={field}>
               <option value="">{t('timeline.allKinds')}</option>
               {TIMELINE_KINDS.map((k) => (
                 <option key={k} value={k}>
                   {t(`kinds.${k}`)}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
           <div className="flex flex-col gap-1.5">
             <label htmlFor="timeline-event" className="text-caption text-ink-2">
               {t('timeline.event')}
             </label>
-            <select id="timeline-event" name="event" defaultValue={eventId ?? ''} className={field}>
+            <Select id="timeline-event" name="event" defaultValue={eventId ?? ''} className={field}>
               <option value="">{t('timeline.allEvents')}</option>
               {timeline.events.map((e) => (
                 <option key={e.id} value={e.id}>
                   {e.name}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
           <Button type="submit" variant="secondary">
             {t('timeline.filter')}
@@ -221,9 +221,28 @@ export default async function PersonPage({
         </form>
         {timeline.rows.length === 0 ? (
           kind || eventId ? (
-            <EmptyState title={t('timeline.noMatchTitle')} description={t('timeline.noMatchDescription')} />
+            <EmptyState
+              title={t('timeline.noMatchTitle')}
+              description={t('timeline.noMatchDescription')}
+              action={
+                <Link
+                  href={`/o/${org}/audiences/people/${contact}`}
+                  className={buttonClass('secondary', 'md')}
+                >
+                  {t('timeline.showEverything')}
+                </Link>
+              }
+            />
           ) : (
-            <EmptyState title={t('timeline.emptyTitle')} description={t('timeline.emptyDescription')} />
+            <EmptyState
+              title={t('timeline.emptyTitle')}
+              description={t('timeline.emptyDescription')}
+              action={
+                <Link href={`/o/${org}/audiences/people`} className={buttonClass('secondary', 'md')}>
+                  {t('timeline.backToPeople')}
+                </Link>
+              }
+            />
           )
         ) : (
           <ol className="flex flex-col gap-2" aria-label={t('timeline.listLabel', { name: display })}>

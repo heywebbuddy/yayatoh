@@ -3,7 +3,7 @@ import { closePools } from '@yayatoh/db';
 import { localKeyVault, setKeyVault } from '@yayatoh/platform';
 import { resolveOrgSlug } from '@yayatoh/tenancy';
 import { type MarketingScenario, marketingScenario } from '@yayatoh/testing';
-import { expectAccessible, newUser } from './helpers.ts';
+import { expectAccessible, newUser, pickOption } from './helpers.ts';
 
 // Tickets are signed with the org's keys: seal them under the web server's key vault.
 const kms = process.env.LOCAL_KMS_KEY;
@@ -152,7 +152,7 @@ test.describe('marketing analytics (M3.8b)', () => {
       'The start date must be on or before the end date.',
     );
     await expect(page.locator('#range-error')).toHaveAttribute('role', 'alert');
-    await expect(page.getByLabel('From', { exact: true })).toHaveValue('2026-03-02');
+    await expect(page.getByLabel('From', { exact: true })).toHaveAttribute('data-value', '2026-03-02');
     await expect(page.getByLabel('From', { exact: true })).toHaveAttribute('aria-invalid', 'true');
     await expectAccessible(page);
     // A past range: nothing sent, clicked or sold; the links still listed with zeros.
@@ -249,7 +249,7 @@ test.describe('marketing analytics (M3.8b)', () => {
     const door = await member(browser, slug, 'viewer', doorName);
     await page.goto(`/o/${slug}/e/${s.eventSlug}/onsite/staff`);
     const add = page.getByRole('region', { name: 'Add door staff' });
-    await add.getByLabel('Team member').selectOption({ label: doorName });
+    await pickOption(add.getByLabel('Team member'), { label: doorName });
     await add.getByRole('button', { name: 'Add door staff' }).click();
     await expect(add.getByRole('status')).toHaveText('Saved.');
 

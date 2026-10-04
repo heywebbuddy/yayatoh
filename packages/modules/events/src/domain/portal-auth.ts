@@ -8,18 +8,26 @@ import { createHmac, randomBytes, randomInt, timingSafeEqual } from 'node:crypto
  * once, only in the browser that asked). Nothing secret is stored: codes, links, browsers and
  * session tokens are kept as HMACs under APP_TOKEN_SECRET.
  */
-export const PORTAL_ROLES = ['speaker', 'exhibitor_admin', 'exhibitor_staff', 'sponsor_contact'] as const;
+export const PORTAL_ROLES = [
+  'speaker',
+  'exhibitor_admin',
+  'exhibitor_staff',
+  'sponsor_contact',
+  // M5.3b: a call-for-papers reviewer; the subject is a `program.cfp_reviewers` row.
+  'cfp_reviewer',
+] as const;
 export type PortalRole = (typeof PORTAL_ROLES)[number];
 export const isPortalRole = (r: string): r is PortalRole => (PORTAL_ROLES as readonly string[]).includes(r);
 
 /** What a portal account acts for: a speaker, an exhibitor or a sponsor row of the event's program. */
-export const PORTAL_SUBJECT_KINDS = ['speaker', 'exhibitor', 'sponsor'] as const;
+export const PORTAL_SUBJECT_KINDS = ['speaker', 'exhibitor', 'sponsor', 'cfp_reviewer'] as const;
 export type PortalSubjectKind = (typeof PORTAL_SUBJECT_KINDS)[number];
 export const SUBJECT_OF_ROLE: Readonly<Record<PortalRole, PortalSubjectKind>> = {
   speaker: 'speaker',
   exhibitor_admin: 'exhibitor',
   exhibitor_staff: 'exhibitor',
   sponsor_contact: 'sponsor',
+  cfp_reviewer: 'cfp_reviewer',
 };
 
 export const PORTAL_CODE_TTL_MS = 10 * 60_000;

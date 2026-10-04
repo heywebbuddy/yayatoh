@@ -1,0 +1,30 @@
+{
+  "severity": {
+    "info": "जानकारी",
+    "warning": "चेतावनी",
+    "critical": "गंभीर"
+  },
+  "alert": {
+    "context": "{severity} · {where}",
+    "open": "Yayatoh में खोलें"
+  },
+  "test": {
+    "title": "{org} से परीक्षण अलर्ट",
+    "body": "Slack जुड़ गया है। Yayatoh के अलर्ट और दैनिक सारांश इस चैनल में आएँगे।"
+  },
+  "digest": {
+    "title": "दैनिक सारांश · {org}",
+    "salesTitle": "बिक्री",
+    "sales": "{orders, plural, =0 {कोई नया ऑर्डर नहीं} one {# नया ऑर्डर} other {# नए ऑर्डर}} · {tickets, plural, one {# टिकट} other {# टिकट}}",
+    "revenue": "राजस्व: {amounts}",
+    "checkins": "{count, plural, =0 {कोई चेक-इन नहीं} one {# चेक-इन} other {# चेक-इन}}",
+    "eventLine": "{name}: {tickets, plural, one {# टिकट} other {# टिकट}}",
+    "eventLineRevenue": "{name}: {tickets, plural, one {# टिकट} other {# टिकट}} · {amounts}",
+    "moreEvents": "{count, plural, one {और # अन्य इवेंट} other {और # अन्य इवेंट}}",
+    "todayTitle": "आज",
+    "todayEvent": "{name} · {time}",
+    "noEventsToday": "आज कोई इवेंट नहीं।",
+    "open": "डैशबोर्ड खोलें"
+  },
+  "footer": "Yayatoh द्वारा भेजा गया। इसे सेटिंग्स → इंटीग्रेशन → Slack में बदलें।"
+}

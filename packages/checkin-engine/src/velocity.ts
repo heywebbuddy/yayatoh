@@ -73,7 +73,14 @@ export type VelocityFinding =
     };
 
 /** Scans a result counts as "let in" for the travel rule. */
-export const OK_RESULTS: ReadonlySet<string> = new Set(['admitted', 'granted', 'provisional']);
+export const OK_RESULTS: ReadonlySet<string> = new Set([
+  'admitted',
+  'granted',
+  'provisional',
+  // M5.6a: a session door let them in or out.
+  'entered',
+  'scanned_out',
+]);
 /** Results that are neither success nor a code problem already covered elsewhere. */
 export const outcomeOf = (result: string): VelocityOutcome => (OK_RESULTS.has(result) ? 'ok' : 'refused');
 

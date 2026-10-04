@@ -1,11 +1,21 @@
 import { displayLinksQuery } from '@yayatoh/command-center';
 import { executeQuery } from '@yayatoh/kernel';
 import { roleCan } from '@yayatoh/tenancy';
-import { Button, Card, EmptyState, PageHeader, SectionHeader, StatusPill, Tag } from '@yayatoh/ui';
+import {
+  Button,
+  buttonClass,
+  Card,
+  EmptyState,
+  PageHeader,
+  SectionHeader,
+  StatusPill,
+  Tag,
+} from '@yayatoh/ui';
 import { MonitorPlay } from 'lucide-react';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { DisplayLinkForm } from '@/components/command-center/display-link-form.tsx';
 import { Crumbs } from '@/components/crumbs.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import { createDisplayLinkAction, revokeDisplayLinkAction } from './actions.ts';
@@ -38,7 +48,15 @@ export default async function TvLinksPage({
     return (
       <>
         <PageHeader breadcrumb={crumbs} title={t('title')} description={ev.name} />
-        <EmptyState title={t('noAccessTitle')} description={t('noAccess')} />
+        <EmptyState
+          title={t('noAccessTitle')}
+          description={t('noAccess')}
+          action={
+            <Link href={`/o/${org}/e/${event}/command-center`} className={buttonClass('primary', 'md')}>
+              {t('back')}
+            </Link>
+          }
+        />
       </>
     );
   const canManage = roleCan(data.role, 'events:write');
@@ -65,7 +83,24 @@ export default async function TvLinksPage({
       <section aria-labelledby="tv-list" className="flex flex-col gap-3">
         <SectionHeader id="tv-list" title={t('listTitle')} count={links.length} />
         {links.length === 0 ? (
-          <EmptyState title={t('emptyTitle')} description={t('emptyDescription')} />
+          <EmptyState
+            title={t('emptyTitle')}
+            description={t('emptyDescription')}
+            action={
+              canManage ? (
+                <Link
+                  href={`/o/${org}/e/${event}/command-center/tv#tv-new`}
+                  className={buttonClass('primary', 'md')}
+                >
+                  {t('emptyAction')}
+                </Link>
+              ) : (
+                <Link href={`/o/${org}/e/${event}/command-center`} className={buttonClass('primary', 'md')}>
+                  {t('back')}
+                </Link>
+              )
+            }
+          />
         ) : (
           <Card className="p-0!">
             <ul className="m-0 flex list-none flex-col divide-y divide-line p-0" data-testid="tv-links">

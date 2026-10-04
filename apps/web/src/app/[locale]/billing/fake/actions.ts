@@ -5,6 +5,7 @@ import {
   fakePortalSignature,
   fakeSubscriptionId,
   signFakeBillingEvent,
+  subscriptionOfCustomer,
 } from '@yayatoh/billing';
 import { redirect } from 'next/navigation';
 import { testBillingSecret } from '@/server/billing.ts';
@@ -81,4 +82,43 @@ export async function changeTestPlan(
     if (!res.ok) throw new Error(`test billing webhook failed: ${res.status}`);
   }
   redirect(`${p.returnPath}?billing=updated`);
+}
+
+/**
+ * The test billing portal's renewal buttons (development only, M6.6b): the provider's webhooks
+ * for a renewal whose payment failed (`past_due`, retries continue) or after the last retry
+ * (`unpaid`), sent to our billing endpoint like any other delivery.
+ */
+export async function simulateRenewal(p: PortalParams, outcome: 'fail' | 'give_up'): Promise<void> {
+  const secret = verified(p);
+  if (!secret) redirect(`/${p.locale}`);
+  const current = await subscriptionOfCustomer('fake', p.customer);
+  if (!current?.subscription) {
+    const qs = new URLSearchParams({
+      customer: p.customer,
+      return: p.returnPath,
+      sig: p.sig,
+      error: 'nosub',
+    });
+    redirect(`/${p.locale}/billing/fake?${qs}`);
+  }
+  const sub = current.subscription;
+  const d = signFakeBillingEvent(secret, {
+    kind: 'subscription',
+    type: outcome === 'fail' ? 'invoice.payment_failed' : 'customer.subscription.updated',
+    customerId: p.customer,
+    subscriptionId: sub.id,
+    status: outcome === 'fail' ? 'past_due' : 'unpaid',
+    priceLookupKey: sub.priceLookupKey,
+    currentPeriodEnd: sub.currentPeriodEnd,
+    cancelAtPeriodEnd: false,
+  });
+  const origin = process.env.BETTER_AUTH_URL ?? 'http://localhost:3000';
+  const res = await fetch(`${origin}/api/webhooks/billing/fake`, {
+    method: 'POST',
+    headers: d.headers,
+    body: d.body,
+  });
+  if (!res.ok) throw new Error(`test billing webhook failed: ${res.status}`);
+  redirect(`${p.returnPath}?billing=renewal`);
 }

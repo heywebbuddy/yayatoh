@@ -3,13 +3,14 @@ import { defineSerializer } from '@yayatoh/contracts';
 import type { TenantTx } from '@yayatoh/db';
 import { type Ctx, DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
-import { and, desc, eq, gt, inArray, sql } from 'drizzle-orm';
+import { and, desc, eq, gt, inArray, isNull, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { connectorByKey } from './connectors/index.ts';
 import { MAPPING_DIRECTIONS, MappingRule } from './domain/mapping.ts';
 import {
   ACTIVE_RUN_STATUSES,
   CONNECTION_STATUSES,
+  DEFAULT_SYNC_INTERVAL_MINUTES,
   LIVE_STATUSES,
   REVOKE_REASONS,
   RUN_STATUSES,
@@ -18,7 +19,7 @@ import {
 } from './domain/sync.ts';
 import { newState, sha256 } from './hash.ts';
 import { connections, fieldMappings, syncCursors, syncErrors, syncRuns } from './schema.ts';
-import type { ConnectorDefinition } from './sdk/connector.ts';
+import { type ConnectorDefinition, isImporter } from './sdk/connector.ts';
 
 /**
  * Connections (M6.4a): connect through the `IntegrationAuth` port (begin → the provider's consent
@@ -134,6 +135,19 @@ export function requireConnector(key: string): ConnectorDefinition {
   return c;
 }
 
+/** An org connector (M6.5c: registrants make their personal ones from their schedule page). */
+function requireOrgConnector(key: string): ConnectorDefinition {
+  const c = requireConnector(key);
+  if (c.audience === 'registrant') throw new DomainError('not_found', 'Unknown connector');
+  return c;
+}
+
+/** The first sync interval of a new connection (the connector's, else the default). */
+export const initialInterval = (c: ConnectorDefinition) =>
+  c.defaultSyncIntervalMinutes && (SYNC_INTERVALS as readonly number[]).includes(c.defaultSyncIntervalMinutes)
+    ? c.defaultSyncIntervalMinutes
+    : DEFAULT_SYNC_INTERVAL_MINUTES;
+
 /** The org must hold the connector's own module key too (P6-13). */
 async function requireConnectorEntitlementTx(tx: TenantTx, c: ConnectorDefinition): Promise<void> {
   if (c.entitlement === 'integrations') return;
@@ -159,6 +173,8 @@ export const listConnectionsQuery = tenantQuery({
     const rows = await tx
       .selectDistinctOn([connections.connector])
       .from(connections)
+      // Registrants' personal connections (M6.5c) are theirs, not the org's integrations.
+      .where(isNull(connections.registrantId))
       .orderBy(
         connections.connector,
         desc(sql`${connections.status} in ('pending', 'active', 'paused')`),
@@ -196,6 +212,7 @@ export const connectionDetailQuery = tenantQuery({
   permission: 'integrations:read',
   handler: async ({ input, tx }) => {
     const c = await connectionTx(tx, input.connectionId);
+    if (c.registrantId) throw new DomainError('not_found', 'Connection not found');
     const [counts, mappings, runs] = await Promise.all([
       openErrorCountsTx(tx, [c.id]),
       currentMappingsTx(tx, c.id),
@@ -244,7 +261,7 @@ export const beginConnectCommand = tenantCommand({
   category: 'export',
   handler: async ({ input, ctx, tx }) => {
     const orgId = requireOrg(ctx);
-    const c = requireConnector(input.connector);
+    const c = requireOrgConnector(input.connector);
     await requireConnectorEntitlementTx(tx, c);
     const state = newState();
     const pending = {
@@ -255,7 +272,13 @@ export const beginConnectCommand = tenantCommand({
     const [live] = await tx
       .select()
       .from(connections)
-      .where(and(eq(connections.connector, c.key), inArray(connections.status, [...LIVE_STATUSES])))
+      .where(
+        and(
+          eq(connections.connector, c.key),
+          isNull(connections.registrantId),
+          inArray(connections.status, [...LIVE_STATUSES]),
+        ),
+      )
       .for('update');
     if (live && live.status !== 'pending')
       throw new DomainError('conflict', 'Already connected', { reason: 'already_connected' });
@@ -265,7 +288,13 @@ export const beginConnectCommand = tenantCommand({
     }
     const [row] = await tx
       .insert(connections)
-      .values({ orgId, connector: c.key, status: 'pending', ...pending })
+      .values({
+        orgId,
+        connector: c.key,
+        status: 'pending',
+        syncIntervalMinutes: initialInterval(c),
+        ...pending,
+      })
       .returning({ id: connections.id });
     if (!row) throw new DomainError('internal');
     return { connectionId: row.id, state };
@@ -293,6 +322,7 @@ export const pendingConnectionQuery = tenantQuery({
         and(
           eq(connections.stateHash, sha256(input.state)),
           eq(connections.status, 'pending'),
+          isNull(connections.registrantId),
           gt(connections.stateExpiresAt, ctx.now),
         ),
       );
@@ -301,7 +331,7 @@ export const pendingConnectionQuery = tenantQuery({
   },
 });
 
-async function seedMappingsTx(tx: TenantTx, ctx: Ctx, connectionId: string, c: ConnectorDefinition) {
+export async function seedMappingsTx(tx: TenantTx, ctx: Ctx, connectionId: string, c: ConnectorDefinition) {
   const orgId = requireOrg(ctx);
   const existing = await currentMappingsTx(tx, connectionId);
   const have = new Set(existing.map((m) => `${m.objectType}:${m.direction}`));
@@ -346,9 +376,12 @@ export const completeConnectCommand = tenantCommand({
   handler: async ({ input, ctx, tx, emit }) => {
     const orgId = requireOrg(ctx);
     const c = await connectionTx(tx, input.connectionId, true);
+    if (c.registrantId) throw new DomainError('not_found', 'Connection not found');
     const connector = requireConnector(c.connector);
     await requireConnectorEntitlementTx(tx, connector);
     if (c.status !== 'pending') throw new DomainError('invalid_state', 'Not waiting for a connect');
+    // M6.4b: an importer waits for someone to preview and start the import.
+    const importer = isImporter(connector);
     if (
       input.state !== null &&
       (c.stateHash !== sha256(input.state) || !c.stateExpiresAt || c.stateExpiresAt <= ctx.now)
@@ -364,14 +397,15 @@ export const completeConnectCommand = tenantCommand({
         stateExpiresAt: null,
         connectedBy: ctx.actor.type === 'user' ? ctx.actor.userId : null,
         connectedAt: ctx.now,
-        nextSyncAt: ctx.now,
+        nextSyncAt: importer ? null : ctx.now,
         consecutiveFailures: 0,
         updatedAt: ctx.now,
       })
       .where(eq(connections.id, c.id));
     await seedMappingsTx(tx, ctx, c.id, connector);
     // The first sync, as soon as the scheduler sees it.
-    await tx.insert(syncRuns).values({ orgId, connectionId: c.id, trigger: 'schedule', status: 'queued' });
+    if (!importer)
+      await tx.insert(syncRuns).values({ orgId, connectionId: c.id, trigger: 'schedule', status: 'queued' });
     emit({
       type: 'integrations.connection_connected',
       version: 1,
@@ -414,7 +448,7 @@ export const failConnectCommand = tenantCommand({
   }),
 });
 
-async function cancelActiveRunsTx(tx: TenantTx, ctx: Ctx, connectionId: string, code: string) {
+export async function cancelActiveRunsTx(tx: TenantTx, ctx: Ctx, connectionId: string, code: string) {
   await tx
     .update(syncRuns)
     .set({ status: 'cancelled', errorCode: code, finishedAt: ctx.now, leaseUntil: null, updatedAt: ctx.now })
@@ -440,7 +474,12 @@ export const setConnectionPausedCommand = tenantCommand({
       .set(
         input.paused
           ? { status: 'paused', pausedAt: ctx.now, nextSyncAt: null, updatedAt: ctx.now }
-          : { status: 'active', pausedAt: null, nextSyncAt: ctx.now, updatedAt: ctx.now },
+          : {
+              status: 'active',
+              pausedAt: null,
+              nextSyncAt: isImporter(connectorByKey(c.connector)) ? null : ctx.now,
+              updatedAt: ctx.now,
+            },
       )
       .where(eq(connections.id, c.id))
       .returning();
@@ -472,6 +511,8 @@ export const setSyncIntervalCommand = tenantCommand({
     const c = await connectionTx(tx, input.connectionId, true);
     if (c.status === 'revoked' || c.status === 'failed')
       throw new DomainError('invalid_state', 'This connection has ended');
+    if (isImporter(connectorByKey(c.connector)))
+      throw new DomainError('invalid_state', 'An import runs only when you start it', { reason: 'importer' });
     const next = c.lastSyncAt ? new Date(c.lastSyncAt.getTime() + input.minutes * 60_000) : ctx.now;
     await tx
       .update(connections)

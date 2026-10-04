@@ -348,7 +348,13 @@ export async function capacityTx(
     nearPct: CAPACITY_NEAR_PCT,
     overPct: CAPACITY_OVER_PCT,
     venue: { ...capacityGauge(f.inside, capacity || null), out: f.out },
-    areas: f.areas.map((a) => ({ ...capacityGauge(a.inside, a.capacity), name: a.name, kind: a.kind })),
+    // Entrances and zones only: M5.6a session doors count their rooms on the session rooms tile
+    // (M5.9a); passing them here broke the whole board for a conference with a session door.
+    areas: f.areas.flatMap((a) =>
+      a.kind === 'entrance' || a.kind === 'zone'
+        ? [{ ...capacityGauge(a.inside, a.capacity), name: a.name, kind: a.kind }]
+        : [],
+    ),
     asOf: ctx.now.toISOString(),
   };
 }

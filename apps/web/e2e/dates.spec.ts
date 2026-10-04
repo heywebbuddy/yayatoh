@@ -1,5 +1,5 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { continueToPayment, expectAccessible, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, pickOption, signIn } from './helpers.ts';
 
 /**
  * M1.4b: multi-date events — recurring schedules (preview, validation, DST), editing one date or
@@ -66,7 +66,7 @@ function chicagoFromNow(offsetH: number): string {
 async function createEvent(page: Page, name: string, starts: string, ends: string): Promise<string> {
   await page.goto('/o/lakeside-events/events/new');
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Time zone').selectOption(TZ);
+  await pickOption(page.getByLabel('Time zone'), TZ);
   await page.getByLabel('Starts', { exact: true }).fill(starts);
   await page.getByLabel('Ends', { exact: true }).fill(ends);
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -104,7 +104,7 @@ async function buyForDate(browser: Browser, slug: string, dateLabel: string, pas
   await guest.goto(`/events/${slug}`);
   await guest.getByRole('link', { name: dateLabel }).click();
   await expect(guest).toHaveURL(/\?date=/);
-  await guest.getByLabel(`Quantity — ${pass}`).selectOption('1');
+  await pickOption(guest.getByLabel(`Quantity — ${pass}`), '1');
   await guest.getByLabel('Full name').fill(who);
   await guest
     .getByLabel('Email for your tickets')
@@ -129,8 +129,8 @@ test.describe('multi-date events', () => {
 
     const repeat = page.getByRole('region', { name: 'Add a repeating schedule' });
     // The form starts from the event: first date, times and weekday.
-    await expect(repeat.getByLabel('First date')).toHaveValue('2027-03-03');
-    await expect(repeat.getByLabel('Start time')).toHaveValue('19:00');
+    await expect(repeat.getByLabel('First date')).toHaveAttribute('data-value', '2027-03-03');
+    await expect(repeat.getByLabel('Start time')).toHaveAttribute('data-value', '19:00');
     await expect(repeat.getByLabel('Wednesday')).toBeChecked();
 
     await repeat.getByLabel('On a date').check();
@@ -394,13 +394,13 @@ test.describe('multi-date events', () => {
     // Box office: the date is chosen first; a pass not sold that night is refused.
     await page.goto(`${base}/tickets-orders`);
     const office = page.getByRole('region', { name: 'Box office' });
-    await office.getByLabel('Date', { exact: true }).selectOption({ label: first });
+    await pickOption(office.getByLabel('Date', { exact: true }), { label: first });
     await office.getByLabel(/^Closing night/).fill('1');
     await office.getByLabel("Buyer's name").fill(`Walk ${tag}`);
     await office.getByLabel("Buyer's email").fill(`walk${tag}@example.test`);
     await office.getByRole('button', { name: 'Record sale' }).click();
     await expect(office.getByText("One of these tickets isn't sold for this date.")).toBeVisible();
-    await office.getByLabel('Date', { exact: true }).selectOption({ label: second });
+    await pickOption(office.getByLabel('Date', { exact: true }), { label: second });
     await office.getByRole('button', { name: 'Record sale' }).click();
     await expect(office.getByText('Sale recorded. The tickets are on their way.')).toBeVisible();
     await page.goto(`${base}/dates`);

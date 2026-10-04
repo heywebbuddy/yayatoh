@@ -1,4 +1,4 @@
-import { columnPrivacy, internal, secret } from '@yayatoh/db';
+import { columnPrivacy, internal, personal, secret } from '@yayatoh/db';
 
 /**
  * Column privacy of the `integrations` schema (roadmap §9 canary leak test; see `columnPrivacy` in
@@ -38,4 +38,28 @@ export const privateColumns = columnPrivacy('integrations', {
     field: 'vocab',
     status: 'vocab',
   },
+  // M6.4c Slack: the channel picked (an id and a name from the workspace), what to send, and the
+  // send log (ids and counts in the payload; never personal data).
+  slack_settings: {
+    channel_id: internal('none', { why: 'a Slack channel id (C…/G…/D…) by CHECK constraint; no free text' }),
+    channel_name: internal(),
+    alert_min_severity: 'vocab',
+    digest_time: 'vocab',
+  },
+  slack_messages: {
+    channel_id: internal('none', { why: 'a Slack channel id (C…/G…/D…) by CHECK constraint; no free text' }),
+    kind: 'vocab',
+    dedupe_key: internal('none', {
+      why: 'kind plus an alert id and sending, a day or a message id, by CHECK constraint; no free text',
+    }),
+    status: 'vocab',
+    payload: internal(),
+    provider_ts: internal('none', {
+      why: "Slack's message timestamp (digits), at most 40 characters; never shown",
+    }),
+    error_code: 'vocab',
+  },
+  // M6.4b: the values of a last-writer conflict (names, emails, labels of attendees).
+  sync_conflicts: { field: 'vocab', kept: personal(), lost: personal() },
+  sheet_links: { spreadsheet_id: internal('code'), title: internal(), status: 'vocab' },
 });

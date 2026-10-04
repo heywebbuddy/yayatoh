@@ -11,6 +11,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@yayatoh/agency": "workspace:*",
     "@yayatoh/ai": "workspace:*",
     "@yayatoh/alerts": "workspace:*",
     "@yayatoh/analytics": "workspace:*",
@@ -34,9 +35,11 @@
     "@yayatoh/events": "workspace:*",
     "@yayatoh/floorplan": "workspace:*",
     "@yayatoh/forms": "workspace:*",
+    "@yayatoh/gallery": "workspace:*",
     "@yayatoh/guests": "workspace:*",
     "@yayatoh/integrations": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
+    "@yayatoh/leads": "workspace:*",
     "@yayatoh/marketing": "workspace:*",
     "@yayatoh/marketplace": "workspace:*",
     "@yayatoh/media": "workspace:*",
@@ -52,12 +55,14 @@
     "@yayatoh/reports": "workspace:*",
     "@yayatoh/reviews": "workspace:*",
     "@yayatoh/seating": "workspace:*",
+    "@yayatoh/sso": "workspace:*",
     "@yayatoh/surveys": "workspace:*",
     "@yayatoh/templates": "workspace:*",
     "@yayatoh/tenancy": "workspace:*",
     "@yayatoh/ticket-crypto": "workspace:*",
     "@yayatoh/ticketing": "workspace:*",
     "@yayatoh/venues": "workspace:*",
+    "@yayatoh/virtual": "workspace:*",
     "@yayatoh/webhooks": "workspace:*",
     "drizzle-orm": "catalog:"
   },
@@ -65,6 +70,7 @@
     "@types/node": "catalog:",
     "@yayatoh/config": "workspace:*",
     "pdfjs-dist": "5.4.296",
+    "sharp": "0.35.4",
     "typescript": "catalog:",
     "zxing-wasm": "3.1.4"
   }

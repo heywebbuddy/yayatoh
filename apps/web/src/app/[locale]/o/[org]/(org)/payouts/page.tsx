@@ -4,6 +4,7 @@ import { payoutAccountQuery, receivablesQuery, settlementsQuery } from '@yayatoh
 import { roleCan } from '@yayatoh/tenancy';
 import { Button, Card, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { HowItWorks } from '@/components/how-it-works.tsx';
 import { StepUpForm } from '@/components/step-up.tsx';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
@@ -49,6 +50,7 @@ export default async function PayoutsPage({
   return (
     <>
       <PageHeader title={t('title')} description={t('description')} />
+      <HowItWorks topic="payouts" />
       {onboarding === 'returned' && account.state !== 'active' ? (
         <p role="status" className="rounded-card border border-line bg-surface-2 px-4 py-3 text-body">
           {t('returned')}

@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { signFakeDisputeWebhook } from '@yayatoh/payments';
-import { continueToPayment, expectAccessible, OPEN_HOUSE, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, OPEN_HOUSE, pickOption, signIn } from './helpers.ts';
 
 /**
  * Responding to a dispute (M1.6e): the organizer reviews the evidence packet (order, tickets, the
@@ -25,7 +25,7 @@ test.describe('dispute response (M1.6e)', () => {
 
     const guest = await (await browser.newContext()).newPage();
     await guest.goto('/events/lakeside-open-house');
-    await guest.getByLabel(`Quantity — ${pass}`).selectOption('1');
+    await pickOption(guest.getByLabel(`Quantity — ${pass}`), '1');
     await guest.getByLabel('Full name').fill(buyer);
     await guest.getByLabel('Email for your tickets').fill(`cleo+${stamp}@example.test`);
     await continueToPayment(guest, `cleo+${stamp}@example.test`);

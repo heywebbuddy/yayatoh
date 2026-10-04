@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { continueToPayment, expectAccessible, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, pickOption, signIn } from './helpers.ts';
 
 function chicago(offsetH: number): string {
   const parts = new Intl.DateTimeFormat('en-CA', {
@@ -26,7 +26,7 @@ test.describe('ticket distribution', () => {
     await signIn(page);
     await page.goto('/o/lakeside-events/events/new');
     await page.getByLabel('Event name', { exact: true }).fill(`Gala ${stamp}`);
-    await page.getByLabel('Time zone').selectOption('America/Chicago');
+    await pickOption(page.getByLabel('Time zone'), 'America/Chicago');
     await page.getByLabel('Starts', { exact: true }).fill(chicago(-1));
     await page.getByLabel('Ends', { exact: true }).fill(chicago(3));
     await page.getByRole('button', { name: 'Create draft' }).click();
@@ -45,7 +45,7 @@ test.describe('ticket distribution', () => {
     // A company books two seats.
     const buyer = await (await browser.newContext()).newPage();
     await buyer.goto(`/events/${slug}`);
-    await buyer.getByLabel('Quantity — Table seat').selectOption('2');
+    await pickOption(buyer.getByLabel('Quantity — Table seat'), '2');
     await buyer.getByLabel('Full name').fill(`Acme ${stamp}`);
     await buyer.getByLabel('Email for your tickets').fill(`acme.${stamp}@example.test`);
     await continueToPayment(buyer, `acme.${stamp}@example.test`);

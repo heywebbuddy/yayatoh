@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, Input } from '@yayatoh/ui';
+import { Alert, Button, DateTimePicker, Input, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState, useEffect, useRef } from 'react';
 import type { TicketFormState } from '@/app/[locale]/o/[org]/e/[event]/tickets-orders/actions.ts';
@@ -54,10 +54,10 @@ export function TicketTypeForm({
         <label htmlFor="feeMode" className="text-[13px] font-bold text-ink">
           {t('tickets.feeMode')}
         </label>
-        <select id="feeMode" name="feeMode" defaultValue="pass_on" className="field">
+        <Select id="feeMode" name="feeMode" defaultValue="pass_on" className="field">
           <option value="pass_on">{t('tickets.passOn')}</option>
           <option value="absorb">{t('tickets.absorb')}</option>
-        </select>
+        </Select>
       </div>
       <Input name="description" maxLength={500} label={t('tickets.description')} />
       <Input
@@ -67,7 +67,7 @@ export function TicketTypeForm({
         label={t('tickets.earlyPrice', { currency })}
         hint={t('tickets.earlyPriceHint')}
       />
-      <Input name="earlyEndsAt" type="datetime-local" label={t('tickets.earlyEndsAt')} />
+      <DateTimePicker name="earlyEndsAt" label={t('tickets.earlyEndsAt')} />
       <div className="flex flex-col gap-1.5 md:col-span-2">
         <label htmlFor="accessDates" className="text-[13px] font-bold text-ink">
           {t('tickets.accessDates')}

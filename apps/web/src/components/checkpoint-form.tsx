@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, Input } from '@yayatoh/ui';
+import { Alert, Button, Input, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState, useEffect, useRef, useState } from 'react';
 import type { CheckpointFormState } from '@/app/[locale]/o/[org]/e/[event]/onsite/actions.ts';
@@ -39,16 +39,16 @@ export function CheckpointForm({
         <label htmlFor="checkpoint-kind" className="text-[13px] font-bold text-ink">
           {t('checkpoints.kind')}
         </label>
-        <select
+        <Select
           id="checkpoint-kind"
           name="kind"
           value={kind}
-          onChange={(e) => setKind(e.target.value === 'zone' ? 'zone' : 'entrance')}
+          onValueChange={(v) => setKind(v === 'zone' ? 'zone' : 'entrance')}
           className="field"
         >
           <option value="entrance">{t('checkpoints.entrance')}</option>
           <option value="zone">{t('checkpoints.zone')}</option>
-        </select>
+        </Select>
       </div>
       {kind === 'zone' ? (
         <fieldset className="flex flex-col gap-2 md:col-span-2">

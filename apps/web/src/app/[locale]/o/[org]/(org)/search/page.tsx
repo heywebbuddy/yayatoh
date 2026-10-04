@@ -4,7 +4,7 @@ import { executeQuery, formatMoney, money } from '@yayatoh/kernel';
 import { searchOrdersQuery } from '@yayatoh/orders';
 import { roleCan } from '@yayatoh/tenancy';
 import { findTicketsByCodeQuery } from '@yayatoh/ticketing';
-import { Card, EmptyState, PageHeader } from '@yayatoh/ui';
+import { buttonClass, Card, EmptyState, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Link } from '@/i18n/navigation.ts';
 import { loadConsole } from '@/server/console.ts';
@@ -31,7 +31,15 @@ export default async function SearchPage({
     return (
       <>
         <PageHeader title={t('search.title')} />
-        <EmptyState title={t('search.tooShortTitle')} description={t('search.tooShortDescription')} />
+        <EmptyState
+          title={t('search.tooShortTitle')}
+          description={t('search.tooShortDescription')}
+          action={
+            <Link href={`/o/${org}`} className={buttonClass('primary', 'md')}>
+              {t('search.browseEvents')}
+            </Link>
+          }
+        />
       </>
     );
   }
@@ -99,7 +107,15 @@ export default async function SearchPage({
     <>
       <PageHeader title={t('search.resultsFor', { q })} />
       {nothing ? (
-        <EmptyState title={t('search.noneTitle')} description={t('search.noneDescription')} />
+        <EmptyState
+          title={t('search.noneTitle')}
+          description={t('search.noneDescription')}
+          action={
+            <Link href={`/o/${org}`} className={buttonClass('primary', 'md')}>
+              {t('search.browseEvents')}
+            </Link>
+          }
+        />
       ) : null}
       {group(
         'search-events',

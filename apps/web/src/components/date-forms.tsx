@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, Input } from '@yayatoh/ui';
+import { Alert, Button, DatePicker, DateTimePicker, Input, Select, TimePicker } from '@yayatoh/ui';
 import { useLocale, useTranslations } from 'next-intl';
 import { type FormEvent, startTransition, useActionState, useEffect, useRef, useState } from 'react';
 import type { DateFormState, RecurrenceState } from '@/app/[locale]/o/[org]/e/[event]/dates/actions.ts';
@@ -61,22 +61,14 @@ export function AddDateForm({ action }: { action: Action<DateFormState> }) {
   const err = (f: string) => (field === f ? (message ?? undefined) : undefined);
   return (
     <form ref={ref} onSubmit={onSubmit} className="grid grid-cols-1 gap-4 md:grid-cols-3" noValidate>
-      <Input
+      <DateTimePicker
         id="add-startsAt"
         name="startsAt"
-        type="datetime-local"
         required
         label={t('startsAt')}
         error={err('startsAt')}
       />
-      <Input
-        id="add-endsAt"
-        name="endsAt"
-        type="datetime-local"
-        required
-        label={t('endsAt')}
-        error={err('endsAt')}
-      />
+      <DateTimePicker id="add-endsAt" name="endsAt" required label={t('endsAt')} error={err('endsAt')} />
       <Input
         id="add-capacity"
         name="capacity"
@@ -137,28 +129,25 @@ export function RecurrenceForm({
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-4" noValidate>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        <Input
+        <DatePicker
           id="rr-startDate"
           name="startDate"
-          type="date"
           required
           defaultValue={defaults.startDate}
           label={t('firstDate')}
           error={err('startDate')}
         />
-        <Input
+        <TimePicker
           id="rr-startTime"
           name="startTime"
-          type="time"
           required
           defaultValue={defaults.startTime}
           label={t('startTime')}
           error={err('startTime')}
         />
-        <Input
+        <TimePicker
           id="rr-endTime"
           name="endTime"
-          type="time"
           required
           defaultValue={defaults.endTime}
           label={t('endTime')}
@@ -169,17 +158,17 @@ export function RecurrenceForm({
           <label htmlFor="rr-freq" className="text-[13px] font-bold text-ink">
             {t('freq')}
           </label>
-          <select
+          <Select
             id="rr-freq"
             name="freq"
             value={freq}
-            onChange={(e) => setFreq(e.target.value as typeof freq)}
+            onValueChange={(v) => setFreq(v as typeof freq)}
             className={select}
           >
             <option value="daily">{t('freqs.daily')}</option>
             <option value="weekly">{t('freqs.weekly')}</option>
             <option value="monthly">{t('freqs.monthly')}</option>
-          </select>
+          </Select>
         </div>
         <Input
           id="rr-interval"
@@ -259,7 +248,7 @@ export function RecurrenceForm({
               error={err('count')}
             />
           ) : (
-            <Input id="rr-until" name="until" type="date" label={t('until')} error={err('until')} />
+            <DatePicker id="rr-until" name="until" label={t('until')} error={err('until')} />
           )}
           <Input
             id="rr-capacity"
@@ -333,19 +322,17 @@ export function EditDateForm({
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-4" noValidate>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        <Input
+        <DateTimePicker
           id="edit-startsAt"
           name="startsAt"
-          type="datetime-local"
           required
           defaultValue={defaults.startsAt}
           label={t('startsAt')}
           error={err('startsAt') ?? err('startTime')}
         />
-        <Input
+        <DateTimePicker
           id="edit-endsAt"
           name="endsAt"
-          type="datetime-local"
           required
           defaultValue={defaults.endsAt}
           label={t('endsAt')}
@@ -411,14 +398,14 @@ export function SeriesPicker({
         <label htmlFor="seriesId" className="text-[13px] font-bold text-ink">
           {t('series')}
         </label>
-        <select id="seriesId" name="seriesId" defaultValue={current ?? ''} className={select}>
+        <Select id="seriesId" name="seriesId" defaultValue={current ?? ''} className={select}>
           <option value="">{t('noSeries')}</option>
           {series.map((s) => (
             <option key={s.id} value={s.id}>
               {s.name}
             </option>
           ))}
-        </select>
+        </Select>
       </div>
       <Button type="submit" variant="secondary" disabled={pending}>
         {t('saveSeries')}

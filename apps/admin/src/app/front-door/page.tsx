@@ -1,6 +1,6 @@
 import { getUsersByIds } from '@yayatoh/auth';
 import { FRONT_DOOR_ROUTES, frontDoorHostList, ROUTE_STATES } from '@yayatoh/platform/front-door';
-import { Alert, Button, Card, PageHeader, StatusDot } from '@yayatoh/ui';
+import { Alert, Button, Card, PageHeader, Select, StatusDot } from '@yayatoh/ui';
 import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { Shell } from '@/components/shell.tsx';
@@ -150,19 +150,19 @@ export default async function FrontDoorPage({
                 <label htmlFor="fd-host" className="text-[13px] font-bold text-ink">
                   {t('change.host')}
                 </label>
-                <select id="fd-host" name="host" required className={`${field} w-full max-w-full`}>
+                <Select id="fd-host" name="host" required className={`${field} w-full max-w-full`}>
                   {hosts.map((h) => (
                     <option key={h.host} value={h.host}>
                       {h.host}
                     </option>
                   ))}
-                </select>
+                </Select>
               </div>
               <div className="flex min-w-0 max-w-full flex-col gap-1.5">
                 <label htmlFor="fd-route" className="text-[13px] font-bold text-ink">
                   {t('change.route')}
                 </label>
-                <select id="fd-route" name="route" required className={`${field} w-full max-w-full`}>
+                <Select id="fd-route" name="route" required className={`${field} w-full max-w-full`}>
                   {FRONT_DOOR_ROUTES.map((r) => (
                     <option key={r.key} value={r.key}>
                       {t('change.routeOption', {
@@ -172,7 +172,7 @@ export default async function FrontDoorPage({
                       })}
                     </option>
                   ))}
-                </select>
+                </Select>
               </div>
             </div>
             <fieldset className="flex flex-col gap-1.5">

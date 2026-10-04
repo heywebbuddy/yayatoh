@@ -2,6 +2,7 @@ import { executeQuery } from '@yayatoh/kernel';
 import { listDomainsQuery, managedHostname, roleCan } from '@yayatoh/tenancy';
 import { Button, Card, PageHeader, StatusDot } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { HowItWorks } from '@/components/how-it-works.tsx';
 import { SettingsForm } from '@/components/settings-form.tsx';
 import { StepUpForm } from '@/components/step-up.tsx';
 import { loadConsole } from '@/server/console.ts';
@@ -35,6 +36,7 @@ export default async function DomainsPage({ params }: { params: Promise<{ locale
   return (
     <>
       <PageHeader title={t('title')} description={t('description')} />
+      <HowItWorks topic="domains" />
       {canManage && !domains.some((d) => d.managed) ? (
         <Card className="flex flex-col gap-3">
           <p className="text-body">{t('managedMissing', { host: managedHostname(org) })}</p>

@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, cx, EmptyState, iconButtonClass } from '@yayatoh/ui';
+import { Button, buttonClass, cx, EmptyState, iconButtonClass } from '@yayatoh/ui';
 import { Bell, Check } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState, useTransition } from 'react';
@@ -87,7 +87,16 @@ export function InboxBell({ org, initial }: { org: string; initial: InboxView })
           </Button>
         </div>
         {view.items.length === 0 ? (
-          <EmptyState title={t('emptyTitle')} description={t('emptyDescription')} className="py-8" />
+          <EmptyState
+            title={t('emptyTitle')}
+            description={t('emptyDescription')}
+            className="py-8"
+            action={
+              <Link href={`/o/${org}/notifications/preferences`} className={buttonClass('secondary', 'md')}>
+                {t('choosePreferences')}
+              </Link>
+            }
+          />
         ) : (
           <ul className="flex max-h-[60vh] list-none flex-col gap-1 overflow-y-auto p-0">
             {view.items.map((i) => (

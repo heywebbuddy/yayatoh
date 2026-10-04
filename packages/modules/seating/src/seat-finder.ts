@@ -47,7 +47,7 @@ const normalizeEmail = (email: string) => email.trim().toLowerCase();
  * The event's plan (for a date, the chart it uses: M1.7g) and the finder settings (kept on the
  * event plan); refused unless the organizer opened the finder.
  */
-async function openFinderTx(
+export async function openFinderTx(
   tx: TenantTx,
   eventId: string,
   mode: FinderMode | null,
@@ -78,7 +78,7 @@ async function openFinderTx(
 }
 
 /** Count this lookup against the device's budget for the event. */
-async function overLimitTx(
+export async function overLimitTx(
   tx: TenantTx,
   ctx: Parameters<typeof hitRateLimitTx>[1],
   eventId: string,
@@ -114,7 +114,7 @@ export const SeatFinderResultDto = z.object({
 export type SeatFinderResultDto = z.infer<typeof SeatFinderResultDto>;
 
 /** Seats of these attendees: given by the organizer (M1.7d) or bought with their ticket (M1.7c). */
-async function seatsOfTx(
+export async function seatsOfTx(
   tx: TenantTx,
   doc: FloorplanDoc,
   eventId: string,

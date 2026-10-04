@@ -121,6 +121,8 @@ export default async function RevisionsPage({
         active="revisions"
         finder={data.modules.has('seat_finder')}
         selection
+        guests={data.modules.has('guests')}
+        solver={data.modules.has('guests') && data.modules.has('ai_seating')}
         date={dateId}
       />
       <SeatingDatePicker
@@ -140,7 +142,15 @@ export default async function RevisionsPage({
           }
         />
       ) : list.revisions.length === 0 ? (
-        <EmptyState title={t('none')} description={t('noneHint')} />
+        <EmptyState
+          title={t('none')}
+          description={t('noneHint')}
+          action={
+            <Link href={base} className={buttonClass('primary', 'md')}>
+              {tt('assign.toPlan')}
+            </Link>
+          }
+        />
       ) : (
         <>
           {sp.restored && /^\d+$/.test(sp.restored) ? (

@@ -3,7 +3,9 @@
 import { parseLinksText, SectionTextError } from '@yayatoh/events';
 import { executeCommand } from '@yayatoh/kernel';
 import {
+  portalAssignLeadLicenseCommand,
   portalInviteStaffCommand,
+  portalReleaseLeadLicenseCommand,
   portalRevokeStaffCommand,
   portalSaveProfileCommand,
 } from '@yayatoh/program';
@@ -68,5 +70,27 @@ export async function inviteStaffAction(_prev: ProgramFormState, form: FormData)
 export async function revokeStaffAction(memberId: string): Promise<void> {
   const { ctx } = await asExhibitor();
   await executeCommand(portalRevokeStaffCommand, { memberId }, ctx, ports);
+  refresh();
+}
+
+/** M5.4b: give one of the exhibitor's people a lead license (up to the allowance). */
+export async function assignLicenseAction(
+  accountId: string,
+  _prev: ProgramFormState,
+): Promise<ProgramFormState> {
+  try {
+    const { ctx } = await asExhibitor();
+    await executeCommand(portalAssignLeadLicenseCommand, { accountId }, ctx, ports);
+  } catch (err) {
+    return failure(err);
+  }
+  refresh();
+  return success();
+}
+
+/** M5.4b: take a lead license back (to give it to someone else). */
+export async function releaseLicenseAction(accountId: string): Promise<void> {
+  const { ctx } = await asExhibitor();
+  await executeCommand(portalReleaseLeadLicenseCommand, { accountId }, ctx, ports);
   refresh();
 }

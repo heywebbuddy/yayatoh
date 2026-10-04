@@ -1,6 +1,15 @@
 import { currencyExponent, executeQuery } from '@yayatoh/kernel';
 import { eventReportQuery } from '@yayatoh/reports';
-import { BarChart, Card, ChartTable, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
+import {
+  BarChart,
+  buttonClass,
+  Card,
+  ChartTable,
+  EmptyState,
+  PageHeader,
+  StatusDot,
+  Table,
+} from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import {
   AsOf,
@@ -12,6 +21,7 @@ import {
   metricText,
   ReportTabs,
 } from '@/components/reports.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import { formatNumber } from '@/lib/format.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
@@ -24,14 +34,22 @@ export default async function AnalysisPage({
 }) {
   const { locale, org, event } = await params;
   setRequestLocale(locale);
-  const { data, event: ev, can } = await loadEvent(org, event, 'analysis');
+  const { data, event: ev, can, opens } = await loadEvent(org, event, 'analysis');
   const t = await getTranslations();
   const base = `/o/${org}/e/${event}/analysis`;
   if (!data.modules.has('reports') || !can('orders:read')) {
     return (
       <>
         <PageHeader title={t('reports.title')} description={ev.name} />
-        <EmptyState title={t('reports.noAccessTitle')} description={t('reports.noAccessDescription')} />
+        <EmptyState
+          title={t('reports.noAccessTitle')}
+          description={t('reports.noAccessDescription')}
+          action={
+            <Link href={`/o/${org}/e/${event}`} className={buttonClass('primary', 'md')}>
+              {t('reports.backToEvent')}
+            </Link>
+          }
+        />
       </>
     );
   }
@@ -56,7 +74,21 @@ export default async function AnalysisPage({
       />
       <ReportTabs base={base} current="overview" finance={finance} />
       {!r.hasSales ? (
-        <EmptyState title={t('reports.emptyTitle')} description={t('reports.emptyDescription')} />
+        <EmptyState
+          title={t('reports.emptyTitle')}
+          description={t('reports.emptyDescription')}
+          action={
+            opens('ticketsOrders') && data.modules.has('ticketing') ? (
+              <Link href={`/o/${org}/e/${event}/tickets-orders`} className={buttonClass('primary', 'md')}>
+                {t('reports.toTicketsOrders')}
+              </Link>
+            ) : (
+              <Link href={`/o/${org}/e/${event}`} className={buttonClass('primary', 'md')}>
+                {t('reports.backToEvent')}
+              </Link>
+            )
+          }
+        />
       ) : (
         <>
           <KpiGrid label={t('reports.keyNumbers')}>

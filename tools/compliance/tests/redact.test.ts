@@ -63,6 +63,67 @@ describe('redaction rules', () => {
     expect(kinds('card: 4242424242424242\n')).toEqual(['card_number']);
   });
 
+  it('does not read timestamps, ids, decimals or counts as card numbers (batch 3j merge)', () => {
+    // Each of these is Luhn-valid, so only the precision rules keep it out.
+    const luhnOk = (body: string) => {
+      for (let c = 0; c <= 9; c++) {
+        const d = `${body}${c}`;
+        let sum = 0;
+        for (let i = 0; i < d.length; i++) {
+          let n = Number(d[d.length - 1 - i]);
+          if (i % 2 === 1) n = n * 2 > 9 ? n * 2 - 9 : n * 2;
+          sum += n;
+        }
+        if (sum % 10 === 0) return d;
+      }
+      throw new Error('unreachable');
+    };
+    // 1. An epoch timestamp in milliseconds (13 digits from 1).
+    const ms = luhnOk('172791360000');
+    expect(kinds(`{"startedAtMs": ${ms}}`)).toEqual([]);
+    // 2. In nanoseconds (19 digits from 1).
+    expect(kinds(`time_ns=${luhnOk('172791360000000000')}`)).toEqual([]);
+    // 3. Ids and references that start with 0, 7, 8 or 9.
+    expect(kinds(`run ${luhnOk('987654321012345')} ref ${luhnOk('000123456789012')}`)).toEqual([]);
+    expect(kinds(`job ${luhnOk('70123456789012')} and ${luhnOk('8812345678901')}`)).toEqual([]);
+    // 4. The digits of a decimal number (a score, a ratio).
+    expect(kinds(`"score": 0.${luhnOk('923456789012345')}`)).toEqual([]);
+    expect(kinds(`ratio 12.${luhnOk('42345678901234')}`)).toEqual([]);
+    // 5. Counts separated by spaces or dashes (not card groupings).
+    const counts =
+      luhnOk('402030405060708')
+        .match(/.{1,2}/g)
+        ?.join(' ') ?? '';
+    expect(kinds(`counts ${counts}`)).toEqual([]);
+    expect(kinds(`counts ${counts.replaceAll(' ', '-')}`)).toEqual([]);
+    // 6. A digest's digit run (batch 3g) stays out too.
+    expect(kinds(`${'f0'}${luhnOk('411111111111111')}${'e1'.repeat(23)}  SHA256SUMS`)).toEqual([]);
+  });
+
+  it('still finds every real card format: issuers, lengths and groupings', () => {
+    for (const card of [
+      '4111111111111111', // Visa
+      '4222222222222', // Visa, 13 digits
+      '5555555555554444', // Mastercard
+      '2223003122003222', // Mastercard 2-series
+      '378282246310005', // Amex
+      '30569309025904', // Diners, 14 digits
+      '3530111333300000', // JCB
+      '6011111111111117', // Discover
+      '6200000000000005', // UnionPay
+      '135410014004955', // UATP (15 digits from 1)
+      '4000000000000000006', // Visa, 19 digits
+      '4111 1111 1111 1111',
+      '4111-1111-1111-1111',
+      '3782 822463 10005',
+      '3056 930902 5904',
+      '4000 0000 0000 0000 006',
+    ])
+      expect(kinds(`card ${card}.`), card).toEqual(['card_number']);
+    expect(kinds('{"pan":"5555555555554444"}')).toEqual(['card_number']);
+    expect(kinds('[1, 4111111111111111]')).toEqual(['card_number']);
+  });
+
   it('never echoes the value it found', () => {
     const token = `${'gh'}p_${r(36)}`;
     const [f] = scanText(`x ${token}`, 'f.json');

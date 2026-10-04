@@ -69,3 +69,37 @@ export const EXPORT_ALLOW = {
   // An audience (M3.6a): the contact's name and email; counts, dates and consent codes only.
   audience: ['crm.contacts.name', 'crm.contacts.email'],
 } as const satisfies Record<string, readonly ColumnId[]>;
+
+/**
+ * M4.5a: a guest website once the visitor proved its password: the hosts' own content and the
+ * program (sub-event names and places, venues are public). Never a guest, a party, an answer or
+ * a contact detail (P4-3); the locked gate is a public page (no canary at all).
+ */
+export const GUEST_SITE_ALLOW: readonly ColumnId[] = [
+  'guests.sites.title',
+  'guests.sites.intro',
+  'guests.site_blocks.heading',
+  'guests.site_blocks.content',
+  'guests.sub_events.name',
+  'guests.sub_events.place',
+];
+
+/**
+ * Batch 3j merge: what a party's own pages (reached by its signed link: the guest hub M4.7a, the
+ * seat page M4.4a, the card page M4.8e) may show — the party's names and envelope, its guests'
+ * names (and, on the seat page, the host-typed names of tablemates, P4-3 d), their meal choices,
+ * the program they are invited to and the menu, and on the hub the party's own tickets (holder and
+ * short code, as on its order page). Never contacts, private answers, notes or tags.
+ */
+export const PARTY_ALLOW: readonly ColumnId[] = [
+  'guests.parties.name',
+  'guests.parties.envelope_name',
+  'guests.guests.first_name',
+  'guests.guests.last_name',
+  'guests.guests.meal',
+  'guests.sub_events.name',
+  'guests.sub_events.place',
+  'guests.menu_options.label',
+  'ticketing.tickets.holder_name',
+  'ticketing.tickets.short_code',
+];

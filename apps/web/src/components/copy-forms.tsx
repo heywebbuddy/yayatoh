@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, Input } from '@yayatoh/ui';
+import { Alert, Button, DateTimePicker, Input } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { type FormEvent, startTransition, useActionState } from 'react';
 import type { CopyFormState } from '@/app/[locale]/o/[org]/e/[event]/copy/actions.ts';
@@ -55,10 +55,9 @@ export function CopyEventForm({
         label={t('newName')}
         error={state.field === 'name' ? (message ?? undefined) : undefined}
       />
-      <Input
+      <DateTimePicker
         id={`${idPrefix}-startsAt`}
         name="startsAt"
-        type="datetime-local"
         required
         defaultValue={defaults.startsAt}
         label={t('startsAt')}

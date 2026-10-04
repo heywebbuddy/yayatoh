@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, Card } from '@yayatoh/ui';
+import { Alert, Button, Card, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState } from 'react';
 import type { ReplayState } from '@/app/[locale]/o/[org]/(org)/webhooks/actions.ts';
@@ -52,7 +52,7 @@ export function RecoverForm({
           <label htmlFor="recover-window" className="text-caption text-ink-2">
             {t('recoverSince')}
           </label>
-          <select
+          <Select
             id="recover-window"
             name="window"
             defaultValue="24h"
@@ -63,7 +63,7 @@ export function RecoverForm({
                 {t(`recoverWindow.${w}`)}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
         <Button type="submit" variant="secondary" disabled={pending}>
           {t('recover')}

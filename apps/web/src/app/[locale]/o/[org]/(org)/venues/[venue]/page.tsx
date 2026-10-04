@@ -8,7 +8,6 @@ import { MediaUploader } from '@/components/media-uploader.tsx';
 import { VenueForm } from '@/components/venue-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatNumber } from '@/lib/format.ts';
-import { zonesWith } from '@/lib/zones.ts';
 import { loadConsole } from '@/server/console.ts';
 import { mediaPanel } from '@/server/media.ts';
 import { ports } from '@/server/ports.ts';
@@ -75,11 +74,10 @@ export default async function VenuePage({
       />
       {saved ? <Alert tone="info" title={t('created')} /> : null}
       {venue.archivedAt ? <Alert tone="info" title={t('archivedNotice')} /> : null}
-      <Card size="panel">
+      <Card size="panel" id="venue-details">
         <VenueForm
           action={updateVenueAction.bind(null, org, venue.id)}
           venue={venue}
-          zones={zonesWith(venue.timezone)}
           defaultTimezone={venue.timezone}
           disabled={!canWrite}
         />
@@ -97,6 +95,20 @@ export default async function VenuePage({
           <EmptyState
             title={t('quotes.emptyTitle')}
             description={venue.directoryListed ? t('quotes.emptyListed') : t('quotes.emptyUnlisted')}
+            action={
+              venue.directoryListed && !venue.archivedAt ? (
+                <Link href={`/venues/${venue.slug}`} className={buttonClass('primary', 'md')}>
+                  {t('quotes.openPublic')}
+                </Link>
+              ) : (
+                <Link
+                  href={`/o/${org}/venues/${venue.id}#venue-details`}
+                  className={buttonClass('primary', 'md')}
+                >
+                  {t('quotes.editListing')}
+                </Link>
+              )
+            }
           />
         ) : (
           <ul className="flex list-none flex-col gap-3 p-0">

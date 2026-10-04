@@ -3,6 +3,7 @@ import { executeQuery } from '@yayatoh/kernel';
 import { roleCan } from '@yayatoh/tenancy';
 import { Button, buttonClass, Card, EmptyState, PageHeader, Table } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { HowItWorks } from '@/components/how-it-works.tsx';
 import { SeriesForm } from '@/components/series-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatNumber } from '@/lib/format.ts';
@@ -24,9 +25,34 @@ export default async function SeriesPage({ params }: { params: Promise<{ locale:
   const names = new Map(events.map((e) => [e.id, e.name]));
   return (
     <>
-      <PageHeader title={t('series.title')} description={t('series.description')} />
+      <PageHeader
+        title={t('series.title')}
+        description={t('series.description')}
+        actions={
+          canWrite ? (
+            <Link href={`/o/${org}/series#new-series`} className={buttonClass('primary', 'md')}>
+              {t('series.new')}
+            </Link>
+          ) : null
+        }
+      />
+      <HowItWorks topic="series" />
       {series.length === 0 ? (
-        <EmptyState title={t('series.emptyTitle')} description={t('series.emptyDescription')} />
+        <EmptyState
+          title={t('series.emptyTitle')}
+          description={t('series.emptyDescription')}
+          action={
+            canWrite ? (
+              <Link href={`/o/${org}/series#new-series`} className={buttonClass('secondary', 'md')}>
+                {t('series.startFirst')}
+              </Link>
+            ) : (
+              <Link href={`/o/${org}`} className={buttonClass('secondary', 'md')}>
+                {t('emptyActions.seeEvents')}
+              </Link>
+            )
+          }
+        />
       ) : (
         <Table
           caption={t('series.caption')}
@@ -97,7 +123,11 @@ export default async function SeriesPage({ params }: { params: Promise<{ locale:
         />
       )}
       {canWrite ? (
-        <section aria-labelledby="new-series-heading" className="flex flex-col gap-3">
+        <section
+          id="new-series"
+          aria-labelledby="new-series-heading"
+          className="flex scroll-mt-6 flex-col gap-3"
+        >
           <h2 id="new-series-heading" className="text-section">
             {t('series.new')}
           </h2>

@@ -1,5 +1,12 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { continueToPayment, expectAccessible, OPEN_HOUSE, signIn } from './helpers.ts';
+import {
+  continueToPayment,
+  expectAccessible,
+  expectPicked,
+  OPEN_HOUSE,
+  pickOption,
+  signIn,
+} from './helpers.ts';
 
 /** `YYYY-MM-DDTHH:mm` wall-clock time in Chicago, `offsetH` hours from now (for datetime-local). */
 function chicago(offsetH: number): string {
@@ -24,7 +31,7 @@ const cents = (text: string) => Math.round(Number(text.replace(/[^0-9.]/g, '')) 
 async function newEvent(page: Page, name: string): Promise<string> {
   await page.goto('/o/lakeside-events/events/new');
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Time zone').selectOption('America/Chicago');
+  await pickOption(page.getByLabel('Time zone'), 'America/Chicago');
   await page.getByLabel('Starts', { exact: true }).fill(chicago(-1));
   await page.getByLabel('Ends', { exact: true }).fill(chicago(3));
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -64,7 +71,7 @@ async function guestBuys(
 ) {
   const guest = await (await browser.newContext()).newPage();
   await guest.goto(`/events/${slug}`);
-  await guest.getByLabel(`Quantity — ${opts.pass}`).selectOption(opts.qty);
+  await pickOption(guest.getByLabel(`Quantity — ${opts.pass}`), opts.qty);
   await guest.getByLabel('Full name').fill(opts.name);
   await guest.getByLabel('Email for your tickets').fill(opts.email);
   if (opts.promo) await guest.getByLabel('Promo code').fill(opts.promo);
@@ -110,7 +117,7 @@ test.describe('reports and dashboard (M1.12)', () => {
     await addPass(page, base, 'Guest pass', '0', '5');
     const code = `RPT${stamp}`;
     await page.getByLabel('Code', { exact: true }).fill(code);
-    await page.getByLabel('Discount type').selectOption('percent');
+    await pickOption(page.getByLabel('Discount type'), 'percent');
     await page.getByLabel('Discount', { exact: true }).fill('25');
     await page.getByRole('button', { name: 'Add code' }).click();
     await expect(page.getByRole('row').filter({ hasText: code })).toBeVisible();
@@ -154,7 +161,7 @@ test.describe('reports and dashboard (M1.12)', () => {
     await box.getByLabel("Buyer's name").fill(`Ed Door ${stamp}`);
     await box.getByLabel(/Buyer's email/).fill(`ed+${stamp}@example.test`);
     await box.getByLabel(/^General/).fill('1');
-    await box.getByLabel('Paid by').selectOption('cash');
+    await pickOption(box.getByLabel('Paid by'), 'cash');
     await box.getByRole('button', { name: 'Record sale' }).click();
     await expect(box.getByText('Sale recorded. The tickets are on their way.')).toBeVisible();
 
@@ -165,7 +172,7 @@ test.describe('reports and dashboard (M1.12)', () => {
     await expect(page.getByRole('status').filter({ hasText: 'booking' })).toHaveText('1 booking');
     await page.getByRole('link', { name: `Ada Paid ${stamp}` }).click();
     const form = page.getByRole('region', { name: 'Refund' });
-    await form.getByLabel('Reason').selectOption('requested_by_customer');
+    await pickOption(form.getByLabel('Reason'), 'requested_by_customer');
     await form.getByRole('checkbox').first().check();
     await form.getByRole('button', { name: 'Refund' }).click();
     await expect(form.getByText(/^Refunded\./)).toBeVisible();
@@ -251,19 +258,19 @@ test.describe('reports and dashboard (M1.12)', () => {
     await page.getByRole('link', { name: 'Bookings' }).click();
     await expect(page.getByRole('status').filter({ hasText: 'booking' })).toHaveText('5 bookings');
     const results = page.getByRole('table', { name: 'Bookings' });
-    await page.getByLabel('Show', { exact: true }).selectOption('comp');
+    await pickOption(page.getByLabel('Show', { exact: true }), 'comp');
     await page.getByRole('button', { name: 'Search' }).click();
     await expect(page.getByRole('status').filter({ hasText: 'booking' })).toHaveText('1 booking');
     await expect(results.getByRole('row').nth(1)).toContainText(`Cy Comp ${stamp}`);
     await expect(results.getByRole('row').nth(1)).toContainText('Complimentary');
-    await page.getByLabel('Show', { exact: true }).selectOption('failed');
+    await pickOption(page.getByLabel('Show', { exact: true }), 'failed');
     await page.getByRole('button', { name: 'Search' }).click();
     await expect(results.getByRole('row').nth(1)).toContainText(`Di Declined ${stamp}`);
     await expect(results.getByRole('row').nth(1)).toContainText('Payment failed');
-    await page.getByLabel('Show', { exact: true }).selectOption('box_office');
+    await pickOption(page.getByLabel('Show', { exact: true }), 'box_office');
     await page.getByRole('button', { name: 'Search' }).click();
     await expect(results.getByRole('row').nth(1)).toContainText(`Ed Door ${stamp}`);
-    await page.getByLabel('Show', { exact: true }).selectOption('all');
+    await pickOption(page.getByLabel('Show', { exact: true }), 'all');
     await page.getByLabel('Search bookings').fill(compCode.toLowerCase());
     await page.getByRole('button', { name: 'Search' }).click();
     await expect(page.getByRole('status').filter({ hasText: 'booking' })).toHaveText('1 booking');
@@ -284,13 +291,13 @@ test.describe('reports and dashboard (M1.12)', () => {
 
     // Export the paid bookings as CSV (bulk framework), then download the file.
     await page.getByLabel('Search bookings').fill('');
-    await page.getByLabel('Show', { exact: true }).selectOption('paid');
+    await pickOption(page.getByLabel('Show', { exact: true }), 'paid');
     await page.getByRole('button', { name: 'Search' }).click();
     await expect(page.getByRole('status').filter({ hasText: 'booking' })).toHaveText('3 bookings');
     await page.getByRole('button', { name: 'Export as CSV' }).click();
     const exportPanel = page.getByRole('region', { name: 'Bookings export' });
     await expect(exportPanel.getByText('Ready: 3 rows exported.')).toBeVisible({ timeout: 20_000 });
-    await expect(page.getByLabel('Show', { exact: true })).toHaveValue('paid');
+    await expectPicked(page.getByLabel('Show', { exact: true }), 'paid');
     const href = (await exportPanel.getByRole('link', { name: 'Download CSV' }).getAttribute('href')) ?? '';
     const csv = await page.request.get(href);
     expect(csv.status()).toBe(200);
@@ -365,7 +372,7 @@ test.describe('reports and dashboard (M1.12)', () => {
 
     await page.goto('/o/lakeside-events');
     const sales = page.getByRole('region', { name: 'Sales', exact: true });
-    await expect(page.getByLabel('Period', { exact: true })).toHaveValue('30d');
+    await expectPicked(page.getByLabel('Period', { exact: true }), '30d');
     await expect(
       page.getByRole('region', { name: 'Sales key numbers' }).getByText('Net revenue'),
     ).toBeVisible();
@@ -376,13 +383,13 @@ test.describe('reports and dashboard (M1.12)', () => {
 
     // Keyboard: choose "Last 7 days" and apply.
     await page.getByLabel('Period', { exact: true }).focus();
-    await page.getByLabel('Period', { exact: true }).selectOption('7d');
+    await pickOption(page.getByLabel('Period', { exact: true }), '7d');
     await page.getByRole('button', { name: 'Apply' }).press('Enter');
     await expect(page).toHaveURL(/period=7d/);
     await expect(byEvent.getByRole('row').filter({ hasText: name })).toBeVisible();
 
     // A backwards custom range is refused with a message; the default period is shown.
-    await page.getByLabel('Period', { exact: true }).selectOption('custom');
+    await pickOption(page.getByLabel('Period', { exact: true }), 'custom');
     await page.getByLabel('From', { exact: true }).fill('2027-02-10');
     await page.getByLabel('To', { exact: true }).fill('2027-02-01');
     await page.getByRole('button', { name: 'Apply' }).click();
@@ -391,14 +398,14 @@ test.describe('reports and dashboard (M1.12)', () => {
     await expectAccessible(page);
 
     // A past period with no sales.
-    await page.getByLabel('Period', { exact: true }).selectOption('custom');
+    await pickOption(page.getByLabel('Period', { exact: true }), 'custom');
     await page.getByLabel('From', { exact: true }).fill('2020-01-01');
     await page.getByLabel('To', { exact: true }).fill('2020-01-31');
     await page.getByRole('button', { name: 'Apply' }).click();
     await expect(page.getByText('No sales in this period', { exact: true })).toBeVisible();
     await expect(sales).toContainText('Jan 1, 2020 – Jan 31, 2020');
 
-    await page.getByLabel('Period', { exact: true }).selectOption('all');
+    await pickOption(page.getByLabel('Period', { exact: true }), 'all');
     await page.getByRole('button', { name: 'Apply' }).click();
     await expect(sales).toContainText('All time');
     await expect(byEvent.getByRole('row').filter({ hasText: name })).toBeVisible();

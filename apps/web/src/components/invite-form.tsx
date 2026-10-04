@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, Input } from '@yayatoh/ui';
+import { Alert, Button, Input, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 
 import type { ActionState } from '@/app/[locale]/o/[org]/(org)/team/actions.ts';
@@ -42,13 +42,13 @@ export function InviteForm({
         <label htmlFor="invite-role" className="text-[13px] font-bold text-ink">
           {t('team.role')}
         </label>
-        <select id="invite-role" name="role" defaultValue={defaultRole} className="field">
+        <Select id="invite-role" name="role" defaultValue={defaultRole} className="field">
           {roles.map((r) => (
             <option key={r} value={r}>
               {t(`${labels}.${r}`)}
             </option>
           ))}
-        </select>
+        </Select>
       </div>
       <Button type="submit" disabled={pending}>
         {t('team.invite')}

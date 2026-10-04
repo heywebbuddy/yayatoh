@@ -3,7 +3,7 @@
 import { type FloorplanDoc, hitTest } from '@yayatoh/floorplan';
 import type { AssignSeatState, SeatAssignmentsDto } from '@yayatoh/seating';
 import { activeAdaRule, type SeatingRule } from '@yayatoh/seating/client';
-import { Alert, Button, Card } from '@yayatoh/ui';
+import { Alert, Button, Card, Select } from '@yayatoh/ui';
 import dynamic from 'next/dynamic';
 import { useFormatter, useTranslations } from 'next-intl';
 import {
@@ -89,7 +89,7 @@ export function SeatAssignments({
   const dragged = useRef<string[] | null>(null);
   const pointerDrag = useRef<{ attendeeId: string; name: string; from: Target } | null>(null);
   const plan = useRef<HTMLDivElement>(null);
-  const moveSelect = useRef<HTMLSelectElement>(null);
+  const moveSelect = useRef<HTMLButtonElement>(null);
 
   // Live (M1.7f): seats held, bought or given meanwhile show without a reload.
   const refreshTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -447,11 +447,11 @@ export function SeatAssignments({
                 <label htmlFor="assign-item" className="text-[13px] font-bold text-ink">
                   {t('assign.form.item')}
                 </label>
-                <select
+                <Select
                   id="assign-item"
                   value={itemId}
-                  onChange={(e) => {
-                    setItemId(e.currentTarget.value);
+                  onValueChange={(v) => {
+                    setItemId(v);
                     setSeatId('');
                     setOverride(false);
                   }}
@@ -463,17 +463,17 @@ export function SeatAssignments({
                       {t('assign.form.option', { item: itemName(i), free: i.free, capacity: i.capacity })}
                     </option>
                   ))}
-                </select>
+                </Select>
               </div>
               <div className="flex flex-col gap-1.5">
                 <label htmlFor="assign-seat" className="text-[13px] font-bold text-ink">
                   {t('assign.form.seat')}
                 </label>
-                <select
+                <Select
                   id="assign-seat"
                   value={seatId}
-                  onChange={(e) => {
-                    setSeatId(e.currentTarget.value);
+                  onValueChange={(v) => {
+                    setSeatId(v);
                     setOverride(false);
                   }}
                   disabled={!chosen}
@@ -485,7 +485,7 @@ export function SeatAssignments({
                       {seatOption(s)}
                     </option>
                   ))}
-                </select>
+                </Select>
               </div>
               {seatId && needsConfirm(seatId) ? (
                 <label className="flex min-h-6 items-start gap-2 text-body">
@@ -650,14 +650,14 @@ export function SeatAssignments({
                                   >
                                     {t('assign.form.item')}
                                   </label>
-                                  <select
+                                  <Select
                                     ref={moveSelect}
                                     id={`move-item-${p.attendeeId}`}
                                     value={moving.itemId}
-                                    onChange={(e) =>
+                                    onValueChange={(v) =>
                                       setMoving({
                                         ...moving,
-                                        itemId: e.currentTarget.value,
+                                        itemId: v,
                                         seatId: '',
                                         override: false,
                                       })
@@ -674,7 +674,7 @@ export function SeatAssignments({
                                         })}
                                       </option>
                                     ))}
-                                  </select>
+                                  </Select>
                                 </div>
                                 <div className="flex flex-col gap-1">
                                   <label
@@ -683,12 +683,12 @@ export function SeatAssignments({
                                   >
                                     {t('assign.form.seat')}
                                   </label>
-                                  <select
+                                  <Select
                                     id={`move-seat-${p.attendeeId}`}
                                     value={moving.seatId}
                                     disabled={!target}
-                                    onChange={(e) =>
-                                      setMoving({ ...moving, seatId: e.currentTarget.value, override: false })
+                                    onValueChange={(v) =>
+                                      setMoving({ ...moving, seatId: v, override: false })
                                     }
                                     className={field}
                                   >
@@ -698,7 +698,7 @@ export function SeatAssignments({
                                         {seatOption(s)}
                                       </option>
                                     ))}
-                                  </select>
+                                  </Select>
                                 </div>
                                 {moving.seatId && needsConfirm(moving.seatId) ? (
                                   <label className="flex min-h-6 items-start gap-2 text-body">

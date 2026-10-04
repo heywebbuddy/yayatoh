@@ -14,6 +14,7 @@ import type { MappingState } from '../actions.ts';
 export function MappingForm({
   direction,
   objectType,
+  objectLabel,
   version,
   rules,
   sources,
@@ -23,6 +24,8 @@ export function MappingForm({
 }: {
   direction: 'pull' | 'push';
   objectType: string;
+  /** M6.4d: the object's name, for connectors that sync more than one. */
+  objectLabel?: string | undefined;
   version: number | null;
   rules: readonly MappingRule[];
   sources: readonly FieldSpec[];
@@ -60,6 +63,7 @@ export function MappingForm({
     <Card className="flex flex-col gap-4">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <h3 id={headingId} className="m-0 text-section">
+          {objectLabel ? `${objectLabel}: ` : ''}
           {t(`title.${direction}`)}
         </h3>
         {version ? <span className="text-caption text-ink-2">{t('version', { version })}</span> : null}
@@ -93,7 +97,7 @@ export function MappingForm({
                 name={`source.${i}`}
                 label={t('source')}
                 value={row.source}
-                onChange={(e) => setRow(i, { source: e.target.value })}
+                onValueChange={(v) => setRow(i, { source: v })}
                 error={error}
               >
                 <option value="">{t('notMapped')}</option>
@@ -108,7 +112,7 @@ export function MappingForm({
                 name={`transform.${i}`}
                 label={t('transform')}
                 value={row.transform}
-                onChange={(e) => setRow(i, { transform: e.target.value as MappingRule['transform'] })}
+                onValueChange={(v) => setRow(i, { transform: v as MappingRule['transform'] })}
               >
                 {TRANSFORMS.map((x) => (
                   <option key={x} value={x}>

@@ -44,7 +44,9 @@ export default async function SeatingRulesPage({
         base={base}
         active="rules"
         finder={data.modules.has('seat_finder')}
+        guests={data.modules.has('guests')}
         selection={data.modules.has('advanced_seating')}
+        solver={data.modules.has('guests') && data.modules.has('ai_seating')}
       />
       {!hasPlan ? (
         <EmptyState

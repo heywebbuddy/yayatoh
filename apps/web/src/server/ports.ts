@@ -1,12 +1,13 @@
 import { attendeesContactOwner } from '@yayatoh/attendees';
 import { participationContactOwner } from '@yayatoh/audiences';
 import { automationsContactOwner } from '@yayatoh/automations';
-import { billingEntitlements } from '@yayatoh/billing';
+import { billingEntitlements, billingReadOnlyGate, composeOrgGates } from '@yayatoh/billing';
 import { campaignsContactOwner } from '@yayatoh/campaigns';
-import { checkinContactOwner } from '@yayatoh/checkin';
+import { checkinContactOwner, setSessionAccessSource } from '@yayatoh/checkin';
 import { registerContactReferenceOwners } from '@yayatoh/crm';
+import { engagementContactOwner } from '@yayatoh/engagement';
 import { eventRolesOf } from '@yayatoh/events';
-import { guestsContactOwner } from '@yayatoh/guests';
+import { guestsContactOwner, guestsOccupantDirectory, guestsPartyCredentials } from '@yayatoh/guests';
 import { notificationsContactOwner } from '@yayatoh/notifications';
 import { ordersContactOwner } from '@yayatoh/orders';
 import {
@@ -16,23 +17,37 @@ import {
   setKeyVault,
 } from '@yayatoh/platform';
 import { defaultResolver } from '@yayatoh/platform/ssrf';
+import { registrationSessionAccess } from '@yayatoh/registration';
+import { setOccupantDirectory, setPartyCredentials } from '@yayatoh/seating';
+import { configureSso, ssoRuntimeFromEnv } from '@yayatoh/sso';
 import { surveysContactOwner } from '@yayatoh/surveys';
-import { createOrgAuthorizer, orgStatusGate } from '@yayatoh/tenancy';
+import { createOrgAuthorizer, memberRoleTx, orgStatusGate } from '@yayatoh/tenancy';
+import { configureVirtual, videoProviderFromEnv } from '@yayatoh/virtual';
 import { configureWebhooks, fakeResolver, webhookPublisherFromEnv } from '@yayatoh/webhooks';
 import { DATA_SUBJECT_CONTRIBUTORS } from './data-subjects.ts';
+import { fakeIdpSeed } from './sso-seed.ts';
 
 /** Composition root for the web transport (Server Actions / RSC). Same ports as /v1. */
 export const ports = createCommandPorts({
   entitlements: billingEntitlements,
   authorizer: createOrgAuthorizer({ eventRoles: eventRolesOf }),
   // A suspended or terminated org is read-only for its members and the public (M1.3f).
-  orgGate: orgStatusGate,
+  // M6.6b: after a failed renewal and its grace period, the org's members and API keys are
+  // read-only until it pays (billing dormant: no read at all).
+  orgGate: composeOrgGates(orgStatusGate, billingReadOnlyGate({ memberRole: memberRoleTx })),
 });
 
 // AWS KMS arrives with the owner's AWS account; until then dev/preview/CI use the local vault.
 const localKms = process.env.LOCAL_KMS_KEY;
 if (localKms) setKeyVault(localKeyVault(localKms));
 
+// M4.3a: seating reaches the guest list through its OccupantDirectory port (same tier).
+setOccupantDirectory(guestsOccupantDirectory);
+// M4.4a: the guest seat finder checks party links and PINs through its PartyCredentials port.
+setPartyCredentials(guestsPartyCredentials);
+// M5.6a: session doors learn registrations and enrollments from the registration module
+// (a higher tier than check-in, so it is plugged in here).
+setSessionAccessSource(registrationSessionAccess);
 // M6.1c: data-subject requests run every module's contributor (find, export, erase).
 registerDataSubjectContributors(DATA_SUBJECT_CONTRIBUTORS);
 
@@ -47,6 +62,7 @@ registerContactReferenceOwners([
   surveysContactOwner,
   campaignsContactOwner,
   automationsContactOwner,
+  engagementContactOwner,
   participationContactOwner,
 ]);
 // M6.3b: outbound webhooks through Svix, or the fake (dev, preview, CI) until the owner's account.
@@ -58,3 +74,15 @@ configureWebhooks({
   publisher: webhookPublisher,
   resolver: webhookPublisher?.name === 'fake' ? fakeResolver : defaultResolver,
 });
+
+// M6.5a: single sign-on and SCIM: the fake IdP, DNS and metadata (dev, preview, CI) or real DNS
+// and metadata with no IdP adapter (production, until the owner's IdP test tenant: SSO is off).
+configureSso(
+  ssoRuntimeFromEnv(process.env, {
+    seed: fakeIdpSeed(),
+    idpUrl: `${process.env.BETTER_AUTH_URL ?? 'http://localhost:3000'}/auth/sso/fake`,
+  }),
+);
+
+// M6.9a: video for virtual sessions (the Mux fake outside production until the owner's account).
+configureVirtual({ provider: videoProviderFromEnv(process.env) });

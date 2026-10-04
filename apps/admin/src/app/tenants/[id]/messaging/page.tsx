@@ -6,7 +6,7 @@ import {
   sendingSetupQuery,
 } from '@yayatoh/notifications';
 import { getOrganizationQuery, type OrganizationDto } from '@yayatoh/tenancy';
-import { Alert, Button, Card, PageHeader, StatusDot, Table } from '@yayatoh/ui';
+import { Alert, Button, Card, PageHeader, Select, StatusDot, Table } from '@yayatoh/ui';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
@@ -184,10 +184,10 @@ export default async function TenantMessagingPage({
                 <label htmlFor="wa-route" className="text-[13px] font-bold text-ink">
                   {t('waRoute')}
                 </label>
-                <select id="wa-route" name="route" className={field}>
+                <Select id="wa-route" name="route" className={field}>
                   <option value="cloud">{t('routeCloud')}</option>
                   <option value="gateway">{t('routeGateway')}</option>
-                </select>
+                </Select>
               </div>
               <div className="flex min-w-60 flex-1 flex-col gap-1.5">
                 <label htmlFor="wa-ref" className="text-[13px] font-bold text-ink">

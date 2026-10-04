@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button } from '@yayatoh/ui';
+import { Alert, Button, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import {
   createContext,
@@ -145,13 +145,13 @@ export function MemberControls({
           <label htmlFor={selectId} className="sr-only">
             {t('team.roleFor', { name })}
           </label>
-          <select id={selectId} name="role" defaultValue={role} key={role} className="field field-sm">
+          <Select id={selectId} name="role" defaultValue={role} key={role} className="field field-sm">
             {roles.map((r) => (
               <option key={r} value={r}>
                 {t(`${labels}.${r}`)}
               </option>
             ))}
-          </select>
+          </Select>
           <Button
             type="submit"
             variant="secondary"

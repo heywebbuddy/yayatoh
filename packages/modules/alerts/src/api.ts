@@ -47,6 +47,8 @@ export const AlertDto = z.object({
   snoozedUntil: z.date().nullable(),
   resolvedAt: z.date().nullable(),
   reopenCount: z.int(),
+  /** M6.2b: an organizer rule's name (custom rules); null for the built-in rules. */
+  title: z.string().nullable(),
 });
 export type AlertDto = z.infer<typeof AlertDto>;
 export const alertSerializer = defineSerializer('alerts.alert', AlertDto);
@@ -106,6 +108,7 @@ async function toDtosTx(tx: TenantTx, rows: (typeof alerts.$inferSelect)[]): Pro
         snoozedUntil: r.snoozedUntil,
         resolvedAt: r.resolvedAt,
         reopenCount: r.reopenCount,
+        title: r.title ?? null,
       }),
     ];
   });

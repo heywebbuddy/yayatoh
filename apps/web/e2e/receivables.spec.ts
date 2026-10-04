@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { continueToPayment, expectAccessible, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, pickOption, signIn } from './helpers.ts';
 
 /** `YYYY-MM-DDTHH:mm` wall-clock time in Chicago, `offsetH` hours from now (for datetime-local). */
 function chicago(offsetH: number): string {
@@ -33,7 +33,7 @@ test.describe('receivables (M1.6e)', () => {
     const eventName = `Receivable Night ${stamp}`;
     await page.goto('/o/lakeside-events/events/new');
     await page.getByLabel('Event name', { exact: true }).fill(eventName);
-    await page.getByLabel('Time zone').selectOption('America/Chicago');
+    await pickOption(page.getByLabel('Time zone'), 'America/Chicago');
     await page.getByLabel('Starts', { exact: true }).fill(chicago(-1));
     await page.getByLabel('Ends', { exact: true }).fill(chicago(3));
     await page.getByRole('button', { name: 'Create draft' }).click();
@@ -51,7 +51,7 @@ test.describe('receivables (M1.6e)', () => {
 
     const guest = await (await browser.newContext()).newPage();
     await guest.goto(`/events/${slug}`);
-    await guest.getByLabel(`Quantity — ${pass}`).selectOption('2');
+    await pickOption(guest.getByLabel(`Quantity — ${pass}`), '2');
     await guest.getByLabel('Full name').fill(buyer);
     await guest.getByLabel('Email for your tickets').fill(`rae+${stamp}@example.test`);
     await continueToPayment(guest, `rae+${stamp}@example.test`);
@@ -68,7 +68,7 @@ test.describe('receivables (M1.6e)', () => {
     await page.reload();
     await page.getByRole('link', { name: buyer }).click();
     const form = page.getByRole('region', { name: 'Refund', exact: true });
-    await form.getByLabel('Reason').selectOption('duplicate');
+    await pickOption(form.getByLabel('Reason'), 'duplicate');
     await form
       .getByRole('checkbox', { name: new RegExp(`#\\d+ · ${pass}`) })
       .first()

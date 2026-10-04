@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
-import { expectAccessible, signIn } from './helpers.ts';
+import { expectAccessible, pickOption, signIn } from './helpers.ts';
 
 /**
  * M5.1b multi-page conditional registration forms: the organizer builds a three-page form (a
@@ -24,8 +24,8 @@ let eventName = '';
 async function conference(page: Page, name: string) {
   await page.goto(`/o/${ORG}/events/new`);
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Event type').selectOption('conference');
-  await page.getByLabel('Time zone').selectOption('America/Chicago');
+  await pickOption(page.getByLabel('Event type'), 'conference');
+  await pickOption(page.getByLabel('Time zone'), 'America/Chicago');
   const d = new Date(Date.now() + 40 * 86_400_000).toISOString().slice(0, 10);
   await page.getByLabel('Starts', { exact: true }).fill(`${d}T09:00`);
   await page.getByLabel('Ends', { exact: true }).fill(`${d}T18:00`);
@@ -61,7 +61,7 @@ async function addQuestion(
 ) {
   const add = card.locator('details').filter({ hasText: `Add a question to ${title}` });
   if ((await add.getAttribute('open')) === null) await add.locator('summary').click();
-  await add.getByLabel('Question type').selectOption({ label: q.type });
+  await pickOption(add.getByLabel('Question type'), { label: q.type });
   if (q.label) await add.getByLabel('Question', { exact: true }).fill(q.label);
   if (q.options) await add.getByLabel('Choices').fill(q.options);
   if (q.required) await add.getByRole('checkbox', { name: 'Required' }).check();
@@ -177,8 +177,8 @@ test('the organizer builds a three-page form with a type-specific page, by keybo
   // Keyboard only: the "Only when" radio, then the question, comparison and answer selects.
   await ws.getByRole('radio', { name: 'Only when an earlier answer matches' }).focus();
   await page.keyboard.press('Space');
-  await ws.getByLabel('Question', { exact: true }).selectOption({ label: 'Joining workshops?' });
-  await ws.getByLabel('Answer', { exact: true }).selectOption({ label: 'Yes' });
+  await pickOption(ws.getByLabel('Question', { exact: true }), { label: 'Joining workshops?' });
+  await pickOption(ws.getByLabel('Answer', { exact: true }), { label: 'Yes' });
   await ws.getByRole('button', { name: 'Save page' }).focus();
   await page.keyboard.press('Enter');
   await expect(ws.getByText('Saved as a new version.')).toBeVisible();
@@ -209,12 +209,12 @@ test('the organizer builds a three-page form with a type-specific page, by keybo
 
   // Preview per registration type.
   const preview = page.getByRole('region', { name: 'Preview by registration type' });
-  await preview.getByLabel('Preview as').selectOption({ label: 'Student' });
+  await pickOption(preview.getByLabel('Preview as'), { label: 'Student' });
   await expect(
     preview.getByRole('list', { name: 'Pages for Student' }).getByText('Page 2: Workshops'),
   ).toBeVisible();
   await expect(preview.getByText('Membership')).toHaveCount(0);
-  await preview.getByLabel('Preview as').selectOption({ label: 'Member' });
+  await pickOption(preview.getByLabel('Preview as'), { label: 'Member' });
   await expect(preview.getByText('Page 2: Membership')).toBeVisible();
   await expect(preview.getByText('Page 3: Workshops')).toBeVisible();
   await expectAccessible(page);
@@ -259,7 +259,7 @@ test('a member saves, resumes from the emailed link and submits', async ({ brows
   await expectAccessible(page);
   // Keyboard only from here: type, tick with Space, Enter submits "Continue".
   await page.getByLabel('Company (required)').fill('Acme Corp');
-  await page.getByLabel('Job title', { exact: true }).selectOption('Other…');
+  await pickOption(page.getByLabel('Job title', { exact: true }), 'Other…');
   await page.getByLabel('Your job title').fill('Chief Happiness Officer');
   await page.getByRole('checkbox', { name: 'Joining workshops?' }).focus();
   await page.keyboard.press('Space');
@@ -295,7 +295,7 @@ test('a member saves, resumes from the emailed link and submits', async ({ brows
   await expect(consent).not.toBeChecked();
   await resumed.getByRole('button', { name: 'Submit' }).click();
   await expect(resumed.getByRole('alert').getByText('Answer this question to continue.')).toBeVisible();
-  await resumed.getByLabel('Track (required)').selectOption({ label: 'Data' });
+  await pickOption(resumed.getByLabel('Track (required)'), { label: 'Data' });
   await consent.focus();
   await resumed.keyboard.press('Space');
   await expectAccessible(resumed);
@@ -327,7 +327,7 @@ test('a student sees another path: the member page never shows', async ({ browse
   await expect(page.getByRole('heading', { name: 'Workshops', level: 2 })).toBeFocused();
   await expect(page.getByText('Step 2 of 2')).toBeVisible();
   await expect(page.getByText('Membership')).toHaveCount(0);
-  await page.getByLabel('Track (required)').selectOption({ label: 'Leadership' });
+  await pickOption(page.getByLabel('Track (required)'), { label: 'Leadership' });
   await page.getByRole('button', { name: 'Submit' }).click();
   await expect(page.getByRole('heading', { name: "Thank you, you're registered" })).toBeVisible();
 });

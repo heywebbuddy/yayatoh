@@ -54,6 +54,11 @@ export interface PortalPrincipal {
   readonly email: string;
   /** The event's end + 90 days: the account stops working then. */
   readonly expiresAt: Date;
+  /**
+   * M5.6b: when this browser's session was signed in (code or magic link). A sign-in is a
+   * re-authentication, so commands that need step-up pass for 10 minutes after it.
+   */
+  readonly signedInAt?: Date | null;
 }
 
 export interface PortalLimits {
@@ -325,7 +330,13 @@ export async function portalPrincipalTx(tx: TenantTx, ctx: Ctx): Promise<PortalP
 
 /** A context for a signed-in portal principal (the web app builds its commands' ctx with it). */
 export const portalCtx = (p: PortalPrincipal, locale = 'en', now = new Date()): Ctx =>
-  createCtx({ orgId: p.orgId, actor: { type: 'portal', accountId: p.accountId, role: p.role }, locale, now });
+  createCtx({
+    orgId: p.orgId,
+    actor: { type: 'portal', accountId: p.accountId, role: p.role },
+    locale,
+    now,
+    stepUpAt: p.signedInAt ?? null,
+  });
 
 /* --------------------------------------------------------------------- invitations ---- */
 
@@ -652,6 +663,8 @@ export async function createPortalSession(
       tokenHash: portalSecretHash(appTokenSecret(), 'session', secret),
       host: input.host.toLowerCase(),
       expiresAt,
+      // The sign-in time is the session's step-up moment (M5.6b): the caller's clock.
+      createdAt: now,
     });
     await tx
       .update(portalAccounts)
@@ -674,7 +687,7 @@ export async function portalPrincipalBySession(
   if (!t) return null;
   return withTenant(systemCtx(t.orgId), async (tx) => {
     const [s] = await tx
-      .select({ accountId: portalSessions.accountId })
+      .select({ accountId: portalSessions.accountId, createdAt: portalSessions.createdAt })
       .from(portalSessions)
       .where(
         and(
@@ -686,7 +699,7 @@ export async function portalPrincipalBySession(
       );
     if (!s) return null;
     const r = await accountTx(tx, s.accountId);
-    return r && stateOf(r, now) === 'ok' ? toPrincipal(r) : null;
+    return r && stateOf(r, now) === 'ok' ? { ...toPrincipal(r), signedInAt: s.createdAt } : null;
   });
 }
 
@@ -761,4 +774,18 @@ export function portalInviteMailer(deps: { notifier: Notifier; appOrigin: string
       });
     },
   });
+}
+
+/**
+ * M5.6b step-up for a signed-in portal person: their current invitation token, so the one sign-in
+ * flow can email them a fresh code (a new sign-in is the re-authentication). Null when gone.
+ */
+export async function portalStepUpInviteToken(orgId: string, accountId: string): Promise<string | null> {
+  const [a] = await withTenant(systemCtx(orgId), (tx) =>
+    tx
+      .select({ v: portalAccounts.inviteVersion })
+      .from(portalAccounts)
+      .where(and(eq(portalAccounts.id, accountId), isNull(portalAccounts.revokedAt))),
+  );
+  return a ? portalInviteToken(orgId, accountId, a.v) : null;
 }

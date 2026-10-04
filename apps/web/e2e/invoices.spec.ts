@@ -1,5 +1,11 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { expectAccessible, expectAccessibleBothModes, lastEmailedCode, signIn } from './helpers.ts';
+import {
+  expectAccessible,
+  expectAccessibleBothModes,
+  lastEmailedCode,
+  pickOption,
+  signIn,
+} from './helpers.ts';
 
 /**
  * M5.1d invoices, PO and pay later: the organizer turns on pay later with a required PO number for
@@ -95,8 +101,8 @@ test('the organizer turns on pay later with a required PO number, by keyboard', 
   // A conference starting in two hours: the door is open and the invoice is due today.
   await page.goto(`/o/${ORG}/events/new`);
   await page.getByLabel('Event name', { exact: true }).fill(`Invoices ${s}`);
-  await page.getByLabel('Event type').selectOption('conference');
-  await page.getByLabel('Time zone').selectOption(TZ);
+  await pickOption(page.getByLabel('Event type'), 'conference');
+  await pickOption(page.getByLabel('Time zone'), TZ);
   await page.getByLabel('Starts', { exact: true }).fill(chicago(2));
   await page.getByLabel('Ends', { exact: true }).fill(chicago(10));
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -119,8 +125,8 @@ test('the organizer turns on pay later with a required PO number, by keyboard', 
   const summary = card.getByText('Change pay later for Member');
   await summary.focus();
   await page.keyboard.press('Enter');
-  await card.getByLabel('Pay later by invoice').selectOption('on');
-  await card.getByLabel('PO number').selectOption('required');
+  await pickOption(card.getByLabel('Pay later by invoice'), 'on');
+  await pickOption(card.getByLabel('PO number'), 'required');
   await card.getByLabel('PO number').press('Tab');
   await expect(card.getByRole('button', { name: 'Save' })).toBeFocused();
   await page.keyboard.press('Enter');
@@ -278,7 +284,7 @@ test('finance records the rest as a wire: the invoice is paid and stays paid aft
   await form.getByRole('button', { name: 'Record payment' }).click();
   await expect(form.getByText('That is more than the balance due.')).toBeVisible();
   await form.getByLabel('Amount (USD)').fill('600');
-  await form.getByLabel('How it was paid').selectOption('wire');
+  await pickOption(form.getByLabel('How it was paid'), 'wire');
   await form.getByLabel('Reference').fill(`WIRE-${s}`);
   await form.getByRole('button', { name: 'Record payment' }).click();
   // Paid in full: the panel says so at once (the record form leaves with the balance).
@@ -342,8 +348,7 @@ test('the invoice reminder journey comes from its template', async ({ page }) =>
   await page.goto(`/o/${ORG}/journeys/new`);
   await page.getByLabel('Journey name').fill(`Reminders ${s}`);
   const scope = page.getByLabel('Event or series');
-  const value = await scope.locator('option', { hasText: `Invoices ${s}` }).getAttribute('value');
-  await scope.selectOption(value ?? '');
+  await pickOption(scope, { label: `Invoices ${s}` });
   await page.getByRole('radio', { name: /^Invoice reminders/ }).check();
   await page.getByRole('button', { name: 'Create journey' }).click();
   await expect(page).toHaveURL(/\/journeys\/[0-9a-f-]{36}\?created=1/);

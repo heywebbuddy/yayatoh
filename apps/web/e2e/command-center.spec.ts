@@ -1,5 +1,12 @@
 import { type Browser, type BrowserContext, expect, type Page, test } from '@playwright/test';
-import { continueToPayment, expectAccessible, newUser, signIn } from './helpers.ts';
+import {
+  continueToPayment,
+  expectAccessible,
+  newUser,
+  pickOption,
+  pickWithKeyboard,
+  signIn,
+} from './helpers.ts';
 
 const PORT = Number(process.env.E2E_PORT ?? 3100);
 const VIEWER = 'jordan@lakeside.test';
@@ -33,7 +40,7 @@ async function newEvent(
 ) {
   await page.goto(`/o/${org}/events/new`);
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Time zone').selectOption('America/Chicago');
+  await pickOption(page.getByLabel('Time zone'), 'America/Chicago');
   await page.getByLabel('Starts', { exact: true }).fill(chicago(startH));
   await page.getByLabel('Ends', { exact: true }).fill(chicago(endH));
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -53,7 +60,7 @@ async function newEvent(
     const guest = await guestContext.newPage();
     const email = `cc+${stamp()}@example.test`;
     await guest.goto(`/events/${base.split('/').pop()}`);
-    await guest.getByLabel('Quantity — Door pass').selectOption(String(n));
+    await pickOption(guest.getByLabel('Quantity — Door pass'), String(n));
     await guest.getByLabel('Full name').fill(`Guest ${name}`);
     await guest.getByLabel('Email for your tickets').fill(email);
     await continueToPayment(guest, email);
@@ -111,7 +118,17 @@ test.describe('Command Center (M3.2a)', () => {
     await expect(page.getByText('Owner view')).toBeVisible();
     await expect(page.getByTestId('cc-mode')).toHaveText('Planning');
     await expect(page.getByText(/^Pre-show starts /)).toBeVisible();
-    expect(await shown(page)).toEqual(['readiness', 'sales', 'tickets', 'alerts', 'timeline']);
+    // M5.9a: a conference's planning layout adds session fill, exhibitors and sponsors.
+    expect(await shown(page)).toEqual([
+      'readiness',
+      'sales',
+      'tickets',
+      'alerts',
+      'sessionFill',
+      'exhibitorActivity',
+      'sponsorActivity',
+      'timeline',
+    ]);
     // Revenue in the org currency, minor units formatted; readiness with deep links to fix it.
     await expect(page.getByTestId('cc-sales-total')).toHaveText('$0.00');
     await expect(page.getByTestId('cc-tickets-sold')).toHaveText('0');
@@ -147,13 +164,29 @@ test.describe('Command Center (M3.2a)', () => {
       'Coming up hidden. Layout saved.',
     );
     await expect(page.getByRole('button', { name: 'Show Coming up' })).toBeFocused();
-    expect(await shown(page)).toEqual(['tickets', 'readiness', 'sales', 'alerts']);
+    expect(await shown(page)).toEqual([
+      'tickets',
+      'readiness',
+      'sales',
+      'alerts',
+      'sessionFill',
+      'exhibitorActivity',
+      'sponsorActivity',
+    ]);
     await expectAccessible(page);
 
     // Persisted for this member and event.
     await page.reload();
     await expect(page.getByTestId('command-center')).toHaveAttribute('data-mode', 'planning');
-    expect(await shown(page)).toEqual(['tickets', 'readiness', 'sales', 'alerts']);
+    expect(await shown(page)).toEqual([
+      'tickets',
+      'readiness',
+      'sales',
+      'alerts',
+      'sessionFill',
+      'exhibitorActivity',
+      'sponsorActivity',
+    ]);
     await page.getByRole('button', { name: 'Customize layout' }).click();
     await expect(
       page.getByRole('region', { name: 'Hidden widgets' }).getByRole('button', { name: 'Show Coming up' }),
@@ -163,11 +196,30 @@ test.describe('Command Center (M3.2a)', () => {
     await page.getByRole('button', { name: 'Show Coming up' }).focus();
     await page.keyboard.press('Enter');
     await expect(page.getByText('Coming up shown. Layout saved.')).toBeVisible();
-    expect(await shown(page)).toEqual(['tickets', 'readiness', 'sales', 'alerts', 'timeline']);
+    expect(await shown(page)).toEqual([
+      'tickets',
+      'readiness',
+      'sales',
+      'alerts',
+      'sessionFill',
+      'exhibitorActivity',
+      'sponsorActivity',
+      'timeline',
+    ]);
     await page.getByRole('button', { name: 'Reset to default' }).click();
     await expect(page.getByText('Layout reset to default.')).toBeVisible();
     await page.reload();
-    expect(await shown(page)).toEqual(['readiness', 'sales', 'tickets', 'alerts', 'timeline']);
+    // M5.9a: a conference's planning layout adds session fill, exhibitors and sponsors.
+    expect(await shown(page)).toEqual([
+      'readiness',
+      'sales',
+      'tickets',
+      'alerts',
+      'sessionFill',
+      'exhibitorActivity',
+      'sponsorActivity',
+      'timeline',
+    ]);
 
     // Arabic, right to left.
     await page.goto(`/ar${base}/command-center`);
@@ -192,7 +244,7 @@ test.describe('Command Center (M3.2a)', () => {
     await newUser(door, { join: ['lakeside-events:viewer'], name });
     await page.goto(`${base}/onsite/staff`);
     const add = page.getByRole('region', { name: 'Add door staff' });
-    await add.getByLabel('Team member').selectOption({ label: name });
+    await pickOption(add.getByLabel('Team member'), { label: name });
     await add.getByRole('button', { name: 'Add door staff' }).click();
     await expect(add.getByRole('status')).toHaveText('Saved.');
 
@@ -206,6 +258,8 @@ test.describe('Command Center (M3.2a)', () => {
       'devices',
       'seatFill',
       'alerts',
+      // M5.9a: a conference's session rooms, live.
+      'sessionAttendance',
       // M3.3a live mode: the feed, speed, capacity, the duplicate/invalid monitor.
       'liveFeed',
       'checkinSpeed',
@@ -273,6 +327,7 @@ test.describe('Command Center (M3.2a)', () => {
       'Devices online',
       'Seat fill',
       'Alerts',
+      'Session rooms',
       'Live feed',
       'Check-in speed',
       'Capacity',
@@ -343,9 +398,8 @@ test.describe('Command Center (M3.2a)', () => {
     await page.reload();
     await expect(page.getByTestId('cc-mode')).toHaveText('Planning');
     const select = page.getByLabel('Set the mode');
-    await expect(select.locator('option:checked')).toHaveText('Automatic (Planning)');
-    await select.focus();
-    await select.selectOption('live');
+    await expect(select).toHaveText('Automatic (Planning)');
+    await pickWithKeyboard(select, 'live');
     await page.getByRole('button', { name: 'Set mode' }).focus();
     await page.keyboard.press('Enter');
     await expect(page.getByText('Mode updated.')).toBeVisible();
@@ -366,7 +420,7 @@ test.describe('Command Center (M3.2a)', () => {
     await expect(page).toHaveURL(new RegExp(`${base}/command-center$`));
 
     // Back to automatic.
-    await page.getByLabel('Set the mode').selectOption('auto');
+    await pickOption(page.getByLabel('Set the mode'), 'auto');
     await page.getByRole('button', { name: 'Set mode' }).click();
     await expect(page.getByText('Mode updated.')).toBeVisible();
     await expect(page.getByTestId('cc-mode')).toHaveText('Planning');

@@ -17,6 +17,7 @@ import { routing } from './i18n/routing.ts';
 import { captureLanding } from './lib/attribution-capture.ts';
 import { FRONT_DOOR_ROUTE_HEADER, frontDoor } from './lib/front-door/index.ts';
 import { bareHost, classifyHost } from './lib/hosts.ts';
+import { INTL_SCOPE_HEADER, intlScopeOf } from './lib/intl-scope.ts';
 import { robotsHeader } from './lib/seo/robots.ts';
 import { localizedPath } from './lib/seo/urls.ts';
 import { TtlCache } from './lib/ttl-cache.ts';
@@ -120,6 +121,10 @@ export default async function proxy(req: NextRequest, event?: NextFetchEvent): P
   forwarded.delete(FRONT_DOOR_ROUTE_HEADER);
   if (door) forwarded.set(FRONT_DOOR_ROUTE_HEADER, door.route);
   forwarded.set('content-security-policy', headers['content-security-policy'] as string);
+  // M4.7a: pages that send their client components only a few message namespaces (never a client's).
+  forwarded.delete(INTL_SCOPE_HEADER);
+  const intlScope = intlScopeOf(stripLocale(path, routing.locales));
+  if (intlScope) forwarded.set(INTL_SCOPE_HEADER, intlScope);
   // The noindex guard: never-indexed hosts and private pages say so on every response.
   const robots = robotsHeader(kind, stripLocale(path, routing.locales));
   // A first visit gets its device id now, and the request carries it on, so the page or route

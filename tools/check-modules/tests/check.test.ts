@@ -52,6 +52,17 @@ describe('check-modules gate canaries', () => {
     ]);
   });
 
+  it('native selects and date/time inputs fail outside the UI kit (U1 no-native-select)', () => {
+    const v = checkModules(here('../canaries/native-select')).filter((x) => x.rule === 'no-native-select');
+    expect(v.map((x) => x.file).sort()).toEqual([
+      'apps/admin/src/dates.tsx',
+      'apps/admin/src/dates.tsx',
+      'apps/admin/src/dates.tsx',
+      'apps/web/src/select.tsx',
+    ]);
+    expect(v.find((x) => x.file === 'apps/web/src/select.tsx')?.message).toContain('Select');
+  });
+
   it('the CLI exits non-zero on a canary and zero on the repo', () => {
     const cli = here('../cli.ts');
     expect(() =>

@@ -1,5 +1,5 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { continueToPayment, expectAccessible, newUser } from './helpers.ts';
+import { continueToPayment, expectAccessible, expectPicked, newUser, pickOption } from './helpers.ts';
 
 /**
  * M3.7a journeys: create the vision journey from the template, switch it on, buy a ticket, see the
@@ -35,7 +35,7 @@ async function ownOrg(page: Page): Promise<string> {
 async function eventWithPass(page: Page, org: string, name: string) {
   await page.goto(`/o/${org}/events/new`);
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Time zone').selectOption('America/Chicago');
+  await pickOption(page.getByLabel('Time zone'), 'America/Chicago');
   const d = new Date(Date.now() + 30 * 86_400_000).toISOString().slice(0, 10);
   await page.getByLabel('Starts', { exact: true }).fill(`${d}T19:00`);
   await page.getByLabel('Ends', { exact: true }).fill(`${d}T23:00`);
@@ -57,7 +57,7 @@ async function eventWithPass(page: Page, org: string, name: string) {
 async function buy(browser: Browser, slug: string, name: string, email: string) {
   const guest = await (await browser.newContext()).newPage();
   await guest.goto(`/events/${slug}`);
-  await guest.getByLabel('Quantity — Pass').selectOption('1');
+  await pickOption(guest.getByLabel('Quantity — Pass'), '1');
   await guest.getByLabel('Full name').fill(name);
   await guest.getByLabel('Email for your tickets').fill(email);
   await continueToPayment(guest, email);
@@ -97,8 +97,7 @@ test.describe('journeys (M3.7a)', () => {
     await expect(page.getByText('Choose an event or series.')).toBeVisible();
     await page.getByLabel('Journey name').fill(' ');
     const scope = page.getByLabel('Event or series');
-    const option = await scope.locator('option', { hasText: eventName }).getAttribute('value');
-    await scope.selectOption(option as string);
+    await pickOption(scope, { label: eventName });
     await page.getByRole('button', { name: 'Create journey' }).click();
     await expect(page.getByText('Enter a name (up to 120 characters).')).toBeVisible();
     await page.getByLabel('Journey name').fill(`Welcome ${s}`);
@@ -116,7 +115,7 @@ test.describe('journeys (M3.7a)', () => {
     ]);
     const actions = page.getByLabel('Do', { exact: true });
     for (const [i, v] of ['email', 'email', 'sms', 'push', 'survey'].entries())
-      await expect(actions.nth(i)).toHaveValue(v);
+      await expectPicked(actions.nth(i), v);
     await expectAccessible(page);
 
     // Switch on (keyboard).
@@ -184,11 +183,9 @@ test.describe('journeys (M3.7a)', () => {
     await page.goto(`/o/${org}/journeys/new`);
     await page.getByLabel('Journey name').fill(`Blank ${s}`);
     const scope = page.getByLabel('Event or series');
-    await scope.selectOption(
-      (await scope.locator('option', { hasText: eventName }).getAttribute('value')) as string,
-    );
+    await pickOption(scope, { label: eventName });
     await page.getByRole('radio', { name: /A blank journey/ }).check();
-    await page.getByLabel('People join when they…').selectOption('checked_in');
+    await pickOption(page.getByLabel('People join when they…'), 'checked_in');
     await page.getByRole('button', { name: 'Create journey' }).click();
     await expect(page).toHaveURL(/\/journeys\/[0-9a-f-]{36}\?created=1$/);
     const path = new URL(page.url()).pathname;
@@ -216,13 +213,14 @@ test.describe('journeys (M3.7a)', () => {
     // A second step: a label, with a condition.
     await page.getByRole('button', { name: 'Add step' }).click();
     const step2 = page.getByRole('group', { name: 'Step 2' });
-    await step2.getByLabel('Do', { exact: true }).selectOption('label');
+    await pickOption(step2.getByLabel('Do', { exact: true }), 'label');
     await step2.getByLabel('Label').fill('Came in');
-    await step2.getByLabel('Only if').selectOption('checked_in');
+    await pickOption(step2.getByLabel('Only if'), 'checked_in');
     // Move it up with the keyboard; focus follows the moved step.
     await page.getByRole('button', { name: 'Move step 2 up' }).focus();
     await page.keyboard.press('Enter');
-    await expect(page.getByRole('group', { name: 'Step 1' }).getByLabel('Do', { exact: true })).toHaveValue(
+    await expectPicked(
+      page.getByRole('group', { name: 'Step 1' }).getByLabel('Do', { exact: true }),
       'label',
     );
     await expect(page.getByRole('button', { name: 'Move step 1 down' })).toBeFocused();
@@ -235,7 +233,8 @@ test.describe('journeys (M3.7a)', () => {
     await page.getByRole('button', { name: 'Save journey' }).click();
     await expect(page.getByText('Journey saved.')).toBeVisible();
     await page.reload();
-    await expect(page.getByRole('group', { name: 'Step 1' }).getByLabel('Do', { exact: true })).toHaveValue(
+    await expectPicked(
+      page.getByRole('group', { name: 'Step 1' }).getByLabel('Do', { exact: true }),
       'label',
     );
     await expect(page.getByRole('group', { name: 'Step 1' }).getByLabel('Label')).toHaveValue('Came in');
@@ -306,9 +305,7 @@ async function visionJourneyByValue(page: Page, org: string, eventName: string, 
   await page.goto(`/o/${org}/journeys/new`);
   await page.getByLabel('Journey name').fill(name);
   const scope = page.getByLabel('Event or series');
-  await scope.selectOption(
-    (await scope.locator('option', { hasText: eventName }).getAttribute('value')) as string,
-  );
+  await pickOption(scope, { label: eventName });
   await page.getByRole('button', { name: 'Create journey' }).click();
   await expect(page).toHaveURL(new RegExp(`/o/${org}/journeys/[0-9a-f-]{36}\\?created=1$`));
   return new URL(page.url()).pathname;

@@ -1,6 +1,6 @@
 import { executeQuery } from '@yayatoh/kernel';
 import { roleCan } from '@yayatoh/tenancy';
-import { Chip, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
+import { buttonClass, Chip, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import { listEndpointsQuery } from '@yayatoh/webhooks';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { EndpointForm } from '@/components/webhooks/endpoint-form.tsx';
@@ -74,7 +74,15 @@ export default async function WebhooksPage({
         </p>
       ) : null}
       {endpoints.length === 0 ? (
-        <EmptyState title={t('emptyTitle')} description={t('emptyDescription')} />
+        <EmptyState
+          title={t('emptyTitle')}
+          description={t('emptyDescription')}
+          action={
+            <Link href={`/o/${org}/webhooks#new-endpoint`} className={buttonClass('primary', 'md')}>
+              {t('emptyAction')}
+            </Link>
+          }
+        />
       ) : (
         <Table
           caption={t('listTitle')}
@@ -128,7 +136,9 @@ export default async function WebhooksPage({
           ]}
         />
       )}
-      <EndpointForm action={createEndpointAction.bind(null, org)} groups={TYPE_GROUPS} />
+      <div id="new-endpoint">
+        <EndpointForm action={createEndpointAction.bind(null, org)} groups={TYPE_GROUPS} />
+      </div>
     </>
   );
 }

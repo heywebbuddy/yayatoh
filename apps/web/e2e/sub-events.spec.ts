@@ -1,5 +1,5 @@
 import { expect, type Locator, type Page, test } from '@playwright/test';
-import { expectAccessible, signIn } from './helpers.ts';
+import { expectAccessible, pickOption, signIn } from './helpers.ts';
 import { quickPlan } from './seating-helpers.ts';
 
 /**
@@ -26,8 +26,8 @@ const DAY = chicagoDate(60);
 async function createWedding(page: Page, name: string): Promise<string> {
   await page.goto(`${ORG}/events/new`);
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Event type').selectOption('wedding');
-  await page.getByLabel('Time zone').selectOption(TZ);
+  await pickOption(page.getByLabel('Event type'), 'wedding');
+  await pickOption(page.getByLabel('Time zone'), TZ);
   await page.getByLabel('Starts', { exact: true }).fill(`${DAY}T15:00`);
   await page.getByLabel('Ends', { exact: true }).fill(`${DAY}T23:00`);
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -86,11 +86,11 @@ async function addSubEvent(
 ) {
   const add = addForm(page);
   await add.getByLabel('Name', { exact: true }).fill(s.name);
-  if (s.kind) await add.getByLabel('Kind').selectOption({ label: s.kind });
+  if (s.kind) await pickOption(add.getByLabel('Kind'), { label: s.kind });
   await add.getByLabel('Starts').fill(`${DAY}T${s.start}`);
   await add.getByLabel('Ends').fill(`${DAY}T${s.end}`);
   if (s.place) await add.getByLabel('Place', { exact: true }).fill(s.place);
-  if (s.date !== undefined) await add.getByLabel('Event date').selectOption({ index: s.date });
+  if (s.date !== undefined) await pickOption(add.getByLabel('Event date'), { index: s.date });
   if (s.everyone)
     await add
       .getByRole('checkbox', { name: 'Everyone on the guest list is invited (parties added later too)' })
@@ -109,11 +109,11 @@ const subCard = (page: Page, name: string) => page.getByRole('region', { name, e
 
 async function record(page: Page, guest: string, sub: string, response: string, paper = true) {
   const form = recordForm(page);
-  await form.getByLabel('Guest', { exact: true }).selectOption({ label: guest });
-  await form.getByLabel('Sub-event', { exact: true }).selectOption({ label: sub });
-  await form.getByLabel('Response', { exact: true }).selectOption({ label: response });
+  await pickOption(form.getByLabel('Guest', { exact: true }), { label: guest });
+  await pickOption(form.getByLabel('Sub-event', { exact: true }), { label: sub });
+  await pickOption(form.getByLabel('Response', { exact: true }), { label: response });
   if (paper)
-    await form.getByLabel('Entered from').selectOption({ label: 'Paper reply (entered for the guest)' });
+    await pickOption(form.getByLabel('Entered from'), { label: 'Paper reply (entered for the guest)' });
   await form.getByRole('button', { name: 'Record response' }).click();
 }
 
@@ -311,7 +311,7 @@ test.describe('sub-events and invitations (M4.1c)', () => {
 
     // Filter to the bride's side, then invite everyone shown to the dinner from the bulk bar.
     const filters = page.getByRole('search', { name: 'Filter the invitations' });
-    await filters.getByLabel('Side').selectOption('Bride');
+    await pickOption(filters.getByLabel('Side'), 'Bride');
     await filters.getByRole('button', { name: 'Apply' }).click();
     await expect(page.getByText('Matching the filters: parties 2 · guests 2')).toBeVisible();
     await expect(grid(page).getByRole('rowheader')).toHaveText([
@@ -324,14 +324,14 @@ test.describe('sub-events and invitations (M4.1c)', () => {
     const bulk = page.getByRole('region', { name: 'Change many at once' });
     await bulk.getByRole('button', { name: 'Apply to the guests shown (2)' }).click();
     await expect(bulk.getByText('Choose a sub-event.')).toBeVisible();
-    await bulk.getByLabel('Sub-event').selectOption({ label: 'Dinner' });
+    await pickOption(bulk.getByLabel('Sub-event'), { label: 'Dinner' });
     await bulk.getByRole('button', { name: 'Apply to the guests shown (2)' }).click();
     await expect(bulk.getByText('Invitations updated.')).toBeVisible();
     await expect(cell(page, 'Invite Ada Adams to Dinner')).toBeChecked();
     await expect(cell(page, 'Invite Cy Clark to Dinner')).toBeChecked();
     // Toggling an "everyone" sub-event from the bulk bar is refused with the reason.
-    await bulk.getByLabel('Sub-event').selectOption({ label: 'Ceremony' });
-    await bulk.getByLabel('Change').selectOption({ label: 'Uninvite (clears their responses)' });
+    await pickOption(bulk.getByLabel('Sub-event'), { label: 'Ceremony' });
+    await pickOption(bulk.getByLabel('Change'), { label: 'Uninvite (clears their responses)' });
     await bulk.getByRole('button', { name: 'Apply to the guests shown (2)' }).click();
     await expect(
       bulk.getByText('Everyone is invited to this sub-event. Turn that off in its settings first.'),
@@ -417,7 +417,7 @@ test.describe('sub-events and invitations (M4.1c)', () => {
 
     // Unlinking the reception from its date: it uses the event plan.
     const edit = await open(page, 'Edit Reception');
-    await edit.getByLabel('Event date').selectOption({ label: 'Not linked to a date' });
+    await pickOption(edit.getByLabel('Event date'), { label: 'Not linked to a date' });
     await edit.getByRole('button', { name: 'Save' }).click();
     await expect(edit.getByText('Saved.')).toBeVisible();
     await expect(page.getByTestId('sub-chart-1')).toHaveText('Seating chart: the event plan (seats: 8)');

@@ -21,6 +21,8 @@ import { deviceStateEventTx } from './live.ts';
 import {
   admissions,
   devices,
+  KIOSK_KINDS,
+  type KioskKind,
   STAFF_ALERT_KINDS,
   type StaffAlertKind,
   staffAlertPushes,
@@ -243,6 +245,8 @@ export const SupervisorDeviceDto = z.object({
   checkpointId: z.uuid().nullable(),
   mode: z.enum(['scanner', 'kiosk']),
   kioskCheckpointId: z.uuid().nullable(),
+  /** M4.4b: what the kiosk shows (null on a scanner). */
+  kioskKind: z.enum(KIOSK_KINDS).nullable(),
   /** A requested sync or entrance switch the device has not picked up yet. */
   pending: z.boolean(),
 });
@@ -290,6 +294,7 @@ export function supervisorViewQuery(source: StaffAlertSource) {
           checkpointId: d.checkpointId,
           mode: d.mode as 'scanner' | 'kiosk',
           kioskCheckpointId: d.kioskCheckpointId,
+          kioskKind: d.mode === 'kiosk' ? kioskKindOf(d.kioskKind) : null,
           pending:
             (d.syncRequestedAt !== null && (d.lastSeenAt === null || d.lastSeenAt < d.syncRequestedAt)) ||
             (d.checkpointRequestedAt !== null &&
@@ -455,15 +460,28 @@ export function verifyKioskPin(pin: string, stored: string): boolean {
  */
 export const startKioskCommand = tenantCommand({
   name: 'checkin.startKiosk',
-  input: DeviceAction.extend({ checkpointId: z.uuid().nullable(), pin: KioskPin }),
+  input: DeviceAction.extend({
+    checkpointId: z.uuid().nullable(),
+    pin: KioskPin,
+    /** M4.4b: ticket self check-in (default), guest check-in by name, or the A–Z board. */
+    kind: z.enum(KIOSK_KINDS).default('tickets'),
+  }),
   output: z.object({ ok: z.boolean() }),
   entitlement: 'checkin',
   permission: 'checkin:kiosk',
   handler: async ({ input, ctx, tx }) => {
     await actionableDeviceTx(tx, input.deviceId, input.eventId);
     const entrances = (await checkpointsTx(tx, input.eventId)).filter((c) => c.kind === 'entrance');
+    // The A–Z board admits nobody: it stands at no entrance.
+    if (input.kind === 'board' && input.checkpointId !== null)
+      throw new DomainError('validation_failed', 'The table board stands at no entrance', {
+        field: 'checkpointId',
+      });
     if (
-      input.checkpointId === null ? entrances.length > 0 : !entrances.some((c) => c.id === input.checkpointId)
+      input.kind !== 'board' &&
+      (input.checkpointId === null
+        ? entrances.length > 0
+        : !entrances.some((c) => c.id === input.checkpointId))
     )
       throw new DomainError('validation_failed', 'Choose one of the event’s entrances', {
         field: 'checkpointId',
@@ -477,6 +495,7 @@ export const startKioskCommand = tenantCommand({
         kioskPinHash: hashKioskPin(input.pin),
         kioskStartedAt: ctx.now,
         kioskStartedBy: ctx.actor.type === 'user' ? ctx.actor.userId : null,
+        kioskKind: input.kind,
         updatedAt: ctx.now,
       })
       .where(eq(devices.id, input.deviceId));
@@ -487,7 +506,12 @@ export const startKioskCommand = tenantCommand({
     action: 'device.kiosk_start',
     targetType: 'device',
     targetId: input.deviceId,
-    data: { eventId: input.eventId, deviceId: input.deviceId, checkpointId: input.checkpointId },
+    data: {
+      eventId: input.eventId,
+      deviceId: input.deviceId,
+      checkpointId: input.checkpointId,
+      kind: input.kind,
+    },
   }),
 });
 
@@ -498,6 +522,7 @@ const KIOSK_OFF = {
   kioskPinHash: null,
   kioskStartedAt: null,
   kioskStartedBy: null,
+  kioskKind: null,
 } as const;
 
 export const stopKioskCommand = tenantCommand({
@@ -562,7 +587,13 @@ export interface DeviceDirectives {
     readonly checkpointId: string | null;
     readonly pinHash: string;
     readonly startedAt: Date;
+    readonly kind: KioskKind;
   } | null;
+}
+
+/** A kiosk's kind; kiosks started before M4.4b (null) check tickets in. */
+export function kioskKindOf(v: string | null): KioskKind {
+  return (KIOSK_KINDS as readonly string[]).includes(v ?? '') ? (v as KioskKind) : 'tickets';
 }
 
 /**
@@ -617,6 +648,7 @@ export async function recordDevicePresenceTx(
             checkpointId: d.kioskCheckpointId,
             pinHash: d.kioskPinHash,
             startedAt: d.kioskStartedAt,
+            kind: kioskKindOf(d.kioskKind),
           }
         : null,
   };

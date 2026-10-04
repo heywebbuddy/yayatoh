@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button } from '@yayatoh/ui';
+import { Alert, Button, DateTimePicker, Select, TimeZonePicker } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { type FormEvent, startTransition, useActionState, useId, useState } from 'react';
 import type { LibraryState, StartEventState } from '@/app/[locale]/o/[org]/(org)/seating-library/actions.ts';
@@ -17,13 +17,11 @@ type Field = NonNullable<StartEventState['field']>;
 export function StartEventForm({
   layouts,
   profiles,
-  zones,
   defaults,
   action,
 }: {
   layouts: readonly { readonly id: string; readonly name: string; readonly seatCount: number }[];
   profiles: readonly string[];
-  zones: readonly string[];
   defaults: { layoutId: string; profile: string; timezone: string };
   action: (prev: StartEventState, form: FormData) => Promise<StartEventState>;
 }) {
@@ -61,13 +59,13 @@ export function StartEventForm({
       <div className="grid gap-4 md:grid-cols-2">
         <div className="flex flex-col gap-1.5 md:col-span-2">
           {label('layoutId', t('layout'))}
-          <select defaultValue={defaults.layoutId} className={field} {...attrs('layoutId')}>
+          <Select defaultValue={defaults.layoutId} className={field} {...attrs('layoutId')}>
             {layouts.map((l) => (
               <option key={l.id} value={l.id}>
                 {t('layoutOption', { name: l.name, seats: l.seatCount })}
               </option>
             ))}
-          </select>
+          </Select>
           {err('layoutId')}
         </div>
         <div className="flex flex-col gap-1.5">
@@ -77,36 +75,35 @@ export function StartEventForm({
         </div>
         <div className="flex flex-col gap-1.5">
           {label('profile', t('profile'))}
-          <select defaultValue={defaults.profile} className={field} {...attrs('profile')}>
+          <Select defaultValue={defaults.profile} className={field} {...attrs('profile')}>
             {profiles.map((p) => (
               <option key={p} value={p}>
                 {tr(`profiles.${p}`)}
               </option>
             ))}
-          </select>
+          </Select>
           {err('profile')}
         </div>
         <div className="flex flex-col gap-1.5">
           <label htmlFor={`${id}-timezone`} className="text-caption text-ink-2">
             {t('timezone')}
           </label>
-          <select id={`${id}-timezone`} name="timezone" defaultValue={defaults.timezone} className={field}>
-            {zones.map((z) => (
-              <option key={z} value={z}>
-                {z}
-              </option>
-            ))}
-          </select>
+          <TimeZonePicker
+            id={`${id}-timezone`}
+            name="timezone"
+            defaultValue={defaults.timezone}
+            className={field}
+          />
         </div>
         <div className="hidden md:block" />
         <div className="flex flex-col gap-1.5">
           {label('startsAt', t('startsAt'))}
-          <input type="datetime-local" required className={field} {...attrs('startsAt')} />
+          <DateTimePicker required className={field} {...attrs('startsAt')} />
           {err('startsAt')}
         </div>
         <div className="flex flex-col gap-1.5">
           {label('endsAt', t('endsAt'))}
-          <input type="datetime-local" required className={field} {...attrs('endsAt')} />
+          <DateTimePicker required className={field} {...attrs('endsAt')} />
           {err('endsAt')}
         </div>
       </div>

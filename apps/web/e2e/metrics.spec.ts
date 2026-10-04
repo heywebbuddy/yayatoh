@@ -1,5 +1,5 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { continueToPayment, expectAccessible, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, pickOption, signIn } from './helpers.ts';
 
 /**
  * M3.1a: the event home's key numbers now come from the metric projection (metric_snapshots,
@@ -28,7 +28,7 @@ const usd = (minor: number) =>
 async function newEvent(page: Page, name: string): Promise<string> {
   await page.goto('/o/lakeside-events/events/new');
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Time zone').selectOption('America/Chicago');
+  await pickOption(page.getByLabel('Time zone'), 'America/Chicago');
   await page.getByLabel('Starts', { exact: true }).fill(chicago(-1));
   await page.getByLabel('Ends', { exact: true }).fill(chicago(3));
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -55,7 +55,7 @@ async function guestBuys(
 ) {
   const guest = await (await browser.newContext()).newPage();
   await guest.goto(`/events/${slug}`);
-  await guest.getByLabel(`Quantity — ${opts.pass}`).selectOption(opts.qty);
+  await pickOption(guest.getByLabel(`Quantity — ${opts.pass}`), opts.qty);
   await guest.getByLabel('Full name').fill(opts.name);
   await guest.getByLabel('Email for your tickets').fill(opts.email);
   await continueToPayment(guest, opts.email);

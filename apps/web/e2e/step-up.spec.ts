@@ -6,9 +6,11 @@ import {
   continueToPayment,
   devPassword,
   expectAccessible,
+  expectPicked,
   lastEmailedCode,
   newUser,
   personaCode,
+  pickOption,
   signIn,
   stepUpDialog,
   type TestUser,
@@ -31,7 +33,7 @@ const owner = (page: Page) => newUser(page, { org: true, twoFactor: true });
 
 async function invite(page: Page, email: string, role: string) {
   await page.getByLabel('Email address').fill(email);
-  await page.getByLabel('Role', { exact: true }).selectOption(role);
+  await pickOption(page.getByLabel('Role', { exact: true }), role);
   await page.getByRole('button', { name: 'Send invitation' }).click();
 }
 
@@ -95,7 +97,7 @@ test.describe('step-up: "Confirm it\'s you"', () => {
       page.getByRole('alert').filter({ hasText: "Please confirm it's you to continue." }),
     ).toBeVisible();
     await expect(page.getByLabel('Email address')).toHaveValue(email);
-    await expect(page.getByLabel('Role', { exact: true })).toHaveValue('finance');
+    await expectPicked(page.getByLabel('Role', { exact: true }), 'finance');
     await expect(page.getByRole('listitem').filter({ hasText: email })).toHaveCount(0);
 
     // The Cancel button does the same; then confirm with the keyboard alone.
@@ -297,7 +299,7 @@ async function paidOrder(page: Page, browser: Browser) {
   const buyer = `Sasha Stepup ${s}`;
   const guest = await (await browser.newContext()).newPage();
   await guest.goto(`/events/${base.split('/').pop()}`);
-  await guest.getByLabel('Quantity — Pass').selectOption('2');
+  await pickOption(guest.getByLabel('Quantity — Pass'), '2');
   await guest.getByLabel('Full name').fill(buyer);
   await guest.getByLabel('Email for your tickets').fill(`sasha+${s}@example.test`);
   await continueToPayment(guest, `sasha+${s}@example.test`);
@@ -320,7 +322,7 @@ test.describe('step-up: money and data leaving', () => {
     await page.getByRole('link', { name: buyer }).click();
     await ageSession(page);
     const form = page.getByRole('region', { name: 'Refund', exact: true });
-    await form.getByLabel('Reason').selectOption('duplicate');
+    await pickOption(form.getByLabel('Reason'), 'duplicate');
     // Every ticket, not the owner's "refund outside the policy" box (M1.6e), which renames the note.
     const tickets = form.getByRole('group', { name: 'Tickets to refund' }).getByRole('checkbox');
     for (const box of await tickets.all()) await box.check();
@@ -328,7 +330,7 @@ test.describe('step-up: money and data leaving', () => {
     await form.getByRole('button', { name: 'Refund' }).click();
     await expect(stepUpDialog(page)).toBeVisible();
     await page.keyboard.press('Escape');
-    await expect(form.getByLabel('Reason')).toHaveValue('duplicate');
+    await expectPicked(form.getByLabel('Reason'), 'duplicate');
     await expect(form.getByLabel('Note (optional, for your team)')).toHaveValue('Bought twice');
     for (const box of await tickets.all()) await expect(box).toBeChecked();
     await expect(page.getByRole('table', { name: 'Refunds' })).toHaveCount(0);
@@ -349,7 +351,7 @@ test.describe('step-up: money and data leaving', () => {
     await ageSession(page);
     const bulk = page.getByRole('form', { name: 'Bulk actions' });
     await bulk.getByLabel('All 2 matching').check();
-    await bulk.getByLabel('Action').selectOption({ label: 'Export as CSV' });
+    await pickOption(bulk.getByLabel('Action'), { label: 'Export as CSV' });
     await bulk.getByRole('button', { name: 'Apply' }).click();
     await expect(stepUpDialog(page)).toBeVisible();
     await expectAccessible(page);

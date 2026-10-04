@@ -1,7 +1,7 @@
 'use client';
 
 import { SLUG_MAX } from '@yayatoh/cms/ui';
-import { Alert, Button, Input } from '@yayatoh/ui';
+import { Alert, Button, Input, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState, useId, useState } from 'react';
 import { Markdown } from '@/components/markdown.tsx';
@@ -71,7 +71,7 @@ export function ArticleEditor({
         <label htmlFor="article-category" className="text-[13px] font-bold text-ink">
           {t('fields.category')}
         </label>
-        <select
+        <Select
           id="article-category"
           name="categoryId"
           defaultValue={values?.categoryId}
@@ -83,20 +83,20 @@ export function ArticleEditor({
               {c.title} · {c.audienceLabel}
             </option>
           ))}
-        </select>
+        </Select>
       </div>
       {locales ? (
         <div className="flex flex-col gap-1.5">
           <label htmlFor="article-locale" className="text-[13px] font-bold text-ink">
             {t('fields.locale')}
           </label>
-          <select id="article-locale" name="locale" defaultValue={values?.locale ?? 'en'} className={select}>
+          <Select id="article-locale" name="locale" defaultValue={values?.locale ?? 'en'} className={select}>
             {locales.map((l) => (
               <option key={l.code} value={l.code} lang={l.code}>
                 {l.name}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
       ) : null}
       <Input

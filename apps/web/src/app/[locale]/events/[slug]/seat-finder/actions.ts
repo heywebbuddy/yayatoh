@@ -1,9 +1,12 @@
 'use server';
 
 import { checkoutTarget } from '@yayatoh/events';
+import { normalizePin } from '@yayatoh/guests';
 import { createCtx, executeCommand, isDomainError } from '@yayatoh/kernel';
 import {
+  findGuestSeatByPinCommand,
   findSeatByNameCommand,
+  type GuestSeatResultDto,
   requestFinderCodeCommand,
   type SeatFinderResultDto,
   verifyFinderCodeCommand,
@@ -186,4 +189,69 @@ export async function resetFinderAction(slug: string): Promise<void> {
   const c = await context(slug);
   if (c) await forgetFinder(c.target.eventId);
   refresh();
+}
+
+export type PinError =
+  | 'noMatch'
+  | 'invalidName'
+  | 'invalidPin'
+  | 'challengeFailed'
+  | 'challengeUnavailable'
+  | 'rateLimited'
+  | 'closed'
+  | 'internal';
+
+export interface PinState {
+  readonly error?: PinError;
+  /** Past this device's budget: show the human check and ask again. */
+  readonly challenge?: boolean;
+  readonly retryMinutes?: number;
+  /** What the guest typed, so an error or a challenge never clears it (the PIN is not kept). */
+  readonly name?: string;
+  /** The party's tables: labels and counts, never a name. */
+  readonly result?: GuestSeatResultDto | null;
+  readonly stamp?: number;
+}
+
+/**
+ * PIN mode (M4.4a, organizer opt-in): a guest's exact full name and the PIN printed on their
+ * party's invitation. The event comes from the slug, never from input. Limited per device and per
+ * event (M1.14 `rsvpLookup`, then the command's own per-device budget); past either, each try
+ * needs the human check. Unknown, partial or misspelled names and wrong PINs all get `noMatch`.
+ */
+export async function findByPinAction(slug: string, _prev: PinState, form: FormData): Promise<PinState> {
+  const stamp = Date.now();
+  const name = String(form.get('name') ?? '')
+    .trim()
+    .slice(0, 170);
+  const pin = normalizePin(String(form.get('pin') ?? ''));
+  const c = await context(slug);
+  if (!c) return { name, error: 'closed', stamp };
+  if (!name) return { name, error: 'invalidName', stamp };
+  if (!pin) return { name, error: 'invalidPin', stamp };
+  const { human, failed } = await challengeAnswer(form);
+  if (failed) return { name, challenge: true, error: 'challengeFailed', stamp };
+  const limit = await limitAction('rsvpLookup', { identity: c.target.eventId, scope: 'seat-finder-pin' });
+  if (!limit.allowed && !human)
+    return getHumanCheck()
+      ? { name, challenge: true, stamp }
+      : { name, error: 'rateLimited', retryMinutes: retryAfterMinutes(limit), stamp };
+  try {
+    const r = await executeCommand(
+      findGuestSeatByPinCommand,
+      { eventId: c.target.eventId, name, pin, device: await deviceKey(), human },
+      c.ctx,
+      ports,
+    );
+    if (r.status === 'challenge')
+      return getHumanCheck()
+        ? { name, challenge: true, stamp }
+        : { name, error: 'challengeUnavailable', stamp };
+    if (r.status === 'no_match')
+      return { name, error: 'noMatch', stamp, ...(limit.allowed ? {} : { challenge: true }) };
+    return { name, result: r.result, stamp };
+  } catch (err) {
+    const e = failure(err);
+    return { name, error: e === 'closed' ? 'closed' : 'internal', stamp };
+  }
 }

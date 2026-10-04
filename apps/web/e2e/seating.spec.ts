@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { expectAccessible, signIn, WEDDING, WEDDING_OWNER } from './helpers.ts';
+import { expectAccessible, pickOption, signIn, WEDDING, WEDDING_OWNER } from './helpers.ts';
 
 test.describe('seating', () => {
   test.use({ viewport: { width: 1280, height: 900 } });
@@ -43,7 +43,7 @@ test.describe('seating', () => {
     // Price the tables, then put seats on sale.
     const prices = page.getByRole('region', { name: 'Prices' });
     await prices.getByRole('checkbox', { name: 'Table 1' }).check();
-    await prices.getByLabel('Sells as').selectOption({ index: 0 });
+    await pickOption(prices.getByLabel('Sells as'), { index: 0 });
     await prices.getByRole('button', { name: 'Set price' }).click();
     await expect(prices.getByText('Prices updated.')).toBeVisible();
     const publish = page.getByRole('button', { name: 'Put seats on sale' });

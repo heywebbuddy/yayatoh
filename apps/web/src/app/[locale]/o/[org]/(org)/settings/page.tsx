@@ -7,7 +7,7 @@ import {
   legalPagesQuery,
   roleCan,
 } from '@yayatoh/tenancy';
-import { buttonClass, Card, EmptyState, light, PageHeader } from '@yayatoh/ui';
+import { buttonClass, Card, EmptyState, light, PageHeader, Select, TimeZonePicker } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { BrandColorField } from '@/components/brand-color-field.tsx';
 import { MediaUploader } from '@/components/media-uploader.tsx';
@@ -37,7 +37,15 @@ export default async function SettingsPage({
     return (
       <>
         <PageHeader title={t('settings.title')} />
-        <EmptyState title={t('settings.noAccessTitle')} description={t('settings.noAccessDescription')} />
+        <EmptyState
+          title={t('settings.noAccessTitle')}
+          description={t('settings.noAccessDescription')}
+          action={
+            <Link href={`/o/${org}/team`} className={buttonClass('primary', 'md')}>
+              {t('settings.findOwner')}
+            </Link>
+          }
+        />
       </>
     );
   }
@@ -46,7 +54,6 @@ export default async function SettingsPage({
   const agreements = await executeQuery(agreementsQuery, {}, data.ctx, ports);
   const logo = await mediaPanel(data, 'org', o.id, 'logo');
   const canAccept = roleCan(data.role, 'members:manage');
-  const zones = Intl.supportedValuesOf('timeZone');
   const labelled = (id: string, label: string, control: React.ReactNode) => (
     <div className="flex flex-col gap-1.5">
       <label htmlFor={id} className="text-[13px] font-bold text-ink">
@@ -174,24 +181,23 @@ export default async function SettingsPage({
             {labelled(
               'org-locale',
               t('settings.general.locale'),
-              <select id="org-locale" name="defaultLocale" defaultValue={o.defaultLocale} className={field}>
+              <Select id="org-locale" name="defaultLocale" defaultValue={o.defaultLocale} className={field}>
                 {LOCALES.map((l) => (
                   <option key={l} value={l}>
                     {new Intl.DisplayNames([l], { type: 'language' }).of(l) ?? l}
                   </option>
                 ))}
-              </select>,
+              </Select>,
             )}
             {labelled(
               'org-timezone',
               t('settings.general.timezone'),
-              <select id="org-timezone" name="timezone" defaultValue={o.timezone} className={field}>
-                {zones.map((z) => (
-                  <option key={z} value={z}>
-                    {z}
-                  </option>
-                ))}
-              </select>,
+              <TimeZonePicker
+                id="org-timezone"
+                name="timezone"
+                defaultValue={o.timezone}
+                className={field}
+              />,
             )}
             {labelled(
               'org-country',

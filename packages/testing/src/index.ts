@@ -1,4 +1,5 @@
 export { ALERT_FIXTURE, type AlertScenario, alertScenario } from './alerts.ts';
+export { ATTRIBUTION_FIXTURE, type AttributionScenario, attributionScenario } from './attribution.ts';
 export {
   AUDIENCE_EDITIONS,
   type AudiencePerson,
@@ -7,6 +8,13 @@ export {
 } from './audiences.ts';
 export { type CampaignContactSeed, campaignScenario } from './campaigns.ts';
 export { type CanaryAdmin, type CanaryFile, type CanaryOrg, canaryOrg } from './canary/org.ts';
+export {
+  CONFERENCE_FIXTURE,
+  type ConferenceScenario,
+  conferenceScenario,
+  type FakeConferenceState,
+  fakeConferenceSources,
+} from './conference.ts';
 export {
   CONTACT_STATS_EVENTS,
   CONTACT_STATS_PRICES,
@@ -18,13 +26,22 @@ export {
 export {
   createOrgFixture,
   EXPORT_PARAMS,
+  FIXTURE_ENGAGEMENT_WEIGHTS,
+  FIXTURE_SITE_PASSWORD,
+  fixtureBuyerAccount,
   type OrgFixture,
+  ssoFixtureDomain,
   staleCtx,
   systemCtx,
   twoOrgs,
   userCtx,
 } from './fixtures.ts';
-export { connectDemo, fakeAuth } from './integrations.ts';
+export { enableGallery, guestGalleryPhoto, guestSiteAccess, hostGalleryPhoto, putToSlot } from './gallery.ts';
+export { type GuestCheckinScenario, guestCheckinScenario } from './guest-checkin.ts';
+export { type GuestHubScenario, guestHubScenario, partyHub } from './guest-hub.ts';
+export { type GuestSeatScenario, guestSeatScenario } from './guest-seat-finder.ts';
+export { GUEST_SITE_PASSWORD, type GuestSiteScenario, guestSiteScenario } from './guest-site.ts';
+export { connectConnector, connectDemo, connectSlack, fakeAuth } from './integrations.ts';
 export { quietDevice, revokeDevice } from './live.ts';
 export {
   bareOrg,
@@ -41,10 +58,13 @@ export {
   mergeScenario,
   TIMELINE_SUBSCRIBERS,
 } from './merge.ts';
+export { networkingFixture, networkPeople } from './networking.ts';
+export { type PledgeParty, type PledgeScenario, pledgeScenario } from './pledges.ts';
 export {
   BULK_ACTIONS,
   bulkStep,
   CONTACT_REFERENCE_OWNERS,
+  FAKE_IDP_SEED,
   ports,
   runBulk,
   submitRegistrationForm,
@@ -56,4 +76,12 @@ export {
   rsvpQuestionsScenario,
   standardRsvpQuestions,
 } from './rsvp-questions.ts';
+// M6.5b: connect the Salesforce connector against its fake org.
+export { connectSalesforce } from './salesforce.ts';
+export {
+  SOCIAL_FIXTURE,
+  type SocialPackParty,
+  type SocialPackScenario,
+  socialPackScenario,
+} from './social-pack.ts';
 export { warehouseScenario } from './warehouse.ts';

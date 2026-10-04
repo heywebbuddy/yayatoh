@@ -12,6 +12,16 @@ export interface MediaStore {
   get(orgId: string, key: string): Promise<Uint8Array | null>;
   /** Delete every object under `{org}/{asset}/` (an asset's variants). */
   deleteAsset(orgId: string, assetId: string): Promise<void>;
+  /**
+   * M4.5b: a presigned PUT for one object of exactly `bytes` bytes, so a browser uploads straight
+   * to the store. Only stores that can sign one (R2) implement it; the app's own direct-upload
+   * route stands in for the others (dev and CI).
+   */
+  presignPut?(
+    orgId: string,
+    key: string,
+    opts: { readonly bytes: number; readonly expiresInSeconds: number },
+  ): { readonly url: string; readonly headers: Readonly<Record<string, string>> };
 }
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
@@ -28,7 +38,9 @@ export function assertOrgKey(orgId: string, key: string): void {
       /^[0-9]{1,5}-[0-9a-f]{32}\.(avif|webp|jpg|png|svg|pdf|zip)$/.test(parts[2] ?? '') ||
       // M5.5a badge PDFs share the first form (`{n}-{hash}.pdf`), as do M6.1c data-subject archives
       // (`{org}/{request}/0-{hash}.zip`); M5.3a portal files (as uploaded): `f-{hash}.{ext}`.
-      /^f-[0-9a-f]{32}\.(pdf|pptx|docx|jpg|png|webp)$/.test(parts[2] ?? '')
+      /^f-[0-9a-f]{32}\.(pdf|pptx|docx|jpg|png|webp)$/.test(parts[2] ?? '') ||
+      // M4.5b: a gallery upload as the browser sent it, before it is sniffed and re-encoded.
+      /^u-[0-9a-f]{32}$/.test(parts[2] ?? '')
     )
   )
     throw new Error('media store: key outside the org prefix');

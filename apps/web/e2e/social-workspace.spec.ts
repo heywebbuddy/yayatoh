@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
-import { expectAccessible, newUser, signIn, WEDDING_OWNER } from './helpers.ts';
+import { expectAccessible, expectPicked, newUser, pickOption, signIn, WEDDING_OWNER } from './helpers.ts';
 
 /**
  * M4.2a social workspace: the Wedding and Gala starter templates (profile, modules, navigation,
@@ -75,7 +75,7 @@ async function inviteLink(page: Page, org: string, email: string): Promise<strin
 async function invite(page: Page, base: string, email: string, role: 'Co-host' | 'Planner') {
   await page.goto(`${base}/team`);
   await page.getByLabel('Email address').fill(email);
-  await page.getByLabel('Role', { exact: true }).selectOption({ label: role });
+  await pickOption(page.getByLabel('Role', { exact: true }), { label: role });
   await page.getByRole('button', { name: 'Send invitation' }).click();
   await expect(page.getByText('Invitation sent.')).toBeVisible();
 }
@@ -260,7 +260,7 @@ test.describe('event team: co-hosts and planners (M4.2a, P4-8)', () => {
     await page.keyboard.type(planner.email);
     await page.keyboard.press('Tab');
     await expect(page.getByLabel('Role', { exact: true })).toBeFocused();
-    await expect(page.getByLabel('Role', { exact: true })).toHaveValue('planner');
+    await expectPicked(page.getByLabel('Role', { exact: true }), 'planner');
     await page.keyboard.press('Tab');
     await page.keyboard.press('Enter');
     await expect(page.getByText('Invitation sent.')).toBeVisible();
@@ -359,17 +359,17 @@ test.describe('event team: co-hosts and planners (M4.2a, P4-8)', () => {
     await page.goto(`${wedding}/team`);
     const table = page.getByRole('table', { name: 'Event team' });
     await expect(table.getByRole('row').filter({ hasText: 'Casey Cohost' })).toContainText('Co-host');
-    await table.getByLabel('Role for Pat Planner', { exact: true }).selectOption({ label: 'Co-host' });
+    await pickOption(table.getByLabel('Role for Pat Planner', { exact: true }), { label: 'Co-host' });
     await table.getByRole('button', { name: 'Save role for Pat Planner' }).click();
     await expect(page.getByText("Pat Planner's role was changed.")).toBeVisible();
     await plannerPage.goto(wedding);
     expect(await navLabels(plannerPage)).toContain('Team');
     // Back to planner (from a fresh page, so the notice below is this change's).
     await page.reload();
-    await page
-      .getByRole('table', { name: 'Event team' })
-      .getByLabel('Role for Pat Planner', { exact: true })
-      .selectOption({ label: 'Planner' });
+    await pickOption(
+      page.getByRole('table', { name: 'Event team' }).getByLabel('Role for Pat Planner', { exact: true }),
+      { label: 'Planner' },
+    );
     await page
       .getByRole('table', { name: 'Event team' })
       .getByRole('button', { name: 'Save role for Pat Planner' })
@@ -377,9 +377,10 @@ test.describe('event team: co-hosts and planners (M4.2a, P4-8)', () => {
     await expect(page.getByText("Pat Planner's role was changed.")).toBeVisible();
     // Persists after reload.
     await page.reload();
-    await expect(
+    await expectPicked(
       page.getByRole('table', { name: 'Event team' }).getByLabel('Role for Pat Planner', { exact: true }),
-    ).toHaveValue('planner');
+      'planner',
+    );
 
     // Revoking: the planner loses the event (and the org) on their next request.
     await page.getByRole('button', { name: 'Remove Pat Planner' }).click();

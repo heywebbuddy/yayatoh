@@ -2,7 +2,7 @@ import { RTL_LOCALES } from '@yayatoh/contracts';
 import { consentRegivenSinceTx, normalizeEmail } from '@yayatoh/crm';
 import { isForeignKeyViolation, type TenantTx, withTenant } from '@yayatoh/db';
 import { createCtx } from '@yayatoh/kernel';
-import { erasedAddressesTx, normalizeAddress, signLinkToken } from '@yayatoh/platform';
+import { emitEvents, erasedAddressesTx, normalizeAddress, signLinkToken } from '@yayatoh/platform';
 import { activeSuspensionsTx, organizationBrandTx } from '@yayatoh/tenancy';
 import { and, asc, desc, eq, inArray, isNull, lte, or } from 'drizzle-orm';
 import { erasedAddressAllows, erasedMailClass, suppressedReason } from './delivery-rules.ts';
@@ -500,6 +500,21 @@ export async function dispatchDueTx(
       if (provider && row.channel !== 'push') health.push({ provider, kind: 'send' });
       // Usage metering (M3.5a): SMS by segment, everything else by message.
       await gate.meter(tx, row.channel as QuotaChannel, segments ?? 1);
+      // The billing meters (M6.6b, P6-7/D16) count paid channels from this outbox event; push is free.
+      if (row.channel !== 'push')
+        await emitEvents(
+          tx,
+          createCtx({ orgId, now, actor: { type: 'system', name: 'notifications:dispatch' } }),
+          [
+            {
+              type: 'messaging.usage_metered',
+              version: 1,
+              aggregateType: 'message',
+              aggregateId: row.id,
+              payload: { orgId, messageId: row.id, channel: row.channel, units: segments ?? 1 },
+            },
+          ],
+        );
       result.sent += 1;
     } catch (err) {
       const channelProvider =
