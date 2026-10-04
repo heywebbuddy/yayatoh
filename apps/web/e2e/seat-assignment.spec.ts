@@ -154,7 +154,11 @@ test.describe('seat assignment (M1.7d)', () => {
     };
 
     if (test.info().project.name === 'desktop-1280') {
-      // Wide enough for both: a real mouse drag.
+      // Wide enough for both: a real mouse drag. Batch 3l merge: the console shell (U2) and the
+      // longer seating tabs push the plan below the fold at 900 px, so the window is made tall
+      // enough for the name and the plan to be on screen together, as a mouse drag needs.
+      await page.setViewportSize({ width: 1280, height: 1800 });
+      await chip(dee).scrollIntoViewIfNeeded();
       const [c, p] = await Promise.all([canvas.boundingBox(), plan.boundingBox()]);
       if (!c || !p) throw new Error('no plan');
       const scale = c.width / 1060;

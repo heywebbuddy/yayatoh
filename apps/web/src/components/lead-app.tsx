@@ -126,6 +126,8 @@ export function LeadApp() {
     const onOffline = () => setOnline(false);
     window.addEventListener('online', tick);
     window.addEventListener('offline', onOffline);
+    // Batch 3l merge: the network may have dropped before these listeners were attached.
+    if (!navigator.onLine) onOffline();
     return () => {
       window.clearInterval(id);
       window.removeEventListener('online', tick);

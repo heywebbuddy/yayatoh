@@ -129,6 +129,7 @@ export {
 } from './components/primitives.tsx';
 export {
   optionsFromChildren,
+  SELECT_REFILL_EVENT,
   Select,
   type SelectOption,
   type SelectProps,
