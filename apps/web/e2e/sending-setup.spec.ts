@@ -101,7 +101,10 @@ test.describe('sending setup', () => {
     await expect(ar.locator('html')).toHaveAttribute('dir', 'rtl');
     await expect(ar.getByRole('heading', { name: 'إعداد الإرسال', level: 1 })).toBeVisible();
     await expect(ar.getByRole('button', { name: 'افحص DNS الآن' })).toBeVisible();
-    await expect(ar.getByText(`notifications@${domain}`)).toBeVisible();
+    // U10: scoped to the domain section (the From name preview above also shows the address).
+    await expect(
+      ar.getByRole('region', { name: 'نطاق إرسال البريد الإلكتروني' }).getByText(`notifications@${domain}`),
+    ).toBeVisible();
     await expectAccessible(ar);
 
     // Remove it: back to the platform sender.

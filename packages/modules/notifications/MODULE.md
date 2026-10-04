@@ -71,3 +71,4 @@ key) inside their own transaction; this module records, gates, renders and sends
   address or id), written through a SECURITY DEFINER function after the tenant transaction.
 - A sending domain belongs to one org platform-wide; mail uses it only while DKIM and SPF are
   verified. A dedicated SMS Messaging Service is used only once its 10DLC campaign is verified.
+- U10 "Email sending" (`email_settings`, one row per org): the From name and Reply-To put on every email the dispatcher sends (and the web's guest-code emails). The From address never changes (verified sending domain, else the platform sender); the name can't contain an address, `@ < > "` or a domain-looking string (CHECK + `checkFromName`), and Reply-To can't be a Yayatoh address (`checkReplyTo`). SES gets `ReplyToAddresses`. Kind `cms.contact_message` (U10) tells the org's messages roles about a contact-page message.

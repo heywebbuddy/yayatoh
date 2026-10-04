@@ -42,6 +42,9 @@ import { storageKey } from './storage/port.ts';
 export const DEFAULT_QUOTA_BYTES = 1024 * 1024 * 1024;
 /** Images per multi-image slot (event gallery, venue photos). */
 export const MAX_PER_SLOT = 20;
+/** U10: images uploaded straight to the media library (reuses don't count; they hold no files). */
+export const MAX_LIBRARY_IMAGES = 1000;
+const maxFor = (ownerType: OwnerType) => (ownerType === 'library' ? MAX_LIBRARY_IMAGES : MAX_PER_SLOT);
 const SINGLE_SLOTS: readonly Slot[] = ['cover', 'logo'];
 const OWNER_SLOTS: Readonly<Record<OwnerType, readonly Slot[]>> = {
   event: ['cover', 'gallery', 'floorplan'],
@@ -50,6 +53,7 @@ const OWNER_SLOTS: Readonly<Record<OwnerType, readonly Slot[]>> = {
   speaker: ['photo'],
   exhibitor: ['logo'],
   sponsor: ['logo'],
+  library: ['library'],
 };
 /** One image per owner slot (cover, logos, a speaker's photo); galleries and venue photos hold more. */
 const isSingle = (ownerType: OwnerType, slot: Slot) => SINGLE_SLOTS.includes(slot) || ownerType === 'speaker';
@@ -74,10 +78,10 @@ export const familyOf = (ownerType: OwnerType): MediaFamily =>
 export const mediaUrl = (orgId: string, assetId: string, fileName: string) =>
   `/media/${orgId}/${assetId}/${fileName}`;
 
-type AssetRow = typeof assets.$inferSelect;
+export type AssetRow = typeof assets.$inferSelect;
 type VariantRow = typeof variants.$inferSelect;
 
-function toDto(a: AssetRow, vs: readonly VariantRow[]): MediaAssetDto {
+export function toDto(a: AssetRow, vs: readonly VariantRow[]): MediaAssetDto {
   return MediaAssetDto.parse({
     ...a,
     variants: vs
@@ -93,7 +97,7 @@ function toDto(a: AssetRow, vs: readonly VariantRow[]): MediaAssetDto {
   });
 }
 
-async function withVariants(tx: TenantTx, rows: AssetRow[]): Promise<MediaAssetDto[]> {
+export async function withVariants(tx: TenantTx, rows: AssetRow[]): Promise<MediaAssetDto[]> {
   if (rows.length === 0) return [];
   const vs = await tx
     .select()
@@ -107,7 +111,7 @@ async function withVariants(tx: TenantTx, rows: AssetRow[]): Promise<MediaAssetD
   return rows.map((r) => toDto(r, vs));
 }
 
-async function usageTx(tx: TenantTx, excludeAssetIds: readonly string[] = []) {
+export async function usageTx(tx: TenantTx, excludeAssetIds: readonly string[] = []) {
   const [used] = await tx
     .select({ bytes: sql<string>`coalesce(sum(${assets.bytes}), 0)` })
     .from(assets)
@@ -116,9 +120,9 @@ async function usageTx(tx: TenantTx, excludeAssetIds: readonly string[] = []) {
   return { usedBytes: Number(used?.bytes ?? 0), limitBytes: q?.limit ?? DEFAULT_QUOTA_BYTES };
 }
 
-async function assertOwnerTx(tx: TenantTx, orgId: string, ownerType: OwnerType, ownerId: string) {
+export async function assertOwnerTx(tx: TenantTx, orgId: string, ownerType: OwnerType, ownerId: string) {
   const exists =
-    ownerType === 'org'
+    ownerType === 'org' || ownerType === 'library'
       ? ownerId === orgId
       : ownerType === 'event'
         ? (await findEventTx(tx, ownerId)) !== null
@@ -150,9 +154,7 @@ interface StoreArgs {
  * the files to the store and the rows, and (for a replacement) delete the old rows. The old files
  * are purged by the caller after commit (`uploadMedia`).
  */
-export async function storeUploadTx(
-  a: StoreArgs,
-): Promise<{ asset: MediaAssetDto; replacedAssetId: string | null }> {
+export async function storeUploadTx(a: StoreArgs): Promise<UploadResultDto> {
   const orgId = requireOrg(a.ctx);
   if (!OWNER_SLOTS[a.ownerType].includes(a.slot))
     throw new DomainError('validation_failed', 'This slot does not belong to this owner', { field: 'slot' });
@@ -171,30 +173,23 @@ export async function storeUploadTx(
   }
   const total = processed.variants.reduce((n, v) => n + v.bytes.byteLength, 0);
 
-  // One upload at a time per org decides the quota and the slot's contents.
-  await a.tx.execute(sql`select pg_advisory_xact_lock(hashtextextended(${`media:${orgId}`}, 0))`);
-  const inSlot = await a.tx
-    .select()
-    .from(assets)
-    .where(and(eq(assets.ownerType, a.ownerType), eq(assets.ownerId, a.ownerId), eq(assets.slot, a.slot)))
-    .orderBy(asc(assets.position));
-  let replaced: AssetRow | null = null;
-  if (a.input.replaceAssetId) {
-    replaced = inSlot.find((r) => r.id === a.input.replaceAssetId) ?? null;
-    if (!replaced) throw new DomainError('not_found', 'The image to replace is not in this slot');
-  } else if (isSingle(a.ownerType, a.slot)) {
-    replaced = inSlot[0] ?? null;
-  } else if (inSlot.length >= MAX_PER_SLOT) {
-    throw new DomainError('conflict', 'This slot is full', { reason: 'slot_full', field: 'file' });
-  }
-  const usage = await usageTx(a.tx, replaced ? [replaced.id] : []);
+  const { inSlot, replaced } = await slotTx(
+    a.tx,
+    orgId,
+    a.ownerType,
+    a.ownerId,
+    a.slot,
+    a.input.replaceAssetId,
+  );
+  // A replaced original that is reused elsewhere moves to the library (its files stay).
+  const usage = await usageTx(a.tx, replaced && !(await reusedTx(a.tx, replaced.id)) ? [replaced.id] : []);
   if (usage.usedBytes + total > usage.limitBytes)
     throw new DomainError('conflict', 'The organization has used its image storage', {
       reason: 'quota_exceeded',
       field: 'file',
     });
 
-  if (replaced) await a.tx.delete(assets).where(eq(assets.id, replaced.id));
+  const released = replaced ? await releaseTx(a.tx, orgId, replaced) : null;
   const position = replaced
     ? replaced.position
     : inSlot.length
@@ -262,7 +257,79 @@ export async function storeUploadTx(
       replacedAssetId: replaced?.id ?? null,
     },
   });
-  return { asset, replacedAssetId: replaced?.id ?? null };
+  return { asset, replacedAssetId: replaced?.id ?? null, filesKept: released ? !released.purge : false };
+}
+
+/**
+ * The slot an image goes into, under the org's media lock (one placement at a time per org
+ * decides the quota and the slot's contents): its current images, and the one the new image
+ * replaces (the named one, or a single slot's current image). A full multi-image slot refuses.
+ */
+export async function slotTx(
+  tx: TenantTx,
+  orgId: string,
+  ownerType: OwnerType,
+  ownerId: string,
+  slot: Slot,
+  replaceAssetId: string | null,
+): Promise<{ inSlot: AssetRow[]; replaced: AssetRow | null }> {
+  await tx.execute(sql`select pg_advisory_xact_lock(hashtextextended(${`media:${orgId}`}, 0))`);
+  const inSlot = await tx
+    .select()
+    .from(assets)
+    .where(and(eq(assets.ownerType, ownerType), eq(assets.ownerId, ownerId), eq(assets.slot, slot)))
+    .orderBy(asc(assets.position));
+  let replaced: AssetRow | null = null;
+  if (replaceAssetId) {
+    replaced = inSlot.find((r) => r.id === replaceAssetId) ?? null;
+    if (!replaced) throw new DomainError('not_found', 'The image to replace is not in this slot');
+  } else if (isSingle(ownerType, slot)) {
+    replaced = inSlot[0] ?? null;
+  } else if (inSlot.length >= maxFor(ownerType)) {
+    throw new DomainError('conflict', 'This slot is full', { reason: 'slot_full', field: 'file' });
+  }
+  return { inSlot, replaced };
+}
+
+/** U10: whether an original is reused somewhere (a reuse row points at it). */
+export async function reusedTx(tx: TenantTx, assetId: string): Promise<boolean> {
+  const [row] = await tx
+    .select({ id: assets.id })
+    .from(assets)
+    .where(eq(assets.sourceAssetId, assetId))
+    .limit(1);
+  return row !== undefined;
+}
+
+/**
+ * Take an image out of its place. An original that is reused elsewhere moves to the org's media
+ * library instead (rows and files stay, the reuses keep working); anything else is deleted.
+ * `purge`: its files must be deleted after commit (a reuse has none of its own).
+ */
+export async function releaseTx(
+  tx: TenantTx,
+  orgId: string,
+  row: AssetRow,
+): Promise<{ purge: boolean; movedToLibrary: boolean }> {
+  if (!row.sourceAssetId && (await reusedTx(tx, row.id))) {
+    const [last] = await tx
+      .select({ p: sql<number | null>`max(${assets.position})` })
+      .from(assets)
+      .where(eq(assets.ownerType, 'library'));
+    await tx
+      .update(assets)
+      .set({
+        ownerType: 'library',
+        ownerId: orgId,
+        slot: 'library',
+        position: (last?.p ?? -1) + 1,
+        updatedAt: sql`now()`,
+      })
+      .where(eq(assets.id, row.id));
+    return { purge: false, movedToLibrary: true };
+  }
+  await tx.delete(assets).where(eq(assets.id, row.id));
+  return { purge: !row.sourceAssetId, movedToLibrary: false };
 }
 
 const uploadAudit = (
@@ -314,7 +381,7 @@ export const uploadLogoCommand = tenantCommand({
   audit: uploadAudit,
 });
 
-async function findAssetTx(tx: TenantTx, assetId: string, family: MediaFamily): Promise<AssetRow> {
+export async function findAssetTx(tx: TenantTx, assetId: string, family: MediaFamily): Promise<AssetRow> {
   const [row] = await tx.select().from(assets).where(eq(assets.id, assetId));
   // The logo belongs to org settings, event and venue images to the event editors, and each
   // program kind to its own commands (their entitlements differ).
@@ -323,7 +390,7 @@ async function findAssetTx(tx: TenantTx, assetId: string, family: MediaFamily): 
 }
 
 async function removeTx(tx: TenantTx, ctx: Ctx, emit: (e: DomainEvent) => void, row: AssetRow) {
-  await tx.delete(assets).where(eq(assets.id, row.id));
+  const released = await releaseTx(tx, requireOrg(ctx), row);
   if (row.ownerType === 'org') await setOrganizationLogoTx(tx, requireOrg(ctx), null);
   emit({
     type: 'media.asset_removed',
@@ -338,11 +405,12 @@ async function removeTx(tx: TenantTx, ctx: Ctx, emit: (e: DomainEvent) => void, 
       slot: row.slot,
     },
   });
-  return { ok: true as const };
+  return { ok: true as const, purged: released.purge };
 }
 
 const RemoveInput = z.object({ assetId: z.uuid() });
-const Ok = z.object({ ok: z.literal(true) });
+/** `purged`: the image's files go after commit (false for a reuse, or an original moved to the library). */
+const Ok = z.object({ ok: z.literal(true), purged: z.boolean() });
 const removeAudit = (input: { assetId: string }) => ({
   action: 'media.remove',
   targetType: 'media_asset',
@@ -482,7 +550,7 @@ export function storeProgramImageTx(
   ctx: Ctx,
   emit: (e: DomainEvent) => void,
   a: { kind: ProgramImageOwner; ownerId: string; assetId: string; file: Uint8Array; alt: string },
-): Promise<{ asset: MediaAssetDto; replacedAssetId: string | null }> {
+): Promise<UploadResultDto> {
   return storeUploadTx({
     tx,
     ctx,
@@ -616,7 +684,8 @@ export async function runUpload(
       .catch(() => undefined);
     throw err;
   }
-  if (result.replacedAssetId) await mediaStore().deleteAsset(orgId, result.replacedAssetId);
+  if (result.replacedAssetId && !result.filesKept)
+    await mediaStore().deleteAsset(orgId, result.replacedAssetId);
   return result;
 }
 
@@ -633,8 +702,8 @@ export async function removeMedia(
       : family === 'content'
         ? removeMediaCommand
         : programImageCommand[family].remove;
-  await executeCommand(command, input, ctx, ports);
-  await mediaStore().deleteAsset(requireOrg(ctx), input.assetId);
+  const r = await executeCommand(command, input, ctx, ports);
+  if (r.purged) await mediaStore().deleteAsset(requireOrg(ctx), input.assetId);
 }
 
 /**
@@ -652,11 +721,14 @@ export function programMediaCleaner(): Subscriber {
       const p = z
         .object({ kind: z.enum(['speaker', 'exhibitor', 'sponsor']), id: z.uuid() })
         .parse(event.payload);
-      const gone = await tx
-        .delete(assets)
-        .where(and(eq(assets.ownerType, p.kind), eq(assets.ownerId, p.id)))
-        .returning({ id: assets.id });
-      for (const g of gone) await mediaStore().deleteAsset(event.orgId, g.id);
+      const rows = await tx
+        .select()
+        .from(assets)
+        .where(and(eq(assets.ownerType, p.kind), eq(assets.ownerId, p.id)));
+      // U10: a photo reused elsewhere stays in the media library.
+      const purge: string[] = [];
+      for (const row of rows) if ((await releaseTx(tx, event.orgId, row)).purge) purge.push(row.id);
+      for (const id of purge) await mediaStore().deleteAsset(event.orgId, id);
     },
   });
 }
@@ -767,6 +839,8 @@ export interface ServeTarget {
   readonly visibility: 'public' | 'private_event' | 'none';
   /** The slot (M1.7g: a `floorplan` image is public only where the organizer shows it). */
   readonly slot: Slot;
+  /** U10: the asset whose files hold the bytes (a library reuse names its original's files). */
+  readonly storageAssetId: string;
 }
 
 /** What a `/media/{org}/{asset}/{file}` request points at (no bytes), or null. */
@@ -785,7 +859,8 @@ export async function serveTarget(
       event_id: string | null;
       visibility: ServeTarget['visibility'];
       slot: Slot;
-    }>(sql`select * from media.serve_target_v2(${orgId}::uuid, ${assetId}::uuid, ${fileName})`),
+      storage_asset_id: string;
+    }>(sql`select * from media.serve_target_v3(${orgId}::uuid, ${assetId}::uuid, ${fileName})`),
   );
   const r = rows[0];
   return r
@@ -798,11 +873,15 @@ export async function serveTarget(
         eventId: r.event_id,
         visibility: r.visibility,
         slot: r.slot,
+        storageAssetId: r.storage_asset_id,
       }
     : null;
 }
 
-/** The bytes of a variant the caller is already allowed to see. */
+/**
+ * The bytes of a variant the caller is already allowed to see. Pass `ServeTarget.storageAssetId`
+ * (a library reuse's bytes live under its original).
+ */
 export function readVariant(orgId: string, assetId: string, fileName: string): Promise<Uint8Array | null> {
   return mediaStore().get(orgId, storageKey(orgId, assetId, fileName));
 }

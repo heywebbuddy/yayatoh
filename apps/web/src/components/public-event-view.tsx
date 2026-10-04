@@ -7,6 +7,7 @@ import {
   pageTarget,
   publicEventBySlug,
   publicEventContent,
+  publicEventSeries,
   publicOccurrences,
 } from '@yayatoh/events';
 import { publicForm } from '@yayatoh/forms';
@@ -21,7 +22,7 @@ import { publicSeatMap } from '@yayatoh/seating';
 import { publicOrgProfile } from '@yayatoh/tenancy';
 import { publicTicketTypes } from '@yayatoh/ticketing';
 import { Alert, brandPalette, buttonClass, cx, EmptyState } from '@yayatoh/ui';
-import { CalendarDays, MapPin } from 'lucide-react';
+import { CalendarDays, Layers, MapPin } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import {
@@ -116,6 +117,8 @@ export async function PublicEventView({
   // (published or postponed), not the checkout one: a postponed event has no checkout but is
   // still listed in its site's sitemap (M1.11d noindex guard found it 404ing there).
   if (orgId && (target ?? contentTarget)?.orgId !== orgId) notFound();
+  // U7: "Part of {series}" links the public series page.
+  const partOf = contentTarget && !embedded ? await publicEventSeries(contentTarget) : null;
   const content: PublicEventContentDto = contentTarget
     ? await publicEventContent(contentTarget)
     : { sections: [], announcements: [] };
@@ -590,6 +593,17 @@ export async function PublicEventView({
                 </li>
               ) : null}
               {ev.category ? <li className={chip}>{t(`categories.${ev.category}`)}</li> : null}
+              {partOf ? (
+                <li>
+                  <Link
+                    href={`/series/${partOf.slug}`}
+                    className={cx(chip, 'underline-offset-2 hover:underline')}
+                  >
+                    <Layers aria-hidden="true" className="size-3.5" strokeWidth={2.2} />
+                    {t('seriesLink.partOf', { name: partOf.name })}
+                  </Link>
+                </li>
+              ) : null}
               {ev.attendanceMode !== 'in_person' ? (
                 <li className={chip}>{t(`publicEvent.mode.${ev.attendanceMode}`)}</li>
               ) : null}

@@ -277,6 +277,9 @@ importers:
       '@yayatoh/engagement':
         specifier: workspace:*
         version: link:../../packages/modules/engagement
+      '@yayatoh/events':
+        specifier: workspace:*
+        version: link:../../packages/modules/events
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../packages/kernel
@@ -359,6 +362,9 @@ importers:
       '@yayatoh/marketplace':
         specifier: workspace:*
         version: link:../../packages/modules/marketplace
+      '@yayatoh/testing':
+        specifier: workspace:*
+        version: link:../../packages/testing
       '@yayatoh/worker':
         specifier: workspace:*
         version: link:../worker
@@ -730,6 +736,9 @@ importers:
       '@yayatoh/checkin':
         specifier: workspace:*
         version: link:../../packages/modules/checkin
+      '@yayatoh/cms':
+        specifier: workspace:*
+        version: link:../../packages/modules/cms
       '@yayatoh/command-center':
         specifier: workspace:*
         version: link:../../packages/modules/command-center

@@ -35,7 +35,7 @@ export {
   type SeriesTone,
   swatchClass,
 } from './components/charts.tsx';
-export { Combobox, type ComboboxProps } from './components/combobox.tsx';
+export { Combobox, type ComboboxProps, mergeKnown } from './components/combobox.tsx';
 export {
   DatePicker,
   type DatePickerProps,

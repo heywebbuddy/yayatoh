@@ -387,6 +387,7 @@ describe('readiness score', () => {
     key,
     done,
     path: key === 'published' ? '' : key,
+    field: null,
   });
 
   it('weighs blocking rules double and lists them with their fix links', () => {

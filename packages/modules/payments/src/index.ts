@@ -79,6 +79,19 @@ export {
   postDonationMemoTx,
   postDonationRefundMemoTx,
 } from './memo-ledger.ts';
+export {
+  type HeldFundsFact,
+  heldFundsTx,
+  lostDisputeEventIdsTx,
+  type PayoutLineFact,
+  type PayoutLineKind,
+  type PayoutTotalFact,
+  payoutTotalsTx,
+  type ReserveFact,
+  reservesHeldTx,
+  type SettlementLinesFact,
+  settlementLinesTx,
+} from './payouts.ts';
 export type {
   AccountEvent,
   BalanceTransaction,

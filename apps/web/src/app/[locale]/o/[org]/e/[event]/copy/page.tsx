@@ -54,10 +54,15 @@ export default async function CopyPage({
               startsAt: utcToZonedInput(ev.startsAt, ev.timezone),
             }}
             submitLabel={t('copy.duplicateSubmit')}
+            timeZone={ev.timezone}
           />
         </Card>
       </section>
-      <section aria-labelledby="template-heading" className="flex flex-col gap-3">
+      <section
+        id="save-template"
+        aria-labelledby="template-heading"
+        className="flex scroll-mt-4 flex-col gap-3"
+      >
         <h2 id="template-heading" className="text-section">
           {t('copy.template')}
         </h2>

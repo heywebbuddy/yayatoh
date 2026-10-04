@@ -354,6 +354,10 @@
       "subject": "Je rapport ‘{name}’: {period}",
       "intro": "Het rapport ‘{name}’ van {org} voor {period} staat klaar. Open het om de pdf te downloaden.",
       "cta": "Pdf downloaden"
+    },
+    "cms.contact_message": {
+      "subject": "Nieuw bericht van {name} via je contactpagina",
+      "intro": "{name} ({email}) schreef je via de contactpagina van je site:"
     }
   },
   "roles": {

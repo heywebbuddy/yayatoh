@@ -35,11 +35,14 @@ export function CopyEventForm({
   defaults,
   submitLabel,
   idPrefix,
+  timeZone,
 }: {
   action: Action;
   defaults: { name: string; startsAt: string };
   submitLabel: string;
   idPrefix: string;
+  /** The zone the start is entered in (shown beside the field). */
+  timeZone?: string;
 }) {
   const t = useTranslations('copy');
   const { pending, onSubmit, message, state } = useForm(action);
@@ -60,6 +63,7 @@ export function CopyEventForm({
         name="startsAt"
         required
         defaultValue={defaults.startsAt}
+        timeZone={timeZone}
         label={t('startsAt')}
         hint={t('startsAtHint')}
         error={state.field === 'startsAt' ? (message ?? undefined) : undefined}

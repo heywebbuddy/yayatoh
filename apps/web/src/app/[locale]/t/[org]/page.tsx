@@ -7,15 +7,16 @@ import { ListingGrid } from '@/components/marketplace/listing-grid.tsx';
 import { OrgHero } from '@/components/marketplace/org-hero.tsx';
 import { Pagination } from '@/components/marketplace/pagination.tsx';
 import { SiteFooter } from '@/components/marketplace/site-chrome.tsx';
+import { TagFilter } from '@/components/marketplace/tag-filter.tsx';
 import { pageLocale } from '@/server/locale.ts';
-import { cachedTenantListings } from '@/server/public-data.ts';
+import { cachedListingTags, cachedTenantListings } from '@/server/public-data.ts';
 import { requestHost } from '@/server/request-origin.ts';
 import { publicMetadata } from '@/server/seo.ts';
 import { tenantOrgParam } from '@/server/tenant-site.ts';
 
 type Props = {
   params: Promise<{ locale: string; org: string }>;
-  searchParams: Promise<{ page?: string }>;
+  searchParams: Promise<{ page?: string; tag?: string }>;
 };
 const pageOf = (raw?: string) => Math.min(500, Math.max(1, Number.parseInt(raw ?? '1', 10) || 1));
 
@@ -44,8 +45,12 @@ export default async function TenantHome({ params, searchParams }: Props) {
   const orgId = tenantOrgParam(org);
   const o = orgId ? await publicOrganizerById(orgId) : null;
   if (!orgId || !o) notFound();
-  const page = pageOf((await searchParams).page);
-  const listings = await cachedTenantListings(orgId, page);
+  const sp = await searchParams;
+  const page = pageOf(sp.page);
+  // U8: the tag filter (a known tag key only; anything else shows every event).
+  const tags = await cachedListingTags(orgId);
+  const tag = tags.find((x) => x.key === sp.tag?.trim().toLowerCase())?.key ?? null;
+  const listings = await cachedTenantListings(orgId, page, tag);
   const t = await getTranslations('market');
   return (
     <div className="min-h-dvh bg-surface">
@@ -59,6 +64,7 @@ export default async function TenantHome({ params, searchParams }: Props) {
           <h2 id="upcoming-heading" className="text-[28px] font-extrabold tracking-[-0.03em]">
             {t('upcoming')}
           </h2>
+          <TagFilter tags={tags} current={tag} path="/" />
           <ListingGrid
             items={listings.items}
             locale={locale}
@@ -69,7 +75,12 @@ export default async function TenantHome({ params, searchParams }: Props) {
               description: t('tenant.emptyDescription', { org: o.name }),
             }}
           />
-          <Pagination path="/" params={{}} page={page} pageCount={listings.pageCount} />
+          <Pagination
+            path="/"
+            params={{ tag: tag ?? undefined }}
+            page={page}
+            pageCount={listings.pageCount}
+          />
         </section>
       </main>
       <SiteFooter>

@@ -98,6 +98,9 @@ test.describe('canary leak crawl (roadmap §9)', () => {
       `${MARKET}/sitemaps/en.xml`,
       `${MARKET}/`,
       `${tenant}/`,
+      // U10: the org contact page (on in the fixture): no address of the org on it.
+      `${tenant}/contact`,
+      `${MARKET}/o/${c.slug}/contact`,
       `${tenant}/events/${ev}`,
       `${tenant}/ar/events/${ev}`,
       `${tenant}/robots.txt`,
@@ -111,6 +114,7 @@ test.describe('canary leak crawl (roadmap §9)', () => {
       `${tenant}/events/${ev}`,
       `${MARKET}/embed/${ev}`,
       `${MARKET}/events/${ev}/give`,
+      `${tenant}/contact`,
     ])
       expect(r.visited).toContain(must);
     expect(r.visited.length).toBeGreaterThan(40);

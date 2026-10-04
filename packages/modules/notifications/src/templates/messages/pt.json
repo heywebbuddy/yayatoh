@@ -354,6 +354,10 @@
       "subject": "Seu relatório “{name}”: {period}",
       "intro": "O relatório “{name}” de {org} para {period} está pronto. Abra para baixar o PDF.",
       "cta": "Baixar o PDF"
+    },
+    "cms.contact_message": {
+      "subject": "Nova mensagem de {name} pela sua página de contato",
+      "intro": "{name} ({email}) escreveu para você pela página de contato do seu site:"
     }
   },
   "roles": {

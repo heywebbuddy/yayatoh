@@ -47,4 +47,10 @@ describe('staff roles (M1.3e/f)', () => {
     expect(staffCan('support', 'charities')).toBe(true);
     expect(staffCan('finance', 'charities')).toBe(false);
   });
+
+  it('only admins change the platform default event categories (U8)', () => {
+    expect(staffCan('admin', 'categories')).toBe(true);
+    expect(staffCan('support', 'categories')).toBe(false);
+    expect(staffCan('finance', 'categories')).toBe(false);
+  });
 });

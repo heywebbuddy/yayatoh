@@ -4,6 +4,7 @@ import {
   type ListingPageDto,
   listingCities,
   orgListings,
+  orgListingTags,
   type SearchParams,
   searchListings,
 } from '@yayatoh/marketplace';
@@ -36,9 +37,23 @@ export const cachedOrganizerListings = (orgId: string, orgSlug: string, p: Searc
     revivePage,
   );
 
-/** A tenant site's own listings, cached under the org's scope. */
-export const cachedTenantListings = (orgId: string, page: number) =>
-  publicCached({ org: orgId }, ['tenant-home', page], () => orgListings(orgId, page), revivePage);
+/** A tenant site's own listings, cached under the org's scope (U8: optionally one tag's). */
+export const cachedTenantListings = (orgId: string, page: number, tag: string | null = null) =>
+  publicCached(
+    { org: orgId },
+    ['tenant-home', page, tag],
+    () => orgListings(orgId, page, new Date(), tag ? { tag } : {}),
+    revivePage,
+  );
+
+/** U8: an org's public tags (its site's tag filter), cached under the org's scope. */
+export const cachedListingTags = (orgId: string) =>
+  publicCached(
+    { org: orgId },
+    ['listing-tags'],
+    () => orgListingTags(orgId),
+    (raw) => raw as { key: string; tag: string; count: number }[],
+  );
 
 export const cachedCities = () =>
   publicCached(

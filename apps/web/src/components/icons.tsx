@@ -8,6 +8,7 @@ import {
   Calendar,
   CalendarCheck,
   CalendarRange,
+  ChartColumn,
   ChartLine,
   ClipboardList,
   Copy,
@@ -17,6 +18,7 @@ import {
   Gauge,
   Globe,
   Handshake,
+  HardDrive,
   Heart,
   History,
   House,
@@ -37,6 +39,7 @@ import {
   MessageSquare,
   Mic,
   Palette,
+  Percent,
   Scale,
   ScanLine,
   Search,
@@ -46,9 +49,11 @@ import {
   ShieldCheck,
   Star,
   Store,
+  Tag,
   Ticket,
   Undo2,
   Users,
+  Wallet,
   Webhook,
   Workflow,
   Zap,
@@ -70,6 +75,7 @@ const ICONS: Record<string, LucideIcon> = {
   clipboard: ClipboardList,
   calendar: Calendar,
   store: Store,
+  tag: Tag,
   mic: Mic,
   award: Award,
   heart: Heart,
@@ -80,6 +86,7 @@ const ICONS: Record<string, LucideIcon> = {
   search: Search,
   globe: Globe,
   image: Image,
+  'hard-drive': HardDrive,
   'calendar-check': CalendarCheck,
   bell: Bell,
   settings: Settings,
@@ -109,6 +116,10 @@ const ICONS: Record<string, LucideIcon> = {
   // M6.7a: the agency's Clients pages and a client's Agencies page.
   briefcase: Briefcase,
   handshake: Handshake,
+  // U5: the Money dashboards.
+  wallet: Wallet,
+  'chart-column': ChartColumn,
+  percent: Percent,
 };
 
 export function Icon({ name, className = 'size-4' }: { name: string; className?: string }) {

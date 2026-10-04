@@ -5,6 +5,7 @@ import {
   DELETE,
   defineDataSubjectContributor,
   ERASED_EMAIL,
+  notSubject,
   REDACT,
   refsOf,
   type SubjectErasure,
@@ -86,6 +87,10 @@ export const notificationsDataSubjects = defineDataSubjectContributor({
     'notifications.push_tokens': DELETE,
     'notifications.inbox_items': DELETE,
     'notifications.email_previews': DELETE,
+    // U10: the org's own Reply-To address for its email, organizer settings, not a person's data.
+    'notifications.email_settings': notSubject(
+      "the org's Reply-To address for its own email (organizer settings, not about a guest or attendee)",
+    ),
   },
   async export(tx: TenantTx, s) {
     const sent = await tx.select().from(messages).where(toSubject(s)).orderBy(asc(messages.createdAt));

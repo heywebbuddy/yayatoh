@@ -85,6 +85,7 @@ describe('audit hash chain', () => {
     expect(row?.n).toBe(row?.max);
   });
 
+  // Two throwaway fixtures (about 15 s each on the merged tree, which seeds every module's rows).
   it('detects an edited, a deleted and a re-hashed entry (tampering needs superuser: app_user can’t)', async () => {
     await expect(
       withTenant(a.ctx(), (tx) => tx.execute(sql`update platform.audit_events set action = 'x'`)),

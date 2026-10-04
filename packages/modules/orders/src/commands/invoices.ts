@@ -4,6 +4,7 @@ import { actorId, type Ctx, createCtx, DomainError, type DomainEvent, requireOrg
 import { type FundsFlow, fundsFlowTx, type ProviderEvent, postInvoicePaymentTx } from '@yayatoh/payments';
 import { signLinkToken, tenantCommand, tenantQuery, verifyLinkToken } from '@yayatoh/platform';
 import {
+  releaseCouponTx,
   releasePromoTx,
   sellHeldTx,
   setOrderPaymentDueTx,
@@ -592,6 +593,7 @@ export const voidInvoiceCommand = tenantCommand({
     });
     await setOrderPaymentDueTx(tx, order.id, false, ctx.now);
     if (order.promoCodeId) await releasePromoTx(tx, order.promoCodeId);
+    if (order.couponId) await releaseCouponTx(tx, order.id, ctx.now);
     await releaseCreditTx(tx, ctx, order.id);
     if (voided.length)
       emit({

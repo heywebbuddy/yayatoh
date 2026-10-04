@@ -63,7 +63,8 @@
     "providers": "Messaging providers",
     "charities": "Charities",
     "menu": "Open menu",
-    "closeMenu": "Close menu"
+    "closeMenu": "Close menu",
+    "categories": "Event categories"
   },
   "tenants": {
     "title": "Tenants",
@@ -1133,5 +1134,40 @@
     "tooLate": "Choose a date on or before {date}",
     "timeZoneNote": "Times in {zone}",
     "selected": "Selected"
+  },
+  "platformCategories": {
+    "title": "Default event categories",
+    "description": "The categories every new organization starts with, in this order. Organizations rename, hide and add their own afterwards; a change here never alters a list an organization already has.",
+    "listTitle": "{count, plural, one {# category in the defaults} other {# categories in the defaults}}",
+    "explain": "Tick the categories new organizations get and move them into order. Unticked categories stay in the platform taxonomy (the marketplace and /v1 keep using every one of them).",
+    "notInDefaults": "Not in the defaults",
+    "moveUp": "Move {name} up",
+    "moveDown": "Move {name} down",
+    "save": "Save defaults",
+    "done": {
+      "saved": "Defaults saved.",
+      "moved": "Order saved."
+    },
+    "error": {
+      "empty": "Keep at least one category in the defaults."
+    },
+    "labels": {
+      "arts_culture": "Arts & culture",
+      "business_seminars": "Business & seminars",
+      "charity": "Charity",
+      "community": "Community",
+      "education_classes": "Education & classes",
+      "family": "Family",
+      "food_drink": "Food & drink",
+      "health_wellness": "Health & wellness",
+      "music": "Music",
+      "nightlife": "Nightlife",
+      "religion_spirituality": "Religion & spirituality",
+      "social_gatherings": "Social gatherings",
+      "sports_fitness": "Sports & fitness",
+      "technology": "Technology",
+      "travel_leisure": "Travel & leisure",
+      "other": "Other"
+    }
   }
 }

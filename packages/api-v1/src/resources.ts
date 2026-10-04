@@ -140,6 +140,13 @@ export const Event = z
     country: z.string().nullable(),
     currency: z.string(),
     publishedAt: DateTime.nullable(),
+    // U8 (additive): the event's labels.
+    category: EventCategory.nullable().openapi({
+      description: 'The platform category the event maps to (the org may label it with its own name).',
+    }),
+    tags: z.array(z.string()).openapi({
+      description: 'The event’s tags, in alphabetical order (filter with `tag` on the list).',
+    }),
   })
   .openapi('Event');
 

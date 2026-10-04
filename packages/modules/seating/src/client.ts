@@ -15,6 +15,7 @@ export {
   type PaperSize,
   sheetLayout,
 } from './domain/cards.ts';
+
 // M6.11b: sales channels (the organizer's forms and the public map use the same rules).
 export {
   CHANNEL_KINDS,

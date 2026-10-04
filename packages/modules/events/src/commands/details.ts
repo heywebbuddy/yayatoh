@@ -2,18 +2,25 @@ import type { TenantTx } from '@yayatoh/db';
 import { DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { findVenueTx } from '@yayatoh/venues';
-import { and, asc, eq, exists, ilike, inArray, sql } from 'drizzle-orm';
+import { and, asc, eq, exists, ilike, inArray, isNull, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
+import { resolveCategoryTx } from '../categories.ts';
 import { EVENT_CATEGORIES, parseTags, TagError, tagKey } from '../domain/categories.ts';
+import { categoryRef, isPlatformKey } from '../domain/org-categories.ts';
 import { EventDto } from '../dto.ts';
 import { EventDetailsDto, SetEventDetailsInput } from '../dto-content.ts';
-import { events } from '../schema.ts';
+import { events, orgCategories } from '../schema.ts';
 import { eventTags } from '../schema-content.ts';
 
 async function findEvent(tx: TenantTx, eventId: string) {
   const [row] = await tx.select().from(events).where(eq(events.id, eventId));
   if (!row) throw new DomainError('not_found');
   return row;
+}
+
+/** An event's tags in key order (also the marketplace projector's source, U8). */
+export async function eventTagsTx(tx: TenantTx, eventId: string): Promise<string[]> {
+  return tagsOf(tx, eventId);
 }
 
 async function tagsOf(tx: TenantTx, eventId: string): Promise<string[]> {
@@ -25,8 +32,15 @@ async function tagsOf(tx: TenantTx, eventId: string): Promise<string[]> {
   return rows.map((r) => r.tag);
 }
 
+async function categoryOf(tx: TenantTx, orgCategoryId: string | null) {
+  if (!orgCategoryId) return null;
+  const [c] = await tx.select().from(orgCategories).where(eq(orgCategories.id, orgCategoryId));
+  return c ?? null;
+}
+
 async function detailsOf(tx: TenantTx, eventId: string) {
   const e = await findEvent(tx, eventId);
+  const c = await categoryOf(tx, e.orgCategoryId);
   return {
     eventId: e.id,
     venueId: e.venueId,
@@ -36,6 +50,9 @@ async function detailsOf(tx: TenantTx, eventId: string) {
     category: e.category as (typeof EVENT_CATEGORIES)[number] | null,
     attendanceMode: e.attendanceMode as EventDetailsDto['attendanceMode'],
     tags: await tagsOf(tx, eventId),
+    categoryRef: c ? categoryRef(c) : e.category,
+    categoryName: c?.name ?? null,
+    categoryHidden: Boolean(c?.hiddenAt),
   };
 }
 
@@ -75,7 +92,25 @@ export const setEventDetailsCommand = tenantCommand({
         set.country = venue.country;
       }
     }
-    if (input.category !== undefined) set.category = input.category;
+    if (input.orgCategory !== undefined) {
+      if (input.orgCategory === null) {
+        set.orgCategoryId = null;
+        set.category = null;
+      } else {
+        const c = await resolveCategoryTx(tx, orgId, input.orgCategory);
+        if (!c) throw new DomainError('not_found', 'Category not found', { field: 'category' });
+        // Like an archived venue: a hidden category stays on events that have it, never newly picked.
+        if (c.hiddenAt && c.id !== current.orgCategoryId)
+          throw new DomainError('invalid_state', 'That category is hidden', { field: 'category' });
+        set.orgCategoryId = c.id;
+        set.category = c.platformKey;
+      }
+    } else if (input.category !== undefined) {
+      // A platform key (older callers): the org's category for it when there is one.
+      const c = input.category ? await resolveCategoryTx(tx, orgId, input.category) : null;
+      set.category = input.category;
+      set.orgCategoryId = c?.id ?? null;
+    }
     if (input.attendanceMode !== undefined) set.attendanceMode = input.attendanceMode;
     if (Object.keys(set).length)
       await tx
@@ -150,14 +185,43 @@ export const searchEventsQuery = tenantQuery({
   name: 'events.searchEvents',
   input: z.object({
     category: z.enum(EVENT_CATEGORIES).optional(),
+    /** U8: an org category ref (platform key of an unchanged default, else id). */
+    categoryRef: z.string().trim().max(80).optional(),
     tag: z.string().trim().max(40).optional(),
     q: z.string().trim().max(80).optional(),
   }),
-  output: z.array(EventDto.extend({ category: z.string().nullable(), tags: z.array(z.string()) })),
+  output: z.array(
+    EventDto.extend({
+      category: z.string().nullable(),
+      tags: z.array(z.string()),
+      /** U8: the org category's own name (null = the platform label of `category`). */
+      categoryName: z.string().nullable(),
+    }),
+  ),
   entitlement: 'core',
   permission: 'events:read',
   handler: async ({ input, tx }) => {
+    const stored = await tx.select().from(orgCategories);
+    const byRef = input.categoryRef
+      ? isPlatformKey(input.categoryRef)
+        ? stored.find((c) => c.name === null && c.platformKey === input.categoryRef)
+        : stored.find((c) => c.id === input.categoryRef)
+      : undefined;
+    const refCond = !input.categoryRef
+      ? undefined
+      : byRef
+        ? // An unchanged default also matches events from before the org stored its list.
+          byRef.name === null
+          ? or(
+              eq(events.orgCategoryId, byRef.id),
+              and(isNull(events.orgCategoryId), eq(events.category, byRef.platformKey)),
+            )
+          : eq(events.orgCategoryId, byRef.id)
+        : isPlatformKey(input.categoryRef)
+          ? and(isNull(events.orgCategoryId), eq(events.category, input.categoryRef))
+          : sql`false`;
     const conds = [
+      refCond,
       input.category ? eq(events.category, input.category) : undefined,
       input.tag
         ? exists(
@@ -186,6 +250,47 @@ export const searchEventsQuery = tenantQuery({
           )
           .orderBy(asc(eventTags.tagKey))
       : [];
-    return rows.map((r) => ({ ...r, tags: tags.filter((t) => t.eventId === r.id).map((t) => t.tag) }));
+    const names = new Map(stored.map((c) => [c.id, c.name]));
+    return rows.map((r) => ({
+      ...r,
+      tags: tags.filter((t) => t.eventId === r.id).map((t) => t.tag),
+      categoryName: r.orgCategoryId ? (names.get(r.orgCategoryId) ?? null) : null,
+    }));
+  },
+});
+
+/**
+ * U8: tags and category of several events at once (the `/v1` event resources), in the caller's
+ * org (RLS): ids of another org's events simply get nothing.
+ */
+export const eventLabelsQuery = tenantQuery({
+  name: 'events.eventLabels',
+  input: z.object({ eventIds: z.array(z.uuid()).max(101) }),
+  output: z.record(
+    z.string(),
+    z.object({ tags: z.array(z.string()), category: z.enum(EVENT_CATEGORIES).nullable() }),
+  ),
+  entitlement: 'core',
+  permission: 'events:read',
+  handler: async ({ input, tx }) => {
+    if (input.eventIds.length === 0) return {};
+    const rows = await tx
+      .select({ id: events.id, category: events.category })
+      .from(events)
+      .where(inArray(events.id, input.eventIds));
+    const tags = await tx
+      .select({ eventId: eventTags.eventId, tag: eventTags.tag })
+      .from(eventTags)
+      .where(inArray(eventTags.eventId, input.eventIds))
+      .orderBy(asc(eventTags.tagKey));
+    return Object.fromEntries(
+      rows.map((r) => [
+        r.id,
+        {
+          tags: tags.filter((t) => t.eventId === r.id).map((t) => t.tag),
+          category: r.category as (typeof EVENT_CATEGORIES)[number] | null,
+        },
+      ]),
+    );
   },
 });

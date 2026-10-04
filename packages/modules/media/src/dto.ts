@@ -21,6 +21,8 @@ export const MediaAssetDto = z.object({
   ownerId: z.uuid(),
   slot: z.enum(SLOTS),
   position: z.number().int(),
+  /** U10: the original this image reuses (null: it is an original with its own files). */
+  sourceAssetId: z.uuid().nullable().default(null),
   sourceType: z.enum(SOURCE_TYPES),
   width: z.number().int(),
   height: z.number().int(),
@@ -53,7 +55,12 @@ export const MediaUsageDto = z.object({ usedBytes: z.number().int(), limitBytes:
 export type MediaUsageDto = z.infer<typeof MediaUsageDto>;
 
 /** Upload result: the new image, and the one it replaced (its files are purged after commit). */
-export const UploadResultDto = z.object({ asset: MediaAssetDto, replacedAssetId: z.uuid().nullable() });
+export const UploadResultDto = z.object({
+  asset: MediaAssetDto,
+  replacedAssetId: z.uuid().nullable(),
+  /** U10: the replaced image was an original reused elsewhere: it moved to the library, files kept. */
+  filesKept: z.boolean().default(false),
+});
 export type UploadResultDto = z.infer<typeof UploadResultDto>;
 
 const Alt = z.string().trim().max(300).nullable().default(null);
@@ -72,9 +79,10 @@ const UploadFields = z.object({
 });
 
 export const UploadMediaInput = UploadFields.extend({
-  ownerType: z.enum(['event', 'venue']),
+  /** U10: `library` (owner id = the org, slot `library`) uploads straight to the media library. */
+  ownerType: z.enum(['event', 'venue', 'library']),
   ownerId: z.uuid(),
-  slot: z.enum(['cover', 'gallery', 'photo', 'floorplan']),
+  slot: z.enum(['cover', 'gallery', 'photo', 'floorplan', 'library']),
 }).refine(altRequired, altIssue);
 export type UploadMediaInput = z.input<typeof UploadMediaInput>;
 

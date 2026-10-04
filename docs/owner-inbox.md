@@ -616,6 +616,7 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **Exports download directly** (a link, audited as `seating.guests.export` with kind, format and row count) **without "Confirm it's you"**: they hold names, parties, meals and replies but no private answers (dietary, accessibility, addresses stay out). The RSVP answers export asks for step-up because it can include private answers. Confirm, or ask for step-up here too.
 - [ ] **Card stock:** place cards are 90 × 50 mm tents (90 × 100 mm flat), escort cards 3.5 × 2 in, table cards a whole sheet folded in half; paper A4, US Letter, A5 or US Legal (Letter is preselected for events in an `America/…` time zone). Pre-cut stock of other brands (Avery templates) is not matched yet: say which you want.
 - [ ] **Declined guests** never get a card and are not counted for the caterer; guests who haven't answered are printed and counted. Confirm.
+
 ## M4.4a — guest seat finder (2026-10-03, pending owner)
 - [ ] **PIN mode uses each party's own PIN, not one event-wide PIN.** P4-2 says "strict name lookup plus the event PIN"; M4.1d made the printed PIN per party (the one on the invitation), so the seat finder's new "full name + PIN" mode reuses it. With a party PIN, typing names reveals nothing (the reply is the same for every miss, and a hit needs that party's PIN). A single event-wide PIN on a poster would let anyone at the venue test whether a name is on the list. Confirm, or ask for an event PIN as well (it would need its own enumeration answer).
 - [ ] **The permanent QR code is the party's RSVP link** (`/rsvp/{token}/seat`): it shows the party's current table however it is moved. "Reset link" on the party's RSVP page replaces it (old printed codes stop working), as for the RSVP itself. Confirm.
@@ -800,6 +801,11 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **Metering and markup (D24):** watch time is counted per attendee per minute (`viewer-minutes`); set the resale price per viewer-minute when billing meters (M6.6b) go live.
 - [ ] **Virtual-only tickets at the door:** check-in does not refuse a virtual-only ticket yet. Say if the door should refuse them (planned as a check-in port in M6.9b).
 
+## U6 — templates from scratch (2026-10-03, pending owner)
+- [ ] **What "sections" and "checklist items" mean in a template.** Chosen default: *sections* are the event page's content sections (text, FAQ, schedule, location, links — the M1.4d blocks); *checklist items* are the organizer's own to-dos, a new per-event list shown under "Your checklist" on the setup guide (the profile's readiness checks stay computed). Per-event switching of workspace sections (nav items) was not built: profiles stay the unit that switches sections on (UX-2). Confirm, or ask for nav-section toggles as a later increment.
+- [ ] **Duplicating an event and saving it as a template now also copy its page sections and checklist titles** (snapshot v2; v1 templates still read). Confirm.
+- [ ] **A template's kind of event is fixed once made** (change it by starting a new template). Confirm.
+
 ## U1 — form controls (2026-10-03, pending owner)
 - [ ] **Built with these defaults; say if any should change:**
   - **Type-ahead on a closed dropdown chooses straight away**, as the browser's own select did (the keyboard paths and habits stay the same). To search, open the list (Enter, ↓ or a click); lists of more than 8 options open with a search box.
@@ -894,3 +900,33 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **New alert rules (defaults):** `integrationFailed` — any failed sync run or connection revoked at the provider in the last 24 hours (warning; critical once a connection is lost), for members with `integrations:read`; `billingPastDue` — the plan subscription is past due (warning) or unpaid (critical), for `billing:read`. Change the thresholds by asking; copy in 13 locales.
 - [ ] **Two REST-hook surfaces on /v1** (both additive, kept): M6.4c's `/orgs/{org}/hooks` (Zapier: key-bound, samples, `webhooks:subscribe`) and M6.5c's `/orgs/{org}/webhook-endpoints` (Make and n8n, `webhooks:manage`). Once /v1 ships they cannot be removed; say if you want one surface before landing.
 - [ ] **One `@opentelemetry/api` version** (pnpm override 1.9.1 in `pnpm-workspace.yaml`) so every package shares one drizzle-orm build. Remove it when no dependency pins 1.9.0.
+## U3 — review bugs (2026-10-03, pending owner)
+- **Demo personas confirm step-up without a code (dev and preview only).** Reviewers sign in with one click on `/dev/login`, so they never had the persona's authenticator, and every sensitive action (adding a domain, refunds, exports) ended on "Please confirm it's you". The confirm dialog now offers "Continue without a code (demo account)" to seeded personas only, and only when `YAYATOH_DEV_AUTH=1` outside production (the same switch as the persona list). It runs the real, audited step-up with the persona's dev secret. Say if previews should keep asking for a code instead.
+- **Domains:** the connect wizard is provider-agnostic. Real DNS checks and certificates arrive with the Vercel Domains adapter (your Vercel account, already listed above).
+
+## U5 — Money dashboards (2026-10-03, pending owner)
+- [ ] **Built with these defaults; say if any should change:**
+  - **Who sees what:** Overview, Payouts figures and Fees need finance access (owner, admin, finance). Sales by event is open to everyone who reads orders (viewer, box office, manager) with counts and gross only; refunds, fees and net per event need finance access.
+  - **Comparison:** each figure is compared with the period of the same length just before ("Last 30 days" vs the 30 days before). All time has no comparison.
+  - **Expected payout** on the timeline is the held amount less the 5 % reserve (decision D3 defaults); anything owed is netted at release, so the actual payout can be lower.
+  - **Fees per order** lists the latest 200 orders of the period (the CSV has the same list).
+
+## U8 — categories, tags and the event-type picker (2026-10-03, pending owner)
+- [ ] **Built with these defaults; say if any should change:**
+  - **Who manages org categories:** owners and admins (`org:update`, the Settings permission). Managers pick categories on events but don't change the list.
+  - **Who manages the platform defaults:** admins only (staff action `categories`). Staff choose and order the existing taxonomy keys; a new platform key needs a code change.
+  - **Defaults reach new orgs only:** an org's list is stored on its first change and never follows later staff changes.
+  - **Public event pages** still show the platform category label, not the org's own name (Later).
+
+## U9 — coupons and currencies (2026-10-03, pending owner)
+- [ ] **Built with these defaults; say if any should change:**
+  - **The currency locks with the first order of any kind**, including an unpaid checkout that later expired: the database refuses the change once any order exists. Stricter alternative: none. Looser: only paid orders (needs a status-aware check instead of the foreign key).
+  - **An event's promo code wins over an org coupon** if the same code ever existed in both; creating either refuses a code the other already uses, so this only matters for data made before U9 (none).
+  - **Per-buyer limits count by email address** (the buyer's CRM contact); a merged contact's uses count together.
+  - **A fixed-amount coupon works only at events in its own currency**; percentage coupons work in every currency. No conversion.
+
+## U10 — media library and settings parity (2026-10-03, pending owner)
+- [ ] **Removing an image from its place keeps it only if it is reused.** An image uploaded into an event, venue or speaker and used nowhere else is deleted when removed there (as before U10); one that is reused elsewhere moves to the media library. Images uploaded straight to the library stay until deleted there. Say if every removed image should stay in the library instead.
+- [ ] **Contact page messages go to owners, admins, managers and marketing** (in-app and email, as for other messages); the email carries the visitor's name, address and an excerpt, and organizers answer from their own mail. Say if one chosen address (e.g. a support inbox) should receive them instead.
+- [ ] **From name rules:** no addresses, `@ < > "` or anything that looks like a domain (so "Events.com Festival" is refused). Say if domain-like names should be allowed when they match the org's verified sending domain.
+- [ ] **Base issues found on the 3u base (not U10's, for the merge session):** 13 native `<select>`s in 3j pages fail U1's `no-native-select` check-modules rule; 19 console empty states in 3j pages have no action (U2's audit); (the 3u merge's own fix commits address part of this).

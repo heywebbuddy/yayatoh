@@ -1,10 +1,17 @@
-import { type EventViewDto, eventViewQuery, followedChannels, WIDGET_META } from '@yayatoh/command-center';
+import {
+  type EventViewDto,
+  eventViewQuery,
+  followedChannels,
+  WIDGET_META,
+  type WidgetKey,
+} from '@yayatoh/command-center';
 import { executeQuery, isDomainError } from '@yayatoh/kernel';
 import { buttonClass, EmptyState, PageHeader, Tag } from '@yayatoh/ui';
 import { MonitorPlay, ScanLine } from 'lucide-react';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { CommandCenterBoard } from '@/components/command-center/board.tsx';
-import { ModePanel } from '@/components/command-center/mode-panel.tsx';
+import { CommandCenterShell } from '@/components/command-center/hero.tsx';
+import { ModeOverrideForm } from '@/components/command-center/mode-panel.tsx';
 import { Crumbs, eventWhen } from '@/components/crumbs.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { commandCenterCtx, loadWidget, WIDGETS, widgetChannels } from '@/server/command-center.ts';
@@ -15,6 +22,8 @@ import { resetLayoutAction, saveLayoutAction, setModeAction } from './actions.ts
 /**
  * The event's Command Center (M3.2a): the member's role layout for the event's current mode,
  * each widget loaded through its registry loader and kept current over its realtime channel.
+ * U4: a hero strip (countdown, mode, the next action) and a KPI row on top, read through the same
+ * loaders (so the role rules are the loaders' own), and a grid packed with no empty cells.
  */
 export default async function CommandCenterPage({
   params,
@@ -48,13 +57,28 @@ export default async function CommandCenterPage({
   }
   // Only widgets the app registered render (the alerts slot is always registered).
   const slots = view.layout.filter((s) => WIDGETS[s.key]);
+  const inLayout = new Set(slots.map((s) => s.key as WidgetKey));
+  const kpis = view.kpis.filter((k) => WIDGETS[k]);
+  // The hero's next action reads readiness (where the mode shows it) and alerts.
+  const hero = {
+    readiness: inLayout.has('readiness'),
+    alerts: inLayout.has('alerts'),
+  };
+  const read = [
+    ...new Set<WidgetKey>([
+      ...slots.filter((x) => !x.hidden).map((x) => x.key),
+      ...kpis,
+      ...(hero.readiness ? (['readiness'] as const) : []),
+      ...(hero.alerts ? (['alerts'] as const) : []),
+    ]),
+  ];
   const initial: Record<string, unknown> = {};
-  for (const s of slots.filter((x) => !x.hidden)) {
+  for (const key of read) {
     try {
-      initial[s.key] = await loadWidget(s.key, ev.id, ctx);
+      initial[key] = await loadWidget(key, ev.id, ctx);
     } catch (err) {
       if (!isDomainError(err)) throw err;
-      initial[s.key] = null;
+      initial[key] = null;
     }
   }
   const channels = await widgetChannels({
@@ -65,6 +89,7 @@ export default async function CommandCenterPage({
     modules: data.modules,
   });
   const base = `/o/${org}/e/${event}`;
+  const alertsHref = `/o/${org}/alerts?event=${ev.id}`;
   return (
     <div
       className="flex flex-col gap-6"
@@ -103,35 +128,56 @@ export default async function CommandCenterPage({
                 {t('tv.open')}
               </Link>
             ) : null}
-            <Link href="/scan" className={buttonClass('primary')}>
+            <Link href="/scan" className={buttonClass('secondary')}>
               <ScanLine aria-hidden="true" strokeWidth={2} />
               {t('openScanner')}
             </Link>
           </>
         }
       />
-      <ModePanel
-        mode={view.mode}
+      <CommandCenterShell
+        hero={{
+          mode: view.mode,
+          role: view.role,
+          canScan: data.modules.has('checkin') && ['owner', 'ops', 'door'].includes(view.role),
+          revenue: kpis.includes('sales'),
+          ...hero,
+        }}
+        links={{ base, publicPage: `/events/${ev.slug}`, alerts: alertsHref }}
         timeZone={view.timeZone}
         locale={locale}
-        canOverride={view.canOverride}
-        action={setModeAction.bind(null, org, event)}
-      />
-      <CommandCenterBoard
-        key={`${view.mode.mode}:${slots.map((s) => `${s.key}${s.hidden ? '-' : ''}`).join(',')}`}
-        slots={slots}
-        channels={Object.fromEntries(slots.map((s) => [s.key, followedChannels(WIDGET_META[s.key])]))}
-        urls={channels}
-        initial={initial}
-        widgetUrl={`/api/command-center/${org}/${event}`}
-        base={base}
-        locale={locale}
-        timeZone={view.timeZone}
         serverNow={ctx.now.toISOString()}
-        nextChangeAt={view.mode.nextChangeAt}
-        save={saveLayoutAction.bind(null, org, event)}
-        reset={resetLayoutAction.bind(null, org, event)}
-      />
+        initial={{ readiness: initial.readiness, alerts: initial.alerts }}
+        controls={
+          view.canOverride ? (
+            <ModeOverrideForm mode={view.mode} action={setModeAction.bind(null, org, event)} />
+          ) : null
+        }
+      >
+        <CommandCenterBoard
+          key={`${view.mode.mode}:${slots.map((s) => `${s.key}${s.hidden ? '-' : ''}`).join(',')}`}
+          slots={slots}
+          channels={Object.fromEntries(
+            [...new Set([...slots.map((s) => s.key), ...read])].map((k) => [
+              k,
+              followedChannels(WIDGET_META[k]),
+            ]),
+          )}
+          urls={channels}
+          initial={initial}
+          widgetUrl={`/api/command-center/${org}/${event}`}
+          base={base}
+          locale={locale}
+          timeZone={view.timeZone}
+          serverNow={ctx.now.toISOString()}
+          nextChangeAt={view.mode.nextChangeAt}
+          save={saveLayoutAction.bind(null, org, event)}
+          reset={resetLayoutAction.bind(null, org, event)}
+          kpis={kpis}
+          hero={hero}
+          alertsHref={alertsHref}
+        />
+      </CommandCenterShell>
     </div>
   );
 }

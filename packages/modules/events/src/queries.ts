@@ -4,15 +4,22 @@ import { type Ctx, DomainError } from '@yayatoh/kernel';
 import { tenantQuery } from '@yayatoh/platform';
 import { and, asc, eq, gt, gte, inArray, isNull, lt, lte, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
+import { tagKey } from './domain/categories.ts';
 import { EventDto, type PublicEventDto, publicEventSerializer } from './dto.ts';
 import { type EVENT_ROLES, eventRoleAssignments, events } from './schema.ts';
+import { eventTags } from './schema-content.ts';
 
 const startsMs = sql`date_trunc('milliseconds', ${events.startsAt})`;
 
 /** Events by start time. `limit` and `after` (a keyset position) page it for /v1; omitted, all. */
 export const listEventsQuery = tenantQuery({
   name: 'events.listEvents',
-  input: z.object({ limit: z.int().min(1).max(101).optional(), after: KeysetAfter.optional() }),
+  input: z.object({
+    limit: z.int().min(1).max(101).optional(),
+    after: KeysetAfter.optional(),
+    /** U8: only events with this tag (case-insensitive). */
+    tag: z.string().trim().max(40).optional(),
+  }),
   output: z.array(EventDto),
   entitlement: 'core',
   permission: 'events:read',
@@ -21,9 +28,14 @@ export const listEventsQuery = tenantQuery({
       .select()
       .from(events)
       .where(
-        input.after
-          ? sql`(${startsMs}, ${events.id}) > (${input.after.at.toISOString()}::timestamptz, ${input.after.id}::uuid)`
-          : undefined,
+        and(
+          input.after
+            ? sql`(${startsMs}, ${events.id}) > (${input.after.at.toISOString()}::timestamptz, ${input.after.id}::uuid)`
+            : undefined,
+          input.tag
+            ? sql`exists (select 1 from ${eventTags} t where t.event_id = ${events.id} and t.tag_key = ${tagKey(input.tag)})`
+            : undefined,
+        ),
       )
       .orderBy(asc(startsMs), asc(events.id));
     return input.limit ? q.limit(input.limit) : q;

@@ -22,6 +22,7 @@ import { setOccupantDirectory, setPartyCredentials } from '@yayatoh/seating';
 import { configureSso, ssoRuntimeFromEnv } from '@yayatoh/sso';
 import { surveysContactOwner } from '@yayatoh/surveys';
 import { createOrgAuthorizer, memberRoleTx, orgStatusGate } from '@yayatoh/tenancy';
+import { ticketingContactOwner } from '@yayatoh/ticketing';
 import { configureVirtual, videoProviderFromEnv } from '@yayatoh/virtual';
 import { configureWebhooks, fakeResolver, webhookPublisherFromEnv } from '@yayatoh/webhooks';
 import { DATA_SUBJECT_CONTRIBUTORS } from './data-subjects.ts';
@@ -58,6 +59,7 @@ registerContactReferenceOwners([
   notificationsContactOwner,
   guestsContactOwner,
   ordersContactOwner,
+  ticketingContactOwner,
   checkinContactOwner,
   surveysContactOwner,
   campaignsContactOwner,

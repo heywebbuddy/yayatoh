@@ -1,3 +1,27 @@
+// U6: the organizer's own checklist on an event, and page sections in copies and templates.
+
+export {
+  addOrgCategoryCommand,
+  ensureOrgCategoriesTx,
+  moveOrgCategoryCommand,
+  OrgCategoryDto,
+  orgCategoriesQuery,
+  platformDefaultKeysTx,
+  renameOrgCategoryCommand,
+  resolveCategoryTx,
+  setOrgCategoryHiddenCommand,
+} from './categories.ts';
+export {
+  addChecklistItemCommand,
+  ChecklistTitle,
+  checklistTitlesTx,
+  deleteChecklistItemCommand,
+  EventChecklistItemDto,
+  eventChecklistQuery,
+  insertChecklistItemsTx,
+  MAX_CHECKLIST_ITEMS,
+  setChecklistItemDoneCommand,
+} from './checklist.ts';
 export {
   accessGrant,
   accessGrantTx,
@@ -21,8 +45,11 @@ export {
   updateAnnouncementCommand,
   updateSectionCommand,
 } from './commands/content.ts';
+export { CURRENCY_LOCKED, SetEventCurrencyInput, setEventCurrencyCommand } from './commands/currency.ts';
 export {
   eventDetailsQuery,
+  eventLabelsQuery,
+  eventTagsTx,
   orgTagsQuery,
   searchEventsQuery,
   setEventDetailsCommand,
@@ -42,6 +69,7 @@ export {
 export { EventSettingsSnapshot, eventSettingsTx, insertEventCopyTx } from './copy.ts';
 // M6.5b: events for CRM connectors (Salesforce campaigns).
 export { type CrmEventRow, crmEventRowsTx } from './crm-event-rows.ts';
+export { insertSectionsTx, SectionsSnapshot, sectionsSnapshotTx } from './copy-content.ts';
 export { eventsDataSubjects } from './data-subject.ts';
 // M6.9a: an event's delivery (attendance) mode for the virtual module.
 export { type EventDeliveryFacts, eventDeliveryTx } from './delivery.ts';
@@ -72,6 +100,15 @@ export {
   safeHref,
   sanitizeMarkdown,
 } from './domain/markdown.ts';
+export {
+  CategoryNameError,
+  categoryRef,
+  isPlatformKey,
+  MAX_CATEGORY_NAME,
+  MAX_ORG_CATEGORIES,
+  moveInOrder,
+  normalizeCategoryName,
+} from './domain/org-categories.ts';
 export {
   checkPortalAccount,
   checkPortalCode,
@@ -116,6 +153,7 @@ export {
   parseFaqText,
   parseLinksText,
   parseScheduleText,
+  SectionBody,
   type SectionContent,
   SectionTextError,
 } from './domain/sections.ts';
@@ -230,6 +268,15 @@ export {
   setEventSeriesCommand,
   updateSeriesCommand,
 } from './series.ts';
+export {
+  createEventInSeriesCommand,
+  eventSeriesQuery,
+  PublicSeriesRefDto,
+  publicEventSeries,
+  SeriesDetailDto,
+  SeriesRefDto,
+  seriesDetailQuery,
+} from './series-events.ts';
 export {
   changeTeamRoleCommand,
   eventTeamQuery,

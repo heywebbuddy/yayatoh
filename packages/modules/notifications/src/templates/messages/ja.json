@@ -354,6 +354,10 @@
       "subject": "レポート「{name}」：{period}",
       "intro": "{org} のレポート「{name}」（{period}）の準備ができました。開いて PDF をダウンロードしてください。",
       "cta": "PDF をダウンロード"
+    },
+    "cms.contact_message": {
+      "subject": "お問い合わせページから {name} さんの新しいメッセージ",
+      "intro": "{name} さん（{email}）がサイトのお問い合わせページからメッセージを送りました:"
     }
   },
   "roles": {

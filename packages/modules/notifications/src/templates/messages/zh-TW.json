@@ -354,6 +354,10 @@
       "subject": "你的報告「{name}」：{period}",
       "intro": "{org} 的報告「{name}」（{period}）已準備好。開啟即可下載 PDF。",
       "cta": "下載 PDF"
+    },
+    "cms.contact_message": {
+      "subject": "{name} 透過聯絡頁面傳來新訊息",
+      "intro": "{name}（{email}）透過你網站的聯絡頁面傳了訊息給你："
     }
   },
   "roles": {

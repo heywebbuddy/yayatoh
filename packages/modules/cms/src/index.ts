@@ -16,6 +16,22 @@ export {
   sitemapEntries,
   updateEntryCommand,
 } from './cms.ts';
+export {
+  CONTACT_INTRO_MAX,
+  CONTACT_MESSAGE_MAX,
+  CONTACT_MESSAGE_MIN,
+  ContactPageDto,
+  contactPageQuery,
+  OrgContactInput,
+  OrgContactMessageDto,
+  orgContactMessagesQuery,
+  orgContactNewCountQuery,
+  orgContactNotifier,
+  PublicContactPageDto,
+  publicContactPage,
+  setContactPageCommand,
+  submitOrgContactCommand,
+} from './contact-page.ts';
 export { cmsDataSubjects } from './data-subject.ts';
 export {
   CONTACT_TOPICS,

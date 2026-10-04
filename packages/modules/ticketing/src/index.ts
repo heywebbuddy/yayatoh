@@ -21,7 +21,25 @@ export {
   updateTicketTypeCommand,
   updateTicketTypeTx,
 } from './commands/ticket-types.ts';
+export { ticketingContactOwner } from './contact-merge.ts';
 export { instantiateTicketTypesTx, TicketTypesSnapshot, ticketTypesSnapshotTx } from './copy.ts';
+export {
+  COUPON_BUYER_LIMIT,
+  CouponDto,
+  type CouponRow,
+  CreateCouponInput,
+  claimCouponTx,
+  couponAppliesTo,
+  couponLive,
+  couponRule,
+  createCouponCommand,
+  listCouponsQuery,
+  type ResolvedCode,
+  reclaimCouponTx,
+  releaseCouponTx,
+  resolveCodeTx,
+  setCouponActiveCommand,
+} from './coupons.ts';
 export { ticketingDataSubjects } from './data-subject.ts';
 export {
   CLAIM_PURPOSE,
@@ -120,6 +138,8 @@ export {
   CreatePromoCodeInput,
   claimPromoTx,
   createPromoCodeCommand,
+  type DiscountRule,
+  listOrgPromoCodesQuery,
   listPromoCodesQuery,
   normalizePromoCode,
   PromoCodeDto,
@@ -129,6 +149,7 @@ export {
 } from './promo.ts';
 export { publicTicketTypes } from './public.ts';
 export {
+  COUPON_SCOPES,
   FEE_MODES,
   PROMO_KINDS,
   TICKET_STATUSES,

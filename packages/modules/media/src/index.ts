@@ -1,12 +1,29 @@
 export { mediaDataSubjects } from './data-subject.ts';
 export * from './dto.ts';
 export {
+  deleteLibraryImage,
+  deleteLibraryImageCommand,
+  familyOfTarget,
+  LibraryDto,
+  LibraryItemDto,
+  libraryQuery,
+  PlacementDto,
+  ReuseMediaInput,
+  reuseMedia,
+  reuseMediaCommand,
+  STORAGE_KINDS,
+  type StorageKind,
+  StorageUsageDto,
+  storageUsageQuery,
+} from './library.ts';
+export {
   catchUpProgramMedia,
   DEFAULT_QUOTA_BYTES,
   familyOf,
   isProgramOwner,
   listMediaQuery,
   listOwnersMediaQuery,
+  MAX_LIBRARY_IMAGES,
   MAX_PER_SLOT,
   type MediaFamily,
   mediaUrl,

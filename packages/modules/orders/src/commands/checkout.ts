@@ -28,13 +28,17 @@ import {
 import { assertNotPausedTx } from '@yayatoh/tenancy';
 import {
   assignTicketSeatsTx,
+  claimCouponTx,
   claimPromoTx,
+  couponRule,
   holdInventoryTx,
   issueTicketsTx,
   quoteTx,
+  reclaimCouponTx,
+  releaseCouponTx,
   releaseHoldTx,
   releasePromoTx,
-  resolvePromoTx,
+  resolveCodeTx,
   sellHeldTx,
   type TicketTypeManager,
 } from '@yayatoh/ticketing';
@@ -169,8 +173,11 @@ export async function startCheckoutTx(
       reason: 'credit_invalid',
       field: 'promoCode',
     });
-  const promo =
-    input.promoCode && !creditCode ? await resolvePromoTx(tx, event.id, input.promoCode, ctx.now) : null;
+  // The event's own promo code, else (U9) one of the org's coupons that applies to this event.
+  const code =
+    input.promoCode && !creditCode ? await resolveCodeTx(tx, event, input.promoCode, ctx.now) : null;
+  const promo = code?.kind === 'promo' ? code.promo : null;
+  const coupon = code?.kind === 'coupon' ? code.coupon : null;
   // Seated events: the chosen seats are held under the order's id and decide the quantities of
   // their ticket types; a seated ticket type cannot be bought without choosing seats.
   const orderId = uuidv7(ctx.now.getTime());
@@ -253,7 +260,7 @@ export async function startCheckoutTx(
   const quote = await quoteTx(tx, event.id, wanted, {
     now: ctx.now,
     includeHidden: new Set([...(grant?.ticketTypeIds ?? []), ...(offer ? [offer.ticketTypeId] : [])]),
-    promo,
+    promo: promo ?? (coupon ? couponRule(coupon) : null),
     occurrenceId,
     ...(opts.manager ? { manager: opts.manager } : {}),
     creditBudgetMinor: credit && credit.currency === event.currency ? credit.balanceMinor : 0,
@@ -283,6 +290,13 @@ export async function startCheckoutTx(
     name: input.buyer.name,
     source: 'checkout',
   });
+  // U9: a coupon use is counted per buyer (their contact), under the coupon's row lock.
+  if (coupon)
+    await claimCouponTx(tx, orgId, coupon.id, {
+      orderId,
+      eventId: event.id,
+      buyerContactId: contact.id,
+    });
   if (input.marketingOptIn) {
     await recordConsentTx(tx, ctx, {
       contactId: contact.id,
@@ -309,8 +323,9 @@ export async function startCheckoutTx(
       currency: quote.currency,
       subtotalMinor: quote.subtotalMinor,
       discountMinor: quote.discountMinor,
-      promoCodeId: quote.promoCodeId,
-      promoCode: promo?.code ?? (credit ? formatCreditNoteNumber(credit.number) : null),
+      promoCodeId: promo ? quote.promoCodeId : null,
+      couponId: coupon?.id ?? null,
+      promoCode: promo?.code ?? coupon?.code ?? (credit ? formatCreditNoteNumber(credit.number) : null),
       feeMinor: quote.feeMinor,
       totalMinor: quote.totalMinor,
       fundsFlow: flow.fundsFlow,
@@ -549,6 +564,7 @@ export const applyProviderEventCommand = tenantCommand({
           });
         // The buyer paid the discounted price, so the use counts again if there is one left.
         if (order.promoCodeId) await claimPromoTx(tx, order.promoCodeId).catch(() => undefined);
+        if (order.couponId) await reclaimCouponTx(tx, order.id, ctx.now);
         await reclaimCreditTx(tx, ctx, order.id);
       } catch {
         // The seats went to someone else: give back the stock this attempt took.
@@ -619,6 +635,7 @@ export const expireOrdersCommand = tenantCommand({
       if (!(await keepOfferHoldTx(tx, order, ctx.now))) await releaseHoldTx(tx, lines(order.items));
       if (order.seatUuids.length) await releaseSeatHoldTx(tx, ctx, order.id);
       if (order.promoCodeId) await releasePromoTx(tx, order.promoCodeId);
+      if (order.couponId) await releaseCouponTx(tx, order.id, ctx.now);
       await releaseCreditTx(tx, ctx, order.id);
       await setStatus(tx, order, 'expire', ctx.now);
       emit({

@@ -354,6 +354,10 @@
       "subject": "你的报告“{name}”：{period}",
       "intro": "{org} 的报告“{name}”（{period}）已准备好。打开即可下载 PDF。",
       "cta": "下载 PDF"
+    },
+    "cms.contact_message": {
+      "subject": "{name} 通过联系页面发来新消息",
+      "intro": "{name}（{email}）通过你网站的联系页面给你发了消息："
     }
   },
   "roles": {

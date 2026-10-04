@@ -226,6 +226,9 @@
       },
       "analytics": {
         "report": "Relatório agendado"
+      },
+      "cms": {
+        "contact_message": "Mensagem da página de contato"
       }
     },
     "status": {
@@ -396,7 +399,12 @@
     "notifications": "Notificações",
     "sso": "Login único",
     "agency": "Clientes",
-    "agencies": "Agências"
+    "agencies": "Agências",
+    "mediaLibrary": "Biblioteca de mídia",
+    "storage": "Armazenamento",
+    "moneyOverview": "Visão geral",
+    "salesByEvent": "Vendas por evento",
+    "fees": "Taxas"
   },
   "vocab": {
     "attendee": "Participante",
@@ -942,7 +950,9 @@
     "submit": "Criar rascunho",
     "slugTaken": "Já existe um evento com este nome. Tente um nome um pouco diferente.",
     "fromTemplate": "Começar com um modelo",
-    "guided": "Criação guiada (3 etapas)"
+    "guided": "Criação guiada (3 etapas)",
+    "currency": "Moeda",
+    "currencyHint": "Usada nos ingressos, no pagamento e nos relatórios. Pode ser alterada até o primeiro pedido."
   },
   "tickets": {
     "subtitle": "Tipos de ingresso, preços e estoque. Todo preço exibido aos compradores já inclui as taxas.",
@@ -1088,7 +1098,8 @@
     "seatChannel": "Alguns desses lugares estão reservados para outro canal de venda. Escolha outros lugares.",
     "channelInvalid": "Este código de venda não é válido para este evento. Abra a página do evento sem ele, ou pergunte a quem lhe deu o link.",
     "channelNotice": "Você está comprando por {name}: os lugares reservados para {name} também estão abertos para você.",
-    "channelLinkInvalid": "Este link de venda não é válido para este evento. Você ainda pode escolher entre os lugares abertos a todos."
+    "channelLinkInvalid": "Este link de venda não é válido para este evento. Você ainda pode escolher entre os lugares abertos a todos.",
+    "couponBuyerLimit": "Você já usou este código quantas vezes ele permite."
   },
   "fakePay": {
     "eyebrow": "Pagamento de teste",
@@ -1194,7 +1205,8 @@
     "addTitle": "Adicionar código promocional",
     "add": "Adicionar código",
     "added": "Código promocional adicionado.",
-    "emptyAction": "Criar um código"
+    "emptyAction": "Criar um código",
+    "orgCoupons": "Os cupons da organização também valem aqui. <link>Ver todos os códigos</link>"
   },
   "questions": {
     "title": "Perguntas do checkout",
@@ -1623,7 +1635,7 @@
       "timezone": "Fuso horário",
       "country": "País (código de 2 letras)",
       "countryHint": "Por exemplo, US, GB ou NG.",
-      "currency": "Moeda padrão (código de 3 letras)",
+      "currency": "Moeda padrão",
       "currencyHint": "Novos eventos começam com esta moeda. Os eventos que você já criou mantêm a deles."
     },
     "brand": {
@@ -1665,7 +1677,8 @@
     "privacyLink": "Pedidos de privacidade",
     "charityLink": "Perfil beneficente",
     "planLink": "Plano e módulos",
-    "findOwner": "Encontrar um proprietário ou administrador"
+    "findOwner": "Encontrar um proprietário ou administrador",
+    "categoriesLink": "Categorias de eventos"
   },
   "legal": {
     "platform": "Yayatoh",
@@ -1844,7 +1857,31 @@
     "added": "Domínio adicionado. Agora publique os registros DNS mostrados acima.",
     "managedMissing": "Seu endereço gratuito {host} ainda não está configurado.",
     "managedCreate": "Configurar meu endereço gratuito",
-    "noAccess": "Somente proprietários e administradores podem alterar domínios."
+    "noAccess": "Somente proprietários e administradores podem alterar domínios.",
+    "wizard": {
+      "label": "Conectar {host}",
+      "steps": "Etapas para conectar {host}",
+      "step": {
+        "domain": "Domínio adicionado",
+        "dns": "Registros DNS",
+        "verify": "Verificado",
+        "ssl": "Conexão segura",
+        "primary": "Principal"
+      },
+      "dns": {
+        "signIn": "Entre onde você gerencia o DNS do seu domínio (seu registrador ou um serviço como o Cloudflare).",
+        "open": "Abra as configurações de DNS deste domínio.",
+        "add": "Adicione cada registro abaixo exatamente como aparece. Remova outros registros A ou CNAME com o mesmo nome.",
+        "back": "Volte aqui e selecione Verificar agora."
+      },
+      "copyName": "nome do registro {type}",
+      "copyValue": "valor do registro {type}",
+      "copy": "Copiar",
+      "copied": "Copiado",
+      "verify": "Encontramos seus registros DNS e estamos verificando-os. Verifique de novo em alguns minutos.",
+      "ssl": "Seu domínio está verificado. Estamos emitindo o certificado seguro (https), o que costuma levar alguns minutos.",
+      "primary": "{host} está ativo. Torne-o principal para que seus links, ingressos e e-mails o usem."
+    }
   },
   "suspensions": {
     "pause_checkout": "A venda de ingressos foi pausada pelo suporte da Yayatoh.",
@@ -3409,7 +3446,23 @@
       "signature": "Assinatura (base64)",
       "footer": "Emitido pela Yayatoh para {org}. A assinatura abrange os dados do comprovativo; verifique-a com a chave pública abaixo."
     },
-    "findOwner": "Encontrar um proprietário ou administrador"
+    "findOwner": "Encontrar um proprietário ou administrador",
+    "categories": {
+      "contacts": "Registos de contacto",
+      "consents": "Registos de consentimento",
+      "orders": "Encomendas",
+      "paidOrders": "Encomendas pagas (guardadas para a contabilidade)",
+      "tickets": "Bilhetes",
+      "activeTickets": "Bilhetes válidos",
+      "claims": "Ligações de transferência de bilhetes",
+      "holderLinks": "Ligações de acesso a bilhetes",
+      "attendees": "Entradas em listas de convidados",
+      "answers": "Respostas no pagamento",
+      "admissions": "Entradas registadas",
+      "invitations": "Convites de equipa",
+      "networkProfiles": "Perfis de networking",
+      "chatMessages": "Mensagens de chat enviadas"
+    }
   },
   "privacyNotice": {
     "eyebrow": "Yayatoh",
@@ -3594,7 +3647,17 @@
     },
     "layoutLibrary": "Biblioteca de mapas",
     "emptyAction": "Adicione seu primeiro local",
-    "emptyViewerAction": "Ver o diretório de locais"
+    "emptyViewerAction": "Ver o diretório de locais",
+    "createNext": "As fotos e os demais detalhes (endereço, mapa, acessibilidade) vêm em seguida.",
+    "createdNext": "Adicione fotos agora e depois preencha os detalhes abaixo.",
+    "steps": {
+      "label": "Novo local",
+      "create": "Criar",
+      "photos": "Fotos",
+      "details": "Detalhes"
+    },
+    "detailsTitle": "Detalhes",
+    "photo": "Foto"
   },
   "details": {
     "title": "Detalhes do evento",
@@ -3616,7 +3679,7 @@
     },
     "attendanceHint": "Para eventos on-line e híbridos, adicione o link de acesso em Acesso. Só quem tem ingresso o vê.",
     "tags": "Tags",
-    "tagsHint": "Separe as tags com vírgulas. Até 10, cada uma com até 40 caracteres.",
+    "tagsHint": "Digite uma tag e pressione Enter, ou escolha uma que você já usou. Até 10, cada uma com até 40 caracteres.",
     "tagErrors": {
       "too_many_tags": "Use no máximo 10 tags.",
       "tag_too_long": "Cada tag pode ter no máximo 40 caracteres."
@@ -3648,7 +3711,16 @@
       "unlisted": "Não listado (só com link)",
       "private": "Privado (código de acesso)"
     },
-    "visibilityHint": "Eventos não listados só abrem pelo link. Eventos privados exigem um código de acesso que desbloqueia a página do evento."
+    "visibilityHint": "Eventos não listados só abrem pelo link. Eventos privados exigem um código de acesso que desbloqueia a página do evento.",
+    "currencyTitle": "Moeda",
+    "currency": "Moeda do evento",
+    "currencyHint": "Preços de ingressos e códigos promocionais mantêm seus valores na nova moeda. Ela é bloqueada no primeiro pedido.",
+    "currencyLocked": "Bloqueada: este evento já tem pedidos, então a moeda não pode mudar.",
+    "currencySaved": "Moeda salva.",
+    "currencySave": "Salvar moeda",
+    "hiddenCategory": "{name} (oculta)",
+    "categoryHiddenHint": "Esta categoria está oculta: o evento a mantém, mas ela não é mais oferecida para outros eventos.",
+    "manageCategories": "Gerenciar categorias"
   },
   "directory": {
     "title": "Diretório de locais",
@@ -3874,13 +3946,14 @@
     "saveTemplate": "Salvar modelo",
     "nameTaken": "Esse nome já está em uso. Escolha outro.",
     "invalid": "Confira este valor.",
-    "backToEvent": "Voltar à visão geral do evento"
+    "backToEvent": "Voltar à visão geral do evento",
+    "headerSave": "Salvar como modelo"
   },
   "series": {
     "title": "Séries",
     "description": "Agrupe eventos em turnês, temporadas ou festivais. Cada série tem uma página pública com os próximos eventos.",
     "emptyTitle": "Ainda não há séries",
-    "emptyDescription": "Crie uma série e adicione eventos a ela na página Datas de cada evento.",
+    "emptyDescription": "Crie uma série abaixo ou dê nome a uma ao criar um evento.",
     "caption": "Séries",
     "name": "Nome",
     "descriptionField": "Descrição (opcional)",
@@ -3902,14 +3975,27 @@
     "title": "Modelos",
     "description": "Crie novos eventos a partir dos seus modelos. Um evento criado de um modelo é um rascunho sem vendas.",
     "emptyTitle": "Ainda não há modelos",
-    "emptyDescription": "Abra um evento, escolha Duplicar e modelo e salve-o como modelo.",
+    "emptyDescription": "Crie um do zero com Novo modelo, copie um modelo inicial ou salve um evento como modelo pelo cabeçalho dele.",
     "contents": "{ticketTypes, plural, one {# tipo de ingresso} other {# tipos de ingresso}} · {questions, plural, one {# pergunta} other {# perguntas}} · {seats, plural, =0 {sem planta} one {# lugar} other {# lugares}}",
     "delete": "Excluir",
     "deleteFor": "Excluir o modelo {name}",
     "use": "Criar um evento a partir de {name}",
     "timezone": "Horários em {timezone}.",
     "createEvent": "Criar evento",
-    "pickEvent": "Escolha um evento para salvar"
+    "newTemplate": "Novo modelo",
+    "summary": "{sections, plural, =0 {nenhuma seção da página} one {# seção da página} other {# seções da página}} · {checklist, plural, =0 {nenhum item da lista} one {# item da lista} other {# itens da lista}}",
+    "originEvent": "Salvo a partir de um evento",
+    "originScratch": "Criado do zero",
+    "edit": "Editar",
+    "editFor": "Editar o modelo {name}",
+    "duplicate": "Duplicar",
+    "duplicateFor": "Duplicar o modelo {name}",
+    "archive": "Arquivar",
+    "archiveFor": "Arquivar o modelo {name}",
+    "restore": "Restaurar",
+    "restoreFor": "Restaurar o modelo {name}",
+    "archivedTitle": "Modelos arquivados ({count})",
+    "archivedHint": "Modelos arquivados não aparecem em nenhum seletor. Eventos criados a partir deles não mudam."
   },
   "publicSeries": {
     "eyebrow": "Uma série de {org}",
@@ -4343,7 +4429,12 @@
     "help": "Ajuda",
     "helpCenter": "Central de ajuda",
     "contact": "Fale conosco",
-    "status": "Status do sistema"
+    "status": "Status do sistema",
+    "tags": {
+      "label": "Filtrar por tag",
+      "all": "Todos os eventos",
+      "tagLabel": "{tag}, {count, plural, one {# evento} other {# eventos}}"
+    }
   },
   "widget": {
     "title": "Ingressos: {event}",
@@ -4515,6 +4606,21 @@
       "floorPlanChosen": "Escolha uma planta para o salão ou crie uma a partir de números.",
       "guestSitePublished": "Publique o site protegido por senha que seus convidados abrem.",
       "tablesSponsors": "Dê nome às mesas e aos seus patrocinadores."
+    },
+    "own": {
+      "title": "Sua lista de verificação",
+      "hint": "Suas próprias tarefas para este evento, além das verificações acima. Marque-as conforme avança.",
+      "empty": "Nada aqui ainda. Adicione sua primeira tarefa.",
+      "list": "Seus itens da lista",
+      "progress": "{done} de {total} concluídos",
+      "newItem": "Novo item",
+      "add": "Adicionar item",
+      "added": "Item adicionado.",
+      "invalid": "Digite de 1 a 200 caracteres.",
+      "tooMany": "Esta lista está cheia. Remova um item primeiro.",
+      "markDone": "Marcar {title} como concluído",
+      "markOpen": "Marcar {title} como pendente",
+      "remove": "Remover {title}"
     }
   },
   "program": {
@@ -4731,7 +4837,9 @@
       "ticketPrice": "Informe um preço como 25 ou 25.00.",
       "ticketQuantity": "Informe quantos estão à venda (pelo menos 1).",
       "generic": "Verifique este campo."
-    }
+    },
+    "currency": "Moeda",
+    "currencyHint": "Usada nos ingressos, no pagamento e nos relatórios. Pode ser alterada até o primeiro pedido."
   },
   "eventMedia": {
     "title": "Imagens",
@@ -4745,7 +4853,8 @@
       "logo": "Logotipo",
       "speaker": "Foto do palestrante",
       "exhibitor": "Logótipo do expositor",
-      "sponsor": "Logótipo do patrocinador"
+      "sponsor": "Logótipo do patrocinador",
+      "library": "Enviar para a biblioteca"
     },
     "hint": {
       "cover": "Exibida no topo da página do evento, nos cartões de eventos e nas pré-visualizações de links.",
@@ -4754,7 +4863,8 @@
       "logo": "Exibido no console, na sua página e site de organizador e nos e-mails.",
       "speaker": "Mostrada na página do evento, na página do palestrante e junto às suas sessões na agenda.",
       "exhibitor": "Mostrado com o expositor na página do evento. Logótipos SVG ficam nítidos em qualquer tamanho.",
-      "sponsor": "Mostrado no nível do patrocinador na página do evento (níveis mais altos mostram logótipos maiores). Logótipos SVG ficam nítidos."
+      "sponsor": "Mostrado no nível do patrocinador na página do evento (níveis mais altos mostram logótipos maiores). Logótipos SVG ficam nítidos.",
+      "library": "As imagens enviadas aqui podem ser usadas em eventos, locais, palestrantes e no seu logotipo sem enviar de novo."
     },
     "empty": {
       "cover": "Ainda não há imagem de capa.",
@@ -4763,7 +4873,8 @@
       "logo": "Ainda não há logotipo.",
       "speaker": "Ainda sem foto.",
       "exhibitor": "Ainda sem logótipo.",
-      "sponsor": "Ainda sem logótipo."
+      "sponsor": "Ainda sem logótipo.",
+      "library": "Ainda não há imagens na biblioteca."
     },
     "count": "{count, plural, one {# imagem} other {# imagens}} de {max}",
     "listLabel": "Imagens atuais",
@@ -5033,7 +5144,18 @@
     "invalidCode": "Esse código não funcionou. Tente de novo.",
     "invalidPassword": "Essa senha não está correta.",
     "rateLimited": "Tentativas demais. Aguarde 15 minutos e tente de novo.",
-    "unauthenticated": "Sua sessão terminou. Entre de novo."
+    "unauthenticated": "Sua sessão terminou. Entre de novo.",
+    "again": "Confirmar que é você",
+    "retry": "Tentar novamente",
+    "problem": {
+      "impersonating": "Você está agindo como este membro e não pode confirmar por ele. Peça a ele que faça esta alteração.",
+      "unauthenticated": "Sua sessão terminou. Entre novamente.",
+      "failed": "Não conseguimos iniciar a confirmação. Verifique sua conexão e tente novamente."
+    },
+    "persona": {
+      "explain": "Conta de demonstração: ela entrou sem autenticador, então você pode confirmar sem código. Isso nunca é oferecido no site real.",
+      "confirm": "Continuar sem código (conta de demonstração)"
+    }
   },
   "surveys": {
     "title": "Pesquisas",
@@ -5383,7 +5505,8 @@
     "tabsLabel": "Tipo de conteúdo",
     "tabs": {
       "post": "Posts do blog",
-      "page": "Páginas"
+      "page": "Páginas",
+      "contact": "Página de contato"
     },
     "kind": {
       "post": "Post do blog",
@@ -5466,7 +5589,8 @@
     "emptyDescription": "{org} ainda não publicou nada aqui.",
     "posts": "Posts",
     "by": "por {name}",
-    "allPosts": "Todos os posts"
+    "allPosts": "Todos os posts",
+    "contact": "Contato"
   },
   "reviews": {
     "ratingLabel": "Avaliado com {rating} de 5",
@@ -6987,7 +7111,10 @@
     "gala": {
       "name": "Gala",
       "description": "Ingressos, mesas e patrocinadores, lugares, doações e check-in no local."
-    }
+    },
+    "copy": "Copiar para seus modelos",
+    "copyFor": "Copiar o modelo inicial {name} para seus modelos",
+    "readOnly": "Somente leitura. Copie para seus modelos para alterar ingressos, seções ou a lista de verificação."
   },
   "profileCopy": {
     "wedding": {
@@ -7068,7 +7195,9 @@
       "event": "Evento",
       "mode": "Modo",
       "starts": "Início",
-      "readiness": "Preparação"
+      "readiness": "Preparação",
+      "sales": "Vendas",
+      "tickets": "Ingressos"
     },
     "manual": "Definido manualmente",
     "role": {
@@ -7139,9 +7268,10 @@
       "readiness": {
         "title": "Preparação",
         "score": "Preparação {score}%",
-        "blocking": "Bloqueante",
-        "todo": "Também a fazer",
-        "allDone": "Tudo pronto."
+        "allDone": "Tudo pronto.",
+        "count": "{done} de {total} concluídos",
+        "required": "Necessário para vender",
+        "recommended": "Recomendado"
       },
       "sales": {
         "title": "Vendas",
@@ -7188,7 +7318,9 @@
       "alerts": {
         "title": "Alertas",
         "pending": "Os alertas aparecerão aqui quando as regras de alerta forem ativadas.",
-        "none": "Nenhum alerta aberto."
+        "none": "Nenhum alerta aberto.",
+        "watching": "As regras de alerta acompanham vendas, pagamentos, dispositivos, capacidade e convidados, e aparecem aqui.",
+        "viewAll": "Ver todos os alertas"
       },
       "entrances": {
         "title": "Entradas"
@@ -7472,6 +7604,49 @@
       "statusOn": "Ativo",
       "statusOff": "Desativado",
       "emptyAction": "Criar um link de tela"
+    },
+    "hero": {
+      "startsIn": "Começa em {duration}",
+      "endsIn": "Termina em {duration}",
+      "ended": "Terminou há {duration}",
+      "nextLabel": "Próximo passo",
+      "blocking": "Necessário antes de poder vender",
+      "next": {
+        "readiness": "Conclua: {item}",
+        "scanner": "Faça o check-in dos convidados na porta",
+        "publicPage": "Tudo pronto. Veja a página do evento como os convidados.",
+        "report": "Acabou. Veja como foi.",
+        "none": "Nada precisa de você agora."
+      },
+      "do": {
+        "alert": "Resolver",
+        "readiness": "Resolver agora",
+        "scanner": "Começar a ler",
+        "publicPage": "Ver página do evento",
+        "report": "Abrir o relatório"
+      }
+    },
+    "kpi": {
+      "title": "Números principais",
+      "sales": "Vendas",
+      "salesToday": "{amount} hoje",
+      "tickets": "Ingressos vendidos",
+      "ofCapacity": "de {capacity}",
+      "noCapacity": "Ainda não há ingressos à venda",
+      "checkins": "Check-in feito",
+      "ofValid": "de {valid} ingressos válidos",
+      "alerts": "Alertas abertos",
+      "allClear": "Tudo certo",
+      "needsYou": "Precisa de você",
+      "critical": "{count, plural, =0 {Nenhum crítico} one {# crítico} other {# críticos}}"
+    },
+    "soldOf": "{sold} de {capacity}",
+    "overviewCounts": "Eventos por modo",
+    "overviewGroup": {
+      "live": "Ao vivo ({count})",
+      "pre_show": "Pré-evento ({count})",
+      "planning": "Em planejamento ({count})",
+      "wrap": "Em encerramento ({count})"
     }
   },
   "alerts": {
@@ -16249,22 +16424,82 @@
     "runAgain": "Executar novamente",
     "agencyAddress": "Ver o endereço da sua agência",
     "clients": "Ver os seus clientes",
-    "plan": "Abrir plano e faturação"
+    "plan": "Abrir plano e faturação",
+    "seeEvents": "Ver seus eventos",
+    "eventHome": "Ir para o início do evento",
+    "clearSearch": "Limpar a pesquisa"
   },
   "coupons": {
     "title": "Cupons",
-    "description": "Códigos promocionais dão desconto no checkout. Cada código pertence a um evento: escolha o evento para ver ou adicionar seus códigos.",
-    "emptyTitle": "Nenhum evento para adicionar códigos",
-    "emptyDescription": "Os códigos promocionais ficam na página Ingressos e pedidos do evento. Crie um evento primeiro e depois adicione os códigos.",
+    "description": "Códigos de desconto para todos os seus eventos ou os que você escolher, com os códigos promocionais de cada evento na mesma lista.",
+    "emptyTitle": "Nenhum código ainda",
+    "emptyDescription": "Adicione um cupom abaixo para dar desconto nos seus eventos.",
     "emptyAction": "Criar um evento",
-    "caption": "Eventos e seus códigos promocionais",
-    "event": "Evento",
-    "when": "Data",
     "status": "Status",
-    "codes": "Códigos promocionais",
-    "manage": "Gerenciar códigos",
-    "view": "Ver códigos",
-    "manageFor": "Códigos promocionais de {name}"
+    "listTitle": "Todos os códigos",
+    "emptyViewer": "Ninguém adicionou um cupom ainda. Proprietários e administradores os adicionam aqui.",
+    "noEventsTitle": "Nenhum evento para adicionar códigos",
+    "noEventsDescription": "Os códigos promocionais ficam na página Ingressos e pedidos do evento. Crie um evento primeiro e depois adicione os códigos.",
+    "code": "Código",
+    "type": "Tipo",
+    "typeCoupon": "Cupom da organização",
+    "typeEvent": "Código do evento",
+    "appliesTo": "Vale para",
+    "discount": "Desconto",
+    "percentOff": "{value} de desconto",
+    "amountOff": "{amount} de desconto por ingresso",
+    "uses": "Usos",
+    "perBuyerShort": "Por comprador",
+    "valid": "Validade",
+    "until": "Até {date}",
+    "from": "A partir de {date}",
+    "always": "Sem data de término",
+    "active": "Ativo",
+    "paused": "Pausado",
+    "actions": "Ações",
+    "pause": "Pausar",
+    "resume": "Retomar",
+    "pauseCode": "Pausar {code}",
+    "resumeCode": "Retomar {code}",
+    "newTitle": "Adicionar um cupom",
+    "kind": "Tipo de desconto",
+    "percent": "Porcentagem de desconto",
+    "amount": "Valor fixo de desconto",
+    "percentValue": "Porcentagem",
+    "amountValue": "Desconto por ingresso",
+    "percentHint": "Por exemplo 20 para 20% de desconto por ingresso, antes das taxas.",
+    "amountHint": "Por exemplo 5 para 5,00 de desconto por ingresso, antes das taxas.",
+    "currency": "Moeda do valor",
+    "currencyHint": "O cupom só vale em eventos nesta moeda.",
+    "scope": "Vale para",
+    "scopeAll": "Todos os eventos",
+    "scopeEvents": "Eventos escolhidos",
+    "events": "Eventos",
+    "eventsHint": "Digite para encontrar um evento. Escolha um ou mais.",
+    "eventsPlaceholder": "Encontrar um evento",
+    "maxUses": "Usos totais (opcional)",
+    "maxUsesHint": "Em todos os eventos. Deixe vazio para não limitar.",
+    "perBuyer": "Usos por comprador (opcional)",
+    "perBuyerHint": "Contados pelo e-mail do comprador.",
+    "startsAt": "Início",
+    "endsAt": "Expira",
+    "optional": "Opcional, no fuso horário da sua organização.",
+    "added": "Cupom adicionado.",
+    "add": "Adicionar cupom",
+    "errors": {
+      "code": "Use de 3 a 32 letras, dígitos, - ou _.",
+      "codeTaken": "Esse código já é usado por um cupom ou pelo código promocional de um evento.",
+      "value": "Informe um desconto, como 20 ou 5,00.",
+      "percentBps": "Informe uma porcentagem entre 0,01 e 100.",
+      "amountMinor": "Informe um valor maior que zero.",
+      "currency": "Escolha uma moeda.",
+      "currencyMismatch": "Um cupom de valor só vale em eventos na sua moeda. Remova os eventos em outras moedas ou use uma porcentagem.",
+      "eventIds": "Escolha pelo menos um evento.",
+      "maxRedemptions": "Informe um número inteiro igual ou maior que 1.",
+      "perBuyerLimit": "Informe um número inteiro igual ou maior que 1.",
+      "startsAt": "Informe uma data e hora válidas.",
+      "endsAt": "A expiração deve ser depois do início."
+    }
   },
   "howItWorks": {
     "docLink": "Ler o guia",
@@ -16281,9 +16516,9 @@
     "templates": {
       "title": "Como funcionam os modelos",
       "intro": "Um modelo salva a configuração de um evento (ingressos, perguntas, seções e conteúdo da página) para que o próximo comece pronto. Eventos criados a partir de um modelo são rascunhos sem vendas.",
-      "step1": "Abra um evento configurado do jeito que você gosta.",
-      "step2": "Escolha Duplicar e modelo e salve como modelo.",
-      "step3": "Volte aqui para criar novos eventos a partir dele ou comece com um modelo inicial abaixo."
+      "step1": "Escolha o tipo de evento e a duração padrão.",
+      "step2": "Adicione tipos de ingresso, seções da página e itens da lista de verificação padrão.",
+      "step3": "Crie eventos a partir dele: cada um é um rascunho com exatamente isso, sem vendas."
     },
     "series": {
       "title": "Como funcionam as séries",
@@ -16317,10 +16552,32 @@
     },
     "coupons": {
       "title": "Como funcionam os códigos promocionais",
-      "intro": "Um código promocional desconta uma porcentagem ou um valor do preço de cada ingresso, antes das taxas. Cada código pertence a um evento.",
-      "step1": "Escolha o evento abaixo e abra seus códigos promocionais.",
-      "step2": "Adicione um código com o desconto e, se quiser, um limite e datas.",
+      "intro": "Um cupom ou código promocional desconta uma porcentagem ou um valor do preço de cada ingresso, antes das taxas. Cupons podem valer para todos os seus eventos ou os que você escolher; um código promocional pertence a um evento.",
+      "step1": "Adicione um cupom abaixo: código, desconto, eventos, limites e datas.",
+      "step2": "Para um código de um só evento, use a página Ingressos e pedidos desse evento.",
       "step3": "Compartilhe o código. Os compradores o inserem no checkout e cada uso é contado."
+    },
+    "money": {
+      "title": "Como seus valores são calculados",
+      "intro": "Cada valor aqui é lido do livro-razão, por moeda, para os dias escolhidos no fuso horário da sua organização.",
+      "step1": "O bruto é o que os compradores pagaram, com taxas incluídas.",
+      "step2": "Reembolsos, disputas perdidas e taxas da Yayatoh são descontados; taxas devolvidas com um reembolso voltam a ser somadas.",
+      "step3": "O que sobra é o seu líquido. As vendas online são repassadas após cada evento; as vendas que você mesmo recebeu já são suas.",
+      "step4": "Repassado é o que chegou à sua conta bancária no período. A página Repasses mostra cada repasse até o nível dos pedidos."
+    },
+    "payoutRules": {
+      "title": "Quando os repasses são enviados",
+      "intro": "Estas regras se aplicam quando a Yayatoh recebe o valor dos ingressos por você.",
+      "step1": "O valor de cada evento é repassado 5 dias úteis após o término do evento.",
+      "step2": "5% ficam retidos como reserva por 90 dias para cobrir reembolsos ou disputas e depois também são repassados.",
+      "step3": "Qualquer valor devido por você (um reembolso ou disputa após o repasse, taxas sobre vendas que você mesmo recebeu) é recuperado por estorno de transferência quando possível; caso contrário, do seu próximo repasse."
+    },
+    "fees": {
+      "title": "Como funcionam as taxas",
+      "intro": "As tarifas da Yayatoh são definidas pela nossa equipe no seu contrato; não é possível alterá-las aqui.",
+      "step1": "Cada ingresso pago tem a taxa do seu plano. Ingressos gratuitos não têm taxa.",
+      "step2": "A taxa é descontada de cada pedido e exibida em cada repasse.",
+      "step3": "Quando um reembolso devolve a taxa, ela aparece em taxas devolvidas."
     }
   },
   "ssoFakeIdp": {
@@ -17177,5 +17434,621 @@
         "too_many_schedules": "Você tem 25 agendamentos. Exclua um primeiro."
       }
     }
+  },
+  "orgCategories": {
+    "breadcrumb": "Trilha de navegação",
+    "title": "Categorias de eventos",
+    "description": "Organize seus eventos do seu jeito. Cada categoria também corresponde a uma categoria do marketplace, para que seus eventos continuem fáceis de encontrar.",
+    "howTitle": "Como funciona",
+    "howMarketplace": "Sua lista começa com as categorias da plataforma. Renomeie, adicione as suas e coloque-as na ordem que quiser.",
+    "howHidden": "Oculte uma categoria que você não usa mais: ela sai das listas de escolha, mas os eventos que a têm a mantêm.",
+    "howTags": "Precisa de mais detalhe? Adicione tags livres a um evento na página Detalhes e filtre por elas.",
+    "addTitle": "Adicionar uma categoria",
+    "listTitle": "Suas categorias ({visible} visíveis de {count})",
+    "name": "Nome da categoria",
+    "nameHint": "Até {max} caracteres.",
+    "marketplace": "Categoria do marketplace",
+    "marketplaceHint": "Onde esses eventos aparecem quando as pessoas navegam pelo marketplace.",
+    "added": "Categoria adicionada.",
+    "add": "Adicionar categoria",
+    "hidden": "Oculta",
+    "mapsTo": "Marketplace: {marketplace}",
+    "events": "{count, plural, one {# evento} other {# eventos}}",
+    "moveUp": "Mover {name} para cima",
+    "moveDown": "Mover {name} para baixo",
+    "rename": "Renomear",
+    "renameLabel": "Renomear {name}",
+    "hide": "Ocultar",
+    "show": "Mostrar",
+    "hideLabel": "Ocultar {name}",
+    "showLabel": "Mostrar {name}",
+    "newName": "Novo nome para {name}",
+    "saveName": "Salvar nome",
+    "cancel": "Cancelar",
+    "done": {
+      "hide": "Oculta. Os eventos que a têm a mantêm.",
+      "show": "Aparece de novo nas listas de escolha.",
+      "up": "Movida para cima.",
+      "down": "Movida para baixo.",
+      "rename": "Renomeada."
+    },
+    "errors": {
+      "name_required": "Digite um nome.",
+      "name_too_long": "Use no máximo {max} caracteres.",
+      "name_taken": "Você já tem uma categoria com esse nome.",
+      "too_many": "Você atingiu o máximo de categorias de uma organização. Oculte ou renomeie uma em vez disso.",
+      "last_visible": "Mantenha pelo menos uma categoria visível."
+    }
+  },
+  "profilePicker": {
+    "question": "Que tipo de evento?",
+    "summaryLabel": "O que um evento do tipo {kind} inclui",
+    "includes": "Inclui",
+    "labelsHint": "O tipo decide quais seções o evento tem. Suas categorias e tags ficam na página Detalhes do evento.",
+    "descriptions": {
+      "conference": "Sessões, palestrantes, patrocinadores e expositores, com inscrição e crachás.",
+      "gala": "Um jantar com ingressos, mesas, patrocinadores e doações.",
+      "concert": "Ingressos e fãs para um show ou uma data de turnê.",
+      "wedding": "Convidados, confirmações, lugares e um site para convidados.",
+      "community": "Membros, inscrições e mensagens para um grupo ou uma causa.",
+      "agency": "Eventos que você organiza para clientes, com marketing e relatórios.",
+      "other": "Ingressos, participantes e check-in para qualquer outra coisa."
+    }
+  },
+  "seriesField": {
+    "label": "Série (opcional)",
+    "hint": "Agrupe este evento com outros numa turnê ou temporada. Digite um nome novo para criar uma.",
+    "none": "Sem série",
+    "newOption": "Nova série: {name}",
+    "summary": "Série",
+    "errors": {
+      "taken": "Já existe uma série com este nome. Escolha-a na lista.",
+      "missing": "Essa série não existe mais. Escolha outra.",
+      "name": "Digite um nome de série com 2 a 160 caracteres."
+    }
+  },
+  "seriesLink": {
+    "partOf": "Parte de {name}"
+  },
+  "seriesPage": {
+    "back": "Todas as séries",
+    "tabs": {
+      "label": "Visualizações da série",
+      "events": "Eventos",
+      "details": "Detalhes"
+    },
+    "columns": {
+      "event": "Evento",
+      "status": "Status",
+      "dates": "Datas",
+      "sales": "Vendas",
+      "actions": "Ações"
+    },
+    "sold": "{count, plural, one {{n} ingresso vendido} other {{n} ingressos vendidos}}",
+    "noSales": "Ainda sem vendas",
+    "remove": "Remover da série",
+    "removeFor": "Remover {name} da série",
+    "createNext": "Criar o próximo evento da série",
+    "createIn": "Criar evento nesta série",
+    "added": "Evento adicionado à série.",
+    "removed": "Evento removido da série. O evento em si não muda.",
+    "deleted": "Série excluída. Os eventos dela não mudam.",
+    "eventsHeading": "{count, plural, one {# evento} other {# eventos}}",
+    "emptyTitle": "Ainda não há eventos nesta série",
+    "emptyDescription": "Crie um evento nesta série ou adicione um que você já tem.",
+    "emptyReadOnly": "Os eventos adicionados a esta série aparecem aqui.",
+    "caption": "Eventos de {name}",
+    "add": {
+      "heading": "Adicionar um evento existente",
+      "label": "Evento",
+      "placeholder": "Escolha um evento",
+      "hint": "Um evento que está em outra série passa para esta.",
+      "option": "{name} · {when}",
+      "optionMoves": "{name} · {when} (em {series})",
+      "required": "Escolha um evento para adicionar.",
+      "submit": "Adicionar à série"
+    },
+    "next": {
+      "back": "Voltar para {name}",
+      "title": "Criar o próximo evento da série",
+      "description": "Um novo rascunho em {name} com a configuração do último evento.",
+      "copies": "Copia as configurações, os tipos de ingresso, as perguntas e o mapa de assentos de {name} ({when}). Pedidos, participantes e check-ins ficam no original.",
+      "name": "Nome do evento",
+      "startsAt": "Começa",
+      "startsAtHint": "No fuso horário do evento ({zone}).",
+      "nameInvalid": "Digite um nome com 2 a 160 caracteres.",
+      "startInvalid": "Digite uma data e hora de início válidas.",
+      "submit": "Criar rascunho"
+    },
+    "details": {
+      "heading": "Detalhes da série",
+      "address": "Página pública:",
+      "saved": "Série salva.",
+      "save": "Salvar alterações",
+      "deleteHeading": "Excluir série",
+      "deleteHint": "Excluir a série remove a página pública dela. Os eventos continuam, fora de qualquer série.",
+      "delete": "Excluir série"
+    }
+  },
+  "templateBuilder": {
+    "breadcrumb": "Trilha de navegação",
+    "newTitle": "Novo modelo",
+    "newDescription": "Comece pelo tipo de evento. Ingressos, seções da página e uma lista de verificação são adicionados na próxima tela.",
+    "profileLegend": "Que tipo de evento?",
+    "profileInvalid": "Escolha um tipo de evento.",
+    "profileHelp": {
+      "wedding": "Convidados, confirmações, lugares, um site privado para convidados e o grande dia. Nunca listado publicamente.",
+      "gala": "Ingressos, mesas e patrocinadores, lugares, doações e check-in.",
+      "concert": "Ingressos, fãs, marketing e check-in rápido na entrada.",
+      "conference": "Inscrições, sessões, palestrantes, expositores, patrocinadores e crachás.",
+      "community": "Encontros e aulas: inscrições gratuitas ou pagas, datas recorrentes e check-in.",
+      "agency": "Eventos que você organiza para clientes, com a marca e os relatórios deles.",
+      "other": "Um evento geral: ingressos, participantes, uma página e check-in."
+    },
+    "name": "Nome do modelo",
+    "nameInvalid": "Digite um nome de 2 a 120 caracteres.",
+    "nameTaken": "Esse nome já está em uso. Escolha outro.",
+    "description": "Descrição (opcional)",
+    "duration": "Duração padrão",
+    "hours": "Horas",
+    "minutes": "Minutos",
+    "durationHint": "Eventos criados a partir dele terminam esse tempo após o início.",
+    "durationInvalid": "Digite uma duração entre 15 minutos e 14 dias.",
+    "timezone": "Fuso horário",
+    "timezoneHint": "O início de novos eventos é informado neste fuso.",
+    "currency": "Moeda",
+    "create": "Criar modelo",
+    "steps": "Etapas do modelo",
+    "step": {
+      "profile": "Tipo de evento",
+      "tickets": "Tipos de ingresso",
+      "sections": "Seções da página",
+      "content": "Conteúdo da página",
+      "checklist": "Lista de verificação"
+    },
+    "created": "Modelo criado. Adicione abaixo os tipos de ingresso, as seções da página e a lista de verificação.",
+    "copied": "Modelo inicial copiado para seus modelos. Preencha abaixo.",
+    "duplicated": "Modelo duplicado. Você está editando a cópia.",
+    "archivedNotice": "Este modelo está arquivado: não aparece em nenhum seletor e não pode ser alterado. Restaure-o para usá-lo de novo.",
+    "useAction": "Criar um evento",
+    "durationHours": "{hours, plural, one {# hora} other {# horas}}",
+    "durationMinutes": "{minutes, plural, one {# minuto} other {# minutos}}",
+    "profileTitle": "Tipo de evento",
+    "profileFixed": "O tipo de evento é definido na criação do modelo. Para outro tipo, crie um novo modelo.",
+    "ticketsTitle": "Tipos de ingresso padrão",
+    "ticketsHint": "Cada evento criado a partir do modelo começa com estes, sem nada vendido.",
+    "ticketsEmpty": "Ainda não há tipos de ingresso. Adicione o primeiro abaixo.",
+    "ticketsList": "Tipos de ingresso",
+    "ticketName": "Nome do ingresso",
+    "ticketNameInvalid": "Digite um nome de 1 a 120 caracteres.",
+    "ticketDescription": "Descrição do ingresso (opcional)",
+    "price": "Preço ({currency})",
+    "priceInvalid": "Digite um preço como 25 ou 25.00.",
+    "quantity": "Quantidade disponível",
+    "quantityInvalid": "Digite uma quantidade de 1 a 1.000.000.",
+    "addTicket": "Adicionar tipo de ingresso",
+    "ticketAdded": "Tipo de ingresso adicionado.",
+    "free": "Grátis",
+    "ticketLine": "{price} · {quantity, plural, one {# disponível} other {# disponíveis}}",
+    "removeTicket": "Remover o tipo de ingresso {name}",
+    "seatPriced": "Usado pelo mapa de lugares salvo",
+    "sectionsTitle": "Seções da página",
+    "sectionsHint": "Os blocos da página do evento, nesta ordem.",
+    "sectionsEmpty": "Ainda não há seções. Adicione a primeira abaixo.",
+    "sectionsList": "Seções da página em ordem",
+    "addSection": "Adicionar uma seção da página",
+    "moveUp": "Mover {title} para cima",
+    "moveDown": "Mover {title} para baixo",
+    "removeSection": "Remover a seção {title}",
+    "contentTitle": "Conteúdo da página",
+    "contentHint": "O que cada evento criado a partir do modelo mostra na página dele.",
+    "tagline": "Slogan (opcional)",
+    "venueName": "Local (opcional)",
+    "city": "Cidade (opcional)",
+    "visibility": "Quem pode encontrá-lo",
+    "settingsTitle": "Nome e padrões",
+    "save": "Salvar alterações",
+    "saved": "Alterações salvas.",
+    "checklistTitle": "Lista de verificação",
+    "checklistHint": "Suas próprias tarefas. Cada evento criado a partir do modelo começa com elas pendentes, no guia de configuração.",
+    "checklistEmpty": "Ainda não há itens.",
+    "checklistList": "Itens da lista de verificação",
+    "checklistItem": "Novo item da lista",
+    "itemInvalid": "Digite de 1 a 200 caracteres.",
+    "tooMany": "Esta lista está cheia. Remova um item primeiro.",
+    "addItem": "Adicionar item",
+    "itemAdded": "Item adicionado.",
+    "removeItem": "Remover o item {title}",
+    "eventsTitle": "Eventos criados a partir dele",
+    "eventsEmpty": "Ainda não há eventos. Crie o primeiro abaixo.",
+    "eventsList": "Eventos criados a partir deste modelo",
+    "useTitle": "Criar um evento a partir deste modelo",
+    "useHint": "Um novo rascunho com os ingressos, as seções da página, o conteúdo e a lista de verificação do modelo."
+  },
+  "money": {
+    "export": "Exportar CSV",
+    "periodForm": "Escolher um período",
+    "tabs": {
+      "label": "Páginas financeiras",
+      "overview": "Visão geral",
+      "payouts": "Repasses",
+      "sales": "Vendas por evento",
+      "fees": "Taxas"
+    },
+    "grain": {
+      "label": "Gráfico por",
+      "auto": "Automático",
+      "day": "Dia",
+      "week": "Semana",
+      "month": "Mês"
+    },
+    "overview": {
+      "title": "Visão geral financeira",
+      "description": "O que você vendeu, o que foi descontado e o que chegou à sua conta bancária. Os dias estão no horário de {timeZone}.",
+      "range": "{from} – {to}",
+      "allTime": "Todo o período",
+      "comparedWith": "em comparação com {from} – {to}",
+      "net": "Líquido",
+      "netChange": "{change} em relação ao período anterior",
+      "netExplained": "Bruto menos reembolsos, disputas perdidas e taxas.",
+      "new": "Novo",
+      "previous": "Período anterior: {amount}",
+      "gross": "Vendas brutas",
+      "refunds": "Reembolsos",
+      "fees": "Taxas",
+      "disputes": "Disputas perdidas",
+      "payouts": "Repassado",
+      "keyNumbers": "Principais números em {currency}",
+      "inCurrency": "Em {currency}",
+      "nextPayout": "Próximo repasse",
+      "nextPayoutOn": "Previsto para {date} · {event}",
+      "noNextPayout": "Nenhum repasse agendado. As vendas online são repassadas após cada evento.",
+      "toPayouts": "Ver todos os repasses",
+      "chart": {
+        "day": "Vendas brutas por dia",
+        "week": "Vendas brutas por semana",
+        "month": "Vendas brutas por mês"
+      },
+      "bucket": {
+        "day": "Dia",
+        "week": "Semana iniciada em",
+        "month": "Mês"
+      },
+      "chartNote": "Reembolsos e taxas estão na tabela de dados.",
+      "showData": "Mostrar os dados",
+      "noSalesInPeriod": "Nenhuma venda ou reembolso neste período.",
+      "emptyTitle": "Nenhuma movimentação neste período",
+      "emptyDescription": "Vendas, reembolsos e repasses aparecem aqui conforme acontecem. Tente um período maior ou venda seus primeiros ingressos.",
+      "showAllTime": "Mostrar todo o período",
+      "createEvent": "Criar um evento"
+    },
+    "payouts": {
+      "summary": "Resumo dos repasses",
+      "next": "Próximo repasse",
+      "nextOn": "Previsto para {date} · {event}",
+      "nothingScheduled": "Nada agendado ainda.",
+      "held": "Retido para seus eventos",
+      "heldSub": "{count, plural, =0 {Nenhum evento tem valores aguardando.} one {# evento aguardando a data de liberação.} other {# eventos aguardando a data de liberação.}}",
+      "inReserve": "Em reserva",
+      "reserveNext": "A próxima devolução será em {date}.",
+      "noReserve": "Nenhuma reserva retida.",
+      "owed": "Valor devido",
+      "owedSub": "Descontado do seu próximo repasse.",
+      "upcoming": "Próximos repasses",
+      "upcomingEmptyTitle": "Nada a caminho ainda",
+      "upcomingEmpty": "Quando a Yayatoh recebe o valor dos ingressos por você, o repasse de cada evento aparece aqui com a respectiva data.",
+      "toOverview": "Ver a visão geral financeira",
+      "payoutOf": "{event}: {amount}",
+      "reserveOf": "Reserva devolvida · {event}: {amount}",
+      "expected": "{event}: cerca de {amount}",
+      "heldDetail": "{held} retidos, {reserve} mantidos como reserva",
+      "reserveBack": "Devolução da reserva · {event}: até {amount}",
+      "reserveDetail": "{kept} retidos no repasse",
+      "status": {
+        "held": "Retido até a liberação",
+        "ready": "Enviando",
+        "waiting_account": "Aguardando sua conta de repasse",
+        "failed": "Tentando novamente",
+        "transferred": "Repassado"
+      }
+    },
+    "payout": {
+      "metaTitle": "Repasse",
+      "title": "Repasse de {event}",
+      "titleReserve": "Reserva devolvida de {event}",
+      "description": "Liberado em {date}.",
+      "export": "Exportar pedidos (CSV)",
+      "summary": "Da liberação ao repasse",
+      "released": "Liberado das vendas do evento",
+      "reserve": "Retido como reserva",
+      "netted": "Descontado pelo valor devido",
+      "amount": "Pago a você",
+      "paidOn": "Enviado à sua conta bancária em {date}.",
+      "notYet": {
+        "ready": "Sendo enviado à sua conta bancária.",
+        "waiting_account": "Aguardando sua conta de repasse.",
+        "failed": "A transferência falhou; ela será tentada novamente."
+      },
+      "reserveOn": "A reserva será devolvida em {date}.",
+      "eventFinance": "{event}: análise financeira",
+      "lines": "Pedidos neste repasse",
+      "totals": "Totais",
+      "date": "Data",
+      "type": "Tipo",
+      "order": "Pedido",
+      "orderLink": "Pedido {ref} · {buyer}",
+      "buyer": "Comprador",
+      "gross": "Pago pelo comprador",
+      "fee": "Taxa",
+      "organizer": "Sua parte",
+      "kind": {
+        "sale": "Venda",
+        "refund": "Reembolso"
+      },
+      "reserveTitle": "Uma liberação de reserva",
+      "reserveExplain": "Este repasse devolve a reserva retida de um repasse anterior, menos o que foi recuperado desde então por reembolsos ou disputas.",
+      "toOriginal": "Ver o repasse original",
+      "noLinesTitle": "Nenhum pedido listado",
+      "noLines": "Este repasse não tem linhas de pedido (foi liberado antes de as linhas de pedido serem registradas).",
+      "back": "Todos os repasses"
+    },
+    "sales": {
+      "title": "Vendas por evento",
+      "description": "Pedidos, ingressos e valores por evento no período. Abra um evento para ver a análise financeira completa.",
+      "descriptionNoFinance": "Pedidos, ingressos e vendas brutas por evento no período.",
+      "tableTitle": "Eventos",
+      "event": "Evento",
+      "orders": "Pedidos",
+      "tickets": "Ingressos",
+      "gross": "Bruto",
+      "refunds": "Reembolsos",
+      "fees": "Taxas",
+      "net": "Líquido",
+      "openFinance": "{event}: análise financeira",
+      "openAnalysis": "{event}: análise de vendas",
+      "netNote": "O líquido é o bruto menos reembolsos, disputas perdidas e taxas no período.",
+      "emptyTitle": "Nenhuma venda neste período",
+      "empty": "Os eventos com vendas ou reembolsos no período são listados aqui. Tente um período maior."
+    },
+    "fees": {
+      "title": "Taxas",
+      "description": "Seu plano de taxas e cada taxa cobrada, por pedido e por repasse.",
+      "plan": "Seu plano de taxas",
+      "planName": "Plano: {plan}",
+      "grandfathered": "Tarifas anteriores",
+      "override": "Tarifa acordada",
+      "rate": "{percent} + {fixed} por ingresso pago",
+      "ratePercent": "{percent} por ingresso pago",
+      "noFee": "Sem taxa",
+      "planNote": "As tarifas são definidas pela Yayatoh. Para discuti-las, entre em contato com o suporte.",
+      "totals": "Taxas no período",
+      "net": "Taxas em {currency}",
+      "takenRefunded": "{taken} cobradas, {refunded} devolvidas",
+      "perOrder": "Taxas por pedido",
+      "perPayout": "Taxas por repasse",
+      "date": "Data",
+      "order": "Pedido",
+      "event": "Evento",
+      "total": "Total do pedido",
+      "fee": "Taxa",
+      "feeRefunded": "Devolvida",
+      "payout": "Repasse",
+      "paidOut": "Repassado",
+      "truncated": "Exibindo os últimos {count} pedidos. A exportação CSV contém a mesma lista.",
+      "noPayouts": "Nenhum repasse ainda.",
+      "emptyTitle": "Nenhuma taxa neste período",
+      "empty": "Os pedidos com taxa no período são listados aqui. Tente um período maior."
+    },
+    "csv": {
+      "period": "Início do período",
+      "currency": "Moeda",
+      "gross": "Bruto",
+      "refunds": "Reembolsos",
+      "fees": "Taxas",
+      "event": "Evento",
+      "orders": "Pedidos",
+      "tickets": "Ingressos",
+      "disputesLost": "Disputas perdidas",
+      "net": "Líquido",
+      "date": "Data",
+      "status": "Status",
+      "released": "Liberado",
+      "reserve": "Reserva",
+      "netted": "Compensado",
+      "amount": "Valor",
+      "type": "Tipo",
+      "order": "Pedido",
+      "buyer": "Comprador",
+      "fee": "Taxa",
+      "organizer": "Sua parte",
+      "total": "Total do pedido",
+      "feeRefunded": "Taxa devolvida"
+    }
+  },
+  "mediaLibrary": {
+    "title": "Biblioteca de mídia",
+    "description": "Todas as imagens que sua organização enviou. Use qualquer uma em qualquer lugar sem enviar de novo.",
+    "upload": "Enviar imagens",
+    "uploadTitle": "Enviar para a biblioteca",
+    "summaryLabel": "Resumo da biblioteca",
+    "summary": "Imagens: {images} · Reutilizações: {reuses} · Armazenamento: {used} de {limit}",
+    "storageLink": "Ver armazenamento",
+    "usedPercent": "{percent}% do armazenamento usado",
+    "filtersLabel": "Mostrar",
+    "filters": {
+      "all": "Todas as imagens",
+      "unused": "Sem uso em nenhum lugar"
+    },
+    "emptyTitle": "Ainda não há imagens",
+    "emptyDescription": "Envie uma vez seus logotipos, fotos de locais e artes de eventos e depois escolha-os em qualquer campo de imagem.",
+    "emptyViewer": "As imagens que sua equipe enviar aparecerão aqui.",
+    "emptyUnusedTitle": "Todas as imagens estão em uso",
+    "emptyUnusedDescription": "As imagens que você não usa mais em nenhum lugar aparecerão aqui, prontas para excluir.",
+    "findOwner": "Ver quem pode enviar",
+    "listLabel": "Imagens da biblioteca",
+    "decorativeName": "Imagem decorativa",
+    "meta": "{size} · {width} × {height} px · {type}",
+    "usedIn": "Usada em",
+    "usedInFor": "Onde {name} é usada",
+    "unused": "Sem uso",
+    "places": {
+      "event": "Evento: {name}",
+      "venue": "Local: {name}",
+      "org": "Logotipo da organização",
+      "speaker": "Palestrante: {name}",
+      "exhibitor": "Expositor: {name}",
+      "sponsor": "Patrocinador: {name}",
+      "library": "Biblioteca"
+    },
+    "delete": "Excluir",
+    "deleteFor": "Excluir {name}",
+    "confirmDelete": "Excluir esta imagem de vez? Ela não é usada em nenhum lugar.",
+    "deleteForGood": "Excluir de vez",
+    "cancel": "Cancelar",
+    "inUseNote": "Em uso: remova-a de onde é usada antes de excluí-la.",
+    "picker": {
+      "open": "Escolher na biblioteca de mídia",
+      "hint": "Use uma imagem que sua organização já tem. Nada é enviado de novo.",
+      "loading": "Carregando a biblioteca…",
+      "empty": "A biblioteca ainda não tem imagens.",
+      "openLibrary": "Abrir a biblioteca de mídia",
+      "choose": "Escolha uma imagem",
+      "noAlt": "Imagem decorativa",
+      "alt": "Texto alternativo para este lugar",
+      "altHint": "Descreva a imagem para quem não pode vê-la.",
+      "altRequired": "Descreva a imagem ou marque-a como decorativa.",
+      "decorative": "Decorativa (sem necessidade de descrição)",
+      "use": "Usar esta imagem",
+      "placed": "Imagem adicionada.",
+      "alreadyHere": "Esta imagem já está aqui.",
+      "noChoice": "Escolha uma imagem primeiro."
+    }
+  },
+  "storage": {
+    "title": "Armazenamento",
+    "description": "Quanto espaço suas imagens ocupam. O armazenamento é gerenciado pela Yayatoh: não há nada para conectar.",
+    "openLibrary": "Abrir a biblioteca de mídia",
+    "summaryLabel": "Resumo do armazenamento",
+    "used": "Usado",
+    "ofDefault": "de {limit} incluídos",
+    "ofCustom": "de {limit} (seu plano)",
+    "usedPercent": "{percent}% do armazenamento usado",
+    "free": "Livre",
+    "freeSub": "Imagens reutilizadas não ocupam espaço extra.",
+    "images": "Imagens",
+    "imagesSub": "Arquivos armazenados: {files} · Reutilizações: {reuses}",
+    "nearlyFull": "O armazenamento está quase cheio. Exclua imagens que não usa mais ou fale com o suporte da Yayatoh para ter mais espaço.",
+    "byKindTitle": "O que ocupa",
+    "kind": "Tipo",
+    "imagesCol": "Imagens",
+    "size": "Tamanho",
+    "share": "Participação",
+    "shareOf": "{kind}: {percent}% do armazenamento usado",
+    "kinds": {
+      "events": "Imagens de eventos",
+      "venues": "Fotos de locais",
+      "program": "Palestrantes, expositores e patrocinadores",
+      "logo": "Logotipo da organização",
+      "library": "Só na biblioteca"
+    },
+    "portalFiles": "Os documentos do portal de palestrantes ficam guardados à parte e não contam: {files} arquivos, {size}.",
+    "largestTitle": "Maiores imagens",
+    "emptyTitle": "Ainda não há imagens",
+    "emptyDescription": "Suas imagens e o espaço que ocupam aparecerão aqui.",
+    "emptyAction": "Enviar imagens",
+    "image": "Imagem",
+    "decorative": "Imagem decorativa",
+    "usedIn": "Usada em",
+    "unused": "Sem uso",
+    "places": "Lugares: {count}",
+    "managedNote": "Precisa de mais espaço? Fale com o suporte da Yayatoh. Contas próprias de armazenamento ou e-mail nunca são necessárias."
+  },
+  "emailIdentity": {
+    "title": "Como seu e-mail aparece",
+    "description": "O nome que as pessoas veem e para onde vão as respostas, em cada e-mail que sua organização envia: ingressos, lembretes, campanhas e mensagens.",
+    "formLabel": "Nome do remetente e Reply-To",
+    "fromName": "Nome do remetente",
+    "fromNameHint": "Deixe vazio para usar {org}. Sem endereços web ou de e-mail.",
+    "replyTo": "Endereço de resposta (Reply-To)",
+    "replyToHint": "As respostas chegam aqui. Deixe vazio para recebê-las no endereço do remetente.",
+    "errors": {
+      "too_long": "Use no máximo 80 caracteres.",
+      "has_address": "Um nome não pode conter um endereço de e-mail nem os caracteres @ < > \".",
+      "has_domain": "Um nome não pode parecer um endereço web (como example.com).",
+      "invalid_email": "Digite um endereço como nome@example.com.",
+      "platform_address": "Use seu próprio endereço, não um da Yayatoh."
+    },
+    "previewTitle": "As caixas de entrada mostram",
+    "previewReplyTo": "As respostas vão para {address}",
+    "previewNoReplyTo": "As respostas vão para o endereço do remetente",
+    "saved": "Salvo. Cada novo e-mail usa estas configurações.",
+    "fixErrors": "Confira os campos destacados.",
+    "done": {
+      "forbidden": "Só proprietários e administradores podem alterar o nome do remetente e o endereço de resposta.",
+      "internal": "Algo deu errado. Tente de novo."
+    },
+    "save": "Salvar",
+    "readOnly": "Só proprietários e administradores podem alterar o nome do remetente e o endereço de resposta."
+  },
+  "orgContact": {
+    "title": "Fale com {org}",
+    "defaultIntro": "Envie uma mensagem para {org}. A resposta chegará por e-mail.",
+    "formLabel": "Mensagem para {org}",
+    "honeypot": "Deixe este campo vazio",
+    "fields": {
+      "name": "Seu nome",
+      "email": "Seu e-mail",
+      "message": "Mensagem"
+    },
+    "emailHint": "Para que possam responder.",
+    "messageHint": "Pelo menos 10 caracteres.",
+    "consent": "Concordo que {org} use meu nome e meu e-mail para responder a esta mensagem.",
+    "errors": {
+      "name": "Digite seu nome.",
+      "email": "Digite um endereço como nome@example.com.",
+      "message": "Escreva pelo menos 10 caracteres.",
+      "consent": "Marque a caixa para que possam responder.",
+      "human": "Confirme que você é uma pessoa."
+    },
+    "rateLimited": "Mensagens demais. Tente de novo em {minutes} min.",
+    "tooFast": "Foi muito rápido. Aguarde um instante e envie de novo.",
+    "expired": "Esta página ficou aberta por muito tempo. Recarregue-a e envie de novo.",
+    "fixErrors": "Confira os campos destacados.",
+    "submit": "Enviar mensagem",
+    "sentTitle": "Mensagem enviada",
+    "sentBody": "Obrigado! {org} responderá ao seu e-mail."
+  },
+  "orgContactConsole": {
+    "title": "Página de contato",
+    "description": "Um formulário de contato no seu site. As mensagens chegam às suas notificações; seu próprio e-mail nunca aparece.",
+    "settingsTitle": "Página de contato",
+    "settingsLabel": "Configurações da página de contato",
+    "enabled": "Mostrar a página de contato no seu site",
+    "enabledHint": "Adiciona Contato ao menu do seu site.",
+    "intro": "Texto acima do formulário",
+    "introHint": "Opcional, até 500 caracteres.",
+    "introError": "Use no máximo 500 caracteres.",
+    "savedOn": "Salvo. Sua página de contato está no ar.",
+    "savedOff": "Salvo. Sua página de contato está desativada.",
+    "save": "Salvar",
+    "liveAt": "No ar em",
+    "offNote": "A página está desativada: os visitantes não podem enviar mensagens.",
+    "privacyNote": "Os visitantes concordam que você use o nome e o e-mail deles para responder. O spam é filtrado antes de chegar a você.",
+    "messagesTitle": "Mensagens",
+    "newCount": "Novas: {count}",
+    "messagesHidden": "As mensagens contêm dados de visitantes: quem edita o site pode lê-las.",
+    "emptyTitle": "Ainda não há mensagens",
+    "emptyOn": "As mensagens da sua página de contato aparecerão aqui e nas suas notificações.",
+    "emptyOff": "Ative a página de contato para receber mensagens.",
+    "openPage": "Abrir a página de contato",
+    "turnOn": "Ativar a página de contato",
+    "from": "De",
+    "message": "Mensagem",
+    "received": "Recebida",
+    "status": "Status",
+    "statusNew": "Nova",
+    "statusHandled": "Respondida",
+    "markHandled": "Marcar como respondida",
+    "markHandledFor": "Marcar a mensagem de {name} como respondida"
   }
 }

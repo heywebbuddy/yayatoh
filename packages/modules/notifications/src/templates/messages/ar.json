@@ -354,6 +354,10 @@
       "subject": "تقريرك «{name}»: {period}",
       "intro": "تقرير «{name}» الخاص بـ {org} عن {period} جاهز. افتحه لتنزيل ملف PDF.",
       "cta": "تنزيل ملف PDF"
+    },
+    "cms.contact_message": {
+      "subject": "رسالة جديدة من {name} عبر صفحة التواصل",
+      "intro": "كتب إليك {name} ({email}) عبر صفحة التواصل في موقعك:"
     }
   },
   "roles": {

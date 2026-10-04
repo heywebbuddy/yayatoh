@@ -1,10 +1,16 @@
 import { isUniqueViolation, type TenantTx } from '@yayatoh/db';
 import {
+  checklistTitlesTx,
   EventDto,
   EventSettingsSnapshot,
   eventSettingsTx,
+  insertChecklistItemsTx,
   insertEventCopyTx,
+  insertSectionsTx,
   joinSeriesTx,
+  MAX_CHECKLIST_ITEMS,
+  SectionsSnapshot,
+  sectionsSnapshotTx,
   seriesOfEventTx,
 } from '@yayatoh/events';
 import { currentFormTx, FormDefinition, publishFormTx } from '@yayatoh/forms';
@@ -12,19 +18,35 @@ import { type Ctx, DomainError, requireOrg, utcToZonedInput } from '@yayatoh/ker
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { instantiateSeatingTx, SeatingSnapshot, seatingSnapshotTx } from '@yayatoh/seating';
 import { instantiateTicketTypesTx, TicketTypesSnapshot, ticketTypesSnapshotTx } from '@yayatoh/ticketing';
-import { asc, eq } from 'drizzle-orm';
+import { asc, eq, isNotNull, isNull } from 'drizzle-orm';
 import { z } from 'zod';
-import { eventTemplates } from './schema.ts';
+import { eventTemplates, templateEvents } from './schema.ts';
 
-/** Version 1 of what a template holds (and what "duplicate" copies). */
-export const EventSnapshot = z.object({
+/** Version 1 of what a template holds (M1.4b). */
+const EventSnapshotV1 = z.object({
   version: z.literal(1),
   event: EventSettingsSnapshot,
   ticketTypes: TicketTypesSnapshot,
   questions: FormDefinition.nullable(),
   seating: SeatingSnapshot,
 });
-export type EventSnapshot = z.infer<typeof EventSnapshot>;
+
+/**
+ * Version 2 (U6): also the event page's sections and the organizer's checklist titles, so a
+ * template made from scratch carries its content. Version 1 rows read as v2 with neither.
+ */
+export const EventSnapshotV2 = EventSnapshotV1.extend({
+  version: z.literal(2),
+  sections: SectionsSnapshot,
+  checklist: z.array(z.string().trim().min(1).max(200)).max(MAX_CHECKLIST_ITEMS),
+});
+export type EventSnapshot = z.infer<typeof EventSnapshotV2>;
+
+/** What a template holds (and what "duplicate" copies), normalized to the newest version. */
+export const EventSnapshot: z.ZodType<EventSnapshot, unknown> = z.union([
+  EventSnapshotV2,
+  EventSnapshotV1.transform((v1): EventSnapshot => ({ ...v1, version: 2, sections: [], checklist: [] })),
+]);
 
 const QUESTIONS = { kind: 'checkout_questions', subjectType: 'event' } as const;
 const localDay = (at: Date, tz: string) => utcToZonedInput(at, tz).slice(0, 10);
@@ -34,11 +56,13 @@ async function snapshotTx(tx: TenantTx, eventId: string) {
   const { name, startsAt, settings } = await eventSettingsTx(tx, eventId);
   const form = await currentFormTx(tx, { ...QUESTIONS, subjectId: eventId });
   const snapshot: EventSnapshot = {
-    version: 1,
+    version: 2,
     event: settings,
     ticketTypes: await ticketTypesSnapshotTx(tx, eventId, startsAt, localDay(startsAt, settings.timezone)),
     questions: form && form.definition.fields.length > 0 ? form.definition : null,
     seating: await seatingSnapshotTx(tx, eventId),
+    sections: await sectionsSnapshotTx(tx, eventId),
+    checklist: await checklistTitlesTx(tx, eventId),
   };
   return { name, startsAt, snapshot };
 }
@@ -64,6 +88,8 @@ async function instantiateTx(
   });
   if (s.questions) await publishFormTx(tx, ctx, { ...QUESTIONS, subjectId: event.id }, s.questions);
   await instantiateSeatingTx(tx, ctx, { eventId: event.id, snapshot: s.seating, ticketTypeIds: typeIds });
+  await insertSectionsTx(tx, ctx, event.id, s.sections);
+  await insertChecklistItemsTx(tx, ctx, event.id, s.checklist);
   return event;
 }
 
@@ -119,11 +145,19 @@ export const TemplateDto = z.object({
   ticketTypes: z.int(),
   questions: z.int(),
   seats: z.int(),
+  /** U6: page sections and checklist items the template carries. */
+  sections: z.int(),
+  checklist: z.int(),
+  /** U6: minutes from start to end of events made from it. */
+  durationMinutes: z.int(),
+  /** U6: `event` when saved from an event, `scratch` when built in the template builder. */
+  origin: z.enum(['event', 'scratch']),
+  archivedAt: z.date().nullable(),
   createdAt: z.date(),
 });
 export type TemplateDto = z.infer<typeof TemplateDto>;
 
-const toDto = (r: typeof eventTemplates.$inferSelect): TemplateDto => {
+export const toTemplateDto = (r: typeof eventTemplates.$inferSelect): TemplateDto => {
   const s = EventSnapshot.parse(r.snapshot);
   return {
     id: r.id,
@@ -134,6 +168,11 @@ const toDto = (r: typeof eventTemplates.$inferSelect): TemplateDto => {
     ticketTypes: s.ticketTypes.length,
     questions: s.questions?.fields.length ?? 0,
     seats: s.seating?.seats.length ?? 0,
+    sections: s.sections.length,
+    checklist: s.checklist.length,
+    durationMinutes: Math.round(s.event.durationMs / 60_000),
+    origin: r.sourceEventId ? 'event' : 'scratch',
+    archivedAt: r.archivedAt,
     createdAt: r.createdAt,
   };
 };
@@ -164,7 +203,7 @@ export const saveTemplateCommand = tenantCommand({
         })
         .returning();
       if (!row) throw new DomainError('internal');
-      return toDto(row);
+      return toTemplateDto(row);
     } catch (err) {
       if (isUniqueViolation(err, 'event_templates_org_name_key'))
         throw new DomainError('conflict', 'A template with this name exists', { field: 'name' });
@@ -188,11 +227,14 @@ export const createFromTemplateCommand = tenantCommand({
   handler: async ({ input, ctx, tx, emit }) => {
     const [t] = await tx.select().from(eventTemplates).where(eq(eventTemplates.id, input.templateId));
     if (!t) throw new DomainError('not_found', 'Template not found');
+    // U6: an archived template is out of every picker; restore it to use it again.
+    if (t.archivedAt) throw new DomainError('invalid_state', 'Template is archived', { reason: 'archived' });
     const event = await instantiateTx(tx, ctx, {
       name: input.name,
       startsAt: input.startsAt,
       snapshot: EventSnapshot.parse(t.snapshot),
     });
+    await tx.insert(templateEvents).values({ orgId: requireOrg(ctx), templateId: t.id, eventId: event.id });
     emit(created(requireOrg(ctx), event, { templateId: t.id }));
     return event;
   },
@@ -222,12 +264,19 @@ export const deleteTemplateCommand = tenantCommand({
   audit: (input) => ({ action: 'template.delete', targetType: 'template', targetId: input.templateId }),
 });
 
+/** The org's templates by name: the active ones (every picker), or the archived ones. */
 export const listTemplatesQuery = tenantQuery({
   name: 'templates.listTemplates',
-  input: z.object({}),
+  input: z.object({ archived: z.boolean().default(false) }),
   output: z.array(TemplateDto),
   entitlement: 'core',
   permission: 'events:read',
-  handler: async ({ tx }) =>
-    (await tx.select().from(eventTemplates).orderBy(asc(eventTemplates.name))).map(toDto),
+  handler: async ({ input, tx }) =>
+    (
+      await tx
+        .select()
+        .from(eventTemplates)
+        .where(input.archived ? isNotNull(eventTemplates.archivedAt) : isNull(eventTemplates.archivedAt))
+        .orderBy(asc(eventTemplates.name))
+    ).map(toTemplateDto),
 });

@@ -3,6 +3,7 @@
 import {
   EVENT_VISIBILITIES,
   ensureShortLinkCommand,
+  setEventCurrencyCommand,
   setEventDetailsCommand,
   setVanityShortLinkCommand,
   updateEventCommand,
@@ -37,9 +38,11 @@ export async function saveDetailsAction(
       {
         eventId: ev.id,
         venueId: venueId || null,
-        category: category || null,
+        // U8: the picker submits an org category ref (platform key of an unchanged default, else id).
+        orgCategory: category || null,
         attendanceMode: String(form.get('attendanceMode') ?? 'in_person'),
-        tags: String(form.get('tags') ?? '').split(','),
+        // U8: one value per chosen tag (the combobox); a comma list still works without JavaScript.
+        tags: form.getAll('tags').flatMap((v) => String(v).split(',')),
       },
       data.ctx,
       ports,
@@ -72,4 +75,26 @@ export async function ensureShortLinkAction(org: string, event: string): Promise
   const { data, event: ev } = await loadEvent(org, event, 'details');
   await executeCommand(ensureShortLinkCommand, { eventId: ev.id }, data.ctx, ports);
   revalidatePath(`/o/${org}/e/${event}/details`);
+}
+
+/** U9 (UX-6): the event's currency, until its first order. */
+export async function setCurrencyAction(
+  org: string,
+  event: string,
+  _prev: FormState,
+  form: FormData,
+): Promise<FormState> {
+  const { data, event: ev } = await loadEvent(org, event, 'details');
+  try {
+    await executeCommand(
+      setEventCurrencyCommand,
+      { eventId: ev.id, currency: String(form.get('currency') ?? '').toUpperCase() },
+      data.ctx,
+      ports,
+    );
+  } catch (err) {
+    return failure(err);
+  }
+  revalidatePath(`/o/${org}/e/${event}`, 'layout');
+  return success();
 }

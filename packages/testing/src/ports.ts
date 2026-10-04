@@ -45,7 +45,7 @@ import { seatAssignAction, setOccupantDirectory, setPartyCredentials } from '@ya
 import { configureSso, fakeIdentityProvider, fakeMetadataFetcher, fakeTxtResolver } from '@yayatoh/sso';
 import { surveyExportAction, surveysContactOwner } from '@yayatoh/surveys';
 import { createOrgAuthorizer, memberRoleTx, orgStatusGate } from '@yayatoh/tenancy';
-import { ticketResendAction } from '@yayatoh/ticketing';
+import { ticketingContactOwner, ticketResendAction } from '@yayatoh/ticketing';
 import { configureVirtual, fakeVideoProvider } from '@yayatoh/virtual';
 import {
   configureWebhooks,
@@ -138,6 +138,7 @@ export const CONTACT_REFERENCE_OWNERS = [
   notificationsContactOwner,
   guestsContactOwner,
   ordersContactOwner,
+  ticketingContactOwner,
   checkinContactOwner,
   surveysContactOwner,
   campaignsContactOwner,

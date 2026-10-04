@@ -8,6 +8,8 @@ export const privateColumns = columnPrivacy('events', {
   access_code_attempts: { client_key: internal() },
   access_codes: { code: holder('code'), label: internal() },
   // Published announcements are public; the holders-only ones are not.
+  // U6: the organizer's own to-dos; never on a public page.
+  event_checklist_items: { title: internal() },
   event_announcements: {
     title: holder(undefined, { where: "audience <> 'public'" }),
     body: holder(undefined, { where: "audience <> 'public'" }),
@@ -33,6 +35,8 @@ export const privateColumns = columnPrivacy('events', {
     attendance_mode: 'vocab',
   },
   occurrences: { status: 'vocab' },
+  // U8: org category names label public event pages.
+  org_categories: { platform_key: 'vocab', name: 'public' },
   // M5.3a portal accounts (P5-7): the invitee's address; codes, links and sessions as HMACs only.
   portal_accounts: { role: 'vocab', subject_kind: 'vocab', email: personal('email') },
   portal_challenges: { code_hash: secret(), link_hash: secret(), browser_hash: secret() },

@@ -1,8 +1,8 @@
 import { withoutTenant, withTenant } from '@yayatoh/db';
-import { checkoutTarget } from '@yayatoh/events';
+import { checkoutTarget, tagKey } from '@yayatoh/events';
 import { createCtx } from '@yayatoh/kernel';
 import { organizationPublicTx, resolveOrgSlug } from '@yayatoh/tenancy';
-import { asc, count, gt, sql } from 'drizzle-orm';
+import { and, arrayContains, asc, count, gt, sql } from 'drizzle-orm';
 import { followRedirectChain, type RedirectRule } from './domain/redirects.ts';
 import { dayRange, escapeLike, PAGE_SIZE, pageCount, type SearchParams } from './domain/search.ts';
 import {
@@ -87,16 +87,27 @@ export async function listingBySlug(slug: string): Promise<(ListingDto & { reado
   return Object.assign(toListing(r), { orgId: String(r.org_id) });
 }
 
-/** A tenant site's own listings (its home page), under RLS in the org's transaction. */
-export async function orgListings(orgId: string, page = 1, now: Date = new Date()): Promise<ListingPageDto> {
+/**
+ * A tenant site's own listings (its home page; also the organizer page), under RLS in the org's
+ * transaction. U8: `tag` narrows to listings with that tag (case-insensitive).
+ */
+export async function orgListings(
+  orgId: string,
+  page = 1,
+  now: Date = new Date(),
+  opts: { tag?: string } = {},
+): Promise<ListingPageDto> {
   const ctx = createCtx({ orgId, actor: { type: 'system', name: 'marketplace.tenant-site' } });
   return withTenant(ctx, async (tx) => {
-    const upcoming = gt(publicListings.endsAt, now);
-    const [{ n } = { n: 0 }] = await tx.select({ n: count() }).from(publicListings).where(upcoming);
+    const where = and(
+      gt(publicListings.endsAt, now),
+      opts.tag ? arrayContains(publicListings.tagKeys, [tagKey(opts.tag)]) : undefined,
+    );
+    const [{ n } = { n: 0 }] = await tx.select({ n: count() }).from(publicListings).where(where);
     const rows = await tx
       .select()
       .from(publicListings)
-      .where(upcoming)
+      .where(where)
       .orderBy(asc(publicListings.startsAt), asc(publicListings.slug))
       .limit(PAGE_SIZE)
       .offset((page - 1) * PAGE_SIZE);
@@ -106,6 +117,28 @@ export async function orgListings(orgId: string, page = 1, now: Date = new Date(
       page,
       pageCount: pageCount(n),
     };
+  });
+}
+
+/**
+ * U8: the tags of an org's upcoming public listings (the org site's tag filter), each once in its
+ * first spelling, with how many listings carry it. Read under RLS: never another org's tags.
+ */
+export async function orgListingTags(
+  orgId: string,
+  now: Date = new Date(),
+): Promise<{ key: string; tag: string; count: number }[]> {
+  const ctx = createCtx({ orgId, actor: { type: 'system', name: 'marketplace.tenant-site' } });
+  return withTenant(ctx, async (tx) => {
+    const rows = await tx.execute<{ key: string; tag: string; n: number }>(sql`
+      select k.key, min(k.tag) as tag, count(*)::int as n
+      from ${publicListings} l
+      cross join lateral unnest(l.tag_keys, l.tags) as k(key, tag)
+      where l.ends_at > ${now.toISOString()}::timestamptz
+      group by k.key
+      order by k.key
+      limit 50`);
+    return rows.map((r) => ({ key: r.key, tag: r.tag, count: Number(r.n) }));
   });
 }
 

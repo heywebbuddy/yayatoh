@@ -7,6 +7,7 @@ import { VenueForm } from '@/components/venue-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatNumber } from '@/lib/format.ts';
 import { loadConsole } from '@/server/console.ts';
+import { venueThumbnails } from '@/server/media.ts';
 import { ports } from '@/server/ports.ts';
 import { createVenueAction } from './actions.ts';
 
@@ -25,6 +26,10 @@ export default async function VenuesPage({
   const canWrite = roleCan(data.role, 'events:write');
   const showArchived = archived === '1';
   const venues = await executeQuery(listVenuesQuery, { includeArchived: showArchived }, data.ctx, ports);
+  const thumbs = await venueThumbnails(
+    data,
+    venues.map((v) => v.id),
+  );
   return (
     <>
       <PageHeader
@@ -59,6 +64,31 @@ export default async function VenuesPage({
           rowKey={(v) => v.id}
           rows={venues}
           columns={[
+            {
+              // U3: the venue's first photo (decorative: the name follows in the next column).
+              key: 'photo',
+              header: t('photo'),
+              cell: (v) => {
+                const p = thumbs.get(v.id);
+                return p ? (
+                  <img
+                    src={p.preview}
+                    alt=""
+                    width={p.width}
+                    height={p.height}
+                    data-testid="venue-thumb"
+                    className="size-12 rounded-tag bg-surface-2 object-cover"
+                  />
+                ) : (
+                  <span
+                    aria-hidden="true"
+                    className="flex size-12 items-center justify-center rounded-tag bg-surface-2 text-ink-3"
+                  >
+                    {v.name.slice(0, 1).toUpperCase()}
+                  </span>
+                );
+              },
+            },
             {
               key: 'name',
               header: t('name'),

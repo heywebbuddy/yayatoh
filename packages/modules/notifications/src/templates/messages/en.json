@@ -354,6 +354,10 @@
       "subject": "Your report “{name}”: {period}",
       "intro": "The {org} report “{name}” for {period} is ready. Open it to download the PDF.",
       "cta": "Download the PDF"
+    },
+    "cms.contact_message": {
+      "subject": "New message from {name} through your contact page",
+      "intro": "{name} ({email}) wrote to you through the contact page on your site:"
     }
   },
   "roles": {

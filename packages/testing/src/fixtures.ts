@@ -88,11 +88,13 @@ import {
   createHelpArticleCommand,
   createHelpCategoryCommand,
   createSiteSectionCommand,
+  setContactPageCommand,
   setEntryStatusCommand,
   setHelpArticleStatusCommand,
   setSiteSectionStatusCommand,
   submitContactRequestCommand,
   submitHelpFeedbackCommand,
+  submitOrgContactCommand,
 } from '@yayatoh/cms';
 import {
   createDisplayLinkCommand,
@@ -141,6 +143,8 @@ import {
   voteCommand,
 } from '@yayatoh/engagement';
 import {
+  addChecklistItemCommand,
+  addOrgCategoryCommand,
   addRecurringOccurrencesCommand,
   addSectionCommand,
   assignEventRoleCommand,
@@ -227,7 +231,13 @@ import {
   setAttributionWindowCommand,
 } from '@yayatoh/marketing';
 import { addLegacyRedirectCommand, catchUpListings, updateSiteSettingsCommand } from '@yayatoh/marketplace';
-import { uploadLogo, uploadMedia, uploadProgramImage, uploadSpeakerPortalFile } from '@yayatoh/media';
+import {
+  reuseMedia,
+  uploadLogo,
+  uploadMedia,
+  uploadProgramImage,
+  uploadSpeakerPortalFile,
+} from '@yayatoh/media';
 import {
   announcementMailer,
   contactMessageCommand,
@@ -248,6 +258,7 @@ import {
   registerPushTokenCommand,
   sendTestNotificationCommand,
   setChannelSenderCommand,
+  setEmailIdentityCommand,
   setFrequencyCapsCommand,
   setMyPreferencesCommand,
   setQuotaLimitCommand,
@@ -414,6 +425,7 @@ import {
 import {
   badgeTicketsTx,
   createClaimLinksCommand,
+  createCouponCommand,
   createPromoCodeCommand,
   createTicketTypeCommand,
   requestHolderLinkCommand,
@@ -697,6 +709,24 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     },
     systemCtx(org.id),
     ports,
+  );
+  // U9: an org coupon for the event and a (released) redemption by the paid order's buyer.
+  const coupon = await executeCommand(
+    createCouponCommand,
+    {
+      code: 'FIXTUREORG',
+      kind: 'amount',
+      amountMinor: 500,
+      currency: 'USD',
+      scope: 'events',
+      eventIds: [event.id],
+    },
+    ctx(),
+    ports,
+  );
+  await withTenant(systemCtx(org.id), (tx) =>
+    tx.execute(sql`insert into ticketing.coupon_redemptions (org_id, coupon_id, order_id, event_id, buyer_contact_id, released_at)
+      select org_id, ${coupon.id}, id, event_id, buyer_contact_id, now() from orders.orders where id = ${checkout.order.id}`),
   );
   // M3.8a: the order's attribution record (first and last touch: the click above) and settings.
   await executeCommand(
@@ -1593,7 +1623,25 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   );
   for (const e of [event, weekly])
     await executeCommand(setEventSeriesCommand, { eventId: e.id, seriesId: tour.id }, ctx(), ports);
-  await executeCommand(saveTemplateCommand, { eventId: event.id, name: `${name} template` }, ctx(), ports);
+  // U6: the organizer's own checklist item (a template made from the event carries it).
+  await executeCommand(
+    addChecklistItemCommand,
+    { eventId: event.id, title: `${name} walkthrough` },
+    ctx(),
+    ports,
+  );
+  const template = await executeCommand(
+    saveTemplateCommand,
+    { eventId: event.id, name: `${name} template` },
+    ctx(),
+    ports,
+  );
+  // U6 template → events link (template_events): the fixture event stands for one made from it.
+  await withTenant(systemCtx(org.id), (tx) =>
+    tx.execute(
+      sql`insert into templates.template_events (org_id, template_id, event_id) values (${org.id}, ${template.id}, ${event.id})`,
+    ),
+  );
   // M1.4c: a directory venue picked for the event, a quote request on it, and tags.
   const venue = await executeCommand(
     createVenueCommand,
@@ -1604,6 +1652,13 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   await executeCommand(
     setEventDetailsCommand,
     { eventId: event.id, venueId: venue.id, category: 'community', tags: ['Fixture', 'Isolation'] },
+    ctx(),
+    ports,
+  );
+  // U8: the org's own category list (seeded from the platform defaults above) and a custom one.
+  await executeCommand(
+    addOrgCategoryCommand,
+    { name: `${name} Specials`, platformKey: 'other' },
     ctx(),
     ports,
   );
@@ -1719,12 +1774,49 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   });
   // Media (M1.4e): an event cover and the org logo (assets, variants, blobs in the dev store),
   // and a quota override row.
-  await uploadMedia(
+  const coverImage = await uploadMedia(
     ctx(),
     { ownerType: 'event', ownerId: event.id, slot: 'cover', alt: `${name} cover`, file: fixturePng('cover') },
     ports,
   );
   await uploadLogo(ctx(), { alt: `${name} logo`, file: fixturePng('logo') }, ports);
+  // U10 "Email sending": the From name (the org's own name) and a Reply-To address.
+  await executeCommand(
+    setEmailIdentityCommand,
+    { fromName: name, replyTo: `team@${slug}.example` },
+    ctx(),
+    ports,
+  );
+  // U10: the org contact page (on) and one visitor message through it.
+  await executeCommand(
+    setContactPageCommand,
+    { enabled: true, intro: `Questions for ${name}?` },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    submitOrgContactCommand,
+    {
+      submissionKey: uuidv7(),
+      name: 'Vera Visitor',
+      email: `vera@${slug}.example`,
+      message: 'Do you have step-free access at the venue?',
+      consent: true,
+    },
+    createCtx({ orgId: org.id }),
+    ports,
+  );
+  // U10: the cover reused in the event's gallery from the media library (no new files: a reuse
+  // row whose variants name the cover's files).
+  await reuseMedia(
+    ctx(),
+    {
+      sourceAssetId: coverImage.asset.id,
+      target: { ownerType: 'event', ownerId: event.id, slot: 'gallery' },
+      alt: `${name} gallery`,
+    },
+    ports,
+  );
   await withTenant(systemCtx(org.id), (tx) =>
     tx.execute(sql`insert into media.quotas (org_id, bytes_limit) values (${org.id}, ${512 * 1024 * 1024})`),
   );

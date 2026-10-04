@@ -95,7 +95,8 @@ export const ORG_SECTIONS: readonly OrgNavSection[] = [
   {
     key: 'money',
     items: [
-      { key: 'finance', path: 'finance', icon: 'scale', module: 'core', needs: 'finance:read' },
+      // U5: the Money dashboards (overview, payouts with their drill-down, sales by event, fees).
+      { key: 'moneyOverview', path: 'money', icon: 'wallet', module: 'core', needs: 'finance:read' },
       {
         key: 'payouts',
         path: 'payouts',
@@ -104,6 +105,15 @@ export const ORG_SECTIONS: readonly OrgNavSection[] = [
         needs: 'finance:read',
         agencyNeeds: 'payouts:manage',
       },
+      {
+        key: 'salesByEvent',
+        path: 'sales-by-event',
+        icon: 'chart-column',
+        module: 'core',
+        needs: 'orders:read',
+      },
+      { key: 'fees', path: 'fees', icon: 'percent', module: 'core', needs: 'finance:read' },
+      { key: 'finance', path: 'finance', icon: 'scale', module: 'core', needs: 'finance:read' },
       // M6.2a: cross-event dashboards from the analytics warehouse.
       {
         key: 'orgAnalytics',
@@ -143,6 +153,8 @@ export const ORG_SECTIONS: readonly OrgNavSection[] = [
         needs: 'marketing:read',
         agencyNeeds: 'org:update',
       },
+      // U10: every image the org uploaded, reusable across events, venues and the program.
+      { key: 'mediaLibrary', path: 'media', icon: 'image', module: 'core', needs: 'events:read' },
       {
         key: 'domains',
         path: 'domains',
@@ -209,6 +221,8 @@ export const ORG_SECTIONS: readonly OrgNavSection[] = [
         needs: 'org:update',
         agencyNeeds: 'org:update',
       },
+      // U10 (UX-3): storage usage (quota, what uses it, the largest images); platform-managed.
+      { key: 'storage', path: 'storage', icon: 'hard-drive', module: 'core', needs: 'events:read' },
       {
         key: 'messagingHealth',
         path: 'messaging',

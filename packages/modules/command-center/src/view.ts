@@ -2,6 +2,8 @@ import type { TenantTx } from '@yayatoh/db';
 import { EventDto, listEventsQuery, listOccurrencesQuery } from '@yayatoh/events';
 import type { Ctx } from '@yayatoh/kernel';
 import { tenantQuery } from '@yayatoh/platform';
+import { eventMetricsQuery } from '@yayatoh/reports';
+import { type OrgRole, roleCan } from '@yayatoh/tenancy';
 import { and, eq } from 'drizzle-orm';
 import { z } from 'zod';
 import { callerScopeTx, orgScopeTx, profileOf } from './access.ts';
@@ -14,7 +16,15 @@ import {
 } from './domain/modes.ts';
 import { readinessScore } from './domain/readiness.ts';
 import { CC_ROLES } from './domain/roles.ts';
-import { resolveLayout, WIDGET_KEYS, WIDGET_META, WIDGET_SIZES, widgetAllowed } from './domain/widgets.ts';
+import {
+  KPI_KEYS,
+  kpiKeys,
+  resolveLayout,
+  WIDGET_KEYS,
+  WIDGET_META,
+  WIDGET_SIZES,
+  widgetAllowed,
+} from './domain/widgets.ts';
 import { readinessRulesTx } from './readiness.ts';
 import { layouts, modeOverrides } from './schema.ts';
 
@@ -94,6 +104,8 @@ export const EventViewDto = z.object({
   customized: z.boolean(),
   /** May set or clear the manual mode (owner and staff who can edit the event). */
   canOverride: z.boolean(),
+  /** U4: the KPI row for this member (role, profile and modules; never sales for the door). */
+  kpis: z.array(z.enum(KPI_KEYS)),
 });
 export type EventViewDto = z.infer<typeof EventViewDto>;
 
@@ -128,6 +140,7 @@ export const eventViewQuery = tenantQuery({
       layout: resolveLayout(WIDGET_META, scope, mode.mode, saved),
       customized: saved !== null,
       canOverride: scope.canWrite,
+      kpis: kpiKeys(WIDGET_META, scope),
     };
   },
 });
@@ -144,6 +157,13 @@ export const OverviewEventDto = z.object({
   nextChangeAt: iso.nullable(),
   /** Readiness score for roles with the readiness widget (planning and pre-show only). */
   readiness: z.int().min(0).max(100).nullable(),
+  /**
+   * U4: gross sales per currency (minor units, the event's currency first) for members who may
+   * read the event's money (the sales widget's rule plus `orders:read`); null for everyone else.
+   */
+  sales: z.array(z.object({ currency: z.string(), total: z.int() })).nullable(),
+  /** U4: tickets sold of the places for sale, for roles with the tickets widget. */
+  tickets: z.object({ sold: z.int(), capacity: z.int().min(0) }).nullable(),
 });
 
 export const OrgOverviewDto = z.object({
@@ -159,7 +179,9 @@ const OVERVIEW_LIMIT = 50;
 
 /**
  * The multi-event overview (M3.2): the org's events that are live, in pre-show, being planned or
- * wrapping up (not settled, cancelled or archived), live first, then by start. No money here.
+ * wrapping up (not settled, cancelled or archived), live first, then by start. U4 adds each
+ * event's sales and tickets, only for members whose role reads them (never the door, viewers
+ * without `orders:read` get no money).
  */
 export const orgOverviewQuery = tenantQuery({
   name: 'commandCenter.orgOverview',
@@ -169,6 +191,7 @@ export const orgOverviewQuery = tenantQuery({
   permission: 'events:read',
   handler: async ({ ctx, tx }) => {
     const org = await orgScopeTx(tx, ctx);
+    const can = (p: string) => roleCan(org.orgRole as OrgRole, p);
     const all = (await listEventsQuery.handler({ input: {}, ctx, tx })).map((e) => EventDto.parse(e));
     // An event whose last date ended more than the wrap ago is settled: skip it before any query.
     const recent = all.filter(
@@ -183,6 +206,36 @@ export const orgOverviewQuery = tenantQuery({
       const scope = { role: org.role, profile: profileOf(ev), modules: org.modules };
       const showReadiness =
         widgetAllowed(WIDGET_META.readiness, scope) && WIDGET_META.readiness.modes.includes(mode.mode);
+      // U4: money and tickets per event, by the same rules as the sales and tickets widgets.
+      const showSales = widgetAllowed(WIDGET_META.sales, scope) && can(WIDGET_META.sales.permission);
+      const showTickets =
+        widgetAllowed(WIDGET_META.tickets, scope) &&
+        can(WIDGET_META.tickets.permission) &&
+        scope.modules.has('reports');
+      const metrics =
+        showSales || showTickets
+          ? (
+              await eventMetricsQuery.handler({
+                input: {
+                  eventId: ev.id,
+                  keys: [
+                    ...(showSales ? (['sales.gross'] as const) : []),
+                    ...(showTickets ? (['tickets.sold', 'tickets.capacity'] as const) : []),
+                  ],
+                },
+                ctx,
+                tx,
+              })
+            ).metrics
+          : [];
+      const value = (key: string, currency: string | null = null) =>
+        metrics.find((m) => m.key === key && m.currency === currency)?.value ?? 0;
+      const currencies = [
+        ev.currency,
+        ...[...new Set(metrics.filter((m) => m.key === 'sales.gross').map((m) => m.currency ?? ''))]
+          .filter((c) => c && c !== ev.currency)
+          .sort(),
+      ];
       rows.push({
         eventId: ev.id,
         slug: ev.slug,
@@ -194,6 +247,8 @@ export const orgOverviewQuery = tenantQuery({
         overridden: mode.override !== null,
         nextChangeAt: mode.nextChangeAt,
         readiness: null,
+        sales: showSales ? currencies.map((c) => ({ currency: c, total: value('sales.gross', c) })) : null,
+        tickets: showTickets ? { sold: value('tickets.sold'), capacity: value('tickets.capacity') } : null,
         settled: mode.settled,
         ...(showReadiness
           ? { readiness: readinessScore(await readinessRulesTx(tx, ctx, { event: ev, ...scope })).score }

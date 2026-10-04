@@ -7,12 +7,9 @@ import {
   deleteAnnouncementCommand,
   deleteSectionCommand,
   parseFaqText,
-  parseLinksText,
-  parseScheduleText,
   reorderSectionsCommand,
   SECTION_KINDS,
   type SectionKind,
-  SectionTextError,
   updateAnnouncementCommand,
   updateEventCommand,
   updateSectionCommand,
@@ -23,36 +20,10 @@ import { getLocale, getTranslations } from 'next-intl/server';
 import type { FormState } from '@/lib/form-state.ts';
 import { aiDrafter } from '@/server/ai.ts';
 import { loadEvent } from '@/server/console.ts';
-import { failure, success, textOrNull } from '@/server/form.ts';
+import { failure, success } from '@/server/form.ts';
 import { ports } from '@/server/ports.ts';
 import { limitAction, retryAfterMinutes } from '@/server/rate-limit.ts';
-
-/** Build a section's content from its form (list-shaped kinds are edited as plain text). */
-function contentFrom(kind: SectionKind, form: FormData): unknown {
-  const text = (k: string) => String(form.get(k) ?? '');
-  switch (kind) {
-    case 'text':
-      return { markdown: text('markdown') };
-    case 'faq':
-      return { items: parseFaqText(text('faq')) };
-    case 'schedule':
-      return { items: parseScheduleText(text('schedule')) };
-    case 'links':
-      return { items: parseLinksText(text('links')) };
-    case 'location':
-      return {
-        address: text('address').trim(),
-        directions: text('directions'),
-        mapUrl: textOrNull(form, 'mapUrl'),
-      };
-  }
-}
-
-function textError(err: unknown): FormState | null {
-  return err instanceof SectionTextError
-    ? { ok: false, code: 'validation_failed', fields: ['content'], reason: err.reason, line: err.line }
-    : null;
-}
+import { sectionContentFrom, sectionTextError } from '@/server/section-content.ts';
 
 const done = (org: string, event: string) => revalidatePath(`/o/${org}/e/${event}/content`);
 
@@ -68,12 +39,17 @@ export async function addSectionAction(
   try {
     await executeCommand(
       addSectionCommand,
-      { eventId: ev.id, kind, title: String(form.get('title') ?? ''), content: contentFrom(kind, form) },
+      {
+        eventId: ev.id,
+        kind,
+        title: String(form.get('title') ?? ''),
+        content: sectionContentFrom(kind, form),
+      },
       data.ctx,
       ports,
     );
   } catch (err) {
-    return textError(err) ?? failure(err);
+    return sectionTextError(err) ?? failure(err);
   }
   done(org, event);
   return success();
@@ -95,14 +71,14 @@ export async function updateSectionAction(
         eventId: ev.id,
         sectionId,
         title: String(form.get('title') ?? ''),
-        content: contentFrom(kind, form),
+        content: sectionContentFrom(kind, form),
         visible: form.get('visible') === '1',
       },
       data.ctx,
       ports,
     );
   } catch (err) {
-    return textError(err) ?? failure(err);
+    return sectionTextError(err) ?? failure(err);
   }
   done(org, event);
   return success();
@@ -266,7 +242,7 @@ export async function acceptDraftAction(
         ports,
       );
   } catch (err) {
-    return textError(err) ?? failure(err);
+    return sectionTextError(err) ?? failure(err);
   }
   done(org, event);
   revalidatePath(`/o/${org}/e/${event}`, 'layout');

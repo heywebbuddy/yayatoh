@@ -47,6 +47,46 @@ export interface ComboboxProps {
   'data-testid'?: string;
 }
 
+/**
+ * Stable defaults: a fresh `[]` per render would re-run the effect that merges known options on
+ * every render, and its state update would render again (React error 185, "maximum update
+ * depth", after any re-render).
+ */
+const NO_OPTIONS: readonly ListOption[] = [];
+
+/**
+ * The options the box knows (to label chips and the input), with `incoming` merged in. It returns
+ * the same map when nothing changed, so React bails out of the update: a caller passing a fresh
+ * array on every render (`options={items.map(…)}`) re-runs the merging effect, and a new map each
+ * time would render again, forever (U7's Series field; U9's coupon events). With the stable
+ * defaults above this is the one guard against that loop.
+ */
+export function mergeKnown(
+  known: ReadonlyMap<string, ListOption>,
+  incoming: readonly ListOption[],
+): Map<string, ListOption> {
+  // Rich labels and hints are new elements on every render: they count as changed only when
+  // they are plain values (the option's `text` carries the words either way).
+  const differs = (a: unknown, b: unknown) => a !== b && (typeof a !== 'object' || typeof b !== 'object');
+  const changed = incoming.some((o) => {
+    const k = known.get(o.value);
+    return (
+      k === undefined ||
+      (k !== o &&
+        (k.text !== o.text ||
+          k.disabled !== o.disabled ||
+          k.group !== o.group ||
+          k.keywords !== o.keywords ||
+          differs(k.label, o.label) ||
+          differs(k.hint, o.hint)))
+    );
+  });
+  if (!changed) return known as Map<string, ListOption>;
+  const next = new Map(known);
+  for (const o of incoming) next.set(o.value, o);
+  return next;
+}
+
 const asArray = (v: string | readonly string[] | undefined): string[] =>
   v === undefined ? [] : typeof v === 'string' ? (v ? [v] : []) : [...v];
 
@@ -69,14 +109,14 @@ export function Combobox({
   label,
   hint,
   error,
-  options = [],
+  options = NO_OPTIONS,
   loadOptions,
   multiple = false,
   value: controlled,
   defaultValue,
   onValueChange,
   onCreate,
-  selectedOptions = [],
+  selectedOptions = NO_OPTIONS,
   placeholder,
   required,
   disabled,
@@ -107,11 +147,7 @@ export function Combobox({
   const seq = useRef(0);
 
   useEffect(() => {
-    setKnown((m) => {
-      const next = new Map(m);
-      for (const o of [...options, ...selectedOptions]) next.set(o.value, o);
-      return next;
-    });
+    setKnown((m) => mergeKnown(m, [...options, ...selectedOptions]));
   }, [options, selectedOptions]);
 
   // A form reset returns to the default values.
