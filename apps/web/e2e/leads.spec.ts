@@ -243,7 +243,7 @@ test.describe('lead retrieval (M5.6b)', () => {
     await admin.context().setOffline(true);
     await expect(admin.getByTestId('leads-network')).toHaveText(/^Offline/);
     await scanCode(admin, person(f, 'Ana').code);
-    await expect(admin.getByText('Saved on this device')).toBeVisible();
+    await expect(admin.getByText('Saved on this device', { exact: true })).toBeVisible();
     // Notes ride along with the queued scan.
     const editor = admin.getByRole('form', { name: 'Lead details' });
     await editor.getByLabel('Notes').fill('Met offline at the booth');
