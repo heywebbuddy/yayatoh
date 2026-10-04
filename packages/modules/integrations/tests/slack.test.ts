@@ -246,3 +246,16 @@ describe('Slack through the port (fake Slack API)', () => {
     expect((outage as ProviderError).retryable).toBe(true);
   });
 });
+
+describe('Slack refusals that do not mean a dead token (M6.x)', () => {
+  const answer = (error: string) =>
+    ({
+      request: async () => ({ status: 200, body: { ok: false, error } }),
+    }) as never;
+  it('a channel the app may not post to keeps the connection', async () => {
+    await expect(slackAuthTest(answer('no_permission'))).rejects.toMatchObject({ status: 400 });
+  });
+  it.each(['invalid_auth', 'token_revoked', 'account_inactive'])('%s still revokes', async (e) => {
+    await expect(slackAuthTest(answer(e))).rejects.toMatchObject({ status: 401 });
+  });
+});

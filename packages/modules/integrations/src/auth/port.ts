@@ -146,3 +146,13 @@ export function redactSecrets(text: string, max = 300): string {
   for (const [re, replacement] of SECRET_PATTERNS) out = out.replace(re, replacement);
   return out.length > max ? `${out.slice(0, max - 1)}…` : out;
 }
+
+/**
+ * Whether a connector-built provider path may be proxied: it stays one path under the proxy
+ * prefix (no query or fragment, no `..` segment in any encoding, no backslash or whitespace), so a
+ * provider-returned id can never walk out of `/proxy` into the auth service's own API.
+ */
+export const providerPath = (path: string) =>
+  /^\/(?!\/)[A-Za-z0-9._~!$&'()*+,;=:@/%-]*$/.test(path) &&
+  !path.split('/').some((seg) => /^(\.|%2e){2}$/i.test(seg) || /^(\.|%2e)$/i.test(seg)) &&
+  !/%(2f|5c|00)/i.test(path);

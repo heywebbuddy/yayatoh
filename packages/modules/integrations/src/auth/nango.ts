@@ -1,5 +1,5 @@
 import type { AuthRef, AuthStatus, IntegrationAuth, ProviderClient, ResolvedConnection } from './port.ts';
-import { ProviderError, providerHeaderName } from './port.ts';
+import { ProviderError, providerHeaderName, providerPath } from './port.ts';
 
 /**
  * The Nango (Cloud) adapter for `IntegrationAuth` (decision P6-4). Nango runs the OAuth dance,
@@ -125,7 +125,7 @@ export function nangoIntegrationAuth(o: NangoOptions): IntegrationAuth {
       ref(r);
       return {
         async request(req) {
-          if (!req.path.startsWith('/') || req.path.startsWith('//'))
+          if (!providerPath(req.path))
             throw new ProviderError(400, 'bad_path');
           const extra = Object.entries(req.headers ?? {});
           if (extra.some(([k, v]) => !providerHeaderName(k) || /[\r\n]/.test(v)))
