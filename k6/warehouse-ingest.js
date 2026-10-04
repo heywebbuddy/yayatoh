@@ -27,7 +27,11 @@ export const options = {
 let firstWritten = -1;
 
 export default function () {
-  const res = http.post(`${BASE}/api/dev/analytics/backfill`, { org: __ENV.ORG || 'lakeside-events', start: '1' }, { timeout: '900s' });
+  const res = http.post(
+    `${BASE}/api/dev/analytics/backfill`,
+    { org: __ENV.ORG || 'lakeside-events', start: '1' },
+    { timeout: '900s' },
+  );
   const body = res.status === 200 ? res.json() : {};
   check(res, {
     'rebuild finished': () => body.state === 'done',
@@ -37,5 +41,6 @@ export default function () {
   events.add(body.events || 0);
   if (body.ms > 0) eventsPerSecond.add((body.events * 1000) / body.ms);
   if (firstWritten < 0) firstWritten = body.written;
-  else check(body, { 'idempotent: a repeat rewrites no more than the first': (b) => b.written <= firstWritten });
+  else
+    check(body, { 'idempotent: a repeat rewrites no more than the first': (b) => b.written <= firstWritten });
 }

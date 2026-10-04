@@ -230,7 +230,12 @@ describe('integrationAuthFromEnv', () => {
 
 describe('Nango proxy paths stay under /proxy (M6.x hardening)', () => {
   const SECRET = 'nango-secret-for-tests';
-  const ref: AuthRef = { orgId, connectionId: 'c-1', providerConfigKey: 'hubspot', authConnectionId: 'conn_1' };
+  const ref: AuthRef = {
+    orgId,
+    connectionId: 'c-1',
+    providerConfigKey: 'hubspot',
+    authConnectionId: 'conn_1',
+  };
   const calls: string[] = [];
   const auth = nangoIntegrationAuth({
     secretKey: SECRET,
@@ -261,7 +266,9 @@ describe('Nango proxy paths stay under /proxy (M6.x hardening)', () => {
 
   it('still proxies ordinary provider paths', async () => {
     calls.length = 0;
-    await auth.client(ref).request({ method: 'GET', path: '/crm/v3/objects/contacts/123', query: { a: 'b' } });
+    await auth
+      .client(ref)
+      .request({ method: 'GET', path: '/crm/v3/objects/contacts/123', query: { a: 'b' } });
     expect(calls[0]).toBe('https://api.nango.dev/proxy/crm/v3/objects/contacts/123?a=b');
   });
 });

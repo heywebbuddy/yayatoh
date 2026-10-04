@@ -24,8 +24,24 @@ const wellFormed429 = new Rate('well_formed_429');
 export const options = {
   scenarios: {
     // Both keys are hammered for one minute window, far above their budget.
-    live_key: { executor: 'constant-arrival-rate', rate: 30, timeUnit: '1s', duration: '60s', preAllocatedVUs: 20, maxVUs: 60, exec: 'live' },
-    test_key: { executor: 'constant-arrival-rate', rate: 10, timeUnit: '1s', duration: '60s', preAllocatedVUs: 10, maxVUs: 30, exec: 'testKey' },
+    live_key: {
+      executor: 'constant-arrival-rate',
+      rate: 30,
+      timeUnit: '1s',
+      duration: '60s',
+      preAllocatedVUs: 20,
+      maxVUs: 60,
+      exec: 'live',
+    },
+    test_key: {
+      executor: 'constant-arrival-rate',
+      rate: 10,
+      timeUnit: '1s',
+      duration: '60s',
+      preAllocatedVUs: 10,
+      maxVUs: 30,
+      exec: 'testKey',
+    },
   },
   thresholds: {
     // Overload is a 429, never a failure of ours.

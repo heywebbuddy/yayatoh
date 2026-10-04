@@ -28,7 +28,11 @@ export const options = {
 };
 
 export default function () {
-  const load = http.post(`${BASE}/api/dev/integrations/load`, { records: String(RECORDS) }, { timeout: '120s' });
+  const load = http.post(
+    `${BASE}/api/dev/integrations/load`,
+    { records: String(RECORDS) },
+    { timeout: '120s' },
+  );
   if (!check(load, { 'connected and seeded': (r) => r.status === 200 })) return;
   const { connectionId } = load.json();
   // One run pulls at most 20 pages of 50 (engine MAX_PAGES); the cursor carries on in the next run.

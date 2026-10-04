@@ -125,8 +125,7 @@ export function nangoIntegrationAuth(o: NangoOptions): IntegrationAuth {
       ref(r);
       return {
         async request(req) {
-          if (!providerPath(req.path))
-            throw new ProviderError(400, 'bad_path');
+          if (!providerPath(req.path)) throw new ProviderError(400, 'bad_path');
           const extra = Object.entries(req.headers ?? {});
           if (extra.some(([k, v]) => !providerHeaderName(k) || /[\r\n]/.test(v)))
             throw new ProviderError(400, 'bad_header');
