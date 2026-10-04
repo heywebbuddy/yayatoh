@@ -7216,7 +7216,8 @@
         "noSalesDescription": "RSVP’s en plaatsen verschijnen hier zodra je gasten antwoorden."
       },
       "details": {
-        "attendanceHint": "Voor online en hybride evenementen voeg je de link toe onder Toegang. Alleen je gasten zien hem."
+        "attendanceHint": "Voor online en hybride evenementen voeg je de link toe onder Toegang. Alleen je gasten zien hem.",
+        "currencyHint": "Prijzen en bedragen houden hun getallen in de nieuwe valuta. Die wordt vergrendeld na de eerste bestelling."
       },
       "dates": {
         "capacityHint": "Optioneel. Het maximale aantal gasten dat deze datum kan ontvangen."
@@ -7247,6 +7248,11 @@
       "eventTeam": {
         "explain": {
           "co_host": "Alles over dit evenement: gasten, RSVP, plaatsen, website, galerij, berichten en de grote dag. Kan de rest van het team uitnodigen."
+        }
+      },
+      "commandCenter": {
+        "kpi": {
+          "ofValid": "van {valid} gasten"
         }
       }
     },

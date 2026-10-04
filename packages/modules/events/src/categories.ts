@@ -178,7 +178,14 @@ function toDto(r: Row, counts: Awaited<ReturnType<typeof eventCountsTx>>): OrgCa
  */
 export const orgCategoriesQuery = tenantQuery({
   name: 'events.orgCategories',
-  input: z.object({ includeHidden: z.boolean().default(false) }),
+  input: z.object({
+    includeHidden: z.boolean().default(false),
+    /**
+     * The event being edited, when there is one (batch 3v merge): it lets an event-scoped role
+     * (a co-host or planner with `events:read` on that event) read the org's list for its picker.
+     */
+    eventId: z.uuid().optional(),
+  }),
   output: z.array(OrgCategoryDto),
   entitlement: 'core',
   permission: 'events:read',

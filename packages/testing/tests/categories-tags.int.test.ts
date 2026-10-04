@@ -2,6 +2,7 @@ import { withoutTenant } from '@yayatoh/db';
 import { closePools } from '@yayatoh/db/testing';
 import {
   addOrgCategoryCommand,
+  assignEventRoleCommand,
   createEventCommand,
   type EventDto,
   eventDetailsQuery,
@@ -9,6 +10,7 @@ import {
   listEventsQuery,
   moveOrgCategoryCommand,
   orgCategoriesQuery,
+  orgTagsQuery,
   renameOrgCategoryCommand,
   searchEventsQuery,
   setEventDetailsCommand,
@@ -17,7 +19,7 @@ import {
 } from '@yayatoh/events';
 import { executeCommand, executeQuery, uuidv7 } from '@yayatoh/kernel';
 import { catchUpListings, orgListings, orgListingTags } from '@yayatoh/marketplace';
-import { createOrganization } from '@yayatoh/tenancy';
+import { addMemberCommand, createOrganization } from '@yayatoh/tenancy';
 import { sql } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { type OrgFixture, ports, twoOrgs, userCtx } from '../src/index.ts';
@@ -216,6 +218,41 @@ describe('org categories (U8)', () => {
     ])
       await expect(run()).rejects.toMatchObject({ code: 'not_found' });
     expect(await executeQuery(searchEventsQuery, { categoryRef: aCat.ref }, b.ctx(), ports)).toEqual([]);
+  });
+
+  it('an event-scoped role reads the pickers for its own event only (batch 3v merge: co-hosts on Details)', async () => {
+    const mine = await event(a, 'Co-host event');
+    const other = await event(a, 'Not theirs');
+    const cohost = uuidv7();
+    await executeCommand(addMemberCommand, { userId: cohost, role: 'scanner' }, a.ctx(), ports);
+    await executeCommand(
+      assignEventRoleCommand,
+      { eventId: mine.id, userId: cohost, role: 'event_manager' },
+      a.ctx(),
+      ports,
+    );
+    const ctx = userCtx(cohost, a.org.id);
+    // Org-wide: refused (the scanner role reads no events).
+    await expect(executeQuery(orgCategoriesQuery, {}, ctx, ports)).rejects.toMatchObject({
+      code: 'forbidden',
+    });
+    await expect(executeQuery(orgTagsQuery, {}, ctx, ports)).rejects.toMatchObject({ code: 'forbidden' });
+    // For the event they hold a role on: the same lists the owner sees.
+    expect(
+      (await executeQuery(orgCategoriesQuery, { includeHidden: true, eventId: mine.id }, ctx, ports)).map(
+        (c) => c.ref,
+      ),
+    ).toEqual((await categories(a, true)).map((c) => c.ref));
+    expect(await executeQuery(orgTagsQuery, { eventId: mine.id }, ctx, ports)).toEqual(
+      await executeQuery(orgTagsQuery, {}, a.ctx(), ports),
+    );
+    // Another event of the org: refused.
+    await expect(executeQuery(orgCategoriesQuery, { eventId: other.id }, ctx, ports)).rejects.toMatchObject({
+      code: 'forbidden',
+    });
+    await expect(executeQuery(orgTagsQuery, { eventId: other.id }, ctx, ports)).rejects.toMatchObject({
+      code: 'forbidden',
+    });
   });
 });
 

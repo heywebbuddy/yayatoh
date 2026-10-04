@@ -7216,7 +7216,8 @@
         "noSalesDescription": "Los RSVP y los asientos aparecen aquí cuando tus invitados empiezan a responder."
       },
       "details": {
-        "attendanceHint": "Para eventos en línea e híbridos, añade el enlace en Acceso. Solo tus invitados lo ven."
+        "attendanceHint": "Para eventos en línea e híbridos, añade el enlace en Acceso. Solo tus invitados lo ven.",
+        "currencyHint": "Los precios e importes conservan sus cifras en la nueva moneda. Se bloquea con el primer pedido."
       },
       "dates": {
         "capacityHint": "Opcional. El máximo de invitados que puede recibir esta fecha."
@@ -7247,6 +7248,11 @@
       "eventTeam": {
         "explain": {
           "co_host": "Todo sobre este evento: invitados, RSVP, asientos, sitio web, galería, mensajes y el gran día. Puede invitar al resto del equipo."
+        }
+      },
+      "commandCenter": {
+        "kpi": {
+          "ofValid": "de {valid} invitados"
         }
       }
     },

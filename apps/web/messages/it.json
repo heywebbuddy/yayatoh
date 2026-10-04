@@ -7216,7 +7216,8 @@
         "noSalesDescription": "RSVP e posti compaiono qui appena i tuoi ospiti iniziano a rispondere."
       },
       "details": {
-        "attendanceHint": "Per eventi online e ibridi, aggiungi il link in Accesso. Lo vedono solo i tuoi ospiti."
+        "attendanceHint": "Per eventi online e ibridi, aggiungi il link in Accesso. Lo vedono solo i tuoi ospiti.",
+        "currencyHint": "Prezzi e importi mantengono le loro cifre nella nuova valuta. Si blocca al primo ordine."
       },
       "dates": {
         "capacityHint": "Facoltativo. Il numero massimo di ospiti che questa data può accogliere."
@@ -7247,6 +7248,11 @@
       "eventTeam": {
         "explain": {
           "co_host": "Tutto su questo evento: ospiti, RSVP, posti, sito web, galleria, messaggi e il grande giorno. Può invitare il resto del team."
+        }
+      },
+      "commandCenter": {
+        "kpi": {
+          "ofValid": "su {valid} ospiti"
         }
       }
     },

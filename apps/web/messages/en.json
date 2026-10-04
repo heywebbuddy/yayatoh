@@ -7216,7 +7216,8 @@
         "noSalesDescription": "RSVPs and seating appear here once your guests start answering."
       },
       "details": {
-        "attendanceHint": "For online and hybrid events, add the join link under Access. Only your guests see it."
+        "attendanceHint": "For online and hybrid events, add the join link under Access. Only your guests see it.",
+        "currencyHint": "Prices and amounts keep their figures in the new currency. It locks once the first order is placed."
       },
       "dates": {
         "capacityHint": "Optional. The most guests this date can welcome."
@@ -7247,6 +7248,11 @@
       "eventTeam": {
         "explain": {
           "co_host": "Everything about this event: guests, RSVP, seating, website, gallery, messages and day-of. Can invite the rest of the team."
+        }
+      },
+      "commandCenter": {
+        "kpi": {
+          "ofValid": "of {valid} guests"
         }
       }
     },

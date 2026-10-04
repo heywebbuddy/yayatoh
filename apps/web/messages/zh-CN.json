@@ -7216,7 +7216,8 @@
         "noSalesDescription": "宾客开始回复后，回复和座位会显示在这里。"
       },
       "details": {
-        "attendanceHint": "线上和混合活动请在“访问”中添加参加链接。只有您的宾客能看到。"
+        "attendanceHint": "线上和混合活动请在“访问”中添加参加链接。只有您的宾客能看到。",
+        "currencyHint": "价格和金额在新货币中保持原有数字。首笔订单后即锁定。"
       },
       "dates": {
         "capacityHint": "可选。此日期最多可接待的宾客人数。"
@@ -7247,6 +7248,11 @@
       "eventTeam": {
         "explain": {
           "co_host": "这个活动的一切：宾客、回复、座位、网站、相册、消息和当天安排。可以邀请团队其他成员。"
+        }
+      },
+      "commandCenter": {
+        "kpi": {
+          "ofValid": "共 {valid} 位宾客"
         }
       }
     },

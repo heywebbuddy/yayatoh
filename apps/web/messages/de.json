@@ -7216,7 +7216,8 @@
         "noSalesDescription": "Zusagen und Sitzplätze erscheinen hier, sobald Ihre Gäste antworten."
       },
       "details": {
-        "attendanceHint": "Für Online- und Hybridveranstaltungen fügen Sie den Link unter Zugang hinzu. Nur Ihre Gäste sehen ihn."
+        "attendanceHint": "Für Online- und Hybridveranstaltungen fügen Sie den Link unter Zugang hinzu. Nur Ihre Gäste sehen ihn.",
+        "currencyHint": "Preise und Beträge behalten ihre Zahlen in der neuen Währung. Sie wird mit der ersten Bestellung gesperrt."
       },
       "dates": {
         "capacityHint": "Optional. Die meisten Gäste, die dieser Termin empfangen kann."
@@ -7247,6 +7248,11 @@
       "eventTeam": {
         "explain": {
           "co_host": "Alles zu dieser Veranstaltung: Gäste, Zusagen, Sitzplätze, Website, Galerie, Nachrichten und der große Tag. Kann den Rest des Teams einladen."
+        }
+      },
+      "commandCenter": {
+        "kpi": {
+          "ofValid": "von {valid} Gästen"
         }
       }
     },

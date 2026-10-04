@@ -61,6 +61,22 @@ export function GivingScreen({
       if (screen && version !== undefined && typeof v === 'number' && v > version) setReplaced(true);
     },
   });
+  // A screen whose stream was down when its link was replaced never gets the `link` message, and the
+  // old link's stream is refused (404) from then on, so it would stay "Reconnecting…" for ever.
+  // When the server refuses the stream, ask once whether this page still exists: a 404 means the
+  // link was replaced (batch 3v merge: the e2e caught it on a projector reconnecting at that moment).
+  useEffect(() => {
+    if (!screen || version === undefined || replaced || stream !== 'offline') return;
+    let cancelled = false;
+    fetch(window.location.href, { method: 'HEAD', cache: 'no-store' })
+      .then((r) => {
+        if (!cancelled && r.status === 404) setReplaced(true);
+      })
+      .catch(() => undefined);
+    return () => {
+      cancelled = true;
+    };
+  }, [screen, version, replaced, stream]);
   useEffect(() => {
     // The system's own preferences turn the modes on (the toggles can still change them).
     if (defaults.contrast === undefined && window.matchMedia?.('(prefers-contrast: more)').matches)

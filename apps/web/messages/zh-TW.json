@@ -7216,7 +7216,8 @@
         "noSalesDescription": "賓客開始回覆後，回覆和座位會顯示在這裡。"
       },
       "details": {
-        "attendanceHint": "線上和混合活動請在「存取」中新增參加連結。只有您的賓客能看到。"
+        "attendanceHint": "線上和混合活動請在「存取」中新增參加連結。只有您的賓客能看到。",
+        "currencyHint": "價格和金額在新貨幣中保持原有數字。首筆訂單後即鎖定。"
       },
       "dates": {
         "capacityHint": "選填。此日期最多可接待的賓客人數。"
@@ -7247,6 +7248,11 @@
       "eventTeam": {
         "explain": {
           "co_host": "這個活動的一切：賓客、回覆、座位、網站、相簿、訊息和當天安排。可以邀請團隊其他成員。"
+        }
+      },
+      "commandCenter": {
+        "kpi": {
+          "ofValid": "共 {valid} 位賓客"
         }
       }
     },
