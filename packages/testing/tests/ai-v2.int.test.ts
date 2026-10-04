@@ -169,6 +169,28 @@ describe('brand kits', () => {
   });
 });
 
+describe('brand kit limit', () => {
+  it('an org has at most 20 brand kits; renaming one at the limit still works', async () => {
+    const existing = (await executeQuery(listBrandKitsQuery, {}, b.ctx(), ports)).length;
+    for (let i = existing; i < 20; i++)
+      await executeCommand(saveBrandKitCommand, { name: `Limit kit ${i}` }, b.ctx(), ports);
+    expect(await codeOf(executeCommand(saveBrandKitCommand, { name: 'One too many' }, b.ctx(), ports))).toBe(
+      'invalid_state:brand_kit_limit',
+    );
+    const [first] = await executeQuery(listBrandKitsQuery, {}, b.ctx(), ports);
+    expect(
+      await codeOf(
+        executeCommand(
+          saveBrandKitCommand,
+          { kitId: first?.id ?? null, name: 'Renamed at the limit' },
+          b.ctx(),
+          ports,
+        ),
+      ),
+    ).toBe('ok');
+  });
+});
+
 describe('drafting v2', () => {
   it('drafts a campaign in the brand voice and tone; nothing is saved or sent', async () => {
     const kit = await executeCommand(

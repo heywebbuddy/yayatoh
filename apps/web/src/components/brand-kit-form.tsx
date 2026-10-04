@@ -53,7 +53,9 @@ export function BrandKitForm({
 
   const other =
     !state.ok && state.code && state.code !== 'validation_failed' && state.code !== 'conflict'
-      ? te(errorMessageKey(state.code))
+      ? state.reason === 'brand_kit_limit'
+        ? t('errors.limit')
+        : te(errorMessageKey(state.code))
       : null;
 
   return (

@@ -15498,7 +15498,8 @@
       "name": "Vul een naam in van 1 tot 60 tekens.",
       "nameTaken": "Een andere merkkit heeft al deze naam.",
       "terms": "Gebruik hoogstens 12 woorden van elk maximaal 40 tekens.",
-      "voice": "Houd de merkstem onder de 600 tekens."
+      "voice": "Houd de merkstem onder de 600 tekens.",
+      "limit": "Deze organisatie heeft al 20 merkkits. Verwijder er een om een nieuwe toe te voegen."
     }
   }
 }

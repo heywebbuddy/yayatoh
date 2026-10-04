@@ -15498,7 +15498,8 @@
       "name": "Gib einen Namen mit 1 bis 60 Zeichen ein.",
       "nameTaken": "Ein anderes Marken-Kit hat bereits diesen Namen.",
       "terms": "Verwende höchstens 12 Wörter mit je bis zu 40 Zeichen.",
-      "voice": "Die Markenstimme muss unter 600 Zeichen bleiben."
+      "voice": "Die Markenstimme muss unter 600 Zeichen bleiben.",
+      "limit": "Diese Organisation hat bereits 20 Marken-Kits. Lösche eins, um ein weiteres hinzuzufügen."
     }
   }
 }

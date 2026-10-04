@@ -15498,7 +15498,8 @@
       "name": "Saisissez un nom de 1 à 60 caractères.",
       "nameTaken": "Un autre kit de marque porte déjà ce nom.",
       "terms": "Utilisez au plus 12 mots de 40 caractères maximum chacun.",
-      "voice": "La voix de la marque doit faire moins de 600 caractères."
+      "voice": "La voix de la marque doit faire moins de 600 caractères.",
+      "limit": "Cette organisation a déjà 20 kits de marque. Supprimez-en un pour en ajouter un autre."
     }
   }
 }

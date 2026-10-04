@@ -110,10 +110,6 @@ export const saveBrandKitCommand = tenantCommand({
         .from(brandKits)
         .where(eq(brandKits.id, input.kitId));
       if (!own) throw new DomainError('not_found');
-    } else {
-      const [{ n } = { n: 0 }] = await tx.select({ n: sql<number>`count(*)::int` }).from(brandKits);
-      if (n >= MAX_BRAND_KITS)
-        throw new DomainError('invalid_state', 'Too many brand kits', { reason: 'brand_kit_limit' });
     }
     const [clash] = await tx
       .select({ id: brandKits.id })
@@ -125,6 +121,11 @@ export const saveBrandKitCommand = tenantCommand({
         ),
       );
     if (clash) throw new DomainError('conflict', 'A brand kit with this name exists', { field: 'name' });
+    if (!input.kitId) {
+      const [{ n } = { n: 0 }] = await tx.select({ n: sql<number>`count(*)::int` }).from(brandKits);
+      if (n >= MAX_BRAND_KITS)
+        throw new DomainError('invalid_state', 'Too many brand kits', { reason: 'brand_kit_limit' });
+    }
     // Only one default: setting one clears the others first (the partial unique index enforces it).
     if (input.isDefault)
       await tx
@@ -159,6 +160,7 @@ export const saveBrandKitCommand = tenantCommand({
 
 export const deleteBrandKitCommand = tenantCommand({
   name: 'ai.deleteBrandKit',
+  category: 'delete',
   input: z.object({ kitId: z.uuid() }),
   output: z.object({ deleted: z.boolean() }),
   entitlement: 'ai',

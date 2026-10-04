@@ -123,6 +123,13 @@ test.describe('AI v2 (M6.12b)', () => {
         .locator('p', { hasText: 'Calm and clear.' }),
     ).toBeVisible();
     await expectAccessible(page);
+    // Delete it (reruns keep the org under the 20-kit limit): gone after the page refreshes.
+    const saved = page.getByRole('listitem').filter({ hasText: `Lake voice ${s}` });
+    await saved.getByText(`Edit Lake voice ${s}`).click();
+    await saved.getByRole('button', { name: `Delete Lake voice ${s}` }).click();
+    await expect(page.getByRole('heading', { name: `Lake voice ${s}` })).toHaveCount(0);
+    await page.reload();
+    await expect(page.getByRole('heading', { name: `Lake voice ${s}` })).toHaveCount(0);
 
     // Arabic, right to left.
     await page.goto(`/ar${ORG}/brand-kits`);
@@ -192,6 +199,15 @@ test.describe('AI v2 (M6.12b)', () => {
     await aiPreview(page).getByRole('button', { name: 'Discard' }).click();
     await expect(ai.getByText('Draft discarded. Nothing changed.')).toBeVisible();
     await expect(editor.getByLabel('Subject', { exact: true })).toHaveValue(`Last chance, friends ${s}`);
+    const campaignPath = new URL(page.url()).pathname;
+
+    // The kit is removed again (reruns keep the org under the 20-kit limit).
+    await page.goto(`${ORG}/brand-kits`);
+    const kitItem = page.getByRole('listitem').filter({ hasText: kit });
+    await kitItem.getByText(`Edit ${kit}`).click();
+    await kitItem.getByRole('button', { name: `Delete ${kit}` }).click();
+    await expect(page.getByRole('heading', { name: kit })).toHaveCount(0);
+    await page.goto(campaignPath);
 
     // Arabic, right to left.
     await page.goto(`/ar${new URL(page.url()).pathname}`);

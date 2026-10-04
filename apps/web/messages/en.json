@@ -15498,7 +15498,8 @@
       "name": "Enter a name of 1 to 60 characters.",
       "nameTaken": "Another brand kit already has this name.",
       "terms": "Use at most 12 words of up to 40 characters each.",
-      "voice": "Keep the brand voice under 600 characters."
+      "voice": "Keep the brand voice under 600 characters.",
+      "limit": "This organization already has 20 brand kits. Delete one to add another."
     }
   }
 }
