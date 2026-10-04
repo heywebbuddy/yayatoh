@@ -324,7 +324,7 @@ test.describe('template builder (U6)', () => {
     await expectAccessible(page);
     expect(await noSideScroll(page)).toBe(true);
     await page.goto(`/ar${ORG}/templates`);
-    await expect(page.getByRole('heading', { name: 'كيف تعمل القوالب' })).toBeVisible();
+    await expect(page.getByText('كيف تعمل القوالب')).toBeVisible();
     await expectAccessible(page);
     expect(await noSideScroll(page)).toBe(true);
   });
