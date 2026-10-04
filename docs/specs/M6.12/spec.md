@@ -120,3 +120,6 @@ them at the event. AI never sends, publishes or saves anything: every result is 
 | AC-M6.12b-6 | Permissions, refunds, out of credits, AI off | `ai-v2.int.test.ts` ("who may draft what", "a failed call gives its credit back…"); `e2e/ai-v2.spec.ts` (viewer/finance, out of credits) |
 | AC-M6.12b-7 | Prompt hygiene: organizer text is data; output cleaned | `compose.test.ts` (escaping, locale tag, HTML/merge braces dropped, agenda bounds) |
 | AC-M6.12b-8 | E2E: draft a campaign with a brand kit, accept an audience suggestion, see matchmaking suggestions; keyboard only, axe both themes, RTL | `e2e/ai-v2.spec.ts` (6 tests × 3 projects) |
+
+### 7. Gate (2026-10-04)
+`pnpm verify` steps on the merged branch (build branch + `merge/next-3u` + `agent/m6.6b`): lint (2 pre-existing file-size warnings on `hi.json`/`ru.json`), check:modules, typecheck 63/63, unit 3482/3482, integration 1963 tests (one category rule fixed during the run; the file re-run green). E2E: `ai-v2.spec.ts` 18/18 and the related `ai-draft`, `campaigns`, `audiences`, `cms`, `agenda`, `networking`, `console-nav` specs on 375/768/1280.
