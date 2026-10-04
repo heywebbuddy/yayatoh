@@ -80,6 +80,8 @@ export * from './dto.ts';
 export { type TicketTypePrice, ticketTypePricesTx } from './fair-value-facts.ts';
 // M5.6b lead retrieval: holder link tickets ("who scanned me") and ticket holders.
 export { holderLinkTicketsTx, ticketHoldersTx } from './holder-leads.ts';
+// M6.9b: an event's active ticket holders (Zoom registrants, CE certificates).
+export { eventHoldersTx } from './holder-facts.ts';
 export {
   currentFaceMinor,
   holdInventoryTx,

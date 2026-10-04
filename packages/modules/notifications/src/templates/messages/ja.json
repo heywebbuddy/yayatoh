@@ -358,6 +358,11 @@
     "cms.contact_message": {
       "subject": "お問い合わせページから {name} さんの新しいメッセージ",
       "intro": "{name} さん（{email}）がサイトのお問い合わせページからメッセージを送りました:"
+    },
+    "ce.certificate": {
+      "subject": "{org} からの証明書",
+      "intro": "{eventName} で {credits} を取得しました。証明書（コード {code}）は下記および PDF でご覧いただけます。",
+      "cta": "PDF の証明書をダウンロード"
     }
   },
   "roles": {

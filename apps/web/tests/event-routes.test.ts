@@ -73,6 +73,8 @@ const SECTION_OF: Record<string, string> = {
   networking: 'sessions',
   // M6.9a: stream setup (conference nav, the `virtual` module).
   virtual: 'virtual',
+  // M6.9b: CE credits (conference nav, the `virtual` module).
+  'ce-credits': 'ceCredits',
 };
 
 describe('event console route sweep (M4.2a)', () => {

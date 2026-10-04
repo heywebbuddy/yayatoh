@@ -358,6 +358,11 @@
     "cms.contact_message": {
       "subject": "{name} 透過聯絡頁面傳來新訊息",
       "intro": "{name}（{email}）透過你網站的聯絡頁面傳了訊息給你："
+    },
+    "ce.certificate": {
+      "subject": "來自 {org} 的證明",
+      "intro": "您在 {eventName} 獲得了 {credits}。您的證明（驗證碼 {code}）見下文及 PDF。",
+      "cta": "下載 PDF 證明"
     }
   },
   "roles": {

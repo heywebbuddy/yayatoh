@@ -229,6 +229,9 @@
       },
       "cms": {
         "contact_message": "來自聯絡頁面的訊息"
+      },
+      "ce": {
+        "certificate": "繼續教育證明"
       }
     },
     "status": {
@@ -404,7 +407,8 @@
     "storage": "儲存空間",
     "moneyOverview": "總覽",
     "salesByEvent": "依活動檢視銷售",
-    "fees": "手續費"
+    "fees": "手續費",
+    "ceCredits": "繼續教育學分"
   },
   "vocab": {
     "attendee": "參加者",
@@ -15684,6 +15688,9 @@
       },
       "google_calendar": {
         "description": "將進行中活動的每個場次同步到 Google 日曆並保持最新：調整的場次會跟著移動，取消的場次會被移除。時間依各活動的時區顯示。"
+      },
+      "zoom": {
+        "description": "為您的場次提供 Zoom 網路研討會：有線上權限的持票人會登記到場次的研討會，出席報告會回傳用於繼續教育學分。"
       }
     },
     "sandboxBadge": "測試",
@@ -15712,7 +15719,9 @@
       "campaigns": "行銷活動",
       "campaign_members": "行銷活動成員",
       "sponsor_opportunities": "贊助商機",
-      "sessions": "場次"
+      "sessions": "場次",
+      "registrants": "研討會登記者",
+      "participants": "研討會出席"
     },
     "fields": {
       "email": "電子郵件",
@@ -15754,7 +15763,10 @@
       "currency_iso_code": "貨幣代碼",
       "event_name": "活動",
       "room": "會場",
-      "time_zone": "時區"
+      "time_zone": "時區",
+      "webinar_id": "研討會 ID",
+      "joined_at": "加入時間",
+      "left_at": "離開時間"
     },
     "status": {
       "none": "未串接",
@@ -16395,6 +16407,28 @@
         "video_off": "目前無法直播。",
         "not_found": "這個場次目前沒有直播。",
         "generic": "發生問題。請再試一次。"
+      }
+    },
+    "zoom": {
+      "title": "Zoom 網路研討會",
+      "intro": "以 Zoom 網路研討會形式舉辦場次：有線上權限的持票人會被登記，出席報告計入學分。",
+      "notConnected": "尚未連接 Zoom。",
+      "connectLink": "在整合中連接 Zoom",
+      "counts": "登記：{registrants} · 出席：{attendees}",
+      "notLinked": "未關聯研討會",
+      "formLabel": "{title} 的 Zoom 研討會",
+      "webinarId": "Zoom 研討會 ID",
+      "webinarIdHint": "來自 Zoom，9 到 12 位數字",
+      "webinarIdInvalid": "請輸入 Zoom 的研討會 ID：9 到 12 位數字。",
+      "link": "關聯研討會",
+      "linkLabel": "為 {title} 關聯 Zoom 研討會",
+      "linked": "已為 {title} 關聯研討會。",
+      "syncNow": "立即與 Zoom 同步",
+      "syncQueued": "已開始與 Zoom 同步。",
+      "errors": {
+        "webinar_taken": "此研討會已關聯到其他場次。",
+        "in_person_event": "此活動為現場活動，沒有場次是研討會。",
+        "zoom_not_connected": "請先在整合中連接 Zoom。"
       }
     }
   },
@@ -18271,6 +18305,105 @@
     "actions": {
       "inviteTeam": "邀請你的團隊",
       "openClients": "查看你的客戶"
+    }
+  },
+  "ce": {
+    "order": {
+      "link": "下載您的繼續教育證明",
+      "linkLabel": "下載門票 {serial} 的繼續教育證明"
+    },
+    "errors": {
+      "in_person_event": "此活動僅限現場參加。"
+    },
+    "setup": {
+      "title": "繼續教育學分",
+      "description": "為場次設定繼續教育學分，然後根據報到掃描和觀看時長簽發 {event} 的證明。",
+      "readOnly": "您可以查看學分。如需修改規則或簽發證明，請聯絡編輯。",
+      "calculateTitle": "簽發證明",
+      "calculateHint": "場次結束後計算學分。達到某場次最低時長的人會透過郵件收到證明。",
+      "lastCalculated": "上次計算 {when}。再次計算只會更新有變化的部分。",
+      "noRulesYet": "請先在下方為至少一個場次設定學分規則。",
+      "calculate": "計算學分并簽發證明",
+      "calculated": "學分已計算。",
+      "calculatedSummary": "新證明：{issued}。修訂：{revised}。撤回：{revoked}。未變：{unchanged}。",
+      "calculatedBelow": "未達任何最低時長的參加者：{count}。",
+      "calculatedPending": "尚未結束的場次：{count}。",
+      "fixFields": "請檢查下方標出的欄位。",
+      "settingsTitle": "證明資訊",
+      "creditLabel": "學分名稱",
+      "creditLabelHint": "按證明上的列印名稱填寫，例如“CPE 學分”。留空則為“繼續教育學分”。",
+      "creditLabelTooLong": "請不超過 60 個字元。",
+      "accreditor": "認證機構",
+      "accreditorHint": "可選。僅在該機構認證您時填寫。",
+      "accreditorTooLong": "請不超過 120 個字元。",
+      "saveSettings": "儲存證明資訊",
+      "settingsSaved": "證明資訊已儲存。",
+      "sessionsTitle": "學分規則",
+      "sessionsHint": "場次按門口掃描計算現場時長，按觀看時長和 Zoom 計算線上時長，每分鐘計一次。",
+      "noSessions": "還沒有場次",
+      "noSessionsHint": "先在議程中新增場次，再在這裡設定學分。",
+      "addSessions": "新增場次",
+      "ended": "已結束",
+      "upcoming": "尚未結束",
+      "awarded": "已授予：{count}",
+      "ruleFormLabel": "{title} 的學分規則",
+      "credits": "學分",
+      "creditsHint": "例如 1.5",
+      "creditsInvalid": "請輸入 0.01 到 100 的學分，最多兩位小數。",
+      "minMinutes": "最低分鐘數",
+      "minMinutesHint": "獲得學分所需的出席時長",
+      "minMinutesInvalid": "請輸入 1 到 1440 的整數分鐘。",
+      "counts": "計入的出席",
+      "countInPerson": "現場（門口掃描）",
+      "countVirtual": "線上（觀看時長和 Zoom）",
+      "countsInvalid": "請至少選擇一種出席方式。",
+      "saveRule": "儲存規則",
+      "saveRuleLabel": "儲存 {title} 的學分規則",
+      "removeRule": "刪除規則",
+      "removeRuleLabel": "刪除 {title} 的學分規則",
+      "ruleSaved": "已儲存 {title} 的學分規則。",
+      "ruleRemoved": "已刪除 {title} 的學分規則。",
+      "certificatesTitle": "證明",
+      "noCertificates": "還沒有證明",
+      "noCertificatesHint": "場次結束後計算學分，證明會顯示在這裡。",
+      "holder": "參加者",
+      "creditsColumn": "學分",
+      "code": "驗證碼",
+      "status": "狀態",
+      "statusIssued": "已簽發 · 修訂 {revision}",
+      "statusRevoked": "已撤回",
+      "issuedOn": "簽發日期",
+      "document": "PDF",
+      "download": "下載",
+      "downloadLabel": "下載 {name} 的證明",
+      "defaultLabel": "繼續教育學分",
+      "goCalculate": "前往簽發證明"
+    },
+    "verify": {
+      "metaTitle": "核驗證明",
+      "eyebrow": "繼續教育證明",
+      "title": "核驗證明",
+      "description": "使用證明上列印的驗證碼核驗參加證明。",
+      "notFound": "沒有使用此驗證碼的證明",
+      "notFoundHint": "請檢查證明上的驗證碼後重試。",
+      "valid": "有效",
+      "revoked": "已撤回",
+      "revokedHint": "主辦方已撤回此證明。",
+      "holder": "簽發給",
+      "event": "活動",
+      "organizer": "主辦方",
+      "accreditor": "認證機構",
+      "credits": "學分",
+      "creditsValue": "{credits} {label}",
+      "defaultLabel": "繼續教育學分",
+      "issued": "簽發日期",
+      "revised": "已修訂",
+      "revisedValue": "修訂 {revision}，{date}",
+      "another": "核驗其他驗證碼",
+      "codeLabel": "驗證碼",
+      "codeHint": "十位字母和數字，例如 K7M2Q-9XR4T",
+      "codeInvalid": "這不是驗證碼。請檢查後重试。",
+      "check": "核驗證明"
     }
   }
 }

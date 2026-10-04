@@ -358,6 +358,11 @@
     "cms.contact_message": {
       "subject": "Nouveau message de {name} via votre page de contact",
       "intro": "{name} ({email}) vous a écrit via la page de contact de votre site :"
+    },
+    "ce.certificate": {
+      "subject": "Votre attestation de {org}",
+      "intro": "Vous avez obtenu {credits} à {eventName}. Votre attestation (code {code}) figure ci-dessous et en PDF.",
+      "cta": "Télécharger l’attestation en PDF"
     }
   },
   "roles": {

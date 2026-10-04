@@ -358,6 +358,11 @@
     "cms.contact_message": {
       "subject": "आपके संपर्क पेज से {name} का नया संदेश",
       "intro": "{name} ({email}) ने आपकी साइट के संपर्क पेज से आपको लिखा है:"
+    },
+    "ce.certificate": {
+      "subject": "{org} से आपका प्रमाणपत्र",
+      "intro": "आपने {eventName} में {credits} अर्जित किए। आपका प्रमाणपत्र (कोड {code}) नीचे और PDF के रूप में है।",
+      "cta": "PDF प्रमाणपत्र डाउनलोड करें"
     }
   },
   "roles": {

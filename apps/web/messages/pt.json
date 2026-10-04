@@ -229,6 +229,9 @@
       },
       "cms": {
         "contact_message": "Mensagem da página de contato"
+      },
+      "ce": {
+        "certificate": "Certificado de formação"
       }
     },
     "status": {
@@ -404,7 +407,8 @@
     "storage": "Armazenamento",
     "moneyOverview": "Visão geral",
     "salesByEvent": "Vendas por evento",
-    "fees": "Taxas"
+    "fees": "Taxas",
+    "ceCredits": "Créditos de formação"
   },
   "vocab": {
     "attendee": "Participante",
@@ -15684,6 +15688,9 @@
       },
       "google_calendar": {
         "description": "Todas as sessões dos seus eventos ativos em um Google Agenda, sempre atualizadas: sessões remarcadas acompanham e as canceladas saem. Os horários aparecem no fuso horário de cada evento."
+      },
+      "zoom": {
+        "description": "Webinars do Zoom para suas sessões: os titulares com acesso on-line são inscritos no webinar da sessão, e os relatórios de presença voltam para os créditos de formação."
       }
     },
     "sandboxBadge": "Teste",
@@ -15712,7 +15719,9 @@
       "campaigns": "Campanhas",
       "campaign_members": "Membros da campanha",
       "sponsor_opportunities": "Oportunidades de patrocínio",
-      "sessions": "Sessões"
+      "sessions": "Sessões",
+      "registrants": "Inscritos no webinar",
+      "participants": "Presença no webinar"
     },
     "fields": {
       "email": "E-mail",
@@ -15754,7 +15763,10 @@
       "currency_iso_code": "Código da moeda",
       "event_name": "Evento",
       "room": "Sala",
-      "time_zone": "Fuso horário"
+      "time_zone": "Fuso horário",
+      "webinar_id": "ID do webinar",
+      "joined_at": "Entrou às",
+      "left_at": "Saiu às"
     },
     "status": {
       "none": "Não conectada",
@@ -16395,6 +16407,28 @@
         "video_off": "A transmissão não está disponível no momento.",
         "not_found": "Esta sessão não está sendo transmitida agora.",
         "generic": "Algo deu errado. Tente novamente."
+      }
+    },
+    "zoom": {
+      "title": "Webinars do Zoom",
+      "intro": "Ofereça uma sessão como webinar do Zoom: os titulares com acesso on-line são inscritos e o relatório de presença conta para os créditos.",
+      "notConnected": "O Zoom não está conectado.",
+      "connectLink": "Conectar o Zoom em Integrações",
+      "counts": "Inscritos: {registrants} · Presentes: {attendees}",
+      "notLinked": "Sem webinar",
+      "formLabel": "Webinar do Zoom de {title}",
+      "webinarId": "ID do webinar do Zoom",
+      "webinarIdHint": "Do Zoom, de 9 a 12 dígitos",
+      "webinarIdInvalid": "Informe o ID do webinar do Zoom: de 9 a 12 dígitos.",
+      "link": "Vincular webinar",
+      "linkLabel": "Vincular o webinar do Zoom de {title}",
+      "linked": "Webinar vinculado a {title}.",
+      "syncNow": "Sincronizar com o Zoom agora",
+      "syncQueued": "Sincronização com o Zoom a caminho.",
+      "errors": {
+        "webinar_taken": "Este webinar está vinculado a outra sessão.",
+        "in_person_event": "Este evento é presencial, então nenhuma sessão é um webinar.",
+        "zoom_not_connected": "Primeiro conecte o Zoom em Integrações."
       }
     }
   },
@@ -18271,6 +18305,105 @@
     "actions": {
       "inviteTeam": "Convide sua equipe",
       "openClients": "Ver seus clientes"
+    }
+  },
+  "ce": {
+    "order": {
+      "link": "Baixar seu certificado de formação",
+      "linkLabel": "Baixar o certificado de formação do ingresso {serial}"
+    },
+    "errors": {
+      "in_person_event": "Este evento é apenas presencial."
+    },
+    "setup": {
+      "title": "Créditos de formação",
+      "description": "Atribua créditos de educação continuada às sessões e emita certificados de {event} a partir das leituras de check-in e do tempo de visualização.",
+      "readOnly": "Você pode ver os créditos. Peça a um editor para mudar regras ou emitir certificados.",
+      "calculateTitle": "Emitir certificados",
+      "calculateHint": "Quando as sessões terminarem, calcule os créditos. Quem atingir o mínimo de uma sessão recebe um certificado por e-mail.",
+      "lastCalculated": "Último cálculo {when}. Calcular de novo muda só o que mudou.",
+      "noRulesYet": "Primeiro atribua uma regra de créditos a pelo menos uma sessão abaixo.",
+      "calculate": "Calcular créditos e emitir certificados",
+      "calculated": "Créditos calculados.",
+      "calculatedSummary": "Novos certificados: {issued}. Revisados: {revised}. Retirados: {revoked}. Inalterados: {unchanged}.",
+      "calculatedBelow": "Participantes abaixo de todos os mínimos: {count}.",
+      "calculatedPending": "Sessões ainda não terminadas: {count}.",
+      "fixFields": "Confira os campos marcados abaixo.",
+      "settingsTitle": "Dados do certificado",
+      "creditLabel": "Nome do crédito",
+      "creditLabelHint": "Como impresso, por exemplo “créditos CPE”. Deixe vazio para “créditos de educação continuada”.",
+      "creditLabelTooLong": "Use até 60 caracteres.",
+      "accreditor": "Órgão acreditador",
+      "accreditorHint": "Opcional. Citado apenas se ele acreditar você.",
+      "accreditorTooLong": "Use até 120 caracteres.",
+      "saveSettings": "Salvar dados do certificado",
+      "settingsSaved": "Dados do certificado salvos.",
+      "sessionsTitle": "Regras de créditos",
+      "sessionsHint": "Uma sessão conta o tempo presencial pelas leituras da porta e o tempo on-line pela visualização e pelo Zoom, uma vez por minuto.",
+      "noSessions": "Ainda não há sessões",
+      "noSessionsHint": "Adicione sessões à programação e atribua créditos aqui.",
+      "addSessions": "Adicionar sessões",
+      "ended": "Encerrada",
+      "upcoming": "Ainda não terminou",
+      "awarded": "Concedido a {count}",
+      "ruleFormLabel": "Regra de créditos de {title}",
+      "credits": "Créditos",
+      "creditsHint": "Por exemplo 1,5",
+      "creditsInvalid": "Informe de 0,01 a 100 créditos, com até duas casas decimais.",
+      "minMinutes": "Minutos mínimos",
+      "minMinutesHint": "Presença necessária para obter os créditos",
+      "minMinutesInvalid": "Informe minutos inteiros de 1 a 1440.",
+      "counts": "Presença que conta",
+      "countInPerson": "Presencial (leituras da porta)",
+      "countVirtual": "On-line (visualização e Zoom)",
+      "countsInvalid": "Escolha pelo menos um tipo de presença.",
+      "saveRule": "Salvar regra",
+      "saveRuleLabel": "Salvar a regra de créditos de {title}",
+      "removeRule": "Remover regra",
+      "removeRuleLabel": "Remover a regra de créditos de {title}",
+      "ruleSaved": "Regra de créditos salva para {title}.",
+      "ruleRemoved": "Regra de créditos removida de {title}.",
+      "certificatesTitle": "Certificados",
+      "noCertificates": "Ainda não há certificados",
+      "noCertificatesHint": "Calcule os créditos depois que as sessões terminarem: os certificados aparecem aqui.",
+      "holder": "Participante",
+      "creditsColumn": "Créditos",
+      "code": "Código de verificação",
+      "status": "Situação",
+      "statusIssued": "Emitido · revisão {revision}",
+      "statusRevoked": "Retirado",
+      "issuedOn": "Emitido em",
+      "document": "PDF",
+      "download": "Baixar",
+      "downloadLabel": "Baixar o certificado de {name}",
+      "defaultLabel": "créditos de educação continuada",
+      "goCalculate": "Ir para Emitir certificados"
+    },
+    "verify": {
+      "metaTitle": "Verificar um certificado",
+      "eyebrow": "Certificado de formação",
+      "title": "Verificar um certificado",
+      "description": "Confira um certificado de participação com o código impresso nele.",
+      "notFound": "Nenhum certificado tem este código",
+      "notFoundHint": "Confira o código do certificado e tente de novo.",
+      "valid": "Válido",
+      "revoked": "Retirado",
+      "revokedHint": "O organizador retirou este certificado.",
+      "holder": "Emitido para",
+      "event": "Evento",
+      "organizer": "Organizador",
+      "accreditor": "Órgão acreditador",
+      "credits": "Créditos",
+      "creditsValue": "{credits} {label}",
+      "defaultLabel": "créditos de educação continuada",
+      "issued": "Emitido em",
+      "revised": "Revisado",
+      "revisedValue": "Revisão {revision}, {date}",
+      "another": "Conferir outro código",
+      "codeLabel": "Código de verificação",
+      "codeHint": "Dez letras e números, por exemplo K7M2Q-9XR4T",
+      "codeInvalid": "Isso não é um código de verificação. Confira e tente de novo.",
+      "check": "Conferir certificado"
     }
   }
 }

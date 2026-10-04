@@ -120,3 +120,92 @@ export const watchMinutes = tenantTable(
     check('watch_minutes_minute_check', sql`date_trunc('minute', minute) = minute`),
   ],
 );
+
+/* ---------------------------------------------------------------- M6.9b: Zoom webinars ---- */
+
+/**
+ * M6.9b: a program session delivered as a Zoom webinar (the organizer links the webinar's id).
+ * One webinar per session and per org. The Zoom connection itself (OAuth through the
+ * `IntegrationAuth` port) lives in `integrations`; its Zoom connector reads and writes these
+ * tables through this module's exports.
+ */
+export const zoomWebinars = tenantTable(
+  virtualSchema,
+  'zoom_webinars',
+  {
+    eventId: uuid('event_id').notNull(),
+    sessionId: uuid('session_id').notNull(),
+    webinarId: text('webinar_id').notNull(),
+  },
+  (t) => [
+    uniqueIndex('zoom_webinars_org_session_key').on(t.orgId, t.sessionId),
+    uniqueIndex('zoom_webinars_org_webinar_key').on(t.orgId, t.webinarId),
+    index('zoom_webinars_org_event_idx').on(t.orgId, t.eventId),
+    check('zoom_webinars_webinar_id_check', sql`webinar_id ~ '^[0-9]{9,12}$'`),
+  ],
+);
+
+/**
+ * A ticket holder to register for a session's webinar (the Zoom connector pushes each row once:
+ * the integrations record link and an Idempotency-Key per row and content). One row per session
+ * and ticket; `updated_at` moves when the row must be sent again (a new webinar id).
+ */
+export const zoomRegistrants = tenantTable(
+  virtualSchema,
+  'zoom_registrants',
+  {
+    eventId: uuid('event_id').notNull(),
+    sessionId: uuid('session_id').notNull(),
+    webinarLinkId: uuid('webinar_link_id').notNull(),
+    ticketId: uuid('ticket_id').notNull(),
+    email: text('email').notNull(),
+    firstName: text('first_name').notNull(),
+    lastName: text('last_name').notNull(),
+  },
+  (t) => [
+    uniqueIndex('zoom_registrants_org_session_ticket_key').on(t.orgId, t.sessionId, t.ticketId),
+    index('zoom_registrants_org_updated_idx').on(t.orgId, t.updatedAt, t.id),
+    index('zoom_registrants_org_webinar_email_idx').on(t.orgId, t.webinarLinkId, t.email),
+    index('zoom_registrants_org_ticket_idx').on(t.orgId, t.ticketId),
+    foreignKey({
+      name: 'zoom_registrants_webinar_fk',
+      columns: [t.orgId, t.webinarLinkId],
+      foreignColumns: [zoomWebinars.orgId, zoomWebinars.id],
+    }).onDelete('cascade'),
+    check('zoom_registrants_email_check', sql`char_length(email) between 3 and 320 and email = lower(email)`),
+    check(
+      'zoom_registrants_names_check',
+      sql`char_length(first_name) between 1 and 64 and char_length(last_name) <= 64`,
+    ),
+  ],
+);
+
+/**
+ * Zoom attendance: one join → leave segment from a webinar's participant report (pulled after the
+ * session). Matched to a ticket by the registrant's email; a participant we did not register
+ * keeps `ticket_id` null and earns nothing.
+ */
+export const zoomAttendance = tenantTable(
+  virtualSchema,
+  'zoom_attendance',
+  {
+    eventId: uuid('event_id').notNull(),
+    sessionId: uuid('session_id').notNull(),
+    webinarLinkId: uuid('webinar_link_id').notNull(),
+    ticketId: uuid('ticket_id'),
+    email: text('email'),
+    joinedAt: ts('joined_at').notNull(),
+    leftAt: ts('left_at').notNull(),
+  },
+  (t) => [
+    index('zoom_attendance_org_event_idx').on(t.orgId, t.eventId),
+    index('zoom_attendance_org_ticket_idx').on(t.orgId, t.ticketId),
+    foreignKey({
+      name: 'zoom_attendance_webinar_fk',
+      columns: [t.orgId, t.webinarLinkId],
+      foreignColumns: [zoomWebinars.orgId, zoomWebinars.id],
+    }).onDelete('cascade'),
+    check('zoom_attendance_times_check', sql`left_at >= joined_at`),
+    check('zoom_attendance_email_check', sql`email is null or char_length(email) <= 320`),
+  ],
+);

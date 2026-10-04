@@ -29,6 +29,7 @@
     "@yayatoh/registration": "workspace:*",
     "@yayatoh/tenancy": "workspace:*",
     "@yayatoh/ticketing": "workspace:*",
+    "@yayatoh/virtual": "workspace:*",
     "drizzle-orm": "catalog:",
     "intl-messageformat": "11.2.15",
     "zod": "catalog:"

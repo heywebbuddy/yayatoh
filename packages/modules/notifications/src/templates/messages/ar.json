@@ -358,6 +358,11 @@
     "cms.contact_message": {
       "subject": "رسالة جديدة من {name} عبر صفحة التواصل",
       "intro": "كتب إليك {name} ({email}) عبر صفحة التواصل في موقعك:"
+    },
+    "ce.certificate": {
+      "subject": "شهادتك من {org}",
+      "intro": "حصلت على {credits} في {eventName}. شهادتك (الرمز {code}) أدناه، وبصيغة PDF.",
+      "cta": "تنزيل الشهادة بصيغة PDF"
     }
   },
   "roles": {

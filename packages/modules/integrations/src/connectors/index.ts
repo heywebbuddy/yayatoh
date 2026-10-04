@@ -5,6 +5,7 @@ import { googleCalendarConnector, googleCalendarPersonalConnector } from './goog
 import { googleSheetsConnector } from './google-sheets/index.ts';
 import { salesforceConnector } from './salesforce/index.ts';
 import { slackConnector } from './slack.ts';
+import { zoomConnector } from './zoom.ts';
 
 /**
  * Every connector (M6.4a). M6.4b–d append theirs here (Eventbrite, Google Sheets, Zapier, Slack,
@@ -22,6 +23,8 @@ export const CONNECTORS: readonly ConnectorDefinition[] = [
   // M6.5c: calendar push of sessions (the org's calendar) and of personal schedules.
   googleCalendarConnector,
   googleCalendarPersonalConnector,
+  // M6.9b: Zoom webinars (registrants out, attendance reports in) for virtual sessions and CE credits.
+  zoomConnector,
 ];
 
 export function connectorByKey(key: string): ConnectorDefinition | null {

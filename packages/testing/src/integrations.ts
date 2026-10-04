@@ -6,6 +6,7 @@ import {
   fakeAuthForConnectors,
   fakeIntegrations,
   type IntegrationAuth,
+  zoomFakeProvider,
 } from '@yayatoh/integrations';
 import { type Ctx, executeCommand, requireOrg } from '@yayatoh/kernel';
 import { ports } from './ports.ts';
@@ -49,6 +50,27 @@ export async function connectConnector(
     key === 'demo' ? demoFakeProvider : def.fake,
   );
   const resolved = await fakeAuth.resolve({ orgId, connectionId, providerConfigKey });
+  if (!resolved) throw new Error('fake connect did not resolve');
+  await executeCommand(
+    completeConnectCommand,
+    { connectionId, state, authConnectionId: resolved.authConnectionId, accountLabel: resolved.accountLabel },
+    ctx,
+    ports,
+  );
+  return { connectionId, authConnectionId: resolved.authConnectionId };
+}
+
+/** M6.9b: connect the Zoom connector through the fake consent (like `connectDemo`). */
+export async function connectZoom(ctx: Ctx): Promise<{ connectionId: string; authConnectionId: string }> {
+  const orgId = requireOrg(ctx);
+  const { connectionId, state } = await executeCommand(
+    beginConnectCommand,
+    { connector: 'zoom' },
+    ctx,
+    ports,
+  );
+  fakeIntegrations.approve({ orgId, connectionId, providerConfigKey: 'zoom' }, zoomFakeProvider);
+  const resolved = await fakeAuth.resolve({ orgId, connectionId, providerConfigKey: 'zoom' });
   if (!resolved) throw new Error('fake connect did not resolve');
   await executeCommand(
     completeConnectCommand,

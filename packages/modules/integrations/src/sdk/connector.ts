@@ -51,6 +51,11 @@ export interface SyncIO {
    * connectors without one. Ids and labels only: never a token.
    */
   readonly scope: Readonly<Record<string, unknown>>;
+  /**
+   * M6.9b: read Yayatoh data in the org's tenant transaction (read only, outside any command), so
+   * a pull can scope its provider calls to what is linked here (Zoom: the webinars to report on).
+   */
+  readonly read: <T>(fn: (tx: TenantTx) => Promise<T>) => Promise<T>;
 }
 
 /** M6.4b: what a pull `write` learns about the record beyond its mapped values. */

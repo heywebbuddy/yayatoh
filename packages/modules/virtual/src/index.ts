@@ -59,3 +59,20 @@ export {
   virtualTicketToken,
   watchableTicketsQuery,
 } from './viewer.ts';
+// M6.9b: Zoom webinars (registrant rows, attendance reports) and online attendance for CE credits.
+export {
+  linkZoomWebinarCommand,
+  normalizeWebinarId,
+  onlineAttendanceTx,
+  reconcileZoomRegistrantsTx,
+  recordZoomAttendanceTx,
+  splitHolderName,
+  syncZoomRegistrantsCommand,
+  ZOOM_REPORT_DAYS,
+  type ZoomRegistrantRecord,
+  zoomRegistrantChangesTx,
+  zoomRegistrantsSubscriber,
+  zoomRegistrantTx,
+  zoomReportWebinarsTx,
+  zoomSetupQuery,
+} from './zoom.ts';

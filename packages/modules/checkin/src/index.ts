@@ -6,6 +6,8 @@ export {
 } from './assistance-support.ts';
 // M5.1d: admit a ticket whose invoice still has a balance (audited staff override).
 export { admitBalanceDueCommand } from './balance-override.ts';
+// M6.9b: session door visits for CE credits.
+export { sessionVisitsTx } from './ce-facts.ts';
 export {
   CheckpointDto,
   createCheckpointCommand,

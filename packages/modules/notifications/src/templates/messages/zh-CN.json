@@ -358,6 +358,11 @@
     "cms.contact_message": {
       "subject": "{name} 通过联系页面发来新消息",
       "intro": "{name}（{email}）通过你网站的联系页面给你发了消息："
+    },
+    "ce.certificate": {
+      "subject": "来自 {org} 的证明",
+      "intro": "您在 {eventName} 获得了 {credits}。您的证明（验证码 {code}）见下文及 PDF。",
+      "cta": "下载 PDF 证明"
     }
   },
   "roles": {

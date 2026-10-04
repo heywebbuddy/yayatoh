@@ -358,6 +358,11 @@
     "cms.contact_message": {
       "subject": "Neue Nachricht von {name} über Ihre Kontaktseite",
       "intro": "{name} ({email}) hat Ihnen über die Kontaktseite Ihrer Website geschrieben:"
+    },
+    "ce.certificate": {
+      "subject": "Ihre Bescheinigung von {org}",
+      "intro": "Sie haben bei {eventName} {credits} erworben. Ihre Bescheinigung (Code {code}) steht unten und als PDF bereit.",
+      "cta": "Bescheinigung als PDF herunterladen"
     }
   },
   "roles": {

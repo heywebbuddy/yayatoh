@@ -35,6 +35,7 @@
     "@yayatoh/badges": "workspace:*",
     "@yayatoh/billing": "workspace:*",
     "@yayatoh/campaigns": "workspace:*",
+    "@yayatoh/ce": "workspace:*",
     "@yayatoh/checkin": "workspace:*",
     "@yayatoh/cms": "workspace:*",
     "@yayatoh/command-center": "workspace:*",

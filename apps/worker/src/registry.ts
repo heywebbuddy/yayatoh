@@ -7,6 +7,7 @@ import { contactSignalsSubscriber, participationProjector } from '@yayatoh/audie
 import { journeySubscribers } from '@yayatoh/automations';
 import { agencyBillingGrantRevoked, billingUsageMeter, nonprofitDiscountFromCharity } from '@yayatoh/billing';
 import { campaignsTimeline } from '@yayatoh/campaigns';
+import { certificateMailer } from '@yayatoh/ce';
 import {
   chatReportSignals,
   checkinTimeline,
@@ -83,6 +84,7 @@ import {
   transferMailer,
   walletPassSync,
 } from '@yayatoh/ticketing';
+import { zoomRegistrantsSubscriber } from '@yayatoh/virtual';
 import { configureWebhooks, webhookPublisherFromEnv, webhookPublisherSubscriber } from '@yayatoh/webhooks';
 import { z } from 'zod';
 import { contactStatsJob } from './contact-stats.ts';
@@ -167,6 +169,9 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     networkChatSignals(),
     // M6.9a: watching a session's stream checks the ticket in at its virtual checkpoint.
     virtualAttendanceSubscriber(),
+    // M6.9b: new holders become Zoom registrants; CE certificates go to their holders.
+    zoomRegistrantsSubscriber(),
+    certificateMailer({ notifier, appOrigin }),
     fraudSignalAlerts({ notifier }),
     // M3.4a: staff alerts for the Scan PWA (web push per device). The Command Center alert engine
     // (M3.2b) replaces `derivedStaffAlerts` here and in apps/web/src/server/scan-staff.ts.

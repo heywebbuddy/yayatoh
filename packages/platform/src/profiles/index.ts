@@ -185,6 +185,8 @@ export const PROFILES: Readonly<Record<ProfileKey, Profile>> = {
       item('sponsors', 'build', 'sponsors', 'award'),
       // M6.9a: stream setup for online and hybrid sessions (the `virtual` module).
       item('virtual', 'build', 'virtual', 'video'),
+      // M6.9b: CE credit rules and certificates (the `virtual` module, P6-13).
+      item('ceCredits', 'build', 'virtual', 'graduation-cap'),
       marketing,
       // M5.5a: badge templates and batch PDFs, before the door.
       item('badges', 'run', 'badges', 'id-card'),

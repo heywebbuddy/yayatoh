@@ -1322,6 +1322,7 @@ export async function runSync(
       origin: originStamp(connectionId),
       now,
       scope: loaded,
+      read: (fn) => withTenant(ctx, fn),
     };
     if (connector.health) await connector.health(io);
     const scope = scopeOf(
