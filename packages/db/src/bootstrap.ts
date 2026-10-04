@@ -51,6 +51,15 @@ export async function bootstrapRoles(
   await admin.unsafe(
     `ALTER DEFAULT PRIVILEGES FOR ROLE ${ROLE.migrator} GRANT SELECT ON TABLES TO ${ROLE.platformReader}`,
   );
+  // M6.12b: pgvector (matchmaking embeddings) is not a trusted extension: the superuser creates it,
+  // in the migrator's `extensions` schema (where M1.8f's pg_trgm lives), before migrations run.
+  await admin.unsafe(`CREATE SCHEMA IF NOT EXISTS extensions AUTHORIZATION ${ROLE.migrator}`);
+  const [vector] = await admin`select 1 from pg_available_extensions where name = 'vector'`;
+  if (!vector)
+    throw new Error(
+      'The pgvector extension is not installed on this Postgres. Use the pgvector/pgvector:pg18 image (docker-compose.yml).',
+    );
+  await admin.unsafe('CREATE EXTENSION IF NOT EXISTS vector WITH SCHEMA extensions');
 }
 
 /**

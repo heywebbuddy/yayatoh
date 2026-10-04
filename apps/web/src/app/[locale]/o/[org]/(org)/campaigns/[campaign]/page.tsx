@@ -17,11 +17,13 @@ import { CampaignEditor } from '@/components/campaign-editor.tsx';
 import { AudiencePanel, LifecyclePanel, SendPanel, TestSendPanel } from '@/components/campaign-panels.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatNumber } from '@/lib/format.ts';
+import { aiComposeSetup } from '@/server/ai-compose.ts';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import { builderData } from '../../audiences/builder-data.ts';
 import {
   deleteCampaignAction,
+  draftCampaignAiAction,
   lifecycleAction,
   previewCampaignAction,
   saveCampaignAction,
@@ -96,6 +98,11 @@ export default async function CampaignPage({
     ? await executeQuery(campaignResultsQuery, { campaignId: c.id }, data.ctx, ports)
     : null;
   const preview = await previewCampaignAction(org, c.id, null);
+  // M6.12b: AI drafting for those who may send (and when the org has the AI module).
+  const ai =
+    draft && canWrite && canSend && data.modules.has('ai') && c.channel === 'email'
+      ? { setup: await aiComposeSetup(data.ctx), draft: draftCampaignAiAction.bind(null, org, c.id) }
+      : undefined;
   const when = new Intl.DateTimeFormat(locale, {
     dateStyle: 'full',
     timeStyle: 'short',
@@ -149,6 +156,7 @@ export default async function CampaignPage({
           save={saveCampaignAction.bind(null, org, c.id)}
           preview={previewCampaignAction.bind(null, org, c.id)}
           initialPreview={preview}
+          {...(ai ? { ai } : {})}
         />
       ) : (
         <section aria-labelledby="campaign-preview" className="flex flex-col gap-3">

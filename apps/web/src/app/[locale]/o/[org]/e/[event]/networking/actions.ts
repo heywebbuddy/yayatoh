@@ -1,5 +1,6 @@
 'use server';
 
+import { refreshMatchmaking } from '@yayatoh/ai';
 import {
   addMeetingSlotsCommand,
   deleteMeetingLocationCommand,
@@ -11,7 +12,10 @@ import {
 } from '@yayatoh/engagement';
 import { executeCommand, zonedTimeToUtc } from '@yayatoh/kernel';
 import { revalidatePath } from 'next/cache';
+import type { AiComposeResult } from '@/lib/ai-compose.ts';
 import type { FormState } from '@/lib/form-state.ts';
+import { aiDrafter } from '@/server/ai.ts';
+import { aiCall } from '@/server/ai-compose.ts';
 import { loadEvent } from '@/server/console.ts';
 import { failure, numberOrNull, success } from '@/server/form.ts';
 import { ports } from '@/server/ports.ts';
@@ -182,4 +186,24 @@ export async function restoreAction(
   return run(org, event, (eventId, ctx) =>
     executeCommand(restoreProfileCommand, { eventId, profileId }, ctx, ports),
   );
+}
+
+/**
+ * M6.12b: embed the opted-in profiles that have no embedding yet, so their match suggestions are
+ * ready (one AI credit per batch). Only listed profiles are ever sent.
+ */
+export async function refreshMatchmakingAction(
+  org: string,
+  event: string,
+): Promise<AiComposeResult<{ embedded: number; pending: number }>> {
+  const { data, event: ev } = await loadEvent(org, event, 'sessions');
+  const res = await aiCall(
+    { orgId: data.org.id, userId: data.session.userId, key: `match:${ev.id}` },
+    async () => {
+      const r = await refreshMatchmaking(data.ctx, ports, aiDrafter(), { eventId: ev.id });
+      return { value: { embedded: r.embedded, pending: r.pending }, balance: r.balance };
+    },
+  );
+  revalidatePath(path(org, event));
+  return res;
 }

@@ -4,6 +4,7 @@ import { executeQuery, utcToZonedInput } from '@yayatoh/kernel';
 import { agendaQuery, groupByDay, type SessionDto } from '@yayatoh/program';
 import { Button, buttonClass, Card, EmptyState, Label, PageHeader, StatusPill } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { AgendaAiPanel } from '@/components/agenda-ai-panel.tsx';
 import {
   AgendaPublishing,
   AgendaWarnings,
@@ -15,16 +16,19 @@ import { ActionButtonForm } from '@/components/portal-admin-forms.tsx';
 import { type FieldSpec, ProgramForm, ScheduleWarning } from '@/components/program-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { agendaWarningMessages } from '@/server/agenda.ts';
+import { aiComposeSetup } from '@/server/ai-compose.ts';
 import { ports } from '@/server/ports.ts';
 import { loadProgramPage, warningMessages } from '@/server/program.ts';
 import { placeDraftSessionAction } from '../speakers/cfp/actions.ts';
 import {
+  addAiSessionsAction,
   createRoomAction,
   createSessionAction,
   createTrackAction,
   deleteRoomAction,
   deleteSessionAction,
   deleteTrackAction,
+  draftAgendaAiAction,
   updateSessionAction,
 } from './actions.ts';
 
@@ -54,6 +58,8 @@ export default async function SessionsPage({
   const live = new Set(await executeQuery(liveSessionsQuery, { eventId: ev.id }, data.ctx, ports));
   const tl = await getTranslations('engagement.moderator');
   const tz = ev.timezone;
+  // M6.12b: AI agenda drafts for editors, when the org has the AI module.
+  const ai = canWrite && data.modules.has('ai') ? await aiComposeSetup(data.ctx) : null;
   const time = new Intl.DateTimeFormat(locale, { timeZone: tz, hour: 'numeric', minute: '2-digit' });
   const dayLabel = new Intl.DateTimeFormat(locale, {
     timeZone: 'UTC',
@@ -225,6 +231,23 @@ export default async function SessionsPage({
         </section>
       ) : null}
       <AgendaWarnings messages={agendaMessages} />
+      {ai ? (
+        <Card>
+          <section aria-labelledby="agenda-ai-heading" className="flex flex-col gap-3">
+            <h2 id="agenda-ai-heading" className="text-section">
+              {tp('ai.title')}
+            </h2>
+            <p className="text-body text-ink-2">{tp('ai.explainer')}</p>
+            <AgendaAiPanel
+              setup={ai}
+              timeZone={tz}
+              locale={locale}
+              draft={draftAgendaAiAction.bind(null, org, event)}
+              add={addAiSessionsAction.bind(null, org, event)}
+            />
+          </section>
+        </Card>
+      ) : null}
       <section aria-labelledby="agenda-heading" className="flex flex-col gap-3">
         <h2 id="agenda-heading" className="text-section">
           {tp('agenda')}

@@ -1,3 +1,4 @@
+import { fakeEmbedding } from '@yayatoh/ai';
 import { type TenantTx, withTenant } from '@yayatoh/db';
 import {
   addMeetingSlotsCommand,
@@ -6,6 +7,7 @@ import {
   myMeetingsQuery,
   optInCommand,
   optOutCommand,
+  pendingEmbeddingsQuery,
   replyBoothChatCommand,
   reportChatCommand,
   reportPersonCommand,
@@ -17,6 +19,7 @@ import {
   sendBoothMessageCommand,
   sendChatMessageCommand,
   setBoothChatCommand,
+  storeEmbeddingsCommand,
   updateNetworkSettingsCommand,
 } from '@yayatoh/engagement';
 import { type Command, type Ctx, createCtx, executeCommand, executeQuery } from '@yayatoh/kernel';
@@ -146,5 +149,18 @@ export async function networkingFixture(
     { eventId, reportId: report?.id ?? '', action: 'dismiss' as const },
     ctx(),
   );
+  // M6.12b matchmaking (isolation coverage of network_embeddings): both listed profiles get a
+  // (fake) embedding; the second then opts out below, which drops theirs.
+  const pending = await executeQuery(pendingEmbeddingsQuery, { eventId }, ctx(), ports);
+  if (pending.items.length > 0)
+    await run(
+      storeEmbeddingsCommand,
+      {
+        eventId,
+        model: 'fake',
+        items: pending.items.map((i) => ({ profileId: i.profileId, embedding: fakeEmbedding(i.text) })),
+      },
+      ctx(),
+    );
   await run(optOutCommand, { eventId, email: b });
 }

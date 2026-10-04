@@ -1,5 +1,5 @@
-import { directoryQuery } from '@yayatoh/engagement';
-import { executeQuery } from '@yayatoh/kernel';
+import { directoryQuery, type MatchesDto, suggestedMatchesQuery } from '@yayatoh/engagement';
+import { executeQuery, isDomainError } from '@yayatoh/kernel';
 import {
   Alert,
   Avatar,
@@ -114,6 +114,15 @@ export default async function NetworkPage({ params, searchParams }: Params) {
     p.ctx,
     ports,
   );
+  // M6.12b: "Suggested for you" (people with similar profiles; opted-in people only), on the
+  // first page of the unfiltered directory.
+  let suggested: MatchesDto | null = null;
+  if (!query && dir.page === 1)
+    try {
+      suggested = await executeQuery(suggestedMatchesQuery, { ...p.at, limit: 4 }, p.ctx, ports);
+    } catch (err) {
+      if (!isDomainError(err)) throw err;
+    }
   const pageHref = (n: number) =>
     `${networkPath(slug)}?${new URLSearchParams({ ...(query ? { q: query } : {}), page: String(n) })}`;
   const tone = {
@@ -133,6 +142,50 @@ export default async function NetworkPage({ params, searchParams }: Params) {
     >
       {notice === 'blocked' || notice === 'reported' ? (
         <Alert tone="info" title={t(`notice.${notice}`)} />
+      ) : null}
+      {suggested?.ready ? (
+        <section aria-labelledby="network-suggested" className="flex flex-col gap-3">
+          <h2 id="network-suggested" className="text-section">
+            {t('suggested.title')}
+          </h2>
+          {suggested.matches.length === 0 ? (
+            <p className="text-body text-ink-2">{t('suggested.none')}</p>
+          ) : (
+            <>
+              <p className="text-caption text-ink-2">{t('suggested.why')}</p>
+              <ul
+                aria-label={t('suggested.listLabel')}
+                className="grid list-none grid-cols-1 gap-3 p-0 sm:grid-cols-2"
+              >
+                {suggested.matches.map((m) => (
+                  <li key={m.id}>
+                    <Card className="flex h-full flex-col gap-2">
+                      <h3 className="text-card">
+                        <Link
+                          href={networkPath(slug, `/people/${m.id}`)}
+                          className="inline-flex min-h-6 items-center underline-offset-2 hover:underline"
+                        >
+                          {m.displayName}
+                        </Link>
+                      </h3>
+                      {m.headline || m.company ? (
+                        <p className="text-body text-ink-2">
+                          {[m.headline, m.company].filter(Boolean).join(' · ')}
+                        </p>
+                      ) : null}
+                      <p className="text-caption">{t('suggested.score', { score: m.score })}</p>
+                      {m.shared.length ? (
+                        <p className="text-caption text-ink-2">
+                          {t('suggested.shared', { interests: m.shared.join(', ') })}
+                        </p>
+                      ) : null}
+                    </Card>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+        </section>
       ) : null}
       <search>
         <form method="get" className="flex flex-col gap-2 sm:flex-row sm:items-end">

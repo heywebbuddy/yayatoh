@@ -174,6 +174,20 @@ export {
 // Batch 3j merge: networking and chat in data-subject requests (read and erased by privacy, tier 6).
 export { eraseNetworkingDsarTx, networkingDsarTx } from './networking/dsar.ts';
 export * from './networking/dto.ts';
+// M6.12b: matchmaking (embeddings of listed profiles, suggestions within the event).
+export {
+  MATCH_BATCH,
+  MAX_MATCHES,
+  MatchDto,
+  MatchesDto,
+  MatchmakingStatusDto,
+  matchmakingStatusQuery,
+  PendingEmbeddingsDto,
+  pendingEmbeddingsQuery,
+  profileEmbeddingText,
+  storeEmbeddingsCommand,
+  suggestedMatchesQuery,
+} from './networking/matchmaking.ts';
 export { networkingEvent, networkingOpen } from './networking/public.ts';
 export {
   AskInput,
@@ -207,6 +221,7 @@ export {
   type LocationKind,
   MEETING_STATES,
   type MeetingState,
+  NETWORK_EMBEDDING_DIMENSIONS,
   POLL_KINDS,
   POLL_STATES,
   type PollKind,

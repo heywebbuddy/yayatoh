@@ -160,6 +160,8 @@ export const ORG_SECTIONS: readonly OrgNavSection[] = [
         needs: 'marketing:read',
         agencyNeeds: 'org:update',
       },
+      // M6.12b: the brand voices AI drafts follow (campaigns, pages, agendas).
+      { key: 'brandKits', path: 'brand-kits', icon: 'palette', module: 'ai', needs: 'marketing:read' },
       // U10: every image the org uploaded, reusable across events, venues and the program.
       { key: 'mediaLibrary', path: 'media', icon: 'image', module: 'core', needs: 'events:read' },
       {

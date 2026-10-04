@@ -3,6 +3,7 @@ import { sql } from 'drizzle-orm';
 import {
   boolean,
   check,
+  customType,
   foreignKey,
   index,
   integer,
@@ -705,5 +706,48 @@ export const chatReports = tenantTable(
       'chat_reports_review_note_check',
       sql`review_note is null or char_length(review_note) between 1 and 1000`,
     ),
+  ],
+);
+
+/** M6.12b: matchmaking embeddings are this many dimensions (the AI port's `EMBEDDING_DIMENSIONS`). */
+export const NETWORK_EMBEDDING_DIMENSIONS = 512;
+
+/**
+ * pgvector's `vector(n)`, created in the `extensions` schema by the database bootstrap (local/CI)
+ * or the owner's runbook (production): it is not a trusted extension, so the migrator can't.
+ */
+const vector512 = customType<{ data: number[]; driverData: string }>({
+  dataType: () => `extensions.vector(${NETWORK_EMBEDDING_DIMENSIONS})`,
+  toDriver: (v) => `[${v.join(',')}]`,
+  fromDriver: (v) => JSON.parse(v) as number[],
+});
+
+/**
+ * M6.12b matchmaking: one embedding per **listed** networking profile (opted in, not hidden).
+ * Built from the profile's public fields only (headline, company, bio, interests — never the
+ * email or the name). Opting out, being hidden, changing the profile or erasure deletes the row
+ * in the same transaction; suggestions also re-check that both sides are listed. Exact cosine
+ * search within one event (no ANN index: an event's directory is small, and a filtered ANN scan
+ * can silently return fewer people).
+ */
+export const networkEmbeddings = tenantTable(
+  engagementSchema,
+  'network_embeddings',
+  {
+    eventId: uuid('event_id').notNull(),
+    profileId: uuid('profile_id').notNull(),
+    embedding: vector512('embedding').notNull(),
+    /** The provider and model that made it (vocabulary, e.g. `fake`). */
+    model: text('model').notNull(),
+  },
+  (t) => [
+    uniqueIndex('network_embeddings_org_profile_key').on(t.orgId, t.profileId),
+    index('network_embeddings_org_event_idx').on(t.orgId, t.eventId),
+    foreignKey({
+      name: 'network_embeddings_profile_fk',
+      columns: [t.orgId, t.profileId],
+      foreignColumns: [networkProfiles.orgId, networkProfiles.id],
+    }).onDelete('cascade'),
+    check('network_embeddings_model_check', sql`char_length(model) between 1 and 80`),
   ],
 );
