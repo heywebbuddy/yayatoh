@@ -87,6 +87,9 @@ const EVENT = {
   country: 'US',
   currency: 'USD',
   publishedAt: '2030-01-10T15:00:00.000Z',
+  // U8 (additive /v1): the platform category and the event's tags.
+  category: 'community',
+  tags: ['gala'],
 };
 
 async function readJson(req: IncomingMessage): Promise<Record<string, unknown> | null> {

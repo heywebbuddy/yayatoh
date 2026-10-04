@@ -773,7 +773,7 @@
             "name": "Events by start time",
             "value": "listEvents",
             "action": "Events by start time",
-            "description": "The organization’s events by start time, every status and visibility. Needs the events:read scope.",
+            "description": "The organization’s events by start time, every status and visibility. `tag` narrows the list to events with that tag. Needs the events:read scope.",
             "routing": {
               "request": {
                 "method": "GET",
@@ -1132,6 +1132,20 @@
               "send": {
                 "type": "query",
                 "property": "limit",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Tag",
+            "name": "tag",
+            "type": "string",
+            "default": "",
+            "description": "Only events with this tag (case-insensitive).",
+            "routing": {
+              "send": {
+                "type": "query",
+                "property": "tag",
                 "value": "={{ $value }}"
               }
             }
