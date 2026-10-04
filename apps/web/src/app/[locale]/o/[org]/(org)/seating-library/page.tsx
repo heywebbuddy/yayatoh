@@ -110,7 +110,7 @@ export default async function SeatingLibraryPage({
           title={t('emptyTitle')}
           description={canWrite ? t('emptyHint') : t('emptyViewer')}
           action={
-            <Link href={`/o/${org}/events`} className={buttonClass('secondary', 'sm')}>
+            <Link href={`/o/${org}`} className={buttonClass('secondary', 'sm')}>
               {t('toEvents')}
             </Link>
           }

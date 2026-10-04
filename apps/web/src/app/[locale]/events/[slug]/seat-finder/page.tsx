@@ -98,7 +98,7 @@ export default async function SeatFinderPage({
           title={t('seatFinder.closedTitle')}
           description={t('seatFinder.closedDescription')}
           action={
-            <Link href={`/events/${slug}`} className="text-body underline">
+            <Link href={`/events/${slug}`} className="inline-flex min-h-6 items-center text-body underline">
               {t('seatFinder.toEvent')}
             </Link>
           }
@@ -167,7 +167,10 @@ export default async function SeatFinderPage({
         />
       )}
       {help}
-      <Link href={`/events/${slug}`} className="self-start text-caption text-ink-2 underline">
+      <Link
+        href={`/events/${slug}`}
+        className="inline-flex min-h-6 items-center self-start text-caption text-ink-2 underline"
+      >
         {t('seatFinder.toEvent')}
       </Link>
     </main>

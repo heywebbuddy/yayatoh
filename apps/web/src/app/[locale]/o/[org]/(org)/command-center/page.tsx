@@ -179,7 +179,7 @@ export default async function CommandCenterOverviewPage({
           title={t('overviewEmpty.title')}
           description={t('overviewEmpty.description')}
           action={
-            <Link href={`/o/${org}/events`} className={buttonClass('primary', 'md')}>
+            <Link href={`/o/${org}`} className={buttonClass('primary', 'md')}>
               {t('overviewEmpty.action')}
             </Link>
           }

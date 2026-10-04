@@ -1,0 +1,1875 @@
+[
+ {
+  "app": "admin",
+  "actor": "staff",
+  "pattern": "/",
+  "path": "/",
+  "status": 200
+ },
+ {
+  "app": "admin",
+  "actor": "staff",
+  "pattern": "/access-log",
+  "path": "/access-log",
+  "status": 200
+ },
+ {
+  "app": "admin",
+  "actor": "staff",
+  "pattern": "/api-usage",
+  "path": "/api-usage",
+  "status": 200
+ },
+ {
+  "app": "admin",
+  "actor": "staff",
+  "pattern": "/categories",
+  "path": "/categories",
+  "status": 200
+ },
+ {
+  "app": "admin",
+  "actor": "staff",
+  "pattern": "/charities",
+  "path": "/charities",
+  "status": 200
+ },
+ {
+  "app": "admin",
+  "actor": "staff",
+  "pattern": "/commission",
+  "path": "/commission",
+  "status": 200
+ },
+ {
+  "app": "admin",
+  "actor": "staff",
+  "pattern": "/front-door",
+  "path": "/front-door",
+  "status": 200
+ },
+ {
+  "app": "admin",
+  "actor": "staff",
+  "pattern": "/incidents",
+  "path": "/incidents",
+  "status": 200
+ },
+ {
+  "app": "admin",
+  "actor": "staff",
+  "pattern": "/listings",
+  "path": "/listings",
+  "status": 200
+ },
+ {
+  "app": "admin",
+  "actor": "staff",
+  "pattern": "/maintenance",
+  "path": "/maintenance",
+  "status": 200
+ },
+ {
+  "app": "admin",
+  "actor": "staff",
+  "pattern": "/messaging",
+  "path": "/messaging",
+  "status": 200
+ },
+ {
+  "app": "admin",
+  "actor": "staff",
+  "pattern": "/not-staff",
+  "path": "/not-staff",
+  "status": 200
+ },
+ {
+  "app": "admin",
+  "actor": "staff",
+  "pattern": "/open-signup",
+  "path": "/open-signup",
+  "status": 200
+ },
+ {
+  "app": "admin",
+  "actor": "staff",
+  "pattern": "/people",
+  "path": "/people",
+  "status": 200
+ },
+ {
+  "app": "admin",
+  "actor": "staff",
+  "pattern": "/providers",
+  "path": "/providers",
+  "status": 200
+ },
+ {
+  "app": "admin",
+  "actor": "staff",
+  "pattern": "/reports",
+  "path": "/reports",
+  "status": 200
+ },
+ {
+  "app": "admin",
+  "actor": "staff",
+  "pattern": "/security",
+  "path": "/security",
+  "status": 200
+ },
+ {
+  "app": "admin",
+  "actor": "staff",
+  "pattern": "/sign-in",
+  "path": "/sign-in",
+  "status": 200
+ },
+ {
+  "app": "admin",
+  "actor": "staff",
+  "pattern": "/signup-codes",
+  "path": "/signup-codes",
+  "status": 200
+ },
+ {
+  "app": "admin",
+  "actor": "staff",
+  "pattern": "/tenants/[id]",
+  "path": "/tenants/01a10776-a254-7b1c-8be4-ca35e4dd8222",
+  "status": 200
+ },
+ {
+  "app": "admin",
+  "actor": "staff",
+  "pattern": "/tenants/[id]/messaging",
+  "path": "/tenants/01a10776-a254-7b1c-8be4-ca35e4dd8222/messaging",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/",
+  "path": "/",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/account/security",
+  "path": "/account/security",
+  "status": 200,
+  "redirectedTo": "/sign-in"
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/auth/error",
+  "path": "/auth/error",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/blogs",
+  "path": "/blogs",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/certificates/[org]/verify",
+  "path": "/certificates/lakeside-events/verify",
+  "status": 404
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/contact",
+  "path": "/contact",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/dev/design",
+  "path": "/dev/design",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/dev/login",
+  "path": "/dev/login",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/dev/mailbox",
+  "path": "/dev/mailbox",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/developers",
+  "path": "/developers",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/developers/events",
+  "path": "/developers/events",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/developers/guides",
+  "path": "/developers/guides",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/developers/reference",
+  "path": "/developers/reference",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/embed/[slug]",
+  "path": "/embed/canary-leaks-launch",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/event-portal",
+  "path": "/event-portal",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/event-portal/chat",
+  "path": "/event-portal/chat",
+  "status": 404
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/event-portal/confirm",
+  "path": "/event-portal/confirm",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/event-portal/profile",
+  "path": "/event-portal/profile",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/event-portal/tasks",
+  "path": "/event-portal/tasks",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/events",
+  "path": "/events",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/events/[slug]",
+  "path": "/events/midwest-leadership-summit-2027",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/events/[slug]/attendee",
+  "path": "/events/harbor-spring-concert/attendee",
+  "status": 200,
+  "redirectedTo": "/events/harbor-spring-concert/seat-finder"
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/events/[slug]/card",
+  "path": "/events/midwest-leadership-summit-2027/card",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/events/[slug]/cfp",
+  "path": "/events/midwest-leadership-summit-2027/cfp",
+  "status": 404
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/events/[slug]/exhibitors",
+  "path": "/events/midwest-leadership-summit-2027/exhibitors",
+  "status": 404
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/events/[slug]/give",
+  "path": "/events/midwest-leadership-summit-2027/give",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/events/[slug]/give/thanks",
+  "path": "/events/midwest-leadership-summit-2027/give/thanks",
+  "status": 404
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/events/[slug]/network",
+  "path": "/events/midwest-leadership-summit-2027/network",
+  "status": 404
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/events/[slug]/network/chat",
+  "path": "/events/midwest-leadership-summit-2027/network/chat",
+  "status": 404
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/events/[slug]/network/connections",
+  "path": "/events/midwest-leadership-summit-2027/network/connections",
+  "status": 404
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/events/[slug]/network/meetings",
+  "path": "/events/midwest-leadership-summit-2027/network/meetings",
+  "status": 404
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/events/[slug]/network/profile",
+  "path": "/events/midwest-leadership-summit-2027/network/profile",
+  "status": 404
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/events/[slug]/register",
+  "path": "/events/midwest-leadership-summit-2027/register",
+  "status": 404
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/events/[slug]/register/group",
+  "path": "/events/midwest-leadership-summit-2027/register/group",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/events/[slug]/registration-form",
+  "path": "/events/midwest-leadership-summit-2027/registration-form",
+  "status": 404
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/events/[slug]/seat-finder",
+  "path": "/events/midwest-leadership-summit-2027/seat-finder",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/events/[slug]/seat-finder/help",
+  "path": "/events/midwest-leadership-summit-2027/seat-finder/help",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/events/[slug]/seat-finder/poster",
+  "path": "/events/midwest-leadership-summit-2027/seat-finder/poster",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/events/[slug]/unlock",
+  "path": "/events/midwest-leadership-summit-2027/unlock",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/events/[slug]/waitlist",
+  "path": "/events/midwest-leadership-summit-2027/waitlist",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/features",
+  "path": "/features",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/forgot-password",
+  "path": "/forgot-password",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/help",
+  "path": "/help",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/help/search",
+  "path": "/help/search",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/legal/[org]/[kind]",
+  "path": "/legal/canary-leaks/refund",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/my-tickets",
+  "path": "/my-tickets",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/o",
+  "path": "/o",
+  "status": 200,
+  "redirectedTo": "/sign-in"
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]",
+  "path": "/o/lakeside-events",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/activity",
+  "path": "/o/lakeside-events/activity",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/agencies",
+  "path": "/o/lakeside-events/agencies",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "agency",
+  "pattern": "/o/[org]/agency",
+  "path": "/o/e2e-mutyz3e90c9ee7/agency",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/agency/billing",
+  "path": "/o/lakeside-events/agency/billing",
+  "status": 404
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/agency/campaigns",
+  "path": "/o/lakeside-events/agency/campaigns",
+  "status": 404
+ },
+ {
+  "app": "web",
+  "actor": "agency",
+  "pattern": "/o/[org]/agency/events",
+  "path": "/o/e2e-mutyz3e90c9ee7/agency/events",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/agency/library",
+  "path": "/o/lakeside-events/agency/library",
+  "status": 404
+ },
+ {
+  "app": "web",
+  "actor": "agency",
+  "pattern": "/o/[org]/agency/marketing",
+  "path": "/o/e2e-mutyz3e90c9ee7/agency/marketing",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "agency",
+  "pattern": "/o/[org]/agency/reports",
+  "path": "/o/e2e-mutyz3e90c9ee7/agency/reports",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/agency/team",
+  "path": "/o/lakeside-events/agency/team",
+  "status": 404
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/alerts",
+  "path": "/o/lakeside-events/alerts",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/alerts/settings",
+  "path": "/o/lakeside-events/alerts/settings",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/analytics",
+  "path": "/o/lakeside-events/analytics",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/analytics/alerts",
+  "path": "/o/lakeside-events/analytics/alerts",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/analytics/explore",
+  "path": "/o/lakeside-events/analytics/explore",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/analytics/reports",
+  "path": "/o/lakeside-events/analytics/reports",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/api-keys",
+  "path": "/o/lakeside-events/api-keys",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/api-keys/usage",
+  "path": "/o/lakeside-events/api-keys/usage",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/audiences",
+  "path": "/o/lakeside-events/audiences",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/audiences/duplicates",
+  "path": "/o/lakeside-events/audiences/duplicates",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/audiences/new",
+  "path": "/o/lakeside-events/audiences/new",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/audiences/people",
+  "path": "/o/lakeside-events/audiences/people",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/brand-kits",
+  "path": "/o/lakeside-events/brand-kits",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/campaigns",
+  "path": "/o/lakeside-events/campaigns",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/charity",
+  "path": "/o/lakeside-events/charity",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/command-center",
+  "path": "/o/lakeside-events/command-center",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/contacts/stats",
+  "path": "/o/lakeside-events/contacts/stats",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/content",
+  "path": "/o/lakeside-events/content",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/content/contact",
+  "path": "/o/lakeside-events/content/contact",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/content/new",
+  "path": "/o/lakeside-events/content/new",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/coupons",
+  "path": "/o/lakeside-events/coupons",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/disputes",
+  "path": "/o/lakeside-events/disputes",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/domains",
+  "path": "/o/lakeside-events/domains",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/access",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/access",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/analysis",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/analysis",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/analysis/bookings",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/analysis/bookings",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/analysis/finance",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/analysis/finance",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/assistance",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/assistance",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/attendees",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/attendees",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/attendees/import",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/attendees/import",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/badges",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/badges",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/badges/printing",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/badges/printing",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/cancel",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/cancel",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/ce-credits",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/ce-credits",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/command-center",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/command-center",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/command-center/tv",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/command-center/tv",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/content",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/content",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/copy",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/copy",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/dates",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/dates",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "wedding",
+  "pattern": "/o/[org]/e/[event]/day-of",
+  "path": "/o/rosewood-weddings/e/harper-and-theo/day-of",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/details",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/details",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/donations",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/donations",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/donations/matches",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/donations/matches",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/donations/paddle-raise",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/donations/paddle-raise",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/donations/paddle-raise/review",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/donations/paddle-raise/review",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/donations/paddle-raise/spot",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/donations/paddle-raise/spot",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/donations/paddles",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/donations/paddles",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/donations/pledges",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/donations/pledges",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/donations/receipts",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/donations/receipts",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/donations/reconciliation",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/donations/reconciliation",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/donations/report",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/donations/report",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/donations/screen",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/donations/screen",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/donations/screen/cards",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/donations/screen/cards",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/engagement",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/engagement",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/exhibitors",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/exhibitors",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/exhibitors/booths",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/exhibitors/booths",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/exhibitors/licenses",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/exhibitors/licenses",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/exhibitors/portal",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/exhibitors/portal",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "wedding",
+  "pattern": "/o/[org]/e/[event]/gallery",
+  "path": "/o/rosewood-weddings/e/harper-and-theo/gallery",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "wedding",
+  "pattern": "/o/[org]/e/[event]/gallery/slideshow",
+  "path": "/o/rosewood-weddings/e/harper-and-theo/gallery/slideshow",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "wedding",
+  "pattern": "/o/[org]/e/[event]/guests",
+  "path": "/o/rosewood-weddings/e/harper-and-theo/guests",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "wedding",
+  "pattern": "/o/[org]/e/[event]/guests/answers",
+  "path": "/o/rosewood-weddings/e/harper-and-theo/guests/answers",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "wedding",
+  "pattern": "/o/[org]/e/[event]/guests/collector",
+  "path": "/o/rosewood-weddings/e/harper-and-theo/guests/collector",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "wedding",
+  "pattern": "/o/[org]/e/[event]/guests/import",
+  "path": "/o/rosewood-weddings/e/harper-and-theo/guests/import",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "wedding",
+  "pattern": "/o/[org]/e/[event]/guests/invitations",
+  "path": "/o/rosewood-weddings/e/harper-and-theo/guests/invitations",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "wedding",
+  "pattern": "/o/[org]/e/[event]/guests/questions",
+  "path": "/o/rosewood-weddings/e/harper-and-theo/guests/questions",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "wedding",
+  "pattern": "/o/[org]/e/[event]/guests/rsvp",
+  "path": "/o/rosewood-weddings/e/harper-and-theo/guests/rsvp",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "wedding",
+  "pattern": "/o/[org]/e/[event]/guests/sub-events",
+  "path": "/o/rosewood-weddings/e/harper-and-theo/guests/sub-events",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/marketing",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/marketing",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/marketing/surveys",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/marketing/surveys",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/media",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/media",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/networking",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/networking",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/onsite",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/onsite",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/onsite/sessions",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/onsite/sessions",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/onsite/signals",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/onsite/signals",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/onsite/staff",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/onsite/staff",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/registration",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/registration",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/registration-form",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/registration-form",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/registration/applications",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/registration/applications",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/registration/enrollment",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/registration/enrollment",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/registration/invoices",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/registration/invoices",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/reviews",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/reviews",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "wedding",
+  "pattern": "/o/[org]/e/[event]/seat-finder",
+  "path": "/o/rosewood-weddings/e/harper-and-theo/seat-finder",
+  "status": 200,
+  "redirectedTo": "/o/rosewood-weddings/e/harper-and-theo/seating/finder"
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/seating",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/seating",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/seating/assign",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/seating/assign",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/seating/best-available",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/seating/best-available",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/seating/cards",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/seating/cards",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/seating/channels",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/seating/channels",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/seating/finder",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/seating/finder",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/seating/guests",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/seating/guests",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/seating/revisions",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/seating/revisions",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/seating/rules",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/seating/rules",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/seating/solver",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/seating/solver",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/sessions",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/sessions",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/sessions/import",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/sessions/import",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/setup-guide",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/setup-guide",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/speakers",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/speakers",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/speakers/cfp",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/speakers/cfp",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/speakers/cfp/reviewers",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/speakers/cfp/reviewers",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/speakers/cfp/settings",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/speakers/cfp/settings",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/speakers/changes",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/speakers/changes",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/speakers/tasks",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/speakers/tasks",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/sponsors",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/sponsors",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/sponsors/deliverables",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/sponsors/deliverables",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/sponsors/packages",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/sponsors/packages",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/tables-sponsors",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/tables-sponsors",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/team",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/team",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/tickets-orders",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/tickets-orders",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/tickets-orders/waitlists",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/tickets-orders/waitlists",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/tracked-links",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/tracked-links",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/e/[event]/virtual",
+  "path": "/o/lakeside-events/e/midwest-leadership-summit-2027/virtual",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "wedding",
+  "pattern": "/o/[org]/e/[event]/website",
+  "path": "/o/rosewood-weddings/e/harper-and-theo/website",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/emails",
+  "path": "/o/lakeside-events/emails",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/events/new",
+  "path": "/o/lakeside-events/events/new",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/events/new/guided",
+  "path": "/o/lakeside-events/events/new/guided",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/fees",
+  "path": "/o/lakeside-events/fees",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/finance",
+  "path": "/o/lakeside-events/finance",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "harbor",
+  "pattern": "/o/[org]/help-center",
+  "path": "/o/harbor-arts/help-center",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "harbor",
+  "pattern": "/o/[org]/help-center/new",
+  "path": "/o/harbor-arts/help-center/new",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/integrations",
+  "path": "/o/lakeside-events/integrations",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/integrations/errors",
+  "path": "/o/lakeside-events/integrations/errors",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/integrations/zapier",
+  "path": "/o/lakeside-events/integrations/zapier",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/journeys",
+  "path": "/o/lakeside-events/journeys",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/journeys/new",
+  "path": "/o/lakeside-events/journeys/new",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/macros",
+  "path": "/o/lakeside-events/macros",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "harbor",
+  "pattern": "/o/[org]/marketing",
+  "path": "/o/harbor-arts/marketing",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/marketing-analytics",
+  "path": "/o/lakeside-events/marketing-analytics",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/marketing-analytics/campaign",
+  "path": "/o/lakeside-events/marketing-analytics/campaign",
+  "status": 404
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/marketing-analytics/deliverability",
+  "path": "/o/lakeside-events/marketing-analytics/deliverability",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "harbor",
+  "pattern": "/o/[org]/marketing/new",
+  "path": "/o/harbor-arts/marketing/new",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/media",
+  "path": "/o/lakeside-events/media",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/messages",
+  "path": "/o/lakeside-events/messages",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/messaging",
+  "path": "/o/lakeside-events/messaging",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/money",
+  "path": "/o/lakeside-events/money",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/notifications",
+  "path": "/o/lakeside-events/notifications",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/notifications/preferences",
+  "path": "/o/lakeside-events/notifications/preferences",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/payouts",
+  "path": "/o/lakeside-events/payouts",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/plan",
+  "path": "/o/lakeside-events/plan",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/plan/usage",
+  "path": "/o/lakeside-events/plan/usage",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/privacy",
+  "path": "/o/lakeside-events/privacy",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/promotions",
+  "path": "/o/lakeside-events/promotions",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/refund-requests",
+  "path": "/o/lakeside-events/refund-requests",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/sales-by-event",
+  "path": "/o/lakeside-events/sales-by-event",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/sandboxes",
+  "path": "/o/lakeside-events/sandboxes",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/search",
+  "path": "/o/lakeside-events/search",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/seat-poster/[event]",
+  "path": "/o/lakeside-events/seat-poster/midwest-leadership-summit-2027",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/seating-library",
+  "path": "/o/lakeside-events/seating-library",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/sending",
+  "path": "/o/lakeside-events/sending",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/series",
+  "path": "/o/lakeside-events/series",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/settings",
+  "path": "/o/lakeside-events/settings",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/settings/categories",
+  "path": "/o/lakeside-events/settings/categories",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/site",
+  "path": "/o/lakeside-events/site",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/sso",
+  "path": "/o/lakeside-events/sso",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/storage",
+  "path": "/o/lakeside-events/storage",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/team",
+  "path": "/o/lakeside-events/team",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/templates",
+  "path": "/o/lakeside-events/templates",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/templates/new",
+  "path": "/o/lakeside-events/templates/new",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/venue-portal",
+  "path": "/o/lakeside-events/venue-portal",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/venues",
+  "path": "/o/lakeside-events/venues",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/webhooks",
+  "path": "/o/lakeside-events/webhooks",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "owner",
+  "pattern": "/o/[org]/webhooks/portal",
+  "path": "/o/lakeside-events/webhooks/portal",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/organizers/[slug]",
+  "path": "/organizers/lakeside-events",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/organizers/[slug]/blogs",
+  "path": "/organizers/lakeside-events/blogs",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/organizers/[slug]/contact",
+  "path": "/organizers/lakeside-events/contact",
+  "status": 404
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/portal/[event]",
+  "path": "/portal/midwest-leadership-summit-2027",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/pricing",
+  "path": "/pricing",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/privacy",
+  "path": "/privacy",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/privacy-request/[org]",
+  "path": "/privacy-request/lakeside-events",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/reset-password",
+  "path": "/reset-password",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/scan",
+  "path": "/scan",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/scan/leads",
+  "path": "/scan/leads",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/search",
+  "path": "/search",
+  "status": 404
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/series/[slug]",
+  "path": "/series/canary-leaks-tour",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/sign-in",
+  "path": "/sign-in",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/sign-in/link",
+  "path": "/sign-in/link",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/sign-in/sso",
+  "path": "/sign-in/sso",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/signup",
+  "path": "/signup",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/status",
+  "path": "/status",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/sub-processors",
+  "path": "/sub-processors",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/t/[org]",
+  "path": "/t/lakeside-events",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/t/[org]/blogs",
+  "path": "/t/lakeside-events/blogs",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/t/[org]/contact",
+  "path": "/t/lakeside-events/contact",
+  "status": 404
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/t/[org]/events/[slug]",
+  "path": "/t/lakeside-events/events/lakeside-open-house",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/t/[org]/my-tickets",
+  "path": "/t/lakeside-events/my-tickets",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/t/[org]/tickets",
+  "path": "/t/lakeside-events/tickets",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/venues",
+  "path": "/venues",
+  "status": 200
+ },
+ {
+  "app": "web",
+  "actor": "visitor",
+  "pattern": "/w/[code]",
+  "path": "/w/TR2AZ6NT",
+  "status": 200
+ }
+]

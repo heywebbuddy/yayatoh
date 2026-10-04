@@ -57,7 +57,10 @@ export default async function SeatFinderPosterPage({
       className="mx-auto flex min-h-dvh max-w-[190mm] flex-col items-center gap-6 bg-surface px-4 py-10 text-center text-ink print:min-h-0 print:py-0"
     >
       <div className="flex w-full flex-wrap items-center justify-between gap-3 print:hidden">
-        <Link href={`/events/${ev.slug}/seat-finder`} className="text-caption text-ink-2 underline">
+        <Link
+          href={`/events/${ev.slug}/seat-finder`}
+          className="inline-flex min-h-6 items-center text-caption text-ink-2 underline"
+        >
           {t('back')}
         </Link>
         <PrintButton label={t('print')} />

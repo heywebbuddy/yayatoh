@@ -90,6 +90,7 @@ export function EmptyState({
   action,
   icon,
   className,
+  headingLevel,
 }: {
   title: ReactNode;
   description?: ReactNode;
@@ -97,7 +98,10 @@ export function EmptyState({
   /** A 24 px line icon, shown in a soft violet tile. */
   icon?: ReactNode;
   className?: string;
+  /** Renders the title as that heading level (use 1 when the state is the whole page, e.g. a 404). */
+  headingLevel?: 1 | 2 | 3 | 4;
 }) {
+  const Title = headingLevel ? (`h${headingLevel}` as const) : 'p';
   return (
     <div
       className={cx(
@@ -113,7 +117,7 @@ export function EmptyState({
           {icon}
         </span>
       ) : null}
-      <p className="m-0 text-card text-ink">{title}</p>
+      <Title className="m-0 text-card text-ink">{title}</Title>
       {description ? <p className="m-0 max-w-md text-body text-ink-2">{description}</p> : null}
       {action ? <div className="mt-1 flex flex-wrap justify-center gap-2">{action}</div> : null}
     </div>
