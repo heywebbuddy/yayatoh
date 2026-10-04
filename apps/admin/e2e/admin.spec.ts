@@ -83,8 +83,8 @@ test('staff pause ticket sales for a tenant; the public page shows it at once; r
   await expectAccessible(page);
   await page.getByLabel('Search by name or address').fill('lakeside');
   await page.getByRole('button', { name: 'Search' }).click();
-  await page.getByRole('link', { name: 'Lakeside Events' }).click();
-  await expect(page.getByRole('heading', { name: 'Lakeside Events' })).toBeVisible();
+  await page.getByRole('link', { name: 'Lakeside Events', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Lakeside Events', exact: true })).toBeVisible();
   await expectAccessible(page);
 
   const sales = page.locator('form').filter({ hasText: 'Ticket sales' });
@@ -163,7 +163,7 @@ test('staff see a tenant dispute and open its evidence packet', async ({ page, b
   await signIn(page, STAFF);
   await page.getByLabel('Search by name or address').fill('lakeside');
   await page.getByRole('button', { name: 'Search' }).click();
-  await page.getByRole('link', { name: 'Lakeside Events' }).click();
+  await page.getByRole('link', { name: 'Lakeside Events', exact: true }).click();
   const disputes = page.getByRole('region', { name: 'Disputes' });
   const item = disputes.getByRole('listitem').filter({ hasText: 'product_not_received' }).first();
   await expect(item).toBeVisible();
@@ -193,7 +193,7 @@ test('staff read the commission report (a fee booked on a sale shows up) and /v1
 
   // A $1.00 fixed fee on Lakeside's USD sales while the organizer records a box-office sale.
   await page.goto('/?q=lakeside');
-  await page.getByRole('link', { name: 'Lakeside Events' }).click();
+  await page.getByRole('link', { name: 'Lakeside Events', exact: true }).click();
   const fees = page.locator('form').filter({ has: page.getByLabel('Percent (basis points)') });
   const setFee = async (fixed: string, reason: string) => {
     await fees.getByLabel('Currency').fill('USD');
@@ -227,7 +227,7 @@ test('staff read the commission report (a fee booked on a sale shows up) and /v1
     await web.close();
   } finally {
     await page.goto('/?q=lakeside');
-    await page.getByRole('link', { name: 'Lakeside Events' }).click();
+    await page.getByRole('link', { name: 'Lakeside Events', exact: true }).click();
     await setFee('0', 'e2e: reset after the commission report');
   }
 
@@ -415,7 +415,7 @@ test('staff see a tenant’s reconciliation differences and resolve one with a n
   await signIn(page, STAFF);
   await page.getByLabel('Search by name or address').fill('lakeside');
   await page.getByRole('button', { name: 'Search' }).click();
-  await page.getByRole('link', { name: 'Lakeside Events' }).click();
+  await page.getByRole('link', { name: 'Lakeside Events', exact: true }).click();
   const section = page.getByRole('region', { name: 'Reconciliation' });
   const item = section.getByRole('listitem').filter({ hasText: `order:drift-${tag}` });
   await expect(item.getByText('Not in the ledger')).toBeVisible();
@@ -437,8 +437,8 @@ test('staff act as a member for an hour: reason required, banner everywhere, mon
   await signIn(page, STAFF);
   await page.getByLabel('Search by name or address').fill('lakeside');
   await page.getByRole('button', { name: 'Search' }).click();
-  await page.getByRole('link', { name: 'Lakeside Events' }).click();
-  await expect(page.getByRole('heading', { name: 'Lakeside Events' })).toBeVisible();
+  await page.getByRole('link', { name: 'Lakeside Events', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Lakeside Events', exact: true })).toBeVisible();
   const tenantUrl = page.url();
   const section = page.getByRole('region', { name: 'Act as a member' });
   await expect(section.getByText(/at most one hour/)).toBeVisible();
@@ -569,8 +569,8 @@ test('an open impersonation can be ended from the staff console too', async ({ p
   await signIn(page, STAFF);
   await page.getByLabel('Search by name or address').fill('lakeside');
   await page.getByRole('button', { name: 'Search' }).click();
-  await page.getByRole('link', { name: 'Lakeside Events' }).click();
-  await expect(page.getByRole('heading', { name: 'Lakeside Events' })).toBeVisible();
+  await page.getByRole('link', { name: 'Lakeside Events', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Lakeside Events', exact: true })).toBeVisible();
   const tenantUrl = page.url();
   const section = page.getByRole('region', { name: 'Act as a member' });
   await pickOption(section.getByLabel('Member'), { label: 'Jordan Lee (jordan@lakeside.test) · viewer' });
