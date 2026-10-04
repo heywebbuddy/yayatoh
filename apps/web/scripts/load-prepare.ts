@@ -4,7 +4,7 @@ import { closePools, withTenant } from '@yayatoh/db';
 import { createEventCommand, getEventBySlugQuery, transitionEventCommand } from '@yayatoh/events';
 import { createCtx, executeCommand, executeQuery } from '@yayatoh/kernel';
 import { setCheckoutSettingsCommand, startCheckoutCommand } from '@yayatoh/orders';
-import { resolveOrgSlug } from '@yayatoh/tenancy';
+import { createApiKeyCommand, resolveOrgSlug } from '@yayatoh/tenancy';
 import { createTicketTypeCommand, listTicketTypesQuery, ticketsForOrderTx } from '@yayatoh/ticketing';
 import { getAuth } from '../src/server/auth.ts';
 import { ports } from '../src/server/ports.ts';
@@ -72,11 +72,38 @@ for (let i = 0; codes.length < TICKETS; i++) {
   codes.push(...issued.map((t) => t.shortCode));
 }
 const device = await executeCommand(enrollDeviceCommand, { label: `k6 ${Date.now()}` }, ctx, ports);
+// M6.x: /v1 keys for `api-limits.js` (a live key and a test key, read-only scopes, fresh each run).
+const stepUp = createCtx({
+  orgId: org.orgId,
+  actor: { type: 'user', userId: owner.user.id },
+  stepUpAt: new Date(),
+});
+const liveKey = await executeCommand(
+  createApiKeyCommand,
+  { name: `k6 live ${Date.now()}`, scopes: ['org:read'] },
+  stepUp,
+  ports,
+);
+const testKey = await executeCommand(
+  createApiKeyCommand,
+  { name: `k6 test ${Date.now()}`, scopes: ['org:read'], mode: 'test' },
+  stepUp,
+  ports,
+);
 mkdirSync(new URL('../../../k6/.data/', import.meta.url), { recursive: true });
 writeFileSync(
   new URL('../../../k6/.data/load.json', import.meta.url),
   JSON.stringify(
-    { eventSlug: slug, eventId: event.id, ticketTypeId: pass.id, deviceToken: device.token, codes },
+    {
+      eventSlug: slug,
+      eventId: event.id,
+      ticketTypeId: pass.id,
+      deviceToken: device.token,
+      orgSlug: 'lakeside-events',
+      liveKey: liveKey.key,
+      testKey: testKey.key,
+      codes,
+    },
     null,
     2,
   ),
