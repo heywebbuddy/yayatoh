@@ -247,7 +247,10 @@ test.describe('kiosk self-print (M5.5c)', () => {
     await expect(k.getByText(cy.name)).toHaveCount(0);
 
     // Bo has no ticket with them: the email code, keyboard only, with its validation.
+    // The welcome screen puts focus in the scan box when it returns: focus the link after that.
+    await expect(k.getByRole('textbox', { name: 'Scan your ticket or type its code' })).toBeFocused();
     await useEmail.focus();
+    await expect(useEmail).toBeFocused();
     await k.keyboard.press('Enter');
     const email = k.getByRole('textbox', { name: 'Your email' });
     await expect(email).toBeFocused();
