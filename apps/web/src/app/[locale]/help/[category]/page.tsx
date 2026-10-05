@@ -48,9 +48,9 @@ export default async function HelpCategory({ params }: Props) {
   return (
     <HelpShell locale={locale} crumbs={[{ label: t('title'), href: '/help' }, { label: c.title }]}>
       <header className="flex flex-col gap-2" lang={c.locale === locale ? undefined : c.locale}>
-        <p className="text-caption text-zinc-500">{t(`audience.${c.audience}`)}</p>
-        <h1 className="text-[40px] leading-tight font-light tracking-[-0.04em] break-words">{c.title}</h1>
-        {c.description ? <p className="text-[17px] text-zinc-600">{c.description}</p> : null}
+        <p className="text-caption text-ink-2">{t(`audience.${c.audience}`)}</p>
+        <h1 className="text-[40px] leading-tight font-extrabold tracking-[-0.04em] break-words">{c.title}</h1>
+        {c.description ? <p className="text-[17px] text-ink-2">{c.description}</p> : null}
       </header>
       <ArticleList articles={found.articles} label={t('articlesIn', { category: c.title })} locale={locale} />
     </HelpShell>

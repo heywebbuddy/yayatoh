@@ -1,0 +1,55 @@
+import type { ConnectorDefinition } from '../sdk/connector.ts';
+import { demoConnector } from './demo.ts';
+import { eventbriteConnector } from './eventbrite/index.ts';
+import { googleCalendarConnector, googleCalendarPersonalConnector } from './google-calendar.ts';
+import { googleSheetsConnector } from './google-sheets/index.ts';
+import { hubspotConnector } from './hubspot/index.ts';
+import { klaviyoConnector } from './klaviyo/index.ts';
+import { mailchimpConnector } from './mailchimp/index.ts';
+import { quickbooksConnector } from './quickbooks.ts';
+import { salesforceConnector } from './salesforce/index.ts';
+import { slackConnector } from './slack.ts';
+import { xeroConnector } from './xero.ts';
+import { zoomConnector } from './zoom.ts';
+
+/**
+ * Every connector (M6.4a). M6.4b–d append theirs here (Eventbrite, Google Sheets, Zapier, Slack,
+ * Mailchimp, HubSpot, Klaviyo), in the order of decision P6-4.
+ */
+export const CONNECTORS: readonly ConnectorDefinition[] = [
+  demoConnector,
+  // M6.4b
+  eventbriteConnector,
+  googleSheetsConnector,
+  // M6.4c
+  slackConnector,
+  // M6.5b.
+  salesforceConnector,
+  // M6.5c: calendar push of sessions (the org's calendar) and of personal schedules.
+  googleCalendarConnector,
+  googleCalendarPersonalConnector,
+  // M6.9b: Zoom webinars (registrants out, attendance reports in) for virtual sessions and CE credits.
+  zoomConnector,
+  // M6.5d: accounting (daily summary journals).
+  quickbooksConnector,
+  xeroConnector,
+  // M6.4d (P6-4 order: Mailchimp and HubSpot, then Klaviyo).
+  mailchimpConnector,
+  hubspotConnector,
+  klaviyoConnector,
+];
+
+export function connectorByKey(key: string): ConnectorDefinition | null {
+  return CONNECTORS.find((c) => c.key === key) ?? null;
+}
+
+/**
+ * The connectors this deployment offers an org's console: fake-only ones only where the auth port
+ * is the fake, and never a registrant's personal one (M6.5c; made from their schedule page).
+ */
+export function offeredConnectors(provider: 'nango' | 'fake' | null): ConnectorDefinition[] {
+  if (!provider) return [];
+  return CONNECTORS.filter(
+    (c) => c.audience !== 'registrant' && (c.availability === 'general' || provider === 'fake'),
+  );
+}

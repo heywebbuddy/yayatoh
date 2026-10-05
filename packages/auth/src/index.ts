@@ -117,6 +117,13 @@ export {
   unlinkSocialAccount,
 } from './social.ts';
 export {
+  findOrCreateSsoAccount,
+  isPlatformStaff,
+  revokeAllSessions,
+  type SsoAccount,
+  sessionSsoOrg,
+} from './sso.ts';
+export {
   deviceLabel,
   isTrustedDevice,
   listTrustedDevices,
@@ -146,8 +153,12 @@ export {
 export {
   getUserLocale,
   getUsersByIds,
+  getUserTheme,
   setUserLocale,
+  setUserTheme,
   USER_LOCALES,
+  USER_THEMES,
   type UserLocale,
   type UserSummary,
+  type UserTheme,
 } from './users.ts';

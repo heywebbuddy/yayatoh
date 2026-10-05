@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
-import { expectAccessible, signIn } from './helpers.ts';
+import { expectAccessible, expectPicked, pickOption, signIn } from './helpers.ts';
 
 const VIEWER = 'jordan@lakeside.test';
 const ORG = '/o/lakeside-events';
@@ -50,7 +50,7 @@ test.describe('event creation wizard and readiness (M1.4f)', () => {
     await expectAccessible(page);
     await page.getByLabel('Event name', { exact: true }).fill(`Wizard Summit ${s}`);
     await page.getByLabel('Tagline (optional)').fill('Two days of ideas.');
-    await page.getByLabel('Event type').selectOption('conference');
+    await pickOption(page.getByLabel('Event type'), 'conference');
     await page.getByRole('button', { name: 'Next' }).click();
 
     // Step 2: focus moves to its heading; both times required; the end after the start.
@@ -62,7 +62,7 @@ test.describe('event creation wizard and readiness (M1.4f)', () => {
     await page.getByRole('button', { name: 'Next' }).click();
     await expect(page.getByText('Enter when the event starts.')).toBeVisible();
     await expect(page.getByText('Enter when the event ends.')).toBeVisible();
-    await page.getByLabel('Time zone').selectOption(TZ);
+    await pickOption(page.getByLabel('Time zone'), TZ);
     await page.getByLabel('Starts', { exact: true }).fill(at(30, '09:00'));
     await page.getByLabel('Ends', { exact: true }).fill(at(30, '08:00'));
     await page.getByRole('button', { name: 'Next' }).click();
@@ -76,10 +76,10 @@ test.describe('event creation wizard and readiness (M1.4f)', () => {
     await expect(stepHeading(page, 'Basics')).toBeFocused();
     await expect(page.getByLabel('Event name', { exact: true })).toHaveValue(`Wizard Summit ${s}`);
     await expect(page.getByLabel('Tagline (optional)')).toHaveValue('Two days of ideas.');
-    await expect(page.getByLabel('Event type')).toHaveValue('conference');
+    await expectPicked(page.getByLabel('Event type'), 'conference');
     await page.getByRole('button', { name: 'Next' }).click();
-    await expect(page.getByLabel('Starts', { exact: true })).toHaveValue(at(30, '09:00'));
-    await expect(page.getByLabel('Ends', { exact: true })).toHaveValue(at(31, '17:00'));
+    await expect(page.getByLabel('Starts', { exact: true })).toHaveAttribute('data-value', at(30, '09:00'));
+    await expect(page.getByLabel('Ends', { exact: true })).toHaveAttribute('data-value', at(31, '17:00'));
     await expect(page.getByRole('radio', { name: 'Online event' })).toBeChecked();
     await page.getByRole('button', { name: 'Next' }).click();
 

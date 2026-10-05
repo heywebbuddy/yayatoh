@@ -40,7 +40,14 @@ export default async function SeatingRulesPage({
   return (
     <>
       <PageHeader title={t('rules.title')} description={t('rules.description')} />
-      <SeatingTabs base={base} active="rules" finder={data.modules.has('seat_finder')} />
+      <SeatingTabs
+        base={base}
+        active="rules"
+        finder={data.modules.has('seat_finder')}
+        guests={data.modules.has('guests')}
+        selection={data.modules.has('advanced_seating')}
+        solver={data.modules.has('guests') && data.modules.has('ai_seating')}
+      />
       {!hasPlan ? (
         <EmptyState
           title={t('rules.noPlan')}
@@ -63,10 +70,15 @@ export default async function SeatingRulesPage({
                         date: when(adaReleaseAt(r.params.releaseDays, ev.startsAt)),
                         severity: t(`rules.severityShort.${r.severity}`),
                       })
-                    : t('rules.summary.cap', {
-                        max: r.params.max,
-                        severity: t(`rules.severityShort.${r.severity}`),
-                      })}
+                    : r.kind === 'ada_companion'
+                      ? t('rules.summary.companion', {
+                          max: r.params.maxPerAccessible,
+                          severity: t(`rules.severityShort.${r.severity}`),
+                        })
+                      : t('rules.summary.cap', {
+                          max: r.params.max,
+                          severity: t(`rules.severityShort.${r.severity}`),
+                        })}
                 </li>
               ))}
             </ul>
@@ -77,10 +89,14 @@ export default async function SeatingRulesPage({
             </h2>
             {canWrite ? (
               <Card>
-                <SeatingRulesForm rules={rules} action={seatingRulesAction.bind(null, org, event)} />
+                <SeatingRulesForm
+                  rules={rules}
+                  companions={data.modules.has('advanced_seating')}
+                  action={seatingRulesAction.bind(null, org, event)}
+                />
               </Card>
             ) : (
-              <p className="text-body text-zinc-600">{t('rules.readOnly')}</p>
+              <p className="text-body text-ink-2">{t('rules.readOnly')}</p>
             )}
           </section>
         </>

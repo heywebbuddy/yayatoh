@@ -15,8 +15,9 @@ permissions:
 
 env:
   # next build type-checks the whole web app in one process; the default ~2 GB heap ran out
-  # once M1.4e–M1.6e landed. Runners have 16 GB.
-  NODE_OPTIONS: --max-old-space-size=6144
+  # once M1.4e–M1.6e landed. Runners have 16 GB. Batch 3m: the worker's tsc needs about 6.6 GB
+  # (every module it composes) and ran out at 6 GB.
+  NODE_OPTIONS: --max-old-space-size=8192
 
 jobs:
   checks:
@@ -32,7 +33,9 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
       - run: pnpm check:modules
-      - run: pnpm typecheck
+      # One package at a time: several tsc processes at 8 GB each OOM-kill the
+      # 16 GB runner (exit 137); api-v1 alone needs about 7.8 GB.
+      - run: pnpm typecheck --concurrency=1
       - run: pnpm test
       - name: OpenAPI spec is up to date
         run: pnpm contracts:check
@@ -87,14 +90,19 @@ jobs:
     runs-on: ubuntu-latest
     services:
       postgres:
-        image: postgres:18
+        image: pgvector/pgvector:pg18
         env:
           POSTGRES_PASSWORD: postgres
         ports: ["5432:5432"]
         options: >-
           --health-cmd "pg_isready -U postgres" --health-interval 2s --health-retries 30
+      gotenberg:
+        # Badge batch PDFs (M5.5a: golden PDFs and the 1,000-badge job); same pinned image.
+        image: gotenberg/gotenberg:8.37.0
+        ports: ["3300:3000"]
     env:
       ADMIN_DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
+      GOTENBERG_URL: http://localhost:3300
     steps:
       - uses: actions/checkout@v5
       - uses: pnpm/action-setup@v4
@@ -120,18 +128,20 @@ jobs:
 
   e2e:
     # Sharded: the suite outgrew one 20-minute runner (M1.11), then three (M1.2c–M2.2b). Each shard
-    # gets its own database and seed, so shards never share state. 30 minutes since batch 3b
-    # (M3.x): shard 6 also runs the staff console suite and passed 20 minutes.
-    name: e2e + axe · shard ${{ matrix.shard }}/6
+    # gets its own database and seed, so shards never share state. Twelve shards since the Phase 3–6
+    # merge to main: six shards of ~550 tests ran about 10 tests a minute and hit the 30-minute limit
+    # with no failures, so ~275 tests per shard and a 60-minute limit (shard 6 also runs the staff
+    # console suite, shard 5 the Lighthouse audits).
+    name: e2e + axe · shard ${{ matrix.shard }}/12
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     strategy:
       fail-fast: false
       matrix:
-        shard: [1, 2, 3, 4, 5, 6]
+        shard: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
     services:
       postgres:
-        image: postgres:18
+        image: pgvector/pgvector:pg18
         env:
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: yayatoh
@@ -180,7 +190,12 @@ jobs:
           pnpm db:bootstrap && pnpm db:migrate && pnpm seed
       - run: pnpm --filter @yayatoh/web build
       - run: pnpm --filter @yayatoh/web exec playwright install --with-deps chromium
-      - run: pnpm --filter @yayatoh/web exec playwright test --shard=${{ matrix.shard }}/6
+      - run: pnpm --filter @yayatoh/web exec playwright test --shard=${{ matrix.shard }}/12
+      # M4.7a: Lighthouse mobile audits (guest hub), alone on the runner after the shard's suite: they
+      # time the CPU, so tests running beside them would skew the score.
+      - name: Lighthouse mobile audits
+        if: matrix.shard == 5
+        run: pnpm --filter @yayatoh/web e2e:lighthouse
       # Staff console (M1.3e): after the web tests on the same runner, because it pauses checkout
       # on a seed org of that runner's database.
       - name: Staff console e2e
@@ -196,6 +211,7 @@ jobs:
           path: |
             apps/web/playwright-report
             apps/web/test-results
+            apps/web/e2e-results
             apps/admin/playwright-report
             apps/admin/test-results
           retention-days: 14
@@ -213,6 +229,43 @@ jobs:
             echo "::error::e2e shards: ${{ needs.e2e.result }}"; exit 1
           fi
 
+  sdk-npm:
+    # M6.3b: @yayatoh/sdk as npm would ship it. A dry run only: the real publish needs the owner's
+    # npm token (owner inbox), and then runs the same build with `npm publish`.
+    name: SDK npm package (publish dry run)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @yayatoh/sdk generate:check
+      - name: Build and publish (dry run, no token)
+        run: pnpm --filter @yayatoh/sdk publish:dry-run
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sdk-npm
+          path: packages/sdk/dist
+          retention-days: 14
+
+  sdk-mobile:
+    # M6.3b (P6-3): the Swift and Kotlin /v1 clients, generated with openapi-generator as build
+    # artifacts. Published with the mobile build (roadmap §8.3), not now.
+    name: SDK Swift + Kotlin clients (generated, not published)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Generate (pinned openapi-generator image)
+        run: bash packages/sdk/scripts/generate-mobile.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sdk-mobile
+          path: packages/sdk/mobile/out
+          retention-days: 14
+
   openapi-breaking:
     name: oasdiff (/v1 additive only)
     if: github.event_name == 'pull_request'
@@ -225,11 +278,16 @@ jobs:
         run: |
           git show "origin/${{ github.base_ref }}:apps/api/openapi.json" > .oasdiff-base.json 2>/dev/null \
             || echo '{"openapi":"3.1.0","info":{"title":"base","version":"0"},"paths":{}}' > .oasdiff-base.json
-      - uses: oasdiff/oasdiff-action/breaking@v0.0.21
-        with:
-          base: .oasdiff-base.json
-          revision: apps/api/openapi.json
-          fail-on: ERR
+      # Pinned oasdiff CLI so the owner-accepted findings files can be passed
+      # (docs/decisions.md, 2026-10-05). Everything not listed there still fails.
+      - name: Install oasdiff
+        run: go install github.com/oasdiff/oasdiff@v1.33.0
+      - name: Breaking changes against the base branch
+        run: |
+          "$(go env GOPATH)/bin/oasdiff" breaking .oasdiff-base.json apps/api/openapi.json \
+            --fail-on ERR \
+            --err-ignore apps/api/oasdiff/accepted-errors.txt \
+            --warn-ignore apps/api/oasdiff/accepted-warnings.txt
 
   secrets:
     name: gitleaks

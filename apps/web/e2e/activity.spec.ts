@@ -1,6 +1,14 @@
 import { readFileSync } from 'node:fs';
 import { expect, type Page, test } from '@playwright/test';
-import { expectAccessible, OWNER, signIn, WEDDING_OWNER } from './helpers.ts';
+import {
+  expectAccessible,
+  expectPicked,
+  OWNER,
+  pickOption,
+  signIn,
+  stepOption,
+  WEDDING_OWNER,
+} from './helpers.ts';
 
 /**
  * M1.14b Settings → Activity: the org's audit log for owners and admins, with the hash-chain
@@ -44,8 +52,8 @@ test.describe('Activity (audit log)', () => {
     await signIn(page, WEDDING_OWNER);
     await saveBrand(page, '#2e4d7a');
     await page.goto(`${ROSEWOOD}/activity`);
-    await page.getByLabel('What').selectOption('organization.update');
-    await page.getByLabel('Who').selectOption({ label: 'Maya Chen' });
+    await pickOption(page.getByLabel('What'), 'organization.update');
+    await pickOption(page.getByLabel('Who'), { label: 'Maya Chen' });
     await page.getByRole('button', { name: 'Filter' }).click();
     await expect(page).toHaveURL(/action=organization\.update/);
     const rows = page.getByRole('table', { name: 'Activity log, newest first' }).getByRole('row');
@@ -54,7 +62,7 @@ test.describe('Activity (audit log)', () => {
     for (const text of (await rows.allInnerTexts()).slice(1)) expect(text).toContain('Maya Chen');
     // Survives a reload (the filters live in the URL).
     await page.reload();
-    await expect(page.getByLabel('What')).toHaveValue('organization.update');
+    await expectPicked(page.getByLabel('What'), 'organization.update');
 
     // A date range in the future: nothing matches.
     await page.getByLabel('From').fill('2099-01-01');
@@ -109,8 +117,7 @@ test.describe('Activity (audit log)', () => {
     await signIn(page, WEDDING_OWNER);
     await page.goto(`${ROSEWOOD}/activity`);
     // Choose an action with the arrow keys, then Tab (through the date fields) to Filter.
-    await page.getByLabel('What').focus();
-    await page.keyboard.press('ArrowDown');
+    await stepOption(page.getByLabel('What'));
     const filter = page.getByRole('button', { name: 'Filter' });
     for (let i = 0; i < 12 && !(await filter.evaluate((el) => el === document.activeElement)); i++)
       await page.keyboard.press('Tab');

@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, Input } from '@yayatoh/ui';
+import { Alert, Button, Input, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 
 import type { ActionState } from '@/app/[locale]/o/[org]/(org)/team/actions.ts';
@@ -39,21 +39,16 @@ export function InviteForm({
         <Input name="email" type="email" required autoComplete="off" label={t('team.inviteEmail')} />
       </div>
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="invite-role" className="text-caption text-zinc-600">
+        <label htmlFor="invite-role" className="text-[13px] font-bold text-ink">
           {t('team.role')}
         </label>
-        <select
-          id="invite-role"
-          name="role"
-          defaultValue={defaultRole}
-          className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
-        >
+        <Select id="invite-role" name="role" defaultValue={defaultRole} className="field">
           {roles.map((r) => (
             <option key={r} value={r}>
               {t(`${labels}.${r}`)}
             </option>
           ))}
-        </select>
+        </Select>
       </div>
       <Button type="submit" disabled={pending}>
         {t('team.invite')}

@@ -1,3 +1,4 @@
+import { backfillOrgNow, catchUpWarehouse, postgresWarehouse } from '@yayatoh/analytics';
 import { devPersonaTotpSecret, secretKey, totp } from '@yayatoh/auth/totp';
 import {
   createHelpArticleCommand,
@@ -419,6 +420,9 @@ for (const d of DEMO_EVENTS) {
     if (found) {
       await catchUpMetrics(found.orgId);
       await rebuildOrgMetrics(found.orgId);
+      // M6.2a: the analytics warehouse (outbox, then a backfill for the rows seeded directly).
+      await catchUpWarehouse(found.orgId);
+      await backfillOrgNow(found.orgId, postgresWarehouse);
     }
   }
 }

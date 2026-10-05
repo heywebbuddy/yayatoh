@@ -33,22 +33,22 @@ export async function OrderReview({
       </h2>
       {review ? (
         <Card className="flex flex-col gap-2">
-          <p className="text-caption text-zinc-600">{t('yours')}</p>
+          <p className="text-caption text-ink-2">{t('yours')}</p>
           <Stars rating={review.rating} label={t('ratingLabel', { rating: review.rating })} />
           {review.body ? <p className="whitespace-pre-line text-body">{review.body}</p> : null}
-          {review.status === 'hidden' ? <p className="text-caption text-zinc-600">{t('hidden')}</p> : null}
+          {review.status === 'hidden' ? <p className="text-caption text-ink-2">{t('hidden')}</p> : null}
         </Card>
       ) : e.ok ? (
         <Card className="flex flex-col gap-3">
-          <p className="text-body text-zinc-600">{t('invite', { until: when.format(e.closesAt) })}</p>
+          <p className="text-body text-ink-2">{t('invite', { until: when.format(e.closesAt) })}</p>
           <ReviewForm action={submitReviewAction.bind(null, token)} />
         </Card>
       ) : e.reason === 'not_ended' && e.opensAt ? (
-        <p className="text-body text-zinc-600">{t('opensAt', { date: when.format(e.opensAt) })}</p>
+        <p className="text-body text-ink-2">{t('opensAt', { date: when.format(e.opensAt) })}</p>
       ) : e.reason === 'window_closed' && e.closesAt ? (
-        <p className="text-body text-zinc-600">{t('closed', { date: when.format(e.closesAt) })}</p>
+        <p className="text-body text-ink-2">{t('closed', { date: when.format(e.closesAt) })}</p>
       ) : (
-        <p className="text-body text-zinc-600">{t('notHeld')}</p>
+        <p className="text-body text-ink-2">{t('notHeld')}</p>
       )}
     </section>
   );

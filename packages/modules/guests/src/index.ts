@@ -1,3 +1,39 @@
+// M4.1f: the contact collector, invitations by email and text, and RSVP reminder delivery.
+export {
+  approveSubmissionCommand,
+  CollectorSettingsDto,
+  CollectorSubmissionDto,
+  collectorMergePreviewQuery,
+  collectorQueueQuery,
+  collectorSettingsQuery,
+  collectorTarget,
+  MAX_PENDING_SUBMISSIONS,
+  mergeSubmissionCommand,
+  publicCollectorQuery,
+  rejectSubmissionCommand,
+  SubmitContactInput,
+  setCollectorCommand,
+  submitContactCommand,
+} from './collector.ts';
+// M6.1a: contact merges move this module's references (ADR 0023).
+export { guestsContactOwner } from './contact-merge.ts';
+export { guestsDataSubjects } from './data-subject.ts';
+// M4.4b: names for the day of (check-in, kiosk, A–Z board).
+export { guestNamesTx } from './day-of.ts';
+export {
+  type CollectorMember,
+  type CollectorPayload,
+  type ContactValues,
+  isE164,
+  MAX_COLLECTOR_MEMBERS,
+  MERGE_FIELDS,
+  type MergeChoice,
+  type MergeField,
+  mergeContact,
+  newMembers,
+  normalizeEmail,
+  normalizePhone,
+} from './domain/collector.ts';
 export {
   changedFields,
   countGuests,
@@ -14,6 +50,101 @@ export {
   parseTags,
   plusOneRefusal,
 } from './domain/guests.ts';
+// M4.7a guest hub: one page per party (RSVP, program, seats, tickets) and its wallet pass port.
+export {
+  type GuestPassContent,
+  type GuestPassFacts,
+  guestPassContent,
+  guestPassSerial,
+  type HubTally,
+  hubTally,
+  nextProgramItem,
+  PASS_SEATS_MAX,
+  PASS_TEXT_MAX,
+} from './domain/hub.ts';
+export {
+  GUEST_IMPORT_FIELDS,
+  GUEST_IMPORT_REJECTIONS,
+  type GuestImportField,
+  type GuestImportRejection,
+  type GuestMapping,
+  guessGuestMapping,
+  parseSheetUrl,
+} from './domain/import.ts';
+// M4.1c: sub-events and invitations.
+export {
+  cellKey,
+  groupState,
+  type InviteGuest,
+  type InviteParty,
+  type InviteSubEvent,
+  type InviteTarget,
+  invitedBySubEvent,
+  inviteeOf,
+  isInvited,
+  moveInOrder,
+  partyMatches,
+  planInvitations,
+  subEventWindow,
+  targetGuests,
+  uninvitedWith,
+  windowInputs,
+} from './domain/invitations.ts';
+export {
+  DEFAULT_INVITE_COPY,
+  defaultInviteCopy,
+  fillInvite,
+  INVITE_LOCALES,
+  type InviteCopy,
+  type InviteLocale,
+  isInviteLocale,
+  MESSAGE_MAX as INVITE_MESSAGE_MAX,
+  SMS_MAX as INVITE_SMS_MAX,
+  SUBJECT_MAX as INVITE_SUBJECT_MAX,
+} from './domain/invite-copy.ts';
+// M4.1d: the RSVP flow (party link, QR, name + PIN, household answers, deadline, host tools).
+export {
+  checkHouseholdAnswers,
+  LOOKUP_ALPHABET,
+  LOOKUP_CODE_LENGTH,
+  lookupCodeFrom,
+  normalizeLookupCode,
+  normalizePin,
+  type PlusOneName,
+  participationRsvp,
+  partyRsvpState,
+  type RsvpAnswer,
+  type RsvpGuest,
+  type RsvpRefusal,
+  rsvpOpen,
+  type SubEventTally,
+  strictFullName,
+  strictName,
+  tally,
+} from './domain/rsvp.ts';
+// M4.5a guest website: blocks, the password gate, the public page.
+export {
+  emptyContent,
+  MAX_BLOCK_ITEMS,
+  MAX_SITE_BLOCKS,
+  normalizeSitePassword,
+  passwordProblem,
+  programSubEvents,
+  readContent,
+  SITE_PASSWORD_MAX,
+  SITE_PASSWORD_MIN,
+  siteAccessToken,
+  siteAccessValid,
+} from './domain/site.ts';
+// M4.6a social Command Center pack: RSVP, meal and dietary counts (counts only).
+export {
+  type MealOption,
+  type MealTally,
+  mealTally,
+  type RsvpPendingCounts,
+  rsvpPendingCounts,
+  type SocialGuest,
+} from './domain/social.ts';
 export * from './dto.ts';
 export {
   addPartyGuestCommand,
@@ -34,10 +165,143 @@ export {
   updatePartyCommand,
   updatePartyGuestCommand,
 } from './guests.ts';
+export {
+  type HubPerson,
+  type HubSeat,
+  type HubTicket,
+  PartyHubDto,
+  type PartyHubReaders,
+  type PartyHubView,
+  partyHubQuery,
+} from './hub.ts';
+export {
+  GuestImportSummaryDto,
+  GuestMappingInput,
+  type GuestTable,
+  type GuestTableInput,
+  guestImportAction,
+  guestImportBulk,
+  guestImportRejectedQuery,
+  guestImportSummaryQuery,
+  IMPORT_TTL_MS,
+  MAX_IMPORT_BYTES,
+  MAX_IMPORT_ROWS,
+  purgeGuestImportsCommand,
+  readGuestTable,
+  stageGuestImportCommand,
+  validateGuestImportCommand,
+} from './imports.ts';
+export {
+  assertInvitedTx,
+  InvitationMatrixDto,
+  invitationMatrixQuery,
+  MatrixGuestDto,
+  recordSubEventResponseCommand,
+  SubEventHistoryEntryDto,
+  setInvitationsCommand,
+  subEventHistoryQuery,
+} from './invitations.ts';
+export {
+  awaitingPartiesTx,
+  DELIVERY_STATES,
+  type DeliveryDeps,
+  type DeliveryState,
+  deliveryState,
+  INVITATION_QUEUED_EVENT,
+  InvitationQueuedPayload,
+  invitationMailer,
+  inviteDedupeKey,
+  type PartyMessage,
+  partyAnsweredTx,
+  type QueueOutcome,
+  queuePartyMessageTx,
+  rsvpDeadlineTx,
+} from './invite-delivery.ts';
+export {
+  InvitationTemplateDto,
+  InviteMessageDto,
+  invitationPreviewQuery,
+  invitationTemplatesQuery,
+  PartyContactDto,
+  PartyInviteDto,
+  partyContactQuery,
+  partyInviteMessagesQuery,
+  partyInvitesQuery,
+  resetInvitationTemplateCommand,
+  sendInvitationsCommand,
+  sendTestInvitationCommand,
+  setInvitationTemplateCommand,
+  setPartyContactCommand,
+  setPartyLocaleCommand,
+} from './invites.ts';
+// M4.8c paddle raise: who can hold a paddle, and their names for the organizer.
+export {
+  type PaddleHolderGuest,
+  type PaddleHolderParty,
+  paddleHolderNamesTx,
+  paddleHoldersTx,
+  paddleHolderTx,
+} from './paddle-holders.ts';
+// M4.8e: where a paddle holder's pledge messages go.
+export { paddleHolderContactTx } from './pledge-contact.ts';
 export { privateColumns } from './private-columns.ts';
+// M4.3a guest seating: the guest list's live channel and seating's OccupantDirectory.
+export { GUESTS_CHANNEL, MAX_PARTY_MESSAGES, publishGuestChangesTx } from './realtime.ts';
+export {
+  createRsvpLinksCommand,
+  findRsvpByNameCommand,
+  markRsvpSentCommand,
+  markRsvpViewedCommand,
+  PartyRsvpDetailDto,
+  PartyRsvpSummaryDto,
+  PUBLIC_RSVP_STATES,
+  PublicRsvpDto,
+  partyRsvpQuery,
+  publicRsvpQuery,
+  publicRsvpQuestionsQuery,
+  RSVP_LINK_PURPOSE,
+  RsvpOverviewDto,
+  RsvpSettingsDto,
+  reopenRsvpCommand,
+  resetRsvpLinkCommand,
+  resetRsvpPinCommand,
+  rsvpLinkRef,
+  rsvpLinksQuery,
+  rsvpLinkToken,
+  rsvpLookupTarget,
+  rsvpOverviewQuery,
+  rsvpPinFor,
+  rsvpSettingsQuery,
+  SubEventTallyDto,
+  setRsvpSettingsCommand,
+  submitRsvpCommand,
+} from './rsvp.ts';
+// M4.1e: RSVP questions (menu, questions on the forms engine, write-back, meal counts, export).
+export {
+  MAX_MENU_OPTIONS,
+  MealCountsDto,
+  MenuOptionDto,
+  mealCountsQuery,
+  menuQuery,
+  PublicRsvpQuestionsDto,
+  publicRsvpQuestionsTx,
+  publishRsvpQuestionsCommand,
+  QuestionAnswersInput,
+  RsvpQuestionsDto,
+  removeMenuOptionCommand,
+  rsvpAnswersExportAction,
+  rsvpAnswersExportBulk,
+  rsvpAnswersPrivateExportAction,
+  rsvpAnswersPrivateExportBulk,
+  rsvpQuestionsQuery,
+  saveMenuOptionCommand,
+} from './rsvp-questions.ts';
+export { RSVP_LINK_TTL_MS, rsvpByContactTx } from './rsvp-state.ts';
 export {
   AGE_CLASSES,
   type AgeClass,
+  COLLECTOR_STATUSES,
+  type CollectorStatus,
   ENTRY_SOURCES,
   GUEST_KINDS,
   GUEST_SOURCES,
@@ -45,4 +309,92 @@ export {
   type GuestSource,
   HISTORY_ACTIONS,
   type HistoryAction,
+  IMPORT_SOURCES,
+  IMPORT_STATUSES,
+  type ImportSource,
+  type ImportStatus,
+  INVITE_CHANNELS,
+  INVITE_MESSAGE_KINDS,
+  type InviteChannel,
+  type InviteMessageKind,
+  PARTY_RSVP_STATES,
+  type PartyRsvpState,
+  RESPONSE_STATUSES,
+  type ResponseStatus,
+  SITE_BLOCK_KINDS,
+  SITE_STATUSES,
+  type SiteBlockKind,
+  type SiteStatus,
+  SUB_EVENT_KINDS,
+  type SubEventKind,
 } from './schema.ts';
+// M4.4a: the guest seat finder's party credentials (seating's `PartyCredentials` port).
+export { guestsPartyCredentials } from './seat-finder-party.ts';
+export {
+  guestsOccupantDirectory,
+  type SeatingOccupant,
+  type SeatingOccupantParty,
+  type SeatingStatus,
+  seatingOccupantsTx,
+  seatingSubEventsTx,
+  wholeEventStatus,
+} from './seating-occupants.ts';
+export {
+  addGuestSiteBlockCommand,
+  GuestSiteDto,
+  guestSitePublishedQuery,
+  guestSiteQuery,
+  guestSiteTarget,
+  moveGuestSiteBlockCommand,
+  PublicGuestSiteDto,
+  PublicSiteBlockDto,
+  publicGuestSiteQuery,
+  publishGuestSiteCommand,
+  removeGuestSiteBlockCommand,
+  SaveGuestSiteInput,
+  SiteBlockDto,
+  saveGuestSiteCommand,
+  setGuestSitePasswordCommand,
+  UpdateGuestSiteBlockInput,
+  unlockGuestSiteQuery,
+  updateGuestSiteBlockCommand,
+} from './site.ts';
+// M4.5b: the gallery behind the guest site (in the gallery module's transactions).
+export { guestSiteAccessTx, guestSiteCodeTx } from './site-access.ts';
+export {
+  type MealDietaryCounts,
+  mealDietaryCountsTx,
+  rsvpDeadlineEventIdsTx,
+  type SocialFacts,
+  socialFactsTx,
+} from './social-facts.ts';
+export {
+  CreateSubEventInput,
+  createSubEventCommand,
+  MAX_SUB_EVENTS_PER_EVENT,
+  moveSubEventCommand,
+  removeSubEventCommand,
+  SubEventDto,
+  SubEventSummaryDto,
+  subEventsOfEventTx,
+  subEventsQuery,
+  updateSubEventCommand,
+} from './sub-events.ts';
+// M4.2b gala tables: a purchased table's party and the guests holding its tickets.
+export {
+  addTableGuestTx,
+  guestsByTicketTx,
+  type TableSource,
+  tablePartiesTx,
+  tablePartyTx,
+} from './tables.ts';
+export {
+  FAKE_PASS_CONTENT_TYPE,
+  type FakeGuestPass,
+  fakeGuestPassProvider,
+  GUEST_PASS_PLATFORMS,
+  type GuestPassPlatform,
+  type GuestPassProvider,
+  type GuestPassRequest,
+  type GuestPassResult,
+} from './wallet-pass.ts';

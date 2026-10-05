@@ -28,10 +28,10 @@ export default async function VenueDirectoryPage({ params }: { params: Promise<{
   return (
     <main className="mx-auto flex min-h-dvh max-w-5xl flex-col gap-8 px-4 py-12 md:px-8">
       <header className="flex flex-col gap-2">
-        <h1 className="text-[36px] leading-tight font-light tracking-[-0.04em] md:text-title">
+        <h1 className="text-[36px] leading-tight font-extrabold tracking-[-0.04em] md:text-title">
           {t('title')}
         </h1>
-        <p className="text-[15px] text-zinc-500">{t('subtitle')}</p>
+        <p className="text-[15px] text-ink-2">{t('subtitle')}</p>
       </header>
       {venues.length === 0 ? (
         <EmptyState title={t('emptyTitle')} description={t('emptyDescription')} />
@@ -40,16 +40,16 @@ export default async function VenueDirectoryPage({ params }: { params: Promise<{
           {venues.map((v) => (
             <li key={v.slug}>
               <Card className="flex h-full flex-col gap-2">
-                <h2 className="text-[20px] font-light tracking-[-0.02em]">
+                <h2 className="text-[20px] font-extrabold tracking-[-0.02em]">
                   <Link href={`/venues/${v.slug}`} className="underline-offset-2 hover:underline">
                     {v.name}
                   </Link>
                 </h2>
-                <p className="text-body text-zinc-500">
+                <p className="text-body text-ink-2">
                   {[v.city, v.region, region.of(v.country) ?? v.country].filter(Boolean).join(', ')}
                 </p>
                 {v.capacity ? (
-                  <p className="text-caption text-zinc-600">
+                  <p className="text-caption text-ink-2">
                     {t('capacity', { count: v.capacity, formatted: formatNumber(v.capacity, locale) })}
                   </p>
                 ) : null}

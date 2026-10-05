@@ -102,6 +102,19 @@ export const BuyerRefundPanelDto = z.object({
 });
 export type BuyerRefundPanelDto = z.infer<typeof BuyerRefundPanelDto>;
 
+/** M3.10c: a credit note as the buyer sees it on their order page. */
+export const BuyerCreditNoteDto = z.object({
+  label: z.string(),
+  amountMinor: z.int(),
+  balanceMinor: z.int(),
+  currency: z.string(),
+  disposition: z.enum(['store_credit', 'refunded']),
+  reason: z.string(),
+  /** Store credit: the code to use at checkout. */
+  code: z.string().nullable(),
+  createdAt: z.date(),
+});
+
 export const PublicOrderDto = OrderDto.omit({ eventId: true }).extend({
   /** Who sold it (roadmap §4.4 seller disclosure): the organizer, or the platform on their behalf. */
   fundsFlow: z.enum(['organizer_mor', 'platform_mor']),
@@ -120,6 +133,10 @@ export const PublicOrderDto = OrderDto.omit({ eventId: true }).extend({
   refundPolicy: RefundPolicyDto.nullable(),
   /** M3.10b: the buyer's latest refund request and whether they may ask for one now. */
   refundRequest: BuyerRefundPanelDto,
+  /** M3.10c: credit notes on this order (store credit shows its code: the buyer's own). */
+  creditNotes: z.array(BuyerCreditNoteDto).default([]),
+  /** M5.1d: a pay-later order's invoice page (view, PDF, pay), on the event's public site. */
+  invoicePath: z.string().nullable().default(null),
 });
 export type PublicOrderDto = z.infer<typeof PublicOrderDto>;
 export const publicOrderSerializer = defineSerializer('orders.publicOrder', PublicOrderDto);
@@ -139,6 +156,21 @@ export const StartCheckoutInput = z.object({
     .default([]),
   /** Seated events: the chosen seats (their ticket types come from the seat map). */
   seats: z.array(z.uuid()).max(50).default([]),
+  /**
+   * M6.11a: the seats best available held for this buyer (its token); the order takes them over
+   * instead of `seats`.
+   */
+  seatHold: z
+    .string()
+    .regex(/^[A-Za-z0-9_-]{32}$/)
+    .optional(),
+  /** M6.11a: the buyer says someone in the party needs a wheelchair-accessible seat. */
+  accessibleNeed: z.boolean().default(false),
+  /**
+   * M6.11b: a sponsor's or promoter's sales code (their link carries it): seated orders go through
+   * that channel and may take its allotted seats. An unknown code is refused.
+   */
+  channelCode: z.string().trim().max(40).optional(),
   /** Multi-date events (M1.4b): the chosen date; required when the event has dates. */
   occurrenceId: z.uuid().optional(),
   buyer: z.object({

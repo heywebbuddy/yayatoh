@@ -9,7 +9,7 @@ import {
 } from '@yayatoh/events';
 import { executeQuery } from '@yayatoh/kernel';
 import { roleCan } from '@yayatoh/tenancy';
-import { Button, Card, EmptyState, Label, PageHeader } from '@yayatoh/ui';
+import { Button, buttonClass, Card, EmptyState, Label, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { AiDraftPanel } from '@/components/ai-draft-panel.tsx';
 import { AnnouncementForm } from '@/components/announcement-form.tsx';
@@ -85,8 +85,8 @@ export default async function ContentPage({
     sections.map((s) => [
       s.id,
       canWrite ? (
-        <details key={s.id} className="border-t border-zinc-100 pt-2">
-          <summary className="min-h-6 cursor-pointer text-caption text-zinc-600">
+        <details key={s.id} className="border-t border-line pt-2">
+          <summary className="min-h-6 cursor-pointer text-caption text-ink-2">
             {t('content.edit', { title: s.title })}
           </summary>
           <div className="flex flex-col gap-3 pt-3">
@@ -122,12 +122,12 @@ export default async function ContentPage({
           ) : undefined
         }
       />
-      {canWrite ? null : <p className="text-body text-zinc-500">{t('content.viewerNotice')}</p>}
+      {canWrite ? null : <p className="text-body text-ink-2">{t('content.viewerNotice')}</p>}
       <section aria-labelledby="tagline-heading" className="flex flex-col gap-2">
         <h2 id="tagline-heading" className="text-section">
           {t('aiDraft.taglineHeading')}
         </h2>
-        <p className="text-body text-zinc-700" data-testid="event-tagline">
+        <p className="text-body text-ink-2" data-testid="event-tagline">
           {ev.tagline ?? t('aiDraft.noTagline')}
         </p>
       </section>
@@ -152,7 +152,24 @@ export default async function ContentPage({
           {t('content.sections')}
         </h2>
         {sections.length === 0 ? (
-          <EmptyState title={t('content.emptyTitle')} description={t('content.emptyDescription')} />
+          <EmptyState
+            title={t('content.emptyTitle')}
+            description={t('content.emptyDescription')}
+            action={
+              canWrite ? (
+                <Link
+                  href={`/o/${org}/e/${event}/content#adding-section`}
+                  className={buttonClass('primary', 'md')}
+                >
+                  {t('content.emptyAction')}
+                </Link>
+              ) : (
+                <Link href={`/o/${org}/e/${event}`} className={buttonClass('primary', 'md')}>
+                  {t('content.backToEvent')}
+                </Link>
+              )
+            }
+          />
         ) : (
           <SectionList
             sections={sections.map((s) => ({ id: s.id, title: s.title, kind: s.kind, visible: s.visible }))}
@@ -163,9 +180,9 @@ export default async function ContentPage({
           />
         )}
         {canWrite ? (
-          <section aria-labelledby="add-section-heading">
+          <section id="adding-section" aria-labelledby="adding-section-heading">
             <Card size="panel" className="flex flex-col gap-3">
-              <h3 id="add-section-heading" className="text-section">
+              <h3 id="adding-section-heading" className="text-section">
                 {t('content.addTitle')}
               </h3>
               <SectionForm action={addSectionAction.bind(null, org, event)} idPrefix="new-section" />
@@ -177,11 +194,28 @@ export default async function ContentPage({
         <h2 id="announcements-heading" className="text-section">
           {t('eventAnnouncements.heading')}
         </h2>
-        <p className="text-body text-zinc-500">{tp('eventAnnouncements.explainer')}</p>
+        <p className="text-body text-ink-2">{tp('eventAnnouncements.explainer')}</p>
         {announcements.length === 0 ? (
           <EmptyState
             title={t('eventAnnouncements.emptyTitle')}
             description={tp('eventAnnouncements.emptyDescription')}
+            action={
+              canWrite ? (
+                <Link
+                  href={`/o/${org}/e/${event}/content#new-announcement`}
+                  className={buttonClass('primary', 'md')}
+                >
+                  {t('eventAnnouncements.emptyAction')}
+                </Link>
+              ) : (
+                <Link
+                  href={`/o/${org}/e/${event}/content#sections-heading`}
+                  className={buttonClass('primary', 'md')}
+                >
+                  {t('eventAnnouncements.toSections')}
+                </Link>
+              )
+            }
           />
         ) : (
           <ul className="flex list-none flex-col gap-3 p-0">
@@ -199,7 +233,7 @@ export default async function ContentPage({
                     </Label>
                     {a.pinned ? <Label>{t('eventAnnouncements.pinned')}</Label> : null}
                     {a.publishedAt ? (
-                      <span className="text-caption text-zinc-500">{when.format(a.publishedAt)}</span>
+                      <span className="text-caption text-ink-2">{when.format(a.publishedAt)}</span>
                     ) : null}
                   </div>
                   <h3 className="text-section">{a.title}</h3>
@@ -239,7 +273,7 @@ export default async function ContentPage({
           </ul>
         )}
         {canWrite ? (
-          <section aria-labelledby="new-announcement-heading">
+          <section id="new-announcement" aria-labelledby="new-announcement-heading">
             <Card size="panel" className="flex flex-col gap-3">
               <h3 id="new-announcement-heading" className="text-section">
                 {t('eventAnnouncements.new')}

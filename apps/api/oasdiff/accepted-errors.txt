@@ -1,0 +1,28 @@
+# Accepted oasdiff findings: errors.
+# Owner decision 2026-10-05 (docs/decisions.md, 2026-10-05 "oasdiff baseline for main"): the first comparison of the build
+# branch's /v1 spec with main (PR #2) found only new response enum values. /v1 had never been
+# published, so this exact set is accepted once. Every other change still fails the gate.
+# Format (oasdiff --err-ignore): one finding per line, "<METHOD> <path> <change text>".
+POST /v1/checkins added the new `admission_level` enum value to the `result` response property for the response status `200`
+POST /v1/checkins added the new `balance_due` enum value to the `result` response property for the response status `200`
+POST /v1/checkins added the new `capacity` enum value to the `result` response property for the response status `200`
+POST /v1/checkins added the new `entered` enum value to the `result` response property for the response status `200`
+POST /v1/checkins added the new `not_enrolled` enum value to the `result` response property for the response status `200`
+POST /v1/checkins added the new `not_in_room` enum value to the `result` response property for the response status `200`
+POST /v1/checkins added the new `scanned_out` enum value to the `result` response property for the response status `200`
+GET /v1/events/{eventId}/manifest added the new `session` enum value to the `header/checkpoints/items/kind` response property for the response status `200`
+POST /v1/orgs/{org}/events/{eventId}/checkins added the new `admission_level` enum value to the `result` response property for the response status `200`
+POST /v1/orgs/{org}/events/{eventId}/checkins added the new `balance_due` enum value to the `result` response property for the response status `200`
+POST /v1/orgs/{org}/events/{eventId}/checkins added the new `capacity` enum value to the `result` response property for the response status `200`
+POST /v1/orgs/{org}/events/{eventId}/checkins added the new `entered` enum value to the `result` response property for the response status `200`
+POST /v1/orgs/{org}/events/{eventId}/checkins added the new `not_enrolled` enum value to the `result` response property for the response status `200`
+POST /v1/orgs/{org}/events/{eventId}/checkins added the new `not_in_room` enum value to the `result` response property for the response status `200`
+POST /v1/orgs/{org}/events/{eventId}/checkins added the new `scanned_out` enum value to the `result` response property for the response status `200`
+GET /v1/orgs/{org}/events/{eventId}/orders added the new `awaiting_invoice` enum value to the `data/items/status` response property for the response status `200`
+GET /v1/orgs/{org}/events/{eventId}/orders added the new `void` enum value to the `data/items/status` response property for the response status `200`
+GET /v1/orgs/{org}/events/{eventId}/speakers added the new `library` enum value to the `data/items/image/slot` response property for the response status `200`
+GET /v1/orgs/{org}/events/{eventId}/speakers/{speakerId} added the new `library` enum value to the `speaker/image/slot` response property for the response status `200`
+GET /v1/public/events/{slug}/images added the new `library` enum value to the `data/items/slot` response property for the response status `200`
+GET /v1/public/events/{slug}/speakers added the new `library` enum value to the `data/items/image/slot` response property for the response status `200`
+GET /v1/public/events/{slug}/speakers/{speakerId} added the new `library` enum value to the `speaker/image/slot` response property for the response status `200`
+GET /v1/public/venues/{slug} added the new `library` enum value to the `photos/items/slot` response property for the response status `200`

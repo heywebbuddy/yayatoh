@@ -2,9 +2,16 @@ import { attendeeEmailAction, attendeeImportAction, attendeeLabelAction } from '
 import { audienceExportAction } from '@yayatoh/audiences';
 import { billingEntitlements } from '@yayatoh/billing';
 import { withPlatformReader } from '@yayatoh/db/platform';
+import {
+  donorCsvExportAction,
+  donorXlsxExportAction,
+  employerExportAction,
+  giftsExportAction,
+} from '@yayatoh/donations';
+import { guestImportAction, rsvpAnswersExportAction, rsvpAnswersPrivateExportAction } from '@yayatoh/guests';
 import { ticketCancelAction, waitlistExportAction } from '@yayatoh/orders';
 import { auditExportAction, bulkStepCommand, createCommandPorts, runBulkOperation } from '@yayatoh/platform';
-import { dsarExportAction } from '@yayatoh/privacy';
+import { registrationDecideAction } from '@yayatoh/registration';
 import { attendeeExportAction, bookingsExportAction } from '@yayatoh/reports';
 import { seatAssignAction } from '@yayatoh/seating';
 import { surveyExportAction } from '@yayatoh/surveys';
@@ -20,13 +27,20 @@ export const BULK_ACTIONS = [
   attendeeExportAction,
   bookingsExportAction,
   auditExportAction,
-  dsarExportAction,
   seatAssignAction,
   ticketResendAction,
   ticketCancelAction,
   surveyExportAction,
   audienceExportAction,
   waitlistExportAction,
+  guestImportAction,
+  registrationDecideAction,
+  rsvpAnswersExportAction,
+  rsvpAnswersPrivateExportAction,
+  giftsExportAction,
+  employerExportAction,
+  donorCsvExportAction,
+  donorXlsxExportAction,
 ] as const;
 const step = bulkStepCommand(BULK_ACTIONS);
 // The org gate (M1.3f) lets system actors through; wired for parity with the apps.

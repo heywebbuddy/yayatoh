@@ -59,34 +59,52 @@ export async function OrderTimeline({
       case 'dispute_opened':
         if (i.code) out.push(i.code);
         break;
+      // M3.10c: a credit note's disposition, a macro's actions (its name is the text).
+      case 'credit_note_issued':
+        if (i.code) out.push(word(`supportTools.credit.disposition.${i.code}`, i.code));
+        break;
+      case 'macro_run':
+        out.push(
+          ...(i.code ?? '')
+            .split(',')
+            .filter(Boolean)
+            .map((a) => word(`supportTools.macros.action.${a}`, a)),
+        );
+        break;
       default:
         break;
     }
-    if (i.kind === 'note' && i.who) out.push(memberNames.get(i.who) ?? t('refundOps.timeline.someone'));
+    if ((i.kind === 'note' || i.kind === 'macro_run') && i.who)
+      out.push(memberNames.get(i.who) ?? t('refundOps.timeline.someone'));
     else if (i.who) out.push(i.who);
-    if (i.text) out.push(i.kind === 'note' || i.kind === 'message' ? i.text : `“${i.text}”`);
+    if (i.text)
+      out.push(
+        ['note', 'message', 'credit_note_issued', 'credit_applied', 'credit_released', 'macro_run'].includes(
+          i.kind,
+        )
+          ? i.text
+          : `“${i.text}”`,
+      );
     return out;
   };
   return (
     <div className="flex flex-col gap-2">
-      <p className="text-caption text-zinc-500">
-        {t('refundOps.timeline.zone', { zone: timeline.timezone })}
-      </p>
-      <ol className="flex list-none flex-col gap-0 border-s border-zinc-200 p-0">
+      <p className="text-caption text-ink-2">{t('refundOps.timeline.zone', { zone: timeline.timezone })}</p>
+      <ol className="flex list-none flex-col gap-0 border-s border-line p-0">
         {timeline.items.map((i, n) => (
           <li
             // Items have no id of their own; their position in this server-rendered list is stable.
             key={`${i.kind}-${i.at.getTime()}-${n}`}
-            className="relative flex flex-col gap-0.5 ps-5 pb-4 before:absolute before:start-[-5px] before:top-1.5 before:size-2.5 before:rounded-full before:bg-zinc-300"
+            className="relative flex flex-col gap-0.5 ps-5 pb-4 before:absolute before:start-[-5px] before:top-1.5 before:size-2.5 before:rounded-full before:bg-ink-3"
           >
-            <span className="text-caption text-zinc-500">
+            <span className="text-caption text-ink-2">
               <time dateTime={i.at.toISOString()}>{when.format(i.at)}</time>
             </span>
             <span className="text-body">
               {t(`refundOps.timeline.kinds.${i.kind}`, { serial: i.ticketSerial ?? 0 })}
             </span>
             {details(i).length ? (
-              <span className="whitespace-pre-line break-words text-caption text-zinc-600">
+              <span className="whitespace-pre-line break-words text-caption text-ink-2">
                 {details(i).join(' · ')}
               </span>
             ) : null}

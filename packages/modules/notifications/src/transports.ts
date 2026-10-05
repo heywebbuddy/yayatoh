@@ -1,7 +1,17 @@
-import { mkdirSync, readdirSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
+import {
+  mkdirSync,
+  readdirSync,
+  readFileSync,
+  renameSync,
+  rmSync,
+  statSync,
+  utimesSync,
+  writeFileSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { type DeliveryEvent, signFakeDeliveryEvents } from './delivery.ts';
+import { ProviderRejection } from './providers/types.ts';
 import type { Urgency } from './web-push.ts';
 
 /**
@@ -12,6 +22,8 @@ import type { Urgency } from './web-push.ts';
  */
 export interface OutboundEmail {
   readonly from: { readonly name: string; readonly address: string };
+  /** U10: where replies go (the org's "Email sending" setting); absent: replies go to the From. */
+  readonly replyTo?: string | null;
   readonly to: string;
   readonly subject: string;
   readonly html: string;
@@ -19,20 +31,37 @@ export interface OutboundEmail {
   readonly headers: Readonly<Record<string, string>>;
   /** The delivery id: providers that support idempotency get it; logs carry it. */
   readonly idempotencyKey: string;
+  /**
+   * The org's own verified sending domain (M3.5b): its From address and SES configuration set.
+   * Absent: the platform sender (`from`).
+   */
+  readonly sender?: { readonly address: string; readonly configurationSet?: string | null } | null;
+  /** The org (SES message tag), for provider-side reporting. */
+  readonly orgId?: string | null;
+}
+
+/** What a provider returns for an accepted message; `provider` names the adapter that sent it. */
+export interface SendResult {
+  readonly providerMessageId: string;
+  readonly provider?: string;
 }
 
 export interface EmailTransport {
-  send(message: OutboundEmail): Promise<{ readonly providerMessageId: string }>;
+  readonly name?: string;
+  send(message: OutboundEmail): Promise<SendResult>;
 }
 
 export interface OutboundSms {
   readonly to: string;
   readonly body: string;
   readonly idempotencyKey: string;
+  /** The org's own 10DLC Messaging Service (M3.5b); absent: the platform's. */
+  readonly sender?: { readonly messagingServiceSid: string } | null;
 }
 
 export interface SmsTransport {
-  send(message: OutboundSms): Promise<{ readonly providerMessageId: string }>;
+  readonly name?: string;
+  send(message: OutboundSms): Promise<SendResult>;
 }
 
 /**
@@ -45,10 +74,16 @@ export interface OutboundWhatsApp {
   readonly body: string;
   readonly category: 'utility' | 'marketing' | 'authentication';
   readonly idempotencyKey: string;
+  /** Template language and the org name parameter (M3.5b templates). */
+  readonly locale?: string;
+  readonly orgName?: string;
+  /** The org's route (Cloud API or the owner's gateway) and its own number, if any (M3.5b). */
+  readonly sender?: { readonly route: 'cloud' | 'gateway'; readonly phoneNumberId?: string | null } | null;
 }
 
 export interface WhatsAppTransport {
-  send(message: OutboundWhatsApp): Promise<{ readonly providerMessageId: string }>;
+  readonly name?: string;
+  send(message: OutboundWhatsApp): Promise<SendResult>;
 }
 
 export interface OutboundPush {
@@ -82,6 +117,7 @@ export type PushSendResult =
   | { readonly error: 'rejected'; readonly status?: number; readonly detail?: string };
 
 export interface PushTransport {
+  readonly name?: string;
   send(message: OutboundPush): Promise<PushSendResult>;
 }
 
@@ -95,8 +131,15 @@ export interface Transports {
 /** The platform sender (roadmap §4.4: `mail.yayatoh.com` with the org's display name from M1.10). */
 export const PLATFORM_SENDER = 'notifications@mail.yayatoh.com';
 
-/** Tests: records every send; `delayMs` widens race windows in concurrency tests. */
+/**
+ * Tests: records every send; `delayMs` widens race windows in concurrency tests. Numbers in
+ * `notOnWhatsApp` are refused like the Cloud API's 131026, in `badNumbers` like Twilio's 21614;
+ * `failing` channels throw (a provider outage).
+ */
 export function memoryTransports(opts: { delayMs?: number } = {}) {
+  const notOnWhatsApp = new Set<string>();
+  const badNumbers = new Set<string>();
+  const failing = new Set<'email' | 'sms' | 'whatsapp'>();
   const emails: OutboundEmail[] = [];
   const sms: OutboundSms[] = [];
   const pushes: OutboundPush[] = [];
@@ -106,24 +149,35 @@ export function memoryTransports(opts: { delayMs?: number } = {}) {
   const busy = new Map<string, number | null>();
   const rejected = new Set<string>();
   const wait = () => (opts.delayMs ? new Promise((r) => setTimeout(r, opts.delayMs)) : Promise.resolve());
+  const down = (channel: 'email' | 'sms' | 'whatsapp') => {
+    if (failing.has(channel)) throw new Error(`memory ${channel}: provider down`);
+  };
   const transports: Transports = {
     email: {
+      name: 'memory',
       async send(m) {
         await wait();
+        down('email');
         emails.push(m);
-        return { providerMessageId: `mem-${emails.length}` };
+        return { providerMessageId: `mem-${emails.length}`, provider: 'memory' };
       },
     },
     sms: {
+      name: 'memory',
       async send(m) {
+        down('sms');
+        if (badNumbers.has(m.to)) throw new ProviderRejection('invalid_address', '21614');
         sms.push(m);
-        return { providerMessageId: `mem-sms-${sms.length}` };
+        return { providerMessageId: `mem-sms-${sms.length}`, provider: 'memory' };
       },
     },
     whatsapp: {
+      name: 'memory',
       async send(m) {
+        down('whatsapp');
+        if (notOnWhatsApp.has(m.to)) throw new ProviderRejection('not_on_channel', '131026');
         whatsapp.push(m);
-        return { providerMessageId: `mem-wa-${whatsapp.length}` };
+        return { providerMessageId: `mem-wa-${whatsapp.length}`, provider: 'memory' };
       },
     },
     push: {
@@ -138,7 +192,19 @@ export function memoryTransports(opts: { delayMs?: number } = {}) {
       },
     },
   };
-  return { transports, emails, sms, whatsapp, pushes, invalid, busy, rejected };
+  return {
+    transports,
+    emails,
+    sms,
+    whatsapp,
+    pushes,
+    invalid,
+    busy,
+    rejected,
+    notOnWhatsApp,
+    badNumbers,
+    failing,
+  };
 }
 
 export interface DevMailboxEntry extends OutboundEmail {
@@ -191,6 +257,7 @@ export function devMailboxTransports(
       JSON.stringify({ ...m, id, at, channel } satisfies DevMailboxEntry),
     );
     const providerMessageId = `dev-${id}`;
+    const provider = 'dev';
     if (channel === 'email' && opts.deliverySecret && /^[0-9a-f-]{36}$/.test(m.idempotencyKey)) {
       mkdirSync(join(dir, EVENTS_DIR), { recursive: true });
       const signed = signFakeDeliveryEvents(
@@ -204,16 +271,18 @@ export function devMailboxTransports(
       );
       writeFileSync(join(dir, EVENTS_DIR, `${id}.json`), JSON.stringify(signed));
     }
-    return { providerMessageId };
+    return { providerMessageId, provider };
   };
   const blank = { from: { name: '', address: '' }, html: '', headers: {} };
   return {
-    email: { send: async (m) => write('email', m) },
+    email: { name: 'dev', send: async (m) => write('email', m) },
     sms: {
+      name: 'dev',
       send: async (m) =>
         write('sms', { ...blank, to: m.to, subject: '', text: m.body, idempotencyKey: m.idempotencyKey }),
     },
     whatsapp: {
+      name: 'dev',
       send: async (m) =>
         write('whatsapp', {
           ...blank,
@@ -266,9 +335,13 @@ export function readDevMailbox(
 
 /**
  * Dev/CI: take the fake provider's pending delivery reports (each once: a file is claimed by
- * renaming it, so two drains never post the same report; the webhook dedupes anyway).
+ * renaming it, so two drains never post the same report; the webhook dedupes anyway). A claimed
+ * report stays on disk until its taker has posted it (`releaseDevDeliveryEvent`), so another
+ * drain can wait for it (`settleDevDeliveryEvents`).
  */
-export function takeDevDeliveryEvents(dir = devMailboxDir()): Array<{ body: string; signature: string }> {
+export function takeDevDeliveryEvents(
+  dir = devMailboxDir(),
+): Array<{ body: string; signature: string; claimed: string }> {
   const folder = join(dir, EVENTS_DIR);
   let files: string[];
   try {
@@ -276,18 +349,56 @@ export function takeDevDeliveryEvents(dir = devMailboxDir()): Array<{ body: stri
   } catch {
     return [];
   }
-  const out: Array<{ body: string; signature: string }> = [];
+  const out: Array<{ body: string; signature: string; claimed: string }> = [];
   for (const f of files.sort()) {
     const claimed = join(folder, `${f}.${process.pid}.claimed`);
     try {
       renameSync(join(folder, f), claimed);
+      // The claim's time: a claim left behind by a process that died is ignored after a minute.
+      const now = new Date();
+      utimesSync(claimed, now, now);
     } catch {
       continue;
     }
-    out.push(JSON.parse(readFileSync(claimed, 'utf8')));
-    rmSync(claimed, { force: true });
+    out.push({ ...JSON.parse(readFileSync(claimed, 'utf8')), claimed });
   }
   return out;
+}
+
+const STALE_CLAIM_MS = 60_000;
+
+/** Dev/CI: a taken report has been posted (or given up on). */
+export function releaseDevDeliveryEvent(claimed: string): void {
+  rmSync(claimed, { force: true });
+}
+
+/**
+ * Dev/CI (batch 3g merge): wait until no report is still claimed by another drain, so a drain
+ * that sent a message returns only after its delivery report was recorded, even when a drain
+ * running at the same time took that report (the messaging e2e read a bounce too early).
+ * Bounded: gives up after `timeoutMs`; claims older than a minute (a process that died) are ignored.
+ */
+export async function settleDevDeliveryEvents(dir = devMailboxDir(), timeoutMs = 15_000): Promise<boolean> {
+  const folder = join(dir, EVENTS_DIR);
+  const deadline = Date.now() + timeoutMs;
+  for (;;) {
+    let pending: string[];
+    try {
+      pending = readdirSync(folder).filter((f) => {
+        if (!f.endsWith('.claimed')) return false;
+        try {
+          return Date.now() - statSync(join(folder, f)).mtimeMs < STALE_CLAIM_MS;
+        } catch {
+          return false;
+        }
+      });
+    } catch {
+      return true;
+    }
+    if (pending.length === 0) return true;
+    if (Date.now() > deadline) return false;
+    await new Promise((r) => setTimeout(r, 100));
+  }
 }
 
 /**

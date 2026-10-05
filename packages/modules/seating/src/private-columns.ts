@@ -16,4 +16,17 @@ export const privateColumns = columnPrivacy('seating', {
   layouts: { name: internal(), doc: internal(), checksum: 'vocab' },
   seat_assignments: { prior_block: 'vocab' },
   seating_rules: { kind: 'vocab', severity: 'vocab', params: internal() },
+  // A sub-event's own drawing (M4.1c): the host's, shown to nobody outside the console yet.
+  sub_event_charts: { doc: internal(), checksum: 'vocab' },
+  // M4.2b hosted tables: guests see the sponsor once the host publishes it (seat finder, map).
+  table_sponsors: { sponsor_name: 'public', logo_url: 'public' },
+  // M6.11a: the organizer's section scores rank best available; never shown to buyers.
+  selection_settings: { section_scores: internal() },
+  // M6.11b: sales channels. A channel's name and code are the organizer's (a promoter's code is
+  // handed to buyers by the promoter, never listed publicly); kind is a closed set by CHECK.
+  seat_channels: { kind: 'vocab', name: internal(), code: internal('code') },
+  // M6.11b: every saved plan of a chart (the console's history; an event's live plan is public).
+  layout_revisions: { kind: 'vocab', doc: internal(), checksum: 'vocab' },
+  // M6.12a solver rules: closed kinds and strengths; params name a party, a tag or a side (console only).
+  solver_rules: { kind: 'vocab', strength: 'vocab', params: internal() },
 });

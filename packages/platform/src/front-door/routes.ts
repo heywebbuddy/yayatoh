@@ -16,7 +16,7 @@ import { LOCALES } from '@yayatoh/contracts';
  * table is ignored (its paths fall back to legacy). Bump `ROUTE_TABLE_VERSION` whenever a route
  * is added, removed or changes what it matches; flag changes record the version they were made on.
  */
-export const ROUTE_TABLE_VERSION = 2;
+export const ROUTE_TABLE_VERSION = 3;
 
 /** The two legacy instances (roadmap §7.4): yayatoh.com and abc.yayatoh.com. */
 export const FRONT_DOOR_INSTANCES = ['yay', 'abc'] as const;
@@ -48,8 +48,9 @@ const isSearch = (q: URLSearchParams) => SEARCH_PARAMS.some((k) => (q.get(k) ?? 
 /**
  * Version 1: read surfaces first (A1 content, A2 public reads). Version 2 (batch 3c merge): the
  * new public pages of M3.11a/b (pricing, help center, features, contact, status) on the
- * marketplace instance; like every route they stay on legacy until staff move them. Order
- * matters: first match wins.
+ * marketplace instance; like every route they stay on legacy until staff move them. Version 3
+ * (batch 3m merge): M6.14a's marketplace search page (`/search`), likewise. Order matters: first
+ * match wins.
  */
 export const FRONT_DOOR_ROUTES: readonly FrontDoorRoute[] = [
   { key: 'home', stage: 'A2', instances: ['yay', 'abc'], shapes: ['/'], matches: (p) => p === '/' },
@@ -152,6 +153,13 @@ export const FRONT_DOOR_ROUTES: readonly FrontDoorRoute[] = [
     shapes: ['/status'],
     matches: (p) => p === '/status',
   },
+  {
+    key: 'marketplace.search',
+    stage: 'A2',
+    instances: ['yay'],
+    shapes: ['/search', '/search?q=…'],
+    matches: (p) => p === '/search',
+  },
 ];
 
 export const FRONT_DOOR_ROUTE_KEYS: ReadonlySet<string> = new Set(FRONT_DOOR_ROUTES.map((r) => r.key));
@@ -180,6 +188,85 @@ export const PLATFORM_PREFIXES: readonly string[] = [
   '/invite',
   '/survey',
   '/sub-processors',
+  // Batch 3e merge: links people get by email lead to pages only the new app has (the legacy app
+  // has none): unsubscribe, tracked links (M3.8a, campaign buttons M3.6b), waitlist places
+  // (M3.10a) and registration form resume links (M5.1b).
+  '/unsubscribe',
+  '/r',
+  '/waitlist',
+  '/registration-form',
+  // Batch 3f: the portal (M5.3a/M5.4a: invitations, sign-in codes and magic links, the event's
+  // sign-in page, the speaker and exhibitor portals).
+  '/event-portal',
+  // Batch 3g merge: M3.3a's TV display links (a venue screen opens `/tv/{token}`, no session).
+  '/tv',
+  // Batch 3h merge: M5.7a's signed big-screen link for live polls and Q&A (`/display/{token}`).
+  '/display',
+  // M4.1d/M4.1f: a wedding party's RSVP page and its paper fallback (`/rsvp/{token}`,
+  // `/rsvp/find/{code}`), and an event's public contact collector (`/collect/{code}`). Only the
+  // new app has them.
+  '/rsvp',
+  '/collect',
+  // M4.5a: an event's guest website behind its password (`/w/{code}`). Only the new app has it.
+  '/w',
+  // M4.7a: a wedding party's guest hub (`/hub/{token}`: RSVP, program, seats, tickets, its manifest
+  // and wallet passes). Only the new app has it.
+  '/hub',
+  // Batch 3h merge: M4.2b's signed table claim link (`/tables/{token}`), where a buyer names the
+  // guests of a gala table.
+  '/tables',
+  // M4.8b: a donor's tax receipt and year-end statement PDFs (`/receipts/{org}/{token}`,
+  // `/statements/{org}/{token}`).
+  '/receipts',
+  '/statements',
+  // Batch 3j merge: M4.8d's room giving screen (`/giving-screen/{token}`, a signed projector link)
+  // and M5.6a's self check-in flyer page (`/session-checkin/{token}`). Only the new app has them.
+  '/giving-screen',
+  '/session-checkin',
+  // Batch 3i merge: M6.1c's self-service privacy requests and the archive/receipt links emailed
+  // to the person (`/privacy-request/{org}`, `…/archive/{token}`, `…/receipt/{token}`), M6.3b's
+  // public developer docs (`/developers/…`) and the webhook portal link (`/webhook-portal/{token}`).
+  '/privacy-request',
+  '/developers',
+  '/webhook-portal',
+  // Batch 3k merge: a buyer's order link (`/orders/{token}`: M5.2b's schedule and M5.10a's
+  // conference hub with its manifest). The legacy app has no `/orders` page.
+  '/orders',
+  // Batch 3m merge: M6.9b's CE certificates (`/certificates/{org}/{token}`, the PDF or its HTML
+  // alternative) and their public verification (`/certificates/{org}/verify`, `…/verify/{code}`).
+  // The legacy app has no certificates.
+  '/certificates',
+];
+
+/**
+ * New-app pages under paths legacy owns (`/events/{slug}/…`): never forwarded either. Batch 3e
+ * merge: the registration pages of M5.1a and M5.1b, and the M3.10a waitlist join page. Batch 3f
+ * merge: the M5.4a public exhibitor map. Batch 3g merge: the seat finder and M3.3b's guest help
+ * pages under it (`seat-finder/help`, and a request's status page `seat-finder/help/{token}`).
+ * Batch 3h merge: M5.1c's group registration, applicant and group pages; M5.7a's participant
+ * page for a session's live polls and Q&A (`/events/{slug}/live/{session}`); M4.8a's giving page
+ * (`/events/{slug}/give`, `/events/{slug}/give/thanks`). Batch 3j merge: M4.8e's card and pledge
+ * pages, M5.3b's call for papers and M5.8a/b's networking pages.
+ */
+export const PLATFORM_PATTERNS: readonly RegExp[] = [
+  /^\/events\/[^/]+\/(register|registration-form|waitlist|exhibitors)$/,
+  /^\/events\/[^/]+\/seat-finder(\/help(\/[^/]+)?)?$/,
+  // M5.1c: group registration, an applicant's or registrant's own page, the payer's group page.
+  /^\/events\/[^/]+\/register\/group$/,
+  /^\/events\/[^/]+\/(registration|group)\/[^/]+$/,
+  // M5.7a: a session's live polls and Q&A for participants.
+  /^\/events\/[^/]+\/live\/[^/]+$/,
+  // M4.8a: the giving page and its thank-you page.
+  /^\/events\/[^/]+\/give(\/thanks)?$/,
+  // M5.1d: a buyer's invoice (view and pay) and its PDF.
+  /^\/events\/[^/]+\/invoice\/[^/]+(\/pdf)?$/,
+  // Batch 3j merge: M4.8e's card page (saving a card for tonight's giving) and a pledge's pay link;
+  // M5.3b's call for papers; M5.8a/b's attendee networking (directory, people, connections,
+  // meetings and their ICS, the profile, booths and chat with its stream).
+  /^\/events\/[^/]+\/card$/,
+  /^\/events\/[^/]+\/pledge\/[^/]+$/,
+  /^\/events\/[^/]+\/cfp$/,
+  /^\/events\/[^/]+\/network(\/(people|booths|chat)\/[^/]+|\/(connections|meetings|profile|chat)(\/stream)?|\/meetings\/[^/]+\/ics)?$/,
 ];
 export const PLATFORM_FILES: ReadonlySet<string> = new Set([
   '/widget.js',
@@ -187,10 +274,23 @@ export const PLATFORM_FILES: ReadonlySet<string> = new Set([
   '/scan-sw.js',
   '/scan-icon.svg',
   '/scan.webmanifest',
+  // Batch 3k merge: the guest hub's (M4.7a) and the conference hub's (M5.10a) service workers and
+  // install icons, served next to their pages.
+  '/hub-sw.js',
+  '/hub-icon.svg',
+  '/hub-icon-192.png',
+  '/hub-icon-512.png',
+  '/hub-icon-maskable-512.png',
+  '/conference-hub-sw.js',
+  '/conference-hub-icon.svg',
+  '/conference-hub-icon-192.png',
+  '/conference-hub-icon-512.png',
+  '/conference-hub-icon-maskable-512.png',
 ]);
 
 export function isPlatformPath(path: string): boolean {
   if (PLATFORM_FILES.has(path)) return true;
+  if (PLATFORM_PATTERNS.some((r) => r.test(path))) return true;
   return PLATFORM_PREFIXES.some((p) => path === p || path.startsWith(`${p}/`));
 }
 

@@ -385,3 +385,38 @@ export async function orderOutcomesTx(
     createdAt: r.created_at instanceof Date ? r.created_at : new Date(String(r.created_at)),
   }));
 }
+
+/** Payment health of one event for the alert engine (M3.2b). Counts only. */
+export interface PaymentAlertFacts {
+  /** Orders whose payment failed and that the buyer has not retried yet (`payment_failed`). */
+  readonly failed: number;
+  /** Payments started longer than `stuckAfterMs` ago that neither succeeded nor failed. */
+  readonly stuck: number;
+  /** Refunds that went through in the trailing `refundWindowMs`. */
+  readonly recentRefunds: number;
+  /** Orders sold at the event (the refund surge's base). */
+  readonly sold: number;
+}
+
+export async function paymentAlertFactsTx(
+  tx: TenantTx,
+  eventId: string,
+  now: Date,
+  opts: { readonly stuckAfterMs: number; readonly refundWindowMs: number },
+): Promise<PaymentAlertFacts> {
+  const stuckBefore = new Date(now.getTime() - opts.stuckAfterMs).toISOString();
+  const refundsSince = new Date(now.getTime() - opts.refundWindowMs).toISOString();
+  const [r] = await tx.execute<{ failed: number; stuck: number; refunds: number; sold: number }>(sql`
+    select
+      count(*) filter (where o.status = 'payment_failed')::int as failed,
+      count(*) filter (where o.status = 'awaiting_payment'
+        and o.created_at < ${stuckBefore}::timestamptz)::int as stuck,
+      count(*) filter (where o.status in (${SOLD}))::int as sold,
+      (select count(*)::int from orders.refunds r
+        join orders.orders ro on ro.id = r.order_id and ro.org_id = r.org_id
+        where ro.event_id = ${eventId}::uuid and r.status = 'succeeded'
+          and r.completed_at >= ${refundsSince}::timestamptz
+          and r.completed_at <= ${now.toISOString()}::timestamptz) as refunds
+    from orders.orders o where o.event_id = ${eventId}::uuid`);
+  return { failed: n(r?.failed), stuck: n(r?.stuck), recentRefunds: n(r?.refunds), sold: n(r?.sold) };
+}

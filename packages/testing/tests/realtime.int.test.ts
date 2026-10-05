@@ -274,12 +274,16 @@ describe('realtime publisher (M3.1b, integration)', () => {
       count: 1,
       at: DURING.toISOString(),
     });
-    // A duplicate scan publishes nothing.
+    // A duplicate scan admits nobody: no admission message, only the live feed's value-free
+    // `scan` ping (M3.3a), which names no ticket either.
     const before = p.got.get(chA)?.length ?? 0;
     await executeCommand(scanTicketCommand, { eventId, code: codes[0] ?? '' }, a.ctx({ now: DURING }), ports);
     await quiet();
     await p.fanout.idle();
-    expect(p.got.get(chA)?.length).toBe(before);
+    const after = p.got.get(chA)?.slice(before) ?? [];
+    expect(after.map((m) => [m.event, m.data])).toEqual([
+      ['scan', { outcome: 'duplicate', checkpointId: null, count: 1, at: DURING.toISOString() }],
+    ]);
     await executeCommand(
       undoAdmissionCommand,
       { eventId, admissionId: r.admissionId ?? '' },

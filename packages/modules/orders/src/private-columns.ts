@@ -7,6 +7,8 @@ import { columnPrivacy, holder, internal, personal, secret } from '@yayatoh/db';
 export const privateColumns = columnPrivacy('orders', {
   // A snapshot of the ticket type's public name.
   order_items: { name: 'public' },
+  // M5.4b add-on lines (a sponsor package or lead licenses): what the organizer sells, by name.
+  addon_items: { kind: 'vocab', name: 'public', currency: 'vocab' },
   orders: {
     status: 'vocab',
     buyer_email: personal('email'),
@@ -44,6 +46,33 @@ export const privateColumns = columnPrivacy('orders', {
   order_notes: { body: internal(), author_id: internal() },
   mass_refunds: { reason: 'vocab', status: 'vocab', currency: 'vocab', requested_by: internal() },
   mass_refund_items: { status: 'vocab', code: 'vocab' },
+  // M3.10c credit notes: the reason, amounts and code go to the buyer (document, order page,
+  // email); the buyer snapshots are theirs.
+  credit_notes: {
+    kind: 'vocab',
+    disposition: 'vocab',
+    reason: holder(),
+    currency: 'vocab',
+    code: holder(undefined, { where: "disposition = 'store_credit'" }),
+    buyer_name: personal(),
+    buyer_email: personal('email'),
+    issued_by: internal(),
+  },
+  // M3.10c support macros: the reply is sent to buyers (holder data); who changed it is internal.
+  support_macros: {
+    name: internal(),
+    subject: holder(),
+    body: holder(),
+    actions: 'vocab',
+    updated_by: internal(),
+  },
+  support_macro_runs: {
+    macro_name: internal(),
+    actions: 'vocab',
+    reply_subject: holder(),
+    reply_body: holder(),
+    ran_by: internal(),
+  },
   refund_policies: { kind: 'vocab', updated_by: internal() },
   // Guest email verification per event (M1.5f): who last changed it (a user id or actor type).
   checkout_settings: { updated_by: internal() },
@@ -65,5 +94,35 @@ export const privateColumns = columnPrivacy('orders', {
     provider_refund_id: secret(),
     failure_code: internal(),
     requested_by: internal(),
+  },
+  // M4.8a: a gift order's donation item. The name is the campaign's (the host's text); amounts
+  // are numbers, never in a public payload (the giving page shows campaign totals only, P4-13).
+  donation_items: { name: internal(), currency: 'vocab' },
+  // M5.1d invoices: the document's people, PO and company are the buyer's (shown to them);
+  // who issued or voided it and why is internal.
+  invoices: {
+    status: 'vocab',
+    po_number: holder(),
+    billing_company: holder(),
+    buyer_name: personal(),
+    buyer_email: personal('email'),
+    currency: 'vocab',
+    terms: 'vocab',
+    void_reason: internal(),
+    issued_by: internal(),
+  },
+  invoice_payments: {
+    channel: 'vocab',
+    method: 'vocab',
+    status: 'vocab',
+    currency: 'vocab',
+    idempotency_key: secret(),
+    funds_flow: 'vocab',
+    connected_account_id: secret(undefined, { where: "funds_flow = 'organizer_mor'" }),
+    provider: 'vocab',
+    provider_payment_id: secret(),
+    reference: internal(),
+    note: internal(),
+    recorded_by: internal(),
   },
 });

@@ -1,15 +1,26 @@
+import * as agency from '@yayatoh/agency';
 import * as ai from '@yayatoh/ai';
+import * as alerts from '@yayatoh/alerts';
+import * as analytics from '@yayatoh/analytics';
+import * as assistance from '@yayatoh/assistance';
 import * as attendees from '@yayatoh/attendees';
 import * as audiences from '@yayatoh/audiences';
+import * as automations from '@yayatoh/automations';
+import * as badges from '@yayatoh/badges';
 import * as billing from '@yayatoh/billing';
+import * as campaigns from '@yayatoh/campaigns';
 import * as checkin from '@yayatoh/checkin';
 import * as cms from '@yayatoh/cms';
+import * as commandCenter from '@yayatoh/command-center';
 import * as crm from '@yayatoh/crm';
 import { withoutTenant } from '@yayatoh/db';
 import { adminClient, closePools } from '@yayatoh/db/testing';
+import * as donations from '@yayatoh/donations';
+import * as engagement from '@yayatoh/engagement';
 import * as events from '@yayatoh/events';
 import * as forms from '@yayatoh/forms';
 import * as guests from '@yayatoh/guests';
+import * as integrations from '@yayatoh/integrations';
 import {
   type Command,
   type Ctx,
@@ -31,6 +42,7 @@ import { freezeCovers, hostRoute, readOnlyFreeze } from '@yayatoh/platform';
 import { problemFor, problemResponse } from '@yayatoh/platform/http';
 import * as privacy from '@yayatoh/privacy';
 import * as program from '@yayatoh/program';
+import * as registration from '@yayatoh/registration';
 import * as reports from '@yayatoh/reports';
 import * as reviews from '@yayatoh/reviews';
 import * as seating from '@yayatoh/seating';
@@ -39,6 +51,7 @@ import * as templates from '@yayatoh/templates';
 import * as tenancy from '@yayatoh/tenancy';
 import * as ticketing from '@yayatoh/ticketing';
 import * as venues from '@yayatoh/venues';
+import * as webhooks from '@yayatoh/webhooks';
 import { sql } from 'drizzle-orm';
 import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
 import { type OrgFixture, ports, systemCtx, twoOrgs } from '../src/index.ts';
@@ -49,17 +62,38 @@ import { type OrgFixture, ports, systemCtx, twoOrgs } from '../src/index.ts';
  * org-scoped freeze never touches another org; only platform_reader/migrator can switch it.
  */
 const MODULES = {
+  // M6.7a: the agency's snapshot refresh and pages.
+  agency,
   ai,
+  // Batch 3d merge: M3.2b's alert engine and M3.2a's Command Center (M3.4a and M3.5b grew
+  // checkin and notifications, already listed).
+  alerts,
+  // Batch 3i merge: M6.2a's warehouse, M6.4a's integrations and M6.3b's webhooks (M6.1x, M6.3a,
+  // M6.6a and M6.11x grew modules already listed).
+  analytics,
+  // Batch 3g merge: M3.3b's guest assistance queue (M3.3a grew checkin and the Command Center).
+  assistance,
   attendees,
   // Batch 3c merge: the modules of batch 3b (audiences, marketing) and 3c (guests; cms grew).
   audiences,
+  // Batch 3e merge: M3.7a journeys, M3.6b campaigns and M5.1a registration (M3.10c, M5.1b,
+  // M5.2a, M4.1b and M4.1c grew modules already listed).
+  automations,
+  // Batch 3f merge: M5.5a badges (M5.3a and M5.4a grew events, program and media).
+  badges,
   billing,
+  campaigns,
   checkin,
   cms,
+  commandCenter,
   crm,
+  engagement,
+  // M4.8a: gifts, campaigns and the gift CSV.
+  donations,
   events,
   forms,
   guests,
+  integrations,
   marketing,
   marketplace,
   media,
@@ -70,6 +104,7 @@ const MODULES = {
   platform,
   privacy,
   program,
+  registration,
   reports,
   reviews,
   seating,
@@ -78,6 +113,7 @@ const MODULES = {
   tenancy,
   ticketing,
   venues,
+  webhooks,
 };
 
 type AnyCommand = Command<unknown, unknown, unknown, unknown>;
@@ -153,15 +189,22 @@ describe('read-only freeze (M2.5a)', () => {
     const categories = new Set(
       COMMANDS.filter((c) => !ALLOWED.has(c.name)).map((c) => c.category ?? 'write'),
     );
-    // `export` is a query category (downloads are reads and keep working); every command category
-    // (money, delete and plain writes, which include starting an export job) is swept below.
-    expect([...categories].sort()).toEqual(['delete', 'money', 'write']);
+    // Downloads are `export` queries (reads keep working). Every command category is swept below:
+    // money, delete, plain writes, and (batch 3f merge) `export` commands that start an export job
+    // (M5.5a's badge batch PDF, the first module-level one; bulk exports are built per module).
+    expect([...categories].sort()).toEqual(['delete', 'export', 'money', 'write']);
     expect([...ALLOWED].sort()).toEqual([
+      // M5.1d: admitting a ticket with a balance due (an audited override) is a door action too.
+      'checkin.admitBalanceDue',
+      // M5.6a: letting someone into a session past a gate (an audited override) is a door action.
+      'checkin.admitSessionOverride',
       'checkin.heartbeat',
       'checkin.scanTicket',
       'checkin.syncScans',
       'checkin.undoAdmission',
       'orders.completeRefund',
+      // M6.8a: records the explicit reversal of an agency's commission transfer the provider made.
+      'payments.recordCommissionReversal',
       'payments.recordTransferReversal',
     ]);
   });

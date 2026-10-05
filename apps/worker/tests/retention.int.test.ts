@@ -13,8 +13,11 @@ afterAll(closePools);
 describe('daily retention job (M1.14c)', () => {
   it('runs every org as a system actor, audits the platform read, purges rate limits', async () => {
     const { a, b } = await twoOrgs();
-    const r = await runRetention();
-    expect(r.orgs).toBeGreaterThanOrEqual(2);
+    // The pass lists every live org through platform_reader (audited) and runs each one; it is
+    // scoped to this test's two orgs so it does not depend on (or wait for) the hundreds of orgs
+    // other test files leave in the shared database (batch 3h root cause of a 30 s timeout).
+    const r = await runRetention({ within: [a.org.id, b.org.id] });
+    expect(r.orgs).toBe(2);
     expect(r.failed).toBe(0);
     expect(typeof r.rateLimits).toBe('number');
     // Without an off-account archive, the access log is never purged.

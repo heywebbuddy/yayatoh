@@ -1,0 +1,132 @@
+export { configureSso, type SsoRuntime, ssoMode, ssoRuntime, ssoRuntimeFromEnv } from './config.ts';
+export {
+  ConnectionDto,
+  checkConnection,
+  connectionView,
+  DomainDto,
+  deleteConnectionCommand,
+  METADATA_ERRORS,
+  recordConnectionTestCommand,
+  type SaveConnectionInput,
+  SsoSettingsDto,
+  saveConnectionCommand,
+  setConnectionStatusCommand,
+  ssoSettingsQuery,
+} from './connections.ts';
+export { ssoDataSubjects } from './data-subject.ts';
+export {
+  certificateInfo,
+  certificateProblem,
+  IdpConfig,
+  type MetadataError,
+  parseSamlMetadata,
+  toPem,
+} from './domain/config.ts';
+export {
+  emailDomain,
+  normalizeDomain,
+  txtMatches,
+  VERIFICATION_LABEL,
+  VERIFICATION_PREFIX,
+  verificationRecord,
+} from './domain/domains.ts';
+export { isSsoRole, mappedRole } from './domain/roles.ts';
+export {
+  applyGroupPatch,
+  applyUserPatch,
+  type GroupFields,
+  groupResource,
+  listResponse,
+  type PatchOp,
+  parseFilter,
+  parseGroup,
+  parsePage,
+  parsePatch,
+  parseUser,
+  resourceTypes,
+  SCIM_ERROR_SCHEMA,
+  SCIM_GROUP_SCHEMA,
+  SCIM_MAX_PAGE,
+  SCIM_USER_SCHEMA,
+  ScimError,
+  type ScimErrorType,
+  ScimGroupResource,
+  ScimUserResource,
+  scimErrorBody,
+  serviceProviderConfig,
+  type UserFields,
+  userResource,
+} from './domain/scim.ts';
+export {
+  addDomainCommand,
+  checkDomainCommand,
+  MAX_DOMAINS,
+  removeDomainCommand,
+  setDomainEnforcementCommand,
+} from './domains.ts';
+export {
+  expectedParties,
+  FAKE_ANSWER_TTL_MS,
+  type FakeIdpStatement,
+  fakeIdentityProvider,
+  fakeIdpSubject,
+  fakeMetadataFetcher,
+  fakeTxtResolver,
+  openFakeIdpAnswer,
+  publishFakeTxt,
+  signFakeIdpAnswer,
+} from './fake.ts';
+export { EXPIRED_IDP_CERTIFICATE, FAKE_IDP_CERTIFICATE, fakeIdpMetadata } from './fixtures.ts';
+export {
+  CompleteLoginInput,
+  completeSsoLoginCommand,
+  LOGIN_REFUSALS,
+  type LoginRefusal,
+  ssoForEmail,
+  ssoPrecheck,
+  ssoRequiredFor,
+} from './login.ts';
+export {
+  ASSERTION_REFUSALS,
+  type AssertionRefusal,
+  type AssertionResult,
+  CHECK_REFUSALS,
+  type CheckRefusal,
+  type IdentityProviderPort,
+  type MetadataFetcher,
+  type ServiceProvider,
+  type SsoAssertion,
+  type SsoConnectionView,
+  type TxtResolver,
+} from './ports.ts';
+export { privateColumns } from './private-columns.ts';
+export {
+  CONNECTION_STATUSES,
+  DOMAIN_STATUSES,
+  SSO_PROTOCOLS,
+  SSO_ROLES,
+  type SsoProtocol,
+  type SsoRole,
+} from './schema.ts';
+export {
+  createScimTokenCommand,
+  hashScimToken,
+  revokeScimTokenCommand,
+  SCIM_TOKEN_PATTERN,
+  scimCreateGroupCommand,
+  scimCreateUserCommand,
+  scimCtx,
+  scimDeleteGroupCommand,
+  scimDeleteUserCommand,
+  scimEmailAllowed,
+  scimGetGroupQuery,
+  scimGetUserQuery,
+  scimGroupFieldsQuery,
+  scimListGroupsQuery,
+  scimListUsersQuery,
+  scimTokenIdentity,
+  scimUpdateGroupCommand,
+  scimUpdateUserCommand,
+  scimUserFieldsQuery,
+  setGroupRoleCommand,
+} from './scim.ts';

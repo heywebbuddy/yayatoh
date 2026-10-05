@@ -24,9 +24,11 @@ describe('program images: entity → media ownership (M1.4h)', () => {
       ['speaker', 'speaker'],
       ['exhibitor', 'exhibitor'],
       ['sponsor', 'sponsor'],
+      // U10: library images are content (event editors upload, place and delete them).
+      ['library', 'content'],
     ]);
     expect(['speaker', 'exhibitor', 'sponsor'].every(isProgramOwner)).toBe(true);
-    expect(['event', 'venue', 'org', 'constructor', 'toString'].some(isProgramOwner)).toBe(false);
+    expect(['event', 'venue', 'org', 'library', 'constructor', 'toString'].some(isProgramOwner)).toBe(false);
   });
 
   it('program images always need alt text and can never be decorative', () => {

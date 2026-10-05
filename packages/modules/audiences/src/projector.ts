@@ -3,12 +3,14 @@ import { admittedTicketIdsTx } from '@yayatoh/checkin';
 import { type ParticipationFacts, refreshContactProfilesTx, replaceParticipationTx } from '@yayatoh/crm';
 import type { TenantTx } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
+import { rsvpByContactTx } from '@yayatoh/guests';
 import { type Ctx, createCtx } from '@yayatoh/kernel';
 import { buyerFactsTx, orderRefTx } from '@yayatoh/orders';
 import { catchUpSubscriber, defineSubscriber, type PublishedEvent, type Subscriber } from '@yayatoh/platform';
 import { seatedAttendeeIdsTx } from '@yayatoh/seating';
 import { orderTicketIdsTx, ticketFactsTx } from '@yayatoh/ticketing';
 import { z } from 'zod';
+import { refreshContactStatsTx } from './stats.ts';
 
 /**
  * Events that can change who took part in an event and how (M3.6). Each names the event and the
@@ -24,6 +26,8 @@ export const PARTICIPATION_EVENTS = [
   'attendee.cancelled@1',
   'attendees.changed@1',
   'seating.assignments_changed@1',
+  // M4.1d: a wedding party answered (or the host recorded its answers).
+  'guests.rsvp_responded@1',
 ] as const;
 
 /**
@@ -34,7 +38,9 @@ export const PARTICIPATION_EVENTS = [
  * - `tickets`, `ticket_type_ids`: live tickets held; `has_seat`: one of them has a bought seat or
  *   the person was seated by the organizer; `checked_in`: any of their tickets was admitted;
  * - `orders`, `spend_minor`: paid orders as the buyer, spend net of refunds;
- * - `registered_at`: the earliest active record or paid order; `labels`: their attendee labels.
+ * - `registered_at`: the earliest active record or paid order; `labels`: their attendee labels;
+ * - `rsvp` (M4.1d): their wedding RSVP when one of the event's guests is linked to them. It is
+ *   set on rows that exist for the reasons above only: an RSVP never adds anyone (P4-3).
  */
 export async function refreshParticipationTx(
   tx: TenantTx,
@@ -62,6 +68,7 @@ export async function refreshParticipationTx(
   );
   const admitted = await admittedTicketIdsTx(tx, eventId, ticketIds);
   const buyers = new Map((await buyerFactsTx(tx, eventId, only)).map((b) => [b.contactId, b]));
+  const rsvps = await rsvpByContactTx(tx, eventId, only);
 
   const people = new Set<string>([...records.map((r) => r.contactId), ...buyers.keys()]);
   const rows: ParticipationFacts[] = [];
@@ -86,6 +93,7 @@ export async function refreshParticipationTx(
       spendMinor: buyer?.spendMinor ?? 0,
       registeredAt: new Date(Math.min(...since)),
       labels: live.flatMap((r) => r.labels),
+      rsvp: rsvps.get(contactId) ?? null,
     });
   }
   const changed = await replaceParticipationTx(tx, ctx, {
@@ -94,7 +102,10 @@ export async function refreshParticipationTx(
     contactIds: only,
     rows,
   });
-  await refreshContactProfilesTx(tx, ctx, [...new Set([...changed, ...(only ?? [])])]);
+  const touched = [...new Set([...changed, ...(only ?? [])])];
+  await refreshContactProfilesTx(tx, ctx, touched);
+  // M6.1b: their contact stats (lifetime value, RFM inputs, scores) follow in the same transaction.
+  await refreshContactStatsTx(tx, ctx, touched);
   return rows.length;
 }
 
@@ -146,6 +157,10 @@ export async function participationTargetTx(
         contactIds:
           v.attendeeIds === null ? null : await attendeeContactIdsTx(tx, { attendeeIds: v.attendeeIds }),
       };
+    }
+    case 'guests.rsvp_responded@1': {
+      const v = EventRef.extend({ contactIds: z.array(z.uuid()) }).parse(p);
+      return { eventId: v.eventId, contactIds: v.contactIds };
     }
     default:
       return null;

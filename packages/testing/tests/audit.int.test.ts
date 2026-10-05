@@ -11,7 +11,7 @@ import {
 import { addMemberCommand, updateOrganizationCommand } from '@yayatoh/tenancy';
 import { sql } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { type OrgFixture, runBulk, twoOrgs, userCtx } from '../src/index.ts';
+import { bareOrg, type OrgFixture, runBulk, twoOrgs, userCtx } from '../src/index.ts';
 import { ports } from '../src/ports.ts';
 
 let a: OrgFixture;
@@ -85,37 +85,40 @@ describe('audit hash chain', () => {
     expect(row?.n).toBe(row?.max);
   });
 
+  // Two throwaway fixtures (about 15 s each on the merged tree, which seeds every module's rows).
   it('detects an edited, a deleted and a re-hashed entry (tampering needs superuser: app_user can’t)', async () => {
     await expect(
       withTenant(a.ctx(), (tx) => tx.execute(sql`update platform.audit_events set action = 'x'`)),
     ).rejects.toThrow();
     const admin = adminClient();
     try {
-      // A throwaway org of its own so the tampering never affects other tests.
-      const { a: t } = await twoOrgs();
+      // A throwaway org of its own so the tampering never affects other tests (a bare org: the
+      // chain needs only a few entries, and a full fixture no longer fits the test's time).
+      const t = await bareOrg(`tamper-${uuidv7().slice(-8)}`, 'Tamper Org');
       for (let i = 0; i < 3; i++)
         await executeCommand(updateOrganizationCommand, { name: `Tamper ${i}` }, t.ctx(), ports);
       const status0 = await withTenant(t.ctx(), verifyAuditChainTx);
       expect(status0.verified).toBe(true);
 
       // 1. Edit the data of entry #2.
-      await admin`update platform.audit_events set data = '{"forged":true}' where org_id = ${t.org.id} and seq = 2`;
+      await admin`update platform.audit_events set data = '{"forged":true}' where org_id = ${t.orgId} and seq = 2`;
       expect(await withTenant(t.ctx(), verifyAuditChainTx)).toMatchObject({ verified: false, brokenAt: 2 });
 
       // 2. Re-hash #2 to hide the edit: the link from #3 now breaks.
-      await admin`update platform.audit_events set hash = platform.audit_hash(prev_hash, org_id, seq, actor, action, target_type, target_id, data, request_id, created_at) where org_id = ${t.org.id} and seq = 2`;
+      await admin`update platform.audit_events set hash = platform.audit_hash(prev_hash, org_id, seq, actor, action, target_type, target_id, data, request_id, created_at) where org_id = ${t.orgId} and seq = 2`;
       expect(await withTenant(t.ctx(), verifyAuditChainTx)).toMatchObject({ verified: false, brokenAt: 3 });
 
       // 3. Delete an entry in the middle: the numbering and the link break.
-      const { a: u } = await twoOrgs();
+      const u = await bareOrg(`delete-${uuidv7().slice(-8)}`, 'Delete Org');
       for (let i = 0; i < 3; i++)
         await executeCommand(updateOrganizationCommand, { name: `Delete ${i}` }, u.ctx(), ports);
-      await admin`delete from platform.audit_events where org_id = ${u.org.id} and seq = 2`;
+      await admin`delete from platform.audit_events where org_id = ${u.orgId} and seq = 2`;
       expect(await withTenant(u.ctx(), verifyAuditChainTx)).toMatchObject({ verified: false, brokenAt: 3 });
     } finally {
       await admin.end();
     }
-  });
+    // Two fresh org fixtures (about 18 s each since batch 3j) don't fit the default 30 s.
+  }, 120_000);
 });
 
 describe('Settings → Activity (auditLogQuery)', () => {

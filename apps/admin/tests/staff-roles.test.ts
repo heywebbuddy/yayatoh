@@ -41,4 +41,22 @@ describe('staff roles (M1.3e/f)', () => {
     expect(staffCan('finance', 'frontDoor')).toBe(false);
     expect(staffCan('finance', 'view')).toBe(true);
   });
+
+  it('M4.8b: admins and support verify charity profiles; finance does not (pending owner)', () => {
+    expect(staffCan('admin', 'charities')).toBe(true);
+    expect(staffCan('support', 'charities')).toBe(true);
+    expect(staffCan('finance', 'charities')).toBe(false);
+  });
+
+  it('only admins change the platform default event categories (U8)', () => {
+    expect(staffCan('admin', 'categories')).toBe(true);
+    expect(staffCan('support', 'categories')).toBe(false);
+    expect(staffCan('finance', 'categories')).toBe(false);
+  });
+
+  it('M6.14a: admins and support moderate marketplace listings; finance does not', () => {
+    expect(staffCan('admin', 'listings')).toBe(true);
+    expect(staffCan('support', 'listings')).toBe(true);
+    expect(staffCan('finance', 'listings')).toBe(false);
+  });
 });

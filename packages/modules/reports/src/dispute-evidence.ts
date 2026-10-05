@@ -2,10 +2,11 @@ import { admissionsForTicketsTx, scanLogForTicketsTx } from '@yayatoh/checkin';
 import { findEventTx } from '@yayatoh/events';
 import { DomainError, requireOrg } from '@yayatoh/kernel';
 import { orderMessagesQuery } from '@yayatoh/notifications';
-import { orderDetailQuery, orderRefundsQuery } from '@yayatoh/orders';
+import { orderDetailQuery, orderPolicySnapshotTx, orderRefundsQuery } from '@yayatoh/orders';
 import { disputeTx, EVIDENCE_OPTIONAL_SECTIONS } from '@yayatoh/payments';
 import { tenantQuery } from '@yayatoh/platform';
 import { legalPageTx, organizationNameTx } from '@yayatoh/tenancy';
+import { transfersForOrderTx } from '@yayatoh/ticketing';
 import { z } from 'zod';
 
 /** Bounded so the packet stays under the card networks' limits (4.5 MB / 19 pages). */
@@ -55,6 +56,28 @@ export const DisputeEvidenceDto = z.object({
     z.object({ amountMinor: z.int(), status: z.string(), createdAt: z.date(), reason: z.string() }),
   ),
   refundPolicy: z.object({ body: z.string(), updatedAt: z.date() }).nullable(),
+  /** M3.10c: the refund terms the buyer saw at purchase (the order's snapshot; null before M3.10b). */
+  policySnapshot: z
+    .object({
+      kind: z.enum(['unset', 'none', 'until', 'always']),
+      daysBefore: z.int().nullable(),
+      retainedMinor: z.int(),
+    })
+    .nullable()
+    .default(null),
+  /** M3.10c: tickets passed on to someone else (who held them, who claimed them, when). */
+  transfers: z
+    .array(
+      z.object({
+        serial: z.int(),
+        fromName: z.string(),
+        toName: z.string(),
+        state: z.string(),
+        at: z.date(),
+        claimedAt: z.date().nullable(),
+      }),
+    )
+    .default([]),
   /** M1.6e: every door scan of these tickets (the access log), rejections included. */
   scans: z.array(
     z.object({
@@ -158,6 +181,15 @@ export const disputeEvidenceQuery = tenantQuery({
         reason: r.reason,
       })),
       refundPolicy: await legalPageTx(tx, 'refund'),
+      policySnapshot: await orderPolicySnapshotTx(tx, d.orderId),
+      transfers: (await transfersForOrderTx(tx, d.orderId, ctx.now)).map((t) => ({
+        serial: t.ticketSerial,
+        fromName: t.fromName,
+        toName: t.toName,
+        state: t.state,
+        at: t.createdAt,
+        claimedAt: t.claimedAt,
+      })),
       scans: log.map((l) => ({
         serial: serialOf.get(l.ticketId ?? '') ?? 0,
         at: l.scannedAt,
@@ -251,6 +283,17 @@ export const EVIDENCE_LABELS = [
   'message',
   'channel',
   'trimmed',
+  'termsAtPurchase',
+  'termsUnset',
+  'termsNone',
+  'termsUntil',
+  'termsAlways',
+  'termsKept',
+  'transfers',
+  'transferFrom',
+  'transferTo',
+  'transferState',
+  'transferClaimed',
 ] as const;
 export type EvidenceLabel = (typeof EVIDENCE_LABELS)[number];
 
@@ -292,6 +335,25 @@ export function evidenceDocument(
     timeZone: e.event.timezone,
   });
   const cur = e.dispute.currency;
+  // M3.10c: the refund terms the buyer saw at purchase, as rows of the refund policy section.
+  const snap = e.policySnapshot;
+  const terms = snap
+    ? {
+        rows: [
+          [
+            l('termsAtPurchase'),
+            snap.kind === 'until'
+              ? l('termsUntil', { days: snap.daysBefore ?? 0 })
+              : snap.kind === 'none'
+                ? l('termsNone')
+                : snap.kind === 'always'
+                  ? l('termsAlways')
+                  : l('termsUnset'),
+          ] as Row,
+          ...(snap.retainedMinor > 0 ? [[l('termsKept'), money(snap.retainedMinor, cur)] as Row] : []),
+        ],
+      }
+    : {};
   return {
     lang: opts.locale,
     title: l('title', { id: e.dispute.id.slice(-8) }),
@@ -363,7 +425,24 @@ export function evidenceDocument(
               t.admittedAt.length ? t.admittedAt.map((d) => at.format(d)).join('; ') : l('notAdmitted'),
             ]),
           },
-          ...(e.ticketsOmitted > 0 ? { note: l('omitted', { n: e.ticketsOmitted }) } : {}),
+          ...(e.ticketsOmitted > 0 || e.transfers.length
+            ? {
+                note: [
+                  ...(e.ticketsOmitted > 0 ? [l('omitted', { n: e.ticketsOmitted })] : []),
+                  // M3.10c: tickets passed on to someone else, in the same section (left out with it).
+                  ...(e.transfers.length
+                    ? [
+                        `${l('transfers')}: ${e.transfers
+                          .map(
+                            (t) =>
+                              `#${t.serial} ${l('transferFrom')} ${t.fromName} ${l('transferTo')} ${t.toName} (${t.state}${t.claimedAt ? `, ${l('transferClaimed')} ${at.format(t.claimedAt)}` : ''})`,
+                          )
+                          .join('; ')}`,
+                      ]
+                    : []),
+                ].join(' '),
+              }
+            : {}),
         },
         e.scans.length
           ? {
@@ -409,10 +488,11 @@ export function evidenceDocument(
           ? {
               id: 'refundPolicy',
               title: l('refundPolicy'),
+              ...terms,
               text: e.refundPolicy.body,
               note: l('policyUpdated', { date: at.format(e.refundPolicy.updatedAt) }),
             }
-          : { id: 'refundPolicy', title: l('refundPolicy'), text: l('noPolicy') },
+          : { id: 'refundPolicy', title: l('refundPolicy'), ...terms, text: l('noPolicy') },
       ] satisfies EvidenceDocument['sections'][number][]
     ).filter((sec) => !(e.review.excluded as readonly string[]).includes(sec.id ?? '')),
   };

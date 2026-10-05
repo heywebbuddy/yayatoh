@@ -5,10 +5,13 @@ import { buttonClass, Card, EmptyState, PageHeader, Table } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { AudienceAiPanel } from '@/components/audience-ai-panel.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatNumber } from '@/lib/format.ts';
+import { aiComposeSetup } from '@/server/ai-compose.ts';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
+import { suggestAudienceAction } from './actions.ts';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('audiences');
@@ -28,6 +31,8 @@ export default async function AudiencesPage({
   const t = await getTranslations('audiences');
   const canSave = roleCan(data.role, 'messages:send');
   const segments = await executeQuery(listSegmentsQuery, {}, data.ctx, ports);
+  // M6.12b: AI audience suggestions for those who may save audiences.
+  const ai = canSave && data.modules.has('ai') ? await aiComposeSetup(data.ctx) : null;
   const when = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeZone: data.org.timezone });
   return (
     <>
@@ -35,15 +40,45 @@ export default async function AudiencesPage({
         title={t('title')}
         description={t('description')}
         actions={
-          canSave ? (
-            <Link href={`/o/${org}/audiences/new`} className={buttonClass('primary')}>
-              {t('new')}
-            </Link>
-          ) : undefined
+          <>
+            {/* M6.1a: the org's people (timelines) and possible duplicates; M6.1b: contact insights. */}
+            {roleCan(data.role, 'contacts:read') ? (
+              <>
+                <Link href={`/o/${org}/audiences/people`} className={buttonClass('secondary')}>
+                  {t('peopleLink')}
+                </Link>
+                <Link href={`/o/${org}/audiences/duplicates`} className={buttonClass('secondary')}>
+                  {t('duplicatesLink')}
+                </Link>
+                <Link href={`/o/${org}/contacts/stats`} className={buttonClass('secondary')}>
+                  {t('insights')}
+                </Link>
+              </>
+            ) : null}
+            {canSave ? (
+              <Link href={`/o/${org}/audiences/new`} className={buttonClass('primary')}>
+                {t('new')}
+              </Link>
+            ) : null}
+          </>
         }
       />
       {segments.length === 0 ? (
-        <EmptyState title={t('emptyTitle')} description={t('emptyDescription')} />
+        <EmptyState
+          title={t('emptyTitle')}
+          description={canSave ? t('emptyDescription') : t('emptyViewer')}
+          action={
+            canSave ? (
+              <Link href="#templates-heading" className={buttonClass('secondary', 'md')}>
+                {t('emptyAction')}
+              </Link>
+            ) : (
+              <Link href={`/o/${org}/team`} className={buttonClass('primary', 'md')}>
+                {t('findOwner')}
+              </Link>
+            )
+          }
+        />
       ) : (
         <Table
           caption={t('caption')}
@@ -73,6 +108,17 @@ export default async function AudiencesPage({
           ]}
         />
       )}
+      {ai ? (
+        <Card>
+          <section aria-labelledby="audience-ai-heading" className="flex flex-col gap-3">
+            <h2 id="audience-ai-heading" className="text-section">
+              {t('ai.title')}
+            </h2>
+            <p className="text-body text-ink-2">{t('ai.explainer')}</p>
+            <AudienceAiPanel org={org} setup={ai} suggest={suggestAudienceAction.bind(null, org)} />
+          </section>
+        </Card>
+      ) : null}
       {canSave ? (
         <section aria-labelledby="templates-heading" className="flex flex-col gap-3">
           <h2 id="templates-heading" className="text-section">
@@ -83,7 +129,7 @@ export default async function AudiencesPage({
               <Card key={k}>
                 <div className="flex h-full flex-col gap-2">
                   <h3 className="text-body font-medium">{t(`templates.${k}.name`)}</h3>
-                  <p className="text-caption text-zinc-500">{t(`templates.${k}.description`)}</p>
+                  <p className="text-caption text-ink-2">{t(`templates.${k}.description`)}</p>
                   <Link
                     href={`/o/${org}/audiences/new?template=${k}`}
                     className={`${buttonClass('secondary', 'sm')} mt-auto self-start`}

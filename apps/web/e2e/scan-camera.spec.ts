@@ -3,7 +3,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { chromium, expect, test } from '@playwright/test';
 import { qrPath } from '@yayatoh/pdf';
-import { continueToPayment, signIn } from './helpers.ts';
+import { continueToPayment, pickOption, signIn } from './helpers.ts';
 
 function chicago(offsetH: number): string {
   const parts = new Intl.DateTimeFormat('en-CA', {
@@ -55,7 +55,7 @@ test.describe('Scan PWA camera', () => {
     await signIn(page);
     await page.goto('/o/lakeside-events/events/new');
     await page.getByLabel('Event name', { exact: true }).fill(`Camera ${stamp}`);
-    await page.getByLabel('Time zone').selectOption('America/Chicago');
+    await pickOption(page.getByLabel('Time zone'), 'America/Chicago');
     await page.getByLabel('Starts', { exact: true }).fill(chicago(-1));
     await page.getByLabel('Ends', { exact: true }).fill(chicago(3));
     await page.getByRole('button', { name: 'Create draft' }).click();
@@ -72,7 +72,7 @@ test.describe('Scan PWA camera', () => {
 
     const guest = await (await browser.newContext()).newPage();
     await guest.goto(`/events/${base.split('/').pop()}`);
-    await guest.getByLabel('Quantity — Lens pass').selectOption('1');
+    await pickOption(guest.getByLabel('Quantity — Lens pass'), '1');
     await guest.getByLabel('Full name').fill(`Cam ${stamp}`);
     await guest.getByLabel('Email for your tickets').fill(`cam+${stamp}@example.test`);
     await continueToPayment(guest, `cam+${stamp}@example.test`);

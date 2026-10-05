@@ -74,13 +74,13 @@ export default async function TrackedLinkPage({
         <div className="flex flex-col gap-3">
           <dl className="flex flex-col gap-2">
             <div className="flex flex-col gap-1">
-              <dt className="text-caption text-zinc-600">{t('link')}</dt>
+              <dt className="text-caption text-ink-2">{t('link')}</dt>
               <dd className="m-0 font-mono text-body break-all" dir="ltr" data-testid="tracked-link-url">
                 {url}
               </dd>
             </div>
             <div className="flex flex-col gap-1">
-              <dt className="text-caption text-zinc-600">{t('utm')}</dt>
+              <dt className="text-caption text-ink-2">{t('utm')}</dt>
               <dd className="m-0 text-body">
                 {t('utmLine', {
                   source: detail.link.source,
@@ -90,7 +90,7 @@ export default async function TrackedLinkPage({
               </dd>
             </div>
             <div className="flex flex-col gap-1">
-              <dt className="text-caption text-zinc-600">{t('destination')}</dt>
+              <dt className="text-caption text-ink-2">{t('destination')}</dt>
               <dd className="m-0 font-mono text-body break-all" dir="ltr">
                 {detail.link.destinationPath ?? `/events/${ev.slug}`}
               </dd>
@@ -104,7 +104,7 @@ export default async function TrackedLinkPage({
           data-testid="tracked-link-qr"
           viewBox={`0 0 ${qr.size} ${qr.size}`}
           shapeRendering="crispEdges"
-          className="size-40 shrink-0 text-zinc-900"
+          className="size-40 shrink-0 rounded-tag text-black"
         >
           <rect width={qr.size} height={qr.size} className="fill-white" />
           <path d={qr.d} fill="currentColor" />
@@ -117,7 +117,7 @@ export default async function TrackedLinkPage({
         <dl className="grid grid-cols-2 gap-3 md:grid-cols-3">
           {figures.map(([key, label, value]) => (
             <Card key={key} className="flex flex-col gap-1">
-              <dt className="text-caption text-zinc-600">{label}</dt>
+              <dt className="text-caption text-ink-2">{label}</dt>
               <dd className="m-0 font-mono text-section" data-testid={`figure-${key}`}>
                 {value}
               </dd>

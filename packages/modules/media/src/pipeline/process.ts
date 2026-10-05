@@ -78,8 +78,12 @@ function encode(img: Sharp, v: PlannedVariant): Sharp {
  * of an animation only), auto-oriented from EXIF and re-encoded; the encoders write no metadata,
  * so EXIF (GPS, camera serials), XMP, IPTC and ICC profiles never reach a variant.
  */
-export async function processImage(bytes: Uint8Array): Promise<ProcessedImage> {
-  if (bytes.byteLength > MAX_UPLOAD_BYTES) throw new MediaRejected('too_large');
+export async function processImage(
+  bytes: Uint8Array,
+  /** M4.5b: gallery uploads go straight to storage, so they may be larger than a request body. */
+  opts: { readonly maxBytes?: number } = {},
+): Promise<ProcessedImage> {
+  if (bytes.byteLength > (opts.maxBytes ?? MAX_UPLOAD_BYTES)) throw new MediaRejected('too_large');
   const type = sniff(bytes);
   if (!type) throw new MediaRejected('unsupported_type');
 

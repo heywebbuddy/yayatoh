@@ -6,17 +6,19 @@ import { tenantCommand } from '@yayatoh/platform';
 import { and, eq, gte, ne, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { nextDeliveryState, SOFT_BOUNCE_WINDOW_MS, suppressionFor } from './delivery-rules.ts';
+import { fallbackTx } from './fallback.ts';
 import { decryptParams } from './notifier.ts';
 import { evaluateComplaintRateTx } from './policy/console.ts';
+import { type ProviderWebhookAdapter, WebhookVerificationError } from './providers/types.ts';
 import { addressSuppressions, messageEvents, messages } from './schema.ts';
 
 /**
  * Provider delivery reports (M1.10d): delivered, bounced (hard/soft), complained. A webhook adapter
  * verifies the provider's signature on the raw body and turns the delivery into these events; the
  * web endpoint resolves each event's org from our message id and records them with
- * `recordDeliveryEventsCommand` (deduplicated by the provider's event id). SES (SNS signatures)
- * and Twilio (`X-Twilio-Signature`) adapters arrive with the owner's accounts; the fake adapter
- * below is what development, preview and CI use.
+ * `recordDeliveryEventsCommand` (deduplicated by the provider's event id). The SES (SNS
+ * signatures), Twilio (`X-Twilio-Signature`) and WhatsApp adapters live in `providers/` (M3.5b);
+ * the fake adapter below is what development, preview and CI use.
  */
 export const DeliveryEvent = z.object({
   /** The provider's event id (deduplication key). */
@@ -102,6 +104,24 @@ export function fakeDeliveryAdapter(
   };
 }
 
+/** The fake provider behind the generic webhook pipeline (M3.5b). */
+export function fakeWebhookAdapter(adapter: DeliveryWebhookAdapter): ProviderWebhookAdapter {
+  return {
+    name: 'fake',
+    async verify(req) {
+      try {
+        return { events: adapter.verify(req.rawBody, req.headers), inbound: [] };
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : '';
+        throw new WebhookVerificationError(
+          /tolerance/.test(msg) ? 'replayed' : /malformed/.test(msg) ? 'malformed' : 'invalid',
+          msg,
+        );
+      }
+    },
+  };
+}
+
 /** The org a message belongs to (SECURITY DEFINER `notifications.message_org`), or null. */
 export async function orgOfMessage(messageId: string): Promise<string | null> {
   const rows = await withoutTenant((tx) =>
@@ -117,6 +137,8 @@ const RecordOutput = z.object({
   suppressed: z.int(),
   /** The complaint rate went over the limit and optional messaging paused (M3.5a). */
   autoPaused: z.boolean(),
+  /** Undelivered texts handed to their category's next channel (M3.5b fallback chains). */
+  fellBack: z.int(),
 });
 
 /**
@@ -136,8 +158,9 @@ export const recordDeliveryEventsCommand = tenantCommand({
   permission: 'platform:notifications.delivery_events',
   handler: async ({ input, ctx, tx, emit }) => {
     const orgId = requireOrg(ctx);
-    const out = { recorded: 0, duplicate: 0, unknown: 0, suppressed: 0, autoPaused: false };
+    const out = { recorded: 0, duplicate: 0, unknown: 0, suppressed: 0, autoPaused: false, fellBack: 0 };
     let complaints = 0;
+    let bounces = 0;
     for (const e of input.events) {
       const [msg] = await tx.select().from(messages).where(eq(messages.id, e.messageId)).for('update');
       // A signed event must still name one of our sends: the provider's id has to match.
@@ -171,6 +194,7 @@ export const recordDeliveryEventsCommand = tenantCommand({
       }
       out.recorded += 1;
       if (e.type === 'complained') complaints += 1;
+      if (e.type === 'bounced') bounces += 1;
       const fact = {
         type: e.type,
         bounceType: e.type === 'bounced' ? (e.bounceType ?? 'hard') : null,
@@ -185,6 +209,12 @@ export const recordDeliveryEventsCommand = tenantCommand({
         })
         .where(eq(messages.id, msg.id));
 
+      // A text that never arrived (M3.5b): the category's next channel gets it, once (its row
+      // shares the dedupe key, and this event is recorded once).
+      if ((msg.channel === 'sms' || msg.channel === 'whatsapp') && e.type === 'bounced') {
+        const next = await fallbackTx(tx, orgId, msg, 'undelivered', ctx.now);
+        if (next?.created) out.fellBack += 1;
+      }
       if (msg.channel === 'push') continue;
       let address: string | null = null;
       if (msg.channel === 'email') {
@@ -235,6 +265,16 @@ export const recordDeliveryEventsCommand = tenantCommand({
       out.suppressed += s.length;
     }
     if (complaints > 0) out.autoPaused = await evaluateComplaintRateTx(tx, ctx, emit);
+    // Batch 3d merge: new bounces or complaints from a provider webhook (M3.5b) re-evaluate the
+    // alert engine's deliverability rule (M3.2b) at once instead of at its next sweep. Counts only.
+    if (bounces + complaints > 0)
+      emit({
+        type: 'messaging.delivery_problems',
+        version: 1,
+        aggregateType: 'organization',
+        aggregateId: orgId,
+        payload: { orgId, provider: input.provider, bounced: bounces, complained: complaints },
+      });
     return out;
   },
   audit: (input, r) => ({

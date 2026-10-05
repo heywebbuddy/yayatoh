@@ -1,0 +1,11 @@
+# Accepted oasdiff findings: warnings.
+# Owner decision 2026-10-05 (docs/decisions.md, 2026-10-05 "oasdiff baseline for main"): the first comparison of the build
+# branch's /v1 spec with main (PR #2) found only new response enum values. /v1 had never been
+# published, so this exact set is accepted once. Every other change still fails the gate.
+# Format (oasdiff --warn-ignore): one finding per line, "<METHOD> <path> <change text>".
+GET /v1/orgs/{org}/events/{eventId}/exhibitors added the new `library` enum value to the `data/items/image/allOf[#/components/schemas/Image]/slot` response property for the response status `200`
+GET /v1/orgs/{org}/events/{eventId}/sponsors added the new `library` enum value to the `data/items/sponsors/items/image/allOf[#/components/schemas/Image]/slot` response property for the response status `200`
+GET /v1/orgs/{org}/orders/{orderId} added the new `awaiting_invoice` enum value to the `allOf[#/components/schemas/Order]/status` response property for the response status `200`
+GET /v1/orgs/{org}/orders/{orderId} added the new `void` enum value to the `allOf[#/components/schemas/Order]/status` response property for the response status `200`
+GET /v1/public/events/{slug}/exhibitors added the new `library` enum value to the `data/items/image/allOf[#/components/schemas/Image]/slot` response property for the response status `200`
+GET /v1/public/events/{slug}/sponsors added the new `library` enum value to the `data/items/sponsors/items/image/allOf[#/components/schemas/Image]/slot` response property for the response status `200`

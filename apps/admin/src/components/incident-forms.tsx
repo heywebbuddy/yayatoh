@@ -1,13 +1,13 @@
 'use client';
 
-import { Alert, Button, Input } from '@yayatoh/ui';
+import { Alert, Button, Input, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState } from 'react';
 import type { IncidentFormState } from '@/app/incidents/actions.ts';
 
 const INITIAL: IncidentFormState = { ok: false, errors: [], stamp: 0 };
-const area = 'rounded-card border bg-white px-4 py-2 text-body';
-const select = 'min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body';
+const area = 'rounded-card border bg-surface px-4 py-2 text-body';
+const select = 'field';
 
 /** Post an incident (M3.11b): title, impact, affected components and the first update. */
 export function NewIncidentForm({
@@ -42,19 +42,19 @@ export function NewIncidentForm({
         error={bad.has('title') ? t('errors.title') : undefined}
       />
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="incident-impact" className="text-caption text-zinc-600">
+        <label htmlFor="incident-impact" className="text-[13px] font-bold text-ink">
           {t('new.impact')}
         </label>
-        <select id="incident-impact" name="impact" defaultValue="minor" className={select}>
+        <Select id="incident-impact" name="impact" defaultValue="minor" className={select}>
           {impacts.map((i) => (
             <option key={i} value={i}>
               {t(`impact.${i}`)}
             </option>
           ))}
-        </select>
+        </Select>
       </div>
       <fieldset className="flex flex-col gap-2">
-        <legend className="mb-1 text-caption text-zinc-600">{t('new.components')}</legend>
+        <legend className="mb-1 text-[13px] font-bold text-ink">{t('new.components')}</legend>
         {components.map((c) => (
           <label key={c} className="flex min-h-6 items-center gap-2 text-body">
             <input type="checkbox" name="components" value={c} className="size-5" />
@@ -63,7 +63,7 @@ export function NewIncidentForm({
         ))}
       </fieldset>
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="incident-body" className="text-caption text-zinc-600">
+        <label htmlFor="incident-body" className="text-[13px] font-bold text-ink">
           {t('new.body')}
         </label>
         <textarea
@@ -73,10 +73,10 @@ export function NewIncidentForm({
           maxLength={2000}
           aria-invalid={bad.has('body') || undefined}
           aria-describedby={bad.has('body') ? 'incident-body-error' : undefined}
-          className={`${area} ${bad.has('body') ? 'border-pink-700' : 'border-zinc-200'}`}
+          className={`${area} ${bad.has('body') ? 'field-invalid' : ''}`}
         />
         {bad.has('body') ? (
-          <p id="incident-body-error" className="text-caption text-pink-700">
+          <p id="incident-body-error" className="text-caption text-danger">
             {t('errors.body')}
           </p>
         ) : null}
@@ -111,19 +111,19 @@ export function IncidentUpdateForm({
       className="flex flex-col gap-3"
     >
       <div className="flex flex-col gap-1.5">
-        <label htmlFor={`status-${id}`} className="text-caption text-zinc-600">
+        <label htmlFor={`status-${id}`} className="text-[13px] font-bold text-ink">
           {t('update.status')}
         </label>
-        <select id={`status-${id}`} name="status" className={select}>
+        <Select id={`status-${id}`} name="status" className={select}>
           {statuses.map((s) => (
             <option key={s} value={s}>
               {t(`status.${s}`)}
             </option>
           ))}
-        </select>
+        </Select>
       </div>
       <div className="flex flex-col gap-1.5">
-        <label htmlFor={`body-${id}`} className="text-caption text-zinc-600">
+        <label htmlFor={`body-${id}`} className="text-[13px] font-bold text-ink">
           {t('update.body')}
         </label>
         <textarea
@@ -132,9 +132,9 @@ export function IncidentUpdateForm({
           rows={3}
           maxLength={2000}
           aria-invalid={bad.has('body') || undefined}
-          className={`${area} ${bad.has('body') ? 'border-pink-700' : 'border-zinc-200'}`}
+          className={`${area} ${bad.has('body') ? 'field-invalid' : ''}`}
         />
-        {bad.has('body') ? <p className="text-caption text-pink-700">{t('errors.body')}</p> : null}
+        {bad.has('body') ? <p className="text-caption text-danger">{t('errors.body')}</p> : null}
       </div>
       <div aria-live="polite">{bad.has('closed') ? <Alert title={t('errors.closed')} /> : null}</div>
       <Button type="submit" variant="secondary" size="sm" disabled={pending} className="self-start">

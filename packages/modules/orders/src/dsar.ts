@@ -105,13 +105,16 @@ export async function eraseOrdersDsarTx(tx: TenantTx, emailNorm: string, now: Da
     .where(and(eq(guestChallenges.email, emailNorm), eq(guestChallenges.scopeOrgId, thisOrg)));
   // M3.10a: the person's places in waitlists go (an open offer's stock goes back first).
   await eraseWaitlistDsarTx(tx, emailNorm);
-  if (ids.length)
-    await tx
-      .update(refunds)
-      .set({ note: null, updatedAt: now })
-      .where(and(inArray(refunds.orderId, ids), isNotNull(refunds.note)));
+  const refundNotes = ids.length
+    ? await tx
+        .update(refunds)
+        .set({ note: null, updatedAt: now })
+        .where(and(inArray(refunds.orderId, ids), isNotNull(refunds.note)))
+        .returning({ id: refunds.id })
+    : [];
   return {
     orderIds: ids,
+    refundNotes: refundNotes.length,
     erased: rows.length,
     legalHold: rows.filter((r) => (SOLD as readonly string[]).includes(r.status)).length,
   };

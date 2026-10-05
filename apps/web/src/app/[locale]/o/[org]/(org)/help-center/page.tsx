@@ -59,10 +59,7 @@ export default async function HelpCenterConsole({
         }
       />
       {canWrite ? null : (
-        <p
-          role="note"
-          className="rounded-card border border-zinc-200 bg-white px-4 py-3 text-body text-zinc-600"
-        >
+        <p role="note" className="rounded-card border border-line bg-surface px-4 py-3 text-body text-ink-2">
           {tc('readOnly')}
         </p>
       )}
@@ -76,7 +73,29 @@ export default async function HelpCenterConsole({
         articles.length === 0 ? (
           <EmptyState
             title={t('emptyArticlesTitle')}
-            description={t(categories.length === 0 ? 'emptyNeedsCategory' : 'emptyArticlesDescription')}
+            description={
+              canWrite
+                ? t(categories.length === 0 ? 'emptyNeedsCategory' : 'emptyArticlesDescription')
+                : t('emptyViewer')
+            }
+            action={
+              !canWrite ? (
+                <Link href={`/o/${org}/team`} className={buttonClass('primary', 'md')}>
+                  {tc('findOwner')}
+                </Link>
+              ) : categories.length === 0 ? (
+                <Link
+                  href={`/o/${org}/help-center?tab=categories#new-category`}
+                  className={buttonClass('primary', 'md')}
+                >
+                  {t('emptyNeedsCategoryAction')}
+                </Link>
+              ) : (
+                <Link href={`/o/${org}/help-center/new`} className={buttonClass('secondary', 'md')}>
+                  {t('emptyArticlesAction')}
+                </Link>
+              )
+            }
           />
         ) : (
           <Table
@@ -92,7 +111,7 @@ export default async function HelpCenterConsole({
                     <Link href={`/o/${org}/help-center/${r.id}`} className="underline underline-offset-2">
                       {r.title}
                     </Link>
-                    <span className="text-caption text-zinc-500">
+                    <span className="text-caption text-ink-2">
                       <span dir="ltr" className="font-mono">
                         {r.slug}
                       </span>{' '}
@@ -137,7 +156,21 @@ export default async function HelpCenterConsole({
       ) : (
         <>
           {categories.length === 0 ? (
-            <EmptyState title={t('emptyCategoriesTitle')} description={t('emptyCategoriesDescription')} />
+            <EmptyState
+              title={t('emptyCategoriesTitle')}
+              description={t('emptyCategoriesDescription')}
+              action={
+                canWrite ? (
+                  <Link href="#new-category" className={buttonClass('primary', 'md')}>
+                    {t('emptyCategoriesAction')}
+                  </Link>
+                ) : (
+                  <Link href={`/o/${org}/team`} className={buttonClass('primary', 'md')}>
+                    {tc('findOwner')}
+                  </Link>
+                )
+              }
+            />
           ) : (
             <Table
               caption={t('tabs.categories')}
@@ -155,7 +188,7 @@ export default async function HelpCenterConsole({
                       >
                         {r.title}
                       </Link>
-                      <span dir="ltr" className="font-mono text-caption text-zinc-500">
+                      <span dir="ltr" className="font-mono text-caption text-ink-2">
                         /help/{r.slug}
                       </span>
                     </span>
@@ -178,7 +211,9 @@ export default async function HelpCenterConsole({
           )}
           {canWrite ? (
             <Card className="flex flex-col gap-4">
-              <h2 className="text-[19px] font-normal">{t('newCategory')}</h2>
+              <h2 id="new-category" className="text-[19px] font-normal">
+                {t('newCategory')}
+              </h2>
               <CategoryForm
                 action={createCategoryAction.bind(null, org)}
                 locales={LOCALES.filter((l) => l !== 'en').map((code) => ({ code, name: localeName(code) }))}

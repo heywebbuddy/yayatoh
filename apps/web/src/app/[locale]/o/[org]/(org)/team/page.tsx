@@ -86,11 +86,11 @@ export default async function TeamPage({ params }: { params: Promise<{ locale: s
           <h2 id="pending-heading" className="text-section">
             {t('team.pending')}
           </h2>
-          <ul className="flex list-none flex-col divide-y divide-zinc-100 rounded-card border border-zinc-200 bg-white p-0">
+          <ul className="flex list-none flex-col divide-y divide-line rounded-card border border-line bg-surface p-0">
             {invitations.map((i) => (
               <li key={i.id} className="flex flex-wrap items-center gap-3 px-4 py-3">
                 <span className="min-w-0 flex-1 truncate">{i.email}</span>
-                <span className="text-caption text-zinc-600">{t(`roles.${i.role}`)}</span>
+                <span className="text-caption text-ink-2">{t(`roles.${i.role}`)}</span>
                 <StatusDot
                   status="warning"
                   label={t('team.expires', { date: formatDate(i.expiresAt.toISOString(), f) })}

@@ -3,8 +3,10 @@ import { sql } from 'drizzle-orm';
 import {
   boolean,
   check,
+  date,
   foreignKey,
   index,
+  integer,
   jsonb,
   pgSchema,
   text,
@@ -55,6 +57,12 @@ export const organizations = tenantTable(
     logoPath: text('logo_path'),
     logoAlt: text('logo_alt'),
     legacyInstance: text('legacy_instance'),
+    /**
+     * M6.3a: a sandbox org (linked to `sandbox_parent_org_id`, which owns the link in
+     * `tenancy.sandbox_orgs`). Fake payments only, never on the marketplace, a SANDBOX banner.
+     */
+    sandbox: boolean('sandbox').notNull().default(false),
+    sandboxParentOrgId: uuid('sandbox_parent_org_id'),
   },
   () => [
     uniqueIndex('organizations_slug_key').on(sql`slug`),
@@ -62,6 +70,10 @@ export const organizations = tenantTable(
     check('organizations_kind_check', inList('kind', ORG_KINDS)),
     check('organizations_status_check', inList('status', ORG_STATUSES)),
     check('organizations_currency_check', sql`currency ~ '^[A-Z]{3}$'`),
+    check(
+      'organizations_sandbox_parent_check',
+      sql`sandbox = (sandbox_parent_org_id is not null) and (sandbox_parent_org_id is null or sandbox_parent_org_id <> id)`,
+    ),
     check('organizations_brand_color_check', sql`brand_color is null or brand_color ~ '^#[0-9a-f]{6}$'`),
     check(
       'organizations_logo_check',
@@ -305,6 +317,15 @@ export const API_KEY_SCOPES = [
   /** Bulk attendee and ticket actions on /v1 (labels, email, resend tickets; M1.13d). */
   'attendees:write',
   'checkin:scan',
+  /** M6.4c: add contacts (/v1 `contacts`, Zapier's "Add contact"). */
+  'contacts:write',
+  /** M6.4c: subscribe and unsubscribe REST hooks (/v1 `hooks`, Zapier triggers). */
+  'webhooks:subscribe',
+  /**
+   * M6.5c: add and remove the org's webhook endpoints over /v1 (Make and n8n instant triggers
+   * subscribe themselves). Never the signing secrets, test sends or replays (console only).
+   */
+  'webhooks:manage',
 ] as const;
 export type ApiKeyScope = (typeof API_KEY_SCOPES)[number];
 
@@ -337,6 +358,10 @@ export const apiKeys = tenantTable(
     revokedBy: uuid('revoked_by'),
     /** A test key (`yy_test_…`): read-only, non-personal scopes only (`TEST_KEY_SCOPES`). */
     sandbox: boolean('sandbox').notNull().default(false),
+    /** M6.3a: the key stops working at this instant (null: no expiry). Rotation sets it on the old key. */
+    expiresAt: timestamp('expires_at', { withTimezone: true }),
+    /** M6.3a: the key that replaced this one (rotation); this one works until `expires_at`. */
+    replacedById: uuid('replaced_by_id'),
   },
   (t) => [
     uniqueIndex('api_keys_key_hash_key').on(t.keyHash),
@@ -422,6 +447,162 @@ export const orgOnboarding = tenantTable(
     foreignKey({
       name: 'org_onboarding_org_fk',
       columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+  ],
+);
+
+/**
+ * M6.3a: requests per API key per day (the org's timezone day), with errors (status ≥ 400) and
+ * refusals for the rate limit. `audited_at` is set once the day's summary is in the audit log.
+ */
+export const apiKeyUsageDaily = tenantTable(
+  tenancy,
+  'api_key_usage_daily',
+  {
+    apiKeyId: uuid('api_key_id').notNull(),
+    day: date('day', { mode: 'string' }).notNull(),
+    requests: integer('requests').notNull().default(0),
+    errors: integer('errors').notNull().default(0),
+    rateLimited: integer('rate_limited').notNull().default(0),
+    auditedAt: timestamp('audited_at', { withTimezone: true }),
+  },
+  (t) => [
+    uniqueIndex('api_key_usage_daily_org_key_day_key').on(t.orgId, t.apiKeyId, t.day),
+    index('api_key_usage_daily_org_day_idx').on(t.orgId, t.day),
+    check(
+      'api_key_usage_daily_counts_check',
+      sql`requests >= 0 and errors between 0 and requests and rate_limited between 0 and errors`,
+    ),
+    foreignKey({
+      name: 'api_key_usage_daily_key_fk',
+      columns: [t.orgId, t.apiKeyId],
+      foreignColumns: [apiKeys.orgId, apiKeys.id],
+    }).onDelete('cascade'),
+  ],
+);
+
+/**
+ * M6.3a: sandbox orgs created from this (parent) org. The parent owns the link; the sandbox org
+ * row carries `sandbox` and its parent. `deleted_at`: the sandbox was deleted (closed, members
+ * removed, keys revoked).
+ */
+export const sandboxOrgs = tenantTable(
+  tenancy,
+  'sandbox_orgs',
+  {
+    sandboxOrgId: uuid('sandbox_org_id').notNull(),
+    name: text('name').notNull(),
+    slug: text('slug').notNull(),
+    createdBy: uuid('created_by'),
+    deletedAt: timestamp('deleted_at', { withTimezone: true }),
+    deletedBy: uuid('deleted_by'),
+  },
+  (t) => [
+    uniqueIndex('sandbox_orgs_sandbox_org_key').on(t.sandboxOrgId),
+    index('sandbox_orgs_org_created_idx').on(t.orgId, t.createdAt),
+    check('sandbox_orgs_name_length', sql`length(name) between 1 and 60`),
+    check('sandbox_orgs_not_self', sql`sandbox_org_id <> org_id`),
+    foreignKey({
+      name: 'sandbox_orgs_org_fk',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+  ],
+);
+
+/** What a client may grant an agency (M6.7a): a ceiling, never owner, admin or finance. */
+export const AGENCY_GRANT_ROLES = ['manager', 'marketing', 'viewer'] as const;
+
+/**
+ * Agency access grants (M6.7a, P6-8). Owned by the **client** (`org_id`), who grants an agency org
+ * a role and revokes it at any time; `finance` is the client's explicit opt-in to its money
+ * tables (off by default). Members of the agency act in the client through a live grant only:
+ * the authorizer and the money tables' row policy re-read it on every request, so a revoked grant
+ * cuts access on the next one. Rows are kept after revocation (history).
+ */
+export const orgAccessGrants = tenantTable(
+  tenancy,
+  'org_access_grants',
+  {
+    agencyOrgId: uuid('agency_org_id').notNull(),
+    role: text('role').notNull(),
+    finance: boolean('finance').notNull().default(false),
+    grantedBy: uuid('granted_by').notNull(),
+    revokedAt: timestamp('revoked_at', { withTimezone: true }),
+    revokedBy: uuid('revoked_by'),
+  },
+  (t) => [
+    uniqueIndex('org_access_grants_org_agency_live_key')
+      .on(t.orgId, t.agencyOrgId)
+      .where(sql`revoked_at is null`),
+    index('org_access_grants_agency_idx').on(t.agencyOrgId).where(sql`revoked_at is null`),
+    check('org_access_grants_role_check', inList('role', AGENCY_GRANT_ROLES)),
+    check('org_access_grants_not_self', sql`agency_org_id <> org_id`),
+    check('org_access_grants_revoked_check', sql`(revoked_at is null) = (revoked_by is null)`),
+    foreignKey({
+      name: 'org_access_grants_org_fk',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'org_access_grants_agency_fk',
+      columns: [t.agencyOrgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+  ],
+);
+
+/** Agency staff access kinds (M6.8b): a standing team member, or a time-boxed day-of pass. */
+export const AGENCY_STAFF_KINDS = ['team', 'day_of'] as const;
+
+/**
+ * Agency v2 team and day-of grants (M6.8b, P6-8). Owned by the **client** (`org_id`), under one of
+ * its agency grants. With no live `team` row for a grant, every agency member except collaborators
+ * acts through it (M6.7a); once the agency names a team, only the team does. A `day_of` row lets one
+ * agency person (collaborators too: event-day freelancers) act through the grant between
+ * `starts_at` and `ends_at` only. `role` is a ceiling under the grant's own role. The access
+ * function (`tenancy.agency_access()`) reads these rows on every request, so a revoked or expired
+ * row cuts access on the next one. Rows are kept after revocation (history).
+ */
+export const agencyStaffGrants = tenantTable(
+  tenancy,
+  'agency_staff_grants',
+  {
+    grantId: uuid('grant_id').notNull(),
+    agencyOrgId: uuid('agency_org_id').notNull(),
+    userId: uuid('user_id').notNull(),
+    kind: text('kind').notNull(),
+    role: text('role').notNull(),
+    /** The client event a day-of pass is for (its window defaults around the event). */
+    eventId: uuid('event_id'),
+    startsAt: timestamp('starts_at', { withTimezone: true }),
+    endsAt: timestamp('ends_at', { withTimezone: true }),
+    createdBy: uuid('created_by').notNull(),
+    revokedAt: timestamp('revoked_at', { withTimezone: true }),
+    revokedBy: uuid('revoked_by'),
+  },
+  (t) => [
+    uniqueIndex('agency_staff_grants_team_live_key')
+      .on(t.orgId, t.grantId, t.userId)
+      .where(sql`kind = 'team' and revoked_at is null`),
+    index('agency_staff_grants_org_grant_idx').on(t.orgId, t.grantId),
+    index('agency_staff_grants_agency_idx').on(t.agencyOrgId).where(sql`revoked_at is null`),
+    check('agency_staff_grants_kind_check', inList('kind', AGENCY_STAFF_KINDS)),
+    check('agency_staff_grants_role_check', inList('role', AGENCY_GRANT_ROLES)),
+    check(
+      'agency_staff_grants_window_check',
+      sql`(kind = 'team' and event_id is null and starts_at is null and ends_at is null) or (kind = 'day_of' and event_id is not null and starts_at is not null and ends_at > starts_at and ends_at - starts_at <= interval '72 hours')`,
+    ),
+    check('agency_staff_grants_revoked_check', sql`(revoked_at is null) = (revoked_by is null)`),
+    foreignKey({
+      name: 'agency_staff_grants_grant_fk',
+      columns: [t.orgId, t.grantId],
+      foreignColumns: [orgAccessGrants.orgId, orgAccessGrants.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'agency_staff_grants_agency_fk',
+      columns: [t.agencyOrgId],
       foreignColumns: [organizations.id],
     }).onDelete('cascade'),
   ],

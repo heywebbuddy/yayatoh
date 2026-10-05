@@ -6,16 +6,21 @@
   "scripts": {
     "dev": "next dev --port 3001",
     "build": "next build",
-    "start": "next start --port 3001",
+    "start": "next start --port 3001 --keepAliveTimeout 75000",
     "typecheck": "next typegen && tsc --noEmit",
     "e2e": "playwright test"
   },
   "dependencies": {
+    "@fontsource-variable/manrope": "5.3.0",
     "@yayatoh/auth": "workspace:*",
     "@yayatoh/billing": "workspace:*",
     "@yayatoh/contracts": "workspace:*",
     "@yayatoh/db": "workspace:*",
+    "@yayatoh/donations": "workspace:*",
+    "@yayatoh/engagement": "workspace:*",
+    "@yayatoh/events": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
+    "@yayatoh/marketplace": "workspace:*",
     "@yayatoh/messaging": "workspace:*",
     "@yayatoh/notifications": "workspace:*",
     "@yayatoh/payments": "workspace:*",
@@ -44,6 +49,7 @@
     "@types/react-dom": "catalog:",
     "@yayatoh/config": "workspace:*",
     "@yayatoh/marketplace": "workspace:*",
+    "@yayatoh/testing": "workspace:*",
     "@yayatoh/worker": "workspace:*",
     "tailwindcss": "catalog:",
     "typescript": "catalog:"

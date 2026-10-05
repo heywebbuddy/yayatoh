@@ -33,7 +33,7 @@ export function ClaimLinkForm({
     <div className="flex flex-col gap-2">
       <form action={formAction} className="flex flex-wrap items-end gap-2">
         <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-          <label htmlFor={`${idPrefix}-email`} className="text-caption text-zinc-600">
+          <label htmlFor={`${idPrefix}-email`} className="text-[13px] font-bold text-ink">
             {t('recipient')}
           </label>
           <input
@@ -42,9 +42,9 @@ export function ClaimLinkForm({
             type="email"
             autoComplete="off"
             aria-describedby={`${idPrefix}-hint`}
-            className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
+            className="field"
           />
-          <span id={`${idPrefix}-hint`} className="text-caption text-zinc-500">
+          <span id={`${idPrefix}-hint`} className="text-caption text-ink-2">
             {t('recipientHint')}
           </span>
         </div>
@@ -54,7 +54,7 @@ export function ClaimLinkForm({
       </form>
       <div aria-live="polite">
         {state.kind === 'link' ? (
-          <div className="flex flex-col gap-1.5 rounded-card border border-zinc-200 bg-zinc-50 p-3">
+          <div className="flex flex-col gap-1.5 rounded-card border border-line bg-surface-2 p-3">
             <p className="text-caption">{state.emailed ? t('linkEmailed') : t('linkReady')}</p>
             <input
               readOnly
@@ -62,7 +62,7 @@ export function ClaimLinkForm({
               value={url(state.token)}
               onFocus={(e) => e.currentTarget.select()}
               data-testid="claim-link"
-              className="min-h-10 w-full rounded-pill border border-zinc-200 bg-white px-4 font-mono text-caption"
+              className="field w-full font-mono text-caption"
             />
           </div>
         ) : state.kind === 'error' ? (

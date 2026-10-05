@@ -5,8 +5,16 @@ import { columnPrivacy, internal, personal, secret } from '@yayatoh/db';
  * @yayatoh/db). Every text, jsonb and text[] column of a tenant table is listed.
  */
 export const privateColumns = columnPrivacy('notifications', {
-  // Hard bounces and complaints (M1.10d); only email rows exist until SMS ships.
-  address_suppressions: { channel: 'vocab', address_norm: personal('email'), reason: 'vocab' },
+  // Hard bounces and complaints (M1.10d); SMS/WhatsApp opt-outs and failures (M3.5b).
+  address_suppressions: {
+    channel: 'vocab',
+    // Text rows hold E.164 numbers (a STOP, an undeliverable number), only ever shown masked.
+    address_norm: personal('email', {
+      where: "channel = 'email'",
+      why: 'SMS/WhatsApp rows hold numbers, masked by addressSuppressionsQuery (providers.int.test)',
+    }),
+    reason: 'vocab',
+  },
   // A rendered email (recipient names, event details), shown only to the member who made it.
   email_previews: { html: personal() },
   inbox_items: { kind: 'vocab', params: internal(), href: internal('path'), dedupe_key: internal() },
@@ -29,6 +37,12 @@ export const privateColumns = columnPrivacy('notifications', {
     // M3.5a: the state for quiet-hour rules, and a keyed hash of (channel, address) for caps.
     recipient_region: 'vocab',
     recipient_key: secret(),
+    // M3.5b: the adapter that sent it, and why a fallback replaced an earlier channel.
+    provider: 'vocab',
+    fallback_reason: 'vocab',
+    // M3.8b: the domain an email went out from — a lowercase hostname seen in every From header
+    // (public DNS data, CHECK-constrained), never an address.
+    sender_domain: 'vocab',
   },
   // Provider delivery reports (M1.10d).
   message_events: {
@@ -56,6 +70,16 @@ export const privateColumns = columnPrivacy('notifications', {
     label: internal(),
     time_zone: 'vocab',
   },
+  // Campaign content (M3.6b): the organizer's own marketing copy, written to be sent to its
+  // audience; merge fields are placeholders (recipient values are filled only at send time).
+  stored_contents: {
+    subject: 'public',
+    preheader: 'public',
+    html: 'public',
+    text_body: 'public',
+    sms_body: 'public',
+    locale: 'vocab',
+  },
   suppressions: { email_norm: personal('email'), category: 'vocab', source: 'vocab' },
   // Messaging policy (M3.5a): usage meters, staff-set quotas, frequency caps and auto-pauses.
   usage_counters: { period: 'vocab', channel: 'vocab' },
@@ -64,6 +88,40 @@ export const privateColumns = columnPrivacy('notifications', {
   auto_pauses: {
     lifted_by: internal(undefined, { where: 'lifted_at is not null' }),
     lift_note: internal(undefined, { where: 'lifted_at is not null' }),
+  },
+  // Provider adapters (M3.5b). A sending domain appears in the From line of every email it sends
+  // and its DNS records are public DNS data; the messaging service / phone number ids stay inside.
+  // U10 "Email sending": the From name is shown on every email (as the org chose it); the Reply-To
+  // address goes out in email headers only and is never on a page (contact page canary crawl).
+  email_settings: { from_name: 'public', reply_to: personal('email') },
+  sending_domains: {
+    domain: 'public',
+    status: 'vocab',
+    dkim_status: 'vocab',
+    spf_status: 'vocab',
+    dmarc_status: 'vocab',
+    dmarc_policy: 'vocab',
+    records: 'public',
+    provider: 'vocab',
+    provider_ref: internal(),
+    created_by: internal(),
+  },
+  channel_senders: {
+    channel: 'vocab',
+    provider: 'vocab',
+    sender_ref: secret('none', {
+      why: 'CHECK requires an MG… SID or a numeric/gateway id; SenderDto shows only its last 4 characters (providers.int.test)',
+    }),
+    display_number: 'public',
+    campaign_status: 'vocab',
+    updated_by: internal(),
+  },
+  inbound_keywords: {
+    channel: 'vocab',
+    provider: 'vocab',
+    provider_event_id: secret(),
+    keyword: 'vocab',
+    recipient_key: secret(),
   },
   template_overrides: {
     kind: 'vocab',

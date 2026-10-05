@@ -1,0 +1,30 @@
+{
+  "severity": {
+    "info": "信息",
+    "warning": "警告",
+    "critical": "严重"
+  },
+  "alert": {
+    "context": "{severity} · {where}",
+    "open": "在 Yayatoh 中打开"
+  },
+  "test": {
+    "title": "来自 {org} 的测试提醒",
+    "body": "Slack 已连接。Yayatoh 的提醒和每日摘要将发送到此频道。"
+  },
+  "digest": {
+    "title": "每日摘要 · {org}",
+    "salesTitle": "销售",
+    "sales": "{orders, plural, =0 {没有新订单} other {# 个新订单}} · {tickets, plural, other {# 张票}}",
+    "revenue": "收入：{amounts}",
+    "checkins": "{count, plural, =0 {没有签到} other {# 次签到}}",
+    "eventLine": "{name}：{tickets, plural, other {# 张票}}",
+    "eventLineRevenue": "{name}：{tickets, plural, other {# 张票}} · {amounts}",
+    "moreEvents": "{count, plural, other {还有 # 场活动}}",
+    "todayTitle": "今天",
+    "todayEvent": "{name} · {time}",
+    "noEventsToday": "今天没有活动。",
+    "open": "打开仪表板"
+  },
+  "footer": "由 Yayatoh 发送。可在 设置 → 集成 → Slack 中更改。"
+}

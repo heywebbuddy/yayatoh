@@ -1,3 +1,14 @@
+export {
+  BOOTH_MARGIN_CM,
+  type BoothProblem,
+  type BoothShape,
+  boothObject,
+  boothPlan,
+  boothProblems,
+  boothSize,
+  boothsOf,
+  boothsOverlap,
+} from './booths.ts';
 export { buildRoundTable, buildRow, quickLayout, rowLabel, SEAT_PITCH_CM } from './builders.ts';
 export {
   CALIBRATION_METRES,
@@ -11,6 +22,7 @@ export {
   scaleUnderlay,
 } from './calibrate.ts';
 export {
+  BoothInfo,
   FloorObject,
   FloorplanDoc,
   Item,

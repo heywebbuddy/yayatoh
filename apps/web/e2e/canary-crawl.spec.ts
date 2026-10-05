@@ -1,6 +1,8 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { expect, type Page, test } from '@playwright/test';
 import { LOCALES } from '@yayatoh/contracts';
+import { signScreenToken } from '@yayatoh/donations';
+import { signDisplayToken } from '@yayatoh/engagement';
 import type { CanaryOrg } from '@yayatoh/testing';
 import {
   canaryToken,
@@ -10,10 +12,13 @@ import {
   type Fetched,
   findCanaries,
   formatLeaks,
+  GUEST_SITE_ALLOW,
   type Leak,
   leaksIn,
+  PARTY_ALLOW,
   V1_ALLOW,
 } from '@yayatoh/testing/canary';
+import { lastEmailedCode } from './helpers.ts';
 
 /**
  * The canary leak crawl (roadmap §9, M1.11 "the canary crawler finds nothing"). The global setup
@@ -79,6 +84,9 @@ test.describe('canary leak crawl (roadmap §9)', () => {
       `${MARKET}/events/${ev}/seat-finder`,
       `${MARKET}/events/${ev}/seat-finder/poster`,
       `${MARKET}/events/${ev}/unlock`,
+      // M4.8a: the giving page (campaign totals only; no donor, tribute or employer, P4-13).
+      `${MARKET}/events/${ev}/give`,
+      `${MARKET}/ar/events/${ev}/give`,
       `${MARKET}/embed/${ev}`,
       `${MARKET}/series/${c.slug}-tour`,
       `${MARKET}/legal/${c.slug}/refund`,
@@ -90,6 +98,9 @@ test.describe('canary leak crawl (roadmap §9)', () => {
       `${MARKET}/sitemaps/en.xml`,
       `${MARKET}/`,
       `${tenant}/`,
+      // U10: the org contact page (on in the fixture): no address of the org on it.
+      `${tenant}/contact`,
+      `${MARKET}/o/${c.slug}/contact`,
       `${tenant}/events/${ev}`,
       `${tenant}/ar/events/${ev}`,
       `${tenant}/robots.txt`,
@@ -98,11 +109,130 @@ test.describe('canary leak crawl (roadmap §9)', () => {
     ];
     const r = await crawl({ start, fetch: (u) => browserFetch(page, u), maxPages: 200, follow });
     // The crawl really reached the canary org's pages (a crawl that saw nothing proves nothing).
-    for (const must of [`${MARKET}/events/${ev}`, `${tenant}/events/${ev}`, `${MARKET}/embed/${ev}`])
+    for (const must of [
+      `${MARKET}/events/${ev}`,
+      `${tenant}/events/${ev}`,
+      `${MARKET}/embed/${ev}`,
+      `${MARKET}/events/${ev}/give`,
+      `${tenant}/contact`,
+    ])
       expect(r.visited).toContain(must);
     expect(r.visited.length).toBeGreaterThan(40);
+    // The giving page really showed the canary org's campaign (its private gift columns are canaries).
+    await page.goto(`${MARKET}/events/${ev}/give`);
+    await expect(page.getByRole('heading', { name: 'Fixture Fund', level: 1 })).toBeVisible();
     expect(formatLeaks(r.leaks)).toBe('no canary leaks');
     expect(r.errors).toEqual([]);
+  });
+
+  test('the guest website: the locked gate carries no canary; unlocked, only the site and its program (M4.5a)', async ({
+    page,
+  }) => {
+    // The acceptance "the leak crawler finds no guest data": the canary org's site is published
+    // behind a password; every guest, party, answer and contact column of the org is a canary.
+    const c = canary();
+    const leaks: Leak[] = [];
+    const gate = [`${MARKET}/w/${c.guestSite.code}`, `${MARKET}/ar/w/${c.guestSite.code}`];
+    for (const url of gate) {
+      const res = await browserFetch(page, url);
+      expect(res?.status, url).toBe(200);
+      leaks.push(...leaksIn(url, `${res?.body ?? ''}\n${res?.extra ?? ''}`, { kind: 'public' }));
+    }
+    await page.goto(`${MARKET}/en/w/${c.guestSite.code}`);
+    await page.getByLabel('Password').fill(c.guestSite.password);
+    await page.getByRole('button', { name: 'Open the website' }).click();
+    await expect(page.getByRole('navigation', { name: 'On this page' })).toBeVisible();
+    const surface = { kind: 'scoped' as const, allow: GUEST_SITE_ALLOW };
+    let shown = 0;
+    for (const url of gate) {
+      const res = await browserFetch(page, url);
+      expect(res?.status, url).toBe(200);
+      const text = `${res?.body ?? ''}\n${res?.extra ?? ''}`;
+      // The unlocked page really shows the canary org's site (its title and program are canaries).
+      shown += findCanaries(text).length;
+      leaks.push(...leaksIn(url, text, surface));
+    }
+    expect(shown).toBeGreaterThan(0);
+    expect(formatLeaks(leaks)).toBe('no canary leaks');
+  });
+
+  test('batch 3j pages: the giving screen, card saving, the call for papers; a party’s own pages show only the party (M4.4a, M4.7a, M4.8d, M4.8e, M5.3b)', async ({
+    page,
+  }) => {
+    const c = canary();
+    const ev = c.event.slug;
+    const leaks: Leak[] = [];
+    const get = async (url: string, surface: Parameters<typeof leaksIn>[2], status = 200) => {
+      const res = await browserFetch(page, url);
+      expect(res?.status, url).toBe(status);
+      const text = `${res?.body ?? ''}\n${res?.extra ?? ''}`;
+      leaks.push(...leaksIn(url, text, surface));
+      return text;
+    };
+    // Public: anyone can open these (the card page and the call for papers have no secret).
+    for (const url of [
+      `${MARKET}/events/${ev}/card`,
+      `${MARKET}/events/${ev}/card?src=checkin`,
+      `${MARKET}/events/${ev}/cfp`,
+      `${MARKET}/ar/events/${ev}/cfp`,
+    ])
+      await get(url, { kind: 'public' });
+    // The room's giving screen and its stream: totals and opted-in names only (P4-13).
+    expect(c.screenVersion).not.toBeNull();
+    const screen = signScreenToken(
+      { orgId: c.orgId, eventId: c.event.id, version: c.screenVersion ?? 1 },
+      process.env.APP_TOKEN_SECRET ?? '',
+    );
+    await get(`${MARKET}/giving-screen/${screen}`, { kind: 'public' });
+    const stream = await page.evaluate(async (u) => {
+      const ctrl = new AbortController();
+      const res = await fetch(u, { signal: ctrl.signal });
+      let out = `${res.status}\n`;
+      if (res.ok && res.body) {
+        const reader = res.body.getReader();
+        const deadline = Date.now() + 5_000;
+        while (!out.includes('event: snapshot') && Date.now() < deadline) {
+          const { value, done } = await reader.read();
+          if (done) break;
+          out += new TextDecoder().decode(value);
+        }
+      }
+      ctrl.abort();
+      return out;
+    }, `/api/donations/screen/${screen}`);
+    expect(stream).toContain('event: snapshot');
+    leaks.push(...leaksIn('giving screen stream', stream, { kind: 'public' }));
+    // A party's own pages (its signed link): the party's names and program, nothing else.
+    expect(c.partyToken).not.toBeNull();
+    const party = encodeURIComponent(c.partyToken ?? '');
+    const surface = { kind: 'scoped' as const, allow: PARTY_ALLOW };
+    let shown = 0;
+    for (const url of [
+      `${MARKET}/hub/${party}`,
+      `${MARKET}/ar/hub/${party}`,
+      `${MARKET}/hub/${party}/manifest`,
+      `${MARKET}/rsvp/${party}/seat`,
+      `${MARKET}/rsvp/${party}/card`,
+    ])
+      shown += findCanaries(await get(url, surface)).length;
+    // The crawl is live: the party's own names are on its pages.
+    expect(shown).toBeGreaterThan(0);
+    // Batch 3j merge: M4.5b's gallery and slideshow behind the same password show the site, the
+    // published photos' captions and their uploaders' names, nothing else (P4-3).
+    const gallery = {
+      kind: 'scoped' as const,
+      allow: [...GUEST_SITE_ALLOW, 'gallery.items.caption', 'gallery.uploaders.display_name'],
+    };
+    for (const url of [
+      `${MARKET}/w/${c.guestSite.code}/gallery`,
+      `${MARKET}/ar/w/${c.guestSite.code}/gallery`,
+      `${MARKET}/w/${c.guestSite.code}/slideshow`,
+    ]) {
+      const res = await browserFetch(page, url);
+      expect(res?.status, url).toBe(200);
+      leaks.push(...leaksIn(url, `${res?.body ?? ''}\n${res?.extra ?? ''}`, gallery));
+    }
+    expect(formatLeaks(leaks)).toBe('no canary leaks');
   });
 
   test('/v1 public endpoints and unauthenticated org endpoints carry no canary', async ({ request }) => {
@@ -165,6 +295,96 @@ test.describe('canary leak crawl (roadmap §9)', () => {
     expect([...seen]).toEqual(
       expect.arrayContaining(['orders.orders.buyer_email', 'attendees.attendees.email']),
     );
+    expect(formatLeaks(leaks)).toBe('no canary leaks');
+  });
+
+  test('live polls and Q&A: the participant page, the big screen and the public stream carry no canary', async ({
+    page,
+  }) => {
+    // M5.7a: the canary org's keynote has a pending question whose body is a canary; only
+    // approved questions may ever reach a public payload.
+    const c = canary();
+    await page.goto(`${MARKET}/events/${c.event.slug}`);
+    const href = await page.locator(`a[href*="/events/${c.event.slug}/live/"]`).first().getAttribute('href');
+    const sessionId = /\/live\/([0-9a-f-]{36})/.exec(href ?? '')?.[1] ?? '';
+    expect(sessionId).not.toBe('');
+    const secret = process.env.APP_TOKEN_SECRET ?? '';
+    const token = signDisplayToken({ orgId: c.orgId, sessionId, version: 1 }, secret);
+    const leaks: Leak[] = [];
+    for (const url of [
+      `${MARKET}/events/${c.event.slug}/live/${sessionId}`,
+      `${MARKET}/ar/events/${c.event.slug}/live/${sessionId}`,
+      `${MARKET}/display/${token}`,
+    ]) {
+      const res = await browserFetch(page, url);
+      expect(res?.status, url).toBe(200);
+      leaks.push(...leaksIn(url, `${res?.body ?? ''}\n${res?.extra ?? ''}`, { kind: 'public' }));
+    }
+    // The audience's realtime snapshot and the big screen's stream.
+    const channel = `org:${c.orgId}:event:${c.event.id}:session:${sessionId}:live`;
+    for (const url of [`/api/realtime/${encodeURIComponent(channel)}`, `/api/engagement/display/${token}`]) {
+      const text = await page.evaluate(async (u) => {
+        const ctrl = new AbortController();
+        const res = await fetch(u, { signal: ctrl.signal });
+        let out = `${res.status}\n`;
+        if (res.ok && res.body) {
+          const reader = res.body.getReader();
+          const deadline = Date.now() + 5_000;
+          while (!out.includes('event: snapshot') && Date.now() < deadline) {
+            const { value, done } = await reader.read();
+            if (done) break;
+            out += new TextDecoder().decode(value);
+          }
+        }
+        ctrl.abort();
+        return out;
+      }, url);
+      expect(text, url).toContain('event: snapshot');
+      expect(text, url).toContain('How do fixtures stay isolated?');
+      leaks.push(...leaksIn(url, text, { kind: 'public' }));
+    }
+    expect(formatLeaks(leaks)).toBe('no canary leaks');
+  });
+
+  test('networking: an opted-in attendee’s pages never show who opted out (or anything private)', async ({
+    page,
+  }) => {
+    // M5.8a: the canary org's fixture event has networking on; its second person opted out, so
+    // every profile column of theirs is a canary. Sign in (the emailed code) as the opted-in one
+    // and crawl every networking page they can reach: nothing private may appear.
+    const c = canary();
+    const email = c.networkEmail;
+    expect(email).not.toBeNull();
+    const base = `${MARKET}/events/${c.event.slug}/network`;
+    await page.goto(base);
+    await page.getByLabel('Your email', { exact: true }).fill(email ?? '');
+    await page.getByRole('button', { name: 'Email me a code' }).click();
+    await page
+      .getByLabel('Verification code', { exact: true })
+      .fill(await lastEmailedCode(page, email ?? ''));
+    await page.getByRole('button', { name: 'Sign in', exact: true }).click();
+    await expect(page.getByRole('navigation', { name: 'Networking sections' })).toBeVisible();
+    const leaks: Leak[] = [];
+    const seen: string[] = [];
+    for (const url of [
+      base,
+      `${base}?q=canary`,
+      `${base}?q=Ben`,
+      `${base}?q=__`,
+      `${base}/connections`,
+      `${base}/meetings`,
+      `${base}/profile`,
+      `${MARKET}/ar/events/${c.event.slug}/network`,
+      `${MARKET}/ar/events/${c.event.slug}/network/profile`,
+    ]) {
+      const f = await browserFetch(page, url);
+      expect(f?.status, url).toBe(200);
+      seen.push(`${f?.body ?? ''}\n${f?.extra ?? ''}`);
+      leaks.push(...leaksIn(url, `${f?.body ?? ''}\n${f?.extra ?? ''}`, { kind: 'public' }));
+    }
+    // The crawl is live: the attendee's own profile is there; the one who opted out is not.
+    expect(seen.join('\n')).toContain('Ana Fixture');
+    expect(seen.join('\n')).not.toContain('Ben Fixture');
     expect(formatLeaks(leaks)).toBe('no canary leaks');
   });
 

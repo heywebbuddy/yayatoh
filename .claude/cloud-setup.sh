@@ -18,7 +18,7 @@ pnpm --version || true
 
 if command -v docker >/dev/null 2>&1; then
   (service docker start >/dev/null 2>&1 || true)
-  for img in postgres:18 redis:7 axllent/mailpit:latest; do
+  for img in pgvector/pgvector:pg18 redis:7 axllent/mailpit:latest; do
     docker pull "$img" >/dev/null 2>&1 || echo "WARN: $img pull failed"
   done
 fi

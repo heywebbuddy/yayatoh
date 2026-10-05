@@ -18,8 +18,11 @@ import { channelOrg } from './realtime.ts';
  * Wire names are always org-scoped (`org:{orgId}:…`, ADR 0009): an org channel is
  * `org:{orgId}:{topic}`, an event channel `org:{orgId}:event:{eventId}:{topic}`. The same names are
  * used for SSE and for Ably, so a token or a stream for one org can never name another org's.
+ * A session channel (M5.7a, one program session's live polls and Q&A) is
+ * `org:{orgId}:event:{eventId}:session:{sessionId}:{topic}`. An inbox channel (M5.8b, one
+ * person's or one exhibitor's chat at an event) is `org:{orgId}:event:{eventId}:inbox:{id}:{topic}`.
  */
-export type RealtimeScope = 'org' | 'event';
+export type RealtimeScope = 'org' | 'event' | 'session' | 'inbox';
 
 export interface RealtimeAccess {
   /** Anyone may attach (the app still runs the channel's own public check, e.g. "on sale"). */
@@ -28,6 +31,11 @@ export interface RealtimeAccess {
   readonly permission?: string;
   /** The org's enrolled check-in devices (door staff), by device token. */
   readonly devices?: boolean;
+  /**
+   * Only through the module's own stream route, which proves the caller owns the channel (M5.8b:
+   * an attendee's or an exhibitor's chat inbox). The generic attach always refuses it.
+   */
+  readonly own?: boolean;
 }
 
 export type RealtimeEvents = Readonly<Record<string, z.ZodType>>;
@@ -52,6 +60,10 @@ const EVENT_NAME = /^[a-z][a-z0-9_.-]{0,39}$/;
 const UUID = '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}';
 const EVENT_WIRE = new RegExp(`^org:(${UUID}):event:(${UUID}):([a-z][a-z0-9-]{0,39})$`);
 const ORG_WIRE = new RegExp(`^org:(${UUID}):([a-z][a-z0-9-]{0,39})$`);
+const SESSION_WIRE = new RegExp(`^org:(${UUID}):event:(${UUID}):session:(${UUID}):([a-z][a-z0-9-]{0,19})$`);
+const INBOX_WIRE = new RegExp(`^org:(${UUID}):event:(${UUID}):inbox:(${UUID}):([a-z][a-z0-9-]{0,19})$`);
+/** Scopes whose wire name carries a third id under the event (a session, an inbox). */
+const SUB_SCOPED = new Set<RealtimeScope>(['session', 'inbox']);
 const EMPTY = z.object({});
 /** Snapshot (`snapshot`) and resynchronise (`refresh`) are sent by the stream itself. */
 const RESERVED = new Set(['snapshot', 'refresh']);
@@ -59,8 +71,9 @@ const RESERVED = new Set(['snapshot', 'refresh']);
 export function defineRealtimeChannel<E extends RealtimeEvents>(
   def: Omit<RealtimeChannelDef<E>, 'key'>,
 ): RealtimeChannelDef<E> {
-  if (!TOPIC.test(def.topic)) throw new Error(`Invalid realtime topic: ${def.topic}`);
-  if (!def.access.public && !def.access.permission && !def.access.devices)
+  if (!TOPIC.test(def.topic) || (SUB_SCOPED.has(def.scope) && def.topic.length > 20))
+    throw new Error(`Invalid realtime topic: ${def.topic}`);
+  if (!def.access.public && !def.access.permission && !def.access.devices && !def.access.own)
     throw new Error(`Realtime channel ${def.topic} has no audience`);
   for (const name of Object.keys(def.events)) {
     if (!EVENT_NAME.test(name)) throw new Error(`Invalid realtime event name: ${name}`);
@@ -70,16 +83,30 @@ export function defineRealtimeChannel<E extends RealtimeEvents>(
   return { ...def, key: `${def.scope}.${def.topic}` };
 }
 
-/** The wire name of a channel for one org (and event). */
+/**
+ * The wire name of a channel for one org (and event, and session or inbox: `subId` is the
+ * session's id for a session channel, the inbox's for an inbox channel).
+ */
 export function realtimeChannelName(
   def: Pick<RealtimeChannelDef, 'scope' | 'topic'>,
   orgId: string,
   eventId?: string | null,
+  subId?: string | null,
 ): string {
-  const name =
-    def.scope === 'event' ? `org:${orgId}:event:${eventId ?? ''}:${def.topic}` : `org:${orgId}:${def.topic}`;
-  if (!(def.scope === 'event' ? EVENT_WIRE : ORG_WIRE).test(name) || !channelOrg(name))
-    throw new Error(`Invalid realtime channel: ${name}`);
+  const name = SUB_SCOPED.has(def.scope)
+    ? `org:${orgId}:event:${eventId ?? ''}:${def.scope}:${subId ?? ''}:${def.topic}`
+    : def.scope === 'event'
+      ? `org:${orgId}:event:${eventId ?? ''}:${def.topic}`
+      : `org:${orgId}:${def.topic}`;
+  const wire =
+    def.scope === 'session'
+      ? SESSION_WIRE
+      : def.scope === 'inbox'
+        ? INBOX_WIRE
+        : def.scope === 'event'
+          ? EVENT_WIRE
+          : ORG_WIRE;
+  if (!wire.test(name) || !channelOrg(name)) throw new Error(`Invalid realtime channel: ${name}`);
   return name;
 }
 
@@ -89,11 +116,35 @@ export interface ParsedChannel {
   readonly eventId: string | null;
   readonly scope: RealtimeScope;
   readonly topic: string;
+  /** Session channels only (M5.7a). */
+  readonly sessionId?: string | null;
+  /** Inbox channels only (M5.8b). */
+  readonly inboxId?: string | null;
 }
 
 /** Split a wire name into its parts, or null when it is not a well-formed channel name. */
 export function parseRealtimeChannel(name: string): ParsedChannel | null {
   if (name.length > 160) return null;
+  const s = SESSION_WIRE.exec(name);
+  if (s)
+    return {
+      name,
+      orgId: s[1] ?? '',
+      eventId: s[2] ?? '',
+      sessionId: s[3] ?? '',
+      scope: 'session',
+      topic: s[4] ?? '',
+    };
+  const i = INBOX_WIRE.exec(name);
+  if (i)
+    return {
+      name,
+      orgId: i[1] ?? '',
+      eventId: i[2] ?? '',
+      inboxId: i[3] ?? '',
+      scope: 'inbox',
+      topic: i[4] ?? '',
+    };
   const e = EVENT_WIRE.exec(name);
   if (e) return { name, orgId: e[1] ?? '', eventId: e[2] ?? '', scope: 'event', topic: e[3] ?? '' };
   const o = ORG_WIRE.exec(name);
@@ -204,6 +255,16 @@ export const CHECKINS_CHANNEL = defineRealtimeChannel({
       count: z.int().min(1).max(10_000),
       at: isoTime,
     }),
+    /**
+     * M3.3a live feed: scans nobody was let in by (a duplicate, or refused), grouped only. The
+     * Command Center re-reads its feed; no ticket, code or holder travels.
+     */
+    scan: z.object({
+      outcome: z.enum(['duplicate', 'refused']),
+      checkpointId: z.uuid().nullable(),
+      count: z.int().min(1).max(10_000),
+      at: isoTime,
+    }),
   },
 });
 
@@ -223,6 +284,8 @@ export const DEVICES_CHANNEL = defineRealtimeChannel({
       queueDepth: z.int().min(0).nullable(),
       at: isoTime,
     }),
+    /** A supervisor changed something for this device (M3.4a): it heartbeats now to pick it up. */
+    command: z.object({ deviceId: z.uuid(), at: isoTime }),
   },
 });
 
@@ -257,7 +320,7 @@ export const ALERTS_CHANNEL = defineRealtimeChannel({
     alert: z.object({
       alertId: z.uuid(),
       eventId: z.uuid().nullable(),
-      state: z.enum(['open', 'acknowledged', 'resolved']),
+      state: z.enum(['open', 'acknowledged', 'snoozed', 'resolved']),
       severity: z.enum(['info', 'warning', 'critical']),
       at: isoTime,
     }),

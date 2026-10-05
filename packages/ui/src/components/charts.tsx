@@ -3,33 +3,37 @@ import { cx } from '../cx.ts';
 /** Chart sizes as static classes: the strict CSP allows no style attributes (M1.14a). */
 const CHART_SIZE = { 88: 'size-[88px]', 120: 'size-[120px]', 150: 'size-[150px]' } as const;
 
-/** Series colours are tokens only (ADR 0018 data visualisation). */
-export type SeriesTone = 'accent' | 'zinc-400' | 'zinc-300' | 'green' | 'pink' | 'yellow';
+/** Series colours are tokens only (ADR 0022 data visualisation): violet first, then pink, mint,
+ * amber, sky; comparisons in muted ink. Every chart works in both modes. */
+export type SeriesTone = 'primary' | 'brand' | 'success' | 'warning' | 'sky' | 'muted' | 'faint';
 
 const STROKE: Record<SeriesTone, string> = {
-  accent: 'stroke-accent-900',
-  'zinc-400': 'stroke-zinc-400',
-  'zinc-300': 'stroke-zinc-300',
-  green: 'stroke-green-500',
-  pink: 'stroke-pink-500',
-  yellow: 'stroke-yellow-500',
+  primary: 'stroke-primary',
+  brand: 'stroke-brand',
+  success: 'stroke-success-dot',
+  warning: 'stroke-warning-dot',
+  sky: 'stroke-ink-2',
+  muted: 'stroke-ink-3',
+  faint: 'stroke-line-strong/50',
 };
 const FILL: Record<SeriesTone, string> = {
-  accent: 'fill-accent-900',
-  'zinc-400': 'fill-zinc-400',
-  'zinc-300': 'fill-zinc-300',
-  green: 'fill-green-500',
-  pink: 'fill-pink-500',
-  yellow: 'fill-yellow-500',
+  primary: 'fill-primary',
+  brand: 'fill-brand',
+  success: 'fill-success-dot',
+  warning: 'fill-warning-dot',
+  sky: 'fill-ink-2',
+  muted: 'fill-ink-3',
+  faint: 'fill-line-strong/50',
 };
 // Literal class names so Tailwind generates them (no string-built classes).
 const SWATCH: Record<SeriesTone, string> = {
-  accent: 'bg-accent-900',
-  'zinc-400': 'bg-zinc-400',
-  'zinc-300': 'bg-zinc-300',
-  green: 'bg-green-500',
-  pink: 'bg-pink-500',
-  yellow: 'bg-yellow-500',
+  primary: 'bg-primary',
+  brand: 'bg-brand',
+  success: 'bg-success-dot',
+  warning: 'bg-warning-dot',
+  sky: 'bg-ink-2',
+  muted: 'bg-ink-3',
+  faint: 'bg-line-strong/50',
 };
 export const swatchClass = (tone: SeriesTone) => SWATCH[tone];
 
@@ -40,7 +44,7 @@ export interface Series {
 }
 
 /**
- * Thin-line chart: 1.75 px strokes, dashed gridlines, end-point dots, mono axis labels.
+ * Line chart: 2 px round strokes, dashed gridlines, end-point dots, tabular axis labels.
  * Includes a visually hidden data table as the accessible alternative.
  */
 export function LineChart({
@@ -73,14 +77,14 @@ export function LineChart({
               x2={width - pad.right}
               y1={y(t)}
               y2={y(t)}
-              className="stroke-zinc-200"
+              className="stroke-line"
               strokeDasharray="3 4"
             />
             <text
               x={pad.left - 8}
               y={y(t) + 3}
               textAnchor="end"
-              className="fill-zinc-500 font-mono text-[10px]"
+              className="fill-ink-2 text-[11px] font-semibold"
             >
               {formatValue(t)}
             </text>
@@ -93,7 +97,7 @@ export function LineChart({
               x={x(i)}
               y={height - 6}
               textAnchor="middle"
-              className="fill-zinc-500 font-mono text-[10px]"
+              className="fill-ink-2 text-[11px] font-semibold"
             >
               {l}
             </text>
@@ -106,9 +110,22 @@ export function LineChart({
           const last = s.points.length - 1;
           return (
             <g key={s.label}>
-              <path d={d} fill="none" className={STROKE[s.tone]} strokeWidth={1.75} strokeLinejoin="round" />
+              <path
+                d={d}
+                fill="none"
+                className={STROKE[s.tone]}
+                strokeWidth={2.25}
+                strokeLinejoin="round"
+                strokeLinecap="round"
+              />
               {last >= 0 ? (
-                <circle cx={x(last)} cy={y(s.points[last] ?? 0)} r={3.5} className={FILL[s.tone]} />
+                <circle
+                  cx={x(last)}
+                  cy={y(s.points[last] ?? 0)}
+                  r={4}
+                  className={cx(FILL[s.tone], 'stroke-surface-solid')}
+                  strokeWidth={2}
+                />
               ) : null}
             </g>
           );
@@ -166,7 +183,7 @@ export function Donut({
   return (
     <div className={cx('relative shrink-0', CHART_SIZE[size])}>
       <svg viewBox="0 0 100 100" className="size-full -rotate-90" role="img" aria-label={title}>
-        <circle cx="50" cy="50" r={r} fill="none" className="stroke-zinc-100" strokeWidth="10" />
+        <circle cx="50" cy="50" r={r} fill="none" className="stroke-surface-3" strokeWidth="10" />
         {segments.map((s) => {
           const len = (s.value / total) * c;
           const el = (
@@ -209,13 +226,13 @@ export function ProgressRing({
   return (
     <div className={cx('relative shrink-0', CHART_SIZE[size])}>
       <svg viewBox="0 0 100 100" className="size-full -rotate-90" role="img" aria-label={label}>
-        <circle cx="50" cy="50" r={r} fill="none" className="stroke-zinc-100" strokeWidth="8" />
+        <circle cx="50" cy="50" r={r} fill="none" className="stroke-surface-3" strokeWidth="8" />
         <circle
           cx="50"
           cy="50"
           r={r}
           fill="none"
-          className="stroke-accent-900"
+          className="stroke-primary"
           strokeWidth="8"
           strokeLinecap="round"
           strokeDasharray={`${(pct / 100) * c} ${c}`}
@@ -223,7 +240,7 @@ export function ProgressRing({
       </svg>
       <span
         className={cx(
-          'absolute inset-0 flex items-center justify-center text-[20px] font-light tracking-[-0.04em]',
+          'absolute inset-0 flex items-center justify-center text-[20px] font-extrabold tracking-[-0.04em] tabular-nums',
         )}
       >
         {pct}%
@@ -245,7 +262,7 @@ export function BarChart({
   title,
   bars,
   height = 200,
-  tone = 'accent',
+  tone = 'primary',
   formatValue = String,
 }: {
   title: string;
@@ -278,14 +295,14 @@ export function BarChart({
             x2={width - pad.right}
             y1={y(t)}
             y2={y(t)}
-            className="stroke-zinc-200"
+            className="stroke-line"
             strokeDasharray="3 4"
           />
           <text
             x={pad.left - 8}
             y={y(t) + 3}
             textAnchor="end"
-            className="fill-zinc-500 font-mono text-[10px]"
+            className="fill-ink-2 text-[11px] font-semibold"
           >
             {formatValue(t)}
           </text>
@@ -300,11 +317,16 @@ export function BarChart({
               y={y(b.value)}
               width={barW}
               height={Math.max(0, height - pad.bottom - y(b.value))}
-              rx={2}
+              rx={6}
               className={FILL[tone]}
             />
             {i % every === 0 ? (
-              <text x={cx} y={height - 6} textAnchor="middle" className="fill-zinc-500 font-mono text-[10px]">
+              <text
+                x={cx}
+                y={height - 6}
+                textAnchor="middle"
+                className="fill-ink-2 text-[11px] font-semibold"
+              >
                 {b.label}
               </text>
             ) : null}
@@ -333,20 +355,20 @@ export function ChartTable({
 }) {
   return (
     <details className="group">
-      <summary className="inline-flex min-h-6 cursor-pointer items-center py-1 text-caption text-zinc-700 underline underline-offset-2">
+      <summary className="inline-flex min-h-6 cursor-pointer items-center py-1 text-caption font-semibold text-primary-ink underline underline-offset-2">
         {toggle}
       </summary>
       <div className="mt-2 overflow-x-auto">
         <table className="w-full border-collapse text-body">
           <caption className="sr-only">{caption}</caption>
           <thead>
-            <tr className="border-b border-zinc-200">
+            <tr className="border-b border-line">
               {headers.map((h, i) => (
                 <th
                   key={h}
                   scope="col"
                   className={cx(
-                    'px-3 py-2 font-mono text-label font-normal uppercase text-zinc-500',
+                    'px-3 py-2 text-label uppercase text-ink-2',
                     i === 0 ? 'text-start' : 'text-end',
                   )}
                 >
@@ -357,7 +379,7 @@ export function ChartTable({
           </thead>
           <tbody>
             {rows.map((r) => (
-              <tr key={r.join('|')} className="border-b border-zinc-100 last:border-0">
+              <tr key={r.join('|')} className="border-b border-line last:border-0">
                 {r.map((c, i) =>
                   i === 0 ? (
                     <th key={headers[i]} scope="row" className="px-3 py-2 text-start font-normal">

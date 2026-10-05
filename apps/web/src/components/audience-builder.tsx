@@ -9,16 +9,20 @@ import {
   MAX_SEGMENT_DEPTH,
   SegmentDefinition,
   type SegmentScope,
+  STATS_METRIC_MAX,
+  STATS_METRICS,
+  type StatsMetric,
   TEMPLATE_KEYS,
   TEMPLATE_PARAMS,
   type TemplateKey,
   TOTAL_METRICS,
   templateDefinition,
 } from '@yayatoh/audiences/client';
-import { Alert, Button, Input, Table } from '@yayatoh/ui';
+import { Alert, Button, DatePicker, Input, Select, Table } from '@yayatoh/ui';
 import { useLocale, useTranslations } from 'next-intl';
 import { type ReactNode, useActionState, useEffect, useId, useMemo, useRef, useState } from 'react';
 import type { PreviewResult, SaveAudienceState } from '@/app/[locale]/o/[org]/(org)/audiences/actions.ts';
+import { Link } from '@/i18n/navigation.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
 
 // Draft nodes are loose (a half-typed label is still a draft); the DSL schema decides validity.
@@ -41,7 +45,7 @@ export interface BuilderSeries {
   readonly name: string;
 }
 
-const SELECT = 'min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body';
+const SELECT = 'field';
 const SCOPE_KINDS = ['any', 'event', 'series', 'previousEdition', 'eventsBetween'] as const;
 
 function newCondition(type: ConditionType, events: readonly BuilderEvent[], currency: string): Draft {
@@ -69,8 +73,17 @@ function newCondition(type: ConditionType, events: readonly BuilderEvent[], curr
       return { type, metric: 'events', op: 'gte', value: 1 };
     case 'seen':
       return { type, which: 'last', from: null, to: null };
+    case 'stats':
+      return { type, metric: 'engagement', op: 'gte', value: 50 };
+    case 'ltv':
+      return { type, currency, op: 'gt', amountMinor: 0 };
+    case 'engagement':
+      return { type, scope: eventScope, op: 'gte', value: 10 };
   }
 }
+
+/** Money conditions (M6.1b) are offered only to members who can read finance. */
+const MONEY_METRICS: readonly StatsMetric[] = ['rfmMonetary'];
 
 const countLeaves = (n: Node): number =>
   isGroup(n) ? n.conditions.reduce((s, c) => s + countLeaves(c), 0) : 1;
@@ -104,6 +117,8 @@ export function AudienceBuilder({
   preview,
   ticketTypes,
   save,
+  canMoney = false,
+  contactsHref = null,
 }: {
   initial: SegmentDefinition | null;
   segmentId: string | null;
@@ -116,6 +131,10 @@ export function AudienceBuilder({
   preview: (definitionJson: string) => Promise<PreviewResult>;
   ticketTypes: (eventId: string) => Promise<{ id: string; name: string }[]>;
   save: (prev: SaveAudienceState, form: FormData) => Promise<SaveAudienceState>;
+  /** M6.1b: lifetime value and the RFM monetary quintile (finance permission). */
+  canMoney?: boolean;
+  /** M6.1b: the contact pages' base path, when the member may open them. */
+  contactsHref?: string | null;
 }) {
   const t = useTranslations('audiences');
   const te = useTranslations();
@@ -193,9 +212,10 @@ export function AudienceBuilder({
           currency={currency}
           types={types}
           set={set}
+          canMoney={canMoney}
         />
         {!parsed.success ? (
-          <p className="text-caption text-pink-700" role="status">
+          <p className="text-caption text-danger" role="status">
             {t('builder.incomplete')}
           </p>
         ) : null}
@@ -231,7 +251,18 @@ export function AudienceBuilder({
             rowKey={(r) => r.contactId}
             rows={result.preview.rows}
             columns={[
-              { key: 'name', header: t('preview.name'), cell: (r) => r.name ?? t('preview.noName') },
+              {
+                key: 'name',
+                header: t('preview.name'),
+                cell: (r) =>
+                  contactsHref ? (
+                    <Link href={`${contactsHref}/${r.contactId}`} className="underline underline-offset-2">
+                      {r.name ?? t('preview.noName')}
+                    </Link>
+                  ) : (
+                    (r.name ?? t('preview.noName'))
+                  ),
+              },
               { key: 'email', header: t('preview.email'), cell: (r) => <bdi>{r.email}</bdi> },
               {
                 key: 'events',
@@ -326,14 +357,14 @@ function Templates({
   return (
     <section
       aria-labelledby={`${id}-h`}
-      className="flex flex-col gap-3 rounded-panel border border-zinc-200 bg-white px-5 py-4"
+      className="flex flex-col gap-3 rounded-panel border border-line bg-surface px-5 py-4"
     >
       <h2 id={`${id}-h`} className="text-section">
         {t('templates.title')}
       </h2>
-      <p className="text-caption text-zinc-500">{t('templates.description')}</p>
+      <p className="text-caption text-ink-2">{t('templates.description')}</p>
       <fieldset className="flex flex-col gap-2">
-        <legend className="text-caption text-zinc-600">{t('templates.pick')}</legend>
+        <legend className="text-[13px] font-bold text-ink">{t('templates.pick')}</legend>
         {TEMPLATE_KEYS.map((k) => (
           <label key={k} className="flex min-h-6 items-start gap-2 text-body">
             <input
@@ -346,28 +377,28 @@ function Templates({
             />
             <span className="flex flex-col">
               <span className="font-medium">{t(`templates.${k}.name`)}</span>
-              <span className="text-caption text-zinc-500">{t(`templates.${k}.description`)}</span>
+              <span className="text-caption text-ink-2">{t(`templates.${k}.description`)}</span>
             </span>
           </label>
         ))}
       </fieldset>
       <div className="flex flex-wrap items-end gap-3">
-        <label className="flex flex-col gap-1.5 text-caption text-zinc-600">
+        <label className="flex max-w-full min-w-0 flex-col gap-1.5 text-[13px] font-bold text-ink">
           {key === 'lastYearNotThisYear' ? t('templates.thisYearsEvent') : t('templates.event')}
-          <select className={SELECT} value={eventId} onChange={(e) => setEventId(e.target.value)}>
+          <Select className={SELECT} value={eventId} onValueChange={(v) => setEventId(v)}>
             {events.length === 0 ? <option value="">{t('templates.noEvents')}</option> : null}
             {events.map((e) => (
               <option key={e.id} value={e.id}>
                 {t('eventOption', { name: e.name, date: e.date })}
               </option>
             ))}
-          </select>
+          </Select>
         </label>
         {needsTypes ? (
           <fieldset className="flex flex-col gap-1.5">
-            <legend className="text-caption text-zinc-600">{t('templates.ticketTypes')}</legend>
+            <legend className="text-[13px] font-bold text-ink">{t('templates.ticketTypes')}</legend>
             {types.length === 0 ? (
-              <p className="text-caption text-zinc-500">{t('templates.noTicketTypes')}</p>
+              <p className="text-caption text-ink-2">{t('templates.noTicketTypes')}</p>
             ) : (
               <div className="flex flex-wrap gap-3">
                 {types.map((tt) => (
@@ -399,7 +430,7 @@ function Templates({
           {t('templates.use')}
         </Button>
       </div>
-      <p aria-live="polite" className="text-caption text-zinc-600">
+      <p aria-live="polite" className="text-caption text-ink-2">
         {used ? t('templates.used', { name: t(`templates.${used}.name`) }) : ''}
       </p>
     </section>
@@ -412,6 +443,7 @@ interface EditorProps {
   currency: string;
   types: Record<string, { id: string; name: string }[]>;
   set: (path: readonly number[], fn: (n: Node) => Node | null) => void;
+  canMoney: boolean;
 }
 
 function GroupEditor({
@@ -427,22 +459,22 @@ function GroupEditor({
   const title = path.length === 0 ? t('rootGroup') : t('group', { n: path.map((i) => i + 1).join('.') });
   return (
     <fieldset
-      className="flex flex-col gap-3 rounded-panel border border-zinc-200 bg-white px-4 py-3"
+      className="flex flex-col gap-3 rounded-panel border border-line bg-surface px-4 py-3"
       data-testid={`group-${path.join('-') || 'root'}`}
     >
-      <legend className="px-1 text-body font-medium">{title}</legend>
-      <label className="flex flex-wrap items-center gap-2 text-caption text-zinc-600">
+      <legend className="px-1 text-[13px] font-bold text-ink">{title}</legend>
+      <label className="flex flex-wrap items-center gap-2 text-caption text-ink-2">
         {t('match')}
-        <select
+        <Select
           className={SELECT}
           value={group.op}
-          onChange={(e) => p.set(path, (g) => ({ ...(g as DraftGroup), op: e.target.value as 'and' | 'or' }))}
+          onValueChange={(v) => p.set(path, (g) => ({ ...(g as DraftGroup), op: v as 'and' | 'or' }))}
         >
           <option value="and">{t('all')}</option>
           <option value="or">{t('any')}</option>
-        </select>
+        </Select>
       </label>
-      {group.conditions.length === 0 ? <p className="text-caption text-zinc-500">{t('emptyGroup')}</p> : null}
+      {group.conditions.length === 0 ? <p className="text-caption text-ink-2">{t('emptyGroup')}</p> : null}
       <ol className="flex list-none flex-col gap-3 p-0">
         {group.conditions.map((c, i) => {
           const at = [...path, i];
@@ -470,21 +502,21 @@ function GroupEditor({
         })}
       </ol>
       <div className="flex flex-wrap items-end gap-2">
-        <label className="flex flex-col gap-1.5 text-caption text-zinc-600" htmlFor={`${id}-type`}>
+        <label className="flex flex-col gap-1.5 text-[13px] font-bold text-ink" htmlFor={`${id}-type`}>
           {t('conditionType')}
         </label>
-        <select
+        <Select
           id={`${id}-type`}
           className={SELECT}
           value={adding}
-          onChange={(e) => setAdding(e.target.value as ConditionType)}
+          onValueChange={(v) => setAdding(v as ConditionType)}
         >
-          {CONDITION_TYPES.map((ct) => (
+          {CONDITION_TYPES.filter((ct) => ct !== 'ltv' || p.canMoney).map((ct) => (
             <option key={ct} value={ct}>
               {t(`types.${ct}`)}
             </option>
           ))}
-        </select>
+        </Select>
         <Button
           type="button"
           size="sm"
@@ -528,7 +560,7 @@ function ConditionEditor({ node, path, ...p }: EditorProps & { node: Draft; path
   const put = (patch: Record<string, unknown>) => p.set(path, (c) => ({ ...(c as Draft), ...patch }));
   const field = (label: string, control: ReactNode) => (
     // biome-ignore lint/a11y/noLabelWithoutControl: the control is passed in and rendered inside the label.
-    <label className="flex flex-col gap-1.5 text-caption text-zinc-600">
+    <label className="flex flex-col gap-1.5 text-[13px] font-bold text-ink">
       {label}
       {control}
     </label>
@@ -538,22 +570,21 @@ function ConditionEditor({ node, path, ...p }: EditorProps & { node: Draft; path
     options: readonly (readonly [string, string])[],
     on: (v: string) => void,
   ) => (
-    <select className={SELECT} value={value} onChange={(e) => on(e.target.value)}>
+    <Select className={SELECT} value={value} onValueChange={(v) => on(v)}>
       {options.map(([v, l]) => (
         <option key={v} value={v}>
           {l}
         </option>
       ))}
-    </select>
+    </Select>
   );
   const date = (label: string, key: string) =>
     field(
       label,
-      <input
-        type="date"
+      <DatePicker
         className={SELECT}
         value={(node[key] as string | null) ?? ''}
-        onChange={(e) => put({ [key]: e.target.value || null })}
+        onValueChange={(v) => put({ [key]: v || null })}
       />,
     );
   const ops = COMPARISONS.map((o) => [o, t(`ops.${o}`)] as const);
@@ -561,10 +592,10 @@ function ConditionEditor({ node, path, ...p }: EditorProps & { node: Draft; path
   const eventTypes = scope?.kind === 'event' ? (p.types[scope.eventId] ?? []) : [];
   return (
     <fieldset
-      className="flex flex-col gap-3 rounded-card border border-zinc-200 px-4 py-3"
+      className="flex flex-col gap-3 rounded-card border border-line px-4 py-3"
       data-testid={`condition-${path.join('-')}`}
     >
-      <legend className="px-1 text-body font-medium">
+      <legend className="px-1 text-[13px] font-bold text-ink">
         {t('condition', { n, type: t(`types.${node.type as ConditionType}`) })}
       </legend>
       <div className="flex flex-wrap items-end gap-3">
@@ -623,7 +654,7 @@ function ConditionEditor({ node, path, ...p }: EditorProps & { node: Draft; path
             {date(t('registeredTo'), 'registeredTo')}
             {eventTypes.length > 0 ? (
               <fieldset className="flex flex-col gap-1.5">
-                <legend className="text-caption text-zinc-600">{t('ticketTypes')}</legend>
+                <legend className="text-[13px] font-bold text-ink">{t('ticketTypes')}</legend>
                 <div className="flex flex-wrap gap-3">
                   {eventTypes.map((tt) => {
                     const ids = (node.ticketTypeIds as string[]) ?? [];
@@ -761,6 +792,98 @@ function ConditionEditor({ node, path, ...p }: EditorProps & { node: Draft; path
             )}
           </>
         ) : null}
+        {node.type === 'stats' ? (
+          <>
+            {field(
+              t('statsMetric'),
+              select(
+                String(node.metric),
+                STATS_METRICS.filter(
+                  (m) => p.canMoney || !MONEY_METRICS.includes(m) || m === node.metric,
+                ).map((m) => [m, t(`statsMetrics.${m}`)] as const),
+                (v) => {
+                  const max = STATS_METRIC_MAX[v as StatsMetric];
+                  put({ metric: v, value: Math.min(Number(node.value), max) });
+                },
+              ),
+            )}
+            {field(
+              t('comparison'),
+              select(String(node.op), ops, (v) => put({ op: v })),
+            )}
+            {field(
+              node.metric === 'noShowPct'
+                ? t('valuePercent')
+                : String(node.metric).startsWith('rfm')
+                  ? t('quintile')
+                  : t('value'),
+              <input
+                type="number"
+                min={0}
+                max={STATS_METRIC_MAX[node.metric as StatsMetric]}
+                step={1}
+                className={SELECT}
+                value={Number(node.value)}
+                onChange={(e) => put({ value: Math.max(0, Math.floor(Number(e.target.value || 0))) })}
+              />,
+            )}
+          </>
+        ) : null}
+        {node.type === 'ltv' ? (
+          <>
+            {field(
+              t('currency'),
+              <input
+                className={SELECT}
+                value={String(node.currency)}
+                maxLength={3}
+                size={4}
+                onChange={(e) => put({ currency: e.target.value.toUpperCase() })}
+              />,
+            )}
+            {field(
+              t('comparison'),
+              select(String(node.op), ops, (v) => put({ op: v })),
+            )}
+            {field(
+              t('amount'),
+              <input
+                type="number"
+                min={0}
+                step="0.01"
+                inputMode="decimal"
+                className={SELECT}
+                value={Number(node.amountMinor) / 100}
+                onChange={(e) =>
+                  put({ amountMinor: Math.max(0, Math.round(Number(e.target.value || 0) * 100)) })
+                }
+              />,
+            )}
+          </>
+        ) : null}
+        {node.type === 'engagement' ? (
+          <>
+            {scope ? <ScopeEditor scope={scope} put={(s) => put({ scope: s })} {...p} /> : null}
+            {field(
+              t('comparison'),
+              select(String(node.op), ops, (v) => put({ op: v })),
+            )}
+            {field(
+              t('engagementScore'),
+              <input
+                type="number"
+                min={0}
+                max={1_000_000}
+                step={1}
+                className={SELECT}
+                value={Number(node.value)}
+                onChange={(e) =>
+                  put({ value: Math.min(1_000_000, Math.max(0, Math.floor(Number(e.target.value || 0)))) })
+                }
+              />,
+            )}
+          </>
+        ) : null}
         {node.type === 'seen' ? (
           <>
             {field(
@@ -810,43 +933,35 @@ function ScopeEditor({
   const cls = SELECT;
   return (
     <>
-      <label className="flex flex-col gap-1.5 text-caption text-zinc-600">
+      <label className="flex flex-col gap-1.5 text-[13px] font-bold text-ink">
         {t('builder.scope')}
-        <select
-          className={cls}
-          value={scope.kind}
-          onChange={(e) => change(e.target.value as SegmentScope['kind'])}
-        >
+        <Select className={cls} value={scope.kind} onValueChange={(v) => change(v as SegmentScope['kind'])}>
           {SCOPE_KINDS.map((k) => (
             <option key={k} value={k}>
               {t(`scopes.${k}`)}
             </option>
           ))}
-        </select>
+        </Select>
       </label>
       {scope.kind === 'event' || scope.kind === 'previousEdition' ? (
-        <label className="flex flex-col gap-1.5 text-caption text-zinc-600">
+        <label className="flex flex-col gap-1.5 text-[13px] font-bold text-ink">
           {scope.kind === 'event' ? t('builder.event') : t('builder.editionOf')}
-          <select
-            className={cls}
-            value={scope.eventId}
-            onChange={(e) => put({ ...scope, eventId: e.target.value })}
-          >
+          <Select className={cls} value={scope.eventId} onValueChange={(v) => put({ ...scope, eventId: v })}>
             {events.map((e) => (
               <option key={e.id} value={e.id}>
                 {t('eventOption', { name: e.name, date: e.date })}
               </option>
             ))}
-          </select>
+          </Select>
         </label>
       ) : null}
       {scope.kind === 'series' ? (
-        <label className="flex flex-col gap-1.5 text-caption text-zinc-600">
+        <label className="flex flex-col gap-1.5 text-[13px] font-bold text-ink">
           {t('builder.series')}
-          <select
+          <Select
             className={cls}
             value={scope.seriesId}
-            onChange={(e) => put({ ...scope, seriesId: e.target.value })}
+            onValueChange={(v) => put({ ...scope, seriesId: v })}
           >
             {series.length === 0 ? <option value="">{t('builder.noSeries')}</option> : null}
             {series.map((s) => (
@@ -854,28 +969,22 @@ function ScopeEditor({
                 {s.name}
               </option>
             ))}
-          </select>
+          </Select>
         </label>
       ) : null}
       {scope.kind === 'eventsBetween' ? (
         <>
-          <label className="flex flex-col gap-1.5 text-caption text-zinc-600">
+          <label className="flex flex-col gap-1.5 text-[13px] font-bold text-ink">
             {t('builder.from')}
-            <input
-              type="date"
+            <DatePicker
               className={cls}
               value={scope.from}
-              onChange={(e) => put({ ...scope, from: e.target.value })}
+              onValueChange={(v) => put({ ...scope, from: v })}
             />
           </label>
-          <label className="flex flex-col gap-1.5 text-caption text-zinc-600">
+          <label className="flex flex-col gap-1.5 text-[13px] font-bold text-ink">
             {t('builder.to')}
-            <input
-              type="date"
-              className={cls}
-              value={scope.to}
-              onChange={(e) => put({ ...scope, to: e.target.value })}
-            />
+            <DatePicker className={cls} value={scope.to} onValueChange={(v) => put({ ...scope, to: v })} />
           </label>
         </>
       ) : null}

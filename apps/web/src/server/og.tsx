@@ -1,5 +1,5 @@
 import 'server-only';
-import { brandPalette, color } from '@yayatoh/ui';
+import { brandPalette, constant, light } from '@yayatoh/ui';
 import { ImageResponse } from 'next/og';
 
 export const OG_SIZE = { width: 1200, height: 630 } as const;
@@ -16,8 +16,8 @@ export function ogImage(o: {
   brandColor: string | null;
 }): ImageResponse {
   const brand = o.brandColor ? brandPalette(o.brandColor) : null;
-  const background = brand?.background ?? color.ink;
-  const text = brand?.text ?? color.white;
+  const background = brand?.background ?? light.primary;
+  const text = brand?.text ?? constant.white;
   return new ImageResponse(
     <div
       style={{

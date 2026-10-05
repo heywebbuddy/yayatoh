@@ -5,6 +5,7 @@ import { DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { desc, eq } from 'drizzle-orm';
 import { z } from 'zod';
+import { assertMoneyConditionsAllowedTx } from './money.ts';
 import { segments } from './schema.ts';
 import { compileForOrgTx } from './scopes.ts';
 
@@ -71,6 +72,7 @@ export const previewAudienceQuery = tenantQuery({
   entitlement: 'marketing',
   permission: 'messages:read',
   handler: async ({ input, ctx, tx }) => {
+    await assertMoneyConditionsAllowedTx(tx, ctx, input.definition);
     const where = await compileForOrgTx(tx, requireOrg(ctx), input.definition, input.eventId);
     const count = await countSegmentTx(tx, where);
     const page = await segmentPageTx(tx, where, { limit: input.limit + 1, afterId: input.afterId });
@@ -148,6 +150,7 @@ export const saveSegmentCommand = tenantCommand({
   permission: 'messages:send',
   handler: async ({ input, ctx, tx }) => {
     const orgId = requireOrg(ctx);
+    await assertMoneyConditionsAllowedTx(tx, ctx, input.definition);
     // The definition must resolve for this org before it is kept.
     await compileForOrgTx(tx, orgId, input.definition, null);
     const who = ctx.actor.type === 'user' ? ctx.actor.userId : null;

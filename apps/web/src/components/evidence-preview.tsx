@@ -10,20 +10,20 @@ export function EvidencePreview({ doc, label }: { doc: EvidenceDocument; label: 
       lang={doc.lang}
       dir="ltr"
       aria-label={label}
-      className="flex flex-col gap-5 rounded-card border border-zinc-200 bg-white p-5"
+      className="flex flex-col gap-5 rounded-card border border-line bg-surface p-5"
     >
       <header className="flex flex-col gap-1">
         <h3 className="text-section">{doc.title}</h3>
-        <p className="text-caption text-zinc-600">{doc.subtitle}</p>
+        <p className="text-caption text-ink-2">{doc.subtitle}</p>
       </header>
       {doc.sections.map((s) => (
         <section key={s.id ?? s.title} className="flex flex-col gap-2">
-          <h4 className="font-mono text-label uppercase text-zinc-500">{s.title}</h4>
+          <h4 className="text-label uppercase text-ink-2">{s.title}</h4>
           {s.rows ? (
             <dl className="grid grid-cols-1 gap-x-6 gap-y-1 sm:grid-cols-[12rem_1fr]">
               {s.rows.map(([k, v]) => (
                 <div key={k} className="contents">
-                  <dt className="text-caption text-zinc-600">{k}</dt>
+                  <dt className="text-caption text-ink-2">{k}</dt>
                   <dd className="break-words text-body">{v}</dd>
                 </div>
               ))}
@@ -34,9 +34,9 @@ export function EvidencePreview({ doc, label }: { doc: EvidenceDocument; label: 
             <section tabIndex={0} aria-label={s.title} className="overflow-x-auto">
               <table className="w-full min-w-[32rem] border-collapse text-caption">
                 <thead>
-                  <tr className="border-b border-zinc-200">
+                  <tr className="border-b border-line">
                     {s.table.head.map((h) => (
-                      <th key={h} scope="col" className="px-2 py-1.5 text-start font-normal text-zinc-500">
+                      <th key={h} scope="col" className="px-2 py-1.5 text-start font-normal text-ink-2">
                         {h}
                       </th>
                     ))}
@@ -44,7 +44,7 @@ export function EvidencePreview({ doc, label }: { doc: EvidenceDocument; label: 
                 </thead>
                 <tbody>
                   {s.table.body.map((r, i) => (
-                    <tr key={i} className="border-b border-zinc-100">
+                    <tr key={i} className="border-b border-line">
                       {r.map((c, j) => (
                         <td key={j} className="px-2 py-1.5 align-top">
                           {c}
@@ -57,10 +57,10 @@ export function EvidencePreview({ doc, label }: { doc: EvidenceDocument; label: 
             </section>
           ) : null}
           {s.text ? <p className="whitespace-pre-wrap break-words text-body">{s.text}</p> : null}
-          {s.note ? <p className="text-caption text-zinc-500">{s.note}</p> : null}
+          {s.note ? <p className="text-caption text-ink-2">{s.note}</p> : null}
         </section>
       ))}
-      <footer className="text-caption text-zinc-500">{doc.footer}</footer>
+      <footer className="text-caption text-ink-2">{doc.footer}</footer>
     </article>
   );
 }

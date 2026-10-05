@@ -51,6 +51,8 @@ export const POLICY_REASONS = [
   'preference',
   'bounced',
   'complained',
+  /** M3.5b: the person replied STOP to a text or WhatsApp message. */
+  'opted_out',
 ] as const;
 
 export const maskPhone = (phone: string) =>
@@ -454,11 +456,14 @@ export async function deliveryReasonsTx(
 
 export const AddressSuppressionDto = z.object({
   id: z.uuid(),
-  channel: z.enum(['email', 'sms']),
+  channel: z.enum(['email', 'sms', 'whatsapp']),
   address: z.string(),
-  reason: z.enum(['hard_bounce', 'soft_bounce', 'complaint']),
+  reason: z.enum(['hard_bounce', 'soft_bounce', 'complaint', 'opt_out']),
   since: z.date(),
-  /** Complaints are the person's own "this is spam": only Yayatoh support can lift them. */
+  /**
+   * Complaints are the person's own "this is spam": only Yayatoh support can lift them. A text
+   * opt-out (STOP, M3.5b) is lifted only by the person (START).
+   */
   liftable: z.boolean(),
 });
 export type AddressSuppressionDto = z.infer<typeof AddressSuppressionDto>;
@@ -477,11 +482,11 @@ export const addressSuppressionsQuery = tenantQuery({
       .limit(100);
     return rows.map((r) => ({
       id: r.id,
-      channel: r.channel as 'email' | 'sms',
+      channel: r.channel as AddressSuppressionDto['channel'],
       address: r.channel === 'email' ? maskEmail(r.addressNorm) : maskPhone(r.addressNorm),
       reason: r.reason as AddressSuppressionDto['reason'],
       since: r.createdAt,
-      liftable: r.reason !== 'complaint',
+      liftable: r.reason !== 'complaint' && r.reason !== 'opt_out',
     }));
   },
 });
@@ -493,7 +498,11 @@ export const addressSuppressionsQuery = tenantQuery({
 export const liftAddressSuppressionCommand = tenantCommand({
   name: 'notifications.liftAddressSuppression',
   input: z.object({ id: z.uuid(), note: z.string().trim().min(3).max(500) }),
-  output: z.object({ lifted: z.boolean(), channel: z.enum(['email', 'sms']), reason: z.string() }),
+  output: z.object({
+    lifted: z.boolean(),
+    channel: z.enum(['email', 'sms', 'whatsapp']),
+    reason: z.string(),
+  }),
   entitlement: 'core',
   permission: 'org:update',
   handler: async ({ input, tx }) => {
@@ -507,8 +516,12 @@ export const liftAddressSuppressionCommand = tenantCommand({
       throw new DomainError('invalid_state', 'Complaints are lifted by Yayatoh support', {
         reason: 'complaint_not_liftable',
       });
+    if (row.reason === 'opt_out')
+      throw new DomainError('invalid_state', 'The person lifts a text opt-out by replying START', {
+        reason: 'opt_out_not_liftable',
+      });
     await tx.delete(addressSuppressions).where(eq(addressSuppressions.id, row.id));
-    return { lifted: true, channel: row.channel as 'email' | 'sms', reason: row.reason };
+    return { lifted: true, channel: row.channel as 'email' | 'sms' | 'whatsapp', reason: row.reason };
   },
   audit: (input, r) => ({
     action: 'notifications.suppression.lift',
@@ -562,4 +575,57 @@ export async function autoPausedOrgsTx(tx: TenantTx): Promise<AutoPausedOrgDto[]
       rateBps: r.rate_bps,
     }),
   );
+}
+
+/** Deliverability of the org's email for the alert engine (M3.2b). Counts only. */
+export interface DeliverabilityFacts {
+  /** Emails sent in the window (every category). */
+  readonly sent: number;
+  readonly bounced: number;
+  readonly complained: number;
+  /** Optional messaging is paused automatically (complaint rate) right now. */
+  readonly autoPaused: boolean;
+  /** Messages (any channel) that failed to send in the window. */
+  readonly failed: number;
+}
+
+export async function deliverabilityFactsTx(
+  tx: TenantTx,
+  now: Date,
+  windowMs: number,
+): Promise<DeliverabilityFacts> {
+  const since = new Date(now.getTime() - windowMs);
+  const sentInWindow = and(
+    eq(messages.channel, 'email'),
+    eq(messages.status, 'sent'),
+    gte(messages.sentAt, since),
+  );
+  const [sent] = await tx.select({ n: count() }).from(messages).where(sentInWindow);
+  const [events] = await tx
+    .select({
+      bounced: sql<number>`count(distinct ${messageEvents.messageId}) filter (where ${messageEvents.type} = 'bounced')::int`,
+      complained: sql<number>`count(distinct ${messageEvents.messageId}) filter (where ${messageEvents.type} = 'complained')::int`,
+    })
+    .from(messageEvents)
+    .innerJoin(
+      messages,
+      and(eq(messages.orgId, messageEvents.orgId), eq(messages.id, messageEvents.messageId)),
+    )
+    .where(sentInWindow);
+  const [paused] = await tx
+    .select({ id: autoPauses.id })
+    .from(autoPauses)
+    .where(isNull(autoPauses.liftedAt))
+    .limit(1);
+  const [failed] = await tx
+    .select({ n: count() })
+    .from(messages)
+    .where(and(eq(messages.status, 'failed'), gte(messages.updatedAt, since)));
+  return {
+    sent: sent?.n ?? 0,
+    bounced: events?.bounced ?? 0,
+    complained: events?.complained ?? 0,
+    autoPaused: Boolean(paused),
+    failed: failed?.n ?? 0,
+  };
 }

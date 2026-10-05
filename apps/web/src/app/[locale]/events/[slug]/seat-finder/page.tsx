@@ -1,16 +1,18 @@
 import { checkoutTarget, publicEventBySlug, publicOccurrences } from '@yayatoh/events';
 import { createCtx, executeQuery, isDomainError } from '@yayatoh/kernel';
 import { finderResultQuery } from '@yayatoh/seating';
-import { EmptyState, Label, PageHeader } from '@yayatoh/ui';
+import { Alert, buttonClass, EmptyState, Label, PageHeader } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { GuestSeatFinder } from '@/components/guest-seat-finder.tsx';
 import { SeatFinder } from '@/components/seat-finder.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatEventDateRange } from '@/lib/format.ts';
+import { checkHelpTicket } from '@/server/assistance.ts';
 import { ports } from '@/server/ports.ts';
 import { humanCheckWidget, openVenueMap, pendingCode, verifiedCode } from '@/server/seat-finder.ts';
-import { codeFlowAction, findByNameAction, resetFinderAction } from './actions.ts';
+import { codeFlowAction, findByNameAction, findByPinAction, resetFinderAction } from './actions.ts';
 
 export async function generateMetadata({
   params,
@@ -33,7 +35,7 @@ export default async function SeatFinderPage({
   searchParams,
 }: {
   params: Promise<{ locale: string; slug: string }>;
-  searchParams: Promise<{ date?: string }>;
+  searchParams: Promise<{ date?: string; ticket?: string }>;
 }) {
   const { locale, slug } = await params;
   const sp = await searchParams;
@@ -56,6 +58,31 @@ export default async function SeatFinderPage({
     currency: ev.currency,
     timeZone: ev.timezone,
   });
+  // M3.3b "Need help": the ticket's help link (from the order page) opens the help form.
+  const ticket = (sp.ticket ?? '').slice(0, 200);
+  const helpCheck = ticket ? await checkHelpTicket(slug, ticket) : null;
+  const help = (
+    <section aria-labelledby="need-help" className="flex flex-col gap-2 border-t border-line pt-5">
+      <h2 id="need-help" className="text-section">
+        {t('assistance.guest.needHelp')}
+      </h2>
+      {!ticket ? (
+        <p className="text-body text-ink-2">{t('assistance.guest.needTicketLink')}</p>
+      ) : helpCheck?.valid ? (
+        <>
+          <p className="text-body text-ink-2">{t('assistance.guest.needHelpHint')}</p>
+          <Link
+            href={`/events/${slug}/seat-finder/help?ticket=${encodeURIComponent(ticket)}`}
+            className={buttonClass('primary', 'md', 'self-start')}
+          >
+            {t('assistance.guest.askButton')}
+          </Link>
+        </>
+      ) : (
+        <Alert title={t('assistance.guest.invalidTitle')}>{t('assistance.guest.invalidDescription')}</Alert>
+      )}
+    </section>
+  );
   const header = (
     <PageHeader
       eyebrow={<Label>{t('seatFinder.eyebrow')}</Label>}
@@ -71,11 +98,12 @@ export default async function SeatFinderPage({
           title={t('seatFinder.closedTitle')}
           description={t('seatFinder.closedDescription')}
           action={
-            <Link href={`/events/${slug}`} className="text-body underline">
+            <Link href={`/events/${slug}`} className="inline-flex min-h-6 items-center text-body underline">
               {t('seatFinder.toEvent')}
             </Link>
           }
         />
+        {help}
       </main>
     );
   const [viewId, codeId] =
@@ -99,7 +127,7 @@ export default async function SeatFinderPage({
       {header}
       {dates.length > 1 ? (
         <nav aria-label={t('seatingDates.finderLabel')} className="flex flex-col gap-1.5">
-          <p className="text-caption text-zinc-600">{t('seatingDates.finderIntro')}</p>
+          <p className="text-caption text-ink-2">{t('seatingDates.finderIntro')}</p>
           <ul className="flex list-none flex-wrap gap-1.5">
             {dates.map((d) => {
               const on = date?.id === d.id;
@@ -108,7 +136,7 @@ export default async function SeatFinderPage({
                   <Link
                     href={`/events/${slug}/seat-finder?date=${d.id}`}
                     aria-current={on ? 'page' : undefined}
-                    className={`inline-flex min-h-9 items-center rounded-pill border px-3.5 text-[13px] ${on ? 'border-ink bg-ink text-white' : 'border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50'}`}
+                    className={`inline-flex min-h-9 items-center rounded-pill border px-3.5 text-[13px] ${on ? 'border-ink bg-tag text-white' : 'border-line bg-surface text-ink-2 hover:bg-surface-2'}`}
                   >
                     {day.format(d.startsAt)}
                   </Link>
@@ -118,18 +146,31 @@ export default async function SeatFinderPage({
           </ul>
         </nav>
       ) : null}
-      <SeatFinder
-        key={`${map.mode}:${date?.id ?? ''}`}
-        mode={map.mode}
-        initialStep={initialStep}
-        verified={verified}
-        doc={map.doc}
-        challenge={humanCheckWidget()}
-        codeFlow={codeFlowAction.bind(null, slug)}
-        byName={findByNameAction.bind(null, slug, date?.id ?? null)}
-        reset={resetFinderAction.bind(null, slug)}
-      />
-      <Link href={`/events/${slug}`} className="self-start text-caption text-zinc-600 underline">
+      {map.mode === 'pin' ? (
+        // M4.4a: wedding and gala guests, by full name and their invitation's PIN (labels only).
+        <GuestSeatFinder
+          doc={map.doc}
+          challenge={humanCheckWidget()}
+          byPin={findByPinAction.bind(null, slug)}
+        />
+      ) : (
+        <SeatFinder
+          key={`${map.mode}:${date?.id ?? ''}`}
+          mode={map.mode}
+          initialStep={initialStep}
+          verified={verified}
+          doc={map.doc}
+          challenge={humanCheckWidget()}
+          codeFlow={codeFlowAction.bind(null, slug)}
+          byName={findByNameAction.bind(null, slug, date?.id ?? null)}
+          reset={resetFinderAction.bind(null, slug)}
+        />
+      )}
+      {help}
+      <Link
+        href={`/events/${slug}`}
+        className="inline-flex min-h-6 items-center self-start text-caption text-ink-2 underline"
+      >
         {t('seatFinder.toEvent')}
       </Link>
     </main>

@@ -3,7 +3,7 @@ import { contactIdByEmailTx, recordConsentTx, upsertContactTx } from '@yayatoh/c
 import { type TenantTx, withTenant } from '@yayatoh/db';
 import { accessGrantTx, findEventTx } from '@yayatoh/events';
 import { submitResponseTx } from '@yayatoh/forms';
-import { type Ctx, createCtx, DomainError, requireOrg, uuidv7 } from '@yayatoh/kernel';
+import { type Ctx, createCtx, DomainError, type DomainEvent, requireOrg, uuidv7 } from '@yayatoh/kernel';
 import {
   claimProviderEventTx,
   fundsFlowTx,
@@ -13,30 +13,42 @@ import {
 } from '@yayatoh/payments';
 import { keyVault, tenantCommand } from '@yayatoh/platform';
 import {
+  adoptSeatHoldTx,
   checkSeatRulesTx,
   extendSeatHoldTx,
   heldSeatsTx,
   holdSeatsTx,
+  orderChannelTx,
+  recordChannelOrderTx,
   releaseSeatHoldTx,
+  resolveSaleChannelTx,
   seatedTicketTypesTx,
   sellSeatsTx,
 } from '@yayatoh/seating';
 import { assertNotPausedTx } from '@yayatoh/tenancy';
 import {
   assignTicketSeatsTx,
+  claimCouponTx,
   claimPromoTx,
+  couponRule,
   holdInventoryTx,
   issueTicketsTx,
   quoteTx,
+  reclaimCouponTx,
+  releaseCouponTx,
   releaseHoldTx,
   releasePromoTx,
-  resolvePromoTx,
+  resolveCodeTx,
   sellHeldTx,
+  type TicketTypeManager,
 } from '@yayatoh/ticketing';
 import { and, eq, inArray, lte, sql } from 'drizzle-orm';
 import { z } from 'zod';
+import { addonItemTx, payAddonOrderTx } from '../addon-orders.ts';
+import { formatCreditNoteNumber, parseCreditCode } from '../domain/credit-notes.ts';
 import { HOLD_MINUTES, orderLifecycle, PAYMENT_EXTENSION_MINUTES } from '../domain/lifecycle.ts';
 import { policySnapshot } from '../domain/refund-policy.ts';
+import { donationItemTx, payDonationOrderTx } from '../donation-orders.ts';
 import { CheckoutResultDto, OrderDto, StartCheckoutInput } from '../dto.ts';
 import { claimOccurrenceTx } from '../occurrence.ts';
 import { orderItems, orders } from '../schema.ts';
@@ -48,6 +60,8 @@ import {
   type WaitlistClaim,
   waitlistReserveTx,
 } from '../waitlist.ts';
+import { applyCreditTx, lockCreditByCodeTx, reclaimCreditTx, releaseCreditTx } from './credit-notes.ts';
+import { applyInvoiceProviderEventTx, invoiceOfOrderTx } from './invoices.ts';
 import { refundPolicyTx } from './refunds.ts';
 
 export const hashManageToken = (token: string) => createHash('sha256').update(token).digest('hex');
@@ -128,168 +142,248 @@ async function setStatus(
  * Start checkout (public). Prices the cart all-in from live ticket types, holds inventory
  * atomically, and snapshots totals and the fee schedule. A zero-total order is paid at once.
  */
-export const startCheckoutCommand = tenantCommand({
-  name: 'orders.startCheckout',
-  input: StartCheckoutInput,
-  output: CheckoutResultDto,
-  entitlement: 'ticketing',
-  permission: 'public:checkout',
-  handler: async ({ input, ctx, tx, emit }) => {
-    const orgId = requireOrg(ctx);
-    // Staff kill switch (M1.3e): applies from the next checkout after it is set.
-    await assertNotPausedTx(tx, 'pause_checkout');
-    const event = await findEventTx(tx, input.eventId);
-    const grant =
-      event && input.accessCodeId ? await accessGrantTx(tx, event.id, input.accessCodeId, ctx.now) : null;
-    if (event?.status !== 'published' || (event.visibility === 'private' && !grant?.unlocksEvent)) {
-      throw new DomainError('not_found', 'Event not found');
-    }
-    const promo = input.promoCode ? await resolvePromoTx(tx, event.id, input.promoCode, ctx.now) : null;
-    // Seated events: the chosen seats are held under the order's id and decide the quantities of
-    // their ticket types; a seated ticket type cannot be bought without choosing seats.
-    const orderId = uuidv7(ctx.now.getTime());
-    const expiresAt = new Date(ctx.now.getTime() + HOLD_MINUTES * 60_000);
-    const seatedTypes = await seatedTicketTypesTx(tx, event.id, input.occurrenceId ?? null);
-    if (input.items.some((i) => seatedTypes.has(i.ticketTypeId)))
-      throw new DomainError('validation_failed', 'Choose seats for this ticket', { reason: 'choose_seats' });
-    const seatItems = new Map<string, number>();
-    if (input.seats.length) {
-      const held = await holdSeatsTx(tx, ctx, {
-        eventId: event.id,
-        occurrenceId: input.occurrenceId ?? null,
-        seatUuids: input.seats,
-        holdId: orderId,
-        expiresAt,
-      });
-      for (const s of held) {
-        if (!s.ticketTypeId)
-          throw new DomainError('validation_failed', 'That seat is not on sale', {
-            reason: 'seat_not_on_sale',
-          });
-        seatItems.set(s.ticketTypeId, (seatItems.get(s.ticketTypeId) ?? 0) + 1);
-      }
-      // Seating rules (M1.7f): an enforced rule refuses (the holds roll back); warnings were shown
-      // to the buyer as they chose.
-      await checkSeatRulesTx(tx, ctx, {
-        eventId: event.id,
-        occurrenceId: input.occurrenceId ?? null,
-        seatUuids: input.seats,
-        context: 'checkout',
-      });
-    }
-    const wanted = [
-      ...input.items,
-      ...[...seatItems].map(([ticketTypeId, quantity]) => ({ ticketTypeId, quantity })),
-    ];
-    // M3.10a: an open waitlist offer is bought with the stock it holds; otherwise the public only
-    // buys beyond what waitlists wait for.
-    const offer: WaitlistClaim | null = input.waitlistToken
-      ? await claimWaitlistOfferTx(tx, {
-          token: input.waitlistToken,
-          eventId: event.id,
-          items: wanted,
-          seats: input.seats,
-          occurrenceId: input.occurrenceId,
-          email: input.buyer.email,
-          now: ctx.now,
-        })
+/**
+ * The checkout itself, inside the caller's transaction (the command below, or a higher module
+ * selling its own managed ticket types: `manager`, M5.1a / ADR 0021). The caller has validated
+ * `input` with `StartCheckoutInput`.
+ */
+export async function startCheckoutTx(
+  {
+    input,
+    ctx,
+    tx,
+    emit,
+  }: { input: z.output<typeof StartCheckoutInput>; ctx: Ctx; tx: TenantTx; emit: (e: DomainEvent) => void },
+  opts: { manager?: TicketTypeManager } = {},
+) {
+  const orgId = requireOrg(ctx);
+  // Staff kill switch (M1.3e): applies from the next checkout after it is set.
+  await assertNotPausedTx(tx, 'pause_checkout');
+  const event = await findEventTx(tx, input.eventId);
+  const grant =
+    event && input.accessCodeId ? await accessGrantTx(tx, event.id, input.accessCodeId, ctx.now) : null;
+  if (event?.status !== 'published' || (event.visibility === 'private' && !grant?.unlocksEvent)) {
+    throw new DomainError('not_found', 'Event not found');
+  }
+  // M3.10c: the code box also takes store credit codes (CR-XXXX-XXXX) from this org's credit notes.
+  const creditCode = input.promoCode ? parseCreditCode(input.promoCode) : null;
+  const credit = creditCode ? await lockCreditByCodeTx(tx, creditCode) : null;
+  if (creditCode && !credit)
+    throw new DomainError('validation_failed', 'This store credit code is not valid', {
+      reason: 'credit_invalid',
+      field: 'promoCode',
+    });
+  // The event's own promo code, else (U9) one of the org's coupons that applies to this event.
+  const code =
+    input.promoCode && !creditCode ? await resolveCodeTx(tx, event, input.promoCode, ctx.now) : null;
+  const promo = code?.kind === 'promo' ? code.promo : null;
+  const coupon = code?.kind === 'coupon' ? code.coupon : null;
+  // Seated events: the chosen seats are held under the order's id and decide the quantities of
+  // their ticket types; a seated ticket type cannot be bought without choosing seats.
+  const orderId = uuidv7(ctx.now.getTime());
+  const expiresAt = new Date(ctx.now.getTime() + HOLD_MINUTES * 60_000);
+  const seatedTypes = await seatedTicketTypesTx(tx, event.id, input.occurrenceId ?? null);
+  if (input.items.some((i) => seatedTypes.has(i.ticketTypeId)))
+    throw new DomainError('validation_failed', 'Choose seats for this ticket', { reason: 'choose_seats' });
+  const seatItems = new Map<string, number>();
+  if (input.seatHold && input.seats.length)
+    throw new DomainError('validation_failed', 'Choose seats or best available, not both', {
+      reason: 'choose_seats',
+    });
+  let seatIds: readonly string[] = input.seats;
+  // M6.11b: seats are sold online through the buyer's sales code, else the public channel.
+  const channel =
+    input.seats.length || input.seatHold
+      ? await resolveSaleChannelTx(tx, event.id, { via: 'online', code: input.channelCode ?? null })
       : null;
-    const occurrenceId = await claimOccurrenceTx(tx, {
-      eventId: event.id,
-      occurrenceId: input.occurrenceId,
-      quantity: wanted.reduce((n, w) => n + w.quantity, 0),
-      now: ctx.now,
-      waitlistReserve: !offer,
-    });
-    const quote = await quoteTx(tx, event.id, wanted, {
-      now: ctx.now,
-      includeHidden: new Set([...(grant?.ticketTypeIds ?? []), ...(offer ? [offer.ticketTypeId] : [])]),
-      promo,
-      occurrenceId,
-    });
-    if (!offer)
-      await holdInventoryTx(
-        tx,
-        lines([...quote.lines]),
-        await waitlistReserveTx(
-          tx,
-          quote.lines.map((l) => l.ticketTypeId),
-        ),
-      );
-    // Counted with the hold, returned if the hold lapses.
-    if (promo) await claimPromoTx(tx, promo.id);
-    const manageToken = randomBytes(32).toString('base64url');
-    const free = quote.totalMinor === 0;
-    // Roadmap §5.3: direct charges on the organizer's account once it is fully enabled.
-    const flow = await fundsFlowTx(tx);
-    const contact = await upsertContactTx(tx, ctx, {
-      email: input.buyer.email,
-      name: input.buyer.name,
-      source: 'checkout',
-    });
-    if (input.marketingOptIn) {
-      await recordConsentTx(tx, ctx, {
-        contactId: contact.id,
-        channel: 'email',
-        purpose: 'marketing',
-        status: 'granted',
-        evidence: `checkout_checkbox:event:${event.id}`,
-      });
+  if (input.seats.length || input.seatHold) {
+    // M6.11a: seats best available already holds for this buyer move to the order's hold.
+    const held = input.seatHold
+      ? await adoptSeatHoldTx(tx, ctx, {
+          eventId: event.id,
+          occurrenceId: input.occurrenceId ?? null,
+          token: input.seatHold,
+          holdId: orderId,
+          expiresAt,
+          channelId: channel?.id ?? null,
+        })
+      : await holdSeatsTx(tx, ctx, {
+          eventId: event.id,
+          occurrenceId: input.occurrenceId ?? null,
+          seatUuids: input.seats,
+          holdId: orderId,
+          expiresAt,
+          channelId: channel?.id ?? null,
+        });
+    seatIds = held.map((s) => s.seatUuid);
+    for (const s of held) {
+      if (!s.ticketTypeId)
+        throw new DomainError('validation_failed', 'That seat is not on sale', {
+          reason: 'seat_not_on_sale',
+        });
+      seatItems.set(s.ticketTypeId, (seatItems.get(s.ticketTypeId) ?? 0) + 1);
     }
-    const [order] = await tx
-      .insert(orders)
-      .values({
-        id: orderId,
-        orgId,
-        eventId: event.id,
-        seatUuids: [...new Set(input.seats)],
-        occurrenceId,
-        status: 'reserved',
-        buyerEmail: input.buyer.email,
-        buyerName: input.buyer.name,
-        buyerUserId: ctx.actor.type === 'user' ? ctx.actor.userId : null,
-        buyerContactId: contact.id,
-        locale: input.locale,
-        currency: quote.currency,
-        subtotalMinor: quote.subtotalMinor,
-        discountMinor: quote.discountMinor,
-        promoCodeId: quote.promoCodeId,
-        promoCode: promo?.code ?? null,
-        feeMinor: quote.feeMinor,
-        totalMinor: quote.totalMinor,
-        fundsFlow: flow.fundsFlow,
-        connectedAccountId: flow.accountId,
-        feeSchedule: quote.feeSchedule,
-        manageTokenHash: hashManageToken(manageToken),
-        riskReview: input.riskReview,
-        // M3.10b: the refund policy the buyer sees now is the one this order keeps.
-        refundPolicySnapshot: policySnapshot(await refundPolicyTx(tx, event.id)),
-        manageTokenCiphertext: await keyVault().encrypt(orgId, new TextEncoder().encode(manageToken)),
-        expiresAt,
-      })
-      .returning();
-    if (!order) throw new DomainError('internal');
-    await submitResponseTx(tx, ctx, {
-      kind: 'checkout_questions',
-      subjectType: 'event',
-      subjectId: event.id,
-      respondentType: 'order',
-      respondentId: order.id,
-      answers: input.answers,
+    // Seating rules (M1.7f): an enforced rule refuses (the holds roll back); warnings were shown
+    // to the buyer as they chose.
+    await checkSeatRulesTx(tx, ctx, {
+      eventId: event.id,
+      occurrenceId: input.occurrenceId ?? null,
+      seatUuids: seatIds,
+      context: 'checkout',
+      accessibleNeed: input.accessibleNeed,
     });
-    const items = await tx
-      .insert(orderItems)
-      .values(quote.lines.map((l) => ({ ...l, orgId, orderId: order.id })))
-      .returning();
-    if (offer)
-      await attachWaitlistOrderTx(
+  }
+  const wanted = [
+    ...input.items,
+    ...[...seatItems].map(([ticketTypeId, quantity]) => ({ ticketTypeId, quantity })),
+  ];
+  // M3.10a: an open waitlist offer is bought with the stock it holds; otherwise the public only
+  // buys beyond what waitlists wait for.
+  const offer: WaitlistClaim | null = input.waitlistToken
+    ? await claimWaitlistOfferTx(tx, {
+        token: input.waitlistToken,
+        eventId: event.id,
+        items: wanted,
+        seats: [...seatIds],
+        occurrenceId: input.occurrenceId,
+        email: input.buyer.email,
+        now: ctx.now,
+      })
+    : null;
+  const occurrenceId = await claimOccurrenceTx(tx, {
+    eventId: event.id,
+    occurrenceId: input.occurrenceId,
+    quantity: wanted.reduce((n, w) => n + w.quantity, 0),
+    now: ctx.now,
+    waitlistReserve: !offer,
+  });
+  const quote = await quoteTx(tx, event.id, wanted, {
+    now: ctx.now,
+    includeHidden: new Set([...(grant?.ticketTypeIds ?? []), ...(offer ? [offer.ticketTypeId] : [])]),
+    promo: promo ?? (coupon ? couponRule(coupon) : null),
+    occurrenceId,
+    ...(opts.manager ? { manager: opts.manager } : {}),
+    creditBudgetMinor: credit && credit.currency === event.currency ? credit.balanceMinor : 0,
+  });
+  if (credit && quote.creditMinor === 0)
+    throw new DomainError('validation_failed', 'This store credit cannot be used on these tickets', {
+      reason: 'credit_not_applicable',
+      field: 'promoCode',
+    });
+  if (!offer)
+    await holdInventoryTx(
+      tx,
+      lines([...quote.lines]),
+      await waitlistReserveTx(
         tx,
-        offer,
-        order.id,
-        items.reduce((n, i) => n + i.quantity, 0),
-      );
+        quote.lines.map((l) => l.ticketTypeId),
+      ),
+    );
+  // Counted with the hold, returned if the hold lapses.
+  if (promo) await claimPromoTx(tx, promo.id);
+  const manageToken = randomBytes(32).toString('base64url');
+  const free = quote.totalMinor === 0;
+  // Roadmap §5.3: direct charges on the organizer's account once it is fully enabled.
+  const flow = await fundsFlowTx(tx);
+  const contact = await upsertContactTx(tx, ctx, {
+    email: input.buyer.email,
+    name: input.buyer.name,
+    source: 'checkout',
+  });
+  // U9: a coupon use is counted per buyer (their contact), under the coupon's row lock.
+  if (coupon)
+    await claimCouponTx(tx, orgId, coupon.id, {
+      orderId,
+      eventId: event.id,
+      buyerContactId: contact.id,
+    });
+  if (input.marketingOptIn) {
+    await recordConsentTx(tx, ctx, {
+      contactId: contact.id,
+      channel: 'email',
+      purpose: 'marketing',
+      status: 'granted',
+      evidence: `checkout_checkbox:event:${event.id}`,
+    });
+  }
+  const [order] = await tx
+    .insert(orders)
+    .values({
+      id: orderId,
+      orgId,
+      eventId: event.id,
+      seatUuids: [...new Set(seatIds)],
+      occurrenceId,
+      status: 'reserved',
+      buyerEmail: input.buyer.email,
+      buyerName: input.buyer.name,
+      buyerUserId: ctx.actor.type === 'user' ? ctx.actor.userId : null,
+      buyerContactId: contact.id,
+      locale: input.locale,
+      currency: quote.currency,
+      subtotalMinor: quote.subtotalMinor,
+      discountMinor: quote.discountMinor,
+      promoCodeId: promo ? quote.promoCodeId : null,
+      couponId: coupon?.id ?? null,
+      promoCode: promo?.code ?? coupon?.code ?? (credit ? formatCreditNoteNumber(credit.number) : null),
+      feeMinor: quote.feeMinor,
+      totalMinor: quote.totalMinor,
+      fundsFlow: flow.fundsFlow,
+      connectedAccountId: flow.accountId,
+      feeSchedule: quote.feeSchedule,
+      manageTokenHash: hashManageToken(manageToken),
+      riskReview: input.riskReview,
+      // M3.10b: the refund policy the buyer sees now is the one this order keeps.
+      refundPolicySnapshot: policySnapshot(await refundPolicyTx(tx, event.id)),
+      manageTokenCiphertext: await keyVault().encrypt(orgId, new TextEncoder().encode(manageToken)),
+      expiresAt,
+    })
+    .returning();
+  if (!order) throw new DomainError('internal');
+  await recordChannelOrderTx(tx, ctx, {
+    eventId: event.id,
+    orderId: order.id,
+    channelId: channel?.id ?? null,
+    seats: order.seatUuids.length,
+  });
+  if (credit) await applyCreditTx(tx, ctx, credit, order.id, quote.creditMinor);
+  await submitResponseTx(tx, ctx, {
+    kind: 'checkout_questions',
+    subjectType: 'event',
+    subjectId: event.id,
+    respondentType: 'order',
+    respondentId: order.id,
+    answers: input.answers,
+  });
+  const items = await tx
+    .insert(orderItems)
+    .values(quote.lines.map((l) => ({ ...l, orgId, orderId: order.id })))
+    .returning();
+  if (offer)
+    await attachWaitlistOrderTx(
+      tx,
+      offer,
+      order.id,
+      items.reduce((n, i) => n + i.quantity, 0),
+    );
+  emit({
+    type: 'order.reserved',
+    version: 1,
+    aggregateType: 'order',
+    aggregateId: order.id,
+    payload: {
+      orgId,
+      orderId: order.id,
+      eventId: event.id,
+      totalMinor: order.totalMinor,
+      currency: order.currency,
+    },
+  });
+  // M1.9e: a checkout the risk rules asked to review becomes a fraud signal on the order
+  // (check-in's subscriber raises it and alerts the team). Rule ids only; no buyer details.
+  if (input.riskReview.length > 0)
     emit({
-      type: 'order.reserved',
+      type: 'order.risk_flagged',
       version: 1,
       aggregateType: 'order',
       aggregateId: order.id,
@@ -297,62 +391,61 @@ export const startCheckoutCommand = tenantCommand({
         orgId,
         orderId: order.id,
         eventId: event.id,
-        totalMinor: order.totalMinor,
-        currency: order.currency,
+        contactId: contact.id,
+        rules: [...input.riskReview],
       },
     });
-    // M1.9e: a checkout the risk rules asked to review becomes a fraud signal on the order
-    // (check-in's subscriber raises it and alerts the team). Rule ids only; no buyer details.
-    if (input.riskReview.length > 0)
-      emit({
-        type: 'order.risk_flagged',
-        version: 1,
-        aggregateType: 'order',
-        aggregateId: order.id,
-        payload: {
-          orgId,
-          orderId: order.id,
-          eventId: event.id,
-          contactId: contact.id,
-          rules: [...input.riskReview],
-        },
-      });
-    let final = order;
-    if (free) {
-      await sellHeldTx(tx, lines(items));
-      final = await setStatus(tx, order, 'pay', ctx.now, { paidAt: ctx.now, expiresAt: null });
-      await issueFor(tx, ctx, final, items);
-      emit({
-        type: 'order.paid',
-        version: 1,
-        aggregateType: 'order',
-        aggregateId: order.id,
-        payload: {
-          orgId,
-          orderId: order.id,
-          eventId: event.id,
-          totalMinor: 0,
-          currency: order.currency,
-          via: 'free',
-        },
-      });
-    }
-    return {
-      order: { ...final, items },
-      manageToken,
-      payment: {
-        fundsFlow: flow.fundsFlow,
-        connectedAccountId: flow.accountId,
-        // organizer_mor: the platform fee is the application fee; platform_mor keeps it.
-        applicationFeeMinor: flow.fundsFlow === 'organizer_mor' ? final.feeMinor : 0,
+  let final = order;
+  if (free) {
+    await sellHeldTx(tx, lines(items));
+    final = await setStatus(tx, order, 'pay', ctx.now, { paidAt: ctx.now, expiresAt: null });
+    await issueFor(tx, ctx, final, items);
+    emit({
+      type: 'order.paid',
+      version: 1,
+      aggregateType: 'order',
+      aggregateId: order.id,
+      payload: {
+        orgId,
+        orderId: order.id,
+        eventId: event.id,
+        totalMinor: 0,
+        currency: order.currency,
+        via: 'free',
       },
-    };
-  },
+    });
+  }
+  return {
+    order: { ...final, items },
+    manageToken,
+    payment: {
+      fundsFlow: flow.fundsFlow,
+      connectedAccountId: flow.accountId,
+      // organizer_mor: the platform fee is the application fee; platform_mor keeps it.
+      applicationFeeMinor: flow.fundsFlow === 'organizer_mor' ? final.feeMinor : 0,
+    },
+  };
+}
+
+export const startCheckoutCommand = tenantCommand({
+  name: 'orders.startCheckout',
+  input: StartCheckoutInput,
+  output: CheckoutResultDto,
+  entitlement: 'ticketing',
+  permission: 'public:checkout',
+  handler: (args) => startCheckoutTx(args),
   audit: (input, r) => ({
     action: 'order.checkout',
     targetType: 'order',
     targetId: r.order.id,
-    data: { eventId: input.eventId, totalMinor: r.order.totalMinor, items: input.items.length },
+    data: {
+      eventId: input.eventId,
+      totalMinor: r.order.totalMinor,
+      items: input.items.length,
+      ...(input.seatHold ? { bestAvailable: true } : {}),
+      ...(input.accessibleNeed ? { accessibleNeed: true } : {}),
+      ...(input.channelCode ? { channelCode: true } : {}),
+    },
   }),
 });
 
@@ -420,6 +513,8 @@ export const applyProviderEventCommand = tenantCommand({
     const e = input as ProviderEvent;
     if (!(await claimProviderEventTx(tx, e))) return { outcome: 'duplicate' as const, status: 'unchanged' };
     const order = await loadOrderTx(tx, e.orderId, true);
+    // M5.1d: an invoice's pay link (a part or all of its balance), matched to its own payment.
+    if (await invoiceOfOrderTx(tx, order.id)) return applyInvoiceProviderEventTx(tx, ctx, emit, order, e);
     if (
       order.providerPaymentId !== e.providerPaymentId ||
       order.totalMinor !== e.amountMinor ||
@@ -441,6 +536,15 @@ export const applyProviderEventCommand = tenantCommand({
       return { outcome: 'applied' as const, status: row.status };
     }
     if (order.status === 'paid') return { outcome: 'ignored' as const, status: order.status };
+    // M4.8a: a gift order has no tickets and holds no stock; it is paid as a gift.
+    const gift = await donationItemTx(tx, order.id);
+    if (gift) {
+      const row = await payDonationOrderTx(tx, ctx, order, gift.giftId, e.provider, emit);
+      return { outcome: 'applied' as const, status: row.status };
+    }
+    // M5.4b: an add-on order (a sponsor package, lead licenses) has no tickets and holds no stock.
+    const addon = await addonItemTx(tx, order.id);
+    if (addon) return payAddonOrderTx(tx, ctx, order, addon, e.provider, emit);
     if (order.status === 'expired') {
       // Paid after the hold lapsed: re-hold if stock is still there, otherwise flag for refund.
       let stockHeld = false;
@@ -455,9 +559,13 @@ export const applyProviderEventCommand = tenantCommand({
             seatUuids: order.seatUuids,
             holdId: order.id,
             expiresAt: new Date(ctx.now.getTime() + HOLD_MINUTES * 60_000),
+            // M6.11b: through the channel the order was sold through.
+            channelId: await orderChannelTx(tx, order.id),
           });
         // The buyer paid the discounted price, so the use counts again if there is one left.
         if (order.promoCodeId) await claimPromoTx(tx, order.promoCodeId).catch(() => undefined);
+        if (order.couponId) await reclaimCouponTx(tx, order.id, ctx.now);
+        await reclaimCreditTx(tx, ctx, order.id);
       } catch {
         // The seats went to someone else: give back the stock this attempt took.
         if (stockHeld) await releaseHoldTx(tx, lines(order.items));
@@ -527,6 +635,8 @@ export const expireOrdersCommand = tenantCommand({
       if (!(await keepOfferHoldTx(tx, order, ctx.now))) await releaseHoldTx(tx, lines(order.items));
       if (order.seatUuids.length) await releaseSeatHoldTx(tx, ctx, order.id);
       if (order.promoCodeId) await releasePromoTx(tx, order.promoCodeId);
+      if (order.couponId) await releaseCouponTx(tx, order.id, ctx.now);
+      await releaseCreditTx(tx, ctx, order.id);
       await setStatus(tx, order, 'expire', ctx.now);
       emit({
         type: 'order.expired',

@@ -210,6 +210,12 @@ describe('venues (M1.4c)', () => {
       await executeQuery(searchEventsQuery, { category: 'music', tag: 'workshop' }, a.ctx(), ports),
     ).toEqual([]);
     expect((await executeQuery(orgTagsQuery, {}, a.ctx(), ports)).map((t) => t.key)).toContain('workshop');
+    // Design v2 org home: a case-insensitive name search; LIKE wildcards match literally.
+    const byName = await executeQuery(searchEventsQuery, { q: 'tAGGED' }, a.ctx(), ports);
+    expect(byName.map((x) => x.id)).toEqual([e.id]);
+    expect(await executeQuery(searchEventsQuery, { q: 'Tag%ed' }, a.ctx(), ports)).toEqual([]);
+    expect(await executeQuery(searchEventsQuery, { q: 'Tagge_' }, a.ctx(), ports)).toEqual([]);
+    expect(await executeQuery(searchEventsQuery, { q: 'tagged' }, b.ctx(), ports)).toEqual([]);
     // Org B sees none of org A's tags or events.
     expect(await executeQuery(searchEventsQuery, { tag: 'workshop' }, b.ctx(), ports)).toEqual([]);
     await expect(

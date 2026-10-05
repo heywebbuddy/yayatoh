@@ -1,16 +1,72 @@
-export { createOrgAuthorizer, type EventRoleResolver, memberRole, orgAuthorizer } from './authorizer.ts';
 export {
+  consoleRole,
+  createOrgAuthorizer,
+  type EventRoleResolver,
+  memberRole,
+  orgAuthorizer,
+} from './authorizer.ts';
+export {
+  type AgencyAccess,
+  type AgencyClientGrant,
+  AgencyClientOrgDto,
+  AgencyGrantDto,
+  agencyAccess,
+  agencyAccessTx,
+  agencyClientGrantsTx,
+  GrantAgencyAccessInput,
+  grantAgencyAccessCommand,
+  listAgencyGrantsQuery,
+  liveAgencyGrantTx,
+  MONEY_TABLES,
+  myAgencyClients,
+  revokeAgencyGrantCommand,
+  revokeAgencyGrantTx,
+  UpdateAgencyGrantInput,
+  updateAgencyGrantCommand,
+} from './commands/agency.ts';
+// M6.8b: agency team and day-of grants.
+export {
+  AgencyStaffGrantDto,
+  agencyStaffGrantsTx,
+  agencyStaffOfAgencyTx,
+  cappedAgencyRole,
+  DAY_OF_MAX_MS,
+  insertAgencyStaffGrantTx,
+  listAgencyStaffGrantsQuery,
+  type NewAgencyStaffGrant,
+  revokeAgencyStaffGrantCommand,
+  revokeAgencyStaffGrantTx,
+  revokeAllAgencyStaffTx,
+} from './commands/agency-staff.ts';
+export {
+  ApiUsageDto,
+  apiUsageQuery,
+  recordApiKeyUsage,
+  summarizeApiKeyUsageCommand,
+  unsummarizedApiKeyUsage,
+} from './commands/api-key-usage.ts';
+// M6.3a: key lifetimes and rotation, daily usage, sandbox orgs.
+export {
+  API_KEY_LIFETIMES,
   API_KEY_MODES,
   API_KEY_PATTERN,
+  API_KEY_ROTATION_OVERLAPS,
   ApiKeyDto,
   type ApiKeyIdentity,
   type ApiKeyMode,
+  type ApiKeySelf,
   apiKeyIdentity,
+  apiKeySelf,
   CreateApiKeyInput,
   createApiKeyCommand,
+  isApiKeyLive,
   listApiKeysQuery,
+  RotateApiKeyInput,
   revokeApiKeyCommand,
+  rotateApiKeyCommand,
 } from './commands/api-keys.ts';
+// M6.8b: applying a brand kit received from an agency.
+export { organizationKindTx, setBrandColorTx } from './commands/brand.ts';
 export {
   addDomainCommand,
   DomainDto,
@@ -42,6 +98,14 @@ export {
   revokeEventInvitationTx,
   revokeInvitationCommand,
 } from './commands/invitations.ts';
+export {
+  type EnsureOutcome,
+  ensureManagedMembershipTx,
+  type ManagedRole,
+  membershipRoleTx,
+  type RemoveOutcome,
+  removeManagedMembershipTx,
+} from './commands/managed-members.ts';
 export { addMemberCommand, changeMemberRoleCommand, removeMemberCommand } from './commands/members.ts';
 export {
   completeOnboardingCommand,
@@ -77,6 +141,22 @@ export {
   updateOrganizationCommand,
 } from './commands/organizations.ts';
 export {
+  CreateSandboxInput,
+  createSandboxCommand,
+  createSandboxOrg,
+  deleteSandboxCommand,
+  deleteSandboxOrg,
+  isSandboxOrg,
+  isSandboxOrgTx,
+  listSandboxesQuery,
+  MAX_SANDBOX_ORGS,
+  provisionSandboxOrgCommand,
+  retireSandboxOrgCommand,
+  SandboxDto,
+  sandboxOrgName,
+  sandboxSlug,
+} from './commands/sandbox.ts';
+export {
   AgreementStatusDto,
   acceptAgreementCommand,
   agreementsQuery,
@@ -99,6 +179,16 @@ export {
   suspensionHistoryQuery,
   suspensionsQuery,
 } from './commands/suspensions.ts';
+// M6.14b venue portal: the venue's partner organizers (`venue_partner`).
+export {
+  addVenuePartnerCommand,
+  isVenuePartnerTx,
+  removeVenuePartnerCommand,
+  VenuePartnerDto,
+  venuePartnersQuery,
+  venuePartnersTx,
+} from './commands/venue-partners.ts';
+export { tenancyDataSubjects } from './data-subject.ts';
 export { AGREEMENT_DOCUMENTS, type AgreementDocument, PLATFORM_AGREEMENTS } from './domain/agreements.ts';
 export { signInvitation } from './domain/invitation-token.ts';
 export {
@@ -120,11 +210,19 @@ export {
   restoredOrgStatus,
 } from './domain/org-status.ts';
 export {
+  AGENCY_CONSOLE_ROLES,
+  AGENCY_FINANCE_PERMISSIONS,
+  AGENCY_ROLE_PERMISSIONS,
+  type AgencyConsoleRole,
+  type AgencyGrantRole,
+  agencyConsoleRole,
+  type ConsoleRole,
   EVENT_ROLE_PERMISSIONS,
   EVENT_ROLE_SECTIONS,
   eventRoleCan,
   eventRolesOpenSection,
   GRANTABLE_ORG_ROLES,
+  isAgencyConsoleRole,
   type OrgRole,
   PERMISSIONS,
   type Permission,
@@ -160,6 +258,7 @@ export {
 } from './hosting/recheck.ts';
 export { privateColumns } from './private-columns.ts';
 export {
+  domainProblemsTx,
   getOrganizationQuery,
   listInvitationsQuery,
   listMembersQuery,
@@ -168,6 +267,7 @@ export {
   myOrganizations,
   organizationBrandTx,
   organizationDefaultsTx,
+  organizationLocaleTx,
   organizationLogoTx,
   organizationNameTx,
   organizationPublicTx,
@@ -176,6 +276,8 @@ export {
   twoFactorRequiredBy,
 } from './queries.ts';
 export {
+  AGENCY_GRANT_ROLES,
+  AGENCY_STAFF_KINDS,
   API_KEY_SCOPES,
   type ApiKeyScope,
   DOMAIN_STATUSES,

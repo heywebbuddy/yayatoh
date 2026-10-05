@@ -26,7 +26,7 @@ export function DateChartForm({
   return (
     <form ref={formRef} action={formAction} className="flex flex-col gap-3">
       <input type="hidden" name="op" value={op} />
-      <p className="text-caption text-zinc-600">{t(op === 'remove' ? 'removeHint' : 'giveHint')}</p>
+      <p className="text-caption text-ink-2">{t(op === 'remove' ? 'removeHint' : 'giveHint')}</p>
       <div aria-live="polite">
         {state.code ? (
           <Alert

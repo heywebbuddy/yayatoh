@@ -5,8 +5,10 @@ import { tenantCommand } from '@yayatoh/platform';
 import { and, asc, eq, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { ExhibitorDto, SpeakerDto, SponsorDto, SponsorTierDto } from './dto.ts';
+import { endExhibitorRolesTx } from './exhibitor-portal.ts';
 import { exhibitors, speakers, sponsors, sponsorTiers } from './schema.ts';
 import { eventOf, programOwnerDeleted } from './shared.ts';
+import { cancelSponsorPackagesTx, endSponsorContactsTx } from './sponsor-packages.ts';
 
 export const MAX_SPEAKERS_PER_EVENT = 300;
 export const MAX_EXHIBITORS_PER_EVENT = 300;
@@ -225,7 +227,9 @@ export const deleteExhibitorCommand = tenantCommand({
   output: z.object({ deleted: z.boolean() }),
   entitlement: 'exhibitors',
   permission: 'events:write',
-  handler: async ({ input, tx, emit }) => {
+  handler: async ({ input, ctx, tx, emit }) => {
+    // M5.4a: its people's portal accounts are revoked (their sessions and event roles end).
+    await endExhibitorRolesTx(tx, ctx, input.eventId, input.exhibitorId);
     const rows = await tx
       .delete(exhibitors)
       .where(and(eq(exhibitors.id, input.exhibitorId), eq(exhibitors.eventId, input.eventId)))
@@ -401,7 +405,10 @@ export const deleteSponsorCommand = tenantCommand({
   output: z.object({ deleted: z.boolean() }),
   entitlement: 'sponsors',
   permission: 'events:write',
-  handler: async ({ input, tx, emit }) => {
+  handler: async ({ input, ctx, tx, emit }) => {
+    // M5.4b: its package ends (the comp code closes) and its contacts' portal access with it.
+    await cancelSponsorPackagesTx(tx, ctx, input.sponsorId, emit);
+    await endSponsorContactsTx(tx, ctx, input.eventId, input.sponsorId);
     const rows = await tx
       .delete(sponsors)
       .where(and(eq(sponsors.id, input.sponsorId), eq(sponsors.eventId, input.eventId)))

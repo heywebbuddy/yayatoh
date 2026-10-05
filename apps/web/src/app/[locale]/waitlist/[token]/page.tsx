@@ -59,7 +59,7 @@ export default async function WaitlistEntryPage({
   const state = (title: string, body: string, extra?: ReactNode) => (
     <Card className="flex flex-col gap-3">
       <h2 className="text-section">{title}</h2>
-      <p role="status" className="text-body text-zinc-700">
+      <p role="status" className="text-body text-ink-2">
         {body}
       </p>
       {extra}
@@ -86,10 +86,10 @@ export default async function WaitlistEntryPage({
             <h2 id="offer-heading" className="text-section">
               {t('offerTitle', { count: view.offer.quantity, pass: view.pass.name })}
             </h2>
-            <p role="status" className="text-body text-zinc-700">
+            <p role="status" className="text-body text-ink-2">
               {t('offerUntil', { until: dateTime.format(view.offer.expiresAt) })}
             </p>
-            <p className="text-body text-zinc-700">
+            <p className="text-body text-ink-2">
               {t('priceEach', {
                 price: formatMoney(money(view.offer.unitAllInMinor, view.event.currency), locale),
               })}

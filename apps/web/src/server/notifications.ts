@@ -1,11 +1,36 @@
+import { orgContactNotifier } from '@yayatoh/cms';
 import 'server-only';
+import { alertEvaluator, evaluateOrgNow, watchQuietDevices } from '@yayatoh/alerts';
 import { attendeeMessageMailer } from '@yayatoh/attendees';
 import { getUsersByIds } from '@yayatoh/auth';
-import { chatReportSignals, checkoutRiskSignals, fraudSignalAlerts } from '@yayatoh/checkin';
+import { journeySubscribers, runDueActions } from '@yayatoh/automations';
+import { agencyBillingGrantRevoked } from '@yayatoh/billing';
+import { campaignsTimeline } from '@yayatoh/campaigns';
+import { certificateMailer } from '@yayatoh/ce';
+import {
+  chatReportSignals,
+  checkinTimeline,
+  checkoutRiskSignals,
+  fraudSignalAlerts,
+  networkChatSignals,
+  sendStaffAlertPushes,
+  staffAlertsSubscriber,
+  virtualAttendanceSubscriber,
+} from '@yayatoh/checkin';
 import { withTenant } from '@yayatoh/db';
-import { findEventTx } from '@yayatoh/events';
+import { pledgeMailer, pledgeOutcomesSubscriber, receiptIssuer, statementMailer } from '@yayatoh/donations';
+import { engagementActivity } from '@yayatoh/engagement';
+import { findEventTx, portalInviteMailer } from '@yayatoh/events';
+import { registrationResumeMailer } from '@yayatoh/forms';
+import { invitationMailer as guestInvitationMailer } from '@yayatoh/guests';
+import { slackAlertsSubscriber } from '@yayatoh/integrations';
 import { createCtx } from '@yayatoh/kernel';
-import { announcementMailer, contactWroteNotifier, threadReplyMailer } from '@yayatoh/messaging';
+import {
+  announcementMailer,
+  contactWroteNotifier,
+  messagingTimeline,
+  threadReplyMailer,
+} from '@yayatoh/messaging';
 import {
   createNotifier,
   type DispatchDeps,
@@ -13,30 +38,66 @@ import {
   dispatchDue,
   FAKE_DELIVERY_SIGNATURE_HEADER,
   fakeDeliverySecret,
+  handleProviderWebhook,
+  releaseDevDeliveryEvent,
+  settleDevDeliveryEvents,
   takeDevDeliveryEvents,
   withWebPush,
 } from '@yayatoh/notifications';
 import {
+  creditNoteMailer,
+  invoiceMailer,
   orderLinkMailer,
+  ordersTimeline,
   postponementMailer,
   refundDeclineMailer,
   refundMailer,
   refundRequestNotifier,
   reminderRescheduler,
+  supportReplyMailer,
+  tableNamingMailer,
   ticketMailer,
   waitlistMailer,
 } from '@yayatoh/orders';
-import { payoutDestinationMailer } from '@yayatoh/payments';
-import { consumeEvent, recentEventsTx, type Subscriber, subscribes } from '@yayatoh/platform';
-import { surveyMailer } from '@yayatoh/surveys';
+import { agencyCommissionMirror, payoutDestinationMailer } from '@yayatoh/payments';
+import {
+  consumeEvent,
+  processedPairsTx,
+  recentEventsTx,
+  type Subscriber,
+  subscribes,
+} from '@yayatoh/platform';
+import { cfpMailer, taskReminderMailer } from '@yayatoh/program';
+import {
+  decisionMailer,
+  enrollmentMailer,
+  registrantLifecycle,
+  registrationCapacity,
+  registrationEnrollment,
+  sponsorCompCodes,
+} from '@yayatoh/registration';
+import { surveyMailer, surveysTimeline } from '@yayatoh/surveys';
 import { impersonationNotice, invitationMailer, orgStatusNotice } from '@yayatoh/tenancy';
-import { claimLinkMailer, holderLinkMailer } from '@yayatoh/ticketing';
+import {
+  claimLinkMailer,
+  fakeWalletPassProvider,
+  holderLinkMailer,
+  ticketResendMailer,
+  transferMailer,
+  walletPassSync,
+} from '@yayatoh/ticketing';
+import { zoomRegistrantsSubscriber } from '@yayatoh/virtual';
+import { conferenceSources } from './conference-sources.ts';
+import { webhookAdapter } from './delivery-webhooks.ts';
 // The composition root registers the key vault (message params and manage links are encrypted).
-import './ports.ts';
-import { deliveryAdapter, ingestDeliveryEvents } from './delivery-webhooks.ts';
+import { ports } from './ports.ts';
+import { staffAlertSource, staffPushSender } from './scan-staff.ts';
 import { webPushConfig } from './web-push.ts';
 
 export const notifier = createNotifier();
+
+/** The fake wallet pass provider in dev and CI (M3.10c): what it was told stays in memory. */
+export const devWalletPasses = fakeWalletPassProvider();
 
 export const userEmails: NonNullable<DispatchDeps['userEmails']> = async (ids) =>
   new Map([...(await getUsersByIds(ids))].map(([id, u]) => [id, u.email]));
@@ -59,18 +120,85 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     reminderRescheduler(),
     claimLinkMailer({ notifier, appOrigin }),
     holderLinkMailer({ notifier, appOrigin }),
+    // M3.10c support tools (as in the worker).
+    ticketResendMailer({ notifier, appOrigin }),
+    transferMailer({ notifier, appOrigin }),
+    walletPassSync({ provider: devWalletPasses }),
+    creditNoteMailer({ notifier, appOrigin }),
+    // M5.1d: pay-later invoices.
+    invoiceMailer({ notifier, appOrigin }),
+    supportReplyMailer({ notifier, appOrigin }),
+    // Dispute evidence deadlines reach finance through the alert engine (batch 3e: the
+    // `disputeDeadline` rule), not a second notification.
     attendeeMessageMailer({ notifier, event: findEventTx }),
     announcementMailer({ notifier, appOrigin }),
     threadReplyMailer({ notifier, appOrigin }),
     contactWroteNotifier({ notifier }),
+    // U10: messages through the org's contact page reach its members.
+    orgContactNotifier({ notifier }),
     payoutDestinationMailer({ notifier, appOrigin }),
     impersonationNotice({ notifier, appOrigin }),
     orgStatusNotice({ notifier, appOrigin }),
     checkoutRiskSignals(),
     chatReportSignals(),
+    // M5.8b: networking chat reports about attendees.
+    networkChatSignals(),
+    // M6.9a: the virtual checkpoint (as in the worker).
+    virtualAttendanceSubscriber(),
+    // M6.9b: new holders become Zoom registrants; CE certificates are mailed (as in the worker).
+    zoomRegistrantsSubscriber(),
+    certificateMailer({ notifier, appOrigin }),
     fraudSignalAlerts({ notifier }),
+    // M3.4a: staff alerts for the Scan PWA (web push per device).
+    staffAlertsSubscriber(staffAlertSource),
     surveyMailer({ notifier, appOrigin }),
+    // M4.1f: wedding invitations by email and text (as in the worker).
+    guestInvitationMailer({ notifier, appOrigin }),
+    registrationResumeMailer({
+      notifier,
+      appOrigin,
+      eventName: async (tx, id) => (await findEventTx(tx, id))?.name ?? null,
+    }),
     waitlistMailer({ notifier, appOrigin }),
+    // M4.2b: a purchased table's claim link to its buyer.
+    tableNamingMailer({ notifier, appOrigin }),
+    alertEvaluator({ notifier, conference: conferenceSources() }),
+    // M6.4c: alerts it sent are queued for Slack channels (the Slack dispatch posts them).
+    slackAlertsSubscriber,
+    // M3.7a: journeys enroll, follow date changes and cancellations (their steps run below).
+    ...journeySubscribers(),
+    // M5.1a: its offers (waitlist.offered) are mailed in the same drain.
+    registrationCapacity(),
+    // M5.4b: sponsor comp registration codes.
+    sponsorCompCodes(),
+    // M5.3a speaker portal: invitations and task reminders.
+    portalInviteMailer({ notifier, appOrigin }),
+    taskReminderMailer({ notifier, appOrigin }),
+    // M5.1c: registrants follow their orders; approval and denial emails.
+    registrantLifecycle(),
+    decisionMailer({ notifier, appOrigin }),
+    // M5.2b: cancelled registrants free their session places; promotions are mailed.
+    registrationEnrollment(),
+    enrollmentMailer({ notifier, appOrigin }),
+    // M5.7b: answered surveys, scans and enrollments become engagement scores (as in the worker).
+    engagementActivity(),
+    // M4.8b: receipts per paid gift or charity-ticket order, and year-end statements (as in the worker).
+    receiptIssuer({ notifier, appOrigin }),
+    statementMailer({ notifier, appOrigin }),
+    // M4.8e: pledge payments settle their pledges; the donor's summary, invoice and reminders.
+    pledgeOutcomesSubscriber,
+    pledgeMailer({ notifier, appOrigin }),
+    // M5.3b: call-for-papers receipts and decisions.
+    cfpMailer({ notifier }),
+    // M6.1a: the person timeline (crm projection), as in the worker.
+    ordersTimeline(),
+    checkinTimeline(),
+    messagingTimeline(),
+    surveysTimeline(),
+    campaignsTimeline(),
+    // M6.8a: agency commission mirrored into the agency's ledger; a revoked grant ends agency billing.
+    agencyCommissionMirror,
+    agencyBillingGrantRevoked,
   ];
 }
 
@@ -83,22 +211,59 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
  * still holds: consumers dedupe through processed_events and deliveries through their dedupe keys,
  * so a real worker running at the same time changes nothing.
  */
-export async function drainOrgMessages(orgId: string, appOrigin: string, opts: { scheduled?: boolean } = {}) {
+export async function drainOrgMessages(
+  orgId: string,
+  appOrigin: string,
+  opts: { scheduled?: boolean; sweep?: boolean } = {},
+) {
   const subs = messageSubscribers(appOrigin);
   const types = [...new Set(subs.flatMap((s) => s.events.map((e) => e.split('@')[0] as string)))];
   const ctx = createCtx({ orgId, actor: { type: 'system', name: 'dev.drain' } });
   let consumed = 0;
   // Subscribers may emit events other subscribers consume (fraud signals → alerts, M1.9e): run
   // until a pass consumes nothing new (bounded).
-  for (let pass = 0; pass < 3; pass++) {
-    const events = await withTenant(ctx, (tx) => recentEventsTx(tx, orgId, types, 6 * 3600_000));
+  let journeySteps = 0;
+  for (let pass = 0; pass < 4; pass++) {
+    const { events, done } = await withTenant(ctx, async (tx) => {
+      const recent = await recentEventsTx(tx, orgId, types, 6 * 3600_000);
+      return {
+        events: recent,
+        done: await processedPairsTx(
+          tx,
+          recent.map((e) => e.id),
+        ),
+      };
+    });
     let fresh = 0;
     for (const event of events) {
-      for (const s of subs) if (subscribes(s, event) && (await consumeEvent(s, event))) fresh += 1;
+      // Pairs handled before are skipped in bulk: in the shared e2e org a transaction per
+      // (event, subscriber) pair made one drain outlast its caller's 30 s (batch 3f merge).
+      // consumeEvent still guards the rest (a concurrent drain or worker never double-applies).
+      for (const s of subs)
+        if (subscribes(s, event) && !done.has(`${s.name} ${event.id}`) && (await consumeEvent(s, event)))
+          fresh += 1;
     }
     consumed += fresh;
-    if (fresh === 0) break;
+    // Journey steps due now (M3.7a; the worker's `automations.run-due` job): they queue messages
+    // and may emit events (a survey step's `survey.sent`), so the next pass picks those up.
+    const steps = await runDueActions(orgId, { notifier, appOrigin }, ports);
+    journeySteps += steps.done + steps.skipped + steps.failed;
+    if (fresh === 0 && steps.done === 0) break;
   }
+  // The live device watchdog (M3.3a), as the worker would run it now. Unless the org-wide pass
+  // follows anyway, it evaluates the events the quiet devices were working at (not every event of
+  // the org: in the shared e2e org that slowed every drain, batch 3g merge).
+  await watchQuietDevices(
+    orgId,
+    { notifier, conference: conferenceSources() },
+    { evaluate: opts.sweep ? false : 'devices' },
+  );
+  // The alert engine's scheduled pass (M3.2b), as the worker's sweep would run it now: only when
+  // asked (`sweep`). The alerts evaluator above already re-evaluates what the drained events
+  // touched; the org-wide pass re-checks every upcoming event and re-notifies unacknowledged
+  // alerts, which in a shared e2e org (hundreds of events, never acknowledged) made every other
+  // suite's drain dispatch that backlog (batch 3d merge).
+  if (opts.sweep) await evaluateOrgNow(orgId, { notifier, conference: conferenceSources() });
   const deps: DispatchDeps = {
     // Web push goes through the real adapter (VAPID + aes128gcm); in dev/CI the only endpoints
     // it may reach besides real push services are the fake push service on this origin.
@@ -119,12 +284,33 @@ export async function drainOrgMessages(orgId: string, appOrigin: string, opts: {
     sent += r.sent;
     if (r.sent + r.suppressed + r.failed === 0) break;
   }
+  // Staff alert pushes (M3.4a), through the same web push adapter.
+  const staffSender = staffPushSender(appOrigin);
+  if (staffSender) sent += (await sendStaffAlertPushes(orgId, staffSender)).sent;
   let reports = 0;
-  const adapter = deliveryAdapter('fake');
-  if (adapter)
+  // The fake provider's reports go through the same webhook pipeline (verified, deduplicated,
+  // counted in provider health) as a real provider's.
+  const adapter = webhookAdapter('email', 'fake');
+  if (adapter) {
     for (const d of takeDevDeliveryEvents()) {
-      const verified = adapter.verify(d.body, new Headers({ [FAKE_DELIVERY_SIGNATURE_HEADER]: d.signature }));
-      reports += (await ingestDeliveryEvents(adapter.name, verified)).recorded;
+      try {
+        const out = await handleProviderWebhook(
+          adapter,
+          {
+            rawBody: d.body,
+            headers: new Headers({ [FAKE_DELIVERY_SIGNATURE_HEADER]: d.signature }),
+            url: `${appOrigin}/api/webhooks/email/fake`,
+          },
+          ports,
+        );
+        reports += out.result?.recorded ?? 0;
+      } finally {
+        releaseDevDeliveryEvent(d.claimed);
+      }
     }
-  return { consumed, sent, reports };
+    // A drain running at the same time may have taken this drain's reports: wait until they are
+    // recorded (batch 3g merge; messaging-followups.spec.ts read a bounce before it was).
+    await settleDevDeliveryEvents();
+  }
+  return { consumed, journeySteps, sent, reports };
 }

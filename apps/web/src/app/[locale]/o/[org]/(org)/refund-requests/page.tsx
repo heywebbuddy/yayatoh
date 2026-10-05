@@ -1,7 +1,7 @@
 import { executeQuery, formatMoney, money } from '@yayatoh/kernel';
 import { REFUND_REQUEST_STATUSES, refundRequestCountsQuery, refundRequestsQuery } from '@yayatoh/orders';
 import { roleCan } from '@yayatoh/tenancy';
-import { EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
+import { buttonClass, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Link } from '@/i18n/navigation.ts';
@@ -59,7 +59,7 @@ export default async function RefundRequestsPage({
             href={s === 'open' ? `/o/${org}/refund-requests` : `/o/${org}/refund-requests?status=${s}`}
             aria-current={s === status ? 'page' : undefined}
             className={`inline-flex min-h-10 items-center rounded-pill border px-4 text-body ${
-              s === status ? 'border-zinc-900 bg-zinc-900 text-white' : 'border-zinc-200 bg-white'
+              s === status ? 'border-ink bg-tag text-white' : 'border-line bg-surface'
             }`}
           >
             {t(`request.status.${s}`)}
@@ -67,7 +67,24 @@ export default async function RefundRequestsPage({
         ))}
       </nav>
       {rows.length === 0 ? (
-        <EmptyState title={t(`queue.empty.${status}`)} />
+        <EmptyState
+          title={t(`queue.empty.${status}`)}
+          description={t(`queue.emptyHint.${status}`)}
+          action={
+            status === 'open' ? (
+              <Link
+                href={`/o/${org}/refund-requests?status=approved`}
+                className={buttonClass('secondary', 'md')}
+              >
+                {t('queue.emptyAction.open')}
+              </Link>
+            ) : (
+              <Link href={`/o/${org}/refund-requests`} className={buttonClass('secondary', 'md')}>
+                {t('queue.emptyAction.other')}
+              </Link>
+            )
+          }
+        />
       ) : (
         <Table
           caption={t('queue.caption', { status: t(`request.status.${status}`) })}
@@ -85,7 +102,7 @@ export default async function RefundRequestsPage({
                   >
                     {r.buyerName}
                   </Link>
-                  <span className="text-caption text-zinc-500">{r.buyerEmail}</span>
+                  <span className="text-caption text-ink-2">{r.buyerEmail}</span>
                 </span>
               ),
             },

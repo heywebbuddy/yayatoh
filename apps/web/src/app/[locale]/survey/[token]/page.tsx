@@ -32,7 +32,7 @@ export default async function SurveyPage({
   const done = (title: string, body: string) => (
     <Card className="flex flex-col gap-2">
       <h2 className="text-section">{title}</h2>
-      <p role="status" className="text-body text-zinc-700">
+      <p role="status" className="text-body text-ink-2">
         {body}
       </p>
     </Card>
@@ -48,7 +48,7 @@ export default async function SurveyPage({
         description={view.intro || t('defaultIntro', { org: view.orgName, event: view.eventName })}
       />
       {view.sessionTitle ? (
-        <p className="text-body text-zinc-700">
+        <p className="text-body text-ink-2">
           {t('sessionLine', { session: view.sessionTitle, event: view.eventName })}
         </p>
       ) : null}

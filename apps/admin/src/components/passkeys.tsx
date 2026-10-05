@@ -45,18 +45,18 @@ export function PasskeyManager({
         {shown ? <Alert tone={shown.tone === 'info' ? 'info' : undefined} title={shown.text} /> : null}
       </div>
       {passkeys.length === 0 ? (
-        <p className="text-body text-zinc-600">{t('none')}</p>
+        <p className="text-body text-ink-2">{t('none')}</p>
       ) : (
         <ul className="flex list-none flex-col gap-3 p-0">
           {passkeys.map((p) => (
             <li
               key={p.id}
-              className="flex flex-wrap items-center justify-between gap-3 border-t border-zinc-100 pt-3"
+              className="flex flex-wrap items-center justify-between gap-3 border-t border-line pt-3"
             >
               <div className="flex flex-col">
                 <span className="text-body">{p.name}</span>
                 {p.createdAt ? (
-                  <span className="text-caption text-zinc-600">{t('added_on', { date: p.createdAt })}</span>
+                  <span className="text-caption text-ink-2">{t('added_on', { date: p.createdAt })}</span>
                 ) : null}
               </div>
               <form action={remove}>

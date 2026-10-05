@@ -19,8 +19,6 @@ import {
   accountDeletionBlockers,
   deleteAccount,
   detachAccountCommand,
-  dsarExportBulk,
-  eraseSubjectCommand,
   exportAccount,
   findSubjectQuery,
 } from '@yayatoh/privacy';
@@ -34,7 +32,8 @@ import {
 import { createTicketTypeCommand } from '@yayatoh/ticketing';
 import { sql } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { type OrgFixture, runBulk, systemCtx, twoOrgs, userCtx } from '../src/index.ts';
+import { eraseNow, exportNow } from '../src/dsar/helpers.ts';
+import { type OrgFixture, systemCtx, twoOrgs, userCtx } from '../src/index.ts';
 import { ports } from '../src/ports.ts';
 
 /**
@@ -361,22 +360,18 @@ describe('team invitations in the org-side DSAR', () => {
     const email = `invitee-${tag()}@example.test`;
     await executeCommand(inviteMemberCommand, { email, role: 'manager' }, a.ctx(), ports);
     const found = await executeQuery(findSubjectQuery, { email }, a.ctx(), ports);
-    expect(found).toMatchObject({ found: true, summary: { invitations: 1 } });
+    expect(found).toMatchObject({ found: true, summary: { tenancy: 1 } });
     // Org B holds nothing about them.
     expect((await executeQuery(findSubjectQuery, { email }, b.ctx(), ports)).found).toBe(false);
-    const { operationId } = await executeCommand(
-      dsarExportBulk.start,
-      { selection: { filter: { email } }, params: { email, orgName: 'Alpha Events' } },
-      a.ctx(),
-      ports,
+    const { modules } = await exportNow(email, a.ctx());
+    const doc = modules.tenancy as { invitations: { role: string; status: string }[] };
+    expect(doc.invitations).toEqual([expect.objectContaining({ role: 'manager', status: 'pending' })]);
+    expect(JSON.stringify(modules)).not.toContain('invitedBy');
+    // The access request is closed now; erasure is a new request.
+    const r = await eraseNow(email, a.ctx());
+    expect(r.receipt.erased).toEqual(
+      expect.arrayContaining([expect.objectContaining({ table: 'tenancy.invitations', rows: 1 })]),
     );
-    expect(await runBulk(a.org.id, operationId)).toBe('done');
-    const file = await executeQuery(dsarExportBulk.file, { operationId }, a.ctx(), ports);
-    const doc = JSON.parse(file.content) as { teamInvitations: { role: string; status: string }[] };
-    expect(doc.teamInvitations).toEqual([expect.objectContaining({ role: 'manager', status: 'pending' })]);
-    expect(file.content).not.toContain('invitedBy');
-    const r = await executeCommand(eraseSubjectCommand, { email, confirm: email }, a.ctx(), ports);
-    expect(r.summary.invitations).toBe(1);
     const invites = await executeQuery(listInvitationsQuery, {}, a.ctx(), ports);
     expect(invites.map((i) => i.email)).not.toContain(email);
     expect(await erasedAddress(email)).not.toBeNull();
@@ -403,7 +398,7 @@ describe('platform-wide erased-address suppression', () => {
     await buyInB(email, null);
     // Org A erases the person (they were on A's list too).
     await withTenant(a.ctx(), (tx) => upsertContactTx(tx, a.ctx(), { email, source: 'manual' }));
-    await executeCommand(eraseSubjectCommand, { email, confirm: email }, a.ctx(), ports);
+    await eraseNow(email, a.ctx());
 
     const k = tag();
     await message(b.org.id, 'attendees.message', email, `upd-${k}`, update);
@@ -455,7 +450,7 @@ describe('platform-wide erased-address suppression', () => {
   it('a contact import in any org skips an erased address with the reason', async () => {
     const email = `gone-${tag()}@example.test`;
     await withTenant(a.ctx(), (tx) => upsertContactTx(tx, a.ctx(), { email, source: 'manual' }));
-    await executeCommand(eraseSubjectCommand, { email, confirm: email }, a.ctx(), ports);
+    await eraseNow(email, a.ctx());
     const csv = `Name,Email\nGone Person,${email.toUpperCase()}\nKeep Person,keep-${tag()}@example.test\n`;
     const s = await executeCommand(
       stageImportCommand,

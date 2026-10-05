@@ -1,6 +1,6 @@
 'use client';
 
-import { type FloorplanDoc, type OBJECT_TYPES, placedSeats } from '@yayatoh/floorplan';
+import { type FloorplanDoc, itemCenter, type OBJECT_TYPES, placedSeats } from '@yayatoh/floorplan';
 import { Button } from '@yayatoh/ui';
 import { Maximize, Minus, Plus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
@@ -18,13 +18,13 @@ type ObjectType = (typeof OBJECT_TYPES)[number];
 
 /** Object colours by type (tokens only): the stage stands out, entrances and exits read at a glance. */
 const OBJECT_STYLE: Record<ObjectType, { box: string; text: string }> = {
-  stage: { box: 'fill-zinc-800 stroke-zinc-900', text: 'fill-white' },
-  entrance: { box: 'fill-green-50 stroke-green-700', text: 'fill-green-700' },
-  exit: { box: 'fill-pink-50 stroke-pink-700', text: 'fill-pink-700' },
-  dance_floor: { box: 'fill-accent-100 stroke-accent-700', text: 'fill-zinc-800' },
-  bar: { box: 'fill-accent-300 stroke-accent-700', text: 'fill-zinc-800' },
-  booth: { box: 'fill-zinc-200 stroke-zinc-500', text: 'fill-zinc-800' },
-  custom: { box: 'fill-zinc-100 stroke-zinc-400', text: 'fill-zinc-700' },
+  stage: { box: 'fill-ink stroke-ink', text: 'fill-white' },
+  entrance: { box: 'fill-success-soft stroke-success-dot', text: 'fill-success-dot' },
+  exit: { box: 'fill-danger-soft stroke-danger', text: 'fill-danger' },
+  dance_floor: { box: 'fill-primary-soft stroke-primary', text: 'fill-ink' },
+  bar: { box: 'fill-primary-soft stroke-primary', text: 'fill-ink' },
+  booth: { box: 'fill-surface-3 stroke-ink-3', text: 'fill-ink' },
+  custom: { box: 'fill-surface-3 stroke-ink-3', text: 'fill-ink' },
 };
 const ZOOMS = [1, 1.5, 2.25, 3.5, 5] as const;
 const SEAT_R = 22;
@@ -33,29 +33,45 @@ const SEAT_R = 22;
  * The public venue map (M1.7e): the plan drawn read-only as SVG — stage, entrances, exits, bars,
  * dance floor and booths labelled, tables and rows with their seats, and the guest's own seats
  * highlighted. Zoom and move with the buttons, the keyboard (+ − arrows 0 with the map focused)
- * or by dragging. The venue guide beside it lists the same things in words.
+ * or by dragging. The venue guide beside it lists the same things in words. M4.4a: guests seated
+ * at a table (not a particular chair) see their whole table or row highlighted (`highlightItems`).
  */
 export function VenueMap({
   doc,
   highlight = [],
+  highlightItems = [],
 }: {
   doc: FloorplanDoc;
   /** Seats to highlight (the guest's own, from the seat finder). */
   highlight?: readonly string[];
+  /** Tables or rows to highlight (M4.4a guest seat finder: guests are seated per table). */
+  highlightItems?: readonly string[];
 }) {
   const t = useTranslations('venueMap');
   const keysId = useId();
   const seats = useMemo(() => placedSeats(doc), [doc]);
-  const mine = useMemo(() => new Set(highlight), [highlight]);
-  // Start on the guest's seats when there are any, else on the whole room.
+  const places = useMemo(() => new Set(highlightItems), [highlightItems]);
+  // A highlighted row's seats are the guest's too (a table gets a ring of its own).
+  const mine = useMemo(
+    () =>
+      new Set([
+        ...highlight,
+        ...doc.items.flatMap((i) => (i.kind === 'row' && places.has(i.id) ? i.seats.map((s) => s.id) : [])),
+      ]),
+    [highlight, doc, places],
+  );
+  // Start on the guest's seats or tables when there are any, else on the whole room.
   const focus = useMemo(() => {
-    const hits = seats.filter((s) => mine.has(s.seatId));
+    const hits = [
+      ...seats.filter((s) => mine.has(s.seatId)),
+      ...doc.items.flatMap((i) => (i.kind === 'table' && places.has(i.id) ? [itemCenter(i)] : [])),
+    ];
     if (!hits.length) return null;
     return {
       x: hits.reduce((a, s) => a + s.x, 0) / hits.length,
       y: hits.reduce((a, s) => a + s.y, 0) / hits.length,
     };
-  }, [seats, mine]);
+  }, [seats, mine, doc, places]);
   const home = { zoom: 0, cx: doc.width / 2, cy: doc.height / 2 };
   const [view, setView] = useState(focus ? { zoom: 2, cx: focus.x, cy: focus.y } : home);
   const drag = useRef<{ x: number; y: number; cx: number; cy: number } | null>(null);
@@ -146,7 +162,7 @@ export function VenueMap({
           <Maximize aria-hidden="true" className="size-4" />
           {t('reset')}
         </Button>
-        <p role="status" className="ms-auto text-caption text-zinc-600">
+        <p role="status" className="ms-auto text-caption text-ink-2">
           {t('zoom', { percent: Math.round(z * 100) })}
         </p>
       </div>
@@ -164,7 +180,7 @@ export function VenueMap({
         onPointerMove={onPointerMove}
         onPointerUp={endDrag}
         onPointerCancel={endDrag}
-        className={`overflow-hidden rounded-card border border-zinc-200 bg-zinc-50 focus-visible:outline-2 focus-visible:outline-offset-2 ${view.zoom > 0 ? 'cursor-grab touch-none' : ''}`}
+        className={`overflow-hidden rounded-card border border-line bg-surface-2 focus-visible:outline-2 focus-visible:outline-offset-2 ${view.zoom > 0 ? 'cursor-grab touch-none' : ''}`}
       >
         <svg
           data-testid="venue-map"
@@ -178,7 +194,7 @@ export function VenueMap({
           <rect
             width={doc.width}
             height={doc.height}
-            className="fill-white stroke-zinc-300"
+            className="fill-surface-solid stroke-ink-3"
             strokeWidth={4}
           />
           {doc.items.map((item) => {
@@ -217,23 +233,34 @@ export function VenueMap({
             }
             const label =
               item.kind === 'table' ? t('table', { label: item.label }) : t('row', { label: item.label });
+            const yours = places.has(item.id);
+            const tableStyle = yours ? 'fill-primary-soft stroke-primary' : 'fill-surface-3 stroke-ink-3';
             return (
               <g
                 key={item.id}
                 data-item={item.kind}
+                data-highlight-item={yours ? item.id : undefined}
                 transform={`translate(${item.x} ${item.y}) rotate(${item.rotation})`}
               >
+                {item.kind === 'table' && yours ? (
+                  // The guest's table: a ring that shows at any zoom.
+                  <circle
+                    r={Math.max(item.width, item.height) / 2 + SEAT_R * 3.2}
+                    className="fill-none stroke-primary"
+                    strokeWidth={10}
+                  />
+                ) : null}
                 {item.kind === 'table' ? (
                   item.shape === 'round' ? (
-                    <circle r={item.width / 2} className="fill-zinc-100 stroke-zinc-400" strokeWidth={3} />
+                    <circle r={item.width / 2} className={tableStyle} strokeWidth={yours ? 6 : 3} />
                   ) : (
                     <rect
                       x={-item.width / 2}
                       y={-item.height / 2}
                       width={item.width}
                       height={item.height}
-                      className="fill-zinc-100 stroke-zinc-400"
-                      strokeWidth={3}
+                      className={tableStyle}
+                      strokeWidth={yours ? 6 : 3}
                     />
                   )
                 ) : null}
@@ -257,7 +284,7 @@ export function VenueMap({
                 cx={s.x}
                 cy={s.y}
                 r={SEAT_R}
-                className="fill-white stroke-zinc-400"
+                className="fill-surface-solid stroke-ink-3"
                 strokeWidth={3}
               />
             ),
@@ -271,21 +298,21 @@ export function VenueMap({
                   cx={s.x}
                   cy={s.y}
                   r={SEAT_R * 2.4}
-                  className="fill-none stroke-accent-900"
+                  className="fill-none stroke-primary"
                   strokeWidth={8}
                 />
                 <circle
                   cx={s.x}
                   cy={s.y}
                   r={SEAT_R + 4}
-                  className="fill-accent-900 stroke-ink"
+                  className="fill-primary stroke-ink"
                   strokeWidth={4}
                 />
               </g>
             ))}
         </svg>
       </div>
-      <p id={keysId} className="text-caption text-zinc-500">
+      <p id={keysId} className="text-caption text-ink-2">
         {t('keys')}
       </p>
     </div>

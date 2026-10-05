@@ -47,12 +47,12 @@ export function SiteSections({
           aria-labelledby={`section-${s.slug}`}
           lang={s.locale === locale ? undefined : s.locale}
           data-section={s.slug}
-          className={`flex min-w-0 flex-col gap-3 ${layout === 'grid' ? 'rounded-card border border-zinc-200 p-5' : ''}`}
+          className={`flex min-w-0 flex-col gap-3 ${layout === 'grid' ? 'rounded-card border border-line p-5' : ''}`}
         >
           {s.eyebrow ? <CardLabel>{s.eyebrow}</CardLabel> : null}
           <H
             id={`section-${s.slug}`}
-            className={`${layout === 'grid' ? 'text-[21px]' : 'text-[28px]'} leading-tight font-normal tracking-[-0.02em] break-words`}
+            className={`${layout === 'grid' ? 'text-[21px]' : 'text-[28px]'} leading-tight font-extrabold tracking-[-0.02em] break-words`}
           >
             {s.heading}
           </H>

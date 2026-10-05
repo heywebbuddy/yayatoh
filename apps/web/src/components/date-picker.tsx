@@ -39,14 +39,14 @@ export async function DatePicker({
   const shown = dates.filter((d) => d.endsAt > now).slice(0, 120);
   return (
     <nav aria-labelledby="dates-heading" className="flex flex-col gap-3">
-      <h2 id="dates-heading" className="text-[28px] font-normal tracking-[-0.03em]">
+      <h2 id="dates-heading" className="text-[28px] font-extrabold tracking-[-0.03em]">
         {t('chooseDate')}
       </h2>
-      <p className="text-caption text-zinc-500">
+      <p className="text-caption text-ink-2">
         {t('datesTimezone', { timezone: timeZone.replace(/_/g, ' ') })}
       </p>
       {shown.length === 0 ? (
-        <p className="text-body text-zinc-600">{t('noUpcomingDates')}</p>
+        <p className="text-body text-ink-2">{t('noUpcomingDates')}</p>
       ) : (
         <ul className="flex list-none flex-wrap gap-2 p-0">
           {shown.map((d) => {
@@ -57,7 +57,7 @@ export async function DatePicker({
             return (
               <li key={d.id}>
                 {unavailable ? (
-                  <span className="inline-flex min-h-11 flex-col justify-center rounded-card border border-zinc-200 bg-zinc-50 px-4 py-2 text-caption text-zinc-500">
+                  <span className="inline-flex min-h-11 flex-col justify-center rounded-card border border-line bg-surface-2 px-4 py-2 text-caption text-ink-2">
                     <span id={`date-${d.id}`} className="line-through">
                       {label}
                     </span>
@@ -67,7 +67,7 @@ export async function DatePicker({
                         href={`/events/${slug}/waitlist?date=${d.id}`}
                         // Named like the pass links; the date it is for is its description.
                         aria-describedby={`date-${d.id}`}
-                        className="inline-flex min-h-6 items-center text-zinc-900 underline underline-offset-2"
+                        className="inline-flex min-h-6 items-center text-ink underline underline-offset-2"
                       >
                         {tw('joinLink')}
                       </Link>
@@ -77,7 +77,7 @@ export async function DatePicker({
                   <Link
                     href={`/events/${slug}?date=${d.id}#passes`}
                     aria-current={current ? 'true' : undefined}
-                    className={`inline-flex min-h-11 items-center rounded-card border px-4 py-2 text-body ${current ? 'border-zinc-900 bg-zinc-900 text-white' : 'border-zinc-200 bg-white text-zinc-900 hover:border-zinc-400'}`}
+                    className={`inline-flex min-h-11 items-center rounded-card border px-4 py-2 text-body ${current ? 'border-ink bg-tag text-white' : 'border-line bg-surface text-ink hover:border-line-strong'}`}
                   >
                     {label}
                   </Link>

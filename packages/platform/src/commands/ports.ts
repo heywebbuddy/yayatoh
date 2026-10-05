@@ -26,14 +26,15 @@ export interface PolicyPorts {
  * Step-up is re-authentication of a person: a user passes with a sign-in or confirmation in the
  * last 10 minutes (`ctx.stepUpAt`, from the session). System actors (verified webhooks, the
  * worker, devices, the staff console) are authenticated at their transport and have no session to
- * refresh. API keys and anonymous callers never pass: sensitive commands stay interactive.
+ * refresh. Portal people (M5.6b) re-confirm with a fresh emailed sign-in code. API keys and anonymous callers never pass: sensitive commands stay interactive.
  */
 export const recentStepUp: CommandPorts<TenantTx>['stepUp'] = {
   satisfied: async (ctx: Ctx) => {
     // Staff acting as a member (M1.2e) can't confirm as that person.
     if (ctx.impersonatedBy) return false;
     if (ctx.actor.type === 'system') return true;
-    return ctx.actor.type === 'user' && isStepUpFresh(ctx.stepUpAt, ctx.now);
+    // M5.6b: a portal person passes with a sign-in in the last 10 minutes (an emailed code).
+    return (ctx.actor.type === 'user' || ctx.actor.type === 'portal') && isStepUpFresh(ctx.stepUpAt, ctx.now);
   },
 };
 
@@ -42,12 +43,23 @@ export const recentStepUp: CommandPorts<TenantTx>['stepUp'] = {
  * member (`actor` stays the member): inside `data`, so the hash chain covers it.
  */
 export function withImpersonator(ctx: Ctx, data: Record<string, unknown>): Record<string, unknown> {
-  if (!ctx.impersonatedBy) return data;
+  const out = withAgency(ctx, data);
+  if (!ctx.impersonatedBy) return out;
   return {
-    ...data,
+    ...out,
     impersonatedBy: `staff:${ctx.impersonatedBy.staffUserId}`,
     impersonationId: ctx.impersonatedBy.impersonationId,
   };
+}
+
+/**
+ * Every audit row written while a user acts in a client org through an agency grant (M6.7a)
+ * names the agency org and the grant next to the user (`actor` stays the user), inside `data`, so
+ * the hash chain covers it.
+ */
+export function withAgency(ctx: Ctx, data: Record<string, unknown>): Record<string, unknown> {
+  if (!ctx.viaAgency) return data;
+  return { ...data, viaAgency: `org:${ctx.viaAgency.agencyOrgId}`, agencyGrantId: ctx.viaAgency.grantId };
 }
 
 /**

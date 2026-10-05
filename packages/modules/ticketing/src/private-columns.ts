@@ -6,6 +6,8 @@ import { columnPrivacy, holder, internal, personal, secret } from '@yayatoh/db';
  */
 export const privateColumns = columnPrivacy('ticketing', {
   holder_links: { email_norm: personal('email') },
+  // U9 org coupons (coupon_redemptions has no text columns).
+  coupons: { code: internal('code'), kind: 'vocab', currency: 'vocab', scope: 'vocab' },
   promo_codes: { code: internal('code'), kind: 'vocab', currency: 'vocab' },
   signing_keys: {
     // Public keys ship in every door manifest.
@@ -28,8 +30,22 @@ export const privateColumns = columnPrivacy('ticketing', {
     currency: 'vocab',
     fee_mode: 'vocab',
     visibility: 'vocab',
+    managed_by: 'vocab',
     access_dates: 'public',
   },
+  // M3.10c transfers: both parties' names and emails are theirs.
+  ticket_transfers: {
+    status: 'vocab',
+    initiated_by: 'vocab',
+    from_name: personal(),
+    from_email: personal('email'),
+    to_name: personal(),
+    to_email: personal('email'),
+    currency: 'vocab',
+    created_by: internal(),
+  },
+  // M3.10c wallet passes: the serial identifies the holder's pass at the provider.
+  wallet_passes: { serial: holder(), holder_name: personal(), status: 'vocab', provider: 'vocab' },
   tickets: {
     short_code: holder(),
     status: 'vocab',

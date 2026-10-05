@@ -117,6 +117,17 @@ export async function t2Orgs(ctx: StepContext): Promise<void> {
         })),
       )}
       on conflict do nothing`;
+    // M6.6a (P6-7): migrated organizers keep their legacy per-ticket fees when subscriptions switch on.
+    await ctx.sql`
+      insert into billing.org_billing ${ctx.sql(
+        created.map(({ id }) => ({
+          id: detUuid(null, `org_billing|${id}`),
+          org_id: id,
+          legacy_fees_grandfathered: true,
+          grandfathered_reason: 'legacy_migration',
+        })),
+      )}
+      on conflict do nothing`;
   }
   const all = orgRows as { id: string; o: OrgSource }[];
   await ctx.sql`

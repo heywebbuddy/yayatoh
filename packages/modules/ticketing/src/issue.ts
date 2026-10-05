@@ -16,7 +16,7 @@ import {
 import { and, desc, eq, inArray, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { returnSoldTx } from './inventory.ts';
-import { signingKeys, TICKET_STATUSES, ticketBarcodes, tickets, ticketTypes } from './schema.ts';
+import { signingKeys, TICKET_STATUSES, tableUnits, ticketBarcodes, tickets, ticketTypes } from './schema.ts';
 
 export interface IssueRequest {
   readonly orderId: string;
@@ -37,6 +37,8 @@ export interface IssuedTicket {
   readonly serial: number;
   readonly shortCode: string;
   readonly code: string;
+  /** M4.2b: the purchased table this ticket is a guest slot of (table ticket types only). */
+  readonly tableUnitId?: string;
 }
 
 /** The org's active signing key, creating the first one on demand. */
@@ -101,9 +103,43 @@ export async function issueTicketsTx(tx: TenantTx, ctx: Ctx, req: IssueRequest):
     name: req.holder.name,
     source: 'ticket',
   });
-  const units = req.items.flatMap((item) =>
-    Array.from({ length: item.quantity }, () => ({ ...item, id: uuidv7() })),
+  // M4.2b: a table ticket type sells tables; each table issues `table_size` tickets (its guest
+  // slots), grouped under one `table_units` row.
+  const typeIds = [...new Set(req.items.map((i) => i.ticketTypeId))];
+  const sizes = new Map(
+    (
+      await tx
+        .select({ id: ticketTypes.id, tableSize: ticketTypes.tableSize })
+        .from(ticketTypes)
+        .where(inArray(ticketTypes.id, typeIds))
+    ).map((r) => [r.id, r.tableSize]),
   );
+  const tableRows: (typeof tableUnits.$inferInsert)[] = [];
+  const units: { orderItemId: string; ticketTypeId: string; id: string; tableUnitId: string | null }[] =
+    req.items.flatMap((item) => {
+      const size = sizes.get(item.ticketTypeId) ?? null;
+      if (!size)
+        return Array.from({ length: item.quantity }, () => ({
+          ...item,
+          id: uuidv7(),
+          tableUnitId: null as string | null,
+        }));
+      return Array.from({ length: item.quantity }, (_, n) => {
+        const tableUnitId = uuidv7();
+        tableRows.push({
+          id: tableUnitId,
+          orgId,
+          eventId: req.eventId,
+          orderId: req.orderId,
+          orderItemId: item.orderItemId,
+          ticketTypeId: item.ticketTypeId,
+          unitNo: n + 1,
+          size,
+        });
+        return Array.from({ length: size }, () => ({ ...item, id: uuidv7(), tableUnitId }));
+      }).flat();
+    });
+  if (tableRows.length) await tx.insert(tableUnits).values(tableRows);
   const attendeeRows = await createAttendeesTx(
     tx,
     ctx,
@@ -133,12 +169,20 @@ export async function issueTicketsTx(tx: TenantTx, ctx: Ctx, req: IssueRequest):
       holderEmail: req.holder.email,
       attendeeId: attendeeFor.get(unit.id) ?? null,
       occurrenceId: req.occurrenceId ?? null,
+      tableUnitId: unit.tableUnitId,
     });
     const code = await signTicketCode({ kid: key.kid, ticketId: t.id, rev: t.rev }, key.privateKey);
     await tx
       .insert(ticketBarcodes)
       .values({ orgId, ticketId: t.id, format: 'yy1', payload: code, rev: t.rev });
-    out.push({ id: t.id, ticketTypeId: t.ticketTypeId, serial, shortCode: t.shortCode, code });
+    out.push({
+      id: t.id,
+      ticketTypeId: t.ticketTypeId,
+      serial,
+      shortCode: t.shortCode,
+      code,
+      ...(t.tableUnitId ? { tableUnitId: t.tableUnitId } : {}),
+    });
   }
   return out;
 }
@@ -157,6 +201,8 @@ export async function ticketsForOrderTx(tx: TenantTx, orderId: string) {
       status: tickets.status,
       holderName: tickets.holderName,
       holderEmail: tickets.holderEmail,
+      /** M4.2b: the purchased table this ticket is a seat of. */
+      tableUnitId: tickets.tableUnitId,
       code: ticketBarcodes.payload,
     })
     .from(tickets)
@@ -282,6 +328,8 @@ export interface ScannableTicket {
   readonly occurrenceId: string | null;
   /** The order it was sold in (fraud signals on the order reach the door, M1.9e). */
   readonly orderId: string;
+  /** M5.1d: sold on an invoice whose balance is still due (the door needs a staff override). */
+  readonly paymentDue: boolean;
 }
 
 /** A ticket for the check-in engine, by id (from a verified code) or by its short code. */
@@ -303,6 +351,7 @@ export async function ticketForScanTx(
       accessDates: ticketTypes.accessDates,
       occurrenceId: tickets.occurrenceId,
       orderId: tickets.orderId,
+      paymentDue: tickets.paymentDue,
     })
     .from(tickets)
     .innerJoin(ticketTypes, eq(ticketTypes.id, tickets.ticketTypeId))
@@ -482,14 +531,35 @@ export async function voidTicketsTx(
       ticketTypeId: tickets.ticketTypeId,
       orderItemId: tickets.orderItemId,
       attendeeId: tickets.attendeeId,
+      tableUnitId: tickets.tableUnitId,
     });
   await cancelAttendeesTx(
     tx,
     ctx,
     rows.flatMap((r) => (r.attendeeId ? [r.attendeeId] : [])),
   );
+  // M4.2b: a table ticket type sells tables, so a table goes back on sale only once none of its
+  // seats is left active; a voided seat of a table that still has guests returns nothing.
+  const units = [...new Set(rows.flatMap((r) => (r.tableUnitId ? [r.tableUnitId] : [])))];
+  const stillLive = new Set(
+    units.length
+      ? (
+          await tx
+            .selectDistinct({ id: tickets.tableUnitId })
+            .from(tickets)
+            .where(and(inArray(tickets.tableUnitId, units), eq(tickets.status, 'active')))
+        ).map((r) => r.id)
+      : [],
+  );
   const perType = new Map<string, number>();
-  for (const r of rows) perType.set(r.ticketTypeId, (perType.get(r.ticketTypeId) ?? 0) + 1);
+  const counted = new Set<string>();
+  for (const r of rows) {
+    if (r.tableUnitId) {
+      if (stillLive.has(r.tableUnitId) || counted.has(r.tableUnitId)) continue;
+      counted.add(r.tableUnitId);
+    }
+    perType.set(r.ticketTypeId, (perType.get(r.ticketTypeId) ?? 0) + 1);
+  }
   await returnSoldTx(
     tx,
     [...perType].map(([ticketTypeId, quantity]) => ({ ticketTypeId, quantity })),
@@ -527,7 +597,8 @@ export async function liveTicketsByOrderItemTx(
     .select({
       orderId: tickets.orderId,
       orderItemId: tickets.orderItemId,
-      count: sql<number>`count(*)::int`,
+      // M4.2b: a table counts once (it was sold as one unit), while any of its seats is live.
+      count: sql<number>`count(distinct coalesce(${tickets.tableUnitId}, ${tickets.id}))::int`,
     })
     .from(tickets)
     .where(and(eq(tickets.eventId, eventId), eq(tickets.status, 'active')))

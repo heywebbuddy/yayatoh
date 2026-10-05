@@ -26,7 +26,7 @@ export async function Announcements({
               {a.pinned ? <Label>{t('pinned')}</Label> : null}
               {showAudience && a.audience === 'holders' ? <Label>{t('holdersOnly')}</Label> : null}
               {a.publishedAt ? (
-                <time dateTime={a.publishedAt.toISOString()} className="text-caption text-zinc-500">
+                <time dateTime={a.publishedAt.toISOString()} className="text-caption text-ink-2">
                   {when.format(a.publishedAt)}
                 </time>
               ) : null}

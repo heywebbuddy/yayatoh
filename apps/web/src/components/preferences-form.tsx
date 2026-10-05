@@ -27,9 +27,9 @@ export function PreferencesForm({
   return (
     <form action={formAction} className="flex flex-col gap-5">
       {CATEGORIES.map((c) => (
-        <fieldset key={c} className="flex flex-col gap-2 border-b border-zinc-100 pb-4">
+        <fieldset key={c} className="flex flex-col gap-2 border-b border-line pb-4">
           <legend className="text-section">{t(`preferences.categories.${c}.name`)}</legend>
-          <p className="text-caption text-zinc-500">{t(`preferences.categories.${c}.hint`)}</p>
+          <p className="text-caption text-ink-2">{t(`preferences.categories.${c}.hint`)}</p>
           <div className="flex flex-wrap gap-x-6 gap-y-2">
             {CHANNELS.map((ch) => (
               <label key={ch} className="flex min-h-6 items-center gap-2 text-body">
@@ -37,7 +37,7 @@ export function PreferencesForm({
                   type="checkbox"
                   name={`${c}:${ch}`}
                   defaultChecked={on.has(`${c}:${ch}`)}
-                  className="size-5 accent-zinc-900"
+                  className="size-5 accent-primary"
                 />
                 {t(`channels.${ch}`)}
               </label>
@@ -45,7 +45,7 @@ export function PreferencesForm({
           </div>
         </fieldset>
       ))}
-      <p className="text-caption text-zinc-500">{t('preferences.required')}</p>
+      <p className="text-caption text-ink-2">{t('preferences.required')}</p>
       <div role="status" aria-live="polite">
         {state.saved ? <p className="text-body font-medium">{t('preferences.saved')}</p> : null}
         {state.tested ? <p className="text-body font-medium">{t('preferences.testSent')}</p> : null}

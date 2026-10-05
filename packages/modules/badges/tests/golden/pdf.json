@@ -1,0 +1,50 @@
+{
+  "fold-4x3.en": {
+    "pages": 2,
+    "size": [288, 432],
+    "text": [
+      "Ada Lovelace Chief Mathematician Analytical Engines Ltd SPEAKER Ada Lovelace Speaker",
+      "Maximiliana Wolfeschlegelsteinhausen VP Partnerships Initech International ATTENDEE Maximiliana Wolfeschlegelsteinhausen General Admission"
+    ]
+  },
+  "fold-4x3.ar": {
+    "pages": 2,
+    "size": [288, 432],
+    "text": [
+      "ىل ﻴ ﻟ ﻲ ﺳ ر ﺎ ﻔ ﻟ ا ت ﺎ ﺠ ﺘ ﻨ ﻤ ﻟ ا ة ﺮ ﻳ ﺪ ﻣ ﺔ ﻴ ﻨ ﻘ ﺘ ﻠ ﻟ ﺞ ﻴ ﻠ ﺨ ﻟ ا ﺔ ﻛ ﺮ ﺷ SPEAKER ىل ﻴ ﻟ ﻲ ﺳ ر ﺎ ﻔ ﻟ ا ث ﺪ ﺤ ﺘ ﻣ",
+      "ﺪ ﺒ ﻋ ﻲ ﺒ ﻴ ﺘ ﻌ ﻟ ا ﺪ ﻟ ﺎ ﺧ ﻦ ﺑ ﻦ ﻤ ﺣ ﺮ ﻟ ا ت ﺎ ﻴ ﺠ ﻣ ﺮ ﺑ س ﺪ ﻨ ﻬ ﻣ ﻞ ﺒ ﻘ ﺘ ﺴ ﻤ ﻟ ا ﺔ ﺴ ﺳ ﺆ ﻣ ATTENDEE ﺪ ﺒ ﻋ ﻲ ﺒ ﻴ ﺘ ﻌ ﻟ ا ﺪ ﻟ ﺎ ﺧ ﻦ ﺑ ﻦ ﻤ ﺣ ﺮ ﻟ ا م ﺎ ﻋ ل ﻮ ﺧ د"
+    ]
+  },
+  "cr80-staff.en": {
+    "pages": 2,
+    "size": [153, 243],
+    "text": [
+      "Ada Lovelace Chief Mathematician Analytical Engines Ltd Sta ff · All areas CREW",
+      "Maximiliana Wolfeschlegelsteinhausen VP Partnerships Initech International Sta ff · All areas CREW"
+    ]
+  },
+  "cr80-staff.ar": {
+    "pages": 2,
+    "size": [153, 243],
+    "text": [
+      "ىل ﻴ ﻟ ﻲ ﺳ ر ﺎ ﻔ ﻟ ا ت ﺎ ﺠ ﺘ ﻨ ﻤ ﻟ ا ة ﺮ ﻳ ﺪ ﻣ ﺔ ﻴ ﻨ ﻘ ﺘ ﻠ ﻟ ﺞ ﻴ ﻠ ﺨ ﻟ ا ﺔ ﻛ ﺮ ﺷ Sta ff · All areas CREW",
+      "ﺪ ﺒ ﻋ ﻲ ﺒ ﻴ ﺘ ﻌ ﻟ ا ﺪ ﻟ ﺎ ﺧ ﻦ ﺑ ﻦ ﻤ ﺣ ﺮ ﻟ ا ت ﺎ ﻴ ﺠ ﻣ ﺮ ﺑ س ﺪ ﻨ ﻬ ﻣ ﻞ ﺒ ﻘ ﺘ ﺴ ﻤ ﻟ ا ﺔ ﺴ ﺳ ﺆ ﻣ Sta ff · All areas CREW"
+    ]
+  },
+  "brother-62.en": {
+    "pages": 2,
+    "size": [176, 283],
+    "text": [
+      "Ada Lovelace Analytical Engines Ltd Speaker",
+      "Maximiliana Wolfeschlegelsteinhausen Initech International General Admission"
+    ]
+  },
+  "brother-62.ar": {
+    "pages": 2,
+    "size": [176, 283],
+    "text": [
+      "ىل ﻴ ﻟ ﻲ ﺳ ر ﺎ ﻔ ﻟ ا ﺔ ﻴ ﻨ ﻘ ﺘ ﻠ ﻟ ﺞ ﻴ ﻠ ﺨ ﻟ ا ﺔ ﻛ ﺮ ﺷ ث ﺪ ﺤ ﺘ ﻣ",
+      "ﺪ ﺒ ﻋ ﻲ ﺒ ﻴ ﺘ ﻌ ﻟ ا ﺪ ﻟ ﺎ ﺧ ﻦ ﺑ ﻦ ﻤ ﺣ ﺮ ﻟ ا ﻞ ﺒ ﻘ ﺘ ﺴ ﻤ ﻟ ا ﺔ ﺴ ﺳ ﺆ ﻣ م ﺎ ﻋ ل ﻮ ﺧ د"
+    ]
+  }
+}

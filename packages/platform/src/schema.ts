@@ -416,7 +416,11 @@ export const realtimeMessages = tenantTable(
 );
 
 /** Platform switches staff flip from the console (M3.11a). Only these keys exist. */
-export const PLATFORM_FLAGS = ['open_signup'] as const;
+export const PLATFORM_FLAGS = [
+  'open_signup',
+  /** Agency v2 (M6.8b, P6-8): publishing downward, campaign fan-out, handover, team/day-of grants. */
+  'agency_v2',
+] as const;
 export type PlatformFlag = (typeof PLATFORM_FLAGS)[number];
 
 /**

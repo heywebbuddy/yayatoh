@@ -1,0 +1,30 @@
+{
+  "severity": {
+    "info": "Информация",
+    "warning": "Предупреждение",
+    "critical": "Критично"
+  },
+  "alert": {
+    "context": "{severity} · {where}",
+    "open": "Открыть в Yayatoh"
+  },
+  "test": {
+    "title": "Тестовое оповещение от {org}",
+    "body": "Slack подключён. Оповещения и ежедневная сводка Yayatoh будут приходить в этот канал."
+  },
+  "digest": {
+    "title": "Ежедневная сводка · {org}",
+    "salesTitle": "Продажи",
+    "sales": "{orders, plural, =0 {Новых заказов нет} one {# новый заказ} few {# новых заказа} many {# новых заказов} other {# нового заказа}} · {tickets, plural, one {# билет} few {# билета} many {# билетов} other {# билета}}",
+    "revenue": "Выручка: {amounts}",
+    "checkins": "{count, plural, =0 {Проходов нет} one {# проход} few {# прохода} many {# проходов} other {# прохода}}",
+    "eventLine": "{name}: {tickets, plural, one {# билет} few {# билета} many {# билетов} other {# билета}}",
+    "eventLineRevenue": "{name}: {tickets, plural, one {# билет} few {# билета} many {# билетов} other {# билета}} · {amounts}",
+    "moreEvents": "{count, plural, one {И ещё # мероприятие} few {И ещё # мероприятия} many {И ещё # мероприятий} other {И ещё # мероприятия}}",
+    "todayTitle": "Сегодня",
+    "todayEvent": "{name} · {time}",
+    "noEventsToday": "Сегодня мероприятий нет.",
+    "open": "Открыть панель"
+  },
+  "footer": "Отправлено Yayatoh. Изменить: Настройки → Интеграции → Slack."
+}

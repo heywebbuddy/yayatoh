@@ -6,11 +6,12 @@ import { ListingGrid } from '@/components/marketplace/listing-grid.tsx';
 import { OrgHero } from '@/components/marketplace/org-hero.tsx';
 import { Pagination } from '@/components/marketplace/pagination.tsx';
 import { SiteFooter, SiteHeader } from '@/components/marketplace/site-chrome.tsx';
+import { TagFilter } from '@/components/marketplace/tag-filter.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { originFor } from '@/lib/hosts.ts';
-import { cachedEntries } from '@/server/cms.ts';
+import { cachedContactPage, cachedEntries } from '@/server/cms.ts';
 import { pageLocale } from '@/server/locale.ts';
-import { cachedOrganizerListings } from '@/server/public-data.ts';
+import { cachedListingTags, cachedOrganizerListings, cachedTenantListings } from '@/server/public-data.ts';
 import { requestHost } from '@/server/request-origin.ts';
 import { apexOrigin, publicMetadata } from '@/server/seo.ts';
 
@@ -45,17 +46,26 @@ export default async function OrganizerPage({ params, searchParams }: Props) {
   pageLocale(locale);
   const o = await publicOrganizer(slug);
   if (!o) notFound();
-  const sp = parseSearchParams(await searchParams);
-  const listings = await cachedOrganizerListings(o.orgId, o.slug, { page: sp.page });
+  const raw = await searchParams;
+  const sp = parseSearchParams(raw);
+  // U8: the tag filter (a known tag key only; anything else shows every event).
+  const tags = await cachedListingTags(o.orgId);
+  const wanted = typeof raw.tag === 'string' ? raw.tag.trim().toLowerCase() : '';
+  const tag = tags.find((x) => x.key === wanted)?.key ?? null;
+  const listings = tag
+    ? await cachedTenantListings(o.orgId, sp.page, tag)
+    : await cachedOrganizerListings(o.orgId, o.slug, { page: sp.page });
   const t = await getTranslations('market');
   const req = await requestHost();
   const site = o.tenantSite && o.primaryHost ? originFor(req, o.primaryHost) : null;
   const path = req.kind === 'marketplace' ? `/o/${o.slug}` : `/organizers/${o.slug}`;
   // M1.4g: the organizer's blog, when it has published posts.
   const posts = await cachedEntries(o.orgId, 'post', 1);
+  // U10: the contact page, while the organizer has it on.
+  const contact = await cachedContactPage(o.orgId);
   const tc = await getTranslations('cmsPublic');
   return (
-    <div className="min-h-dvh bg-white">
+    <div className="min-h-dvh bg-surface">
       <SiteHeader />
       <main id="main" className="flex flex-col gap-8">
         <OrgHero orgId={o.orgId} eyebrow={t('organizer.eyebrow')} name={o.name} brandColor={o.brandColor}>
@@ -69,14 +79,20 @@ export default async function OrganizerPage({ params, searchParams }: Props) {
               {tc('blog')}
             </Link>
           ) : null}
+          {contact ? (
+            <Link href={`${path}/contact`} className="self-start text-body underline">
+              {tc('contact')}
+            </Link>
+          ) : null}
         </OrgHero>
         <section
           aria-labelledby="upcoming-heading"
           className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-4 md:px-6"
         >
-          <h2 id="upcoming-heading" className="text-[28px] font-normal tracking-[-0.03em]">
+          <h2 id="upcoming-heading" className="text-[28px] font-extrabold tracking-[-0.03em]">
             {t('upcoming')}
           </h2>
+          <TagFilter tags={tags} current={tag} path={path} />
           <ListingGrid
             items={listings.items}
             locale={locale}
@@ -87,7 +103,12 @@ export default async function OrganizerPage({ params, searchParams }: Props) {
               description: t('organizer.emptyDescription', { org: o.name }),
             }}
           />
-          <Pagination path={path} params={{}} page={listings.page} pageCount={listings.pageCount} />
+          <Pagination
+            path={path}
+            params={{ tag: tag ?? undefined }}
+            page={listings.page}
+            pageCount={listings.pageCount}
+          />
         </section>
       </main>
       <SiteFooter />

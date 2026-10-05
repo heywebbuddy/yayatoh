@@ -20,8 +20,11 @@ export const SURVEY_KINDS = ['post_event', 'session_feedback'] as const;
 export type SurveyKind = (typeof SURVEY_KINDS)[number];
 export const SEND_AUDIENCES = ['all', 'checked_in'] as const;
 export type SendAudience = (typeof SEND_AUDIENCES)[number];
-/** Where a send came from: the console, or a journey step (M3.7a). */
-export const SEND_SOURCES = ['console', 'journey'] as const;
+/**
+ * Where a send came from: the console, a journey step (M3.7a), or the session-end prompt on the
+ * live session page (M5.7b: one invitation for the signed-in attendee who asked, no email).
+ */
+export const SEND_SOURCES = ['console', 'journey', 'prompt'] as const;
 
 /**
  * A survey about one event (post-event) or one program session (session feedback). Its questions
@@ -73,7 +76,7 @@ export const surveySends = tenantTable(
       columns: [t.orgId, t.surveyId],
       foreignColumns: [surveys.orgId, surveys.id],
     }).onDelete('cascade'),
-    check('sends_source_check', sql`source in ('console', 'journey')`),
+    check('sends_source_check', sql`source in ('console', 'journey', 'prompt')`),
     check('sends_audience_check', sql`audience in ('all', 'checked_in')`),
     check('sends_reminder_days_check', sql`reminder_days is null or reminder_days between 1 and 30`),
     check('sends_link_days_check', sql`link_days between 1 and 90`),

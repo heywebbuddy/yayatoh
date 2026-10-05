@@ -19,7 +19,7 @@ export function ProgramThumb({ item, round = false }: { item: MediaItem | undefi
       loading="lazy"
       decoding="async"
       className={cx(
-        'size-12 shrink-0 border border-zinc-200 bg-white',
+        'size-12 shrink-0 border border-line bg-surface',
         round ? 'rounded-full object-cover' : 'rounded-card object-contain p-1',
       )}
     />

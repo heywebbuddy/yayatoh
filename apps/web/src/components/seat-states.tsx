@@ -74,11 +74,11 @@ export function LiveSeatCounts() {
 }
 
 const SWATCH: Record<LiveSeatState, string> = {
-  available: 'bg-white',
-  held: 'bg-accent-700',
-  sold: 'bg-zinc-700',
-  assigned: 'bg-accent-900',
-  blocked: 'bg-pink-700',
+  available: 'bg-surface',
+  held: 'bg-warning-dot',
+  sold: 'bg-tag',
+  assigned: 'bg-primary',
+  blocked: 'bg-danger',
 };
 
 /** What the plan's seat colours mean (a guest's seat apart from a blocked one). */
@@ -87,13 +87,13 @@ export function SeatLegend({ children }: { children?: ReactNode }) {
   return (
     <ul
       aria-label={t('label')}
-      className="flex list-none flex-wrap gap-x-4 gap-y-1 p-0 text-caption text-zinc-600"
+      className="flex list-none flex-wrap gap-x-4 gap-y-1 p-0 text-caption text-ink-2"
     >
       {LIVE_SEAT_STATES.map((s) => (
         <li key={s} className="flex items-center gap-1.5">
           <span
             aria-hidden="true"
-            className={`inline-block size-3 rounded-pill border border-zinc-500 ${SWATCH[s]}`}
+            className={`inline-block size-3 rounded-pill border border-line-strong ${SWATCH[s]}`}
           />
           {t(s)}
         </li>

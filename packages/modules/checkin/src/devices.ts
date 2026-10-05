@@ -11,6 +11,7 @@ import {
   OK_RESULTS,
   ruleResult,
   SCOPE_TAG,
+  type SignedSessionGate,
   scopeMessage,
   zoneAllows,
 } from '@yayatoh/checkin-engine';
@@ -30,19 +31,18 @@ import {
 import { and, eq, gte, isNull, lte, sql } from 'drizzle-orm';
 import { checkpointsTx, raiseSignalTx, TWO_ENTRANCES_WINDOW_MS } from './checkpoints.ts';
 import { withOccurrenceTx } from './occurrence.ts';
-import { admissions, CHECKPOINT_KINDS, devices, type ScanResult, scans } from './schema.ts';
+import { admissions, CHECKPOINT_KINDS, devices, KIOSK_KINDS, type ScanResult, scans } from './schema.ts';
+import { occupiedTx, sessionAccessSource, sessionDoorTx, sessionScanTx } from './session-doors.ts';
 import { checkVelocityTx, openHighSignalCountTx } from './signals.ts';
 import { deviceScanScopeTx, scopeAllowsCheckpoint } from './staff.ts';
 
 const hashToken = (token: string) => createHash('sha256').update(token).digest('hex');
-/** Devices act as a system actor named after the device; authorization happened at the token. */
-const DEVICE_ACTOR = /^device:([0-9a-f-]{36})$/;
 
-export function deviceIdOf(ctx: Ctx): string {
-  const m = ctx.actor.type === 'system' ? DEVICE_ACTOR.exec(ctx.actor.name) : null;
-  if (!m?.[1]) throw new DomainError('forbidden', 'Device credentials required');
-  return m[1];
-}
+import { deviceIdOf } from './device-actor.ts';
+import { devicePresenceTx, deviceStateEventTx, heartbeatTransitionsTx } from './live.ts';
+import { recordDevicePresenceTx } from './staff-mode.ts';
+
+export { deviceIdOf };
 
 /**
  * Resolve a device bearer token to a device context (org from the token, never from headers).
@@ -72,6 +72,16 @@ const deviceEvent = (type: string, orgId: string, deviceId: string) => ({
   payload: { orgId, deviceId },
 });
 
+/**
+ * The event a device last reported working at (null: none yet, or not this org's device). The
+ * alert engine's outbox subscriber uses it to re-evaluate that event alone on a device event
+ * (batch 3g merge); the scheduled sweep refreshes the org's other events.
+ */
+export async function deviceEventIdTx(tx: TenantTx, deviceId: string): Promise<string | null> {
+  const [r] = await tx.select({ eventId: devices.eventId }).from(devices).where(eq(devices.id, deviceId));
+  return r?.eventId ?? null;
+}
+
 /** How recently a device must have sent a heartbeat to count as online. */
 export const DEVICE_ONLINE_WINDOW_MS = 90_000;
 
@@ -88,6 +98,35 @@ export async function devicesOnlineTx(tx: TenantTx, now: Date): Promise<number> 
       ),
     );
   return r?.n ?? 0;
+}
+
+/**
+ * Device health for the alert engine (M3.2b): devices in use (not revoked or being wiped, seen
+ * within `inUseWindowMs`) that went quiet (no heartbeat within the online window), and online ones
+ * with a low battery or a queue of scans waiting to sync. Counts only; no labels or tokens.
+ */
+export async function deviceHealthTx(
+  tx: TenantTx,
+  now: Date,
+  opts: { readonly inUseWindowMs: number; readonly lowBatteryPct: number; readonly backlogScans: number },
+): Promise<{ readonly offline: number; readonly lowBattery: number; readonly backlog: number }> {
+  const online = new Date(now.getTime() - DEVICE_ONLINE_WINDOW_MS).toISOString();
+  const inUse = new Date(now.getTime() - opts.inUseWindowMs).toISOString();
+  const [r] = await tx.execute<{ offline: number; low: number; backlog: number }>(sql`
+    select
+      count(*) filter (where last_seen_at < ${online}::timestamptz)::int as offline,
+      count(*) filter (where last_seen_at >= ${online}::timestamptz
+        and battery_pct is not null and battery_pct <= ${opts.lowBatteryPct})::int as low,
+      count(*) filter (where last_seen_at >= ${online}::timestamptz
+        and queue_depth is not null and queue_depth >= ${opts.backlogScans})::int as backlog
+    from checkin.devices
+    where revoked_at is null and wipe_requested_at is null
+      and last_seen_at >= ${inUse}::timestamptz and last_seen_at <= ${now.toISOString()}::timestamptz + interval '5 minutes'`);
+  return {
+    offline: Number(r?.offline ?? 0),
+    lowBattery: Number(r?.low ?? 0),
+    backlog: Number(r?.backlog ?? 0),
+  };
 }
 
 export const enrollDeviceCommand = tenantCommand({
@@ -146,6 +185,7 @@ export const setDeviceStateCommand = tenantCommand({
       .where(eq(devices.id, input.deviceId))
       .returning({ id: devices.id });
     if (rows.length === 0) throw new DomainError('not_found');
+    await deviceStateEventTx(tx, ctx, input.deviceId, input.action === 'revoke' ? 'revoked' : 'wiped');
     emit(deviceEvent('device.state_changed', requireOrg(ctx), input.deviceId));
     return { ok: true };
   },
@@ -160,20 +200,81 @@ export const heartbeatCommand = tenantCommand({
     batteryPct: z.int().min(0).max(100).nullable().default(null),
     queueDepth: z.int().min(0).max(1_000_000),
     clockOffsetMs: z.int().min(-86_400_000).max(86_400_000),
+    /** M3.4a: the event the device works and where it scans (the device board). */
+    eventId: z.uuid().optional(),
+    checkpointId: z.uuid().nullable().optional(),
+    /** M3.3a: the app's build, for the device board (letters, digits and `.+-_`, ≤ 64). */
+    appVersion: z
+      .string()
+      .regex(/^[A-Za-z0-9._+-]{1,64}$/)
+      .optional(),
   }),
-  output: z.object({ serverTime: z.date(), commands: z.array(z.enum(['wipe'])) }),
+  output: z.object({
+    serverTime: z.date(),
+    commands: z.array(z.enum(['wipe'])),
+    /** M3.4a directives (additive): sync now, switch checkpoint, kiosk mode. */
+    syncRequestedAt: z.date().nullable(),
+    checkpoint: z.object({ id: z.uuid().nullable(), requestedAt: z.date() }).nullable(),
+    kiosk: z
+      .object({
+        eventId: z.uuid(),
+        checkpointId: z.uuid().nullable(),
+        pinHash: z.string(),
+        startedAt: z.date(),
+        /** M4.4b: what the kiosk shows. */
+        kind: z.enum(KIOSK_KINDS),
+      })
+      .nullable(),
+  }),
   entitlement: 'checkin',
   permission: 'checkin:device',
   handler: async ({ input, ctx, tx, emit }) => {
+    const { eventId, checkpointId, appVersion, ...health } = input;
+    const [before] = await tx
+      .select({ id: devices.id, lastSeenAt: devices.lastSeenAt, batteryPct: devices.batteryPct })
+      .from(devices)
+      .where(eq(devices.id, deviceIdOf(ctx)));
     const [d] = await tx
       .update(devices)
-      .set({ ...input, lastSeenAt: ctx.now, updatedAt: ctx.now })
+      .set({
+        ...health,
+        ...(appVersion ? { appVersion } : {}),
+        lastSeenAt: ctx.now,
+        updatedAt: ctx.now,
+      })
       .where(and(eq(devices.id, deviceIdOf(ctx)), isNull(devices.revokedAt)))
       .returning({ wipe: devices.wipeRequestedAt });
-    if (!d) throw new DomainError('forbidden', 'Device revoked');
+    if (!d || !before) throw new DomainError('forbidden', 'Device revoked');
+    const directives = await recordDevicePresenceTx(
+      tx,
+      ctx,
+      deviceIdOf(ctx),
+      { eventId, checkpointId },
+      { batteryPct: input.batteryPct, queueDepth: input.queueDepth },
+    );
+    // M3.3a live mode: the feed's device transitions, and the member the device is handed to.
+    const [now] = await tx
+      .select({
+        id: devices.id,
+        eventId: devices.eventId,
+        checkpointId: devices.checkpointId,
+        assignedUserId: devices.assignedUserId,
+      })
+      .from(devices)
+      .where(eq(devices.id, deviceIdOf(ctx)));
+    if (now) {
+      await heartbeatTransitionsTx(
+        tx,
+        ctx,
+        before,
+        { eventId: now.eventId, batteryPct: input.batteryPct },
+        DEVICE_ONLINE_WINDOW_MS,
+      );
+      await devicePresenceTx(tx, ctx, now);
+    }
     // Devices-online and the device board (M3.1/M3.3) follow heartbeats through the outbox.
     emit(deviceEvent('device.heartbeat', requireOrg(ctx), deviceIdOf(ctx)));
-    return { serverTime: ctx.now, commands: d.wipe ? (['wipe'] as const).slice() : [] };
+    return { serverTime: ctx.now, commands: d.wipe ? (['wipe'] as const).slice() : [], ...directives };
   },
 });
 
@@ -194,6 +295,14 @@ const ManifestRowDto = z.object({
    * (case-sensitive, domain-separated; offline scanning, M2.2c/M1.9e).
    */
   legacyCodes: z.array(z.string()).optional(),
+  /** M5.6a (v3, when the device has session doors): what the pass may do at sessions. */
+  sessionAccess: z
+    .object({
+      registrant: z.boolean(),
+      /** The sessions the pass gives; null = every session. */
+      sessionIds: z.array(z.uuid()).nullable(),
+    })
+    .optional(),
 });
 
 export const ManifestPageDto = z.object({
@@ -216,8 +325,23 @@ export const ManifestPageDto = z.object({
         name: z.string(),
         kind: z.enum(CHECKPOINT_KINDS).openapi('CheckpointKind'),
         ticketTypeIds: z.array(z.uuid()),
+        /** M5.6a: a session door's program session. */
+        sessionId: z.uuid().nullable().optional(),
       }),
     ),
+    /** M5.6a (v3): the sessions behind the device's session doors (title, times, room count). */
+    sessions: z
+      .array(
+        z.object({
+          checkpointId: z.uuid(),
+          sessionId: z.uuid(),
+          title: z.string(),
+          startsAt: z.string(),
+          endsAt: z.string(),
+          occupied: z.int(),
+        }),
+      )
+      .optional(),
     occurrences: z.array(
       z.object({
         id: z.uuid(),
@@ -233,6 +357,19 @@ export const ManifestPageDto = z.object({
       eventId: z.uuid(),
       deviceId: z.uuid(),
       checkpointIds: z.array(z.uuid()).nullable(),
+      /** M5.6a (v3): each session door's gates, signed with the scope. */
+      sessionGates: z
+        .array(
+          z.object({
+            checkpointId: z.uuid(),
+            sessionId: z.uuid(),
+            capacity: z.int().nullable(),
+            enrollmentRequired: z.boolean(),
+            /** Tickets holding a place (sessions that need an enrollment). */
+            enrolled: z.array(z.uuid()),
+          }),
+        )
+        .optional(),
       signature: z.string(),
     }),
   }),
@@ -248,8 +385,14 @@ async function signedScope(
   eventId: string,
   deviceId: string,
   scope: ReadonlySet<string> | null,
+  sessionGates?: SignedSessionGate[],
 ): Promise<NonNullable<ManifestHeader['scope']>> {
-  const base = { eventId, deviceId, checkpointIds: scope === null ? null : [...scope].sort() };
+  const base = {
+    eventId,
+    deviceId,
+    checkpointIds: scope === null ? null : [...scope].sort(),
+    ...(sessionGates ? { sessionGates } : {}),
+  };
   return { ...base, signature: await signForScannersTx(tx, orgId, SCOPE_TAG, scopeMessage(base)) };
 }
 
@@ -292,7 +435,6 @@ export const deviceManifestQuery = tenantQuery({
     const scope = await deviceScanScopeTx(tx, deviceId, event.id, ctx.now);
     if (scope !== null && scope.size === 0)
       throw new DomainError('forbidden', 'This device is not assigned to this event');
-    const keys = await publicKeysTx(tx);
     const salt = `yy-manifest:${event.id}`;
     const page = await manifestTicketsTx(
       tx,
@@ -300,8 +442,43 @@ export const deviceManifestQuery = tenantQuery({
       decodeCursor(input.cursor, input.overlap),
       input.limit,
     );
+    // M5.6a: the device's session doors, their signed gates and each pass's session access.
+    const cps = (await checkpointsTx(tx, event.id)).filter((c) => scopeAllowsCheckpoint(scope, c.id));
+    const doors = [];
+    for (const c of cps.filter((x) => x.kind === 'session')) {
+      const door = await sessionDoorTx(tx, c);
+      if (door) doors.push(door);
+    }
+    const hasDoors = cps.some((c) => c.kind === 'session');
+    const sessionGates: SignedSessionGate[] = [];
+    const sessions: NonNullable<ManifestHeader['sessions']>[number][] = [];
+    for (const d of doors) {
+      sessionGates.push({
+        checkpointId: d.checkpoint.id,
+        ...d.rule,
+        enrolled: d.rule.enrollmentRequired
+          ? await sessionAccessSource().enrolledTicketIdsTx(tx, d.session.sessionId)
+          : [],
+      });
+      sessions.push({
+        checkpointId: d.checkpoint.id,
+        sessionId: d.session.sessionId,
+        title: d.session.title,
+        startsAt: d.session.startsAt.toISOString(),
+        endsAt: d.session.endsAt.toISOString(),
+        occupied: await occupiedTx(tx, d.session.sessionId),
+      });
+    }
+    const access = hasDoors
+      ? await sessionAccessSource().accessTx(
+          tx,
+          event.id,
+          page.map((t) => t.id),
+        )
+      : null;
     const rows: ManifestRow[] = [];
     for (const t of page) {
+      const a = access?.get(t.id);
       rows.push({
         ticketId: t.id,
         shortCode: t.shortCode,
@@ -317,9 +494,29 @@ export const deviceManifestQuery = tenantQuery({
         ...(t.legacyCodes.length
           ? { legacyCodes: await Promise.all(t.legacyCodes.map((c) => legacyPayloadHash(salt, c))) }
           : {}),
+        ...(access
+          ? {
+              sessionAccess: {
+                registrant: a?.registrant ?? false,
+                sessionIds: a ? (a.sessionIds === null ? null : [...a.sessionIds]) : [],
+              },
+            }
+          : {}),
       });
     }
     const last = page.at(-1);
+    // Sign the scope before reading the keys: an org's first signing key is made on first use (a
+    // guest-only wedding or gala that has issued no ticket yet), and the header must carry the key
+    // that signed its scope or the device refuses the manifest (batch 3j merge, M4.4b).
+    const signed = await signedScope(
+      tx,
+      requireOrg(ctx),
+      event.id,
+      deviceId,
+      scope,
+      hasDoors ? sessionGates : undefined,
+    );
+    const keys = await publicKeysTx(tx);
     const header: ManifestHeader = {
       event: {
         id: event.id,
@@ -334,14 +531,14 @@ export const deviceManifestQuery = tenantQuery({
       salt,
       serverTime: ctx.now.toISOString(),
       unknownPolicy: 'provisional',
-      checkpoints: (await checkpointsTx(tx, event.id))
-        .filter((c) => scopeAllowsCheckpoint(scope, c.id))
-        .map((c) => ({
-          id: c.id,
-          name: c.name,
-          kind: c.kind as 'entrance' | 'zone',
-          ticketTypeIds: c.ticketTypeIds,
-        })),
+      checkpoints: cps.map((c) => ({
+        id: c.id,
+        name: c.name,
+        kind: c.kind as 'entrance' | 'zone' | 'session',
+        ticketTypeIds: c.ticketTypeIds,
+        ...(c.kind === 'session' ? { sessionId: c.sessionId } : {}),
+      })),
+      ...(hasDoors ? { sessions } : {}),
       occurrences: (await occurrencesOfEventTx(tx, event.id)).map((o) => ({
         id: o.id,
         startsAt: o.startsAt.toISOString(),
@@ -349,7 +546,7 @@ export const deviceManifestQuery = tenantQuery({
         status: o.status,
       })),
       version: MANIFEST_VERSION,
-      scope: await signedScope(tx, requireOrg(ctx), event.id, deviceId, scope),
+      scope: signed,
     };
     return {
       header,
@@ -374,6 +571,13 @@ const DEVICE_VERDICTS = [
   'granted',
   'no_access',
   'wrong_checkpoint',
+  // M5.6a session doors.
+  'entered',
+  'scanned_out',
+  'not_in_room',
+  'not_enrolled',
+  'admission_level',
+  'capacity',
 ] as const;
 
 export const SyncResultDto = z.object({
@@ -410,6 +614,8 @@ export const syncScansCommand = tenantCommand({
           verdict: z.enum(DEVICE_VERDICTS),
           /** The checkpoint the device was scanning at, if any. */
           checkpointId: z.uuid().optional(),
+          /** M5.6a session doors: scanning people in (default) or out. */
+          direction: z.enum(['in', 'out']).optional(),
         }),
       )
       .min(1)
@@ -421,6 +627,12 @@ export const syncScansCommand = tenantCommand({
   handler: async ({ input, ctx, tx, emit }) => {
     const orgId = requireOrg(ctx);
     const deviceId = deviceIdOf(ctx);
+    // One sync per event at a time (M3.4a): a retried batch racing its first attempt, or two
+    // devices admitting the same tickets in different orders, can neither double-apply a scan
+    // nor deadlock on the admissions index. Batches are short; devices simply wait their turn.
+    await tx.execute(
+      sql`select pg_advisory_xact_lock(hashtextextended(${`checkin.sync:${input.eventId}`}, 0))`,
+    );
     const event = await findEventTx(tx, input.eventId);
     if (!event) throw new DomainError('not_found', 'Event not found');
     const keys = await publicKeysTx(tx);
@@ -473,7 +685,26 @@ export const syncScansCommand = tenantCommand({
           : ruleResult({ now: at, event, ticket: await withOccurrenceTx(tx, ticket) });
       let result: ScanResult = rule === 'ok' ? 'admitted' : rule;
       let admissionId: string | null = null;
-      if (rule === 'ok' && ticket && checkpoint?.kind === 'zone') {
+      if (rule === 'ok' && checkpoint?.kind === 'session') {
+        // M5.6a: a session door records attendance; the device's room count stands (offline).
+        const door = ticket ? await sessionDoorTx(tx, checkpoint) : null;
+        result =
+          door && ticket
+            ? (
+                await sessionScanTx(tx, emit, {
+                  orgId,
+                  door,
+                  ticket,
+                  at,
+                  direction: s.direction ?? 'in',
+                  deviceId,
+                  scannedBy: null,
+                  offline: true,
+                  deviceVerdict: s.verdict,
+                })
+              ).result
+            : 'invalid';
+      } else if (rule === 'ok' && ticket && checkpoint?.kind === 'zone') {
         result = zoneAllows(checkpoint, ticket.ticketTypeId) ? 'granted' : 'no_access';
       } else if (rule === 'ok' && ticket) {
         const day = eventDay(at, event.timezone);
@@ -646,6 +877,14 @@ export const syncScansCommand = tenantCommand({
         to: corrected(last),
         deviceId,
         ticketIds: okTickets,
+      });
+    // The live feed (M3.3a): one ping per synced batch that stored scans nobody was let in by.
+    const refused = results.filter((r) => r.stored && !OK_RESULTS.has(r.result)).length;
+    if (refused > 0)
+      await publishRealtimeTx(tx, orgId, CHECKINS_CHANNEL, {
+        eventId: event.id,
+        event: 'scan',
+        data: { outcome: 'refused', checkpointId: null, count: refused, at: ctx.now.toISOString() },
       });
     // Door screens follow along (M3.1b): one message per synced batch that admitted anyone.
     if (newAdmissions > 0)

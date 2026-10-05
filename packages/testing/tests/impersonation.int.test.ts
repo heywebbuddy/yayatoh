@@ -1,13 +1,26 @@
+import * as agency from '@yayatoh/agency';
 import * as ai from '@yayatoh/ai';
+import * as alerts from '@yayatoh/alerts';
+import * as analytics from '@yayatoh/analytics';
+import * as assistance from '@yayatoh/assistance';
 import * as attendees from '@yayatoh/attendees';
+import * as audiences from '@yayatoh/audiences';
+import * as automations from '@yayatoh/automations';
+import * as badges from '@yayatoh/badges';
 import * as billing from '@yayatoh/billing';
+import * as campaigns from '@yayatoh/campaigns';
 import * as checkin from '@yayatoh/checkin';
 import * as cms from '@yayatoh/cms';
+import * as commandCenter from '@yayatoh/command-center';
 import * as crm from '@yayatoh/crm';
 import { withTenant } from '@yayatoh/db';
 import { closePools } from '@yayatoh/db/testing';
+import * as donations from '@yayatoh/donations';
+import * as engagement from '@yayatoh/engagement';
 import * as events from '@yayatoh/events';
 import * as forms from '@yayatoh/forms';
+import * as guests from '@yayatoh/guests';
+import * as integrations from '@yayatoh/integrations';
 import {
   COMMAND_CATEGORIES,
   type Command,
@@ -18,6 +31,7 @@ import {
   type Query,
   uuidv7,
 } from '@yayatoh/kernel';
+import * as marketing from '@yayatoh/marketing';
 import * as marketplace from '@yayatoh/marketplace';
 import * as media from '@yayatoh/media';
 import * as messaging from '@yayatoh/messaging';
@@ -28,6 +42,7 @@ import * as platform from '@yayatoh/platform';
 import { auditLogQuery, consumeEvent, memoryNotifier } from '@yayatoh/platform';
 import * as privacy from '@yayatoh/privacy';
 import * as program from '@yayatoh/program';
+import * as registration from '@yayatoh/registration';
 import * as reports from '@yayatoh/reports';
 import * as reviews from '@yayatoh/reviews';
 import * as seating from '@yayatoh/seating';
@@ -45,6 +60,7 @@ import {
 } from '@yayatoh/tenancy';
 import * as ticketing from '@yayatoh/ticketing';
 import * as venues from '@yayatoh/venues';
+import * as webhooks from '@yayatoh/webhooks';
 import { sql } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { type OrgFixture, ports, systemCtx, twoOrgs, userCtx } from '../src/index.ts';
@@ -64,12 +80,35 @@ const impersonatedBy = () => ({ staffUserId, impersonationId: uuidv7() });
 const acting = (o: OrgFixture = a) => o.ctx({ impersonatedBy: impersonatedBy() });
 
 const MODULES = {
+  // M6.7a: the agency's snapshot refresh and pages.
+  agency,
   ai,
+  // Batch 3e merge: the modules of batches 3b–3e (alerts, audiences, Command Center, guests,
+  // marketing; campaigns, journeys and registration), so their commands carry categories too.
+  alerts,
+  // Batch 3i merge: M6.2a's warehouse backfill and M6.3b's webhook endpoints.
+  analytics,
+  // Batch 3g merge: M3.3b's guest assistance queue (M3.3a grew checkin and the Command Center).
+  assistance,
+  audiences,
+  automations,
+  // Batch 3f merge: M5.5a badges (M5.3a and M5.4a grew events, program and media).
+  badges,
+  campaigns,
+  commandCenter,
+  guests,
+  // M6.4a: connecting an integration is an export (org data leaves for a third party).
+  integrations,
+  marketing,
+  registration,
   attendees,
   billing,
   checkin,
   cms,
   crm,
+  engagement,
+  // M4.8a: gifts, campaigns and the gift CSV.
+  donations,
   events,
   forms,
   marketplace,
@@ -89,6 +128,7 @@ const MODULES = {
   tenancy,
   ticketing,
   venues,
+  webhooks,
 };
 
 type AnyCommand = Command<unknown, unknown, unknown, unknown>;
@@ -149,26 +189,31 @@ describe('impersonation: the pipeline refuses money, export and delete (M1.2e)',
     expect(exportStarts).toEqual(
       expect.arrayContaining([
         'platform.startAuditCsv',
-        'privacy.startDsarExport',
+        // The data-subject archive (M6.1c).
+        'privacy.exportSubject',
         'reports.startAttendeesCsv',
         'reports.startBookingsCsv',
         // Survey responses CSV (M3.9a).
         'surveys.startResponsesCsv',
         // Waitlist CSV (M3.10a).
         'orders.startWaitlistCsv',
+        // Gift CSV (M4.8a).
+        'donations.startGiftsCsv',
       ]),
     );
     const files = [...queries.values()].filter((q) => q.category === 'export').map((q) => q.name);
     expect(files).toEqual(
       expect.arrayContaining([
         'platform.auditCsvFile',
-        'privacy.dsarExportFile',
+        'privacy.archiveFile',
+        'privacy.selfArchiveFile',
         'reports.attendeesCsvFile',
         'reports.bookingsCsvFile',
         'attendees.importFailures',
         'reports.disputeEvidencePacket',
         'surveys.responsesCsvFile',
         'orders.waitlistCsvFile',
+        'donations.giftsCsvFile',
       ]),
     );
     const money = flagged.filter((c) => c.category === 'money').map((c) => c.name);
@@ -184,6 +229,9 @@ describe('impersonation: the pipeline refuses money, export and delete (M1.2e)',
         'payments.recordTransfer',
         'payments.recordTransferReversal',
         'payments.releaseDueSettlements',
+        // M5.1d: recording an invoice payment, voiding an invoice.
+        'orders.recordInvoicePayment',
+        'orders.voidInvoice',
       ]),
     );
     expect(flagged.filter((c) => c.category === 'delete').map((c) => c.name)).toEqual(
@@ -198,6 +246,8 @@ describe('impersonation: the pipeline refuses money, export and delete (M1.2e)',
         'media.removeSpeakerPhoto',
         'media.removeExhibitorLogo',
         'media.removeSponsorLogo',
+        // Live polls (M5.7a).
+        'engagement.deletePoll',
         'program.deleteSession',
         'cms.deleteEntry',
         // Account erasure's per-org part (M1.14e; run by the platform, never as a member).
@@ -209,6 +259,12 @@ describe('impersonation: the pipeline refuses money, export and delete (M1.2e)',
         'orders.removePush',
         // A date's own seating chart goes, with the guests seated on it (M1.7g).
         'seating.removeDateChart',
+        // A giving level (M4.8a; its gifts stay).
+        'donations.deleteLevel',
+        // The daily retention pass erases donors of lapsed gifts (M4.8a; platform only).
+        'donations.retention',
+        // Taking back a paddle number (M4.8c; refused once it has entries).
+        'donations.releasePaddle',
       ]),
     );
   });

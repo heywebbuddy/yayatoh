@@ -13,7 +13,9 @@ export const PRIVATE_PATHS = [
   '/orders/',
   '/my-tickets/',
   '/claim/',
+  '/tables/',
   '/portal/',
+  '/event-portal',
   '/scan',
   '/dev/',
   '/sign-in',
@@ -26,6 +28,12 @@ export const PRIVATE_PATHS = [
   '/reset-password',
   '/auth/',
   '/tickets',
+  // M3.3a: TV display links.
+  '/tv/',
+  // M4.5a: guest websites (password-protected, never indexed: P4-3c).
+  '/w/',
+  // M4.7a: a party's guest hub (its signed link; never indexed: P4-3).
+  '/hub/',
 ];
 
 /**

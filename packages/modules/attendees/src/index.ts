@@ -2,6 +2,7 @@ export {
   AttendeeFilter,
   AttendeeHitDto,
   AttendeeListDto,
+  addAttendeeLabelsTx,
   attendeeLabelsQuery,
   attendeesByIdsTx,
   attendeesByTicketIdsTx,
@@ -28,6 +29,9 @@ export {
   attendeesForExportTx,
   resolveAttendeeIdsTx,
 } from './bulk.ts';
+// M6.1a: contact merges move this module's references (ADR 0023).
+export { attendeesByTicketTx, attendeesContactOwner } from './contact-merge.ts';
+export { attendeesDataSubjects } from './data-subject.ts';
 export { attendeesDsarTx, eraseAttendeesDsarTx, redactAttendeesForEventsTx } from './dsar.ts';
 export * from './dto.ts';
 export {
@@ -50,6 +54,10 @@ export {
   stageImportCommand,
   validateImportCommand,
 } from './imports.ts';
+// M5.8a: networking looks people up by verified address and active place.
+export { activeAttendeeByEmailTx, activeEventContactsTx } from './networking.ts';
 export { attendeeContactIdsTx, emitAttendeesChangedTx, participationAttendeesTx } from './participation.ts';
 export { privateColumns } from './private-columns.ts';
 export { ATTENDEE_SOURCES, ATTENDEE_STATUSES, IMPORT_FIELDS, type ImportField } from './schema.ts';
+// M6.4b: attendee rows for two-way syncs (Google Sheets).
+export { type AttendeeSyncRow, attendeeSyncRowTx, attendeesChangedSinceTx } from './sync-rows.ts';

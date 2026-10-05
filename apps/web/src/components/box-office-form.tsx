@@ -1,20 +1,17 @@
 'use client';
 
-import { Alert, Button } from '@yayatoh/ui';
+import { Alert, Button, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { type FormEvent, startTransition, useActionState, useEffect, useRef, useState } from 'react';
 import type { BoxOfficeState } from '@/app/[locale]/o/[org]/e/[event]/tickets-orders/actions.ts';
-import {
-  type SeatChoice,
-  type SeatMapView,
-  SeatPicker,
-  type SeatStreamSource,
-} from '@/components/seat-picker.tsx';
+import type { BestSeatsActions } from '@/components/best-available.tsx';
+import type { SeatChoice, SeatMapView, SeatStreamSource } from '@/components/seat-picker.tsx';
+import { SeatSelection } from '@/components/seat-selection.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
 
 const METHODS = ['cash', 'zelle', 'card_terminal', 'other'] as const;
-const field = 'min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body';
+const field = 'field';
 
 /**
  * Sell tickets for money the organizer took themselves (cash at the door, Zelle, own terminal).
@@ -31,6 +28,8 @@ export function BoxOfficeForm({
   seatStream = null,
   prices = {},
   timeZone,
+  bestSeats = null,
+  advancedSeating = false,
 }: {
   /** Multi-date events (M1.4b): the date being sold. */
   dates?: readonly { id: string; label: string }[];
@@ -43,6 +42,10 @@ export function BoxOfficeForm({
   /** Ticket type id → its all-in price label (seat list). */
   prices?: Readonly<Record<string, string>>;
   timeZone?: string;
+  /** M6.11a: best available at the door (when the organizer offers it). */
+  bestSeats?: BestSeatsActions | null;
+  /** M6.11a: the org has advanced seating (the accessible-seat statement, companion seats). */
+  advancedSeating?: boolean;
 }) {
   const t = useTranslations('boxOffice');
   const te = useTranslations();
@@ -77,38 +80,44 @@ export function BoxOfficeForm({
           ? t('soldOut')
           : state.reason === 'seats_taken'
             ? t('seatsTaken')
-            : state.reason === 'seat_rule'
-              ? t('seatRule')
-              : state.reason === 'seats_not_on_sale' || state.reason === 'seat_not_on_sale'
-                ? t('notOnSale')
-                : state.reason === 'choose_date'
-                  ? t('chooseDate')
-                  : state.reason === 'date_sold_out'
-                    ? t('dateSoldOut')
-                    : state.reason === 'wrong_date'
-                      ? t('wrongDate')
-                      : state.reason === 'date_cancelled' || state.reason === 'date_passed'
-                        ? t('dateUnavailable')
-                        : te(errorMessageKey(state.code));
+            : state.reason === 'find_seats'
+              ? te('checkout.best.findFirst')
+              : state.reason === 'seat_hold_expired'
+                ? te('checkout.best.expired')
+                : state.reason === 'seat_channel'
+                  ? t('seatChannel')
+                  : state.reason === 'seat_rule'
+                    ? t('seatRule')
+                    : state.reason === 'seats_not_on_sale' || state.reason === 'seat_not_on_sale'
+                      ? t('notOnSale')
+                      : state.reason === 'choose_date'
+                        ? t('chooseDate')
+                        : state.reason === 'date_sold_out'
+                          ? t('dateSoldOut')
+                          : state.reason === 'wrong_date'
+                            ? t('wrongDate')
+                            : state.reason === 'date_cancelled' || state.reason === 'date_passed'
+                              ? t('dateUnavailable')
+                              : te(errorMessageKey(state.code));
   const standing = passes.filter((p) => !p.seated);
   return (
     <form ref={form} onSubmit={onSubmit} className="flex flex-col gap-4">
       {dates.length > 0 ? (
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="bo-date" className="text-caption text-zinc-600">
+          <label htmlFor="bo-date" className="text-[13px] font-bold text-ink">
             {t('date')}
           </label>
-          <select id="bo-date" name="occurrenceId" required className={field}>
+          <Select id="bo-date" name="occurrenceId" required className={field}>
             {dates.map((d) => (
               <option key={d.id} value={d.id}>
                 {d.label}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
       ) : null}
       <fieldset className="flex flex-col gap-2">
-        <legend className="text-caption text-zinc-600">{t('tickets')}</legend>
+        <legend className="text-[13px] font-bold text-ink">{t('tickets')}</legend>
         {standing.map((p) => (
           <div key={p.id} className="flex items-center gap-3">
             <input
@@ -128,28 +137,34 @@ export function BoxOfficeForm({
         {passes
           .filter((p) => p.seated)
           .map((p) => (
-            <p key={p.id} className="text-body text-zinc-600">
+            <p key={p.id} className="text-body text-ink-2">
               {t('seatedPass', { pass: p.label })}
             </p>
           ))}
       </fieldset>
       {seatMap ? (
-        <div className="rounded-card border border-zinc-200 p-4">
-          <SeatPicker
+        <div className="rounded-card border border-line p-4">
+          <SeatSelection
             key={round}
             map={seatMap}
             prices={prices}
+            levels={passes.filter((p) => p.seated)}
             max={50}
             stream={seatStream}
             context="box_office"
-            timeZone={timeZone}
+            best={bestSeats}
+            ada={advancedSeating}
+            occurrenceId={() =>
+              (form.current?.elements.namedItem('occurrenceId') as HTMLSelectElement | null)?.value || null
+            }
             onChoice={setChoice}
+            {...(timeZone ? { timeZone } : {})}
           />
         </div>
       ) : null}
       {enforced.length ? (
-        <div className="flex flex-col gap-2 rounded-card border border-pink-700/30 bg-pink-50 p-4">
-          <p className="text-body text-pink-700">{t('rulesEnforced')}</p>
+        <div className="flex flex-col gap-2 rounded-card border border-danger/30 bg-danger-soft p-4">
+          <p className="text-body text-danger">{t('rulesEnforced')}</p>
           <label className="flex min-h-6 items-center gap-2 text-body">
             <input
               type="checkbox"
@@ -162,7 +177,7 @@ export function BoxOfficeForm({
             {t('override')}
           </label>
           {mustConfirm ? (
-            <p id="bo-override-error" role="alert" className="text-body font-medium text-pink-700">
+            <p id="bo-override-error" role="alert" className="text-body font-medium text-danger">
               {t('confirmOverride')}
             </p>
           ) : null}
@@ -170,37 +185,37 @@ export function BoxOfficeForm({
       ) : null}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="bo-name" className="text-caption text-zinc-600">
+          <label htmlFor="bo-name" className="text-[13px] font-bold text-ink">
             {t('name')}
           </label>
           <input id="bo-name" name="name" required maxLength={120} autoComplete="off" className={field} />
         </div>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="bo-email" className="text-caption text-zinc-600">
+          <label htmlFor="bo-email" className="text-[13px] font-bold text-ink">
             {t('email')}
           </label>
           <input id="bo-email" name="email" type="email" required autoComplete="off" className={field} />
         </div>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="bo-method" className="text-caption text-zinc-600">
+          <label htmlFor="bo-method" className="text-[13px] font-bold text-ink">
             {t('methodLabel')}
           </label>
-          <select id="bo-method" name="method" defaultValue="cash" className={field}>
+          <Select id="bo-method" name="method" defaultValue="cash" className={field}>
             {METHODS.map((m) => (
               <option key={m} value={m}>
                 {t(`method.${m}`)}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="bo-reference" className="text-caption text-zinc-600">
+          <label htmlFor="bo-reference" className="text-[13px] font-bold text-ink">
             {t('reference')}
           </label>
           <input id="bo-reference" name="reference" maxLength={120} autoComplete="off" className={field} />
         </div>
       </div>
-      <p className="text-caption text-zinc-500">{t('feeNote')}</p>
+      <p className="text-caption text-ink-2">{t('feeNote')}</p>
       <div aria-live="polite">
         {state.ok && state.orderId ? (
           <Alert tone="info" title={state.seats ? t('doneSeats', { count: state.seats }) : t('done')}>

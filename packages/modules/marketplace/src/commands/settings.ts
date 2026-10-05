@@ -1,6 +1,7 @@
 import { MAX_NAV_PAGES, pageIdsTx } from '@yayatoh/cms';
 import { DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
+import { isSandboxOrgTx } from '@yayatoh/tenancy';
 import { z } from 'zod';
 import { MAX_EMBED_ORIGINS, normalizeOrigin } from '../domain/embed.ts';
 import { SiteSettingsDto } from '../dto.ts';
@@ -59,6 +60,12 @@ export const updateSiteSettingsCommand = tenantCommand({
         });
     }
     const current = await settingsTx(tx);
+    // M6.3a: a sandbox org can never be enrolled on the marketplace.
+    if (input.listOnMarketplace === true && !current.listOnMarketplace && (await isSandboxOrgTx(tx, orgId)))
+      throw new DomainError('invalid_state', 'A sandbox org cannot be listed on the marketplace', {
+        field: 'listOnMarketplace',
+        reason: 'sandbox_org',
+      });
     // Letting a new website embed checkout grants it access (roadmap §10): a step-up, M1.2c.
     // Removing websites never needs one.
     if (embedOrigins?.some((o) => !current.embedOrigins.includes(o))) await requireStepUp();

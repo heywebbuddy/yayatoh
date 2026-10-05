@@ -106,7 +106,7 @@ export default async function HelpArticleConsole({
       ) : (
         <Card>
           <article aria-label={tc('previewLabel')} className="flex flex-col gap-3">
-            {article.summary ? <p className="text-body text-zinc-600">{article.summary}</p> : null}
+            {article.summary ? <p className="text-body text-ink-2">{article.summary}</p> : null}
             <Markdown source={article.body} />
           </article>
         </Card>

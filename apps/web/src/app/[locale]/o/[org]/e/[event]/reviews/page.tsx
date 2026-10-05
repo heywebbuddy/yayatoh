@@ -24,7 +24,7 @@ export default async function ReviewsPage({
   setRequestLocale(locale);
   const raw = (await searchParams).filter;
   const filter: Filter = (REVIEW_FILTERS as readonly string[]).includes(raw ?? '') ? (raw as Filter) : 'all';
-  const { data, event: ev, can } = await loadEvent(org, event, 'reviews');
+  const { data, event: ev, can, opens } = await loadEvent(org, event, 'reviews');
   const t = await getTranslations('reviews');
   // Moderation is an events:write power (event managers included, through the event's roles).
   const canModerate = can('events:write');
@@ -35,28 +35,25 @@ export default async function ReviewsPage({
     <>
       <PageHeader title={t('console.title')} description={t('console.description')} />
       {canModerate ? null : (
-        <p
-          role="note"
-          className="rounded-card border border-zinc-200 bg-white px-4 py-3 text-body text-zinc-600"
-        >
+        <p role="note" className="rounded-card border border-line bg-surface px-4 py-3 text-body text-ink-2">
           {t('console.readOnly')}
         </p>
       )}
       <Card className="flex flex-wrap items-center gap-6">
         <div className="flex flex-col gap-1">
-          <span className="font-mono text-label uppercase text-zinc-500">{t('console.average')}</span>
+          <span className="text-label uppercase text-ink-2">{t('console.average')}</span>
           {list.average === null ? (
-            <span className="text-body text-zinc-600">{t('console.noRating')}</span>
+            <span className="text-body text-ink-2">{t('console.noRating')}</span>
           ) : (
-            <span className="flex items-center gap-2 text-[28px] font-light">
+            <span className="flex items-center gap-2 text-[28px] font-extrabold">
               {formatNumber(list.average, locale)}
               <Stars rating={Math.round(list.average)} label={t('ratingLabel', { rating: list.average })} />
             </span>
           )}
         </div>
         <div className="flex flex-col gap-1">
-          <span className="font-mono text-label uppercase text-zinc-500">{t('console.visible')}</span>
-          <span className="text-[28px] font-light">{formatNumber(list.count, locale)}</span>
+          <span className="text-label uppercase text-ink-2">{t('console.visible')}</span>
+          <span className="text-[28px] font-extrabold">{formatNumber(list.count, locale)}</span>
         </div>
       </Card>
       <nav aria-label={t('console.filterLabel')} className="flex flex-wrap gap-2">
@@ -75,6 +72,21 @@ export default async function ReviewsPage({
         <EmptyState
           title={t(filter === 'all' ? 'console.emptyTitle' : 'console.emptyFilteredTitle')}
           description={t('console.emptyDescription')}
+          action={
+            filter !== 'all' ? (
+              <Link href={base} className={buttonClass('primary', 'md')}>
+                {t('console.showAll')}
+              </Link>
+            ) : opens('ticketsOrders') ? (
+              <Link href={`/o/${org}/e/${event}/tickets-orders`} className={buttonClass('primary', 'md')}>
+                {t('console.seeOrders')}
+              </Link>
+            ) : (
+              <Link href={`/o/${org}/e/${event}`} className={buttonClass('primary', 'md')}>
+                {t('console.backToEvent')}
+              </Link>
+            )
+          }
         />
       ) : (
         <ul aria-label={t('console.listLabel')} className="flex list-none flex-col gap-3 p-0">
@@ -93,7 +105,7 @@ export default async function ReviewsPage({
                     />
                   </div>
                   {r.body ? <p className="whitespace-pre-line text-body">{r.body}</p> : null}
-                  <p className="text-caption text-zinc-500">
+                  <p className="text-caption text-ink-2">
                     {r.author ?? t('anonymous')} ·{' '}
                     {formatDate(r.createdAt.toISOString(), f, {
                       year: 'numeric',
@@ -102,7 +114,7 @@ export default async function ReviewsPage({
                     })}
                   </p>
                   {r.hiddenReason ? (
-                    <p className="text-caption text-zinc-600">
+                    <p className="text-caption text-ink-2">
                       {t('console.hiddenBecause', { reason: r.hiddenReason })}
                     </p>
                   ) : null}
@@ -111,7 +123,7 @@ export default async function ReviewsPage({
                       <p className="text-caption font-medium">
                         {t('console.reports', { count: r.openReports })}
                       </p>
-                      <ul className="flex list-none flex-col gap-1 p-0 text-caption text-zinc-600">
+                      <ul className="flex list-none flex-col gap-1 p-0 text-caption text-ink-2">
                         {r.reports.map((rep, i) => (
                           <li key={`${rep.createdAt.toISOString()}-${i}`}>
                             {t(`reportReasons.${rep.reason}`)}

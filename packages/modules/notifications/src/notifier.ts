@@ -92,6 +92,7 @@ export function createNotifier(): Notifier {
           kind: intent.kind,
           params: intent.params,
           dedupeKey: intent.dedupeKey,
+          href: intent.href,
           orderId: intent.orderId,
           eventId: intent.eventId,
         });

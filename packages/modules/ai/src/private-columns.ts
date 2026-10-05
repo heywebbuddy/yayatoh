@@ -15,4 +15,14 @@ export const privateColumns = columnPrivacy('ai', {
     draft_kind: 'vocab',
     actor: internal(),
   },
+  // M6.12b: a brand kit is the org's own working material (console and AI prompts only, never a
+  // public page); the tone is a vocabulary word.
+  brand_kits: {
+    name: internal(),
+    voice: internal(),
+    tone: 'vocab',
+    keywords: internal(),
+    avoid: internal(),
+    created_by: internal(),
+  },
 });

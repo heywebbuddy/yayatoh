@@ -1,4 +1,21 @@
+export { mediaDataSubjects } from './data-subject.ts';
 export * from './dto.ts';
+export {
+  deleteLibraryImage,
+  deleteLibraryImageCommand,
+  familyOfTarget,
+  LibraryDto,
+  LibraryItemDto,
+  libraryQuery,
+  PlacementDto,
+  ReuseMediaInput,
+  reuseMedia,
+  reuseMediaCommand,
+  STORAGE_KINDS,
+  type StorageKind,
+  StorageUsageDto,
+  storageUsageQuery,
+} from './library.ts';
 export {
   catchUpProgramMedia,
   DEFAULT_QUOTA_BYTES,
@@ -6,6 +23,7 @@ export {
   isProgramOwner,
   listMediaQuery,
   listOwnersMediaQuery,
+  MAX_LIBRARY_IMAGES,
   MAX_PER_SLOT,
   type MediaFamily,
   mediaUrl,
@@ -33,22 +51,59 @@ export {
   uploadProgramImage,
 } from './media.ts';
 export {
+  cleanFileName,
+  PORTAL_FILE_CONTENT_TYPES,
+  PORTAL_FILE_MAX_BYTES,
+  PORTAL_PHOTO_MAX_BYTES,
+  sniffPortalFile,
+} from './pipeline/documents.ts';
+export {
   CONTENT_TYPES,
   FILE_NAME,
+  MAX_INPUT_PIXELS,
   MAX_UPLOAD_BYTES,
   STANDARD_WIDTHS,
   VARIANT_FORMATS,
   type VariantFormat,
+  variantFileName,
 } from './pipeline/plan.ts';
-export { MediaRejected, type RejectReason } from './pipeline/process.ts';
-export { ACCEPT_MIME, sniff } from './pipeline/sniff.ts';
+export {
+  MediaRejected,
+  type ProcessedImage,
+  type ProcessedVariant,
+  processImage,
+  type RejectReason,
+} from './pipeline/process.ts';
+export { ACCEPT_MIME, type SourceType, sniff } from './pipeline/sniff.ts';
 export { sanitizeSvg } from './pipeline/svg.ts';
+export {
+  portalExhibitorLogoCommand,
+  portalExhibitorLogoQuery,
+  uploadExhibitorLogoFromPortal,
+} from './portal.ts';
+export {
+  catchUpSpeakerPhotos,
+  PortalFileDto,
+  PortalFileResultDto,
+  portalFileQuery,
+  speakerPhotoApprover,
+  UploadPortalFileInput,
+  uploadSpeakerPortalFile,
+  uploadSpeakerPortalFileCommand,
+} from './portal-files.ts';
 export { privateColumns } from './private-columns.ts';
 export { OWNER_TYPES, type OwnerType, SLOTS, type Slot } from './schema.ts';
+export {
+  PORTAL_FILE_PURPOSES,
+  PORTAL_FILE_TYPES,
+  type PortalFilePurpose,
+  type PortalFileType,
+} from './schema-files.ts';
 export { mediaStore, mediaStoreFromEnv, setMediaStore } from './storage/config.ts';
 export type { MediaStore } from './storage/port.ts';
 export { postgresMediaStore } from './storage/postgres.ts';
-export { r2MediaStore } from './storage/r2.ts';
+export { presignV4, r2MediaStore } from './storage/r2.ts';
+export { catchUpErasedMedia, subjectErasedMediaCleaner } from './subject-erased.ts';
 export {
   signUploadTicket,
   type UploadTicket,

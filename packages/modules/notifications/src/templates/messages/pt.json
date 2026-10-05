@@ -116,6 +116,10 @@
       "intro": "Você ainda não respondeu: a {org} ainda gostaria de saber como foi {eventName} para você.",
       "cta": "Responder à pesquisa"
     },
+    "automations.message": {
+      "subject": "{subject}",
+      "intro": "Sobre {eventName}:"
+    },
     "guest.checkout-code": {
       "subject": "{code} é o seu código para confirmar o seu e-mail",
       "intro": "Digite {code} para confirmar o seu e-mail e concluir o seu pedido com {org}. O código funciona uma vez e expira em {minutes, plural, one {# minuto} other {# minutos}}. Se não o pediu, pode ignorar este e-mail."
@@ -175,6 +179,190 @@
       "subject": "{eventName} foi adiado",
       "intro": "{eventName} foi adiado. Seus ingressos continuam válidos para a nova data. Se não puder ir, você pode pedir um reembolso na página do seu pedido, conforme a política de reembolso do organizador.",
       "cta": "Ver meu pedido"
+    },
+    "alerts.alert": {
+      "subject": "{rule, select, unseated {{count, plural, one {{countWords} participante não tem lugar} other {{countWords} participantes não têm lugar}}} undistributed {{count, plural, one {{countWords} ingresso comprado não foi distribuído} other {{countWords} ingressos comprados não foram distribuídos}}} paymentsFailed {{count, plural, one {{countWords} pagamento falhou} other {{countWords} pagamentos falharam}}} paymentsStuck {{count, plural, one {{countWords} pagamento está travado} other {{countWords} pagamentos estão travados}}} refundSurge {{count, plural, one {{countWords} reembolso na última hora} other {{countWords} reembolsos na última hora}}} devicesOffline {{count, plural, one {{countWords} dispositivo de check-in está offline} other {{countWords} dispositivos de check-in estão offline}}} devicesLowBattery {{count, plural, one {{countWords} dispositivo de check-in está com bateria fraca} other {{countWords} dispositivos de check-in estão com bateria fraca}}} devicesBacklog {{count, plural, one {{countWords} dispositivo de check-in tem leituras aguardando sincronização} other {{countWords} dispositivos de check-in têm leituras aguardando sincronização}}} capacityNear {O local está {count}% cheio} capacityFull {O local está lotado ({count}%)} sellOut {{count}% dos ingressos foram vendidos} salesPace {As vendas de ingressos estão em {count}% do ritmo da meta} readiness {{count, plural, one {{countWords} etapa de configuração está bloqueando este evento} other {{countWords} etapas de configuração estão bloqueando este evento}}} domain {{count, plural, one {{countWords} domínio personalizado tem um problema} other {{countWords} domínios personalizados têm um problema}}} payoutsPastDue {{count, plural, one {{countWords} requisito da conta de repasses está atrasado} other {{countWords} requisitos da conta de repasses estão atrasados}}} deliverability {A entregabilidade de e-mails precisa de atenção} automationFailed {{count, plural, one {{countWords} mensagem ou ação em massa falhou hoje} other {{countWords} mensagens ou ações em massa falharam hoje}}} assistanceOverdue {{count, plural, one {{countWords} pedido de ajuda está esperando demais} other {{countWords} pedidos de ajuda estão esperando demais}}} campaignFailed {{count, plural, one {{countWords} envio de campanha falhou hoje} other {{countWords} envios de campanha falharam hoje}}} disputeDeadline {{count, plural, one {{countWords} contestação precisa de provas em breve} other {{countWords} contestações precisam de provas em breve}}} pledgesUnpaid {{count, plural, one {{countWords} compromisso continua sem pagamento 14 dias após o evento} other {{countWords} compromissos continuam sem pagamento 14 dias após o evento}}} sessionsNearCapacity {{count, plural, one {{countWords} sessão está acima de 95 % da capacidade} other {{countWords} sessões estão acima de 95 % da capacidade}}} sessionWaitlists {{count, plural, one {{countWords} sessão tem uma lista de espera longa} other {{countWords} sessões têm listas de espera longas}}} roomsTooSmall {{count, plural, one {{countWords} sessão tem mais lugares ocupados do que a sala comporta} other {{countWords} sessões têm mais lugares ocupados do que as salas comportam}}} exhibitorsNoLeads {{count, plural, one {{countWords} expositor não tem leads} other {{countWords} expositores não têm leads}}} exhibitorsNoStaff {{count, plural, one {{countWords} expositor não convidou equipe de estande} other {{countWords} expositores não convidaram equipe de estande}}} speakerTasksOverdue {{count, plural, one {{countWords} tarefa de palestrante está atrasada} other {{countWords} tarefas de palestrantes estão atrasadas}}} deliverablesOverdue {{count, plural, one {{countWords} entrega de patrocinador está atrasada} other {{countWords} entregas de patrocinadores estão atrasadas}}} printersKiosksOffline {{count, plural, one {{countWords} impressora de crachás ou quiosque está offline} other {{countWords} impressoras de crachás ou quiosques estão offline}}} approvalBacklog {{count, plural, one {{countWords} inscrição aguarda uma decisão} other {{countWords} inscrições aguardam uma decisão}}} invoicesOverdue {{count, plural, one {{countWords} fatura está vencida} other {{countWords} faturas estão vencidas}}} rsvpPending {{count, plural, one {{countWords} convidado não respondeu ao convite} other {{countWords} convidados não responderam ao convite}}} guestsUnseated {{count, plural, one {{countWords} convidado não tem mesa} other {{countWords} convidados não têm mesa}}} mealsMissing {{count, plural, one {{countWords} convidado confirmado não escolheu a refeição} other {{countWords} convidados confirmados não escolheram a refeição}}} integrationFailed {{count, plural, one {{countWords} problema de integração hoje (uma sincronização falhada ou uma conexão perdida)} other {{countWords} problemas de integração hoje (sincronizações falhadas ou conexões perdidas)}}} billingPastDue {{count, plural, one {O pagamento do plano está em atraso} other {{countWords} pagamentos do plano estão em atraso}}} other {Alerta}}",
+      "intro": "{eventName, select, none {Algo precisa de atenção em {org}.} other {Algo precisa de atenção em {eventName}.}} O botão abre a página que resolve isso.",
+      "cta": "Resolver"
+    },
+    "alerts.alert-text": {
+      "subject": "{rule, select, unseated {{count, plural, one {{countWords} participante não tem lugar} other {{countWords} participantes não têm lugar}}} undistributed {{count, plural, one {{countWords} ingresso comprado não foi distribuído} other {{countWords} ingressos comprados não foram distribuídos}}} paymentsFailed {{count, plural, one {{countWords} pagamento falhou} other {{countWords} pagamentos falharam}}} paymentsStuck {{count, plural, one {{countWords} pagamento está travado} other {{countWords} pagamentos estão travados}}} refundSurge {{count, plural, one {{countWords} reembolso na última hora} other {{countWords} reembolsos na última hora}}} devicesOffline {{count, plural, one {{countWords} dispositivo de check-in está offline} other {{countWords} dispositivos de check-in estão offline}}} devicesLowBattery {{count, plural, one {{countWords} dispositivo de check-in está com bateria fraca} other {{countWords} dispositivos de check-in estão com bateria fraca}}} devicesBacklog {{count, plural, one {{countWords} dispositivo de check-in tem leituras aguardando sincronização} other {{countWords} dispositivos de check-in têm leituras aguardando sincronização}}} capacityNear {O local está {count}% cheio} capacityFull {O local está lotado ({count}%)} sellOut {{count}% dos ingressos foram vendidos} salesPace {As vendas de ingressos estão em {count}% do ritmo da meta} readiness {{count, plural, one {{countWords} etapa de configuração está bloqueando este evento} other {{countWords} etapas de configuração estão bloqueando este evento}}} domain {{count, plural, one {{countWords} domínio personalizado tem um problema} other {{countWords} domínios personalizados têm um problema}}} payoutsPastDue {{count, plural, one {{countWords} requisito da conta de repasses está atrasado} other {{countWords} requisitos da conta de repasses estão atrasados}}} deliverability {A entregabilidade de e-mails precisa de atenção} automationFailed {{count, plural, one {{countWords} mensagem ou ação em massa falhou hoje} other {{countWords} mensagens ou ações em massa falharam hoje}}} assistanceOverdue {{count, plural, one {{countWords} pedido de ajuda está esperando demais} other {{countWords} pedidos de ajuda estão esperando demais}}} campaignFailed {{count, plural, one {{countWords} envio de campanha falhou hoje} other {{countWords} envios de campanha falharam hoje}}} disputeDeadline {{count, plural, one {{countWords} contestação precisa de provas em breve} other {{countWords} contestações precisam de provas em breve}}} pledgesUnpaid {{count, plural, one {{countWords} compromisso continua sem pagamento 14 dias após o evento} other {{countWords} compromissos continuam sem pagamento 14 dias após o evento}}} sessionsNearCapacity {{count, plural, one {{countWords} sessão está acima de 95 % da capacidade} other {{countWords} sessões estão acima de 95 % da capacidade}}} sessionWaitlists {{count, plural, one {{countWords} sessão tem uma lista de espera longa} other {{countWords} sessões têm listas de espera longas}}} roomsTooSmall {{count, plural, one {{countWords} sessão tem mais lugares ocupados do que a sala comporta} other {{countWords} sessões têm mais lugares ocupados do que as salas comportam}}} exhibitorsNoLeads {{count, plural, one {{countWords} expositor não tem leads} other {{countWords} expositores não têm leads}}} exhibitorsNoStaff {{count, plural, one {{countWords} expositor não convidou equipe de estande} other {{countWords} expositores não convidaram equipe de estande}}} speakerTasksOverdue {{count, plural, one {{countWords} tarefa de palestrante está atrasada} other {{countWords} tarefas de palestrantes estão atrasadas}}} deliverablesOverdue {{count, plural, one {{countWords} entrega de patrocinador está atrasada} other {{countWords} entregas de patrocinadores estão atrasadas}}} printersKiosksOffline {{count, plural, one {{countWords} impressora de crachás ou quiosque está offline} other {{countWords} impressoras de crachás ou quiosques estão offline}}} approvalBacklog {{count, plural, one {{countWords} inscrição aguarda uma decisão} other {{countWords} inscrições aguardam uma decisão}}} invoicesOverdue {{count, plural, one {{countWords} fatura está vencida} other {{countWords} faturas estão vencidas}}} rsvpPending {{count, plural, one {{countWords} convidado não respondeu ao convite} other {{countWords} convidados não responderam ao convite}}} guestsUnseated {{count, plural, one {{countWords} convidado não tem mesa} other {{countWords} convidados não têm mesa}}} mealsMissing {{count, plural, one {{countWords} convidado confirmado não escolheu a refeição} other {{countWords} convidados confirmados não escolheram a refeição}}} integrationFailed {{count, plural, one {{countWords} problema de integração hoje (uma sincronização falhada ou uma conexão perdida)} other {{countWords} problemas de integração hoje (sincronizações falhadas ou conexões perdidas)}}} billingPastDue {{count, plural, one {O pagamento do plano está em atraso} other {{countWords} pagamentos do plano estão em atraso}}} other {Alerta}}",
+      "intro": "{eventName, select, none {Algo precisa de atenção em {org}.} other {Algo precisa de atenção em {eventName}.}} O botão abre a página que resolve isso."
+    },
+    "campaigns.test": {
+      "subject": "[Teste] {subject}",
+      "intro": "Um envio de teste da sua campanha."
+    },
+    "orders.credit-note": {
+      "subject": "Nota de crédito {number} para {eventName}",
+      "intro": "{org} emitiu a nota de crédito {number} de {amount} no seu pedido para {eventName}. {storeCredit, select, yes {Use o código {code} no pagamento para usá-la num próximo pedido com {org}.} other {Este valor foi reembolsado a você.}}",
+      "cta": "Ver meu pedido"
+    },
+    "orders.invoice": {
+      "subject": "Fatura {number} para {eventName}",
+      "intro": "A sua inscrição em {eventName} está registada. {org} emitiu a fatura {number} no valor de {amount}, com vencimento em {due}. Use o botão abaixo para a ver, descarregar o PDF ou pagá-la total ou parcialmente.",
+      "cta": "Ver e pagar a fatura"
+    },
+    "orders.support-reply": {
+      "subject": "{subject}",
+      "intro": "Uma mensagem de {org} sobre o seu pedido para {eventName}:",
+      "cta": "Ver meu pedido"
+    },
+    "payments.dispute-deadline": {
+      "subject": "Provas da contestação a vencer: {eventName}",
+      "intro": "As provas de uma contestação de {amount} num pedido para {eventName} vencem em {hours, plural, =0 {menos de uma hora} one {# hora} other {# horas}}. Revise-as e envie-as antes do prazo."
+    },
+    "ticketing.transfer-offered": {
+      "subject": "{fromName} enviou um ingresso para {eventName}",
+      "intro": "{fromName} está transferindo um ingresso para {eventName} para você. Resgate-o com este e-mail para receber o seu próprio código QR.",
+      "cta": "Resgatar meu ingresso"
+    },
+    "ticketing.transfer-completed": {
+      "subject": "Seu ingresso para {eventName} foi transferido",
+      "intro": "{toName} resgatou o ingresso que você transferiu para {eventName}. Seu código QR antigo não funciona mais."
+    },
+    "ticketing.transfer-received": {
+      "subject": "Seu ingresso para {eventName}",
+      "intro": "Você resgatou o ingresso que {fromName} enviou para {eventName}. Seu próprio código QR está pronto.",
+      "cta": "Ver meu ingresso"
+    },
+    "forms.resume": {
+      "subject": "Continue sua inscrição em {eventName}",
+      "intro": "Aqui está o seu link para retomar sua inscrição em {eventName} de onde parou. Ele funciona por {days, plural, one {# dia} other {# dias}} após o último salvamento e só para você, então não o encaminhe. Se você não pediu este e-mail, pode ignorá-lo.",
+      "cta": "Continuar minha inscrição"
+    },
+    "orders.table-naming": {
+      "subject": "{reminder, plural, =1 {Lembrete: indique os seus convidados para {eventName}} other {Indique os seus convidados para {eventName}}}",
+      "intro": "A sua {tableName} tem {size, plural, one {# lugar} other {# lugares}}. {missing, plural, =0 {Todos os lugares têm nome; pode verificá-los a qualquer momento.} one {Ainda falta o nome de # lugar.} other {Ainda faltam os nomes de # lugares.}} Use o botão abaixo para nos dizer quem se senta à sua mesa.",
+      "cta": "Indicar os meus convidados"
+    },
+    "registration.approved": {
+      "subject": "Sua solicitação para {eventName} foi aprovada",
+      "intro": "Boas notícias, {name}: sua solicitação para participar de {eventName} como {typeName} foi aprovada. Use o botão abaixo para ver sua inscrição e, se o seu passe tiver preço, pagar e confirmar sua vaga.",
+      "cta": "Ver minha inscrição"
+    },
+    "registration.denied": {
+      "subject": "Sua solicitação para {eventName}",
+      "intro": "Obrigado por solicitar participar de {eventName} como {typeName}, {name}. O organizador não pôde aprovar sua solicitação desta vez. Nada foi cobrado.",
+      "cta": "Ver minha solicitação"
+    },
+    "portal.invite": {
+      "subject": "Convite para o portal de {eventName}",
+      "intro": "{org} convidou você para o portal de {eventName} como {role}. Lá você vê suas sessões, atualiza seu perfil e conclui suas tarefas. O botão pede um código de acesso enviado para este endereço.",
+      "cta": "Abrir o portal"
+    },
+    "portal.sign-in": {
+      "subject": "{code} é seu código de acesso para {eventName}",
+      "intro": "Digite {code} para entrar no portal de {eventName} ou use o botão abaixo no mesmo navegador. Código válido: {minutes} min. Botão válido: {linkMinutes} min. Cada um funciona uma vez. Se você não pediu, ignore este e-mail.",
+      "cta": "Entrar no portal"
+    },
+    "program.task-reminder": {
+      "subject": "Lembrete: {title} para {eventName}",
+      "intro": "{org} ainda aguarda “{title}” para {eventName}. Prazo: {until}.",
+      "cta": "Abrir minhas tarefas"
+    },
+    "donations.receipt": {
+      "subject": "{deductible, select, yes {Seu recibo de doação de {org}} other {Seu recibo de pagamento de {org}}}",
+      "intro": "Obrigado pelo seu pagamento de {amount} para {eventName}. O seu recibo está abaixo. Guarde-o, ou a cópia em PDF, com os seus registros.",
+      "cta": "Baixar o recibo em PDF"
+    },
+    "donations.year-end-statement": {
+      "subject": "Seu extrato de doações de {year} de {org}",
+      "intro": "Obrigado por apoiar {org} em {year}. O extrato dos seus pagamentos dedutíveis de impostos está abaixo e em PDF.",
+      "cta": "Baixar o extrato em PDF"
+    },
+    "guests.invitation": {
+      "subject": "{subject}",
+      "intro": "{message}",
+      "cta": "Responder ao convite"
+    },
+    "guests.rsvp-reminder": {
+      "subject": "Lembrete: responda sobre {eventName}",
+      "intro": "{name}, ainda não recebemos a sua resposta. Digam-nos quem virá a {eventName} até {deadline}.",
+      "cta": "Responder agora"
+    },
+    "registration.session-enrolled": {
+      "subject": "Abriu uma vaga: você está em {sessionTitle}",
+      "intro": "Abriu uma vaga em {sessionTitle} no {eventName} ({when}) e você era a próxima pessoa na lista de espera, então agora está inscrito. Se não puder ir, remova a sessão da sua agenda para que a vaga vá para a próxima pessoa.",
+      "cta": "Abrir minha agenda"
+    },
+    "registration.session-offer": {
+      "subject": "Uma vaga em {sessionTitle} é sua até {until}",
+      "intro": "Abriu uma vaga em {sessionTitle} no {eventName} ({when}) e você é a próxima pessoa na lista. Aceite-a na sua agenda antes de {until}; depois disso, ela vai para a próxima pessoa.",
+      "cta": "Aceitar minha vaga"
+    },
+    "alerts.alert-urgent-text": {
+      "subject": "{rule, select, unseated {{count, plural, one {{countWords} participante não tem lugar} other {{countWords} participantes não têm lugar}}} undistributed {{count, plural, one {{countWords} ingresso comprado não foi distribuído} other {{countWords} ingressos comprados não foram distribuídos}}} paymentsFailed {{count, plural, one {{countWords} pagamento falhou} other {{countWords} pagamentos falharam}}} paymentsStuck {{count, plural, one {{countWords} pagamento está travado} other {{countWords} pagamentos estão travados}}} refundSurge {{count, plural, one {{countWords} reembolso na última hora} other {{countWords} reembolsos na última hora}}} devicesOffline {{count, plural, one {{countWords} dispositivo de check-in está offline} other {{countWords} dispositivos de check-in estão offline}}} devicesLowBattery {{count, plural, one {{countWords} dispositivo de check-in está com bateria fraca} other {{countWords} dispositivos de check-in estão com bateria fraca}}} devicesBacklog {{count, plural, one {{countWords} dispositivo de check-in tem leituras aguardando sincronização} other {{countWords} dispositivos de check-in têm leituras aguardando sincronização}}} capacityNear {O local está {count}% cheio} capacityFull {O local está lotado ({count}%)} sellOut {{count}% dos ingressos foram vendidos} salesPace {As vendas de ingressos estão em {count}% do ritmo da meta} readiness {{count, plural, one {{countWords} etapa de configuração está bloqueando este evento} other {{countWords} etapas de configuração estão bloqueando este evento}}} domain {{count, plural, one {{countWords} domínio personalizado tem um problema} other {{countWords} domínios personalizados têm um problema}}} payoutsPastDue {{count, plural, one {{countWords} requisito da conta de repasses está atrasado} other {{countWords} requisitos da conta de repasses estão atrasados}}} deliverability {A entregabilidade de e-mails precisa de atenção} automationFailed {{count, plural, one {{countWords} mensagem ou ação em massa falhou hoje} other {{countWords} mensagens ou ações em massa falharam hoje}}} assistanceOverdue {{count, plural, one {{countWords} pedido de ajuda está esperando demais} other {{countWords} pedidos de ajuda estão esperando demais}}} campaignFailed {{count, plural, one {{countWords} envio de campanha falhou hoje} other {{countWords} envios de campanha falharam hoje}}} disputeDeadline {{count, plural, one {{countWords} contestação precisa de provas em breve} other {{countWords} contestações precisam de provas em breve}}} pledgesUnpaid {{count, plural, one {{countWords} compromisso continua sem pagamento 14 dias após o evento} other {{countWords} compromissos continuam sem pagamento 14 dias após o evento}}} sessionsNearCapacity {{count, plural, one {{countWords} sessão está acima de 95 % da capacidade} other {{countWords} sessões estão acima de 95 % da capacidade}}} sessionWaitlists {{count, plural, one {{countWords} sessão tem uma lista de espera longa} other {{countWords} sessões têm listas de espera longas}}} roomsTooSmall {{count, plural, one {{countWords} sessão tem mais lugares ocupados do que a sala comporta} other {{countWords} sessões têm mais lugares ocupados do que as salas comportam}}} exhibitorsNoLeads {{count, plural, one {{countWords} expositor não tem leads} other {{countWords} expositores não têm leads}}} exhibitorsNoStaff {{count, plural, one {{countWords} expositor não convidou equipe de estande} other {{countWords} expositores não convidaram equipe de estande}}} speakerTasksOverdue {{count, plural, one {{countWords} tarefa de palestrante está atrasada} other {{countWords} tarefas de palestrantes estão atrasadas}}} deliverablesOverdue {{count, plural, one {{countWords} entrega de patrocinador está atrasada} other {{countWords} entregas de patrocinadores estão atrasadas}}} printersKiosksOffline {{count, plural, one {{countWords} impressora de crachás ou quiosque está offline} other {{countWords} impressoras de crachás ou quiosques estão offline}}} approvalBacklog {{count, plural, one {{countWords} inscrição aguarda uma decisão} other {{countWords} inscrições aguardam uma decisão}}} invoicesOverdue {{count, plural, one {{countWords} fatura está vencida} other {{countWords} faturas estão vencidas}}} rsvpPending {{count, plural, one {{countWords} convidado não respondeu ao convite} other {{countWords} convidados não responderam ao convite}}} guestsUnseated {{count, plural, one {{countWords} convidado não tem mesa} other {{countWords} convidados não têm mesa}}} mealsMissing {{count, plural, one {{countWords} convidado confirmado não escolheu a refeição} other {{countWords} convidados confirmados não escolheram a refeição}}} integrationFailed {{count, plural, one {{countWords} problema de integração hoje (uma sincronização falhada ou uma conexão perdida)} other {{countWords} problemas de integração hoje (sincronizações falhadas ou conexões perdidas)}}} billingPastDue {{count, plural, one {O pagamento do plano está em atraso} other {{countWords} pagamentos do plano estão em atraso}}} other {Alerta}}",
+      "intro": "{eventName, select, none {Algo precisa de atenção em {org}.} other {Algo precisa de atenção em {eventName}.}} O botão abre a página que resolve isso."
+    },
+    "donations.pledge-summary": {
+      "subject": "{mode, select, card {Seu compromisso com {org}: seu cartão será cobrado amanhã} other {Seu compromisso com {org}: como pagar}}",
+      "intro": "{mode, select, card {Obrigado pelo compromisso de {amount} em {eventName}. Vamos cobrar seu cartão ({card}) em {chargeAt}. Para usar outro cartão ou pagar de outra forma, use o botão abaixo antes disso.} other {Obrigado pelo compromisso de {amount} em {eventName}. Pague on-line pelos links abaixo até {dueOn}.}}",
+      "cta": "{mode, select, card {Trocar o cartão ou pagar de outra forma} other {Pagar meu compromisso}}"
+    },
+    "donations.pledge-invoice": {
+      "subject": "Seu compromisso com {org}: pague on-line",
+      "intro": "{reason, select, declined {Não conseguimos cobrar seu cartão pelo compromisso de {amount} em {eventName}.} other {Seu cartão salvo não pode mais ser usado para o compromisso de {amount} em {eventName}.}} Pague on-line até {dueOn}.",
+      "cta": "Pagar meu compromisso"
+    },
+    "donations.pledge-reminder": {
+      "subject": "Lembrete: seu compromisso de {amount} com {org}",
+      "intro": "Obrigado de novo pelo compromisso de {amount} em {eventName}. O vencimento é {dueOn}. Se você já pagou, ignore este e-mail.",
+      "cta": "Pagar meu compromisso"
+    },
+    "program.cfp-received": {
+      "subject": "Recebemos sua proposta “{title}”",
+      "intro": "Obrigado por propor “{title}” para {eventName}. {org} vai analisá-la e enviará a decisão por e-mail."
+    },
+    "program.cfp-accepted": {
+      "subject": "Sua proposta “{title}” foi aceita",
+      "intro": "Boa notícia: {org} aceitou “{title}” para {eventName}. Os organizadores vão compartilhar o horário da sua sessão em breve.{hasNote, select, yes { Nota dos organizadores: {note}} other {}}"
+    },
+    "program.cfp-rejected": {
+      "subject": "Sobre sua proposta “{title}”",
+      "intro": "Obrigado por propor “{title}” para {eventName}. Desta vez, {org} não pôde incluí-la na programação.{hasNote, select, yes { Nota dos organizadores: {note}} other {}}"
+    },
+    "privacy.request-code": {
+      "subject": "{code} é o seu código para confirmar o pedido de privacidade",
+      "intro": "Digite {code} para confirmar o seu pedido a {org}: {kind, select, erasure {apagar os seus dados pessoais} other {uma cópia dos seus dados pessoais}}. O código funciona uma vez e expira em {minutes, plural, one {# minuto} other {# minutos}}. Se não pediu, ignore este e-mail: nada acontece sem o código."
+    },
+    "privacy.archive-ready": {
+      "subject": "Os seus dados pessoais de {org} estão prontos",
+      "intro": "{org} respondeu ao seu pedido: uma cópia dos dados pessoais que guarda sobre si está pronta num ficheiro ZIP. O link funciona durante {days, plural, one {# dia} other {# dias}}. O arquivo está assinado, para que possa verificar que não foi alterado.",
+      "cta": "Descarregar os meus dados"
+    },
+    "privacy.erasure-done": {
+      "subject": "{org} apagou os seus dados pessoais",
+      "intro": "{org} apagou os seus dados pessoais como pediu. Alguns registos têm de ser guardados por lei (por exemplo, pedidos pagos para efeitos fiscais), sem o seu nome nem e-mail; o recibo indica-os com o motivo. Este é o último e-mail sobre o assunto.",
+      "cta": "Ver o recibo"
+    },
+    "badges.kiosk-code": {
+      "subject": "{code} é o seu código para o quiosque de crachás de {eventName}",
+      "intro": "Introduza {code} no quiosque de crachás para confirmar os seus dados e imprimir o seu crachá. O código funciona uma vez e expira em {minutes, plural, one {# minuto} other {# minutos}}. Se não o pediu, pode ignorar este e-mail."
+    },
+    "alerts.metric": {
+      "subject": "A regra de alerta “{title}” foi acionada",
+      "intro": "{reading, select, none {Sua regra de alerta “{title}” continua acionada em {org}.} other {Sua regra de alerta “{title}” foi acionada em {org}: {reading} {windowDays, plural, one {no último dia} other {nos últimos # dias}}.}} Abra para confirmar ou adiar.",
+      "cta": "Abrir o alerta"
+    },
+    "alerts.metric-now": {
+      "subject": "A regra de alerta “{title}” foi acionada",
+      "intro": "{reading, select, none {Sua regra de alerta “{title}” continua acionada em {org}.} other {Sua regra de alerta “{title}” foi acionada em {org}: {reading} {windowDays, plural, one {no último dia} other {nos últimos # dias}}.}} Abra para confirmar ou adiar.",
+      "cta": "Abrir o alerta"
+    },
+    "analytics.report": {
+      "subject": "Seu relatório “{name}”: {period}",
+      "intro": "O relatório “{name}” de {org} para {period} está pronto. Abra para baixar o PDF.",
+      "cta": "Baixar o PDF"
+    },
+    "cms.contact_message": {
+      "subject": "Nova mensagem de {name} pela sua página de contato",
+      "intro": "{name} ({email}) escreveu para você pela página de contato do seu site:"
+    },
+    "ce.certificate": {
+      "subject": "Seu certificado de {org}",
+      "intro": "Você obteve {credits} em {eventName}. Seu certificado (código {code}) está abaixo e em PDF.",
+      "cta": "Baixar o certificado em PDF"
     }
   },
   "roles": {
@@ -188,7 +376,12 @@
     "viewer": "visualizador",
     "co_host": "coanfitrião",
     "planner": "planejador",
-    "collaborator": "colaborador do evento"
+    "collaborator": "colaborador do evento",
+    "speaker": "palestrante",
+    "exhibitor_admin": "administrador do expositor",
+    "exhibitor_staff": "equipe do expositor",
+    "sponsor_contact": "contato do patrocinador",
+    "cfp_reviewer": "avaliador da chamada de trabalhos"
   },
   "account": {
     "deleted": {
@@ -244,5 +437,10 @@
         "intro": "Voltamos a Yayatoh para a versão anterior enquanto corrigimos um problema. Os ingressos que você comprou desde {start} continuam válidos. Se precisamos reembolsar algum pedido seu, você vai receber um e-mail separado com o valor. Entre como antes."
       }
     }
+  },
+  "campaigns": {
+    "testBanner": "E-mail de teste: só a sua equipe recebeu. Os campos de mesclagem mostram o valor alternativo.",
+    "eventCta": "Ver o evento",
+    "testSubject": "[Teste] {subject}"
   }
 }

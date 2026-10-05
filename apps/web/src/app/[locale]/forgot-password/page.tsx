@@ -1,6 +1,7 @@
 import { Card, Label, PageHeader } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { AuthBar } from '@/components/auth-bar.tsx';
 import { ForgotPasswordForm } from '@/components/password-reset-forms.tsx';
 import { humanCheckWidget } from '@/server/human-check.ts';
 
@@ -20,15 +21,21 @@ export default async function ForgotPasswordPage({ params }: { params: Promise<{
   setRequestLocale(locale);
   const t = await getTranslations('passwordReset');
   return (
-    <main id="main" className="mx-auto flex min-h-dvh max-w-md flex-col justify-center gap-6 px-6 py-16">
-      <PageHeader
-        eyebrow={<Label>{t('eyebrow')}</Label>}
-        title={t('forgotTitle')}
-        description={t('forgotDescription')}
-      />
-      <Card size="panel">
-        <ForgotPasswordForm humanCheck={humanCheckWidget()} locale={locale} />
-      </Card>
-    </main>
+    <>
+      <AuthBar />
+      <main
+        id="main"
+        className="mx-auto flex min-h-[calc(100dvh-5rem)] max-w-md flex-col justify-center gap-6 px-6 py-16"
+      >
+        <PageHeader
+          eyebrow={<Label>{t('eyebrow')}</Label>}
+          title={t('forgotTitle')}
+          description={t('forgotDescription')}
+        />
+        <Card size="panel">
+          <ForgotPasswordForm humanCheck={humanCheckWidget()} locale={locale} />
+        </Card>
+      </main>
+    </>
   );
 }

@@ -22,7 +22,7 @@ import {
   releaseDueSettlementsCommand,
 } from '@yayatoh/payments';
 import { AUDIT_EXPORT_COLUMNS, auditExportBulk, consumeEvent, memoryNotifier } from '@yayatoh/platform';
-import { dsarExportBulk, eraseSubjectCommand } from '@yayatoh/privacy';
+import { eraseSubjectCommand, exportSubjectCommand, openRequestCommand } from '@yayatoh/privacy';
 import { attendeeExportBulk, BOOKING_EXPORT_COLUMNS, bookingsExportBulk } from '@yayatoh/reports';
 import {
   addDomainCommand,
@@ -161,14 +161,17 @@ describe('step-up: sensitive commands need a re-authentication in the last 10 mi
     ).toEqual({ accountId: `fakeacct_${a.org.slug}` });
   });
 
-  it('privacy and audit (M1.14): personal data export, erasure and the audit log export', async () => {
-    const email = `imported-${a.org.slug}@example.test`;
-    expect(
-      await expectGate(dsarExportBulk.start, {
-        selection: { filter: { email } },
-        params: { email, orgName: 'Step-up org' },
-      }),
-    ).toMatchObject({ operationId: expect.any(String) });
+  it('privacy and audit (M1.14, M6.1c): personal data export, erasure and the audit log export', async () => {
+    // Opening a request needs no step-up; fulfilling it does.
+    const access = await executeCommand(
+      openRequestCommand,
+      { email: `stepup-${tag}@example.test`, kind: 'access' },
+      staleCtx(a.ctx()),
+      ports,
+    );
+    expect(await expectGate(exportSubjectCommand, { requestId: access.requestId })).toMatchObject({
+      requestId: access.requestId,
+    });
     expect(
       await expectGate(auditExportBulk.start, {
         selection: { filter: {} },
@@ -179,11 +182,19 @@ describe('step-up: sensitive commands need a re-authentication in the last 10 mi
         },
       }),
     ).toMatchObject({ operationId: expect.any(String) });
-    // Erasure can't be undone. A made-up address passes the gate and then finds nothing.
-    await expectGate(eraseSubjectCommand, {
-      email: `nobody-${tag}@example.test`,
-      confirm: `nobody-${tag}@example.test`,
-    });
+    // Erasure can't be undone. A made-up address passes the gate and erases nothing.
+    const erasure = await executeCommand(
+      openRequestCommand,
+      { email: `nobody-${tag}@example.test`, kind: 'erasure' },
+      a.ctx(),
+      ports,
+    );
+    expect(
+      await expectGate(eraseSubjectCommand, {
+        requestId: erasure.requestId,
+        confirm: `nobody-${tag}@example.test`,
+      }),
+    ).toMatchObject({ requestId: erasure.requestId });
   });
 
   it('bulk exports (attendees and bookings), but not other bulk actions', async () => {

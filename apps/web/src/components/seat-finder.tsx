@@ -19,11 +19,14 @@ export interface FinderResult {
     readonly itemKind: 'row' | 'table';
     readonly itemLabel: string;
     readonly seatLabel: string;
+    /** M4.2b: the hosted table's sponsor (published by the host). */
+    readonly sponsor?: string | null;
+    readonly sponsorLogoUrl?: string | null;
   }[];
   readonly unseated: number;
 }
 
-const field = 'min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body';
+const field = 'field';
 
 /** Submit without React's form reset, so a challenge or an error keeps what the guest typed. */
 function useSubmit(formAction: (form: FormData) => void) {
@@ -119,9 +122,9 @@ function FinderBody({
     ) : null;
   const challengeBox = (s: FinderState) =>
     s.challenge && challenge ? (
-      <fieldset className="flex flex-col gap-2 rounded-card border border-zinc-200 bg-white p-4">
-        <legend className="px-1 text-body font-medium">{t('challengeTitle')}</legend>
-        <p className="text-caption text-zinc-600">{t('challengeHint')}</p>
+      <fieldset className="flex flex-col gap-2 rounded-card border border-line bg-surface p-4">
+        <legend className="px-1 text-[13px] font-bold text-ink">{t('challengeTitle')}</legend>
+        <p className="text-caption text-ink-2">{t('challengeHint')}</p>
         <HumanCheckField widget={challenge} />
       </fieldset>
     ) : null;
@@ -162,14 +165,20 @@ function FinderBody({
                 return (
                   <li key={s.seatUuid}>
                     <Card className="flex flex-col gap-0.5">
-                      <span className="text-[22px] font-light tracking-[-0.03em]">
+                      <span className="text-[22px] font-extrabold tracking-[-0.03em]">
                         {t(`seatAt.${s.itemKind}`, { item: s.itemLabel, seat: s.seatLabel })}
                       </span>
-                      {w ? <span className="text-caption text-zinc-600">{w.area}</span> : null}
-                      {w?.entrance ? (
-                        <span className="text-caption text-zinc-600">
-                          {t('nearest', { name: w.entrance })}
+                      {s.sponsor ? (
+                        <span className="flex items-center gap-2 text-body" data-sponsor>
+                          {s.sponsorLogoUrl ? (
+                            <img src={s.sponsorLogoUrl} alt="" className="h-8 w-auto" />
+                          ) : null}
+                          {t('hostedBy', { sponsor: s.sponsor })}
                         </span>
+                      ) : null}
+                      {w ? <span className="text-caption text-ink-2">{w.area}</span> : null}
+                      {w?.entrance ? (
+                        <span className="text-caption text-ink-2">{t('nearest', { name: w.entrance })}</span>
                       ) : null}
                     </Card>
                   </li>
@@ -177,10 +186,10 @@ function FinderBody({
               })}
             </ul>
           ) : (
-            <p className="text-body text-zinc-600">{result.found ? t('noSeat') : t('notFound')}</p>
+            <p className="text-body text-ink-2">{result.found ? t('noSeat') : t('notFound')}</p>
           )}
           {result.seats.length > 0 && result.unseated > 0 ? (
-            <p className="text-body text-zinc-600">{t('someUnseated', { count: result.unseated })}</p>
+            <p className="text-body text-ink-2">{t('someUnseated', { count: result.unseated })}</p>
           ) : null}
           {verified ? startOver(t('again')) : null}
         </section>
@@ -191,10 +200,10 @@ function FinderBody({
           <h2 id="finder-lookup" className="text-section">
             {t('lookupTitle')}
           </h2>
-          <p className="text-body text-zinc-600">{t('nameIntro')}</p>
+          <p className="text-body text-ink-2">{t('nameIntro')}</p>
           <form onSubmit={onName} action={nameAction} noValidate className="flex flex-col gap-3">
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="finder-name" className="text-caption text-zinc-600">
+              <label htmlFor="finder-name" className="text-[13px] font-bold text-ink">
                 {t('name')}
               </label>
               <input
@@ -224,13 +233,13 @@ function FinderBody({
                 {t('sent')}
               </p>
             ) : (
-              <p className="text-body text-zinc-600">{t('codeHint')}</p>
+              <p className="text-body text-ink-2">{t('codeHint')}</p>
             )}
           </div>
           <form onSubmit={onCode} action={codeAction} noValidate className="flex flex-col gap-3">
             <input type="hidden" name="intent" value="verify" />
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="finder-code" className="text-caption text-zinc-600">
+              <label htmlFor="finder-code" className="text-[13px] font-bold text-ink">
                 {t('code')}
               </label>
               <input
@@ -255,11 +264,11 @@ function FinderBody({
           <h2 id="finder-lookup" className="text-section">
             {t('lookupTitle')}
           </h2>
-          <p className="text-body text-zinc-600">{t('codeIntro')}</p>
+          <p className="text-body text-ink-2">{t('codeIntro')}</p>
           <form onSubmit={onCode} action={codeAction} noValidate className="flex flex-col gap-3">
             <input type="hidden" name="intent" value="request" />
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="finder-email" className="text-caption text-zinc-600">
+              <label htmlFor="finder-email" className="text-[13px] font-bold text-ink">
                 {t('email')}
               </label>
               <input

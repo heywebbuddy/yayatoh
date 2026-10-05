@@ -1,16 +1,17 @@
 import { listOccurrencesQuery } from '@yayatoh/events';
 import { getFormQuery, listResponsesQuery } from '@yayatoh/forms';
-import { executeQuery, formatMoney, money } from '@yayatoh/kernel';
+import { currencyExponent, executeQuery, formatMoney, money } from '@yayatoh/kernel';
 import { checkoutSettingsQuery, listOrdersQuery, refundPolicyQuery } from '@yayatoh/orders';
 import { dateChartsQuery, publicSeatMap } from '@yayatoh/seating';
 import { listPromoCodesQuery, listTicketTypesQuery } from '@yayatoh/ticketing';
-import { Button, Card, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
+import { Button, buttonClass, Card, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { BoxOfficeForm } from '@/components/box-office-form.tsx';
 import { CheckoutVerificationForm } from '@/components/checkout-verification-form.tsx';
 import { PromoCodeForm } from '@/components/promo-code-form.tsx';
 import { QuestionForm } from '@/components/question-form.tsx';
 import { RefundPolicyForm } from '@/components/refund-policy-form.tsx';
+import { TransferRulesForm } from '@/components/support-tools.tsx';
 import { TicketTypeForm } from '@/components/ticket-type-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatNumber } from '@/lib/format.ts';
@@ -22,6 +23,8 @@ import {
   addGuestCountsAction,
   addQuestionAction,
   archiveTicketTypeAction,
+  boxOfficeBestSeatsAction,
+  boxOfficeReleaseSeatsAction,
   boxOfficeSaleAction,
   createPromoCodeAction,
   createTicketTypeAction,
@@ -30,6 +33,7 @@ import {
   setCheckoutVerificationAction,
   setPromoCodeActiveAction,
   setRefundPolicyAction,
+  transferRulesAction,
 } from './actions.ts';
 
 export default async function TicketsPage({
@@ -44,6 +48,7 @@ export default async function TicketsPage({
   setRequestLocale(locale);
   const { data, event: ev, can } = await loadEvent(org, event, 'ticketsOrders');
   const t = await getTranslations();
+  const tr = await getTranslations('supportTools');
   const types = await executeQuery(listTicketTypesQuery, { eventId: ev.id }, data.ctx, ports);
   // Multi-date events (M1.4b): ticket types may be limited to dates; the box office sells one date.
   const dates = await executeQuery(listOccurrencesQuery, { eventId: ev.id }, data.ctx, ports);
@@ -86,10 +91,13 @@ export default async function TicketsPage({
       ? [saleDate]
       : saleDates.filter((d) => !ownCharts.has(d.id));
   // Seated events (M1.7f): the box office chooses seats from the same map as buyers, live.
+  // M6.11a: best available and companion seats come with advanced seating.
+  const advancedSeating = data.modules.has('advanced_seating');
   const seatMap = canSell
     ? await publicSeatMap(data.ctx.orgId ?? '', ev.id, {
         audience: 'staff',
         occurrenceId: saleDate?.id ?? null,
+        advancedSeating,
       })
     : null;
   const seatedTypes = new Set(seatMap?.seats.map((s) => s.ticketTypeId) ?? []);
@@ -141,7 +149,24 @@ export default async function TicketsPage({
         </p>
       ) : null}
       {types.length === 0 ? (
-        <EmptyState title={t('tickets.emptyTitle')} description={t('tickets.emptyDescription')} />
+        <EmptyState
+          title={t('tickets.emptyTitle')}
+          description={t('tickets.emptyDescription')}
+          action={
+            canWrite ? (
+              <Link
+                href={`/o/${org}/e/${event}/tickets-orders#new-ticket-type`}
+                className={buttonClass('primary', 'md')}
+              >
+                {t('tickets.emptyAction')}
+              </Link>
+            ) : (
+              <Link href={`/o/${org}/e/${event}`} className={buttonClass('secondary', 'md')}>
+                {t('emptyActions.eventHome')}
+              </Link>
+            )
+          }
+        />
       ) : (
         <Table
           caption={t('tickets.caption')}
@@ -154,8 +179,13 @@ export default async function TicketsPage({
               cell: (r) => (
                 <span className="flex flex-col">
                   <span>{r.name}</span>
+                  {r.tableSize ? (
+                    <span className="text-caption text-ink-2">
+                      {t('galaTables.tableOf', { size: r.tableSize })}
+                    </span>
+                  ) : null}
                   {r.visibility === 'hidden' ? (
-                    <span className="text-caption text-zinc-500">{t('tickets.hidden')}</span>
+                    <span className="text-caption text-ink-2">{t('tickets.hidden')}</span>
                   ) : null}
                 </span>
               ),
@@ -173,7 +203,7 @@ export default async function TicketsPage({
               cell: (r) => (
                 <span className="flex flex-col items-end">
                   <span>{fmt(r.allInMinor)}</span>
-                  <span className="text-[11px] text-zinc-500">
+                  <span className="text-[11px] text-ink-2">
                     {r.feeMode === 'absorb'
                       ? t('tickets.feeAbsorbed')
                       : t('tickets.feeIncluded', { fee: fmt(r.feeMinor) })}
@@ -202,6 +232,24 @@ export default async function TicketsPage({
                 `${formatNumber(r.quantitySold, locale)} / ${formatNumber(r.quantityTotal, locale)}`,
               mono: true,
               align: 'end',
+            },
+            {
+              key: 'transfers',
+              header: tr('rules.column'),
+              cell: (r) =>
+                r.transfersAllowed
+                  ? [
+                      tr('rules.summaryAllowed'),
+                      r.transferCutoffHours
+                        ? tr('rules.summaryCutoff', { hours: r.transferCutoffHours })
+                        : null,
+                      r.transferFeeMinor > 0
+                        ? tr('rules.summaryFee', { fee: fmt(r.transferFeeMinor) })
+                        : null,
+                    ]
+                      .filter(Boolean)
+                      .join(' · ')
+                  : tr('rules.summaryOff'),
             },
             {
               key: 'status',
@@ -237,15 +285,48 @@ export default async function TicketsPage({
           ]}
         />
       )}
+      {canWrite && types.length > 0 ? (
+        <section aria-labelledby="transfer-rules-heading" className="flex flex-col gap-3">
+          <h2 id="transfer-rules-heading" className="text-section">
+            {tr('rules.title')}
+          </h2>
+          <p className="text-body text-ink-2">{tr('rules.description')}</p>
+          <ul className="flex list-none flex-col gap-3 p-0">
+            {types.map((r) => (
+              <li key={r.id}>
+                <Card className="flex flex-col gap-2">
+                  <p className="text-body font-medium">{r.name}</p>
+                  <TransferRulesForm
+                    action={transferRulesAction.bind(null, org, event, r.id)}
+                    idPrefix={`rules-${r.id}`}
+                    name={r.name}
+                    currency={ev.currency}
+                    rules={{
+                      allowed: r.transfersAllowed,
+                      cutoffHours: r.transferCutoffHours,
+                      fee:
+                        r.transferFeeMinor > 0
+                          ? (r.transferFeeMinor / 10 ** currencyExponent(ev.currency)).toFixed(
+                              currencyExponent(ev.currency),
+                            )
+                          : '',
+                    }}
+                  />
+                </Card>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
       {canSell ? (
         <section aria-labelledby="box-office-heading" className="flex flex-col gap-3">
           <h2 id="box-office-heading" className="text-section">
             {t('boxOffice.title')}
           </h2>
-          <p className="text-body text-zinc-600">{t('boxOffice.description')}</p>
+          <p className="text-body text-ink-2">{t('boxOffice.description')}</p>
           {ownCharts.size ? (
             <nav aria-label={t('seatingDates.boxOfficeLabel')} className="flex flex-col gap-1.5">
-              <p className="text-caption text-zinc-600">{t('seatingDates.boxOfficeIntro')}</p>
+              <p className="text-caption text-ink-2">{t('seatingDates.boxOfficeIntro')}</p>
               <ul className="flex list-none flex-wrap gap-1.5">
                 {[{ id: '', label: t('seatingDates.eventPlan') }, ...saleDates].map((d) => {
                   const on = (saleDate?.id ?? '') === d.id;
@@ -254,7 +335,7 @@ export default async function TicketsPage({
                       <Link
                         href={`/o/${org}/e/${event}/tickets-orders${d.id ? `?date=${d.id}` : ''}#box-office-heading`}
                         aria-current={on ? 'page' : undefined}
-                        className={`inline-flex min-h-9 items-center rounded-pill border px-3.5 text-[13px] ${on ? 'border-ink bg-ink text-white' : 'border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50'}`}
+                        className={`inline-flex min-h-9 items-center rounded-pill border px-3.5 text-[13px] ${on ? 'border-ink bg-tag text-white' : 'border-line bg-surface text-ink-2 hover:bg-surface-2'}`}
                       >
                         {d.label}
                         {d.id && ownCharts.has(d.id) ? ` · ${t('seatingDates.ownChart')}` : ''}
@@ -269,7 +350,13 @@ export default async function TicketsPage({
             <BoxOfficeForm
               action={boxOfficeSaleAction.bind(null, org, event)}
               passes={types
-                .filter((tt) => tt.quantitySold + tt.quantityHeld < tt.quantityTotal && !tt.isDonation)
+                // M5.1a: registration passes are sold only through registration.
+                .filter(
+                  (tt) =>
+                    tt.quantitySold + tt.quantityHeld < tt.quantityTotal &&
+                    !tt.isDonation &&
+                    tt.managedBy === null,
+                )
                 .map((tt) => ({
                   id: tt.id,
                   label: `${tt.name} · ${fmt(tt.allInMinor)}`,
@@ -292,6 +379,15 @@ export default async function TicketsPage({
               }
               prices={Object.fromEntries(types.map((tt) => [tt.id, fmt(tt.allInMinor)]))}
               timeZone={ev.timezone}
+              advancedSeating={advancedSeating}
+              bestSeats={
+                seatMap?.bestAvailable
+                  ? {
+                      find: boxOfficeBestSeatsAction.bind(null, org, event),
+                      release: boxOfficeReleaseSeatsAction.bind(null, org, event),
+                    }
+                  : null
+              }
             />
           </Card>
         </section>
@@ -302,7 +398,15 @@ export default async function TicketsPage({
             {t('orders.title')}
           </h2>
           {orders.length === 0 ? (
-            <EmptyState title={t('orders.emptyTitle')} description={t('orders.emptyDescription')} />
+            <EmptyState
+              title={t('orders.emptyTitle')}
+              description={t('orders.emptyDescription')}
+              action={
+                <Link href={`/events/${event}`} className={buttonClass('secondary', 'md')}>
+                  {t('orders.emptyAction')}
+                </Link>
+              }
+            />
           ) : (
             <Table
               caption={t('orders.title')}
@@ -320,7 +424,7 @@ export default async function TicketsPage({
                       >
                         {o.buyerName}
                       </Link>
-                      <span className="text-caption text-zinc-500">{o.buyerEmail}</span>
+                      <span className="text-caption text-ink-2">{o.buyerEmail}</span>
                     </span>
                   ),
                 },
@@ -335,7 +439,7 @@ export default async function TicketsPage({
                         key: 'answers',
                         header: t('questions.answers'),
                         cell: (o: (typeof orders)[number]) => (
-                          <span className="text-caption text-zinc-600">{answersFor(o.id)}</span>
+                          <span className="text-caption text-ink-2">{answersFor(o.id)}</span>
                         ),
                       },
                     ]
@@ -373,14 +477,31 @@ export default async function TicketsPage({
           {t('questions.title')}
         </h2>
         {fields.length === 0 ? (
-          <EmptyState title={t('questions.emptyTitle')} description={t('questions.emptyDescription')} />
+          <EmptyState
+            title={t('questions.emptyTitle')}
+            description={t('questions.emptyDescription')}
+            action={
+              canWrite ? (
+                <Link
+                  href={`/o/${org}/e/${event}/tickets-orders#new-question`}
+                  className={buttonClass('primary', 'md')}
+                >
+                  {t('questions.emptyAction')}
+                </Link>
+              ) : (
+                <Link href={`/o/${org}/e/${event}`} className={buttonClass('secondary', 'md')}>
+                  {t('emptyActions.eventHome')}
+                </Link>
+              )
+            }
+          />
         ) : (
-          <ol className="flex list-none flex-col divide-y divide-zinc-100 rounded-card border border-zinc-200 p-0">
+          <ol className="flex list-none flex-col divide-y divide-line rounded-card border border-line p-0">
             {fields.map((f, i) => (
               <li key={f.key} className="flex flex-wrap items-center gap-3 px-4 py-3">
                 <span className="flex min-w-0 flex-1 flex-col">
                   <span>{f.label}</span>
-                  <span className="text-caption text-zinc-500">
+                  <span className="text-caption text-ink-2">
                     {[
                       t(`questions.types.${f.type}`),
                       f.required ? t('questions.requiredBadge') : null,
@@ -431,7 +552,7 @@ export default async function TicketsPage({
           </ol>
         )}
         {canWrite ? (
-          <Card className="flex flex-col gap-3">
+          <Card id="new-question" className="flex scroll-mt-6 flex-col gap-3">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <h3 className="text-section">{t('questions.addTitle')}</h3>
               <form action={addGuestCountsAction.bind(null, org, event)}>
@@ -449,7 +570,7 @@ export default async function TicketsPage({
           {t('guestVerify.settingTitle')}
         </h2>
         <Card className="flex flex-col gap-3">
-          <p className="text-body text-zinc-600">{t('guestVerify.settingDescription')}</p>
+          <p className="text-body text-ink-2">{t('guestVerify.settingDescription')}</p>
           {canWrite ? (
             <CheckoutVerificationForm
               action={setCheckoutVerificationAction.bind(null, org, event)}
@@ -474,7 +595,7 @@ export default async function TicketsPage({
               ))}
             </ul>
           ) : (
-            <p className="text-body text-zinc-600">{tp('notSet')}</p>
+            <p className="text-body text-ink-2">{tp('notSet')}</p>
           )}
           {canWrite ? (
             <RefundPolicyForm
@@ -485,12 +606,39 @@ export default async function TicketsPage({
           ) : null}
         </Card>
       </section>
-      <section aria-labelledby="promo-heading" className="flex flex-col gap-3">
+      <section id="promo-codes" aria-labelledby="promo-heading" className="flex scroll-mt-6 flex-col gap-3">
         <h2 id="promo-heading" className="text-section">
           {t('promo.title')}
         </h2>
+        {/* U9 (UX-5): org-wide coupons apply here too; one list shows every code. */}
+        <p className="text-caption text-ink-2">
+          {t.rich('promo.orgCoupons', {
+            link: (chunks) => (
+              <Link href={`/o/${org}/coupons`} className="underline underline-offset-2">
+                {chunks}
+              </Link>
+            ),
+          })}
+        </p>
         {promos.length === 0 ? (
-          <EmptyState title={t('promo.emptyTitle')} description={t('promo.emptyDescription')} />
+          <EmptyState
+            title={t('promo.emptyTitle')}
+            description={t('promo.emptyDescription')}
+            action={
+              canWrite ? (
+                <Link
+                  href={`/o/${org}/e/${event}/tickets-orders#new-promo-code`}
+                  className={buttonClass('primary', 'md')}
+                >
+                  {t('promo.emptyAction')}
+                </Link>
+              ) : (
+                <Link href={`/o/${org}/e/${event}`} className={buttonClass('secondary', 'md')}>
+                  {t('emptyActions.eventHome')}
+                </Link>
+              )
+            }
+          />
         ) : (
           <Table
             caption={t('promo.title')}
@@ -553,14 +701,14 @@ export default async function TicketsPage({
           />
         )}
         {canWrite ? (
-          <Card className="flex flex-col gap-3">
+          <Card id="new-promo-code" className="flex scroll-mt-6 flex-col gap-3">
             <h3 className="text-section">{t('promo.addTitle')}</h3>
             <PromoCodeForm currency={ev.currency} action={createPromoCodeAction.bind(null, org, event)} />
           </Card>
         ) : null}
       </section>
       {canWrite ? (
-        <Card className="flex flex-col gap-3">
+        <Card id="new-ticket-type" className="flex scroll-mt-6 flex-col gap-3">
           <h2 className="text-section">{t('tickets.addTitle')}</h2>
           <TicketTypeForm
             currency={ev.currency}

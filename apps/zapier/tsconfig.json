@@ -1,0 +1,5 @@
+{
+  "extends": "@yayatoh/config/tsconfig/library.json",
+  "compilerOptions": { "allowJs": true, "checkJs": false },
+  "include": ["tests", "*.js", "lib", "triggers", "creates"]
+}

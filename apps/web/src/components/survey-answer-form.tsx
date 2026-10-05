@@ -21,7 +21,7 @@ export interface SurveyQuestion {
 
 /** Scale choices as large pill radios: arrow keys move within the group, 44 px targets. */
 const PILL =
-  'flex size-11 cursor-pointer items-center justify-center rounded-pill border border-zinc-200 bg-white font-mono text-body text-zinc-900 has-[:checked]:border-ink has-[:checked]:bg-ink has-[:checked]:text-white has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-ink';
+  'flex size-11 cursor-pointer items-center justify-center rounded-pill border border-line bg-surface font-mono text-body text-ink has-[:checked]:border-ink has-[:checked]:bg-tag has-[:checked]:text-white has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-focus';
 
 /**
  * The respondent's form, mobile first. The server validates every answer again; its answer
@@ -76,7 +76,7 @@ export function SurveyAnswerForm({
         const error = errorOf(q.key);
         const errorId = `${id}-error`;
         const errorText = error ? (
-          <p id={errorId} className="text-caption text-pink-700">
+          <p id={errorId} className="text-caption text-danger">
             {error}
           </p>
         ) : null;
@@ -91,7 +91,7 @@ export function SurveyAnswerForm({
               aria-invalid={error ? true : undefined}
               className="flex flex-col gap-2 border-0 p-0"
             >
-              <legend className="mb-2 text-body font-medium text-zinc-900">{title(q)}</legend>
+              <legend className="mb-2 text-body font-medium text-ink">{title(q)}</legend>
               <div className="flex flex-wrap gap-2">
                 {Array.from({ length: to - from + 1 }, (_, i) => from + i).map((v) => (
                   <label key={v} className={PILL}>
@@ -107,7 +107,7 @@ export function SurveyAnswerForm({
                   </label>
                 ))}
               </div>
-              <p id={hintId} className="text-caption text-zinc-600">
+              <p id={hintId} className="text-caption text-ink-2">
                 {q.type === 'nps' ? t('npsScale') : t('ratingScale')}
               </p>
               {errorText}
@@ -124,7 +124,7 @@ export function SurveyAnswerForm({
                   value="1"
                   aria-invalid={error ? true : undefined}
                   aria-describedby={error ? errorId : undefined}
-                  className="mt-0.5 size-5 shrink-0 accent-ink"
+                  className="mt-0.5 size-5 shrink-0 accent-primary"
                 />
                 <span>{title(q)}</span>
               </label>
@@ -139,14 +139,14 @@ export function SurveyAnswerForm({
               aria-invalid={error ? true : undefined}
               className="flex flex-col gap-2 border-0 p-0"
             >
-              <legend className="mb-1 text-body font-medium text-zinc-900">{title(q)}</legend>
+              <legend className="mb-1 text-body font-medium text-ink">{title(q)}</legend>
               {q.options.map((o) => (
                 <label key={o.value} className="flex min-h-6 items-center gap-2.5 text-body">
                   <input
                     type={q.type === 'select' ? 'radio' : 'checkbox'}
                     name={name}
                     value={o.value}
-                    className="size-5 accent-ink"
+                    className="size-5 accent-primary"
                   />
                   {o.label}
                 </label>
@@ -157,7 +157,7 @@ export function SurveyAnswerForm({
         if (q.type === 'long_text')
           return (
             <div key={q.key} className="flex flex-col gap-1.5">
-              <label htmlFor={id} className="text-body font-medium text-zinc-900">
+              <label htmlFor={id} className="text-body font-medium text-ink">
                 {title(q)}
               </label>
               <textarea
@@ -167,7 +167,7 @@ export function SurveyAnswerForm({
                 rows={4}
                 aria-invalid={error ? true : undefined}
                 aria-describedby={error ? errorId : undefined}
-                className={`rounded-card border bg-white px-4 py-2.5 text-body text-zinc-900 ${error ? 'border-pink-700' : 'border-zinc-200'}`}
+                className={`rounded-card border bg-surface px-4 py-2.5 text-body text-ink ${error ? 'field-invalid' : ''}`}
               />
               {errorText}
             </div>

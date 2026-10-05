@@ -378,10 +378,11 @@ async function recordLagTx(tx: TenantTx, event: PublishedEvent) {
  * Exactly once per event (processed_events), and idempotent besides: every value is recomputed
  * from its sources, so replays and duplicates change nothing. Backfilled (`replayed`) events
  * update the metrics but record no lag sample and call no `onChange` (no side effects).
- * `onChange` runs after each live event (M3.1b realtime publisher hook).
+ * `onChange` runs after each live event, inside the projector's transaction (M3.1b realtime
+ * publisher hook: the M3.2 Command Center publishes its "changed" ping there).
  */
 export function metricsProjector(
-  deps: { onChange?: (orgId: string, eventId: string | null) => Promise<void> } = {},
+  deps: { onChange?: (orgId: string, eventId: string | null, tx: TenantTx) => Promise<void> } = {},
 ): Subscriber {
   return defineSubscriber({
     name: METRICS_CONSUMER,
@@ -391,7 +392,7 @@ export function metricsProjector(
       const { eventId } = await projectMetricEventTx(tx, event);
       if (event.replayed) return;
       await recordLagTx(tx, event);
-      await deps.onChange?.(event.orgId, eventId);
+      await deps.onChange?.(event.orgId, eventId, tx);
     },
   });
 }

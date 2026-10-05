@@ -7,7 +7,16 @@ import {
   legalPagesQuery,
   roleCan,
 } from '@yayatoh/tenancy';
-import { buttonClass, Card, color, EmptyState, PageHeader } from '@yayatoh/ui';
+import {
+  buttonClass,
+  Card,
+  CurrencyPicker,
+  EmptyState,
+  light,
+  PageHeader,
+  Select,
+  TimeZonePicker,
+} from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { BrandColorField } from '@/components/brand-color-field.tsx';
 import { MediaUploader } from '@/components/media-uploader.tsx';
@@ -18,7 +27,7 @@ import { mediaPanel } from '@/server/media.ts';
 import { ports } from '@/server/ports.ts';
 import { acceptAction, brandAction, generalAction, legalAction } from './actions.ts';
 
-const field = 'min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body';
+const field = 'field';
 
 /** Organization settings: general, brand kit, the organizer's legal pages, platform agreements. */
 export default async function SettingsPage({
@@ -37,7 +46,15 @@ export default async function SettingsPage({
     return (
       <>
         <PageHeader title={t('settings.title')} />
-        <EmptyState title={t('settings.noAccessTitle')} description={t('settings.noAccessDescription')} />
+        <EmptyState
+          title={t('settings.noAccessTitle')}
+          description={t('settings.noAccessDescription')}
+          action={
+            <Link href={`/o/${org}/team`} className={buttonClass('primary', 'md')}>
+              {t('settings.findOwner')}
+            </Link>
+          }
+        />
       </>
     );
   }
@@ -46,10 +63,9 @@ export default async function SettingsPage({
   const agreements = await executeQuery(agreementsQuery, {}, data.ctx, ports);
   const logo = await mediaPanel(data, 'org', o.id, 'logo');
   const canAccept = roleCan(data.role, 'members:manage');
-  const zones = Intl.supportedValuesOf('timeZone');
   const labelled = (id: string, label: string, control: React.ReactNode) => (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={id} className="text-caption text-zinc-600">
+      <label htmlFor={id} className="text-[13px] font-bold text-ink">
         {label}
       </label>
       {control}
@@ -72,13 +88,26 @@ export default async function SettingsPage({
                 {t('settings.privacyLink')}
               </Link>
             ) : null}
+            {/* U8: the org's own event categories. */}
+            <Link href={`/o/${org}/settings/categories`} className={buttonClass('secondary', 'sm')}>
+              {t('settings.categoriesLink')}
+            </Link>
+            {/* M4.8b: the charity profile behind tax-deductible receipts. */}
+            <Link href={`/o/${org}/charity`} className={buttonClass('secondary', 'sm')}>
+              {t('settings.charityLink')}
+            </Link>
+            {roleCan(data.role, 'billing:read') ? (
+              <Link href={`/o/${org}/plan`} className={buttonClass('secondary', 'sm')}>
+                {t('settings.planLink')}
+              </Link>
+            ) : null}
           </>
         }
       />
       {need === 'terms' ? (
         <p
           role="alert"
-          className="rounded-card border border-accent-700 bg-accent-50 px-4 py-3 text-body text-accent-text"
+          className="rounded-card border border-primary bg-primary-soft px-4 py-3 text-body text-primary-ink"
         >
           {t('settings.agreements.needed')}
         </p>
@@ -94,18 +123,18 @@ export default async function SettingsPage({
             return (
               <div
                 key={doc}
-                className="flex flex-col gap-2 border-b border-zinc-100 pb-4 last:border-0 last:pb-0"
+                className="flex flex-col gap-2 border-b border-line pb-4 last:border-0 last:pb-0"
               >
                 <p className="text-body">
                   <Link href={`/legal/platform/${doc}`} className="underline">
                     {t(`settings.agreements.doc.${doc}`)}
                   </Link>{' '}
-                  <span className="text-caption text-zinc-500">
+                  <span className="text-caption text-ink-2">
                     {t('settings.agreements.version', { version: a?.currentVersion ?? '' })}
                   </span>
                 </p>
                 {a?.acceptedAt ? (
-                  <p className="text-caption text-zinc-600">
+                  <p className="text-caption text-ink-2">
                     {t('settings.agreements.acceptedOn', {
                       date: new Intl.DateTimeFormat(locale, {
                         dateStyle: 'medium',
@@ -125,13 +154,13 @@ export default async function SettingsPage({
                         name="agree"
                         value="yes"
                         required
-                        className="mt-0.5 size-5 accent-ink"
+                        className="mt-0.5 size-5 accent-primary"
                       />
                       {t('settings.agreements.agree', { document: t(`settings.agreements.doc.${doc}`) })}
                     </label>
                   </SettingsForm>
                 ) : (
-                  <p className="text-caption text-zinc-600">{t('settings.agreements.ownerOnly')}</p>
+                  <p className="text-caption text-ink-2">{t('settings.agreements.ownerOnly')}</p>
                 )}
               </div>
             );
@@ -165,24 +194,23 @@ export default async function SettingsPage({
             {labelled(
               'org-locale',
               t('settings.general.locale'),
-              <select id="org-locale" name="defaultLocale" defaultValue={o.defaultLocale} className={field}>
+              <Select id="org-locale" name="defaultLocale" defaultValue={o.defaultLocale} className={field}>
                 {LOCALES.map((l) => (
                   <option key={l} value={l}>
                     {new Intl.DisplayNames([l], { type: 'language' }).of(l) ?? l}
                   </option>
                 ))}
-              </select>,
+              </Select>,
             )}
             {labelled(
               'org-timezone',
               t('settings.general.timezone'),
-              <select id="org-timezone" name="timezone" defaultValue={o.timezone} className={field}>
-                {zones.map((z) => (
-                  <option key={z} value={z}>
-                    {z}
-                  </option>
-                ))}
-              </select>,
+              <TimeZonePicker
+                id="org-timezone"
+                name="timezone"
+                defaultValue={o.timezone}
+                className={field}
+              />,
             )}
             {labelled(
               'org-country',
@@ -201,18 +229,16 @@ export default async function SettingsPage({
             {labelled(
               'org-currency',
               t('settings.general.currency'),
-              <input
+              <CurrencyPicker
                 id="org-currency"
                 name="currency"
                 required
-                pattern="[A-Za-z]{3}"
-                maxLength={3}
                 defaultValue={o.currency}
                 aria-describedby="org-currency-hint"
                 className={field}
               />,
             )}
-            <p id="org-currency-hint" className="text-caption text-zinc-500 md:col-span-2">
+            <p id="org-currency-hint" className="text-caption text-ink-2 md:col-span-2">
               {t('settings.general.currencyHint')}
             </p>
             <p id="org-country-hint" className="sr-only">
@@ -232,8 +258,8 @@ export default async function SettingsPage({
             submitLabel={t('settings.save')}
             savedLabel={t('settings.saved')}
           >
-            <p className="text-body text-zinc-600">{t('settings.brand.description')}</p>
-            <BrandColorField initial={o.brandColor} fallback={color.accent[900].toLowerCase()} />
+            <p className="text-body text-ink-2">{t('settings.brand.description')}</p>
+            <BrandColorField initial={o.brandColor} fallback={light.primary.toLowerCase()} />
           </SettingsForm>
         </Card>
       </section>
@@ -246,7 +272,7 @@ export default async function SettingsPage({
         <h2 id="legal-heading" className="text-section">
           {t('settings.legal.title')}
         </h2>
-        <p className="text-body text-zinc-600">{t('settings.legal.description')}</p>
+        <p className="text-body text-ink-2">{t('settings.legal.description')}</p>
         {LEGAL_PAGE_KINDS.map((kind) => {
           const page = legal.find((p) => p.kind === kind);
           return (
@@ -265,7 +291,7 @@ export default async function SettingsPage({
                     rows={6}
                     maxLength={50_000}
                     defaultValue={page?.body ?? ''}
-                    className="rounded-card border border-zinc-200 bg-white px-4 py-3 text-body"
+                    className="rounded-card border border-line bg-surface px-4 py-3 text-body"
                   />,
                 )}
                 {page ? (

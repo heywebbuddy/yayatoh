@@ -12,6 +12,8 @@
 .env.*
 !.env.example
 *.pem
+# Synthetic, self-signed public test certificates (no keys; see the fixtures README)
+!packages/modules/notifications/tests/fixtures/synthetic-*-cert.pem
 *.p12
 *.p8
 *.key
@@ -28,6 +30,7 @@ out/
 coverage/
 playwright-report/
 test-results/
+e2e-results/
 *.tsbuildinfo
 
 # OS / editor
@@ -50,3 +53,4 @@ apps/web/e2e/.generated/
 # Cutover orchestrator state and rehearsal reports (M2.5a)
 /.cutover/
 /reports/
+docs/ux/sweep/full/

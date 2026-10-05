@@ -36,23 +36,23 @@ export default async function IncidentsPage() {
             <h2 id="incidents-list" className="text-section">
               {t('list')}
             </h2>
-            {incidents.length === 0 ? <p className="text-body text-zinc-600">{t('empty')}</p> : null}
+            {incidents.length === 0 ? <p className="text-body text-ink-2">{t('empty')}</p> : null}
             {incidents.map((i) => (
               <Card key={i.id} className="flex flex-col gap-3">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <h3 className="text-body font-medium break-words">{i.title}</h3>
                   <StatusDot status={i.active ? 'danger' : 'success'} label={t(`status.${i.status}`)} />
                 </div>
-                <p className="text-caption text-zinc-600">
+                <p className="text-caption text-ink-2">
                   {t(`impact.${i.impact}`)} · {t('started', { date: date.format(i.startedAt) })}
                   {i.components.length > 0
                     ? ` · ${i.components.map((c) => t(`component.${c}`)).join(', ')}`
                     : ''}
                 </p>
-                <ol className="flex list-none flex-col gap-2 border-s border-zinc-200 p-0 ps-4">
+                <ol className="flex list-none flex-col gap-2 border-s border-line p-0 ps-4">
                   {i.updates.map((u) => (
                     <li key={`${u.at.toISOString()}-${u.status}`} className="text-body">
-                      <span className="text-caption text-zinc-500">
+                      <span className="text-caption text-ink-2">
                         {t(`status.${u.status}`)} · {date.format(u.at)}
                       </span>
                       <p className="break-words whitespace-pre-line">{u.body}</p>

@@ -1,13 +1,13 @@
 import { executeQuery } from '@yayatoh/kernel';
 import { roleCan } from '@yayatoh/tenancy';
-import { Card, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
+import { buttonClass, Card, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import { listVenuesQuery } from '@yayatoh/venues';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { VenueForm } from '@/components/venue-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatNumber } from '@/lib/format.ts';
-import { zonesWith } from '@/lib/zones.ts';
 import { loadConsole } from '@/server/console.ts';
+import { venueThumbnails } from '@/server/media.ts';
 import { ports } from '@/server/ports.ts';
 import { createVenueAction } from './actions.ts';
 
@@ -26,13 +26,37 @@ export default async function VenuesPage({
   const canWrite = roleCan(data.role, 'events:write');
   const showArchived = archived === '1';
   const venues = await executeQuery(listVenuesQuery, { includeArchived: showArchived }, data.ctx, ports);
+  const thumbs = await venueThumbnails(
+    data,
+    venues.map((v) => v.id),
+  );
   return (
     <>
-      <PageHeader title={t('title')} description={t('subtitle')} />
+      <PageHeader
+        title={t('title')}
+        description={t('subtitle')}
+        actions={
+          // M6.11b: the venue layout library (saved floor plans).
+          <Link href={`/o/${org}/seating-library`} className={buttonClass('secondary')}>
+            {t('layoutLibrary')}
+          </Link>
+        }
+      />
       {venues.length === 0 ? (
         <EmptyState
           title={t('emptyTitle')}
           description={canWrite ? t('emptyDescription') : t('emptyViewer')}
+          action={
+            canWrite ? (
+              <Link href={`/o/${org}/venues#new-venue`} className={buttonClass('primary', 'md')}>
+                {t('emptyAction')}
+              </Link>
+            ) : (
+              <Link href="/venues" className={buttonClass('primary', 'md')}>
+                {t('emptyViewerAction')}
+              </Link>
+            )
+          }
         />
       ) : (
         <Table
@@ -40,6 +64,31 @@ export default async function VenuesPage({
           rowKey={(v) => v.id}
           rows={venues}
           columns={[
+            {
+              // U3: the venue's first photo (decorative: the name follows in the next column).
+              key: 'photo',
+              header: t('photo'),
+              cell: (v) => {
+                const p = thumbs.get(v.id);
+                return p ? (
+                  <img
+                    src={p.preview}
+                    alt=""
+                    width={p.width}
+                    height={p.height}
+                    data-testid="venue-thumb"
+                    className="size-12 rounded-tag bg-surface-2 object-cover"
+                  />
+                ) : (
+                  <span
+                    aria-hidden="true"
+                    className="flex size-12 items-center justify-center rounded-tag bg-surface-2 text-ink-3"
+                  >
+                    {v.name.slice(0, 1).toUpperCase()}
+                  </span>
+                );
+              },
+            },
             {
               key: 'name',
               header: t('name'),
@@ -78,25 +127,21 @@ export default async function VenuesPage({
       )}
       <Link
         href={showArchived ? `/o/${org}/venues` : `/o/${org}/venues?archived=1`}
-        className="self-start text-caption text-zinc-600 underline underline-offset-2"
+        className="self-start text-caption text-ink-2 underline underline-offset-2"
       >
         {showArchived ? t('hideArchived') : t('showArchived')}
       </Link>
       {canWrite ? (
-        <section aria-labelledby="new-venue-heading" className="flex flex-col gap-3">
+        <section id="new-venue" aria-labelledby="new-venue-heading" className="flex flex-col gap-3">
           <h2 id="new-venue-heading" className="text-section">
             {t('new')}
           </h2>
           <Card size="panel">
-            <VenueForm
-              action={createVenueAction.bind(null, org)}
-              zones={zonesWith(data.org.timezone)}
-              defaultTimezone={data.org.timezone}
-            />
+            <VenueForm action={createVenueAction.bind(null, org)} defaultTimezone={data.org.timezone} />
           </Card>
         </section>
       ) : (
-        <p className="text-body text-zinc-500">{t('viewerNotice')}</p>
+        <p className="text-body text-ink-2">{t('viewerNotice')}</p>
       )}
     </>
   );

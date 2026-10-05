@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { mediaStoreFromEnv } from '../src/storage/config.ts';
 import { assertOrgKey } from '../src/storage/port.ts';
-import { r2MediaStore, signV4 } from '../src/storage/r2.ts';
+import { presignV4, r2MediaStore, signV4 } from '../src/storage/r2.ts';
 
 const ORG = '0190f2a4-1c2b-7cde-8f00-000000000001';
 const OTHER = '0190f2a4-1c2b-7cde-8f00-000000000002';
@@ -89,5 +89,49 @@ describe('storage keys and configuration', () => {
     expect(() => mediaStoreFromEnv({ MEDIA_STORE: 'r2' })).toThrow(/needs R2_ACCOUNT_ID/);
     expect(() => mediaStoreFromEnv({ VERCEL_ENV: 'production' })).toThrow(/development only/);
     expect(() => mediaStoreFromEnv({ MEDIA_STORE: 's3' })).toThrow(/Unknown MEDIA_STORE/);
+  });
+});
+
+describe('presigned PUT (M4.5b)', () => {
+  it('matches AWS’s published query-string signing example', () => {
+    // https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html (GET example).
+    const url = presignV4({
+      method: 'GET',
+      url: new URL('https://examplebucket.s3.amazonaws.com/test.txt'),
+      headers: {},
+      accessKeyId: 'AKIAIOSFODNN7EXAMPLE',
+      secretAccessKey: 'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY',
+      region: 'us-east-1',
+      service: 's3',
+      now: new Date('2013-05-24T00:00:00Z'),
+      expiresInSeconds: 86400,
+    });
+    expect(url.searchParams.get('X-Amz-Signature')).toBe(
+      'aeeed9bbccd4d02ee5c0109b86d86835f995330da4c265957d157751f604d404',
+    );
+  });
+
+  it('the R2 store signs a PUT for exactly the declared size, inside the org prefix only', () => {
+    const store = r2MediaStore({
+      accountId: 'acct',
+      accessKeyId: 'AK',
+      secretAccessKey: 'SK',
+      bucket: 'media',
+    });
+    const org = '01900000-0000-7000-8000-000000000003';
+    const key = `${org}/01900000-0000-7000-8000-000000000002/u-${'b'.repeat(32)}`;
+    const signed = store.presignPut?.(org, key, { bytes: 4321, expiresInSeconds: 3600 });
+    expect(signed?.headers).toEqual({ 'content-length': '4321' });
+    const u = new URL(signed?.url ?? '');
+    expect(u.host).toBe('acct.r2.cloudflarestorage.com');
+    expect(u.pathname).toBe(`/media/${key}`);
+    expect(u.searchParams.get('X-Amz-SignedHeaders')).toBe('content-length;host');
+    expect(u.searchParams.get('X-Amz-Expires')).toBe('3600');
+    expect(() =>
+      store.presignPut?.(org, `01900000-0000-7000-8000-000000000009/x/u-${'b'.repeat(32)}`, {
+        bytes: 1,
+        expiresInSeconds: 1,
+      }),
+    ).toThrow();
   });
 });

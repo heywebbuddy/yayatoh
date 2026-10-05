@@ -34,12 +34,33 @@ describe('check-modules gate canaries', () => {
     expect(rules('migrator-access')).toContain('migrator-access');
   });
 
+  it('raw colours (hex, rgba, default palette classes) fail in web, admin and ui; token files pass', () => {
+    const v = checkModules(here('../canaries/raw-colour')).filter((x) => x.rule === 'design-tokens');
+    expect(v.map((x) => x.file).sort()).toEqual([
+      'apps/admin/src/rgba.tsx',
+      'apps/web/src/hex.tsx',
+      'apps/web/src/palette.tsx',
+    ]);
+    expect(v.find((x) => x.file === 'apps/web/src/palette.tsx')?.message).toContain('bg-zinc-100');
+  });
+
   it('literal UI strings in the web app fail', () => {
     const v = checkModules(here('../canaries/literal-strings')).filter((x) => x.rule === 'i18n-literal');
     expect(v.map((x) => x.message)).toEqual([
       expect.stringContaining('"Welcome back"'),
       expect.stringContaining('aria-label="Search events"'),
     ]);
+  });
+
+  it('native selects and date/time inputs fail outside the UI kit (U1 no-native-select)', () => {
+    const v = checkModules(here('../canaries/native-select')).filter((x) => x.rule === 'no-native-select');
+    expect(v.map((x) => x.file).sort()).toEqual([
+      'apps/admin/src/dates.tsx',
+      'apps/admin/src/dates.tsx',
+      'apps/admin/src/dates.tsx',
+      'apps/web/src/select.tsx',
+    ]);
+    expect(v.find((x) => x.file === 'apps/web/src/select.tsx')?.message).toContain('Select');
   });
 
   it('the CLI exits non-zero on a canary and zero on the repo', () => {

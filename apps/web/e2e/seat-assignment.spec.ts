@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
-import { expectAccessible, signIn } from './helpers.ts';
+import { expectAccessible, pickOption, signIn, stepOption } from './helpers.ts';
 
 const VIEWER = 'jordan@lakeside.test';
 
@@ -10,7 +10,7 @@ const unique = (what: string) => `${what} ${Date.now()} ${test.info().project.na
 async function createGala(page: Page, name: string) {
   await page.goto('/o/lakeside-events/events/new');
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Event type').selectOption('gala');
+  await pickOption(page.getByLabel('Event type'), 'gala');
   await page.getByLabel('Starts', { exact: true }).fill('2027-12-04T18:00');
   await page.getByLabel('Ends', { exact: true }).fill('2027-12-04T23:00');
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -95,8 +95,8 @@ test.describe('seat assignment (M1.7d)', () => {
     await page.keyboard.press('Tab');
     const item = page.getByLabel('Table or row');
     await expect(item).toBeFocused();
-    await page.keyboard.press('ArrowDown');
-    await expect(item.locator('option:checked')).toHaveText('Table 1 — 4 of 4 free');
+    await stepOption(item);
+    await expect(item).toHaveText('Table 1 — 4 of 4 free');
     await page.keyboard.press('Tab');
     await expect(page.getByLabel('Seat', { exact: true })).toBeFocused();
     await page.keyboard.press('Tab');
@@ -154,9 +154,24 @@ test.describe('seat assignment (M1.7d)', () => {
     };
 
     if (test.info().project.name === 'desktop-1280') {
-      // Wide enough for both: a real mouse drag.
-      const [c, p] = await Promise.all([canvas.boundingBox(), plan.boundingBox()]);
-      if (!c || !p) throw new Error('no plan');
+      // Wide enough for both: a real mouse drag. Batch 3k merge: with every seating view in the
+      // tab row (it wraps), the drop point can sit below the fold; scroll first so the name and the
+      // drop point are both on screen (a drag that scrolls the page midway is no drop).
+      const box = async () => {
+        const [c, p, q] = await Promise.all([
+          canvas.boundingBox(),
+          plan.boundingBox(),
+          chip(dee).boundingBox(),
+        ]);
+        if (!c || !p || !q) throw new Error('no plan');
+        return { c, p, q };
+      };
+      const before = await box();
+      const fold = (page.viewportSize()?.height ?? 900) - 40;
+      const dropY = before.c.y + (830 * before.c.width) / 1060;
+      const by = Math.min(Math.max(0, dropY - fold), Math.max(0, before.q.y - 8));
+      if (by > 0) await page.evaluate((y) => window.scrollBy(0, y), by);
+      const { c, p } = await box();
       const scale = c.width / 1060;
       await chip(dee).dragTo(plan, {
         targetPosition: { x: c.x - p.x + 730 * scale, y: c.y - p.y + 830 * scale },
@@ -190,14 +205,14 @@ test.describe('seat assignment (M1.7d)', () => {
     await page.getByRole('checkbox', { name: people[0] }).check();
     await submit.click();
     await expect(alert).toHaveText('Choose a table or row.');
-    await page.getByLabel('Table or row').selectOption({ label: 'Table 1 — 2 of 2 free' });
+    await pickOption(page.getByLabel('Table or row'), { label: 'Table 1 — 2 of 2 free' });
     await page.getByRole('checkbox', { name: people[1] }).check();
-    await page.getByLabel('Seat', { exact: true }).selectOption({ label: 'Table 1 · 1' });
+    await pickOption(page.getByLabel('Seat', { exact: true }), { label: 'Table 1 · 1' });
     await submit.click();
     await expect(alert).toHaveText('A seat is for one person. Choose one person, or “Any free seat”.');
     await expectAccessible(page);
 
-    await page.getByLabel('Seat', { exact: true }).selectOption({ label: 'Any free seat' });
+    await pickOption(page.getByLabel('Seat', { exact: true }), { label: 'Any free seat' });
     await page.getByRole('button', { name: 'Select all shown' }).click();
     await expect(page.getByText('3 selected')).toBeVisible();
     await submit.click();
@@ -228,7 +243,7 @@ test.describe('seat assignment (M1.7d)', () => {
     await createPlan(page, base, 1, 4);
     const prices = page.getByRole('region', { name: 'Prices' });
     await prices.getByRole('checkbox', { name: 'Table 1' }).check();
-    await prices.getByLabel('Sells as').selectOption({ label: 'Table seat' });
+    await pickOption(prices.getByLabel('Sells as'), { label: 'Table seat' });
     await prices.getByRole('button', { name: 'Set price' }).click();
     await expect(prices.getByText('Prices updated.')).toBeVisible();
     await page.getByRole('button', { name: 'Put seats on sale' }).click();
@@ -237,8 +252,8 @@ test.describe('seat assignment (M1.7d)', () => {
 
     await page.goto(`${base}/seating/assign`);
     await page.getByRole('checkbox', { name: guest }).check();
-    await page.getByLabel('Table or row').selectOption({ label: 'Table 1 — 4 of 4 free' });
-    await page.getByLabel('Seat', { exact: true }).selectOption({ label: 'Table 1 · 2' });
+    await pickOption(page.getByLabel('Table or row'), { label: 'Table 1 — 4 of 4 free' });
+    await pickOption(page.getByLabel('Seat', { exact: true }), { label: 'Table 1 · 2' });
     await page.getByRole('button', { name: 'Seat them' }).click();
     await expect(feedback(page)).toHaveText('Seated 1 person at Table 1.');
     await expect(tableCard(page, 'Table 1')).toContainText('Table 1 · 2');
@@ -269,7 +284,7 @@ test.describe('seat assignment (M1.7d)', () => {
     await addGuests(page, base, [jo, kim]);
     await page.goto(`${base}/seating/assign`);
     await page.getByRole('checkbox', { name: jo }).check();
-    await page.getByLabel('Table or row').selectOption({ label: 'Table 1 — 4 of 4 free' });
+    await pickOption(page.getByLabel('Table or row'), { label: 'Table 1 — 4 of 4 free' });
     await page.getByRole('button', { name: 'Seat them' }).click();
     await expect(tableCard(page, 'Table 1')).toContainText(jo);
 
@@ -287,7 +302,7 @@ test.describe('seat assignment (M1.7d)', () => {
     // The owner's open page, now signed in as the viewer: the server refuses both actions.
     await signIn(page, VIEWER);
     await page.getByRole('checkbox', { name: kim }).check();
-    await page.getByLabel('Table or row').selectOption({ label: 'Table 1 — 3 of 4 free' });
+    await pickOption(page.getByLabel('Table or row'), { label: 'Table 1 — 3 of 4 free' });
     await page.getByRole('button', { name: 'Seat them' }).click();
     const alert = page.locator('[aria-live="polite"]').getByRole('alert');
     await expect(alert).toHaveText('You can see the seating but not change it.');

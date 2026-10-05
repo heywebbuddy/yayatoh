@@ -24,8 +24,12 @@ export const REALTIME_NOTIFY_CHANNEL = 'realtime_messages';
 export const REALTIME_REPLAY_LIMIT = 500;
 
 export interface RealtimePublish {
-  /** Required for event channels. */
+  /** Required for event and session channels. */
   readonly eventId?: string | null;
+  /** Required for session channels (M5.7a). */
+  readonly sessionId?: string | null;
+  /** Required for inbox channels (M5.8b). */
+  readonly inboxId?: string | null;
   readonly event: string;
   readonly data: unknown;
 }
@@ -42,7 +46,12 @@ export async function publishRealtimeTx(
   message: RealtimePublish,
 ): Promise<string> {
   if (def.source !== 'log') throw new Error(`Realtime channel ${def.key} is not published through the log`);
-  const channel = realtimeChannelName(def, orgId, message.eventId);
+  const channel = realtimeChannelName(
+    def,
+    orgId,
+    message.eventId,
+    def.scope === 'inbox' ? message.inboxId : message.sessionId,
+  );
   const data = realtimePayload(def, message.event, message.data);
   const [row] = await tx
     .insert(realtimeMessages)

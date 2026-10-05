@@ -1,4 +1,5 @@
 import type { BearerSession, BearerSessions } from '@yayatoh/auth';
+import type { ApiAccessQuotas } from '@yayatoh/billing';
 import type { TenantTx } from '@yayatoh/db';
 import type { CommandPorts, Ctx } from '@yayatoh/kernel';
 import type { PaymentProvider } from '@yayatoh/payments';
@@ -35,6 +36,12 @@ export interface V1Deps {
   readonly bulkInlineMs?: number;
   /** Where the router is mounted (`/v1` on api.yayatoh.com, `/api/v1` on the web app). */
   readonly basePath?: string;
+  /** M6.3a: an org's `api_access` quotas (default: its plan, from billing; null = no API access). */
+  readonly apiQuotas?: (orgId: string) => Promise<ApiAccessQuotas | null>;
+  /** How long an org's quotas are cached (default 30 s). */
+  readonly quotaCacheMs?: number;
+  /** M6.3a: count each API key's requests per day (on unless false). */
+  readonly keyUsage?: boolean;
 }
 
 export type V1Env = {

@@ -28,7 +28,7 @@ export function PeopleConsole({
     <div className="flex flex-col gap-4">
       <Card className="flex flex-col gap-3">
         <h2 className="text-section">{t('find.title')}</h2>
-        <p className="text-body text-zinc-600">{t('find.hint')}</p>
+        <p className="text-body text-ink-2">{t('find.hint')}</p>
         <form action={findAction} className="flex flex-col gap-3 sm:flex-row sm:items-start" noValidate>
           <div className="flex-1">
             <Input
@@ -121,7 +121,7 @@ function PersonResult({
                     ))}
                   </ul>
                 ) : (
-                  <p className="text-body text-zinc-600">{t('result.none')}</p>
+                  <p className="text-body text-ink-2">{t('result.none')}</p>
                 )}
                 <h3 className="text-body font-medium">{t('result.invitations')}</h3>
                 {person.invitations.length ? (
@@ -133,7 +133,7 @@ function PersonResult({
                     ))}
                   </ul>
                 ) : (
-                  <p className="text-body text-zinc-600">{t('result.none')}</p>
+                  <p className="text-body text-ink-2">{t('result.none')}</p>
                 )}
                 <History person={person} />
               </Card>
@@ -141,7 +141,7 @@ function PersonResult({
 
             <Card className="flex flex-col gap-3">
               <h2 className="text-section">{t('export.title')}</h2>
-              <p className="text-body text-zinc-600">{t('export.hint')}</p>
+              <p className="text-body text-ink-2">{t('export.hint')}</p>
               <form action={exportAction} className="flex flex-col gap-3" noValidate>
                 <input type="hidden" name="email" value={person.email} />
                 <Input
@@ -171,9 +171,9 @@ function PersonResult({
               </div>
             </Card>
 
-            <Card className="flex flex-col gap-3 border-pink-700">
+            <Card className="flex flex-col gap-3 border-danger">
               <h2 className="text-section">{t('erase.title')}</h2>
-              <ul className="flex list-disc flex-col gap-1 ps-5 text-body text-zinc-600">
+              <ul className="flex list-disc flex-col gap-1 ps-5 text-body text-ink-2">
                 <li>{t('erase.what')}</li>
                 <li>{t('erase.kept')}</li>
                 <li>{t('erase.suppression')}</li>
@@ -237,7 +237,7 @@ function PersonResult({
         {erased.kind === 'erased' ? (
           <p
             role="status"
-            className="rounded-card border border-green-500 bg-white px-4 py-3 text-body"
+            className="rounded-card border border-success bg-surface px-4 py-3 text-body"
             data-testid="person-erased"
           >
             {t('erase.done', {
@@ -267,12 +267,12 @@ function History({ person }: { person: Extract<FindState, { kind: 'found' }>['pe
                 actor: r.actor === 'self' ? t('result.self') : r.actor,
                 date: when.format(new Date(r.at)),
               })}
-              {r.reason ? <span className="text-zinc-600"> · {r.reason}</span> : null}
+              {r.reason ? <span className="text-ink-2"> · {r.reason}</span> : null}
             </li>
           ))}
         </ul>
       ) : (
-        <p className="text-body text-zinc-600">{t('result.none')}</p>
+        <p className="text-body text-ink-2">{t('result.none')}</p>
       )}
     </>
   );
@@ -280,8 +280,8 @@ function History({ person }: { person: Extract<FindState, { kind: 'found' }>['pe
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div className="flex items-baseline justify-between gap-3 border-b border-zinc-100 py-1">
-      <dt className="text-body text-zinc-600">{label}</dt>
+    <div className="flex items-baseline justify-between gap-3 border-b border-line py-1">
+      <dt className="text-body text-ink-2">{label}</dt>
       <dd className="text-body">{children}</dd>
     </div>
   );

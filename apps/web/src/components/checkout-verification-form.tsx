@@ -24,7 +24,7 @@ export function CheckoutVerificationForm({
           name="verifyEmail"
           value="1"
           defaultChecked={verifyEmail}
-          className="mt-0.5 size-5 shrink-0 accent-ink"
+          className="mt-0.5 size-5 shrink-0 accent-primary"
         />
         <span>{t('guestVerify.settingLabel')}</span>
       </label>

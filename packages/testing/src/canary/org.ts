@@ -4,12 +4,14 @@ import { createEntryCommand, createHelpArticleCommand, createSiteSectionCommand 
 import { emptySegment } from '@yayatoh/crm';
 import { withTenant } from '@yayatoh/db';
 import { createAnnouncementCommand, getEventBySlugQuery } from '@yayatoh/events';
+import { rsvpLinkToken } from '@yayatoh/guests';
 import { executeCommand, executeQuery } from '@yayatoh/kernel';
 import { updateSiteSettingsCommand } from '@yayatoh/marketplace';
 import { announcementMailer, sendAnnouncementCommand } from '@yayatoh/messaging';
 import { createNotifier, dispatchDue, memoryTransports } from '@yayatoh/notifications';
+import { applyAccountEventCommand } from '@yayatoh/payments';
 import { auditExportBulk, consumeEvent, keyVault, recentEventsTx } from '@yayatoh/platform';
-import { dsarExportBulk } from '@yayatoh/privacy';
+import { archiveFileQuery, exportSubjectCommand, openRequestCommand, unzip } from '@yayatoh/privacy';
 import { attendeeExportBulk, BOOKING_EXPORT_COLUMNS, bookingsExportBulk } from '@yayatoh/reports';
 import { hideReviewCommand } from '@yayatoh/reviews';
 import {
@@ -19,7 +21,7 @@ import {
   setLegalPageCommand,
 } from '@yayatoh/tenancy';
 import { sql } from 'drizzle-orm';
-import { createOrgFixture, EXPORT_PARAMS, systemCtx, userCtx } from '../fixtures.ts';
+import { createOrgFixture, EXPORT_PARAMS, FIXTURE_SITE_PASSWORD, systemCtx, userCtx } from '../fixtures.ts';
 import { ports, runBulk } from '../ports.ts';
 import {
   canaryToken,
@@ -64,8 +66,26 @@ export interface CanaryOrg {
   readonly exports: readonly CanaryFile[];
   /** Outbound messages captured through the fake transports after the fill. */
   readonly outbound: readonly { readonly channel: string; readonly payload: string }[];
+  /**
+   * Where the captured pushes went (device endpoint token and web push keys, as JSON), apart from
+   * their content.
+   */
+  readonly pushAddresses: readonly string[];
   /** Private columns filled (id → rows written). */
   readonly filled: Readonly<Record<string, number>>;
+  /** M4.5a: the fixture event's guest website (published) and its password. */
+  readonly guestSite: { readonly code: string; readonly password: string };
+  /**
+   * M5.8a: the address of the fixture event's attendee who is opted in to networking (a canary
+   * itself), to crawl the networking pages as them. Null when the event has none.
+   */
+  readonly networkEmail: string | null;
+  /**
+   * Batch 3j merge: the fixture party's signed RSVP link (its guest hub, seat and card pages are
+   * crawled as the party) and the version of the event's giving screen link (M4.8d).
+   */
+  readonly partyToken: string | null;
+  readonly screenVersion: number | null;
 }
 
 const ident = (...parts: string[]) => parts.map((p) => `"${p.replace(/"/g, '""')}"`).join('.');
@@ -124,7 +144,28 @@ export async function canaryOrg(o: {
     ports,
   );
   const exports = await generateExports(orgId, ctx, event.id, slug);
-  const outbound = await sendOutbound(orgId, ctx, event.id);
+  const { outbound, pushAddresses } = await sendOutbound(orgId, ctx, event.id);
+  const [site] = await o.admin.unsafe(
+    `select code from guests.sites where org_id = $1 and event_id = $2 and status = 'published'`,
+    [orgId, event.id],
+  );
+  if (!site) throw new Error('canary: the fixture event has no published guest website');
+  const [member] = await o.admin.unsafe(
+    `select lower(a.email) as email from engagement.network_profiles p
+     join attendees.attendees a on a.org_id = p.org_id and a.event_id = p.event_id
+       and a.contact_id = p.contact_id and a.status = 'active'
+     where p.org_id = $1 and p.event_id = $2 and p.opted_in and p.hidden_at is null
+     order by a.created_at limit 1`,
+    [orgId, event.id],
+  );
+  const [link] = await o.admin.unsafe(
+    `select link_id from guests.party_rsvp where org_id = $1 and event_id = $2 order by created_at limit 1`,
+    [orgId, event.id],
+  );
+  const [screen] = await o.admin.unsafe(
+    `select version from donations.screens where org_id = $1 and event_id = $2`,
+    [orgId, event.id],
+  );
   return {
     orgId,
     slug,
@@ -135,13 +176,44 @@ export async function canaryOrg(o: {
     deviceToken,
     exports,
     outbound,
+    pushAddresses,
     filled,
+    guestSite: { code: site.code as string, password: FIXTURE_SITE_PASSWORD },
+    networkEmail: (member?.email as string | undefined) ?? null,
+    partyToken: link ? rsvpLinkToken(link.link_id as string) : null,
+    screenVersion: screen ? Number(screen.version) : null,
   };
 }
 
 /** One-time extras beyond the shared fixture. */
 async function prepare(admin: CanaryAdmin, orgId: string, ownerId: string, eventId: string) {
   const ctx = () => userCtx(ownerId, orgId);
+  // M4.8a: a connected account, so the giving page shows the fixture's campaign (gifts need one).
+  const [account] = await admin.unsafe(
+    `select account_id from payments.payment_accounts where org_id = $1 limit 1`,
+    [orgId],
+  );
+  if (!account) throw new Error('canary: the fixture has no payout account');
+  await executeCommand(
+    applyAccountEventCommand,
+    {
+      provider: 'fake',
+      id: `fakeevt_canary_${orgId}`,
+      type: 'account.updated',
+      orgId,
+      account: {
+        accountId: account.account_id as string,
+        chargesEnabled: true,
+        payoutsEnabled: true,
+        detailsSubmitted: true,
+        requirementsDue: [],
+        country: 'US',
+        defaultCurrency: 'usd',
+      },
+    },
+    systemCtx(orgId),
+    ports,
+  );
   await executeCommand(
     updateSiteSettingsCommand,
     { listOnMarketplace: true, tenantSite: true, embedOrigins: ['https://canary-embed.test'] },
@@ -219,6 +291,17 @@ async function prepare(admin: CanaryAdmin, orgId: string, ownerId: string, event
      from orders.orders o where org_id = $1 order by created_at limit 1`,
     [orgId],
   );
+  // M5.1d: a pending pay-link invoice payment on a direct-charge flow, so its connected account
+  // column holds a value too.
+  await admin.unsafe(
+    `insert into orders.invoice_payments
+     select (jsonb_populate_record(null::orders.invoice_payments, to_jsonb(p) || jsonb_build_object(
+       'id', gen_random_uuid(), 'channel', 'pay_link', 'method', 'card', 'status', 'pending',
+       'funds_flow', 'organizer_mor', 'connected_account_id', 'acct_canary', 'received_on', null,
+       'completed_at', null, 'fee_part_minor', 0, 'idempotency_key', md5(random()::text)))).*
+     from orders.invoice_payments p where org_id = $1 order by created_at limit 1`,
+    [orgId],
+  );
 }
 
 /** Writes the canaries into every registered private column of the org (every row). */
@@ -272,9 +355,12 @@ async function fill(admin: CanaryAdmin, orgId: string): Promise<Record<string, n
         path: `'/' || $2 || ${suffix}`,
         'key-prefix': `left(t.${col}, 8) || $2 || ${suffix}`,
         code: `'CANARY_${String(codes.indexOf(c.id)).padStart(2, '0')}_' || r.n::text || left($2, 0)`,
+        // Batch 3m merge: idempotent for arrays too (a refill appended again and again, until a
+        // bounded array such as M6.5d's journal lines broke its CHECK on a reused e2e database).
         json: `case jsonb_typeof(t.${col})
                  when 'object' then t.${col} || jsonb_build_object('__canary', $2 || ${suffix})
-                 when 'array' then t.${col} || jsonb_build_array($2 || ${suffix})
+                 when 'array' then case when t.${col} @> jsonb_build_array($2 || ${suffix}) then t.${col}
+                   else t.${col} || jsonb_build_array($2 || ${suffix}) end
                  else jsonb_build_object('__canary', $2 || ${suffix}) end`,
         // Idempotent (a refill on a reused org must not grow the array).
         array: `case when ($2 || ${suffix}) = any(coalesce(t.${col}, '{}')) then t.${col}
@@ -362,17 +448,17 @@ async function generateExports(
     tx.execute<{ email: string }>(sql`select email from attendees.attendees order by created_at limit 1`),
   );
   const email = guest?.email ?? `nobody@${slug}.test`;
-  await run(
-    'dsar',
-    () =>
-      executeCommand(
-        dsarExportBulk.start,
-        { selection: { filter: { email } }, params: { email, orgName: 'Canary Leak Check' } },
-        ctx(),
-        ports,
-      ),
-    (operationId) => executeQuery(dsarExportBulk.file, { operationId }, ctx(), ports),
-  );
+  // M6.1c: the access archive (a signed ZIP) for that guest; its JSON files are what is checked.
+  {
+    const { requestId } = await executeCommand(openRequestCommand, { email, kind: 'access' }, ctx(), ports);
+    await executeCommand(exportSubjectCommand, { requestId }, ctx(), ports);
+    const file = await executeQuery(archiveFileQuery, { requestId }, ctx(), ports);
+    const text = [...unzip(file.bytes)]
+      .filter(([path]) => path.endsWith('.json'))
+      .map(([, bytes]) => new TextDecoder().decode(bytes))
+      .join('\n');
+    out.push({ kind: 'dsar', name: file.name, content: text });
+  }
   await run(
     'audit',
     () =>
@@ -446,9 +532,21 @@ async function sendOutbound(orgId: string, ctx: () => ReturnType<typeof userCtx>
     appOrigin: 'https://app.yayatoh.test',
     ignoreQuietHours: true,
   });
-  return [
+  const outbound = [
     ...mem.emails.map((m) => ({ channel: 'email', payload: JSON.stringify(m) })),
     ...mem.sms.map((m) => ({ channel: 'sms', payload: JSON.stringify(m) })),
-    ...mem.pushes.map((m) => ({ channel: 'push', payload: JSON.stringify(m) })),
+    // A push's address (the device's endpoint token and keys) is where it goes, as an email's
+    // `to` is: checked apart (`pushAddresses`). The message itself is everything else (M5.9a: the
+    // canary's first alert push, an overdue invoice routed to the owner by push).
+    ...mem.pushes.map(({ token: _token, keys: _keys, ...m }) => ({
+      channel: 'push',
+      payload: JSON.stringify(m),
+    })),
   ];
+  // The address with its web push keys (both come from the device's `push_tokens` row): the merge
+  // check asserts the address carries nothing but that row's token, so the keys stay covered.
+  return {
+    outbound,
+    pushAddresses: mem.pushes.map((m) => JSON.stringify({ token: m.token, keys: m.keys ?? null })),
+  };
 }

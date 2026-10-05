@@ -1,0 +1,36 @@
+{
+  "name": "@yayatoh/zapier",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Yayatoh for Zapier (Zapier Platform CLI app, not published: publishing waits for the owner's partner review).",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest run --root ../.. --project unit apps/zapier",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "zapier-platform-core": "19.1.0"
+  },
+  "devDependencies": {
+    "@hono/node-server": "catalog:",
+    "@types/node": "catalog:",
+    "@yayatoh/api-v1": "workspace:*",
+    "@yayatoh/config": "workspace:*",
+    "@yayatoh/db": "workspace:*",
+    "@yayatoh/integrations": "workspace:*",
+    "@yayatoh/kernel": "workspace:*",
+    "@yayatoh/payments": "workspace:*",
+    "@yayatoh/platform": "workspace:*",
+    "@yayatoh/tenancy": "workspace:*",
+    "@yayatoh/testing": "workspace:*",
+    "@yayatoh/webhooks": "workspace:*",
+    "drizzle-orm": "catalog:",
+    "hono": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

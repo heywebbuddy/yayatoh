@@ -1,5 +1,5 @@
-# openapi-generator config for the future Swift 6 client (roadmap §6.1, §8.3). Not built in CI:
-# mobile apps are deferred. Run scripts/generate-mobile.sh to produce it locally.
+# openapi-generator config for the future Swift 6 client (roadmap §6.1, §8.3). Generated in CI as an artifact
+# (the `sdk-mobile` job, M6.3b), not published: mobile apps are deferred. scripts/generate-mobile.sh.
 generatorName: swift6
 inputSpec: /local/apps/api/openapi.json
 outputDir: /local/packages/sdk/mobile/out/swift

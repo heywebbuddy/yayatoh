@@ -249,7 +249,7 @@ function ChallengeForm({ finish, onRestart }: { finish: () => Promise<void>; onR
   const restart = state.code === 'too_many_attempts' || state.code === 'expired';
   if (checking)
     return (
-      <p role="status" className="text-body text-zinc-600">
+      <p role="status" className="text-body text-ink-2">
         {t('checking')}
       </p>
     );
@@ -258,7 +258,7 @@ function ChallengeForm({ finish, onRestart }: { finish: () => Promise<void>; onR
       <h2 id={headingId} className="text-section">
         {t('title')}
       </h2>
-      <p className="text-body text-zinc-600">{kind === 'totp' ? t('explainTotp') : t('explainBackup')}</p>
+      <p className="text-body text-ink-2">{kind === 'totp' ? t('explainTotp') : t('explainBackup')}</p>
       <div aria-live="polite">{state.code ? <Alert title={t(`errors.${state.code}`)} /> : null}</div>
       <input type="hidden" name="kind" value={kind} />
       <Input
@@ -301,7 +301,7 @@ export function ContinueToSite({ handoff, name, email }: { handoff: Handoff; nam
   const [failed, setFailed] = useState(false);
   return (
     <div className="flex flex-col gap-4">
-      <p className="text-body text-zinc-600">{t('signedInAs', { name, email })}</p>
+      <p className="text-body text-ink-2">{t('signedInAs', { name, email })}</p>
       <div aria-live="polite">{failed ? <Alert title={t('failed', { site: handoff.site })} /> : null}</div>
       <Button
         disabled={busy}

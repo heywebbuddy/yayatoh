@@ -10,6 +10,8 @@ export interface ListingSource {
     readonly status: string;
     readonly primaryHost: string | null;
     readonly primaryHostManaged: boolean;
+    /** M6.3a: a sandbox org is never on the marketplace. */
+    readonly sandbox?: boolean;
   };
   readonly settings: { readonly listOnMarketplace: boolean; readonly tenantSite: boolean };
 }
@@ -27,9 +29,14 @@ export function isListable(s: ListingSource): boolean {
   );
 }
 
-/** Shown on the marketplace: listable, org enrolled (D13: opt-in), never a wedding (D13). */
+/**
+ * Shown on the marketplace: listable, org enrolled (D13: opt-in), never a wedding (D13), never a
+ * sandbox org's event (M6.3a).
+ */
 export function isOnMarketplace(s: ListingSource): boolean {
-  return isListable(s) && s.settings.listOnMarketplace && s.event.profile !== 'wedding';
+  return (
+    isListable(s) && s.settings.listOnMarketplace && s.event.profile !== 'wedding' && s.org.sandbox !== true
+  );
 }
 
 /**

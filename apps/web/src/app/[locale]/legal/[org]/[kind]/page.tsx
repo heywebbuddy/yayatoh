@@ -3,6 +3,7 @@ import { Label, PageHeader } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { PLATFORM_LEGAL } from '@/content/platform-legal.ts';
+import { Link } from '@/i18n/navigation.ts';
 
 /**
  * Public legal pages: the platform's own agreements (`/legal/platform/platform_tos|dpa`), and each
@@ -55,6 +56,17 @@ export default async function LegalPage({
           </p>
         ))}
       </div>
+      {org !== 'platform' && kind === 'privacy' ? (
+        // M6.1c: the person's own data-subject request (a copy, or erasure).
+        <p className="text-body">
+          <Link
+            href={`/privacy-request/${org}`}
+            className="inline-flex min-h-11 items-center font-semibold underline underline-offset-2"
+          >
+            {t('legal.privacyRequest')}
+          </Link>
+        </p>
+      ) : null}
     </main>
   );
 }

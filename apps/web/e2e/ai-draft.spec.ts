@@ -1,5 +1,5 @@
 import { type APIRequestContext, expect, type Page, test } from '@playwright/test';
-import { expectAccessible, signIn, WEDDING, WEDDING_OWNER } from './helpers.ts';
+import { expectAccessible, pickOption, signIn, WEDDING, WEDDING_OWNER } from './helpers.ts';
 
 const VIEWER = 'jordan@lakeside.test';
 const ORG = '/o/lakeside-events';
@@ -23,8 +23,8 @@ async function setCredits(request: APIRequestContext, org: string, balance: numb
 async function createEvent(page: Page, name: string) {
   await page.goto(`${ORG}/events/new`);
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Event type').selectOption('concert');
-  await page.getByLabel('Time zone').selectOption(TZ);
+  await pickOption(page.getByLabel('Event type'), 'concert');
+  await pickOption(page.getByLabel('Time zone'), TZ);
   await page.getByLabel('Starts', { exact: true }).fill(`${chicagoDate(30)}T19:00`);
   await page.getByLabel('Ends', { exact: true }).fill(`${chicagoDate(30)}T23:00`);
   await page.getByLabel('Venue', { exact: true }).fill('Pier 9');

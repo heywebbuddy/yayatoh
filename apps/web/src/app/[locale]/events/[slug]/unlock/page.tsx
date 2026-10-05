@@ -27,8 +27,8 @@ export default async function UnlockEventPage({
   const t = await getTranslations('accessEntry');
   return (
     <main id="main" className="mx-auto flex min-h-dvh max-w-xl flex-col justify-center gap-6 px-6 py-16">
-      <h1 className="text-[32px] leading-tight font-light tracking-[-0.04em]">{t('title')}</h1>
-      <p className="text-body text-zinc-500">{t('gateDescription')}</p>
+      <h1 className="text-[32px] leading-tight font-extrabold tracking-[-0.04em]">{t('title')}</h1>
+      <p className="text-body text-ink-2">{t('gateDescription')}</p>
       <AccessCodeEntry action={unlockEventAction.bind(null, slug)} idPrefix="gate" />
     </main>
   );

@@ -52,6 +52,17 @@ describe('profiles', () => {
       false,
     );
   });
+
+  it("the Badges page (M5.5a) is the conference profile's, behind the badges module key", () => {
+    expect(navIncludes('conference', all, 'badges')).toBe(true);
+    for (const p of PROFILE_KEYS.filter((k) => k !== 'conference'))
+      expect(navIncludes(p, all, 'badges')).toBe(false);
+    expect(navIncludes('conference', new Set([...all].filter((m) => m !== 'badges')), 'badges')).toBe(false);
+    expect(PROFILES.conference.nav.find((i) => i.key === 'badges')).toMatchObject({
+      path: 'badges',
+      group: 'run',
+    });
+  });
 });
 
 describe('social profiles (M4.2a)', () => {

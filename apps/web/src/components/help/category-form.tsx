@@ -46,7 +46,7 @@ export function CategoryForm({
   return (
     <form action={formAction} onSubmit={keepValues(formAction)} className="flex flex-col gap-4" noValidate>
       <fieldset className="flex flex-col gap-2">
-        <legend className="mb-1 text-caption text-zinc-600">{t('fields.audience')}</legend>
+        <legend className="mb-1 text-[13px] font-bold text-ink">{t('fields.audience')}</legend>
         {HELP_AUDIENCES.map((a) => (
           <label key={a} className="flex min-h-6 items-center gap-2 text-body">
             <input
@@ -100,13 +100,13 @@ export function CategoryForm({
         defaultValue={values?.position ?? 0}
         error={bad.has('position') ? t('positionError') : undefined}
       />
-      <details className="rounded-card border border-zinc-200 p-4">
+      <details className="rounded-card border border-line p-4">
         <summary className="min-h-6 cursor-pointer text-body">{t('translations')}</summary>
         <div className="mt-4 flex flex-col gap-4">
           {bad.has('translations') ? <Alert title={t('translationsError')} /> : null}
           {locales.map((l) => (
             <fieldset key={l.code} className="flex flex-col gap-2" lang={l.code}>
-              <legend className="mb-1 text-caption text-zinc-600">{l.name}</legend>
+              <legend className="mb-1 text-[13px] font-bold text-ink">{l.name}</legend>
               <Input
                 id={`tr-${l.code}-title`}
                 name={`tr.${l.code}.title`}

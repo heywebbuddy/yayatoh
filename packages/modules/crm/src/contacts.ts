@@ -10,6 +10,7 @@ import {
   consents,
   contacts,
 } from './schema.ts';
+import { activeContactIdsTx } from './timeline.ts';
 
 /** The org-unique key for a contact: trimmed, lower-cased email. */
 export const normalizeEmail = (email: string) => email.trim().toLowerCase();
@@ -48,8 +49,16 @@ export async function upsertContactsTx(
       target: [contacts.orgId, contacts.emailNorm],
       set: { name: sql`coalesce(${contacts.name}, excluded.name)`, updatedAt: ctx.now },
     })
-    .returning({ id: contacts.id, emailNorm: contacts.emailNorm });
-  return new Map(rows.map((r) => [r.emailNorm, r.id]));
+    .returning({ id: contacts.id, emailNorm: contacts.emailNorm, mergedInto: contacts.mergedInto });
+  // M6.1a: an address of a merged-away record resolves to the record it was merged into.
+  const merged = rows.filter((r) => r.mergedInto !== null);
+  const active = merged.length
+    ? await activeContactIdsTx(
+        tx,
+        merged.map((r) => r.id),
+      )
+    : new Map<string, string>();
+  return new Map(rows.map((r) => [r.emailNorm, active.get(r.id) ?? r.id]));
 }
 
 /**
@@ -66,9 +75,11 @@ export async function upsertContactTx(tx: TenantTx, ctx: Ctx, input: UpsertConta
       target: [contacts.orgId, contacts.emailNorm],
       set: { name: sql`coalesce(${contacts.name}, excluded.name)`, updatedAt: ctx.now },
     })
-    .returning({ id: contacts.id });
+    .returning({ id: contacts.id, mergedInto: contacts.mergedInto });
   if (!row) throw new DomainError('internal');
-  return row;
+  // M6.1a: an address of a merged-away record resolves to the record it was merged into.
+  if (row.mergedInto === null) return { id: row.id };
+  return { id: (await activeContactIdsTx(tx, [row.id])).get(row.id) ?? row.id };
 }
 
 export interface ConsentInput {
@@ -77,6 +88,8 @@ export interface ConsentInput {
   readonly purpose: (typeof CONSENT_PURPOSES)[number];
   readonly status: (typeof CONSENT_STATUSES)[number];
   readonly evidence: string;
+  /** The wording version agreed to, for versioned terms (`CONSENT_TERMS`). */
+  readonly version?: number | null;
 }
 
 export async function recordConsentTx(tx: TenantTx, ctx: Ctx, input: ConsentInput): Promise<void> {
@@ -103,13 +116,18 @@ export async function currentConsentTx(
   return (row?.status as ConsentInput['status'] | undefined) ?? null;
 }
 
-/** The org's contact for an email, if there is one (no merge-following yet). */
+/**
+ * The org's contact for an email, if there is one. An address of a merged-away record resolves to
+ * the record it was merged into (M6.1a).
+ */
 export async function contactIdByEmailTx(tx: TenantTx, email: string): Promise<string | null> {
   const [row] = await tx
-    .select({ id: contacts.id })
+    .select({ id: contacts.id, mergedInto: contacts.mergedInto })
     .from(contacts)
     .where(eq(contacts.emailNorm, normalizeEmail(email)));
-  return row?.id ?? null;
+  if (!row) return null;
+  if (row.mergedInto === null) return row.id;
+  return (await activeContactIdsTx(tx, [row.id])).get(row.id) ?? row.id;
 }
 
 /** Signed-in accounts linked to contacts (push notifications need a user). */
@@ -166,6 +184,36 @@ export async function contactByIdTx(
   return row ?? null;
 }
 
+/** Contacts' names and emails by id (journey run history, M3.7a). Unknown ids are left out. */
+export async function contactsByIdsTx(
+  tx: TenantTx,
+  contactIds: readonly string[],
+): Promise<Map<string, { email: string; name: string | null }>> {
+  if (contactIds.length === 0) return new Map();
+  const rows = await tx
+    .select({ id: contacts.id, email: contacts.email, name: contacts.name })
+    .from(contacts)
+    .where(inArray(contacts.id, [...new Set(contactIds)]));
+  return new Map(rows.map((r) => [r.id, { email: r.email, name: r.name }]));
+}
+
+/**
+ * Ids of contacts whose email or name contains the text (case-insensitive, literal; a history
+ * filter, M3.7a). Bounded.
+ */
+export async function contactIdsMatchingTx(tx: TenantTx, text: string, limit = 1000): Promise<string[]> {
+  const q = text.trim().toLowerCase();
+  if (!q) return [];
+  const rows = await tx
+    .select({ id: contacts.id })
+    .from(contacts)
+    .where(
+      sql`position(${q} in lower(${contacts.email})) > 0 or position(${q} in lower(coalesce(${contacts.name}, ''))) > 0`,
+    )
+    .limit(limit);
+  return rows.map((r) => r.id);
+}
+
 /** Contacts' phone numbers (texts to attendees, M3.5a). */
 export async function contactPhonesTx(
   tx: TenantTx,
@@ -179,6 +227,12 @@ export async function contactPhonesTx(
   return new Map(rows.filter((r) => r.phone).map((r) => [r.id, r.phone as string]));
 }
 
+/** The org's contacts with this E.164 number (a text keyword such as STOP applies to each, M3.5b). */
+export async function contactIdsByPhoneTx(tx: TenantTx, phoneE164: string): Promise<string[]> {
+  const rows = await tx.select({ id: contacts.id }).from(contacts).where(eq(contacts.phoneE164, phoneE164));
+  return rows.map((r) => r.id);
+}
+
 /** Set (or clear) a contact's E.164 phone number. */
 export async function setContactPhoneTx(
   tx: TenantTx,
@@ -187,4 +241,75 @@ export async function setContactPhoneTx(
   phoneE164: string | null,
 ): Promise<void> {
   await tx.update(contacts).set({ phoneE164, updatedAt: ctx.now }).where(eq(contacts.id, contactId));
+}
+
+export interface MarketingReach {
+  readonly contactId: string;
+  readonly email: string;
+  readonly name: string | null;
+  readonly phone: string | null;
+  /** The latest marketing consent for the channel (null: none recorded, which means no consent). */
+  readonly consent: ConsentInput['status'] | null;
+  /** When that consent row was captured. */
+  readonly consentAt: Date | null;
+}
+
+/**
+ * Addresses and the latest marketing consent on one channel for many contacts at once (a
+ * campaign's recipient snapshot, M3.6b). Merged contacts are left out (they have no reach of
+ * their own). One statement per 5,000 contacts.
+ */
+export async function marketingReachTx(
+  tx: TenantTx,
+  contactIds: readonly string[],
+  channel: ConsentInput['channel'],
+): Promise<MarketingReach[]> {
+  const out: MarketingReach[] = [];
+  for (let i = 0; i < contactIds.length; i += 5_000) {
+    const part = contactIds.slice(i, i + 5_000);
+    const rows = await tx.execute<{
+      id: string;
+      email: string;
+      name: string | null;
+      phone_e164: string | null;
+      status: string | null;
+      captured_at: string | Date | null;
+    }>(sql`
+      select c.id, c.email, c.name, c.phone_e164, lc.status, lc.captured_at
+      from crm.contacts c
+      left join lateral (
+        select k.status, k.captured_at from crm.consents k
+        where k.org_id = c.org_id and k.contact_id = c.id and k.channel = ${channel} and k.purpose = 'marketing'
+        order by k.captured_at desc, k.id desc
+        limit 1
+      ) lc on true
+      where c.id = any(ARRAY[${sql.join(
+        part.map((id) => sql`${id}`),
+        sql`, `,
+      )}]::uuid[])
+        and c.merged_into is null`);
+    for (const r of rows)
+      out.push({
+        contactId: r.id,
+        email: r.email,
+        name: r.name,
+        phone: r.phone_e164,
+        consent: (r.status as ConsentInput['status'] | null) ?? null,
+        consentAt: r.captured_at === null ? null : new Date(r.captured_at),
+      });
+  }
+  return out;
+}
+
+/** Names and addresses of contacts (a campaign releasing its next recipients, M3.6b). */
+export async function contactsForSendTx(
+  tx: TenantTx,
+  contactIds: readonly string[],
+): Promise<Map<string, { email: string; name: string | null; phone: string | null }>> {
+  if (contactIds.length === 0) return new Map();
+  const rows = await tx
+    .select({ id: contacts.id, email: contacts.email, name: contacts.name, phone: contacts.phoneE164 })
+    .from(contacts)
+    .where(inArray(contacts.id, [...contactIds]));
+  return new Map(rows.map((r) => [r.id, { email: r.email, name: r.name, phone: r.phone }]));
 }

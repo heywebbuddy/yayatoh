@@ -2,17 +2,24 @@ import { KeysetAfter } from '@yayatoh/contracts';
 import { type TenantTx, withoutTenant, withTenant } from '@yayatoh/db';
 import { type Ctx, DomainError } from '@yayatoh/kernel';
 import { tenantQuery } from '@yayatoh/platform';
-import { and, asc, eq, gt, inArray, isNull, lt, or, sql } from 'drizzle-orm';
+import { and, asc, eq, gt, gte, inArray, isNull, lt, lte, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
+import { tagKey } from './domain/categories.ts';
 import { EventDto, type PublicEventDto, publicEventSerializer } from './dto.ts';
 import { type EVENT_ROLES, eventRoleAssignments, events } from './schema.ts';
+import { eventTags } from './schema-content.ts';
 
 const startsMs = sql`date_trunc('milliseconds', ${events.startsAt})`;
 
 /** Events by start time. `limit` and `after` (a keyset position) page it for /v1; omitted, all. */
 export const listEventsQuery = tenantQuery({
   name: 'events.listEvents',
-  input: z.object({ limit: z.int().min(1).max(101).optional(), after: KeysetAfter.optional() }),
+  input: z.object({
+    limit: z.int().min(1).max(101).optional(),
+    after: KeysetAfter.optional(),
+    /** U8: only events with this tag (case-insensitive). */
+    tag: z.string().trim().max(40).optional(),
+  }),
   output: z.array(EventDto),
   entitlement: 'core',
   permission: 'events:read',
@@ -21,9 +28,14 @@ export const listEventsQuery = tenantQuery({
       .select()
       .from(events)
       .where(
-        input.after
-          ? sql`(${startsMs}, ${events.id}) > (${input.after.at.toISOString()}::timestamptz, ${input.after.id}::uuid)`
-          : undefined,
+        and(
+          input.after
+            ? sql`(${startsMs}, ${events.id}) > (${input.after.at.toISOString()}::timestamptz, ${input.after.id}::uuid)`
+            : undefined,
+          input.tag
+            ? sql`exists (select 1 from ${eventTags} t where t.event_id = ${events.id} and t.tag_key = ${tagKey(input.tag)})`
+            : undefined,
+        ),
       )
       .orderBy(asc(startsMs), asc(events.id));
     return input.limit ? q.limit(input.limit) : q;
@@ -98,6 +110,30 @@ export async function publicEventBySlug(
 /** Every event id of the org (metric rebuilds walk them). Ids only. */
 export async function eventIdsTx(tx: TenantTx): Promise<string[]> {
   const rows = await tx.select({ id: events.id }).from(events).orderBy(events.id);
+  return rows.map((r) => r.id);
+}
+
+/**
+ * Alert engine (M3.2b): the org's events that are still ahead or running, i.e. not cancelled,
+ * completed or archived and ending after `endsAfter`, starting before `startsBefore`.
+ */
+export async function upcomingEventIdsTx(
+  tx: TenantTx,
+  endsAfter: Date,
+  startsBefore: Date,
+): Promise<string[]> {
+  const rows = await tx
+    .select({ id: events.id })
+    .from(events)
+    .where(
+      and(
+        inArray(events.status, ['draft', 'published', 'postponed']),
+        gte(events.endsAt, endsAfter),
+        lte(events.startsAt, startsBefore),
+      ),
+    )
+    .orderBy(events.startsAt, events.id)
+    .limit(200);
   return rows.map((r) => r.id);
 }
 
@@ -289,4 +325,26 @@ export async function removeUserEventRolesTx(tx: TenantTx, userId: string): Prom
     .where(eq(eventRoleAssignments.userId, userId))
     .returning({ id: eventRoleAssignments.id });
   return rows.length;
+}
+
+/**
+ * The id of one live event-role assignment (M5.4a: the portal principal names the assignment it
+ * was signed in under), or null when there is none.
+ */
+export async function eventRoleAssignmentIdTx(
+  tx: TenantTx,
+  a: { eventId: string; userId: string; role: (typeof EVENT_ROLES)[number]; now: Date },
+): Promise<string | null> {
+  const [row] = await tx
+    .select({ id: eventRoleAssignments.id })
+    .from(eventRoleAssignments)
+    .where(
+      and(
+        eq(eventRoleAssignments.eventId, a.eventId),
+        eq(eventRoleAssignments.userId, a.userId),
+        eq(eventRoleAssignments.role, a.role),
+        liveGrant(a.now),
+      ),
+    );
+  return row?.id ?? null;
 }

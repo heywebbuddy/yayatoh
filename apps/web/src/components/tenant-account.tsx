@@ -2,7 +2,7 @@ import { myOrganizations } from '@yayatoh/tenancy';
 import { buttonClass } from '@yayatoh/ui';
 import { getTranslations } from 'next-intl/server';
 import { localizedPath } from '@/lib/seo/urls.ts';
-import { getSession } from '@/server/session.ts';
+import { getSession, sessionOpensOrg } from '@/server/session.ts';
 import { appOrigin } from '@/server/tenant-return.ts';
 
 const linkClass = 'inline-flex min-h-6 items-center text-caption underline underline-offset-4';
@@ -35,12 +35,13 @@ export async function TenantAccount({
         {t('signIn')}
       </a>
     );
-  const membership = orgId
-    ? (await myOrganizations(session.userId)).find((m) => m.orgId === orgId)
-    : undefined;
+  const membership =
+    orgId && sessionOpensOrg(session, orgId)
+      ? (await myOrganizations(session.userId)).find((m) => m.orgId === orgId)
+      : undefined;
   return (
     <nav aria-label={t('label')} className="flex flex-wrap items-center gap-3">
-      <span className="text-caption text-zinc-600">{t('signedInAs', { name: session.name })}</span>
+      <span className="text-caption text-ink-2">{t('signedInAs', { name: session.name })}</span>
       {orgId ? (
         <a href={localizedPath(locale, '/tickets')} className={linkClass}>
           {t('tickets')}

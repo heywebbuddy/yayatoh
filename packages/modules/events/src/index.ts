@@ -1,3 +1,27 @@
+// U6: the organizer's own checklist on an event, and page sections in copies and templates.
+
+export {
+  addOrgCategoryCommand,
+  ensureOrgCategoriesTx,
+  moveOrgCategoryCommand,
+  OrgCategoryDto,
+  orgCategoriesQuery,
+  platformDefaultKeysTx,
+  renameOrgCategoryCommand,
+  resolveCategoryTx,
+  setOrgCategoryHiddenCommand,
+} from './categories.ts';
+export {
+  addChecklistItemCommand,
+  ChecklistTitle,
+  checklistTitlesTx,
+  deleteChecklistItemCommand,
+  EventChecklistItemDto,
+  eventChecklistQuery,
+  insertChecklistItemsTx,
+  MAX_CHECKLIST_ITEMS,
+  setChecklistItemDoneCommand,
+} from './checklist.ts';
 export {
   accessGrant,
   accessGrantTx,
@@ -21,8 +45,11 @@ export {
   updateAnnouncementCommand,
   updateSectionCommand,
 } from './commands/content.ts';
+export { CURRENCY_LOCKED, SetEventCurrencyInput, setEventCurrencyCommand } from './commands/currency.ts';
 export {
   eventDetailsQuery,
+  eventLabelsQuery,
+  eventTagsTx,
   orgTagsQuery,
   searchEventsQuery,
   setEventDetailsCommand,
@@ -40,6 +67,12 @@ export {
   shortLinksQuery,
 } from './commands/short-links.ts';
 export { EventSettingsSnapshot, eventSettingsTx, insertEventCopyTx } from './copy.ts';
+export { insertSectionsTx, SectionsSnapshot, sectionsSnapshotTx } from './copy-content.ts';
+// M6.5b: events for CRM connectors (Salesforce campaigns).
+export { type CrmEventRow, crmEventRowsTx } from './crm-event-rows.ts';
+export { eventsDataSubjects } from './data-subject.ts';
+// M6.9a: an event's delivery (attendance) mode for the virtual module.
+export { type EventDeliveryFacts, eventDeliveryTx } from './delivery.ts';
 export {
   ACCESS_ATTEMPT_WINDOW_MS,
   ACCESS_ATTEMPTS_PER_WINDOW,
@@ -68,6 +101,42 @@ export {
   sanitizeMarkdown,
 } from './domain/markdown.ts';
 export {
+  CategoryNameError,
+  categoryRef,
+  isPlatformKey,
+  MAX_CATEGORY_NAME,
+  MAX_ORG_CATEGORIES,
+  moveInOrder,
+  normalizeCategoryName,
+} from './domain/org-categories.ts';
+export {
+  checkPortalAccount,
+  checkPortalCode,
+  checkPortalLink,
+  isPortalRole,
+  maskPortalEmail,
+  PORTAL_CODE_TTL_MS,
+  PORTAL_GRACE_MS,
+  PORTAL_LINK_TTL_MS,
+  PORTAL_MAX_ATTEMPTS,
+  PORTAL_RESEND_COOLDOWN_MS,
+  PORTAL_ROLES,
+  PORTAL_SESSION_MS,
+  PORTAL_SUBJECT_KINDS,
+  type PortalAccountCheck,
+  type PortalRole,
+  type PortalSubjectKind,
+  parsePortalLinkToken,
+  parsePortalSessionToken,
+  portalExpiresAt,
+  portalSessionExpiry,
+  SUBJECT_OF_ROLE,
+  signPortalInvite,
+  signPortalSite,
+  verifyPortalInvite,
+  verifyPortalSite,
+} from './domain/portal-auth.ts';
+export {
   type ExpandedDate,
   expandRecurrence,
   MAX_OCCURRENCES,
@@ -84,6 +153,7 @@ export {
   parseFaqText,
   parseLinksText,
   parseScheduleText,
+  SectionBody,
   type SectionContent,
   SectionTextError,
 } from './domain/sections.ts';
@@ -96,6 +166,9 @@ export {
 } from './domain/short-code.ts';
 export * from './dto.ts';
 export * from './dto-content.ts';
+// M6.4d: events for marketing-tool syncs (HubSpot marketing events).
+export { type EventSyncRow, eventForSyncTx, eventsForSyncAfterTx } from './integration-sync.ts';
+export { eventListingFactsTx } from './listing-facts.ts';
 export {
   addOccurrencesCommand,
   addRecurringOccurrencesCommand,
@@ -112,6 +185,38 @@ export {
   RecurrenceRuleInput,
   updateOccurrenceCommand,
 } from './occurrences.ts';
+export {
+  consumePortalLink,
+  createPortalAccountTx,
+  createPortalSession,
+  endPortalSession,
+  livePortalAccountsTx,
+  PortalAccountDto,
+  type PortalChallengeResult,
+  type PortalInvite,
+  type PortalLimits,
+  type PortalLinkResult,
+  type PortalPrincipal,
+  type PortalResendResult,
+  type PortalVerifyResult,
+  portalAccountInvited,
+  portalAccountLinkTx,
+  portalAccountsTx,
+  portalCtx,
+  portalInviteByToken,
+  portalInviteMailer,
+  portalInviteToken,
+  portalInviteUrl,
+  portalPrincipalBySession,
+  portalPrincipalTx,
+  portalSiteByToken,
+  portalSiteToken,
+  portalStepUpInviteToken,
+  requestPortalChallenge,
+  resendPortalInvitations,
+  revokePortalAccountTx,
+  verifyPortalChallenge,
+} from './portal.ts';
 export { privateColumns } from './private-columns.ts';
 export {
   accessTarget,
@@ -127,6 +232,7 @@ export {
   type EventRoleGrant,
   eventIdsEndedBeforeTx,
   eventIdsTx,
+  eventRoleAssignmentIdTx,
   eventRoleGrantsTx,
   eventRolesOf,
   eventStaffTx,
@@ -140,6 +246,7 @@ export {
   publicEventBySlug,
   removeEventRoleTx,
   removeUserEventRolesTx,
+  upcomingEventIdsTx,
   upsertEventRoleTx,
 } from './queries.ts';
 export {
@@ -165,6 +272,15 @@ export {
   updateSeriesCommand,
 } from './series.ts';
 export {
+  createEventInSeriesCommand,
+  eventSeriesQuery,
+  PublicSeriesRefDto,
+  publicEventSeries,
+  SeriesDetailDto,
+  SeriesRefDto,
+  seriesDetailQuery,
+} from './series-events.ts';
+export {
   changeTeamRoleCommand,
   eventTeamQuery,
   grantTeamRoleTx,
@@ -178,3 +294,4 @@ export {
   TeamMemberDto,
   teamEventBySlugQuery,
 } from './team.ts';
+export { eventsOverTx } from './timings.ts';

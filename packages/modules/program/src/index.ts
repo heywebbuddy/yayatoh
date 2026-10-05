@@ -1,3 +1,155 @@
+// M5.2a: agenda model v2.
+export {
+  addStandardSessionTypesCommand,
+  agendaImportPreviewQuery,
+  agendaQuery,
+  CLAIM_REFUSALS,
+  claimSessionPlaceTx,
+  createSessionGroupCommand,
+  createSessionTypeCommand,
+  deleteSessionGroupCommand,
+  deleteSessionTypeCommand,
+  importAgendaCommand,
+  MAX_SESSION_GROUPS_PER_EVENT,
+  MAX_SESSION_TYPES_PER_EVENT,
+  publishAgendaCommand,
+  recordGroupPickTx,
+  releaseGroupPickTx,
+  releaseSessionPlaceTx,
+  SetSessionAgendaInput,
+  setSessionAgendaCommand,
+  unpublishAgendaCommand,
+} from './agenda.ts';
+export * from './agenda-dto.ts';
+// M5.8b: exhibitors at booths, for booth chat (engagement).
+export { type BoothExhibitor, boothExhibitorsTx } from './booth-chat.ts';
+// M5.4a: exhibitor portal (members, invitations, profile approval) and booths.
+export {
+  assignBoothCommand,
+  boothAssigned,
+  boothPlanQuery,
+  deleteBoothCommand,
+  MAX_BOOTHS_PER_EVENT,
+  publicExhibitorMap,
+  saveBoothCommand,
+  unassignBoothCommand,
+} from './booths.ts';
+// M6.5c: calendar push (integrations) reads placed sessions through these.
+export { type CalendarSession, calendarSessionsByIdTx, calendarSessionsPageTx } from './calendar.ts';
+// M5.3b: call for papers.
+export {
+  addCfpQuestionCommand,
+  addCfpReviewerCommand,
+  assignCfpReviewerCommand,
+  CfpCallDto,
+  type CfpOverviewDto,
+  type CfpReviewerDto,
+  type CfpSubmissionDetailDto,
+  type CfpSubmissionRowDto,
+  cfpMailer,
+  cfpOverviewQuery,
+  cfpReviewerHomeQuery,
+  cfpReviewerSubmissionQuery,
+  cfpSubmissionQuery,
+  DecideCfpInput,
+  decideCfpSubmissionCommand,
+  MAX_CFP_QUESTIONS,
+  MAX_CFP_REVIEWERS,
+  type PublicCfpDto,
+  placeDraftSessionCommand,
+  publicCfp,
+  type ReviewerHomeDto,
+  type ReviewerSubmissionDto,
+  removeCfpQuestionCommand,
+  reviewerPrincipalTx,
+  revokeCfpReviewerCommand,
+  SaveCfpInput,
+  type SubmitCfpInput,
+  saveCfpCommand,
+  submitCfpCommand,
+  submitCfpReviewCommand,
+  unassignCfpReviewerCommand,
+} from './cfp.ts';
+// M5.6a: session doors (check-in reads its session's facts through these).
+export {
+  eventSessionIdsTx,
+  type SessionDoorFacts,
+  sessionDoorChoicesTx,
+  sessionDoorFactsTx,
+} from './checkin-facts.ts';
+// M5.9a: the conference Command Center pack's counts (alert rules and widgets read these).
+export {
+  type ExhibitorStaffing,
+  exhibitorStaffingTx,
+  overdueSpeakerTasksTx,
+  type SessionFill,
+  sessionFillTx,
+  sponsorTierCountsTx,
+} from './conference-facts.ts';
+// M6.5b: sponsors and their deals for CRM connectors (Salesforce opportunities).
+export { type CrmSponsorRow, crmSponsorRowsTx } from './crm-sponsor-rows.ts';
+export { programDataSubjects } from './data-subject.ts';
+export {
+  ADMISSIONS,
+  type Admission,
+  AGENDA_CSV_COLUMNS,
+  AGENDA_ROW_ERRORS,
+  AGENDA_STATES,
+  AGENDA_WARNING_KINDS,
+  type AgendaItem,
+  type AgendaPlanRow,
+  type AgendaRow,
+  type AgendaRowError,
+  type AgendaState,
+  type AgendaWarning,
+  agendaCsvTime,
+  agendaWarnings,
+  formulaSafe,
+  type GroupPickDecision,
+  groupPickDecision,
+  mapAgendaHeaders,
+  parseAgendaTime,
+  parseSpeakers,
+  planAgendaImport,
+  readAgendaRow,
+} from './domain/agenda.ts';
+export {
+  averageScore,
+  type CfpOpenness,
+  cfpOpenness,
+  checkCoSpeakers,
+  draftSessionTimes,
+  forReviewer,
+} from './domain/cfp.ts';
+export {
+  allowanceUse,
+  BOOTH_WARNING_KINDS,
+  type BoothWarningKind,
+  boothWarnings,
+  DEFAULT_STAFF_ALLOWANCE,
+  holdsPlace,
+  MEMBER_STATUSES,
+  type MemberStatus,
+  nextPrimary,
+  planAssignment,
+  staffAllowance,
+} from './domain/exhibitors.ts';
+// M5.6b: lead capture checks the person's license against the allowance.
+export { type LeadSeatStanding, leadSeatStanding } from './domain/lead-seat.ts';
+export {
+  changeDiff,
+  changedValues,
+  type FieldChange,
+  isOverdue,
+  missingRecipients,
+  PRE_DUE_MS,
+  PROFILE_FIELDS,
+  preDueKey,
+  preDueReminderAt,
+  type ReminderPlan as TaskReminderPlan,
+  SESSION_FIELDS,
+  staleFields,
+} from './domain/portal.ts';
 export {
   groupByDay,
   localDay,
@@ -7,7 +159,61 @@ export {
   scheduleWarnings,
   warningsFor,
 } from './domain/schedule.ts';
+// M5.4b: sponsor packages, deliverables, the sponsor portal and lead licenses.
+export {
+  DEFAULT_INCLUDED_LEAD_LICENSES,
+  dueAtFromDate,
+  dueDateOf,
+  isOverdue as isDeliverableOverdue,
+  leadLicenseAllowance,
+  overdueDeliverables,
+  PURCHASE_HOLD_MINUTES,
+  packagesLeft,
+  snapshotAllowances,
+  staffAllowanceWithPackages,
+  templateDueAt,
+} from './domain/sponsorship.ts';
 export * from './dto.ts';
+// M5.2b: session facts and the row lock for registration's enrollment.
+export {
+  type EnrollableSession,
+  enrollableSessionsByIdTx,
+  enrollableSessionsTx,
+  lockEnrollableSessionTx,
+} from './enrollment.ts';
+export * from './exhibitor-dto.ts';
+export {
+  decideProfileChangeCommand,
+  exhibitorPortalAdminQuery,
+  exhibitorPortalQuery,
+  exhibitorPrincipalTx,
+  inviteExhibitorMemberCommand,
+  MAX_MEMBERS_PER_EXHIBITOR,
+  portalInviteStaffCommand,
+  portalRevokeStaffCommand,
+  portalSaveProfileCommand,
+  resendExhibitorInviteCommand,
+  revokeExhibitorMemberCommand,
+  saveExhibitorListingCommand,
+  saveExhibitorSettingsCommand,
+  staffInvited,
+} from './exhibitor-portal.ts';
+// M5.10a: when sessions last changed (the attendee's calendar feed).
+export { sessionStampsTx } from './hub.ts';
+export {
+  activateLicensePurchaseTx,
+  attachLicenseOrderTx,
+  leadLicenseSettingsTx,
+  leadLicensesAdminQuery,
+  leadLicenseUseTx,
+  MAX_PURCHASED_LICENSES,
+  portalAssignLeadLicenseCommand,
+  portalLeadLicensesQuery,
+  portalReleaseLeadLicenseCommand,
+  reserveLeadLicensesTx,
+  saveLeadLicenseSettingsCommand,
+} from './lead-licenses.ts';
+export { eventHasExhibitorsTx, exhibitorNamesTx, leadSeatStandingTx } from './lead-seat.ts';
 export {
   createExhibitorCommand,
   createSpeakerCommand,
@@ -28,8 +234,60 @@ export {
   updateSpeakerCommand,
   updateSponsorCommand,
 } from './people.ts';
+export * from './portal-dto.ts';
+export {
+  decideSpeakerChangeCommand,
+  inviteSpeakerCommand,
+  ProfileProposalInput,
+  proposeProfileChangeCommand,
+  proposeSessionChangeCommand,
+  proposeSpeakerPhotoTx,
+  revokeSpeakerAccessCommand,
+  SessionProposalInput,
+  speakerAccessQuery,
+  speakerChangeDecided,
+  speakerChangesQuery,
+  speakerPrincipalTx,
+} from './portal-speakers.ts';
+export {
+  assignNewSpeakersCommand,
+  CreatePortalTaskInput,
+  completePortalTaskCommand,
+  completeTaskWithFileTx,
+  createPortalTaskCommand,
+  deletePortalTaskCommand,
+  emitOverdueTasks,
+  MAX_TASKS_PER_EVENT,
+  portalSpeakerCleanup,
+  portalTaskBoardQuery,
+  remindMissingCommand,
+  speakerPortalQuery,
+  speakerTaskCompleted,
+  speakerTaskOverdue,
+  taskFileOwnerTx,
+  taskFileTargetTx,
+  taskReminderMailer,
+} from './portal-tasks.ts';
 export { privateColumns } from './private-columns.ts';
 export { publicProgram, publicSpeaker } from './public.ts';
+export { EXHIBITOR_MEMBER_ROLES } from './schema.ts';
+export { CFP_STATUSES, type CfpStatus, SUBMISSION_STATUSES, type SubmissionStatus } from './schema-cfp.ts';
+export {
+  ASSIGNEE_STATUSES,
+  CHANGE_STATUSES,
+  TASK_KINDS,
+  TASK_SUBJECT_KINDS,
+  type TaskKind,
+  type TaskSubjectKind,
+} from './schema-portal.ts';
+export {
+  DELIVERABLE_OWNERS,
+  type DeliverableOwner,
+  GRANT_SOURCES,
+  GRANT_STATUSES,
+  LOGO_PLACEMENTS,
+  type LogoPlacement,
+} from './schema-sponsors.ts';
 export {
   CreateSessionInput,
   createRoomCommand,
@@ -54,3 +312,39 @@ export {
   programOwnerDeleted,
   programOwnerTx,
 } from './shared.ts';
+export { packageBadgesTx, packageLicensesTx, sponsorPrincipalTx } from './sponsor-allowances.ts';
+export {
+  addSponsorDeliverableCommand,
+  deleteSponsorDeliverableCommand,
+  MAX_DELIVERABLES_PER_SPONSOR,
+  overdueDeliverableCountTx,
+  portalSetDeliverableDoneCommand,
+  setSponsorDeliverableDoneCommand,
+  sponsorDeliverablesQuery,
+} from './sponsor-deliverables.ts';
+export * from './sponsor-dto.ts';
+export {
+  activatePurchasedGrantTx,
+  activeGrantOfSponsorTx,
+  assignSponsoredSessionCommand,
+  attachCompCodeTx,
+  attachGrantOrderTx,
+  cancelSponsorGrantCommand,
+  DeliverableTemplate,
+  grantCompStateTx,
+  grantSponsorPackageCommand,
+  inviteSponsorContactCommand,
+  MAX_CONTACTS_PER_SPONSOR,
+  MAX_TEMPLATE_DELIVERABLES,
+  packageActivated,
+  packageCancelled,
+  resendSponsorInviteCommand,
+  reserveSponsorPackageTx,
+  revokeSponsorContactCommand,
+  SavePackageInput,
+  saveSponsorPackageCommand,
+  setSponsorExhibitorCommand,
+  sponsorshipAdminQuery,
+  unassignSponsoredSessionCommand,
+} from './sponsor-packages.ts';
+export { sponsorPortalQuery } from './sponsor-portal.ts';

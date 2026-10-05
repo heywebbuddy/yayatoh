@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Guests</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>body{margin:0}</style>
+</helmet>
+<div style="min-height: 100%; box-sizing: border-box; font-family: 'Manrope', system-ui, sans-serif; {{theme}}">
+<div style="display: flex; flex-wrap: wrap; gap: 20px; padding: 16px; box-sizing: border-box; min-height: 1120px">
+
+<aside style="flex: 0 0 260px; box-sizing: border-box; background: var(--side); border: 1px solid var(--sideLine); border-radius: 28px; padding: 26px 16px 18px; display: flex; flex-direction: column; gap: 22px; color: var(--sideInk); backdrop-filter: blur(24px)">
+<div style="display: flex; align-items: center; gap: 10px; padding: 0 8px">
+<svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><path d="M5 21C5 13.3 10.6 6 18.5 6c0 7.7-5.6 15-13.5 15z" fill="#FF3D86"></path><path d="M27 11c0 7.7-5.6 15-13.5 15 0-7.7 5.6-15 13.5-15z" fill="#7B5CFF" fill-opacity="0.92"></path></svg>
+<span style="font-size: 21px; font-weight: 800; letter-spacing: -0.02em; color: #FFFFFF">yayatoh</span>
+</div>
+<button style="display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 12px; border-radius: 16px; border: 1px solid var(--sideLine); background: var(--sideTile); color: #FFFFFF; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; text-align: start">
+<span style="width: 28px; height: 28px; border-radius: 9px; background: #7B5CFF; display: grid; place-items: center; font-size: 12px; font-weight: 800; color: #FFFFFF">SR</span>
+<span style="flex-grow: 1">Sofia Ricci Weddings</span>
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 15 5 5 5-5"></path><path d="m7 9 5-5 5 5"></path></svg>
+</button>
+<nav aria-label="Main" style="display: flex; flex-direction: column; gap: 4px">
+<div style="font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; padding: 0 10px 8px; color: var(--sideLabel)">Menu</div>
+<a href="#" style="display: flex; align-items: center; gap: 12px; padding: 6px 10px 6px 6px; border-radius: 14px; color: var(--sideInk); text-decoration: none; font-size: 14px; font-weight: 600">
+<span style="width: 34px; height: 34px; border-radius: 11px; background: var(--sideTile); display: grid; place-items: center"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5 9.5V21h14V9.5"></path></svg></span>Home</a>
+<a href="#" aria-current="page" style="display: flex; align-items: center; gap: 12px; padding: 6px 10px 6px 6px; border-radius: 14px; background: var(--sideRow); color: #FFFFFF; text-decoration: none; font-size: 14px; font-weight: 700">
+<span style="width: 34px; height: 34px; border-radius: 11px; background: var(--sideTileOn); color: var(--sideTileOnInk); display: grid; place-items: center"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.5" width="18" height="16.5" rx="3"></rect><path d="M3 9.5h18M8 2.5v4M16 2.5v4"></path></svg></span>
+<span style="flex-grow: 1">Events</span>
+<span style="min-width: 22px; height: 22px; padding: 0 6px; box-sizing: border-box; border-radius: 7px; background: #FFFFFF; color: #17121B; font-size: 12px; font-weight: 800; display: grid; place-items: center">4</span></a>
+<a href="#" style="display: flex; align-items: center; gap: 12px; padding: 6px 10px 6px 6px; border-radius: 14px; color: var(--sideInk); text-decoration: none; font-size: 14px; font-weight: 600">
+<span style="width: 34px; height: 34px; border-radius: 11px; background: var(--sideTile); display: grid; place-items: center"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="7" cy="7" r="3"></circle><circle cx="17" cy="7" r="3"></circle><circle cx="7" cy="17" r="3"></circle><circle cx="17" cy="17" r="3"></circle></svg></span>Command Center</a>
+<a href="#" style="display: flex; align-items: center; gap: 12px; padding: 6px 10px 6px 6px; border-radius: 14px; color: var(--sideInk); text-decoration: none; font-size: 14px; font-weight: 600">
+<span style="width: 34px; height: 34px; border-radius: 11px; background: var(--sideTile); display: grid; place-items: center"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"></path><path d="M16 4.8a3.3 3.3 0 0 1 0 6.4M18 14.8c2 .7 3.2 2.4 3.6 5.2"></path></svg></span>Contacts</a>
+<a href="#" style="display: flex; align-items: center; gap: 12px; padding: 6px 10px 6px 6px; border-radius: 14px; color: var(--sideInk); text-decoration: none; font-size: 14px; font-weight: 600">
+<span style="width: 34px; height: 34px; border-radius: 11px; background: var(--sideTile); display: grid; place-items: center"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11v3a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"></path><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"></path></svg></span>Messages</a>
+<a href="#" style="display: flex; align-items: center; gap: 12px; padding: 6px 10px 6px 6px; border-radius: 14px; color: var(--sideInk); text-decoration: none; font-size: 14px; font-weight: 600">
+<span style="width: 34px; height: 34px; border-radius: 11px; background: var(--sideTile); display: grid; place-items: center"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"></path></svg></span>Reports</a>
+</nav>
+<div style="flex-grow: 1"></div>
+<div style="position: relative; overflow: hidden; border-radius: 22px; padding: 16px; background: var(--promo); border: 1px solid var(--sideLine); display: flex; flex-direction: column; gap: 8px">
+<span style="font-size: 16px; font-weight: 800; color: #FFFFFF">Guest website</span>
+<span style="font-size: 13px; line-height: 1.45; color: rgba(255,255,255,0.82)">Publish the program, travel and RSVP in all 13 languages.</span>
+<a href="#" style="align-self: flex-start; margin-top: 4px; display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 14px; border-radius: 12px; background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.28); color: #FFFFFF; text-decoration: none; font-size: 13px; font-weight: 700">Set it up →</a>
+</div>
+<div style="display: flex; align-items: center; gap: 10px; padding: 4px 6px">
+<span style="width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, #B9A6FF, #7B5CFF); display: grid; place-items: center; font-weight: 800; font-size: 13px; color: #FFFFFF">SR</span>
+<div style="display: flex; flex-direction: column; gap: 2px; flex-grow: 1"><span style="font-size: 14px; font-weight: 700; color: #FFFFFF">Sofia Ricci</span><span style="font-size: 12px; color: var(--sideInk)">Planner</span></div>
+</div>
+</aside>
+
+<main style="flex: 1 1 640px; min-width: 0; display: flex; flex-direction: column; gap: 20px; padding: 6px 6px 24px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+<div style="flex: 1 1 280px; display: flex; flex-direction: column; gap: 8px">
+<div style="font-size: 13px; font-weight: 600; color: var(--ink2)">Events <span aria-hidden="true">›</span> Amara &amp; Leo</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+<h1 style="margin: 0; font-size: 40px; line-height: 1.05; font-weight: 800; letter-spacing: -0.035em; color: var(--ink)">Amara &amp; Leo’s Wedding</h1>
+<span style="font-size: 11px; font-weight: 800; letter-spacing: 0.08em; padding: 6px 10px; border-radius: 8px; background: var(--tag); color: var(--tagInk)">WEDDING</span>
+</div>
+</div>
+<button onClick="{{toggle}}" aria-label="{{modeLabel}}" style="width: 46px; height: 46px; border-radius: 16px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); display: grid; place-items: center; cursor: pointer">
+<sc-if value="{{isDark}}" hint-placeholder-val="{{false}}"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg></sc-if>
+<sc-if value="{{isLight}}" hint-placeholder-val="{{true}}"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"></path></svg></sc-if>
+</button>
+<a href="#" style="display: inline-flex; align-items: center; gap: 8px; height: 46px; padding: 0 18px; border-radius: 15px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); text-decoration: none; font-size: 14px; font-weight: 700">Preview guest site</a>
+</div>
+
+<nav aria-label="Event sections" style="display: flex; flex-wrap: wrap; gap: 6px; padding: 6px; border-radius: 18px; background: var(--surface); border: 1px solid var(--line); align-self: flex-start; backdrop-filter: blur(20px)">
+<a href="#" style="height: 40px; padding: 0 16px; border-radius: 13px; display: inline-flex; align-items: center; color: var(--ink2); text-decoration: none; font-size: 14px; font-weight: 700">Overview</a>
+<a href="#" aria-current="page" style="height: 40px; padding: 0 12px 0 16px; border-radius: 13px; display: inline-flex; align-items: center; gap: 8px; background: var(--tabOn); color: var(--tabOnInk); text-decoration: none; font-size: 14px; font-weight: 800; box-shadow: var(--tabGlow)">Guests <span style="font-size: 12px; padding: 2px 7px; border-radius: 7px; background: rgba(255,255,255,0.18)">186</span></a>
+<a href="#" style="height: 40px; padding: 0 16px; border-radius: 13px; display: inline-flex; align-items: center; color: var(--ink2); text-decoration: none; font-size: 14px; font-weight: 700">Invitations</a>
+<a href="#" style="height: 40px; padding: 0 16px; border-radius: 13px; display: inline-flex; align-items: center; color: var(--ink2); text-decoration: none; font-size: 14px; font-weight: 700">Seating</a>
+<a href="#" style="height: 40px; padding: 0 16px; border-radius: 13px; display: inline-flex; align-items: center; color: var(--ink2); text-decoration: none; font-size: 14px; font-weight: 700">Website</a>
+<a href="#" style="height: 40px; padding: 0 16px; border-radius: 13px; display: inline-flex; align-items: center; color: var(--ink2); text-decoration: none; font-size: 14px; font-weight: 700">Messages</a>
+</nav>
+
+<div style="display: flex; flex-wrap: wrap; gap: 16px">
+<section aria-labelledby="next" style="flex: 3 1 560px; min-width: 0; position: relative; overflow: hidden; border-radius: 28px; padding: 24px; background: var(--feature); border: 1px solid var(--line); box-shadow: var(--shadow); display: flex; flex-wrap: wrap; gap: 24px; color: var(--featureInk)">
+<div style="position: absolute; inset-inline-start: 34%; top: -120px; width: 160px; height: 380px; border-radius: 50%; background: var(--streak); filter: blur(28px); transform: rotate(28deg)"></div>
+<div style="position: relative; flex: 1 1 220px; min-height: 230px; border-radius: 22px; overflow: hidden; background: linear-gradient(160deg, #6E4BFF 0%, #4A2FC4 45%, #24165E 100%); display: flex; flex-direction: column; justify-content: flex-end; padding: 18px; box-sizing: border-box; box-shadow: 0 20px 40px rgba(60,30,160,0.35)">
+<div style="position: absolute; inset: 0; background: linear-gradient(115deg, rgba(255,255,255,0) 40%, rgba(255,255,255,0.22) 52%, rgba(255,255,255,0) 64%)"></div>
+<div style="position: absolute; inset-inline-end: -30px; top: 30px; width: 170px; height: 120px; border-radius: 28px; background: linear-gradient(135deg, #9C84FF, #6A3BFF); transform: rotate(-18deg); opacity: 0.85"></div>
+<span style="position: relative; font-size: 12px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.75)">Ceremony</span>
+<span style="position: relative; font-size: 22px; line-height: 1.2; font-weight: 800; color: #FFFFFF">Sat 12 Sep · 4:00 PM<br>Villa Rosa, Lake Como</span>
+</div>
+<div style="position: relative; flex: 1 1 260px; display: flex; flex-direction: column; gap: 14px">
+<span style="font-size: 13px; font-weight: 600; opacity: 0.75">RSVP closes Mon 24 Aug · in 9 days</span>
+<h2 id="next" style="margin: 0; font-size: 24px; line-height: 1.2; font-weight: 800; letter-spacing: -0.02em">23 parties still need to answer. Send a gentle reminder tonight.</h2>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 13px; font-weight: 700; opacity: 0.75">Hosts</span>
+<sc-for list="{{hosts}}" as="h" hint-placeholder-count="3">
+<div style="display: flex; align-items: center; gap: 10px; padding: 6px 6px 6px 6px; border-radius: 999px; border: 1px solid var(--chipLine); background: var(--chipBg); max-width: 340px">
+<span style="width: 34px; height: 34px; border-radius: 50%; background: {{h.av}}; color: #16131D; display: grid; place-items: center; font-size: 12px; font-weight: 800">{{h.ini}}</span>
+<div style="display: flex; flex-direction: column; flex-grow: 1"><span style="font-size: 14px; font-weight: 700">{{h.name}}</span><span style="font-size: 12px; opacity: 0.75">{{h.role}}</span></div>
+<span aria-label="Accepted" style="width: 26px; height: 26px; border-radius: 50%; background: var(--mintDot); color: #0A0812; display: grid; place-items: center; box-shadow: 0 0 0 4px var(--mintSoft)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg></span>
+</div>
+</sc-for>
+</div>
+<a href="#" style="align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 18px; border-radius: 14px; background: var(--primary); color: #FFFFFF; text-decoration: none; font-size: 14px; font-weight: 700; box-shadow: var(--primaryGlow)">Send RSVP reminder</a>
+</div>
+</section>
+
+<section aria-label="RSVP summary" style="flex: 2 1 300px; min-width: 0; border-radius: 28px; padding: 22px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 16px; backdrop-filter: blur(20px)">
+<div style="display: flex; align-items: center"><h2 style="margin: 0; font-size: 20px; font-weight: 800; letter-spacing: -0.02em; flex-grow: 1">RSVP</h2><span style="font-size: 13px; color: var(--ink2)">186 invited · 74 parties</span></div>
+<div style="display: flex; height: 12px; border-radius: 999px; overflow: hidden; gap: 3px" aria-hidden="true"><div style="flex: 142; background: var(--mintDot); border-radius: 999px"></div><div style="flex: 23; background: var(--amberBar); border-radius: 999px"></div><div style="flex: 21; background: var(--pinkDot); border-radius: 999px"></div></div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+<sc-for list="{{stats}}" as="s" hint-placeholder-count="4">
+<div style="border-radius: 18px; padding: 14px 16px; background: {{s.bg}}; display: flex; flex-direction: column; gap: 6px">
+<span style="font-size: 13px; font-weight: 700; color: {{s.ink}}">{{s.label}}</span>
+<span style="font-size: 32px; line-height: 1; font-weight: 800; letter-spacing: -0.04em; color: var(--ink); font-variant-numeric: tabular-nums">{{s.value}}</span>
+<span style="font-size: 12px; color: var(--ink2)">{{s.sub}}</span>
+</div>
+</sc-for>
+</div>
+</section>
+</div>
+
+<section aria-labelledby="gl" style="border-radius: 28px; padding: 22px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 14px; backdrop-filter: blur(20px)">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+<h2 id="gl" style="margin: 0; font-size: 20px; font-weight: 800; letter-spacing: -0.02em">Guest list</h2>
+<div role="group" aria-label="Filter by RSVP" style="display: flex; flex-wrap: wrap; gap: 6px">
+<sc-for list="{{filters}}" as="f" hint-placeholder-count="4">
+<button onClick="{{f.pick}}" aria-pressed="{{f.on}}" style="height: 36px; padding: 0 12px; border-radius: 999px; border: 1px solid {{f.line}}; background: {{f.bg}}; color: {{f.ink}}; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer">{{f.label}} <span style="opacity: 0.7">{{f.n}}</span></button>
+</sc-for>
+</div>
+<div style="flex-grow: 1"></div>
+<label style="display: flex; align-items: center; gap: 8px; height: 42px; padding: 0 14px; border-radius: 14px; background: var(--surface2); border: 1px solid var(--line); color: var(--ink2); min-width: 220px">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+<input aria-label="Search guests" placeholder="Search guests or parties" style="flex-grow: 1; border: 0; outline: none; background: transparent; font: inherit; font-size: 14px; color: var(--ink)">
+</label>
+<a href="#" style="display: inline-flex; align-items: center; gap: 8px; height: 42px; padding: 0 16px; border-radius: 14px; border: 1px solid var(--line); background: var(--surface2); color: var(--ink); text-decoration: none; font-size: 14px; font-weight: 700">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M4 20h16"></path></svg>Import list</a>
+<a href="#" style="display: inline-flex; align-items: center; gap: 8px; height: 42px; padding: 0 16px; border-radius: 14px; background: var(--primary); color: #FFFFFF; text-decoration: none; font-size: 14px; font-weight: 700; box-shadow: var(--primaryGlow)">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Add party</a>
+</div>
+<div style="overflow-x: auto">
+<div style="min-width: 820px">
+<div style="display: grid; grid-template-columns: minmax(0, 2.4fr) minmax(0, 1fr) minmax(0, 1.5fr) minmax(0, 1.1fr) minmax(0, 1fr) minmax(0, 0.6fr); gap: 12px; padding: 0 12px 10px; font-size: 12px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink2)">
+<span>Party</span><span>Side</span><span>Invited to</span><span>RSVP</span><span>Meals</span><span style="text-align: end">Table</span>
+</div>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="6">
+<div style="display: grid; grid-template-columns: minmax(0, 2.4fr) minmax(0, 1fr) minmax(0, 1.5fr) minmax(0, 1.1fr) minmax(0, 1fr) minmax(0, 0.6fr); align-items: center; gap: 12px; padding: 12px; border-radius: 18px; border: 1px solid var(--line); background: var(--surface2); margin-bottom: 8px">
+<div style="display: flex; align-items: center; gap: 12px; min-width: 0">
+<div style="display: flex"><span style="width: 38px; height: 38px; border-radius: 50%; background: {{r.av1}}; color: #16131D; display: grid; place-items: center; font-size: 12px; font-weight: 800; border: 2px solid var(--surfaceSolid)">{{r.ini1}}</span><span style="width: 38px; height: 38px; margin-inline-start: -12px; border-radius: 50%; background: {{r.av2}}; color: #16131D; display: grid; place-items: center; font-size: 12px; font-weight: 800; border: 2px solid var(--surfaceSolid)">{{r.ini2}}</span></div>
+<div style="display: flex; flex-direction: column; gap: 2px; min-width: 0"><span style="font-size: 14px; font-weight: 700; color: var(--ink)">{{r.party}}</span><span style="font-size: 12px; color: var(--ink2)">{{r.people}}</span></div>
+</div>
+<span style="font-size: 13px; font-weight: 600; color: var(--ink)">{{r.side}}</span>
+<div style="display: flex; gap: 6px; flex-wrap: wrap">
+<sc-for list="{{r.subs}}" as="e" hint-placeholder-count="3"><span style="font-size: 11px; font-weight: 800; padding: 4px 8px; border-radius: 8px; background: {{e.bg}}; color: {{e.ink}}">{{e.t}}</span></sc-for>
+</div>
+<span style="justify-self: start; display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 800; padding: 5px 10px; border-radius: 999px; background: {{r.stBg}}; color: {{r.stInk}}"><span style="width: 7px; height: 7px; border-radius: 50%; background: {{r.stDot}}"></span>{{r.status}}</span>
+<span style="font-size: 13px; color: var(--ink2)">{{r.meals}}</span>
+<span style="justify-self: end; font-size: 15px; font-weight: 800; color: var(--ink); font-variant-numeric: tabular-nums">{{r.table}}</span>
+</div>
+</sc-for>
+</div>
+</div>
+</section>
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"dark":{"editor":"boolean","default":false},"$preview":{"width":1440,"height":1120}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const LIGHT = "--surface:#FFFFFF;--surfaceSolid:#FFFFFF;--surface2:#F6F5FA;--line:#E7E4EE;--ink:#16131D;--ink2:#5E596A;--side:#17121B;--sideLine:rgba(255,255,255,0.06);--sideInk:#B9B3C4;--sideLabel:#8E889A;--sideTile:#251E2A;--sideRow:rgba(255,255,255,0.10);--sideTileOn:#FFFFFF;--sideTileOnInk:#17121B;--promo:linear-gradient(150deg,#6A3BFF 0%,#3B1FA8 100%);--primary:#6A3BFF;--primaryInk:#5528E8;--primaryGlow:0 8px 20px rgba(106,59,255,0.28);--tabOn:#17121B;--tabOnInk:#FFFFFF;--tabGlow:none;--pinkDot:#FF3D86;--pink:#C41C5E;--pinkSoft:#FDE3EE;--mint:#0B7A50;--mintSoft:#DDF6EA;--mintDot:#16C784;--amber:#8A4F00;--amberSoft:#FFF0D4;--amberBar:#FFB020;--tag:#2A2230;--tagInk:#FFFFFF;--feature:linear-gradient(135deg,#FFFFFF 0%,#F4EEFF 100%);--featureInk:#16131D;--streak:rgba(255,255,255,0);--chipBg:#FFFFFF;--chipLine:#E7E4EE;--shadow:0 1px 2px rgba(22,19,29,0.04),0 10px 30px rgba(22,19,29,0.06);--lav:#E3D9FF;--blush:#FCDDE9;--sky:#D8E8FF;--sand:#FBE8CF;background:#F2F1F6;color:#16131D;";
+    const DARK = "color-scheme:dark;--surface:rgba(26,20,46,0.72);--surfaceSolid:#1C1631;--surface2:rgba(255,255,255,0.04);--line:rgba(170,150,255,0.16);--ink:#F4F1FF;--ink2:#ABA4C6;--side:rgba(15,11,28,0.86);--sideLine:rgba(170,150,255,0.16);--sideInk:#A9A3C4;--sideLabel:#8D86A8;--sideTile:rgba(255,255,255,0.05);--sideRow:linear-gradient(135deg,rgba(123,92,255,0.55),rgba(123,92,255,0.16));--sideTileOn:#7B5CFF;--sideTileOnInk:#FFFFFF;--promo:radial-gradient(120% 120% at 100% 0%,#8D6FFF 0%,#4B2FB0 45%,#1A1233 100%);--primary:#7B5CFF;--primaryInk:#BBA9FF;--primaryGlow:0 0 0 1px rgba(160,135,255,0.4),0 10px 30px rgba(123,92,255,0.45);--tabOn:linear-gradient(135deg,#7B5CFF,#5A3BE0);--tabOnInk:#FFFFFF;--tabGlow:0 8px 24px rgba(123,92,255,0.45);--pinkDot:#FF5C9A;--pink:#FF7EAF;--pinkSoft:rgba(255,92,154,0.16);--mint:#4BE9AC;--mintSoft:rgba(59,230,164,0.14);--mintDot:#3BE6A4;--amber:#FFC56E;--amberSoft:rgba(255,197,110,0.14);--amberBar:#FFB84D;--tag:rgba(255,255,255,0.08);--tagInk:#ECE7FF;--feature:linear-gradient(160deg,#120D22 0%,#0B0816 100%);--featureInk:#F4F1FF;--streak:rgba(196,180,255,0.55);--chipBg:rgba(255,255,255,0.04);--chipLine:rgba(170,150,255,0.22);--shadow:0 0 0 1px rgba(170,150,255,0.05),0 24px 48px rgba(0,0,0,0.40);--lav:#B9A6FF;--blush:#FFB3CF;--sky:#A9CCFF;--sand:#FFD9A0;background:radial-gradient(55% 40% at 72% -6%,rgba(123,92,255,0.45),rgba(123,92,255,0) 70%),radial-gradient(40% 32% at 0% 100%,rgba(255,92,154,0.13),rgba(255,92,154,0) 70%),#0A0812;color:#F4F1FF;";
+    const dark = (this.state && typeof this.state.dark === 'boolean') ? this.state.dark : !!this.props.dark;
+    const filter = (this.state && this.state.filter) || 'all';
+    const R = { bg: 'var(--lav)', ink: '#16131D' };
+    const sub = (t) => ({ t: t, bg: 'var(--surfaceSolid)', ink: 'var(--ink)' });
+    const st = {
+      yes: { status: 'Attending', stBg: 'var(--mintSoft)', stInk: 'var(--mint)', stDot: 'var(--mintDot)' },
+      wait: { status: 'Awaiting', stBg: 'var(--amberSoft)', stInk: 'var(--amber)', stDot: 'var(--amberBar)' },
+      no: { status: 'Declined', stBg: 'var(--pinkSoft)', stInk: 'var(--pink)', stDot: 'var(--pinkDot)' }
+    };
+    const all = [
+      Object.assign({ k: 'yes', ini1: 'GO', ini2: 'NO', av1: 'var(--blush)', av2: 'var(--lav)', party: 'The Okafor family', people: 'Grace, Nnamdi + 2 children', side: 'Amara’s', subs: [sub('Rehearsal'), sub('Ceremony'), sub('Reception')], meals: '2 fish · 2 kids', table: '1' }, st.yes),
+      Object.assign({ k: 'yes', ini1: 'MB', ini2: 'HB', av1: 'var(--sky)', av2: 'var(--sand)', party: 'Martin & Helga Brandt', people: '2 guests', side: 'Leo’s', subs: [sub('Rehearsal'), sub('Ceremony'), sub('Reception')], meals: '1 beef · 1 veg', table: '1' }, st.yes),
+      Object.assign({ k: 'wait', ini1: 'CR', ini2: '+1', av1: 'var(--lav)', av2: 'var(--sand)', party: 'Chiara Romano', people: '1 guest + plus-one', side: 'Amara’s', subs: [sub('Ceremony'), sub('Reception')], meals: '—', table: '—' }, st.wait),
+      Object.assign({ k: 'yes', ini1: 'TN', ini2: 'KN', av1: 'var(--sand)', av2: 'var(--blush)', party: 'Tomás & Kai Nakamura', people: '2 guests · 1 nut allergy', side: 'Leo’s', subs: [sub('Ceremony'), sub('Reception')], meals: '2 veg', table: '6' }, st.yes),
+      Object.assign({ k: 'no', ini1: 'EL', ini2: 'JL', av1: 'var(--sky)', av2: 'var(--lav)', party: 'Elena & Jonas Lind', people: '2 guests', side: 'Amara’s', subs: [sub('Ceremony'), sub('Reception')], meals: '—', table: '—' }, st.no),
+      Object.assign({ k: 'wait', ini1: 'AF', ini2: 'RF', av1: 'var(--blush)', av2: 'var(--sky)', party: 'Amir & Rania Farouk', people: '2 guests', side: 'Leo’s', subs: [sub('Reception')], meals: '—', table: '—' }, st.wait)
+    ];
+    const defs = [
+      { id: 'all', label: 'All', n: '186' },
+      { id: 'yes', label: 'Attending', n: '142' },
+      { id: 'wait', label: 'Awaiting', n: '23' },
+      { id: 'no', label: 'Declined', n: '21' }
+    ];
+    return {
+      theme: dark ? DARK : LIGHT,
+      isDark: dark,
+      isLight: !dark,
+      modeLabel: dark ? 'Switch to light mode' : 'Switch to dark mode',
+      toggle: () => this.setState({ dark: !dark }),
+      hosts: [
+        { ini: 'AO', av: '#FFC2D6', name: 'Amara Okafor', role: 'Host' },
+        { ini: 'LB', av: '#C9BBFF', name: 'Leo Brandt', role: 'Host' },
+        { ini: 'SR', av: '#FFD9A0', name: 'Sofia Ricci', role: 'Planner' }
+      ],
+      stats: [
+        { label: 'Attending', value: '142', sub: '58 parties confirmed', bg: 'var(--mintSoft)', ink: 'var(--mint)' },
+        { label: 'Awaiting', value: '23', sub: '9 opened the invite', bg: 'var(--amberSoft)', ink: 'var(--amber)' },
+        { label: 'Declined', value: '21', sub: 'Seats released', bg: 'var(--pinkSoft)', ink: 'var(--pink)' },
+        { label: 'Meals chosen', value: '131', sub: '11 still to pick', bg: 'var(--surface2)', ink: 'var(--ink2)' }
+      ],
+      filters: defs.map((d) => {
+        const on = d.id === filter;
+        return { label: d.label, n: d.n, on: on ? 'true' : 'false', bg: on ? 'var(--tag)' : 'transparent', ink: on ? 'var(--tagInk)' : 'var(--ink2)', line: on ? 'var(--tag)' : 'var(--line)', pick: () => this.setState({ filter: d.id }) };
+      }),
+      rows: all.filter((r) => filter === 'all' || r.k === filter)
+    };
+  }
+}
+</script>
+</body>
+</html>

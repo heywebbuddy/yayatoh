@@ -1,6 +1,7 @@
 import { tenantTable } from '@yayatoh/db';
 import { sql } from 'drizzle-orm';
 import {
+  boolean,
   check,
   foreignKey,
   index,
@@ -47,6 +48,8 @@ export const EVENT_ROLES = [
   // M4.2a (P4-8): an event's co-host (the couple, the gala chair) and planner.
   'co_host',
   'planner',
+  // M5.3b: a call-for-papers reviewer (a portal account, P5-7): sees only assigned submissions.
+  'cfp_reviewer',
 ] as const;
 
 const inList = (col: string, values: readonly string[]) =>
@@ -77,6 +80,11 @@ export const events = tenantTable(
     category: text('category'),
     /** M1.4d: in person, online or hybrid. The join link lives in `event_private_info`. */
     attendanceMode: text('attendance_mode').notNull().default('in_person'),
+    /**
+     * U8: the org's own category (`org_categories`). `category` above stays the platform key it maps
+     * to (the marketplace taxonomy); a hidden org category keeps its events.
+     */
+    orgCategoryId: uuid('org_category_id'),
   },
   (t) => [
     uniqueIndex('events_slug_key').on(t.slug),
@@ -87,6 +95,11 @@ export const events = tenantTable(
     check('events_time_order_check', sql`ends_at > starts_at`),
     check('events_slug_format_check', sql`slug ~ '^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$'`),
     check('events_currency_check', sql`currency ~ '^[A-Z]{3}$'`),
+    /**
+     * U9: orders reference (org, event, currency) and refuse a currency change once one exists;
+     * ticket types and promo codes follow it (hand-written FKs).
+     */
+    uniqueIndex('events_org_id_currency_key').on(t.orgId, t.id, t.currency),
     index('events_org_id_venue_id_idx').on(t.orgId, t.venueId),
     index('events_org_id_category_idx').on(t.orgId, t.category),
     check(
@@ -94,6 +107,12 @@ export const events = tenantTable(
       sql.raw(`category is null or category in (${EVENT_CATEGORIES.map((v) => `'${v}'`).join(', ')})`),
     ),
     check('events_attendance_mode_check', inList('attendance_mode', ATTENDANCE_MODES)),
+    index('events_org_id_org_category_id_idx').on(t.orgId, t.orgCategoryId),
+    foreignKey({
+      name: 'events_org_category_fk',
+      columns: [t.orgId, t.orgCategoryId],
+      foreignColumns: [orgCategories.orgId, orgCategories.id],
+    }),
   ],
 );
 
@@ -197,5 +216,49 @@ export const seriesEvents = tenantTable(
       columns: [t.orgId, t.eventId],
       foreignColumns: [events.orgId, events.id],
     }).onDelete('cascade'),
+  ],
+);
+
+/**
+ * U8 (UX-2): the platform's default category list, managed by staff in admin. Global reference
+ * data (GLOBAL_TABLES): one row per taxonomy key; `in_defaults` and `position` decide which
+ * categories a new org list starts with and in what order. app_user reads it; staff change it
+ * only through the SECURITY DEFINER `events.set_platform_default_categories`.
+ */
+export const platformCategories = eventsSchema.table(
+  'platform_categories',
+  {
+    key: text('key').primaryKey(),
+    position: integer('position').notNull(),
+    inDefaults: boolean('in_defaults').notNull().default(true),
+    updatedBy: text('updated_by').notNull().default('migration'),
+    updatedAt: ts('updated_at').notNull().defaultNow(),
+  },
+  () => [check('platform_categories_key_check', inList('key', EVENT_CATEGORIES))],
+);
+
+/**
+ * U8 (UX-2): the org's own categories, seeded from the platform defaults on the first change.
+ * `name` null = the platform label of `platform_key` (translated); a custom or renamed category
+ * has a name. Every category maps to a platform key, so the marketplace keeps its taxonomy.
+ * Hidden categories leave the pickers; events keep them.
+ */
+export const orgCategories = tenantTable(
+  eventsSchema,
+  'org_categories',
+  {
+    platformKey: text('platform_key').notNull(),
+    name: text('name'),
+    position: integer('position').notNull(),
+    hiddenAt: ts('hidden_at'),
+  },
+  (t) => [
+    index('org_categories_org_id_position_idx').on(t.orgId, t.position),
+    uniqueIndex('org_categories_org_name_key')
+      .on(t.orgId, sql`lower(${t.name})`)
+      .where(sql`name is not null`),
+    uniqueIndex('org_categories_org_default_key').on(t.orgId, t.platformKey).where(sql`name is null`),
+    check('org_categories_platform_key_check', inList('platform_key', EVENT_CATEGORIES)),
+    check('org_categories_name_check', sql`name is null or char_length(name) between 1 and 60`),
   ],
 );

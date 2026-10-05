@@ -1,0 +1,45 @@
+{
+  "name": "@yayatoh/integrations",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "yayatoh": {
+    "tier": 6
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./client": "./src/client.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@yayatoh/attendees": "workspace:*",
+    "@yayatoh/audiences": "workspace:*",
+    "@yayatoh/billing": "workspace:*",
+    "@yayatoh/checkin": "workspace:*",
+    "@yayatoh/contracts": "workspace:*",
+    "@yayatoh/crm": "workspace:*",
+    "@yayatoh/db": "workspace:*",
+    "@yayatoh/donations": "workspace:*",
+    "@yayatoh/events": "workspace:*",
+    "@yayatoh/kernel": "workspace:*",
+    "@yayatoh/notifications": "workspace:*",
+    "@yayatoh/orders": "workspace:*",
+    "@yayatoh/payments": "workspace:*",
+    "@yayatoh/platform": "workspace:*",
+    "@yayatoh/program": "workspace:*",
+    "@yayatoh/registration": "workspace:*",
+    "@yayatoh/tenancy": "workspace:*",
+    "@yayatoh/ticketing": "workspace:*",
+    "@yayatoh/virtual": "workspace:*",
+    "drizzle-orm": "catalog:",
+    "intl-messageformat": "11.2.15",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@yayatoh/config": "workspace:*",
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
+  }
+}

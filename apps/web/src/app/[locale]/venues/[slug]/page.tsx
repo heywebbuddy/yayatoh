@@ -54,20 +54,20 @@ export default async function PublicVenuePage({
   return (
     <main className="mx-auto flex min-h-dvh max-w-5xl flex-col gap-10 px-4 py-12 md:px-8">
       <header className="flex flex-col gap-3">
-        <Link href="/venues" className="self-start text-caption text-zinc-600 underline underline-offset-2">
+        <Link href="/venues" className="self-start text-caption text-ink-2 underline underline-offset-2">
           {t('directory')}
         </Link>
-        <h1 className="text-[36px] leading-tight font-light tracking-[-0.04em] md:text-title">
+        <h1 className="text-[36px] leading-tight font-extrabold tracking-[-0.04em] md:text-title">
           {venue.name}
         </h1>
-        <p className="text-[15px] text-zinc-500">{t('managedBy', { org: venue.organizerName })}</p>
+        <p className="text-[15px] text-ink-2">{t('managedBy', { org: venue.organizerName })}</p>
       </header>
       <section aria-labelledby="venue-about" className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <h2 id="venue-about" className="sr-only">
           {t('about')}
         </h2>
         <Card className="flex flex-col gap-2">
-          <h3 className="text-caption text-zinc-600">{t('address')}</h3>
+          <h3 className="text-caption text-ink-2">{t('address')}</h3>
           <address className="not-italic text-body">
             {address.map((l) => (
               <span key={l} className="block">
@@ -91,12 +91,12 @@ export default async function PublicVenuePage({
               {t('capacity', { count: venue.capacity, formatted: formatNumber(venue.capacity, locale) })}
             </p>
           ) : null}
-          <p className="text-caption text-zinc-600">
+          <p className="text-caption text-ink-2">
             {t('timezone', { zone: venue.timezone.replace(/_/g, ' ') })}
           </p>
           {venue.accessibilityNotes ? (
             <>
-              <h3 className="text-caption text-zinc-600">{t('accessibility')}</h3>
+              <h3 className="text-caption text-ink-2">{t('accessibility')}</h3>
               <p className="whitespace-pre-line text-body">{venue.accessibilityNotes}</p>
             </>
           ) : null}
@@ -113,7 +113,7 @@ export default async function PublicVenuePage({
                 <MediaPicture
                   image={p}
                   sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                  className="aspect-[4/3] w-full rounded-card bg-zinc-50 object-cover"
+                  className="aspect-[4/3] w-full rounded-card bg-surface-2 object-cover"
                 />
               </li>
             ))}
@@ -134,7 +134,7 @@ export default async function PublicVenuePage({
                   <Link href={`/events/${e.slug}`} className="text-body underline underline-offset-2">
                     {e.name}
                   </Link>
-                  <span className="text-caption text-zinc-500">
+                  <span className="text-caption text-ink-2">
                     {formatEventDateRange(e.startsAt.toISOString(), e.endsAt.toISOString(), {
                       locale,
                       currency: 'USD',
@@ -151,7 +151,7 @@ export default async function PublicVenuePage({
         <h2 id="venue-quote" className="text-section">
           {t('quoteTitle')}
         </h2>
-        <p className="text-body text-zinc-500">{t('quoteDescription', { org: venue.organizerName })}</p>
+        <p className="text-body text-ink-2">{t('quoteDescription', { org: venue.organizerName })}</p>
         <Card size="panel">
           <QuoteForm
             action={requestQuoteAction.bind(null, slug)}

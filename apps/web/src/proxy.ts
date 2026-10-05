@@ -3,6 +3,7 @@ import { frameAncestors, matchLegacyRedirect, widgetOrigins } from '@yayatoh/mar
 import {
   DEVICE_COOKIE,
   generateNonce,
+  geolocationAllowed,
   isDeviceId,
   newDeviceId,
   pageTypeOf,
@@ -17,9 +18,11 @@ import { routing } from './i18n/routing.ts';
 import { captureLanding } from './lib/attribution-capture.ts';
 import { FRONT_DOOR_ROUTE_HEADER, frontDoor } from './lib/front-door/index.ts';
 import { bareHost, classifyHost } from './lib/hosts.ts';
+import { INTL_SCOPE_HEADER, intlScopeOf } from './lib/intl-scope.ts';
 import { robotsHeader } from './lib/seo/robots.ts';
 import { localizedPath } from './lib/seo/urls.ts';
 import { TtlCache } from './lib/ttl-cache.ts';
+import { webhookPortalFrameSources } from './lib/webhook-portal.ts';
 
 /**
  * Optimistic only (CLAUDE.md): no authorization here. The proxy maps the Host to a site
@@ -106,8 +109,14 @@ export default async function proxy(req: NextRequest, event?: NextFetchEvent): P
     nonce,
     dev: process.env.NODE_ENV === 'development',
     https,
-    // Ably (M3.1b) when it is the configured transport; SSE is same-origin.
-    extra: { connect: realtimeConnectSources() },
+    // M6.14a: marketplace search's "Use my location".
+    geolocation: geolocationAllowed(stripLocale(path, routing.locales)),
+    // Ably (M3.1b) when it is the configured transport; SSE is same-origin. M6.3b: Svix's portal
+    // on the console's embedded-portal page, once Svix is configured (nothing otherwise).
+    extra: {
+      connect: realtimeConnectSources(),
+      frame: webhookPortalFrameSources(stripLocale(path, routing.locales), process.env),
+    },
   });
   const forwarded = new Headers(req.headers);
   forwarded.set('x-nonce', nonce);
@@ -115,6 +124,10 @@ export default async function proxy(req: NextRequest, event?: NextFetchEvent): P
   forwarded.delete(FRONT_DOOR_ROUTE_HEADER);
   if (door) forwarded.set(FRONT_DOOR_ROUTE_HEADER, door.route);
   forwarded.set('content-security-policy', headers['content-security-policy'] as string);
+  // M4.7a: pages that send their client components only a few message namespaces (never a client's).
+  forwarded.delete(INTL_SCOPE_HEADER);
+  const intlScope = intlScopeOf(stripLocale(path, routing.locales));
+  if (intlScope) forwarded.set(INTL_SCOPE_HEADER, intlScope);
   // The noindex guard: never-indexed hosts and private pages say so on every response.
   const robots = robotsHeader(kind, stripLocale(path, routing.locales));
   // A first visit gets its device id now, and the request carries it on, so the page or route
@@ -234,7 +247,8 @@ export default async function proxy(req: NextRequest, event?: NextFetchEvent): P
     const ev = /^\/events\/([^/]+)\/?$/.exec(rest);
     if (ev) return secure(rewrite(req, forwarded, res, `/${locale}/t/${orgId}/events/${ev[1]}`, locale));
     // The org's CMS (M1.4g): its blog, posts and pages (the legacy Voyager paths).
-    const cms = /^\/(blogs|blogs\/[^/]+|pages\/[^/]+)\/?$/.exec(rest);
+    // U10: its contact page (a 404 there while the organizer has it off).
+    const cms = /^\/(blogs|blogs\/[^/]+|pages\/[^/]+|contact)\/?$/.exec(rest);
     if (cms) return secure(rewrite(req, forwarded, res, `/${locale}/t/${orgId}/${cms[1]}`, locale));
     // The live seat stream of that page (M1.7f): the host's org decides which events it may carry.
     const seats = /^\/events\/([^/]+)\/seats\/stream\/?$/.exec(rest);
@@ -274,11 +288,12 @@ export default async function proxy(req: NextRequest, event?: NextFetchEvent): P
   }
 
   if (kind === 'marketplace') {
-    // `/o/{slug}` and, M1.4g, its blog and pages (`/o/{slug}/blogs[/{post}]`, `/o/{slug}/pages/{page}`).
-    const org = /^\/o\/([^/]+)(\/blogs|\/blogs\/[^/]+|\/pages\/[^/]+)?\/?$/.exec(rest);
+    // `/o/{slug}` and, M1.4g, its blog and pages (`/o/{slug}/blogs[/{post}]`, `/o/{slug}/pages/{page}`);
+    // U10: its contact page (`/o/{slug}/contact`).
+    const org = /^\/o\/([^/]+)(\/blogs|\/blogs\/[^/]+|\/pages\/[^/]+|\/contact)?\/?$/.exec(rest);
     if (org)
       return secure(rewrite(req, forwarded, res, `/${locale}/organizers/${org[1]}${org[2] ?? ''}`, locale));
-    const long = /^\/organizers\/([^/]+)(\/blogs|\/blogs\/[^/]+|\/pages\/[^/]+)?\/?$/.exec(rest);
+    const long = /^\/organizers\/([^/]+)(\/blogs|\/blogs\/[^/]+|\/pages\/[^/]+|\/contact)?\/?$/.exec(rest);
     if (long)
       return secure(
         NextResponse.redirect(onHost(req, localizedPath(locale, `/o/${long[1]}${long[2] ?? ''}`)), 308),

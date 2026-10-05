@@ -32,7 +32,7 @@ export function SignOutEverywhere() {
     <form
       action={signOutEverywhereAction}
       aria-labelledby={promptId}
-      className="flex flex-col gap-3 rounded-card border border-zinc-200 bg-zinc-50 p-4"
+      className="flex flex-col gap-3 rounded-card border border-line bg-surface-2 p-4"
       onKeyDown={(e) => {
         if (e.key === 'Escape') cancel();
       }}

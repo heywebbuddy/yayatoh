@@ -32,14 +32,14 @@ export default async function UnsubscribePage({
         description={t(`category.${info.category}`)}
       />
       <Card size="panel" className="flex flex-col gap-4">
-        {info.email ? <p className="text-body text-zinc-600">{t('address', { email: info.email })}</p> : null}
+        {info.email ? <p className="text-body text-ink-2">{t('address', { email: info.email })}</p> : null}
         <UnsubscribeForm
           action={unsubscribeAction.bind(null, token)}
           initial={info.unsubscribed}
           org={info.orgName}
           category={info.category}
         />
-        <p className="text-caption text-zinc-500">{t('transactionalNote')}</p>
+        <p className="text-caption text-ink-2">{t('transactionalNote')}</p>
         {info.preferencesPath ? (
           <Link href={info.preferencesPath} className="self-start text-body underline underline-offset-4">
             {t('managePreferences', { org: info.orgName })}

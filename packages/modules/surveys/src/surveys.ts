@@ -433,6 +433,30 @@ export async function sendSurveyStepTx(
     : { status: 'skipped', reason: 'already_invited' };
 }
 
+/**
+ * Whether a person (contact) answered the event's post-event survey: the journey condition
+ * "answered the survey" (M3.7a). False when the event has no post-event survey.
+ */
+export async function answeredEventSurveyTx(
+  tx: TenantTx,
+  eventId: string,
+  contactId: string,
+): Promise<boolean> {
+  const [row] = await tx
+    .select({ id: surveyResponses.id })
+    .from(surveyResponses)
+    .innerJoin(surveys, eq(surveys.id, surveyResponses.surveyId))
+    .where(
+      and(
+        eq(surveys.eventId, eventId),
+        eq(surveys.kind, 'post_event'),
+        eq(surveyResponses.contactId, contactId),
+      ),
+    )
+    .limit(1);
+  return Boolean(row);
+}
+
 /** `sendSurveyStepTx` as a command, for callers outside a transaction (a journey runner job). */
 export const sendSurveyStepCommand = tenantCommand({
   name: 'surveys.sendSurveyStep',
@@ -641,7 +665,15 @@ export const submitSurveyResponseCommand = tenantCommand({
       version: 1,
       aggregateType: 'survey',
       aggregateId: s.id,
-      payload: { orgId, surveyId: s.id, eventId: s.eventId, invitationId: inv.id },
+      payload: {
+        orgId,
+        surveyId: s.id,
+        eventId: s.eventId,
+        invitationId: inv.id,
+        // M5.7b: who answered (engagement scores) and the session a feedback survey is about.
+        contactId: inv.contactId,
+        sessionId: s.sessionId,
+      },
     });
     return { ok: true, surveyId: s.id };
   },
@@ -887,4 +919,4 @@ export async function respondedInvitationIdsTx(tx: TenantTx, eventId: string, su
   return rows.map((r) => r.id);
 }
 
-export { formSubject, surveyTx };
+export { formSubject, subjectEndsAt, surveyTx };

@@ -18,6 +18,9 @@ export const GuestDto = z.object({
   dietary: z.string().nullable(),
   accessibility: z.string().nullable(),
   address: z.string().nullable(),
+  /** From an import (M4.1b), sealed with the answers above. */
+  email: z.string().nullable(),
+  phone: z.string().nullable(),
   attendeeId: z.uuid().nullable(),
   isPrimary: z.boolean(),
 });
@@ -68,7 +71,7 @@ export type GuestListDto = z.infer<typeof GuestListDto>;
 
 export const HistoryEntryDto = z.object({
   id: z.uuid(),
-  partyId: z.uuid(),
+  partyId: z.uuid().nullable(),
   guestId: z.uuid().nullable(),
   action: z.enum(HISTORY_ACTIONS),
   source: z.enum(GUEST_SOURCES),

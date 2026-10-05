@@ -23,13 +23,46 @@ export {
   bulkOperationRequesterTx,
   bulkStepCommand,
   defineBulkAction,
+  failedBulkOperationsTx,
   listBulkOperationsQuery,
   MAX_BULK_ITEMS,
   markBulkFailedCommand,
   runBulkOperation,
 } from './bulk.ts';
 export { tenantCommand, tenantQuery } from './commands/define.ts';
-export { createCommandPorts, type PolicyPorts, recentStepUp, withImpersonator } from './commands/ports.ts';
+export {
+  createCommandPorts,
+  type PolicyPorts,
+  recentStepUp,
+  withAgency,
+  withImpersonator,
+} from './commands/ports.ts';
+export {
+  type DataSubject,
+  type DataSubjectContributor,
+  DELETE,
+  dataSubjectContributors,
+  defineDataSubjectContributor,
+  type ErasureConnectorHook,
+  erasureConnectorHooks,
+  type HeldRecord,
+  hold,
+  LEGAL_HOLD_BASES,
+  type LegalHoldBasis,
+  notSubject,
+  REDACT,
+  refsOf,
+  registerDataSubjectContributors,
+  registerErasureConnectorHooks,
+  type SubjectCoverageProblem,
+  type SubjectErasure,
+  type SubjectExport,
+  type SubjectFile,
+  type SubjectRefs,
+  type SubjectTableAction,
+  subjectCoverage,
+} from './data-subject.ts';
+export { platformDataSubjects, subjectNeedles } from './data-subject-platform.ts';
 export {
   addressHash,
   type ErasedAddress,
@@ -67,7 +100,7 @@ export {
   turnstileHumanCheck,
 } from './human-check.ts';
 export { IDENTITY_KEY_SCOPE, type KeyVault, keyVault, localKeyVault, setKeyVault } from './key-vault.ts';
-export { isModuleKey, MODULE_KEYS, type ModuleKey } from './modules.ts';
+export { isModuleKey, MODULE_KEYS, type ModuleKey, PHASE6_MODULE_KEYS } from './modules.ts';
 export {
   type MemberNotificationIntent,
   memoryNotifier,
@@ -83,6 +116,7 @@ export {
   emitEvents,
   eventKey,
   type PublishedEvent,
+  processedPairsTx,
   recentEventsTx,
   type Subscriber,
   subscribes,

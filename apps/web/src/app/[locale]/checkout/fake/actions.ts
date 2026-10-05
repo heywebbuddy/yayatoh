@@ -13,6 +13,7 @@ export async function completeFakePayment(
     currency: string;
     returnUrl: string;
     fee?: string;
+    acct?: string;
   },
   outcome: 'succeeded' | 'failed',
 ): Promise<void> {
@@ -27,6 +28,7 @@ export async function completeFakePayment(
     orgId: params.org,
     orderId: params.order,
     ...(params.fee !== undefined ? { applicationFeeMinor: Number(params.fee) } : {}),
+    ...(params.acct ? { connectedAccountId: params.acct } : {}),
   });
   await fetch(`${origin}/api/webhooks/fake`, {
     method: 'POST',

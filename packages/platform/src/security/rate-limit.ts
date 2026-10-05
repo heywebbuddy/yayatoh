@@ -245,6 +245,29 @@ export const RATE_LIMIT_POLICIES = {
     identity: { limit: 10, windowMs: 60 * MIN },
     ipCeiling: { limit: 300, windowMs: 10 * MIN },
   },
+  /** M5.1a: looking up the registration types an email or code may pick (code guessing). */
+  registrationLookup: {
+    device: { limit: 30, windowMs: 10 * MIN },
+    anonymousIp: { limit: 60, windowMs: 10 * MIN },
+    ipCeiling: { limit: 600, windowMs: 10 * MIN },
+  },
+  /** M5.3b: sending a call-for-papers proposal (public form, per device, IP and submitter email). */
+  cfpSubmit: {
+    device: { limit: 10, windowMs: 10 * MIN },
+    anonymousIp: { limit: 20, windowMs: 10 * MIN },
+    identity: { limit: 10, windowMs: 60 * MIN },
+    ipCeiling: { limit: 200, windowMs: 10 * MIN },
+  },
+  /**
+   * Registration forms (M5.1b): starting one (creates a draft) and asking for the resume link
+   * (sends an email; also capped per respondent by the forms module).
+   */
+  registrationForm: {
+    device: { limit: 20, windowMs: 10 * MIN },
+    anonymousIp: { limit: 40, windowMs: 10 * MIN },
+    identity: { limit: 10, windowMs: 60 * MIN },
+    ipCeiling: { limit: 300, windowMs: 10 * MIN },
+  },
   /** Starting a checkout (creates holds on inventory). */
   checkoutStart: {
     device: { limit: 20, windowMs: 10 * MIN },
@@ -272,6 +295,14 @@ export const RATE_LIMIT_POLICIES = {
     identity: { limit: 5, windowMs: 60 * MIN },
     ipCeiling: { limit: 200, windowMs: 10 * MIN },
   },
+  /** Guests' help requests from the seat finder (M3.3b); identity = the ticket. Each one may push
+   * staff phones, so bursts are cut early (a ticket also has at most 3 open requests). */
+  assistanceRequest: {
+    device: { limit: 5, windowMs: 10 * MIN },
+    anonymousIp: { limit: 20, windowMs: 10 * MIN },
+    identity: { limit: 5, windowMs: 30 * MIN },
+    ipCeiling: { limit: 200, windowMs: 10 * MIN },
+  },
   /** Reports of public reviews (M1.4g). */
   reviewReport: {
     device: { limit: 10, windowMs: 10 * MIN },
@@ -288,6 +319,13 @@ export const RATE_LIMIT_POLICIES = {
   /** Contact / sales requests from the marketing site (M3.11b); identity = the sender's email. */
   contactRequest: {
     device: { limit: 3, windowMs: 10 * MIN },
+    anonymousIp: { limit: 10, windowMs: 10 * MIN },
+    identity: { limit: 3, windowMs: 60 * MIN },
+    ipCeiling: { limit: 100, windowMs: 10 * MIN },
+  },
+  /** U10: messages through an org's contact page; identity = the sender's email and the org. */
+  orgContact: {
+    device: { limit: 5, windowMs: 10 * MIN },
     anonymousIp: { limit: 10, windowMs: 10 * MIN },
     identity: { limit: 3, windowMs: 60 * MIN },
     ipCeiling: { limit: 100, windowMs: 10 * MIN },
@@ -321,11 +359,89 @@ export const RATE_LIMIT_POLICIES = {
     identity: { limit: 3, windowMs: 24 * 60 * MIN },
     ipCeiling: { limit: 20, windowMs: 60 * MIN },
   },
+  /** Session enrollment from "My schedule" (M5.2b): enrol, join or leave a line, drop, accept;
+   * identity = the order's manage token. Generous: people build their schedule in one sitting. */
+  sessionEnrollment: {
+    device: { limit: 60, windowMs: 10 * MIN },
+    anonymousIp: { limit: 120, windowMs: 10 * MIN },
+    identity: { limit: 120, windowMs: 60 * MIN },
+    ipCeiling: { limit: 900, windowMs: 10 * MIN },
+  },
+  /** Live polls and Q&A (M5.7a): votes, questions and upvotes from one device or network (the
+   * engagement module also caps questions per participant and keeps one vote per poll). A room
+   * full of phones shares one venue IP, hence the high anonymous and ceiling limits. */
+  engagement: {
+    device: { limit: 60, windowMs: MIN },
+    anonymousIp: { limit: 600, windowMs: MIN },
+    ipCeiling: { limit: 6000, windowMs: 10 * MIN },
+  },
+  /** Networking (M5.8a): profile changes, connection and meeting requests and answers, block and
+   * report; identity = the verified address. The engagement module also caps waiting requests. */
+  networking: {
+    device: { limit: 60, windowMs: 10 * MIN },
+    anonymousIp: { limit: 300, windowMs: 10 * MIN },
+    identity: { limit: 120, windowMs: 60 * MIN },
+    ipCeiling: { limit: 3000, windowMs: 10 * MIN },
+  },
+  /** Networking chat (M5.8b): sending, read marks, block and report, from attendees and booth
+   * people; identity = the verified address or the portal account. The engagement module keeps
+   * the message limits themselves (per minute, hour, new chats, unanswered). */
+  chat: {
+    device: { limit: 120, windowMs: 10 * MIN },
+    anonymousIp: { limit: 600, windowMs: 10 * MIN },
+    identity: { limit: 300, windowMs: 60 * MIN },
+    ipCeiling: { limit: 6000, windowMs: 10 * MIN },
+  },
   /** CSP violation reports. */
   cspReport: {
     device: { limit: 60, windowMs: MIN },
     anonymousIp: { limit: 60, windowMs: MIN },
     ipCeiling: { limit: 300, windowMs: MIN },
+  },
+  /**
+   * M4.1d: the RSVP paper fallback (exact full name + the party's PIN). Past the device budget
+   * the page asks for the human check before each further try; identity = the event's lookup
+   * code, across devices.
+   */
+  rsvpLookup: {
+    device: { limit: 5, windowMs: 10 * MIN },
+    anonymousIp: { limit: 15, windowMs: 10 * MIN },
+    identity: { limit: 100, windowMs: 15 * MIN },
+    ipCeiling: { limit: 200, windowMs: 10 * MIN },
+  },
+  /**
+   * M4.1f: the public contact collector (guests send their address and contact details). Each
+   * submission lands in the host's queue, so past the device budget the page asks for the human
+   * check; identity = the collector's code, across devices.
+   */
+  contactCollector: {
+    device: { limit: 5, windowMs: 60 * MIN },
+    anonymousIp: { limit: 10, windowMs: 60 * MIN },
+    identity: { limit: 300, windowMs: 60 * MIN },
+    ipCeiling: { limit: 200, windowMs: 60 * MIN },
+  },
+  /**
+   * M4.5a: a guest website's password. Past the device budget the page asks for the human check
+   * before each further try; identity = the site's address, across devices (a whole wedding's
+   * guests unlocking it the same evening stays well under it).
+   */
+  guestSitePassword: {
+    device: { limit: 8, windowMs: 10 * MIN },
+    anonymousIp: { limit: 30, windowMs: 10 * MIN },
+    identity: { limit: 300, windowMs: 15 * MIN },
+    ipCeiling: { limit: 300, windowMs: 10 * MIN },
+  },
+  /**
+   * M4.5b: guests' gallery uploads and video links (one per upload slot). Generous per device (a
+   * guest shares a whole evening's photos), and per address across devices (a venue's guests
+   * share one Wi-Fi address); identity = the site's address. The cap and quotas bound storage;
+   * this bounds the request rate.
+   */
+  galleryUpload: {
+    device: { limit: 120, windowMs: 60 * MIN },
+    anonymousIp: { limit: 240, windowMs: 60 * MIN },
+    identity: { limit: 5_000, windowMs: 60 * MIN },
+    ipCeiling: { limit: 2_000, windowMs: 60 * MIN },
   },
 } as const satisfies Record<string, RateLimitPolicy>;
 

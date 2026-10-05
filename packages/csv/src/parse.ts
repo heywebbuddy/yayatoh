@@ -8,7 +8,11 @@ export type CsvErrorCode =
   | 'too_many_columns'
   | 'cell_too_long'
   | 'unterminated_quote'
-  | 'empty';
+  | 'empty'
+  /** XLSX (M4.1b): not a readable workbook, the named sheet is missing, or it expands too far. */
+  | 'not_a_spreadsheet'
+  | 'sheet_not_found'
+  | 'too_large';
 
 // Plain fields, not parameter properties: Node runs this file with type stripping only.
 export class CsvError extends Error {

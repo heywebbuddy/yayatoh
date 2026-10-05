@@ -94,7 +94,7 @@ export default async function WaitlistJoinPage({ params, searchParams }: Params)
       )}
       <Link
         href={`/events/${slug}${chosen ? `?date=${chosen.id}` : ''}`}
-        className="self-start text-body underline underline-offset-2"
+        className="inline-flex min-h-6 items-center self-start text-body underline underline-offset-2"
       >
         {t('backToEvent')}
       </Link>

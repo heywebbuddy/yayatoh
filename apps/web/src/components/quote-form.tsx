@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, Input } from '@yayatoh/ui';
+import { Alert, Button, DatePicker, Input } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState, useEffect, useRef, useState } from 'react';
 import { errorMessageKey } from '@/lib/errors.ts';
@@ -57,9 +57,8 @@ export function QuoteForm({
         error={bad.has('email') ? t('errors.email') : undefined}
       />
       <Input name="phone" type="tel" autoComplete="tel" label={t('phone')} />
-      <Input
+      <DatePicker
         name="eventDate"
-        type="date"
         label={t('eventDate')}
         error={bad.has('eventDate') ? t('errors.eventDate') : undefined}
       />
@@ -77,7 +76,7 @@ export function QuoteForm({
         <input id="quote-website" name="website" type="text" tabIndex={-1} autoComplete="off" />
       </div>
       <div className="flex flex-col gap-1.5 md:col-span-2">
-        <label htmlFor="quote-message" className="text-caption text-zinc-600">
+        <label htmlFor="quote-message" className="text-[13px] font-bold text-ink">
           {t('message')}
         </label>
         <textarea
@@ -88,14 +87,14 @@ export function QuoteForm({
           maxLength={4000}
           aria-invalid={bad.has('message') || undefined}
           aria-describedby={bad.has('message') ? 'quote-message-error' : 'quote-message-hint'}
-          className={`rounded-card border bg-white px-4 py-2 text-body ${bad.has('message') ? 'border-pink-700' : 'border-zinc-200'}`}
+          className={`rounded-card border bg-surface px-4 py-2 text-body ${bad.has('message') ? 'field-invalid' : ''}`}
         />
         {bad.has('message') ? (
-          <p id="quote-message-error" className="text-caption text-pink-700">
+          <p id="quote-message-error" className="text-caption text-danger">
             {t('errors.message')}
           </p>
         ) : (
-          <p id="quote-message-hint" className="text-caption text-zinc-500">
+          <p id="quote-message-hint" className="text-caption text-ink-2">
             {t('messageHint')}
           </p>
         )}

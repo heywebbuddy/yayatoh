@@ -69,7 +69,7 @@ export function SignInForm({
             pending={pending}
             idPrefix="sign-in"
           />
-          <p className="text-caption text-zinc-600">{t('attendeeSignIn.orLink')}</p>
+          <p className="text-caption text-ink-2">{t('attendeeSignIn.orLink')}</p>
         </>
       ) : null}
       <div aria-live="assertive">{error ? <Alert title={error} /> : null}</div>
@@ -204,7 +204,7 @@ export function OrderLinksForm({
         <h2 id="order-links-title" className="text-section">
           {t('orderLinks.title')}
         </h2>
-        <p className="text-body text-zinc-600">{t('orderLinks.description')}</p>
+        <p className="text-body text-ink-2">{t('orderLinks.description')}</p>
         <form action={formAction} className="flex flex-col gap-3 sm:flex-row sm:items-end">
           <div className="flex-1">
             <Input

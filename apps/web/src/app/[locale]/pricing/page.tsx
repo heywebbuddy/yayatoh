@@ -79,8 +79,8 @@ export default async function PricingPage({
                     aria-current={f.currency === currency ? 'true' : undefined}
                     className={`inline-flex min-h-10 items-center rounded-pill border px-4 text-body ${
                       f.currency === currency
-                        ? 'border-zinc-900 bg-zinc-900 text-white'
-                        : 'border-zinc-200 bg-white text-zinc-700'
+                        ? 'border-ink bg-tag text-white'
+                        : 'border-line bg-surface text-ink-2'
                     }`}
                   >
                     {f.currency}
@@ -97,9 +97,9 @@ export default async function PricingPage({
                 {t('feeHeading', { currency: fee.currency })}
               </h2>
               <Card className="flex flex-col gap-2">
-                <p className="text-[28px] leading-tight font-light tracking-[-0.03em]">{feeSummary}</p>
-                <p className="text-body text-zinc-600">{t('freeTickets')}</p>
-                <p className="text-body text-zinc-600">{t('noSubscription')}</p>
+                <p className="text-[28px] leading-tight font-extrabold tracking-[-0.03em]">{feeSummary}</p>
+                <p className="text-body text-ink-2">{t('freeTickets')}</p>
+                <p className="text-body text-ink-2">{t('noSubscription')}</p>
               </Card>
             </section>
             <section aria-labelledby="allin-heading" className="flex flex-col gap-3">
@@ -130,11 +130,11 @@ export default async function PricingPage({
                   { key: 'net', header: t('col.youReceive'), cell: (r) => fmt(r.b.organizerNet.amount) },
                 ]}
               />
-              <p className="text-caption text-zinc-600">{t('exampleNote')}</p>
+              <p className="text-caption text-ink-2">{t('exampleNote')}</p>
             </section>
           </>
         ) : (
-          <p className="text-body text-zinc-600">{t('unavailable')}</p>
+          <p className="text-body text-ink-2">{t('unavailable')}</p>
         )}
         <section aria-labelledby="start-heading" className="flex flex-col gap-3">
           <h2 id="start-heading" className="text-section">

@@ -1,0 +1,17 @@
+# M6.2a — per-event state for no-shows (valid tickets, checked in, end day in the org's time zone).
+# `deleted = 1` drops an event. Newest `version` per (org_id, event_id) wins.
+
+SCHEMA >
+    `org_id` String `json:$.org_id`,
+    `event_id` String `json:$.event_id`,
+    `version` UInt64 `json:$.version`,
+    `deleted` UInt8 `json:$.deleted`,
+    `starts_at` DateTime64(3, 'UTC') `json:$.starts_at`,
+    `ends_at` DateTime64(3, 'UTC') `json:$.ends_at`,
+    `end_day` Date `json:$.end_day`,
+    `valid_tickets` Int64 `json:$.valid_tickets`,
+    `checked_in` Int64 `json:$.checked_in`
+
+ENGINE "ReplacingMergeTree"
+ENGINE_SORTING_KEY "org_id, event_id"
+ENGINE_VER "version"

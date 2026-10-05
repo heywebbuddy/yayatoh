@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
-import { expectAccessible, expectHtmlAccessible, OPEN_HOUSE, signIn } from './helpers.ts';
+import { expectAccessible, expectHtmlAccessible, OPEN_HOUSE, pickOption, signIn } from './helpers.ts';
 
 interface Captured {
   subject: string;
@@ -152,7 +152,7 @@ test.describe('messaging: announcements and conversations', () => {
 
     // Report, then block: the attendee can no longer write.
     const safety = page.getByRole('region', { name: 'Block or report' });
-    await safety.getByLabel('Reason').selectOption('spam');
+    await pickOption(safety.getByLabel('Reason'), 'spam');
     await safety.getByRole('button', { name: 'Report to Yayatoh' }).click();
     await expect(safety.getByText('Thanks. Yayatoh will review this conversation.')).toBeVisible();
     await safety.getByRole('button', { name: 'Block this person' }).click();
@@ -167,7 +167,7 @@ test.describe('messaging: announcements and conversations', () => {
     // The attendee blocks the organizer (and reports), then unblocks.
     await guest.reload();
     const theirs = guest.getByRole('region', { name: 'Block or report' });
-    await theirs.getByLabel('Reason').selectOption('other');
+    await pickOption(theirs.getByLabel('Reason'), 'other');
     await theirs.getByLabel('Details (optional)').fill('Too many emails');
     await theirs.getByRole('button', { name: 'Report to Yayatoh' }).click();
     await expect(theirs.getByText('Thanks. Yayatoh will review this conversation.')).toBeVisible();

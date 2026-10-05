@@ -1,6 +1,6 @@
 # ADR 0018 — Design system: Superpower-style
 
-- **Status:** Accepted (owner decision, 2026-09-26)
+- **Status:** Accepted (owner decision, 2026-09-26). **Visual layer superseded by [ADR 0022](0022-design-system-v2.md)** (2026-10-02); the rules (tokens only, no raw colours, status not by hue alone) stay.
 - **Supersedes:** the "three directions" exploration in roadmap §3.1 (UI row).
 
 ## Context

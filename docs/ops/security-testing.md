@@ -39,6 +39,15 @@ a single small machine. That is the "large on-sale" risk the roadmap assigns to 
 Queue-it (§10) and to M2.3 capacity work; it is not a correctness problem (no errors, no
 oversell). Staging runs at 3× the expected peak are the real gate before M2.1 (owner inbox).
 
+### Phase 6 load tests (M6.x, local run 2026-10-04)
+`k6/api-limits.js`, `k6/sync-throughput.js`, `k6/warehouse-ingest.js` against one `next start` and Postgres 18 in Docker; fake providers only.
+
+| Run | Load | Result | Thresholds |
+|---|---|---|---|
+| API limits per entitlement | live key 30 req/s + test key 10 req/s for 60 s | admitted 908 live (budget 600/min) and 181 test (budget 120/min); 1 313 limited, 100 % well-formed 429; p95 **33 ms**; 0 5xx | ✓ all |
+| Sync throughput | demo connector, 1 500 contacts, 3 syncs | **244 records/s** (min 229); sync p95 **8.6 s**; every record pulled, no failures beyond the seeded one | ✓ all |
+| Warehouse ingest | full analytics rebuild, 3 runs | rebuild finished, events read, repeats idempotent; p95 **216 ms** | ✓ all |
+
 ## Accessibility
 - Every new screen and state in M1.14 has an axe check (WCAG 2.2 AA tags, zero serious/critical):
   Activity (list, filters, empty, export, refused), Privacy requests (find, results, export, erase,

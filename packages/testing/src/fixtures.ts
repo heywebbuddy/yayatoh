@@ -1,33 +1,150 @@
 import { createECDH } from 'node:crypto';
-import { draftEventCopy, fakeDrafter } from '@yayatoh/ai';
+import { draftEventCopy, fakeDrafter, saveBrandKitCommand } from '@yayatoh/ai';
 import {
+  acknowledgeAlertCommand,
+  evaluateEventAlertsTx,
+  listAlertsQuery,
+  setAlertRoutingCommand,
+  setMyAlertPhoneCommand,
+  setSalesTargetCommand,
+} from '@yayatoh/alerts';
+import {
+  backfillOrgNow,
+  catchUpWarehouse,
+  createAlertRuleCommand,
+  createReportScheduleCommand,
+  periodContaining,
+  postgresWarehouse,
+  runReportPeriod,
+  saveViewCommand,
+} from '@yayatoh/analytics';
+import {
+  assignCommand as assistanceAssignCommand,
+  addNoteCommand as assistanceNoteCommand,
+  queueQuery as assistanceQueueQuery,
+  assistanceTicketToken,
+  guestRequestCommand,
+  staffRequestCommand,
+} from '@yayatoh/assistance';
+import {
+  addGuestCommand,
   attendeeImportBulk,
   attendeeLabelBulk,
+  setAttendeeLabelsCommand,
   stageImportCommand,
   validateImportCommand,
 } from '@yayatoh/attendees';
-import { catchUpParticipation, saveSegmentCommand, templateDefinition } from '@yayatoh/audiences';
-import { setEntitlementOverrideCommand, setFeeOverrideCommand } from '@yayatoh/billing';
+import {
+  catchUpContactSignals,
+  catchUpParticipation,
+  saveSegmentCommand,
+  templateDefinition,
+} from '@yayatoh/audiences';
+import { createJourneyCommand, journeyTriggers, setJourneyEnabledCommand } from '@yayatoh/automations';
+import {
+  assignTemplateCommand,
+  createPrinterCommand,
+  createTemplateCommand,
+  kioskRequestCodeCommand,
+  printerHeartbeatCommand,
+  runBadgeBatch,
+  setKioskSettingsCommand,
+  setPrintNodeCommand,
+  startBatchCommand,
+  startPrintJobCommand,
+} from '@yayatoh/badges';
+import {
+  applyBillingEventCommand,
+  linkBillingCustomerCommand,
+  recordUsageTx,
+  setEntitlementOverrideCommand,
+  setFeeOverrideCommand,
+  setLegacyFeesCommand,
+} from '@yayatoh/billing';
+import {
+  createCampaignCommand,
+  runOrgCampaigns,
+  saveCampaignCommand,
+  sendNowCommand,
+  setAudienceCommand,
+} from '@yayatoh/campaigns';
 import {
   chatReportSignals,
+  claimStaffPushCommand,
   createCheckpointCommand,
   enrollDeviceCommand,
+  heartbeatCommand,
+  markQuietDevicesTx,
+  recordGuestArrivalsCommand,
+  reportPresenceCommand,
   scanTicketCommand,
   setDetectionSettingsCommand,
+  stageStaffAlertPushesTx,
+  startKioskCommand,
+  subscribeStaffPushCommand,
 } from '@yayatoh/checkin';
 import {
   createEntryCommand,
   createHelpArticleCommand,
   createHelpCategoryCommand,
   createSiteSectionCommand,
+  setContactPageCommand,
   setEntryStatusCommand,
   setHelpArticleStatusCommand,
   setSiteSectionStatusCommand,
   submitContactRequestCommand,
   submitHelpFeedbackCommand,
+  submitOrgContactCommand,
 } from '@yayatoh/cms';
+import {
+  createDisplayLinkCommand,
+  saveWidgetLayoutCommand,
+  setModeOverrideCommand,
+} from '@yayatoh/command-center';
+import {
+  mergeContactsCommand,
+  recordTermConsentTx,
+  recordTimelineTx,
+  scanDuplicatesCommand,
+  upsertContactTx,
+} from '@yayatoh/crm';
 import { withTenant } from '@yayatoh/db';
 import {
+  armLevelCommand,
+  assignPaddleCommand,
+  closeCallCommand,
+  closeMatchCommand,
+  confirmEntriesCommand,
+  createCampaignCommand as createGivingCampaignCommand,
+  createLevelCommand as createGivingLevelCommand,
+  createMatchCommand,
+  issueReceiptTx,
+  paddleConsoleQuery,
+  recordDonationReconciliationCommand,
+  recordPaddlesCommand,
+  resolveDonationReconItemCommand,
+  saveCharityProfileCommand,
+  saveScreenCommand,
+  setFairValueCommand,
+  verifyCharityCommand,
+} from '@yayatoh/donations';
+import {
+  askQuestionCommand,
+  catchUpEngagement,
+  createPollCommand,
+  enableLiveCommand,
+  moderateQuestionCommand,
+  openPollCommand,
+  participantKey,
+  pinQuestionCommand,
+  setScoreWeightsCommand,
+  updateSettingsCommand,
+  upvoteQuestionCommand,
+  voteCommand,
+} from '@yayatoh/engagement';
+import {
+  addChecklistItemCommand,
+  addOrgCategoryCommand,
   addRecurringOccurrencesCommand,
   addSectionCommand,
   assignEventRoleCommand,
@@ -35,9 +152,12 @@ import {
   createAccessCodeCommand,
   createAnnouncementCommand,
   createEventCommand,
+  createPortalSession,
   createSeriesCommand,
   type EventDto,
   listOccurrencesQuery,
+  portalCtx,
+  portalPrincipalBySession,
   redeemAccessCodeCommand,
   setEventDetailsCommand,
   setEventSeriesCommand,
@@ -45,23 +165,87 @@ import {
   transitionEventCommand,
 } from '@yayatoh/events';
 import { buildRow } from '@yayatoh/floorplan';
-import { publishFormCommand } from '@yayatoh/forms';
 import {
+  publishFormCommand,
+  publishRegistrationFormCommand,
+  saveRegistrationPageCommand,
+  setJobTitlesCommand,
+  startRegistrationFormCommand,
+} from '@yayatoh/forms';
+import { addGalleryVideoCommand } from '@yayatoh/gallery';
+import {
+  addGuestSiteBlockCommand,
   addPartyGuestCommand,
   addPlusOneCommand,
+  collectorQueueQuery,
   createPartyCommand,
+  createRsvpLinksCommand,
+  createSubEventCommand,
+  guessGuestMapping,
+  guestImportBulk,
+  markRsvpSentCommand,
+  markRsvpViewedCommand,
   moveGuestCommand,
+  partyRsvpQuery,
+  publishGuestSiteCommand,
+  publishRsvpQuestionsCommand,
+  readGuestTable,
+  recordSubEventResponseCommand,
+  rejectSubmissionCommand,
+  type SiteBlockKind,
+  saveGuestSiteCommand,
+  saveMenuOptionCommand,
+  setCollectorCommand,
+  setGuestSitePasswordCommand,
+  setInvitationsCommand,
+  setInvitationTemplateCommand,
+  setPartyLocaleCommand,
+  setRsvpSettingsCommand,
+  stageGuestImportCommand,
+  submitContactCommand,
+  updateGuestSiteBlockCommand,
   updatePartyGuestCommand,
+  validateGuestImportCommand,
 } from '@yayatoh/guests';
+import {
+  dayIn,
+  fakeIntegrations,
+  linkEventSheet,
+  queueSlackTestCommand,
+  runSync,
+  saveAccountMapCommand,
+  saveAudienceSyncCommand,
+  saveSlackSettingsCommand,
+  sheetLinksQuery,
+  sheetsRemoteEdit,
+  sheetsRemoteRows,
+} from '@yayatoh/integrations';
 import { type Ctx, createCtx, executeCommand, executeQuery, uuidv7 } from '@yayatoh/kernel';
+import {
+  acceptLeadTermsCommand,
+  LEAD_TERMS_VERSION,
+  saveLeadSettingsCommand,
+  syncLeadScansCommand,
+} from '@yayatoh/leads';
 import {
   attributeOrderCommand,
   createTrackedLinkCommand,
   recordClickCommand,
   setAttributionWindowCommand,
 } from '@yayatoh/marketing';
-import { addLegacyRedirectCommand, catchUpListings, updateSiteSettingsCommand } from '@yayatoh/marketplace';
-import { uploadLogo, uploadMedia, uploadProgramImage } from '@yayatoh/media';
+import {
+  addLegacyRedirectCommand,
+  catchUpListings,
+  moderateListingCommand,
+  updateSiteSettingsCommand,
+} from '@yayatoh/marketplace';
+import {
+  reuseMedia,
+  uploadLogo,
+  uploadMedia,
+  uploadProgramImage,
+  uploadSpeakerPortalFile,
+} from '@yayatoh/media';
 import {
   announcementMailer,
   contactMessageCommand,
@@ -71,12 +255,18 @@ import {
   threadToken,
 } from '@yayatoh/messaging';
 import {
+  addSendingDomainCommand,
   createNotifier,
   dispatchDue,
+  fakeIdentityPort,
   memoryTransports,
   recordDeliveryEventsCommand,
+  recordInboundKeywordCommand,
+  recordSendingDomainCheckCommand,
   registerPushTokenCommand,
   sendTestNotificationCommand,
+  setChannelSenderCommand,
+  setEmailIdentityCommand,
   setFrequencyCapsCommand,
   setMyPreferencesCommand,
   setQuotaLimitCommand,
@@ -92,12 +282,16 @@ import {
   attachPaymentCommand,
   completeRefundCommand,
   declineRefundRequestCommand,
+  issueCreditNoteCommand,
   refundRequestsQuery,
   registerOrderPushCommand,
   requestRefundCommand,
+  runSupportMacroCommand,
+  saveSupportMacroCommand,
   setCheckoutSettingsCommand,
   setRefundPolicyCommand,
   startCheckoutCommand,
+  startLeadLicenseCheckoutCommand,
   startRefundCommand,
 } from '@yayatoh/orders';
 import {
@@ -110,19 +304,67 @@ import {
   catchUpSubscriber,
   consumeEvent,
   defineSubscriber,
+  emitEvents,
+  MODULE_KEYS,
   publishRealtimeTx,
   recentEventsTx,
 } from '@yayatoh/platform';
-import { dsarExportBulk } from '@yayatoh/privacy';
+import { exportSubjectCommand, openRequestCommand } from '@yayatoh/privacy';
 import {
+  addCfpQuestionCommand,
+  addCfpReviewerCommand,
+  addSponsorDeliverableCommand,
+  assignBoothCommand,
+  assignCfpReviewerCommand,
+  assignSponsoredSessionCommand,
+  cfpOverviewQuery,
+  claimSessionPlaceTx,
   createExhibitorCommand,
+  createPortalTaskCommand,
   createRoomCommand,
   createSessionCommand,
+  createSessionGroupCommand,
+  createSessionTypeCommand,
   createSpeakerCommand,
   createSponsorCommand,
   createSponsorTierCommand,
   createTrackCommand,
+  decideCfpSubmissionCommand,
+  grantSponsorPackageCommand,
+  inviteExhibitorMemberCommand,
+  inviteSpeakerCommand,
+  inviteSponsorContactCommand,
+  portalAssignLeadLicenseCommand,
+  portalInviteStaffCommand,
+  portalSaveProfileCommand,
+  sessionsOf as programSessionsOf,
+  proposeProfileChangeCommand,
+  publishAgendaCommand,
+  recordGroupPickTx,
+  saveBoothCommand,
+  saveCfpCommand,
+  saveExhibitorListingCommand,
+  saveExhibitorSettingsCommand,
+  saveLeadLicenseSettingsCommand,
+  saveSponsorPackageCommand,
+  setSessionAgendaCommand,
+  setSponsorExhibitorCommand,
+  speakerPortalQuery,
+  submitCfpCommand,
+  submitCfpReviewCommand,
 } from '@yayatoh/program';
+import {
+  applyCommand,
+  createRegistrationTypeCommand,
+  registrationSetupQuery,
+  replaceMembersCommand,
+  saveReasonTemplateCommand,
+  seedRegistrationDefaultsCommand,
+  setCellCommand,
+  setEnrollmentSettingsCommand,
+  setPayLaterCommand,
+  setTypeRulesCommand,
+} from '@yayatoh/registration';
 import {
   analyticsForwarder,
   attendeeExportBulk,
@@ -131,15 +373,37 @@ import {
 } from '@yayatoh/reports';
 import { reportReviewCommand, submitReviewCommand } from '@yayatoh/reviews';
 import {
+  addSolverRuleCommand,
+  allotSeatsCommand,
   assignSeatsCommand,
+  giveSubEventOwnChartCommand,
   holdSeatsTx,
   publishEventLayoutCommand,
+  recordChannelOrderTx,
   requestFinderCodeCommand,
   saveLayoutCommand,
+  saveSeatChannelCommand,
+  seatGuestsCommand,
   setEventLayoutCommand,
   setFinderSettingsCommand,
   setSeatingRulesCommand,
+  setSelectionSettingsCommand,
+  setVipTableCommand,
 } from '@yayatoh/seating';
+import {
+  addDomainCommand,
+  checkDomainCommand,
+  completeSsoLoginCommand,
+  createScimTokenCommand,
+  FAKE_IDP_CERTIFICATE,
+  publishFakeTxt,
+  recordConnectionTestCommand,
+  saveConnectionCommand,
+  scimCreateGroupCommand,
+  scimCreateUserCommand,
+  scimCtx,
+  setConnectionStatusCommand,
+} from '@yayatoh/sso';
 import {
   createSurveyCommand,
   sendSurveyCommand,
@@ -154,9 +418,12 @@ import {
   addMemberCommand,
   createApiKeyCommand,
   createOrganization,
+  createSandboxCommand,
+  deleteSandboxCommand,
   inviteMemberCommand,
   type OrganizationDto,
   PLATFORM_AGREEMENTS,
+  recordApiKeyUsage,
   revokeApiKeyCommand,
   setLegalPageCommand,
   setOrgStatusCommand,
@@ -164,14 +431,31 @@ import {
   updateOrganizationCommand,
 } from '@yayatoh/tenancy';
 import {
+  badgeTicketsTx,
   createClaimLinksCommand,
+  createCouponCommand,
   createPromoCodeCommand,
   createTicketTypeCommand,
   requestHolderLinkCommand,
 } from '@yayatoh/ticketing';
 import { createVenueCommand, submitQuoteRequestCommand } from '@yayatoh/venues';
+import { createEndpointCommand } from '@yayatoh/webhooks';
 import { sql } from 'drizzle-orm';
-import { ports, runBulk } from './ports.ts';
+import { ceFixture } from './ce.ts';
+import { enableGallery, guestGalleryPhoto, guestSiteAccess, hostGalleryPhoto } from './gallery.ts';
+import {
+  connectAccounting,
+  connectConnector,
+  connectDemo,
+  connectFake,
+  connectSlack,
+  fakeAccountMap,
+  fakeAuth,
+} from './integrations.ts';
+import { catchUpTimeline } from './merge.ts';
+import { networkingFixture } from './networking.ts';
+import { ports, runBulk, submitRegistrationForm } from './ports.ts';
+import { virtualFixture, virtualV2Fixture } from './virtual.ts';
 
 export interface OrgFixture {
   readonly org: OrganizationDto;
@@ -184,6 +468,9 @@ export interface OrgFixture {
   readonly testKey: string;
   /** Context of the owner inside this org. */
   readonly ctx: (overrides?: Partial<Ctx>) => Ctx;
+  /** M5.3a: the fixture speaker and their portal account (session cookie value on `fixture.test`). */
+  readonly speakerId: string;
+  readonly portal: { readonly accountId: string; readonly token: string };
 }
 
 /**
@@ -334,6 +621,63 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ctx(),
     ports,
   );
+  // M5.1b: a registration form, the job title list, one submitted respondent (consent checked,
+  // company named) and one draft with a sensitive answer, so respondents, job titles and
+  // companies are covered.
+  await executeCommand(
+    publishRegistrationFormCommand,
+    {
+      eventId: event.id,
+      definition: {
+        pages: [
+          {
+            key: 'about',
+            title: 'About you',
+            fields: [
+              { key: 'company', type: 'company', label: 'Company' },
+              { key: 'job', type: 'job_title', label: 'Job title' },
+              { key: 'access', type: 'short_text', label: 'Access needs', sensitive: true },
+              {
+                key: 'share_email',
+                type: 'consent',
+                label: 'Exhibitors may receive my email',
+                consent: { term: 'exhibitor_email_sharing', version: 1 },
+              },
+            ],
+          },
+        ],
+      },
+    },
+    ctx(),
+    ports,
+  );
+  await executeCommand(setJobTitlesCommand, { titles: ['Engineer', 'Director'] }, ctx(), ports);
+  for (const [who, submit] of [
+    ['respondent', true],
+    ['drafter', false],
+  ] as const) {
+    const { token } = await executeCommand(
+      startRegistrationFormCommand,
+      {
+        eventId: event.id,
+        registrationTypeId: 'fixture-type',
+        name: `Fixture ${who}`,
+        email: `${who}@${slug}.test`,
+      },
+      ctx(),
+      ports,
+    );
+    const answers = { company: `${name} Partner`, job: 'Engineer', access: 'Step-free', share_email: true };
+    if (submit)
+      await executeCommand(submitRegistrationForm, { token, pageKey: 'about', answers }, ctx(), ports);
+    else
+      await executeCommand(
+        saveRegistrationPageCommand,
+        { token, pageKey: 'about', answers, intent: 'stay' },
+        ctx(),
+        ports,
+      );
+  }
   // One paid order (fake provider) so orders, order items and provider events are covered.
   await executeCommand(transitionEventCommand, { eventId: event.id, transition: 'publish' }, ctx(), ports);
   // M3.8a: a tracked link and one click on it from the buyer's device, before the order.
@@ -383,6 +727,24 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     systemCtx(org.id),
     ports,
   );
+  // U9: an org coupon for the event and a (released) redemption by the paid order's buyer.
+  const coupon = await executeCommand(
+    createCouponCommand,
+    {
+      code: 'FIXTUREORG',
+      kind: 'amount',
+      amountMinor: 500,
+      currency: 'USD',
+      scope: 'events',
+      eventIds: [event.id],
+    },
+    ctx(),
+    ports,
+  );
+  await withTenant(systemCtx(org.id), (tx) =>
+    tx.execute(sql`insert into ticketing.coupon_redemptions (org_id, coupon_id, order_id, event_id, buyer_contact_id, released_at)
+      select org_id, ${coupon.id}, id, event_id, buyer_contact_id, now() from orders.orders where id = ${checkout.order.id}`),
+  );
   // M3.8a: the order's attribution record (first and last touch: the click above) and settings.
   await executeCommand(
     attributeOrderCommand,
@@ -391,6 +753,90 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ports,
   );
   await executeCommand(setAttributionWindowCommand, { windowDays: 30 }, ctx(), ports);
+  // M3.7a: a switched-on journey for the event; the paid order above enrolls the buyer (a run
+  // with its scheduled steps, both still ahead).
+  const journey = await executeCommand(
+    createJourneyCommand,
+    {
+      name: `${name} welcome`,
+      eventId: event.id,
+      trigger: 'order_paid',
+      steps: [
+        {
+          anchor: 'event_start',
+          offsetDays: -2,
+          action: 'email',
+          subject: 'Soon: {event}',
+          body: 'Hi {name}!',
+        },
+        { anchor: 'event_start', offsetDays: -1, action: 'label', label: 'Reminded' },
+      ],
+    },
+    ctx(),
+    ports,
+  );
+  await executeCommand(setJourneyEnabledCommand, { journeyId: journey.id, enabled: true }, ctx(), ports);
+  await catchUpSubscriber(journeyTriggers(), org.id);
+  // M5.5a badges: a template (and its version) assigned to the pass, and a batch with one
+  // rendered part left running (a fake renderer: no Gotenberg in the fixture).
+  const badgeTemplate = await executeCommand(
+    createTemplateCommand,
+    { eventId: event.id, name: 'Fixture badge', size: 'fold_4x3' },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    assignTemplateCommand,
+    { eventId: event.id, ticketTypeId: ga.id, templateId: badgeTemplate.id },
+    ctx(),
+    ports,
+  );
+  const badgeBatch = await executeCommand(
+    startBatchCommand,
+    { eventId: event.id, requestKey: `fixture-${slug}`, sort: 'last_name' },
+    ctx(),
+    ports,
+  );
+  await runBadgeBatch(
+    { ports, renderer: { render: async () => new TextEncoder().encode('%PDF-fixture') } },
+    org.id,
+    badgeBatch.id,
+    { maxChunks: 1 },
+  );
+  // M5.5b printing: the print settings row (PrintNode off), a station printer heard from, and one
+  // badge printed and reprinted (the print log).
+  await executeCommand(setPrintNodeCommand, { enabled: false }, systemCtx(org.id), ports);
+  const badgePrinter = await executeCommand(
+    createPrinterCommand,
+    { eventId: event.id, name: 'Fixture desk', adapter: 'browser' },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    printerHeartbeatCommand,
+    { eventId: event.id, printerId: badgePrinter.id },
+    ctx(),
+    ports,
+  );
+  const [badgeTicket] = await withTenant(ctx(), (tx) => badgeTicketsTx(tx, { eventId: event.id }));
+  if (badgeTicket)
+    for (const [n, reason] of [
+      [1, null],
+      [2, 'damaged'],
+    ] as const)
+      await executeCommand(
+        startPrintJobCommand,
+        {
+          eventId: event.id,
+          ticketId: badgeTicket.id,
+          printerId: badgePrinter.id,
+          reason,
+          note: n === 2 ? 'Fixture reprint' : null,
+          requestKey: `fixture-print-${n}-${slug}`,
+        },
+        ctx(),
+        ports,
+      );
   // A dispute on the paid order, opened (hold) and won (hold undone): isolation coverage.
   for (const [type, outcome] of [
     ['dispute.created', undefined],
@@ -515,14 +961,20 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     systemCtx(org.id),
     ports,
   );
-  await executeCommand(enrollDeviceCommand, { label: `Door ${slug}` }, ctx(), ports);
+  const door = await executeCommand(enrollDeviceCommand, { label: `Door ${slug}` }, ctx(), ports);
   // Org API keys: one live with every scope, one test key (M1.13d), one revoked (isolation coverage).
-  const { key: apiKey } = await executeCommand(
+  const { key: apiKey, id: apiKeyId } = await executeCommand(
     createApiKeyCommand,
     { name: `Fixture ${slug}`, scopes: [...API_KEY_SCOPES] },
     ctx(),
     ports,
   );
+  // M6.3a: one day of the key's usage, and a sandbox org linked to this org (isolation coverage).
+  await recordApiKeyUsage({ orgId: org.id, keyId: apiKeyId, status: 200 });
+  // Only the parent's link row (no sandbox org is provisioned, so fixtures add no org that
+  // org-wide jobs must walk), deleted again so the org's live sandbox count starts at zero.
+  const sandbox = await executeCommand(createSandboxCommand, { name: `Sandbox of ${name}` }, ctx(), ports);
+  await executeCommand(deleteSandboxCommand, { sandboxId: sandbox.id }, ctx(), ports);
   const { key: testKey } = await executeCommand(
     createApiKeyCommand,
     { name: `Sandbox ${slug}`, scopes: ['org:read', 'events:read'], mode: 'test' },
@@ -538,7 +990,9 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   await executeCommand(revokeApiKeyCommand, { apiKeyId: retired.id }, ctx(), ports);
   // One admission (and its scan) at event time, so the check-in tables are covered.
   const [issued] = await withTenant(systemCtx(org.id), (tx) =>
-    tx.execute<{ short_code: string }>(sql`select short_code from ticketing.tickets order by serial limit 1`),
+    tx.execute<{ id: string; short_code: string }>(
+      sql`select id, short_code from ticketing.tickets order by serial limit 1`,
+    ),
   );
   // Two entrances: admitted at one, shown at the other a minute later → a `two_entrances` signal.
   const gate = async (name: string) =>
@@ -563,6 +1017,76 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
       ports,
     );
   }
+  // Staff mode (M3.4a): the door device reports in at the main gate, opts in to staff alerts,
+  // and is taken by the owner as a supervisor's phone; a capacity alert is queued for it.
+  // Dated at event time, so the fixture device doesn't count as online now (devices.online metric).
+  const deviceCtx = createCtx({
+    orgId: org.id,
+    actor: { type: 'system', name: `device:${door.deviceId}` },
+    now: new Date('2027-10-14T14:55:00Z'),
+  });
+  await executeCommand(
+    heartbeatCommand,
+    { batteryPct: 80, queueDepth: 0, clockOffsetMs: 0, eventId: event.id, checkpointId: mainGate },
+    deviceCtx,
+    ports,
+  );
+  const pushKey = createECDH('prime256v1');
+  pushKey.generateKeys();
+  const copy = { title: 'Alert', body: '{label} {percent}' };
+  await executeCommand(
+    subscribeStaffPushCommand(() => true),
+    {
+      endpoint: `https://push.example.test/fixture-${slug}`,
+      keys: { p256dh: pushKey.getPublicKey().toString('base64url'), auth: 'AAAAAAAAAAAAAAAAAAAAAA' },
+      locale: 'en',
+      copy: { device_offline: copy, device_low_battery: copy, device_backlog: copy, capacity_near: copy },
+    },
+    deviceCtx,
+    ports,
+  );
+  await executeCommand(
+    claimStaffPushCommand,
+    { eventId: event.id, deviceId: door.deviceId, supervisor: true },
+    ctx(),
+    ports,
+  );
+  await withTenant(systemCtx(org.id), (tx) =>
+    stageStaffAlertPushesTx(
+      tx,
+      {
+        list: async () => [
+          {
+            key: `capacity_near:${event.id}:fixture`,
+            kind: 'capacity_near',
+            severity: 'warning',
+            deviceId: null,
+            deviceLabel: null,
+            percent: 91,
+            count: null,
+            since: new Date(),
+            supervisorOnly: false,
+          },
+        ],
+      },
+      event.id,
+      new Date(),
+    ),
+  );
+  await executeCommand(
+    startKioskCommand,
+    { eventId: event.id, deviceId: door.deviceId, checkpointId: sideGate, pin: '2468' },
+    ctx(),
+    ports,
+  );
+  // M5.5c kiosk self-print: the event's kiosk settings and one emailed kiosk code (isolation).
+  await executeCommand(setKioskSettingsCommand, { eventId: event.id, enabled: true }, ctx(), ports);
+  await executeCommand(
+    kioskRequestCodeCommand(async () => false),
+    { eventId: event.id, email: `kiosk@${slug}.test` },
+    createCtx({ orgId: org.id, actor: { type: 'system', name: `device:${door.deviceId}` } }),
+    ports,
+  );
   // Per-event velocity rule settings (M1.9d), for isolation coverage.
   await executeCommand(
     setDetectionSettingsCommand,
@@ -597,6 +1121,60 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
       ports,
     );
   }
+  // M3.10c support tools (isolation coverage): a store credit note on the paid order with a little
+  // of it spent, a macro run on the order (a team note), and a cancelled transfer of the first
+  // ticket with the recipient's wallet pass, voided (inserted directly so holders stay as they are).
+  const note = await executeCommand(
+    issueCreditNoteCommand,
+    {
+      orderId: checkout.order.id,
+      kind: 'partial',
+      amountMinor: 100,
+      disposition: 'store_credit',
+      reason: 'Goodwill for the late doors.',
+    },
+    ctx({ idempotencyKey: `fixture-credit-${slug}` }),
+    ports,
+  );
+  await withTenant(systemCtx(org.id), async (tx) => {
+    await tx.execute(sql`
+      update orders.credit_notes set balance_minor = balance_minor - 1 where id = ${note.id}`);
+    await tx.execute(sql`
+      insert into orders.credit_note_applications (org_id, credit_note_id, order_id, amount_minor)
+      values (${org.id}, ${note.id}, ${checkout.order.id}, 1)`);
+  });
+  const macro = await executeCommand(
+    saveSupportMacroCommand,
+    {
+      name: 'Called the buyer',
+      subject: 'About your order {{order_ref}}',
+      body: 'Spoke with {{buyer_name}} about {{event_name}}.',
+      actions: ['add_note'],
+    },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    runSupportMacroCommand,
+    { orderId: checkout.order.id, macroId: macro.id },
+    ctx({ idempotencyKey: `fixture-macro-${slug}` }),
+    ports,
+  );
+  if (held)
+    await withTenant(systemCtx(org.id), async (tx) => {
+      const [claim] = await tx.execute<{ id: string }>(sql`
+        insert into ticketing.ticket_claims (org_id, ticket_id, recipient_email, expires_at, revoked_at, created_by)
+        values (${org.id}, ${held.id}, ${`friend@${slug}.test`}, now() + interval '7 days', now(), 'fixture')
+        returning id`);
+      await tx.execute(sql`
+        insert into ticketing.ticket_transfers (org_id, ticket_id, event_id, order_id, claim_id, status,
+          initiated_by, from_name, from_email, to_name, to_email, currency, created_by, from_rev, cancelled_at)
+        values (${org.id}, ${held.id}, ${event.id}, ${checkout.order.id}, ${claim?.id}, 'cancelled', 'holder',
+          'Fixture Buyer', ${held.holder_email}, 'Fixture Friend', ${`friend@${slug}.test`}, 'USD', 'fixture', 0, now())`);
+      await tx.execute(sql`
+        insert into ticketing.wallet_passes (org_id, ticket_id, rev, serial, holder_name, status, voided_at)
+        values (${org.id}, ${held.id}, 999, ${`yy-${held.id}-999`}, 'Fixture Friend', 'voided', now())`);
+    });
   // A guest-list import (staged rows + a batch), a finished bulk label (undo data) and an export
   // (a file with parts), for isolation coverage.
   const staged = await executeCommand(
@@ -696,6 +1274,46 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ctx(),
     ports,
   );
+  // M6.11a: best available offered, and one companion seat (isolation coverage). The fixture's row
+  // has no accessible seat, so the companion row is written directly rather than by the command.
+  await executeCommand(
+    setSelectionSettingsCommand,
+    { eventId: event.id, bestAvailable: true, sectionScores: {} },
+    ctx(),
+    ports,
+  );
+  await withTenant(ctx(), (tx) =>
+    tx.execute(
+      sql`insert into seating.companion_seats (org_id, event_id, seat_uuid) values (${org.id}, ${event.id}, ${plan.items[0]?.seats[1]?.id ?? ''})`,
+    ),
+  );
+  // M6.11b: a promoter channel with the row's last seat allotted to it, and one order attributed
+  // to it (isolation coverage). The plan's saves above wrote its layout revisions.
+  const promoter = await executeCommand(
+    saveSeatChannelCommand,
+    {
+      eventId: event.id,
+      kind: 'promoter',
+      name: 'Fixture promoter',
+      code: `FIX-${slug.slice(-6).toUpperCase()}`,
+    },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    allotSeatsCommand,
+    { eventId: event.id, channelId: promoter.id, seatUuids: [plan.items[0]?.seats[3]?.id ?? ''] },
+    ctx(),
+    ports,
+  );
+  await withTenant(ctx(), (tx) =>
+    recordChannelOrderTx(tx, ctx(), {
+      eventId: event.id,
+      orderId: uuidv7(),
+      channelId: promoter.id,
+      seats: 1,
+    }),
+  );
   // The public seat finder (M1.7e): opened, and that guest asks for a code (a code row and a
   // rate-limit counter, isolation coverage).
   await executeCommand(
@@ -719,6 +1337,14 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     systemCtx(org.id),
     ports,
   );
+  // M6.14a: staff hid the listing and showed it again (moderation row, isolation coverage).
+  for (const hidden of [true, false])
+    await executeCommand(
+      moderateListingCommand,
+      { eventId: event.id, hidden, reason: `fixture ${hidden ? 'hide' : 'unhide'}` },
+      systemCtx(org.id),
+      ports,
+    );
   // Notifications (M1.10): a queued and a sent message, an inbox item, a preference, a push
   // token, a template override and an unsubscribe (isolation coverage).
   const notifier = createNotifier();
@@ -866,6 +1492,60 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
       (org_id, complaints, sent, rate_bps, window_start, lifted_at, lifted_by, lift_note)
       values (${org.id}, 2, 400, 50, now() - interval '1 day', now(), 'system:fixture', 'fixture lift')`),
   );
+  // Provider adapters (M3.5b): a verified sending domain, dedicated SMS and WhatsApp senders (ids
+  // derived from the org id, so unique platform-wide) and an inbound STOP (isolation coverage).
+  const sending = await executeCommand(
+    addSendingDomainCommand,
+    { domain: `mail.${slug}.example.test`, provider: 'fake' },
+    ctx(),
+    ports,
+  );
+  const identity = await fakeIdentityPort().status(sending.domain);
+  await executeCommand(
+    recordSendingDomainCheckCommand,
+    {
+      id: sending.id,
+      dkim: identity.dkim,
+      spf: identity.spf,
+      dmarc: 'verified',
+      dmarcPolicy: 'none',
+      records: identity.records,
+      providerRef: identity.providerRef,
+    },
+    ctx(),
+    ports,
+  );
+  const hex = org.id.replace(/-/g, '');
+  await executeCommand(
+    setChannelSenderCommand,
+    { kind: 'sms', messagingServiceSid: `MG${hex}`, displayNumber: null, campaignStatus: 'verified' },
+    systemCtx(org.id),
+    ports,
+  );
+  await executeCommand(
+    setChannelSenderCommand,
+    {
+      kind: 'whatsapp',
+      route: 'cloud',
+      senderRef: BigInt(`0x${hex.slice(-13)}`).toString(),
+      displayNumber: null,
+    },
+    systemCtx(org.id),
+    ports,
+  );
+  await executeCommand(
+    recordInboundKeywordCommand,
+    {
+      provider: 'twilio',
+      id: `fixture-stop-${slug}`,
+      channel: 'sms',
+      keyword: 'stop',
+      from: '+19995550100',
+      receivedAt: new Date(),
+    },
+    systemCtx(org.id),
+    ports,
+  );
   // Messaging (M1.10c): an announcement fanned out to the event's attendees, a contact's reply,
   // and a report from each side (isolation coverage).
   const sent = await executeCommand(
@@ -968,7 +1648,25 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   );
   for (const e of [event, weekly])
     await executeCommand(setEventSeriesCommand, { eventId: e.id, seriesId: tour.id }, ctx(), ports);
-  await executeCommand(saveTemplateCommand, { eventId: event.id, name: `${name} template` }, ctx(), ports);
+  // U6: the organizer's own checklist item (a template made from the event carries it).
+  await executeCommand(
+    addChecklistItemCommand,
+    { eventId: event.id, title: `${name} walkthrough` },
+    ctx(),
+    ports,
+  );
+  const template = await executeCommand(
+    saveTemplateCommand,
+    { eventId: event.id, name: `${name} template` },
+    ctx(),
+    ports,
+  );
+  // U6 template → events link (template_events): the fixture event stands for one made from it.
+  await withTenant(systemCtx(org.id), (tx) =>
+    tx.execute(
+      sql`insert into templates.template_events (org_id, template_id, event_id) values (${org.id}, ${template.id}, ${event.id})`,
+    ),
+  );
   // M1.4c: a directory venue picked for the event, a quote request on it, and tags.
   const venue = await executeCommand(
     createVenueCommand,
@@ -979,6 +1677,13 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   await executeCommand(
     setEventDetailsCommand,
     { eventId: event.id, venueId: venue.id, category: 'community', tags: ['Fixture', 'Isolation'] },
+    ctx(),
+    ports,
+  );
+  // U8: the org's own category list (seeded from the platform defaults above) and a custom one.
+  await executeCommand(
+    addOrgCategoryCommand,
+    { name: `${name} Specials`, platformKey: 'other' },
     ctx(),
     ports,
   );
@@ -1027,23 +1732,90 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
       createCtx({ orgId: org.id }),
       ports,
     );
-  // A data-subject access request for the imported guest (M1.14c, isolation coverage).
+  // Data-subject requests (M1.14c, M6.1c; isolation coverage): the imported guest's access request,
+  // fulfilled (a signed archive in the media store), and an open erasure request (sealed address).
   const dsar = await executeCommand(
-    dsarExportBulk.start,
-    {
-      selection: { filter: { email: `imported-${slug}@example.test` } },
-      params: { email: `imported-${slug}@example.test`, orgName: name },
-    },
+    openRequestCommand,
+    { email: `imported-${slug}@example.test`, kind: 'access' },
     ctx(),
     ports,
   );
-  await runBulk(org.id, dsar.operationId);
+  await executeCommand(exportSubjectCommand, { requestId: dsar.requestId }, ctx(), ports);
+  await executeCommand(
+    openRequestCommand,
+    { email: `forget-me-${slug}@example.test`, kind: 'erasure' },
+    ctx(),
+    ports,
+  );
   // Legacy migration (M2.2b): a host_affiliate child org (its own owner) and one legacy statement.
   const affiliate = await createOrganization(
     userCtx(uuidv7()),
     { slug: `${slug}-affiliate`, name: `${name} Affiliate` },
     ports,
   );
+  // M6.7a: the org grants an agency (its own org and owner) viewer access, and holds agency
+  // snapshots of its affiliate (isolation coverage: the agency tables are owned by the agency org).
+  const agencyOrg = await createOrganization(
+    userCtx(uuidv7()),
+    { slug: `${slug}-agency`, name: `${name} Agency`, kind: 'agency' },
+    ports,
+  );
+  await withTenant(systemCtx(org.id), async (tx) => {
+    await tx.execute(
+      sql`insert into tenancy.org_access_grants (org_id, agency_org_id, role, granted_by) values (${org.id}, ${agencyOrg.id}, 'viewer', ${ownerId})`,
+    );
+    await tx.execute(sql`insert into agency.client_snapshots (org_id, client_org_id, grant_id, events_total,
+      next_event_name, revenue, with_finance, refreshed_at)
+      values (${org.id}, ${affiliate.id}, ${uuidv7()}, 1, 'Affiliate Gala', '{"USD": 1000}'::jsonb, true, now())`);
+    await tx.execute(sql`insert into agency.event_snapshots (org_id, client_org_id, event_id, name, slug, status, starts_at,
+      ends_at, timezone, currency, refreshed_at) values (${org.id}, ${affiliate.id}, ${uuidv7()}, 'Affiliate Gala',
+      'affiliate-gala', 'published', now(), now() + interval '3 hours', 'America/New_York', 'USD', now())`);
+    // M6.8a agency billing (isolation coverage): an offer to pay the affiliate's plan (as an agency
+    // would hold it), and an ended acceptance of the fixture agency's billing (never in force).
+    await tx.execute(sql`insert into billing.agency_billing_offers (org_id, client_org_id, offered_by)
+      values (${org.id}, ${affiliate.id}, ${ownerId})`);
+    await tx.execute(sql`insert into billing.agency_billing (org_id, grant_id, agency_org_id, commission_bps,
+      accepted_by, accepted_at, ended_at, end_reason)
+      select ${org.id}, g.id, ${agencyOrg.id}, 1000, ${ownerId}, now() - interval '2 days', now() - interval '1 day', 'client'
+      from tenancy.org_access_grants g where g.org_id = ${org.id} and g.agency_org_id = ${agencyOrg.id}`);
+  });
+  // M6.8b: agency v2 rows owned by the org: its template's private settings, a brand kit (its own)
+  // and a received copy, a publication and a fan-out with one target (as if it were an agency),
+  // a received item, a detachment, and a team place and a day-of pass under its agency grant.
+  await withTenant(systemCtx(org.id), async (tx) => {
+    const [tpl] = await tx.execute<{ id: string }>(
+      sql`select id from templates.event_templates where org_id = ${org.id} limit 1`,
+    );
+    const [g] = await tx.execute<{ id: string }>(
+      sql`select id from tenancy.org_access_grants where org_id = ${org.id} and agency_org_id = ${agencyOrg.id}`,
+    );
+    if (tpl)
+      await tx.execute(sql`insert into agency_ops.template_settings (org_id, template_id, private_notes, private_parts)
+        values (${org.id}, ${tpl.id}, 'Fixture private note', array['seating']::text[])`);
+    await tx.execute(sql`insert into agency_ops.brand_kits (org_id, name, brand_color, private_notes)
+      values (${org.id}, 'Fixture kit', '#336699', 'Fixture kit note')`);
+    await tx.execute(sql`insert into agency_ops.brand_kits (org_id, name, brand_color, received_from_agency_org_id)
+      values (${org.id}, 'Received kit', '#996633', ${agencyOrg.id})`);
+    await tx.execute(sql`insert into agency_ops.publications (org_id, kind, source_id, client_org_id, status, published_at)
+      values (${org.id}, 'template', ${uuidv7()}, ${affiliate.id}, 'published', now())`);
+    await tx.execute(sql`insert into agency_ops.received_items (org_id, kind, local_id, agency_org_id, source_id)
+      values (${org.id}, 'template', ${uuidv7()}, ${agencyOrg.id}, ${uuidv7()})`);
+    const [f] = await tx.execute<{
+      id: string;
+    }>(sql`insert into agency_ops.fanouts (org_id, name, subject, heading, body,
+      audience, mode) values (${org.id}, 'Fixture fan-out', 'Hello', 'Hello', 'Body', 'everyone', 'draft') returning id`);
+    await tx.execute(sql`insert into agency_ops.fanout_targets (org_id, fanout_id, client_org_id, status)
+      values (${org.id}, ${f?.id}, ${affiliate.id}, 'draft')`);
+    await tx.execute(sql`insert into agency_ops.detachments (org_id, agency_org_id, grant_id, initiated_by)
+      values (${org.id}, ${agencyOrg.id}, ${uuidv7()}, 'client')`);
+    if (g) {
+      await tx.execute(sql`insert into tenancy.agency_staff_grants (org_id, grant_id, agency_org_id, user_id, kind, role,
+        created_by) values (${org.id}, ${g.id}, ${agencyOrg.id}, ${uuidv7()}, 'team', 'viewer', ${ownerId})`);
+      await tx.execute(sql`insert into tenancy.agency_staff_grants (org_id, grant_id, agency_org_id, user_id, kind, role,
+        event_id, starts_at, ends_at, created_by) values (${org.id}, ${g.id}, ${agencyOrg.id}, ${uuidv7()}, 'day_of',
+        'viewer', ${event.id}, now(), now() + interval '6 hours', ${ownerId})`);
+    }
+  });
   await withTenant(systemCtx(org.id), async (tx) => {
     await tx.execute(
       sql`insert into tenancy.org_relationships (org_id, child_org_id, kind, source) values (${org.id}, ${affiliate.id}, 'host_affiliate', 'fixture')`,
@@ -1070,14 +1842,84 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
       insert into platform.metric_timeseries (org_id, metric, bucket, currency, value, source)
       values (${org.id}, 'sales.gross', '2025-01-01', 'USD', 5000, 'legacy')`);
   });
+  // M6.14b venues: the org and its affiliate partner both ways (`venue_partner`). The org shares
+  // its 'Main room' plan with the affiliate; the affiliate shares a plan of its own that the org's
+  // event used (copy-on-use record); the event is promoted on the marketplace for a week.
+  await withTenant(systemCtx(org.id), async (tx) => {
+    await tx.execute(
+      sql`insert into tenancy.org_relationships (org_id, child_org_id, kind, source) values (${org.id}, ${affiliate.id}, 'venue_partner', 'fixture')`,
+    );
+    await tx.execute(
+      sql`insert into seating.layout_shares (org_id, layout_id, partner_org_id) values (${org.id}, ${layout.id}, ${affiliate.id})`,
+    );
+    await tx.execute(sql`
+      insert into marketplace.promotions (org_id, event_id, starts_at, ends_at)
+      values (${org.id}, ${event.id}, now() - interval '1 hour', now() + interval '7 days')`);
+  });
+  const venueLayout = await withTenant(systemCtx(affiliate.id), async (tx) => {
+    await tx.execute(
+      sql`insert into tenancy.org_relationships (org_id, child_org_id, kind, source) values (${affiliate.id}, ${org.id}, 'venue_partner', 'fixture')`,
+    );
+    const [l] = await tx.execute<{ id: string }>(sql`
+      insert into seating.layouts (org_id, name, doc, checksum, seat_count)
+      values (${affiliate.id}, ${`${name} Affiliate hall`}, ${JSON.stringify(plan)}::jsonb, 'fixture', 4)
+      returning id`);
+    if (!l) throw new Error('fixture: no venue layout');
+    await tx.execute(
+      sql`insert into seating.layout_shares (org_id, layout_id, partner_org_id) values (${affiliate.id}, ${l.id}, ${org.id})`,
+    );
+    return l.id;
+  });
+  await withTenant(systemCtx(org.id), (tx) =>
+    tx.execute(
+      sql`insert into seating.shared_layout_uses (org_id, event_id, venue_org_id, venue_layout_id) values (${org.id}, ${event.id}, ${affiliate.id}, ${venueLayout})`,
+    ),
+  );
   // Media (M1.4e): an event cover and the org logo (assets, variants, blobs in the dev store),
   // and a quota override row.
-  await uploadMedia(
+  const coverImage = await uploadMedia(
     ctx(),
     { ownerType: 'event', ownerId: event.id, slot: 'cover', alt: `${name} cover`, file: fixturePng('cover') },
     ports,
   );
   await uploadLogo(ctx(), { alt: `${name} logo`, file: fixturePng('logo') }, ports);
+  // U10 "Email sending": the From name (the org's own name) and a Reply-To address.
+  await executeCommand(
+    setEmailIdentityCommand,
+    { fromName: name, replyTo: `team@${slug}.example` },
+    ctx(),
+    ports,
+  );
+  // U10: the org contact page (on) and one visitor message through it.
+  await executeCommand(
+    setContactPageCommand,
+    { enabled: true, intro: `Questions for ${name}?` },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    submitOrgContactCommand,
+    {
+      submissionKey: uuidv7(),
+      name: 'Vera Visitor',
+      email: `vera@${slug}.example`,
+      message: 'Do you have step-free access at the venue?',
+      consent: true,
+    },
+    createCtx({ orgId: org.id }),
+    ports,
+  );
+  // U10: the cover reused in the event's gallery from the media library (no new files: a reuse
+  // row whose variants name the cover's files).
+  await reuseMedia(
+    ctx(),
+    {
+      sourceAssetId: coverImage.asset.id,
+      target: { ownerType: 'event', ownerId: event.id, slot: 'gallery' },
+      alt: `${name} gallery`,
+    },
+    ports,
+  );
   await withTenant(systemCtx(org.id), (tx) =>
     tx.execute(sql`insert into media.quotas (org_id, bytes_limit) values (${org.id}, ${512 * 1024 * 1024})`),
   );
@@ -1108,7 +1950,7 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     { ownerId: speaker.id, alt: `Photo of ${name} Speaker`, file: fixturePng('logo') },
     ports,
   );
-  await executeCommand(
+  const keynote = await executeCommand(
     createSessionCommand,
     {
       eventId: event.id,
@@ -1122,9 +1964,64 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ctx(),
     ports,
   );
-  await executeCommand(
+  const exhibitor = await executeCommand(
     createExhibitorCommand,
     { eventId: event.id, name: `${name} Exhibitor`, boothLabel: 'B1' },
+    ctx(),
+    ports,
+  );
+  // M5.4a: the exhibitor portal (settings, listing, an admin signed in by link, a staff invite, a
+  // pending profile change) and a booth with the exhibitor at it.
+  await executeCommand(
+    saveExhibitorSettingsCommand,
+    { eventId: event.id, defaultStaffAllowance: 3, approvalRequired: true },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    saveExhibitorListingCommand,
+    {
+      eventId: event.id,
+      exhibitorId: exhibitor.id,
+      listed: true,
+      categories: ['Software'],
+      links: [{ label: 'Docs', url: 'https://example.com/docs' }],
+      staffAllowance: null,
+    },
+    ctx(),
+    ports,
+  );
+  // The exhibitor admin is a portal account (M5.3a), signed in like any portal person.
+  const exhibitorInvite = await executeCommand(
+    inviteExhibitorMemberCommand,
+    { eventId: event.id, exhibitorId: exhibitor.id, email: `admin@${slug}.example`, role: 'exhibitor_admin' },
+    ctx(),
+    ports,
+  );
+  const exhibitorSession = await createPortalSession({
+    orgId: org.id,
+    accountId: exhibitorInvite.member.id,
+    host: 'fixture.test',
+  });
+  const exhibitorPrincipal = await portalPrincipalBySession(exhibitorSession.token, 'fixture.test');
+  if (!exhibitorPrincipal) throw new Error('fixture: exhibitor portal session');
+  const exhibitorCtx = portalCtx(exhibitorPrincipal);
+  await executeCommand(portalInviteStaffCommand, { email: `staff@${slug}.example` }, exhibitorCtx, ports);
+  await executeCommand(
+    portalSaveProfileCommand,
+    { name: `${name} Exhibitor`, description: 'Proposed *copy*.' },
+    exhibitorCtx,
+    ports,
+  );
+  const hall = await executeCommand(
+    saveBoothCommand,
+    { eventId: event.id, number: 'A1', category: 'Software', x: 100, y: 100, width: 300, height: 300 },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    assignBoothCommand,
+    { eventId: event.id, boothId: hall.booths[0]?.id ?? '', exhibitorId: exhibitor.id },
     ctx(),
     ports,
   );
@@ -1134,13 +2031,450 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ctx(),
     ports,
   );
-  await executeCommand(
+  const sponsor = await executeCommand(
     createSponsorCommand,
     { eventId: event.id, tierId: tier.id, name: `${name} Sponsor` },
     ctx(),
     ports,
   );
+  // M5.4b: Gold's package terms (on sale, with a deliverable template), the sponsor exhibiting as
+  // the exhibitor, the package granted by the organizer (its deliverables and an extra one), a
+  // sponsored session, a sponsor contact; lead licenses for sale, an exhibitor admin's purchase
+  // waiting for payment (an add-on order) and a license held by the admin.
+  await executeCommand(
+    saveSponsorPackageCommand,
+    {
+      eventId: event.id,
+      tierId: tier.id,
+      description: 'Our top package.',
+      priceMinor: 500_000,
+      quantity: 3,
+      onSale: true,
+      compRegistrations: 5,
+      exhibitorBadges: 2,
+      leadLicenses: 2,
+      logoPlacements: ['website', 'stage'],
+      sessionSlots: 1,
+      deliverables: [{ title: 'Send logo files', owner: 'sponsor', daysBefore: 14 }],
+    },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    setSponsorExhibitorCommand,
+    { eventId: event.id, sponsorId: sponsor.id, exhibitorId: exhibitor.id },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    grantSponsorPackageCommand,
+    { eventId: event.id, sponsorId: sponsor.id, tierId: tier.id, note: 'Paid by wire' },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    addSponsorDeliverableCommand,
+    {
+      eventId: event.id,
+      sponsorId: sponsor.id,
+      title: 'Print the stage banner',
+      owner: 'organizer',
+      ownerName: 'Production team',
+      dueDate: new Date(event.startsAt.getTime() - 7 * 86_400_000).toISOString().slice(0, 10),
+    },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    assignSponsoredSessionCommand,
+    { eventId: event.id, sponsorId: sponsor.id, sessionId: keynote.session.id },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    inviteSponsorContactCommand,
+    { eventId: event.id, sponsorId: sponsor.id, email: `sponsor@${slug}.example` },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    saveLeadLicenseSettingsCommand,
+    { eventId: event.id, includedLeadLicenses: 1, leadLicensePriceMinor: 25_000 },
+    ctx(),
+    ports,
+  );
+  await executeCommand(startLeadLicenseCheckoutCommand, { quantity: 2, locale: 'en' }, exhibitorCtx, ports);
+  await executeCommand(
+    portalAssignLeadLicenseCommand,
+    { accountId: exhibitorInvite.member.id },
+    exhibitorCtx,
+    ports,
+  );
+  // M5.6b lead retrieval: the admin accepts the lead terms, sets qualifiers, and captures the
+  // fixture's first ticket at the event (every leads table gets a row).
+  const atEvent = portalCtx(exhibitorPrincipal, 'en', event.startsAt);
+  // The holder agreed to share their email with exhibitors (P5-8), so the lead carries one.
+  await withTenant(systemCtx(org.id), async (tx) => {
+    const [h] = await tx.execute<{ holder_email: string }>(
+      sql`select holder_email from ticketing.tickets where id = ${issued?.id ?? ''}`,
+    );
+    await recordTermConsentTx(tx, systemCtx(org.id), {
+      email: h?.holder_email ?? '',
+      name: null,
+      term: 'exhibitor_email_sharing',
+      version: 1,
+      evidence: 'fixture:registration_form',
+    });
+  });
+  await executeCommand(acceptLeadTermsCommand, { version: LEAD_TERMS_VERSION }, atEvent, ports);
+  await executeCommand(
+    saveLeadSettingsCommand,
+    { qualifiers: ['Budget', 'Demo'], teamVisibility: false },
+    atEvent,
+    ports,
+  );
+  const leadSync = await executeCommand(
+    syncLeadScansCommand,
+    {
+      scans: [
+        {
+          scanId: `fixture-lead-${slug}`,
+          code: issued?.short_code ?? '',
+          capturedAt: event.startsAt,
+          offline: true,
+          rating: 'hot',
+          qualifiers: ['Demo'],
+          notes: 'Wants a demo',
+        },
+      ],
+    },
+    atEvent,
+    ports,
+  );
+  if (leadSync.results[0]?.status !== 'captured' || !leadSync.results[0].lead?.email)
+    throw new Error('fixture: lead not captured with its email');
+  // M5.2a: agenda model v2 on the weekly event (so the launch event's agenda stays live): a
+  // session type, a pick-one group with an optional workshop in it, one claimed place and one
+  // group pick, a speaker with an email (the CSV import's match key), and a published agenda.
+  const workshopType = await executeCommand(
+    createSessionTypeCommand,
+    { eventId: weekly.id, name: 'Workshop' },
+    ctx(),
+    ports,
+  );
+  const pickOne = await executeCommand(
+    createSessionGroupCommand,
+    { eventId: weekly.id, name: 'Pick one' },
+    ctx(),
+    ports,
+  );
+  const workshop = await executeCommand(
+    createSessionCommand,
+    {
+      eventId: weekly.id,
+      title: 'Hands-on workshop',
+      startsAt: weekly.startsAt,
+      endsAt: new Date(weekly.startsAt.getTime() + 3_600_000),
+      capacity: 30,
+    },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    setSessionAgendaCommand,
+    {
+      eventId: weekly.id,
+      sessionId: workshop.session.id,
+      typeId: workshopType.id,
+      admission: 'optional',
+      groupId: pickOne.id,
+    },
+    ctx(),
+    ports,
+  );
+  const weeklySpeaker = await executeCommand(
+    createSpeakerCommand,
+    { eventId: weekly.id, name: `${name} Host` },
+    ctx(),
+    ports,
+  );
+  await withTenant(systemCtx(org.id), async (tx) => {
+    await claimSessionPlaceTx(tx, workshop.session.id);
+    await recordGroupPickTx(tx, systemCtx(org.id), {
+      groupId: pickOne.id,
+      sessionId: workshop.session.id,
+      registrantId: uuidv7(),
+    });
+    await tx.execute(
+      sql`insert into program.speaker_contacts (org_id, event_id, speaker_id, email) values (${org.id}, ${weekly.id}, ${weeklySpeaker.id}, ${`host@${slug}.test`})`,
+    );
+  });
+  await executeCommand(publishAgendaCommand, { eventId: weekly.id }, ctx(), ports);
+  // M5.3a speaker portal: the speaker's portal account (and its event-role assignment), a sign-in
+  // code and a session, a proposed profile change, and an upload task answered with a file.
+  const invited = await executeCommand(
+    inviteSpeakerCommand,
+    { eventId: event.id, speakerId: speaker.id, email: `speaker-${slug}@example.test` },
+    ctx(),
+    ports,
+  );
+  const portalSession = await createPortalSession({
+    orgId: org.id,
+    accountId: invited.accountId,
+    host: 'fixture.test',
+  });
+  await withTenant(systemCtx(org.id), (tx) =>
+    tx.execute(sql`
+      insert into events.portal_challenges
+        (org_id, account_id, code_hash, expires_at, link_hash, browser_hash, link_expires_at)
+      values (${org.id}, ${invited.accountId}, ${'0'.repeat(64)}, now(), ${'1'.repeat(64)}, ${'2'.repeat(64)}, now())`),
+  );
+  const principal = await portalPrincipalBySession(portalSession.token, 'fixture.test');
+  if (!principal) throw new Error('fixture: portal session');
+  const speakerCtx = portalCtx(principal);
+  await executeCommand(
+    proposeProfileChangeCommand,
+    { name: `${name} Speaker`, company: name, bio: 'Talks about *portals*.' },
+    speakerCtx,
+    ports,
+  );
+  await executeCommand(
+    createPortalTaskCommand,
+    {
+      eventId: event.id,
+      kind: 'upload',
+      title: 'Upload your slides',
+      dueAt: new Date(event.startsAt.getTime() - 86_400_000),
+    },
+    ctx(),
+    ports,
+  );
+  const speakerView = await executeQuery(speakerPortalQuery, {}, speakerCtx, ports);
+  const slidesTask = speakerView.tasks[0];
+  if (!slidesTask) throw new Error('fixture: speaker task');
+  await uploadSpeakerPortalFile(
+    speakerCtx,
+    {
+      purpose: 'task_answer',
+      assigneeId: slidesTask.assigneeId,
+      file: new TextEncoder().encode('%PDF-1.4\n% fixture slides\n%%EOF\n'),
+      fileName: 'slides.pdf',
+    },
+    ports,
+  );
   await draftEventCopy(ctx(), ports, fakeDrafter, { eventId: event.id, kind: 'tagline' });
+  // M6.12b: a brand kit (isolation coverage of ai.brand_kits).
+  await executeCommand(
+    saveBrandKitCommand,
+    {
+      name: `${name} voice`,
+      voice: 'Warm, local, never pushy.',
+      tone: 'friendly',
+      keywords: 'community, lakeside',
+      avoid: 'cheap',
+      isDefault: true,
+    },
+    ctx(),
+    ports,
+  );
+  // M5.1a registration: the default types and items (activating the conference pack), a code-only
+  // and a domain-only type, one cell per type, and a capacity claim.
+  await executeCommand(seedRegistrationDefaultsCommand, { eventId: event.id, names: {} }, ctx(), ports);
+  const regSetup = await executeQuery(registrationSetupQuery, { eventId: event.id }, ctx(), ports);
+  const fullPass = regSetup.items.find((i) => i.key === 'full_pass');
+  const member = regSetup.types.find((t) => t.key === 'member');
+  const press = await executeCommand(
+    createRegistrationTypeCommand,
+    {
+      eventId: event.id,
+      name: 'Press',
+      eligibility: 'access_code',
+      accessCode: `PRESS-${slug}`.slice(0, 32).toUpperCase(),
+    },
+    ctx(),
+    ports,
+  );
+  const staff = await executeCommand(
+    createRegistrationTypeCommand,
+    {
+      eventId: event.id,
+      name: 'Staff',
+      eligibility: 'email_domain',
+      emailDomains: ['example.test'],
+      capacity: 10,
+    },
+    ctx(),
+    ports,
+  );
+  if (fullPass && member) {
+    for (const [typeId, priceMinor] of [
+      [member.id, 0],
+      [press.id, 0],
+      [staff.id, 2500],
+    ] as const)
+      await executeCommand(
+        setCellCommand,
+        { eventId: event.id, registrationTypeId: typeId, admissionItemId: fullPass.id, priceMinor },
+        ctx(),
+        ports,
+      );
+    // A capacity claim on the fixture's order (counting nothing): no second order, so tests that
+    // count the fixture's orders are unchanged.
+    await withTenant(systemCtx(org.id), (tx) =>
+      tx.execute(sql`insert into registration.capacity_claims (org_id, event_id, registration_type_id, order_id)
+        values (${org.id}, ${event.id}, ${member.id}, ${checkout.order.id})`),
+    );
+    // M5.1c: an approval type with a member list and a reason template, and one pending
+    // application (no order: nobody is charged before approval).
+    const applicants = await executeCommand(
+      createRegistrationTypeCommand,
+      { eventId: event.id, name: 'Applicants', capacity: 50 },
+      ctx(),
+      ports,
+    );
+    await executeCommand(
+      setCellCommand,
+      {
+        eventId: event.id,
+        registrationTypeId: applicants.id,
+        admissionItemId: fullPass.id,
+        priceMinor: 4000,
+      },
+      ctx(),
+      ports,
+    );
+    await executeCommand(
+      setTypeRulesCommand,
+      {
+        eventId: event.id,
+        registrationTypeId: applicants.id,
+        approval: 'manual',
+        autoApproveDomains: [`staff.${slug}.test`],
+        kind: 'standard',
+      },
+      ctx(),
+      ports,
+    );
+    await executeCommand(
+      replaceMembersCommand,
+      { eventId: event.id, registrationTypeId: applicants.id, emails: [`member@${slug}.test`] },
+      ctx(),
+      ports,
+    );
+    await executeCommand(
+      saveReasonTemplateCommand,
+      { eventId: event.id, decision: 'deny', label: 'Full', body: 'Fixture: this rate is full.' },
+      ctx(),
+      ports,
+    );
+    await executeCommand(
+      applyCommand,
+      {
+        eventId: event.id,
+        registrationTypeId: applicants.id,
+        admissionItemId: fullPass.id,
+        name: 'Fixture Applicant',
+        email: `applicant@${slug}.test`,
+        company: 'Fixture Co',
+        jobTitle: 'Fixture Lead',
+        message: 'Fixture: why I want to attend.',
+      },
+      createCtx({ orgId: org.id, actor: { type: 'anonymous' } }),
+      ports,
+    );
+    // M5.1d: a pay-later type (PO required) and an invoice with a recorded check on the fixture's
+    // paid order (inserted directly: no second order, so order counts stay as they are), for the
+    // isolation suite: invoice, invoice payment and the org's invoice counter.
+    const billed = await executeCommand(
+      createRegistrationTypeCommand,
+      { eventId: event.id, name: 'Billed', capacity: 20 },
+      ctx(),
+      ports,
+    );
+    await executeCommand(
+      setPayLaterCommand,
+      { eventId: event.id, registrationTypeId: billed.id, payLater: true, poNumber: 'required' },
+      ctx(),
+      ports,
+    );
+    await withTenant(systemCtx(org.id), async (tx) => {
+      await tx.execute(sql`
+        insert into orders.invoice_sequences (org_id, last_number) values (${org.id}, 1)`);
+      const [inv] = await tx.execute<{ id: string }>(sql`
+        insert into orders.invoices (org_id, order_id, event_id, number, po_number, billing_company,
+          buyer_name, buyer_email, currency, total_minor, fee_minor, paid_minor, terms, issued_on,
+          due_on, due_at, issued_by)
+        select org_id, id, event_id, 1, ${`PO-${slug}`.slice(0, 60)}, 'Fixture Co', buyer_name,
+          buyer_email, currency, greatest(total_minor, 1000), least(fee_minor, greatest(total_minor, 1000)),
+          100, 'net30_event7', current_date, current_date + 30, now() + interval '30 days', 'fixture'
+        from orders.orders where id = ${checkout.order.id}
+        returning id`);
+      if (inv)
+        await tx.execute(sql`
+          insert into orders.invoice_payments (org_id, invoice_id, order_id, channel, method, status,
+            amount_minor, currency, idempotency_key, reference, note, received_on, recorded_by, completed_at)
+          select org_id, id, order_id, 'offline', 'check', 'succeeded', 100, currency,
+            ${`fixture-invoice-${slug}`}, 'CHK-1001', 'Fixture: first instalment.', current_date,
+            'fixture', now()
+          from orders.invoices where id = ${inv.id}`);
+    });
+  }
+  // M5.2b session enrollment: the full pass lists the event's first session, the event's waitlist
+  // offers places (2 h), and one fixture ticket waits in that session's line (raw inserts: no
+  // place is held, so the counter is unchanged).
+  if (fullPass) {
+    await executeCommand(
+      setEnrollmentSettingsCommand,
+      { eventId: event.id, promotion: 'offer', offerMinutes: 120 },
+      ctx(),
+      ports,
+    );
+    await withTenant(systemCtx(org.id), async (tx) => {
+      await tx.execute(sql`insert into registration.item_sessions (org_id, event_id, admission_item_id, session_id)
+        select ${org.id}, ${event.id}, ${fullPass.id}, id from program.sessions where event_id = ${event.id} limit 1`);
+      await tx.execute(sql`insert into registration.session_enrollments
+          (org_id, event_id, session_id, registrant_id, order_id, status, position_at)
+        select ${org.id}, ${event.id}, s.id, t.id, t.order_id, 'waiting', now()
+        from program.sessions s, ticketing.tickets t
+        where s.event_id = ${event.id} and t.order_id = ${checkout.order.id} limit 1`);
+    });
+  }
+  // M5.6a session check-in: a door for the event's first session with its flyer on, and one
+  // visit there (let in past the full room by a staff override, then scanned out).
+  if (fullPass) {
+    const [first] = await withTenant(systemCtx(org.id), (tx) =>
+      tx.execute<{ id: string }>(
+        sql`select id from program.sessions where event_id = ${event.id} order by starts_at, id limit 1`,
+      ),
+    );
+    if (first) {
+      const sessionDoor = await executeCommand(
+        createCheckpointCommand,
+        { eventId: event.id, name: 'Session door', kind: 'session', sessionId: first.id, selfCheckin: true },
+        ctx(),
+        ports,
+      );
+      await withTenant(systemCtx(org.id), (tx) =>
+        tx.execute(sql`insert into checkin.session_attendance
+            (org_id, event_id, checkpoint_id, session_id, ticket_id, in_at, out_at, source, override_gates, override_reason)
+          select ${org.id}, ${event.id}, ${sessionDoor.id}, ${first.id}, t.id, now() - interval '50 minutes',
+            now() - interval '5 minutes', 'override', array['capacity']::text[], 'Fixture: speaker guest.'
+          from ticketing.tickets t where t.order_id = ${checkout.order.id} limit 1`),
+      );
+    }
+  }
+  // M5.10a conference hub: a fixture ticket stars the event's first session and has replaced its
+  // calendar feed link once (version 2).
+  await withTenant(systemCtx(org.id), async (tx) => {
+    await tx.execute(sql`insert into registration.session_favorites (org_id, event_id, session_id, registrant_id)
+      select ${org.id}, ${event.id}, s.id, t.id
+      from program.sessions s, ticketing.tickets t
+      where s.event_id = ${event.id} and t.order_id = ${checkout.order.id}
+      order by s.starts_at, t.id limit 1`);
+    await tx.execute(sql`insert into registration.calendar_feeds (org_id, event_id, registrant_id, version)
+      select ${org.id}, ${event.id}, t.id, 2 from ticketing.tickets t
+      where t.order_id = ${checkout.order.id} order by t.id limit 1`);
+  });
   // M4.1a: a party with a named guest (sealed answers, linked to a guest-list entry), a child and
   // an unnamed plus-one; then an edit and a move, so every history action has rows.
   const party = await executeCommand(
@@ -1213,6 +2547,146 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   await executeCommand(
     moveGuestCommand,
     { eventId: event.id, guestId: friend.id, toPartyId: party.id },
+    ctx(),
+    ports,
+  );
+  // M4.1c: a ceremony (everyone invited) and a reception (the named host invited, so their
+  // plus-one follows) with its own chart, and a paper response.
+  const ceremony = await executeCommand(
+    createSubEventCommand,
+    {
+      eventId: event.id,
+      name: 'Ceremony',
+      kind: 'ceremony',
+      startsAt: event.startsAt,
+      endsAt: new Date(event.startsAt.getTime() + 3_600_000),
+      place: 'The garden',
+      inviteAll: true,
+    },
+    ctx(),
+    ports,
+  );
+  const reception = await executeCommand(
+    createSubEventCommand,
+    {
+      eventId: event.id,
+      name: 'Reception',
+      kind: 'reception',
+      startsAt: new Date(event.startsAt.getTime() + 3_600_000),
+      endsAt: new Date(event.startsAt.getTime() + 4 * 3_600_000),
+    },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    setInvitationsCommand,
+    {
+      eventId: event.id,
+      subEventIds: [reception.id],
+      target: { kind: 'guests', guestIds: [host.id] },
+      invited: true,
+    },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    recordSubEventResponseCommand,
+    { eventId: event.id, guestId: host.id, subEventId: reception.id, status: 'attending', source: 'paper' },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    recordSubEventResponseCommand,
+    { eventId: event.id, guestId: host.id, subEventId: ceremony.id, status: 'declined' },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    giveSubEventOwnChartCommand,
+    { eventId: event.id, subEventId: reception.id, layoutId: layout.id },
+    ctx(),
+    ports,
+  );
+  // M4.3a guest seating (isolation coverage): the host at row A of the
+  // reception's own chart, and row A marked as a VIP zone.
+  const rowA = plan.items[0]?.id ?? '';
+  await executeCommand(
+    seatGuestsCommand,
+    { eventId: event.id, subEventId: reception.id, itemId: rowA, guestIds: [host.id] },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    setVipTableCommand,
+    { eventId: event.id, subEventId: reception.id, itemId: rowA, vip: true },
+    ctx(),
+    ports,
+  );
+  // M4.4b guest check-in (isolation coverage): the door device checks the host in.
+  await executeCommand(
+    recordGuestArrivalsCommand,
+    {
+      eventId: event.id,
+      arrivals: [
+        {
+          clientId: uuidv7(),
+          guestId: host.id,
+          deviceTs: new Date('2027-10-14T14:56:00Z'),
+          clockOffsetMs: 0,
+          source: 'scanner',
+        },
+      ],
+    },
+    deviceCtx,
+    ports,
+  );
+  // M6.12a seating solver (isolation coverage): a keep-together rule for every party.
+  await executeCommand(
+    addSolverRuleCommand,
+    { eventId: event.id, spec: { kind: 'keep_together', params: { group: { by: 'party' } } } },
+    ctx(),
+    ports,
+  );
+  // M4.1b: a pasted guest list staged, checked and imported (a household with a plus-one and a
+  // child, sealed answers; one rejected row kept sealed for its download), and a second list
+  // left staged, so both import tables hold rows.
+  const pasted = readGuestTable({
+    source: 'paste',
+    text: `Household\tName\tAge\tDietary\tPlus one\n${name} Imported\tImported Guest\t\tNo shellfish\tyes\n${name} Imported\tImported Kid\tchild\t\t\n\tGuest of Nobody\t\t\t\n`,
+  });
+  const guestBatch = await executeCommand(
+    stageGuestImportCommand,
+    {
+      eventId: event.id,
+      source: 'paste',
+      headers: [...pasted.headers],
+      rows: pasted.rows.map((r) => [...r]),
+    },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    validateGuestImportCommand,
+    { eventId: event.id, batchId: guestBatch.batchId, mapping: guessGuestMapping(pasted.headers) },
+    ctx(),
+    ports,
+  );
+  const guestImport = await executeCommand(
+    guestImportBulk.start,
+    { eventId: event.id, selection: { filter: { batchId: guestBatch.batchId } }, params: {} },
+    ctx(),
+    ports,
+  );
+  await runBulk(org.id, guestImport.operationId);
+  await executeCommand(
+    stageGuestImportCommand,
+    {
+      eventId: event.id,
+      source: 'csv',
+      fileName: 'later.csv',
+      headers: ['First name', 'Last name', 'Address'],
+      rows: [['Staged', 'Guest', '2 Fixture Road']],
+    },
     ctx(),
     ports,
   );
@@ -1307,6 +2781,30 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   // M3.6 audiences: the participation projector catches up on everything above (live rows and
   // profiles), and one saved audience (isolation coverage).
   await catchUpParticipation(org.id);
+  // M6.1b contact stats: a session attended and a campaign opened (the signals' outbox contracts),
+  // so `contact_signals` has rows; `contact_scores` follows from the projections above.
+  await withTenant(systemCtx(org.id), async (tx) => {
+    const [someone] = await tx.execute<{ id: string }>(sql`select id from crm.contacts order by id limit 1`);
+    if (!someone) return;
+    const ref = uuidv7();
+    await emitEvents(tx, systemCtx(org.id), [
+      {
+        type: 'session.attended',
+        version: 1,
+        aggregateType: 'session',
+        aggregateId: ref,
+        payload: { eventId: event.id, sessionId: ref, contactId: someone.id },
+      },
+      {
+        type: 'campaign.opened',
+        version: 1,
+        aggregateType: 'campaign',
+        aggregateId: ref,
+        payload: { campaignId: ref, contactId: someone.id },
+      },
+    ]);
+  });
+  await catchUpContactSignals(org.id);
   await executeCommand(
     saveSegmentCommand,
     {
@@ -1316,11 +2814,990 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ctx(),
     ports,
   );
+  // M3.2a Command Center: the owner's own layout and a manual mode (isolation coverage).
+  // Guest assistance (M3.3b): a guest asks for help with their ticket's link, the door device asks
+  // for backup, the owner takes the guest's request and writes a note (every assistance table).
+  await executeCommand(
+    guestRequestCommand,
+    {
+      eventId: event.id,
+      ticketToken: assistanceTicketToken(issued?.id ?? ''),
+      reason: 'seat',
+      note: 'Someone is in my seat',
+      location: 'Row C',
+    },
+    createCtx({ orgId: org.id, now: new Date('2027-10-14T15:05:00Z') }),
+    ports,
+  );
+  await executeCommand(
+    staffRequestCommand,
+    { eventId: event.id, reason: 'backup', note: 'Long line', checkpointId: mainGate },
+    deviceCtx,
+    ports,
+  );
+  const [guestAsk] = await executeQuery(assistanceQueueQuery, { eventId: event.id }, ctx(), ports);
+  if (!guestAsk) throw new Error('fixture: no help request');
+  await executeCommand(
+    assistanceAssignCommand,
+    { eventId: event.id, requestId: guestAsk.id, assignee: 'me' },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    assistanceNoteCommand,
+    { eventId: event.id, requestId: guestAsk.id, body: 'On my way' },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    saveWidgetLayoutCommand,
+    { eventId: event.id, order: ['sales', 'readiness'], hidden: ['timeline'] },
+    ctx(),
+    ports,
+  );
+  await executeCommand(setModeOverrideCommand, { eventId: event.id, mode: 'pre_show' }, ctx(), ports);
+
+  // M3.6b campaigns: a sent campaign (recipient snapshot, tracked link, stored content) to the
+  // org's email subscribers (the fixture buyer opted in), released by the scheduler (isolation coverage).
+  const campaign = await executeCommand(
+    createCampaignCommand,
+    { name: `Fixture news ${slug}` },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    saveCampaignCommand,
+    {
+      campaignId: campaign.id,
+      name: campaign.name,
+      locale: 'en',
+      content: {
+        subject: 'News for {{first_name|you}}',
+        preheader: '',
+        font: 'sans',
+        smsBody: '',
+        blocks: [
+          { id: 'b1', type: 'heading', text: 'Hello {{first_name|there}}' },
+          { id: 'b2', type: 'button', label: 'See the event', eventId: event.id, path: null },
+          { id: 'b3', type: 'footer', postalAddress: `1 ${name} Way, Chicago IL`, note: '' },
+        ],
+      },
+    },
+    ctx(),
+    ports,
+  );
+  const subscribers = await executeCommand(
+    saveSegmentCommand,
+    {
+      name: 'Email subscribers',
+      definition: {
+        version: 1,
+        root: {
+          type: 'group',
+          op: 'and',
+          conditions: [{ type: 'consent', channel: 'email', granted: true }],
+        },
+      },
+    },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    setAudienceCommand,
+    { campaignId: campaign.id, audience: { kind: 'segment', segmentId: subscribers.id } },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    sendNowCommand,
+    { campaignId: campaign.id },
+    ctx({ idempotencyKey: `fixture-campaign-${slug}` }),
+    ports,
+  );
+  await runOrgCampaigns(org.id, ports);
+  // M3.3a live mode: the owner at the main gate (staff presence), a TV display link, and the door
+  // device's transitions (its first heartbeat above recorded "online"; it went quiet since).
+  await executeCommand(
+    reportPresenceCommand,
+    { eventId: event.id, checkpointId: mainGate },
+    ctx({ now: new Date('2027-10-14T15:02:00Z') }),
+    ports,
+  );
+  await executeCommand(createDisplayLinkCommand, { eventId: event.id, label: 'Lobby screen' }, ctx(), ports);
+  const quietCtx = { ...systemCtx(org.id), now: new Date('2027-10-14T15:30:00Z') };
+  await withTenant(quietCtx, (tx) => markQuietDevicesTx(tx, quietCtx, 90_000));
   // M3.1a: the metrics projector (snapshots, sharded counter, time series, lag samples) and the
   // analytics sink over this org's outbox, as the worker would.
   await catchUpMetrics(org.id);
   await catchUpSubscriber(analyticsForwarder(postgresAnalyticsSink), org.id);
-  return { org, ownerId, viewerId, event, apiKey, testKey, ctx };
+  // M6.2a: the analytics warehouse (Postgres rollups) over this org's outbox, as the worker would,
+  // then one backfill run (rows in every analytics table for the isolation suite).
+  await catchUpWarehouse(org.id);
+  await backfillOrgNow(org.id, postgresWarehouse);
+  // M6.2b: the fixture order's touch path and attribution rollups come from the attribution
+  // record and the warehouse above; plus the owner's explorer view, an alert rule, a report
+  // schedule and one sent period (its run, PDF and message): rows in every new table.
+  await executeCommand(
+    saveViewCommand,
+    {
+      name: 'Linear revenue by source',
+      measure: 'attributed_revenue',
+      dimension: 'source',
+      model: 'linear',
+      range: '30d',
+    },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    createAlertRuleCommand,
+    {
+      name: 'Registrations today',
+      measure: 'registrations',
+      condition: 'above',
+      threshold: 1000,
+      windowDays: 1,
+    },
+    ctx(),
+    ports,
+  );
+  const reportSchedule = await executeCommand(
+    createReportScheduleCommand,
+    { name: 'Daily summary', frequency: 'daily', recipients: [ownerId] },
+    ctx(),
+    ports,
+  );
+  await runReportPeriod(org.id, reportSchedule.id, periodContaining('daily', '2027-10-01'), {
+    notifier: createNotifier(),
+    renderer: { render: async () => new TextEncoder().encode('%PDF-1.7 fixture report') },
+    userLocales: async () => new Map(),
+  });
+  // M3.2b alert engine: the fixture event's unseated ticket holders raise an alert (evaluated as
+  // the worker would, a day before the event), the owner acknowledges it; one routing row, the
+  // owner's alert number and a sales target (isolation coverage of every alerts table).
+  const alertCtx = { ...systemCtx(org.id), now: new Date(event.startsAt.getTime() - 86_400_000 * 3) };
+  await withTenant(alertCtx, (tx) =>
+    evaluateEventAlertsTx(tx, alertCtx, event.id, { notifier: createNotifier() }),
+  );
+  const [fixtureAlert] = await executeQuery(listAlertsQuery, { eventId: event.id }, ctx(), ports);
+  if (!fixtureAlert) throw new Error('fixture: the fixture event raised no alert');
+  await executeCommand(acknowledgeAlertCommand, { alertId: fixtureAlert.id }, ctx(), ports);
+  await executeCommand(
+    setAlertRoutingCommand,
+    { cells: [{ role: 'viewer', category: 'door', channels: ['in_app'] }] },
+    ctx(),
+    ports,
+  );
+  await executeCommand(setMyAlertPhoneCommand, { smsPhone: '+15550100199' }, ctx(), ports);
+  await executeCommand(setSalesTargetCommand, { eventId: event.id, tickets: 150 }, ctx(), ports);
+  await liveEngagementFixture(org.id, event.id, ctx);
+  await engagementScoreFixture(org.id, event.id, slug, ctx);
+  // M5.8a networking (every networking table, both orgs), with M5.8b chat (direct and booth).
+  await networkingFixture(org.id, event.id, ctx, exhibitorCtx);
+  // M6.9a virtual: an access choice, a stream, a viewing with a minute, and the virtual checkpoint.
+  await virtualFixture(org.id, event.id);
+  // M6.9b: a Zoom webinar with a registrant and attendance; a CE rule, certificate and award.
+  await ceFixture(org.id, event.id);
+  // M6.10a: a verified Zoom join and leave on that webinar (zoom_participant_events).
+  await virtualV2Fixture(org.id);
+  // M4.2b gala tables (isolation coverage): the fixture order's first ticket item recorded as a
+  // purchased table, and a sponsor on a table of the event plan. Rows only: no second order and no
+  // new tickets, so tests that count the fixture's orders and tickets are unchanged.
+  await withTenant(systemCtx(org.id), async (tx) => {
+    await tx.execute(sql`
+      insert into ticketing.table_units (org_id, event_id, order_id, order_item_id, ticket_type_id, unit_no, size)
+      select org_id, event_id, order_id, order_item_id, ticket_type_id, 1, 2
+      from ticketing.tickets where order_id = ${checkout.order.id} order by serial limit 1`);
+    await tx.execute(sql`
+      insert into seating.table_sponsors (org_id, event_id, item_id, sponsor_name, published)
+      values (${org.id}, ${event.id}, ${uuidv7()}, ${`${name} Sponsor`}, true)`);
+  });
+  // Batch 3e: a journey step failure reported two days ago (outside the rules' 24-hour window, so
+  // it raises nothing), as the alerts subscriber records it (isolation coverage of alerts.signals).
+  await withTenant(systemCtx(org.id), (tx) =>
+    tx.execute(sql`insert into alerts.signals (org_id, kind, source_event_id, occurred_at)
+      values (${org.id}, 'journey_step_failed', ${uuidv7()}, now() - interval '2 days')`),
+  );
+  // M4.1d: RSVP settings (deadline, name lookup), links for every party, the fixture party sent
+  // and opened through its link (isolation coverage of `rsvp_settings` and `party_rsvp`).
+  await executeCommand(
+    setRsvpSettingsCommand,
+    { eventId: event.id, deadline: new Date(event.startsAt.getTime() - 7 * 86_400_000), nameLookup: true },
+    ctx(),
+    ports,
+  );
+  await executeCommand(createRsvpLinksCommand, { eventId: event.id }, ctx(), ports);
+  await executeCommand(markRsvpSentCommand, { eventId: event.id, partyId: party.id }, ctx(), ports);
+  const partyLink = await executeQuery(
+    partyRsvpQuery,
+    { eventId: event.id, partyId: party.id },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    markRsvpViewedCommand,
+    { token: partyLink.token ?? '' },
+    createCtx({ orgId: org.id, now: new Date(event.startsAt.getTime() - 30 * 86_400_000) }),
+    ports,
+  );
+  // M4.1e: the event's menu (the host's meal "Fish" is on it) and RSVP questions: a meal choice
+  // for the reception, a dietary question saved to the sealed fields, and a conditional question
+  // (isolation coverage of `menu_options` and `rsvp` forms).
+  for (const option of [
+    { label: 'Fish', notes: 'Contains shellfish' },
+    { label: 'Vegetarian', notes: 'Vegan on request' },
+  ])
+    await executeCommand(saveMenuOptionCommand, { eventId: event.id, ...option }, ctx(), ports);
+  await executeCommand(
+    publishRsvpQuestionsCommand,
+    {
+      eventId: event.id,
+      definition: {
+        questions: [
+          {
+            key: 'meal',
+            type: 'meal',
+            label: 'Reception: meal choice',
+            subEventId: reception.id,
+            required: true,
+            showIf: { '==': [{ var: 'attending' }, true] },
+          },
+          {
+            key: 'dietary',
+            type: 'long_text',
+            label: 'Allergies or dietary needs',
+            sensitive: true,
+            binding: 'dietary',
+          },
+          {
+            key: 'song',
+            type: 'short_text',
+            label: 'Ceremony: song request',
+            subEventId: ceremony.id,
+            showIf: {
+              and: [{ '==': [{ var: 'attending' }, true] }, { '==': [{ var: 'age_class' }, 'adult'] }],
+            },
+          },
+        ],
+      },
+    },
+    ctx(),
+    ports,
+  );
+  // M4.1f: the contact collector (on), one submission waiting and one rejected, the event's own
+  // English invitation wording, the fixture party's invitation language and a logged invitation
+  // (isolation coverage of `collector_settings`, `collector_submissions`, `invitation_templates`,
+  // `party_invites` and `invite_messages`).
+  await executeCommand(setCollectorCommand, { eventId: event.id, enabled: true }, ctx(), ports);
+  const submit = (household: string) =>
+    executeCommand(
+      submitContactCommand,
+      {
+        eventId: event.id,
+        household,
+        members: [{ firstName: 'Rosa', lastName: household }],
+        address: '12 Lake Road',
+        email: `${household.toLowerCase()}@example.test`,
+      },
+      createCtx({ orgId: org.id }),
+      ports,
+    );
+  await submit('Moreno');
+  await submit('Spam');
+  const queue = await executeQuery(collectorQueueQuery, { eventId: event.id }, ctx(), ports);
+  const spam = queue.pending.find((q) => q.household === 'Spam');
+  if (spam)
+    await executeCommand(rejectSubmissionCommand, { eventId: event.id, submissionId: spam.id }, ctx(), ports);
+  await executeCommand(
+    setInvitationTemplateCommand,
+    {
+      eventId: event.id,
+      locale: 'en',
+      subject: 'Join us: {event}',
+      message: 'Dear {party}, please join us.',
+      smsText: '{party}, join us at {event}:',
+    },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    setPartyLocaleCommand,
+    { eventId: event.id, partyId: party.id, locale: 'es' },
+    ctx(),
+    ports,
+  );
+  await withTenant(systemCtx(org.id), (tx) =>
+    tx.execute(sql`insert into guests.invite_messages (org_id, event_id, party_id, kind, channel, dedupe_key, locale)
+      values (${org.id}, ${event.id}, ${party.id}, 'invitation', 'email', ${`guests-invite:${party.id}:${uuidv7()}`}, 'es')`),
+  );
+  // M4.5a: the guest website, published behind a password, with one block of each kind
+  // (isolation coverage of `sites` and `site_blocks`; the canary crawl unlocks it).
+  await guestSiteRows(event.id, ctx);
+  // M4.5b: the gallery behind it (isolation coverage of every gallery table): a host photo
+  // (published), a guest's photo waiting for approval and a video link.
+  await galleryRows(org.id, event.id, ctx);
+  await donationRows(org.id, event.id, slug, ctx);
+  await receiptRows(org.id, event.id, ga.id, checkout.order.id, ctx);
+  await paddleRaiseRows(event.id, party.id, ctx);
+  await screenRows(event.id, ctx);
+  await pledgeCollectionRows(org.id, event.id, party.id);
+  await matchRows(org.id, event.id, ctx);
+  await donationReconRows(org.id, event.id, ctx);
+  // M5.3b call for papers: an open call with one question, a proposal with a co-speaker and an
+  // answer (forms engine), a reviewer (portal account) assigned and reviewing, and a second
+  // proposal declined (acceptance would add speakers and a session to the fixture event, which other
+  // suites count; the accept path is covered by cfp.int.test.ts): isolation coverage of every cfp table.
+  await executeCommand(
+    saveCfpCommand,
+    { eventId: event.id, status: 'open', durations: [30, 45], intro: `Speak at ${name}` },
+    ctx(),
+    ports,
+  );
+  const cfpQuestion = await executeCommand(
+    addCfpQuestionCommand,
+    { eventId: event.id, type: 'short_text', label: 'Your city' },
+    ctx(),
+    ports,
+  );
+  const cfpPublic = createCtx({ orgId: org.id, locale: 'en' });
+  for (const n of [1, 2])
+    await executeCommand(
+      submitCfpCommand,
+      {
+        eventId: event.id,
+        title: `Proposal ${n} for ${name}`,
+        abstract: 'A talk about *fixtures*.',
+        durationMinutes: 30,
+        speakerName: `Proposer ${n}`,
+        speakerEmail: `proposer${n}-${slug}@example.test`,
+        speakerCompany: name,
+        speakerBio: 'Bio of the proposer.',
+        coSpeakers: [{ name: `Co ${n}`, email: `co${n}-${slug}@example.test` }],
+        answers: { [cfpQuestion.key]: 'Lisbon' },
+      },
+      cfpPublic,
+      ports,
+    );
+  const cfpView = await executeQuery(cfpOverviewQuery, { eventId: event.id }, ctx(), ports);
+  const [cfpFirst, cfpSecond] = cfpView.submissions;
+  if (!cfpFirst || !cfpSecond) throw new Error('fixture: cfp submissions');
+  const cfpReviewer = await executeCommand(
+    addCfpReviewerCommand,
+    { eventId: event.id, name: `Reviewer of ${name}`, email: `reviewer-${slug}@example.test` },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    assignCfpReviewerCommand,
+    { eventId: event.id, submissionId: cfpFirst.id, reviewerId: cfpReviewer.reviewerId },
+    ctx(),
+    ports,
+  );
+  const reviewerSession = await createPortalSession({
+    orgId: org.id,
+    accountId: cfpReviewer.accountId,
+    host: 'fixture.test',
+  });
+  const reviewerPrincipal = await portalPrincipalBySession(reviewerSession.token, 'fixture.test');
+  if (!reviewerPrincipal) throw new Error('fixture: reviewer session');
+  await executeCommand(
+    submitCfpReviewCommand,
+    { submissionId: cfpFirst.id, score: 4, comment: 'A clear, useful talk.' },
+    portalCtx(reviewerPrincipal),
+    ports,
+  );
+  await executeCommand(
+    decideCfpSubmissionCommand,
+    { eventId: event.id, submissionId: cfpSecond.id, decision: 'reject', note: 'Thank you for applying.' },
+    ctx(),
+    ports,
+  );
+  // M6.1a CRM merge and timeline: the person timeline catches up on the outbox above; two records
+  // of one mailbox are found by the duplicate scan and merged (isolation coverage of every table).
+  await catchUpTimeline(org.id);
+  const twins = await withTenant(systemCtx(org.id), async (tx) => {
+    const sys = systemCtx(org.id);
+    const one = await upsertContactTx(tx, sys, {
+      email: `twin.${slug}@example.test`,
+      name: 'Twin Fixture',
+      source: 'manual',
+    });
+    const two = await upsertContactTx(tx, sys, {
+      email: `twin.${slug}+b@example.test`,
+      name: 'Twin Fixture',
+      source: 'manual',
+    });
+    await recordTimelineTx(tx, sys, [
+      { contactId: two.id, kind: 'message_in', occurredAt: new Date(), sourceRef: uuidv7() },
+    ]);
+    return { one: one.id, two: two.id };
+  });
+  await executeCommand(scanDuplicatesCommand, { full: true }, ctx(), ports);
+  await executeCommand(
+    mergeContactsCommand,
+    { sourceContactId: twins.two, targetContactId: twins.one },
+    ctx(),
+    ports,
+  );
+  // M6.3b: one webhook endpoint (fake publisher), so webhooks.endpoints has rows for both orgs.
+  await executeCommand(
+    createEndpointCommand,
+    { url: `https://hooks.example.com/${slug}`, description: 'Fixture receiver', eventTypes: ['order.paid'] },
+    ctx(),
+    ports,
+  );
+  // M6.5a single sign-on and SCIM: a SAML connection tested and active for a verified domain, a
+  // SCIM token, a SCIM user (the viewer) in a group, and the viewer's IdP identity link.
+  await ssoFixture(org.id, slug, viewerId, ctx);
+  // M6.6a billing (isolation coverage of org_billing, subscriptions, org_entitlements and
+  // provider_events): legacy fees grandfathered, a fake billing customer, and a Pro subscription
+  // whose synced entitlements are every module key (so the org's modules match launch_standard
+  // even in a test that switches billing on).
+  await executeCommand(
+    setLegacyFeesCommand,
+    { grandfathered: true, note: 'fixture' },
+    systemCtx(org.id),
+    ports,
+  );
+  const billingCustomer = `fakecus_fixture_${org.id.slice(-12)}`;
+  await executeCommand(
+    linkBillingCustomerCommand,
+    { provider: 'fake', customerId: billingCustomer },
+    systemCtx(org.id),
+    ports,
+  );
+  const billedAt = new Date(Date.now() - 60_000);
+  await executeCommand(
+    applyBillingEventCommand,
+    {
+      kind: 'subscription',
+      provider: 'fake',
+      id: `fakeevt_fixture_sub_${org.id}`,
+      type: 'customer.subscription.created',
+      createdAt: billedAt,
+      customerId: billingCustomer,
+      subscriptionId: `fakesub_fixture_${org.id.slice(-12)}`,
+      status: 'active',
+      priceLookupKey: 'tier_pro_month_usd',
+      currentPeriodEnd: new Date(billedAt.getTime() + 30 * 86_400_000),
+      cancelAtPeriodEnd: false,
+    },
+    systemCtx(org.id),
+    ports,
+  );
+  await executeCommand(
+    applyBillingEventCommand,
+    {
+      kind: 'entitlements',
+      provider: 'fake',
+      id: `fakeevt_fixture_ent_${org.id}`,
+      type: 'entitlements.active_entitlement_summary.updated',
+      createdAt: billedAt,
+      customerId: billingCustomer,
+      features: [...MODULE_KEYS],
+    },
+    systemCtx(org.id),
+    ports,
+  );
+  // M6.4a: the demo connector connected through the fake port and synced once (a connection, its
+  // mappings, cursors, a run, record links and the demo's broken record in the errors inbox).
+  const demo = await connectDemo(ctx());
+  await runSync(org.id, demo.connectionId, { auth: fakeAuth }, ports);
+  // M6.4c: Slack connected through the fake port, its channel and digest set, a test alert queued.
+  const slack = await connectSlack(ctx());
+  await runSync(org.id, slack.connectionId, { auth: fakeAuth }, ports);
+  await executeCommand(
+    saveSlackSettingsCommand,
+    {
+      connectionId: slack.connectionId,
+      channelId: 'C01GENERAL',
+      channelName: 'general',
+      alertsEnabled: true,
+      alertMinSeverity: 'warning',
+      digestEnabled: true,
+      digestTime: '08:00',
+      includeFinance: false,
+    },
+    ctx(),
+    ports,
+  );
+  await executeCommand(queueSlackTestCommand, { connectionId: slack.connectionId }, ctx(), ports);
+  // M6.4b: Google Sheets connected, the event's attendee list linked to a sheet and synced (a
+  // sheet link, row links), then a cell edited in the sheet while the attendee changed here later:
+  // the next sync keeps ours and puts the sheet's value in the inbox (a conflict and its values).
+  const sheetGuest = await executeCommand(
+    addGuestCommand,
+    { eventId: event.id, name: 'Sheet Guest', email: `sheet.guest.${org.id.slice(-8)}@fixture.test` },
+    ctx(),
+    ports,
+  );
+  const sheets = await connectConnector(ctx(), 'google_sheets');
+  await linkEventSheet(ctx(), { auth: fakeAuth }, ports, {
+    connectionId: sheets.connectionId,
+    eventId: event.id,
+  });
+  await runSync(org.id, sheets.connectionId, { auth: fakeAuth }, ports);
+  const [sheetLink] = await executeQuery(
+    sheetLinksQuery,
+    { connectionId: sheets.connectionId },
+    ctx(),
+    ports,
+  );
+  const sheetAccount = fakeIntegrations.account(sheets.authConnectionId);
+  const guestRow =
+    sheetAccount && sheetLink
+      ? sheetsRemoteRows(sheetAccount, sheetLink.spreadsheetId).find(
+          (r) => r.values.email === sheetGuest.email,
+        )
+      : undefined;
+  if (!sheetAccount || !sheetLink || !guestRow) throw new Error('fixture: the sheet did not fill');
+  sheetsRemoteEdit(
+    sheetAccount,
+    sheetLink.spreadsheetId,
+    guestRow.rowId,
+    { name: 'Sheet Guest (sheet)' },
+    new Date(Date.now() - 60_000),
+  );
+  await executeCommand(
+    setAttendeeLabelsCommand,
+    { eventId: event.id, attendeeIds: [sheetGuest.id], add: ['vip'] },
+    ctx(),
+    ports,
+  );
+  await runSync(org.id, sheets.connectionId, { auth: fakeAuth }, ports, { force: true });
+  // M6.6b meters and plan changes (isolation coverage of usage_records and plan_changes): one
+  // device's usage from a (synthetic) outbox event, and an in-app plan change as recorded.
+  await withTenant(systemCtx(org.id), async (tx) => {
+    await recordUsageTx(tx, {
+      id: uuidv7(),
+      orgId: org.id,
+      type: 'device.enrolled',
+      version: 1,
+      payload: { orgId: org.id, deviceId: uuidv7() },
+      occurredAt: new Date(billedAt.getTime() + 1000).toISOString(),
+    });
+    await tx.execute(sql`insert into billing.plan_changes
+      (org_id, from_plan_key, to_plan_key, price_lookup_key, direction, currency, amount_due_minor,
+       tax_minor, discount_minor, status, requested_by, idempotency_key)
+      values (${org.id}, 'launch_standard', 'tier_pro', 'tier_pro_month_usd', 'start', 'USD', 10692,
+       792, 0, 'submitted', ${`user:${ownerId}`}, ${`fixture:${uuidv7()}`})`);
+  });
+  // M6.5d: QuickBooks (fake) with the accounts mapped from today, and today's ledger posted as a
+  // daily summary journal by a run "as of" tomorrow (a day is posted once it has ended).
+  const books = await connectAccounting(ctx(), 'quickbooks');
+  await executeCommand(
+    saveAccountMapCommand,
+    {
+      connectionId: books.connectionId,
+      accounts: fakeAccountMap('quickbooks'),
+      startsOn: dayIn(new Date(), 'America/Chicago'),
+    },
+    ctx(),
+    ports,
+  );
+  await runSync(org.id, books.connectionId, { auth: fakeAuth }, ports, {
+    now: new Date(Date.now() + 24 * 60 * 60_000),
+    force: true,
+  });
+  // M6.4d: Mailchimp connected with an audience (everyone with consent) and synced once: its
+  // audience settings and the consent change its seed unsubscribe brings in.
+  const mailchimp = await connectFake(ctx(), 'mailchimp');
+  await executeCommand(
+    saveAudienceSyncCommand,
+    { connectionId: mailchimp.connectionId, segmentId: null, listId: 'mc_list_main', listName: 'Newsletter' },
+    ctx(),
+    ports,
+  );
+  await runSync(org.id, mailchimp.connectionId, { auth: fakeAuth }, ports);
+  // Batch 3k merge: the warehouse catches up once more on what the fixture did after its backfill
+  // (M4.8f's gift refund, among others), as the worker would, so it is current when tests start.
+  await catchUpWarehouse(org.id);
+  return {
+    org,
+    ownerId,
+    viewerId,
+    event,
+    apiKey,
+    testKey,
+    ctx,
+    speakerId: speaker.id,
+    portal: { accountId: invited.accountId, token: portalSession.token },
+  };
+}
+
+/**
+ * M5.7a live engagement on the fixture event's keynote: polls and Q&A on (names behind anonymous
+ * questions visible to moderators), an open single-choice poll with one vote, an open word cloud
+ * with one word, an approved, upvoted and pinned question, and a pending anonymous one.
+ */
+async function liveEngagementFixture(orgId: string, eventId: string, ctx: (o?: Partial<Ctx>) => Ctx) {
+  const [keynote] = await withTenant(systemCtx(orgId), (tx) => programSessionsOf(tx, eventId));
+  if (!keynote) throw new Error('fixture: the fixture event has no session');
+  const at = { eventId, sessionId: keynote.id };
+  const visitor = (n: number) => participantKey('fixture-secret', keynote.id, `device-${n}`);
+  const public_ = createCtx({ orgId });
+  await executeCommand(enableLiveCommand, at, ctx(), ports);
+  await executeCommand(
+    updateSettingsCommand,
+    { ...at, qaOpen: true, allowAnonymous: true, anonymousIdentity: 'moderators' },
+    ctx(),
+    ports,
+  );
+  const choice = await executeCommand(
+    createPollCommand,
+    { ...at, kind: 'single', question: 'Which track next?', options: ['Design', 'Data'] },
+    ctx(),
+    ports,
+  );
+  await executeCommand(openPollCommand, { eventId, pollId: choice.id }, ctx(), ports);
+  await executeCommand(
+    voteCommand,
+    { eventId, pollId: choice.id, participantKey: visitor(1), optionIds: ['o1'] },
+    public_,
+    ports,
+  );
+  const cloud = await executeCommand(
+    createPollCommand,
+    { ...at, kind: 'word_cloud', question: 'One word for today?' },
+    ctx(),
+    ports,
+  );
+  await executeCommand(openPollCommand, { eventId, pollId: cloud.id }, ctx(), ports);
+  await executeCommand(
+    voteCommand,
+    { eventId, pollId: cloud.id, participantKey: visitor(1), word: 'Inspiring' },
+    public_,
+    ports,
+  );
+  const askedBy = async (n: number, body: string, anonymous: boolean) => {
+    await executeCommand(
+      askQuestionCommand,
+      { ...at, participantKey: visitor(n), body, name: `Visitor ${n}`, anonymous },
+      public_,
+      ports,
+    );
+    const rows = await withTenant(systemCtx(orgId), (tx) =>
+      tx.execute<{ id: string }>(
+        sql`select id from engagement.questions where session_id = ${keynote.id} and body = ${body} limit 1`,
+      ),
+    );
+    return rows[0]?.id ?? '';
+  };
+  const approved = await askedBy(1, 'How do fixtures stay isolated?', false);
+  await executeCommand(
+    moderateQuestionCommand,
+    { eventId, questionId: approved, action: 'approve' },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    upvoteQuestionCommand,
+    { eventId, questionId: approved, participantKey: visitor(2) },
+    public_,
+    ports,
+  );
+  await executeCommand(pinQuestionCommand, { ...at, questionId: approved }, ctx(), ports);
+  await askedBy(2, 'A question still waiting for a moderator', true);
+}
+
+/** M5.7b: the fixture buyer's signed-in account (no real user; the actor id ties it to the commands). */
+export const fixtureBuyerAccount = (slug: string) => ({
+  userId: '01a10000-0000-7000-8000-00000000b7e1',
+  email: `buyer@${slug}.test`,
+});
+
+/** M5.7b: the org's engagement weights in the fixture (not the defaults, so tests see them apply). */
+export const FIXTURE_ENGAGEMENT_WEIGHTS = {
+  check_in: 8,
+  poll_vote: 3,
+  question: 4,
+  feedback: 6,
+  enrollment: 2,
+} as const;
+
+/**
+ * M5.7b engagement scores (isolation coverage of `engagement.engagement_events`,
+ * `engagement.score_weights` and `crm.event_engagement`): the org's own weights; the fixture
+ * buyer, signed in, rates the keynote in a new poll and asks a named question; the activity
+ * subscriber catches up on the buyer's door scan and post-event survey answer. The fixture
+ * attendee's score is then 8 (check-in) + 3 (vote) + 4 (question) + 6 (feedback) = 21.
+ */
+async function engagementScoreFixture(
+  orgId: string,
+  eventId: string,
+  slug: string,
+  ctx: (o?: Partial<Ctx>) => Ctx,
+) {
+  const [keynote] = await withTenant(systemCtx(orgId), (tx) => programSessionsOf(tx, eventId));
+  if (!keynote) throw new Error('fixture: the fixture event has no session');
+  await executeCommand(setScoreWeightsCommand, FIXTURE_ENGAGEMENT_WEIGHTS, ctx(), ports);
+  const account = fixtureBuyerAccount(slug);
+  const buyer = createCtx({ orgId, actor: { type: 'user', userId: account.userId } });
+  const key = participantKey('fixture-secret', keynote.id, `user:${account.userId}`);
+  const rating = await executeCommand(
+    createPollCommand,
+    { eventId, sessionId: keynote.id, kind: 'rating', question: 'Rate the keynote', ratingScale: 5 },
+    ctx(),
+    ports,
+  );
+  await executeCommand(openPollCommand, { eventId, pollId: rating.id }, ctx(), ports);
+  await executeCommand(
+    voteCommand,
+    { eventId, pollId: rating.id, participantKey: key, rating: 5, account },
+    buyer,
+    ports,
+  );
+  await executeCommand(
+    askQuestionCommand,
+    {
+      eventId,
+      sessionId: keynote.id,
+      participantKey: key,
+      body: 'Will the slides be shared?',
+      name: 'Fixture Buyer',
+      account,
+    },
+    buyer,
+    ports,
+  );
+  await catchUpEngagement(orgId);
+}
+
+/**
+ * M4.8a donations (isolation coverage of every donations table and `orders.donation_items`): a
+ * campaign with a level, and a gift whose order lapsed unpaid. The fixture's payout account is
+ * still onboarding (gifts need a connected account), so the lapsed gift and its order are written
+ * as the gift flow leaves them, without a provider; an expired order touches no total or report.
+ */
+async function donationRows(orgId: string, eventId: string, slug: string, ctx: (o?: Partial<Ctx>) => Ctx) {
+  const campaign = await executeCommand(
+    createGivingCampaignCommand,
+    { eventId, name: 'Fixture Fund', description: 'Every gift helps.', goalMinor: 1_000_000 },
+    ctx(),
+    ports,
+  );
+  const level = await executeCommand(
+    createGivingLevelCommand,
+    {
+      eventId,
+      campaignId: campaign.id,
+      name: 'Classroom',
+      amountMinor: 100_000,
+      description: 'Funds a classroom',
+    },
+    ctx(),
+    ports,
+  );
+  const orderId = uuidv7();
+  const giftId = uuidv7();
+  await withTenant(systemCtx(orgId), async (tx) => {
+    await tx.execute(sql`insert into orders.orders (id, org_id, event_id, status, buyer_email, buyer_name,
+      currency, subtotal_minor, fee_minor, total_minor, funds_flow, connected_account_id, fee_schedule,
+      manage_token_hash, created_via)
+      values (${orderId}, ${orgId}, ${eventId}, 'expired', ${`donor+${slug}@example.test`}, 'Fixture Donor',
+      'USD', 102000, 0, 102000, 'organizer_mor', ${`fakeacct_${slug}`}, '{"kind":"donation"}'::jsonb,
+      ${`fixture-gift-${orgId}`}, 'donation')`);
+    await tx.execute(sql`insert into orders.donation_items (org_id, order_id, gift_id, name, amount_minor,
+      fee_cover_minor, currency) values (${orgId}, ${orderId}, ${giftId}, 'Fixture Fund', 100000, 2000, 'USD')`);
+    await tx.execute(sql`insert into donations.gifts (id, org_id, event_id, campaign_id, level_id, order_id,
+      status, amount_minor, fee_cover_minor, currency, donor_name, donor_email, display_as, employer,
+      tribute_kind, tribute_name, tribute_recipient, tribute_note)
+      values (${giftId}, ${orgId}, ${eventId}, ${campaign.id}, ${level.id}, ${orderId}, 'expired', 100000,
+      2000, 'USD', 'Fixture Donor', ${`donor+${slug}@example.test`}, 'anonymous', 'Fixture Corp',
+      'memory', 'Grandma Ada', 'The Ada family', 'In loving memory.')`);
+  });
+}
+
+/**
+ * M4.8b receipts (isolation coverage of the charity profile, fair-market values, receipts, the
+ * receipt counter and year-end statements): a staff-verified charity profile, a fair-market value
+ * on the fixture's ticket type, the receipt of the fixture's paid order (plain: it was paid under
+ * the platform's funds flow), and a year-end statement written as the yearly pass leaves one.
+ */
+async function receiptRows(
+  orgId: string,
+  eventId: string,
+  ticketTypeId: string,
+  orderId: string,
+  ctx: (o?: Partial<Ctx>) => Ctx,
+) {
+  const profile = await executeCommand(
+    saveCharityProfileCommand,
+    { legalName: 'Fixture Charity Inc', ein: '23-4567891', exemptKind: '501c3', address: '1 Pier Way' },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    verifyCharityCommand,
+    {
+      version: profile.version,
+      irs: {
+        ein: '23-4567891',
+        name: 'FIXTURE CHARITY INC',
+        city: 'BOSTON',
+        state: 'MA',
+        subsection: '03',
+        deductibility: '1',
+        status: '01',
+      },
+    },
+    systemCtx(orgId),
+    ports,
+  );
+  await executeCommand(
+    setFairValueCommand,
+    { eventId, ticketTypeId, fmvMinor: 1000, description: 'Lunch' },
+    ctx(),
+    ports,
+  );
+  await withTenant(systemCtx(orgId), async (tx) => {
+    await issueReceiptTx(tx, orgId, orderId, new Date());
+    await tx.execute(sql`insert into donations.year_end_statements (org_id, tax_year, donor_email, donor_name,
+      currency, receipt_count, amount_minor, fmv_minor, deductible_minor, charity_name, charity_ein,
+      copy_version) values (${orgId}, 2026, 'fixture-donor@example.test', 'Fixture Donor', 'USD', 1, 10000, 0,
+      10000, 'Fixture Charity Inc', '23-4567891', 'fixture')`);
+  });
+}
+
+/**
+ * M4.8c paddle raise (isolation coverage of paddles, calls, entries and pledges): the fixture
+ * party's paddle, a called and closed level with one entry confirmed into a pledge. The level is
+ * closed so tests can arm their own.
+ */
+async function paddleRaiseRows(eventId: string, partyId: string, ctx: (o?: Partial<Ctx>) => Ctx) {
+  const paddle = await executeCommand(assignPaddleCommand, { eventId, partyId, number: 1 }, ctx(), ports);
+  const view = await executeQuery(paddleConsoleQuery, { eventId }, ctx(), ports);
+  const campaign = view.campaigns[0];
+  const level = campaign?.levels[0];
+  if (!campaign || !level) throw new Error('fixture: the fixture campaign has no level');
+  const call = await executeCommand(
+    armLevelCommand,
+    { eventId, campaignId: campaign.id, levelId: level.id },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    recordPaddlesCommand,
+    {
+      eventId,
+      entries: [{ clientId: uuidv7(), callId: call.id, paddle: paddle.number, recordedAt: new Date() }],
+    },
+    ctx(),
+    ports,
+  );
+  await executeCommand(closeCallCommand, { eventId, callId: call.id }, ctx(), ports);
+  await executeCommand(confirmEntriesCommand, { eventId, callId: call.id }, ctx(), ports);
+}
+
+/** M4.8d live giving screen (isolation coverage of `donations.screens`): the fixture campaign's screen. */
+async function screenRows(eventId: string, ctx: (o?: Partial<Ctx>) => Ctx) {
+  const view = await executeQuery(paddleConsoleQuery, { eventId }, ctx(), ports);
+  const campaign = view.campaigns[0];
+  if (!campaign) throw new Error('fixture: no campaign for the screen');
+  await executeCommand(
+    saveScreenCommand,
+    { eventId, campaignId: campaign.id, showNames: true },
+    ctx(),
+    ports,
+  );
+}
+
+/**
+ * M4.8e cards on file and pledge collection (isolation coverage of saved cards, collections and
+ * attempts): the fixture party's active saved card, its pledge invoiced after a declined charge,
+ * and that charge's try on the fixture's lapsed gift order. Written as the flow leaves them
+ * (the fixture org is not connected, so no provider is involved).
+ */
+async function pledgeCollectionRows(orgId: string, eventId: string, partyId: string) {
+  await withTenant(systemCtx(orgId), async (tx) => {
+    const [card] = await tx.execute<{ id: string }>(sql`insert into donations.saved_cards (org_id, event_id,
+      party_id, name, email, source, status, provider, connected_account_id, provider_setup_id, customer_id,
+      payment_method_id, brand, last4, exp_month, exp_year, consent_version, consented_at, activated_at,
+      remove_after) values (${orgId}, ${eventId}, ${partyId}, 'Fixture Holder', 'holder@example.test', 'party',
+      'active', 'fake', 'fakeacct_fixture', 'fakeseti_fixture', 'fakecus_fixture', 'fakepm_ok_fixture', 'visa',
+      '4242', 12, 2030, 'fixture', now(), now(), now() + interval '400 days') returning id`);
+    const [pl] = await tx.execute<{ id: string; campaign_id: string }>(
+      sql`select id, campaign_id from donations.pledges where event_id = ${eventId} limit 1`,
+    );
+    const [gift] = await tx.execute<{ id: string; order_id: string }>(
+      sql`select id, order_id from donations.gifts where event_id = ${eventId} limit 1`,
+    );
+    if (!card || !pl || !gift)
+      throw new Error('fixture: pledge collection rows need a card, a pledge and a gift');
+    const [c] = await tx.execute<{
+      id: string;
+    }>(sql`insert into donations.pledge_collections (org_id, event_id,
+      campaign_id, pledge_id, amount_minor, currency, donor_name, donor_email, status, saved_card_id,
+      card_attempts, invoiced_at, due_on, note, offline_reference) values (${orgId}, ${eventId},
+      ${pl.campaign_id}, ${pl.id}, 100000, 'USD', 'Fixture Holder', 'holder@example.test', 'invoiced',
+      ${card.id}, 1, now(), current_date + 30, 'Called the donor', 'n/a') returning id`);
+    await tx.execute(sql`insert into donations.pledge_attempts (org_id, collection_id, kind, attempt, gift_id,
+      order_id, status, decline_code, settled_at) values (${orgId}, ${c?.id}, 'card', 1, ${gift.id},
+      ${gift.order_id}, 'failed', 'card_declined', now())`);
+  });
+}
+
+/**
+ * M4.8f matching gifts (isolation coverage of matches and gift refunds): a 1:1 match on the fixture
+ * campaign over the paddle raise's window, closed into the sponsor's pledge (it matched the
+ * fixture's confirmed paddle pledge), and a refund recorded against the fixture's lapsed gift as
+ * the refund subscriber leaves one.
+ */
+async function matchRows(orgId: string, eventId: string, ctx: (o?: Partial<Ctx>) => Ctx) {
+  const view = await executeQuery(paddleConsoleQuery, { eventId }, ctx(), ports);
+  const campaign = view.campaigns[0];
+  if (!campaign) throw new Error('fixture: no campaign');
+  const now = Date.now();
+  const match = await executeCommand(
+    createMatchCommand,
+    {
+      eventId,
+      campaignId: campaign.id,
+      sponsorName: 'Fixture Sponsor',
+      sponsorEmail: 'sponsor@example.test',
+      publicName: 'The Fixture Family',
+      ratioPercent: 100,
+      capMinor: 2_500_000,
+      startsAt: new Date(now - 3_600_000),
+      endsAt: new Date(now + 3_600_000),
+    },
+    ctx(),
+    ports,
+  );
+  await executeCommand(closeMatchCommand, { eventId, matchId: match.id }, ctx(), ports);
+  await withTenant(systemCtx(orgId), async (tx) => {
+    const refundId = uuidv7();
+    await tx.execute(sql`insert into orders.refunds (id, org_id, order_id, status, reason, amount_minor,
+      currency, requested_by, completed_at)
+      select ${refundId}, org_id, order_id, 'succeeded', 'requested_by_customer', 1000, 'USD', 'fixture', now()
+      from donations.gifts where event_id = ${eventId} limit 1`);
+    await tx.execute(sql`insert into donations.gift_refunds (org_id, gift_id, refund_id, amount_minor, currency,
+      refunded_at) select org_id, id, ${refundId}, 1000, 'USD', now() from donations.gifts
+      where event_id = ${eventId} limit 1`);
+    // Batch 3k merge: the outbox event a refund always comes with, so projections fed by the
+    // outbox (M6.2a's warehouse) see it like the reports do (the gift refund above is idempotent).
+    const [r] = await tx.execute<{ order_id: string }>(
+      sql`select order_id from orders.refunds where id = ${refundId}`,
+    );
+    if (r)
+      await emitEvents(tx, systemCtx(orgId), [
+        {
+          type: 'order.refunded',
+          version: 1,
+          aggregateType: 'order',
+          aggregateId: r.order_id,
+          payload: {
+            orgId,
+            orderId: r.order_id,
+            refundId,
+            amountMinor: 1000,
+            currency: 'USD',
+            tickets: 0,
+            fully: false,
+          },
+        },
+      ]);
+  });
 }
 
 /** English headers for attendee exports (the console passes its own locale's). */
@@ -1347,4 +3824,181 @@ export async function twoOrgs(suffix = uuidv7().slice(-8)) {
   const a = await createOrgFixture(`alpha-${suffix}`, 'Alpha Events');
   const b = await createOrgFixture(`bravo-${suffix}`, 'Bravo Weddings');
   return { a, b };
+}
+
+/**
+ * M4.8g donations reconciliation (isolation coverage of runs, differences and payouts): one run
+ * over the fixture's lapsed gift order, which the provider says it charged (the ledger has no memo
+ * for it: a `missing_in_ledger` difference) and paid out.
+ */
+async function donationReconRows(orgId: string, eventId: string, ctx: (o?: Partial<Ctx>) => Ctx) {
+  const [gift] = await withTenant(systemCtx(orgId), (tx) =>
+    tx.execute<{ order_id: string }>(
+      sql`select order_id from donations.gifts where event_id = ${eventId} limit 1`,
+    ),
+  );
+  if (!gift) throw new Error('fixture: no gift to reconcile');
+  const at = new Date(Date.now() - 2 * 86_400_000);
+  await executeCommand(
+    recordDonationReconciliationCommand,
+    {
+      eventId,
+      provider: 'fake',
+      movements: [
+        {
+          id: `fakebt_fixture_${orgId}`,
+          kind: 'charge',
+          amountMinor: 1_000,
+          feeMinor: 52,
+          currency: 'USD',
+          occurredAt: at,
+          reference: `order:${gift.order_id}`,
+          payoutId: 'fakepo_fixture',
+        },
+      ],
+      payouts: [
+        {
+          id: 'fakepo_fixture',
+          amountMinor: 948,
+          currency: 'USD',
+          status: 'paid',
+          createdAt: at,
+          arrivalDate: new Date(at.getTime() + 2 * 86_400_000).toISOString().slice(0, 10),
+        },
+      ],
+    },
+    ctx(),
+    ports,
+  );
+  // Resolved with a note, so the resolved state (and the note's canary) is covered too.
+  const [item] = await withTenant(systemCtx(orgId), (tx) =>
+    tx.execute<{ id: string }>(
+      sql`select id from donations.recon_items where event_id = ${eventId} and status = 'open' limit 1`,
+    ),
+  );
+  if (!item) throw new Error('fixture: no reconciliation difference to resolve');
+  await executeCommand(
+    resolveDonationReconItemCommand,
+    { eventId, itemId: item.id, note: 'Fixture: gift paid before memo entries' },
+    ctx(),
+    ports,
+  );
+}
+
+/** The fixture's guest website password (the canary crawl unlocks the site with it). */
+export const FIXTURE_SITE_PASSWORD = 'fixture site pass';
+
+/** M4.5b: the fixture event's gallery: on, a host photo, a guest's pending photo, a video link. */
+async function galleryRows(orgId: string, eventId: string, ctx: () => Ctx) {
+  await enableGallery(ctx(), eventId);
+  await hostGalleryPhoto(ctx(), eventId, fixturePng('cover'), 'Fixture host photo');
+  const access = await guestSiteAccess(orgId, eventId, FIXTURE_SITE_PASSWORD);
+  await guestGalleryPhoto(
+    orgId,
+    { eventId, access, name: 'Fixture Guest' },
+    fixturePng('logo'),
+    'Fixture guest photo',
+  );
+  await executeCommand(
+    addGalleryVideoCommand,
+    { eventId, url: 'https://youtu.be/dQw4w9WgXcQ', caption: 'Fixture video' },
+    ctx(),
+    ports,
+  );
+}
+
+/** M4.5a: the fixture event's guest website, one block of each kind, published. */
+async function guestSiteRows(eventId: string, ctx: () => Ctx) {
+  const ev = { eventId };
+  await executeCommand(
+    saveGuestSiteCommand,
+    { ...ev, title: 'Fixture guest site', intro: 'Welcome, guests.', contentLocale: 'en' },
+    ctx(),
+    ports,
+  );
+  const blocks: [SiteBlockKind, string, unknown][] = [
+    ['text', 'Welcome', { body: 'See you **soon**.' }],
+    ['program', 'Program', { show: 'everyone', subEventIds: [] }],
+    ['travel', 'Travel', { items: [{ title: 'Fixture Inn', details: 'Near the venue.', url: null }] }],
+    ['registry', 'Registry', { items: [{ label: 'Gift list', url: 'https://gifts.example.test/fixture' }] }],
+    ['faq', 'FAQ', { items: [{ question: 'Parking?', answer: 'On site.' }] }],
+  ];
+  for (const [kind, heading, content] of blocks) {
+    const b = await executeCommand(addGuestSiteBlockCommand, { ...ev, kind }, ctx(), ports);
+    await executeCommand(
+      updateGuestSiteBlockCommand,
+      { ...ev, blockId: b.id, heading, content },
+      ctx(),
+      ports,
+    );
+  }
+  await executeCommand(setGuestSitePasswordCommand, { ...ev, password: FIXTURE_SITE_PASSWORD }, ctx(), ports);
+  await executeCommand(publishGuestSiteCommand, { ...ev, published: true }, ctx(), ports);
+}
+
+/** The fixture org's single sign-on domain (verified through the fake DNS). */
+export const ssoFixtureDomain = (slug: string) => `${slug}.sso.test`;
+
+/**
+ * M6.5a: rows in every `sso` table for an org: a SAML connection (the fake IdP's metadata values),
+ * a verified domain, a passed test and activation, a SCIM token, the viewer as a SCIM user in a
+ * group, and the viewer's IdP identity link.
+ */
+async function ssoFixture(orgId: string, slug: string, viewerId: string, ctx: (o?: Partial<Ctx>) => Ctx) {
+  const domain = ssoFixtureDomain(slug);
+  const conn = await executeCommand(
+    saveConnectionCommand,
+    {
+      protocol: 'saml',
+      name: 'Fixture IdP',
+      defaultRole: 'viewer',
+      jit: true,
+      entityId: `https://idp.${domain}/idp`,
+      ssoUrl: `https://idp.${domain}/sso/saml`,
+      certificate: FAKE_IDP_CERTIFICATE,
+    },
+    ctx(),
+    ports,
+  );
+  const d = await executeCommand(addDomainCommand, { domain }, ctx(), ports);
+  publishFakeTxt(d.record.name, d.record.value);
+  await executeCommand(checkDomainCommand, { domainId: d.id }, ctx(), ports);
+  await executeCommand(recordConnectionTestCommand, { connectionId: conn.id, ok: true }, ctx(), ports);
+  await executeCommand(setConnectionStatusCommand, { status: 'active' }, ctx(), ports);
+  const token = await executeCommand(createScimTokenCommand, {}, ctx(), ports);
+  const scim = scimCtx(orgId, token.id);
+  const baseUrl = 'https://app.yayatoh.test/api/scim/v2';
+  const user = await executeCommand(
+    scimCreateUserCommand,
+    {
+      userId: viewerId,
+      baseUrl,
+      fields: {
+        userName: `viewer@${domain}`,
+        email: `viewer@${domain}`,
+        externalId: `ext-${slug}`,
+        displayName: 'Fixture Viewer',
+        givenName: 'Fixture',
+        familyName: 'Viewer',
+        active: true,
+      },
+    },
+    scim,
+    ports,
+  );
+  await executeCommand(
+    scimCreateGroupCommand,
+    {
+      baseUrl,
+      fields: { displayName: 'Fixture group', externalId: `grp-${slug}`, members: [user.resource.id] },
+    },
+    scim,
+    ports,
+  );
+  await executeCommand(
+    completeSsoLoginCommand,
+    { connectionId: conn.id, subject: `subject-${slug}`, email: `viewer@${domain}`, userId: viewerId },
+    createCtx({ orgId, actor: { type: 'system', name: 'sso.login' } }),
+    ports,
+  );
 }

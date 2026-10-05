@@ -78,6 +78,20 @@ export const LEDGER_ACCOUNTS = [
   'org:payable_releasable',
   'org:reserve',
   'org:receivable',
+  /*
+   * M6.8a agency commission. In the **client's** ledger: `commission_held` is owed to the agency
+   * until its transfer at release; `commission_receivable` is what the agency owes back after a
+   * refund once its commission was transferred (until the explicit reversal succeeds or it is
+   * netted from the next commission). In the **agency's** ledger (mirror journals, never platform
+   * cash): `commission_due` (earned, not yet transferred), `commission_earned` (income),
+   * `commission_paid` (transferred to it), `commission_clawback` (owed back after a refund).
+   */
+  'agency:commission_held',
+  'agency:commission_receivable',
+  'agency:commission_due',
+  'agency:commission_earned',
+  'agency:commission_paid',
+  'agency:commission_clawback',
 ] as const;
 export type LedgerAccount = (typeof LEDGER_ACCOUNTS)[number];
 
@@ -132,7 +146,8 @@ export const postings = tenantTable(
   ],
 );
 
-export const SETTLEMENT_KINDS = ['event', 'reserve'] as const;
+/** `commission` (M6.8a): an agency's commission on the event, a second transfer in the event's group. */
+export const SETTLEMENT_KINDS = ['event', 'reserve', 'commission'] as const;
 export const SETTLEMENT_STATUSES = ['ready', 'waiting_account', 'transferred', 'failed'] as const;
 
 /**
@@ -163,9 +178,12 @@ export const settlements = tenantTable(
     failure: text('failure'),
     releasedAt: timestamp('released_at', { withTimezone: true }).notNull(),
     transferredAt: timestamp('transferred_at', { withTimezone: true }),
+    /** M6.8a: the agency a `commission` settlement pays (its connected account is the destination). */
+    agencyOrgId: uuid('agency_org_id'),
   },
   (t) => [
     index('settlements_org_status_idx').on(t.orgId, t.status),
+    check('settlements_agency_check', sql`(kind = 'commission') = (agency_org_id is not null)`),
     index('settlements_org_event_idx').on(t.orgId, t.eventId),
     check('settlements_kind_check', sql.raw(`kind in (${SETTLEMENT_KINDS.map((k) => `'${k}'`).join(', ')})`)),
     check(
@@ -206,6 +224,11 @@ export const disputes = tenantTable(
     evidenceSummary: text('evidence_summary'),
     /** M1.6e: packet sections the reviewer left out (e.g. `messages`). */
     evidenceExcluded: text('evidence_excluded').array().notNull().default(sql`'{}'::text[]`),
+    /**
+     * M3.10c: the deadline alerts already raised (0 none, 1 three days before, 2 one day before),
+     * so each is raised once.
+     */
+    deadlineAlertLevel: integer('deadline_alert_level').notNull().default(0),
   },
   (t) => [
     uniqueIndex('disputes_org_provider_key').on(t.orgId, t.provider, t.providerDisputeId),
@@ -215,6 +238,7 @@ export const disputes = tenantTable(
       sql.raw(`status in (${DISPUTE_STATUSES.map((s) => `'${s}'`).join(', ')})`),
     ),
     check('disputes_amount_check', sql`amount_minor > 0`),
+    check('disputes_deadline_alert_check', sql`deadline_alert_level between 0 and 2`),
   ],
 );
 

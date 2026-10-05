@@ -1,13 +1,17 @@
 import { formatLinksText } from '@yayatoh/events';
-import type { SpeakerDto } from '@yayatoh/program';
-import { Button, Card, EmptyState, PageHeader } from '@yayatoh/ui';
+import { executeQuery } from '@yayatoh/kernel';
+import { type SpeakerDto, speakerAccessQuery, speakerChangesQuery } from '@yayatoh/program';
+import { Button, buttonClass, Card, EmptyState, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Markdown } from '@/components/markdown.tsx';
 import { MediaUploader } from '@/components/media-uploader.tsx';
 import { type FieldSpec, ProgramForm } from '@/components/program-form.tsx';
 import { ProgramThumb } from '@/components/program-thumb.tsx';
+import { SpeakerAccessPanel } from '@/components/speaker-access-panel.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import { defaultProgramAlt } from '@/lib/program-media.ts';
 import { programMediaPanels } from '@/server/media.ts';
+import { ports } from '@/server/ports.ts';
 import { loadProgramPage } from '@/server/program.ts';
 import { createSpeakerAction, deleteSpeakerAction, updateSpeakerAction } from './actions.ts';
 
@@ -22,7 +26,7 @@ export default async function SpeakersPage({
 }) {
   const { locale, org, event } = await params;
   setRequestLocale(locale);
-  const { data, program, canWrite } = await loadProgramPage(org, event, 'speakers');
+  const { data, ev, program, canWrite } = await loadProgramPage(org, event, 'speakers');
   const t = await getTranslations();
   const tp = await getTranslations('program');
   const tm = await getTranslations('media');
@@ -31,6 +35,11 @@ export default async function SpeakersPage({
     'speaker',
     program.speakers.map((p) => p.id),
   );
+  // M5.3a speaker portal: access per speaker, and links to proposed changes and the task board.
+  const ts = await getTranslations('speakerAccess');
+  const tcfp = await getTranslations('cfp');
+  const access = await executeQuery(speakerAccessQuery, { eventId: ev.id }, data.ctx, ports);
+  const changes = await executeQuery(speakerChangesQuery, { eventId: ev.id }, data.ctx, ports);
   const errors = {
     name: tp('errors.name'),
     links: tp('errors.links'),
@@ -81,14 +90,44 @@ export default async function SpeakersPage({
   const sessionsOf = (id: string) => program.sessions.filter((s) => s.speakerIds.includes(id)).length;
   return (
     <>
-      <PageHeader title={t('nav.speakers')} description={tp('speakersSubtitle')} />
-      {canWrite ? null : <p className="text-body text-zinc-500">{tp('viewerNotice')}</p>}
+      <PageHeader
+        title={t('nav.speakers')}
+        description={tp('speakersSubtitle')}
+        actions={
+          <nav aria-label={ts('portalNav')} className="flex flex-wrap gap-2.5">
+            <Link href={`/o/${org}/e/${event}/speakers/changes`} className={buttonClass('secondary')}>
+              {ts('changesLink', { count: changes.pending.length })}
+            </Link>
+            <Link href={`/o/${org}/e/${event}/speakers/tasks`} className={buttonClass('secondary')}>
+              {ts('tasksLink')}
+            </Link>
+            <Link href={`/o/${org}/e/${event}/speakers/cfp`} className={buttonClass('secondary')}>
+              {tcfp('title')}
+            </Link>
+          </nav>
+        }
+      />
+      {canWrite ? null : <p className="text-body text-ink-2">{tp('viewerNotice')}</p>}
       <section aria-labelledby="speakers-heading" className="flex flex-col gap-3">
         <h2 id="speakers-heading" className="text-section">
           {tp('speakerList', { count: program.speakers.length })}
         </h2>
         {program.speakers.length === 0 ? (
-          <EmptyState title={tp('emptySpeakersTitle')} description={tp('emptySpeakersDescription')} />
+          <EmptyState
+            title={tp('emptySpeakersTitle')}
+            description={canWrite ? tp('emptySpeakersDescription') : tp('emptySpeakersReadOnly')}
+            action={
+              canWrite ? (
+                <Link href="#adding-speaker-heading" className={buttonClass('primary', 'md')}>
+                  {tp('addFirstSpeaker')}
+                </Link>
+              ) : (
+                <Link href={`/o/${org}/e/${event}`} className={buttonClass('secondary', 'md')}>
+                  {tp('backToEvent')}
+                </Link>
+              )
+            }
+          />
         ) : (
           <ul className="flex list-none flex-col gap-3 p-0">
             {program.speakers.map((p) => (
@@ -98,15 +137,23 @@ export default async function SpeakersPage({
                     <ProgramThumb item={photos.get(p.id)?.items[0]} round />
                     <h3 className="text-body font-medium">{p.name}</h3>
                   </div>
-                  <p className="text-caption text-zinc-600">
+                  <p className="text-caption text-ink-2">
                     {[p.title, p.company].filter(Boolean).join(' · ')}
                     {[p.title, p.company].some(Boolean) ? ' · ' : ''}
                     {tp('sessionCount', { count: sessionsOf(p.id) })}
                   </p>
                   {p.bio ? <Markdown source={p.bio} /> : null}
+                  <SpeakerAccessPanel
+                    org={org}
+                    event={event}
+                    speakerId={p.id}
+                    speakerName={p.name}
+                    accounts={access.find((x) => x.speakerId === p.id)?.accounts ?? []}
+                    canWrite={canWrite}
+                  />
                   {canWrite ? (
-                    <details className="border-t border-zinc-100 pt-2">
-                      <summary className="min-h-6 cursor-pointer text-caption text-zinc-600">
+                    <details className="border-t border-line pt-2">
+                      <summary className="min-h-6 cursor-pointer text-caption text-ink-2">
                         {tp('editNamed', { name: p.name })}
                       </summary>
                       <div className="flex flex-col gap-3 pt-3">
@@ -144,9 +191,9 @@ export default async function SpeakersPage({
           </ul>
         )}
         {canWrite ? (
-          <section aria-labelledby="add-speaker-heading">
+          <section aria-labelledby="adding-speaker-heading">
             <Card size="panel" className="flex flex-col gap-3">
-              <h3 id="add-speaker-heading" className="text-section">
+              <h3 id="adding-speaker-heading" className="text-section">
                 {tp('addSpeaker')}
               </h3>
               <ProgramForm
@@ -158,7 +205,7 @@ export default async function SpeakersPage({
                 errors={errors}
                 reset
               />
-              <p className="text-caption text-zinc-500">{tp('photoAfterSave')}</p>
+              <p className="text-caption text-ink-2">{tp('photoAfterSave')}</p>
             </Card>
           </section>
         ) : null}

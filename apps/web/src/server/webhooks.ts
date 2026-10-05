@@ -1,4 +1,5 @@
 import 'server-only';
+import { applyCardSetupCommand } from '@yayatoh/donations';
 import { createCtx, executeCommand, isDomainError } from '@yayatoh/kernel';
 import { applyDisputeEventCommand, applyProviderEventCommand } from '@yayatoh/orders';
 import {
@@ -6,6 +7,7 @@ import {
   isAccountEvent,
   isDisputeEvent,
   isIgnoredEvent,
+  isSetupEvent,
   type WebhookEvent,
 } from '@yayatoh/payments';
 import { tooManyRequests } from '@yayatoh/platform/security';
@@ -22,7 +24,10 @@ import { limitRequest } from '@/server/rate-limit.ts';
  */
 export async function handlePaymentWebhook(req: Request, expected: 'fake' | 'stripe'): Promise<Response> {
   const provider = getPaymentProvider();
-  if (provider.name !== expected) return new Response(null, { status: 404 });
+  // M6.3a: on a Stripe deployment the fake endpoint stays open for sandbox orgs' fake payments
+  // only (the sandbox-safe provider refuses a fake-signed event for any other org).
+  const sandboxFake = expected === 'fake' && 'sandboxSafe' in provider;
+  if (provider.name !== expected && !sandboxFake) return new Response(null, { status: 404 });
   const raw = await req.text();
   let event: WebhookEvent;
   try {
@@ -39,9 +44,12 @@ export async function handlePaymentWebhook(req: Request, expected: 'fake' | 'str
   try {
     const out = isAccountEvent(event)
       ? await executeCommand(applyAccountEventCommand, event, ctx, ports)
-      : isDisputeEvent(event)
-        ? await executeCommand(applyDisputeEventCommand, event, ctx, ports)
-        : await executeCommand(applyProviderEventCommand, event, ctx, ports);
+      : // M4.8e: a guest's saved card (SetupIntent on the connected account).
+        isSetupEvent(event)
+        ? await executeCommand(applyCardSetupCommand, event, ctx, ports)
+        : isDisputeEvent(event)
+          ? await executeCommand(applyDisputeEventCommand, event, ctx, ports)
+          : await executeCommand(applyProviderEventCommand, event, ctx, ports);
     return Response.json(out);
   } catch (err) {
     if (isDomainError(err)) return Response.json({ error: err.code }, { status: err.status });

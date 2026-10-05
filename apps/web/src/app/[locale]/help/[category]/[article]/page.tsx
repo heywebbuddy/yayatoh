@@ -102,9 +102,11 @@ export default async function HelpArticle({ params }: Props) {
       />
       <article className="flex flex-col gap-6" lang={a.locale === locale ? undefined : a.locale}>
         <header className="flex flex-col gap-2">
-          <h1 className="text-[36px] leading-tight font-light tracking-[-0.03em] break-words">{a.title}</h1>
-          {a.summary ? <p className="text-[17px] leading-7 text-zinc-600">{a.summary}</p> : null}
-          <p className="text-caption text-zinc-500">
+          <h1 className="text-[36px] leading-tight font-extrabold tracking-[-0.03em] break-words">
+            {a.title}
+          </h1>
+          {a.summary ? <p className="text-[17px] leading-7 text-ink-2">{a.summary}</p> : null}
+          <p className="text-caption text-ink-2">
             {t('updated', {
               date: formatDate(
                 a.updatedAt.toISOString(),
@@ -118,7 +120,7 @@ export default async function HelpArticle({ params }: Props) {
           <p
             role="note"
             lang={locale}
-            className="rounded-card border border-zinc-200 px-4 py-3 text-body text-zinc-600"
+            className="rounded-card border border-line px-4 py-3 text-body text-ink-2"
           >
             {t('notTranslated')}
           </p>
@@ -128,7 +130,7 @@ export default async function HelpArticle({ params }: Props) {
       <HelpFeedbackForm action={helpFeedbackAction.bind(null, a.slug, a.locale)} />
       {related.length > 0 ? (
         <section aria-labelledby="help-related" className="flex flex-col gap-4">
-          <h2 id="help-related" className="text-[22px] font-normal tracking-[-0.02em]">
+          <h2 id="help-related" className="text-[22px] font-extrabold tracking-[-0.02em]">
             {t('related')}
           </h2>
           <ArticleList articles={related} label={t('related')} locale={locale} />

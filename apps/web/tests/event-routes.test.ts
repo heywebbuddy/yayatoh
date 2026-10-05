@@ -48,6 +48,33 @@ const SECTION_OF: Record<string, string> = {
   'tracked-links': 'trackedLinks',
   // Cancel or postpone the event is an action of the event home (its button lives there).
   cancel: 'home',
+  // Batch 3d merge: M3.2a's Command Center (every profile).
+  'command-center': 'commandCenter',
+  // M4.4b: the day-of host view (weddings).
+  'day-of': 'dayOf',
+  // M3.3b: the help queue (every profile with check-in).
+  assistance: 'assistance',
+  // M4.2b: the gala's Tables & Sponsors (no longer a placeholder).
+  'tables-sponsors': 'tablesSponsors',
+  // Batch 3e merge: M5.1a's Registration page and M5.1b's form builder (the Registration item).
+  registration: 'registration',
+  'registration-form': 'registration',
+  // Batch 3f merge: M5.5a's Badges pages (they load through `loadBadgesPage`, checked below).
+  badges: 'badges',
+  // M4.8a: the Donations tab (gala and community profiles) replaces its placeholder.
+  donations: 'donations',
+  // M4.5a: the guest website (no longer a placeholder).
+  website: 'website',
+  // M4.5b: the gallery (no longer a placeholder).
+  gallery: 'gallery',
+  // M5.7b: Engagement scores, reached from Sessions (the sessions section).
+  engagement: 'sessions',
+  // M5.8a: networking is reached from Sessions and opens with it.
+  networking: 'sessions',
+  // M6.9a: stream setup (conference nav, the `virtual` module).
+  virtual: 'virtual',
+  // M6.9b: CE credits (conference nav, the `virtual` module).
+  'ce-credits': 'ceCredits',
 };
 
 describe('event console route sweep (M4.2a)', () => {
@@ -80,11 +107,25 @@ describe('event console route sweep (M4.2a)', () => {
     expect(src).not.toMatch(/loadEventBase\(/);
     const calls = [...src.matchAll(/loadEvent\(([^)]*)\)/g)].map((m) => m[1] ?? '');
     if (calls.length === 0) {
-      // Helpers that load for a page (the program pages) take the section themselves.
-      expect(src).toMatch(/loadProgramPage\(org, event, '(sessions|speakers|exhibitors|sponsors)'\)/);
+      // Helpers that load for a page (the program pages) take the section themselves; the
+      // Badges helper loads its own section (asserted in the next test).
+      // M5.5b's printing pages load through `loadPrintingPage`, which goes through `loadBadgesPage`.
+      if (section === 'badges') expect(src).toMatch(/load(Badges|Printing)Page\(org, event\)/);
+      else expect(src).toMatch(/loadProgramPage\(org, event, '(sessions|speakers|exhibitors|sponsors)'\)/);
       return;
     }
     for (const args of calls) expect(args).toBe(`org, event, '${section}'`);
+  });
+
+  it('the Badges page helper loads the badges section', () => {
+    const src = readFileSync(join(__dirname, '../src/server/badges.ts'), 'utf8');
+    expect([...src.matchAll(/loadEvent\(([^)]*)\)/g)].map((m) => m[1])).toEqual(["org, event, 'badges'"]);
+  });
+
+  it('the printing pages helper loads through the Badges page helper (M5.5b)', () => {
+    const src = readFileSync(join(__dirname, '../src/server/printing.ts'), 'utf8');
+    expect(src).not.toMatch(/loadEvent(Base)?\(/);
+    expect([...src.matchAll(/loadBadgesPage\(([^)]*)\)/g)].map((m) => m[1])).toEqual(['org, event']);
   });
 
   it('the placeholder page resolves only nav items, gated by who may open them', () => {

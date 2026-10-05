@@ -59,7 +59,13 @@
     "openSignup": "Open signup",
     "incidents": "Incidents",
     "frontDoor": "Front door",
-    "maintenance": "Maintenance"
+    "maintenance": "Maintenance",
+    "providers": "Messaging providers",
+    "charities": "Charities",
+    "menu": "Open menu",
+    "closeMenu": "Close menu",
+    "categories": "Event categories",
+    "listings": "Marketplace listings"
   },
   "tenants": {
     "title": "Tenants",
@@ -503,7 +509,42 @@
       "open": "No open reports",
       "closed": "No reviewed reports yet"
     },
-    "emptyDescription": "Reports from organizers and contacts show up here."
+    "emptyDescription": "Reports from organizers and contacts show up here.",
+    "chat": {
+      "title": "Networking chat reports",
+      "description": "1:1 chats at events that attendees or exhibitors reported. The organizer handles each report at the event too; review it here for Yayatoh.",
+      "heading": "{org} · {kind} · {reason}",
+      "meta": "Reported by the {reporter} · {at} UTC · Organizer: {moderation} ·",
+      "kind": {
+        "direct": "Attendee chat",
+        "booth": "Booth chat"
+      },
+      "reporter": {
+        "attendee": "attendee",
+        "exhibitor": "exhibitor"
+      },
+      "reasons": {
+        "spam": "Spam or unwanted selling",
+        "harassment": "Harassment",
+        "inappropriate": "Inappropriate content",
+        "fake": "Fake profile",
+        "other": "Something else"
+      },
+      "moderation": {
+        "open": "not handled yet",
+        "actioned": "acted on",
+        "dismissed": "dismissed"
+      },
+      "from": {
+        "reporter": "Reporter",
+        "reported": "Reported side"
+      },
+      "removed": "removed by the organizer",
+      "empty": {
+        "open": "No open chat reports",
+        "closed": "No reviewed chat reports yet"
+      }
+    }
   },
   "people": {
     "metaTitle": "Privacy requests · Yayatoh staff",
@@ -633,14 +674,47 @@
     "done": {
       "lifted": "The auto-pause was lifted. Messaging resumed.",
       "quota": "The quota was saved.",
-      "quota_reset": "The quota is back to the default."
+      "quota_reset": "The quota is back to the default.",
+      "sender": "The sender was saved.",
+      "sender_cleared": "The tenant is back on the shared sender."
     },
     "errors": {
       "not_paused": "This organization is not auto-paused.",
       "validation_failed": "Check the values: a whole number and a reason of at least 3 characters.",
       "forbidden": "Your staff role can't do that.",
-      "internal": "Something went wrong."
-    }
+      "internal": "Something went wrong.",
+      "sid": "Enter a Messaging Service SID: MG followed by 32 hexadecimal characters.",
+      "number": "Enter the number in international format, for example +13125550100.",
+      "phone_number_id": "The Cloud API needs the phone number id (digits).",
+      "gateway_sender": "The gateway sender is letters, digits, - and _ only.",
+      "sender_taken": "That sender belongs to another tenant.",
+      "unavailable": "Twilio isn't set up yet, so the 10DLC status can't be checked."
+    },
+    "sendersTitle": "Dedicated senders",
+    "sendersDescription": "The tenant's own text senders. Without one, texts use Yayatoh's shared number and WhatsApp uses the default route. SMS uses a dedicated Messaging Service only once its 10DLC campaign is verified.",
+    "smsShared": "SMS: Yayatoh's shared number.",
+    "smsDedicated": "SMS: Messaging Service ending {hint}, 10DLC campaign {status}.",
+    "campaignStatus": {
+      "verified": "verified",
+      "pending": "in review",
+      "failed": "rejected",
+      "not_registered": "not registered"
+    },
+    "smsForm": "Dedicated SMS sender",
+    "smsSid": "Messaging Service SID (MG…)",
+    "displayNumber": "Number people see (optional, +1…)",
+    "smsSave": "Save and check 10DLC status",
+    "smsClear": "Use the shared number",
+    "waDefault": "WhatsApp: the default route.",
+    "waCloud": "WhatsApp: Cloud API, phone number id ending {hint}.",
+    "waGateway": "WhatsApp: the owner's gateway.",
+    "waForm": "WhatsApp route",
+    "waRoute": "Route",
+    "routeCloud": "WhatsApp Cloud API",
+    "routeGateway": "Pani WhatsApp gateway",
+    "waRef": "Phone number id (Cloud API) or gateway sender (optional)",
+    "waSave": "Save the WhatsApp route",
+    "waClear": "Use the default route"
   },
   "openSignup": {
     "title": "Open signup",
@@ -889,5 +963,260 @@
       "route": "Host {host} → {summary}",
       "meta": "{who} · {when} UTC · {reason}"
     }
+  },
+  "providers": {
+    "title": "Messaging providers",
+    "description": "Each provider: whether it is live, its last webhook, sends and errors over the last 24 hours, and the steps to switch it on. Config is checked by name only.",
+    "tableCaption": "Provider health, last 24 hours",
+    "columns": {
+      "provider": "Provider",
+      "mode": "Mode",
+      "lastWebhook": "Last webhook",
+      "webhooks": "Webhooks (24 h)",
+      "sends": "Sends (24 h)",
+      "errorRate": "Error rate",
+      "lastError": "Last error"
+    },
+    "names": {
+      "ses": "Amazon SES (email)",
+      "twilio": "Twilio (SMS)",
+      "whatsapp_cloud": "WhatsApp Cloud API",
+      "whatsapp_gateway": "Pani WhatsApp gateway",
+      "fake": "Fake email provider (development)",
+      "dev": "Dev mailbox (development)",
+      "memory": "Test transports"
+    },
+    "mode": {
+      "live": "Live",
+      "ready": "Configured, not switched on",
+      "off": "Not set up",
+      "fake": "Development fake"
+    },
+    "never": "Never",
+    "webhooksValue": "{ok} verified, {refused} refused",
+    "sendsValue": "{sent} sent, {errors} errors",
+    "noSends": "No sends",
+    "checklistTitle": "Switch-on checklist: {provider}",
+    "ownerStep": "Owner's step",
+    "done": "Done",
+    "todo": "To do",
+    "missing": "Missing: {names}",
+    "items": {
+      "env": "Config names are set in the environment (values in Doppler, never in the repo)",
+      "ses": {
+        "production": "SES production access granted (out of the sandbox) in the owner's AWS account",
+        "domain": "mail.yayatoh.com verified in SES with Easy DKIM, a custom MAIL FROM and DMARC",
+        "configurationSet": "Configuration set with an SNS event destination (delivery, bounce, complaint) subscribed to /api/webhooks/email/ses",
+        "webhook": "A verified SNS notification has arrived",
+        "switch": "EMAIL_PROVIDER=ses"
+      },
+      "twilio": {
+        "registration": "Toll-free verification and the 10DLC brand and campaign approved",
+        "service": "Messaging Service with Advanced Opt-Out on and its inbound webhook at /api/webhooks/sms/twilio/inbound",
+        "webhook": "A verified status callback or inbound message has arrived",
+        "switch": "SMS_PROVIDER=twilio"
+      },
+      "cloud": {
+        "business": "Meta business verification, the WhatsApp Business Account and its phone number",
+        "templates": "Templates yayatoh_update (utility), yayatoh_news (marketing) and yayatoh_code (authentication) approved in 13 languages",
+        "webhook": "Webhook subscribed (messages field) at /api/webhooks/whatsapp/cloud and a verified delivery has arrived",
+        "switch": "WHATSAPP_PROVIDER includes cloud"
+      },
+      "gateway": {
+        "contract": "The gateway's API contract and signing key from the owner (whatsapp.panitechnologies.com)",
+        "webhook": "Callbacks configured to /api/webhooks/whatsapp/gateway and a verified one has arrived",
+        "switch": "WHATSAPP_PROVIDER includes gateway"
+      }
+    }
+  },
+  "charities": {
+    "title": "Charity profiles",
+    "description": "Profiles orgs sent for verification. Check each against the IRS exempt-organization list before its receipts turn tax-deductible.",
+    "filter": "Filter charity profiles",
+    "pending": "Waiting",
+    "reviewed": "Reviewed",
+    "pendingCaption": "Charity profiles waiting for review, oldest first",
+    "reviewedCaption": "Reviewed charity profiles, newest first",
+    "emptyPending": "No charity profiles are waiting for review.",
+    "emptyReviewed": "No charity profiles reviewed yet.",
+    "org": "Organization",
+    "legalName": "Legal name",
+    "ein": "EIN",
+    "kind": "Exempt status",
+    "kinds": {
+      "501c3": "Own 501(c)(3)",
+      "fiscal_sponsor": "Fiscal sponsor"
+    },
+    "status": "Status",
+    "statuses": {
+      "pending": "Waiting for review",
+      "verified": "Verified",
+      "rejected": "Rejected"
+    },
+    "submitted": "Submitted",
+    "reviewedAt": "Reviewed",
+    "reviewTitle": "Charity review",
+    "reviewHeading": "Charity profile of {org}",
+    "reviewDescription": "Compare what the org entered with the IRS exempt-organization list, then verify or reject. Every verdict is audited.",
+    "back": "Back to charity profiles",
+    "profileTitle": "What the org entered",
+    "sponsor": "Fiscal sponsor",
+    "address": "Address",
+    "version": "version {version}",
+    "note": "Last note",
+    "irsTitle": "IRS exempt-organization list: EIN {ein}",
+    "irsUnavailable": "The IRS list isn’t loaded on this server, so profiles can’t be verified yet. The owner runs the download job (IRS_EO_BMF_DIR).",
+    "source": {
+      "irs_bulk": "Source: the IRS bulk file (EO Business Master File).",
+      "fixture": "Source: the recorded test list (dev and CI only)."
+    },
+    "irsName": "Name on the list",
+    "irsPlace": "City and state",
+    "irsSubsection": "Subsection (03 = 501(c)(3))",
+    "irsDeductibility": "Deductibility (1 = deductible)",
+    "irsStatus": "Exemption status (01–03 = in force)",
+    "nameMatches": "matches",
+    "nameDiffers": "differs from the profile: check before verifying",
+    "eligible": "Eligible: a 501(c)(3) to which contributions are deductible",
+    "problems": {
+      "not_listed": "Not on the IRS list",
+      "not_501c3": "Not a 501(c)(3) organization",
+      "not_deductible": "Contributions are not deductible",
+      "not_in_force": "Exemption not in force (revoked or terminated)",
+      "unavailable": "The IRS list isn’t available"
+    },
+    "verdictTitle": "Verdict",
+    "verifyForm": "Verify the charity profile",
+    "verifyNote": "Note (optional)",
+    "verify": "Verify",
+    "alreadyVerified": "This profile is verified. Withdraw the verification below if it no longer holds.",
+    "cannotVerify": "This profile can’t be verified: the IRS list doesn’t show an eligible organization for its EIN.",
+    "rejectForm": "Reject the charity profile",
+    "rejectNote": "Note to the org (required)",
+    "reject": "Reject",
+    "withdraw": "Withdraw verification",
+    "done": {
+      "verified": "Verified. The org’s receipts are tax-deductible from now on.",
+      "rejected": "Rejected. The org sees your note; its receipts are not tax-deductible."
+    },
+    "errors": {
+      "stale": "The org changed its profile while you reviewed it. Review the new version.",
+      "note": "Write a note of at least 3 characters for the org.",
+      "ein_mismatch": "The IRS record is for another EIN.",
+      "not_listed": "The EIN is not on the IRS list.",
+      "not_501c3": "The organization is not a 501(c)(3).",
+      "not_deductible": "Contributions to this organization are not deductible.",
+      "not_in_force": "The organization’s exemption is not in force.",
+      "unavailable": "The IRS list isn’t available on this server.",
+      "internal": "Something went wrong. Try again."
+    }
+  },
+  "theme": {
+    "label": "Colour theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "formControls": {
+    "search": "Search",
+    "noResults": "No matches",
+    "loading": "Loading…",
+    "remove": "Remove {label}",
+    "create": "Create “{query}”",
+    "clear": "Clear",
+    "chooseDate": "Choose a date",
+    "chooseTime": "Choose a time",
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month",
+    "today": "Today",
+    "invalidDate": "Enter a date like {example}",
+    "invalidTime": "Enter a time like {example}",
+    "tooEarly": "Choose a date on or after {date}",
+    "tooLate": "Choose a date on or before {date}",
+    "timeZoneNote": "Times in {zone}",
+    "selected": "Selected"
+  },
+  "platformCategories": {
+    "title": "Default event categories",
+    "description": "The categories every new organization starts with, in this order. Organizations rename, hide and add their own afterwards; a change here never alters a list an organization already has.",
+    "listTitle": "{count, plural, one {# category in the defaults} other {# categories in the defaults}}",
+    "explain": "Tick the categories new organizations get and move them into order. Unticked categories stay in the platform taxonomy (the marketplace and /v1 keep using every one of them).",
+    "notInDefaults": "Not in the defaults",
+    "moveUp": "Move {name} up",
+    "moveDown": "Move {name} down",
+    "save": "Save defaults",
+    "done": {
+      "saved": "Defaults saved.",
+      "moved": "Order saved."
+    },
+    "error": {
+      "empty": "Keep at least one category in the defaults."
+    },
+    "labels": {
+      "arts_culture": "Arts & culture",
+      "business_seminars": "Business & seminars",
+      "charity": "Charity",
+      "community": "Community",
+      "education_classes": "Education & classes",
+      "family": "Family",
+      "food_drink": "Food & drink",
+      "health_wellness": "Health & wellness",
+      "music": "Music",
+      "nightlife": "Nightlife",
+      "religion_spirituality": "Religion & spirituality",
+      "social_gatherings": "Social gatherings",
+      "sports_fitness": "Sports & fitness",
+      "technology": "Technology",
+      "travel_leisure": "Travel & leisure",
+      "other": "Other"
+    }
+  },
+  "listings": {
+    "title": "Marketplace listings",
+    "description": "Live marketplace listings, newest first. Hiding one takes it off the marketplace and its search; the organizer's own site keeps it. Every change needs a reason and is kept in the organizer's activity log.",
+    "filter": "Listings",
+    "tabs": {
+      "listed": "Listed",
+      "hidden": "Hidden"
+    },
+    "searchLabel": "Find a listing",
+    "search": "Event or organizer",
+    "searchSubmit": "Find",
+    "status": {
+      "listed": "Listed",
+      "hidden": "Hidden"
+    },
+    "meta": "{org} · {city} · {at}",
+    "tenantLink": "Tenant {slug}",
+    "publicLink": "Public page",
+    "gone": "Event no longer public",
+    "hiddenBecause": "Hidden because:",
+    "lastReason": "Last moderation note:",
+    "reason": "Reason",
+    "hideHint": "Why it breaks the marketplace rules. The organizer's activity log keeps it.",
+    "showHint": "Why it can be listed again.",
+    "hide": "Hide from marketplace",
+    "show": "Show on marketplace",
+    "hideLabel": "Hide {name}",
+    "showLabel": "Show {name} again",
+    "done": {
+      "hidden": "Hidden from the marketplace. Search drops it within seconds.",
+      "shown": "Back on the marketplace. Search shows it again within seconds."
+    },
+    "errors": {
+      "reason_required": "Give a reason.",
+      "reason_too_long": "Keep the reason under 500 characters.",
+      "already_hidden": "Someone already hid this listing.",
+      "not_hidden": "This listing isn't hidden.",
+      "not_found": "That listing is no longer public.",
+      "other": "Something went wrong ({code}). Try again."
+    },
+    "empty": {
+      "listed": "No live marketplace listings",
+      "hidden": "No hidden listings"
+    },
+    "emptySearch": "No listings match that search",
+    "emptyListedDescription": "Listings appear here when enrolled organizers publish public events.",
+    "emptyHiddenDescription": "Listings you hide appear here, with the reason, so you can show them again."
   }
 }

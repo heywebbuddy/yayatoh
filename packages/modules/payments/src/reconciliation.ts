@@ -150,6 +150,7 @@ export const recordReconciliationCommand = tenantCommand({
           when 'refund' then 'refund:' || (j.memo->>'refundId')
           when 'transfer' then 'settlement:' || j.ref_id
           when 'transfer_reversal' then 'reversal:' || (j.memo->>'refundId')
+          when 'agency_commission_reversal_paid' then 'commission_reversal:' || (j.memo->>'refundId')
           when 'dispute' then 'dispute:' || (j.memo->>'providerDisputeId')
           when 'dispute_won' then 'dispute:' || coalesce(
             (select d.provider_dispute_id from payments.disputes d where d.id = (j.memo->>'disputeId')::uuid),

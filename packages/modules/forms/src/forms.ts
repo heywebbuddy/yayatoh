@@ -5,6 +5,7 @@ import { and, asc, desc, eq, inArray, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { AnswerError, checkAnswers, FIELD_TYPES, FieldDefinition, FormDefinition } from './definition.ts';
 import {
+  type ALL_FORM_KINDS,
   FORM_KINDS,
   formResponses,
   forms,
@@ -65,12 +66,16 @@ export async function currentFormTx(tx: TenantTx, s: Subject) {
  */
 function checkKindRules(kind: Subject['kind'], definition: FormDefinition): void {
   for (const f of definition.fields) {
-    if (kind === 'checkout_questions' && !(FIELD_TYPES as readonly string[]).includes(f.type))
+    if (
+      (kind === 'checkout_questions' || kind === 'cfp') &&
+      !(FIELD_TYPES as readonly string[]).includes(f.type)
+    )
       throw new DomainError('validation_failed', 'Not a checkout question type', {
         reason: 'form_invalid',
         field: f.key,
       });
-    if (kind === 'survey' && f.sensitive)
+    // CFP answers are read by reviewers (M5.3b): nothing sensitive either.
+    if ((kind === 'survey' || kind === 'cfp') && f.sensitive)
       throw new DomainError('validation_failed', 'Survey answers cannot be sensitive', {
         reason: 'form_invalid',
         field: f.key,
@@ -96,8 +101,24 @@ export async function publishFormTx(
   subject: Subject,
   definition: FormDefinition,
 ): Promise<{ version: number }> {
-  const orgId = requireOrg(ctx);
   checkKindRules(subject.kind, definition);
+  const { version } = await writeVersionTx(tx, ctx, subject, definition);
+  return { version };
+}
+
+/**
+ * Append the next immutable version of a form (creating the form on first use), for every kind.
+ * The caller has validated the definition for its kind.
+ */
+export async function writeVersionTx(
+  tx: TenantTx,
+  ctx: Ctx,
+  subject: { kind: (typeof ALL_FORM_KINDS)[number]; subjectType: Subject['subjectType']; subjectId: string },
+  definition: object,
+  /** Refuse the write unless the form is still at this version (0: not created yet). */
+  expectedVersion?: number,
+): Promise<{ version: number; formId: string; versionId: string }> {
+  const orgId = requireOrg(ctx);
   await tx
     .insert(forms)
     .values({ orgId, kind: subject.kind, subjectType: subject.subjectType, subjectId: subject.subjectId })
@@ -115,10 +136,16 @@ export async function publishFormTx(
     )
     .for('update');
   if (!form) throw new DomainError('internal');
+  if (expectedVersion !== undefined && form.currentVersion !== expectedVersion)
+    throw new DomainError('conflict', 'The form changed meanwhile', { reason: 'stale_version' });
   const version = form.currentVersion + 1;
-  await tx.insert(formVersions).values({ orgId, formId: form.id, version, definition });
+  const [row] = await tx
+    .insert(formVersions)
+    .values({ orgId, formId: form.id, version, definition })
+    .returning({ id: formVersions.id });
+  if (!row) throw new DomainError('internal');
   await tx.update(forms).set({ currentVersion: version, updatedAt: ctx.now }).where(eq(forms.id, form.id));
-  return { version };
+  return { version, formId: form.id, versionId: row.id };
 }
 
 export const publishFormCommand = tenantCommand({
@@ -127,7 +154,11 @@ export const publishFormCommand = tenantCommand({
   output: z.object({ version: z.int() }),
   entitlement: 'ticketing',
   permission: 'events:write',
-  handler: async ({ input, ctx, tx }) => publishFormTx(tx, ctx, input, input.definition),
+  handler: async ({ input, ctx, tx }) => {
+    // CFP questions are published by the program module's command (the `speakers` module gate).
+    if (input.kind === 'cfp') throw new DomainError('forbidden', 'Use the call-for-papers command');
+    return publishFormTx(tx, ctx, input, input.definition);
+  },
   audit: (input, r) => ({
     action: 'form.publish',
     targetType: 'form',

@@ -11,7 +11,7 @@ import { eventRolesOf } from '@yayatoh/events';
 import { executeQuery } from '@yayatoh/kernel';
 import { composeNav, isProfileKey } from '@yayatoh/platform';
 import { eventRoleCan, roleCan } from '@yayatoh/tenancy';
-import { Button, Card, EmptyState, PageHeader } from '@yayatoh/ui';
+import { Button, buttonClass, Card, EmptyState, PageHeader, Select } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { DetectionForm } from '@/components/detection-form.tsx';
@@ -52,7 +52,15 @@ export default async function SignalsPage({
     return (
       <>
         <PageHeader title={t('signals.title')} />
-        <EmptyState title={t('checkin.noAccessTitle')} description={t('signals.noAccess')} />
+        <EmptyState
+          title={t('checkin.noAccessTitle')}
+          description={t('signals.noAccess')}
+          action={
+            <Link href={`/o/${org}/e/${event}`} className={buttonClass('primary', 'md')}>
+              {t('checkin.backToEvent')}
+            </Link>
+          }
+        />
       </>
     );
   }
@@ -71,7 +79,7 @@ export default async function SignalsPage({
   const people = await getUsersByIds([...new Set(signals.flatMap((s) => (s.userId ? [s.userId] : [])))]);
   const open = signals.filter((s) => s.status === 'open').length;
   const base = `/o/${org}/e/${event}`;
-  const select = 'min-h-10 rounded-pill border border-zinc-300 bg-white px-4 text-body';
+  const select = 'field';
   return (
     <>
       <PageHeader
@@ -91,42 +99,42 @@ export default async function SignalsPage({
         className="flex flex-wrap items-end gap-3"
       >
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="signal-kind" className="text-caption text-zinc-600">
+          <label htmlFor="signal-kind" className="text-[13px] font-bold text-ink">
             {t('fraudSignals.filter.kind')}
           </label>
-          <select id="signal-kind" name="kind" defaultValue={kind ?? ''} className={select}>
+          <Select id="signal-kind" name="kind" defaultValue={kind ?? ''} className={select}>
             <option value="">{t('fraudSignals.filter.allKinds')}</option>
             {FRAUD_SIGNAL_KINDS.map((k) => (
               <option key={k} value={k}>
                 {t(`checkpoints.signal.${k}`)}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="signal-severity" className="text-caption text-zinc-600">
+          <label htmlFor="signal-severity" className="text-[13px] font-bold text-ink">
             {t('fraudSignals.filter.severity')}
           </label>
-          <select id="signal-severity" name="severity" defaultValue={severity ?? ''} className={select}>
+          <Select id="signal-severity" name="severity" defaultValue={severity ?? ''} className={select}>
             <option value="">{t('fraudSignals.filter.allSeverities')}</option>
             {FRAUD_SEVERITIES.map((s) => (
               <option key={s} value={s}>
                 {t(`signals.severity.${s}`)}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="signal-status" className="text-caption text-zinc-600">
+          <label htmlFor="signal-status" className="text-[13px] font-bold text-ink">
             {t('fraudSignals.filter.status')}
           </label>
-          <select id="signal-status" name="status" defaultValue={status} className={select}>
+          <Select id="signal-status" name="status" defaultValue={status} className={select}>
             {STATUSES.map((s) => (
               <option key={s} value={s}>
                 {s === 'all' ? t('fraudSignals.filter.allStatuses') : t(`signals.status.${s}`)}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
         <Button type="submit" variant="secondary">
           {t('fraudSignals.filter.apply')}
@@ -146,9 +154,22 @@ export default async function SignalsPage({
             <EmptyState
               title={t('fraudSignals.filter.emptyTitle')}
               description={t('fraudSignals.filter.emptyDescription')}
+              action={
+                <Link href={`${base}/onsite/signals`} className={buttonClass('primary', 'md')}>
+                  {t('signals.showAll')}
+                </Link>
+              }
             />
           ) : (
-            <EmptyState title={t('signals.emptyTitle')} description={t('signals.emptyDescription')} />
+            <EmptyState
+              title={t('signals.emptyTitle')}
+              description={t('signals.emptyDescription')}
+              action={
+                <Link href="#detection-heading" className={buttonClass('secondary', 'md')}>
+                  {t('signals.reviewDetection')}
+                </Link>
+              }
+            />
           )
         ) : (
           <ul className="flex list-none flex-col gap-3 p-0">
@@ -177,7 +198,7 @@ export default async function SignalsPage({
         <h2 id="detection-heading" className="text-section">
           {t('signals.settings.title')}
         </h2>
-        <p className="text-caption text-zinc-500">{t('signals.settings.description')}</p>
+        <p className="text-caption text-ink-2">{t('signals.settings.description')}</p>
         {canTriage ? (
           <Card>
             <DetectionForm

@@ -1,7 +1,7 @@
 import type { TenantTx } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
 import { actorId, type Ctx, DomainError, type DomainEvent, requireOrg } from '@yayatoh/kernel';
-import { eventTransferTx, postRefundTx } from '@yayatoh/payments';
+import { eventTransferTx, postDonationRefundMemoTx, postRefundTx } from '@yayatoh/payments';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { releaseAttendeeSeatsTx, voidSeatTx } from '@yayatoh/seating';
 import { ticketsForOrderTx, voidTicketsTx } from '@yayatoh/ticketing';
@@ -16,6 +16,7 @@ import {
   refundsFee,
   ticketRefund,
 } from '../domain/refund-policy.ts';
+import { refundUnits } from '../domain/tables.ts';
 import {
   orderItems,
   orders,
@@ -116,7 +117,8 @@ export async function computeTx(
   let c: Computed;
   if (req.ticketIds) {
     const busy = new Set(open.filter((r) => r.status === 'pending').flatMap((r) => r.ticketIds));
-    const tickets = (await ticketsForOrderTx(tx, order.id)).filter((t) => req.ticketIds?.includes(t.id));
+    const orderTickets = await ticketsForOrderTx(tx, order.id);
+    const tickets = orderTickets.filter((t) => req.ticketIds?.includes(t.id));
     if (tickets.length !== new Set(req.ticketIds).size)
       throw new DomainError('validation_failed', 'Unknown ticket for this order', { field: 'ticketIds' });
     if (tickets.some((t) => t.status !== 'active' || busy.has(t.id)))
@@ -127,10 +129,20 @@ export async function computeTx(
       (await tx.select().from(orderItems).where(eq(orderItems.orderId, order.id))).map((i) => [i.id, i]),
     );
     const feeBack = refundsFee(req.reason as RefundReason);
+    // M4.2b: a table (sold as one unit) is refunded whole, once, whatever its seats.
+    const units = refundUnits(
+      tickets,
+      orderTickets.filter((t) => t.status === 'active'),
+    );
+    if (!units)
+      throw new DomainError('validation_failed', 'Refund every seat of a table together', {
+        field: 'ticketIds',
+        reason: 'table_partial',
+      });
     let amount = 0;
     let fee = 0;
     let retained = 0;
-    for (const t of tickets) {
+    for (const t of units) {
       const item = items.get(t.orderItemId);
       if (!item) throw new DomainError('internal', 'Ticket without an order item');
       const r = ticketRefund(item, feeBack);
@@ -376,7 +388,7 @@ async function succeedTx(tx: TenantTx, ctx: Ctx, refund: typeof refunds.$inferSe
       voided.flatMap((t) => (t.attendeeId ? [t.attendeeId] : [])),
     );
   }
-  const { receivableMinor } = await postRefundTx(tx, ctx, {
+  const { receivableMinor, commissionReversal } = await postRefundTx(tx, ctx, {
     refundId: refund.id,
     orderId: order.id,
     eventId: order.eventId,
@@ -385,6 +397,15 @@ async function succeedTx(tx: TenantTx, ctx: Ctx, refund: typeof refunds.$inferSe
     feeRefundedMinor: refund.feeRefundedMinor,
     currency: refund.currency,
   });
+  // M4.8g: a gift's refund is on the charity's own account: a memo entry, like the gift.
+  if (order.createdVia === 'donation')
+    await postDonationRefundMemoTx(tx, ctx, {
+      refundId: refund.id,
+      orderId: order.id,
+      eventId: order.eventId,
+      amountMinor: refund.amountMinor,
+      currency: refund.currency,
+    });
   const done = await tx
     .select({ amount: refunds.amountMinor })
     .from(refunds)
@@ -422,7 +443,7 @@ async function succeedTx(tx: TenantTx, ctx: Ctx, refund: typeof refunds.$inferSe
   });
   // Paid out already: the organizer's share is a receivable; ask the caller to reverse the transfer.
   const transferId = receivableMinor > 0 ? await eventTransferTx(tx, order.eventId) : null;
-  return transferId
+  const reversal = transferId
     ? {
         transferId,
         amountMinor: receivableMinor,
@@ -431,6 +452,19 @@ async function succeedTx(tx: TenantTx, ctx: Ctx, refund: typeof refunds.$inferSe
         orderId: order.id,
       }
     : null;
+  // M6.8a: the agency's commission was transferred already: reverse that transfer explicitly too.
+  const commission =
+    commissionReversal?.transferId && commissionReversal.afterTransferMinor > 0
+      ? {
+          transferId: commissionReversal.transferId,
+          agencyOrgId: commissionReversal.agencyOrgId,
+          amountMinor: commissionReversal.afterTransferMinor,
+          currency: refund.currency,
+          eventId: order.eventId,
+          orderId: order.id,
+        }
+      : null;
+  return { reversal, commission };
 }
 
 /**
@@ -485,6 +519,21 @@ export const completeRefundCommand = tenantCommand({
         orderId: z.uuid(),
       })
       .nullable(),
+    /**
+     * M6.8a: the agency's commission was transferred already: reverse this much of its transfer
+     * explicitly (never `reverse_transfer`), then record it. Absent when there is none.
+     */
+    commissionReversal: z
+      .object({
+        transferId: z.string(),
+        agencyOrgId: z.uuid(),
+        amountMinor: z.int(),
+        currency: z.string(),
+        eventId: z.uuid(),
+        orderId: z.uuid(),
+      })
+      .nullable()
+      .optional(),
   }),
   entitlement: 'ticketing',
   permission: 'orders:refund',
@@ -512,9 +561,14 @@ export const completeRefundCommand = tenantCommand({
       .where(eq(refunds.id, refund.id))
       .returning();
     if (!row) throw new DomainError('internal');
-    const reversal = input.outcome === 'succeeded' ? await succeedTx(tx, ctx, row, emit) : null;
+    const done = input.outcome === 'succeeded' ? await succeedTx(tx, ctx, row, emit) : null;
     if (input.outcome === 'failed') await reopenRequestTx(tx, ctx, row);
-    return { status: input.outcome, changed: true, reversal };
+    return {
+      status: input.outcome,
+      changed: true,
+      reversal: done?.reversal ?? null,
+      commissionReversal: done?.commission ?? null,
+    };
   },
   audit: (input, r) => ({
     action: 'order.refund_complete',

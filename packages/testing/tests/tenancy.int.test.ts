@@ -57,6 +57,8 @@ describe('tenancy: organizations', () => {
         'id',
         'kind',
         'name',
+        // M6.3a: whether the org is a sandbox (the console's SANDBOX banner).
+        'sandbox',
         'slug',
         'status',
         'timezone',

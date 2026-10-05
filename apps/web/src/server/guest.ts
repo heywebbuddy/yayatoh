@@ -4,6 +4,7 @@ import { withTenant } from '@yayatoh/db';
 import { createCtx } from '@yayatoh/kernel';
 import {
   devMailboxTransports,
+  emailIdentityTx,
   type MessageKind,
   PLATFORM_SENDER,
   renderMessage,
@@ -115,17 +116,20 @@ export async function emailVerifiedHere(email: string, orgId: string | null): Pr
 // ─── Pending codes ──────────────────────────────────────────────────────────────────────────
 
 const PENDING_MAX_AGE_S = 20 * 60;
-const pendingBase = (purpose: 'checkout' | 'sign_in') => (purpose === 'checkout' ? 'yy_gc' : 'yy_gp');
+/** `privacy`: a self-service data-subject request (M6.1c; a site sign-in code, its own cookie). */
+type PendingFor = 'checkout' | 'sign_in' | 'privacy';
+const PENDING_BASE: Record<PendingFor, string> = { checkout: 'yy_gc', sign_in: 'yy_gp', privacy: 'yy_gr' };
+const pendingBase = (purpose: PendingFor) => PENDING_BASE[purpose];
 
 /** The code this browser is waiting for (a signed challenge id; the code itself is only emailed). */
-export async function rememberPendingChallenge(purpose: 'checkout' | 'sign_in', challengeId: string) {
+export async function rememberPendingChallenge(purpose: PendingFor, challengeId: string) {
   await setCookie(pendingBase(purpose), signLinkToken(`guest-${purpose}`, challengeId), PENDING_MAX_AGE_S);
 }
-export async function pendingChallenge(purpose: 'checkout' | 'sign_in'): Promise<string | null> {
+export async function pendingChallenge(purpose: PendingFor): Promise<string | null> {
   const raw = await readCookie(pendingBase(purpose));
   return raw ? verifyLinkToken(`guest-${purpose}`, raw) : null;
 }
-export const forgetPendingChallenge = (purpose: 'checkout' | 'sign_in') => dropCookie(pendingBase(purpose));
+export const forgetPendingChallenge = (purpose: PendingFor) => dropCookie(pendingBase(purpose));
 
 /** The random state that binds a sign-in magic link to this browser (made on first request). */
 export async function browserState(create: boolean): Promise<string | null> {
@@ -174,19 +178,31 @@ function guestTransports(): Transports | null {
 
 /** Send a guest code or sign-in email in the visitor's language, branded for the org's site. */
 export async function sendGuestEmail(input: {
-  readonly kind: Extract<MessageKind, 'guest.checkout-code' | 'guest.sign-in' | 'guest.waitlist-code'>;
+  readonly kind: Extract<
+    MessageKind,
+    | 'guest.checkout-code'
+    | 'guest.sign-in'
+    | 'guest.waitlist-code'
+    | 'portal.sign-in'
+    | 'portal.invite'
+    | 'privacy.request-code'
+    | 'privacy.archive-ready'
+    | 'privacy.erasure-done'
+    | 'badges.kiosk-code'
+  >;
   readonly to: string;
   readonly locale: string;
   readonly orgId: string | null;
   readonly params: Readonly<Record<string, string | number>>;
 }): Promise<void> {
   const to = normalizeGuestEmail(input.to);
-  const brand = input.orgId
+  const [brand, identity] = input.orgId
     ? await withTenant(
         createCtx({ orgId: input.orgId, actor: { type: 'system', name: 'orders.guest-mail' } }),
-        (tx) => organizationBrandTx(tx, input.orgId as string),
+        async (tx) =>
+          [await organizationBrandTx(tx, input.orgId as string), await emailIdentityTx(tx)] as const,
       )
-    : null;
+    : [null, null];
   const org = {
     name: brand?.name ?? 'Yayatoh',
     brandColor: brand?.brandColor ?? null,
@@ -198,7 +214,9 @@ export async function sendGuestEmail(input: {
   // Dev and e2e read the latest code through /api/dev/last-code (never in production).
   if (devAuthEnabled() && typeof input.params.code === 'string') await rememberDevCode(to, input.params.code);
   await t.email.send({
-    from: { name: org.name, address: PLATFORM_SENDER },
+    // U10: the org's From name and Reply-To, as on all its email.
+    from: { name: identity?.fromName ?? org.name, address: PLATFORM_SENDER },
+    ...(identity?.replyTo ? { replyTo: identity.replyTo } : {}),
     to,
     subject: rendered.subject,
     html: rendered.html,

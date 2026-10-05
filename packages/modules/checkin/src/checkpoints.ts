@@ -2,11 +2,12 @@ import type { TenantTx } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
 import { DomainError, type DomainEvent, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
+import { sessionDoorFactsTx } from '@yayatoh/program';
 import { eventTicketTypeIdsTx } from '@yayatoh/ticketing';
 
 type EmitFn = (event: DomainEvent) => void;
 
-import { and, asc, eq, gte, isNull, sql } from 'drizzle-orm';
+import { and, asc, eq, gte, isNull, ne, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import {
   CHECKPOINT_KINDS,
@@ -16,7 +17,9 @@ import {
   type FraudSignalKind,
   fraudSignals,
   scans,
+  VIRTUAL_CHECKPOINT_KIND,
 } from './schema.ts';
+import { newSelfCheckinToken } from './session-doors.ts';
 
 export const CheckpointDto = z.object({
   id: z.uuid(),
@@ -26,6 +29,12 @@ export const CheckpointDto = z.object({
   archived: z.boolean(),
   latitude: z.number().nullable(),
   longitude: z.number().nullable(),
+  /** M3.3a: how many people the area holds (the capacity gauges); null = not limited. */
+  capacity: z.int().nullable(),
+  /** M5.6a: a session door's program session (null for entrances and zones). */
+  sessionId: z.uuid().nullable(),
+  /** M5.6a: the session's self check-in flyer is on. */
+  selfCheckin: z.boolean(),
 });
 export type CheckpointDto = z.infer<typeof CheckpointDto>;
 
@@ -38,6 +47,9 @@ const toDto = (c: CheckpointRow): CheckpointDto => ({
   archived: c.archivedAt !== null,
   latitude: c.latitude,
   longitude: c.longitude,
+  capacity: c.capacity,
+  sessionId: c.sessionId,
+  selfCheckin: c.selfCheckinToken !== null,
 });
 
 export const createCheckpointCommand = tenantCommand({
@@ -52,6 +64,20 @@ export const createCheckpointCommand = tenantCommand({
       /** Where it is (WGS 84), for the impossible-travel signal. Both or neither. */
       latitude: z.number().min(-90).max(90).nullable().default(null),
       longitude: z.number().min(-180).max(180).nullable().default(null),
+      /** M3.3a: how many people the area holds (capacity gauges). */
+      capacity: z.int().min(1).max(1_000_000).nullable().default(null),
+      /** M5.6a: a session door's program session (required for kind `session`, else none). */
+      sessionId: z.uuid().nullable().default(null),
+      /** M5.6a: print a self check-in flyer for the session (attendance only). */
+      selfCheckin: z.boolean().default(false),
+    })
+    .refine((v) => (v.kind === 'session') === (v.sessionId !== null), {
+      message: 'A session door names its session',
+      path: ['sessionId'],
+    })
+    .refine((v) => v.kind === 'session' || !v.selfCheckin, {
+      message: 'Only session doors have flyers',
+      path: ['selfCheckin'],
     })
     .refine((v) => v.kind === 'zone' || v.ticketTypeIds.length === 0, {
       message: 'Only zones list ticket types',
@@ -70,6 +96,11 @@ export const createCheckpointCommand = tenantCommand({
     const known = await eventTicketTypeIdsTx(tx, event.id);
     if (input.ticketTypeIds.some((id) => !known.has(id)))
       throw new DomainError('validation_failed', 'Unknown ticket type', { field: 'ticketTypeIds' });
+    if (input.sessionId) {
+      const [session] = await sessionDoorFactsTx(tx, [input.sessionId]);
+      if (session?.eventId !== event.id)
+        throw new DomainError('validation_failed', 'Unknown session', { field: 'sessionId' });
+    }
     const [row] = await tx
       .insert(checkpoints)
       .values({
@@ -80,6 +111,9 @@ export const createCheckpointCommand = tenantCommand({
         ticketTypeIds: [...new Set(input.ticketTypeIds)],
         latitude: input.latitude,
         longitude: input.longitude,
+        capacity: input.capacity,
+        sessionId: input.sessionId,
+        selfCheckinToken: input.selfCheckin ? newSelfCheckinToken() : null,
       })
       .onConflictDoNothing()
       .returning();
@@ -90,7 +124,12 @@ export const createCheckpointCommand = tenantCommand({
     action: 'checkpoint.create',
     targetType: 'checkpoint',
     targetId: r?.id ?? null,
-    data: { eventId: input.eventId, kind: input.kind },
+    data: {
+      eventId: input.eventId,
+      kind: input.kind,
+      sessionId: input.sessionId,
+      selfCheckin: input.selfCheckin,
+    },
   }),
 });
 
@@ -131,7 +170,11 @@ export async function checkpointsTx(tx: TenantTx, eventId: string, includeArchiv
     .select()
     .from(checkpoints)
     .where(
-      and(eq(checkpoints.eventId, eventId), includeArchived ? undefined : isNull(checkpoints.archivedAt)),
+      and(
+        eq(checkpoints.eventId, eventId),
+        ne(checkpoints.kind, VIRTUAL_CHECKPOINT_KIND),
+        includeArchived ? undefined : isNull(checkpoints.archivedAt),
+      ),
     )
     .orderBy(asc(checkpoints.kind), asc(checkpoints.name));
 }
@@ -147,7 +190,12 @@ export async function scanCheckpointTx(
     .select()
     .from(checkpoints)
     .where(
-      and(eq(checkpoints.id, checkpointId), eq(checkpoints.eventId, eventId), isNull(checkpoints.archivedAt)),
+      and(
+        eq(checkpoints.id, checkpointId),
+        eq(checkpoints.eventId, eventId),
+        ne(checkpoints.kind, VIRTUAL_CHECKPOINT_KIND),
+        isNull(checkpoints.archivedAt),
+      ),
     );
   if (!c) throw new DomainError('not_found', 'Checkpoint not found');
   return c;

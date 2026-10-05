@@ -9,7 +9,7 @@ import type { RefundPolicyFormState } from '@/app/[locale]/o/[org]/e/[event]/tic
 import { errorMessageKey } from '@/lib/errors.ts';
 import { INITIAL_FORM_STATE } from '@/lib/form-state.ts';
 
-const field = 'min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body';
+const field = 'field';
 const KINDS = ['unset', 'none', 'until', 'always'] as const;
 
 /** Set the event's refund policy (M1.6e): none, until N days before, or always, with a kept fee. */
@@ -31,7 +31,7 @@ export function RefundPolicyForm({
   return (
     <form action={formAction} className="flex flex-col gap-4">
       <fieldset className="flex flex-col gap-2">
-        <legend className="text-caption text-zinc-600">{t('kindLegend')}</legend>
+        <legend className="text-[13px] font-bold text-ink">{t('kindLegend')}</legend>
         {KINDS.map((k) => (
           <label key={k} className="flex min-h-6 items-center gap-2 text-body">
             <input
@@ -48,7 +48,7 @@ export function RefundPolicyForm({
       </fieldset>
       {kind === 'until' ? (
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="policy-days" className="text-caption text-zinc-600">
+          <label htmlFor="policy-days" className="text-[13px] font-bold text-ink">
             {t('daysLabel')}
           </label>
           <input
@@ -63,12 +63,12 @@ export function RefundPolicyForm({
             aria-invalid={bad('daysBefore') || undefined}
             className={`${field} w-32`}
           />
-          <p className="text-caption text-zinc-500">{t('daysHint')}</p>
+          <p className="text-caption text-ink-2">{t('daysHint')}</p>
         </div>
       ) : null}
       {kind === 'until' || kind === 'always' ? (
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="policy-retained" className="text-caption text-zinc-600">
+          <label htmlFor="policy-retained" className="text-[13px] font-bold text-ink">
             {t('retainedLabel', { currency })}
           </label>
           <input
@@ -86,11 +86,11 @@ export function RefundPolicyForm({
             aria-invalid={bad('retainedMinor') || undefined}
             className={`${field} w-40`}
           />
-          <p className="text-caption text-zinc-500">{t('retainedHint')}</p>
+          <p className="text-caption text-ink-2">{t('retainedHint')}</p>
         </div>
       ) : null}
-      <p className="text-caption text-zinc-500">{t('minimumHint')}</p>
-      <p className="text-caption text-zinc-500">{tr('tightenHint')}</p>
+      <p className="text-caption text-ink-2">{t('minimumHint')}</p>
+      <p className="text-caption text-ink-2">{tr('tightenHint')}</p>
       <div aria-live="polite">
         {state.ok ? (
           <Alert

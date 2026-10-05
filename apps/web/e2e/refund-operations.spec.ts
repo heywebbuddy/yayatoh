@@ -1,5 +1,5 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { continueToPayment, expectAccessible, OPEN_HOUSE, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, OPEN_HOUSE, pickOption, signIn } from './helpers.ts';
 
 /**
  * M3.10b refund operations in the browser: buyers ask for refunds from their order page and the
@@ -34,7 +34,7 @@ async function eventWithPass(
 ) {
   await page.goto('/o/lakeside-events/events/new');
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Time zone').selectOption('America/Chicago');
+  await pickOption(page.getByLabel('Time zone'), 'America/Chicago');
   await page.getByLabel('Starts', { exact: true }).fill(chicago(240));
   await page.getByLabel('Ends', { exact: true }).fill(chicago(243));
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -62,7 +62,7 @@ async function setPolicy(page: Page, policy: 'Always' | 'No refunds') {
 async function buy(browser: Browser, slug: string, pass: string, buyer: string, email: string, quantity = 1) {
   const guest = await (await browser.newContext()).newPage();
   await guest.goto(`/events/${slug}`);
-  await guest.getByLabel(`Quantity — ${pass}`).selectOption(String(quantity));
+  await pickOption(guest.getByLabel(`Quantity — ${pass}`), String(quantity));
   await guest.getByLabel('Full name').fill(buyer);
   await guest.getByLabel('Email for your tickets').fill(email);
   await continueToPayment(guest, email);

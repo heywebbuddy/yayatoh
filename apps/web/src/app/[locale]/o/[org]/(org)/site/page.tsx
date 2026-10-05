@@ -3,10 +3,11 @@ import { listEventsQuery } from '@yayatoh/events';
 import { executeQuery } from '@yayatoh/kernel';
 import { siteSettingsQuery } from '@yayatoh/marketplace';
 import { managedHostname, roleCan } from '@yayatoh/tenancy';
-import { Card, EmptyState, PageHeader } from '@yayatoh/ui';
+import { buttonClass, Card, EmptyState, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { CopySnippet } from '@/components/copy-snippet.tsx';
 import { SettingsForm } from '@/components/settings-form.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import { widgetSnippet } from '@/lib/widget.ts';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
@@ -47,11 +48,11 @@ export default async function SitePage({ params }: { params: Promise<{ locale: s
         defaultChecked={checked}
         disabled={!canManage}
         aria-describedby={`${name}-hint`}
-        className="mt-0.5 size-5 accent-ink"
+        className="mt-0.5 size-5 accent-primary"
       />
       <span className="flex flex-col gap-0.5">
         {label}
-        <span id={`${name}-hint`} className="text-caption text-zinc-500">
+        <span id={`${name}-hint`} className="text-caption text-ink-2">
           {hint}
         </span>
       </span>
@@ -61,10 +62,7 @@ export default async function SitePage({ params }: { params: Promise<{ locale: s
     <>
       <PageHeader title={t('title')} description={t('description')} />
       {canManage ? null : (
-        <p
-          role="note"
-          className="rounded-card border border-zinc-200 bg-white px-4 py-3 text-body text-zinc-600"
-        >
+        <p role="note" className="rounded-card border border-line bg-surface px-4 py-3 text-body text-ink-2">
           {t('readOnly')}
         </p>
       )}
@@ -116,10 +114,10 @@ export default async function SitePage({ params }: { params: Promise<{ locale: s
         <h2 id="nav-pages-heading" className="text-section">
           {t('navPages.title')}
         </h2>
-        <p className="text-body text-zinc-600">{t('navPages.description')}</p>
+        <p className="text-body text-ink-2">{t('navPages.description')}</p>
         <Card>
           {pageRows.length === 0 ? (
-            <p className="text-body text-zinc-600">{t('navPages.empty')}</p>
+            <p className="text-body text-ink-2">{t('navPages.empty')}</p>
           ) : canManage ? (
             <SettingsForm
               action={navPagesAction.bind(null, org)}
@@ -135,18 +133,18 @@ export default async function SitePage({ params }: { params: Promise<{ locale: s
                       name="navPage"
                       value={p.id}
                       defaultChecked={linked.has(p.id)}
-                      className="size-5 accent-ink"
+                      className="size-5 accent-primary"
                     />
                     <span>
                       {p.title}
                       {p.status === 'published' ? null : (
-                        <span className="text-caption text-zinc-500"> · {tc(`status.${p.status}`)}</span>
+                        <span className="text-caption text-ink-2"> · {tc(`status.${p.status}`)}</span>
                       )}
                     </span>
                   </label>
                 ))}
               </fieldset>
-              <p className="text-caption text-zinc-500">{t('navPages.hint')}</p>
+              <p className="text-caption text-ink-2">{t('navPages.hint')}</p>
             </SettingsForm>
           ) : (
             <ul className="flex list-none flex-col gap-1 p-0 text-body">
@@ -165,7 +163,7 @@ export default async function SitePage({ params }: { params: Promise<{ locale: s
         <h2 id="widget-heading" className="text-section">
           {t('widget.title')}
         </h2>
-        <p className="text-body text-zinc-600">{t('widget.description')}</p>
+        <p className="text-body text-ink-2">{t('widget.description')}</p>
         <Card>
           {canManage ? (
             <SettingsForm
@@ -174,7 +172,7 @@ export default async function SitePage({ params }: { params: Promise<{ locale: s
               savedLabel={t('saved')}
             >
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="widget-origins" className="text-caption text-zinc-600">
+                <label htmlFor="widget-origins" className="text-[13px] font-bold text-ink">
                   {t('widget.origins')}
                 </label>
                 <textarea
@@ -184,9 +182,9 @@ export default async function SitePage({ params }: { params: Promise<{ locale: s
                   dir="ltr"
                   defaultValue={settings.embedOrigins.join('\n')}
                   aria-describedby="widget-origins-hint"
-                  className="rounded-card border border-zinc-200 bg-white px-4 py-3 text-body"
+                  className="rounded-card border border-line bg-surface px-4 py-3 text-body"
                 />
-                <p id="widget-origins-hint" className="text-caption text-zinc-500">
+                <p id="widget-origins-hint" className="text-caption text-ink-2">
                   {t('widget.originsHint')}
                 </p>
               </div>
@@ -198,7 +196,15 @@ export default async function SitePage({ params }: { params: Promise<{ locale: s
           )}
         </Card>
         {events.length === 0 ? (
-          <EmptyState title={t('widget.emptyTitle')} description={t('widget.emptyDescription')} />
+          <EmptyState
+            title={t('widget.emptyTitle')}
+            description={t('widget.emptyDescription')}
+            action={
+              <Link href={`/o/${org}`} className={buttonClass('secondary', 'md')}>
+                {t('widget.toEvents')}
+              </Link>
+            }
+          />
         ) : (
           <ul aria-label={t('widget.snippets')} className="flex list-none flex-col gap-3 p-0">
             {events.map((e) => (

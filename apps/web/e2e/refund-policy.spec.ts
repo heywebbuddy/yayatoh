@@ -1,5 +1,5 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { continueToPayment, expectAccessible, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, pickOption, signIn } from './helpers.ts';
 
 /** `YYYY-MM-DDTHH:mm` wall-clock time in Chicago, `offsetH` hours from now (for datetime-local). */
 function chicago(offsetH: number): string {
@@ -20,7 +20,7 @@ function chicago(offsetH: number): string {
 async function eventWithPass(page: Page, name: string, pass: string) {
   await page.goto('/o/lakeside-events/events/new');
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Time zone').selectOption('America/Chicago');
+  await pickOption(page.getByLabel('Time zone'), 'America/Chicago');
   await page.getByLabel('Starts', { exact: true }).fill(chicago(72));
   await page.getByLabel('Ends', { exact: true }).fill(chicago(75));
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -40,7 +40,7 @@ async function eventWithPass(page: Page, name: string, pass: string) {
 async function buy(browser: Browser, slug: string, pass: string, buyer: string, email: string) {
   const guest = await (await browser.newContext()).newPage();
   await guest.goto(`/events/${slug}`);
-  await guest.getByLabel(`Quantity — ${pass}`).selectOption('2');
+  await pickOption(guest.getByLabel(`Quantity — ${pass}`), '2');
   await guest.getByLabel('Full name').fill(buyer);
   await guest.getByLabel('Email for your tickets').fill(email);
   await continueToPayment(guest, email);
@@ -112,7 +112,7 @@ test.describe('refund policy (M1.6e)', () => {
     await page.getByRole('link', { name: buyer }).click();
     const form = page.getByRole('region', { name: 'Refund', exact: true });
     await expect(form.getByText(/^Refunds are available on request until /)).toBeVisible();
-    await form.getByLabel('Reason').selectOption('requested_by_customer');
+    await pickOption(form.getByLabel('Reason'), 'requested_by_customer');
     await form
       .getByRole('checkbox', { name: new RegExp(`#\\d+ · ${pass}`) })
       .first()
@@ -142,7 +142,7 @@ test.describe('refund policy (M1.6e)', () => {
 
     // The platform minimum still refunds in full, without an override.
     const again = page.getByRole('region', { name: 'Refund', exact: true });
-    await again.getByLabel('Reason').selectOption('event_cancelled');
+    await pickOption(again.getByLabel('Reason'), 'event_cancelled');
     await again
       .getByRole('checkbox', { name: new RegExp(`#\\d+ · ${pass}`) })
       .first()

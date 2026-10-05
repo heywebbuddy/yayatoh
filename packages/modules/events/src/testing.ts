@@ -1,4 +1,5 @@
 export { eventRoleAssignments, events, occurrences, series, seriesEvents } from './schema.ts';
+export { eventChecklistItems } from './schema-checklist.ts';
 export {
   accessCodeAttempts,
   accessCodes,
@@ -8,3 +9,4 @@ export {
   eventTags,
   shortLinks,
 } from './schema-content.ts';
+export { portalAccounts, portalChallenges, portalSessions } from './schema-portal.ts';

@@ -1,4 +1,5 @@
 export { legacyQrPayload } from '@yayatoh/ticket-crypto';
+export { type BadgeTicket, badgeTicketsTx, badgeTicketTypesTx } from './badges.ts';
 export {
   attendeeTicketsTx,
   BULK_TICKET_FAILURES,
@@ -11,13 +12,35 @@ export {
 } from './bulk.ts';
 export {
   archiveTicketTypeCommand,
+  archiveTicketTypeTx,
   createTicketTypeCommand,
+  createTicketTypeTx,
   eventPriceRangeTx,
   listTicketTypesQuery,
   sellsPaidTicketsQuery,
   updateTicketTypeCommand,
+  updateTicketTypeTx,
 } from './commands/ticket-types.ts';
+export { ticketingContactOwner } from './contact-merge.ts';
 export { instantiateTicketTypesTx, TicketTypesSnapshot, ticketTypesSnapshotTx } from './copy.ts';
+export {
+  COUPON_BUYER_LIMIT,
+  CouponDto,
+  type CouponRow,
+  CreateCouponInput,
+  claimCouponTx,
+  couponAppliesTo,
+  couponLive,
+  couponRule,
+  createCouponCommand,
+  listCouponsQuery,
+  type ResolvedCode,
+  reclaimCouponTx,
+  releaseCouponTx,
+  resolveCodeTx,
+  setCouponActiveCommand,
+} from './coupons.ts';
+export { ticketingDataSubjects } from './data-subject.ts';
 export {
   CLAIM_PURPOSE,
   claimContext,
@@ -37,6 +60,14 @@ export {
   revokeClaimLinkCommand,
   TicketClaimDto,
 } from './distribution.ts';
+export { allocateCredit } from './domain/credit.ts';
+export {
+  decideTransfer,
+  type TransferDecision,
+  type TransferRefusal,
+  type TransferRules,
+  transferDeadline,
+} from './domain/transfer-rules.ts';
 export {
   eraseTicketsDsarTx,
   purgeHolderLinksTx,
@@ -45,6 +76,12 @@ export {
   ticketsDsarTx,
 } from './dsar.ts';
 export * from './dto.ts';
+// M4.8b: ticket type prices for fair-market values and the quid-pro-quo notice (donations).
+export { type TicketTypePrice, ticketTypePricesTx } from './fair-value-facts.ts';
+// M6.9b: an event's active ticket holders (Zoom registrants, CE certificates).
+export { eventHoldersTx } from './holder-facts.ts';
+// M5.6b lead retrieval: holder link tickets ("who scanned me") and ticket holders.
+export { holderLinkTicketsTx, ticketHoldersTx } from './holder-leads.ts';
 export {
   currentFaceMinor,
   holdInventoryTx,
@@ -80,6 +117,8 @@ export {
   ticketsForOrderTx,
   voidTicketsTx,
 } from './issue.ts';
+export { activeTicketIdForCodeTx, activeTicketShortCodeTx, activeTicketsHeldByTx } from './kiosk.ts';
+export { nameTicketHolderTx } from './naming.ts';
 export {
   activeTicketsForOccurrenceTx,
   assertOccurrenceIdsTx,
@@ -87,12 +126,22 @@ export {
   occurrenceSalesQuery,
   validForOccurrence,
 } from './occurrences.ts';
+// M5.6a: a registrant's order (add-ons) for session doors.
+export { orderSiblingsTx } from './order-siblings.ts';
+// M6.4b: ticket counts of imported orders.
+export { ticketCountsForOrdersTx } from './order-ticket-counts.ts';
 export { orderTicketIdsTx, ticketFactsTx } from './participation.ts';
+// M4.7a: a party's active tickets for its guest hub (the app passes this reader to the guests module).
+export { partyTicketsTx } from './party-tickets.ts';
+// M5.1d: tickets sold on an invoice with a balance due.
+export { paymentDueTicketIdsTx, setOrderPaymentDueTx } from './payment-due.ts';
 export { privateColumns } from './private-columns.ts';
 export {
   CreatePromoCodeInput,
   claimPromoTx,
   createPromoCodeCommand,
+  type DiscountRule,
+  listOrgPromoCodesQuery,
   listPromoCodesQuery,
   normalizePromoCode,
   PromoCodeDto,
@@ -101,11 +150,55 @@ export {
   setPromoCodeActiveCommand,
 } from './promo.ts';
 export { publicTicketTypes } from './public.ts';
-export { FEE_MODES, PROMO_KINDS, TICKET_STATUSES, TICKET_TYPE_VISIBILITIES } from './schema.ts';
+export {
+  COUPON_SCOPES,
+  FEE_MODES,
+  PROMO_KINDS,
+  TICKET_STATUSES,
+  TICKET_TYPE_MANAGERS,
+  TICKET_TYPE_VISIBILITIES,
+  type TicketTypeManager,
+} from './schema.ts';
 export {
   orderIdsByShortCodeTx,
   type TicketTypeStats,
   ticketsDistributedTx,
   ticketTypeStatsTx,
+  undistributedTicketIdsSql,
+  undistributedTicketsTx,
 } from './stats.ts';
-export { claimLinkMailer, holderLinkMailer } from './subscribers.ts';
+export { claimLinkMailer, holderLinkMailer, transferMailer } from './subscribers.ts';
+// M4.2b gala tables: purchased tables and their guest slots.
+export {
+  recordTableLinkSentTx,
+  TABLE_NAMING_PURPOSE,
+  type TableUnitRow,
+  tableSlotsTx,
+  tableUnitContext,
+  tableUnitsTx,
+  tableUnitTx,
+} from './tables.ts';
+export {
+  cancelHolderTransferCommand,
+  cancelTransferCommand,
+  orderTransfersQuery,
+  StartedTransferDto,
+  startHolderTransferCommand,
+  startTransferCommand,
+  startTransferTx,
+  TRANSFER_CLAIM_DAYS,
+  TRANSFER_STATES,
+  TransferDto,
+  transfersForOrderTx,
+} from './transfers.ts';
+// M6.9a: ticket type names for the virtual module's access modes.
+export { ticketTypeNamesTx } from './virtual-facts.ts';
+export {
+  type FakeWalletPush,
+  fakeWalletPassProvider,
+  orderWalletPassesQuery,
+  WalletPassDto,
+  type WalletPassProvider,
+  walletPassSync,
+  walletSerial,
+} from './wallet.ts';

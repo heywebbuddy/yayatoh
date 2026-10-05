@@ -1,8 +1,9 @@
 import { withTenant } from '@yayatoh/db';
 import type { CommandPorts, Ctx } from '@yayatoh/kernel';
 import { and, eq } from 'drizzle-orm';
+import { type AgencyAccess, agencyAccess } from './commands/agency.ts';
 import { apiKeyScopes } from './commands/api-keys.ts';
-import { eventRoleCan, type OrgRole, roleCan } from './domain/permissions.ts';
+import { type ConsoleRole, eventRoleCan, type OrgRole, roleCan } from './domain/permissions.ts';
 import { memberships } from './schema.ts';
 
 /** The actor's role in the context org, or null. Read under the tenant's RLS. */
@@ -17,6 +18,32 @@ export async function memberRole(ctx: Ctx): Promise<OrgRole | null> {
       .where(and(eq(memberships.orgId, orgId), eq(memberships.userId, userId))),
   );
   return (row?.role as OrgRole | undefined) ?? null;
+}
+
+/**
+ * The actor's role in the context org for the console: their membership, or (M6.7a) the console
+ * role of the live agency grant they act through. Both are read fresh on every call, so a revoked
+ * grant or removed membership counts at once. `agency` is the grant when that is the source.
+ */
+export async function consoleRole(
+  ctx: Ctx,
+): Promise<{ role: ConsoleRole; agency: AgencyAccess | null } | null> {
+  const member = await memberRole(ctx);
+  if (member) return { role: member, agency: null };
+  const agency = await agencyAccess(ctx);
+  return agency ? { role: agency.consoleRole, agency } : null;
+}
+
+/**
+ * The agency console role for this context, or null (M6.7a): the live grant must exist and be the
+ * one the context says it acts through (`ctx.viaAgency`), so every audit row names it.
+ */
+async function agencyRole(ctx: Ctx): Promise<ConsoleRole | null> {
+  if (!ctx.viaAgency) return null;
+  const agency = await agencyAccess(ctx);
+  if (!agency || agency.grantId !== ctx.viaAgency.grantId || agency.agencyOrgId !== ctx.viaAgency.agencyOrgId)
+    return null;
+  return agency.consoleRole;
 }
 
 /** Event roles of the actor for one event; implemented by the events module (a port: tier 1 can't read tier 2). */
@@ -39,6 +66,8 @@ const eventIdOf = (input: unknown): string | null => {
  * or a system actor; everything else needs a membership whose role grants the permission, or,
  * for a command about one event (`input.eventId`), a member's event-scoped role that grants it.
  */
+const EXHIBITOR_PORTAL_ROLES: ReadonlySet<string> = new Set(['exhibitor_admin', 'exhibitor_staff']);
+
 export function createOrgAuthorizer(
   deps: { eventRoles?: EventRoleResolver } = {},
 ): CommandPorts<unknown>['authorizer'] {
@@ -50,6 +79,16 @@ export function createOrgAuthorizer(
       if (permission === 'invitation:accept') return ctx.actor.type === 'user';
       // Public commands (checkout) are open to anyone; the command itself enforces what may be bought.
       if (permission.startsWith('public:')) return true;
+      // M5.3a portal accounts (P5-7): only `portal:{their role}` (or `portal:exhibitor` for both
+      // exhibitor roles, M5.4a), never anything a member can do. The command re-checks the account
+      // (live, its event and its subject) in its transaction.
+      if (permission.startsWith('portal:'))
+        return (
+          ctx.actor.type === 'portal' &&
+          (permission === `portal:${ctx.actor.role}` ||
+            (permission === 'portal:exhibitor' && EXHIBITOR_PORTAL_ROLES.has(ctx.actor.role)))
+        );
+      if (ctx.actor.type === 'portal') return false;
       if (permission.startsWith('platform:')) return ctx.actor.type === 'system';
       if (ctx.actor.type === 'system') return true;
       // An org API key may do exactly what its live scopes list, in its own org only.
@@ -58,7 +97,12 @@ export function createOrgAuthorizer(
         return scopes.includes(permission) || scopes.includes(SCOPE_FOR[permission] ?? permission);
       }
       const role = await memberRole(ctx);
-      if (role === null) return false;
+      if (role === null) {
+        // M6.7a: a member of an agency acting through the client's live grant. Event-scoped roles
+        // never apply to agency access.
+        const agency = await agencyRole(ctx);
+        return agency !== null && roleCan(agency, permission);
+      }
       if (roleCan(role, permission)) return true;
       const eventId = eventIdOf(input);
       if (!eventId || !deps.eventRoles) return false;

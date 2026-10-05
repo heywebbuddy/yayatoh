@@ -1,8 +1,8 @@
 import { executeQuery } from '@yayatoh/kernel';
 import { composeNav, isProfileKey } from '@yayatoh/platform';
-import { eventSeatingQuery, listLayoutsQuery } from '@yayatoh/seating';
+import { eventSeatingQuery, listLayoutsQuery, planTablesQuery } from '@yayatoh/seating';
 import { listTicketTypesQuery } from '@yayatoh/ticketing';
-import { Button, Card, PageHeader, StatusDot } from '@yayatoh/ui';
+import { Alert, Button, Card, PageHeader, Select, StatusDot } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { DateChartForm } from '@/components/date-chart-form.tsx';
@@ -11,6 +11,7 @@ import { SeatingDatePicker } from '@/components/seating-dates.tsx';
 import { SeatingEditor } from '@/components/seating-editor.tsx';
 import { SeatingTabs } from '@/components/seating-tabs.tsx';
 import { SettingsForm } from '@/components/settings-form.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import { localizedPath } from '@/lib/seo/urls.ts';
 import { loadEvent } from '@/server/console.ts';
 import { mediaPanel } from '@/server/media.ts';
@@ -26,7 +27,7 @@ import {
   useLayoutAction,
 } from './actions.ts';
 
-const field = 'min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body';
+const field = 'field';
 const STATUS_DOT = { draft: 'neutral', published: 'success', locked: 'info' } as const;
 
 /** Seating (M1.7b): set up the event's floor plan, edit it, price it and put it on sale. */
@@ -35,7 +36,7 @@ export default async function SeatingPage({
   searchParams,
 }: {
   params: Promise<{ locale: string; org: string; event: string }>;
-  searchParams: Promise<{ date?: string }>;
+  searchParams: Promise<{ date?: string; fromLibrary?: string }>;
 }) {
   const { locale, org, event } = await params;
   const sp = await searchParams;
@@ -55,7 +56,7 @@ export default async function SeatingPage({
   ]);
   const labelled = (id: string, label: string, control: React.ReactNode) => (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={id} className="text-caption text-zinc-600">
+      <label htmlFor={id} className="text-[13px] font-bold text-ink">
         {label}
       </label>
       {control}
@@ -152,13 +153,13 @@ export default async function SeatingPage({
                     {labelled(
                       'saved-layout',
                       t('saved.layout'),
-                      <select id="saved-layout" name="layoutId" className={field}>
+                      <Select id="saved-layout" name="layoutId" className={field}>
                         {layouts.map((l) => (
                           <option key={l.id} value={l.id}>
                             {t('saved.option', { name: l.name, seats: l.seatCount })}
                           </option>
                         ))}
-                      </select>,
+                      </Select>,
                     )}
                   </SettingsForm>
                 </Card>
@@ -166,7 +167,7 @@ export default async function SeatingPage({
             ) : null}
           </>
         ) : (
-          <p className="text-body text-zinc-600">{t('none')}</p>
+          <p className="text-body text-ink-2">{t('none')}</p>
         )}
       </>
     );
@@ -181,17 +182,31 @@ export default async function SeatingPage({
   const tc = await getTranslations('seatingDates');
   const underlayTicket = canWrite ? (await mediaPanel(data, 'event', ev.id, 'floorplan')).ticket : null;
   const seatStatus = Object.fromEntries(seating.seats.map((s) => [s.seatUuid, s.state]));
+  // M4.2b hosted tables: sponsors written on their tables (the event plan's table ids).
+  const sponsors = Object.fromEntries(
+    (await executeQuery(planTablesQuery, { eventId: ev.id }, data.ctx, ports)).flatMap((p) =>
+      p.sponsor ? [[p.itemId, p.sponsor.sponsorName] as const] : [],
+    ),
+  );
   const priced = seating.seats.filter((s) => s.ticketTypeId).length;
   const items = seating.doc.items.filter((i) => i.kind !== 'object');
   return (
     <>
       <PageHeader title={t('title')} description={t('description')} />
-      <SeatingTabs base={base} active="plan" finder={data.modules.has('seat_finder')} date={dateId} />
+      <SeatingTabs
+        base={base}
+        active="plan"
+        finder={data.modules.has('seat_finder')}
+        guests={data.modules.has('guests')}
+        selection={data.modules.has('advanced_seating')}
+        solver={data.modules.has('guests') && data.modules.has('ai_seating')}
+        date={dateId}
+      />
       <SeatingDatePicker base={base} dates={dates} selected={dateId} timeZone={ev.timezone} locale={locale} />
       {date ? (
         <Card className="flex flex-col gap-3">
           <h2 className="text-section">{tc('dateTitle', { date: when.format(date.startsAt) })}</h2>
-          <p className="text-body text-zinc-700" aria-live="polite" data-testid="date-chart-state">
+          <p className="text-body text-ink-2" aria-live="polite" data-testid="date-chart-state">
             {seating.chart ? tc('ownChartBody') : tc('usesPlanBody')}
           </p>
           {canWrite && !date.cancelled ? (
@@ -203,7 +218,7 @@ export default async function SeatingPage({
           ) : null}
         </Card>
       ) : dates.length ? (
-        <p className="text-caption text-zinc-600">{tc('planBody')}</p>
+        <p className="text-caption text-ink-2">{tc('planBody')}</p>
       ) : null}
       {/* Live (M1.7f): counts and seat colours follow sales, holds and guests as they happen. */}
       <SeatStatesProvider
@@ -214,7 +229,7 @@ export default async function SeatingPage({
         <Card className="flex flex-wrap items-center gap-x-6 gap-y-2">
           <StatusDot status={STATUS_DOT[seating.status]} label={t(`status.${seating.status}`)} />
           <LiveSeatCounts />
-          <span className="text-caption text-zinc-600">
+          <span className="text-caption text-ink-2">
             {t('priced', { priced, total: seating.seats.length })}
           </span>
           {seating.status === 'draft' && canWrite ? (
@@ -225,7 +240,9 @@ export default async function SeatingPage({
             </form>
           ) : null}
         </Card>
-        {seating.status === 'locked' ? <p className="text-caption text-zinc-600">{t('lockedNote')}</p> : null}
+        {seating.status === 'locked' ? <p className="text-caption text-ink-2">{t('lockedNote')}</p> : null}
+        {/* M6.11b: a new event started from the library lands here to price its seats. */}
+        {sp.fromLibrary ? <Alert tone="info" title={t('fromLibrary')} /> : null}
 
         <section aria-labelledby="editor-heading" className="flex flex-col gap-3">
           <h2 id="editor-heading" className="text-section">
@@ -237,6 +254,7 @@ export default async function SeatingPage({
             locked={locked}
             saveDoc={saveDocAction.bind(null, org, event, dateId)}
             underlayTicket={underlayTicket}
+            sponsors={sponsors}
           />
         </section>
       </SeatStatesProvider>
@@ -246,7 +264,7 @@ export default async function SeatingPage({
           <h2 id="prices-heading" className="text-section">
             {t('prices.title')}
           </h2>
-          <p className="text-body text-zinc-600">{t('prices.description')}</p>
+          <p className="text-body text-ink-2">{t('prices.description')}</p>
           <Card>
             <SettingsForm
               action={categoryAction.bind(null, org, event, dateId)}
@@ -254,7 +272,7 @@ export default async function SeatingPage({
               savedLabel={t('prices.done')}
             >
               <fieldset className="flex flex-wrap gap-x-4 gap-y-1.5">
-                <legend className="mb-1.5 text-caption text-zinc-600">{t('prices.which')}</legend>
+                <legend className="mb-1.5 text-caption text-ink-2">{t('prices.which')}</legend>
                 {items.map((i) => (
                   <label key={i.id} className="flex min-h-6 items-center gap-2 text-body">
                     <input type="checkbox" name="itemId" value={i.id} className="size-5" />
@@ -265,14 +283,14 @@ export default async function SeatingPage({
               {labelled(
                 'prices-type',
                 t('prices.ticketType'),
-                <select id="prices-type" name="ticketTypeId" className={field}>
+                <Select id="prices-type" name="ticketTypeId" className={field}>
                   <option value="">{t('prices.offSale')}</option>
                   {types.map((tt) => (
                     <option key={tt.id} value={tt.id}>
                       {tt.name}
                     </option>
                   ))}
-                </select>,
+                </Select>,
               )}
             </SettingsForm>
           </Card>
@@ -284,6 +302,12 @@ export default async function SeatingPage({
           <h2 id="template-heading" className="text-section">
             {t('template.title')}
           </h2>
+          <p className="text-body text-ink-2">
+            {t('template.description')}{' '}
+            <Link href={`/o/${org}/seating-library`} className="underline underline-offset-2">
+              {t('template.library')}
+            </Link>
+          </p>
           <Card>
             <SettingsForm
               action={saveTemplateAction.bind(null, org, event, seating.doc)}

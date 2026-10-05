@@ -1,7 +1,7 @@
 import { executeQuery } from '@yayatoh/kernel';
 import { orgFinanceQuery, orgReportQuery } from '@yayatoh/reports';
 import { roleCan } from '@yayatoh/tenancy';
-import { Button, EmptyState, Input, Table } from '@yayatoh/ui';
+import { Button, buttonClass, DatePicker, EmptyState, Select, Table } from '@yayatoh/ui';
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation.ts';
 import { formatNumber } from '@/lib/format.ts';
@@ -45,7 +45,7 @@ export async function OrgSales({
           <h2 id="sales-heading" className="text-section">
             {t('reports.org.title')}
           </h2>
-          <p className="text-caption text-zinc-600">
+          <p className="text-caption text-ink-2">
             {r.from && r.to
               ? t('reports.org.range', { from: day(r.from), to: day(r.to) })
               : t('reports.org.periods.all')}
@@ -55,33 +55,31 @@ export async function OrgSales({
       </div>
       <form method="get" className="flex flex-wrap items-start gap-3">
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="report-period" className="text-caption text-zinc-600">
+          <label htmlFor="report-period" className="text-[13px] font-bold text-ink">
             {t('reports.org.period')}
           </label>
-          <select
+          <Select
             id="report-period"
             name="period"
             defaultValue={period.error ? 'custom' : period.period}
-            className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
+            className="field"
           >
             {PERIODS.map((p) => (
               <option key={p} value={p}>
                 {t(`reports.org.periods.${p}`)}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
-        <Input
+        <DatePicker
           name="from"
-          type="date"
           id="report-from"
           label={t('reports.org.from')}
           defaultValue={period.period === 'custom' ? period.from : undefined}
           hint={t('reports.org.customHint')}
         />
-        <Input
+        <DatePicker
           name="to"
-          type="date"
           id="report-to"
           label={t('reports.org.to')}
           defaultValue={period.period === 'custom' ? period.to : undefined}
@@ -92,7 +90,21 @@ export async function OrgSales({
         </Button>
       </form>
       {!r.hasSales ? (
-        <EmptyState title={t('reports.org.emptyTitle')} description={t('reports.org.emptyDescription')} />
+        <EmptyState
+          title={t('reports.org.emptyTitle')}
+          description={t('reports.org.emptyDescription')}
+          action={
+            period.period === 'all' ? (
+              <Link href="#events-heading" className={buttonClass('primary', 'md')}>
+                {t('reports.org.toEvents')}
+              </Link>
+            ) : (
+              <Link href={`/o/${org}?period=all`} className={buttonClass('primary', 'md')}>
+                {t('reports.org.showAllTime')}
+              </Link>
+            )
+          }
+        />
       ) : (
         <>
           <KpiGrid label={t('reports.org.keyNumbers')}>

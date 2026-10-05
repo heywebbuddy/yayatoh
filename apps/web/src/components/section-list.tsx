@@ -131,7 +131,7 @@ export function SectionList({
 
   return (
     <div className="flex flex-col gap-3">
-      {canWrite ? <p className="text-caption text-zinc-500">{t('reorderHint')}</p> : null}
+      {canWrite ? <p className="text-caption text-ink-2">{t('reorderHint')}</p> : null}
       <ol aria-label={t('sectionsLabel')} className="flex list-none flex-col gap-2 p-0">
         {order.map((s, i) => (
           <li
@@ -149,15 +149,15 @@ export function SectionList({
               if (canWrite) e.preventDefault();
             }}
             onDrop={(e) => drop(e, s.id)}
-            className={`flex flex-col gap-2 rounded-card border bg-white px-4 py-3 ${dragging === s.id ? 'border-zinc-900 opacity-60' : 'border-zinc-200'}`}
+            className={`flex flex-col gap-2 rounded-card border bg-surface px-4 py-3 ${dragging === s.id ? 'border-ink opacity-60' : 'border-line'}`}
           >
             <div className="flex flex-wrap items-center gap-3">
               {canWrite ? (
-                <GripVertical aria-hidden="true" className="size-4 shrink-0 cursor-grab text-zinc-400" />
+                <GripVertical aria-hidden="true" className="size-4 shrink-0 cursor-grab text-ink-3" />
               ) : null}
-              <span className="font-mono text-caption text-zinc-500">{i + 1}</span>
+              <span className="font-mono text-caption text-ink-2">{i + 1}</span>
               <span className="min-w-0 flex-1 font-medium">{s.title}</span>
-              <span className="text-caption text-zinc-500">
+              <span className="text-caption text-ink-2">
                 {t(`kinds.${s.kind as 'text'}`)}
                 {s.visible ? '' : ` · ${t('hidden')}`}
               </span>
@@ -196,7 +196,7 @@ export function SectionList({
       </ol>
       <div aria-live="polite" className="flex flex-col gap-2">
         {message ? (
-          <p role="status" className="text-caption text-zinc-600">
+          <p role="status" className="text-caption text-ink-2">
             {message}
           </p>
         ) : null}

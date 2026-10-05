@@ -4,6 +4,22 @@ export {
   sendAccountNotice,
   userPreferencesTx,
 } from './account-data.ts';
+// M6.1a: contact merges move this module's references (ADR 0023).
+export { notificationsContactOwner } from './contact-merge.ts';
+export { notificationsDataSubjects } from './data-subject.ts';
+export {
+  CAMPAIGN_DEDUPE_PREFIX,
+  campaignDedupeKey,
+  campaignSendStatsTx,
+  DELIVERABILITY_THRESHOLDS,
+  type DeliverabilityBreakdown,
+  type DeliverabilityVerdict,
+  deliverabilityBreakdownTx,
+  deliverabilityVerdict,
+  PLATFORM_SENDER_DOMAIN,
+  rateBps,
+  type SendTally,
+} from './deliverability.ts';
 export {
   DELIVERY_SIGNATURE_TOLERANCE_S,
   DeliveryEvent,
@@ -11,6 +27,7 @@ export {
   FAKE_DELIVERY_SIGNATURE_HEADER,
   fakeDeliveryAdapter,
   fakeDeliverySecret,
+  fakeWebhookAdapter,
   orgOfMessage,
   recordDeliveryEventsCommand,
   signFakeDeliveryEvents,
@@ -37,9 +54,32 @@ export {
   type PushRowOutcome,
   pushOptions,
   pushRowOutcome,
+  REJECTION_REASONS,
   UNSUBSCRIBE_PURPOSE,
   unsubscribeUrls,
 } from './dispatch.ts';
+export {
+  checkFromName,
+  checkReplyTo,
+  type EmailIdentity,
+  EmailIdentityDto,
+  emailIdentityQuery,
+  emailIdentityTx,
+  FROM_NAME_MAX,
+  type FromNameProblem,
+  type ReplyToProblem,
+  setEmailIdentityCommand,
+} from './email-identity.ts';
+export {
+  FALLBACK_CHAINS,
+  type FallbackChannel,
+  type FallbackOutcome,
+  type FallbackReason,
+  fallbackTx,
+  isFallbackReason,
+  planFallback,
+} from './fallback.ts';
+export { inboundOrgs, recordInboundKeywordCommand } from './inbound.ts';
 export {
   BuyerMessageDto,
   buyerOrderMessagesTx,
@@ -54,6 +94,8 @@ export {
   orderMessagesQuery,
   sendTestNotificationCommand,
 } from './inbox.ts';
+// M6.4d: unsubscribes and cleaned addresses reported by connected marketing tools.
+export { suppressAddressFromIntegrationTx, suppressFromIntegrationTx } from './integration-suppressions.ts';
 export {
   type Category,
   defaultPreference,
@@ -67,6 +109,7 @@ export {
   OPTIONAL_CATEGORIES,
   whatsappCategoryOf,
 } from './kinds.ts';
+export { type MessageState, messageStatesByPrefixTx, messageStatesTx } from './message-states.ts';
 export { addInboxItemTx, createNotifier } from './notifier.ts';
 export {
   allowedPlaceholders,
@@ -101,6 +144,8 @@ export {
   autoPauseQuery,
   CapDto,
   CapInput,
+  type DeliverabilityFacts,
+  deliverabilityFactsTx,
   deliveryReasonsTx,
   evaluateComplaintRateTx,
   frequencyCapsQuery,
@@ -121,6 +166,7 @@ export {
   createGateState,
   type GateFacts,
   type GateState,
+  orgQuotaLimitsTx,
   POLICY_RULES,
   type PolicyPhase,
   type PolicyRule,
@@ -173,6 +219,131 @@ export {
 } from './previews.ts';
 export { privateColumns } from './private-columns.ts';
 export {
+  type HealthKind,
+  type HealthTick,
+  ProviderHealthDto,
+  providerHealthTx,
+  recordProviderHealth,
+} from './provider-health.ts';
+export {
+  type ChecklistItem,
+  missingEnv,
+  PROVIDER_CHECKLISTS,
+  PROVIDER_ENV,
+  type ProviderMode,
+  providerMode,
+  switchedOn,
+  whatsappRoutes,
+} from './providers/config.ts';
+export { HELP_WORDS, helpReply, parseKeyword, START_WORDS, STOP_WORDS } from './providers/keywords.ts';
+export {
+  identityPortFromEnv,
+  liveTransports,
+  liveWebhookAdapter,
+  senderStatusFromEnv,
+  type WebhookChannel,
+  whatsappVerifyToken,
+} from './providers/select.ts';
+export {
+  CHECK_STATUSES,
+  type CheckStatus,
+  checkDmarc,
+  type DmarcResult,
+  type DnsRecord,
+  fakeIdentityPort,
+  fakeResolveTxt,
+  formatFrom,
+  type IdentityStatus,
+  identityRecords,
+  mailFromDomain,
+  organizationalDomain,
+  type ResolveTxt,
+  SES_TAG_MESSAGE,
+  SES_TAG_ORG,
+  type SendingIdentityPort,
+  type SesConfig,
+  sesEmailTransport,
+  sesIdentityPort,
+  suggestedDmarcRecord,
+} from './providers/ses.ts';
+export { type AwsCredentials, amzDate, signAwsRequest } from './providers/sigv4.ts';
+export {
+  type CertKey,
+  isSnsUrl,
+  SNS_REPLAY_TOLERANCE_S,
+  type SnsMessage,
+  sesEventToDeliveryEvents,
+  sesWebhookAdapter,
+  snsCertKeys,
+  snsStringToSign,
+  verifySnsMessage,
+} from './providers/sns.ts';
+export {
+  CAMPAIGN_STATUSES,
+  type CampaignStatus,
+  fakeSenderStatus,
+  MESSAGING_SERVICE_SID,
+  type SenderStatusPort,
+  TWILIO_HARD_ERRORS,
+  TWILIO_INBOUND_PATH,
+  TWILIO_SENDER_ERRORS,
+  TWILIO_SIGNATURE_HEADER,
+  TWILIO_STATUS_PATH,
+  type TwilioConfig,
+  twilioInboundKeyword,
+  twilioSenderStatus,
+  twilioSignature,
+  twilioSmsTransport,
+  twilioStatusToEvents,
+  twilioWebhookAdapter,
+  verifyTwilioRequest,
+} from './providers/twilio.ts';
+export {
+  E164_RE,
+  type Fetch,
+  type InboundKeyword,
+  isProviderRejection,
+  KEYWORDS,
+  type Keyword,
+  PROVIDER_NAMES,
+  type ProviderName,
+  ProviderRejection,
+  type ProviderWebhookAdapter,
+  REAL_PROVIDERS,
+  REJECTION_CODES,
+  type RealProvider,
+  type RejectionCode,
+  type VerifiedWebhook,
+  WEBHOOK_FAILURES,
+  type WebhookFailure,
+  type WebhookRequest,
+  WebhookVerificationError,
+} from './providers/types.ts';
+export {
+  CLOUD_NOT_ON_WHATSAPP,
+  cloudStatusToEvent,
+  GATEWAY_CALLBACK_PATH,
+  GATEWAY_KEY_HEADER,
+  GATEWAY_SIGNATURE_HEADER,
+  GATEWAY_TIMESTAMP_HEADER,
+  GATEWAY_TOLERANCE_S,
+  gatewaySignature,
+  META_SIGNATURE_HEADER,
+  metaChallenge,
+  metaSignature,
+  routedWhatsAppTransport,
+  signGatewayRequest,
+  WHATSAPP_LANGUAGES,
+  WHATSAPP_TEMPLATES,
+  type WhatsAppCloudConfig,
+  type WhatsAppGatewayConfig,
+  whatsappCloudTransport,
+  whatsappCloudWebhookAdapter,
+  whatsappGatewayTransport,
+  whatsappGatewayWebhookAdapter,
+  whatsappTemplate,
+} from './providers/whatsapp.ts';
+export {
   DeviceLabel,
   endpointRef,
   fakePushAllowed,
@@ -200,14 +371,44 @@ export {
   rescheduleRemindersTx,
 } from './reminders.ts';
 export {
+  CAMPAIGN_STATUS_VALUES,
   CATEGORIES,
   DELIVERY_STATES,
+  FALLBACK_REASONS,
+  INTEGRATION_SUPPRESSION_SOURCES,
   MESSAGE_CHANNELS,
+  MESSAGE_PROVIDERS,
   MESSAGE_STATUSES,
   PREFERENCE_CHANNELS,
   PUSH_DELIVERY_STATUSES,
   PUSH_PLATFORMS,
 } from './schema.ts';
+export {
+  addSendingDomainCommand,
+  type DnsRecordDto,
+  normalizeSendingDomain,
+  type OrgSenders,
+  orgSendersTx,
+  recordSendingDomainCheckCommand,
+  removeSendingDomainCommand,
+  SENDING_LOCAL_PART,
+  SenderDto,
+  SendingDomainDto,
+  SendingSetupDto,
+  sendingSetupQuery,
+  sendingSetupTx,
+  setChannelSenderCommand,
+} from './senders.ts';
+export {
+  cancelQueuedByPrefixTx,
+  marketingSuppressionsTx,
+  queuedSinceByPrefixTx,
+  renderStoredContent,
+  type StoredContent,
+  sendOutcomesTx,
+  storeContentTx,
+  storedContentTx,
+} from './stored-content.ts';
 export {
   CUTOVER_AUDIENCES,
   CUTOVER_MOMENTS,
@@ -217,6 +418,7 @@ export {
   renderCutoverNotice,
   renderCutoverSet,
 } from './templates/cutover.ts';
+export { countWords } from './templates/numbers.ts';
 export {
   EMAIL_MESSAGES,
   emailLocale,
@@ -248,7 +450,10 @@ export {
   readDevMailbox,
   readFakePushes,
   recordFakePush,
+  releaseDevDeliveryEvent,
+  type SendResult,
   type SmsTransport,
+  settleDevDeliveryEvents,
   type Transports,
   takeDevDeliveryEvents,
   type WhatsAppTransport,
@@ -300,3 +505,10 @@ export {
   webPushTransport,
   withWebPush,
 } from './web-push-transport.ts';
+export {
+  handleProviderWebhook,
+  type IngestResult,
+  ingestDeliveryEvents,
+  ingestInboundKeywords,
+  type WebhookOutcome,
+} from './webhooks.ts';

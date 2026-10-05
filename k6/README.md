@@ -1,11 +1,15 @@
 # Load tests (k6) — M1.14d
 
-Two scripts with thresholds from roadmap §10 (performance budgets and SLOs):
+Five scripts with thresholds from roadmap §10 (performance budgets and SLOs):
 
 | Script | What | Thresholds |
 |---|---|---|
 | `checkout.js` | Public event page, then a checkout start through the real no-JS form post (the same Server Action the page runs) for a free ticket | event page p95 < 400 ms · checkout p95 < 800 ms · errors < 1 % · checks > 99 % |
 | `scan.js` | Door devices verifying tickets online (`POST /api/v1/scans/batch`) plus manifest paging | scan p95 < 300 ms · manifest p95 < 1 s · errors < 1 % |
+
+| `api-limits.js` (M6.x) | `/v1` with a live and a test API key hammered past the plan's `api_access` quotas (600 / 120 a minute per key) | 429s are well formed (problem+json, Retry-After, RateLimit-*) · admitted between 1× and 2× the budget (token bucket) · no 5xx · p95 < 300 ms |
+| `sync-throughput.js` (M6.x) | Demo connector pulling 1 500 contacts through the fake IntegrationAuth port (`/api/dev/integrations/load`) | every record pulled · ≤ 1 failure (the demo seed's broken record) · p95 < 60 s per sync · > 25 records/s |
+| `warehouse-ingest.js` (M6.x) | Full analytics rebuild (`/api/dev/analytics/backfill start=1`) | finishes, reads events, repeats are idempotent · p95 < 120 s |
 
 Every iteration is a new visitor (fresh device cookie, its own TEST-NET client IP), so the rate
 limiter sees realistic traffic; the shared-IP case is tested separately (e2e).

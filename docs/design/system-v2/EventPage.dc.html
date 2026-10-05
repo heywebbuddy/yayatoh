@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Lakeside Summer Gala tickets</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>body{margin:0}</style>
+</helmet>
+<div style="min-height: 100%; box-sizing: border-box; font-family: 'Manrope', system-ui, sans-serif; {{theme}}">
+<div style="max-width: 1200px; margin: 0 auto; padding: 20px 20px 48px; box-sizing: border-box; display: flex; flex-direction: column; gap: 24px">
+
+<header style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 10px 10px 10px 18px; border-radius: 22px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); backdrop-filter: blur(20px)">
+<a href="#" style="display: flex; align-items: center; gap: 10px; color: var(--ink); text-decoration: none">
+<span style="width: 34px; height: 34px; border-radius: 11px; background: #FF3D86; display: grid; place-items: center; font-size: 13px; font-weight: 800; color: #FFFFFF">LE</span>
+<span style="font-size: 17px; font-weight: 800; letter-spacing: -0.02em">Lakeside Events</span>
+</a>
+<nav aria-label="Site" style="display: flex; gap: 4px; flex-grow: 1">
+<a href="#" style="padding: 8px 12px; border-radius: 10px; color: var(--ink2); text-decoration: none; font-size: 14px; font-weight: 700">All events</a>
+<a href="#" style="padding: 8px 12px; border-radius: 10px; color: var(--ink2); text-decoration: none; font-size: 14px; font-weight: 700">About</a>
+</nav>
+<button onClick="{{toggle}}" aria-label="{{modeLabel}}" style="width: 44px; height: 44px; border-radius: 14px; border: 1px solid var(--line); background: var(--surface2); color: var(--ink); display: grid; place-items: center; cursor: pointer">
+<sc-if value="{{isDark}}" hint-placeholder-val="{{false}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg></sc-if>
+<sc-if value="{{isLight}}" hint-placeholder-val="{{true}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"></path></svg></sc-if>
+</button>
+<a href="#" style="display: inline-flex; align-items: center; height: 44px; padding: 0 16px; border-radius: 14px; background: var(--tag); color: var(--tagInk); text-decoration: none; font-size: 14px; font-weight: 700">Sign in</a>
+</header>
+
+<section aria-labelledby="ev" style="position: relative; overflow: hidden; border-radius: 32px; padding: 40px; min-height: 380px; box-sizing: border-box; background: var(--hero); color: #FFFFFF; display: flex; flex-direction: column; justify-content: flex-end; gap: 16px; box-shadow: var(--heroShadow)">
+<div style="position: absolute; inset-inline-end: 6%; top: -80px; width: 180px; height: 460px; border-radius: 50%; background: rgba(230,222,255,0.55); filter: blur(34px); transform: rotate(32deg)"></div>
+<div style="position: absolute; inset-inline-end: -60px; bottom: -70px; width: 420px; height: 300px; border-radius: 64px; background: linear-gradient(135deg, #A48CFF 0%, #6A3BFF 55%, #3B1FA8 100%); transform: rotate(-16deg); box-shadow: 0 30px 60px rgba(40,10,120,0.45)"></div>
+<div style="position: absolute; inset-inline-end: 160px; bottom: 120px; width: 200px; height: 140px; border-radius: 40px; background: linear-gradient(135deg, rgba(255,255,255,0.55), rgba(255,255,255,0.08)); border: 1px solid rgba(255,255,255,0.4); transform: rotate(-16deg); backdrop-filter: blur(6px)"></div>
+<div style="position: relative; display: flex; flex-wrap: wrap; gap: 8px">
+<span style="display: inline-flex; align-items: center; gap: 8px; height: 32px; padding: 0 12px; border-radius: 999px; background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.3); font-size: 13px; font-weight: 700"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="4.5" width="18" height="16.5" rx="3"></rect><path d="M3 9.5h18M8 2.5v4M16 2.5v4"></path></svg>Sat 18 Jul 2026 · 6:30 PM CEST</span>
+<span style="display: inline-flex; align-items: center; gap: 8px; height: 32px; padding: 0 12px; border-radius: 999px; background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.3); font-size: 13px; font-weight: 700"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"></path><circle cx="12" cy="9.5" r="2.5"></circle></svg>Villa Lakeside, Como</span>
+<span style="display: inline-flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 999px; background: #FF3D86; font-size: 13px; font-weight: 800">216 tickets left</span>
+</div>
+<h1 id="ev" style="position: relative; margin: 0; max-width: 640px; font-size: 56px; line-height: 1.02; font-weight: 800; letter-spacing: -0.045em; text-wrap: balance">Lakeside Summer Gala 2026</h1>
+<p style="position: relative; margin: 0; max-width: 520px; font-size: 17px; line-height: 1.55; color: rgba(255,255,255,0.86)">An evening of music, dinner and giving on the water, raising funds for the Lakeside Arts Fund’s youth programmes.</p>
+</section>
+
+<div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+<div style="flex: 3 1 520px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
+<section aria-labelledby="ab" style="border-radius: 28px; padding: 26px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 12px; backdrop-filter: blur(20px)">
+<h2 id="ab" style="margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.02em">About the evening</h2>
+<p style="margin: 0; font-size: 15px; line-height: 1.7; color: var(--ink2); max-width: 65ch">Drinks on the terrace at sunset, a three-course dinner by Chef Lucia Bruni, and a live set from the Como Strings Quartet. At 9 PM we raise our paddles for the Arts Fund. Every gift is matched 1:1 by Brightwater Bank, up to $25,000.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; padding-top: 6px">
+<span style="font-size: 11px; font-weight: 800; letter-spacing: 0.08em; padding: 6px 10px; border-radius: 8px; background: var(--tag); color: var(--tagInk)">BLACK TIE</span>
+<span style="font-size: 11px; font-weight: 800; letter-spacing: 0.08em; padding: 6px 10px; border-radius: 8px; background: var(--tag); color: var(--tagInk)">21+</span>
+<span style="font-size: 11px; font-weight: 800; letter-spacing: 0.08em; padding: 6px 10px; border-radius: 8px; background: var(--tag); color: var(--tagInk)">STEP-FREE ACCESS</span>
+</div>
+</section>
+
+<section aria-labelledby="pg" style="border-radius: 28px; padding: 26px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 14px; backdrop-filter: blur(20px)">
+<h2 id="pg" style="margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.02em">Programme</h2>
+<sc-for list="{{agenda}}" as="a" hint-placeholder-count="5">
+<div style="display: flex; align-items: center; gap: 16px; padding: 12px 14px; border-radius: 18px; background: {{a.bg}}; border: 1px solid {{a.line}}">
+<span style="flex: 0 0 76px; font-size: 16px; font-weight: 800; color: var(--ink); font-variant-numeric: tabular-nums">{{a.t}}</span>
+<div style="display: flex; flex-direction: column; gap: 2px; flex-grow: 1"><span style="font-size: 15px; font-weight: 700; color: var(--ink)">{{a.title}}</span><span style="font-size: 13px; color: var(--ink2)">{{a.where}}</span></div>
+<span style="font-size: 11px; font-weight: 800; padding: 4px 9px; border-radius: 999px; background: {{a.chipBg}}; color: {{a.chipInk}}">{{a.chip}}</span>
+</div>
+</sc-for>
+</section>
+
+<section aria-labelledby="hb" style="border-radius: 28px; padding: 22px 26px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); display: flex; flex-wrap: wrap; align-items: center; gap: 16px; backdrop-filter: blur(20px)">
+<span style="width: 52px; height: 52px; border-radius: 16px; background: #FF3D86; display: grid; place-items: center; font-size: 16px; font-weight: 800; color: #FFFFFF">LE</span>
+<div style="display: flex; flex-direction: column; gap: 2px; flex-grow: 1"><span id="hb" style="font-size: 13px; font-weight: 700; color: var(--ink2)">Hosted by</span><span style="font-size: 17px; font-weight: 800; color: var(--ink)">Lakeside Events · for the Lakeside Arts Fund</span></div>
+<a href="#" style="display: inline-flex; align-items: center; height: 42px; padding: 0 16px; border-radius: 14px; border: 1px solid var(--line); background: var(--surface2); color: var(--ink); text-decoration: none; font-size: 14px; font-weight: 700">Contact the host</a>
+</section>
+</div>
+
+<aside aria-labelledby="tk" style="flex: 2 1 340px; min-width: 0; position: sticky; top: 16px; border-radius: 28px; padding: 24px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 14px; backdrop-filter: blur(20px)">
+<div style="display: flex; align-items: center"><h2 id="tk" style="margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.02em; flex-grow: 1">Tickets</h2><span style="font-size: 13px; color: var(--ink2)">Prices in USD</span></div>
+<sc-for list="{{tickets}}" as="t" hint-placeholder-count="3">
+<div style="display: flex; align-items: center; gap: 12px; padding: 14px; border-radius: 20px; border: 1px solid {{t.line}}; background: {{t.bg}}; box-shadow: {{t.glow}}">
+<div style="display: flex; flex-direction: column; gap: 3px; flex-grow: 1; min-width: 0">
+<span style="font-size: 15px; font-weight: 800; color: var(--ink)">{{t.name}}</span>
+<span style="font-size: 12px; color: var(--ink2)">{{t.desc}}</span>
+<span style="font-size: 15px; font-weight: 800; color: var(--ink); font-variant-numeric: tabular-nums">{{t.price}}</span>
+</div>
+<div style="display: flex; align-items: center; gap: 6px; padding: 4px; border-radius: 14px; background: var(--surface2); border: 1px solid var(--line)">
+<button onClick="{{t.dec}}" aria-label="{{t.decLabel}}" style="width: 36px; height: 36px; border-radius: 11px; border: 0; background: var(--surfaceSolid); color: var(--ink); font: inherit; font-size: 18px; font-weight: 800; cursor: pointer">−</button>
+<span aria-live="polite" style="min-width: 22px; text-align: center; font-size: 15px; font-weight: 800; color: var(--ink); font-variant-numeric: tabular-nums">{{t.qty}}</span>
+<button onClick="{{t.inc}}" aria-label="{{t.incLabel}}" style="width: 36px; height: 36px; border-radius: 11px; border: 0; background: var(--primary); color: #FFFFFF; font: inherit; font-size: 18px; font-weight: 800; cursor: pointer">+</button>
+</div>
+</div>
+</sc-for>
+<label style="display: flex; align-items: center; gap: 12px; padding: 14px; border-radius: 20px; background: var(--pinkSoft); cursor: pointer">
+<input type="checkbox" checked="{{give}}" onChange="{{toggleGive}}" style="width: 22px; height: 22px; accent-color: #E8246F">
+<span style="display: flex; flex-direction: column; gap: 2px; flex-grow: 1"><span style="font-size: 14px; font-weight: 800; color: var(--ink)">Add a $50 gift to the Arts Fund</span><span style="font-size: 12px; color: var(--ink2)">Matched 1:1 · tax receipt by email</span></span>
+</label>
+<div style="display: flex; flex-direction: column; gap: 8px; padding: 6px 4px 0; border-top: 1px dashed var(--line)">
+<div style="display: flex; justify-content: space-between; font-size: 14px; color: var(--ink2); padding-top: 10px"><span>Tickets</span><span style="font-variant-numeric: tabular-nums">{{subtotal}}</span></div>
+<div style="display: flex; justify-content: space-between; font-size: 14px; color: var(--ink2)"><span>Gift</span><span style="font-variant-numeric: tabular-nums">{{gift}}</span></div>
+<div style="display: flex; justify-content: space-between; align-items: baseline; font-size: 15px; font-weight: 800; color: var(--ink)"><span>Total</span><span style="font-size: 30px; letter-spacing: -0.03em; font-variant-numeric: tabular-nums">{{total}}</span></div>
+</div>
+<a href="#" style="display: flex; align-items: center; justify-content: center; gap: 8px; height: 54px; border-radius: 18px; background: var(--primary); color: #FFFFFF; text-decoration: none; font-size: 16px; font-weight: 800; box-shadow: var(--primaryGlow)">Continue to checkout →</a>
+<div style="display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 12px; color: var(--ink2)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10.5" width="16" height="10.5" rx="2.5"></rect><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"></path></svg>All fees included · Secure payment · Free cancellation until 4 Jul</div>
+</aside>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"dark":{"editor":"boolean","default":false},"$preview":{"width":1440,"height":1240}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const LIGHT = "--surface:#FFFFFF;--surfaceSolid:#FFFFFF;--surface2:#F6F5FA;--line:#E7E4EE;--ink:#16131D;--ink2:#5E596A;--primary:#6A3BFF;--primarySoft:#EEE8FF;--primaryGlow:0 10px 24px rgba(106,59,255,0.30);--pinkSoft:#FDE3EE;--mint:#0B7A50;--mintSoft:#DDF6EA;--tag:#2A2230;--tagInk:#FFFFFF;--hero:radial-gradient(90% 120% at 90% 10%,#B49CFF 0%,#6A3BFF 38%,#2B1673 100%);--heroShadow:0 30px 60px rgba(70,35,190,0.25);--shadow:0 1px 2px rgba(22,19,29,0.04),0 10px 30px rgba(22,19,29,0.06);background:#F2F1F6;color:#16131D;";
+    const DARK = "color-scheme:dark;--surface:rgba(26,20,46,0.72);--surfaceSolid:#251E3D;--surface2:rgba(255,255,255,0.05);--line:rgba(170,150,255,0.16);--ink:#F4F1FF;--ink2:#ABA4C6;--primary:#7B5CFF;--primarySoft:rgba(123,92,255,0.2);--primaryGlow:0 0 0 1px rgba(160,135,255,0.4),0 12px 32px rgba(123,92,255,0.5);--pinkSoft:rgba(255,92,154,0.14);--mint:#4BE9AC;--mintSoft:rgba(59,230,164,0.14);--tag:rgba(255,255,255,0.09);--tagInk:#ECE7FF;--hero:radial-gradient(90% 120% at 90% 0%,#8D6FFF 0%,#4B2FB0 34%,#120C26 78%);--heroShadow:0 0 0 1px rgba(170,150,255,0.18),0 30px 80px rgba(80,50,220,0.35);--shadow:0 0 0 1px rgba(170,150,255,0.05),0 24px 48px rgba(0,0,0,0.40);background:radial-gradient(55% 40% at 72% -6%,rgba(123,92,255,0.40),rgba(123,92,255,0) 70%),radial-gradient(40% 32% at 0% 100%,rgba(255,92,154,0.12),rgba(255,92,154,0) 70%),#0A0812;color:#F4F1FF;";
+    const s = this.state || {};
+    const dark = typeof s.dark === 'boolean' ? s.dark : !!this.props.dark;
+    const q = s.q || { ga: 2, vip: 0, table: 0 };
+    const give = typeof s.give === 'boolean' ? s.give : true;
+    const types = [
+      { id: 'ga', name: 'General admission', desc: 'Dinner, drinks and the after-party', price: 120 },
+      { id: 'vip', name: 'VIP', desc: 'Front tables, meet the artists, valet', price: 195 },
+      { id: 'table', name: 'Table of 10', desc: 'Name your guests later by link · sponsor sign', price: 1500 }
+    ];
+    const money = (n) => '$' + n.toLocaleString('en-US');
+    const set = (id, d) => () => { const n = Object.assign({}, q); n[id] = Math.max(0, Math.min(10, (n[id] || 0) + d)); this.setState({ q: n }); };
+    const sub = types.reduce((a, t) => a + t.price * (q[t.id] || 0), 0);
+    const g = give ? 50 : 0;
+    const now = { bg: 'var(--mintSoft)', line: 'var(--mint)', chipBg: 'var(--mint)', chipInk: dark ? '#0A0812' : '#FFFFFF' };
+    const plain = { bg: 'var(--surface2)', line: 'var(--line)', chipBg: 'var(--tag)', chipInk: 'var(--tagInk)' };
+    return {
+      theme: dark ? DARK : LIGHT,
+      isDark: dark,
+      isLight: !dark,
+      modeLabel: dark ? 'Switch to light mode' : 'Switch to dark mode',
+      toggle: () => this.setState({ dark: !dark }),
+      agenda: [
+        Object.assign({ t: '6:30 PM', title: 'Drinks at sunset', where: 'Terrace', chip: 'Arrive' }, plain),
+        Object.assign({ t: '7:30 PM', title: 'Welcome from the Arts Fund', where: 'Main hall', chip: 'Talk' }, plain),
+        Object.assign({ t: '7:45 PM', title: 'Three-course dinner', where: 'Main hall', chip: 'Dinner' }, plain),
+        Object.assign({ t: '9:00 PM', title: 'Paddle raise, matched 1:1', where: 'Stage', chip: 'Give' }, now),
+        Object.assign({ t: '10:00 PM', title: 'After-party with the Como Strings', where: 'Boathouse', chip: 'Music' }, plain)
+      ],
+      tickets: types.map((t) => {
+        const n = q[t.id] || 0;
+        const on = n > 0;
+        return {
+          name: t.name, desc: t.desc, price: money(t.price), qty: String(n),
+          line: on ? 'var(--primary)' : 'var(--line)', bg: on ? 'var(--primarySoft)' : 'var(--surface2)', glow: on ? '0 0 0 3px var(--primarySoft)' : 'none',
+          dec: set(t.id, -1), inc: set(t.id, 1), decLabel: 'Remove one ' + t.name, incLabel: 'Add one ' + t.name
+        };
+      }),
+      give: give,
+      toggleGive: () => this.setState({ give: !give }),
+      subtotal: money(sub),
+      gift: money(g),
+      total: money(sub + g)
+    };
+  }
+}
+</script>
+</body>
+</html>

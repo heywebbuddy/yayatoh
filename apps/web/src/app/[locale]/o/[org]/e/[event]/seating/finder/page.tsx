@@ -14,6 +14,8 @@ import { finderSettingsAction } from '../actions.ts';
 /**
  * Seat finder (M1.7e): open the venue map and seat finder to guests, choose how they look up
  * their seat (an emailed code, or instantly by full name), and print the poster for the door.
+ * M4.4a: with the guests module, a third way (full name + the party's invitation PIN, labels only)
+ * and a pointer to the party links, whose QR codes open each party's own seat page.
  */
 export default async function SeatFinderSettingsPage({
   params,
@@ -35,10 +37,19 @@ export default async function SeatFinderSettingsPage({
   const canWrite = can('seating:write');
   const origin = (process.env.BETTER_AUTH_URL ?? 'http://localhost:3000').replace(/\/$/, '');
   const publicPath = `/events/${ev.slug}/seat-finder`;
+  const guests = data.modules.has('guests');
+  const modes = guests ? (['code', 'name', 'pin'] as const) : (['code', 'name'] as const);
   return (
     <>
       <PageHeader title={t('finder.title')} description={t('finder.description')} />
-      <SeatingTabs base={base} active="finder" finder />
+      <SeatingTabs
+        base={base}
+        active="finder"
+        finder
+        guests={data.modules.has('guests')}
+        selection={data.modules.has('advanced_seating')}
+        solver={data.modules.has('guests') && data.modules.has('ai_seating')}
+      />
       {!settings ? (
         <EmptyState
           title={t('finder.noPlan')}
@@ -60,7 +71,7 @@ export default async function SeatFinderSettingsPage({
             </span>
           </Card>
           {ev.status !== 'published' || ev.visibility === 'private' ? (
-            <p className="text-caption text-zinc-600">{t('finder.notPublic')}</p>
+            <p className="text-caption text-ink-2">{t('finder.notPublic')}</p>
           ) : null}
 
           <section aria-labelledby="finder-settings" className="flex flex-col gap-3">
@@ -85,13 +96,13 @@ export default async function SeatFinderSettingsPage({
                       />
                       {t('finder.publicMap')}
                     </label>
-                    <p id="public-map-hint" className="ps-7 text-caption text-zinc-600">
+                    <p id="public-map-hint" className="ps-7 text-caption text-ink-2">
                       {t('finder.publicMapHint')}
                     </p>
                   </div>
                   <fieldset className="flex flex-col gap-2">
-                    <legend className="mb-1 text-caption text-zinc-600">{t('finder.mode')}</legend>
-                    {(['code', 'name'] as const).map((m) => (
+                    <legend className="mb-1 text-[13px] font-bold text-ink">{t('finder.mode')}</legend>
+                    {modes.map((m) => (
                       <div key={m} className="flex flex-col gap-0.5">
                         <label className="flex min-h-6 items-center gap-2 text-body">
                           <input
@@ -104,7 +115,7 @@ export default async function SeatFinderSettingsPage({
                           />
                           {t(`finder.modeOption.${m}`)}
                         </label>
-                        <p id={`mode-${m}-hint`} className="ps-7 text-caption text-zinc-600">
+                        <p id={`mode-${m}-hint`} className="ps-7 text-caption text-ink-2">
                           {t(`finder.modeHint.${m}`)}
                         </p>
                       </div>
@@ -113,7 +124,7 @@ export default async function SeatFinderSettingsPage({
                 </SettingsForm>
               </Card>
             ) : (
-              <p className="text-body text-zinc-600">{t('finder.readOnly')}</p>
+              <p className="text-body text-ink-2">{t('finder.readOnly')}</p>
             )}
           </section>
 
@@ -123,7 +134,7 @@ export default async function SeatFinderSettingsPage({
             </h2>
             <Card className="flex flex-col gap-3">
               <div className="flex flex-col gap-1">
-                <span className="text-caption text-zinc-600">{t('finder.address')}</span>
+                <span className="text-caption text-ink-2">{t('finder.address')}</span>
                 <span data-testid="finder-url" className="font-mono text-body break-all">
                   {`${origin}${publicPath}`}
                 </span>
@@ -142,10 +153,27 @@ export default async function SeatFinderSettingsPage({
                 ) : null}
               </div>
               {settings.publicMap ? null : (
-                <p className="text-caption text-zinc-600">{t('finder.closedNote')}</p>
+                <p className="text-caption text-ink-2">{t('finder.closedNote')}</p>
               )}
             </Card>
           </section>
+
+          {guests ? (
+            <section aria-labelledby="finder-parties" className="flex flex-col gap-3">
+              <h2 id="finder-parties" className="text-section">
+                {t('finder.partyLinksTitle')}
+              </h2>
+              <Card className="flex flex-col gap-3">
+                <p className="text-body text-ink-2">{t('finder.partyLinksHint')}</p>
+                <Link
+                  href={`/o/${org}/e/${event}/guests/rsvp`}
+                  className={buttonClass('secondary', 'sm', 'self-start')}
+                >
+                  {t('finder.partyLinksAction')}
+                </Link>
+              </Card>
+            </section>
+          ) : null}
         </>
       )}
     </>

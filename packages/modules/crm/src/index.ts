@@ -1,11 +1,20 @@
+export { addContactCommand } from './add-contact.ts';
+// M5.6b: the consent row behind an exhibitor email share (status and version).
+export { currentConsentEntryTx } from './consent-entry.ts';
 export {
   type ConsentInput,
   consentSummaryTx,
   contactByIdTx,
   contactIdByEmailTx,
+  contactIdsByPhoneTx,
+  contactIdsMatchingTx,
   contactPhonesTx,
+  contactsByIdsTx,
+  contactsForSendTx,
   contactUserIdsTx,
   currentConsentTx,
+  type MarketingReach,
+  marketingReachTx,
   normalizeEmail,
   recordConsentTx,
   setContactPhoneTx,
@@ -13,20 +22,93 @@ export {
   upsertContactsTx,
   upsertContactTx,
 } from './contacts.ts';
+// M6.5b: contacts, consent and participation for CRM connectors (Salesforce).
+export {
+  type CrmConsentRow,
+  type CrmParticipationRow,
+  type CrmPersonRow,
+  consentedContactsChangedTx,
+  contactsWithConsentTx,
+  crmParticipationRowsTx,
+  withdrawGrantedEmailMarketingTx,
+  writeCrmPersonTx,
+} from './crm-connector-sync.ts';
+export { crmDataSubjects } from './data-subject.ts';
 export { consentRegivenSinceTx, contactDsarTx, eraseContactDsarTx, unlinkContactUserTx } from './dsar.ts';
+export { contactForAccountTx, replaceEventEngagementTx } from './engagement.ts';
+// M6.4d: consent and participation reads/writes for Mailchimp, Klaviyo and HubSpot syncs.
+export {
+  type ContactConsentRow,
+  contactIdsAfterTx,
+  contactsConsentTx,
+  type ParticipationSyncRow,
+  participationByIdTx,
+  participationsAfterTx,
+  setSyncedContactCompanyTx,
+  withdrawEmailMarketingTx,
+} from './integration-consent.ts';
+// M6.1a: duplicates, merge with undo, the person timeline.
+export {
+  BulkMergeDto,
+  MergeChoicesInput,
+  MergeResultDto,
+  mergeContactsCommand,
+  mergeDuplicatesBulkCommand,
+  UndoMergeDto,
+  undoMergeCommand,
+} from './merge/commands.ts';
+export * from './merge/domain.ts';
+export { dismissDuplicateCommand, scanDuplicatesCommand, scanDuplicatesTx } from './merge/duplicates.ts';
+export {
+  type ContactSnapshot,
+  type MergeInput,
+  type MergeResult,
+  mergeContactsTx,
+  scrubMergeSnapshotsTx,
+  undoMergeTx,
+} from './merge/engine.ts';
+export {
+  type ContactReferenceOwner,
+  contactColumnsTx,
+  contactReferenceOwners,
+  type MergeStep,
+  type MovedRow,
+  registerContactReferenceOwners,
+  uncoveredContactColumnsTx,
+} from './merge/owners.ts';
+export {
+  ContactCardDto,
+  DuplicatePairDto,
+  DuplicateQueueDto,
+  duplicatePairQuery,
+  duplicateQueueQuery,
+  PeoplePageDto,
+  PersonDto,
+  peopleQuery,
+  personQuery,
+} from './merge/queries.ts';
 export { privateColumns } from './private-columns.ts';
 export {
   type ParticipationFacts,
   participantContactIdsTx,
+  participationEventIdsTx,
   refreshContactProfilesTx,
   replaceParticipationTx,
 } from './projection.ts';
+// M6.1b contact stats.
 export {
   CONSENT_CHANNELS,
   CONSENT_PURPOSES,
   CONSENT_STATUSES,
   CONSENT_SUMMARIES,
+  CONTACT_SIGNAL_KINDS,
   CONTACT_SOURCES,
+  type ContactSignalKind,
+  DUPLICATE_REASONS,
+  DUPLICATE_STATUSES,
+  MERGE_FIELDS,
+  MERGE_STATUSES,
+  TIMELINE_KINDS,
 } from './schema.ts';
 export {
   type CompileOptions,
@@ -38,3 +120,55 @@ export {
   segmentPageTx,
 } from './segments/compile.ts';
 export * from './segments/dsl.ts';
+export {
+  type ComputedCurrencyStats,
+  type ComputedScores,
+  computeContactStats,
+  type EventOver,
+  type StatsParticipation,
+  type StatsSignals,
+} from './stats/compute.ts';
+export * from './stats/formulas.ts';
+export {
+  NO_SIGNALS,
+  recordContactSignalTx,
+  signalTotalsTx,
+  statsContactPageTx,
+  statsParticipationTx,
+  writeContactStatsTx,
+} from './stats/projection.ts';
+export {
+  ContactStatsDto,
+  ContactValueDto,
+  contactStatsQuery,
+  contactValueQuery,
+  OrgContactStatsDto,
+  OrgValueDto,
+  orgContactStatsQuery,
+  orgValueQuery,
+} from './stats/queries.ts';
+export { RFM_KEYS, type RfmKey } from './stats/rfm.ts';
+export {
+  type ContactSyncRow,
+  contactSyncRowTx,
+  contactsChangedSinceTx,
+  writeSyncedContactTx,
+} from './sync.ts';
+export {
+  CONSENT_TERM_KEYS,
+  CONSENT_TERMS,
+  type ConsentTerm,
+  currentTermVersion,
+  isConsentTerm,
+  recordTermConsentTx,
+} from './terms.ts';
+export {
+  activeContactIdsTx,
+  recordTimelineTx,
+  type TimelineCursor,
+  type TimelineFact,
+  type TimelineKind,
+  type TimelineRow,
+  timelineEventIdsTx,
+  timelinePageTx,
+} from './timeline.ts';

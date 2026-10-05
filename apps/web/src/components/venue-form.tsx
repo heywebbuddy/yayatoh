@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, Input } from '@yayatoh/ui';
+import { Alert, Button, Input, TimeZonePicker } from '@yayatoh/ui';
 import type { VenueDto } from '@yayatoh/venues';
 import { useTranslations } from 'next-intl';
 import { useActionState } from 'react';
@@ -10,26 +10,30 @@ import { keepValues } from '@/lib/keep-values.ts';
 
 const FIELD_ERRORS = ['name', 'country', 'latitude', 'longitude', 'timezone', 'capacity', 'mapUrl'] as const;
 
-/** Create or edit an org venue (M1.4c). Server-side validation errors land on their fields. */
+/**
+ * Create or edit an org venue (M1.4c). Server-side validation errors land on their fields.
+ * U3: creating asks only for the essentials (name, capacity, city, country, time zone, listing);
+ * photos and the remaining details follow on the venue's page.
+ */
 export function VenueForm({
   action,
   venue,
-  zones,
   defaultTimezone,
   disabled = false,
 }: {
   action: (prev: FormState, form: FormData) => Promise<FormState>;
   venue?: VenueDto;
-  zones: readonly string[];
   defaultTimezone: string;
   disabled?: boolean;
 }) {
   const t = useTranslations('venues');
   const te = useTranslations();
+  // Creating shows the essentials only (principle 4); editing shows every field.
+  const full = Boolean(venue);
   const [state, formAction, pending] = useActionState(action, INITIAL_FORM_STATE);
   const bad = new Set(state.fields ?? []);
   const err = (f: (typeof FIELD_ERRORS)[number]) => (bad.has(f) ? t(`errors.${f}`) : undefined);
-  const selectClass = 'min-h-10 rounded-pill border bg-white px-4 text-body';
+  const selectClass = 'field';
   return (
     <form action={formAction} onSubmit={keepValues(formAction)} className="flex flex-col gap-4" noValidate>
       <fieldset disabled={disabled} className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -51,20 +55,24 @@ export function VenueForm({
           defaultValue={venue?.capacity ?? undefined}
           error={err('capacity')}
         />
-        <Input
-          name="addressLine1"
-          maxLength={200}
-          autoComplete="address-line1"
-          label={t('addressLine1')}
-          defaultValue={venue?.addressLine1 ?? undefined}
-        />
-        <Input
-          name="addressLine2"
-          maxLength={200}
-          autoComplete="address-line2"
-          label={t('addressLine2')}
-          defaultValue={venue?.addressLine2 ?? undefined}
-        />
+        {full ? (
+          <>
+            <Input
+              name="addressLine1"
+              maxLength={200}
+              autoComplete="address-line1"
+              label={t('addressLine1')}
+              defaultValue={venue?.addressLine1 ?? undefined}
+            />
+            <Input
+              name="addressLine2"
+              maxLength={200}
+              autoComplete="address-line2"
+              label={t('addressLine2')}
+              defaultValue={venue?.addressLine2 ?? undefined}
+            />
+          </>
+        ) : null}
         <Input
           name="city"
           maxLength={120}
@@ -72,20 +80,24 @@ export function VenueForm({
           label={t('city')}
           defaultValue={venue?.city ?? undefined}
         />
-        <Input
-          name="region"
-          maxLength={120}
-          autoComplete="address-level1"
-          label={t('region')}
-          defaultValue={venue?.region ?? undefined}
-        />
-        <Input
-          name="postalCode"
-          maxLength={20}
-          autoComplete="postal-code"
-          label={t('postalCode')}
-          defaultValue={venue?.postalCode ?? undefined}
-        />
+        {full ? (
+          <>
+            <Input
+              name="region"
+              maxLength={120}
+              autoComplete="address-level1"
+              label={t('region')}
+              defaultValue={venue?.region ?? undefined}
+            />
+            <Input
+              name="postalCode"
+              maxLength={20}
+              autoComplete="postal-code"
+              label={t('postalCode')}
+              defaultValue={venue?.postalCode ?? undefined}
+            />
+          </>
+        ) : null}
         <Input
           name="country"
           required
@@ -99,66 +111,64 @@ export function VenueForm({
           error={err('country')}
         />
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="venue-timezone" className="text-caption text-zinc-600">
+          <label htmlFor="venue-timezone" className="text-[13px] font-bold text-ink">
             {t('timezone')}
           </label>
-          <select
+          <TimeZonePicker
             id="venue-timezone"
             name="timezone"
             defaultValue={venue?.timezone ?? defaultTimezone}
             aria-invalid={bad.has('timezone') || undefined}
             aria-describedby={bad.has('timezone') ? 'venue-timezone-error' : undefined}
-            className={`${selectClass} ${bad.has('timezone') ? 'border-pink-700' : 'border-zinc-200'}`}
-          >
-            {zones.map((z) => (
-              <option key={z} value={z}>
-                {z.replace(/_/g, ' ')}
-              </option>
-            ))}
-          </select>
+            className={`${selectClass} ${bad.has('timezone') ? 'field-invalid' : ''}`}
+          />
           {bad.has('timezone') ? (
-            <p id="venue-timezone-error" className="text-caption text-pink-700">
+            <p id="venue-timezone-error" className="text-caption text-danger">
               {t('errors.timezone')}
             </p>
           ) : null}
         </div>
-        <Input
-          name="mapUrl"
-          type="url"
-          maxLength={500}
-          label={t('mapUrl')}
-          hint={t('mapUrlHint')}
-          defaultValue={venue?.mapUrl ?? undefined}
-          error={err('mapUrl')}
-        />
-        <Input
-          name="latitude"
-          inputMode="decimal"
-          label={t('latitude')}
-          hint={t('geoHint')}
-          defaultValue={venue?.latitude ?? undefined}
-          error={err('latitude')}
-        />
-        <Input
-          name="longitude"
-          inputMode="decimal"
-          label={t('longitude')}
-          defaultValue={venue?.longitude ?? undefined}
-          error={err('longitude')}
-        />
-        <div className="flex flex-col gap-1.5 md:col-span-2">
-          <label htmlFor="accessibilityNotes" className="text-caption text-zinc-600">
-            {t('accessibilityNotes')}
-          </label>
-          <textarea
-            id="accessibilityNotes"
-            name="accessibilityNotes"
-            rows={3}
-            maxLength={2000}
-            defaultValue={venue?.accessibilityNotes ?? ''}
-            className="rounded-card border border-zinc-200 bg-white px-4 py-2 text-body"
-          />
-        </div>
+        {full ? (
+          <>
+            <Input
+              name="mapUrl"
+              type="url"
+              maxLength={500}
+              label={t('mapUrl')}
+              hint={t('mapUrlHint')}
+              defaultValue={venue?.mapUrl ?? undefined}
+              error={err('mapUrl')}
+            />
+            <Input
+              name="latitude"
+              inputMode="decimal"
+              label={t('latitude')}
+              hint={t('geoHint')}
+              defaultValue={venue?.latitude ?? undefined}
+              error={err('latitude')}
+            />
+            <Input
+              name="longitude"
+              inputMode="decimal"
+              label={t('longitude')}
+              defaultValue={venue?.longitude ?? undefined}
+              error={err('longitude')}
+            />
+            <div className="flex flex-col gap-1.5 md:col-span-2">
+              <label htmlFor="accessibilityNotes" className="text-[13px] font-bold text-ink">
+                {t('accessibilityNotes')}
+              </label>
+              <textarea
+                id="accessibilityNotes"
+                name="accessibilityNotes"
+                rows={3}
+                maxLength={2000}
+                defaultValue={venue?.accessibilityNotes ?? ''}
+                className="rounded-card border border-line bg-surface px-4 py-2 text-body"
+              />
+            </div>
+          </>
+        ) : null}
         <label className="flex min-h-6 items-center gap-2 text-body md:col-span-2">
           <input
             type="checkbox"
@@ -170,6 +180,7 @@ export function VenueForm({
           {t('directoryListed')}
         </label>
       </fieldset>
+      {full ? null : <p className="m-0 text-caption text-ink-2">{t('createNext')}</p>}
       <div aria-live="polite" className="flex flex-col gap-2">
         {state.ok && !pending ? <Alert tone="info" title={t('saved')} /> : null}
         {state.code ? (

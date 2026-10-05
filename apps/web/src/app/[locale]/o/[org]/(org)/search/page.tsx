@@ -4,7 +4,7 @@ import { executeQuery, formatMoney, money } from '@yayatoh/kernel';
 import { searchOrdersQuery } from '@yayatoh/orders';
 import { roleCan } from '@yayatoh/tenancy';
 import { findTicketsByCodeQuery } from '@yayatoh/ticketing';
-import { Card, EmptyState, PageHeader } from '@yayatoh/ui';
+import { buttonClass, Card, EmptyState, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Link } from '@/i18n/navigation.ts';
 import { loadConsole } from '@/server/console.ts';
@@ -31,7 +31,15 @@ export default async function SearchPage({
     return (
       <>
         <PageHeader title={t('search.title')} />
-        <EmptyState title={t('search.tooShortTitle')} description={t('search.tooShortDescription')} />
+        <EmptyState
+          title={t('search.tooShortTitle')}
+          description={t('search.tooShortDescription')}
+          action={
+            <Link href={`/o/${org}`} className={buttonClass('primary', 'md')}>
+              {t('search.browseEvents')}
+            </Link>
+          }
+        />
       </>
     );
   }
@@ -74,18 +82,18 @@ export default async function SearchPage({
           {title}
         </h2>
         <Card size="panel">
-          <ul className="flex list-none flex-col divide-y divide-zinc-100 p-0">
+          <ul className="flex list-none flex-col divide-y divide-line p-0">
             {items.map((i) => (
               <li key={i.key} className="py-2.5">
                 {i.href ? (
                   <Link href={i.href} className="flex flex-col underline-offset-2 hover:underline">
-                    <span className="text-zinc-900">{i.main}</span>
-                    <span className="text-caption text-zinc-500">{i.sub}</span>
+                    <span className="text-ink">{i.main}</span>
+                    <span className="text-caption text-ink-2">{i.sub}</span>
                   </Link>
                 ) : (
                   <span className="flex flex-col">
                     <span>{i.main}</span>
-                    <span className="text-caption text-zinc-500">{i.sub}</span>
+                    <span className="text-caption text-ink-2">{i.sub}</span>
                   </span>
                 )}
               </li>
@@ -99,7 +107,15 @@ export default async function SearchPage({
     <>
       <PageHeader title={t('search.resultsFor', { q })} />
       {nothing ? (
-        <EmptyState title={t('search.noneTitle')} description={t('search.noneDescription')} />
+        <EmptyState
+          title={t('search.noneTitle')}
+          description={t('search.noneDescription')}
+          action={
+            <Link href={`/o/${org}`} className={buttonClass('primary', 'md')}>
+              {t('search.browseEvents')}
+            </Link>
+          }
+        />
       ) : null}
       {group(
         'search-events',

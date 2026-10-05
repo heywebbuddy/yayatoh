@@ -4,9 +4,17 @@ import { applyBps, DomainError, money, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { and, asc, eq, inArray, isNull, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
-import { PROMO_KINDS, promoCodes, ticketTypes } from './schema.ts';
+import { coupons, PROMO_KINDS, promoCodes, ticketTypes } from './schema.ts';
 
 export type PromoRow = typeof promoCodes.$inferSelect;
+
+/**
+ * What a quote needs to price a code: an event promo code or (U9) an org coupon. An amount in
+ * another currency takes nothing off (coupons are matched to the event's currency on resolve).
+ */
+export type DiscountRule = Pick<PromoRow, 'id' | 'kind' | 'percentBps' | 'amountMinor' | 'ticketTypeIds'> & {
+  readonly currency: string | null;
+};
 
 /** Codes are matched case-insensitively: stored and compared upper-case. */
 export const normalizePromoCode = (code: string) => code.trim().toUpperCase();
@@ -41,13 +49,14 @@ export async function resolvePromoTx(
 
 /** Per-ticket discount on a face price; never more than the face price. */
 export function promoDiscountMinor(
-  p: PromoRow,
+  p: DiscountRule,
   ticketTypeId: string,
   faceMinor: number,
   currency: string,
 ): number {
   if (p.ticketTypeIds.length > 0 && !p.ticketTypeIds.includes(ticketTypeId)) return 0;
   if (p.kind === 'percent') return applyBps(money(faceMinor, currency), p.percentBps ?? 0).amount;
+  if (p.currency !== currency) return 0;
   return Math.min(faceMinor, p.amountMinor ?? 0);
 }
 
@@ -148,6 +157,9 @@ export const createPromoCodeCommand = tenantCommand({
       .from(promoCodes)
       .where(and(eq(promoCodes.eventId, input.eventId), eq(promoCodes.code, input.code)));
     if (exists.length) throw new DomainError('conflict', 'That code already exists', { field: 'code' });
+    // U9: an org coupon owns its code across every event.
+    const [coupon] = await tx.select({ id: coupons.id }).from(coupons).where(eq(coupons.code, input.code));
+    if (coupon) throw new DomainError('conflict', 'That code already exists', { field: 'code' });
     const [row] = await tx
       .insert(promoCodes)
       .values({ ...input, orgId: requireOrg(ctx), currency: event.currency })
@@ -197,4 +209,15 @@ export const listPromoCodesQuery = tenantQuery({
       .from(promoCodes)
       .where(eq(promoCodes.eventId, input.eventId))
       .orderBy(asc(promoCodes.createdAt)),
+});
+
+/** U9: every event's promo codes, for the org's one Coupons list (usage counts included). */
+export const listOrgPromoCodesQuery = tenantQuery({
+  name: 'ticketing.listOrgPromoCodes',
+  input: z.object({}),
+  output: z.array(PromoCodeDto),
+  entitlement: 'ticketing',
+  permission: 'events:read',
+  handler: async ({ tx }) =>
+    tx.select().from(promoCodes).orderBy(asc(promoCodes.code), asc(promoCodes.createdAt)),
 });

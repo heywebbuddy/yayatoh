@@ -42,6 +42,7 @@ export async function PublicSpeakerView({
   // M1.4h: speaker photos (this speaker's, and co-speakers' avatars in the session list).
   const images = Object.fromEntries(await publicProgramMedia(target.orgId, target.eventId, { privateOk }));
   const t = await getTranslations('publicEvent');
+  const ta = await getTranslations('agenda');
   const time = new Intl.DateTimeFormat(locale, {
     timeZone: pub.timezone,
     hour: 'numeric',
@@ -55,7 +56,7 @@ export async function PublicSpeakerView({
   });
   const { speaker } = page;
   return (
-    <main id="main" className="mx-auto flex min-h-dvh max-w-3xl flex-col gap-6 bg-white px-6 py-10">
+    <main id="main" className="mx-auto flex min-h-dvh max-w-3xl flex-col gap-6 bg-surface px-6 py-10">
       <nav aria-label={t('breadcrumb')}>
         <Link
           href={`/events/${slug}#speakers`}
@@ -74,9 +75,9 @@ export async function PublicSpeakerView({
           />
         ) : null}
         <div className="flex flex-col gap-1">
-          <h1 className="text-[36px] leading-tight font-normal tracking-[-0.03em]">{speaker.name}</h1>
+          <h1 className="text-[36px] leading-tight font-extrabold tracking-[-0.03em]">{speaker.name}</h1>
           {speaker.title || speaker.company ? (
-            <p className="text-body text-zinc-600">
+            <p className="text-body text-ink-2">
               {[speaker.title, speaker.company].filter(Boolean).join(' · ')}
             </p>
           ) : null}
@@ -108,9 +109,9 @@ export async function PublicSpeakerView({
           {t('speakerSessions')}
         </h2>
         {page.sessions.length === 0 ? (
-          <p className="text-body text-zinc-500">{t('speakerNoSessions')}</p>
+          <p className="text-body text-ink-2">{t('speakerNoSessions')}</p>
         ) : (
-          <ol className="list-none divide-y divide-zinc-100 rounded-card border border-zinc-200 p-0">
+          <ol className="list-none divide-y divide-line rounded-card border border-line p-0">
             {page.sessions.map((s) => (
               <SessionRow
                 key={s.id}
@@ -119,11 +120,12 @@ export async function PublicSpeakerView({
                 time={time}
                 day={day.format(s.startsAt)}
                 images={images}
+                optionalLabel={ta('optional')}
               />
             ))}
           </ol>
         )}
-        <p className="text-caption text-zinc-500">
+        <p className="text-caption text-ink-2">
           {t('datesTimezone', { timezone: pub.timezone.replace(/_/g, ' ') })}
         </p>
       </section>

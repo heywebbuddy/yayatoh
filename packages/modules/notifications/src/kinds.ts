@@ -57,6 +57,61 @@ export const KINDS = {
     urgent: true,
     params: ['url', 'name', 'eventName', 'reason'],
   },
+  // M3.10c support tools: a credit note (store credit code or recorded refund), a support macro's
+  // reply, an approaching dispute evidence deadline (finance), and ticket transfers (the claim link
+  // to the recipient, then the outcome to both sides).
+  'orders.credit-note': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: ['url', 'name', 'eventName', 'number', 'amountMinor', 'currency', 'storeCredit', 'code'],
+  },
+  // M5.1d: a pay-later invoice (number, amount, due date; the link views, downloads and pays it).
+  'orders.invoice': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['url', 'name', 'eventName', 'number', 'amountMinor', 'currency', 'dueOn'],
+  },
+  'orders.support-reply': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['url', 'name', 'eventName', 'subject', 'body'],
+  },
+  'payments.dispute-deadline': {
+    category: 'sales',
+    channels: ['in_app', 'email'],
+    urgent: true,
+    audience: ['owner', 'admin', 'finance'],
+    params: ['eventName', 'amountMinor', 'currency', 'hours'],
+  },
+  'ticketing.transfer-offered': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['url', 'name', 'fromName', 'eventName'],
+  },
+  'ticketing.transfer-completed': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['name', 'toName', 'eventName'],
+  },
+  'ticketing.transfer-received': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['url', 'name', 'fromName', 'eventName'],
+  },
+  // M4.2b gala tables: a table's claim link to its buyer (after payment, on request, or the
+  // host's naming reminder: `reminder` = 1).
+  'orders.table-naming': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['url', 'name', 'eventName', 'tableName', 'size', 'missing', 'reminder'],
+  },
   'events.postponed': {
     category: 'transactional',
     channels: ['email'],
@@ -113,6 +168,13 @@ export const KINDS = {
     urgent: true,
     params: ['code', 'eventName', 'url', 'minutes'],
   },
+  /** M5.5c: a badge kiosk's one-time code, sent at once by the web app (never queued). */
+  'badges.kiosk-code': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['code', 'eventName', 'minutes'],
+  },
   /** M1.5f: sent at once by the web app (never queued: the code is never stored). */
   'guest.checkout-code': {
     category: 'transactional',
@@ -125,6 +187,66 @@ export const KINDS = {
     channels: ['email'],
     urgent: true,
     params: ['code', 'url', 'minutes', 'linkMinutes', 'site'],
+  },
+  // M5.3a portal accounts (P5-7): the invitation (queued) and the sign-in code with its magic link
+  // (sent at once by the web app, never queued, like guest.sign-in).
+  'portal.invite': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['url', 'eventName', 'role'],
+  },
+  'portal.sign-in': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['code', 'url', 'minutes', 'linkMinutes', 'eventName'],
+  },
+  // M5.3a: "remind whoever is missing X" and the scheduled reminder before a task is due.
+  'program.task-reminder': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: ['url', 'eventName', 'title', 'until', 'timeZone'],
+  },
+  // M5.3b: call for papers — the proposal arrived, and the decision (to every speaker on it).
+  'program.cfp-received': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: ['eventName', 'title'],
+  },
+  'program.cfp-accepted': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: ['eventName', 'title', 'note', 'hasNote'],
+  },
+  'program.cfp-rejected': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: ['eventName', 'title', 'note', 'hasNote'],
+  },
+  // M6.1c data-subject requests: the self-service confirmation code (sent at once by the web app,
+  // never queued, like guest.sign-in), then the archive link or the erasure receipt link.
+  'privacy.request-code': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['code', 'minutes', 'kind'],
+  },
+  'privacy.archive-ready': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['url', 'days'],
+  },
+  'privacy.erasure-done': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['url'],
   },
   'guest.waitlist-code': {
     category: 'transactional',
@@ -149,6 +271,39 @@ export const KINDS = {
     channels: ['email'],
     urgent: false,
     params: ['url', 'name', 'eventName', 'passName'],
+  },
+  // Session waitlist promotion (M5.2b, P5-9): enrolled at once, or offered a place until a time.
+  'registration.session-enrolled': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: ['url', 'name', 'eventName', 'sessionTitle', 'startsAt', 'timeZone'],
+  },
+  'registration.session-offer': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['url', 'name', 'eventName', 'sessionTitle', 'startsAt', 'until', 'timeZone'],
+  },
+  // Registration form save and resume (M5.1b): the person asked for their link.
+  'forms.resume': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['url', 'name', 'eventName', 'days'],
+  },
+  // Apply-to-attend decisions (M5.1c): the applicant's link (pay step or confirmation), the reason.
+  'registration.approved': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['url', 'name', 'eventName', 'typeName', 'body'],
+  },
+  'registration.denied': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['url', 'name', 'eventName', 'typeName', 'body'],
   },
   'orders.order-link': {
     category: 'transactional',
@@ -190,12 +345,45 @@ export const KINDS = {
     urgent: false,
     params: ['url', 'name', 'eventName', 'title'],
   },
+  // Journeys (M3.7a): a step's message, written by the organizer (subject and body), sent on the
+  // step's own channel (email, SMS, WhatsApp or push) to one person about one event. Reminders:
+  // the person can switch them off, texts need informational consent, quiet hours apply.
+  // M4.1f: a wedding party's invitation (the host's wording, the party's RSVP link) and the RSVP
+  // deadline reminders of its journey. Transactional (P4-3: guests are never marketing; no
+  // consent or contact needed), not urgent: quiet hours apply in the event's timezone.
+  'guests.invitation': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: ['url', 'subject', 'message', 'eventName'],
+  },
+  'guests.rsvp-reminder': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: ['url', 'name', 'eventName', 'deadline'],
+  },
+  'automations.message': {
+    category: 'reminders',
+    channels: ['email'],
+    urgent: false,
+    params: ['subject', 'body', 'name', 'eventName'],
+  },
   'sales.order_paid': {
     category: 'sales',
     channels: ['in_app', 'email', 'push'],
     urgent: true,
     audience: SALES_TEAM,
     params: ['name', 'eventName', 'count', 'amountMinor', 'currency'],
+  },
+  // U10: a visitor wrote through the org's contact page (its site). The message team hears at once;
+  // the email carries the visitor's name, address and an excerpt (the full text is in the console).
+  'cms.contact_message': {
+    category: 'messages',
+    channels: ['in_app', 'email'],
+    urgent: true,
+    audience: ['owner', 'admin', 'manager', 'marketing'],
+    params: ['name', 'email', 'body'],
   },
   'messaging.contact_replied': {
     category: 'messages',
@@ -249,6 +437,15 @@ export const KINDS = {
     whatsapp: 'marketing',
     params: ['subject', 'body', 'name'],
   },
+  // A campaign test send (M3.6b) to up to five addresses the sender typed: clearly marked, never
+  // counted in the campaign's results, sent at once (the sender is waiting for it). The body is
+  // the campaign's stored content; transactional so the consent gate (marketing) doesn't apply.
+  'campaigns.test': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['subject'],
+  },
   // The org's complaint rate went over the limit and optional messaging paused itself (M3.5a).
   'messaging.auto_paused': {
     category: 'transactional',
@@ -257,11 +454,111 @@ export const KINDS = {
     audience: ['owner', 'admin'],
     params: ['rateBps'],
   },
+  // M3.2b: Command Center alerts, sent to the members the alerts module's per-role routing
+  // reaches. In-app, email and push go out at once; a text goes to the member's own alert number
+  // as `alerts.alert-text`, which waits out quiet hours.
+  'alerts.alert': {
+    category: 'transactional',
+    channels: ['in_app', 'email', 'push'],
+    urgent: true,
+    params: ['rule', 'count', 'severity', 'eventName'],
+  },
+  'alerts.alert-text': {
+    category: 'transactional',
+    channels: ['sms'],
+    urgent: false,
+    params: ['rule', 'count', 'severity', 'eventName'],
+  },
+  // M3.3a live-critical escalation: the same text to a member on duty at the event's doors, sent
+  // at once (devices offline, capacity reached, a payment outage while the doors are open).
+  'alerts.alert-urgent-text': {
+    category: 'transactional',
+    channels: ['sms'],
+    urgent: true,
+    params: ['rule', 'count', 'severity', 'eventName'],
+  },
+  // M6.2b: an organizer-authored alert rule (analytics) fired, through the alerts engine's
+  // routing (in-app, email, push; no texts). `alerts.metric` waits out quiet hours in the
+  // recipient's time zone (the rule's default); `alerts.metric-now` goes at once.
+  'alerts.metric': {
+    category: 'transactional',
+    channels: ['in_app', 'email', 'push'],
+    urgent: false,
+    params: ['title', 'reading', 'windowDays', 'severity'],
+  },
+  'alerts.metric-now': {
+    category: 'transactional',
+    channels: ['in_app', 'email', 'push'],
+    urgent: true,
+    params: ['title', 'reading', 'windowDays', 'severity'],
+  },
+  // M6.2b: a scheduled analytics report (PDF) for a period is ready; the button opens it in the
+  // console (members only; the PDF is in the member's language).
+  'analytics.report': {
+    category: 'transactional',
+    channels: ['in_app', 'email'],
+    urgent: true,
+    params: ['name', 'period'],
+  },
   'notifications.test': {
     category: 'transactional',
     channels: ['in_app', 'push'],
     urgent: true,
     params: [],
+  },
+  // M4.8b: a donation receipt (one per payment) and the year-end giving statement, to the donor
+  // only. The receipt's own wording (`body`) is the donations module's legal-copy template.
+  'donations.receipt': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: ['url', 'name', 'eventName', 'amountMinor', 'currency', 'deductible', 'body'],
+  },
+  // M6.9b: a CE certificate (one message per revision), to the ticket holder only. The
+  // certificate's own wording (`body`) is the ce module's legal-copy template.
+  'ce.certificate': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: ['url', 'name', 'eventName', 'credits', 'code', 'revision', 'body'],
+  },
+  'donations.year-end-statement': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: ['url', 'name', 'year', 'amountMinor', 'currency', 'body'],
+  },
+  // M4.8e: pledge collection (P4-12), to the donor only. The summary after the night is closed
+  // (the card and the charge time, or the pay links and the due date), the invoice when a card
+  // charge falls back to a pay link, and the reminders (cancelled the moment it is paid).
+  'donations.pledge-summary': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: [
+      'url',
+      'name',
+      'eventName',
+      'amountMinor',
+      'currency',
+      'mode',
+      'card',
+      'chargeAt',
+      'dueOn',
+      'body',
+    ],
+  },
+  'donations.pledge-invoice': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: ['url', 'name', 'eventName', 'amountMinor', 'currency', 'reason', 'dueOn'],
+  },
+  'donations.pledge-reminder': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: ['url', 'name', 'eventName', 'amountMinor', 'currency', 'dueOn', 'step'],
   },
 } as const satisfies Record<string, KindDefinition>;
 

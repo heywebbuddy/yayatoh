@@ -1,6 +1,7 @@
-import type { ORG_ROLES } from '../schema.ts';
+import type { AGENCY_GRANT_ROLES, ORG_ROLES } from '../schema.ts';
 
 export type OrgRole = (typeof ORG_ROLES)[number];
+export type AgencyGrantRole = (typeof AGENCY_GRANT_ROLES)[number];
 
 /** Org-level permissions. Event-scoped roles arrive with events (M1.4). */
 export const PERMISSIONS = [
@@ -24,7 +25,16 @@ export const PERMISSIONS = [
   'attendees:write',
   /** Download attendee lists (CSV). Contact data leaving the platform: narrower than read. */
   'attendees:export',
+  /**
+   * Include private answers (dietary, accessibility, private RSVP questions; P4-3) in a guest
+   * answers export (M4.1e). Owners and admins; co-hosts on their event (`attendees:*`).
+   */
+  'attendees:export_private',
   'contacts:read',
+  /** Merge duplicate contacts and undo merges (M6.1a): moves orders, tickets and history. */
+  'contacts:merge',
+  /** Add contacts to the org's CRM from outside (/v1 and Zapier's "Add contact", M6.4c). */
+  'contacts:write',
   'finance:read',
   /** Resolve reconciliation differences (M1.6e). */
   'finance:reconcile',
@@ -38,6 +48,13 @@ export const PERMISSIONS = [
   'marketing:read',
   'marketing:write',
   'checkin:scan',
+  /**
+   * Door supervisor (M3.4a): every device of the org in the Scan PWA, force a sync, switch a
+   * device's entrance, revoke a device (step-up), and receive device alerts.
+   */
+  'checkin:supervise',
+  /** Put a device into kiosk mode (self check-in locked to one entrance, PIN to exit; M3.4a). */
+  'checkin:kiosk',
   /** Create and revoke org API keys (/v1). */
   'api_keys:manage',
   /** Read the organizer inbox (conversations with customers) and the announcement log. */
@@ -58,6 +75,51 @@ export const PERMISSIONS = [
   'guests:read',
   /** Add, change, move and remove parties and guests (M4.1a). Event-scoped for co-hosts and planners. */
   'guests:write',
+  /** Acknowledge and snooze Command Center alerts (M3.2b). Viewers and scanners only see them. */
+  'alerts:manage',
+  /** See an event's help requests (M3.3b guest assistance queue): guests' notes are staff-only. */
+  'assistance:read',
+  /** Take, assign, start, resolve and cancel help requests, and add notes (M3.3b). */
+  'assistance:manage',
+  /** See a gala's purchased tables, their buyers and named guests (M4.2b Tables & Sponsors). */
+  'tables:read',
+  /** Name a purchased table's guests by hand and send naming reminders (M4.2b). */
+  'tables:write',
+  /** Create and delete sandbox orgs linked to this org (M6.3a). Owners and admins. */
+  'sandbox:manage',
+  /** Webhook endpoints, their signing secrets, test sends and replays (M6.3b). Owners and admins. */
+  'webhooks:manage',
+  /**
+   * Subscribe and unsubscribe REST hooks (/v1 `hooks`, M6.4c): Zapier-style endpoints that receive
+   * one event type. Narrower than `webhooks:manage` (no secrets, no other endpoints). Owners, admins.
+   */
+  'webhooks:subscribe',
+  /** See the org's integrations: connections, sync history, mappings and the errors inbox (M6.4a). */
+  'integrations:read',
+  /**
+   * Connect, map, sync, pause and disconnect third-party integrations, and work the errors inbox
+   * (M6.4a). Org data leaves through them: owners and admins only.
+   */
+  'integrations:manage',
+  /**
+   * Single sign-on and SCIM (M6.5a): the IdP connection, verified domains and their enforcement,
+   * the SCIM token and group-to-role mapping. Who can sign in and with which role: owners and admins.
+   */
+  'sso:manage',
+  /**
+   * Change the org's subscription plan and pay a failed renewal (M6.6b). Owners and admins; finance
+   * sees the plan and usage (`billing:read`) but doesn't change it.
+   */
+  'billing:manage',
+  /** An agency org's Clients | Events | Marketing | Reports pages, read from its snapshots (M6.7a). */
+  'agency:read',
+  /**
+   * Agency v2 operations (M6.8b): publish templates and brand kits to clients, hand a client over,
+   * and give the agency's staff team and day-of access. Owners, admins and managers.
+   */
+  'agency:manage',
+  /** Fan one campaign out to clients, each sent in the client's own org (M6.8b). */
+  'agency:campaigns',
 ] as const;
 export type Permission = (typeof PERMISSIONS)[number];
 
@@ -82,11 +144,24 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'guests:write',
     'attendees:export',
     'contacts:read',
+    'contacts:merge',
+    'contacts:write',
     'marketing:read',
     'marketing:write',
     'checkin:scan',
+    'checkin:supervise',
+    'checkin:kiosk',
     'messages:read',
     'messages:send',
+    'alerts:manage',
+    'assistance:read',
+    'assistance:manage',
+    'tables:read',
+    'tables:write',
+    'integrations:read',
+    'agency:read',
+    'agency:manage',
+    'agency:campaigns',
   ],
   finance: [
     'org:read',
@@ -100,15 +175,19 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'disputes:respond',
     'payouts:manage',
     'marketing:read',
+    'alerts:manage',
   ],
   marketing: [
     'org:read',
     'events:read',
     'contacts:read',
+    'contacts:write',
     'marketing:read',
     'marketing:write',
     'messages:read',
     'messages:send',
+    'agency:read',
+    'agency:campaigns',
   ],
   box_office: [
     'org:read',
@@ -122,9 +201,15 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'attendees:write',
     'guests:write',
     'checkin:scan',
+    'checkin:kiosk',
     'messages:read',
+    'alerts:manage',
+    'assistance:read',
+    'assistance:manage',
+    'tables:read',
+    'tables:write',
   ],
-  scanner: ['org:read', 'checkin:scan'],
+  scanner: ['org:read', 'checkin:scan', 'assistance:read', 'assistance:manage'],
   viewer: [
     'org:read',
     'members:read',
@@ -134,6 +219,9 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'guests:read',
     'marketing:read',
     'event_team:read',
+    'assistance:read',
+    'tables:read',
+    'agency:read',
   ],
   /**
    * M4.2a: someone who works on specific events only (a co-host or planner invited to one event).
@@ -184,8 +272,65 @@ export function roleRequiresTwoFactor(role: string): boolean {
   return (TWO_FACTOR_ROLES as readonly string[]).includes(role);
 }
 
-export function roleCan(role: OrgRole, permission: string): boolean {
-  return (ROLE_PERMISSIONS[role] as readonly string[]).includes(permission);
+/**
+ * What an agency grant never carries into a client org (M6.7a, P6-8), whatever its role:
+ * platform powers, money and billing (unless the client opts in with `finance`), the client's
+ * members, API keys, audit log, privacy requests, org settings, refunds and box-office sales (both
+ * write the money tables), attendee exports (contact data leaving the client) and the client's own
+ * agency pages.
+ */
+// Batch 3k merge: sandboxes (M6.3a), webhook endpoints (M6.3b) and integrations (M6.4a) are the
+// client's own setup, where org data leaves the org: never through a grant.
+const AGENCY_NEVER =
+  /^(platform|payouts|billing|members|api_keys|audit|privacy|finance|disputes|agency|sandbox|webhooks|integrations):|^orders:(refund|sell)|^org:update$|^attendees:export/;
+
+/** What a client's finance opt-in adds to a grant (read-only: no refunds, payouts or disputes). */
+export const AGENCY_FINANCE_PERMISSIONS = ['finance:read', 'billing:read'] as const;
+
+/**
+ * The console role of someone acting in a client org through an agency grant: the granted role,
+ * with `_finance` when the client opted in to its money tables. Not stored anywhere: derived from
+ * the live grant on every request.
+ */
+export type AgencyConsoleRole = `agency_${AgencyGrantRole}` | `agency_${AgencyGrantRole}_finance`;
+export const AGENCY_CONSOLE_ROLES = [
+  'agency_manager',
+  'agency_manager_finance',
+  'agency_marketing',
+  'agency_marketing_finance',
+  'agency_viewer',
+  'agency_viewer_finance',
+] as const satisfies readonly AgencyConsoleRole[];
+
+/** A member's org role, or an agency grant's console role. */
+export type ConsoleRole = OrgRole | AgencyConsoleRole;
+
+export const agencyConsoleRole = (role: AgencyGrantRole, finance: boolean): AgencyConsoleRole =>
+  finance ? `agency_${role}_finance` : `agency_${role}`;
+
+export const isAgencyConsoleRole = (role: string): role is AgencyConsoleRole =>
+  (AGENCY_CONSOLE_ROLES as readonly string[]).includes(role);
+
+const agencyPermissions = (role: AgencyGrantRole, finance: boolean): readonly string[] => [
+  ...ROLE_PERMISSIONS[role].filter((p) => !AGENCY_NEVER.test(p)),
+  ...(finance ? AGENCY_FINANCE_PERMISSIONS : []),
+];
+
+/** Permissions of each agency console role (the granted role's, minus `AGENCY_NEVER`). */
+export const AGENCY_ROLE_PERMISSIONS: Readonly<Record<AgencyConsoleRole, readonly string[]>> = {
+  agency_manager: agencyPermissions('manager', false),
+  agency_manager_finance: agencyPermissions('manager', true),
+  agency_marketing: agencyPermissions('marketing', false),
+  agency_marketing_finance: agencyPermissions('marketing', true),
+  agency_viewer: agencyPermissions('viewer', false),
+  agency_viewer_finance: agencyPermissions('viewer', true),
+};
+
+export function roleCan(role: ConsoleRole, permission: string): boolean {
+  const list: readonly string[] = isAgencyConsoleRole(role)
+    ? AGENCY_ROLE_PERMISSIONS[role]
+    : ROLE_PERMISSIONS[role];
+  return list.includes(permission);
 }
 
 /**
@@ -208,10 +353,16 @@ export const EVENT_ROLE_PERMISSIONS: Readonly<Record<string, readonly string[]>>
     'attendees:write',
     'attendees:export',
     'checkin:scan',
+    'checkin:supervise',
+    'checkin:kiosk',
     'messages:read',
     'messages:send',
+    'assistance:read',
+    'assistance:manage',
+    'tables:read',
+    'tables:write',
   ],
-  door_staff: ['events:read', 'checkin:scan'],
+  door_staff: ['events:read', 'checkin:scan', 'assistance:read', 'assistance:manage'],
   session_scanner: ['checkin:scan'],
   /**
    * M4.2a (P4-8), the couple or the gala chair: everything about their event, including tickets,
@@ -239,6 +390,7 @@ export const EVENT_ROLE_PERMISSIONS: Readonly<Record<string, readonly string[]>>
     'dayof:*',
     'tickets:*',
     'tables:*',
+    'assistance:*',
   ],
   /**
    * M4.2a (P4-8): guests, RSVP, seating, website, gallery, messages and day-of for that event.
@@ -257,7 +409,10 @@ export const EVENT_ROLE_PERMISSIONS: Readonly<Record<string, readonly string[]>>
     'website:*',
     'gallery:*',
     'dayof:*',
+    'assistance:*',
   ],
+  /** Starts and stops kiosk mode on the event's devices (M3.4a); scans nothing themselves. */
+  kiosk_operator: ['checkin:kiosk'],
 };
 
 /** Event roles that can be given by invitation from an event's Team page (M4.2a). */
@@ -265,7 +420,7 @@ export const TEAM_EVENT_ROLES = ['co_host', 'planner'] as const;
 export type TeamEventRole = (typeof TEAM_EVENT_ROLES)[number];
 
 /** Permissions that no event role ever grants, whatever its wildcards (defence in depth). */
-const NEVER_EVENT_SCOPED = /^(platform|payouts|billing|members|api_keys|audit|privacy|org):/;
+const NEVER_EVENT_SCOPED = /^(platform|payouts|billing|members|api_keys|sandbox|webhooks|audit|privacy|org):/;
 
 function grants(entry: string, permission: string): boolean {
   if (entry === permission) return true;

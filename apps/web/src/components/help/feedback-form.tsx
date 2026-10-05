@@ -23,7 +23,7 @@ export function HelpFeedbackForm({
   return (
     <section
       aria-labelledby="help-feedback-title"
-      className="flex flex-col gap-3 rounded-card border border-zinc-200 p-4"
+      className="flex flex-col gap-3 rounded-card border border-line p-4"
     >
       <h2 id="help-feedback-title" className="text-body font-medium">
         {t('question')}
@@ -42,7 +42,7 @@ export function HelpFeedbackForm({
         <form action={formAction} className="flex flex-col gap-3">
           <input type="hidden" name="helpful" value="no" />
           <fieldset className="flex flex-col gap-2">
-            <legend className="mb-1 text-body text-zinc-700">{t('reasonLegend')}</legend>
+            <legend className="mb-1 text-body text-ink-2">{t('reasonLegend')}</legend>
             {FEEDBACK_REASONS.map((r) => (
               <label key={r} className="flex min-h-6 items-center gap-2 text-body">
                 <input type="radio" name="reason" value={r} className="size-5" />
@@ -57,7 +57,7 @@ export function HelpFeedbackForm({
       ) : null}
       <div aria-live="polite">
         {answered ? (
-          <p role="status" className="text-body text-zinc-700">
+          <p role="status" className="text-body text-ink-2">
             {t(answered === 'yes' ? 'thanksYes' : 'thanksNo')}
           </p>
         ) : null}

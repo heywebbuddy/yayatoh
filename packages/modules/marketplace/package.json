@@ -19,8 +19,10 @@
     "@yayatoh/events": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
     "@yayatoh/platform": "workspace:*",
+    "@yayatoh/reviews": "workspace:*",
     "@yayatoh/tenancy": "workspace:*",
     "@yayatoh/ticketing": "workspace:*",
+    "@yayatoh/venues": "workspace:*",
     "drizzle-orm": "catalog:",
     "zod": "catalog:"
   },

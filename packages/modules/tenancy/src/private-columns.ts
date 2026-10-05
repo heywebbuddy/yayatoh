@@ -27,6 +27,8 @@ export const privateColumns = columnPrivacy('tenancy', {
     signup_mode: 'vocab',
     completed_by: internal(undefined, { where: 'completed_at is not null' }),
   },
+  // Agency grants (M6.7a): the granted role ceiling.
+  org_access_grants: { role: 'vocab' },
   org_relationships: { kind: 'vocab', source: 'vocab' },
   // Staff status changes (M1.3f): the reason and who made it stay in the staff console.
   org_status_changes: {
@@ -53,4 +55,9 @@ export const privateColumns = columnPrivacy('tenancy', {
     logo_path: 'public',
     logo_alt: 'public',
   },
+  // M6.3a: daily API key usage counts (no text columns); sandbox links: the sandbox's name and
+  // address are shown to the parent org's admins only.
+  sandbox_orgs: { name: internal(), slug: internal() },
+  // M6.8b: agency team and day-of grants (vocabularies only; people are uuids).
+  agency_staff_grants: { kind: 'vocab', role: 'vocab' },
 });

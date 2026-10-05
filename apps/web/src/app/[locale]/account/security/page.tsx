@@ -48,7 +48,7 @@ export default async function SecurityPage({
       <main id="main" className="mx-auto flex w-full max-w-2xl flex-col gap-6 px-4 py-12 md:px-6">
         <PageHeader eyebrow={<Label>{t('security.eyebrow')}</Label>} title={t('security.title')} />
         <Card className="flex flex-col gap-3">
-          <p className="text-body text-zinc-600">{t('security.impersonating')}</p>
+          <p className="text-body text-ink-2">{t('security.impersonating')}</p>
           <Link href="/o" className={buttonClass('secondary', 'sm', 'self-start')}>
             {t('security.backToConsole')}
           </Link>
@@ -80,7 +80,7 @@ export default async function SecurityPage({
         {required && !status.enabled ? (
           <section
             aria-labelledby="required-heading"
-            className="flex flex-col gap-2 rounded-card border border-accent-700 bg-accent-50 px-5 py-4 text-accent-text"
+            className="flex flex-col gap-2 rounded-card border border-primary bg-primary-soft px-5 py-4 text-primary-ink"
           >
             <h2 id="required-heading" className="text-section">
               {t('security.requiredTitle')}
@@ -103,10 +103,10 @@ export default async function SecurityPage({
               label={status.enabled ? t('security.statusOn') : t('security.statusOff')}
             />
           </div>
-          <p className="text-body text-zinc-600">{t('security.appExplain')}</p>
+          <p className="text-body text-ink-2">{t('security.appExplain')}</p>
           {status.enabled ? (
             required ? (
-              <p className="text-body text-zinc-600">
+              <p className="text-body text-ink-2">
                 {t('security.cannotTurnOff', { reasons: reasons.join(' · ') })}
               </p>
             ) : (
@@ -129,7 +129,7 @@ export default async function SecurityPage({
             <h2 id="methods-heading" className="text-section">
               {t('security.methods.title')}
             </h2>
-            <p className="text-body text-zinc-600">{t('security.methods.explain')}</p>
+            <p className="text-body text-ink-2">{t('security.methods.explain')}</p>
             <SignInMethods
               providers={providers.length > 0 ? providers : linked.map((l) => l.provider)}
               linked={linked.map((l) => ({ provider: l.provider, linkedAt: day.format(l.linkedAt) }))}
@@ -142,7 +142,7 @@ export default async function SecurityPage({
             <h2 id="devices-heading" className="text-section">
               {t('security.devices.title')}
             </h2>
-            <p className="text-body text-zinc-600">{t('security.devices.explain')}</p>
+            <p className="text-body text-ink-2">{t('security.devices.explain')}</p>
             <TrustedDevices
               devices={devices.map((d) => ({
                 id: d.id,
@@ -158,7 +158,7 @@ export default async function SecurityPage({
           <h2 id="sessions-heading" className="text-section">
             {t('security.sessionsTitle')}
           </h2>
-          <p className="text-body text-zinc-600">{t('security.sessionsExplain')}</p>
+          <p className="text-body text-ink-2">{t('security.sessionsExplain')}</p>
           <SignOutEverywhere />
         </Card>
         {!required || status.enabled ? (

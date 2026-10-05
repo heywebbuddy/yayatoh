@@ -1,34 +1,42 @@
 import { getUsersByIds } from '@yayatoh/auth';
+import { sendStaffAlertPushes } from '@yayatoh/checkin';
 import { withPlatformReader } from '@yayatoh/db/platform';
 import {
   type DispatchDeps,
   devMailboxTransports,
   dispatchDue,
   fakeDeliverySecret,
+  liveTransports,
   type Transports,
   vapidConfig,
   withWebPush,
 } from '@yayatoh/notifications';
+import { emitOverdueTasks } from '@yayatoh/program';
 import { sql } from 'drizzle-orm';
 
 /**
- * The channel adapters for this environment. Real providers (SES, Twilio, FCM v1, APNs, VAPID)
- * arrive with the owner's accounts (docs/owner-inbox.md). Until then development and preview
- * write to the dev mailbox; production refuses to pretend and leaves messages queued.
+ * The channel adapters for this environment (M3.5b): the live providers (SES, Twilio, the
+ * WhatsApp Cloud API and the owner's gateway), chosen by config names once the owner's accounts
+ * exist (docs/owner-inbox.md); every other channel writes to the dev mailbox in development and
+ * preview. Production refuses to pretend: without a live email provider it leaves messages
+ * queued, and a channel without a live provider fails over to the category's next channel.
  */
 export function workerTransports(
   env: NodeJS.ProcessEnv = process.env,
   appOrigin = env.NEXT_PUBLIC_APP_ORIGIN ?? 'http://localhost:3000',
 ): Transports | null {
-  if (env.NODE_ENV === 'production' || env.VERCEL_ENV === 'production') return null;
+  const production = env.NODE_ENV === 'production' || env.VERCEL_ENV === 'production';
   // The fake provider's delivery reports wait in the mailbox for the dev drain (M1.10d). Web push
   // (M1.10e) uses the real adapter with the dev VAPID keys; with dev auth on, the fake push service
   // on the app's origin is reachable too.
-  return withWebPush(devMailboxTransports(undefined, { deliverySecret: fakeDeliverySecret(env) }), {
-    vapid: vapidConfig(env),
-    appOrigin,
-    fakeOrigin: env.YAYATOH_DEV_AUTH === '1' ? appOrigin : null,
-  });
+  const base = production
+    ? null
+    : withWebPush(devMailboxTransports(undefined, { deliverySecret: fakeDeliverySecret(env) }), {
+        vapid: vapidConfig(env),
+        appOrigin,
+        fakeOrigin: env.YAYATOH_DEV_AUTH === '1' ? appOrigin : null,
+      });
+  return liveTransports(env, appOrigin, base);
 }
 
 export const userEmails: NonNullable<DispatchDeps['userEmails']> = async (ids) =>
@@ -51,4 +59,39 @@ export async function dispatchNotifications(deps: DispatchDeps): Promise<number>
   let sent = 0;
   for (const { org_id } of orgs) sent += (await dispatchDue(org_id, deps, 100)).sent;
   return sent;
+}
+
+/**
+ * Staff alert pushes (M3.4a): orgs with queued pushes (SECURITY DEFINER, ids only), then each
+ * org's pushes under its RLS. Rows are claimed with SKIP LOCKED, so overlapping ticks are harmless.
+ */
+export async function dispatchStaffPushes(transports: Transports): Promise<number> {
+  const push = transports.push;
+  if (!push) return 0;
+  const orgs = await withPlatformReader(
+    { actor: 'system:staff-push', reason: 'find orgs with staff alert pushes to send' },
+    (tx) =>
+      tx.execute<{ org_id: string }>(sql`select org_id from checkin.orgs_with_queued_staff_pushes(100)`),
+  );
+  let sent = 0;
+  for (const { org_id } of orgs)
+    sent += (await sendStaffAlertPushes(org_id, { send: (m) => push.send(m) })).sent;
+  return sent;
+}
+
+/**
+ * M5.3a: report overdue portal tasks (`program.speaker_task.overdue@1`, once per assignee) for the
+ * orgs that have any, found through a SECURITY DEFINER function (ids only).
+ */
+export async function sweepOverdueTasks(now = new Date()): Promise<number> {
+  const orgs = await withPlatformReader(
+    { actor: 'system:program', reason: 'find orgs with overdue portal tasks' },
+    (tx) =>
+      tx.execute<{ org_id: string }>(
+        sql`select org_id from program.orgs_with_overdue_tasks(${now.toISOString()}::timestamptz, 100)`,
+      ),
+  );
+  let n = 0;
+  for (const { org_id } of orgs) n += await emitOverdueTasks(org_id, now);
+  return n;
 }

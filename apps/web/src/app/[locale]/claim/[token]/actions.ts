@@ -6,7 +6,7 @@ import { getLocale } from 'next-intl/server';
 import { redirect } from '@/i18n/navigation.ts';
 import { ports } from '@/server/ports.ts';
 
-export type ClaimState = { readonly code: string | null };
+export type ClaimState = { readonly code: string | null; readonly reason?: string };
 
 /** Claim the ticket; the new holder lands on their tickets page (a holder magic link). */
 export async function claimAction(token: string, _prev: ClaimState, form: FormData): Promise<ClaimState> {
@@ -21,7 +21,9 @@ export async function claimAction(token: string, _prev: ClaimState, form: FormDa
       ports,
     ));
   } catch (err) {
-    return { code: isDomainError(err) ? err.code : 'internal' };
+    if (!isDomainError(err)) return { code: 'internal' };
+    const reason = (err.details as { reason?: unknown } | undefined)?.reason;
+    return { code: err.code, ...(typeof reason === 'string' ? { reason } : {}) };
   }
   const locale = await getLocale();
   redirect({ href: holderToken ? `/my-tickets/${holderToken}` : `/claim/${token}`, locale });

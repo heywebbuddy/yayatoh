@@ -42,6 +42,8 @@ export interface NotificationIntent {
   readonly occurrenceId?: string | null;
   /** Not before this time (reminders). */
   readonly sendAfter?: Date | null;
+  /** In-app items: the console path the inbox item links to (org-relative, like members' notices). */
+  readonly href?: string | null;
 }
 
 /** A notification for org members, fanned out by role per the kind's category. */

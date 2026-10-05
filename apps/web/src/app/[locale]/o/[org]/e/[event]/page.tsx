@@ -2,10 +2,12 @@ import { type EventTransition, eventLifecycle } from '@yayatoh/events';
 import { Button, buttonClass, Card, PageHeader, ProgressRing } from '@yayatoh/ui';
 import { Check } from 'lucide-react';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { AlertsList } from '@/components/alerts-list.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { greetingKey } from '@/lib/event-status.ts';
 import { type FormatCtx, formatEventDateRange } from '@/lib/format.ts';
 import { readinessPercent } from '@/lib/readiness.ts';
+import { eventAlertItems } from '@/server/alerts.ts';
 import { loadEvent } from '@/server/console.ts';
 import { demoOverlay } from '@/server/demo.ts';
 import { loadReadiness } from '@/server/readiness.ts';
@@ -53,6 +55,8 @@ export default async function EventDashboard({
     ['published', 'postponed', 'cancelled', 'completed'].includes(ev.status) && ev.visibility !== 'private';
   const place = [ev.venueName, ev.city].filter(Boolean).join(', ');
   const base = `/o/${org}/e/${event}`;
+  // M3.2b: this event's active alerts (the Command Center's Alerts widget renders the same list).
+  const alertItems = demo ? null : await eventAlertItems(data, org, locale, ev.id, data.org.timezone);
 
   return (
     <>
@@ -74,7 +78,7 @@ export default async function EventDashboard({
             ) : null}
             {canWrite
               ? actions.slice(0, 3).map((a, i) => (
-                  <form key={a} action={transitionAction.bind(null, org, event, a)}>
+                  <form key={a} id={`event-action-${a}`} action={transitionAction.bind(null, org, event, a)}>
                     <Button type="submit" variant={i === 0 && a !== 'cancel' ? 'primary' : 'secondary'}>
                       {t(`eventActions.${a}`)}
                     </Button>
@@ -97,6 +101,15 @@ export default async function EventDashboard({
         <EventKpis eventId={ev.id} base={base} locale={locale} ctx={data.ctx} finance={can('finance:read')} />
       ) : null}
 
+      {alertItems && alertItems.length > 0 ? (
+        <AlertsList
+          title={t('alerts.widget.title')}
+          items={alertItems}
+          emptyText={t('alerts.widget.none')}
+          viewAll={{ href: `/o/${org}/alerts?event=${ev.id}`, label: t('alerts.widget.viewAll') }}
+        />
+      ) : null}
+
       {rules.length === 0 ? null : (
         <Card className="flex flex-col gap-3">
           <div className="flex flex-wrap items-center justify-between gap-2">
@@ -116,18 +129,18 @@ export default async function EventDashboard({
               {rules.map((r) => (
                 <li key={r.key} className="flex items-center gap-2.5 py-1 text-[13px]">
                   <span
-                    className={`flex size-[18px] items-center justify-center rounded-full ${r.done ? 'bg-green-500 text-white' : 'border border-zinc-300'}`}
+                    className={`flex size-[18px] items-center justify-center rounded-full ${r.done ? 'bg-success-dot text-white' : 'border border-line-strong'}`}
                   >
                     {r.done ? <Check aria-hidden="true" className="size-3" strokeWidth={2.5} /> : null}
                   </span>
                   {r.path !== undefined && !r.done ? (
                     <Link
                       href={r.path ? `${base}/${r.path}` : base}
-                      className="inline-flex min-h-6 items-center text-zinc-600 underline underline-offset-2"
+                      className="inline-flex min-h-6 items-center text-ink-2 underline underline-offset-2"
                     >
                       {t(`readiness.${r.key}`)}
                       {r.comingSoon ? (
-                        <span className="ms-1.5 text-caption text-zinc-500 no-underline">
+                        <span className="ms-1.5 text-caption text-ink-2 no-underline">
                           ({t('readiness.comingSoon')})
                         </span>
                       ) : (
@@ -135,7 +148,7 @@ export default async function EventDashboard({
                       )}
                     </Link>
                   ) : (
-                    <span className={r.done ? 'text-zinc-900' : 'text-zinc-500'}>
+                    <span className={r.done ? 'text-ink' : 'text-ink-2'}>
                       {t(`readiness.${r.key}`)}
                       <span className="sr-only">{r.done ? t('readiness.done') : t('readiness.todo')}</span>
                     </span>

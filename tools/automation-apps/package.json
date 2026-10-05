@@ -1,0 +1,30 @@
+{
+  "name": "@yayatoh/automation-apps",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "generate": "node cli.ts write",
+    "generate:check": "node cli.ts check"
+  },
+  "dependencies": {
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@yayatoh/api-v1": "workspace:*",
+    "@yayatoh/auth": "workspace:*",
+    "@yayatoh/config": "workspace:*",
+    "@yayatoh/db": "workspace:*",
+    "@yayatoh/kernel": "workspace:*",
+    "@yayatoh/payments": "workspace:*",
+    "@yayatoh/tenancy": "workspace:*",
+    "@yayatoh/testing": "workspace:*",
+    "hono": "catalog:",
+    "typescript": "catalog:"
+  }
+}

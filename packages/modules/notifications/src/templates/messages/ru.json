@@ -116,6 +116,10 @@
       "intro": "Вы ещё не ответили: {org} по-прежнему хотели бы узнать, как вам {eventName}.",
       "cta": "Пройти опрос"
     },
+    "automations.message": {
+      "subject": "{subject}",
+      "intro": "О событии {eventName}:"
+    },
     "guest.checkout-code": {
       "subject": "{code} — ваш код для подтверждения почты",
       "intro": "Введите {code}, чтобы подтвердить почту и завершить заказ у {org}. Код действует один раз и истекает через {minutes, plural, one {# минуту} few {# минуты} many {# минут} other {# минуты}}. Если вы его не запрашивали, просто проигнорируйте это письмо."
@@ -175,6 +179,190 @@
       "subject": "{eventName} перенесено",
       "intro": "{eventName} перенесено. Ваши билеты остаются действительными на новую дату. Если вы не сможете прийти, запросите возврат на странице заказа по правилам возврата организатора.",
       "cta": "Открыть мой заказ"
+    },
+    "alerts.alert": {
+      "subject": "{rule, select, unseated {{count, plural, one {{countWords} участник без места} few {{countWords} участника без мест} many {{countWords} участников без мест} other {{countWords} участника без мест}}} undistributed {{count, plural, one {{countWords} купленный билет не передан} few {{countWords} купленных билета не переданы} many {{countWords} купленных билетов не переданы} other {{countWords} купленного билета не передано}}} paymentsFailed {{count, plural, one {{countWords} платёж не прошёл} few {{countWords} платежа не прошли} many {{countWords} платежей не прошли} other {{countWords} платежа не прошло}}} paymentsStuck {{count, plural, one {{countWords} платёж завис} few {{countWords} платежа зависли} many {{countWords} платежей зависли} other {{countWords} платежа зависло}}} refundSurge {{count, plural, one {{countWords} возврат за последний час} few {{countWords} возврата за последний час} many {{countWords} возвратов за последний час} other {{countWords} возврата за последний час}}} devicesOffline {{count, plural, one {{countWords} устройство регистрации не в сети} few {{countWords} устройства регистрации не в сети} many {{countWords} устройств регистрации не в сети} other {{countWords} устройства регистрации не в сети}}} devicesLowBattery {{count, plural, one {{countWords} устройство регистрации с низким зарядом} few {{countWords} устройства регистрации с низким зарядом} many {{countWords} устройств регистрации с низким зарядом} other {{countWords} устройства регистрации с низким зарядом}}} devicesBacklog {{count, plural, one {{countWords} устройство регистрации ждёт синхронизации сканов} few {{countWords} устройства регистрации ждут синхронизации сканов} many {{countWords} устройств регистрации ждут синхронизации сканов} other {{countWords} устройства регистрации ждут синхронизации сканов}}} capacityNear {Площадка заполнена на {count} %} capacityFull {Площадка заполнена полностью ({count} %)} sellOut {Продано {count} % билетов} salesPace {Продажи билетов идут на {count} % от целевого темпа} readiness {{count, plural, one {{countWords} шаг настройки блокирует мероприятие} few {{countWords} шага настройки блокируют мероприятие} many {{countWords} шагов настройки блокируют мероприятие} other {{countWords} шага настройки блокируют мероприятие}}} domain {{count, plural, one {{countWords} собственный домен с проблемой} few {{countWords} собственных домена с проблемами} many {{countWords} собственных доменов с проблемами} other {{countWords} собственного домена с проблемами}}} payoutsPastDue {{count, plural, one {{countWords} требование к счёту выплат просрочено} few {{countWords} требования к счёту выплат просрочены} many {{countWords} требований к счёту выплат просрочены} other {{countWords} требования к счёту выплат просрочено}}} deliverability {Доставляемость писем требует внимания} automationFailed {{count, plural, one {{countWords} сообщение или массовое действие сегодня не выполнено} few {{countWords} сообщения или массовых действия сегодня не выполнены} many {{countWords} сообщений или массовых действий сегодня не выполнены} other {{countWords} сообщения или массового действия сегодня не выполнено}}} assistanceOverdue {{count, plural, one {{countWords} запрос помощи ждёт слишком долго} few {{countWords} запроса помощи ждут слишком долго} many {{countWords} запросов помощи ждут слишком долго} other {{countWords} запроса помощи ждут слишком долго}}} campaignFailed {{count, plural, one {{countWords} рассылка сегодня не удалась} few {{countWords} рассылки сегодня не удались} many {{countWords} рассылок сегодня не удались} other {{countWords} рассылки сегодня не удалось}}} disputeDeadline {{count, plural, one {По {countWords} спору скоро нужны доказательства} few {По {countWords} спорам скоро нужны доказательства} many {По {countWords} спорам скоро нужны доказательства} other {По {countWords} спора скоро нужны доказательства}}} pledgesUnpaid {{count, plural, one {{countWords} обещание пожертвования не оплачено через 14 дней после мероприятия} few {{countWords} обещания пожертвования не оплачены через 14 дней после мероприятия} many {{countWords} обещаний пожертвования не оплачены через 14 дней после мероприятия} other {{countWords} обещания пожертвования не оплачены через 14 дней после мероприятия}}} sessionsNearCapacity {{count, plural, one {{countWords} сессия заполнена более чем на 95 %} few {{countWords} сессии заполнены более чем на 95 %} many {{countWords} сессий заполнены более чем на 95 %} other {{countWords} сессии заполнены более чем на 95 %}}} sessionWaitlists {{count, plural, one {У {countWords} сессии длинная очередь} few {У {countWords} сессий длинные очереди} many {У {countWords} сессий длинные очереди} other {У {countWords} сессии длинные очереди}}} roomsTooSmall {{count, plural, one {В {countWords} сессии занято больше мест, чем в зале} few {В {countWords} сессиях занято больше мест, чем в залах} many {В {countWords} сессиях занято больше мест, чем в залах} other {В {countWords} сессиях занято больше мест, чем в залах}}} exhibitorsNoLeads {{count, plural, one {У {countWords} экспонента нет лидов} few {У {countWords} экспонентов нет лидов} many {У {countWords} экспонентов нет лидов} other {У {countWords} экспонента нет лидов}}} exhibitorsNoStaff {{count, plural, one {{countWords} экспонент не пригласил персонал стенда} few {{countWords} экспонента не пригласили персонал стенда} many {{countWords} экспонентов не пригласили персонал стенда} other {{countWords} экспонента не пригласили персонал стенда}}} speakerTasksOverdue {{count, plural, one {{countWords} задача спикера просрочена} few {{countWords} задачи спикеров просрочены} many {{countWords} задач спикеров просрочено} other {{countWords} задачи спикеров просрочены}}} deliverablesOverdue {{count, plural, one {{countWords} обязательство спонсора просрочено} few {{countWords} обязательства спонсоров просрочены} many {{countWords} обязательств спонсоров просрочено} other {{countWords} обязательства спонсоров просрочены}}} printersKiosksOffline {{count, plural, one {{countWords} принтер бейджей или киоск не в сети} few {{countWords} принтера бейджей или киоска не в сети} many {{countWords} принтеров бейджей или киосков не в сети} other {{countWords} принтера бейджей или киоска не в сети}}} approvalBacklog {{count, plural, one {{countWords} заявка ждёт решения} few {{countWords} заявки ждут решения} many {{countWords} заявок ждут решения} other {{countWords} заявки ждут решения}}} invoicesOverdue {{count, plural, one {{countWords} счёт просрочен} few {{countWords} счёта просрочены} many {{countWords} счетов просрочено} other {{countWords} счёта просрочены}}} rsvpPending {{count, plural, one {{countWords} гость не ответил на приглашение} few {{countWords} гостя не ответили на приглашение} many {{countWords} гостей не ответили на приглашение} other {{countWords} гостя не ответили на приглашение}}} guestsUnseated {{count, plural, one {{countWords} гость без стола} few {{countWords} гостя без стола} many {{countWords} гостей без стола} other {{countWords} гостя без стола}}} mealsMissing {{count, plural, one {{countWords} гость, который придёт, не выбрал блюдо} few {{countWords} гостя, которые придут, не выбрали блюдо} many {{countWords} гостей, которые придут, не выбрали блюдо} other {{countWords} гостя, которые придут, не выбрали блюдо}}} integrationFailed {{count, plural, one {Сегодня {countWords} проблема с интеграциями (сбой синхронизации или потерянное подключение)} few {Сегодня {countWords} проблемы с интеграциями (сбои синхронизации или потерянные подключения)} many {Сегодня {countWords} проблем с интеграциями (сбои синхронизации или потерянные подключения)} other {Сегодня {countWords} проблемы с интеграциями (сбои синхронизации или потерянные подключения)}}} billingPastDue {{count, plural, one {Оплата тарифа просрочена} few {{countWords} платежа за тариф просрочены} many {{countWords} платежей за тариф просрочены} other {{countWords} платежа за тариф просрочены}}} other {Оповещение}}",
+      "intro": "{eventName, select, none {В {org} что-то требует внимания.} other {На мероприятии «{eventName}» что-то требует внимания.}} Кнопка откроет страницу, где это можно исправить.",
+      "cta": "Исправить"
+    },
+    "alerts.alert-text": {
+      "subject": "{rule, select, unseated {{count, plural, one {{countWords} участник без места} few {{countWords} участника без мест} many {{countWords} участников без мест} other {{countWords} участника без мест}}} undistributed {{count, plural, one {{countWords} купленный билет не передан} few {{countWords} купленных билета не переданы} many {{countWords} купленных билетов не переданы} other {{countWords} купленного билета не передано}}} paymentsFailed {{count, plural, one {{countWords} платёж не прошёл} few {{countWords} платежа не прошли} many {{countWords} платежей не прошли} other {{countWords} платежа не прошло}}} paymentsStuck {{count, plural, one {{countWords} платёж завис} few {{countWords} платежа зависли} many {{countWords} платежей зависли} other {{countWords} платежа зависло}}} refundSurge {{count, plural, one {{countWords} возврат за последний час} few {{countWords} возврата за последний час} many {{countWords} возвратов за последний час} other {{countWords} возврата за последний час}}} devicesOffline {{count, plural, one {{countWords} устройство регистрации не в сети} few {{countWords} устройства регистрации не в сети} many {{countWords} устройств регистрации не в сети} other {{countWords} устройства регистрации не в сети}}} devicesLowBattery {{count, plural, one {{countWords} устройство регистрации с низким зарядом} few {{countWords} устройства регистрации с низким зарядом} many {{countWords} устройств регистрации с низким зарядом} other {{countWords} устройства регистрации с низким зарядом}}} devicesBacklog {{count, plural, one {{countWords} устройство регистрации ждёт синхронизации сканов} few {{countWords} устройства регистрации ждут синхронизации сканов} many {{countWords} устройств регистрации ждут синхронизации сканов} other {{countWords} устройства регистрации ждут синхронизации сканов}}} capacityNear {Площадка заполнена на {count} %} capacityFull {Площадка заполнена полностью ({count} %)} sellOut {Продано {count} % билетов} salesPace {Продажи билетов идут на {count} % от целевого темпа} readiness {{count, plural, one {{countWords} шаг настройки блокирует мероприятие} few {{countWords} шага настройки блокируют мероприятие} many {{countWords} шагов настройки блокируют мероприятие} other {{countWords} шага настройки блокируют мероприятие}}} domain {{count, plural, one {{countWords} собственный домен с проблемой} few {{countWords} собственных домена с проблемами} many {{countWords} собственных доменов с проблемами} other {{countWords} собственного домена с проблемами}}} payoutsPastDue {{count, plural, one {{countWords} требование к счёту выплат просрочено} few {{countWords} требования к счёту выплат просрочены} many {{countWords} требований к счёту выплат просрочены} other {{countWords} требования к счёту выплат просрочено}}} deliverability {Доставляемость писем требует внимания} automationFailed {{count, plural, one {{countWords} сообщение или массовое действие сегодня не выполнено} few {{countWords} сообщения или массовых действия сегодня не выполнены} many {{countWords} сообщений или массовых действий сегодня не выполнены} other {{countWords} сообщения или массового действия сегодня не выполнено}}} assistanceOverdue {{count, plural, one {{countWords} запрос помощи ждёт слишком долго} few {{countWords} запроса помощи ждут слишком долго} many {{countWords} запросов помощи ждут слишком долго} other {{countWords} запроса помощи ждут слишком долго}}} campaignFailed {{count, plural, one {{countWords} рассылка сегодня не удалась} few {{countWords} рассылки сегодня не удались} many {{countWords} рассылок сегодня не удались} other {{countWords} рассылки сегодня не удалось}}} disputeDeadline {{count, plural, one {По {countWords} спору скоро нужны доказательства} few {По {countWords} спорам скоро нужны доказательства} many {По {countWords} спорам скоро нужны доказательства} other {По {countWords} спора скоро нужны доказательства}}} pledgesUnpaid {{count, plural, one {{countWords} обещание пожертвования не оплачено через 14 дней после мероприятия} few {{countWords} обещания пожертвования не оплачены через 14 дней после мероприятия} many {{countWords} обещаний пожертвования не оплачены через 14 дней после мероприятия} other {{countWords} обещания пожертвования не оплачены через 14 дней после мероприятия}}} sessionsNearCapacity {{count, plural, one {{countWords} сессия заполнена более чем на 95 %} few {{countWords} сессии заполнены более чем на 95 %} many {{countWords} сессий заполнены более чем на 95 %} other {{countWords} сессии заполнены более чем на 95 %}}} sessionWaitlists {{count, plural, one {У {countWords} сессии длинная очередь} few {У {countWords} сессий длинные очереди} many {У {countWords} сессий длинные очереди} other {У {countWords} сессии длинные очереди}}} roomsTooSmall {{count, plural, one {В {countWords} сессии занято больше мест, чем в зале} few {В {countWords} сессиях занято больше мест, чем в залах} many {В {countWords} сессиях занято больше мест, чем в залах} other {В {countWords} сессиях занято больше мест, чем в залах}}} exhibitorsNoLeads {{count, plural, one {У {countWords} экспонента нет лидов} few {У {countWords} экспонентов нет лидов} many {У {countWords} экспонентов нет лидов} other {У {countWords} экспонента нет лидов}}} exhibitorsNoStaff {{count, plural, one {{countWords} экспонент не пригласил персонал стенда} few {{countWords} экспонента не пригласили персонал стенда} many {{countWords} экспонентов не пригласили персонал стенда} other {{countWords} экспонента не пригласили персонал стенда}}} speakerTasksOverdue {{count, plural, one {{countWords} задача спикера просрочена} few {{countWords} задачи спикеров просрочены} many {{countWords} задач спикеров просрочено} other {{countWords} задачи спикеров просрочены}}} deliverablesOverdue {{count, plural, one {{countWords} обязательство спонсора просрочено} few {{countWords} обязательства спонсоров просрочены} many {{countWords} обязательств спонсоров просрочено} other {{countWords} обязательства спонсоров просрочены}}} printersKiosksOffline {{count, plural, one {{countWords} принтер бейджей или киоск не в сети} few {{countWords} принтера бейджей или киоска не в сети} many {{countWords} принтеров бейджей или киосков не в сети} other {{countWords} принтера бейджей или киоска не в сети}}} approvalBacklog {{count, plural, one {{countWords} заявка ждёт решения} few {{countWords} заявки ждут решения} many {{countWords} заявок ждут решения} other {{countWords} заявки ждут решения}}} invoicesOverdue {{count, plural, one {{countWords} счёт просрочен} few {{countWords} счёта просрочены} many {{countWords} счетов просрочено} other {{countWords} счёта просрочены}}} rsvpPending {{count, plural, one {{countWords} гость не ответил на приглашение} few {{countWords} гостя не ответили на приглашение} many {{countWords} гостей не ответили на приглашение} other {{countWords} гостя не ответили на приглашение}}} guestsUnseated {{count, plural, one {{countWords} гость без стола} few {{countWords} гостя без стола} many {{countWords} гостей без стола} other {{countWords} гостя без стола}}} mealsMissing {{count, plural, one {{countWords} гость, который придёт, не выбрал блюдо} few {{countWords} гостя, которые придут, не выбрали блюдо} many {{countWords} гостей, которые придут, не выбрали блюдо} other {{countWords} гостя, которые придут, не выбрали блюдо}}} integrationFailed {{count, plural, one {Сегодня {countWords} проблема с интеграциями (сбой синхронизации или потерянное подключение)} few {Сегодня {countWords} проблемы с интеграциями (сбои синхронизации или потерянные подключения)} many {Сегодня {countWords} проблем с интеграциями (сбои синхронизации или потерянные подключения)} other {Сегодня {countWords} проблемы с интеграциями (сбои синхронизации или потерянные подключения)}}} billingPastDue {{count, plural, one {Оплата тарифа просрочена} few {{countWords} платежа за тариф просрочены} many {{countWords} платежей за тариф просрочены} other {{countWords} платежа за тариф просрочены}}} other {Оповещение}}",
+      "intro": "{eventName, select, none {В {org} что-то требует внимания.} other {На мероприятии «{eventName}» что-то требует внимания.}} Кнопка откроет страницу, где это можно исправить."
+    },
+    "campaigns.test": {
+      "subject": "[Тест] {subject}",
+      "intro": "Тестовая отправка вашей кампании."
+    },
+    "orders.credit-note": {
+      "subject": "Кредит-нота {number} для {eventName}",
+      "intro": "{org} выставил кредит-ноту {number} на {amount} по вашему заказу на {eventName}. {storeCredit, select, yes {Введите код {code} при оплате, чтобы использовать её в следующем заказе у {org}.} other {Эта сумма вам возвращена.}}",
+      "cta": "Посмотреть заказ"
+    },
+    "orders.invoice": {
+      "subject": "Счёт {number} за {eventName}",
+      "intro": "Вы зарегистрированы на {eventName}. {org} выставила счёт {number} на сумму {amount} со сроком оплаты {due}. Нажмите кнопку ниже, чтобы открыть его, скачать PDF или оплатить полностью или частично.",
+      "cta": "Открыть и оплатить счёт"
+    },
+    "orders.support-reply": {
+      "subject": "{subject}",
+      "intro": "Сообщение от {org} о вашем заказе на {eventName}:",
+      "cta": "Посмотреть заказ"
+    },
+    "payments.dispute-deadline": {
+      "subject": "Скоро срок доказательств по спору: {eventName}",
+      "intro": "Доказательства по спору на {amount} по заказу на {eventName} нужно отправить через {hours, plural, =0 {менее часа} one {# час} few {# часа} many {# часов} other {# часа}}. Проверьте и отправьте их до срока."
+    },
+    "ticketing.transfer-offered": {
+      "subject": "{fromName} отправил(а) вам билет на {eventName}",
+      "intro": "{fromName} передаёт вам билет на {eventName}. Получите его с этим адресом электронной почты, чтобы получить собственный QR-код.",
+      "cta": "Получить билет"
+    },
+    "ticketing.transfer-completed": {
+      "subject": "Ваш билет на {eventName} передан",
+      "intro": "{toName} получил(а) билет на {eventName}, который вы передали. Ваш старый QR-код больше не действует."
+    },
+    "ticketing.transfer-received": {
+      "subject": "Ваш билет на {eventName}",
+      "intro": "Вы получили билет на {eventName}, который отправил(а) {fromName}. Ваш собственный QR-код готов.",
+      "cta": "Посмотреть билет"
+    },
+    "forms.resume": {
+      "subject": "Продолжите регистрацию на {eventName}",
+      "intro": "Вот ваша ссылка, чтобы продолжить регистрацию на {eventName} с того места, где вы остановились. Она действует {days, plural, one {# день} few {# дня} many {# дней} other {# дня}} после последнего сохранения и только для вас, поэтому не пересылайте её. Если вы её не запрашивали, просто проигнорируйте это письмо.",
+      "cta": "Продолжить регистрацию"
+    },
+    "orders.table-naming": {
+      "subject": "{reminder, plural, =1 {Напоминание: укажите гостей на {eventName}} other {Укажите гостей на {eventName}}}",
+      "intro": "За вашим столом «{tableName}» {size, plural, one {# место} few {# места} many {# мест} other {# места}}. {missing, plural, =0 {У каждого места есть имя; проверить их можно в любое время.} one {Ещё # месту нужно имя.} few {Ещё # местам нужны имена.} many {Ещё # местам нужны имена.} other {Ещё # места нуждаются в именах.}} Нажмите кнопку ниже и укажите, кто сидит за вашим столом.",
+      "cta": "Указать гостей"
+    },
+    "registration.approved": {
+      "subject": "Ваша заявка на {eventName} одобрена",
+      "intro": "Хорошие новости, {name}: ваша заявка на участие в {eventName} в категории «{typeName}» одобрена. Нажмите кнопку ниже, чтобы открыть регистрацию и, если пропуск платный, оплатить его и подтвердить место.",
+      "cta": "Открыть мою регистрацию"
+    },
+    "registration.denied": {
+      "subject": "Ваша заявка на {eventName}",
+      "intro": "Спасибо за заявку на участие в {eventName} в категории «{typeName}», {name}. В этот раз организатор не смог её одобрить. Деньги с вас не списывались.",
+      "cta": "Открыть мою заявку"
+    },
+    "portal.invite": {
+      "subject": "Приглашение в портал «{eventName}»",
+      "intro": "{org} приглашает вас в портал мероприятия «{eventName}» в роли: {role}. Там вы увидите свои сессии, обновите профиль и выполните задачи. Кнопка запросит код входа, который придёт на этот адрес.",
+      "cta": "Открыть портал"
+    },
+    "portal.sign-in": {
+      "subject": "{code} — ваш код входа для «{eventName}»",
+      "intro": "Введите {code}, чтобы войти в портал «{eventName}», или нажмите кнопку ниже в том же браузере. Код действует: {minutes} мин. Кнопка действует: {linkMinutes} мин. Каждый срабатывает один раз. Если вы его не запрашивали, проигнорируйте это письмо.",
+      "cta": "Войти в портал"
+    },
+    "program.task-reminder": {
+      "subject": "Напоминание: {title} для «{eventName}»",
+      "intro": "{org} всё ещё ждёт «{title}» для «{eventName}». Срок: {until}.",
+      "cta": "Открыть мои задачи"
+    },
+    "donations.receipt": {
+      "subject": "{deductible, select, yes {Квитанция о пожертвовании от {org}} other {Квитанция об оплате от {org}}}",
+      "intro": "Спасибо за ваш платёж в размере {amount} за {eventName}. Квитанция приведена ниже. Сохраните её или PDF-копию вместе с вашими документами.",
+      "cta": "Скачать квитанцию в PDF"
+    },
+    "donations.year-end-statement": {
+      "subject": "Сводка пожертвований за {year} год от {org}",
+      "intro": "Спасибо, что поддержали {org} в {year} году. Сводка платежей, подлежащих налоговому вычету, приведена ниже и в PDF.",
+      "cta": "Скачать сводку в PDF"
+    },
+    "guests.invitation": {
+      "subject": "{subject}",
+      "intro": "{message}",
+      "cta": "Ответить на приглашение"
+    },
+    "guests.rsvp-reminder": {
+      "subject": "Напоминание: ответьте на приглашение на {eventName}",
+      "intro": "{name}, мы ещё не получили ваш ответ. Сообщите, пожалуйста, до {deadline}, кто придёт на {eventName}.",
+      "cta": "Ответить"
+    },
+    "registration.session-enrolled": {
+      "subject": "Освободилось место: вы записаны на {sessionTitle}",
+      "intro": "В {sessionTitle} на {eventName} ({when}) освободилось место, и вы были следующим в листе ожидания, поэтому теперь вы записаны. Если не сможете прийти, уберите сессию из своего расписания, чтобы место досталось следующему.",
+      "cta": "Открыть моё расписание"
+    },
+    "registration.session-offer": {
+      "subject": "Место на {sessionTitle} за вами до {until}",
+      "intro": "В {sessionTitle} на {eventName} ({when}) освободилось место, и вы следующий в очереди. Примите его в своём расписании до {until}; после этого оно перейдёт следующему.",
+      "cta": "Принять место"
+    },
+    "alerts.alert-urgent-text": {
+      "subject": "{rule, select, unseated {{count, plural, one {{countWords} участник без места} few {{countWords} участника без мест} many {{countWords} участников без мест} other {{countWords} участника без мест}}} undistributed {{count, plural, one {{countWords} купленный билет не передан} few {{countWords} купленных билета не переданы} many {{countWords} купленных билетов не переданы} other {{countWords} купленного билета не передано}}} paymentsFailed {{count, plural, one {{countWords} платёж не прошёл} few {{countWords} платежа не прошли} many {{countWords} платежей не прошли} other {{countWords} платежа не прошло}}} paymentsStuck {{count, plural, one {{countWords} платёж завис} few {{countWords} платежа зависли} many {{countWords} платежей зависли} other {{countWords} платежа зависло}}} refundSurge {{count, plural, one {{countWords} возврат за последний час} few {{countWords} возврата за последний час} many {{countWords} возвратов за последний час} other {{countWords} возврата за последний час}}} devicesOffline {{count, plural, one {{countWords} устройство регистрации не в сети} few {{countWords} устройства регистрации не в сети} many {{countWords} устройств регистрации не в сети} other {{countWords} устройства регистрации не в сети}}} devicesLowBattery {{count, plural, one {{countWords} устройство регистрации с низким зарядом} few {{countWords} устройства регистрации с низким зарядом} many {{countWords} устройств регистрации с низким зарядом} other {{countWords} устройства регистрации с низким зарядом}}} devicesBacklog {{count, plural, one {{countWords} устройство регистрации ждёт синхронизации сканов} few {{countWords} устройства регистрации ждут синхронизации сканов} many {{countWords} устройств регистрации ждут синхронизации сканов} other {{countWords} устройства регистрации ждут синхронизации сканов}}} capacityNear {Площадка заполнена на {count} %} capacityFull {Площадка заполнена полностью ({count} %)} sellOut {Продано {count} % билетов} salesPace {Продажи билетов идут на {count} % от целевого темпа} readiness {{count, plural, one {{countWords} шаг настройки блокирует мероприятие} few {{countWords} шага настройки блокируют мероприятие} many {{countWords} шагов настройки блокируют мероприятие} other {{countWords} шага настройки блокируют мероприятие}}} domain {{count, plural, one {{countWords} собственный домен с проблемой} few {{countWords} собственных домена с проблемами} many {{countWords} собственных доменов с проблемами} other {{countWords} собственного домена с проблемами}}} payoutsPastDue {{count, plural, one {{countWords} требование к счёту выплат просрочено} few {{countWords} требования к счёту выплат просрочены} many {{countWords} требований к счёту выплат просрочены} other {{countWords} требования к счёту выплат просрочено}}} deliverability {Доставляемость писем требует внимания} automationFailed {{count, plural, one {{countWords} сообщение или массовое действие сегодня не выполнено} few {{countWords} сообщения или массовых действия сегодня не выполнены} many {{countWords} сообщений или массовых действий сегодня не выполнены} other {{countWords} сообщения или массового действия сегодня не выполнено}}} assistanceOverdue {{count, plural, one {{countWords} запрос помощи ждёт слишком долго} few {{countWords} запроса помощи ждут слишком долго} many {{countWords} запросов помощи ждут слишком долго} other {{countWords} запроса помощи ждут слишком долго}}} campaignFailed {{count, plural, one {{countWords} рассылка сегодня не удалась} few {{countWords} рассылки сегодня не удались} many {{countWords} рассылок сегодня не удались} other {{countWords} рассылки сегодня не удалось}}} disputeDeadline {{count, plural, one {По {countWords} спору скоро нужны доказательства} few {По {countWords} спорам скоро нужны доказательства} many {По {countWords} спорам скоро нужны доказательства} other {По {countWords} спора скоро нужны доказательства}}} pledgesUnpaid {{count, plural, one {{countWords} обещание пожертвования не оплачено через 14 дней после мероприятия} few {{countWords} обещания пожертвования не оплачены через 14 дней после мероприятия} many {{countWords} обещаний пожертвования не оплачены через 14 дней после мероприятия} other {{countWords} обещания пожертвования не оплачены через 14 дней после мероприятия}}} sessionsNearCapacity {{count, plural, one {{countWords} сессия заполнена более чем на 95 %} few {{countWords} сессии заполнены более чем на 95 %} many {{countWords} сессий заполнены более чем на 95 %} other {{countWords} сессии заполнены более чем на 95 %}}} sessionWaitlists {{count, plural, one {У {countWords} сессии длинная очередь} few {У {countWords} сессий длинные очереди} many {У {countWords} сессий длинные очереди} other {У {countWords} сессии длинные очереди}}} roomsTooSmall {{count, plural, one {В {countWords} сессии занято больше мест, чем в зале} few {В {countWords} сессиях занято больше мест, чем в залах} many {В {countWords} сессиях занято больше мест, чем в залах} other {В {countWords} сессиях занято больше мест, чем в залах}}} exhibitorsNoLeads {{count, plural, one {У {countWords} экспонента нет лидов} few {У {countWords} экспонентов нет лидов} many {У {countWords} экспонентов нет лидов} other {У {countWords} экспонента нет лидов}}} exhibitorsNoStaff {{count, plural, one {{countWords} экспонент не пригласил персонал стенда} few {{countWords} экспонента не пригласили персонал стенда} many {{countWords} экспонентов не пригласили персонал стенда} other {{countWords} экспонента не пригласили персонал стенда}}} speakerTasksOverdue {{count, plural, one {{countWords} задача спикера просрочена} few {{countWords} задачи спикеров просрочены} many {{countWords} задач спикеров просрочено} other {{countWords} задачи спикеров просрочены}}} deliverablesOverdue {{count, plural, one {{countWords} обязательство спонсора просрочено} few {{countWords} обязательства спонсоров просрочены} many {{countWords} обязательств спонсоров просрочено} other {{countWords} обязательства спонсоров просрочены}}} printersKiosksOffline {{count, plural, one {{countWords} принтер бейджей или киоск не в сети} few {{countWords} принтера бейджей или киоска не в сети} many {{countWords} принтеров бейджей или киосков не в сети} other {{countWords} принтера бейджей или киоска не в сети}}} approvalBacklog {{count, plural, one {{countWords} заявка ждёт решения} few {{countWords} заявки ждут решения} many {{countWords} заявок ждут решения} other {{countWords} заявки ждут решения}}} invoicesOverdue {{count, plural, one {{countWords} счёт просрочен} few {{countWords} счёта просрочены} many {{countWords} счетов просрочено} other {{countWords} счёта просрочены}}} rsvpPending {{count, plural, one {{countWords} гость не ответил на приглашение} few {{countWords} гостя не ответили на приглашение} many {{countWords} гостей не ответили на приглашение} other {{countWords} гостя не ответили на приглашение}}} guestsUnseated {{count, plural, one {{countWords} гость без стола} few {{countWords} гостя без стола} many {{countWords} гостей без стола} other {{countWords} гостя без стола}}} mealsMissing {{count, plural, one {{countWords} гость, который придёт, не выбрал блюдо} few {{countWords} гостя, которые придут, не выбрали блюдо} many {{countWords} гостей, которые придут, не выбрали блюдо} other {{countWords} гостя, которые придут, не выбрали блюдо}}} integrationFailed {{count, plural, one {Сегодня {countWords} проблема с интеграциями (сбой синхронизации или потерянное подключение)} few {Сегодня {countWords} проблемы с интеграциями (сбои синхронизации или потерянные подключения)} many {Сегодня {countWords} проблем с интеграциями (сбои синхронизации или потерянные подключения)} other {Сегодня {countWords} проблемы с интеграциями (сбои синхронизации или потерянные подключения)}}} billingPastDue {{count, plural, one {Оплата тарифа просрочена} few {{countWords} платежа за тариф просрочены} many {{countWords} платежей за тариф просрочены} other {{countWords} платежа за тариф просрочены}}} other {Оповещение}}",
+      "intro": "{eventName, select, none {В {org} что-то требует внимания.} other {На мероприятии «{eventName}» что-то требует внимания.}} Кнопка откроет страницу, где это можно исправить."
+    },
+    "donations.pledge-summary": {
+      "subject": "{mode, select, card {Ваше обещание пожертвования для {org}: завтра мы спишем средства с карты} other {Ваше обещание пожертвования для {org}: как оплатить}}",
+      "intro": "{mode, select, card {Спасибо за обещание пожертвовать {amount} на {eventName}. Мы спишем сумму с вашей карты ({card}) {chargeAt}. Чтобы использовать другую карту или оплатить иначе, воспользуйтесь кнопкой ниже до этого времени.} other {Спасибо за обещание пожертвовать {amount} на {eventName}. Оплатите онлайн по ссылкам ниже до {dueOn}.}}",
+      "cta": "{mode, select, card {Сменить карту или оплатить иначе} other {Оплатить обещание}}"
+    },
+    "donations.pledge-invoice": {
+      "subject": "Ваше обещание пожертвования для {org}: оплатите онлайн",
+      "intro": "{reason, select, declined {Нам не удалось списать с вашей карты сумму обещания {amount} на {eventName}.} other {Сохранённую карту больше нельзя использовать для обещания {amount} на {eventName}.}} Оплатите онлайн до {dueOn}.",
+      "cta": "Оплатить обещание"
+    },
+    "donations.pledge-reminder": {
+      "subject": "Напоминание: ваше обещание {amount} для {org}",
+      "intro": "Ещё раз спасибо за обещание пожертвовать {amount} на {eventName}. Срок оплаты — {dueOn}. Если вы уже оплатили, просто проигнорируйте это письмо.",
+      "cta": "Оплатить обещание"
+    },
+    "program.cfp-received": {
+      "subject": "Мы получили вашу заявку «{title}»",
+      "intro": "Спасибо за заявку «{title}» на {eventName}. {org} рассмотрит её и сообщит решение по электронной почте."
+    },
+    "program.cfp-accepted": {
+      "subject": "Ваша заявка «{title}» принята",
+      "intro": "Хорошие новости: {org} принимает «{title}» на {eventName}. Организаторы скоро сообщат время вашего выступления.{hasNote, select, yes { Комментарий организаторов: {note}} other {}}"
+    },
+    "program.cfp-rejected": {
+      "subject": "О вашей заявке «{title}»",
+      "intro": "Спасибо за заявку «{title}» на {eventName}. В этот раз {org} не смогли включить её в программу.{hasNote, select, yes { Комментарий организаторов: {note}} other {}}"
+    },
+    "privacy.request-code": {
+      "subject": "{code} — ваш код для подтверждения запроса о персональных данных",
+      "intro": "Введите {code}, чтобы подтвердить запрос к {org}: {kind, select, erasure {удаление ваших персональных данных} other {копия ваших персональных данных}}. Код действует один раз и истекает через {minutes, plural, one {# минуту} few {# минуты} many {# минут} other {# минуты}}. Если вы его не запрашивали, проигнорируйте это письмо: без кода ничего не произойдёт."
+    },
+    "privacy.archive-ready": {
+      "subject": "Ваши персональные данные из {org} готовы",
+      "intro": "{org} ответила на ваш запрос: копия персональных данных о вас готова в ZIP-файле. Ссылка действует {days, plural, one {# день} few {# дня} many {# дней} other {# дня}}. Архив подписан, поэтому можно проверить, что его не изменяли.",
+      "cta": "Скачать мои данные"
+    },
+    "privacy.erasure-done": {
+      "subject": "{org} удалила ваши персональные данные",
+      "intro": "{org} удалила ваши персональные данные по вашему запросу. Некоторые записи по закону нужно хранить (например, оплаченные заказы для налогов) — без вашего имени и email; в квитанции они перечислены с причиной. Это последнее письмо по этому вопросу.",
+      "cta": "Посмотреть квитанцию"
+    },
+    "badges.kiosk-code": {
+      "subject": "{code} — ваш код для киоска бейджей на {eventName}",
+      "intro": "Введите {code} в киоске бейджей, чтобы проверить свои данные и напечатать бейдж. Код действует один раз и истекает через {minutes, plural, one {# минуту} few {# минуты} many {# минут} other {# минуты}}. Если вы его не запрашивали, просто проигнорируйте это письмо."
+    },
+    "alerts.metric": {
+      "subject": "Сработало правило оповещения «{title}»",
+      "intro": "{reading, select, none {Ваше правило оповещения «{title}» в {org} всё ещё срабатывает.} other {Ваше правило оповещения «{title}» в {org} сработало: {reading} за {windowDays, plural, one {последний # день} few {последние # дня} many {последние # дней} other {последние # дня}}.}} Откройте его, чтобы подтвердить или отложить.",
+      "cta": "Открыть оповещение"
+    },
+    "alerts.metric-now": {
+      "subject": "Сработало правило оповещения «{title}»",
+      "intro": "{reading, select, none {Ваше правило оповещения «{title}» в {org} всё ещё срабатывает.} other {Ваше правило оповещения «{title}» в {org} сработало: {reading} за {windowDays, plural, one {последний # день} few {последние # дня} many {последние # дней} other {последние # дня}}.}} Откройте его, чтобы подтвердить или отложить.",
+      "cta": "Открыть оповещение"
+    },
+    "analytics.report": {
+      "subject": "Ваш отчёт «{name}»: {period}",
+      "intro": "Отчёт «{name}» организации {org} за {period} готов. Откройте его, чтобы скачать PDF.",
+      "cta": "Скачать PDF"
+    },
+    "cms.contact_message": {
+      "subject": "Новое сообщение от {name} со страницы контактов",
+      "intro": "{name} ({email}) написал(а) вам через страницу контактов на вашем сайте:"
+    },
+    "ce.certificate": {
+      "subject": "Ваш сертификат от {org}",
+      "intro": "Вы получили {credits} на мероприятии {eventName}. Ваш сертификат (код {code}) ниже и в PDF.",
+      "cta": "Скачать сертификат в PDF"
     }
   },
   "roles": {
@@ -188,7 +376,12 @@
     "viewer": "наблюдатель",
     "co_host": "соорганизатор",
     "planner": "планировщик",
-    "collaborator": "участник события"
+    "collaborator": "участник события",
+    "speaker": "спикер",
+    "exhibitor_admin": "администратор экспонента",
+    "exhibitor_staff": "сотрудник экспонента",
+    "sponsor_contact": "контакт спонсора",
+    "cfp_reviewer": "рецензент заявок на доклады"
   },
   "account": {
     "deleted": {
@@ -244,5 +437,10 @@
         "intro": "Мы вернули Yayatoh к предыдущей версии, пока исправляем проблему. Билеты, купленные с {start}, остаются действительными. Если нам пришлось вернуть деньги за один из ваших заказов, вы получите отдельное письмо с суммой. Входите как раньше."
       }
     }
+  },
+  "campaigns": {
+    "testBanner": "Тестовое письмо: его получила только ваша команда. Поля подстановки показывают запасные значения.",
+    "eventCta": "Открыть мероприятие",
+    "testSubject": "[Тест] {subject}"
   }
 }

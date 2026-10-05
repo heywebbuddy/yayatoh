@@ -55,7 +55,7 @@ export async function MyTicketsView({
                   <Card className="flex flex-col gap-2">
                     {orgId ? null : <Label>{o.orgName}</Label>}
                     <h2 className="text-section">{o.eventName}</h2>
-                    <p className="text-caption text-zinc-600">
+                    <p className="text-caption text-ink-2">
                       {formatEventDateRange(o.startsAt.toISOString(), o.endsAt.toISOString(), {
                         locale,
                         currency: o.currency,
@@ -67,7 +67,7 @@ export async function MyTicketsView({
                         status={o.status === 'paid' ? 'success' : 'warning'}
                         label={t(`order.status.${o.status}`)}
                       />
-                      <span className="text-caption text-zinc-600">
+                      <span className="text-caption text-ink-2">
                         {t('attendeeSignIn.tickets', { count: o.tickets })}
                       </span>
                       <span className="font-mono text-caption tabular-nums">

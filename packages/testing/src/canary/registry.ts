@@ -1,14 +1,29 @@
+import { privateColumns as agency } from '@yayatoh/agency';
+import { privateColumns as agencyOps } from '@yayatoh/agency-ops';
 import { privateColumns as ai } from '@yayatoh/ai';
+import { privateColumns as alerts } from '@yayatoh/alerts';
+import { privateColumns as analytics } from '@yayatoh/analytics';
+import { privateColumns as assistance } from '@yayatoh/assistance';
 import { privateColumns as attendees } from '@yayatoh/attendees';
 import { privateColumns as audiences } from '@yayatoh/audiences';
+import { privateColumns as automations } from '@yayatoh/automations';
+import { privateColumns as badges } from '@yayatoh/badges';
 import { privateColumns as billing } from '@yayatoh/billing';
+import { privateColumns as campaigns } from '@yayatoh/campaigns';
+import { privateColumns as ce } from '@yayatoh/ce';
 import { privateColumns as checkin } from '@yayatoh/checkin';
 import { privateColumns as cms } from '@yayatoh/cms';
+import { privateColumns as commandCenter } from '@yayatoh/command-center';
 import { privateColumns as crm } from '@yayatoh/crm';
 import type { CanarySeed, ColumnRule, PrivateClass, PrivateColumn, SchemaPrivacy } from '@yayatoh/db';
+import { privateColumns as donations } from '@yayatoh/donations';
+import { privateColumns as engagement } from '@yayatoh/engagement';
 import { privateColumns as events } from '@yayatoh/events';
 import { privateColumns as forms } from '@yayatoh/forms';
+import { privateColumns as gallery } from '@yayatoh/gallery';
 import { privateColumns as guests } from '@yayatoh/guests';
+import { privateColumns as integrations } from '@yayatoh/integrations';
+import { privateColumns as leads } from '@yayatoh/leads';
 import { privateColumns as marketing } from '@yayatoh/marketing';
 import { privateColumns as marketplace } from '@yayatoh/marketplace';
 import { privateColumns as media } from '@yayatoh/media';
@@ -19,14 +34,18 @@ import { privateColumns as payments } from '@yayatoh/payments';
 import { privateColumns as platform } from '@yayatoh/platform';
 import { privateColumns as privacy } from '@yayatoh/privacy';
 import { privateColumns as program } from '@yayatoh/program';
+import { privateColumns as registration } from '@yayatoh/registration';
 import { privateColumns as reports } from '@yayatoh/reports';
 import { privateColumns as reviews } from '@yayatoh/reviews';
 import { privateColumns as seating } from '@yayatoh/seating';
+import { privateColumns as sso } from '@yayatoh/sso';
 import { privateColumns as surveys } from '@yayatoh/surveys';
 import { privateColumns as templates } from '@yayatoh/templates';
 import { privateColumns as tenancy } from '@yayatoh/tenancy';
 import { privateColumns as ticketing } from '@yayatoh/ticketing';
 import { privateColumns as venues } from '@yayatoh/venues';
+import { privateColumns as virtual } from '@yayatoh/virtual';
+import { privateColumns as webhooks } from '@yayatoh/webhooks';
 
 /**
  * Every module's column-privacy declaration (roadmap §9). A module that adds tenant tables exports
@@ -34,16 +53,32 @@ import { privateColumns as venues } from '@yayatoh/venues';
  * (`tests/column-privacy.test.ts`) names the exact line to add when a column is missing.
  */
 export const COLUMN_PRIVACY: readonly SchemaPrivacy[] = [
+  // M6.7a: the agency's client and event snapshots.
+  agency,
+  // M6.8b: agency v2 operations (published copies, fan-outs, detachments).
+  agencyOps,
   ai,
+  alerts,
+  analytics,
+  assistance,
   attendees,
   audiences,
+  automations,
+  badges,
   billing,
+  campaigns,
   checkin,
   cms,
+  commandCenter,
   crm,
+  engagement,
+  donations,
+  leads,
   events,
   forms,
+  gallery,
   guests,
+  integrations,
   marketing,
   marketplace,
   media,
@@ -54,6 +89,7 @@ export const COLUMN_PRIVACY: readonly SchemaPrivacy[] = [
   platform,
   privacy,
   program,
+  registration,
   reports,
   reviews,
   seating,
@@ -62,6 +98,10 @@ export const COLUMN_PRIVACY: readonly SchemaPrivacy[] = [
   tenancy,
   ticketing,
   venues,
+  sso,
+  virtual,
+  ce,
+  webhooks,
 ];
 
 /** `schema.table.column` */
@@ -100,6 +140,16 @@ export function privateColumnList(
 ): RegisteredPrivateColumn[] {
   return registeredColumns(list).filter((c): c is RegisteredPrivateColumn => isPrivate(c.rule));
 }
+
+/**
+ * Canaries that live in no column: secrets planted in fakes, which must never reach anything we
+ * store, log or serve. M6.4a: the fake `IntegrationAuth`'s OAuth tokens (`FAKE_ACCESS_TOKEN`,
+ * `FAKE_REFRESH_TOKEN`). The matcher classes them `secret`.
+ */
+export const PLANTED_SECRETS: readonly ColumnId[] = [
+  'integrations.oauth.access_token',
+  'integrations.oauth.refresh_token',
+];
 
 /** The canary a private column is filled with: `__CANARY_<schema>.<table>.<column>__`. */
 export const canaryToken = (id: ColumnId) => `__CANARY_${id}__`;

@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, Input } from '@yayatoh/ui';
+import { Alert, Button, DatePicker, DateTimePicker, Input, Select, TimePicker } from '@yayatoh/ui';
 import { useLocale, useTranslations } from 'next-intl';
 import { type FormEvent, startTransition, useActionState, useEffect, useRef, useState } from 'react';
 import type { DateFormState, RecurrenceState } from '@/app/[locale]/o/[org]/e/[event]/dates/actions.ts';
@@ -27,7 +27,7 @@ const PROBLEMS = new Set([
   'event_finished',
   'cancelled',
 ]);
-const select = 'min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body';
+const select = 'field';
 
 /** The message for a refused form, and the field it belongs to (shown next to that field). */
 function useProblem(state: DateFormState) {
@@ -61,22 +61,14 @@ export function AddDateForm({ action }: { action: Action<DateFormState> }) {
   const err = (f: string) => (field === f ? (message ?? undefined) : undefined);
   return (
     <form ref={ref} onSubmit={onSubmit} className="grid grid-cols-1 gap-4 md:grid-cols-3" noValidate>
-      <Input
+      <DateTimePicker
         id="add-startsAt"
         name="startsAt"
-        type="datetime-local"
         required
         label={t('startsAt')}
         error={err('startsAt')}
       />
-      <Input
-        id="add-endsAt"
-        name="endsAt"
-        type="datetime-local"
-        required
-        label={t('endsAt')}
-        error={err('endsAt')}
-      />
+      <DateTimePicker id="add-endsAt" name="endsAt" required label={t('endsAt')} error={err('endsAt')} />
       <Input
         id="add-capacity"
         name="capacity"
@@ -137,28 +129,25 @@ export function RecurrenceForm({
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-4" noValidate>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        <Input
+        <DatePicker
           id="rr-startDate"
           name="startDate"
-          type="date"
           required
           defaultValue={defaults.startDate}
           label={t('firstDate')}
           error={err('startDate')}
         />
-        <Input
+        <TimePicker
           id="rr-startTime"
           name="startTime"
-          type="time"
           required
           defaultValue={defaults.startTime}
           label={t('startTime')}
           error={err('startTime')}
         />
-        <Input
+        <TimePicker
           id="rr-endTime"
           name="endTime"
-          type="time"
           required
           defaultValue={defaults.endTime}
           label={t('endTime')}
@@ -166,20 +155,20 @@ export function RecurrenceForm({
           error={err('endTime')}
         />
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="rr-freq" className="text-caption text-zinc-600">
+          <label htmlFor="rr-freq" className="text-[13px] font-bold text-ink">
             {t('freq')}
           </label>
-          <select
+          <Select
             id="rr-freq"
             name="freq"
             value={freq}
-            onChange={(e) => setFreq(e.target.value as typeof freq)}
+            onValueChange={(v) => setFreq(v as typeof freq)}
             className={select}
           >
             <option value="daily">{t('freqs.daily')}</option>
             <option value="weekly">{t('freqs.weekly')}</option>
             <option value="monthly">{t('freqs.monthly')}</option>
-          </select>
+          </Select>
         </div>
         <Input
           id="rr-interval"
@@ -208,29 +197,29 @@ export function RecurrenceForm({
       </div>
       {freq === 'weekly' ? (
         <fieldset className="flex flex-col gap-2">
-          <legend className="text-caption text-zinc-600">{t('weekdays')}</legend>
+          <legend className="text-[13px] font-bold text-ink">{t('weekdays')}</legend>
           <div className="flex flex-wrap gap-2">
             {days.map((d, i) => (
               <label
                 key={d}
-                className="flex min-h-10 items-center gap-2 rounded-pill border border-zinc-200 bg-white px-3 text-body"
+                className="flex min-h-10 items-center gap-2 rounded-pill border border-line bg-surface px-3 text-body"
               >
                 <input
                   type="checkbox"
                   name="byWeekday"
                   value={i + 1}
                   defaultChecked={i + 1 === defaults.weekday}
-                  className="size-5 accent-ink"
+                  className="size-5 accent-primary"
                 />
                 {d}
               </label>
             ))}
           </div>
-          <p className="text-caption text-zinc-500">{t('weekdaysHint')}</p>
+          <p className="text-caption text-ink-2">{t('weekdaysHint')}</p>
         </fieldset>
       ) : null}
       <fieldset className="flex flex-col gap-2">
-        <legend className="text-caption text-zinc-600">{t('ends')}</legend>
+        <legend className="text-[13px] font-bold text-ink">{t('ends')}</legend>
         <div className="flex flex-wrap gap-4">
           {(['count', 'until'] as const).map((m) => (
             <label key={m} className="flex min-h-6 items-center gap-2 text-body">
@@ -240,7 +229,7 @@ export function RecurrenceForm({
                 value={m}
                 checked={endMode === m}
                 onChange={() => setEndMode(m)}
-                className="size-5 accent-ink"
+                className="size-5 accent-primary"
               />
               {t(m === 'count' ? 'endsAfter' : 'endsOn')}
             </label>
@@ -259,7 +248,7 @@ export function RecurrenceForm({
               error={err('count')}
             />
           ) : (
-            <Input id="rr-until" name="until" type="date" label={t('until')} error={err('until')} />
+            <DatePicker id="rr-until" name="until" label={t('until')} error={err('until')} />
           )}
           <Input
             id="rr-capacity"
@@ -278,7 +267,7 @@ export function RecurrenceForm({
         {!state.code && state.preview ? (
           <section
             aria-labelledby="preview-heading"
-            className="flex flex-col gap-2 rounded-card border border-zinc-200 bg-white p-4"
+            className="flex flex-col gap-2 rounded-card border border-line bg-surface p-4"
           >
             <h3 id="preview-heading" className="text-body font-medium">
               {t('previewTitle', { count: state.preview.total })}
@@ -294,7 +283,7 @@ export function RecurrenceForm({
               ))}
             </ol>
             {state.preview.total > state.preview.dates.length ? (
-              <p className="text-caption text-zinc-500">
+              <p className="text-caption text-ink-2">
                 {t('previewMore', { count: state.preview.total - state.preview.dates.length })}
               </p>
             ) : null}
@@ -333,19 +322,17 @@ export function EditDateForm({
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-4" noValidate>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        <Input
+        <DateTimePicker
           id="edit-startsAt"
           name="startsAt"
-          type="datetime-local"
           required
           defaultValue={defaults.startsAt}
           label={t('startsAt')}
           error={err('startsAt') ?? err('startTime')}
         />
-        <Input
+        <DateTimePicker
           id="edit-endsAt"
           name="endsAt"
-          type="datetime-local"
           required
           defaultValue={defaults.endsAt}
           label={t('endsAt')}
@@ -364,16 +351,16 @@ export function EditDateForm({
       </div>
       {canFollow ? (
         <fieldset className="flex flex-col gap-2">
-          <legend className="text-caption text-zinc-600">{t('scope')}</legend>
+          <legend className="text-[13px] font-bold text-ink">{t('scope')}</legend>
           <label className="flex min-h-6 items-center gap-2 text-body">
-            <input type="radio" name="scope" value="one" defaultChecked className="size-5 accent-ink" />
+            <input type="radio" name="scope" value="one" defaultChecked className="size-5 accent-primary" />
             {t('scopeOne')}
           </label>
           <label className="flex min-h-6 items-start gap-2 text-body">
-            <input type="radio" name="scope" value="following" className="mt-0.5 size-5 accent-ink" />
+            <input type="radio" name="scope" value="following" className="mt-0.5 size-5 accent-primary" />
             <span>
               {t('scopeFollowing')}
-              <span className="block text-caption text-zinc-500">{t('scopeFollowingHint')}</span>
+              <span className="block text-caption text-ink-2">{t('scopeFollowingHint')}</span>
             </span>
           </label>
         </fieldset>
@@ -408,17 +395,17 @@ export function SeriesPicker({
   return (
     <form action={formAction} className="flex flex-wrap items-end gap-3">
       <div className="flex min-w-56 flex-col gap-1.5">
-        <label htmlFor="seriesId" className="text-caption text-zinc-600">
+        <label htmlFor="seriesId" className="text-[13px] font-bold text-ink">
           {t('series')}
         </label>
-        <select id="seriesId" name="seriesId" defaultValue={current ?? ''} className={select}>
+        <Select id="seriesId" name="seriesId" defaultValue={current ?? ''} className={select}>
           <option value="">{t('noSeries')}</option>
           {series.map((s) => (
             <option key={s.id} value={s.id}>
               {s.name}
             </option>
           ))}
-        </select>
+        </Select>
       </div>
       <Button type="submit" variant="secondary" disabled={pending}>
         {t('saveSeries')}

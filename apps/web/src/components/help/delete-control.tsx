@@ -38,12 +38,12 @@ export function DeleteControl({
       {confirming ? (
         <section
           aria-labelledby="delete-confirm-title"
-          className="flex flex-col gap-3 rounded-card border border-pink-700 bg-white p-4"
+          className="flex flex-col gap-3 rounded-card border border-danger bg-surface p-4"
         >
           <h3 id="delete-confirm-title" className="text-body font-medium">
             {t('deleteConfirm.title', { title })}
           </h3>
-          <p className="text-body text-zinc-600">{t('deleteConfirm.body')}</p>
+          <p className="text-body text-ink-2">{t('deleteConfirm.body')}</p>
           <form action={formAction} className="flex flex-wrap gap-2">
             <Button ref={confirmRef} type="submit" variant="primary" disabled={pending}>
               {t('deleteConfirm.confirm')}

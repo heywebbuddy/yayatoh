@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, Input } from '@yayatoh/ui';
+import { Alert, Button, Input, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState, useEffect, useRef } from 'react';
 import type { TicketFormState } from '@/app/[locale]/o/[org]/e/[event]/tickets-orders/actions.ts';
@@ -33,18 +33,13 @@ export function PromoCodeForm({
         hint={t('promo.codeHint')}
       />
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="promo-kind" className="text-caption text-zinc-600">
+        <label htmlFor="promo-kind" className="text-[13px] font-bold text-ink">
           {t('promo.kind')}
         </label>
-        <select
-          id="promo-kind"
-          name="kind"
-          defaultValue="percent"
-          className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
-        >
+        <Select id="promo-kind" name="kind" defaultValue="percent" className="field">
           <option value="percent">{t('promo.percent')}</option>
           <option value="amount">{t('promo.amount', { currency })}</option>
-        </select>
+        </Select>
       </div>
       <Input
         name="value"

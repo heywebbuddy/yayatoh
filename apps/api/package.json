@@ -26,7 +26,9 @@
     "@yayatoh/kernel": "workspace:*",
     "@yayatoh/payments": "workspace:*",
     "@yayatoh/platform": "workspace:*",
+    "@yayatoh/registration": "workspace:*",
     "@yayatoh/tenancy": "workspace:*",
+    "@yayatoh/virtual": "workspace:*",
     "hono": "catalog:",
     "zod": "catalog:"
   },

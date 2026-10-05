@@ -1,5 +1,5 @@
 import type { TenantTx } from '@yayatoh/db';
-import { and, asc, eq, isNotNull, sql } from 'drizzle-orm';
+import { and, asc, eq, isNotNull, type SQL, sql } from 'drizzle-orm';
 import { ticketClaims, tickets, ticketTypes } from './schema.ts';
 
 export interface TicketTypeStats {
@@ -71,4 +71,32 @@ export async function orderIdsByShortCodeTx(tx: TenantTx, eventId: string, code:
     .from(tickets)
     .where(and(eq(tickets.eventId, eventId), eq(tickets.shortCode, c)));
   return rows.map((r) => r.orderId);
+}
+
+/**
+ * Purchased tickets still waiting to be handed on (M3.2b): a buyer keeps one ticket of each
+ * order; every further active ticket the same person still holds (never claimed through a claim
+ * link) is waiting to be distributed. A subquery of ticket ids (the attendee list's
+ * "waiting to be passed on" filter and the alert's count share it).
+ */
+export function undistributedTicketIdsSql(eventId: string): SQL {
+  return sql`select u.id from (
+      select t.id, row_number() over (partition by t.order_id, lower(t.holder_email) order by t.serial) as rn
+      from ticketing.tickets t
+      where t.event_id = ${eventId}::uuid and t.status = 'active'
+        and not exists (select 1 from ticketing.ticket_claims c
+          where c.org_id = t.org_id and c.ticket_id = t.id and c.claimed_at is not null)
+    ) u where u.rn > 1`;
+}
+
+/** Alert engine (M3.2b): how many tickets wait to be distributed, and the event's active tickets. */
+export async function undistributedTicketsTx(
+  tx: TenantTx,
+  eventId: string,
+): Promise<{ readonly undistributed: number; readonly active: number }> {
+  const [r] = await tx.execute<{ undistributed: number; active: number }>(sql`
+    select (select count(*)::int from (${undistributedTicketIdsSql(eventId)}) x) as undistributed,
+      (select count(*)::int from ticketing.tickets
+        where event_id = ${eventId}::uuid and status = 'active') as active`);
+  return { undistributed: Number(r?.undistributed ?? 0), active: Number(r?.active ?? 0) };
 }

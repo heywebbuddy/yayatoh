@@ -50,10 +50,7 @@ export default async function ContentPage({
         }
       />
       {canWrite ? null : (
-        <p
-          role="note"
-          className="rounded-card border border-zinc-200 bg-white px-4 py-3 text-body text-zinc-600"
-        >
+        <p role="note" className="rounded-card border border-line bg-surface px-4 py-3 text-body text-ink-2">
           {t('readOnly')}
         </p>
       )}
@@ -61,11 +58,26 @@ export default async function ContentPage({
       <nav aria-label={t('tabsLabel')} className="flex gap-2">
         {tab('post')}
         {tab('page')}
+        {/* U10: the contact page block of the org's site. */}
+        <Link href={`/o/${org}/content/contact`} className={buttonClass('secondary', 'sm')}>
+          {t('tabs.contact')}
+        </Link>
       </nav>
       {rows.length === 0 ? (
         <EmptyState
           title={t(kind === 'page' ? 'emptyPagesTitle' : 'emptyPostsTitle')}
           description={t(canWrite ? 'emptyDescription' : 'emptyDescriptionViewer')}
+          action={
+            canWrite ? (
+              <Link href={`/o/${org}/content/new?kind=${kind}`} className={buttonClass('secondary', 'md')}>
+                {t(kind === 'page' ? 'emptyActionPage' : 'emptyActionPost')}
+              </Link>
+            ) : (
+              <Link href={`/o/${org}/team`} className={buttonClass('primary', 'md')}>
+                {t('findOwner')}
+              </Link>
+            )
+          }
         />
       ) : (
         <Table
@@ -81,7 +93,7 @@ export default async function ContentPage({
                   <Link href={`/o/${org}/content/${r.id}`} className="underline underline-offset-2">
                     {r.title}
                   </Link>
-                  <span dir="ltr" className="font-mono text-caption text-zinc-500">
+                  <span dir="ltr" className="font-mono text-caption text-ink-2">
                     {kind === 'page' ? '/pages/' : '/blogs/'}
                     {r.slug}
                   </span>

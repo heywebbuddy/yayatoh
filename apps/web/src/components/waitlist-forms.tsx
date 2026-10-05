@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, Card, Input } from '@yayatoh/ui';
+import { Alert, Button, Card, Input, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { type FormEvent, type ReactNode, startTransition, useActionState } from 'react';
 import type { WaitlistActionState } from '@/app/[locale]/waitlist/[token]/actions.ts';
@@ -85,21 +85,16 @@ export function WaitlistOfferForm({
     >
       <Card className="flex flex-col gap-4">
         <div className="flex flex-col gap-1">
-          <label htmlFor="offer-quantity" className="text-body font-medium">
+          <label htmlFor="offer-quantity" className="text-[13px] font-bold text-ink">
             {t('quantity')}
           </label>
-          <select
-            id="offer-quantity"
-            name="quantity"
-            defaultValue={String(quantity)}
-            className="min-h-10 w-28 rounded-pill border border-zinc-200 bg-white px-4 text-body text-zinc-900"
-          >
+          <Select id="offer-quantity" name="quantity" defaultValue={String(quantity)} className="field w-28">
             {Array.from({ length: quantity - min + 1 }, (_, i) => min + i).map((n) => (
               <option key={n} value={n}>
                 {n}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
         <Input
           name="name"
@@ -109,7 +104,7 @@ export function WaitlistOfferForm({
           label={t('name')}
           error={state.field === 'name' ? t('errors.field.name') : undefined}
         />
-        <p className="text-body text-zinc-700">{t('offerEmail', { email })}</p>
+        <p className="text-body text-ink-2">{t('offerEmail', { email })}</p>
       </Card>
       {questions.length > 0 ? (
         <Card>

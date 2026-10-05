@@ -71,7 +71,7 @@ export function GuestCodeFields({
             : null;
   return (
     <div className="flex flex-col gap-3">
-      <p className="text-body text-zinc-700">{t('sent', { email })}</p>
+      <p className="text-body text-ink-2">{t('sent', { email })}</p>
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
         <div className="sm:w-56">
           <Input
@@ -103,7 +103,7 @@ export function GuestCodeFields({
         </Button>
       </div>
       <div aria-live="polite" className="flex flex-col gap-2">
-        {seconds > 0 ? <p className="text-caption text-zinc-600">{t('resendIn', { seconds })}</p> : null}
+        {seconds > 0 ? <p className="text-caption text-ink-2">{t('resendIn', { seconds })}</p> : null}
         {status === 'cooldown' && message ? <Alert tone="info" title={message} /> : null}
       </div>
     </div>

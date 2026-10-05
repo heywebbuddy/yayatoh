@@ -59,10 +59,10 @@ export function SignInForm() {
       <Button variant="secondary" disabled={busy} onClick={withPasskey}>
         {t('passkey')}
       </Button>
-      <p className="flex items-center gap-3 text-caption text-zinc-500">
-        <span aria-hidden="true" className="h-px flex-1 bg-zinc-200" />
+      <p className="flex items-center gap-3 text-caption text-ink-2">
+        <span aria-hidden="true" className="h-px flex-1 bg-line" />
         {t('or')}
-        <span aria-hidden="true" className="h-px flex-1 bg-zinc-200" />
+        <span aria-hidden="true" className="h-px flex-1 bg-line" />
       </p>
       <form onSubmit={onSubmit} className="flex flex-col gap-4" noValidate>
         <Input name="email" type="email" autoComplete="email webauthn" required label={t('email')} />
@@ -98,7 +98,7 @@ function ChallengeForm({ onRestart }: { onRestart: () => void }) {
   return (
     <form action={formAction} className="flex flex-col gap-4" noValidate>
       <h2 className="text-section">{t('title')}</h2>
-      <p className="text-body text-zinc-600">{kind === 'totp' ? t('explainTotp') : t('explainBackup')}</p>
+      <p className="text-body text-ink-2">{kind === 'totp' ? t('explainTotp') : t('explainBackup')}</p>
       <div aria-live="polite">{state.code ? <Alert title={t(`errors.${state.code}`)} /> : null}</div>
       <input type="hidden" name="kind" value={kind} />
       <Input

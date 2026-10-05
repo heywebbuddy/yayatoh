@@ -2,17 +2,43 @@ import type { TenantTx } from '@yayatoh/db';
 import { keyVault } from '@yayatoh/platform';
 import { and, eq, inArray } from 'drizzle-orm';
 import { FormDefinition } from './definition.ts';
-import { formResponses, forms, formVersions } from './schema.ts';
+import { RegistrationFormDefinition } from './registration.ts';
+import { formResponses, forms, formVersions, type RESPONDENT_TYPES } from './schema.ts';
+
+/** Question key → label, for checkout/survey definitions and paged registration ones. */
+function questionLabels(definition: unknown): Record<string, string> {
+  const paged = RegistrationFormDefinition.safeParse(definition);
+  const fields = paged.success
+    ? paged.data.pages.flatMap((p) => p.fields)
+    : (FormDefinition.safeParse(definition).data?.fields ?? []);
+  return Object.fromEntries(fields.map((f) => [f.key, f.label]));
+}
 
 /**
  * A person's form answers (checkout questions answered in their orders), with question labels,
  * sensitive answers decrypted: the subject is entitled to them (M1.14c access requests).
  */
 export async function responsesDsarTx(tx: TenantTx, orgId: string, orderIds: readonly string[]) {
-  if (orderIds.length === 0) return [];
+  return (await respondentAnswersDsarTx(tx, orgId, 'order', orderIds)).map(({ respondentId, ...r }) => ({
+    orderId: respondentId,
+    ...r,
+  }));
+}
+
+/**
+ * The answers one kind of respondent gave (orders, survey invitations, registration-form
+ * respondents: M6.1c), with question labels and sensitive answers decrypted.
+ */
+export async function respondentAnswersDsarTx(
+  tx: TenantTx,
+  orgId: string,
+  type: (typeof RESPONDENT_TYPES)[number],
+  ids: readonly string[],
+) {
+  if (ids.length === 0) return [];
   const rows = await tx
     .select({
-      orderId: formResponses.respondentId,
+      respondentId: formResponses.respondentId,
       kind: forms.kind,
       definition: formVersions.definition,
       answers: formResponses.answers,
@@ -22,9 +48,7 @@ export async function responsesDsarTx(tx: TenantTx, orgId: string, orderIds: rea
     .from(formResponses)
     .innerJoin(formVersions, eq(formVersions.id, formResponses.formVersionId))
     .innerJoin(forms, eq(forms.id, formVersions.formId))
-    .where(
-      and(eq(formResponses.respondentType, 'order'), inArray(formResponses.respondentId, [...orderIds])),
-    );
+    .where(and(eq(formResponses.respondentType, type), inArray(formResponses.respondentId, [...ids])));
   const out = [];
   for (const r of rows) {
     const secret = r.sensitiveCiphertext
@@ -32,12 +56,12 @@ export async function responsesDsarTx(tx: TenantTx, orgId: string, orderIds: rea
           new TextDecoder().decode(await keyVault().decrypt(orgId, r.sensitiveCiphertext)),
         ) as object)
       : {};
-    const labels = Object.fromEntries(FormDefinition.parse(r.definition).fields.map((f) => [f.key, f.label]));
+    const labels = questionLabels(r.definition);
     const answers = Object.entries({ ...(r.answers as object), ...secret }).map(([key, value]) => ({
       question: labels[key] ?? key,
       value,
     }));
-    out.push({ orderId: r.orderId, form: r.kind, answers, createdAt: r.createdAt });
+    out.push({ respondentId: r.respondentId, form: r.kind, answers, createdAt: r.createdAt });
   }
   return out;
 }

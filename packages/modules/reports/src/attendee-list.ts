@@ -11,12 +11,16 @@ import type { TenantTx } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
 import { DomainError } from '@yayatoh/kernel';
 import { tenantQuery } from '@yayatoh/platform';
-import { ticketIdsOfTypesSql } from '@yayatoh/ticketing';
+import { ticketIdsOfTypesSql, undistributedTicketIdsSql } from '@yayatoh/ticketing';
 import { z } from 'zod';
 
 /** Checked in on the event's current day, on any day, or never (M1.8f). */
 export const CHECKED_IN_FILTERS = ['today', 'any', 'never'] as const;
 export type CheckedInFilter = (typeof CHECKED_IN_FILTERS)[number];
+
+/** M3.2b: tickets waiting to be passed on (a buyer's extra tickets nobody claimed yet). */
+export const DISTRIBUTION_FILTERS = ['pending'] as const;
+export type DistributionFilter = (typeof DISTRIBUTION_FILTERS)[number];
 
 /**
  * The attendee list's filters (M1.8f): the attendees module's own (search, labels, source,
@@ -26,6 +30,7 @@ export type CheckedInFilter = (typeof CHECKED_IN_FILTERS)[number];
 export const AttendeeListFilter = AttendeeFilter.extend({
   ticketTypeIds: z.array(z.uuid()).max(50).default([]),
   checkedIn: z.enum(CHECKED_IN_FILTERS).optional(),
+  distribution: z.enum(DISTRIBUTION_FILTERS).optional(),
 });
 export type AttendeeListFilter = z.input<typeof AttendeeListFilter>;
 
@@ -36,10 +41,17 @@ export type AttendeeListFilter = z.input<typeof AttendeeListFilter>;
 export async function attendeeListExtensionTx(
   tx: TenantTx,
   eventId: string,
-  f: { ticketTypeIds: readonly string[]; checkedIn?: CheckedInFilter | undefined },
+  f: {
+    ticketTypeIds: readonly string[];
+    checkedIn?: CheckedInFilter | undefined;
+    distribution?: DistributionFilter | undefined;
+  },
   now: Date,
 ): Promise<TicketFilterExtension> {
-  const ticketIn = f.ticketTypeIds.length ? [ticketIdsOfTypesSql(f.ticketTypeIds)] : [];
+  const ticketIn = [
+    ...(f.ticketTypeIds.length ? [ticketIdsOfTypesSql(f.ticketTypeIds)] : []),
+    ...(f.distribution === 'pending' ? [undistributedTicketIdsSql(eventId)] : []),
+  ];
   if (!f.checkedIn) return { ticketIn };
   if (f.checkedIn === 'never') return { ticketIn, ticketNotIn: [admittedTicketIdsSql(eventId)] };
   if (f.checkedIn === 'any') return { ticketIn: [...ticketIn, admittedTicketIdsSql(eventId)] };
@@ -57,6 +69,7 @@ export const attendeeListQuery = tenantQuery({
   input: ListAttendeesInput.extend({
     ticketTypeIds: z.array(z.uuid()).max(50).default([]),
     checkedIn: z.enum(CHECKED_IN_FILTERS).optional(),
+    distribution: z.enum(DISTRIBUTION_FILTERS).optional(),
   }),
   output: AttendeeListDto,
   entitlement: 'attendees',

@@ -4,6 +4,7 @@ import {
   bigint,
   boolean,
   check,
+  date,
   foreignKey,
   index,
   integer,
@@ -26,6 +27,10 @@ export const ORDER_STATUSES = [
   'cancelled',
   'partially_refunded',
   'refunded',
+  /** M5.1d: invoiced (pay later): registered, tickets issued, waiting for the balance. */
+  'awaiting_invoice',
+  /** M5.1d: an invoice the organizer voided before anything was paid. */
+  'void',
 ] as const;
 
 /**
@@ -64,6 +69,8 @@ export const orders = tenantTable(
     /** `ticketing.promo_codes` (hand-written FK) and the code as the buyer typed it, normalized. */
     promoCodeId: uuid('promo_code_id'),
     promoCode: text('promo_code'),
+    /** U9: the org-wide coupon the order took (`ticketing.coupons`, hand-written FK); `promo_code` holds its code. */
+    couponId: uuid('coupon_id'),
     feeMinor: minor('fee_minor').notNull(),
     totalMinor: minor('total_minor').notNull(),
     fundsFlow: text('funds_flow').notNull(),
@@ -613,5 +620,364 @@ export const massRefundItems = tenantTable(
       columns: [t.orgId, t.refundId],
       foreignColumns: [refunds.orgId, refunds.id],
     }),
+  ],
+);
+
+/** The per-org credit note counter (M3.10c): numbers are gap-free per org, taken under this row's lock. */
+export const creditNoteSequences = tenantTable(
+  ordersSchema,
+  'credit_note_sequences',
+  { lastNumber: integer('last_number').notNull().default(0) },
+  (t) => [
+    uniqueIndex('credit_note_sequences_org_key').on(t.orgId),
+    check('credit_note_sequences_last_check', sql`last_number >= 0`),
+  ],
+);
+
+export const CREDIT_NOTE_KINDS = ['full', 'partial'] as const;
+export const CREDIT_NOTE_DISPOSITIONS = ['store_credit', 'refunded'] as const;
+
+/**
+ * Credit notes (M3.10c): a document reducing what an order cost, numbered per org (CN-00001…),
+ * full (what is left of the order) or partial, with a reason. `store_credit`: the amount becomes
+ * credit the buyer spends with `code` on a later order of the same org (`balance_minor` is what
+ * is left); `refunded`: the amount was paid back outside the provider (recorded, nothing moves).
+ */
+export const creditNotes = tenantTable(
+  ordersSchema,
+  'credit_notes',
+  {
+    orderId: uuid('order_id').notNull(),
+    eventId: uuid('event_id').notNull(),
+    number: integer('number').notNull(),
+    kind: text('kind').notNull(),
+    disposition: text('disposition').notNull(),
+    reason: text('reason').notNull(),
+    amountMinor: minor('amount_minor').notNull(),
+    balanceMinor: minor('balance_minor').notNull(),
+    currency: text('currency').notNull(),
+    /** Store credit only: what the buyer types at checkout (`CR-XXXX-XXXX`). */
+    code: text('code'),
+    /** Snapshots for the document. */
+    buyerName: text('buyer_name').notNull(),
+    buyerEmail: text('buyer_email').notNull(),
+    issuedBy: text('issued_by').notNull(),
+  },
+  (t) => [
+    uniqueIndex('credit_notes_org_number_key').on(t.orgId, t.number),
+    uniqueIndex('credit_notes_org_code_key').on(t.orgId, t.code).where(sql`code is not null`),
+    index('credit_notes_org_order_idx').on(t.orgId, t.orderId, t.createdAt),
+    index('credit_notes_org_created_idx').on(t.orgId, t.createdAt),
+    foreignKey({
+      name: 'credit_notes_order_fk',
+      columns: [t.orgId, t.orderId],
+      foreignColumns: [orders.orgId, orders.id],
+    }),
+    check('credit_notes_number_check', sql`number >= 1`),
+    check('credit_notes_kind_check', sql`kind in ('full', 'partial')`),
+    check('credit_notes_disposition_check', sql`disposition in ('store_credit', 'refunded')`),
+    check('credit_notes_reason_check', sql`length(reason) between 3 and 500`),
+    check('credit_notes_amount_check', sql`amount_minor > 0 and balance_minor between 0 and amount_minor`),
+    check(
+      'credit_notes_store_credit_check',
+      sql`(disposition = 'store_credit') = (code is not null) and (disposition = 'store_credit' or balance_minor = 0)`,
+    ),
+    check('credit_notes_currency_check', sql`currency ~ '^[A-Z]{3}$'`),
+  ],
+);
+
+/**
+ * Store credit spent on an order (M3.10c): taken from the note's balance at checkout (a discount
+ * on the order's tickets) and given back if the order lapses unpaid (`released_at`).
+ */
+export const creditNoteApplications = tenantTable(
+  ordersSchema,
+  'credit_note_applications',
+  {
+    creditNoteId: uuid('credit_note_id').notNull(),
+    orderId: uuid('order_id').notNull(),
+    amountMinor: minor('amount_minor').notNull(),
+    releasedAt: ts('released_at'),
+  },
+  (t) => [
+    index('credit_note_applications_org_note_idx').on(t.orgId, t.creditNoteId),
+    uniqueIndex('credit_note_applications_org_order_key').on(t.orgId, t.orderId),
+    foreignKey({
+      name: 'credit_note_applications_note_fk',
+      columns: [t.orgId, t.creditNoteId],
+      foreignColumns: [creditNotes.orgId, creditNotes.id],
+    }),
+    foreignKey({
+      name: 'credit_note_applications_order_fk',
+      columns: [t.orgId, t.orderId],
+      foreignColumns: [orders.orgId, orders.id],
+    }),
+    check('credit_note_applications_amount_check', sql`amount_minor > 0`),
+  ],
+);
+
+export const MACRO_ACTIONS = ['email_buyer', 'add_note', 'resend_tickets', 'transfer_ticket'] as const;
+
+/**
+ * Support macros (M3.10c): a saved reply and the actions that go with it, run from an order.
+ * `subject` and `body` may use merge fields (`{{buyer_name}}`…); archived macros are kept for the
+ * run history.
+ */
+export const supportMacros = tenantTable(
+  ordersSchema,
+  'support_macros',
+  {
+    name: text('name').notNull(),
+    subject: text('subject').notNull(),
+    body: text('body').notNull(),
+    actions: text('actions').array().notNull(),
+    updatedBy: text('updated_by').notNull(),
+    archivedAt: ts('archived_at'),
+  },
+  (t) => [
+    uniqueIndex('support_macros_org_name_key')
+      .on(t.orgId, sql`lower(${t.name})`)
+      .where(sql`archived_at is null`),
+    check('support_macros_name_check', sql`length(name) between 2 and 80`),
+    check('support_macros_subject_check', sql`length(subject) between 1 and 200`),
+    check('support_macros_body_check', sql`length(body) between 1 and 5000`),
+    check(
+      'support_macros_actions_check',
+      sql.raw(
+        `cardinality(actions) between 1 and 4 and actions <@ array[${MACRO_ACTIONS.map((a) => `'${a}'`).join(', ')}]::text[]`,
+      ),
+    ),
+  ],
+);
+
+/** One run of a macro on an order (M3.10c): what it did, for the order timeline and audit. */
+export const supportMacroRuns = tenantTable(
+  ordersSchema,
+  'support_macro_runs',
+  {
+    macroId: uuid('macro_id').notNull(),
+    orderId: uuid('order_id').notNull(),
+    macroName: text('macro_name').notNull(),
+    actions: text('actions').array().notNull(),
+    /** The reply as it was sent (merge fields filled). */
+    replySubject: text('reply_subject').notNull(),
+    replyBody: text('reply_body').notNull(),
+    ranBy: text('ran_by').notNull(),
+  },
+  (t) => [
+    index('support_macro_runs_org_order_idx').on(t.orgId, t.orderId, t.createdAt),
+    foreignKey({
+      name: 'support_macro_runs_macro_fk',
+      columns: [t.orgId, t.macroId],
+      foreignColumns: [supportMacros.orgId, supportMacros.id],
+    }),
+    foreignKey({
+      name: 'support_macro_runs_order_fk',
+      columns: [t.orgId, t.orderId],
+      foreignColumns: [orders.orgId, orders.id],
+    }),
+  ],
+);
+
+/**
+ * M4.8a: the donation item of a gift order (P4-9). A gift is an order with no ticket lines and
+ * one donation item: the gift and the processing fee the donor chose to cover (P4-10), both going
+ * to the charity. `gift_id` is the `donations` module's gift (a higher tier: no foreign key).
+ * Paid as a direct charge on the organizer's connected account with application fee 0.
+ */
+export const donationItems = tenantTable(
+  ordersSchema,
+  'donation_items',
+  {
+    orderId: uuid('order_id').notNull(),
+    giftId: uuid('gift_id').notNull(),
+    /** What the donor gives to (the campaign's name when the gift was made). */
+    name: text('name').notNull(),
+    amountMinor: minor('amount_minor').notNull(),
+    feeCoverMinor: minor('fee_cover_minor').notNull().default(0),
+    currency: text('currency').notNull(),
+  },
+  (t) => [
+    uniqueIndex('donation_items_org_order_key').on(t.orgId, t.orderId),
+    uniqueIndex('donation_items_org_gift_key').on(t.orgId, t.giftId),
+    foreignKey({
+      name: 'donation_items_order_fk',
+      columns: [t.orgId, t.orderId],
+      foreignColumns: [orders.orgId, orders.id],
+    }).onDelete('cascade'),
+    check('donation_items_amount_check', sql`amount_minor > 0 and fee_cover_minor >= 0`),
+    check('donation_items_currency_check', sql`currency ~ '^[A-Z]{3}$'`),
+    check('donation_items_name_length', sql`length(name) between 1 and 120`),
+  ],
+);
+
+/* ------------------------------------------------------------------- M5.1d invoices ---- */
+
+export const INVOICE_STATUSES = ['open', 'paid', 'void'] as const;
+export const INVOICE_PAYMENT_CHANNELS = ['pay_link', 'offline'] as const;
+/** How the money came: a card through the pay link, or what staff recorded (organizer-collected). */
+export const INVOICE_PAYMENT_METHODS = ['card', 'check', 'wire', 'cash', 'other'] as const;
+export const INVOICE_PAYMENT_STATUSES = ['pending', 'succeeded', 'failed'] as const;
+
+/** Gap-free invoice numbers per org (M5.1d; the counter row is locked by the upsert). */
+export const invoiceSequences = tenantTable(
+  ordersSchema,
+  'invoice_sequences',
+  { lastNumber: integer('last_number').notNull().default(0) },
+  (t) => [
+    uniqueIndex('invoice_sequences_org_key').on(t.orgId),
+    check('invoice_sequences_last_check', sql`last_number >= 0`),
+  ],
+);
+
+/**
+ * An invoice (M5.1d, P5-5): one per pay-later order, numbered per org (INV-00001…, never reused:
+ * a void invoice keeps its number). Terms are snapshotted: due on `due_on` (a calendar day in the
+ * event's timezone; `due_at` is that day's start there). `paid_minor` and `fee_allocated_minor`
+ * are the running sums of its succeeded payments (the balance is `total_minor - paid_minor`).
+ * Never cancelled automatically: only the organizer voids one.
+ */
+export const invoices = tenantTable(
+  ordersSchema,
+  'invoices',
+  {
+    orderId: uuid('order_id').notNull(),
+    eventId: uuid('event_id').notNull(),
+    number: integer('number').notNull(),
+    status: text('status').notNull().default('open'),
+    poNumber: text('po_number'),
+    billingCompany: text('billing_company'),
+    /** Snapshots for the document. */
+    buyerName: text('buyer_name').notNull(),
+    buyerEmail: text('buyer_email').notNull(),
+    currency: text('currency').notNull(),
+    totalMinor: minor('total_minor').notNull(),
+    /** The order's platform fee, spread over the payments (each payment's fee part). */
+    feeMinor: minor('fee_minor').notNull(),
+    paidMinor: minor('paid_minor').notNull().default(0),
+    feeAllocatedMinor: minor('fee_allocated_minor').notNull().default(0),
+    /** `net30_event7`: Net 30 from the invoice date, due no later than 7 days before the event. */
+    terms: text('terms').notNull(),
+    issuedOn: date('issued_on', { mode: 'string' }).notNull(),
+    dueOn: date('due_on', { mode: 'string' }).notNull(),
+    dueAt: ts('due_at').notNull(),
+    paidAt: ts('paid_at'),
+    voidedAt: ts('voided_at'),
+    voidReason: text('void_reason'),
+    issuedBy: text('issued_by').notNull(),
+  },
+  (t) => [
+    uniqueIndex('invoices_org_number_key').on(t.orgId, t.number),
+    uniqueIndex('invoices_org_order_key').on(t.orgId, t.orderId),
+    index('invoices_org_event_status_idx').on(t.orgId, t.eventId, t.status, t.dueOn),
+    foreignKey({
+      name: 'invoices_order_fk',
+      columns: [t.orgId, t.orderId],
+      foreignColumns: [orders.orgId, orders.id],
+    }),
+    check('invoices_number_check', sql`number >= 1`),
+    check(
+      'invoices_status_check',
+      sql.raw(`status in (${INVOICE_STATUSES.map((s) => `'${s}'`).join(', ')})`),
+    ),
+    check(
+      'invoices_amounts_check',
+      sql`total_minor > 0 and fee_minor between 0 and total_minor and paid_minor >= 0 and fee_allocated_minor between 0 and fee_minor`,
+    ),
+    check(
+      'invoices_paid_check',
+      sql`(status = 'paid') = (paid_at is not null) and (status <> 'paid' or paid_minor >= total_minor)`,
+    ),
+    // A pay link opened before a void may still be paid afterwards: recorded, to be refunded.
+    check('invoices_void_check', sql`(status = 'void') = (voided_at is not null)`),
+    check('invoices_due_check', sql`due_on >= issued_on`),
+    check('invoices_terms_check', sql`terms in ('net30_event7')`),
+    check('invoices_po_check', sql`po_number is null or length(po_number) between 1 and 60`),
+    check(
+      'invoices_company_check',
+      sql`billing_company is null or length(billing_company) between 1 and 120`,
+    ),
+    check('invoices_void_reason_check', sql`void_reason is null or length(void_reason) between 3 and 500`),
+    check('invoices_currency_check', sql`currency ~ '^[A-Z]{3}$'`),
+  ],
+);
+
+/**
+ * A payment against an invoice (M5.1d): a card payment through the pay link (`pending` until the
+ * provider's verified webhook, on the org's funds flow at the time) or one staff recorded
+ * (check, wire, cash: organizer-collected, the fee part becomes a receivable). `idempotency_key`
+ * is unique per org: replaying a pay link or a recording never creates a second payment.
+ */
+export const invoicePayments = tenantTable(
+  ordersSchema,
+  'invoice_payments',
+  {
+    invoiceId: uuid('invoice_id').notNull(),
+    orderId: uuid('order_id').notNull(),
+    channel: text('channel').notNull(),
+    method: text('method').notNull(),
+    status: text('status').notNull(),
+    amountMinor: minor('amount_minor').notNull(),
+    /** The platform fee part of this payment (fixed when it succeeds; the card's application fee). */
+    feePartMinor: minor('fee_part_minor').notNull().default(0),
+    currency: text('currency').notNull(),
+    idempotencyKey: text('idempotency_key').notNull(),
+    fundsFlow: text('funds_flow'),
+    connectedAccountId: text('connected_account_id'),
+    provider: text('provider'),
+    providerPaymentId: text('provider_payment_id'),
+    /** Offline: the cheque number or wire reference staff typed. */
+    reference: text('reference'),
+    note: text('note'),
+    /** Offline: the day the money arrived (staff's calendar). */
+    receivedOn: date('received_on', { mode: 'string' }),
+    recordedBy: text('recorded_by').notNull(),
+    completedAt: ts('completed_at'),
+  },
+  (t) => [
+    uniqueIndex('invoice_payments_org_key').on(t.orgId, t.idempotencyKey),
+    uniqueIndex('invoice_payments_org_provider_key')
+      .on(t.orgId, t.provider, t.providerPaymentId)
+      .where(sql`provider_payment_id is not null`),
+    index('invoice_payments_org_invoice_idx').on(t.orgId, t.invoiceId, t.createdAt),
+    index('invoice_payments_org_order_idx').on(t.orgId, t.orderId),
+    foreignKey({
+      name: 'invoice_payments_invoice_fk',
+      columns: [t.orgId, t.invoiceId],
+      foreignColumns: [invoices.orgId, invoices.id],
+    }),
+    foreignKey({
+      name: 'invoice_payments_order_fk',
+      columns: [t.orgId, t.orderId],
+      foreignColumns: [orders.orgId, orders.id],
+    }),
+    check(
+      'invoice_payments_channel_check',
+      sql.raw(`channel in (${INVOICE_PAYMENT_CHANNELS.map((s) => `'${s}'`).join(', ')})`),
+    ),
+    check(
+      'invoice_payments_method_check',
+      sql.raw(`method in (${INVOICE_PAYMENT_METHODS.map((s) => `'${s}'`).join(', ')})`),
+    ),
+    check(
+      'invoice_payments_status_check',
+      sql.raw(`status in (${INVOICE_PAYMENT_STATUSES.map((s) => `'${s}'`).join(', ')})`),
+    ),
+    check(
+      'invoice_payments_amount_check',
+      sql`amount_minor > 0 and fee_part_minor between 0 and amount_minor`,
+    ),
+    check(
+      'invoice_payments_kind_check',
+      sql`(channel = 'pay_link') = (method = 'card') and (channel = 'pay_link' or (status = 'succeeded' and received_on is not null))`,
+    ),
+    check(
+      'invoice_payments_flow_check',
+      sql`(channel = 'offline') = (funds_flow is null) and (funds_flow is null or funds_flow in ('organizer_mor', 'platform_mor')) and ((funds_flow = 'organizer_mor') = (connected_account_id is not null))`,
+    ),
+    check('invoice_payments_done_check', sql`(status = 'pending') = (completed_at is null)`),
+    check('invoice_payments_reference_check', sql`reference is null or length(reference) between 1 and 80`),
+    check('invoice_payments_note_check', sql`note is null or length(note) <= 500`),
+    check('invoice_payments_currency_check', sql`currency ~ '^[A-Z]{3}$'`),
   ],
 );

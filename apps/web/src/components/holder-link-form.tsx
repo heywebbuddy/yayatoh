@@ -16,10 +16,10 @@ export function HolderLinkForm({
   const [state, formAction, pending] = useActionState(action, { sent: false, code: null });
   return (
     <div className="flex max-w-xl flex-col gap-2">
-      <p className="text-body text-zinc-600">{t('myTickets.requestHint')}</p>
+      <p className="text-body text-ink-2">{t('myTickets.requestHint')}</p>
       <form action={formAction} className="flex flex-wrap items-end gap-2">
         <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-          <label htmlFor="holder-email" className="text-caption text-zinc-600">
+          <label htmlFor="holder-email" className="text-[13px] font-bold text-ink">
             {t('myTickets.requestEmail')}
           </label>
           <input
@@ -28,7 +28,7 @@ export function HolderLinkForm({
             type="email"
             required
             autoComplete="email"
-            className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
+            className="field"
           />
         </div>
         <Button type="submit" variant="secondary" disabled={pending}>

@@ -50,6 +50,21 @@ export const Table = z.object({
   seats: z.array(Seat).min(1).max(40),
 });
 
+/**
+ * What an exhibit-hall booth carries (M5.4a): its number ("B12", unique per plan) and an optional
+ * category ("Food", "Startups"). Its size is the object's width × height. Only `booth` objects.
+ */
+export const BoothInfo = z.object({
+  number: z
+    .string()
+    .trim()
+    .min(1)
+    .max(20)
+    .regex(/^[\p{L}\p{N}][\p{L}\p{N} ._/-]*$/u),
+  category: z.string().trim().max(40).nullable().default(null),
+});
+export type BoothInfo = z.infer<typeof BoothInfo>;
+
 export const FloorObject = z.object({
   kind: z.literal('object'),
   id: z.uuid(),
@@ -60,7 +75,9 @@ export const FloorObject = z.object({
   width: size,
   height: size,
   rotation,
+  booth: BoothInfo.optional(),
 });
+export type FloorObject = z.infer<typeof FloorObject>;
 
 export const Item = z.discriminatedUnion('kind', [Row, Table, FloorObject]);
 export type Item = z.infer<typeof Item>;

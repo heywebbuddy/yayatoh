@@ -1,10 +1,11 @@
 import type { SponsorDto } from '@yayatoh/program';
-import { Button, Card, EmptyState, PageHeader } from '@yayatoh/ui';
+import { Button, buttonClass, Card, EmptyState, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Markdown } from '@/components/markdown.tsx';
 import { MediaUploader } from '@/components/media-uploader.tsx';
 import { type FieldSpec, ProgramForm } from '@/components/program-form.tsx';
 import { ProgramThumb } from '@/components/program-thumb.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import { defaultProgramAlt } from '@/lib/program-media.ts';
 import { programMediaPanels } from '@/server/media.ts';
 import { loadProgramPage } from '@/server/program.ts';
@@ -33,6 +34,7 @@ export default async function SponsorsPage({
   );
   const t = await getTranslations();
   const tp = await getTranslations('program');
+  const ts = await getTranslations('sponsorship');
   const errors = {
     name: tp('errors.name'),
     'conflict.name': tp('errors.nameTaken'),
@@ -64,14 +66,42 @@ export default async function SponsorsPage({
   ];
   return (
     <>
-      <PageHeader title={t('nav.sponsors')} description={tp('sponsorsSubtitle')} />
-      {canWrite ? null : <p className="text-body text-zinc-500">{tp('viewerNotice')}</p>}
+      <PageHeader
+        title={t('nav.sponsors')}
+        description={tp('sponsorsSubtitle')}
+        actions={
+          // M5.4b: package terms and sponsors' packages, and the deliverables checklist.
+          <nav aria-label={ts('subnav')} className="flex flex-wrap gap-2.5">
+            <Link href={`/o/${org}/e/${event}/sponsors/packages`} className={buttonClass('secondary')}>
+              {ts('packagesLink')}
+            </Link>
+            <Link href={`/o/${org}/e/${event}/sponsors/deliverables`} className={buttonClass('secondary')}>
+              {ts('deliverablesLink')}
+            </Link>
+          </nav>
+        }
+      />
+      {canWrite ? null : <p className="text-body text-ink-2">{tp('viewerNotice')}</p>}
       <section aria-labelledby="tiers-heading" className="flex flex-col gap-3">
         <h2 id="tiers-heading" className="text-section">
           {tp('tiers')}
         </h2>
         {program.sponsorTiers.length === 0 ? (
-          <EmptyState title={tp('emptyTiersTitle')} description={tp('emptyTiersDescription')} />
+          <EmptyState
+            title={tp('emptyTiersTitle')}
+            description={canWrite ? tp('emptyTiersDescription') : tp('emptyTiersReadOnly')}
+            action={
+              canWrite ? (
+                <Link href="#adding-tier-heading" className={buttonClass('primary', 'md')}>
+                  {tp('addFirstTier')}
+                </Link>
+              ) : (
+                <Link href={`/o/${org}/e/${event}`} className={buttonClass('secondary', 'md')}>
+                  {tp('backToEvent')}
+                </Link>
+              )
+            }
+          />
         ) : (
           <ol className="flex list-none flex-col gap-3 p-0">
             {program.sponsorTiers.map((tier) => {
@@ -82,7 +112,7 @@ export default async function SponsorsPage({
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <h3 className="text-body font-medium">
                         {tier.name}{' '}
-                        <span className="text-caption text-zinc-500">
+                        <span className="text-caption text-ink-2">
                           · {tp('order', { position: tier.position })}
                         </span>
                       </h3>
@@ -98,22 +128,22 @@ export default async function SponsorsPage({
                       ) : null}
                     </div>
                     {inTier.length === 0 ? (
-                      <p className="text-caption text-zinc-500">{tp('noSponsorsInTier')}</p>
+                      <p className="text-caption text-ink-2">{tp('noSponsorsInTier')}</p>
                     ) : (
                       <ul className="flex list-none flex-col gap-2 p-0">
                         {inTier.map((s) => (
-                          <li key={s.id} className="flex flex-col gap-1 border-t border-zinc-100 pt-2">
+                          <li key={s.id} className="flex flex-col gap-1 border-t border-line pt-2">
                             <span className="flex items-center gap-3">
                               <ProgramThumb item={logos.get(s.id)?.items[0]} />
                               <span className="text-body">{s.name}</span>
                             </span>
                             {s.websiteUrl ? (
-                              <span className="text-caption text-zinc-600">{s.websiteUrl}</span>
+                              <span className="text-caption text-ink-2">{s.websiteUrl}</span>
                             ) : null}
                             {s.description ? <Markdown source={s.description} /> : null}
                             {canWrite ? (
                               <details>
-                                <summary className="min-h-6 cursor-pointer text-caption text-zinc-600">
+                                <summary className="min-h-6 cursor-pointer text-caption text-ink-2">
                                   {tp('editNamed', { name: s.name })}
                                 </summary>
                                 <div className="flex flex-col gap-3 pt-3">
@@ -155,9 +185,9 @@ export default async function SponsorsPage({
         )}
         {canWrite ? (
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-            <section aria-labelledby="add-tier-heading">
+            <section aria-labelledby="adding-tier-heading">
               <Card size="panel" className="flex flex-col gap-3">
-                <h3 id="add-tier-heading" className="text-section">
+                <h3 id="adding-tier-heading" className="text-section">
                   {tp('addTier')}
                 </h3>
                 <ProgramForm
@@ -202,7 +232,7 @@ export default async function SponsorsPage({
                     errors={errors}
                     reset
                   />
-                  <p className="text-caption text-zinc-500">{tp('logoAfterSave')}</p>
+                  <p className="text-caption text-ink-2">{tp('logoAfterSave')}</p>
                 </Card>
               </section>
             ) : null}

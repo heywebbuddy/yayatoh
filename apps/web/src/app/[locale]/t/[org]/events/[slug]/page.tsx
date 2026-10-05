@@ -7,7 +7,7 @@ import { tenantOrgParam } from '@/server/tenant-site.ts';
 
 type Params = {
   params: Promise<{ locale: string; org: string; slug: string }>;
-  searchParams: Promise<{ date?: string }>;
+  searchParams: Promise<{ date?: string; channel?: string }>;
 };
 
 export async function generateMetadata({ params }: Pick<Params, 'params'>): Promise<Metadata> {
@@ -18,9 +18,17 @@ export async function generateMetadata({ params }: Pick<Params, 'params'>): Prom
 /** An event on its org's tenant site (the proxy rewrites `{host}/events/{slug}` here). */
 export default async function TenantEventPage({ params, searchParams }: Params) {
   const { locale, org, slug } = await params;
-  const { date } = await searchParams;
+  const { date, channel } = await searchParams;
   pageLocale(locale);
   const orgId = tenantOrgParam(org);
   if (!orgId) notFound();
-  return <PublicEventView locale={locale} slug={slug} orgId={orgId} date={date ?? null} />;
+  return (
+    <PublicEventView
+      locale={locale}
+      slug={slug}
+      orgId={orgId}
+      date={date ?? null}
+      channelCode={channel?.slice(0, 40) ?? null}
+    />
+  );
 }

@@ -16,6 +16,7 @@ import {
   ATTENDEE_EXPORT_COLUMNS,
   attendeeExportBulk,
   CHECKED_IN_FILTERS,
+  DISTRIBUTION_FILTERS,
   matchingAttendeeIdsQuery,
 } from '@yayatoh/reports';
 import { type BulkAssignTarget, seatAssignBulk } from '@yayatoh/seating';
@@ -99,6 +100,7 @@ function listQuery(form: FormData, extra: Record<string, string>): string {
   add('status', form.get('f_status'));
   add('type', form.get('f_type'));
   add('checkin', form.get('f_checkin'));
+  add('distribution', form.get('f_distribution'));
   for (const [k, v] of Object.entries(extra)) q.set(k, v);
   return q.toString();
 }
@@ -136,19 +138,21 @@ export async function bulkAction(
     status: pick(ATTENDEE_STATUSES, form.get('f_status')),
     ticketTypeIds: UUID.test(typeId) ? [typeId] : [],
     checkedIn: pick(CHECKED_IN_FILTERS, form.get('f_checkin')),
+    distribution: pick(DISTRIBUTION_FILTERS, form.get('f_distribution')),
   };
   const all = form.get('scope') === 'all';
   let operationId: string;
   try {
     // Exports take the list's whole filter. The other actions belong to lower tiers that know
-    // only the attendee filters: ticket-type and check-in filters are resolved to ids here, and
+    // only the attendee filters: ticket-type, check-in and distribution filters are resolved to ids here, and
     // a cancellation always runs on the exact people its confirmation counted.
     const byIds = async () =>
       all
         ? executeQuery(matchingAttendeeIdsQuery, { eventId: ev.id, filter }, data.ctx, ports)
         : form.getAll('ids').map(String);
-    const extended = filter.ticketTypeIds.length > 0 || filter.checkedIn !== undefined;
-    const { ticketTypeIds: _t, checkedIn: _c, ...basic } = filter;
+    const extended =
+      filter.ticketTypeIds.length > 0 || filter.checkedIn !== undefined || filter.distribution !== undefined;
+    const { ticketTypeIds: _t, checkedIn: _c, distribution: _d, ...basic } = filter;
     const selection: { filter?: typeof basic; ids?: string[] } =
       all && !extended ? { filter: basic } : { ids: await byIds() };
     if (kind === 'export') {

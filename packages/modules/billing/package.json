@@ -19,6 +19,7 @@
     "@yayatoh/kernel": "workspace:*",
     "@yayatoh/platform": "workspace:*",
     "drizzle-orm": "catalog:",
+    "stripe": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {

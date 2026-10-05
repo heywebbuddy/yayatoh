@@ -22,7 +22,7 @@ export default async function AccountDeletedPage({ params }: { params: Promise<{
     <main id="main" className="mx-auto flex w-full max-w-2xl flex-col gap-6 px-4 py-12 md:px-6">
       <PageHeader eyebrow={<Label>{t('eyebrow')}</Label>} title={t('title')} description={t('description')} />
       <Card className="flex flex-col gap-3">
-        <ul className="flex list-disc flex-col gap-1 ps-5 text-body text-zinc-600">
+        <ul className="flex list-disc flex-col gap-1 ps-5 text-body text-ink-2">
           <li>{t('email')}</li>
           <li>{t('orders')}</li>
           <li>{t('comeBack')}</li>

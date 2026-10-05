@@ -1,8 +1,25 @@
 import 'server-only';
 import { createHash } from 'node:crypto';
+import { ASSISTANCE_CHANNEL } from '@yayatoh/assistance';
 import { checkinFactsTx, deviceContext } from '@yayatoh/checkin';
 import { type TenantTx, withTenant } from '@yayatoh/db';
+import {
+  consoleLiveTx,
+  GIVING_SCREEN_CHANNEL,
+  PADDLE_REALTIME_CHANNELS,
+  screenSnapshotTx,
+  spotterStateTx,
+} from '@yayatoh/donations';
+import {
+  CHAT_REALTIME_CHANNELS,
+  ENGAGEMENT_REALTIME_CHANNELS,
+  moderationSnapshotTx,
+  publicSnapshotTx,
+  sessionChannelOpen,
+} from '@yayatoh/engagement';
 import { findEventTx, isPublicEvent } from '@yayatoh/events';
+import { GALLERY_CHANNEL } from '@yayatoh/gallery';
+import { GUESTS_CHANNEL } from '@yayatoh/guests';
 import { createCtx } from '@yayatoh/kernel';
 import {
   ablyRealtimePublisher,
@@ -31,13 +48,14 @@ import {
 } from '@yayatoh/platform';
 import {
   createSeatFeed,
+  GUEST_SEATS_CHANNEL,
   listenForSeatChanges,
   SEAT_STATES_CHANNEL,
   SEATS_CHANNEL,
   type SeatFeed,
   type SeatStreamKind,
 } from '@yayatoh/seating';
-import { memberRole } from '@yayatoh/tenancy';
+import { orgActor } from './org-actor.ts';
 import { ports } from './ports.ts';
 import { getSession } from './session.ts';
 
@@ -58,6 +76,22 @@ export const REALTIME_CHANNELS = createRealtimeRegistry([
   ...CORE_REALTIME_CHANNELS,
   SEATS_CHANNEL,
   SEAT_STATES_CHANNEL,
+  // M3.3b: the event's help queue (ids and states; the console and the Scan PWA re-read).
+  ASSISTANCE_CHANNEL,
+  // M5.7a: live polls and Q&A, one session each.
+  ...ENGAGEMENT_REALTIME_CHANNELS,
+  // M4.3a: the guest seating editor follows the guest list and the guests' places.
+  GUESTS_CHANNEL,
+  GUEST_SEATS_CHANNEL,
+  // M4.5b: the gallery's live slideshow (item ids and states; the slideshow re-reads).
+  GALLERY_CHANNEL,
+  // M4.8c: the paddle raise's spotters (level and paddle numbers) and console (totals).
+  ...PADDLE_REALTIME_CHANNELS,
+  // M4.8d: the room's giving screen (thermometer; its projector streams through a signed link).
+  GIVING_SCREEN_CHANNEL,
+  // M5.8b: chat inboxes (attendees, exhibitors). Registered so they resolve; only their own
+  // stream routes attach them (`inboxStreamResponse`), the generic attach refuses them.
+  ...CHAT_REALTIME_CHANNELS,
 ]);
 
 /** Stream (re)connections per caller and channel per minute. */
@@ -131,7 +165,22 @@ const SNAPSHOTS: Record<string, (tx: TenantTx, channel: ResolvedChannel) => Prom
     const f = await checkinFactsTx(tx, { eventId: c.eventId ?? undefined });
     return { admitted: f.admissions, tickets: f.tickets };
   },
+  // M5.7a: the audience's (approved questions, shown results) and the moderators' full state.
+  'session.live': (tx, c) => publicSnapshotTx(tx, c.sessionId ?? ''),
+  'session.moderation': (tx, c) => moderationSnapshotTx(tx, c.sessionId ?? ''),
+  // M4.8c: a spotter's phone and the paddle-raise console (re)connecting.
+  'event.paddle-spotters': (tx, c) => spotterStateTx(tx, c.eventId ?? ''),
+  'event.paddle-console': async (tx, c) => {
+    const event = await findEventTx(tx, c.eventId ?? '');
+    return consoleLiveTx(tx, c.eventId ?? '', event?.currency ?? 'USD');
+  },
+  // M4.8d: a giving screen (re)connecting gets the whole thermometer.
+  'event.giving-screen': (tx, c) => screenSnapshotTx(tx, c.eventId ?? ''),
 };
+
+/** Session channels (M5.7a) name a real session of their event with live engagement on. */
+const sessionOpen = (c: ResolvedChannel) =>
+  c.scope !== 'session' || sessionChannelOpen(c.orgId, c.eventId ?? '', c.sessionId ?? '');
 
 function logSource(channel: ResolvedChannel): SseSource {
   const live = realtimeLive();
@@ -234,8 +283,11 @@ export async function authorizeRealtime(
     if (session) {
       identified = true;
       who = `user:${session.userId}`;
-      const userCtx = createCtx({ orgId: channel.orgId, actor: { type: 'user', userId: session.userId } });
-      const member = (await memberRole(userCtx)) !== null;
+      // A member, or (M6.7a) an agency acting through the client's live grant.
+      const actor = await orgActor(channel.orgId, session);
+      const userCtx =
+        actor?.ctx ?? createCtx({ orgId: channel.orgId, actor: { type: 'user', userId: session.userId } });
+      const member = actor !== null;
       ctx = userCtx;
       decision = await decideRealtimeAccess(channel, {
         memberOrgId: member ? channel.orgId : null,
@@ -247,7 +299,7 @@ export async function authorizeRealtime(
   if (decision === 'deny') return { ok: false, status: identified ? 403 : 401 };
   if (decision === 'public') {
     const open = channel.eventId ? await isPublicEvent(channel.orgId, channel.eventId) : false;
-    if (!open) return { ok: false, status: 404 };
+    if (!open || !(await sessionOpen(channel))) return { ok: false, status: 404 };
     return { ok: true, channel, as: 'public', who };
   }
   // Allowed by role or device: the module must be on, and the event must be this org's.
@@ -258,6 +310,7 @@ export async function authorizeRealtime(
     const exists = await withTenant(systemCtx(channel.orgId), (tx) => findEventTx(tx, eventId));
     if (!exists) return { ok: false, status: 404 };
   }
+  if (!(await sessionOpen(channel))) return { ok: false, status: 404 };
   return { ok: true, channel, as, who };
 }
 
@@ -356,6 +409,48 @@ export async function seatStreamResponse(
     req,
     { ok: true, channel, as: opts.kind === 'public' ? 'public' : 'member', who: opts.who ?? 'anonymous' },
     { rateBucket: `seat-stream:${opts.eventId}:${streamKey(opts.who)}` },
+  );
+}
+
+/**
+ * M4.5b: a guest's live slideshow. The route already checked the guest site's password and that
+ * the gallery is on (the org and event come from the site's address); same stream, same limits.
+ */
+export async function galleryStreamResponse(
+  req: Request,
+  opts: { orgId: string; eventId: string; who: string | null },
+): Promise<Response> {
+  const channel = REALTIME_CHANNELS.resolve(
+    `org:${opts.orgId}:event:${opts.eventId}:${GALLERY_CHANNEL.topic}`,
+  ) as ResolvedChannel;
+  return realtimeStreamResponse(
+    req,
+    { ok: true, channel, as: 'public', who: opts.who ?? 'anonymous' },
+    { rateBucket: `gallery-stream:${opts.eventId}:${streamKey(opts.who)}` },
+  );
+}
+
+/**
+ * A chat inbox stream (M5.8b): the route proved who the caller is and worked out their own inbox
+ * (`own`); a `channel` the browser names must be exactly that inbox (403 otherwise: another
+ * person's, another event's or another org's inbox is never attached). Same stream, limits and
+ * resumption as every channel.
+ */
+export async function inboxStreamResponse(
+  req: Request,
+  own: string | null,
+  who: string,
+  allowed: (own: string | null, requested: string) => boolean,
+): Promise<Response> {
+  if (!own) return new Response(null, { status: 404 });
+  const requested = new URL(req.url).searchParams.get('channel');
+  if (requested !== null && !allowed(own, requested)) return new Response(null, { status: 403 });
+  const channel = REALTIME_CHANNELS.resolve(own);
+  if (!channel) return new Response(null, { status: 404 });
+  return realtimeStreamResponse(
+    req,
+    { ok: true, channel, as: 'member', who },
+    { rateBucket: `chat-stream:${channel.inboxId ?? ''}:${streamKey(who)}` },
   );
 }
 

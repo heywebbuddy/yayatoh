@@ -5,7 +5,7 @@ import { closePools } from '@yayatoh/db';
 import { catchUpListings } from '@yayatoh/marketplace';
 import { signLinkToken } from '@yayatoh/platform';
 import { resolveOrgSlug } from '@yayatoh/tenancy';
-import { expectAccessible, signIn } from './helpers.ts';
+import { expectAccessible, pickOption, signIn } from './helpers.ts';
 
 const PORT = Number(process.env.E2E_PORT ?? 3100);
 const MARKET = `http://yayatoh.localhost:${PORT}`;
@@ -46,7 +46,7 @@ async function noHorizontalScroll(page: Page) {
 async function createEvent(page: Page, name: string, org = ORG) {
   await page.goto(`${org}/events/new`);
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Time zone').selectOption('America/Chicago');
+  await pickOption(page.getByLabel('Time zone'), 'America/Chicago');
   await page.getByLabel('Starts', { exact: true }).fill('2029-06-12T18:00');
   await page.getByLabel('Ends', { exact: true }).fill('2029-06-12T22:00');
   await page.getByRole('button', { name: 'Create draft' }).click();

@@ -25,6 +25,7 @@ import { formatNumber } from '@/lib/format.ts';
 import { realtimeUrl } from '@/lib/realtime-url.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
+import { CardSavingQr } from '../donations/pledges/card-qr.tsx';
 import {
   checkpointArchivedAction,
   createCheckpointAction,
@@ -49,6 +50,13 @@ const DOT = {
   granted: 'success',
   no_access: 'danger',
   wrong_checkpoint: 'danger',
+  balance_due: 'warning',
+  entered: 'success',
+  scanned_out: 'success',
+  not_in_room: 'warning',
+  not_enrolled: 'danger',
+  admission_level: 'danger',
+  capacity: 'warning',
 } as const;
 
 /** Door check-in: HID scanners and manual entry, entrances and zones, devices and alerts. */
@@ -71,7 +79,15 @@ export default async function OnsitePage({
     return (
       <>
         <PageHeader title={t('checkin.title')} />
-        <EmptyState title={t('checkin.noAccessTitle')} description={t('checkin.noAccessDescription')} />
+        <EmptyState
+          title={t('checkin.noAccessTitle')}
+          description={t('checkin.noAccessDescription')}
+          action={
+            <Link href={`/o/${org}/e/${event}`} className={buttonClass('primary', 'md')}>
+              {t('checkin.backToEvent')}
+            </Link>
+          }
+        />
       </>
     );
   }
@@ -131,7 +147,7 @@ export default async function OnsitePage({
           {status.byCheckpoint.map((c) => (
             <li
               key={c.checkpointId}
-              className="rounded-pill border border-zinc-200 bg-white px-4 py-1.5 text-caption"
+              className="rounded-pill border border-line bg-surface px-4 py-1.5 text-caption"
             >
               {c.name} · {formatNumber(c.admittedToday, locale)}
             </li>
@@ -141,13 +157,18 @@ export default async function OnsitePage({
       <Scanner
         action={scanAction.bind(null, org, event)}
         timeZone={ev.timezone}
-        checkpoints={standable.map((c) => ({ id: c.id, name: c.name }))}
+        checkpoints={standable.map((c) => ({ id: c.id, name: c.name, kind: c.kind }))}
         scoped={scope.checkpointIds !== null}
+        presenceUrl={`/api/command-center/${org}/${event}/presence`}
       />
+      {/* M4.8e: at a gala with an open campaign, the desk shows guests the card-saving QR code. */}
+      {data.modules.has('donations') ? (
+        <CardSavingQr orgId={data.org.id} eventId={ev.id} slug={ev.slug} source="checkin" />
+      ) : null}
       {status.signals.length > 0 ? (
         <section
           aria-labelledby="signals-heading"
-          className="flex flex-col gap-2 rounded-panel border-2 border-accent-700 bg-accent-50 px-5 py-4 text-accent-text"
+          className="flex flex-col gap-2 rounded-panel border-2 border-primary bg-primary-soft px-5 py-4 text-primary-ink"
         >
           <h2 id="signals-heading" className="text-section">
             {t('checkpoints.signalsTitle', { count: status.signals.length })}
@@ -168,7 +189,7 @@ export default async function OnsitePage({
           </Link>
         </section>
       ) : (
-        <p className="text-caption text-zinc-600">
+        <p className="text-caption text-ink-2">
           <Link href={`${base}/signals`} className="underline">
             {t('signals.openList')}
           </Link>
@@ -178,7 +199,7 @@ export default async function OnsitePage({
         <h2 id="door-staff-heading" className="text-section">
           {t('doorStaff.byCheckpoint')}
         </h2>
-        <ul className="flex list-none flex-col divide-y divide-zinc-100 rounded-card border border-zinc-200 bg-white p-0">
+        <ul className="flex list-none flex-col divide-y divide-line rounded-card border border-line bg-surface p-0">
           {status.staff
             .filter((s) => s.checkpointId === null || cpName.has(s.checkpointId))
             .map((s) => (
@@ -189,7 +210,7 @@ export default async function OnsitePage({
                 <span className="min-w-32 font-medium">
                   {s.checkpointId ? cpName.get(s.checkpointId) : t('doorStaff.anywhere')}
                 </span>
-                <span className="text-body text-zinc-700">
+                <span className="text-body text-ink-2">
                   {s.userIds.length > 0 ? s.userIds.map(nameOf).join(', ') : t('doorStaff.nobody')}
                 </span>
               </li>
@@ -204,7 +225,7 @@ export default async function OnsitePage({
       {status.alerts.length > 0 ? (
         <section
           aria-labelledby="alerts-heading"
-          className="flex flex-col gap-2 rounded-panel border-2 border-pink-700 bg-pink-50 px-5 py-4 text-pink-700"
+          className="flex flex-col gap-2 rounded-panel border-2 border-danger bg-danger-soft px-5 py-4 text-danger"
         >
           <h2 id="alerts-heading" className="text-section">
             {t('checkin.alertsTitle', { count: status.alerts.length })}
@@ -225,13 +246,21 @@ export default async function OnsitePage({
           {t('checkin.recent')}
         </h2>
         {status.recent.length === 0 ? (
-          <EmptyState title={t('checkin.noScansTitle')} description={t('checkin.noScansDescription')} />
+          <EmptyState
+            title={t('checkin.noScansTitle')}
+            description={t('checkin.noScansDescription')}
+            action={
+              <Link href="#scan-code" className={buttonClass('primary', 'md')}>
+                {t('checkin.scanFirst')}
+              </Link>
+            }
+          />
         ) : (
           <Card size="panel">
-            <ol className="flex list-none flex-col divide-y divide-zinc-100 p-0">
+            <ol className="flex list-none flex-col divide-y divide-line p-0">
               {status.recent.map((r, i) => (
                 <li key={`${r.at.toISOString()}-${i}`} className="flex flex-wrap items-center gap-3 py-2.5">
-                  <span className="w-16 font-mono text-caption text-zinc-500">{time.format(r.at)}</span>
+                  <span className="w-16 font-mono text-caption text-ink-2">{time.format(r.at)}</span>
                   <StatusDot
                     status={r.undone ? 'neutral' : DOT[r.result]}
                     label={r.undone ? t('checkin.undone') : t(`checkin.result.${r.result}`)}
@@ -260,24 +289,30 @@ export default async function OnsitePage({
           <h2 id="checkpoints-heading" className="text-section">
             {t('checkpoints.title')}
           </h2>
-          <p className="text-caption text-zinc-500">{t('checkpoints.description')}</p>
+          <p className="text-caption text-ink-2">{t('checkpoints.description')}</p>
+          <Link href={`${base}/sessions`} className={buttonClass('secondary', 'sm', 'self-start')}>
+            {t('sessionCheckin.manage')}
+          </Link>
           {checkpoints.length > 0 ? (
             <Card size="panel">
-              <ul className="flex list-none flex-col divide-y divide-zinc-100 p-0">
+              <ul className="flex list-none flex-col divide-y divide-line p-0">
                 {checkpoints.map((c) => (
                   <li key={c.id} className="flex flex-wrap items-center gap-3 py-2.5">
                     <span className="min-w-0 flex-1">
                       <span className="block">{c.name}</span>
-                      <span className="text-caption text-zinc-500">
+                      <span className="text-caption text-ink-2">
                         {c.archived
                           ? t('checkpoints.archived')
-                          : c.kind === 'entrance'
-                            ? t('checkpoints.entrance')
-                            : c.ticketTypeIds.length === 0
-                              ? t('checkpoints.zoneAll')
-                              : t('checkpoints.zoneFor', {
-                                  types: c.ticketTypeIds.map((id) => typeName.get(id) ?? '—').join(', '),
-                                })}
+                          : c.kind === 'session'
+                            ? t('sessionCheckin.sessionDoor')
+                            : c.kind === 'entrance'
+                              ? t('checkpoints.entrance')
+                              : c.ticketTypeIds.length === 0
+                                ? t('checkpoints.zoneAll')
+                                : t('checkpoints.zoneFor', {
+                                    types: c.ticketTypeIds.map((id) => typeName.get(id) ?? '—').join(', '),
+                                  })}
+                        {c.capacity !== null ? ` · ${t('checkpoints.holds', { count: c.capacity })}` : ''}
                         {c.latitude !== null && c.longitude !== null
                           ? ` · ${t('checkpoints.located', { lat: c.latitude.toFixed(5), lng: c.longitude.toFixed(5) })}`
                           : ''}
@@ -313,23 +348,23 @@ export default async function OnsitePage({
           <h2 id="devices-heading" className="text-section">
             {t('devices.title')}
           </h2>
-          <p className="text-caption text-zinc-500">{t('devices.description')}</p>
+          <p className="text-caption text-ink-2">{t('devices.description')}</p>
           {devices.length > 0 ? (
             <Card size="panel">
-              <ul className="flex list-none flex-col divide-y divide-zinc-100 p-0">
+              <ul className="flex list-none flex-col divide-y divide-line p-0">
                 {devices.map((d) => (
                   <li key={d.id} className="flex flex-wrap items-center gap-3 py-2.5">
                     <span className="min-w-0 flex-1">
                       <span className="block">
                         {d.label}
                         {d.assignedUserId ? (
-                          <span className="text-caption text-zinc-500">
+                          <span className="text-caption text-ink-2">
                             {' '}
                             · {t('devices.handedToName', { name: nameOf(d.assignedUserId) })}
                           </span>
                         ) : null}
                       </span>
-                      <span className="text-caption text-zinc-500">
+                      <span className="text-caption text-ink-2">
                         {d.revoked
                           ? t('devices.revoked')
                           : d.wipeRequested

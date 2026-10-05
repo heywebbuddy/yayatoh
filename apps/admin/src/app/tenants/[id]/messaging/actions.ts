@@ -1,10 +1,13 @@
 'use server';
 
-import { type Ctx, executeCommand, isDomainError } from '@yayatoh/kernel';
+import { type Ctx, DomainError, executeCommand, isDomainError } from '@yayatoh/kernel';
 import {
   liftAutoPauseCommand,
+  MESSAGING_SERVICE_SID,
   QUOTA_CHANNELS,
   type QuotaChannel,
+  senderStatusFromEnv,
+  setChannelSenderCommand,
   setQuotaLimitCommand,
 } from '@yayatoh/notifications';
 import { revalidatePath } from 'next/cache';
@@ -59,4 +62,57 @@ export async function quotaAction(orgId: string, channel: QuotaChannel, form: Fo
       ports,
     ),
   );
+}
+
+const E164 = /^\+[1-9][0-9]{6,14}$/;
+const invalid = (reason: string) => new DomainError('validation_failed', reason, { reason });
+
+/** An optional display number: E.164 or empty. */
+function displayNumber(form: FormData): string | null {
+  const raw = String(form.get('number') ?? '').replace(/[\s()-]/g, '');
+  if (!raw) return null;
+  if (!E164.test(raw)) throw invalid('number');
+  return raw;
+}
+
+/**
+ * The tenant's own SMS sender (M3.5b; admin and support; audited): a Twilio Messaging Service,
+ * saved with its 10DLC campaign status as Twilio reports it now; or back to the shared number.
+ */
+export async function smsSenderAction(orgId: string, form: FormData) {
+  const clear = form.get('intent') === 'clear';
+  await run(orgId, 'messaging', clear ? 'sender_cleared' : 'sender', async (ctx) => {
+    if (clear) return executeCommand(setChannelSenderCommand, { kind: 'clear', channel: 'sms' }, ctx, ports);
+    const sid = String(form.get('sid') ?? '').trim();
+    if (!MESSAGING_SERVICE_SID.test(sid)) throw invalid('sid');
+    const number = displayNumber(form);
+    const port = senderStatusFromEnv(process.env);
+    if (!port) throw invalid('unavailable');
+    const campaignStatus = await port.campaignStatus(sid);
+    return executeCommand(
+      setChannelSenderCommand,
+      { kind: 'sms', messagingServiceSid: sid, displayNumber: number, campaignStatus },
+      ctx,
+      ports,
+    );
+  });
+}
+
+/** The tenant's WhatsApp route (decision P3-2): the Cloud API with its phone number id, or the gateway. */
+export async function whatsappSenderAction(orgId: string, form: FormData) {
+  const clear = form.get('intent') === 'clear';
+  await run(orgId, 'messaging', clear ? 'sender_cleared' : 'sender', async (ctx) => {
+    if (clear)
+      return executeCommand(setChannelSenderCommand, { kind: 'clear', channel: 'whatsapp' }, ctx, ports);
+    const route = form.get('route') === 'gateway' ? 'gateway' : 'cloud';
+    const ref = String(form.get('ref') ?? '').trim();
+    if (route === 'cloud' && !/^[0-9]{5,30}$/.test(ref)) throw invalid('phone_number_id');
+    if (route === 'gateway' && ref && !/^[A-Za-z0-9_-]{1,64}$/.test(ref)) throw invalid('gateway_sender');
+    return executeCommand(
+      setChannelSenderCommand,
+      { kind: 'whatsapp', route, senderRef: ref || null, displayNumber: displayNumber(form) },
+      ctx,
+      ports,
+    );
+  });
 }

@@ -1,6 +1,6 @@
 import { expect, type Page, test } from '@playwright/test';
 import { createYayatohClient, type Schemas, unwrap, YayatohApiError } from '@yayatoh/sdk';
-import { signIn } from './helpers.ts';
+import { inOptions, pickOption, signIn } from './helpers.ts';
 
 const ORG = '/o/lakeside-events';
 const TZ = 'America/Chicago';
@@ -22,8 +22,8 @@ const at = (days: number, hhmm: string) => `${chicagoDate(days)}T${hhmm}`;
 async function createEvent(page: Page, name: string, opts: { private?: boolean } = {}) {
   await page.goto(`${ORG}/events/new`);
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Event type').selectOption('conference');
-  await page.getByLabel('Time zone').selectOption(TZ);
+  await pickOption(page.getByLabel('Event type'), 'conference');
+  await pickOption(page.getByLabel('Time zone'), TZ);
   await page.getByLabel('Starts', { exact: true }).fill(at(40, '09:00'));
   await page.getByLabel('Ends', { exact: true }).fill(at(42, '18:00'));
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -57,11 +57,10 @@ async function addSession(
   await page.goto(`${base}/sessions`);
   const rooms = page.getByRole('region', { name: 'Rooms' });
   if (
-    (await page
-      .getByRole('region', { name: 'Add session' })
-      .getByLabel('Room', { exact: true })
-      .locator('option', { hasText: 'Main hall' })
-      .count()) === 0
+    (await inOptions(
+      page.getByRole('region', { name: 'Add session' }).getByLabel('Room', { exact: true }),
+      (list) => list.getByRole('option', { name: 'Main hall' }).count(),
+    )) === 0
   ) {
     await rooms.getByLabel('Room name').fill('Main hall');
     await rooms.getByRole('button', { name: 'Add room' }).click();
@@ -71,7 +70,7 @@ async function addSession(
   await add.getByLabel('Session title').fill(s.title);
   await add.getByLabel('Session starts').fill(s.from);
   await add.getByLabel('Session ends').fill(s.to);
-  await add.getByLabel('Room', { exact: true }).selectOption({ label: 'Main hall' });
+  await pickOption(add.getByLabel('Room', { exact: true }), { label: 'Main hall' });
   if (s.speaker) await add.getByRole('checkbox', { name: s.speaker }).check();
   await add.getByRole('button', { name: 'Add session' }).click();
   await expect(add.getByText('Session added.')).toBeVisible();

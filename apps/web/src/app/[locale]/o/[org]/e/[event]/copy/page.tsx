@@ -1,7 +1,8 @@
 import { utcToZonedInput } from '@yayatoh/kernel';
-import { Card, EmptyState, PageHeader } from '@yayatoh/ui';
+import { buttonClass, Card, EmptyState, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { CopyEventForm, SaveTemplateForm } from '@/components/copy-forms.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import { profileT } from '@/lib/profile-copy.ts';
 import { loadEvent } from '@/server/console.ts';
 import { duplicateAction, saveTemplateAction } from './actions.ts';
@@ -25,7 +26,15 @@ export default async function CopyPage({
     return (
       <>
         <PageHeader title={t('copy.title')} />
-        <EmptyState title={t('copy.noAccessTitle')} description={t('copy.noAccessDescription')} />
+        <EmptyState
+          title={t('copy.noAccessTitle')}
+          description={t('copy.noAccessDescription')}
+          action={
+            <Link href={`/o/${org}/e/${event}`} className={buttonClass('primary', 'md')}>
+              {t('copy.backToEvent')}
+            </Link>
+          }
+        />
       </>
     );
   return (
@@ -35,7 +44,7 @@ export default async function CopyPage({
         <h2 id="duplicate-heading" className="text-section">
           {t('copy.duplicate')}
         </h2>
-        <p className="text-body text-zinc-600">{t('copy.duplicateHint')}</p>
+        <p className="text-body text-ink-2">{t('copy.duplicateHint')}</p>
         <Card>
           <CopyEventForm
             idPrefix="duplicate"
@@ -45,14 +54,19 @@ export default async function CopyPage({
               startsAt: utcToZonedInput(ev.startsAt, ev.timezone),
             }}
             submitLabel={t('copy.duplicateSubmit')}
+            timeZone={ev.timezone}
           />
         </Card>
       </section>
-      <section aria-labelledby="template-heading" className="flex flex-col gap-3">
+      <section
+        id="save-template"
+        aria-labelledby="template-heading"
+        className="flex scroll-mt-4 flex-col gap-3"
+      >
         <h2 id="template-heading" className="text-section">
           {t('copy.template')}
         </h2>
-        <p className="text-body text-zinc-600">{t('copy.templateHint')}</p>
+        <p className="text-body text-ink-2">{t('copy.templateHint')}</p>
         <Card>
           <SaveTemplateForm
             action={saveTemplateAction.bind(null, org, event)}

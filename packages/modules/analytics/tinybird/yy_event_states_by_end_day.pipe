@@ -1,0 +1,11 @@
+# M6.2a — events whose end day falls in the range (no-shows). Per-org JWT with fixed org_id.
+
+NODE endpoint
+SQL >
+    %
+    SELECT org_id, event_id, starts_at, ends_at, end_day, valid_tickets, checked_in
+    FROM yy_event_states FINAL
+    WHERE org_id = {{ String(org_id, required=True) }}
+      AND deleted = 0
+      AND end_day BETWEEN {{ Date(from, required=True) }} AND {{ Date(to, required=True) }}
+      {% if defined(event_id) %} AND event_id = {{ String(event_id) }} {% end %}

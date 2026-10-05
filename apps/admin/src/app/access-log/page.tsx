@@ -19,7 +19,7 @@ export default async function AccessLogPage() {
         <section className="overflow-x-auto" tabIndex={0} aria-label={t('title')}>
           <table className="w-full text-start text-caption">
             <caption className="sr-only">{t('title')}</caption>
-            <thead className="text-zinc-500">
+            <thead className="text-ink-2">
               <tr>
                 <th scope="col" className="px-4 py-2 text-start font-normal">
                   {t('at')}
@@ -34,7 +34,7 @@ export default async function AccessLogPage() {
             </thead>
             <tbody>
               {rows.map((r, i) => (
-                <tr key={`${r.at.toISOString()}-${i}`} className="border-t border-zinc-100">
+                <tr key={`${r.at.toISOString()}-${i}`} className="border-t border-line">
                   <td className="px-4 py-1.5 whitespace-nowrap">{when.format(r.at)}</td>
                   <td className="px-4 py-1.5 font-mono">{r.actor}</td>
                   <td className="px-4 py-1.5">{r.reason}</td>

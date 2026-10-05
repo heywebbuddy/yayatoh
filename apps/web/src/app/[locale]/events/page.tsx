@@ -3,8 +3,10 @@ import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import { MarketplaceResults } from '@/components/marketplace/results.tsx';
 import { SiteFooter, SiteHeader } from '@/components/marketplace/site-chrome.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import { pageLocale } from '@/server/locale.ts';
 import { requestHost } from '@/server/request-origin.ts';
+import { searchConfigured } from '@/server/search.ts';
 import { apexOrigin, publicMetadata } from '@/server/seo.ts';
 
 type Props = {
@@ -38,10 +40,18 @@ export default async function EventsPage({ params, searchParams }: Props) {
   const t = await getTranslations('market');
   const sp = parseSearchParams(await searchParams);
   return (
-    <div className="min-h-dvh bg-white">
+    <div className="min-h-dvh bg-surface">
       <SiteHeader />
       <main id="main" className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 pb-8 md:px-6">
-        <h1 className="pt-6 text-[40px] leading-none font-light tracking-[-0.045em]">{t('events.title')}</h1>
+        <h1 className="pt-6 text-[40px] leading-none font-extrabold tracking-[-0.045em]">
+          {t('events.title')}
+        </h1>
+        {/* M6.14a: search v2 (facets, geo, recommendations) when an index is configured. */}
+        {searchConfigured() && (await requestHost()).kind === 'marketplace' ? (
+          <Link href="/search" className="inline-flex min-h-6 items-center self-start text-body underline">
+            {t('search.openSearch')}
+          </Link>
+        ) : null}
         <MarketplaceResults locale={locale} params={sp} path="/events" />
       </main>
       <SiteFooter />

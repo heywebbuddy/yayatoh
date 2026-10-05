@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, Input } from '@yayatoh/ui';
+import { Alert, Button, DateTimePicker, Input } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState, useEffect, useRef } from 'react';
 import { errorMessageKey } from '@/lib/errors.ts';
@@ -50,16 +50,15 @@ export function AccessCodeForm({
           hint={t('maxUsesHint')}
           error={bad.has('maxUses') ? t('maxUsesInvalid') : undefined}
         />
-        <Input
+        <DateTimePicker
           name="expiresAt"
-          type="datetime-local"
           label={t('expiresAt')}
           hint={t('expiresHint')}
           error={bad.has('expiresAt') ? t('expiresInvalid') : undefined}
         />
       </div>
       <fieldset className="flex flex-col gap-2" aria-describedby={nothing ? 'unlocks-error' : undefined}>
-        <legend className="text-caption text-zinc-600">{t('unlocks')}</legend>
+        <legend className="text-[13px] font-bold text-ink">{t('unlocks')}</legend>
         <label className="flex min-h-6 items-center gap-2 text-body">
           <input
             type="checkbox"
@@ -76,11 +75,9 @@ export function AccessCodeForm({
             {t('unlocksPass', { name: p.name })}
           </label>
         ))}
-        {hiddenPasses.length === 0 ? (
-          <p className="text-caption text-zinc-500">{t('noHiddenPasses')}</p>
-        ) : null}
+        {hiddenPasses.length === 0 ? <p className="text-caption text-ink-2">{t('noHiddenPasses')}</p> : null}
         {nothing ? (
-          <p id="unlocks-error" className="text-caption text-pink-700">
+          <p id="unlocks-error" className="text-caption text-danger">
             {t('unlocksRequired')}
           </p>
         ) : null}

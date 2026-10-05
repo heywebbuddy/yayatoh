@@ -15,6 +15,8 @@ export interface ParticipationFacts {
   readonly spendMinor: number;
   readonly registeredAt: Date;
   readonly labels: readonly string[];
+  /** M4.1d: the contact's RSVP as a wedding guest at this event, if they are one. */
+  readonly rsvp?: 'attending' | 'declined' | 'awaiting' | null;
 }
 
 const MAX_ROW_LABELS = 60;
@@ -69,6 +71,7 @@ export async function replaceParticipationTx(
           registered: r.registered,
           orders: r.orders,
           labels: [...new Set(r.labels)].sort().slice(0, MAX_ROW_LABELS),
+          rsvp: r.rsvp ?? null,
         })),
       )
       .onConflictDoUpdate({
@@ -85,6 +88,7 @@ export async function replaceParticipationTx(
           registered: sql`excluded.registered`,
           orders: sql`excluded.orders`,
           labels: sql`excluded.labels`,
+          rsvp: sql`excluded.rsvp`,
           updatedAt: ctx.now,
         },
       });
@@ -123,4 +127,17 @@ export async function refreshContactProfilesTx(
     sql`select crm.refresh_contact_profiles(${orgId}::uuid, ${ids}) as n`,
   );
   return Number(row?.n ?? 0);
+}
+
+/** The events these contacts have participation rows for (M6.1a: what a merge recomputes). */
+export async function participationEventIdsTx(
+  tx: TenantTx,
+  contactIds: readonly string[],
+): Promise<string[]> {
+  if (contactIds.length === 0) return [];
+  const rows = await tx
+    .selectDistinct({ eventId: eventParticipation.eventId })
+    .from(eventParticipation)
+    .where(inArray(eventParticipation.contactId, [...contactIds]));
+  return rows.map((r) => r.eventId);
 }

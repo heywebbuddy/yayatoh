@@ -11,34 +11,29 @@ export async function EventSections({ sections }: { sections: readonly PublicSec
         <section
           key={s.id}
           aria-labelledby={`section-${s.id}`}
-          className="flex flex-col gap-4 px-6 pb-10 md:px-16"
+          className="flex scroll-mt-4 flex-col gap-4 rounded-panel border border-line bg-surface p-5 elevation-card glass md:p-6"
         >
-          <h2 id={`section-${s.id}`} className="text-[28px] font-normal tracking-[-0.03em]">
+          <h2 id={`section-${s.id}`} className="text-section">
             {s.title}
           </h2>
           {s.kind === 'text' ? <Markdown source={s.content.markdown} /> : null}
           {s.kind === 'faq' ? (
-            <div className="flex flex-col divide-y divide-zinc-100 rounded-card border border-zinc-200">
+            <div className="flex flex-col divide-y divide-line rounded-card border border-line">
               {s.content.items.map((item) => (
                 <details key={item.question} className="group px-5 py-3">
-                  <summary className="min-h-6 cursor-pointer font-medium text-zinc-900">
-                    {item.question}
-                  </summary>
-                  <Markdown
-                    source={item.answer}
-                    className="flex flex-col gap-2 pt-2 text-body text-zinc-700"
-                  />
+                  <summary className="min-h-6 cursor-pointer font-medium text-ink">{item.question}</summary>
+                  <Markdown source={item.answer} className="flex flex-col gap-2 pt-2 text-body text-ink-2" />
                 </details>
               ))}
             </div>
           ) : null}
           {s.kind === 'schedule' ? (
-            <ol className="list-none divide-y divide-zinc-100 rounded-card border border-zinc-200 p-0">
+            <ol className="list-none divide-y divide-line rounded-card border border-line p-0">
               {s.content.items.map((item) => (
                 <li key={`${item.time}-${item.title}`} className="flex flex-wrap gap-x-6 gap-y-1 px-5 py-4">
-                  <time className="w-14 font-mono text-caption text-zinc-500">{item.time}</time>
+                  <time className="w-16 text-body font-extrabold text-ink tabular-nums">{item.time}</time>
                   <span className="flex-1">{item.title}</span>
-                  {item.detail ? <span className="text-caption text-zinc-500">{item.detail}</span> : null}
+                  {item.detail ? <span className="text-caption text-ink-2">{item.detail}</span> : null}
                 </li>
               ))}
             </ol>
@@ -46,7 +41,7 @@ export async function EventSections({ sections }: { sections: readonly PublicSec
           {s.kind === 'location' ? (
             <div className="flex flex-col gap-3">
               {s.content.address ? (
-                <address className="whitespace-pre-line not-italic text-body text-zinc-700">
+                <address className="whitespace-pre-line not-italic text-body text-ink-2">
                   {s.content.address}
                 </address>
               ) : null}

@@ -26,6 +26,8 @@ export const SessionDto = z.object({
   trackId: z.uuid().nullable(),
   capacity: z.number().int().nullable(),
   speakerIds: z.array(z.uuid()),
+  /** M5.3b: an accepted proposal not yet on the agenda (never public). */
+  draft: z.boolean(),
 });
 export type SessionDto = z.infer<typeof SessionDto>;
 
@@ -112,6 +114,9 @@ export const PublicSessionDto = z.object({
   room: z.string().nullable(),
   track: z.string().nullable(),
   speakers: z.array(PublicSpeakerRef),
+  /** M5.2a: the session type's name ("Workshop") and whether it is included or optional. */
+  type: z.string().nullable(),
+  admission: z.enum(['included', 'optional']),
 });
 export type PublicSessionDto = z.infer<typeof PublicSessionDto>;
 

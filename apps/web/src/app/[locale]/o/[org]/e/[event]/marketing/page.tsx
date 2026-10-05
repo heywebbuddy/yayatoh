@@ -40,7 +40,7 @@ export default async function MarketingPage({
       <Card className="flex flex-wrap items-center justify-between gap-3">
         <span className="flex flex-col">
           <span className="text-body font-medium">{ts('title')}</span>
-          <span className="text-caption text-zinc-600">{ts('marketingHint')}</span>
+          <span className="text-caption text-ink-2">{ts('marketingHint')}</span>
         </span>
         <Link href={`/o/${org}/e/${event}/marketing/surveys`} className={buttonClass('secondary', 'sm')}>
           {ts('open')}
@@ -73,7 +73,7 @@ export default async function MarketingPage({
               cell: (a) => (
                 <span className="flex flex-col">
                   <span>{a.subject}</span>
-                  <span className="line-clamp-2 text-caption text-zinc-500">{a.body}</span>
+                  <span className="line-clamp-2 text-caption text-ink-2">{a.body}</span>
                 </span>
               ),
             },
@@ -96,7 +96,7 @@ export default async function MarketingPage({
                 <span className="flex flex-col gap-0.5">
                   <span>{t('deliveryCounts', a.delivery)}</span>
                   {a.reasons.length ? (
-                    <span className="flex flex-col text-caption text-zinc-600">
+                    <span className="flex flex-col text-caption text-ink-2">
                       <span className="sr-only">{t('reasonsLabel')}</span>
                       {a.reasons.map((r) => (
                         <span key={`${r.channel}:${r.reason}`}>

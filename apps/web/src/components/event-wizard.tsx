@@ -1,30 +1,26 @@
 'use client';
 
-import { Alert, Button, Card, Input } from '@yayatoh/ui';
+import {
+  Alert,
+  Button,
+  Card,
+  CurrencyPicker,
+  DateTimePicker,
+  Input,
+  Select,
+  TimeZonePicker,
+} from '@yayatoh/ui';
 import { Check } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useActionState, useEffect, useRef, useState } from 'react';
 import type { WizardState } from '@/app/[locale]/o/[org]/(org)/events/new/actions.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
 import { readinessRules } from '@/lib/readiness.ts';
+import { type PickerProfile, ProfilePicker } from './profile-picker.tsx';
+import { seriesErrorKey } from './series-errors.ts';
+import { NEW_SERIES, SeriesField } from './series-field.tsx';
 
-const PROFILES = ['conference', 'gala', 'concert', 'wedding', 'community', 'agency', 'other'] as const;
 const MODES = ['in_person', 'online', 'hybrid'] as const;
-const ZONES = [
-  'America/New_York',
-  'America/Chicago',
-  'America/Denver',
-  'America/Los_Angeles',
-  'America/Toronto',
-  'Europe/London',
-  'Europe/Paris',
-  'Africa/Lagos',
-  'Africa/Accra',
-  'Asia/Dubai',
-  'Asia/Kolkata',
-  'Asia/Tokyo',
-  'Australia/Sydney',
-] as const;
 const STEPS = ['basics', 'when', 'tickets'] as const;
 /** Fields with their own message under `wizard.errors.*`; others get the generic one. */
 const KNOWN_ERRORS = new Set([
@@ -39,6 +35,7 @@ const KNOWN_ERRORS = new Set([
   'ticketName',
   'ticketPrice',
   'ticketQuantity',
+  'series',
 ]);
 
 type Values = Record<
@@ -54,7 +51,9 @@ type Values = Record<
   | 'city'
   | 'ticketName'
   | 'ticketPrice'
-  | 'ticketQuantity',
+  | 'ticketQuantity'
+  | 'series'
+  | 'currency',
   string
 >;
 type Field = keyof Values;
@@ -94,13 +93,20 @@ export function EventWizard({
   venues,
   currency,
   ticketing,
+  series = null,
+  profiles,
 }: {
   action: (prev: WizardState, form: FormData) => Promise<WizardState>;
-  defaults: { profile: string; timezone: string };
+  /** `series`: the series picked in advance (U7, "Create event in this series"). */
+  defaults: { profile: string; timezone: string; series?: string };
+  /** U8: the "What kind of event?" choices with the sections each includes. */
+  profiles: readonly PickerProfile[];
   venues: readonly { id: string; name: string; city: string | null }[];
   currency: string;
   /** Whether the org sells tickets (the first-pass fields and rule). */
   ticketing: boolean;
+  /** U7: the org's series for the Series field (null without access to them). */
+  series?: readonly { id: string; name: string }[] | null;
 }) {
   const t = useTranslations('wizard');
   const tn = useTranslations();
@@ -123,6 +129,8 @@ export function EventWizard({
     ticketName: '',
     ticketPrice: '',
     ticketQuantity: '',
+    series: defaults.series ?? '',
+    currency,
   });
   const heading = useRef<HTMLHeadingElement>(null);
   const moved = useRef(false);
@@ -141,6 +149,7 @@ export function EventWizard({
 
   const set = (k: Field) => (e: { target: { value: string } }) =>
     setV((p) => ({ ...p, [k]: e.target.value }));
+  const setTo = (k: Field) => (value: string) => setV((p) => ({ ...p, [k]: value }));
   const go = (to: number) => {
     if (to > step) {
       const e = validate(step, v);
@@ -151,10 +160,10 @@ export function EventWizard({
     setReached((r) => Math.max(r, to));
   };
   const err = (k: Field) => (errors[k] ? t(`errors.${errors[k]}`) : undefined);
-  const zones = ZONES.includes(defaults.timezone as (typeof ZONES)[number])
-    ? ZONES
-    : [defaults.timezone, ...ZONES];
-  const selectClass = 'min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body';
+  const seriesName = v.series.startsWith(NEW_SERIES)
+    ? v.series.slice(NEW_SERIES.length)
+    : (series?.find((x) => x.id === v.series)?.name ?? null);
+  const selectClass = 'field';
   const venue = venues.find((x) => x.id === v.venueId);
   const rules = readinessRules({
     name: v.name,
@@ -187,7 +196,7 @@ export function EventWizard({
                 disabled={i > reached || pending}
                 aria-current={i === step ? 'step' : undefined}
                 className={`inline-flex min-h-10 items-center gap-2 rounded-pill border px-4 text-caption ${
-                  i === step ? 'border-zinc-900 bg-zinc-900 text-white' : 'border-zinc-200 text-zinc-700'
+                  i === step ? 'border-ink bg-tag text-white' : 'border-line text-ink-2'
                 } disabled:opacity-60`}
               >
                 <span aria-hidden="true" className="font-mono">
@@ -227,12 +236,12 @@ export function EventWizard({
         <input type="hidden" name="requestKey" value={requestKey} />
         {(Object.keys(v) as Field[]).map((k) =>
           // Fields of other steps travel as hidden inputs, so the last step submits everything.
-          (step === 0 && ['name', 'tagline', 'profile'].includes(k)) ||
+          (step === 0 && ['name', 'tagline', 'profile', 'series'].includes(k)) ||
           (step === 1 &&
             ['timezone', 'startsAt', 'endsAt', 'attendanceMode', 'venueId', 'venueName', 'city'].includes(
               k,
             )) ||
-          (step === 2 && ['ticketName', 'ticketPrice', 'ticketQuantity'].includes(k)) ? null : (
+          (step === 2 && ['ticketName', 'ticketPrice', 'ticketQuantity', 'currency'].includes(k)) ? null : (
             <input key={k} type="hidden" name={k} value={v[k]} />
           ),
         )}
@@ -259,70 +268,67 @@ export function EventWizard({
               onChange={set('tagline')}
               error={err('tagline')}
             />
-            <div className="flex flex-col gap-1.5">
-              <label htmlFor="wizard-profile" className="text-caption text-zinc-600">
-                {t('profile')}
-              </label>
-              <select
-                id="wizard-profile"
-                name="profile"
-                value={v.profile}
-                onChange={set('profile')}
-                className={selectClass}
-              >
-                {PROFILES.map((p) => (
-                  <option key={p} value={p}>
-                    {tn(`profiles.${p}`)}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <ProfilePicker
+              id="wizard-profile"
+              label={t('profile')}
+              profiles={profiles}
+              value={v.profile}
+              onValueChange={setTo('profile')}
+              className={selectClass}
+            />
+            {series ? (
+              <SeriesField
+                id="wizard-series"
+                series={series}
+                value={v.series}
+                onValueChange={setTo('series')}
+                error={
+                  errors.series && state.code && state.field === 'series'
+                    ? tn(seriesErrorKey(state.code))
+                    : undefined
+                }
+              />
+            ) : null}
           </>
         ) : null}
 
         {step === 1 ? (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="flex flex-col gap-1.5 sm:col-span-2">
-              <label htmlFor="wizard-timezone" className="text-caption text-zinc-600">
+              <label htmlFor="wizard-timezone" className="text-[13px] font-bold text-ink">
                 {t('timezone')}
               </label>
-              <select
+              <TimeZonePicker
                 id="wizard-timezone"
                 name="timezone"
                 value={v.timezone}
-                onChange={set('timezone')}
+                onValueChange={setTo('timezone')}
                 className={selectClass}
-              >
-                {zones.map((z) => (
-                  <option key={z} value={z}>
-                    {z.replace(/_/g, ' ')}
-                  </option>
-                ))}
-              </select>
+              />
             </div>
-            <Input
+            <DateTimePicker
               id="wizard-starts"
               name="startsAt"
-              type="datetime-local"
               required
               label={t('startsAt')}
               hint={t('localTimeHint')}
               value={v.startsAt}
-              onChange={set('startsAt')}
+              onValueChange={setTo('startsAt')}
+              timeZone={v.timezone}
               error={err('startsAt')}
             />
-            <Input
+            <DateTimePicker
               id="wizard-ends"
               name="endsAt"
-              type="datetime-local"
               required
               label={t('endsAt')}
               value={v.endsAt}
-              onChange={set('endsAt')}
+              onValueChange={setTo('endsAt')}
+              timeZone={v.timezone}
               error={err('endsAt')}
             />
             <fieldset className="flex flex-col gap-1.5 sm:col-span-2">
-              <legend className="pb-1.5 text-caption text-zinc-600">{t('attendanceMode')}</legend>
+              <legend className="pb-1.5 text-[13px] font-bold text-ink">{t('attendanceMode')}</legend>
               <div className="flex flex-wrap gap-x-5 gap-y-1">
                 {MODES.map((m) => (
                   <label key={m} className="flex min-h-6 items-center gap-2 text-body">
@@ -341,14 +347,14 @@ export function EventWizard({
             </fieldset>
             {venues.length > 0 ? (
               <div className="flex flex-col gap-1.5 sm:col-span-2">
-                <label htmlFor="wizard-venue" className="text-caption text-zinc-600">
+                <label htmlFor="wizard-venue" className="text-[13px] font-bold text-ink">
                   {t('savedVenue')}
                 </label>
-                <select
+                <Select
                   id="wizard-venue"
                   name="venueId"
                   value={v.venueId}
-                  onChange={set('venueId')}
+                  onValueChange={setTo('venueId')}
                   className={selectClass}
                 >
                   <option value="">{t('noSavedVenue')}</option>
@@ -357,7 +363,7 @@ export function EventWizard({
                       {[x.name, x.city].filter(Boolean).join(', ')}
                     </option>
                   ))}
-                </select>
+                </Select>
               </div>
             ) : null}
             {v.venueId ? null : (
@@ -387,10 +393,22 @@ export function EventWizard({
 
         {step === 2 ? (
           <>
+            {/* U9 (UX-6): the event's own currency; it locks once the first order is placed. */}
+            <CurrencyPicker
+              id="wizard-currency"
+              name="currency"
+              required
+              value={v.currency}
+              onValueChange={setTo('currency')}
+              label={t('currency')}
+              hint={t('currencyHint')}
+              error={err('currency')}
+              className={`${selectClass} sm:max-w-sm`}
+            />
             {ticketing ? (
               <fieldset className="flex flex-col gap-3">
                 <legend className="pb-1 text-body font-medium">{t('firstPass')}</legend>
-                <p className="text-caption text-zinc-500">{t('firstPassHint')}</p>
+                <p className="text-caption text-ink-2">{t('firstPassHint')}</p>
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                   <Input
                     id="wizard-ticket-name"
@@ -405,7 +423,7 @@ export function EventWizard({
                     id="wizard-ticket-price"
                     name="ticketPrice"
                     inputMode="decimal"
-                    label={t('ticketPrice', { currency })}
+                    label={t('ticketPrice', { currency: v.currency })}
                     hint={t('ticketPriceHint')}
                     value={v.ticketPrice}
                     onChange={set('ticketPrice')}
@@ -428,14 +446,20 @@ export function EventWizard({
                 {t('summary')}
               </h3>
               <dl className="grid grid-cols-1 gap-x-4 gap-y-1 text-body sm:grid-cols-[max-content_1fr]">
-                <dt className="text-caption text-zinc-600">{t('name')}</dt>
+                <dt className="text-caption text-ink-2">{t('name')}</dt>
                 <dd className="m-0">{v.name}</dd>
-                <dt className="text-caption text-zinc-600">{t('when')}</dt>
+                {seriesName ? (
+                  <>
+                    <dt className="text-caption text-ink-2">{tn('seriesField.summary')}</dt>
+                    <dd className="m-0">{seriesName}</dd>
+                  </>
+                ) : null}
+                <dt className="text-caption text-ink-2">{t('when')}</dt>
                 <dd className="m-0">
                   {v.startsAt.replace('T', ' ')} – {v.endsAt.replace('T', ' ')} (
                   {v.timezone.replace(/_/g, ' ')})
                 </dd>
-                <dt className="text-caption text-zinc-600">{t('where')}</dt>
+                <dt className="text-caption text-ink-2">{t('where')}</dt>
                 <dd className="m-0">
                   {[venue?.name ?? v.venueName, venue ? venue.city : v.city].filter(Boolean).join(', ') ||
                     tn(`publicEvent.mode.${v.attendanceMode as (typeof MODES)[number]}`)}
@@ -446,7 +470,7 @@ export function EventWizard({
               <h3 id="wizard-checklist" className="text-body font-medium">
                 {t('checklist')}
               </h3>
-              <p className="text-caption text-zinc-500">{t('checklistHint')}</p>
+              <p className="text-caption text-ink-2">{t('checklistHint')}</p>
               <ul className="flex list-none flex-col gap-1 p-0">
                 {rules
                   .filter((r) => r.key !== 'datesUpcoming')
@@ -454,7 +478,7 @@ export function EventWizard({
                     <li key={r.key} className="flex items-center gap-2.5 text-body">
                       <span
                         aria-hidden="true"
-                        className={`flex size-[18px] items-center justify-center rounded-full ${r.done ? 'bg-green-500 text-white' : 'border border-zinc-300'}`}
+                        className={`flex size-[18px] items-center justify-center rounded-full ${r.done ? 'bg-success-dot text-white' : 'border border-line-strong'}`}
                       >
                         {r.done ? <Check className="size-3" strokeWidth={2.5} /> : null}
                       </span>

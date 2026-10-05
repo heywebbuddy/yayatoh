@@ -183,7 +183,13 @@ export const PROFILES: Readonly<Record<ProfileKey, Profile>> = {
       item('speakers', 'build', 'speakers', 'mic'),
       item('exhibitors', 'build', 'exhibitors', 'store'),
       item('sponsors', 'build', 'sponsors', 'award'),
+      // M6.9a: stream setup for online and hybrid sessions (the `virtual` module).
+      item('virtual', 'build', 'virtual', 'video'),
+      // M6.9b: CE credit rules and certificates (the `virtual` module, P6-13).
+      item('ceCredits', 'build', 'virtual', 'graduation-cap'),
       marketing,
+      // M5.5a: badge templates and batch PDFs, before the door.
+      item('badges', 'run', 'badges', 'id-card'),
       onsite,
       libraries,
     ]),
@@ -272,6 +278,10 @@ export const PROFILE_INDEPENDENT_SECTIONS = [
   'dates',
   'copy',
   'team',
+  // M3.2a: the Command Center (its widgets follow the profile themselves).
+  'commandCenter',
+  // M3.3b: the help queue (guest assistance at the door, every profile with check-in).
+  'assistance',
 ] as const;
 
 /**

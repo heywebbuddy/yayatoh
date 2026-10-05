@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
-import { continueToPayment } from './helpers.ts';
+import { continueToPayment, pickOption } from './helpers.ts';
 
 /** A unique name per test and viewport project (projects run in parallel on one database). */
 export const unique = (what: string) => `${what} ${Date.now()} ${test.info().project.name.split('-')[0]}`;
@@ -12,7 +12,7 @@ export async function createGala(
 ) {
   await page.goto('/o/lakeside-events/events/new');
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Event type').selectOption('gala');
+  await pickOption(page.getByLabel('Event type'), 'gala');
   await page.getByLabel('Starts', { exact: true }).fill(starts);
   await page.getByLabel('Ends', { exact: true }).fill(ends);
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -58,11 +58,17 @@ export async function priceAllAndPublish(page: Page, base: string, ticketType: s
   const prices = page.getByRole('region', { name: 'Prices' });
   const boxes = prices.getByRole('checkbox');
   await expect(boxes.first()).toBeVisible();
-  // Many rows (the 5,000-seat plan): tick them all at once.
-  await boxes.evaluateAll((els) => {
-    for (const el of els) if (!(el as HTMLInputElement).checked) (el as HTMLInputElement).click();
-  });
-  await prices.getByLabel('Sells as').selectOption({ label: ticketType });
+  // Many rows (the 5,000-seat plan): tick them all at once. A tick made while the page is still
+  // settling can be lost (CI priced only one of two tables), so tick until every box stays ticked.
+  await expect(async () => {
+    const unticked = await boxes.evaluateAll((els) => {
+      for (const el of els) if (!(el as HTMLInputElement).checked) (el as HTMLInputElement).click();
+      return els.filter((el) => !(el as HTMLInputElement).checked).length;
+    });
+    expect(unticked).toBe(0);
+    await expect(prices.locator('input[type="checkbox"]:not(:checked)')).toHaveCount(0);
+  }).toPass({ timeout: 15_000 });
+  await pickOption(prices.getByLabel('Sells as'), { label: ticketType });
   await prices.getByRole('button', { name: 'Set price' }).click();
   await expect(prices.getByText('Prices updated.')).toBeVisible();
   await page.getByRole('button', { name: 'Put seats on sale' }).click();

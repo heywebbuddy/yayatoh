@@ -4,6 +4,7 @@ import {
   boolean,
   check,
   doublePrecision,
+  foreignKey,
   index,
   integer,
   jsonb,
@@ -40,6 +41,21 @@ export const SCAN_RESULTS = [
   'no_access',
   /** The scanner (checkpoint-scoped door staff, or their device) may not scan at this checkpoint. */
   'wrong_checkpoint',
+  /** M5.1d: the ticket's invoice still has a balance; admitted only with a staff override. */
+  'balance_due',
+  // M5.6a session doors (no event admission is recorded; attendance is).
+  /** Let into the session. */
+  'entered',
+  /** Left the session (scan out). */
+  'scanned_out',
+  /** A scan out of someone not in the room. */
+  'not_in_room',
+  /** Gate `enrollment`: not a registrant, or not enrolled in a session that needs it. */
+  'not_enrolled',
+  /** Gate `admission_level`: the pass doesn't give this session. */
+  'admission_level',
+  /** Gate `capacity`: the room is full. */
+  'capacity',
 ] as const;
 export type ScanResult = (typeof SCAN_RESULTS)[number];
 
@@ -62,6 +78,8 @@ export const admissions = tenantTable(
     checkpointId: uuid('checkpoint_id'),
     undoneAt: ts('undone_at'),
     undoneBy: uuid('undone_by'),
+    /** M5.1d: admitted with a balance still due on the invoice (a staff override, audited). */
+    balanceOverride: boolean('balance_override').notNull().default(false),
   },
   (t) => [
     uniqueIndex('admissions_org_ticket_day_live_key')
@@ -125,16 +143,224 @@ export const devices = tenantTable(
      * member's checkpoint scope. Null = an org device that may scan anywhere.
      */
     assignedUserId: uuid('assigned_user_id'),
+    // --- Staff mode (M3.4a) ---
+    /** The event the device last reported working (heartbeat): the event's device board. */
+    eventId: uuid('event_id'),
+    /** Where the device reported scanning (null = the whole event). */
+    checkpointId: uuid('checkpoint_id'),
+    /** A supervisor asked for a sync now: delivered by heartbeat until the device applied it. */
+    syncRequestedAt: ts('sync_requested_at'),
+    /** A supervisor moved the device (null checkpoint = the whole event), delivered by heartbeat. */
+    checkpointRequestedAt: ts('checkpoint_requested_at'),
+    requestedCheckpointId: uuid('requested_checkpoint_id'),
+    /** `scanner`, or `kiosk`: self check-in locked to one event and entrance, PIN to exit. */
+    mode: text('mode').notNull().default('scanner'),
+    kioskEventId: uuid('kiosk_event_id'),
+    kioskCheckpointId: uuid('kiosk_checkpoint_id'),
+    /** `pbkdf2-sha256$<iterations>$<salt b64url>$<hash b64url>`; never the PIN itself. */
+    kioskPinHash: text('kiosk_pin_hash'),
+    kioskStartedAt: ts('kiosk_started_at'),
+    kioskStartedBy: uuid('kiosk_started_by'),
+    /**
+     * M4.4b: what the kiosk shows: `tickets` (self check-in by code, M3.4a), `guests` (a guest types
+     * their full name: their table, and they're checked in) or `board` (the A–Z table board on a
+     * TV). Null on a scanner and on kiosks started before M4.4b (= `tickets`).
+     */
+    kioskKind: text('kiosk_kind'),
+    // --- Live mode (M3.3a) ---
+    /** The Scan PWA's build as its heartbeat reports it (the device board's "app version"). */
+    appVersion: text('app_version'),
   },
   (t) => [
     // Global: the token alone resolves the device (and so the org) through a definer function.
     uniqueIndex('devices_token_hash_key').on(t.tokenHash),
+    index('devices_org_event_idx').on(t.orgId, t.eventId),
     check('devices_battery_check', sql`battery_pct is null or battery_pct between 0 and 100`),
+    check('devices_mode_check', sql`mode in ('scanner', 'kiosk')`),
+    check(
+      'devices_kiosk_check',
+      sql`(mode = 'kiosk') = (kiosk_event_id is not null and kiosk_pin_hash is not null and kiosk_started_at is not null)`,
+    ),
+    check(
+      'devices_kiosk_pin_check',
+      sql`kiosk_pin_hash is null or kiosk_pin_hash ~ '^pbkdf2-sha256[$][0-9]{4,7}[$][A-Za-z0-9_-]{22}[$][A-Za-z0-9_-]{43}$'`,
+    ),
+    check(
+      'devices_kiosk_kind_check',
+      sql`kiosk_kind is null or kiosk_kind in ('tickets', 'guests', 'board')`,
+    ),
+    check('devices_app_version_check', sql`app_version is null or app_version ~ '^[A-Za-z0-9._+-]{1,64}$'`),
   ],
 );
 
-export const CHECKPOINT_KINDS = ['entrance', 'zone'] as const;
+/** What happened to a device, for the live feed (M3.3a). */
+export const DEVICE_EVENT_KINDS = ['online', 'offline', 'low_battery', 'revoked', 'wiped'] as const;
+export type DeviceEventKind = (typeof DEVICE_EVENT_KINDS)[number];
+
+/**
+ * A device's transitions (M3.3a live feed): back online after a silence, gone quiet (the live
+ * watchdog, at the moment it crossed the offline line), battery dropping to low, revoked or wiped.
+ * Append-only. `event_id` is the event the device reported working at the time (null: none yet).
+ */
+export const deviceEvents = tenantTable(
+  checkinSchema,
+  'device_events',
+  {
+    deviceId: uuid('device_id').notNull(),
+    eventId: uuid('event_id'),
+    kind: text('kind').notNull(),
+    at: ts('at').notNull(),
+    batteryPct: integer('battery_pct'),
+  },
+  (t) => [
+    index('device_events_org_event_at_idx').on(t.orgId, t.eventId, t.at),
+    index('device_events_org_device_at_idx').on(t.orgId, t.deviceId, t.at),
+    foreignKey({
+      name: 'device_events_device_fk',
+      columns: [t.orgId, t.deviceId],
+      foreignColumns: [devices.orgId, devices.id],
+    }).onDelete('cascade'),
+    check(
+      'device_events_kind_check',
+      sql.raw(`kind in (${DEVICE_EVENT_KINDS.map((k) => `'${k}'`).join(', ')})`),
+    ),
+    check('device_events_battery_check', sql`battery_pct is null or battery_pct between 0 and 100`),
+  ],
+);
+
+export const PRESENCE_SOURCES = ['door_screen', 'device'] as const;
+export type PresenceSource = (typeof PRESENCE_SOURCES)[number];
+
+/**
+ * Staff presence (M3.3a): who is signed in at an event's doors, on which device and entrance.
+ * One row per member per event, refreshed by the web door screen (every 30 s while open) and by
+ * the heartbeat of a device handed to the member. A row counts while `last_seen_at` is within the
+ * presence window (`PRESENCE_TTL_MS`); old rows are simply not shown.
+ */
+export const staffPresence = tenantTable(
+  checkinSchema,
+  'staff_presence',
+  {
+    eventId: uuid('event_id').notNull(),
+    userId: uuid('user_id').notNull(),
+    deviceId: uuid('device_id'),
+    checkpointId: uuid('checkpoint_id'),
+    source: text('source').notNull(),
+    startedAt: ts('started_at').notNull(),
+    lastSeenAt: ts('last_seen_at').notNull(),
+  },
+  (t) => [
+    uniqueIndex('staff_presence_org_event_user_key').on(t.orgId, t.eventId, t.userId),
+    index('staff_presence_org_event_seen_idx').on(t.orgId, t.eventId, t.lastSeenAt),
+    check('staff_presence_source_check', sql`source in ('door_screen', 'device')`),
+    check('staff_presence_time_check', sql`last_seen_at >= started_at`),
+  ],
+);
+
+/** Staff alert kinds a device can be pushed (M3.4a). Supervisor-only kinds need `checkin:supervise`. */
+export const STAFF_ALERT_KINDS = [
+  'device_offline',
+  'device_low_battery',
+  'device_backlog',
+  'capacity_near',
+] as const;
+export type StaffAlertKind = (typeof STAFF_ALERT_KINDS)[number];
+/**
+ * Everything a staff device can be pushed: the staff alerts plus M3.3b's urgent and
+ * high-priority help requests at its event (`assistance`, placeholder `{label}` = where).
+ */
+export const STAFF_PUSH_KINDS = [...STAFF_ALERT_KINDS, 'assistance'] as const;
+export type StaffPushKind = (typeof STAFF_PUSH_KINDS)[number];
+
+/**
+ * Staff web push (M3.4a), opted in per device from the Scan PWA's staff mode. One subscription per
+ * device. `supervisor_user_id` is the signed-in supervisor who opted in for device alerts (their
+ * permission is re-checked at every alert); without one the device gets staff alerts only.
+ * `copy` is the notification text per alert kind in the device's language, as the PWA rendered it
+ * from its messages (placeholders `{label}` and `{percent}`), so the server holds no UI strings.
+ */
+export const staffPushSubscriptions = tenantTable(
+  checkinSchema,
+  'staff_push_subscriptions',
+  {
+    deviceId: uuid('device_id').notNull(),
+    endpoint: text('endpoint').notNull(),
+    p256dh: text('p256dh').notNull(),
+    authSecret: text('auth_secret').notNull(),
+    locale: text('locale').notNull(),
+    copy: jsonb('copy').$type<Record<string, { title: string; body: string }>>().notNull(),
+    supervisorUserId: uuid('supervisor_user_id'),
+    disabledAt: ts('disabled_at'),
+  },
+  (t) => [
+    uniqueIndex('staff_push_subscriptions_org_device_key').on(t.orgId, t.deviceId),
+    foreignKey({
+      name: 'staff_push_subscriptions_device_fk',
+      columns: [t.orgId, t.deviceId],
+      foreignColumns: [devices.orgId, devices.id],
+    }).onDelete('cascade'),
+    check(
+      'staff_push_subscriptions_endpoint_check',
+      sql`endpoint ~ '^https?://' and length(endpoint) <= 2048`,
+    ),
+    check('staff_push_subscriptions_p256dh_check', sql`p256dh ~ '^[A-Za-z0-9_-]{87}$'`),
+    check('staff_push_subscriptions_auth_check', sql`auth_secret ~ '^[A-Za-z0-9_-]{22}$'`),
+    check('staff_push_subscriptions_locale_check', sql`locale ~ '^[a-z]{2}(-[A-Z]{2})?$'`),
+  ],
+);
+
+export const STAFF_PUSH_STATUSES = ['queued', 'sent', 'expired', 'rejected', 'retrying'] as const;
+
+/**
+ * Each staff alert reaches each subscribed device at most once (`alert_key` per episode, e.g. a
+ * device's offline spell), queued in the evaluating transaction and sent after it.
+ */
+export const staffAlertPushes = tenantTable(
+  checkinSchema,
+  'staff_alert_pushes',
+  {
+    subscriptionId: uuid('subscription_id').notNull(),
+    eventId: uuid('event_id').notNull(),
+    alertKey: text('alert_key').notNull(),
+    kind: text('kind').notNull(),
+    /** Allowlisted placeholders only: the device label and a percentage. */
+    params: jsonb('params')
+      .$type<{ label?: string; percent?: number; count?: number }>()
+      .notNull()
+      .default({}),
+    status: text('status').notNull().default('queued'),
+    httpStatus: integer('http_status'),
+    attempts: integer('attempts').notNull().default(0),
+    sentAt: ts('sent_at'),
+  },
+  (t) => [
+    uniqueIndex('staff_alert_pushes_org_sub_key').on(t.orgId, t.subscriptionId, t.alertKey),
+    index('staff_alert_pushes_org_status_idx').on(t.orgId, t.status),
+    foreignKey({
+      name: 'staff_alert_pushes_subscription_fk',
+      columns: [t.orgId, t.subscriptionId],
+      foreignColumns: [staffPushSubscriptions.orgId, staffPushSubscriptions.id],
+    }).onDelete('cascade'),
+    check(
+      'staff_alert_pushes_kind_check',
+      sql.raw(`kind in (${STAFF_PUSH_KINDS.map((k) => `'${k}'`).join(', ')})`),
+    ),
+    check(
+      'staff_alert_pushes_status_check',
+      sql.raw(`status in (${STAFF_PUSH_STATUSES.map((k) => `'${k}'`).join(', ')})`),
+    ),
+    check('staff_alert_pushes_key_check', sql`length(alert_key) between 3 and 200`),
+  ],
+);
+
+export const CHECKPOINT_KINDS = ['entrance', 'zone', 'session'] as const;
 export type CheckpointKind = (typeof CHECKPOINT_KINDS)[number];
+/**
+ * M6.9a: a session's virtual checkpoint, where watching the stream checks a ticket in. Created
+ * by the `checkin.virtual-attendance` subscriber, never by organizers, and never scanned: every
+ * checkpoint list and scan lookup leaves it out.
+ */
+export const VIRTUAL_CHECKPOINT_KIND = 'virtual';
 
 /**
  * Where scanning happens at an event. An entrance admits to the event (one admission per ticket
@@ -153,10 +379,31 @@ export const checkpoints = tenantTable(
     /** Where it is (WGS 84), for the impossible-travel signal. Both or neither. */
     latitude: doublePrecision('latitude'),
     longitude: doublePrecision('longitude'),
+    /** How many people the area holds (M3.3a capacity gauges); null = not limited. */
+    capacity: integer('capacity'),
+    /** M5.6a: a session door's program session (kind `session` only; no FK across modules). */
+    sessionId: uuid('session_id'),
+    /**
+     * M5.6a: the self check-in flyer's token (session doors with the option on; random, printed
+     * on the flyer's QR). Global: the public page finds the org through a definer function.
+     */
+    selfCheckinToken: text('self_checkin_token'),
   },
   (t) => [
     uniqueIndex('checkpoints_org_event_name_key').on(t.orgId, t.eventId, t.name),
-    check('checkpoints_kind_check', sql`kind in ('entrance', 'zone')`),
+    check('checkpoints_capacity_check', sql`capacity is null or capacity between 1 and 1000000`),
+    check('checkpoints_kind_check', sql`kind in ('entrance', 'zone', 'session', 'virtual')`),
+    check('checkpoints_session_check', sql`(kind in ('session', 'virtual')) = (session_id is not null)`),
+    check(
+      'checkpoints_self_checkin_check',
+      sql`self_checkin_token is null or (kind = 'session' and self_checkin_token ~ '^[A-Za-z0-9_-]{32}$')`,
+    ),
+    uniqueIndex('checkpoints_self_checkin_token_key')
+      .on(t.selfCheckinToken)
+      .where(sql`self_checkin_token is not null`),
+    index('checkpoints_org_session_idx').on(t.orgId, t.sessionId).where(sql`session_id is not null`),
+    // M6.9a: one virtual checkpoint per session.
+    uniqueIndex('checkpoints_org_virtual_session_key').on(t.orgId, t.sessionId).where(sql`kind = 'virtual'`),
     check(
       'checkpoints_location_check',
       sql`(latitude is null) = (longitude is null) and (latitude is null or (latitude between -90 and 90 and longitude between -180 and 180))`,
@@ -296,5 +543,121 @@ export const detectionSettings = tenantTable(
     uniqueIndex('detection_settings_org_event_key').on(t.orgId, t.eventId),
     check('detection_settings_rate_check', sql`max_scans_per_minute between 2 and 600`),
     check('detection_settings_travel_check', sql`max_travel_kmh between 1 and 200`),
+  ],
+);
+
+/** M4.4b: what a kiosk shows (`checkin.devices.kiosk_kind`). */
+export const KIOSK_KINDS = ['tickets', 'guests', 'board'] as const;
+export type KioskKind = (typeof KIOSK_KINDS)[number];
+
+/** M4.4b: where a guest's arrival was recorded. */
+export const ARRIVAL_SOURCES = ['scanner', 'kiosk', 'host'] as const;
+export type ArrivalSource = (typeof ARRIVAL_SOURCES)[number];
+
+/**
+ * A wedding or gala guest's arrival (M4.4b): one row per guest (guests module), first wins by the
+ * corrected time the device saw them. Recorded by a Scan PWA device (by name or party, offline
+ * too), a guest kiosk (the guest's own full name) or the host on the day-of page; undoing it
+ * deletes the row (the audit log keeps both). `client_id` makes a device's resend a no-op.
+ * `(org_id, guest_id)` references `guests.guests` and `(org_id, event_id)` `events.events`
+ * through hand-written foreign keys (cascade): the arrival goes with the guest.
+ */
+export const guestArrivals = tenantTable(
+  checkinSchema,
+  'guest_arrivals',
+  {
+    eventId: uuid('event_id').notNull(),
+    guestId: uuid('guest_id').notNull(),
+    arrivedAt: ts('arrived_at').notNull(),
+    source: text('source').notNull(),
+    deviceId: uuid('device_id'),
+    recordedBy: uuid('recorded_by'),
+    clientId: uuid('client_id').notNull(),
+  },
+  (t) => [
+    uniqueIndex('guest_arrivals_org_guest_key').on(t.orgId, t.guestId),
+    uniqueIndex('guest_arrivals_org_client_key').on(t.orgId, t.clientId),
+    index('guest_arrivals_org_event_at_idx').on(t.orgId, t.eventId, t.arrivedAt),
+    check('guest_arrivals_source_check', sql`source in ('scanner', 'kiosk', 'host')`),
+    check('guest_arrivals_device_check', sql`source <> 'host' or device_id is null`),
+  ],
+);
+
+/* ------------------------------------------------------------- M5.6a: session check-in ---- */
+
+export const ATTENDANCE_SOURCES = ['scan', 'override', 'self'] as const;
+export type AttendanceSource = (typeof ATTENDANCE_SOURCES)[number];
+
+/**
+ * One visit to a session's room (M5.6a): in at a session door, out when scanned out (null while
+ * in the room). At most one open visit per ticket and session (a second scan in is `duplicate`);
+ * leaving and coming back is a new visit. Dwell time is the sum of the visits. `source`: a door
+ * scan, a staff override of the gates (`override_gates` + `override_reason`, audited), or the
+ * attendee's own check-in from a flyer (`self`, attendance only, never gated).
+ */
+export const sessionAttendance = tenantTable(
+  checkinSchema,
+  'session_attendance',
+  {
+    eventId: uuid('event_id').notNull(),
+    checkpointId: uuid('checkpoint_id').notNull(),
+    sessionId: uuid('session_id').notNull(),
+    ticketId: uuid('ticket_id').notNull(),
+    inAt: ts('in_at').notNull(),
+    outAt: ts('out_at'),
+    source: text('source').notNull().default('scan'),
+    inBy: uuid('in_by'),
+    inDeviceId: uuid('in_device_id'),
+    outDeviceId: uuid('out_device_id'),
+    /** Scanned on a device while offline (the in scan). */
+    offline: boolean('offline').notNull().default(false),
+    overrideGates: text('override_gates').array().notNull().default(sql`'{}'::text[]`),
+    overrideReason: text('override_reason'),
+  },
+  (t) => [
+    uniqueIndex('session_attendance_org_open_key')
+      .on(t.orgId, t.sessionId, t.ticketId)
+      .where(sql`out_at is null`),
+    index('session_attendance_org_session_in_idx').on(t.orgId, t.sessionId, t.inAt),
+    index('session_attendance_org_event_idx').on(t.orgId, t.eventId),
+    index('session_attendance_org_ticket_idx').on(t.orgId, t.ticketId),
+    foreignKey({
+      name: 'session_attendance_checkpoint_fk',
+      columns: [t.orgId, t.checkpointId],
+      foreignColumns: [checkpoints.orgId, checkpoints.id],
+    }),
+    check('session_attendance_out_check', sql`out_at is null or out_at >= in_at`),
+    check('session_attendance_source_check', sql`source in ('scan', 'override', 'self')`),
+    check(
+      'session_attendance_override_check',
+      sql`override_gates <@ array['enrollment', 'admission_level', 'capacity']::text[] and (source = 'override') = (cardinality(override_gates) > 0) and (override_reason is null) = (source <> 'override') and (override_reason is null or char_length(override_reason) between 3 and 300)`,
+    ),
+  ],
+);
+
+/**
+ * M6.9a: a ticket checked in at a session's virtual checkpoint by watching its stream (the
+ * virtual module's `virtual.attended@1`: the ticket's first counted minute). Once per ticket and
+ * checkpoint; minutes stay in the virtual module.
+ */
+export const virtualAttendance = tenantTable(
+  checkinSchema,
+  'virtual_attendance',
+  {
+    eventId: uuid('event_id').notNull(),
+    checkpointId: uuid('checkpoint_id').notNull(),
+    sessionId: uuid('session_id').notNull(),
+    ticketId: uuid('ticket_id').notNull(),
+    firstAt: ts('first_at').notNull(),
+  },
+  (t) => [
+    uniqueIndex('virtual_attendance_org_checkpoint_ticket_key').on(t.orgId, t.checkpointId, t.ticketId),
+    index('virtual_attendance_org_event_idx').on(t.orgId, t.eventId),
+    index('virtual_attendance_org_ticket_idx').on(t.orgId, t.ticketId),
+    foreignKey({
+      name: 'virtual_attendance_checkpoint_fk',
+      columns: [t.orgId, t.checkpointId],
+      foreignColumns: [checkpoints.orgId, checkpoints.id],
+    }).onDelete('cascade'),
   ],
 );

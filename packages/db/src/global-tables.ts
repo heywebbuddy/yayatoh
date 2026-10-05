@@ -26,7 +26,17 @@ export const GLOBAL_TABLES: Readonly<Record<string, string>> = {
   'auth.security_events':
     'Per-person security audit (2FA set up/off, backup codes, step-up); append-only through packages/auth.',
   'billing.fee_schedules': 'Platform fee per plan and currency; reference data written only by migrations.',
+  'billing.addons':
+    'Add-on catalog (event add-ons such as conference_pack: modules, price, per-event quotas); reference data written only by migrations (app_user: SELECT).',
   'billing.plan_modules': 'Modules per plan; reference data written only by migrations (app_user: SELECT).',
+  'billing.plan_catalog':
+    'Plans sold through the billing provider (M6.6a: sort order, on/off, provider product id); reference data written by migrations and the SECURITY DEFINER billing.apply_catalog (platform_reader); app_user: SELECT.',
+  'billing.plan_prices':
+    'Plan prices by provider lookup key (M6.6a; placeholders switched off until D22); written by migrations and billing.apply_catalog (platform_reader); app_user: SELECT.',
+  'billing.features':
+    "The billing provider's Entitlement Features mirrored per module key (M6.6a); written by migrations and billing.apply_catalog (platform_reader); app_user: SELECT.",
+  'events.platform_categories':
+    "U8: the platform's default event category list (order, in or out of the defaults); seeded by migrations, changed by staff only through the SECURITY DEFINER events.set_platform_default_categories (platform_reader); app_user: SELECT.",
   'platform.signup_codes':
     'Invite-only signup codes (hashed); no app_user privileges, only SECURITY DEFINER check/claim and staff-only create.',
   'platform.flags':
@@ -63,4 +73,6 @@ export const GLOBAL_TABLES: Readonly<Record<string, string>> = {
     "Guest email codes and magic links (M1.5f; codes, links and browsers as HMACs; the address until the row is pruned a day after expiry); a guest proving an address is no tenant's data yet and marketplace sign-in spans orgs; reached only through @yayatoh/orders (app_user; platform_reader has no access).",
   'orders.guest_sessions':
     'Attendee "My tickets" sessions (M1.5f; token HMAC, host-bound, org or marketplace scope); reached only through @yayatoh/orders (app_user; platform_reader has no access).',
+  'notifications.provider_health':
+    'Messaging provider health per provider × UTC hour (M3.5b: sends, send errors, verified and refused webhooks, last error code; no org, address or message id); no app_user privileges, only the SECURITY DEFINER notifications.record_provider_health; platform_reader SELECT.',
 };

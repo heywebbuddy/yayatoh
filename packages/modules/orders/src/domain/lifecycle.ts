@@ -13,6 +13,11 @@ export const orderLifecycle = defineStateMachine({
     cancel: { from: ['reserved', 'awaiting_payment', 'payment_failed', 'paid'], to: 'cancelled' },
     refundPartially: { from: ['paid', 'partially_refunded'], to: 'partially_refunded' },
     refund: { from: ['paid', 'partially_refunded'], to: 'refunded' },
+    // M5.1d (roadmap §5.2 "Offline and invoice"): pay later. Never expires; paid when the balance
+    // reaches zero, void only by the organizer and only while nothing was paid.
+    invoice: { from: ['reserved'], to: 'awaiting_invoice' },
+    payInvoice: { from: ['awaiting_invoice'], to: 'paid' },
+    voidInvoice: { from: ['awaiting_invoice'], to: 'void' },
   },
 });
 

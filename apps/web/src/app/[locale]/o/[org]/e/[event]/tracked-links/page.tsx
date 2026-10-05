@@ -44,7 +44,7 @@ export default async function TrackedLinksPage({
   return (
     <>
       <PageHeader title={t('title')} description={t('description', { event: ev.name })} />
-      {canWrite ? null : <p className="text-body text-zinc-500">{t('viewerNotice')}</p>}
+      {canWrite ? null : <p className="text-body text-ink-2">{t('viewerNotice')}</p>}
       {canWrite ? (
         <section aria-labelledby="create-link-heading" className="flex flex-col gap-3">
           <h2 id="create-link-heading" className="text-section">
@@ -62,7 +62,7 @@ export default async function TrackedLinksPage({
         <h2 id="links-heading" className="text-section">
           {t('listTitle')}
         </h2>
-        <p className="text-caption text-zinc-500">{t('listHint', { days: settings.windowDays })}</p>
+        <p className="text-caption text-ink-2">{t('listHint', { days: settings.windowDays })}</p>
         <Table
           caption={t('listTitle')}
           rowKey={(r) => r.link.id}
@@ -80,7 +80,7 @@ export default async function TrackedLinksPage({
                     <Link href={`${base}/${r.link.id}`} className="underline underline-offset-2">
                       {name}
                     </Link>
-                    <span className="text-caption text-zinc-500">
+                    <span className="text-caption text-ink-2">
                       {t('utmLine', {
                         source: r.link.source,
                         medium: r.link.medium,
@@ -134,7 +134,7 @@ export default async function TrackedLinksPage({
         <h2 id="utm-only-heading" className="text-section">
           {t('utmOnlyTitle')}
         </h2>
-        <p className="text-caption text-zinc-500">{t('utmOnlyHint')}</p>
+        <p className="text-caption text-ink-2">{t('utmOnlyHint')}</p>
         <Table
           caption={t('utmOnlyTitle')}
           rowKey={(r) => JSON.stringify([r.source, r.medium, r.campaign])}

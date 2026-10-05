@@ -32,7 +32,7 @@ export default async function SubProcessorsPage({ params }: { params: Promise<{ 
       />
       <p
         role="note"
-        className="rounded-card border border-accent-700 bg-accent-50 px-4 py-3 text-body text-accent-text"
+        className="rounded-card border border-primary bg-primary-soft px-4 py-3 text-body text-primary-ink"
       >
         {t('draft')}
       </p>

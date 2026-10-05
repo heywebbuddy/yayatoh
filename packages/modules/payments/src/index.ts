@@ -10,11 +10,42 @@ export {
   payoutAccountIdQuery,
   payoutAccountQuery,
   payoutDestinationMailer,
+  payoutRequirementsPastDueTx,
   recordPayoutAccountCommand,
   setPayoutHoldCommand,
 } from './accounts.ts';
+export {
+  accrueCommissionTx,
+  agencyCommissionMirror,
+  agencyCommissionStatementQuery,
+  type CommissionReversal,
+  CommissionStatementDto,
+  clientCommissionStatementQuery,
+  commissionBalanceTx,
+  recordCommissionReversalCommand,
+  reverseCommissionTx,
+} from './commission.ts';
+export {
+  COMMISSION_ENTRY_KINDS,
+  type CommissionEntryKind,
+  commissionFor,
+  cumulativeReversal,
+  mirrorPostings,
+  reversalForRefund,
+  splitReversal,
+} from './commission-math.ts';
 export { paymentProviderFromEnv } from './config.ts';
+// M6.5d: the ledger per day and currency (accounting summaries).
+export { type LedgerDayTotals, ledgerDailyTotalsTx } from './daily-totals.ts';
+export { paymentsDataSubjects } from './data-subject.ts';
 export { claimProviderEventTx } from './dedupe.ts';
+export {
+  alertDisputeDeadlinesCommand,
+  DISPUTE_ALERT_HOURS,
+  disputeAlertLevel,
+  disputeDeadlineFactsTx,
+  disputeDeadlineNotifier,
+} from './dispute-alerts.ts';
 export {
   closeDisputeTx,
   DisputeDto,
@@ -30,14 +61,24 @@ export {
   saveEvidenceDraftCommand,
 } from './disputes.ts';
 export {
+  FAKE_TEST_CARDS,
   type FakeBalanceStore,
+  type FakeCardStore,
+  type FakeConnectedTransaction,
+  type FakeTestCard,
   fakePaymentProvider,
+  fakePayouts,
+  fakeProcessingFee,
   memoryBalanceStore,
   processFakeBalanceStore,
+  processFakeCardStore,
   signFakeAccountWebhook,
   signFakeDisputeWebhook,
+  signFakeSetupWebhook,
   signFakeWebhook,
 } from './fake.ts';
+// M5.1d: invoice payments (pay link and organizer-collected) on the ledger.
+export { postInvoicePaymentTx } from './invoice-ledger.ts';
 export {
   balanceTx,
   type JournalInput,
@@ -51,22 +92,60 @@ export {
   postTransferReversalTx,
   refundJournalTotalsTx,
 } from './ledger.ts';
+// M4.8g: memo-only journals for gifts on the charity's connected account.
+export {
+  MEMO_JOURNAL_KINDS,
+  type MemoEntry,
+  type MemoJournalKind,
+  memoEntriesTx,
+  postDonationMemoTx,
+  postDonationRefundMemoTx,
+} from './memo-ledger.ts';
+export {
+  type HeldFundsFact,
+  heldFundsTx,
+  lostDisputeEventIdsTx,
+  type PayoutLineFact,
+  type PayoutLineKind,
+  type PayoutTotalFact,
+  payoutTotalsTx,
+  type ReserveFact,
+  reservesHeldTx,
+  type SettlementLinesFact,
+  settlementLinesTx,
+} from './payouts.ts';
 export type {
   AccountEvent,
   BalanceTransaction,
   BalanceTransactionKind,
+  ChargeSavedCardInput,
+  ChargeSavedCardResult,
   ConnectAccountState,
+  ConnectedBalanceTransaction,
+  ConnectedTransactionKind,
+  CreateCardSetupInput,
   CreatePaymentInput,
   CreatePaymentResult,
   DisputeEvent,
   FundsFlow,
   IgnoredEvent,
   PaymentProvider,
+  Payout,
+  PayoutStatus,
   ProviderEvent,
   RefundInput,
+  SetupEvent,
   WebhookEvent,
 } from './port.ts';
-export { BALANCE_TRANSACTION_KINDS, isAccountEvent, isDisputeEvent, isIgnoredEvent } from './port.ts';
+export {
+  BALANCE_TRANSACTION_KINDS,
+  CONNECTED_TRANSACTION_KINDS,
+  isAccountEvent,
+  isDisputeEvent,
+  isIgnoredEvent,
+  isSetupEvent,
+  PAYOUT_STATUSES,
+} from './port.ts';
 export { privateColumns } from './private-columns.ts';
 export {
   dayBounds,
@@ -94,6 +173,7 @@ export {
   RISK_WINDOW_MINUTES,
   rulesRiskProvider,
 } from './risk.ts';
+export { type SandboxCheck, sandboxSafeProvider } from './sandbox.ts';
 export {
   DISPUTE_STATUSES,
   LEDGER_ACCOUNTS,

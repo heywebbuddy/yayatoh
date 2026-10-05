@@ -41,7 +41,7 @@ const decide = (
 
 describe('route table (M2.4a)', () => {
   it('is versioned, with unique keys and only read surfaces', () => {
-    expect(ROUTE_TABLE_VERSION).toBe(2);
+    expect(ROUTE_TABLE_VERSION).toBe(3);
     const keys = FRONT_DOOR_ROUTES.map((r) => r.key);
     expect(new Set(keys).size).toBe(keys.length);
     expect(keys).toEqual([
@@ -60,6 +60,7 @@ describe('route table (M2.4a)', () => {
       'site.contact',
       'help.center',
       'site.status',
+      'marketplace.search',
     ]);
     for (const r of FRONT_DOOR_ROUTES) expect(r.key).toMatch(/^[a-z][a-z0-9.]*$/);
   });
@@ -108,6 +109,18 @@ describe('route table (M2.4a)', () => {
       expect(matchFrontDoorRoute('abc', p, new URLSearchParams())).toBeNull();
     expect(matchFrontDoorRoute('abc', '/', new URLSearchParams())?.key).toBe('home');
     expect(matchFrontDoorRoute('abc', '/events/gala', new URLSearchParams())?.key).toBe('events.page');
+  });
+
+  it('v3: M6.14a search is a moved route on the marketplace host only, on legacy until moved', () => {
+    const q = new URLSearchParams('q=jazz');
+    expect(matchFrontDoorRoute('yay', '/search', q)?.key).toBe('marketplace.search');
+    expect(matchFrontDoorRoute('abc', '/search', q)).toBeNull();
+    expect(matchFrontDoorRoute('yay', '/search/x', q)).toBeNull();
+    expect(decide('/search?q=jazz')).toMatchObject({ owner: 'legacy', route: 'marketplace.search' });
+    expect(decide('/ar/search', flags({ 'marketplace.search': 'next' }))).toMatchObject({
+      owner: 'next',
+      route: 'marketplace.search',
+    });
   });
 
   it('v2: the M3.11 public pages are moved routes on the marketplace host only', () => {
@@ -175,6 +188,13 @@ describe('who serves a request', () => {
       '/api/v2/events',
       '/api/v2',
       '/api/v1/orgs/x',
+      // Batch 3d merge: M3.5b's provider webhooks and M3.4a's staff mode endpoints.
+      '/api/webhooks/email/ses',
+      '/api/webhooks/sms/twilio',
+      '/api/webhooks/sms/twilio/inbound',
+      '/api/webhooks/whatsapp/whatsapp_cloud',
+      '/api/scan/staff',
+      '/api/command-center/org/event/sales',
       '/_next/static/chunk.js',
       '/media/org/file.webp',
       '/embed/gala',
@@ -183,6 +203,102 @@ describe('who serves a request', () => {
       '/auth/start',
       '/my-tickets',
       '/ar/sign-in',
+      // Batch 3e merge: emailed links and the new registration pages.
+      '/unsubscribe/abc~sig',
+      '/r/AbC123',
+      '/waitlist/abc~sig',
+      '/registration-form/abc~sig',
+      '/events/summit/register',
+      '/events/summit/registration-form',
+      '/ar/events/summit/register',
+      // Batch 3f merge: the portal and the public exhibitor map.
+      '/event-portal',
+      '/event-portal/invite/token',
+      '/event-portal/verify/token',
+      '/event-portal/sign-in/site',
+      '/fr/event-portal',
+      '/events/summit/exhibitors',
+      // Batch 3g merge: TV display links, the seat finder and its guest help pages, the Scan PWA's
+      // help requests and the Command Center's presence ping.
+      '/tv/abc~sig',
+      '/ar/tv/abc~sig',
+      '/events/summit/seat-finder',
+      '/events/summit/seat-finder/help',
+      '/events/summit/seat-finder/help/abc~sig',
+      '/ar/events/summit/seat-finder/help',
+      '/api/scan/assistance',
+      '/api/tv/abc~sig',
+      '/api/command-center/org/event/presence',
+      // M5.1c: group registration, the applicant's page, the payer's group page.
+      '/events/summit/register/group',
+      '/events/summit/registration/abc~sig',
+      '/events/summit/group/abc~sig',
+      // M5.7a: the participant page and the big screen (and its stream).
+      '/events/summit/live/0190a0b0-0000-7000-8000-000000000001',
+      '/ar/events/summit/live/0190a0b0-0000-7000-8000-000000000001',
+      '/display/org~session~1~sig',
+      '/api/engagement/display/org~session~1~sig',
+      // M4.1d/M4.1f: RSVP pages and the contact collector.
+      '/rsvp/abc~sig',
+      '/rsvp/find/ABCD2345',
+      '/collect/ABCD2345',
+      '/es/collect/ABCD2345',
+      // M4.2b: a gala table's claim link.
+      '/tables/abc~sig',
+      // M4.8a: the giving page and its thank-you page.
+      '/events/summit/give',
+      '/events/summit/give/thanks',
+      '/ar/events/summit/give',
+      // M4.8b: receipt and year-end statement PDFs.
+      '/receipts/0190a0b0-0000-7000-8000-000000000001/abc~sig',
+      '/statements/0190a0b0-0000-7000-8000-000000000001/abc~sig',
+      // M5.1d: the buyer's invoice and its PDF.
+      '/events/summit/invoice/abc~sig',
+      '/events/summit/invoice/abc~sig/pdf',
+      // Batch 3j merge: the guest website and gallery, the guest hub, a party's seat and card pages,
+      // the giving screen, card saving and pledge pay links, the call for papers, networking and
+      // chat, and the session self check-in flyer.
+      '/w/ABCD2345',
+      '/w/ABCD2345/gallery',
+      '/ar/w/ABCD2345/slideshow',
+      '/hub/abc~sig',
+      '/hub/abc~sig/manifest',
+      '/hub/abc~sig/pass/apple',
+      '/rsvp/abc~sig/seat',
+      '/rsvp/abc~sig/card',
+      '/giving-screen/org~event~1~sig',
+      '/api/donations/screen/org~event~1~sig',
+      '/events/summit/card',
+      '/events/summit/pledge/abc~sig',
+      '/events/summit/cfp',
+      '/ar/events/summit/cfp',
+      '/events/summit/network',
+      '/events/summit/network/people/0190a0b0-0000-7000-8000-000000000001',
+      '/events/summit/network/connections',
+      '/events/summit/network/meetings',
+      '/events/summit/network/meetings/0190a0b0-0000-7000-8000-000000000001/ics',
+      '/events/summit/network/profile',
+      '/events/summit/network/booths/0190a0b0-0000-7000-8000-000000000001',
+      '/events/summit/network/chat',
+      '/events/summit/network/chat/stream',
+      '/events/summit/network/chat/0190a0b0-0000-7000-8000-000000000001',
+      '/session-checkin/abcdefghijklmnopqrstuvwxyz012345',
+      '/api/gallery/file/abc~sig',
+      // Batch 3k merge: M5.10a's conference hub (an order link: its views, manifest, service worker
+      // and icons) and signed calendar feed; M5.2b's schedule on the same order link.
+      '/orders/abc~sig',
+      '/orders/abc~sig/schedule',
+      '/orders/abc~sig/hub',
+      '/ar/orders/abc~sig/hub',
+      '/orders/abc~sig/hub/manifest',
+      '/conference-hub-sw.js',
+      '/conference-hub-icon-192.png',
+      '/hub-sw.js',
+      '/api/calendar/org~reg~1~sig.ics',
+      // Batch 3m merge: M6.9b's CE certificate links and their public verification.
+      '/certificates/harbor-arts/abc~sig',
+      '/certificates/harbor-arts/verify',
+      '/ar/certificates/harbor-arts/verify/ABCDE-12345',
     ]) {
       expect(isPlatformPath(new URL(p, 'https://x').pathname) || decide(p).owner === 'next').toBe(true);
       expect(decide(p, flags(), { legacy: true })).toEqual({
@@ -193,6 +309,23 @@ describe('who serves a request', () => {
     }
     expect(isPlatformPath('/apiary')).toBe(false);
     expect(isPlatformPath('/sign-instructions')).toBe(false);
+    // The event page itself and its other sub-paths stay with the route table.
+    expect(isPlatformPath('/events/summit')).toBe(false);
+    expect(isPlatformPath('/events/summit/attendee')).toBe(false);
+    expect(isPlatformPath('/events/summit/seat-finder/help/a/b')).toBe(false);
+    expect(isPlatformPath('/tvguide')).toBe(false);
+    expect(isPlatformPath('/events/summit/group')).toBe(false);
+    expect(isPlatformPath('/events/summit/live')).toBe(false);
+    expect(isPlatformPath('/events/summit/give/other')).toBe(false);
+    expect(isPlatformPath('/displays')).toBe(false);
+    expect(isPlatformPath('/events/summit/cards')).toBe(false);
+    expect(isPlatformPath('/events/summit/pledge')).toBe(false);
+    expect(isPlatformPath('/events/summit/network/other')).toBe(false);
+    expect(isPlatformPath('/events/summit/network/people/a/b')).toBe(false);
+    expect(isPlatformPath('/giving-screens')).toBe(false);
+    expect(isPlatformPath('/ordersx')).toBe(false);
+    expect(isPlatformPath('/conference-hub-sw.jsx')).toBe(false);
+    expect(isPlatformPath('/certificatesx')).toBe(false);
   });
 });
 

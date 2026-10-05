@@ -26,7 +26,8 @@ export type GuestVerifyOutcome =
  * the cooldown). Once verified the browser is remembered for 30 minutes (`yy_gv`), like checkout.
  */
 export async function guestEmailStep(input: {
-  readonly purpose: 'waitlist';
+  /** `checkout` (M5.1a registration) sends the checkout code email; `waitlist` the waitlist one. */
+  readonly purpose: 'waitlist' | 'checkout';
   readonly orgId: string;
   readonly email: string;
   readonly locale: string;
@@ -81,7 +82,7 @@ export async function guestEmailStep(input: {
       },
     };
   await sendGuestEmail({
-    kind: 'guest.waitlist-code',
+    kind: input.purpose === 'checkout' ? 'guest.checkout-code' : 'guest.waitlist-code',
     to: input.email,
     locale: input.locale,
     orgId: input.orgId,

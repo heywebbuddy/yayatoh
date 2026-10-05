@@ -116,6 +116,10 @@
       "intro": "आपने अभी तक जवाब नहीं दिया है: {org} अब भी जानना चाहता है कि {eventName} आपको कैसा लगा।",
       "cta": "सर्वे का जवाब दें"
     },
+    "automations.message": {
+      "subject": "{subject}",
+      "intro": "{eventName} के बारे में:"
+    },
     "guest.checkout-code": {
       "subject": "{code} आपका ईमेल पुष्टि कोड है",
       "intro": "अपना ईमेल पुष्ट करने और {org} के साथ अपना ऑर्डर पूरा करने के लिए {code} दर्ज करें। कोड एक बार काम करता है और {minutes, plural, one {# मिनट} other {# मिनट}} में समाप्त हो जाता है। अगर आपने इसे नहीं माँगा, तो इस ईमेल को अनदेखा करें।"
@@ -175,6 +179,190 @@
       "subject": "{eventName} स्थगित",
       "intro": "{eventName} स्थगित कर दिया गया है। आपके टिकट नई तारीख के लिए मान्य रहेंगे। अगर आप नहीं आ सकते, तो आयोजक की रिफ़ंड नीति के अनुसार अपने ऑर्डर पेज से रिफ़ंड माँग सकते हैं।",
       "cta": "मेरा ऑर्डर देखें"
+    },
+    "alerts.alert": {
+      "subject": "{rule, select, unseated {{count, plural, one {{countWords} उपस्थित व्यक्ति के पास सीट नहीं है} other {{countWords} उपस्थित लोगों के पास सीट नहीं है}}} undistributed {{count, plural, one {{countWords} खरीदा गया टिकट वितरित नहीं हुआ है} other {{countWords} खरीदे गए टिकट वितरित नहीं हुए हैं}}} paymentsFailed {{count, plural, one {{countWords} भुगतान विफल रहा} other {{countWords} भुगतान विफल रहे}}} paymentsStuck {{count, plural, one {{countWords} भुगतान अटका हुआ है} other {{countWords} भुगतान अटके हुए हैं}}} refundSurge {{count, plural, one {{countWords} रिफ़ंड पिछले घंटे में} other {{countWords} रिफ़ंड पिछले घंटे में}}} devicesOffline {{count, plural, one {{countWords} चेक-इन डिवाइस ऑफ़लाइन है} other {{countWords} चेक-इन डिवाइस ऑफ़लाइन हैं}}} devicesLowBattery {{count, plural, one {{countWords} चेक-इन डिवाइस की बैटरी कम है} other {{countWords} चेक-इन डिवाइसों की बैटरी कम है}}} devicesBacklog {{count, plural, one {{countWords} चेक-इन डिवाइस पर स्कैन सिंक होने की प्रतीक्षा में हैं} other {{countWords} चेक-इन डिवाइसों पर स्कैन सिंक होने की प्रतीक्षा में हैं}}} capacityNear {स्थल {count}% भर चुका है} capacityFull {स्थल पूरी तरह भर गया है ({count}%)} sellOut {{count}% टिकट बिक चुके हैं} salesPace {टिकट बिक्री लक्ष्य गति के {count}% पर है} readiness {{count, plural, one {{countWords} सेटअप चरण इस इवेंट को रोक रहा है} other {{countWords} सेटअप चरण इस इवेंट को रोक रहे हैं}}} domain {{count, plural, one {{countWords} कस्टम डोमेन में समस्या है} other {{countWords} कस्टम डोमेन में समस्या है}}} payoutsPastDue {{count, plural, one {{countWords} भुगतान खाता आवश्यकता की समय-सीमा निकल चुकी है} other {{countWords} भुगतान खाता आवश्यकताओं की समय-सीमा निकल चुकी है}}} deliverability {ईमेल डिलीवरी पर ध्यान देने की ज़रूरत है} automationFailed {{count, plural, one {{countWords} संदेश या बल्क कार्रवाई आज विफल रही} other {{countWords} संदेश या बल्क कार्रवाइयाँ आज विफल रहीं}}} assistanceOverdue {{count, plural, one {{countWords} सहायता अनुरोध बहुत देर से प्रतीक्षा में है} other {{countWords} सहायता अनुरोध बहुत देर से प्रतीक्षा में हैं}}} campaignFailed {{count, plural, one {{countWords} अभियान भेजना आज विफल रहा} other {{countWords} अभियान भेजना आज विफल रहे}}} disputeDeadline {{count, plural, one {{countWords} विवाद के लिए जल्द ही सबूत चाहिए} other {{countWords} विवादों के लिए जल्द ही सबूत चाहिए}}} pledgesUnpaid {{count, plural, one {{countWords} संकल्प कार्यक्रम के 14 दिन बाद भी बकाया है} other {{countWords} संकल्प कार्यक्रम के 14 दिन बाद भी बकाया हैं}}} sessionsNearCapacity {{count, plural, one {{countWords} सत्र 95 % क्षमता से ऊपर है} other {{countWords} सत्र 95 % क्षमता से ऊपर हैं}}} sessionWaitlists {{count, plural, one {{countWords} सत्र की प्रतीक्षा सूची लंबी है} other {{countWords} सत्रों की प्रतीक्षा सूचियाँ लंबी हैं}}} roomsTooSmall {{count, plural, one {{countWords} सत्र में कमरे की सीटों से अधिक स्थान आरक्षित हैं} other {{countWords} सत्रों में कमरों की सीटों से अधिक स्थान आरक्षित हैं}}} exhibitorsNoLeads {{count, plural, one {{countWords} प्रदर्शक के पास कोई लीड नहीं है} other {{countWords} प्रदर्शकों के पास कोई लीड नहीं है}}} exhibitorsNoStaff {{count, plural, one {{countWords} प्रदर्शक ने बूथ स्टाफ़ को आमंत्रित नहीं किया है} other {{countWords} प्रदर्शकों ने बूथ स्टाफ़ को आमंत्रित नहीं किया है}}} speakerTasksOverdue {{count, plural, one {{countWords} वक्ता कार्य की समय-सीमा निकल गई है} other {{countWords} वक्ता कार्यों की समय-सीमा निकल गई है}}} deliverablesOverdue {{count, plural, one {{countWords} प्रायोजक डिलिवरेबल की समय-सीमा निकल गई है} other {{countWords} प्रायोजक डिलिवरेबल की समय-सीमा निकल गई है}}} printersKiosksOffline {{count, plural, one {{countWords} बैज प्रिंटर या कियोस्क ऑफ़लाइन है} other {{countWords} बैज प्रिंटर या कियोस्क ऑफ़लाइन हैं}}} approvalBacklog {{count, plural, one {{countWords} आवेदन निर्णय की प्रतीक्षा में है} other {{countWords} आवेदन निर्णय की प्रतीक्षा में हैं}}} invoicesOverdue {{count, plural, one {{countWords} चालान की नियत तारीख निकल गई है} other {{countWords} चालानों की नियत तारीख निकल गई है}}} rsvpPending {{count, plural, one {{countWords} मेहमान ने RSVP का जवाब नहीं दिया है} other {{countWords} मेहमानों ने RSVP का जवाब नहीं दिया है}}} guestsUnseated {{count, plural, one {{countWords} मेहमान के पास टेबल नहीं है} other {{countWords} मेहमानों के पास टेबल नहीं है}}} mealsMissing {{count, plural, one {{countWords} आने वाले मेहमान ने भोजन नहीं चुना है} other {{countWords} आने वाले मेहमानों ने भोजन नहीं चुना है}}} integrationFailed {{count, plural, one {आज {countWords} इंटीग्रेशन समस्या (विफल सिंक या टूटा कनेक्शन)} other {आज {countWords} इंटीग्रेशन समस्याएँ (विफल सिंक या टूटे कनेक्शन)}}} billingPastDue {{count, plural, one {प्लान का भुगतान बकाया है} other {{countWords} प्लान भुगतान बकाया हैं}}} other {अलर्ट}}",
+      "intro": "{eventName, select, none {{org} में किसी चीज़ पर ध्यान देने की ज़रूरत है।} other {{eventName} में किसी चीज़ पर ध्यान देने की ज़रूरत है।}} बटन वह पेज खोलता है जो इसे ठीक करता है।",
+      "cta": "ठीक करें"
+    },
+    "alerts.alert-text": {
+      "subject": "{rule, select, unseated {{count, plural, one {{countWords} उपस्थित व्यक्ति के पास सीट नहीं है} other {{countWords} उपस्थित लोगों के पास सीट नहीं है}}} undistributed {{count, plural, one {{countWords} खरीदा गया टिकट वितरित नहीं हुआ है} other {{countWords} खरीदे गए टिकट वितरित नहीं हुए हैं}}} paymentsFailed {{count, plural, one {{countWords} भुगतान विफल रहा} other {{countWords} भुगतान विफल रहे}}} paymentsStuck {{count, plural, one {{countWords} भुगतान अटका हुआ है} other {{countWords} भुगतान अटके हुए हैं}}} refundSurge {{count, plural, one {{countWords} रिफ़ंड पिछले घंटे में} other {{countWords} रिफ़ंड पिछले घंटे में}}} devicesOffline {{count, plural, one {{countWords} चेक-इन डिवाइस ऑफ़लाइन है} other {{countWords} चेक-इन डिवाइस ऑफ़लाइन हैं}}} devicesLowBattery {{count, plural, one {{countWords} चेक-इन डिवाइस की बैटरी कम है} other {{countWords} चेक-इन डिवाइसों की बैटरी कम है}}} devicesBacklog {{count, plural, one {{countWords} चेक-इन डिवाइस पर स्कैन सिंक होने की प्रतीक्षा में हैं} other {{countWords} चेक-इन डिवाइसों पर स्कैन सिंक होने की प्रतीक्षा में हैं}}} capacityNear {स्थल {count}% भर चुका है} capacityFull {स्थल पूरी तरह भर गया है ({count}%)} sellOut {{count}% टिकट बिक चुके हैं} salesPace {टिकट बिक्री लक्ष्य गति के {count}% पर है} readiness {{count, plural, one {{countWords} सेटअप चरण इस इवेंट को रोक रहा है} other {{countWords} सेटअप चरण इस इवेंट को रोक रहे हैं}}} domain {{count, plural, one {{countWords} कस्टम डोमेन में समस्या है} other {{countWords} कस्टम डोमेन में समस्या है}}} payoutsPastDue {{count, plural, one {{countWords} भुगतान खाता आवश्यकता की समय-सीमा निकल चुकी है} other {{countWords} भुगतान खाता आवश्यकताओं की समय-सीमा निकल चुकी है}}} deliverability {ईमेल डिलीवरी पर ध्यान देने की ज़रूरत है} automationFailed {{count, plural, one {{countWords} संदेश या बल्क कार्रवाई आज विफल रही} other {{countWords} संदेश या बल्क कार्रवाइयाँ आज विफल रहीं}}} assistanceOverdue {{count, plural, one {{countWords} सहायता अनुरोध बहुत देर से प्रतीक्षा में है} other {{countWords} सहायता अनुरोध बहुत देर से प्रतीक्षा में हैं}}} campaignFailed {{count, plural, one {{countWords} अभियान भेजना आज विफल रहा} other {{countWords} अभियान भेजना आज विफल रहे}}} disputeDeadline {{count, plural, one {{countWords} विवाद के लिए जल्द ही सबूत चाहिए} other {{countWords} विवादों के लिए जल्द ही सबूत चाहिए}}} pledgesUnpaid {{count, plural, one {{countWords} संकल्प कार्यक्रम के 14 दिन बाद भी बकाया है} other {{countWords} संकल्प कार्यक्रम के 14 दिन बाद भी बकाया हैं}}} sessionsNearCapacity {{count, plural, one {{countWords} सत्र 95 % क्षमता से ऊपर है} other {{countWords} सत्र 95 % क्षमता से ऊपर हैं}}} sessionWaitlists {{count, plural, one {{countWords} सत्र की प्रतीक्षा सूची लंबी है} other {{countWords} सत्रों की प्रतीक्षा सूचियाँ लंबी हैं}}} roomsTooSmall {{count, plural, one {{countWords} सत्र में कमरे की सीटों से अधिक स्थान आरक्षित हैं} other {{countWords} सत्रों में कमरों की सीटों से अधिक स्थान आरक्षित हैं}}} exhibitorsNoLeads {{count, plural, one {{countWords} प्रदर्शक के पास कोई लीड नहीं है} other {{countWords} प्रदर्शकों के पास कोई लीड नहीं है}}} exhibitorsNoStaff {{count, plural, one {{countWords} प्रदर्शक ने बूथ स्टाफ़ को आमंत्रित नहीं किया है} other {{countWords} प्रदर्शकों ने बूथ स्टाफ़ को आमंत्रित नहीं किया है}}} speakerTasksOverdue {{count, plural, one {{countWords} वक्ता कार्य की समय-सीमा निकल गई है} other {{countWords} वक्ता कार्यों की समय-सीमा निकल गई है}}} deliverablesOverdue {{count, plural, one {{countWords} प्रायोजक डिलिवरेबल की समय-सीमा निकल गई है} other {{countWords} प्रायोजक डिलिवरेबल की समय-सीमा निकल गई है}}} printersKiosksOffline {{count, plural, one {{countWords} बैज प्रिंटर या कियोस्क ऑफ़लाइन है} other {{countWords} बैज प्रिंटर या कियोस्क ऑफ़लाइन हैं}}} approvalBacklog {{count, plural, one {{countWords} आवेदन निर्णय की प्रतीक्षा में है} other {{countWords} आवेदन निर्णय की प्रतीक्षा में हैं}}} invoicesOverdue {{count, plural, one {{countWords} चालान की नियत तारीख निकल गई है} other {{countWords} चालानों की नियत तारीख निकल गई है}}} rsvpPending {{count, plural, one {{countWords} मेहमान ने RSVP का जवाब नहीं दिया है} other {{countWords} मेहमानों ने RSVP का जवाब नहीं दिया है}}} guestsUnseated {{count, plural, one {{countWords} मेहमान के पास टेबल नहीं है} other {{countWords} मेहमानों के पास टेबल नहीं है}}} mealsMissing {{count, plural, one {{countWords} आने वाले मेहमान ने भोजन नहीं चुना है} other {{countWords} आने वाले मेहमानों ने भोजन नहीं चुना है}}} integrationFailed {{count, plural, one {आज {countWords} इंटीग्रेशन समस्या (विफल सिंक या टूटा कनेक्शन)} other {आज {countWords} इंटीग्रेशन समस्याएँ (विफल सिंक या टूटे कनेक्शन)}}} billingPastDue {{count, plural, one {प्लान का भुगतान बकाया है} other {{countWords} प्लान भुगतान बकाया हैं}}} other {अलर्ट}}",
+      "intro": "{eventName, select, none {{org} में किसी चीज़ पर ध्यान देने की ज़रूरत है।} other {{eventName} में किसी चीज़ पर ध्यान देने की ज़रूरत है।}} बटन वह पेज खोलता है जो इसे ठीक करता है।"
+    },
+    "campaigns.test": {
+      "subject": "[परीक्षण] {subject}",
+      "intro": "आपके अभियान का परीक्षण भेजना।"
+    },
+    "orders.credit-note": {
+      "subject": "{eventName} के लिए क्रेडिट नोट {number}",
+      "intro": "{org} ने {eventName} के आपके ऑर्डर पर {amount} का क्रेडिट नोट {number} जारी किया है। {storeCredit, select, yes {{org} के साथ अगले ऑर्डर में इसका उपयोग करने के लिए चेकआउट पर कोड {code} डालें।} other {यह राशि आपको वापस कर दी गई है।}}",
+      "cta": "मेरा ऑर्डर देखें"
+    },
+    "orders.invoice": {
+      "subject": "{eventName} के लिए इनवॉइस {number}",
+      "intro": "आप {eventName} के लिए पंजीकृत हैं। {org} ने {amount} का इनवॉइस {number} जारी किया है, जिसकी नियत तिथि {due} है। इसे देखने, PDF डाउनलोड करने या पूरा या आंशिक भुगतान करने के लिए नीचे दिए गए बटन का उपयोग करें।",
+      "cta": "इनवॉइस देखें और भुगतान करें"
+    },
+    "orders.support-reply": {
+      "subject": "{subject}",
+      "intro": "{eventName} के आपके ऑर्डर के बारे में {org} का संदेश:",
+      "cta": "मेरा ऑर्डर देखें"
+    },
+    "payments.dispute-deadline": {
+      "subject": "विवाद के साक्ष्य की समय-सीमा निकट: {eventName}",
+      "intro": "{eventName} के एक ऑर्डर पर {amount} के विवाद के साक्ष्य {hours, plural, =0 {एक घंटे से कम} one {# घंटे} other {# घंटे}} में देय हैं। समय-सीमा से पहले इनकी समीक्षा करके जमा करें।"
+    },
+    "ticketing.transfer-offered": {
+      "subject": "{fromName} ने आपको {eventName} का टिकट भेजा है",
+      "intro": "{fromName} आपको {eventName} का एक टिकट ट्रांसफ़र कर रहे हैं। अपना QR कोड पाने के लिए इसी ईमेल पते से इसे क्लेम करें।",
+      "cta": "मेरा टिकट क्लेम करें"
+    },
+    "ticketing.transfer-completed": {
+      "subject": "{eventName} का आपका टिकट ट्रांसफ़र हो गया",
+      "intro": "{toName} ने {eventName} का वह टिकट क्लेम कर लिया जो आपने ट्रांसफ़र किया था। आपका पुराना QR कोड अब काम नहीं करता।"
+    },
+    "ticketing.transfer-received": {
+      "subject": "{eventName} का आपका टिकट",
+      "intro": "आपने {eventName} का वह टिकट क्लेम कर लिया जो {fromName} ने भेजा था। आपका अपना QR कोड तैयार है।",
+      "cta": "मेरा टिकट देखें"
+    },
+    "forms.resume": {
+      "subject": "{eventName} के लिए अपना पंजीकरण जारी रखें",
+      "intro": "{eventName} के लिए अपना पंजीकरण वहीं से जारी रखने का लिंक यह रहा जहाँ आपने छोड़ा था। यह आपके पिछली बार सहेजने के बाद {days, plural, one {# दिन} other {# दिन}} तक और केवल आपके लिए काम करता है, इसलिए इसे आगे न भेजें। अगर आपने इसके लिए नहीं कहा था, तो इस ईमेल को अनदेखा करें।",
+      "cta": "मेरा पंजीकरण जारी रखें"
+    },
+    "orders.table-naming": {
+      "subject": "{reminder, plural, =1 {रिमाइंडर: {eventName} के लिए अपने मेहमानों के नाम बताएँ} other {{eventName} के लिए अपने मेहमानों के नाम बताएँ}}",
+      "intro": "आपकी {tableName} में {size, plural, one {# सीट} other {# सीटें}} हैं। {missing, plural, =0 {हर सीट का नाम दर्ज है; आप उन्हें कभी भी देख सकते हैं।} one {# सीट का नाम अभी बाकी है।} other {# सीटों के नाम अभी बाकी हैं।}} नीचे दिए बटन से बताएँ कि आपकी टेबल पर कौन बैठेगा।",
+      "cta": "मेहमानों के नाम दें"
+    },
+    "registration.approved": {
+      "subject": "{eventName} के लिए आपका आवेदन स्वीकृत हुआ",
+      "intro": "अच्छी खबर, {name}: {typeName} के रूप में {eventName} में भाग लेने का आपका आवेदन स्वीकृत हो गया है। अपना पंजीकरण देखने और, यदि आपके पास का शुल्क है, भुगतान करके अपनी जगह पक्की करने के लिए नीचे दिए बटन का उपयोग करें।",
+      "cta": "मेरा पंजीकरण देखें"
+    },
+    "registration.denied": {
+      "subject": "{eventName} के लिए आपका आवेदन",
+      "intro": "{typeName} के रूप में {eventName} में भाग लेने के लिए आवेदन करने हेतु धन्यवाद, {name}। आयोजक इस बार आपका आवेदन स्वीकृत नहीं कर सके। आपसे कोई शुल्क नहीं लिया गया है।",
+      "cta": "मेरा आवेदन देखें"
+    },
+    "portal.invite": {
+      "subject": "{eventName} पोर्टल के लिए आमंत्रण",
+      "intro": "{org} ने आपको {eventName} के पोर्टल में {role} के रूप में आमंत्रित किया है। वहाँ आप अपने सत्र देख सकते हैं, अपनी प्रोफ़ाइल अपडेट कर सकते हैं और अपने कार्य पूरे कर सकते हैं। बटन इस पते पर भेजा गया साइन-इन कोड माँगेगा।",
+      "cta": "पोर्टल खोलें"
+    },
+    "portal.sign-in": {
+      "subject": "{eventName} के लिए आपका साइन-इन कोड {code} है",
+      "intro": "{eventName} पोर्टल में साइन इन करने के लिए {code} दर्ज करें, या इसी ब्राउज़र में नीचे दिया बटन इस्तेमाल करें। कोड की वैधता: {minutes} मिनट। बटन की वैधता: {linkMinutes} मिनट। हर एक केवल एक बार काम करता है। अगर आपने यह नहीं माँगा, तो इस ईमेल को अनदेखा करें।",
+      "cta": "पोर्टल में साइन इन करें"
+    },
+    "program.task-reminder": {
+      "subject": "याद दिलाना: {eventName} के लिए {title}",
+      "intro": "{org} को {eventName} के लिए अभी भी “{title}” का इंतज़ार है। अंतिम तिथि: {until}।",
+      "cta": "मेरे कार्य खोलें"
+    },
+    "donations.receipt": {
+      "subject": "{deductible, select, yes {{org} की ओर से आपकी दान रसीद} other {{org} की ओर से आपकी भुगतान रसीद}}",
+      "intro": "{eventName} के लिए {amount} के भुगतान के लिए धन्यवाद। आपकी रसीद नीचे है। इसे या इसकी PDF प्रति को अपने रिकॉर्ड के साथ रखें।",
+      "cta": "PDF रसीद डाउनलोड करें"
+    },
+    "donations.year-end-statement": {
+      "subject": "{org} की ओर से आपका {year} का दान विवरण",
+      "intro": "{year} में {org} का समर्थन करने के लिए धन्यवाद। आपके कर-कटौती योग्य भुगतानों का विवरण नीचे और PDF में है।",
+      "cta": "PDF विवरण डाउनलोड करें"
+    },
+    "guests.invitation": {
+      "subject": "{subject}",
+      "intro": "{message}",
+      "cta": "निमंत्रण का उत्तर दें"
+    },
+    "guests.rsvp-reminder": {
+      "subject": "अनुस्मारक: कृपया {eventName} के लिए उत्तर दें",
+      "intro": "{name}, हमें अभी तक आपका उत्तर नहीं मिला है। कृपया {deadline} तक बताएँ कि {eventName} में कौन आएगा।",
+      "cta": "अभी उत्तर दें"
+    },
+    "registration.session-enrolled": {
+      "subject": "एक सीट खाली हुई: आप {sessionTitle} में शामिल हैं",
+      "intro": "{eventName} ({when}) के {sessionTitle} में एक सीट खाली हुई और प्रतीक्षा सूची में अगला नंबर आपका था, इसलिए अब आपका नामांकन हो गया है। अगर आप नहीं आ सकते, तो सत्र को अपने शेड्यूल से हटा दें ताकि सीट अगले व्यक्ति को मिल जाए।",
+      "cta": "मेरा शेड्यूल खोलें"
+    },
+    "registration.session-offer": {
+      "subject": "{sessionTitle} में एक सीट {until} तक आपके लिए है",
+      "intro": "{eventName} ({when}) के {sessionTitle} में एक सीट खाली हुई है और अगला नंबर आपका है। इसे {until} से पहले अपने शेड्यूल से स्वीकार करें; उसके बाद यह अगले व्यक्ति को मिल जाएगी।",
+      "cta": "मेरी सीट स्वीकार करें"
+    },
+    "alerts.alert-urgent-text": {
+      "subject": "{rule, select, unseated {{count, plural, one {{countWords} उपस्थित व्यक्ति के पास सीट नहीं है} other {{countWords} उपस्थित लोगों के पास सीट नहीं है}}} undistributed {{count, plural, one {{countWords} खरीदा गया टिकट वितरित नहीं हुआ है} other {{countWords} खरीदे गए टिकट वितरित नहीं हुए हैं}}} paymentsFailed {{count, plural, one {{countWords} भुगतान विफल रहा} other {{countWords} भुगतान विफल रहे}}} paymentsStuck {{count, plural, one {{countWords} भुगतान अटका हुआ है} other {{countWords} भुगतान अटके हुए हैं}}} refundSurge {{count, plural, one {{countWords} रिफ़ंड पिछले घंटे में} other {{countWords} रिफ़ंड पिछले घंटे में}}} devicesOffline {{count, plural, one {{countWords} चेक-इन डिवाइस ऑफ़लाइन है} other {{countWords} चेक-इन डिवाइस ऑफ़लाइन हैं}}} devicesLowBattery {{count, plural, one {{countWords} चेक-इन डिवाइस की बैटरी कम है} other {{countWords} चेक-इन डिवाइसों की बैटरी कम है}}} devicesBacklog {{count, plural, one {{countWords} चेक-इन डिवाइस पर स्कैन सिंक होने की प्रतीक्षा में हैं} other {{countWords} चेक-इन डिवाइसों पर स्कैन सिंक होने की प्रतीक्षा में हैं}}} capacityNear {स्थल {count}% भर चुका है} capacityFull {स्थल पूरी तरह भर गया है ({count}%)} sellOut {{count}% टिकट बिक चुके हैं} salesPace {टिकट बिक्री लक्ष्य गति के {count}% पर है} readiness {{count, plural, one {{countWords} सेटअप चरण इस इवेंट को रोक रहा है} other {{countWords} सेटअप चरण इस इवेंट को रोक रहे हैं}}} domain {{count, plural, one {{countWords} कस्टम डोमेन में समस्या है} other {{countWords} कस्टम डोमेन में समस्या है}}} payoutsPastDue {{count, plural, one {{countWords} भुगतान खाता आवश्यकता की समय-सीमा निकल चुकी है} other {{countWords} भुगतान खाता आवश्यकताओं की समय-सीमा निकल चुकी है}}} deliverability {ईमेल डिलीवरी पर ध्यान देने की ज़रूरत है} automationFailed {{count, plural, one {{countWords} संदेश या बल्क कार्रवाई आज विफल रही} other {{countWords} संदेश या बल्क कार्रवाइयाँ आज विफल रहीं}}} assistanceOverdue {{count, plural, one {{countWords} सहायता अनुरोध बहुत देर से प्रतीक्षा में है} other {{countWords} सहायता अनुरोध बहुत देर से प्रतीक्षा में हैं}}} campaignFailed {{count, plural, one {{countWords} अभियान भेजना आज विफल रहा} other {{countWords} अभियान भेजना आज विफल रहे}}} disputeDeadline {{count, plural, one {{countWords} विवाद के लिए जल्द ही सबूत चाहिए} other {{countWords} विवादों के लिए जल्द ही सबूत चाहिए}}} pledgesUnpaid {{count, plural, one {{countWords} संकल्प कार्यक्रम के 14 दिन बाद भी बकाया है} other {{countWords} संकल्प कार्यक्रम के 14 दिन बाद भी बकाया हैं}}} sessionsNearCapacity {{count, plural, one {{countWords} सत्र 95 % क्षमता से ऊपर है} other {{countWords} सत्र 95 % क्षमता से ऊपर हैं}}} sessionWaitlists {{count, plural, one {{countWords} सत्र की प्रतीक्षा सूची लंबी है} other {{countWords} सत्रों की प्रतीक्षा सूचियाँ लंबी हैं}}} roomsTooSmall {{count, plural, one {{countWords} सत्र में कमरे की सीटों से अधिक स्थान आरक्षित हैं} other {{countWords} सत्रों में कमरों की सीटों से अधिक स्थान आरक्षित हैं}}} exhibitorsNoLeads {{count, plural, one {{countWords} प्रदर्शक के पास कोई लीड नहीं है} other {{countWords} प्रदर्शकों के पास कोई लीड नहीं है}}} exhibitorsNoStaff {{count, plural, one {{countWords} प्रदर्शक ने बूथ स्टाफ़ को आमंत्रित नहीं किया है} other {{countWords} प्रदर्शकों ने बूथ स्टाफ़ को आमंत्रित नहीं किया है}}} speakerTasksOverdue {{count, plural, one {{countWords} वक्ता कार्य की समय-सीमा निकल गई है} other {{countWords} वक्ता कार्यों की समय-सीमा निकल गई है}}} deliverablesOverdue {{count, plural, one {{countWords} प्रायोजक डिलिवरेबल की समय-सीमा निकल गई है} other {{countWords} प्रायोजक डिलिवरेबल की समय-सीमा निकल गई है}}} printersKiosksOffline {{count, plural, one {{countWords} बैज प्रिंटर या कियोस्क ऑफ़लाइन है} other {{countWords} बैज प्रिंटर या कियोस्क ऑफ़लाइन हैं}}} approvalBacklog {{count, plural, one {{countWords} आवेदन निर्णय की प्रतीक्षा में है} other {{countWords} आवेदन निर्णय की प्रतीक्षा में हैं}}} invoicesOverdue {{count, plural, one {{countWords} चालान की नियत तारीख निकल गई है} other {{countWords} चालानों की नियत तारीख निकल गई है}}} rsvpPending {{count, plural, one {{countWords} मेहमान ने RSVP का जवाब नहीं दिया है} other {{countWords} मेहमानों ने RSVP का जवाब नहीं दिया है}}} guestsUnseated {{count, plural, one {{countWords} मेहमान के पास टेबल नहीं है} other {{countWords} मेहमानों के पास टेबल नहीं है}}} mealsMissing {{count, plural, one {{countWords} आने वाले मेहमान ने भोजन नहीं चुना है} other {{countWords} आने वाले मेहमानों ने भोजन नहीं चुना है}}} integrationFailed {{count, plural, one {आज {countWords} इंटीग्रेशन समस्या (विफल सिंक या टूटा कनेक्शन)} other {आज {countWords} इंटीग्रेशन समस्याएँ (विफल सिंक या टूटे कनेक्शन)}}} billingPastDue {{count, plural, one {प्लान का भुगतान बकाया है} other {{countWords} प्लान भुगतान बकाया हैं}}} other {अलर्ट}}",
+      "intro": "{eventName, select, none {{org} में किसी चीज़ पर ध्यान देने की ज़रूरत है।} other {{eventName} में किसी चीज़ पर ध्यान देने की ज़रूरत है।}} बटन वह पेज खोलता है जो इसे ठीक करता है।"
+    },
+    "donations.pledge-summary": {
+      "subject": "{mode, select, card {{org} को आपका संकल्प: कल आपके कार्ड से राशि ली जाएगी} other {{org} को आपका संकल्प: भुगतान कैसे करें}}",
+      "intro": "{mode, select, card {{eventName} में {amount} के संकल्प के लिए धन्यवाद। हम {chargeAt} को आपके कार्ड ({card}) से राशि लेंगे। कोई दूसरा कार्ड इस्तेमाल करने या किसी और तरीके से भुगतान करने के लिए, उससे पहले नीचे दिए बटन का उपयोग करें।} other {{eventName} में {amount} के संकल्प के लिए धन्यवाद। कृपया {dueOn} तक नीचे दिए लिंक से ऑनलाइन भुगतान करें।}}",
+      "cta": "{mode, select, card {कार्ड बदलें या दूसरे तरीके से भुगतान करें} other {मेरा संकल्प चुकाएँ}}"
+    },
+    "donations.pledge-invoice": {
+      "subject": "{org} को आपका संकल्प: कृपया ऑनलाइन भुगतान करें",
+      "intro": "{reason, select, declined {{eventName} में {amount} के आपके संकल्प के लिए हम आपके कार्ड से राशि नहीं ले सके।} other {{eventName} में {amount} के आपके संकल्प के लिए आपका सहेजा गया कार्ड अब इस्तेमाल नहीं हो सकता।}} कृपया {dueOn} तक ऑनलाइन भुगतान करें।",
+      "cta": "मेरा संकल्प चुकाएँ"
+    },
+    "donations.pledge-reminder": {
+      "subject": "याद दिलाना: {org} को {amount} का आपका संकल्प",
+      "intro": "{eventName} में {amount} के संकल्प के लिए फिर से धन्यवाद। इसकी नियत तारीख {dueOn} है। अगर आप भुगतान कर चुके हैं, तो इस ईमेल को अनदेखा करें।",
+      "cta": "मेरा संकल्प चुकाएँ"
+    },
+    "program.cfp-received": {
+      "subject": "हमें आपका प्रस्ताव “{title}” मिल गया है",
+      "intro": "{eventName} के लिए “{title}” प्रस्तावित करने के लिए धन्यवाद। {org} इसकी समीक्षा करेगा और निर्णय आपको ईमेल करेगा।"
+    },
+    "program.cfp-accepted": {
+      "subject": "आपका प्रस्ताव “{title}” स्वीकार कर लिया गया है",
+      "intro": "अच्छी खबर: {org} ने {eventName} के लिए “{title}” स्वीकार कर लिया है। आयोजक जल्द ही आपके सत्र का समय बताएँगे।{hasNote, select, yes { आयोजकों का संदेश: {note}} other {}}"
+    },
+    "program.cfp-rejected": {
+      "subject": "आपके प्रस्ताव “{title}” के बारे में",
+      "intro": "{eventName} के लिए “{title}” प्रस्तावित करने के लिए धन्यवाद। इस बार {org} इसे कार्यक्रम में शामिल नहीं कर सका।{hasNote, select, yes { आयोजकों का संदेश: {note}} other {}}"
+    },
+    "privacy.request-code": {
+      "subject": "{code} आपके गोपनीयता अनुरोध की पुष्टि का कोड है",
+      "intro": "{org} को अपने अनुरोध की पुष्टि के लिए {code} दर्ज करें: {kind, select, erasure {आपका निजी डेटा मिटाना} other {आपके निजी डेटा की एक प्रति}}। कोड एक बार काम करता है और {minutes, plural, one {# मिनट} other {# मिनट}} में समाप्त हो जाता है। अगर आपने यह नहीं माँगा, तो इस ईमेल को अनदेखा करें: कोड के बिना कुछ नहीं होगा।"
+    },
+    "privacy.archive-ready": {
+      "subject": "{org} से आपका निजी डेटा तैयार है",
+      "intro": "{org} ने आपके अनुरोध का उत्तर दिया: आपके बारे में रखे गए निजी डेटा की एक प्रति ZIP फ़ाइल के रूप में तैयार है। लिंक {days, plural, one {# दिन} other {# दिन}} तक काम करेगा। संग्रह पर हस्ताक्षर है, ताकि आप जाँच सकें कि इसमें बदलाव नहीं हुआ।",
+      "cta": "मेरा डेटा डाउनलोड करें"
+    },
+    "privacy.erasure-done": {
+      "subject": "{org} ने आपका निजी डेटा मिटा दिया",
+      "intro": "{org} ने आपके कहे अनुसार आपका निजी डेटा मिटा दिया। कुछ रिकॉर्ड कानूनन रखने होते हैं (जैसे कर के लिए भुगतान किए गए ऑर्डर), आपके नाम और ईमेल के बिना; रसीद उन्हें कारण सहित बताती है। इस बारे में यह आखिरी ईमेल है।",
+      "cta": "रसीद देखें"
+    },
+    "badges.kiosk-code": {
+      "subject": "{code} {eventName} के बैज कियोस्क के लिए आपका कोड है",
+      "intro": "अपना विवरण जाँचने और अपना बैज प्रिंट करने के लिए बैज कियोस्क पर {code} दर्ज करें। कोड एक बार काम करता है और {minutes, plural, one {# मिनट} other {# मिनट}} में समाप्त हो जाता है। अगर आपने यह नहीं माँगा था, तो इस ईमेल को अनदेखा करें।"
+    },
+    "alerts.metric": {
+      "subject": "अलर्ट नियम “{title}” सक्रिय हुआ",
+      "intro": "{reading, select, none {आपका अलर्ट नियम “{title}” {org} में अब भी सक्रिय है।} other {आपका अलर्ट नियम “{title}” {org} में सक्रिय हुआ: {windowDays, plural, one {पिछले दिन} other {पिछले # दिनों}} में {reading}।}} इसे स्वीकार करने या स्नूज़ करने के लिए खोलें।",
+      "cta": "अलर्ट खोलें"
+    },
+    "alerts.metric-now": {
+      "subject": "अलर्ट नियम “{title}” सक्रिय हुआ",
+      "intro": "{reading, select, none {आपका अलर्ट नियम “{title}” {org} में अब भी सक्रिय है।} other {आपका अलर्ट नियम “{title}” {org} में सक्रिय हुआ: {windowDays, plural, one {पिछले दिन} other {पिछले # दिनों}} में {reading}।}} इसे स्वीकार करने या स्नूज़ करने के लिए खोलें।",
+      "cta": "अलर्ट खोलें"
+    },
+    "analytics.report": {
+      "subject": "आपकी रिपोर्ट “{name}”: {period}",
+      "intro": "{org} की रिपोर्ट “{name}” {period} के लिए तैयार है। PDF डाउनलोड करने के लिए इसे खोलें।",
+      "cta": "PDF डाउनलोड करें"
+    },
+    "cms.contact_message": {
+      "subject": "आपके संपर्क पेज से {name} का नया संदेश",
+      "intro": "{name} ({email}) ने आपकी साइट के संपर्क पेज से आपको लिखा है:"
+    },
+    "ce.certificate": {
+      "subject": "{org} से आपका प्रमाणपत्र",
+      "intro": "आपने {eventName} में {credits} अर्जित किए। आपका प्रमाणपत्र (कोड {code}) नीचे और PDF के रूप में है।",
+      "cta": "PDF प्रमाणपत्र डाउनलोड करें"
     }
   },
   "roles": {
@@ -188,7 +376,12 @@
     "viewer": "दर्शक",
     "co_host": "सह-मेज़बान",
     "planner": "योजनाकार",
-    "collaborator": "इवेंट सहयोगी"
+    "collaborator": "इवेंट सहयोगी",
+    "speaker": "वक्ता",
+    "exhibitor_admin": "प्रदर्शक एडमिन",
+    "exhibitor_staff": "प्रदर्शक स्टाफ़",
+    "sponsor_contact": "प्रायोजक संपर्क",
+    "cfp_reviewer": "कॉल फ़ॉर पेपर्स समीक्षक"
   },
   "account": {
     "deleted": {
@@ -244,5 +437,10 @@
         "intro": "एक समस्या ठीक करने तक हमने Yayatoh को पिछले संस्करण पर लौटा दिया है। {start} से खरीदे गए टिकट मान्य रहेंगे। अगर हमें आपका कोई ऑर्डर रिफ़ंड करना पड़ा, तो आपको राशि के साथ अलग ईमेल मिलेगा। पहले की तरह साइन इन करें।"
       }
     }
+  },
+  "campaigns": {
+    "testBanner": "परीक्षण ईमेल: यह केवल आपकी टीम को मिला है। मर्ज फ़ील्ड अपने वैकल्पिक मान दिखाते हैं।",
+    "eventCta": "इवेंट देखें",
+    "testSubject": "[परीक्षण] {subject}"
   }
 }

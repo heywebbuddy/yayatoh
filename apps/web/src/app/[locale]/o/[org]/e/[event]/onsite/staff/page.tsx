@@ -3,7 +3,7 @@ import { doorStaffQuery } from '@yayatoh/checkin';
 import { executeQuery } from '@yayatoh/kernel';
 import { composeNav, isProfileKey } from '@yayatoh/platform';
 import { listMembersQuery, roleCan } from '@yayatoh/tenancy';
-import { Button, Card, EmptyState, PageHeader } from '@yayatoh/ui';
+import { Button, buttonClass, Card, EmptyState, PageHeader } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { DoorStaffForm } from '@/components/door-staff-form.tsx';
@@ -36,7 +36,15 @@ export default async function DoorStaffPage({
     return (
       <>
         <PageHeader title={t('doorStaff.title')} />
-        <EmptyState title={t('checkin.noAccessTitle')} description={t('doorStaff.noAccess')} />
+        <EmptyState
+          title={t('checkin.noAccessTitle')}
+          description={t('doorStaff.noAccess')}
+          action={
+            <Link href={`/o/${org}/e/${event}`} className={buttonClass('primary', 'md')}>
+              {t('checkin.backToEvent')}
+            </Link>
+          }
+        />
       </>
     );
   }
@@ -63,7 +71,21 @@ export default async function DoorStaffPage({
           {t('doorStaff.listTitle')}
         </h2>
         {staff.length === 0 ? (
-          <EmptyState title={t('doorStaff.emptyTitle')} description={t('doorStaff.emptyDescription')} />
+          <EmptyState
+            title={t('doorStaff.emptyTitle')}
+            description={canManage ? t('doorStaff.emptyDescription') : t('doorStaff.emptyReadOnly')}
+            action={
+              canManage ? (
+                <Link href="#staff-add-heading" className={buttonClass('primary', 'md')}>
+                  {t('doorStaff.addFirst')}
+                </Link>
+              ) : (
+                <Link href={`/o/${org}/e/${event}/onsite`} className={buttonClass('secondary', 'md')}>
+                  {t('doorStaff.openCheckin')}
+                </Link>
+              )
+            }
+          />
         ) : (
           <ul className="flex list-none flex-col gap-3 p-0">
             {staff.map((s) => {
@@ -79,7 +101,7 @@ export default async function DoorStaffPage({
                   <Card className="flex flex-col gap-3">
                     <div className="flex flex-wrap items-baseline gap-x-3">
                       <h3 className="text-body font-medium">{name}</h3>
-                      <p className="text-caption text-zinc-600" data-testid="staff-scope">
+                      <p className="text-caption text-ink-2" data-testid="staff-scope">
                         {t('doorStaff.scansAt', { where })}
                       </p>
                     </div>
@@ -115,13 +137,13 @@ export default async function DoorStaffPage({
           <h2 id="staff-add-heading" className="text-section">
             {t('doorStaff.addTitle')}
           </h2>
-          <p className="text-caption text-zinc-500">{t('doorStaff.addHint')}</p>
+          <p className="text-caption text-ink-2">{t('doorStaff.addHint')}</p>
           <Card>
             <DoorStaffForm action={save} checkpoints={checkpoints} members={candidates} />
           </Card>
         </section>
       ) : (
-        <p className="text-caption text-zinc-600">{t('doorStaff.readOnly')}</p>
+        <p className="text-caption text-ink-2">{t('doorStaff.readOnly')}</p>
       )}
     </>
   );

@@ -37,19 +37,21 @@ export default async function Features({ params }: Props) {
   const t = await getTranslations('marketing');
   const sections = await cachedSections(org.orgId, 'features', locale);
   return (
-    <div className="min-h-dvh bg-white">
+    <div className="min-h-dvh bg-surface">
       <SiteHeader />
       <main id="main" className="mx-auto flex w-full max-w-4xl flex-col gap-10 px-4 py-8 md:px-6 md:py-16">
         <header className="flex flex-col gap-3">
-          <h1 className="text-[40px] leading-tight font-light tracking-[-0.045em]">{t('features.title')}</h1>
-          <p className="max-w-2xl text-[17px] text-zinc-600">{t('features.lede')}</p>
+          <h1 className="text-[40px] leading-tight font-extrabold tracking-[-0.045em]">
+            {t('features.title')}
+          </h1>
+          <p className="max-w-2xl text-[17px] text-ink-2">{t('features.lede')}</p>
         </header>
         {sections.length === 0 ? (
           <EmptyState title={t('features.emptyTitle')} description={t('features.emptyDescription')} />
         ) : (
           <SiteSections sections={sections} layout="stack" locale={locale} />
         )}
-        <div className="flex flex-wrap gap-3 border-t border-zinc-200 pt-8">
+        <div className="flex flex-wrap gap-3 border-t border-line pt-8">
           <Link href="/contact" className={buttonClass('primary')}>
             {t('features.contactCta')}
           </Link>

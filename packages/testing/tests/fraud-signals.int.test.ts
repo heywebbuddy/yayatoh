@@ -559,7 +559,10 @@ describe('alerts: preferences and quiet hours', () => {
     expect(rows.length).toBeGreaterThan(0);
     expect(rows.every((r) => r.category === 'security')).toBe(true);
     expect(rows.some((r) => r.status === 'queued' && r.reason === 'quiet_hours')).toBe(true);
-    expect(emails.filter((e) => e.to === `${a.ownerId}@members.test`)).toHaveLength(0);
+    // (Command Center alerts, M3.2b, are transactional and go at once: only fraud alerts wait.)
+    expect(
+      emails.filter((e) => e.to === `${a.ownerId}@members.test` && e.subject.startsWith('Fraud alert')),
+    ).toHaveLength(0);
     // At 08:00 local they go out, with a button into the console.
     await dispatchDue(a.org.id, {
       transports,

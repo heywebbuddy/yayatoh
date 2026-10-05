@@ -23,11 +23,19 @@ const PREFIXES: readonly [string, PageType][] = [
   ['/signup', 'console'],
   ['/connect', 'console'],
   ['/portal', 'console'],
+  // M5.3a: speaker (and later exhibitor) portal accounts: invitation, sign-in and the portal.
+  ['/event-portal', 'console'],
   ['/checkout', 'checkout'],
   ['/my-tickets', 'token'],
   ['/orders', 'token'],
   ['/claim', 'token'],
   ['/invite', 'token'],
+  // M3.3a TV mode: a display link's token in the path.
+  ['/tv', 'token'],
+  // M4.5a: a guest website (its address in the path, its content behind a password).
+  ['/w', 'token'],
+  // M4.7a: a party's guest hub (its signed RSVP link in the path: no referrer, never framed).
+  ['/hub', 'token'],
   ['/scan', 'scan'],
 ];
 
@@ -60,7 +68,16 @@ export interface SecurityHeaderOptions {
   /** HTTPS deployments: HSTS and upgrade-insecure-requests. */
   readonly https?: boolean;
   readonly extra?: CspOptions['extra'];
+  /** M6.14a: the page may ask for the visitor's location (same origin only). */
+  readonly geolocation?: boolean;
 }
+
+/**
+ * M6.14a: paths (after the locale) whose page may ask for the visitor's location: the
+ * marketplace search's "Use my location". Everything else keeps `geolocation=()`.
+ */
+const GEOLOCATION_PATHS: readonly string[] = ['/search'];
+export const geolocationAllowed = (pathname: string) => GEOLOCATION_PATHS.includes(pathname);
 
 /** Every header a page response carries, by page type. */
 export function securityHeaders(type: PageType, o: SecurityHeaderOptions): Record<string, string> {
@@ -94,7 +111,7 @@ export function securityHeaders(type: PageType, o: SecurityHeaderOptions): Recor
     'permissions-policy': [
       `camera=${type === 'scan' ? '(self)' : '()'}`,
       'microphone=()',
-      'geolocation=()',
+      `geolocation=${o.geolocation && type === 'public' ? '(self)' : '()'}`,
       'payment=()',
       'usb=()',
       'browsing-topics=()',

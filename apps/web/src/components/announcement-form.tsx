@@ -38,7 +38,7 @@ export function AnnouncementForm({
         error={bad.has('title') ? t('titleInvalid') : undefined}
       />
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="announcement-body" className="text-caption text-zinc-600">
+        <label htmlFor="announcement-body" className="text-[13px] font-bold text-ink">
           {t('body')}
         </label>
         <textarea
@@ -48,20 +48,20 @@ export function AnnouncementForm({
           rows={5}
           aria-invalid={bad.has('body') || undefined}
           aria-describedby={bad.has('body') ? 'announcement-body-error' : 'announcement-body-hint'}
-          className={`rounded-card border bg-white px-4 py-2 text-body ${bad.has('body') ? 'border-pink-700' : 'border-zinc-200'}`}
+          className={`rounded-card border bg-surface px-4 py-2 text-body ${bad.has('body') ? 'field-invalid' : ''}`}
         />
         {bad.has('body') ? (
-          <p id="announcement-body-error" className="text-caption text-pink-700">
+          <p id="announcement-body-error" className="text-caption text-danger">
             {t('bodyInvalid')}
           </p>
         ) : (
-          <p id="announcement-body-hint" className="text-caption text-zinc-500">
+          <p id="announcement-body-hint" className="text-caption text-ink-2">
             {t('bodyHint')}
           </p>
         )}
       </div>
       <fieldset className="flex flex-col gap-2">
-        <legend className="text-caption text-zinc-600">{t('audience')}</legend>
+        <legend className="text-[13px] font-bold text-ink">{t('audience')}</legend>
         <div className="flex flex-wrap gap-x-6 gap-y-2">
           <label className="flex min-h-6 items-center gap-2 text-body">
             <input type="radio" name="audience" value="public" defaultChecked className="size-5" />
