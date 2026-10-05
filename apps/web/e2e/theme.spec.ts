@@ -94,8 +94,12 @@ test.describe('theme (design system v2)', () => {
     await expect(page.getByRole('menu')).toHaveCount(0);
     await expect(themeButton(page)).toBeFocused();
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+    // ArrowDown on the button opens the menu on its first item; wait for that focus before the
+    // next key, or a fast second press reaches the button while the menu is still mounting.
     await page.keyboard.press('ArrowDown');
+    await expect(light).toBeFocused();
     await page.keyboard.press('ArrowDown');
+    await expect(page.getByRole('menuitemradio', { name: 'Dark' })).toBeFocused();
     await page.keyboard.press('Enter');
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
   });
