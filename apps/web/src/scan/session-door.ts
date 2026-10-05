@@ -20,7 +20,8 @@ export function sessionOccupancy(
   log: readonly DoorLogEntry[],
 ): Map<string, number> {
   const out = new Map<string, number>();
-  for (const s of header.sessions ?? []) out.set(s.sessionId, (out.get(s.sessionId) ?? 0) + s.occupied);
+  // The manifest lists a session once per door, each with the whole room's count: take it once.
+  for (const s of header.sessions ?? []) out.set(s.sessionId, s.occupied);
   const sessionOf = new Map(
     header.checkpoints.flatMap((c) =>
       c.kind === 'session' && c.sessionId ? [[c.id, c.sessionId] as const] : [],

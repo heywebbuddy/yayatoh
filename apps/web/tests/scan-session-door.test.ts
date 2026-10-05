@@ -42,6 +42,20 @@ describe('Scan PWA session doors (M5.6a)', () => {
     expect(pruneDoorLog(log, '2027-01-01T10:10:00Z').map((e) => e.scanId)).toEqual(['c']);
   });
 
+  it('a session behind two doors counts its room once (the manifest lists it per door)', () => {
+    const twoDoors: Pick<ManifestHeader, 'sessions' | 'checkpoints'> = {
+      ...header,
+      sessions: [
+        { checkpointId: 'door-a', sessionId: 's1', title: 'T', startsAt: '', endsAt: '', occupied: 3 },
+        { checkpointId: 'door-b', sessionId: 's1', title: 'T', startsAt: '', endsAt: '', occupied: 3 },
+      ],
+    };
+    expect(sessionOccupancy(twoDoors, []).get('s1')).toBe(3);
+    expect(
+      sessionOccupancy(twoDoors, [{ scanId: '1', verdict: 'entered', checkpointId: 'door-b' }]).get('s1'),
+    ).toBe(4);
+  });
+
   it('never goes below zero', () => {
     const empty = { ...header, sessions: [] };
     expect(
