@@ -1,5 +1,12 @@
 import { type Browser, expect, type Locator, type Page, test } from '@playwright/test';
-import { continueToPayment, expectAccessible, newUser, pickOption, signIn } from './helpers.ts';
+import {
+  continueToPayment,
+  expectAccessible,
+  newUser,
+  pickOption,
+  setThemeSettled,
+  signIn,
+} from './helpers.ts';
 
 /**
  * U4 Command Center v2: the hero strip (countdown, mode, the one next action), the KPI row by
@@ -131,7 +138,8 @@ const shown = (page: Page) =>
     .evaluateAll((els) => els.map((e) => (e.getAttribute('data-testid') ?? '').replace('cc-widget-', '')));
 
 async function setTheme(page: Page, theme: 'light' | 'dark') {
-  await page.evaluate((t) => document.documentElement.setAttribute('data-theme', t), theme);
+  // Waits for the colour fades the switch starts, so axe never samples a tile mid-fade.
+  await setThemeSettled(page, theme);
 }
 
 test.describe('Command Center v2 (U4)', () => {

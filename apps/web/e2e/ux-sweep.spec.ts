@@ -2,7 +2,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { type BrowserContext, expect, type Page, test } from '@playwright/test';
 import { LOCALES } from '@yayatoh/contracts';
-import { signIn } from './helpers.ts';
+import { setThemeSettled, signIn } from './helpers.ts';
 import { axeSerious, measure, type PageMetrics } from './ux-sweep/checks.ts';
 import {
   EVENT,
@@ -85,9 +85,8 @@ async function settle(page: Page) {
 }
 
 async function setTheme(page: Page, theme: 'light' | 'dark') {
-  await page.evaluate((t) => {
-    document.documentElement.dataset.theme = t;
-  }, theme);
+  // Waits for the colour fades the switch starts (axe and screenshots see the settled theme).
+  await setThemeSettled(page, theme);
   await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
 }
 
