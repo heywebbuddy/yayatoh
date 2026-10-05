@@ -58,10 +58,16 @@ export async function priceAllAndPublish(page: Page, base: string, ticketType: s
   const prices = page.getByRole('region', { name: 'Prices' });
   const boxes = prices.getByRole('checkbox');
   await expect(boxes.first()).toBeVisible();
-  // Many rows (the 5,000-seat plan): tick them all at once.
-  await boxes.evaluateAll((els) => {
-    for (const el of els) if (!(el as HTMLInputElement).checked) (el as HTMLInputElement).click();
-  });
+  // Many rows (the 5,000-seat plan): tick them all at once. A tick made while the page is still
+  // settling can be lost (CI priced only one of two tables), so tick until every box stays ticked.
+  await expect(async () => {
+    const unticked = await boxes.evaluateAll((els) => {
+      for (const el of els) if (!(el as HTMLInputElement).checked) (el as HTMLInputElement).click();
+      return els.filter((el) => !(el as HTMLInputElement).checked).length;
+    });
+    expect(unticked).toBe(0);
+    await expect(prices.locator('input[type="checkbox"]:not(:checked)')).toHaveCount(0);
+  }).toPass({ timeout: 15_000 });
   await pickOption(prices.getByLabel('Sells as'), { label: ticketType });
   await prices.getByRole('button', { name: 'Set price' }).click();
   await expect(prices.getByText('Prices updated.')).toBeVisible();
