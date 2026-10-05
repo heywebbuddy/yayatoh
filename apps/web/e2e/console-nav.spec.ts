@@ -207,6 +207,15 @@ test.describe('How it works panels', () => {
     await summary.focus();
     await page.keyboard.press('Enter');
     await expect(panel).not.toHaveAttribute('open', '');
+    // The choice is saved by the toggle event, which fires a moment after the panel closes:
+    // reload only once the cookie holds it.
+    await expect
+      .poll(async () =>
+        (await page.context().cookies()).some(
+          (c) => c.name === 'yy_help_closed' && decodeURIComponent(c.value).includes('domains'),
+        ),
+      )
+      .toBe(true);
     await page.reload();
     await expect(page.locator('details[data-help-topic="domains"]')).not.toHaveAttribute('open', '');
     // Other pages' panels are unaffected.
