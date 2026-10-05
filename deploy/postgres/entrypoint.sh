@@ -15,6 +15,10 @@ else
       exit 1
     fi
   done
+  # The config holds the bucket key and cipher pass: owner-only. Restore the umask afterwards, or
+  # docker-entrypoint.sh (running as root) creates the data directory's parent 0700 root-owned
+  # and Postgres, as the postgres user, cannot create its data directory.
+  saved_umask=$(umask)
   umask 077
   cat > /etc/pgbackrest/pgbackrest.conf <<CONF
 [global]
@@ -42,6 +46,7 @@ pg1-path=${PGDATA}
 pg1-user=${POSTGRES_USER:-postgres}
 CONF
   chown postgres:postgres /etc/pgbackrest/pgbackrest.conf
+  umask "$saved_umask"
   ARCHIVE_ARGS=(
     -c archive_mode=on
     -c "archive_command=pgbackrest --stanza=${STANZA} archive-push %p"
