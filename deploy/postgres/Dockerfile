@@ -3,7 +3,7 @@
 # repository the official image already trusts.
 FROM pgvector/pgvector:pg18
 RUN apt-get update \
- && apt-get install -y --no-install-recommends pgbackrest \
+ && apt-get install -y --no-install-recommends ca-certificates pgbackrest \
  && rm -rf /var/lib/apt/lists/* \
  && install -d -o postgres -g postgres -m 0750 /var/log/pgbackrest /var/lib/pgbackrest /var/spool/pgbackrest /etc/pgbackrest
 COPY entrypoint.sh /usr/local/bin/yayatoh-postgres-entrypoint.sh
