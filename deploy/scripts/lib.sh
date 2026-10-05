@@ -24,8 +24,8 @@ write_env() {
   local all
   all=$(DOPPLER_TOKEN=$(cat "$token_file") doppler secrets download --no-file --format docker)
   ( umask 077
-    grep -v -E '^(POSTGRES_PASSWORD|ADMIN_DATABASE_URL|BACKUP_[A-Z_]+|DOPPLER_[A-Z_]+)=' <<<"$all" > "$RUN_DIR/app.env"
-    grep -E '^(POSTGRES_PASSWORD|BACKUP_[A-Z_]+)=' <<<"$all" > "$RUN_DIR/postgres.env" || true
+    grep -v -E '^(POSTGRES_PASSWORD|ADMIN_DATABASE_URL|BACKUP_[A-Z0-9_]+|DOPPLER_[A-Z_]+)=' <<<"$all" > "$RUN_DIR/app.env"
+    grep -E '^(POSTGRES_PASSWORD|BACKUP_[A-Z0-9_]+)=' <<<"$all" > "$RUN_DIR/postgres.env" || true
     grep -E '^ADMIN_DATABASE_URL=' <<<"$all" > "$RUN_DIR/bootstrap.env" || true )
   grep -q '^POSTGRES_PASSWORD=' "$RUN_DIR/postgres.env" || { echo "Doppler has no POSTGRES_PASSWORD." >&2; exit 1; }
   # The image refuses dev-only settings in production anyway; refuse them here before anything starts.
