@@ -128,15 +128,17 @@ jobs:
 
   e2e:
     # Sharded: the suite outgrew one 20-minute runner (M1.11), then three (M1.2c–M2.2b). Each shard
-    # gets its own database and seed, so shards never share state. 30 minutes since batch 3b
-    # (M3.x): shard 6 also runs the staff console suite and passed 20 minutes.
-    name: e2e + axe · shard ${{ matrix.shard }}/6
+    # gets its own database and seed, so shards never share state. Twelve shards since the Phase 3–6
+    # merge to main: six shards of ~550 tests ran about 10 tests a minute and hit the 30-minute limit
+    # with no failures, so ~275 tests per shard and a 60-minute limit (shard 6 also runs the staff
+    # console suite, shard 5 the Lighthouse audits).
+    name: e2e + axe · shard ${{ matrix.shard }}/12
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     strategy:
       fail-fast: false
       matrix:
-        shard: [1, 2, 3, 4, 5, 6]
+        shard: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
     services:
       postgres:
         image: pgvector/pgvector:pg18
@@ -188,7 +190,7 @@ jobs:
           pnpm db:bootstrap && pnpm db:migrate && pnpm seed
       - run: pnpm --filter @yayatoh/web build
       - run: pnpm --filter @yayatoh/web exec playwright install --with-deps chromium
-      - run: pnpm --filter @yayatoh/web exec playwright test --shard=${{ matrix.shard }}/6
+      - run: pnpm --filter @yayatoh/web exec playwright test --shard=${{ matrix.shard }}/12
       # M4.7a: Lighthouse mobile audits (guest hub), alone on the runner after the shard's suite: they
       # time the CPU, so tests running beside them would skew the score.
       - name: Lighthouse mobile audits
