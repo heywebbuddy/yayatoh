@@ -1024,3 +1024,10 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **Phase 6 security review:** read `docs/ops/security-review-phase6.md` and decide on the residual items it lists (OAuth token handling and SSO were reviewed; in-scope fixes are done).
 - [ ] **Load numbers are from a small shared VM.** Re-run `k6/api-limits.js`, `k6/sync-throughput.js` and `k6/warehouse-ingest.js` on staging before the first real tenant.
 
+
+## Batch 3w merge (2026-10-05; final batch of the build)
+- [ ] **Land `merge/next-3w` on the build branch.** It merges `agent/m6.x` (Phase 6 hardening: journeys, k6, connector PII gate, security review, connector runbook; no migrations) and `agent/u11` (whole-app UX sweep). No conflicts; no migrations in this batch.
+- [ ] **Open items from M6.X** (see "M6.X hardening" above): connector switch-on runbook, the residual items in `docs/ops/security-review-phase6.md`, and re-running the k6 tests on staging.
+- [ ] **U11 backlog:** `docs/ux/backlog.md` lists the page-specific findings the sweep did not fix (10 reviewed rows, 58 measured rows; one high: `admin:/listings` scrolls sideways at 390 px). Decide which become the next UX increment. The admin `/tenants/{id}` 500 for the canary fixture org is the one behaviour bug in it.
+- [ ] **Visual baselines changed.** U11's 24 px breadcrumb target shifts the `/dev/design` page by a sub-pixel, so the select-size snapshots (`form-controls.spec.ts`) were re-recorded for both renderers (12 images). The change is intended; no tolerance was loosened.
+- [ ] **E2E environment note:** the whole-suite run needs Gotenberg up (`docker compose up -d postgres gotenberg mailpit`); a helper shard run without it failed 17 PDF tests that pass with it.
