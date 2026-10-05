@@ -33,7 +33,9 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
       - run: pnpm check:modules
-      - run: pnpm typecheck
+      # One package at a time: several tsc processes at 8 GB each OOM-kill the
+      # 16 GB runner (exit 137); api-v1 alone needs about 7.8 GB.
+      - run: pnpm typecheck --concurrency=1
       - run: pnpm test
       - name: OpenAPI spec is up to date
         run: pnpm contracts:check
@@ -274,11 +276,16 @@ jobs:
         run: |
           git show "origin/${{ github.base_ref }}:apps/api/openapi.json" > .oasdiff-base.json 2>/dev/null \
             || echo '{"openapi":"3.1.0","info":{"title":"base","version":"0"},"paths":{}}' > .oasdiff-base.json
-      - uses: oasdiff/oasdiff-action/breaking@v0.0.21
-        with:
-          base: .oasdiff-base.json
-          revision: apps/api/openapi.json
-          fail-on: ERR
+      # Pinned oasdiff CLI so the owner-accepted findings files can be passed
+      # (docs/decisions.md, 2026-10-05). Everything not listed there still fails.
+      - name: Install oasdiff
+        run: go install github.com/oasdiff/oasdiff@v1.33.0
+      - name: Breaking changes against the base branch
+        run: |
+          "$(go env GOPATH)/bin/oasdiff" breaking .oasdiff-base.json apps/api/openapi.json \
+            --fail-on ERR \
+            --err-ignore apps/api/oasdiff/accepted-errors.txt \
+            --warn-ignore apps/api/oasdiff/accepted-warnings.txt
 
   secrets:
     name: gitleaks

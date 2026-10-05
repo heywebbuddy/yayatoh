@@ -8,3 +8,12 @@ f564acf4b740717e6991ed464d2d6ba2674b6cc9:packages/testing/tests/stripe-flow.int.
 5e08ccf7fd517731c9f81f1817b66fd4e0f2d4ff:packages/modules/notifications/tests/web-push.test.ts:generic-api-key:34
 # M3.10b mass-refund integration test: made-up secret for the fake payment provider (standing owner approval for fixtures)
 f3dd4b422de94956902b1279ffa5977688539006:packages/testing/tests/mass-refund.int.test.ts:generic-api-key:119
+# Batch 3 fundraising/engagement integration tests: made-up secrets named after their test, for the fake payment provider (standing owner approval for fixtures)
+4d3351287f39ca81101004486ec2651ee7a37ad1:packages/testing/tests/pledge-collection.int.test.ts:generic-api-key:62
+e592998594fc54a34fc34bb88777e1e1557fcc3a:packages/testing/tests/matching-gifts.int.test.ts:generic-api-key:50
+0fc6a82c08a2489b7b4a706cb981d63de76be568:packages/testing/tests/receipts.int.test.ts:generic-api-key:46
+fa264586b3c64d3e1570a455c5da65e761e61bd5:packages/testing/tests/donations.int.test.ts:generic-api-key:39
+2de4b9b5fb2849ce17700f73243e3563c3e0fff3:packages/testing/tests/engagement.int.test.ts:generic-api-key:38
+# M6.3b webhook signing tests: the Standard Webhooks spec's published test vector (public, not a credential)
+344ced60997eec6c1c8ea7bdb3b229e80c2efa39:packages/sdk/tests/webhooks.test.ts:generic-api-key:7
+f43c277cbad51bf2648e35fbf8a0e39dda8def5e:packages/modules/webhooks/tests/signing.test.ts:generic-api-key:18
