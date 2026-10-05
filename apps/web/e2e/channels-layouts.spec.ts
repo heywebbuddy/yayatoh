@@ -280,6 +280,10 @@ test.describe('channels, revisions and the layout library (M6.11b)', () => {
 
     // Start a new event from it: every validation error first, then by keyboard.
     await card.getByRole('link', { name: `Start an event from ${name}` }).click();
+    // The link is a client navigation to ?start={id}; the form remounts (keyed on the chosen plan)
+    // when it commits. The newest plan is also the default, so wait for the URL before using the
+    // form, or a click can land on the old form just before it is replaced.
+    await expect(page).toHaveURL(/[?&]start=/);
     const start = page.getByRole('region', { name: 'Start a new event from a plan' });
     await expectPicked(start.getByLabel('Plan', { exact: true }), /.+/);
     await expect(start.getByLabel('Plan', { exact: true })).toHaveText(`${name} (8 seats)`);

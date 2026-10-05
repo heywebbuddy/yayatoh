@@ -151,7 +151,10 @@ test.describe('Create menu and Help', () => {
     await page.keyboard.press('Escape');
     await expect(menu).toBeHidden();
     await expect(trigger).toBeFocused();
+    // ArrowDown on the button opens the menu on its first item; wait for that focus before the
+    // next keys, or a fast press reaches the button while the menu is still mounting.
     await page.keyboard.press('ArrowDown');
+    await expect(menu.getByRole('menuitem').first()).toBeFocused();
     for (let i = 0; i < 3; i++) await page.keyboard.press('ArrowDown');
     await expect(page.getByRole('menuitem', { name: 'Venue' })).toBeFocused();
     await page.keyboard.press('Enter');
