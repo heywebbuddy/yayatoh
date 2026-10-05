@@ -1,3 +1,4 @@
+import { isProductionEnv } from '@yayatoh/kernel';
 import type { MediaStore } from './port.ts';
 import { postgresMediaStore } from './postgres.ts';
 import { r2MediaStore } from './r2.ts';
@@ -21,7 +22,7 @@ export function mediaStoreFromEnv(env: Readonly<Record<string, string | undefine
     return r2MediaStore({ accountId, accessKeyId, secretAccessKey, bucket });
   }
   if (which === 'postgres') {
-    if (env.VERCEL_ENV === 'production')
+    if (isProductionEnv(env))
       throw new Error('The Postgres media store is for development only; set MEDIA_STORE=r2 in production');
     return postgresMediaStore();
   }

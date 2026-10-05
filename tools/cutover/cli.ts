@@ -5,7 +5,7 @@ import { createInterface } from 'node:readline/promises';
 import { closePools } from '@yayatoh/db';
 import { checkTarget, TargetRefused } from '@yayatoh/legacy-migrate';
 import { renderCutoverSet } from '@yayatoh/notifications';
-import { localKeyVault, setKeyVault } from '@yayatoh/platform';
+import { keyVaultFromEnv, setKeyVault } from '@yayatoh/platform';
 import { realDeps } from './src/deps.ts';
 import { REHEARSALS, type RehearsalId, rehearse } from './src/rehearse.ts';
 import { buildReport, newState, reportMarkdown, runTrack } from './src/runner.ts';
@@ -87,9 +87,10 @@ function targetArg(): ReturnType<typeof checkTarget> | null {
 }
 
 function keyVault() {
-  const key = process.env.LOCAL_KMS_KEY;
-  if (!key) fail('LOCAL_KMS_KEY is not set (ticket signing keys and manage tokens)');
-  setKeyVault(localKeyVault(key));
+  const vault = keyVaultFromEnv();
+  if (!vault)
+    fail('No key vault: set AWS_KMS_KEY_ID or LOCAL_KMS_KEY (ticket signing keys and manage tokens)');
+  setKeyVault(vault);
 }
 
 /** Typed confirmation: the step id to run it ("go" at a go/no-go); anything else pauses. */

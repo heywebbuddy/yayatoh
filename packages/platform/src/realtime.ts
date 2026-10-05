@@ -1,4 +1,5 @@
 import { createHmac, randomBytes } from 'node:crypto';
+import { isProductionEnv } from '@yayatoh/kernel';
 
 /**
  * Realtime publishing (ADR 0009): live features push small, derived messages to channels.
@@ -196,7 +197,7 @@ export function realtimePublisherFromEnv(
   if (provider === 'sse') return hub;
   if (provider !== 'ably') throw new Error(`Unknown REALTIME_PROVIDER: ${provider}`);
   if (!env.ABLY_API_KEY) {
-    if (env.NODE_ENV === 'production' && env.VERCEL_ENV === 'production')
+    if (env.NODE_ENV === 'production' && isProductionEnv(env))
       throw new Error('REALTIME_PROVIDER=ably needs ABLY_API_KEY');
     console.warn('REALTIME_PROVIDER=ably without ABLY_API_KEY: publishing over SSE only');
     return hub;

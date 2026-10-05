@@ -1,3 +1,4 @@
+import { isProductionEnv } from '@yayatoh/kernel';
 import { CONNECTORS } from '../connectors/index.ts';
 import { fakeIntegrationAuth } from './fake.ts';
 import { nangoIntegrationAuth } from './nango.ts';
@@ -20,7 +21,7 @@ export function integrationAuthFromEnv(
   const provider =
     env.INTEGRATIONS_AUTH_PROVIDER ?? (env.NODE_ENV === 'production' && !env.YAYATOH_DEV_AUTH ? '' : 'fake');
   if (provider === 'fake') {
-    if (env.VERCEL_ENV === 'production') return null;
+    if (isProductionEnv(env)) return null;
     return fakeAuthForConnectors();
   }
   if (provider === 'nango' && env.NANGO_SECRET_KEY)

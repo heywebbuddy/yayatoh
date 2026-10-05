@@ -1,3 +1,4 @@
+import { isProductionEnv } from '@yayatoh/kernel';
 import { Button, Card, Label, PageHeader } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
@@ -13,7 +14,7 @@ export default async function FakeConnect({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  if (!process.env.FAKE_PAYMENTS_SECRET || process.env.VERCEL_ENV === 'production') notFound();
+  if (!process.env.FAKE_PAYMENTS_SECRET || isProductionEnv()) notFound();
   const sp = await searchParams;
   if (!sp.acct || !sp.org || !sp.return) notFound();
   const t = await getTranslations('fakeConnect');

@@ -1,3 +1,4 @@
+import { isProductionEnv } from '@yayatoh/kernel';
 import type { Transports } from '../transports.ts';
 import { providerMode, whatsappRoutes } from './config.ts';
 import { fakeIdentityPort, type SendingIdentityPort, sesEmailTransport, sesIdentityPort } from './ses.ts';
@@ -118,7 +119,7 @@ export function whatsappVerifyToken(env: Env): string | null {
   return providerMode('whatsapp_cloud', env) === 'live' ? req(env, 'WHATSAPP_CLOUD_VERIFY_TOKEN') : null;
 }
 
-const production = (env: Env) => env.VERCEL_ENV === 'production' || env.NODE_ENV === 'production';
+const production = (env: Env) => isProductionEnv(env) || env.NODE_ENV === 'production';
 
 /**
  * Sending identities: SES when live, else the fake outside production (null in production

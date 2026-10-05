@@ -1,3 +1,4 @@
+import { isProductionEnv } from '@yayatoh/kernel';
 import { defaultResolver, type Resolver } from '@yayatoh/platform/ssrf';
 import { fakePublisher } from './fake.ts';
 import type { WebhookPublisher } from './port.ts';
@@ -10,7 +11,7 @@ import { svixPublisher } from './svix.ts';
 export function webhookPublisherFromEnv(env: NodeJS.ProcessEnv, appOrigin: string): WebhookPublisher | null {
   if (env.SVIX_API_KEY)
     return svixPublisher({ apiKey: env.SVIX_API_KEY, serverUrl: env.SVIX_SERVER_URL || undefined });
-  if (env.VERCEL_ENV === 'production') return null;
+  if (isProductionEnv(env)) return null;
   const seed = env.FAKE_WEBHOOKS_SECRET || env.APP_TOKEN_SECRET || env.BETTER_AUTH_SECRET;
   if (!seed || seed.length < 32) return null;
   return fakePublisher({ seed, appOrigin });
@@ -18,7 +19,7 @@ export function webhookPublisherFromEnv(env: NodeJS.ProcessEnv, appOrigin: strin
 
 /** The seed the fake publisher signs portal links with (the fake portal page checks them). */
 export function fakeWebhookSeed(env: NodeJS.ProcessEnv): string | null {
-  if (env.SVIX_API_KEY || env.VERCEL_ENV === 'production') return null;
+  if (env.SVIX_API_KEY || isProductionEnv(env)) return null;
   const seed = env.FAKE_WEBHOOKS_SECRET || env.APP_TOKEN_SECRET || env.BETTER_AUTH_SECRET;
   return seed && seed.length >= 32 ? seed : null;
 }

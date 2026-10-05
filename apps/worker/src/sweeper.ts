@@ -4,7 +4,7 @@ import { collectPledges } from '@yayatoh/donations';
 import { createCtx, executeCommand } from '@yayatoh/kernel';
 import { expireOrdersCommand, sweepWaitlistsCommand } from '@yayatoh/orders';
 import { alertDisputeDeadlinesCommand, type PaymentProvider } from '@yayatoh/payments';
-import { createCommandPorts, localKeyVault, setKeyVault } from '@yayatoh/platform';
+import { createCommandPorts, keyVaultFromEnv, setKeyVault } from '@yayatoh/platform';
 import { sweepEnrollmentsCommand } from '@yayatoh/registration';
 import {
   orgAuthorizer,
@@ -14,7 +14,9 @@ import {
 } from '@yayatoh/tenancy';
 import { sql } from 'drizzle-orm';
 
-if (process.env.LOCAL_KMS_KEY) setKeyVault(localKeyVault(process.env.LOCAL_KMS_KEY));
+// AWS KMS in production (AWS_KMS_KEY_ID); dev/preview/CI use the local vault (LOCAL_KMS_KEY).
+const vault = keyVaultFromEnv();
+if (vault) setKeyVault(vault);
 
 // The org gate (M1.3f) lets system actors through; wired for parity with the apps.
 const ports = createCommandPorts({

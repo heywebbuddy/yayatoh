@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { closePools } from '@yayatoh/db';
 import { fakePaymentProvider } from '@yayatoh/payments';
-import { localKeyVault, setKeyVault } from '@yayatoh/platform';
+import { keyVaultFromEnv as platformKeyVault, setKeyVault } from '@yayatoh/platform';
 import { demoHandles, resetDemoOwner } from './src/demo.ts';
 import { legacyFreezeProbe } from './src/freeze-probe.ts';
 import { orderLinkReport } from './src/order-links.ts';
@@ -73,11 +73,11 @@ function guardTarget() {
 }
 
 function keyVaultFromEnv() {
-  // Envelope encryption for signing keys and manage-token links. Production uses the KMS adapter
-  // (pending, docs/owner-inbox.md); dev, CI and rehearsals use the local vault.
-  const key = process.env.LOCAL_KMS_KEY;
-  if (!key) fail('LOCAL_KMS_KEY is not set (the key vault encrypts signing keys and manage tokens)');
-  setKeyVault(localKeyVault(key));
+  // Envelope encryption for signing keys and manage-token links: AWS KMS in production
+  // (AWS_KMS_KEY_ID); dev, CI and rehearsals use the local vault (LOCAL_KMS_KEY).
+  const vault = platformKeyVault();
+  if (!vault) fail('No key vault: set AWS_KMS_KEY_ID or LOCAL_KMS_KEY (signing keys and manage tokens)');
+  setKeyVault(vault);
 }
 
 function writeReport(report: unknown) {

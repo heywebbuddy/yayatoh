@@ -8,6 +8,7 @@ approved by the owner step by step.
 | Runbook | When |
 |---|---|
 | [deploy.md](deploy.md) | Every production deploy |
+| [deploy-contabo.md](deploy-contabo.md) | The production server (ADR 0024): one-time setup, every release, backups and restore |
 | [rollback.md](rollback.md) | A deploy made things worse |
 | [restore-drill.md](restore-drill.md) | Monthly drill; a real database restore |
 | [incident.md](incident.md) | Anything user-visible is broken or data may be exposed |

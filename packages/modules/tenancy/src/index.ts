@@ -256,6 +256,12 @@ export {
   recheckDue,
   recheckIntervalMs,
 } from './hosting/recheck.ts';
+export {
+  type DnsLookup,
+  domainProviderFromEnv,
+  selfHostedDomainProvider,
+  systemDns,
+} from './hosting/self-hosted.ts';
 export { privateColumns } from './private-columns.ts';
 export {
   domainProblemsTx,

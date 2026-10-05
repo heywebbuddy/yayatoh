@@ -11,6 +11,13 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
 - [x] **Install the Claude GitHub App** on `Pani-Digital-Services-LLC`, for the `yayatoh` and `yayatoh-legacy` repos only. See `docs/cloud-environment.md` §1.
 - [x] **Create the `yayatoh` cloud environment** at claude.ai/code. See `docs/cloud-environment.md` §2.
 
+- [ ] **Production server (Contabo, ADR 0024; labels: `infra`, `auth`).** Follow `docs/runbooks/deploy-contabo.md` §A: make the `yayatoh` container package public after its first build; create the R2 backup bucket and token, the AWS KMS key `alias/yayatoh-prod` with its `yayatoh-kms` IAM user, and a read-only Doppler service token; add the database, KMS, backup and domain values to Doppler `prd`; point `app.`, `admin.`, `sites.yayatoh.com` and `*.yayatoh.events` at the server; run `server-setup.sh`, then `first-run.sh <commit>`. Keep `BACKUP_CIPHER_PASS` in a password manager as well: no backup restores without it. Defaults taken; say if any should change:
+  - **No visitor country yet:** Caddy strips client-sent country and address headers and sets the real address. Country-based risk rules and the pricing page's currency guess see no country until a GeoIP source is added (a MaxMind account and Caddy module, or Cloudflare in front, which ADR 0004 had ruled out).
+  - **Backups:** weekly full, daily differential, WAL every minute, 4 weeks kept, encrypted, in a separate R2 bucket. A monthly restore drill (`restore-drill.md`).
+  - **No previews per PR** (Vercel had them): CI still runs every gate; previews are local or a later staging copy of the compose file.
+  - **The front door (ADR 0020) runs the same way on this server** (the Next.js proxy forwards with `fetch`); the Vercel preview spike in `front-door.md` §0 becomes a staging test on this server.
+  - **The worker now uses Stripe for refunds and mass refunds when `PAYMENTS_PROVIDER=stripe`** (it only had the fake before). That switch stays off until you approve live payments.
+
 - [ ] **Front door, pending owner** (M2.4a; labels: `infra`, `db-migration`, `auth`). Built with these defaults; say if any should change:
   - **ADR 0020 (proposed):** the new app's proxy forwards to Laravel with `fetch` (full control of cookies, headers and counters) instead of the platform rewrite or a Cloudflare Worker. Needs your Vercel preview for the spike (25 MB upload, 150 s response, 60 MB stream) before any DNS change; the Worker stays the fallback.
   - **Who moves routes:** admins only, with a password or authenticator step-up and a reason; support and finance see the page read-only.

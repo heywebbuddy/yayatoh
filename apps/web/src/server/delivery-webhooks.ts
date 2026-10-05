@@ -1,4 +1,5 @@
 import 'server-only';
+import { isProductionEnv } from '@yayatoh/kernel';
 import {
   fakeDeliveryAdapter,
   fakeDeliverySecret,
@@ -22,7 +23,7 @@ import { appOrigin } from '@/server/tenant-return.ts';
  */
 export function webhookAdapter(channel: WebhookChannel, provider: string): ProviderWebhookAdapter | null {
   if (channel === 'email' && provider === 'fake') {
-    if (process.env.VERCEL_ENV === 'production' && process.env.EMAIL_PROVIDER !== 'fake') return null;
+    if (isProductionEnv() && process.env.EMAIL_PROVIDER !== 'fake') return null;
     const secret = fakeDeliverySecret();
     return secret ? fakeWebhookAdapter(fakeDeliveryAdapter(secret)) : null;
   }
