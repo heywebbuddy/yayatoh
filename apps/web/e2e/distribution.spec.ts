@@ -22,6 +22,8 @@ test.describe('ticket distribution', () => {
     page,
     browser,
   }) => {
+    // A long journey (event, order, claim, door scans): it needs more than the 30 s default under load.
+    test.setTimeout(90_000);
     const stamp = Date.now();
     await signIn(page);
     await page.goto('/o/lakeside-events/events/new');
@@ -103,6 +105,9 @@ test.describe('ticket distribution', () => {
     await field.fill(passedOn);
     await field.press('Enter');
     await expect(result).toContainText('Not a valid ticket');
+    // The scanner clears the field and starts a new scan id just after it shows a result; typing
+    // before that would be wiped (or reuse the old scan id), so wait for the reset.
+    await expect(field).toHaveValue('');
     await field.fill(guestCode);
     await field.press('Enter');
     await expect(result).toContainText('Welcome in');
