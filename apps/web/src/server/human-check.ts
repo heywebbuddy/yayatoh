@@ -1,5 +1,4 @@
 import 'server-only';
-import { isProductionEnv } from '@yayatoh/kernel';
 import { FAKE_HUMAN_TOKEN, fakeHumanCheck, type HumanCheck, turnstileHumanCheck } from '@yayatoh/platform';
 import { headers } from 'next/headers';
 import { clientIp } from './rate-limit.ts';
@@ -16,7 +15,7 @@ let humanCheck: HumanCheck | null | undefined;
  */
 export function getHumanCheck(): HumanCheck | null {
   if (humanCheck !== undefined) return humanCheck;
-  const production = isProductionEnv();
+  const production = process.env.VERCEL_ENV === 'production';
   const provider = process.env.HUMAN_CHECK_PROVIDER || (production ? 'turnstile' : 'fake');
   const siteKey = process.env.TURNSTILE_SITE_KEY;
   const secretKey = process.env.TURNSTILE_SECRET_KEY;

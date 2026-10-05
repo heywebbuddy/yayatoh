@@ -8,7 +8,6 @@ import {
   type SocialProvider,
   type SocialProviderId,
 } from '@yayatoh/auth';
-import { isProductionEnv } from '@yayatoh/kernel';
 import { getAuth } from './auth.ts';
 import { appOrigin } from './tenant-return.ts';
 
@@ -19,7 +18,7 @@ import { appOrigin } from './tenant-return.ts';
  * production) sends the browser to the fake consent page `/auth/social/fake`. Production never
  * uses the fake adapter.
  */
-const production = () => isProductionEnv();
+const production = () => process.env.VERCEL_ENV === 'production';
 
 export function socialMode(): 'fake' | 'real' {
   if (production()) return 'real';

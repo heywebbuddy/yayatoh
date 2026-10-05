@@ -2,8 +2,6 @@
 
 **Who:** anyone with merge rights; production promotion by the owner. **Duration:** 15 min.
 
-> Production runs on one self-hosted server since ADR 0024: the server commands are in [deploy-contabo.md](deploy-contabo.md). The checks below still apply; read "promote in Vercel" and "fly deploy" as `deploy.sh <commit>`.
-
 ## Before
 1. The PR is green: `pnpm verify`, the full e2e suite, `contracts:check`, oasdiff; risk-tagged PRs
    (`db-migration`, `auth`, `payments`, `tenancy`, `infra`) carry the owner's approval.

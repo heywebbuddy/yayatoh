@@ -10,7 +10,6 @@ import {
 } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { isProductionEnv } from '@yayatoh/kernel';
 import { type DeliveryEvent, signFakeDeliveryEvents } from './delivery.ts';
 import { ProviderRejection } from './providers/types.ts';
 import type { Urgency } from './web-push.ts';
@@ -246,7 +245,8 @@ export function devMailboxTransports(
   dir = devMailboxDir(),
   opts: { deliverySecret?: string | null } = {},
 ): Transports {
-  if (isProductionEnv()) throw new Error('The dev mailbox is not allowed in production');
+  if (process.env.VERCEL_ENV === 'production')
+    throw new Error('The dev mailbox is not allowed in production');
   mkdirSync(dir, { recursive: true });
   let n = 0;
   const write = (channel: DevMailboxEntry['channel'], m: OutboundEmail) => {
@@ -440,7 +440,8 @@ const FAKE_PUSH_ID = /^[A-Za-z0-9_-]{8,64}$/;
 
 /** Dev/CI: keep one received push for a fake subscription id (refused in production). */
 export function recordFakePush(id: string, entry: FakePushEntry, dir = devMailboxDir()): void {
-  if (isProductionEnv()) throw new Error('The fake push service is not allowed in production');
+  if (process.env.VERCEL_ENV === 'production')
+    throw new Error('The fake push service is not allowed in production');
   if (!FAKE_PUSH_ID.test(id)) throw new Error('bad fake push id');
   const folder = join(dir, PUSH_SERVICE_DIR, id);
   mkdirSync(folder, { recursive: true });

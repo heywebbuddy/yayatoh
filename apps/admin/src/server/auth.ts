@@ -8,18 +8,18 @@ import {
   type TwoFactorService,
   twoFactorService,
 } from '@yayatoh/auth';
-import { IDENTITY_KEY_SCOPE, type KeyVault, keyVaultFromEnv } from '@yayatoh/platform';
+import { IDENTITY_KEY_SCOPE, type KeyVault, localKeyVault } from '@yayatoh/platform';
 
 let instance: Auth | undefined;
 const exempt = devPersonaReplayExempt();
 let vault: KeyVault | undefined;
 
-// AWS KMS in production (AWS_KMS_KEY_ID); dev/preview/CI use the local vault (LOCAL_KMS_KEY).
+// AWS KMS arrives with the owner's AWS account; until then dev/preview/CI use the local vault.
 function identityVault(): KeyVault {
   if (!vault) {
-    const v = keyVaultFromEnv();
-    if (!v) throw new Error('No key vault: set AWS_KMS_KEY_ID or LOCAL_KMS_KEY (see .env.example)');
-    vault = v;
+    const key = process.env.LOCAL_KMS_KEY;
+    if (!key) throw new Error('LOCAL_KMS_KEY is not set (see .env.example)');
+    vault = localKeyVault(key);
   }
   return vault;
 }

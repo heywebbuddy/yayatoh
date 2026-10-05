@@ -5,7 +5,6 @@ import {
   DomainError,
   executeCommand,
   executeQuery,
-  isProductionEnv,
   requireOrg,
 } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
@@ -32,7 +31,7 @@ type Env = Readonly<Record<string, string | undefined>>;
  * only plans and prices on sale can be chosen.
  */
 export function offersPlaceholderPlans(env: Env = process.env): boolean {
-  return (env.BILLING_PROVIDER || 'fake') === 'fake' && !isProductionEnv(env);
+  return (env.BILLING_PROVIDER || 'fake') === 'fake' && env.VERCEL_ENV !== 'production';
 }
 
 export const PLAN_CHANGE_DIRECTIONS = ['upgrade', 'downgrade', 'switch', 'start'] as const;

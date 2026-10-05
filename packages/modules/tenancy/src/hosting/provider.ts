@@ -1,5 +1,4 @@
 import { createHmac } from 'node:crypto';
-import { isProductionEnv } from '@yayatoh/kernel';
 
 export interface DnsRecord {
   readonly type: 'A' | 'CNAME' | 'TXT';
@@ -21,7 +20,7 @@ export interface DomainCheck {
  * adapter's concern.
  */
 export interface DomainProvider {
-  readonly name: 'fake' | 'vercel' | 'self_hosted';
+  readonly name: 'fake' | 'vercel';
   addDomain(hostname: string): Promise<{ providerRef: string } & DomainCheck>;
   checkDomain(hostname: string): Promise<DomainCheck>;
   removeDomain(hostname: string): Promise<void>;
@@ -33,7 +32,8 @@ export interface DomainProvider {
  * issued), `*.fail.test` points elsewhere (failed), anything else waits for DNS.
  */
 export function fakeDomainProvider(opts: { secret: string }): DomainProvider {
-  if (isProductionEnv()) throw new Error('The fake domain provider is not allowed in production');
+  if (process.env.VERCEL_ENV === 'production')
+    throw new Error('The fake domain provider is not allowed in production');
   const token = (host: string) =>
     createHmac('sha256', opts.secret).update(`domain:${host}`).digest('hex').slice(0, 16);
   const records = (host: string): DnsRecord[] => [

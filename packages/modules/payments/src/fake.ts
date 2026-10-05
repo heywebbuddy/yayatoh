@@ -1,5 +1,4 @@
 import { createHmac, randomUUID, timingSafeEqual } from 'node:crypto';
-import { isProductionEnv } from '@yayatoh/kernel';
 import type {
   AccountEvent,
   BalanceTransaction,
@@ -143,7 +142,8 @@ export function fakePaymentProvider(opts: {
   /** Tests: the clock stamped on balance transactions. */
   now?: () => Date;
 }): PaymentProvider {
-  if (isProductionEnv()) throw new Error('The fake payment provider is not allowed in production');
+  if (process.env.VERCEL_ENV === 'production')
+    throw new Error('The fake payment provider is not allowed in production');
   if (opts.secret.length < 32) throw new Error('fake provider secret must be ≥32 chars');
   const now = opts.now ?? (() => new Date());
   const cards = opts.cards ?? processFakeCardStore();

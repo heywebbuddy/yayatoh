@@ -13,7 +13,7 @@ import { notificationsContactOwner } from '@yayatoh/notifications';
 import { ordersContactOwner } from '@yayatoh/orders';
 import {
   createCommandPorts,
-  keyVaultFromEnv,
+  localKeyVault,
   registerDataSubjectContributors,
   setKeyVault,
 } from '@yayatoh/platform';
@@ -39,9 +39,9 @@ export const ports = createCommandPorts({
   orgGate: composeOrgGates(orgStatusGate, billingReadOnlyGate({ memberRole: memberRoleTx })),
 });
 
-// AWS KMS in production (AWS_KMS_KEY_ID); dev/preview/CI use the local vault (LOCAL_KMS_KEY).
-const vault = keyVaultFromEnv();
-if (vault) setKeyVault(vault);
+// AWS KMS arrives with the owner's AWS account; until then dev/preview/CI use the local vault.
+const localKms = process.env.LOCAL_KMS_KEY;
+if (localKms) setKeyVault(localKeyVault(localKms));
 
 // M4.3a: seating reaches the guest list through its OccupantDirectory port (same tier).
 setOccupantDirectory(guestsOccupantDirectory);

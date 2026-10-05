@@ -1,5 +1,4 @@
 import { createHmac, randomUUID, timingSafeEqual } from 'node:crypto';
-import { isProductionEnv } from '@yayatoh/kernel';
 import { MODULE_KEYS } from '@yayatoh/platform';
 import { z } from 'zod';
 import { PLACEHOLDER_PLANS } from '../catalog.ts';
@@ -105,7 +104,8 @@ const DAY = 86_400_000;
  * follow `prorate` (a flat 8 % stands in for Stripe Tax).
  */
 export function fakeBillingProvider(opts: FakeBillingOptions): FakeBillingProvider {
-  if (isProductionEnv()) throw new Error('The fake billing provider is not allowed in production');
+  if (process.env.VERCEL_ENV === 'production')
+    throw new Error('The fake billing provider is not allowed in production');
   if (opts.secret.length < 32) throw new Error('fake provider secret must be ≥32 chars');
   const meterEvents: UsageReport[] = [];
   const seen = new Set<string>();

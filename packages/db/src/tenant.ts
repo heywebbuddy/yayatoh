@@ -38,9 +38,3 @@ export async function withTenant<T>(ctx: Ctx, fn: (tx: TenantTx) => Promise<T>):
 export async function withoutTenant<T>(fn: (tx: TenantTx) => Promise<T>): Promise<T> {
   return pool('app').db.transaction(async (tx) => fn(tx as unknown as TenantTx));
 }
-
-/** Health checks: true when the app role's pool reaches the database (`select 1`). */
-export async function pingDatabase(): Promise<boolean> {
-  await pool('app').db.execute(sql`select 1`);
-  return true;
-}

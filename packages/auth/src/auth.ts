@@ -1,6 +1,6 @@
 import { passkey } from '@better-auth/passkey';
 import { identityDatabase } from '@yayatoh/db/identity';
-import { isProductionEnv, uuidv7 } from '@yayatoh/kernel';
+import { uuidv7 } from '@yayatoh/kernel';
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { APIError, createAuthEndpoint, createAuthMiddleware } from 'better-auth/api';
@@ -81,7 +81,7 @@ export function devPersonaReplayExempt(
   env: Record<string, string | undefined> = process.env,
 ): AuthOptions['totpReplayExempt'] {
   const password = env.DEV_PERSONA_PASSWORD;
-  if (env.YAYATOH_DEV_AUTH !== '1' || isProductionEnv(env) || !password) return undefined;
+  if (env.YAYATOH_DEV_AUTH !== '1' || env.VERCEL_ENV === 'production' || !password) return undefined;
   return (user, secret) => secret === devPersonaTotpSecret(user.email, password);
 }
 

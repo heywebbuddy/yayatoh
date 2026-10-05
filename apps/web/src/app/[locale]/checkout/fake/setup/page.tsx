@@ -1,4 +1,3 @@
-import { isProductionEnv } from '@yayatoh/kernel';
 import { FAKE_TEST_CARDS } from '@yayatoh/payments';
 import { Button, Card, Label, PageHeader, Select } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
@@ -18,7 +17,7 @@ export default async function FakeCardSetup({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  if (!process.env.FAKE_PAYMENTS_SECRET || isProductionEnv()) notFound();
+  if (!process.env.FAKE_PAYMENTS_SECRET || process.env.VERCEL_ENV === 'production') notFound();
   const sp = await searchParams;
   const { seti, org, ref, acct, email } = sp;
   if (!seti || !org || !ref || !acct || !email || !sp.return) notFound();

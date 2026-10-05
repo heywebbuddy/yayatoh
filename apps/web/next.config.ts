@@ -100,9 +100,7 @@ const config: NextConfig = {
           { key: 'Referrer-Policy', value: 'no-referrer' },
         ],
       },
-      ...(process.env.YAYATOH_ENV === 'production' ||
-      process.env.VERCEL_ENV === 'production' ||
-      process.env.HSTS === '1'
+      ...(process.env.VERCEL_ENV === 'production' || process.env.HSTS === '1'
         ? [
             {
               source: '/:path*',

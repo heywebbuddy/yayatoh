@@ -1,5 +1,4 @@
 import { createHmac } from 'node:crypto';
-import { isProductionEnv } from '@yayatoh/kernel';
 import type { OutboundPush, PushSendResult, PushTransport, Transports } from './transports.ts';
 import {
   b64url,
@@ -54,7 +53,7 @@ export function vapidConfig(env: NodeJS.ProcessEnv = process.env): VapidConfig |
     return { keys: { publicKey: pub, privateKey: priv }, subject, dev: false };
   }
   if (pub || priv) throw new Error('Set both VAPID_PUBLIC_KEY and VAPID_PRIVATE_KEY');
-  if (isProductionEnv(env)) return null;
+  if (env.VERCEL_ENV === 'production') return null;
   const secret = env.APP_TOKEN_SECRET;
   if (!secret) return null;
   return { keys: devVapidKeys(secret), subject, dev: true };

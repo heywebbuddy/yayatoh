@@ -1,6 +1,5 @@
 'use server';
 
-import { isProductionEnv } from '@yayatoh/kernel';
 import { signFakeWebhook } from '@yayatoh/payments';
 import { redirect } from 'next/navigation';
 
@@ -19,7 +18,7 @@ export async function completeFakePayment(
   outcome: 'succeeded' | 'failed',
 ): Promise<void> {
   const secret = process.env.FAKE_PAYMENTS_SECRET;
-  if (!secret || isProductionEnv()) throw new Error('fake payments are disabled');
+  if (!secret || process.env.VERCEL_ENV === 'production') throw new Error('fake payments are disabled');
   const origin = process.env.BETTER_AUTH_URL ?? 'http://localhost:3000';
   const { body, signature } = signFakeWebhook(secret, {
     type: outcome === 'succeeded' ? 'payment.succeeded' : 'payment.failed',

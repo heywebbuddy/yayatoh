@@ -1,5 +1,4 @@
 import { createCipheriv, createDecipheriv, randomBytes } from 'node:crypto';
-import { isProductionEnv } from '@yayatoh/kernel';
 
 /**
  * Envelope encryption for secrets we must store (ticket signing keys, OAuth tokens, TOTP seeds).
@@ -20,7 +19,8 @@ export const IDENTITY_KEY_SCOPE = 'platform:identity';
 
 /** AES-256-GCM with the scope (org id) as additional data, so a ciphertext cannot move between orgs. */
 export function localKeyVault(masterKeyHex: string): KeyVault {
-  if (isProductionEnv()) throw new Error('The local key vault is not allowed in production');
+  if (process.env.VERCEL_ENV === 'production')
+    throw new Error('The local key vault is not allowed in production');
   const key = Buffer.from(masterKeyHex, 'hex');
   if (key.length !== 32) throw new Error('LOCAL_KMS_KEY must be 32 bytes of hex');
   return {

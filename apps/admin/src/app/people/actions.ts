@@ -1,7 +1,7 @@
 'use server';
 
 import type { AccountUser } from '@yayatoh/auth';
-import { isDomainError, isProductionEnv } from '@yayatoh/kernel';
+import { isDomainError } from '@yayatoh/kernel';
 import { consoleTransport, devMailboxTransports, sendAccountNotice } from '@yayatoh/notifications';
 import { deleteAccount, exportAccount, StaffReason } from '@yayatoh/privacy';
 import { z } from 'zod';
@@ -65,7 +65,7 @@ export type EraseState =
 
 /** The deletion confirmation to the old address (dev mailbox in development; SES pending). */
 async function notify(to: string, user: AccountUser) {
-  const dev = process.env.YAYATOH_DEV_AUTH === '1' && !isProductionEnv();
+  const dev = process.env.YAYATOH_DEV_AUTH === '1' && process.env.VERCEL_ENV !== 'production';
   await sendAccountNotice(dev ? devMailboxTransports().email : consoleTransport(), {
     to,
     name: user.name,

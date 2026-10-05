@@ -1,6 +1,6 @@
 # ADR 0004 — Hosting: Vercel + Fly worker + Neon + Upstash + R2 + AWS SES/KMS; Claude Code cloud sessions
 
-- **Status:** Accepted (M0.5, 2026-09-27; rationale from roadmap §3.6, §9). **Runtime hosting superseded by [ADR 0024](0024-self-hosted-single-server.md) (2026-10-05)**; the build environment, AWS SES/KMS, Doppler and R2 stay.
+- **Status:** Accepted (M0.5, 2026-09-27; rationale from roadmap §3.6, §9)
 
 ## Context
 - The owner had no hosting preference and accepted the recommendation by default (decision log 2026-09-26; confirm as D1).

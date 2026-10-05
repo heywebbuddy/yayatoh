@@ -1,7 +1,7 @@
 import 'server-only';
 import { createHmac, timingSafeEqual } from 'node:crypto';
 import { withTenant } from '@yayatoh/db';
-import { createCtx, isProductionEnv } from '@yayatoh/kernel';
+import { createCtx } from '@yayatoh/kernel';
 import {
   devMailboxTransports,
   emailIdentityTx,
@@ -169,7 +169,10 @@ let transports: Transports | null | undefined;
  */
 function guestTransports(): Transports | null {
   if (transports !== undefined) return transports;
-  transports = process.env.NODE_ENV === 'production' && isProductionEnv() ? null : devMailboxTransports();
+  transports =
+    process.env.NODE_ENV === 'production' && process.env.VERCEL_ENV === 'production'
+      ? null
+      : devMailboxTransports();
   return transports;
 }
 

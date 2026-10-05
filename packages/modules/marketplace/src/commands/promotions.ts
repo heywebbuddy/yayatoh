@@ -1,4 +1,4 @@
-import { DomainError, isProductionEnv, requireOrg } from '@yayatoh/kernel';
+import { DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { and, asc, eq, isNull } from 'drizzle-orm';
 import { z } from 'zod';
@@ -17,7 +17,7 @@ export function promotedPlacementsEnabled(env: Env = process.env): boolean {
   const v = (env.PROMOTED_PLACEMENTS ?? '').trim().toLowerCase();
   if (ON.includes(v)) return true;
   if (OFF.includes(v)) return false;
-  return env.YAYATOH_DEV_AUTH === '1' && !isProductionEnv(env);
+  return env.YAYATOH_DEV_AUTH === '1' && env.VERCEL_ENV !== 'production';
 }
 
 export const PROMOTION_STATES = ['none', 'scheduled', 'active', 'ended'] as const;

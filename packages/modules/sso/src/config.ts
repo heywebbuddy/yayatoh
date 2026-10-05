@@ -1,5 +1,4 @@
 import { resolveTxt } from 'node:dns/promises';
-import { isProductionEnv } from '@yayatoh/kernel';
 import { safeFetch } from '@yayatoh/platform/ssrf';
 import { fakeIdentityProvider, fakeMetadataFetcher, fakeTxtResolver } from './fake.ts';
 import type { IdentityProviderPort, MetadataFetcher, TxtResolver } from './ports.ts';
@@ -35,7 +34,7 @@ export function ssoRuntime(): SsoRuntime {
 
 /** Whether this deployment uses the fakes. */
 export function ssoMode(env: Record<string, string | undefined>): 'fake' | 'real' {
-  if (isProductionEnv(env)) return 'real';
+  if (env.VERCEL_ENV === 'production') return 'real';
   return env.SSO_PROVIDER === 'real' ? 'real' : 'fake';
 }
 

@@ -4,11 +4,11 @@ import { billingEnabled, billingProviderFromEnv } from '@yayatoh/billing';
 import { setPlatformAuditSink, tryAcquireLeadership } from '@yayatoh/db/platform';
 import { guestsOccupantDirectory } from '@yayatoh/guests';
 import { createNotifier } from '@yayatoh/notifications';
-import { fakePaymentProvider, paymentProviderFromEnv } from '@yayatoh/payments';
+import { fakePaymentProvider } from '@yayatoh/payments';
 import { gotenbergRenderer } from '@yayatoh/pdf';
 import { purgeRealtimeMessages } from '@yayatoh/platform';
 import { setOccupantDirectory } from '@yayatoh/seating';
-import { domainProviderFromEnv } from '@yayatoh/tenancy';
+import { fakeDomainProvider } from '@yayatoh/tenancy';
 import { sweepAlerts } from './alerts.ts';
 import { analyticsTickJob, enqueueAnalyticsTicks } from './analytics-pro.ts';
 import { badgeBatchJob, enqueueDueBadgeBatches } from './badges.ts';
@@ -72,15 +72,14 @@ setInterval(() => {
   counts.clear();
 }, 60_000).unref();
 
-// Stripe when PAYMENTS_PROVIDER=stripe (as the web); dev/preview use the fake provider.
+// Stripe arrives with the owner's account; until then dev/preview use the fake provider.
 const fakeSecret = process.env.FAKE_PAYMENTS_SECRET;
-const paymentsOrigin = process.env.BETTER_AUTH_URL ?? 'http://localhost:3000';
-const payments =
-  process.env.PAYMENTS_PROVIDER === 'stripe'
-    ? paymentProviderFromEnv(process.env, paymentsOrigin)
-    : fakeSecret
-      ? fakePaymentProvider({ secret: fakeSecret, appOrigin: paymentsOrigin })
-      : null;
+const payments = fakeSecret
+  ? fakePaymentProvider({
+      secret: fakeSecret,
+      appOrigin: process.env.BETTER_AUTH_URL ?? 'http://localhost:3000',
+    })
+  : null;
 
 const SUBSCRIBERS = subscribers();
 // Mass refunds (M3.10b) need the payment provider; badge batch PDFs (M5.5a) need Gotenberg.
@@ -357,9 +356,10 @@ setInterval(() => {
 }, 300_000).unref();
 
 // Pending custom domains (M1.3f): check them again every minute on their backoff schedule, so a
-// domain goes live without "Check now" (leader only; self-hosted DNS checks or the dev fake).
-const domainProvider = domainProviderFromEnv();
-const domainJob = domainProvider ? domainRecheckJob({ provider: domainProvider, payments }) : null;
+// domain goes live without "Check now" (leader only; the fake provider until the owner's Vercel).
+const domainJob = fakeSecret
+  ? domainRecheckJob({ provider: fakeDomainProvider({ secret: fakeSecret }), payments })
+  : null;
 if (!domainJob)
   console.warn('domains: no domain provider configured; pending domains are checked by hand only');
 let rechecking = false;

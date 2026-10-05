@@ -1,7 +1,6 @@
 import { getUsersByIds } from '@yayatoh/auth';
 import { sendStaffAlertPushes } from '@yayatoh/checkin';
 import { withPlatformReader } from '@yayatoh/db/platform';
-import { isProductionEnv } from '@yayatoh/kernel';
 import {
   type DispatchDeps,
   devMailboxTransports,
@@ -26,7 +25,7 @@ export function workerTransports(
   env: NodeJS.ProcessEnv = process.env,
   appOrigin = env.NEXT_PUBLIC_APP_ORIGIN ?? 'http://localhost:3000',
 ): Transports | null {
-  const production = env.NODE_ENV === 'production' || isProductionEnv(env);
+  const production = env.NODE_ENV === 'production' || env.VERCEL_ENV === 'production';
   // The fake provider's delivery reports wait in the mailbox for the dev drain (M1.10d). Web push
   // (M1.10e) uses the real adapter with the dev VAPID keys; with dev auth on, the fake push service
   // on the app's origin is reachable too.

@@ -1,4 +1,3 @@
-import { isProductionEnv } from '@yayatoh/kernel';
 import Stripe from 'stripe';
 import {
   type BillingEvent,
@@ -41,7 +40,8 @@ const secondsToDate = (s: number | null | undefined) => (typeof s === 'number' ?
  */
 export function stripeBillingProvider(opts: StripeBillingOptions): BillingProvider {
   const live = opts.secretKey.startsWith('sk_live_') || opts.secretKey.startsWith('rk_live_');
-  if (live && !isProductionEnv()) throw new Error('Live Stripe keys are only allowed in production');
+  if (live && process.env.VERCEL_ENV !== 'production')
+    throw new Error('Live Stripe keys are only allowed in production');
   if (!opts.webhookSecret) throw new Error('The Stripe billing webhook secret is required');
   const stripe = new Stripe(opts.secretKey, {
     apiVersion: STRIPE_BILLING_API_VERSION,

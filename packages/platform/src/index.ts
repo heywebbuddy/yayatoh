@@ -13,7 +13,6 @@ export {
   auditLogQuery,
   verifyAuditChainTx,
 } from './audit.ts';
-export { type AwsCredentials, amzDate, type SignInput, signAwsRequest } from './aws-sigv4.ts';
 export {
   type AnyBulkAction,
   type BulkAction,
@@ -101,7 +100,6 @@ export {
   turnstileHumanCheck,
 } from './human-check.ts';
 export { IDENTITY_KEY_SCOPE, type KeyVault, keyVault, localKeyVault, setKeyVault } from './key-vault.ts';
-export { type KmsKeyVaultConfig, keyVaultFromEnv, kmsKeyVault } from './kms-key-vault.ts';
 export { isModuleKey, MODULE_KEYS, type ModuleKey, PHASE6_MODULE_KEYS } from './modules.ts';
 export {
   type MemberNotificationIntent,

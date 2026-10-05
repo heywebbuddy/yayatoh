@@ -5,7 +5,6 @@ import {
   billingProviderFromEnv,
   processBillingWebhook,
 } from '@yayatoh/billing';
-import { isProductionEnv } from '@yayatoh/kernel';
 import { tooManyRequests } from '@yayatoh/platform/security';
 import { ports } from '@/server/ports.ts';
 import { limitRequest } from '@/server/rate-limit.ts';
@@ -59,7 +58,8 @@ export async function handleBillingWebhook(req: Request, expected: string): Prom
  * 404 and the plan page shows no way to it.
  */
 export function testBillingSecret(): string | null {
-  if (!billingEnabled() || isProductionEnv() || process.env.YAYATOH_DEV_AUTH !== '1') return null;
+  if (!billingEnabled() || process.env.VERCEL_ENV === 'production' || process.env.YAYATOH_DEV_AUTH !== '1')
+    return null;
   if (process.env.BILLING_PROVIDER && process.env.BILLING_PROVIDER !== 'fake') return null;
   return process.env.FAKE_PAYMENTS_SECRET ?? null;
 }
