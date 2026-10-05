@@ -1,4 +1,5 @@
 import 'server-only';
+import { isProductionEnv } from '@yayatoh/kernel';
 import {
   betterStackStatusPage,
   fakeStatusPage,
@@ -18,7 +19,7 @@ let port: StatusPage | null | undefined;
  */
 export function getStatusPage(): StatusPage | null {
   if (port !== undefined) return port;
-  const production = process.env.VERCEL_ENV === 'production';
+  const production = isProductionEnv();
   const provider = process.env.STATUS_PAGE_PROVIDER || (production ? 'betterstack' : 'fake');
   const token = process.env.BETTER_STACK_API_TOKEN;
   const statusPageId = process.env.BETTER_STACK_STATUS_PAGE_ID;

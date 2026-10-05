@@ -1,4 +1,4 @@
-import { formatMoney, money } from '@yayatoh/kernel';
+import { formatMoney, isProductionEnv, money } from '@yayatoh/kernel';
 import { Button, Card, Label, PageHeader } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
@@ -14,7 +14,7 @@ export default async function FakeCheckout({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  if (!process.env.FAKE_PAYMENTS_SECRET || process.env.VERCEL_ENV === 'production') notFound();
+  if (!process.env.FAKE_PAYMENTS_SECRET || isProductionEnv()) notFound();
   const sp = await searchParams;
   const { pi, org, order, amount, currency } = sp;
   if (!pi || !org || !order || !amount || !currency || !sp.return) notFound();

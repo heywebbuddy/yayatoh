@@ -3,7 +3,7 @@ import { eventAttendeesMatchingTx, eventAttendeesTx } from '@yayatoh/attendees';
 import { type TenantTx, withTenant } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
 import { FloorplanDoc } from '@yayatoh/floorplan';
-import { createCtx, DomainError, requireOrg, uuidv7 } from '@yayatoh/kernel';
+import { createCtx, DomainError, isProductionEnv, requireOrg, uuidv7 } from '@yayatoh/kernel';
 import {
   appTokenSecret,
   defineSubscriber,
@@ -580,7 +580,7 @@ export async function devFinderCode(
   eventId: string,
   email: string,
 ): Promise<{ codeId: string; code: string } | null> {
-  if (process.env.YAYATOH_DEV_AUTH !== '1' || process.env.VERCEL_ENV === 'production')
+  if (process.env.YAYATOH_DEV_AUTH !== '1' || isProductionEnv())
     throw new DomainError('forbidden', 'Development only');
   const ctx = createCtx({ orgId, actor: { type: 'system', name: 'seating.dev-finder-code' } });
   const [row] = await withTenant(ctx, (tx) =>

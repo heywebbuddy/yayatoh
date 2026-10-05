@@ -1,0 +1,8 @@
+[Unit]
+Description=Yayatoh database backup (check)
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/bash /opt/yayatoh/src/deploy/scripts/backup.sh check

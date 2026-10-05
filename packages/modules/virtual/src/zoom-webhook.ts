@@ -1,6 +1,13 @@
 import { createHmac, timingSafeEqual } from 'node:crypto';
 import { type TenantTx, withoutTenant } from '@yayatoh/db';
-import { type CommandPorts, createCtx, executeCommand, isDomainError, requireOrg } from '@yayatoh/kernel';
+import {
+  type CommandPorts,
+  createCtx,
+  executeCommand,
+  isDomainError,
+  isProductionEnv,
+  requireOrg,
+} from '@yayatoh/kernel';
 import { tenantCommand } from '@yayatoh/platform';
 import { and, asc, eq, sql } from 'drizzle-orm';
 import { z } from 'zod';
@@ -43,8 +50,7 @@ const hmac = (secret: string, text: string) => createHmac('sha256', secret).upda
 export function zoomWebhookSecretFromEnv(env: Readonly<Record<string, string | undefined>>): string | null {
   if (env.ZOOM_WEBHOOK_SECRET_TOKEN && env.ZOOM_WEBHOOK_SECRET_TOKEN.length >= 16)
     return env.ZOOM_WEBHOOK_SECRET_TOKEN;
-  const production =
-    env.VERCEL_ENV === 'production' || (env.NODE_ENV === 'production' && !env.YAYATOH_DEV_AUTH);
+  const production = isProductionEnv(env) || (env.NODE_ENV === 'production' && !env.YAYATOH_DEV_AUTH);
   if (production || !env.APP_TOKEN_SECRET || env.APP_TOKEN_SECRET.length < 32) return null;
   return hmac(env.APP_TOKEN_SECRET, 'zoom.webhook.fake');
 }

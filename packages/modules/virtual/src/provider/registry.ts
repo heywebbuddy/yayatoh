@@ -1,4 +1,4 @@
-import { DomainError } from '@yayatoh/kernel';
+import { DomainError, isProductionEnv } from '@yayatoh/kernel';
 import { cloudflareStreamProvider } from './cloudflare.ts';
 import { fakeVideoProvider } from './fake.ts';
 import { muxVideoProvider } from './mux.ts';
@@ -18,8 +18,7 @@ import type { PlaybackClaims, VideoProvider } from './port.ts';
 export function videoProvidersFromEnv(env: Readonly<Record<string, string | undefined>>): VideoProvider[] {
   const wanted = env.VIDEO_PROVIDER ?? (env.NODE_ENV === 'production' && !env.YAYATOH_DEV_AUTH ? '' : 'fake');
   if (wanted === 'fake') {
-    if (env.VERCEL_ENV === 'production' || !env.APP_TOKEN_SECRET || env.APP_TOKEN_SECRET.length < 32)
-      return [];
+    if (isProductionEnv(env) || !env.APP_TOKEN_SECRET || env.APP_TOKEN_SECRET.length < 32) return [];
     return [
       fakeVideoProvider({ seed: env.APP_TOKEN_SECRET }),
       fakeVideoProvider({ seed: env.APP_TOKEN_SECRET, kind: 'cloudflare' }),

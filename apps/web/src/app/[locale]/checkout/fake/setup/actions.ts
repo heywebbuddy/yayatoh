@@ -1,5 +1,6 @@
 'use server';
 
+import { isProductionEnv } from '@yayatoh/kernel';
 import { FAKE_TEST_CARDS, type FakeTestCard, signFakeSetupWebhook } from '@yayatoh/payments';
 import { redirect } from 'next/navigation';
 
@@ -13,7 +14,7 @@ export async function completeFakeSetup(
   form: FormData,
 ): Promise<void> {
   const secret = process.env.FAKE_PAYMENTS_SECRET;
-  if (!secret || process.env.VERCEL_ENV === 'production') throw new Error('fake payments are disabled');
+  if (!secret || isProductionEnv()) throw new Error('fake payments are disabled');
   const origin = process.env.BETTER_AUTH_URL ?? 'http://localhost:3000';
   const picked = String(form.get('card') ?? '4242');
   const card = (Object.hasOwn(FAKE_TEST_CARDS, picked) ? picked : '4242') as FakeTestCard;

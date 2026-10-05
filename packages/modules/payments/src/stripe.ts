@@ -1,3 +1,4 @@
+import { isProductionEnv } from '@yayatoh/kernel';
 import Stripe from 'stripe';
 import type {
   BalanceTransaction,
@@ -57,8 +58,7 @@ export interface StripeProviderOptions {
  */
 export function stripePaymentProvider(opts: StripeProviderOptions): PaymentProvider {
   const live = opts.secretKey.startsWith('sk_live_') || opts.secretKey.startsWith('rk_live_');
-  if (live && process.env.VERCEL_ENV !== 'production')
-    throw new Error('Live Stripe keys are only allowed in production');
+  if (live && !isProductionEnv()) throw new Error('Live Stripe keys are only allowed in production');
   if (opts.webhookSecrets.length === 0) throw new Error('At least one Stripe webhook secret is required');
   const stripe = new Stripe(opts.secretKey, {
     apiVersion: STRIPE_API_VERSION,

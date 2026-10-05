@@ -10,7 +10,7 @@ One file per decision, named `NNNN-short-title.md`. Each file has these sections
 | [0001](0001-modular-monolith.md) | Modular monolith: package per module, tiers, ports, Postgres schema per module | §3.5 |
 | [0002](0002-one-command-model.md) | One command model (`defineCommand`) behind both transports: Server Actions and Hono `/v1` | §3.3 |
 | [0003](0003-tenancy-shared-db-force-rls.md) | Tenancy: shared DB, `org_id`, FORCE RLS, `withTenant`, DB roles, isolation suite as merge gate | §4.3 |
-| [0004](0004-hosting.md) | Hosting: Vercel + Fly worker + Neon + Upstash + R2 + AWS SES/KMS; Claude Code cloud sessions | §3.6, §9 |
+| [0004](0004-hosting.md) | Hosting: Vercel + Fly worker + Neon + Upstash + R2 + AWS SES/KMS; Claude Code cloud sessions (runtime hosting superseded by 0024) | §3.6, §9 |
 | [0005](0005-hybrid-funds-flow-and-ledger.md) | Hybrid funds flow (`organizer_mor` / `platform_mor`), double-entry ledger, daily reconciliation | §5.3 |
 | [0006](0006-migration-postgres-first-cutover.md) | Migration: Postgres-first, no shared-MySQL writes, Next.js front door, rehearsed per-instance cutover | §7.4 |
 | [0007](0007-legacy-api-v2-facade.md) | Legacy `/api/v2` facade: frozen, allowlisted, host-namespaced, no sunset while mobile is deferred | §6.2, §8.3 |
@@ -30,3 +30,4 @@ One file per decision, named `NNNN-short-title.md`. Each file has these sections
 | [0021](0021-conference-module-layout.md) | Conference module layout: `registration`/`badges` (tier 5), `engagement` (tier 4), program grows unsplit; registration cells are managed ticket types | §3.5 |
 | [0022](0022-design-system-v2.md) | Design system v2: semantic tokens, light default, dark opt-in, Manrope, floating dark sidebar | §3.1 |
 | [0023](0023-phase-6-module-layout.md) | Phase 6 module layout: `analytics`/`integrations` (6), `agency` (5), `virtual` (4); crm grows; contact reference owners move a person's rows in one merge transaction; the timeline is a crm projection fed by its owners | §3.5 |
+| [0024](0024-self-hosted-single-server.md) | Hosting: one self-hosted server (Contabo) with Docker Compose, Caddy on-demand TLS, AWS KMS key vault, pgBackRest backups; supersedes 0004 for runtime hosting | §3.6, §9 |

@@ -1,5 +1,6 @@
 import 'server-only';
 import { withPlatformReader } from '@yayatoh/db/platform';
+import { isProductionEnv } from '@yayatoh/kernel';
 import {
   type FakeIncidentRow,
   fakeIncident,
@@ -20,7 +21,7 @@ import type { Staff } from './staff.ts';
  * are posted in Better Stack itself and this page only links there.
  */
 export function incidentProvider(): 'fake' | 'betterstack' {
-  const production = process.env.VERCEL_ENV === 'production';
+  const production = isProductionEnv();
   const provider = process.env.STATUS_PAGE_PROVIDER || (production ? 'betterstack' : 'fake');
   return provider === 'fake' && !production ? 'fake' : 'betterstack';
 }
