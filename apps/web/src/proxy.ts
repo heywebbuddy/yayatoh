@@ -1,4 +1,5 @@
 import { LOCALES } from '@yayatoh/contracts';
+import { isProductionEnv } from '@yayatoh/kernel';
 import { frameAncestors, matchLegacyRedirect, widgetOrigins } from '@yayatoh/marketplace';
 import {
   DEVICE_COOKIE,
@@ -10,6 +11,7 @@ import {
   realtimeConnectSources,
   securityHeaders,
   stripLocale,
+  turnstileCspSources,
 } from '@yayatoh/platform/security';
 import { resolveHost } from '@yayatoh/tenancy';
 import { type NextFetchEvent, NextRequest, NextResponse } from 'next/server';
@@ -105,6 +107,8 @@ export default async function proxy(req: NextRequest, event?: NextFetchEvent): P
   const path = req.nextUrl.pathname;
   const https = req.nextUrl.protocol === 'https:';
   const nonce = generateNonce();
+  // Cloudflare Turnstile's loader and challenge iframe, once the real challenge is configured.
+  const turnstile = turnstileCspSources(process.env, isProductionEnv());
   const headers = securityHeaders(pageTypeOf(stripLocale(path, routing.locales)), {
     nonce,
     dev: process.env.NODE_ENV === 'development',
@@ -115,7 +119,11 @@ export default async function proxy(req: NextRequest, event?: NextFetchEvent): P
     // on the console's embedded-portal page, once Svix is configured (nothing otherwise).
     extra: {
       connect: realtimeConnectSources(),
-      frame: webhookPortalFrameSources(stripLocale(path, routing.locales), process.env),
+      script: turnstile.script,
+      frame: [
+        ...webhookPortalFrameSources(stripLocale(path, routing.locales), process.env),
+        ...turnstile.frame,
+      ],
     },
   });
   const forwarded = new Headers(req.headers);
