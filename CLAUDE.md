@@ -124,7 +124,7 @@ Run from the repo root. Local services: `docker compose up -d` (Postgres 18 with
 
 ## Safety
 - **No secrets in the repo.** Use `.env.example` names only; real values live in Doppler or cloud-environment credentials.
-- **No production credentials, production data or production writes.** Development uses masked snapshots only. Production actions go through reviewed runbook scripts that the owner runs or approves step by step.
+- **No production credentials, production data or production writes.** Development uses masked snapshots only. Production actions go through reviewed runbook scripts that the owner runs or approves step by step. **Owner decision 2026-10-05:** the owner may instruct Claude Code to run the reviewed scripts in `deploy/scripts/` (per `docs/runbooks/deploy-contabo.md`) on the production server over SSH, using the owner's SSH key. Claude Code shows each command that changes the server and waits for the owner's "go" first; it never asks for or handles passwords or secrets (they go into Doppler only) and never sets `PAYMENTS_PROVIDER=stripe` or uses live Stripe keys without the owner's explicit approval.
 - The legacy code (`legacy/` locally, `heywebbuddy/yayatoh-legacy` on GitHub) is **reference only**. Eventmie Pro is commercially licensed: read it to write specs and test vectors, never copy its code, templates or assets.
 - Migrations: expand/contract only, `lock_timeout`, concurrent indexes. The owner approves destructive steps.
 - Never weaken or skip a test or CI gate to get green.
