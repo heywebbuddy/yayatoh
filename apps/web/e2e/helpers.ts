@@ -164,13 +164,21 @@ export async function expectAccessible(page: Page) {
 /**
  * axe in light AND dark mode (ADR 0022): checks the page as served, then switches <html> to the
  * dark theme in place (exactly what the theme switch does) and checks again, then restores it.
+ * Controls fade their colours over 150 ms (styles.css), so each check waits for those transitions
+ * to finish; otherwise a slow runner can sample a field mid-fade and report a contrast it never has.
  */
 export async function expectAccessibleBothModes(page: Page) {
   const html = page.locator('html');
   const before = (await html.getAttribute('data-theme')) ?? 'light';
   for (const mode of ['light', 'dark'] as const) {
-    await page.evaluate((m) => {
+    await page.evaluate(async (m) => {
       document.documentElement.dataset.theme = m;
+      await Promise.all(
+        document
+          .getAnimations()
+          .filter((a) => a instanceof CSSTransition)
+          .map((a) => a.finished.catch(() => undefined)),
+      );
     }, mode);
     await expect(html).toHaveAttribute('data-theme', mode);
     await expectAccessible(page);
