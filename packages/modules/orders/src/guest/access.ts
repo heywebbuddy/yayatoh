@@ -1,5 +1,5 @@
 import { withoutTenant } from '@yayatoh/db';
-import { DomainError, uuidv7 } from '@yayatoh/kernel';
+import { DomainError, isProductionEnv, uuidv7 } from '@yayatoh/kernel';
 import { appTokenSecret } from '@yayatoh/platform';
 import type { RateLimiter, RateLimitSubject } from '@yayatoh/platform/security';
 import { and, desc, eq, gt, isNull, lt, type SQL } from 'drizzle-orm';
@@ -345,7 +345,7 @@ export async function revokeGuestSessions(
  * see the expired-code message without waiting ten minutes. Refused outside dev personas.
  */
 export async function devExpireGuestChallenges(email: string): Promise<number> {
-  if (process.env.YAYATOH_DEV_AUTH !== '1' || process.env.VERCEL_ENV === 'production')
+  if (process.env.YAYATOH_DEV_AUTH !== '1' || isProductionEnv())
     throw new DomainError('forbidden', 'Development only');
   const now = new Date();
   const rows = await withoutTenant((tx) =>

@@ -53,7 +53,9 @@ const config: NextConfig = {
           { key: 'X-Frame-Options', value: 'DENY' },
         ],
       },
-      ...(process.env.VERCEL_ENV === 'production' || process.env.HSTS === '1'
+      ...(process.env.YAYATOH_ENV === 'production' ||
+      process.env.VERCEL_ENV === 'production' ||
+      process.env.HSTS === '1'
         ? [
             {
               source: '/:path*',

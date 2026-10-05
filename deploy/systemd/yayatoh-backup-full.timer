@@ -1,0 +1,10 @@
+[Unit]
+Description=Yayatoh database backup (full)
+
+[Timer]
+OnCalendar=Sun *-*-* 03:15:00 UTC
+Persistent=true
+RandomizedDelaySec=300
+
+[Install]
+WantedBy=timers.target

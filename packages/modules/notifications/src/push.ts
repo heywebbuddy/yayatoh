@@ -1,7 +1,7 @@
 import { createHash } from 'node:crypto';
 import { normalizeEmail } from '@yayatoh/crm';
 import type { TenantTx } from '@yayatoh/db';
-import { DomainError, requireOrg } from '@yayatoh/kernel';
+import { DomainError, isProductionEnv, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { and, count, desc, eq, isNull, or, type SQL } from 'drizzle-orm';
 import { z } from 'zod';
@@ -35,7 +35,7 @@ export type WebPushDeviceInput = z.infer<typeof WebPushDeviceInput>;
 
 /** Dev/CI (dev auth, never production): the fake push service's endpoints may be registered. */
 export function fakePushAllowed(env: NodeJS.ProcessEnv = process.env): boolean {
-  return env.YAYATOH_DEV_AUTH === '1' && env.VERCEL_ENV !== 'production';
+  return env.YAYATOH_DEV_AUTH === '1' && !isProductionEnv(env);
 }
 
 function isRegistrableEndpoint(endpoint: string): boolean {

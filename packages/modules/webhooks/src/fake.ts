@@ -1,4 +1,5 @@
 import { createHash, createHmac, randomUUID, timingSafeEqual } from 'node:crypto';
+import { isProductionEnv } from '@yayatoh/kernel';
 import {
   type AttemptStatus,
   type DeliveryAttempt,
@@ -88,8 +89,7 @@ export function fakePublisher(opts: {
   store?: FakeWebhookStore;
   now?: () => Date;
 }): FakePublisher {
-  if (process.env.VERCEL_ENV === 'production')
-    throw new Error('The fake webhook publisher is not allowed in production');
+  if (isProductionEnv()) throw new Error('The fake webhook publisher is not allowed in production');
   if (opts.seed.length < 32) throw new Error('fake webhook seed must be ≥32 chars');
   const store = opts.store ?? processWebhookStore();
   const now = opts.now ?? (() => new Date());
