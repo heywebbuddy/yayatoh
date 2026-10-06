@@ -1,9 +1,8 @@
 import 'server-only';
 import { createHmac, timingSafeEqual } from 'node:crypto';
 import { withTenant } from '@yayatoh/db';
-import { createCtx, isProductionEnv } from '@yayatoh/kernel';
+import { createCtx } from '@yayatoh/kernel';
 import {
-  devMailboxTransports,
   emailIdentityTx,
   type MessageKind,
   PLATFORM_SENDER,
@@ -26,6 +25,7 @@ import { organizationBrandTx } from '@yayatoh/tenancy';
 import { cookies, headers } from 'next/headers';
 import { rememberDevCode } from './auth.ts';
 import { devAuthEnabled } from './dev.ts';
+import { webTransports } from './mail-transports.ts';
 import { clientIp, rateLimiter } from './rate-limit.ts';
 import { requestHost } from './request-origin.ts';
 import { ownAuthSession } from './session.ts';
@@ -160,17 +160,13 @@ export async function currentGuestSession(orgId: string | null): Promise<GuestSe
 
 // ─── Email ──────────────────────────────────────────────────────────────────────────────────
 
-let transports: Transports | null | undefined;
-
 /**
  * Where guest codes go. They are sent at once (never queued, so the code is never stored): the
- * dev mailbox in development, preview and CI; production needs the owner's SES account (owner
- * inbox, M1.10) and refuses to pretend until then.
+ * live email provider once configured, the dev mailbox in development, preview and CI; production
+ * without a provider refuses to pretend.
  */
 function guestTransports(): Transports | null {
-  if (transports !== undefined) return transports;
-  transports = process.env.NODE_ENV === 'production' && isProductionEnv() ? null : devMailboxTransports();
-  return transports;
+  return webTransports();
 }
 
 /** Send a guest code or sign-in email in the visitor's language, branded for the org's site. */

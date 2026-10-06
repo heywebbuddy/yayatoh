@@ -8,8 +8,13 @@ import {
   type TwoFactorService,
   twoFactorService,
 } from '@yayatoh/auth';
+import { LOCALES } from '@yayatoh/contracts';
+import { isProductionEnv } from '@yayatoh/kernel';
+import { type MessageKind, PLATFORM_SENDER, renderMessage } from '@yayatoh/notifications';
 import { IDENTITY_KEY_SCOPE, keyVault, liftErasedAccountMail } from '@yayatoh/platform';
+import { cookies } from 'next/headers';
 import { devAuthEnabled } from './dev.ts';
+import { webTransports } from './mail-transports.ts';
 // Registers the key vault (the composition root) before any seed is sealed.
 import './ports.ts';
 
@@ -64,14 +69,61 @@ export async function devLastCode(email: string): Promise<string | null> {
   return (await c.internalAdapter.findVerificationValue(devMailboxKey(email)))?.value ?? null;
 }
 
-// SES arrives with M1.10 (owner account pending); until then codes are logged in dev only.
+/** The visitor's language (next-intl's cookie), else English. */
+async function mailLocale(): Promise<string> {
+  try {
+    const l = (await cookies()).get('NEXT_LOCALE')?.value;
+    return l && (LOCALES as readonly string[]).includes(l) ? l : 'en';
+  } catch {
+    return 'en';
+  }
+}
+
+/**
+ * Production: sign-in mail goes out at once through the live email provider (`webTransports`),
+ * in the visitor's language. Without a provider it fails loudly: the code or link is never
+ * written to a log.
+ */
+async function sendAuthMail(
+  kind: Extract<MessageKind, 'auth.sign-in-code' | 'auth.password-reset' | 'auth.magic-link'>,
+  to: string,
+  params: Readonly<Record<string, string | number>>,
+): Promise<void> {
+  const t = webTransports();
+  if (!t) throw new Error('No email provider is configured for sign-in email (EMAIL_PROVIDER=ses)');
+  const rendered = renderMessage({
+    kind,
+    locale: await mailLocale(),
+    params,
+    org: { name: 'Yayatoh', brandColor: null, poweredByVisible: false },
+  });
+  await t.email.send({
+    from: { name: 'Yayatoh', address: PLATFORM_SENDER },
+    to,
+    subject: rendered.subject,
+    html: rendered.html,
+    text: rendered.text,
+    headers: {},
+    idempotencyKey: `auth-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+  });
+}
+
+const production = () => process.env.NODE_ENV === 'production' && isProductionEnv();
+
+// Development, preview and CI keep the console mailer (and the dev code store for personas and
+// e2e); production sends real email. Expiries match createAuth: code 10 min, link 15, reset 30.
 export const authMailer: AuthMailer = {
   async sendOtp(to, otp, purpose) {
+    if (production()) return sendAuthMail('auth.sign-in-code', to, { code: otp, minutes: 10 });
     if (devAuthEnabled()) await rememberDevCode(to, otp);
     await consoleMailer.sendOtp(to, otp, purpose);
   },
-  sendMagicLink: (to, url) => consoleMailer.sendMagicLink(to, url),
+  async sendMagicLink(to, url) {
+    if (production()) return sendAuthMail('auth.magic-link', to, { url, minutes: 15 });
+    await consoleMailer.sendMagicLink(to, url);
+  },
   async sendPasswordReset(to, url) {
+    if (production()) return sendAuthMail('auth.password-reset', to, { url, minutes: 30 });
     if (devAuthEnabled()) await rememberDevLink(to, url);
     await consoleMailer.sendPasswordReset?.(to, url);
   },

@@ -188,6 +188,26 @@ export const KINDS = {
     urgent: true,
     params: ['code', 'url', 'minutes', 'linkMinutes', 'site'],
   },
+  // Account sign-in on the app host (Better Auth's email code, magic link and password reset): sent
+  // at once by the web app through the live email provider, never queued (the secret is never stored).
+  'auth.sign-in-code': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['code', 'minutes'],
+  },
+  'auth.password-reset': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['url', 'minutes'],
+  },
+  'auth.magic-link': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['url', 'minutes'],
+  },
   // M5.3a portal accounts (P5-7): the invitation (queued) and the sign-in code with its magic link
   // (sent at once by the web app, never queued, like guest.sign-in).
   'portal.invite': {

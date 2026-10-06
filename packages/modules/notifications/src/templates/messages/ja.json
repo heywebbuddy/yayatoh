@@ -363,6 +363,20 @@
       "subject": "{org} からの証明書",
       "intro": "{eventName} で {credits} を取得しました。証明書（コード {code}）は下記および PDF でご覧いただけます。",
       "cta": "PDF の証明書をダウンロード"
+    },
+    "auth.sign-in-code": {
+      "subject": "{code}はYayatohのサインインコードです",
+      "intro": "{code}を入力してYayatohにサインインしてください。コードは1回限り有効で、{minutes}分後に失効します。心当たりがない場合は、このメールを無視してください。"
+    },
+    "auth.password-reset": {
+      "subject": "Yayatohの新しいパスワードを設定",
+      "intro": "お使いのYayatohアカウントのパスワード再設定がリクエストされました。下のボタンから新しいパスワードを設定できます。1回限り有効で、{minutes}分後に失効します。心当たりがない場合は、このメールを無視してください。パスワードは変わりません。",
+      "cta": "新しいパスワードを設定"
+    },
+    "auth.magic-link": {
+      "subject": "Yayatohのサインインリンク",
+      "intro": "下のボタンから、このブラウザでYayatohにサインインしてください。リンクは1回限り有効で、{minutes}分後に失効します。心当たりがない場合は、このメールを無視してください。",
+      "cta": "Yayatohにサインイン"
     }
   },
   "roles": {
