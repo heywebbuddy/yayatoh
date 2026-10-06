@@ -363,6 +363,20 @@
       "subject": "Ihre Bescheinigung von {org}",
       "intro": "Sie haben bei {eventName} {credits} erworben. Ihre Bescheinigung (Code {code}) steht unten und als PDF bereit.",
       "cta": "Bescheinigung als PDF herunterladen"
+    },
+    "auth.sign-in-code": {
+      "subject": "{code} ist Ihr Yayatoh-Anmeldecode",
+      "intro": "Geben Sie {code} ein, um sich bei Yayatoh anzumelden. Der Code gilt einmal und läuft in {minutes, plural, one {# Minute} other {# Minuten}} ab. Wenn Sie ihn nicht angefordert haben, können Sie diese E-Mail ignorieren."
+    },
+    "auth.password-reset": {
+      "subject": "Neues Yayatoh-Passwort wählen",
+      "intro": "Jemand hat angefordert, das Passwort Ihres Yayatoh-Kontos zurückzusetzen. Mit der Schaltfläche unten wählen Sie ein neues; sie gilt einmal und läuft in {minutes, plural, one {# Minute} other {# Minuten}} ab. Wenn Sie das nicht angefordert haben, können Sie diese E-Mail ignorieren: Ihr Passwort bleibt unverändert.",
+      "cta": "Neues Passwort wählen"
+    },
+    "auth.magic-link": {
+      "subject": "Ihr Yayatoh-Anmeldelink",
+      "intro": "Melden Sie sich mit der Schaltfläche unten in diesem Browser bei Yayatoh an. Der Link gilt einmal und läuft in {minutes, plural, one {# Minute} other {# Minuten}} ab. Wenn Sie ihn nicht angefordert haben, können Sie diese E-Mail ignorieren.",
+      "cta": "Bei Yayatoh anmelden"
     }
   },
   "roles": {

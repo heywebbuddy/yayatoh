@@ -363,6 +363,20 @@
       "subject": "Votre attestation de {org}",
       "intro": "Vous avez obtenu {credits} à {eventName}. Votre attestation (code {code}) figure ci-dessous et en PDF.",
       "cta": "Télécharger l’attestation en PDF"
+    },
+    "auth.sign-in-code": {
+      "subject": "{code} est votre code de connexion Yayatoh",
+      "intro": "Saisissez {code} pour vous connecter à Yayatoh. Le code fonctionne une fois et expire dans {minutes, plural, one {# minute} other {# minutes}}. Si vous ne l’avez pas demandé, ignorez cet e-mail."
+    },
+    "auth.password-reset": {
+      "subject": "Choisissez un nouveau mot de passe Yayatoh",
+      "intro": "Quelqu’un a demandé à réinitialiser le mot de passe de votre compte Yayatoh. Le bouton ci-dessous vous permet d’en choisir un nouveau ; il fonctionne une fois et expire dans {minutes, plural, one {# minute} other {# minutes}}. Si vous ne l’avez pas demandé, ignorez cet e-mail : votre mot de passe ne change pas.",
+      "cta": "Choisir un nouveau mot de passe"
+    },
+    "auth.magic-link": {
+      "subject": "Votre lien de connexion Yayatoh",
+      "intro": "Utilisez le bouton ci-dessous pour vous connecter à Yayatoh dans ce navigateur. Le lien fonctionne une fois et expire dans {minutes, plural, one {# minute} other {# minutes}}. Si vous ne l’avez pas demandé, ignorez cet e-mail.",
+      "cta": "Se connecter à Yayatoh"
     }
   },
   "roles": {

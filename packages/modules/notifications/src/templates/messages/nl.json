@@ -363,6 +363,20 @@
       "subject": "Uw bewijs van {org}",
       "intro": "U behaalde {credits} bij {eventName}. Uw bewijs (code {code}) staat hieronder en als pdf.",
       "cta": "Het bewijs als pdf downloaden"
+    },
+    "auth.sign-in-code": {
+      "subject": "{code} is je inlogcode voor Yayatoh",
+      "intro": "Voer {code} in om in te loggen bij Yayatoh. De code werkt één keer en verloopt over {minutes, plural, one {# minuut} other {# minuten}}. Heb je dit niet gevraagd, negeer dan deze e-mail."
+    },
+    "auth.password-reset": {
+      "subject": "Kies een nieuw Yayatoh-wachtwoord",
+      "intro": "Iemand heeft gevraagd het wachtwoord van je Yayatoh-account opnieuw in te stellen. Met de knop hieronder kies je een nieuw wachtwoord; die werkt één keer en verloopt over {minutes, plural, one {# minuut} other {# minuten}}. Heb je dit niet gevraagd, negeer dan deze e-mail: je wachtwoord blijft hetzelfde.",
+      "cta": "Nieuw wachtwoord kiezen"
+    },
+    "auth.magic-link": {
+      "subject": "Je inloglink voor Yayatoh",
+      "intro": "Gebruik de knop hieronder om in deze browser in te loggen bij Yayatoh. De link werkt één keer en verloopt over {minutes, plural, one {# minuut} other {# minuten}}. Heb je dit niet gevraagd, negeer dan deze e-mail.",
+      "cta": "Inloggen bij Yayatoh"
     }
   },
   "roles": {

@@ -363,6 +363,20 @@
       "subject": "Your certificate from {org}",
       "intro": "You earned {credits} at {eventName}. Your certificate (code {code}) is below, and as a PDF.",
       "cta": "Download the PDF certificate"
+    },
+    "auth.sign-in-code": {
+      "subject": "{code} is your Yayatoh sign-in code",
+      "intro": "Enter {code} to sign in to Yayatoh. The code works once and expires in {minutes, plural, one {# minute} other {# minutes}}. If you didn't ask for it, you can ignore this email."
+    },
+    "auth.password-reset": {
+      "subject": "Choose a new Yayatoh password",
+      "intro": "Someone asked to reset the password of your Yayatoh account. The button below lets you choose a new one; it works once and expires in {minutes, plural, one {# minute} other {# minutes}}. If you didn't ask for it, you can ignore this email: your password stays the same.",
+      "cta": "Choose a new password"
+    },
+    "auth.magic-link": {
+      "subject": "Your Yayatoh sign-in link",
+      "intro": "Use the button below to sign in to Yayatoh in this browser. The link works once and expires in {minutes, plural, one {# minute} other {# minutes}}. If you didn't ask for it, you can ignore this email.",
+      "cta": "Sign in to Yayatoh"
     }
   },
   "roles": {

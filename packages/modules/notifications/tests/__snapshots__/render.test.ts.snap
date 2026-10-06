@@ -1521,6 +1521,682 @@ Please use Lot C on Harbor Street.
 }
 `;
 
+exports[`renderMessage: every kind in all 13 locales > auth.magic-link · ar 1`] = `
+{
+  "subject": "رابط تسجيل الدخول إلى Yayatoh",
+  "text": "رابط تسجيل الدخول إلى Yayatoh
+
+مرحبًا،
+
+استخدم الزر أدناه لتسجيل الدخول إلى Yayatoh في هذا المتصفح. يعمل الرابط مرة واحدة وتنتهي صلاحيته خلال 15 دقيقة. إذا لم تطلبه، يمكنك تجاهل هذه الرسالة.
+
+تسجيل الدخول إلى Yayatoh: https://app.yayatoh.test/api/auth/magic-link/verify?token=sample
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > auth.magic-link · de 1`] = `
+{
+  "subject": "Ihr Yayatoh-Anmeldelink",
+  "text": "Ihr Yayatoh-Anmeldelink
+
+Hallo,
+
+Melden Sie sich mit der Schaltfläche unten in diesem Browser bei Yayatoh an. Der Link gilt einmal und läuft in 15 Minuten ab. Wenn Sie ihn nicht angefordert haben, können Sie diese E-Mail ignorieren.
+
+Bei Yayatoh anmelden: https://app.yayatoh.test/api/auth/magic-link/verify?token=sample
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > auth.magic-link · en 1`] = `
+{
+  "subject": "Your Yayatoh sign-in link",
+  "text": "Your Yayatoh sign-in link
+
+Hello,
+
+Use the button below to sign in to Yayatoh in this browser. The link works once and expires in 15 minutes. If you didn't ask for it, you can ignore this email.
+
+Sign in to Yayatoh: https://app.yayatoh.test/api/auth/magic-link/verify?token=sample
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > auth.magic-link · es 1`] = `
+{
+  "subject": "Tu enlace para iniciar sesión en Yayatoh",
+  "text": "Tu enlace para iniciar sesión en Yayatoh
+
+Hola:
+
+Usa el botón de abajo para iniciar sesión en Yayatoh en este navegador. El enlace sirve una vez y caduca en 15 minutos. Si no lo pediste, puedes ignorar este correo.
+
+Iniciar sesión en Yayatoh: https://app.yayatoh.test/api/auth/magic-link/verify?token=sample
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > auth.magic-link · fr 1`] = `
+{
+  "subject": "Votre lien de connexion Yayatoh",
+  "text": "Votre lien de connexion Yayatoh
+
+Bonjour,
+
+Utilisez le bouton ci-dessous pour vous connecter à Yayatoh dans ce navigateur. Le lien fonctionne une fois et expire dans 15 minutes. Si vous ne l’avez pas demandé, ignorez cet e-mail.
+
+Se connecter à Yayatoh: https://app.yayatoh.test/api/auth/magic-link/verify?token=sample
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > auth.magic-link · hi 1`] = `
+{
+  "subject": "आपका Yayatoh साइन-इन लिंक",
+  "text": "आपका Yayatoh साइन-इन लिंक
+
+नमस्ते,
+
+इस ब्राउज़र में Yayatoh में साइन इन करने के लिए नीचे दिए गए बटन का उपयोग करें। लिंक एक बार काम करता है और 15 मिनट में समाप्त हो जाता है। अगर आपने यह नहीं माँगा, तो इस ईमेल को अनदेखा करें।
+
+Yayatoh में साइन इन करें: https://app.yayatoh.test/api/auth/magic-link/verify?token=sample
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > auth.magic-link · it 1`] = `
+{
+  "subject": "Il tuo link di accesso a Yayatoh",
+  "text": "Il tuo link di accesso a Yayatoh
+
+Ciao,
+
+Usa il pulsante qui sotto per accedere a Yayatoh in questo browser. Il link vale una volta e scade tra 15 minuti. Se non l’hai richiesto, ignora questa email.
+
+Accedi a Yayatoh: https://app.yayatoh.test/api/auth/magic-link/verify?token=sample
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > auth.magic-link · ja 1`] = `
+{
+  "subject": "Yayatohのサインインリンク",
+  "text": "Yayatohのサインインリンク
+
+こんにちは。
+
+下のボタンから、このブラウザでYayatohにサインインしてください。リンクは1回限り有効で、15分後に失効します。心当たりがない場合は、このメールを無視してください。
+
+Yayatohにサインイン: https://app.yayatoh.test/api/auth/magic-link/verify?token=sample
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > auth.magic-link · nl 1`] = `
+{
+  "subject": "Je inloglink voor Yayatoh",
+  "text": "Je inloglink voor Yayatoh
+
+Hallo,
+
+Gebruik de knop hieronder om in deze browser in te loggen bij Yayatoh. De link werkt één keer en verloopt over 15 minuten. Heb je dit niet gevraagd, negeer dan deze e-mail.
+
+Inloggen bij Yayatoh: https://app.yayatoh.test/api/auth/magic-link/verify?token=sample
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > auth.magic-link · pt 1`] = `
+{
+  "subject": "O seu link de acesso ao Yayatoh",
+  "text": "O seu link de acesso ao Yayatoh
+
+Olá!
+
+Use o botão abaixo para entrar no Yayatoh neste navegador. O link funciona uma vez e expira em 15 minutos. Se não pediu, ignore este e-mail.
+
+Entrar no Yayatoh: https://app.yayatoh.test/api/auth/magic-link/verify?token=sample
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > auth.magic-link · ru 1`] = `
+{
+  "subject": "Ваша ссылка для входа в Yayatoh",
+  "text": "Ваша ссылка для входа в Yayatoh
+
+Здравствуйте!
+
+Нажмите кнопку ниже, чтобы войти в Yayatoh в этом браузере. Ссылка действует один раз и истекает через 15 минут. Если вы её не запрашивали, проигнорируйте это письмо.
+
+Войти в Yayatoh: https://app.yayatoh.test/api/auth/magic-link/verify?token=sample
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > auth.magic-link · zh-CN 1`] = `
+{
+  "subject": "您的 Yayatoh 登录链接",
+  "text": "您的 Yayatoh 登录链接
+
+您好：
+
+点击下方按钮，在此浏览器中登录 Yayatoh。链接仅可使用一次，15 分钟后失效。如果这不是您的请求，请忽略此邮件。
+
+登录 Yayatoh: https://app.yayatoh.test/api/auth/magic-link/verify?token=sample
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > auth.magic-link · zh-TW 1`] = `
+{
+  "subject": "您的 Yayatoh 登入連結",
+  "text": "您的 Yayatoh 登入連結
+
+您好：
+
+點擊下方按鈕，在此瀏覽器中登入 Yayatoh。連結僅能使用一次，15 分鐘後失效。如果這不是您的請求，請忽略此郵件。
+
+登入 Yayatoh: https://app.yayatoh.test/api/auth/magic-link/verify?token=sample
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > auth.password-reset · ar 1`] = `
+{
+  "subject": "اختر كلمة مرور جديدة لـ Yayatoh",
+  "text": "اختر كلمة مرور جديدة لـ Yayatoh
+
+مرحبًا،
+
+طلب أحدهم إعادة تعيين كلمة مرور حسابك في Yayatoh. يتيح لك الزر أدناه اختيار كلمة مرور جديدة؛ يعمل مرة واحدة وتنتهي صلاحيته خلال 30 دقيقة. إذا لم تطلب ذلك، يمكنك تجاهل هذه الرسالة: تبقى كلمة مرورك كما هي.
+
+اختيار كلمة مرور جديدة: https://app.yayatoh.test/reset-password/sample
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > auth.password-reset · de 1`] = `
+{
+  "subject": "Neues Yayatoh-Passwort wählen",
+  "text": "Neues Yayatoh-Passwort wählen
+
+Hallo,
+
+Jemand hat angefordert, das Passwort Ihres Yayatoh-Kontos zurückzusetzen. Mit der Schaltfläche unten wählen Sie ein neues; sie gilt einmal und läuft in 30 Minuten ab. Wenn Sie das nicht angefordert haben, können Sie diese E-Mail ignorieren: Ihr Passwort bleibt unverändert.
+
+Neues Passwort wählen: https://app.yayatoh.test/reset-password/sample
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > auth.password-reset · en 1`] = `
+{
+  "subject": "Choose a new Yayatoh password",
+  "text": "Choose a new Yayatoh password
+
+Hello,
+
+Someone asked to reset the password of your Yayatoh account. The button below lets you choose a new one; it works once and expires in 30 minutes. If you didn't ask for it, you can ignore this email: your password stays the same.
+
+Choose a new password: https://app.yayatoh.test/reset-password/sample
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > auth.password-reset · es 1`] = `
+{
+  "subject": "Elige una nueva contraseña de Yayatoh",
+  "text": "Elige una nueva contraseña de Yayatoh
+
+Hola:
+
+Alguien pidió restablecer la contraseña de tu cuenta de Yayatoh. El botón de abajo te permite elegir una nueva; sirve una vez y caduca en 30 minutos. Si no lo pediste, puedes ignorar este correo: tu contraseña no cambia.
+
+Elegir una nueva contraseña: https://app.yayatoh.test/reset-password/sample
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > auth.password-reset · fr 1`] = `
+{
+  "subject": "Choisissez un nouveau mot de passe Yayatoh",
+  "text": "Choisissez un nouveau mot de passe Yayatoh
+
+Bonjour,
+
+Quelqu’un a demandé à réinitialiser le mot de passe de votre compte Yayatoh. Le bouton ci-dessous vous permet d’en choisir un nouveau ; il fonctionne une fois et expire dans 30 minutes. Si vous ne l’avez pas demandé, ignorez cet e-mail : votre mot de passe ne change pas.
+
+Choisir un nouveau mot de passe: https://app.yayatoh.test/reset-password/sample
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > auth.password-reset · hi 1`] = `
+{
+  "subject": "Yayatoh का नया पासवर्ड चुनें",
+  "text": "Yayatoh का नया पासवर्ड चुनें
+
+नमस्ते,
+
+किसी ने आपके Yayatoh खाते का पासवर्ड रीसेट करने का अनुरोध किया है। नीचे दिया गया बटन आपको नया पासवर्ड चुनने देता है; यह एक बार काम करता है और 30 मिनट में समाप्त हो जाता है। अगर आपने यह नहीं माँगा, तो इस ईमेल को अनदेखा करें: आपका पासवर्ड वही रहेगा।
+
+नया पासवर्ड चुनें: https://app.yayatoh.test/reset-password/sample
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > auth.password-reset · it 1`] = `
+{
+  "subject": "Scegli una nuova password di Yayatoh",
+  "text": "Scegli una nuova password di Yayatoh
+
+Ciao,
+
+Qualcuno ha chiesto di reimpostare la password del tuo account Yayatoh. Il pulsante qui sotto ti permette di sceglierne una nuova; vale una volta e scade tra 30 minuti. Se non l’hai richiesto, ignora questa email: la tua password non cambia.
+
+Scegli una nuova password: https://app.yayatoh.test/reset-password/sample
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > auth.password-reset · ja 1`] = `
+{
+  "subject": "Yayatohの新しいパスワードを設定",
+  "text": "Yayatohの新しいパスワードを設定
+
+こんにちは。
+
+お使いのYayatohアカウントのパスワード再設定がリクエストされました。下のボタンから新しいパスワードを設定できます。1回限り有効で、30分後に失効します。心当たりがない場合は、このメールを無視してください。パスワードは変わりません。
+
+新しいパスワードを設定: https://app.yayatoh.test/reset-password/sample
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > auth.password-reset · nl 1`] = `
+{
+  "subject": "Kies een nieuw Yayatoh-wachtwoord",
+  "text": "Kies een nieuw Yayatoh-wachtwoord
+
+Hallo,
+
+Iemand heeft gevraagd het wachtwoord van je Yayatoh-account opnieuw in te stellen. Met de knop hieronder kies je een nieuw wachtwoord; die werkt één keer en verloopt over 30 minuten. Heb je dit niet gevraagd, negeer dan deze e-mail: je wachtwoord blijft hetzelfde.
+
+Nieuw wachtwoord kiezen: https://app.yayatoh.test/reset-password/sample
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > auth.password-reset · pt 1`] = `
+{
+  "subject": "Escolha uma nova palavra-passe do Yayatoh",
+  "text": "Escolha uma nova palavra-passe do Yayatoh
+
+Olá!
+
+Alguém pediu para redefinir a palavra-passe da sua conta Yayatoh. O botão abaixo permite escolher uma nova; funciona uma vez e expira em 30 minutos. Se não pediu, ignore este e-mail: a sua palavra-passe não muda.
+
+Escolher uma nova palavra-passe: https://app.yayatoh.test/reset-password/sample
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > auth.password-reset · ru 1`] = `
+{
+  "subject": "Выберите новый пароль Yayatoh",
+  "text": "Выберите новый пароль Yayatoh
+
+Здравствуйте!
+
+Кто-то запросил сброс пароля вашей учётной записи Yayatoh. Кнопка ниже позволяет выбрать новый пароль; она действует один раз и истекает через 30 минут. Если вы этого не запрашивали, проигнорируйте это письмо: ваш пароль не изменится.
+
+Выбрать новый пароль: https://app.yayatoh.test/reset-password/sample
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > auth.password-reset · zh-CN 1`] = `
+{
+  "subject": "设置新的 Yayatoh 密码",
+  "text": "设置新的 Yayatoh 密码
+
+您好：
+
+有人请求重置您 Yayatoh 账户的密码。点击下方按钮即可设置新密码；按钮仅可使用一次，30 分钟后失效。如果这不是您的请求，请忽略此邮件：您的密码不会改变。
+
+设置新密码: https://app.yayatoh.test/reset-password/sample
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > auth.password-reset · zh-TW 1`] = `
+{
+  "subject": "設定新的 Yayatoh 密碼",
+  "text": "設定新的 Yayatoh 密碼
+
+您好：
+
+有人請求重設您 Yayatoh 帳戶的密碼。點擊下方按鈕即可設定新密碼；按鈕僅能使用一次，30 分鐘後失效。如果這不是您的請求，請忽略此郵件：您的密碼不會改變。
+
+設定新密碼: https://app.yayatoh.test/reset-password/sample
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > auth.sign-in-code · ar 1`] = `
+{
+  "subject": "305117 هو رمز تسجيل الدخول إلى Yayatoh",
+  "text": "305117 هو رمز تسجيل الدخول إلى Yayatoh
+
+مرحبًا،
+
+أدخل 305117 لتسجيل الدخول إلى Yayatoh. يعمل الرمز مرة واحدة وتنتهي صلاحيته خلال 10 دقائق. إذا لم تطلبه، يمكنك تجاهل هذه الرسالة.
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > auth.sign-in-code · de 1`] = `
+{
+  "subject": "305117 ist Ihr Yayatoh-Anmeldecode",
+  "text": "305117 ist Ihr Yayatoh-Anmeldecode
+
+Hallo,
+
+Geben Sie 305117 ein, um sich bei Yayatoh anzumelden. Der Code gilt einmal und läuft in 10 Minuten ab. Wenn Sie ihn nicht angefordert haben, können Sie diese E-Mail ignorieren.
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > auth.sign-in-code · en 1`] = `
+{
+  "subject": "305117 is your Yayatoh sign-in code",
+  "text": "305117 is your Yayatoh sign-in code
+
+Hello,
+
+Enter 305117 to sign in to Yayatoh. The code works once and expires in 10 minutes. If you didn't ask for it, you can ignore this email.
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > auth.sign-in-code · es 1`] = `
+{
+  "subject": "305117 es tu código para iniciar sesión en Yayatoh",
+  "text": "305117 es tu código para iniciar sesión en Yayatoh
+
+Hola:
+
+Introduce 305117 para iniciar sesión en Yayatoh. El código sirve una vez y caduca en 10 minutos. Si no lo pediste, puedes ignorar este correo.
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > auth.sign-in-code · fr 1`] = `
+{
+  "subject": "305117 est votre code de connexion Yayatoh",
+  "text": "305117 est votre code de connexion Yayatoh
+
+Bonjour,
+
+Saisissez 305117 pour vous connecter à Yayatoh. Le code fonctionne une fois et expire dans 10 minutes. Si vous ne l’avez pas demandé, ignorez cet e-mail.
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > auth.sign-in-code · hi 1`] = `
+{
+  "subject": "305117 आपका Yayatoh साइन-इन कोड है",
+  "text": "305117 आपका Yayatoh साइन-इन कोड है
+
+नमस्ते,
+
+Yayatoh में साइन इन करने के लिए 305117 दर्ज करें। कोड एक बार काम करता है और 10 मिनट में समाप्त हो जाता है। अगर आपने यह नहीं माँगा, तो इस ईमेल को अनदेखा करें।
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > auth.sign-in-code · it 1`] = `
+{
+  "subject": "305117 è il tuo codice di accesso a Yayatoh",
+  "text": "305117 è il tuo codice di accesso a Yayatoh
+
+Ciao,
+
+Inserisci 305117 per accedere a Yayatoh. Il codice vale una volta e scade tra 10 minuti. Se non l’hai richiesto, ignora questa email.
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > auth.sign-in-code · ja 1`] = `
+{
+  "subject": "305117はYayatohのサインインコードです",
+  "text": "305117はYayatohのサインインコードです
+
+こんにちは。
+
+305117を入力してYayatohにサインインしてください。コードは1回限り有効で、10分後に失効します。心当たりがない場合は、このメールを無視してください。
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > auth.sign-in-code · nl 1`] = `
+{
+  "subject": "305117 is je inlogcode voor Yayatoh",
+  "text": "305117 is je inlogcode voor Yayatoh
+
+Hallo,
+
+Voer 305117 in om in te loggen bij Yayatoh. De code werkt één keer en verloopt over 10 minuten. Heb je dit niet gevraagd, negeer dan deze e-mail.
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > auth.sign-in-code · pt 1`] = `
+{
+  "subject": "305117 é o seu código de acesso ao Yayatoh",
+  "text": "305117 é o seu código de acesso ao Yayatoh
+
+Olá!
+
+Digite 305117 para entrar no Yayatoh. O código funciona uma vez e expira em 10 minutos. Se não pediu, ignore este e-mail.
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > auth.sign-in-code · ru 1`] = `
+{
+  "subject": "305117 — ваш код для входа в Yayatoh",
+  "text": "305117 — ваш код для входа в Yayatoh
+
+Здравствуйте!
+
+Введите 305117, чтобы войти в Yayatoh. Код действует один раз и истекает через 10 минут. Если вы его не запрашивали, проигнорируйте это письмо.
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > auth.sign-in-code · zh-CN 1`] = `
+{
+  "subject": "305117 是您的 Yayatoh 登录验证码",
+  "text": "305117 是您的 Yayatoh 登录验证码
+
+您好：
+
+输入 305117 以登录 Yayatoh。验证码仅可使用一次，10 分钟后失效。如果这不是您的请求，请忽略此邮件。
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > auth.sign-in-code · zh-TW 1`] = `
+{
+  "subject": "305117 是您的 Yayatoh 登入驗證碼",
+  "text": "305117 是您的 Yayatoh 登入驗證碼
+
+您好：
+
+輸入 305117 以登入 Yayatoh。驗證碼僅能使用一次，10 分鐘後失效。如果這不是您的請求，請忽略此郵件。
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
 exports[`renderMessage: every kind in all 13 locales > automations.message · ar 1`] = `
 {
   "subject": "One week to go",

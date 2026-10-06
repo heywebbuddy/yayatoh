@@ -363,6 +363,20 @@
       "subject": "来自 {org} 的证明",
       "intro": "您在 {eventName} 获得了 {credits}。您的证明（验证码 {code}）见下文及 PDF。",
       "cta": "下载 PDF 证明"
+    },
+    "auth.sign-in-code": {
+      "subject": "{code} 是您的 Yayatoh 登录验证码",
+      "intro": "输入 {code} 以登录 Yayatoh。验证码仅可使用一次，{minutes} 分钟后失效。如果这不是您的请求，请忽略此邮件。"
+    },
+    "auth.password-reset": {
+      "subject": "设置新的 Yayatoh 密码",
+      "intro": "有人请求重置您 Yayatoh 账户的密码。点击下方按钮即可设置新密码；按钮仅可使用一次，{minutes} 分钟后失效。如果这不是您的请求，请忽略此邮件：您的密码不会改变。",
+      "cta": "设置新密码"
+    },
+    "auth.magic-link": {
+      "subject": "您的 Yayatoh 登录链接",
+      "intro": "点击下方按钮，在此浏览器中登录 Yayatoh。链接仅可使用一次，{minutes} 分钟后失效。如果这不是您的请求，请忽略此邮件。",
+      "cta": "登录 Yayatoh"
     }
   },
   "roles": {
