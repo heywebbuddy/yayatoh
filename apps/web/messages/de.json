@@ -232,6 +232,11 @@
       },
       "ce": {
         "certificate": "Teilnahmebescheinigung"
+      },
+      "auth": {
+        "sign-in-code": "Anmeldecode",
+        "password-reset": "Passwort zurücksetzen",
+        "magic-link": "Anmeldelink"
       }
     },
     "status": {

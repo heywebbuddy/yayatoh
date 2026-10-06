@@ -232,6 +232,11 @@
       },
       "ce": {
         "certificate": "继续教育证明"
+      },
+      "auth": {
+        "sign-in-code": "登录验证码",
+        "password-reset": "重置密码",
+        "magic-link": "登录链接"
       }
     },
     "status": {

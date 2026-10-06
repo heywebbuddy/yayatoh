@@ -232,6 +232,11 @@
       },
       "ce": {
         "certificate": "सतत शिक्षा प्रमाणपत्र"
+      },
+      "auth": {
+        "sign-in-code": "साइन-इन कोड",
+        "password-reset": "पासवर्ड रीसेट",
+        "magic-link": "साइन-इन लिंक"
       }
     },
     "status": {

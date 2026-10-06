@@ -232,6 +232,11 @@
       },
       "ce": {
         "certificate": "Сертификат обучения"
+      },
+      "auth": {
+        "sign-in-code": "Код для входа",
+        "password-reset": "Сброс пароля",
+        "magic-link": "Ссылка для входа"
       }
     },
     "status": {

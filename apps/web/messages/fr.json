@@ -232,6 +232,11 @@
       },
       "ce": {
         "certificate": "Attestation de formation"
+      },
+      "auth": {
+        "sign-in-code": "Code de connexion",
+        "password-reset": "Réinitialisation du mot de passe",
+        "magic-link": "Lien de connexion"
       }
     },
     "status": {
