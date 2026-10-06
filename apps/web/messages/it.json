@@ -232,6 +232,11 @@
       },
       "ce": {
         "certificate": "Attestato formativo"
+      },
+      "auth": {
+        "sign-in-code": "Codice di accesso",
+        "password-reset": "Reimpostazione password",
+        "magic-link": "Link di accesso"
       }
     },
     "status": {

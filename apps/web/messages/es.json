@@ -232,6 +232,11 @@
       },
       "ce": {
         "certificate": "Certificado de formación"
+      },
+      "auth": {
+        "sign-in-code": "Código de inicio de sesión",
+        "password-reset": "Restablecer contraseña",
+        "magic-link": "Enlace de inicio de sesión"
       }
     },
     "status": {

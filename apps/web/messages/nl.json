@@ -232,6 +232,11 @@
       },
       "ce": {
         "certificate": "Nascholingsbewijs"
+      },
+      "auth": {
+        "sign-in-code": "Inlogcode",
+        "password-reset": "Wachtwoord opnieuw instellen",
+        "magic-link": "Inloglink"
       }
     },
     "status": {

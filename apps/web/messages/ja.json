@@ -232,6 +232,11 @@
       },
       "ce": {
         "certificate": "継続教育の証明書"
+      },
+      "auth": {
+        "sign-in-code": "サインインコード",
+        "password-reset": "パスワード再設定",
+        "magic-link": "サインインリンク"
       }
     },
     "status": {

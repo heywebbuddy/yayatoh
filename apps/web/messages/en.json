@@ -232,6 +232,11 @@
       },
       "ce": {
         "certificate": "CE certificate"
+      },
+      "auth": {
+        "sign-in-code": "Sign-in code",
+        "password-reset": "Password reset",
+        "magic-link": "Sign-in link"
       }
     },
     "status": {

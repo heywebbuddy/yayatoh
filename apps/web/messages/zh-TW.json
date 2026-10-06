@@ -232,6 +232,11 @@
       },
       "ce": {
         "certificate": "繼續教育證明"
+      },
+      "auth": {
+        "sign-in-code": "登入驗證碼",
+        "password-reset": "重設密碼",
+        "magic-link": "登入連結"
       }
     },
     "status": {
