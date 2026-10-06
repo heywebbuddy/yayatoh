@@ -36,7 +36,7 @@ async function call(
   method: string,
   path: string,
   body: unknown,
-): Promise<{ status: number; json: Record<string, unknown> }> {
+): Promise<{ status: number; json: Record<string, unknown>; errorHeader: string | null }> {
   const url = `${endpoint(cfg.region)}${path}`;
   const payload = body === undefined ? '' : JSON.stringify(body);
   const headers = signAwsRequest({
@@ -62,7 +62,8 @@ async function call(
   } catch {
     json = {};
   }
-  return { status: res.status, json };
+  // SES v2 names its errors in this header (e.g. `NotFoundException:http://…`), not in the body.
+  return { status: res.status, json, errorHeader: res.headers.get('x-amzn-errortype') };
 }
 
 /** SES error types that will never succeed on retry. */
@@ -73,10 +74,12 @@ const PERMANENT = new Set([
   'NotFoundException',
 ]);
 
-const errorType = (res: { json: Record<string, unknown> }, fallback: string) =>
-  String(res.json.__type ?? res.json.code ?? fallback)
-    .split('#')
-    .pop() ?? fallback;
+const errorType = (res: { json: Record<string, unknown>; errorHeader?: string | null }, fallback: string) =>
+  (
+    String(res.json.__type ?? res.json.code ?? res.errorHeader ?? fallback)
+      .split('#')
+      .pop() ?? fallback
+  ).split(':')[0] || fallback;
 
 export interface SesSendExtra {
   readonly orgId?: string | null;

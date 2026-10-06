@@ -210,6 +210,24 @@ describe('SES sending', () => {
     await expect(throttled.send(email)).rejects.not.toBeInstanceOf(ProviderRejection);
     await expect(throttled.send(email)).rejects.toThrow(/TooManyRequests/);
   });
+  it('reads SES v2 error names from the x-amzn-ErrorType header (e.g. a missing configuration set)', async () => {
+    const missing = sesEmailTransport({
+      ...cfg,
+      fetch: fakeFetch(
+        () =>
+          new Response(JSON.stringify({ message: 'Configuration set <x> does not exist.' }), {
+            status: 404,
+            headers: {
+              'content-type': 'application/json',
+              'x-amzn-errortype': 'NotFoundException:http://internal.amazon.com/coral/com.amazonaws.sesv2/',
+            },
+          }),
+      ).fn,
+    });
+    const err = await missing.send(email).catch((e: unknown) => e);
+    expect(err).toBeInstanceOf(ProviderRejection);
+    expect(String((err as Error).message)).toMatch(/NotFoundException/);
+  });
   it('creates identities with Easy DKIM and a custom MAIL FROM, and reads their checks', async () => {
     const f = fakeFetch((_url, init) => {
       if (init?.method === 'POST')
