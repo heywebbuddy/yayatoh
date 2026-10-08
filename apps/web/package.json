@@ -10,7 +10,7 @@
     "typecheck": "next typegen && tsc --noEmit",
     "e2e": "playwright test",
     "e2e:lighthouse": "E2E_LIGHTHOUSE=1 playwright test --project=lighthouse --workers=1",
-    "seed": "node scripts/seed.ts",
+    "seed": "node --conditions=react-server scripts/seed.ts",
     "load:prepare": "node scripts/load-prepare.ts"
   },
   "dependencies": {

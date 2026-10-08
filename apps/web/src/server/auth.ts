@@ -12,7 +12,7 @@ import { LOCALES } from '@yayatoh/contracts';
 import { isProductionEnv } from '@yayatoh/kernel';
 import { type MessageKind, PLATFORM_SENDER, renderMessage } from '@yayatoh/notifications';
 import { IDENTITY_KEY_SCOPE, keyVault, liftErasedAccountMail } from '@yayatoh/platform';
-import { cookies } from 'next/headers';
+import { cookies } from 'next/headers.js';
 import { devAuthEnabled } from './dev.ts';
 import { webTransports } from './mail-transports.ts';
 // Registers the key vault (the composition root) before any seed is sealed.
