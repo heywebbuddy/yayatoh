@@ -132,7 +132,7 @@ export async function Shell({ staff, children }: { staff: Staff; children: React
       </aside>
       <main
         id="main"
-        className="flex w-full min-w-0 flex-1 flex-col gap-6 px-4 pt-2 pb-12 [&>div:first-child]:sticky [&>div:first-child]:top-0 [&>div:first-child]:z-20 [&>div:first-child]:py-2 lg:px-2 lg:pt-3 [&>*]:min-w-0"
+        className="flex w-full min-w-0 flex-1 flex-col gap-6 px-4 pt-2 pb-12 [&>div:first-child]:sticky [&>div:first-child]:top-0 [&>div:first-child]:z-20 [&>div:first-child]:bg-page [&>div:first-child]:bg-fixed [&>div:first-child]:py-2 lg:px-2 lg:pt-3 [&>*]:min-w-0"
       >
         {children}
       </main>
