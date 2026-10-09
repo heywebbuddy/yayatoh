@@ -8,6 +8,7 @@ import { EventCurrencyForm, EventDetailsForm, VanityForm } from '@/components/ev
 import { HowItWorks } from '@/components/how-it-works.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { loadEvent } from '@/server/console.ts';
+import { categoryLabels } from '@/server/event-categories.ts';
 import { ports } from '@/server/ports.ts';
 import { ensureShortLinkAction, saveDetailsAction, setCurrencyAction, setVanityAction } from './actions.ts';
 
@@ -30,9 +31,10 @@ export default async function EventDetailsPage({
   ]);
   // U8: hidden categories leave the picker, except the one this event already has.
   const te = await getTranslations();
+  const platformLabel = await categoryLabels((key) => te(`categories.${key}`));
   const categoryChoices = categories
     .filter((c) => !c.hidden || c.ref === details.categoryRef)
-    .map((c) => ({ ref: c.ref, label: c.name ?? te(`categories.${c.platformKey}`), hidden: c.hidden }));
+    .map((c) => ({ ref: c.ref, label: c.name ?? platformLabel(c.platformKey), hidden: c.hidden }));
   // The picked venue stays listed even if it was archived since.
   const options =
     details.venueId && !venues.some((v) => v.id === details.venueId)

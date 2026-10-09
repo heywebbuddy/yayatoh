@@ -1,4 +1,4 @@
-import { EVENT_CATEGORIES, orgCategoriesQuery } from '@yayatoh/events';
+import { orgCategoriesQuery } from '@yayatoh/events';
 import { executeQuery } from '@yayatoh/kernel';
 import { roleCan } from '@yayatoh/tenancy';
 import { Breadcrumb, Card, PageHeader } from '@yayatoh/ui';
@@ -7,6 +7,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { AddCategoryForm, CategoryList } from '@/components/category-manager.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { loadConsole } from '@/server/console.ts';
+import { categoryLabels, platformCategoryCatalog } from '@/server/event-categories.ts';
 import { ports } from '@/server/ports.ts';
 import { addCategoryAction, categoryRowAction } from './actions.ts';
 
@@ -26,7 +27,8 @@ export default async function CategoriesPage({
   const t = await getTranslations('orgCategories');
   const tg = await getTranslations();
   const list = await executeQuery(orgCategoriesQuery, { includeHidden: true }, data.ctx, ports);
-  const platformLabel = (key: string) => tg(`categories.${key as (typeof EVENT_CATEGORIES)[number]}`);
+  const catalog = await platformCategoryCatalog();
+  const platformLabel = await categoryLabels((key) => tg(`categories.${key}`));
   const rows = list.map((c) => ({
     ref: c.ref,
     label: c.name ?? platformLabel(c.platformKey),
@@ -64,7 +66,7 @@ export default async function CategoriesPage({
         <Card size="panel">
           <AddCategoryForm
             action={addCategoryAction.bind(null, org)}
-            platformCategories={EVENT_CATEGORIES.map((key) => ({ key, label: platformLabel(key) }))}
+            platformCategories={catalog.map(({ key }) => ({ key, label: platformLabel(key) }))}
           />
         </Card>
       </section>

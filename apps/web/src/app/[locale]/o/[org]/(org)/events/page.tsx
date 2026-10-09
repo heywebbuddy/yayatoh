@@ -1,4 +1,4 @@
-import { type EventCategory, searchEventsQuery } from '@yayatoh/events';
+import { searchEventsQuery } from '@yayatoh/events';
 import { executeQuery } from '@yayatoh/kernel';
 import { roleCan } from '@yayatoh/tenancy';
 import { buttonClass, Card, EmptyState, Label, PageHeader, Pagination, StatusDot } from '@yayatoh/ui';
@@ -8,6 +8,7 @@ import { Link } from '@/i18n/navigation.ts';
 import { eventPhase } from '@/lib/event-status.ts';
 import { formatEventDateRange } from '@/lib/format.ts';
 import { loadConsoleBase } from '@/server/console.ts';
+import { categoryLabels } from '@/server/event-categories.ts';
 import { ports } from '@/server/ports.ts';
 
 const STATUS_DOT = {
@@ -41,6 +42,7 @@ export default async function OrgEventsPage({
     getTranslations(),
     getTranslations('market.pagination'),
   ]);
+  const platformLabel = await categoryLabels((key) => t(`categories.${key}`));
   const listed = all;
   const now = Date.now();
   const current = listed.filter((event) => event.endsAt.getTime() >= now);
@@ -131,7 +133,7 @@ export default async function OrgEventsPage({
                       {event.categoryName
                         ? ` · ${event.categoryName}`
                         : event.category
-                          ? ` · ${t(`categories.${event.category as EventCategory}`)}`
+                          ? ` � ${platformLabel(event.category)}`
                           : ''}
                     </Label>
                     <h2 className="text-[22px] leading-tight font-extrabold tracking-[-0.03em]">

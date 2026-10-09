@@ -211,6 +211,8 @@ export function orderLinkMailer(deps: { notifier: Notifier; appOrigin: string })
 
 export const GuestOrderDto = z.object({
   orderId: z.uuid(),
+  orgId: z.uuid(),
+  eventId: z.uuid(),
   orgName: z.string(),
   eventName: z.string(),
   startsAt: z.date(),
@@ -265,6 +267,8 @@ async function guestOrdersInOrgTx(
     out.push(
       guestOrderSerializer.serialize({
         orderId: r.id,
+        orgId,
+        eventId: r.eventId,
         orgName,
         eventName: ev.name,
         startsAt: ev.startsAt,

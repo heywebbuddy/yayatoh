@@ -13,6 +13,7 @@ import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { Link } from '@/i18n/navigation.ts';
 import { localizedPath } from '@/lib/seo/urls.ts';
+import { categoryLabels, platformCategoryCatalog } from '@/server/event-categories.ts';
 import { ListingCard } from './listing-card.tsx';
 import { LocateButton } from './locate-button.tsx';
 
@@ -57,6 +58,8 @@ export async function SearchV2Form({
   const t = await getTranslations('market.search');
   const tf = await getTranslations('market.filters');
   const tc = await getTranslations('categories');
+  const platformLabel = await categoryLabels((key) => tc(key as 'other'));
+  const catalog = await platformCategoryCatalog();
   const counted = (label: string, n: number | undefined) =>
     n === undefined ? label : t('optionCount', { label, count: n });
   const countOf = (list: readonly { value: string; count: number }[], v: string) =>
@@ -70,7 +73,11 @@ export async function SearchV2Form({
     </div>
   );
   const categories = [
-    ...new Set([...result.facets.category.map((c) => c.value), ...(p.category ? [p.category] : [])]),
+    ...new Set([
+      ...catalog.map((c) => c.key),
+      ...result.facets.category.map((c) => c.value),
+      ...(p.category ? [p.category] : []),
+    ]),
   ];
   const cities = [...new Set([...result.facets.city.map((c) => c.value), ...(p.city ? [p.city] : [])])];
   const nearOptions = [...new Set([...centers, ...(p.near && p.near !== 'me' ? [p.near] : [])])];
@@ -104,7 +111,7 @@ export async function SearchV2Form({
               <option value="">{tf('anyCategory')}</option>
               {categories.map((c) => (
                 <option key={c} value={c}>
-                  {counted(tc(c as 'other'), countOf(result.facets.category, c))}
+                  {counted(platformLabel(c), countOf(result.facets.category, c))}
                 </option>
               ))}
             </Select>,

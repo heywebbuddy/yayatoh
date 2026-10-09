@@ -4,7 +4,7 @@
  * Adding an entry needs a reason and a reviewer from the tenancy lane.
  */
 export const GLOBAL_TABLES: Readonly<Record<string, string>> = {
-  'billing.plans': 'Plan catalog; reference data written only by migrations (app_user: SELECT).',
+  'billing.plans': 'Plan catalog; written by migrations and restricted billing catalog functions (app_user: SELECT).',
   'auth.users': 'Global identities (Better Auth); accessed only through packages/auth.',
   'auth.sessions': 'Better Auth sessions; accessed only through packages/auth.',
   'auth.accounts': 'Credentials and OAuth links; accessed only through packages/auth.',
@@ -28,7 +28,7 @@ export const GLOBAL_TABLES: Readonly<Record<string, string>> = {
   'billing.fee_schedules': 'Platform fee per plan and currency; reference data written only by migrations.',
   'billing.addons':
     'Add-on catalog (event add-ons such as conference_pack: modules, price, per-event quotas); reference data written only by migrations (app_user: SELECT).',
-  'billing.plan_modules': 'Modules per plan; reference data written only by migrations (app_user: SELECT).',
+  'billing.plan_modules': 'Modules per plan; written by migrations and restricted billing catalog functions (app_user: SELECT).',
   'billing.plan_catalog':
     'Plans sold through the billing provider (M6.6a: sort order, on/off, provider product id); reference data written by migrations and the SECURITY DEFINER billing.apply_catalog (platform_reader); app_user: SELECT.',
   'billing.plan_prices':

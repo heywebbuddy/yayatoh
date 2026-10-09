@@ -29,7 +29,7 @@ test.describe('default event categories (U8)', () => {
   test('the page works on a phone and support staff cannot open it', async ({ page, browser }) => {
     await signInStaff(page);
     await page.goto('/categories');
-    await expect(page.getByRole('heading', { name: 'Default event categories', level: 1 })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Event categories', level: 1 })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Save defaults' })).toBeVisible();
     await expectAccessible(page);
 
@@ -57,7 +57,7 @@ async function defaultsJourney(page: Page) {
     .getByRole('link', { name: 'Event categories' })
     .click();
   await expect(page).toHaveURL(/\/categories$/);
-  await expect(page.getByRole('heading', { name: 'Default event categories', level: 1 })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Event categories', level: 1 })).toBeVisible();
   await expectAccessible(page);
   const rows = page.getByRole('listitem');
   const names = async () => (await rows.locator('span.font-semibold').allInnerTexts()).map((x) => x.trim());

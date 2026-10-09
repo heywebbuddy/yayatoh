@@ -1,5 +1,5 @@
 import { type FakeBillingDelivery, fakeBillingProvider } from './fake.ts';
-import type { BillingProvider } from './port.ts';
+import type { BillingProvider, ProviderCatalog } from './port.ts';
 import { stripeBillingProvider } from './stripe.ts';
 
 export { billingEnabled } from './flag.ts';
@@ -14,7 +14,7 @@ type Env = Readonly<Record<string, string | undefined>>;
 export function billingProviderFromEnv(
   env: Env = process.env,
   /** The fake's webhook delivery (the web app hands them to its own billing endpoint). */
-  opts: { deliver?: (d: FakeBillingDelivery) => Promise<void> } = {},
+  opts: { deliver?: (d: FakeBillingDelivery) => Promise<void>; catalog?: () => Promise<ProviderCatalog> } = {},
 ): BillingProvider {
   const which = env.BILLING_PROVIDER || 'fake';
   if (which === 'stripe') {
@@ -28,7 +28,7 @@ export function billingProviderFromEnv(
     const secret = env.FAKE_PAYMENTS_SECRET;
     if (!secret)
       throw new Error('No billing provider configured (FAKE_PAYMENTS_SECRET, or BILLING_PROVIDER=stripe)');
-    return fakeBillingProvider({ secret, ...(opts.deliver ? { deliver: opts.deliver } : {}) });
+    return fakeBillingProvider({ secret, ...opts });
   }
   throw new Error(`Unknown BILLING_PROVIDER "${which}" (fake or stripe)`);
 }

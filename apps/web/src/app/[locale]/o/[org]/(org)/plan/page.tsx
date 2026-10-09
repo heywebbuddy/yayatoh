@@ -85,8 +85,7 @@ export default async function PlanPage({
     );
   }
   const s = await executeQuery(planSummaryQuery, {}, data.ctx, ports);
-  const planName = (key: string, fallback: string) =>
-    t.has(`planName.${key}`) ? t(`planName.${key}`) : fallback;
+  const planName = (_key: string, fallback: string) => fallback;
   const moduleName = (key: string) => (t.has(`module.${key}`) ? t(`module.${key}`) : key);
   const priceText = (p: Price) =>
     !p
@@ -232,7 +231,7 @@ export default async function PlanPage({
         <SectionHeader
           id="catalog-heading"
           title={t('catalog.title')}
-          description={t('catalog.description')}
+          description={t(s.catalog.some((p) => p.active) ? 'change.description' : 'catalog.description')}
         />
         <Table
           caption={t('catalog.title')}

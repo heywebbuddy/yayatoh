@@ -251,7 +251,7 @@ describe('search v2 parameters', () => {
       page: 2,
     });
     const bad = parseSearchV2Params({
-      category: 'gala',
+      category: 'INVALID CATEGORY',
       price: 'unpriced',
       when: 'year',
       radius: '7',

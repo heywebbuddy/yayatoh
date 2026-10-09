@@ -1,4 +1,4 @@
-import { EVENT_CATEGORIES, type EventCategory } from './categories.ts';
+import { CATEGORY_KEY_PATTERN, type EventCategory } from './categories.ts';
 
 /**
  * U8 (UX-2): org-managed categories. Pure rules shared by the commands, the console and tests.
@@ -11,7 +11,7 @@ export const MAX_CATEGORY_NAME = 60;
 export const MAX_ORG_CATEGORIES = 100;
 
 export function isPlatformKey(ref: string): ref is EventCategory {
-  return (EVENT_CATEGORIES as readonly string[]).includes(ref);
+  return CATEGORY_KEY_PATTERN.test(ref);
 }
 
 /** The ref of a stored category: its platform key while unnamed, else its id. */

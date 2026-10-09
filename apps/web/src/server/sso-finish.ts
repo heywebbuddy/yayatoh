@@ -30,7 +30,7 @@ export async function finishSsoRequest(
   };
   if (here.kind === 'tenant') return new NextResponse('Not found', { status: 404 });
   const pending = await takeSso(input.state, input.cookie);
-  if (!pending) return done(localizedPath(locale, '/sign-in/sso?error=expired'));
+  if (!pending) return done(localizedPath(locale, '/o/sign-in/sso?error=expired'));
   const at = (path: string) => localizedPath(pending.locale, path);
   if (pending.intent === 'test') {
     const session = await ownSession();
@@ -55,10 +55,11 @@ export async function finishSsoRequest(
     if (outcome.ok && !outcome.domainVerified) q.set('domain', 'unverified');
     return done(at(`/o/${pending.orgSlug}/sso?${q}`));
   }
-  if (input.error) return done(at('/sign-in/sso?error=cancelled'));
+  if (input.error) return done(at('/o/sign-in/sso?error=cancelled'));
   const outcome = await completeSso(pending, input.response, headers);
-  if (outcome.kind === 'refused') return done(at(`/sign-in/sso?error=${encodeURIComponent(outcome.reason)}`));
-  if (outcome.kind !== 'signed_in') return done(at('/sign-in/sso?error=failed'));
+  if (outcome.kind === 'refused')
+    return done(at(`/o/sign-in/sso?error=${encodeURIComponent(outcome.reason)}`));
+  if (outcome.kind !== 'signed_in') return done(at('/o/sign-in/sso?error=failed'));
   const next = `/o/${pending.orgSlug}`;
   if (outcome.challenge)
     return done(`${at('/sign-in')}?${new URLSearchParams({ challenge: '1', next })}`, outcome.cookies);

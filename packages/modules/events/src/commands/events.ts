@@ -4,6 +4,7 @@ import { tenantCommand } from '@yayatoh/platform';
 import { assertNotPausedTx, hasAcceptedTermsTx, markOnboardingStepTx } from '@yayatoh/tenancy';
 import { and, eq, inArray } from 'drizzle-orm';
 import { z } from 'zod';
+import { resolveCategoryTx } from '../categories.ts';
 import { EVENT_TRANSITIONS, type EventTransition, eventLifecycle, slugify } from '../domain/lifecycle.ts';
 import { CreateEventInput, EventDto, EventRoleDto, UpdateEventInput } from '../dto.ts';
 import { EVENT_ROLES, eventRoleAssignments, events } from '../schema.ts';
@@ -34,10 +35,22 @@ export const createEventCommand = tenantCommand({
   handler: async ({ input, ctx, tx, emit }) => {
     const orgId = requireOrg(ctx);
     const slug = input.slug ?? slugify(input.name);
+    const { orgCategory, ...fields } = input;
+    const category = orgCategory ? await resolveCategoryTx(tx, orgId, orgCategory) : null;
+    if (orgCategory && (!category || category.hiddenAt))
+      throw new DomainError('validation_failed', 'Choose a visible category from this organization', {
+        field: 'orgCategory',
+      });
     try {
       const [row] = await tx
         .insert(events)
-        .values({ ...input, slug, orgId })
+        .values({
+          ...fields,
+          slug,
+          orgId,
+          category: category?.platformKey ?? null,
+          orgCategoryId: category?.id ?? null,
+        })
         .returning();
       if (!row) throw new DomainError('internal');
       // M1.4d: every event gets its automatic `/e/{code}` short link.

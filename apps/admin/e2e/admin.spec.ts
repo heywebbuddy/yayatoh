@@ -79,8 +79,10 @@ test('staff pause ticket sales for a tenant; the public page shows it at once; r
   browser,
 }) => {
   await signIn(page, STAFF);
+  await page.goto('/tenants');
   await expect(page.getByRole('heading', { name: 'Tenants' })).toBeVisible();
   await expectAccessible(page);
+  await page.goto('/tenants');
   await page.getByLabel('Search by name or address').fill('lakeside');
   await page.getByRole('button', { name: 'Search' }).click();
   await page.getByRole('link', { name: 'Lakeside Events', exact: true }).click();
@@ -161,6 +163,7 @@ test('staff see a tenant dispute and open its evidence packet', async ({ page, b
   expect(res.status()).toBe(200);
 
   await signIn(page, STAFF);
+  await page.goto('/tenants');
   await page.getByLabel('Search by name or address').fill('lakeside');
   await page.getByRole('button', { name: 'Search' }).click();
   await page.getByRole('link', { name: 'Lakeside Events', exact: true }).click();
@@ -413,6 +416,7 @@ test('staff see a tenant’s reconciliation differences and resolve one with a n
   });
   expect(run.status()).toBe(200);
   await signIn(page, STAFF);
+  await page.goto('/tenants');
   await page.getByLabel('Search by name or address').fill('lakeside');
   await page.getByRole('button', { name: 'Search' }).click();
   await page.getByRole('link', { name: 'Lakeside Events', exact: true }).click();
@@ -435,6 +439,7 @@ test('staff act as a member for an hour: reason required, banner everywhere, mon
   test.setTimeout(120_000);
   const stamp = Date.now();
   await signIn(page, STAFF);
+  await page.goto('/tenants');
   await page.getByLabel('Search by name or address').fill('lakeside');
   await page.getByRole('button', { name: 'Search' }).click();
   await page.getByRole('link', { name: 'Lakeside Events', exact: true }).click();
@@ -567,6 +572,7 @@ test('staff act as a member for an hour: reason required, banner everywhere, mon
 test('an open impersonation can be ended from the staff console too', async ({ page }) => {
   const stamp = Date.now();
   await signIn(page, STAFF);
+  await page.goto('/tenants');
   await page.getByLabel('Search by name or address').fill('lakeside');
   await page.getByRole('button', { name: 'Search' }).click();
   await page.getByRole('link', { name: 'Lakeside Events', exact: true }).click();

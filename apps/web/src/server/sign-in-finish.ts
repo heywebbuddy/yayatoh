@@ -15,6 +15,13 @@ export interface SignInTarget {
 export const safeNext = (next: string | null | undefined) =>
   next?.startsWith('/') && !next.startsWith('//') && !next.includes('\\') ? next : '/o';
 
+const entryPath = (target: SignInTarget) =>
+  !target.handoff && (target.next === '/o' || target.next.startsWith('/o/'))
+    ? '/o/sign-in'
+    : !target.handoff && target.next.split('?')[0] === '/sign-up'
+      ? '/sign-up'
+      : '/sign-in';
+
 /** The sign-in page with the second step open, keeping where to go afterwards. */
 export function challengeUrl(t: SignInTarget): string {
   const q = new URLSearchParams({ challenge: '1' });
@@ -22,7 +29,7 @@ export function challengeUrl(t: SignInTarget): string {
     q.set('return', t.handoff.returnUrl);
     q.set('state', t.handoff.state);
   } else q.set('next', t.next);
-  return `${localizedPath(t.locale, '/sign-in')}?${q}`;
+  return `${localizedPath(t.locale, entryPath(t))}?${q}`;
 }
 
 /** The sign-in page with a message (a refused or cancelled provider sign-in), keeping the target. */
@@ -32,7 +39,7 @@ export function signInUrl(t: SignInTarget, extra: Record<string, string>): strin
     q.set('return', t.handoff.returnUrl);
     q.set('state', t.handoff.state);
   } else if (t.next !== '/o') q.set('next', t.next);
-  return `${localizedPath(t.locale, '/sign-in')}?${q}`;
+  return `${localizedPath(t.locale, entryPath(t))}?${q}`;
 }
 
 /**

@@ -16,6 +16,7 @@ import { useActionState, useEffect, useRef, useState } from 'react';
 import type { WizardState } from '@/app/[locale]/o/[org]/(org)/events/new/actions.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
 import { readinessRules } from '@/lib/readiness.ts';
+import { type EventCategoryChoice, EventCategoryField } from './event-category-field.tsx';
 import { type PickerProfile, ProfilePicker } from './profile-picker.tsx';
 import { seriesErrorKey } from './series-errors.ts';
 import { NEW_SERIES, SeriesField } from './series-field.tsx';
@@ -42,6 +43,7 @@ type Values = Record<
   | 'name'
   | 'tagline'
   | 'profile'
+  | 'orgCategory'
   | 'timezone'
   | 'startsAt'
   | 'endsAt'
@@ -95,12 +97,16 @@ export function EventWizard({
   ticketing,
   series = null,
   profiles,
+  categories,
+  manageCategoriesHref,
 }: {
   action: (prev: WizardState, form: FormData) => Promise<WizardState>;
   /** `series`: the series picked in advance (U7, "Create event in this series"). */
   defaults: { profile: string; timezone: string; series?: string };
   /** U8: the "What kind of event?" choices with the sections each includes. */
   profiles: readonly PickerProfile[];
+  categories: readonly EventCategoryChoice[];
+  manageCategoriesHref?: string;
   venues: readonly { id: string; name: string; city: string | null }[];
   currency: string;
   /** Whether the org sells tickets (the first-pass fields and rule). */
@@ -119,6 +125,7 @@ export function EventWizard({
     name: '',
     tagline: '',
     profile: defaults.profile,
+    orgCategory: '',
     timezone: defaults.timezone,
     startsAt: '',
     endsAt: '',
@@ -236,7 +243,7 @@ export function EventWizard({
         <input type="hidden" name="requestKey" value={requestKey} />
         {(Object.keys(v) as Field[]).map((k) =>
           // Fields of other steps travel as hidden inputs, so the last step submits everything.
-          (step === 0 && ['name', 'tagline', 'profile', 'series'].includes(k)) ||
+          (step === 0 && ['name', 'tagline', 'profile', 'orgCategory', 'series'].includes(k)) ||
           (step === 1 &&
             ['timezone', 'startsAt', 'endsAt', 'attendanceMode', 'venueId', 'venueName', 'city'].includes(
               k,
@@ -275,6 +282,16 @@ export function EventWizard({
               value={v.profile}
               onValueChange={setTo('profile')}
               className={selectClass}
+            />
+            <EventCategoryField
+              id="wizard-category"
+              categories={categories}
+              value={v.orgCategory}
+              onValueChange={setTo('orgCategory')}
+              manageHref={manageCategoriesHref}
+              error={
+                state.field === 'orgCategory' && state.code ? tn(errorMessageKey(state.code)) : undefined
+              }
             />
             {series ? (
               <SeriesField
@@ -445,6 +462,10 @@ export function EventWizard({
               <h3 id="wizard-summary" className="text-body font-medium">
                 {t('summary')}
               </h3>
+              <p className="text-body">
+                {tn('newEvent.category')}:{' '}
+                {categories.find((c) => c.ref === v.orgCategory)?.label ?? tn('newEvent.categoryNone')}
+              </p>
               <dl className="grid grid-cols-1 gap-x-4 gap-y-1 text-body sm:grid-cols-[max-content_1fr]">
                 <dt className="text-caption text-ink-2">{t('name')}</dt>
                 <dd className="m-0">{v.name}</dd>

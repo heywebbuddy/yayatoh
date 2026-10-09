@@ -1,8 +1,15 @@
 'use server';
 
+import { isUniqueViolation } from '@yayatoh/db';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { moveKey, parseDefaultKeys, savePlatformDefaults } from '@/server/platform-categories.ts';
+import {
+  CreatePlatformCategoryInput,
+  createPlatformCategory,
+  moveKey,
+  parseDefaultKeys,
+  savePlatformDefaults,
+} from '@/server/platform-categories.ts';
 import { requireStaff } from '@/server/staff.ts';
 
 /**
@@ -15,11 +22,32 @@ export async function savePlatformCategoriesAction(form: FormData) {
   const order = form.getAll('key').map(String);
   const included = new Set(form.getAll('include').map(String));
   let keys = order.filter((k) => included.has(k));
-  const move = /^(up|down):([a-z_]+)$/.exec(String(form.get('move') ?? ''));
+  const move = /^(up|down):([a-z][a-z0-9_]{0,59})$/.exec(String(form.get('move') ?? ''));
   if (move) keys = moveKey(keys, move[2] as string, move[1] as 'up' | 'down');
   const parsed = parseDefaultKeys(keys);
   if (!parsed) redirect('/categories?error=empty');
   await savePlatformDefaults(staff.actor, parsed);
   revalidatePath('/categories');
   redirect(`/categories?done=${move ? 'moved' : 'saved'}${move ? `&focus=${move[1]}:${move[2]}` : ''}`);
+}
+
+export async function createPlatformCategoryAction(
+  _state: string | null,
+  form: FormData,
+): Promise<string | null> {
+  const staff = await requireStaff('categories');
+  const parsed = CreatePlatformCategoryInput.safeParse({
+    key: String(form.get('key') ?? '').trim(),
+    label: String(form.get('label') ?? ''),
+    include: form.get('include') === 'on',
+  });
+  if (!parsed.success) return 'invalid';
+  try {
+    await createPlatformCategory(staff.actor, parsed.data);
+  } catch (error) {
+    if (isUniqueViolation(error)) return 'duplicate';
+    throw error;
+  }
+  revalidatePath('/categories');
+  redirect('/categories?done=created');
 }

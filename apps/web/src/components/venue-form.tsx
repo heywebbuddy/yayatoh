@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, Input, TimeZonePicker } from '@yayatoh/ui';
+import { Alert, Button, CountryPicker, Input, TimeZonePicker } from '@yayatoh/ui';
 import type { VenueDto } from '@yayatoh/venues';
 import { useTranslations } from 'next-intl';
 import { useActionState } from 'react';
@@ -98,16 +98,12 @@ export function VenueForm({
             />
           </>
         ) : null}
-        <Input
+        <CountryPicker
           name="country"
           required
-          maxLength={2}
-          autoComplete="country"
-          autoCapitalize="characters"
-          spellCheck={false}
           label={t('country')}
           hint={t('countryHint')}
-          defaultValue={venue?.country}
+          defaultValue={venue?.country ?? ''}
           error={err('country')}
         />
         <div className="flex flex-col gap-1.5">

@@ -1,3 +1,4 @@
+import { EventCategoryKey } from '@yayatoh/events';
 import { z } from 'zod';
 
 export const PAGE_SIZE = 12;
@@ -23,7 +24,7 @@ export const SearchParams = z
   .object({
     q: z.preprocess(blank, z.string().trim().max(100).optional().catch(undefined)),
     city: z.preprocess(blank, z.string().trim().max(120).optional().catch(undefined)),
-    category: z.preprocess(blank, z.enum(CATEGORIES).optional().catch(undefined)),
+    category: z.preprocess(blank, EventCategoryKey.optional().catch(undefined)),
     price: z.preprocess(blank, z.enum(PRICE_FILTERS).optional().catch(undefined)),
     from: day,
     to: day,

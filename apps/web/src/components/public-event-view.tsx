@@ -55,6 +55,7 @@ import { localizedPath } from '@/lib/seo/urls.ts';
 import { venueDisplayName } from '@/lib/venue-display.ts';
 import { hasAdvancedSeating } from '@/server/advanced-seating.ts';
 import { publicDemoOverlay } from '@/server/demo.ts';
+import { categoryLabels } from '@/server/event-categories.ts';
 import { cachedExhibitorMap } from '@/server/exhibitor-map.ts';
 import { cachedReviews } from '@/server/public-data.ts';
 import { requestHost } from '@/server/request-origin.ts';
@@ -268,6 +269,7 @@ export async function PublicEventView({
     agenda: program.sessions.length > 0 ? [] : (demo?.agenda ?? []),
   };
   const t = await getTranslations();
+  const platformLabel = await categoryLabels((key) => t(`categories.${key}`));
   const f = { locale, currency: ev.currency, timeZone: ev.timezone };
   const range = formatEventDateRange(ev.startsAt.toISOString(), ev.endsAt.toISOString(), f);
   const price = (minor: number) => formatMoney(money(minor, ev.currency), locale).replace(/\.00$/, '');
@@ -594,7 +596,7 @@ export async function PublicEventView({
                   {ev.city}
                 </li>
               ) : null}
-              {ev.category ? <li className={chip}>{t(`categories.${ev.category}`)}</li> : null}
+              {ev.category ? <li className={chip}>{platformLabel(ev.category)}</li> : null}
               {partOf ? (
                 <li>
                   <Link

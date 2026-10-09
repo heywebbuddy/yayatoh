@@ -1,4 +1,4 @@
-import { listSeriesQuery } from '@yayatoh/events';
+import { listSeriesQuery, orgCategoriesQuery } from '@yayatoh/events';
 import { executeQuery } from '@yayatoh/kernel';
 import { roleCan } from '@yayatoh/tenancy';
 import { buttonClass, PageHeader } from '@yayatoh/ui';
@@ -9,6 +9,7 @@ import { EventWizard } from '@/components/event-wizard.tsx';
 import { HowItWorks } from '@/components/how-it-works.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { loadConsole } from '@/server/console.ts';
+import { categoryLabels } from '@/server/event-categories.ts';
 import { ports } from '@/server/ports.ts';
 import { pickerProfiles } from '@/server/profile-picker.ts';
 import { guidedCreateAction } from '../actions.ts';
@@ -28,10 +29,13 @@ export default async function GuidedNewEventPage({
   const data = await loadConsole(org);
   if (!roleCan(data.role, 'events:write')) notFound();
   const t = await getTranslations('wizard');
-  const [venues, series] = await Promise.all([
+  const [venues, series, categories] = await Promise.all([
     executeQuery(listVenuesQuery, {}, data.ctx, ports),
     executeQuery(listSeriesQuery, {}, data.ctx, ports),
+    executeQuery(orgCategoriesQuery, {}, data.ctx, ports),
   ]);
+  const tg = await getTranslations();
+  const categoryLabel = await categoryLabels((key) => tg(`categories.${key}`));
   const preset = series.find((s) => s.id === sp.series)?.id;
   return (
     <>
@@ -57,6 +61,8 @@ export default async function GuidedNewEventPage({
         currency={data.org.currency}
         ticketing={data.modules.has('ticketing')}
         profiles={await pickerProfiles(data.modules)}
+        categories={categories.map((c) => ({ ref: c.ref, label: c.name ?? categoryLabel(c.platformKey) }))}
+        manageCategoriesHref={roleCan(data.role, 'org:update') ? `/o/${org}/settings/categories` : undefined}
       />
     </>
   );

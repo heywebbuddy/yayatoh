@@ -1,8 +1,8 @@
-import { fakeBillingCatalog, fakePortalSignature } from '@yayatoh/billing';
+import { fakePortalSignature } from '@yayatoh/billing';
 import { Alert, Button, buttonClass, Card, Label, PageHeader, Radio } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { testBillingSecret } from '@/server/billing.ts';
+import { getBillingProvider, testBillingSecret } from '@/server/billing.ts';
 import { changeTestPlan, simulateRenewal } from './actions.ts';
 
 /**
@@ -27,7 +27,7 @@ export default async function FakeBillingPortal({
   const t = await getTranslations('billingPortal');
   const tp = await getTranslations('billingPlan');
   const p = { locale, customer: sp.customer, returnPath: sp.return, sig: sp.sig };
-  const plans = fakeBillingCatalog().products;
+  const plans = (await getBillingProvider().listCatalog()).products.filter((p) => p.active);
   return (
     <main id="main" className="mx-auto flex min-h-dvh max-w-md flex-col justify-center gap-6 px-6 py-16">
       <PageHeader eyebrow={<Label>{t('eyebrow')}</Label>} title={t('title')} description={t('description')} />
@@ -42,7 +42,7 @@ export default async function FakeBillingPortal({
                 key={x.id}
                 name="plan"
                 value={x.planKey ?? ''}
-                label={tp.has(`planName.${x.planKey}`) ? tp(`planName.${x.planKey}`) : x.name}
+                label={x.name}
                 hint={tp('modules.count', { count: x.features.length })}
               />
             ))}

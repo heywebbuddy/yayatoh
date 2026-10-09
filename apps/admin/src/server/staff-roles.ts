@@ -3,6 +3,8 @@ import type { STAFF_ROLES } from '@yayatoh/platform';
 export type StaffRole = (typeof STAFF_ROLES)[number];
 export type StaffAction =
   | 'view'
+  | 'createTenant'
+  | 'plans'
   | 'suspend'
   | 'payouts'
   | 'fees'
@@ -49,6 +51,8 @@ export type StaffAction =
  */
 const CAN: Readonly<Record<StaffRole, readonly StaffAction[]>> = {
   admin: [
+    'createTenant',
+    'plans',
     'view',
     'suspend',
     'payouts',

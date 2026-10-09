@@ -8,10 +8,12 @@ import { type HostKind, indexable } from '../hosts.ts';
  */
 export const PRIVATE_PATHS = [
   '/o/*/',
+  '/o/sign-in',
   '/api/',
   '/checkout/',
   '/orders/',
   '/my-tickets/',
+  '/attendee',
   '/claim/',
   '/tables/',
   '/portal/',
@@ -19,6 +21,7 @@ export const PRIVATE_PATHS = [
   '/scan',
   '/dev/',
   '/sign-in',
+  '/sign-up',
   '/signup',
   '/invite/',
   '/connect/',
@@ -60,10 +63,11 @@ export const NOINDEX = 'noindex, nofollow';
  * them); anywhere else `/o/…` is the console.
  */
 export function isPrivatePage(kind: HostKind, path: string): boolean {
+  if (path === '/o/sign-in' || path.startsWith('/o/sign-in/')) return true;
   if (kind === 'marketplace' && /^\/o\/[^/]+(?:\/blogs|\/blogs\/[^/]+|\/pages\/[^/]+)?\/?$/.test(path))
     return false;
   if (pageTypeOf(path) !== 'public') return true;
-  return /^\/(?:embed|messages|unsubscribe|account|dev|t|organizers|api|forgot-password|reset-password|auth|tickets)(?:\/|$)|^\/events\/[^/]+\/unlock\/?$/.test(
+  return /^\/(?:embed|messages|unsubscribe|account|attendee|dev|t|organizers|api|forgot-password|reset-password|auth|tickets)(?:\/|$)|^\/events\/[^/]+\/unlock\/?$/.test(
     path,
   );
 }

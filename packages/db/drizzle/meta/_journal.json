@@ -1181,8 +1181,22 @@
     {
       "idx": 168,
       "version": "7",
+      "when": 1791390000000,
+      "tag": "0168_admin_billing_plans",
+      "breakpoints": true
+    },
+    {
+      "idx": 169,
+      "version": "7",
+      "when": 1791470000000,
+      "tag": "0169_dynamic_event_categories",
+      "breakpoints": true
+    },
+    {
+      "idx": 170,
+      "version": "7",
       "when": 1791509400000,
-      "tag": "0168_public_series_directory",
+      "tag": "0170_public_series_directory",
       "breakpoints": true
     }
   ]

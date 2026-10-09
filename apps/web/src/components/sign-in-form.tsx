@@ -51,12 +51,16 @@ function useFinish(next: string, handoff: Handoff | undefined) {
  * messages. Signing in for a tenant site hands the person back there (M1.2d).
  */
 export function SignInForm({
+  initialMode = 'password',
+  allowModeSwitch = true,
   next,
   challenge = false,
   handoff,
   humanCheck = null,
   locale,
 }: {
+  initialMode?: Mode;
+  allowModeSwitch?: boolean;
   next: string;
   challenge?: boolean;
   handoff?: Handoff;
@@ -66,7 +70,7 @@ export function SignInForm({
 }) {
   const t = useTranslations('signIn');
   const finish = useFinish(next, handoff);
-  const [mode, setMode] = useState<Mode>('password');
+  const [mode, setMode] = useState<Mode>(initialMode);
   const [step, setStep] = useState<'credentials' | 'challenge'>(challenge ? 'challenge' : 'credentials');
   const [codeSent, setCodeSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -188,16 +192,18 @@ export function SignInForm({
       <Button type="submit" disabled={busy}>
         {mode === 'password' ? t('submit') : codeSent ? t('verify') : t('sendCode')}
       </Button>
-      <Button
-        variant="ghost"
-        onClick={() => {
-          setMode(mode === 'password' ? 'code' : 'password');
-          setCodeSent(false);
-          setError(null);
-        }}
-      >
-        {mode === 'password' ? t('useCode') : t('usePassword')}
-      </Button>
+      {allowModeSwitch ? (
+        <Button
+          variant="ghost"
+          onClick={() => {
+            setMode(mode === 'password' ? 'code' : 'password');
+            setCodeSent(false);
+            setError(null);
+          }}
+        >
+          {mode === 'password' ? t('useCode') : t('usePassword')}
+        </Button>
+      ) : null}
       {mode === 'password' ? (
         <Link
           href="/forgot-password"

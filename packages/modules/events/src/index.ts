@@ -84,6 +84,7 @@ export {
   type AttendanceMode,
   EVENT_CATEGORIES,
   type EventCategory,
+  EventCategoryKey,
   MAX_TAG_LENGTH,
   MAX_TAGS_PER_EVENT,
   parseTags,
@@ -185,6 +186,7 @@ export {
   RecurrenceRuleInput,
   updateOccurrenceCommand,
 } from './occurrences.ts';
+export { listPlatformCategoryCatalog } from './platform-categories.ts';
 export {
   consumePortalLink,
   createPortalAccountTx,

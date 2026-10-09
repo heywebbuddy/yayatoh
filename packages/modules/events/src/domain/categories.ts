@@ -1,3 +1,4 @@
+import { z } from 'zod';
 /**
  * The platform category taxonomy (M1.4c). yayatoh.com's legacy categories become platform
  * categories (roadmap §7); labels are translated in the web app under `categories.*`.
@@ -20,7 +21,10 @@ export const EVENT_CATEGORIES = [
   'travel_leisure',
   'other',
 ] as const;
-export type EventCategory = (typeof EVENT_CATEGORIES)[number];
+/** Built-in keys retain translated labels; additional keys are managed in the database. */
+export type EventCategory = string;
+export const CATEGORY_KEY_PATTERN = /^[a-z][a-z0-9_]{0,59}$/;
+export const EventCategoryKey = z.string().regex(CATEGORY_KEY_PATTERN);
 
 export const ATTENDANCE_MODES = ['in_person', 'online', 'hybrid'] as const;
 export type AttendanceMode = (typeof ATTENDANCE_MODES)[number];

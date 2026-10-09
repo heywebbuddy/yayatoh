@@ -39,7 +39,7 @@ import { getSession, sessionOpensOrg, sessionOrgScope } from './session.ts';
 export const loadConsoleBase = cache(async (orgSlug: string) => {
   const locale = await getLocale();
   const session = await getSession();
-  if (!session) return redirect({ href: '/sign-in', locale });
+  if (!session) return redirect({ href: '/o/sign-in', locale });
   const imp = session.impersonation;
   const allOrgs = await myOrganizations(session.userId);
   // Staff acting as a member (M1.2e) see only the org they started from; their own sign-in asked
@@ -59,7 +59,7 @@ export const loadConsoleBase = cache(async (orgSlug: string) => {
   // Another org than the one whose IdP signed this session in: sign in again to open it.
   if (!sessionOpensOrg(session, resolved.orgId))
     return redirect({
-      href: `/sign-in?${new URLSearchParams({ next: `/o/${orgSlug}`, sso: 'other_org' })}`,
+      href: `/o/sign-in?${new URLSearchParams({ next: `/o/${orgSlug}`, sso: 'other_org' })}`,
       locale,
     });
   const actor = await orgActor(resolved.orgId, session, { locale });
@@ -72,7 +72,7 @@ export const loadConsoleBase = cache(async (orgSlug: string) => {
     session.ssoOrgId !== resolved.orgId &&
     (await ssoRequiredFor({ orgId: resolved.orgId, userId: session.userId, email: session.email }))
   )
-    return redirect({ href: '/sign-in/sso?error=sso_required', locale });
+    return redirect({ href: '/o/sign-in/sso?error=sso_required', locale });
   const [org, modules, logos] = await Promise.all([
     executeQuery(getOrganizationQuery, {}, ctx, ports),
     effectiveModules(ctx),

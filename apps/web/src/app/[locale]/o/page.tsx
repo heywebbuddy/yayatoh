@@ -9,13 +9,14 @@ export default async function OrgPicker({ params }: { params: Promise<{ locale: 
   const { locale } = await params;
   setRequestLocale(locale);
   const session = await getSession();
-  if (!session) return redirect({ href: '/sign-in', locale });
+  if (!session) return redirect({ href: '/o/sign-in', locale });
   const orgs = await myOrganizations(session.userId);
   // Staff acting as a member (M1.2e) open the org they started from.
   // M6.5a: a session from an org's single sign-on opens that org.
   const scope = sessionOrgScope(session);
   const first = scope ? orgs.find((o) => o.orgId === scope) : orgs[0];
   if (first) return redirect({ href: `/o/${first.slug}`, locale });
+  if (!scope) return redirect({ href: '/attendee', locale });
   const t = await getTranslations('orgPicker');
   return (
     <main id="main" className="mx-auto max-w-xl px-6 py-24">

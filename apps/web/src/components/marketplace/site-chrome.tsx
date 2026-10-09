@@ -6,6 +6,8 @@ import { BrandMark } from '@/components/brand-mark.tsx';
 import { IncidentBanner } from '@/components/status/incident-banner.tsx';
 import { ThemeSwitch } from '@/components/theme-switch.tsx';
 import { Link } from '@/i18n/navigation.ts';
+import { dashboardAccess } from '@/server/dashboard-access.ts';
+import { currentGuestSession } from '@/server/guest.ts';
 import { currentTheme } from '@/server/theme.ts';
 
 const navLink =
@@ -19,8 +21,10 @@ export async function SiteHeader({ name, browse = true }: { name?: string; brows
   const t = await getTranslations('market');
   const tDirectory = await getTranslations('directory');
   const tSeries = await getTranslations('series');
-  const tAttendee = await getTranslations('attendeeSignIn');
+  const attendee = await getTranslations('attendeeDashboard');
   const theme = await currentTheme();
+  const access = await dashboardAccess();
+  const signedIn = access.kind !== 'anonymous' || Boolean(await currentGuestSession(null));
   return (
     <>
       <IncidentBanner variant="site" />
@@ -36,35 +40,31 @@ export async function SiteHeader({ name, browse = true }: { name?: string; brows
             </Link>
             <nav aria-label={t('siteNav')} className="order-last w-full sm:order-none sm:w-auto">
               <ul className="m-0 flex list-none flex-wrap items-center gap-1 p-0 text-body">
-                {browse ? (
-                  <li>
-                    <Link href="/events" className={navLink}>
-                      {t('browse')}
-                    </Link>
-                  </li>
-                ) : null}
-                <li>
-                  <Link href="/venues" className={navLink}>
-                    {tDirectory('title')}
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/series" className={navLink}>
-                    {tSeries('title')}
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/my-tickets" className={navLink}>
-                    {tAttendee('title')}
-                  </Link>
-                </li>
+                {browse ? <li><Link href="/events" className={navLink}>{t('browse')}</Link></li> : null}
+                <li><Link href="/venues" className={navLink}>{tDirectory('title')}</Link></li>
+                <li><Link href="/series" className={navLink}>{tSeries('title')}</Link></li>
+                <li><Link href="/my-tickets" className={navLink}>{attendee('nav.tickets')}</Link></li>
               </ul>
             </nav>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <ThemeSwitch initial={theme} />
-              <Link href="/sign-in" className={buttonClass('dark')}>
-                {t('forOrganizers')}
-              </Link>
+              {signedIn ? (
+                <Link href={access.href} className={buttonClass('dark')}>
+                  {attendee('dashboardLink')}
+                </Link>
+              ) : (
+                <>
+                  <Link href="/sign-in?next=/attendee" className={buttonClass('secondary')}>
+                    {attendee('signInLink')}
+                  </Link>
+                  <Link href="/sign-up" className={buttonClass('dark')}>
+                    {attendee('signUpLink')}
+                  </Link>
+                  <Link href="/o/sign-in" className={buttonClass('secondary')}>
+                    {t('forOrganizers')}
+                  </Link>
+                </>
+              )}
             </div>
           </header>
         </div>

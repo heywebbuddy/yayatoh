@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useActionState, useState } from 'react';
 import type { CreateEventState } from '@/app/[locale]/o/[org]/(org)/events/new/actions.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
+import { type EventCategoryChoice, EventCategoryField } from './event-category-field.tsx';
 import { type PickerProfile, ProfilePicker } from './profile-picker.tsx';
 import { seriesErrorKey } from './series-errors.ts';
 import { SeriesField } from './series-field.tsx';
@@ -14,6 +15,8 @@ export function CreateEventForm({
   defaults,
   series,
   profiles,
+  categories,
+  manageCategoriesHref,
 }: {
   action: (prev: CreateEventState, form: FormData) => Promise<CreateEventState>;
   /** `series`: the series picked in advance (U7, "Create event in this series"). */
@@ -22,11 +25,14 @@ export function CreateEventForm({
   series?: readonly { id: string; name: string }[];
   /** U8: the "What kind of event?" choices with the sections each includes. */
   profiles: readonly PickerProfile[];
+  categories: readonly EventCategoryChoice[];
+  manageCategoriesHref?: string;
 }) {
   const t = useTranslations();
   const [state, formAction, pending] = useActionState(action, { code: null });
   // One key per form: a double submit returns the same event instead of "name already taken".
   const [requestKey] = useState(() => `create-event:${crypto.randomUUID()}`);
+  const [category, setCategory] = useState('');
   const selectClass = 'field';
   return (
     <Card size="panel" className="max-w-2xl">
@@ -50,6 +56,14 @@ export function CreateEventForm({
           profiles={profiles}
           defaultValue={defaults.profile}
           className={selectClass}
+        />
+        <EventCategoryField
+          id="new-event-category"
+          categories={categories}
+          value={category}
+          onValueChange={setCategory}
+          manageHref={manageCategoriesHref}
+          error={state.field === 'orgCategory' && state.code ? t(errorMessageKey(state.code)) : undefined}
         />
         {series ? (
           <SeriesField

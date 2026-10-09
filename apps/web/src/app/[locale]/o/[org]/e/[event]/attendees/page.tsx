@@ -680,7 +680,7 @@ export default async function AttendeesPage({
             id="bulk-form"
             action={bulkAction.bind(null, org, event)}
             aria-label={t('bulk.formLabel')}
-            className="flex flex-wrap items-end gap-3 rounded-card border border-line bg-surface px-4 py-3"
+            className="flex flex-wrap items-center gap-3 rounded-card border border-line bg-surface px-4 py-3"
           >
             <input type="hidden" name="f_q" value={q} />
             {labels.map((l) => (

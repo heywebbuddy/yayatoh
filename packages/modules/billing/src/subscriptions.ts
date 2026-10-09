@@ -64,6 +64,7 @@ export const applyBillingEventCommand = tenantCommand({
   permission: 'platform:billing.webhook',
   handler: async ({ input, ctx, tx, emit }) => {
     const orgId = requireOrg(ctx);
+    await tx.execute(sql`select pg_advisory_xact_lock(hashtext(${orgId}))`);
     const account = await billingRowTx(tx);
     const done = async (outcome: BillingEventOutcome) => ({
       outcome,

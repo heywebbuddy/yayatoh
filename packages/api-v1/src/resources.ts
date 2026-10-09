@@ -5,10 +5,10 @@ import type { ProblemDto } from '@yayatoh/contracts';
 import {
   ANNOUNCEMENT_AUDIENCES,
   ATTENDANCE_MODES,
-  EVENT_CATEGORIES,
   EVENT_PROFILES,
   EVENT_STATUSES,
   EVENT_VISIBILITIES,
+  EventCategoryKey,
   OCCURRENCE_STATUSES,
   SECTION_KINDS,
 } from '@yayatoh/events';
@@ -44,7 +44,7 @@ export const OrgRole = z.enum(ORG_ROLES).openapi('OrgRole');
 export const EventProfile = z.enum(EVENT_PROFILES).openapi('EventProfile');
 export const EventStatus = z.enum(EVENT_STATUSES).openapi('EventStatus');
 export const EventVisibility = z.enum(EVENT_VISIBILITIES).openapi('EventVisibility');
-export const EventCategory = z.enum(EVENT_CATEGORIES).openapi('EventCategory');
+export const EventCategory = EventCategoryKey.openapi('EventCategory');
 export const AttendanceMode = z.enum(ATTENDANCE_MODES).openapi('AttendanceMode');
 export const FeeMode = z.enum(FEE_MODES).openapi('FeeMode');
 export const TicketTypeVisibility = z.enum(TICKET_TYPE_VISIBILITIES).openapi('TicketTypeVisibility');

@@ -77,6 +77,7 @@ export async function createEventAction(
   const input = () => ({
     name: get('name'),
     profile: get('profile') || data.profile,
+    orgCategory: get('orgCategory') || null,
     timezone,
     // Organizers enter wall-clock times in the event's zone (CLAUDE.md → Time).
     startsAt: zonedTimeToUtc(get('startsAt'), timezone),
@@ -129,6 +130,7 @@ const WIZARD_STEP: Readonly<Record<string, number>> = {
   city: 1,
   attendanceMode: 1,
   series: 0,
+  orgCategory: 0,
   ticketName: 2,
   ticketPrice: 2,
   currency: 2,
@@ -199,6 +201,7 @@ export async function guidedCreateAction(
     name: get('name'),
     tagline: get('tagline') || null,
     profile: get('profile') || data.profile,
+    orgCategory: get('orgCategory') || null,
     timezone,
     startsAt,
     endsAt,

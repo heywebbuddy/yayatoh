@@ -71,7 +71,7 @@ describe('search parameters (M1.11a)', () => {
       parseSearchParams({
         q: '  jazz ',
         city: '',
-        category: 'rave',
+        category: 'INVALID CATEGORY',
         price: 'cheap',
         from: '2027-13-40',
         page: '-3',

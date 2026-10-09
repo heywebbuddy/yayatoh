@@ -107,6 +107,9 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
         title={t(`order.title.${order.status}`, { name: order.buyerName.split(' ')[0] ?? '' })}
         description={t('order.sentTo', { email: order.buyerEmail })}
       />
+      <Link href="/attendee/tickets" className={buttonClass('secondary', 'sm', 'self-start')}>
+        {(await getTranslations('attendeeDashboard'))('backToDashboard')}
+      </Link>
       <Card size="panel" className="flex flex-col gap-4">
         <StatusDot status={DOT[order.status]} label={t(`order.status.${order.status}`)} />
         {/* M5.1d: a pay-later order: its invoice (view, PDF, pay). */}

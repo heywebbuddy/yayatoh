@@ -299,7 +299,7 @@ export default async function proxy(req: NextRequest, event?: NextFetchEvent): P
     // `/o/{slug}` and, M1.4g, its blog and pages (`/o/{slug}/blogs[/{post}]`, `/o/{slug}/pages/{page}`);
     // U10: its contact page (`/o/{slug}/contact`).
     const org = /^\/o\/([^/]+)(\/blogs|\/blogs\/[^/]+|\/pages\/[^/]+|\/contact)?\/?$/.exec(rest);
-    if (org)
+    if (org && org[1] !== 'sign-in')
       return secure(rewrite(req, forwarded, res, `/${locale}/organizers/${org[1]}${org[2] ?? ''}`, locale));
     const long = /^\/organizers\/([^/]+)(\/blogs|\/blogs\/[^/]+|\/pages\/[^/]+|\/contact)?\/?$/.exec(rest);
     if (long)

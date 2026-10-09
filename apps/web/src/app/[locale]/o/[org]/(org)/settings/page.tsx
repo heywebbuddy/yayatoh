@@ -10,6 +10,7 @@ import {
 import {
   buttonClass,
   Card,
+  CountryPicker,
   CurrencyPicker,
   EmptyState,
   light,
@@ -215,12 +216,10 @@ export default async function SettingsPage({
             {labelled(
               'org-country',
               t('settings.general.country'),
-              <input
+              <CountryPicker
                 id="org-country"
                 name="country"
                 required
-                pattern="[A-Za-z]{2}"
-                maxLength={2}
                 defaultValue={o.country}
                 aria-describedby="org-country-hint"
                 className={field}
