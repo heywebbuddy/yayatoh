@@ -133,7 +133,7 @@ export default async function OrgEventsPage({
                       {event.categoryName
                         ? ` · ${event.categoryName}`
                         : event.category
-                          ? ` � ${platformLabel(event.category)}`
+                          ? ` · ${platformLabel(event.category)}`
                           : ''}
                     </Label>
                     <h2 className="text-[22px] leading-tight font-extrabold tracking-[-0.03em]">
