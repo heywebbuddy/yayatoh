@@ -11,7 +11,7 @@ import {
   rsvpOverviewQuery,
 } from '@yayatoh/guests';
 import { executeQuery } from '@yayatoh/kernel';
-import { isProfileKey, navIncludes, navLabelKey, PROFILES } from '@yayatoh/platform';
+import { isProfileKey, navLabelKey } from '@yayatoh/platform';
 import {
   Avatar,
   AvatarStack,
@@ -41,6 +41,7 @@ import { Crumbs } from '@/components/crumbs.tsx';
 import { type FieldSpec, ProgramForm } from '@/components/program-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatNumber } from '@/lib/format.ts';
+import { guestNav } from '@/lib/guest-nav.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import {
@@ -94,8 +95,9 @@ const initials = (name: string) =>
 
 /**
  * Guests (M4.1a): the parties (households) of a wedding or gala and the guests in each, with
- * placeholder plus-ones. Replaces the "coming soon" section for profiles whose navigation lists
- * `guests`. Organizer roles with `attendees:write` edit; viewers read.
+ * placeholder plus-ones. Available when the event has the guests module, even when its profile
+ * does not list Guests in the sidebar (for example, a conference seating workflow linking parties).
+ * Organizer roles with `attendees:write` edit; viewers read.
  */
 export default async function GuestsPage({
   params,
@@ -107,10 +109,12 @@ export default async function GuestsPage({
   const { locale, org, event } = await params;
   const sp = await searchParams;
   setRequestLocale(locale);
-  const { data, event: ev, can } = await loadEvent(org, event, 'guests');
+  // The guest list also backs seating's guest-party workflow. Load through the seating section so
+  // profiles that expose seating but omit Guests from their sidebar can still follow that CTA.
+  const { data, event: ev, can } = await loadEvent(org, event, 'seating');
   const profile = isProfileKey(ev.profile) ? ev.profile : 'other';
-  const nav = PROFILES[profile].nav.find((i) => i.key === 'guests');
-  if (!nav || !navIncludes(profile, data.modules, 'guests') || !can('guests:read')) notFound();
+  const nav = guestNav(profile);
+  if (!data.modules.has('guests') || !can('guests:read')) notFound();
   const t = await getTranslations();
   const tp = await getTranslations('parties');
   const canWrite = can('guests:write');

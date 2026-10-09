@@ -19,7 +19,7 @@ export async function exportAnswersAction(
   _form: FormData,
 ): Promise<{ code: string } | undefined> {
   const locale = await getLocale();
-  const { data, event: ev, can } = await loadEvent(org, event, 'guests');
+  const { data, event: ev, can } = await loadEvent(org, event, 'seating');
   const t = await getTranslations('rsvpAnswers.exportColumns');
   const back = `/o/${org}/e/${event}/guests/answers`;
   const bulk = can('attendees:export_private') ? rsvpAnswersPrivateExportBulk : rsvpAnswersExportBulk;

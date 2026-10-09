@@ -54,16 +54,11 @@ export default async function SsoPage({
   const t = await getTranslations('sso');
   const tr = await getTranslations('roles');
   const header = <PageHeader title={t('title')} description={t('subtitle')} />;
-  const help = (
-    <Link href="/help/search?q=single%20sign-on" className="underline underline-offset-2">
-      {t('help')}
-    </Link>
-  );
   if (!roleCan(data.role, 'sso:manage'))
     return (
       <>
         {header}
-        <EmptyState title={t('noAccessTitle')} description={t('noAccessDescription')} action={help} />
+        <EmptyState title={t('noAccessTitle')} description={t('noAccessDescription')} />
       </>
     );
   if (!data.modules.has('enterprise'))
@@ -85,7 +80,7 @@ export default async function SsoPage({
     return (
       <>
         {header}
-        <EmptyState title={t('unavailableTitle')} description={t('unavailableDescription')} action={help} />
+        <EmptyState title={t('unavailableTitle')} description={t('unavailableDescription')} />
       </>
     );
   const s = await executeQuery(ssoSettingsQuery, {}, data.ctx, ports);

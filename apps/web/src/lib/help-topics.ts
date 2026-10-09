@@ -1,22 +1,20 @@
 /**
  * U2: the pages with a "How it works" panel (UX review 1: Domains, Templates, Series, Payouts,
- * Sending, event type and category, Coupons). Copy is `howItWorks.<topic>.{title,intro,stepN}`;
- * `query` searches the platform help center (`/help/search`), so the link never breaks when the
- * help team renames an article.
+ * Sending, event type and category, Coupons). Copy is `howItWorks.<topic>.{title,intro,stepN}`.
  */
 export const HELP_TOPICS = {
-  domains: { steps: 4, query: 'custom domain' },
-  templates: { steps: 3, query: 'event template' },
-  series: { steps: 3, query: 'event series' },
-  payouts: { steps: 4, query: 'payouts' },
-  sending: { steps: 4, query: 'sending domain' },
-  eventType: { steps: 3, query: 'event type' },
-  coupons: { steps: 3, query: 'promo code' },
+  domains: { steps: 4 },
+  templates: { steps: 3 },
+  series: { steps: 3 },
+  payouts: { steps: 4 },
+  sending: { steps: 4 },
+  eventType: { steps: 3 },
+  coupons: { steps: 3 },
   // U5: the Money pages (the payout rules were prose on the Payouts page).
-  money: { steps: 4, query: 'net revenue' },
-  payoutRules: { steps: 3, query: 'payout schedule' },
-  fees: { steps: 3, query: 'platform fees' },
-} as const satisfies Record<string, { steps: number; query: string }>;
+  money: { steps: 4 },
+  payoutRules: { steps: 3 },
+  fees: { steps: 3 },
+} as const satisfies Record<string, { steps: number }>;
 
 export type HelpTopic = keyof typeof HELP_TOPICS;
 export const HELP_TOPIC_KEYS = Object.keys(HELP_TOPICS) as HelpTopic[];

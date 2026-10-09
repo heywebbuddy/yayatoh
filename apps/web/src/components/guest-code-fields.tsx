@@ -70,10 +70,10 @@ export function GuestCodeFields({
             ? t('cooldown')
             : null;
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex min-w-0 max-w-full flex-col gap-3">
       <p className="text-body text-ink-2">{t('sent', { email })}</p>
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
-        <div className="sm:w-56">
+      <div className="flex min-w-0 max-w-full flex-wrap items-end gap-3">
+        <div className="w-full min-w-0 sm:w-56 sm:flex-none">
           <Input
             // A new outcome clears the field for the next try.
             key={`${status}-${attemptsLeft ?? ''}`}

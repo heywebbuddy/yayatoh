@@ -87,7 +87,6 @@ export function CreateEventForm({
             hint={t('newEvent.currencyHint')}
             className={selectClass}
           />
-          <div aria-hidden="true" className="hidden sm:block" />
           <Input name="venueName" maxLength={160} label={t('newEvent.venue')} />
           <Input name="city" maxLength={120} label={t('newEvent.city')} />
         </div>

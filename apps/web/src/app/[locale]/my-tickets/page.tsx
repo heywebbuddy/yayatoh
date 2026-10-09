@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { SiteFooter, SiteHeader } from '@/components/marketplace/site-chrome.tsx';
 import { MyTicketsView } from '@/components/my-tickets-view.tsx';
 
 export async function generateMetadata({
@@ -23,5 +24,11 @@ export default async function MyTicketsPage({
   const { locale } = await params;
   setRequestLocale(locale);
   const { signedOut } = await searchParams;
-  return <MyTicketsView orgId={null} siteName="Yayatoh" locale={locale} signedOut={signedOut} />;
+  return (
+    <div className="min-h-dvh bg-page">
+      <SiteHeader />
+      <MyTicketsView orgId={null} siteName="Yayatoh" locale={locale} signedOut={signedOut} />
+      <SiteFooter />
+    </div>
+  );
 }

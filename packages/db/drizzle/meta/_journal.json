@@ -1177,6 +1177,13 @@
       "when": 1791077391001,
       "tag": "0167_demonic_boomerang",
       "breakpoints": true
+    },
+    {
+      "idx": 168,
+      "version": "7",
+      "when": 1791509400000,
+      "tag": "0168_public_series_directory",
+      "breakpoints": true
     }
   ]
 }

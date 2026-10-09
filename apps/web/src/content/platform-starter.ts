@@ -409,7 +409,6 @@ export const STARTER_SECTIONS: readonly StarterSection[] = [
     position: 20,
     eyebrow: 'Help',
     heading: 'Already using Yayatoh?',
-    body: 'Most answers are in the help center. Ticket buyers: please contact the event organizer by replying to your confirmation email.',
-    cta: { label: 'Visit the help center', href: '/help' },
+    body: 'For support, contact our team. Ticket buyers: please contact the event organizer by replying to your confirmation email.',
   },
 ];

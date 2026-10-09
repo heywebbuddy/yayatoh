@@ -73,6 +73,7 @@ export function useStepUp(): StepUpApi {
 
 function StepUpDialog({ onDone }: { onDone: (ok: boolean) => void }) {
   const t = useTranslations('stepUp');
+  const te = useTranslations();
   const ref = useRef<HTMLDialogElement>(null);
   const titleId = useId();
   const descId = useId();
@@ -162,9 +163,11 @@ function StepUpDialog({ onDone }: { onDone: (ok: boolean) => void }) {
         ? t('rateLimited')
         : code === 'unauthenticated'
           ? t('unauthenticated')
-          : code
-            ? t('invalidCode')
-            : null;
+          : code === 'internal'
+            ? te('errors.internal')
+            : code
+              ? t('invalidCode')
+              : null;
 
   return (
     <dialog

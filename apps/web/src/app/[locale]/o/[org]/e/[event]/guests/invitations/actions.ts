@@ -32,7 +32,7 @@ async function run(
   event: string,
   write: (eventId: string, ctx: Parameters<typeof executeCommand>[2]) => Promise<unknown>,
 ): Promise<State> {
-  const { data, event: ev } = await loadEvent(org, event, 'guests');
+  const { data, event: ev } = await loadEvent(org, event, 'seating');
   try {
     await write(ev.id, data.ctx);
   } catch (err) {
@@ -65,7 +65,7 @@ export async function sendInvitationsAction(
   _p: State,
   form: FormData,
 ) {
-  const { data, event: ev } = await loadEvent(org, event, 'guests');
+  const { data, event: ev } = await loadEvent(org, event, 'seating');
   let result: { sent: number; noAddress: number };
   try {
     const channels = channelsOf(form);

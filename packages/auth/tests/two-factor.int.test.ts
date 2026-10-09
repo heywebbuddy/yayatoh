@@ -23,11 +23,11 @@ function testSealer(): SecretSealer {
       const iv = randomBytes(12);
       const c = createCipheriv('aes-256-gcm', key, iv);
       const body = Buffer.concat([c.update(plaintext, 'utf8'), c.final()]);
-      return `test.v1.${iv.toString('base64url')}.${body.toString('base64url')}.${c.getAuthTag().toString('base64url')}`;
+      return `local.v1.${iv.toString('base64url')}.${body.toString('base64url')}.${c.getAuthTag().toString('base64url')}`;
     },
     async open(sealed: string) {
       const [scheme, v, iv, body, tag] = sealed.split('.');
-      if (scheme !== 'test' || v !== 'v1' || !iv || !body || !tag) throw new Error('not sealed');
+      if (scheme !== 'local' || v !== 'v1' || !iv || !body || !tag) throw new Error('not sealed');
       const d = createDecipheriv('aes-256-gcm', key, Buffer.from(iv, 'base64url'));
       d.setAuthTag(Buffer.from(tag, 'base64url'));
       return Buffer.concat([d.update(Buffer.from(body, 'base64url')), d.final()]).toString('utf8');
@@ -134,13 +134,27 @@ describe('two-step verification: enrolment', () => {
     );
     expect(row).toBeDefined();
     const stored = `${row?.secret} ${row?.backup_codes}`;
-    expect(row?.secret.startsWith('test.v1.')).toBe(true);
+    expect(row?.secret.startsWith('local.v1.')).toBe(true);
     expect(row?.backup_codes.startsWith('test.v1.')).toBe(true);
     expect(stored).not.toContain(u.secret);
     expect(stored).not.toContain(setupKey(u.secret).replace(/ /g, ''));
     for (const c of u.backupCodes) expect(stored).not.toContain(c);
     // Opening the envelope yields Better Auth's own ciphertext, not the seed either.
     expect(await sealer.open(row?.secret ?? '')).not.toContain(u.secret);
+  });
+
+  it('continues to verify accounts whose seed uses the legacy Better Auth ciphertext format', async () => {
+    const u = await enrolled('legacy');
+    const [row] = await identityDatabase().execute<{ secret: string }>(
+      sql`select secret from auth.two_factors where user_id = ${u.id}`,
+    );
+    expect(row).toBeDefined();
+    const legacyCiphertext = await sealer.open(row?.secret ?? '');
+    await identityDatabase().execute(
+      sql`update auth.two_factors set secret = ${legacyCiphertext} where user_id = ${u.id}`,
+    );
+
+    await expect(tf.disable(u.id, u.nextCode())).resolves.toBeUndefined();
   });
 });
 

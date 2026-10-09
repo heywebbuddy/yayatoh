@@ -336,6 +336,7 @@
   },
   "nav": {
     "home": "Accueil",
+    "events": "Événements",
     "analysis": "Analyse",
     "setupGuide": "Guide de configuration",
     "branding": "Image de marque",

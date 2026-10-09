@@ -20,7 +20,8 @@ export function ThemeSwitch({ initial }: { initial: ThemeChoice }) {
       label={`${t('label')}: ${t(theme)}`}
       testId="theme-switch"
       radio
-      align="start"
+      align="end"
+      side="top"
       trigger={<Current aria-hidden="true" strokeWidth={2} />}
       triggerClassName="flex size-9 items-center justify-center rounded-[12px] text-side-ink hover:bg-side-hover hover:text-side-strong [&_svg]:size-[18px]"
       items={(['light', 'dark', 'system'] as const).map((k) => {

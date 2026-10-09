@@ -48,7 +48,7 @@ import {
   StatusDot,
   Table,
 } from '@yayatoh/ui';
-import { X } from 'lucide-react';
+import { Plus, X } from 'lucide-react';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { AutoRefresh } from '@/components/auto-refresh.tsx';
 import { BadgePrintPanel } from '@/components/badge-print-panel.tsx';
@@ -412,34 +412,35 @@ export default async function AttendeesPage({
               </span>
             </h1>
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             {!demo && canWrite && data.modules.has('attendees') ? (
-              <Link href={`${base}/import`} className={buttonClass('secondary')}>
+              <details className="group relative">
+                <summary
+                  className={`${buttonClass('primary', 'sm')} cursor-pointer list-none [&::-webkit-details-marker]:hidden`}
+                >
+                  <Plus aria-hidden="true" />
+                  {t('actions.addAttendee', { term: t(term(profile, 'attendee')) })}
+                </summary>
+                <div className="absolute end-0 top-full z-30 mt-2 w-[min(640px,calc(100vw-2rem))] rounded-panel border border-line bg-surface p-4 elevation-pop">
+                  <GuestForm action={addGuestAction.bind(null, org, event)} />
+                </div>
+              </details>
+            ) : (
+              <Button variant="secondary" size="sm" disabled title={t('common.comingSoon')}>
+                {t('actions.addAttendee', { term: t(term(profile, 'attendee')) })}
+              </Button>
+            )}
+            {!demo && canWrite && data.modules.has('attendees') ? (
+              <Link href={`${base}/import`} className={buttonClass('secondary', 'sm')}>
                 {t('actions.import')}
               </Link>
             ) : (
-              <Button variant="secondary" disabled title={t('common.comingSoon')}>
+              <Button variant="secondary" size="sm" disabled title={t('common.comingSoon')}>
                 {t('actions.import')}
-              </Button>
-            )}
-            {!demo && canWrite && data.modules.has('attendees') ? null : (
-              <Button disabled title={t('common.comingSoon')}>
-                {t('actions.addAttendee', { term: t(term(profile, 'attendee')) })}
               </Button>
             )}
           </div>
         </div>
-
-        {!demo && canWrite && data.modules.has('attendees') ? (
-          <details className="group rounded-card border border-line bg-surface px-4 py-3">
-            <summary className="flex min-h-8 cursor-pointer list-none items-center text-body [&::-webkit-details-marker]:hidden">
-              {t('actions.addAttendee', { term: t(term(profile, 'attendee')) })}
-            </summary>
-            <div className="pt-3">
-              <GuestForm action={addGuestAction.bind(null, org, event)} />
-            </div>
-          </details>
-        ) : null}
 
         <nav aria-label={t('attendees.segments')} className="-mx-1 overflow-x-auto">
           <ul className="flex list-none gap-1.5 px-1 pb-1">

@@ -294,7 +294,7 @@ export default async function TicketsPage({
           <ul className="flex list-none flex-col gap-3 p-0">
             {types.map((r) => (
               <li key={r.id}>
-                <Card className="flex flex-col gap-2">
+                <Card className="@container flex flex-col gap-2 !p-4">
                   <p className="text-body font-medium">{r.name}</p>
                   <TransferRulesForm
                     action={transferRulesAction.bind(null, org, event, r.id)}

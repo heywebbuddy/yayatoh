@@ -1,7 +1,7 @@
 import { type NavGroup, type NavItem, navLabelKey, type ProfileKey } from '@yayatoh/platform';
 import { roleCan } from '@yayatoh/tenancy';
-import { Avatar, buttonClass, type Crumb, cx, iconButtonClass, NavSection } from '@yayatoh/ui';
-import { ChevronsUpDown, CircleHelp, Plus, ShieldCheck } from 'lucide-react';
+import { Avatar, buttonClass, type Crumb, cx, NavSection } from '@yayatoh/ui';
+import { ChevronsUpDown, Plus, ShieldCheck } from 'lucide-react';
 import { cookies } from 'next/headers';
 import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
@@ -287,7 +287,7 @@ async function SidebarContent({
 }
 
 const SIDEBAR =
-  'flex-col overflow-y-auto rounded-panel border border-side-line bg-side px-4 pt-6 pb-4 text-side-ink dark:backdrop-blur-xl';
+  'flex-col overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden rounded-panel border border-side-line bg-side px-4 pt-6 pb-4 text-side-ink dark:backdrop-blur-xl';
 
 /**
  * The console frame (ADR 0022): a floating near-black sidebar (rounded 28, inset 16) with the org
@@ -334,7 +334,7 @@ export async function ConsoleShell({
         <OrgStatusBanner status={data.org.status} sandbox={data.org.sandbox} />
         <AgencyBadge data={data} />
         <IncidentBanner variant="console" />
-        <header className="relative z-30 flex flex-wrap items-center gap-2.5">
+        <header className="sticky top-0 z-40 -mx-4 flex flex-wrap items-center gap-2.5 bg-page/95 px-4 py-2 backdrop-blur-xl md:-mx-6 md:px-6 lg:mx-0 lg:px-0">
           <MobileNav openLabel={t('menu')} closeLabel={t('closeMenu')}>
             <nav
               aria-label={t('navigation')}
@@ -350,15 +350,6 @@ export async function ConsoleShell({
           {status ? <div className="flex min-w-0 items-center gap-2.5">{status}</div> : null}
           <div className="ms-auto flex items-center gap-2.5">
             <CreateMenu label={t('create.label')} entries={create} />
-            {/* U2: the platform help center, from every console page. */}
-            <Link
-              href="/help"
-              aria-label={t('help')}
-              title={t('help')}
-              className={iconButtonClass('secondary', 'md')}
-            >
-              <CircleHelp aria-hidden="true" strokeWidth={2} />
-            </Link>
             <ThemeSwitch initial={theme} />
             <NotificationCenter data={data} />
           </div>

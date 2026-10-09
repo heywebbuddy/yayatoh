@@ -1,4 +1,4 @@
-import type { TenantTx } from '@yayatoh/db';
+import { sql, type TenantTx } from '@yayatoh/db';
 import { type Ctx, DomainError, type DomainEvent, requireOrg } from '@yayatoh/kernel';
 import { defineSubscriber, type Notifier, tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { markOnboardingStepTx, organizationBrandTx } from '@yayatoh/tenancy';
@@ -150,6 +150,55 @@ export const recordPayoutAccountCommand = tenantCommand({
     return { accountId: input.accountId };
   },
   audit: (input) => ({ action: 'payouts.account', targetType: 'payment_account', targetId: input.accountId }),
+});
+
+/**
+ * Disconnect an unused fake payout account so a test organization can restart onboarding with a
+ * different provider. Fake accounts with recorded financial activity are immutable here: past
+ * orders and settlements retain the destination that was used when they were created.
+ */
+export const disconnectFakePayoutAccountCommand = tenantCommand({
+  name: 'payments.disconnectFakePayoutAccount',
+  category: 'money',
+  input: z.object({}),
+  output: z.object({ accountId: z.string(), disconnected: z.boolean() }),
+  entitlement: 'core',
+  permission: 'payouts:manage',
+  stepUp: true,
+  handler: async ({ ctx, tx }) => {
+    const [account] = await tx.select().from(paymentAccounts).limit(1).for('update');
+    if (!account) throw new DomainError('not_found', 'This organization has no payout account');
+    if (account.provider !== 'fake')
+      throw new DomainError('forbidden', 'Only a fake payout account can be disconnected here');
+
+    const [usage] = await tx.execute<{ used: boolean }>(sql`
+      select
+        exists (
+          select 1 from orders.orders
+          where org_id = ${requireOrg(ctx)} and connected_account_id = ${account.accountId}
+        ) or exists (
+          select 1 from orders.invoice_payments
+          where org_id = ${requireOrg(ctx)} and connected_account_id = ${account.accountId}
+        ) or exists (
+          select 1 from payments.settlements
+          where org_id = ${requireOrg(ctx)} and destination_account_id = ${account.accountId}
+        ) as used
+    `);
+    if (usage?.used)
+      throw new DomainError(
+        'conflict',
+        'This test account is attached to financial records and cannot be disconnected',
+      );
+
+    await tx.delete(paymentAccounts).where(sql`id = ${account.id}`);
+    return { accountId: account.accountId, disconnected: true };
+  },
+  audit: (_input, result) => ({
+    action: 'payouts.fake_account_disconnect',
+    targetType: 'payment_account',
+    targetId: result?.accountId ?? null,
+    data: { disconnected: result?.disconnected ?? false },
+  }),
 });
 
 /**

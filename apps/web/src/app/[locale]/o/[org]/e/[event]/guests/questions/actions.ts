@@ -24,7 +24,7 @@ export async function publishQuestionsAction(
   _prev: PublishState,
   form: FormData,
 ): Promise<PublishState> {
-  const { data, event: ev } = await loadEvent(org, event, 'guests');
+  const { data, event: ev } = await loadEvent(org, event, 'seating');
   let definition: unknown;
   try {
     definition = JSON.parse(String(form.get('definition') ?? ''));
@@ -58,7 +58,7 @@ export async function saveMenuOptionAction(
   _prev: FormState,
   form: FormData,
 ): Promise<FormState> {
-  const { data, event: ev } = await loadEvent(org, event, 'guests');
+  const { data, event: ev } = await loadEvent(org, event, 'seating');
   const label = String(form.get('label') ?? '').trim();
   if (!label) return { ok: false, code: 'validation_failed', fields: ['label'] };
   try {
@@ -88,7 +88,7 @@ export async function removeMenuOptionAction(
   _prev: FormState,
   _form: FormData,
 ): Promise<FormState> {
-  const { data, event: ev } = await loadEvent(org, event, 'guests');
+  const { data, event: ev } = await loadEvent(org, event, 'seating');
   try {
     await executeCommand(removeMenuOptionCommand, { eventId: ev.id, optionId }, data.ctx, ports);
   } catch (err) {

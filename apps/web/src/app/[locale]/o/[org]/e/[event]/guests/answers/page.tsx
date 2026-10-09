@@ -5,7 +5,7 @@ import {
   rsvpOverviewQuery,
 } from '@yayatoh/guests';
 import { executeQuery, isDomainError } from '@yayatoh/kernel';
-import { type BulkOperationDto, isProfileKey, navIncludes, navLabelKey, PROFILES } from '@yayatoh/platform';
+import { type BulkOperationDto, isProfileKey, navLabelKey } from '@yayatoh/platform';
 import { Alert, Button, buttonClass, Card, CardHeader, EmptyState, PageHeader } from '@yayatoh/ui';
 import { Download } from 'lucide-react';
 import type { Metadata } from 'next';
@@ -16,6 +16,7 @@ import { StepUpForm } from '@/components/step-up.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
 import { formatNumber } from '@/lib/format.ts';
+import { guestNav } from '@/lib/guest-nav.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import { GuestsCrumbs, RsvpTabs } from '../rsvp/nav.tsx';
@@ -44,10 +45,10 @@ export default async function RsvpAnswersPage({
 }) {
   const { locale, org, event } = await params;
   setRequestLocale(locale);
-  const { data, event: ev, can } = await loadEvent(org, event, 'guests');
+  const { data, event: ev, can } = await loadEvent(org, event, 'seating');
   const profile = isProfileKey(ev.profile) ? ev.profile : 'other';
-  const nav = PROFILES[profile].nav.find((i) => i.key === 'guests');
-  if (!nav || !navIncludes(profile, data.modules, 'guests') || !can('guests:read')) notFound();
+  const nav = guestNav(profile);
+  if (!data.modules.has('guests') || !can('guests:read')) notFound();
   const sp = await searchParams;
   const t = await getTranslations('rsvpAnswers');
   const tb = await getTranslations('bulk');

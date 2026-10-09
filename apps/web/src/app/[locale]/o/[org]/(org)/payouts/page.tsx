@@ -22,7 +22,8 @@ import { StepUpForm } from '@/components/step-up.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
-import { startPayoutOnboarding } from './actions.ts';
+import { disconnectFakePayoutAccount, startPayoutOnboarding } from './actions.ts';
+import { DisconnectFakePayoutForm } from './disconnect-fake-form.tsx';
 
 const DOT = { none: 'neutral', pending: 'info', restricted: 'warning', active: 'success' } as const;
 const SETTLEMENT_DOT = {
@@ -218,6 +219,19 @@ export default async function PayoutsPage({
           </StepUpForm>
         ) : !canManage ? (
           <p className="text-caption text-ink-2">{t('noAccess')}</p>
+        ) : null}
+        {canManage && account.provider === 'fake' ? (
+          <div className="flex flex-col items-start gap-2 border-t border-line pt-4">
+            <p className="text-caption text-ink-2">
+              Disconnect an unused fake test account to start payout setup again with another provider.
+              This is blocked if the account has been used by orders or settlements.
+            </p>
+            <DisconnectFakePayoutForm
+              action={disconnectFakePayoutAccount.bind(null, org, locale)}
+              label="Disconnect test account"
+              confirmMessage="Disconnect this fake payout account? This cannot be undone."
+            />
+          </div>
         ) : null}
       </Card>
       {d ? (

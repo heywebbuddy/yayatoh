@@ -1,12 +1,13 @@
 import { guestListQuery, PARTY_RSVP_STATES, rsvpOverviewQuery } from '@yayatoh/guests';
 import { executeQuery, utcToZonedInput } from '@yayatoh/kernel';
-import { isProfileKey, navIncludes, navLabelKey, PROFILES } from '@yayatoh/platform';
+import { isProfileKey, navLabelKey } from '@yayatoh/platform';
 import { Alert, buttonClass, Card, EmptyState, PageHeader, StatCard, StatusPill } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { ProgramForm } from '@/components/program-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatNumber } from '@/lib/format.ts';
+import { guestNav } from '@/lib/guest-nav.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import { RSVP_STATE_TONE } from '../party-rsvp.tsx';
@@ -26,10 +27,10 @@ export default async function RsvpHostPage({
 }) {
   const { locale, org, event } = await params;
   setRequestLocale(locale);
-  const { data, event: ev, can } = await loadEvent(org, event, 'guests');
+  const { data, event: ev, can } = await loadEvent(org, event, 'seating');
   const profile = isProfileKey(ev.profile) ? ev.profile : 'other';
-  const nav = PROFILES[profile].nav.find((i) => i.key === 'guests');
-  if (!nav || !navIncludes(profile, data.modules, 'guests') || !can('guests:read')) notFound();
+  const nav = guestNav(profile);
+  if (!data.modules.has('guests') || !can('guests:read')) notFound();
   const t = await getTranslations('rsvpHost');
   const tr = await getTranslations();
   const canWrite = can('guests:write');

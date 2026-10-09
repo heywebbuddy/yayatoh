@@ -112,7 +112,7 @@ export async function createEventAction(
     if (err instanceof Error && /YYYY-MM-DDTHH:mm/.test(err.message)) return { code: 'validation_failed' };
     throw err;
   }
-  return redirect({ href: `/o/${org}/e/${slug}`, locale: await getLocale() });
+  return redirect({ href: `/o/${org}/e/${slug}/media?created=1`, locale: await getLocale() });
 }
 
 /** Which wizard step owns a field (the wizard jumps back to it on a server error). */
@@ -230,5 +230,5 @@ export async function guidedCreateAction(
     }
     throw err;
   }
-  return redirect({ href: `/o/${org}/e/${slug}/setup-guide`, locale: await getLocale() });
+  return redirect({ href: `/o/${org}/e/${slug}/media?created=1`, locale: await getLocale() });
 }

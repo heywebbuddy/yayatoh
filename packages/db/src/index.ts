@@ -1,3 +1,4 @@
+export { sql } from 'drizzle-orm';
 export { closePools } from './client.ts';
 export {
   type CanarySeed,

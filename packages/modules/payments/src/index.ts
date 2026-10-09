@@ -3,6 +3,7 @@ export {
   applyAccountEventCommand,
   continuePayoutOnboardingCommand,
   DESTINATION_HOLD_MS,
+  disconnectFakePayoutAccountCommand,
   fundsFlowTx,
   PAYOUT_STATES,
   PayoutAccountDto,

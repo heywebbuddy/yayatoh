@@ -1,5 +1,5 @@
 import 'server-only';
-import { helpSitemapEntries, publicSiteSections, sitemapEntries } from '@yayatoh/cms';
+import { publicSiteSections, sitemapEntries } from '@yayatoh/cms';
 import { publicOrganizerById, sitemapListings } from '@yayatoh/marketplace';
 import { resolveOrgSlug } from '@yayatoh/tenancy';
 import type { SitemapPage } from '@/lib/seo/sitemap.ts';
@@ -18,17 +18,12 @@ async function contentPages(orgId: string, base: string): Promise<SitemapPage[]>
 }
 
 /**
- * The platform CMS pages of the marketplace (M3.11b): the help center, its categories and
- * articles, the features and contact pages (when they have published sections) and the status page.
+ * The platform CMS pages of the marketplace (M3.11b): features and contact pages (when they have
+ * published sections) and the status page.
  */
 async function platformPages(orgId: string): Promise<SitemapPage[]> {
-  const help = await helpSitemapEntries(orgId);
-  const latest = help.articles.reduce<Date | null>((m, a) => (!m || a.updatedAt > m ? a.updatedAt : m), null);
   const features = await publicSiteSections(orgId, 'features', 'en');
   return [
-    ...(help.articles.length > 0 ? [{ path: '/help', lastmod: latest }] : []),
-    ...help.categories.map((c) => ({ path: `/help/${c.slug}`, lastmod: c.updatedAt })),
-    ...help.articles.map((a) => ({ path: `/help/${a.categorySlug}/${a.slug}`, lastmod: a.updatedAt })),
     ...(features.length > 0 ? [{ path: '/features', lastmod: null }] : []),
     { path: '/contact', lastmod: null },
     { path: '/status', lastmod: null },

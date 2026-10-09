@@ -12,58 +12,62 @@ const navLink =
   'inline-flex min-h-10 items-center rounded-[10px] px-3 font-bold text-ink-2 hover:bg-surface-3 hover:text-ink aria-[current=page]:text-ink';
 
 /**
- * The public site's header (ADR 0022): a floating bar with the wordmark (home), browse, features,
- * pricing (M3.11a), help, the theme switch and the organizer entrance, under the incident banner
- * while the status page reports one (M3.11b).
+ * The public site's header (ADR 0022): attendee discovery and ticket links, theme switch, and the
+ * organizer entrance, under the incident banner while the status page reports one (M3.11b).
  */
 export async function SiteHeader({ name, browse = true }: { name?: string; browse?: boolean }) {
   const t = await getTranslations('market');
+  const tDirectory = await getTranslations('directory');
+  const tSeries = await getTranslations('series');
+  const tAttendee = await getTranslations('attendeeSignIn');
   const theme = await currentTheme();
   return (
     <>
       <IncidentBanner variant="site" />
-      <div className="mx-auto w-full max-w-6xl px-3 pt-3 sm:px-5 sm:pt-5">
-        <header className="relative z-20 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 rounded-[22px] border border-line bg-surface p-2.5 ps-4 elevation-card glass">
-          <Link
-            href="/"
-            className="inline-flex min-h-10 items-center gap-2.5 rounded-control text-[19px] font-extrabold tracking-[-0.03em] text-ink"
-          >
-            {name ? null : <BrandMark className="size-7" />}
-            {name ?? t('wordmark')}
-          </Link>
-          <nav aria-label={t('siteNav')} className="order-last w-full sm:order-none sm:w-auto">
-            <ul className="m-0 flex list-none flex-wrap items-center gap-1 p-0 text-body">
-              {browse ? (
+      <div className="sticky top-0 z-50 bg-page/90 pt-2 pb-1 backdrop-blur-xl sm:pt-3">
+        <div className="mx-auto w-full max-w-6xl px-3 sm:px-5">
+          <header className="relative flex flex-wrap items-center justify-between gap-x-4 gap-y-2 rounded-[22px] border border-line bg-surface p-2.5 ps-4 elevation-card glass">
+            <Link
+              href="/"
+              className="inline-flex min-h-10 items-center gap-2.5 rounded-control text-[19px] font-extrabold tracking-[-0.03em] text-ink"
+            >
+              {name ? null : <BrandMark className="size-7" />}
+              {name ?? t('wordmark')}
+            </Link>
+            <nav aria-label={t('siteNav')} className="order-last w-full sm:order-none sm:w-auto">
+              <ul className="m-0 flex list-none flex-wrap items-center gap-1 p-0 text-body">
+                {browse ? (
+                  <li>
+                    <Link href="/events" className={navLink}>
+                      {t('browse')}
+                    </Link>
+                  </li>
+                ) : null}
                 <li>
-                  <Link href="/events" className={navLink}>
-                    {t('browse')}
+                  <Link href="/venues" className={navLink}>
+                    {tDirectory('title')}
                   </Link>
                 </li>
-              ) : null}
-              <li>
-                <Link href="/features" className={navLink}>
-                  {t('features')}
-                </Link>
-              </li>
-              <li>
-                <Link href="/pricing" className={navLink}>
-                  {t('pricing')}
-                </Link>
-              </li>
-              <li>
-                <Link href="/help" className={navLink}>
-                  {t('help')}
-                </Link>
-              </li>
-            </ul>
-          </nav>
-          <div className="flex items-center gap-2">
-            <ThemeSwitch initial={theme} />
-            <Link href="/sign-in" className={buttonClass('dark')}>
-              {t('forOrganizers')}
-            </Link>
-          </div>
-        </header>
+                <li>
+                  <Link href="/series" className={navLink}>
+                    {tSeries('title')}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/my-tickets" className={navLink}>
+                    {tAttendee('title')}
+                  </Link>
+                </li>
+              </ul>
+            </nav>
+            <div className="flex items-center gap-2">
+              <ThemeSwitch initial={theme} />
+              <Link href="/sign-in" className={buttonClass('dark')}>
+                {t('forOrganizers')}
+              </Link>
+            </div>
+          </header>
+        </div>
       </div>
     </>
   );
@@ -86,11 +90,6 @@ export async function SiteFooter({ children }: { children?: ReactNode }) {
         <li>
           <Link href="/sub-processors" className="inline-flex min-h-6 items-center text-ink-2 underline">
             {home('subProcessorsLink')}
-          </Link>
-        </li>
-        <li>
-          <Link href="/help" className="inline-flex min-h-6 items-center text-ink-2 underline">
-            {t('helpCenter')}
           </Link>
         </li>
         <li>

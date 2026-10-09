@@ -52,6 +52,7 @@ import { formatEventDateRange, formatNumber } from '@/lib/format.ts';
 import { refundPolicyLines } from '@/lib/refund-policy-text.ts';
 import { aggregateRatingJsonLd, eventJsonLd, jsonLdScript } from '@/lib/seo/jsonld.ts';
 import { localizedPath } from '@/lib/seo/urls.ts';
+import { venueDisplayName } from '@/lib/venue-display.ts';
 import { hasAdvancedSeating } from '@/server/advanced-seating.ts';
 import { publicDemoOverlay } from '@/server/demo.ts';
 import { cachedExhibitorMap } from '@/server/exhibitor-map.ts';
@@ -584,7 +585,7 @@ export async function PublicEventView({
                     className={cx(chip, 'underline-offset-2 hover:underline')}
                   >
                     <MapPin aria-hidden="true" className="size-3.5" strokeWidth={2.2} />
-                    {ev.venueName}
+                    {venueDisplayName(ev.venueName)}
                   </Link>
                 </li>
               ) : ev.city ? (

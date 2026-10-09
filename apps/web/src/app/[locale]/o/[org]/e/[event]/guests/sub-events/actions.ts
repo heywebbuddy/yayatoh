@@ -76,7 +76,7 @@ async function run(
   event: string,
   write: (ev: { id: string; timezone: string }, ctx: Ctx) => Promise<unknown>,
 ): Promise<State> {
-  const { data, event: ev } = await loadEvent(org, event, 'guests');
+  const { data, event: ev } = await loadEvent(org, event, 'seating');
   try {
     await write(ev, data.ctx);
   } catch (err) {
