@@ -561,7 +561,7 @@ test.describe('venue photos (M1.4e)', () => {
     await signIn(page);
     await page.goto(`${ORG}/venues`);
     await page.getByLabel('Venue name').fill(name);
-    await page.getByLabel('Country code').fill('us');
+    await pickOption(page.getByLabel('Country code'), 'US');
     await page.getByLabel('City', { exact: true }).fill('Madison');
     await page.getByLabel(/List this venue in the Yayatoh venue directory/).check();
     await page.getByRole('button', { name: 'Add venue' }).click();

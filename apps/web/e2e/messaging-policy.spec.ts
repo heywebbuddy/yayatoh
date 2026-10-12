@@ -36,7 +36,7 @@ async function eventWithGuests(
   await page.getByLabel('Ends', { exact: true }).fill('2027-11-01T22:00');
   await page.getByRole('button', { name: 'Create draft' }).click();
   await expect(page).toHaveURL(new RegExp(`/o/${org}/e/rules-\\d+`));
-  const base = new URL(page.url()).pathname;
+  const base = new URL(page.url()).pathname.replace(/\/media$/, '');
   for (const g of guests) {
     await page.goto(`${base}/attendees`);
     await page

@@ -212,8 +212,8 @@ test.describe('event currency', () => {
     await page.getByLabel('Starts').fill('2027-06-05T19:00');
     await page.getByLabel('Ends').fill('2027-06-05T23:00');
     await page.getByRole('button', { name: 'Create draft' }).click();
-    await expect(page).toHaveURL(new RegExp(`${ORG}/e/[a-z0-9-]+$`));
-    const event = new URL(page.url()).pathname.replace(/^\/en/, '');
+    await expect(page).toHaveURL(new RegExp(`${ORG}/e/[a-z0-9-]+/media\\?created=1$`));
+    const event = new URL(page.url()).pathname.replace(/\/media$/, '').replace(/^\/en/, '');
 
     await page.goto(`${event}/tickets-orders`);
     await expect(page.getByLabel('Price (EUR)')).toBeVisible();

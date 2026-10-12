@@ -388,7 +388,7 @@ test.describe('event team: co-hosts and planners (M4.2a, P4-8)', () => {
     await expect(page.getByText('Pat Planner was removed.')).toBeVisible();
     expect(await status(plannerPage, wedding)).toBe(404);
     await plannerPage.goto('/o');
-    await expect(plannerPage.getByText("You're not in an organization yet")).toBeVisible();
+    await expect(plannerPage).toHaveURL(/\/attendee$/);
     await page.reload();
     await expect(page.getByRole('table', { name: 'Event team' }).getByText('Pat Planner')).toHaveCount(0);
   });

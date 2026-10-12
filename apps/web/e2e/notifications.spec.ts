@@ -98,8 +98,9 @@ test.describe('notifications: emails sent and the message log', () => {
     await page.getByLabel('Starts', { exact: true }).fill('2027-11-01T18:00');
     await page.getByLabel('Ends', { exact: true }).fill('2027-11-01T22:00');
     await page.getByRole('button', { name: 'Create draft' }).click();
-    await expect(page).toHaveURL(/\/o\/rosewood-weddings\/e\/quiet-night-[0-9a-z-]+$/);
-    const base = new URL(page.url()).pathname;
+    await expect(page).toHaveURL(/\/o\/rosewood-weddings\/e\/quiet-night-[0-9a-z-]+\/media\?created=1$/);
+    const base = new URL(page.url()).pathname.replace(/\/media$/, '');
+    await page.goto(base);
     await page.getByRole('button', { name: 'Publish' }).click();
     await expect(page.getByText('Published ·')).toBeVisible();
     await page.goto(`${base}/tickets-orders`);
@@ -138,7 +139,7 @@ test.describe('notifications: one-click unsubscribe', () => {
     await page.getByLabel('Ends', { exact: true }).fill('2027-11-01T22:00');
     await page.getByRole('button', { name: 'Create draft' }).click();
     await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/mailing-\d+/);
-    const base = new URL(page.url()).pathname;
+    const base = new URL(page.url()).pathname.replace(/\/media$/, '');
     await page.goto(`${base}/attendees`);
     await page
       .getByText(/^Add (attendee|guest)/i)

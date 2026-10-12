@@ -78,8 +78,8 @@ async function createEvent(page: Page, name: string) {
   await page.getByLabel('Starts', { exact: true }).fill('2027-05-05T19:00');
   await page.getByLabel('Ends', { exact: true }).fill('2027-05-05T22:00');
   await page.getByRole('button', { name: 'Create draft' }).click();
-  await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+$/);
-  return new URL(page.url()).pathname;
+  await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+\/media\?created=1$/);
+  return new URL(page.url()).pathname.replace(/\/media$/, '');
 }
 
 async function addPassAndPublish(page: Page, base: string, pass: string) {
@@ -535,8 +535,9 @@ test.describe('member email language', () => {
     await page.getByLabel('Starts', { exact: true }).fill('2027-07-01T19:00');
     await page.getByLabel('Ends', { exact: true }).fill('2027-07-01T22:00');
     await page.getByRole('button', { name: 'Create draft' }).click();
-    await expect(page).toHaveURL(/\/o\/harbor-arts\/e\/[a-z0-9-]+$/);
-    const base = new URL(page.url()).pathname;
+    await expect(page).toHaveURL(/\/o\/harbor-arts\/e\/[a-z0-9-]+\/media\?created=1$/);
+    const base = new URL(page.url()).pathname.replace(/\/media$/, '');
+    await page.goto(base);
     await addPassAndPublish(page, base, 'Pase');
     const buyer = `Lucia ${tag}`;
     await buy(browser, base.split('/').pop() as string, 'Pase', buyer, `lucia+${tag}@example.test`);

@@ -29,7 +29,7 @@ async function noHorizontalScroll(page: Page) {
 async function createVenue(page: Page, name: string, opts: { listed?: boolean; city?: string } = {}) {
   await page.goto(`${ORG}/venues`);
   await page.getByLabel('Venue name').fill(name);
-  await page.getByLabel('Country code').fill('us');
+  await pickOption(page.getByLabel('Country code'), 'US');
   await page.getByLabel('City', { exact: true }).fill(opts.city ?? 'Madison');
   await page.getByLabel('Capacity', { exact: true }).fill('250');
   if (opts.listed) await page.getByLabel(/List this venue in the Yayatoh venue directory/).check();
@@ -61,8 +61,8 @@ async function createEvent(page: Page, name: string) {
   await page.getByLabel('Starts', { exact: true }).fill(chicago(24 * 30));
   await page.getByLabel('Ends', { exact: true }).fill(chicago(24 * 30 + 3));
   await page.getByRole('button', { name: 'Create draft' }).click();
-  await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+$/);
-  const base = new URL(page.url()).pathname;
+  await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+\/media\?created=1$/);
+  const base = new URL(page.url()).pathname.replace(/\/media$/, '');
   return { base, slug: base.split('/').pop() ?? '' };
 }
 
@@ -84,16 +84,15 @@ test.describe('venues, categories and tags (M1.4c)', () => {
     await noHorizontalScroll(page);
 
     // U3: creating asks for the essentials only; the rest is validated on the details form next.
-    // Invalid country first.
+    // No country first.
     await page.getByLabel('Venue name').fill(`Harbor Hall ${s}`);
-    await page.getByLabel('Country code').fill('U');
     await page.getByRole('button', { name: 'Add venue' }).click();
     await expect(page.getByText('Some details need fixing. Check the highlighted fields.')).toBeVisible();
     await expect(page.getByText('Use a two-letter country code, for example US.')).toBeVisible();
     await expect(page.getByLabel('Country code')).toHaveAttribute('aria-invalid', 'true');
     await expectAccessible(page);
 
-    await page.getByLabel('Country code').fill('us');
+    await pickOption(page.getByLabel('Country code'), 'US');
     await page.getByLabel('Capacity', { exact: true }).fill('0');
     await page.getByRole('button', { name: 'Add venue' }).click();
     await expect(page.getByText('Capacity must be a whole number of at least 1.')).toBeVisible();
@@ -125,7 +124,7 @@ test.describe('venues, categories and tags (M1.4c)', () => {
     await expect(page.getByText('Venue saved.')).toBeVisible();
     await page.reload();
     await expect(page.getByLabel('City', { exact: true })).toHaveValue('Madison');
-    await expect(page.getByLabel('Country code')).toHaveValue('US');
+    await expectPicked(page.getByLabel('Country code'), 'US');
     await expect(page.getByLabel('Capacity', { exact: true })).toHaveValue('300');
     await expect(page.getByLabel('Map link')).toHaveValue('https://maps.example.com/harbor');
     await expect(page.getByLabel('Accessibility notes')).toHaveValue('Step-free entrance on Shore Road.');

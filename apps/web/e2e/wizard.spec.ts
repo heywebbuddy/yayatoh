@@ -109,7 +109,9 @@ test.describe('event creation wizard and readiness (M1.4f)', () => {
     await expect(page.getByLabel('Pass name')).toHaveValue('General');
     await page.getByRole('button', { name: 'Create draft' }).click();
 
-    // The draft exists, with its tagline, mode and pass, and the setup guide opens.
+    // The draft exists, with its tagline, mode and pass; the Media step links the setup guide.
+    await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/wizard-summit-[a-z0-9-]+\/media\?created=1$/);
+    await page.getByRole('link', { name: 'Open the setup guide' }).click();
     await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/wizard-summit-[a-z0-9-]+\/setup-guide$/);
     await expect(page.getByRole('heading', { name: 'Setup guide', level: 1 })).toBeVisible();
     const guide = page.getByRole('list', { name: 'Readiness checklist' });
@@ -146,8 +148,8 @@ test.describe('event creation wizard and readiness (M1.4f)', () => {
     await expect(page.locator(':focus')).toBeVisible();
     await page.getByRole('button', { name: 'Create draft' }).focus();
     await page.keyboard.press('Enter');
-    await expect(page).toHaveURL(/\/setup-guide$/);
-    await expect(page.getByRole('heading', { name: 'Setup guide', level: 1 })).toBeVisible();
+    await expect(page).toHaveURL(/\/media\?created=1$/);
+    await expect(page.getByRole('link', { name: 'Open the setup guide' })).toBeVisible();
   });
 
   test('a server-side error takes you back to its step (name already taken)', async ({ page }) => {
@@ -162,7 +164,7 @@ test.describe('event creation wizard and readiness (M1.4f)', () => {
       await page.getByLabel('Ends', { exact: true }).fill(at(25, '21:00'));
       await page.getByRole('button', { name: 'Next' }).click();
       await page.getByRole('button', { name: 'Create draft' }).click();
-      if (attempt === 1) await expect(page).toHaveURL(/\/setup-guide$/);
+      if (attempt === 1) await expect(page).toHaveURL(/\/media\?created=1$/);
     }
     await expect(page.getByRole('button', { name: 'Step 1 of 3: Basics' })).toHaveAttribute(
       'aria-current',
@@ -187,8 +189,9 @@ test.describe('event creation wizard and readiness (M1.4f)', () => {
     await page.getByLabel('Ends', { exact: true }).fill(at(25, '21:00'));
     await page.getByRole('button', { name: 'Next' }).click();
     await page.getByRole('button', { name: 'Create draft' }).click();
-    await expect(page).toHaveURL(/\/setup-guide$/);
-    const base = new URL(page.url()).pathname.replace(/\/setup-guide$/, '');
+    await expect(page).toHaveURL(/\/media\?created=1$/);
+    const base = new URL(page.url()).pathname.replace(/\/media$/, '');
+    await page.goto(`${base}/setup-guide`);
     await expect(page.getByText(/steps left/)).toBeVisible();
     for (const [link, path] of [
       ['Go to: Venue added', '/details'],

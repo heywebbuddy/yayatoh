@@ -312,8 +312,8 @@ test.describe('tracked links', () => {
     await page.getByLabel('Starts', { exact: true }).fill('2027-11-01T18:00');
     await page.getByLabel('Ends', { exact: true }).fill('2027-11-01T22:00');
     await page.getByRole('button', { name: 'Create draft' }).click();
-    await expect(page).toHaveURL(/\/o\/rosewood-weddings\/e\/untracked-[0-9a-z-]+$/);
-    await page.goto(`${new URL(page.url()).pathname}/tracked-links`);
+    await expect(page).toHaveURL(/\/o\/rosewood-weddings\/e\/untracked-[0-9a-z-]+\/media\?created=1$/);
+    await page.goto(`${new URL(page.url()).pathname.replace(/\/media$/, '')}/tracked-links`);
     await expect(page.getByText('No tracked links yet.')).toBeVisible();
     await expect(page.getByText('No orders from UTM tags alone yet.')).toBeVisible();
     const windowField = page.getByLabel('Attribution window (days)', { exact: true });

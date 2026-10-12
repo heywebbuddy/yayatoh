@@ -79,14 +79,15 @@ test.describe('shared fixes from the U11 sweep', () => {
     await noHorizontalScroll(page);
   });
 
-  test('"See your events" links go to the events list (the org home), never a 404', async ({ page }) => {
+  test('"See your events" links go to the events list, never a 404', async ({ page }) => {
     await signIn(page);
     for (const path of [`${ORG}/seating-library`, `${ORG}/command-center`, `${ORG}/contacts/stats`]) {
       const res = await page.goto(path);
       expect(res?.status(), path).toBe(200);
-      const dead = page.locator(`a[href$="${ORG}/events"]`);
-      await expect(dead, path).toHaveCount(0);
     }
+    // The org's events list is a page of its own now.
+    expect((await page.goto(`${ORG}/events`))?.status()).toBe(200);
+    await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
   });
 
   test('public back links are 24 px targets', async ({ page }) => {

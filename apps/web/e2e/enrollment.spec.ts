@@ -235,8 +235,8 @@ test.describe('session enrollment and waitlists (M5.2b)', () => {
     await page.getByLabel('Starts', { exact: true }).fill(`${d}T09:00`);
     await page.getByLabel('Ends', { exact: true }).fill(`${d}T18:00`);
     await page.getByRole('button', { name: 'Create draft' }).click();
-    await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+$/);
-    const base = new URL(page.url()).pathname;
+    await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+\/media\?created=1$/);
+    const base = new URL(page.url()).pathname.replace(/\/media$/, '');
     await page.goto(`${base}/registration/enrollment`);
     await expect(page.getByText('No optional sessions yet', { exact: true })).toBeVisible();
     await expect(page.getByRole('link', { name: 'Go to Sessions' })).toHaveAttribute(

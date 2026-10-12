@@ -77,7 +77,7 @@ test.describe('Google and Apple sign-in (M1.2f)', () => {
     await page.keyboard.type(name);
     await page.keyboard.press('Enter');
     // A new account without organizations lands on the empty org picker.
-    await expect(page).toHaveURL(/\/o$/);
+    await expect(page).toHaveURL(/\/attendee$/);
     await page.goto('/account/security');
     await expect(methods(page)).toContainText('Google');
     await expect(methods(page)).toContainText('Linked on');
@@ -89,7 +89,7 @@ test.describe('Google and Apple sign-in (M1.2f)', () => {
     await page.goto('/sign-in');
     await page.getByRole('link', { name: 'Continue with Google' }).click();
     await consent(page, { email });
-    await expect(page).toHaveURL(/\/o$/);
+    await expect(page).toHaveURL(/\/attendee$/);
     await page.goto('/account/security');
     await expect(page.getByText(email).first()).toBeVisible();
     await expect(methods(page).getByText('Linked on')).toHaveCount(1);
@@ -118,7 +118,7 @@ test.describe('Google and Apple sign-in (M1.2f)', () => {
     await expectAccessible(page);
     await page.getByLabel('6-digit code').fill(code);
     await page.getByLabel('6-digit code').press('Enter');
-    await expect(page).toHaveURL(/\/o$/);
+    await expect(page).toHaveURL(/\/attendee$/);
     await page.goto('/account/security');
     await expect(methods(page)).toContainText('Linked on');
 
@@ -127,14 +127,14 @@ test.describe('Google and Apple sign-in (M1.2f)', () => {
     await page.goto('/sign-in');
     await page.getByRole('link', { name: 'Continue with Google' }).click();
     await consent(page, { email: user.email });
-    await expect(page).toHaveURL(/\/o$/);
+    await expect(page).toHaveURL(/\/attendee$/);
     await fresh(context);
     await page.goto('/sign-in');
     await page.waitForLoadState('load');
     await page.getByLabel('Email', { exact: true }).fill(user.email);
     await page.getByLabel('Password', { exact: true }).fill(devPassword());
     await page.getByRole('button', { name: 'Sign in', exact: true }).click();
-    await expect(page).toHaveURL(/\/o$/);
+    await expect(page).toHaveURL(/\/attendee$/);
   });
 
   test('the proof page in Arabic reads right to left', async ({ page }) => {
@@ -182,7 +182,7 @@ test.describe('Google and Apple sign-in (M1.2f)', () => {
       page.waitForRequest((r) => r.url().includes('/auth/social/google/callback')),
       page.getByRole('button', { name: 'Continue', exact: true }).click(),
     ]);
-    await expect(page).toHaveURL(/\/o$/);
+    await expect(page).toHaveURL(/\/attendee$/);
     await page.goto(callback.url());
     await expect(page).toHaveURL(/\/sign-in\?social=failed/);
   });
@@ -193,7 +193,7 @@ test.describe('Google and Apple sign-in (M1.2f)', () => {
     await page.goto('/sign-in');
     await page.getByRole('link', { name: 'Continue with Apple' }).click();
     await consent(page, { provider: 'Apple', email: unique('apple'), name: 'Ada Apple', hide: true });
-    await expect(page).toHaveURL(/\/o$/);
+    await expect(page).toHaveURL(/\/attendee$/);
     await page.goto('/account/security');
     await expect(page.getByText(/@privaterelay\.appleid\.com/).first()).toBeVisible();
     await expect(methods(page)).toContainText('Apple');
@@ -285,6 +285,6 @@ test.describe('Google and Apple sign-in (M1.2f)', () => {
     await expectAccessible(page);
     await page.getByLabel('6-digit code').fill(codeForKey(user.setupKey ?? ''));
     await page.getByRole('button', { name: 'Verify and sign in' }).click();
-    await expect(page).toHaveURL(/\/o$/);
+    await expect(page).toHaveURL(/\/attendee$/);
   });
 });

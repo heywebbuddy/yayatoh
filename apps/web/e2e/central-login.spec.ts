@@ -99,7 +99,7 @@ test.describe('central login on tenant sites', () => {
     // Signed in on the app host first.
     await page.goto(`${APP}/sign-in`);
     await passwordForm(page, user.email);
-    await expect(page).toHaveURL(/\/o$/);
+    await expect(page).toHaveURL(/\/attendee$/);
 
     await page.goto(`${HARBOR}/`);
     await signInLink(page).click();

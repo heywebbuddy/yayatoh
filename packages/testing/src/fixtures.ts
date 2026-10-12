@@ -3710,7 +3710,8 @@ async function pledgeCollectionRows(orgId: string, eventId: string, partyId: str
       payment_method_id, brand, last4, exp_month, exp_year, consent_version, consented_at, activated_at,
       remove_after) values (${orgId}, ${eventId}, ${partyId}, 'Fixture Holder', 'holder@example.test', 'party',
       'active', 'fake', 'fakeacct_fixture', 'fakeseti_fixture', 'fakecus_fixture', 'fakepm_ok_fixture', 'visa',
-      '4242', 12, 2030, 'fixture', now(), now(), now() + interval '400 days') returning id`);
+      '4242', 12, 2030, 'fixture', now(), now(),
+      (select ends_at + interval '30 days' from events.events where id = ${eventId})) returning id`);
     const [pl] = await tx.execute<{ id: string; campaign_id: string }>(
       sql`select id, campaign_id from donations.pledges where event_id = ${eventId} limit 1`,
     );

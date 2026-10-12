@@ -8,6 +8,7 @@ import {
   expectAccessible,
   expectAccessibleBothModes,
   newUser,
+  pickOption,
   signIn,
   stepUpDialog,
   type TestUser,
@@ -341,7 +342,7 @@ test.describe('U3: a venue is created with its photo in one flow', () => {
     await create.getByLabel('Venue name').fill(name);
     await create.getByLabel('Capacity', { exact: true }).fill('180');
     await create.getByLabel('City', { exact: true }).fill('Madison');
-    await create.getByLabel('Country code').fill('us');
+    await pickOption(create.getByLabel('Country code'), 'US');
     await create.getByLabel(/List this venue in the Yayatoh venue directory/).check();
     await create.getByRole('button', { name: 'Add venue' }).click();
 
@@ -396,7 +397,7 @@ test.describe('U3: a venue is created with its photo in one flow', () => {
     const create = page.getByRole('region', { name: 'إضافة مكان' });
     await expect(create).toBeVisible();
     await create.getByLabel('اسم المكان').fill(`قاعة ${stamp()}`);
-    await create.getByLabel('رمز البلد').fill('ae');
+    await pickOption(create.getByLabel('رمز البلد'), 'AE');
     await create.getByRole('button', { name: 'إضافة المكان' }).click();
     await expect(page.getByRole('navigation', { name: 'مكان جديد' })).toBeVisible();
     await expect(page).toHaveURL(/\/ar\/o\/lakeside-events\/venues\/[0-9a-f-]+\?saved=1$/);

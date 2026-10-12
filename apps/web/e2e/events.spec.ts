@@ -17,7 +17,8 @@ test.describe('events', () => {
     await page.getByLabel('Venue').fill('Riverside Hall');
     await page.getByRole('button', { name: 'Create draft' }).click();
 
-    await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/autumn-mixer-\d+$/);
+    await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/autumn-mixer-\d+\/media\?created=1$/);
+    await page.goto(new URL(page.url()).pathname.replace(/\/media$/, ''));
     await expect(page.getByText('Draft ·')).toBeVisible();
     await expect(page.getByText('No sales yet')).toBeVisible();
     const slug = page.url().split('/').pop() as string;

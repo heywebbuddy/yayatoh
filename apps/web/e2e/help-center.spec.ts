@@ -23,7 +23,6 @@ test.describe('help center (M3.11b)', () => {
     await expect(page.getByRole('heading', { level: 1, name: 'Help center' })).toBeVisible();
     await expect(page.getByRole('heading', { level: 2, name: 'For organizers' })).toBeVisible();
     await expect(page.getByRole('heading', { level: 2, name: 'For ticket buyers' })).toBeVisible();
-    await expect(page.getByRole('link', { name: 'Help', exact: true })).toBeVisible();
     await noHorizontalScroll(page);
     await expectAccessible(page);
 
@@ -116,9 +115,9 @@ test.describe('help center (M3.11b)', () => {
     await expect(page.getByRole('link', { name: 'Add tickets to your phone wallet' })).toHaveCount(0);
     await page.goto(`${APEX}/help/search?q=wallet`);
     await expect(page.getByRole('link', { name: 'Add tickets to your phone wallet' })).toHaveCount(0);
-    // The sitemap doesn't list it either.
+    // The sitemap doesn't list it either (the help center is left out of the sitemap entirely).
     const sitemap = (await (await page.goto(`${APEX}/sitemaps/en.xml`))?.text()) ?? '';
-    expect(sitemap).toContain('/help/your-tickets/find-your-tickets');
+    expect(sitemap).not.toContain('/help/');
     expect(sitemap).not.toContain('wallet-passes');
     // Tenant sites have no help center.
     expect((await page.goto(`http://harbor-arts.yayatoh.events:${PORT}/help`))?.status()).toBe(404);

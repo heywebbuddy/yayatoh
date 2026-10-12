@@ -31,8 +31,8 @@ async function createWedding(page: Page, name: string): Promise<string> {
   await page.getByLabel('Starts', { exact: true }).fill(`${DAY}T15:00`);
   await page.getByLabel('Ends', { exact: true }).fill(`${DAY}T23:00`);
   await page.getByRole('button', { name: 'Create draft' }).click();
-  await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+$/);
-  return new URL(page.url()).pathname;
+  await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+\/media\?created=1$/);
+  return new URL(page.url()).pathname.replace(/\/media$/, '');
 }
 
 /** Opens a disclosure (by its summary text) and returns its region. */
