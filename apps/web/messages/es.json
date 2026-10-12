@@ -7297,6 +7297,11 @@
         "kpi": {
           "ofValid": "de {valid} invitados"
         }
+      },
+      "media": {
+        "hint": {
+          "logo": "Se muestra en la consola, en tu página pública y tu sitio, y en los correos."
+        }
       }
     },
     "gala": {
@@ -7309,6 +7314,11 @@
       },
       "eventAnnouncements": {
         "emptyDescription": "Publica noticias, cambios de horario o recordatorios para tus invitados."
+      },
+      "media": {
+        "hint": {
+          "logo": "Se muestra en la consola, en tu página pública y tu sitio, y en los correos."
+        }
       }
     }
   },

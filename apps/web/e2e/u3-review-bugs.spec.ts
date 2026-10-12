@@ -373,15 +373,14 @@ test.describe('U3: a venue is created with its photo in one flow', () => {
     await page.reload();
     await expect(details.getByLabel('Street address')).toHaveValue('1 Lake Shore Road');
 
-    // The public venue page shows the photo; the list shows its thumbnail.
+    // The public venue page shows the photo (its first photo is the page's cover); the list shows
+    // its thumbnail.
     const slug = (await page.getByRole('link', { name: 'View public page' }).getAttribute('href'))
       ?.split('/')
       .pop();
     const guest = await (await browser.newContext()).newPage();
     await guest.goto(`/venues/${slug}`);
-    await expect(
-      guest.getByRole('region', { name: 'Photos' }).getByRole('img', { name: 'The main hall with a stage' }),
-    ).toBeVisible();
+    await expect(guest.getByRole('img', { name: 'The main hall with a stage' })).toBeVisible();
     await guest.close();
     await page.goto(`${ORG}/venues`);
     const row = page.getByRole('row').filter({ hasText: name });

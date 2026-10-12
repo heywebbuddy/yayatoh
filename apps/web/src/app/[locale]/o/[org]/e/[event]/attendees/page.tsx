@@ -421,7 +421,7 @@ export default async function AttendeesPage({
                   <Plus aria-hidden="true" />
                   {t('actions.addAttendee', { term: t(term(profile, 'attendee')) })}
                 </summary>
-                <div className="absolute end-0 top-full z-30 mt-2 w-[min(640px,calc(100vw-2rem))] rounded-panel border border-line bg-surface p-4 elevation-pop">
+                <div className="absolute start-0 top-full z-30 mt-2 w-[min(640px,calc(100vw-2rem))] rounded-panel border border-line bg-surface p-4 elevation-pop sm:start-auto sm:end-0">
                   <GuestForm action={addGuestAction.bind(null, org, event)} />
                 </div>
               </details>

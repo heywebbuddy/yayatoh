@@ -151,7 +151,8 @@ test.describe('starter templates (M4.2a)', () => {
     await expectAccessible(page);
     await page.goto(`/ar${wedding}/setup-guide`);
     await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
-    await expect(page.getByText('قريبًا').first()).toBeVisible();
+    // The wedding checklist (every item is live now; the RSVP deadline was the last "coming soon").
+    await expect(page.getByRole('list', { name: 'قائمة الجاهزية' })).toBeVisible();
     await expectAccessible(page);
   });
 });

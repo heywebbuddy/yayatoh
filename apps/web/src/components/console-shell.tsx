@@ -334,7 +334,11 @@ export async function ConsoleShell({
         <OrgStatusBanner status={data.org.status} sandbox={data.org.sandbox} />
         <AgencyBadge data={data} />
         <IncidentBanner variant="console" />
-        <header className="sticky top-0 z-40 -mx-4 flex flex-wrap items-center gap-2.5 bg-page/95 px-4 py-2 backdrop-blur-xl md:-mx-6 md:px-6 lg:mx-0 lg:px-0">
+        {/* Sticky on wide screens only: on phones it wraps to two rows and would cover the page. */}
+        <header
+          data-console-header
+          className="relative z-40 flex flex-wrap items-center gap-2.5 lg:sticky lg:top-0 lg:bg-page/95 lg:py-2 lg:backdrop-blur-xl"
+        >
           <MobileNav openLabel={t('menu')} closeLabel={t('closeMenu')}>
             <nav
               aria-label={t('navigation')}

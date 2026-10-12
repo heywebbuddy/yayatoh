@@ -58,7 +58,8 @@ test.describe('plan and modules (M6.6a)', () => {
     await expect(rows.first()).toContainText('$0.00 a month');
     await expect(rows.nth(2)).toContainText('$99.00 a month');
     await expect(rows.nth(4)).toContainText('Custom quote');
-    await expect(page.getByRole('table', { name: 'Plans' }).getByText('Not on sale yet')).toHaveCount(5);
+    // The global setup put Free and Pro on sale; the other three are not yet.
+    await expect(page.getByRole('table', { name: 'Plans' }).getByText('Not on sale yet')).toHaveCount(3);
     // The console is unchanged: module-gated pages are still in the nav.
     await expect(page.locator(`nav a[href$="/${slug}/campaigns"]`).first()).toBeAttached();
     await expectAccessible(page);

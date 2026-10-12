@@ -146,9 +146,8 @@ test.describe('series ↔ events', () => {
     await page.getByLabel('Event name', { exact: true }).fill(second);
     await page.getByLabel('Starts', { exact: true }).fill('2028-09-10T19:00');
     await page.getByRole('button', { name: 'Create draft' }).click();
-    await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+\/media\?created=1$/);
-    const nextBase = new URL(page.url()).pathname.replace(/\/media$/, '');
-    await page.goto(nextBase);
+    await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+$/);
+    const nextBase = new URL(page.url()).pathname;
     await expect(page.getByText(/^Draft ·/)).toBeVisible();
     await expect(page.getByRole('link', { name: `Part of ${series}` })).toBeVisible();
     // It copied the pass.

@@ -7297,6 +7297,11 @@
         "kpi": {
           "ofValid": "von {valid} Gästen"
         }
+      },
+      "media": {
+        "hint": {
+          "logo": "Wird in der Konsole, auf deiner öffentlichen Seite und Website sowie in E-Mails angezeigt."
+        }
       }
     },
     "gala": {
@@ -7309,6 +7314,11 @@
       },
       "eventAnnouncements": {
         "emptyDescription": "Veröffentlichen Sie Neuigkeiten, Zeitänderungen oder Erinnerungen für Ihre Gäste."
+      },
+      "media": {
+        "hint": {
+          "logo": "Wird in der Konsole, auf deiner öffentlichen Seite und Website sowie in E-Mails angezeigt."
+        }
       }
     }
   },
