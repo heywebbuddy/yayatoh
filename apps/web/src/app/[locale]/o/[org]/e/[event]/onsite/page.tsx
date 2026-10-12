@@ -17,6 +17,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { AutoRefresh } from '@/components/auto-refresh.tsx';
 import { CheckpointForm } from '@/components/checkpoint-form.tsx';
 import { DeviceEnrollForm } from '@/components/device-enroll-form.tsx';
+import { HolderLookup } from '@/components/holder-lookup.tsx';
 import { LiveCheckins } from '@/components/live-checkins.tsx';
 import { Scanner } from '@/components/scanner.tsx';
 import { SEVERITY_DOT, signalSummary } from '@/components/signal-summary.ts';
@@ -31,6 +32,7 @@ import {
   createCheckpointAction,
   deviceStateAction,
   enrollDeviceAction,
+  findHoldersAction,
   scanAction,
   undoAction,
 } from './actions.ts';
@@ -160,6 +162,10 @@ export default async function OnsitePage({
         checkpoints={standable.map((c) => ({ id: c.id, name: c.name, kind: c.kind }))}
         scoped={scope.checkpointIds !== null}
         presenceUrl={`/api/command-center/${org}/${event}/presence`}
+      />
+      <HolderLookup
+        find={findHoldersAction.bind(null, org, event)}
+        scan={scanAction.bind(null, org, event)}
       />
       {/* M4.8e: at a gala with an open campaign, the desk shows guests the card-saving QR code. */}
       {data.modules.has('donations') ? (

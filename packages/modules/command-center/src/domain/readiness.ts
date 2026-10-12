@@ -34,6 +34,8 @@ export interface ReadinessFacts {
   readonly guests?: number;
   /** M4.5a: the event's guest website is published. */
   readonly guestSite?: boolean;
+  /** Weddings and galas: the RSVP deadline is set (agreement audit 2026-10-12). */
+  readonly rsvpDeadline?: boolean;
   /** M4.2b: table ticket types of the event (a gala sells its tables). */
   readonly tableTickets?: number;
   readonly now: Date;
@@ -60,12 +62,12 @@ export interface ReadinessRule {
  * builds one removes it here and gives its checklist item a real fact. `apps/web/tests/readiness`
  * checks the list against the routes on disk.
  */
-export const PLACEHOLDER_SECTIONS = ['rsvp', 'messages', 'branding', 'communications', 'libraries'] as const;
+export const PLACEHOLDER_SECTIONS = ['communications', 'libraries'] as const;
 
 /** Profile checklist items (M4.2a): each names the page that fixes it and, once built, its fact. */
 const PROFILE_ITEMS: Readonly<Record<string, { path: string; done: (f: ReadinessFacts) => boolean }>> = {
   guestsAdded: { path: 'guests', done: (f) => (f.guests ?? 0) > 0 },
-  rsvpDeadlineSet: { path: 'rsvp', done: () => false },
+  rsvpDeadlineSet: { path: 'rsvp', done: (f) => f.rsvpDeadline === true },
   floorPlanChosen: { path: 'seating', done: (f) => f.floorPlan === true },
   guestSitePublished: { path: 'website', done: (f) => f.guestSite === true },
   tablesSponsors: { path: 'tables-sponsors', done: (f) => (f.tableTickets ?? 0) > 0 },

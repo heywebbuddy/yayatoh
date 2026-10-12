@@ -1,10 +1,11 @@
 import { rsvpQuestionsQuery, subEventsQuery } from '@yayatoh/guests';
 import { executeQuery } from '@yayatoh/kernel';
-import { isProfileKey, navIncludes, navLabelKey, PROFILES } from '@yayatoh/platform';
+import { isProfileKey, navLabelKey } from '@yayatoh/platform';
 import { Alert, Card, CardHeader, PageHeader } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { guestNav } from '@/lib/guest-nav.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import { GuestsCrumbs, RsvpTabs } from '../rsvp/nav.tsx';
@@ -28,10 +29,10 @@ export default async function RsvpQuestionsPage({
 }) {
   const { locale, org, event } = await params;
   setRequestLocale(locale);
-  const { data, event: ev, can } = await loadEvent(org, event, 'guests');
+  const { data, event: ev, can } = await loadEvent(org, event, 'seating');
   const profile = isProfileKey(ev.profile) ? ev.profile : 'other';
-  const nav = PROFILES[profile].nav.find((i) => i.key === 'guests');
-  if (!nav || !navIncludes(profile, data.modules, 'guests') || !can('guests:read')) notFound();
+  const nav = guestNav(profile);
+  if (!data.modules.has('guests') || !can('guests:read')) notFound();
   const t = await getTranslations('rsvpQuestions');
   const tr = await getTranslations();
   const canWrite = can('guests:write');

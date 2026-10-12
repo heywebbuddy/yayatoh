@@ -39,8 +39,8 @@ export const ORG_SECTIONS: readonly OrgNavSection[] = [
   {
     key: 'events',
     items: [
-      // The home lists the org's events; creating one (`events/new`) starts there or in Create.
-      { key: 'home', path: '', icon: 'home', module: 'core', owns: ['events'] },
+      { key: 'home', path: '', icon: 'home', module: 'core' },
+      { key: 'events', path: 'events', icon: 'calendar', module: 'core', needs: 'events:read' },
       // M6.7a: an agency org's Clients | Events | Marketing | Reports (entitlement `agency`).
       {
         key: 'agency',

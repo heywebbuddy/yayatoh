@@ -2,6 +2,7 @@ import { myOrganizations } from '@yayatoh/tenancy';
 import { buttonClass } from '@yayatoh/ui';
 import { getTranslations } from 'next-intl/server';
 import { localizedPath } from '@/lib/seo/urls.ts';
+import { dashboardAccess } from '@/server/dashboard-access.ts';
 import { getSession, sessionOpensOrg } from '@/server/session.ts';
 import { appOrigin } from '@/server/tenant-return.ts';
 
@@ -24,6 +25,7 @@ export async function TenantAccount({
   orgId?: string;
 }) {
   const t = await getTranslations('tenantAccount');
+  const attendee = await getTranslations('attendeeDashboard');
   const session = await getSession();
   const here = localizedPath(locale, path);
   if (!session)
@@ -39,10 +41,17 @@ export async function TenantAccount({
     orgId && sessionOpensOrg(session, orgId)
       ? (await myOrganizations(session.userId)).find((m) => m.orgId === orgId)
       : undefined;
+  const access = await dashboardAccess();
   return (
     <nav aria-label={t('label')} className="flex flex-wrap items-center gap-3">
       <span className="text-caption text-ink-2">{t('signedInAs', { name: session.name })}</span>
-      {orgId ? (
+      <a
+        href={`${appOrigin()}${localizedPath(locale, access.kind === 'organizer' ? '/o' : '/attendee')}`}
+        className={linkClass}
+      >
+        {attendee('dashboardLink')}
+      </a>
+      {orgId && access.kind !== 'organizer' ? (
         <a href={localizedPath(locale, '/tickets')} className={linkClass}>
           {t('tickets')}
         </a>

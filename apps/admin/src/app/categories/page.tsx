@@ -5,6 +5,7 @@ import { Shell } from '@/components/shell.tsx';
 import { listPlatformCategories } from '@/server/platform-categories.ts';
 import { requireStaff } from '@/server/staff.ts';
 import { savePlatformCategoriesAction } from './actions.ts';
+import { CreateCategoryForm } from './create-form.tsx';
 
 /**
  * U8 (UX-2): the platform's default event categories. Every new organization's list starts as
@@ -21,8 +22,9 @@ export default async function PlatformCategoriesPage({
   const t = await getTranslations('platformCategories');
   const rows = await listPlatformCategories(staff.actor);
   const included = rows.filter((r) => r.inDefaults);
-  const done = sp.done === 'saved' || sp.done === 'moved' ? sp.done : null;
-  const label = (key: string) => t(`labels.${key}` as 'labels.other');
+  const done = sp.done === 'saved' || sp.done === 'moved' || sp.done === 'created' ? sp.done : null;
+  const label = (key: string) =>
+    rows.find((r) => r.key === key)?.label ?? t(`labels.${key}` as 'labels.other');
   return (
     <Shell staff={staff}>
       <PageHeader title={t('title')} description={t('description')} />
@@ -30,6 +32,11 @@ export default async function PlatformCategoriesPage({
         {done ? <Alert tone="info" title={t(`done.${done}`)} /> : null}
         {sp.error === 'empty' ? <Alert title={t('error.empty')} /> : null}
       </div>
+      <Card className="flex flex-col gap-4">
+        <h2 className="text-section">{t('create')}</h2>
+        <p className="text-body text-ink-2">{t('createHint')}</p>
+        <CreateCategoryForm />
+      </Card>
       <Card className="flex flex-col gap-4">
         <h2 className="text-section">{t('listTitle', { count: included.length })}</h2>
         <p className="text-body text-ink-2">{t('explain')}</p>

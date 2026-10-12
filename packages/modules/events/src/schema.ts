@@ -12,7 +12,7 @@ import {
   uniqueIndex,
   uuid,
 } from 'drizzle-orm/pg-core';
-import { ATTENDANCE_MODES, EVENT_CATEGORIES } from './domain/categories.ts';
+import { ATTENDANCE_MODES } from './domain/categories.ts';
 
 export const eventsSchema = pgSchema('events');
 
@@ -85,9 +85,15 @@ export const events = tenantTable(
      * to (the marketplace taxonomy); a hidden org category keeps its events.
      */
     orgCategoryId: uuid('org_category_id'),
+    /**
+     * Per-event branding (agreement §3): the event's own accent colour (#rrggbb) on its public
+     * pages, over the org's brand kit. Null: the org's colour.
+     */
+    brandColor: text('brand_color'),
   },
   (t) => [
     uniqueIndex('events_slug_key').on(t.slug),
+    check('events_brand_color_check', sql`brand_color is null or brand_color ~ '^#[0-9a-f]{6}$'`),
     index('events_org_id_starts_at_idx').on(t.orgId, t.startsAt),
     check('events_status_check', inList('status', EVENT_STATUSES)),
     check('events_visibility_check', inList('visibility', EVENT_VISIBILITIES)),
@@ -102,10 +108,11 @@ export const events = tenantTable(
     uniqueIndex('events_org_id_currency_key').on(t.orgId, t.id, t.currency),
     index('events_org_id_venue_id_idx').on(t.orgId, t.venueId),
     index('events_org_id_category_idx').on(t.orgId, t.category),
-    check(
-      'events_category_check',
-      sql.raw(`category is null or category in (${EVENT_CATEGORIES.map((v) => `'${v}'`).join(', ')})`),
-    ),
+    foreignKey({
+      columns: [t.category],
+      foreignColumns: [platformCategories.key],
+      name: 'events_category_fk',
+    }),
     check('events_attendance_mode_check', inList('attendance_mode', ATTENDANCE_MODES)),
     index('events_org_id_org_category_id_idx').on(t.orgId, t.orgCategoryId),
     foreignKey({
@@ -229,20 +236,23 @@ export const platformCategories = eventsSchema.table(
   'platform_categories',
   {
     key: text('key').primaryKey(),
+    label: text('label'),
     position: integer('position').notNull(),
     inDefaults: boolean('in_defaults').notNull().default(true),
     updatedBy: text('updated_by').notNull().default('migration'),
     updatedAt: ts('updated_at').notNull().defaultNow(),
   },
-  () => [check('platform_categories_key_check', inList('key', EVENT_CATEGORIES))],
+  (t) => [
+    check('platform_categories_key_check', sql`key ~ '^[a-z][a-z0-9_]{0,59}$'`),
+    check(
+      'platform_categories_label_check',
+      sql`label is null or char_length(btrim(label)) between 1 and 60`,
+    ),
+    uniqueIndex('platform_categories_label_unique').on(sql`lower(${t.label})`).where(sql`label is not null`),
+  ],
 );
 
-/**
- * U8 (UX-2): the org's own categories, seeded from the platform defaults on the first change.
- * `name` null = the platform label of `platform_key` (translated); a custom or renamed category
- * has a name. Every category maps to a platform key, so the marketplace keeps its taxonomy.
- * Hidden categories leave the pickers; events keep them.
- */
+/** Organization-specific names and visibility; platform keys remain stable. */
 export const orgCategories = tenantTable(
   eventsSchema,
   'org_categories',
@@ -258,7 +268,11 @@ export const orgCategories = tenantTable(
       .on(t.orgId, sql`lower(${t.name})`)
       .where(sql`name is not null`),
     uniqueIndex('org_categories_org_default_key').on(t.orgId, t.platformKey).where(sql`name is null`),
-    check('org_categories_platform_key_check', inList('platform_key', EVENT_CATEGORIES)),
+    foreignKey({
+      columns: [t.platformKey],
+      foreignColumns: [platformCategories.key],
+      name: 'org_categories_platform_key_fk',
+    }),
     check('org_categories_name_check', sql`name is null or char_length(name) between 1 and 60`),
   ],
 );

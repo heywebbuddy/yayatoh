@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { MyTicketsView } from '@/components/my-tickets-view.tsx';
+import { redirect } from '@/i18n/navigation.ts';
 
 export async function generateMetadata({
   params,
@@ -22,6 +22,6 @@ export default async function MyTicketsPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const { signedOut } = await searchParams;
-  return <MyTicketsView orgId={null} siteName="Yayatoh" locale={locale} signedOut={signedOut} />;
+  await searchParams;
+  return redirect({ href: '/attendee/tickets', locale });
 }

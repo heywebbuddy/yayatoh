@@ -1,4 +1,4 @@
-import { listSeriesQuery } from '@yayatoh/events';
+import { listSeriesQuery, orgCategoriesQuery } from '@yayatoh/events';
 import { executeQuery } from '@yayatoh/kernel';
 import { roleCan } from '@yayatoh/tenancy';
 import { buttonClass, PageHeader } from '@yayatoh/ui';
@@ -8,6 +8,7 @@ import { CreateEventForm } from '@/components/create-event-form.tsx';
 import { HowItWorks } from '@/components/how-it-works.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { loadConsole } from '@/server/console.ts';
+import { categoryLabels } from '@/server/event-categories.ts';
 import { ports } from '@/server/ports.ts';
 import { pickerProfiles } from '@/server/profile-picker.ts';
 import { createEventAction } from './actions.ts';
@@ -27,6 +28,9 @@ export default async function NewEventPage({
   if (!roleCan(data.role, 'events:write')) notFound();
   const t = await getTranslations('newEvent');
   const series = await executeQuery(listSeriesQuery, {}, data.ctx, ports);
+  const categories = await executeQuery(orgCategoriesQuery, {}, data.ctx, ports);
+  const tg = await getTranslations();
+  const categoryLabel = await categoryLabels((key) => tg(`categories.${key}`));
   const preset = series.find((s) => s.id === sp.series)?.id;
   return (
     <>
@@ -58,6 +62,8 @@ export default async function NewEventPage({
         }}
         series={series.map((s) => ({ id: s.id, name: s.name }))}
         profiles={await pickerProfiles(data.modules)}
+        categories={categories.map((c) => ({ ref: c.ref, label: c.name ?? categoryLabel(c.platformKey) }))}
+        manageCategoriesHref={roleCan(data.role, 'org:update') ? `/o/${org}/settings/categories` : undefined}
       />
     </>
   );

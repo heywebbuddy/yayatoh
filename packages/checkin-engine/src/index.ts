@@ -21,6 +21,17 @@ export {
   searchGuests,
   snapshotLabels,
 } from './guests.ts';
+// Ticket-holder lookup at the door by name, email or phone (server and Scan PWA alike).
+export {
+  findTicketHolders,
+  LOOKUP_LIMIT,
+  type LookupKind,
+  lookupKind,
+  nameMatches,
+  PHONE_KEY_DIGITS,
+  phoneKey,
+  phoneLookupHash,
+} from './lookup.ts';
 export {
   admittedKey,
   legacyIndex,

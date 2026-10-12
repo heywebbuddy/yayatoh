@@ -16,12 +16,15 @@ import type { IntegrationAuth } from '../../auth/port.ts';
 import { currentMappingsTx } from '../../connections.ts';
 import { ACTIVE_RUN_STATUSES, SHEET_LINK_STATUSES } from '../../domain/sync.ts';
 import { connections, recordLinks, sheetLinks, syncCursors, syncErrors, syncRuns } from '../../schema.ts';
+import { SHEET_TAB, SYNC_LABEL, valuesPath } from './grid.ts';
 import { GOOGLE_SHEETS, googleSheetsConnector, SHEET_COLUMNS } from './index.ts';
 
 /**
  * Linking an event's attendee list to a spreadsheet (M6.4b). Link: the transport creates the
- * spreadsheet at Google through the port (the header row is the push mapping's columns), then
- * `linkSheetCommand` records it and queues a sync (which fills the sheet). Unlink: nothing syncs
+ * spreadsheet at Google through the port (Sheets API v4: `POST /v4/spreadsheets` with one frozen-
+ * header "Attendees" tab, `PUT values/Attendees!A1` for the header row — the push mapping's
+ * columns plus the "Yayatoh sync" column — and `POST :batchUpdate` to hide that last column),
+ * then `linkSheetCommand` records it and queues a sync (which fills the sheet). Unlink: nothing syncs
  * any more; the sheet stays at Google with what it holds; the rows' links go, so a later link
  * starts a fresh sheet. Reads `integrations:read`, writes `integrations:manage`.
  */
@@ -302,10 +305,48 @@ export async function linkEventSheet(
   const res = await client.request({
     method: 'POST',
     path: '/v4/spreadsheets',
-    body: { properties: { title: target.title }, headers: target.headers },
+    body: {
+      properties: { title: target.title },
+      sheets: [{ properties: { title: SHEET_TAB, gridProperties: { frozenRowCount: 1 } } }],
+    },
     idempotencyKey: `sheet-link:${input.connectionId}:${input.eventId}:${crypto.randomUUID()}`,
   });
-  const created = z.object({ spreadsheetId: z.string().regex(/^[A-Za-z0-9_-]{1,128}$/) }).parse(res.body);
+  const created = z
+    .object({
+      spreadsheetId: z.string().regex(/^[A-Za-z0-9_-]{1,128}$/),
+      sheets: z.array(z.object({ properties: z.object({ sheetId: z.int(), title: z.string() }) })).min(1),
+    })
+    .parse(res.body);
+  const tab = created.sheets.find((s) => s.properties.title === SHEET_TAB) ?? created.sheets[0];
+  const labels = [...target.headers.map((h) => h.label), SYNC_LABEL];
+  const headerRange = `${SHEET_TAB}!A1`;
+  await client.request({
+    method: 'PUT',
+    path: valuesPath(created.spreadsheetId, headerRange),
+    query: { valueInputOption: 'RAW' },
+    body: { range: headerRange, majorDimension: 'ROWS', values: [labels] },
+  });
+  // The sync column holds each row's stamp: hidden, so people only see their columns.
+  await client.request({
+    method: 'POST',
+    path: `/v4/spreadsheets/${created.spreadsheetId}:batchUpdate`,
+    body: {
+      requests: [
+        {
+          updateDimensionProperties: {
+            range: {
+              sheetId: tab?.properties.sheetId ?? 0,
+              dimension: 'COLUMNS',
+              startIndex: labels.length - 1,
+              endIndex: labels.length,
+            },
+            properties: { hiddenByUser: true },
+            fields: 'hiddenByUser',
+          },
+        },
+      ],
+    },
+  });
   return executeCommand(
     linkSheetCommand,
     { ...input, spreadsheetId: created.spreadsheetId, title: target.title },

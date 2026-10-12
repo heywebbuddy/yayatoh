@@ -336,6 +336,7 @@
   },
   "nav": {
     "home": "ホーム",
+    "events": "イベント",
     "analysis": "分析",
     "setupGuide": "セットアップガイド",
     "branding": "ブランディング",
@@ -964,7 +965,13 @@
     "fromTemplate": "テンプレートから始める",
     "guided": "ガイド付き作成(3ステップ)",
     "currency": "通貨",
-    "currencyHint": "チケット、決済、レポートで使われます。最初の注文までは変更できます。"
+    "currencyHint": "チケット、決済、レポートで使われます。最初の注文までは変更できます。",
+    "category": "カテゴリ（任意）",
+    "categoryNone": "カテゴリはまだありません",
+    "categoryHint": "イベントの整理に役立ち、参加者がイベントを見つけやすくなります。あとから「イベントの詳細」で変更できます。",
+    "manageCategories": "カテゴリを管理（新しいタブで開きます）",
+    "refreshCategories": "カテゴリ一覧を更新",
+    "refreshingCategories": "更新中…"
   },
   "tickets": {
     "subtitle": "チケット種別、価格、在庫を管理します。購入者に表示される価格はすべて手数料込みです。",
@@ -1526,8 +1533,8 @@
     "noAccessTitle": "あなたの役割ではインポートを利用できません",
     "noAccessDescription": "参加者を編集できる役割を付与するよう主催者に依頼してください。",
     "step1": "1. ファイルを選択",
-    "fileHint": "ヘッダー行があり、1行に1人のゲストを記載したCSV（最大20,000行、5 MB）。Excel、Numbers、Google SheetsからCSVとしてエクスポートしてください。",
-    "file": "CSVファイル",
+    "fileHint": "ヘッダー行があり、1行に1人のゲストを記載したCSVまたはExcel（.xlsx）ファイル（最大20,000行、5 MB）。テンプレートから始めるか、Excel、Numbers、Google Sheetsからエクスポートしてください。",
+    "file": "CSVまたはExcelファイル",
     "upload": "アップロード",
     "step2": "2. {file}の列を対応付ける",
     "rows": "{count, plural, other {#行}}",
@@ -1567,7 +1574,8 @@
       "cell_too_long": "1,000文字を超えるセルがあります。",
       "unterminated_quote": "閉じられていない引用符があるため、CSVとして読み込めません。"
     },
-    "backToEvent": "イベントの概要に戻る"
+    "backToEvent": "イベントの概要に戻る",
+    "template": "テンプレートをダウンロード（CSV）"
   },
   "distribution": {
     "title": "このチケットを送る",
@@ -1825,7 +1833,12 @@
         "other": "調整 · {event}"
       }
     },
-    "destinationHold": "新しい支払い口座: 安全のため、この口座への送金は {until} 以降に始まります。組織のオーナーにメールでお知らせしました。"
+    "destinationHold": "新しい支払い口座: 安全のため、この口座への送金は {until} 以降に始まります。組織のオーナーにメールでお知らせしました。",
+    "disconnectFake": {
+      "hint": "使われていないテスト用の架空アカウントを切断すると、別のプロバイダーで入金設定をやり直せます。注文や精算で使用されたアカウントは切断できません。",
+      "label": "テストアカウントを切断",
+      "confirm": "このテスト用入金アカウントを切断しますか？この操作は元に戻せません。"
+    }
   },
   "fakeConnect": {
     "eyebrow": "テストモード",
@@ -2175,12 +2188,36 @@
         "exit": "出口",
         "dance_floor": "ダンスフロア",
         "bar": "バー",
+        "vip_area": "VIPエリア",
         "custom": "その他"
       },
       "accessibleCol": "アクセシブル席",
       "accessibleOf": "{item}のアクセシブル席",
       "accessibleHint": "アクセシブル席：番号を入力します（例「1, 2」）。座席表では枠付きで表示され、座席ルールで確保できます。",
-      "sponsoredBy": "スポンサー：{sponsor}"
+      "sponsoredBy": "スポンサー：{sponsor}",
+      "tableShape": "テーブルの形",
+      "shape": {
+        "round": "円形",
+        "rect": "長方形"
+      },
+      "addSeat": "単独の座席を追加",
+      "width": "幅（cm）",
+      "height": "高さ（cm）",
+      "sizeCol": "サイズ（cm）",
+      "sectionCol": "セクション",
+      "sectionOf": "{item}のセクション",
+      "noSection": "セクションなし",
+      "vipSection": "{section}（VIP）",
+      "sections": "セクション",
+      "sectionsHint": "列やテーブルを「家族」「バルコニー」などのセクションにまとめます。VIPセクションは座席選択や会場マップで目立つように表示されます。フロア上で示すにはVIPエリアを描いてください。",
+      "sectionName": "セクション{section}の名前",
+      "sectionVip": "VIP",
+      "sectionItems": "{count, plural, other {列・テーブル #件}}",
+      "removeSection": "削除",
+      "removeSectionNamed": "セクション{section}を削除",
+      "newSection": "新しいセクション",
+      "addSection": "セクションを追加",
+      "moveSelectedTo": "選択項目をセクションへ移動…"
     },
     "prices": {
       "title": "価格",
@@ -2947,6 +2984,7 @@
       "exit": "出口",
       "dance_floor": "ダンスフロア",
       "bar": "バー",
+      "vip_area": "VIPエリア",
       "custom": "その他"
     },
     "named": "{type}：{label}",
@@ -7388,7 +7426,11 @@
         "title": "販売済みチケット",
         "ofCapacity": "/ {capacity}",
         "noCapacity": "販売中のチケットはまだありません",
-        "comps": "{count, plural, other {招待 # 枚}}"
+        "comps": "{count, plural, other {招待 # 枚}}",
+        "claimed": "{count, plural, other {譲渡済み # 枚}}",
+        "waiting": "{count, plural, other {譲渡待ち # 枚}}",
+        "registrations": "{count, plural, other {登録確定 # 件}}",
+        "inProgress": "{count, plural, other {手続き中 # 件}}"
       },
       "checkins": {
         "title": "チェックイン",
@@ -7635,7 +7677,11 @@
         "total": "{count, plural, other {スポンサー #社}}",
         "overdue": "{count, plural, other {期限切れの納品物 #件}}",
         "deliverablesPending": "スポンサーパッケージが有効になると、ここに納品物が表示されます。",
-        "open": "スポンサーを開く"
+        "open": "スポンサーを開く",
+        "packages": "{active, plural, other {有効なパッケージ #件}} · 保留中 {pending}件",
+        "revenue": "スポンサー収入：{amount}",
+        "deliverables": "納品物：{total}件中{done}件完了",
+        "sponsoredSessions": "{count, plural, other {スポンサー付きセッション #件}}"
       },
       "rsvp": {
         "title": "出欠",
@@ -9819,7 +9865,8 @@
       "not_validated": "インポートする前にリストを確認してください。",
       "nothing_to_import": "インポートできるグループがありません。リストの行を直して、もう一度インポートしてください。",
       "expired": "このインポートは期限切れです。リストからやり直してください。"
-    }
+    },
+    "template": "テンプレートをダウンロード"
   },
   "subEvents": {
     "link": "プログラムと招待",
@@ -13249,6 +13296,23 @@
     "cardTitle": "今夜の寄付用にカードを保存しますか？",
     "cardBody": "ゲストが自分のスマートフォンで読み取ります。ゲストが同意しない限り、何も保存されません。"
   },
+  "scanLookup": {
+    "view": "参加者を探す",
+    "title": "チケット名義人を探す",
+    "searchLabel": "名前、メールアドレス、電話番号",
+    "searchHint": "オフラインでも使えます。名前を2文字以上入力するか、メールアドレスまたは電話番号を完全に入力してください。",
+    "results": "該当するチケット名義人",
+    "noMatchTitle": "チケット名義人が見つかりません",
+    "noMatchName": "綴りを確認するか、メールアドレスまたは電話番号で試してください。",
+    "noMatchContact": "メールアドレスと電話番号は完全に一致する必要があります。代わりに名前で試してください。",
+    "checkIn": "チェックイン",
+    "checkInNamed": "{name} をチェックイン",
+    "checkedIn": "チェックイン済み",
+    "void": "キャンセル済みのチケット",
+    "search": "検索",
+    "consoleHint": "コードが読み取れないときに使います。名前はすべての語が一致する必要があり、メールアドレスと電話番号は完全に入力する必要があります。",
+    "searchAgain": "もう一度検索"
+  },
   "scanGuestKiosk": {
     "welcome": "{event} へようこそ",
     "subtitle": "テーブルを確認してチェックイン",
@@ -15151,7 +15215,7 @@
     "scores": "スコア",
     "engagement": "エンゲージメントスコア",
     "engagementValue": "{score} / 100",
-    "engagementHow": "{wAttended} × {attended} 参加イベント + {wSessions} × {sessions} セッション + {wCampaigns} × {campaigns} 開封キャンペーン = {points} ポイント. 100 × {points} ÷ ({points} + {half}) = {score}.",
+    "engagementHow": "{scored, plural, other {#件のイベント}}での活動 {eventPoints} ポイント（チェックイン、投票、質問、フィードバック、申し込み。設定した重みに基づく）+ {wAttended} × {attended} その他の参加イベント + {wSessions} × {sessions} セッション + {wCampaigns} × {campaigns} 開封キャンペーン = {points} ポイント。 100 × {points} ÷ ({points} + {half}) = {score}.",
     "noShow": "不参加の傾向",
     "noShowHow": "({noShows} 不参加 + {priorNoShows}) ÷ ({past} 過去の登録 + {priorRegistrations}) = {pct}. 今後のイベントはまだ集計されません。",
     "rfm": "RFM",
@@ -18924,5 +18988,91 @@
       "not_listed": "プロモーションできるのはマーケットプレイスのイベントだけです。",
       "failed": "プロモーションを開始できませんでした。もう一度お試しください。"
     }
+  },
+  "attendeeDashboard": {
+    "dashboardLink": "ダッシュボード",
+    "signInLink": "サインイン",
+    "signUpLink": "新規登録",
+    "title": "マイダッシュボード",
+    "navigation": "参加者メニュー",
+    "welcome": "Yayatoh へようこそ",
+    "browse": "イベントを探す",
+    "nav": {
+      "overview": "概要",
+      "events": "マイイベント",
+      "tickets": "チケットと注文",
+      "schedule": "マイスケジュール",
+      "profile": "プロフィール",
+      "notifications": "通知",
+      "settings": "アカウント設定"
+    },
+    "descriptions": {
+      "overview": "予約、今後のイベント、アカウントをまとめて確認できます。",
+      "events": "予約または登録したイベントです。",
+      "tickets": "注文を開くと、QRコードの表示、チケットのダウンロード、利用可能な返金・譲渡の手続きができます。",
+      "schedule": "セッションの予約と、対応イベントの個人スケジュールです。",
+      "profile": "アカウント名と写真を管理します。",
+      "notifications": "主催者ごとに受け取る内容を選べます。",
+      "settings": "サインイン、セキュリティ、個人データを管理します。"
+    },
+    "signInTitle": "イベントはここから",
+    "signInHint": "アカウントにサインインすると、確認済みメールアドレスで購入した内容を確認できます。下でチケットのメールアドレスを確認して、その予約を表示することもできます。",
+    "accountSignIn": "アカウントにサインイン",
+    "createAccount": "メールのコードで続行",
+    "guestSignIn": "メールのコードでチケットを表示",
+    "verifyEmail": "予約を表示する前に、アカウントのメールアドレスを確認してください。メールのワンタイムコードでサインインできます。",
+    "accountRequired": "アカウントを管理するにはサインインしてください",
+    "accountRequiredHint": "チケットのメールアドレス確認では予約のみ表示できます。プロフィールやセキュリティを管理するには、同じメールアドレスでアカウントにサインインしてください。",
+    "ticketCount": "{count, plural, other {#枚のチケットを予約済み}}",
+    "openOrder": "チケットを表示・注文を管理",
+    "openSchedule": "マイスケジュールを開く",
+    "emptyTitle": "表示する予約はありません",
+    "emptyHint": "このメールアドレスでイベントを予約すると、ここに表示されます。",
+    "signedInAs": "{email} の予約",
+    "upcomingEvents": "今後のイベント",
+    "orders": "注文",
+    "eventsAttended": "過去に予約したイベント",
+    "nextEvents": "次のイベント",
+    "upcoming": "今後・開催中",
+    "past": "過去のイベント",
+    "noneInPeriod": "この期間のイベントはありません。",
+    "signOut": "サインアウト",
+    "noSchedule": "セッションのスケジュールはまだありません",
+    "noScheduleHint": "予約にセッションが含まれる場合にスケジュールが表示されます。通常のチケット制イベントではセッションのスケジュールは不要です。",
+    "preferencesHint": "この主催者からのメールリマインダー、イベントの最新情報、お得な情報、利用可能なSMSの受信設定を管理します。",
+    "managePreferences": "通知設定を管理",
+    "noPreferences": "この主催者の連絡設定はまだありません。",
+    "organizationPrivacy": "組織が保有する自分のデータを請求",
+    "noOrganizations": "主催者はまだいません",
+    "preferencesEmpty": "予約後に主催者ごとの設定が利用できるようになります。",
+    "profile": {
+      "name": "氏名",
+      "nameError": "1〜120文字で名前を入力してください。",
+      "email": "確認済みメールアドレス",
+      "emailHint": "予約はこの確認済みメールアドレスで照合されます。アカウント名を変更しても、既存のチケット所有者情報は書き換わりません。",
+      "photo": "プロフィール写真",
+      "photoHint": "JPEG、PNG、WebP形式、512 KBまで。写真は正方形のアバターにリサイズされます。",
+      "photoError": "512 KB未満の有効なJPEG、PNG、WebP画像を選択してください。",
+      "removePhoto": "現在の写真を削除",
+      "save": "プロフィールを保存",
+      "saving": "保存中…",
+      "saved": "プロフィールを保存しました。",
+      "error": "プロフィールを保存できませんでした。入力内容を確認して、もう一度お試しください。"
+    },
+    "backToDashboard": "マイダッシュボードに戻る",
+    "organizerSignInTitle": "組織としてサインイン",
+    "organizerSignInDescription": "組織へのアクセス権があるアカウントでサインインして、イベントとチームを管理します。",
+    "attendeeSignInTitle": "参加者としてサインイン",
+    "attendeeSignInDescription": "サインインして、チケット、予約、プロフィールを確認しましょう。",
+    "attendeeSignUpTitle": "新規登録",
+    "attendeeSignUpDescription": "メールアドレスを確認してアカウントを作成し、イベントとチケットをまとめて管理しましょう。",
+    "organizationAccessRequired": "このアカウントには組織へのアクセス権がありません。主催者アカウントを使用するか、参加者ダッシュボードに進んでください。",
+    "useAnotherAccount": "別のアカウントを使用"
+  },
+  "eventBranding": {
+    "title": "このイベントの色",
+    "description": "公開イベントページで、このイベント独自のアクセントカラーを使います。空欄にすると、下の組織のブランドカラーが使われます。",
+    "color": "イベントカラー",
+    "usesOrg": "このイベントは組織のブランドカラーを使用しています。"
   }
 }

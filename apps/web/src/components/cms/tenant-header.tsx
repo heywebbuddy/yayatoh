@@ -1,5 +1,7 @@
 import type { PublicOrganizer } from '@yayatoh/marketplace';
+import { publicMedia } from '@yayatoh/media';
 import { getLocale, getTranslations } from 'next-intl/server';
+import { MediaPicture } from '@/components/media-picture.tsx';
 import { TenantAccount } from '@/components/tenant-account.tsx';
 import { ThemeSwitch } from '@/components/theme-switch.tsx';
 import { Link } from '@/i18n/navigation.ts';
@@ -16,13 +18,16 @@ const linkClass =
  */
 export async function TenantHeader({ org, current }: { org: PublicOrganizer; current?: string }) {
   const t = await getTranslations('cmsPublic');
-  const [nav, posts, contact, locale, theme] = await Promise.all([
+  const [nav, posts, contact, locale, theme, logos] = await Promise.all([
     cachedNavPages(org.orgId),
     cachedEntries(org.orgId, 'post', 1),
     cachedContactPage(org.orgId),
     getLocale(),
     currentTheme(),
+    publicMedia('org', org.orgId),
   ]);
+  // White-label (agreement §3): the org's own logo in its site's header, else its initials.
+  const logo = logos[0] ?? null;
   const links = [
     ...(posts.items.length > 0 ? [{ href: '/blogs', label: t('blog') }] : []),
     ...nav.map((p) => ({ href: entryPath('page', p.slug), label: p.title })),
@@ -36,17 +41,27 @@ export async function TenantHeader({ org, current }: { org: PublicOrganizer; cur
           href="/"
           className="inline-flex min-h-10 items-center gap-2.5 rounded-control text-[17px] font-extrabold tracking-[-0.02em] text-ink"
         >
-          <span
-            aria-hidden="true"
-            className="flex size-[34px] shrink-0 items-center justify-center rounded-[11px] bg-brand-strong text-[13px] font-extrabold text-white"
-          >
-            {org.name
-              .split(/\s+/)
-              .filter(Boolean)
-              .slice(0, 2)
-              .map((w) => w[0]?.toUpperCase() ?? '')
-              .join('')}
-          </span>
+          {logo ? (
+            <span
+              aria-hidden="true"
+              data-testid="tenant-logo"
+              className="flex h-[34px] max-w-28 shrink-0 items-center justify-center rounded-[11px] bg-white px-1.5"
+            >
+              <MediaPicture image={logo} sizes="112px" eager className="max-h-7 w-auto object-contain" />
+            </span>
+          ) : (
+            <span
+              aria-hidden="true"
+              className="flex size-[34px] shrink-0 items-center justify-center rounded-[11px] bg-brand-strong text-[13px] font-extrabold text-white"
+            >
+              {org.name
+                .split(/\s+/)
+                .filter(Boolean)
+                .slice(0, 2)
+                .map((w) => w[0]?.toUpperCase() ?? '')
+                .join('')}
+            </span>
+          )}
           {org.name}
         </Link>
         {links.length > 0 ? (

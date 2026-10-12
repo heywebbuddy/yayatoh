@@ -67,8 +67,8 @@ export default async function AgencyBillingPage({
             title={t('noClientsTitle')}
             description={t('noClients', { address: data.org.slug })}
             action={
-              <Link href="/help" className={buttonClass('primary', 'md')}>
-                {ta('helpAction')}
+              <Link href={`/o/${org}/agency`} className={buttonClass('primary', 'md')}>
+                {ta('seeClients')}
               </Link>
             }
           />

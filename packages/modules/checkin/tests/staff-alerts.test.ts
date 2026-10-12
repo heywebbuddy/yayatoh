@@ -78,14 +78,14 @@ describe('staff alerts (M3.4a)', () => {
     expect(alerts[0]?.kind).toBe('device_offline');
   });
 
-  it('capacity near at 90 % of expected, once per event day, for all staff', () => {
-    expect(capacityPercent(89, 100)).toBe(89);
+  it('capacity near at 95 % of expected (the alert engine’s number), once per event day, for all staff', () => {
+    expect(capacityPercent(94, 100)).toBe(94);
     expect(capacityPercent(1, 0)).toBeNull();
-    expect(deriveStaffAlerts({ ...base, devices: [], checkedIn: 89 })).toEqual([]);
+    expect(deriveStaffAlerts({ ...base, devices: [], checkedIn: 94 })).toEqual([]);
     const [a] = deriveStaffAlerts({ ...base, devices: [], checkedIn: CAPACITY_NEAR_PCT });
     expect(a).toMatchObject({
       kind: 'capacity_near',
-      percent: 90,
+      percent: 95,
       supervisorOnly: false,
       key: 'capacity_near:e1:2027-12-01',
     });

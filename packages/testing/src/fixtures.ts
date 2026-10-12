@@ -3351,17 +3351,12 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
         )
       : undefined;
   if (!sheetAccount || !sheetLink || !guestRow) throw new Error('fixture: the sheet did not fill');
-  sheetsRemoteEdit(
-    sheetAccount,
-    sheetLink.spreadsheetId,
-    guestRow.rowId,
-    { name: 'Sheet Guest (sheet)' },
-    new Date(Date.now() - 60_000),
-  );
+  sheetsRemoteEdit(sheetAccount, sheetLink.spreadsheetId, guestRow.rowId, { name: 'Sheet Guest (sheet)' });
+  // A sheet edit counts from the run that reads it: ours is dated after that run, so it is later.
   await executeCommand(
     setAttendeeLabelsCommand,
     { eventId: event.id, attendeeIds: [sheetGuest.id], add: ['vip'] },
-    ctx(),
+    ctx({ now: new Date(Date.now() + 60_000) }),
     ports,
   );
   await runSync(org.id, sheets.connectionId, { auth: fakeAuth }, ports, { force: true });

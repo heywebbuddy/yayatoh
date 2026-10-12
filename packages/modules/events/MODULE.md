@@ -16,7 +16,7 @@ Events, their lifecycle and event-scoped roles. Owns Postgres schema `events`.
 
 **M1.4c/d content and access**
 - Venues belong to the `venues` module (tier 1); an event points at one with `venue_id` (composite FK). Picking a venue copies its name, city and country into the free-text fields, which stay what pages show (expand step; the free-text fields keep working without a venue).
-- Categories are the platform taxonomy `EVENT_CATEGORIES` (a CHECK on `events.category`); tags are per org (`event_tags`, unique per event case-insensitively via `tag_key`, at most 10 per event).
+- Categories reference the staff-managed `platform_categories` catalog (foreign keys on event and organization category keys); `EVENT_CATEGORIES` only supplies built-in translated labels. Staff create categories through an audited SECURITY DEFINER function; app_user can only read the catalog. Customized organization lists remain unchanged when platform defaults change; tags are per org (`event_tags`, unique per event case-insensitively via `tag_key`, at most 10 per event).
 - Content sections (`event_sections`) are typed per kind (Zod `SectionBody`), kept in dense `position` order; reorder takes either the full order (drag) or one step (keyboard), and a stale order is a `conflict`.
 - Organizer text is a small Markdown subset parsed to a tree (`domain/markdown.ts`) and rendered as React elements: raw HTML stays text; only http(s)/mailto links survive.
 - Announcements publish/unpublish; each publish emits `event.announcement_published@1` for notifications (M1.10). No email is sent here. `holders` announcements never reach public reads.

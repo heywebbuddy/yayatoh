@@ -1,6 +1,7 @@
 import { withPlatformReader } from '@yayatoh/db/platform';
-import { EVENT_CATEGORIES } from '@yayatoh/events/ui';
+import { EventCategoryKey } from '@yayatoh/events';
 import { sql } from 'drizzle-orm';
+import { z } from 'zod';
 
 /**
  * U8 (UX-2): the platform's default event category list. Every new organization's category list
@@ -9,7 +10,8 @@ import { sql } from 'drizzle-orm';
  * Every use lands in the access log with the staff actor.
  */
 export interface PlatformCategoryRow {
-  readonly key: (typeof EVENT_CATEGORIES)[number];
+  readonly key: string;
+  readonly label: string | null;
   readonly inDefaults: boolean;
   readonly position: number;
   readonly updatedBy: string;
@@ -22,31 +24,29 @@ export async function listPlatformCategories(actor: string): Promise<PlatformCat
     (tx) =>
       tx.execute<{
         key: string;
+        label: string | null;
         in_defaults: boolean;
         position: number;
         updated_by: string;
         updated_at: string;
       }>(
-        sql`select key, in_defaults, position, updated_by, updated_at from events.platform_categories
+        sql`select key, label, in_defaults, position, updated_by, updated_at from events.platform_categories
           order by in_defaults desc, position, key`,
       ),
   );
-  return rows
-    .filter((r) => (EVENT_CATEGORIES as readonly string[]).includes(r.key))
-    .map((r) => ({
-      key: r.key as PlatformCategoryRow['key'],
-      inDefaults: r.in_defaults,
-      position: Number(r.position),
-      updatedBy: r.updated_by,
-      updatedAt: new Date(r.updated_at),
-    }));
+  return rows.map((r) => ({
+    key: r.key,
+    label: r.label,
+    inDefaults: r.in_defaults,
+    position: Number(r.position),
+    updatedBy: r.updated_by,
+    updatedAt: new Date(r.updated_at),
+  }));
 }
 
 /** The default list in order (validated: known keys, each once, at least one). */
-export function parseDefaultKeys(keys: readonly string[]): (typeof EVENT_CATEGORIES)[number][] | null {
-  const known = keys.filter((k): k is (typeof EVENT_CATEGORIES)[number] =>
-    (EVENT_CATEGORIES as readonly string[]).includes(k),
-  );
+export function parseDefaultKeys(keys: readonly string[]): string[] | null {
+  const known = keys.filter((k): k is string => EventCategoryKey.safeParse(k).success);
   const unique = [...new Set(known)];
   return unique.length && unique.length === keys.length ? unique : null;
 }
@@ -73,4 +73,30 @@ export async function savePlatformDefaults(actor: string, keys: readonly string[
     { callsWritingFunctions: true },
   );
   return Number(row?.n ?? 0);
+}
+
+export const CreatePlatformCategoryInput = z.object({
+  key: EventCategoryKey,
+  label: z
+    .string()
+    .trim()
+    .min(1)
+    .max(60)
+    .transform((s) => s.replace(/\s+/g, ' ')),
+  include: z.boolean(),
+});
+
+export async function createPlatformCategory(
+  actor: string,
+  raw: z.input<typeof CreatePlatformCategoryInput>,
+) {
+  const input = CreatePlatformCategoryInput.parse(raw);
+  return withPlatformReader(
+    { actor, reason: `staff console: create platform category (${input.key})` },
+    (tx) =>
+      tx.execute(
+        sql`select events.create_platform_category(${input.key}, ${input.label}, ${input.include}, ${actor})`,
+      ),
+    { callsWritingFunctions: true },
+  );
 }

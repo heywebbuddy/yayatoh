@@ -76,13 +76,14 @@ export async function confirmStepUpAsPersonaAction(): Promise<StepUpState> {
   } catch (err) {
     if (isTwoFactorError(err))
       return { ok: false, code: err.code === 'rate_limited' ? 'rate_limited' : 'invalid_code' };
-    throw err;
+    console.error('Step-up confirmation failed', safeError(err));
+    return { ok: false, code: 'internal' };
   }
 }
 
 export interface StepUpState {
   readonly ok: boolean;
-  readonly code: 'invalid_code' | 'invalid_password' | 'rate_limited' | 'unauthenticated' | null;
+  readonly code: 'invalid_code' | 'invalid_password' | 'rate_limited' | 'unauthenticated' | 'internal' | null;
 }
 
 /** Check the proof and restart this session's fresh window (10 minutes). Audited in packages/auth. */
@@ -104,6 +105,12 @@ export async function confirmStepUpAction(_prev: StepUpState, form: FormData): P
         ok: false,
         code: err.code === 'rate_limited' || err.code === 'invalid_password' ? err.code : 'invalid_code',
       };
-    throw err;
+    console.error('Step-up confirmation failed', safeError(err));
+    return { ok: false, code: 'internal' };
   }
+}
+
+/** Log only an exception name and message; never include submitted passwords or authenticator codes. */
+function safeError(err: unknown) {
+  return err instanceof Error ? { name: err.name, message: err.message } : { name: 'UnknownError' };
 }

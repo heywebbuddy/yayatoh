@@ -1,15 +1,11 @@
-# Local development services. Development uses masked snapshots only — never production data.
 services:
   postgres:
-    # Postgres 18 with the pgvector extension (M6.12b matchmaking embeddings).
     image: pgvector/pgvector:pg18
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${LOCAL_POSTGRES_PASSWORD:-postgres}
       POSTGRES_DB: yayatoh
     ports: ["5432:5432"]
-    # Parallel queries over large tables (e.g. timed legacy-migration rehearsals) need more than
-    # Docker's default 64 MB of shared memory.
     shm_size: 256mb
     volumes: [pgdata:/var/lib/postgresql]
     healthcheck:

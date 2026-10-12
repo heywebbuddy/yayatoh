@@ -227,6 +227,48 @@ export async function contactPhonesTx(
   return new Map(rows.filter((r) => r.phone).map((r) => [r.id, r.phone as string]));
 }
 
+/**
+ * Phone numbers by email (normalized email → E.164) for the contacts that have one: the door
+ * lookup's phone hashes in the check-in manifest. A merged-away contact's number is not used.
+ */
+export async function contactPhonesByEmailTx(
+  tx: TenantTx,
+  emails: readonly string[],
+): Promise<Map<string, string>> {
+  const norms = [...new Set(emails.map(normalizeEmail))];
+  if (norms.length === 0) return new Map();
+  const rows = await tx
+    .select({ email: contacts.emailNorm, phone: contacts.phoneE164 })
+    .from(contacts)
+    .where(
+      and(
+        inArray(contacts.emailNorm, norms),
+        sql`${contacts.phoneE164} is not null`,
+        sql`${contacts.mergedInto} is null`,
+      ),
+    );
+  return new Map(rows.map((r) => [r.email, r.phone as string]));
+}
+
+/**
+ * Emails of the contacts whose number ends with these digits (the door lookup's phone key: the
+ * last eight digits, so a number typed without its country code still matches).
+ */
+export async function contactEmailsByPhoneTailTx(tx: TenantTx, digits: string): Promise<string[]> {
+  if (!/^\d{8,15}$/.test(digits)) return [];
+  const rows = await tx
+    .select({ email: contacts.emailNorm })
+    .from(contacts)
+    .where(
+      and(
+        sql`${contacts.mergedInto} is null`,
+        sql`right(${contacts.phoneE164}, ${digits.length}) = ${digits}`,
+      ),
+    )
+    .limit(50);
+  return rows.map((r) => r.email);
+}
+
 /** The org's contacts with this E.164 number (a text keyword such as STOP applies to each, M3.5b). */
 export async function contactIdsByPhoneTx(tx: TenantTx, phoneE164: string): Promise<string[]> {
   const rows = await tx.select({ id: contacts.id }).from(contacts).where(eq(contacts.phoneE164, phoneE164));

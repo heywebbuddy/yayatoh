@@ -33,7 +33,7 @@ controls:
     description: Written security commitments, a no-production-data rule for engineering and a code of conduct for anyone with access.
     evidence:
       - { kind: policy, path: compliance/policies/information-security.md }
-      - { kind: doc, path: CLAUDE.md, note: "Non-negotiable rules and Safety section binding every build session" }
+      - { kind: doc, path: docs/agent-briefs/common.md, note: "Rules binding every build session (the root agent guide was removed on Kartik_Fixes)" }
     owner: [Sign the information security policy; acknowledgement by each person with production access]
 
   - id: CC1.2
@@ -56,7 +56,7 @@ controls:
     title: Competence
     description: Build sessions follow a written agent guide and milestone briefs; reviewers are named per PR.
     evidence:
-      - { kind: doc, path: CLAUDE.md }
+      - { kind: doc, path: docs/roadmap.md, note: "Approved build plan, architecture and non-negotiable rules" }
       - { kind: doc, path: docs/agent-briefs/common.md }
     owner: [Background checks and training records for people with production access]
 

@@ -3,6 +3,7 @@ import {
   type BillingProvider,
   billingEnabled,
   billingProviderFromEnv,
+  persistedBillingCatalog,
   processBillingWebhook,
 } from '@yayatoh/billing';
 import { isProductionEnv } from '@yayatoh/kernel';
@@ -21,6 +22,7 @@ export function getBillingProvider(): BillingProvider {
   // The fake hands the webhooks a plan change or a payment causes straight to our own webhook
   // processor (M6.6b): the same verification and apply path the provider's deliveries take.
   provider ??= billingProviderFromEnv(process.env, {
+    catalog: persistedBillingCatalog,
     deliver: async (d) => {
       const out = await processBillingWebhook(d.body, new Headers(d.headers), 'fake', {
         provider: getBillingProvider,

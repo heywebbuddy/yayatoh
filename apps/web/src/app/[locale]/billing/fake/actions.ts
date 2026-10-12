@@ -1,14 +1,13 @@
 'use server';
 
 import {
-  fakeBillingCatalog,
   fakePortalSignature,
   fakeSubscriptionId,
   signFakeBillingEvent,
   subscriptionOfCustomer,
 } from '@yayatoh/billing';
 import { redirect } from 'next/navigation';
-import { testBillingSecret } from '@/server/billing.ts';
+import { getBillingProvider, testBillingSecret } from '@/server/billing.ts';
 
 export interface PortalParams {
   readonly locale: string;
@@ -36,9 +35,9 @@ export async function changeTestPlan(
 ): Promise<void> {
   const secret = verified(p);
   if (!secret) redirect(`/${p.locale}`);
-  const catalog = fakeBillingCatalog();
+  const catalog = await getBillingProvider().listCatalog();
   const planKey = String(formData.get('plan') ?? '');
-  const product = catalog.products.find((x) => x.planKey === planKey);
+  const product = catalog.products.find((x) => x.planKey === planKey && x.active);
   if (outcome === 'switch' && !product) {
     const qs = new URLSearchParams({
       customer: p.customer,
@@ -49,8 +48,9 @@ export async function changeTestPlan(
     redirect(`/${p.locale}/billing/fake?${qs}`);
   }
   const price =
-    catalog.prices.find((x) => x.productId === product?.id && x.interval === 'month') ??
-    catalog.prices.find((x) => x.productId === product?.id);
+    catalog.prices.find((x) => x.productId === product?.id && x.active && x.interval === 'month') ??
+    catalog.prices.find((x) => x.productId === product?.id && x.active);
+  if (outcome === 'switch' && !price) redirect(p.returnPath);
   const createdAt = new Date();
   const origin = process.env.BETTER_AUTH_URL ?? 'http://localhost:3000';
   const deliveries = [

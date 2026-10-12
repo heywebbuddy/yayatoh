@@ -43,6 +43,7 @@ export {
   removeGuestCommand,
 } from './guests.ts';
 export {
+  ATTENDEE_IMPORT_TEMPLATE,
   attendeeImportAction,
   attendeeImportBulk,
   guessMapping,

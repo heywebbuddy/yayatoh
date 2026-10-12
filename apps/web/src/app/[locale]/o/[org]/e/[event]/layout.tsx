@@ -42,6 +42,15 @@ const ASSISTANCE: NavItem = {
   icon: 'life-buoy',
 };
 
+/** The guest-party list also feeds seating on profiles that do not list it by default. */
+const GUESTS_NAV: NavItem = {
+  key: 'guests',
+  path: 'guests',
+  group: 'build',
+  module: 'guests',
+  icon: 'users',
+};
+
 /** M1.4b: every event can have several dates, a series and copies, whatever its profile. */
 const COPY_NAV: readonly NavItem[] = [
   { key: 'dates', path: 'dates', group: 'build', module: 'core', icon: 'calendar-range' },
@@ -59,6 +68,7 @@ const NEEDS: Readonly<Record<string, string>> = {
   team: 'event_team:read',
   trackedLinks: 'marketing:read',
   assistance: 'assistance:read',
+  guests: 'guests:read',
 };
 
 export default async function EventLayout({
@@ -74,12 +84,18 @@ export default async function EventLayout({
   const t = await getTranslations();
   const phase = eventPhase(ev.startsAt.toISOString(), ev.endsAt.toISOString());
   // M4.2a: only the sections this person may open (profile routes, team roles, permissions).
+  const profileNav = composeNav(profile, data.modules);
   const items = [
-    ...composeNav(profile, data.modules).flatMap((i) => (i.key === 'home' ? [i, COMMAND_CENTER] : [i])),
+    ...profileNav.flatMap((i) => (i.key === 'home' ? [i, COMMAND_CENTER] : [i])),
+    ...(!profileNav.some((i) => i.key === 'guests') && data.modules.has('guests') ? [GUESTS_NAV] : []),
     ...(data.modules.has('marketing') ? [TRACKED_LINKS] : []),
     ...(data.modules.has('checkin') ? [ASSISTANCE] : []),
     ...COPY_NAV,
-  ].filter((i) => opens(i.key) && (!NEEDS[i.key] || can(NEEDS[i.key] as string)));
+  ].filter(
+    (i) =>
+      (opens(i.key) || (i.key === 'guests' && opens('seating'))) &&
+      (!NEEDS[i.key] || can(NEEDS[i.key] as string)),
+  );
   const rules = opens('setupGuide') ? await loadReadiness(org, event) : [];
   const counted = rules.filter((r) => !r.comingSoon);
   // U7: the series this event is part of (series are org-level: co-hosts without org access don't see it).

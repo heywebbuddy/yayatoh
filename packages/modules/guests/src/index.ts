@@ -65,6 +65,7 @@ export {
 export {
   GUEST_IMPORT_FIELDS,
   GUEST_IMPORT_REJECTIONS,
+  GUEST_IMPORT_TEMPLATE,
   type GuestImportField,
   type GuestImportRejection,
   type GuestMapping,

@@ -2,7 +2,8 @@ import { qrPath } from '@yayatoh/pdf';
 
 /**
  * Server-rendered QR for a signed yy1 ticket code: one SVG path, no client JS, no innerHTML.
- * The same path renders in ticket PDFs; dark modules use currentColor so colour comes from tokens.
+ * The same path renders in ticket PDFs; modules stay near-black on the white code surface so a
+ * surrounding muted text colour cannot lower the QR's scan contrast.
  */
 export function TicketQr({ code, label, className }: { code: string; label: string; className?: string }) {
   const { size, d } = qrPath(code);
@@ -15,7 +16,7 @@ export function TicketQr({ code, label, className }: { code: string; label: stri
       className={className}
     >
       <rect width={size} height={size} fill="white" />
-      <path d={d} fill="currentColor" />
+      <path d={d} fill="black" />
     </svg>
   );
 }

@@ -1177,6 +1177,34 @@
       "when": 1791077391001,
       "tag": "0167_demonic_boomerang",
       "breakpoints": true
+    },
+    {
+      "idx": 168,
+      "version": "7",
+      "when": 1791390000000,
+      "tag": "0168_admin_billing_plans",
+      "breakpoints": true
+    },
+    {
+      "idx": 169,
+      "version": "7",
+      "when": 1791470000000,
+      "tag": "0169_dynamic_event_categories",
+      "breakpoints": true
+    },
+    {
+      "idx": 170,
+      "version": "7",
+      "when": 1791509400000,
+      "tag": "0170_public_series_directory",
+      "breakpoints": true
+    },
+    {
+      "idx": 171,
+      "version": "7",
+      "when": 1791809294542,
+      "tag": "0171_event_brand_color",
+      "breakpoints": true
     }
   ]
 }

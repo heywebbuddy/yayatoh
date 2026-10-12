@@ -34,7 +34,7 @@ async function run(
     ctx: Parameters<typeof executeCommand>[2],
   ) => Promise<unknown>,
 ): Promise<State> {
-  const { data, event: ev } = await loadEvent(org, event, 'guests');
+  const { data, event: ev } = await loadEvent(org, event, 'seating');
   try {
     await write(ev, data.ctx);
   } catch (err) {

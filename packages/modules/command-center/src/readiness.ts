@@ -1,6 +1,6 @@
 import type { TenantTx } from '@yayatoh/db';
 import { type EventDto, eventDetailsQuery, eventSectionsQuery, listOccurrencesQuery } from '@yayatoh/events';
-import { guestCountQuery, guestSitePublishedQuery } from '@yayatoh/guests';
+import { guestCountQuery, guestSitePublishedQuery, rsvpDeadlineTx } from '@yayatoh/guests';
 import type { Ctx } from '@yayatoh/kernel';
 import { composeNav, PROFILES, type ProfileKey } from '@yayatoh/platform';
 import { programCountsQuery } from '@yayatoh/program';
@@ -43,6 +43,11 @@ export async function readinessRulesTx(
     checklist.includes('guestSitePublished') && scope.modules.has('website')
       ? await guestSitePublishedQuery.handler({ input, ctx, tx })
       : null;
+  // The wedding checklist's RSVP deadline (set on the RSVP page).
+  const deadline =
+    checklist.includes('rsvpDeadlineSet') && scope.modules.has('guests')
+      ? await rsvpDeadlineTx(tx, ev.id)
+      : null;
   return readinessRules({
     name: ev.name,
     status: ev.status,
@@ -62,6 +67,7 @@ export async function readinessRulesTx(
     floorPlan: seating !== null,
     guests: guestList?.guests ?? 0,
     guestSite: site?.published ?? false,
+    rsvpDeadline: deadline !== null,
     // M4.2b: table tickets on sale (the gala's "tables & sponsors" item).
     tableTickets: tickets.filter((t) => t.tableSize !== null && t.archivedAt === null).length,
     now: ctx.now,

@@ -19,7 +19,7 @@ import {
   SUSPENSION_KINDS,
   suspensionHistoryQuery,
 } from '@yayatoh/tenancy';
-import { Alert, Button, Card, PageHeader, Select, StatusDot } from '@yayatoh/ui';
+import { Alert, Button, buttonClass, Card, CurrencyPicker, PageHeader, Select, StatusDot } from '@yayatoh/ui';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
@@ -104,6 +104,7 @@ export default async function TenantPage({
   const { done, error } = await searchParams;
   if (!z.uuid().safeParse(id).success) notFound();
   const t = await getTranslations('tenant');
+  const tp = await getTranslations('plans');
   const ctx = staff.ctx(id);
   let org: OrganizationDto;
   try {
@@ -577,13 +578,12 @@ export default async function TenantPage({
               <label htmlFor="fee-currency" className="text-[13px] font-bold text-ink">
                 {t('fees.currency')}
               </label>
-              <input
+              <CurrencyPicker
                 id="fee-currency"
                 name="currency"
                 required
-                pattern="[A-Za-z]{3}"
                 defaultValue={org.currency}
-                className={`${field} w-24`}
+                className={field}
               />
             </div>
             <div className="flex flex-col gap-1.5">
@@ -622,6 +622,11 @@ export default async function TenantPage({
       </Section>
 
       <Section id="entitlements" title={t('entitlements.title')}>
+        {staff.can('plans') ? (
+          <Link href={`/plans?org=${id}`} className={buttonClass('secondary', 'sm')}>
+            {tp('assign')}
+          </Link>
+        ) : null}
         <p className="text-body">
           {t('entitlements.current')}{' '}
           <span className="font-mono text-caption">{entitlements.modules.join(', ')}</span>

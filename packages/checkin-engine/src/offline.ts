@@ -21,6 +21,11 @@ export interface ManifestRow {
   readonly occurrenceId?: string | null;
   readonly holderName: string;
   readonly emailHash: string;
+  /**
+   * Door lookup by phone (agreement §8): `phoneLookupHash(salt, phone)` of the holder's number,
+   * when the organization has one. Absent on older manifests and holders without a number.
+   */
+  readonly phoneHash?: string;
   readonly issuedAt: string;
   /**
    * Migrated tickets (M2.2c, M1.9e): the legacy QR payloads that still admit this ticket, as

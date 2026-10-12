@@ -2,6 +2,8 @@ import {
   admittedKey,
   clockOffsetMs,
   eventDay,
+  findTicketHolders,
+  type LookupKind,
   legacyIndex,
   MANIFEST_VERSION,
   type ManifestHeader,
@@ -25,6 +27,17 @@ import {
   wipeAll,
 } from './store.ts';
 import { chunk, dedupeQueue, isNewDirective, singleFlight } from './sync-queue.ts';
+
+/** A ticket holder found by name, email or phone (`ScanClient.lookup`). */
+export interface LookupMatch {
+  readonly ticketId: string;
+  readonly shortCode: string;
+  readonly holderName: string;
+  readonly typeName: string;
+  readonly status: 'active' | 'void';
+  /** Already admitted today on this device (the server may know of other doors). */
+  readonly admittedHere: boolean;
+}
 
 export interface ScanConfig {
   readonly eventId: string;
@@ -436,6 +449,29 @@ export class ScanClient {
   }
 
   /** Decide locally (instant), record, queue; the flush that follows may refine it. */
+  /**
+   * Find ticket holders by name, email or phone in the downloaded list (works offline). Each
+   * match says whether this device already admitted it today; checking one in is a normal scan
+   * of its short code, so duplicates, dates and checkpoints follow the same rules as the camera.
+   */
+  async lookup(query: string): Promise<{ kind: LookupKind; matches: LookupMatch[] }> {
+    if (!this.snapshot) return { kind: 'name', matches: [] };
+    const now = new Date(Date.now() + this.clockOffsetMs);
+    const day = eventDay(now, this.snapshot.header.event.timezone);
+    const { kind, rows } = await findTicketHolders(this.byId.values(), this.snapshot.header.salt, query);
+    return {
+      kind,
+      matches: rows.map((r) => ({
+        ticketId: r.ticketId,
+        shortCode: r.shortCode,
+        holderName: r.holderName,
+        typeName: r.typeName,
+        status: r.status,
+        admittedHere: this.admitted.has(admittedKey(r.ticketId, day)),
+      })),
+    };
+  }
+
   async scan(code: string): Promise<ScanOutcome> {
     if (!this.snapshot) throw new Error('No guest list yet — connect once to download it.');
     const now = new Date(Date.now() + this.clockOffsetMs);

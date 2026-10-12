@@ -12,7 +12,7 @@ export async function GET(
   const { org, event, batch } = await params;
   const notFound = () => new Response('Not found', { status: 404, headers: { 'cache-control': 'no-store' } });
   if (!/^[0-9a-f-]{36}$/.test(batch)) return notFound();
-  const { data, event: ev } = await loadEvent(org, event, 'guests');
+  const { data, event: ev } = await loadEvent(org, event, 'seating');
   const t = await getTranslations('guestImport');
   try {
     const r = await executeQuery(

@@ -5,6 +5,7 @@ export {
   ensureEventAddonTx,
   eventAddonTx,
 } from './addons.ts';
+export { AdminPlanInput, assignOrganizationPlanCommand, persistedBillingCatalog } from './admin-plans.ts';
 export {
   type AgencyBilledClientDto,
   type AgencyBillingInForce,

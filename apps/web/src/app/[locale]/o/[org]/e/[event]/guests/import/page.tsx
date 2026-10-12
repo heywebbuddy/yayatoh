@@ -6,7 +6,6 @@ import {
   guestImportSummaryQuery,
 } from '@yayatoh/guests';
 import { executeQuery, isDomainError } from '@yayatoh/kernel';
-import { isProfileKey, navIncludes, PROFILES } from '@yayatoh/platform';
 import { Button, buttonClass, Card, EmptyState, PageHeader, Select, Table } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
@@ -69,10 +68,8 @@ export default async function GuestImportPage({
   const { locale, org, event } = await params;
   const sp = await searchParams;
   setRequestLocale(locale);
-  const { data, event: ev, can } = await loadEvent(org, event, 'guests');
-  const profile = isProfileKey(ev.profile) ? ev.profile : 'other';
-  if (!PROFILES[profile].nav.some((i) => i.key === 'guests') || !navIncludes(profile, data.modules, 'guests'))
-    notFound();
+  const { data, event: ev, can } = await loadEvent(org, event, 'seating');
+  if (!data.modules.has('guests')) notFound();
   const t = await getTranslations('guestImport');
   const tp = await getTranslations('parties');
   const te = await getTranslations();
@@ -205,7 +202,14 @@ export default async function GuestImportPage({
                     className="min-h-10 text-body file:me-3 file:min-h-10 file:rounded-pill file:border file:border-line file:bg-surface file:px-4"
                   />
                   <p id="import-file-hint" className="text-caption text-ink-2">
-                    {t('fileHint')}
+                    {t('fileHint')}{' '}
+                    <a
+                      href={`/${locale}/o/${org}/e/${event}/guests/import/template`}
+                      download
+                      className="underline underline-offset-2"
+                    >
+                      {t('template')}
+                    </a>
                   </p>
                 </div>
                 <div className={field}>

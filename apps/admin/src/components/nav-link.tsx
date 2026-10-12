@@ -8,8 +8,7 @@ import type { ReactNode } from 'react';
 /** A staff console sidebar row (ADR 0022); active follows the path, with aria-current. */
 export function NavLink({ href, icon, children }: { href: string; icon: ReactNode; children: ReactNode }) {
   const pathname = usePathname();
-  const active =
-    href === '/' ? pathname === '/' || pathname.startsWith('/tenants') : pathname.startsWith(href);
+  const active = href === '/' ? pathname === '/' : pathname === href || pathname.startsWith(`${href}/`);
   return (
     <Link
       href={href}

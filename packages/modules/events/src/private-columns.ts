@@ -33,6 +33,7 @@ export const privateColumns = columnPrivacy('events', {
     currency: 'vocab',
     category: 'vocab',
     attendance_mode: 'vocab',
+    brand_color: 'public',
   },
   occurrences: { status: 'vocab' },
   // U8: org category names label public event pages.

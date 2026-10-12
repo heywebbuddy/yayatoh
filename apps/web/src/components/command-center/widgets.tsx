@@ -68,7 +68,14 @@ type Readiness = {
   items: ReadinessItem[];
 };
 type Sales = { lines: { currency: string; total: number; today: number; refunds: number }[]; orders: number };
-type Tickets = { sold: number; comp: number; capacity: number };
+type Tickets = {
+  sold: number;
+  comp: number;
+  capacity: number;
+  claimed?: number;
+  waiting?: number;
+  registrations?: { confirmed: number; inProgress: number } | null;
+};
 type Checkins = { today: number; total: number; valid: number };
 type SeatFill = { occupied: number; total: number };
 type Devices = { online: number; enrolled: number; lowBattery: number };
@@ -288,6 +295,19 @@ function TicketsBody({ d, c }: { d: Tickets; c: Ctx }) {
         {d.comp > 0 ? ` · ${t('comps', { count: d.comp })}` : ''}
       </p>
       <Meter value={d.sold} max={d.capacity} label={tm('meter', { value: d.sold, max: d.capacity })} />
+      {d.claimed || d.waiting ? (
+        <p className="text-caption text-ink-2" data-testid="cc-tickets-distribution">
+          {t('claimed', { count: d.claimed ?? 0 })} · {t('waiting', { count: d.waiting ?? 0 })}
+        </p>
+      ) : null}
+      {d.registrations ? (
+        <p className="text-caption text-ink-2" data-testid="cc-tickets-registrations">
+          {t('registrations', { count: d.registrations.confirmed })}
+          {d.registrations.inProgress > 0
+            ? ` · ${t('inProgress', { count: d.registrations.inProgress })}`
+            : ''}
+        </p>
+      ) : null}
     </div>
   );
 }

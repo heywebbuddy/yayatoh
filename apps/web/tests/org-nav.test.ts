@@ -75,6 +75,15 @@ describe('org navigation route sweep', () => {
     expect(ORG_SECTIONS.map((s) => s.key)).toEqual(['events', 'audience', 'money', 'site', 'settings']);
   });
 
+  it('gives event readers a dedicated index while Home stays the organization overview', () => {
+    expect(ORG_SECTIONS[0]?.items.find((item) => item.key === 'events')).toMatchObject({
+      path: 'events',
+      needs: 'events:read',
+    });
+    expect(orgNavOwner('events')?.item.key).toBe('events');
+    expect(orgNavOwner('')?.item.key).toBe('home');
+  });
+
   it('gives every item one place, a label and a real page', () => {
     const keys = ORG_SECTIONS.flatMap((s) => s.items.map((i) => i.key));
     expect(new Set(keys).size).toBe(keys.length);

@@ -1,4 +1,4 @@
-import { EVENT_CATEGORIES } from '@yayatoh/events';
+import { EventCategoryKey } from '@yayatoh/events';
 import { z } from 'zod';
 import { PRICE_BANDS } from './document.ts';
 
@@ -29,7 +29,7 @@ export const SearchV2Params = z
   .object({
     q: opt(z.string().trim().max(100)),
     city: opt(z.string().trim().max(120)),
-    category: opt(z.enum(EVENT_CATEGORIES)),
+    category: opt(EventCategoryKey),
     price: opt(z.enum(PRICE_FILTER_BANDS as [string, ...string[]])),
     when: opt(z.enum(WHEN_PRESETS)),
     from: day,

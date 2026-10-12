@@ -31,24 +31,23 @@ export function noShowPropensityBps(pastRegistrations: number, noShows: number):
 export const NO_SHOW_PRIOR_BPS = noShowPropensityBps(0, 0);
 
 /**
- * Engagement score (0–100). M5.7b's engagement score (scans, polls, Q&A, feedback, enrollments,
- * org-adjustable weights) is not merged yet: this is the documented placeholder over the same
- * kinds of input, with the inputs M5.7b adds weighted in already (they are zero until it lands).
+ * Engagement score (0–100), over everything a person did with the org:
  *
- *   points = 10 × events attended (door scans) + 5 × sessions attended (session scans)
- *          + 2 × campaigns opened + 3 × poll and Q&A answers + 3 × feedback responses
- *          + 2 × session enrollments
+ *   points = Σ event engagement (M5.7b, per event: check-in, poll votes, questions, feedback and
+ *            optional-session enrollments on the org's own weights)
+ *          + 10 × events attended that have no M5.7b score yet (door scans)
+ *          + 5 × sessions attended (session scans) + 2 × campaigns opened
  *   score  = round(100 × points / (points + 25))
  *
- * The curve saturates: 25 points is a score of 50, 225 points is 90, and it approaches 100.
+ * An event with an M5.7b score counts through it (its check-in is part of it), never twice. The
+ * curve saturates: 25 points is a score of 50, 225 points is 90, and it approaches 100.
  */
 export const ENGAGEMENT_WEIGHTS = {
   eventsAttended: 10,
   sessionsAttended: 5,
   campaignsOpened: 2,
-  pollAnswers: 3,
-  feedback: 3,
-  enrollments: 2,
+  /** M5.7b event engagement points, already weighted by the org (1 point = 1 point). */
+  eventEngagement: 1,
 } as const;
 export const ENGAGEMENT_HALF_POINTS = 25;
 

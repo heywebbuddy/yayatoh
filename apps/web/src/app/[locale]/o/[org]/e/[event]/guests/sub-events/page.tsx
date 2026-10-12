@@ -11,7 +11,6 @@ import {
   windowInputs,
 } from '@yayatoh/guests';
 import { executeQuery } from '@yayatoh/kernel';
-import { isProfileKey, navIncludes, PROFILES } from '@yayatoh/platform';
 import { listLayoutsQuery, type SubEventChartDto, subEventChartsQuery } from '@yayatoh/seating';
 import { buttonClass, Card, EmptyState, PageHeader, Select } from '@yayatoh/ui';
 import { listVenuesQuery } from '@yayatoh/venues';
@@ -71,10 +70,8 @@ export default async function SubEventsPage({
   const { locale, org, event } = await params;
   const sp = await searchParams;
   setRequestLocale(locale);
-  const { data, event: ev, can } = await loadEvent(org, event, 'guests');
-  const profile = isProfileKey(ev.profile) ? ev.profile : 'other';
-  const nav = PROFILES[profile].nav.find((i) => i.key === 'guests');
-  if (!nav || !navIncludes(profile, data.modules, 'guests') || !can('guests:read')) notFound();
+  const { data, event: ev, can } = await loadEvent(org, event, 'seating');
+  if (!data.modules.has('guests') || !can('guests:read')) notFound();
   const t = await getTranslations('subEvents');
   const tp = await getTranslations('parties');
   const canWrite = can('guests:write');

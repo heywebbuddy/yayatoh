@@ -395,9 +395,11 @@ describe('My tickets: orders of a verified address', () => {
         'currency',
         'endsAt',
         'eventName',
+        'eventId',
         'managePath',
         'orderId',
         'orgName',
+        'orgId',
         'startsAt',
         'status',
         'tickets',
@@ -405,6 +407,8 @@ describe('My tickets: orders of a verified address', () => {
         'totalMinor',
       ].sort(),
     );
+    expect(onA[0]?.orgId).toBe(a.org.id);
+    expect(onA[0]?.eventId).toBe(eventA);
     const token = onA[0]?.managePath.replace('/orders/', '') ?? '';
     expect((await orderByManageToken(token))?.id).toBe(onA[0]?.orderId);
     expect(await guestOrders(addr('nobody'), null)).toEqual([]);

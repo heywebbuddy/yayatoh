@@ -202,6 +202,44 @@ export function createOrganization(ctx: Ctx, input: unknown, ports: CommandPorts
   return executeCommand(createOrganizationCommand, input, { ...ctx, orgId }, ports);
 }
 
+/** Staff provision an organization and its owner atomically, without accepting terms for them. */
+export const ProvisionOrganizationInput = CreateOrganizationInput.extend({
+  ownerUserId: z.uuid(),
+  reason: z.string().trim().min(3).max(500),
+});
+
+export const provisionOrganizationCommand = tenantCommand({
+  name: 'tenancy.provisionOrganization',
+  input: ProvisionOrganizationInput,
+  output: OrganizationDto,
+  entitlement: null,
+  permission: 'platform:org.create',
+  handler: async ({ input, ctx, tx, emit }) => {
+    if (ctx.actor.type !== 'system' || !ctx.actor.name.startsWith('staff:')) {
+      throw new DomainError('forbidden');
+    }
+    const { ownerUserId, reason: _reason, ...org } = input;
+    const row = await insertOrganizationTx(tx, ctx, org, emit);
+    await tx.insert(memberships).values({ orgId: row.id, userId: ownerUserId, role: 'owner' });
+    return row;
+  },
+  audit: (input, row) => ({
+    action: 'organization.provision',
+    targetType: 'organization',
+    targetId: row.id,
+    data: { ownerUserId: input.ownerUserId, reason: input.reason },
+  }),
+});
+
+export function provisionOrganization(ctx: Ctx, input: unknown, ports: CommandPorts<TenantTx>) {
+  return executeCommand(
+    provisionOrganizationCommand,
+    input,
+    { ...ctx, orgId: uuidv7(ctx.now.getTime()) },
+    ports,
+  );
+}
+
 export const updateOrganizationCommand = tenantCommand({
   name: 'tenancy.updateOrganization',
   input: UpdateOrganizationInput,

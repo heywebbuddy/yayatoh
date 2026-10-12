@@ -38,6 +38,19 @@ export const PublicSeriesDto = z.object({
 export type PublicSeriesDto = z.infer<typeof PublicSeriesDto>;
 export const publicSeriesSerializer = defineSerializer('events.publicSeries', PublicSeriesDto);
 
+/** A series may appear in the public directory only when it has upcoming public events. */
+export const PublicSeriesDirectoryItemDto = z.object({
+  slug: z.string(),
+  name: z.string(),
+  description: z.string().nullable(),
+  organizerName: z.string(),
+});
+export type PublicSeriesDirectoryItemDto = z.infer<typeof PublicSeriesDirectoryItemDto>;
+export const publicSeriesDirectoryItemSerializer = defineSerializer(
+  'events.publicSeriesDirectoryItem',
+  PublicSeriesDirectoryItemDto,
+);
+
 const Name = z.string().trim().min(2).max(160);
 const Description = z.string().trim().max(2000).nullable();
 
@@ -241,6 +254,26 @@ export async function publicSeriesBySlug(
         city: r.city,
       })),
     });
+  });
+}
+
+/** Publicly listed series with at least one upcoming public event, across active organizations. */
+export async function publicSeriesDirectory(now: Date = new Date()): Promise<PublicSeriesDirectoryItemDto[]> {
+  return withoutTenant(async (tx) => {
+    const rows = await tx.execute<{
+      slug: string;
+      name: string;
+      description: string | null;
+      organizer_name: string;
+    }>(sql`select * from events.public_series_directory(${now.toISOString()}::timestamptz)`);
+    return rows.map((r) =>
+      publicSeriesDirectoryItemSerializer.serialize({
+        slug: r.slug,
+        name: r.name,
+        description: r.description,
+        organizerName: r.organizer_name,
+      }),
+    );
   });
 }
 

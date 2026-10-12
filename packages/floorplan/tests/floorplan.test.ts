@@ -1,12 +1,15 @@
 import { uuidv7 } from '@yayatoh/kernel';
 import { describe, expect, it } from 'vitest';
 import {
+  buildRectTable,
   buildRoundTable,
   buildRow,
+  buildSingleSeat,
   canonicalJson,
   FloorplanDoc,
   hitTest,
   layoutProblems,
+  OBJECT_TYPES,
   placedSeats,
   quickLayout,
   rowLabel,
@@ -104,5 +107,50 @@ describe('floor plan documents', () => {
     expect(hitTest(doc, { x: 2500 + 110, y: 300 })).toBeNull();
     expect(hitTest(doc, { x: 400, y: 1600 })).toBeNull();
     expect(hitTest(doc, { x: 2900, y: 1900 })).toBeNull();
+  });
+});
+
+describe('more seating objects (agreement §5 and §9)', () => {
+  it('a rectangular table seats people on both long sides and at the ends', () => {
+    const t = buildRectTable({ label: '1', seats: 10, x: 500, y: 500 });
+    expect(t).toMatchObject({ kind: 'table', shape: 'rect', height: 90 });
+    expect(t.seats.map((s) => s.label)).toEqual(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']);
+    // Four on top, one at the right end, four at the bottom, one at the left end.
+    expect(t.seats.filter((s) => s.y < 0)).toHaveLength(4);
+    expect(t.seats.filter((s) => s.y > 0)).toHaveLength(4);
+    expect(t.seats.filter((s) => s.y === 0)).toHaveLength(2);
+    const small = buildRectTable({ label: '2', seats: 4, x: 0, y: 0 });
+    expect(small.seats.filter((s) => s.y === 0)).toHaveLength(0);
+    const doc = FloorplanDoc.parse({ version: 1, width: 2000, height: 2000, items: [t, small] });
+    expect(layoutProblems({ ...doc, items: [t] })).toEqual([]);
+  });
+
+  it('a single seat is a one-seat row named after the seat', () => {
+    const s = buildSingleSeat({ label: 'S1', x: 100, y: 100 });
+    expect(s).toMatchObject({ kind: 'row', label: 'S1', seats: [{ label: 'S1' }] });
+    expect(s.seats).toHaveLength(1);
+  });
+
+  it('a VIP area is a floor object, and VIP sections are named', () => {
+    expect(OBJECT_TYPES).toContain('vip_area');
+    const doc = FloorplanDoc.parse({
+      version: 1,
+      width: 2000,
+      height: 2000,
+      sections: [{ id: '00000000-0000-7000-8000-000000000001', label: 'Family', vip: true }],
+      items: [
+        {
+          kind: 'object',
+          id: '00000000-0000-7000-8000-000000000002',
+          objectType: 'vip_area',
+          x: 100,
+          y: 100,
+          width: 800,
+          height: 600,
+        },
+      ],
+    });
+    expect(doc.items[0]).toMatchObject({ objectType: 'vip_area' });
+    expect(doc.sections[0]?.vip).toBe(true);
   });
 });

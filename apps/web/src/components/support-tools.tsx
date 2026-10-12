@@ -492,15 +492,18 @@ export function TransferRulesForm({
   return (
     <form
       action={formAction}
-      className="flex flex-wrap items-end gap-4"
+      className="grid min-w-0 grid-cols-1 gap-3 @xl:grid-cols-[auto_10rem_10rem_auto] @xl:items-start @xl:justify-start @xl:gap-4"
       aria-label={t('formLabel', { name })}
     >
-      <label className="flex min-h-10 items-center gap-2 text-body">
+      <label className="flex min-h-10 min-w-0 items-center gap-2 text-body @xl:translate-y-9">
         <input type="checkbox" name="allowed" value="yes" defaultChecked={rules.allowed} className="size-5" />
         {t('allowed')}
       </label>
-      <div className="flex flex-col gap-1.5">
-        <label htmlFor={`${idPrefix}-cutoff`} className="text-[13px] font-bold text-ink">
+      <div className="grid min-w-0 grid-rows-[1.25rem_auto_auto] gap-1.5">
+        <label
+          htmlFor={`${idPrefix}-cutoff`}
+          className="flex min-h-5 items-end text-[13px] font-bold text-ink"
+        >
           {t('cutoff')}
         </label>
         <input
@@ -510,14 +513,14 @@ export function TransferRulesForm({
           defaultValue={rules.cutoffHours ?? ''}
           aria-describedby={`${idPrefix}-cutoff-hint`}
           aria-invalid={state.fields?.includes('transferCutoffHours') || undefined}
-          className={`${field} w-28`}
+          className={`${field} w-full`}
         />
         <span id={`${idPrefix}-cutoff-hint`} className="text-caption text-ink-2">
           {t('cutoffHint')}
         </span>
       </div>
-      <div className="flex flex-col gap-1.5">
-        <label htmlFor={`${idPrefix}-fee`} className="text-[13px] font-bold text-ink">
+      <div className="grid min-w-0 grid-rows-[1.25rem_auto_auto] gap-1.5">
+        <label htmlFor={`${idPrefix}-fee`} className="flex min-h-5 items-end text-[13px] font-bold text-ink">
           {t('fee', { currency })}
         </label>
         <input
@@ -526,20 +529,20 @@ export function TransferRulesForm({
           inputMode="decimal"
           defaultValue={rules.fee}
           aria-invalid={state.fields?.includes('transferFeeMinor') || undefined}
-          className={`${field} w-28`}
+          className={`${field} w-full`}
         />
         <span className="text-caption text-ink-2">{t('feeHint')}</span>
       </div>
-      <Button type="submit" size="sm" variant="secondary" disabled={pending}>
+      <Button type="submit" size="sm" variant="secondary" disabled={pending} className="@xl:translate-y-7">
         {t('save')}
       </Button>
-      <span aria-live="polite" className="basis-full text-caption">
-        {state.ok
-          ? t('saved')
-          : state.code
-            ? message(state, { transferCutoffHours: t('cutoffInvalid'), transferFeeMinor: t('feeInvalid') })
-            : null}
-      </span>
+      {state.ok || state.code ? (
+        <span aria-live="polite" className="text-caption @xl:col-span-full">
+          {state.ok
+            ? t('saved')
+            : message(state, { transferCutoffHours: t('cutoffInvalid'), transferFeeMinor: t('feeInvalid') })}
+        </span>
+      ) : null}
     </form>
   );
 }

@@ -2799,25 +2799,7 @@
           "string",
           "null"
         ],
-        "enum": [
-          "arts_culture",
-          "business_seminars",
-          "charity",
-          "community",
-          "education_classes",
-          "family",
-          "food_drink",
-          "health_wellness",
-          "music",
-          "nightlife",
-          "religion_spirituality",
-          "social_gatherings",
-          "sports_fitness",
-          "technology",
-          "travel_leisure",
-          "other",
-          null
-        ]
+        "pattern": "^[a-z][a-z0-9_]{0,59}$"
       },
       "AttendanceMode": {
         "type": "string",
@@ -14293,6 +14275,9 @@
                             "type": "string"
                           },
                           "emailHash": {
+                            "type": "string"
+                          },
+                          "phoneHash": {
                             "type": "string"
                           },
                           "issuedAt": {

@@ -44,6 +44,7 @@ export function Menu({
   trigger,
   items,
   align = 'end',
+  side = 'bottom',
   radio = false,
   triggerClassName,
   link: LinkC = 'a',
@@ -55,6 +56,7 @@ export function Menu({
   trigger: ReactNode;
   items: readonly MenuItem[];
   align?: 'start' | 'end';
+  side?: 'top' | 'bottom';
   radio?: boolean;
   triggerClassName?: string;
   link?: ElementType;
@@ -159,7 +161,8 @@ export function Menu({
           tabIndex={-1}
           onKeyDown={onListKey}
           className={cx(
-            'absolute top-full z-50 mt-2 flex min-w-52 flex-col gap-0.5 rounded-tile border border-line bg-surface-solid p-1.5 elevation-pop',
+            'absolute z-50 flex min-w-52 flex-col gap-0.5 rounded-tile border border-line bg-surface-solid p-1.5 elevation-pop',
+            side === 'top' ? 'bottom-full mb-2' : 'top-full mt-2',
             align === 'end' ? 'end-0' : 'start-0',
           )}
         >

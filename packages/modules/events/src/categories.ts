@@ -3,7 +3,7 @@ import { DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { and, asc, count, eq, isNotNull, isNull, ne, sql } from 'drizzle-orm';
 import { z } from 'zod';
-import { EVENT_CATEGORIES, type EventCategory } from './domain/categories.ts';
+import { type EventCategory, EventCategoryKey } from './domain/categories.ts';
 import {
   CategoryNameError,
   categoryRef,
@@ -25,7 +25,7 @@ export const OrgCategoryDto = z.object({
   ref: z.string(),
   /** Null until the org's list is stored. */
   id: z.uuid().nullable(),
-  platformKey: z.enum(EVENT_CATEGORIES),
+  platformKey: EventCategoryKey,
   /** Null = the platform label of `platformKey` (translated by the app). */
   name: z.string().nullable(),
   hidden: z.boolean(),
@@ -225,7 +225,7 @@ export const addOrgCategoryCommand = tenantCommand({
   name: 'events.addOrgCategory',
   input: z.object({
     name: z.string().max(200),
-    platformKey: z.enum(EVENT_CATEGORIES).default('other'),
+    platformKey: EventCategoryKey.default('other'),
   }),
   output: OrgCategoryDto,
   entitlement: 'core',
@@ -233,6 +233,11 @@ export const addOrgCategoryCommand = tenantCommand({
   handler: async ({ input, ctx, tx }) => {
     const orgId = requireOrg(ctx);
     const name = nameOrThrow(input.name);
+    const [platform] = await tx
+      .select({ key: platformCategories.key })
+      .from(platformCategories)
+      .where(eq(platformCategories.key, input.platformKey));
+    if (!platform) throw new DomainError('validation_failed', 'Category not found', { field: 'platformKey' });
     const rows = await ensureOrgCategoriesTx(tx, orgId);
     if (rows.length >= MAX_ORG_CATEGORIES)
       throw new DomainError('invalid_state', 'Too many categories', { reason: 'too_many', field: 'name' });

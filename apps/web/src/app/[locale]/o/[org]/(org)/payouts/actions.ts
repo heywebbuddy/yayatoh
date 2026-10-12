@@ -1,8 +1,13 @@
 'use server';
 
 import { executeCommand, isDomainError } from '@yayatoh/kernel';
-import { continuePayoutOnboardingCommand, recordPayoutAccountCommand } from '@yayatoh/payments';
+import {
+  continuePayoutOnboardingCommand,
+  disconnectFakePayoutAccountCommand,
+  recordPayoutAccountCommand,
+} from '@yayatoh/payments';
 import { roleCan } from '@yayatoh/tenancy';
+import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { loadConsole } from '@/server/console.ts';
 import { getPaymentProvider } from '@/server/payments.ts';
@@ -54,4 +59,18 @@ export async function startPayoutOnboarding(
     refreshUrl: here,
   });
   redirect(link.url);
+}
+
+export async function disconnectFakePayoutAccount(
+  org: string,
+  locale: string,
+): Promise<{ code: string } | undefined> {
+  const data = await loadConsole(org);
+  if (!roleCan(data.role, 'payouts:manage')) redirect(`/${locale}/o/${org}/payouts`);
+  try {
+    await executeCommand(disconnectFakePayoutAccountCommand, {}, data.ctx, ports);
+  } catch (err) {
+    return { code: isDomainError(err) ? err.code : 'internal' };
+  }
+  revalidatePath(`/o/${org}/payouts`);
 }

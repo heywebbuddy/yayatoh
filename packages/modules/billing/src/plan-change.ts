@@ -135,9 +135,9 @@ async function optionsTx(tx: TenantTx): Promise<PlanChangeOptions> {
   const have = [...(await effectiveModulesTx(tx))];
   const offers: PlanOffer[] = [];
   for (const c of catalog) {
-    if (!c.active && !placeholders) continue;
+    if (!c.active && (!placeholders || c.managedLocally)) continue;
     for (const p of prices.filter((x) => x.planKey === c.planKey)) {
-      if ((!p.active && !placeholders) || p.unitAmountMinor === null) continue;
+      if ((!p.active && (!placeholders || c.managedLocally)) || p.unitAmountMinor === null) continue;
       const interval = p.billingInterval as 'month' | 'year';
       const delta = moduleDelta(have, modulesByPlan.get(c.planKey) ?? []);
       offers.push({

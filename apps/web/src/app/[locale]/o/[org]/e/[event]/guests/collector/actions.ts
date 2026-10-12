@@ -29,7 +29,7 @@ async function run<T>(
   write: (eventId: string, ctx: Parameters<typeof executeCommand>[2]) => Promise<T>,
   then?: (result: T) => string,
 ): Promise<State> {
-  const { data, event: ev } = await loadEvent(org, event, 'guests');
+  const { data, event: ev } = await loadEvent(org, event, 'seating');
   let result: T;
   try {
     result = await write(ev.id, data.ctx);

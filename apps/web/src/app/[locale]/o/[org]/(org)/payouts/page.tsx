@@ -22,7 +22,8 @@ import { StepUpForm } from '@/components/step-up.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
-import { startPayoutOnboarding } from './actions.ts';
+import { disconnectFakePayoutAccount, startPayoutOnboarding } from './actions.ts';
+import { DisconnectFakePayoutForm } from './disconnect-fake-form.tsx';
 
 const DOT = { none: 'neutral', pending: 'info', restricted: 'warning', active: 'success' } as const;
 const SETTLEMENT_DOT = {
@@ -218,6 +219,16 @@ export default async function PayoutsPage({
           </StepUpForm>
         ) : !canManage ? (
           <p className="text-caption text-ink-2">{t('noAccess')}</p>
+        ) : null}
+        {canManage && account.provider === 'fake' ? (
+          <div className="flex flex-col items-start gap-2 border-t border-line pt-4">
+            <p className="text-caption text-ink-2">{t('disconnectFake.hint')}</p>
+            <DisconnectFakePayoutForm
+              action={disconnectFakePayoutAccount.bind(null, org, locale)}
+              label={t('disconnectFake.label')}
+              confirmMessage={t('disconnectFake.confirm')}
+            />
+          </div>
         ) : null}
       </Card>
       {d ? (

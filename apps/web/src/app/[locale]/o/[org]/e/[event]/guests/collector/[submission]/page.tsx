@@ -1,11 +1,12 @@
 import { collectorMergePreviewQuery, guestListQuery, MERGE_FIELDS } from '@yayatoh/guests';
 import { executeQuery, isDomainError } from '@yayatoh/kernel';
-import { isProfileKey, navIncludes, navLabelKey, PROFILES } from '@yayatoh/platform';
+import { isProfileKey, navLabelKey } from '@yayatoh/platform';
 import { Button, buttonClass, Card, EmptyState, PageHeader, Select, Table } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { type FieldSpec, ProgramForm } from '@/components/program-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
+import { guestNav } from '@/lib/guest-nav.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import { GuestsCrumbs } from '../../rsvp/nav.tsx';
@@ -30,10 +31,10 @@ export default async function MergeSubmissionPage({
   const { party } = await searchParams;
   setRequestLocale(locale);
   if (!UUID.test(submission)) notFound();
-  const { data, event: ev, can } = await loadEvent(org, event, 'guests');
+  const { data, event: ev, can } = await loadEvent(org, event, 'seating');
   const profile = isProfileKey(ev.profile) ? ev.profile : 'other';
-  const nav = PROFILES[profile].nav.find((i) => i.key === 'guests');
-  if (!nav || !navIncludes(profile, data.modules, 'guests') || !can('guests:write')) notFound();
+  const nav = guestNav(profile);
+  if (!data.modules.has('guests') || !can('guests:write')) notFound();
   const t = await getTranslations('collectorHost');
   const tr = await getTranslations();
   const list = await executeQuery(guestListQuery, { eventId: ev.id, limit: 1 }, data.ctx, ports);

@@ -36,7 +36,7 @@ async function stage(
   event: string,
   read: () => Promise<{ input: GuestTableInput; fileName?: string }>,
 ): Promise<void> {
-  const { data, event: ev } = await loadEvent(org, event, 'guests');
+  const { data, event: ev } = await loadEvent(org, event, 'seating');
   const locale = await getLocale();
   let batchId: string;
   try {
@@ -108,7 +108,7 @@ const col = (v: FormDataEntryValue | null) => {
 
 /** Step 2: the host's column mapping; checks every row and plans the parties. */
 export async function validateImportAction(org: string, event: string, batchId: string, form: FormData) {
-  const { data, event: ev } = await loadEvent(org, event, 'guests');
+  const { data, event: ev } = await loadEvent(org, event, 'seating');
   const locale = await getLocale();
   const href = `${base(org, event)}?batch=${batchId}`;
   try {
@@ -130,7 +130,7 @@ export async function validateImportAction(org: string, event: string, batchId: 
 
 /** Step 3: import the planned parties (a bulk job; small lists finish before the page loads). */
 export async function startImportAction(org: string, event: string, batchId: string) {
-  const { data, event: ev } = await loadEvent(org, event, 'guests');
+  const { data, event: ev } = await loadEvent(org, event, 'seating');
   const locale = await getLocale();
   const href = `${base(org, event)}?batch=${batchId}`;
   let operationId: string;

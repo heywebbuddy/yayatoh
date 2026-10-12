@@ -2,7 +2,6 @@
 
 import {
   addOrgCategoryCommand,
-  EVENT_CATEGORIES,
   moveOrgCategoryCommand,
   renameOrgCategoryCommand,
   setOrgCategoryHiddenCommand,
@@ -28,9 +27,7 @@ export async function addCategoryAction(org: string, _prev: FormState, form: For
       addOrgCategoryCommand,
       {
         name: String(form.get('name') ?? ''),
-        platformKey: (EVENT_CATEGORIES as readonly string[]).includes(platformKey)
-          ? (platformKey as (typeof EVENT_CATEGORIES)[number])
-          : 'other',
+        platformKey: platformKey || 'other',
       },
       data.ctx,
       ports,

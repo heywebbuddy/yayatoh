@@ -55,9 +55,6 @@ export default async function Features({ params }: Props) {
           <Link href="/contact" className={buttonClass('primary')}>
             {t('features.contactCta')}
           </Link>
-          <Link href="/help" className={buttonClass('secondary')}>
-            {t('features.helpCta')}
-          </Link>
         </div>
       </main>
       <SiteFooter />

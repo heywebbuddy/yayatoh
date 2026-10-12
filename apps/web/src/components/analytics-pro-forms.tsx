@@ -238,6 +238,7 @@ export function AlertRuleForm({
           {moneyMeasures.length ? (
             <Select
               id="rule-currency"
+              searchable
               name="currency"
               label={t('currency')}
               hint={currencyError ? undefined : t('currencyHint')}

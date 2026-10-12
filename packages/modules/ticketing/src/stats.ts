@@ -1,6 +1,6 @@
 import type { TenantTx } from '@yayatoh/db';
 import { and, asc, eq, isNotNull, type SQL, sql } from 'drizzle-orm';
-import { ticketClaims, tickets, ticketTypes } from './schema.ts';
+import { type TICKET_STATUSES, ticketClaims, tickets, ticketTypes } from './schema.ts';
 
 export interface TicketTypeStats {
   readonly ticketTypeId: string;
@@ -99,4 +99,51 @@ export async function undistributedTicketsTx(
       (select count(*)::int from ticketing.tickets
         where event_id = ${eventId}::uuid and status = 'active') as active`);
   return { undistributed: Number(r?.undistributed ?? 0), active: Number(r?.active ?? 0) };
+}
+
+/** A ticket found by its holder's name or email (`ticketHoldersForLookupTx`). */
+export interface LookupTicket {
+  readonly id: string;
+  readonly shortCode: string;
+  readonly holderName: string;
+  readonly typeName: string;
+  readonly status: (typeof TICKET_STATUSES)[number];
+}
+
+const likeEscape = (s: string) => s.replace(/[\\%_]/g, (c) => `\\${c}`);
+
+/**
+ * The door lookup (agreement §8): an event's tickets whose holder name contains every word, or
+ * whose holder email is one of `emails` (normalized). Active tickets first, then by name.
+ */
+export async function ticketHoldersForLookupTx(
+  tx: TenantTx,
+  eventId: string,
+  by: { readonly words?: readonly string[]; readonly emails?: readonly string[] },
+  limit = 25,
+): Promise<LookupTicket[]> {
+  const words = (by.words ?? []).filter(Boolean);
+  const emails = [...new Set((by.emails ?? []).map((e) => e.trim().toLowerCase()))];
+  if (words.length === 0 && emails.length === 0) return [];
+  const match =
+    words.length > 0
+      ? and(...words.map((w) => sql`${tickets.holderName} ilike ${`%${likeEscape(w)}%`}`))
+      : sql`lower(${tickets.holderEmail}) in (${sql.join(
+          emails.map((e) => sql`${e}`),
+          sql`, `,
+        )})`;
+  const rows = await tx
+    .select({
+      id: tickets.id,
+      shortCode: tickets.shortCode,
+      holderName: tickets.holderName,
+      typeName: ticketTypes.name,
+      status: tickets.status,
+    })
+    .from(tickets)
+    .innerJoin(ticketTypes, eq(ticketTypes.id, tickets.ticketTypeId))
+    .where(and(eq(tickets.eventId, eventId), match))
+    .orderBy(sql`${tickets.status} = 'void'`, asc(tickets.holderName), asc(tickets.shortCode))
+    .limit(limit);
+  return rows.map((r) => ({ ...r, status: r.status as LookupTicket['status'] }));
 }

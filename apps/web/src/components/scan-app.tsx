@@ -6,6 +6,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { GuestKioskScreen, TableBoardScreen } from '@/components/scan-guest-kiosk.tsx';
 import { GuestCheckinPanel } from '@/components/scan-guests.tsx';
 import { KioskScreen } from '@/components/scan-kiosk.tsx';
+import { TicketLookupPanel } from '@/components/scan-lookup.tsx';
 import { SessionDoorControls, SessionOverride } from '@/components/scan-session-door.tsx';
 import { StaffPanel } from '@/components/scan-staff.tsx';
 import { SupervisorPanel } from '@/components/scan-supervisor.tsx';
@@ -23,7 +24,7 @@ import { followChannel } from '@/scan/stream.ts';
 import { useCameraScan } from '@/scan/use-camera.ts';
 
 type Phase = 'boot' | 'setup' | 'ready' | 'wiped';
-type View = 'scan' | 'guests' | 'staff' | 'supervisor';
+type View = 'scan' | 'lookup' | 'guests' | 'staff' | 'supervisor';
 
 /** Local verdicts and server results share the door screen's `checkin.result.*` messages. */
 const RESULT_KEY: Record<string, string> = {
@@ -376,6 +377,8 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
   const resultKey = shown ? (RESULT_KEY[shown] ?? 'invalid') : null;
   const views: { key: View; label: string }[] = [
     { key: 'scan', label: t('scanStaff.viewScan') },
+    // Find a ticket holder by name, email or phone when their code won't scan (agreement §8).
+    ...(client && client.ticketCount > 0 ? [{ key: 'lookup' as const, label: t('scanLookup.view') }] : []),
     // M4.4b: guest check-in by name or party, when the event has a guest list.
     ...(client?.guests.available ? [{ key: 'guests' as const, label: t('scanGuests.view') }] : []),
     { key: 'staff', label: t('scanStaff.viewStaff') },
@@ -410,6 +413,17 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
           </button>
         ))}
       </Tabs>
+      {client && view === 'lookup' ? (
+        <TicketLookupPanel
+          client={client}
+          version={`${queue}:${last?.scanId ?? ''}:${lastSync?.getTime() ?? ''}`}
+          onCheckIn={(code) => {
+            // Show the verdict where every scan shows it.
+            setView('scan');
+            void scan(code);
+          }}
+        />
+      ) : null}
       {client && view === 'guests' ? (
         <GuestCheckinPanel client={client} version={guestsVersion} afterChange={afterGuestChange} />
       ) : null}

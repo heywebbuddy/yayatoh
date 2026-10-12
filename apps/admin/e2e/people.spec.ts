@@ -133,7 +133,7 @@ test('finance staff get no privacy requests: no nav item and the page is refused
     env: process.env,
   });
   await signInStaff(page, person.email);
-  await expect(page.getByRole('heading', { name: 'Tenants' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Platform dashboard' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Privacy requests' })).toHaveCount(0);
   await page.goto('/people');
   await expect(page).toHaveURL(/\/not-staff$/);

@@ -26,6 +26,72 @@ export const GUEST_IMPORT_FIELDS = [
   'plusOne',
 ] as const;
 export type GuestImportField = (typeof GUEST_IMPORT_FIELDS)[number];
+
+/**
+ * The downloadable starter sheet (agreement §5: CSV/Excel guest import): headers the column
+ * guessing recognises, and two example households a host overwrites. Checked against
+ * `guessGuestMapping` in the tests.
+ */
+export const GUEST_IMPORT_TEMPLATE = {
+  headers: [
+    'Household',
+    'First name',
+    'Last name',
+    'Age',
+    'Email',
+    'Phone',
+    'Meal',
+    'Dietary',
+    'Side',
+    'VIP',
+    'Tags',
+    'Plus one',
+  ],
+  rows: [
+    [
+      'The Okafor family',
+      'Ada',
+      'Okafor',
+      'adult',
+      'ada@example.com',
+      '(415) 555-0101',
+      'Fish',
+      '',
+      'Bride',
+      'yes',
+      'Family',
+      '',
+    ],
+    [
+      'The Okafor family',
+      'Tobi',
+      'Okafor',
+      'child',
+      '',
+      '',
+      'Kids menu',
+      'Nut allergy',
+      'Bride',
+      '',
+      'Family',
+      '',
+    ],
+    [
+      'Sam Lee',
+      'Sam',
+      'Lee',
+      'adult',
+      'sam@example.com',
+      '',
+      'Vegetarian',
+      'Vegetarian',
+      'Groom',
+      '',
+      'Friends',
+      'yes',
+    ],
+  ],
+} as const;
 /** field → 0-based column index. */
 export type GuestMapping = Partial<Record<GuestImportField, number>>;
 

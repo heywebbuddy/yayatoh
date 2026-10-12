@@ -53,17 +53,22 @@ export default async function SsoPage({
   const data = await loadConsole(org);
   const t = await getTranslations('sso');
   const tr = await getTranslations('roles');
+  const ts = await getTranslations('settings');
+  const ta = await getTranslations('agency');
   const header = <PageHeader title={t('title')} description={t('subtitle')} />;
-  const help = (
-    <Link href="/help/search?q=single%20sign-on" className="underline underline-offset-2">
-      {t('help')}
-    </Link>
-  );
   if (!roleCan(data.role, 'sso:manage'))
     return (
       <>
         {header}
-        <EmptyState title={t('noAccessTitle')} description={t('noAccessDescription')} action={help} />
+        <EmptyState
+          title={t('noAccessTitle')}
+          description={t('noAccessDescription')}
+          action={
+            <Link href={`/o/${org}/team`} className="underline underline-offset-2">
+              {ts('findOwner')}
+            </Link>
+          }
+        />
       </>
     );
   if (!data.modules.has('enterprise'))
@@ -85,7 +90,15 @@ export default async function SsoPage({
     return (
       <>
         {header}
-        <EmptyState title={t('unavailableTitle')} description={t('unavailableDescription')} action={help} />
+        <EmptyState
+          title={t('unavailableTitle')}
+          description={t('unavailableDescription')}
+          action={
+            <Link href={`/o/${org}`} className="underline underline-offset-2">
+              {ta('homeAction')}
+            </Link>
+          }
+        />
       </>
     );
   const s = await executeQuery(ssoSettingsQuery, {}, data.ctx, ports);

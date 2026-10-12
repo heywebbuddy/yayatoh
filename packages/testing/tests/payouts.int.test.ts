@@ -4,6 +4,7 @@ import { createCtx, executeCommand, executeQuery, uuidv7 } from '@yayatoh/kernel
 import { orderByManageToken, startCheckoutCommand } from '@yayatoh/orders';
 import {
   applyAccountEventCommand,
+  disconnectFakePayoutAccountCommand,
   payoutAccountIdQuery,
   payoutAccountQuery,
   recordPayoutAccountCommand,
@@ -152,5 +153,29 @@ describe('payout accounts (M1.3c)', () => {
     expect((await orderByManageToken(r.manageToken))?.fundsFlow).toBe('organizer_mor');
     // Org B (still onboarding) keeps platform_mor.
     expect((await executeQuery(payoutAccountQuery, {}, b.ctx(), ports)).fundsFlow).toBe('platform_mor');
+  });
+
+  it('lets an organization disconnect an unused fake account and start over', async () => {
+    await expect(
+      executeCommand(disconnectFakePayoutAccountCommand, {}, a.ctx(), ports),
+    ).rejects.toMatchObject({ code: 'conflict' });
+    // The org fixtures attach a donation order to every fixture account: give org B a fresh fake
+    // account nothing has used yet.
+    const unused = `fakeacct_unused_${uuidv7().slice(-12)}`;
+    await withTenant(systemCtx(b.org.id), (tx) =>
+      tx.execute(sql`update payments.payment_accounts set account_id = ${unused} where org_id = ${b.org.id}`),
+    );
+    expect(await executeCommand(disconnectFakePayoutAccountCommand, {}, b.ctx(), ports)).toEqual({
+      accountId: unused,
+      disconnected: true,
+    });
+    expect(await executeQuery(payoutAccountQuery, {}, b.ctx(), ports)).toMatchObject({
+      state: 'none',
+      provider: null,
+      fundsFlow: 'platform_mor',
+    });
+    await expect(
+      executeCommand(disconnectFakePayoutAccountCommand, {}, userCtx(b.viewerId, b.org.id), ports),
+    ).rejects.toMatchObject({ code: 'forbidden' });
   });
 });

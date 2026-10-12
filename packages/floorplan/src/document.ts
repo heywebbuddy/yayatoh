@@ -23,7 +23,17 @@ export const Seat = z.object({
 });
 export type Seat = z.infer<typeof Seat>;
 
-export const OBJECT_TYPES = ['stage', 'booth', 'entrance', 'exit', 'dance_floor', 'bar', 'custom'] as const;
+/** `vip_area`: a marked VIP zone on the floor (agreement §5), drawn under the tables in it. */
+export const OBJECT_TYPES = [
+  'stage',
+  'booth',
+  'entrance',
+  'exit',
+  'dance_floor',
+  'bar',
+  'vip_area',
+  'custom',
+] as const;
 
 export const Row = z.object({
   kind: z.literal('row'),

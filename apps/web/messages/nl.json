@@ -336,6 +336,7 @@
   },
   "nav": {
     "home": "Start",
+    "events": "Evenementen",
     "analysis": "Analyse",
     "setupGuide": "Installatiegids",
     "branding": "Huisstijl",
@@ -964,7 +965,13 @@
     "fromTemplate": "Beginnen met een sjabloon",
     "guided": "Begeleid aanmaken (3 stappen)",
     "currency": "Valuta",
-    "currencyHint": "Tickets, afrekenen en rapporten gebruiken deze. Wijzigen kan tot de eerste bestelling."
+    "currencyHint": "Tickets, afrekenen en rapporten gebruiken deze. Wijzigen kan tot de eerste bestelling.",
+    "category": "Categorie (optioneel)",
+    "categoryNone": "Nog geen categorie",
+    "categoryHint": "Helpt je evenementen te ordenen en helpt deelnemers ze te vinden. Je kunt dit later wijzigen bij Evenementgegevens.",
+    "manageCategories": "Categorieën beheren (opent in een nieuw tabblad)",
+    "refreshCategories": "Categorielijst vernieuwen",
+    "refreshingCategories": "Vernieuwen…"
   },
   "tickets": {
     "subtitle": "Tickettypes, prijzen en voorraad. Elke prijs die kopers zien is inclusief kosten.",
@@ -1526,8 +1533,8 @@
     "noAccessTitle": "Importeren hoort niet bij je rol",
     "noAccessDescription": "Vraag een organisator om een rol waarmee je deelnemers kunt bewerken.",
     "step1": "1. Kies een bestand",
-    "fileHint": "Een CSV met een koprij en één gast per regel, maximaal 20.000 rijen en 5 MB. Exporteer het als CSV vanuit Excel, Numbers of Google Sheets.",
-    "file": "CSV-bestand",
+    "fileHint": "Een CSV- of Excel-bestand (.xlsx) met een koprij en één gast per regel, maximaal 20.000 rijen en 5 MB. Begin met het sjabloon of exporteer vanuit Excel, Numbers of Google Sheets.",
+    "file": "CSV- of Excel-bestand",
     "upload": "Uploaden",
     "step2": "2. Koppel de kolommen in {file}",
     "rows": "{count, plural, one {# rij} other {# rijen}}",
@@ -1567,7 +1574,8 @@
       "cell_too_long": "Een cel is langer dan 1.000 tekens.",
       "unterminated_quote": "Het bestand bevat een niet-afgesloten aanhalingsteken en kan daarom niet als CSV worden gelezen."
     },
-    "backToEvent": "Terug naar het evenementoverzicht"
+    "backToEvent": "Terug naar het evenementoverzicht",
+    "template": "Download een sjabloon (CSV)"
   },
   "distribution": {
     "title": "Dit ticket versturen",
@@ -1825,7 +1833,12 @@
         "other": "Correctie · {event}"
       }
     },
-    "destinationHold": "Nieuwe uitbetaalrekening: voor je veiligheid beginnen overboekingen ernaartoe pas na {until}. De eigenaren van je organisatie zijn gemaild."
+    "destinationHold": "Nieuwe uitbetaalrekening: voor je veiligheid beginnen overboekingen ernaartoe pas na {until}. De eigenaren van je organisatie zijn gemaild.",
+    "disconnectFake": {
+      "hint": "Ontkoppel een ongebruikt nep-testaccount om de uitbetalingsinstelling opnieuw te starten met een andere provider. Dit kan niet als het account al is gebruikt voor bestellingen of verrekeningen.",
+      "label": "Testaccount ontkoppelen",
+      "confirm": "Dit nep-uitbetalingsaccount ontkoppelen? Dit kan niet ongedaan worden gemaakt."
+    }
   },
   "fakeConnect": {
     "eyebrow": "Testmodus",
@@ -2175,12 +2188,36 @@
         "exit": "Uitgang",
         "dance_floor": "Dansvloer",
         "bar": "Bar",
+        "vip_area": "VIP-zone",
         "custom": "Overig"
       },
       "accessibleCol": "Toegankelijke plaatsen",
       "accessibleOf": "Toegankelijke plaatsen van {item}",
       "accessibleHint": "Toegankelijke plaatsen: typ hun nummers, bijv. ‘1, 2’. Ze zijn omlijnd op de plattegrond en de zaalregels kunnen ze vrijhouden.",
-      "sponsoredBy": "Sponsor: {sponsor}"
+      "sponsoredBy": "Sponsor: {sponsor}",
+      "tableShape": "Tafelvorm",
+      "shape": {
+        "round": "Rond",
+        "rect": "Rechthoekig"
+      },
+      "addSeat": "Losse plaats toevoegen",
+      "width": "Breedte (cm)",
+      "height": "Hoogte (cm)",
+      "sizeCol": "Afmeting (cm)",
+      "sectionCol": "Vak",
+      "sectionOf": "Vak van {item}",
+      "noSection": "Geen vak",
+      "vipSection": "{section} (VIP)",
+      "sections": "Vakken",
+      "sectionsHint": "Groepeer rijen en tafels in vakken zoals ‘Familie’ of ‘Balkon’. VIP-vakken vallen op bij het kiezen van plaatsen en op de plattegrond van de locatie. Teken een VIP-zone om die op de vloer aan te geven.",
+      "sectionName": "Naam van vak {section}",
+      "sectionVip": "VIP",
+      "sectionItems": "{count, plural, one {# rij of tafel} other {# rijen en tafels}}",
+      "removeSection": "Verwijderen",
+      "removeSectionNamed": "Vak {section} verwijderen",
+      "newSection": "Nieuw vak",
+      "addSection": "Vak toevoegen",
+      "moveSelectedTo": "Selectie naar vak verplaatsen…"
     },
     "prices": {
       "title": "Prijzen",
@@ -2947,6 +2984,7 @@
       "exit": "Uitgang",
       "dance_floor": "Dansvloer",
       "bar": "Bar",
+      "vip_area": "VIP-zone",
       "custom": "Overig"
     },
     "named": "{type}: {label}",
@@ -7388,7 +7426,11 @@
         "title": "Verkochte tickets",
         "ofCapacity": "van {capacity}",
         "noCapacity": "Nog geen tickets te koop",
-        "comps": "{count, plural, one {# vrijkaart} other {# vrijkaarten}}"
+        "comps": "{count, plural, one {# vrijkaart} other {# vrijkaarten}}",
+        "claimed": "{count, plural, one {# ticket doorgegeven} other {# tickets doorgegeven}}",
+        "waiting": "{count, plural, one {# wacht op doorgeven} other {# wachten op doorgeven}}",
+        "registrations": "{count, plural, one {# registratie bevestigd} other {# registraties bevestigd}}",
+        "inProgress": "{count, plural, one {# bezig} other {# bezig}}"
       },
       "checkins": {
         "title": "Check-ins",
@@ -7635,7 +7677,11 @@
         "total": "{count, plural, one {# sponsor} other {# sponsors}}",
         "overdue": "{count, plural, one {# levering te laat} other {# leveringen te laat}}",
         "deliverablesPending": "Leveringen verschijnen hier zodra sponsorpakketten aan staan.",
-        "open": "Sponsors openen"
+        "open": "Sponsors openen",
+        "packages": "{active, plural, one {# pakket actief} other {# pakketten actief}} · {pending} wachtend",
+        "revenue": "Sponsoring: {amount}",
+        "deliverables": "Leveringen: {done} van {total} klaar",
+        "sponsoredSessions": "{count, plural, one {# gesponsorde sessie} other {# gesponsorde sessies}}"
       },
       "rsvp": {
         "title": "Reacties",
@@ -9819,7 +9865,8 @@
       "not_validated": "Controleer de lijst voordat je importeert.",
       "nothing_to_import": "Er kan geen groep worden geïmporteerd. Verbeter de rijen in je lijst en importeer hem opnieuw.",
       "expired": "Deze import is verlopen. Begin opnieuw met je lijst."
-    }
+    },
+    "template": "Download een sjabloon"
   },
   "subEvents": {
     "link": "Onderdelen en uitnodigingen",
@@ -13249,6 +13296,23 @@
     "cardTitle": "Een kaart opslaan voor de giften van vanavond?",
     "cardBody": "De gast scant dit met de eigen telefoon. Er wordt niets opgeslagen tenzij die daar akkoord gaat."
   },
+  "scanLookup": {
+    "view": "Deelnemer zoeken",
+    "title": "Een tickethouder zoeken",
+    "searchLabel": "Naam, e-mail of telefoon",
+    "searchHint": "Werkt offline. Typ minstens twee letters van een naam, of een volledig e-mailadres of telefoonnummer.",
+    "results": "Gevonden tickethouders",
+    "noMatchTitle": "Geen tickethouder gevonden",
+    "noMatchName": "Controleer de spelling, of probeer het e-mailadres of telefoonnummer.",
+    "noMatchContact": "E-mailadressen en telefoonnummers moeten exact overeenkomen. Probeer in plaats daarvan de naam.",
+    "checkIn": "Inchecken",
+    "checkInNamed": "{name} inchecken",
+    "checkedIn": "Ingecheckt",
+    "void": "Ticket geannuleerd",
+    "search": "Zoeken",
+    "consoleHint": "Gebruik dit als een code niet scant. Bij namen moet elk woord overeenkomen; e-mailadressen en telefoonnummers moeten volledig zijn.",
+    "searchAgain": "Opnieuw zoeken"
+  },
   "scanGuestKiosk": {
     "welcome": "Welkom bij {event}",
     "subtitle": "Vind je tafel en check in",
@@ -15151,7 +15215,7 @@
     "scores": "Scores",
     "engagement": "Betrokkenheidsscore",
     "engagementValue": "{score} / 100",
-    "engagementHow": "{wAttended} × {attended} bijgewoonde evenementen + {wSessions} × {sessions} sessies + {wCampaigns} × {campaigns} geopende campagnes = {points} punten. 100 × {points} ÷ ({points} + {half}) = {score}.",
+    "engagementHow": "{eventPoints} activiteitspunten bij {scored, plural, one {# evenement} other {# evenementen}} (check-ins, polls, vragen, feedback en inschrijvingen, volgens uw wegingen) + {wAttended} × {attended} andere bijgewoonde evenementen + {wSessions} × {sessions} sessies + {wCampaigns} × {campaigns} geopende campagnes = {points} punten. 100 × {points} ÷ ({points} + {half}) = {score}.",
     "noShow": "Kans op no-show",
     "noShowHow": "({noShows} no-shows + {priorNoShows}) ÷ ({past} eerdere aanmeldingen + {priorRegistrations}) = {pct}. Komende evenementen tellen nog niet mee.",
     "rfm": "RFM",
@@ -18924,5 +18988,91 @@
       "not_listed": "Alleen evenementen op de marktplaats kunnen worden gepromoot.",
       "failed": "De promotie kon niet starten. Probeer het opnieuw."
     }
+  },
+  "attendeeDashboard": {
+    "dashboardLink": "Dashboard",
+    "signInLink": "Inloggen",
+    "signUpLink": "Registreren",
+    "title": "Mijn dashboard",
+    "navigation": "Navigatie voor deelnemers",
+    "welcome": "Welkom bij Yayatoh",
+    "browse": "Evenementen ontdekken",
+    "nav": {
+      "overview": "Overzicht",
+      "events": "Mijn evenementen",
+      "tickets": "Tickets en bestellingen",
+      "schedule": "Mijn programma",
+      "profile": "Profiel",
+      "notifications": "Meldingen",
+      "settings": "Accountinstellingen"
+    },
+    "descriptions": {
+      "overview": "Je boekingen, aankomende evenementen en account op één plek.",
+      "events": "Evenementen die je hebt geboekt of waarvoor je je hebt aangemeld.",
+      "tickets": "Open een bestelling om QR-codes te bekijken, tickets te downloaden en beschikbare opties voor terugbetaling of overdracht te beheren.",
+      "schedule": "Je sessieboekingen en persoonlijke programma's voor evenementen die dat ondersteunen.",
+      "profile": "Beheer je accountnaam en foto.",
+      "notifications": "Kies wat je van elke organisator ontvangt.",
+      "settings": "Beheer inloggen, beveiliging en je persoonsgegevens."
+    },
+    "signInTitle": "Je evenementen beginnen hier",
+    "signInHint": "Log in op je account om aankopen te zien die met het geverifieerde e-mailadres zijn gedaan. Je kunt hieronder ook een ticket-e-mailadres verifiëren om de bijbehorende boekingen te bekijken.",
+    "accountSignIn": "Inloggen op mijn account",
+    "createAccount": "Doorgaan met e-mailcode",
+    "guestSignIn": "Tickets bekijken met een e-mailcode",
+    "verifyEmail": "Verifieer het e-mailadres van je account voordat je de boekingen bekijkt. Je kunt inloggen met een eenmalige e-mailcode.",
+    "accountRequired": "Log in om je account te beheren",
+    "accountRequiredHint": "Met verificatie van je ticket-e-mailadres krijg je toegang tot boekingen. Log in op je account met hetzelfde e-mailadres om je profiel en beveiliging te beheren.",
+    "ticketCount": "{count, plural, one {# ticket geboekt} other {# tickets geboekt}}",
+    "openOrder": "Tickets bekijken en bestelling beheren",
+    "openSchedule": "Mijn programma openen",
+    "emptyTitle": "Geen boekingen om te tonen",
+    "emptyHint": "Zodra je met dit e-mailadres een evenement boekt, verschijnt het hier.",
+    "signedInAs": "Boekingen voor {email}",
+    "upcomingEvents": "Aankomende evenementen",
+    "orders": "Bestellingen",
+    "eventsAttended": "Eerder geboekte evenementen",
+    "nextEvents": "Binnenkort",
+    "upcoming": "Aankomend en lopend",
+    "past": "Afgelopen evenementen",
+    "noneInPeriod": "Geen evenementen in deze periode.",
+    "signOut": "Uitloggen",
+    "noSchedule": "Nog geen sessieprogramma's",
+    "noScheduleHint": "Programma's verschijnen wanneer een boeking sessies bevat. Gewone evenementen met tickets hebben geen sessieprogramma nodig.",
+    "preferencesHint": "Beheer e-mailherinneringen, evenementupdates, aanbiedingen en beschikbare sms-voorkeuren voor deze organisator.",
+    "managePreferences": "Meldingsvoorkeuren beheren",
+    "noPreferences": "Er zijn nog geen contactvoorkeuren beschikbaar voor deze organisator.",
+    "organizationPrivacy": "Mijn gegevens bij de organisatie opvragen",
+    "noOrganizations": "Nog geen organisatoren",
+    "preferencesEmpty": "Voorkeuren per organisator worden beschikbaar nadat je een boeking hebt gedaan.",
+    "profile": {
+      "name": "Volledige naam",
+      "nameError": "Vul een naam in van 1 tot 120 tekens.",
+      "email": "Geverifieerd e-mailadres",
+      "emailHint": "Boekingen worden gekoppeld aan dit geverifieerde e-mailadres. Als je je accountnaam wijzigt, blijven bestaande gegevens van tickethouders ongewijzigd.",
+      "photo": "Profielfoto",
+      "photoHint": "JPEG, PNG of WebP, maximaal 512 KB. Je foto wordt verkleind tot een vierkante avatar.",
+      "photoError": "Kies een geldige JPEG-, PNG- of WebP-afbeelding kleiner dan 512 KB.",
+      "removePhoto": "Huidige foto verwijderen",
+      "save": "Profiel opslaan",
+      "saving": "Opslaan…",
+      "saved": "Profiel opgeslagen.",
+      "error": "Je profiel kon niet worden opgeslagen. Controleer de velden en probeer het opnieuw."
+    },
+    "backToDashboard": "Terug naar mijn dashboard",
+    "organizerSignInTitle": "Inloggen voor organisaties",
+    "organizerSignInDescription": "Log in met een account met toegang tot een organisatie om je evenementen en team te beheren.",
+    "attendeeSignInTitle": "Inloggen voor deelnemers",
+    "attendeeSignInDescription": "Log in om je tickets, boekingen en profiel te bekijken.",
+    "attendeeSignUpTitle": "Registreren",
+    "attendeeSignUpDescription": "Verifieer je e-mailadres om een account aan te maken en je evenementen en tickets bij elkaar te houden.",
+    "organizationAccessRequired": "Dit account heeft geen toegang tot een organisatie. Gebruik een organisatoraccount of ga verder naar je deelnemersdashboard.",
+    "useAnotherAccount": "Een ander account gebruiken"
+  },
+  "eventBranding": {
+    "title": "Kleur van dit evenement",
+    "description": "Geef dit evenement een eigen accentkleur op de openbare evenementpagina. Laat leeg om hieronder de huisstijlkleur van je organisatie te gebruiken.",
+    "color": "Evenementkleur",
+    "usesOrg": "Dit evenement gebruikt de huisstijlkleur van de organisatie."
   }
 }

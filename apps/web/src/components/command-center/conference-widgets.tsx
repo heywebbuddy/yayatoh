@@ -1,6 +1,7 @@
 'use client';
 
 import type { SessionLevel } from '@yayatoh/command-center/client';
+import { formatMoney, money } from '@yayatoh/kernel';
 import { cx, ProgressBar, StatusDot } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation.ts';
@@ -8,7 +9,7 @@ import { Link } from '@/i18n/navigation.ts';
 /**
  * M5.9a conference pack tiles: session rooms live, session fill and lines, exhibitor and sponsor
  * activity. Each renders its loader's allowlisted DTO (counts, titles, exhibitor and sponsor
- * names); no people and no money reach them.
+ * names); no people reach them, and money only the owner's sponsorship income.
  */
 
 interface Ctx {
@@ -68,6 +69,10 @@ export type SponsorActivity = {
   sponsors: number;
   tiers: { tier: string; sponsors: number }[];
   deliverablesOverdue: number | null;
+  packages?: { active: number; pending: number };
+  deliverables?: { done: number; total: number };
+  sponsoredSessions?: number;
+  revenue?: { currency: string; minor: number }[] | null;
 };
 
 const num = (n: number, locale: string) => new Intl.NumberFormat(locale).format(n);
@@ -297,6 +302,28 @@ export function SponsorActivityBody({ d, c }: { d: SponsorActivity; c: Ctx }) {
           </li>
         ))}
       </ul>
+      {d.packages ? (
+        <p className="m-0 text-body text-ink-2" data-testid="cc-sponsor-packages">
+          {t('packages', { active: d.packages.active, pending: d.packages.pending })}
+        </p>
+      ) : null}
+      {d.revenue?.length ? (
+        <p className="m-0 text-body text-ink" data-testid="cc-sponsor-revenue">
+          {t('revenue', {
+            amount: d.revenue.map((r) => formatMoney(money(r.minor, r.currency), c.locale)).join(' · '),
+          })}
+        </p>
+      ) : null}
+      {d.deliverables && d.deliverables.total > 0 ? (
+        <p className="m-0 text-caption text-ink-2">
+          {t('deliverables', { done: d.deliverables.done, total: d.deliverables.total })}
+        </p>
+      ) : null}
+      {d.sponsoredSessions ? (
+        <p className="m-0 text-caption text-ink-2">
+          {t('sponsoredSessions', { count: d.sponsoredSessions })}
+        </p>
+      ) : null}
       {d.deliverablesOverdue === null ? (
         <p className="m-0 text-caption text-ink-2">{t('deliverablesPending')}</p>
       ) : (

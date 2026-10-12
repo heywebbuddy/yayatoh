@@ -2391,8 +2391,7 @@ export interface components {
             venueName: string | null;
             visibility: components["schemas"]["EventVisibility"];
         };
-        /** @enum {string|null} */
-        EventCategory: "arts_culture" | "business_seminars" | "charity" | "community" | "education_classes" | "family" | "food_drink" | "health_wellness" | "music" | "nightlife" | "religion_spirituality" | "social_gatherings" | "sports_fitness" | "technology" | "travel_leisure" | "other" | null;
+        EventCategory: string | null;
         EventDate: {
             capacity: number | null;
             /** Format: date-time */
@@ -4668,6 +4667,7 @@ export interface operations {
                             legacyCodes?: string[];
                             /** Format: uuid */
                             occurrenceId: string | null;
+                            phoneHash?: string;
                             rev: number;
                             sessionAccess?: {
                                 registrant: boolean;

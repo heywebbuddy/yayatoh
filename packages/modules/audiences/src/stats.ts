@@ -1,5 +1,6 @@
 import {
   computeContactStats,
+  eventEngagementTotalsTx,
   NO_SIGNALS,
   recordContactSignalTx,
   signalTotalsTx,
@@ -50,6 +51,8 @@ export async function refreshContactStatsTx(
   const orgCurrency = (await organizationDefaultsTx(tx, orgId))?.currency ?? 'USD';
   const participation = await statsParticipationTx(tx, ids);
   const signals = await signalTotalsTx(tx, ids);
+  // M5.7b: event engagement scores (polls, questions, feedback, enrollments) feed the contact score.
+  const engagement = await eventEngagementTotalsTx(tx, ids);
   const over = await eventsOverTx(
     tx,
     [...participation.values()].flatMap((rows) => rows.map((r) => r.eventId)),
@@ -60,7 +63,7 @@ export async function refreshContactStatsTx(
       id,
       computeContactStats({
         participation: participation.get(id) ?? [],
-        signals: signals.get(id) ?? NO_SIGNALS,
+        signals: { ...(signals.get(id) ?? NO_SIGNALS), eventEngagement: engagement.get(id) },
         orgCurrency,
         isOver: (eventId) => over.has(eventId),
       }),

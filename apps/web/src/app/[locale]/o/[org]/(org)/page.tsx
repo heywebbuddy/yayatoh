@@ -1,5 +1,4 @@
 import {
-  type EventCategory,
   listEventsQuery,
   listSeriesQuery,
   orgCategoriesQuery,
@@ -39,6 +38,7 @@ import { eventPhase, greetingKey } from '@/lib/event-status.ts';
 import { formatEventDateRange } from '@/lib/format.ts';
 import { resolvePeriod } from '@/lib/period.ts';
 import { loadConsole, loadConsoleBase } from '@/server/console.ts';
+import { categoryLabels } from '@/server/event-categories.ts';
 import { ports } from '@/server/ports.ts';
 import { completeOnboardingAction } from './onboarding-actions.ts';
 
@@ -185,6 +185,7 @@ async function EventList({
 }) {
   const data = await loadConsole(org);
   const t = await getTranslations();
+  const platformLabel = await categoryLabels((key) => t(`categories.${key}`));
   const filtered = Boolean(filters.category || filters.tag || filters.q);
   const [all, series, tags, categories] = await Promise.all([
     executeQuery(
@@ -284,7 +285,7 @@ async function EventList({
               <option value="">{t('eventFilters.anyCategory')}</option>
               {categories.map((c) => (
                 <option key={c.ref} value={c.ref}>
-                  {c.name ?? t(`categories.${c.platformKey}`)}
+                  {c.name ?? platformLabel(c.platformKey)}
                 </option>
               ))}
             </Select>
@@ -366,7 +367,7 @@ async function EventList({
                       {e.categoryName
                         ? ` · ${e.categoryName}`
                         : e.category
-                          ? ` · ${t(`categories.${e.category as EventCategory}`)}`
+                          ? ` · ${platformLabel(e.category)}`
                           : ''}
                     </Label>
                     <h3 className="text-[22px] leading-tight font-extrabold tracking-[-0.03em]">{e.name}</h3>

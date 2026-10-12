@@ -1,6 +1,6 @@
 import { defineSerializer } from '@yayatoh/contracts';
 import { z } from 'zod';
-import { ATTENDANCE_MODES, EVENT_CATEGORIES } from './domain/categories.ts';
+import { ATTENDANCE_MODES, EventCategoryKey } from './domain/categories.ts';
 import { ANNOUNCEMENT_AUDIENCES, SECTION_KINDS, SHORT_LINK_KINDS } from './domain/content-kinds.ts';
 import { SectionBody } from './domain/sections.ts';
 
@@ -10,7 +10,7 @@ export const EventDetailsDto = z.object({
   venueName: z.string().nullable(),
   city: z.string().nullable(),
   country: z.string().nullable(),
-  category: z.enum(EVENT_CATEGORIES).nullable(),
+  category: EventCategoryKey.nullable(),
   attendanceMode: z.enum(ATTENDANCE_MODES),
   tags: z.array(z.string()),
   /** U8: the org category (its ref, see `categoryRef`) and its own name (null = platform label). */
@@ -18,17 +18,25 @@ export const EventDetailsDto = z.object({
   categoryName: z.string().nullable(),
   /** U8: the event's category is hidden (it stays on the event, out of the pickers). */
   categoryHidden: z.boolean(),
+  /** Per-event branding: the event's accent colour (#rrggbb), or null for the org's. */
+  brandColor: z.string().nullable(),
 });
 export type EventDetailsDto = z.infer<typeof EventDetailsDto>;
 
 export const SetEventDetailsInput = z.object({
   eventId: z.uuid(),
   venueId: z.uuid().nullable().optional(),
-  category: z.enum(EVENT_CATEGORIES).nullable().optional(),
+  category: EventCategoryKey.nullable().optional(),
   /** U8: an org category by ref (platform key of an unchanged default, else id); wins over `category`. */
   orgCategory: z.string().max(80).nullable().optional(),
   attendanceMode: z.enum(ATTENDANCE_MODES).optional(),
   tags: z.array(z.string().max(200)).max(50).optional(),
+  /** Per-event branding: #rrggbb (any case), or null to use the org's colour. */
+  brandColor: z
+    .string()
+    .regex(/^#[0-9a-fA-F]{6}$/)
+    .nullable()
+    .optional(),
 });
 
 export const EventSectionDto = z.intersection(

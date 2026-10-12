@@ -5,11 +5,11 @@ import { findVenueTx } from '@yayatoh/venues';
 import { and, asc, eq, exists, ilike, inArray, isNull, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { resolveCategoryTx } from '../categories.ts';
-import { EVENT_CATEGORIES, parseTags, TagError, tagKey } from '../domain/categories.ts';
+import { EventCategoryKey, parseTags, TagError, tagKey } from '../domain/categories.ts';
 import { categoryRef, isPlatformKey } from '../domain/org-categories.ts';
 import { EventDto } from '../dto.ts';
 import { EventDetailsDto, SetEventDetailsInput } from '../dto-content.ts';
-import { events, orgCategories } from '../schema.ts';
+import { events, orgCategories, platformCategories } from '../schema.ts';
 import { eventTags } from '../schema-content.ts';
 
 async function findEvent(tx: TenantTx, eventId: string) {
@@ -47,12 +47,13 @@ async function detailsOf(tx: TenantTx, eventId: string) {
     venueName: e.venueName,
     city: e.city,
     country: e.country,
-    category: e.category as (typeof EVENT_CATEGORIES)[number] | null,
+    category: e.category as string | null,
     attendanceMode: e.attendanceMode as EventDetailsDto['attendanceMode'],
     tags: await tagsOf(tx, eventId),
     categoryRef: c ? categoryRef(c) : e.category,
     categoryName: c?.name ?? null,
     categoryHidden: Boolean(c?.hiddenAt),
+    brandColor: e.brandColor,
   };
 }
 
@@ -106,12 +107,21 @@ export const setEventDetailsCommand = tenantCommand({
         set.category = c.platformKey;
       }
     } else if (input.category !== undefined) {
+      if (input.category) {
+        const [platform] = await tx
+          .select({ key: platformCategories.key })
+          .from(platformCategories)
+          .where(eq(platformCategories.key, input.category));
+        if (!platform)
+          throw new DomainError('validation_failed', 'Category not found', { field: 'category' });
+      }
       // A platform key (older callers): the org's category for it when there is one.
       const c = input.category ? await resolveCategoryTx(tx, orgId, input.category) : null;
       set.category = input.category;
       set.orgCategoryId = c?.id ?? null;
     }
     if (input.attendanceMode !== undefined) set.attendanceMode = input.attendanceMode;
+    if (input.brandColor !== undefined) set.brandColor = input.brandColor?.toLowerCase() ?? null;
     if (Object.keys(set).length)
       await tx
         .update(events)
@@ -185,7 +195,7 @@ const likeEscape = (s: string) => s.replace(/[\\%_]/g, (c) => `\\${c}`);
 export const searchEventsQuery = tenantQuery({
   name: 'events.searchEvents',
   input: z.object({
-    category: z.enum(EVENT_CATEGORIES).optional(),
+    category: EventCategoryKey.optional(),
     /** U8: an org category ref (platform key of an unchanged default, else id). */
     categoryRef: z.string().trim().max(80).optional(),
     tag: z.string().trim().max(40).optional(),
@@ -269,7 +279,7 @@ export const eventLabelsQuery = tenantQuery({
   input: z.object({ eventIds: z.array(z.uuid()).max(101) }),
   output: z.record(
     z.string(),
-    z.object({ tags: z.array(z.string()), category: z.enum(EVENT_CATEGORIES).nullable() }),
+    z.object({ tags: z.array(z.string()), category: EventCategoryKey.nullable() }),
   ),
   entitlement: 'core',
   permission: 'events:read',
@@ -289,7 +299,7 @@ export const eventLabelsQuery = tenantQuery({
         r.id,
         {
           tags: tags.filter((t) => t.eventId === r.id).map((t) => t.tag),
-          category: r.category as (typeof EVENT_CATEGORIES)[number] | null,
+          category: r.category as string | null,
         },
       ]),
     );

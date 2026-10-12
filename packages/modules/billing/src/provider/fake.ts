@@ -78,6 +78,8 @@ export interface FakeBillingDelivery {
 
 export interface FakeBillingOptions {
   readonly secret: string;
+  /** Optional persisted catalog, used by the app so admin changes can be tested end to end. */
+  readonly catalog?: () => Promise<ProviderCatalog>;
   /**
    * Where the fake sends the webhooks a plan change or a payment causes (the real provider calls
    * our endpoint over the network; the fake hands them to this function). Unset: not sent.
@@ -110,17 +112,17 @@ export function fakeBillingProvider(opts: FakeBillingOptions): FakeBillingProvid
   const meterEvents: UsageReport[] = [];
   const seen = new Set<string>();
   const discounts = new Map<string, CouponId>();
-  const priceOf = (lookupKey: string | null) => {
-    const catalog = fakeBillingCatalog();
+  const priceOf = async (lookupKey: string | null) => {
+    const catalog = opts.catalog ? await opts.catalog() : fakeBillingCatalog();
     const price = catalog.prices.find((p) => p.lookupKey === lookupKey);
     const product = price ? catalog.products.find((p) => p.id === price.productId) : undefined;
     return price && product ? { price, product } : null;
   };
-  const preview = (i: PlanChangeRequest): ProviderChangePreview => {
-    const target = priceOf(i.priceLookupKey);
+  const preview = async (i: PlanChangeRequest): Promise<ProviderChangePreview> => {
+    const target = await priceOf(i.priceLookupKey);
     if (!target || target.price.unitAmountMinor === null || !target.price.interval)
       throw new Error(`fake billing: no fixed price ${i.priceLookupKey}`);
-    const current = i.subscription ? priceOf(i.subscription.priceLookupKey) : null;
+    const current = i.subscription ? await priceOf(i.subscription.priceLookupKey) : null;
     const r = prorate({
       current:
         current && current.price.unitAmountMinor !== null && current.price.interval
@@ -151,7 +153,7 @@ export function fakeBillingProvider(opts: FakeBillingOptions): FakeBillingProvid
     meterEvents,
     discounts,
     async listCatalog() {
-      return fakeBillingCatalog();
+      return opts.catalog ? opts.catalog() : fakeBillingCatalog();
     },
     async createCustomer(i) {
       return { customerId: fakeCustomerId(opts.secret, i.orgId) };
@@ -168,8 +170,8 @@ export function fakeBillingProvider(opts: FakeBillingOptions): FakeBillingProvid
       return preview(i);
     },
     async changePlan(i) {
-      const p = preview(i);
-      const target = priceOf(i.priceLookupKey);
+      const p = await preview(i);
+      const target = await priceOf(i.priceLookupKey);
       const subscriptionId = i.subscription?.id ?? fakeSubscriptionId(opts.secret, i.customerId);
       const createdAt = new Date();
       await send([

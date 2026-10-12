@@ -36,6 +36,7 @@ export const INTERNAL_EVENTS: Readonly<Record<string, InternalReason>> = {
   'billing.agency_billing_withdrawn@1': 'platform',
   'billing.customer_linked@1': 'platform',
   'billing.entitlements_synced@1': 'platform',
+  'billing.plan_assigned@1': 'platform',
   'billing.subscription_changed@1': 'platform',
   'bulk.completed@1': 'workflow',
   'bulk.requested@1': 'workflow',

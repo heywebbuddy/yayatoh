@@ -2,9 +2,9 @@ import { defineSerializer } from '@yayatoh/contracts';
 import type { TenantTx } from '@yayatoh/db';
 import { DomainError } from '@yayatoh/kernel';
 import { tenantQuery } from '@yayatoh/platform';
-import { asc, eq, type SQL, sql } from 'drizzle-orm';
+import { and, asc, eq, type SQL, sql } from 'drizzle-orm';
 import { z } from 'zod';
-import { contactScores, contactStats, contacts } from '../schema.ts';
+import { contactScores, contactStats, contacts, eventParticipation } from '../schema.ts';
 import {
   ENGAGEMENT_BANDS,
   FREQUENCY_BANDS,
@@ -12,6 +12,7 @@ import {
   NO_SHOW_PRIOR_BPS,
   RECENCY_DAYS,
 } from './formulas.ts';
+import { eventEngagementTotalsTx } from './projection.ts';
 import { RFM_SQL } from './rfm.ts';
 
 /**
@@ -38,6 +39,12 @@ export const ContactStatsDto = z.object({
   firstSeenAt: z.date().nullable(),
   lastSeenAt: z.date().nullable(),
   engagementScore: z.int(),
+  /**
+   * The engagement score's event part (M5.7b), read now: points from scored events, and attended
+   * events without a score yet (they count by their door scan). The stored score follows them
+   * at the next refresh.
+   */
+  engagementInputs: z.object({ eventPoints: z.int(), scoredEvents: z.int(), unscoredAttended: z.int() }),
   noShowBps: z.int(),
   /** RFM recency and frequency quintiles in the org; null outside the population (no events). */
   rfm: z.object({ recency: Quintile, frequency: Quintile }).nullable(),
@@ -87,6 +94,18 @@ export const contactStatsQuery = tenantQuery({
     const c = await contactRowTx(tx, input.contactId);
     const [s] = await tx.select().from(contactScores).where(eq(contactScores.contactId, c.id));
     const rfm = await rfmOfTx(tx, c.id);
+    const engagement = (await eventEngagementTotalsTx(tx, [c.id])).get(c.id);
+    const scored = new Set(engagement?.eventIds ?? []);
+    const attended = await tx
+      .select({ eventId: eventParticipation.eventId })
+      .from(eventParticipation)
+      .where(
+        and(
+          eq(eventParticipation.contactId, c.id),
+          eq(eventParticipation.registered, true),
+          eq(eventParticipation.checkedIn, true),
+        ),
+      );
     return contactStatsSerializer.serialize({
       contactId: c.id,
       name: c.name,
@@ -102,6 +121,11 @@ export const contactStatsQuery = tenantQuery({
       firstSeenAt: s?.firstSeenAt ?? null,
       lastSeenAt: s?.lastSeenAt ?? null,
       engagementScore: s?.engagementScore ?? 0,
+      engagementInputs: {
+        eventPoints: engagement?.points ?? 0,
+        scoredEvents: scored.size,
+        unscoredAttended: attended.filter((a) => !scored.has(a.eventId)).length,
+      },
       noShowBps: s?.noShowBps ?? NO_SHOW_PRIOR_BPS,
       rfm: rfm ? { recency: rfm.recency, frequency: rfm.frequency } : null,
       computedAt: s?.computedAt ?? null,

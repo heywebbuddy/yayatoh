@@ -111,13 +111,13 @@ test.describe('starter templates (M4.2a)', () => {
     const guests = guide.locator('[data-rule="guestsAdded"]');
     await expect(guests.getByText('Coming soon')).toHaveCount(0);
     await expect(guests.getByRole('link')).toHaveAttribute('href', new RegExp(`${wedding}/guests$`));
-    // Not built yet: "coming soon", linking to the placeholder page (never a broken link).
+    // Agreement audit 2026-10-12: the RSVP deadline item counts and opens the RSVP screens.
     const rsvp = guide.locator('[data-rule="rsvpDeadlineSet"]');
-    await expect(rsvp.getByText('Coming soon')).toBeVisible();
+    await expect(rsvp.getByText('Coming soon')).toHaveCount(0);
     await expect(guide.locator('[data-rule="floorPlanChosen"]').getByText('Coming soon')).toHaveCount(0);
     await rsvp.getByRole('link').click();
-    await expect(page).toHaveURL(new RegExp(`${wedding}/rsvp$`));
-    await expect(page.getByText('This area is being built')).toBeVisible();
+    await expect(page).toHaveURL(new RegExp(`${wedding}/guests/rsvp$`));
+    await expect(page.getByText('This area is being built')).toHaveCount(0);
     await expectAccessible(page);
 
     // Choosing a floor plan ticks its item.

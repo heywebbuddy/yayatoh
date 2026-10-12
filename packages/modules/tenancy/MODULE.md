@@ -3,6 +3,7 @@
 Organizations and memberships. Owns Postgres schema `tenancy`.
 
 **Invariants**
+- Staff provisioning creates an active organization, owner membership, managed domain and onboarding progress atomically. Admins resolve an existing owner account, give an audit reason, and never accept agreements for the owner.
 - `organizations.org_id = organizations.id` (CHECK). An org row is visible only inside its own tenant context.
 - An org always has at least one `owner` membership; the last owner cannot be removed or demoted.
 - Slugs are global and immutable once an event is published on them (enforced from M1.4).

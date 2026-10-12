@@ -172,6 +172,7 @@ export const planCatalog = billing.table(
     sortOrder: integer('sort_order').notNull().default(0),
     active: boolean('active').notNull().default(false),
     providerProductId: text('provider_product_id'),
+    managedLocally: boolean('managed_locally').notNull().default(false),
     syncedAt: timestamp('synced_at', { withTimezone: true }),
   },
   () => [check('plan_catalog_sort_check', sql`sort_order between 0 and 1000`)],

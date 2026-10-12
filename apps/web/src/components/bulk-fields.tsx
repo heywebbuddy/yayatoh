@@ -228,7 +228,7 @@ export function BulkFields({
           </dialog>
         </>
       ) : (
-        <Button type="submit" variant="secondary">
+        <Button type="submit" variant="secondary" className="self-end">
           {t('apply')}
         </Button>
       )}

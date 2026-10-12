@@ -51,9 +51,10 @@ export async function ContactStatsPanel({
   const nf = new Intl.NumberFormat(locale);
   const df = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeZone: timezone });
   const points = engagementPoints({
-    eventsAttended: s.eventsAttended,
+    eventsAttended: s.engagementInputs.unscoredAttended,
     sessionsAttended: s.sessionsAttended,
     campaignsOpened: s.campaignsOpened,
+    eventEngagement: s.engagementInputs.eventPoints,
   });
   return (
     <>
@@ -114,8 +115,10 @@ export async function ContactStatsPanel({
               </p>
               <p className="text-caption text-ink-2">
                 {t('engagementHow', {
+                  eventPoints: s.engagementInputs.eventPoints,
+                  scored: s.engagementInputs.scoredEvents,
                   wAttended: ENGAGEMENT_WEIGHTS.eventsAttended,
-                  attended: s.eventsAttended,
+                  attended: s.engagementInputs.unscoredAttended,
                   wSessions: ENGAGEMENT_WEIGHTS.sessionsAttended,
                   sessions: s.sessionsAttended,
                   wCampaigns: ENGAGEMENT_WEIGHTS.campaignsOpened,

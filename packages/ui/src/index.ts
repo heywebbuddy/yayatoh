@@ -105,8 +105,11 @@ export {
   PersonChip,
 } from './components/people.tsx';
 export {
+  CountryPicker,
+  type CountryPickerProps,
   CurrencyPicker,
   type CurrencyPickerProps,
+  countryOptions,
   currencyOptions,
   TimeZonePicker,
   type TimeZonePickerProps,

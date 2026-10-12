@@ -106,6 +106,9 @@ function sealTwoFactorSecrets(adapter: Any, sealer: SecretSealer): Any {
   };
   const openOut = async (model: string, row: Any) => {
     if (!isTf(model) || !row || typeof row.secret !== 'string') return row;
+    // Older accounts stored Better Auth's own ciphertext directly. Only unwrap values that
+    // carry one of our KeyVault envelopes; Better Auth will decrypt legacy values downstream.
+    if (!row.secret.startsWith('local.v1.') && !row.secret.startsWith('kms.v1.')) return row;
     return { ...row, secret: await sealer.open(row.secret) };
   };
   return {

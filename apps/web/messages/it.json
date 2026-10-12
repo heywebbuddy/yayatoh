@@ -336,6 +336,7 @@
   },
   "nav": {
     "home": "Home",
+    "events": "Eventi",
     "analysis": "Analisi",
     "setupGuide": "Guida alla configurazione",
     "branding": "Branding",
@@ -964,7 +965,13 @@
     "fromTemplate": "Parti da un modello",
     "guided": "Creazione guidata (3 passaggi)",
     "currency": "Valuta",
-    "currencyHint": "La usano biglietti, pagamento e report. Puoi cambiarla fino al primo ordine."
+    "currencyHint": "La usano biglietti, pagamento e report. Puoi cambiarla fino al primo ordine.",
+    "category": "Categoria (facoltativa)",
+    "categoryNone": "Ancora nessuna categoria",
+    "categoryHint": "Ti aiuta a organizzare gli eventi e aiuta i partecipanti a trovarli. Puoi cambiarla in seguito nei dettagli dell’evento.",
+    "manageCategories": "Gestisci categorie (si apre in una nuova scheda)",
+    "refreshCategories": "Aggiorna elenco categorie",
+    "refreshingCategories": "Aggiornamento…"
   },
   "tickets": {
     "subtitle": "Tipi di biglietto, prezzi e disponibilità. Ogni prezzo mostrato agli acquirenti include le commissioni.",
@@ -1526,8 +1533,8 @@
     "noAccessTitle": "L’importazione non fa parte del tuo ruolo",
     "noAccessDescription": "Chiedi a un organizzatore un ruolo che possa modificare i partecipanti.",
     "step1": "1. Scegli un file",
-    "fileHint": "Un CSV con una riga di intestazione e un ospite per riga, fino a 20.000 righe e 5 MB. Esportalo in CSV da Excel, Numbers o Google Sheets.",
-    "file": "File CSV",
+    "fileHint": "Un file CSV o Excel (.xlsx) con una riga di intestazione e un ospite per riga, fino a 20.000 righe e 5 MB. Parti dal modello oppure esporta da Excel, Numbers o Google Sheets.",
+    "file": "File CSV o Excel",
     "upload": "Carica",
     "step2": "2. Abbina le colonne di {file}",
     "rows": "{count, plural, one {# riga} other {# righe}}",
@@ -1567,7 +1574,8 @@
       "cell_too_long": "Una cella supera i 1.000 caratteri.",
       "unterminated_quote": "Il file contiene delle virgolette non chiuse, quindi non può essere letto come CSV."
     },
-    "backToEvent": "Torna alla panoramica dell’evento"
+    "backToEvent": "Torna alla panoramica dell’evento",
+    "template": "Scarica un modello (CSV)"
   },
   "distribution": {
     "title": "Invia questo biglietto",
@@ -1825,7 +1833,12 @@
         "other": "Rettifica · {event}"
       }
     },
-    "destinationHold": "Nuovo conto per i pagamenti: per la tua sicurezza, i trasferimenti verso questo conto iniziano dopo il {until}. Abbiamo avvisato via email i proprietari della tua organizzazione."
+    "destinationHold": "Nuovo conto per i pagamenti: per la tua sicurezza, i trasferimenti verso questo conto iniziano dopo il {until}. Abbiamo avvisato via email i proprietari della tua organizzazione.",
+    "disconnectFake": {
+      "hint": "Scollega un account di prova fittizio inutilizzato per ricominciare la configurazione degli accrediti con un altro fornitore. Non è possibile se l’account è già stato usato per ordini o regolamenti.",
+      "label": "Scollega account di prova",
+      "confirm": "Scollegare questo account di accredito fittizio? L’operazione non può essere annullata."
+    }
   },
   "fakeConnect": {
     "eyebrow": "Modalità di prova",
@@ -2175,12 +2188,36 @@
         "exit": "Uscita",
         "dance_floor": "Pista da ballo",
         "bar": "Bar",
+        "vip_area": "Area VIP",
         "custom": "Altro"
       },
       "accessibleCol": "Posti accessibili",
       "accessibleOf": "Posti accessibili di {item}",
       "accessibleHint": "Posti accessibili: scrivi i numeri, ad es. «1, 2». Sono evidenziati sulla piantina e le regole dei posti possono riservarli.",
-      "sponsoredBy": "Sponsor: {sponsor}"
+      "sponsoredBy": "Sponsor: {sponsor}",
+      "tableShape": "Forma del tavolo",
+      "shape": {
+        "round": "Rotondo",
+        "rect": "Rettangolare"
+      },
+      "addSeat": "Aggiungi un posto singolo",
+      "width": "Larghezza (cm)",
+      "height": "Altezza (cm)",
+      "sizeCol": "Dimensioni (cm)",
+      "sectionCol": "Settore",
+      "sectionOf": "Settore di {item}",
+      "noSection": "Nessun settore",
+      "vipSection": "{section} (VIP)",
+      "sections": "Settori",
+      "sectionsHint": "Raggruppa file e tavoli in settori come “Famiglia” o “Balconata”. I settori VIP risaltano nella scelta dei posti e sulla mappa della location. Disegna un’area VIP per segnarla sulla pianta.",
+      "sectionName": "Nome del settore {section}",
+      "sectionVip": "VIP",
+      "sectionItems": "{count, plural, one {# fila o tavolo} other {# file e tavoli}}",
+      "removeSection": "Rimuovi",
+      "removeSectionNamed": "Rimuovi il settore {section}",
+      "newSection": "Nuovo settore",
+      "addSection": "Aggiungi settore",
+      "moveSelectedTo": "Sposta la selezione nel settore…"
     },
     "prices": {
       "title": "Prezzi",
@@ -2947,6 +2984,7 @@
       "exit": "Uscita",
       "dance_floor": "Pista da ballo",
       "bar": "Bar",
+      "vip_area": "Area VIP",
       "custom": "Altro"
     },
     "named": "{type}: {label}",
@@ -7388,7 +7426,11 @@
         "title": "Biglietti venduti",
         "ofCapacity": "su {capacity}",
         "noCapacity": "Ancora nessun biglietto in vendita",
-        "comps": "{count, plural, one {# omaggio} other {# omaggi}}"
+        "comps": "{count, plural, one {# omaggio} other {# omaggi}}",
+        "claimed": "{count, plural, one {# biglietto ceduto} other {# biglietti ceduti}}",
+        "waiting": "{count, plural, one {# in attesa di essere ceduto} other {# in attesa di essere ceduti}}",
+        "registrations": "{count, plural, one {# registrazione confermata} other {# registrazioni confermate}}",
+        "inProgress": "{count, plural, one {# in corso} other {# in corso}}"
       },
       "checkins": {
         "title": "Ingressi",
@@ -7635,7 +7677,11 @@
         "total": "{count, plural, one {# sponsor} other {# sponsor}}",
         "overdue": "{count, plural, one {# consegna scaduta} other {# consegne scadute}}",
         "deliverablesPending": "Le consegne compariranno qui quando i pacchetti sponsor saranno attivi.",
-        "open": "Apri gli sponsor"
+        "open": "Apri gli sponsor",
+        "packages": "{active, plural, one {# pacchetto attivo} other {# pacchetti attivi}} · {pending} in attesa",
+        "revenue": "Sponsorizzazioni: {amount}",
+        "deliverables": "Consegne: {done} di {total} completate",
+        "sponsoredSessions": "{count, plural, one {# sessione sponsorizzata} other {# sessioni sponsorizzate}}"
       },
       "rsvp": {
         "title": "Risposte",
@@ -9819,7 +9865,8 @@
       "not_validated": "Controlla la lista prima di importarla.",
       "nothing_to_import": "Nessun gruppo può essere importato. Correggi le righe della lista e importala di nuovo.",
       "expired": "Questa importazione è scaduta. Ricomincia con la tua lista."
-    }
+    },
+    "template": "Scarica un modello"
   },
   "subEvents": {
     "link": "Momenti e inviti",
@@ -13249,6 +13296,23 @@
     "cardTitle": "Salvare una carta per le donazioni di stasera?",
     "cardBody": "L’ospite lo scansiona con il proprio telefono. Non viene salvato nulla senza il suo consenso lì."
   },
+  "scanLookup": {
+    "view": "Trova partecipante",
+    "title": "Trova un intestatario di biglietto",
+    "searchLabel": "Nome, email o telefono",
+    "searchHint": "Funziona offline. Digita almeno due lettere di un nome, oppure un indirizzo email o un numero di telefono completo.",
+    "results": "Intestatari trovati",
+    "noMatchTitle": "Nessun intestatario trovato",
+    "noMatchName": "Controlla l’ortografia, oppure prova con il suo indirizzo email o numero di telefono.",
+    "noMatchContact": "Indirizzi email e numeri di telefono devono corrispondere esattamente. Prova invece con il nome.",
+    "checkIn": "Check-in",
+    "checkInNamed": "Check-in di {name}",
+    "checkedIn": "Check-in effettuato",
+    "void": "Biglietto annullato",
+    "search": "Cerca",
+    "consoleHint": "Usalo quando un codice non si scansiona. Ogni parola del nome deve corrispondere; indirizzi email e numeri di telefono devono essere completi.",
+    "searchAgain": "Cerca di nuovo"
+  },
   "scanGuestKiosk": {
     "welcome": "Benvenuti a {event}",
     "subtitle": "Trova il tuo tavolo e fai il check-in",
@@ -15151,7 +15215,7 @@
     "scores": "Punteggi",
     "engagement": "Punteggio di coinvolgimento",
     "engagementValue": "{score} / 100",
-    "engagementHow": "{wAttended} × {attended} eventi frequentati + {wSessions} × {sessions} sessioni + {wCampaigns} × {campaigns} campagne aperte = {points} punti. 100 × {points} ÷ ({points} + {half}) = {score}.",
+    "engagementHow": "{eventPoints} punti di attività in {scored, plural, one {# evento} other {# eventi}} (check-in, sondaggi, domande, feedback e iscrizioni, secondo i tuoi pesi) + {wAttended} × {attended} altri eventi frequentati + {wSessions} × {sessions} sessioni + {wCampaigns} × {campaigns} campagne aperte = {points} punti. 100 × {points} ÷ ({points} + {half}) = {score}.",
     "noShow": "Propensione all’assenza",
     "noShowHow": "({noShows} assenze + {priorNoShows}) ÷ ({past} registrazioni passate + {priorRegistrations}) = {pct}. Gli eventi futuri non contano ancora.",
     "rfm": "RFM",
@@ -18924,5 +18988,91 @@
       "not_listed": "Solo gli eventi sul marketplace possono essere promossi.",
       "failed": "Impossibile avviare la promozione. Riprova."
     }
+  },
+  "attendeeDashboard": {
+    "dashboardLink": "Dashboard",
+    "signInLink": "Accedi",
+    "signUpLink": "Registrati",
+    "title": "La mia dashboard",
+    "navigation": "Navigazione partecipante",
+    "welcome": "Benvenuto su Yayatoh",
+    "browse": "Scopri eventi",
+    "nav": {
+      "overview": "Panoramica",
+      "events": "I miei eventi",
+      "tickets": "Biglietti e ordini",
+      "schedule": "Il mio programma",
+      "profile": "Profilo",
+      "notifications": "Notifiche",
+      "settings": "Impostazioni account"
+    },
+    "descriptions": {
+      "overview": "Le tue prenotazioni, i prossimi eventi e il tuo account, tutto insieme.",
+      "events": "Eventi che hai prenotato o a cui ti sei registrato.",
+      "tickets": "Apri un ordine per vedere i codici QR, scaricare i biglietti e gestire le opzioni di rimborso o trasferimento disponibili.",
+      "schedule": "Le tue prenotazioni delle sessioni e i programmi personali per gli eventi che li supportano.",
+      "profile": "Gestisci il nome e la foto del tuo account.",
+      "notifications": "Scegli cosa ricevere da ciascun organizzatore.",
+      "settings": "Gestisci accesso, sicurezza e dati personali."
+    },
+    "signInTitle": "I tuoi eventi iniziano qui",
+    "signInHint": "Accedi al tuo account per vedere gli acquisti effettuati con la sua email verificata. Puoi anche verificare qui sotto l’email di un biglietto per vederne le prenotazioni.",
+    "accountSignIn": "Accedi al mio account",
+    "createAccount": "Continua con un codice via email",
+    "guestSignIn": "Vedi i biglietti con un codice via email",
+    "verifyEmail": "Verifica l’email del tuo account prima di accedere alle sue prenotazioni. Puoi usare l’accesso con codice monouso via email.",
+    "accountRequired": "Accedi per gestire il tuo account",
+    "accountRequiredHint": "La verifica dell’email dei biglietti dà accesso alle prenotazioni. Accedi al tuo account con la stessa email per gestire profilo e sicurezza.",
+    "ticketCount": "{count, plural, one {# biglietto prenotato} other {# biglietti prenotati}}",
+    "openOrder": "Vedi biglietti e gestisci ordine",
+    "openSchedule": "Apri il mio programma",
+    "emptyTitle": "Nessuna prenotazione da mostrare",
+    "emptyHint": "Quando prenoterai un evento con questa email, comparirà qui.",
+    "signedInAs": "Prenotazioni di {email}",
+    "upcomingEvents": "Prossimi eventi",
+    "orders": "Ordini",
+    "eventsAttended": "Eventi prenotati passati",
+    "nextEvents": "In arrivo",
+    "upcoming": "In arrivo e in corso",
+    "past": "Eventi passati",
+    "noneInPeriod": "Nessun evento in questo periodo.",
+    "signOut": "Esci",
+    "noSchedule": "Ancora nessun programma delle sessioni",
+    "noScheduleHint": "I programmi compaiono quando una prenotazione include sessioni. I normali eventi con biglietto non richiedono un programma delle sessioni.",
+    "preferencesHint": "Gestisci promemoria via email, aggiornamenti sull’evento, offerte e preferenze SMS disponibili per questo organizzatore.",
+    "managePreferences": "Gestisci preferenze di notifica",
+    "noPreferences": "Per questo organizzatore non sono ancora disponibili preferenze di contatto.",
+    "organizationPrivacy": "Richiedi i miei dati all’organizzazione",
+    "noOrganizations": "Ancora nessun organizzatore",
+    "preferencesEmpty": "Le preferenze degli organizzatori saranno disponibili dopo la tua prima prenotazione.",
+    "profile": {
+      "name": "Nome completo",
+      "nameError": "Inserisci un nome da 1 a 120 caratteri.",
+      "email": "Email verificata",
+      "emailHint": "Le prenotazioni sono associate a questa email verificata. Cambiare il nome dell’account non modifica i dati dei titolari dei biglietti esistenti.",
+      "photo": "Foto del profilo",
+      "photoHint": "JPEG, PNG o WebP, fino a 512 KB. La foto viene ritagliata come avatar quadrato.",
+      "photoError": "Scegli un’immagine JPEG, PNG o WebP valida inferiore a 512 KB.",
+      "removePhoto": "Rimuovi la foto attuale",
+      "save": "Salva profilo",
+      "saving": "Salvataggio…",
+      "saved": "Profilo salvato.",
+      "error": "Impossibile salvare il profilo. Controlla i campi e riprova."
+    },
+    "backToDashboard": "Torna alla mia dashboard",
+    "organizerSignInTitle": "Accesso organizzazione",
+    "organizerSignInDescription": "Accedi con un account che ha accesso all’organizzazione per gestire i tuoi eventi e il tuo team.",
+    "attendeeSignInTitle": "Accesso partecipante",
+    "attendeeSignInDescription": "Accedi per vedere biglietti, prenotazioni e profilo.",
+    "attendeeSignUpTitle": "Registrati",
+    "attendeeSignUpDescription": "Verifica la tua email per creare un account e tenere insieme eventi e biglietti.",
+    "organizationAccessRequired": "Questo account non ha accesso a un’organizzazione. Usa un account organizzatore o continua alla tua dashboard partecipante.",
+    "useAnotherAccount": "Usa un altro account"
+  },
+  "eventBranding": {
+    "title": "Colore di questo evento",
+    "description": "Dai a questo evento un colore di accento proprio nella sua pagina pubblica. Lascia vuoto per usare il colore del brand della tua organizzazione indicato sotto.",
+    "color": "Colore dell’evento",
+    "usesOrg": "Questo evento usa il colore del brand dell’organizzazione."
   }
 }

@@ -1,6 +1,6 @@
 import { CurrencyCode, defineSerializer, IanaTimezone, partialNoDefaults, Slug } from '@yayatoh/contracts';
 import { z } from 'zod';
-import { ATTENDANCE_MODES, EVENT_CATEGORIES } from './domain/categories.ts';
+import { ATTENDANCE_MODES, EventCategoryKey } from './domain/categories.ts';
 import { EVENT_PROFILES, EVENT_ROLES, EVENT_STATUSES, EVENT_VISIBILITIES } from './schema.ts';
 
 export const EventDto = z.object({
@@ -39,12 +39,14 @@ export const PublicEventDto = z.object({
   organizerName: z.string(),
   poweredByVisible: z.boolean(),
   /** M1.4c/d (additive). */
-  category: z.enum(EVENT_CATEGORIES).nullable(),
+  category: EventCategoryKey.nullable(),
   attendanceMode: z.enum(ATTENDANCE_MODES),
   /** The venue's public page, when the venue is in the directory. */
   venueSlug: z.string().nullable(),
   /** Private events are only ever returned after an access code unlocked them. */
   visibility: z.enum(EVENT_VISIBILITIES),
+  /** Per-event branding (agreement §3): the event's accent colour, or null for the org's. */
+  brandColor: z.string().nullable().default(null),
 });
 export type PublicEventDto = z.infer<typeof PublicEventDto>;
 export const publicEventSerializer = defineSerializer('events.publicEvent', PublicEventDto);
@@ -67,7 +69,10 @@ const Base = z.object({
   currency: CurrencyCode.default('USD'),
 });
 
-export const CreateEventInput = Base.extend({ slug: Slug.optional() }).refine((v) => v.endsAt > v.startsAt, {
+export const CreateEventInput = Base.extend({
+  slug: Slug.optional(),
+  orgCategory: z.string().max(80).nullable().optional(),
+}).refine((v) => v.endsAt > v.startsAt, {
   message: 'endsAt must be after startsAt',
   path: ['endsAt'],
 });

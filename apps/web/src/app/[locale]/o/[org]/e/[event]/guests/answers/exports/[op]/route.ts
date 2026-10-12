@@ -14,7 +14,7 @@ export async function GET(
   const { org, event, op } = await params;
   const notFound = () => new Response('Not found', { status: 404, headers: { 'cache-control': 'no-store' } });
   if (!/^[0-9a-f-]{36}$/.test(op)) return notFound();
-  const { data, event: ev } = await loadEvent(org, event, 'guests');
+  const { data, event: ev } = await loadEvent(org, event, 'seating');
   for (const bulk of [rsvpAnswersPrivateExportBulk, rsvpAnswersExportBulk]) {
     try {
       const status = await executeQuery(bulk.status, { operationId: op }, data.ctx, ports);

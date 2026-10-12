@@ -44,7 +44,9 @@ const SECTION_OF: Record<string, string> = {
   reviews: 'reviews',
   team: 'team',
   // Batch 3c merge: the pages added beside M4.2a (M4.1a guests, M3.8a tracked links, M3.10b cancel).
-  guests: 'guests',
+  // Kartik_Fixes: the guest list backs seating's guest-party workflow, so its pages load through
+  // the seating section (every profile with Guests also shows Seating, and so does a planner).
+  guests: 'seating',
   'tracked-links': 'trackedLinks',
   // Cancel or postpone the event is an action of the event home (its button lives there).
   cancel: 'home',
@@ -75,6 +77,11 @@ const SECTION_OF: Record<string, string> = {
   virtual: 'virtual',
   // M6.9b: CE credits (conference nav, the `virtual` module).
   'ce-credits': 'ceCredits',
+  // Kartik_Fixes: event Branding edits the shared org brand kit (no longer a placeholder).
+  branding: 'branding',
+  // Agreement audit 2026-10-12: the wedding's RSVP and Messages items open the guest screens.
+  rsvp: 'rsvp',
+  messages: 'messages',
 };
 
 describe('event console route sweep (M4.2a)', () => {

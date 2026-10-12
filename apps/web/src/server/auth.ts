@@ -12,7 +12,8 @@ import { LOCALES } from '@yayatoh/contracts';
 import { isProductionEnv } from '@yayatoh/kernel';
 import { type MessageKind, PLATFORM_SENDER, renderMessage } from '@yayatoh/notifications';
 import { IDENTITY_KEY_SCOPE, keyVault, liftErasedAccountMail } from '@yayatoh/platform';
-import { cookies } from 'next/headers';
+import { cookies } from 'next/headers.js';
+import { sendLiveAuthMail } from '../lib/auth-mail-policy.ts';
 import { devAuthEnabled } from './dev.ts';
 import { webTransports } from './mail-transports.ts';
 // Registers the key vault (the composition root) before any seed is sealed.
@@ -91,6 +92,8 @@ async function sendAuthMail(
 ): Promise<void> {
   const t = webTransports();
   if (!t) throw new Error('No email provider is configured for sign-in email (EMAIL_PROVIDER=ses)');
+  if (process.env.EMAIL_PROVIDER === 'ses' && t.email.name !== 'ses')
+    throw new Error('AWS SES is selected but its required email configuration is incomplete');
   const rendered = renderMessage({
     kind,
     locale: await mailLocale(),
@@ -110,20 +113,23 @@ async function sendAuthMail(
 
 const production = () => process.env.NODE_ENV === 'production' && isProductionEnv();
 
-// Development, preview and CI keep the console mailer (and the dev code store for personas and
-// e2e); production sends real email. Expiries match createAuth: code 10 min, link 15, reset 30.
+// Explicit SES configuration sends real account mail locally too. Unconfigured development
+// keeps the console mailer and the dev code store. Code 10 min, link 15, reset 30.
 export const authMailer: AuthMailer = {
   async sendOtp(to, otp, purpose) {
-    if (production()) return sendAuthMail('auth.sign-in-code', to, { code: otp, minutes: 10 });
+    if (sendLiveAuthMail(production(), process.env.EMAIL_PROVIDER))
+      return sendAuthMail('auth.sign-in-code', to, { code: otp, minutes: 10 });
     if (devAuthEnabled()) await rememberDevCode(to, otp);
     await consoleMailer.sendOtp(to, otp, purpose);
   },
   async sendMagicLink(to, url) {
-    if (production()) return sendAuthMail('auth.magic-link', to, { url, minutes: 15 });
+    if (sendLiveAuthMail(production(), process.env.EMAIL_PROVIDER))
+      return sendAuthMail('auth.magic-link', to, { url, minutes: 15 });
     await consoleMailer.sendMagicLink(to, url);
   },
   async sendPasswordReset(to, url) {
-    if (production()) return sendAuthMail('auth.password-reset', to, { url, minutes: 30 });
+    if (sendLiveAuthMail(production(), process.env.EMAIL_PROVIDER))
+      return sendAuthMail('auth.password-reset', to, { url, minutes: 30 });
     if (devAuthEnabled()) await rememberDevLink(to, url);
     await consoleMailer.sendPasswordReset?.(to, url);
   },

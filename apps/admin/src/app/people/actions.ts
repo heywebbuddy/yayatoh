@@ -5,6 +5,7 @@ import { isDomainError, isProductionEnv } from '@yayatoh/kernel';
 import { consoleTransport, devMailboxTransports, sendAccountNotice } from '@yayatoh/notifications';
 import { deleteAccount, exportAccount, StaffReason } from '@yayatoh/privacy';
 import { z } from 'zod';
+import { liveEmail } from '@/server/mail.ts';
 import { hasAnything, lookupPerson, type PersonLookup } from '@/server/people.ts';
 import { ports } from '@/server/ports.ts';
 import { requireStaff } from '@/server/staff.ts';
@@ -63,10 +64,10 @@ export type EraseState =
     }
   | { readonly kind: 'erased'; readonly requestId: string; readonly summary: Record<string, number> };
 
-/** The deletion confirmation to the old address (dev mailbox in development; SES pending). */
+/** The deletion confirmation to the old address: SES when configured, else the dev mailbox or a log. */
 async function notify(to: string, user: AccountUser) {
   const dev = process.env.YAYATOH_DEV_AUTH === '1' && !isProductionEnv();
-  await sendAccountNotice(dev ? devMailboxTransports().email : consoleTransport(), {
+  await sendAccountNotice(liveEmail() ?? (dev ? devMailboxTransports().email : consoleTransport()), {
     to,
     name: user.name,
     locale: user.locale,

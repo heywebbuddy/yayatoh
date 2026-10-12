@@ -28,3 +28,20 @@ export async function approvalBacklogTx(
     .where(and(eq(registrants.eventId, eventId), eq(registrants.status, 'pending')));
   return { pending: Number(r?.n ?? 0), oldestAt: r?.oldest ?? null };
 }
+
+/**
+ * Registrations at a glance (agreement §6, the Command Center's tickets tile): confirmed
+ * registrants, and applications or unpaid places still in progress (pending, approved, reserved).
+ */
+export async function registrationCountsTx(
+  tx: TenantTx,
+  eventId: string,
+): Promise<{ confirmed: number; inProgress: number }> {
+  const rows = await tx
+    .select({ status: registrants.status, n: count() })
+    .from(registrants)
+    .where(eq(registrants.eventId, eventId))
+    .groupBy(registrants.status);
+  const n = (s: string) => Number(rows.find((r) => r.status === s)?.n ?? 0);
+  return { confirmed: n('confirmed'), inProgress: n('pending') + n('approved') + n('reserved') };
+}

@@ -5,6 +5,7 @@ import {
   ChartColumn,
   DoorOpen,
   KeyRound,
+  LayoutDashboard,
   MessageSquareWarning,
   Percent,
   Route,
@@ -39,7 +40,9 @@ export async function Shell({ staff, children }: { staff: Staff; children: React
   const paused = staff.can('messaging') ? (await autoPausedOrgs(staff)).length : 0;
   const theme = await currentTheme();
   const links: { href: string; label: string; icon: ReactNode; show: boolean }[] = [
-    { href: '/', label: t('tenants'), icon: <Building2 {...I} />, show: true },
+    { href: '/', label: t('dashboard'), icon: <LayoutDashboard {...I} />, show: true },
+    { href: '/tenants', label: t('tenants'), icon: <Building2 {...I} />, show: true },
+    { href: '/plans', label: t('plans'), icon: <Percent {...I} />, show: staff.can('plans') },
     { href: '/commission', label: t('commission'), icon: <Percent {...I} />, show: staff.can('fees') },
     { href: '/reports', label: t('reports'), icon: <ChartColumn {...I} />, show: staff.can('reports') },
     {
@@ -93,7 +96,7 @@ export async function Shell({ staff, children }: { staff: Staff; children: React
       >
         {t('skip')}
       </a>
-      <aside className="m-3 flex flex-col gap-4 rounded-panel border border-side-line bg-side p-4 text-side-ink lg:sticky lg:top-4 lg:m-0 lg:h-[calc(100dvh-2rem)] lg:w-[256px] lg:shrink-0 lg:gap-5 lg:overflow-y-auto lg:px-4 lg:pt-6 dark:backdrop-blur-xl [&_:focus-visible]:outline-white">
+      <aside className="m-3 flex flex-col gap-4 rounded-panel border border-side-line bg-side p-4 text-side-ink lg:sticky lg:top-4 lg:m-0 lg:h-[calc(100dvh-2rem)] lg:w-[256px] lg:shrink-0 lg:gap-5 lg:overflow-y-auto lg:[scrollbar-width:none] lg:[&::-webkit-scrollbar]:hidden lg:px-4 lg:pt-6 dark:backdrop-blur-xl [&_:focus-visible]:outline-white">
         <header className="flex items-center gap-2.5 px-2">
           <svg aria-hidden="true" viewBox="0 0 32 32" className="size-[28px] shrink-0">
             <path d="M5 21C5 13.3 10.6 6 18.5 6c0 7.7-5.6 15-13.5 15z" className="fill-brand" />
@@ -129,7 +132,7 @@ export async function Shell({ staff, children }: { staff: Staff; children: React
       </aside>
       <main
         id="main"
-        className="mx-auto flex w-full max-w-6xl min-w-0 flex-col gap-6 px-4 pt-2 pb-12 lg:px-2 lg:pt-3"
+        className="flex w-full min-w-0 flex-1 flex-col gap-6 px-4 pt-2 pb-12 [&>div:first-child]:sticky [&>div:first-child]:top-0 [&>div:first-child]:z-20 [&>div:first-child]:bg-page [&>div:first-child]:bg-fixed [&>div:first-child]:-mx-4 [&>div:first-child]:px-4 [&>div:first-child]:-mt-2 [&>div:first-child]:pt-2 [&>div:first-child]:py-2 lg:px-2 lg:-mx-2 lg:-mt-3 lg:pt-3 [&>*]:min-w-0"
       >
         {children}
       </main>

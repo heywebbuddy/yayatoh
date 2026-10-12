@@ -1,9 +1,8 @@
 'use client';
 
 import { cx } from '@yayatoh/ui';
-import { BookOpen, ChevronDown, Lightbulb } from 'lucide-react';
+import { ChevronDown, Lightbulb } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { Link } from '@/i18n/navigation.ts';
 import { HELP_COOKIE, type HelpTopic, parseClosedHelp, serializeClosedHelp } from '@/lib/help-topics.ts';
 
 function remember(topic: HelpTopic, open: boolean) {
@@ -26,8 +25,6 @@ export function HowItWorksPanel({
   title,
   intro,
   steps,
-  docLabel,
-  docHref,
   hideLabel,
   showLabel,
 }: {
@@ -38,8 +35,6 @@ export function HowItWorksPanel({
   title: string;
   intro: string;
   steps: readonly string[];
-  docLabel: string;
-  docHref: string;
   hideLabel: string;
   showLabel: string;
 }) {
@@ -103,13 +98,6 @@ export function HowItWorksPanel({
             </li>
           ))}
         </ol>
-        <Link
-          href={docHref}
-          className="inline-flex min-h-6 items-center gap-2 self-start rounded-tag text-body font-bold text-primary-ink underline underline-offset-2"
-        >
-          <BookOpen aria-hidden="true" className="size-4" strokeWidth={2} />
-          {docLabel}
-        </Link>
       </div>
     </details>
   );

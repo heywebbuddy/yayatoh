@@ -1,6 +1,6 @@
 import 'server-only';
+import { engineStaffAlerts } from '@yayatoh/alerts';
 import {
-  derivedStaffAlerts,
   deviceContext,
   type StaffAlertSource,
   type StaffPushSender,
@@ -21,11 +21,11 @@ import { webPushConfig } from './web-push.ts';
 /**
  * Staff mode of the Scan PWA (M3.4a), composed for the web app.
  *
- * `staffAlertSource` is where the alerts list comes from: the check-in module's derived alerts
- * (device offline, low battery, backlog, capacity near) until the Command Center alert engine
- * (M3.2b) lands; it then replaces this one line (and the same line in the worker).
+ * `staffAlertSource` is where the alerts list comes from: the check-in module's per-device alerts
+ * (device offline, low battery, backlog, capacity near) on the Command Center alert engine's
+ * state, so what the organizer acknowledged or snoozed is quiet here too (same in the worker).
  */
-export const staffAlertSource: StaffAlertSource = derivedStaffAlerts;
+export const staffAlertSource: StaffAlertSource = engineStaffAlerts();
 
 export const staffOverview = staffOverviewQuery(staffAlertSource);
 export const supervisorView = supervisorViewQuery(staffAlertSource);

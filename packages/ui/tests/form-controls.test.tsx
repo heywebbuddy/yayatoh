@@ -2,7 +2,9 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import {
   Combobox,
+  CountryPicker,
   CurrencyPicker,
+  countryOptions,
   currencyOptions,
   DatePicker,
   DateTimePicker,
@@ -203,7 +205,21 @@ describe('Date and time pickers', () => {
   });
 });
 
-describe('Time zone and currency pickers', () => {
+describe('Country, time zone and currency pickers', () => {
+  it('lists all countries and territories with localized names and submits ISO codes', () => {
+    const options = countryOptions('en');
+    expect(options).toHaveLength(249);
+    expect(new Set(options.map((option) => option.value)).size).toBe(249);
+    expect(options.find((option) => option.value === 'IN')?.text).toBe('India IN');
+    expect(countryOptions('fr').find((option) => option.value === 'DE')?.text).toContain('Allemagne');
+    const html = renderToStaticMarkup(<CountryPicker name="country" defaultValue="IN" required />);
+    expect(html).toContain('role="combobox"');
+    expect(html).toContain('name="country" value="IN"');
+    expect(html).toContain('India');
+    const empty = renderToStaticMarkup(<CountryPicker name="country" required />);
+    expect(empty).toContain('name="country" value=""');
+    expect(empty).not.toContain('name="country" value="AF"');
+  });
   it('lists IANA zones grouped by region with the current offset', () => {
     const opts = timeZoneOptions('en', new Date('2026-07-01T12:00:00Z'));
     const kolkata = opts.find((o) => o.value === 'Asia/Kolkata');
