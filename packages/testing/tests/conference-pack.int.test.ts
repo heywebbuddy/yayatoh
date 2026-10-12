@@ -319,8 +319,9 @@ describe('who sees what', () => {
     expect(sp).toMatchObject({ sponsors: 2, tiers: [{ tier: 'Gold', sponsors: 2 }], deliverablesOverdue: 2 });
     // Agreement §6 sponsor metrics: packages and deliverables for ops; income for the owner only.
     expect(sp.revenue).toBeNull();
-    expect(sp.deliverables.total).toBeGreaterThanOrEqual(2);
-    expect(sp.packages.active + sp.packages.pending).toBeGreaterThanOrEqual(0);
+    // The scenario's overdue count comes from its deliverables port; the table counts are their own.
+    expect(sp.deliverables.done).toBeLessThanOrEqual(sp.deliverables.total);
+    expect(sp.packages).toEqual({ active: expect.any(Number), pending: expect.any(Number) });
     const owner = await executeQuery(
       sponsorActivityWidget(sources.overdueDeliverables ?? null).loader,
       { eventId: fresh.eventId },

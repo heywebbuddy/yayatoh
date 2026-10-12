@@ -78,6 +78,8 @@ it('reports live totals, zero-filled daily activity and plan distribution while 
 });
 
 it('counts paid and failed orders correctly and separates sales and completed refunds by currency', async () => {
+  // Platform-wide totals: the integration suite shares one database, so count what this test adds.
+  const base = await dashboardData(staff, 7);
   const usdEvent = uuidv7();
   const inrEvent = uuidv7();
   const usdOrder = uuidv7();
@@ -99,19 +101,36 @@ it('counts paid and failed orders correctly and separates sales and completed re
   }
   await db`insert into orders.refunds(org_id,order_id,status,reason,amount_minor,currency,requested_by,completed_at) values (${orgId},${usdOrder},'succeeded','goodwill',100,'USD',${actor},now())`;
   const data = await dashboardData(staff, 7);
-  expect(data.totals).toMatchObject({
-    events: 2,
-    upcoming: 1,
-    orders: 4,
-    periodOrders: 3,
-    paidOrders: 2,
-    paymentFailed: 1,
-  });
-  expect(data.trend.reduce((sum, row) => sum + row.orders, 0)).toBe(3);
-  expect(data.financials).toEqual([
-    { currency: 'INR', gross: '2200', refunds: '0', commission: '0' },
-    { currency: 'USD', gross: '1100', refunds: '100', commission: '0' },
-  ]);
+  const added = (k: 'events' | 'upcoming' | 'orders' | 'periodOrders' | 'paidOrders' | 'paymentFailed') =>
+    Number(data.totals[k]) - Number(base.totals[k]);
+  expect({
+    events: added('events'),
+    upcoming: added('upcoming'),
+    orders: added('orders'),
+    periodOrders: added('periodOrders'),
+    paidOrders: added('paidOrders'),
+    paymentFailed: added('paymentFailed'),
+  }).toEqual({ events: 2, upcoming: 1, orders: 4, periodOrders: 3, paidOrders: 2, paymentFailed: 1 });
+  const trendOrders = (d: typeof data) => d.trend.reduce((sum, row) => sum + row.orders, 0);
+  expect(trendOrders(data) - trendOrders(base)).toBe(3);
+  const money = (d: typeof data, currency: string) => {
+    const f = d.financials.find((x) => x.currency === currency);
+    return {
+      gross: BigInt(f?.gross ?? '0'),
+      refunds: BigInt(f?.refunds ?? '0'),
+      commission: BigInt(f?.commission ?? '0'),
+    };
+  };
+  const delta = (currency: string) => {
+    const [now, then] = [money(data, currency), money(base, currency)];
+    return {
+      gross: String(now.gross - then.gross),
+      refunds: String(now.refunds - then.refunds),
+      commission: String(now.commission - then.commission),
+    };
+  };
+  expect(delta('INR')).toEqual({ gross: '2200', refunds: '0', commission: '0' });
+  expect(delta('USD')).toEqual({ gross: '1100', refunds: '100', commission: '0' });
 });
 
 afterAll(async () => {

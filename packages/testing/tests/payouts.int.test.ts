@@ -159,8 +159,14 @@ describe('payout accounts (M1.3c)', () => {
     await expect(
       executeCommand(disconnectFakePayoutAccountCommand, {}, a.ctx(), ports),
     ).rejects.toMatchObject({ code: 'conflict' });
+    // The org fixtures attach a donation order to every fixture account: give org B a fresh fake
+    // account nothing has used yet.
+    const unused = `fakeacct_unused_${uuidv7().slice(-12)}`;
+    await withTenant(systemCtx(b.org.id), (tx) =>
+      tx.execute(sql`update payments.payment_accounts set account_id = ${unused} where org_id = ${b.org.id}`),
+    );
     expect(await executeCommand(disconnectFakePayoutAccountCommand, {}, b.ctx(), ports)).toEqual({
-      accountId: acct(b),
+      accountId: unused,
       disconnected: true,
     });
     expect(await executeQuery(payoutAccountQuery, {}, b.ctx(), ports)).toMatchObject({

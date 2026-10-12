@@ -135,7 +135,7 @@ describe('two-step verification: enrolment', () => {
     expect(row).toBeDefined();
     const stored = `${row?.secret} ${row?.backup_codes}`;
     expect(row?.secret.startsWith('local.v1.')).toBe(true);
-    expect(row?.backup_codes.startsWith('test.v1.')).toBe(true);
+    expect(row?.backup_codes.startsWith('local.v1.')).toBe(true);
     expect(stored).not.toContain(u.secret);
     expect(stored).not.toContain(setupKey(u.secret).replace(/ /g, ''));
     for (const c of u.backupCodes) expect(stored).not.toContain(c);

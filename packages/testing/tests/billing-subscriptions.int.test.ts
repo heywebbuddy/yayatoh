@@ -160,7 +160,12 @@ describe('plan change through the webhook alone (M6.6a acceptance)', () => {
       legacyFees: { grandfathered: true, reason: 'staff' },
     });
     expect(s.modules).toEqual([...plan('tier_pro').modules].sort());
-    expect(s.catalog.map((c) => [c.key, c.active])).toEqual(PLACEHOLDER_PLANS.map((p) => [p.key, false]));
+    // The placeholder tiers (staff-made plans from other suites may sit beside them in the shared
+    // catalog: Kartik_Fixes' admin plans).
+    const placeholders = new Set<string>(PLACEHOLDER_PLANS.map((p) => p.key));
+    expect(s.catalog.filter((c) => placeholders.has(c.key)).map((c) => [c.key, c.active])).toEqual(
+      PLACEHOLDER_PLANS.map((p) => [p.key, false]),
+    );
     // The allowlist: no provider or customer ids reach the page.
     expect(JSON.stringify(s)).not.toContain(customerA);
     expect(JSON.stringify(s)).not.toContain('fakesub_');
