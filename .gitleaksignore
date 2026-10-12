@@ -17,3 +17,21 @@ fa264586b3c64d3e1570a455c5da65e761e61bd5:packages/testing/tests/donations.int.te
 # M6.3b webhook signing tests: the Standard Webhooks spec's published test vector (public, not a credential)
 344ced60997eec6c1c8ea7bdb3b229e80c2efa39:packages/sdk/tests/webhooks.test.ts:generic-api-key:7
 f43c277cbad51bf2648e35fbf8a0e39dda8def5e:packages/modules/webhooks/tests/signing.test.ts:generic-api-key:18
+# env.rtf, committed in 09d49dd0 and deleted in 1303e8ef (Kartik_Fixes, #11): real credentials, all rotated (owner, 2026-10-13); these values are dead. Never commit env files: values live in Doppler.
+09d49dd0221e3423631069f702b5e4f1d55c3bd4:env.rtf:aws-access-token:21
+09d49dd0221e3423631069f702b5e4f1d55c3bd4:env.rtf:aws-access-token:25
+09d49dd0221e3423631069f702b5e4f1d55c3bd4:env.rtf:generic-api-key:20
+09d49dd0221e3423631069f702b5e4f1d55c3bd4:env.rtf:generic-api-key:24
+09d49dd0221e3423631069f702b5e4f1d55c3bd4:env.rtf:generic-api-key:27
+09d49dd0221e3423631069f702b5e4f1d55c3bd4:env.rtf:generic-api-key:32
+09d49dd0221e3423631069f702b5e4f1d55c3bd4:env.rtf:generic-api-key:33
+09d49dd0221e3423631069f702b5e4f1d55c3bd4:env.rtf:generic-api-key:37
+09d49dd0221e3423631069f702b5e4f1d55c3bd4:env.rtf:generic-api-key:38
+09d49dd0221e3423631069f702b5e4f1d55c3bd4:env.rtf:generic-api-key:39
+09d49dd0221e3423631069f702b5e4f1d55c3bd4:env.rtf:generic-api-key:50
+09d49dd0221e3423631069f702b5e4f1d55c3bd4:env.rtf:generic-api-key:57
+09d49dd0221e3423631069f702b5e4f1d55c3bd4:env.rtf:generic-api-key:61
+09d49dd0221e3423631069f702b5e4f1d55c3bd4:env.rtf:generic-api-key:66
+09d49dd0221e3423631069f702b5e4f1d55c3bd4:env.rtf:generic-api-key:71
+09d49dd0221e3423631069f702b5e4f1d55c3bd4:env.rtf:jwt:19
+09d49dd0221e3423631069f702b5e4f1d55c3bd4:env.rtf:stripe-access-token:67

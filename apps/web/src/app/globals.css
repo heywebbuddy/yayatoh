@@ -3,14 +3,6 @@
 
 @source "../../../../packages/ui/src";
 
-/* The console header sticks on wide screens: content scrolled or focused into view lands below it
-   (WCAG 2.4.11 focus not obscured, 2.5.8 target size). */
-@media (min-width: 64rem) {
-  html:has([data-console-header]) {
-    scroll-padding-top: 5rem;
-  }
-}
-
 /* Printed pages (the seat-finder poster): let the printer pick A4 or Letter, with a small margin. */
 @page {
   margin: 12mm;
