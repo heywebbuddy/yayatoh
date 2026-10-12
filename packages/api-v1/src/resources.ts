@@ -5,10 +5,10 @@ import type { ProblemDto } from '@yayatoh/contracts';
 import {
   ANNOUNCEMENT_AUDIENCES,
   ATTENDANCE_MODES,
+  CATEGORY_KEY_PATTERN,
   EVENT_PROFILES,
   EVENT_STATUSES,
   EVENT_VISIBILITIES,
-  EventCategoryKey,
   OCCURRENCE_STATUSES,
   SECTION_KINDS,
 } from '@yayatoh/events';
@@ -44,7 +44,9 @@ export const OrgRole = z.enum(ORG_ROLES).openapi('OrgRole');
 export const EventProfile = z.enum(EVENT_PROFILES).openapi('EventProfile');
 export const EventStatus = z.enum(EVENT_STATUSES).openapi('EventStatus');
 export const EventVisibility = z.enum(EVENT_VISIBILITIES).openapi('EventVisibility');
-export const EventCategory = EventCategoryKey.openapi('EventCategory');
+// Built on this file's zod (the one extended with `.openapi`), as the other enums here; the
+// events module's `EventCategoryKey` is plain zod, which has no `.openapi` in every load order.
+export const EventCategory = z.string().regex(CATEGORY_KEY_PATTERN).openapi('EventCategory');
 export const AttendanceMode = z.enum(ATTENDANCE_MODES).openapi('AttendanceMode');
 export const FeeMode = z.enum(FEE_MODES).openapi('FeeMode');
 export const TicketTypeVisibility = z.enum(TICKET_TYPE_VISIBILITIES).openapi('TicketTypeVisibility');

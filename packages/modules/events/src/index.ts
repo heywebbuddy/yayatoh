@@ -82,6 +82,7 @@ export {
 export {
   ATTENDANCE_MODES,
   type AttendanceMode,
+  CATEGORY_KEY_PATTERN,
   EVENT_CATEGORIES,
   type EventCategory,
   EventCategoryKey,
