@@ -1,7 +1,6 @@
 import 'server-only';
 import {
   type Auth,
-  consoleMailer,
   createAuth,
   devPersonaReplayExempt,
   type SecretSealer,
@@ -9,6 +8,7 @@ import {
   twoFactorService,
 } from '@yayatoh/auth';
 import { IDENTITY_KEY_SCOPE, type KeyVault, keyVaultFromEnv } from '@yayatoh/platform';
+import { staffMailer } from './mail.ts';
 
 let instance: Auth | undefined;
 const exempt = devPersonaReplayExempt();
@@ -43,7 +43,7 @@ export function getAuth(): Auth {
     instance = createAuth({
       baseURL,
       secret,
-      mailer: consoleMailer,
+      mailer: staffMailer,
       cookieNamespace: 'admin',
       // Staff passkeys (M1.2f): rpID is the registrable domain (`yayatoh.com` in production, set by
       // PASSKEY_RP_ID) or this console's host name; only this console's origin may use them.
@@ -68,7 +68,7 @@ let twoFactor: TwoFactorService | undefined;
  */
 export function getTwoFactor(): TwoFactorService {
   twoFactor ??= twoFactorService(getAuth(), {
-    mailer: consoleMailer,
+    mailer: staffMailer,
     ...(exempt ? { totpReplayExempt: exempt } : {}),
   });
   return twoFactor;
