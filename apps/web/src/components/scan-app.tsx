@@ -283,8 +283,8 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
     const m = markRef.current;
     if (!last || !m || m.scanId !== last.scanId) return;
     markRef.current = null;
-    const raf = requestAnimationFrame(() => markScanFeedback(m.id));
-    return () => cancelAnimationFrame(raf);
+    // Not cancelled on the next render: a quick next scan must not lose this one's measure.
+    requestAnimationFrame(() => markScanFeedback(m.id));
   }, [last]);
 
   // Camera scanning: BarcodeDetector, or the zxing-wasm fallback (iOS Safari).
