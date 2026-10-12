@@ -595,18 +595,15 @@ describe('Google Sheets live sync', () => {
     const people = await attendeeRows(o.ctx(), o.eventId);
     const joan = people.find((p) => p.email === 'joan@eb-buyers.test');
     const hedy = people.find((p) => p.email === 'hedy@eb-buyers.test');
-    // Joan: the sheet changed first, Yayatoh later → Yayatoh's value is kept.
-    sheetsRemoteEdit(
-      o.acc,
-      sid,
-      rows.find((r) => r.values.email === joan?.email)?.rowId as string,
-      { labels: 'from-sheet' },
-      new Date(Date.now() - 120_000),
-    );
+    // Joan: the sheet changed first, Yayatoh later → Yayatoh's value is kept. (A person's edit has
+    // no time at Google: it counts from the run that reads it, so Yayatoh's change is dated after it.)
+    sheetsRemoteEdit(o.acc, sid, rows.find((r) => r.values.email === joan?.email)?.rowId as string, {
+      labels: 'from-sheet',
+    });
     await executeCommand(
       setAttendeeLabelsCommand,
       { eventId: o.eventId, attendeeIds: [joan?.id as string], add: ['from-yayatoh'] },
-      o.ctx(),
+      { ...o.ctx(), now: new Date(Date.now() + 120_000) },
       ports,
     );
     // Hedy: Yayatoh changed first, the sheet later → the sheet's value is kept.
@@ -616,13 +613,9 @@ describe('Google Sheets live sync', () => {
       o.ctx(),
       ports,
     );
-    sheetsRemoteEdit(
-      o.acc,
-      sid,
-      rows.find((r) => r.values.email === hedy?.email)?.rowId as string,
-      { labels: 'theirs' },
-      new Date(Date.now() + 120_000),
-    );
+    sheetsRemoteEdit(o.acc, sid, rows.find((r) => r.values.email === hedy?.email)?.rowId as string, {
+      labels: 'theirs',
+    });
     await run(o.orgId, o.sheets.connectionId);
     const after = await attendeeRows(o.ctx(), o.eventId);
     expect(after.find((p) => p.id === joan?.id)?.labels).toEqual(['from-yayatoh']);

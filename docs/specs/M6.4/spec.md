@@ -323,9 +323,10 @@ fake `eventbriteFakeProvider` serving the recorded fixture account `fixture.ts`)
 scopes. Fixture org rows for `sheet_links` and `sync_conflicts` (a linked sheet and a conflict).
 
 ### 4. Later / not yet
-- The **production Sheets adapter** maps the connector's row calls onto Sheets API v4 (values
-  ranges, developer metadata for stable row ids, a hidden origin column, an installable onEdit
-  trigger for "Last updated"); only the fake exists now (pending owner: Google Cloud project).
+- Done 2026-10-12: the connector calls Sheets API v4 directly (values ranges; row id, revision,
+  origin and content hash in a hidden "Yayatoh sync" column, `google-sheets/grid.ts`); the fake
+  emulates those endpoints. A person's edit is dated by the sync that first reads it. Still to
+  verify against the owner's Google Cloud project.
 - Eventbrite: import of event status (all import as drafts), multi-date (series) events, seating,
   discounts and custom questions; mapping of attendee sub-fields; a per-event choice of what to
   import; a capacity smaller than sold + refunded (the order goes to the inbox).

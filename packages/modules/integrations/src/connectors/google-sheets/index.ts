@@ -20,12 +20,37 @@ import {
   type SyncIO,
   type WriteMeta,
 } from '../../sdk/connector.ts';
-import { googleSheetsFakeProvider, type SheetRow } from './fake.ts';
+import { googleSheetsFakeProvider } from './fake.ts';
+import {
+  APPEND_RANGE,
+  cellRange,
+  idempotencyHash,
+  planWrite,
+  READ_RANGE,
+  readGrid,
+  SHEET_COLUMNS,
+  type SheetRow,
+  SYNC_LABEL,
+  syncColumn,
+  valuesPath,
+} from './grid.ts';
+
+export { SHEET_COLUMNS };
 
 /**
  * Google Sheets live sync (M6.4b, decision P6-4 step 3): an event's attendee list, two ways, with a
  * spreadsheet per linked event. Columns come from the push mapping (Yayatoh field → column); our
  * edits push on the next run, sheet edits pull on the next run.
+ *
+ * - **The real Sheets API v4** through the port (Nango proxies to sheets.googleapis.com): the
+ *   "Attendees" tab is read whole with `GET values/Attendees!A1:Z`, rows are appended with
+ *   `POST values/Attendees!A1:append` and updated (a row, or one stamp cell) with
+ *   `PUT values/Attendees!A{n}:{col}{n}`, always `valueInputOption=RAW` (a typed `=` is text, never
+ *   a formula). Linking creates the spreadsheet (`links.ts`).
+ * - **Row identity and change detection** live in each row's hidden "Yayatoh sync" cell (`grid.ts`):
+ *   Google has no row ids, edit times or change feed. A row a person typed in gets an id on first
+ *   read and an edited row a new revision, both written back to the stamp; our writes stamp our
+ *   origin, so they come back as our own.
  *
  * - **Rows ↔ attendees** through the record links (`<spreadsheet id>:<row id>` ↔ attendee id), so
  *   a round trip never duplicates: a row we wrote comes back with our version and origin and is
@@ -39,7 +64,8 @@ import { googleSheetsFakeProvider, type SheetRow } from './fake.ts';
  *   Dismissing the flag unties the attendee from that row.
  * - **Conflicts: last writer by row timestamp.** When both the row and the attendee changed since
  *   the last sync, the later change wins (the row's last-edit time against the attendee's update
- *   time); the losing values land in the errors inbox beside the conflict.
+ *   time); the losing values land in the errors inbox beside the conflict. A person's edit has no
+ *   time at Google: it counts from the run that first reads it.
  */
 
 export const GOOGLE_SHEETS = 'google_sheets';
@@ -58,14 +84,6 @@ const splitId = (id: string) => {
   return i > 0 ? { spreadsheetId: id.slice(0, i), rowId: id.slice(i + 1) } : null;
 };
 
-/** The columns every linked sheet has (keys are the push mapping's targets). */
-export const SHEET_COLUMNS = [
-  { key: 'name', label: 'Name', type: 'string' },
-  { key: 'email', label: 'Email', type: 'string' },
-  { key: 'labels', label: 'Labels', type: 'string' },
-  { key: 'status', label: 'Status', type: 'string' },
-] as const;
-
 function rowRecord(spreadsheetId: string, r: SheetRow): RemoteRecord {
   const at = new Date(r.updatedAt);
   return {
@@ -77,10 +95,56 @@ function rowRecord(spreadsheetId: string, r: SheetRow): RemoteRecord {
   };
 }
 
+const ValuesBody = z.object({ values: z.array(z.array(z.unknown())).optional() });
+
+/** The tab's cells as text (Google leaves out trailing empty cells and rows). */
+async function readCells(io: SyncIO, spreadsheetId: string): Promise<string[][]> {
+  const res = await io.client.request({
+    method: 'GET',
+    path: valuesPath(spreadsheetId, READ_RANGE),
+    query: { majorDimension: 'ROWS' },
+  });
+  return (ValuesBody.parse(res.body ?? {}).values ?? []).map((row) =>
+    row.map((c) => (c === null || c === undefined ? '' : String(c))),
+  );
+}
+
+async function putCells(
+  io: SyncIO,
+  spreadsheetId: string,
+  range: string,
+  values: string[][],
+  idempotencyKey?: string,
+) {
+  await io.client.request({
+    method: 'PUT',
+    path: valuesPath(spreadsheetId, range),
+    query: { valueInputOption: 'RAW' },
+    body: { range, majorDimension: 'ROWS', values },
+    ...(idempotencyKey ? { idempotencyKey } : {}),
+  });
+}
+
+/** A new row id (the stamp's `id`; record ids are `<spreadsheet id>:<row id>`). */
+function newRowId(): string {
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const bytes = crypto.getRandomValues(new Uint8Array(15));
+  return `r${[...bytes].map((b) => alphabet[b % alphabet.length]).join('')}`;
+}
+
+/**
+ * Every row of the sheet. Rows typed in or edited by a person since the last read get their
+ * stamp written back first (one cell each), so their ids and revisions hold from now on.
+ */
 async function readRows(io: SyncIO, spreadsheetId: string): Promise<SheetRow[]> {
-  const res = await io.client.request({ method: 'GET', path: `/v4/spreadsheets/${spreadsheetId}/rows` });
-  const body = res.body as { rows?: SheetRow[] };
-  return Array.isArray(body.rows) ? body.rows : [];
+  const { header, rows } = readGrid(await readCells(io, spreadsheetId), { now: io.now, newId: newRowId });
+  const col = syncColumn(header);
+  const stale = rows.filter((r) => r.writeBack !== null);
+  if (stale.length && header.sync === null)
+    await putCells(io, spreadsheetId, cellRange(1, col), [[SYNC_LABEL]]);
+  for (const r of stale)
+    await putCells(io, spreadsheetId, cellRange(r.rowNumber, col), [[r.writeBack as string]]);
+  return rows.map((r) => r.row);
 }
 
 const labelsOf = (s: unknown) =>
@@ -168,8 +232,6 @@ async function writeRow(
   return { localId: current.id };
 }
 
-const SendResult = z.object({ rowId: z.string().regex(/^[A-Za-z0-9_-]{1,64}$/), rev: z.int() });
-
 export const googleSheetsConnector = defineConnector({
   key: GOOGLE_SHEETS,
   name: 'Google Sheets',
@@ -246,18 +308,30 @@ export const googleSheetsConnector = defineConnector({
           if (!link)
             throw new DomainError('invalid_state', 'The event has no linked sheet', { reason: 'not_linked' });
           const where = input.externalId ? splitId(input.externalId) : null;
-          const update = where && where.spreadsheetId === link.spreadsheetId ? where.rowId : null;
-          const res = await io.client.request({
-            method: update ? 'PATCH' : 'POST',
-            path: update
-              ? `/v4/spreadsheets/${link.spreadsheetId}/rows/${update}`
-              : `/v4/spreadsheets/${link.spreadsheetId}/rows`,
-            body: { values: input.values, origin: io.origin },
-            // Per sheet: the same record and content sent to a newly linked sheet is a new write.
-            idempotencyKey: `${input.idempotencyKey}:${link.spreadsheetId}`,
+          const sid = link.spreadsheetId;
+          // Per sheet: the same record and content sent to a newly linked sheet is a new write.
+          const key = `${input.idempotencyKey}:${sid}`;
+          // Google has no Idempotency-Key: the sheet itself says whether this write already landed.
+          const { plan, header } = planWrite(await readCells(io, sid), {
+            rowId: where && where.spreadsheetId === sid ? where.rowId : null,
+            values: input.values,
+            k: idempotencyHash(key),
+            origin: io.origin,
+            now: io.now,
+            newId: newRowId,
           });
-          const out = SendResult.parse(res.body);
-          return { externalId: rowRecordId(link.spreadsheetId, out.rowId), version: String(out.rev) };
+          if (plan.kind !== 'none' && header.sync === null)
+            await putCells(io, sid, cellRange(1, syncColumn(header)), [[SYNC_LABEL]]);
+          if (plan.kind === 'update') await putCells(io, sid, plan.range, [plan.cells], key);
+          if (plan.kind === 'append')
+            await io.client.request({
+              method: 'POST',
+              path: valuesPath(sid, APPEND_RANGE, ':append'),
+              query: { valueInputOption: 'RAW', insertDataOption: 'INSERT_ROWS' },
+              body: { values: [plan.cells] },
+              idempotencyKey: key,
+            });
+          return { externalId: rowRecordId(sid, plan.rowId), version: String(plan.rev) };
         },
       },
     },

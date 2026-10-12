@@ -232,32 +232,33 @@ test.describe('Eventbrite importer and Google Sheets (M6.4b)', () => {
     expect(sheet.rows).toHaveLength(9);
     expect(sheet.rows.filter((r) => r.values.email === 'walk.in@sheet.test')).toHaveLength(1);
 
-    // Both sides change Joan; Yayatoh's change is later, so it wins and the sheet's goes to the inbox.
-    await atProvider(page, sheets, {
-      action: 'sheet-edit',
-      email: 'joan@eb-buyers.test',
-      'set.labels': 'from-sheet',
-    });
+    // Both sides change Joan. A sheet edit has no time at Google: it counts from the sync that reads
+    // it, so it is the later change; it wins and Yayatoh's goes to the inbox.
     await page.goto(`${jazz}/attendees`);
     await page.getByRole('row').filter({ hasText: 'Joan Clarke' }).getByRole('link').click();
     const profile = page.getByRole('complementary', { name: 'Profile' });
     await profile.getByLabel('Add a label').fill('from-yayatoh');
     await profile.getByRole('button', { name: 'Add', exact: true }).click();
     await expect(profile.getByRole('listitem').filter({ hasText: 'from-yayatoh' })).toBeVisible();
+    await atProvider(page, sheets, {
+      action: 'sheet-edit',
+      email: 'joan@eb-buyers.test',
+      'set.labels': 'from-sheet',
+    });
     // And Grace's row is deleted in the sheet.
     await atProvider(page, sheets, { action: 'sheet-delete', email: 'grace@eb-buyers.test' });
     await syncNow(page, org, sheets);
     sheet = await sheetRows(page, sheets);
     expect(sheet.rows.find((r) => r.values.email === 'joan@eb-buyers.test')?.values.labels).toBe(
-      'from-yayatoh',
+      'from-sheet',
     );
 
     await page.goto(`/o/${org}/integrations/errors`);
     const conflict = page.getByRole('listitem').filter({
       has: page.getByRole('heading', { name: /Google Sheets: Changed in both places · 1 record/ }),
     });
-    await expect(conflict).toContainText("Changed in both places: Yayatoh's change was kept");
-    await expect(conflict).toContainText('Labels: kept “from-yayatoh”, lost “from-sheet”');
+    await expect(conflict).toContainText("Changed in both places: the provider's change was kept");
+    await expect(conflict).toContainText('Labels: kept “from-sheet”, lost “from-yayatoh”');
     await expect(conflict.getByRole('button', { name: /Retry/ })).toHaveCount(0);
     const deleted = page.getByRole('listitem').filter({
       has: page.getByRole('heading', { name: /Google Sheets: Reading from the provider · 1 record/ }),

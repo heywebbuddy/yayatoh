@@ -601,10 +601,10 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 
 ## M6.4b — Eventbrite importer and Google Sheets (2026-10-03, pending owner)
 - [ ] **Eventbrite OAuth app** (yours to register at Eventbrite → Account settings → Developer links → API keys): add it to Nango as the integration `eventbrite` (client id/secret, redirect to Nango's callback). The importer calls `/v3/users/me/organizations/`, `/v3/organizations/{id}/events/` and `/v3/organizations/{id}/orders/` through the Nango proxy; UNVERIFIED against a real account (built and tested on a recorded fake).
-- [ ] **Google Cloud project** with the Sheets and Drive APIs and an OAuth consent screen for the scope `drive.file` (only files the app creates); add it to Nango with the integration id **`google_sheets`**. The production Sheets adapter (row ids as developer metadata, a hidden origin column, an onEdit trigger keeping "Last updated") is still to be written and verified against that project; today only the fake runs.
+- [ ] **Google Cloud project** with the Sheets and Drive APIs and an OAuth consent screen for the scope `drive.file` (only files the app creates); add it to Nango with the integration id **`google_sheets`**. The connector now calls the real Sheets API v4 (values ranges; each row's id, revision and origin in a hidden "Yayatoh sync" column; 2026-10-12) and the fake emulates those calls; still to be verified against that project.
   - Imported Eventbrite events arrive as **drafts** (you publish them here); imported orders are paid/refunded as on Eventbrite, collected by you, never charged or emailed, and not refundable here (refund on Eventbrite, then import again).
   - Revenue in the import result is the gross of orders still placed (fees and tax included), per currency.
-  - **Sheets conflict rule:** the later change wins (row edit time against the attendee's update time); the losing value waits in the errors inbox until dismissed.
+  - **Sheets conflict rule:** the later change wins; Google keeps no edit time per row, so a person's edit is dated by the sync that first sees it. The losing value waits in the errors inbox until dismissed.
   - A row typed into the sheet becomes a **guest** on the list; a row deleted in the sheet never removes anyone (it is flagged; Dismiss unties the attendee from the row).
   - Sheet columns: Name, Email, Labels, Status (from the field mapping).
 ## M6.1b — contact stats (2026-10-02, pending owner)
