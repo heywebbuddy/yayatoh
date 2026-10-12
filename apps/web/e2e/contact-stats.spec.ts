@@ -53,7 +53,12 @@ test.describe('contact stats (M6.1b)', () => {
       await expect(page.getByTestId('stat-no-show')).toHaveText('14.3%');
       // The formulas are written out next to the numbers.
       await expect(
-        page.getByText('10 × 2 events attended + 5 × 4 sessions + 2 × 2 campaigns opened = 44 points.'),
+        page.getByText(
+          '+ 10 × 2 other events attended + 5 × 4 sessions + 2 × 2 campaigns opened = 44 points.',
+          {
+            exact: false,
+          },
+        ),
       ).toBeVisible();
       await expect(
         page.getByText('(0 no-shows + 1) ÷ (2 past registrations + 5) = 14.3%.', { exact: false }),

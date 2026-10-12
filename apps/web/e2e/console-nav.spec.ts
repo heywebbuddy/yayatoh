@@ -182,16 +182,16 @@ test.describe('Create menu and Help', () => {
     await expect(page.locator('#new-template')).toHaveAttribute('open', '');
   });
 
-  test('Help opens the platform help center', async ({ page }) => {
+  test('the console no longer links the help center; it still opens by its address', async ({ page }) => {
     await signIn(page);
     await page.goto(`${ORG}/venues`);
-    await page.getByRole('link', { name: 'Help', exact: true }).click();
-    await expect(page).toHaveURL(/\/help$/);
+    await expect(page.getByRole('link', { name: 'Help', exact: true })).toHaveCount(0);
+    expect((await page.goto('/help'))?.status()).toBe(200);
   });
 });
 
 test.describe('How it works panels', () => {
-  test('collapse, remembered after a reload, with a guide link', async ({ page }) => {
+  test('collapse, remembered after a reload', async ({ page }) => {
     await signIn(page);
     await page.goto(`${ORG}/domains`);
     const panel = page.locator('details[data-help-topic="domains"]');
@@ -199,10 +199,8 @@ test.describe('How it works panels', () => {
     await expect(summary).toContainText('How custom domains work');
     await expect(panel).toHaveAttribute('open', '');
     await expect(panel.getByRole('listitem')).toHaveCount(4);
-    await expect(panel.getByRole('link', { name: 'Read the guide' })).toHaveAttribute(
-      'href',
-      '/help/search?q=custom%20domain',
-    );
+    // The help center is no longer linked from the console, so the panel has no guide link.
+    await expect(panel.getByRole('link', { name: 'Read the guide' })).toHaveCount(0);
     await expectAccessibleBothModes(page);
     await summary.focus();
     await page.keyboard.press('Enter');

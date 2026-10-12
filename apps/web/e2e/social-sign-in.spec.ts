@@ -183,6 +183,9 @@ test.describe('Google and Apple sign-in (M1.2f)', () => {
       page.getByRole('button', { name: 'Continue', exact: true }).click(),
     ]);
     await expect(page).toHaveURL(/\/attendee$/);
+    // Replayed from a signed-out browser (the sign-in page sends a signed-in person to their
+    // dashboard): the callback signs no one in and says so.
+    await page.context().clearCookies();
     await page.goto(callback.url());
     await expect(page).toHaveURL(/\/sign-in\?social=failed/);
   });

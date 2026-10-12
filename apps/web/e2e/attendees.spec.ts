@@ -196,7 +196,7 @@ test.describe('attendees: import', () => {
       `Broken ${stamp};not-an-email;`,
     ].join('\n');
     await page
-      .getByLabel('CSV file')
+      .getByLabel('CSV or Excel file')
       .setInputFiles({ name: 'guests.csv', mimeType: 'text/csv', buffer: Buffer.from(csv) });
     await page.getByRole('button', { name: 'Upload' }).click();
     await expect(page.getByRole('heading', { name: '2. Match the columns in guests.csv' })).toBeVisible();

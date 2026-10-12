@@ -50,8 +50,11 @@ async function createEvent(page: Page, name: string, org = ORG) {
   await page.getByLabel('Starts', { exact: true }).fill('2029-06-12T18:00');
   await page.getByLabel('Ends', { exact: true }).fill('2029-06-12T22:00');
   await page.getByRole('button', { name: 'Create draft' }).click();
-  await expect(page.getByText('Draft ·')).toBeVisible();
-  const base = new URL(page.url()).pathname.replace(/^\/[a-z]{2}(-[A-Z]{2})?(?=\/o\/)/, '');
+  // Creating lands on the new event's Media step.
+  await expect(page).toHaveURL(/\/media\?created=1$/);
+  const base = new URL(page.url()).pathname
+    .replace(/^\/[a-z]{2}(-[A-Z]{2})?(?=\/o\/)/, '')
+    .replace(/\/media$/, '');
   return { base, slug: base.split('/').pop() ?? '' };
 }
 
@@ -588,26 +591,28 @@ test.describe('venue photos (M1.4e)', () => {
       .getAttribute('href')
       .then((h) => h?.split('/').pop() ?? '');
     await guest.goto(`/venues/${slug}`);
+    // The first photo is the page's cover; the Photos section lists the others.
     const section = guest.getByRole('region', { name: 'Photos' });
-    await expect(section.getByRole('img', { name: 'The hall set for dinner' })).toBeVisible();
+    await expect(guest.getByRole('img', { name: 'The hall set for dinner' })).toBeVisible();
     await expect(section.getByRole('img', { name: 'The terrace' })).toBeVisible();
     await expectAccessible(guest);
     const arabic = await anonymous(browser);
     await arabic.goto(`/ar/venues/${slug}`);
     await expect(arabic.locator('html')).toHaveAttribute('dir', 'rtl');
-    await expect(arabic.getByRole('region', { name: 'الصور' }).getByRole('img')).toHaveCount(2);
+    await expect(arabic.getByRole('region', { name: 'الصور' }).getByRole('img')).toHaveCount(1);
     await expectAccessible(arabic);
     await arabic.close();
 
     await photos.getByRole('button', { name: 'Remove: The terrace' }).click();
     await expect(photos.getByRole('img', { name: 'The terrace' })).toHaveCount(0);
     await guest.goto(`/venues/${slug}`);
-    await expect(guest.getByRole('region', { name: 'Photos' }).getByRole('img')).toHaveCount(1);
+    // One photo left: the cover, and no Photos section.
+    await expect(guest.getByRole('img', { name: 'The hall set for dinner' })).toBeVisible();
+    await expect(guest.getByRole('region', { name: 'Photos' })).toHaveCount(0);
 
     // An unlisted venue's photos are not public.
     const src = await guest
-      .getByRole('region', { name: 'Photos' })
-      .getByRole('img')
+      .getByRole('img', { name: 'The hall set for dinner' })
       .evaluate((el: HTMLImageElement) => el.currentSrc || el.src);
     await page.getByLabel(/List this venue in the Yayatoh venue directory/).uncheck();
     await page.getByRole('button', { name: 'Save venue' }).click();

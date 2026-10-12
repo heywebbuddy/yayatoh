@@ -300,7 +300,7 @@ test.describe('marketplace search v2 (M6.14a)', () => {
 
   test('empty results say what to do; bad parameters are ignored', async ({ page, request }) => {
     const s = await scenario(request, test.info().project.name);
-    const res = await page.goto(`${MARKET}/search?q=${s.tag}&category=gala&price=bogus&radius=7&page=x`);
+    const res = await page.goto(`${MARKET}/search?q=${s.tag}&category=Gala!&price=bogus&radius=7&page=x`);
     expect(res?.status()).toBe(200);
     await expect(page.getByText('3 events', { exact: true })).toBeVisible();
     await page.goto(`${MARKET}/search?q=${s.tag}nothing`);

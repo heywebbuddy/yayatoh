@@ -495,7 +495,7 @@ export function TransferRulesForm({
       className="grid min-w-0 grid-cols-1 gap-3 @xl:grid-cols-[auto_10rem_10rem_auto] @xl:items-start @xl:justify-start @xl:gap-4"
       aria-label={t('formLabel', { name })}
     >
-      <label className="flex min-h-10 min-w-0 items-center gap-2 text-body @xl:translate-y-9">
+      <label className="flex min-h-10 min-w-0 items-center gap-2 text-body @xl:mt-7">
         <input type="checkbox" name="allowed" value="yes" defaultChecked={rules.allowed} className="size-5" />
         {t('allowed')}
       </label>
@@ -533,7 +533,7 @@ export function TransferRulesForm({
         />
         <span className="text-caption text-ink-2">{t('feeHint')}</span>
       </div>
-      <Button type="submit" size="sm" variant="secondary" disabled={pending} className="@xl:translate-y-7">
+      <Button type="submit" size="sm" variant="secondary" disabled={pending} className="@xl:mt-7">
         {t('save')}
       </Button>
       {state.ok || state.code ? (

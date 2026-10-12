@@ -307,7 +307,7 @@ test.describe('Guest assistance (M3.3b)', () => {
     // Arabic RTL on the scanner's staff screen.
     await device.goto('/ar/scan');
     await expect(device.locator('html')).toHaveAttribute('dir', 'rtl');
-    await device.getByRole('navigation').getByRole('button').nth(1).click();
+    await device.getByRole('navigation').getByRole('button', { name: 'الفريق' }).click();
     await expect(device.getByRole('heading', { name: 'اطلب المساعدة' })).toBeVisible();
     await expectAccessible(device);
     await deviceContext.close();

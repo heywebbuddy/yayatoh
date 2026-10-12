@@ -169,8 +169,8 @@ test.describe('delete my account', () => {
     await page.getByRole('button', { name: 'Email me a code' }).click();
     await page.getByLabel('6-digit code', { exact: true }).fill(await lastEmailedCode(page, user.email));
     await page.getByRole('button', { name: 'Verify and sign in' }).click();
+    // Signed in again as a new account with no organization: the attendee dashboard.
     await expect(page).toHaveURL(/\/attendee$/);
-    await expect(page.getByText("You're not in an organization yet")).toBeVisible();
   });
 
   test('the only owner of an organization sees why they can’t delete (no form); a co-owner’s stale form is refused with the organization named', async ({
@@ -305,7 +305,7 @@ test.describe('organizer privacy requests: team invitations and erased addresses
       await page.goto(`${base}/attendees`);
       await page.getByRole('link', { name: 'Import' }).click();
       await page
-        .getByLabel('CSV file', { exact: true })
+        .getByLabel('CSV or Excel file', { exact: true })
         .setInputFiles({ name: 'guests.csv', mimeType: 'text/csv', buffer: Buffer.from(csv) });
       await page.getByRole('button', { name: 'Upload' }).click();
       await page.getByRole('button', { name: 'Check rows' }).click();

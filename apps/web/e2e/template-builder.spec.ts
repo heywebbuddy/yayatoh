@@ -152,9 +152,8 @@ test.describe('template builder (U6)', () => {
     await use.getByLabel('Name of the new event').fill(`From kit ${tag}`);
     await use.getByLabel('Starts', { exact: true }).fill('2028-03-01T09:00');
     await use.getByRole('button', { name: 'Create event' }).click();
-    await expect(page).toHaveURL(/\/e\/from-kit-[a-z0-9-]+\/media\?created=1$/);
-    const made = new URL(page.url()).pathname.replace(/\/media$/, '').replace(/^\/en/, '');
-    await page.goto(made);
+    await expect(page).toHaveURL(/\/e\/from-kit-[a-z0-9-]+$/);
+    const made = new URL(page.url()).pathname.replace(/^\/en/, '');
     await expect(page.getByText('Draft ·')).toBeVisible();
     await page.goto(`${made}/tickets-orders`);
     await expect(page.getByRole('row').filter({ hasText: 'Standard' })).toContainText('0 / 300');

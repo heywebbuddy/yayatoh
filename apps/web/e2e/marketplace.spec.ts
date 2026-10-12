@@ -135,7 +135,7 @@ test.describe('marketplace home and search (M1.11a)', () => {
   });
 
   test('invalid filter values in a shared link are ignored, not an error', async ({ page }) => {
-    const res = await page.goto('/events?price=cheap&from=2027-99-99&page=-4&category=rave');
+    const res = await page.goto('/events?price=cheap&from=2027-99-99&page=-4&category=Rave!');
     expect(res?.status()).toBe(200);
     await expect(page.getByRole('list', { name: 'Upcoming events' })).toBeVisible();
   });
@@ -319,6 +319,9 @@ test.describe('projection (M1.11a)', () => {
     await page.getByLabel('Ends', { exact: true }).fill('2029-03-05T22:00');
     await page.getByLabel('City').fill('Boston');
     await page.getByRole('button', { name: 'Create draft' }).click();
+    // Creating lands on the event's Media step; the overview has Publish.
+    await expect(page).toHaveURL(/\/media\?created=1$/);
+    await page.goto(new URL(page.url()).pathname.replace(/\/media$/, ''));
     await expect(page.getByText('Draft ·')).toBeVisible();
     const dashboard = page.url();
     await page.getByRole('button', { name: 'Publish' }).click();

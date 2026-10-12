@@ -391,9 +391,9 @@ test.describe('guests: parties, guests and plus-ones (M4.1a)', () => {
     await expectAccessible(page);
   });
 
-  test('profiles decide: a conference has no guests page', async ({ page }) => {
+  test('a conference with seating opens its guest list (it backs the seating)', async ({ page }) => {
     await signIn(page);
     const res = await page.goto('/o/lakeside-events/e/midwest-leadership-summit-2027/guests');
-    expect(res?.status()).toBe(404);
+    expect(res?.status()).toBe(200);
   });
 });

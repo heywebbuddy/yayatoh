@@ -272,7 +272,7 @@ test.describe('central login on tenant sites', () => {
       `http://yayatoh.localhost:${PORT}/`,
     ]) {
       await page.goto(`${APP}/sign-in?return=${encodeURIComponent(back)}&state=${state}`);
-      await expect(page.getByRole('heading', { name: 'Sign in to Yayatoh' })).toBeVisible();
+      await expect(page.getByRole('heading', { name: 'Attendee sign in' })).toBeVisible();
       await expect(page.getByText(/to continue to/)).toHaveCount(0);
     }
   });

@@ -358,6 +358,9 @@ test.describe('marketplace journey', () => {
     await page.getByLabel('Ends', { exact: true }).fill('2029-05-05T22:00');
     await page.getByLabel('City').fill(`Metz ${tag}`);
     await page.getByRole('button', { name: 'Create draft' }).click();
+    // Creating lands on the event's Media step; the overview has Publish.
+    await expect(page).toHaveURL(/\/media\?created=1$/);
+    await page.goto(new URL(page.url()).pathname.replace(/\/media$/, ''));
     await expect(page.getByText('Draft ·')).toBeVisible();
     const dashboard = page.url();
     const slug = dashboard.split('/').pop() ?? '';

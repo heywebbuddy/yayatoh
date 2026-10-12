@@ -345,7 +345,8 @@ test.describe('what kind of event? (U8)', () => {
     await page.getByLabel('Starts', { exact: true }).fill('2031-03-01T18:00');
     await page.getByLabel('Ends', { exact: true }).fill('2031-03-01T21:00');
     await page.getByRole('button', { name: 'Create draft' }).click();
-    await expect(page).toHaveURL(/\/e\/kinds-/);
+    await expect(page).toHaveURL(/\/e\/kinds-[a-z0-9-]+\/media\?created=1$/);
+    await page.goto(new URL(page.url()).pathname.replace(/\/media$/, ''));
     await expect(page.getByRole('link', { name: 'Speakers' }).first()).toBeVisible();
   });
 
