@@ -1533,8 +1533,8 @@
     "noAccessTitle": "L’import ne fait pas partie de votre rôle",
     "noAccessDescription": "Demandez à un organisateur un rôle qui permet de modifier les participants.",
     "step1": "1. Choisir un fichier",
-    "fileHint": "Un CSV avec une ligne d’en-tête et un invité par ligne, jusqu’à 20 000 lignes et 5 Mo. Exportez-le en CSV depuis Excel, Numbers ou Google Sheets.",
-    "file": "Fichier CSV",
+    "fileHint": "Un fichier CSV ou Excel (.xlsx) avec une ligne d’en-tête et un invité par ligne, jusqu’à 20 000 lignes et 5 Mo. Partez du modèle, ou exportez depuis Excel, Numbers ou Google Sheets.",
+    "file": "Fichier CSV ou Excel",
     "upload": "Téléverser",
     "step2": "2. Associer les colonnes de {file}",
     "rows": "{count, plural, one {# ligne} other {# lignes}}",
@@ -1574,7 +1574,8 @@
       "cell_too_long": "Une cellule dépasse 1 000 caractères.",
       "unterminated_quote": "Le fichier contient un guillemet non fermé et ne peut pas être lu comme CSV."
     },
-    "backToEvent": "Retour à l’aperçu de l’événement"
+    "backToEvent": "Retour à l’aperçu de l’événement",
+    "template": "Télécharger un modèle (CSV)"
   },
   "distribution": {
     "title": "Envoyer ce billet",
@@ -2187,12 +2188,36 @@
         "exit": "Sortie",
         "dance_floor": "Piste de danse",
         "bar": "Bar",
+        "vip_area": "Espace VIP",
         "custom": "Autre"
       },
       "accessibleCol": "Places accessibles",
       "accessibleOf": "Places accessibles de {item}",
       "accessibleHint": "Places accessibles : saisissez leurs numéros, par ex. « 1, 2 ». Elles sont entourées sur le plan, et les règles de placement peuvent les réserver.",
-      "sponsoredBy": "Sponsor : {sponsor}"
+      "sponsoredBy": "Sponsor : {sponsor}",
+      "tableShape": "Forme de table",
+      "shape": {
+        "round": "Ronde",
+        "rect": "Rectangulaire"
+      },
+      "addSeat": "Ajouter une place seule",
+      "width": "Largeur (cm)",
+      "height": "Hauteur (cm)",
+      "sizeCol": "Taille (cm)",
+      "sectionCol": "Section",
+      "sectionOf": "Section de {item}",
+      "noSection": "Aucune section",
+      "vipSection": "{section} (VIP)",
+      "sections": "Sections",
+      "sectionsHint": "Regroupez rangées et tables en sections comme « Famille » ou « Balcon ». Les sections VIP sont mises en avant dans les sélecteurs de places et sur le plan du lieu. Dessinez un espace VIP pour le délimiter au sol.",
+      "sectionName": "Nom de la section {section}",
+      "sectionVip": "VIP",
+      "sectionItems": "{count, plural, one {# rangée ou table} other {# rangées et tables}}",
+      "removeSection": "Retirer",
+      "removeSectionNamed": "Retirer la section {section}",
+      "newSection": "Nouvelle section",
+      "addSection": "Ajouter une section",
+      "moveSelectedTo": "Déplacer la sélection vers la section…"
     },
     "prices": {
       "title": "Prix",
@@ -2959,6 +2984,7 @@
       "exit": "Sortie",
       "dance_floor": "Piste de danse",
       "bar": "Bar",
+      "vip_area": "Espace VIP",
       "custom": "Autre"
     },
     "named": "{type} : {label}",
@@ -7400,7 +7426,11 @@
         "title": "Billets vendus",
         "ofCapacity": "sur {capacity}",
         "noCapacity": "Aucun billet en vente pour l’instant",
-        "comps": "{count, plural, one {# invitation} other {# invitations}}"
+        "comps": "{count, plural, one {# invitation} other {# invitations}}",
+        "claimed": "{count, plural, one {# billet transmis} other {# billets transmis}}",
+        "waiting": "{count, plural, one {# en attente de transmission} other {# en attente de transmission}}",
+        "registrations": "{count, plural, one {# inscription confirmée} other {# inscriptions confirmées}}",
+        "inProgress": "{count, plural, one {# en cours} other {# en cours}}"
       },
       "checkins": {
         "title": "Entrées",
@@ -7647,7 +7677,11 @@
         "total": "{count, plural, one {# sponsor} other {# sponsors}}",
         "overdue": "{count, plural, one {# livrable en retard} other {# livrables en retard}}",
         "deliverablesPending": "Les livrables apparaîtront ici une fois les formules de sponsoring activées.",
-        "open": "Ouvrir les sponsors"
+        "open": "Ouvrir les sponsors",
+        "packages": "{active, plural, one {# formule active} other {# formules actives}} · {pending} en attente",
+        "revenue": "Sponsoring : {amount}",
+        "deliverables": "Livrables : {done} sur {total} terminés",
+        "sponsoredSessions": "{count, plural, one {# session sponsorisée} other {# sessions sponsorisées}}"
       },
       "rsvp": {
         "title": "Réponses",
@@ -9831,7 +9865,8 @@
       "not_validated": "Vérifiez la liste avant de l’importer.",
       "nothing_to_import": "Aucun groupe ne peut être importé. Corrigez les lignes de votre liste et importez-la à nouveau.",
       "expired": "Cette importation a expiré. Recommencez avec votre liste."
-    }
+    },
+    "template": "Télécharger un modèle"
   },
   "subEvents": {
     "link": "Sous-événements et invitations",
@@ -13261,6 +13296,23 @@
     "cardTitle": "Enregistrer une carte pour les dons de ce soir ?",
     "cardBody": "L’invité le scanne avec son propre téléphone. Rien n’est enregistré sans son accord sur son téléphone."
   },
+  "scanLookup": {
+    "view": "Trouver un participant",
+    "title": "Trouver un titulaire de billet",
+    "searchLabel": "Nom, e-mail ou téléphone",
+    "searchHint": "Fonctionne hors ligne. Tapez au moins deux lettres d’un nom, ou une adresse e-mail ou un numéro de téléphone complet.",
+    "results": "Titulaires de billet trouvés",
+    "noMatchTitle": "Aucun titulaire de billet trouvé",
+    "noMatchName": "Vérifiez l’orthographe, ou essayez son adresse e-mail ou son numéro de téléphone.",
+    "noMatchContact": "Les adresses e-mail et numéros de téléphone doivent correspondre exactement. Essayez plutôt son nom.",
+    "checkIn": "Enregistrer",
+    "checkInNamed": "Enregistrer {name}",
+    "checkedIn": "Enregistré",
+    "void": "Billet annulé",
+    "search": "Rechercher",
+    "consoleHint": "À utiliser quand un code ne se scanne pas. Chaque mot du nom doit correspondre ; les adresses e-mail et numéros de téléphone doivent être complets.",
+    "searchAgain": "Nouvelle recherche"
+  },
   "scanGuestKiosk": {
     "welcome": "Bienvenue à {event}",
     "subtitle": "Trouvez votre table et enregistrez-vous",
@@ -15163,7 +15215,7 @@
     "scores": "Scores",
     "engagement": "Score d’engagement",
     "engagementValue": "{score} / 100",
-    "engagementHow": "{wAttended} × {attended} événements suivis + {wSessions} × {sessions} sessions + {wCampaigns} × {campaigns} campagnes ouvertes = {points} points. 100 × {points} ÷ ({points} + {half}) = {score}.",
+    "engagementHow": "{eventPoints} points d’activité sur {scored, plural, one {# événement} other {# événements}} (enregistrements, sondages, questions, avis et inscriptions, selon vos pondérations) + {wAttended} × {attended} autres événements suivis + {wSessions} × {sessions} sessions + {wCampaigns} × {campaigns} campagnes ouvertes = {points} points. 100 × {points} ÷ ({points} + {half}) = {score}.",
     "noShow": "Propension à ne pas venir",
     "noShowHow": "({noShows} absences + {priorNoShows}) ÷ ({past} inscriptions passées + {priorRegistrations}) = {pct}. Les événements à venir ne comptent pas encore.",
     "rfm": "RFM",
@@ -19016,5 +19068,11 @@
     "attendeeSignUpDescription": "Vérifiez votre e-mail pour créer un compte et retrouver vos événements et billets au même endroit.",
     "organizationAccessRequired": "Ce compte n’a pas d’accès organisation. Utilisez un compte organisateur ou continuez vers votre tableau de bord participant.",
     "useAnotherAccount": "Utiliser un autre compte"
+  },
+  "eventBranding": {
+    "title": "Couleur de cet événement",
+    "description": "Donnez à cet événement sa propre couleur d’accent sur sa page publique. Laissez vide pour utiliser la couleur de marque de votre organisation ci-dessous.",
+    "color": "Couleur de l’événement",
+    "usesOrg": "Cet événement utilise la couleur de marque de l’organisation."
   }
 }

@@ -45,6 +45,8 @@ export const PublicEventDto = z.object({
   venueSlug: z.string().nullable(),
   /** Private events are only ever returned after an access code unlocked them. */
   visibility: z.enum(EVENT_VISIBILITIES),
+  /** Per-event branding (agreement §3): the event's accent colour, or null for the org's. */
+  brandColor: z.string().nullable().default(null),
 });
 export type PublicEventDto = z.infer<typeof PublicEventDto>;
 export const publicEventSerializer = defineSerializer('events.publicEvent', PublicEventDto);

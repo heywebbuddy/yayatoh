@@ -41,15 +41,16 @@ describe('no-show propensity (documented formula)', () => {
   });
 });
 
-describe('engagement score (placeholder until M5.7b)', () => {
+describe('engagement score (M5.7b event engagement included)', () => {
   it('weights the inputs and saturates at half for 25 points', () => {
     expect(engagementPoints({ eventsAttended: 2, sessionsAttended: 4, campaignsOpened: 2 })).toBe(44);
     expect(engagementScore({ eventsAttended: 2, sessionsAttended: 4, campaignsOpened: 2 })).toBe(64);
     expect(engagementScore({})).toBe(0);
     expect(engagementScore({ sessionsAttended: 5 })).toBe(50);
     expect(engagementScore({ eventsAttended: 1 })).toBe(29);
-    // M5.7b's inputs are in the formula already.
-    expect(engagementPoints({ pollAnswers: 1, feedback: 1, enrollments: 1 })).toBe(8);
+    // M5.7b event engagement points count one for one (the org's weights are already in them).
+    expect(engagementPoints({ eventEngagement: 17 })).toBe(17);
+    expect(engagementScore({ eventEngagement: 25 })).toBe(50);
     expect(engagementScore({ eventsAttended: 10_000 })).toBe(100);
     expect(engagementScore({ eventsAttended: 100 })).toBe(98);
     expect(engagementScore({ sessionsAttended: 45 })).toBe(90);
@@ -240,5 +241,45 @@ describe('segment conditions on contact stats', () => {
     expect(usesProfileConditions(def([{ type: 'ltv', currency: 'USD', op: 'gt', amountMinor: 1 }]))).toBe(
       true,
     );
+  });
+});
+
+describe('contact stats with M5.7b event engagement', () => {
+  const row = (eventId: string, checkedIn: boolean) => ({
+    eventId,
+    registered: true,
+    checkedIn,
+    tickets: 1,
+    orders: 1,
+    spendMinor: 1000,
+    currency: 'USD',
+    registeredAt: new Date('2027-01-01T00:00:00Z'),
+  });
+  const signals = { sessionsAttended: 0, campaignsOpened: 0, firstAt: null, lastAt: null };
+
+  it('counts a scored event through its score, never twice, and an unscored one by its door scan', () => {
+    const participation = [row('e1', true), row('e2', true), row('e3', false)];
+    const base = computeContactStats({ participation, signals, orgCurrency: 'USD', isOver: () => true });
+    // Two events attended, no M5.7b scores: 20 points → 44.
+    expect(base?.scores.engagementScore).toBe(engagementScore({ eventsAttended: 2 }));
+    const scored = computeContactStats({
+      participation,
+      signals: { ...signals, eventEngagement: { points: 30, eventIds: ['e1'] } },
+      orgCurrency: 'USD',
+      isOver: () => true,
+    });
+    // e1 counts by its 30 points (its check-in is in them), e2 by its door scan: 40 points.
+    expect(scored?.scores.engagementScore).toBe(engagementScore({ eventEngagement: 30, eventsAttended: 1 }));
+    expect(scored?.scores.eventsAttended).toBe(2);
+  });
+
+  it('a contact with only event engagement still gets stats', () => {
+    const r = computeContactStats({
+      participation: [],
+      signals: { ...signals, eventEngagement: { points: 5, eventIds: ['e9'] } },
+      orgCurrency: 'USD',
+      isOver: () => false,
+    });
+    expect(r?.scores.engagementScore).toBe(engagementScore({ eventEngagement: 5 }));
   });
 });

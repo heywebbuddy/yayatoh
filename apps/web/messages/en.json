@@ -1533,8 +1533,8 @@
     "noAccessTitle": "Importing isn't part of your role",
     "noAccessDescription": "Ask an organizer for a role that can edit attendees.",
     "step1": "1. Choose a file",
-    "fileHint": "A CSV with a header row and one guest per line, up to 20,000 rows and 5 MB. Export it from Excel, Numbers or Google Sheets as CSV.",
-    "file": "CSV file",
+    "fileHint": "A CSV or Excel (.xlsx) file with a header row and one guest per line, up to 20,000 rows and 5 MB. Start from the template, or export from Excel, Numbers or Google Sheets.",
+    "file": "CSV or Excel file",
     "upload": "Upload",
     "step2": "2. Match the columns in {file}",
     "rows": "{count, plural, one {# row} other {# rows}}",
@@ -1574,7 +1574,8 @@
       "cell_too_long": "A cell is longer than 1,000 characters.",
       "unterminated_quote": "The file has an unclosed quote, so it can't be read as CSV."
     },
-    "backToEvent": "Back to the event overview"
+    "backToEvent": "Back to the event overview",
+    "template": "Download a template (CSV)"
   },
   "distribution": {
     "title": "Send this ticket",
@@ -2187,12 +2188,36 @@
         "exit": "Exit",
         "dance_floor": "Dance floor",
         "bar": "Bar",
+        "vip_area": "VIP area",
         "custom": "Other"
       },
       "accessibleCol": "Accessible seats",
       "accessibleOf": "Accessible seats of {item}",
       "accessibleHint": "Accessible seats: type their numbers, e.g. “1, 2”. They are outlined on the plan, and the seating rules can keep them back.",
-      "sponsoredBy": "Sponsor: {sponsor}"
+      "sponsoredBy": "Sponsor: {sponsor}",
+      "tableShape": "Table shape",
+      "shape": {
+        "round": "Round",
+        "rect": "Rectangular"
+      },
+      "addSeat": "Add a single seat",
+      "width": "Width (cm)",
+      "height": "Height (cm)",
+      "sizeCol": "Size (cm)",
+      "sectionCol": "Section",
+      "sectionOf": "Section of {item}",
+      "noSection": "No section",
+      "vipSection": "{section} (VIP)",
+      "sections": "Sections",
+      "sectionsHint": "Group rows and tables into sections such as “Family” or “Balcony”. VIP sections stand out in seat pickers and on the venue map. Draw a VIP area to mark it on the floor.",
+      "sectionName": "Name of section {section}",
+      "sectionVip": "VIP",
+      "sectionItems": "{count, plural, one {# row or table} other {# rows and tables}}",
+      "removeSection": "Remove",
+      "removeSectionNamed": "Remove section {section}",
+      "newSection": "New section",
+      "addSection": "Add section",
+      "moveSelectedTo": "Move selected to section…"
     },
     "prices": {
       "title": "Prices",
@@ -2959,6 +2984,7 @@
       "exit": "Exit",
       "dance_floor": "Dance floor",
       "bar": "Bar",
+      "vip_area": "VIP area",
       "custom": "Other"
     },
     "named": "{type}: {label}",
@@ -7400,7 +7426,11 @@
         "title": "Tickets sold",
         "ofCapacity": "of {capacity}",
         "noCapacity": "No tickets on sale yet",
-        "comps": "{count, plural, one {# complimentary} other {# complimentary}}"
+        "comps": "{count, plural, one {# complimentary} other {# complimentary}}",
+        "claimed": "{count, plural, one {# ticket handed on} other {# tickets handed on}}",
+        "waiting": "{count, plural, one {# waiting to be handed on} other {# waiting to be handed on}}",
+        "registrations": "{count, plural, one {# registration confirmed} other {# registrations confirmed}}",
+        "inProgress": "{count, plural, one {# in progress} other {# in progress}}"
       },
       "checkins": {
         "title": "Check-ins",
@@ -7647,7 +7677,11 @@
         "total": "{count, plural, one {# sponsor} other {# sponsors}}",
         "overdue": "{count, plural, one {# deliverable overdue} other {# deliverables overdue}}",
         "deliverablesPending": "Deliverables appear here once sponsor packages are on.",
-        "open": "Open sponsors"
+        "open": "Open sponsors",
+        "packages": "{active, plural, one {# package active} other {# packages active}} · {pending} waiting",
+        "revenue": "Sponsorship: {amount}",
+        "deliverables": "Deliverables: {done} of {total} done",
+        "sponsoredSessions": "{count, plural, one {# sponsored session} other {# sponsored sessions}}"
       },
       "rsvp": {
         "title": "RSVP",
@@ -9831,7 +9865,8 @@
       "not_validated": "Check the list before importing.",
       "nothing_to_import": "No party can be imported. Fix the rows in your list and import it again.",
       "expired": "This import has expired. Start again with your list."
-    }
+    },
+    "template": "Download a template"
   },
   "subEvents": {
     "link": "Sub-events and invitations",
@@ -13261,6 +13296,23 @@
     "cardTitle": "Saving a card for tonight's giving?",
     "cardBody": "The guest scans this with their own phone. Nothing is saved unless they agree there."
   },
+  "scanLookup": {
+    "view": "Find attendee",
+    "title": "Find a ticket holder",
+    "searchLabel": "Name, email or phone",
+    "searchHint": "Works offline. Type at least two letters of a name, or a full email address or phone number.",
+    "results": "Matching ticket holders",
+    "noMatchTitle": "No ticket holder found",
+    "noMatchName": "Check the spelling, or try their email address or phone number.",
+    "noMatchContact": "Email addresses and phone numbers must match exactly. Try their name instead.",
+    "checkIn": "Check in",
+    "checkInNamed": "Check in {name}",
+    "checkedIn": "Checked in",
+    "void": "Ticket cancelled",
+    "search": "Search",
+    "consoleHint": "Use when a code won’t scan. Names match every word; email addresses and phone numbers must be complete.",
+    "searchAgain": "Search again"
+  },
   "scanGuestKiosk": {
     "welcome": "Welcome to {event}",
     "subtitle": "Find your table and check in",
@@ -15163,7 +15215,7 @@
     "scores": "Scores",
     "engagement": "Engagement score",
     "engagementValue": "{score} / 100",
-    "engagementHow": "{wAttended} × {attended} events attended + {wSessions} × {sessions} sessions + {wCampaigns} × {campaigns} campaigns opened = {points} points. 100 × {points} ÷ ({points} + {half}) = {score}.",
+    "engagementHow": "{eventPoints} points of activity at {scored, plural, one {# event} other {# events}} (check-ins, polls, questions, feedback and enrollments, on your weights) + {wAttended} × {attended} other events attended + {wSessions} × {sessions} sessions + {wCampaigns} × {campaigns} campaigns opened = {points} points. 100 × {points} ÷ ({points} + {half}) = {score}.",
     "noShow": "No-show propensity",
     "noShowHow": "({noShows} no-shows + {priorNoShows}) ÷ ({past} past registrations + {priorRegistrations}) = {pct}. Upcoming events don’t count yet.",
     "rfm": "RFM",
@@ -19016,5 +19068,11 @@
     "attendeeSignUpDescription": "Verify your email to create an account and keep your events and tickets together.",
     "organizationAccessRequired": "This account does not have organization access. Use an organizer account or continue to your attendee dashboard.",
     "useAnotherAccount": "Use a different account"
+  },
+  "eventBranding": {
+    "title": "This event’s colour",
+    "description": "Give this event its own accent colour on its public event page. Leave it empty to use your organization’s brand colour below.",
+    "color": "Event colour",
+    "usesOrg": "This event uses the organization’s brand colour."
   }
 }

@@ -1,8 +1,9 @@
 import type { TenantTx } from '@yayatoh/db';
 import { livePortalAccountsTx } from '@yayatoh/events';
-import { and, asc, count, countDistinct, eq, inArray, lte } from 'drizzle-orm';
+import { and, asc, count, countDistinct, eq, inArray, lte, sql } from 'drizzle-orm';
 import { exhibitors, rooms, sessionDetails, sessions, sponsors, sponsorTiers } from './schema.ts';
 import { portalTaskAssignees, portalTasks } from './schema-portal.ts';
+import { sponsorDeliverables, sponsoredSessions, sponsorGrants } from './schema-sponsors.ts';
 
 /**
  * M5.9a conference Command Center pack: the program's counts the alert rules and the Command
@@ -132,4 +133,58 @@ export async function sponsorTierCountsTx(
     ).map((r) => [r.tierId, Number(r.n)] as const),
   );
   return tiers.map((t) => ({ tier: t.name, sponsors: counts.get(t.id) ?? 0 }));
+}
+
+/** Sponsorship at a glance (agreement §6, dashboard phase 2: sponsor metrics). Counts and sums only. */
+export interface SponsorMetrics {
+  /** Packages in force, and reserved or bought but not yet paid or activated. */
+  readonly packages: { readonly active: number; readonly pending: number };
+  /** What active packages bring in, per currency (minor units; organizer grants at their price). */
+  readonly revenue: readonly { readonly currency: string; readonly minor: number }[];
+  /** Package deliverables: done of all, and those past due and still open. */
+  readonly deliverables: { readonly done: number; readonly total: number; readonly overdue: number };
+  /** Sessions a sponsor presents (their ids, for attendance). */
+  readonly sponsoredSessionIds: readonly string[];
+}
+
+export async function sponsorMetricsTx(tx: TenantTx, eventId: string, now: Date): Promise<SponsorMetrics> {
+  const grants = await tx
+    .select({
+      status: sponsorGrants.status,
+      currency: sponsorGrants.currency,
+      n: count(),
+      minor: sql<string>`coalesce(sum(${sponsorGrants.priceMinor}), 0)`,
+    })
+    .from(sponsorGrants)
+    .where(eq(sponsorGrants.eventId, eventId))
+    .groupBy(sponsorGrants.status, sponsorGrants.currency);
+  const [d] = await tx
+    .select({
+      total: count(),
+      done: sql<number>`count(*) filter (where ${sponsorDeliverables.status} = 'done')::int`,
+      overdue: sql<number>`count(*) filter (where ${sponsorDeliverables.status} = 'open' and ${sponsorDeliverables.dueAt} <= ${now.toISOString()}::timestamptz)::int`,
+    })
+    .from(sponsorDeliverables)
+    .where(eq(sponsorDeliverables.eventId, eventId));
+  const sessionRows = await tx
+    .selectDistinct({ sessionId: sponsoredSessions.sessionId })
+    .from(sponsoredSessions)
+    .where(eq(sponsoredSessions.eventId, eventId));
+  const by = (status: string) => grants.filter((g) => g.status === status);
+  return {
+    packages: {
+      active: by('active').reduce((a, g) => a + Number(g.n), 0),
+      pending: by('pending').reduce((a, g) => a + Number(g.n), 0),
+    },
+    revenue: by('active')
+      .map((g) => ({ currency: g.currency, minor: Number(g.minor) }))
+      .filter((r) => r.minor > 0)
+      .sort((a, b) => a.currency.localeCompare(b.currency)),
+    deliverables: {
+      done: Number(d?.done ?? 0),
+      total: Number(d?.total ?? 0),
+      overdue: Number(d?.overdue ?? 0),
+    },
+    sponsoredSessionIds: sessionRows.map((r) => r.sessionId),
+  };
 }

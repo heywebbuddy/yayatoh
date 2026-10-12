@@ -202,7 +202,14 @@ export default async function GuestImportPage({
                     className="min-h-10 text-body file:me-3 file:min-h-10 file:rounded-pill file:border file:border-line file:bg-surface file:px-4"
                   />
                   <p id="import-file-hint" className="text-caption text-ink-2">
-                    {t('fileHint')}
+                    {t('fileHint')}{' '}
+                    <a
+                      href={`/${locale}/o/${org}/e/${event}/guests/import/template`}
+                      download
+                      className="underline underline-offset-2"
+                    >
+                      {t('template')}
+                    </a>
                   </p>
                 </div>
                 <div className={field}>

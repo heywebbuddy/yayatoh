@@ -1,6 +1,7 @@
 'use server';
 
 import { attendeeImportBulk, stageImportCommand, validateImportCommand } from '@yayatoh/attendees';
+import { CsvError, parseXlsx } from '@yayatoh/csv';
 import { executeCommand, isDomainError } from '@yayatoh/kernel';
 import { getLocale } from 'next-intl/server';
 import { redirect } from '@/i18n/navigation.ts';
@@ -16,7 +17,26 @@ const errorOf = (err: unknown) => {
   return typeof reason === 'string' ? `${err.code}:${reason}` : err.code;
 };
 
-/** Step 1: read the uploaded CSV and stage it; then the mapping step. */
+/** One CSV line for re-reading (no formula neutralising: this text is parsed, never opened). */
+const csvLine = (cells: readonly string[]) =>
+  cells.map((c) => (/[",\r\n]/.test(c) || c !== c.trim() ? `"${c.replace(/"/g, '""')}"` : c)).join(',');
+
+/**
+ * The upload as CSV text: a CSV as it is, an Excel workbook's first sheet (agreement §5: CSV/Excel
+ * guest import) read with the same reader as the guest list and written back as CSV.
+ */
+async function uploadText(file: File): Promise<string> {
+  const xlsx =
+    /\.xlsx$/i.test(file.name) ||
+    file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+  if (!xlsx) return file.text();
+  const x = parseXlsx(new Uint8Array(await file.arrayBuffer()), {
+    limits: { maxRows: 20_000, maxColumns: 50, maxCell: 1_000 },
+  });
+  return [x.headers, ...x.rows].map((r) => csvLine(r)).join('\r\n');
+}
+
+/** Step 1: read the uploaded CSV or Excel file and stage it; then the mapping step. */
 export async function uploadImportAction(org: string, event: string, form: FormData): Promise<void> {
   const { data, event: ev } = await loadEvent(org, event, 'attendees');
   const locale = await getLocale();
@@ -26,10 +46,19 @@ export async function uploadImportAction(org: string, event: string, form: FormD
     return redirect({ href: `${base}?error=validation_failed:empty`, locale });
   if (file.size > MAX_BYTES) return redirect({ href: `${base}?error=validation_failed:too_large`, locale });
   let batchId: string;
+  let csv: string;
+  try {
+    csv = await uploadText(file);
+  } catch (err) {
+    return redirect({
+      href: `${base}?error=validation_failed:${err instanceof CsvError ? err.code : 'not_a_spreadsheet'}`,
+      locale,
+    });
+  }
   try {
     ({ batchId } = await executeCommand(
       stageImportCommand,
-      { eventId: ev.id, fileName: file.name || 'guests.csv', csv: await file.text() },
+      { eventId: ev.id, fileName: file.name || 'guests.csv', csv },
       data.ctx,
       ports,
     ));

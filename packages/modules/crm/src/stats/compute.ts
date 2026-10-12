@@ -18,6 +18,11 @@ export type EventOver = (eventId: string) => boolean;
 export interface StatsSignals {
   readonly sessionsAttended: number;
   readonly campaignsOpened: number;
+  /**
+   * M5.7b event engagement (crm `event_engagement`): the points summed over events, and which
+   * events have a score (those count through it instead of their door scan). Absent = none.
+   */
+  readonly eventEngagement?: { readonly points: number; readonly eventIds: readonly string[] };
   readonly firstAt: Date | null;
   readonly lastAt: Date | null;
 }
@@ -70,9 +75,18 @@ export function computeContactStats(input: {
   readonly isOver: EventOver;
 }): { scores: ComputedScores; currencies: ComputedCurrencyStats[] } | null {
   const { participation: rows, signals } = input;
-  if (rows.length === 0 && signals.sessionsAttended === 0 && signals.campaignsOpened === 0) return null;
+  if (
+    rows.length === 0 &&
+    signals.sessionsAttended === 0 &&
+    signals.campaignsOpened === 0 &&
+    !signals.eventEngagement?.points
+  )
+    return null;
   let eventsRegistered = 0;
   let eventsAttended = 0;
+  /** Attended events that M5.7b scored (counted through their score instead). */
+  let scoredAttended = 0;
+  const scored = new Set(signals.eventEngagement?.eventIds ?? []);
   let pastRegistered = 0;
   let noShows = 0;
   let orders = 0;
@@ -83,6 +97,7 @@ export function computeContactStats(input: {
     const attended = r.registered && r.checkedIn;
     if (r.registered) eventsRegistered += 1;
     if (attended) eventsAttended += 1;
+    if (attended && scored.has(r.eventId)) scoredAttended += 1;
     if (r.registered && input.isOver(r.eventId)) {
       pastRegistered += 1;
       if (!r.checkedIn) noShows += 1;
@@ -118,9 +133,10 @@ export function computeContactStats(input: {
       firstSeenAt: first,
       lastSeenAt: last,
       engagementScore: engagementScore({
-        eventsAttended,
+        eventsAttended: eventsAttended - scoredAttended,
         sessionsAttended: signals.sessionsAttended,
         campaignsOpened: signals.campaignsOpened,
+        eventEngagement: signals.eventEngagement?.points ?? 0,
       }),
       noShowBps: noShowPropensityBps(pastRegistered, noShows),
     },

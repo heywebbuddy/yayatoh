@@ -85,6 +85,11 @@ export async function publicEventBySlug(
   );
   const r = rows[0];
   if (!r) return null;
+  const [brand] = await withoutTenant((tx) =>
+    tx.execute<{ color: string | null }>(
+      sql`select events.public_event_brand_color(${slug}, ${opts.includePrivate === true}) as color`,
+    ),
+  );
   return publicEventSerializer.serialize({
     slug: r.slug,
     name: r.name,
@@ -103,6 +108,7 @@ export async function publicEventBySlug(
     attendanceMode: r.attendance_mode,
     venueSlug: r.venue_slug,
     visibility: r.visibility,
+    brandColor: brand?.color ?? null,
   });
 }
 

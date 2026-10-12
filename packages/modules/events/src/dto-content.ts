@@ -18,6 +18,8 @@ export const EventDetailsDto = z.object({
   categoryName: z.string().nullable(),
   /** U8: the event's category is hidden (it stays on the event, out of the pickers). */
   categoryHidden: z.boolean(),
+  /** Per-event branding: the event's accent colour (#rrggbb), or null for the org's. */
+  brandColor: z.string().nullable(),
 });
 export type EventDetailsDto = z.infer<typeof EventDetailsDto>;
 
@@ -29,6 +31,12 @@ export const SetEventDetailsInput = z.object({
   orgCategory: z.string().max(80).nullable().optional(),
   attendanceMode: z.enum(ATTENDANCE_MODES).optional(),
   tags: z.array(z.string().max(200)).max(50).optional(),
+  /** Per-event branding: #rrggbb (any case), or null to use the org's colour. */
+  brandColor: z
+    .string()
+    .regex(/^#[0-9a-fA-F]{6}$/)
+    .nullable()
+    .optional(),
 });
 
 export const EventSectionDto = z.intersection(

@@ -1,6 +1,6 @@
 import { kiosksOfflineTx, sessionsInRoomTx } from '@yayatoh/checkin';
 import type { TenantTx } from '@yayatoh/db';
-import { exhibitorStaffingTx, sessionFillTx, sponsorTierCountsTx } from '@yayatoh/program';
+import { exhibitorStaffingTx, sessionFillTx, sponsorMetricsTx, sponsorTierCountsTx } from '@yayatoh/program';
 import { sessionWaitlistsTx } from '@yayatoh/registration';
 import { z } from 'zod';
 import {
@@ -240,14 +240,27 @@ export const SponsorActivityWidgetDto = z.object({
   tiers: z.array(z.object({ tier: z.string(), sponsors: Count })),
   /** Null: no deliverables source connected yet. */
   deliverablesOverdue: Count.nullable(),
+  /** Agreement §6 (dashboard phase 2): packages in force and waiting to be paid or activated. */
+  packages: z.object({ active: Count, pending: Count }),
+  /** Package deliverables done of all. */
+  deliverables: z.object({ done: Count, total: Count }),
+  /** Sessions a sponsor presents. */
+  sponsoredSessions: Count,
+  /** Sponsorship income per currency, minor units: the owner only (null for other roles). */
+  revenue: z.array(z.object({ currency: z.string(), minor: z.int() })).nullable(),
 });
 
 export const sponsorActivityWidget = (deliverables: OverdueDeliverables | null) =>
   defineWidget(WIDGET_META.sponsorActivity, SponsorActivityWidgetDto, async ({ tx, ctx, scope }) => {
     const tiers = await sponsorTierCountsTx(tx, scope.event.id);
+    const m = await sponsorMetricsTx(tx, scope.event.id, ctx.now);
     return {
       sponsors: tiers.reduce((a, t) => a + t.sponsors, 0),
       tiers,
       deliverablesOverdue: (await deliverables?.(tx, scope.event.id, ctx.now)) ?? null,
+      packages: m.packages,
+      deliverables: { done: m.deliverables.done, total: m.deliverables.total },
+      sponsoredSessions: m.sponsoredSessionIds.length,
+      revenue: scope.role === 'owner' ? [...m.revenue] : null,
     };
   });

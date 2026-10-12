@@ -1533,8 +1533,8 @@
     "noAccessTitle": "你的角色不包含匯入權限",
     "noAccessDescription": "請主辦單位為你指派可編輯參加者的角色。",
     "step1": "1. 選擇檔案",
-    "fileHint": "包含標題列、每列一位賓客的 CSV 檔案，最多 20,000 列、5 MB。請從 Excel、Numbers 或 Google Sheets 匯出為 CSV。",
-    "file": "CSV 檔案",
+    "fileHint": "包含標題列、每列一位賓客的 CSV 或 Excel（.xlsx）檔案，最多 20,000 列、5 MB。可從範本開始，或從 Excel、Numbers 或 Google Sheets 匯出。",
+    "file": "CSV 或 Excel 檔案",
     "upload": "上傳",
     "step2": "2. 對應 {file} 中的欄位",
     "rows": "{count, plural, other {# 列}}",
@@ -1574,7 +1574,8 @@
       "cell_too_long": "有儲存格超過 1,000 個字元。",
       "unterminated_quote": "檔案中有未閉合的引號，無法作為 CSV 讀取。"
     },
-    "backToEvent": "返回活動概覽"
+    "backToEvent": "返回活動概覽",
+    "template": "下載範本（CSV）"
   },
   "distribution": {
     "title": "傳送這張票",
@@ -2187,12 +2188,36 @@
         "exit": "出口",
         "dance_floor": "舞池",
         "bar": "吧檯",
+        "vip_area": "VIP 區",
         "custom": "其他"
       },
       "accessibleCol": "無障礙座位",
       "accessibleOf": "{item} 的無障礙座位",
       "accessibleHint": "無障礙座位：輸入座位號，例如「1, 2」。它們在座位圖上帶外框顯示，座位規則可以為其保留。",
-      "sponsoredBy": "贊助商：{sponsor}"
+      "sponsoredBy": "贊助商：{sponsor}",
+      "tableShape": "桌子形狀",
+      "shape": {
+        "round": "圓形",
+        "rect": "矩形"
+      },
+      "addSeat": "新增單一座位",
+      "width": "寬度（公分）",
+      "height": "高度（公分）",
+      "sizeCol": "尺寸（公分）",
+      "sectionCol": "區域",
+      "sectionOf": "{item}所屬區域",
+      "noSection": "無區域",
+      "vipSection": "{section}（VIP）",
+      "sections": "區域",
+      "sectionsHint": "將排和桌分組到「家人」或「樓座」等區域。VIP 區域會在選位介面和場地地圖上醒目顯示。繪製 VIP 區即可在平面圖上標示該區域。",
+      "sectionName": "區域 {section} 的名稱",
+      "sectionVip": "VIP",
+      "sectionItems": "{count, plural, other {# 個排或桌}}",
+      "removeSection": "移除",
+      "removeSectionNamed": "移除區域 {section}",
+      "newSection": "新區域",
+      "addSection": "新增區域",
+      "moveSelectedTo": "將所選項目移至區域…"
     },
     "prices": {
       "title": "價格",
@@ -2959,6 +2984,7 @@
       "exit": "出口",
       "dance_floor": "舞池",
       "bar": "吧檯",
+      "vip_area": "VIP 區",
       "custom": "其他"
     },
     "named": "{type}：{label}",
@@ -7400,7 +7426,11 @@
         "title": "已售票券",
         "ofCapacity": "共 {capacity}",
         "noCapacity": "尚無販售中的票券",
-        "comps": "{count, plural, other {# 張招待票}}"
+        "comps": "{count, plural, other {# 張招待票}}",
+        "claimed": "{count, plural, other {已轉交 # 張票券}}",
+        "waiting": "{count, plural, other {# 張等待轉交}}",
+        "registrations": "{count, plural, other {已確認 # 筆報名}}",
+        "inProgress": "{count, plural, other {# 筆處理中}}"
       },
       "checkins": {
         "title": "報到",
@@ -7647,7 +7677,11 @@
         "total": "{count, plural, other {# 家贊助商}}",
         "overdue": "{count, plural, other {# 項交付已逾期}}",
         "deliverablesPending": "開啟贊助方案後，交付事項會顯示在這裡。",
-        "open": "開啟贊助商"
+        "open": "開啟贊助商",
+        "packages": "{active, plural, other {# 個方案生效中}} · {pending} 個待處理",
+        "revenue": "贊助金額：{amount}",
+        "deliverables": "交付：已完成 {done}/{total}",
+        "sponsoredSessions": "{count, plural, other {# 場贊助場次}}"
       },
       "rsvp": {
         "title": "出席回覆",
@@ -9831,7 +9865,8 @@
       "not_validated": "請在匯入前檢查名單。",
       "nothing_to_import": "沒有可匯入的組。請更正名單中的列後重新匯入。",
       "expired": "此匯入已過期。請用你的名單重新開始。"
-    }
+    },
+    "template": "下載範本"
   },
   "subEvents": {
     "link": "分場活動與邀請",
@@ -13261,6 +13296,23 @@
     "cardTitle": "要儲存信用卡以供今晚捐款嗎？",
     "cardBody": "請賓客用自己的手機掃描。除非賓客在手機上同意，否則不會儲存任何資料。"
   },
+  "scanLookup": {
+    "view": "查找參加者",
+    "title": "查找持票人",
+    "searchLabel": "姓名、電子郵件或電話",
+    "searchHint": "離線可用。請輸入姓名中至少兩個字母，或完整的電子郵件地址或電話號碼。",
+    "results": "符合的持票人",
+    "noMatchTitle": "找不到持票人",
+    "noMatchName": "請檢查拼寫，或嘗試以其電子郵件地址或電話號碼查找。",
+    "noMatchContact": "電子郵件地址和電話號碼必須完全相符。請改用姓名查找。",
+    "checkIn": "報到",
+    "checkInNamed": "為 {name} 報到",
+    "checkedIn": "已報到",
+    "void": "票券已取消",
+    "search": "搜尋",
+    "consoleHint": "在條碼無法掃描時使用。姓名需每個詞都相符；電子郵件地址和電話號碼須完整輸入。",
+    "searchAgain": "重新搜尋"
+  },
   "scanGuestKiosk": {
     "welcome": "歡迎來到 {event}",
     "subtitle": "查詢您的桌位並報到",
@@ -15163,7 +15215,7 @@
     "scores": "分數",
     "engagement": "參與度分數",
     "engagementValue": "{score} / 100",
-    "engagementHow": "{wAttended} × {attended} 出席活動 + {wSessions} × {sessions} 場次 + {wCampaigns} × {campaigns} 開啟的行銷活動 = {points} 分. 100 × {points} ÷ ({points} + {half}) = {score}.",
+    "engagementHow": "在 {scored, plural, other {# 場活動}}中的 {eventPoints} 活動分（報到、投票、提問、意見回饋和報名，依你設定的權重計算）+ {wAttended} × {attended} 其他出席活動 + {wSessions} × {sessions} 場次 + {wCampaigns} × {campaigns} 開啟的行銷活動 = {points} 分。 100 × {points} ÷ ({points} + {half}) = {score}.",
     "noShow": "缺席傾向",
     "noShowHow": "({noShows} 次缺席 + {priorNoShows}) ÷ ({past} 次過往報名 + {priorRegistrations}) = {pct}. 即將舉行的活動暫不計入。",
     "rfm": "RFM",
@@ -19016,5 +19068,11 @@
     "attendeeSignUpDescription": "驗證電子郵件即可建立帳戶，集中管理你的活動與票券。",
     "organizationAccessRequired": "此帳戶沒有組織存取權限。請使用主辦方帳戶，或繼續前往你的參加者控制台。",
     "useAnotherAccount": "使用其他帳戶"
+  },
+  "eventBranding": {
+    "title": "此活動的顏色",
+    "description": "為此活動在其公開活動頁面上設定專屬強調色。留空則使用下方你所屬組織的品牌顏色。",
+    "color": "活動顏色",
+    "usesOrg": "此活動使用組織的品牌顏色。"
   }
 }

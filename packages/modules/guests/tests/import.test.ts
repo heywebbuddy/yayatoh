@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   type GroupContext,
+  GUEST_IMPORT_TEMPLATE,
   groupGuestRows,
   guessGuestMapping,
   type MappedGuestRow,
@@ -295,5 +296,26 @@ describe('Google Sheet links (P4-7)', () => {
     expect(sheetExportUrl({ id: ID, gid: null })).toBe(
       `https://docs.google.com/spreadsheets/d/${ID}/export?format=csv`,
     );
+  });
+});
+
+describe('the downloadable template (agreement §5)', () => {
+  it('has a header the import recognises for every column, and rows as wide as it', () => {
+    const m = guessGuestMapping(GUEST_IMPORT_TEMPLATE.headers);
+    expect(m).toEqual({
+      party: 0,
+      firstName: 1,
+      lastName: 2,
+      ageClass: 3,
+      email: 4,
+      phone: 5,
+      meal: 6,
+      dietary: 7,
+      side: 8,
+      vip: 9,
+      tags: 10,
+      plusOne: 11,
+    });
+    for (const r of GUEST_IMPORT_TEMPLATE.rows) expect(r).toHaveLength(GUEST_IMPORT_TEMPLATE.headers.length);
   });
 });

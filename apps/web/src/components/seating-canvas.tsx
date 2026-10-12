@@ -126,29 +126,36 @@ export default function SeatingCanvas({
                 <Text text={m.label} x={12} y={-56} fontSize={44} fill={paper.selected} />
               </Group>
             ))}
-            {doc.items.map((item) => (
-              <PlanItem
-                key={item.id}
-                item={item}
-                selected={selected.has(item.id)}
-                // While calibrating, clicks mark points: nothing moves.
-                locked={locked || Boolean(onPoint)}
-                seatStatus={seatStatus}
-                seatKey={
-                  item.kind === 'object' ? '' : item.seats.map((s) => seatStatus[s.id] ?? 'available').join()
-                }
-                scale={view.scale}
-                onSelect={onSelect}
-                onMove={onMove}
-                sponsor={sponsors[item.id]}
-              />
-            ))}
+            {/* VIP areas sit under the tables and rows in them (drawn first). */}
+            {[...doc.items]
+              .sort((a, b) => Number(!isArea(a)) - Number(!isArea(b)))
+              .map((item) => (
+                <PlanItem
+                  key={item.id}
+                  item={item}
+                  selected={selected.has(item.id)}
+                  // While calibrating, clicks mark points: nothing moves.
+                  locked={locked || Boolean(onPoint)}
+                  seatStatus={seatStatus}
+                  seatKey={
+                    item.kind === 'object'
+                      ? ''
+                      : item.seats.map((s) => seatStatus[s.id] ?? 'available').join()
+                  }
+                  scale={view.scale}
+                  onSelect={onSelect}
+                  onMove={onMove}
+                  sponsor={sponsors[item.id]}
+                />
+              ))}
           </Layer>
         </Stage>
       </div>
     </div>
   );
 }
+
+const isArea = (i: Item) => i.kind === 'object' && i.objectType === 'vip_area';
 
 /** One row, table or object; redrawn only when it, its selection or its seats' states change. */
 const PlanItem = memo(
@@ -205,6 +212,7 @@ const PlanItem = memo(
             stroke={outline}
             strokeWidth={isSelected ? 8 : 3}
             cornerRadius={12}
+            {...(item.objectType === 'vip_area' ? { dash: [36, 20], opacity: 0.85 } : {})}
           />
           <Text
             text={item.label || item.objectType}

@@ -251,11 +251,11 @@ describe('readiness checklist (U4)', () => {
       ['speakersAdded', true, false],
       ['published', false, true],
     ]);
-    // "Coming soon" items never show in the checklist.
+    // The RSVP deadline is a real item now (it was "coming soon" until the RSVP page existed).
     const wedding = readinessScore(
       readinessRules({ ...facts, checklist: ['guestsAdded', 'rsvpDeadlineSet'] }),
     );
     expect(wedding.items.map((i) => i.key)).toContain('guestsAdded');
-    expect(wedding.items.map((i) => i.key)).not.toContain('rsvpDeadlineSet');
+    expect(wedding.items.map((i) => i.key)).toContain('rsvpDeadlineSet');
   });
 });

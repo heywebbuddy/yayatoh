@@ -85,9 +85,15 @@ export const events = tenantTable(
      * to (the marketplace taxonomy); a hidden org category keeps its events.
      */
     orgCategoryId: uuid('org_category_id'),
+    /**
+     * Per-event branding (agreement §3): the event's own accent colour (#rrggbb) on its public
+     * pages, over the org's brand kit. Null: the org's colour.
+     */
+    brandColor: text('brand_color'),
   },
   (t) => [
     uniqueIndex('events_slug_key').on(t.slug),
+    check('events_brand_color_check', sql`brand_color is null or brand_color ~ '^#[0-9a-f]{6}$'`),
     index('events_org_id_starts_at_idx').on(t.orgId, t.startsAt),
     check('events_status_check', inList('status', EVENT_STATUSES)),
     check('events_visibility_check', inList('visibility', EVENT_VISIBILITIES)),

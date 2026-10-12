@@ -316,7 +316,18 @@ describe('who sees what', () => {
       userCtx(members.manager as string, a.org.id),
       ports,
     );
-    expect(sp).toEqual({ sponsors: 2, tiers: [{ tier: 'Gold', sponsors: 2 }], deliverablesOverdue: 2 });
+    expect(sp).toMatchObject({ sponsors: 2, tiers: [{ tier: 'Gold', sponsors: 2 }], deliverablesOverdue: 2 });
+    // Agreement §6 sponsor metrics: packages and deliverables for ops; income for the owner only.
+    expect(sp.revenue).toBeNull();
+    expect(sp.deliverables.total).toBeGreaterThanOrEqual(2);
+    expect(sp.packages.active + sp.packages.pending).toBeGreaterThanOrEqual(0);
+    const owner = await executeQuery(
+      sponsorActivityWidget(sources.overdueDeliverables ?? null).loader,
+      { eventId: fresh.eventId },
+      a.ctx(),
+      ports,
+    );
+    expect(owner.revenue).not.toBeNull();
   }, 120_000);
 });
 

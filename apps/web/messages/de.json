@@ -1533,8 +1533,8 @@
     "noAccessTitle": "Importieren gehört nicht zu deiner Rolle",
     "noAccessDescription": "Bitte einen Veranstalter um eine Rolle, die Teilnehmende bearbeiten darf.",
     "step1": "1. Datei auswählen",
-    "fileHint": "Eine CSV-Datei mit Kopfzeile und einem Gast pro Zeile, höchstens 20.000 Zeilen und 5 MB. Exportiere sie aus Excel, Numbers oder Google Sheets als CSV.",
-    "file": "CSV-Datei",
+    "fileHint": "Eine CSV- oder Excel-Datei (.xlsx) mit Kopfzeile und einem Gast pro Zeile, höchstens 20.000 Zeilen und 5 MB. Beginne mit der Vorlage oder exportiere aus Excel, Numbers oder Google Sheets.",
+    "file": "CSV- oder Excel-Datei",
     "upload": "Hochladen",
     "step2": "2. Spalten in {file} zuordnen",
     "rows": "{count, plural, one {# Zeile} other {# Zeilen}}",
@@ -1574,7 +1574,8 @@
       "cell_too_long": "Eine Zelle ist länger als 1.000 Zeichen.",
       "unterminated_quote": "Die Datei enthält ein nicht geschlossenes Anführungszeichen und kann nicht als CSV gelesen werden."
     },
-    "backToEvent": "Zurück zur Veranstaltungsübersicht"
+    "backToEvent": "Zurück zur Veranstaltungsübersicht",
+    "template": "Vorlage herunterladen (CSV)"
   },
   "distribution": {
     "title": "Dieses Ticket senden",
@@ -2187,12 +2188,36 @@
         "exit": "Ausgang",
         "dance_floor": "Tanzfläche",
         "bar": "Bar",
+        "vip_area": "VIP-Bereich",
         "custom": "Sonstiges"
       },
       "accessibleCol": "Barrierefreie Plätze",
       "accessibleOf": "Barrierefreie Plätze von {item}",
       "accessibleHint": "Barrierefreie Plätze: Nummern eintragen, z. B. „1, 2“. Sie sind im Plan umrandet, und die Sitzregeln können sie zurückhalten.",
-      "sponsoredBy": "Sponsor: {sponsor}"
+      "sponsoredBy": "Sponsor: {sponsor}",
+      "tableShape": "Tischform",
+      "shape": {
+        "round": "Rund",
+        "rect": "Rechteckig"
+      },
+      "addSeat": "Einzelplatz hinzufügen",
+      "width": "Breite (cm)",
+      "height": "Höhe (cm)",
+      "sizeCol": "Größe (cm)",
+      "sectionCol": "Sektion",
+      "sectionOf": "Sektion von {item}",
+      "noSection": "Keine Sektion",
+      "vipSection": "{section} (VIP)",
+      "sections": "Sektionen",
+      "sectionsHint": "Fasse Reihen und Tische in Sektionen wie „Familie“ oder „Balkon“ zusammen. VIP-Sektionen werden in der Platzauswahl und auf dem Lageplan hervorgehoben. Zeichne einen VIP-Bereich, um ihn auf der Fläche zu markieren.",
+      "sectionName": "Name der Sektion {section}",
+      "sectionVip": "VIP",
+      "sectionItems": "{count, plural, one {# Reihe oder Tisch} other {# Reihen und Tische}}",
+      "removeSection": "Entfernen",
+      "removeSectionNamed": "Sektion {section} entfernen",
+      "newSection": "Neue Sektion",
+      "addSection": "Sektion hinzufügen",
+      "moveSelectedTo": "Auswahl in Sektion verschieben…"
     },
     "prices": {
       "title": "Preise",
@@ -2959,6 +2984,7 @@
       "exit": "Ausgang",
       "dance_floor": "Tanzfläche",
       "bar": "Bar",
+      "vip_area": "VIP-Bereich",
       "custom": "Sonstiges"
     },
     "named": "{type}: {label}",
@@ -7400,7 +7426,11 @@
         "title": "Verkaufte Tickets",
         "ofCapacity": "von {capacity}",
         "noCapacity": "Noch keine Tickets im Verkauf",
-        "comps": "{count, plural, one {# Freiticket} other {# Freitickets}}"
+        "comps": "{count, plural, one {# Freiticket} other {# Freitickets}}",
+        "claimed": "{count, plural, one {# Ticket weitergegeben} other {# Tickets weitergegeben}}",
+        "waiting": "{count, plural, one {# wartet auf Weitergabe} other {# warten auf Weitergabe}}",
+        "registrations": "{count, plural, one {# Anmeldung bestätigt} other {# Anmeldungen bestätigt}}",
+        "inProgress": "{count, plural, one {# in Bearbeitung} other {# in Bearbeitung}}"
       },
       "checkins": {
         "title": "Check-ins",
@@ -7647,7 +7677,11 @@
         "total": "{count, plural, one {# Sponsor} other {# Sponsoren}}",
         "overdue": "{count, plural, one {# Leistung überfällig} other {# Leistungen überfällig}}",
         "deliverablesPending": "Leistungen erscheinen hier, sobald Sponsorpakete aktiv sind.",
-        "open": "Sponsoren öffnen"
+        "open": "Sponsoren öffnen",
+        "packages": "{active, plural, one {# Paket aktiv} other {# Pakete aktiv}} · {pending} ausstehend",
+        "revenue": "Sponsoring: {amount}",
+        "deliverables": "Leistungen: {done} von {total} erledigt",
+        "sponsoredSessions": "{count, plural, one {# gesponserte Session} other {# gesponserte Sessions}}"
       },
       "rsvp": {
         "title": "Zusagen",
@@ -9831,7 +9865,8 @@
       "not_validated": "Prüfen Sie die Liste vor dem Import.",
       "nothing_to_import": "Keine Gruppe kann importiert werden. Korrigieren Sie die Zeilen Ihrer Liste und importieren Sie sie erneut.",
       "expired": "Dieser Import ist abgelaufen. Beginnen Sie mit Ihrer Liste neu."
-    }
+    },
+    "template": "Vorlage herunterladen"
   },
   "subEvents": {
     "link": "Programmpunkte und Einladungen",
@@ -13261,6 +13296,23 @@
     "cardTitle": "Eine Karte für die heutigen Spenden speichern?",
     "cardBody": "Der Gast scannt dies mit dem eigenen Handy. Gespeichert wird nur, wenn er dort zustimmt."
   },
+  "scanLookup": {
+    "view": "Teilnehmer finden",
+    "title": "Ticketinhaber finden",
+    "searchLabel": "Name, E-Mail oder Telefon",
+    "searchHint": "Funktioniert offline. Gib mindestens zwei Buchstaben eines Namens oder eine vollständige E-Mail-Adresse oder Telefonnummer ein.",
+    "results": "Passende Ticketinhaber",
+    "noMatchTitle": "Kein Ticketinhaber gefunden",
+    "noMatchName": "Prüfe die Schreibweise oder versuche es mit der E-Mail-Adresse oder Telefonnummer.",
+    "noMatchContact": "E-Mail-Adressen und Telefonnummern müssen exakt übereinstimmen. Versuche es stattdessen mit dem Namen.",
+    "checkIn": "Einchecken",
+    "checkInNamed": "{name} einchecken",
+    "checkedIn": "Eingecheckt",
+    "void": "Ticket storniert",
+    "search": "Suchen",
+    "consoleHint": "Nutze dies, wenn sich ein Code nicht scannen lässt. Bei Namen muss jedes Wort passen; E-Mail-Adressen und Telefonnummern müssen vollständig sein.",
+    "searchAgain": "Erneut suchen"
+  },
   "scanGuestKiosk": {
     "welcome": "Willkommen bei {event}",
     "subtitle": "Finde deinen Tisch und checke ein",
@@ -15163,7 +15215,7 @@
     "scores": "Scores",
     "engagement": "Engagement-Score",
     "engagementValue": "{score} / 100",
-    "engagementHow": "{wAttended} × {attended} besuchte Veranstaltungen + {wSessions} × {sessions} Sessions + {wCampaigns} × {campaigns} geöffnete Kampagnen = {points} Punkte. 100 × {points} ÷ ({points} + {half}) = {score}.",
+    "engagementHow": "{eventPoints} Aktivitätspunkte bei {scored, plural, one {# Veranstaltung} other {# Veranstaltungen}} (Check-ins, Umfragen, Fragen, Feedback und Anmeldungen, nach Ihren Gewichtungen) + {wAttended} × {attended} weitere besuchte Veranstaltungen + {wSessions} × {sessions} Sessions + {wCampaigns} × {campaigns} geöffnete Kampagnen = {points} Punkte. 100 × {points} ÷ ({points} + {half}) = {score}.",
     "noShow": "No-Show-Neigung",
     "noShowHow": "({noShows} No-Shows + {priorNoShows}) ÷ ({past} vergangene Anmeldungen + {priorRegistrations}) = {pct}. Kommende Veranstaltungen zählen noch nicht.",
     "rfm": "RFM",
@@ -19016,5 +19068,11 @@
     "attendeeSignUpDescription": "Bestätige deine E-Mail, um ein Konto zu erstellen und deine Events und Tickets an einem Ort zu haben.",
     "organizationAccessRequired": "Dieses Konto hat keinen Organisationszugriff. Verwende ein Veranstalterkonto oder wechsle zu deinem Teilnehmer-Dashboard.",
     "useAnotherAccount": "Anderes Konto verwenden"
+  },
+  "eventBranding": {
+    "title": "Farbe dieses Events",
+    "description": "Gib diesem Event eine eigene Akzentfarbe auf seiner öffentlichen Eventseite. Lass das Feld leer, um unten die Markenfarbe deiner Organisation zu verwenden.",
+    "color": "Eventfarbe",
+    "usesOrg": "Dieses Event verwendet die Markenfarbe der Organisation."
   }
 }

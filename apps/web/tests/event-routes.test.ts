@@ -79,6 +79,9 @@ const SECTION_OF: Record<string, string> = {
   'ce-credits': 'ceCredits',
   // Kartik_Fixes: event Branding edits the shared org brand kit (no longer a placeholder).
   branding: 'branding',
+  // Agreement audit 2026-10-12: the wedding's RSVP and Messages items open the guest screens.
+  rsvp: 'rsvp',
+  messages: 'messages',
 };
 
 describe('event console route sweep (M4.2a)', () => {

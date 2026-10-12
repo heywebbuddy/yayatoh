@@ -104,12 +104,19 @@ export default async function ImportPage({
                 name="file"
                 type="file"
                 required
-                accept=".csv,text/csv"
+                accept=".csv,.xlsx,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                 className="min-h-10 text-body file:me-3 file:min-h-10 file:rounded-pill file:border file:border-line file:bg-surface file:px-4"
               />
             </div>
             <Button type="submit">{t('import.upload')}</Button>
           </form>
+          <a
+            href={`/${locale}/o/${org}/e/${event}/attendees/import/template`}
+            download
+            className="self-start text-body underline underline-offset-2"
+          >
+            {t('import.template')}
+          </a>
         </Card>
       ) : (
         <>

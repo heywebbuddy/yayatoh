@@ -1533,8 +1533,8 @@
     "noAccessTitle": "Importar no forma parte de tu rol",
     "noAccessDescription": "Pide a un organizador un rol que pueda editar asistentes.",
     "step1": "1. Elige un archivo",
-    "fileHint": "Un CSV con una fila de encabezado y un invitado por línea, hasta 20.000 filas y 5 MB. Expórtalo como CSV desde Excel, Numbers o Google Sheets.",
-    "file": "Archivo CSV",
+    "fileHint": "Un archivo CSV o Excel (.xlsx) con una fila de encabezado y un invitado por línea, hasta 20.000 filas y 5 MB. Empieza con la plantilla o exporta desde Excel, Numbers o Google Sheets.",
+    "file": "Archivo CSV o Excel",
     "upload": "Subir",
     "step2": "2. Asigna las columnas de {file}",
     "rows": "{count, plural, one {# fila} other {# filas}}",
@@ -1574,7 +1574,8 @@
       "cell_too_long": "Una celda tiene más de 1000 caracteres.",
       "unterminated_quote": "El archivo tiene unas comillas sin cerrar, así que no se puede leer como CSV."
     },
-    "backToEvent": "Volver al resumen del evento"
+    "backToEvent": "Volver al resumen del evento",
+    "template": "Descargar una plantilla (CSV)"
   },
   "distribution": {
     "title": "Enviar esta entrada",
@@ -2187,12 +2188,36 @@
         "exit": "Salida",
         "dance_floor": "Pista de baile",
         "bar": "Barra",
+        "vip_area": "Zona VIP",
         "custom": "Otro"
       },
       "accessibleCol": "Asientos accesibles",
       "accessibleOf": "Asientos accesibles de {item}",
       "accessibleHint": "Asientos accesibles: escribe sus números, p. ej. «1, 2». Se resaltan en el plano y las reglas de asientos pueden reservarlos.",
-      "sponsoredBy": "Patrocinador: {sponsor}"
+      "sponsoredBy": "Patrocinador: {sponsor}",
+      "tableShape": "Forma de la mesa",
+      "shape": {
+        "round": "Redonda",
+        "rect": "Rectangular"
+      },
+      "addSeat": "Añadir un asiento individual",
+      "width": "Ancho (cm)",
+      "height": "Alto (cm)",
+      "sizeCol": "Tamaño (cm)",
+      "sectionCol": "Sección",
+      "sectionOf": "Sección de {item}",
+      "noSection": "Sin sección",
+      "vipSection": "{section} (VIP)",
+      "sections": "Secciones",
+      "sectionsHint": "Agrupa filas y mesas en secciones como «Familia» o «Balcón». Las secciones VIP se destacan en los selectores de asientos y en el mapa del recinto. Dibuja una zona VIP para marcarla en el plano.",
+      "sectionName": "Nombre de la sección {section}",
+      "sectionVip": "VIP",
+      "sectionItems": "{count, plural, one {# fila o mesa} other {# filas y mesas}}",
+      "removeSection": "Quitar",
+      "removeSectionNamed": "Quitar la sección {section}",
+      "newSection": "Nueva sección",
+      "addSection": "Añadir sección",
+      "moveSelectedTo": "Mover lo seleccionado a la sección…"
     },
     "prices": {
       "title": "Precios",
@@ -2959,6 +2984,7 @@
       "exit": "Salida",
       "dance_floor": "Pista de baile",
       "bar": "Barra",
+      "vip_area": "Zona VIP",
       "custom": "Otro"
     },
     "named": "{type}: {label}",
@@ -7400,7 +7426,11 @@
         "title": "Entradas vendidas",
         "ofCapacity": "de {capacity}",
         "noCapacity": "Aún no hay entradas a la venta",
-        "comps": "{count, plural, one {# de cortesía} other {# de cortesía}}"
+        "comps": "{count, plural, one {# de cortesía} other {# de cortesía}}",
+        "claimed": "{count, plural, one {# entrada transferida} other {# entradas transferidas}}",
+        "waiting": "{count, plural, one {# pendiente de transferir} other {# pendientes de transferir}}",
+        "registrations": "{count, plural, one {# inscripción confirmada} other {# inscripciones confirmadas}}",
+        "inProgress": "{count, plural, one {# en curso} other {# en curso}}"
       },
       "checkins": {
         "title": "Registros de entrada",
@@ -7647,7 +7677,11 @@
         "total": "{count, plural, one {# patrocinador} other {# patrocinadores}}",
         "overdue": "{count, plural, one {# entregable vencido} other {# entregables vencidos}}",
         "deliverablesPending": "Los entregables aparecerán aquí cuando se activen los paquetes de patrocinio.",
-        "open": "Abrir patrocinadores"
+        "open": "Abrir patrocinadores",
+        "packages": "{active, plural, one {# paquete activo} other {# paquetes activos}} · {pending} en espera",
+        "revenue": "Patrocinio: {amount}",
+        "deliverables": "Entregables: {done} de {total} completados",
+        "sponsoredSessions": "{count, plural, one {# sesión patrocinada} other {# sesiones patrocinadas}}"
       },
       "rsvp": {
         "title": "Confirmaciones",
@@ -9831,7 +9865,8 @@
       "not_validated": "Revisa la lista antes de importarla.",
       "nothing_to_import": "No se puede importar ningún grupo. Corrige las filas de tu lista e impórtala de nuevo.",
       "expired": "Esta importación ha caducado. Vuelve a empezar con tu lista."
-    }
+    },
+    "template": "Descargar una plantilla"
   },
   "subEvents": {
     "link": "Subeventos e invitaciones",
@@ -13261,6 +13296,23 @@
     "cardTitle": "¿Guardar una tarjeta para las donaciones de esta noche?",
     "cardBody": "El invitado lo escanea con su propio teléfono. No se guarda nada a menos que lo acepte allí."
   },
+  "scanLookup": {
+    "view": "Buscar asistente",
+    "title": "Buscar a un titular de entrada",
+    "searchLabel": "Nombre, correo o teléfono",
+    "searchHint": "Funciona sin conexión. Escribe al menos dos letras de un nombre, o un correo electrónico o número de teléfono completo.",
+    "results": "Titulares de entrada encontrados",
+    "noMatchTitle": "No se encontró ningún titular de entrada",
+    "noMatchName": "Revisa la ortografía o prueba con su correo electrónico o número de teléfono.",
+    "noMatchContact": "Los correos electrónicos y números de teléfono deben coincidir exactamente. Prueba con su nombre.",
+    "checkIn": "Registrar",
+    "checkInNamed": "Registrar a {name}",
+    "checkedIn": "Registrado",
+    "void": "Entrada cancelada",
+    "search": "Buscar",
+    "consoleHint": "Úsalo cuando un código no se pueda escanear. Los nombres deben coincidir en cada palabra; los correos y teléfonos deben estar completos.",
+    "searchAgain": "Buscar de nuevo"
+  },
   "scanGuestKiosk": {
     "welcome": "Bienvenido a {event}",
     "subtitle": "Encuentra tu mesa y regístrate",
@@ -15163,7 +15215,7 @@
     "scores": "Puntuaciones",
     "engagement": "Puntuación de participación",
     "engagementValue": "{score} / 100",
-    "engagementHow": "{wAttended} × {attended} eventos asistidos + {wSessions} × {sessions} sesiones + {wCampaigns} × {campaigns} campañas abiertas = {points} puntos. 100 × {points} ÷ ({points} + {half}) = {score}.",
+    "engagementHow": "{eventPoints} puntos de actividad en {scored, plural, one {# evento} other {# eventos}} (check-ins, encuestas, preguntas, comentarios e inscripciones, según tus ponderaciones) + {wAttended} × {attended} otros eventos asistidos + {wSessions} × {sessions} sesiones + {wCampaigns} × {campaigns} campañas abiertas = {points} puntos. 100 × {points} ÷ ({points} + {half}) = {score}.",
     "noShow": "Propensión a no asistir",
     "noShowHow": "({noShows} inasistencias + {priorNoShows}) ÷ ({past} registros pasados + {priorRegistrations}) = {pct}. Los eventos próximos aún no cuentan.",
     "rfm": "RFM",
@@ -19016,5 +19068,11 @@
     "attendeeSignUpDescription": "Verifica tu correo para crear una cuenta y tener tus eventos y entradas en un mismo lugar.",
     "organizationAccessRequired": "Esta cuenta no tiene acceso a ninguna organización. Usa una cuenta de organizador o continúa a tu panel de asistente.",
     "useAnotherAccount": "Usar otra cuenta"
+  },
+  "eventBranding": {
+    "title": "Color de este evento",
+    "description": "Dale a este evento su propio color de acento en su página pública. Déjalo vacío para usar el color de marca de tu organización que aparece abajo.",
+    "color": "Color del evento",
+    "usesOrg": "Este evento usa el color de marca de la organización."
   }
 }

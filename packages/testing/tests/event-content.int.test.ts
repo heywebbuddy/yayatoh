@@ -609,3 +609,29 @@ describe('short links (M1.4d)', () => {
     expect(await resolveShortLink(auto?.code ?? '')).toBeNull();
   });
 });
+
+describe('per-event branding (agreement §3)', () => {
+  it('an event can have its own accent colour on its public page, and go back to the org colour', async () => {
+    const set = await executeCommand(
+      setEventDetailsCommand,
+      { eventId: ev.id, brandColor: '#1A73E8' },
+      a.ctx(),
+      ports,
+    );
+    expect(set.brandColor).toBe('#1a73e8');
+    expect(await publicEventBySlug(ev.slug)).toMatchObject({ brandColor: '#1a73e8' });
+    await expect(
+      executeCommand(setEventDetailsCommand, { eventId: ev.id, brandColor: 'blue' }, a.ctx(), ports),
+    ).rejects.toMatchObject({ code: 'validation_failed' });
+    await expect(
+      executeCommand(
+        setEventDetailsCommand,
+        { eventId: ev.id, brandColor: '#000000' },
+        userCtx(a.viewerId, a.org.id),
+        ports,
+      ),
+    ).rejects.toMatchObject({ code: 'forbidden' });
+    await executeCommand(setEventDetailsCommand, { eventId: ev.id, brandColor: null }, a.ctx(), ports);
+    expect(await publicEventBySlug(ev.slug)).toMatchObject({ brandColor: null });
+  });
+});

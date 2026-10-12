@@ -1,6 +1,14 @@
 'use client';
 
-import { buildRoundTable, buildRow, type FloorplanDoc, type Item, OBJECT_TYPES } from '@yayatoh/floorplan';
+import {
+  buildRectTable,
+  buildRoundTable,
+  buildRow,
+  buildSingleSeat,
+  type FloorplanDoc,
+  type Item,
+  OBJECT_TYPES,
+} from '@yayatoh/floorplan';
 import { uuidv7 } from '@yayatoh/kernel';
 import { Button, Select } from '@yayatoh/ui';
 import dynamic from 'next/dynamic';
@@ -62,6 +70,8 @@ export function SeatingEditor({
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [newSeats, setNewSeats] = useState({ row: 10, table: 8 });
   const [objectType, setObjectType] = useState<(typeof OBJECT_TYPES)[number]>('stage');
+  const [tableShape, setTableShape] = useState<'round' | 'rect'>('round');
+  const [sectionName, setSectionName] = useState('');
   // Calibrating the floor plan image (M1.7g): which point the next click marks, and both points.
   const [marking, setMarking] = useState<Marking>(null);
   const [points, setPoints] = useState({ a: { x: '', y: '' }, b: { x: '', y: '' } });
@@ -122,6 +132,35 @@ export function SeatingEditor({
     while (used.has(String(n))) n++;
     return String(n);
   };
+  /** The next free "S1", "S2"… for a seat on its own (it is a one-seat row). */
+  const nextSeatLabel = () => {
+    const used = new Set(doc.items.map((i) => i.label.toLowerCase()));
+    let n = 1;
+    while (used.has(`s${n}`)) n++;
+    return `S${n}`;
+  };
+  // Sections (agreement §5 and §9: sections and VIP areas): name them, mark VIP, assign items.
+  const addSection = () => {
+    const label = sectionName.trim().slice(0, 40);
+    if (!label || doc.sections.length >= 200) return;
+    commit({ ...doc, sections: [...doc.sections, { id: uuidv7(), label, vip: false }] });
+    setSectionName('');
+  };
+  const updateSection = (id: string, patch: Partial<{ label: string; vip: boolean }>) =>
+    commit({ ...doc, sections: doc.sections.map((x) => (x.id === id ? { ...x, ...patch } : x)) });
+  const removeSection = (id: string) =>
+    commit({
+      ...doc,
+      sections: doc.sections.filter((x) => x.id !== id),
+      items: doc.items.map((i) =>
+        i.kind !== 'object' && i.sectionId === id ? { ...i, sectionId: null } : i,
+      ),
+    });
+  const sectionOfSelected = (sectionId: string | null) =>
+    commit({
+      ...doc,
+      items: doc.items.map((i) => (selected.has(i.id) && i.kind !== 'object' ? { ...i, sectionId } : i)),
+    });
   const add = (item: Item) => {
     commit({ ...doc, items: [...doc.items, item] });
     setSelected(new Set([item.id]));
@@ -195,6 +234,27 @@ export function SeatingEditor({
     />
   );
 
+  const sizeField = (item: Extract<Item, { kind: 'object' }>, key: 'width' | 'height') => (
+    <input
+      key={`${item.id}:${key}:${item[key]}`}
+      type="number"
+      min={10}
+      step={10}
+      defaultValue={item[key]}
+      disabled={locked}
+      aria-label={`${t(key)} — ${item.label || t(`object.${item.objectType}`)}`}
+      className={field}
+      onBlur={(e) => {
+        const v = Math.round(Number(e.currentTarget.value));
+        if (Number.isFinite(v) && v >= 1 && v !== item[key]) update(item.id, (i) => ({ ...i, [key]: v }));
+      }}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') e.currentTarget.blur();
+      }}
+    />
+  );
+  const sectionLabel = new Map(doc.sections.map((x) => [x.id, x.label]));
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-wrap items-center gap-2" role="toolbar" aria-label={t('toolbar')}>
@@ -240,11 +300,33 @@ export function SeatingEditor({
           disabled={locked}
           onClick={() =>
             add(
-              buildRoundTable({ label: nextLabel('table'), seats: Math.min(40, newSeats.table), ...center }),
+              (tableShape === 'rect' ? buildRectTable : buildRoundTable)({
+                label: nextLabel('table'),
+                seats: Math.min(40, newSeats.table),
+                ...center,
+              }),
             )
           }
         >
           {t('addTable')}
+        </Button>
+        <Select
+          aria-label={t('tableShape')}
+          value={tableShape}
+          onValueChange={(v) => setTableShape(v === 'rect' ? 'rect' : 'round')}
+          className="field field-sm"
+          disabled={locked}
+        >
+          <option value="round">{t('shape.round')}</option>
+          <option value="rect">{t('shape.rect')}</option>
+        </Select>
+        <Button
+          size="sm"
+          variant="secondary"
+          disabled={locked}
+          onClick={() => add(buildSingleSeat({ label: nextSeatLabel(), ...center }))}
+        >
+          {t('addSeat')}
         </Button>
         <Select
           aria-label={t('objectType')}
@@ -269,10 +351,10 @@ export function SeatingEditor({
               id: uuidv7(),
               objectType,
               label: t(`object.${objectType}`),
-              x: center.x - 200,
-              y: center.y - 100,
-              width: 400,
-              height: 200,
+              x: center.x - (objectType === 'vip_area' ? 400 : 200),
+              y: center.y - (objectType === 'vip_area' ? 300 : 100),
+              width: objectType === 'vip_area' ? 800 : 400,
+              height: objectType === 'vip_area' ? 600 : 200,
               rotation: 0,
             })
           }
@@ -358,6 +440,9 @@ export function SeatingEditor({
                 {t('label')}
               </th>
               <th scope="col" className="py-1 pe-3 text-start font-normal">
+                {t('sectionCol')}
+              </th>
+              <th scope="col" className="py-1 pe-3 text-start font-normal">
                 {t('seatsCol')}
               </th>
               <th scope="col" className="py-1 pe-3 text-start font-normal">
@@ -369,8 +454,11 @@ export function SeatingEditor({
               <th scope="col" className="py-1 pe-3 text-start font-normal">
                 y (cm)
               </th>
-              <th scope="col" className="py-1 text-start font-normal">
+              <th scope="col" className="py-1 pe-3 text-start font-normal">
                 {t('rotation')}
+              </th>
+              <th scope="col" className="py-1 text-start font-normal">
+                {t('sizeCol')}
               </th>
             </tr>
           </thead>
@@ -415,6 +503,28 @@ export function SeatingEditor({
                     </span>
                   ) : null}
                 </td>
+                <td className="py-1 pe-3">
+                  {item.kind === 'object' ? (
+                    '—'
+                  ) : (
+                    <Select
+                      aria-label={t('sectionOf', { item: item.label })}
+                      value={item.sectionId ?? ''}
+                      onValueChange={(v) =>
+                        update(item.id, (i) => (i.kind === 'object' ? i : { ...i, sectionId: v || null }))
+                      }
+                      className="field field-sm"
+                      disabled={locked}
+                    >
+                      <option value="">{t('noSection')}</option>
+                      {doc.sections.map((x) => (
+                        <option key={x.id} value={x.id}>
+                          {x.vip ? t('vipSection', { section: x.label }) : x.label}
+                        </option>
+                      ))}
+                    </Select>
+                  )}
+                </td>
                 <td className="py-1 pe-3 tabular-nums">{item.kind === 'object' ? '—' : item.seats.length}</td>
                 <td className="py-1 pe-3">
                   {item.kind === 'object' ? (
@@ -451,7 +561,16 @@ export function SeatingEditor({
                 </td>
                 <td className="py-1 pe-3">{numberField(item, 'x', 'x')}</td>
                 <td className="py-1 pe-3">{numberField(item, 'y', 'y')}</td>
-                <td className="py-1">{numberField(item, 'rotation', t('rotation'))}</td>
+                <td className="py-1 pe-3">{numberField(item, 'rotation', t('rotation'))}</td>
+                <td className="py-1">
+                  {item.kind === 'object' ? (
+                    <span className="flex items-center gap-1">
+                      {sizeField(item, 'width')}×{sizeField(item, 'height')}
+                    </span>
+                  ) : (
+                    '—'
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>
@@ -463,6 +582,96 @@ export function SeatingEditor({
       {selectedItems.length ? (
         <p className="text-caption text-ink-2">{t('selectedCount', { count: selectedItems.length })}</p>
       ) : null}
+      <section
+        aria-labelledby="seating-sections"
+        className="flex flex-col gap-3 rounded-card border border-line p-4"
+      >
+        <h3 id="seating-sections" className="text-body font-bold">
+          {t('sections')}
+        </h3>
+        <p className="text-caption text-ink-2">{t('sectionsHint')}</p>
+        {doc.sections.length ? (
+          <ul className="m-0 flex list-none flex-col gap-2 p-0">
+            {doc.sections.map((x) => {
+              const count = doc.items.filter((i) => i.kind !== 'object' && i.sectionId === x.id).length;
+              return (
+                <li key={x.id} className="flex flex-wrap items-center gap-3" data-section={x.label}>
+                  <input
+                    key={`${x.id}:${x.label}`}
+                    defaultValue={x.label}
+                    maxLength={40}
+                    disabled={locked}
+                    aria-label={t('sectionName', { section: x.label })}
+                    className="field field-sm w-40"
+                    onBlur={(e) => {
+                      const v = e.currentTarget.value.trim();
+                      if (v && v !== x.label) updateSection(x.id, { label: v });
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') e.currentTarget.blur();
+                    }}
+                  />
+                  <label className="flex items-center gap-2 text-caption">
+                    <input
+                      type="checkbox"
+                      className="size-5"
+                      checked={x.vip}
+                      disabled={locked}
+                      onChange={(e) => updateSection(x.id, { vip: e.currentTarget.checked })}
+                    />
+                    {t('sectionVip')}
+                  </label>
+                  <span className="text-caption text-ink-2">{t('sectionItems', { count })}</span>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    disabled={locked}
+                    aria-label={t('removeSectionNamed', { section: x.label })}
+                    onClick={() => removeSection(x.id)}
+                  >
+                    {t('removeSection')}
+                  </Button>
+                </li>
+              );
+            })}
+          </ul>
+        ) : null}
+        <div className="flex flex-wrap items-end gap-2">
+          <label className="flex flex-col gap-1 text-caption text-ink-2">
+            {t('newSection')}
+            <input
+              value={sectionName}
+              maxLength={40}
+              disabled={locked}
+              onChange={(e) => setSectionName(e.currentTarget.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') addSection();
+              }}
+              className="field field-sm w-48"
+            />
+          </label>
+          <Button size="sm" variant="secondary" disabled={locked || !sectionName.trim()} onClick={addSection}>
+            {t('addSection')}
+          </Button>
+          {selectedItems.some((i) => i.kind !== 'object') && doc.sections.length ? (
+            <Select
+              aria-label={t('moveSelectedTo')}
+              value=""
+              onValueChange={(v) => sectionOfSelected(v === '-' ? null : v)}
+              className="field field-sm"
+              disabled={locked}
+            >
+              <option value="">{t('moveSelectedTo')}</option>
+              <option value="-">{t('noSection')}</option>
+              {doc.sections.map((x) => (
+                <option key={x.id} value={x.id}>
+                  {sectionLabel.get(x.id)}
+                </option>
+              ))}
+            </Select>
+          ) : null}
+        </div>
+      </section>
     </div>
   );
 }

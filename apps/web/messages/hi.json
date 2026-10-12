@@ -1533,8 +1533,8 @@
     "noAccessTitle": "इंपोर्ट करना आपकी भूमिका में शामिल नहीं है",
     "noAccessDescription": "किसी आयोजक से ऐसी भूमिका माँगें जो प्रतिभागियों को संपादित कर सके।",
     "step1": "1. फ़ाइल चुनें",
-    "fileHint": "हेडर पंक्ति वाली CSV फ़ाइल, जिसमें हर पंक्ति में एक मेहमान हो, अधिकतम 20,000 पंक्तियाँ और 5 MB। इसे Excel, Numbers या Google Sheets से CSV के रूप में एक्सपोर्ट करें।",
-    "file": "CSV फ़ाइल",
+    "fileHint": "हेडर पंक्ति वाली CSV या Excel (.xlsx) फ़ाइल, जिसमें हर पंक्ति में एक मेहमान हो, अधिकतम 20,000 पंक्तियाँ और 5 MB। टेम्पलेट से शुरू करें, या Excel, Numbers या Google Sheets से एक्सपोर्ट करें।",
+    "file": "CSV या Excel फ़ाइल",
     "upload": "अपलोड करें",
     "step2": "2. {file} के कॉलम मिलाएँ",
     "rows": "{count, plural, one {# पंक्ति} other {# पंक्तियाँ}}",
@@ -1574,7 +1574,8 @@
       "cell_too_long": "कोई सेल 1,000 अक्षरों से लंबा है।",
       "unterminated_quote": "फ़ाइल में एक उद्धरण चिह्न बंद नहीं है, इसलिए इसे CSV के रूप में नहीं पढ़ा जा सकता।"
     },
-    "backToEvent": "इवेंट के अवलोकन पर वापस जाएँ"
+    "backToEvent": "इवेंट के अवलोकन पर वापस जाएँ",
+    "template": "टेम्पलेट डाउनलोड करें (CSV)"
   },
   "distribution": {
     "title": "यह टिकट भेजें",
@@ -2187,12 +2188,36 @@
         "exit": "निकास",
         "dance_floor": "डांस फ़्लोर",
         "bar": "बार",
+        "vip_area": "VIP क्षेत्र",
         "custom": "अन्य"
       },
       "accessibleCol": "सुलभ सीटें",
       "accessibleOf": "{item} की सुलभ सीटें",
       "accessibleHint": "सुलभ सीटें: उनके नंबर लिखें, जैसे “1, 2”। प्लान पर उनके चारों ओर रेखा दिखती है, और सीटिंग नियम उन्हें रोक सकते हैं।",
-      "sponsoredBy": "प्रायोजक: {sponsor}"
+      "sponsoredBy": "प्रायोजक: {sponsor}",
+      "tableShape": "टेबल का आकार",
+      "shape": {
+        "round": "गोल",
+        "rect": "आयताकार"
+      },
+      "addSeat": "एक अकेली सीट जोड़ें",
+      "width": "चौड़ाई (cm)",
+      "height": "ऊँचाई (cm)",
+      "sizeCol": "आकार (cm)",
+      "sectionCol": "सेक्शन",
+      "sectionOf": "{item} का सेक्शन",
+      "noSection": "कोई सेक्शन नहीं",
+      "vipSection": "{section} (VIP)",
+      "sections": "सेक्शन",
+      "sectionsHint": "पंक्तियों और टेबलों को “परिवार” या “बालकनी” जैसे सेक्शन में समूहित करें। VIP सेक्शन सीट चुनने वाले विकल्पों और वेन्यू मैप पर अलग से दिखते हैं। फ़्लोर पर चिह्नित करने के लिए VIP क्षेत्र बनाएँ।",
+      "sectionName": "सेक्शन {section} का नाम",
+      "sectionVip": "VIP",
+      "sectionItems": "{count, plural, one {# पंक्ति या टेबल} other {# पंक्तियाँ और टेबल}}",
+      "removeSection": "हटाएँ",
+      "removeSectionNamed": "सेक्शन {section} हटाएँ",
+      "newSection": "नया सेक्शन",
+      "addSection": "सेक्शन जोड़ें",
+      "moveSelectedTo": "चयनित को सेक्शन में ले जाएँ…"
     },
     "prices": {
       "title": "कीमतें",
@@ -2959,6 +2984,7 @@
       "exit": "निकास",
       "dance_floor": "डांस फ़्लोर",
       "bar": "बार",
+      "vip_area": "VIP क्षेत्र",
       "custom": "अन्य"
     },
     "named": "{type}: {label}",
@@ -7400,7 +7426,11 @@
         "title": "बिके टिकट",
         "ofCapacity": "{capacity} में से",
         "noCapacity": "अभी कोई टिकट बिक्री पर नहीं",
-        "comps": "{count, plural, one {# मुफ़्त टिकट} other {# मुफ़्त टिकट}}"
+        "comps": "{count, plural, one {# मुफ़्त टिकट} other {# मुफ़्त टिकट}}",
+        "claimed": "{count, plural, one {# टिकट आगे दिया गया} other {# टिकट आगे दिए गए}}",
+        "waiting": "{count, plural, one {# आगे देने के इंतज़ार में} other {# आगे देने के इंतज़ार में}}",
+        "registrations": "{count, plural, one {# पंजीकरण पुष्ट} other {# पंजीकरण पुष्ट}}",
+        "inProgress": "{count, plural, one {# प्रगति में} other {# प्रगति में}}"
       },
       "checkins": {
         "title": "चेक-इन",
@@ -7647,7 +7677,11 @@
         "total": "{count, plural, one {# प्रायोजक} other {# प्रायोजक}}",
         "overdue": "{count, plural, one {# डिलिवरेबल विलंबित} other {# डिलिवरेबल विलंबित}}",
         "deliverablesPending": "प्रायोजक पैकेज चालू होने पर डिलिवरेबल यहाँ दिखेंगे।",
-        "open": "प्रायोजक खोलें"
+        "open": "प्रायोजक खोलें",
+        "packages": "{active, plural, one {# पैकेज सक्रिय} other {# पैकेज सक्रिय}} · {pending} प्रतीक्षा में",
+        "revenue": "प्रायोजन: {amount}",
+        "deliverables": "डिलिवरेबल: {total} में से {done} पूरे",
+        "sponsoredSessions": "{count, plural, one {# प्रायोजित सत्र} other {# प्रायोजित सत्र}}"
       },
       "rsvp": {
         "title": "RSVP",
@@ -9831,7 +9865,8 @@
       "not_validated": "आयात से पहले सूची जाँचें।",
       "nothing_to_import": "कोई समूह आयात नहीं हो सकता। अपनी सूची की पंक्तियाँ ठीक करके फिर आयात करें।",
       "expired": "इस आयात की समय-सीमा खत्म हो गई। अपनी सूची के साथ फिर से शुरू करें।"
-    }
+    },
+    "template": "टेम्पलेट डाउनलोड करें"
   },
   "subEvents": {
     "link": "कार्यक्रम और निमंत्रण",
@@ -13261,6 +13296,23 @@
     "cardTitle": "आज रात के दान के लिए कार्ड सहेजना है?",
     "cardBody": "मेहमान इसे अपने फ़ोन से स्कैन करते हैं। जब तक वे वहाँ सहमति न दें, कुछ भी सहेजा नहीं जाता।"
   },
+  "scanLookup": {
+    "view": "उपस्थित व्यक्ति खोजें",
+    "title": "टिकट धारक खोजें",
+    "searchLabel": "नाम, ईमेल या फ़ोन",
+    "searchHint": "ऑफ़लाइन भी काम करता है। नाम के कम से कम दो अक्षर, या पूरा ईमेल पता या फ़ोन नंबर लिखें।",
+    "results": "मिलते-जुलते टिकट धारक",
+    "noMatchTitle": "कोई टिकट धारक नहीं मिला",
+    "noMatchName": "वर्तनी जाँचें, या उनका ईमेल पता या फ़ोन नंबर आज़माएँ।",
+    "noMatchContact": "ईमेल पते और फ़ोन नंबर पूरी तरह मेल खाने चाहिए। इसके बजाय उनका नाम आज़माएँ।",
+    "checkIn": "चेक-इन करें",
+    "checkInNamed": "{name} का चेक-इन करें",
+    "checkedIn": "चेक-इन हो गया",
+    "void": "टिकट रद्द",
+    "search": "खोजें",
+    "consoleHint": "जब कोई कोड स्कैन न हो, तब इसका उपयोग करें। नाम का हर शब्द मेल खाना चाहिए; ईमेल पते और फ़ोन नंबर पूरे होने चाहिए।",
+    "searchAgain": "फिर से खोजें"
+  },
   "scanGuestKiosk": {
     "welcome": "{event} में आपका स्वागत है",
     "subtitle": "अपनी टेबल खोजें और चेक-इन करें",
@@ -15163,7 +15215,7 @@
     "scores": "स्कोर",
     "engagement": "सहभागिता स्कोर",
     "engagementValue": "{score} / 100",
-    "engagementHow": "{wAttended} × {attended} उपस्थित इवेंट + {wSessions} × {sessions} सत्र + {wCampaigns} × {campaigns} खोले गए अभियान = {points} अंक. 100 × {points} ÷ ({points} + {half}) = {score}.",
+    "engagementHow": "{scored, plural, one {# इवेंट} other {# इवेंट}} में {eventPoints} गतिविधि अंक (चेक-इन, पोल, प्रश्न, फ़ीडबैक और नामांकन, आपके भार के अनुसार) + {wAttended} × {attended} अन्य उपस्थित इवेंट + {wSessions} × {sessions} सत्र + {wCampaigns} × {campaigns} खोले गए अभियान = {points} अंक। 100 × {points} ÷ ({points} + {half}) = {score}.",
     "noShow": "न आने की संभावना",
     "noShowHow": "({noShows} अनुपस्थितियाँ + {priorNoShows}) ÷ ({past} पिछले पंजीकरण + {priorRegistrations}) = {pct}. आगामी इवेंट अभी नहीं गिने जाते।",
     "rfm": "RFM",
@@ -19016,5 +19068,11 @@
     "attendeeSignUpDescription": "खाता बनाने और अपने इवेंट व टिकट एक जगह रखने के लिए अपना ईमेल सत्यापित करें।",
     "organizationAccessRequired": "इस खाते के पास संगठन एक्सेस नहीं है। आयोजक खाते का उपयोग करें या अपने प्रतिभागी डैशबोर्ड पर जाएँ।",
     "useAnotherAccount": "दूसरा खाता इस्तेमाल करें"
+  },
+  "eventBranding": {
+    "title": "इस इवेंट का रंग",
+    "description": "इस इवेंट को उसके सार्वजनिक इवेंट पेज पर अपना एक्सेंट रंग दें। नीचे दिए अपने संगठन के ब्रांड रंग का उपयोग करने के लिए इसे खाली छोड़ दें।",
+    "color": "इवेंट का रंग",
+    "usesOrg": "यह इवेंट संगठन के ब्रांड रंग का उपयोग करता है।"
   }
 }

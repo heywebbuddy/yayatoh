@@ -1533,8 +1533,8 @@
     "noAccessTitle": "你的角色不包含导入权限",
     "noAccessDescription": "请让主办方为你分配可编辑参会者的角色。",
     "step1": "1. 选择文件",
-    "fileHint": "包含标题行、每行一位宾客的 CSV 文件，最多 20,000 行、5 MB。请从 Excel、Numbers 或 Google Sheets 导出为 CSV。",
-    "file": "CSV 文件",
+    "fileHint": "包含标题行、每行一位宾客的 CSV 或 Excel（.xlsx）文件，最多 20,000 行、5 MB。可从模板开始，或从 Excel、Numbers 或 Google Sheets 导出。",
+    "file": "CSV 或 Excel 文件",
     "upload": "上传",
     "step2": "2. 匹配 {file} 中的列",
     "rows": "{count, plural, other {# 行}}",
@@ -1574,7 +1574,8 @@
       "cell_too_long": "有单元格超过 1,000 个字符。",
       "unterminated_quote": "文件中有未闭合的引号，无法作为 CSV 读取。"
     },
-    "backToEvent": "返回活动概览"
+    "backToEvent": "返回活动概览",
+    "template": "下载模板（CSV）"
   },
   "distribution": {
     "title": "发送这张票",
@@ -2187,12 +2188,36 @@
         "exit": "出口",
         "dance_floor": "舞池",
         "bar": "吧台",
+        "vip_area": "VIP 区",
         "custom": "其他"
       },
       "accessibleCol": "无障碍座位",
       "accessibleOf": "{item} 的无障碍座位",
       "accessibleHint": "无障碍座位：输入座位号，例如“1, 2”。它们在座位图上带轮廓显示，座位规则可以为其保留。",
-      "sponsoredBy": "赞助商：{sponsor}"
+      "sponsoredBy": "赞助商：{sponsor}",
+      "tableShape": "桌子形状",
+      "shape": {
+        "round": "圆形",
+        "rect": "矩形"
+      },
+      "addSeat": "添加单个座位",
+      "width": "宽度（厘米）",
+      "height": "高度（厘米）",
+      "sizeCol": "尺寸（厘米）",
+      "sectionCol": "区域",
+      "sectionOf": "{item}所在区域",
+      "noSection": "无区域",
+      "vipSection": "{section}（VIP）",
+      "sections": "区域",
+      "sectionsHint": "将排和桌分组到“家人”或“楼座”等区域中。VIP 区域会在选座界面和场地地图上突出显示。绘制 VIP 区即可在平面图上标出该区域。",
+      "sectionName": "区域 {section} 的名称",
+      "sectionVip": "VIP",
+      "sectionItems": "{count, plural, other {# 个排或桌}}",
+      "removeSection": "移除",
+      "removeSectionNamed": "移除区域 {section}",
+      "newSection": "新区域",
+      "addSection": "添加区域",
+      "moveSelectedTo": "将所选项移至区域…"
     },
     "prices": {
       "title": "价格",
@@ -2959,6 +2984,7 @@
       "exit": "出口",
       "dance_floor": "舞池",
       "bar": "吧台",
+      "vip_area": "VIP 区",
       "custom": "其他"
     },
     "named": "{type}：{label}",
@@ -7400,7 +7426,11 @@
         "title": "已售门票",
         "ofCapacity": "共 {capacity}",
         "noCapacity": "尚无在售门票",
-        "comps": "{count, plural, other {# 张赠票}}"
+        "comps": "{count, plural, other {# 张赠票}}",
+        "claimed": "{count, plural, other {已转交 # 张门票}}",
+        "waiting": "{count, plural, other {# 张等待转交}}",
+        "registrations": "{count, plural, other {已确认 # 个报名}}",
+        "inProgress": "{count, plural, other {# 个进行中}}"
       },
       "checkins": {
         "title": "签到",
@@ -7647,7 +7677,11 @@
         "total": "{count, plural, other {# 家赞助商}}",
         "overdue": "{count, plural, other {# 项交付已逾期}}",
         "deliverablesPending": "开启赞助方案后，交付事项会显示在这里。",
-        "open": "打开赞助商"
+        "open": "打开赞助商",
+        "packages": "{active, plural, other {# 个方案生效中}} · {pending} 个待处理",
+        "revenue": "赞助金额：{amount}",
+        "deliverables": "交付：已完成 {done}/{total}",
+        "sponsoredSessions": "{count, plural, other {# 场赞助分会场}}"
       },
       "rsvp": {
         "title": "出席回复",
@@ -9831,7 +9865,8 @@
       "not_validated": "请在导入前检查名单。",
       "nothing_to_import": "没有可导入的组。请更正名单中的行后重新导入。",
       "expired": "此导入已过期。请用你的名单重新开始。"
-    }
+    },
+    "template": "下载模板"
   },
   "subEvents": {
     "link": "分场活动与邀请",
@@ -13261,6 +13296,23 @@
     "cardTitle": "要保存银行卡用于今晚的捐款吗？",
     "cardBody": "请宾客用自己的手机扫描。除非宾客在手机上同意，否则不会保存任何信息。"
   },
+  "scanLookup": {
+    "view": "查找参会者",
+    "title": "查找持票人",
+    "searchLabel": "姓名、邮箱或电话",
+    "searchHint": "离线可用。请输入姓名中至少两个字母，或完整的邮箱地址或电话号码。",
+    "results": "匹配的持票人",
+    "noMatchTitle": "未找到持票人",
+    "noMatchName": "请检查拼写，或尝试用其邮箱地址或电话号码查找。",
+    "noMatchContact": "邮箱地址和电话号码必须完全匹配。请改用姓名查找。",
+    "checkIn": "签到",
+    "checkInNamed": "为 {name} 签到",
+    "checkedIn": "已签到",
+    "void": "门票已取消",
+    "search": "搜索",
+    "consoleHint": "在二维码无法扫描时使用。姓名需每个词都匹配；邮箱地址和电话号码须完整输入。",
+    "searchAgain": "重新搜索"
+  },
   "scanGuestKiosk": {
     "welcome": "欢迎来到 {event}",
     "subtitle": "查找您的桌位并签到",
@@ -15163,7 +15215,7 @@
     "scores": "得分",
     "engagement": "参与度得分",
     "engagementValue": "{score} / 100",
-    "engagementHow": "{wAttended} × {attended} 出席活动 + {wSessions} × {sessions} 分会场 + {wCampaigns} × {campaigns} 打开的营销活动 = {points} 分. 100 × {points} ÷ ({points} + {half}) = {score}.",
+    "engagementHow": "在 {scored, plural, other {# 场活动}}中的 {eventPoints} 活动分（签到、投票、提问、反馈和报名，按你设置的权重计算）+ {wAttended} × {attended} 其他出席活动 + {wSessions} × {sessions} 分会场 + {wCampaigns} × {campaigns} 打开的营销活动 = {points} 分。 100 × {points} ÷ ({points} + {half}) = {score}.",
     "noShow": "缺席倾向",
     "noShowHow": "({noShows} 次缺席 + {priorNoShows}) ÷ ({past} 次过往报名 + {priorRegistrations}) = {pct}. 即将举行的活动暂不计入。",
     "rfm": "RFM",
@@ -19016,5 +19068,11 @@
     "attendeeSignUpDescription": "验证邮箱即可创建账户，集中管理你的活动和门票。",
     "organizationAccessRequired": "此账户没有组织访问权限。请使用主办方账户，或继续前往你的参会者控制台。",
     "useAnotherAccount": "使用其他账户"
+  },
+  "eventBranding": {
+    "title": "此活动的颜色",
+    "description": "为此活动在其公开活动页面上设置专属强调色。留空则使用下方你所在组织的品牌颜色。",
+    "color": "活动颜色",
+    "usesOrg": "此活动使用组织的品牌颜色。"
   }
 }

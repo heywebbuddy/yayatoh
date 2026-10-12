@@ -24,9 +24,12 @@ const OBJECT_STYLE: Record<ObjectType, { box: string; text: string }> = {
   dance_floor: { box: 'fill-primary-soft stroke-primary', text: 'fill-ink' },
   bar: { box: 'fill-primary-soft stroke-primary', text: 'fill-ink' },
   booth: { box: 'fill-surface-3 stroke-ink-3', text: 'fill-ink' },
+  vip_area: { box: 'fill-warning-soft stroke-warning', text: 'fill-ink' },
   custom: { box: 'fill-surface-3 stroke-ink-3', text: 'fill-ink' },
 };
 const ZOOMS = [1, 1.5, 2.25, 3.5, 5] as const;
+/** VIP areas are drawn first, under the tables and rows in them. */
+const isArea = (i: FloorplanDoc['items'][number]) => i.kind === 'object' && i.objectType === 'vip_area';
 const SEAT_R = 22;
 
 /**
@@ -197,86 +200,88 @@ export function VenueMap({
             className="fill-surface-solid stroke-ink-3"
             strokeWidth={4}
           />
-          {doc.items.map((item) => {
-            if (item.kind === 'object') {
-              const style = OBJECT_STYLE[item.objectType];
-              const name = objectName(item.objectType, item.label);
-              const size = Math.max(
-                24,
-                Math.min(90, item.height * 0.35, (item.width / Math.max(4, name.length)) * 1.6),
-              );
+          {[...doc.items]
+            .sort((a, b) => Number(!isArea(a)) - Number(!isArea(b)))
+            .map((item) => {
+              if (item.kind === 'object') {
+                const style = OBJECT_STYLE[item.objectType];
+                const name = objectName(item.objectType, item.label);
+                const size = Math.max(
+                  24,
+                  Math.min(90, item.height * 0.35, (item.width / Math.max(4, name.length)) * 1.6),
+                );
+                return (
+                  <g
+                    key={item.id}
+                    data-object={item.objectType}
+                    transform={`translate(${item.x} ${item.y}) rotate(${item.rotation})`}
+                  >
+                    <rect
+                      width={item.width}
+                      height={item.height}
+                      rx={16}
+                      className={style.box}
+                      strokeWidth={4}
+                    />
+                    <text
+                      x={item.width / 2}
+                      y={item.height / 2}
+                      textAnchor="middle"
+                      dominantBaseline="central"
+                      fontSize={size}
+                      className={style.text}
+                    >
+                      {name}
+                    </text>
+                  </g>
+                );
+              }
+              const label =
+                item.kind === 'table' ? t('table', { label: item.label }) : t('row', { label: item.label });
+              const yours = places.has(item.id);
+              const tableStyle = yours ? 'fill-primary-soft stroke-primary' : 'fill-surface-3 stroke-ink-3';
               return (
                 <g
                   key={item.id}
-                  data-object={item.objectType}
+                  data-item={item.kind}
+                  data-highlight-item={yours ? item.id : undefined}
                   transform={`translate(${item.x} ${item.y}) rotate(${item.rotation})`}
                 >
-                  <rect
-                    width={item.width}
-                    height={item.height}
-                    rx={16}
-                    className={style.box}
-                    strokeWidth={4}
-                  />
+                  {item.kind === 'table' && yours ? (
+                    // The guest's table: a ring that shows at any zoom.
+                    <circle
+                      r={Math.max(item.width, item.height) / 2 + SEAT_R * 3.2}
+                      className="fill-none stroke-primary"
+                      strokeWidth={10}
+                    />
+                  ) : null}
+                  {item.kind === 'table' ? (
+                    item.shape === 'round' ? (
+                      <circle r={item.width / 2} className={tableStyle} strokeWidth={yours ? 6 : 3} />
+                    ) : (
+                      <rect
+                        x={-item.width / 2}
+                        y={-item.height / 2}
+                        width={item.width}
+                        height={item.height}
+                        className={tableStyle}
+                        strokeWidth={yours ? 6 : 3}
+                      />
+                    )
+                  ) : null}
                   <text
-                    x={item.width / 2}
-                    y={item.height / 2}
-                    textAnchor="middle"
+                    x={item.kind === 'row' ? -SEAT_R - 16 : 0}
+                    y={0}
+                    textAnchor={item.kind === 'row' ? 'end' : 'middle'}
                     dominantBaseline="central"
-                    fontSize={size}
-                    className={style.text}
+                    fontSize={item.kind === 'row' ? 36 : 32}
+                    className="fill-ink"
                   >
-                    {name}
+                    {item.kind === 'row' ? item.label : label}
                   </text>
                 </g>
               );
-            }
-            const label =
-              item.kind === 'table' ? t('table', { label: item.label }) : t('row', { label: item.label });
-            const yours = places.has(item.id);
-            const tableStyle = yours ? 'fill-primary-soft stroke-primary' : 'fill-surface-3 stroke-ink-3';
-            return (
-              <g
-                key={item.id}
-                data-item={item.kind}
-                data-highlight-item={yours ? item.id : undefined}
-                transform={`translate(${item.x} ${item.y}) rotate(${item.rotation})`}
-              >
-                {item.kind === 'table' && yours ? (
-                  // The guest's table: a ring that shows at any zoom.
-                  <circle
-                    r={Math.max(item.width, item.height) / 2 + SEAT_R * 3.2}
-                    className="fill-none stroke-primary"
-                    strokeWidth={10}
-                  />
-                ) : null}
-                {item.kind === 'table' ? (
-                  item.shape === 'round' ? (
-                    <circle r={item.width / 2} className={tableStyle} strokeWidth={yours ? 6 : 3} />
-                  ) : (
-                    <rect
-                      x={-item.width / 2}
-                      y={-item.height / 2}
-                      width={item.width}
-                      height={item.height}
-                      className={tableStyle}
-                      strokeWidth={yours ? 6 : 3}
-                    />
-                  )
-                ) : null}
-                <text
-                  x={item.kind === 'row' ? -SEAT_R - 16 : 0}
-                  y={0}
-                  textAnchor={item.kind === 'row' ? 'end' : 'middle'}
-                  dominantBaseline="central"
-                  fontSize={item.kind === 'row' ? 36 : 32}
-                  className="fill-ink"
-                >
-                  {item.kind === 'row' ? item.label : label}
-                </text>
-              </g>
-            );
-          })}
+            })}
           {seats.map((s) =>
             mine.has(s.seatId) ? null : (
               <circle

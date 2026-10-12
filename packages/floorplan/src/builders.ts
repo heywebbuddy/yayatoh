@@ -72,6 +72,73 @@ export function buildRoundTable(opts: {
   };
 }
 
+/**
+ * A rectangular (banquet) table: seats along both long sides, and one at each end when there are
+ * enough, numbered clockwise from the top left. Width follows the seats on a side.
+ */
+export function buildRectTable(opts: {
+  label: string;
+  seats: number;
+  x: number;
+  y: number;
+  sectionId?: string | null;
+}): Extract<Item, { kind: 'table' }> {
+  const n = Math.max(1, opts.seats);
+  const ends = n >= 6 ? 2 : 0;
+  const top = Math.ceil((n - ends) / 2);
+  const bottom = n - ends - top;
+  const pitch = 70;
+  const width = Math.max(120, top * pitch);
+  const height = 90;
+  const gap = 35;
+  const pos: { x: number; y: number }[] = [];
+  const along = (count: number, i: number) => -width / 2 + (width / count) * (i + 0.5);
+  for (let i = 0; i < top; i++) pos.push({ x: along(top, i), y: -height / 2 - gap });
+  if (ends) pos.push({ x: width / 2 + gap, y: 0 });
+  for (let i = bottom - 1; i >= 0; i--) pos.push({ x: along(bottom, i), y: height / 2 + gap });
+  if (ends) pos.push({ x: -width / 2 - gap, y: 0 });
+  const seats: Seat[] = pos.map((p, i) => ({
+    id: uuidv7(),
+    label: String(i + 1),
+    x: Math.round(p.x),
+    y: Math.round(p.y),
+    accessible: false,
+  }));
+  return {
+    kind: 'table',
+    id: uuidv7(),
+    label: opts.label,
+    sectionId: opts.sectionId ?? null,
+    shape: 'rect',
+    x: opts.x,
+    y: opts.y,
+    width: Math.round(width),
+    height,
+    rotation: 0,
+    seats,
+  };
+}
+
+/**
+ * One seat on its own (agreement §9: individual seats), as a one-seat row so it sells, assigns
+ * and finds like any other seat. `label` names the seat ("12", "Host"); the row carries it too.
+ */
+export function buildSingleSeat(opts: {
+  label: string;
+  x: number;
+  y: number;
+  sectionId?: string | null;
+}): Extract<Item, { kind: 'row' }> {
+  const row = buildRow({
+    label: opts.label,
+    count: 1,
+    x: opts.x,
+    y: opts.y,
+    sectionId: opts.sectionId ?? null,
+  });
+  return { ...row, seats: row.seats.map((s) => ({ ...s, label: opts.label })) };
+}
+
 /** Row labels A, B, … Z, AA, AB, … */
 export function rowLabel(i: number): string {
   let n = i;

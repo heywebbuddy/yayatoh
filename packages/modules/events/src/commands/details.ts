@@ -53,6 +53,7 @@ async function detailsOf(tx: TenantTx, eventId: string) {
     categoryRef: c ? categoryRef(c) : e.category,
     categoryName: c?.name ?? null,
     categoryHidden: Boolean(c?.hiddenAt),
+    brandColor: e.brandColor,
   };
 }
 
@@ -120,6 +121,7 @@ export const setEventDetailsCommand = tenantCommand({
       set.orgCategoryId = c?.id ?? null;
     }
     if (input.attendanceMode !== undefined) set.attendanceMode = input.attendanceMode;
+    if (input.brandColor !== undefined) set.brandColor = input.brandColor?.toLowerCase() ?? null;
     if (Object.keys(set).length)
       await tx
         .update(events)

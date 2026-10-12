@@ -37,6 +37,15 @@ const HEADER_GUESSES: Record<ImportField, RegExp> = {
   labels: /^(labels?|tags?|groups?|table|étiquettes?|etiquetas?)$/i,
 };
 
+/** The downloadable starter sheet: the headers `guessMapping` recognises and two examples. */
+export const ATTENDEE_IMPORT_TEMPLATE = {
+  headers: ['Name', 'Email', 'Labels'],
+  rows: [
+    ['Ada Okafor', 'ada@example.com', 'VIP; Speaker'],
+    ['Sam Lee', 'sam@example.com', 'Press'],
+  ],
+} as const;
+
 /** Best-effort column mapping from header names; the organizer confirms or changes it. */
 export function guessMapping(headers: readonly string[]): Partial<Record<ImportField, number>> {
   const out: Partial<Record<ImportField, number>> = {};

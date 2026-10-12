@@ -213,7 +213,9 @@ export async function PublicEventView({
       : null;
   // The venue map and seat finder, once the organizer opened them (M1.7e).
   const venue = target ? await openVenueMap(target.orgId, target.eventId, chosen?.id ?? null) : null;
-  const brand = orgProfile?.brandColor ? brandPalette(orgProfile.brandColor) : null;
+  // Per-event branding (agreement §3): the event's own colour over the org's brand kit.
+  const accent = pub.brandColor ?? orgProfile?.brandColor ?? null;
+  const brand = accent ? brandPalette(accent) : null;
   const questions = target
     ? ((
         await publicForm(target.orgId, {
