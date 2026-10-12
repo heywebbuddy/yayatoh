@@ -40,10 +40,28 @@ export async function SiteHeader({ name, browse = true }: { name?: string; brows
             </Link>
             <nav aria-label={t('siteNav')} className="order-last w-full sm:order-none sm:w-auto">
               <ul className="m-0 flex list-none flex-wrap items-center gap-1 p-0 text-body">
-                {browse ? <li><Link href="/events" className={navLink}>{t('browse')}</Link></li> : null}
-                <li><Link href="/venues" className={navLink}>{tDirectory('title')}</Link></li>
-                <li><Link href="/series" className={navLink}>{tSeries('title')}</Link></li>
-                <li><Link href="/my-tickets" className={navLink}>{attendee('nav.tickets')}</Link></li>
+                {browse ? (
+                  <li>
+                    <Link href="/events" className={navLink}>
+                      {t('browse')}
+                    </Link>
+                  </li>
+                ) : null}
+                <li>
+                  <Link href="/venues" className={navLink}>
+                    {tDirectory('title')}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/series" className={navLink}>
+                    {tSeries('title')}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/my-tickets" className={navLink}>
+                    {attendee('nav.tickets')}
+                  </Link>
+                </li>
               </ul>
             </nav>
             <div className="flex flex-wrap items-center gap-2">

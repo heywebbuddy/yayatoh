@@ -965,7 +965,13 @@
     "fromTemplate": "Empezar con una plantilla",
     "guided": "Creación guiada (3 pasos)",
     "currency": "Moneda",
-    "currencyHint": "La usan las entradas, el pago y los informes. Puedes cambiarla hasta el primer pedido."
+    "currencyHint": "La usan las entradas, el pago y los informes. Puedes cambiarla hasta el primer pedido.",
+    "category": "Categoría (opcional)",
+    "categoryNone": "Aún sin categoría",
+    "categoryHint": "Te ayuda a organizar tus eventos y a que los asistentes los encuentren. Puedes cambiarla más adelante en los detalles del evento.",
+    "manageCategories": "Gestionar categorías (se abre en una pestaña nueva)",
+    "refreshCategories": "Actualizar lista de categorías",
+    "refreshingCategories": "Actualizando…"
   },
   "tickets": {
     "subtitle": "Tipos de entrada, precios e inventario. Todos los precios que ven los compradores incluyen las tarifas.",
@@ -1826,7 +1832,12 @@
         "other": "Ajuste · {event}"
       }
     },
-    "destinationHold": "Nueva cuenta de pagos: por tu seguridad, las transferencias a ella empiezan después del {until}. Avisamos por correo a los propietarios de tu organización."
+    "destinationHold": "Nueva cuenta de pagos: por tu seguridad, las transferencias a ella empiezan después del {until}. Avisamos por correo a los propietarios de tu organización.",
+    "disconnectFake": {
+      "hint": "Desconecta una cuenta de prueba ficticia sin usar para volver a configurar los pagos recibidos con otro proveedor. No es posible si la cuenta ya se ha usado en pedidos o liquidaciones.",
+      "label": "Desconectar cuenta de prueba",
+      "confirm": "¿Desconectar esta cuenta de pagos ficticia? Esta acción no se puede deshacer."
+    }
   },
   "fakeConnect": {
     "eyebrow": "Modo de prueba",
@@ -18925,5 +18936,85 @@
       "not_listed": "Solo se pueden promocionar eventos del marketplace.",
       "failed": "No se pudo iniciar la promoción. Inténtalo de nuevo."
     }
+  },
+  "attendeeDashboard": {
+    "dashboardLink": "Panel",
+    "signInLink": "Iniciar sesión",
+    "signUpLink": "Registrarse",
+    "title": "Mi panel",
+    "navigation": "Navegación del asistente",
+    "welcome": "Te damos la bienvenida a Yayatoh",
+    "browse": "Explorar eventos",
+    "nav": {
+      "overview": "Resumen",
+      "events": "Mis eventos",
+      "tickets": "Entradas y pedidos",
+      "schedule": "Mi programa",
+      "profile": "Perfil",
+      "notifications": "Notificaciones",
+      "settings": "Ajustes de la cuenta"
+    },
+    "descriptions": {
+      "overview": "Tus reservas, próximos eventos y tu cuenta, todo en un mismo lugar.",
+      "events": "Eventos que has reservado o en los que te has inscrito.",
+      "tickets": "Abre un pedido para ver los códigos QR, descargar las entradas y gestionar las opciones de reembolso o transferencia disponibles.",
+      "schedule": "Tus reservas de sesiones y programas personales de los eventos que los admiten.",
+      "profile": "Gestiona el nombre y la foto de tu cuenta.",
+      "notifications": "Elige qué recibes de cada organizador.",
+      "settings": "Gestiona el inicio de sesión, la seguridad y tus datos personales."
+    },
+    "signInTitle": "Tus eventos empiezan aquí",
+    "signInHint": "Inicia sesión en tu cuenta para ver las compras hechas con su correo verificado. También puedes verificar abajo el correo de tus entradas para ver sus reservas.",
+    "accountSignIn": "Iniciar sesión en mi cuenta",
+    "createAccount": "Continuar con un código por correo",
+    "guestSignIn": "Ver entradas con un código por correo",
+    "verifyEmail": "Verifica el correo de tu cuenta antes de acceder a sus reservas. Puedes iniciar sesión con un código de un solo uso enviado por correo.",
+    "accountRequired": "Inicia sesión para gestionar tu cuenta",
+    "accountRequiredHint": "La verificación del correo de las entradas da acceso a las reservas. Inicia sesión en tu cuenta con el mismo correo para gestionar tu perfil y la seguridad.",
+    "ticketCount": "{count, plural, one {# entrada reservada} other {# entradas reservadas}}",
+    "openOrder": "Ver entradas y gestionar pedido",
+    "openSchedule": "Abrir mi programa",
+    "emptyTitle": "No hay reservas que mostrar",
+    "emptyHint": "Cuando reserves un evento con este correo, aparecerá aquí.",
+    "signedInAs": "Reservas de {email}",
+    "upcomingEvents": "Próximos eventos",
+    "orders": "Pedidos",
+    "eventsAttended": "Eventos reservados anteriores",
+    "nextEvents": "A continuación",
+    "upcoming": "Próximos y en curso",
+    "past": "Eventos pasados",
+    "noneInPeriod": "No hay eventos en este periodo.",
+    "signOut": "Cerrar sesión",
+    "noSchedule": "Aún no hay programas de sesiones",
+    "noScheduleHint": "Los programas aparecen cuando una reserva incluye sesiones. Los eventos con entrada normales no necesitan un programa de sesiones.",
+    "preferencesHint": "Gestiona los recordatorios por correo, las novedades del evento, las ofertas y las preferencias de SMS disponibles para este organizador.",
+    "managePreferences": "Gestionar preferencias de notificaciones",
+    "noPreferences": "Este organizador aún no tiene preferencias de contacto disponibles.",
+    "organizationPrivacy": "Solicitar mis datos de la organización",
+    "noOrganizations": "Aún no hay organizadores",
+    "preferencesEmpty": "Las preferencias de los organizadores estarán disponibles cuando hagas una reserva.",
+    "profile": {
+      "name": "Nombre completo",
+      "nameError": "Introduce un nombre de 1 a 120 caracteres.",
+      "email": "Correo verificado",
+      "emailHint": "Las reservas se asocian a este correo verificado. Cambiar el nombre de tu cuenta no modifica los datos de los titulares de entradas existentes.",
+      "photo": "Foto de perfil",
+      "photoHint": "JPEG, PNG o WebP, hasta 512 KB. Tu foto se recorta en un avatar cuadrado.",
+      "photoError": "Elige una imagen JPEG, PNG o WebP válida de menos de 512 KB.",
+      "removePhoto": "Quitar la foto actual",
+      "save": "Guardar perfil",
+      "saving": "Guardando…",
+      "saved": "Perfil guardado.",
+      "error": "No pudimos guardar tu perfil. Revisa los campos e inténtalo de nuevo."
+    },
+    "backToDashboard": "Volver a mi panel",
+    "organizerSignInTitle": "Inicio de sesión de organizaciones",
+    "organizerSignInDescription": "Inicia sesión con una cuenta con acceso a la organización para gestionar tus eventos y tu equipo.",
+    "attendeeSignInTitle": "Inicio de sesión de asistentes",
+    "attendeeSignInDescription": "Inicia sesión para ver tus entradas, reservas y perfil.",
+    "attendeeSignUpTitle": "Registrarse",
+    "attendeeSignUpDescription": "Verifica tu correo para crear una cuenta y tener tus eventos y entradas en un mismo lugar.",
+    "organizationAccessRequired": "Esta cuenta no tiene acceso a ninguna organización. Usa una cuenta de organizador o continúa a tu panel de asistente.",
+    "useAnotherAccount": "Usar otra cuenta"
   }
 }

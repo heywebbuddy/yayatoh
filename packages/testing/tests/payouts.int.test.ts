@@ -169,12 +169,7 @@ describe('payout accounts (M1.3c)', () => {
       fundsFlow: 'platform_mor',
     });
     await expect(
-      executeCommand(
-        disconnectFakePayoutAccountCommand,
-        {},
-        userCtx(b.viewerId, b.org.id),
-        ports,
-      ),
+      executeCommand(disconnectFakePayoutAccountCommand, {}, userCtx(b.viewerId, b.org.id), ports),
     ).rejects.toMatchObject({ code: 'forbidden' });
   });
 });

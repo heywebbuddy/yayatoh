@@ -222,14 +222,11 @@ export default async function PayoutsPage({
         ) : null}
         {canManage && account.provider === 'fake' ? (
           <div className="flex flex-col items-start gap-2 border-t border-line pt-4">
-            <p className="text-caption text-ink-2">
-              Disconnect an unused fake test account to start payout setup again with another provider.
-              This is blocked if the account has been used by orders or settlements.
-            </p>
+            <p className="text-caption text-ink-2">{t('disconnectFake.hint')}</p>
             <DisconnectFakePayoutForm
               action={disconnectFakePayoutAccount.bind(null, org, locale)}
-              label="Disconnect test account"
-              confirmMessage="Disconnect this fake payout account? This cannot be undone."
+              label={t('disconnectFake.label')}
+              confirmMessage={t('disconnectFake.confirm')}
             />
           </div>
         ) : null}

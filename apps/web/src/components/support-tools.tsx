@@ -500,7 +500,10 @@ export function TransferRulesForm({
         {t('allowed')}
       </label>
       <div className="grid min-w-0 grid-rows-[1.25rem_auto_auto] gap-1.5">
-        <label htmlFor={`${idPrefix}-cutoff`} className="flex min-h-5 items-end text-[13px] font-bold text-ink">
+        <label
+          htmlFor={`${idPrefix}-cutoff`}
+          className="flex min-h-5 items-end text-[13px] font-bold text-ink"
+        >
           {t('cutoff')}
         </label>
         <input

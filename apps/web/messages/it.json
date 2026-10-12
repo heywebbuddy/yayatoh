@@ -965,7 +965,13 @@
     "fromTemplate": "Parti da un modello",
     "guided": "Creazione guidata (3 passaggi)",
     "currency": "Valuta",
-    "currencyHint": "La usano biglietti, pagamento e report. Puoi cambiarla fino al primo ordine."
+    "currencyHint": "La usano biglietti, pagamento e report. Puoi cambiarla fino al primo ordine.",
+    "category": "Categoria (facoltativa)",
+    "categoryNone": "Ancora nessuna categoria",
+    "categoryHint": "Ti aiuta a organizzare gli eventi e aiuta i partecipanti a trovarli. Puoi cambiarla in seguito nei dettagli dell’evento.",
+    "manageCategories": "Gestisci categorie (si apre in una nuova scheda)",
+    "refreshCategories": "Aggiorna elenco categorie",
+    "refreshingCategories": "Aggiornamento…"
   },
   "tickets": {
     "subtitle": "Tipi di biglietto, prezzi e disponibilità. Ogni prezzo mostrato agli acquirenti include le commissioni.",
@@ -1826,7 +1832,12 @@
         "other": "Rettifica · {event}"
       }
     },
-    "destinationHold": "Nuovo conto per i pagamenti: per la tua sicurezza, i trasferimenti verso questo conto iniziano dopo il {until}. Abbiamo avvisato via email i proprietari della tua organizzazione."
+    "destinationHold": "Nuovo conto per i pagamenti: per la tua sicurezza, i trasferimenti verso questo conto iniziano dopo il {until}. Abbiamo avvisato via email i proprietari della tua organizzazione.",
+    "disconnectFake": {
+      "hint": "Scollega un account di prova fittizio inutilizzato per ricominciare la configurazione degli accrediti con un altro fornitore. Non è possibile se l’account è già stato usato per ordini o regolamenti.",
+      "label": "Scollega account di prova",
+      "confirm": "Scollegare questo account di accredito fittizio? L’operazione non può essere annullata."
+    }
   },
   "fakeConnect": {
     "eyebrow": "Modalità di prova",
@@ -18925,5 +18936,85 @@
       "not_listed": "Solo gli eventi sul marketplace possono essere promossi.",
       "failed": "Impossibile avviare la promozione. Riprova."
     }
+  },
+  "attendeeDashboard": {
+    "dashboardLink": "Dashboard",
+    "signInLink": "Accedi",
+    "signUpLink": "Registrati",
+    "title": "La mia dashboard",
+    "navigation": "Navigazione partecipante",
+    "welcome": "Benvenuto su Yayatoh",
+    "browse": "Scopri eventi",
+    "nav": {
+      "overview": "Panoramica",
+      "events": "I miei eventi",
+      "tickets": "Biglietti e ordini",
+      "schedule": "Il mio programma",
+      "profile": "Profilo",
+      "notifications": "Notifiche",
+      "settings": "Impostazioni account"
+    },
+    "descriptions": {
+      "overview": "Le tue prenotazioni, i prossimi eventi e il tuo account, tutto insieme.",
+      "events": "Eventi che hai prenotato o a cui ti sei registrato.",
+      "tickets": "Apri un ordine per vedere i codici QR, scaricare i biglietti e gestire le opzioni di rimborso o trasferimento disponibili.",
+      "schedule": "Le tue prenotazioni delle sessioni e i programmi personali per gli eventi che li supportano.",
+      "profile": "Gestisci il nome e la foto del tuo account.",
+      "notifications": "Scegli cosa ricevere da ciascun organizzatore.",
+      "settings": "Gestisci accesso, sicurezza e dati personali."
+    },
+    "signInTitle": "I tuoi eventi iniziano qui",
+    "signInHint": "Accedi al tuo account per vedere gli acquisti effettuati con la sua email verificata. Puoi anche verificare qui sotto l’email di un biglietto per vederne le prenotazioni.",
+    "accountSignIn": "Accedi al mio account",
+    "createAccount": "Continua con un codice via email",
+    "guestSignIn": "Vedi i biglietti con un codice via email",
+    "verifyEmail": "Verifica l’email del tuo account prima di accedere alle sue prenotazioni. Puoi usare l’accesso con codice monouso via email.",
+    "accountRequired": "Accedi per gestire il tuo account",
+    "accountRequiredHint": "La verifica dell’email dei biglietti dà accesso alle prenotazioni. Accedi al tuo account con la stessa email per gestire profilo e sicurezza.",
+    "ticketCount": "{count, plural, one {# biglietto prenotato} other {# biglietti prenotati}}",
+    "openOrder": "Vedi biglietti e gestisci ordine",
+    "openSchedule": "Apri il mio programma",
+    "emptyTitle": "Nessuna prenotazione da mostrare",
+    "emptyHint": "Quando prenoterai un evento con questa email, comparirà qui.",
+    "signedInAs": "Prenotazioni di {email}",
+    "upcomingEvents": "Prossimi eventi",
+    "orders": "Ordini",
+    "eventsAttended": "Eventi prenotati passati",
+    "nextEvents": "In arrivo",
+    "upcoming": "In arrivo e in corso",
+    "past": "Eventi passati",
+    "noneInPeriod": "Nessun evento in questo periodo.",
+    "signOut": "Esci",
+    "noSchedule": "Ancora nessun programma delle sessioni",
+    "noScheduleHint": "I programmi compaiono quando una prenotazione include sessioni. I normali eventi con biglietto non richiedono un programma delle sessioni.",
+    "preferencesHint": "Gestisci promemoria via email, aggiornamenti sull’evento, offerte e preferenze SMS disponibili per questo organizzatore.",
+    "managePreferences": "Gestisci preferenze di notifica",
+    "noPreferences": "Per questo organizzatore non sono ancora disponibili preferenze di contatto.",
+    "organizationPrivacy": "Richiedi i miei dati all’organizzazione",
+    "noOrganizations": "Ancora nessun organizzatore",
+    "preferencesEmpty": "Le preferenze degli organizzatori saranno disponibili dopo la tua prima prenotazione.",
+    "profile": {
+      "name": "Nome completo",
+      "nameError": "Inserisci un nome da 1 a 120 caratteri.",
+      "email": "Email verificata",
+      "emailHint": "Le prenotazioni sono associate a questa email verificata. Cambiare il nome dell’account non modifica i dati dei titolari dei biglietti esistenti.",
+      "photo": "Foto del profilo",
+      "photoHint": "JPEG, PNG o WebP, fino a 512 KB. La foto viene ritagliata come avatar quadrato.",
+      "photoError": "Scegli un’immagine JPEG, PNG o WebP valida inferiore a 512 KB.",
+      "removePhoto": "Rimuovi la foto attuale",
+      "save": "Salva profilo",
+      "saving": "Salvataggio…",
+      "saved": "Profilo salvato.",
+      "error": "Impossibile salvare il profilo. Controlla i campi e riprova."
+    },
+    "backToDashboard": "Torna alla mia dashboard",
+    "organizerSignInTitle": "Accesso organizzazione",
+    "organizerSignInDescription": "Accedi con un account che ha accesso all’organizzazione per gestire i tuoi eventi e il tuo team.",
+    "attendeeSignInTitle": "Accesso partecipante",
+    "attendeeSignInDescription": "Accedi per vedere biglietti, prenotazioni e profilo.",
+    "attendeeSignUpTitle": "Registrati",
+    "attendeeSignUpDescription": "Verifica la tua email per creare un account e tenere insieme eventi e biglietti.",
+    "organizationAccessRequired": "Questo account non ha accesso a un’organizzazione. Usa un account organizzatore o continua alla tua dashboard partecipante.",
+    "useAnotherAccount": "Usa un altro account"
   }
 }

@@ -253,6 +253,10 @@ describe('Better Stack mapping (M3.11b)', () => {
   });
 
   it('the adapter sends the token, reads updates and caches for the TTL', async () => {
+    // The adapter reads the wall clock; pin it to the fixtures' NOW so the recent-incident window
+    // does not drift as real time passes.
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(NOW);
     const fetchMock = vi.fn(async (url: string | URL | Request, init?: RequestInit) => {
       expect((init?.headers as Record<string, string> | undefined)?.authorization).toBe('Bearer tok');
       const u = String(url);
@@ -279,6 +283,7 @@ describe('Better Stack mapping (M3.11b)', () => {
     const calls = fetchMock.mock.calls.length;
     await port.snapshot();
     expect(fetchMock.mock.calls.length).toBe(calls);
+    vi.useRealTimers();
   });
 
   it('the adapter fails loudly on HTTP errors (the web shows "status unavailable")', async () => {

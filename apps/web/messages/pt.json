@@ -965,7 +965,13 @@
     "fromTemplate": "Começar com um modelo",
     "guided": "Criação guiada (3 etapas)",
     "currency": "Moeda",
-    "currencyHint": "Usada nos ingressos, no pagamento e nos relatórios. Pode ser alterada até o primeiro pedido."
+    "currencyHint": "Usada nos ingressos, no pagamento e nos relatórios. Pode ser alterada até o primeiro pedido.",
+    "category": "Categoria (opcional)",
+    "categoryNone": "Nenhuma categoria ainda",
+    "categoryHint": "Ajuda você a organizar eventos e ajuda os participantes a encontrá-los. Você pode alterar isso depois em Detalhes do evento.",
+    "manageCategories": "Gerenciar categorias (abre em uma nova aba)",
+    "refreshCategories": "Atualizar lista de categorias",
+    "refreshingCategories": "Atualizando…"
   },
   "tickets": {
     "subtitle": "Tipos de ingresso, preços e estoque. Todo preço exibido aos compradores já inclui as taxas.",
@@ -1826,7 +1832,12 @@
         "other": "Ajuste · {event}"
       }
     },
-    "destinationHold": "Nova conta de repasse: para sua segurança, as transferências para ela começam depois de {until}. Os proprietários da sua organização foram avisados por e-mail."
+    "destinationHold": "Nova conta de repasse: para sua segurança, as transferências para ela começam depois de {until}. Os proprietários da sua organização foram avisados por e-mail.",
+    "disconnectFake": {
+      "hint": "Desconecte uma conta de teste fictícia não utilizada para recomeçar a configuração de repasses com outro provedor. Isso não é possível se a conta já tiver sido usada em pedidos ou liquidações.",
+      "label": "Desconectar conta de teste",
+      "confirm": "Desconectar esta conta de repasses fictícia? Esta ação não pode ser desfeita."
+    }
   },
   "fakeConnect": {
     "eyebrow": "Modo de teste",
@@ -18925,5 +18936,85 @@
       "not_listed": "Só os eventos do marketplace podem ser promovidos.",
       "failed": "Não foi possível iniciar a promoção. Tente novamente."
     }
+  },
+  "attendeeDashboard": {
+    "dashboardLink": "Painel",
+    "signInLink": "Entrar",
+    "signUpLink": "Criar conta",
+    "title": "Meu painel",
+    "navigation": "Navegação do participante",
+    "welcome": "Boas-vindas ao Yayatoh",
+    "browse": "Explorar eventos",
+    "nav": {
+      "overview": "Visão geral",
+      "events": "Meus eventos",
+      "tickets": "Ingressos e pedidos",
+      "schedule": "Minha agenda",
+      "profile": "Perfil",
+      "notifications": "Notificações",
+      "settings": "Configurações da conta"
+    },
+    "descriptions": {
+      "overview": "Suas reservas, próximos eventos e sua conta, tudo em um só lugar.",
+      "events": "Eventos que você reservou ou nos quais se inscreveu.",
+      "tickets": "Abra um pedido para ver os QR codes, baixar ingressos e gerenciar as opções de reembolso ou transferência disponíveis.",
+      "schedule": "Suas reservas de sessões e agendas pessoais dos eventos que oferecem esse recurso.",
+      "profile": "Gerencie o nome e a foto da sua conta.",
+      "notifications": "Escolha o que você recebe de cada organizador.",
+      "settings": "Gerencie o acesso, a segurança e seus dados pessoais."
+    },
+    "signInTitle": "Seus eventos começam aqui",
+    "signInHint": "Entre na sua conta para ver as compras feitas com o e-mail verificado dela. Você também pode verificar o e-mail de um ingresso abaixo para ver as reservas dele.",
+    "accountSignIn": "Entrar na minha conta",
+    "createAccount": "Continuar com código por e-mail",
+    "guestSignIn": "Ver ingressos com um código por e-mail",
+    "verifyEmail": "Verifique o e-mail da sua conta antes de acessar as reservas. Você pode entrar com um código de uso único enviado por e-mail.",
+    "accountRequired": "Entre para gerenciar sua conta",
+    "accountRequiredHint": "A verificação do e-mail do ingresso dá acesso às reservas. Entre na sua conta com o mesmo e-mail para gerenciar seu perfil e a segurança.",
+    "ticketCount": "{count, plural, one {# ingresso reservado} other {# ingressos reservados}}",
+    "openOrder": "Ver ingressos e gerenciar pedido",
+    "openSchedule": "Abrir minha agenda",
+    "emptyTitle": "Nenhuma reserva para mostrar",
+    "emptyHint": "Quando você reservar um evento com este e-mail, ele aparecerá aqui.",
+    "signedInAs": "Reservas de {email}",
+    "upcomingEvents": "Próximos eventos",
+    "orders": "Pedidos",
+    "eventsAttended": "Eventos reservados anteriores",
+    "nextEvents": "A seguir",
+    "upcoming": "Próximos e em andamento",
+    "past": "Eventos passados",
+    "noneInPeriod": "Nenhum evento neste período.",
+    "signOut": "Sair",
+    "noSchedule": "Nenhuma agenda de sessões ainda",
+    "noScheduleHint": "As agendas aparecem quando uma reserva inclui sessões. Eventos comuns com ingresso não exigem agenda de sessões.",
+    "preferencesHint": "Gerencie lembretes por e-mail, novidades do evento, ofertas e as preferências de SMS disponíveis para este organizador.",
+    "managePreferences": "Gerenciar preferências de notificação",
+    "noPreferences": "Ainda não há preferências de contato disponíveis para este organizador.",
+    "organizationPrivacy": "Solicitar meus dados da organização",
+    "noOrganizations": "Nenhum organizador ainda",
+    "preferencesEmpty": "As preferências por organizador ficam disponíveis depois que você faz uma reserva.",
+    "profile": {
+      "name": "Nome completo",
+      "nameError": "Informe um nome com 1 a 120 caracteres.",
+      "email": "E-mail verificado",
+      "emailHint": "As reservas são associadas a este e-mail verificado. Alterar o nome da conta não altera os dados dos titulares de ingressos já existentes.",
+      "photo": "Foto do perfil",
+      "photoHint": "JPEG, PNG ou WebP, até 512 KB. Sua foto é redimensionada para um avatar quadrado.",
+      "photoError": "Escolha uma imagem JPEG, PNG ou WebP válida com menos de 512 KB.",
+      "removePhoto": "Remover foto atual",
+      "save": "Salvar perfil",
+      "saving": "Salvando…",
+      "saved": "Perfil salvo.",
+      "error": "Não foi possível salvar seu perfil. Confira os campos e tente novamente."
+    },
+    "backToDashboard": "Voltar ao meu painel",
+    "organizerSignInTitle": "Entrar como organização",
+    "organizerSignInDescription": "Entre com uma conta que tenha acesso à organização para gerenciar seus eventos e sua equipe.",
+    "attendeeSignInTitle": "Entrar como participante",
+    "attendeeSignInDescription": "Entre para ver seus ingressos, reservas e perfil.",
+    "attendeeSignUpTitle": "Criar conta",
+    "attendeeSignUpDescription": "Verifique seu e-mail para criar uma conta e manter seus eventos e ingressos juntos.",
+    "organizationAccessRequired": "Esta conta não tem acesso a uma organização. Use uma conta de organizador ou continue para o seu painel de participante.",
+    "useAnotherAccount": "Usar outra conta"
   }
 }

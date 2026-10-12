@@ -965,7 +965,13 @@
     "fromTemplate": "Partir d’un modèle",
     "guided": "Création guidée (3 étapes)",
     "currency": "Devise",
-    "currencyHint": "Les billets, le paiement et les rapports l'utilisent. Modifiable jusqu'à la première commande."
+    "currencyHint": "Les billets, le paiement et les rapports l'utilisent. Modifiable jusqu'à la première commande.",
+    "category": "Catégorie (facultatif)",
+    "categoryNone": "Pas encore de catégorie",
+    "categoryHint": "Vous aide à organiser vos événements et aide les participants à les trouver. Vous pourrez la modifier plus tard dans les détails de l’événement.",
+    "manageCategories": "Gérer les catégories (s’ouvre dans un nouvel onglet)",
+    "refreshCategories": "Actualiser la liste des catégories",
+    "refreshingCategories": "Actualisation…"
   },
   "tickets": {
     "subtitle": "Types de billets, prix et stock. Tous les prix affichés aux acheteurs incluent les frais.",
@@ -1826,7 +1832,12 @@
         "other": "Ajustement · {event}"
       }
     },
-    "destinationHold": "Nouveau compte de versement : pour votre sécurité, les virements vers ce compte commencent après le {until}. Les propriétaires de votre organisation ont été prévenus par e-mail."
+    "destinationHold": "Nouveau compte de versement : pour votre sécurité, les virements vers ce compte commencent après le {until}. Les propriétaires de votre organisation ont été prévenus par e-mail.",
+    "disconnectFake": {
+      "hint": "Déconnectez un compte de test fictif inutilisé pour reprendre la configuration des versements avec un autre prestataire. Impossible si le compte a déjà servi pour des commandes ou des règlements.",
+      "label": "Déconnecter le compte de test",
+      "confirm": "Déconnecter ce compte de versement fictif ? Cette action est irréversible."
+    }
   },
   "fakeConnect": {
     "eyebrow": "Mode test",
@@ -18925,5 +18936,85 @@
       "not_listed": "Seuls les événements de la place de marché peuvent être mis en avant.",
       "failed": "La mise en avant n'a pas pu être lancée. Réessayez."
     }
+  },
+  "attendeeDashboard": {
+    "dashboardLink": "Tableau de bord",
+    "signInLink": "Se connecter",
+    "signUpLink": "S’inscrire",
+    "title": "Mon tableau de bord",
+    "navigation": "Navigation participant",
+    "welcome": "Bienvenue sur Yayatoh",
+    "browse": "Découvrir des événements",
+    "nav": {
+      "overview": "Vue d’ensemble",
+      "events": "Mes événements",
+      "tickets": "Billets et commandes",
+      "schedule": "Mon programme",
+      "profile": "Profil",
+      "notifications": "Notifications",
+      "settings": "Paramètres du compte"
+    },
+    "descriptions": {
+      "overview": "Vos réservations, vos prochains événements et votre compte, réunis.",
+      "events": "Les événements que vous avez réservés ou auxquels vous êtes inscrit.",
+      "tickets": "Ouvrez une commande pour voir les QR codes, télécharger les billets et gérer les options de remboursement ou de transfert disponibles.",
+      "schedule": "Vos réservations de sessions et programmes personnels pour les événements qui les proposent.",
+      "profile": "Gérez le nom et la photo de votre compte.",
+      "notifications": "Choisissez ce que vous recevez de chaque organisateur.",
+      "settings": "Gérez la connexion, la sécurité et vos données personnelles."
+    },
+    "signInTitle": "Vos événements commencent ici",
+    "signInHint": "Connectez-vous à votre compte pour voir les achats effectués avec son e-mail vérifié. Vous pouvez aussi vérifier ci-dessous l’e-mail d’un billet pour voir ses réservations.",
+    "accountSignIn": "Me connecter à mon compte",
+    "createAccount": "Continuer avec un code par e-mail",
+    "guestSignIn": "Voir mes billets avec un code par e-mail",
+    "verifyEmail": "Vérifiez l’e-mail de votre compte avant d’accéder à ses réservations. Vous pouvez utiliser la connexion par code à usage unique envoyé par e-mail.",
+    "accountRequired": "Connectez-vous pour gérer votre compte",
+    "accountRequiredHint": "La vérification de l’e-mail des billets donne accès aux réservations. Connectez-vous à votre compte avec le même e-mail pour gérer votre profil et la sécurité.",
+    "ticketCount": "{count, plural, one {# billet réservé} other {# billets réservés}}",
+    "openOrder": "Voir les billets et gérer la commande",
+    "openSchedule": "Ouvrir mon programme",
+    "emptyTitle": "Aucune réservation à afficher",
+    "emptyHint": "Dès que vous réservez un événement avec cet e-mail, il apparaîtra ici.",
+    "signedInAs": "Réservations de {email}",
+    "upcomingEvents": "Événements à venir",
+    "orders": "Commandes",
+    "eventsAttended": "Événements réservés passés",
+    "nextEvents": "Prochainement",
+    "upcoming": "À venir et en cours",
+    "past": "Événements passés",
+    "noneInPeriod": "Aucun événement sur cette période.",
+    "signOut": "Se déconnecter",
+    "noSchedule": "Pas encore de programme de sessions",
+    "noScheduleHint": "Les programmes apparaissent lorsqu’une réservation comprend des sessions. Les événements avec billet classiques n’ont pas besoin de programme de sessions.",
+    "preferencesHint": "Gérez les rappels par e-mail, les actualités de l’événement, les offres et les préférences SMS disponibles pour cet organisateur.",
+    "managePreferences": "Gérer les préférences de notification",
+    "noPreferences": "Aucune préférence de contact n’est encore disponible pour cet organisateur.",
+    "organizationPrivacy": "Demander mes données auprès de l’organisation",
+    "noOrganizations": "Aucun organisateur pour l’instant",
+    "preferencesEmpty": "Les préférences des organisateurs sont disponibles après votre première réservation.",
+    "profile": {
+      "name": "Nom complet",
+      "nameError": "Saisissez un nom de 1 à 120 caractères.",
+      "email": "E-mail vérifié",
+      "emailHint": "Les réservations sont associées à cet e-mail vérifié. Modifier le nom de votre compte ne modifie pas les informations des titulaires de billets existants.",
+      "photo": "Photo de profil",
+      "photoHint": "JPEG, PNG ou WebP, jusqu’à 512 Ko. Votre photo est recadrée en avatar carré.",
+      "photoError": "Choisissez une image JPEG, PNG ou WebP valide de moins de 512 Ko.",
+      "removePhoto": "Supprimer la photo actuelle",
+      "save": "Enregistrer le profil",
+      "saving": "Enregistrement…",
+      "saved": "Profil enregistré.",
+      "error": "Impossible d’enregistrer votre profil. Vérifiez les champs et réessayez."
+    },
+    "backToDashboard": "Retour à mon tableau de bord",
+    "organizerSignInTitle": "Connexion organisation",
+    "organizerSignInDescription": "Connectez-vous avec un compte disposant d’un accès organisation pour gérer vos événements et votre équipe.",
+    "attendeeSignInTitle": "Connexion participant",
+    "attendeeSignInDescription": "Connectez-vous pour voir vos billets, réservations et votre profil.",
+    "attendeeSignUpTitle": "S’inscrire",
+    "attendeeSignUpDescription": "Vérifiez votre e-mail pour créer un compte et retrouver vos événements et billets au même endroit.",
+    "organizationAccessRequired": "Ce compte n’a pas d’accès organisation. Utilisez un compte organisateur ou continuez vers votre tableau de bord participant.",
+    "useAnotherAccount": "Utiliser un autre compte"
   }
 }

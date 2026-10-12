@@ -965,7 +965,13 @@
     "fromTemplate": "Beginnen met een sjabloon",
     "guided": "Begeleid aanmaken (3 stappen)",
     "currency": "Valuta",
-    "currencyHint": "Tickets, afrekenen en rapporten gebruiken deze. Wijzigen kan tot de eerste bestelling."
+    "currencyHint": "Tickets, afrekenen en rapporten gebruiken deze. Wijzigen kan tot de eerste bestelling.",
+    "category": "Categorie (optioneel)",
+    "categoryNone": "Nog geen categorie",
+    "categoryHint": "Helpt je evenementen te ordenen en helpt deelnemers ze te vinden. Je kunt dit later wijzigen bij Evenementgegevens.",
+    "manageCategories": "Categorieën beheren (opent in een nieuw tabblad)",
+    "refreshCategories": "Categorielijst vernieuwen",
+    "refreshingCategories": "Vernieuwen…"
   },
   "tickets": {
     "subtitle": "Tickettypes, prijzen en voorraad. Elke prijs die kopers zien is inclusief kosten.",
@@ -1826,7 +1832,12 @@
         "other": "Correctie · {event}"
       }
     },
-    "destinationHold": "Nieuwe uitbetaalrekening: voor je veiligheid beginnen overboekingen ernaartoe pas na {until}. De eigenaren van je organisatie zijn gemaild."
+    "destinationHold": "Nieuwe uitbetaalrekening: voor je veiligheid beginnen overboekingen ernaartoe pas na {until}. De eigenaren van je organisatie zijn gemaild.",
+    "disconnectFake": {
+      "hint": "Ontkoppel een ongebruikt nep-testaccount om de uitbetalingsinstelling opnieuw te starten met een andere provider. Dit kan niet als het account al is gebruikt voor bestellingen of verrekeningen.",
+      "label": "Testaccount ontkoppelen",
+      "confirm": "Dit nep-uitbetalingsaccount ontkoppelen? Dit kan niet ongedaan worden gemaakt."
+    }
   },
   "fakeConnect": {
     "eyebrow": "Testmodus",
@@ -18925,5 +18936,85 @@
       "not_listed": "Alleen evenementen op de marktplaats kunnen worden gepromoot.",
       "failed": "De promotie kon niet starten. Probeer het opnieuw."
     }
+  },
+  "attendeeDashboard": {
+    "dashboardLink": "Dashboard",
+    "signInLink": "Inloggen",
+    "signUpLink": "Registreren",
+    "title": "Mijn dashboard",
+    "navigation": "Navigatie voor deelnemers",
+    "welcome": "Welkom bij Yayatoh",
+    "browse": "Evenementen ontdekken",
+    "nav": {
+      "overview": "Overzicht",
+      "events": "Mijn evenementen",
+      "tickets": "Tickets en bestellingen",
+      "schedule": "Mijn programma",
+      "profile": "Profiel",
+      "notifications": "Meldingen",
+      "settings": "Accountinstellingen"
+    },
+    "descriptions": {
+      "overview": "Je boekingen, aankomende evenementen en account op één plek.",
+      "events": "Evenementen die je hebt geboekt of waarvoor je je hebt aangemeld.",
+      "tickets": "Open een bestelling om QR-codes te bekijken, tickets te downloaden en beschikbare opties voor terugbetaling of overdracht te beheren.",
+      "schedule": "Je sessieboekingen en persoonlijke programma's voor evenementen die dat ondersteunen.",
+      "profile": "Beheer je accountnaam en foto.",
+      "notifications": "Kies wat je van elke organisator ontvangt.",
+      "settings": "Beheer inloggen, beveiliging en je persoonsgegevens."
+    },
+    "signInTitle": "Je evenementen beginnen hier",
+    "signInHint": "Log in op je account om aankopen te zien die met het geverifieerde e-mailadres zijn gedaan. Je kunt hieronder ook een ticket-e-mailadres verifiëren om de bijbehorende boekingen te bekijken.",
+    "accountSignIn": "Inloggen op mijn account",
+    "createAccount": "Doorgaan met e-mailcode",
+    "guestSignIn": "Tickets bekijken met een e-mailcode",
+    "verifyEmail": "Verifieer het e-mailadres van je account voordat je de boekingen bekijkt. Je kunt inloggen met een eenmalige e-mailcode.",
+    "accountRequired": "Log in om je account te beheren",
+    "accountRequiredHint": "Met verificatie van je ticket-e-mailadres krijg je toegang tot boekingen. Log in op je account met hetzelfde e-mailadres om je profiel en beveiliging te beheren.",
+    "ticketCount": "{count, plural, one {# ticket geboekt} other {# tickets geboekt}}",
+    "openOrder": "Tickets bekijken en bestelling beheren",
+    "openSchedule": "Mijn programma openen",
+    "emptyTitle": "Geen boekingen om te tonen",
+    "emptyHint": "Zodra je met dit e-mailadres een evenement boekt, verschijnt het hier.",
+    "signedInAs": "Boekingen voor {email}",
+    "upcomingEvents": "Aankomende evenementen",
+    "orders": "Bestellingen",
+    "eventsAttended": "Eerder geboekte evenementen",
+    "nextEvents": "Binnenkort",
+    "upcoming": "Aankomend en lopend",
+    "past": "Afgelopen evenementen",
+    "noneInPeriod": "Geen evenementen in deze periode.",
+    "signOut": "Uitloggen",
+    "noSchedule": "Nog geen sessieprogramma's",
+    "noScheduleHint": "Programma's verschijnen wanneer een boeking sessies bevat. Gewone evenementen met tickets hebben geen sessieprogramma nodig.",
+    "preferencesHint": "Beheer e-mailherinneringen, evenementupdates, aanbiedingen en beschikbare sms-voorkeuren voor deze organisator.",
+    "managePreferences": "Meldingsvoorkeuren beheren",
+    "noPreferences": "Er zijn nog geen contactvoorkeuren beschikbaar voor deze organisator.",
+    "organizationPrivacy": "Mijn gegevens bij de organisatie opvragen",
+    "noOrganizations": "Nog geen organisatoren",
+    "preferencesEmpty": "Voorkeuren per organisator worden beschikbaar nadat je een boeking hebt gedaan.",
+    "profile": {
+      "name": "Volledige naam",
+      "nameError": "Vul een naam in van 1 tot 120 tekens.",
+      "email": "Geverifieerd e-mailadres",
+      "emailHint": "Boekingen worden gekoppeld aan dit geverifieerde e-mailadres. Als je je accountnaam wijzigt, blijven bestaande gegevens van tickethouders ongewijzigd.",
+      "photo": "Profielfoto",
+      "photoHint": "JPEG, PNG of WebP, maximaal 512 KB. Je foto wordt verkleind tot een vierkante avatar.",
+      "photoError": "Kies een geldige JPEG-, PNG- of WebP-afbeelding kleiner dan 512 KB.",
+      "removePhoto": "Huidige foto verwijderen",
+      "save": "Profiel opslaan",
+      "saving": "Opslaan…",
+      "saved": "Profiel opgeslagen.",
+      "error": "Je profiel kon niet worden opgeslagen. Controleer de velden en probeer het opnieuw."
+    },
+    "backToDashboard": "Terug naar mijn dashboard",
+    "organizerSignInTitle": "Inloggen voor organisaties",
+    "organizerSignInDescription": "Log in met een account met toegang tot een organisatie om je evenementen en team te beheren.",
+    "attendeeSignInTitle": "Inloggen voor deelnemers",
+    "attendeeSignInDescription": "Log in om je tickets, boekingen en profiel te bekijken.",
+    "attendeeSignUpTitle": "Registreren",
+    "attendeeSignUpDescription": "Verifieer je e-mailadres om een account aan te maken en je evenementen en tickets bij elkaar te houden.",
+    "organizationAccessRequired": "Dit account heeft geen toegang tot een organisatie. Gebruik een organisatoraccount of ga verder naar je deelnemersdashboard.",
+    "useAnotherAccount": "Een ander account gebruiken"
   }
 }

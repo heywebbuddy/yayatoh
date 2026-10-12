@@ -965,7 +965,13 @@
     "fromTemplate": "Mit einer Vorlage beginnen",
     "guided": "Geführte Einrichtung (3 Schritte)",
     "currency": "Währung",
-    "currencyHint": "Tickets, Checkout und Berichte verwenden sie. Bis zur ersten Bestellung änderbar."
+    "currencyHint": "Tickets, Checkout und Berichte verwenden sie. Bis zur ersten Bestellung änderbar.",
+    "category": "Kategorie (optional)",
+    "categoryNone": "Noch keine Kategorie",
+    "categoryHint": "Hilft dir, Events zu organisieren, und Teilnehmenden, sie zu finden. Du kannst sie später in den Eventdetails ändern.",
+    "manageCategories": "Kategorien verwalten (öffnet einen neuen Tab)",
+    "refreshCategories": "Kategorieliste aktualisieren",
+    "refreshingCategories": "Wird aktualisiert …"
   },
   "tickets": {
     "subtitle": "Ticketarten, Preise und Kontingente. Alle Preise, die Käufer sehen, enthalten die Gebühren.",
@@ -1826,7 +1832,12 @@
         "other": "Korrektur · {event}"
       }
     },
-    "destinationHold": "Neues Auszahlungskonto: Zu deiner Sicherheit beginnen Überweisungen darauf erst nach {until}. Die Inhaber deiner Organisation wurden per E-Mail informiert."
+    "destinationHold": "Neues Auszahlungskonto: Zu deiner Sicherheit beginnen Überweisungen darauf erst nach {until}. Die Inhaber deiner Organisation wurden per E-Mail informiert.",
+    "disconnectFake": {
+      "hint": "Trenne ein ungenutztes Fake-Testkonto, um die Auszahlungseinrichtung mit einem anderen Anbieter neu zu starten. Das ist nicht möglich, wenn das Konto bereits für Bestellungen oder Abrechnungen verwendet wurde.",
+      "label": "Testkonto trennen",
+      "confirm": "Dieses Fake-Auszahlungskonto trennen? Das kann nicht rückgängig gemacht werden."
+    }
   },
   "fakeConnect": {
     "eyebrow": "Testmodus",
@@ -18925,5 +18936,85 @@
       "not_listed": "Nur Veranstaltungen auf dem Marktplatz können hervorgehoben werden.",
       "failed": "Die Hervorhebung konnte nicht gestartet werden. Bitte erneut versuchen."
     }
+  },
+  "attendeeDashboard": {
+    "dashboardLink": "Dashboard",
+    "signInLink": "Anmelden",
+    "signUpLink": "Registrieren",
+    "title": "Mein Dashboard",
+    "navigation": "Navigation für Teilnehmende",
+    "welcome": "Willkommen bei Yayatoh",
+    "browse": "Events entdecken",
+    "nav": {
+      "overview": "Übersicht",
+      "events": "Meine Events",
+      "tickets": "Tickets & Bestellungen",
+      "schedule": "Mein Ablaufplan",
+      "profile": "Profil",
+      "notifications": "Benachrichtigungen",
+      "settings": "Kontoeinstellungen"
+    },
+    "descriptions": {
+      "overview": "Deine Buchungen, kommenden Events und dein Konto an einem Ort.",
+      "events": "Events, die du gebucht hast oder für die du angemeldet bist.",
+      "tickets": "Öffne eine Bestellung, um QR-Codes anzusehen, Tickets herunterzuladen und verfügbare Erstattungs- oder Weitergabeoptionen zu verwalten.",
+      "schedule": "Deine Session-Buchungen und persönlichen Ablaufpläne für Events, die das unterstützen.",
+      "profile": "Verwalte deinen Kontonamen und dein Foto.",
+      "notifications": "Wähle, was du von jedem Veranstalter erhältst.",
+      "settings": "Verwalte Anmeldung, Sicherheit und deine persönlichen Daten."
+    },
+    "signInTitle": "Hier beginnen deine Events",
+    "signInHint": "Melde dich bei deinem Konto an, um Käufe mit der bestätigten E-Mail-Adresse zu sehen. Du kannst unten auch eine Ticket-E-Mail bestätigen, um deren Buchungen anzuzeigen.",
+    "accountSignIn": "Bei meinem Konto anmelden",
+    "createAccount": "Mit E-Mail-Code fortfahren",
+    "guestSignIn": "Tickets mit E-Mail-Code ansehen",
+    "verifyEmail": "Bestätige die E-Mail-Adresse deines Kontos, bevor du auf die Buchungen zugreifst. Du kannst die Anmeldung mit Einmalcode per E-Mail nutzen.",
+    "accountRequired": "Melde dich an, um dein Konto zu verwalten",
+    "accountRequiredHint": "Die Bestätigung der Ticket-E-Mail gibt Zugriff auf Buchungen. Melde dich mit derselben E-Mail bei deinem Konto an, um Profil und Sicherheit zu verwalten.",
+    "ticketCount": "{count, plural, one {# Ticket gebucht} other {# Tickets gebucht}}",
+    "openOrder": "Tickets ansehen & Bestellung verwalten",
+    "openSchedule": "Meinen Ablaufplan öffnen",
+    "emptyTitle": "Keine Buchungen vorhanden",
+    "emptyHint": "Sobald du ein Event mit dieser E-Mail buchst, erscheint es hier.",
+    "signedInAs": "Buchungen für {email}",
+    "upcomingEvents": "Kommende Events",
+    "orders": "Bestellungen",
+    "eventsAttended": "Vergangene gebuchte Events",
+    "nextEvents": "Als Nächstes",
+    "upcoming": "Kommend & laufend",
+    "past": "Vergangene Events",
+    "noneInPeriod": "Keine Events in diesem Zeitraum.",
+    "signOut": "Abmelden",
+    "noSchedule": "Noch keine Session-Ablaufpläne",
+    "noScheduleHint": "Ablaufpläne erscheinen, wenn eine Buchung Sessions enthält. Normale Events mit Tickets brauchen keinen Session-Ablaufplan.",
+    "preferencesHint": "Verwalte E-Mail-Erinnerungen, Event-Updates, Angebote und verfügbare SMS-Einstellungen für diesen Veranstalter.",
+    "managePreferences": "Benachrichtigungseinstellungen verwalten",
+    "noPreferences": "Für diesen Veranstalter sind noch keine Kontakteinstellungen verfügbar.",
+    "organizationPrivacy": "Meine Daten bei der Organisation anfordern",
+    "noOrganizations": "Noch keine Veranstalter",
+    "preferencesEmpty": "Veranstaltereinstellungen sind verfügbar, sobald du eine Buchung vorgenommen hast.",
+    "profile": {
+      "name": "Vollständiger Name",
+      "nameError": "Gib einen Namen mit 1 bis 120 Zeichen ein.",
+      "email": "Bestätigte E-Mail",
+      "emailHint": "Buchungen werden dieser bestätigten E-Mail zugeordnet. Eine Änderung deines Kontonamens überschreibt keine bestehenden Angaben zu Ticketinhabern.",
+      "photo": "Profilfoto",
+      "photoHint": "JPEG, PNG oder WebP, bis 512 KB. Dein Foto wird zu einem quadratischen Avatar zugeschnitten.",
+      "photoError": "Wähle ein gültiges JPEG-, PNG- oder WebP-Bild unter 512 KB.",
+      "removePhoto": "Aktuelles Foto entfernen",
+      "save": "Profil speichern",
+      "saving": "Wird gespeichert …",
+      "saved": "Profil gespeichert.",
+      "error": "Dein Profil konnte nicht gespeichert werden. Prüfe die Felder und versuche es erneut."
+    },
+    "backToDashboard": "Zurück zu meinem Dashboard",
+    "organizerSignInTitle": "Anmeldung für Organisationen",
+    "organizerSignInDescription": "Melde dich mit einem Konto mit Organisationszugriff an, um deine Events und dein Team zu verwalten.",
+    "attendeeSignInTitle": "Anmeldung für Teilnehmende",
+    "attendeeSignInDescription": "Melde dich an, um deine Tickets, Buchungen und dein Profil zu sehen.",
+    "attendeeSignUpTitle": "Registrieren",
+    "attendeeSignUpDescription": "Bestätige deine E-Mail, um ein Konto zu erstellen und deine Events und Tickets an einem Ort zu haben.",
+    "organizationAccessRequired": "Dieses Konto hat keinen Organisationszugriff. Verwende ein Veranstalterkonto oder wechsle zu deinem Teilnehmer-Dashboard.",
+    "useAnotherAccount": "Anderes Konto verwenden"
   }
 }

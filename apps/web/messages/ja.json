@@ -965,7 +965,13 @@
     "fromTemplate": "テンプレートから始める",
     "guided": "ガイド付き作成(3ステップ)",
     "currency": "通貨",
-    "currencyHint": "チケット、決済、レポートで使われます。最初の注文までは変更できます。"
+    "currencyHint": "チケット、決済、レポートで使われます。最初の注文までは変更できます。",
+    "category": "カテゴリ（任意）",
+    "categoryNone": "カテゴリはまだありません",
+    "categoryHint": "イベントの整理に役立ち、参加者がイベントを見つけやすくなります。あとから「イベントの詳細」で変更できます。",
+    "manageCategories": "カテゴリを管理（新しいタブで開きます）",
+    "refreshCategories": "カテゴリ一覧を更新",
+    "refreshingCategories": "更新中…"
   },
   "tickets": {
     "subtitle": "チケット種別、価格、在庫を管理します。購入者に表示される価格はすべて手数料込みです。",
@@ -1826,7 +1832,12 @@
         "other": "調整 · {event}"
       }
     },
-    "destinationHold": "新しい支払い口座: 安全のため、この口座への送金は {until} 以降に始まります。組織のオーナーにメールでお知らせしました。"
+    "destinationHold": "新しい支払い口座: 安全のため、この口座への送金は {until} 以降に始まります。組織のオーナーにメールでお知らせしました。",
+    "disconnectFake": {
+      "hint": "使われていないテスト用の架空アカウントを切断すると、別のプロバイダーで入金設定をやり直せます。注文や精算で使用されたアカウントは切断できません。",
+      "label": "テストアカウントを切断",
+      "confirm": "このテスト用入金アカウントを切断しますか？この操作は元に戻せません。"
+    }
   },
   "fakeConnect": {
     "eyebrow": "テストモード",
@@ -18925,5 +18936,85 @@
       "not_listed": "プロモーションできるのはマーケットプレイスのイベントだけです。",
       "failed": "プロモーションを開始できませんでした。もう一度お試しください。"
     }
+  },
+  "attendeeDashboard": {
+    "dashboardLink": "ダッシュボード",
+    "signInLink": "サインイン",
+    "signUpLink": "新規登録",
+    "title": "マイダッシュボード",
+    "navigation": "参加者メニュー",
+    "welcome": "Yayatoh へようこそ",
+    "browse": "イベントを探す",
+    "nav": {
+      "overview": "概要",
+      "events": "マイイベント",
+      "tickets": "チケットと注文",
+      "schedule": "マイスケジュール",
+      "profile": "プロフィール",
+      "notifications": "通知",
+      "settings": "アカウント設定"
+    },
+    "descriptions": {
+      "overview": "予約、今後のイベント、アカウントをまとめて確認できます。",
+      "events": "予約または登録したイベントです。",
+      "tickets": "注文を開くと、QRコードの表示、チケットのダウンロード、利用可能な返金・譲渡の手続きができます。",
+      "schedule": "セッションの予約と、対応イベントの個人スケジュールです。",
+      "profile": "アカウント名と写真を管理します。",
+      "notifications": "主催者ごとに受け取る内容を選べます。",
+      "settings": "サインイン、セキュリティ、個人データを管理します。"
+    },
+    "signInTitle": "イベントはここから",
+    "signInHint": "アカウントにサインインすると、確認済みメールアドレスで購入した内容を確認できます。下でチケットのメールアドレスを確認して、その予約を表示することもできます。",
+    "accountSignIn": "アカウントにサインイン",
+    "createAccount": "メールのコードで続行",
+    "guestSignIn": "メールのコードでチケットを表示",
+    "verifyEmail": "予約を表示する前に、アカウントのメールアドレスを確認してください。メールのワンタイムコードでサインインできます。",
+    "accountRequired": "アカウントを管理するにはサインインしてください",
+    "accountRequiredHint": "チケットのメールアドレス確認では予約のみ表示できます。プロフィールやセキュリティを管理するには、同じメールアドレスでアカウントにサインインしてください。",
+    "ticketCount": "{count, plural, other {#枚のチケットを予約済み}}",
+    "openOrder": "チケットを表示・注文を管理",
+    "openSchedule": "マイスケジュールを開く",
+    "emptyTitle": "表示する予約はありません",
+    "emptyHint": "このメールアドレスでイベントを予約すると、ここに表示されます。",
+    "signedInAs": "{email} の予約",
+    "upcomingEvents": "今後のイベント",
+    "orders": "注文",
+    "eventsAttended": "過去に予約したイベント",
+    "nextEvents": "次のイベント",
+    "upcoming": "今後・開催中",
+    "past": "過去のイベント",
+    "noneInPeriod": "この期間のイベントはありません。",
+    "signOut": "サインアウト",
+    "noSchedule": "セッションのスケジュールはまだありません",
+    "noScheduleHint": "予約にセッションが含まれる場合にスケジュールが表示されます。通常のチケット制イベントではセッションのスケジュールは不要です。",
+    "preferencesHint": "この主催者からのメールリマインダー、イベントの最新情報、お得な情報、利用可能なSMSの受信設定を管理します。",
+    "managePreferences": "通知設定を管理",
+    "noPreferences": "この主催者の連絡設定はまだありません。",
+    "organizationPrivacy": "組織が保有する自分のデータを請求",
+    "noOrganizations": "主催者はまだいません",
+    "preferencesEmpty": "予約後に主催者ごとの設定が利用できるようになります。",
+    "profile": {
+      "name": "氏名",
+      "nameError": "1〜120文字で名前を入力してください。",
+      "email": "確認済みメールアドレス",
+      "emailHint": "予約はこの確認済みメールアドレスで照合されます。アカウント名を変更しても、既存のチケット所有者情報は書き換わりません。",
+      "photo": "プロフィール写真",
+      "photoHint": "JPEG、PNG、WebP形式、512 KBまで。写真は正方形のアバターにリサイズされます。",
+      "photoError": "512 KB未満の有効なJPEG、PNG、WebP画像を選択してください。",
+      "removePhoto": "現在の写真を削除",
+      "save": "プロフィールを保存",
+      "saving": "保存中…",
+      "saved": "プロフィールを保存しました。",
+      "error": "プロフィールを保存できませんでした。入力内容を確認して、もう一度お試しください。"
+    },
+    "backToDashboard": "マイダッシュボードに戻る",
+    "organizerSignInTitle": "組織としてサインイン",
+    "organizerSignInDescription": "組織へのアクセス権があるアカウントでサインインして、イベントとチームを管理します。",
+    "attendeeSignInTitle": "参加者としてサインイン",
+    "attendeeSignInDescription": "サインインして、チケット、予約、プロフィールを確認しましょう。",
+    "attendeeSignUpTitle": "新規登録",
+    "attendeeSignUpDescription": "メールアドレスを確認してアカウントを作成し、イベントとチケットをまとめて管理しましょう。",
+    "organizationAccessRequired": "このアカウントには組織へのアクセス権がありません。主催者アカウントを使用するか、参加者ダッシュボードに進んでください。",
+    "useAnotherAccount": "別のアカウントを使用"
   }
 }

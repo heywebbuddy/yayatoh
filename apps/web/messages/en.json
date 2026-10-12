@@ -1832,7 +1832,12 @@
         "other": "Adjustment · {event}"
       }
     },
-    "destinationHold": "New payout account: for your security, transfers to it start after {until}. Your organization's owners were emailed."
+    "destinationHold": "New payout account: for your security, transfers to it start after {until}. Your organization's owners were emailed.",
+    "disconnectFake": {
+      "hint": "Disconnect an unused fake test account to start payout setup again with another provider. This is blocked if the account has been used by orders or settlements.",
+      "label": "Disconnect test account",
+      "confirm": "Disconnect this fake payout account? This cannot be undone."
+    }
   },
   "fakeConnect": {
     "eyebrow": "Test mode",

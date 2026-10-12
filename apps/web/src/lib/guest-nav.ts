@@ -1,4 +1,4 @@
-import { isProfileKey, PROFILES, type NavItem } from '@yayatoh/platform';
+import { isProfileKey, type NavItem, PROFILES } from '@yayatoh/platform';
 
 /** The guest list can back seating on profiles whose sidebar does not list Guests by default. */
 export function guestNav(profileKey: string): NavItem {

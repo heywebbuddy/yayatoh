@@ -16,7 +16,7 @@ export function TicketQr({ code, label, className }: { code: string; label: stri
       className={className}
     >
       <rect width={size} height={size} fill="white" />
-      <path d={d} fill="#111827" />
+      <path d={d} fill="black" />
     </svg>
   );
 }

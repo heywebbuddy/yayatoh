@@ -965,7 +965,13 @@
     "fromTemplate": "从模板开始",
     "guided": "引导式创建(3 步)",
     "currency": "货币",
-    "currencyHint": "门票、结账和报表都使用该货币。在第一笔订单之前可以更改。"
+    "currencyHint": "门票、结账和报表都使用该货币。在第一笔订单之前可以更改。",
+    "category": "分类（可选）",
+    "categoryNone": "暂无分类",
+    "categoryHint": "便于你整理活动，也方便参会者找到活动。之后可在“活动详情”中修改。",
+    "manageCategories": "管理分类（在新标签页中打开）",
+    "refreshCategories": "刷新分类列表",
+    "refreshingCategories": "正在刷新…"
   },
   "tickets": {
     "subtitle": "管理票种、价格和库存。买家看到的所有价格均已包含费用。",
@@ -1826,7 +1832,12 @@
         "other": "调整 · {event}"
       }
     },
-    "destinationHold": "新的收款账户：为了你的安全，向该账户的转账将在 {until} 之后开始。已发邮件通知组织所有者。"
+    "destinationHold": "新的收款账户：为了你的安全，向该账户的转账将在 {until} 之后开始。已发邮件通知组织所有者。",
+    "disconnectFake": {
+      "hint": "断开未使用的模拟测试账户，即可改用其他服务商重新设置收款。如果该账户已用于订单或结算，则无法断开。",
+      "label": "断开测试账户",
+      "confirm": "要断开此模拟收款账户吗？此操作无法撤销。"
+    }
   },
   "fakeConnect": {
     "eyebrow": "测试模式",
@@ -18925,5 +18936,85 @@
       "not_listed": "只有市场上的活动才能推广。",
       "failed": "无法开始推广,请重试。"
     }
+  },
+  "attendeeDashboard": {
+    "dashboardLink": "控制台",
+    "signInLink": "登录",
+    "signUpLink": "注册",
+    "title": "我的控制台",
+    "navigation": "参会者导航",
+    "welcome": "欢迎使用 Yayatoh",
+    "browse": "探索活动",
+    "nav": {
+      "overview": "概览",
+      "events": "我的活动",
+      "tickets": "门票和订单",
+      "schedule": "我的日程",
+      "profile": "资料",
+      "notifications": "通知",
+      "settings": "账户设置"
+    },
+    "descriptions": {
+      "overview": "你的预订、即将举行的活动和账户，一目了然。",
+      "events": "你已预订或报名的活动。",
+      "tickets": "打开订单即可查看二维码、下载门票，并管理可用的退款或转让选项。",
+      "schedule": "你的场次预订，以及支持此功能的活动的个人日程。",
+      "profile": "管理你的账户名称和照片。",
+      "notifications": "选择要从每个主办方接收的内容。",
+      "settings": "管理登录、安全和个人数据。"
+    },
+    "signInTitle": "你的活动从这里开始",
+    "signInHint": "登录账户即可查看使用其已验证邮箱完成的购买。你也可以在下方验证门票邮箱，查看该邮箱的预订。",
+    "accountSignIn": "登录我的账户",
+    "createAccount": "使用邮箱验证码继续",
+    "guestSignIn": "使用邮箱验证码查看门票",
+    "verifyEmail": "请先验证账户邮箱，然后再查看其预订。你可以使用一次性邮箱验证码登录。",
+    "accountRequired": "登录以管理你的账户",
+    "accountRequiredHint": "验证门票邮箱可查看预订。若要管理资料和安全设置，请使用同一邮箱登录账户。",
+    "ticketCount": "{count, plural, other {已预订 # 张门票}}",
+    "openOrder": "查看门票并管理订单",
+    "openSchedule": "打开我的日程",
+    "emptyTitle": "暂无预订",
+    "emptyHint": "使用此邮箱预订活动后，活动将显示在这里。",
+    "signedInAs": "{email} 的预订",
+    "upcomingEvents": "即将举行的活动",
+    "orders": "订单",
+    "eventsAttended": "过去预订的活动",
+    "nextEvents": "即将开始",
+    "upcoming": "即将举行和进行中",
+    "past": "过去的活动",
+    "noneInPeriod": "此期间没有活动。",
+    "signOut": "退出登录",
+    "noSchedule": "暂无场次日程",
+    "noScheduleHint": "预订包含场次时才会显示日程。普通售票活动不需要场次日程。",
+    "preferencesHint": "管理此主办方的邮件提醒、活动动态、优惠信息以及可用的短信偏好。",
+    "managePreferences": "管理通知偏好",
+    "noPreferences": "此主办方暂无可用的联系偏好。",
+    "organizationPrivacy": "申请获取组织持有的我的数据",
+    "noOrganizations": "暂无主办方",
+    "preferencesEmpty": "完成预订后即可设置各主办方的偏好。",
+    "profile": {
+      "name": "姓名",
+      "nameError": "请输入 1 到 120 个字符的姓名。",
+      "email": "已验证邮箱",
+      "emailHint": "预订按此已验证邮箱进行匹配。修改账户名称不会更改现有的持票人信息。",
+      "photo": "头像",
+      "photoHint": "支持 JPEG、PNG 或 WebP，最大 512 KB。照片将调整为方形头像。",
+      "photoError": "请选择小于 512 KB 的有效 JPEG、PNG 或 WebP 图片。",
+      "removePhoto": "移除当前照片",
+      "save": "保存资料",
+      "saving": "正在保存…",
+      "saved": "资料已保存。",
+      "error": "无法保存你的资料。请检查各字段后重试。"
+    },
+    "backToDashboard": "返回我的控制台",
+    "organizerSignInTitle": "组织登录",
+    "organizerSignInDescription": "使用拥有组织访问权限的账户登录，管理你的活动和团队。",
+    "attendeeSignInTitle": "参会者登录",
+    "attendeeSignInDescription": "登录以查看你的门票、预订和资料。",
+    "attendeeSignUpTitle": "注册",
+    "attendeeSignUpDescription": "验证邮箱即可创建账户，集中管理你的活动和门票。",
+    "organizationAccessRequired": "此账户没有组织访问权限。请使用主办方账户，或继续前往你的参会者控制台。",
+    "useAnotherAccount": "使用其他账户"
   }
 }

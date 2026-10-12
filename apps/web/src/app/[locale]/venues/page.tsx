@@ -26,6 +26,7 @@ export default async function VenueDirectoryPage({ params }: { params: Promise<{
   // Live data: render per request, never at build time.
   await connection();
   const t = await getTranslations('directory');
+  const tMeta = await getTranslations('meta');
   const venues = await venueDirectory();
   const region = new Intl.DisplayNames([locale], { type: 'region' });
   return (
@@ -42,7 +43,9 @@ export default async function VenueDirectoryPage({ params }: { params: Promise<{
             className="pointer-events-none absolute end-24 -bottom-36 -z-10 h-64 w-80 rotate-12 rounded-[56px] border border-white/25 bg-white/10"
           />
           <div className="relative flex max-w-3xl flex-col gap-3">
-            <span className="text-label font-bold uppercase tracking-[0.12em] text-white/75">Yayatoh</span>
+            <span className="text-label font-bold uppercase tracking-[0.12em] text-white/75">
+              {tMeta('title')}
+            </span>
             <h1 className="m-0 text-[38px] leading-[1.04] font-extrabold tracking-[-0.045em] md:text-[56px]">
               {t('title')}
             </h1>

@@ -3,11 +3,12 @@ import { agencyBilledClientsQuery, agencyV2Enabled, DEFAULT_AGENCY_COMMISSION_BP
 import { executeQuery } from '@yayatoh/kernel';
 import { agencyCommissionStatementQuery } from '@yayatoh/payments';
 import { roleCan } from '@yayatoh/tenancy';
-import { Alert, Button, EmptyState, SectionHeader, StatusPill, Table } from '@yayatoh/ui';
+import { Alert, Button, buttonClass, EmptyState, SectionHeader, StatusPill, Table } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { StepUpForm } from '@/components/step-up.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import { ports } from '@/server/ports.ts';
 import { ratePct } from '../../agencies/agency-billing-section.tsx';
 import { CommissionStatement } from '../../agencies/commission-statement.tsx';
@@ -38,6 +39,7 @@ export default async function AgencyBillingPage({
   const { data, canRead } = await loadAgency(org);
   if (!canRead) return null;
   const t = await getTranslations('agencyBilling');
+  const ta = await getTranslations('agency');
   const manage = roleCan(data.role, 'billing:manage');
   const finance = roleCan(data.role, 'finance:read');
   const clients = await executeQuery(agencyClientsQuery, {}, data.ctx, ports);
@@ -64,6 +66,11 @@ export default async function AgencyBillingPage({
           <EmptyState
             title={t('noClientsTitle')}
             description={t('noClients', { address: data.org.slug })}
+            action={
+              <Link href={`/o/${org}/agency`} className={buttonClass('primary', 'md')}>
+                {ta('seeClients')}
+              </Link>
+            }
           />
         ) : (
           <Table

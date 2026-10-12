@@ -14,7 +14,10 @@ type Env = Readonly<Record<string, string | undefined>>;
 export function billingProviderFromEnv(
   env: Env = process.env,
   /** The fake's webhook delivery (the web app hands them to its own billing endpoint). */
-  opts: { deliver?: (d: FakeBillingDelivery) => Promise<void>; catalog?: () => Promise<ProviderCatalog> } = {},
+  opts: {
+    deliver?: (d: FakeBillingDelivery) => Promise<void>;
+    catalog?: () => Promise<ProviderCatalog>;
+  } = {},
 ): BillingProvider {
   const which = env.BILLING_PROVIDER || 'fake';
   if (which === 'stripe') {
