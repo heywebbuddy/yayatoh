@@ -98,6 +98,8 @@ export {
   scanWindowTx,
   staffPresenceTx,
 } from './live.ts';
+// Agreement §8: find ticket holders at the door by name, email or phone.
+export { findTicketHoldersQuery, TicketHolderMatchDto } from './lookup.ts';
 // M5.8b: networking chat reports → chat_abuse signals.
 export { networkChatSignal, networkChatSignals } from './network-chat-signals.ts';
 export { privateColumns } from './private-columns.ts';

@@ -4667,6 +4667,7 @@ export interface operations {
                             legacyCodes?: string[];
                             /** Format: uuid */
                             occurrenceId: string | null;
+                            phoneHash?: string;
                             rev: number;
                             sessionAccess?: {
                                 registrant: boolean;

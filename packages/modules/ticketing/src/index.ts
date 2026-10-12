@@ -160,8 +160,10 @@ export {
   type TicketTypeManager,
 } from './schema.ts';
 export {
+  type LookupTicket,
   orderIdsByShortCodeTx,
   type TicketTypeStats,
+  ticketHoldersForLookupTx,
   ticketsDistributedTx,
   ticketTypeStatsTx,
   undistributedTicketIdsSql,

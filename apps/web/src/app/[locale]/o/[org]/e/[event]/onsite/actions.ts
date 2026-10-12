@@ -5,14 +5,16 @@ import {
   admitSessionOverrideCommand,
   createCheckpointCommand,
   enrollDeviceCommand,
+  findTicketHoldersQuery,
   type ScanOutcomeDto,
   scanTicketCommand,
   setCheckpointArchivedCommand,
   setDeviceStateCommand,
+  type TicketHolderMatchDto,
   undoAdmissionCommand,
 } from '@yayatoh/checkin';
 import { SESSION_GATES } from '@yayatoh/checkin-engine';
-import { executeCommand, isDomainError } from '@yayatoh/kernel';
+import { executeCommand, executeQuery, isDomainError } from '@yayatoh/kernel';
 import { revalidatePath } from 'next/cache';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
@@ -109,6 +111,34 @@ export async function scanAction(
     return { kind: 'outcome', outcome, seq };
   } catch (err) {
     return { kind: 'error', code: isDomainError(err) ? err.code : 'internal', seq };
+  }
+}
+
+export type LookupState =
+  | { readonly kind: 'idle' }
+  | {
+      readonly kind: 'found';
+      readonly query: string;
+      readonly lookup: 'name' | 'email' | 'phone';
+      readonly matches: readonly TicketHolderMatchDto[];
+    }
+  | { readonly kind: 'error'; readonly code: string };
+
+/** Find ticket holders by name, email or phone (agreement §8) when a code won't scan. */
+export async function findHoldersAction(
+  org: string,
+  event: string,
+  _prev: LookupState,
+  form: FormData,
+): Promise<LookupState> {
+  const { data, event: ev } = await loadEvent(org, event, 'onsite');
+  const query = String(form.get('query') ?? '').trim();
+  if (!query) return { kind: 'idle' };
+  try {
+    const r = await executeQuery(findTicketHoldersQuery, { eventId: ev.id, query }, data.ctx, ports);
+    return { kind: 'found', query, lookup: r.kind, matches: r.matches };
+  } catch (err) {
+    return { kind: 'error', code: isDomainError(err) ? err.code : 'internal' };
   }
 }
 

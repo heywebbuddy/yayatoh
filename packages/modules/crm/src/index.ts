@@ -5,9 +5,11 @@ export {
   type ConsentInput,
   consentSummaryTx,
   contactByIdTx,
+  contactEmailsByPhoneTailTx,
   contactIdByEmailTx,
   contactIdsByPhoneTx,
   contactIdsMatchingTx,
+  contactPhonesByEmailTx,
   contactPhonesTx,
   contactsByIdsTx,
   contactsForSendTx,
@@ -130,6 +132,7 @@ export {
 } from './stats/compute.ts';
 export * from './stats/formulas.ts';
 export {
+  eventEngagementTotalsTx,
   NO_SIGNALS,
   recordContactSignalTx,
   signalTotalsTx,

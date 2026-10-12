@@ -67,6 +67,8 @@ export {
   sweepMetricAlertsTx,
 } from './metric-rules.ts';
 export { privateColumns } from './private-columns.ts';
+// The Scan PWA's staff alerts on the engine's state (M3.4a × M3.2b).
+export { engineStaffAlerts } from './staff.ts';
 export {
   ALERT_TRIGGER_EVENTS,
   alertEvaluator,

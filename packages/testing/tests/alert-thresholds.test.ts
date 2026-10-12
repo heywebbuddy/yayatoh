@@ -3,6 +3,7 @@ import {
   BACKLOG_SCANS,
   DEVICE_ONLINE_WINDOW_MS,
   LOW_BATTERY_PCT,
+  CAPACITY_NEAR_PCT as STAFF_CAPACITY_NEAR_PCT,
   STAFF_OFFLINE_AFTER_MS,
 } from '@yayatoh/checkin';
 import {
@@ -22,6 +23,8 @@ describe('device alert thresholds', () => {
   it('match between staff mode and the alert engine', () => {
     expect(LOW_BATTERY_PCT).toBe(THRESHOLDS.lowBatteryPct);
     expect(BACKLOG_SCANS).toBe(THRESHOLDS.backlogScans);
+    // Agreement audit 2026-10-12: staff mode said "capacity near" at 90 %, the engine at 95 %.
+    expect(STAFF_CAPACITY_NEAR_PCT).toBe(THRESHOLDS.capacityNearPct);
   });
 
   it('call a device offline after the same silence', () => {

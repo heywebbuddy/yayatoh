@@ -2,9 +2,9 @@ import type { StaffAlertKind } from './schema.ts';
 
 /**
  * Staff alerts (M3.4a): the few operational alerts door staff and supervisors need on the Scan
- * PWA, derived from device heartbeats and today's check-ins. The Command Center alert engine
- * (M3.2b) replaces this source behind the same port (`StaffAlertSource`) when it lands; the
- * derivation here stays as the stub adapter and as the fallback for tests.
+ * PWA, derived from device heartbeats and today's check-ins. Hosts wrap it in the alert engine's
+ * `engineStaffAlerts` (alerts module), which quiets what the organizer acknowledged or snoozed;
+ * the derivation alone stays for tests.
  */
 
 /** A device that has not sent a heartbeat for this long is offline (same window as devices online). */
@@ -18,8 +18,11 @@ export const STAFF_OFFLINE_FORGET_MS = 6 * 3_600_000;
 export const LOW_BATTERY_PCT = 15;
 /** Scans waiting to sync on one device at or above this count alert. */
 export const BACKLOG_SCANS = 50;
-/** Checked in today at or above this share of the expected guests alerts ("capacity near"). */
-export const CAPACITY_NEAR_PCT = 90;
+/**
+ * Checked in today at or above this share of the expected guests alerts ("capacity near"): the
+ * alert engine's `THRESHOLDS.capacityNearPct` (checked in packages/testing).
+ */
+export const CAPACITY_NEAR_PCT = 95;
 
 /** Kinds only supervisors receive (they are about devices, which only supervisors act on). */
 export const SUPERVISOR_ALERT_KINDS: ReadonlySet<StaffAlertKind> = new Set([

@@ -14,8 +14,10 @@ import { type Ctx, DomainError, type Query, utcToZonedInput, zonedTimeToUtc } fr
 import { analyticsReportTx, deliverabilityReportTx } from '@yayatoh/marketing';
 import { navIncludes, tenantQuery } from '@yayatoh/platform';
 import { programQuery } from '@yayatoh/program';
+import { registrationCountsTx } from '@yayatoh/registration';
 import { eventMetricsQuery, eventTimeseriesQuery, type ProjectedKey } from '@yayatoh/reports';
 import { seatFillTx } from '@yayatoh/seating';
+import { ticketsDistributedTx, undistributedTicketsTx } from '@yayatoh/ticketing';
 import { z } from 'zod';
 import { type CallerScope, callerScopeTx } from './access.ts';
 import { computeEventMode, modeWindows } from './domain/modes.ts';
@@ -125,6 +127,12 @@ export const TicketsWidgetDto = z.object({
   comp: Count,
   /** Places for sale (0 = no ticket types yet). */
   capacity: Count,
+  /** Tickets handed on and claimed by their holder through a claim link (agreement §6). */
+  claimed: Count,
+  /** Purchased tickets still waiting to be handed on (the `undistributed` alert's count). */
+  waiting: Count,
+  /** Registrations (events with the registration module): confirmed, and still in progress. */
+  registrations: z.object({ confirmed: Count, inProgress: Count }).nullable(),
   asOf: iso,
 });
 
@@ -347,10 +355,16 @@ export const ticketsWidget = defineWidget(
       'tickets.comp',
       'tickets.capacity',
     ]);
+    const pending = await undistributedTicketsTx(tx, scope.event.id);
     return {
       sold: value('tickets.sold'),
       comp: value('tickets.comp'),
       capacity: value('tickets.capacity'),
+      claimed: await ticketsDistributedTx(tx, scope.event.id),
+      waiting: pending.undistributed,
+      registrations: navIncludes(scope.profile, scope.modules, 'registration')
+        ? await registrationCountsTx(tx, scope.event.id)
+        : null,
       asOf: ctx.now.toISOString(),
     };
   },

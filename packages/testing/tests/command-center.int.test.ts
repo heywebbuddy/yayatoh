@@ -225,6 +225,8 @@ describe('widget loaders refuse what the registry does not allow', () => {
     const tickets = await load(ticketsWidget, eventId);
     expect(tickets).toMatchObject({ sold: 3, capacity: 50, comp: 0 });
     expect(tickets.capacity).toBe(m('tickets.capacity'));
+    // Agreement §6: the buyer keeps one of their three tickets; two wait to be handed on.
+    expect(tickets).toMatchObject({ claimed: 0, waiting: 2 });
 
     // Check-ins follow a scan (door staff scan the fixture event; the owner scans this one).
     const [ticket] = await ticketsOf(a, order.id);

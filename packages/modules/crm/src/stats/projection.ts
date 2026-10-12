@@ -7,6 +7,7 @@ import {
   contactSignals,
   contactStats,
   contacts,
+  eventEngagement,
   eventParticipation,
 } from '../schema.ts';
 import type { ComputedCurrencyStats, ComputedScores, StatsParticipation, StatsSignals } from './compute.ts';
@@ -65,6 +66,30 @@ export async function signalTotalsTx(
       firstAt: new Date(r.firstAt),
       lastAt: new Date(r.lastAt),
     });
+  return out;
+}
+
+/** M5.7b event engagement per contact: points summed over events, and the events scored. */
+export async function eventEngagementTotalsTx(
+  tx: TenantTx,
+  contactIds: readonly string[],
+): Promise<Map<string, { points: number; eventIds: string[] }>> {
+  const out = new Map<string, { points: number; eventIds: string[] }>();
+  if (contactIds.length === 0) return out;
+  const rows = await tx
+    .select({
+      contactId: eventEngagement.contactId,
+      eventId: eventEngagement.eventId,
+      score: eventEngagement.score,
+    })
+    .from(eventEngagement)
+    .where(inArray(eventEngagement.contactId, [...contactIds]));
+  for (const r of rows) {
+    const t = out.get(r.contactId) ?? { points: 0, eventIds: [] };
+    t.points += r.score;
+    t.eventIds.push(r.eventId);
+    out.set(r.contactId, t);
+  }
   return out;
 }
 

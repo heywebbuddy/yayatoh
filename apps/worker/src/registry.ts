@@ -1,6 +1,11 @@
 import { agencySnapshotSubscriber } from '@yayatoh/agency';
 import { agencyDetachSubscriber } from '@yayatoh/agency-ops';
-import { alertEvaluator, type ConferenceSources, connectedConferenceSources } from '@yayatoh/alerts';
+import {
+  alertEvaluator,
+  type ConferenceSources,
+  connectedConferenceSources,
+  engineStaffAlerts,
+} from '@yayatoh/alerts';
 import { warehouseFromEnv, warehouseIngestor } from '@yayatoh/analytics';
 import { attendeeMessageMailer } from '@yayatoh/attendees';
 import { contactSignalsSubscriber, participationProjector } from '@yayatoh/audiences';
@@ -12,7 +17,6 @@ import {
   chatReportSignals,
   checkinTimeline,
   checkoutRiskSignals,
-  derivedStaffAlerts,
   fraudSignalAlerts,
   networkChatSignals,
   staffAlertsSubscriber,
@@ -173,9 +177,9 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     zoomRegistrantsSubscriber(),
     certificateMailer({ notifier, appOrigin }),
     fraudSignalAlerts({ notifier }),
-    // M3.4a: staff alerts for the Scan PWA (web push per device). The Command Center alert engine
-    // (M3.2b) replaces `derivedStaffAlerts` here and in apps/web/src/server/scan-staff.ts.
-    staffAlertsSubscriber(derivedStaffAlerts),
+    // M3.4a: staff alerts for the Scan PWA (web push per device), on the alert engine's state
+    // (M3.2b: acknowledged or snoozed alerts stay quiet), as in apps/web/src/server/scan-staff.ts.
+    staffAlertsSubscriber(engineStaffAlerts()),
     programMediaCleaner(),
     // M6.1c: an erasure's stored files, then the connector hooks (M6.4), after it committed.
     subjectErasedMediaCleaner(),

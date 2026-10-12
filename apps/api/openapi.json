@@ -14277,6 +14277,9 @@
                           "emailHash": {
                             "type": "string"
                           },
+                          "phoneHash": {
+                            "type": "string"
+                          },
                           "issuedAt": {
                             "type": "string"
                           },

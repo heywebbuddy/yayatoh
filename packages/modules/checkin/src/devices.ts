@@ -9,12 +9,14 @@ import {
   type ManifestHeader,
   type ManifestRow,
   OK_RESULTS,
+  phoneLookupHash,
   ruleResult,
   SCOPE_TAG,
   type SignedSessionGate,
   scopeMessage,
   zoneAllows,
 } from '@yayatoh/checkin-engine';
+import { contactPhonesByEmailTx } from '@yayatoh/crm';
 import { type TenantTx, withoutTenant } from '@yayatoh/db';
 import { findEventTx, occurrencesOfEventTx } from '@yayatoh/events';
 import { type Ctx, createCtx, DomainError, requireOrg } from '@yayatoh/kernel';
@@ -289,6 +291,8 @@ const ManifestRowDto = z.object({
   occurrenceId: z.uuid().nullable(),
   holderName: z.string(),
   emailHash: z.string(),
+  /** Door lookup by phone: `phoneLookupHash(salt, phone)` of the holder's number, when known. */
+  phoneHash: z.string().optional(),
   issuedAt: z.string(),
   /**
    * Migrated tickets: their legacy QR payloads as `legacyPayloadHash(salt, payload)` only
@@ -476,9 +480,16 @@ export const deviceManifestQuery = tenantQuery({
           page.map((t) => t.id),
         )
       : null;
+    // Door lookup by phone (agreement §8): the holders' numbers from the org's contacts, hashed.
+    const phones = await contactPhonesByEmailTx(
+      tx,
+      page.map((t) => t.holderEmail),
+    );
     const rows: ManifestRow[] = [];
     for (const t of page) {
       const a = access?.get(t.id);
+      const phone = phones.get(t.holderEmail.trim().toLowerCase());
+      const phoneHash = phone ? await phoneLookupHash(salt, phone) : null;
       rows.push({
         ticketId: t.id,
         shortCode: t.shortCode,
@@ -490,6 +501,7 @@ export const deviceManifestQuery = tenantQuery({
         occurrenceId: t.occurrenceId,
         holderName: t.holderName,
         emailHash: await lookupHash(salt, t.holderEmail),
+        ...(phoneHash ? { phoneHash } : {}),
         issuedAt: t.createdAt.toISOString(),
         ...(t.legacyCodes.length
           ? { legacyCodes: await Promise.all(t.legacyCodes.map((c) => legacyPayloadHash(salt, c))) }
