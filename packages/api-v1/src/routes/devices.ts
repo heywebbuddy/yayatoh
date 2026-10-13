@@ -10,9 +10,14 @@ import { body, json, problems, userSecurity, writeProblems } from './common.ts';
  * A phone is stored in every organization where the person has an order or a ticket, so each can
  * send them updates about their events and none can reach a person it has no relation to.
  */
+const DevicePlatform = z
+  .enum(['apns', 'fcm'])
+  .openapi('DevicePlatform', { description: '`apns` for iOS, `fcm` for Android.' });
+const ApnsEnvironment = z.enum(['sandbox', 'production']).openapi('ApnsEnvironment');
+
 const DeviceRequest = z
   .object({
-    platform: z.enum(['apns', 'fcm']).openapi({ description: '`apns` for iOS, `fcm` for Android.' }),
+    platform: DevicePlatform,
     token: z.string().min(8).max(4096).openapi({
       description:
         'The APNs device token (hex) or the FCM registration token. Send it again whenever the OS rotates it.',
@@ -28,7 +33,7 @@ const DeviceRequest = z
       description: 'The phone’s IANA time zone; quiet hours follow it.',
       example: 'Europe/Lisbon',
     }),
-    environment: z.enum(['sandbox', 'production']).optional().openapi({
+    environment: ApnsEnvironment.optional().openapi({
       description: 'APNs only: `sandbox` for a development build’s token (default `production`).',
     }),
   })
