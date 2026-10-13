@@ -1,0 +1,52 @@
+{
+  "name": "@yayatoh/staff",
+  "version": "0.0.0",
+  "private": true,
+  "main": "expo-router/entry",
+  "scripts": {
+    "start": "expo start --dev-client",
+    "ios": "expo run:ios",
+    "android": "expo run:android",
+    "typecheck": "tsc --noEmit",
+    "test": "jest",
+    "export": "expo export --platform ios && expo export --platform android",
+    "doctor": "expo-doctor"
+  },
+  "dependencies": {
+    "@yayatoh/mobile-core": "workspace:*",
+    "@yayatoh/sdk": "workspace:*",
+    "@yayatoh/ui": "workspace:*",
+    "expo": "catalog:mobile",
+    "expo-build-properties": "catalog:mobile",
+    "expo-constants": "catalog:mobile",
+    "expo-dev-client": "catalog:mobile",
+    "expo-linking": "catalog:mobile",
+    "expo-router": "catalog:mobile",
+    "expo-splash-screen": "catalog:mobile",
+    "expo-status-bar": "catalog:mobile",
+    "expo-system-ui": "catalog:mobile",
+    "expo-updates": "catalog:mobile",
+    "react": "catalog:mobile",
+    "react-native": "catalog:mobile",
+    "react-native-gesture-handler": "catalog:mobile",
+    "react-native-reanimated": "catalog:mobile",
+    "react-native-safe-area-context": "catalog:mobile",
+    "react-native-screens": "catalog:mobile",
+    "react-native-worklets": "catalog:mobile",
+    "use-intl": "catalog:mobile"
+  },
+  "devDependencies": {
+    "@react-native/jest-preset": "catalog:mobile",
+    "@react-native/metro-config": "catalog:mobile",
+    "@testing-library/react-native": "catalog:mobile",
+    "@types/jest": "catalog:mobile",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:mobile",
+    "@yayatoh/config": "workspace:*",
+    "expo-doctor": "catalog:mobile",
+    "jest": "catalog:mobile",
+    "jest-expo": "catalog:mobile",
+    "react-test-renderer": "catalog:mobile",
+    "typescript": "catalog:"
+  }
+}

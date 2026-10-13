@@ -37,6 +37,9 @@ class LegacyFirstSequencer extends BaseSequencer {
   }
 }
 
+/** The Expo apps and their core test with jest-expo (`pnpm test:mobile`), not Vitest (M7.1b). */
+const MOBILE = ['**/apps/mobile/**', '**/apps/staff/**', '**/packages/mobile-core/**'];
+
 const shared = ['apps/*/src/**', 'apps/*/tests/**', 'packages/**/src/**', 'packages/**/tests/**', 'tools/**'];
 
 export default defineConfig({
@@ -47,7 +50,7 @@ export default defineConfig({
         test: {
           name: 'unit',
           include: shared.map((g) => `${g}/*.test.{ts,tsx}`),
-          exclude: ['**/*.int.test.{ts,tsx}', '**/node_modules/**', '**/canaries/**'],
+          exclude: ['**/*.int.test.{ts,tsx}', '**/node_modules/**', '**/canaries/**', ...MOBILE],
           environment: 'node',
         },
       },
@@ -55,7 +58,7 @@ export default defineConfig({
         test: {
           name: 'integration',
           include: shared.map((g) => `${g}/*.int.test.{ts,tsx}`),
-          exclude: ['**/node_modules/**'],
+          exclude: ['**/node_modules/**', ...MOBILE],
           environment: 'node',
           globalSetup: ['packages/db/tests/global-setup.ts'],
           setupFiles: ['packages/db/tests/setup-env.ts'],

@@ -54,3 +54,9 @@ apps/web/e2e/.generated/
 /.cutover/
 /reports/
 docs/ux/sweep/full/
+
+# Expo (M7.1b)
+.expo/
+expo-env.d.ts
+apps/*/ios/
+apps/*/android/

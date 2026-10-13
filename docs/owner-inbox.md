@@ -1038,3 +1038,9 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **U11 backlog:** `docs/ux/backlog.md` lists the page-specific findings the sweep did not fix (10 reviewed rows, 58 measured rows; one high: `admin:/listings` scrolls sideways at 390 px). Decide which become the next UX increment. The admin `/tenants/{id}` 500 for the canary fixture org is the one behaviour bug in it.
 - [ ] **Visual baselines changed.** U11's 24 px breadcrumb target shifts the `/dev/design` page by a sub-pixel, so the select-size snapshots (`form-controls.spec.ts`) were re-recorded for both renderers (12 images). The change is intended; no tolerance was loosened.
 - [ ] **E2E environment note:** the whole-suite run needs Gotenberg up (`docker compose up -d postgres gotenberg mailpit`); a helper shard run without it failed 17 PDF tests that pass with it.
+
+## M7.1b — Expo workspace (pending owner)
+- [ ] **Approve or change ADR 0025 (mobile apps) and ADR 0026 (no `/api/v2` facade).** Both are **Proposed** drafts; 0026 supersedes ADR 0007 once accepted.
+- [ ] **Store identifiers (P7-4).** Production uses `com.yayatoh.yayatohapp` (Android package from `docs/research/36-gap-mobile-roadmap.md`) for Yayatoh and `com.yayatoh.staff` for Yayatoh Staff. The existing listing's **iOS bundle ID is not in the repo**: set `IOS_BUNDLE_ID` (and `ANDROID_PACKAGE` if the listed package differs) for production builds, with App Store Connect and Play Console access and the Android signing setup.
+- [ ] **Expo account.** `EAS_PROJECT_ID` and `EXPO_OWNER` are read from the environment; no EAS project exists yet. Builders never run `eas build`, `submit` or `update` against a real project.
+- [ ] **Link files.** The apps declare `applinks:yayatoh.com`, `applinks:app.yayatoh.com` and `applinks:*.yayatoh.events`; the server must serve `apple-app-site-association` and `assetlinks.json` (a later server increment, `docs/plans/mobile.md`).
