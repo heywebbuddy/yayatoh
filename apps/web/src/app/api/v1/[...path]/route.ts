@@ -1,4 +1,4 @@
-import { createV1 } from '@yayatoh/api-v1';
+import { createV1, mobileSettingsFromEnv } from '@yayatoh/api-v1';
 import { bearerSessions } from '@yayatoh/auth';
 import { Hono } from 'hono';
 import { getAuth } from '@/server/auth.ts';
@@ -17,6 +17,7 @@ const app = new Hono().route(
     sessions: () => bearerSessions(getAuth()),
     payments: getPaymentProvider,
     basePath: '/api/v1',
+    mobile: mobileSettingsFromEnv(),
   }),
 );
 

@@ -23,10 +23,18 @@ import { publicRoutes } from './routes/public.ts';
 import { salesRoutes } from './routes/sales.ts';
 import { API_VERSION } from './routes/version.ts';
 import { clientInfo } from './telemetry.ts';
+import { mobileApps, resolveMobile, versionGate } from './versions.ts';
 import { registerWebhooks } from './webhooks.ts';
 
 export { cachedJson, etagOf } from './caching.ts';
-export type { MobileSettings, Principal, V1Deps } from './context.ts';
+export {
+  MOBILE_CLIENTS,
+  type MobileAppSettings,
+  type MobileClient,
+  type MobileSettings,
+  type Principal,
+  type V1Deps,
+} from './context.ts';
 export { decodeCursor, encodeCursor, pageByKey, pageOf } from './cursor.ts';
 export {
   type Deprecation,
@@ -38,6 +46,7 @@ export {
 export { memoryRateLimiter, RATE_LIMITS, type RateDecision, type RateLimiter } from './rate-limit.ts';
 export { API_VERSION } from './routes/version.ts';
 export { type ClientInfo, clientInfo } from './telemetry.ts';
+export { compareVersions, mobileSettingsFromEnv } from './versions.ts';
 
 /** Every operation's tag, described (Spectral `openapi-tags`, `tag-description`). */
 const API_TAGS = [
@@ -213,6 +222,11 @@ export function createV1(deps: V1Deps) {
       );
     });
   }
+
+  // M7.2d: an app below its minimum version gets a 426 before anything else is looked up (never a
+  // Staff device inside its event window; a request without the app header always passes).
+  const apps = mobileApps(resolveMobile(deps.mobile));
+  v1.use('*', versionGate({ ports: deps.ports, settings: () => apps, basePath, now: deps.now }));
 
   // Credential → principal. Device tokens (`yyd_`) are left to the scanner routes.
   v1.use('*', async (c, next) => {

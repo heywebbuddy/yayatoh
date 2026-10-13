@@ -1,9 +1,10 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi';
 import { DomainError } from '@yayatoh/kernel';
 import { myOrganizations } from '@yayatoh/tenancy';
-import type { MobileSettings, V1Deps, V1Env } from '../context.ts';
+import type { V1Deps, V1Env } from '../context.ts';
 import { RATE_LIMITS, type RateLimiter } from '../rate-limit.ts';
 import { listSchema, Membership, MobileConfig, Session, TokenPair, toWire, User } from '../resources.ts';
+import { mobileApps, resolveMobile } from '../versions.ts';
 import { body, json, problems, userSecurity } from './common.ts';
 import { API_VERSION } from './version.ts';
 
@@ -107,16 +108,9 @@ const mobileConfig = createRoute({
   tags: ['mobile'],
   summary: 'Minimum and latest app versions, base URLs and feature flags (public)',
   description:
-    'Minimum and latest app versions per platform, the base URLs and feature flags. No credential.',
+    'Minimum and latest app versions per platform and per app (`apps`), the base URLs and feature flags. No credential. An app below its `minimumVersion` gets `426 Upgrade Required` (problem+json, code `upgrade_required`, `details.storeUrl`) from every other route; this one always answers.',
   responses: { 200: json(MobileConfig, 'Mobile configuration') },
 });
-
-const DEFAULT_MOBILE: MobileSettings = {
-  minimumVersions: { ios: '0.0.0', android: '0.0.0' },
-  latestVersions: { ios: '0.0.0', android: '0.0.0' },
-  baseUrls: { api: 'https://api.yayatoh.com/v1', web: 'https://app.yayatoh.com' },
-  features: { wallet: false, rsvp: false, agenda: false, offlineScanning: true },
-};
 
 function userOf(c: { get(k: 'principal'): V1Env['Variables']['principal'] }) {
   const p = c.get('principal');
@@ -125,7 +119,7 @@ function userOf(c: { get(k: 'principal'): V1Env['Variables']['principal'] }) {
 }
 
 export function authRoutes(deps: V1Deps, limiter: RateLimiter, ipOf: (h: Headers) => string) {
-  const mobile: MobileSettings = { ...DEFAULT_MOBILE, ...deps.mobile };
+  const mobile = resolveMobile(deps.mobile);
   const sessions = () => {
     if (!deps.sessions) throw new DomainError('not_found', 'Sessions are not available on this host');
     return deps.sessions();
@@ -209,5 +203,7 @@ export function authRoutes(deps: V1Deps, limiter: RateLimiter, ipOf: (h: Headers
         200,
       );
     })
-    .openapi(mobileConfig, (c) => c.json(toWire(MobileConfig, { apiVersion: API_VERSION, ...mobile }), 200));
+    .openapi(mobileConfig, (c) =>
+      c.json(toWire(MobileConfig, { apiVersion: API_VERSION, ...mobile, apps: mobileApps(mobile) }), 200),
+    );
 }

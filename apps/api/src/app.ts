@@ -1,5 +1,11 @@
 import { OpenAPIHono } from '@hono/zod-openapi';
-import { createV1, OPENAPI_INFO, type V1Deps, openApiDocument as v1Document } from '@yayatoh/api-v1';
+import {
+  createV1,
+  mobileSettingsFromEnv,
+  OPENAPI_INFO,
+  type V1Deps,
+  openApiDocument as v1Document,
+} from '@yayatoh/api-v1';
 import { type Auth, bearerSessions, consoleMailer, createAuth } from '@yayatoh/auth';
 import { type PaymentProvider, paymentProviderFromEnv } from '@yayatoh/payments';
 import { secureHeaders } from 'hono/secure-headers';
@@ -30,7 +36,7 @@ export const deps: V1Deps = {
     payments ??= paymentProviderFromEnv(process.env, process.env.BETTER_AUTH_URL ?? 'http://localhost:3000');
     return payments;
   },
-  mobile: process.env.MOBILE_CONFIG_JSON ? JSON.parse(process.env.MOBILE_CONFIG_JSON) : undefined,
+  mobile: mobileSettingsFromEnv(),
   // Images are served by the web app (`/media/…`); /v1 hands out absolute URLs on its origin.
   publicOrigin: process.env.NEXT_PUBLIC_APP_ORIGIN || undefined,
 };

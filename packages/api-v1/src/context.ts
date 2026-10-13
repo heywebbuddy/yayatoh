@@ -11,11 +11,33 @@ export type Principal =
   | { readonly kind: 'api_key'; readonly key: ApiKeyIdentity }
   | { readonly kind: 'user'; readonly session: BearerSession };
 
+/** The four mobile apps, as they name themselves in `X-Yayatoh-Client` (M7.1c, M7.2d). */
+export const MOBILE_CLIENTS = [
+  'yayatoh-ios',
+  'yayatoh-android',
+  'yayatoh-staff-ios',
+  'yayatoh-staff-android',
+] as const;
+export type MobileClient = (typeof MOBILE_CLIENTS)[number];
+
+/** One app's version policy: below `minimumVersion` its `/v1` calls get a 426 pointing at `storeUrl`. */
+export interface MobileAppSettings {
+  readonly minimumVersion: string;
+  readonly latestVersion: string;
+  readonly storeUrl: string;
+}
+
 export interface MobileSettings {
+  /** The attendee apps' minimum per platform (kept for the older clients); see `apps`. */
   readonly minimumVersions: { readonly ios: string; readonly android: string };
   readonly latestVersions: { readonly ios: string; readonly android: string };
   readonly baseUrls: { readonly api: string; readonly web: string };
   readonly features: Readonly<Record<string, boolean>>;
+  /**
+   * M7.2d: per-app overrides. An app left out (or a field left out) takes the attendee apps'
+   * per-platform values above, or no minimum for the Staff apps.
+   */
+  readonly apps?: Readonly<Partial<Record<MobileClient, Partial<MobileAppSettings>>>>;
 }
 
 export interface V1Deps {
@@ -27,6 +49,8 @@ export interface V1Deps {
   /** Count requests per route × client × app version (on unless false). */
   readonly telemetry?: boolean;
   readonly mobile?: Partial<MobileSettings>;
+  /** Test seam: the clock for the Staff event window of the version gate (default: the real time). */
+  readonly now?: () => Date;
   /**
    * The web app's origin, which serves `/media/…` (images get absolute URLs). Default: the
    * request's origin, right for the web mount; `apps/api` sets `NEXT_PUBLIC_APP_ORIGIN`.
