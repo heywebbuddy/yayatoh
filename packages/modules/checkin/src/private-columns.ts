@@ -37,7 +37,8 @@ export const privateColumns = columnPrivacy('checkin', {
   // Staff push (M3.4a): the endpoint and keys are credentials of the device's browser.
   staff_push_subscriptions: {
     platform: 'vocab',
-    app_id: internal(),
+    // Native rows only: the keys CHECK requires app_id to be null on a web push row (M7.2e).
+    app_id: internal(undefined, { where: "platform <> 'webpush'" }),
     endpoint: secret('url'),
     p256dh: secret('none', {
       why: 'CHECK requires an 87-char base64url P-256 key; never selected into a DTO',

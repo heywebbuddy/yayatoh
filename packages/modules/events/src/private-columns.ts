@@ -45,8 +45,9 @@ export const privateColumns = columnPrivacy('events', {
     token_hash: secret(),
     host: internal(),
     kind: 'vocab',
-    refresh_hash: secret(),
-    previous_refresh_hash: secret(),
+    // Bearer rows only: the bearer CHECK requires both to be null on a cookie session (M7.2e).
+    refresh_hash: secret(undefined, { where: "kind = 'bearer'" }),
+    previous_refresh_hash: secret(undefined, { where: "kind = 'bearer'" }),
   },
   series: { slug: 'public', name: 'public', description: 'public' },
   // Short links are public URLs (`/e/{code}`).

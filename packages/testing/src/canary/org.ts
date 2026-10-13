@@ -1,11 +1,11 @@
 import { AUDIENCE_EXPORT_COLUMNS, audienceExportBulk, catchUpParticipation } from '@yayatoh/audiences';
-import { enrollDeviceCommand } from '@yayatoh/checkin';
+import { enrollDeviceCommand, subscribeStaffNativePushCommand } from '@yayatoh/checkin';
 import { createEntryCommand, createHelpArticleCommand, createSiteSectionCommand } from '@yayatoh/cms';
 import { emptySegment } from '@yayatoh/crm';
 import { withTenant } from '@yayatoh/db';
-import { createAnnouncementCommand, getEventBySlugQuery } from '@yayatoh/events';
+import { createAnnouncementCommand, createPortalBearerSession, getEventBySlugQuery } from '@yayatoh/events';
 import { rsvpLinkToken } from '@yayatoh/guests';
-import { executeCommand, executeQuery } from '@yayatoh/kernel';
+import { createCtx, executeCommand, executeQuery } from '@yayatoh/kernel';
 import { updateSiteSettingsCommand } from '@yayatoh/marketplace';
 import { announcementMailer, sendAnnouncementCommand } from '@yayatoh/messaging';
 import { createNotifier, dispatchDue, memoryTransports } from '@yayatoh/notifications';
@@ -302,6 +302,28 @@ async function prepare(admin: CanaryAdmin, orgId: string, ownerId: string, event
      from orders.invoice_payments p where org_id = $1 order by created_at limit 1`,
     [orgId],
   );
+  // M7.2e: a Staff app on a second door device registered for native push (its app id), and an
+  // exhibitor or speaker signed in through the app (a bearer portal session with refresh hashes).
+  const staffApp = await executeCommand(enrollDeviceCommand, { label: 'Canary staff app' }, ctx(), ports);
+  const copy = { title: 'Alert', body: '{label} {percent}' };
+  await executeCommand(
+    subscribeStaffNativePushCommand,
+    {
+      platform: 'apns',
+      token: 'a'.repeat(64),
+      appId: 'com.yayatoh.staff',
+      locale: 'en',
+      copy: { device_offline: copy, device_low_battery: copy, device_backlog: copy, capacity_near: copy },
+    },
+    createCtx({ orgId, actor: { type: 'system', name: `device:${staffApp.deviceId}` } }),
+    ports,
+  );
+  const [portalAccount] = await admin.unsafe(
+    `select id from events.portal_accounts where org_id = $1 order by created_at limit 1`,
+    [orgId],
+  );
+  if (!portalAccount) throw new Error('canary: the fixture has no portal account');
+  await createPortalBearerSession({ orgId, accountId: portalAccount.id as string });
 }
 
 /** Writes the canaries into every registered private column of the org (every row). */
