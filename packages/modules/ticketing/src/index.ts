@@ -117,7 +117,12 @@ export {
   ticketsForOrderTx,
   voidTicketsTx,
 } from './issue.ts';
-export { activeTicketIdForCodeTx, activeTicketShortCodeTx, activeTicketsHeldByTx } from './kiosk.ts';
+export {
+  activeTicketIdForCodeTx,
+  activeTicketShortCodeTx,
+  activeTicketsHeldByEmailTx,
+  activeTicketsHeldByTx,
+} from './kiosk.ts';
 export { nameTicketHolderTx } from './naming.ts';
 export {
   activeTicketsForOccurrenceTx,

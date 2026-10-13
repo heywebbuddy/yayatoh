@@ -954,6 +954,9 @@ importers:
       '@yayatoh/media':
         specifier: workspace:*
         version: link:../modules/media
+      '@yayatoh/notifications':
+        specifier: workspace:*
+        version: link:../modules/notifications
       '@yayatoh/orders':
         specifier: workspace:*
         version: link:../modules/orders

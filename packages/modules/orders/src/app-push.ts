@@ -9,7 +9,13 @@ import {
   reminderTimeFor,
 } from '@yayatoh/notifications';
 import { defineSubscriber, type Notifier } from '@yayatoh/platform';
-import { eventHoldersTx, ticketPushFactsTx, ticketsForOrderTx, transferFactsTx } from '@yayatoh/ticketing';
+import {
+  activeTicketsHeldByEmailTx,
+  eventHoldersTx,
+  ticketPushFactsTx,
+  ticketsForOrderTx,
+  transferFactsTx,
+} from '@yayatoh/ticketing';
 import { eq } from 'drizzle-orm';
 import { z } from 'zod';
 import { orders } from './schema.ts';
@@ -292,4 +298,28 @@ export function appPushNotifier(deps: { notifier: Notifier }) {
       }
     },
   });
+}
+
+/**
+ * A phone was just registered in this org (`POST /v1/me/devices`): queue the reminders of the
+ * tickets this person already holds, which were skipped while they had no phone here. Safe to run
+ * again: each reminder is keyed by kind, ticket and person.
+ */
+export async function queueRemindersForHolderTx(
+  tx: TenantTx,
+  notifier: Notifier,
+  email: string,
+  now: Date,
+): Promise<number> {
+  let queued = 0;
+  for (const t of await activeTicketsHeldByEmailTx(tx, email))
+    queued += await queueAppReminders(tx, notifier, {
+      ticketId: t.id,
+      orderId: t.orderId,
+      eventId: t.eventId,
+      occurrenceId: t.occurrenceId,
+      to: { email },
+      now,
+    });
+  return queued;
 }

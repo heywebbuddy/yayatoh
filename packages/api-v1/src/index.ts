@@ -15,6 +15,7 @@ import { authRoutes } from './routes/auth.ts';
 import { automationRoutes } from './routes/automation.ts';
 import { bulkRoutes } from './routes/bulk.ts';
 import { contentRoutes } from './routes/content.ts';
+import { deviceRoutes } from './routes/devices.ts';
 import { docsRoutes } from './routes/docs.ts';
 import { health } from './routes/health.ts';
 import { hookRoutes } from './routes/hooks.ts';
@@ -28,7 +29,6 @@ import { registerWebhooks } from './webhooks.ts';
 
 export { cachedJson, etagOf } from './caching.ts';
 export type { MeContext, MobileSettings, Principal, V1Deps, V1Env } from './context.ts';
-export { meScope } from './me-scope.ts';
 export { decodeCursor, encodeCursor, pageByKey, pageOf } from './cursor.ts';
 export {
   type Deprecation,
@@ -37,6 +37,7 @@ export {
   deprecationMiddleware,
   deprecations,
 } from './deprecation.ts';
+export { meScope } from './me-scope.ts';
 export { memoryRateLimiter, RATE_LIMITS, type RateDecision, type RateLimiter } from './rate-limit.ts';
 export { API_VERSION } from './routes/version.ts';
 export { type ClientInfo, clientInfo } from './telemetry.ts';
@@ -312,6 +313,8 @@ export function createV1(deps: V1Deps) {
 
   v1.route('/', health);
   v1.route('/', authRoutes(deps, limiter, clientIp));
+  // M7.2c: the person's phones for push (`/me/devices`, behind the `/me` scope).
+  v1.route('/', deviceRoutes(deps));
   v1.route('/', publicRoutes());
   v1.route('/', contentRoutes(deps));
   v1.route('/', orgRoutes(deps));
