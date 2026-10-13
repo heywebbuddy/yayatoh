@@ -17,5 +17,9 @@
     "@yayatoh/config": "workspace:*",
     "@types/node": "catalog:",
     "typescript": "catalog:"
+  },
+  "dependencies": {
+    "@noble/curves": "catalog:",
+    "@noble/hashes": "catalog:"
   }
 }
