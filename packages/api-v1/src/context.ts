@@ -1,4 +1,4 @@
-import type { BearerSession, BearerSessions } from '@yayatoh/auth';
+import type { AppSignIn, BearerSession, BearerSessions } from '@yayatoh/auth';
 import type { ApiAccessQuotas } from '@yayatoh/billing';
 import type { TenantTx } from '@yayatoh/db';
 import type { CommandPorts, Ctx } from '@yayatoh/kernel';
@@ -22,6 +22,11 @@ export interface V1Deps {
   readonly ports: CommandPorts<TenantTx>;
   /** Bearer sessions (Better Auth). Without it, only API keys and device tokens authenticate. */
   readonly sessions?: () => BearerSessions;
+  /**
+   * M7.2a: app sign-in (emailed code, Apple and Google id_tokens, the two-factor step) and
+   * step-up on bearer sessions. Without it those grants and routes answer 404.
+   */
+  readonly appSignIn?: () => AppSignIn;
   readonly payments: () => PaymentProvider;
   readonly rateLimiter?: RateLimiter;
   /** Count requests per route × client × app version (on unless false). */

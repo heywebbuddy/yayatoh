@@ -55,4 +55,9 @@ export const RATE_LIMITS = {
   search: { limit: 60, window: 60 },
   loginAccount: { limit: 5, window: 15 * 60 },
   loginIp: { limit: 100, window: 60 },
+  /** M7.2a: emailed sign-in codes requested, per address and per client IP. */
+  emailCodeAccount: { limit: 5, window: 15 * 60 },
+  emailCodeIp: { limit: 30, window: 60 },
+  /** M7.2a: emails sent for a step-up code, per signed-in person. */
+  stepUpMail: { limit: 5, window: 15 * 60 },
 } as const;

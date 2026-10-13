@@ -1,5 +1,6 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi';
-import { DomainError } from '@yayatoh/kernel';
+import { type AppSignInResult, isTwoFactorError } from '@yayatoh/auth';
+import { DomainError, STEP_UP_WINDOW_MS } from '@yayatoh/kernel';
 import { myOrganizations } from '@yayatoh/tenancy';
 import type { MobileSettings, V1Deps, V1Env } from '../context.ts';
 import { RATE_LIMITS, type RateLimiter } from '../rate-limit.ts';
@@ -11,6 +12,12 @@ const LoginBody = z
   .object({ email: z.email().max(254), password: z.string().min(1).max(128) })
   .openapi('LoginRequest');
 
+const Nonce = z.string().min(16).max(200).openapi({
+  description:
+    'A random value the app makes for this attempt and gives the platform’s sign-in sheet. For Apple the sheet puts its SHA-256 (hex) in the id_token; for Google it is carried as given.',
+});
+const Code = z.string().min(1).max(32);
+
 const TokenBody = z
   .discriminatedUnion('grantType', [
     z.object({
@@ -19,6 +26,34 @@ const TokenBody = z
       password: z.string().min(1).max(128),
     }),
     z.object({ grantType: z.literal('refresh_token'), refreshToken: z.string().min(1).max(200) }),
+    z.object({
+      grantType: z.literal('email_code'),
+      email: z.email().max(254),
+      code: Code.openapi({ description: 'The six-digit code from `POST /auth/email-code`.' }),
+    }),
+    z.object({
+      grantType: z.literal('apple'),
+      idToken: z.string().min(1).max(8192),
+      nonce: Nonce,
+      name: z.string().trim().min(1).max(200).optional().openapi({
+        description: 'The name Apple gives the app on the first sign-in only (it is not in the id_token).',
+      }),
+    }),
+    z.object({
+      grantType: z.literal('google'),
+      idToken: z.string().min(1).max(8192),
+      nonce: Nonce,
+    }),
+    z.object({
+      grantType: z.literal('two_factor'),
+      challenge: z.string().min(1).max(100),
+      code: Code.openapi({ description: 'An authenticator code or a backup code.' }),
+    }),
+    z.object({
+      grantType: z.literal('link_proof'),
+      challenge: z.string().min(1).max(100),
+      code: Code.openapi({ description: 'The six-digit code emailed to the existing account’s address.' }),
+    }),
   ])
   .openapi('TokenRequest');
 
@@ -28,11 +63,82 @@ const token = createRoute({
   operationId: 'issueToken',
   tags: ['auth'],
   summary:
-    'Sign in (grantType password) or refresh (grantType refresh_token): a 15-minute access token and a rotating refresh token',
-  description:
+    'Sign in or refresh: a 15-minute access token and a rotating refresh token (grantType password, email_code, apple, google, two_factor, link_proof or refresh_token)',
+  description: [
     'Each refresh spends the refresh token and returns a new pair; the previous access token ends. A spent refresh token presented again revokes its whole chain (every access token issued from it ends), answering `401` with `reason: refresh_token_reused`.',
+    '',
+    '**Grants.** `password`: email and password. `email_code`: the code from `POST /auth/email-code`; the first sign-in creates the account with the address verified. `apple` and `google`: the native sheet’s `idToken` with the `nonce` the app gave it; the token’s signature, issuer, audience, expiry and nonce are checked. `two_factor` and `link_proof`: finish a step the platform asked for (below).',
+    '',
+    '**Steps.** An account with two-step verification never gets tokens from a first factor (`password`, `email_code`, `apple`, `google`, `link_proof`): the answer is `401 step_up_required` with `details.reason: two_factor_required`, a single-use `details.challenge` and `details.challengeExpiresAt` (five minutes). Send it with an authenticator or backup code as grant `two_factor`. A provider sign-in whose verified email matches an existing account that has not linked it answers `401 step_up_required` with `details.reason: email_proof_required`: a code was emailed to that address; send it with the `challenge` as grant `link_proof`.',
+    '',
+    '**Refusals** are `401 unauthenticated` with `details.reason`: `invalid_credentials`, `invalid_code`, `too_many_attempts` (start the sign-in again), `invalid_challenge` (unknown, spent or expired), `invalid_id_token`, `provider_email_missing`, `provider_email_unverified`, `provider_linked_elsewhere`; or `429 rate_limited`.',
+  ].join('\n'),
   request: body(TokenBody),
   responses: { 200: json(TokenPair, 'Tokens'), ...problems },
+});
+
+const EmailCodeBody = z.object({ email: z.email().max(254) }).openapi('EmailCodeRequest');
+const EmailCodeRequested = z
+  .object({
+    expiresInSeconds: z.number().int().openapi({ description: 'How long the code works.' }),
+  })
+  .openapi('EmailCodeRequested');
+
+const emailCode = createRoute({
+  method: 'post',
+  path: '/auth/email-code',
+  operationId: 'requestEmailCode',
+  tags: ['auth'],
+  summary: 'Email a six-digit sign-in code',
+  description:
+    'Sends a code to the address and answers `202` with the same body whether or not the address has an account: the first sign-in with the code creates it. Spend the code with `POST /auth/token` (grantType `email_code`). Limited per address (5 per 15 min) and per client IP.',
+  request: body(EmailCodeBody),
+  responses: { 202: json(EmailCodeRequested, 'A code was sent if the address can receive mail'), ...problems },
+});
+
+const StepUpMethod = z.enum(['totp', 'password', 'email']).openapi('StepUpMethod', {
+  description:
+    'How this person confirms it is them: their authenticator (if set up), else their password, else an emailed code.',
+});
+const StepUpStarted = z.object({ method: StepUpMethod }).openapi('StepUpStarted');
+const StepUpBody = z
+  .discriminatedUnion('method', [
+    z.object({ method: z.literal('totp'), code: Code }),
+    z.object({ method: z.literal('email'), code: Code }),
+    z.object({ method: z.literal('password'), password: z.string().min(1).max(128) }),
+  ])
+  .openapi('StepUpRequest');
+const StepUpResult = z
+  .object({
+    stepUpAt: z.iso.datetime({ offset: true }),
+    expiresAt: z.iso.datetime({ offset: true }).openapi({
+      description: 'Commands that need a recent step-up pass until this time.',
+    }),
+  })
+  .openapi('StepUpResult');
+
+const stepUpStart = createRoute({
+  method: 'post',
+  path: '/auth/step-up/start',
+  operationId: 'startStepUp',
+  tags: ['auth'],
+  summary: 'Which proof the signed-in person must give to step up (emails the code when it is an emailed one)',
+  description:
+    'Answers with the method (`totp`, `password` or `email`). For `email` a six-digit code is sent to the person’s address (5 per 15 min). Then send the proof to `POST /auth/step-up`.',
+  security: userSecurity,
+  responses: { 200: json(StepUpStarted, 'The method to use'), ...problems },
+});
+const stepUp = createRoute({
+  method: 'post',
+  path: '/auth/step-up',
+  operationId: 'stepUp',
+  tags: ['auth'],
+  summary: 'Confirm it is you: commands that need a recent step-up pass for the next few minutes',
+  description:
+    'Checks an authenticator or backup code (`totp`), the password, or an emailed code (`email`; the method must be the person’s own, see `POST /auth/step-up/start`) and stamps this session. A command that needs a step-up and finds none fresh answers `401 step_up_required`. A wrong proof answers `400 validation_failed` with `details.reason` `invalid_code` or `invalid_password`; five wrong proofs in 15 minutes answer `429`. A fresh sign-in counts as a step-up.',
+  security: userSecurity,
+  request: body(StepUpBody),
+  responses: { 200: json(StepUpResult, 'The session is stepped up'), ...problems },
 });
 
 const RevokeBody = z.object({ refreshToken: z.string().min(1).max(200) }).openapi('RevokeRequest');
@@ -118,6 +224,37 @@ const DEFAULT_MOBILE: MobileSettings = {
   features: { wallet: false, rsvp: false, agenda: false, offlineScanning: true },
 };
 
+/**
+ * The problem for a sign-in that did not end in tokens. Steps (`step_up_required`) carry the
+ * challenge to answer; refusals are `unauthenticated` with a stable `details.reason`.
+ */
+function refuse(r: Extract<AppSignInResult, { ok: false }>): never {
+  switch (r.reason) {
+    case 'two_factor_required':
+      throw new DomainError('step_up_required', 'Enter the code from your authenticator app', {
+        reason: 'two_factor_required',
+        challenge: r.challenge.token,
+        challengeExpiresAt: r.challenge.expiresAt.toISOString(),
+      });
+    case 'link_proof_required':
+      throw new DomainError('step_up_required', 'Enter the code we emailed to confirm this address', {
+        reason: 'email_proof_required',
+        challenge: r.challenge.token,
+        challengeExpiresAt: r.challenge.expiresAt.toISOString(),
+      });
+    case 'rate_limited':
+      throw new DomainError('rate_limited', 'Too many wrong codes', { retryAfter: 15 * 60 });
+    case 'invalid_code':
+    case 'too_many_attempts':
+    case 'invalid_challenge':
+    case 'invalid_id_token':
+    case 'provider_email_missing':
+    case 'provider_email_unverified':
+    case 'provider_linked_elsewhere':
+      throw new DomainError('unauthenticated', 'The sign-in could not be completed', { reason: r.reason });
+  }
+}
+
 function userOf(c: { get(k: 'principal'): V1Env['Variables']['principal'] }) {
   const p = c.get('principal');
   if (p?.kind !== 'user') throw new DomainError('unauthenticated', 'A user session is required');
@@ -141,37 +278,112 @@ export function authRoutes(deps: V1Deps, limiter: RateLimiter, ipOf: (h: Headers
         throw new DomainError('rate_limited', 'Too many sign-in attempts', { retryAfter: d.resetSeconds });
     }
   };
+  const appSignIn = () => {
+    if (!deps.appSignIn) throw new DomainError('not_found', 'App sign-in is not available on this host');
+    return deps.appSignIn();
+  };
+  const takeOrThrow = (key: string, rule: { limit: number; window: number }) => {
+    const d = limiter.take(key, rule.limit, rule.window);
+    if (!d.allowed) throw new DomainError('rate_limited', 'Too many attempts', { retryAfter: d.resetSeconds });
+  };
   return new OpenAPIHono<V1Env>()
     .openapi(token, async (c) => {
       const req = c.req.valid('json');
       const ip = ipOf(c.req.raw.headers);
+      if (req.grantType === 'refresh_token') {
+        const d = limiter.take(`refresh:ip:${ip}`, RATE_LIMITS.loginIp.limit, RATE_LIMITS.loginIp.window);
+        if (!d.allowed)
+          throw new DomainError('rate_limited', 'Too many requests', { retryAfter: d.resetSeconds });
+        const r = await sessions().refresh(req.refreshToken);
+        if (!r.ok)
+          throw new DomainError('unauthenticated', 'The refresh token cannot be used', {
+            reason: r.reason === 'reused' ? 'refresh_token_reused' : `refresh_token_${r.reason}`,
+          });
+        return c.json(toWire(TokenPair, { ...r.tokens, tokenType: 'bearer' }), 200);
+      }
       if (req.grantType === 'password') {
         loginLimits(req.email, ip);
         const r = await sessions().signInForTokens(req.email, req.password);
         if (!r.ok) {
-          throw r.reason === 'two_factor_required'
-            ? new DomainError(
-                'step_up_required',
-                'This account uses two-factor sign-in; use the web sign-in',
-                {
-                  reason: 'two_factor_required',
-                },
-              )
-            : new DomainError('unauthenticated', 'Wrong email or password', {
-                reason: 'invalid_credentials',
-              });
+          if (r.reason === 'two_factor_required') {
+            // The password is right: open the second step where the deployment can (M7.2a).
+            const challenge = deps.appSignIn ? await deps.appSignIn().challengeForPassword(req.email) : null;
+            if (challenge) return refuse({ ok: false, reason: 'two_factor_required', challenge });
+            throw new DomainError(
+              'step_up_required',
+              'This account uses two-factor sign-in; use the web sign-in',
+              { reason: 'two_factor_required' },
+            );
+          }
+          throw new DomainError('unauthenticated', 'Wrong email or password', {
+            reason: 'invalid_credentials',
+          });
         }
         return c.json(toWire(TokenPair, { ...r.tokens, tokenType: 'bearer' }), 200);
       }
-      const d = limiter.take(`refresh:ip:${ip}`, RATE_LIMITS.loginIp.limit, RATE_LIMITS.loginIp.window);
-      if (!d.allowed)
-        throw new DomainError('rate_limited', 'Too many requests', { retryAfter: d.resetSeconds });
-      const r = await sessions().refresh(req.refreshToken);
-      if (!r.ok)
-        throw new DomainError('unauthenticated', 'The refresh token cannot be used', {
-          reason: r.reason === 'reused' ? 'refresh_token_reused' : `refresh_token_${r.reason}`,
-        });
+      const app = appSignIn();
+      let r: AppSignInResult;
+      switch (req.grantType) {
+        case 'email_code':
+          takeOrThrow(`emailcode:verify:${req.email.toLowerCase()}`, RATE_LIMITS.loginAccount);
+          takeOrThrow(`emailcode:verify:ip:${ip}`, RATE_LIMITS.loginIp);
+          r = await app.signInWithEmailCode(req.email, req.code);
+          break;
+        case 'apple':
+        case 'google':
+          takeOrThrow(`idtoken:ip:${ip}`, RATE_LIMITS.loginIp);
+          r = await app.signInWithIdToken({
+            provider: req.grantType,
+            idToken: req.idToken,
+            nonce: req.nonce,
+            name: req.grantType === 'apple' ? (req.name ?? null) : null,
+          });
+          break;
+        case 'two_factor':
+          takeOrThrow(`challenge:ip:${ip}`, RATE_LIMITS.loginIp);
+          r = await app.completeTwoFactor(req.challenge, req.code);
+          break;
+        case 'link_proof':
+          takeOrThrow(`challenge:ip:${ip}`, RATE_LIMITS.loginIp);
+          r = await app.completeLinkProof(req.challenge, req.code);
+          break;
+      }
+      if (!r.ok) return refuse(r);
       return c.json(toWire(TokenPair, { ...r.tokens, tokenType: 'bearer' }), 200);
+    })
+    .openapi(emailCode, async (c) => {
+      const { email } = c.req.valid('json');
+      const ip = ipOf(c.req.raw.headers);
+      takeOrThrow(`emailcode:acct:${email.toLowerCase()}`, RATE_LIMITS.emailCodeAccount);
+      takeOrThrow(`emailcode:ip:${ip}`, RATE_LIMITS.emailCodeIp);
+      return c.json(toWire(EmailCodeRequested, await appSignIn().requestEmailCode(email)), 202);
+    })
+    .openapi(stepUpStart, async (c) => {
+      const s = userOf(c);
+      takeOrThrow(`stepup:mail:${s.user.id}`, RATE_LIMITS.stepUpMail);
+      const method = await appSignIn().startStepUp(s.user.id, s.user.email);
+      return c.json(toWire(StepUpStarted, { method }), 200);
+    })
+    .openapi(stepUp, async (c) => {
+      const s = userOf(c);
+      const proof = c.req.valid('json');
+      let at: Date;
+      try {
+        at = await appSignIn().stepUp({
+          userId: s.user.id,
+          sessionToken: s.token,
+          proof: proof.method === 'password' ? { method: 'password', password: proof.password } : proof,
+        });
+      } catch (err) {
+        if (!isTwoFactorError(err)) throw err;
+        if (err.code === 'rate_limited')
+          throw new DomainError('rate_limited', 'Too many wrong codes', { retryAfter: 15 * 60 });
+        throw new DomainError('validation_failed', 'That did not confirm it is you', { reason: err.code });
+      }
+      return c.json(
+        toWire(StepUpResult, { stepUpAt: at, expiresAt: new Date(at.getTime() + STEP_UP_WINDOW_MS) }),
+        200,
+      );
     })
     .openapi(revoke, async (c) => {
       await sessions().revokeRefresh(c.req.valid('json').refreshToken);
