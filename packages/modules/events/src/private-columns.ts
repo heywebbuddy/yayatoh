@@ -45,8 +45,12 @@ export const privateColumns = columnPrivacy('events', {
     token_hash: secret(),
     host: internal(),
     kind: 'vocab',
-    refresh_hash: secret(),
-    previous_refresh_hash: secret(),
+    refresh_hash: secret('none', {
+      why: 'CHECK: set only on a bearer session (M7.2e), an HMAC of the refresh token; never in a response',
+    }),
+    previous_refresh_hash: secret('none', {
+      why: 'CHECK: set only on a bearer session (M7.2e), an HMAC of the spent refresh token; never in a response',
+    }),
   },
   series: { slug: 'public', name: 'public', description: 'public' },
   // Short links are public URLs (`/e/{code}`).
