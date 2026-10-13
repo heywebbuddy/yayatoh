@@ -40,7 +40,15 @@ import {
 import { and, eq, gte, isNull, lte, sql } from 'drizzle-orm';
 import { checkpointsTx, raiseSignalTx, TWO_ENTRANCES_WINDOW_MS } from './checkpoints.ts';
 import { withOccurrenceTx } from './occurrence.ts';
-import { admissions, CHECKPOINT_KINDS, devices, KIOSK_KINDS, type ScanResult, scans } from './schema.ts';
+import {
+  admissions,
+  CHECKPOINT_KINDS,
+  devices,
+  KIOSK_KINDS,
+  type ScanResult,
+  scans,
+  staffPushSubscriptions,
+} from './schema.ts';
 import { occupiedTx, sessionAccessSource, sessionDoorTx, sessionScanTx } from './session-doors.ts';
 import { checkVelocityTx, openHighSignalCountTx } from './signals.ts';
 import { deviceScanScopeTx, scopeAllowsCheckpoint } from './staff.ts';
@@ -250,6 +258,9 @@ export const setDeviceStateCommand = tenantCommand({
       .where(eq(devices.id, input.deviceId))
       .returning({ id: devices.id });
     if (rows.length === 0) throw new DomainError('not_found');
+    // M7.2e: a revoked or wiped device gets no more staff alerts, on any push service: its
+    // subscription (web, APNs or FCM) goes with it, and its queued alert pushes by cascade.
+    await tx.delete(staffPushSubscriptions).where(eq(staffPushSubscriptions.deviceId, input.deviceId));
     await deviceStateEventTx(tx, ctx, input.deviceId, input.action === 'revoke' ? 'revoked' : 'wiped');
     emit(deviceEvent('device.state_changed', requireOrg(ctx), input.deviceId));
     return { ok: true };

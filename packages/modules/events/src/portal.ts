@@ -656,7 +656,11 @@ export async function createPortalSession(
     const r = await accountTx(tx, input.accountId);
     if (!r || stateOf(r, now) !== 'ok') throw new DomainError('forbidden');
     const expiresAt = portalSessionExpiry(now, portalExpiresAt(r.eventEndsAt));
-    await tx.delete(portalSessions).where(lt(portalSessions.expiresAt, new Date(now.getTime() - DAY)));
+    await tx
+      .delete(portalSessions)
+      .where(
+        and(eq(portalSessions.kind, 'cookie'), lt(portalSessions.expiresAt, new Date(now.getTime() - DAY))),
+      );
     await tx.insert(portalSessions).values({
       orgId: input.orgId,
       accountId: input.accountId,
@@ -692,6 +696,7 @@ export async function portalPrincipalBySession(
       .where(
         and(
           eq(portalSessions.tokenHash, portalSecretHash(appTokenSecret(), 'session', t.secret)),
+          eq(portalSessions.kind, 'cookie'),
           eq(portalSessions.host, host.toLowerCase()),
           isNull(portalSessions.revokedAt),
           gt(portalSessions.expiresAt, now),

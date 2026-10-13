@@ -799,6 +799,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/orgs/{org}/events/{eventId}/ops": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The event-day view: check-ins against expected, throughput, scan issues, devices and alerts
+         * @description Read-only, for members who can read the event (a bearer session; an API key answers 403, the Command Center is for members). The numbers are the web Command Center’s, from the same loaders: check-ins against expected, scans per minute per entrance and a per-minute series, duplicate and invalid scans, device status and the active alerts. A section the member’s role or the organization’s plan does not include is `null`.
+         */
+        get: operations["getEventOps"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/orgs/{org}/events/{eventId}/orders": {
         parameters: {
             query?: never;
@@ -1199,6 +1219,166 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/portal/auth/code": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Email a sign-in code for a portal invitation
+         * @description Emails a six-digit code (10 minutes, single use; five wrong tries lock it) to the invited address. A forged, reissued, revoked or expired invitation answers 403 `forbidden`, the same as on the web. Limited per device, IP and address. No credential.
+         */
+        post: operations["requestPortalCode"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/portal/auth/invitations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Email me my invitation again
+         * @description For someone who lost their invitation: emails the current invitation link of every live account of that address at the event. The answer is `204` whether or not the address has access (no enumeration). Limited per device, IP and address. No credential.
+         */
+        post: operations["resendPortalInvitations"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/portal/auth/revoke": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Sign out: the session ends, access and refresh token both
+         * @description Unknown or already ended tokens also answer `204`. No credential.
+         */
+        post: operations["revokePortalToken"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/portal/auth/token": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Sign in with the emailed code (grantType code) or refresh (grantType refresh_token)
+         * @description A right code returns a 15-minute access token and a rotating refresh token. Each refresh spends the refresh token and returns a new pair; a spent one presented again ends the session (`401`, `reason: refresh_token_reused`). A wrong code answers `401` with `reason: wrong_code` and `attemptsLeft`; the fifth wrong try locks the code (`code_locked`). No credential.
+         */
+        post: operations["issuePortalToken"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/portal/leads": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The leads the rep may see
+         * @description The exhibitor admin sees every lead of their exhibitor; staff see their own, or the team’s when the admin shares them. Each lead carries only the fields the attendee agreed to share (P5-8): name, job title and company, and the email only with consent. Another exhibitor’s leads never appear. `409 invalid_state` once lead access has ended (90 days after the event).
+         */
+        get: operations["listLeads"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/portal/leads/{leadId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Rate, qualify and annotate a lead
+         * @description Sets the lead’s rating, qualifiers and notes (until lead access ends). A lead of another exhibitor, or a teammate’s that is not shared, is `404` the same as an unknown one.
+         */
+        patch: operations["updateLead"];
+        trace?: never;
+    };
+    "/v1/portal/leads/scans": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Capture leads: one scan online, or the offline queue in batches
+         * @description Each scan id is applied once, so the app can resend its queue until it gets an answer; a scan is checked against the capture window at its own time. A rep without a licence within the allowance gets `403 forbidden` (`reason: no_license` or `over_allowance`); unaccepted lead terms `409` (`terms_not_accepted`).
+         */
+        post: operations["syncLeadScans"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/portal/leads/setup": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Lead mode: the rep’s licence, the lead terms, the capture window and the qualifiers
+         * @description For the signed-in exhibitor rep: which exhibitor and event, whether they hold a lead licence within the allowance, whether the terms are accepted, the capture window (opens 24 hours before the event, closes 48 hours after it; notes stay open 90 days) and the qualifier labels.
+         */
+        get: operations["getLeadSetup"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/public/events/{slug}": {
         parameters: {
             query?: never;
@@ -1474,6 +1654,154 @@ export interface paths {
          */
         post: operations["syncScans"];
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/staff/assistance": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Ask for backup, a supervisor, medical help, security or device support
+         * @description Raises a staff request tied to this device and the entrance it scans at; urgent ones push to the other staff devices. Device token only.
+         */
+        post: operations["createStaffAssistanceRequest"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/staff/assistance/{requestId}/{action}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Take, start, resolve or cancel a help request
+         * @description Works one help request of the device’s event. A request that changed meanwhile answers 409; one that cannot take that action answers 409 `invalid_state`. Device token only.
+         */
+        post: operations["workStaffAssistanceRequest"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/staff/events/{eventId}/assistance": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The event’s open help requests, most urgent first
+         * @description Open requests (guests’ and staff’s) most urgent first, then oldest first; at most 50. Device token only.
+         */
+        get: operations["listStaffAssistance"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/staff/events/{eventId}/guests": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The event’s guests for check-in by name or party, offline too
+         * @description Names, party labels, tables and arrivals of the event’s guest list: an allowlist with no contact detail, meal or private answer. Device token only.
+         */
+        get: operations["getStaffGuestSnapshot"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/staff/events/{eventId}/overview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Staff mode: today’s counts, the device board and alerts for the device’s event
+         * @description Check-ins against expected (per entrance and per event day), the event’s devices and the alerts the device may see, plus the realtime channels to follow. Device token only; the app keeps the last answer for offline use. The same answer as the Scan PWA’s staff screen.
+         */
+        get: operations["getStaffOverview"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/staff/guest-arrivals": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Sync guest check-ins made on the device, offline ones too (idempotent per check-in)
+         * @description Up to 500 arrivals; each is applied once by its `clientId`, so a retry is safe, and the first arrival of a guest (corrected device time) wins. `arrived`: this check-in is the guest’s arrival; `already`: someone checked the guest in earlier; `unknown`: not a guest of this event. Device token only.
+         */
+        post: operations["recordStaffGuestArrivals"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/staff/push": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Are staff alerts pushed to this device?
+         * @description Whether this device has a push registration for staff alerts, and on which service. Device token only.
+         */
+        get: operations["getStaffPush"];
+        /**
+         * Register this device for staff alerts on APNs or FCM
+         * @description The device’s one push registration: a new one replaces the old. It is deleted when an organizer revokes or wipes the device. Pushes carry the app’s own words (`copy`) with a device label or a percentage, never personal data. Device token only.
+         */
+        put: operations["registerStaffPush"];
+        post?: never;
+        /**
+         * Stop pushing staff alerts to this device
+         * @description Removes the device’s push registration. Device token only.
+         */
+        delete: operations["unregisterStaffPush"];
         options?: never;
         head?: never;
         patch?: never;
@@ -2264,6 +2592,73 @@ export interface components {
          */
         ApnsEnvironment: "sandbox" | "production";
         /** @enum {string} */
+        AssistanceActivityKind: "created" | "assigned" | "started" | "resolved" | "cancelled" | "note";
+        /** @enum {string} */
+        AssistanceActor: "guest" | "member" | "device" | "system";
+        /** @enum {string} */
+        AssistanceAssigneeKind: "user" | "device";
+        /** @enum {string} */
+        AssistancePriority: "urgent" | "high" | "normal";
+        AssistanceQueue: {
+            requests: components["schemas"]["AssistanceRequest"][];
+        };
+        /** @enum {string} */
+        AssistanceReason: "seat" | "accessibility" | "medical" | "lost_item" | "other" | "backup" | "supervisor" | "security" | "device";
+        AssistanceRequest: {
+            activity: {
+                actor: components["schemas"]["AssistanceActor"];
+                actorDevice: string | null;
+                /** Format: uuid */
+                actorUserId: string | null;
+                assigneeDevice: string | null;
+                /** Format: uuid */
+                assigneeUserId: string | null;
+                /** Format: date-time */
+                at: string;
+                body: string;
+                kind: components["schemas"]["AssistanceActivityKind"];
+            }[];
+            /** Format: date-time */
+            assignedAt: string | null;
+            assignee: {
+                /** Format: uuid */
+                id: string;
+                kind: components["schemas"]["AssistanceAssigneeKind"];
+                label: string | null;
+            } | null;
+            checkpoint: string | null;
+            /** Format: date-time */
+            closedAt: string | null;
+            /** Format: date-time */
+            createdAt: string;
+            /** @description The device that raised a staff request. */
+            device: string | null;
+            /** Format: date-time */
+            dueAt: string;
+            guest: {
+                name: string;
+                ticket: string;
+            } | null;
+            /** Format: uuid */
+            id: string;
+            location: string;
+            /** @description Assigned to the device asking. */
+            mine: boolean;
+            note: string;
+            number: number;
+            overdue: boolean;
+            priority: components["schemas"]["AssistancePriority"];
+            reason: components["schemas"]["AssistanceReason"];
+            source: components["schemas"]["AssistanceSource"];
+            /** Format: date-time */
+            startedAt: string | null;
+            state: components["schemas"]["AssistanceState"];
+        };
+        /** @enum {string} */
+        AssistanceSource: "guest" | "staff";
+        /** @enum {string} */
+        AssistanceState: "new" | "assigned" | "in_progress" | "resolved" | "cancelled";
+        /** @enum {string} */
         AttendanceMode: "in_person" | "online" | "hybrid";
         Attendee: {
             /** Format: date-time */
@@ -2465,6 +2860,8 @@ export interface components {
         };
         /** @enum {string} */
         DateStatus: "scheduled" | "cancelled";
+        /** @enum {string} */
+        DeviceMode: "scanner" | "kiosk";
         /**
          * @description `apns` for iOS, `fcm` for Android.
          * @enum {string}
@@ -2559,6 +2956,11 @@ export interface components {
             data: components["schemas"]["EventDate"][];
             nextCursor: string | null;
         };
+        /**
+         * @description The Command Center mode in force.
+         * @enum {string}
+         */
+        EventMode: "planning" | "pre_show" | "live" | "wrap";
         EventPage: {
             data: components["schemas"]["Event"][];
             nextCursor: string | null;
@@ -2587,6 +2989,8 @@ export interface components {
             data: components["schemas"]["Exhibitor"][];
             nextCursor: string | null;
         };
+        /** @enum {string} */
+        ExhibitorPortalRole: "exhibitor_admin" | "exhibitor_staff";
         FaqSection: {
             content: components["schemas"]["FaqSectionContent"];
             /** Format: uuid */
@@ -2608,6 +3012,73 @@ export interface components {
         };
         /** @enum {string} */
         FeeMode: "pass_on" | "absorb";
+        /** @enum {string} */
+        GuestArrivalResult: "arrived" | "already" | "unknown";
+        /** @enum {string} */
+        GuestArrivalSource: "scanner" | "kiosk";
+        GuestArrivalsRequest: {
+            arrivals: {
+                /**
+                 * Format: uuid
+                 * @description The device’s id for this check-in: a resend is a no-op.
+                 */
+                clientId: string;
+                clockOffsetMs: number;
+                /** Format: date-time */
+                deviceTs: string;
+                /** Format: uuid */
+                guestId: string;
+                source: components["schemas"]["GuestArrivalSource"];
+            }[];
+            /** Format: uuid */
+            eventId: string;
+        };
+        GuestArrivalsResult: {
+            results: {
+                /** Format: uuid */
+                clientId: string;
+                result: components["schemas"]["GuestArrivalResult"];
+            }[];
+        };
+        /** @enum {string} */
+        GuestPlaceKind: "table" | "row";
+        GuestSnapshot: {
+            /** @description While the event takes gifts online: the card-saving page opened from check-in, with its QR path (`d`, in a `size`-wide square). */
+            card: {
+                d: string;
+                size: number;
+                url: string;
+            } | null;
+            /** Format: uuid */
+            eventId: string;
+            /** Format: date-time */
+            generatedAt: string;
+            parties: {
+                guests: {
+                    /** Format: date-time */
+                    arrivedAt: string | null;
+                    firstName: string | null;
+                    guestOf: string | null;
+                    /** Format: uuid */
+                    id: string;
+                    lastName: string | null;
+                    name: string | null;
+                    places: {
+                        chart: string | null;
+                        kind: components["schemas"]["GuestPlaceKind"];
+                        label: string;
+                    }[];
+                    status: components["schemas"]["GuestStatus"];
+                }[];
+                /** Format: uuid */
+                id: string;
+                name: string;
+                tags: string[];
+            }[];
+            version: number;
+        };
+        /** @enum {string} */
+        GuestStatus: "attending" | "pending" | "declined";
         Health: {
             service: string;
             status: components["schemas"]["HealthStatus"];
@@ -2697,6 +3168,114 @@ export interface components {
          * @enum {string}
          */
         KioskKind: "tickets" | "guests" | "board";
+        Lead: {
+            /** Format: date-time */
+            capturedAt: string;
+            company: string;
+            /** @description Only if the attendee agreed to share it (P5-8). */
+            email: string | null;
+            emailConsentVersion: number | null;
+            /** Format: date-time */
+            emailWithdrawnAt: string | null;
+            /** Format: uuid */
+            id: string;
+            jobTitle: string;
+            /** Format: date-time */
+            lastScannedAt: string;
+            name: string;
+            notes: string;
+            qualifiers: string[];
+            rating: components["schemas"]["LeadRating"];
+            scannedBy: string | null;
+            scannedByMe: boolean;
+            scans: number;
+            sharedFields: components["schemas"]["LeadSharedField"][];
+        };
+        /** @enum {string} */
+        LeadCaptureState: "not_open" | "open" | "closed";
+        /**
+         * @description A rep without a licence (`unlicensed`, `over_allowance`) cannot scan.
+         * @enum {string}
+         */
+        LeadLicenseStanding: "licensed" | "unlicensed" | "over_allowance";
+        LeadList: {
+            leads: components["schemas"]["Lead"][];
+            scope: components["schemas"]["LeadScope"];
+        };
+        /** @enum {string|null} */
+        LeadRating: "hot" | "warm" | "cold" | null;
+        LeadScan: {
+            /**
+             * Format: date-time
+             * @description When the scan was made (the device clock).
+             */
+            capturedAt: string;
+            /** @description The badge QR payload. */
+            code: string;
+            notes?: string;
+            offline?: boolean;
+            qualifiers?: string[];
+            rating?: components["schemas"]["LeadRating"];
+            /** @description The device’s id for this scan: sending it again is a no-op. */
+            scanId: string;
+        };
+        LeadScanBatch: {
+            scans: components["schemas"]["LeadScan"][];
+        };
+        LeadScanBatchResult: {
+            results: components["schemas"]["LeadScanResult"][];
+        };
+        /** @enum {string|null} */
+        LeadScanRefusal: "invalid" | "wrong_event" | "not_open" | "closed" | null;
+        LeadScanResult: {
+            lead: components["schemas"]["Lead"] & (Record<string, never> | null);
+            reason: components["schemas"]["LeadScanRefusal"];
+            scanId: string;
+            status: components["schemas"]["LeadScanStatus"];
+        };
+        /** @enum {string} */
+        LeadScanStatus: "captured" | "rescanned" | "refused";
+        /** @enum {string} */
+        LeadScope: "all" | "team" | "own";
+        LeadSetup: {
+            capture: {
+                accessOpen: boolean;
+                /** Format: date-time */
+                accessUntil: string;
+                /** Format: date-time */
+                closesAt: string;
+                /** Format: date-time */
+                opensAt: string;
+                state: components["schemas"]["LeadCaptureState"];
+            };
+            email: string;
+            eventName: string;
+            exhibitorName: string;
+            /** @description Admin only: how many leads the exhibitor has (0 for staff). */
+            leadCount: number;
+            license: components["schemas"]["LeadLicenseStanding"];
+            /** @description The exhibitor’s qualifier labels a lead can carry. */
+            qualifiers: string[];
+            role: components["schemas"]["ExhibitorPortalRole"];
+            teamVisibility: boolean;
+            /** @description The exhibitor admin accepted the lead terms. */
+            termsAccepted: boolean;
+            termsVersion: number;
+            timezone: string;
+        };
+        /** @enum {string} */
+        LeadSharedField: "name" | "job_title" | "company" | "email";
+        LeadUpdate: {
+            notes: string;
+            qualifiers: string[];
+            rating: components["schemas"]["LeadRating"];
+        };
+        LeadUpdated: {
+            /** Format: uuid */
+            exhibitorId: string;
+            /** Format: uuid */
+            leadId: string;
+        };
         Link: {
             label: string;
             url: string;
@@ -2792,6 +3371,128 @@ export interface components {
                 ios: string;
             };
         };
+        /** @enum {string} */
+        NativePushPlatform: "apns" | "fcm";
+        OpsAlerts: {
+            alerts: {
+                /** Format: date-time */
+                at: string;
+                count: number;
+                /** @description Console path of the page that fixes it. */
+                href: string | null;
+                /** Format: uuid */
+                id: string;
+                /** @description The alert rule’s key. */
+                rule: string;
+                severity: components["schemas"]["OpsAlertSeverity"];
+                state: components["schemas"]["OpsAlertState"];
+            }[];
+        } | null;
+        /** @enum {string} */
+        OpsAlertSeverity: "info" | "warning" | "critical";
+        /** @enum {string} */
+        OpsAlertState: "open" | "acknowledged" | "snoozed";
+        OpsCheckins: {
+            /** Format: date-time */
+            asOf: string;
+            byDate: {
+                checkedIn: number;
+                day: string;
+            }[];
+            byEntrance: {
+                checkedIn: number;
+                name: string;
+            }[];
+            checkedIn: number;
+            expected: number;
+            timeZone: string;
+        } | null;
+        OpsDevices: {
+            /** Format: date-time */
+            asOf: string;
+            devices: {
+                appVersion: string | null;
+                batteryPct: number | null;
+                checkpoint: string | null;
+                /** Format: uuid */
+                id: string;
+                kiosk: boolean;
+                label: string;
+                /** Format: date-time */
+                lastScanAt: string | null;
+                /** Format: date-time */
+                lastSeenAt: string | null;
+                online: boolean;
+                queueDepth: number | null;
+            }[];
+        } | null;
+        OpsScanIssues: {
+            /** Format: date-time */
+            asOf: string;
+            counts: {
+                count: number;
+                result: string;
+            }[];
+            duplicates: number;
+            recent: {
+                /** Format: date-time */
+                at: string;
+                checkpoint: string | null;
+                device: string | null;
+                /** Format: uuid */
+                id: string;
+                /** Format: uuid */
+                orderId: string | null;
+                result: string;
+            }[];
+            refused: number;
+        } | null;
+        OpsThroughput: {
+            /** Format: date-time */
+            asOf: string;
+            devices: {
+                /** Format: uuid */
+                id: string | null;
+                medianGapS: number | null;
+                name: string | null;
+                queueMin: number | null;
+                scansPerMin: number;
+            }[];
+            /** @description Scans per minute at each entrance. */
+            entrances: {
+                /** Format: uuid */
+                id: string | null;
+                medianGapS: number | null;
+                name: string | null;
+                queueMin: number | null;
+                scansPerMin: number;
+            }[];
+            medianGapS: number | null;
+            queueMin: number | null;
+            /** @description Expected guests not in yet. */
+            remaining: number;
+            scansPerMin: number;
+            /** @description Check-ins per minute over the last 15 minutes, oldest first. */
+            series: {
+                /** Format: date-time */
+                at: string;
+                count: number;
+            }[];
+            windowMin: number;
+        } | null;
+        OpsView: {
+            alerts: components["schemas"]["OpsAlerts"];
+            /** Format: date-time */
+            asOf: string;
+            checkins: components["schemas"]["OpsCheckins"];
+            devices: components["schemas"]["OpsDevices"];
+            /** Format: uuid */
+            eventId: string;
+            mode: components["schemas"]["EventMode"];
+            scanIssues: components["schemas"]["OpsScanIssues"];
+            throughput: components["schemas"]["OpsThroughput"];
+            timeZone: string;
+        };
         Order: {
             buyerEmail: string;
             buyerName: string;
@@ -2849,6 +3550,76 @@ export interface components {
         };
         /** @enum {string} */
         OrgRole: "owner" | "admin" | "manager" | "finance" | "marketing" | "box_office" | "scanner" | "viewer" | "collaborator";
+        PortalCodeGrant: {
+            /** Format: uuid */
+            challengeId: string;
+            /** @description The six-digit code from the email. */
+            code: string;
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            grantType: "code";
+            /** @description The token in the emailed invitation link (`…/event-portal/invite/{token}`, or the app link built from it). */
+            inviteToken: string;
+        };
+        PortalCodeRequest: {
+            /** @description The token in the emailed invitation link (`…/event-portal/invite/{token}`, or the app link built from it). */
+            inviteToken: string;
+        };
+        PortalCodeRequested: {
+            /**
+             * Format: uuid
+             * @description Send it back with the code.
+             */
+            challengeId: string;
+            /**
+             * Format: date-time
+             * @description When another code may be requested.
+             */
+            resendAt: string;
+            status: components["schemas"]["PortalCodeStatus"];
+        };
+        /**
+         * @description `sent`: a code was emailed; `cooldown`: one was sent less than 30 seconds ago (use that one).
+         * @enum {string}
+         */
+        PortalCodeStatus: "sent" | "cooldown";
+        PortalInvitationsRequest: {
+            /** Format: email */
+            email: string;
+            /** @description The token of the event’s portal sign-in page link. */
+            siteToken: string;
+        };
+        PortalRefreshGrant: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            grantType: "refresh_token";
+            refreshToken: string;
+        };
+        PortalRevokeRequest: {
+            refreshToken: string;
+        };
+        PortalTokenPair: {
+            /** @description Send as `Authorization: Bearer …` (15 minutes). */
+            accessToken: string;
+            /** Format: date-time */
+            expiresAt: string;
+            /** @description Seconds until the access token ends. */
+            expiresIn: number;
+            /**
+             * Format: date-time
+             * @description When the session ends (a week, or the account’s end).
+             */
+            refreshExpiresAt: string;
+            /** @description Spent by the next refresh; keep it in secure storage. */
+            refreshToken: string;
+            /** @enum {string} */
+            tokenType: "bearer";
+        };
+        PortalTokenRequest: components["schemas"]["PortalCodeGrant"] | components["schemas"]["PortalRefreshGrant"];
         Problem: {
             /** @description Stable machine code, e.g. `forbidden`, `rate_limited`. */
             code: string;
@@ -3183,6 +3954,146 @@ export interface components {
         };
         SponsorTierList: {
             data: components["schemas"]["SponsorTier"][];
+        };
+        /** @enum {string} */
+        StaffAlertKind: "device_offline" | "device_low_battery" | "device_backlog" | "capacity_near";
+        /** @enum {string} */
+        StaffAlertSeverity: "warning" | "critical";
+        /**
+         * @description `take` gives the request to this device; `start`, `resolve` and `cancel` move it on (resolving and cancelling close it).
+         * @enum {string}
+         */
+        StaffAssistanceAction: "take" | "start" | "resolve" | "cancel";
+        StaffAssistanceCreated: {
+            number: number;
+            /** Format: uuid */
+            requestId: string;
+        };
+        /** @enum {string} */
+        StaffAssistanceReason: "backup" | "supervisor" | "medical" | "security" | "device";
+        StaffAssistanceRequestBody: {
+            /**
+             * Format: uuid
+             * @description The entrance the device scans at, if any.
+             */
+            checkpointId?: string | null;
+            /** Format: uuid */
+            eventId: string;
+            note?: string;
+            reason: components["schemas"]["StaffAssistanceReason"];
+        };
+        StaffAssistanceWorkBody: {
+            /** Format: uuid */
+            eventId: string;
+        };
+        StaffAssistanceWorked: {
+            state: components["schemas"]["AssistanceState"];
+        };
+        StaffNativePushRequest: {
+            /** @description The app’s bundle id (APNs topic) or package name. */
+            appId?: string | null;
+            /** @description The notification text per alert kind in the device’s language (placeholders `{label}` and `{percent}`); the server holds no UI strings. */
+            copy: {
+                assistance?: {
+                    body: string;
+                    title: string;
+                };
+                capacity_near: {
+                    body: string;
+                    title: string;
+                };
+                device_backlog: {
+                    body: string;
+                    title: string;
+                };
+                device_low_battery: {
+                    body: string;
+                    title: string;
+                };
+                device_offline: {
+                    body: string;
+                    title: string;
+                };
+            };
+            locale: string;
+            platform: components["schemas"]["NativePushPlatform"];
+            /** @description The APNs device token or the FCM registration token. */
+            token: string;
+        };
+        StaffOverview: {
+            /** @description Staff alerts; a device a supervisor opted in for also sees device alerts (offline, low battery, backlog). */
+            alerts: {
+                count: number | null;
+                /** Format: uuid */
+                deviceId: string | null;
+                deviceLabel: string | null;
+                key: string;
+                kind: components["schemas"]["StaffAlertKind"];
+                percent: number | null;
+                severity: components["schemas"]["StaffAlertSeverity"];
+                /** Format: date-time */
+                since: string;
+            }[];
+            /** Format: date-time */
+            asOf: string;
+            /** @description Live admissions per event day (multi-day events), oldest first. */
+            byDate: {
+                checkedIn: number;
+                day: string;
+            }[];
+            byEntrance: {
+                checkedIn: number;
+                /** Format: uuid */
+                checkpointId: string;
+                name: string;
+            }[];
+            /** @description Realtime channel names to follow for this event. */
+            channels: {
+                assistance: string;
+                checkins: string;
+                devices: string;
+            };
+            /** @description Tickets checked in today (live admissions). */
+            checkedIn: number;
+            /** @description Today in the event’s time zone (`YYYY-MM-DD`). */
+            day: string;
+            /**
+             * Format: uuid
+             * @description The device asking.
+             */
+            deviceId: string;
+            devices: {
+                batteryPct: number | null;
+                /** Format: uuid */
+                checkpointId: string | null;
+                /** Format: uuid */
+                id: string;
+                label: string;
+                /** Format: date-time */
+                lastSeenAt: string | null;
+                mode: components["schemas"]["DeviceMode"];
+                online: boolean;
+                queueDepth: number | null;
+                /** @description The device asking. */
+                self: boolean;
+            }[];
+            /** Format: uuid */
+            eventId: string;
+            eventName: string;
+            /** @description Tickets issued for the event. */
+            expected: number;
+            timezone: string;
+        };
+        StaffPushOk: {
+            ok: boolean;
+        };
+        /** @enum {string|null} */
+        StaffPushPlatform: "webpush" | "apns" | "fcm" | null;
+        StaffPushStatus: {
+            platform: components["schemas"]["StaffPushPlatform"];
+            subscribed: boolean;
+            /** @description A supervisor claimed device alerts on this device. */
+            supervisor: boolean;
         };
         /**
          * @description How this person confirms it is them: their authenticator (if set up), else their password, else an emailed code.
@@ -7443,6 +8354,76 @@ export interface operations {
             };
         };
     };
+    getEventOps: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The event id */
+                eventId: string;
+                /** @description Organization id or slug */
+                org: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The event-day view */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OpsView"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
     listEventOrders: {
         parameters: {
             query?: {
@@ -9184,6 +10165,549 @@ export interface operations {
             };
         };
     };
+    requestPortalCode: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PortalCodeRequest"];
+            };
+        };
+        responses: {
+            /** @description The code was sent */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PortalCodeRequested"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    resendPortalInvitations: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PortalInvitationsRequest"];
+            };
+        };
+        responses: {
+            /** @description Done */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    revokePortalToken: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PortalRevokeRequest"];
+            };
+        };
+        responses: {
+            /** @description Signed out */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    issuePortalToken: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PortalTokenRequest"];
+            };
+        };
+        responses: {
+            /** @description Tokens */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PortalTokenPair"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    listLeads: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The leads */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LeadList"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Conflict, invalid state, or the same Idempotency-Key is in flight */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    updateLead: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The lead */
+                leadId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LeadUpdate"];
+            };
+        };
+        responses: {
+            /** @description Updated */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LeadUpdated"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Conflict, invalid state, or the same Idempotency-Key is in flight */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The Idempotency-Key was used with a different request (`idempotency_key_reused`) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Read-only maintenance (`read_only_freeze`): nothing was changed; retry after `Retry-After` seconds */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    syncLeadScans: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LeadScanBatch"];
+            };
+        };
+        responses: {
+            /** @description Results per scan */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LeadScanBatchResult"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Conflict, invalid state, or the same Idempotency-Key is in flight */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The Idempotency-Key was used with a different request (`idempotency_key_reused`) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Read-only maintenance (`read_only_freeze`): nothing was changed; retry after `Retry-After` seconds */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    getLeadSetup: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The lead setup */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LeadSetup"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
     getPublicEvent: {
         parameters: {
             query?: never;
@@ -10018,6 +11542,729 @@ export interface operations {
                         title: string;
                         type: string;
                     };
+                };
+            };
+        };
+    };
+    createStaffAssistanceRequest: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StaffAssistanceRequestBody"];
+            };
+        };
+        responses: {
+            /** @description The request */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StaffAssistanceCreated"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown, revoked or wiped device token (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Conflict, invalid state, or the same Idempotency-Key is in flight */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The Idempotency-Key was used with a different request (`idempotency_key_reused`) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Read-only maintenance (`read_only_freeze`): nothing was changed; retry after `Retry-After` seconds */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    workStaffAssistanceRequest: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description `take` gives the request to this device; `start`, `resolve` and `cancel` move it on (resolving and cancelling close it). */
+                action: components["schemas"]["StaffAssistanceAction"];
+                /** @description The help request */
+                requestId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StaffAssistanceWorkBody"];
+            };
+        };
+        responses: {
+            /** @description The request’s new state */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StaffAssistanceWorked"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown, revoked or wiped device token (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Conflict, invalid state, or the same Idempotency-Key is in flight */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The Idempotency-Key was used with a different request (`idempotency_key_reused`) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Read-only maintenance (`read_only_freeze`): nothing was changed; retry after `Retry-After` seconds */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    listStaffAssistance: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The event the device works */
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The open queue */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistanceQueue"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown, revoked or wiped device token (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    getStaffGuestSnapshot: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The event the device works */
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The guest snapshot */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GuestSnapshot"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown, revoked or wiped device token (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    getStaffOverview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The event the device works */
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The staff screen */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StaffOverview"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown, revoked or wiped device token (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    recordStaffGuestArrivals: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GuestArrivalsRequest"];
+            };
+        };
+        responses: {
+            /** @description Results per check-in */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GuestArrivalsResult"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown, revoked or wiped device token (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Conflict, invalid state, or the same Idempotency-Key is in flight */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The Idempotency-Key was used with a different request (`idempotency_key_reused`) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Read-only maintenance (`read_only_freeze`): nothing was changed; retry after `Retry-After` seconds */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    getStaffPush: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The registration */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StaffPushStatus"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown, revoked or wiped device token (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    registerStaffPush: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StaffNativePushRequest"];
+            };
+        };
+        responses: {
+            /** @description Registered */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StaffPushOk"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown, revoked or wiped device token (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Conflict, invalid state, or the same Idempotency-Key is in flight */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The Idempotency-Key was used with a different request (`idempotency_key_reused`) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Read-only maintenance (`read_only_freeze`): nothing was changed; retry after `Retry-After` seconds */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    unregisterStaffPush: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Removed */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StaffPushOk"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown, revoked or wiped device token (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
                 };
             };
         };

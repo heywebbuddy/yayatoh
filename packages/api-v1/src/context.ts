@@ -3,7 +3,9 @@ import type { ApiAccessQuotas } from '@yayatoh/billing';
 import type { TenantTx } from '@yayatoh/db';
 import type { CommandPorts, Ctx } from '@yayatoh/kernel';
 import type { PaymentProvider } from '@yayatoh/payments';
+import type { RateLimiter as PlatformRateLimiter } from '@yayatoh/platform/security';
 import type { ApiKeyIdentity } from '@yayatoh/tenancy';
+import type { PortalMailer } from './portal-mail.ts';
 import type { RateLimiter } from './rate-limit.ts';
 
 /** Who is calling: an org API key or a signed-in user (bearer session). Devices use the scanner routes. */
@@ -71,6 +73,10 @@ export interface V1Deps {
   readonly quotaCacheMs?: number;
   /** M6.3a: count each API key's requests per day (on unless false). */
   readonly keyUsage?: boolean;
+  /** M7.2e: sends the portal sign-in code and invitation emails (default: the notifications providers, as the web app's guest codes). */
+  readonly portalMail?: PortalMailer;
+  /** M7.2e: the M1.14 limiter behind the portal sign-in (default: Upstash when configured, else Postgres counters). */
+  readonly portalLimiter?: PlatformRateLimiter;
 }
 
 /**

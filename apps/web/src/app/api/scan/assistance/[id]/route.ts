@@ -1,5 +1,4 @@
-import { assignCommand, updateCommand } from '@yayatoh/assistance';
-import { executeCommand } from '@yayatoh/kernel';
+import { workStaffRequest } from '@yayatoh/api-v1/staff';
 import { problem, problemFor, problemResponse } from '@yayatoh/platform/http';
 import { ports } from '@/server/ports.ts';
 import { scanDevice } from '@/server/scan-staff.ts';
@@ -18,13 +17,14 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   } catch {
     return problemResponse(problem('validation_failed', 'Invalid JSON'));
   }
-  const ref = { eventId: body.eventId as string, requestId: id };
   try {
-    const r =
-      body.action === 'take'
-        ? await executeCommand(assignCommand, { ...ref, assignee: 'me' as const }, device.ctx, ports)
-        : await executeCommand(updateCommand, { ...ref, action: body.action as never }, device.ctx, ports);
-    return Response.json({ state: r.state });
+    return Response.json(
+      await workStaffRequest(
+        device.ctx,
+        { eventId: body.eventId, requestId: id, action: body.action },
+        ports,
+      ),
+    );
   } catch (err) {
     return problemResponse(problemFor(err));
   }

@@ -41,7 +41,13 @@ export const privateColumns = columnPrivacy('events', {
   // M5.3a portal accounts (P5-7): the invitee's address; codes, links and sessions as HMACs only.
   portal_accounts: { role: 'vocab', subject_kind: 'vocab', email: personal('email') },
   portal_challenges: { code_hash: secret(), link_hash: secret(), browser_hash: secret() },
-  portal_sessions: { token_hash: secret(), host: internal() },
+  portal_sessions: {
+    token_hash: secret(),
+    host: internal(),
+    kind: 'vocab',
+    refresh_hash: secret(),
+    previous_refresh_hash: secret(),
+  },
   series: { slug: 'public', name: 'public', description: 'public' },
   // Short links are public URLs (`/e/{code}`).
   short_links: { code: 'public', kind: 'vocab' },

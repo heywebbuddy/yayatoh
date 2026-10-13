@@ -24,7 +24,9 @@ import {
   KIOSK_KINDS,
   type KioskKind,
   STAFF_ALERT_KINDS,
+  STAFF_PUSH_PLATFORMS,
   type StaffAlertKind,
+  type StaffPushPlatform,
   staffAlertPushes,
   staffPushSubscriptions,
 } from './schema.ts';
@@ -700,9 +702,11 @@ export function subscribeStaffPushCommand(endpointAllowed: (endpoint: string) =>
         .from(staffPushSubscriptions)
         .where(eq(staffPushSubscriptions.deviceId, deviceId));
       const values = {
+        platform: 'webpush',
         endpoint: input.endpoint,
         p256dh: input.keys.p256dh,
         authSecret: input.keys.auth,
+        appId: null,
         locale: input.locale,
         copy: input.copy,
         disabledAt: null,
@@ -717,6 +721,69 @@ export function subscribeStaffPushCommand(endpointAllowed: (endpoint: string) =>
     audit: () => ({ action: 'device.push_subscribe', targetType: 'device', targetId: null }),
   });
 }
+
+/** The native services a Staff app registers with (the web push endpoint is `subscribeStaffPushCommand`). */
+export const NATIVE_PUSH_PLATFORMS = ['apns', 'fcm'] as const;
+export type NativePushPlatform = (typeof NATIVE_PUSH_PLATFORMS)[number];
+
+export const StaffNativePushInput = z.object({
+  platform: z.enum(NATIVE_PUSH_PLATFORMS),
+  /** The APNs device token (hex) or the FCM registration token. */
+  token: z.string().regex(/^[A-Za-z0-9:_\-.]{8,4096}$/),
+  /** The app's bundle id (APNs topic) or package name. */
+  appId: z
+    .string()
+    .regex(/^[A-Za-z0-9._-]{3,200}$/)
+    .nullable()
+    .default(null),
+  locale: z.string().regex(/^[a-z]{2}(-[A-Z]{2})?$/),
+  copy: StaffPushInput.shape.copy,
+});
+
+/**
+ * Opt this device in to staff alerts on APNs or FCM (M7.2e, the Staff app). The row is the
+ * device's one subscription, tied to it: a new registration replaces the old one (the web push
+ * one too), and revoking or wiping the device deletes it. Re-registering the same token keeps the
+ * supervisor who claimed the alerts. The pushes carry the app's own words from `copy` and a label
+ * or percentage, never a person's data.
+ */
+export const subscribeStaffNativePushCommand = tenantCommand({
+  name: 'checkin.subscribeStaffNativePush',
+  input: StaffNativePushInput,
+  output: z.object({ ok: z.boolean() }),
+  entitlement: 'checkin',
+  permission: 'checkin:device',
+  handler: async ({ input, ctx, tx }) => {
+    const deviceId = deviceIdOf(ctx);
+    const [prev] = await tx
+      .select()
+      .from(staffPushSubscriptions)
+      .where(eq(staffPushSubscriptions.deviceId, deviceId));
+    const values = {
+      platform: input.platform,
+      endpoint: input.token,
+      p256dh: null,
+      authSecret: null,
+      appId: input.appId,
+      locale: input.locale,
+      copy: input.copy,
+      disabledAt: null,
+      supervisorUserId: prev && prev.endpoint === input.token ? prev.supervisorUserId : null,
+      updatedAt: ctx.now,
+    };
+    if (prev)
+      await tx.update(staffPushSubscriptions).set(values).where(eq(staffPushSubscriptions.id, prev.id));
+    else await tx.insert(staffPushSubscriptions).values({ ...values, orgId: requireOrg(ctx), deviceId });
+    return { ok: true };
+  },
+  // Never the token in the audit log.
+  audit: (input) => ({
+    action: 'device.push_subscribe',
+    targetType: 'device',
+    targetId: null,
+    data: { platform: input.platform },
+  }),
+});
 
 export const unsubscribeStaffPushCommand = tenantCommand({
   name: 'checkin.unsubscribeStaffPush',
@@ -734,7 +801,13 @@ export const unsubscribeStaffPushCommand = tenantCommand({
 export const staffPushStatusQuery = tenantQuery({
   name: 'checkin.staffPushStatus',
   input: z.object({}),
-  output: z.object({ subscribed: z.boolean(), supervisor: z.boolean(), endpoint: z.string().nullable() }),
+  output: z.object({
+    subscribed: z.boolean(),
+    supervisor: z.boolean(),
+    endpoint: z.string().nullable(),
+    /** M7.2e (additive): which service the subscription uses. */
+    platform: z.enum(STAFF_PUSH_PLATFORMS).nullable(),
+  }),
   entitlement: 'checkin',
   permission: 'checkin:device',
   handler: async ({ ctx, tx }) => {
@@ -745,7 +818,12 @@ export const staffPushStatusQuery = tenantQuery({
         and(eq(staffPushSubscriptions.deviceId, deviceIdOf(ctx)), isNull(staffPushSubscriptions.disabledAt)),
       );
     // The endpoint goes back only to the device that registered it (to recognise itself).
-    return { subscribed: !!s, supervisor: !!s?.supervisorUserId, endpoint: s?.endpoint ?? null };
+    return {
+      subscribed: !!s,
+      supervisor: !!s?.supervisorUserId,
+      endpoint: s?.endpoint ?? null,
+      platform: s ? (s.platform as StaffPushPlatform) : null,
+    };
   },
 });
 
@@ -869,9 +947,10 @@ export function staffAlertsSubscriber(
 /** How a staff push is sent: the notifications module's web push adapter, composed by the host. */
 export interface StaffPushSender {
   send(m: {
-    readonly platform: 'webpush';
+    readonly platform: StaffPushPlatform;
     readonly token: string;
-    readonly keys: { readonly p256dh: string; readonly auth: string };
+    /** Web push only (RFC 8291); null for APNs and FCM. */
+    readonly keys: { readonly p256dh: string; readonly auth: string } | null;
     readonly title: string;
     readonly body: string;
     readonly url: string | null;
@@ -954,12 +1033,13 @@ export async function sendStaffAlertPushes(
     const result =
       text && !sub.disabledAt
         ? await sender.send({
-            platform: 'webpush',
+            platform: sub.platform as StaffPushPlatform,
             token: sub.endpoint,
-            keys: { p256dh: sub.p256dh, auth: sub.authSecret },
+            keys: sub.p256dh && sub.authSecret ? { p256dh: sub.p256dh, auth: sub.authSecret } : null,
             title: text.title,
             body: text.body,
-            url: `/${sub.locale}/scan`,
+            // The app opens its staff screen itself; only the browser needs an address.
+            url: sub.platform === 'webpush' ? `/${sub.locale}/scan` : null,
             idempotencyKey: push.id,
             ttlSeconds: 600,
             urgency: 'high',
