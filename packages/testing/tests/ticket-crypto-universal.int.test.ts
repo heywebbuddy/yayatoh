@@ -4,7 +4,7 @@ import { closePools } from '@yayatoh/db/testing';
 import { createEventCommand, transitionEventCommand } from '@yayatoh/events';
 import { createCtx, executeCommand } from '@yayatoh/kernel';
 import { orderByManageToken, startCheckoutCommand } from '@yayatoh/orders';
-import { base32Decode, verifyTicketCode } from '@yayatoh/ticket-crypto';
+import { base32Decode, generateKeyPair, verifyTicketCode } from '@yayatoh/ticket-crypto';
 import { createTicketTypeCommand, publicKeysTx } from '@yayatoh/ticketing';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { type OrgFixture, ports, systemCtx, twoOrgs } from '../src/index.ts';
@@ -130,10 +130,7 @@ describe('codes issued by the server', () => {
     expect((await offlineVerdict(state([`${t1.id}:2027-12-01`]), t2.code, now)).verdict).toBe('admit');
     // The same code against a manifest that carries another org's key: refused.
     const foreign = state([]);
-    const other = await globalThis.crypto.subtle.generateKey({ name: 'Ed25519' }, true, ['sign', 'verify']);
-    const otherRaw = new Uint8Array(
-      await globalThis.crypto.subtle.exportKey('raw', (other as CryptoKeyPair).publicKey),
-    );
+    const otherRaw = (await generateKeyPair()).publicKey;
     const swapped: OfflineState = {
       ...foreign,
       header: { ...foreign.header, publicKeys: { '1': Buffer.from(otherRaw).toString('base64') } },
