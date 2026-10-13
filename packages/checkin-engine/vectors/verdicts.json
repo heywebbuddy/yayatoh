@@ -1,0 +1,1967 @@
+{
+  "description": "Offline verdicts (ADR 0011). For each scenario: build the state from states[state] with `admitted`, `inRoom` and `occupancy`, run offlineVerdict(state, code, now, checkpointId, { direction }), and expect `expect`. Codes are signed by the key in each state’s header.",
+  "seedRule": "seed = SHA-256('yayatoh-test-vector-key:' + label)",
+  "now": "2027-12-01T20:00:00Z",
+  "states": {
+    "main": {
+      "header": {
+        "event": {
+          "id": "e1",
+          "name": "Vector Summit",
+          "startsAt": "2027-12-01T15:00:00Z",
+          "endsAt": "2027-12-03T04:00:00Z",
+          "timezone": "America/Chicago"
+        },
+        "publicKeys": {
+          "1": "2Je8S2xT8dr/dlVvxQxX2A3BR1OcJXI7RyLMHJtqHGE="
+        },
+        "salt": "yy-manifest:e1",
+        "serverTime": "2027-12-01T12:00:00.000Z",
+        "unknownPolicy": "provisional",
+        "checkpoints": [
+          {
+            "id": "north",
+            "name": "North gate",
+            "kind": "entrance",
+            "ticketTypeIds": []
+          },
+          {
+            "id": "vip",
+            "name": "VIP lounge",
+            "kind": "zone",
+            "ticketTypeIds": [
+              "type-vip"
+            ]
+          },
+          {
+            "id": "hall",
+            "name": "Hall",
+            "kind": "zone",
+            "ticketTypeIds": []
+          }
+        ],
+        "version": 3,
+        "scope": {
+          "eventId": "e1",
+          "deviceId": "d1",
+          "checkpointIds": null,
+          "signature": "AAGlJNEJtiRtCnMfvRXJeKzN_dBhRuqqXtvFZQRCtfNKbrCEfkrOajB8zp2pVVQeDQab3gsN32T24bfzw-bVehsM"
+        }
+      },
+      "rows": [
+        {
+          "ticketId": "01a98404-ae00-7000-8000-000000000001",
+          "shortCode": "KNOWNAAA",
+          "rev": 1,
+          "status": "active",
+          "ticketTypeId": "type-ga",
+          "typeName": "General",
+          "accessDates": [],
+          "holderName": "Ada Lovelace",
+          "emailHash": "8d3c9cc1d7e442b7eb92654a4dec4cd243b62d6224d3ee31fece9b500d23f42a",
+          "issuedAt": "2027-11-30T12:00:00.000Z",
+          "phoneHash": "d8d731eda0b5efef2900b660f66f35db645b6276add92aa1b1b37145084d0161"
+        },
+        {
+          "ticketId": "01a98404-ae00-7000-8000-000000000002",
+          "shortCode": "GALAAAAA",
+          "rev": 0,
+          "status": "active",
+          "ticketTypeId": "type-vip",
+          "typeName": "VIP",
+          "accessDates": [
+            {
+              "date": "2027-12-02",
+              "name": "Gala"
+            }
+          ],
+          "holderName": "Grace Hopper",
+          "emailHash": "8d3c9cc1d7e442b7eb92654a4dec4cd243b62d6224d3ee31fece9b500d23f42a",
+          "issuedAt": "2027-11-30T12:00:00.000Z"
+        },
+        {
+          "ticketId": "01a98404-ae00-7000-8000-000000000003",
+          "shortCode": "VOIDAAAA",
+          "rev": 0,
+          "status": "void",
+          "ticketTypeId": "type-ga",
+          "typeName": "General",
+          "accessDates": [],
+          "holderName": "Alan Turing",
+          "emailHash": "8d3c9cc1d7e442b7eb92654a4dec4cd243b62d6224d3ee31fece9b500d23f42a",
+          "issuedAt": "2027-11-30T12:00:00.000Z"
+        },
+        {
+          "ticketId": "01a98404-ae00-7000-8000-000000000006",
+          "shortCode": "MIGRATED",
+          "rev": 0,
+          "status": "active",
+          "ticketTypeId": "type-ga",
+          "typeName": "General",
+          "accessDates": [],
+          "holderName": "Migrated Holder",
+          "emailHash": "8d3c9cc1d7e442b7eb92654a4dec4cd243b62d6224d3ee31fece9b500d23f42a",
+          "issuedAt": "2027-11-30T12:00:00.000Z",
+          "legacyCodes": [
+            "3aed609fd941b77017fbc3ded6af42681cd2193f40b45d1b839fa39cd1268f2f",
+            "4dbae1061ded27140bfe3096f4af4dac4e1c796391e8f1245b15cfcbfc917096"
+          ]
+        }
+      ],
+      "lastSyncAt": "2027-12-01T12:00:00.000Z"
+    },
+    "policy-reject": {
+      "header": {
+        "event": {
+          "id": "e1",
+          "name": "Vector Summit",
+          "startsAt": "2027-12-01T15:00:00Z",
+          "endsAt": "2027-12-03T04:00:00Z",
+          "timezone": "America/Chicago"
+        },
+        "publicKeys": {
+          "1": "2Je8S2xT8dr/dlVvxQxX2A3BR1OcJXI7RyLMHJtqHGE="
+        },
+        "salt": "yy-manifest:e1",
+        "serverTime": "2027-12-01T12:00:00.000Z",
+        "unknownPolicy": "reject",
+        "checkpoints": [
+          {
+            "id": "north",
+            "name": "North gate",
+            "kind": "entrance",
+            "ticketTypeIds": []
+          },
+          {
+            "id": "vip",
+            "name": "VIP lounge",
+            "kind": "zone",
+            "ticketTypeIds": [
+              "type-vip"
+            ]
+          },
+          {
+            "id": "hall",
+            "name": "Hall",
+            "kind": "zone",
+            "ticketTypeIds": []
+          }
+        ],
+        "version": 3,
+        "scope": {
+          "eventId": "e1",
+          "deviceId": "d1",
+          "checkpointIds": null,
+          "signature": "AAGlJNEJtiRtCnMfvRXJeKzN_dBhRuqqXtvFZQRCtfNKbrCEfkrOajB8zp2pVVQeDQab3gsN32T24bfzw-bVehsM"
+        }
+      },
+      "rows": [
+        {
+          "ticketId": "01a98404-ae00-7000-8000-000000000001",
+          "shortCode": "KNOWNAAA",
+          "rev": 1,
+          "status": "active",
+          "ticketTypeId": "type-ga",
+          "typeName": "General",
+          "accessDates": [],
+          "holderName": "Ada Lovelace",
+          "emailHash": "8d3c9cc1d7e442b7eb92654a4dec4cd243b62d6224d3ee31fece9b500d23f42a",
+          "issuedAt": "2027-11-30T12:00:00.000Z",
+          "phoneHash": "d8d731eda0b5efef2900b660f66f35db645b6276add92aa1b1b37145084d0161"
+        },
+        {
+          "ticketId": "01a98404-ae00-7000-8000-000000000002",
+          "shortCode": "GALAAAAA",
+          "rev": 0,
+          "status": "active",
+          "ticketTypeId": "type-vip",
+          "typeName": "VIP",
+          "accessDates": [
+            {
+              "date": "2027-12-02",
+              "name": "Gala"
+            }
+          ],
+          "holderName": "Grace Hopper",
+          "emailHash": "8d3c9cc1d7e442b7eb92654a4dec4cd243b62d6224d3ee31fece9b500d23f42a",
+          "issuedAt": "2027-11-30T12:00:00.000Z"
+        },
+        {
+          "ticketId": "01a98404-ae00-7000-8000-000000000003",
+          "shortCode": "VOIDAAAA",
+          "rev": 0,
+          "status": "void",
+          "ticketTypeId": "type-ga",
+          "typeName": "General",
+          "accessDates": [],
+          "holderName": "Alan Turing",
+          "emailHash": "8d3c9cc1d7e442b7eb92654a4dec4cd243b62d6224d3ee31fece9b500d23f42a",
+          "issuedAt": "2027-11-30T12:00:00.000Z"
+        },
+        {
+          "ticketId": "01a98404-ae00-7000-8000-000000000006",
+          "shortCode": "MIGRATED",
+          "rev": 0,
+          "status": "active",
+          "ticketTypeId": "type-ga",
+          "typeName": "General",
+          "accessDates": [],
+          "holderName": "Migrated Holder",
+          "emailHash": "8d3c9cc1d7e442b7eb92654a4dec4cd243b62d6224d3ee31fece9b500d23f42a",
+          "issuedAt": "2027-11-30T12:00:00.000Z",
+          "legacyCodes": [
+            "3aed609fd941b77017fbc3ded6af42681cd2193f40b45d1b839fa39cd1268f2f",
+            "4dbae1061ded27140bfe3096f4af4dac4e1c796391e8f1245b15cfcbfc917096"
+          ]
+        }
+      ],
+      "lastSyncAt": "2027-12-01T12:00:00.000Z"
+    },
+    "scoped-north": {
+      "header": {
+        "event": {
+          "id": "e1",
+          "name": "Vector Summit",
+          "startsAt": "2027-12-01T15:00:00Z",
+          "endsAt": "2027-12-03T04:00:00Z",
+          "timezone": "America/Chicago"
+        },
+        "publicKeys": {
+          "1": "2Je8S2xT8dr/dlVvxQxX2A3BR1OcJXI7RyLMHJtqHGE="
+        },
+        "salt": "yy-manifest:e1",
+        "serverTime": "2027-12-01T12:00:00.000Z",
+        "unknownPolicy": "provisional",
+        "checkpoints": [
+          {
+            "id": "north",
+            "name": "North gate",
+            "kind": "entrance",
+            "ticketTypeIds": []
+          },
+          {
+            "id": "vip",
+            "name": "VIP lounge",
+            "kind": "zone",
+            "ticketTypeIds": [
+              "type-vip"
+            ]
+          },
+          {
+            "id": "hall",
+            "name": "Hall",
+            "kind": "zone",
+            "ticketTypeIds": []
+          }
+        ],
+        "version": 3,
+        "scope": {
+          "eventId": "e1",
+          "deviceId": "d1",
+          "checkpointIds": [
+            "north"
+          ],
+          "signature": "AAFO7eAURbdLnO4LSTUdJ_RzLun0ljCKDY0ktUVU3dHlLCazNRy14jD19h89ypfOpeZGIx369YYXnQLo3XHaFi8C"
+        }
+      },
+      "rows": [
+        {
+          "ticketId": "01a98404-ae00-7000-8000-000000000001",
+          "shortCode": "KNOWNAAA",
+          "rev": 1,
+          "status": "active",
+          "ticketTypeId": "type-ga",
+          "typeName": "General",
+          "accessDates": [],
+          "holderName": "Ada Lovelace",
+          "emailHash": "8d3c9cc1d7e442b7eb92654a4dec4cd243b62d6224d3ee31fece9b500d23f42a",
+          "issuedAt": "2027-11-30T12:00:00.000Z",
+          "phoneHash": "d8d731eda0b5efef2900b660f66f35db645b6276add92aa1b1b37145084d0161"
+        },
+        {
+          "ticketId": "01a98404-ae00-7000-8000-000000000002",
+          "shortCode": "GALAAAAA",
+          "rev": 0,
+          "status": "active",
+          "ticketTypeId": "type-vip",
+          "typeName": "VIP",
+          "accessDates": [
+            {
+              "date": "2027-12-02",
+              "name": "Gala"
+            }
+          ],
+          "holderName": "Grace Hopper",
+          "emailHash": "8d3c9cc1d7e442b7eb92654a4dec4cd243b62d6224d3ee31fece9b500d23f42a",
+          "issuedAt": "2027-11-30T12:00:00.000Z"
+        },
+        {
+          "ticketId": "01a98404-ae00-7000-8000-000000000003",
+          "shortCode": "VOIDAAAA",
+          "rev": 0,
+          "status": "void",
+          "ticketTypeId": "type-ga",
+          "typeName": "General",
+          "accessDates": [],
+          "holderName": "Alan Turing",
+          "emailHash": "8d3c9cc1d7e442b7eb92654a4dec4cd243b62d6224d3ee31fece9b500d23f42a",
+          "issuedAt": "2027-11-30T12:00:00.000Z"
+        },
+        {
+          "ticketId": "01a98404-ae00-7000-8000-000000000006",
+          "shortCode": "MIGRATED",
+          "rev": 0,
+          "status": "active",
+          "ticketTypeId": "type-ga",
+          "typeName": "General",
+          "accessDates": [],
+          "holderName": "Migrated Holder",
+          "emailHash": "8d3c9cc1d7e442b7eb92654a4dec4cd243b62d6224d3ee31fece9b500d23f42a",
+          "issuedAt": "2027-11-30T12:00:00.000Z",
+          "legacyCodes": [
+            "3aed609fd941b77017fbc3ded6af42681cd2193f40b45d1b839fa39cd1268f2f",
+            "4dbae1061ded27140bfe3096f4af4dac4e1c796391e8f1245b15cfcbfc917096"
+          ]
+        }
+      ],
+      "lastSyncAt": "2027-12-01T12:00:00.000Z"
+    },
+    "manifest-v1": {
+      "header": {
+        "event": {
+          "id": "e1",
+          "name": "Vector Summit",
+          "startsAt": "2027-12-01T15:00:00Z",
+          "endsAt": "2027-12-03T04:00:00Z",
+          "timezone": "America/Chicago"
+        },
+        "publicKeys": {
+          "1": "2Je8S2xT8dr/dlVvxQxX2A3BR1OcJXI7RyLMHJtqHGE="
+        },
+        "salt": "yy-manifest:e1",
+        "serverTime": "2027-12-01T12:00:00.000Z",
+        "unknownPolicy": "provisional",
+        "checkpoints": [
+          {
+            "id": "north",
+            "name": "North gate",
+            "kind": "entrance",
+            "ticketTypeIds": []
+          },
+          {
+            "id": "vip",
+            "name": "VIP lounge",
+            "kind": "zone",
+            "ticketTypeIds": [
+              "type-vip"
+            ]
+          },
+          {
+            "id": "hall",
+            "name": "Hall",
+            "kind": "zone",
+            "ticketTypeIds": []
+          }
+        ]
+      },
+      "rows": [
+        {
+          "ticketId": "01a98404-ae00-7000-8000-000000000001",
+          "shortCode": "KNOWNAAA",
+          "rev": 1,
+          "status": "active",
+          "ticketTypeId": "type-ga",
+          "typeName": "General",
+          "accessDates": [],
+          "holderName": "Ada Lovelace",
+          "emailHash": "8d3c9cc1d7e442b7eb92654a4dec4cd243b62d6224d3ee31fece9b500d23f42a",
+          "issuedAt": "2027-11-30T12:00:00.000Z",
+          "phoneHash": "d8d731eda0b5efef2900b660f66f35db645b6276add92aa1b1b37145084d0161"
+        },
+        {
+          "ticketId": "01a98404-ae00-7000-8000-000000000002",
+          "shortCode": "GALAAAAA",
+          "rev": 0,
+          "status": "active",
+          "ticketTypeId": "type-vip",
+          "typeName": "VIP",
+          "accessDates": [
+            {
+              "date": "2027-12-02",
+              "name": "Gala"
+            }
+          ],
+          "holderName": "Grace Hopper",
+          "emailHash": "8d3c9cc1d7e442b7eb92654a4dec4cd243b62d6224d3ee31fece9b500d23f42a",
+          "issuedAt": "2027-11-30T12:00:00.000Z"
+        },
+        {
+          "ticketId": "01a98404-ae00-7000-8000-000000000003",
+          "shortCode": "VOIDAAAA",
+          "rev": 0,
+          "status": "void",
+          "ticketTypeId": "type-ga",
+          "typeName": "General",
+          "accessDates": [],
+          "holderName": "Alan Turing",
+          "emailHash": "8d3c9cc1d7e442b7eb92654a4dec4cd243b62d6224d3ee31fece9b500d23f42a",
+          "issuedAt": "2027-11-30T12:00:00.000Z"
+        },
+        {
+          "ticketId": "01a98404-ae00-7000-8000-000000000006",
+          "shortCode": "MIGRATED",
+          "rev": 0,
+          "status": "active",
+          "ticketTypeId": "type-ga",
+          "typeName": "General",
+          "accessDates": [],
+          "holderName": "Migrated Holder",
+          "emailHash": "8d3c9cc1d7e442b7eb92654a4dec4cd243b62d6224d3ee31fece9b500d23f42a",
+          "issuedAt": "2027-11-30T12:00:00.000Z",
+          "legacyCodes": [
+            "3aed609fd941b77017fbc3ded6af42681cd2193f40b45d1b839fa39cd1268f2f",
+            "4dbae1061ded27140bfe3096f4af4dac4e1c796391e8f1245b15cfcbfc917096"
+          ]
+        }
+      ],
+      "lastSyncAt": "2027-12-01T12:00:00.000Z"
+    },
+    "no-legacy": {
+      "header": {
+        "event": {
+          "id": "e1",
+          "name": "Vector Summit",
+          "startsAt": "2027-12-01T15:00:00Z",
+          "endsAt": "2027-12-03T04:00:00Z",
+          "timezone": "America/Chicago"
+        },
+        "publicKeys": {
+          "1": "2Je8S2xT8dr/dlVvxQxX2A3BR1OcJXI7RyLMHJtqHGE="
+        },
+        "salt": "yy-manifest:e1",
+        "serverTime": "2027-12-01T12:00:00.000Z",
+        "unknownPolicy": "provisional",
+        "checkpoints": [
+          {
+            "id": "north",
+            "name": "North gate",
+            "kind": "entrance",
+            "ticketTypeIds": []
+          },
+          {
+            "id": "vip",
+            "name": "VIP lounge",
+            "kind": "zone",
+            "ticketTypeIds": [
+              "type-vip"
+            ]
+          },
+          {
+            "id": "hall",
+            "name": "Hall",
+            "kind": "zone",
+            "ticketTypeIds": []
+          }
+        ],
+        "version": 3,
+        "scope": {
+          "eventId": "e1",
+          "deviceId": "d1",
+          "checkpointIds": null,
+          "signature": "AAGlJNEJtiRtCnMfvRXJeKzN_dBhRuqqXtvFZQRCtfNKbrCEfkrOajB8zp2pVVQeDQab3gsN32T24bfzw-bVehsM"
+        }
+      },
+      "rows": [
+        {
+          "ticketId": "01a98404-ae00-7000-8000-000000000001",
+          "shortCode": "KNOWNAAA",
+          "rev": 1,
+          "status": "active",
+          "ticketTypeId": "type-ga",
+          "typeName": "General",
+          "accessDates": [],
+          "holderName": "Ada Lovelace",
+          "emailHash": "8d3c9cc1d7e442b7eb92654a4dec4cd243b62d6224d3ee31fece9b500d23f42a",
+          "issuedAt": "2027-11-30T12:00:00.000Z",
+          "phoneHash": "d8d731eda0b5efef2900b660f66f35db645b6276add92aa1b1b37145084d0161"
+        },
+        {
+          "ticketId": "01a98404-ae00-7000-8000-000000000002",
+          "shortCode": "GALAAAAA",
+          "rev": 0,
+          "status": "active",
+          "ticketTypeId": "type-vip",
+          "typeName": "VIP",
+          "accessDates": [
+            {
+              "date": "2027-12-02",
+              "name": "Gala"
+            }
+          ],
+          "holderName": "Grace Hopper",
+          "emailHash": "8d3c9cc1d7e442b7eb92654a4dec4cd243b62d6224d3ee31fece9b500d23f42a",
+          "issuedAt": "2027-11-30T12:00:00.000Z"
+        },
+        {
+          "ticketId": "01a98404-ae00-7000-8000-000000000003",
+          "shortCode": "VOIDAAAA",
+          "rev": 0,
+          "status": "void",
+          "ticketTypeId": "type-ga",
+          "typeName": "General",
+          "accessDates": [],
+          "holderName": "Alan Turing",
+          "emailHash": "8d3c9cc1d7e442b7eb92654a4dec4cd243b62d6224d3ee31fece9b500d23f42a",
+          "issuedAt": "2027-11-30T12:00:00.000Z"
+        },
+        {
+          "ticketId": "01a98404-ae00-7000-8000-000000000006",
+          "shortCode": "MIGRATED",
+          "rev": 0,
+          "status": "active",
+          "ticketTypeId": "type-ga",
+          "typeName": "General",
+          "accessDates": [],
+          "holderName": "Migrated Holder",
+          "emailHash": "8d3c9cc1d7e442b7eb92654a4dec4cd243b62d6224d3ee31fece9b500d23f42a",
+          "issuedAt": "2027-11-30T12:00:00.000Z"
+        }
+      ],
+      "lastSyncAt": "2027-12-01T12:00:00.000Z"
+    },
+    "multi-date": {
+      "header": {
+        "event": {
+          "id": "e1",
+          "name": "Vector Summit",
+          "startsAt": "2027-12-01T15:00:00Z",
+          "endsAt": "2027-12-03T04:00:00Z",
+          "timezone": "America/Chicago"
+        },
+        "publicKeys": {
+          "1": "2Je8S2xT8dr/dlVvxQxX2A3BR1OcJXI7RyLMHJtqHGE="
+        },
+        "salt": "yy-manifest:e1",
+        "serverTime": "2027-12-01T12:00:00.000Z",
+        "unknownPolicy": "provisional",
+        "checkpoints": [
+          {
+            "id": "north",
+            "name": "North gate",
+            "kind": "entrance",
+            "ticketTypeIds": []
+          },
+          {
+            "id": "vip",
+            "name": "VIP lounge",
+            "kind": "zone",
+            "ticketTypeIds": [
+              "type-vip"
+            ]
+          },
+          {
+            "id": "hall",
+            "name": "Hall",
+            "kind": "zone",
+            "ticketTypeIds": []
+          }
+        ],
+        "version": 3,
+        "scope": {
+          "eventId": "e1",
+          "deviceId": "d1",
+          "checkpointIds": null,
+          "signature": "AAGlJNEJtiRtCnMfvRXJeKzN_dBhRuqqXtvFZQRCtfNKbrCEfkrOajB8zp2pVVQeDQab3gsN32T24bfzw-bVehsM"
+        },
+        "occurrences": [
+          {
+            "id": "o1",
+            "startsAt": "2027-12-01T15:00:00Z",
+            "endsAt": "2027-12-01T23:00:00Z",
+            "status": "scheduled"
+          },
+          {
+            "id": "o2",
+            "startsAt": "2027-12-02T15:00:00Z",
+            "endsAt": "2027-12-02T23:00:00Z",
+            "status": "scheduled"
+          },
+          {
+            "id": "o3",
+            "startsAt": "2027-12-01T15:00:00Z",
+            "endsAt": "2027-12-01T23:00:00Z",
+            "status": "cancelled"
+          }
+        ]
+      },
+      "rows": [
+        {
+          "ticketId": "01a98404-ae00-7000-8000-0000000000b1",
+          "shortCode": "OCCONEAA",
+          "rev": 0,
+          "status": "active",
+          "ticketTypeId": "type-ga",
+          "typeName": "General",
+          "accessDates": [],
+          "holderName": "Sam Smith",
+          "emailHash": "8d3c9cc1d7e442b7eb92654a4dec4cd243b62d6224d3ee31fece9b500d23f42a",
+          "issuedAt": "2027-11-30T12:00:00.000Z",
+          "occurrenceId": "o1"
+        },
+        {
+          "ticketId": "01a98404-ae00-7000-8000-0000000000b2",
+          "shortCode": "OCCTWOAA",
+          "rev": 0,
+          "status": "active",
+          "ticketTypeId": "type-ga",
+          "typeName": "General",
+          "accessDates": [],
+          "holderName": "Sam Smith",
+          "emailHash": "8d3c9cc1d7e442b7eb92654a4dec4cd243b62d6224d3ee31fece9b500d23f42a",
+          "issuedAt": "2027-11-30T12:00:00.000Z",
+          "occurrenceId": "o2"
+        },
+        {
+          "ticketId": "01a98404-ae00-7000-8000-0000000000b3",
+          "shortCode": "OCCCANCL",
+          "rev": 0,
+          "status": "active",
+          "ticketTypeId": "type-ga",
+          "typeName": "General",
+          "accessDates": [],
+          "holderName": "Sam Smith",
+          "emailHash": "8d3c9cc1d7e442b7eb92654a4dec4cd243b62d6224d3ee31fece9b500d23f42a",
+          "issuedAt": "2027-11-30T12:00:00.000Z",
+          "occurrenceId": "o3"
+        },
+        {
+          "ticketId": "01a98404-ae00-7000-8000-0000000000b4",
+          "shortCode": "OCCGHOST",
+          "rev": 0,
+          "status": "active",
+          "ticketTypeId": "type-ga",
+          "typeName": "General",
+          "accessDates": [],
+          "holderName": "Sam Smith",
+          "emailHash": "8d3c9cc1d7e442b7eb92654a4dec4cd243b62d6224d3ee31fece9b500d23f42a",
+          "issuedAt": "2027-11-30T12:00:00.000Z",
+          "occurrenceId": "o9"
+        }
+      ],
+      "lastSyncAt": "2027-12-01T12:00:00.000Z"
+    },
+    "sessions": {
+      "header": {
+        "event": {
+          "id": "e1",
+          "name": "Vector Summit",
+          "startsAt": "2027-12-01T15:00:00Z",
+          "endsAt": "2027-12-03T04:00:00Z",
+          "timezone": "America/Chicago"
+        },
+        "publicKeys": {
+          "1": "2Je8S2xT8dr/dlVvxQxX2A3BR1OcJXI7RyLMHJtqHGE="
+        },
+        "salt": "yy-manifest:e1",
+        "serverTime": "2027-12-01T12:00:00.000Z",
+        "unknownPolicy": "provisional",
+        "checkpoints": [
+          {
+            "id": "north",
+            "name": "North gate",
+            "kind": "entrance",
+            "ticketTypeIds": []
+          },
+          {
+            "id": "room-a",
+            "name": "Room A",
+            "kind": "session",
+            "ticketTypeIds": [],
+            "sessionId": "s1"
+          },
+          {
+            "id": "room-b",
+            "name": "Room B",
+            "kind": "session",
+            "ticketTypeIds": [],
+            "sessionId": "s2"
+          },
+          {
+            "id": "room-c",
+            "name": "Room C",
+            "kind": "session",
+            "ticketTypeIds": [],
+            "sessionId": "s3"
+          },
+          {
+            "id": "room-x",
+            "name": "Room X",
+            "kind": "session",
+            "ticketTypeIds": [],
+            "sessionId": "sx"
+          }
+        ],
+        "version": 3,
+        "scope": {
+          "eventId": "e1",
+          "deviceId": "d1",
+          "checkpointIds": null,
+          "sessionGates": [
+            {
+              "checkpointId": "room-a",
+              "sessionId": "s1",
+              "capacity": 2,
+              "enrollmentRequired": true,
+              "enrolled": [
+                "01a98404-ae00-7000-8000-0000000000a2",
+                "01a98404-ae00-7000-8000-0000000000a1"
+              ]
+            },
+            {
+              "checkpointId": "room-b",
+              "sessionId": "s2",
+              "capacity": null,
+              "enrollmentRequired": false,
+              "enrolled": []
+            },
+            {
+              "checkpointId": "room-c",
+              "sessionId": "s3",
+              "capacity": 1,
+              "enrollmentRequired": false,
+              "enrolled": []
+            }
+          ],
+          "signature": "AAFlpSlV_TnyaBG-o2D2XbVUr6kmF6C-DhxWIrnk1OOoEnw_AV8L33exggWOAo2XeoUNJ_MCYqIBYJSjTVqALUgA"
+        },
+        "sessions": [
+          {
+            "checkpointId": "room-a",
+            "sessionId": "s1",
+            "title": "Keynote",
+            "startsAt": "2027-12-01T16:00:00Z",
+            "endsAt": "2027-12-01T17:00:00Z",
+            "occupied": 0
+          }
+        ]
+      },
+      "rows": [
+        {
+          "ticketId": "01a98404-ae00-7000-8000-0000000000a1",
+          "shortCode": "SESSAAAA",
+          "rev": 0,
+          "status": "active",
+          "ticketTypeId": "type-ga",
+          "typeName": "General",
+          "accessDates": [],
+          "holderName": "Sam Smith",
+          "emailHash": "8d3c9cc1d7e442b7eb92654a4dec4cd243b62d6224d3ee31fece9b500d23f42a",
+          "issuedAt": "2027-11-30T12:00:00.000Z",
+          "sessionAccess": {
+            "registrant": true,
+            "sessionIds": null
+          }
+        },
+        {
+          "ticketId": "01a98404-ae00-7000-8000-0000000000a2",
+          "shortCode": "SESSBBBB",
+          "rev": 0,
+          "status": "active",
+          "ticketTypeId": "type-ga",
+          "typeName": "General",
+          "accessDates": [],
+          "holderName": "Sam Smith",
+          "emailHash": "8d3c9cc1d7e442b7eb92654a4dec4cd243b62d6224d3ee31fece9b500d23f42a",
+          "issuedAt": "2027-11-30T12:00:00.000Z",
+          "sessionAccess": {
+            "registrant": true,
+            "sessionIds": [
+              "s2"
+            ]
+          }
+        },
+        {
+          "ticketId": "01a98404-ae00-7000-8000-0000000000a3",
+          "shortCode": "SESSCCCC",
+          "rev": 0,
+          "status": "active",
+          "ticketTypeId": "type-ga",
+          "typeName": "General",
+          "accessDates": [],
+          "holderName": "Sam Smith",
+          "emailHash": "8d3c9cc1d7e442b7eb92654a4dec4cd243b62d6224d3ee31fece9b500d23f42a",
+          "issuedAt": "2027-11-30T12:00:00.000Z",
+          "sessionAccess": {
+            "registrant": true,
+            "sessionIds": null
+          }
+        },
+        {
+          "ticketId": "01a98404-ae00-7000-8000-0000000000a4",
+          "shortCode": "SESSDDDD",
+          "rev": 0,
+          "status": "active",
+          "ticketTypeId": "type-ga",
+          "typeName": "General",
+          "accessDates": [],
+          "holderName": "Sam Smith",
+          "emailHash": "8d3c9cc1d7e442b7eb92654a4dec4cd243b62d6224d3ee31fece9b500d23f42a",
+          "issuedAt": "2027-11-30T12:00:00.000Z",
+          "sessionAccess": {
+            "registrant": false,
+            "sessionIds": null
+          }
+        },
+        {
+          "ticketId": "01a98404-ae00-7000-8000-0000000000a5",
+          "shortCode": "SESSEEEE",
+          "rev": 0,
+          "status": "void",
+          "ticketTypeId": "type-ga",
+          "typeName": "General",
+          "accessDates": [],
+          "holderName": "Sam Smith",
+          "emailHash": "8d3c9cc1d7e442b7eb92654a4dec4cd243b62d6224d3ee31fece9b500d23f42a",
+          "issuedAt": "2027-11-30T12:00:00.000Z",
+          "sessionAccess": {
+            "registrant": true,
+            "sessionIds": null
+          }
+        }
+      ],
+      "lastSyncAt": "2027-12-01T12:00:00.000Z"
+    }
+  },
+  "scenarios": [
+    {
+      "name": "admit",
+      "rule": "admit",
+      "state": "main",
+      "code": "YY1AEAACANJQQCK4ADQACAAAAAAAAAAAAIAAGAAW2Z7AQEJHNOJKNI36NJVMQSH7IK3PRX5DJJMAD2E5MQSCEY2LKGP46FSGIY2IUFINM6MWAWZRZUXW6YJDZKPP7LHNF5KMKIU5AQN",
+      "expect": {
+        "verdict": "admit",
+        "ticketId": "01a98404-ae00-7000-8000-000000000001"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "checkpointId": null,
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "admit at a named entrance",
+      "rule": "admit",
+      "state": "main",
+      "code": "YY1AEAACANJQQCK4ADQACAAAAAAAAAAAAIAAGAAW2Z7AQEJHNOJKNI36NJVMQSH7IK3PRX5DJJMAD2E5MQSCEY2LKGP46FSGIY2IUFINM6MWAWZRZUXW6YJDZKPP7LHNF5KMKIU5AQN",
+      "checkpointId": "north",
+      "expect": {
+        "verdict": "admit",
+        "ticketId": "01a98404-ae00-7000-8000-000000000001"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "duplicate: already admitted on this device today",
+      "rule": "duplicate",
+      "state": "main",
+      "code": "YY1AEAACANJQQCK4ADQACAAAAAAAAAAAAIAAGAAW2Z7AQEJHNOJKNI36NJVMQSH7IK3PRX5DJJMAD2E5MQSCEY2LKGP46FSGIY2IUFINM6MWAWZRZUXW6YJDZKPP7LHNF5KMKIU5AQN",
+      "admitted": [
+        "01a98404-ae00-7000-8000-000000000001:2027-12-01"
+      ],
+      "expect": {
+        "verdict": "duplicate",
+        "ticketId": "01a98404-ae00-7000-8000-000000000001"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "checkpointId": null,
+      "direction": "in",
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "not a duplicate on the next day",
+      "rule": "duplicate",
+      "state": "main",
+      "code": "YY1AEAACANJQQCK4ADQACAAAAAAAAAAAAIAAGAAW2Z7AQEJHNOJKNI36NJVMQSH7IK3PRX5DJJMAD2E5MQSCEY2LKGP46FSGIY2IUFINM6MWAWZRZUXW6YJDZKPP7LHNF5KMKIU5AQN",
+      "now": "2027-12-02T20:00:00Z",
+      "admitted": [
+        "01a98404-ae00-7000-8000-000000000001:2027-12-01"
+      ],
+      "expect": {
+        "verdict": "admit",
+        "ticketId": "01a98404-ae00-7000-8000-000000000001"
+      },
+      "checkpointId": null,
+      "direction": "in",
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "duplicate by the event’s calendar day, not UTC (9 pm Chicago is already Dec 2 in UTC)",
+      "rule": "duplicate",
+      "state": "main",
+      "code": "YY1AEAACANJQQCK4ADQACAAAAAAAAAAAAIAAGAAW2Z7AQEJHNOJKNI36NJVMQSH7IK3PRX5DJJMAD2E5MQSCEY2LKGP46FSGIY2IUFINM6MWAWZRZUXW6YJDZKPP7LHNF5KMKIU5AQN",
+      "now": "2027-12-02T03:00:00Z",
+      "admitted": [
+        "01a98404-ae00-7000-8000-000000000001:2027-12-01"
+      ],
+      "expect": {
+        "verdict": "duplicate",
+        "ticketId": "01a98404-ae00-7000-8000-000000000001"
+      },
+      "checkpointId": null,
+      "direction": "in",
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "duplicate by short code",
+      "rule": "duplicate",
+      "state": "main",
+      "code": "KNOWNAAA",
+      "admitted": [
+        "01a98404-ae00-7000-8000-000000000001:2027-12-01"
+      ],
+      "expect": {
+        "verdict": "duplicate",
+        "ticketId": "01a98404-ae00-7000-8000-000000000001"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "checkpointId": null,
+      "direction": "in",
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "superseded: rev 0 against manifest rev 1",
+      "rule": "superseded",
+      "state": "main",
+      "code": "YY1AEAACANJQQCK4ADQACAAAAAAAAAAAAIAADD7U3VRHIATCSAYXTIGSAJEL3YXJQR2VIPA4NBSQFDKIQY3MDX3KQTCKJCYTIIWIUAXHOV3PI3MZ243K5GTLZHYBLSZZQ5T6NQOWLIA",
+      "expect": {
+        "verdict": "superseded",
+        "ticketId": "01a98404-ae00-7000-8000-000000000001"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "checkpointId": null,
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "rev ahead of the manifest (a transfer after the last sync) → provisional",
+      "rule": "provisional",
+      "state": "main",
+      "code": "YY1AEAACANJQQCK4ADQACAAAAAAAAAAAAIAAJ4PP4ONVIUG3JX2OYFVCR6OMTX7A3EPFNDEAFJOIPSAKMYFCQE3CHRMOD2KC6YPEZ5JKYP3HIMNLAYHCIQPC43CHRNYZUM7I3AMIVQH",
+      "expect": {
+        "verdict": "provisional",
+        "ticketId": "01a98404-ae00-7000-8000-000000000001"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "checkpointId": null,
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "provisional: issued after the last sync, policy provisional",
+      "rule": "provisional",
+      "state": "main",
+      "code": "YY1AEAACANJREV7IYDQACAAAAAAAAAAABAAABORSAHXVJUT3NR56TCMG2CLZPIKSVSZ7GCNEK3CZXDH47AOR3L7RYXLR57RTJGSLLGA5BOF3WBWQPD2OUROOWMA3BWKC4XYCFEBPIIH",
+      "expect": {
+        "verdict": "provisional",
+        "ticketId": "01a9892b-f460-7000-8000-000000000004"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "checkpointId": null,
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "provisional boundary: issued 1 ms after the sync",
+      "rule": "provisional",
+      "state": "main",
+      "code": "YY1AEAACANJREVQUALQACAAAAAAAAAAACAAAADWE64HULT7WJAISKAWRRN55VMJWHHTRJ56X33GLB4LBTEAVSJ4VMQF2IEFMZSDFTDKNMLGXHZ5W67PV473LY4IFPATQJXQENLGL7AL",
+      "expect": {
+        "verdict": "provisional",
+        "ticketId": "01a9892b-0a01-7000-8000-000000000008"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "checkpointId": null,
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "invalid boundary: issued at the sync instant exactly",
+      "rule": "reject",
+      "state": "main",
+      "code": "YY1AEAACANJREVQUADQACAAAAAAAAAAABYAADCVN2G3H6TA3KXYC5PK6WTK5I55XBUA3UNIFN2AZYUL2DQ3WHMUNXB6EUPW5O7IVYRMRUI2MYAKMJUC7R6JWCY7OUMJOK2MQAAHIAIJ",
+      "expect": {
+        "verdict": "invalid",
+        "ticketId": "01a9892b-0a00-7000-8000-000000000007"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "checkpointId": null,
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "policy reject: issued after the last sync is refused",
+      "rule": "provisional",
+      "state": "policy-reject",
+      "code": "YY1AEAACANJREV7IYDQACAAAAAAAAAAABAAABORSAHXVJUT3NR56TCMG2CLZPIKSVSZ7GCNEK3CZXDH47AOR3L7RYXLR57RTJGSLLGA5BOF3WBWQPD2OUROOWMA3BWKC4XYCFEBPIIH",
+      "expect": {
+        "verdict": "invalid",
+        "ticketId": "01a9892b-f460-7000-8000-000000000004"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "checkpointId": null,
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "a provisional admit scanned again on this device → duplicate",
+      "rule": "duplicate",
+      "state": "main",
+      "code": "YY1AEAACANJREV7IYDQACAAAAAAAAAAABAAABORSAHXVJUT3NR56TCMG2CLZPIKSVSZ7GCNEK3CZXDH47AOR3L7RYXLR57RTJGSLLGA5BOF3WBWQPD2OUROOWMA3BWKC4XYCFEBPIIH",
+      "admitted": [
+        "01a9892b-f460-7000-8000-000000000004:2027-12-01"
+      ],
+      "expect": {
+        "verdict": "duplicate",
+        "ticketId": "01a9892b-f460-7000-8000-000000000004"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "checkpointId": null,
+      "direction": "in",
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "invalid: not in the manifest, issued before the last sync",
+      "rule": "reject",
+      "state": "main",
+      "code": "YY1AEAACANJRD2BXADQACAAAAAAAAAAABIAACVAN23GZGW46AIWR37KOXB5KELU6EXJY7K2NRBV7KPXLNN7F6PWHPF4WIFZR5VQFORGS7KZUP7LIIPJS36BVLKIJIFTJ3QVQFLF76YP",
+      "expect": {
+        "verdict": "invalid",
+        "ticketId": "01a988f4-1b80-7000-8000-000000000005"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "checkpointId": null,
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "invalid: signed by another key",
+      "rule": "bad signature",
+      "state": "main",
+      "code": "YY1AEAACANJQQCK4ADQACAAAAAAAAAAAAIAAEQUULRSFVP5YTP65675OCHUFKUL53PYB3YS2ZKTTMMQRZN2LF6B55KKJRIYNQYX6HIHBMWC2CAVQDJRYNWD3CHH7ATANMY5EOD63HYL",
+      "expect": {
+        "verdict": "invalid",
+        "ticketId": null
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "checkpointId": null,
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "invalid: signature tampered",
+      "rule": "bad signature",
+      "state": "main",
+      "code": "YY1AEAACANJQQCK4ADQACAAAAAAAAAAAAIAAGAAW2Z7AQEJHNOJKNI36NJVMQSH7IK3PRX5DJJMAD2E5MQSCEY2LKGP46FSGIY2IUFINM6MWAWZRZUXW6YJDZKPP7LHNF5KMKIU5AQA",
+      "expect": {
+        "verdict": "invalid",
+        "ticketId": null
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "checkpointId": null,
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "invalid: unknown key id",
+      "rule": "bad signature",
+      "state": "main",
+      "code": "YY1AEAASANJQQCK4ADQACAAAAAAAAAAAAIAAGBDIE3IIWH7WTB4FWUTK2UQ7UMB4RYMHTXNYQFGFP5YRT625I5MCYIY56RTTIL6ZYAYYBXVRGSWFP6MKHXYTC5SACIB6RHVJOKLZKYB",
+      "expect": {
+        "verdict": "invalid",
+        "ticketId": null
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "checkpointId": null,
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "invalid: garbage after the YY1 prefix",
+      "rule": "bad signature",
+      "state": "main",
+      "code": "YY1NOTACODE",
+      "expect": {
+        "verdict": "invalid",
+        "ticketId": null
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "checkpointId": null,
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "lower-case code body still verifies (the scanner upper-cases)",
+      "rule": "admit",
+      "state": "main",
+      "code": "yy1aeaacanjqqck4adqacaaaaaaaaaaaaiaagaaw2z7aqejhnojkni36njvmqsh7ik3prx5djjmad2e5mqscey2lkgp46fsgiy2iufinm6mwawzrzuxw6yjdzkpp7lhnf5kmkiu5aqn",
+      "expect": {
+        "verdict": "admit",
+        "ticketId": "01a98404-ae00-7000-8000-000000000001"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "checkpointId": null,
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "short code, any case, with spaces",
+      "rule": "short code",
+      "state": "main",
+      "code": " knownaaa ",
+      "expect": {
+        "verdict": "admit",
+        "ticketId": "01a98404-ae00-7000-8000-000000000001"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "checkpointId": null,
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "unknown short code",
+      "rule": "short code",
+      "state": "main",
+      "code": "NOPE2345",
+      "expect": {
+        "verdict": "invalid",
+        "ticketId": null
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "checkpointId": null,
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "void ticket",
+      "rule": "rules",
+      "state": "main",
+      "code": "YY1AEAACANJQQCK4ADQACAAAAAAAAAAAAYAAC44YXJMXMM7DZQWXGPYEWHAAHELDUUMJMMYCPYNXBLOVWL53EEEUCGWIV4BLOQWAOVMHXPKUQKQPOMP4ASJ3WNE5LEKBGBZXSQT7KQL",
+      "expect": {
+        "verdict": "void",
+        "ticketId": "01a98404-ae00-7000-8000-000000000003"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "checkpointId": null,
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "access date: not today",
+      "rule": "rules",
+      "state": "main",
+      "code": "YY1AEAACANJQQCK4ADQACAAAAAAAAAAAAQAACE3UJ2RZFG6KMTQU7W4HCZZOUTDD5OOEWMB7IOR3FBDQ3GFIWUCDOQNIFNZ765EUHNJUBQ5S3MZLVDO4BL6TVTMP2AQSOOJFTWMWKAM",
+      "expect": {
+        "verdict": "not_today",
+        "ticketId": "01a98404-ae00-7000-8000-000000000002"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "checkpointId": null,
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "access date: today",
+      "rule": "rules",
+      "state": "main",
+      "code": "YY1AEAACANJQQCK4ADQACAAAAAAAAAAAAQAACE3UJ2RZFG6KMTQU7W4HCZZOUTDD5OOEWMB7IOR3FBDQ3GFIWUCDOQNIFNZ765EUHNJUBQ5S3MZLVDO4BL6TVTMP2AQSOOJFTWMWKAM",
+      "now": "2027-12-02T20:00:00Z",
+      "expect": {
+        "verdict": "admit",
+        "ticketId": "01a98404-ae00-7000-8000-000000000002"
+      },
+      "checkpointId": null,
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "before the doors open",
+      "rule": "rules",
+      "state": "main",
+      "code": "YY1AEAACANJQQCK4ADQACAAAAAAAAAAAAIAAGAAW2Z7AQEJHNOJKNI36NJVMQSH7IK3PRX5DJJMAD2E5MQSCEY2LKGP46FSGIY2IUFINM6MWAWZRZUXW6YJDZKPP7LHNF5KMKIU5AQN",
+      "now": "2027-11-30T00:00:00Z",
+      "expect": {
+        "verdict": "outside_window",
+        "ticketId": "01a98404-ae00-7000-8000-000000000001"
+      },
+      "checkpointId": null,
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "window opens 6 h before the start (exactly)",
+      "rule": "rules",
+      "state": "main",
+      "code": "YY1AEAACANJQQCK4ADQACAAAAAAAAAAAAIAAGAAW2Z7AQEJHNOJKNI36NJVMQSH7IK3PRX5DJJMAD2E5MQSCEY2LKGP46FSGIY2IUFINM6MWAWZRZUXW6YJDZKPP7LHNF5KMKIU5AQN",
+      "now": "2027-12-01T09:00:00Z",
+      "expect": {
+        "verdict": "admit",
+        "ticketId": "01a98404-ae00-7000-8000-000000000001"
+      },
+      "checkpointId": null,
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "window not yet open (1 ms before)",
+      "rule": "rules",
+      "state": "main",
+      "code": "YY1AEAACANJQQCK4ADQACAAAAAAAAAAAAIAAGAAW2Z7AQEJHNOJKNI36NJVMQSH7IK3PRX5DJJMAD2E5MQSCEY2LKGP46FSGIY2IUFINM6MWAWZRZUXW6YJDZKPP7LHNF5KMKIU5AQN",
+      "now": "2027-12-01T08:59:59.999Z",
+      "expect": {
+        "verdict": "outside_window",
+        "ticketId": "01a98404-ae00-7000-8000-000000000001"
+      },
+      "checkpointId": null,
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "window closes 6 h after the end (exactly)",
+      "rule": "rules",
+      "state": "main",
+      "code": "YY1AEAACANJQQCK4ADQACAAAAAAAAAAAAIAAGAAW2Z7AQEJHNOJKNI36NJVMQSH7IK3PRX5DJJMAD2E5MQSCEY2LKGP46FSGIY2IUFINM6MWAWZRZUXW6YJDZKPP7LHNF5KMKIU5AQN",
+      "now": "2027-12-03T10:00:00Z",
+      "expect": {
+        "verdict": "admit",
+        "ticketId": "01a98404-ae00-7000-8000-000000000001"
+      },
+      "checkpointId": null,
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "window closed (1 ms after)",
+      "rule": "rules",
+      "state": "main",
+      "code": "YY1AEAACANJQQCK4ADQACAAAAAAAAAAAAIAAGAAW2Z7AQEJHNOJKNI36NJVMQSH7IK3PRX5DJJMAD2E5MQSCEY2LKGP46FSGIY2IUFINM6MWAWZRZUXW6YJDZKPP7LHNF5KMKIU5AQN",
+      "now": "2027-12-03T10:00:00.001Z",
+      "expect": {
+        "verdict": "outside_window",
+        "ticketId": "01a98404-ae00-7000-8000-000000000001"
+      },
+      "checkpointId": null,
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "legacy payload",
+      "rule": "legacy",
+      "state": "main",
+      "code": "AbC-123-xyz",
+      "expect": {
+        "verdict": "admit",
+        "ticketId": "01a98404-ae00-7000-8000-000000000006"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "checkpointId": null,
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "legacy payload, JSON wrapper",
+      "rule": "legacy",
+      "state": "main",
+      "code": "{\"order_number\":\"172633440000017\",\"event\":3}",
+      "expect": {
+        "verdict": "admit",
+        "ticketId": "01a98404-ae00-7000-8000-000000000006"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "checkpointId": null,
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "legacy payload, other case is a different payload",
+      "rule": "legacy",
+      "state": "main",
+      "code": "abc-123-xyz",
+      "expect": {
+        "verdict": "invalid",
+        "ticketId": null
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "checkpointId": null,
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "legacy payload not in the manifest",
+      "rule": "legacy",
+      "state": "main",
+      "code": "ZZZ-999-zzz",
+      "expect": {
+        "verdict": "invalid",
+        "ticketId": null
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "checkpointId": null,
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "legacy payload twice → duplicate",
+      "rule": "legacy",
+      "state": "main",
+      "code": "AbC-123-xyz",
+      "admitted": [
+        "01a98404-ae00-7000-8000-000000000006:2027-12-01"
+      ],
+      "expect": {
+        "verdict": "duplicate",
+        "ticketId": "01a98404-ae00-7000-8000-000000000006"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "checkpointId": null,
+      "direction": "in",
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "a manifest without legacy codes does not read legacy payloads",
+      "rule": "legacy",
+      "state": "no-legacy",
+      "code": "AbC-123-xyz",
+      "expect": {
+        "verdict": "invalid",
+        "ticketId": null
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "checkpointId": null,
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "a version 1 manifest (no scope) still scans",
+      "rule": "manifest v1",
+      "state": "manifest-v1",
+      "code": "YY1AEAACANJQQCK4ADQACAAAAAAAAAAAAIAAGAAW2Z7AQEJHNOJKNI36NJVMQSH7IK3PRX5DJJMAD2E5MQSCEY2LKGP46FSGIY2IUFINM6MWAWZRZUXW6YJDZKPP7LHNF5KMKIU5AQN",
+      "expect": {
+        "verdict": "admit",
+        "ticketId": "01a98404-ae00-7000-8000-000000000001"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "checkpointId": null,
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "zone grants its ticket type",
+      "rule": "zone",
+      "state": "main",
+      "code": "YY1AEAACANJQQCK4ADQACAAAAAAAAAAAAQAACE3UJ2RZFG6KMTQU7W4HCZZOUTDD5OOEWMB7IOR3FBDQ3GFIWUCDOQNIFNZ765EUHNJUBQ5S3MZLVDO4BL6TVTMP2AQSOOJFTWMWKAM",
+      "now": "2027-12-02T20:00:00Z",
+      "checkpointId": "vip",
+      "expect": {
+        "verdict": "granted",
+        "ticketId": "01a98404-ae00-7000-8000-000000000002"
+      },
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "zone refuses other types",
+      "rule": "zone",
+      "state": "main",
+      "code": "YY1AEAACANJQQCK4ADQACAAAAAAAAAAAAIAAGAAW2Z7AQEJHNOJKNI36NJVMQSH7IK3PRX5DJJMAD2E5MQSCEY2LKGP46FSGIY2IUFINM6MWAWZRZUXW6YJDZKPP7LHNF5KMKIU5AQN",
+      "checkpointId": "vip",
+      "expect": {
+        "verdict": "no_access",
+        "ticketId": "01a98404-ae00-7000-8000-000000000001"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "zones allow re-entry",
+      "rule": "zone",
+      "state": "main",
+      "code": "YY1AEAACANJQQCK4ADQACAAAAAAAAAAAAQAACE3UJ2RZFG6KMTQU7W4HCZZOUTDD5OOEWMB7IOR3FBDQ3GFIWUCDOQNIFNZ765EUHNJUBQ5S3MZLVDO4BL6TVTMP2AQSOOJFTWMWKAM",
+      "now": "2027-12-02T20:00:00Z",
+      "checkpointId": "vip",
+      "admitted": [
+        "01a98404-ae00-7000-8000-000000000002:2027-12-02"
+      ],
+      "expect": {
+        "verdict": "granted",
+        "ticketId": "01a98404-ae00-7000-8000-000000000002"
+      },
+      "direction": "in",
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "event rules come first at a zone",
+      "rule": "zone",
+      "state": "main",
+      "code": "YY1AEAACANJQQCK4ADQACAAAAAAAAAAAAQAACE3UJ2RZFG6KMTQU7W4HCZZOUTDD5OOEWMB7IOR3FBDQ3GFIWUCDOQNIFNZ765EUHNJUBQ5S3MZLVDO4BL6TVTMP2AQSOOJFTWMWKAM",
+      "checkpointId": "vip",
+      "expect": {
+        "verdict": "not_today",
+        "ticketId": "01a98404-ae00-7000-8000-000000000002"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "an unknown-but-signed pass only enters an all-types zone",
+      "rule": "zone",
+      "state": "main",
+      "code": "YY1AEAACANJREV7IYDQACAAAAAAAAAAABAAABORSAHXVJUT3NR56TCMG2CLZPIKSVSZ7GCNEK3CZXDH47AOR3L7RYXLR57RTJGSLLGA5BOF3WBWQPD2OUROOWMA3BWKC4XYCFEBPIIH",
+      "checkpointId": "vip",
+      "expect": {
+        "verdict": "no_access",
+        "ticketId": "01a9892b-f460-7000-8000-000000000004"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "an unknown-but-signed pass enters an all-types zone",
+      "rule": "zone",
+      "state": "main",
+      "code": "YY1AEAACANJREV7IYDQACAAAAAAAAAAABAAABORSAHXVJUT3NR56TCMG2CLZPIKSVSZ7GCNEK3CZXDH47AOR3L7RYXLR57RTJGSLLGA5BOF3WBWQPD2OUROOWMA3BWKC4XYCFEBPIIH",
+      "checkpointId": "hall",
+      "expect": {
+        "verdict": "granted",
+        "ticketId": "01a9892b-f460-7000-8000-000000000004"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "a scoped device admits at its checkpoint",
+      "rule": "scope",
+      "state": "scoped-north",
+      "code": "YY1AEAACANJQQCK4ADQACAAAAAAAAAAAAIAAGAAW2Z7AQEJHNOJKNI36NJVMQSH7IK3PRX5DJJMAD2E5MQSCEY2LKGP46FSGIY2IUFINM6MWAWZRZUXW6YJDZKPP7LHNF5KMKIU5AQN",
+      "checkpointId": "north",
+      "expect": {
+        "verdict": "admit",
+        "ticketId": "01a98404-ae00-7000-8000-000000000001"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "a scoped device refuses another checkpoint",
+      "rule": "scope",
+      "state": "scoped-north",
+      "code": "YY1AEAACANJQQCK4ADQACAAAAAAAAAAAAIAAGAAW2Z7AQEJHNOJKNI36NJVMQSH7IK3PRX5DJJMAD2E5MQSCEY2LKGP46FSGIY2IUFINM6MWAWZRZUXW6YJDZKPP7LHNF5KMKIU5AQN",
+      "checkpointId": "hall",
+      "expect": {
+        "verdict": "wrong_checkpoint",
+        "ticketId": null
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "a scoped device refuses the whole event",
+      "rule": "scope",
+      "state": "scoped-north",
+      "code": "YY1AEAACANJQQCK4ADQACAAAAAAAAAAAAIAAGAAW2Z7AQEJHNOJKNI36NJVMQSH7IK3PRX5DJJMAD2E5MQSCEY2LKGP46FSGIY2IUFINM6MWAWZRZUXW6YJDZKPP7LHNF5KMKIU5AQN",
+      "checkpointId": null,
+      "expect": {
+        "verdict": "wrong_checkpoint",
+        "ticketId": null
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "ticket for today’s date admits",
+      "rule": "occurrence",
+      "state": "multi-date",
+      "code": "YY1AEAACANJQQCK4ADQACAAAAAAAAAABMIAACGZRQNXHSDTZSEIKXCSUGDXM6QVJQDK2YJLLS4WVGTHJQMCEIDX645MQQWKVUBIVTXPU5NA6VSGBF4SJWDYWZLFLSJU3EMV4NIFXIQI",
+      "expect": {
+        "verdict": "admit",
+        "ticketId": "01a98404-ae00-7000-8000-0000000000b1"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "checkpointId": null,
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "ticket for tomorrow’s date is too early",
+      "rule": "occurrence",
+      "state": "multi-date",
+      "code": "YY1AEAACANJQQCK4ADQACAAAAAAAAAABMQAAD7Q77MTNR6NTM64V4DJ5336RGV3UTKEQOZ25BZEHGTCS5XVHUOOLZXADH22P3CXYU2J3VDZXXIHXINA6HIHRGBSV75HF6JO2PPBKSIN",
+      "expect": {
+        "verdict": "wrong_date",
+        "ticketId": "01a98404-ae00-7000-8000-0000000000b2"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "checkpointId": null,
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "ticket for tomorrow’s date admits on its day",
+      "rule": "occurrence",
+      "state": "multi-date",
+      "code": "YY1AEAACANJQQCK4ADQACAAAAAAAAAABMQAAD7Q77MTNR6NTM64V4DJ5336RGV3UTKEQOZ25BZEHGTCS5XVHUOOLZXADH22P3CXYU2J3VDZXXIHXINA6HIHRGBSV75HF6JO2PPBKSIN",
+      "now": "2027-12-02T20:00:00Z",
+      "expect": {
+        "verdict": "admit",
+        "ticketId": "01a98404-ae00-7000-8000-0000000000b2"
+      },
+      "checkpointId": null,
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "ticket for a cancelled date",
+      "rule": "occurrence",
+      "state": "multi-date",
+      "code": "YY1AEAACANJQQCK4ADQACAAAAAAAAAABMYAAAFF425NUMP6ACYPEOYXUD2ZO77AQVYLCDS4IWARA3GBS6UPS766PPFS7F5FXLST5XEK7UXGXA6LMI3VFAL6PZK6UP23C52GDNJN7AQK",
+      "expect": {
+        "verdict": "wrong_date",
+        "ticketId": "01a98404-ae00-7000-8000-0000000000b3"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "checkpointId": null,
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "ticket for a date missing from the manifest",
+      "rule": "occurrence",
+      "state": "multi-date",
+      "code": "YY1AEAACANJQQCK4ADQACAAAAAAAAAABNAAADHOGWXU2VKWDOQWS4N2DWHAFDIXK35P5OCKWGJLEUC66OCY2EPFCFOGFZHL2UCLV34JJ4K52C67RQMPZVI6D5YHWPJ2GDU7A25X5TYB",
+      "expect": {
+        "verdict": "wrong_date",
+        "ticketId": "01a98404-ae00-7000-8000-0000000000b4"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "checkpointId": null,
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "enrolled registrant enters",
+      "rule": "session",
+      "state": "sessions",
+      "code": "SESSAAAA",
+      "checkpointId": "room-a",
+      "expect": {
+        "verdict": "entered",
+        "ticketId": "01a98404-ae00-7000-8000-0000000000a1"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "already in the room → duplicate",
+      "rule": "session",
+      "state": "sessions",
+      "code": "SESSAAAA",
+      "checkpointId": "room-a",
+      "inRoom": [
+        "01a98404-ae00-7000-8000-0000000000a1@s1"
+      ],
+      "expect": {
+        "verdict": "duplicate",
+        "ticketId": "01a98404-ae00-7000-8000-0000000000a1"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "direction": "in",
+      "admitted": [],
+      "occupancy": {}
+    },
+    {
+      "name": "scan out of someone seen going in",
+      "rule": "session",
+      "state": "sessions",
+      "code": "SESSAAAA",
+      "checkpointId": "room-a",
+      "direction": "out",
+      "inRoom": [
+        "01a98404-ae00-7000-8000-0000000000a1@s1"
+      ],
+      "expect": {
+        "verdict": "scanned_out",
+        "ticketId": "01a98404-ae00-7000-8000-0000000000a1"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "admitted": [],
+      "occupancy": {}
+    },
+    {
+      "name": "scan out of someone never seen going in",
+      "rule": "session",
+      "state": "sessions",
+      "code": "SESSAAAA",
+      "checkpointId": "room-a",
+      "direction": "out",
+      "expect": {
+        "verdict": "not_in_room",
+        "ticketId": "01a98404-ae00-7000-8000-0000000000a1"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "admission level: the pass does not include the session",
+      "rule": "session",
+      "state": "sessions",
+      "code": "SESSBBBB",
+      "checkpointId": "room-a",
+      "expect": {
+        "verdict": "admission_level",
+        "ticketId": "01a98404-ae00-7000-8000-0000000000a2"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "enrollment: registrant not enrolled in an enrollment-required session",
+      "rule": "session",
+      "state": "sessions",
+      "code": "SESSCCCC",
+      "checkpointId": "room-a",
+      "expect": {
+        "verdict": "not_enrolled",
+        "ticketId": "01a98404-ae00-7000-8000-0000000000a3"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "enrollment: not a registrant",
+      "rule": "session",
+      "state": "sessions",
+      "code": "SESSDDDD",
+      "checkpointId": "room-a",
+      "expect": {
+        "verdict": "not_enrolled",
+        "ticketId": "01a98404-ae00-7000-8000-0000000000a4"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "capacity: the room is full",
+      "rule": "session",
+      "state": "sessions",
+      "code": "SESSAAAA",
+      "checkpointId": "room-a",
+      "occupancy": {
+        "s1": 2
+      },
+      "expect": {
+        "verdict": "capacity",
+        "ticketId": "01a98404-ae00-7000-8000-0000000000a1"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "direction": "in",
+      "admitted": [],
+      "inRoom": []
+    },
+    {
+      "name": "capacity: one place left",
+      "rule": "session",
+      "state": "sessions",
+      "code": "SESSAAAA",
+      "checkpointId": "room-a",
+      "occupancy": {
+        "s1": 1
+      },
+      "expect": {
+        "verdict": "entered",
+        "ticketId": "01a98404-ae00-7000-8000-0000000000a1"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "direction": "in",
+      "admitted": [],
+      "inRoom": []
+    },
+    {
+      "name": "event rules still apply: void pass",
+      "rule": "session",
+      "state": "sessions",
+      "code": "SESSEEEE",
+      "checkpointId": "room-a",
+      "expect": {
+        "verdict": "void",
+        "ticketId": "01a98404-ae00-7000-8000-0000000000a5"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "a session without enrollment: any registrant with the level enters",
+      "rule": "session",
+      "state": "sessions",
+      "code": "SESSAAAA",
+      "checkpointId": "room-b",
+      "expect": {
+        "verdict": "entered",
+        "ticketId": "01a98404-ae00-7000-8000-0000000000a1"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "a pass listing the session enters it",
+      "rule": "session",
+      "state": "sessions",
+      "code": "SESSBBBB",
+      "checkpointId": "room-b",
+      "expect": {
+        "verdict": "entered",
+        "ticketId": "01a98404-ae00-7000-8000-0000000000a2"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "a session with capacity 1: full",
+      "rule": "session",
+      "state": "sessions",
+      "code": "SESSAAAA",
+      "checkpointId": "room-c",
+      "occupancy": {
+        "s3": 1
+      },
+      "expect": {
+        "verdict": "capacity",
+        "ticketId": "01a98404-ae00-7000-8000-0000000000a1"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "direction": "in",
+      "admitted": [],
+      "inRoom": []
+    },
+    {
+      "name": "a session with capacity 1: empty",
+      "rule": "session",
+      "state": "sessions",
+      "code": "SESSAAAA",
+      "checkpointId": "room-c",
+      "occupancy": {
+        "s3": 0
+      },
+      "expect": {
+        "verdict": "entered",
+        "ticketId": "01a98404-ae00-7000-8000-0000000000a1"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "direction": "in",
+      "admitted": [],
+      "inRoom": []
+    },
+    {
+      "name": "an unknown-but-signed pass is refused where enrollment is required",
+      "rule": "session",
+      "state": "sessions",
+      "code": "YY1AEAACANJREV7IYDQACAAAAAAAAAAABAAABORSAHXVJUT3NR56TCMG2CLZPIKSVSZ7GCNEK3CZXDH47AOR3L7RYXLR57RTJGSLLGA5BOF3WBWQPD2OUROOWMA3BWKC4XYCFEBPIIH",
+      "checkpointId": "room-a",
+      "expect": {
+        "verdict": "not_enrolled",
+        "ticketId": "01a9892b-f460-7000-8000-000000000004"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "an unknown-but-signed pass enters where it is not",
+      "rule": "session",
+      "state": "sessions",
+      "code": "YY1AEAACANJREV7IYDQACAAAAAAAAAAABAAABORSAHXVJUT3NR56TCMG2CLZPIKSVSZ7GCNEK3CZXDH47AOR3L7RYXLR57RTJGSLLGA5BOF3WBWQPD2OUROOWMA3BWKC4XYCFEBPIIH",
+      "checkpointId": "room-b",
+      "expect": {
+        "verdict": "entered",
+        "ticketId": "01a9892b-f460-7000-8000-000000000004"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "a session door without a signed gate admits nobody",
+      "rule": "session",
+      "state": "sessions",
+      "code": "SESSAAAA",
+      "checkpointId": "room-x",
+      "expect": {
+        "verdict": "invalid",
+        "ticketId": "01a98404-ae00-7000-8000-0000000000a1"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "a session door still refuses a bad signature",
+      "rule": "session",
+      "state": "sessions",
+      "code": "YY1AEAACANJQQCK4ADQACAAAAAAAAAABIIAAB5WI3SNKXC5X2RRCF6LILYTRFWKJWJDN46LP3HTNOBAG23TDM4BQVWTOMYK3TYXM6FSCLWUJZBJM63N7HGANOUCVJOAYDVEER5AX2QG",
+      "checkpointId": "room-b",
+      "expect": {
+        "verdict": "invalid",
+        "ticketId": null
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    },
+    {
+      "name": "an entrance of the same manifest behaves like the event",
+      "rule": "session",
+      "state": "sessions",
+      "code": "SESSAAAA",
+      "checkpointId": "north",
+      "expect": {
+        "verdict": "admit",
+        "ticketId": "01a98404-ae00-7000-8000-0000000000a1"
+      },
+      "now": "2027-12-01T20:00:00Z",
+      "direction": "in",
+      "admitted": [],
+      "inRoom": [],
+      "occupancy": {}
+    }
+  ]
+}

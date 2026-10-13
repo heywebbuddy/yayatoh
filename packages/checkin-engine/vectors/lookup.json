@@ -1,0 +1,337 @@
+{
+  "description": "Door lookup: lookupHash(salt, value) of a normalized email, phoneLookupHash(salt, phone) (last 8 digits, domain separated), lookupKind(query), and findTicketHolders(rows, salt, query).ids. Hashes by OpenSSL.",
+  "salt": "yy-manifest:e1",
+  "emails": [
+    {
+      "value": "ada@example.test",
+      "hash": "54d41b68bc9208f1db5bd8b4ccec1acfdfd5c9b44036f6d5559b25ae08d5dbb0"
+    },
+    {
+      "value": " Ada@Example.test ",
+      "hash": "54d41b68bc9208f1db5bd8b4ccec1acfdfd5c9b44036f6d5559b25ae08d5dbb0"
+    },
+    {
+      "value": "ADA@EXAMPLE.TEST",
+      "hash": "54d41b68bc9208f1db5bd8b4ccec1acfdfd5c9b44036f6d5559b25ae08d5dbb0"
+    },
+    {
+      "value": "\tada@example.test\n",
+      "hash": "54d41b68bc9208f1db5bd8b4ccec1acfdfd5c9b44036f6d5559b25ae08d5dbb0"
+    },
+    {
+      "value": "sam+tag@example.test",
+      "hash": "bcebf5173ea94e121d3bbe1014caceca0aa5552222e730160f19119ccdc55290"
+    },
+    {
+      "value": "ÁDA@example.test",
+      "hash": "a818d8f4a3de407aaf22a00d47a55cedcf0b84c75632dd889b9f78a7d3eef01a"
+    }
+  ],
+  "phones": [
+    {
+      "value": "+14155550134",
+      "key": "55550134",
+      "hash": "d8d731eda0b5efef2900b660f66f35db645b6276add92aa1b1b37145084d0161"
+    },
+    {
+      "value": "+1 (415) 555-0134",
+      "key": "55550134",
+      "hash": "d8d731eda0b5efef2900b660f66f35db645b6276add92aa1b1b37145084d0161"
+    },
+    {
+      "value": "415 555 0134",
+      "key": "55550134",
+      "hash": "d8d731eda0b5efef2900b660f66f35db645b6276add92aa1b1b37145084d0161"
+    },
+    {
+      "value": "(415)555-0134",
+      "key": "55550134",
+      "hash": "d8d731eda0b5efef2900b660f66f35db645b6276add92aa1b1b37145084d0161"
+    },
+    {
+      "value": "415.555.0134",
+      "key": "55550134",
+      "hash": "d8d731eda0b5efef2900b660f66f35db645b6276add92aa1b1b37145084d0161"
+    },
+    {
+      "value": "4155550134",
+      "key": "55550134",
+      "hash": "d8d731eda0b5efef2900b660f66f35db645b6276add92aa1b1b37145084d0161"
+    },
+    {
+      "value": "+442071838750",
+      "key": "71838750",
+      "hash": "fecf9a66f0914f456f0b5b75ae5d356e0882d07947a2c2e97a17f3108b3cf094"
+    },
+    {
+      "value": "+81 3-1234-5678",
+      "key": "12345678",
+      "hash": "255ecd0b8cfa8c78c21560ff4d7a8ff250d19d462727766e27247c913ff3f59e"
+    },
+    {
+      "value": "+4915112345678",
+      "key": "12345678",
+      "hash": "255ecd0b8cfa8c78c21560ff4d7a8ff250d19d462727766e27247c913ff3f59e"
+    },
+    {
+      "value": "1234567",
+      "key": null,
+      "hash": null
+    },
+    {
+      "value": "555-013",
+      "key": null,
+      "hash": null
+    },
+    {
+      "value": "",
+      "key": null,
+      "hash": null
+    },
+    {
+      "value": "ext. 12",
+      "key": null,
+      "hash": null
+    }
+  ],
+  "kinds": [
+    {
+      "query": "  Ana@Example.com ",
+      "kind": "email"
+    },
+    {
+      "query": "a@",
+      "kind": "email"
+    },
+    {
+      "query": "+1 (415) 555-0134",
+      "kind": "phone"
+    },
+    {
+      "query": "4155550134",
+      "kind": "phone"
+    },
+    {
+      "query": "415.555.0134",
+      "kind": "phone"
+    },
+    {
+      "query": "5550",
+      "kind": "name"
+    },
+    {
+      "query": "1234567",
+      "kind": "name"
+    },
+    {
+      "query": "José",
+      "kind": "name"
+    },
+    {
+      "query": "Ada Lovelace",
+      "kind": "name"
+    },
+    {
+      "query": "12 Main St",
+      "kind": "name"
+    },
+    {
+      "query": "+1 abc 4155550134",
+      "kind": "name"
+    },
+    {
+      "query": "",
+      "kind": "name"
+    }
+  ],
+  "otherSalt": {
+    "salt": "yy-manifest:e2",
+    "value": "ada@example.test",
+    "hash": "95f2a96c443ffdc16556ae79edc10f0b0f38f26e42e983f3f71ebc129cee878a"
+  },
+  "rows": [
+    {
+      "ticketId": "0192f000-0000-7000-8000-0000000000c1",
+      "shortCode": "HOLDER1",
+      "rev": 0,
+      "status": "active",
+      "ticketTypeId": "type-ga",
+      "typeName": "General",
+      "accessDates": [],
+      "holderName": "Ada Lovelace",
+      "emailHash": "54d41b68bc9208f1db5bd8b4ccec1acfdfd5c9b44036f6d5559b25ae08d5dbb0",
+      "issuedAt": "2024-11-03T03:09:44.832Z",
+      "phoneHash": "d8d731eda0b5efef2900b660f66f35db645b6276add92aa1b1b37145084d0161"
+    },
+    {
+      "ticketId": "0192f000-0000-7000-8000-0000000000c2",
+      "shortCode": "HOLDER2",
+      "rev": 0,
+      "status": "active",
+      "ticketTypeId": "type-ga",
+      "typeName": "General",
+      "accessDates": [],
+      "holderName": "Ada Byron",
+      "emailHash": "5542475e495d0238cdd1d335977861315ac140887dd66492df6fe3b18852a986",
+      "issuedAt": "2024-11-03T03:09:44.832Z"
+    },
+    {
+      "ticketId": "0192f000-0000-7000-8000-0000000000c3",
+      "shortCode": "HOLDER3",
+      "rev": 0,
+      "status": "active",
+      "ticketTypeId": "type-ga",
+      "typeName": "General",
+      "accessDates": [],
+      "holderName": "José María Núñez",
+      "emailHash": "320907d16e5be6a1fbb863f2150d8a3f07dcc11cf445225173a07f04855806a3",
+      "issuedAt": "2024-11-03T03:09:44.832Z",
+      "phoneHash": "255ecd0b8cfa8c78c21560ff4d7a8ff250d19d462727766e27247c913ff3f59e"
+    },
+    {
+      "ticketId": "0192f000-0000-7000-8000-0000000000c4",
+      "shortCode": "HOLDER4",
+      "rev": 0,
+      "status": "void",
+      "ticketTypeId": "type-ga",
+      "typeName": "General",
+      "accessDates": [],
+      "holderName": "Zed Zebra",
+      "emailHash": "eec45c3ebf8c431d5865bf1be1f5ca9021b24a38f15b1bad66b562a10d2851a9",
+      "issuedAt": "2024-11-03T03:09:44.832Z",
+      "phoneHash": "fecf9a66f0914f456f0b5b75ae5d356e0882d07947a2c2e97a17f3108b3cf094"
+    },
+    {
+      "ticketId": "0192f000-0000-7000-8000-0000000000c5",
+      "shortCode": "HOLDER5",
+      "rev": 0,
+      "status": "active",
+      "ticketTypeId": "type-ga",
+      "typeName": "General",
+      "accessDates": [],
+      "holderName": "Zed Able",
+      "emailHash": "fdac9909123394506ab2a60fcee0142e93205bb8e669c8c48622f220b2ed1d20",
+      "issuedAt": "2024-11-03T03:09:44.832Z"
+    },
+    {
+      "ticketId": "0192f000-0000-7000-8000-0000000000c6",
+      "shortCode": "HOLDER6",
+      "rev": 0,
+      "status": "active",
+      "ticketTypeId": "type-ga",
+      "typeName": "General",
+      "accessDates": [],
+      "holderName": "Dara O'Neil",
+      "emailHash": "0ebc1842cb8f1a1536700d22129c73ad53706264b79354f38a0953f0fff36f4c",
+      "issuedAt": "2024-11-03T03:09:44.832Z"
+    }
+  ],
+  "searches": [
+    {
+      "query": "ada@example.test",
+      "ids": [
+        "0192f000-0000-7000-8000-0000000000c1"
+      ]
+    },
+    {
+      "query": "  ADA@Example.Test ",
+      "ids": [
+        "0192f000-0000-7000-8000-0000000000c1"
+      ]
+    },
+    {
+      "query": "nobody@example.test",
+      "ids": []
+    },
+    {
+      "query": "+1 415 555 0134",
+      "ids": [
+        "0192f000-0000-7000-8000-0000000000c1"
+      ]
+    },
+    {
+      "query": "(415) 555-0134",
+      "ids": [
+        "0192f000-0000-7000-8000-0000000000c1"
+      ]
+    },
+    {
+      "query": "612345678",
+      "ids": [
+        "0192f000-0000-7000-8000-0000000000c3"
+      ]
+    },
+    {
+      "query": "020 7183 8750",
+      "ids": [
+        "0192f000-0000-7000-8000-0000000000c4"
+      ]
+    },
+    {
+      "query": "999 999 9999",
+      "ids": []
+    },
+    {
+      "query": "ada",
+      "ids": [
+        "0192f000-0000-7000-8000-0000000000c2",
+        "0192f000-0000-7000-8000-0000000000c1"
+      ]
+    },
+    {
+      "query": "ada lo",
+      "ids": [
+        "0192f000-0000-7000-8000-0000000000c1"
+      ]
+    },
+    {
+      "query": "lovelace ada",
+      "ids": [
+        "0192f000-0000-7000-8000-0000000000c1"
+      ]
+    },
+    {
+      "query": "jose nun",
+      "ids": [
+        "0192f000-0000-7000-8000-0000000000c3"
+      ]
+    },
+    {
+      "query": "MARIA",
+      "ids": [
+        "0192f000-0000-7000-8000-0000000000c3"
+      ]
+    },
+    {
+      "query": "ose",
+      "ids": []
+    },
+    {
+      "query": "oneil",
+      "ids": [
+        "0192f000-0000-7000-8000-0000000000c6"
+      ]
+    },
+    {
+      "query": "o'neil dara",
+      "ids": [
+        "0192f000-0000-7000-8000-0000000000c6"
+      ]
+    },
+    {
+      "query": "zed",
+      "ids": [
+        "0192f000-0000-7000-8000-0000000000c5",
+        "0192f000-0000-7000-8000-0000000000c4"
+      ]
+    },
+    {
+      "query": "a",
+      "ids": []
+    },
+    {
+      "query": "",
+      "ids": []
+    }
+  ]
+}
