@@ -1,7 +1,8 @@
 import { createV1, mobileSettingsFromEnv } from '@yayatoh/api-v1';
-import { bearerSessions } from '@yayatoh/auth';
+import { type AppSignIn, appSignIn, bearerSessions, idTokenVerifierFromEnv } from '@yayatoh/auth';
+import { isProductionEnv } from '@yayatoh/kernel';
 import { Hono } from 'hono';
-import { getAuth } from '@/server/auth.ts';
+import { authMailer, getAuth, getTwoFactor } from '@/server/auth.ts';
 import { getPaymentProvider } from '@/server/payments.ts';
 import { ports } from '@/server/ports.ts';
 
@@ -10,11 +11,21 @@ import { ports } from '@/server/ports.ts';
  * router is the one `apps/api` serves at `api.yayatoh.com/v1`; only the mount point differs.
  * No cookies are read here: API keys, bearer sessions and device tokens only.
  */
+let signIn: AppSignIn | undefined;
+/** App sign-in (M7.2a) on this origin: the web's mailer, sealed two-step secrets and step-up rules. */
+const getAppSignIn = (): AppSignIn =>
+  (signIn ??= appSignIn(getAuth(), {
+    mailer: authMailer,
+    twoFactor: getTwoFactor(),
+    verifier: idTokenVerifierFromEnv(process.env, { production: isProductionEnv() }),
+  }));
+
 const app = new Hono().route(
   '/api/v1',
   createV1({
     ports,
     sessions: () => bearerSessions(getAuth()),
+    appSignIn: getAppSignIn,
     payments: getPaymentProvider,
     basePath: '/api/v1',
     mobile: mobileSettingsFromEnv(),

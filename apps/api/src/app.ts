@@ -6,32 +6,22 @@ import {
   type V1Deps,
   openApiDocument as v1Document,
 } from '@yayatoh/api-v1';
-import { type Auth, bearerSessions, consoleMailer, createAuth } from '@yayatoh/auth';
+import { bearerSessions } from '@yayatoh/auth';
 import { type PaymentProvider, paymentProviderFromEnv } from '@yayatoh/payments';
 import { secureHeaders } from 'hono/secure-headers';
+import { getAppSignIn, getAuth } from './auth.ts';
 import { notFound, onError } from './errors.ts';
 import { ports } from './ports.ts';
 
 export { OPENAPI_INFO };
 
-let auth: Auth | undefined;
 let payments: PaymentProvider | undefined;
 
 /** api.yayatoh.com: sessions are the web's Better Auth sessions, carried as bearer tokens. */
 export const deps: V1Deps = {
   ports,
-  sessions: () => {
-    if (!auth) {
-      const secret = process.env.BETTER_AUTH_SECRET;
-      if (!secret) throw new Error('BETTER_AUTH_SECRET is not set (see .env.example)');
-      auth = createAuth({
-        baseURL: process.env.API_PUBLIC_URL ?? process.env.BETTER_AUTH_URL ?? 'http://localhost:4000',
-        secret,
-        mailer: consoleMailer,
-      });
-    }
-    return bearerSessions(auth);
-  },
+  sessions: () => bearerSessions(getAuth()),
+  appSignIn: getAppSignIn,
   payments: () => {
     payments ??= paymentProviderFromEnv(process.env, process.env.BETTER_AUTH_URL ?? 'http://localhost:3000');
     return payments;

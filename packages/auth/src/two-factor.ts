@@ -307,6 +307,23 @@ export function twoFactorService(auth: Auth, opts: TwoFactorServiceOptions) {
       return { backupCodes };
     },
 
+    /**
+     * The second step of an app sign-in (M7.2a): a TOTP or a backup code (spent on use) for a
+     * person whose first factor is done. Wrong codes count toward the same per-person pause as
+     * every other code (5 in 15 minutes). Returns which kind matched.
+     */
+    async verifySignInCode(userId: string, code: string): Promise<'totp' | 'backup_code'> {
+      await assertNotLimited(userId);
+      const r = await row(userId);
+      if (!r || !(await enabled(userId))) throw new TwoFactorError('not_enabled');
+      const used = await checkCode(r, code, 'sign_in');
+      if (!used) return failed(userId, 'invalid_code');
+      await succeeded(userId);
+      if (used === 'backup_code') await record(userId, 'two_factor.backup_code_used', { purpose: 'sign_in' });
+      await record(userId, 'two_factor.challenge_passed', { method: used });
+      return used;
+    },
+
     /** Turn it off with a current code (TOTP or a backup code). The caller checks role requirements first. */
     async disable(userId: string, code: string) {
       await assertNotLimited(userId);
