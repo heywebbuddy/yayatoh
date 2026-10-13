@@ -44,11 +44,28 @@ export interface V1Deps {
   readonly keyUsage?: boolean;
 }
 
+/**
+ * The signed-in person behind a `/me/…` request (see `meScope`): a user bearer session whose email
+ * is verified. Routes that need the person (my tickets, my orders, my devices) read this.
+ */
+export interface MeContext {
+  readonly session: BearerSession;
+  readonly user: BearerSession['user'];
+  /**
+   * The person's context: actor `user`, no org (`orgId` is null), the session's `stepUpAt`, the
+   * request id and `Accept-Language`. Never tenant-scoped: queries across orgs resolve the person
+   * by their verified email, or enter an org with their own `createCtx({ orgId, … })`.
+   */
+  readonly ctx: Ctx;
+}
+
 export type V1Env = {
   Variables: {
     requestId: string;
     principal: Principal | null;
     /** The tenant context of an `/orgs/{org}/…` request (org from the path, checked against the credential). */
     ctx: Ctx;
+    /** M7.2a: the signed-in person of a `/me/…` request (set by `meScope`). */
+    me: MeContext;
   };
 };

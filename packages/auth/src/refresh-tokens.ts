@@ -34,6 +34,8 @@ export interface TokenPair {
   readonly refreshToken: string;
   readonly refreshTokenExpiresAt: Date;
   readonly user: { readonly id: string; readonly name: string; readonly email: string };
+  /** The re-authentication the access token carries (see `BearerSession.stepUpAt`). */
+  readonly stepUpAt: Date | null;
 }
 
 export type RefreshRefusal = 'invalid' | 'expired' | 'revoked' | 'reused';
@@ -54,10 +56,24 @@ async function endAccessSessions(tokens: readonly (string | null)[]) {
   if (live.length > 0) await identityDatabase().delete(sessions).where(inArray(sessions.token, live));
 }
 
+/** The step-up recorded on a session (a Better Auth session row), or null. */
+async function stepUpOf(sessionToken: string): Promise<Date | null> {
+  const [row] = await identityDatabase()
+    .select({ stepUpAt: sessions.stepUpAt })
+    .from(sessions)
+    .where(eq(sessions.token, sessionToken));
+  return row?.stepUpAt ?? null;
+}
+
 export function refreshTokenService(auth: Auth, opts: { now?: () => Date } = {}) {
   const now = opts.now ?? (() => new Date());
 
-  async function issueIn(familyId: string, userId: string, at: Date): Promise<TokenPair | null> {
+  async function issueIn(
+    familyId: string,
+    userId: string,
+    at: Date,
+    stepUpAt: Date | null,
+  ): Promise<TokenPair | null> {
     const c = await auth.$context;
     const user = await c.internalAdapter.findUserById(userId);
     if (!user || (user as { deletedAt?: Date | null }).deletedAt) return null;
@@ -66,7 +82,7 @@ export function refreshTokenService(auth: Auth, opts: { now?: () => Date } = {})
     const session = await c.internalAdapter.createSession(
       userId,
       true,
-      { expiresAt: accessTokenExpiresAt, host: null },
+      { expiresAt: accessTokenExpiresAt, host: null, stepUpAt },
       true,
     );
     const refreshToken = newRefreshToken();
@@ -88,6 +104,7 @@ export function refreshTokenService(auth: Auth, opts: { now?: () => Date } = {})
       refreshToken,
       refreshTokenExpiresAt,
       user: { id: user.id, name: user.name, email: user.email },
+      stepUpAt,
     };
   }
 
@@ -105,10 +122,13 @@ export function refreshTokenService(auth: Auth, opts: { now?: () => Date } = {})
   }
 
   return {
-    /** A new family for a person who just signed in (password checked by the caller). */
+    /**
+     * A new family for a person who just signed in (the caller has checked the password, code or
+     * provider token). Signing in is a re-authentication, so the access token starts stepped up.
+     */
     async issue(userId: string): Promise<TokenPair> {
       const at = now();
-      const pair = await issueIn(uuidv7(), userId, at);
+      const pair = await issueIn(uuidv7(), userId, at, at);
       if (!pair) throw new Error('refreshTokenService.issue: no such user');
       await audit(userId, 'refresh_token.issued', {}, at);
       return pair;
@@ -148,10 +168,12 @@ export function refreshTokenService(auth: Auth, opts: { now?: () => Date } = {})
         }
         return { ok: false, reason: 'revoked' };
       }
+      // A refresh is not a re-authentication: the new access token carries the old one's step-up.
+      const stepUpAt = spent.accessSessionToken ? await stepUpOf(spent.accessSessionToken) : null;
       // The access token issued with the spent refresh token ends now.
       await endAccessSessions([spent.accessSessionToken]);
       if (spent.expiresAt.getTime() <= at.getTime()) return { ok: false, reason: 'expired' };
-      const pair = await issueIn(spent.familyId, spent.userId, at);
+      const pair = await issueIn(spent.familyId, spent.userId, at, stepUpAt);
       if (!pair) return { ok: false, reason: 'revoked' };
       return { ok: true, tokens: pair };
     },
