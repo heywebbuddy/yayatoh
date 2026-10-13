@@ -1,10 +1,34 @@
 'use client';
 
+import { qrPath } from '@yayatoh/pdf/qr';
 import { Alert, Button, Card, Input, Select } from '@yayatoh/ui';
 import { useLocale, useTranslations } from 'next-intl';
 import { useActionState } from 'react';
 import type { EnrollState } from '@/app/[locale]/o/[org]/e/[event]/onsite/actions.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
+
+/**
+ * The setup link as a QR (M7.2d). Drawn here, in the browser, from the link already on screen: the
+ * key sits in the URL fragment and is never sent to a server, so it is never rendered by one either.
+ * The link is a universal link the Staff app claims; in a browser it still opens the Scan PWA.
+ */
+function SetupQr({ link, label }: { link: string; label: string }) {
+  const { size, d } = qrPath(link);
+  return (
+    <svg
+      role="img"
+      aria-label={label}
+      viewBox={`0 0 ${size} ${size}`}
+      shapeRendering="crispEdges"
+      className="size-44 shrink-0 rounded-tile border border-line"
+      data-testid="scan-qr"
+    >
+      <rect width={size} height={size} fill="white" />
+      {/* A QR is always dark on light, in both themes. */}
+      <path d={d} fill="black" />
+    </svg>
+  );
+}
 
 export function DeviceEnrollForm({
   eventId,
@@ -68,6 +92,10 @@ export function DeviceEnrollForm({
             >
               {t('devices.openScanner')}
             </a>
+            <div className="flex flex-wrap items-center gap-4">
+              <SetupQr link={setupLink(state.token)} label={t('devices.qrLabel')} />
+              <p className="m-0 min-w-0 flex-1 text-caption text-ink-2">{t('devices.qrHint')}</p>
+            </div>
           </div>
         ) : state.kind === 'error' ? (
           <Alert title={t(errorMessageKey(state.code))} />

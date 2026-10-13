@@ -1341,6 +1341,8 @@
     "revokeFor": "Revocar {label}",
     "linkHint": "O abre este enlace en el dispositivo: configura el escáner para este evento.",
     "openScanner": "Abrir el escáner en este dispositivo",
+    "qrLabel": "Código QR del enlace de configuración",
+    "qrHint": "O escanea este código con la app Staff o con la cámara del dispositivo que estás configurando. La clave se queda en el enlace y nunca se envía al servidor.",
     "handedTo": "Entregado a",
     "orgDevice": "Nadie (escanea en cualquier lugar)",
     "handedToName": "para {name}"

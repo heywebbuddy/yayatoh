@@ -1341,6 +1341,8 @@
     "revokeFor": "撤销 {label}",
     "linkHint": "或在设备上打开此链接：它会为本活动设置好扫描器。",
     "openScanner": "在此设备上打开扫描器",
+    "qrLabel": "设置链接的二维码",
+    "qrHint": "也可以用 Staff 应用或正在设置的设备的相机扫描此二维码。密钥只保留在链接中，绝不会发送到服务器。",
     "handedTo": "交给",
     "orgDevice": "无人(可在任何位置扫描)",
     "handedToName": "给 {name}"

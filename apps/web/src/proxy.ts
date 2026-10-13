@@ -17,6 +17,7 @@ import { resolveHost } from '@yayatoh/tenancy';
 import { type NextFetchEvent, NextRequest, NextResponse } from 'next/server';
 import createMiddleware from 'next-intl/middleware';
 import { routing } from './i18n/routing.ts';
+import { appLinksResponse, isAppLinksPath } from './lib/app-links.ts';
 import { captureLanding } from './lib/attribution-capture.ts';
 import { FRONT_DOOR_ROUTE_HEADER, frontDoor } from './lib/front-door/index.ts';
 import { bareHost, classifyHost } from './lib/hosts.ts';
@@ -99,7 +100,26 @@ function languageSwitch(req: NextRequest, code: string, host: string) {
   return res;
 }
 
+/**
+ * The app-link files (M7.2d: apple-app-site-association, assetlinks.json) are answered before
+ * anything else: no front door, locale redirect, host redirect (a tenant's non-primary host would
+ * 308), legacy redirect, auth or cookie may touch them, because the OS fetchers follow no redirect.
+ * A host that is not one of the apps' link domains (a custom tenant domain, a preview) gets a 404.
+ */
+function appLinks(req: NextRequest): Response {
+  if (req.method !== 'GET' && req.method !== 'HEAD')
+    return new Response(null, { status: 405, headers: { allow: 'GET, HEAD' } });
+  const res = appLinksResponse(req.nextUrl.pathname, bareHost(req.headers.get('host')));
+  if (!res)
+    return new Response('Not found', {
+      status: 404,
+      headers: { 'content-type': 'text/plain', 'cache-control': 'no-store' },
+    });
+  return req.method === 'HEAD' ? new Response(null, { status: res.status, headers: res.headers }) : res;
+}
+
 export default async function proxy(req: NextRequest, event?: NextFetchEvent): Promise<Response> {
+  if (isAppLinksPath(req.nextUrl.pathname)) return appLinks(req);
   const door = await frontDoor(req, (p) => event?.waitUntil(p));
   if (door?.kind === 'response') return door.response;
   const host = bareHost(req.headers.get('host'));

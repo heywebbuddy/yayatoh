@@ -1341,6 +1341,8 @@
     "revokeFor": "Revoke {label}",
     "linkHint": "Or open this link on the device: it sets the scanner up for this event.",
     "openScanner": "Open the scanner on this device",
+    "qrLabel": "QR code of the setup link",
+    "qrHint": "Or scan this code with the Staff app, or with the camera of the device you are setting up. The key stays in the link and is never sent to the server.",
     "handedTo": "Handed to",
     "orgDevice": "Nobody (scans anywhere)",
     "handedToName": "for {name}"
