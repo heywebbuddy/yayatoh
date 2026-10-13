@@ -80,3 +80,10 @@ their routes on a `/v1/me` scope for the signed-in person.
 | The `/v1/me` scope refuses unverified emails, API keys and anonymous callers | `packages/api-v1/tests/me-scope.int.test.ts` |
 | Refresh rotation and family revoke are unchanged | `packages/auth/tests/sign-in-extras.int.test.ts`, `packages/api-v1/tests/v1.int.test.ts` (unchanged), `app-sign-in.int.test.ts` (refresh and revoke) |
 | `/v1` changes are additions only | `oasdiff breaking` against `origin/main`: none; `pnpm contracts:check` |
+
+## 5. Gate (2026-10-13)
+- `pnpm lint`, `pnpm check:modules`, `pnpm turbo run typecheck` (all 60 packages; `worker` and `compliance` need an 8–9 GB heap), `pnpm contracts:check`, `oasdiff breaking` against `origin/main` (no findings): green.
+- Unit: 4160 passed, 1 failed (`packages/modules/media/tests/golden.test.ts`, a recorded image hash; the media module is untouched, so this is the sharp/libvips build in this container).
+- Integration: 2398 passed, 1 failed (`tools/automation-apps/tests/apps.int.test.ts`, "trigger subscriptions": `400 dns` because `hook.eu1.make.com` does not resolve in this container).
+- E2E: `apps/web/e2e/maintenance.spec.ts` (the only spec calling `/api/v1/auth/login`) on mobile-375, tablet-768 and desktop-1280: 6 passed. A smoke run against the built web app's `/api/v1` mount: email code → tokens → `/me` (`emailVerified: true`) → `step-up/start`.
+- No web screens changed, so no new browser tests. The apps' screens come with M7.1c and the M7.2b–e increments.
