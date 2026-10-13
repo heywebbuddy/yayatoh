@@ -10,6 +10,7 @@ import { routePath } from 'hono/route';
 import type { Principal, V1Deps, V1Env } from './context.ts';
 import { deprecationMiddleware } from './deprecation.ts';
 import { onV1Error, problem, sendProblem } from './http.ts';
+import { isGuardedMePath, meScope } from './me-scope.ts';
 import { memoryRateLimiter, RATE_LIMITS, type RateDecision } from './rate-limit.ts';
 import { authRoutes } from './routes/auth.ts';
 import { automationRoutes } from './routes/automation.ts';
@@ -29,7 +30,7 @@ import { clientInfo } from './telemetry.ts';
 import { registerWebhooks } from './webhooks.ts';
 
 export { cachedJson, etagOf } from './caching.ts';
-export type { MobileSettings, Principal, V1Deps } from './context.ts';
+export type { MeContext, MobileSettings, Principal, V1Deps, V1Env } from './context.ts';
 export { decodeCursor, encodeCursor, pageByKey, pageOf } from './cursor.ts';
 export {
   type Deprecation,
@@ -38,6 +39,7 @@ export {
   deprecationMiddleware,
   deprecations,
 } from './deprecation.ts';
+export { meScope } from './me-scope.ts';
 export { type PortalMail, type PortalMailer, portalMailer } from './portal-mail.ts';
 export { memoryRateLimiter, RATE_LIMITS, type RateDecision, type RateLimiter } from './rate-limit.ts';
 export { API_VERSION } from './routes/version.ts';
@@ -313,7 +315,12 @@ export function createV1(deps: V1Deps) {
       if (p.key.orgId !== orgId) throw new DomainError('not_found', 'Organization not found');
       c.set('ctx', createCtx({ ...base, actor: { type: 'api_key', keyId: p.key.keyId } }));
     } else {
-      const ctx = createCtx({ ...base, actor: { type: 'user', userId: p.session.user.id } });
+      // M7.2a: the session's last sign-in or step-up reaches commands marked `stepUp`.
+      const ctx = createCtx({
+        ...base,
+        actor: { type: 'user', userId: p.session.user.id },
+        stepUpAt: p.session.stepUpAt,
+      });
       if (!(await memberRole(ctx))) throw new DomainError('not_found', 'Organization not found');
       c.set('ctx', ctx);
     }
@@ -321,6 +328,13 @@ export function createV1(deps: V1Deps) {
   });
   v1.use('/orgs/:org', orgScope);
   v1.use('/orgs/:org/*', orgScope);
+
+  // M7.2a: `/me/…` is for a signed-in person with a verified email (see `meScope`).
+  v1.use('/me/*', async (c, next) => {
+    const path = new URL(c.req.url).pathname.slice(basePath.length);
+    if (!isGuardedMePath(path)) return next();
+    return meScope(c, next);
+  });
 
   v1.route('/', health);
   v1.route('/', authRoutes(deps, limiter, clientIp));

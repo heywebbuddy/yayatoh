@@ -10,6 +10,17 @@ export {
   recordAccountEvent,
 } from './account.ts';
 export {
+  type AppChallenge,
+  type AppSignIn,
+  type AppSignInOptions,
+  type AppSignInRefusal,
+  type AppSignInResult,
+  appSignIn,
+  CHALLENGE_ATTEMPTS,
+  CHALLENGE_TTL_MS,
+  EMAIL_CODE_TTL_SECONDS,
+} from './app-sign-in.ts';
+export {
   type Auth,
   type AuthOptions,
   consumeTotpStep,
@@ -32,6 +43,22 @@ export {
   safeReturnPath,
   stateMatches,
 } from './handoff.ts';
+export {
+  APPLE_JWKS_URL,
+  type FakeIdTokenClaims,
+  fakeIdTokenSecret,
+  fakeIdTokenVerifier,
+  GOOGLE_JWKS_URL,
+  type IdTokenAudiences,
+  type IdTokenVerifier,
+  idTokenAudiencesFromEnv,
+  idTokenVerifierFromEnv,
+  type JwksIdTokenOptions,
+  jwksIdTokenVerifier,
+  profileFromClaims,
+  remoteJwks,
+  signFakeIdToken,
+} from './id-token.ts';
 export {
   dueImpersonations,
   endImpersonation,
@@ -105,6 +132,7 @@ export {
   listSocialAccounts,
   openFakeCode,
   pendingLinkProof,
+  resetUnverifiedAccount,
   resolveSocialSignIn,
   SOCIAL_PROVIDERS,
   type SocialProfile,

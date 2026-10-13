@@ -1,4 +1,4 @@
-import type { BearerSession, BearerSessions } from '@yayatoh/auth';
+import type { AppSignIn, BearerSession, BearerSessions } from '@yayatoh/auth';
 import type { ApiAccessQuotas } from '@yayatoh/billing';
 import type { TenantTx } from '@yayatoh/db';
 import type { CommandPorts, Ctx } from '@yayatoh/kernel';
@@ -24,6 +24,11 @@ export interface V1Deps {
   readonly ports: CommandPorts<TenantTx>;
   /** Bearer sessions (Better Auth). Without it, only API keys and device tokens authenticate. */
   readonly sessions?: () => BearerSessions;
+  /**
+   * M7.2a: app sign-in (emailed code, Apple and Google id_tokens, the two-factor step) and
+   * step-up on bearer sessions. Without it those grants and routes answer 404.
+   */
+  readonly appSignIn?: () => AppSignIn;
   readonly payments: () => PaymentProvider;
   readonly rateLimiter?: RateLimiter;
   /** Count requests per route × client × app version (on unless false). */
@@ -50,11 +55,28 @@ export interface V1Deps {
   readonly portalLimiter?: PlatformRateLimiter;
 }
 
+/**
+ * The signed-in person behind a `/me/…` request (see `meScope`): a user bearer session whose email
+ * is verified. Routes that need the person (my tickets, my orders, my devices) read this.
+ */
+export interface MeContext {
+  readonly session: BearerSession;
+  readonly user: BearerSession['user'];
+  /**
+   * The person's context: actor `user`, no org (`orgId` is null), the session's `stepUpAt`, the
+   * request id and `Accept-Language`. Never tenant-scoped: queries across orgs resolve the person
+   * by their verified email, or enter an org with their own `createCtx({ orgId, … })`.
+   */
+  readonly ctx: Ctx;
+}
+
 export type V1Env = {
   Variables: {
     requestId: string;
     principal: Principal | null;
     /** The tenant context of an `/orgs/{org}/…` request (org from the path, checked against the credential). */
     ctx: Ctx;
+    /** M7.2a: the signed-in person of a `/me/…` request (set by `meScope`). */
+    me: MeContext;
   };
 };

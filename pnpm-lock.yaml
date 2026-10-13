@@ -1057,6 +1057,9 @@ importers:
       drizzle-orm:
         specifier: 'catalog:'
         version: 0.45.3(@opentelemetry/api@1.9.1)(kysely@0.29.6)(pg@8.23.0)(postgres@3.4.9)
+      jose:
+        specifier: 6.2.12
+        version: 6.2.12
       zod:
         specifier: 'catalog:'
         version: 4.6.5

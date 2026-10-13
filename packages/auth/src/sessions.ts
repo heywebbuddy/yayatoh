@@ -5,7 +5,20 @@ export interface BearerSession {
   /** The Better Auth session token, sent back as `Authorization: Bearer …`. */
   readonly token: string;
   readonly expiresAt: Date;
-  readonly user: { readonly id: string; readonly name: string; readonly email: string };
+  readonly user: {
+    readonly id: string;
+    readonly name: string;
+    readonly email: string;
+    /** Whether the person has proved the address (an emailed code, a provider's verified email). */
+    readonly emailVerified: boolean;
+  };
+  /**
+   * The last re-authentication on this session: the sign-in that made it or a later step-up
+   * (`POST /v1/auth/step-up`), whichever is newer; null when there has been none. Commands marked
+   * `stepUp` need it within `STEP_UP_WINDOW_MS`. A refresh carries it over unchanged: refreshing
+   * is not re-authenticating.
+   */
+  readonly stepUpAt: Date | null;
 }
 
 export type SignInResult =
@@ -49,10 +62,22 @@ export function bearerSessions(auth: Auth): BearerSessions {
       ...(fixed ? { query: { disableRefresh: true } } : {}),
     });
     if (!s) return null;
+    const explicit = (s.session as { stepUpAt?: Date | string | null }).stepUpAt;
+    const created = new Date(s.session.createdAt);
+    const stamped = explicit ? new Date(explicit) : null;
+    // A sliding session counts its creation as a re-authentication, like the web's session. An
+    // access token (M1.2f) is refreshed without one, so only an explicit sign-in or step-up counts.
+    const stepUpAt = fixed ? stamped : stamped && stamped > created ? stamped : created;
     return {
       token: s.session.token,
       expiresAt: new Date(s.session.expiresAt),
-      user: { id: s.user.id, name: s.user.name, email: s.user.email },
+      user: {
+        id: s.user.id,
+        name: s.user.name,
+        email: s.user.email,
+        emailVerified: Boolean(s.user.emailVerified),
+      },
+      stepUpAt,
     };
   };
   return {
