@@ -1,3 +1,5 @@
+import { sha256Hex } from './primitives.ts';
+
 /**
  * Migrated legacy QR payloads (roadmap §7.5, M2.2b). Eventmie printed the booking's
  * `order_number` either bare or inside a JSON object; both scan. Case matters (the payload is
@@ -22,7 +24,5 @@ export function legacyQrPayload(raw: string): string | null {
  * device never holds a payload it could print, and a hash can't be mistaken for an email's.
  */
 export async function legacyPayloadHash(salt: string, payload: string): Promise<string> {
-  const data = new TextEncoder().encode(`legacy:${salt}:${payload}`);
-  const digest = await globalThis.crypto.subtle.digest('SHA-256', data);
-  return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, '0')).join('');
+  return sha256Hex(`legacy:${salt}:${payload}`);
 }

@@ -2,6 +2,7 @@ import {
   CODE_PREFIX,
   legacyPayloadHash,
   legacyQrPayload,
+  sha256Hex,
   verifyStatement,
   verifyTicketCode,
 } from '@yayatoh/ticket-crypto';
@@ -363,7 +364,5 @@ export function legacyIndex(rows: Iterable<ManifestRow>): Map<string, ManifestRo
 
 /** SHA-256 of `salt:value`, hex — the manifest's offline lookup hash for a normalized email. */
 export async function lookupHash(salt: string, value: string): Promise<string> {
-  const data = new TextEncoder().encode(`${salt}:${value.trim().toLowerCase()}`);
-  const digest = await globalThis.crypto.subtle.digest('SHA-256', data);
-  return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, '0')).join('');
+  return sha256Hex(`${salt}:${value.trim().toLowerCase()}`);
 }

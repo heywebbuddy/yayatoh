@@ -8,6 +8,8 @@ catalog:
   "@biomejs/biome": 2.5.14
   "@hono/node-server": 2.1.1
   "@hono/zod-openapi": 1.6.3
+  "@noble/curves": 2.4.0
+  "@noble/hashes": 2.4.0
   "@tailwindcss/postcss": 4.3.3
   "@types/node": ^24.0.0
   "@types/react": 19.3.0

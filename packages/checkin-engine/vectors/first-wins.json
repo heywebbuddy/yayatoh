@@ -1,0 +1,215 @@
+{
+  "description": "Cross-device duplicates (ADR 0011): clockOffsetMs(sample), correctedArrival(deviceTs, offsetMs, now), earlierArrival(current, candidate), and races where the earliest corrected arrival wins whatever order uploads arrive in.",
+  "offsets": [
+    {
+      "name": "a good clock: the interval contains zero",
+      "serverTime": 1000,
+      "sentAt": 900,
+      "receivedAt": 1100,
+      "expect": 0
+    },
+    {
+      "name": "a slow device: behind by at least 4900 ms",
+      "serverTime": 10000,
+      "sentAt": 4900,
+      "receivedAt": 5100,
+      "expect": 4900
+    },
+    {
+      "name": "a fast device: ahead by at least 4000 ms",
+      "serverTime": 1000,
+      "sentAt": 5000,
+      "receivedAt": 5200,
+      "expect": -4000
+    },
+    {
+      "name": "sent and received swapped",
+      "serverTime": 1000,
+      "sentAt": 5200,
+      "receivedAt": 5000,
+      "expect": -4000
+    },
+    {
+      "name": "lower bound exactly zero",
+      "serverTime": 1000,
+      "sentAt": 500,
+      "receivedAt": 1000,
+      "expect": 0
+    },
+    {
+      "name": "upper bound exactly zero",
+      "serverTime": 1000,
+      "sentAt": 1000,
+      "receivedAt": 1500,
+      "expect": 0
+    },
+    {
+      "name": "instant round trip, clock right",
+      "serverTime": 2000,
+      "sentAt": 2000,
+      "receivedAt": 2000,
+      "expect": 0
+    }
+  ],
+  "corrected": [
+    {
+      "name": "no offset",
+      "deviceTs": "2027-12-01T12:00:00.000Z",
+      "offsetMs": 0,
+      "now": "2027-12-01T12:30:00.000Z",
+      "expect": "2027-12-01T12:00:00.000Z"
+    },
+    {
+      "name": "a slow clock is moved forward",
+      "deviceTs": "2027-12-01T12:00:00.000Z",
+      "offsetMs": 5000,
+      "now": "2027-12-01T12:30:00.000Z",
+      "expect": "2027-12-01T12:00:05.000Z"
+    },
+    {
+      "name": "a fast clock is moved back",
+      "deviceTs": "2027-12-01T12:00:05.000Z",
+      "offsetMs": -10000,
+      "now": "2027-12-01T12:30:00.000Z",
+      "expect": "2027-12-01T11:59:55.000Z"
+    },
+    {
+      "name": "never later than now (a clock hours ahead)",
+      "deviceTs": "2027-12-01T15:00:00.000Z",
+      "offsetMs": 0,
+      "now": "2027-12-01T12:30:00.000Z",
+      "expect": "2027-12-01T12:30:00.000Z"
+    },
+    {
+      "name": "exactly now",
+      "deviceTs": "2027-12-01T12:30:00.000Z",
+      "offsetMs": 0,
+      "now": "2027-12-01T12:30:00.000Z",
+      "expect": "2027-12-01T12:30:00.000Z"
+    }
+  ],
+  "earlier": [
+    {
+      "name": "nothing recorded yet",
+      "current": null,
+      "candidate": "2027-12-01T12:00:00.000Z",
+      "expect": true
+    },
+    {
+      "name": "earlier replaces",
+      "current": "2027-12-01T12:00:01.000Z",
+      "candidate": "2027-12-01T12:00:00.000Z",
+      "expect": true
+    },
+    {
+      "name": "a millisecond earlier replaces",
+      "current": "2027-12-01T12:00:00.001Z",
+      "candidate": "2027-12-01T12:00:00.000Z",
+      "expect": true
+    },
+    {
+      "name": "later does not",
+      "current": "2027-12-01T12:00:00.000Z",
+      "candidate": "2027-12-01T12:00:00.001Z",
+      "expect": false
+    },
+    {
+      "name": "a tie keeps the first recorded",
+      "current": "2027-12-01T12:00:00.000Z",
+      "candidate": "2027-12-01T12:00:00.000Z",
+      "expect": false
+    }
+  ],
+  "races": [
+    {
+      "name": "two good clocks: the earlier scan wins",
+      "now": "2027-12-01T12:30:00.000Z",
+      "arrivals": [
+        {
+          "device": "phone-1",
+          "deviceTs": "2027-12-01T12:00:00.000Z",
+          "offsetMs": 0
+        },
+        {
+          "device": "phone-2",
+          "deviceTs": "2027-12-01T12:00:00.500Z",
+          "offsetMs": 0
+        }
+      ],
+      "winner": "phone-1"
+    },
+    {
+      "name": "a fast clock is corrected: the later raw timestamp is really earlier",
+      "now": "2027-12-01T12:30:00.000Z",
+      "arrivals": [
+        {
+          "device": "phone-1",
+          "deviceTs": "2027-12-01T12:00:05.000Z",
+          "offsetMs": -10000
+        },
+        {
+          "device": "phone-2",
+          "deviceTs": "2027-12-01T12:00:00.000Z",
+          "offsetMs": 0
+        }
+      ],
+      "winner": "phone-1"
+    },
+    {
+      "name": "a slow clock is corrected: the earlier raw timestamp is really later",
+      "now": "2027-12-01T12:30:00.000Z",
+      "arrivals": [
+        {
+          "device": "phone-1",
+          "deviceTs": "2027-12-01T11:59:58.000Z",
+          "offsetMs": 4000
+        },
+        {
+          "device": "phone-2",
+          "deviceTs": "2027-12-01T12:00:00.000Z",
+          "offsetMs": 0
+        }
+      ],
+      "winner": "phone-2"
+    },
+    {
+      "name": "a clock hours ahead cannot claim a future moment",
+      "now": "2027-12-01T12:30:00.000Z",
+      "arrivals": [
+        {
+          "device": "phone-1",
+          "deviceTs": "2027-12-01T15:00:00.000Z",
+          "offsetMs": 0
+        },
+        {
+          "device": "phone-2",
+          "deviceTs": "2027-12-01T12:10:00.000Z",
+          "offsetMs": 0
+        }
+      ],
+      "winner": "phone-2"
+    },
+    {
+      "name": "three devices",
+      "now": "2027-12-01T12:30:00.000Z",
+      "arrivals": [
+        {
+          "device": "phone-1",
+          "deviceTs": "2027-12-01T12:00:10.000Z",
+          "offsetMs": 0
+        },
+        {
+          "device": "phone-2",
+          "deviceTs": "2027-12-01T12:00:12.000Z",
+          "offsetMs": -4000
+        },
+        {
+          "device": "phone-3",
+          "deviceTs": "2027-12-01T12:00:09.000Z",
+          "offsetMs": 0
+        }
+      ],
+      "winner": "phone-2"
+    }
+  ]
+}
