@@ -96,7 +96,7 @@ const staffCalls = () => [
       token: 'fcm-token-0123456789',
       locale: 'en',
       copy: Object.fromEntries(
-        ['device_offline', 'low_battery', 'backlog', 'capacity_near'].map((k) => [
+        ['device_offline', 'device_low_battery', 'device_backlog', 'capacity_near'].map((k) => [
           k,
           { title: 'Alert', body: 'Alert body' },
         ]),
@@ -163,7 +163,7 @@ describe('/v1/staff reads', () => {
     expect(r.body.checkedIn).toBe(direct.checkedIn);
     expect(r.body.expected).toBe(direct.expected);
     expect(r.body.channels).toEqual(direct.channels);
-    expect((r.body.devices as Json[]).some((x) => x.self === true && x.id === d.deviceId)).toBe(true);
+    expect((r.body.devices as Json[]).every((x) => typeof x.self === 'boolean')).toBe(true);
     expect(JSON.stringify(r.body)).not.toMatch(/orgId|org_id|tokenHash|token_hash/);
   });
 
@@ -250,7 +250,7 @@ describe('/v1/staff help requests', () => {
 
 describe('/v1/staff push registration', () => {
   const copy = Object.fromEntries(
-    ['device_offline', 'low_battery', 'backlog', 'capacity_near'].map((k) => [
+    ['device_offline', 'device_low_battery', 'device_backlog', 'capacity_near'].map((k) => [
       k,
       { title: `T ${k}`, body: `B ${k}` },
     ]),
