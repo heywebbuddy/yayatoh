@@ -325,11 +325,14 @@ test.describe('My tickets', () => {
     await expect(me.getByText(`Continue to see the tickets for ${email}.`)).toBeVisible();
     await expectAccessible(me);
     await me.getByRole('button', { name: 'Continue to My tickets' }).click();
-    await expect(me.getByText(`Signed in as ${email}`)).toBeVisible();
-    const orders = me.getByRole('list', { name: 'Your orders' });
+    // My tickets is the attendee dashboard's Tickets & orders page now.
+    await expect(me).toHaveURL(`${MARKET}/attendee/tickets`);
+    const orders = me.getByRole('main');
     // The marketplace names the organizer of each order.
     await expect(orders.getByText('Lakeside Events')).toBeVisible();
     await expect(orders.getByRole('heading', { name: /^My tickets link/ })).toBeVisible();
+    await me.goto(`${MARKET}/attendee`);
+    await expect(me.getByText(`Bookings for ${email}`)).toBeVisible();
     // Used: the same link no longer signs anyone in (a signed-in browser just goes to My tickets).
     const late = await guestPage(browser);
     await late.goto(link);
@@ -337,12 +340,13 @@ test.describe('My tickets', () => {
     await expect(late.getByLabel('Verification code', { exact: true })).toHaveCount(0);
     await expectAccessible(late);
     await me.goto(link);
-    await expect(me).toHaveURL(`${MARKET}/my-tickets`);
-    await expect(me.getByText(`Signed in as ${email}`)).toBeVisible();
+    await expect(me).toHaveURL(`${MARKET}/attendee/tickets`);
+    await expect(me.getByRole('main').getByRole('heading', { name: /^My tickets link/ })).toBeVisible();
 
     // A new link, opened in another browser (forwarded): the code from the same email is needed.
-    await me.goto(`${MARKET}/my-tickets`);
+    await me.goto(`${MARKET}/attendee`);
     await me.getByRole('button', { name: 'Sign out', exact: true }).click();
+    await me.goto(`${MARKET}/my-tickets`);
     await me.getByLabel('Your email', { exact: true }).fill(email);
     await me.getByRole('button', { name: 'Email me a code' }).click();
     await expect(codeField(me)).toBeVisible();
@@ -373,7 +377,8 @@ test.describe('My tickets', () => {
       .getByLabel('Verification code', { exact: true })
       .fill(await lastEmailedCode(elsewhere, email));
     await elsewhere.getByRole('button', { name: 'Sign in', exact: true }).click();
-    await expect(elsewhere.getByText(`Signed in as ${email}`)).toBeVisible();
+    await expect(elsewhere).toHaveURL(new RegExp(`^${MARKET}/attendee`));
+    await expect(elsewhere.getByText(email).first()).toBeVisible();
   });
 
   test('Arabic: My tickets reads right to left', async ({ browser }) => {
