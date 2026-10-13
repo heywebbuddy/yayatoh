@@ -43,6 +43,7 @@
     "@types/node": "catalog:",
     "@types/react": "catalog:mobile",
     "@yayatoh/config": "workspace:*",
+    "expo-doctor": "catalog:mobile",
     "jest": "catalog:mobile",
     "jest-expo": "catalog:mobile",
     "react-test-renderer": "catalog:mobile",

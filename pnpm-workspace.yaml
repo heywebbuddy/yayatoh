@@ -74,6 +74,7 @@ catalogs:
     expo-build-properties: ~57.0.22
     expo-constants: ~57.0.21
     expo-dev-client: ~57.0.20
+    expo-doctor: 1.20.4
     expo-linking: ~57.0.12
     expo-router: ~57.0.26
     expo-splash-screen: ~57.0.10

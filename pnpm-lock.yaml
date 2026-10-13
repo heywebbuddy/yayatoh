@@ -258,6 +258,9 @@ catalogs:
     expo-dev-client:
       specifier: ~57.0.20
       version: 57.0.20
+    expo-doctor:
+      specifier: 1.20.4
+      version: 1.20.4
     expo-linking:
       specifier: ~57.0.12
       version: 57.0.12
@@ -611,6 +614,9 @@ importers:
       '@yayatoh/config':
         specifier: workspace:*
         version: link:../../packages/config
+      expo-doctor:
+        specifier: catalog:mobile
+        version: 1.20.4
       jest:
         specifier: catalog:mobile
         version: 29.7.0(@types/node@24.19.0)(supports-color@10.2.2)
@@ -711,6 +717,9 @@ importers:
       '@yayatoh/config':
         specifier: workspace:*
         version: link:../../packages/config
+      expo-doctor:
+        specifier: catalog:mobile
+        version: 1.20.4
       jest:
         specifier: catalog:mobile
         version: 29.7.0(@types/node@24.19.0)(supports-color@10.2.2)
@@ -8782,6 +8791,11 @@ packages:
     peerDependencies:
       expo: '*'
       react-native: '*'
+
+  expo-doctor@1.20.4:
+    resolution: {integrity: sha512-Jm1lIqVdO8br9wiqTg5QhJ1u4zLWAhoue4bXsEuzW543vC3XY+U0cpEOmiLkvJhTTgZgIK+24l4i8VzyZ2VLMg==}
+    engines: {node: ^20.19.4 || ^22.13.0 || ^24.3.0 || >= 25.0.0}
+    hasBin: true
 
   expo-eas-client@57.0.5:
     resolution: {integrity: sha512-7Ut6TbaYZDURHZkhKRGZdLgq4EE7sHc6VrKAcU0Pzj1Bd+Nsb/XseViYuch2+X/+RvQMlzu8Eyf4YvBVpDCivQ==}
@@ -17387,6 +17401,8 @@ snapshots:
       expo: 57.0.28(f3c9dfeb2a9e069785049d4276d4dd5d)
       expo-dev-menu-interface: 57.0.0(expo@57.0.28)
       react-native: 0.86.3(@babel/core@7.29.7(supports-color@10.2.2))(@react-native/jest-preset@0.86.3(@babel/core@7.29.7(supports-color@10.2.2))(react@19.2.3)(supports-color@10.2.2))(@react-native/metro-config@0.86.3(@babel/core@7.29.7(supports-color@10.2.2))(supports-color@10.2.2))(@types/react@19.2.18)(react@19.2.3)(supports-color@10.2.2)
+
+  expo-doctor@1.20.4: {}
 
   expo-eas-client@57.0.5: {}
 
