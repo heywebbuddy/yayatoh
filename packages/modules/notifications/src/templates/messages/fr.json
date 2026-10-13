@@ -377,6 +377,38 @@
       "subject": "Votre lien de connexion Yayatoh",
       "intro": "Utilisez le bouton ci-dessous pour vous connecter à Yayatoh dans ce navigateur. Le lien fonctionne une fois et expire dans {minutes, plural, one {# minute} other {# minutes}}. Si vous ne l’avez pas demandé, ignorez cet e-mail.",
       "cta": "Se connecter à Yayatoh"
+    },
+    "push.order-confirmed": {
+      "subject": "{eventName}",
+      "intro": "Votre commande est confirmée."
+    },
+    "push.ticket-received": {
+      "subject": "{eventName}",
+      "intro": "Un billet vous a été transféré."
+    },
+    "push.transfer-accepted": {
+      "subject": "{eventName}",
+      "intro": "Le transfert de votre billet a été accepté."
+    },
+    "push.transfer-cancelled": {
+      "subject": "{eventName}",
+      "intro": "Un transfert de billet a été annulé."
+    },
+    "push.event-changed": {
+      "subject": "{eventName}",
+      "intro": "La date, l’heure ou le lieu a changé."
+    },
+    "push.event-cancelled": {
+      "subject": "{eventName}",
+      "intro": "Cet événement a été annulé."
+    },
+    "push.reminder-24h": {
+      "subject": "{eventName}",
+      "intro": "Commence demain à {time}."
+    },
+    "push.reminder-2h": {
+      "subject": "{eventName}",
+      "intro": "Commence dans 2 heures, à {time}."
     }
   },
   "roles": {

@@ -237,6 +237,16 @@
         "sign-in-code": "Código de inicio de sesión",
         "password-reset": "Restablecer contraseña",
         "magic-link": "Enlace de inicio de sesión"
+      },
+      "push": {
+        "order-confirmed": "Notificación de la app: pedido confirmado",
+        "ticket-received": "Notificación de la app: entrada recibida",
+        "transfer-accepted": "Notificación de la app: transferencia aceptada",
+        "transfer-cancelled": "Notificación de la app: transferencia cancelada",
+        "event-changed": "Notificación de la app: evento modificado",
+        "event-cancelled": "Notificación de la app: evento cancelado",
+        "reminder-24h": "Notificación de la app: recordatorio 24 horas antes",
+        "reminder-2h": "Notificación de la app: recordatorio 2 horas antes"
       }
     },
     "status": {

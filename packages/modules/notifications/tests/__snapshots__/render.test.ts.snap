@@ -13338,6 +13338,1722 @@ Lakeside Events仍在等待您提交Midwest Leadership Summit的「Upload your s
 }
 `;
 
+exports[`renderMessage: every kind in all 13 locales > push.event-cancelled · ar 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+مرحبًا،
+
+تم إلغاء هذه الفعالية.
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.event-cancelled · de 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Hallo,
+
+Diese Veranstaltung wurde abgesagt.
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.event-cancelled · en 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Hello,
+
+This event was cancelled.
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.event-cancelled · es 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Hola:
+
+Este evento fue cancelado.
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.event-cancelled · fr 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Bonjour,
+
+Cet événement a été annulé.
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.event-cancelled · hi 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+नमस्ते,
+
+यह इवेंट रद्द कर दिया गया है।
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.event-cancelled · it 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Ciao,
+
+Questo evento è stato annullato.
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.event-cancelled · ja 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+こんにちは。
+
+このイベントは中止になりました。
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.event-cancelled · nl 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Hallo,
+
+Dit evenement is geannuleerd.
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.event-cancelled · pt 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Olá!
+
+Este evento foi cancelado.
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.event-cancelled · ru 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Здравствуйте!
+
+Это мероприятие отменено.
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.event-cancelled · zh-CN 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+您好：
+
+此活动已取消。
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.event-cancelled · zh-TW 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+您好：
+
+此活動已取消。
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.event-changed · ar 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+مرحبًا،
+
+تغيّر التاريخ أو الوقت أو المكان.
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.event-changed · de 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Hallo,
+
+Datum, Uhrzeit oder Ort haben sich geändert.
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.event-changed · en 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Hello,
+
+The date, time or venue changed.
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.event-changed · es 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Hola:
+
+Cambió la fecha, la hora o el lugar.
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.event-changed · fr 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Bonjour,
+
+La date, l’heure ou le lieu a changé.
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.event-changed · hi 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+नमस्ते,
+
+तारीख़, समय या स्थान बदल गया है।
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.event-changed · it 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Ciao,
+
+Sono cambiati la data, l’orario o il luogo.
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.event-changed · ja 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+こんにちは。
+
+日時または会場が変更されました。
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.event-changed · nl 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Hallo,
+
+De datum, tijd of locatie is gewijzigd.
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.event-changed · pt 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Olá!
+
+A data, o horário ou o local mudou.
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.event-changed · ru 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Здравствуйте!
+
+Изменились дата, время или место.
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.event-changed · zh-CN 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+您好：
+
+日期、时间或地点已更改。
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.event-changed · zh-TW 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+您好：
+
+日期、時間或地點已變更。
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.order-confirmed · ar 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+مرحبًا،
+
+تم تأكيد طلبك.
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.order-confirmed · de 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Hallo,
+
+Deine Bestellung ist bestätigt.
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.order-confirmed · en 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Hello,
+
+Your order is confirmed.
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.order-confirmed · es 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Hola:
+
+Tu pedido está confirmado.
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.order-confirmed · fr 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Bonjour,
+
+Votre commande est confirmée.
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.order-confirmed · hi 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+नमस्ते,
+
+आपका ऑर्डर कन्फ़र्म हो गया है।
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.order-confirmed · it 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Ciao,
+
+Il tuo ordine è confermato.
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.order-confirmed · ja 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+こんにちは。
+
+ご注文が確定しました。
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.order-confirmed · nl 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Hallo,
+
+Je bestelling is bevestigd.
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.order-confirmed · pt 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Olá!
+
+Seu pedido foi confirmado.
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.order-confirmed · ru 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Здравствуйте!
+
+Ваш заказ подтверждён.
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.order-confirmed · zh-CN 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+您好：
+
+您的订单已确认。
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.order-confirmed · zh-TW 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+您好：
+
+您的訂單已確認。
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.reminder-2h · ar 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+مرحبًا،
+
+يبدأ بعد ساعتين، في 8:00 م.
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+تصلك رسالة التذكير هذه لأن لديك تذاكر من Lakeside Events.
+إلغاء الاشتراك: https://app.yayatoh.test/unsubscribe/sample
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.reminder-2h · de 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Hallo,
+
+Beginnt in 2 Stunden, um 20:00.
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Du erhältst diese Erinnerung, weil du Tickets von Lakeside Events hast.
+Abmelden: https://app.yayatoh.test/unsubscribe/sample
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.reminder-2h · en 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Hello,
+
+Starts in 2 hours, at 8:00 PM.
+
+--
+Sent by Lakeside Events with Yayatoh.
+You're getting this reminder because you have tickets from Lakeside Events.
+Unsubscribe: https://app.yayatoh.test/unsubscribe/sample
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.reminder-2h · es 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Hola:
+
+Empieza en 2 horas, a las 20:00.
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Recibes este recordatorio porque tienes entradas de Lakeside Events.
+Cancelar suscripción: https://app.yayatoh.test/unsubscribe/sample
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.reminder-2h · fr 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Bonjour,
+
+Commence dans 2 heures, à 20:00.
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Vous recevez ce rappel car vous avez des billets de Lakeside Events.
+Se désabonner: https://app.yayatoh.test/unsubscribe/sample
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.reminder-2h · hi 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+नमस्ते,
+
+2 घंटे में शुरू होगा, 8:00 pm पर।
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+आपको यह रिमाइंडर इसलिए मिला क्योंकि आपके पास Lakeside Events के टिकट हैं।
+सदस्यता छोड़ें: https://app.yayatoh.test/unsubscribe/sample
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.reminder-2h · it 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Ciao,
+
+Inizia tra 2 ore, alle 20:00.
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Ricevi questo promemoria perché hai biglietti di Lakeside Events.
+Annulla iscrizione: https://app.yayatoh.test/unsubscribe/sample
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.reminder-2h · ja 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+こんにちは。
+
+2時間後の 20:00 に開始します。
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Lakeside Events のチケットをお持ちのため、このリマインダーをお送りしています。
+配信停止: https://app.yayatoh.test/unsubscribe/sample
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.reminder-2h · nl 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Hallo,
+
+Begint over 2 uur, om 20:00.
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Je krijgt deze herinnering omdat je tickets van Lakeside Events hebt.
+Afmelden: https://app.yayatoh.test/unsubscribe/sample
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.reminder-2h · pt 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Olá!
+
+Começa em 2 horas, às 20:00.
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Você recebe este lembrete porque tem ingressos de Lakeside Events.
+Cancelar inscrição: https://app.yayatoh.test/unsubscribe/sample
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.reminder-2h · ru 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Здравствуйте!
+
+Начало через 2 часа, в 20:00.
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Вы получили это напоминание, потому что у вас есть билеты от Lakeside Events.
+Отписаться: https://app.yayatoh.test/unsubscribe/sample
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.reminder-2h · zh-CN 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+您好：
+
+2小时后（20:00）开始。
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+您收到此提醒，是因为您持有 Lakeside Events 的门票。
+退订: https://app.yayatoh.test/unsubscribe/sample
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.reminder-2h · zh-TW 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+您好：
+
+2 小時後（晚上8:00）開始。
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+您收到此提醒，是因為您持有 Lakeside Events 的票券。
+取消訂閱: https://app.yayatoh.test/unsubscribe/sample
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.reminder-24h · ar 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+مرحبًا،
+
+يبدأ غدًا في 8:00 م.
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+تصلك رسالة التذكير هذه لأن لديك تذاكر من Lakeside Events.
+إلغاء الاشتراك: https://app.yayatoh.test/unsubscribe/sample
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.reminder-24h · de 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Hallo,
+
+Beginnt morgen um 20:00.
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Du erhältst diese Erinnerung, weil du Tickets von Lakeside Events hast.
+Abmelden: https://app.yayatoh.test/unsubscribe/sample
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.reminder-24h · en 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Hello,
+
+Starts tomorrow at 8:00 PM.
+
+--
+Sent by Lakeside Events with Yayatoh.
+You're getting this reminder because you have tickets from Lakeside Events.
+Unsubscribe: https://app.yayatoh.test/unsubscribe/sample
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.reminder-24h · es 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Hola:
+
+Empieza mañana a las 20:00.
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Recibes este recordatorio porque tienes entradas de Lakeside Events.
+Cancelar suscripción: https://app.yayatoh.test/unsubscribe/sample
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.reminder-24h · fr 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Bonjour,
+
+Commence demain à 20:00.
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Vous recevez ce rappel car vous avez des billets de Lakeside Events.
+Se désabonner: https://app.yayatoh.test/unsubscribe/sample
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.reminder-24h · hi 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+नमस्ते,
+
+कल 8:00 pm पर शुरू होगा।
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+आपको यह रिमाइंडर इसलिए मिला क्योंकि आपके पास Lakeside Events के टिकट हैं।
+सदस्यता छोड़ें: https://app.yayatoh.test/unsubscribe/sample
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.reminder-24h · it 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Ciao,
+
+Inizia domani alle 20:00.
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Ricevi questo promemoria perché hai biglietti di Lakeside Events.
+Annulla iscrizione: https://app.yayatoh.test/unsubscribe/sample
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.reminder-24h · ja 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+こんにちは。
+
+明日 20:00 に開始します。
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Lakeside Events のチケットをお持ちのため、このリマインダーをお送りしています。
+配信停止: https://app.yayatoh.test/unsubscribe/sample
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.reminder-24h · nl 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Hallo,
+
+Begint morgen om 20:00.
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Je krijgt deze herinnering omdat je tickets van Lakeside Events hebt.
+Afmelden: https://app.yayatoh.test/unsubscribe/sample
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.reminder-24h · pt 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Olá!
+
+Começa amanhã às 20:00.
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Você recebe este lembrete porque tem ingressos de Lakeside Events.
+Cancelar inscrição: https://app.yayatoh.test/unsubscribe/sample
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.reminder-24h · ru 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Здравствуйте!
+
+Начало завтра в 20:00.
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Вы получили это напоминание, потому что у вас есть билеты от Lakeside Events.
+Отписаться: https://app.yayatoh.test/unsubscribe/sample
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.reminder-24h · zh-CN 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+您好：
+
+明天 20:00 开始。
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+您收到此提醒，是因为您持有 Lakeside Events 的门票。
+退订: https://app.yayatoh.test/unsubscribe/sample
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.reminder-24h · zh-TW 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+您好：
+
+明天 晚上8:00 開始。
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+您收到此提醒，是因為您持有 Lakeside Events 的票券。
+取消訂閱: https://app.yayatoh.test/unsubscribe/sample
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.ticket-received · ar 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+مرحبًا،
+
+تم تحويل تذكرة إليك.
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.ticket-received · de 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Hallo,
+
+Dir wurde ein Ticket übertragen.
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.ticket-received · en 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Hello,
+
+A ticket was transferred to you.
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.ticket-received · es 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Hola:
+
+Te han transferido una entrada.
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.ticket-received · fr 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Bonjour,
+
+Un billet vous a été transféré.
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.ticket-received · hi 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+नमस्ते,
+
+आपको एक टिकट ट्रांसफ़र किया गया है।
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.ticket-received · it 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Ciao,
+
+Ti è stato trasferito un biglietto.
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.ticket-received · ja 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+こんにちは。
+
+チケットが譲渡されました。
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.ticket-received · nl 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Hallo,
+
+Er is een ticket aan je overgedragen.
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.ticket-received · pt 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Olá!
+
+Um ingresso foi transferido para você.
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.ticket-received · ru 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Здравствуйте!
+
+Вам передали билет.
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.ticket-received · zh-CN 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+您好：
+
+有一张票已转让给您。
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.ticket-received · zh-TW 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+您好：
+
+有一張票券已轉讓給您。
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.transfer-accepted · ar 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+مرحبًا،
+
+تم قبول تحويل تذكرتك.
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.transfer-accepted · de 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Hallo,
+
+Deine Ticketübertragung wurde angenommen.
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.transfer-accepted · en 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Hello,
+
+Your ticket transfer was accepted.
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.transfer-accepted · es 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Hola:
+
+Tu transferencia de entrada fue aceptada.
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.transfer-accepted · fr 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Bonjour,
+
+Le transfert de votre billet a été accepté.
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.transfer-accepted · hi 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+नमस्ते,
+
+आपका टिकट ट्रांसफ़र स्वीकार कर लिया गया है।
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.transfer-accepted · it 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Ciao,
+
+Il trasferimento del tuo biglietto è stato accettato.
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.transfer-accepted · ja 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+こんにちは。
+
+チケットの譲渡が承諾されました。
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.transfer-accepted · nl 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Hallo,
+
+Je ticketoverdracht is geaccepteerd.
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.transfer-accepted · pt 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Olá!
+
+A transferência do seu ingresso foi aceita.
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.transfer-accepted · ru 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Здравствуйте!
+
+Передача вашего билета принята.
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.transfer-accepted · zh-CN 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+您好：
+
+您的转票已被接受。
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.transfer-accepted · zh-TW 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+您好：
+
+您的轉讓票券已被接受。
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.transfer-cancelled · ar 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+مرحبًا،
+
+تم إلغاء تحويل تذكرة.
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.transfer-cancelled · de 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Hallo,
+
+Eine Ticketübertragung wurde abgebrochen.
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.transfer-cancelled · en 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Hello,
+
+A ticket transfer was cancelled.
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.transfer-cancelled · es 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Hola:
+
+Se canceló una transferencia de entrada.
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.transfer-cancelled · fr 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Bonjour,
+
+Un transfert de billet a été annulé.
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.transfer-cancelled · hi 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+नमस्ते,
+
+एक टिकट ट्रांसफ़र रद्द कर दिया गया है।
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.transfer-cancelled · it 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Ciao,
+
+Un trasferimento di biglietto è stato annullato.
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.transfer-cancelled · ja 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+こんにちは。
+
+チケットの譲渡が取り消されました。
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.transfer-cancelled · nl 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Hallo,
+
+Een ticketoverdracht is geannuleerd.
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.transfer-cancelled · pt 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Olá!
+
+Uma transferência de ingresso foi cancelada.
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.transfer-cancelled · ru 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+Здравствуйте!
+
+Передача билета отменена.
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.transfer-cancelled · zh-CN 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+您好：
+
+一次转票已被取消。
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > push.transfer-cancelled · zh-TW 1`] = `
+{
+  "subject": "Lakeside Jazz Night",
+  "text": "Lakeside Jazz Night
+
+您好：
+
+一次票券轉讓已被取消。
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
 exports[`renderMessage: every kind in all 13 locales > registration.approved · ar 1`] = `
 {
   "subject": "تمت الموافقة على طلبك لحضور Midwest Leadership Summit",

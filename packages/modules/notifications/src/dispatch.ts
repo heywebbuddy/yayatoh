@@ -302,6 +302,14 @@ export async function dispatchDueTx(
       const tz = deviceTz ?? (isValidTimeZone(row.timeZone) ? row.timeZone : org.timezone);
       const release = quietHoursRelease(now, tz);
       if (release) {
+        // A reminder held past its event's start would arrive too late to be a reminder (M7.2c).
+        if (isAppReminder(row.kind)) {
+          const startsAt = (await decryptParams(orgId, row.paramsCiphertext)).startsAt;
+          if (typeof startsAt === 'string' && Date.parse(startsAt) <= release.getTime()) {
+            await suppress(row, 'quiet_hours');
+            continue;
+          }
+        }
         await update(row, { sendAfter: release, reason: 'quiet_hours' });
         result.held += 1;
         continue;
@@ -580,10 +588,15 @@ async function pushDevicesOf(tx: TenantTx, row: Row): Promise<Device[]> {
     .orderBy(desc(pushTokens.lastSeenAt), asc(pushTokens.id));
 }
 
+const isAppReminder = (kind: string) => kind === 'push.reminder-24h' || kind === 'push.reminder-2h';
+
 /** How long a push may wait on the push service, and how urgently it is delivered (RFC 8030). */
 export function pushOptions(kind: MessageKind): { ttlSeconds: number; urgency: Urgency } {
   if (kind === 'notifications.test') return { ttlSeconds: 300, urgency: 'high' };
-  if (kind === 'events.reminder') return { ttlSeconds: 12 * 3600, urgency: 'normal' };
+  if (kind === 'events.reminder' || kind === 'push.reminder-24h')
+    return { ttlSeconds: 12 * 3600, urgency: 'normal' };
+  // Stale an hour in: the event is about to start (M7.2c).
+  if (kind === 'push.reminder-2h') return { ttlSeconds: 3600, urgency: 'high' };
   return kindOf(kind).urgent
     ? { ttlSeconds: 4 * 3600, urgency: 'high' }
     : { ttlSeconds: 86_400, urgency: 'normal' };

@@ -1,12 +1,6 @@
 import { normalizeEmail } from '@yayatoh/crm';
 import { type TenantTx, withoutTenant, withTenant } from '@yayatoh/db';
-import {
-  type CommandPorts,
-  createCtx,
-  DomainError,
-  executeCommand,
-  requireOrg,
-} from '@yayatoh/kernel';
+import { type CommandPorts, createCtx, DomainError, executeCommand, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand } from '@yayatoh/platform';
 import { and, asc, eq, inArray, isNull, sql } from 'drizzle-orm';
 import { z } from 'zod';
@@ -57,7 +51,9 @@ export const AppDeviceInput = z
 export type AppDeviceInput = z.infer<typeof AppDeviceInput>;
 
 /** `PUSH_APP_IDS` (comma-separated), when set, lists the only app ids a device may register with. */
-export function allowedAppIds(env: Readonly<Record<string, string | undefined>> = process.env): string[] | null {
+export function allowedAppIds(
+  env: Readonly<Record<string, string | undefined>> = process.env,
+): string[] | null {
   const ids = (env.PUSH_APP_IDS ?? '')
     .split(',')
     .map((s) => s.trim())
@@ -209,7 +205,9 @@ export async function registerAppDevice(args: {
     });
     if (r.stored) orgs += 1;
     if (r.stored && args.afterOrg)
-      await withTenant(ctx, (tx) => (args.afterOrg as NonNullable<typeof args.afterOrg>)(tx, orgId, emailNorm));
+      await withTenant(ctx, (tx) =>
+        (args.afterOrg as NonNullable<typeof args.afterOrg>)(tx, orgId, emailNorm),
+      );
   }
   return { orgs };
 }

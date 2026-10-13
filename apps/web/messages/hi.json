@@ -237,6 +237,16 @@
         "sign-in-code": "साइन-इन कोड",
         "password-reset": "पासवर्ड रीसेट",
         "magic-link": "साइन-इन लिंक"
+      },
+      "push": {
+        "order-confirmed": "ऐप पुश: ऑर्डर कन्फ़र्म",
+        "ticket-received": "ऐप पुश: टिकट मिला",
+        "transfer-accepted": "ऐप पुश: ट्रांसफ़र स्वीकार",
+        "transfer-cancelled": "ऐप पुश: ट्रांसफ़र रद्द",
+        "event-changed": "ऐप पुश: इवेंट में बदलाव",
+        "event-cancelled": "ऐप पुश: इवेंट रद्द",
+        "reminder-24h": "ऐप पुश: 24 घंटे पहले रिमाइंडर",
+        "reminder-2h": "ऐप पुश: 2 घंटे पहले रिमाइंडर"
       }
     },
     "status": {

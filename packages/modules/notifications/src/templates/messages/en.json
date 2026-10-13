@@ -377,6 +377,38 @@
       "subject": "Your Yayatoh sign-in link",
       "intro": "Use the button below to sign in to Yayatoh in this browser. The link works once and expires in {minutes, plural, one {# minute} other {# minutes}}. If you didn't ask for it, you can ignore this email.",
       "cta": "Sign in to Yayatoh"
+    },
+    "push.order-confirmed": {
+      "subject": "{eventName}",
+      "intro": "Your order is confirmed."
+    },
+    "push.ticket-received": {
+      "subject": "{eventName}",
+      "intro": "A ticket was transferred to you."
+    },
+    "push.transfer-accepted": {
+      "subject": "{eventName}",
+      "intro": "Your ticket transfer was accepted."
+    },
+    "push.transfer-cancelled": {
+      "subject": "{eventName}",
+      "intro": "A ticket transfer was cancelled."
+    },
+    "push.event-changed": {
+      "subject": "{eventName}",
+      "intro": "The date, time or venue changed."
+    },
+    "push.event-cancelled": {
+      "subject": "{eventName}",
+      "intro": "This event was cancelled."
+    },
+    "push.reminder-24h": {
+      "subject": "{eventName}",
+      "intro": "Starts tomorrow at {time}."
+    },
+    "push.reminder-2h": {
+      "subject": "{eventName}",
+      "intro": "Starts in 2 hours, at {time}."
     }
   },
   "roles": {
