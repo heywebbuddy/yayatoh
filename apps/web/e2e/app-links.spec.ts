@@ -178,8 +178,10 @@ test.describe('enrolment link QR', () => {
     await signIn(page);
     await page.goto(`/ar${screen}`);
     await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
-    await page.locator('input[name="label"]').fill(`AR ${test.info().project.name} ${Date.now()}`);
-    await page.locator('form button[type="submit"]').first().click();
+    const label = page.locator('input[name="label"]');
+    await label.fill(`AR ${test.info().project.name} ${Date.now()}`);
+    // The add-device form's own button: another form (the mobile menu's) can come first in the page.
+    await label.locator('xpath=ancestor::form').locator('button[type="submit"]').click();
     const qr = page.getByTestId('scan-qr');
     await expect(qr).toBeVisible();
     expect(await qr.getAttribute('aria-label')).not.toBe('QR code of the setup link');
