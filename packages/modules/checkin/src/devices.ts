@@ -116,7 +116,9 @@ export async function deviceWindowState(
 ): Promise<DeviceWindowState> {
   const dc = await deviceContext(token);
   if (!dc) return 'unknown';
-  const ctx = opts.now ? createCtx({ orgId: requireOrg(dc.ctx), actor: dc.ctx.actor, now: opts.now }) : dc.ctx;
+  const ctx = opts.now
+    ? createCtx({ orgId: requireOrg(dc.ctx), actor: dc.ctx.actor, now: opts.now })
+    : dc.ctx;
   const r = await executeQuery(
     deviceInEventWindowQuery,
     opts.eventId ? { eventId: opts.eventId } : {},

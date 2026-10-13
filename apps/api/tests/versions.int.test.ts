@@ -79,7 +79,9 @@ describe('/v1/mobile/config', () => {
 
 describe('a below-minimum attendee app', () => {
   it('gets 426 problem+json with the store link', async () => {
-    const res = await app.request('/v1/public/events/anything', { headers: client('yayatoh-ios/2.9.9 (120)') });
+    const res = await app.request('/v1/public/events/anything', {
+      headers: client('yayatoh-ios/2.9.9 (120)'),
+    });
     expect(res.status).toBe(426);
     expect(res.headers.get('content-type')).toBe('application/problem+json');
     expect(res.headers.get('cache-control')).toBe('no-store');
@@ -113,7 +115,9 @@ describe('a below-minimum attendee app', () => {
     expect(await ok('3.0.0-beta.1')).toBe(200);
     // /v1/health is on the always-answers list; use a data route to see the gate.
     const gated = (v: string) =>
-      app.request('/v1/public/events/anything', { headers: client(`yayatoh-ios/${v}`) }).then((r) => r.status);
+      app
+        .request('/v1/public/events/anything', { headers: client(`yayatoh-ios/${v}`) })
+        .then((r) => r.status);
     expect(await gated('3.0.0')).not.toBe(426);
     expect(await gated('3.10.0 (2)')).not.toBe(426);
     expect(await gated('10.0.0')).not.toBe(426);
@@ -147,7 +151,9 @@ describe('requests that are never refused', () => {
       'x'.repeat(500),
     ])
       expect(await status(client(h))).not.toBe(426);
-    expect(await status({ 'x-app-version': '0.0.1', 'user-agent': 'Yayatoh/0.0.1 CFNetwork Darwin' })).not.toBe(426);
+    expect(
+      await status({ 'x-app-version': '0.0.1', 'user-agent': 'Yayatoh/0.0.1 CFNetwork Darwin' }),
+    ).not.toBe(426);
   });
 });
 
@@ -188,10 +194,14 @@ describe('a below-minimum Staff app', () => {
 
   it('is judged by the event in the manifest path, so a fresh device is not stranded', async () => {
     now = new Date(starts.getTime() + H);
-    const res = await app.request(`/v1/events/${a.event.id}/manifest?limit=5`, { headers: { ...device(), ...old } });
+    const res = await app.request(`/v1/events/${a.event.id}/manifest?limit=5`, {
+      headers: { ...device(), ...old },
+    });
     expect(res.status).toBe(200);
     now = new Date(ends.getTime() + 3 * H);
-    const after = await app.request(`/v1/events/${a.event.id}/manifest?limit=5`, { headers: { ...device(), ...old } });
+    const after = await app.request(`/v1/events/${a.event.id}/manifest?limit=5`, {
+      headers: { ...device(), ...old },
+    });
     expect(after.status).toBe(426);
   });
 

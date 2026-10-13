@@ -128,7 +128,10 @@ describe('assetlinks.json', () => {
   it('has a statement per package with the signing fingerprints, upper-cased', () => {
     expect(assetLinks(appLinkConfig(env))).toEqual([
       {
-        relation: ['delegate_permission/common.handle_all_urls', 'delegate_permission/common.get_login_creds'],
+        relation: [
+          'delegate_permission/common.handle_all_urls',
+          'delegate_permission/common.get_login_creds',
+        ],
         target: {
           namespace: 'android_app',
           package_name: 'com.yayatoh.app',
@@ -136,7 +139,10 @@ describe('assetlinks.json', () => {
         },
       },
       {
-        relation: ['delegate_permission/common.handle_all_urls', 'delegate_permission/common.get_login_creds'],
+        relation: [
+          'delegate_permission/common.handle_all_urls',
+          'delegate_permission/common.get_login_creds',
+        ],
         target: {
           namespace: 'android_app',
           package_name: 'com.yayatoh.staff',
