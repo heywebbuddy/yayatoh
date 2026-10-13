@@ -132,6 +132,7 @@ export {
   listSocialAccounts,
   openFakeCode,
   pendingLinkProof,
+  resetUnverifiedAccount,
   resolveSocialSignIn,
   SOCIAL_PROVIDERS,
   type SocialProfile,

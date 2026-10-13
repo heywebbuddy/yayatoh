@@ -11,6 +11,7 @@ import {
   confirmLinkProof,
   createSocialUser,
   LINK_PROOF_TTL_MS,
+  resetUnverifiedAccount,
   resolveSocialSignIn,
   type SocialProviderId,
   startLinkProof,
@@ -91,6 +92,15 @@ async function audit(userId: string, action: string, data: Record<string, unknow
 const errorCodeOf = (err: unknown): string | undefined =>
   (err as { body?: { code?: string } } | null)?.body?.code;
 
+/** A wrong, spent, expired or over-tried emailed code, as the refusal the caller reports. */
+function otpRefusal(err: unknown): { ok: false; reason: AppSignInRefusal } | null {
+  const code = errorCodeOf(err);
+  if (code === 'TOO_MANY_ATTEMPTS') return { ok: false, reason: 'too_many_attempts' };
+  if (code === 'INVALID_OTP' || code === 'OTP_EXPIRED' || code === 'INVALID_EMAIL')
+    return { ok: false, reason: 'invalid_code' };
+  return null;
+}
+
 export function appSignIn(auth: Auth, opts: AppSignInOptions) {
   const now = opts.now ?? (() => new Date());
   const tokens = refreshTokenService(auth, { now });
@@ -123,6 +133,30 @@ export function appSignIn(auth: Auth, opts: AppSignInOptions) {
     return { ok: true, tokens: pair };
   }
 
+  /**
+   * An emailed code spent on an account that never verified its address (a password sign-up that
+   * stopped there). Better Auth's own path for this case cannot run on our verification table, so
+   * the code is checked and spent here, then the web's pre-hijack guard applies: the password,
+   * two-step verification, trusted devices and sessions of the unproven account are removed.
+   */
+  async function spendOnUnverified(userId: string, address: string, otp: string): Promise<AppSignInResult> {
+    try {
+      await auth.api.checkVerificationOTP({ body: { email: address, type: 'sign-in', otp } });
+    } catch (err) {
+      const refusal = otpRefusal(err);
+      if (refusal) return refusal;
+      throw err;
+    }
+    const spent = await identityDatabase()
+      .delete(verifications)
+      .where(eq(verifications.identifier, `sign-in-otp-${address}`))
+      .returning({ id: verifications.id });
+    if (spent.length === 0) return { ok: false, reason: 'invalid_code' };
+    await resetUnverifiedAccount(userId);
+    await audit(userId, 'app_sign_in.unverified_account_reset', {}, now());
+    return finish(userId, 'email_code');
+  }
+
   return {
     /**
      * Email a six-digit sign-in code. Known and unknown addresses take the same path (an unknown
@@ -138,17 +172,17 @@ export function appSignIn(auth: Auth, opts: AppSignInOptions) {
       const address = normalise(email);
       const otp = code.replace(/\s/g, '');
       if (!/^\d{6}$/.test(otp)) return { ok: false, reason: 'invalid_code' };
+      const c = await auth.$context;
+      const existing = await c.internalAdapter.findUserByEmail(address);
+      if (existing && !existing.user.emailVerified) return spendOnUnverified(existing.user.id, address, otp);
       let res: Awaited<ReturnType<typeof auth.api.signInEmailOTP>>;
       try {
         res = await auth.api.signInEmailOTP({ body: { email: address, otp } });
       } catch (err) {
-        const code = errorCodeOf(err);
-        if (code === 'TOO_MANY_ATTEMPTS') return { ok: false, reason: 'too_many_attempts' };
-        if (code === 'INVALID_OTP' || code === 'OTP_EXPIRED' || code === 'INVALID_EMAIL')
-          return { ok: false, reason: 'invalid_code' };
+        const refusal = otpRefusal(err);
+        if (refusal) return refusal;
         throw err;
       }
-      const c = await auth.$context;
       if ('twoFactorRedirect' in res && res.twoFactorRedirect) {
         // The web's challenge (a cookie nobody here holds) was opened and the session dropped.
         const found = await c.internalAdapter.findUserByEmail(address);

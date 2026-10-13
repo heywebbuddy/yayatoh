@@ -417,6 +417,31 @@ export async function pendingLinkProof(
   return u ? { userId: p.userId, provider: p.provider, email: u.email } : null;
 }
 
+/**
+ * Pre-hijack guard: an account that never verified its email was made by whoever typed the
+ * address, who may not own it. When the real owner proves the address (a code to that mailbox),
+ * its password, two-step verification, trusted devices and sessions go and the email is marked
+ * verified. Used when a provider is linked by email proof and when an emailed sign-in code is
+ * spent on such an account.
+ */
+export async function resetUnverifiedAccount(userId: string): Promise<void> {
+  await identityDatabase().transaction(async (tx) => {
+    await tx
+      .delete(accounts)
+      .where(and(eq(accounts.userId, userId), eq(accounts.providerId, 'credential')));
+    await tx.delete(twoFactors).where(eq(twoFactors.userId, userId));
+    await tx.delete(sessions).where(eq(sessions.userId, userId));
+    await tx
+      .update(trustedDevices)
+      .set({ revokedAt: new Date(), revokedReason: 'password_changed' })
+      .where(and(eq(trustedDevices.userId, userId), isNull(trustedDevices.revokedAt)));
+    await tx
+      .update(users)
+      .set({ emailVerified: true, twoFactorEnabled: false, updatedAt: new Date() })
+      .where(eq(users.id, userId));
+  });
+}
+
 export type LinkProofResult =
   | { readonly ok: true; readonly userId: string; readonly reset: boolean }
   | {
@@ -460,24 +485,7 @@ export async function confirmLinkProof(auth: Auth, id: string, code: string): Pr
     .where(and(eq(users.id, p.userId), isNull(users.deletedAt)));
   if (!u) return { ok: false, error: 'expired' };
   const reset = !u.emailVerified;
-  if (reset) {
-    // Pre-hijack guard: whoever made this unverified account may not own the address.
-    await db.transaction(async (tx) => {
-      await tx
-        .delete(accounts)
-        .where(and(eq(accounts.userId, p.userId), eq(accounts.providerId, 'credential')));
-      await tx.delete(twoFactors).where(eq(twoFactors.userId, p.userId));
-      await tx.delete(sessions).where(eq(sessions.userId, p.userId));
-      await tx
-        .update(trustedDevices)
-        .set({ revokedAt: new Date(), revokedReason: 'password_changed' })
-        .where(and(eq(trustedDevices.userId, p.userId), isNull(trustedDevices.revokedAt)));
-      await tx
-        .update(users)
-        .set({ emailVerified: true, twoFactorEnabled: false, updatedAt: new Date() })
-        .where(eq(users.id, p.userId));
-    });
-  }
+  if (reset) await resetUnverifiedAccount(p.userId);
   if (!other)
     await c.internalAdapter.linkAccount({ userId: p.userId, providerId: p.provider, accountId: p.subject });
   await audit(p.userId, 'social.linked', { provider: p.provider, proof: 'email_code', reset });
