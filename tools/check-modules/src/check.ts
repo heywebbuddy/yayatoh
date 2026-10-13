@@ -113,6 +113,11 @@ function isTestFile(rel: string): boolean {
   return /(^|\/)tests?\//.test(rel) || /\.(int\.)?test\.tsx?$/.test(rel) || /(^|\/)e2e\//.test(rel);
 }
 
+// Source with block and line comments removed (a heuristic: enough to ignore prose).
+export function withoutComments(src: string): string {
+  return src.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/(^|[^:\w'"`])\/\/.*$/gm, '$1');
+}
+
 function loadGlobalTables(root: string): Set<string> {
   const file = join(root, 'packages/db/src/global-tables.ts');
   if (!existsSync(file)) return new Set();
@@ -190,6 +195,15 @@ export function checkModules(root: string): Violation[] {
       for (const m of src.matchAll(/\b(aria-label|placeholder|title|alt|label)="([^"]*\p{L}[^"]*)"/gu)) {
         add('i18n-literal', `literal ${m[1]}="${m[2]}" — use a next-intl message`);
       }
+    }
+
+    // Universal packages also run on Hermes, which has no Web Crypto `subtle` (M7.1a): Ed25519 and
+    // SHA-256 come from @noble in @yayatoh/ticket-crypto. Tests may compare against Web Crypto.
+    if (pkg?.universal && !test && /\bsubtle\b/.test(withoutComments(src))) {
+      add(
+        'universal-crypto',
+        `universal package ${pkg.name} must not use crypto.subtle (Hermes has none) — use @yayatoh/ticket-crypto (@noble)`,
+      );
     }
 
     for (const spec of importsOf(src)) {

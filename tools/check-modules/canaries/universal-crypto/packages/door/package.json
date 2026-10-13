@@ -1,0 +1,5 @@
+{
+  "name": "@yayatoh/door",
+  "yayatoh": { "kind": "universal" },
+  "exports": { ".": "./src/index.ts" }
+}
