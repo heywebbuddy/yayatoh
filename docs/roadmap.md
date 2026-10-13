@@ -1766,6 +1766,8 @@ Order: CRM (M6.1–6.2), then API and integrations (M6.3–6.5), then billing an
 **Continuous compliance:** SOC 2 Type I at 6–9 months after launch, then Type II. Annual pen test. VPAT. DPF.
 
 ### 8.3 Deferred: mobile apps (planned, not built in this build)
+> **2026-10-13: superseded.** The owner asked to build the apps now, from scratch, with Expo. See `docs/plans/mobile.md` (Phase 7). The section below is kept for history.
+
 **Owner decision:** plan the apps now, build them later.
 
 **What this build does for mobile:**
