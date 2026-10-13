@@ -543,7 +543,7 @@ const getOps = createRoute({
   tags: ['staff'],
   summary: 'The event-day view: check-ins against expected, throughput, scan issues, devices and alerts',
   description:
-    'Read-only, for members who can read the event (a bearer session; an API key is refused). The numbers are the web Command Center’s, from the same loaders: check-ins against expected, scans per minute per entrance and a per-minute series, duplicate and invalid scans, device status and the active alerts. A section the member’s role or the organization’s plan does not include is `null`.',
+    'Read-only, for members who can read the event (a bearer session; an API key answers 403, the Command Center is for members). The numbers are the web Command Center’s, from the same loaders: check-ins against expected, scans per minute per entrance and a per-minute series, duplicate and invalid scans, device status and the active alerts. A section the member’s role or the organization’s plan does not include is `null`.',
   security: userSecurity,
   request: { params: EventParams },
   responses: { 200: json(OpsView, 'The event-day view'), ...problems },

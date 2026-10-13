@@ -74,6 +74,13 @@ async function call(method: string, path: string, token?: string, bodyJson?: unk
   return { res, status: res.status, body: (text ? JSON.parse(text) : null) as Json };
 }
 
+/** The lead of the n-th result of a scan batch response. */
+const leadOf = (body: Json, n = 0): Json => {
+  const lead = ((body.results as Json[])[n] as Json).lead;
+  if (!lead) throw new Error(`result ${n} has no lead`);
+  return lead as Json;
+};
+
 let a: OrgFixture;
 let b: OrgFixture;
 let ev: EventDto;
@@ -87,7 +94,13 @@ async function conference(org: OrgFixture, name: string) {
   const startsAt = new Date(Date.now() + 2 * H);
   const event = await executeCommand(
     createEventCommand,
-    { name, profile: 'conference', timezone: 'America/Chicago', startsAt, endsAt: new Date(startsAt.getTime() + 8 * H) },
+    {
+      name,
+      profile: 'conference',
+      timezone: 'America/Chicago',
+      startsAt,
+      endsAt: new Date(startsAt.getTime() + 8 * H),
+    },
     org.ctx(),
     ports,
   );
@@ -104,7 +117,12 @@ async function conference(org: OrgFixture, name: string) {
     org.ctx(),
     ports,
   );
-  await executeCommand(transitionEventCommand, { eventId: event.id, transition: 'publish' }, org.ctx(), ports);
+  await executeCommand(
+    transitionEventCommand,
+    { eventId: event.id, transition: 'publish' },
+    org.ctx(),
+    ports,
+  );
   await executeCommand(
     saveLeadLicenseSettingsCommand,
     { eventId: event.id, includedLeadLicenses: 2, leadLicensePriceMinor: null },
@@ -140,7 +158,12 @@ async function team(name: string, staff = 1, org = a, event = ev): Promise<Team>
   const ctx = await adminCtx(org.org.id, admin);
   const ids: string[] = [];
   for (let i = 0; i < staff; i++) {
-    const r = await executeCommand(portalInviteStaffCommand, { email: `staff+${uniq()}@x.example` }, ctx, ports);
+    const r = await executeCommand(
+      portalInviteStaffCommand,
+      { email: `staff+${uniq()}@x.example` },
+      ctx,
+      ports,
+    );
     ids.push((r as { member: { id: string } }).member.id);
   }
   await executeCommand(portalAssignLeadLicenseCommand, { accountId: admin }, ctx, ports);
@@ -237,7 +260,11 @@ describe('/v1/portal/auth — the email-code sign-in as bearer tokens', () => {
     expect(s.mail).toMatchObject({ kind: 'portal.sign-in', params: { eventName: ev.name } });
     const setup = await call('GET', '/portal/leads/setup', s.access);
     expect(setup.status).toBe(200);
-    expect(setup.body).toMatchObject({ exhibitorName: 'Signin Co', role: 'exhibitor_admin', license: 'licensed' });
+    expect(setup.body).toMatchObject({
+      exhibitorName: 'Signin Co',
+      role: 'exhibitor_admin',
+      license: 'licensed',
+    });
   });
 
   it('says how many tries are left on a wrong code, and a spent code cannot be used twice', async () => {
@@ -320,13 +347,19 @@ describe('/v1/portal/auth — the email-code sign-in as bearer tokens', () => {
   it('refresh rotates the pair; the old access token and the spent refresh token stop working', async () => {
     const t = await team('Refresh Co');
     const s = await signIn(t.admin);
-    const r = await call('POST', '/portal/auth/token', undefined, { grantType: 'refresh_token', refreshToken: s.refresh });
+    const r = await call('POST', '/portal/auth/token', undefined, {
+      grantType: 'refresh_token',
+      refreshToken: s.refresh,
+    });
     expect(r.status).toBe(200);
     expect(r.body.refreshToken).not.toBe(s.refresh);
     expect((await call('GET', '/portal/leads/setup', s.access)).status).toBe(401);
     expect((await call('GET', '/portal/leads/setup', String(r.body.accessToken))).status).toBe(200);
     // The spent refresh token presented again ends the whole session.
-    const reuse = await call('POST', '/portal/auth/token', undefined, { grantType: 'refresh_token', refreshToken: s.refresh });
+    const reuse = await call('POST', '/portal/auth/token', undefined, {
+      grantType: 'refresh_token',
+      refreshToken: s.refresh,
+    });
     expect(reuse.status).toBe(401);
     expect(reuse.body).toMatchObject({ details: { reason: 'refresh_token_reused' } });
     expect((await call('GET', '/portal/leads/setup', String(r.body.accessToken))).status).toBe(401);
@@ -335,7 +368,10 @@ describe('/v1/portal/auth — the email-code sign-in as bearer tokens', () => {
       refreshToken: String(r.body.refreshToken),
     });
     expect(dead.status).toBe(401);
-    const junk = await call('POST', '/portal/auth/token', undefined, { grantType: 'refresh_token', refreshToken: 'nope' });
+    const junk = await call('POST', '/portal/auth/token', undefined, {
+      grantType: 'refresh_token',
+      refreshToken: 'nope',
+    });
     expect(junk.status).toBe(401);
     expect(junk.body).toMatchObject({ details: { reason: 'refresh_token_invalid' } });
   });
@@ -343,11 +379,17 @@ describe('/v1/portal/auth — the email-code sign-in as bearer tokens', () => {
   it('sign-out ends the session; the browser cookie token is not a bearer token', async () => {
     const t = await team('Signout Co');
     const s = await signIn(t.admin);
-    expect((await call('POST', '/portal/auth/revoke', undefined, { refreshToken: s.refresh })).status).toBe(204);
+    expect((await call('POST', '/portal/auth/revoke', undefined, { refreshToken: s.refresh })).status).toBe(
+      204,
+    );
     expect((await call('GET', '/portal/leads/setup', s.access)).status).toBe(401);
-    expect((await call('POST', '/portal/auth/revoke', undefined, { refreshToken: 'unknown' })).status).toBe(204);
+    expect((await call('POST', '/portal/auth/revoke', undefined, { refreshToken: 'unknown' })).status).toBe(
+      204,
+    );
     const cookie = await createPortalSession({ orgId: a.org.id, accountId: t.admin, host: 'portal.test' });
-    expect((await call('GET', '/portal/leads/setup', `yyp_${a.org.id}~${cookie.token.split('~')[1]}`)).status).toBe(401);
+    expect(
+      (await call('GET', '/portal/leads/setup', `yyp_${a.org.id}~${cookie.token.split('~')[1]}`)).status,
+    ).toBe(401);
     expect((await call('GET', '/portal/leads/setup', cookie.token)).status).toBe(401);
   });
 
@@ -363,8 +405,12 @@ describe('/v1/portal/auth — the email-code sign-in as bearer tokens', () => {
     );
     expect((await call('GET', '/portal/leads/setup', s.access)).status).toBe(401);
     expect(
-      (await call('POST', '/portal/auth/token', undefined, { grantType: 'refresh_token', refreshToken: s.refresh }))
-        .status,
+      (
+        await call('POST', '/portal/auth/token', undefined, {
+          grantType: 'refresh_token',
+          refreshToken: s.refresh,
+        })
+      ).status,
     ).toBe(401);
   });
 
@@ -380,7 +426,10 @@ describe('/v1/portal/auth — the email-code sign-in as bearer tokens', () => {
       expect(none.status, `${method} ${path}`).toBe(401);
       expect(none.res.headers.get('content-type')).toBe('application/problem+json');
       expect((await call(method, path, a.apiKey, method === 'GET' ? undefined : {})).status).toBe(401);
-      expect((await call(method, path, `yyp_${a.org.id}~${'x'.repeat(43)}`, method === 'GET' ? undefined : {})).status).toBe(401);
+      expect(
+        (await call(method, path, `yyp_${a.org.id}~${'x'.repeat(43)}`, method === 'GET' ? undefined : {}))
+          .status,
+      ).toBe(401);
     }
   });
 
@@ -393,12 +442,22 @@ describe('/v1/portal/auth — the email-code sign-in as bearer tokens', () => {
     const siteToken = portalSiteToken(a.org.id, ev.id);
     sent.length = 0;
     const known = await call('POST', '/portal/auth/invitations', undefined, { siteToken, email: row?.email });
-    const unknown = await call('POST', '/portal/auth/invitations', undefined, { siteToken, email: 'nobody@nowhere.example' });
+    const unknown = await call('POST', '/portal/auth/invitations', undefined, {
+      siteToken,
+      email: 'nobody@nowhere.example',
+    });
     expect(known.status).toBe(204);
     expect(unknown.status).toBe(204);
     expect(sent.map((m) => m.kind)).toEqual(['portal.invite']);
     expect(sent[0]?.to).toBe(row?.email);
-    expect((await call('POST', '/portal/auth/invitations', undefined, { siteToken: 'z'.repeat(60), email: 'a@b.example' })).status).toBe(403);
+    expect(
+      (
+        await call('POST', '/portal/auth/invitations', undefined, {
+          siteToken: 'z'.repeat(60),
+          email: 'a@b.example',
+        })
+      ).status,
+    ).toBe(403);
   });
 });
 
@@ -421,9 +480,9 @@ describe('/v1/portal/leads — own exhibitor, consented fields, licence', () => 
     expect(r.status).toBe(200);
     const results = r.body.results as Json[];
     expect(results.map((x) => x.status)).toEqual(['captured', 'captured', 'refused']);
-    expect((results[0]?.lead as Json).email).toBe(yes.email);
-    expect((results[0]?.lead as Json).sharedFields).toEqual(['name', 'job_title', 'company', 'email']);
-    expect((results[1]?.lead as Json).email).toBeNull();
+    expect(leadOf(r.body, 0).email).toBe(yes.email);
+    expect(leadOf(r.body, 0).sharedFields).toEqual(['name', 'job_title', 'company', 'email']);
+    expect(leadOf(r.body, 1).email).toBeNull();
     expect(results[2]?.lead).toBeNull();
     expect(JSON.stringify(r.body)).not.toMatch(/ticketId|orgId|org_id|address|phone/);
     const again = await call('POST', '/portal/leads/scans', s.access, { scans: batch });
@@ -441,7 +500,7 @@ describe('/v1/portal/leads — own exhibitor, consented fields, licence', () => 
     const theirs = await signIn(t2.admin);
     const guest = await attendee(true);
     const cap = await call('POST', '/portal/leads/scans', theirs.access, { scans: [scan(guest.code)] });
-    const leadId = String(((cap.body.results as Json[])[0]?.lead as Json).id);
+    const leadId = String(leadOf(cap.body).id);
     expect(((await call('GET', '/portal/leads', mine.access)).body.leads as Json[]).length).toBe(0);
     const patch = (token: string) =>
       call('PATCH', `/portal/leads/${leadId}`, token, { rating: 'hot', qualifiers: [], notes: 'follow up' });
@@ -456,9 +515,14 @@ describe('/v1/portal/leads — own exhibitor, consented fields, licence', () => 
     const s = await signIn(t.admin);
     const guest = await attendee(false);
     const cap = await call('POST', '/portal/leads/scans', s.access, { scans: [scan(guest.code)] });
-    const leadId = String(((cap.body.results as Json[])[0]?.lead as Json).id);
+    const leadId = String(leadOf(cap.body).id);
     const bad = (extra: Json) =>
-      call('PATCH', `/portal/leads/${leadId}`, s.access, { rating: null, qualifiers: [], notes: '', ...extra });
+      call('PATCH', `/portal/leads/${leadId}`, s.access, {
+        rating: null,
+        qualifiers: [],
+        notes: '',
+        ...extra,
+      });
     expect((await bad({ rating: 'lukewarm' })).status).toBe(400);
     expect((await bad({ notes: 'x'.repeat(5000) })).status).toBe(400);
     expect((await call('POST', '/portal/leads/scans', s.access, { scans: [] })).status).toBe(400);

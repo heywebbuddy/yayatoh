@@ -10,8 +10,8 @@ import { type OrgFixture, ports, systemCtx, twoOrgs } from '@yayatoh/testing';
 import { sql } from 'drizzle-orm';
 import { Hono } from 'hono';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { staffOverviewFor } from '../src/staff/index.ts';
 import { createV1, type V1Deps } from '../src/index.ts';
+import { staffOverviewFor } from '../src/staff/index.ts';
 
 /**
  * M7.2e: the Staff app's device-token routes (`/v1/staff/*`), the organizer's event-day view
@@ -76,35 +76,32 @@ const ARRIVAL = (guestId: string) => ({
 });
 
 /** Every `/staff` route, with a body where it takes one. */
-const staffCalls = () => [
-  ['GET', `/staff/events/${a.event.id}/overview`, undefined],
-  ['GET', `/staff/events/${a.event.id}/guests`, undefined],
-  ['POST', '/staff/guest-arrivals', { eventId: a.event.id, arrivals: [ARRIVAL(crypto.randomUUID())] }],
-  ['GET', `/staff/events/${a.event.id}/assistance`, undefined],
-  ['POST', '/staff/assistance', { eventId: a.event.id, reason: 'backup' }],
+const staffCalls = () =>
   [
-    'POST',
-    `/staff/assistance/${crypto.randomUUID()}/take`,
-    { eventId: a.event.id },
-  ],
-  ['GET', '/staff/push', undefined],
-  [
-    'PUT',
-    '/staff/push',
-    {
-      platform: 'fcm',
-      token: 'fcm-token-0123456789',
-      locale: 'en',
-      copy: Object.fromEntries(
-        ['device_offline', 'device_low_battery', 'device_backlog', 'capacity_near'].map((k) => [
-          k,
-          { title: 'Alert', body: 'Alert body' },
-        ]),
-      ),
-    },
-  ],
-  ['DELETE', '/staff/push', undefined],
-] as const;
+    ['GET', `/staff/events/${a.event.id}/overview`, undefined],
+    ['GET', `/staff/events/${a.event.id}/guests`, undefined],
+    ['POST', '/staff/guest-arrivals', { eventId: a.event.id, arrivals: [ARRIVAL(crypto.randomUUID())] }],
+    ['GET', `/staff/events/${a.event.id}/assistance`, undefined],
+    ['POST', '/staff/assistance', { eventId: a.event.id, reason: 'backup' }],
+    ['POST', `/staff/assistance/${crypto.randomUUID()}/take`, { eventId: a.event.id }],
+    ['GET', '/staff/push', undefined],
+    [
+      'PUT',
+      '/staff/push',
+      {
+        platform: 'fcm',
+        token: 'fcm-token-0123456789',
+        locale: 'en',
+        copy: Object.fromEntries(
+          ['device_offline', 'device_low_battery', 'device_backlog', 'capacity_near'].map((k) => [
+            k,
+            { title: 'Alert', body: 'Alert body' },
+          ]),
+        ),
+      },
+    ],
+    ['DELETE', '/staff/push', undefined],
+  ] as const;
 
 describe('/v1/staff device authentication', () => {
   it('every route needs a device token (problem+json 401), and rejects other credentials', async () => {
@@ -206,7 +203,8 @@ describe('/v1/staff help requests', () => {
     expect(list.status).toBe(200);
     const mine = (list.body.requests as Json[]).find((x) => x.id === id);
     expect(mine).toMatchObject({ source: 'staff', reason: 'backup', note, mine: false });
-    const work = (action: string) => call('POST', `/staff/assistance/${id}/${action}`, d.token, { eventId: a.event.id });
+    const work = (action: string) =>
+      call('POST', `/staff/assistance/${id}/${action}`, d.token, { eventId: a.event.id });
     const taken = await work('take');
     expect(taken.status).toBe(200);
     expect(taken.body.state).toBe('assigned');
@@ -239,12 +237,15 @@ describe('/v1/staff help requests', () => {
         .status,
     ).toBe(404);
     expect(
-      (await call('POST', `/staff/assistance/${crypto.randomUUID()}/explode`, d.token, { eventId: a.event.id }))
-        .status,
+      (
+        await call('POST', `/staff/assistance/${crypto.randomUUID()}/explode`, d.token, {
+          eventId: a.event.id,
+        })
+      ).status,
     ).toBe(400);
-    expect((await call('POST', '/staff/assistance', d.token, { eventId: b.event.id, reason: 'backup' })).status).toBe(
-      404,
-    );
+    expect(
+      (await call('POST', '/staff/assistance', d.token, { eventId: b.event.id, reason: 'backup' })).status,
+    ).toBe(404);
   });
 });
 
@@ -300,7 +301,13 @@ describe('/v1/staff push registration', () => {
   it('refuses a bad token, platform or text; the token never comes back', async () => {
     const d = await enroll('Door push invalid');
     const bad = (extra: Json) =>
-      call('PUT', '/staff/push', d.token, { platform: 'fcm', token: 'fcm-token-ok-1', locale: 'en', copy, ...extra });
+      call('PUT', '/staff/push', d.token, {
+        platform: 'fcm',
+        token: 'fcm-token-ok-1',
+        locale: 'en',
+        copy,
+        ...extra,
+      });
     expect((await bad({ platform: 'webpush' })).status).toBe(400);
     expect((await bad({ token: 'short' })).status).toBe(400);
     expect((await bad({ locale: 'English' })).status).toBe(400);
@@ -315,10 +322,21 @@ describe('/v1/staff push registration', () => {
     const wiped = await enroll('Door push wipe');
     for (const d of [revoked, wiped])
       expect(
-        (await call('PUT', '/staff/push', d.token, { platform: 'fcm', token: `fcm-${d.deviceId}`, locale: 'en', copy }))
-          .status,
+        (
+          await call('PUT', '/staff/push', d.token, {
+            platform: 'fcm',
+            token: `fcm-${d.deviceId}`,
+            locale: 'en',
+            copy,
+          })
+        ).status,
       ).toBe(200);
-    await executeCommand(setDeviceStateCommand, { deviceId: revoked.deviceId, action: 'revoke' }, a.ctx(), ports);
+    await executeCommand(
+      setDeviceStateCommand,
+      { deviceId: revoked.deviceId, action: 'revoke' },
+      a.ctx(),
+      ports,
+    );
     await executeCommand(setDeviceStateCommand, { deviceId: wiped.deviceId, action: 'wipe' }, a.ctx(), ports);
     expect([...(await rows(revoked.deviceId))]).toHaveLength(0);
     expect([...(await rows(wiped.deviceId))]).toHaveLength(0);
@@ -348,7 +366,8 @@ describe('GET /v1/orgs/{org}/events/{event}/ops', () => {
       '@yayatoh/command-center'
     );
     const ctx = a.ctx();
-    const load = (def: { loader: never }) => executeQuery(def.loader, { eventId: a.event.id, params: {} } as never, ctx, ports);
+    const load = (def: { loader: never }) =>
+      executeQuery(def.loader, { eventId: a.event.id, params: {} } as never, ctx, ports);
     const [entrances, devices, issues, view] = await Promise.all([
       load(entrancesWidget as never),
       load(deviceBoardWidget as never),
@@ -364,5 +383,8 @@ describe('GET /v1/orgs/{org}/events/{event}/ops', () => {
     const d = await enroll('Door ops');
     const device = await call('GET', `/orgs/${a.org.slug}/events/${a.event.id}/ops`, d.token);
     expect(device.status).toBe(401);
+    const key = await call('GET', `/orgs/${a.org.slug}/events/${a.event.id}/ops`, a.apiKey);
+    expect(key.status).toBe(403);
+    expect(key.body.code).toBe('forbidden');
   });
 });

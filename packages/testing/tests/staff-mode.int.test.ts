@@ -11,11 +11,13 @@ import {
   revokeDeviceCommand,
   type StaffPushSender,
   sendStaffAlertPushes,
+  setDeviceStateCommand,
   staffAlertsSubscriber,
   staffOverviewQuery,
   staffPushStatusQuery,
   startKioskCommand,
   stopKioskCommand,
+  subscribeStaffNativePushCommand,
   subscribeStaffPushCommand,
   supervisorViewQuery,
   switchDeviceCheckpointCommand,
@@ -53,6 +55,7 @@ const at = (sec: number) => new Date(DOORS.getTime() + sec * 1000);
 const overview = staffOverviewQuery(derivedStaffAlerts);
 const supervisorView = supervisorViewQuery(derivedStaffAlerts);
 const subscribe = subscribeStaffPushCommand((e) => e.startsWith('https://push.example.test/'));
+const subscribeNative = subscribeStaffNativePushCommand;
 
 async function setup(f: OrgFixture, name: string, quantity: number) {
   const e = await executeCommand(
@@ -479,6 +482,94 @@ describe('staff mode: overview, device board and alerts', () => {
       ),
     );
     expect(other?.n).toBe(0);
+  });
+
+  it('native staff push (M7.2e): APNs and FCM rows are sent without keys, replace the old row, and die with the device', async () => {
+    const phone = await enroll('Native phone');
+    await beat(phone);
+    // Validated: a native token is not a URL and carries no keys.
+    await expect(
+      executeCommand(
+        subscribeNative,
+        { platform: 'apns', token: 'no spaces allowed', appId: null, locale: 'en', copy: COPY },
+        phone.ctx(),
+        ports,
+      ),
+    ).rejects.toMatchObject({ code: 'validation_failed' });
+    await executeCommand(
+      subscribe,
+      { endpoint: 'https://push.example.test/native-first', keys: pushKeys(), locale: 'en', copy: COPY },
+      phone.ctx(),
+      ports,
+    );
+    await executeCommand(
+      subscribeNative,
+      { platform: 'apns', token: 'a'.repeat(64), appId: 'agency.yayatoh.staff', locale: 'en', copy: COPY },
+      phone.ctx(),
+      ports,
+    );
+    // One row per device: the native registration replaced the browser's.
+    const rows = await withTenant(systemCtx(a.org.id), (tx) =>
+      tx.execute<{ platform: string; p256dh: string | null; app_id: string | null }>(
+        sql`select platform, p256dh, app_id from checkin.staff_push_subscriptions where device_id = ${phone.deviceId}`,
+      ),
+    );
+    expect([...rows]).toEqual([{ platform: 'apns', p256dh: null, app_id: 'agency.yayatoh.staff' }]);
+    expect(await executeQuery(staffPushStatusQuery, {}, phone.ctx(), ports)).toMatchObject({
+      subscribed: true,
+      platform: 'apns',
+    });
+    // The database refuses a native row with web keys, or a web row without them.
+    await expect(
+      withTenant(systemCtx(a.org.id), (tx) =>
+        tx.execute(
+          sql`update checkin.staff_push_subscriptions set p256dh = ${'k'.repeat(87)} where device_id = ${phone.deviceId}`,
+        ),
+      ),
+    ).rejects.toThrow();
+
+    // Queue an alert for it and send: the sender gets the platform, the token, no keys, no URL.
+    const sub = staffAlertsSubscriber(derivedStaffAlerts, { now: () => at(60) });
+    const [hb] = await withTenant(systemCtx(a.org.id), (tx) =>
+      tx.execute<{ id: string; log_seq: number }>(
+        sql`select id, log_seq from platform.domain_events where type = 'device.heartbeat' and aggregate_id = ${phone.deviceId} order by log_seq desc limit 1`,
+      ),
+    );
+    await consumeEvent(sub, {
+      id: hb?.id ?? '',
+      orgId: a.org.id,
+      type: 'device.heartbeat',
+      version: 1,
+      aggregateType: 'device',
+      aggregateId: phone.deviceId,
+      payload: { orgId: a.org.id, deviceId: phone.deviceId },
+      logSeq: Number(hb?.log_seq ?? 0),
+    });
+    const sent: Parameters<StaffPushSender['send']>[0][] = [];
+    await sendStaffAlertPushes(a.org.id, {
+      send: async (m) => {
+        sent.push(m);
+        return { providerMessageId: 'ok' };
+      },
+    });
+    const mine = sent.filter((m) => m.token === 'a'.repeat(64));
+    expect(mine.length).toBeGreaterThanOrEqual(1);
+    expect(mine[0]).toMatchObject({ platform: 'apns', keys: null, url: null });
+    expect(JSON.stringify(mine)).not.toMatch(/@|email|phone/i);
+
+    // Revoking the device deletes its registration; so does wiping another one.
+    await executeCommand(
+      setDeviceStateCommand,
+      { deviceId: phone.deviceId, action: 'revoke' },
+      a.ctx(),
+      ports,
+    );
+    const after = await withTenant(systemCtx(a.org.id), (tx) =>
+      tx.execute<{ n: number }>(
+        sql`select count(*)::int as n from checkin.staff_push_subscriptions where device_id = ${phone.deviceId}`,
+      ),
+    );
+    expect(after[0]?.n).toBe(0);
   });
 });
 

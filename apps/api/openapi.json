@@ -75,8 +75,16 @@
       "description": "REST hooks for automation tools (Zapier): subscribe a URL to one event type and unsubscribe."
     },
     {
+      "name": "portal",
+      "description": "Exhibitor reps in the Staff app: sign in with the emailed portal code, then lead setup, scan batches and per-lead rating, qualifiers and notes."
+    },
+    {
       "name": "scanner",
       "description": "The Scan PWA’s device-token routes (manifest, offline sync)."
+    },
+    {
+      "name": "staff",
+      "description": "The Staff app’s device-token routes (counts, device board, alerts, guest check-in, help requests, push) and the organizer’s read-only event-day view."
     },
     {
       "name": "webhooks",
@@ -89,6 +97,11 @@
         "type": "http",
         "scheme": "bearer",
         "description": "Scanner device token (`yyd_…`), issued once at enrollment."
+      },
+      "portalSession": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "An exhibitor portal access token (`yyp_…`) from `POST /v1/portal/auth/token` (15 minutes, with a rotating refresh token)."
       },
       "apiKey": {
         "type": "http",
@@ -7032,6 +7045,2235 @@
           "enrollment",
           "admission_level",
           "capacity"
+        ]
+      },
+      "StaffOverview": {
+        "type": "object",
+        "properties": {
+          "eventId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "eventName": {
+            "type": "string"
+          },
+          "timezone": {
+            "type": "string"
+          },
+          "day": {
+            "type": "string",
+            "description": "Today in the event’s time zone (`YYYY-MM-DD`)."
+          },
+          "asOf": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "checkedIn": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Tickets checked in today (live admissions)."
+          },
+          "expected": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Tickets issued for the event."
+          },
+          "byEntrance": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "checkpointId": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "checkedIn": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "required": [
+                "checkpointId",
+                "name",
+                "checkedIn"
+              ]
+            }
+          },
+          "byDate": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "day": {
+                  "type": "string"
+                },
+                "checkedIn": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "required": [
+                "day",
+                "checkedIn"
+              ]
+            },
+            "description": "Live admissions per event day (multi-day events), oldest first."
+          },
+          "devices": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "label": {
+                  "type": "string"
+                },
+                "online": {
+                  "type": "boolean"
+                },
+                "lastSeenAt": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date-time"
+                },
+                "batteryPct": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "queueDepth": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "checkpointId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "uuid"
+                },
+                "mode": {
+                  "$ref": "#/components/schemas/DeviceMode"
+                },
+                "self": {
+                  "type": "boolean",
+                  "description": "The device asking."
+                }
+              },
+              "required": [
+                "id",
+                "label",
+                "online",
+                "lastSeenAt",
+                "batteryPct",
+                "queueDepth",
+                "checkpointId",
+                "mode",
+                "self"
+              ]
+            }
+          },
+          "alerts": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "type": "string"
+                },
+                "kind": {
+                  "$ref": "#/components/schemas/StaffAlertKind"
+                },
+                "severity": {
+                  "$ref": "#/components/schemas/StaffAlertSeverity"
+                },
+                "deviceId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "uuid"
+                },
+                "deviceLabel": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "percent": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "count": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "since": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              },
+              "required": [
+                "key",
+                "kind",
+                "severity",
+                "deviceId",
+                "deviceLabel",
+                "percent",
+                "count",
+                "since"
+              ]
+            },
+            "description": "Staff alerts; a device a supervisor opted in for also sees device alerts (offline, low battery, backlog)."
+          },
+          "channels": {
+            "type": "object",
+            "properties": {
+              "checkins": {
+                "type": "string"
+              },
+              "devices": {
+                "type": "string"
+              },
+              "assistance": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "checkins",
+              "devices",
+              "assistance"
+            ],
+            "description": "Realtime channel names to follow for this event."
+          },
+          "deviceId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The device asking."
+          }
+        },
+        "required": [
+          "eventId",
+          "eventName",
+          "timezone",
+          "day",
+          "asOf",
+          "checkedIn",
+          "expected",
+          "byEntrance",
+          "byDate",
+          "devices",
+          "alerts",
+          "channels",
+          "deviceId"
+        ]
+      },
+      "DeviceMode": {
+        "type": "string",
+        "enum": [
+          "scanner",
+          "kiosk"
+        ]
+      },
+      "StaffAlertKind": {
+        "type": "string",
+        "enum": [
+          "device_offline",
+          "device_low_battery",
+          "device_backlog",
+          "capacity_near"
+        ]
+      },
+      "StaffAlertSeverity": {
+        "type": "string",
+        "enum": [
+          "warning",
+          "critical"
+        ]
+      },
+      "GuestSnapshot": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "integer"
+          },
+          "eventId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "generatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "parties": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "tags": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "guests": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "firstName": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "lastName": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "name": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "guestOf": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "status": {
+                        "$ref": "#/components/schemas/GuestStatus"
+                      },
+                      "places": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "chart": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "kind": {
+                              "$ref": "#/components/schemas/GuestPlaceKind"
+                            },
+                            "label": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "chart",
+                            "kind",
+                            "label"
+                          ]
+                        }
+                      },
+                      "arrivedAt": {
+                        "type": [
+                          "string",
+                          "null"
+                        ],
+                        "format": "date-time"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "firstName",
+                      "lastName",
+                      "name",
+                      "guestOf",
+                      "status",
+                      "places",
+                      "arrivedAt"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "id",
+                "name",
+                "tags",
+                "guests"
+              ]
+            }
+          },
+          "card": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "url": {
+                "type": "string"
+              },
+              "size": {
+                "type": "integer"
+              },
+              "d": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "url",
+              "size",
+              "d"
+            ],
+            "description": "While the event takes gifts online: the card-saving page opened from check-in, with its QR path (`d`, in a `size`-wide square)."
+          }
+        },
+        "required": [
+          "version",
+          "eventId",
+          "generatedAt",
+          "parties",
+          "card"
+        ]
+      },
+      "GuestStatus": {
+        "type": "string",
+        "enum": [
+          "attending",
+          "pending",
+          "declined"
+        ]
+      },
+      "GuestPlaceKind": {
+        "type": "string",
+        "enum": [
+          "table",
+          "row"
+        ]
+      },
+      "GuestArrivalsResult": {
+        "type": "object",
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "clientId": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "result": {
+                  "$ref": "#/components/schemas/GuestArrivalResult"
+                }
+              },
+              "required": [
+                "clientId",
+                "result"
+              ]
+            }
+          }
+        },
+        "required": [
+          "results"
+        ]
+      },
+      "GuestArrivalResult": {
+        "type": "string",
+        "enum": [
+          "arrived",
+          "already",
+          "unknown"
+        ]
+      },
+      "GuestArrivalsRequest": {
+        "type": "object",
+        "properties": {
+          "eventId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "arrivals": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "clientId": {
+                  "type": "string",
+                  "format": "uuid",
+                  "description": "The device’s id for this check-in: a resend is a no-op."
+                },
+                "guestId": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "deviceTs": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "clockOffsetMs": {
+                  "type": "integer"
+                },
+                "source": {
+                  "$ref": "#/components/schemas/GuestArrivalSource"
+                }
+              },
+              "required": [
+                "clientId",
+                "guestId",
+                "deviceTs",
+                "clockOffsetMs",
+                "source"
+              ]
+            },
+            "minItems": 1,
+            "maxItems": 500
+          }
+        },
+        "required": [
+          "eventId",
+          "arrivals"
+        ]
+      },
+      "GuestArrivalSource": {
+        "type": "string",
+        "enum": [
+          "scanner",
+          "kiosk"
+        ]
+      },
+      "AssistanceQueue": {
+        "type": "object",
+        "properties": {
+          "requests": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AssistanceRequest"
+            }
+          }
+        },
+        "required": [
+          "requests"
+        ]
+      },
+      "AssistanceRequest": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "number": {
+            "type": "integer"
+          },
+          "source": {
+            "$ref": "#/components/schemas/AssistanceSource"
+          },
+          "reason": {
+            "$ref": "#/components/schemas/AssistanceReason"
+          },
+          "priority": {
+            "$ref": "#/components/schemas/AssistancePriority"
+          },
+          "state": {
+            "$ref": "#/components/schemas/AssistanceState"
+          },
+          "note": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          },
+          "guest": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "ticket": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "ticket"
+            ]
+          },
+          "device": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The device that raised a staff request."
+          },
+          "checkpoint": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "assignee": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "kind": {
+                "$ref": "#/components/schemas/AssistanceAssigneeKind"
+              },
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "label": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "kind",
+              "id",
+              "label"
+            ]
+          },
+          "mine": {
+            "type": "boolean",
+            "description": "Assigned to the device asking."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "dueAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "assignedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "startedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "closedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "overdue": {
+            "type": "boolean"
+          },
+          "activity": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "$ref": "#/components/schemas/AssistanceActivityKind"
+                },
+                "body": {
+                  "type": "string"
+                },
+                "actor": {
+                  "$ref": "#/components/schemas/AssistanceActor"
+                },
+                "actorUserId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "uuid"
+                },
+                "actorDevice": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "assigneeUserId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "uuid"
+                },
+                "assigneeDevice": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "at": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              },
+              "required": [
+                "kind",
+                "body",
+                "actor",
+                "actorUserId",
+                "actorDevice",
+                "assigneeUserId",
+                "assigneeDevice",
+                "at"
+              ]
+            }
+          }
+        },
+        "required": [
+          "id",
+          "number",
+          "source",
+          "reason",
+          "priority",
+          "state",
+          "note",
+          "location",
+          "guest",
+          "device",
+          "checkpoint",
+          "assignee",
+          "mine",
+          "createdAt",
+          "dueAt",
+          "assignedAt",
+          "startedAt",
+          "closedAt",
+          "overdue",
+          "activity"
+        ]
+      },
+      "AssistanceSource": {
+        "type": "string",
+        "enum": [
+          "guest",
+          "staff"
+        ]
+      },
+      "AssistanceReason": {
+        "type": "string",
+        "enum": [
+          "seat",
+          "accessibility",
+          "medical",
+          "lost_item",
+          "other",
+          "backup",
+          "supervisor",
+          "security",
+          "device"
+        ]
+      },
+      "AssistancePriority": {
+        "type": "string",
+        "enum": [
+          "urgent",
+          "high",
+          "normal"
+        ]
+      },
+      "AssistanceState": {
+        "type": "string",
+        "enum": [
+          "new",
+          "assigned",
+          "in_progress",
+          "resolved",
+          "cancelled"
+        ]
+      },
+      "AssistanceAssigneeKind": {
+        "type": "string",
+        "enum": [
+          "user",
+          "device"
+        ]
+      },
+      "AssistanceActivityKind": {
+        "type": "string",
+        "enum": [
+          "created",
+          "assigned",
+          "started",
+          "resolved",
+          "cancelled",
+          "note"
+        ]
+      },
+      "AssistanceActor": {
+        "type": "string",
+        "enum": [
+          "guest",
+          "member",
+          "device",
+          "system"
+        ]
+      },
+      "StaffAssistanceCreated": {
+        "type": "object",
+        "properties": {
+          "requestId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "number": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "requestId",
+          "number"
+        ]
+      },
+      "StaffAssistanceRequestBody": {
+        "type": "object",
+        "properties": {
+          "eventId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "reason": {
+            "$ref": "#/components/schemas/StaffAssistanceReason"
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "checkpointId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid",
+            "description": "The entrance the device scans at, if any."
+          }
+        },
+        "required": [
+          "eventId",
+          "reason"
+        ]
+      },
+      "StaffAssistanceReason": {
+        "type": "string",
+        "enum": [
+          "backup",
+          "supervisor",
+          "medical",
+          "security",
+          "device"
+        ]
+      },
+      "StaffAssistanceWorked": {
+        "type": "object",
+        "properties": {
+          "state": {
+            "$ref": "#/components/schemas/AssistanceState"
+          }
+        },
+        "required": [
+          "state"
+        ]
+      },
+      "StaffAssistanceAction": {
+        "type": "string",
+        "enum": [
+          "take",
+          "start",
+          "resolve",
+          "cancel"
+        ],
+        "description": "`take` gives the request to this device; `start`, `resolve` and `cancel` move it on (resolving and cancelling close it)."
+      },
+      "StaffAssistanceWorkBody": {
+        "type": "object",
+        "properties": {
+          "eventId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "eventId"
+        ]
+      },
+      "StaffPushStatus": {
+        "type": "object",
+        "properties": {
+          "subscribed": {
+            "type": "boolean"
+          },
+          "supervisor": {
+            "type": "boolean",
+            "description": "A supervisor claimed device alerts on this device."
+          },
+          "platform": {
+            "$ref": "#/components/schemas/StaffPushPlatform"
+          }
+        },
+        "required": [
+          "subscribed",
+          "supervisor",
+          "platform"
+        ]
+      },
+      "StaffPushPlatform": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "webpush",
+          "apns",
+          "fcm",
+          null
+        ]
+      },
+      "StaffPushOk": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "ok"
+        ]
+      },
+      "StaffNativePushRequest": {
+        "type": "object",
+        "properties": {
+          "platform": {
+            "$ref": "#/components/schemas/NativePushPlatform"
+          },
+          "token": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 4096,
+            "description": "The APNs device token or the FCM registration token."
+          },
+          "appId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "minLength": 3,
+            "maxLength": 200,
+            "description": "The app’s bundle id (APNs topic) or package name."
+          },
+          "locale": {
+            "type": "string",
+            "pattern": "^[a-z]{2}(-[A-Z]{2})?$"
+          },
+          "copy": {
+            "type": "object",
+            "properties": {
+              "device_offline": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200
+                  },
+                  "body": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200
+                  }
+                },
+                "required": [
+                  "title",
+                  "body"
+                ]
+              },
+              "device_low_battery": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200
+                  },
+                  "body": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200
+                  }
+                },
+                "required": [
+                  "title",
+                  "body"
+                ]
+              },
+              "device_backlog": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200
+                  },
+                  "body": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200
+                  }
+                },
+                "required": [
+                  "title",
+                  "body"
+                ]
+              },
+              "capacity_near": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200
+                  },
+                  "body": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200
+                  }
+                },
+                "required": [
+                  "title",
+                  "body"
+                ]
+              },
+              "assistance": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200
+                  },
+                  "body": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200
+                  }
+                },
+                "required": [
+                  "title",
+                  "body"
+                ]
+              }
+            },
+            "required": [
+              "device_offline",
+              "device_low_battery",
+              "device_backlog",
+              "capacity_near"
+            ],
+            "description": "The notification text per alert kind in the device’s language (placeholders `{label}` and `{percent}`); the server holds no UI strings."
+          }
+        },
+        "required": [
+          "platform",
+          "token",
+          "locale",
+          "copy"
+        ]
+      },
+      "NativePushPlatform": {
+        "type": "string",
+        "enum": [
+          "apns",
+          "fcm"
+        ]
+      },
+      "OpsView": {
+        "type": "object",
+        "properties": {
+          "eventId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "asOf": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "timeZone": {
+            "type": "string"
+          },
+          "mode": {
+            "$ref": "#/components/schemas/EventMode"
+          },
+          "checkins": {
+            "$ref": "#/components/schemas/OpsCheckins"
+          },
+          "throughput": {
+            "$ref": "#/components/schemas/OpsThroughput"
+          },
+          "scanIssues": {
+            "$ref": "#/components/schemas/OpsScanIssues"
+          },
+          "devices": {
+            "$ref": "#/components/schemas/OpsDevices"
+          },
+          "alerts": {
+            "$ref": "#/components/schemas/OpsAlerts"
+          }
+        },
+        "required": [
+          "eventId",
+          "asOf",
+          "timeZone",
+          "mode",
+          "checkins",
+          "throughput",
+          "scanIssues",
+          "devices",
+          "alerts"
+        ]
+      },
+      "EventMode": {
+        "type": "string",
+        "enum": [
+          "planning",
+          "pre_show",
+          "live",
+          "wrap"
+        ],
+        "description": "The Command Center mode in force."
+      },
+      "OpsCheckins": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "timeZone": {
+            "type": "string"
+          },
+          "checkedIn": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "expected": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "byEntrance": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "checkedIn": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "required": [
+                "name",
+                "checkedIn"
+              ]
+            }
+          },
+          "byDate": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "day": {
+                  "type": "string"
+                },
+                "checkedIn": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "required": [
+                "day",
+                "checkedIn"
+              ]
+            }
+          },
+          "asOf": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "timeZone",
+          "checkedIn",
+          "expected",
+          "byEntrance",
+          "byDate",
+          "asOf"
+        ]
+      },
+      "OpsThroughput": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "windowMin": {
+            "type": "integer"
+          },
+          "series": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "at": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "count": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "required": [
+                "at",
+                "count"
+              ]
+            },
+            "description": "Check-ins per minute over the last 15 minutes, oldest first."
+          },
+          "scansPerMin": {
+            "type": "number",
+            "minimum": 0
+          },
+          "medianGapS": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "queueMin": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "remaining": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Expected guests not in yet."
+          },
+          "entrances": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "uuid"
+                },
+                "name": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "scansPerMin": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "medianGapS": {
+                  "type": [
+                    "number",
+                    "null"
+                  ],
+                  "minimum": 0
+                },
+                "queueMin": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "minimum": 0
+                }
+              },
+              "required": [
+                "id",
+                "name",
+                "scansPerMin",
+                "medianGapS",
+                "queueMin"
+              ]
+            },
+            "description": "Scans per minute at each entrance."
+          },
+          "devices": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "uuid"
+                },
+                "name": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "scansPerMin": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "medianGapS": {
+                  "type": [
+                    "number",
+                    "null"
+                  ],
+                  "minimum": 0
+                },
+                "queueMin": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "minimum": 0
+                }
+              },
+              "required": [
+                "id",
+                "name",
+                "scansPerMin",
+                "medianGapS",
+                "queueMin"
+              ]
+            }
+          },
+          "asOf": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "windowMin",
+          "series",
+          "scansPerMin",
+          "medianGapS",
+          "queueMin",
+          "remaining",
+          "entrances",
+          "devices",
+          "asOf"
+        ]
+      },
+      "OpsScanIssues": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "counts": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "string",
+                  "pattern": "^[a-z_]{3,40}$"
+                },
+                "count": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "required": [
+                "result",
+                "count"
+              ]
+            }
+          },
+          "duplicates": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "refused": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "recent": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "result": {
+                  "type": "string",
+                  "pattern": "^[a-z_]{3,40}$"
+                },
+                "at": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "checkpoint": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "device": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "orderId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "uuid"
+                }
+              },
+              "required": [
+                "id",
+                "result",
+                "at",
+                "checkpoint",
+                "device",
+                "orderId"
+              ]
+            }
+          },
+          "asOf": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "counts",
+          "duplicates",
+          "refused",
+          "recent",
+          "asOf"
+        ]
+      },
+      "OpsDevices": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "devices": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "label": {
+                  "type": "string"
+                },
+                "online": {
+                  "type": "boolean"
+                },
+                "lastSeenAt": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date-time"
+                },
+                "batteryPct": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "queueDepth": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "checkpoint": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "kiosk": {
+                  "type": "boolean"
+                },
+                "appVersion": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "lastScanAt": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date-time"
+                }
+              },
+              "required": [
+                "id",
+                "label",
+                "online",
+                "lastSeenAt",
+                "batteryPct",
+                "queueDepth",
+                "checkpoint",
+                "kiosk",
+                "appVersion",
+                "lastScanAt"
+              ]
+            }
+          },
+          "asOf": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "devices",
+          "asOf"
+        ]
+      },
+      "OpsAlerts": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "alerts": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "rule": {
+                  "type": "string",
+                  "description": "The alert rule’s key."
+                },
+                "severity": {
+                  "$ref": "#/components/schemas/OpsAlertSeverity"
+                },
+                "state": {
+                  "$ref": "#/components/schemas/OpsAlertState"
+                },
+                "count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "href": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "Console path of the page that fixes it."
+                },
+                "at": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              },
+              "required": [
+                "id",
+                "rule",
+                "severity",
+                "state",
+                "count",
+                "href",
+                "at"
+              ]
+            }
+          }
+        },
+        "required": [
+          "alerts"
+        ]
+      },
+      "OpsAlertSeverity": {
+        "type": "string",
+        "enum": [
+          "info",
+          "warning",
+          "critical"
+        ]
+      },
+      "OpsAlertState": {
+        "type": "string",
+        "enum": [
+          "open",
+          "acknowledged",
+          "snoozed"
+        ]
+      },
+      "PortalCodeRequested": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/PortalCodeStatus"
+          },
+          "challengeId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Send it back with the code."
+          },
+          "resendAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When another code may be requested."
+          }
+        },
+        "required": [
+          "status",
+          "challengeId",
+          "resendAt"
+        ]
+      },
+      "PortalCodeStatus": {
+        "type": "string",
+        "enum": [
+          "sent",
+          "cooldown"
+        ],
+        "description": "`sent`: a code was emailed; `cooldown`: one was sent less than 30 seconds ago (use that one)."
+      },
+      "PortalCodeRequest": {
+        "type": "object",
+        "properties": {
+          "inviteToken": {
+            "type": "string",
+            "minLength": 40,
+            "maxLength": 300,
+            "description": "The token in the emailed invitation link (`…/event-portal/invite/{token}`, or the app link built from it)."
+          }
+        },
+        "required": [
+          "inviteToken"
+        ]
+      },
+      "PortalTokenPair": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "description": "Send as `Authorization: Bearer …` (15 minutes)."
+          },
+          "refreshToken": {
+            "type": "string",
+            "description": "Spent by the next refresh; keep it in secure storage."
+          },
+          "tokenType": {
+            "type": "string",
+            "enum": [
+              "bearer"
+            ]
+          },
+          "expiresIn": {
+            "type": "integer",
+            "description": "Seconds until the access token ends."
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "refreshExpiresAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the session ends (a week, or the account’s end)."
+          }
+        },
+        "required": [
+          "accessToken",
+          "refreshToken",
+          "tokenType",
+          "expiresIn",
+          "expiresAt",
+          "refreshExpiresAt"
+        ]
+      },
+      "PortalTokenRequest": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/PortalCodeGrant"
+          },
+          {
+            "$ref": "#/components/schemas/PortalRefreshGrant"
+          }
+        ],
+        "discriminator": {
+          "propertyName": "grantType",
+          "mapping": {
+            "code": "#/components/schemas/PortalCodeGrant",
+            "refresh_token": "#/components/schemas/PortalRefreshGrant"
+          }
+        }
+      },
+      "PortalCodeGrant": {
+        "type": "object",
+        "properties": {
+          "grantType": {
+            "type": "string",
+            "enum": [
+              "code"
+            ]
+          },
+          "inviteToken": {
+            "type": "string",
+            "minLength": 40,
+            "maxLength": 300,
+            "description": "The token in the emailed invitation link (`…/event-portal/invite/{token}`, or the app link built from it)."
+          },
+          "challengeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "code": {
+            "type": "string",
+            "pattern": "^\\s*\\d{3}\\s?\\d{3}\\s*$",
+            "description": "The six-digit code from the email."
+          }
+        },
+        "required": [
+          "grantType",
+          "inviteToken",
+          "challengeId",
+          "code"
+        ]
+      },
+      "PortalRefreshGrant": {
+        "type": "object",
+        "properties": {
+          "grantType": {
+            "type": "string",
+            "enum": [
+              "refresh_token"
+            ]
+          },
+          "refreshToken": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          }
+        },
+        "required": [
+          "grantType",
+          "refreshToken"
+        ]
+      },
+      "PortalRevokeRequest": {
+        "type": "object",
+        "properties": {
+          "refreshToken": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          }
+        },
+        "required": [
+          "refreshToken"
+        ]
+      },
+      "PortalInvitationsRequest": {
+        "type": "object",
+        "properties": {
+          "siteToken": {
+            "type": "string",
+            "minLength": 40,
+            "maxLength": 300,
+            "description": "The token of the event’s portal sign-in page link."
+          },
+          "email": {
+            "type": "string",
+            "maxLength": 254,
+            "format": "email"
+          }
+        },
+        "required": [
+          "siteToken",
+          "email"
+        ]
+      },
+      "LeadSetup": {
+        "type": "object",
+        "properties": {
+          "eventName": {
+            "type": "string"
+          },
+          "timezone": {
+            "type": "string"
+          },
+          "exhibitorName": {
+            "type": "string"
+          },
+          "role": {
+            "$ref": "#/components/schemas/ExhibitorPortalRole"
+          },
+          "email": {
+            "type": "string"
+          },
+          "license": {
+            "$ref": "#/components/schemas/LeadLicenseStanding"
+          },
+          "termsAccepted": {
+            "type": "boolean",
+            "description": "The exhibitor admin accepted the lead terms."
+          },
+          "termsVersion": {
+            "type": "integer"
+          },
+          "capture": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "$ref": "#/components/schemas/LeadCaptureState"
+              },
+              "opensAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "closesAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "accessUntil": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "accessOpen": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "state",
+              "opensAt",
+              "closesAt",
+              "accessUntil",
+              "accessOpen"
+            ]
+          },
+          "qualifiers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The exhibitor’s qualifier labels a lead can carry."
+          },
+          "teamVisibility": {
+            "type": "boolean"
+          },
+          "leadCount": {
+            "type": "integer",
+            "description": "Admin only: how many leads the exhibitor has (0 for staff)."
+          }
+        },
+        "required": [
+          "eventName",
+          "timezone",
+          "exhibitorName",
+          "role",
+          "email",
+          "license",
+          "termsAccepted",
+          "termsVersion",
+          "capture",
+          "qualifiers",
+          "teamVisibility",
+          "leadCount"
+        ]
+      },
+      "ExhibitorPortalRole": {
+        "type": "string",
+        "enum": [
+          "exhibitor_admin",
+          "exhibitor_staff"
+        ]
+      },
+      "LeadLicenseStanding": {
+        "type": "string",
+        "enum": [
+          "licensed",
+          "unlicensed",
+          "over_allowance"
+        ],
+        "description": "A rep without a licence (`unlicensed`, `over_allowance`) cannot scan."
+      },
+      "LeadCaptureState": {
+        "type": "string",
+        "enum": [
+          "not_open",
+          "open",
+          "closed"
+        ]
+      },
+      "LeadList": {
+        "type": "object",
+        "properties": {
+          "leads": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Lead"
+            }
+          },
+          "scope": {
+            "$ref": "#/components/schemas/LeadScope"
+          }
+        },
+        "required": [
+          "leads",
+          "scope"
+        ]
+      },
+      "Lead": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "jobTitle": {
+            "type": "string"
+          },
+          "company": {
+            "type": "string"
+          },
+          "email": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Only if the attendee agreed to share it (P5-8)."
+          },
+          "sharedFields": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LeadSharedField"
+            }
+          },
+          "emailConsentVersion": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "emailWithdrawnAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "rating": {
+            "$ref": "#/components/schemas/LeadRating"
+          },
+          "qualifiers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "notes": {
+            "type": "string"
+          },
+          "capturedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastScannedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "scans": {
+            "type": "integer"
+          },
+          "scannedByMe": {
+            "type": "boolean"
+          },
+          "scannedBy": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "jobTitle",
+          "company",
+          "email",
+          "sharedFields",
+          "emailConsentVersion",
+          "emailWithdrawnAt",
+          "rating",
+          "qualifiers",
+          "notes",
+          "capturedAt",
+          "lastScannedAt",
+          "scans",
+          "scannedByMe",
+          "scannedBy"
+        ]
+      },
+      "LeadSharedField": {
+        "type": "string",
+        "enum": [
+          "name",
+          "job_title",
+          "company",
+          "email"
+        ]
+      },
+      "LeadRating": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "hot",
+          "warm",
+          "cold",
+          null
+        ]
+      },
+      "LeadScope": {
+        "type": "string",
+        "enum": [
+          "all",
+          "team",
+          "own"
+        ]
+      },
+      "LeadScanBatchResult": {
+        "type": "object",
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LeadScanResult"
+            }
+          }
+        },
+        "required": [
+          "results"
+        ]
+      },
+      "LeadScanResult": {
+        "type": "object",
+        "properties": {
+          "scanId": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/LeadScanStatus"
+          },
+          "reason": {
+            "$ref": "#/components/schemas/LeadScanRefusal"
+          },
+          "lead": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Lead"
+              },
+              {
+                "type": [
+                  "object",
+                  "null"
+                ]
+              }
+            ]
+          }
+        },
+        "required": [
+          "scanId",
+          "status",
+          "reason",
+          "lead"
+        ]
+      },
+      "LeadScanStatus": {
+        "type": "string",
+        "enum": [
+          "captured",
+          "rescanned",
+          "refused"
+        ]
+      },
+      "LeadScanRefusal": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "invalid",
+          "wrong_event",
+          "not_open",
+          "closed",
+          null
+        ]
+      },
+      "LeadScanBatch": {
+        "type": "object",
+        "properties": {
+          "scans": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LeadScan"
+            },
+            "minItems": 1,
+            "maxItems": 200
+          }
+        },
+        "required": [
+          "scans"
+        ]
+      },
+      "LeadScan": {
+        "type": "object",
+        "properties": {
+          "scanId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{8,80}$",
+            "description": "The device’s id for this scan: sending it again is a no-op."
+          },
+          "code": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 400,
+            "description": "The badge QR payload."
+          },
+          "capturedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the scan was made (the device clock)."
+          },
+          "offline": {
+            "type": "boolean"
+          },
+          "rating": {
+            "$ref": "#/components/schemas/LeadRating"
+          },
+          "qualifiers": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 60
+            },
+            "maxItems": 10
+          },
+          "notes": {
+            "type": "string",
+            "maxLength": 2000
+          }
+        },
+        "required": [
+          "scanId",
+          "code",
+          "capturedAt"
+        ]
+      },
+      "LeadUpdated": {
+        "type": "object",
+        "properties": {
+          "leadId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "exhibitorId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "leadId",
+          "exhibitorId"
+        ]
+      },
+      "LeadUpdate": {
+        "type": "object",
+        "properties": {
+          "rating": {
+            "$ref": "#/components/schemas/LeadRating"
+          },
+          "qualifiers": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 60
+            },
+            "maxItems": 10
+          },
+          "notes": {
+            "type": "string",
+            "maxLength": 2000
+          }
+        },
+        "required": [
+          "rating",
+          "qualifiers",
+          "notes"
         ]
       }
     },
@@ -16123,6 +18365,1674 @@
                     "status",
                     "code"
                   ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/staff/events/{eventId}/overview": {
+      "get": {
+        "operationId": "getStaffOverview",
+        "tags": [
+          "staff"
+        ],
+        "summary": "Staff mode: today’s counts, the device board and alerts for the device’s event",
+        "description": "Check-ins against expected (per entrance and per event day), the event’s devices and the alerts the device may see, plus the realtime channels to follow. Device token only; the app keeps the last answer for offline use. The same answer as the Scan PWA’s staff screen.",
+        "security": [
+          {
+            "deviceToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The event the device works"
+            },
+            "required": true,
+            "description": "The event the device works",
+            "name": "eventId",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The staff screen",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StaffOverview"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown, revoked or wiped device token (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/staff/events/{eventId}/guests": {
+      "get": {
+        "operationId": "getStaffGuestSnapshot",
+        "tags": [
+          "staff"
+        ],
+        "summary": "The event’s guests for check-in by name or party, offline too",
+        "description": "Names, party labels, tables and arrivals of the event’s guest list: an allowlist with no contact detail, meal or private answer. Device token only.",
+        "security": [
+          {
+            "deviceToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The event the device works"
+            },
+            "required": true,
+            "description": "The event the device works",
+            "name": "eventId",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The guest snapshot",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GuestSnapshot"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown, revoked or wiped device token (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/staff/guest-arrivals": {
+      "post": {
+        "operationId": "recordStaffGuestArrivals",
+        "tags": [
+          "staff"
+        ],
+        "summary": "Sync guest check-ins made on the device, offline ones too (idempotent per check-in)",
+        "description": "Up to 500 arrivals; each is applied once by its `clientId`, so a retry is safe, and the first arrival of a guest (corrected device time) wins. `arrived`: this check-in is the guest’s arrival; `already`: someone checked the guest in earlier; `unknown`: not a guest of this event. Device token only.",
+        "security": [
+          {
+            "deviceToken": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GuestArrivalsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Results per check-in",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GuestArrivalsResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown, revoked or wiped device token (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict, invalid state, or the same Idempotency-Key is in flight",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The Idempotency-Key was used with a different request (`idempotency_key_reused`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Read-only maintenance (`read_only_freeze`): nothing was changed; retry after `Retry-After` seconds",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/staff/events/{eventId}/assistance": {
+      "get": {
+        "operationId": "listStaffAssistance",
+        "tags": [
+          "staff"
+        ],
+        "summary": "The event’s open help requests, most urgent first",
+        "description": "Open requests (guests’ and staff’s) most urgent first, then oldest first; at most 50. Device token only.",
+        "security": [
+          {
+            "deviceToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The event the device works"
+            },
+            "required": true,
+            "description": "The event the device works",
+            "name": "eventId",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The open queue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssistanceQueue"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown, revoked or wiped device token (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/staff/assistance": {
+      "post": {
+        "operationId": "createStaffAssistanceRequest",
+        "tags": [
+          "staff"
+        ],
+        "summary": "Ask for backup, a supervisor, medical help, security or device support",
+        "description": "Raises a staff request tied to this device and the entrance it scans at; urgent ones push to the other staff devices. Device token only.",
+        "security": [
+          {
+            "deviceToken": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StaffAssistanceRequestBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StaffAssistanceCreated"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown, revoked or wiped device token (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict, invalid state, or the same Idempotency-Key is in flight",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The Idempotency-Key was used with a different request (`idempotency_key_reused`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Read-only maintenance (`read_only_freeze`): nothing was changed; retry after `Retry-After` seconds",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/staff/assistance/{requestId}/{action}": {
+      "post": {
+        "operationId": "workStaffAssistanceRequest",
+        "tags": [
+          "staff"
+        ],
+        "summary": "Take, start, resolve or cancel a help request",
+        "description": "Works one help request of the device’s event. A request that changed meanwhile answers 409; one that cannot take that action answers 409 `invalid_state`. Device token only.",
+        "security": [
+          {
+            "deviceToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The help request"
+            },
+            "required": true,
+            "description": "The help request",
+            "name": "requestId",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "$ref": "#/components/schemas/StaffAssistanceAction"
+            },
+            "required": true,
+            "description": "`take` gives the request to this device; `start`, `resolve` and `cancel` move it on (resolving and cancelling close it).",
+            "name": "action",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StaffAssistanceWorkBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The request’s new state",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StaffAssistanceWorked"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown, revoked or wiped device token (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict, invalid state, or the same Idempotency-Key is in flight",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The Idempotency-Key was used with a different request (`idempotency_key_reused`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Read-only maintenance (`read_only_freeze`): nothing was changed; retry after `Retry-After` seconds",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/staff/push": {
+      "get": {
+        "operationId": "getStaffPush",
+        "tags": [
+          "staff"
+        ],
+        "summary": "Are staff alerts pushed to this device?",
+        "description": "Whether this device has a push registration for staff alerts, and on which service. Device token only.",
+        "security": [
+          {
+            "deviceToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The registration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StaffPushStatus"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown, revoked or wiped device token (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "registerStaffPush",
+        "tags": [
+          "staff"
+        ],
+        "summary": "Register this device for staff alerts on APNs or FCM",
+        "description": "The device’s one push registration: a new one replaces the old. It is deleted when an organizer revokes or wipes the device. Pushes carry the app’s own words (`copy`) with a device label or a percentage, never personal data. Device token only.",
+        "security": [
+          {
+            "deviceToken": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StaffNativePushRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Registered",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StaffPushOk"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown, revoked or wiped device token (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict, invalid state, or the same Idempotency-Key is in flight",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The Idempotency-Key was used with a different request (`idempotency_key_reused`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Read-only maintenance (`read_only_freeze`): nothing was changed; retry after `Retry-After` seconds",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "unregisterStaffPush",
+        "tags": [
+          "staff"
+        ],
+        "summary": "Stop pushing staff alerts to this device",
+        "description": "Removes the device’s push registration. Device token only.",
+        "security": [
+          {
+            "deviceToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Removed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StaffPushOk"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown, revoked or wiped device token (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/orgs/{org}/events/{eventId}/ops": {
+      "get": {
+        "operationId": "getEventOps",
+        "tags": [
+          "staff"
+        ],
+        "summary": "The event-day view: check-ins against expected, throughput, scan issues, devices and alerts",
+        "description": "Read-only, for members who can read the event (a bearer session; an API key answers 403, the Command Center is for members). The numbers are the web Command Center’s, from the same loaders: check-ins against expected, scans per minute per entrance and a per-minute series, duplicate and invalid scans, device status and the active alerts. A section the member’s role or the organization’s plan does not include is `null`.",
+        "security": [
+          {
+            "bearerSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 63,
+              "description": "Organization id or slug",
+              "example": "lakeside-events"
+            },
+            "required": true,
+            "description": "Organization id or slug",
+            "name": "org",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The event id"
+            },
+            "required": true,
+            "description": "The event id",
+            "name": "eventId",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The event-day view",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpsView"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/portal/auth/code": {
+      "post": {
+        "operationId": "requestPortalCode",
+        "tags": [
+          "portal"
+        ],
+        "summary": "Email a sign-in code for a portal invitation",
+        "description": "Emails a six-digit code (10 minutes, single use; five wrong tries lock it) to the invited address. A forged, reissued, revoked or expired invitation answers 403 `forbidden`, the same as on the web. Limited per device, IP and address. No credential.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PortalCodeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The code was sent",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PortalCodeRequested"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/portal/auth/token": {
+      "post": {
+        "operationId": "issuePortalToken",
+        "tags": [
+          "portal"
+        ],
+        "summary": "Sign in with the emailed code (grantType code) or refresh (grantType refresh_token)",
+        "description": "A right code returns a 15-minute access token and a rotating refresh token. Each refresh spends the refresh token and returns a new pair; a spent one presented again ends the session (`401`, `reason: refresh_token_reused`). A wrong code answers `401` with `reason: wrong_code` and `attemptsLeft`; the fifth wrong try locks the code (`code_locked`). No credential.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PortalTokenRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Tokens",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PortalTokenPair"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/portal/auth/revoke": {
+      "post": {
+        "operationId": "revokePortalToken",
+        "tags": [
+          "portal"
+        ],
+        "summary": "Sign out: the session ends, access and refresh token both",
+        "description": "Unknown or already ended tokens also answer `204`. No credential.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PortalRevokeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Signed out"
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/portal/auth/invitations": {
+      "post": {
+        "operationId": "resendPortalInvitations",
+        "tags": [
+          "portal"
+        ],
+        "summary": "Email me my invitation again",
+        "description": "For someone who lost their invitation: emails the current invitation link of every live account of that address at the event. The answer is `204` whether or not the address has access (no enumeration). Limited per device, IP and address. No credential.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PortalInvitationsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Done"
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/portal/leads/setup": {
+      "get": {
+        "operationId": "getLeadSetup",
+        "tags": [
+          "portal"
+        ],
+        "summary": "Lead mode: the rep’s licence, the lead terms, the capture window and the qualifiers",
+        "description": "For the signed-in exhibitor rep: which exhibitor and event, whether they hold a lead licence within the allowance, whether the terms are accepted, the capture window (opens 24 hours before the event, closes 48 hours after it; notes stay open 90 days) and the qualifier labels.",
+        "security": [
+          {
+            "portalSession": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The lead setup",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeadSetup"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/portal/leads": {
+      "get": {
+        "operationId": "listLeads",
+        "tags": [
+          "portal"
+        ],
+        "summary": "The leads the rep may see",
+        "description": "The exhibitor admin sees every lead of their exhibitor; staff see their own, or the team’s when the admin shares them. Each lead carries only the fields the attendee agreed to share (P5-8): name, job title and company, and the email only with consent. Another exhibitor’s leads never appear. `409 invalid_state` once lead access has ended (90 days after the event).",
+        "security": [
+          {
+            "portalSession": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The leads",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeadList"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict, invalid state, or the same Idempotency-Key is in flight",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/portal/leads/scans": {
+      "post": {
+        "operationId": "syncLeadScans",
+        "tags": [
+          "portal"
+        ],
+        "summary": "Capture leads: one scan online, or the offline queue in batches",
+        "description": "Each scan id is applied once, so the app can resend its queue until it gets an answer; a scan is checked against the capture window at its own time. A rep without a licence within the allowance gets `403 forbidden` (`reason: no_license` or `over_allowance`); unaccepted lead terms `409` (`terms_not_accepted`).",
+        "security": [
+          {
+            "portalSession": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LeadScanBatch"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Results per scan",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeadScanBatchResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict, invalid state, or the same Idempotency-Key is in flight",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The Idempotency-Key was used with a different request (`idempotency_key_reused`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Read-only maintenance (`read_only_freeze`): nothing was changed; retry after `Retry-After` seconds",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/portal/leads/{leadId}": {
+      "patch": {
+        "operationId": "updateLead",
+        "tags": [
+          "portal"
+        ],
+        "summary": "Rate, qualify and annotate a lead",
+        "description": "Sets the lead’s rating, qualifiers and notes (until lead access ends). A lead of another exhibitor, or a teammate’s that is not shared, is `404` the same as an unknown one.",
+        "security": [
+          {
+            "portalSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The lead"
+            },
+            "required": true,
+            "description": "The lead",
+            "name": "leadId",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LeadUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeadUpdated"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict, invalid state, or the same Idempotency-Key is in flight",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The Idempotency-Key was used with a different request (`idempotency_key_reused`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Read-only maintenance (`read_only_freeze`): nothing was changed; retry after `Retry-After` seconds",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
                 }
               }
             }
