@@ -106,4 +106,21 @@ $$;
 REVOKE ALL ON FUNCTION notifications.app_devices_purge(text) FROM PUBLIC;
 --> statement-breakpoint
 GRANT EXECUTE ON FUNCTION notifications.app_devices_purge(text) TO app_user;
+--> statement-breakpoint
+-- The provider said a token is gone (APNs 410, FCM UNREGISTERED): it is dead for every org, so no
+-- other org sends to it again either. A re-registration (the app is back) re-enables it, org by org.
+CREATE FUNCTION notifications.app_token_disable(p_platform text, p_token text)
+RETURNS integer
+LANGUAGE sql VOLATILE SECURITY DEFINER SET search_path = pg_catalog AS $$
+  WITH gone AS (
+    UPDATE notifications.push_tokens k SET disabled_at = now(), updated_at = now()
+    WHERE k.platform = p_platform AND k.token = p_token AND k.source = 'app' AND k.disabled_at IS NULL
+    RETURNING 1
+  )
+  SELECT count(*)::integer FROM gone
+$$;
+--> statement-breakpoint
+REVOKE ALL ON FUNCTION notifications.app_token_disable(text, text) FROM PUBLIC;
+--> statement-breakpoint
+GRANT EXECUTE ON FUNCTION notifications.app_token_disable(text, text) TO app_user;
 -- hand-written: end

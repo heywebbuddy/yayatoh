@@ -451,6 +451,26 @@ describe('unregistered tokens, retries and sign-out (M7.2c)', () => {
     expect(t.pushes.filter((p) => p.token === d.token)).toHaveLength(1);
   });
 
+  it('a token reported gone by one org’s send is disabled in every org the phone is stored in', async () => {
+    const who = email('gone');
+    const first = await publishedEvent(a, '2030-06-01T23:00:00Z');
+    const second = await publishedEvent(b, '2030-06-01T23:00:00Z');
+    await buy(a, first.ev.id, first.tt.id, who);
+    await buy(b, second.ev.id, second.tt.id, who);
+    const d = device();
+    expect(await register(who, d)).toEqual({ orgs: 2 });
+    const t = memoryTransports();
+    t.invalid.add(d.token);
+    await changed(who, first.ev.name, `gone:${who}`);
+    await dispatch(a, t, at('2030-01-01T12:00:00Z'));
+    expect((await tokensOf(a, d.token))[0]?.disabled_at).not.toBeNull();
+    expect((await tokensOf(b, d.token))[0]?.disabled_at).not.toBeNull();
+    // Registering again brings it back everywhere.
+    await register(who, d);
+    expect((await tokensOf(a, d.token))[0]?.disabled_at).toBeNull();
+    expect((await tokensOf(b, d.token))[0]?.disabled_at).toBeNull();
+  });
+
   it('a busy push service (429) is retried later, not failed', async () => {
     const { who, ev } = await person();
     const d = device({ platform: 'fcm', token: `${'f'.repeat(30)}${uuidv7()}`, environment: undefined });

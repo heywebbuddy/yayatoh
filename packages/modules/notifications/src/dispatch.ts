@@ -4,7 +4,7 @@ import { isForeignKeyViolation, type TenantTx, withTenant } from '@yayatoh/db';
 import { createCtx } from '@yayatoh/kernel';
 import { emitEvents, erasedAddressesTx, normalizeAddress, signLinkToken } from '@yayatoh/platform';
 import { activeSuspensionsTx, organizationBrandTx } from '@yayatoh/tenancy';
-import { and, asc, desc, eq, inArray, isNull, lte, or } from 'drizzle-orm';
+import { and, asc, desc, eq, inArray, isNull, lte, or, sql } from 'drizzle-orm';
 import { erasedAddressAllows, erasedMailClass, suppressedReason } from './delivery-rules.ts';
 import { emailIdentityTx } from './email-identity.ts';
 import { fallbackTx, isFallbackReason } from './fallback.ts';
@@ -750,8 +750,13 @@ async function sendPushTx(
         .values({ ...delivery, pushTokenId: null, attempts: (prior?.attempts ?? 0) + 1 });
     }
     // Gone for good (FCM UNREGISTERED, APNs 410, web push 404/410): prune the subscription.
-    if (status === 'expired')
+    if (status === 'expired') {
       await tx.update(pushTokens).set({ disabledAt: now, updatedAt: now }).where(eq(pushTokens.id, d.id));
+      // A phone's token is dead in every org it was stored in, not only this one (M7.2c): the
+      // others stop sending to it too, until the app registers again.
+      if (d.platform === 'apns' || d.platform === 'fcm')
+        await tx.execute(sql`select notifications.app_token_disable(${d.platform}, ${d.token})`);
+    }
     results.push({
       status,
       providerMessageId,
