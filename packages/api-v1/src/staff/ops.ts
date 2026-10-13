@@ -12,6 +12,7 @@ import {
   type ScanIssuesWidgetDto,
   scanIssuesWidget,
   WIDGET_META,
+  type WidgetDef,
   type WidgetKey,
 } from '@yayatoh/command-center';
 import type { TenantTx } from '@yayatoh/db';
@@ -97,15 +98,15 @@ const PROJECTED: ReadonlySet<WidgetKey> = new Set(['checkinSpeed']);
  */
 export async function opsViewFor(ctx: Ctx, eventId: string, ports: CommandPorts<TenantTx>): Promise<OpsView> {
   const view = await executeQuery(eventViewQuery, { eventId }, ctx, ports);
-  const load = <O>(def: { loader: Parameters<typeof executeQuery>[0] }) =>
-    section(async () => (await executeQuery(def.loader as never, { eventId, params: {} }, ctx, ports)) as O);
+  const load = <O>(def: WidgetDef<O>) =>
+    section(() => executeQuery(def.loader, { eventId, params: {} }, ctx, ports));
   if (PROJECTED.has('checkinSpeed') && ctx.orgId) await applyUnpublishedMetricEvents(ctx.orgId);
   const [checkins, throughput, scanIssues, devices, alerts] = await Promise.all([
-    load<z.infer<typeof EntrancesWidgetDto>>(entrancesWidget),
-    load<z.infer<typeof CheckinSpeedWidgetDto>>(checkinSpeedWidget),
-    load<z.infer<typeof ScanIssuesWidgetDto>>(scanIssuesWidget),
-    load<z.infer<typeof DeviceBoardWidgetDto>>(deviceBoardWidget),
-    load<z.infer<typeof AlertsWidgetDto>>(alertsWidget),
+    load(entrancesWidget),
+    load(checkinSpeedWidget),
+    load(scanIssuesWidget),
+    load(deviceBoardWidget),
+    load(alertsWidget),
   ]);
   return {
     eventId,

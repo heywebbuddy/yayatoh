@@ -445,9 +445,7 @@ export function portalRoutes(deps: V1Deps, ipOf: (h: Headers) => string) {
         });
       if (v.status === 'refused') throw new DomainError('forbidden', 'This invitation cannot be used');
       if (v.status === 'wrong') throw refused('wrong_code', { attemptsLeft: v.attemptsLeft });
-      if (v.status === 'locked') throw refused('code_locked');
-      if (v.status === 'expired') throw refused('code_expired');
-      if (v.status === 'used') throw refused('code_used');
+      if (v.status !== 'ok') throw refused(`code_${v.status}`);
       return c.json(pair(await createPortalBearerSession({ orgId: v.orgId, accountId: v.accountId })), 200);
     })
     .openapi(revokePortalToken, async (c) => {

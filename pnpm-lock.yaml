@@ -1021,6 +1021,9 @@ importers:
       '@yayatoh/floorplan':
         specifier: workspace:*
         version: link:../floorplan
+      '@yayatoh/registration':
+        specifier: workspace:*
+        version: link:../modules/registration
       '@yayatoh/testing':
         specifier: workspace:*
         version: link:../testing
