@@ -270,6 +270,12 @@ export const pushTokens = tenantTable(
     /** The device's IANA timezone as the browser reported it: push quiet hours use it. */
     timeZone: text('time_zone'),
     source: text('source').notNull().default('app'),
+    /** Native apps (M7.2c): the app's bundle id / package name (the APNs topic), version and language. */
+    appId: text('app_id'),
+    appVersion: text('app_version'),
+    locale: text('locale'),
+    /** APNs only: `sandbox` for a development build's token, `production` for a store build's. */
+    environment: text('environment'),
     lastSeenAt: tsz('last_seen_at').notNull().defaultNow(),
     disabledAt: tsz('disabled_at'),
   },
@@ -290,6 +296,13 @@ export const pushTokens = tenantTable(
       sql`(platform = 'webpush' and token ~ '^https?://' and p256dh ~ '^[A-Za-z0-9_-]{87}$' and auth_secret ~ '^[A-Za-z0-9_-]{22}$') or (platform <> 'webpush' and p256dh is null and auth_secret is null)`,
     ),
     check('push_tokens_label_length', sql`label is null or length(label) between 1 and 80`),
+    check(
+      'push_tokens_environment_check',
+      sql`environment is null or environment in ('sandbox', 'production')`,
+    ),
+    check('push_tokens_app_id_length', sql`app_id is null or length(app_id) between 3 and 155`),
+    check('push_tokens_app_version_length', sql`app_version is null or length(app_version) between 1 and 40`),
+    check('push_tokens_locale_length', sql`locale is null or length(locale) between 2 and 12`),
     check('push_tokens_time_zone_length', sql`time_zone is null or length(time_zone) between 1 and 64`),
   ],
 );

@@ -415,6 +415,10 @@ export async function dispatchDueTx(
           title: rendered.subject,
           body: typeof params.body === 'string' && params.body ? params.body : rendered.preview,
           url: link,
+          // Native apps (M7.2c): the in-app route, and the ticket's collapse id so that a newer push
+          // replaces an older one (else the message's own id collapses retries of one message).
+          path: typeof params._path === 'string' && params._path ? params._path : null,
+          collapse: typeof params._collapse === 'string' && params._collapse ? params._collapse : null,
           lang: rendered.lang,
           dir: rendered.dir,
           ...pushOptions(row.kind as MessageKind),
@@ -634,6 +638,8 @@ async function sendPushTx(
     title: string;
     body: string;
     url: string | null;
+    path: string | null;
+    collapse: string | null;
     lang: string;
     dir: 'ltr' | 'rtl';
     ttlSeconds: number;
@@ -655,7 +661,8 @@ async function sendPushTx(
         )
     : [];
   const byToken = new Map(earlier.map((d) => [d.pushTokenId, d]));
-  const topic = pushTopic(row.id);
+  const { collapse, ...sent } = content;
+  const topic = collapse ?? pushTopic(row.id);
   const results: Parameters<typeof pushRowOutcome>[0][number][] = [];
   for (const d of devices) {
     const prior = byToken.get(d.id);
@@ -670,7 +677,9 @@ async function sendPushTx(
       platform: d.platform as 'fcm' | 'apns' | 'webpush',
       token: d.token,
       keys: d.p256dh && d.authSecret ? { p256dh: d.p256dh, auth: d.authSecret } : null,
-      ...content,
+      ...sent,
+      appId: d.appId,
+      environment: d.environment as 'sandbox' | 'production' | null,
       topic,
       idempotencyKey: `${row.id}:${d.id}`,
     });

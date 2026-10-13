@@ -160,6 +160,9 @@ export const tickets = tenantTable(
     uniqueIndex('tickets_org_event_serial_key').on(t.orgId, t.eventId, t.serial),
     uniqueIndex('tickets_org_short_code_key').on(t.orgId, t.shortCode),
     index('tickets_org_order_idx').on(t.orgId, t.orderId),
+    // M7.2c: the cross-org lookup of the orgs where an address holds a ticket (native push follows
+    // the person; `notifications.app_orgs_by_email`).
+    index('tickets_holder_email_lower_idx').on(sql`lower(holder_email)`),
     index('tickets_org_event_updated_idx').on(t.orgId, t.eventId, t.updatedAt, t.id),
     index('tickets_org_occurrence_idx').on(t.orgId, t.occurrenceId).where(sql`occurrence_id is not null`),
     index('tickets_org_table_unit_idx').on(t.orgId, t.tableUnitId).where(sql`table_unit_id is not null`),

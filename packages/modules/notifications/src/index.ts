@@ -5,6 +5,21 @@ export {
   userPreferencesTx,
 } from './account-data.ts';
 // M6.1a: contact merges move this module's references (ADR 0023).
+export {
+  APP_PUSH_PLATFORMS,
+  AppDeviceInput,
+  allowedAppIds,
+  followAppDevicesTx,
+  hasAppDeviceTx,
+  orgsWithAppAccess,
+  purgeAppDevices,
+  type RegisterAppDeviceResult,
+  registerAppDevice,
+  registerAppDeviceCommand,
+  releaseAppDevice,
+  removeAppDevice,
+  upsertAppDeviceTx,
+} from './app-devices.ts';
 export { notificationsContactOwner } from './contact-merge.ts';
 export { notificationsDataSubjects } from './data-subject.ts';
 export {
@@ -226,20 +241,42 @@ export {
   recordProviderHealth,
 } from './provider-health.ts';
 export {
+  APNS_PRODUCTION_ORIGIN,
+  APNS_SANDBOX_ORIGIN,
+  type ApnsConfig,
+  type ApnsHttp2,
+  type ApnsRequest,
+  type ApnsResponse,
+  apnsConfigFromEnv,
+  apnsProviderToken,
+  apnsTransport,
+  classifyApnsResponse,
+} from './providers/apns.ts';
+export {
   type ChecklistItem,
   missingEnv,
   PROVIDER_CHECKLISTS,
   PROVIDER_ENV,
   type ProviderMode,
   providerMode,
+  pushProviders,
   switchedOn,
   whatsappRoutes,
 } from './providers/config.ts';
+export {
+  classifyFcmResponse,
+  FCM_SCOPE,
+  type FcmServiceAccount,
+  fcmConfigFromEnv,
+  fcmMessage,
+  fcmTransport,
+} from './providers/fcm.ts';
 export { HELP_WORDS, helpReply, parseKeyword, START_WORDS, STOP_WORDS } from './providers/keywords.ts';
 export {
   identityPortFromEnv,
   liveTransports,
   liveWebhookAdapter,
+  nativePushTransport,
   senderStatusFromEnv,
   type WebhookChannel,
   whatsappVerifyToken,
@@ -305,6 +342,8 @@ export {
   isProviderRejection,
   KEYWORDS,
   type Keyword,
+  NATIVE_PUSH_PROVIDERS,
+  type NativePushProvider,
   PROVIDER_NAMES,
   type ProviderName,
   ProviderRejection,
