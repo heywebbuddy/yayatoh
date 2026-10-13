@@ -494,3 +494,56 @@ export async function holderTransferOptionsTx(
     }),
   );
 }
+
+/** What a push about a transfer needs: who is on each side and where it stands (M7.2c). */
+export interface TransferFacts {
+  readonly id: string;
+  readonly ticketId: string;
+  readonly eventId: string;
+  readonly orderId: string;
+  readonly status: string;
+  readonly initiatedBy: string;
+  readonly fromEmail: string;
+  readonly toEmail: string;
+}
+
+export async function transferFactsTx(tx: TenantTx, id: string): Promise<TransferFacts | null> {
+  const [t] = await tx.select().from(ticketTransfers).where(eq(ticketTransfers.id, id));
+  return t
+    ? {
+        id: t.id,
+        ticketId: t.ticketId,
+        eventId: t.eventId,
+        orderId: t.orderId,
+        status: t.status,
+        initiatedBy: t.initiatedBy,
+        fromEmail: t.fromEmail,
+        toEmail: t.toEmail,
+      }
+    : null;
+}
+
+/** A ticket's event, date, state and holder address, for reminders and pushes (M7.2c). */
+export interface TicketPushFacts {
+  readonly id: string;
+  readonly eventId: string;
+  readonly occurrenceId: string | null;
+  readonly orderId: string;
+  readonly status: string;
+  readonly holderEmail: string | null;
+}
+
+export async function ticketPushFactsTx(tx: TenantTx, ids: readonly string[]): Promise<TicketPushFacts[]> {
+  if (ids.length === 0) return [];
+  return tx
+    .select({
+      id: tickets.id,
+      eventId: tickets.eventId,
+      occurrenceId: tickets.occurrenceId,
+      orderId: tickets.orderId,
+      status: tickets.status,
+      holderEmail: tickets.holderEmail,
+    })
+    .from(tickets)
+    .where(inArray(tickets.id, [...ids]));
+}

@@ -5,6 +5,7 @@ export {
   startLeadLicenseCheckoutCommand,
   startSponsorPackageCheckoutCommand,
 } from './addon-orders.ts';
+export { appPushNotifier, appReminderKey, cancelAppReminders, queueAppReminders } from './app-push.ts';
 export {
   BOOKING_FILTERS,
   BookingDto,

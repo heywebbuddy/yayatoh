@@ -584,7 +584,14 @@ async function pushDevicesOf(tx: TenantTx, row: Row): Promise<Device[]> {
   return tx
     .select()
     .from(pushTokens)
-    .where(and(or(...owners), isNull(pushTokens.disabledAt)))
+    .where(
+      and(
+        or(...owners),
+        isNull(pushTokens.disabledAt),
+        // The app's lock-screen kinds go to phones with the app only, never to a browser (M7.2c).
+        ...(row.kind.startsWith('push.') ? [inArray(pushTokens.platform, ['apns', 'fcm'])] : []),
+      ),
+    )
     .orderBy(desc(pushTokens.lastSeenAt), asc(pushTokens.id));
 }
 

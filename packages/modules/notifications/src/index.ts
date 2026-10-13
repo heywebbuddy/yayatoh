@@ -402,7 +402,14 @@ export {
   WebPushDeviceInput,
 } from './push.ts';
 export { isValidTimeZone, QUIET_END_HOUR, QUIET_START_HOUR, quietHoursRelease } from './quiet-hours.ts';
-export { planReminder, type ReminderPlan, reminderTime } from './reminder-time.ts';
+export {
+  APP_REMINDER_KINDS,
+  type AppReminderKind,
+  planReminder,
+  type ReminderPlan,
+  reminderTime,
+  reminderTimeFor,
+} from './reminder-time.ts';
 export {
   cancelQueuedTx,
   type ReminderTarget,

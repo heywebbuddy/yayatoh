@@ -188,9 +188,13 @@ export {
   startHolderTransferCommand,
   startTransferCommand,
   startTransferTx,
+  type TicketPushFacts,
   TRANSFER_CLAIM_DAYS,
   TRANSFER_STATES,
   TransferDto,
+  type TransferFacts,
+  ticketPushFactsTx,
+  transferFactsTx,
   transfersForOrderTx,
 } from './transfers.ts';
 // M6.9a: ticket type names for the virtual module's access modes.
