@@ -131,7 +131,7 @@ export function classifyApnsResponse(
   return { kind: 'rejected', reason: reason || `http_${status}` };
 }
 
-const PRIORITY = { high: '10', normal: '10', low: '5', 'very-low': '5' } as const;
+const PRIORITY = { high: '10', normal: '5', low: '5', 'very-low': '5' } as const;
 
 /**
  * The adapter. `http2` defaults to a shared `node:http2` session per host; a dropped session is

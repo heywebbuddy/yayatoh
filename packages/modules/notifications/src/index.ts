@@ -112,6 +112,7 @@ export {
 // M6.4d: unsubscribes and cleaned addresses reported by connected marketing tools.
 export { suppressAddressFromIntegrationTx, suppressFromIntegrationTx } from './integration-suppressions.ts';
 export {
+  APP_PUSH_KINDS,
   type Category,
   defaultPreference,
   EMAIL_KINDS,

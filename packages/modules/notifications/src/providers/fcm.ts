@@ -76,7 +76,7 @@ export function fcmAssertion(account: FcmServiceAccount, now: Date): string {
 /** The v1 message for one device (`data` values are strings by FCM's rule). */
 export function fcmMessage(m: OutboundPush) {
   const collapse = m.topic ?? undefined;
-  const high = m.urgency === 'high' || m.urgency === 'normal' || m.urgency === undefined;
+  const high = m.urgency === 'high' || m.urgency === undefined;
   return {
     token: m.token,
     notification: { title: m.title, body: m.body },
