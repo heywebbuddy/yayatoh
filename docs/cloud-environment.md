@@ -59,7 +59,7 @@ On Pro/Max plans, store secret values as **API credentials**, not plain variable
 ## Phase 7: mobile apps (added 2026-10-13)
 Plan: `docs/plans/mobile.md`. Builder rules: `docs/agent-briefs/mobile-common.md`.
 
-**Model.** Every Phase 7 build session runs on **Sonnet 5.5 at high effort** (owner, 2026-10-13). The orchestrating session sets this when it launches each builder. The repo default in `.claude/settings.json` applies to everything else.
+**Model.** Every Phase 7 build session runs on **Sonnet 5.5 at high effort** (owner, 2026-10-13). Builders are launched as one-time cloud routines with the model set to `claude-sonnet-5-5`, in the **Default** environment (the account has no `yayatoh` environment), with no claude.ai connectors attached. The routines API has no effort setting, so the repo default in `.claude/settings.json` is `effortLevel: "high"`, and that applies to every session in this repo.
 
 **Network access.** Add these to the `yayatoh` environment's custom list. Expo's command-line tools call them for version checks (`expo install --check`) and `expo-doctor`'s package check:
 
