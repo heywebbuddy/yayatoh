@@ -36,6 +36,8 @@ async function signIn(page: Page, email: string, opts: { twoFactor?: boolean } =
   await page.getByLabel('Email').fill(email);
   await page.getByLabel('Password').fill(devPassword());
   await page.getByRole('button', { name: 'Sign in', exact: true }).click();
+  // The password step is done before the next navigation (a goto right away would cancel it).
+  await expect(page.getByRole('button', { name: 'Sign in', exact: true })).toHaveCount(0);
   if (!opts.twoFactor) return;
   await expect(page.getByRole('heading', { name: 'Two-step verification' })).toBeVisible();
   await page.getByLabel('6-digit code').fill(personaCode(email));
@@ -184,7 +186,7 @@ test('staff read the commission report (a fee booked on a sale shows up) and /v1
 }) => {
   const stamp = Date.now();
   await signIn(page, STAFF);
-  await page.getByRole('link', { name: 'Commission' }).click();
+  await page.getByRole('link', { name: 'Commission', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Commission', level: 1 })).toBeVisible();
   await expect(page.getByText(/\(UTC\)$/)).toBeVisible();
   const report = page.getByRole('table', { name: 'Commission' });
@@ -195,11 +197,11 @@ test('staff read the commission report (a fee booked on a sale shows up) and /v1
   const before = await lakesideNet();
 
   // A $1.00 fixed fee on Lakeside's USD sales while the organizer records a box-office sale.
-  await page.goto('/?q=lakeside');
+  await page.goto('/tenants?q=lakeside');
   await page.getByRole('link', { name: 'Lakeside Events', exact: true }).click();
   const fees = page.locator('form').filter({ has: page.getByLabel('Percent (basis points)') });
   const setFee = async (fixed: string, reason: string) => {
-    await fees.getByLabel('Currency').fill('USD');
+    await pickOption(fees.getByLabel('Currency'), 'USD');
     await fees.getByLabel('Percent (basis points)').fill('0');
     await fees.getByLabel('Fixed (minor units)').fill(fixed);
     await fees.getByLabel('Reason (kept in the audit log)').fill(reason);
@@ -229,7 +231,7 @@ test('staff read the commission report (a fee booked on a sale shows up) and /v1
     await expect(box.getByText('Sale recorded. The tickets are on their way.')).toBeVisible();
     await web.close();
   } finally {
-    await page.goto('/?q=lakeside');
+    await page.goto('/tenants?q=lakeside');
     await page.getByRole('link', { name: 'Lakeside Events', exact: true }).click();
     await setFee('0', 'e2e: reset after the commission report');
   }
@@ -322,8 +324,8 @@ test('staff review a messaging report: allowlisted excerpt, a note is required, 
   await web.getByLabel('Starts', { exact: true }).fill('2027-11-01T18:00');
   await web.getByLabel('Ends', { exact: true }).fill('2027-11-01T22:00');
   await web.getByRole('button', { name: 'Create draft' }).click();
-  await expect(web).toHaveURL(/\/o\/lakeside-events\/e\/reported-\d+/);
-  const base = new URL(web.url()).pathname;
+  await expect(web).toHaveURL(/\/o\/lakeside-events\/e\/reported-[a-z0-9-]+\/media\?created=1$/);
+  const base = new URL(web.url()).pathname.replace(/\/media$/, '');
   await web.goto(`${base}/attendees`);
   await web
     .getByText(/^Add (attendee|guest)/i)

@@ -63,7 +63,8 @@ test('staff console pages carry the strict nonce CSP and the console security he
   // are styled through the CSSOM, which the policy allows).
   expect(await (await page.request.get('/sign-in')).text()).not.toMatch(/\sstyle="/);
   await signInStaff(page);
-  await page.goto('/?q=lakeside');
+  // The tenants list moved to /tenants (the home page is the platform dashboard).
+  await page.goto('/tenants?q=lakeside');
   await page.getByRole('link', { name: 'Lakeside Events', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Lakeside Events', level: 1 })).toBeVisible();
   await page.goto('/signup-codes');

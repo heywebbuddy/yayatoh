@@ -5,6 +5,7 @@ import {
   devPassword,
   expectAccessible,
   makeStaff,
+  pickOption,
   replayForm,
   serverForm,
   signInStaff,
@@ -95,7 +96,7 @@ test('admin staff freeze one organization by keyboard with step-up; the organize
     'Scheduled maintenance: changes are paused',
   );
   await owner.getByLabel('Venue name').fill('Frozen Hall');
-  await owner.getByLabel('Country code').fill('us');
+  await pickOption(owner.getByLabel('Country code'), 'US');
   await owner.getByRole('button', { name: 'Add venue' }).click();
   await expect(
     owner.getByRole('alert').filter({ hasText: 'Changes are paused during scheduled maintenance.' }),
