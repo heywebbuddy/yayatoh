@@ -38,4 +38,5 @@ export const meScope = createMiddleware<V1Env>(async (c, next) => {
 const OPEN_ME_PATHS: readonly string[] = ['/me', '/me/', '/me/organizations'];
 
 /** Whether the path (without the mount prefix) is one the scope guards. */
-export const isGuardedMePath = (path: string): boolean => !OPEN_ME_PATHS.includes(path);
+export const isGuardedMePath = (path: string): boolean =>
+  !OPEN_ME_PATHS.includes(path.length > 1 ? path.replace(/\/+$/, '') : path);
