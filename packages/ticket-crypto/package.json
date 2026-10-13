@@ -8,10 +8,15 @@
     "kind": "universal"
   },
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./vectors/ticket-codes.json": "./vectors/ticket-codes.json",
+    "./vectors/statements.json": "./vectors/statements.json",
+    "./vectors/legacy.json": "./vectors/legacy.json",
+    "./vectors/primitives.json": "./vectors/primitives.json"
   },
   "scripts": {
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "vectors:write": "node tests/write-vectors.ts"
   },
   "devDependencies": {
     "@yayatoh/config": "workspace:*",

@@ -1,0 +1,179 @@
+{
+  "description": "Detached statement signatures: verifyStatement(tag, message, signature, publicKeys of `kids`) must give `expect`.",
+  "seedRule": "seed = SHA-256('yayatoh-test-vector-key:' + label)",
+  "publicKeys": {
+    "1": "2Je8S2xT8dr/dlVvxQxX2A3BR1OcJXI7RyLMHJtqHGE=",
+    "2": "A9NJI7Y7w6OxM7vted9KQY18J/48YGnY1+UE+H05i8Q=",
+    "7": "rjUSN5HOEDSEnzQjwJ0tYAnWqxu0CyXxFAQUmASjgKU=",
+    "65535": "iEzw+aQlvp/Z4L4g9tP/fA44K2nlV/KTWzOVcede4lA="
+  },
+  "vectors": [
+    {
+      "name": "valid",
+      "tag": "checkin-scope-v1",
+      "message": "{\"eventId\":\"e1\",\"deviceId\":\"d1\",\"checkpointIds\":[\"a\",\"b\"]}",
+      "signature": "AAFkRDamCVgcIrVjNY45u6UF8LG3BlUYi8_SyVeNTDKTtq4srMPCKPahE6EYIXnsfGnjlP8plduYl_Tz73JJhrwH",
+      "kids": [
+        1,
+        2,
+        7,
+        65535
+      ],
+      "expect": true
+    },
+    {
+      "name": "valid, unicode message and another tag",
+      "tag": "other-tag",
+      "message": "café ✓ 日本",
+      "signature": "AALUZapB0e8vrELYuzk5MUB2r-_oxTMC-aFMBEA54Mzt2rVxI18NHMNnYNspI0pV4OZlNyxZ0js5fhffLYUU2ZYM",
+      "kids": [
+        1,
+        2,
+        7,
+        65535
+      ],
+      "expect": true
+    },
+    {
+      "name": "tampered message",
+      "tag": "checkin-scope-v1",
+      "message": "{\"eventId\":\"e1\",\"deviceId\":\"d1\",\"checkpointIds\":[\"a\",\"b\"]} ",
+      "signature": "AAFkRDamCVgcIrVjNY45u6UF8LG3BlUYi8_SyVeNTDKTtq4srMPCKPahE6EYIXnsfGnjlP8plduYl_Tz73JJhrwH",
+      "kids": [
+        1,
+        2,
+        7,
+        65535
+      ],
+      "expect": false
+    },
+    {
+      "name": "wrong tag (domain separation)",
+      "tag": "other-tag",
+      "message": "{\"eventId\":\"e1\",\"deviceId\":\"d1\",\"checkpointIds\":[\"a\",\"b\"]}",
+      "signature": "AAFkRDamCVgcIrVjNY45u6UF8LG3BlUYi8_SyVeNTDKTtq4srMPCKPahE6EYIXnsfGnjlP8plduYl_Tz73JJhrwH",
+      "kids": [
+        1,
+        2,
+        7,
+        65535
+      ],
+      "expect": false
+    },
+    {
+      "name": "a ticket-code style tag is not a statement",
+      "tag": "yayatoh-ticket-v1",
+      "message": "{\"eventId\":\"e1\",\"deviceId\":\"d1\",\"checkpointIds\":[\"a\",\"b\"]}",
+      "signature": "AAFkRDamCVgcIrVjNY45u6UF8LG3BlUYi8_SyVeNTDKTtq4srMPCKPahE6EYIXnsfGnjlP8plduYl_Tz73JJhrwH",
+      "kids": [
+        1,
+        2,
+        7,
+        65535
+      ],
+      "expect": false
+    },
+    {
+      "name": "unknown key id",
+      "tag": "checkin-scope-v1",
+      "message": "{\"eventId\":\"e1\",\"deviceId\":\"d1\",\"checkpointIds\":[\"a\",\"b\"]}",
+      "signature": "AAFkRDamCVgcIrVjNY45u6UF8LG3BlUYi8_SyVeNTDKTtq4srMPCKPahE6EYIXnsfGnjlP8plduYl_Tz73JJhrwH",
+      "kids": [
+        2,
+        7
+      ],
+      "expect": false
+    },
+    {
+      "name": "signed by another key under a known key id",
+      "tag": "checkin-scope-v1",
+      "message": "{\"eventId\":\"e1\",\"deviceId\":\"d1\",\"checkpointIds\":[\"a\",\"b\"]}",
+      "signature": "AAFtJSNEemOufwFMvdK9qR_Y1mWPVx3C2ncg6b-cXwespg8FwQhMAEl6QmPxdPpeYszr9zz7yhy0URSA1on3yLYG",
+      "kids": [
+        1,
+        2,
+        7,
+        65535
+      ],
+      "expect": false
+    },
+    {
+      "name": "key id rewritten to another known key",
+      "tag": "checkin-scope-v1",
+      "message": "{\"eventId\":\"e1\",\"deviceId\":\"d1\",\"checkpointIds\":[\"a\",\"b\"]}",
+      "signature": "AAJkRDamCVgcIrVjNY45u6UF8LG3BlUYi8_SyVeNTDKTtq4srMPCKPahE6EYIXnsfGnjlP8plduYl_Tz73JJhrwH",
+      "kids": [
+        1,
+        2,
+        7,
+        65535
+      ],
+      "expect": false
+    },
+    {
+      "name": "non-canonical signature (S + group order)",
+      "tag": "checkin-scope-v1",
+      "message": "{\"eventId\":\"e1\",\"deviceId\":\"d1\",\"checkpointIds\":[\"a\",\"b\"]}",
+      "signature": "AAFkRDamCVgcIrVjNY45u6UF8LG3BlUYi8_SyVeNTDKTtpsAoiDdiwj66T0QxFfmW37jlP8plduYl_Tz73JJhrwX",
+      "kids": [
+        1,
+        2,
+        7,
+        65535
+      ],
+      "expect": false
+    },
+    {
+      "name": "empty signature",
+      "tag": "checkin-scope-v1",
+      "message": "{\"eventId\":\"e1\",\"deviceId\":\"d1\",\"checkpointIds\":[\"a\",\"b\"]}",
+      "signature": "",
+      "kids": [
+        1,
+        2,
+        7,
+        65535
+      ],
+      "expect": false
+    },
+    {
+      "name": "not base64url",
+      "tag": "checkin-scope-v1",
+      "message": "{\"eventId\":\"e1\",\"deviceId\":\"d1\",\"checkpointIds\":[\"a\",\"b\"]}",
+      "signature": "not-base64!",
+      "kids": [
+        1,
+        2,
+        7,
+        65535
+      ],
+      "expect": false
+    },
+    {
+      "name": "padded base64",
+      "tag": "checkin-scope-v1",
+      "message": "{\"eventId\":\"e1\",\"deviceId\":\"d1\",\"checkpointIds\":[\"a\",\"b\"]}",
+      "signature": "AAFkRDamCVgcIrVjNY45u6UF8LG3BlUYi8_SyVeNTDKTtq4srMPCKPahE6EYIXnsfGnjlP8plduYl_Tz73JJhrwH=",
+      "kids": [
+        1,
+        2,
+        7,
+        65535
+      ],
+      "expect": false
+    },
+    {
+      "name": "truncated",
+      "tag": "checkin-scope-v1",
+      "message": "{\"eventId\":\"e1\",\"deviceId\":\"d1\",\"checkpointIds\":[\"a\",\"b\"]}",
+      "signature": "AAFkRDamCVgcIrVjNY45u6UF8LG3BlUYi8_SyVeNTDKTtq4srMPCKPahE6EYIXnsfGnjlP8plduYl_Tz73JJ",
+      "kids": [
+        1,
+        2,
+        7,
+        65535
+      ],
+      "expect": false
+    }
+  ]
+}

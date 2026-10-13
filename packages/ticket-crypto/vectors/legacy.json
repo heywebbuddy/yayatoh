@@ -1,0 +1,147 @@
+{
+  "description": "Legacy (Eventmie) QR payloads: legacyQrPayload(input) must give `payload`; legacyPayloadHash(salt, payload) must give `hash` (SHA-256 of \"legacy:\" + salt + \":\" + payload, hex, by OpenSSL).",
+  "payloads": [
+    {
+      "name": "bare order number",
+      "input": "172633440000017",
+      "payload": "172633440000017"
+    },
+    {
+      "name": "surrounding whitespace",
+      "input": " 172633440000017 \n",
+      "payload": "172633440000017"
+    },
+    {
+      "name": "letters keep their case",
+      "input": "AbC-def_123",
+      "payload": "AbC-def_123"
+    },
+    {
+      "name": "JSON object, string order number",
+      "input": "{\"order_number\":\"172633440000017\",\"event\":3}",
+      "payload": "172633440000017"
+    },
+    {
+      "name": "JSON object, numeric order number",
+      "input": "{\"order_number\":172633440000017}",
+      "payload": "172633440000017"
+    },
+    {
+      "name": "JSON object with whitespace around",
+      "input": "  {\"order_number\":\"ab_cd-12\"}  ",
+      "payload": "ab_cd-12"
+    },
+    {
+      "name": "JSON object, JSON string inside",
+      "input": "{\"order_number\":\"{\\\"order_number\\\":\\\"NESTED123\\\"}\"}",
+      "payload": "NESTED123"
+    },
+    {
+      "name": "JSON object without an order number",
+      "input": "{\"id\":1}",
+      "payload": null
+    },
+    {
+      "name": "JSON object, null order number",
+      "input": "{\"order_number\":null}",
+      "payload": null
+    },
+    {
+      "name": "JSON object, array order number",
+      "input": "{\"order_number\":[\"x1y2z3\"]}",
+      "payload": null
+    },
+    {
+      "name": "JSON object, order number too short",
+      "input": "{\"order_number\":\"short\"}",
+      "payload": null
+    },
+    {
+      "name": "JSON object, exponent number",
+      "input": "{\"order_number\":1.5e21}",
+      "payload": null
+    },
+    {
+      "name": "broken JSON",
+      "input": "{broken",
+      "payload": null
+    },
+    {
+      "name": "five characters",
+      "input": "abcde",
+      "payload": null
+    },
+    {
+      "name": "six characters",
+      "input": "abcdef",
+      "payload": "abcdef"
+    },
+    {
+      "name": "64 characters",
+      "input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "payload": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "name": "65 characters",
+      "input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "payload": null
+    },
+    {
+      "name": "inner spaces",
+      "input": "has spaces 123",
+      "payload": null
+    },
+    {
+      "name": "a dot",
+      "input": "abc.def.123",
+      "payload": null
+    },
+    {
+      "name": "non-ASCII letters",
+      "input": "ÄÖÜ12345",
+      "payload": null
+    },
+    {
+      "name": "empty",
+      "input": "",
+      "payload": null
+    }
+  ],
+  "hashes": [
+    {
+      "salt": "yy-manifest:e1",
+      "payload": "172633440000017",
+      "hash": "4dbae1061ded27140bfe3096f4af4dac4e1c796391e8f1245b15cfcbfc917096"
+    },
+    {
+      "salt": "yy-manifest:e1",
+      "payload": "AbC-def_123",
+      "hash": "b78d4d9dead05b134ab469738b5fa867b1320d1f28746c661c76655e7c3cf8fc"
+    },
+    {
+      "salt": "yy-manifest:e1",
+      "payload": "abc-def_123",
+      "hash": "7bb4ba29eb307324de0e5dee6c9fc5261ea55c97b7b480076756769bc93d9a11"
+    },
+    {
+      "salt": "yy-manifest:e2",
+      "payload": "AbC-def_123",
+      "hash": "be5876a07bc9256058936f6861f28af596384be2f77095c752b87293c7dd242c"
+    },
+    {
+      "salt": "",
+      "payload": "abcdef",
+      "hash": "c036cc41176d02f022d1f9ab823111705dd8112444fbc6877d594d220dbe7d37"
+    },
+    {
+      "salt": "salt with : colons :",
+      "payload": "abcdef",
+      "hash": "bd707b9dcce1fad55c2e6f7902397ac15189e762d73f876b04d87ad56642b1b2"
+    },
+    {
+      "salt": "säl† ✓",
+      "payload": "abcdef",
+      "hash": "9a39e35262fd40599a6f5c15cbe4cf3724ea71261ece0c23b9909a99a2dc82fe"
+    }
+  ]
+}
