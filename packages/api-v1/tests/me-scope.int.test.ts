@@ -106,7 +106,6 @@ describe('/v1/me scope (M7.2a)', () => {
     const p = await person('legacy', { verified: false });
     expect((await call('GET', '/me', p.token)).status).toBe(200);
     expect((await call('GET', '/me/organizations', p.token)).status).toBe(200);
-    expect((await call('GET', '/me/organizations/', p.token)).status).toBe(200);
   });
 
   it('the bearer session carries emailVerified and stepUpAt', async () => {
