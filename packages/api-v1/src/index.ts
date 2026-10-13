@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { OpenAPIHono } from '@hono/zod-openapi';
 import { type ApiAccessQuotas, apiAccessQuotas } from '@yayatoh/billing';
 import { DEVICE_TOKEN_SCHEME, scannerRoutes } from '@yayatoh/checkin/routes';
@@ -19,8 +20,10 @@ import { health } from './routes/health.ts';
 import { hookRoutes } from './routes/hooks.ts';
 import { keyRoutes } from './routes/key.ts';
 import { orgRoutes } from './routes/org.ts';
+import { portalRoutes } from './routes/portal.ts';
 import { publicRoutes } from './routes/public.ts';
 import { salesRoutes } from './routes/sales.ts';
+import { staffRoutes } from './routes/staff.ts';
 import { API_VERSION } from './routes/version.ts';
 import { clientInfo } from './telemetry.ts';
 import { registerWebhooks } from './webhooks.ts';
@@ -35,6 +38,7 @@ export {
   deprecationMiddleware,
   deprecations,
 } from './deprecation.ts';
+export { type PortalMail, type PortalMailer, portalMailer } from './portal-mail.ts';
 export { memoryRateLimiter, RATE_LIMITS, type RateDecision, type RateLimiter } from './rate-limit.ts';
 export { API_VERSION } from './routes/version.ts';
 export { type ClientInfo, clientInfo } from './telemetry.ts';
@@ -69,7 +73,17 @@ const API_TAGS = [
     description:
       'REST hooks for automation tools (Zapier): subscribe a URL to one event type and unsubscribe.',
   },
+  {
+    name: 'portal',
+    description:
+      'Exhibitor reps in the Staff app: sign in with the emailed portal code, then lead setup, scan batches and per-lead rating, qualifiers and notes.',
+  },
   { name: 'scanner', description: 'The Scan PWA’s device-token routes (manifest, offline sync).' },
+  {
+    name: 'staff',
+    description:
+      'The Staff app’s device-token routes (counts, device board, alerts, guest check-in, help requests, push) and the organizer’s read-only event-day view.',
+  },
   {
     name: 'webhooks',
     description:
@@ -214,12 +228,13 @@ export function createV1(deps: V1Deps) {
     });
   }
 
-  // Credential → principal. Device tokens (`yyd_`) are left to the scanner routes.
+  // Credential → principal. Device tokens (`yyd_`) are left to the scanner and staff routes, and
+  // exhibitor portal tokens (`yyp_`, M7.2e) to the portal routes.
   v1.use('*', async (c, next) => {
     c.set('principal', null);
     const m = /^Bearer\s+(\S+)$/i.exec(c.req.header('authorization') ?? '');
     const token = m?.[1];
-    if (token && !token.startsWith('yyd_')) {
+    if (token && !token.startsWith('yyd_') && !token.startsWith('yyp_')) {
       if (token.startsWith('yy_')) {
         const key = await apiKeyIdentity(token);
         if (!key) throw new DomainError('unauthenticated', 'Unknown, expired or revoked API key');
@@ -235,6 +250,7 @@ export function createV1(deps: V1Deps) {
     // headers describe the tighter of the two. Without the module its keys are refused.
     const p = c.get('principal');
     const device = token?.startsWith('yyd_');
+    const portal = token?.startsWith('yyp_');
     let d: RateDecision;
     let window: number;
     if (p?.kind === 'api_key') {
@@ -250,12 +266,22 @@ export function createV1(deps: V1Deps) {
         : perKey;
       d = !perOrg.allowed || perOrg.remaining < perKey.remaining ? perOrg : perKey;
     } else {
-      const rule = p ? RATE_LIMITS.credential : device ? { limit: 3000, window: 60 } : RATE_LIMITS.anonymous;
+      const rule = p
+        ? RATE_LIMITS.credential
+        : device
+          ? { limit: 3000, window: 60 }
+          : portal
+            ? RATE_LIMITS.credential
+            : RATE_LIMITS.anonymous;
       const key = p
         ? credentialKey(p)
         : device
           ? `device:${token?.slice(0, 20)}`
-          : `ip:${clientIp(c.req.raw.headers)}`;
+          : portal
+            ? `portal:${createHash('sha256')
+                .update(token ?? '')
+                .digest('base64url')}`
+            : `ip:${clientIp(c.req.raw.headers)}`;
       window = rule.window;
       d = limiter.take(key, rule.limit, rule.window);
     }
@@ -314,9 +340,18 @@ export function createV1(deps: V1Deps) {
   // M6.5c: webhook subscriptions (Make and n8n instant triggers).
   v1.route('/', hookRoutes(deps));
   v1.route('/', scannerRoutes(deps.ports));
+  // M7.2e: the Staff app's device-token routes and the organizer's event-day view.
+  v1.route('/', staffRoutes(deps));
+  v1.route('/', portalRoutes(deps, clientIp));
   v1.route('/', docsRoutes(basePath));
 
   v1.openAPIRegistry.registerComponent('securitySchemes', 'deviceToken', DEVICE_TOKEN_SCHEME);
+  v1.openAPIRegistry.registerComponent('securitySchemes', 'portalSession', {
+    type: 'http',
+    scheme: 'bearer',
+    description:
+      'An exhibitor portal access token (`yyp_…`) from `POST /v1/portal/auth/token` (15 minutes, with a rotating refresh token).',
+  });
   v1.openAPIRegistry.registerComponent('securitySchemes', 'apiKey', {
     type: 'http',
     scheme: 'bearer',

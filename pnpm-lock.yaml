@@ -924,6 +924,12 @@ importers:
       '@scalar/api-reference':
         specifier: 1.72.1
         version: 1.72.1(change-case@5.4.4)(qrcode@1.5.4)(supports-color@10.2.2)(tailwindcss@4.3.3)(typescript@6.0.3)(zod@4.6.5)
+      '@yayatoh/alerts':
+        specifier: workspace:*
+        version: link:../modules/alerts
+      '@yayatoh/assistance':
+        specifier: workspace:*
+        version: link:../modules/assistance
       '@yayatoh/attendees':
         specifier: workspace:*
         version: link:../modules/attendees
@@ -936,6 +942,9 @@ importers:
       '@yayatoh/checkin':
         specifier: workspace:*
         version: link:../modules/checkin
+      '@yayatoh/command-center':
+        specifier: workspace:*
+        version: link:../modules/command-center
       '@yayatoh/contracts':
         specifier: workspace:*
         version: link:../contracts
@@ -945,27 +954,42 @@ importers:
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../db
+      '@yayatoh/donations':
+        specifier: workspace:*
+        version: link:../modules/donations
       '@yayatoh/events':
         specifier: workspace:*
         version: link:../modules/events
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../kernel
+      '@yayatoh/leads':
+        specifier: workspace:*
+        version: link:../modules/leads
       '@yayatoh/media':
         specifier: workspace:*
         version: link:../modules/media
+      '@yayatoh/notifications':
+        specifier: workspace:*
+        version: link:../modules/notifications
       '@yayatoh/orders':
         specifier: workspace:*
         version: link:../modules/orders
       '@yayatoh/payments':
         specifier: workspace:*
         version: link:../modules/payments
+      '@yayatoh/pdf':
+        specifier: workspace:*
+        version: link:../pdf
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../platform
       '@yayatoh/program':
         specifier: workspace:*
         version: link:../modules/program
+      '@yayatoh/reports':
+        specifier: workspace:*
+        version: link:../modules/reports
       '@yayatoh/seating':
         specifier: workspace:*
         version: link:../modules/seating

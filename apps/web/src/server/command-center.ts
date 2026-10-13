@@ -1,21 +1,19 @@
 import 'server-only';
 import { listAlertsQuery, RULES } from '@yayatoh/alerts';
+import { alertsEngineWidget } from '@yayatoh/api-v1/staff';
 import { ASSISTANCE_CHANNEL } from '@yayatoh/assistance';
 import { getUsersByIds } from '@yayatoh/auth';
 import { campaignNamesTx } from '@yayatoh/campaigns';
 import { reportPresenceCommand } from '@yayatoh/checkin';
 import {
-  AlertsWidgetDto,
   COMMAND_CENTER_WIDGETS,
   campaignsWidget,
-  defineWidget,
   exhibitorActivityWidget,
   type FeedAlert,
   isWidgetKey,
   liveFeedWidget,
   sponsorActivityWidget,
   staffPresenceWidget,
-  WIDGET_META,
   type WidgetChannel,
   type WidgetKey,
   type WidgetLoadArgs,
@@ -89,41 +87,6 @@ async function feedAlerts({ tx, ctx, scope }: WidgetLoadArgs): Promise<FeedAlert
 async function memberNames(ids: readonly string[]): Promise<ReadonlyMap<string, string>> {
   const people = await getUsersByIds([...new Set(ids)]);
   return new Map([...people].map(([id, u]) => [id, u.name]));
-}
-
-/**
- * The Alerts widget filled by the M3.2b alert engine (batch 3d merge): the event's active alerts
- * the member's org role may see (the engine's own rule), and for the door layout only the door's
- * alerts (devices, capacity): never payments or sales, so the door sees no revenue here either.
- */
-function alertsEngineWidget() {
-  return defineWidget(WIDGET_META.alerts, AlertsWidgetDto, async ({ tx, ctx, scope }) => {
-    const list = await listAlertsQuery.handler({
-      input: { status: 'active', eventId: scope.event.id, limit: 20 },
-      ctx,
-      tx,
-    });
-    return {
-      engine: 'ready' as const,
-      alerts: list
-        .filter((a) => scope.role !== 'door' || RULES[a.rule].category === 'door')
-        .flatMap((a) =>
-          a.state === 'resolved'
-            ? []
-            : [
-                {
-                  id: a.id,
-                  rule: a.rule,
-                  severity: a.severity,
-                  state: a.state,
-                  count: a.count,
-                  href: a.fixPath,
-                  at: a.openedAt.toISOString(),
-                },
-              ],
-        ),
-    };
-  });
 }
 
 /**

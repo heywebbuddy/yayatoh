@@ -88,7 +88,13 @@ export const portalChallenges = tenantTable(
   ],
 );
 
-/** A signed-in portal browser. The cookie is `{org}~{secret}`; only the secret's HMAC is stored. */
+/**
+ * A signed-in portal session. In a browser (`kind` `cookie`) the cookie is `{org}~{secret}`, bound
+ * to its host, and lasts a week. In an app (M7.2e, `kind` `bearer`, host `bearer`) it is a short
+ * access token (`yyp_{org}~{secret}`: `expires_at`, 15 minutes) and a rotating refresh token
+ * (`yyr_{org}~{secret}`); `refresh_expires_at` is the session's end, and a spent refresh token
+ * presented again ends the session (`previous_refresh_hash`). Only HMACs of secrets are stored.
+ */
 export const portalSessions = tenantTable(
   eventsSchema,
   'portal_sessions',
@@ -98,14 +104,28 @@ export const portalSessions = tenantTable(
     host: text('host').notNull(),
     expiresAt: ts('expires_at').notNull(),
     revokedAt: ts('revoked_at'),
+    /** `cookie` (a browser) or `bearer` (an app, M7.2e). */
+    kind: text('kind').notNull().default('cookie'),
+    /** Bearer sessions: the current refresh token's HMAC, the one it replaced, and the session's end. */
+    refreshHash: text('refresh_hash'),
+    previousRefreshHash: text('previous_refresh_hash'),
+    refreshExpiresAt: ts('refresh_expires_at'),
   },
   (t) => [
     uniqueIndex('portal_sessions_org_token_key').on(t.orgId, t.tokenHash),
+    uniqueIndex('portal_sessions_org_refresh_key')
+      .on(t.orgId, t.refreshHash)
+      .where(sql`refresh_hash is not null`),
     index('portal_sessions_org_account_idx').on(t.orgId, t.accountId),
     foreignKey({
       name: 'portal_sessions_account_fk',
       columns: [t.orgId, t.accountId],
       foreignColumns: [portalAccounts.orgId, portalAccounts.id],
     }).onDelete('cascade'),
+    check('portal_sessions_kind_check', sql`kind in ('cookie', 'bearer')`),
+    check(
+      'portal_sessions_bearer_check',
+      sql`(kind = 'cookie' and refresh_hash is null and previous_refresh_hash is null and refresh_expires_at is null) or (kind = 'bearer' and refresh_hash is not null and refresh_expires_at is not null)`,
+    ),
   ],
 );

@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./staff": "./src/staff/index.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"
@@ -12,20 +13,28 @@
   "dependencies": {
     "@hono/zod-openapi": "catalog:",
     "@scalar/api-reference": "1.72.1",
+    "@yayatoh/alerts": "workspace:*",
+    "@yayatoh/assistance": "workspace:*",
     "@yayatoh/attendees": "workspace:*",
     "@yayatoh/auth": "workspace:*",
     "@yayatoh/billing": "workspace:*",
     "@yayatoh/checkin": "workspace:*",
+    "@yayatoh/command-center": "workspace:*",
     "@yayatoh/contracts": "workspace:*",
     "@yayatoh/crm": "workspace:*",
     "@yayatoh/db": "workspace:*",
+    "@yayatoh/donations": "workspace:*",
     "@yayatoh/events": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
+    "@yayatoh/leads": "workspace:*",
     "@yayatoh/media": "workspace:*",
+    "@yayatoh/notifications": "workspace:*",
     "@yayatoh/orders": "workspace:*",
     "@yayatoh/payments": "workspace:*",
+    "@yayatoh/pdf": "workspace:*",
     "@yayatoh/platform": "workspace:*",
     "@yayatoh/program": "workspace:*",
+    "@yayatoh/reports": "workspace:*",
     "@yayatoh/seating": "workspace:*",
     "@yayatoh/tenancy": "workspace:*",
     "@yayatoh/ticketing": "workspace:*",
