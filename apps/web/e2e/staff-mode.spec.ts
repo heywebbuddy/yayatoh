@@ -60,8 +60,9 @@ async function eventNow(
   await page.getByLabel('Starts', { exact: true }).fill(chicago(-1));
   await page.getByLabel('Ends', { exact: true }).fill(chicago(3));
   await page.getByRole('button', { name: 'Create draft' }).click();
-  await expect(page).toHaveURL(new RegExp(`/o/${slug}/e/[a-z0-9-]+$`));
-  const base = new URL(page.url()).pathname;
+  await expect(page).toHaveURL(new RegExp(`/o/${slug}/e/[a-z0-9-]+/media\\?created=1$`));
+  const base = new URL(page.url()).pathname.replace(/\/media$/, '');
+  await page.goto(base);
   await page.getByRole('button', { name: 'Publish' }).click();
   await expect(page.getByText('Published ·')).toBeVisible();
   await page.goto(`${base}/tickets-orders`);
@@ -167,7 +168,7 @@ test.describe('Scan PWA staff mode (M3.4a)', () => {
     // Arabic: the same screen right to left.
     await watcher.page.goto('/ar/scan');
     await expect(watcher.page.locator('html')).toHaveAttribute('dir', 'rtl');
-    await watcher.page.getByRole('navigation').getByRole('button').nth(1).click();
+    await watcher.page.getByRole('navigation').getByRole('button', { name: 'الفريق' }).click();
     await expect(watcher.page.getByTestId('staff-checked-in')).toContainText('1');
     await expectAccessible(watcher.page);
     await watcher.context.close();

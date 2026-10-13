@@ -82,8 +82,9 @@ test.describe('series ↔ events', () => {
     await page.keyboard.press('Enter');
     await expect(seriesCombo(page)).toHaveValue(series);
     await page.getByRole('button', { name: 'Create draft' }).click();
-    await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+$/);
-    const base = new URL(page.url()).pathname;
+    await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+\/media\?created=1$/);
+    const base = new URL(page.url()).pathname.replace(/\/media$/, '');
+    await page.goto(base);
     const slug = base.split('/').pop() as string;
 
     // The event header names its series and links the series page.
@@ -95,7 +96,8 @@ test.describe('series ↔ events', () => {
 
     // The series page: Events tab with status, dates and sales.
     await expect(page.getByRole('heading', { level: 1, name: series })).toBeVisible();
-    await expect(page.getByRole('link', { name: 'Events', exact: true })).toHaveAttribute(
+    const views = page.getByRole('navigation', { name: 'Series views' });
+    await expect(views.getByRole('link', { name: 'Events', exact: true })).toHaveAttribute(
       'aria-current',
       'page',
     );
@@ -213,10 +215,10 @@ test.describe('series ↔ events', () => {
     await fillQuickEvent(page, `Picked ${tag}`);
     await pickSeries(page, series);
     await page.getByRole('button', { name: 'Create draft' }).click();
-    await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+$/);
+    await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+\/media\?created=1$/);
     await expect(page.getByRole('link', { name: `Part of ${series}` })).toBeVisible();
     // The event's Dates tab shows the same series.
-    await page.goto(`${new URL(page.url()).pathname}/dates`);
+    await page.goto(`${new URL(page.url()).pathname.replace(/\/media$/, '')}/dates`);
     await expect(
       page.getByRole('region', { name: 'Series' }).getByRole('combobox', { name: 'Series' }),
     ).toContainText(series);
@@ -240,7 +242,7 @@ test.describe('series ↔ events', () => {
     await expect(seriesCombo(page)).toHaveValue(series);
     await fillQuickEvent(page, `Inside ${tag}`, '12');
     await page.getByRole('button', { name: 'Create draft' }).click();
-    await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+$/);
+    await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+\/media\?created=1$/);
     await page.getByRole('link', { name: `Part of ${series}` }).click();
     await expect(page.getByRole('row').filter({ hasText: `Inside ${tag}` })).toBeVisible();
   });
@@ -266,7 +268,7 @@ test.describe('series ↔ events', () => {
     await expect(seriesCombo(page)).toHaveValue(series);
     await page.getByRole('button', { name: 'Step 3 of 3: Tickets and publishing' }).click();
     await page.getByRole('button', { name: 'Create draft' }).click();
-    await expect(page).toHaveURL(/\/setup-guide$/);
+    await expect(page).toHaveURL(/\/media\?created=1$/);
     await expect(page.getByRole('link', { name: `Part of ${series}` })).toBeVisible();
   });
 
@@ -278,7 +280,7 @@ test.describe('series ↔ events', () => {
     await page.goto(`${ORG}/events/new`);
     await fillQuickEvent(page, loose, '14');
     await page.getByRole('button', { name: 'Create draft' }).click();
-    await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+$/);
+    await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+\/media\?created=1$/);
     await expect(page.getByRole('link', { name: /^Part of / })).toHaveCount(0);
     await createSeries(page, series);
     await page.goto(`${ORG}/series/adds-${tag}`);
@@ -351,7 +353,7 @@ test.describe('series ↔ events', () => {
     await seriesCombo(owner).fill(series);
     await owner.getByRole('option', { name: `Create “${series}”` }).click();
     await owner.getByRole('button', { name: 'Create draft' }).click();
-    await expect(owner).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+$/);
+    await expect(owner).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+\/media\?created=1$/);
 
     await signIn(page, VIEWER);
     await page.goto(`${ORG}/series/viewed-${tag}`);

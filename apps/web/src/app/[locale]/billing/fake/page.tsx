@@ -25,7 +25,13 @@ export default async function FakeBillingPortal({
   if (!/^\/[a-z-]+\/o\/[a-z0-9-]+\/plan$/.test(sp.return)) notFound();
   if (fakePortalSignature(secret, sp.customer, sp.return) !== sp.sig) notFound();
   const t = await getTranslations('billingPortal');
-  const tp = await getTranslations('billingPlan');
+  const [tp, en] = await Promise.all([
+    getTranslations('billingPlan'),
+    getTranslations({ locale: 'en', namespace: 'billingPlan' }),
+  ]);
+  // A built-in plan still under its default name is translated; a name staff set is shown as is.
+  const planName = (key: string | null, name: string) =>
+    key && tp.has(`planName.${key}`) && name === en(`planName.${key}`) ? tp(`planName.${key}`) : name;
   const p = { locale, customer: sp.customer, returnPath: sp.return, sig: sp.sig };
   const plans = (await getBillingProvider().listCatalog()).products.filter((p) => p.active);
   return (
@@ -42,7 +48,7 @@ export default async function FakeBillingPortal({
                 key={x.id}
                 name="plan"
                 value={x.planKey ?? ''}
-                label={x.name}
+                label={planName(x.planKey, x.name)}
                 hint={tp('modules.count', { count: x.features.length })}
               />
             ))}

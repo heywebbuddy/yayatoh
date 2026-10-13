@@ -1,9 +1,8 @@
-import { PRICE_FILTERS, type SearchParams } from '@yayatoh/marketplace';
+import { CATEGORIES, PRICE_FILTERS, type SearchParams } from '@yayatoh/marketplace';
 import { buttonClass, DatePicker, Select } from '@yayatoh/ui';
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation.ts';
 import { localizedPath } from '@/lib/seo/urls.ts';
-import { categoryLabels, platformCategoryCatalog } from '@/server/event-categories.ts';
 
 const field = 'field w-full';
 
@@ -23,9 +22,8 @@ export async function SearchForm({
   cities: readonly string[];
 }) {
   const t = await getTranslations('market.filters');
-  const tc = await getTranslations('categories');
-  const catalog = await platformCategoryCatalog();
-  const platformLabel = await categoryLabels((key) => tc(key as 'other'));
+  // This search filters by event type (the listing's profile); the v2 search has the categories.
+  const tc = await getTranslations('market.category');
   const active = Boolean(
     params.q || params.city || params.category || params.price || params.from || params.to,
   );
@@ -78,9 +76,9 @@ export async function SearchForm({
             t('category'),
             <Select id="category" name="category" defaultValue={params.category ?? ''} className={field}>
               <option value="">{t('anyCategory')}</option>
-              {catalog.map(({ key: c }) => (
+              {CATEGORIES.map((c) => (
                 <option key={c} value={c}>
-                  {platformLabel(c)}
+                  {tc(c)}
                 </option>
               ))}
             </Select>,

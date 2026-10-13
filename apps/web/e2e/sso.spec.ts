@@ -62,7 +62,8 @@ async function ssoSignIn(browser: Browser, email: string) {
   const context = await browser.newContext();
   await ownClientIp(context);
   const page = await context.newPage();
-  await page.goto('/sign-in');
+  // Single sign-on is offered on the organizer sign-in page.
+  await page.goto('/o/sign-in');
   await page.getByRole('link', { name: 'Sign in with single sign-on' }).click();
   await page.getByLabel('Work email').fill(email);
   await page.getByRole('button', { name: 'Continue' }).click();

@@ -32,8 +32,9 @@ async function newEvent(page: Page, name: string): Promise<string> {
   await page.getByLabel('Starts', { exact: true }).fill(chicago(-1));
   await page.getByLabel('Ends', { exact: true }).fill(chicago(3));
   await page.getByRole('button', { name: 'Create draft' }).click();
-  await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+$/);
-  const base = new URL(page.url()).pathname;
+  await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+\/media\?created=1$/);
+  const base = new URL(page.url()).pathname.replace(/\/media$/, '');
+  await page.goto(base);
   await page.getByRole('button', { name: 'Publish' }).click();
   await expect(page.getByText('Published ·')).toBeVisible();
   return base;

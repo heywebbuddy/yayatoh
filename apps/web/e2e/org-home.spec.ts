@@ -18,7 +18,7 @@ async function draft(page: Page, org: string, name: string, offset: number) {
   await page.getByLabel('Starts', { exact: true }).fill(`${day(offset)}T18:00`);
   await page.getByLabel('Ends', { exact: true }).fill(`${day(offset)}T21:00`);
   await page.getByRole('button', { name: 'Create draft' }).click();
-  await expect(page).toHaveURL(new RegExp(`/o/${org}/e/[a-z0-9-]+$`));
+  await expect(page).toHaveURL(new RegExp(`/o/${org}/e/[a-z0-9-]+/media\\?created=1$`));
 }
 
 test.describe('org home events list (design v2)', () => {

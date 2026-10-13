@@ -169,8 +169,8 @@ test.describe('delete my account', () => {
     await page.getByRole('button', { name: 'Email me a code' }).click();
     await page.getByLabel('6-digit code', { exact: true }).fill(await lastEmailedCode(page, user.email));
     await page.getByRole('button', { name: 'Verify and sign in' }).click();
-    await expect(page).toHaveURL(/\/o$/);
-    await expect(page.getByText("You're not in an organization yet")).toBeVisible();
+    // Signed in again as a new account with no organization: the attendee dashboard.
+    await expect(page).toHaveURL(/\/attendee$/);
   });
 
   test('the only owner of an organization sees why they can’t delete (no form); a co-owner’s stale form is refused with the organization named', async ({
@@ -297,14 +297,15 @@ test.describe('organizer privacy requests: team invitations and erased addresses
     await page.getByLabel('Starts', { exact: true }).fill('2027-11-01T18:00');
     await page.getByLabel('Ends', { exact: true }).fill('2027-11-01T22:00');
     await page.getByRole('button', { name: 'Create draft' }).click();
-    await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/erased-import-\d+$/);
-    const base = new URL(page.url()).pathname;
+    await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/erased-import-\d+\/media\?created=1$/);
+    const base = new URL(page.url()).pathname.replace(/\/media$/, '');
+    await page.goto(base);
 
     const importCsv = async (csv: string) => {
       await page.goto(`${base}/attendees`);
       await page.getByRole('link', { name: 'Import' }).click();
       await page
-        .getByLabel('CSV file', { exact: true })
+        .getByLabel('CSV or Excel file', { exact: true })
         .setInputFiles({ name: 'guests.csv', mimeType: 'text/csv', buffer: Buffer.from(csv) });
       await page.getByRole('button', { name: 'Upload' }).click();
       await page.getByRole('button', { name: 'Check rows' }).click();

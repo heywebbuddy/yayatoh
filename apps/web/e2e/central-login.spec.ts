@@ -99,7 +99,7 @@ test.describe('central login on tenant sites', () => {
     // Signed in on the app host first.
     await page.goto(`${APP}/sign-in`);
     await passwordForm(page, user.email);
-    await expect(page).toHaveURL(/\/o$/);
+    await expect(page).toHaveURL(/\/attendee$/);
 
     await page.goto(`${HARBOR}/`);
     await signInLink(page).click();
@@ -272,7 +272,7 @@ test.describe('central login on tenant sites', () => {
       `http://yayatoh.localhost:${PORT}/`,
     ]) {
       await page.goto(`${APP}/sign-in?return=${encodeURIComponent(back)}&state=${state}`);
-      await expect(page.getByRole('heading', { name: 'Sign in to Yayatoh' })).toBeVisible();
+      await expect(page.getByRole('heading', { name: 'Attendee sign in' })).toBeVisible();
       await expect(page.getByText(/to continue to/)).toHaveCount(0);
     }
   });

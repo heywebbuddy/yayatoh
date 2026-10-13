@@ -72,7 +72,7 @@ test.describe('human check (Turnstile) on sign-in, sign-up codes and resets', ()
     await page.getByLabel('6-digit code').fill(await lastEmailedCode(page, email));
     await page.getByRole('button', { name: 'Verify and sign in' }).click();
     // A first code creates the account (sign-up).
-    await expect(page).toHaveURL(/\/o$/);
+    await expect(page).toHaveURL(/\/attendee$/);
   });
 
   test('the API route refuses a code request without a solved check (no bypass around the form)', async ({
@@ -123,7 +123,7 @@ test.describe('human check (Turnstile) on sign-in, sign-up codes and resets', ()
     await passHumanCheck(page);
     await page.getByLabel('Password', { exact: true }).fill(devPassword());
     await page.getByRole('button', { name: 'Sign in', exact: true }).click();
-    await expect(page).toHaveURL(/\/o$/);
+    await expect(page).toHaveURL(/\/attendee$/);
   });
 
   test('the check in Arabic reads right to left', async ({ page }) => {
@@ -209,7 +209,7 @@ test.describe('forgot password (M1.2f)', () => {
       page.getByRole('alert').filter({ hasText: "That email and password don't match." }),
     ).toBeVisible();
     await passwordAttempt(page, user.email, next);
-    await expect(page).toHaveURL(/\/o$/);
+    await expect(page).toHaveURL(/\/attendee$/);
   });
 
   test('the reset pages in Arabic read right to left', async ({ page }) => {

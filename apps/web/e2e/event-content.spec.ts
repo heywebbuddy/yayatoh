@@ -39,8 +39,9 @@ async function createEvent(
   await page.getByLabel('Starts', { exact: true }).fill(chicago(start));
   await page.getByLabel('Ends', { exact: true }).fill(chicago(start + (opts.lengthMin ?? 180)));
   await page.getByRole('button', { name: 'Create draft' }).click();
-  await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+$/);
-  const base = new URL(page.url()).pathname;
+  await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+\/media\?created=1$/);
+  const base = new URL(page.url()).pathname.replace(/\/media$/, '');
+  await page.goto(base);
   if (opts.publish !== false) {
     await page.getByRole('button', { name: 'Publish' }).click();
     await expect(page.getByText('Published ·')).toBeVisible();

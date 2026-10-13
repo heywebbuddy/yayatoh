@@ -7297,6 +7297,11 @@
         "kpi": {
           "ofValid": "van {valid} gasten"
         }
+      },
+      "media": {
+        "hint": {
+          "logo": "Te zien in de console, op je openbare pagina en site, en in e-mails."
+        }
       }
     },
     "gala": {
@@ -7309,6 +7314,11 @@
       },
       "eventAnnouncements": {
         "emptyDescription": "Plaats nieuws, tijdswijzigingen of herinneringen voor je gasten."
+      },
+      "media": {
+        "hint": {
+          "logo": "Te zien in de console, op je openbare pagina en site, en in e-mails."
+        }
       }
     }
   },

@@ -7297,6 +7297,11 @@
         "kpi": {
           "ofValid": "共 {valid} 位賓客"
         }
+      },
+      "media": {
+        "hint": {
+          "logo": "顯示在控制台、你的公開頁面和網站以及電子郵件中。"
+        }
       }
     },
     "gala": {
@@ -7309,6 +7314,11 @@
       },
       "eventAnnouncements": {
         "emptyDescription": "為賓客發布消息、時間變更或提醒。"
+      },
+      "media": {
+        "hint": {
+          "logo": "顯示在控制台、你的公開頁面和網站以及電子郵件中。"
+        }
       }
     }
   },

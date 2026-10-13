@@ -3,15 +3,9 @@ import { expectAccessible } from './helpers.ts';
 
 /** The public pricing and fees page (M3.11a), rendered from the fee configuration. */
 test.describe('pricing and fees page', () => {
-  test('from the marketplace header; the fee and an all-in example per currency; keyboard; axe', async ({
-    page,
-  }) => {
-    await page.goto('/');
-    await page
-      .getByRole('navigation', { name: 'Site', exact: true })
-      .getByRole('link', { name: 'Pricing' })
-      .click();
-    await expect(page).toHaveURL(/\/pricing$/);
+  test('the fee and an all-in example per currency; keyboard; axe', async ({ page }) => {
+    // The public header links attendee pages now; pricing opens by its address.
+    await page.goto('/pricing');
     await expect(page.getByRole('heading', { name: 'Pricing and fees', level: 1 })).toBeVisible();
     // Every configured currency of the default plan (seeded: CAD, EUR, GBP, USD); USD by default.
     const currencies = page.getByRole('navigation', { name: 'Currency' });

@@ -69,8 +69,9 @@ test('staff review a networking chat report: excerpt by side, a note is required
   await web.getByLabel('Starts', { exact: true }).fill(`${chicagoDate(40)}T09:00`);
   await web.getByLabel('Ends', { exact: true }).fill(`${chicagoDate(40)}T18:00`);
   await web.getByRole('button', { name: 'Create draft' }).click();
-  await expect(web).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+$/);
-  const base = new URL(web.url()).pathname;
+  await expect(web).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+\/media\?created=1$/);
+  const base = new URL(web.url()).pathname.replace(/\/media$/, '');
+  await web.goto(base);
   await web.getByRole('button', { name: 'Publish' }).click();
   await expect(web.getByText('Published ·')).toBeVisible();
   await web.goto(`${base}/networking`);

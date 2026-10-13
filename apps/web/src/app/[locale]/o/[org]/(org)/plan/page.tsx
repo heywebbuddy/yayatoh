@@ -67,7 +67,10 @@ export default async function PlanPage({
   const { billing, change, at: atParam, error, payment, picked } = await searchParams;
   setRequestLocale(locale);
   const data = await loadConsole(org);
-  const t = await getTranslations('billingPlan');
+  const [t, en] = await Promise.all([
+    getTranslations('billingPlan'),
+    getTranslations({ locale: 'en', namespace: 'billingPlan' }),
+  ]);
   if (!roleCan(data.role, 'billing:read')) {
     return (
       <>
@@ -85,7 +88,9 @@ export default async function PlanPage({
     );
   }
   const s = await executeQuery(planSummaryQuery, {}, data.ctx, ports);
-  const planName = (_key: string, fallback: string) => fallback;
+  // A built-in plan still under its default name is translated; a name staff set is shown as is.
+  const planName = (key: string, name: string) =>
+    t.has(`planName.${key}`) && name === en(`planName.${key}`) ? t(`planName.${key}`) : name;
   const moduleName = (key: string) => (t.has(`module.${key}`) ? t(`module.${key}`) : key);
   const priceText = (p: Price) =>
     !p

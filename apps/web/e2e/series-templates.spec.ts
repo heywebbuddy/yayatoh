@@ -14,8 +14,8 @@ async function createEvent(page: Page, name: string): Promise<string> {
   await page.getByLabel('Starts', { exact: true }).fill('2027-09-10T19:00');
   await page.getByLabel('Ends', { exact: true }).fill('2027-09-10T23:00');
   await page.getByRole('button', { name: 'Create draft' }).click();
-  await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+$/);
-  return new URL(page.url()).pathname;
+  await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+\/media\?created=1$/);
+  return new URL(page.url()).pathname.replace(/\/media$/, '');
 }
 
 async function addTicketType(page: Page, base: string, name: string) {
@@ -206,7 +206,7 @@ test.describe('duplicate and templates', () => {
     await card.getByRole('button', { name: 'Create event' }).click();
     await expect(page).toHaveURL(/\/e\/from-kit-/);
     await expect(page.getByText('Draft ·')).toBeVisible();
-    const made = new URL(page.url()).pathname;
+    const made = new URL(page.url()).pathname.replace(/\/media$/, '');
     await page.goto(`${made}/tickets-orders`);
     await expect(page.getByRole('row').filter({ hasText: 'Kit pass' })).toContainText('0 / 20');
 

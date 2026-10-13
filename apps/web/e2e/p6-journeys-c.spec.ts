@@ -214,8 +214,9 @@ test.describe('AI journey', () => {
     await page.getByLabel('Venue', { exact: true }).fill('Pier 9');
     await page.getByLabel('City', { exact: true }).fill('Chicago');
     await page.getByRole('button', { name: 'Create draft' }).click();
-    await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+$/);
-    const base = new URL(page.url()).pathname;
+    await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+\/media\?created=1$/);
+    const base = new URL(page.url()).pathname.replace(/\/media$/, '');
+    await page.goto(base);
     await page.getByRole('button', { name: 'Publish' }).click();
     await expect(page.getByText('Published ·')).toBeVisible();
 
@@ -357,6 +358,9 @@ test.describe('marketplace journey', () => {
     await page.getByLabel('Ends', { exact: true }).fill('2029-05-05T22:00');
     await page.getByLabel('City').fill(`Metz ${tag}`);
     await page.getByRole('button', { name: 'Create draft' }).click();
+    // Creating lands on the event's Media step; the overview has Publish.
+    await expect(page).toHaveURL(/\/media\?created=1$/);
+    await page.goto(new URL(page.url()).pathname.replace(/\/media$/, ''));
     await expect(page.getByText('Draft ·')).toBeVisible();
     const dashboard = page.url();
     const slug = dashboard.split('/').pop() ?? '';

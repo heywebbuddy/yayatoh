@@ -2,7 +2,7 @@ import { expect, type Page, test } from '@playwright/test';
 import { closePools } from '@yayatoh/db';
 import { adminClient } from '@yayatoh/db/testing';
 import { resolveOrgSlug } from '@yayatoh/tenancy';
-import { devPassword, expectAccessible } from './helpers.ts';
+import { devPassword, expectAccessible, pickOption, pickWithKeyboard } from './helpers.ts';
 
 /**
  * Read-only freeze (M2.5a, roadmap §7.8; runbook docs/runbooks/cutover.md). Staff switch it in the
@@ -81,10 +81,9 @@ test.describe('read-only freeze (M2.5a)', () => {
       await expectAccessible(page);
 
       // Keyboard only: fill the venue form and submit with Enter. Refused, nothing saved.
+      await pickWithKeyboard(page.getByLabel('Country code'), 'US');
       await page.getByLabel('Venue name').focus();
       await page.keyboard.type(venue);
-      await page.getByLabel('Country code').focus();
-      await page.keyboard.type('us');
       await page.keyboard.press('Enter');
       await expect(
         page.getByRole('alert').filter({ hasText: 'Changes are paused during scheduled maintenance.' }),
@@ -126,7 +125,7 @@ test.describe('read-only freeze (M2.5a)', () => {
     await page.goto(`/o/${org.slug}/venues`);
     await expect(banner(page)).toHaveCount(0);
     await page.getByLabel('Venue name').fill(venue);
-    await page.getByLabel('Country code').fill('us');
+    await pickOption(page.getByLabel('Country code'), 'US');
     await page.getByRole('button', { name: 'Add venue' }).click();
     await expect(page.getByText('Venue added.')).toBeVisible();
     await page.goto(`/o/${org.slug}/venues`);

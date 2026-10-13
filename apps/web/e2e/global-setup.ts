@@ -2,7 +2,8 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 /**
- * Before the suite: build (or refill) the canary org for canary-crawl.spec.ts (roadmap §9), and
+ * Before the suite: build (or refill) the canary org for canary-crawl.spec.ts (roadmap §9), put
+ * two plans on sale for the test billing portal, and
  * migrate the synthetic legacy dataset (M2.2b) into the e2e database, as the
  * owner's migration would, and write the handles the legacy-migration spec reads
  * (e2e/.generated/legacy-demo.json). Idempotent: a rerun on a used database changes nothing.
@@ -22,6 +23,13 @@ export default function globalSetup() {
       encoding: 'utf8',
     });
     if (c.status !== 0) throw new Error(`canary org setup failed:\n${c.stdout}\n${c.stderr}`);
+    // The test billing portal offers only plans on sale (billing-plan.spec).
+    const b = spawnSync(process.execPath, ['apps/web/e2e/billing-setup.ts'], {
+      cwd: root,
+      env: process.env,
+      encoding: 'utf8',
+    });
+    if (b.status !== 0) throw new Error(`billing plan setup failed:\n${b.stdout}\n${b.stderr}`);
   }
   const missing = ['MIGRATOR_DATABASE_URL', 'DATABASE_URL', 'LOCAL_KMS_KEY'].filter((k) => !process.env[k]);
   if (missing.length) {

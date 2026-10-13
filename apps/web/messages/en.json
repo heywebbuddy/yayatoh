@@ -7297,6 +7297,11 @@
         "kpi": {
           "ofValid": "of {valid} guests"
         }
+      },
+      "media": {
+        "hint": {
+          "logo": "Shown in the console, on your public page and site, and in emails."
+        }
       }
     },
     "gala": {
@@ -7309,6 +7314,11 @@
       },
       "eventAnnouncements": {
         "emptyDescription": "Post news, schedule changes or reminders for your guests."
+      },
+      "media": {
+        "hint": {
+          "logo": "Shown in the console, on your public page and site, and in emails."
+        }
       }
     }
   },

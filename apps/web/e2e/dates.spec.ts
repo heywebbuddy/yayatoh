@@ -70,8 +70,8 @@ async function createEvent(page: Page, name: string, starts: string, ends: strin
   await page.getByLabel('Starts', { exact: true }).fill(starts);
   await page.getByLabel('Ends', { exact: true }).fill(ends);
   await page.getByRole('button', { name: 'Create draft' }).click();
-  await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+$/);
-  return new URL(page.url()).pathname;
+  await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+\/media\?created=1$/);
+  return new URL(page.url()).pathname.replace(/\/media$/, '');
 }
 
 async function addWeekly(page: Page, base: string, count: number) {

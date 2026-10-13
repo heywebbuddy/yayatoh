@@ -106,8 +106,9 @@ test('the organizer turns on pay later with a required PO number, by keyboard', 
   await page.getByLabel('Starts', { exact: true }).fill(chicago(2));
   await page.getByLabel('Ends', { exact: true }).fill(chicago(10));
   await page.getByRole('button', { name: 'Create draft' }).click();
-  await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+$/);
-  base = new URL(page.url()).pathname;
+  await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+\/media\?created=1$/);
+  base = new URL(page.url()).pathname.replace(/\/media$/, '');
+  await page.goto(base);
   slug = base.split('/').pop() as string;
   await page.getByRole('button', { name: 'Publish' }).click();
   await expect(page.getByText('Published ·')).toBeVisible();

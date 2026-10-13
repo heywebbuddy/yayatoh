@@ -203,7 +203,7 @@ test.describe('two-step verification: the sign-in challenge', () => {
     await expectAccessible(page);
     await page.getByLabel('Backup code').fill(first ?? '');
     await page.getByRole('button', { name: 'Verify and sign in' }).click();
-    await expect(page).toHaveURL(/\/o$/);
+    await expect(page).toHaveURL(/\/attendee$/);
 
     // Spent: the same code is refused next time; another one works.
     await context.clearCookies();
@@ -217,7 +217,7 @@ test.describe('two-step verification: the sign-in challenge', () => {
     // Typed as people do: spaces and without the dash.
     await page.getByLabel('Backup code').fill(` ${(second ?? '').replace('-', ' ')} `);
     await page.getByRole('button', { name: 'Verify and sign in' }).click();
-    await expect(page).toHaveURL(/\/o$/);
+    await expect(page).toHaveURL(/\/attendee$/);
 
     await page.goto(SECURITY);
     await expect(page.getByText('8 backup codes left')).toBeVisible();
@@ -244,7 +244,7 @@ test.describe('two-step verification: the sign-in challenge', () => {
     ).toBeVisible();
     await page.getByLabel('Backup code').fill(replaced[0] ?? '');
     await page.getByRole('button', { name: 'Verify and sign in' }).click();
-    await expect(page).toHaveURL(/\/o$/);
+    await expect(page).toHaveURL(/\/attendee$/);
   });
 
   test('wrong codes are limited: after five, the sign-in starts again', async ({ page }) => {
@@ -271,7 +271,7 @@ test.describe('two-step verification: the sign-in challenge', () => {
     await signInWithPassword(page, user.email);
     await page.getByLabel('6-digit code').fill(codeForKey(key));
     await page.getByRole('button', { name: 'Verify and sign in' }).click();
-    await expect(page).toHaveURL(/\/o$/);
+    await expect(page).toHaveURL(/\/attendee$/);
   });
 
   test('an emailed sign-in code is one factor: the authenticator code still follows', async ({ page }) => {
@@ -290,7 +290,7 @@ test.describe('two-step verification: the sign-in challenge', () => {
     expect(probe.status()).toBe(307);
     await page.getByLabel('6-digit code').fill(codeForKey(user.setupKey ?? ''));
     await page.getByRole('button', { name: 'Verify and sign in' }).click();
-    await expect(page).toHaveURL(/\/o$/);
+    await expect(page).toHaveURL(/\/attendee$/);
   });
 
   test('a seeded owner signs in with the password and the authenticator code', async ({ page }) => {
@@ -494,7 +494,7 @@ test.describe('two-step verification: Arabic (right to left)', () => {
     await expectAccessible(page);
     await page.getByLabel('رمز من 6 أرقام').fill(codeForKey(user.setupKey ?? ''));
     await page.getByRole('button', { name: 'تحقّق وسجّل الدخول' }).click();
-    await expect(page).toHaveURL(/\/ar\/o$/);
+    await expect(page).toHaveURL(/\/ar\/attendee$/);
   });
 });
 
@@ -507,7 +507,7 @@ test.describe('two-step verification: each code works once (M1.2c leftover)', ()
     await signInWithPassword(page, user.email);
     await page.getByLabel('6-digit code').fill(code);
     await page.getByRole('button', { name: 'Verify and sign in' }).click();
-    await expect(page).toHaveURL(/\/o$/);
+    await expect(page).toHaveURL(/\/attendee$/);
 
     // Signed out, and the same code again (still inside its 90-second window): refused.
     await page.context().clearCookies();
@@ -523,6 +523,6 @@ test.describe('two-step verification: each code works once (M1.2c leftover)', ()
     await page.getByRole('button', { name: 'Use a backup code instead' }).click();
     await page.getByLabel('Backup code').fill(user.backupCodes[0] ?? '');
     await page.getByRole('button', { name: 'Verify and sign in' }).click();
-    await expect(page).toHaveURL(/\/o$/);
+    await expect(page).toHaveURL(/\/attendee$/);
   });
 });

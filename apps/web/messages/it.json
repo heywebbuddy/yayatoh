@@ -7297,6 +7297,11 @@
         "kpi": {
           "ofValid": "su {valid} ospiti"
         }
+      },
+      "media": {
+        "hint": {
+          "logo": "Mostrato nella console, sulla tua pagina pubblica e sul sito, e nelle email."
+        }
       }
     },
     "gala": {
@@ -7309,6 +7314,11 @@
       },
       "eventAnnouncements": {
         "emptyDescription": "Pubblica novità, cambi di orario o promemoria per i tuoi ospiti."
+      },
+      "media": {
+        "hint": {
+          "logo": "Mostrato nella console, sulla tua pagina pubblica e sul sito, e nelle email."
+        }
       }
     }
   },

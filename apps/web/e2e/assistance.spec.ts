@@ -44,8 +44,9 @@ async function eventNow(page: Page, browser: Browser, prefix: string): Promise<S
   await page.getByLabel('Starts', { exact: true }).fill(chicago(-1));
   await page.getByLabel('Ends', { exact: true }).fill(chicago(3));
   await page.getByRole('button', { name: 'Create draft' }).click();
-  await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+$/);
-  const base = new URL(page.url()).pathname;
+  await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+\/media\?created=1$/);
+  const base = new URL(page.url()).pathname.replace(/\/media$/, '');
+  await page.goto(base);
   const slug = base.split('/').pop() as string;
   await page.getByRole('button', { name: 'Publish' }).click();
   await expect(page.getByText('Published ·')).toBeVisible();
@@ -306,7 +307,7 @@ test.describe('Guest assistance (M3.3b)', () => {
     // Arabic RTL on the scanner's staff screen.
     await device.goto('/ar/scan');
     await expect(device.locator('html')).toHaveAttribute('dir', 'rtl');
-    await device.getByRole('navigation').getByRole('button').nth(1).click();
+    await device.getByRole('navigation').getByRole('button', { name: 'الفريق' }).click();
     await expect(device.getByRole('heading', { name: 'اطلب المساعدة' })).toBeVisible();
     await expectAccessible(device);
     await deviceContext.close();

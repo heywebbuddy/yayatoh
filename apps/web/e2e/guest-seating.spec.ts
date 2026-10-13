@@ -32,8 +32,8 @@ async function createWedding(page: Page, name: string): Promise<string> {
   await page.getByLabel('Starts', { exact: true }).fill(`${chicagoDate(60)}T16:00`);
   await page.getByLabel('Ends', { exact: true }).fill(`${chicagoDate(60)}T23:00`);
   await page.getByRole('button', { name: 'Create draft' }).click();
-  await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+$/);
-  return new URL(page.url()).pathname;
+  await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+\/media\?created=1$/);
+  return new URL(page.url()).pathname.replace(/\/media$/, '');
 }
 
 const partyRegion = (page: Page, name: string) => page.getByRole('region', { name, exact: true });

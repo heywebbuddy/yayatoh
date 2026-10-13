@@ -33,7 +33,7 @@ test.describe('messaging: announcements and conversations', () => {
     await page.getByLabel('Ends', { exact: true }).fill('2027-11-01T22:00');
     await page.getByRole('button', { name: 'Create draft' }).click();
     await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/harbor-\d+/);
-    const base = new URL(page.url()).pathname;
+    const base = new URL(page.url()).pathname.replace(/\/media$/, '');
 
     // The Marketing section: empty sent log, and every validation message.
     await page.goto(`${base}/marketing`);

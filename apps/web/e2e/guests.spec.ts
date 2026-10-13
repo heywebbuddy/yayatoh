@@ -14,8 +14,8 @@ test.describe('guest list', () => {
     await page.getByLabel('Starts', { exact: true }).fill('2027-11-01T18:00');
     await page.getByLabel('Ends', { exact: true }).fill('2027-11-01T22:00');
     await page.getByRole('button', { name: 'Create draft' }).click();
-    await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/dinner-\d+$/);
-    const base = new URL(page.url()).pathname;
+    await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/dinner-\d+\/media\?created=1$/);
+    const base = new URL(page.url()).pathname.replace(/\/media$/, '');
     await page.goto(`${base}/attendees`);
 
     await page

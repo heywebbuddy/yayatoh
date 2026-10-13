@@ -33,7 +33,7 @@ async function answerWithBackup(page: Page, code: string, trust: boolean) {
   await page.getByLabel('Backup code').fill(code);
   if (trust) await page.getByRole('checkbox', { name: TRUST }).check();
   await page.getByRole('button', { name: 'Verify and sign in' }).click();
-  await expect(page).toHaveURL(/\/o$/);
+  await expect(page).toHaveURL(/\/attendee$/);
 }
 
 /** Sign out here but keep the browser's trusted-device cookie (a new visit on the same device). */
@@ -66,12 +66,12 @@ test.describe('trusted devices (M1.2f)', () => {
     await page.keyboard.press('Space');
     await expect(page.getByRole('checkbox', { name: TRUST })).toBeChecked();
     await page.keyboard.press('Enter');
-    await expect(page).toHaveURL(/\/o$/);
+    await expect(page).toHaveURL(/\/attendee$/);
 
     // Same browser, new sign-in: no second step.
     await signOutKeepingDevice(context);
     await passwordSignIn(page, user.email);
-    await expect(page).toHaveURL(/\/o$/);
+    await expect(page).toHaveURL(/\/attendee$/);
     await expect(challengeHeading(page)).toHaveCount(0);
 
     // Another browser is not trusted.

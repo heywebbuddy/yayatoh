@@ -30,8 +30,9 @@ async function conference(page: Page, name: string) {
   await page.getByLabel('Starts', { exact: true }).fill(`${d}T09:00`);
   await page.getByLabel('Ends', { exact: true }).fill(`${d}T18:00`);
   await page.getByRole('button', { name: 'Create draft' }).click();
-  await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+$/);
-  const path = new URL(page.url()).pathname;
+  await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+\/media\?created=1$/);
+  const path = new URL(page.url()).pathname.replace(/\/media$/, '');
+  await page.goto(path);
   await page.getByRole('button', { name: 'Publish' }).click();
   await expect(page.getByText('Published ·')).toBeVisible();
   // Batch 3e: M5.1a's registration types (the standard ones), three of them with a free pass so

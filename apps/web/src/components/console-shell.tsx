@@ -334,7 +334,7 @@ export async function ConsoleShell({
         <OrgStatusBanner status={data.org.status} sandbox={data.org.sandbox} />
         <AgencyBadge data={data} />
         <IncidentBanner variant="console" />
-        <header className="sticky top-0 z-40 -mx-4 flex flex-wrap items-center gap-2.5 bg-page/95 px-4 py-2 backdrop-blur-xl md:-mx-6 md:px-6 lg:mx-0 lg:px-0">
+        <header className="relative z-30 flex flex-wrap items-center gap-2.5">
           <MobileNav openLabel={t('menu')} closeLabel={t('closeMenu')}>
             <nav
               aria-label={t('navigation')}

@@ -151,7 +151,8 @@ test.describe('starter templates (M4.2a)', () => {
     await expectAccessible(page);
     await page.goto(`/ar${wedding}/setup-guide`);
     await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
-    await expect(page.getByText('قريبًا').first()).toBeVisible();
+    // The wedding checklist (every item is live now; the RSVP deadline was the last "coming soon").
+    await expect(page.getByRole('list', { name: 'قائمة الجاهزية' })).toBeVisible();
     await expectAccessible(page);
   });
 });
@@ -388,7 +389,7 @@ test.describe('event team: co-hosts and planners (M4.2a, P4-8)', () => {
     await expect(page.getByText('Pat Planner was removed.')).toBeVisible();
     expect(await status(plannerPage, wedding)).toBe(404);
     await plannerPage.goto('/o');
-    await expect(plannerPage.getByText("You're not in an organization yet")).toBeVisible();
+    await expect(plannerPage).toHaveURL(/\/attendee$/);
     await page.reload();
     await expect(page.getByRole('table', { name: 'Event team' }).getByText('Pat Planner')).toHaveCount(0);
   });

@@ -164,5 +164,5 @@ async function createDraftEvent(page: Page, slug: string, name: string) {
   await page.getByLabel('Starts', { exact: true }).fill('2031-05-01T19:00');
   await page.getByLabel('Ends', { exact: true }).fill('2031-05-01T23:00');
   await page.getByRole('button', { name: 'Create draft' }).click();
-  await expect(page).toHaveURL(new RegExp(`/o/${slug}/e/[a-z0-9-]+$`));
+  await expect(page).toHaveURL(new RegExp(`/o/${slug}/e/[a-z0-9-]+/media\\?created=1$`));
 }

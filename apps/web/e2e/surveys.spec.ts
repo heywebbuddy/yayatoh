@@ -44,8 +44,8 @@ async function pastEvent(page: Page, name: string) {
   await page.getByLabel('Starts', { exact: true }).fill('2026-03-01T18:00');
   await page.getByLabel('Ends', { exact: true }).fill('2026-03-01T22:00');
   await page.getByRole('button', { name: 'Create draft' }).click();
-  await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+$/);
-  return new URL(page.url()).pathname;
+  await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+\/media\?created=1$/);
+  return new URL(page.url()).pathname.replace(/\/media$/, '');
 }
 
 async function addGuests(page: Page, base: string, people: readonly { name: string; email: string }[]) {
@@ -342,8 +342,8 @@ test.describe('surveys (M3.9a)', () => {
     await page.getByLabel('Starts', { exact: true }).fill('2031-05-01T09:00');
     await page.getByLabel('Ends', { exact: true }).fill('2031-05-01T18:00');
     await page.getByRole('button', { name: 'Create draft' }).click();
-    await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+$/);
-    const base = new URL(page.url()).pathname;
+    await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+\/media\?created=1$/);
+    const base = new URL(page.url()).pathname.replace(/\/media$/, '');
     await page.goto(`${base}/sessions`);
     const add = page.getByRole('region', { name: 'Add session' });
     await add.getByLabel('Session title').fill(`Keynote ${s}`);
