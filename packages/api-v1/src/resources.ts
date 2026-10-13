@@ -81,7 +81,17 @@ export const Problem = z
   })
   .openapi('Problem') satisfies z.ZodType<ProblemDto>;
 
-export const User = z.object({ id: z.uuid(), name: z.string(), email: z.string() }).openapi('User');
+export const User = z
+  .object({
+    id: z.uuid(),
+    name: z.string(),
+    email: z.string(),
+    emailVerified: z.boolean().openapi({
+      description:
+        'Whether the person has proved the address (an emailed code, a provider’s verified email). `/me/…` routes other than `/me` and `/me/organizations` refuse unverified sessions (`403`, `details.reason: email_unverified`).',
+    }),
+  })
+  .openapi('User');
 
 export const Session = z
   .object({

@@ -33,7 +33,12 @@ export interface TokenPair {
   readonly accessTokenExpiresAt: Date;
   readonly refreshToken: string;
   readonly refreshTokenExpiresAt: Date;
-  readonly user: { readonly id: string; readonly name: string; readonly email: string };
+  readonly user: {
+    readonly id: string;
+    readonly name: string;
+    readonly email: string;
+    readonly emailVerified: boolean;
+  };
   /** The re-authentication the access token carries (see `BearerSession.stepUpAt`). */
   readonly stepUpAt: Date | null;
 }
@@ -103,7 +108,7 @@ export function refreshTokenService(auth: Auth, opts: { now?: () => Date } = {})
       accessTokenExpiresAt,
       refreshToken,
       refreshTokenExpiresAt,
-      user: { id: user.id, name: user.name, email: user.email },
+      user: { id: user.id, name: user.name, email: user.email, emailVerified: Boolean(user.emailVerified) },
       stepUpAt,
     };
   }

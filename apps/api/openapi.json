@@ -2422,12 +2422,17 @@
           },
           "email": {
             "type": "string"
+          },
+          "emailVerified": {
+            "type": "boolean",
+            "description": "Whether the person has proved the address (an emailed code, a provider’s verified email). `/me/…` routes other than `/me` and `/me/organizations` refuse unverified sessions (`403`, `details.reason: email_unverified`)."
           }
         },
         "required": [
           "id",
           "name",
-          "email"
+          "email",
+          "emailVerified"
         ]
       },
       "Problem": {
@@ -2507,6 +2512,274 @@
             "required": [
               "grantType",
               "refreshToken"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "grantType": {
+                "type": "string",
+                "enum": [
+                  "email_code"
+                ]
+              },
+              "email": {
+                "type": "string",
+                "maxLength": 254,
+                "format": "email"
+              },
+              "code": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 32,
+                "description": "The six-digit code from `POST /auth/email-code`."
+              }
+            },
+            "required": [
+              "grantType",
+              "email",
+              "code"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "grantType": {
+                "type": "string",
+                "enum": [
+                  "apple"
+                ]
+              },
+              "idToken": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 8192
+              },
+              "nonce": {
+                "type": "string",
+                "minLength": 16,
+                "maxLength": 200,
+                "description": "A random value the app makes for this attempt and gives the platform’s sign-in sheet. For Apple the sheet puts its SHA-256 (hex) in the id_token; for Google it is carried as given."
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200,
+                "description": "The name Apple gives the app on the first sign-in only (it is not in the id_token)."
+              }
+            },
+            "required": [
+              "grantType",
+              "idToken",
+              "nonce"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "grantType": {
+                "type": "string",
+                "enum": [
+                  "google"
+                ]
+              },
+              "idToken": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 8192
+              },
+              "nonce": {
+                "type": "string",
+                "minLength": 16,
+                "maxLength": 200,
+                "description": "A random value the app makes for this attempt and gives the platform’s sign-in sheet. For Apple the sheet puts its SHA-256 (hex) in the id_token; for Google it is carried as given."
+              }
+            },
+            "required": [
+              "grantType",
+              "idToken",
+              "nonce"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "grantType": {
+                "type": "string",
+                "enum": [
+                  "two_factor"
+                ]
+              },
+              "challenge": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              },
+              "code": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 32,
+                "description": "An authenticator code or a backup code."
+              }
+            },
+            "required": [
+              "grantType",
+              "challenge",
+              "code"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "grantType": {
+                "type": "string",
+                "enum": [
+                  "link_proof"
+                ]
+              },
+              "challenge": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              },
+              "code": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 32,
+                "description": "The six-digit code emailed to the existing account’s address."
+              }
+            },
+            "required": [
+              "grantType",
+              "challenge",
+              "code"
+            ]
+          }
+        ]
+      },
+      "EmailCodeRequested": {
+        "type": "object",
+        "properties": {
+          "expiresInSeconds": {
+            "type": "integer",
+            "description": "How long the code works."
+          }
+        },
+        "required": [
+          "expiresInSeconds"
+        ]
+      },
+      "EmailCodeRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "maxLength": 254,
+            "format": "email"
+          }
+        },
+        "required": [
+          "email"
+        ]
+      },
+      "StepUpStarted": {
+        "type": "object",
+        "properties": {
+          "method": {
+            "$ref": "#/components/schemas/StepUpMethod"
+          }
+        },
+        "required": [
+          "method"
+        ]
+      },
+      "StepUpMethod": {
+        "type": "string",
+        "enum": [
+          "totp",
+          "password",
+          "email"
+        ],
+        "description": "How this person confirms it is them: their authenticator (if set up), else their password, else an emailed code."
+      },
+      "StepUpResult": {
+        "type": "object",
+        "properties": {
+          "stepUpAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Commands that need a recent step-up pass until this time."
+          }
+        },
+        "required": [
+          "stepUpAt",
+          "expiresAt"
+        ]
+      },
+      "StepUpRequest": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "method": {
+                "type": "string",
+                "enum": [
+                  "totp"
+                ]
+              },
+              "code": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 32
+              }
+            },
+            "required": [
+              "method",
+              "code"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "method": {
+                "type": "string",
+                "enum": [
+                  "email"
+                ]
+              },
+              "code": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 32
+              }
+            },
+            "required": [
+              "method",
+              "code"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "method": {
+                "type": "string",
+                "enum": [
+                  "password"
+                ]
+              },
+              "password": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              }
+            },
+            "required": [
+              "method",
+              "password"
             ]
           }
         ]
@@ -6793,8 +7066,8 @@
         "tags": [
           "auth"
         ],
-        "summary": "Sign in (grantType password) or refresh (grantType refresh_token): a 15-minute access token and a rotating refresh token",
-        "description": "Each refresh spends the refresh token and returns a new pair; the previous access token ends. A spent refresh token presented again revokes its whole chain (every access token issued from it ends), answering `401` with `reason: refresh_token_reused`.",
+        "summary": "Sign in or refresh: a 15-minute access token and a rotating refresh token (grantType password, email_code, apple, google, two_factor, link_proof or refresh_token)",
+        "description": "Each refresh spends the refresh token and returns a new pair; the previous access token ends. A spent refresh token presented again revokes its whole chain (every access token issued from it ends), answering `401` with `reason: refresh_token_reused`.\n\n**Grants.** `password`: email and password. `email_code`: the code from `POST /auth/email-code`; the first sign-in creates the account with the address verified. `apple` and `google`: the native sheet’s `idToken` with the `nonce` the app gave it; the token’s signature, issuer, audience, expiry and nonce are checked. `two_factor` and `link_proof`: finish a step the platform asked for (below).\n\n**Steps.** An account with two-step verification never gets tokens from a first factor (`password`, `email_code`, `apple`, `google`, `link_proof`): the answer is `401 step_up_required` with `details.reason: two_factor_required`, a single-use `details.challenge` and `details.challengeExpiresAt` (five minutes). Send it with an authenticator or backup code as grant `two_factor`. A provider sign-in whose verified email matches an existing account that has not linked it answers `401 step_up_required` with `details.reason: email_proof_required`: a code was emailed to that address; send it with the `challenge` as grant `link_proof`.\n\n**Refusals** are `401 unauthenticated` with `details.reason`: `invalid_credentials`, `invalid_code`, `too_many_attempts` (start the sign-in again), `invalid_challenge` (unknown, spent or expired), `invalid_id_token`, `provider_email_missing`, `provider_email_unverified`, `provider_linked_elsewhere`; or `429 rate_limited`.",
         "requestBody": {
           "required": true,
           "content": {
@@ -6812,6 +7085,252 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TokenPair"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/email-code": {
+      "post": {
+        "operationId": "requestEmailCode",
+        "tags": [
+          "auth"
+        ],
+        "summary": "Email a six-digit sign-in code",
+        "description": "Sends a code to the address and answers `202` with the same body whether or not the address has an account: the first sign-in with the code creates it. Spend the code with `POST /auth/token` (grantType `email_code`). Limited per address (5 per 15 min) and per client IP.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmailCodeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "A code was sent if the address can receive mail",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmailCodeRequested"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/step-up/start": {
+      "post": {
+        "operationId": "startStepUp",
+        "tags": [
+          "auth"
+        ],
+        "summary": "Which proof the signed-in person must give to step up (emails the code when it is an emailed one)",
+        "description": "Answers with the method (`totp`, `password` or `email`). For `email` a six-digit code is sent to the person’s address (5 per 15 min). Then send the proof to `POST /auth/step-up`.",
+        "security": [
+          {
+            "bearerSession": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The method to use",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StepUpStarted"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/step-up": {
+      "post": {
+        "operationId": "stepUp",
+        "tags": [
+          "auth"
+        ],
+        "summary": "Confirm it is you: commands that need a recent step-up pass for the next few minutes",
+        "description": "Checks an authenticator or backup code (`totp`), the password, or an emailed code (`email`; the method must be the person’s own, see `POST /auth/step-up/start`) and stamps this session. A command that needs a step-up and finds none fresh answers `401 step_up_required`. A wrong proof answers `400 validation_failed` with `details.reason` `invalid_code` or `invalid_password`; five wrong proofs in 15 minutes answer `429`. A fresh sign-in counts as a step-up.",
+        "security": [
+          {
+            "bearerSession": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StepUpRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The session is stepped up",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StepUpResult"
                 }
               }
             }
