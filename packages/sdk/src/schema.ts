@@ -250,7 +250,7 @@ export interface paths {
         };
         /**
          * Minimum and latest app versions, base URLs and feature flags (public)
-         * @description Minimum and latest app versions per platform, the base URLs and feature flags. No credential.
+         * @description Minimum and latest app versions per platform and per app (`apps`), the base URLs and feature flags. No credential. An app below its `minimumVersion` gets `426 Upgrade Required` (problem+json, code `upgrade_required`, `details.storeUrl`) from every other route; this one always answers.
          */
         get: operations["getMobileConfig"];
         put?: never;
@@ -2608,8 +2608,23 @@ export interface components {
         MembershipList: {
             data: components["schemas"]["Membership"][];
         };
+        MobileAppConfig: {
+            /** @description The newest version in the stores. */
+            latestVersion: string;
+            /** @description Below this version the app’s `/v1` calls get `426 Upgrade Required` (never a Staff device during its event). */
+            minimumVersion: string;
+            /** @description Where to get the update (the app’s store page). */
+            storeUrl: string;
+        };
         MobileConfig: {
             apiVersion: string;
+            /** @description Version policy per app, keyed by the identifier the app sends in `X-Yayatoh-Client`. `minimumVersions` and `latestVersions` above are the attendee apps’ per-platform values. */
+            apps: {
+                "yayatoh-android": components["schemas"]["MobileAppConfig"];
+                "yayatoh-ios": components["schemas"]["MobileAppConfig"];
+                "yayatoh-staff-android": components["schemas"]["MobileAppConfig"];
+                "yayatoh-staff-ios": components["schemas"]["MobileAppConfig"];
+            };
             baseUrls: {
                 api: string;
                 web: string;

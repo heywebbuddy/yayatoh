@@ -16,6 +16,9 @@ import { scanTicketCommand } from './scan.ts';
 import { SCAN_RESULTS } from './schema.ts';
 import { admitSessionOverrideCommand } from './session-checkin.ts';
 
+// M7.2d: the `/v1` version gate asks whether a device is inside its event window.
+export { DEVICE_EVENT_WINDOW, type DeviceWindowState, deviceWindowState } from './devices.ts';
+
 type Env = { Variables: { device: Ctx } };
 
 const security = [{ deviceToken: [] }];

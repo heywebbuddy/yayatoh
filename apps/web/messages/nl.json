@@ -1341,6 +1341,8 @@
     "revokeFor": "{label} intrekken",
     "linkHint": "Of open deze link op het apparaat: hij stelt de scanner in voor dit evenement.",
     "openScanner": "Scanner openen op dit apparaat",
+    "qrLabel": "QR-code van de installatielink",
+    "qrHint": "Of scan deze code met de Staff-app of met de camera van het apparaat dat je instelt. De sleutel blijft in de link en wordt nooit naar de server gestuurd.",
     "handedTo": "Entregue a",
     "orgDevice": "Ninguém (escaneia em qualquer lugar)",
     "handedToName": "para {name}"

@@ -1341,6 +1341,8 @@
     "revokeFor": "撤銷 {label}",
     "linkHint": "或在裝置上開啟此連結：它會為本活動設定好掃描器。",
     "openScanner": "在此裝置上開啟掃描器",
+    "qrLabel": "設定連結的 QR 碼",
+    "qrHint": "也可以用 Staff App 或正在設定的裝置的相機掃描此 QR 碼。金鑰只保留在連結中，絕不會傳送到伺服器。",
     "handedTo": "交給",
     "orgDevice": "無人(可在任何位置掃描)",
     "handedToName": "給 {name}"

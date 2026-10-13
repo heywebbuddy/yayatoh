@@ -13,6 +13,11 @@ export const KNOWN_CLIENTS = [
   'sdk-ts',
   'sdk-swift',
   'sdk-kotlin',
+  // M7.1c / M7.2d: the attendee and Staff apps, which the version gate also reads.
+  'yayatoh-ios',
+  'yayatoh-android',
+  'yayatoh-staff-ios',
+  'yayatoh-staff-android',
 ] as const;
 /** `1`, `3.2`, `3.2.1`, `3.2.1.4`, optionally with a short pre-release or build suffix. */
 const VERSION = /^\d{1,6}(\.\d{1,6}){0,3}([-+][0-9A-Za-z.]{1,20})?$/;
@@ -28,7 +33,9 @@ export function clientInfo(headers: { get(name: string): string | null | undefin
   const explicit = headers.get('x-yayatoh-client')?.trim();
   if (explicit) {
     const [client, v] = explicit.split('/', 2);
-    if (client) return { client: known(client.toLowerCase()), appVersion: version(v) };
+    // The apps append their build: `yayatoh-ios/3.2.1 (45)`. Only the version counts.
+    if (client)
+      return { client: known(client.toLowerCase()), appVersion: version(v?.trim().split(/\s+/, 1)[0]) };
   }
   const ua = headers.get('user-agent') ?? '';
   const guessed = /iphone|ipad|ios|cfnetwork|darwin/i.test(ua)

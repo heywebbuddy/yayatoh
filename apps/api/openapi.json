@@ -2679,6 +2679,30 @@
             "additionalProperties": {
               "type": "boolean"
             }
+          },
+          "apps": {
+            "type": "object",
+            "properties": {
+              "yayatoh-ios": {
+                "$ref": "#/components/schemas/MobileAppConfig"
+              },
+              "yayatoh-android": {
+                "$ref": "#/components/schemas/MobileAppConfig"
+              },
+              "yayatoh-staff-ios": {
+                "$ref": "#/components/schemas/MobileAppConfig"
+              },
+              "yayatoh-staff-android": {
+                "$ref": "#/components/schemas/MobileAppConfig"
+              }
+            },
+            "required": [
+              "yayatoh-ios",
+              "yayatoh-android",
+              "yayatoh-staff-ios",
+              "yayatoh-staff-android"
+            ],
+            "description": "Version policy per app, keyed by the identifier the app sends in `X-Yayatoh-Client`. `minimumVersions` and `latestVersions` above are the attendee apps’ per-platform values."
           }
         },
         "required": [
@@ -2686,7 +2710,30 @@
           "minimumVersions",
           "latestVersions",
           "baseUrls",
-          "features"
+          "features",
+          "apps"
+        ]
+      },
+      "MobileAppConfig": {
+        "type": "object",
+        "properties": {
+          "minimumVersion": {
+            "type": "string",
+            "description": "Below this version the app’s `/v1` calls get `426 Upgrade Required` (never a Staff device during its event)."
+          },
+          "latestVersion": {
+            "type": "string",
+            "description": "The newest version in the stores."
+          },
+          "storeUrl": {
+            "type": "string",
+            "description": "Where to get the update (the app’s store page)."
+          }
+        },
+        "required": [
+          "minimumVersion",
+          "latestVersion",
+          "storeUrl"
         ]
       },
       "PublicEvent": {
@@ -7261,7 +7308,7 @@
           "mobile"
         ],
         "summary": "Minimum and latest app versions, base URLs and feature flags (public)",
-        "description": "Minimum and latest app versions per platform, the base URLs and feature flags. No credential.",
+        "description": "Minimum and latest app versions per platform and per app (`apps`), the base URLs and feature flags. No credential. An app below its `minimumVersion` gets `426 Upgrade Required` (problem+json, code `upgrade_required`, `details.storeUrl`) from every other route; this one always answers.",
         "responses": {
           "200": {
             "description": "Mobile configuration",
