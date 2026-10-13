@@ -73,7 +73,7 @@ describe('check-modules gate canaries', () => {
     expect(() =>
       execFileSync(process.execPath, [cli, '--root', here('../../..')], { stdio: 'pipe' }),
     ).not.toThrow();
-  });
+  }, 30_000);
 });
 
 describe('importsOf', () => {

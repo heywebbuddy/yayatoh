@@ -16,6 +16,28 @@ interface Pkg {
   readonly universal: boolean;
 }
 
+/**
+ * Phase 7 (M7.1b, ADR 0025): the Expo apps and the package they share. They are React Native code
+ * that talks to the server only through `@yayatoh/sdk`, so they may import universal packages, the
+ * SDK, the design tokens and mobile-core, and nothing that belongs to the web or the database.
+ */
+const MOBILE_ROOTS = ['apps/mobile', 'apps/staff', 'packages/mobile-core'];
+const MOBILE_ALLOWED_PACKAGES = ['@yayatoh/sdk', '@yayatoh/mobile-core'];
+/** Declared in package.json only: the UI package (for its `./tokens` export) and the shared tsconfig. */
+const MOBILE_DECLARED_EXTRA = ['@yayatoh/ui', '@yayatoh/config'];
+/** Third-party packages that are web or server only: an app bundle must never pull them in. */
+const MOBILE_FORBIDDEN_EXTERNAL =
+  /^(?:next(?:\/.*)?|next-intl(?:\/.*)?|react-dom(?:\/.*)?|server-only|drizzle-orm(?:\/.*)?|hono(?:\/.*)?|@hono\/.*|pg-boss|stripe)$/;
+/** Config files run in Node (Expo, Metro and Jest read them), so they may import `node:` modules. */
+const MOBILE_NODE_FILES =
+  /(?:^|\/)(?:app|metro|jest)\.config\.(?:ts|js|cjs)$|\/src\/app-config\.ts$|\/metro\.cjs$/;
+/** Style props and JSX attributes whose value is a colour. `transparent` is not a colour literal. */
+const MOBILE_COLOUR_PROP = /\b\w*[cC]olor\s*(?::|=\s*\{?)\s*(['"`])(?!transparent\1)([^'"`]+)\1/g;
+/** Attributes and style keys that carry text a person reads or a screen reader speaks. */
+const MOBILE_TEXT_PROPS =
+  /\b(accessibilityLabel|accessibilityHint|aria-label|placeholder|title|headerTitle|tabBarLabel|alt|label)\s*(?:=\s*\{?|:)\s*(['"])([^'"\n]*\p{L}[^'"\n]*)\2/gu;
+const isMobilePath = (rel: string) => MOBILE_ROOTS.some((r) => rel.startsWith(`${r}/`));
+
 const SKIP_DIRS = new Set([
   'node_modules',
   '.next',
@@ -159,6 +181,21 @@ export function checkModules(root: string): Violation[] {
     }
     if (!SOURCE.test(abs)) continue;
 
+    // Mobile apps (ADR 0025): no colour literals and no literal UI strings in .tsx. Colours come
+    // from @yayatoh/ui/tokens, text from the app's catalogs (use-intl).
+    if (isMobilePath(rel) && rel.endsWith('.tsx') && !test) {
+      const hex = src.match(/#[0-9a-fA-F]{8}\b|#[0-9a-fA-F]{6}\b|#[0-9a-fA-F]{3,4}\b(?![0-9a-fA-F])/);
+      if (hex) add('design-tokens', `raw colour ${hex[0]} — use a token from @yayatoh/ui/tokens`);
+      const fn = src.match(/\b(?:rgba?|hsla?|oklch|oklab)\(\s*\d/);
+      if (fn) add('design-tokens', `raw colour ${fn[0]}… — use a token from @yayatoh/ui/tokens`);
+      for (const m of src.matchAll(MOBILE_COLOUR_PROP))
+        add('design-tokens', `literal colour "${m[2]}" — use a token from @yayatoh/ui/tokens`);
+      for (const text of literalJsxText(src))
+        add('i18n-literal', `literal UI text "${text}" — use a message from the app's catalog`);
+      for (const m of src.matchAll(MOBILE_TEXT_PROPS))
+        add('i18n-literal', `literal ${m[1]} "${m[3]}" — use a message from the app's catalog`);
+    }
+
     // Cache guard (roadmap §4.3 step 6): public caching only through the org-scoped helper.
     if (rel.startsWith('apps/') && !test && rel !== CACHE_HELPER) {
       if (/\bunstable_cache\b|['"]use cache(?::[\w-]+)?['"]|\bcacheTag\s*\(/.test(src))
@@ -193,6 +230,33 @@ export function checkModules(root: string): Violation[] {
     }
 
     for (const spec of importsOf(src)) {
+      if (isMobilePath(rel)) {
+        if (MOBILE_FORBIDDEN_EXTERNAL.test(spec))
+          add(
+            'mobile-imports',
+            `"${spec}" is web or server code: the apps reach the server through @yayatoh/sdk`,
+          );
+        if (/^(?:node:|fs$|path$)/.test(spec) && !test && !MOBILE_NODE_FILES.test(rel))
+          add(
+            'mobile-imports',
+            `"${spec}" does not exist on a phone: only config files may import Node modules`,
+          );
+        if (spec.startsWith('@yayatoh/')) {
+          const [scope, name] = spec.split('/');
+          const named = `${scope}/${name}`;
+          const allowed =
+            named === pkg?.name ||
+            byName.get(named)?.universal ||
+            MOBILE_ALLOWED_PACKAGES.includes(named) ||
+            spec === '@yayatoh/ui/tokens';
+          if (!allowed)
+            add(
+              'mobile-imports',
+              `${spec}: apps import only universal packages, @yayatoh/sdk, @yayatoh/ui/tokens and @yayatoh/mobile-core`,
+            );
+        }
+      }
+
       // Relative imports must stay inside their own package.
       if (spec.startsWith('.')) {
         const target = relative(root, join(abs, '..', spec))
@@ -274,6 +338,25 @@ export function checkModules(root: string): Violation[] {
         if (!globalTables.has(key)) {
           add('tenant-table', `table ${key} is not a tenantTable() and not listed in GLOBAL_TABLES`);
         }
+      }
+    }
+  }
+
+  // The mobile packages may not even declare a web, server or database package.
+  for (const p of pkgs.filter((x) => MOBILE_ROOTS.includes(x.dir))) {
+    for (const dep of p.deps) {
+      const allowed =
+        !dep.startsWith('@yayatoh/') ||
+        dep === p.name ||
+        byName.get(dep)?.universal ||
+        MOBILE_ALLOWED_PACKAGES.includes(dep) ||
+        MOBILE_DECLARED_EXTRA.includes(dep);
+      if (!allowed || MOBILE_FORBIDDEN_EXTERNAL.test(dep)) {
+        violations.push({
+          rule: 'mobile-imports',
+          file: `${p.dir}/package.json`,
+          message: `${p.name} declares ${dep}: apps depend only on universal packages, @yayatoh/sdk, @yayatoh/ui (tokens), @yayatoh/mobile-core and @yayatoh/config`,
+        });
       }
     }
   }

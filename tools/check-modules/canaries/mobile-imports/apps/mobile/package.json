@@ -1,0 +1,7 @@
+{
+  "name": "@yayatoh/mobile",
+  "dependencies": {
+    "@yayatoh/db": "workspace:*",
+    "next": "16.0.0"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "@yayatoh/events",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "yayatoh": {
+    "tier": 3
+  }
+}

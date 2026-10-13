@@ -1,0 +1,4 @@
+{
+  "extends": "@yayatoh/config/tsconfig/expo.json",
+  "include": ["src", "tests"]
+}

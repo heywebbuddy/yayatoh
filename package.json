@@ -13,6 +13,7 @@
     "format": "biome check --write .",
     "typecheck": "turbo run typecheck",
     "test": "vitest run --project unit",
+    "test:mobile": "turbo run test --filter=@yayatoh/mobile --filter=@yayatoh/staff --filter=@yayatoh/mobile-core",
     "test:int": "vitest run --project integration",
     "test:isolation": "vitest run --project integration -t isolation",
     "test:canary": "pnpm --filter @yayatoh/web exec playwright test canary-crawl --project=desktop-1280",
@@ -33,7 +34,7 @@
     "cutover:rehearse": "node tools/cutover/cli.ts rehearse",
     "vapid:generate": "node packages/modules/notifications/scripts/generate-vapid-keys.ts",
     "contracts:check": "pnpm --filter @yayatoh/api openapi:check && pnpm --filter @yayatoh/api openapi:lint && pnpm --filter @yayatoh/sdk generate:check && pnpm --filter @yayatoh/automation-apps generate:check",
-    "verify": "pnpm lint && pnpm check:modules && pnpm typecheck && pnpm test && pnpm test:int",
+    "verify": "pnpm lint && pnpm check:modules && pnpm typecheck && pnpm test && pnpm test:mobile && pnpm test:int",
     "apps:generate": "pnpm --filter @yayatoh/automation-apps generate"
   },
   "devDependencies": {

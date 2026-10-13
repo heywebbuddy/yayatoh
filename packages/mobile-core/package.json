@@ -1,0 +1,36 @@
+{
+  "name": "@yayatoh/mobile-core",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "sideEffects": false,
+  "yayatoh": {
+    "kind": "mobile"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./app-config": "./src/app-config.ts",
+    "./metro": "./metro.cjs"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "jest"
+  },
+  "peerDependencies": {
+    "expo": "*",
+    "react": "*",
+    "react-native": "*"
+  },
+  "devDependencies": {
+    "@types/jest": "catalog:mobile",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:mobile",
+    "@yayatoh/config": "workspace:*",
+    "expo": "catalog:mobile",
+    "jest": "catalog:mobile",
+    "jest-expo": "catalog:mobile",
+    "react": "catalog:mobile",
+    "react-native": "catalog:mobile",
+    "typescript": "catalog:"
+  }
+}
