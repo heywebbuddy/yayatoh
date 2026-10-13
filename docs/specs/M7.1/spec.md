@@ -23,7 +23,7 @@ Give the later mobile increments a place to land: two Expo apps that build, test
 
 ### 3. Later / not yet
 - Contents of `mobile-core` (client, token storage, theme, translations, deep links, version gate, crash reporting): M7.1c. Real screens: M7.2 onwards.
-- Maestro flows: none yet, there is no journey to drive (the first land with M7.2).
+- Maestro: one launch smoke flow per app (`apps/<app>/.maestro/launch.yaml`, written, not run: no simulator in cloud sessions). Journey flows land with M7.2 onwards.
 - Real store identifiers, EAS project, signing, the Apple and Google accounts, the `/.well-known` files: owner actions (`docs/owner-inbox.md`).
 - Running on a simulator or an emulator, and `expo-doctor` network checks if the cloud runner cannot reach them: device pass and CI.
 
@@ -39,4 +39,4 @@ Give the later mobile increments a place to land: two Expo apps that build, test
 | Both apps export for iOS and Android; `expo-doctor` is clean | CI job `mobile` (results in the commit report) |
 | `pnpm --filter @yayatoh/web build` and the web's React are unchanged | `pnpm why react` diff; web build (report) |
 | `pnpm install --frozen-lockfile` works on a clean checkout | CI `checks`; run in the report |
-| Apps run on an iOS simulator and an Android emulator | device pass |
+| Apps run on an iOS simulator and an Android emulator; launch smoke flows pass | device pass (`apps/<app>/.maestro/launch.yaml`) |
