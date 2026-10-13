@@ -252,13 +252,16 @@ describe('/v1/portal/auth — the email-code sign-in as bearer tokens', () => {
       code: '000000',
     });
     expect(wrong.status).toBe(401);
-    expect(wrong.body).toMatchObject({ code: 'unauthenticated', reason: 'wrong_code', attemptsLeft: 4 });
+    expect(wrong.body).toMatchObject({
+      code: 'unauthenticated',
+      details: { reason: 'wrong_code', attemptsLeft: 4 },
+    });
     const code = String(sent.at(-1)?.params.code);
     const body = { grantType: 'code', inviteToken, challengeId: asked.body.challengeId, code };
     expect((await call('POST', '/portal/auth/token', undefined, body)).status).toBe(200);
     const again = await call('POST', '/portal/auth/token', undefined, body);
     expect(again.status).toBe(401);
-    expect(again.body.reason).toBe('code_used');
+    expect(again.body).toMatchObject({ details: { reason: 'code_used' } });
   });
 
   it('locks the code after five wrong tries, even against the right one', async () => {
@@ -281,7 +284,7 @@ describe('/v1/portal/auth — the email-code sign-in as bearer tokens', () => {
       code,
     });
     expect(r.status).toBe(401);
-    expect(r.body.reason).toBe('code_locked');
+    expect(r.body).toMatchObject({ details: { reason: 'code_locked' } });
   });
 
   it('a second request inside the cooldown sends no new code', async () => {
@@ -325,7 +328,7 @@ describe('/v1/portal/auth — the email-code sign-in as bearer tokens', () => {
     // The spent refresh token presented again ends the whole session.
     const reuse = await call('POST', '/portal/auth/token', undefined, { grantType: 'refresh_token', refreshToken: s.refresh });
     expect(reuse.status).toBe(401);
-    expect(reuse.body.reason).toBe('refresh_token_reused');
+    expect(reuse.body).toMatchObject({ details: { reason: 'refresh_token_reused' } });
     expect((await call('GET', '/portal/leads/setup', String(r.body.accessToken))).status).toBe(401);
     const dead = await call('POST', '/portal/auth/token', undefined, {
       grantType: 'refresh_token',
@@ -334,7 +337,7 @@ describe('/v1/portal/auth — the email-code sign-in as bearer tokens', () => {
     expect(dead.status).toBe(401);
     const junk = await call('POST', '/portal/auth/token', undefined, { grantType: 'refresh_token', refreshToken: 'nope' });
     expect(junk.status).toBe(401);
-    expect(junk.body.reason).toBe('refresh_token_invalid');
+    expect(junk.body).toMatchObject({ details: { reason: 'refresh_token_invalid' } });
   });
 
   it('sign-out ends the session; the browser cookie token is not a bearer token', async () => {
