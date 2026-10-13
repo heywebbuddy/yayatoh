@@ -41,11 +41,14 @@ beforeAll(async () => {
 });
 afterAll(closePools);
 
+/** `app.request` may return a Response or a promise of one; this is always a promise. */
+const call = async (...args: Parameters<typeof app.request>) => app.request(...args);
+
 const H = 3_600_000;
 const client = (c: string) => ({ 'x-yayatoh-client': c });
 const device = () => ({ authorization: `Bearer ${token}` });
 const heartbeat = (headers: Record<string, string>) =>
-  app.request('/v1/devices/heartbeat', {
+  call('/v1/devices/heartbeat', {
     method: 'POST',
     headers: { ...headers, 'content-type': 'application/json' },
     body: JSON.stringify({ queueDepth: 0, clockOffsetMs: 0 }),
@@ -53,7 +56,7 @@ const heartbeat = (headers: Record<string, string>) =>
 
 describe('/v1/mobile/config', () => {
   it('keeps the old fields and adds the per-app policy', async () => {
-    const res = await app.request('/v1/mobile/config');
+    const res = await call('/v1/mobile/config');
     expect(res.status).toBe(200);
     const body = (await res.json()) as Record<string, unknown>;
     expect(body).toMatchObject({
@@ -72,14 +75,14 @@ describe('/v1/mobile/config', () => {
   });
 
   it('always answers, even to an app below its minimum', async () => {
-    const res = await app.request('/v1/mobile/config', { headers: client('yayatoh-ios/1.0.0 (7)') });
+    const res = await call('/v1/mobile/config', { headers: client('yayatoh-ios/1.0.0 (7)') });
     expect(res.status).toBe(200);
   });
 });
 
 describe('a below-minimum attendee app', () => {
   it('gets 426 problem+json with the store link', async () => {
-    const res = await app.request('/v1/public/events/anything', {
+    const res = await call('/v1/public/events/anything', {
       headers: client('yayatoh-ios/2.9.9 (120)'),
     });
     expect(res.status).toBe(426);
@@ -100,7 +103,7 @@ describe('a below-minimum attendee app', () => {
   });
 
   it('is refused on authenticated routes before the credential is even looked at', async () => {
-    const res = await app.request('/v1/me', {
+    const res = await call('/v1/me', {
       headers: { ...client('yayatoh-android/2.0.0'), authorization: 'Bearer not-a-session' },
     });
     expect(res.status).toBe(426);
@@ -108,16 +111,14 @@ describe('a below-minimum attendee app', () => {
 
   it('compares versions numerically, not as text', async () => {
     const ok = (v: string) =>
-      app.request('/v1/health', { headers: client(`yayatoh-ios/${v}`) }).then((r) => r.status);
+      call('/v1/health', { headers: client(`yayatoh-ios/${v}`) }).then((r) => r.status);
     expect(await ok('3.0.0')).toBe(200);
     expect(await ok('3.10.0 (2)')).toBe(200);
     expect(await ok('10.0.0')).toBe(200);
     expect(await ok('3.0.0-beta.1')).toBe(200);
     // /v1/health is on the always-answers list; use a data route to see the gate.
     const gated = (v: string) =>
-      app
-        .request('/v1/public/events/anything', { headers: client(`yayatoh-ios/${v}`) })
-        .then((r) => r.status);
+      call('/v1/public/events/anything', { headers: client(`yayatoh-ios/${v}`) }).then((r) => r.status);
     expect(await gated('3.0.0')).not.toBe(426);
     expect(await gated('3.10.0 (2)')).not.toBe(426);
     expect(await gated('10.0.0')).not.toBe(426);
@@ -128,15 +129,15 @@ describe('a below-minimum attendee app', () => {
 
   it('answers the health check and the API document (a stale app can still see what to do)', async () => {
     const h = client('yayatoh-ios/1.0.0');
-    expect((await app.request('/v1/health', { headers: h })).status).toBe(200);
-    expect((await app.request('/v1/openapi.json', { headers: h })).status).toBe(200);
+    expect((await call('/v1/health', { headers: h })).status).toBe(200);
+    expect((await call('/v1/openapi.json', { headers: h })).status).toBe(200);
   });
 });
 
 describe('requests that are never refused', () => {
   it('without the header, with a malformed one, or from an unknown or non-app client', async () => {
     const status = (headers: Record<string, string>) =>
-      app.request('/v1/public/events/anything', { headers }).then((r) => r.status);
+      call('/v1/public/events/anything', { headers }).then((r) => r.status);
     expect(await status({})).not.toBe(426);
     for (const h of [
       'yayatoh-ios',
@@ -161,7 +162,7 @@ describe('a below-minimum Staff app', () => {
   const old = client('yayatoh-staff-ios/1.0.0 (3)');
 
   it('gets 426 on a user route, like any app', async () => {
-    const res = await app.request('/v1/public/events/anything', { headers: old });
+    const res = await call('/v1/public/events/anything', { headers: old });
     expect(res.status).toBe(426);
     expect(await res.json()).toMatchObject({ details: { storeUrl: STAFF_STORE, minimumVersion: '2.0.0' } });
   });
@@ -194,12 +195,12 @@ describe('a below-minimum Staff app', () => {
 
   it('is judged by the event in the manifest path, so a fresh device is not stranded', async () => {
     now = new Date(starts.getTime() + H);
-    const res = await app.request(`/v1/events/${a.event.id}/manifest?limit=5`, {
+    const res = await call(`/v1/events/${a.event.id}/manifest?limit=5`, {
       headers: { ...device(), ...old },
     });
     expect(res.status).toBe(200);
     now = new Date(ends.getTime() + 3 * H);
-    const after = await app.request(`/v1/events/${a.event.id}/manifest?limit=5`, {
+    const after = await call(`/v1/events/${a.event.id}/manifest?limit=5`, {
       headers: { ...device(), ...old },
     });
     expect(after.status).toBe(426);
@@ -218,7 +219,7 @@ describe('a below-minimum Staff app', () => {
     // The gate lets a live device through inside its window whichever app sends it; the
     // attendee apps never hold device tokens, so this is not a way around the minimum for users.
     expect(res.status).toBe(200);
-    const user = await app.request('/v1/me', {
+    const user = await call('/v1/me', {
       headers: { ...client('yayatoh-ios/1.0.0'), authorization: 'Bearer some-session' },
     });
     expect(user.status).toBe(426);
