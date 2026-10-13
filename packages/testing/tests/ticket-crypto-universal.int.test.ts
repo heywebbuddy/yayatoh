@@ -1,3 +1,4 @@
+import { type ManifestRow, type OfflineState, offlineVerdict, uuidv7Time } from '@yayatoh/checkin-engine';
 import { withTenant } from '@yayatoh/db';
 import { closePools } from '@yayatoh/db/testing';
 import { createEventCommand, transitionEventCommand } from '@yayatoh/events';
@@ -5,7 +6,6 @@ import { createCtx, executeCommand } from '@yayatoh/kernel';
 import { orderByManageToken, startCheckoutCommand } from '@yayatoh/orders';
 import { base32Decode, verifyTicketCode } from '@yayatoh/ticket-crypto';
 import { createTicketTypeCommand, publicKeysTx } from '@yayatoh/ticketing';
-import { type ManifestRow, type OfflineState, offlineVerdict, uuidv7Time } from '@yayatoh/checkin-engine';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { type OrgFixture, ports, systemCtx, twoOrgs } from '../src/index.ts';
 
@@ -21,7 +21,12 @@ beforeAll(async () => {
   ({ a } = await twoOrgs());
   const e = await executeCommand(
     createEventCommand,
-    { name: 'Universal crypto', timezone: 'UTC', startsAt: '2027-12-01T18:00:00Z', endsAt: '2027-12-01T23:00:00Z' },
+    {
+      name: 'Universal crypto',
+      timezone: 'UTC',
+      startsAt: '2027-12-01T18:00:00Z',
+      endsAt: '2027-12-01T23:00:00Z',
+    },
     a.ctx(),
     ports,
   );
@@ -59,12 +64,17 @@ describe('codes issued by the server', () => {
     const keys = await withTenant(systemCtx(a.org.id), (tx) => publicKeysTx(tx));
     const raw = keys.get(1) as Uint8Array;
     const subtle = globalThis.crypto.subtle;
-    const publicKey = await subtle.importKey('raw', new Uint8Array(raw), { name: 'Ed25519' }, false, ['verify']);
+    const publicKey = await subtle.importKey('raw', new Uint8Array(raw), { name: 'Ed25519' }, false, [
+      'verify',
+    ]);
     for (const t of tickets) {
       expect(await verifyTicketCode(t.code, keys)).toEqual({ ok: true, kid: 1, ticketId: t.id, rev: 0 });
       // The independent check: Web Crypto verifies the server's signature over the signed bytes.
       const bytes = base32Decode(t.code.slice(3)) as Uint8Array;
-      const message = new Uint8Array([...new TextEncoder().encode('yayatoh-ticket-v1'), ...bytes.slice(0, 21)]);
+      const message = new Uint8Array([
+        ...new TextEncoder().encode('yayatoh-ticket-v1'),
+        ...bytes.slice(0, 21),
+      ]);
       expect(await subtle.verify({ name: 'Ed25519' }, publicKey, bytes.slice(21), message)).toBe(true);
     }
   });
@@ -121,7 +131,9 @@ describe('codes issued by the server', () => {
     // The same code against a manifest that carries another org's key: refused.
     const foreign = state([]);
     const other = await globalThis.crypto.subtle.generateKey({ name: 'Ed25519' }, true, ['sign', 'verify']);
-    const otherRaw = new Uint8Array(await globalThis.crypto.subtle.exportKey('raw', (other as CryptoKeyPair).publicKey));
+    const otherRaw = new Uint8Array(
+      await globalThis.crypto.subtle.exportKey('raw', (other as CryptoKeyPair).publicKey),
+    );
     const swapped: OfflineState = {
       ...foreign,
       header: { ...foreign.header, publicKeys: { '1': Buffer.from(otherRaw).toString('base64') } },

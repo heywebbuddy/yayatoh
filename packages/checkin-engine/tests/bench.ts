@@ -98,7 +98,7 @@ const subtleKey = await globalThis.crypto.subtle.importKey(
   ['verify'],
 );
 const subtleVerify = async (code: string) => {
-  const bytes = base32Decode(code.slice(CODE_PREFIX.length));
+  const bytes = base32Decode(code.slice(CODE_PREFIX.length)) as Uint8Array;
   const message = new Uint8Array([...new TextEncoder().encode('yayatoh-ticket-v1'), ...bytes.slice(0, 21)]);
   return globalThis.crypto.subtle.verify({ name: 'Ed25519' }, subtleKey, bytes.slice(21), message);
 };
