@@ -56,6 +56,32 @@ On Pro/Max plans, store secret values as **API credentials**, not plain variable
 - **Stop rules:** sessions stop when idle, so they commit and push often. Load tests and nightly suites run in GitHub Actions, not in sessions.
 - **Config:** only repo files reach the cloud — `CLAUDE.md`, `.claude/settings.json`, `.claude/` skills, agents and commands, and `.mcp.json`. User-level `~/.claude` settings do not.
 
+## Phase 7: mobile apps (added 2026-10-13)
+Plan: `docs/plans/mobile.md`. Builder rules: `docs/agent-briefs/mobile-common.md`.
+
+**Model.** Every Phase 7 build session runs on **Sonnet 5.5 at high effort** (owner, 2026-10-13). The orchestrating session sets this when it launches each builder. The repo default in `.claude/settings.json` applies to everything else.
+
+**Network access.** Add these to the `yayatoh` environment's custom list. Expo's command-line tools call them for version checks (`expo install --check`) and `expo-doctor`'s package check:
+
+```
+api.expo.dev
+exp.host
+reactnative.directory
+```
+
+If an Expo command still fails with a network error, its log names the host to add.
+
+**No new secrets in cloud sessions.** Builders use fake providers and never touch real Expo, Apple, Google, APNs, FCM or Sentry accounts. `EXPO_TOKEN` goes in **GitHub Actions secrets only**, so a cloud session can never start a real build or store upload.
+
+**Limits.** Sessions run Linux with no iOS simulator or Android emulator. They write the code, the tests and the Maestro flows, and run `expo export` for both platforms. The device pass at the end of each app wave runs on EAS (below) or on the owner's Mac.
+
+### EAS: Expo's build cloud (owner, needed by the first preview build)
+EAS builds the iOS and Android apps on Expo's Macs, submits them to TestFlight and Play, and runs the Maestro flows on cloud simulators and emulators.
+1. **Expo:** create an Expo organization, and install Expo's GitHub app with access to this repo.
+2. **Apple:** add an App Store Connect API key in EAS; EAS then manages certificates and provisioning profiles.
+3. **Google:** upload a Play Console service-account key to EAS for submissions.
+4. **GitHub:** add `EXPO_TOKEN` as a GitHub Actions secret.
+
 ## Known limits
 - **Size:** each session VM has 4 vCPU, 16 GB RAM and 30 GB disk.
 - **Command timeouts:** 2 minutes by default, 10 minutes maximum. Raise them with `BASH_DEFAULT_TIMEOUT_MS` and `BASH_MAX_TIMEOUT_MS` in the environment if test suites need it.
