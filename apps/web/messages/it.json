@@ -237,6 +237,16 @@
         "sign-in-code": "Codice di accesso",
         "password-reset": "Reimpostazione password",
         "magic-link": "Link di accesso"
+      },
+      "push": {
+        "order-confirmed": "Notifica dell’app: ordine confermato",
+        "ticket-received": "Notifica dell’app: biglietto ricevuto",
+        "transfer-accepted": "Notifica dell’app: trasferimento accettato",
+        "transfer-cancelled": "Notifica dell’app: trasferimento annullato",
+        "event-changed": "Notifica dell’app: evento modificato",
+        "event-cancelled": "Notifica dell’app: evento annullato",
+        "reminder-24h": "Notifica dell’app: promemoria 24 ore prima",
+        "reminder-2h": "Notifica dell’app: promemoria 2 ore prima"
       }
     },
     "status": {

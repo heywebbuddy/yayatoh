@@ -377,6 +377,38 @@
       "subject": "Yayatohのサインインリンク",
       "intro": "下のボタンから、このブラウザでYayatohにサインインしてください。リンクは1回限り有効で、{minutes}分後に失効します。心当たりがない場合は、このメールを無視してください。",
       "cta": "Yayatohにサインイン"
+    },
+    "push.order-confirmed": {
+      "subject": "{eventName}",
+      "intro": "ご注文が確定しました。"
+    },
+    "push.ticket-received": {
+      "subject": "{eventName}",
+      "intro": "チケットが譲渡されました。"
+    },
+    "push.transfer-accepted": {
+      "subject": "{eventName}",
+      "intro": "チケットの譲渡が承諾されました。"
+    },
+    "push.transfer-cancelled": {
+      "subject": "{eventName}",
+      "intro": "チケットの譲渡が取り消されました。"
+    },
+    "push.event-changed": {
+      "subject": "{eventName}",
+      "intro": "日時または会場が変更されました。"
+    },
+    "push.event-cancelled": {
+      "subject": "{eventName}",
+      "intro": "このイベントは中止になりました。"
+    },
+    "push.reminder-24h": {
+      "subject": "{eventName}",
+      "intro": "明日 {time} に開始します。"
+    },
+    "push.reminder-2h": {
+      "subject": "{eventName}",
+      "intro": "2時間後の {time} に開始します。"
     }
   },
   "roles": {

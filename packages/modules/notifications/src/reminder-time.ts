@@ -21,6 +21,22 @@ export function reminderTime(startsAt: Date, timeZone: string | null | undefined
   return new Date(zonedTimeToUtc(`${dayBefore}${local.slice(10)}`, timeZone).getTime() + seconds);
 }
 
+/** The attendee app's two reminders (M7.2c): a day before, as `reminderTime`, and two hours before. */
+export const APP_REMINDER_KINDS = ['push.reminder-24h', 'push.reminder-2h'] as const;
+export type AppReminderKind = (typeof APP_REMINDER_KINDS)[number];
+export const REMINDER_KINDS = ['events.reminder', ...APP_REMINDER_KINDS] as const;
+const TWO_HOURS_MS = 2 * 60 * 60 * 1000;
+
+/**
+ * When a reminder of this kind goes out. The 2 h reminder is a true two hours (an elapsed
+ * duration, so a DST change in between doesn't move it); the others are the wall-clock day before.
+ */
+export function reminderTimeFor(kind: string, startsAt: Date, timeZone: string | null | undefined): Date {
+  return kind === 'push.reminder-2h'
+    ? new Date(startsAt.getTime() - TWO_HOURS_MS)
+    : reminderTime(startsAt, timeZone);
+}
+
 export type ReminderPlan =
   | { readonly sendAfter: Date }
   | { readonly cancel: 'event_started' | 'event_cancelled' | 'event_postponed' };
@@ -39,10 +55,11 @@ export function planReminder(
     readonly postponed?: boolean;
   },
   now: Date,
+  kind: string = 'events.reminder',
 ): ReminderPlan {
   if (target.cancelled) return { cancel: 'event_cancelled' };
   if (target.postponed) return { cancel: 'event_postponed' };
   if (target.startsAt.getTime() <= now.getTime()) return { cancel: 'event_started' };
-  const at = reminderTime(target.startsAt, target.timeZone);
+  const at = reminderTimeFor(kind, target.startsAt, target.timeZone);
   return { sendAfter: at.getTime() > now.getTime() ? at : now };
 }

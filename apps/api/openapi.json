@@ -3009,6 +3009,79 @@
           "storeUrl"
         ]
       },
+      "DeviceRegistration": {
+        "type": "object",
+        "properties": {
+          "organizations": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "In how many organizations the phone is now stored. 0: the person has no order or ticket yet; register again after the first purchase."
+          }
+        },
+        "required": [
+          "organizations"
+        ]
+      },
+      "DeviceRequest": {
+        "type": "object",
+        "properties": {
+          "platform": {
+            "$ref": "#/components/schemas/DevicePlatform"
+          },
+          "token": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 4096,
+            "description": "The APNs device token (hex) or the FCM registration token. Send it again whenever the OS rotates it."
+          },
+          "appId": {
+            "type": "string",
+            "description": "The bundle id (iOS) or package name (Android).",
+            "example": "com.yayatoh.app"
+          },
+          "appVersion": {
+            "type": "string",
+            "example": "1.4.0"
+          },
+          "locale": {
+            "type": "string",
+            "description": "The app’s language tag; push text is rendered in it.",
+            "example": "pt-BR"
+          },
+          "timeZone": {
+            "type": "string",
+            "maxLength": 64,
+            "description": "The phone’s IANA time zone; quiet hours follow it.",
+            "example": "Europe/Lisbon"
+          },
+          "environment": {
+            "$ref": "#/components/schemas/ApnsEnvironment"
+          }
+        },
+        "required": [
+          "platform",
+          "token",
+          "appId",
+          "appVersion",
+          "locale"
+        ]
+      },
+      "DevicePlatform": {
+        "type": "string",
+        "enum": [
+          "apns",
+          "fcm"
+        ],
+        "description": "`apns` for iOS, `fcm` for Android."
+      },
+      "ApnsEnvironment": {
+        "type": "string",
+        "enum": [
+          "sandbox",
+          "production"
+        ],
+        "description": "APNs only: `sandbox` for a development build’s token (default `production`)."
+      },
       "PublicEvent": {
         "type": "object",
         "properties": {
@@ -7835,6 +7908,207 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/MobileConfig"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/me/devices": {
+      "post": {
+        "operationId": "registerDevice",
+        "tags": [
+          "me"
+        ],
+        "summary": "Register this phone for push notifications",
+        "description": "Stores the phone in every organization where the signed-in person has an order or an active ticket, and removes it from anyone else it was registered to (the phone changed hands). Registering again refreshes the row and re-enables a token the push service had reported gone. Needs a verified email.",
+        "security": [
+          {
+            "bearerSession": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeviceRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Registered",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceRegistration"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict, invalid state, or the same Idempotency-Key is in flight",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The Idempotency-Key was used with a different request (`idempotency_key_reused`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Read-only maintenance (`read_only_freeze`): nothing was changed; retry after `Retry-After` seconds",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/me/devices/{token}": {
+      "delete": {
+        "operationId": "removeDevice",
+        "tags": [
+          "me"
+        ],
+        "summary": "Remove this phone (sign-out)",
+        "description": "Deletes the phone’s rows in every organization, for the signed-in person only. Unknown tokens also answer `204`. Call it before signing out.",
+        "security": [
+          {
+            "bearerSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 4096,
+              "description": "The device token, URL-encoded"
+            },
+            "required": true,
+            "description": "The device token, URL-encoded",
+            "name": "token",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Removed (unknown tokens too)"
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
                 }
               }
             }

@@ -377,6 +377,38 @@
       "subject": "आपका Yayatoh साइन-इन लिंक",
       "intro": "इस ब्राउज़र में Yayatoh में साइन इन करने के लिए नीचे दिए गए बटन का उपयोग करें। लिंक एक बार काम करता है और {minutes, plural, one {# मिनट} other {# मिनट}} में समाप्त हो जाता है। अगर आपने यह नहीं माँगा, तो इस ईमेल को अनदेखा करें।",
       "cta": "Yayatoh में साइन इन करें"
+    },
+    "push.order-confirmed": {
+      "subject": "{eventName}",
+      "intro": "आपका ऑर्डर कन्फ़र्म हो गया है।"
+    },
+    "push.ticket-received": {
+      "subject": "{eventName}",
+      "intro": "आपको एक टिकट ट्रांसफ़र किया गया है।"
+    },
+    "push.transfer-accepted": {
+      "subject": "{eventName}",
+      "intro": "आपका टिकट ट्रांसफ़र स्वीकार कर लिया गया है।"
+    },
+    "push.transfer-cancelled": {
+      "subject": "{eventName}",
+      "intro": "एक टिकट ट्रांसफ़र रद्द कर दिया गया है।"
+    },
+    "push.event-changed": {
+      "subject": "{eventName}",
+      "intro": "तारीख़, समय या स्थान बदल गया है।"
+    },
+    "push.event-cancelled": {
+      "subject": "{eventName}",
+      "intro": "यह इवेंट रद्द कर दिया गया है।"
+    },
+    "push.reminder-24h": {
+      "subject": "{eventName}",
+      "intro": "कल {time} पर शुरू होगा।"
+    },
+    "push.reminder-2h": {
+      "subject": "{eventName}",
+      "intro": "2 घंटे में शुरू होगा, {time} पर।"
     }
   },
   "roles": {

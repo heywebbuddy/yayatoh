@@ -1,5 +1,5 @@
 import type { TenantTx } from '@yayatoh/db';
-import { and, eq, or } from 'drizzle-orm';
+import { and, desc, eq, or, sql } from 'drizzle-orm';
 import { ticketBarcodes, tickets } from './schema.ts';
 
 /**
@@ -69,4 +69,27 @@ export async function activeTicketShortCodeTx(
     .from(tickets)
     .where(and(eq(tickets.id, ticketId), eq(tickets.eventId, eventId), eq(tickets.status, 'active')));
   return t?.shortCode ?? null;
+}
+
+/**
+ * M7.2c: every active ticket held by this address in the current org (newest first, at most 200):
+ * the tickets whose reminders a newly registered phone needs queued.
+ */
+export async function activeTicketsHeldByEmailTx(
+  tx: TenantTx,
+  email: string,
+): Promise<{ id: string; eventId: string; occurrenceId: string | null; orderId: string }[]> {
+  return tx
+    .select({
+      id: tickets.id,
+      eventId: tickets.eventId,
+      occurrenceId: tickets.occurrenceId,
+      orderId: tickets.orderId,
+    })
+    .from(tickets)
+    .where(
+      and(eq(tickets.status, 'active'), sql`lower(${tickets.holderEmail}) = ${email.trim().toLowerCase()}`),
+    )
+    .orderBy(desc(tickets.createdAt))
+    .limit(200);
 }

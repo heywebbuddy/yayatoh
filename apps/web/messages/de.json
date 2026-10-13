@@ -237,6 +237,16 @@
         "sign-in-code": "Anmeldecode",
         "password-reset": "Passwort zurücksetzen",
         "magic-link": "Anmeldelink"
+      },
+      "push": {
+        "order-confirmed": "App-Mitteilung: Bestellung bestätigt",
+        "ticket-received": "App-Mitteilung: Ticket erhalten",
+        "transfer-accepted": "App-Mitteilung: Übertragung angenommen",
+        "transfer-cancelled": "App-Mitteilung: Übertragung abgebrochen",
+        "event-changed": "App-Mitteilung: Veranstaltung geändert",
+        "event-cancelled": "App-Mitteilung: Veranstaltung abgesagt",
+        "reminder-24h": "App-Mitteilung: Erinnerung 24 Stunden vorher",
+        "reminder-2h": "App-Mitteilung: Erinnerung 2 Stunden vorher"
       }
     },
     "status": {

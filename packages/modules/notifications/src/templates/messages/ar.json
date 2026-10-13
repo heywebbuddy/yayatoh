@@ -377,6 +377,38 @@
       "subject": "رابط تسجيل الدخول إلى Yayatoh",
       "intro": "استخدم الزر أدناه لتسجيل الدخول إلى Yayatoh في هذا المتصفح. يعمل الرابط مرة واحدة وتنتهي صلاحيته خلال {minutes, plural, zero {# دقيقة} one {دقيقة واحدة} two {دقيقتين} few {# دقائق} many {# دقيقة} other {# دقيقة}}. إذا لم تطلبه، يمكنك تجاهل هذه الرسالة.",
       "cta": "تسجيل الدخول إلى Yayatoh"
+    },
+    "push.order-confirmed": {
+      "subject": "{eventName}",
+      "intro": "تم تأكيد طلبك."
+    },
+    "push.ticket-received": {
+      "subject": "{eventName}",
+      "intro": "تم تحويل تذكرة إليك."
+    },
+    "push.transfer-accepted": {
+      "subject": "{eventName}",
+      "intro": "تم قبول تحويل تذكرتك."
+    },
+    "push.transfer-cancelled": {
+      "subject": "{eventName}",
+      "intro": "تم إلغاء تحويل تذكرة."
+    },
+    "push.event-changed": {
+      "subject": "{eventName}",
+      "intro": "تغيّر التاريخ أو الوقت أو المكان."
+    },
+    "push.event-cancelled": {
+      "subject": "{eventName}",
+      "intro": "تم إلغاء هذه الفعالية."
+    },
+    "push.reminder-24h": {
+      "subject": "{eventName}",
+      "intro": "يبدأ غدًا في {time}."
+    },
+    "push.reminder-2h": {
+      "subject": "{eventName}",
+      "intro": "يبدأ بعد ساعتين، في {time}."
     }
   },
   "roles": {

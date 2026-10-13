@@ -1,4 +1,4 @@
-import type { RealProvider } from './types.ts';
+import type { ConfigurableProvider, NativePushProvider, RealProvider } from './types.ts';
 
 /**
  * Which messaging providers are switched on (M3.5b), from config names only (values live in
@@ -8,9 +8,11 @@ import type { RealProvider } from './types.ts';
  * - `WHATSAPP_PROVIDER=cloud`, `gateway` or `cloud,gateway` enables the WhatsApp routes; the first
  *   listed is the default route for orgs without their own (decision P3-2: Cloud API for new
  *   tenants; staff set the gateway route on orgs whose existing flows use it).
+ * - `PUSH_PROVIDER=apns`, `fcm` or `apns,fcm` sends native app pushes (M7.2c): APNs with a `.p8`
+ *   token key, FCM through HTTP v1 with a service account.
  * A provider is live only when switched on AND every one of its config names is set.
  */
-export const PROVIDER_ENV: Readonly<Record<RealProvider, readonly string[]>> = {
+export const PROVIDER_ENV: Readonly<Record<ConfigurableProvider, readonly string[]>> = {
   ses: [
     'AWS_SES_REGION',
     'AWS_SES_ACCESS_KEY_ID',
@@ -32,11 +34,25 @@ export const PROVIDER_ENV: Readonly<Record<RealProvider, readonly string[]>> = {
     'WHATSAPP_CLOUD_VERIFY_TOKEN',
   ],
   whatsapp_gateway: ['WHATSAPP_GATEWAY_URL', 'WHATSAPP_GATEWAY_KEY_ID', 'WHATSAPP_GATEWAY_SECRET'],
+  // M7.2c: `APNS_PRIVATE_KEY` is the `.p8` file's text (a `\n` may stand for a line break);
+  // `APNS_BUNDLE_ID` the app's bundle id (the APNs topic; several, comma-separated, for more apps);
+  // `FCM_SERVICE_ACCOUNT_JSON` the service account's JSON key (or its base64).
+  apns: ['APNS_KEY_ID', 'APNS_TEAM_ID', 'APNS_PRIVATE_KEY', 'APNS_BUNDLE_ID'],
+  fcm: ['FCM_SERVICE_ACCOUNT_JSON'],
 };
 
 type Env = Readonly<Record<string, string | undefined>>;
 
-export function switchedOn(provider: RealProvider, env: Env = process.env): boolean {
+/** The native push providers named by `PUSH_PROVIDER` (`apns`, `fcm`). */
+export function pushProviders(env: Env = process.env): NativePushProvider[] {
+  return (env.PUSH_PROVIDER ?? '')
+    .split(',')
+    .map((s) => s.trim())
+    .filter((s): s is NativePushProvider => s === 'apns' || s === 'fcm');
+}
+
+export function switchedOn(provider: ConfigurableProvider, env: Env = process.env): boolean {
+  if (provider === 'apns' || provider === 'fcm') return pushProviders(env).includes(provider);
   if (provider === 'ses') return env.EMAIL_PROVIDER === 'ses';
   if (provider === 'twilio') return env.SMS_PROVIDER === 'twilio';
   const routes = whatsappRoutes(env);
@@ -51,14 +67,14 @@ export function whatsappRoutes(env: Env = process.env): Array<'cloud' | 'gateway
 }
 
 /** The config names this provider still misses (names only, never values). */
-export function missingEnv(provider: RealProvider, env: Env = process.env): string[] {
+export function missingEnv(provider: ConfigurableProvider, env: Env = process.env): string[] {
   return PROVIDER_ENV[provider].filter((k) => !env[k]?.trim());
 }
 
 export type ProviderMode = 'live' | 'ready' | 'off';
 
 /** `live`: switched on and configured; `ready`: configured, not switched on; `off`: neither. */
-export function providerMode(provider: RealProvider, env: Env = process.env): ProviderMode {
+export function providerMode(provider: ConfigurableProvider, env: Env = process.env): ProviderMode {
   const configured = missingEnv(provider, env).length === 0;
   if (configured && switchedOn(provider, env)) return 'live';
   return configured ? 'ready' : 'off';

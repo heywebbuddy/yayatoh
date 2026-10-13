@@ -237,6 +237,16 @@
         "sign-in-code": "Código de acesso",
         "password-reset": "Redefinição da palavra-passe",
         "magic-link": "Link de acesso"
+      },
+      "push": {
+        "order-confirmed": "Notificação do app: pedido confirmado",
+        "ticket-received": "Notificação do app: ingresso recebido",
+        "transfer-accepted": "Notificação do app: transferência aceita",
+        "transfer-cancelled": "Notificação do app: transferência cancelada",
+        "event-changed": "Notificação do app: evento alterado",
+        "event-cancelled": "Notificação do app: evento cancelado",
+        "reminder-24h": "Notificação do app: lembrete 24 horas antes",
+        "reminder-2h": "Notificação do app: lembrete 2 horas antes"
       }
     },
     "status": {

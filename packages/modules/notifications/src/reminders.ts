@@ -1,7 +1,7 @@
 import type { TenantTx } from '@yayatoh/db';
 import { and, asc, eq, inArray, or } from 'drizzle-orm';
 import { decryptParams, encryptParams } from './notifier.ts';
-import { planReminder } from './reminder-time.ts';
+import { planReminder, REMINDER_KINDS } from './reminder-time.ts';
 import { MESSAGE_CHANNELS, messages } from './schema.ts';
 
 /** Where a reminder's event (or date) stands now. `null`: leave the reminder as it is. */
@@ -42,7 +42,7 @@ export async function rescheduleRemindersTx(
     .where(
       and(
         eq(messages.eventId, eventId),
-        eq(messages.kind, 'events.reminder'),
+        inArray(messages.kind, [...REMINDER_KINDS]),
         or(
           eq(messages.status, 'queued'),
           // Parked while the event was postponed: rescheduling brings it back.
@@ -58,7 +58,7 @@ export async function rescheduleRemindersTx(
       result.unchanged += 1;
       continue;
     }
-    const plan = planReminder(target, now);
+    const plan = planReminder(target, now, row.kind);
     if ('cancel' in plan) {
       if (row.status === 'canceled' && row.reason === plan.cancel) {
         result.unchanged += 1;
@@ -77,7 +77,8 @@ export async function rescheduleRemindersTx(
       startsAt: target.startsAt.toISOString(),
       timeZone: target.timeZone,
       eventName: target.eventName,
-      venue: target.venue,
+      // The app's push reminders carry no venue (lock-screen text is the event name and time only).
+      ...('venue' in params ? { venue: target.venue } : {}),
     };
     const same =
       row.status === 'queued' &&
@@ -85,7 +86,9 @@ export async function rescheduleRemindersTx(
       (row.sendAfter.getTime() === plan.sendAfter.getTime() ||
         (plan.sendAfter.getTime() <= now.getTime() && row.sendAfter.getTime() <= now.getTime())) &&
       row.timeZone === target.timeZone &&
-      (['startsAt', 'timeZone', 'eventName', 'venue'] as const).every((k) => params[k] === next[k]);
+      (['startsAt', 'timeZone', 'eventName', 'venue'] as const).every(
+        (k) => params[k] === (next as Record<string, unknown>)[k],
+      );
     if (same) {
       result.unchanged += 1;
       continue;

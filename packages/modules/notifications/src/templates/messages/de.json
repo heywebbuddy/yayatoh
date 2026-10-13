@@ -377,6 +377,38 @@
       "subject": "Ihr Yayatoh-Anmeldelink",
       "intro": "Melden Sie sich mit der Schaltfläche unten in diesem Browser bei Yayatoh an. Der Link gilt einmal und läuft in {minutes, plural, one {# Minute} other {# Minuten}} ab. Wenn Sie ihn nicht angefordert haben, können Sie diese E-Mail ignorieren.",
       "cta": "Bei Yayatoh anmelden"
+    },
+    "push.order-confirmed": {
+      "subject": "{eventName}",
+      "intro": "Deine Bestellung ist bestätigt."
+    },
+    "push.ticket-received": {
+      "subject": "{eventName}",
+      "intro": "Dir wurde ein Ticket übertragen."
+    },
+    "push.transfer-accepted": {
+      "subject": "{eventName}",
+      "intro": "Deine Ticketübertragung wurde angenommen."
+    },
+    "push.transfer-cancelled": {
+      "subject": "{eventName}",
+      "intro": "Eine Ticketübertragung wurde abgebrochen."
+    },
+    "push.event-changed": {
+      "subject": "{eventName}",
+      "intro": "Datum, Uhrzeit oder Ort haben sich geändert."
+    },
+    "push.event-cancelled": {
+      "subject": "{eventName}",
+      "intro": "Diese Veranstaltung wurde abgesagt."
+    },
+    "push.reminder-24h": {
+      "subject": "{eventName}",
+      "intro": "Beginnt morgen um {time}."
+    },
+    "push.reminder-2h": {
+      "subject": "{eventName}",
+      "intro": "Beginnt in 2 Stunden, um {time}."
     }
   },
   "roles": {

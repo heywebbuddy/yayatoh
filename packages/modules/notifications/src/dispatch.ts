@@ -4,7 +4,7 @@ import { isForeignKeyViolation, type TenantTx, withTenant } from '@yayatoh/db';
 import { createCtx } from '@yayatoh/kernel';
 import { emitEvents, erasedAddressesTx, normalizeAddress, signLinkToken } from '@yayatoh/platform';
 import { activeSuspensionsTx, organizationBrandTx } from '@yayatoh/tenancy';
-import { and, asc, desc, eq, inArray, isNull, lte, or } from 'drizzle-orm';
+import { and, asc, desc, eq, inArray, isNull, lte, or, sql } from 'drizzle-orm';
 import { erasedAddressAllows, erasedMailClass, suppressedReason } from './delivery-rules.ts';
 import { emailIdentityTx } from './email-identity.ts';
 import { fallbackTx, isFallbackReason } from './fallback.ts';
@@ -302,6 +302,14 @@ export async function dispatchDueTx(
       const tz = deviceTz ?? (isValidTimeZone(row.timeZone) ? row.timeZone : org.timezone);
       const release = quietHoursRelease(now, tz);
       if (release) {
+        // A reminder held past its event's start would arrive too late to be a reminder (M7.2c).
+        if (isAppReminder(row.kind)) {
+          const startsAt = (await decryptParams(orgId, row.paramsCiphertext)).startsAt;
+          if (typeof startsAt === 'string' && Date.parse(startsAt) <= release.getTime()) {
+            await suppress(row, 'quiet_hours');
+            continue;
+          }
+        }
         await update(row, { sendAfter: release, reason: 'quiet_hours' });
         result.held += 1;
         continue;
@@ -415,6 +423,10 @@ export async function dispatchDueTx(
           title: rendered.subject,
           body: typeof params.body === 'string' && params.body ? params.body : rendered.preview,
           url: link,
+          // Native apps (M7.2c): the in-app route, and the ticket's collapse id so that a newer push
+          // replaces an older one (else the message's own id collapses retries of one message).
+          path: typeof params._path === 'string' && params._path ? params._path : null,
+          collapse: typeof params._collapse === 'string' && params._collapse ? params._collapse : null,
           lang: rendered.lang,
           dir: rendered.dir,
           ...pushOptions(row.kind as MessageKind),
@@ -572,14 +584,26 @@ async function pushDevicesOf(tx: TenantTx, row: Row): Promise<Device[]> {
   return tx
     .select()
     .from(pushTokens)
-    .where(and(or(...owners), isNull(pushTokens.disabledAt)))
+    .where(
+      and(
+        or(...owners),
+        isNull(pushTokens.disabledAt),
+        // The app's lock-screen kinds go to phones with the app only, never to a browser (M7.2c).
+        ...(row.kind.startsWith('push.') ? [inArray(pushTokens.platform, ['apns', 'fcm'])] : []),
+      ),
+    )
     .orderBy(desc(pushTokens.lastSeenAt), asc(pushTokens.id));
 }
+
+const isAppReminder = (kind: string) => kind === 'push.reminder-24h' || kind === 'push.reminder-2h';
 
 /** How long a push may wait on the push service, and how urgently it is delivered (RFC 8030). */
 export function pushOptions(kind: MessageKind): { ttlSeconds: number; urgency: Urgency } {
   if (kind === 'notifications.test') return { ttlSeconds: 300, urgency: 'high' };
-  if (kind === 'events.reminder') return { ttlSeconds: 12 * 3600, urgency: 'normal' };
+  if (kind === 'events.reminder' || kind === 'push.reminder-24h')
+    return { ttlSeconds: 12 * 3600, urgency: 'normal' };
+  // Stale an hour in: the event is about to start (M7.2c).
+  if (kind === 'push.reminder-2h') return { ttlSeconds: 3600, urgency: 'high' };
   return kindOf(kind).urgent
     ? { ttlSeconds: 4 * 3600, urgency: 'high' }
     : { ttlSeconds: 86_400, urgency: 'normal' };
@@ -634,6 +658,8 @@ async function sendPushTx(
     title: string;
     body: string;
     url: string | null;
+    path: string | null;
+    collapse: string | null;
     lang: string;
     dir: 'ltr' | 'rtl';
     ttlSeconds: number;
@@ -655,7 +681,8 @@ async function sendPushTx(
         )
     : [];
   const byToken = new Map(earlier.map((d) => [d.pushTokenId, d]));
-  const topic = pushTopic(row.id);
+  const { collapse, ...sent } = content;
+  const topic = collapse ?? pushTopic(row.id);
   const results: Parameters<typeof pushRowOutcome>[0][number][] = [];
   for (const d of devices) {
     const prior = byToken.get(d.id);
@@ -670,7 +697,9 @@ async function sendPushTx(
       platform: d.platform as 'fcm' | 'apns' | 'webpush',
       token: d.token,
       keys: d.p256dh && d.authSecret ? { p256dh: d.p256dh, auth: d.authSecret } : null,
-      ...content,
+      ...sent,
+      appId: d.appId,
+      environment: d.environment as 'sandbox' | 'production' | null,
       topic,
       idempotencyKey: `${row.id}:${d.id}`,
     });
@@ -721,8 +750,13 @@ async function sendPushTx(
         .values({ ...delivery, pushTokenId: null, attempts: (prior?.attempts ?? 0) + 1 });
     }
     // Gone for good (FCM UNREGISTERED, APNs 410, web push 404/410): prune the subscription.
-    if (status === 'expired')
+    if (status === 'expired') {
       await tx.update(pushTokens).set({ disabledAt: now, updatedAt: now }).where(eq(pushTokens.id, d.id));
+      // A phone's token is dead in every org it was stored in, not only this one (M7.2c): the
+      // others stop sending to it too, until the app registers again.
+      if (d.platform === 'apns' || d.platform === 'fcm')
+        await tx.execute(sql`select notifications.app_token_disable(${d.platform}, ${d.token})`);
+    }
     results.push({
       status,
       providerMessageId,
