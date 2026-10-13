@@ -8,13 +8,11 @@ import {
   signFakeIdToken,
   twoFactorService,
 } from '@yayatoh/auth';
-import { identityDatabase } from '@yayatoh/db/identity';
 import { adminClient, closePools } from '@yayatoh/db/testing';
 import { executeCommand, STEP_UP_WINDOW_MS } from '@yayatoh/kernel';
 import { fakePaymentProvider } from '@yayatoh/payments';
 import { addMemberCommand, createApiKeyCommand } from '@yayatoh/tenancy';
 import { type OrgFixture, ports, twoOrgs } from '@yayatoh/testing';
-import { sql } from 'drizzle-orm';
 import { Hono } from 'hono';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { createV1 } from '../src/index.ts';
@@ -91,7 +89,8 @@ const token = (body: unknown, ip?: string) => call('POST', '/auth/token', { body
 const details = (r: Reply) => (r.body.details ?? {}) as Json;
 
 const addr = (label: string) => `${label}-${suffix}-${randomBytes(2).toString('hex')}@example.test`;
-const lastCode = (to: string) => [...sent].reverse().find((m) => m.to === to && m.kind === 'otp')?.value ?? '';
+const lastCode = (to: string) =>
+  [...sent].reverse().find((m) => m.to === to && m.kind === 'otp')?.value ?? '';
 
 async function emailSignIn(email: string) {
   await call('POST', '/auth/email-code', { body: { email } });
@@ -148,7 +147,9 @@ describe('POST /v1/auth/email-code', () => {
     expect(r1.body).toEqual(r2.body);
     expect(r1.body).toEqual({ expiresInSeconds: 600 });
     // Address case does not matter.
-    expect((await call('POST', '/auth/email-code', { body: { email: known.toUpperCase() } })).status).toBe(202);
+    expect((await call('POST', '/auth/email-code', { body: { email: known.toUpperCase() } })).status).toBe(
+      202,
+    );
   });
 
   it('rejects malformed requests', async () => {
@@ -252,11 +253,21 @@ describe('two-factor accounts', () => {
   it('every grant returns a challenge instead of tokens, and TOTP completes it', async () => {
     const u = await twoFactorUser('tf-all');
     const viaCode = expectChallenge(await emailSignIn(u.email));
-    const viaPassword = expectChallenge(await token({ grantType: 'password', email: u.email, password: PASSWORD }));
+    const viaPassword = expectChallenge(
+      await token({ grantType: 'password', email: u.email, password: PASSWORD }),
+    );
     const sub = `g-${suffix}-tfall`;
-    const proof = await token({ grantType: 'google', idToken: idToken('google', { sub, email: u.email }), nonce: NONCE });
+    const proof = await token({
+      grantType: 'google',
+      idToken: idToken('google', { sub, email: u.email }),
+      nonce: NONCE,
+    });
     expect(details(proof).reason).toBe('email_proof_required');
-    const linked = await token({ grantType: 'link_proof', challenge: details(proof).challenge, code: lastCode(u.email) });
+    const linked = await token({
+      grantType: 'link_proof',
+      challenge: details(proof).challenge,
+      code: lastCode(u.email),
+    });
     expectChallenge(linked);
     const viaProvider = expectChallenge(
       await token({ grantType: 'google', idToken: idToken('google', { sub, email: u.email }), nonce: NONCE }),
@@ -286,9 +297,7 @@ describe('two-factor accounts', () => {
   it('a challenge expires after five minutes', async () => {
     const u = await twoFactorUser('tf-expire');
     const ch = expectChallenge(await emailSignIn(u.email));
-    await identityDatabase().execute(
-      sql`update auth.verifications set expires_at = now() - interval '1 second' where identifier like 'yy-app-challenge:%' and value like ${`%${u.id}%`}`,
-    );
+    await admin`update auth.verifications set expires_at = now() - interval '1 second' where identifier like 'yy-app-challenge:%' and value like ${`%${u.id}%`}`;
     const r = await token({ grantType: 'two_factor', challenge: ch, code: u.code() });
     expect(r.status).toBe(401);
     expect(details(r).reason).toBe('invalid_challenge');
@@ -323,7 +332,9 @@ describe('two-factor accounts', () => {
     expect(r.body.code).toBe('step_up_required');
     expect(details(r).reason).toBe('two_factor_required');
     // A wrong password is still just a wrong password.
-    expect((await token({ grantType: 'password', email: u.email, password: 'wrong-password' })).status).toBe(401);
+    expect((await token({ grantType: 'password', email: u.email, password: 'wrong-password' })).status).toBe(
+      401,
+    );
   });
 });
 
@@ -331,10 +342,18 @@ describe('grantType apple and google', () => {
   it('a new Google identity creates a verified account and signs in again by identity', async () => {
     const email = addr('goog');
     const sub = `g-${suffix}-a`;
-    const first = await token({ grantType: 'google', idToken: idToken('google', { sub, email }), nonce: NONCE });
+    const first = await token({
+      grantType: 'google',
+      idToken: idToken('google', { sub, email }),
+      nonce: NONCE,
+    });
     expect(first.status).toBe(200);
     expect(first.body.user).toMatchObject({ email, emailVerified: true });
-    const again = await token({ grantType: 'google', idToken: idToken('google', { sub, email }), nonce: NONCE });
+    const again = await token({
+      grantType: 'google',
+      idToken: idToken('google', { sub, email }),
+      nonce: NONCE,
+    });
     expect((again.body.user as Json).id).toBe((first.body.user as Json).id);
   });
 
@@ -357,7 +376,10 @@ describe('grantType apple and google', () => {
       ['audience', idToken('google', { sub, email, audience: 'someone-elses-app' })],
       ['issuer', idToken('google', { sub, email, issuer: 'https://evil.example' })],
       ['expiry', idToken('google', { sub, email, ttlSeconds: -300 })],
-      ['signature', signFakeIdToken('d'.repeat(64), { provider: 'google', audience: GOOGLE, nonce: NONCE, sub, email })],
+      [
+        'signature',
+        signFakeIdToken('d'.repeat(64), { provider: 'google', audience: GOOGLE, nonce: NONCE, sub, email }),
+      ],
       ['garbage', 'not.a.token'],
     ];
     for (const [, idTokenValue] of bad) {
@@ -388,7 +410,11 @@ describe('grantType apple and google', () => {
     const email = addr('link');
     const made = await emailSignIn(email);
     const sub = `g-${suffix}-link`;
-    const step = await token({ grantType: 'google', idToken: idToken('google', { sub, email }), nonce: NONCE });
+    const step = await token({
+      grantType: 'google',
+      idToken: idToken('google', { sub, email }),
+      nonce: NONCE,
+    });
     expect(step.status).toBe(401);
     expect(step.body.code).toBe('step_up_required');
     expect(details(step).reason).toBe('email_proof_required');
@@ -402,7 +428,11 @@ describe('grantType apple and google', () => {
     expect(ok.status).toBe(200);
     expect((ok.body.user as Json).id).toBe((made.body.user as Json).id);
     // The identity now signs in directly; the proof cannot be replayed.
-    const direct = await token({ grantType: 'google', idToken: idToken('google', { sub, email }), nonce: NONCE });
+    const direct = await token({
+      grantType: 'google',
+      idToken: idToken('google', { sub, email }),
+      nonce: NONCE,
+    });
     expect(direct.status).toBe(200);
     const replay = await token({ grantType: 'link_proof', challenge, code: lastCode(email) });
     expect(replay.status).toBe(401);
@@ -457,7 +487,9 @@ describe('step-up on a bearer session', () => {
     expect((await probe(s.access)).status).toBe(200);
 
     // The code was single use.
-    expect((await call('POST', '/auth/step-up', { token: s.access, body: { method: 'email', code } })).status).toBe(400);
+    expect(
+      (await call('POST', '/auth/step-up', { token: s.access, body: { method: 'email', code } })).status,
+    ).toBe(400);
   });
 
   it('a person with an authenticator steps up with it; the other methods are refused', async () => {
@@ -478,7 +510,10 @@ describe('step-up on a bearer session', () => {
       expect(refused.status).toBe(400);
     }
     expect((await probe(access)).status).toBe(401);
-    const ok = await call('POST', '/auth/step-up', { token: access, body: { method: 'totp', code: u.nextCode() } });
+    const ok = await call('POST', '/auth/step-up', {
+      token: access,
+      body: { method: 'totp', code: u.nextCode() },
+    });
     expect(ok.status).toBe(200);
     expect((await probe(access)).status).toBe(200);
   });
@@ -487,13 +522,17 @@ describe('step-up on a bearer session', () => {
     const s = await adminSession('stepup-limit');
     let last = 0;
     for (let i = 0; i < 6; i++)
-      last = (await call('POST', '/auth/step-up', { token: s.access, body: { method: 'email', code: '000000' } })).status;
+      last = (
+        await call('POST', '/auth/step-up', { token: s.access, body: { method: 'email', code: '000000' } })
+      ).status;
     expect(last).toBe(429);
   });
 
   it('needs a user session: an API key or no credential is refused, bodies are validated', async () => {
     expect((await call('POST', '/auth/step-up/start')).status).toBe(401);
-    expect((await call('POST', '/auth/step-up', { body: { method: 'email', code: '123456' } })).status).toBe(401);
+    expect((await call('POST', '/auth/step-up', { body: { method: 'email', code: '123456' } })).status).toBe(
+      401,
+    );
     expect((await call('POST', '/auth/step-up/start', { token: a.apiKey })).status).toBe(401);
     const s = await adminSession('stepup-validate');
     for (const body of [{}, { method: 'telepathy' }, { method: 'totp' }, { method: 'password' }])
@@ -503,7 +542,8 @@ describe('step-up on a bearer session', () => {
   it('limits the emails a step-up can send', async () => {
     const s = await adminSession('stepup-mail');
     let last = 0;
-    for (let i = 0; i < 6; i++) last = (await call('POST', '/auth/step-up/start', { token: s.access })).status;
+    for (let i = 0; i < 6; i++)
+      last = (await call('POST', '/auth/step-up/start', { token: s.access })).status;
     expect(last).toBe(429);
   });
 });

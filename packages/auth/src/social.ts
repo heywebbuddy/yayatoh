@@ -426,9 +426,7 @@ export async function pendingLinkProof(
  */
 export async function resetUnverifiedAccount(userId: string): Promise<void> {
   await identityDatabase().transaction(async (tx) => {
-    await tx
-      .delete(accounts)
-      .where(and(eq(accounts.userId, userId), eq(accounts.providerId, 'credential')));
+    await tx.delete(accounts).where(and(eq(accounts.userId, userId), eq(accounts.providerId, 'credential')));
     await tx.delete(twoFactors).where(eq(twoFactors.userId, userId));
     await tx.delete(sessions).where(eq(sessions.userId, userId));
     await tx

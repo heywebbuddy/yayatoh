@@ -30,6 +30,20 @@ export {
   type SecretSealer,
 } from './auth.ts';
 export {
+  consumeHandoff,
+  HANDOFF_TTL_MS,
+  type HandoffRefusal,
+  handoffExpired,
+  hashHandoffCode,
+  isHandoffCode,
+  issueHandoff,
+  newHandoffCode,
+  normalizeHandoffHost,
+  purgeHandoffCodes,
+  safeReturnPath,
+  stateMatches,
+} from './handoff.ts';
+export {
   APPLE_JWKS_URL,
   type FakeIdTokenClaims,
   fakeIdTokenSecret,
@@ -45,20 +59,6 @@ export {
   remoteJwks,
   signFakeIdToken,
 } from './id-token.ts';
-export {
-  consumeHandoff,
-  HANDOFF_TTL_MS,
-  type HandoffRefusal,
-  handoffExpired,
-  hashHandoffCode,
-  isHandoffCode,
-  issueHandoff,
-  newHandoffCode,
-  normalizeHandoffHost,
-  purgeHandoffCodes,
-  safeReturnPath,
-  stateMatches,
-} from './handoff.ts';
 export {
   dueImpersonations,
   endImpersonation,

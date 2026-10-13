@@ -1,7 +1,7 @@
 import {
+  type AppSignIn,
   type Auth,
   type AuthMailer,
-  type AppSignIn,
   appSignIn,
   consoleMailer,
   createAuth,

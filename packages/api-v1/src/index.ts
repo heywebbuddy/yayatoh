@@ -28,7 +28,6 @@ import { registerWebhooks } from './webhooks.ts';
 
 export { cachedJson, etagOf } from './caching.ts';
 export type { MeContext, MobileSettings, Principal, V1Deps, V1Env } from './context.ts';
-export { meScope } from './me-scope.ts';
 export { decodeCursor, encodeCursor, pageByKey, pageOf } from './cursor.ts';
 export {
   type Deprecation,
@@ -37,6 +36,7 @@ export {
   deprecationMiddleware,
   deprecations,
 } from './deprecation.ts';
+export { meScope } from './me-scope.ts';
 export { memoryRateLimiter, RATE_LIMITS, type RateDecision, type RateLimiter } from './rate-limit.ts';
 export { API_VERSION } from './routes/version.ts';
 export { type ClientInfo, clientInfo } from './telemetry.ts';

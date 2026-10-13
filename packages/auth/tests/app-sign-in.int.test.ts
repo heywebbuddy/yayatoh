@@ -32,7 +32,8 @@ const PASSWORD = 'correct horse battery staple';
 afterAll(closePools);
 
 const addr = (label: string) => `${label}-${suffix}-${randomBytes(2).toString('hex')}@example.test`;
-const lastCode = (to: string) => [...sent].reverse().find((m) => m.to === to && m.kind === 'otp')?.value ?? '';
+const lastCode = (to: string) =>
+  [...sent].reverse().find((m) => m.to === to && m.kind === 'otp')?.value ?? '';
 
 async function userRow(email: string) {
   const [row] = await identityDatabase().execute<{ id: string; email_verified: boolean; name: string }>(
@@ -304,7 +305,12 @@ describe('Apple and Google', () => {
 
   it('a valid Apple token with an unknown private-relay address creates a new account', async () => {
     const email = `${randomBytes(6).toString('hex')}@privaterelay.appleid.com`;
-    const r = await signIn('apple', idToken('apple', { sub: `a-${suffix}-relay`, email }), NONCE, 'Ann Apple');
+    const r = await signIn(
+      'apple',
+      idToken('apple', { sub: `a-${suffix}-relay`, email }),
+      NONCE,
+      'Ann Apple',
+    );
     expect(r.ok).toBe(true);
     expect(await userRow(email)).toMatchObject({ email_verified: true, name: 'Ann Apple' });
   });
@@ -314,8 +320,22 @@ describe('Apple and Google', () => {
     const sub = `g-${suffix}-refused`;
     const cases: string[] = [
       idToken('google', { sub, email, audience: 'someone-elses-app' }),
-      signFakeIdToken(FAKE, { provider: 'google', audience: GOOGLE, nonce: NONCE, sub, email, ttlSeconds: -120 }),
-      signFakeIdToken(FAKE, { provider: 'google', audience: GOOGLE, nonce: NONCE, sub, email, issuer: 'https://evil.example' }),
+      signFakeIdToken(FAKE, {
+        provider: 'google',
+        audience: GOOGLE,
+        nonce: NONCE,
+        sub,
+        email,
+        ttlSeconds: -120,
+      }),
+      signFakeIdToken(FAKE, {
+        provider: 'google',
+        audience: GOOGLE,
+        nonce: NONCE,
+        sub,
+        email,
+        issuer: 'https://evil.example',
+      }),
       signFakeIdToken('b'.repeat(64), { provider: 'google', audience: GOOGLE, nonce: NONCE, sub, email }),
       'garbage',
     ];
@@ -334,7 +354,10 @@ describe('Apple and Google', () => {
       reason: 'provider_email_missing',
     });
     expect(
-      await signIn('google', idToken('google', { sub: `g-${suffix}-unv`, email: addr('unv'), emailVerified: false })),
+      await signIn(
+        'google',
+        idToken('google', { sub: `g-${suffix}-unv`, email: addr('unv'), emailVerified: false }),
+      ),
     ).toEqual({ ok: false, reason: 'provider_email_unverified' });
   });
 
@@ -361,7 +384,10 @@ describe('Apple and Google', () => {
     const next = await signIn('google', idToken('google', { sub, email: existing }));
     expect(next.ok && next.tokens.user.id).toBe(made.tokens.user.id);
     // The proof is single use.
-    expect(await app.completeLinkProof(r.challenge.token, code)).toEqual({ ok: false, reason: 'invalid_challenge' });
+    expect(await app.completeLinkProof(r.challenge.token, code)).toEqual({
+      ok: false,
+      reason: 'invalid_challenge',
+    });
   });
 
   it('a provider sign-in on a two-factor account still takes the second step', async () => {
@@ -424,10 +450,18 @@ describe('step-up on a bearer session', () => {
     if (!done.ok) throw new Error('setup');
     expect(await app.startStepUp(u.id, u.email)).toBe('totp');
     await expect(
-      app.stepUp({ userId: u.id, sessionToken: done.tokens.accessToken, proof: { method: 'email', code: '123456' } }),
+      app.stepUp({
+        userId: u.id,
+        sessionToken: done.tokens.accessToken,
+        proof: { method: 'email', code: '123456' },
+      }),
     ).rejects.toMatchObject({ code: 'invalid_code' });
     await expect(
-      app.stepUp({ userId: u.id, sessionToken: done.tokens.accessToken, proof: { method: 'totp', code: u.nextCode() } }),
+      app.stepUp({
+        userId: u.id,
+        sessionToken: done.tokens.accessToken,
+        proof: { method: 'totp', code: u.nextCode() },
+      }),
     ).resolves.toBeInstanceOf(Date);
   });
 });

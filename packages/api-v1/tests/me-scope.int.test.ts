@@ -80,7 +80,11 @@ describe('/v1/me scope (M7.2a)', () => {
     const p = await person('verified', { verified: true });
     const r = await call('GET', '/me/probe', p.token);
     expect(r.status).toBe(200);
-    expect(r.body).toMatchObject({ userId: p.userId, orgId: null, actor: { type: 'user', userId: p.userId } });
+    expect(r.body).toMatchObject({
+      userId: p.userId,
+      orgId: null,
+      actor: { type: 'user', userId: p.userId },
+    });
     // The sign-in is a re-authentication, so the context carries it.
     expect(Date.now() - Date.parse(String(r.body.stepUp))).toBeLessThan(STEP_UP_WINDOW_MS);
   });

@@ -5,7 +5,7 @@ import { eq } from 'drizzle-orm';
 import type { Auth } from './auth.ts';
 import type { IdTokenVerifier } from './id-token.ts';
 import type { AuthMailer } from './mailer.ts';
-import { type TokenPair, refreshTokenService } from './refresh-tokens.ts';
+import { refreshTokenService, type TokenPair } from './refresh-tokens.ts';
 import { securityEvents, verifications } from './schema.ts';
 import {
   confirmLinkProof,
@@ -198,7 +198,8 @@ export function appSignIn(auth: Auth, opts: AppSignInOptions) {
       // The code is checked; the 14-day session it made is not what this client gets.
       await c.internalAdapter.deleteSession(res.token);
       const userId = res.user.id;
-      if (!res.user.name) await c.internalAdapter.updateUser(userId, { name: address.split('@')[0] ?? address });
+      if (!res.user.name)
+        await c.internalAdapter.updateUser(userId, { name: address.split('@')[0] ?? address });
       return finish(userId, 'email_code');
     },
 
@@ -221,7 +222,8 @@ export function appSignIn(auth: Auth, opts: AppSignInOptions) {
     }): Promise<AppSignInResult> {
       const verified = await opts.verifier.verify(input);
       if (!verified) return { ok: false, reason: 'invalid_id_token' };
-      const profile = verified.name || !input.name ? verified : { ...verified, name: input.name.trim() || null };
+      const profile =
+        verified.name || !input.name ? verified : { ...verified, name: input.name.trim() || null };
       const resolution = await resolveSocialSignIn(profile);
       switch (resolution.kind) {
         case 'linked':

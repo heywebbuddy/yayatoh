@@ -110,7 +110,13 @@ describe('id_token verification (real adapter, local keys)', () => {
     const good = await token('google');
     const [h, , s] = good.split('.');
     const forgedBody = Buffer.from(
-      JSON.stringify({ iss: 'https://accounts.google.com', aud: GOOGLE_AUD, sub: 'someone-else', exp: nowS + 600, nonce: NONCE }),
+      JSON.stringify({
+        iss: 'https://accounts.google.com',
+        aud: GOOGLE_AUD,
+        sub: 'someone-else',
+        exp: nowS + 600,
+        nonce: NONCE,
+      }),
     ).toString('base64url');
     expect(await verify('google', `${h}.${forgedBody}.${s}`)).toBeNull();
     expect(await verify('google', `${h}.${forgedBody}.`)).toBeNull();
@@ -148,7 +154,10 @@ describe('id_token verification (real adapter, local keys)', () => {
     expect(await verify('apple', await token('apple', { nonce: NONCE }))).toBeNull();
     // Google's holds the nonce as given; a hash of it is not accepted there.
     expect(
-      await verify('google', await token('google', { nonce: createHash('sha256').update(NONCE).digest('hex') })),
+      await verify(
+        'google',
+        await token('google', { nonce: createHash('sha256').update(NONCE).digest('hex') }),
+      ),
     ).toBeNull();
     expect(await verify('google', await token('google'), '')).toBeNull();
   });
@@ -158,7 +167,9 @@ describe('id_token verification (real adapter, local keys)', () => {
       audiences: { apple: [], google: audiences.google },
       keys: { apple: createLocalJWKSet({ keys: [] }), google: createLocalJWKSet({ keys: [] }) },
     });
-    expect(await closed.verify({ provider: 'apple', idToken: await token('apple'), nonce: NONCE })).toBeNull();
+    expect(
+      await closed.verify({ provider: 'apple', idToken: await token('apple'), nonce: NONCE }),
+    ).toBeNull();
   });
 });
 

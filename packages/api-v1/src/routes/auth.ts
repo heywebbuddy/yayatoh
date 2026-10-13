@@ -93,7 +93,10 @@ const emailCode = createRoute({
   description:
     'Sends a code to the address and answers `202` with the same body whether or not the address has an account: the first sign-in with the code creates it. Spend the code with `POST /auth/token` (grantType `email_code`). Limited per address (5 per 15 min) and per client IP.',
   request: body(EmailCodeBody),
-  responses: { 202: json(EmailCodeRequested, 'A code was sent if the address can receive mail'), ...problems },
+  responses: {
+    202: json(EmailCodeRequested, 'A code was sent if the address can receive mail'),
+    ...problems,
+  },
 });
 
 const StepUpMethod = z.enum(['totp', 'password', 'email']).openapi('StepUpMethod', {
@@ -122,7 +125,8 @@ const stepUpStart = createRoute({
   path: '/auth/step-up/start',
   operationId: 'startStepUp',
   tags: ['auth'],
-  summary: 'Which proof the signed-in person must give to step up (emails the code when it is an emailed one)',
+  summary:
+    'Which proof the signed-in person must give to step up (emails the code when it is an emailed one)',
   description:
     'Answers with the method (`totp`, `password` or `email`). For `email` a six-digit code is sent to the person’s address (5 per 15 min). Then send the proof to `POST /auth/step-up`.',
   security: userSecurity,
@@ -284,7 +288,8 @@ export function authRoutes(deps: V1Deps, limiter: RateLimiter, ipOf: (h: Headers
   };
   const takeOrThrow = (key: string, rule: { limit: number; window: number }) => {
     const d = limiter.take(key, rule.limit, rule.window);
-    if (!d.allowed) throw new DomainError('rate_limited', 'Too many attempts', { retryAfter: d.resetSeconds });
+    if (!d.allowed)
+      throw new DomainError('rate_limited', 'Too many attempts', { retryAfter: d.resetSeconds });
   };
   return new OpenAPIHono<V1Env>()
     .openapi(token, async (c) => {

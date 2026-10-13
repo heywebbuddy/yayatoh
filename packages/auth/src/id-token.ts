@@ -15,7 +15,11 @@ import type { SocialProfile, SocialProviderId } from './social.ts';
 export interface IdTokenVerifier {
   readonly kind: 'fake' | 'real';
   /** The profile a valid token proves, or null (any reason: the caller never says which). */
-  verify(input: { provider: SocialProviderId; idToken: string; nonce: string }): Promise<SocialProfile | null>;
+  verify(input: {
+    provider: SocialProviderId;
+    idToken: string;
+    nonce: string;
+  }): Promise<SocialProfile | null>;
 }
 
 const ISSUERS: Record<SocialProviderId, readonly string[]> = {
