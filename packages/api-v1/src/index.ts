@@ -33,8 +33,8 @@ import { registerWebhooks } from './webhooks.ts';
 
 export { cachedJson, etagOf } from './caching.ts';
 export {
-  MOBILE_CLIENTS,
   type MeContext,
+  MOBILE_CLIENTS,
   type MobileAppSettings,
   type MobileClient,
   type MobileSettings,
