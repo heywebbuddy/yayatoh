@@ -16,7 +16,8 @@
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "vectors:write": "node tests/write-vectors.ts"
+    "vectors:write": "node tests/write-vectors.ts",
+    "bench": "node tests/bench.ts"
   },
   "devDependencies": {
     "@yayatoh/config": "workspace:*",
