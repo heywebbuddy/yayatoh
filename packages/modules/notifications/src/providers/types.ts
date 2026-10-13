@@ -15,6 +15,8 @@ export const PROVIDER_NAMES = [
   'twilio',
   'whatsapp_cloud',
   'whatsapp_gateway',
+  'apns',
+  'fcm',
   'fake',
   'dev',
   'memory',
@@ -24,6 +26,15 @@ export type ProviderName = (typeof PROVIDER_NAMES)[number];
 /** The real providers (staff console health and switch-on checklists). */
 export const REAL_PROVIDERS = ['ses', 'twilio', 'whatsapp_cloud', 'whatsapp_gateway'] as const;
 export type RealProvider = (typeof REAL_PROVIDERS)[number];
+
+/**
+ * The native push providers (M7.2c): APNs and FCM. They are switched on and checked with the same
+ * `providerMode` as the others (`PUSH_PROVIDER=apns,fcm`), but are not in the staff health page yet
+ * (push sends are not counted in provider health).
+ */
+export const NATIVE_PUSH_PROVIDERS = ['apns', 'fcm'] as const;
+export type NativePushProvider = (typeof NATIVE_PUSH_PROVIDERS)[number];
+export type ConfigurableProvider = RealProvider | NativePushProvider;
 
 /**
  * Why a provider refused a message for good (no retry): the dispatcher records the reason and,

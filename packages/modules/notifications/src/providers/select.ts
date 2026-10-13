@@ -1,6 +1,9 @@
 import { isProductionEnv } from '@yayatoh/kernel';
-import type { Transports } from '../transports.ts';
+import type { OutboundPush, PushTransport, Transports } from '../transports.ts';
+import { routedPushTransport } from '../web-push-transport.ts';
+import { type ApnsHttp2, apnsConfigFromEnv, apnsTransport } from './apns.ts';
 import { providerMode, whatsappRoutes } from './config.ts';
+import { fcmConfigFromEnv, fcmTransport } from './fcm.ts';
 import { fakeIdentityPort, type SendingIdentityPort, sesEmailTransport, sesIdentityPort } from './ses.ts';
 import { sesWebhookAdapter } from './sns.ts';
 import {
@@ -60,6 +63,26 @@ const gateway = (env: Env, origin: string) => ({
   callbackOrigin: origin,
 });
 
+/**
+ * The native push adapters that are live (`PUSH_PROVIDER` names them and their config is set),
+ * routed per platform over `fallback` (the dev mailbox in development and CI, nothing in
+ * production). Null when neither is live. A platform without a live adapter falls to `fallback`.
+ */
+export function nativePushTransport(
+  env: Env,
+  fallback: PushTransport | undefined,
+  inject: { readonly http2?: ApnsHttp2; readonly fetch?: typeof fetch } = {},
+): PushTransport | null {
+  const live = (p: 'apns' | 'fcm') => providerMode(p, env) === 'live';
+  const byPlatform: Partial<Record<OutboundPush['platform'], PushTransport>> = {};
+  const apns = live('apns') ? apnsConfigFromEnv(env) : null;
+  const fcm = live('fcm') ? fcmConfigFromEnv(env) : null;
+  if (apns)
+    byPlatform.apns = apnsTransport({ config: apns, ...(inject.http2 ? { http2: inject.http2 } : {}) });
+  if (fcm) byPlatform.fcm = fcmTransport({ account: fcm, ...(inject.fetch ? { fetch: inject.fetch } : {}) });
+  return Object.keys(byPlatform).length ? routedPushTransport(byPlatform, fallback) : null;
+}
+
 /** Live providers over `base` (channel by channel). Null when nothing can send email. */
 export function liveTransports(env: Env, appOrigin: string, base: Transports | null): Transports | null {
   const live = (p: Parameters<typeof providerMode>[0]) => providerMode(p, env) === 'live';
@@ -76,11 +99,13 @@ export function liveTransports(env: Env, appOrigin: string, base: Transports | n
       })
     : base?.whatsapp;
   const sms = live('twilio') ? twilioSmsTransport(twilio(env, appOrigin)) : base?.sms;
+  // M7.2c: APNs and FCM when live; web push (and the dev mailbox) stay as the base has them.
+  const push = nativePushTransport(env, base?.push) ?? base?.push;
   return {
     email,
     ...(sms ? { sms } : {}),
     ...(whatsapp ? { whatsapp } : {}),
-    ...(base?.push ? { push: base.push } : {}),
+    ...(push ? { push } : {}),
   };
 }
 

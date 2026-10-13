@@ -237,6 +237,16 @@
         "sign-in-code": "サインインコード",
         "password-reset": "パスワード再設定",
         "magic-link": "サインインリンク"
+      },
+      "push": {
+        "order-confirmed": "アプリ通知: 注文確定",
+        "ticket-received": "アプリ通知: チケット受取",
+        "transfer-accepted": "アプリ通知: 譲渡の承諾",
+        "transfer-cancelled": "アプリ通知: 譲渡の取消",
+        "event-changed": "アプリ通知: イベントの変更",
+        "event-cancelled": "アプリ通知: イベントの中止",
+        "reminder-24h": "アプリ通知: 24時間前のリマインダー",
+        "reminder-2h": "アプリ通知: 2時間前のリマインダー"
       }
     },
     "status": {

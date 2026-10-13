@@ -237,6 +237,16 @@
         "sign-in-code": "Inlogcode",
         "password-reset": "Wachtwoord opnieuw instellen",
         "magic-link": "Inloglink"
+      },
+      "push": {
+        "order-confirmed": "App-melding: bestelling bevestigd",
+        "ticket-received": "App-melding: ticket ontvangen",
+        "transfer-accepted": "App-melding: overdracht geaccepteerd",
+        "transfer-cancelled": "App-melding: overdracht geannuleerd",
+        "event-changed": "App-melding: evenement gewijzigd",
+        "event-cancelled": "App-melding: evenement geannuleerd",
+        "reminder-24h": "App-melding: herinnering 24 uur van tevoren",
+        "reminder-2h": "App-melding: herinnering 2 uur van tevoren"
       }
     },
     "status": {

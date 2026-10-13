@@ -1,5 +1,5 @@
 {
-  "id": "0c18c088-6d23-42fd-b54a-dc6ff29e15e1",
+  "id": "446c0328-204f-4906-a547-447bac1f94cf",
   "prevId": "f101071c-d62d-4460-bb49-69bc739d99b0",
   "version": "7",
   "dialect": "postgresql",
@@ -20129,13 +20129,6 @@
           "primaryKey": false,
           "notNull": true
         },
-        "platform": {
-          "name": "platform",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'webpush'"
-        },
         "endpoint": {
           "name": "endpoint",
           "type": "text",
@@ -20146,19 +20139,13 @@
           "name": "p256dh",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "auth_secret": {
           "name": "auth_secret",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
-        },
-        "app_id": {
-          "name": "app_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "locale": {
           "name": "locale",
@@ -20265,17 +20252,17 @@
         }
       },
       "checkConstraints": {
-        "staff_push_subscriptions_platform_check": {
-          "name": "staff_push_subscriptions_platform_check",
-          "value": "platform in ('webpush', 'apns', 'fcm')"
-        },
         "staff_push_subscriptions_endpoint_check": {
           "name": "staff_push_subscriptions_endpoint_check",
-          "value": "(platform = 'webpush' and endpoint ~ '^https?://' and length(endpoint) <= 2048) or (platform <> 'webpush' and length(endpoint) between 8 and 4096)"
+          "value": "endpoint ~ '^https?://' and length(endpoint) <= 2048"
         },
-        "staff_push_subscriptions_keys_check": {
-          "name": "staff_push_subscriptions_keys_check",
-          "value": "(platform = 'webpush' and p256dh ~ '^[A-Za-z0-9_-]{87}$' and auth_secret ~ '^[A-Za-z0-9_-]{22}$' and app_id is null) or (platform <> 'webpush' and p256dh is null and auth_secret is null and (app_id is null or length(app_id) between 3 and 200))"
+        "staff_push_subscriptions_p256dh_check": {
+          "name": "staff_push_subscriptions_p256dh_check",
+          "value": "p256dh ~ '^[A-Za-z0-9_-]{87}$'"
+        },
+        "staff_push_subscriptions_auth_check": {
+          "name": "staff_push_subscriptions_auth_check",
+          "value": "auth_secret ~ '^[A-Za-z0-9_-]{22}$'"
         },
         "staff_push_subscriptions_locale_check": {
           "name": "staff_push_subscriptions_locale_check",
@@ -48114,6 +48101,30 @@
           "notNull": true,
           "default": "'app'"
         },
+        "app_id": {
+          "name": "app_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "app_version": {
+          "name": "app_version",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "locale": {
+          "name": "locale",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "environment": {
+          "name": "environment",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "last_seen_at": {
           "name": "last_seen_at",
           "type": "timestamp with time zone",
@@ -48267,6 +48278,22 @@
         "push_tokens_label_length": {
           "name": "push_tokens_label_length",
           "value": "label is null or length(label) between 1 and 80"
+        },
+        "push_tokens_environment_check": {
+          "name": "push_tokens_environment_check",
+          "value": "environment is null or environment in ('sandbox', 'production')"
+        },
+        "push_tokens_app_id_length": {
+          "name": "push_tokens_app_id_length",
+          "value": "app_id is null or length(app_id) between 3 and 155"
+        },
+        "push_tokens_app_version_length": {
+          "name": "push_tokens_app_version_length",
+          "value": "app_version is null or length(app_version) between 1 and 40"
+        },
+        "push_tokens_locale_length": {
+          "name": "push_tokens_locale_length",
+          "value": "locale is null or length(locale) between 2 and 12"
         },
         "push_tokens_time_zone_length": {
           "name": "push_tokens_time_zone_length",
@@ -73915,6 +73942,21 @@
           "method": "btree",
           "with": {}
         },
+        "tickets_holder_email_lower_idx": {
+          "name": "tickets_holder_email_lower_idx",
+          "columns": [
+            {
+              "expression": "lower(holder_email)",
+              "asc": true,
+              "isExpression": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
         "tickets_org_event_updated_idx": {
           "name": "tickets_org_event_updated_idx",
           "columns": [
@@ -81571,31 +81613,6 @@
           "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": false
-        },
-        "kind": {
-          "name": "kind",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'cookie'"
-        },
-        "refresh_hash": {
-          "name": "refresh_hash",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "previous_refresh_hash": {
-          "name": "previous_refresh_hash",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "refresh_expires_at": {
-          "name": "refresh_expires_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
         }
       },
       "indexes": {
@@ -81631,28 +81648,6 @@
             }
           ],
           "isUnique": true,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "portal_sessions_org_refresh_key": {
-          "name": "portal_sessions_org_refresh_key",
-          "columns": [
-            {
-              "expression": "org_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "refresh_hash",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "where": "refresh_hash is not null",
           "concurrently": false,
           "method": "btree",
           "with": {}
@@ -81720,16 +81715,7 @@
           "withCheck": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)"
         }
       },
-      "checkConstraints": {
-        "portal_sessions_kind_check": {
-          "name": "portal_sessions_kind_check",
-          "value": "kind in ('cookie', 'bearer')"
-        },
-        "portal_sessions_bearer_check": {
-          "name": "portal_sessions_bearer_check",
-          "value": "(kind = 'cookie' and refresh_hash is null and previous_refresh_hash is null and refresh_expires_at is null) or (kind = 'bearer' and refresh_hash is not null and refresh_expires_at is not null)"
-        }
-      },
+      "checkConstraints": {},
       "isRLSEnabled": true
     },
     "media.portal_files": {

@@ -237,6 +237,16 @@
         "sign-in-code": "Code de connexion",
         "password-reset": "Réinitialisation du mot de passe",
         "magic-link": "Lien de connexion"
+      },
+      "push": {
+        "order-confirmed": "Notification de l’app : commande confirmée",
+        "ticket-received": "Notification de l’app : billet reçu",
+        "transfer-accepted": "Notification de l’app : transfert accepté",
+        "transfer-cancelled": "Notification de l’app : transfert annulé",
+        "event-changed": "Notification de l’app : événement modifié",
+        "event-cancelled": "Notification de l’app : événement annulé",
+        "reminder-24h": "Notification de l’app : rappel 24 heures avant",
+        "reminder-2h": "Notification de l’app : rappel 2 heures avant"
       }
     },
     "status": {

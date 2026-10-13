@@ -377,6 +377,38 @@
       "subject": "您的 Yayatoh 登入連結",
       "intro": "點擊下方按鈕，在此瀏覽器中登入 Yayatoh。連結僅能使用一次，{minutes} 分鐘後失效。如果這不是您的請求，請忽略此郵件。",
       "cta": "登入 Yayatoh"
+    },
+    "push.order-confirmed": {
+      "subject": "{eventName}",
+      "intro": "您的訂單已確認。"
+    },
+    "push.ticket-received": {
+      "subject": "{eventName}",
+      "intro": "有一張票券已轉讓給您。"
+    },
+    "push.transfer-accepted": {
+      "subject": "{eventName}",
+      "intro": "您的轉讓票券已被接受。"
+    },
+    "push.transfer-cancelled": {
+      "subject": "{eventName}",
+      "intro": "一次票券轉讓已被取消。"
+    },
+    "push.event-changed": {
+      "subject": "{eventName}",
+      "intro": "日期、時間或地點已變更。"
+    },
+    "push.event-cancelled": {
+      "subject": "{eventName}",
+      "intro": "此活動已取消。"
+    },
+    "push.reminder-24h": {
+      "subject": "{eventName}",
+      "intro": "明天 {time} 開始。"
+    },
+    "push.reminder-2h": {
+      "subject": "{eventName}",
+      "intro": "2 小時後（{time}）開始。"
     }
   },
   "roles": {

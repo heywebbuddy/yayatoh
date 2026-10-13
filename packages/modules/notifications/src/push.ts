@@ -3,7 +3,7 @@ import { normalizeEmail } from '@yayatoh/crm';
 import type { TenantTx } from '@yayatoh/db';
 import { DomainError, isProductionEnv, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
-import { and, count, desc, eq, isNull, or, type SQL } from 'drizzle-orm';
+import { and, count, desc, eq, inArray, isNull, or, type SQL } from 'drizzle-orm';
 import { z } from 'zod';
 import { requireUser } from './preferences.ts';
 import { isValidTimeZone } from './quiet-hours.ts';
@@ -180,6 +180,8 @@ export async function pushDevicesTx(tx: TenantTx, owner: PushOwner): Promise<Pus
 export async function hasPushDeviceTx(
   tx: TenantTx,
   to: { readonly userId?: string | null; readonly email?: string | null },
+  /** Only phones with the attendee app (APNs, FCM): the `push.*` kinds are for them (M7.2c). */
+  opts: { readonly nativeOnly?: boolean } = {},
 ): Promise<boolean> {
   const owners = [
     ...(to.userId ? [eq(pushTokens.userId, to.userId)] : []),
@@ -189,7 +191,13 @@ export async function hasPushDeviceTx(
   const [row] = await tx
     .select({ id: pushTokens.id })
     .from(pushTokens)
-    .where(and(or(...owners), isNull(pushTokens.disabledAt)))
+    .where(
+      and(
+        or(...owners),
+        isNull(pushTokens.disabledAt),
+        ...(opts.nativeOnly ? [inArray(pushTokens.platform, ['apns', 'fcm'])] : []),
+      ),
+    )
     .limit(1);
   return Boolean(row);
 }

@@ -237,6 +237,16 @@
         "sign-in-code": "Sign-in code",
         "password-reset": "Password reset",
         "magic-link": "Sign-in link"
+      },
+      "push": {
+        "order-confirmed": "App push: order confirmed",
+        "ticket-received": "App push: ticket received",
+        "transfer-accepted": "App push: transfer accepted",
+        "transfer-cancelled": "App push: transfer cancelled",
+        "event-changed": "App push: event changed",
+        "event-cancelled": "App push: event cancelled",
+        "reminder-24h": "App push: reminder 24 hours before",
+        "reminder-2h": "App push: reminder 2 hours before"
       }
     },
     "status": {

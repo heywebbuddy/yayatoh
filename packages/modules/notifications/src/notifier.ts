@@ -75,7 +75,12 @@ export function createNotifier(): Notifier {
       // everyone else gets nothing rather than a "no device" row in the log.
       const wantsPush = (intent.channels ?? def.channels).includes('push');
       const canPush =
-        wantsPush && (await hasPushDeviceTx(tx, { userId: intent.to.userId, email: intent.to.email }));
+        wantsPush &&
+        (await hasPushDeviceTx(
+          tx,
+          { userId: intent.to.userId, email: intent.to.email },
+          { nativeOnly: intent.kind.startsWith('push.') },
+        ));
       const channels = (intent.channels ?? def.channels).filter(
         (c): c is Exclude<NotificationChannel, 'in_app'> => {
           if (c === 'email') return Boolean(intent.to.email || intent.to.userId);

@@ -237,6 +237,16 @@
         "sign-in-code": "Код для входа",
         "password-reset": "Сброс пароля",
         "magic-link": "Ссылка для входа"
+      },
+      "push": {
+        "order-confirmed": "Push в приложении: заказ подтверждён",
+        "ticket-received": "Push в приложении: билет получен",
+        "transfer-accepted": "Push в приложении: передача принята",
+        "transfer-cancelled": "Push в приложении: передача отменена",
+        "event-changed": "Push в приложении: мероприятие изменено",
+        "event-cancelled": "Push в приложении: мероприятие отменено",
+        "reminder-24h": "Push в приложении: напоминание за 24 часа",
+        "reminder-2h": "Push в приложении: напоминание за 2 часа"
       }
     },
     "status": {

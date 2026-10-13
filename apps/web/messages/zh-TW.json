@@ -237,6 +237,16 @@
         "sign-in-code": "登入驗證碼",
         "password-reset": "重設密碼",
         "magic-link": "登入連結"
+      },
+      "push": {
+        "order-confirmed": "應用程式推播：訂單已確認",
+        "ticket-received": "應用程式推播：收到票券",
+        "transfer-accepted": "應用程式推播：轉讓已接受",
+        "transfer-cancelled": "應用程式推播：轉讓已取消",
+        "event-changed": "應用程式推播：活動有變更",
+        "event-cancelled": "應用程式推播：活動已取消",
+        "reminder-24h": "應用程式推播：提前 24 小時提醒",
+        "reminder-2h": "應用程式推播：提前 2 小時提醒"
       }
     },
     "status": {

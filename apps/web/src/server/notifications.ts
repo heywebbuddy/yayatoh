@@ -45,6 +45,7 @@ import {
   withWebPush,
 } from '@yayatoh/notifications';
 import {
+  appPushNotifier,
   creditNoteMailer,
   invoiceMailer,
   orderLinkMailer,
@@ -118,6 +119,8 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     refundDeclineMailer({ notifier, appOrigin }),
     postponementMailer({ notifier, appOrigin }),
     reminderRescheduler(),
+    // M7.2c: the attendee app's pushes (order, transfers, event changes, reminders).
+    appPushNotifier({ notifier }),
     claimLinkMailer({ notifier, appOrigin }),
     holderLinkMailer({ notifier, appOrigin }),
     // M3.10c support tools (as in the worker).

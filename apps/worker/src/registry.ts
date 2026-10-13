@@ -48,6 +48,7 @@ import {
 } from '@yayatoh/messaging';
 import { createNotifier } from '@yayatoh/notifications';
 import {
+  appPushNotifier,
   creditNoteMailer,
   invoiceMailer,
   orderLinkMailer,
@@ -141,6 +142,8 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     refundDeclineMailer({ notifier, appOrigin }),
     postponementMailer({ notifier, appOrigin }),
     reminderRescheduler(),
+    // M7.2c: the attendee app's pushes (order, transfers, event changes, reminders).
+    appPushNotifier({ notifier }),
     claimLinkMailer({ notifier, appOrigin }),
     holderLinkMailer({ notifier, appOrigin }),
     ticketResendMailer({ notifier, appOrigin }),

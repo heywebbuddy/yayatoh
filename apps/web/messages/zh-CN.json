@@ -237,6 +237,16 @@
         "sign-in-code": "登录验证码",
         "password-reset": "重置密码",
         "magic-link": "登录链接"
+      },
+      "push": {
+        "order-confirmed": "应用推送：订单已确认",
+        "ticket-received": "应用推送：收到门票",
+        "transfer-accepted": "应用推送：转票已接受",
+        "transfer-cancelled": "应用推送：转票已取消",
+        "event-changed": "应用推送：活动有变更",
+        "event-cancelled": "应用推送：活动已取消",
+        "reminder-24h": "应用推送：提前 24 小时提醒",
+        "reminder-2h": "应用推送：提前 2 小时提醒"
       }
     },
     "status": {
