@@ -10,5 +10,5 @@ const response = http.post(`${base}/api/dev/user`, {
 });
 const user = json(response.body);
 output.email = user.email;
-output.backupCode = user.backupCodes && user.backupCodes.length ? user.backupCodes[0] : '';
+output.backupCode = user.backupCodes?.length ? user.backupCodes[0] : '';
 output.password = DEV_PERSONA_PASSWORD;

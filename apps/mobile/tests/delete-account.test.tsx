@@ -1,5 +1,4 @@
 import { screen, waitFor } from 'expo-router/testing-library';
-import { CACHE_FILE } from '../../../packages/mobile-core/src/cache/persister';
 import { onPath, openTab, press, type } from './helpers/actions';
 import { cores, renderApp } from './helpers/app';
 import { BACKUP, CODE, createFakeServer, PASSWORD, USER } from './helpers/fake-server';
@@ -78,7 +77,7 @@ describe('confirming and deleting', () => {
       buster: 'b',
       clientState: { mutations: [], queries: [] },
     });
-    expect(app.files.files.has(CACHE_FILE)).toBe(true);
+    expect(app.files.files.size).toBeGreaterThan(0);
 
     await submit(CODE);
     await onPath(app.view, '/account/deleted');
@@ -96,7 +95,7 @@ describe('confirming and deleting', () => {
     // The phone holds no tokens and no cache.
     expect(app.core.session.state.status).toBe('signedOut');
     expect(app.storage.data.size).toBe(0);
-    expect(app.files.files.has(CACHE_FILE)).toBe(false);
+    expect(app.files.files.size).toBe(0);
     expect(app.core.queryClient.getQueryData(['tickets'])).toBeUndefined();
   });
 

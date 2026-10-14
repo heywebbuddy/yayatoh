@@ -192,6 +192,53 @@ describe('DELETE /v1/me', () => {
   });
 });
 
+describe('while a staff member is acting as the person', () => {
+  // The same router, with every session reported as an impersonation (as the web's own-session rule).
+  const impersonating = new Hono().route(
+    '/v1',
+    createV1({
+      ports,
+      sessions: () => {
+        const real = bearerSessions(auth);
+        return {
+          ...real,
+          session: async (token: string) => {
+            const s = await real.session(token);
+            return s ? { ...s, impersonated: true } : s;
+          },
+        };
+      },
+      appSignIn: () => signIn,
+      payments: () => fakePaymentProvider({ secret, appOrigin: 'http://localhost:3000' }),
+      accountNotice: async (to, user) => {
+        notices.push({ to, name: user.name });
+      },
+      telemetry: false,
+      rateLimiter: memoryRateLimiter(),
+    }),
+  );
+  const via = async (method: string, path: string, token: string) => {
+    const res = await impersonating.request(`/v1${path}`, {
+      method,
+      headers: { authorization: `Bearer ${token}`, 'x-forwarded-for': '10.8.0.1' },
+    });
+    const text = await res.text();
+    return { status: res.status, body: (text ? JSON.parse(text) : null) as Json };
+  };
+
+  it('refuses to delete the account or sign it out everywhere, and changes nothing', async () => {
+    const p = await phone(addr('impersonated'));
+    const del = await via('DELETE', '/me', p.access);
+    expect(del.status).toBe(403);
+    expect((del.body.details as Json).reason).toBe('impersonation');
+    const out = await via('POST', '/auth/sign-out-everywhere', p.access);
+    expect(out.status).toBe(403);
+    expect((await call('GET', '/me', { token: p.access })).status).toBe(200);
+    expect((await refreshWith(p.refresh)).status).toBe(200);
+    expect(notices.some((n) => n.to === p.email)).toBe(false);
+  });
+});
+
 describe('POST /v1/auth/sign-out-everywhere', () => {
   it('needs a bearer session', async () => {
     expect((await call('POST', '/auth/sign-out-everywhere')).status).toBe(401);

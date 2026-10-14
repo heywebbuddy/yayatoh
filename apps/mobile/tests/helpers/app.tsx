@@ -15,7 +15,6 @@ import {
 } from '@yayatoh/mobile-core';
 import { Slot } from 'expo-router';
 import { act, renderRouter } from 'expo-router/testing-library';
-import type { ComponentType } from 'react';
 import { Text } from 'react-native';
 import AuthLayout from '../../src/app/(auth)/_layout';
 import CodeScreen from '../../src/app/(auth)/code';
@@ -91,7 +90,7 @@ export async function renderApp(options: RenderOptions = {}): Promise<Harness> {
   cores.push(core);
   if (options.signedIn) await core.session.setTokens(pair());
 
-  const Root: ComponentType = () => (
+  const Root = () => (
     <CoreProvider core={core} bindNetwork={false}>
       <Slot />
     </CoreProvider>

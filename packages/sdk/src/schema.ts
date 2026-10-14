@@ -329,7 +329,7 @@ export interface paths {
          * Delete the signed-in person’s account (needs a fresh step-up)
          * @description Deletes the account as the web’s account page does (App Store rule 5.1.1(v)): the person’s sign-in methods, sessions and refresh tokens end, their address joins the suppression list, and a confirmation goes to the old address. Organizers keep their orders, tickets and consents as the controllers of those records; they lose the link to the account.
          *
-         *     Needs a step-up within the last ten minutes (`POST /auth/step-up`); without one the answer is `401 step_up_required` and nothing is deleted. Refused with `409 invalid_state` (`details.reason: last_owner`, `details.orgs`: names) while the person is the only owner of an organization. Works for sessions whose email is not yet verified.
+         *     Needs a step-up within the last ten minutes (`POST /auth/step-up`); without one the answer is `401 step_up_required` and nothing is deleted. Refused with `409 invalid_state` (`details.reason: last_owner`, `details.orgs`: names) while the person is the only owner of an organization. Works for sessions whose email is not yet verified. Refused with `403 forbidden` (`details.reason: impersonation`) while a staff member is acting as the person.
          */
         delete: operations["deleteMe"];
         options?: never;

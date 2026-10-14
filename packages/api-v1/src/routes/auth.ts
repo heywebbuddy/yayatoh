@@ -239,7 +239,7 @@ const deleteMe = createRoute({
   description: [
     'Deletes the account as the web’s account page does (App Store rule 5.1.1(v)): the person’s sign-in methods, sessions and refresh tokens end, their address joins the suppression list, and a confirmation goes to the old address. Organizers keep their orders, tickets and consents as the controllers of those records; they lose the link to the account.',
     '',
-    'Needs a step-up within the last ten minutes (`POST /auth/step-up`); without one the answer is `401 step_up_required` and nothing is deleted. Refused with `409 invalid_state` (`details.reason: last_owner`, `details.orgs`: names) while the person is the only owner of an organization. Works for sessions whose email is not yet verified.',
+    'Needs a step-up within the last ten minutes (`POST /auth/step-up`); without one the answer is `401 step_up_required` and nothing is deleted. Refused with `409 invalid_state` (`details.reason: last_owner`, `details.orgs`: names) while the person is the only owner of an organization. Works for sessions whose email is not yet verified. Refused with `403 forbidden` (`details.reason: impersonation`) while a staff member is acting as the person.',
   ].join('\n'),
   security: userSecurity,
   responses: { 200: json(AccountErasure, 'Deleted'), ...writeProblems },
@@ -300,6 +300,16 @@ function userOf(c: { get(k: 'principal'): V1Env['Variables']['principal'] }) {
   const p = c.get('principal');
   if (p?.kind !== 'user') throw new DomainError('unauthenticated', 'A user session is required');
   return p.session;
+}
+
+/** The person's own session: commands about the account itself never run under an impersonation. */
+function ownSessionOf(c: { get(k: 'principal'): V1Env['Variables']['principal'] }) {
+  const s = userOf(c);
+  if (s.impersonated)
+    throw new DomainError('forbidden', 'Not available while a staff member is acting as this person', {
+      reason: 'impersonation',
+    });
+  return s;
 }
 
 export function authRoutes(deps: V1Deps, limiter: RateLimiter, ipOf: (h: Headers) => string) {
@@ -428,7 +438,7 @@ export function authRoutes(deps: V1Deps, limiter: RateLimiter, ipOf: (h: Headers
       );
     })
     .openapi(signOutEverywhere, async (c) => {
-      await appSignIn().signOutEverywhere(userOf(c).user.id);
+      await appSignIn().signOutEverywhere(ownSessionOf(c).user.id);
       return c.body(null, 204);
     })
     .openapi(revoke, async (c) => {
@@ -459,7 +469,7 @@ export function authRoutes(deps: V1Deps, limiter: RateLimiter, ipOf: (h: Headers
     })
     .openapi(me, (c) => c.json(toWire(User, userOf(c).user), 200))
     .openapi(deleteMe, async (c) => {
-      const s = userOf(c);
+      const s = ownSessionOf(c);
       // The same command as the web's account page: the step-up, the last-owner rule, each org's
       // detach and the anonymising all happen inside `deleteAccount`.
       const r = await deleteAccount({

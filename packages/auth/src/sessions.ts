@@ -19,6 +19,11 @@ export interface BearerSession {
    * is not re-authenticating.
    */
   readonly stepUpAt: Date | null;
+  /**
+   * True when a staff member is acting as this person (an impersonation session). Commands about
+   * the account itself (deleting it, signing it out everywhere) refuse these, as the web does.
+   */
+  readonly impersonated?: boolean;
 }
 
 export type SignInResult =
@@ -78,6 +83,7 @@ export function bearerSessions(auth: Auth): BearerSessions {
         emailVerified: Boolean(s.user.emailVerified),
       },
       stepUpAt,
+      impersonated: Boolean((s.session as { impersonationId?: string | null }).impersonationId),
     };
   };
   return {
