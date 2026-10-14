@@ -21,6 +21,7 @@ import { docsRoutes } from './routes/docs.ts';
 import { health } from './routes/health.ts';
 import { hookRoutes } from './routes/hooks.ts';
 import { keyRoutes } from './routes/key.ts';
+import { meRoutes } from './routes/me.ts';
 import { orgRoutes } from './routes/org.ts';
 import { portalRoutes } from './routes/portal.ts';
 import { publicRoutes } from './routes/public.ts';
@@ -61,7 +62,11 @@ export { compareVersions, mobileSettingsFromEnv } from './versions.ts';
 const API_TAGS = [
   { name: 'system', description: 'Liveness and the API document.' },
   { name: 'auth', description: 'Bearer sessions for mobile and command-line clients.' },
-  { name: 'me', description: 'The signed-in user and their organizations.' },
+  {
+    name: 'me',
+    description:
+      'The signed-in user and their organizations; as an attendee, their tickets, orders, transfers, refund requests, wallet passes, claims and phones for push.',
+  },
   { name: 'mobile', description: 'Configuration for the mobile apps (versions, base URLs, flags).' },
   { name: 'public', description: 'Published events and their passes, without a credential.' },
   {
@@ -353,10 +358,15 @@ export function createV1(deps: V1Deps) {
     return meScope(c, next);
   });
 
+  // M7.2b: claim links are for a signed-in person with a verified email too.
+  v1.use('/claims/*', meScope);
+
   v1.route('/', health);
   v1.route('/', authRoutes(deps, limiter, clientIp));
   // M7.2c: the person's phones for push (`/me/devices`, behind the `/me` scope).
   v1.route('/', deviceRoutes(deps));
+  // M7.2b: my tickets, my orders, transfers, refund requests, wallet passes and claims.
+  v1.route('/', meRoutes(deps));
   v1.route('/', publicRoutes());
   v1.route('/', contentRoutes(deps));
   v1.route('/', orgRoutes(deps));

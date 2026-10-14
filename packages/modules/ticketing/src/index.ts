@@ -47,12 +47,14 @@ export {
   claimDetailsQuery,
   claimsForTicketsTx,
   claimTicketCommand,
+  claimTicketForPersonCommand,
   createClaimLinksCommand,
   giveTicketCommand,
   HOLDER_PURPOSE,
   HolderTicketsDto,
   holderContext,
   holderTicketsQuery,
+  issueAppHolderLinkCommand,
   issueHolderLinkTx,
   listClaimLinksQuery,
   PublicClaimDto,
@@ -123,9 +125,9 @@ export {
   activeTicketsHeldByEmailTx,
   activeTicketsHeldByTx,
 } from './kiosk.ts';
-export { nameTicketHolderTx } from './naming.ts';
 // M7.2b: a person's own tickets, for the attendee app.
 export { MyTicketDto, myTicketsTx } from './my-tickets.ts';
+export { nameTicketHolderTx } from './naming.ts';
 export {
   activeTicketsForOccurrenceTx,
   assertOccurrenceIdsTx,

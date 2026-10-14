@@ -4,8 +4,8 @@ import { findEventTx, findOccurrenceTx } from '@yayatoh/events';
 import type { Ctx } from '@yayatoh/kernel';
 import { and, asc, eq, sql } from 'drizzle-orm';
 import { z } from 'zod';
-import { holderTransferOptionsTx } from './transfers.ts';
 import { ticketBarcodes, tickets, ticketTypes } from './schema.ts';
+import { holderTransferOptionsTx } from './transfers.ts';
 
 /**
  * A person's own tickets in one org (M7.2b), for the attendee app: the active (or, for one ticket
@@ -119,7 +119,8 @@ export async function myTicketsTx(
   if (rows.length === 0) return [];
 
   const events = new Map<string, Awaited<ReturnType<typeof findEventTx>>>();
-  for (const eventId of new Set(rows.map((r) => r.eventId))) events.set(eventId, await findEventTx(tx, eventId));
+  for (const eventId of new Set(rows.map((r) => r.eventId)))
+    events.set(eventId, await findEventTx(tx, eventId));
   const dates = new Map<string, { startsAt: Date; endsAt: Date } | null>();
   for (const id of new Set(rows.flatMap((r) => (r.occurrenceId ? [r.occurrenceId] : [])))) {
     const occ = await findOccurrenceTx(tx, id);

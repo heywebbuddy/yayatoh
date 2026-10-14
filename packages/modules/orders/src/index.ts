@@ -299,8 +299,6 @@ export {
   setCheckoutSettingsCommand,
   VERIFY_EMAIL_DEFAULT,
 } from './guest/orders.ts';
-// M7.2b: a person's own orders for the attendee app.
-export { MyOrderDetailDto, myOrderDetail, myOrderRefundTarget } from './my-orders.ts';
 export {
   checkGuestCode,
   checkGuestLink,
@@ -354,6 +352,8 @@ export {
   orderFeesTx,
   orderMoneyRowsTx,
 } from './money-facts.ts';
+// M7.2b: a person's own orders for the attendee app.
+export { MyOrderDetailDto, myOrderDetail, myOrderRefundTarget } from './my-orders.ts';
 export { type SoldOrderDayFact, soldOrderDaysTx } from './order-days.ts';
 export { buyerFactsTx, orderRefTx } from './participation.ts';
 export { orderPaymentStateTx } from './payment-state.ts';
