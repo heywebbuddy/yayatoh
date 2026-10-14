@@ -13,7 +13,7 @@ import { Banner, Button, Empty, Loading } from '../shop/ui';
 
 export function ShortLinkScreen({ code }: { code: string }) {
   const t = useTranslations('discover.shortLink');
-  const common = useTranslations('core.common');
+  const core = useTranslations('core');
   const router = useRouter();
   const colors = useColors();
   const ports = useShopPorts();
@@ -47,12 +47,12 @@ export function ShortLinkScreen({ code }: { code: string }) {
           testID="short-link-error"
           action={
             <Button
-              label={common('retry')}
+              label={core('common.retry')}
               onPress={() => void (base.isError ? base.refetch() : slug.refetch())}
             />
           }
         >
-          {common('errors.network')}
+          {core('errors.network')}
         </Banner>
       ) : (
         <Loading label={t('opening')} />

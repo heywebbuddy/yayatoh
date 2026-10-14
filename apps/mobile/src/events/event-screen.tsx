@@ -82,7 +82,7 @@ function EventBody({
 }) {
   const t = useTranslations('discover.event');
   const ct = useTranslations('checkout');
-  const common = useTranslations('core.common');
+  const core = useTranslations('core');
   const locale = useLocale();
   const colors = useColors();
   const router = useRouter();
@@ -160,9 +160,9 @@ function EventBody({
             tone="danger"
             title={t('errorTitle')}
             testID="event-error"
-            action={<Button label={common('retry')} onPress={() => void eventQuery.refetch()} />}
+            action={<Button label={core('common.retry')} onPress={() => void eventQuery.refetch()} />}
           >
-            {failure.kind === 'network' ? common('errors.network') : common('errors.generic')}
+            {failure.kind === 'network' ? core('errors.network') : core('errors.generic')}
           </Banner>
         )}
       </SafeAreaView>
@@ -308,11 +308,11 @@ function EventBody({
               tone="danger"
               title={t('ticketsError')}
               testID="tickets-error"
-              action={<Button label={common('retry')} onPress={() => void passesQuery.refetch()} />}
+              action={<Button label={core('common.retry')} onPress={() => void passesQuery.refetch()} />}
             >
               {failureOf(passesQuery.error).kind === 'network'
-                ? common('errors.network')
-                : common('errors.generic')}
+                ? core('errors.network')
+                : core('errors.generic')}
             </Banner>
           ) : passes.length === 0 ? (
             <Body muted testID="no-passes">

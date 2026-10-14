@@ -44,7 +44,7 @@ function OrderRow({ order, onPress }: { order: MyOrderSummary; onPress: () => vo
 
 export function OrdersScreen() {
   const t = useTranslations('orders');
-  const common = useTranslations('core.common');
+  const core = useTranslations('core');
   const router = useRouter();
   const colors = useColors();
   const query = useMyOrders();
@@ -83,13 +83,13 @@ export function OrdersScreen() {
               tone="danger"
               title={t('errorTitle')}
               testID="orders-error"
-              action={<Button label={common('retry')} onPress={() => void query.refetch()} />}
+              action={<Button label={core('common.retry')} onPress={() => void query.refetch()} />}
             >
               {failure.kind === 'network'
-                ? common('errors.network')
+                ? core('errors.network')
                 : failure.kind === 'unauthenticated'
                   ? t('signInAgain')
-                  : common('errors.generic')}
+                  : core('errors.generic')}
             </Banner>
           ) : (
             <Empty

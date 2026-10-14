@@ -78,7 +78,7 @@ function RefundCard({ order }: { order: MyOrder }) {
 
 export function OrderScreen({ id, placed }: { id: string; placed: 'confirmed' | 'pending' | null }) {
   const t = useTranslations('orders');
-  const common = useTranslations('core.common');
+  const core = useTranslations('core');
   const locale = useLocale();
   const router = useRouter();
   const colors = useColors();
@@ -152,13 +152,13 @@ export function OrderScreen({ id, placed }: { id: string; placed: 'confirmed' | 
             tone="danger"
             title={t('errorTitle')}
             testID="order-error"
-            action={<Button label={common('retry')} onPress={() => void query.refetch()} />}
+            action={<Button label={core('common.retry')} onPress={() => void query.refetch()} />}
           >
             {failure?.kind === 'network'
-              ? common('errors.network')
+              ? core('errors.network')
               : failure?.kind === 'unauthenticated'
                 ? t('signInAgain')
-                : common('errors.generic')}
+                : core('errors.generic')}
           </Banner>
         )}
       </SafeAreaView>

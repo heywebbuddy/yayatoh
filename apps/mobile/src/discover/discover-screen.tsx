@@ -30,7 +30,7 @@ const SEARCH_DEBOUNCE_MS = 350;
 
 export function DiscoverScreen() {
   const t = useTranslations('discover');
-  const common = useTranslations('core.common');
+  const core = useTranslations('core');
   const router = useRouter();
   const colors = useColors();
   const ports = useShopPorts();
@@ -264,13 +264,13 @@ export function DiscoverScreen() {
       tone="danger"
       title={t('errorTitle')}
       testID="search-error"
-      action={<Button label={common('retry')} onPress={() => void search.refetch()} />}
+      action={<Button label={core('common.retry')} onPress={() => void search.refetch()} />}
     >
       {failure.kind === 'network'
-        ? common('errors.network')
+        ? core('errors.network')
         : failure.kind === 'rate_limited'
           ? t('rateLimited')
-          : common('errors.generic')}
+          : core('errors.generic')}
     </Banner>
   ) : null;
 
