@@ -24,6 +24,8 @@ export interface ServerConfig {
   providerEmailExists: boolean;
   /** The emailed sign-in code has expired (the server cannot tell it from a wrong one). */
   codeExpired: boolean;
+  /** The sign-in code was tried too often: the server refuses it with `too_many_attempts`. */
+  codeAttemptsExhausted: boolean;
   /** `POST /auth/email-code` answers 429 with this wait, in seconds. */
   emailCodeRateLimit: number | null;
   /** `POST /auth/token` answers 429 with this wait, in seconds. */
@@ -32,6 +34,8 @@ export interface ServerConfig {
   stepUpMethod: 'totp' | 'password' | 'email';
   /** Whether the session counts as freshly stepped up for `DELETE /me`. */
   stepUpFresh: boolean;
+  /** The server stops counting the session as stepped up right after accepting a step-up (a lapse). */
+  stepUpLapses: boolean;
   /** `DELETE /me` is refused: the person is the only owner of these organizations. */
   soleOwnerOf: string[];
   /** Every call fails like a dead network. */
@@ -72,10 +76,12 @@ export function createFakeServer() {
     twoFactor: false,
     providerEmailExists: false,
     codeExpired: false,
+    codeAttemptsExhausted: false,
     emailCodeRateLimit: null,
     tokenRateLimit: null,
     stepUpMethod: 'email',
     stepUpFresh: true,
+    stepUpLapses: false,
     soleOwnerOf: [],
     offline: false,
     signOutEverywhereStatus: 204,
@@ -104,6 +110,7 @@ export function createFakeServer() {
     if (config.tokenRateLimit) return rateLimited(config.tokenRateLimit);
     switch (body.grantType) {
       case 'email_code':
+        if (config.codeAttemptsExhausted) return refuse('too_many_attempts');
         if (config.codeExpired || body.code !== CODE) return refuse('invalid_code');
         return firstFactorDone();
       case 'password':
@@ -149,7 +156,7 @@ export function createFakeServer() {
         return problem(400, 'validation_failed', {
           reason: body?.method === 'password' ? 'invalid_password' : 'invalid_code',
         });
-      config.stepUpFresh = true;
+      config.stepUpFresh = !config.stepUpLapses;
       return json(200, {
         stepUpAt: new Date().toISOString(),
         expiresAt: new Date(Date.now() + 600_000).toISOString(),

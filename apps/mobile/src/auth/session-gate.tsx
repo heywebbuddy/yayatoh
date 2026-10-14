@@ -24,8 +24,10 @@ export function SessionSplash() {
 }
 
 /** Only for signed-in people: signed-out visitors go to the welcome screen. */
-export function RequireSession({ children }: { children: ReactNode }) {
+export function RequireSession({ children, bypass = false }: { children: ReactNode; bypass?: boolean }) {
   const session = useSession();
+  // Same element either way, so a bypass never remounts the screens below.
+  if (bypass) return children;
   if (session.status === 'loading') return <SessionSplash />;
   if (session.status === 'signedOut') return <Redirect href={href(PATHS.welcome)} />;
   return children;
@@ -50,7 +52,7 @@ export function RequireSessionExceptDeleted({ children }: { children: ReactNode 
   const segments = useSegments() as string[];
   return (
     <AccountFlowContext.Provider value={flow}>
-      {deleting || segments.at(-1) === 'deleted' ? children : <RequireSession>{children}</RequireSession>}
+      <RequireSession bypass={deleting || segments.at(-1) === 'deleted'}>{children}</RequireSession>
     </AccountFlowContext.Provider>
   );
 }

@@ -56,7 +56,12 @@ export interface RenderOptions {
   readonly url?: string;
   readonly signedIn?: boolean;
   readonly server?: FakeServer;
-  readonly deviceLanguage?: string;
+  /** The language the person picked in the app (default: follow the phone, which is English). */
+  readonly locale?: string;
+  /** Leave the stored session unread, to look at the instant before it is known. */
+  readonly skipRestore?: boolean;
+  /** The storage, for a test that needs it slow. */
+  readonly storage?: ReturnType<typeof memoryKeyValueStore>;
   readonly apple?: AppleSignInProvider;
   readonly google?: GoogleSignInProvider;
 }
@@ -66,7 +71,8 @@ export const cores: Core[] = [];
 
 export async function renderApp(options: RenderOptions = {}): Promise<Harness> {
   const server = options.server ?? createFakeServer();
-  const storage = memoryKeyValueStore();
+  const storage = options.storage ?? memoryKeyValueStore();
+  if (options.locale) await storage.set('yayatoh.pref.locale', options.locale);
   const files = memoryFileStore();
   const core = createCore({
     appName: 'Yayatoh',
@@ -114,8 +120,9 @@ export async function renderApp(options: RenderOptions = {}): Promise<Harness> {
     { initialUrl: options.url ?? '/' },
   );
   // Let the stored session load inside act so the first screen settles before the test looks.
-  await act(async () => {
-    await core.session.restore();
-  });
+  if (!options.skipRestore)
+    await act(async () => {
+      await core.session.restore();
+    });
   return { core, server, storage, files, view };
 }
