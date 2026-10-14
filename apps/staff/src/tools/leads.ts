@@ -102,10 +102,7 @@ export function scanGate(setup: LeadSetup, now: Date): ScanGate {
 
 export type EditProblem = 'too_many_qualifiers' | 'qualifier_too_long' | 'notes_too_long';
 
-export function checkEdit(edit: {
-  qualifiers: readonly string[];
-  notes: string;
-}): EditProblem | null {
+export function checkEdit(edit: { qualifiers: readonly string[]; notes: string }): EditProblem | null {
   if (edit.qualifiers.length > MAX_QUALIFIERS) return 'too_many_qualifiers';
   if (edit.qualifiers.some((q) => q.length > QUALIFIER_MAX)) return 'qualifier_too_long';
   if (edit.notes.length > NOTES_MAX) return 'notes_too_long';
@@ -157,7 +154,8 @@ export function failureOf(err: unknown): FlushFailure {
     const reason = (err.problem as { reason?: string } | null)?.reason;
     return reason === 'terms_not_accepted' ? 'terms' : 'ended';
   }
-  if (err.status === 401 || err.status >= 500 || err.status === 429 || err.status === 408) return 'unreachable';
+  if (err.status === 401 || err.status >= 500 || err.status === 429 || err.status === 408)
+    return 'unreachable';
   return 'rejected';
 }
 

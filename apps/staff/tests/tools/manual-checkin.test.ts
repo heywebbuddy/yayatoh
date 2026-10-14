@@ -24,7 +24,10 @@ describe('manual check-in', () => {
   it('admits online by short code with an idempotency key and logs the reason without the name', async () => {
     const t = base();
     const api = fakeStaff();
-    const r = await manualCheckIn({ ...t, api, offline: null }, { shortCode: 'ABCD2345', reason: 'wont_scan' });
+    const r = await manualCheckIn(
+      { ...t, api, offline: null },
+      { shortCode: 'ABCD2345', reason: 'wont_scan' },
+    );
     expect(r).toMatchObject({ via: 'online', result: 'admitted', holderName: 'Ada Lovelace' });
     expect(api.checkIn).toHaveBeenCalledWith({
       eventId: EVENT,
@@ -34,7 +37,12 @@ describe('manual check-in', () => {
     });
     const log = await t.vault.read<Record<string, string>[]>('manual-log');
     expect(log).toHaveLength(1);
-    expect(log?.[0]).toMatchObject({ shortCode: 'ABCD2345', reason: 'wont_scan', result: 'admitted', via: 'online' });
+    expect(log?.[0]).toMatchObject({
+      shortCode: 'ABCD2345',
+      reason: 'wont_scan',
+      result: 'admitted',
+      via: 'online',
+    });
     expect(JSON.stringify(log)).not.toContain('Ada');
   });
 
@@ -54,7 +62,9 @@ describe('manual check-in', () => {
 
   it('decides offline with the saved manifest when the phone is offline, and does not call the server', async () => {
     const api = fakeStaff();
-    const offline = { scan: jest.fn(async () => ({ verdict: 'admit', holderName: 'Ada Lovelace', typeName: 'GA' })) };
+    const offline = {
+      scan: jest.fn(async () => ({ verdict: 'admit', holderName: 'Ada Lovelace', typeName: 'GA' })),
+    };
     const r = await manualCheckIn(
       { ...base(), api, offline, isOffline: () => true },
       { shortCode: 'ABCD2345', reason: 'phone_dead' },
@@ -70,7 +80,9 @@ describe('manual check-in', () => {
         throw new TypeError('Network request failed');
       },
     });
-    const offline = { scan: async () => ({ verdict: 'duplicate', holderName: 'Ada Lovelace', typeName: null }) };
+    const offline = {
+      scan: async () => ({ verdict: 'duplicate', holderName: 'Ada Lovelace', typeName: null }),
+    };
     const r = await manualCheckIn({ ...base(), api, offline }, { shortCode: 'ABCD2345', reason: 'x' });
     expect(r).toMatchObject({ via: 'offline', result: 'duplicate' });
   });
@@ -89,14 +101,18 @@ describe('manual check-in', () => {
   });
 
   it('says so when there is neither a connection nor a saved manifest', async () => {
-    const r = await manualCheckIn({ ...base(), api: null, offline: null }, { shortCode: 'ABCD2345', reason: 'x' });
+    const r = await manualCheckIn(
+      { ...base(), api: null, offline: null },
+      { shortCode: 'ABCD2345', reason: 'x' },
+    );
     expect(r).toEqual({ via: 'none' });
   });
 
   it('keeps only the latest 500 log entries', async () => {
     const t = base();
     const api = fakeStaff();
-    for (let i = 0; i < 503; i++) await manualCheckIn({ ...t, api, offline: null }, { shortCode: `C${i}`, reason: 'x' });
+    for (let i = 0; i < 503; i++)
+      await manualCheckIn({ ...t, api, offline: null }, { shortCode: `C${i}`, reason: 'x' });
     const log = (await t.vault.read<unknown[]>('manual-log')) ?? [];
     expect(log).toHaveLength(500);
   });

@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useTranslations } from 'use-intl';
 import { useTools } from '../deps';
-import { downloadManifest, type HolderMatch, lookupHolders, type LookupOutcome } from '../lookup';
+import { downloadManifest, type HolderMatch, type LookupOutcome, lookupHolders } from '../lookup';
 import { Body, Button, Card, Empty, ErrorState, Field, Heading, Loading, Notice, Row, Screen } from '../ui';
 import { ManualCheckInPanel } from './manual-panel';
 
@@ -36,7 +36,12 @@ export function LookupScreen() {
   });
   const source = saved.data ?? download.data ?? null;
 
-  if (!device) return <Screen><Empty title={t('hub.none')} /></Screen>;
+  if (!device)
+    return (
+      <Screen>
+        <Empty title={t('hub.none')} />
+      </Screen>
+    );
 
   async function search() {
     if (!source) return;
@@ -63,10 +68,16 @@ export function LookupScreen() {
       <Button label={t('lookup.search')} onPress={search} disabled={!source} testID="lookup-search" />
       {loading ? <Loading label={t('lookup.loading')} /> : null}
       {download.isError && !source ? (
-        <ErrorState message={t('lookup.loadFailed')} retryLabel={core('common.retry')} onRetry={() => download.refetch()} />
+        <ErrorState
+          message={t('lookup.loadFailed')}
+          retryLabel={core('common.retry')}
+          onRetry={() => download.refetch()}
+        />
       ) : null}
       {saved.isSuccess && !source && !loading && !download.isError ? (
-        <Notice tone="warn" testID="lookup-unavailable">{t('lookup.unavailable')}</Notice>
+        <Notice tone="warn" testID="lookup-unavailable">
+          {t('lookup.unavailable')}
+        </Notice>
       ) : null}
       {source ? (
         <Body muted testID="lookup-source">

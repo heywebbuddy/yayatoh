@@ -2,7 +2,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { YayatohApiError } from '@yayatoh/sdk';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useFormatter, useTranslations } from 'use-intl';
-import type { LeadRating, LeadScanResult, LeadSetup } from '../api';
+import type { LeadRating, LeadScanResult } from '../api';
 import { useTools } from '../deps';
 import {
   checkEdit,
@@ -12,12 +12,25 @@ import {
   matchesLead,
   RATINGS,
   type ScanGate,
-  scanGate,
   type ShownLead,
+  scanGate,
   shownLead,
 } from '../leads';
 import { toolKeys, useLeadList, useLeadSetup } from '../queries';
-import { Body, Button, Card, Chip, Empty, ErrorState, Field, Heading, Loading, Notice, Row, Screen } from '../ui';
+import {
+  Body,
+  Button,
+  Card,
+  Chip,
+  Empty,
+  ErrorState,
+  Field,
+  Heading,
+  Loading,
+  Notice,
+  Row,
+  Screen,
+} from '../ui';
 
 /** The rep's outbox: scans go in first and out when the connection allows. */
 function useLeadOutbox(owner: string | null): LeadOutbox | null {
@@ -59,7 +72,8 @@ export function LeadsScreen() {
     setPending(r.pending);
     setFailure(r.failure);
     setSent(r.failure === null && r.results.length > 0);
-    if (r.results.length > 0 && portal) await qc.invalidateQueries({ queryKey: toolKeys.leads(portal.sessionKey) });
+    if (r.results.length > 0 && portal)
+      await qc.invalidateQueries({ queryKey: toolKeys.leads(portal.sessionKey) });
   }, [outbox, portal, qc]);
 
   useEffect(() => {
@@ -70,12 +84,26 @@ export function LeadsScreen() {
     });
   }, [outbox, offline, flush]);
 
-  if (!portal) return <Screen><Empty title={t('notSignedIn')} /></Screen>;
-  if (setup.isPending) return <Screen><Loading label={t('title')} /></Screen>;
+  if (!portal)
+    return (
+      <Screen>
+        <Empty title={t('notSignedIn')} />
+      </Screen>
+    );
+  if (setup.isPending)
+    return (
+      <Screen>
+        <Loading label={t('title')} />
+      </Screen>
+    );
   if (!setup.data)
     return (
       <Screen>
-        <ErrorState message={t('loadFailed')} retryLabel={core('common.retry')} onRetry={() => setup.refetch()} />
+        <ErrorState
+          message={t('loadFailed')}
+          retryLabel={core('common.retry')}
+          onRetry={() => setup.refetch()}
+        />
       </Screen>
     );
 
@@ -89,7 +117,9 @@ export function LeadsScreen() {
       <Heading>{t('title')}</Heading>
       <Body muted>{t('setup', { exhibitor: setup.data.exhibitorName, event: setup.data.eventName })}</Body>
       {gate && !gate.open ? (
-        <Notice tone="warn" testID="leads-gate">{t(gateText(gate.why))}</Notice>
+        <Notice tone="warn" testID="leads-gate">
+          {t(gateText(gate.why))}
+        </Notice>
       ) : null}
       <Button
         label={t('scan')}
@@ -110,11 +140,17 @@ export function LeadsScreen() {
       ) : null}
       {accessEnded ? <Notice tone="info">{t('accessEnded')}</Notice> : null}
       {list.isError && !accessEnded ? (
-        <ErrorState message={t('loadFailed')} retryLabel={core('common.retry')} onRetry={() => list.refetch()} />
+        <ErrorState
+          message={t('loadFailed')}
+          retryLabel={core('common.retry')}
+          onRetry={() => list.refetch()}
+        />
       ) : null}
       {list.data ? (
         <>
-          <Body muted testID="leads-scope">{t(`scope.${list.data.scope}`)}</Body>
+          <Body muted testID="leads-scope">
+            {t(`scope.${list.data.scope}`)}
+          </Body>
           <Field
             label={t('searchLabel')}
             value={query}
@@ -181,16 +217,37 @@ export function LeadScanScreen() {
   const [busy, setBusy] = useState(false);
   const [saved, setSaved] = useState<Saved | null>(null);
 
-  if (!portal) return <Screen><Empty title={t('notSignedIn')} /></Screen>;
-  if (setup.isPending) return <Screen><Loading label={t('scanner.hint')} /></Screen>;
+  if (!portal)
+    return (
+      <Screen>
+        <Empty title={t('notSignedIn')} />
+      </Screen>
+    );
+  if (setup.isPending)
+    return (
+      <Screen>
+        <Loading label={t('scanner.hint')} />
+      </Screen>
+    );
   if (!setup.data)
     return (
       <Screen>
-        <ErrorState message={t('loadFailed')} retryLabel={core('common.retry')} onRetry={() => setup.refetch()} />
+        <ErrorState
+          message={t('loadFailed')}
+          retryLabel={core('common.retry')}
+          onRetry={() => setup.refetch()}
+        />
       </Screen>
     );
   const gate = scanGate(setup.data, clock.now());
-  if (!gate.open) return <Screen><Notice tone="warn" testID="scan-gate">{t(gateText(gate.why))}</Notice></Screen>;
+  if (!gate.open)
+    return (
+      <Screen>
+        <Notice tone="warn" testID="scan-gate">
+          {t(gateText(gate.why))}
+        </Notice>
+      </Screen>
+    );
 
   function reset() {
     setCode(null);
@@ -242,7 +299,9 @@ export function LeadScanScreen() {
             <Scanner active onCode={(c) => setCode(c)} />
           </>
         ) : (
-          <Notice tone="info" testID="scanner-off">{t('scanner.cameraOff')}</Notice>
+          <Notice tone="info" testID="scanner-off">
+            {t('scanner.cameraOff')}
+          </Notice>
         )}
         <Field
           label={t('scanner.manualLabel')}
@@ -355,22 +414,47 @@ export function LeadDetailScreen({ leadId }: { leadId: string }) {
   const setup = useLeadSetup();
   const list = useLeadList(!!setup.data?.capture.accessOpen);
   const raw = list.data?.leads.find((l) => l.id === leadId) ?? null;
-  const [edit, setEdit] = useState<{ rating: LeadRating | null; qualifiers: string[]; notes: string } | null>(null);
+  const [edit, setEdit] = useState<{ rating: LeadRating | null; qualifiers: string[]; notes: string } | null>(
+    null,
+  );
   const [problem, setProblem] = useState<string | null>(null);
   const [state, setState] = useState<'saved' | 'failed' | null>(null);
   const [busy, setBusy] = useState(false);
 
-  if (!portal) return <Screen><Empty title={t('notSignedIn')} /></Screen>;
+  if (!portal)
+    return (
+      <Screen>
+        <Empty title={t('notSignedIn')} />
+      </Screen>
+    );
   if (setup.data && !setup.data.capture.accessOpen)
-    return <Screen><Notice tone="info">{t('accessEnded')}</Notice></Screen>;
-  if (list.isPending || setup.isPending) return <Screen><Loading label={t('title')} /></Screen>;
+    return (
+      <Screen>
+        <Notice tone="info">{t('accessEnded')}</Notice>
+      </Screen>
+    );
+  if (list.isPending || setup.isPending)
+    return (
+      <Screen>
+        <Loading label={t('title')} />
+      </Screen>
+    );
   if (list.isError)
     return (
       <Screen>
-        <ErrorState message={t('loadFailed')} retryLabel={core('common.retry')} onRetry={() => list.refetch()} />
+        <ErrorState
+          message={t('loadFailed')}
+          retryLabel={core('common.retry')}
+          onRetry={() => list.refetch()}
+        />
       </Screen>
     );
-  if (!raw) return <Screen><Empty title={t('lead.notFound')} /></Screen>;
+  if (!raw)
+    return (
+      <Screen>
+        <Empty title={t('lead.notFound')} />
+      </Screen>
+    );
   const lead = shownLead(raw);
   const form = edit ?? { rating: lead.rating, qualifiers: [...lead.qualifiers], notes: lead.notes };
   // Qualifiers the exhibitor removed stay visible on the lead, so they can be taken off.
@@ -385,7 +469,9 @@ export function LeadDetailScreen({ leadId }: { leadId: string }) {
     try {
       await (portal as NonNullable<typeof portal>).api.updateLead(leadId, form);
       setState('saved');
-      await qc.invalidateQueries({ queryKey: toolKeys.leads((portal as NonNullable<typeof portal>).sessionKey) });
+      await qc.invalidateQueries({
+        queryKey: toolKeys.leads((portal as NonNullable<typeof portal>).sessionKey),
+      });
     } catch {
       setState('failed');
     } finally {
@@ -439,7 +525,9 @@ export function LeadDetailScreen({ leadId }: { leadId: string }) {
             onPress={() =>
               setEdit({
                 ...form,
-                qualifiers: form.qualifiers.includes(q) ? form.qualifiers.filter((x) => x !== q) : [...form.qualifiers, q],
+                qualifiers: form.qualifiers.includes(q)
+                  ? form.qualifiers.filter((x) => x !== q)
+                  : [...form.qualifiers, q],
               })
             }
             testID={`qualifier-${q}`}

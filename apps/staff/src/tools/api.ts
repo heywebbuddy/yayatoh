@@ -122,9 +122,7 @@ export function createStaffApi(client: YayatohClient): StaffApi {
     overview: (eventId) => unwrap(client.GET('/v1/staff/events/{eventId}/overview', eventPath(eventId))),
     guests: (eventId) => unwrap(client.GET('/v1/staff/events/{eventId}/guests', eventPath(eventId))),
     async recordArrivals(eventId, arrivals) {
-      return unwrap(
-        client.POST('/v1/staff/guest-arrivals', { body: { eventId, arrivals: [...arrivals] } }),
-      );
+      return unwrap(client.POST('/v1/staff/guest-arrivals', { body: { eventId, arrivals: [...arrivals] } }));
     },
     async assistance(eventId) {
       const r = await unwrap(client.GET('/v1/staff/events/{eventId}/assistance', eventPath(eventId)));
@@ -218,7 +216,9 @@ export function createOpsApi(client: YayatohClient): OpsApi {
       return r.data.map((o) => ({ id: o.id, slug: o.slug, name: o.name }));
     },
     async events(org) {
-      const r = await unwrap(client.GET('/v1/orgs/{org}/events', { params: { path: { org }, query: { limit: 50 } } }));
+      const r = await unwrap(
+        client.GET('/v1/orgs/{org}/events', { params: { path: { org }, query: { limit: 50 } } }),
+      );
       return r.data.map((e) => ({ id: e.id, name: e.name, startsAt: e.startsAt, timezone: e.timezone }));
     },
     ops: (org, eventId) =>

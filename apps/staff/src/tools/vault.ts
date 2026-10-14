@@ -45,7 +45,10 @@ export function createVault(deps: {
     if (stored) {
       try {
         const k = fromBase64(stored);
-        if (k.length === KEY_LENGTH) return (cached = k);
+        if (k.length === KEY_LENGTH) {
+          cached = k;
+          return k;
+        }
       } catch {
         // A damaged key is as good as none.
       }
@@ -53,7 +56,8 @@ export function createVault(deps: {
     if (!create) return null;
     const k = random(KEY_LENGTH);
     await storage.set(VAULT_KEY_NAME, toBase64(k));
-    return (cached = k);
+    cached = k;
+    return k;
   }
 
   return {

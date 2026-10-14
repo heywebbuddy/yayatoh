@@ -8,7 +8,13 @@
  * salted hashes and are never part of a match, and a field the manifest does not carry cannot be
  * shown because nothing here asks for it.
  */
-import { findTicketHolders, type LookupKind, lookupKind, type ManifestRow, normalizeName } from '@yayatoh/checkin-engine';
+import {
+  findTicketHolders,
+  type LookupKind,
+  lookupKind,
+  type ManifestRow,
+  normalizeName,
+} from '@yayatoh/checkin-engine';
 import type { StaffApi } from './api';
 
 /** The manifest rows to search, with the salt their hashes were made with. */

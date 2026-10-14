@@ -4,9 +4,21 @@ import { useFormatter, useLocale, useTranslations } from 'use-intl';
 import type { NativePushRequest, StaffAlertKind, StaffOverview } from '../api';
 import { useTools } from '../deps';
 import { toolKeys, useOverview } from '../queries';
-import { Body, Button, Card, Columns, Empty, ErrorState, Heading, Loading, Notice, Pane, Row, Screen, Stat } from '../ui';
-
-const ALERT_KINDS: readonly StaffAlertKind[] = ['device_offline', 'device_low_battery', 'device_backlog', 'capacity_near'];
+import {
+  Body,
+  Button,
+  Card,
+  Columns,
+  Empty,
+  ErrorState,
+  Heading,
+  Loading,
+  Notice,
+  Pane,
+  Row,
+  Screen,
+  Stat,
+} from '../ui';
 
 /** Today's check-ins against expected, the device board, alerts, and the staff push toggle (M7.4c). */
 export function TodayScreen() {
@@ -17,12 +29,26 @@ export function TodayScreen() {
   const offline = useOffline();
   const q = useOverview();
 
-  if (!device) return <Screen><Empty title={t('hub.none')} /></Screen>;
-  if (q.isPending) return <Screen><Loading label={t('nav.today')} /></Screen>;
+  if (!device)
+    return (
+      <Screen>
+        <Empty title={t('hub.none')} />
+      </Screen>
+    );
+  if (q.isPending)
+    return (
+      <Screen>
+        <Loading label={t('nav.today')} />
+      </Screen>
+    );
   if (!q.data)
     return (
       <Screen>
-        <ErrorState message={t('today.loadFailed')} retryLabel={core('common.retry')} onRetry={() => q.refetch()} />
+        <ErrorState
+          message={t('today.loadFailed')}
+          retryLabel={core('common.retry')}
+          onRetry={() => q.refetch()}
+        />
       </Screen>
     );
   const o = q.data;
@@ -34,12 +60,18 @@ export function TodayScreen() {
   return (
     <Screen testID="today-screen">
       <Heading>{o.eventName}</Heading>
-      <Body muted>{stale ? t('today.savedOnly', { time: time(o.asOf) }) : t('today.updated', { time: time(o.asOf) })}</Body>
+      <Body muted>
+        {stale ? t('today.savedOnly', { time: time(o.asOf) }) : t('today.updated', { time: time(o.asOf) })}
+      </Body>
       <Columns>
         <Pane>
           <Card>
             <Row>
-              <Stat testID="stat-checked-in" label={t('today.checkedIn')} value={format.number(o.checkedIn)} />
+              <Stat
+                testID="stat-checked-in"
+                label={t('today.checkedIn')}
+                value={format.number(o.checkedIn)}
+              />
               <Stat testID="stat-expected" label={t('today.expected')} value={format.number(o.expected)} />
             </Row>
             <Body muted>{t('today.percent', { percent })}</Body>
@@ -70,7 +102,8 @@ export function TodayScreen() {
             {o.devices.map((d) => (
               <Body key={d.id}>
                 {d.label}
-                {d.self ? ` (${t('today.thisDevice')})` : ''} · {d.online ? t('today.online') : t('today.deviceOffline')}
+                {d.self ? ` (${t('today.thisDevice')})` : ''} ·{' '}
+                {d.online ? t('today.online') : t('today.deviceOffline')}
                 {d.batteryPct !== null ? ` · ${t('today.battery', { percent: d.batteryPct })}` : ''}
                 {d.queueDepth ? ` · ${t('today.queue', { count: d.queueDepth })}` : ''}
               </Body>
@@ -92,7 +125,10 @@ function AlertsCard({ overview }: { overview: StaffOverview }) {
       {overview.alerts.map((a) => (
         <Notice key={a.key} tone={a.severity === 'critical' ? 'stop' : 'warn'}>
           {t(`today.severity.${a.severity}`)}:{' '}
-          {t(`today.alert.${a.kind}`, { label: a.deviceLabel ?? t('today.unlabeled'), percent: a.percent ?? 0 })}
+          {t(`today.alert.${a.kind}`, {
+            label: a.deviceLabel ?? t('today.unlabeled'),
+            percent: a.percent ?? 0,
+          })}
         </Notice>
       ))}
     </Card>

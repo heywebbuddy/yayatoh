@@ -1,5 +1,5 @@
-import { YayatohApiError } from '@yayatoh/sdk';
 import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
+import { YayatohApiError } from '@yayatoh/sdk';
 import { GuestsScreen } from '../../src/tools/screens/guests';
 import { fakeStaff, snapshot } from './fixtures';
 import { en, makeDeps, offlineSwitch, renderTool } from './harness';
@@ -77,7 +77,9 @@ describe('Guest list screen', () => {
 
   it('flags a guest someone else checked in earlier', async () => {
     const staff = fakeStaff({
-      recordArrivals: async (_e, a) => ({ results: a.map((x) => ({ clientId: x.clientId, result: 'already' as const })) }),
+      recordArrivals: async (_e, a) => ({
+        results: a.map((x) => ({ clientId: x.clientId, result: 'already' as const })),
+      }),
     });
     renderTool(<GuestsScreen />, { deps: makeDeps({ staff }) });
     await type('grace');
@@ -104,7 +106,12 @@ describe('Guest list screen', () => {
   });
 
   it('shows an error with a retry when the list cannot be loaded', async () => {
-    const staff = fakeStaff({ guests: jest.fn().mockRejectedValueOnce(new YayatohApiError(new Response(null, { status: 500 }), null)).mockResolvedValue(snapshot()) as never });
+    const staff = fakeStaff({
+      guests: jest
+        .fn()
+        .mockRejectedValueOnce(new YayatohApiError(new Response(null, { status: 500 }), null))
+        .mockResolvedValue(snapshot()) as never,
+    });
     renderTool(<GuestsScreen />, { deps: makeDeps({ staff }) });
     expect(await screen.findByText(en.tools.guests.loadFailed)).toBeOnTheScreen();
     fireEvent.press(screen.getByTestId('retry'));

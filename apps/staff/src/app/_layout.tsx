@@ -8,6 +8,7 @@ import { getCore, getDevice, getPortal } from '../core';
 import { DeviceCoreBridge, DeviceGuard, DeviceProvider, EnrolmentLinks } from '../device';
 import { PortalProvider } from '../portal';
 import { ScanProvider } from '../scan/provider';
+import { ToolsWipe } from '../tools/runtime';
 
 /** The offline banner sits under the status bar and only takes room while the phone is offline. */
 function OfflineStrip() {
@@ -41,6 +42,7 @@ export default function RootLayout() {
         <PortalProvider session={portal}>
           <DeviceCoreBridge />
           <EnrolmentLinks />
+          <ToolsWipe />
           <StatusBar style="auto" />
           <ScanProvider>
             <ThemedStack />

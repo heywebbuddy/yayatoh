@@ -3,7 +3,7 @@ import { render } from '@testing-library/react-native';
 import { type AppLocale, LocaleProvider, ThemeProvider } from '@yayatoh/mobile-core';
 import { type ReactElement, useSyncExternalStore } from 'react';
 import { catalogs } from '../../src/i18n';
-import { ToolsProvider, type ToolsDeps } from '../../src/tools/deps';
+import { type ToolsDeps, ToolsProvider } from '../../src/tools/deps';
 import { CHECKPOINT, DEVICE, EVENT, fakeStaff, newId, testVault } from './fixtures';
 
 export function makeDeps(over: Partial<ToolsDeps> = {}): ToolsDeps & { vaultFiles: Map<string, Uint8Array> } {
@@ -41,7 +41,10 @@ export function renderTool(ui: ReactElement, opts: { deps?: ToolsDeps; locale?: 
   const locale = opts.locale ?? 'en';
   const deps = opts.deps ?? makeDeps();
   const client = new QueryClient({
-    defaultOptions: { queries: { retry: false, gcTime: Infinity, staleTime: 0 }, mutations: { retry: false } },
+    defaultOptions: {
+      queries: { retry: false, gcTime: Infinity, staleTime: 0 },
+      mutations: { retry: false },
+    },
   });
   clients.push(client);
   const view = render(
@@ -50,7 +53,12 @@ export function renderTool(ui: ReactElement, opts: { deps?: ToolsDeps; locale?: 
         <LocaleProvider
           catalogs={catalogs}
           deviceLanguageTags={[locale]}
-          direction={{ isRTL: locale === 'ar', allowRTL: () => {}, forceRTL: () => {}, reload: async () => {} }}
+          direction={{
+            isRTL: locale === 'ar',
+            allowRTL: () => {},
+            forceRTL: () => {},
+            reload: async () => {},
+          }}
         >
           <ToolsProvider deps={deps}>{ui}</ToolsProvider>
         </LocaleProvider>

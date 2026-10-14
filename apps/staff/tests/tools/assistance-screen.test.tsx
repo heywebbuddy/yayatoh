@@ -15,13 +15,18 @@ describe('Help requests screen', () => {
   });
 
   it('says there are no open requests', async () => {
-    renderTool(<AssistanceScreen />, { deps: makeDeps({ staff: fakeStaff({ assistance: async () => [] }) }) });
+    renderTool(<AssistanceScreen />, {
+      deps: makeDeps({ staff: fakeStaff({ assistance: async () => [] }) }),
+    });
     expect(await screen.findByText(en.tools.assistance.empty)).toBeOnTheScreen();
   });
 
   it('shows an error with a retry', async () => {
     const staff = fakeStaff({
-      assistance: jest.fn().mockRejectedValueOnce(new YayatohApiError(new Response(null, { status: 500 }), null)).mockResolvedValue([request()]) as never,
+      assistance: jest
+        .fn()
+        .mockRejectedValueOnce(new YayatohApiError(new Response(null, { status: 500 }), null))
+        .mockResolvedValue([request()]) as never,
     });
     renderTool(<AssistanceScreen />, { deps: makeDeps({ staff }) });
     expect(await screen.findByText(en.tools.assistance.loadFailed)).toBeOnTheScreen();
@@ -36,7 +41,9 @@ describe('Help requests screen', () => {
     await act(async () => {
       fireEvent.press(await screen.findByTestId('take-7'));
     });
-    expect(staff.workAssistance).toHaveBeenCalledWith(expect.objectContaining({ requestId: request().id, action: 'take' }));
+    expect(staff.workAssistance).toHaveBeenCalledWith(
+      expect.objectContaining({ requestId: request().id, action: 'take' }),
+    );
     expect(await screen.findByText(en.tools.assistance.mine)).toBeOnTheScreen();
     expect(screen.getByTestId('start-7')).toBeOnTheScreen();
     expect(screen.getByTestId('resolve-7')).toBeOnTheScreen();
@@ -45,7 +52,9 @@ describe('Help requests screen', () => {
 
   it('resolves a request this device took', async () => {
     const mine = request({ state: 'in_progress', mine: true });
-    const staff = fakeStaff({ assistance: jest.fn().mockResolvedValueOnce([mine]).mockResolvedValue([]) as never });
+    const staff = fakeStaff({
+      assistance: jest.fn().mockResolvedValueOnce([mine]).mockResolvedValue([]) as never,
+    });
     renderTool(<AssistanceScreen />, { deps: makeDeps({ staff }) });
     await act(async () => {
       fireEvent.press(await screen.findByTestId('resolve-7'));
@@ -55,8 +64,14 @@ describe('Help requests screen', () => {
   });
 
   it('only offers take on a request another device holds, and never start, resolve or cancel', async () => {
-    const other = request({ state: 'assigned', mine: false, assignee: { kind: 'device', id: 'd', label: 'Gate B' } });
-    renderTool(<AssistanceScreen />, { deps: makeDeps({ staff: fakeStaff({ assistance: async () => [other] }) }) });
+    const other = request({
+      state: 'assigned',
+      mine: false,
+      assignee: { kind: 'device', id: 'd', label: 'Gate B' },
+    });
+    renderTool(<AssistanceScreen />, {
+      deps: makeDeps({ staff: fakeStaff({ assistance: async () => [other] }) }),
+    });
     await screen.findByText('Request #7');
     expect(screen.getByTestId('take-7')).toBeOnTheScreen();
     expect(screen.queryByTestId('resolve-7')).toBeNull();
@@ -78,7 +93,9 @@ describe('Help requests screen', () => {
   });
 
   it('flags an overdue request', async () => {
-    renderTool(<AssistanceScreen />, { deps: makeDeps({ staff: fakeStaff({ assistance: async () => [request({ overdue: true })] }) }) });
+    renderTool(<AssistanceScreen />, {
+      deps: makeDeps({ staff: fakeStaff({ assistance: async () => [request({ overdue: true })] }) }),
+    });
     expect(await screen.findByText(en.tools.assistance.overdue)).toBeOnTheScreen();
   });
 
@@ -113,7 +130,11 @@ describe('Help requests screen', () => {
     });
 
     it('says when the request could not be sent', async () => {
-      const staff = fakeStaff({ raiseAssistance: async () => { throw new TypeError('x'); } });
+      const staff = fakeStaff({
+        raiseAssistance: async () => {
+          throw new TypeError('x');
+        },
+      });
       renderTool(<AssistanceScreen />, { deps: makeDeps({ staff }) });
       fireEvent.press(await screen.findByTestId('raise-backup'));
       await act(async () => {

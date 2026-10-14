@@ -4,7 +4,7 @@
  * real one in `runtime.tsx` from the device session (M7.4a), the saved manifest and offline
  * scanner (M7.4b), the exhibitor and organizer sessions and the phone's adapters.
  */
-import { createContext, type ComponentType, type ReactNode, useContext } from 'react';
+import { type ComponentType, createContext, type ReactNode, useContext } from 'react';
 import type { OpsApi, PortalApi, StaffApi } from './api';
 import type { ManifestSource } from './lookup';
 import type { OfflineCheckIn } from './manual-checkin';

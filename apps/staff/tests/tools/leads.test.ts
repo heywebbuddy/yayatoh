@@ -5,9 +5,9 @@ import {
   createLeadOutbox,
   failureOf,
   matchesLead,
+  SYNC_BATCH_MAX,
   scanGate,
   shownLead,
-  SYNC_BATCH_MAX,
 } from '../../src/tools/leads';
 import { lead, newId, setup, testVault } from './fixtures';
 
@@ -22,7 +22,9 @@ const portal = (over: Record<string, unknown> = {}) => ({
   setup: jest.fn(),
   leads: jest.fn(),
   updateLead: jest.fn(),
-  syncScans: jest.fn(async (scans: readonly { scanId: string; code: string }[]) => scans.map((s) => result(s.scanId))),
+  syncScans: jest.fn(async (scans: readonly { scanId: string; code: string }[]) =>
+    scans.map((s) => result(s.scanId)),
+  ),
   ...over,
 });
 
@@ -32,7 +34,12 @@ const problemWith = (status: number, reason?: string) =>
 describe('lead consent (P5-8)', () => {
   it('shows every field the attendee agreed to share, the email only with its consent', () => {
     const s = shownLead(lead());
-    expect(s).toMatchObject({ name: 'Dana Whitfield', jobTitle: 'Head of Operations', company: 'Northwind', email: 'dana@northwind.test' });
+    expect(s).toMatchObject({
+      name: 'Dana Whitfield',
+      jobTitle: 'Head of Operations',
+      company: 'Northwind',
+      email: 'dana@northwind.test',
+    });
   });
 
   it('hides a field that was not shared even if the response carries it', () => {
@@ -47,7 +54,9 @@ describe('lead consent (P5-8)', () => {
   });
 
   it('never shows an email without its consent, whatever else is shared', () => {
-    const s = shownLead(lead({ sharedFields: ['name', 'job_title', 'company'], email: 'dana@northwind.test' }));
+    const s = shownLead(
+      lead({ sharedFields: ['name', 'job_title', 'company'], email: 'dana@northwind.test' }),
+    );
     expect(s.email).toBeNull();
     expect(s.emailWithdrawn).toBe(false);
     expect(JSON.stringify(s)).not.toContain('dana@northwind.test');
@@ -64,10 +73,14 @@ describe('lead consent (P5-8)', () => {
 
 describe('the lead licence and the capture window (P5-4)', () => {
   const noon = new Date('2026-10-20T12:00:00Z');
-  it('lets a licensed rep scan inside the window', () => expect(scanGate(setup(), noon)).toEqual({ open: true }));
+  it('lets a licensed rep scan inside the window', () =>
+    expect(scanGate(setup(), noon)).toEqual({ open: true }));
   it('stops a rep without a licence, or over the allowance', () => {
     expect(scanGate(setup({ license: 'unlicensed' }), noon)).toEqual({ open: false, why: 'no_license' });
-    expect(scanGate(setup({ license: 'over_allowance' }), noon)).toEqual({ open: false, why: 'over_allowance' });
+    expect(scanGate(setup({ license: 'over_allowance' }), noon)).toEqual({
+      open: false,
+      why: 'over_allowance',
+    });
   });
   it('waits for the exhibitor admin to accept the lead terms', () =>
     expect(scanGate(setup({ termsAccepted: false }), noon)).toEqual({ open: false, why: 'terms' }));
@@ -101,8 +114,21 @@ describe('the lead outbox', () => {
 
   it('queues an offline scan with its rating, qualifiers and notes, then syncs it', async () => {
     const { outbox, api } = make();
-    const s = await outbox.add({ code: ' BADGE-1 ', rating: 'hot', qualifiers: ['Wants demo'], notes: 'Call', offline: true });
-    expect(s).toMatchObject({ code: 'BADGE-1', rating: 'hot', qualifiers: ['Wants demo'], notes: 'Call', offline: true, capturedAt: '2026-10-20T10:00:00.000Z' });
+    const s = await outbox.add({
+      code: ' BADGE-1 ',
+      rating: 'hot',
+      qualifiers: ['Wants demo'],
+      notes: 'Call',
+      offline: true,
+    });
+    expect(s).toMatchObject({
+      code: 'BADGE-1',
+      rating: 'hot',
+      qualifiers: ['Wants demo'],
+      notes: 'Call',
+      offline: true,
+      capturedAt: '2026-10-20T10:00:00.000Z',
+    });
     const r = await outbox.flush();
     expect(r).toMatchObject({ pending: 0, failure: null });
     expect(r.results.map((x) => x.status)).toEqual(['captured']);
@@ -133,11 +159,18 @@ describe('the lead outbox', () => {
     const s = await outbox.add({ code: 'A', rating: 'cold' });
     await outbox.edit(s.scanId, { rating: 'hot', notes: 'Better fit than I thought' });
     await outbox.flush();
-    expect(api.syncScans.mock.calls[0]?.[0]?.[0]).toMatchObject({ rating: 'hot', notes: 'Better fit than I thought' });
+    expect(api.syncScans.mock.calls[0]?.[0]?.[0]).toMatchObject({
+      rating: 'hot',
+      notes: 'Better fit than I thought',
+    });
   });
 
   it('removes a refused scan from the queue (it will not succeed on a retry)', async () => {
-    const api = portal({ syncScans: jest.fn(async (scans: readonly { scanId: string }[]) => scans.map((s) => result(s.scanId, 'refused'))) });
+    const api = portal({
+      syncScans: jest.fn(async (scans: readonly { scanId: string }[]) =>
+        scans.map((s) => result(s.scanId, 'refused')),
+      ),
+    });
     const { outbox } = make(api);
     await outbox.add({ code: 'bad' });
     const r = await outbox.flush();
@@ -164,7 +197,13 @@ describe('the lead outbox', () => {
     ];
     for (const [err, failure] of cases) {
       expect(failureOf(err)).toBe(failure);
-      const { outbox } = make(portal({ syncScans: jest.fn(async () => { throw err; }) }));
+      const { outbox } = make(
+        portal({
+          syncScans: jest.fn(async () => {
+            throw err;
+          }),
+        }),
+      );
       await outbox.add({ code: 'A' });
       expect(await outbox.flush()).toMatchObject({ pending: 1, failure });
     }
@@ -179,7 +218,9 @@ describe('the lead outbox', () => {
     expect((await a.outbox.pending()).map((s) => s.code)).toEqual(['A1']);
     expect((await b.outbox.pending()).map((s) => s.code)).toEqual(['B1']);
     await b.outbox.flush();
-    expect(b.api.syncScans.mock.calls.flatMap((c) => c[0].map((s: { code: string }) => s.code))).toEqual(['B1']);
+    expect(b.api.syncScans.mock.calls.flatMap((c) => c[0].map((s: { code: string }) => s.code))).toEqual([
+      'B1',
+    ]);
     expect((await a.outbox.pending()).map((s) => s.code)).toEqual(['A1']);
   });
 

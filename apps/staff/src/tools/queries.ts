@@ -37,7 +37,8 @@ export function useOverview() {
   const active = useAppActive();
   return useQuery({
     queryKey: toolKeys.overview(device?.eventId ?? ''),
-    queryFn: () => (staff && device ? staff.overview(device.eventId) : Promise.reject(new Error('no device'))),
+    queryFn: () =>
+      staff && device ? staff.overview(device.eventId) : Promise.reject(new Error('no device')),
     enabled: !!staff && !!device,
     refetchInterval: active ? REFRESH_MS.overview : false,
   });

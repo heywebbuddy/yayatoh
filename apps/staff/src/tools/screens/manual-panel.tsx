@@ -1,7 +1,14 @@
 import { useRef, useState } from 'react';
 import { useFormatter, useTranslations } from 'use-intl';
 import { useTools } from '../deps';
-import { checkReason, MANUAL_REASONS, type ManualReason, type ManualResult, manualCheckIn, verdictTone } from '../manual-checkin';
+import {
+  checkReason,
+  MANUAL_REASONS,
+  type ManualReason,
+  type ManualResult,
+  manualCheckIn,
+  verdictTone,
+} from '../manual-checkin';
 import { Body, Button, Card, Chip, Field, Heading, Notice, Row } from '../ui';
 
 /**
@@ -120,7 +127,12 @@ export function ManualCheckInPanel({
       {result?.via === 'none' ? <Notice tone="warn">{t('manual.noWay')}</Notice> : null}
       <Row>
         <Button label={t('manual.confirm')} onPress={confirm} busy={busy} testID="manual-confirm" />
-        <Button label={t('manual.cancel')} onPress={() => onClose(null)} variant="secondary" testID="manual-cancel" />
+        <Button
+          label={t('manual.cancel')}
+          onPress={() => onClose(null)}
+          variant="secondary"
+          testID="manual-cancel"
+        />
       </Row>
     </Card>
   );

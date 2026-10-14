@@ -1,10 +1,28 @@
 import { useQuery } from '@tanstack/react-query';
-import { searchGuests, type SnapshotGuest, type SnapshotParty, snapshotLabels } from '@yayatoh/checkin-engine';
+import {
+  type SnapshotGuest,
+  type SnapshotParty,
+  searchGuests,
+  snapshotLabels,
+} from '@yayatoh/checkin-engine';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useFormatter, useTranslations } from 'use-intl';
 import { useTools } from '../deps';
 import { createGuestOutbox, type FlushOutcome, loadGuests } from '../guest-checkin';
-import { Body, Button, Card, Chip, Empty, ErrorState, Field, Heading, Loading, Notice, Row, Screen } from '../ui';
+import {
+  Body,
+  Button,
+  Card,
+  Chip,
+  Empty,
+  ErrorState,
+  Field,
+  Heading,
+  Loading,
+  Notice,
+  Row,
+  Screen,
+} from '../ui';
 
 type Mark = 'waiting' | 'already' | 'unknown' | 'done';
 
@@ -100,15 +118,34 @@ export function GuestsScreen() {
     });
   }
 
-  if (!device) return <Screen><Empty title={t('hub.none')} /></Screen>;
-  if (guests.isPending) return <Screen><Loading label={t('guests.loading')} /></Screen>;
+  if (!device)
+    return (
+      <Screen>
+        <Empty title={t('hub.none')} />
+      </Screen>
+    );
+  if (guests.isPending)
+    return (
+      <Screen>
+        <Loading label={t('guests.loading')} />
+      </Screen>
+    );
   if (guests.isError)
     return (
       <Screen>
-        <ErrorState message={t('guests.loadFailed')} retryLabel={core('common.retry')} onRetry={() => guests.refetch()} />
+        <ErrorState
+          message={t('guests.loadFailed')}
+          retryLabel={core('common.retry')}
+          onRetry={() => guests.refetch()}
+        />
       </Screen>
     );
-  if (!guests.data) return <Screen><Notice tone="warn">{t('guests.unavailable')}</Notice></Screen>;
+  if (!guests.data)
+    return (
+      <Screen>
+        <Notice tone="warn">{t('guests.unavailable')}</Notice>
+      </Screen>
+    );
 
   const parties = snapshot?.parties ?? [];
   const searching = text.trim() !== '' || labels.length > 0;
@@ -159,7 +196,9 @@ export function GuestsScreen() {
                     selected={labels.includes(l.toLowerCase())}
                     onPress={() =>
                       setLabels((cur) =>
-                        cur.includes(l.toLowerCase()) ? cur.filter((x) => x !== l.toLowerCase()) : [...cur, l.toLowerCase()],
+                        cur.includes(l.toLowerCase())
+                          ? cur.filter((x) => x !== l.toLowerCase())
+                          : [...cur, l.toLowerCase()],
                       )
                     }
                     testID={`label-${l}`}
@@ -169,7 +208,9 @@ export function GuestsScreen() {
             </>
           ) : null}
           {!searching ? <Body muted>{t('guests.prompt')}</Body> : null}
-          {searching && found.length === 0 ? <Empty title={t('guests.none')} body={t('guests.noneBody')} /> : null}
+          {searching && found.length === 0 ? (
+            <Empty title={t('guests.none')} body={t('guests.noneBody')} />
+          ) : null}
           {found.map((party) => (
             <PartyCard key={party.id} party={party} marks={marks} onCheckIn={checkIn} />
           ))}
@@ -188,7 +229,6 @@ function PartyCard({
   marks: Record<string, Mark>;
   onCheckIn: (guestId: string) => void;
 }) {
-  const t = useTranslations('tools');
   return (
     <Card testID={`party-${party.id}`}>
       <Heading level={2}>{party.name}</Heading>
@@ -200,10 +240,19 @@ function PartyCard({
   );
 }
 
-function GuestRow({ guest, mark, onCheckIn }: { guest: SnapshotGuest; mark: Mark | undefined; onCheckIn: () => void }) {
+function GuestRow({
+  guest,
+  mark,
+  onCheckIn,
+}: {
+  guest: SnapshotGuest;
+  mark: Mark | undefined;
+  onCheckIn: () => void;
+}) {
   const t = useTranslations('tools');
   const format = useFormatter();
-  const name = guest.name ?? (guest.guestOf ? t('guests.guestOf', { name: guest.guestOf }) : t('guests.unnamed'));
+  const name =
+    guest.name ?? (guest.guestOf ? t('guests.guestOf', { name: guest.guestOf }) : t('guests.unnamed'));
   const arrived = guest.arrivedAt !== null || mark === 'done' || mark === 'already';
   const places = guest.places.map((p) => p.label).join(', ') || t('guests.noPlace');
   return (

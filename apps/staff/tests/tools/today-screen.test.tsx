@@ -17,7 +17,9 @@ describe('Today screen', () => {
   it('shows the device board: online, battery, queue, and which device is this one', async () => {
     renderTool(<TodayScreen />);
     expect(await screen.findByText(/Gate A iPad \(This device\) · Online · Battery 81%/)).toBeOnTheScreen();
-    expect(screen.getByText(/Gate B phone · Offline · Battery 9% · 14 scans waiting to send/)).toBeOnTheScreen();
+    expect(
+      screen.getByText(/Gate B phone · Offline · Battery 9% · 14 scans waiting to send/),
+    ).toBeOnTheScreen();
   });
 
   it('lists alerts in words with their severity', async () => {
@@ -26,20 +28,30 @@ describe('Today screen', () => {
   });
 
   it('says when there are no alerts', async () => {
-    renderTool(<TodayScreen />, { deps: makeDeps({ staff: fakeStaff({ overview: async () => overview({ alerts: [] }) }) }) });
+    renderTool(<TodayScreen />, {
+      deps: makeDeps({ staff: fakeStaff({ overview: async () => overview({ alerts: [] }) }) }),
+    });
     expect(await screen.findByText(en.tools.today.noAlerts)).toBeOnTheScreen();
   });
 
   it('shows the days of a multi-day event', async () => {
     const staff = fakeStaff({
-      overview: async () => overview({ byDate: [{ day: '2026-10-20', checkedIn: 412 }, { day: '2026-10-21', checkedIn: 30 }] }),
+      overview: async () =>
+        overview({
+          byDate: [
+            { day: '2026-10-20', checkedIn: 412 },
+            { day: '2026-10-21', checkedIn: 30 },
+          ],
+        }),
     });
     renderTool(<TodayScreen />, { deps: makeDeps({ staff }) });
     expect(await screen.findByText('2026-10-21: 30')).toBeOnTheScreen();
   });
 
   it('shows an error with a retry when the numbers cannot be loaded', async () => {
-    const staff = fakeStaff({ overview: jest.fn().mockRejectedValueOnce(new TypeError('x')).mockResolvedValue(overview()) as never });
+    const staff = fakeStaff({
+      overview: jest.fn().mockRejectedValueOnce(new TypeError('x')).mockResolvedValue(overview()) as never,
+    });
     renderTool(<TodayScreen />, { deps: makeDeps({ staff }) });
     expect(await screen.findByText(en.tools.today.loadFailed)).toBeOnTheScreen();
     fireEvent.press(screen.getByTestId('retry'));
@@ -54,7 +66,14 @@ describe('Today screen', () => {
   describe('alerts on this phone', () => {
     it('turns alerts on: permission, the phone token, and the text in the phone’s language', async () => {
       const staff = fakeStaff();
-      const deps = makeDeps({ staff, push: { permission: async () => 'undetermined', request: async () => 'granted', token: async () => ({ platform: 'apns', token: 'apns-token-1234', appId: 'com.yayatoh.staff' }) } });
+      const deps = makeDeps({
+        staff,
+        push: {
+          permission: async () => 'undetermined',
+          request: async () => 'granted',
+          token: async () => ({ platform: 'apns', token: 'apns-token-1234', appId: 'com.yayatoh.staff' }),
+        },
+      });
       renderTool(<TodayScreen />, { deps });
       expect(await screen.findByText(en.tools.push.off)).toBeOnTheScreen();
       await act(async () => {
@@ -62,9 +81,23 @@ describe('Today screen', () => {
       });
       await waitFor(() => expect(staff.registerPush).toHaveBeenCalledTimes(1));
       const body = staff.registerPush.mock.calls[0]?.[0];
-      expect(body).toMatchObject({ platform: 'apns', token: 'apns-token-1234', appId: 'com.yayatoh.staff', locale: 'en' });
-      expect(body?.copy.device_low_battery).toEqual({ title: 'Low battery', body: '{label} battery is at {percent}%.' });
-      expect(Object.keys(body?.copy ?? {}).sort()).toEqual(['assistance', 'capacity_near', 'device_backlog', 'device_low_battery', 'device_offline']);
+      expect(body).toMatchObject({
+        platform: 'apns',
+        token: 'apns-token-1234',
+        appId: 'com.yayatoh.staff',
+        locale: 'en',
+      });
+      expect(body?.copy.device_low_battery).toEqual({
+        title: 'Low battery',
+        body: '{label} battery is at {percent}%.',
+      });
+      expect(Object.keys(body?.copy ?? {}).sort()).toEqual([
+        'assistance',
+        'capacity_near',
+        'device_backlog',
+        'device_low_battery',
+        'device_offline',
+      ]);
     });
 
     it('sends no personal data in the push text, only the app’s own words', async () => {
@@ -82,7 +115,10 @@ describe('Today screen', () => {
 
     it('explains how to allow notifications when permission is denied, and registers nothing', async () => {
       const staff = fakeStaff();
-      const deps = makeDeps({ staff, push: { permission: async () => 'denied', request: async () => 'denied', token: async () => null } });
+      const deps = makeDeps({
+        staff,
+        push: { permission: async () => 'denied', request: async () => 'denied', token: async () => null },
+      });
       renderTool(<TodayScreen />, { deps });
       await screen.findByText(en.tools.push.off);
       await act(async () => {
@@ -93,7 +129,9 @@ describe('Today screen', () => {
     });
 
     it('says when the phone cannot give a token', async () => {
-      const deps = makeDeps({ push: { permission: async () => 'granted', request: async () => 'granted', token: async () => null } });
+      const deps = makeDeps({
+        push: { permission: async () => 'granted', request: async () => 'granted', token: async () => null },
+      });
       renderTool(<TodayScreen />, { deps });
       await screen.findByText(en.tools.push.off);
       await act(async () => {
@@ -103,7 +141,9 @@ describe('Today screen', () => {
     });
 
     it('turns alerts off for a device that is registered', async () => {
-      const staff = fakeStaff({ pushStatus: async () => ({ subscribed: true, supervisor: false, platform: 'fcm' }) });
+      const staff = fakeStaff({
+        pushStatus: async () => ({ subscribed: true, supervisor: false, platform: 'fcm' }),
+      });
       renderTool(<TodayScreen />, { deps: makeDeps({ staff }) });
       expect(await screen.findByText(en.tools.push.on)).toBeOnTheScreen();
       await act(async () => {
@@ -113,7 +153,11 @@ describe('Today screen', () => {
     });
 
     it('says when the change failed', async () => {
-      const staff = fakeStaff({ registerPush: async () => { throw new TypeError('x'); } });
+      const staff = fakeStaff({
+        registerPush: async () => {
+          throw new TypeError('x');
+        },
+      });
       renderTool(<TodayScreen />, { deps: makeDeps({ staff }) });
       await screen.findByText(en.tools.push.off);
       await act(async () => {

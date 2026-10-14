@@ -4,7 +4,11 @@ import { EVENT, fakeOps, opsView } from './fixtures';
 import { en, makeDeps, renderTool } from './harness';
 
 const choice = { org: 'harbor', orgName: 'Harbor Events', eventId: EVENT, eventName: 'Harbor Summit' };
-const organizer = (api = fakeOps(), c: typeof choice | null = choice) => ({ api, choice: c, choose: jest.fn() });
+const organizer = (api = fakeOps(), c: typeof choice | null = choice) => ({
+  api,
+  choice: c,
+  choose: jest.fn(),
+});
 
 describe('Organizer event-day view', () => {
   it('asks the person to sign in as an organizer when there is no account session', async () => {
@@ -16,8 +20,14 @@ describe('Organizer event-day view', () => {
     const api = fakeOps();
     renderTool(<OpsScreen />, { deps: makeDeps({ organizer: organizer(api) }) });
     const v = opsView();
-    expect(await screen.findByTestId('ops-checked-in')).toHaveProp('accessibilityLabel', `Checked in: ${v.checkins?.checkedIn}`);
-    expect(screen.getByTestId('ops-expected')).toHaveProp('accessibilityLabel', `Expected: ${v.checkins?.expected}`);
+    expect(await screen.findByTestId('ops-checked-in')).toHaveProp(
+      'accessibilityLabel',
+      `Checked in: ${v.checkins?.checkedIn}`,
+    );
+    expect(screen.getByTestId('ops-expected')).toHaveProp(
+      'accessibilityLabel',
+      `Expected: ${v.checkins?.expected}`,
+    );
     expect(screen.getByText('412 of 900')).toBeOnTheScreen();
     expect(screen.getByText('488 guests still to arrive')).toBeOnTheScreen();
     expect(screen.getByText('Main gate: 300')).toBeOnTheScreen();
@@ -73,7 +83,14 @@ describe('Organizer event-day view', () => {
 
   it('names a rule it has no words for without showing its internal key', async () => {
     const v = opsView();
-    const api = fakeOps({ ops: async () => ({ ...v, alerts: { alerts: [{ ...(v.alerts?.alerts[0] as object), rule: 'secretInternalRule', id: 'x' } as never] } }) });
+    const api = fakeOps({
+      ops: async () => ({
+        ...v,
+        alerts: {
+          alerts: [{ ...(v.alerts?.alerts[0] as object), rule: 'secretInternalRule', id: 'x' } as never],
+        },
+      }),
+    });
     renderTool(<OpsScreen />, { deps: makeDeps({ organizer: organizer(api) }) });
     expect(await screen.findByText(new RegExp(en.ops.alerts.rule.other))).toBeOnTheScreen();
     expect(JSON.stringify(screen.toJSON())).not.toContain('secretInternalRule');
@@ -98,7 +115,9 @@ describe('Organizer event-day view', () => {
   });
 
   it('shows an error with a retry', async () => {
-    const api = fakeOps({ ops: jest.fn().mockRejectedValueOnce(new TypeError('x')).mockResolvedValue(opsView()) as never });
+    const api = fakeOps({
+      ops: jest.fn().mockRejectedValueOnce(new TypeError('x')).mockResolvedValue(opsView()) as never,
+    });
     renderTool(<OpsScreen />, { deps: makeDeps({ organizer: organizer(api) }) });
     expect(await screen.findByText(en.ops.loadFailed)).toBeOnTheScreen();
     fireEvent.press(screen.getByTestId('retry'));
@@ -138,7 +157,9 @@ describe('Organizer event-day view', () => {
     });
 
     it('says when there is no organization or no event', async () => {
-      renderTool(<OpsScreen />, { deps: makeDeps({ organizer: organizer(fakeOps({ organizations: async () => [] }), null) }) });
+      renderTool(<OpsScreen />, {
+        deps: makeDeps({ organizer: organizer(fakeOps({ organizations: async () => [] }), null) }),
+      });
       expect(await screen.findByText(en.ops.picker.noOrgs)).toBeOnTheScreen();
     });
 

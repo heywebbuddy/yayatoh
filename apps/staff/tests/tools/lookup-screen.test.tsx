@@ -9,8 +9,20 @@ async function savedManifest() {
     salt: SALT,
     origin: 'device' as const,
     rows: [
-      await row({ ticketId: 't1', shortCode: 'ADA00001', holderName: 'Ada Lovelace', email: 'ada@example.test', phone: '+14155550134' }),
-      await row({ ticketId: 't2', shortCode: 'VOID0002', holderName: 'Adele Goldberg', status: 'void', email: 'adele@example.test' }),
+      await row({
+        ticketId: 't1',
+        shortCode: 'ADA00001',
+        holderName: 'Ada Lovelace',
+        email: 'ada@example.test',
+        phone: '+14155550134',
+      }),
+      await row({
+        ticketId: 't2',
+        shortCode: 'VOID0002',
+        holderName: 'Adele Goldberg',
+        status: 'void',
+        email: 'adele@example.test',
+      }),
     ],
     admittedToday: (id: string) => id === 'none',
   };
@@ -46,7 +58,12 @@ describe('Lookup screen', () => {
 
   it('downloads the list through the staff route when the phone has none saved', async () => {
     const staff = fakeStaff({
-      manifestPage: async () => ({ salt: SALT, rows: [await row({ holderName: 'Grace Hopper', shortCode: 'GRC00001' })], cursor: null, complete: true }),
+      manifestPage: async () => ({
+        salt: SALT,
+        rows: [await row({ holderName: 'Grace Hopper', shortCode: 'GRC00001' })],
+        cursor: null,
+        complete: true,
+      }),
     });
     renderTool(<LookupScreen />, { deps: makeDeps({ staff }) });
     expect(await screen.findByText(en.tools.lookup.sourceDownload)).toBeOnTheScreen();
@@ -62,7 +79,12 @@ describe('Lookup screen', () => {
   });
 
   it('shows an error with a retry when the download fails', async () => {
-    const staff = fakeStaff({ manifestPage: jest.fn().mockRejectedValueOnce(new TypeError('x')).mockResolvedValue({ salt: SALT, rows: [], cursor: null, complete: true }) as never });
+    const staff = fakeStaff({
+      manifestPage: jest
+        .fn()
+        .mockRejectedValueOnce(new TypeError('x'))
+        .mockResolvedValue({ salt: SALT, rows: [], cursor: null, complete: true }) as never,
+    });
     renderTool(<LookupScreen />, { deps: makeDeps({ staff }) });
     expect(await screen.findByText(en.tools.lookup.loadFailed)).toBeOnTheScreen();
     fireEvent.press(screen.getByTestId('retry'));
@@ -135,7 +157,13 @@ describe('Lookup screen', () => {
 
     it('warns about a duplicate and says when the guest first came in', async () => {
       const staff = fakeStaff({
-        checkIn: async () => ({ result: 'duplicate', holderName: 'Ada Lovelace', typeName: 'GA', shortCode: 'ADA00001', firstAdmittedAt: '2026-10-20T09:05:00Z' }),
+        checkIn: async () => ({
+          result: 'duplicate',
+          holderName: 'Ada Lovelace',
+          typeName: 'GA',
+          shortCode: 'ADA00001',
+          firstAdmittedAt: '2026-10-20T09:05:00Z',
+        }),
       });
       await open(makeDeps({ staff }));
       fireEvent.press(screen.getByTestId('reason-phone_dead'));
@@ -145,7 +173,9 @@ describe('Lookup screen', () => {
     });
 
     it('decides on the phone when offline and says it will sync', async () => {
-      const offlineCheckIn = { scan: jest.fn(async () => ({ verdict: 'admit', holderName: 'Ada Lovelace', typeName: 'GA' })) };
+      const offlineCheckIn = {
+        scan: jest.fn(async () => ({ verdict: 'admit', holderName: 'Ada Lovelace', typeName: 'GA' })),
+      };
       const staff = fakeStaff();
       await open(makeDeps({ staff, offlineCheckIn, useOffline: () => true }));
       fireEvent.press(screen.getByTestId('reason-lost_ticket'));
@@ -163,7 +193,11 @@ describe('Lookup screen', () => {
     });
 
     it('shows an error when the server refuses, and keeps the form so staff can try again', async () => {
-      const staff = fakeStaff({ checkIn: async () => { throw new YayatohApiError(new Response(null, { status: 403 }), null); } });
+      const staff = fakeStaff({
+        checkIn: async () => {
+          throw new YayatohApiError(new Response(null, { status: 403 }), null);
+        },
+      });
       await open(makeDeps({ staff }));
       fireEvent.press(screen.getByTestId('reason-wont_scan'));
       fireEvent.press(screen.getByTestId('manual-confirm'));

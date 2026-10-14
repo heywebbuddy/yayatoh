@@ -5,9 +5,30 @@ import { useTranslations } from 'use-intl';
 import type { AssistanceAction, AssistanceRequest, StaffAssistanceReason } from '../api';
 import { useTools } from '../deps';
 import { toolKeys, useAssistanceQueue } from '../queries';
-import { Body, Button, Card, Chip, Empty, ErrorState, Field, Heading, Loading, Notice, Row, Screen, Columns, Pane } from '../ui';
+import {
+  Body,
+  Button,
+  Card,
+  Chip,
+  Columns,
+  Empty,
+  ErrorState,
+  Field,
+  Heading,
+  Loading,
+  Notice,
+  Pane,
+  Row,
+  Screen,
+} from '../ui';
 
-const STAFF_REASONS: readonly StaffAssistanceReason[] = ['backup', 'supervisor', 'medical', 'security', 'device'];
+const STAFF_REASONS: readonly StaffAssistanceReason[] = [
+  'backup',
+  'supervisor',
+  'medical',
+  'security',
+  'device',
+];
 
 /** The help-request queue of the device's event: claim, work and resolve requests, or ask for backup (M7.4c). */
 export function AssistanceScreen() {
@@ -33,7 +54,12 @@ export function AssistanceScreen() {
     }
   }
 
-  if (!device) return <Screen><Empty title={t('hub.none')} /></Screen>;
+  if (!device)
+    return (
+      <Screen>
+        <Empty title={t('hub.none')} />
+      </Screen>
+    );
 
   return (
     <Screen testID="assistance-screen">
@@ -86,7 +112,8 @@ function RequestCard({
     <Card testID={`request-${r.number}`}>
       <Heading level={2}>{t('assistance.number', { number: r.number })}</Heading>
       <Body>
-        {t(`assistance.reason.${r.reason}`)} · {t(`assistance.priority.${r.priority}`)} · {t(`assistance.state.${r.state}`)}
+        {t(`assistance.reason.${r.reason}`)} · {t(`assistance.priority.${r.priority}`)} ·{' '}
+        {t(`assistance.state.${r.state}`)}
       </Body>
       {r.overdue ? <Notice tone="warn">{t('assistance.overdue')}</Notice> : null}
       {r.mine ? <Notice tone="info">{t('assistance.mine')}</Notice> : null}
@@ -196,7 +223,9 @@ function RaiseForm() {
         multiline
         testID="raise-note"
       />
-      {state?.kind === 'sent' ? <Notice tone="ok">{t('assistance.raise.sent', { number: state.number })}</Notice> : null}
+      {state?.kind === 'sent' ? (
+        <Notice tone="ok">{t('assistance.raise.sent', { number: state.number })}</Notice>
+      ) : null}
       {state?.kind === 'failed' ? <Notice tone="stop">{t('assistance.raise.failed')}</Notice> : null}
       <Button label={t('assistance.raise.send')} onPress={send} busy={busy} testID="raise-send" />
     </Card>

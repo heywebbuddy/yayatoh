@@ -29,12 +29,11 @@ export function useWide(): boolean {
 export function Screen({ children, testID }: { children: ReactNode; testID?: string }) {
   const colors = useColors();
   return (
-    <SafeAreaView style={[styles.screen, { backgroundColor: colors.canvas }]} edges={['bottom', 'left', 'right']}>
-      <ScrollView
-        testID={testID}
-        contentContainerStyle={styles.content}
-        keyboardShouldPersistTaps="handled"
-      >
+    <SafeAreaView
+      style={[styles.screen, { backgroundColor: colors.canvas }]}
+      edges={['bottom', 'left', 'right']}
+    >
+      <ScrollView testID={testID} contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
         <View style={styles.column}>{children}</View>
       </ScrollView>
     </SafeAreaView>
@@ -69,15 +68,7 @@ export function Heading({ children, level = 1 }: { children: ReactNode; level?: 
   );
 }
 
-export function Body({
-  children,
-  muted,
-  testID,
-}: {
-  children: ReactNode;
-  muted?: boolean;
-  testID?: string;
-}) {
+export function Body({ children, muted, testID }: { children: ReactNode; muted?: boolean; testID?: string }) {
   const colors = useColors();
   return (
     <Text testID={testID} style={[styles.body, { color: muted ? colors.ink2 : colors.ink }]}>
@@ -232,15 +223,7 @@ export type Tone = 'ok' | 'warn' | 'stop' | 'info';
 const GLYPH: Record<Tone, string> = { ok: '✓', warn: '!', stop: '✕', info: 'i' };
 
 /** A message with a glyph and text, so the tone never rests on colour alone. */
-export function Notice({
-  tone,
-  children,
-  testID,
-}: {
-  tone: Tone;
-  children: ReactNode;
-  testID?: string;
-}) {
+export function Notice({ tone, children, testID }: { tone: Tone; children: ReactNode; testID?: string }) {
   const colors = useColors();
   const bg =
     tone === 'ok'

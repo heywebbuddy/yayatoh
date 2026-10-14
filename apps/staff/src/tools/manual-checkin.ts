@@ -40,7 +40,8 @@ export interface OfflineScanOutcome {
 }
 
 export interface OfflineCheckIn {
-  scan(code: string): Promise<OfflineScanOutcome>;
+  /** Decides with the saved manifest; null when the phone has no list (or it expired). */
+  scan(code: string): Promise<OfflineScanOutcome | null>;
 }
 
 /** Engine verdicts are named differently from the server's results in two places. */
@@ -117,6 +118,7 @@ export async function manualCheckIn(
   }
   if (!deps.offline) return { via: 'none' };
   const o = await deps.offline.scan(input.shortCode);
+  if (!o) return { via: 'none' };
   const result = FROM_ENGINE[o.verdict] ?? (o.verdict as ScanResult);
   await log(result, 'offline');
   return {

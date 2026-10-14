@@ -4,7 +4,21 @@ import { useFormatter, useTranslations } from 'use-intl';
 import type { OpsView, OrgChoice } from '../api';
 import { useTools } from '../deps';
 import { toolKeys, useOps } from '../queries';
-import { Body, Button, Card, Columns, Empty, ErrorState, Heading, Loading, Notice, Pane, Row, Screen, Stat } from '../ui';
+import {
+  Body,
+  Button,
+  Card,
+  Columns,
+  Empty,
+  ErrorState,
+  Heading,
+  Loading,
+  Notice,
+  Pane,
+  Row,
+  Screen,
+  Stat,
+} from '../ui';
 
 const KNOWN_RULES = new Set([
   'devicesOffline',
@@ -34,9 +48,19 @@ export function OpsScreen() {
   const offline = useOffline();
   const q = useOps();
 
-  if (!organizer) return <Screen><Empty title={t('notSignedIn')} /></Screen>;
+  if (!organizer)
+    return (
+      <Screen>
+        <Empty title={t('notSignedIn')} />
+      </Screen>
+    );
   if (!organizer.choice) return <EventPicker />;
-  if (q.isPending) return <Screen><Loading label={t('title')} /></Screen>;
+  if (q.isPending)
+    return (
+      <Screen>
+        <Loading label={t('title')} />
+      </Screen>
+    );
   if (!q.data)
     return (
       <Screen>
@@ -45,20 +69,34 @@ export function OpsScreen() {
     );
   const v = q.data;
   const time = (iso: string) =>
-    format.dateTime(new Date(iso), { hour: 'numeric', minute: '2-digit', second: '2-digit', timeZone: v.timeZone });
+    format.dateTime(new Date(iso), {
+      hour: 'numeric',
+      minute: '2-digit',
+      second: '2-digit',
+      timeZone: v.timeZone,
+    });
   const stale = q.isError || offline;
 
   return (
     <Screen testID="ops-screen">
       <Row>
         <Heading>{t('title')}</Heading>
-        <Notice tone="info" testID="ops-mode">{t(`mode.${v.mode}`)}</Notice>
+        <Notice tone="info" testID="ops-mode">
+          {t(`mode.${v.mode}`)}
+        </Notice>
       </Row>
-      <Body muted>{stale ? t('savedOnly', { time: time(v.asOf) }) : t('updated', { time: time(v.asOf) })}</Body>
+      <Body muted>
+        {stale ? t('savedOnly', { time: time(v.asOf) }) : t('updated', { time: time(v.asOf) })}
+      </Body>
       <Body muted>{t('readOnly')}</Body>
       <Row>
         <Body testID="ops-event">{organizer.choice.eventName}</Body>
-        <Button label={t('changeEvent')} onPress={() => organizer.choose(null)} variant="secondary" testID="ops-change" />
+        <Button
+          label={t('changeEvent')}
+          onPress={() => organizer.choose(null)}
+          variant="secondary"
+          testID="ops-change"
+        />
       </Row>
       <Columns>
         <Pane>
@@ -92,10 +130,16 @@ function Checkins({ v }: { v: OpsView }) {
       ) : (
         <>
           <Row>
-            <Stat testID="ops-checked-in" label={t('checkins.checkedIn')} value={format.number(c.checkedIn)} />
+            <Stat
+              testID="ops-checked-in"
+              label={t('checkins.checkedIn')}
+              value={format.number(c.checkedIn)}
+            />
             <Stat testID="ops-expected" label={t('checkins.expected')} value={format.number(c.expected)} />
           </Row>
-          <Body>{t('checkins.of', { checkedIn: format.number(c.checkedIn), expected: format.number(c.expected) })}</Body>
+          <Body>
+            {t('checkins.of', { checkedIn: format.number(c.checkedIn), expected: format.number(c.expected) })}
+          </Body>
           <Body muted>{t('checkins.remaining', { count: Math.max(0, c.expected - c.checkedIn) })}</Body>
           <Heading level={2}>{t('checkins.entrances')}</Heading>
           {c.byEntrance.map((e) => (
@@ -132,9 +176,13 @@ function Throughput({ v }: { v: OpsView }) {
       ) : (
         <>
           <Body>{t('throughput.rate', { rate: one(th.scansPerMin) })}</Body>
-          {th.medianGapS !== null ? <Body muted>{t('throughput.gap', { seconds: one(th.medianGapS) })}</Body> : null}
+          {th.medianGapS !== null ? (
+            <Body muted>{t('throughput.gap', { seconds: one(th.medianGapS) })}</Body>
+          ) : null}
           {th.queueMin !== null ? <Body muted>{t('throughput.queue', { minutes: th.queueMin })}</Body> : null}
-          <Body muted>{t('throughput.recent')}: {th.series.map((p) => p.count).join(' · ')}</Body>
+          <Body muted>
+            {t('throughput.recent')}: {th.series.map((p) => p.count).join(' · ')}
+          </Body>
           <Heading level={2}>{t('throughput.entrances')}</Heading>
           {th.entrances.map((e) => (
             <Body key={e.id ?? e.name}>
@@ -204,9 +252,13 @@ function Alerts({ v }: { v: OpsView }) {
         <Body muted>{t('alerts.none')}</Body>
       ) : (
         a.alerts.map((x) => (
-          <Notice key={x.id} tone={x.severity === 'critical' ? 'stop' : x.severity === 'warning' ? 'warn' : 'info'}>
-            {t(`alerts.severity.${x.severity}`)}: {t(`alerts.rule.${KNOWN_RULES.has(x.rule) ? x.rule : 'other'}`)} ·{' '}
-            {t(`alerts.state.${x.state}`)} · {t('alerts.count', { count: x.count })}
+          <Notice
+            key={x.id}
+            tone={x.severity === 'critical' ? 'stop' : x.severity === 'warning' ? 'warn' : 'info'}
+          >
+            {t(`alerts.severity.${x.severity}`)}:{' '}
+            {t(`alerts.rule.${KNOWN_RULES.has(x.rule) ? x.rule : 'other'}`)} · {t(`alerts.state.${x.state}`)}{' '}
+            · {t('alerts.count', { count: x.count })}
           </Notice>
         ))
       )}
@@ -244,14 +296,24 @@ function EventPicker() {
       <Heading>{t('picker.title')}</Heading>
       {orgs.isPending ? <Loading label={t('picker.title')} /> : null}
       {orgs.isError ? (
-        <ErrorState message={t('picker.loadFailed')} retryLabel={core('common.retry')} onRetry={() => orgs.refetch()} />
+        <ErrorState
+          message={t('picker.loadFailed')}
+          retryLabel={core('common.retry')}
+          onRetry={() => orgs.refetch()}
+        />
       ) : null}
       {orgs.data && orgs.data.length === 0 ? <Empty title={t('picker.noOrgs')} /> : null}
       {!chosen && orgs.data && orgs.data.length > 1 ? (
         <>
           <Body muted>{t('picker.chooseOrg')}</Body>
           {orgs.data.map((o) => (
-            <Button key={o.id} label={o.name} onPress={() => setOrg(o)} variant="secondary" testID={`org-${o.slug}`} />
+            <Button
+              key={o.id}
+              label={o.name}
+              onPress={() => setOrg(o)}
+              variant="secondary"
+              testID={`org-${o.slug}`}
+            />
           ))}
         </>
       ) : null}
@@ -260,7 +322,11 @@ function EventPicker() {
           <Body muted>{t('picker.chooseEvent', { org: chosen.name })}</Body>
           {events.isPending ? <Loading label={t('picker.chooseEvent', { org: chosen.name })} /> : null}
           {events.isError ? (
-            <ErrorState message={t('picker.loadFailed')} retryLabel={core('common.retry')} onRetry={() => events.refetch()} />
+            <ErrorState
+              message={t('picker.loadFailed')}
+              retryLabel={core('common.retry')}
+              onRetry={() => events.refetch()}
+            />
           ) : null}
           {events.data && events.data.length === 0 ? <Empty title={t('picker.noEvents')} /> : null}
           {events.data?.map((e) => (
@@ -273,7 +339,12 @@ function EventPicker() {
                 label={t('picker.open')}
                 a11yLabel={t('picker.openFor', { name: e.name })}
                 onPress={() =>
-                  organizer?.choose({ org: chosen.slug, orgName: chosen.name, eventId: e.id, eventName: e.name })
+                  organizer?.choose({
+                    org: chosen.slug,
+                    orgName: chosen.name,
+                    eventId: e.id,
+                    eventName: e.name,
+                  })
                 }
                 testID={`event-${e.id}`}
               />

@@ -1,4 +1,4 @@
-import { downloadManifest, lookupHolders, queryTooShort, type ManifestSource } from '../../src/tools/lookup';
+import { downloadManifest, lookupHolders, type ManifestSource, queryTooShort } from '../../src/tools/lookup';
 import { EVENT, fakeStaff, row, SALT } from './fixtures';
 
 async function source(): Promise<ManifestSource> {
@@ -6,9 +6,26 @@ async function source(): Promise<ManifestSource> {
     salt: SALT,
     origin: 'device',
     rows: [
-      await row({ ticketId: 't1', shortCode: 'ADA00001', holderName: 'Ada Lovelace', email: 'ada@example.test', phone: '+14155550134' }),
-      await row({ ticketId: 't2', shortCode: 'ALA00002', holderName: 'Alan Turing', email: 'alan@example.test' }),
-      await row({ ticketId: 't3', shortCode: 'ADE00003', holderName: 'Adele Goldberg', email: 'adele@example.test', status: 'void' }),
+      await row({
+        ticketId: 't1',
+        shortCode: 'ADA00001',
+        holderName: 'Ada Lovelace',
+        email: 'ada@example.test',
+        phone: '+14155550134',
+      }),
+      await row({
+        ticketId: 't2',
+        shortCode: 'ALA00002',
+        holderName: 'Alan Turing',
+        email: 'alan@example.test',
+      }),
+      await row({
+        ticketId: 't3',
+        shortCode: 'ADE00003',
+        holderName: 'Adele Goldberg',
+        email: 'adele@example.test',
+        status: 'void',
+      }),
     ],
     admittedToday: (id) => id === 't1',
   };
@@ -84,7 +101,10 @@ describe('lookup at the door', () => {
       { salt: SALT, rows: [await row({ ticketId: 'a' })], cursor: 'c1', complete: false },
       { salt: SALT, rows: [await row({ ticketId: 'b' })], cursor: 'c2', complete: true },
     ];
-    const api = fakeStaff({ manifestPage: async (_e, cursor) => (cursor ? pages[1]! : pages[0]!) });
+    const api = fakeStaff({
+      manifestPage: async (_e, cursor) =>
+        cursor ? (pages[1] as (typeof pages)[number]) : (pages[0] as (typeof pages)[number]),
+    });
     const src = await downloadManifest(api, EVENT);
     expect([...src.rows].map((r) => r.ticketId)).toEqual(['a', 'b']);
     expect(src.origin).toBe('download');

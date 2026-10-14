@@ -65,7 +65,13 @@ describe('the guest check-in outbox', () => {
   it('queues a check-in with its own id and the corrected clock offset, once per guest', async () => {
     const { outbox } = make();
     const a = await outbox.add('g1');
-    expect(a).toMatchObject({ clientId: 'c-1', guestId: 'g1', deviceTs: '2026-10-20T09:30:00.000Z', clockOffsetMs: 1235, source: 'scanner' });
+    expect(a).toMatchObject({
+      clientId: 'c-1',
+      guestId: 'g1',
+      deviceTs: '2026-10-20T09:30:00.000Z',
+      clockOffsetMs: 1235,
+      source: 'scanner',
+    });
     expect(await outbox.add('g1')).toEqual(a);
     expect(await outbox.load()).toHaveLength(1);
   });
@@ -100,7 +106,10 @@ describe('the guest check-in outbox', () => {
   it('flags a guest someone else checked in earlier and a guest the event does not know', async () => {
     const api = fakeStaff({
       recordArrivals: async (_e, arrivals) => ({
-        results: arrivals.map((a, i) => ({ clientId: a.clientId, result: i === 0 ? ('already' as const) : ('unknown' as const) })),
+        results: arrivals.map((a, i) => ({
+          clientId: a.clientId,
+          result: i === 0 ? ('already' as const) : ('unknown' as const),
+        })),
       }),
     });
     const { outbox } = make(api);

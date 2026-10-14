@@ -47,7 +47,17 @@ describe('Lead retrieval home', () => {
 
   it('shows only the fields the attendee shared', async () => {
     const api = fakePortal({
-      leads: async () => ({ leads: [lead({ sharedFields: ['company'], name: 'Hidden Name', jobTitle: 'Hidden Title', email: 'hidden@x.test' })], scope: 'own' }),
+      leads: async () => ({
+        leads: [
+          lead({
+            sharedFields: ['company'],
+            name: 'Hidden Name',
+            jobTitle: 'Hidden Title',
+            email: 'hidden@x.test',
+          }),
+        ],
+        scope: 'own',
+      }),
     });
     renderTool(<LeadsScreen />, { deps: makeDeps({ portal: rep(api) }) });
     expect(await screen.findByText('Northwind')).toBeOnTheScreen();
@@ -90,7 +100,10 @@ describe('Lead retrieval home', () => {
     });
 
     it('closes capture after the window but keeps the leads', async () => {
-      const deps = makeDeps({ portal: rep(), clock: { now: () => new Date('2026-10-23T00:00:00Z'), offsetMs: () => 0 } });
+      const deps = makeDeps({
+        portal: rep(),
+        clock: { now: () => new Date('2026-10-23T00:00:00Z'), offsetMs: () => 0 },
+      });
       renderTool(<LeadsScreen />, { deps });
       expect(await screen.findByText(en.leads.gate.closed)).toBeOnTheScreen();
       expect(await screen.findByText('Dana Whitfield')).toBeOnTheScreen();
@@ -98,21 +111,29 @@ describe('Lead retrieval home', () => {
     });
 
     it('says when lead access has ended', async () => {
-      const api = fakePortal({ setup: async () => setup({ capture: { ...setup().capture, accessOpen: false } }) });
+      const api = fakePortal({
+        setup: async () => setup({ capture: { ...setup().capture, accessOpen: false } }),
+      });
       renderTool(<LeadsScreen />, { deps: makeDeps({ portal: rep(api) }) });
       expect(await screen.findByText(en.leads.accessEnded)).toBeOnTheScreen();
       expect(api.leads).not.toHaveBeenCalled();
     });
 
     it('says when the server ends access while the list loads (409)', async () => {
-      const api = fakePortal({ leads: async () => { throw new YayatohApiError(new Response(null, { status: 409 }), null); } });
+      const api = fakePortal({
+        leads: async () => {
+          throw new YayatohApiError(new Response(null, { status: 409 }), null);
+        },
+      });
       renderTool(<LeadsScreen />, { deps: makeDeps({ portal: rep(api) }) });
       expect(await screen.findByText(en.leads.accessEnded)).toBeOnTheScreen();
     });
   });
 
   it('shows errors with a retry for the setup and for the list', async () => {
-    const api = fakePortal({ setup: jest.fn().mockRejectedValueOnce(new TypeError('x')).mockResolvedValue(setup()) as never });
+    const api = fakePortal({
+      setup: jest.fn().mockRejectedValueOnce(new TypeError('x')).mockResolvedValue(setup()) as never,
+    });
     renderTool(<LeadsScreen />, { deps: makeDeps({ portal: rep(api) }) });
     expect(await screen.findByText(en.leads.loadFailed)).toBeOnTheScreen();
     fireEvent.press(screen.getByTestId('retry'));
@@ -123,7 +144,13 @@ describe('Lead retrieval home', () => {
     it('sends scans waiting from an earlier session when the screen opens', async () => {
       const api = fakePortal();
       const deps = makeDeps({ portal: rep(api) });
-      const o = createLeadOutbox({ vault: deps.vault, api: null, owner: 'rep@acme.test', newId: () => 'left-over-scan', now: () => new Date('2026-10-20T09:00:00Z') });
+      const o = createLeadOutbox({
+        vault: deps.vault,
+        api: null,
+        owner: 'rep@acme.test',
+        newId: () => 'left-over-scan',
+        now: () => new Date('2026-10-20T09:00:00Z'),
+      });
       await o.add({ code: 'BADGE-OLD', offline: true });
       renderTool(<LeadsScreen />, { deps });
       await waitFor(() => expect(api.syncScans).toHaveBeenCalledTimes(1));
@@ -133,7 +160,13 @@ describe('Lead retrieval home', () => {
     it('keeps scans on the phone while offline and says how many wait', async () => {
       const api = fakePortal();
       const deps = makeDeps({ portal: rep(api), useOffline: () => true });
-      const o = createLeadOutbox({ vault: deps.vault, api: null, owner: 'rep@acme.test', newId: () => 's1', now: () => new Date() });
+      const o = createLeadOutbox({
+        vault: deps.vault,
+        api: null,
+        owner: 'rep@acme.test',
+        newId: () => 's1',
+        now: () => new Date(),
+      });
       await o.add({ code: 'B1' });
       await o.add({ code: 'B2' });
       renderTool(<LeadsScreen />, { deps });
@@ -143,10 +176,23 @@ describe('Lead retrieval home', () => {
     });
 
     it('explains why a sync was refused', async () => {
-      const refusal = new YayatohApiError(new Response(null, { status: 403 }), { code: 'forbidden', reason: 'over_allowance' } as never);
-      const api = fakePortal({ syncScans: async () => { throw refusal; } });
+      const refusal = new YayatohApiError(new Response(null, { status: 403 }), {
+        code: 'forbidden',
+        reason: 'over_allowance',
+      } as never);
+      const api = fakePortal({
+        syncScans: async () => {
+          throw refusal;
+        },
+      });
       const deps = makeDeps({ portal: rep(api) });
-      const o = createLeadOutbox({ vault: deps.vault, api: null, owner: 'rep@acme.test', newId: () => 's1', now: () => new Date() });
+      const o = createLeadOutbox({
+        vault: deps.vault,
+        api: null,
+        owner: 'rep@acme.test',
+        newId: () => 's1',
+        now: () => new Date(),
+      });
       await o.add({ code: 'B1' });
       renderTool(<LeadsScreen />, { deps });
       expect(await screen.findByText(en.leads.syncFailed.over_allowance)).toBeOnTheScreen();
@@ -175,8 +221,11 @@ describe('Lead retrieval home', () => {
 
     it('calls the routes with the rep’s own portal token and shows exactly what they return', async () => {
       const { fetchFake, seen } = serverByToken();
-      const mk = (token: string) => createPortalApi(createYayatohClient({ baseUrl: 'https://x.test', token, fetch: fetchFake }));
-      renderTool(<LeadsScreen />, { deps: makeDeps({ portal: { api: mk('yyp_acme'), sessionKey: 'session-1' } }) });
+      const mk = (token: string) =>
+        createPortalApi(createYayatohClient({ baseUrl: 'https://x.test', token, fetch: fetchFake }));
+      renderTool(<LeadsScreen />, {
+        deps: makeDeps({ portal: { api: mk('yyp_acme'), sessionKey: 'session-1' } }),
+      });
       expect(await screen.findByText('Acme Lead')).toBeOnTheScreen();
       expect(screen.queryByText('Globex Lead')).toBeNull();
       expect(seen.every((s) => s.endsWith('yyp_acme'))).toBe(true);
@@ -184,11 +233,16 @@ describe('Lead retrieval home', () => {
 
     it('does not show one rep’s cached leads to the next rep on the same phone', async () => {
       const { fetchFake } = serverByToken();
-      const mk = (token: string) => createPortalApi(createYayatohClient({ baseUrl: 'https://x.test', token, fetch: fetchFake }));
-      const first = renderTool(<LeadsScreen />, { deps: makeDeps({ portal: { api: mk('yyp_acme'), sessionKey: 'session-1' } }) });
+      const mk = (token: string) =>
+        createPortalApi(createYayatohClient({ baseUrl: 'https://x.test', token, fetch: fetchFake }));
+      const first = renderTool(<LeadsScreen />, {
+        deps: makeDeps({ portal: { api: mk('yyp_acme'), sessionKey: 'session-1' } }),
+      });
       await screen.findByText('Acme Lead');
       first.unmount();
-      renderTool(<LeadsScreen />, { deps: makeDeps({ portal: { api: mk('yyp_globex'), sessionKey: 'session-2' } }) });
+      renderTool(<LeadsScreen />, {
+        deps: makeDeps({ portal: { api: mk('yyp_globex'), sessionKey: 'session-2' } }),
+      });
       expect(await screen.findByText('Globex Lead')).toBeOnTheScreen();
       expect(screen.queryByText('Acme Lead')).toBeNull();
     });
@@ -199,7 +253,12 @@ describe('Scan a badge', () => {
   const Camera = ({ onCode }: { onCode: (c: string) => void }) => {
     const { Pressable, Text } = require('react-native');
     return (
-      <Pressable accessibilityRole="button" accessibilityLabel="camera-read" testID="camera" onPress={() => onCode('BADGE-CAM')}>
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel="camera-read"
+        testID="camera"
+        onPress={() => onCode('BADGE-CAM')}
+      >
         <Text>camera</Text>
       </Pressable>
     );
@@ -254,7 +313,11 @@ describe('Scan a badge', () => {
   });
 
   it('saves on the phone when the send fails for lack of a connection', async () => {
-    const api = fakePortal({ syncScans: async () => { throw new TypeError('x'); } });
+    const api = fakePortal({
+      syncScans: async () => {
+        throw new TypeError('x');
+      },
+    });
     await capture(makeDeps({ portal: rep(api), Scanner: Camera }));
     await act(async () => {
       fireEvent.press(screen.getByTestId('lead-save'));
@@ -264,7 +327,8 @@ describe('Scan a badge', () => {
 
   it('shows why a badge was refused', async () => {
     const api = fakePortal({
-      syncScans: async (s): Promise<LeadScanResult[]> => s.map((x) => ({ scanId: x.scanId, status: 'refused', reason: 'wrong_event', lead: null })),
+      syncScans: async (s): Promise<LeadScanResult[]> =>
+        s.map((x) => ({ scanId: x.scanId, status: 'refused', reason: 'wrong_event', lead: null })),
     });
     await capture(makeDeps({ portal: rep(api), Scanner: Camera }));
     await act(async () => {
@@ -275,7 +339,8 @@ describe('Scan a badge', () => {
 
   it('says a re-scanned badge was updated', async () => {
     const api = fakePortal({
-      syncScans: async (s): Promise<LeadScanResult[]> => s.map((x) => ({ scanId: x.scanId, status: 'rescanned', reason: null, lead: lead() })),
+      syncScans: async (s): Promise<LeadScanResult[]> =>
+        s.map((x) => ({ scanId: x.scanId, status: 'rescanned', reason: null, lead: lead() })),
     });
     await capture(makeDeps({ portal: rep(api), Scanner: Camera }));
     await act(async () => {
@@ -286,7 +351,13 @@ describe('Scan a badge', () => {
 
   it('shows only the consented fields of a captured lead', async () => {
     const api = fakePortal({
-      syncScans: async (s): Promise<LeadScanResult[]> => s.map((x) => ({ scanId: x.scanId, status: 'captured', reason: null, lead: lead({ sharedFields: ['company'], name: 'Secret Name' }) })),
+      syncScans: async (s): Promise<LeadScanResult[]> =>
+        s.map((x) => ({
+          scanId: x.scanId,
+          status: 'captured',
+          reason: null,
+          lead: lead({ sharedFields: ['company'], name: 'Secret Name' }),
+        })),
     });
     await capture(makeDeps({ portal: rep(api), Scanner: Camera }));
     await act(async () => {
@@ -298,7 +369,9 @@ describe('Scan a badge', () => {
   });
 
   it('refuses too many qualifiers and notes that are too long', async () => {
-    const api = fakePortal({ setup: async () => setup({ qualifiers: Array.from({ length: 11 }, (_, i) => `Q${i}`) }) });
+    const api = fakePortal({
+      setup: async () => setup({ qualifiers: Array.from({ length: 11 }, (_, i) => `Q${i}`) }),
+    });
     await capture(makeDeps({ portal: rep(api), Scanner: Camera }));
     for (let i = 0; i < 11; i++) fireEvent.press(screen.getByTestId(`qualifier-Q${i}`));
     fireEvent.press(screen.getByTestId('lead-save'));
@@ -354,7 +427,12 @@ describe('A lead', () => {
   });
 
   it('says "not shared" for a field the attendee did not share, and never shows the withheld value', async () => {
-    const api = fakePortal({ leads: async () => ({ leads: [lead({ sharedFields: ['name'], email: 'dana@northwind.test', company: 'Northwind' })], scope: 'own' }) });
+    const api = fakePortal({
+      leads: async () => ({
+        leads: [lead({ sharedFields: ['name'], email: 'dana@northwind.test', company: 'Northwind' })],
+        scope: 'own',
+      }),
+    });
     renderTool(<LeadDetailScreen leadId={ID} />, { deps: makeDeps({ portal: rep(api) }) });
     expect(await screen.findByText(`Email: ${en.leads.lead.notShared}`)).toBeOnTheScreen();
     expect(screen.getByText(`Company: ${en.leads.lead.notShared}`)).toBeOnTheScreen();
@@ -362,7 +440,9 @@ describe('A lead', () => {
   });
 
   it('says when an attendee withdrew permission to share their email', async () => {
-    const api = fakePortal({ leads: async () => ({ leads: [lead({ emailWithdrawnAt: '2026-10-21T09:00:00Z' })], scope: 'own' }) });
+    const api = fakePortal({
+      leads: async () => ({ leads: [lead({ emailWithdrawnAt: '2026-10-21T09:00:00Z' })], scope: 'own' }),
+    });
     renderTool(<LeadDetailScreen leadId={ID} />, { deps: makeDeps({ portal: rep(api) }) });
     expect(await screen.findByText(en.leads.lead.emailWithdrawn)).toBeOnTheScreen();
     expect(screen.getByText(`Email: ${en.leads.lead.notShared}`)).toBeOnTheScreen();
@@ -378,11 +458,19 @@ describe('A lead', () => {
       fireEvent.press(screen.getByTestId('lead-save'));
     });
     expect(await screen.findByText(en.leads.lead.saved)).toBeOnTheScreen();
-    expect(api.updateLead).toHaveBeenCalledWith(ID, { rating: 'cold', qualifiers: ['Wants demo', 'Budget approved'], notes: 'Not now' });
+    expect(api.updateLead).toHaveBeenCalledWith(ID, {
+      rating: 'cold',
+      qualifiers: ['Wants demo', 'Budget approved'],
+      notes: 'Not now',
+    });
   });
 
   it('says when the save failed, and when notes are too long', async () => {
-    const api = fakePortal({ updateLead: async () => { throw new TypeError('x'); } });
+    const api = fakePortal({
+      updateLead: async () => {
+        throw new TypeError('x');
+      },
+    });
     renderTool(<LeadDetailScreen leadId={ID} />, { deps: makeDeps({ portal: rep(api) }) });
     fireEvent.changeText(await screen.findByTestId('lead-notes'), 'n'.repeat(2001));
     fireEvent.press(screen.getByTestId('lead-save'));
@@ -395,7 +483,9 @@ describe('A lead', () => {
   });
 
   it('says when the lead is not in the rep’s list (another exhibitor’s lead is a 404 and never loads)', async () => {
-    renderTool(<LeadDetailScreen leadId="99999999-9999-4999-8999-999999999999" />, { deps: makeDeps({ portal: rep() }) });
+    renderTool(<LeadDetailScreen leadId="99999999-9999-4999-8999-999999999999" />, {
+      deps: makeDeps({ portal: rep() }),
+    });
     expect(await screen.findByText(en.leads.lead.notFound)).toBeOnTheScreen();
   });
 });
