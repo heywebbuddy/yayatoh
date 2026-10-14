@@ -19,8 +19,7 @@
       "notFoundTitle": "We can’t find that ticket",
       "notFoundBody": "It may have been transferred, refunded or removed from your account.",
       "toMyTickets": "Go to my tickets",
-      "poweredBy": "Powered by Yayatoh",
-      "organizer": "Organizer"
+      "poweredBy": "Powered by Yayatoh"
     },
     "list": {
       "title": "My tickets",
@@ -45,7 +44,6 @@
       "openTicket": "Opens the ticket and its QR code"
     },
     "detail": {
-      "title": "Ticket",
       "qrLabel": "Ticket QR code for {event}",
       "qrHint": "Show this code at the entrance. The screen stays at full brightness while this ticket is open.",
       "qrUnavailable": "There is no code for this ticket.",
@@ -54,7 +52,6 @@
       "holder": "Ticket holder",
       "type": "Ticket type",
       "seat": "Seat",
-      "date": "Date admitted",
       "entrances": "Entrances and zones",
       "entrance": "{name} (entrance)",
       "zone": "{name} (zone)",
@@ -123,8 +120,7 @@
       "sentBody": "{name} will get an email at {email} with a link to claim the ticket. You can cancel the transfer until they do.",
       "done": "Done",
       "sameHolder": "That person already holds this ticket.",
-      "invalidState": "This transfer can’t be started any more.",
-      "alreadyPending": "This ticket already has a transfer waiting."
+      "invalidState": "This transfer can’t be started any more."
     },
     "refund": {
       "title": "Refund request",
