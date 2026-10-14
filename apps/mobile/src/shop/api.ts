@@ -5,7 +5,13 @@
  * Public pages (search, event, passes) need no sign-in and use the unsigned client. Orders and
  * checkout use the signed one.
  */
-import { type InfiniteData, useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  type InfiniteData,
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { useCore } from '@yayatoh/mobile-core';
 import { type Schemas, unwrap } from '@yayatoh/sdk';
 import { type DiscoverFilters, searchQuery } from './filters';
@@ -84,8 +90,7 @@ export function useEventSections(slug: string) {
   return useQuery({
     queryKey: shopKeys.sections(slug),
     queryFn: async () =>
-      (await unwrap(publicApi.GET('/v1/public/events/{slug}/sections', { params: { path: { slug } } })))
-        .data,
+      (await unwrap(publicApi.GET('/v1/public/events/{slug}/sections', { params: { path: { slug } } }))).data,
   });
 }
 
@@ -105,7 +110,11 @@ export function useMyOrders() {
     queryKey: shopKeys.orders,
     initialPageParam: undefined as string | undefined,
     queryFn: ({ pageParam }) =>
-      unwrap(api.GET('/v1/me/orders', { params: { query: { limit: 20, ...(pageParam ? { cursor: pageParam } : {}) } } })),
+      unwrap(
+        api.GET('/v1/me/orders', {
+          params: { query: { limit: 20, ...(pageParam ? { cursor: pageParam } : {}) } },
+        }),
+      ),
     getNextPageParam: (last) => last.nextCursor ?? undefined,
   });
 }

@@ -38,10 +38,12 @@ export function presetRange(preset: DatePreset, now: Date): DateRange {
 /** Which preset the range is, if any (so its chip shows as chosen). */
 export function presetOf(range: DateRange, now: Date): DatePreset | null {
   if (!range.from || !range.to) return null;
-  return DATE_PRESETS.find((p) => {
-    const r = presetRange(p, now);
-    return r.from === range.from && r.to === range.to;
-  }) ?? null;
+  return (
+    DATE_PRESETS.find((p) => {
+      const r = presetRange(p, now);
+      return r.from === range.from && r.to === range.to;
+    }) ?? null
+  );
 }
 
 /** True for a real calendar date written `YYYY-MM-DD` (`2027-02-30` is not one). */

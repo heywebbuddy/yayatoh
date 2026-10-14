@@ -91,7 +91,8 @@ const VARIANTS: Record<AppEnv, { nameSuffix: string; schemeSuffix: string; idSuf
 export const STAFF_CAMERA_USAGE = 'Yayatoh Staff uses the camera to scan ticket QR codes at the door.';
 
 /** Shown by iOS when the attendee app asks for the location, after the person taps "near me" (English). */
-export const NEAR_ME_USAGE = 'Yayatoh uses your location once, when you tap "near me", to list events close to you.';
+export const NEAR_ME_USAGE =
+  'Yayatoh uses your location once, when you tap "near me", to list events close to you.';
 
 export type EnvVars = Readonly<Record<string, string | undefined>>;
 

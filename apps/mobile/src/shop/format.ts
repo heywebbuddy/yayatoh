@@ -9,8 +9,8 @@
 export function currencyDigits(currency: string, locale: string): number {
   try {
     return (
-      new Intl.NumberFormat(locale, { style: 'currency', currency }).resolvedOptions().maximumFractionDigits ??
-      2
+      new Intl.NumberFormat(locale, { style: 'currency', currency }).resolvedOptions()
+        .maximumFractionDigits ?? 2
     );
   } catch {
     return 2;
@@ -30,9 +30,12 @@ export function formatMoney(minor: number, currency: string, locale: string): st
 
 const dayKey = (iso: string, timeZone: string, locale: string): string => {
   try {
-    return new Intl.DateTimeFormat(locale, { timeZone, year: 'numeric', month: 'numeric', day: 'numeric' }).format(
-      new Date(iso),
-    );
+    return new Intl.DateTimeFormat(locale, {
+      timeZone,
+      year: 'numeric',
+      month: 'numeric',
+      day: 'numeric',
+    }).format(new Date(iso));
   } catch {
     return iso.slice(0, 10);
   }
@@ -83,7 +86,11 @@ export function formatEventWhen(startsAt: string, endsAt: string, timeZone: stri
   };
   if (sameDay) {
     const start = safeFormat(startsAt, locale, timeZone, full);
-    const endTime = safeFormat(endsAt, locale, timeZone, { hour: 'numeric', minute: '2-digit', timeZoneName: 'short' });
+    const endTime = safeFormat(endsAt, locale, timeZone, {
+      hour: 'numeric',
+      minute: '2-digit',
+      timeZoneName: 'short',
+    });
     return `${start} – ${endTime}`;
   }
   const start = safeFormat(startsAt, locale, timeZone, full);

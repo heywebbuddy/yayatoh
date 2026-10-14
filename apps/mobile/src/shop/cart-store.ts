@@ -60,3 +60,16 @@ export function useCartEntry(slug: string): CartEntry {
     () => EMPTY,
   );
 }
+
+/**
+ * Whether a checkout of this event is running (starting, paying, confirming). One at a time per event
+ * across screens: the checkout screen and the event screen the return link opens must not both settle it.
+ */
+const running = new Set<string>();
+export function claimCheckout(slug: string): boolean {
+  if (running.has(slug)) return false;
+  running.add(slug);
+  return true;
+}
+export const releaseCheckout = (slug: string): void => void running.delete(slug);
+export const isCheckoutRunning = (slug: string): boolean => running.has(slug);

@@ -159,7 +159,10 @@ describe('permissions', () => {
     );
     expect(m.plugins).toContainEqual([
       'expo-location',
-      expect.objectContaining({ isAndroidBackgroundLocationEnabled: false, isIosBackgroundLocationEnabled: false }),
+      expect.objectContaining({
+        isAndroidBackgroundLocationEnabled: false,
+        isIosBackgroundLocationEnabled: false,
+      }),
     ]);
     const s = staff();
     expect(s.ios?.infoPlist?.NSLocationWhenInUseUsageDescription).toBeUndefined();

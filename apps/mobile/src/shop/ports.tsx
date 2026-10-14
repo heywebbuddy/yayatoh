@@ -34,14 +34,30 @@ export interface BrowserPort {
   openPayment(paymentUrl: string, returnUrl: string): Promise<BrowserOutcome>;
   /** The web checkout (or any page) in the system's secure browser. */
   openWeb(url: string): Promise<void>;
+  /** A link that belongs to another app (maps), opened by the system. */
+  openExternal(url: string): Promise<void>;
+  /** Closes a browser session still open (the app was reopened by the return link). */
+  dismiss(): Promise<void>;
+}
+
+export interface LinksPort {
+  /**
+   * The slug a short code (`/e/{code}`) points to, or null when no event has that code. The web
+   * answers the short link with a permanent redirect to the event page; there is no `/v1` route for
+   * it yet, so the app follows that redirect and reads the slug from where it ends.
+   */
+  resolveShortCode(webBase: string, code: string): Promise<string | null>;
 }
 
 export interface ShopPorts {
   readonly location: LocationPort;
+  readonly links: LinksPort;
   readonly browser: BrowserPort;
   /** A fresh `Idempotency-Key`. */
   readonly newKey: () => string;
   readonly now: () => Date;
+  /** Waits; the checkout re-reads an order a few times while the provider confirms a payment. */
+  readonly wait: (ms: number) => Promise<void>;
 }
 
 const expoLocation: LocationPort = {
@@ -73,12 +89,44 @@ const expoLocation: LocationPort = {
 const expoBrowser: BrowserPort = {
   async openPayment(paymentUrl, returnUrl) {
     const WebBrowser = await import('expo-web-browser');
-    const result = await WebBrowser.openAuthSessionAsync(paymentUrl, returnUrl);
-    return result.type === 'success' ? { type: 'return', url: result.url } : { type: 'closed' };
+    try {
+      const result = await WebBrowser.openAuthSessionAsync(paymentUrl, returnUrl);
+      return result.type === 'success' ? { type: 'return', url: result.url } : { type: 'closed' };
+    } catch {
+      // An auth session can refuse a return link it cannot watch for (an https link on an older iOS):
+      // the plain secure browser still shows the payment page, and the return link reopens the app.
+      await WebBrowser.openBrowserAsync(paymentUrl);
+      return { type: 'closed' };
+    }
+  },
+  async openExternal(url) {
+    const { Linking } = await import('react-native');
+    await Linking.openURL(url);
+  },
+  async dismiss() {
+    const WebBrowser = await import('expo-web-browser');
+    try {
+      WebBrowser.dismissAuthSession();
+      WebBrowser.dismissBrowser();
+    } catch {
+      // Nothing was open.
+    }
   },
   async openWeb(url) {
     const WebBrowser = await import('expo-web-browser');
     await WebBrowser.openBrowserAsync(url);
+  },
+};
+
+const expoLinks: LinksPort = {
+  async resolveShortCode(webBase, code) {
+    const response = await fetch(`${webBase.replace(/\/+$/, '')}/e/${encodeURIComponent(code)}`, {
+      method: 'HEAD',
+      redirect: 'follow',
+    });
+    if (response.status === 404) return null;
+    if (!response.ok) throw new Error(`short link: ${response.status}`);
+    return /\/events\/([A-Za-z0-9][A-Za-z0-9_-]{0,199})(?:[/?#]|$)/.exec(response.url)?.[1] ?? null;
   },
 };
 
@@ -87,8 +135,10 @@ function defaultPorts(): ShopPorts {
   expoPorts ??= {
     location: expoLocation,
     browser: expoBrowser,
+    links: expoLinks,
     newKey: () => randomUUID(),
     now: () => new Date(),
+    wait: (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
   };
   return expoPorts;
 }

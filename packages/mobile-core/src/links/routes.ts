@@ -123,11 +123,7 @@ function checkoutMarkers(query: string): Record<string, string> {
   return order && UUID.test(order) ? { checkout, order } : { checkout };
 }
 
-function attendeeRoute(
-  segments: readonly string[],
-  org: string | null,
-  query: string,
-): AppRoute | null {
+function attendeeRoute(segments: readonly string[], org: string | null, query: string): AppRoute | null {
   const [a, b, ...rest] = segments;
   if (!a || !b || rest.length > 0) return null;
   const withOrg = (params: Record<string, string>) => (org ? { ...params, org } : params);

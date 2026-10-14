@@ -23,10 +23,12 @@ describe('universal links (attendee app)', () => {
 
   it('keeps the checkout return markers of an event link, and nothing else of its query (M7.3c)', () => {
     const order = '0b9e5a5c-6f0d-4c43-9d57-0d5f3b7d2a11';
-    expect(attendee(`https://yayatoh.com/events/summit?checkout=return&order=${order}&utm_source=x`)).toEqual({
-      pathname: ROUTES.event,
-      params: { slug: 'summit', checkout: 'return', order },
-    });
+    expect(attendee(`https://yayatoh.com/events/summit?checkout=return&order=${order}&utm_source=x`)).toEqual(
+      {
+        pathname: ROUTES.event,
+        params: { slug: 'summit', checkout: 'return', order },
+      },
+    );
     expect(attendee(`https://abc.yayatoh.events/events/summit?checkout=cancelled&order=${order}`)).toEqual({
       pathname: ROUTES.event,
       params: { slug: 'summit', org: 'abc', checkout: 'cancelled', order },

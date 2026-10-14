@@ -7,8 +7,8 @@
 import { px, radius, space, TOUCH_TARGET_PX, type, useColors } from '@yayatoh/mobile-core';
 import type { ReactNode } from 'react';
 import {
-  ActivityIndicator,
   type AccessibilityRole,
+  ActivityIndicator,
   Pressable,
   type StyleProp,
   StyleSheet,
@@ -24,10 +24,7 @@ const MIN_TARGET = Math.max(TOUCH_TARGET_PX, 44);
 export function Heading({ children, level = 1 }: { children: ReactNode; level?: 1 | 2 }) {
   const colors = useColors();
   return (
-    <Text
-      accessibilityRole="header"
-      style={[level === 1 ? styles.h1 : styles.h2, { color: colors.ink }]}
-    >
+    <Text accessibilityRole="header" style={[level === 1 ? styles.h1 : styles.h2, { color: colors.ink }]}>
       {children}
     </Text>
   );
@@ -135,7 +132,15 @@ export function Button({
       <Text
         style={[
           styles.buttonLabel,
-          { color: primary ? (inactive ? colors.ink3 : colors.onPrimary) : inactive ? colors.ink3 : colors.ink },
+          {
+            color: primary
+              ? inactive
+                ? colors.ink3
+                : colors.onPrimary
+              : inactive
+                ? colors.ink3
+                : colors.ink,
+          },
         ]}
       >
         {label}
@@ -231,8 +236,18 @@ export function Banner({
   testID?: string;
 }) {
   const colors = useColors();
-  const fill = { info: colors.primarySoft, warning: colors.warningSoft, danger: colors.dangerSoft, success: colors.successSoft }[tone];
-  const ink = { info: colors.primaryInk, warning: colors.warning, danger: colors.danger, success: colors.success }[tone];
+  const fill = {
+    info: colors.primarySoft,
+    warning: colors.warningSoft,
+    danger: colors.dangerSoft,
+    success: colors.successSoft,
+  }[tone];
+  const ink = {
+    info: colors.primaryInk,
+    warning: colors.warning,
+    danger: colors.danger,
+    success: colors.success,
+  }[tone];
   const mark = { info: 'ℹ', warning: '!', danger: '⚠', success: '✓' }[tone];
   const role: AccessibilityRole = tone === 'danger' || tone === 'warning' ? 'alert' : 'summary';
   return (
@@ -283,11 +298,29 @@ export function Empty({
 }
 
 const styles = StyleSheet.create({
-  h1: { fontSize: type.section.size, fontWeight: '800', lineHeight: type.section.size * type.section.lineHeight, textAlign: 'auto' },
-  h2: { fontSize: type.card.size, fontWeight: '800', lineHeight: type.card.size * type.card.lineHeight, textAlign: 'auto' },
-  body: { fontSize: type.body.size + 1, lineHeight: (type.body.size + 1) * type.body.lineHeight, textAlign: 'auto' },
+  h1: {
+    fontSize: type.section.size,
+    fontWeight: '800',
+    lineHeight: type.section.size * type.section.lineHeight,
+    textAlign: 'auto',
+  },
+  h2: {
+    fontSize: type.card.size,
+    fontWeight: '800',
+    lineHeight: type.card.size * type.card.lineHeight,
+    textAlign: 'auto',
+  },
+  body: {
+    fontSize: type.body.size + 1,
+    lineHeight: (type.body.size + 1) * type.body.lineHeight,
+    textAlign: 'auto',
+  },
   strong: { fontWeight: '700' },
-  caption: { fontSize: type.caption.size + 1, lineHeight: (type.caption.size + 1) * type.caption.lineHeight, textAlign: 'auto' },
+  caption: {
+    fontSize: type.caption.size + 1,
+    lineHeight: (type.caption.size + 1) * type.caption.lineHeight,
+    textAlign: 'auto',
+  },
   card: {
     borderWidth: StyleSheet.hairlineWidth,
     borderRadius: px(radius.tile),

@@ -20,7 +20,9 @@ export function parseCheckoutReturn(
 }
 
 /** The outcome in a return URL the browser session ended on (`…/events/slug?checkout=return&order=…`). */
-export function outcomeOfUrl(url: string): { readonly outcome: CheckoutReturn; readonly orderId: string | null } | null {
+export function outcomeOfUrl(
+  url: string,
+): { readonly outcome: CheckoutReturn; readonly orderId: string | null } | null {
   const query = url.split('#')[0]?.split('?')[1];
   if (!query) return null;
   const params = new Map<string, string>();
