@@ -1,0 +1,10 @@
+# M7.1c: with the network off the app tells the person so. Written, not run in cloud sessions.
+# Device pass: iOS simulator or emulator with airplane mode toggled by the runner.
+appId: com.yayatoh.yayatohapp.preview
+---
+- launchApp:
+    clearState: true
+- setAirplaneMode: enabled
+- assertVisible: "You're offline. You can still see what was saved on this phone."
+- setAirplaneMode: disabled
+- assertNotVisible: "You're offline. You can still see what was saved on this phone."
