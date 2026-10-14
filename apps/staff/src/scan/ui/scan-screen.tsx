@@ -29,9 +29,11 @@ export interface ScanViewProps {
   readonly feedback?: Feedback;
   /** Swapped for a stand-in in tests that cannot load the native camera. */
   readonly Camera?: ComponentType<QrCameraProps>;
+  /** The clock the camera's repeat filter reads (a test seam). */
+  readonly now?: () => number;
 }
 
-export function ScanView({ engine, scheduler, feedback = nativeFeedback, Camera = QrCamera }: ScanViewProps) {
+export function ScanView({ engine, scheduler, feedback = nativeFeedback, Camera = QrCamera, now }: ScanViewProps) {
   const t = useTranslations('scan');
   const tc = useTranslations('core.common');
   const colors = useColors();
@@ -43,7 +45,7 @@ export function ScanView({ engine, scheduler, feedback = nativeFeedback, Camera 
   const [torchSupported, setTorchSupported] = useState(false);
   const [manual, setManual] = useState(false);
   const [flags, setFlags] = useState<FlaggedScan[]>([]);
-  const { outcome, unavailable, submit } = useScanFlow({ engine, scheduler, feedback, direction });
+  const { outcome, unavailable, submit } = useScanFlow({ engine, scheduler, feedback, direction, ...(now ? { now } : {}) });
 
   const timezone = engine.timezone;
   const door = engine.sessionDoor;
@@ -53,13 +55,14 @@ export function ScanView({ engine, scheduler, feedback = nativeFeedback, Camera 
   const [seenFlags, setSeenFlags] = useState(status.flaggedCount);
   useEffect(() => {
     let live = true;
-    void engine.flags().then((all) => live && setFlags(all));
+    if (status.flaggedCount === 0) setFlags((prev) => (prev.length ? [] : prev));
+    else void engine.flags().then((all) => live && setFlags(all));
     if (status.flaggedCount > seenFlags) feedback.play(viewFor('duplicate'));
     setSeenFlags(status.flaggedCount);
     return () => {
       live = false;
     };
-  }, [engine, status.flaggedCount]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [engine, status.flaggedCount, feedback, seenFlags]);
 
   const onCode = useCallback((code: string) => void submit(code, 'camera'), [submit]);
   const onManual = useCallback(

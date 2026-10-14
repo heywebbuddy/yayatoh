@@ -29,6 +29,7 @@ import { ScanAuthError, type ScanApi, ScanRejectedError, ScanSyncError } from '.
 import { backoffMs } from './backoff';
 import { uuidv7 } from './ids';
 import { applyDoorVerdict, sessionOccupancy } from './session-door';
+import { TimingLog } from './timing';
 import type { DoorLogRow, ScanStore } from './store';
 import type {
   AdmissionInfo,
@@ -116,6 +117,8 @@ export class ScanEngine {
   private byShort = new Map<string, ManifestRow>();
   private byLegacy = new Map<string, ManifestRow>();
   private admitted = new Map<string, AdmissionInfo>();
+  /** The keys of `admitted`, kept as a set so a scan never copies it. */
+  private admittedKeys = new Set<string>();
   private inRoom = new Set<string>();
   private doorLog: DoorLogRow[] = [];
   private depth = 0;
@@ -131,6 +134,8 @@ export class ScanEngine {
   private unauthorized = false;
   private syncError: EngineStatus['syncError'] = null;
   private expired = false;
+  /** How long recent verdicts took (the 300 ms budget); read by the device pass. */
+  readonly timings = new TimingLog();
 
   private readonly now: () => number;
   private readonly perfNow: () => number;
@@ -220,6 +225,7 @@ export class ScanEngine {
     }
     this.index(await store.loadRows());
     this.admitted = await store.loadAdmissions();
+    this.admittedKeys = new Set(this.admitted.keys());
     this.inRoom = await store.loadInRoom();
     this.doorLog = await store.loadDoorLog();
     this.depth = await store.count();
@@ -262,6 +268,7 @@ export class ScanEngine {
       this.byShort = new Map();
       this.byLegacy = new Map();
       this.admitted = new Map();
+      this.admittedKeys = new Set();
       this.inRoom = new Set();
       this.doorLog = [];
       this.depth = 0;
@@ -390,7 +397,7 @@ export class ScanEngine {
         byId: this.byId,
         byShortCode: this.byShort,
         byLegacyCode: this.byLegacy,
-        admitted: new Set(this.admitted.keys()),
+        admitted: this.admittedKeys,
         lastSyncAt: new Date(this.lastSync ?? header.serverTime),
         inRoom: this.inRoom,
         occupancy: door ? sessionOccupancy(header, this.doorLog) : new Map(),
@@ -438,11 +445,16 @@ export class ScanEngine {
       if (sendable) await store.enqueue(entry);
     });
     // Only now is the scan safe: update the in-memory view.
-    if (admission && ticketId) this.admitted.set(admittedKey(ticketId, day), admission);
+    if (admission && ticketId) {
+      this.admitted.set(admittedKey(ticketId, day), admission);
+      this.admittedKeys.add(admittedKey(ticketId, day));
+    }
     if (doorRow) this.doorLog.push(doorRow);
     if (sendable) this.depth += 1;
     this.publish();
 
+    const elapsedMs = this.perfNow() - started;
+    this.timings.add(elapsedMs);
     return {
       scanId,
       verdict,
@@ -450,7 +462,7 @@ export class ScanEngine {
       holderName: row?.holderName ?? null,
       typeName: row?.typeName ?? null,
       firstAdmission,
-      elapsedMs: this.perfNow() - started,
+      elapsedMs,
     };
   }
 
