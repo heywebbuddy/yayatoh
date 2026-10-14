@@ -146,6 +146,20 @@ describe('permissions', () => {
     expect(m.ios?.infoPlist?.NSCameraUsageDescription).toBeUndefined();
   });
 
+  it('adds the calendar plugin to the attendee app only, write-only, with no reminders (M7.3b)', () => {
+    const calendar = (c: ReturnType<typeof mobile>) =>
+      (c.plugins ?? []).find((p) => Array.isArray(p) && p[0] === 'expo-calendar') as
+        | [string, Record<string, unknown>]
+        | undefined;
+    expect(calendar(mobile())?.[1]).toMatchObject({
+      writeOnlyAccess: true,
+      remindersPermission: false,
+      calendarPermission: expect.stringMatching(/calendar/i),
+      writeOnlyCalendarPermission: expect.stringMatching(/calendar/i),
+    });
+    expect(calendar(staff())).toBeUndefined();
+  });
+
   it('adds no permission for notifications yet (M7.2c and M7.3d own them)', () => {
     for (const c of [mobile(), staff()]) {
       expect(JSON.stringify(c)).not.toMatch(/NOTIFICATION|UIBackgroundModes|RECORD_AUDIO|LOCATION/);
