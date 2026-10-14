@@ -1,4 +1,150 @@
 {
+  "scan": {
+    "title": "Escanear entradas",
+    "ready": "Listo para escanear",
+    "header": {
+      "at": "En: {name}",
+      "wholeEvent": "Todo el evento"
+    },
+    "status": {
+      "queue": "{count, plural, =0 {Todos los escaneos enviados} one {# escaneo pendiente de envío} other {# escaneos pendientes de envío}}",
+      "updated": "Lista de invitados actualizada a las {time}"
+    },
+    "sync": {
+      "button": "Sincronizar ahora",
+      "running": "Sincronizando…"
+    },
+    "download": {
+      "title": "Descargando la lista de invitados",
+      "body": "Mantén el teléfono conectado hasta que termine. Después, el escaneo funciona sin conexión.",
+      "failedOffline": "No se puede descargar la lista de invitados. Revisa la conexión e inténtalo de nuevo.",
+      "failedNotAssigned": "Este dispositivo no está asignado a este evento. Pide a un organizador que revise su registro.",
+      "failedScope": "La lista de invitados no superó la comprobación de seguridad. Inténtalo de nuevo o pide a un organizador que vuelva a registrar este dispositivo."
+    },
+    "expired": {
+      "title": "Lista de invitados eliminada",
+      "body": "El evento terminó hace más de un día, así que la lista de invitados se borró de este teléfono."
+    },
+    "camera": {
+      "askTitle": "Permite que la cámara escanee",
+      "askBody": "Yayatoh Staff usa la cámara para leer los códigos QR de las entradas en la puerta.",
+      "allow": "Permitir cámara",
+      "deniedTitle": "El acceso a la cámara está desactivado",
+      "deniedBody": "Activa la cámara para Yayatoh Staff en Ajustes para escanear códigos QR. Aún puedes escribir el código de una entrada.",
+      "openSettings": "Abrir ajustes",
+      "typeCode": "Escribir un código",
+      "unavailable": "No se encontró ninguna cámara en este dispositivo.",
+      "preview": "Vista de la cámara. Apunta al código QR de una entrada."
+    },
+    "torch": {
+      "on": "Encender la luz",
+      "off": "Apagar la luz"
+    },
+    "manual": {
+      "open": "Escribir un código",
+      "title": "Código de entrada",
+      "label": "Código de entrada",
+      "hint": "Escribe el código impreso bajo el código QR y compruébalo.",
+      "placeholder": "Código",
+      "submit": "Comprobar código",
+      "close": "Volver a la cámara",
+      "empty": "Introduce un código de entrada."
+    },
+    "direction": {
+      "label": "Sentido",
+      "in": "Entrada",
+      "out": "Salida"
+    },
+    "verdict": {
+      "admit": {
+        "title": "Admitir"
+      },
+      "admitted": {
+        "title": "Admitido"
+      },
+      "granted": {
+        "title": "Acceso concedido"
+      },
+      "entered": {
+        "title": "Ha entrado"
+      },
+      "scanned_out": {
+        "title": "Salida registrada"
+      },
+      "provisional": {
+        "title": "Admitir y marcar",
+        "hint": "Aún no está en la lista de invitados. Déjalo pasar; un supervisor lo revisará."
+      },
+      "duplicate": {
+        "title": "Ya escaneada",
+        "hint": "Esta entrada ya se escaneó hoy.",
+        "hintWhen": "Primera admisión a las {time}.",
+        "hintWhere": "Primera admisión a las {time} en {place}."
+      },
+      "duplicate_offline": {
+        "title": "Duplicado detectado",
+        "hint": "Otra puerta admitió primero esta entrada."
+      },
+      "superseded": {
+        "title": "Entrada antigua",
+        "hint": "Este código fue reemplazado. Pide la entrada más reciente."
+      },
+      "void": {
+        "title": "Entrada cancelada",
+        "hint": "Esta entrada fue reembolsada o cancelada. No la admitas."
+      },
+      "invalid": {
+        "title": "No reconocida",
+        "hint": "No es una entrada válida para este evento."
+      },
+      "wrong_event": {
+        "title": "Evento equivocado",
+        "hint": "Esta entrada es de otro evento."
+      },
+      "outside_window": {
+        "title": "Puertas cerradas"
+      },
+      "wrong_date": {
+        "title": "Fecha equivocada"
+      },
+      "not_today": {
+        "title": "No válida hoy"
+      },
+      "no_access": {
+        "title": "Sin acceso aquí"
+      },
+      "wrong_checkpoint": {
+        "title": "Entrada equivocada",
+        "hint": "Este dispositivo no está configurado para escanear en esta entrada."
+      },
+      "balance_due": {
+        "title": "Saldo pendiente",
+        "hint": "Envíalo al mostrador para pagar el saldo."
+      },
+      "not_in_room": {
+        "title": "No está en la sala"
+      },
+      "not_enrolled": {
+        "title": "Sin inscripción"
+      },
+      "admission_level": {
+        "title": "No incluida"
+      },
+      "capacity": {
+        "title": "Sala llena"
+      }
+    },
+    "flagged": {
+      "title": "{count, plural, one {# escaneo necesita otra revisión} many {# de escaneos necesitan otra revisión} other {# escaneos necesitan otra revisión}}",
+      "duplicate": "Otra puerta también admitió esta entrada. Comprueba que la persona no entre dos veces.",
+      "rejected": "Este escaneo no se pudo enviar y se descartó.",
+      "other": "El servidor valoró este escaneo de otra forma. Un supervisor lo revisará.",
+      "when": "Escaneado a las {time}",
+      "dismiss": "Descartar",
+      "dismissAll": "Descartar todo",
+      "unknownHolder": "Una entrada"
+    }
+  },
   "home": {
     "title": "Yayatoh Staff",
     "tagline": "Las herramientas de puerta para el día del evento llegarán pronto."

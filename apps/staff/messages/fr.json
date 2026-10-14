@@ -1,4 +1,150 @@
 {
+  "scan": {
+    "title": "Scanner les billets",
+    "ready": "Prêt à scanner",
+    "header": {
+      "at": "À : {name}",
+      "wholeEvent": "Tout l’événement"
+    },
+    "status": {
+      "queue": "{count, plural, =0 {Tous les scans sont envoyés} one {# scan en attente d’envoi} many {# de scans en attente d’envoi} other {# scans en attente d’envoi}}",
+      "updated": "Liste des invités mise à jour à {time}"
+    },
+    "sync": {
+      "button": "Synchroniser maintenant",
+      "running": "Synchronisation…"
+    },
+    "download": {
+      "title": "Téléchargement de la liste des invités",
+      "body": "Gardez le téléphone connecté jusqu’à la fin. Ensuite, le scan fonctionne sans connexion.",
+      "failedOffline": "Impossible de télécharger la liste des invités. Vérifiez la connexion et réessayez.",
+      "failedNotAssigned": "Cet appareil n’est pas affecté à cet événement. Demandez à un organisateur de vérifier son enregistrement.",
+      "failedScope": "La liste des invités n’a pas passé le contrôle de sécurité. Réessayez ou demandez à un organisateur d’enregistrer à nouveau cet appareil."
+    },
+    "expired": {
+      "title": "Liste des invités supprimée",
+      "body": "L’événement s’est terminé il y a plus d’un jour, la liste des invités a donc été supprimée de ce téléphone."
+    },
+    "camera": {
+      "askTitle": "Autoriser l’appareil photo pour scanner",
+      "askBody": "Yayatoh Staff utilise l’appareil photo pour lire les QR codes des billets à l’entrée.",
+      "allow": "Autoriser l’appareil photo",
+      "deniedTitle": "L’accès à l’appareil photo est désactivé",
+      "deniedBody": "Activez l’appareil photo pour Yayatoh Staff dans les Réglages afin de scanner les QR codes. Vous pouvez toujours saisir un code de billet.",
+      "openSettings": "Ouvrir les réglages",
+      "typeCode": "Saisir un code à la place",
+      "unavailable": "Aucun appareil photo n’a été trouvé sur cet appareil.",
+      "preview": "Vue de l’appareil photo. Pointez-le vers le QR code d’un billet."
+    },
+    "torch": {
+      "on": "Allumer la lampe",
+      "off": "Éteindre la lampe"
+    },
+    "manual": {
+      "open": "Saisir un code",
+      "title": "Code du billet",
+      "label": "Code du billet",
+      "hint": "Saisissez le code imprimé sous le QR code, puis vérifiez-le.",
+      "placeholder": "Code",
+      "submit": "Vérifier le code",
+      "close": "Retour à l’appareil photo",
+      "empty": "Saisissez un code de billet."
+    },
+    "direction": {
+      "label": "Sens",
+      "in": "Entrée",
+      "out": "Sortie"
+    },
+    "verdict": {
+      "admit": {
+        "title": "Admettre"
+      },
+      "admitted": {
+        "title": "Admis"
+      },
+      "granted": {
+        "title": "Accès accordé"
+      },
+      "entered": {
+        "title": "Entré"
+      },
+      "scanned_out": {
+        "title": "Sortie enregistrée"
+      },
+      "provisional": {
+        "title": "Admettre et signaler",
+        "hint": "Pas encore sur la liste des invités. Laissez entrer ; un superviseur vérifiera."
+      },
+      "duplicate": {
+        "title": "Déjà scanné",
+        "hint": "Ce billet a déjà été scanné aujourd’hui.",
+        "hintWhen": "Première admission à {time}.",
+        "hintWhere": "Première admission à {time} à {place}."
+      },
+      "duplicate_offline": {
+        "title": "Doublon détecté",
+        "hint": "Une autre porte a admis ce billet en premier."
+      },
+      "superseded": {
+        "title": "Ancien billet",
+        "hint": "Ce code a été remplacé. Demandez le billet le plus récent."
+      },
+      "void": {
+        "title": "Billet annulé",
+        "hint": "Ce billet a été remboursé ou annulé. Ne pas admettre."
+      },
+      "invalid": {
+        "title": "Non reconnu",
+        "hint": "Ce n’est pas un billet valide pour cet événement."
+      },
+      "wrong_event": {
+        "title": "Mauvais événement",
+        "hint": "Ce billet est pour un autre événement."
+      },
+      "outside_window": {
+        "title": "Portes fermées"
+      },
+      "wrong_date": {
+        "title": "Mauvaise date"
+      },
+      "not_today": {
+        "title": "Non valable aujourd’hui"
+      },
+      "no_access": {
+        "title": "Pas d’accès ici"
+      },
+      "wrong_checkpoint": {
+        "title": "Mauvaise entrée",
+        "hint": "Cet appareil n’est pas configuré pour scanner à cette entrée."
+      },
+      "balance_due": {
+        "title": "Solde à payer",
+        "hint": "Envoyez la personne au guichet pour régler le solde."
+      },
+      "not_in_room": {
+        "title": "Pas dans la salle"
+      },
+      "not_enrolled": {
+        "title": "Non inscrit"
+      },
+      "admission_level": {
+        "title": "Non inclus"
+      },
+      "capacity": {
+        "title": "Salle complète"
+      }
+    },
+    "flagged": {
+      "title": "{count, plural, one {# scan à revoir} many {# de scans à revoir} other {# scans à revoir}}",
+      "duplicate": "Une autre porte a aussi admis ce billet. Vérifiez que la personne n’entre pas deux fois.",
+      "rejected": "Ce scan n’a pas pu être envoyé et a été abandonné.",
+      "other": "Le serveur a jugé ce scan différemment. Un superviseur va l’examiner.",
+      "when": "Scanné à {time}",
+      "dismiss": "Ignorer",
+      "dismissAll": "Tout ignorer",
+      "unknownHolder": "Un billet"
+    }
+  },
   "home": {
     "title": "Yayatoh Staff",
     "tagline": "Les outils d’entrée pour le jour de l’événement arrivent bientôt."
