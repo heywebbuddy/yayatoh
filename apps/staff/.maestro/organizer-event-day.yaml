@@ -1,0 +1,25 @@
+# M7.4c: the organizer's read-only event-day view. Written, not run in cloud sessions; the device pass
+# runs it against a preview build.
+# Precondition: signed in as the seeded organizer with two-step verification (M7.4a "sign-in/organizer")
+# for an organization with one live event, "Harbor Summit".
+appId: com.yayatoh.staff.preview
+---
+- openLink: yayatoh-staff-preview://tools/ops
+# One organization: straight to its events.
+- tapOn:
+    id: event-.*
+- assertVisible: 'Check-ins'
+- assertVisible: 'Throughput'
+- assertVisible: 'Scan issues'
+- assertVisible: 'Devices'
+- assertVisible: 'Alerts'
+- assertVisible: 'Read only. Numbers refresh while this screen is open.'
+# Nothing on this screen changes data.
+- assertNotVisible: 'Check in'
+# The numbers move while the screen stays open: a scan at the door raises the count within 15 seconds.
+- copyTextFrom:
+    id: ops-checked-in
+- waitForAnimationToEnd:
+    timeout: 20000
+- assertVisible:
+    id: ops-checked-in

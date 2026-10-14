@@ -253,5 +253,431 @@
       "wrongCode": "驗證碼不正確。請檢查後再試一次。",
       "wrongCodeAttempts": "驗證碼不正確。{count, plural, other {還剩 # 次機會。}}"
     }
+  },
+  "tools": {
+    "title": "報到工具",
+    "nav": {
+      "hub": "報到工具",
+      "lookup": "查詢賓客",
+      "guests": "賓客名單",
+      "assistance": "協助請求",
+      "today": "今日",
+      "leads": "潛在客戶蒐集",
+      "scanBadge": "掃描名牌",
+      "lead": "潛在客戶",
+      "ops": "活動當天"
+    },
+    "hub": {
+      "intro": "入口所需的一切，盡在這裡。",
+      "none": "此手機尚未設定為報到工作用途。請使用主辦單位提供的代碼註冊，或登入。",
+      "lookup": "查詢賓客",
+      "lookupHint": "依姓名、手機號碼或電子郵件查詢。可離線使用。",
+      "guests": "賓客名單",
+      "guestsHint": "依姓名或同行團體為賓客報到。",
+      "assistance": "協助請求",
+      "assistanceHint": "接手、處理並解決請求。",
+      "today": "今日",
+      "todayHint": "報到人數、裝置和提醒。",
+      "leads": "潛在客戶蒐集",
+      "leadsHint": "掃描名牌並保存您的潛在客戶。",
+      "ops": "活動當天",
+      "opsHint": "為主辦單位提供即時數據。"
+    },
+    "lookup": {
+      "queryLabel": "姓名、手機號碼或電子郵件",
+      "queryHint": "請輸入姓名的至少兩個字、完整的電子郵件信箱或手機號碼。",
+      "search": "搜尋",
+      "tooShort": "請至少輸入兩個字。",
+      "sourceDevice": "正在搜尋此手機上儲存的名單。",
+      "sourceDownload": "正在搜尋剛下載的名單。",
+      "loading": "正在載入賓客名單…",
+      "unavailable": "此手機上還沒有賓客名單。請連線一次以下載。",
+      "loadFailed": "無法載入賓客名單。",
+      "results": "{count, plural, other {# 筆結果}}",
+      "none": "找不到任何人",
+      "noneBody": "請檢查拼字，或試試電子郵件或手機號碼。",
+      "pass": "{type} · 代碼 {code}",
+      "voidPass": "此票券已作廢，無法使用。",
+      "admittedHere": "今天已在此手機上報到。",
+      "checkIn": "報到",
+      "checkInFor": "為 {name} 報到"
+    },
+    "manual": {
+      "title": "為 {name} 報到",
+      "reasonLabel": "為什麼要手動報到？",
+      "reasons": {
+        "wont_scan": "QR 碼無法掃描",
+        "phone_dead": "對方手機沒電",
+        "lost_ticket": "對方遺失了票券",
+        "other": "其他原因"
+      },
+      "noteLabel": "備註",
+      "noteHint": "請說明情況。選擇其他原因時必填。",
+      "errors": {
+        "reason_missing": "請選擇原因。",
+        "note_missing": "請新增至少 3 個字元的簡短備註。",
+        "note_too_long": "備註請控制在 300 個字元以內。"
+      },
+      "confirm": "報到",
+      "cancel": "取消",
+      "working": "正在報到…",
+      "noWay": "無網路連線，也沒有已儲存的賓客名單。請連線後再試一次。",
+      "failed": "無法報到。請再試一次。",
+      "offlineNote": "已在此手機上確認。恢復連線後將自動同步。",
+      "firstAdmitted": "首次報到時間：{time}。"
+    },
+    "verdict": {
+      "admitted": "已報到",
+      "provisional": "已報到，待確認",
+      "granted": "准許進入",
+      "duplicate": "已報到過",
+      "duplicate_offline": "已在其他地方報到",
+      "invalid": "票券無效",
+      "void": "票券已作廢",
+      "wrong_event": "票券屬於其他活動",
+      "not_today": "今日無效",
+      "outside_window": "不在入場時間內",
+      "wrong_date": "票券日期不符",
+      "superseded": "已被新票券取代",
+      "no_access": "無權進入此處",
+      "wrong_checkpoint": "入口錯誤",
+      "balance_due": "尚有餘款待付",
+      "entered": "已放行",
+      "scanned_out": "已掃碼離場",
+      "not_in_room": "不在場內",
+      "not_enrolled": "未報名",
+      "admission_level": "票券不含此場次",
+      "capacity": "場次已滿"
+    },
+    "guests": {
+      "searchLabel": "依姓名或同行團體搜尋",
+      "labels": "標籤",
+      "loading": "正在載入賓客名單…",
+      "loadFailed": "無法載入賓客名單。",
+      "unavailable": "此手機上還沒有賓客名單。請連線一次以下載。",
+      "emptyList": "此活動沒有賓客名單。",
+      "prompt": "搜尋賓客即可為其報到。",
+      "none": "找不到賓客",
+      "noneBody": "請檢查拼字，或搜尋同行團體。",
+      "savedCopy": "離線：顯示 {time} 儲存的名單。",
+      "guestOf": "{name} 的賓客",
+      "unnamed": "賓客",
+      "status": {
+        "attending": "出席",
+        "pending": "未回覆",
+        "declined": "已婉拒"
+      },
+      "arrived": "{time} 抵達",
+      "waiting": "已報到，待傳送",
+      "checkIn": "報到",
+      "checkInFor": "為 {name} 報到",
+      "already": "{name} 稍早已被報到。",
+      "unknown": "{name} 不在此活動的賓客名單中。",
+      "pending": "{count, plural, other {# 筆報到待傳送}}",
+      "sendNow": "立即傳送",
+      "sent": "已傳送。",
+      "sendFailed": "無法傳送。連線後將自動傳送。",
+      "noPlace": "尚無桌位"
+    },
+    "assistance": {
+      "empty": "沒有待處理的請求",
+      "emptyBody": "新請求一收到就會顯示在這裡。",
+      "loadFailed": "無法載入請求。",
+      "number": "請求 #{number}",
+      "reason": {
+        "seat": "座位",
+        "accessibility": "無障礙協助",
+        "medical": "醫療",
+        "lost_item": "遺失物品",
+        "other": "其他",
+        "backup": "支援",
+        "supervisor": "主管",
+        "security": "保全",
+        "device": "裝置支援"
+      },
+      "priority": {
+        "urgent": "緊急",
+        "high": "高優先",
+        "normal": "一般優先"
+      },
+      "state": {
+        "new": "新請求",
+        "assigned": "已接手",
+        "in_progress": "處理中",
+        "resolved": "已解決",
+        "cancelled": "已取消"
+      },
+      "overdue": "已逾期",
+      "mine": "由本裝置接手",
+      "guest": "賓客：{name}",
+      "where": "地點：{location}",
+      "take": "接手",
+      "takeFor": "接手請求 {number}",
+      "start": "開始處理",
+      "startFor": "開始處理請求 {number}",
+      "resolve": "標示為已解決",
+      "resolveFor": "將請求 {number} 標示為已解決",
+      "cancel": "取消請求",
+      "cancelFor": "取消請求 {number}",
+      "changed": "此請求已變更，清單已重新整理。",
+      "actionFailed": "無法更新請求。請再試一次。",
+      "raise": {
+        "title": "請求協助",
+        "reasonLabel": "您需要什麼？",
+        "reasons": {
+          "backup": "支援",
+          "supervisor": "主管",
+          "medical": "醫療協助",
+          "security": "保全",
+          "device": "裝置支援"
+        },
+        "noteLabel": "備註（選填）",
+        "send": "傳送請求",
+        "reasonMissing": "請選擇您需要的協助。",
+        "sent": "請求 #{number} 已傳送。",
+        "failed": "無法傳送請求。請再試一次。"
+      }
+    },
+    "today": {
+      "checkedIn": "已報到",
+      "expected": "預計",
+      "percent": "已達預計的 {percent}%",
+      "entrances": "依入口",
+      "days": "依日期",
+      "devices": "裝置",
+      "online": "線上",
+      "deviceOffline": "離線",
+      "thisDevice": "本裝置",
+      "battery": "電量 {percent}%",
+      "queue": "{count, plural, other {# 筆掃描待傳送}}",
+      "alerts": "提醒",
+      "noAlerts": "目前沒有提醒。",
+      "alert": {
+        "device_offline": "{label} 已離線。",
+        "device_low_battery": "{label} 電量為 {percent}%。",
+        "device_backlog": "{label} 有掃描待傳送。",
+        "capacity_near": "人數即將達到上限。"
+      },
+      "severity": {
+        "warning": "警告",
+        "critical": "嚴重"
+      },
+      "updated": "{time} 更新",
+      "savedOnly": "離線：顯示 {time} 儲存的最新數據。",
+      "loadFailed": "無法載入今日數據。",
+      "unlabeled": "某台裝置"
+    },
+    "push": {
+      "title": "此手機的提醒",
+      "body": "裝置離線、電量不足或進度落後時，將收到通知。",
+      "on": "提醒已開啟。",
+      "off": "提醒已關閉。",
+      "enable": "開啟提醒",
+      "disable": "關閉提醒",
+      "denied": "此 App 的通知已被封鎖。請在手機設定中允許通知，然後再試一次。",
+      "unavailable": "此手機無法註冊提醒。",
+      "failed": "無法變更提醒設定。請再試一次。",
+      "copy": {
+        "device_offline": {
+          "title": "裝置離線",
+          "body": "{label} 已離線。"
+        },
+        "device_low_battery": {
+          "title": "電量不足",
+          "body": "{label} 電量為 {percent}%。"
+        },
+        "device_backlog": {
+          "title": "掃描待傳送",
+          "body": "{label} 有掃描待傳送。"
+        },
+        "capacity_near": {
+          "title": "人數上限",
+          "body": "人數即將達到上限。"
+        },
+        "assistance": {
+          "title": "有人請求協助",
+          "body": "入口處有人需要協助。"
+        }
+      }
+    }
+  },
+  "leads": {
+    "title": "您的潛在客戶",
+    "open": "開啟",
+    "openFor": "開啟 {name} 的潛在客戶資料",
+    "setup": "{exhibitor} · {event}",
+    "count": "{count, plural, other {# 位潛在客戶}}",
+    "searchLabel": "搜尋潛在客戶",
+    "empty": "尚無潛在客戶",
+    "emptyBody": "掃描名牌即可取得您的第一位潛在客戶。",
+    "noMatches": "沒有符合搜尋條件的潛在客戶。",
+    "loadFailed": "無法載入您的潛在客戶。",
+    "accessEnded": "此活動的潛在客戶存取權限已結束。",
+    "notSignedIn": "請以參展商身分登入以使用潛在客戶蒐集。",
+    "scan": "掃描名牌",
+    "pending": "{count, plural, other {# 筆掃描待傳送}}",
+    "sendNow": "立即傳送",
+    "sent": "已傳送。",
+    "scope": {
+      "all": "您所屬參展商的全部潛在客戶",
+      "team": "您團隊的潛在客戶",
+      "own": "您掃描的潛在客戶"
+    },
+    "gate": {
+      "no_license": "您沒有潛在客戶授權。請聯絡參展商管理員為您分配。",
+      "over_allowance": "您所屬參展商的潛在客戶授權已全部用完。",
+      "terms": "參展商管理員尚未接受潛在客戶條款。",
+      "not_open": "潛在客戶蒐集尚未開放。",
+      "closed": "潛在客戶蒐集已結束。您仍可編輯備註。"
+    },
+    "syncFailed": {
+      "unreachable": "無網路連線。您的掃描已儲存，稍後將傳送。",
+      "no_license": "您沒有潛在客戶授權，因此無法傳送掃描。",
+      "over_allowance": "您所屬參展商的潛在客戶授權已超額，因此無法傳送掃描。",
+      "terms": "潛在客戶條款尚未被接受，因此無法傳送掃描。",
+      "ended": "潛在客戶存取權限已結束，因此無法傳送掃描。",
+      "rejected": "伺服器拒絕了這些掃描。"
+    },
+    "scanner": {
+      "hint": "請將相機對準與會者的名牌代碼。",
+      "cameraOff": "相機無法使用。請改為輸入名牌代碼。",
+      "manualLabel": "名牌代碼",
+      "manualHint": "相機無法辨識時，請手動輸入代碼。",
+      "useCode": "使用此代碼",
+      "codeMissing": "請輸入名牌代碼。"
+    },
+    "capture": {
+      "title": "取得潛在客戶",
+      "rating": "評級",
+      "ratings": {
+        "hot": "熱",
+        "warm": "溫",
+        "cold": "冷"
+      },
+      "qualifiers": "篩選標籤",
+      "noQualifiers": "您所屬參展商尚未設定任何篩選標籤。",
+      "notes": "備註",
+      "save": "儲存潛在客戶",
+      "saving": "正在儲存…",
+      "savedOnline": "已取得潛在客戶。",
+      "savedOffline": "已儲存在此手機上，連線後將傳送。",
+      "rescanned": "已在您的潛在客戶中，已更新。",
+      "another": "掃描下一個名牌",
+      "errors": {
+        "too_many_qualifiers": "最多選擇 10 個篩選標籤。",
+        "qualifier_too_long": "有篩選標籤過長。",
+        "notes_too_long": "備註請控制在 2000 個字元以內。"
+      }
+    },
+    "refused": {
+      "invalid": "無法辨識該名牌。",
+      "wrong_event": "該名牌屬於其他活動。",
+      "not_open": "潛在客戶蒐集尚未開放。",
+      "closed": "潛在客戶蒐集已結束。"
+    },
+    "lead": {
+      "consent": "您只能看到與會者同意分享的內容。",
+      "name": "姓名",
+      "jobTitle": "職稱",
+      "company": "公司",
+      "email": "電子郵件",
+      "notShared": "與會者未分享",
+      "emailWithdrawn": "與會者已撤回分享其電子郵件的許可。",
+      "scans": "{count, plural, other {已掃描 # 次}}",
+      "capturedAt": "取得時間：{time}",
+      "scannedBy": "掃描者：{name}",
+      "save": "儲存變更",
+      "saved": "已儲存。",
+      "saveFailed": "無法儲存。請再試一次。",
+      "notFound": "您的清單中沒有此潛在客戶。"
+    }
+  },
+  "ops": {
+    "title": "活動當天",
+    "updated": "{time} 更新",
+    "savedOnly": "離線：顯示 {time} 的最新數據。",
+    "loadFailed": "無法載入活動當天檢視。",
+    "notSignedIn": "請以主辦單位身分登入以查看活動當天。",
+    "readOnly": "唯讀。此畫面開啟期間數據會自動更新。",
+    "changeEvent": "切換活動",
+    "picker": {
+      "title": "選擇活動",
+      "chooseOrg": "請選擇組織。",
+      "chooseEvent": "{org} 的活動",
+      "noOrgs": "您不屬於任何組織。",
+      "noEvents": "此組織沒有活動。",
+      "loadFailed": "無法載入您的活動。",
+      "open": "查看",
+      "openFor": "查看 {name}"
+    },
+    "mode": {
+      "planning": "籌備中",
+      "pre_show": "開門前",
+      "live": "進行中",
+      "wrap": "收尾"
+    },
+    "hidden": "您的角色或方案不包含此內容。",
+    "checkins": {
+      "title": "報到",
+      "of": "{checkedIn} / {expected}",
+      "checkedIn": "已報到",
+      "expected": "預計",
+      "remaining": "{count, plural, other {還有 # 位賓客未到}}",
+      "entrances": "依入口",
+      "days": "依日期"
+    },
+    "throughput": {
+      "title": "通行量",
+      "rate": "每分鐘掃描數：{rate}",
+      "gap": "掃描間隔中位數：{seconds} 秒",
+      "queue": "{minutes, plural, other {排隊約 # 分鐘}}",
+      "entrances": "各入口每分鐘掃描數",
+      "recent": "最近 15 分鐘"
+    },
+    "issues": {
+      "title": "掃描問題",
+      "duplicates": "重複",
+      "refused": "遭拒",
+      "none": "今日沒有掃描問題。"
+    },
+    "devices": {
+      "title": "裝置",
+      "online": "線上",
+      "offline": "離線",
+      "battery": "電量 {percent}%",
+      "queue": "{count, plural, other {# 筆掃描待傳送}}",
+      "at": "位置：{place}",
+      "none": "沒有裝置。"
+    },
+    "alerts": {
+      "title": "提醒",
+      "none": "目前沒有提醒。",
+      "count": "{count, plural, other {# 項受影響}}",
+      "severity": {
+        "info": "資訊",
+        "warning": "警告",
+        "critical": "嚴重"
+      },
+      "state": {
+        "open": "未處理",
+        "acknowledged": "已確認",
+        "snoozed": "已延後"
+      },
+      "rule": {
+        "devicesOffline": "裝置離線",
+        "devicesLowBattery": "裝置電量不足",
+        "devicesBacklog": "裝置有掃描待傳送",
+        "capacityNear": "人數即將達到上限",
+        "capacityFull": "人數已滿",
+        "assistanceOverdue": "協助請求已逾期",
+        "printersKiosksOffline": "印表機或自助服務機離線",
+        "paymentsFailed": "付款失敗",
+        "paymentsStuck": "付款卡住",
+        "refundSurge": "退款增加",
+        "sellOut": "已售罄",
+        "readiness": "活動尚未就緒",
+        "other": "需要在控制台處理"
+      }
+    }
   }
 }

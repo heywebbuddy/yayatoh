@@ -1109,3 +1109,9 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **Search source:** the apps' search uses the public read model directly (exact keyset paging, works before a Meilisearch account exists). Free text is substring match; typo tolerance and facets wait for the Meilisearch index.
 - [ ] **Country rule skipped for the app** (no geo header); the velocity and payment-failure rules apply as on the web.
 - [ ] **Device pass:** pay on Stripe test mode in the secure in-app browser and land back in the app; cancel path.
+
+## M7.4c — door tools (2026-10-14, pending owner; labels `mobile-contract`)
+- [ ] **No device-token lookup route; online lookup reads the manifest.** The Staff app finds a guest online by downloading the event's manifest pages (the rows the device already holds when it scans) into memory and matching them with the same engine function. A small `GET /v1/staff/events/{event}/lookup` (the console's `findTicketHolders` with the device's context) would avoid the download. Say if you want it.
+- [ ] **The manual check-in reason is not sent to the server.** `POST /v1/checkins` has no `reason`; the app keeps it in an encrypted log on the phone (short code, reason, result). Say if the reason should be audited server-side (a `reason` field on the scan, additive).
+- [ ] **Staff push needs the flag and an FCM file.** After M7.3d merges, set `staff.push: true` in `packages/mobile-core/src/app-config.ts`; for Android push the Staff app needs its own `google-services.json` as an EAS file secret and APNs capability on its bundle id (P7-4 accounts). Until then the toggle reports "this phone could not register".
+- [ ] **Unsent leads survive a rep's sign-out.** They stay encrypted on the phone and send when that rep signs in again; a device wipe deletes them. Say if sign-out should instead warn and block while leads are unsent.

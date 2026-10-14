@@ -253,5 +253,431 @@
       "wrongCode": "Quel codice non è corretto. Controllalo e riprova.",
       "wrongCodeAttempts": "Quel codice non è corretto. {count, plural, one {Resta # tentativo.} other {Restano # tentativi.}}"
     }
+  },
+  "tools": {
+    "title": "Strumenti d'ingresso",
+    "nav": {
+      "hub": "Strumenti d'ingresso",
+      "lookup": "Cerca ospite",
+      "guests": "Lista ospiti",
+      "assistance": "Richieste di assistenza",
+      "today": "Oggi",
+      "leads": "Raccolta lead",
+      "scanBadge": "Scansiona badge",
+      "lead": "Lead",
+      "ops": "Giorno dell'evento"
+    },
+    "hub": {
+      "intro": "Tutto per l'ingresso in un unico posto.",
+      "none": "Questo telefono non è ancora configurato per l'ingresso. Registralo con il codice dell'organizzatore oppure accedi.",
+      "lookup": "Cerca ospite",
+      "lookupHint": "Per nome, telefono o email. Funziona offline.",
+      "guests": "Lista ospiti",
+      "guestsHint": "Fai il check-in degli ospiti per nome o gruppo.",
+      "assistance": "Richieste di assistenza",
+      "assistanceHint": "Prendi in carico, gestisci e risolvi le richieste.",
+      "today": "Oggi",
+      "todayHint": "Check-in, dispositivi e avvisi.",
+      "leads": "Raccolta lead",
+      "leadsHint": "Scansiona i badge e conserva i tuoi lead.",
+      "ops": "Giorno dell'evento",
+      "opsHint": "Numeri in tempo reale per l'organizzatore."
+    },
+    "lookup": {
+      "queryLabel": "Nome, telefono o email",
+      "queryHint": "Digita almeno due lettere di un nome, un indirizzo email completo o un numero di telefono.",
+      "search": "Cerca",
+      "tooShort": "Digita almeno due lettere.",
+      "sourceDevice": "Ricerca nell'elenco salvato su questo telefono.",
+      "sourceDownload": "Ricerca nell'elenco appena scaricato.",
+      "loading": "Caricamento della lista ospiti…",
+      "unavailable": "La lista ospiti non è ancora su questo telefono. Connettiti una volta per scaricarla.",
+      "loadFailed": "Impossibile caricare la lista ospiti.",
+      "results": "{count, plural, one {# risultato} other {# risultati}}",
+      "none": "Nessun risultato",
+      "noneBody": "Controlla l'ortografia o prova con email o telefono.",
+      "pass": "{type} · Codice {code}",
+      "voidPass": "Questo pass è stato annullato e non può essere usato.",
+      "admittedHere": "Check-in già effettuato oggi su questo telefono.",
+      "checkIn": "Check-in",
+      "checkInFor": "Check-in di {name}"
+    },
+    "manual": {
+      "title": "Check-in di {name}",
+      "reasonLabel": "Perché fai il check-in manualmente?",
+      "reasons": {
+        "wont_scan": "Il codice non si scansiona",
+        "phone_dead": "Ha il telefono scarico",
+        "lost_ticket": "Ha perso il biglietto",
+        "other": "Altro motivo"
+      },
+      "noteLabel": "Nota",
+      "noteHint": "Spiega cos'è successo. Obbligatoria per un altro motivo.",
+      "errors": {
+        "reason_missing": "Scegli un motivo.",
+        "note_missing": "Aggiungi una nota breve di almeno 3 caratteri.",
+        "note_too_long": "La nota deve essere sotto i 300 caratteri."
+      },
+      "confirm": "Check-in",
+      "cancel": "Annulla",
+      "working": "Check-in in corso…",
+      "noWay": "Nessuna connessione e nessuna lista ospiti salvata. Connettiti e riprova.",
+      "failed": "Impossibile effettuare il check-in. Riprova.",
+      "offlineNote": "Deciso su questo telefono. Verrà sincronizzato quando tornerai online.",
+      "firstAdmitted": "Primo check-in alle {time}."
+    },
+    "verdict": {
+      "admitted": "Check-in effettuato",
+      "provisional": "Check-in effettuato, da confermare",
+      "granted": "Accesso consentito",
+      "duplicate": "Check-in già effettuato",
+      "duplicate_offline": "Check-in già effettuato altrove",
+      "invalid": "Pass non valido",
+      "void": "Pass annullato",
+      "wrong_event": "Il pass è per un altro evento",
+      "not_today": "Non valido oggi",
+      "outside_window": "Fuori dall'orario d'ingresso",
+      "wrong_date": "Il pass è per un'altra data",
+      "superseded": "Sostituito da un pass più recente",
+      "no_access": "Nessun accesso qui",
+      "wrong_checkpoint": "Ingresso sbagliato",
+      "balance_due": "Saldo da pagare",
+      "entered": "Ammesso",
+      "scanned_out": "Uscita scansionata",
+      "not_in_room": "Non è in sala",
+      "not_enrolled": "Non iscritto",
+      "admission_level": "Il pass non include questa sessione",
+      "capacity": "La sessione è al completo"
+    },
+    "guests": {
+      "searchLabel": "Cerca per nome o gruppo",
+      "labels": "Etichette",
+      "loading": "Caricamento della lista ospiti…",
+      "loadFailed": "Impossibile caricare la lista ospiti.",
+      "unavailable": "La lista ospiti non è ancora su questo telefono. Connettiti una volta per scaricarla.",
+      "emptyList": "Questo evento non ha una lista ospiti.",
+      "prompt": "Cerca un ospite per fare il check-in.",
+      "none": "Nessun ospite trovato",
+      "noneBody": "Controlla l'ortografia o cerca il gruppo.",
+      "savedCopy": "Offline: mostro la lista salvata alle {time}.",
+      "guestOf": "Ospite di {name}",
+      "unnamed": "Ospite",
+      "status": {
+        "attending": "Partecipa",
+        "pending": "Senza risposta",
+        "declined": "Ha rifiutato"
+      },
+      "arrived": "Arrivato alle {time}",
+      "waiting": "Check-in effettuato, in attesa di invio",
+      "checkIn": "Check-in",
+      "checkInFor": "Check-in di {name}",
+      "already": "Qualcuno ha già fatto il check-in di {name}.",
+      "unknown": "{name} non è nella lista ospiti di questo evento.",
+      "pending": "{count, plural, one {# check-in in attesa di invio} other {# check-in in attesa di invio}}",
+      "sendNow": "Invia ora",
+      "sent": "Inviato.",
+      "sendFailed": "Impossibile inviare. Verranno inviati quando sarai online.",
+      "noPlace": "Ancora nessun tavolo"
+    },
+    "assistance": {
+      "empty": "Nessuna richiesta aperta",
+      "emptyBody": "Le nuove richieste appaiono qui appena arrivano.",
+      "loadFailed": "Impossibile caricare le richieste.",
+      "number": "Richiesta n. {number}",
+      "reason": {
+        "seat": "Posti a sedere",
+        "accessibility": "Accessibilità",
+        "medical": "Medica",
+        "lost_item": "Oggetto smarrito",
+        "other": "Altro",
+        "backup": "Rinforzi",
+        "supervisor": "Supervisore",
+        "security": "Sicurezza",
+        "device": "Supporto dispositivi"
+      },
+      "priority": {
+        "urgent": "Urgente",
+        "high": "Priorità alta",
+        "normal": "Priorità normale"
+      },
+      "state": {
+        "new": "Nuova",
+        "assigned": "Presa in carico",
+        "in_progress": "In corso",
+        "resolved": "Risolta",
+        "cancelled": "Annullata"
+      },
+      "overdue": "In ritardo",
+      "mine": "Presa in carico da questo dispositivo",
+      "guest": "Ospite: {name}",
+      "where": "Dove: {location}",
+      "take": "Prendi in carico",
+      "takeFor": "Prendi in carico la richiesta {number}",
+      "start": "Avvia",
+      "startFor": "Avvia la richiesta {number}",
+      "resolve": "Risolvi",
+      "resolveFor": "Risolvi la richiesta {number}",
+      "cancel": "Annulla richiesta",
+      "cancelFor": "Annulla la richiesta {number}",
+      "changed": "Questa richiesta è cambiata. L'elenco è stato aggiornato.",
+      "actionFailed": "Impossibile aggiornare la richiesta. Riprova.",
+      "raise": {
+        "title": "Chiedi aiuto",
+        "reasonLabel": "Di cosa hai bisogno?",
+        "reasons": {
+          "backup": "Rinforzi",
+          "supervisor": "Supervisore",
+          "medical": "Assistenza medica",
+          "security": "Sicurezza",
+          "device": "Supporto dispositivi"
+        },
+        "noteLabel": "Nota (facoltativa)",
+        "send": "Invia richiesta",
+        "reasonMissing": "Scegli di cosa hai bisogno.",
+        "sent": "Richiesta n. {number} inviata.",
+        "failed": "Impossibile inviare la richiesta. Riprova."
+      }
+    },
+    "today": {
+      "checkedIn": "Check-in effettuati",
+      "expected": "Attesi",
+      "percent": "{percent}% degli attesi",
+      "entrances": "Per ingresso",
+      "days": "Per giorno",
+      "devices": "Dispositivi",
+      "online": "Online",
+      "deviceOffline": "Offline",
+      "thisDevice": "Questo dispositivo",
+      "battery": "Batteria {percent}%",
+      "queue": "{count, plural, one {# scansione in attesa di invio} other {# scansioni in attesa di invio}}",
+      "alerts": "Avvisi",
+      "noAlerts": "Nessun avviso al momento.",
+      "alert": {
+        "device_offline": "{label} è offline.",
+        "device_low_battery": "La batteria di {label} è al {percent}%.",
+        "device_backlog": "{label} ha scansioni in attesa di invio.",
+        "capacity_near": "La capienza è quasi raggiunta."
+      },
+      "severity": {
+        "warning": "Attenzione",
+        "critical": "Critico"
+      },
+      "updated": "Aggiornato {time}",
+      "savedOnly": "Offline: mostro gli ultimi numeri salvati alle {time}.",
+      "loadFailed": "Impossibile caricare i numeri di oggi.",
+      "unlabeled": "Un dispositivo"
+    },
+    "push": {
+      "title": "Avvisi su questo telefono",
+      "body": "Ricevi una notifica quando un dispositivo va offline, ha poca batteria o resta indietro.",
+      "on": "Gli avvisi sono attivi.",
+      "off": "Gli avvisi sono disattivati.",
+      "enable": "Attiva gli avvisi",
+      "disable": "Disattiva gli avvisi",
+      "denied": "Le notifiche sono bloccate per questa app. Consentile nelle Impostazioni del telefono e riprova.",
+      "unavailable": "Questo telefono non è riuscito a registrarsi per gli avvisi.",
+      "failed": "Impossibile modificare gli avvisi. Riprova.",
+      "copy": {
+        "device_offline": {
+          "title": "Dispositivo offline",
+          "body": "{label} è offline."
+        },
+        "device_low_battery": {
+          "title": "Batteria scarica",
+          "body": "La batteria di {label} è al {percent}%."
+        },
+        "device_backlog": {
+          "title": "Scansioni in attesa",
+          "body": "{label} ha scansioni in attesa di invio."
+        },
+        "capacity_near": {
+          "title": "Capienza",
+          "body": "La capienza è quasi raggiunta."
+        },
+        "assistance": {
+          "title": "Aiuto richiesto",
+          "body": "Qualcuno ha bisogno di aiuto all'ingresso."
+        }
+      }
+    }
+  },
+  "leads": {
+    "title": "I tuoi lead",
+    "open": "Apri",
+    "openFor": "Apri il lead di {name}",
+    "setup": "{exhibitor} · {event}",
+    "count": "{count, plural, one {# lead} other {# lead}}",
+    "searchLabel": "Cerca lead",
+    "empty": "Ancora nessun lead",
+    "emptyBody": "Scansiona un badge per raccogliere il tuo primo lead.",
+    "noMatches": "Nessun lead corrisponde alla ricerca.",
+    "loadFailed": "Impossibile caricare i tuoi lead.",
+    "accessEnded": "L'accesso ai lead per questo evento è terminato.",
+    "notSignedIn": "Accedi come espositore per usare la raccolta lead.",
+    "scan": "Scansiona badge",
+    "pending": "{count, plural, one {# scansione in attesa di invio} other {# scansioni in attesa di invio}}",
+    "sendNow": "Invia ora",
+    "sent": "Inviato.",
+    "scope": {
+      "all": "Tutti i lead del tuo espositore",
+      "team": "I lead del tuo team",
+      "own": "Lead che hai scansionato"
+    },
+    "gate": {
+      "no_license": "Non hai una licenza lead. Chiedila all'amministratore del tuo espositore.",
+      "over_allowance": "Il tuo espositore ha esaurito tutte le licenze lead.",
+      "terms": "L'amministratore del tuo espositore non ha ancora accettato i termini sui lead.",
+      "not_open": "La raccolta lead non è ancora aperta.",
+      "closed": "La raccolta lead è chiusa. Puoi ancora modificare le tue note."
+    },
+    "syncFailed": {
+      "unreachable": "Nessuna connessione. Le tue scansioni sono salvate e verranno inviate più tardi.",
+      "no_license": "Non hai una licenza lead, quindi le scansioni non possono essere inviate.",
+      "over_allowance": "Il tuo espositore ha superato le licenze lead, quindi le scansioni non possono essere inviate.",
+      "terms": "I termini sui lead non sono stati accettati, quindi le scansioni non possono essere inviate.",
+      "ended": "L'accesso ai lead è terminato, quindi le scansioni non possono essere inviate.",
+      "rejected": "Il server ha rifiutato le scansioni."
+    },
+    "scanner": {
+      "hint": "Inquadra con la fotocamera il codice del badge del partecipante.",
+      "cameraOff": "La fotocamera non è disponibile. Digita il codice del badge.",
+      "manualLabel": "Codice del badge",
+      "manualHint": "Digita il codice se la fotocamera non riesce a leggerlo.",
+      "useCode": "Usa questo codice",
+      "codeMissing": "Inserisci il codice del badge."
+    },
+    "capture": {
+      "title": "Raccogli lead",
+      "rating": "Valutazione",
+      "ratings": {
+        "hot": "Caldo",
+        "warm": "Tiepido",
+        "cold": "Freddo"
+      },
+      "qualifiers": "Qualificatori",
+      "noQualifiers": "Il tuo espositore non ha impostato qualificatori.",
+      "notes": "Note",
+      "save": "Salva lead",
+      "saving": "Salvataggio…",
+      "savedOnline": "Lead raccolto.",
+      "savedOffline": "Salvato su questo telefono. Verrà inviato quando sarai online.",
+      "rescanned": "Già nei tuoi lead. Aggiornato.",
+      "another": "Scansiona un altro badge",
+      "errors": {
+        "too_many_qualifiers": "Scegli al massimo 10 qualificatori.",
+        "qualifier_too_long": "Un qualificatore è troppo lungo.",
+        "notes_too_long": "Le note devono essere sotto i 2000 caratteri."
+      }
+    },
+    "refused": {
+      "invalid": "Impossibile leggere quel badge.",
+      "wrong_event": "Quel badge è di un altro evento.",
+      "not_open": "La raccolta lead non è ancora aperta.",
+      "closed": "La raccolta lead è chiusa."
+    },
+    "lead": {
+      "consent": "Vedi solo ciò che il partecipante ha acconsentito a condividere.",
+      "name": "Nome",
+      "jobTitle": "Ruolo",
+      "company": "Azienda",
+      "email": "Email",
+      "notShared": "Non condiviso dal partecipante",
+      "emailWithdrawn": "Il partecipante ha revocato il permesso di condividere la sua email.",
+      "scans": "{count, plural, one {Scansionato # volta} other {Scansionato # volte}}",
+      "capturedAt": "Raccolto {time}",
+      "scannedBy": "Scansionato da {name}",
+      "save": "Salva modifiche",
+      "saved": "Salvato.",
+      "saveFailed": "Impossibile salvare. Riprova.",
+      "notFound": "Questo lead non è nella tua lista."
+    }
+  },
+  "ops": {
+    "title": "Giorno dell'evento",
+    "updated": "Aggiornato {time}",
+    "savedOnly": "Offline: mostro gli ultimi numeri delle {time}.",
+    "loadFailed": "Impossibile caricare la vista del giorno dell'evento.",
+    "notSignedIn": "Accedi come organizzatore per vedere il giorno dell'evento.",
+    "readOnly": "Sola lettura. I numeri si aggiornano finché questa schermata è aperta.",
+    "changeEvent": "Cambia evento",
+    "picker": {
+      "title": "Scegli un evento",
+      "chooseOrg": "Scegli un'organizzazione.",
+      "chooseEvent": "Eventi di {org}",
+      "noOrgs": "Non fai parte di nessuna organizzazione.",
+      "noEvents": "Questa organizzazione non ha eventi.",
+      "loadFailed": "Impossibile caricare i tuoi eventi.",
+      "open": "Segui",
+      "openFor": "Segui {name}"
+    },
+    "mode": {
+      "planning": "Pianificazione",
+      "pre_show": "Prima dell'apertura",
+      "live": "In diretta",
+      "wrap": "Chiusura"
+    },
+    "hidden": "Non incluso per il tuo ruolo o piano.",
+    "checkins": {
+      "title": "Check-in",
+      "of": "{checkedIn} su {expected}",
+      "checkedIn": "Check-in effettuato",
+      "expected": "Attesi",
+      "remaining": "{count, plural, one {# ospite deve ancora arrivare} other {# ospiti devono ancora arrivare}}",
+      "entrances": "Per ingresso",
+      "days": "Per giorno"
+    },
+    "throughput": {
+      "title": "Flusso d'ingresso",
+      "rate": "Scansioni al minuto: {rate}",
+      "gap": "Intervallo mediano tra le scansioni: {seconds} s",
+      "queue": "{minutes, plural, one {Circa # minuto in coda} other {Circa # minuti in coda}}",
+      "entrances": "Scansioni al minuto per ingresso",
+      "recent": "Ultimi 15 minuti"
+    },
+    "issues": {
+      "title": "Problemi di scansione",
+      "duplicates": "Duplicati",
+      "refused": "Rifiutati",
+      "none": "Oggi nessun problema di scansione."
+    },
+    "devices": {
+      "title": "Dispositivi",
+      "online": "Online",
+      "offline": "Offline",
+      "battery": "Batteria {percent}%",
+      "queue": "{count, plural, one {# scansione in attesa} other {# scansioni in attesa}}",
+      "at": "In {place}",
+      "none": "Nessun dispositivo."
+    },
+    "alerts": {
+      "title": "Avvisi",
+      "none": "Nessun avviso al momento.",
+      "count": "{count, plural, one {# interessato} other {# interessati}}",
+      "severity": {
+        "info": "Info",
+        "warning": "Attenzione",
+        "critical": "Critico"
+      },
+      "state": {
+        "open": "Aperto",
+        "acknowledged": "Preso in carico",
+        "snoozed": "Posticipato"
+      },
+      "rule": {
+        "devicesOffline": "Dispositivi offline",
+        "devicesLowBattery": "Dispositivi con batteria scarica",
+        "devicesBacklog": "Dispositivi con scansioni in attesa",
+        "capacityNear": "Capienza quasi raggiunta",
+        "capacityFull": "Capienza esaurita",
+        "assistanceOverdue": "Richieste di assistenza in ritardo",
+        "printersKiosksOffline": "Stampanti o chioschi offline",
+        "paymentsFailed": "Pagamenti non riusciti",
+        "paymentsStuck": "Pagamenti bloccati",
+        "refundSurge": "Rimborsi in aumento",
+        "sellOut": "Esaurito",
+        "readiness": "Evento non pronto",
+        "other": "Richiede attenzione nella console"
+      }
+    }
   }
 }

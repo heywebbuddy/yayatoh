@@ -6,7 +6,8 @@ import { en, makeDeps, renderTool } from './harness';
 describe('Door tools home', () => {
   it('lists the door tools for an enrolled device and nothing else', async () => {
     renderTool(<HubScreen />);
-    for (const id of ['lookup', 'guests', 'assistance', 'today']) expect(await screen.findByTestId(`tile-${id}`)).toBeOnTheScreen();
+    for (const id of ['lookup', 'guests', 'assistance', 'today'])
+      expect(await screen.findByTestId(`tile-${id}`)).toBeOnTheScreen();
     expect(screen.queryByTestId('tile-leads')).toBeNull();
     expect(screen.queryByTestId('tile-ops')).toBeNull();
   });

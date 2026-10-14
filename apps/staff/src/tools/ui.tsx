@@ -41,7 +41,7 @@ export function Screen({ children, testID }: { children: ReactNode; testID?: str
 }
 
 /** Children side by side on a wide screen, stacked on a phone. */
-export function Columns({ children, testID }: { children: ReactNode; testID?: string }) {
+export function Columns({ children, testID = 'columns' }: { children: ReactNode; testID?: string }) {
   const wide = useWide();
   return (
     <View testID={testID} style={[styles.columns, wide && styles.columnsWide]}>
