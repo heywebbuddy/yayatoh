@@ -71,7 +71,6 @@ export function createServer(): FakeServer {
       return calls.filter((c) => c.method === m.method && m.regex.test(c.path));
     },
     fetch: async (input, init) => {
-      if (server.offline) throw new TypeError('Network request failed');
       const request = input instanceof Request ? input : new Request(input, init);
       const url = new URL(request.url);
       const path = url.pathname.replace(/^.*?(\/v1\/)/, '/v1/');
@@ -84,6 +83,8 @@ export function createServer(): FakeServer {
         headers: request.headers,
       };
       calls.push(call);
+      // The request left the phone but no answer came back: the call is recorded, then it fails.
+      if (server.offline) throw new TypeError('Network request failed');
       for (const r of routes) {
         if (r.method !== request.method) continue;
         const match = r.regex.exec(path);
