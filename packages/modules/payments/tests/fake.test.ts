@@ -25,6 +25,28 @@ describe('fake payment provider', () => {
     expect(a.redirectUrl).toContain('/checkout/fake?');
   });
 
+  it('M7.2f: carries the cancel link the apps ask for, and none otherwise', async () => {
+    const base = {
+      orgId: 'o',
+      orderId: 'z',
+      amount: money(2500, 'USD'),
+      fundsFlow: 'platform_mor' as const,
+      connectedAccountId: null,
+      applicationFee: money(0, 'USD'),
+      buyerEmail: 'b@e.test',
+      description: 'd',
+      idempotencyKey: 'order:z:1',
+      returnUrl: 'https://app.test/r',
+    };
+    const plain = new URL((await p.createPayment(base)).redirectUrl);
+    expect(plain.searchParams.has('cancel')).toBe(false);
+    const withCancel = new URL(
+      (await p.createPayment({ ...base, cancelUrl: 'https://app.test/c' })).redirectUrl,
+    );
+    expect(withCancel.searchParams.get('return')).toBe('https://app.test/r');
+    expect(withCancel.searchParams.get('cancel')).toBe('https://app.test/c');
+  });
+
   it('verifies signatures over the raw body and rejects tampering', async () => {
     const { body, signature } = signFakeWebhook(secret, {
       type: 'payment.succeeded',

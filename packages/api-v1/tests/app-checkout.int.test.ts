@@ -10,7 +10,7 @@ import {
 } from '@yayatoh/events';
 import { buildRow, type FloorplanDoc } from '@yayatoh/floorplan';
 import { publishFormCommand } from '@yayatoh/forms';
-import { createCtx, executeCommand, uuidv7 } from '@yayatoh/kernel';
+import { createCtx, executeCommand, executeQuery, uuidv7 } from '@yayatoh/kernel';
 import { catchUpListings, updateSiteSettingsCommand } from '@yayatoh/marketplace';
 import {
   applyProviderEventCommand,
@@ -20,6 +20,11 @@ import {
 } from '@yayatoh/orders';
 import { fakePaymentProvider } from '@yayatoh/payments';
 import { createRateLimiter, memoryRateLimitStore } from '@yayatoh/platform/security';
+import {
+  registrationSetupQuery,
+  seedRegistrationDefaultsCommand,
+  setCellCommand,
+} from '@yayatoh/registration';
 import {
   assignSeatCategoryCommand,
   publishEventLayoutCommand,
@@ -578,6 +583,25 @@ describe('POST /v1/public/events/{slug}/checkout', () => {
     const open = await pass(a, s.id, 1000, {}, 'Standing');
     expect((await ck(p.token, s.slug, cart([open.id, 1]))).status).toBe(201);
     expect(await ordersOf(s.id, p.email)).toHaveLength(1);
+
+    // Registration types (approvals, groups, guests) are the web's.
+    const reg = await event(a, 'Registration Conference');
+    const rp = await pass(a, reg.id, 9000);
+    await executeCommand(seedRegistrationDefaultsCommand, { eventId: reg.id, names: {} }, a.ctx(), ports);
+    const setup = await executeQuery(registrationSetupQuery, { eventId: reg.id }, a.ctx(), ports);
+    await executeCommand(
+      setCellCommand,
+      {
+        eventId: reg.id,
+        registrationTypeId: setup.types.find((t) => t.key === 'member')?.id as string,
+        admissionItemId: setup.items.find((i) => i.key === 'full_pass')?.id as string,
+        priceMinor: 30_000,
+      },
+      a.ctx(),
+      ports,
+    );
+    await publish(a, reg.id);
+    await expectWeb(reg.slug, rp.id, 'registration');
 
     // A multi-date event keeps its date in the web link.
     expect(webUrl(q.slug)).not.toContain('date=');

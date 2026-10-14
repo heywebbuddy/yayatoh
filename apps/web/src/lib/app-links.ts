@@ -161,3 +161,14 @@ export function appLinksResponse(path: string, host: string, env: Env = process.
     },
   });
 }
+
+/**
+ * Where the fake payment page (dev, preview and CI only) sends the buyer after "paying": a path on
+ * this origin, or (M7.2f) a universal link of the mobile apps, which the app opens. Anything else
+ * goes to the home page.
+ */
+export function fakeReturnTarget(returnUrl: string, origin: string, env: Env = process.env): string {
+  const back = new URL(returnUrl, origin);
+  if (back.origin === new URL(origin).origin) return `${back.pathname}${back.search}`;
+  return back.protocol === 'https:' && appLinksHost(back.hostname, env) ? back.toString() : '/';
+}

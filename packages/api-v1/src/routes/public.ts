@@ -88,7 +88,12 @@ const SearchQuery = KeyPageQuery.extend({
   lat: z.coerce.number().min(-90).max(90).optional().openapi({
     description: 'With `lng`: only events with a located venue within `radiusKm`, nearest first.',
   }),
-  lng: z.coerce.number().min(-180).max(180).optional(),
+  lng: z.coerce
+    .number()
+    .min(-180)
+    .max(180)
+    .optional()
+    .openapi({ description: 'With `lat`: the point’s longitude.' }),
   radiusKm: z.coerce
     .number()
     .min(1)
@@ -208,7 +213,7 @@ const CheckoutRequest = z
 
 const CheckoutResponse = z
   .object({
-    action: z.enum(['pay', 'paid', 'web']).openapi({
+    action: z.enum(['pay', 'paid', 'web']).openapi('AppCheckoutAction', {
       description:
         '`pay`: open `paymentUrl` in a secure in-app browser session. `paid`: nothing to pay (a free cart); the tickets are issued. `web`: the app cannot finish this cart; open `webUrl` instead (nothing is held).',
     }),
@@ -223,7 +228,7 @@ const CheckoutResponse = z
     webUrl: z.string().nullable().openapi({
       description: 'The event page where the web checkout runs (open it in the same browser session).',
     }),
-    webReason: z.enum(WEB_REASONS).nullable().openapi({
+    webReason: z.enum(WEB_REASONS).openapi('AppCheckoutWebReason').nullable().openapi({
       description:
         'Why this cart finishes on the web: the event asks checkout questions, sells by seat or through registration types, a pass has a transfer fee, or a pass lets the buyer choose the amount.',
     }),
