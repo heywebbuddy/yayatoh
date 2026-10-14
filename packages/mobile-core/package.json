@@ -22,6 +22,8 @@
     "react-native": "*"
   },
   "devDependencies": {
+    "@react-native/jest-preset": "catalog:mobile",
+    "@testing-library/react-native": "catalog:mobile",
     "@types/jest": "catalog:mobile",
     "@types/node": "catalog:",
     "@types/react": "catalog:mobile",
@@ -31,6 +33,24 @@
     "jest-expo": "catalog:mobile",
     "react": "catalog:mobile",
     "react-native": "catalog:mobile",
+    "react-test-renderer": "catalog:mobile",
     "typescript": "catalog:"
+  },
+  "dependencies": {
+    "@noble/ciphers": "catalog:mobile",
+    "@react-native-google-signin/google-signin": "catalog:mobile",
+    "@sentry/react-native": "catalog:mobile",
+    "@tanstack/react-query": "catalog:mobile",
+    "@tanstack/react-query-persist-client": "catalog:mobile",
+    "@yayatoh/sdk": "workspace:*",
+    "@yayatoh/ui": "workspace:*",
+    "expo-apple-authentication": "catalog:mobile",
+    "expo-application": "catalog:mobile",
+    "expo-crypto": "catalog:mobile",
+    "expo-file-system": "catalog:mobile",
+    "expo-localization": "catalog:mobile",
+    "expo-network": "catalog:mobile",
+    "expo-secure-store": "catalog:mobile",
+    "use-intl": "catalog:mobile"
   }
 }
