@@ -13,7 +13,6 @@
     "doctor": "expo-doctor"
   },
   "dependencies": {
-    "@react-native-google-signin/google-signin": "catalog:mobile",
     "@sentry/react-native": "catalog:mobile",
     "@tanstack/react-query": "catalog:mobile",
     "@yayatoh/mobile-core": "workspace:*",
@@ -22,6 +21,7 @@
     "expo": "catalog:mobile",
     "expo-apple-authentication": "catalog:mobile",
     "expo-application": "catalog:mobile",
+    "expo-auth-session": "catalog:mobile",
     "expo-build-properties": "catalog:mobile",
     "expo-constants": "catalog:mobile",
     "expo-crypto": "catalog:mobile",
@@ -36,6 +36,7 @@
     "expo-status-bar": "catalog:mobile",
     "expo-system-ui": "catalog:mobile",
     "expo-updates": "catalog:mobile",
+    "expo-web-browser": "catalog:mobile",
     "react": "catalog:mobile",
     "react-native": "catalog:mobile",
     "react-native-gesture-handler": "catalog:mobile",

@@ -29,6 +29,7 @@
     "@types/react": "catalog:mobile",
     "@yayatoh/config": "workspace:*",
     "expo": "catalog:mobile",
+    "intl-messageformat": "catalog:mobile",
     "jest": "catalog:mobile",
     "jest-expo": "catalog:mobile",
     "react": "catalog:mobile",
@@ -38,7 +39,7 @@
   },
   "dependencies": {
     "@noble/ciphers": "catalog:mobile",
-    "@react-native-google-signin/google-signin": "catalog:mobile",
+    "@noble/hashes": "catalog:",
     "@sentry/react-native": "catalog:mobile",
     "@tanstack/react-query": "catalog:mobile",
     "@tanstack/react-query-persist-client": "catalog:mobile",
@@ -46,11 +47,14 @@
     "@yayatoh/ui": "workspace:*",
     "expo-apple-authentication": "catalog:mobile",
     "expo-application": "catalog:mobile",
+    "expo-auth-session": "catalog:mobile",
     "expo-crypto": "catalog:mobile",
     "expo-file-system": "catalog:mobile",
     "expo-localization": "catalog:mobile",
     "expo-network": "catalog:mobile",
     "expo-secure-store": "catalog:mobile",
+    "expo-updates": "catalog:mobile",
+    "expo-web-browser": "catalog:mobile",
     "use-intl": "catalog:mobile"
   }
 }
