@@ -24,7 +24,7 @@
     "replace": {
       "title": "Replace this device's enrolment?",
       "body": "This device is enrolled for {event}. Enrolling again erases its token and everything it saved for that event.",
-      "thisEvent": "an event",
+      "bodyNoEvent": "This device is enrolled for an event. Enrolling again erases its token and everything it saved for that event.",
       "confirm": "Erase and enrol again",
       "cancel": "Keep the current enrolment"
     },

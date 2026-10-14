@@ -24,7 +24,7 @@
     "replace": {
       "title": "Registrierung dieses Geräts ersetzen?",
       "body": "Dieses Gerät ist für {event} registriert. Eine erneute Registrierung löscht sein Token und alles, was es für diese Veranstaltung gespeichert hat.",
-      "thisEvent": "eine Veranstaltung",
+      "bodyNoEvent": "Dieses Gerät ist für eine Veranstaltung registriert. Eine erneute Registrierung löscht sein Token und alles, was es für diese Veranstaltung gespeichert hat.",
       "confirm": "Löschen und neu registrieren",
       "cancel": "Aktuelle Registrierung behalten"
     },

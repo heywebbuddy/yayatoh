@@ -24,7 +24,7 @@
     "replace": {
       "title": "Remplacer l’enregistrement de cet appareil ?",
       "body": "Cet appareil est enregistré pour {event}. Le réenregistrer supprime son jeton et tout ce qu’il a enregistré pour cet événement.",
-      "thisEvent": "un événement",
+      "bodyNoEvent": "Cet appareil est enregistré pour un événement. Le réenregistrer supprime son jeton et tout ce qu’il a enregistré pour cet événement.",
       "confirm": "Effacer et réenregistrer",
       "cancel": "Garder l’enregistrement actuel"
     },

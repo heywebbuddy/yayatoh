@@ -24,7 +24,7 @@
     "replace": {
       "title": "Sostituire la registrazione di questo dispositivo?",
       "body": "Questo dispositivo è registrato per {event}. Registrarlo di nuovo elimina il suo token e tutto ciò che ha salvato per quell’evento.",
-      "thisEvent": "un evento",
+      "bodyNoEvent": "Questo dispositivo è registrato per un evento. Registrarlo di nuovo elimina il suo token e tutto ciò che ha salvato per quell’evento.",
       "confirm": "Cancella e registra di nuovo",
       "cancel": "Mantieni la registrazione attuale"
     },
