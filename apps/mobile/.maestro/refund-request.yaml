@@ -1,0 +1,16 @@
+# M7.3b: ask the organizer for a refund from a ticket, under the order's policy. Written, not run in
+# cloud sessions. Seed: tess@example.test holds a ticket from an order whose policy allows requests.
+appId: com.yayatoh.yayatohapp.preview
+env:
+  EVENT: Summer Night
+---
+- launchApp:
+    clearState: true
+- runFlow: sign-in-email-code.yaml
+- tapOn:
+    text: 'General admission for ${EVENT}.*'
+- tapOn: 'Request a refund'
+- assertVisible: 'Refund policy'
+- tapOn: 'Send request'
+- assertVisible: 'Request sent.*'
+- assertVisible: 'Your request'
