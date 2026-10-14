@@ -50,6 +50,8 @@ interface AppIdentity {
   readonly androidPackage: string;
   /** Only the Staff app scans: the attendee app never asks for the camera. */
   readonly camera: boolean;
+  /** Sign in with Apple is an attendee sign-in (P7-5); Staff signs in by enrolment QR or account. */
+  readonly appleSignIn: boolean;
 }
 
 const APPS: Record<AppId, AppIdentity> = {
@@ -62,6 +64,7 @@ const APPS: Record<AppId, AppIdentity> = {
     iosBundleId: 'com.yayatoh.yayatohapp',
     androidPackage: 'com.yayatoh.yayatohapp',
     camera: false,
+    appleSignIn: true,
   },
   staff: {
     name: 'Yayatoh Staff',
@@ -70,6 +73,7 @@ const APPS: Record<AppId, AppIdentity> = {
     iosBundleId: 'com.yayatoh.staff',
     androidPackage: 'com.yayatoh.staff',
     camera: true,
+    appleSignIn: false,
   },
 };
 
@@ -83,6 +87,12 @@ const VARIANTS: Record<AppEnv, { nameSuffix: string; schemeSuffix: string; idSuf
 export const STAFF_CAMERA_USAGE = 'Yayatoh Staff uses the camera to scan ticket QR codes at the door.';
 
 export type EnvVars = Readonly<Record<string, string | undefined>>;
+
+/** `123-abc.apps.googleusercontent.com` -> `com.googleusercontent.apps.123-abc` (Google's iOS redirect scheme). */
+export function googleIosRedirectScheme(clientId: string): string {
+  const [first] = clientId.split('.apps.googleusercontent.com');
+  return `com.googleusercontent.apps.${first}`;
+}
 
 export function resolveAppEnv(raw: string | undefined): AppEnv {
   const value = (raw ?? 'development').trim();
@@ -177,10 +187,22 @@ export function buildExpoConfig(opts: BuildOptions): ExpoConfig {
     plugins.push(['expo-build-properties', { android: { usesCleartextTraffic: true } }]);
   }
 
+  // Google sign-in returns through the OAuth client's own redirect scheme (M7.1c): iOS clients use
+  // `com.googleusercontent.apps.<id>`, Android clients their package name. Public identifiers, set
+  // per environment; without them the app has no Google button.
+  const googleIosClientId = clean(env.GOOGLE_IOS_CLIENT_ID);
+  const googleAndroidClientId = clean(env.GOOGLE_ANDROID_CLIENT_ID);
+  const sentryDsn = clean(env.SENTRY_DSN);
+  const appScheme = `${id.scheme}${variant.schemeSuffix}`;
+  const googleSchemes = [
+    ...(googleIosClientId ? [googleIosRedirectScheme(googleIosClientId)] : []),
+    ...(googleAndroidClientId ? [androidPackage] : []),
+  ];
+
   const config: ExpoConfig = {
     name: `${id.name}${variant.nameSuffix}`,
     slug: id.slug,
-    scheme: `${id.scheme}${variant.schemeSuffix}`,
+    scheme: googleSchemes.length ? [appScheme, ...googleSchemes] : appScheme,
     version: '0.1.0',
     orientation: opts.app === 'staff' ? 'default' : 'portrait',
     icon: opts.assets.icon,
@@ -196,6 +218,7 @@ export function buildExpoConfig(opts: BuildOptions): ExpoConfig {
     ios: {
       bundleIdentifier: iosBundleId,
       supportsTablet: true,
+      ...(id.appleSignIn ? { usesAppleSignIn: true } : {}),
       associatedDomains: associatedDomains(env),
       infoPlist: {
         CFBundleAllowMixedLocalizations: true,
@@ -220,6 +243,9 @@ export function buildExpoConfig(opts: BuildOptions): ExpoConfig {
     extra: {
       appEnv,
       apiBaseUrl,
+      ...(sentryDsn ? { sentryDsn } : {}),
+      ...(googleIosClientId ? { googleIosClientId } : {}),
+      ...(googleAndroidClientId ? { googleAndroidClientId } : {}),
       ...(projectId ? { eas: { projectId } } : {}),
     },
   };

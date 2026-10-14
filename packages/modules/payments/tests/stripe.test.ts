@@ -88,6 +88,19 @@ describe('Stripe adapter — charges (roadmap §5.3)', () => {
     expect(calls[0]?.body.has('payment_intent_data[application_fee_amount]')).toBe(false);
   });
 
+  it('M7.2f: a cancel link of its own (the apps’ universal link); without one, the return link as ever', async () => {
+    const { provider, calls } = fakeStripe({ 'POST /v1/checkout/sessions': () => ({ json: session() }) });
+    const base = { ...payment, fundsFlow: 'platform_mor', connectedAccountId: null } as const;
+    await provider.createPayment({
+      ...base,
+      cancelUrl: 'https://app.yayatoh.com/events/x?checkout=cancelled',
+    });
+    expect(calls[0]?.body.get('success_url')).toBe(payment.returnUrl);
+    expect(calls[0]?.body.get('cancel_url')).toBe('https://app.yayatoh.com/events/x?checkout=cancelled');
+    await provider.createPayment({ ...base, idempotencyKey: 'order:2' });
+    expect(calls[1]?.body.get('cancel_url')).toBe(payment.returnUrl);
+  });
+
   it('refuses impossible charges and live keys outside production', async () => {
     const { provider } = fakeStripe({});
     await expect(

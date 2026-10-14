@@ -1,9 +1,10 @@
 import { priceBreakdown } from '@yayatoh/billing';
-import { withoutTenant } from '@yayatoh/db';
-import { money } from '@yayatoh/kernel';
-import { sql } from 'drizzle-orm';
+import { withoutTenant, withTenant } from '@yayatoh/db';
+import { createCtx, money } from '@yayatoh/kernel';
+import { and, eq, gt, inArray, sql } from 'drizzle-orm';
 import { type PublicTicketTypeDto, publicTicketTypeSerializer } from './dto.ts';
 import { currentFaceMinor } from './inventory.ts';
+import { ticketTypes } from './schema.ts';
 
 type Row = {
   id: string;
@@ -95,5 +96,32 @@ export async function publicTicketTypes(
       unlocked: r.unlocked,
       tableSize: tableSizes.get(r.id) ?? null,
     });
+  });
+}
+
+/**
+ * Which of these ticket types charge a fee when the holder transfers a ticket (M3.10c). The mobile
+ * checkout (M7.2f) sends such carts to the web checkout, where the rule is shown before paying.
+ * Server-side only: the org comes from the event, never from a request.
+ */
+export async function transferFeeTicketTypeIds(
+  orgId: string,
+  eventId: string,
+  ticketTypeIds: readonly string[],
+): Promise<string[]> {
+  if (ticketTypeIds.length === 0) return [];
+  const ctx = createCtx({ orgId, actor: { type: 'system', name: 'ticketing.app-checkout' } });
+  return withTenant(ctx, async (tx) => {
+    const rows = await tx
+      .select({ id: ticketTypes.id })
+      .from(ticketTypes)
+      .where(
+        and(
+          eq(ticketTypes.eventId, eventId),
+          inArray(ticketTypes.id, [...ticketTypeIds]),
+          gt(ticketTypes.transferFeeMinor, 0),
+        ),
+      );
+    return rows.map((r) => r.id);
   });
 }

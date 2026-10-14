@@ -1,17 +1,38 @@
+import { CoreProvider, OfflineBanner, useColors, useIsOffline } from '@yayatoh/mobile-core';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useMemo } from 'react';
-import { IntlProvider } from 'use-intl';
-import { catalogs, deviceLocale } from '../i18n';
-import { useColors } from '../theme';
+import { View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { getCore } from '../core';
+
+/** The offline banner sits under the status bar and only takes room while the phone is offline. */
+function OfflineStrip() {
+  const offline = useIsOffline();
+  if (!offline) return null;
+  return (
+    <SafeAreaView edges={['top']}>
+      <OfflineBanner offline />
+    </SafeAreaView>
+  );
+}
+
+function ThemedStack() {
+  const colors = useColors();
+  return (
+    <View style={{ flex: 1, backgroundColor: colors.canvas }}>
+      <OfflineStrip />
+      <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.canvas } }} />
+    </View>
+  );
+}
 
 export default function RootLayout() {
-  const colors = useColors();
-  const locale = useMemo(deviceLocale, []);
+  const core = useMemo(getCore, []);
   return (
-    <IntlProvider locale={locale} messages={catalogs[locale]}>
+    <CoreProvider core={core}>
       <StatusBar style="auto" />
-      <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.canvas } }} />
-    </IntlProvider>
+      <ThemedStack />
+    </CoreProvider>
   );
 }

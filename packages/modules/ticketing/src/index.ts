@@ -158,7 +158,7 @@ export {
   resolvePromoTx,
   setPromoCodeActiveCommand,
 } from './promo.ts';
-export { publicTicketTypes } from './public.ts';
+export { publicTicketTypes, transferFeeTicketTypeIds } from './public.ts';
 export {
   COUPON_SCOPES,
   FEE_MODES,

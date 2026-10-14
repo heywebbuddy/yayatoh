@@ -1,0 +1,62 @@
+{
+  "common": {
+    "retry": "Riprova",
+    "cancel": "Annulla",
+    "close": "Chiudi",
+    "continue": "Continua",
+    "ok": "OK"
+  },
+  "errors": {
+    "generic": "Qualcosa è andato storto. Riprova.",
+    "network": "Nessuna connessione. Controlla la rete e riprova."
+  },
+  "offline": {
+    "banner": "Sei offline. Puoi comunque vedere ciò che è stato salvato su questo telefono.",
+    "queued": "{count, plural, one {# modifica verrà inviata quando tornerai online.} many {# di modifiche verranno inviate quando tornerai online.} other {# modifiche verranno inviate quando tornerai online.}}"
+  },
+  "update": {
+    "requiredTitle": "Aggiornamento necessario",
+    "requiredBody": "Questa versione di {app} non è più supportata. Passa alla versione {minimum} o successiva per continuare.",
+    "requiredBodyGeneric": "Questa versione di {app} non è più supportata. Passa all'ultima versione per continuare.",
+    "action": "Aggiorna {app}",
+    "noStoreLink": "Apri lo store delle app su questo telefono e aggiorna {app}.",
+    "softTitle": "È disponibile una nuova versione",
+    "softBody": "La versione {latest} di {app} è pronta. Aggiorna per avere le ultime correzioni e funzioni.",
+    "softAction": "Aggiorna",
+    "softDismiss": "Non ora"
+  },
+  "signIn": {
+    "failed": {
+      "invalid_credentials": "Quell'e-mail o quella password non sono corrette.",
+      "invalid_code": "Quel codice non è corretto. Controllalo e riprova.",
+      "too_many_attempts": "Troppi codici errati. Ricomincia per ricevere un nuovo codice.",
+      "invalid_challenge": "Quel passaggio è scaduto. Ricomincia.",
+      "invalid_id_token": "Non siamo riusciti a confermare l'accesso. Riprova.",
+      "provider_email_missing": "Il tuo account non ha condiviso un indirizzo e-mail, quindi non possiamo farti accedere con esso.",
+      "provider_email_unverified": "Il tuo indirizzo e-mail non è verificato su quell'account. Verificalo o usa un altro modo per accedere.",
+      "provider_linked_elsewhere": "Quell'account è già collegato a un altro account Yayatoh.",
+      "unknown": "Non siamo riusciti a farti accedere. Riprova."
+    },
+    "rateLimited": "{minutes, plural, one {Troppi tentativi. Riprova tra # minuto.} many {Troppi tentativi. Riprova tra # di minuti.} other {Troppi tentativi. Riprova tra # minuti.}}",
+    "unavailable": "Non riusciamo a raggiungere Yayatoh. Controlla la connessione e riprova.",
+    "unsupported": "Questo accesso non è disponibile su questo telefono."
+  },
+  "stepUp": {
+    "invalid_code": "Quel codice non è corretto.",
+    "invalid_password": "Quella password non è corretta."
+  },
+  "session": {
+    "endedReused": "Sei stato disconnesso perché questo accesso è stato usato su un altro dispositivo. Accedi di nuovo.",
+    "endedExpired": "La sessione è terminata. Accedi di nuovo."
+  },
+  "language": {
+    "label": "Lingua",
+    "system": "Come questo telefono"
+  },
+  "theme": {
+    "label": "Aspetto",
+    "system": "Come questo telefono",
+    "light": "Chiaro",
+    "dark": "Scuro"
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "common": {
+    "retry": "Réessayer",
+    "cancel": "Annuler",
+    "close": "Fermer",
+    "continue": "Continuer",
+    "ok": "OK"
+  },
+  "errors": {
+    "generic": "Une erreur s'est produite. Veuillez réessayer.",
+    "network": "Pas de connexion. Vérifiez votre réseau et réessayez."
+  },
+  "offline": {
+    "banner": "Vous êtes hors ligne. Vous pouvez toujours voir ce qui a été enregistré sur ce téléphone.",
+    "queued": "{count, plural, one {# modification sera envoyée dès que vous serez de nouveau en ligne.} many {# de modifications seront envoyées dès que vous serez de nouveau en ligne.} other {# modifications seront envoyées dès que vous serez de nouveau en ligne.}}"
+  },
+  "update": {
+    "requiredTitle": "Mise à jour requise",
+    "requiredBody": "Cette version de {app} n'est plus prise en charge. Passez à la version {minimum} ou ultérieure pour continuer.",
+    "requiredBodyGeneric": "Cette version de {app} n'est plus prise en charge. Passez à la dernière version pour continuer.",
+    "action": "Mettre à jour {app}",
+    "noStoreLink": "Ouvrez la boutique d'applications de ce téléphone et mettez à jour {app}.",
+    "softTitle": "Une nouvelle version est disponible",
+    "softBody": "La version {latest} de {app} est prête. Mettez à jour pour profiter des derniers correctifs et fonctionnalités.",
+    "softAction": "Mettre à jour",
+    "softDismiss": "Pas maintenant"
+  },
+  "signIn": {
+    "failed": {
+      "invalid_credentials": "Cet e-mail ou ce mot de passe n'est pas correct.",
+      "invalid_code": "Ce code n'est pas correct. Vérifiez-le et réessayez.",
+      "too_many_attempts": "Trop de codes erronés. Recommencez pour obtenir un nouveau code.",
+      "invalid_challenge": "Cette étape a expiré. Recommencez.",
+      "invalid_id_token": "Nous n'avons pas pu confirmer votre connexion. Veuillez réessayer.",
+      "provider_email_missing": "Votre compte n'a pas partagé d'adresse e-mail, nous ne pouvons donc pas vous connecter avec lui.",
+      "provider_email_unverified": "Votre adresse e-mail n'est pas vérifiée sur ce compte. Vérifiez-la ou utilisez un autre moyen de connexion.",
+      "provider_linked_elsewhere": "Ce compte est déjà lié à un autre compte Yayatoh.",
+      "unknown": "Nous n'avons pas pu vous connecter. Veuillez réessayer."
+    },
+    "rateLimited": "{minutes, plural, one {Trop de tentatives. Réessayez dans # minute.} many {Trop de tentatives. Réessayez dans # de minutes.} other {Trop de tentatives. Réessayez dans # minutes.}}",
+    "unavailable": "Impossible de joindre Yayatoh. Vérifiez votre connexion et réessayez.",
+    "unsupported": "Cette connexion n'est pas disponible sur ce téléphone."
+  },
+  "stepUp": {
+    "invalid_code": "Ce code n'est pas correct.",
+    "invalid_password": "Ce mot de passe n'est pas correct."
+  },
+  "session": {
+    "endedReused": "Vous avez été déconnecté car cette connexion a été utilisée sur un autre appareil. Veuillez vous reconnecter.",
+    "endedExpired": "Votre session a pris fin. Veuillez vous reconnecter."
+  },
+  "language": {
+    "label": "Langue",
+    "system": "Comme ce téléphone"
+  },
+  "theme": {
+    "label": "Apparence",
+    "system": "Comme ce téléphone",
+    "light": "Clair",
+    "dark": "Sombre"
+  }
+}

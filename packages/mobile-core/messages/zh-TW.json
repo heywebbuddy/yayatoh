@@ -1,0 +1,62 @@
+{
+  "common": {
+    "retry": "重試",
+    "cancel": "取消",
+    "close": "關閉",
+    "continue": "繼續",
+    "ok": "確定"
+  },
+  "errors": {
+    "generic": "發生問題，請再試一次。",
+    "network": "沒有網路連線。請檢查網路後再試一次。"
+  },
+  "offline": {
+    "banner": "你已離線。仍可查看此手機上已儲存的內容。",
+    "queued": "{count, plural, other {恢復連線後，將傳送 # 項變更。}}"
+  },
+  "update": {
+    "requiredTitle": "需要更新",
+    "requiredBody": "此版本的{app}已不再受支援。請更新至 {minimum} 或更新版本以繼續使用。",
+    "requiredBodyGeneric": "此版本的{app}已不再受支援。請更新至最新版本以繼續使用。",
+    "action": "更新{app}",
+    "noStoreLink": "請在此手機上開啟應用程式商店並更新{app}。",
+    "softTitle": "有新版本可用",
+    "softBody": "{app}的 {latest} 版本已準備就緒。更新即可取得最新的修正和功能。",
+    "softAction": "更新",
+    "softDismiss": "稍後再說"
+  },
+  "signIn": {
+    "failed": {
+      "invalid_credentials": "該電子郵件或密碼不正確。",
+      "invalid_code": "該驗證碼不正確。請檢查後再試一次。",
+      "too_many_attempts": "錯誤的驗證碼次數過多。請重新開始以取得新的驗證碼。",
+      "invalid_challenge": "該步驟已過期。請重新開始。",
+      "invalid_id_token": "我們無法確認你的登入。請再試一次。",
+      "provider_email_missing": "你的帳戶未提供電子郵件地址，因此我們無法用它登入。",
+      "provider_email_unverified": "你的電子郵件地址在該帳戶中尚未驗證。請先驗證，或使用其他方式登入。",
+      "provider_linked_elsewhere": "該帳戶已連結到另一個 Yayatoh 帳戶。",
+      "unknown": "我們無法讓你登入。請再試一次。"
+    },
+    "rateLimited": "{minutes, plural, other {嘗試次數過多。請在 # 分鐘後再試一次。}}",
+    "unavailable": "無法連線到 Yayatoh。請檢查網路連線後再試一次。",
+    "unsupported": "此手機上無法使用該登入方式。"
+  },
+  "stepUp": {
+    "invalid_code": "該驗證碼不正確。",
+    "invalid_password": "該密碼不正確。"
+  },
+  "session": {
+    "endedReused": "你已登出，因為此登入已在另一部裝置上使用。請重新登入。",
+    "endedExpired": "你的工作階段已結束。請重新登入。"
+  },
+  "language": {
+    "label": "語言",
+    "system": "與此手機相同"
+  },
+  "theme": {
+    "label": "外觀",
+    "system": "與此手機相同",
+    "light": "淺色",
+    "dark": "深色"
+  }
+}

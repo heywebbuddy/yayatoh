@@ -246,6 +246,7 @@ export {
   holdSeatsTx,
   releaseExpiredSeatHoldsTx,
   releaseSeatHoldTx,
+  seatedTicketTypeIds,
   seatedTicketTypesTx,
   sellSeatsTx,
   voidSeatTx,

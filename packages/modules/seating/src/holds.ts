@@ -1,5 +1,5 @@
-import type { TenantTx } from '@yayatoh/db';
-import { type Ctx, DomainError } from '@yayatoh/kernel';
+import { type TenantTx, withTenant } from '@yayatoh/db';
+import { type Ctx, createCtx, DomainError } from '@yayatoh/kernel';
 import { and, eq, inArray, isNull, lte, sql } from 'drizzle-orm';
 import { channelKeptSeatsTx, sellableThroughSql } from './channels.ts';
 import { chartKeyTx, onChart } from './chart.ts';
@@ -168,6 +168,24 @@ export async function seatedTicketTypesTx(
     .from(eventSeats)
     .where(and(where, sql`${eventSeats.ticketTypeId} is not null`));
   return new Set(rows.flatMap((r) => (r.ticketTypeId ? [r.ticketTypeId] : [])));
+}
+
+/**
+ * Which of these ticket types are sold by seat (any chart of the event): a cart with one of them
+ * needs the seat map, so the mobile checkout (M7.2f) sends it to the web checkout. Server-side
+ * only: the org comes from the event, never from a request.
+ */
+export async function seatedTicketTypeIds(
+  orgId: string,
+  eventId: string,
+  ticketTypeIds: readonly string[],
+): Promise<string[]> {
+  if (ticketTypeIds.length === 0) return [];
+  const ctx = createCtx({ orgId, actor: { type: 'system', name: 'seating.app-checkout' } });
+  return withTenant(ctx, async (tx) => {
+    const seated = await seatedTicketTypesTx(tx, eventId);
+    return ticketTypeIds.filter((id) => seated.has(id));
+  });
 }
 
 /** The seats a hold (an order) has, with their price category and label. */

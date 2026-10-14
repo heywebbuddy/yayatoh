@@ -1,0 +1,12 @@
+# M7.1c: a build whose version is below the server's minimum shows the update screen and nothing
+# else. Written, not run in cloud sessions. The device pass runs it against a preview build pointed
+# (API_BASE_URL) at a server whose MOBILE_CONFIG_JSON sets apps."yayatoh-ios".minimumVersion above
+# the build's version, with IOS_ATTENDEE_STORE_URL set.
+appId: com.yayatoh.yayatohapp.preview
+---
+- launchApp:
+    clearState: true
+- assertVisible: 'Update required'
+- assertVisible:
+    text: 'Update Yayatoh'
+- assertNotVisible: 'Your events and tickets will appear here soon.'

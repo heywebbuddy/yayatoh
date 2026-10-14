@@ -1563,6 +1563,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/public/events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Search the marketplace’s upcoming events (no credential)
+         * @description Upcoming and ongoing events listed on the marketplace, by text, platform category, organizer, date range and distance from a point. Soonest first, or nearest first when a point is given. Keyset paging: pass `nextCursor` back as `cursor` (a new event never shifts a page). Private and unlisted events, weddings, drafts and organizers that did not opt in to the marketplace never appear. No credential.
+         */
+        get: operations["searchPublicEvents"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/public/events/{slug}": {
         parameters: {
             query?: never;
@@ -1617,6 +1637,32 @@ export interface paths {
         get: operations["listPublicEventAnnouncements"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/public/events/{slug}/checkout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Start a checkout from the app (signed-in person with a verified email)
+         * @description The same steps as the web checkout: the cart is priced all-in from the live passes and held for 10 minutes, then the provider payment is created and attached. The buyer is the signed-in person (their verified email); the response carries the hosted payment page to open in a secure in-app browser session, which returns to the app through a universal link (`…/events/{slug}?checkout=return|cancelled&order={orderId}`).
+         *
+         *     Needs an `Idempotency-Key`: a retry returns the same order and payment link while the hold lasts. A free cart is paid at once (`action: paid`).
+         *
+         *     A cart the app cannot finish natively (the event asks checkout questions, sells by seat or through registration types, a pass has a transfer fee, or lets the buyer choose the amount) answers `action: web` with the event page to open instead. Passes that give access to a stream are refused: `409`, `details.reason: buy_on_web`, with `details.webUrl`.
+         *
+         *     Same rules and rate limits as the web: promo and coupon codes, pass limits, sales windows, the pre-checkout risk rules, and the budget for starting checkouts (`429` with `Retry-After`).
+         */
+        post: operations["startAppCheckout"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2775,6 +2821,52 @@ export interface components {
          * @enum {string}
          */
         ApnsEnvironment: "sandbox" | "production";
+        /**
+         * @description `pay`: open `paymentUrl` in a secure in-app browser session. `paid`: nothing to pay (a free cart); the tickets are issued. `web`: the app cannot finish this cart; open `webUrl` instead (nothing is held).
+         * @enum {string}
+         */
+        AppCheckoutAction: "pay" | "paid" | "web";
+        AppCheckoutRequest: {
+            items: {
+                quantity: number;
+                /**
+                 * Format: uuid
+                 * @description A pass from `listPublicTicketTypes`.
+                 */
+                ticketTypeId: string;
+            }[];
+            /** @description Only an explicit yes: buying is never consent to marketing. */
+            marketingOptIn?: boolean;
+            /** @description The name on the order (default: the account’s name). The email is always the account’s. */
+            name?: string;
+            /**
+             * Format: uuid
+             * @description The chosen date of a multi-date event; required when the event has dates.
+             */
+            occurrenceId?: string;
+            /** @description A promo code of the event, an organization coupon, or a store credit code. */
+            promoCode?: string;
+        };
+        AppCheckoutResult: {
+            action: components["schemas"]["AppCheckoutAction"];
+            /**
+             * Format: date-time
+             * @description When the held tickets are released if the order is still unpaid.
+             */
+            expiresAt: string | null;
+            /** Format: uuid */
+            orderId: string | null;
+            /** @description The provider’s hosted payment page. It returns to the app through a universal link on completion or cancellation. */
+            paymentUrl: string | null;
+            webReason: components["schemas"]["AppCheckoutWebReason"];
+            /** @description The event page where the web checkout runs (open it in the same browser session). */
+            webUrl: string | null;
+        };
+        /**
+         * @description Why this cart finishes on the web: the event asks checkout questions, sells by seat or through registration types, a pass has a transfer fee, or a pass lets the buyer choose the amount.
+         * @enum {string|null}
+         */
+        AppCheckoutWebReason: "checkout_questions" | "seat_selection" | "registration" | "transfer_fee" | "choose_your_amount" | null;
         /** @enum {string} */
         AssistanceActivityKind: "created" | "assigned" | "started" | "resolved" | "cancelled" | "note";
         /** @enum {string} */
@@ -4105,10 +4197,42 @@ export interface components {
             data: components["schemas"]["PublicEventDate"][];
             nextCursor: string | null;
         };
+        PublicEventPage: {
+            data: components["schemas"]["PublicEventSummary"][];
+            nextCursor: string | null;
+        };
         /** @description A content block of the event page; `kind` says which `content` shape it has. */
         PublicEventSection: components["schemas"]["PublicTextSection"] | components["schemas"]["PublicFaqSection"] | components["schemas"]["PublicScheduleSection"] | components["schemas"]["PublicLocationSection"] | components["schemas"]["PublicLinksSection"];
         PublicEventSectionList: {
             data: components["schemas"]["PublicEventSection"][];
+        };
+        PublicEventSummary: {
+            category: components["schemas"]["EventCategory"];
+            city: string | null;
+            country: string | null;
+            currency: string;
+            /** @description Kilometres from the search point, to one decimal; null without a point. */
+            distanceKm: number | null;
+            /** Format: date-time */
+            endsAt: string;
+            maxPriceMinor: number | null;
+            /** @description The cheapest pass, all-in, in minor units. */
+            minPriceMinor: number | null;
+            name: string;
+            organizer: {
+                name: string;
+                slug: string;
+            };
+            profile: components["schemas"]["EventProfile"];
+            slug: string;
+            /** Format: date-time */
+            startsAt: string;
+            status: components["schemas"]["EventStatus"];
+            tagline: string | null;
+            timezone: string;
+            /** @description The event’s page on the web. */
+            url: string;
+            venueName: string | null;
         };
         PublicFaqSection: {
             content: components["schemas"]["FaqSectionContent"];
@@ -12052,6 +12176,74 @@ export interface operations {
             };
         };
     };
+    searchPublicEvents: {
+        parameters: {
+            query?: {
+                /** @description A platform category key. */
+                category?: components["schemas"]["EventCategory"] & unknown;
+                /** @description The previous page’s `nextCursor`. */
+                cursor?: string;
+                /** @description Events still on at or after this moment. A date (`2027-05-01`) means the start of that UTC day. */
+                from?: string;
+                /** @description With `lng`: only events with a located venue within `radiusKm`, nearest first. */
+                lat?: number | null;
+                /** @description Page size (1–100). */
+                limit?: number;
+                /** @description With `lat`: the point’s longitude. */
+                lng?: number | null;
+                /** @description The organizer’s slug (`organizer.slug` of a result). */
+                organizer?: string;
+                /** @description Words in the name, tagline, venue, city or organizer. */
+                q?: string;
+                /** @description Kilometres around the point (1–500). */
+                radiusKm?: number;
+                /** @description Events starting before this moment. A date (`2027-05-31`) means the end of that UTC day (the next midnight, exclusive). */
+                to?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description A page of events */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublicEventPage"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
     getPublicEvent: {
         parameters: {
             query?: never;
@@ -12215,6 +12407,117 @@ export interface operations {
             };
             /** @description Too many requests (`rate_limited`); see `Retry-After` */
             429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    startAppCheckout: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Required on every write. Retrying with the same key returns the stored result (kept 24 h). */
+                "idempotency-key": string;
+            };
+            path: {
+                /** @description The event’s public slug */
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AppCheckoutRequest"];
+            };
+        };
+        responses: {
+            /** @description The cart finishes on the web (`action: web`) */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AppCheckoutResult"];
+                };
+            };
+            /** @description The order was placed (`action: pay` or `paid`) */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AppCheckoutResult"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Conflict, invalid state, or the same Idempotency-Key is in flight */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The Idempotency-Key was used with a different request (`idempotency_key_reused`) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Read-only maintenance (`read_only_freeze`): nothing was changed; retry after `Retry-After` seconds */
+            503: {
                 headers: {
                     [name: string]: unknown;
                 };

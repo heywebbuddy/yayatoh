@@ -204,6 +204,7 @@ export function fakePaymentProvider(opts: {
         // What the buyer is paying for, as Stripe's hosted page shows it.
         desc: i.description,
         return: i.returnUrl,
+        ...(i.cancelUrl ? { cancel: i.cancelUrl } : {}),
       });
       if (i.fundsFlow === 'organizer_mor') {
         if (!i.connectedAccountId) throw new Error('organizer_mor needs a connected account');

@@ -360,6 +360,7 @@ export function createV1(deps: V1Deps) {
 
   // M7.2b: claim links are for a signed-in person with a verified email too.
   v1.use('/claims/*', meScope);
+  v1.use('/public/events/:slug/checkout', meScope);
 
   v1.route('/', health);
   v1.route('/', authRoutes(deps, limiter, clientIp));
@@ -367,7 +368,8 @@ export function createV1(deps: V1Deps) {
   v1.route('/', deviceRoutes(deps));
   // M7.2b: my tickets, my orders, transfers, refund requests, wallet passes and claims.
   v1.route('/', meRoutes(deps));
-  v1.route('/', publicRoutes());
+  // M7.2f: public event search and the apps' checkout (a signed-in person, like `/me/…`).
+  v1.route('/', publicRoutes(deps, limiter, clientIp, credentialKey));
   v1.route('/', contentRoutes(deps));
   v1.route('/', orgRoutes(deps));
   v1.route(

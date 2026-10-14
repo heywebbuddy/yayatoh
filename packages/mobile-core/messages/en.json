@@ -1,0 +1,62 @@
+{
+  "common": {
+    "retry": "Try again",
+    "cancel": "Cancel",
+    "close": "Close",
+    "continue": "Continue",
+    "ok": "OK"
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "network": "No connection. Check your network and try again."
+  },
+  "offline": {
+    "banner": "You're offline. You can still see what was saved on this phone.",
+    "queued": "{count, plural, one {# change will be sent when you're back online.} other {# changes will be sent when you're back online.}}"
+  },
+  "update": {
+    "requiredTitle": "Update required",
+    "requiredBody": "This version of {app} is no longer supported. Update to version {minimum} or later to keep going.",
+    "requiredBodyGeneric": "This version of {app} is no longer supported. Update to the latest version to keep going.",
+    "action": "Update {app}",
+    "noStoreLink": "Open the app store on this phone and update {app}.",
+    "softTitle": "A new version is available",
+    "softBody": "Version {latest} of {app} is ready. Update for the latest fixes and features.",
+    "softAction": "Update",
+    "softDismiss": "Not now"
+  },
+  "signIn": {
+    "failed": {
+      "invalid_credentials": "That email or password is not right.",
+      "invalid_code": "That code is not right. Check it and try again.",
+      "too_many_attempts": "Too many wrong codes. Start again to get a new code.",
+      "invalid_challenge": "That step has expired. Start again.",
+      "invalid_id_token": "We could not confirm your sign-in. Please try again.",
+      "provider_email_missing": "Your account did not share an email address, so we cannot sign you in with it.",
+      "provider_email_unverified": "Your email address is not verified with that account. Verify it, or use another way to sign in.",
+      "provider_linked_elsewhere": "That account is already linked to a different Yayatoh account.",
+      "unknown": "We could not sign you in. Please try again."
+    },
+    "rateLimited": "{minutes, plural, one {Too many attempts. Try again in # minute.} other {Too many attempts. Try again in # minutes.}}",
+    "unavailable": "We could not reach Yayatoh. Check your connection and try again.",
+    "unsupported": "That sign-in is not available on this phone."
+  },
+  "stepUp": {
+    "invalid_code": "That code is not right.",
+    "invalid_password": "That password is not right."
+  },
+  "session": {
+    "endedReused": "You were signed out because this sign-in was used on another device. Please sign in again.",
+    "endedExpired": "Your session ended. Please sign in again."
+  },
+  "language": {
+    "label": "Language",
+    "system": "Same as this phone"
+  },
+  "theme": {
+    "label": "Appearance",
+    "system": "Same as this phone",
+    "light": "Light",
+    "dark": "Dark"
+  }
+}
