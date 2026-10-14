@@ -1,0 +1,7 @@
+# A sub-flow: one fake-provider purchase ending on the order confirmation.
+appId: ${APP_ID}
+---
+- openLink: ${SCHEME}://events/${EVENT_SLUG}
+- tapOn: "Buy tickets"
+- tapOn: "Checkout"
+- assertVisible: "Order confirmed"

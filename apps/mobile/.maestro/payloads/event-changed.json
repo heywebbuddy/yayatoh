@@ -1,0 +1,1 @@
+{ "aps": { "alert": { "title": "Summit 2026", "body": "The start time changed" } }, "path": "/events/${EVENT_SLUG}" }

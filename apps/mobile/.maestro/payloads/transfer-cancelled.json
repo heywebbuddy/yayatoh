@@ -1,0 +1,1 @@
+{ "aps": { "alert": { "title": "Summit 2026", "body": "A transfer was cancelled" } }, "path": "/tickets/${TICKET_ID}" }

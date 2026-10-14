@@ -1,0 +1,19 @@
+# Device pass. Each link opens its screen from a closed app (openLink launches a stopped app).
+appId: ${APP_ID}
+---
+- launchApp:
+    clearState: true
+- runFlow: sign-in-seeded.yaml
+- stopApp
+- openLink: https://app.yayatoh.com/events/${EVENT_SLUG}
+- assertVisible: "Summit"
+- stopApp
+- openLink: ${SCHEME}://claim/${CLAIM_TOKEN}
+- assertVisible: "Claim"
+- stopApp
+- openLink: https://app.yayatoh.com/my-tickets/${HOLDER_TOKEN}
+- assertVisible: "Ticket QR code"
+- stopApp
+# The checkout return link opens the order confirmation.
+- openLink: https://app.yayatoh.com/events/${EVENT_SLUG}?checkout=return&order=${ORDER_ID}
+- assertVisible: "Order"
