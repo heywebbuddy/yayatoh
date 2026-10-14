@@ -1,0 +1,22 @@
+# Codes that must not get in (M7.4b): an unknown code, and a refunded ticket. Each shows a red
+# panel, the words, and the next step. Env: ENROL_LINK, VOID_TICKET_CODE (a seeded refunded ticket).
+appId: com.yayatoh.staff.preview
+---
+- runFlow: scan-setup.yaml
+- tapOn:
+    id: manual-open
+- tapOn:
+    id: manual-input
+- inputText: ZZZZZZZZ
+- tapOn:
+    id: manual-submit
+- assertVisible: 'Not recognised'
+- assertVisible:
+    id: verdict-glyph-stop
+- tapOn:
+    id: manual-input
+- inputText: ${VOID_TICKET_CODE}
+- tapOn:
+    id: manual-submit
+- assertVisible: 'Cancelled ticket'
+- assertVisible: 'This ticket was refunded or cancelled. Do not admit.'

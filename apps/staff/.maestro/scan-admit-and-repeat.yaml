@@ -1,0 +1,31 @@
+# A typed code admits once, then reports the repeat with when and where (M7.4b). The camera cannot
+# be driven by Maestro, so the code goes in through "Type a code", the same path as a scanned one.
+# Env: ENROL_LINK, TICKET_CODE (a seeded short code of an active ticket), HOLDER_NAME (its holder).
+appId: com.yayatoh.staff.preview
+---
+- runFlow: scan-setup.yaml
+- tapOn:
+    id: manual-open
+- tapOn:
+    id: manual-input
+- inputText: ${TICKET_CODE}
+- tapOn:
+    id: manual-submit
+- assertVisible: 'Admit'
+- assertVisible: ${HOLDER_NAME}
+- assertVisible:
+    id: verdict-glyph-admit
+# The same code again: a repeat, with the time of the first admission.
+- tapOn:
+    id: manual-input
+- inputText: ${TICKET_CODE}
+- tapOn:
+    id: manual-submit
+- assertVisible: 'Already scanned'
+- assertVisible: 'First admitted at.*'
+- assertVisible:
+    id: verdict-glyph-warn
+# One scan was queued per attempt and the phone is online, so the queue empties by itself.
+- extendedWaitUntil:
+    visible: 'All scans sent'
+    timeout: 30000
