@@ -1,3 +1,4 @@
+import { randomBytes } from 'node:crypto';
 import { AUDIENCE_EXPORT_COLUMNS, audienceExportBulk, catchUpParticipation } from '@yayatoh/audiences';
 import { enrollDeviceCommand, subscribeStaffNativePushCommand } from '@yayatoh/checkin';
 import { createEntryCommand, createHelpArticleCommand, createSiteSectionCommand } from '@yayatoh/cms';
@@ -9,6 +10,7 @@ import { createCtx, executeCommand, executeQuery } from '@yayatoh/kernel';
 import { updateSiteSettingsCommand } from '@yayatoh/marketplace';
 import { announcementMailer, sendAnnouncementCommand } from '@yayatoh/messaging';
 import { createNotifier, dispatchDue, memoryTransports } from '@yayatoh/notifications';
+import { hashManageToken } from '@yayatoh/orders';
 import { applyAccountEventCommand } from '@yayatoh/payments';
 import { auditExportBulk, consumeEvent, keyVault, recentEventsTx } from '@yayatoh/platform';
 import { archiveFileQuery, exportSubjectCommand, openRequestCommand, unzip } from '@yayatoh/privacy';
@@ -236,6 +238,17 @@ async function prepareAttendee(
   );
   if (!mine) throw new Error('canary: the attendee order has no active ticket');
   await admin.unsafe(`update ticketing.tickets set holder_email = $2 where id = $1`, [mine.id, email]);
+  // The fill sealed a canary where the order's manage-link token lives; "My tickets" needs a real
+  // one to list the order (as it does for the web), so this one order gets a real token.
+  const manageToken = randomBytes(32).toString('base64url');
+  await admin.unsafe(
+    `update orders.orders set manage_token_ciphertext = $2, manage_token_hash = $3 where id = $1`,
+    [
+      order.id,
+      await keyVault().encrypt(orgId, new TextEncoder().encode(manageToken)),
+      hashManageToken(manageToken),
+    ],
+  );
   await auth.api
     .signUpEmail({ body: { email, password: ATTENDEE_PASSWORD, name: 'Canary Attendee' } })
     .catch(() => undefined);
