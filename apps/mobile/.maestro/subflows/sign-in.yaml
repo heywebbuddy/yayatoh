@@ -1,0 +1,20 @@
+# Signs in with a seeded persona's password (M7.3a's welcome screen). Skips itself when already signed in.
+appId: ${APP_ID}
+---
+- runFlow:
+    when:
+      visible: 'Use a password'
+    commands:
+      - tapOn: 'Use a password'
+      - tapOn:
+          text: 'Email'
+      - inputText: ${EMAIL}
+      - tapOn:
+          text: 'Password'
+      - inputText: ${PASSWORD}
+      - hideKeyboard
+      - tapOn:
+          text: 'Sign in'
+          index: 0
+- assertVisible:
+    text: 'Discover'
