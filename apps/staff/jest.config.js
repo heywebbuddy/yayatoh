@@ -6,6 +6,6 @@ module.exports = {
   // packages (@yayatoh/*) are symlinks to source outside node_modules, so Babel transforms them.
   // use-intl and its formatjs dependencies ship ES modules.
   transformIgnorePatterns: [
-    'node_modules/(?!(\\.pnpm|(jest-)?react-native|@react-native(-community)?|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|use-intl|@formatjs/.*|intl-messageformat))',
+    'node_modules/(?!(\\.pnpm|(jest-)?react-native|@react-native(-community)?|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|use-intl|@formatjs/.*|intl-messageformat|@noble/.*|@tanstack/.*))',
   ],
 };
