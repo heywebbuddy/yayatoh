@@ -17,10 +17,24 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { px, radius, space, TOUCH_TARGET_PX, type, useColors } from '../theme';
 
-export function Screen({ children, testID }: { children: ReactNode; testID?: string }) {
+type Edge = 'top' | 'right' | 'bottom' | 'left';
+
+/**
+ * A scrolling screen on the canvas. `edges` are the sides the safe area pads: a screen under a
+ * navigation header or above the tab bar leaves that side to it.
+ */
+export function Screen({
+  children,
+  testID,
+  edges,
+}: {
+  children: ReactNode;
+  testID?: string;
+  edges?: readonly Edge[];
+}) {
   const colors = useColors();
   return (
-    <SafeAreaView style={[styles.screen, { backgroundColor: colors.canvas }]} testID={testID}>
+    <SafeAreaView edges={edges} style={[styles.screen, { backgroundColor: colors.canvas }]} testID={testID}>
       <ScrollView
         contentContainerStyle={styles.content}
         keyboardShouldPersistTaps="handled"

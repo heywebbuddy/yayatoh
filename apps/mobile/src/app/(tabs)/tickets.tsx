@@ -5,7 +5,7 @@ import { Heading, Screen } from '../../auth/ui';
 export default function TicketsTab() {
   const t = useTranslations('account.tabs');
   return (
-    <Screen testID="tickets-screen">
+    <Screen edges={['top', 'left', 'right']} testID="tickets-screen">
       <Heading>{t('tickets')}</Heading>
     </Screen>
   );

@@ -50,7 +50,7 @@ export default function AccountTab() {
   };
 
   return (
-    <Screen testID="account-screen">
+    <Screen edges={['top', 'left', 'right']} testID="account-screen">
       <Stack gap={6}>
         <Heading>{t('title')}</Heading>
 

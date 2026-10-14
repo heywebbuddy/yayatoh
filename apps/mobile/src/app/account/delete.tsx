@@ -105,7 +105,7 @@ export default function DeleteAccount() {
         : t('stepUpTotp');
 
   return (
-    <Screen testID="delete-account-screen">
+    <Screen edges={['left', 'right', 'bottom']} testID="delete-account-screen">
       <Header.Screen options={{ title: t('title') }} />
       <Stack gap={6}>
         <Heading>{t('title')}</Heading>

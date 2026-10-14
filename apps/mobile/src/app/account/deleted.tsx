@@ -8,7 +8,7 @@ export default function AccountDeleted() {
   const t = useTranslations('account.deleted');
   const router = useRouter();
   return (
-    <Screen testID="account-deleted-screen">
+    <Screen edges={['left', 'right', 'bottom']} testID="account-deleted-screen">
       <Header.Screen options={{ title: t('title'), headerBackVisible: false, gestureEnabled: false }} />
       <Stack gap={6}>
         <Stack gap={3}>

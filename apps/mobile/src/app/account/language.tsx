@@ -8,7 +8,7 @@ export default function LanguageScreen() {
   const t = useTranslations('core.language');
   const { choice, setChoice } = useLocaleSettings();
   return (
-    <Screen testID="language-screen">
+    <Screen edges={['left', 'right', 'bottom']} testID="language-screen">
       <Header.Screen options={{ title: t('label') }} />
       <Heading>{t('label')}</Heading>
       <Card>

@@ -5,7 +5,7 @@ import { Heading, Screen } from '../../auth/ui';
 export default function DiscoverTab() {
   const t = useTranslations('account.tabs');
   return (
-    <Screen testID="discover-screen">
+    <Screen edges={['top', 'left', 'right']} testID="discover-screen">
       <Heading>{t('discover')}</Heading>
     </Screen>
   );
