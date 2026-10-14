@@ -12,7 +12,20 @@ import { formatEventRange } from '../format';
 import { useClaimDetails, useClaimTicket } from '../hooks';
 import { hrefs } from '../nav';
 import { rememberPending } from '../pending';
-import { BackBar, Banner, Body, Button, Caption, Card, EmptyState, Fact, Field, Heading, Loading, Screen } from '../ui';
+import {
+  BackBar,
+  Banner,
+  Body,
+  Button,
+  Caption,
+  Card,
+  EmptyState,
+  Fact,
+  Field,
+  Heading,
+  Loading,
+  Screen,
+} from '../ui';
 
 export type ClaimFailure =
   | { kind: 'mismatch' }
@@ -30,7 +43,8 @@ export function claimFailure(p: ProblemView): ClaimFailure {
     return p.retryAfter
       ? { kind: 'message', key: 'common.rateLimited', seconds: p.retryAfter }
       : { kind: 'message', key: 'common.rateLimitedNoTime' };
-  if (p.status === 403 && p.reason === 'email_unverified') return { kind: 'message', key: 'claim.unverified' };
+  if (p.status === 403 && p.reason === 'email_unverified')
+    return { kind: 'message', key: 'claim.unverified' };
   if (p.status === 404) return { kind: 'message', key: 'claim.invalid' };
   return { kind: 'message', key: 'claim.failed' };
 }
@@ -88,10 +102,7 @@ export function ClaimScreen({ token }: { token: string }) {
     setFailure(null);
     if (name.trim().length === 0) return setNameError(true);
     setNameError(false);
-    claim.mutate(
-      { name: name.trim() },
-      { onError: (error) => setFailure(claimFailure(viewProblem(error))) },
-    );
+    claim.mutate({ name: name.trim() }, { onError: (error) => setFailure(claimFailure(viewProblem(error))) });
   };
 
   if (claim.data) {
@@ -101,7 +112,11 @@ export function ClaimScreen({ token }: { token: string }) {
         <Card testID="claim-success">
           <Heading>{t('claim.success')}</Heading>
           <Body>{t('claim.successBody', { type: ticket.ticketTypeName, event: ticket.event.name })}</Body>
-          <Button label={t('claim.view')} onPress={() => router.replace(hrefs.ticket(ticket.id))} testID="view-ticket" />
+          <Button
+            label={t('claim.view')}
+            onPress={() => router.replace(hrefs.ticket(ticket.id))}
+            testID="view-ticket"
+          />
         </Card>
       </Screen>
     );
@@ -133,7 +148,13 @@ export function ClaimScreen({ token }: { token: string }) {
           testID={`claim-${stateFailure.state}`}
           title={t(`claim.state${cap(stateFailure.state)}`)}
           body={t(`claim.state${cap(stateFailure.state)}Body`)}
-          action={<Button label={t('common.toMyTickets')} variant="secondary" onPress={() => router.replace(hrefs.tickets())} />}
+          action={
+            <Button
+              label={t('common.toMyTickets')}
+              variant="secondary"
+              onPress={() => router.replace(hrefs.tickets())}
+            />
+          }
         />
       ) : (
         <>
@@ -147,7 +168,13 @@ export function ClaimScreen({ token }: { token: string }) {
             <Fact label={t('claim.ticketType')} value={d.ticketTypeName} />
             <Fact
               label={t('claim.when')}
-              value={formatEventRange(format, d.event.startsAt, d.event.endsAt, d.event.timezone, t('common.rangeSeparator'))}
+              value={formatEventRange(
+                format,
+                d.event.startsAt,
+                d.event.endsAt,
+                d.event.timezone,
+                t('common.rangeSeparator'),
+              )}
             />
             <Fact label={t('claim.organizer')} value={d.organizerName} />
           </Card>
@@ -162,9 +189,16 @@ export function ClaimScreen({ token }: { token: string }) {
                       name: d.transfer.toName,
                       email: session.status === 'signedIn' ? session.user.email : '',
                     })
-                  : t('claim.mismatchBodyPlain', { email: session.status === 'signedIn' ? session.user.email : '' })}
+                  : t('claim.mismatchBodyPlain', {
+                      email: session.status === 'signedIn' ? session.user.email : '',
+                    })}
               </Banner>
-              <Button label={t('claim.switchAccount')} variant="secondary" onPress={() => void switchAccount()} testID="switch-account" />
+              <Button
+                label={t('claim.switchAccount')}
+                variant="secondary"
+                onPress={() => void switchAccount()}
+                testID="switch-account"
+              />
             </Card>
           ) : failure?.kind === 'message' ? (
             <Banner tone="danger" testID="claim-error">
@@ -193,4 +227,3 @@ export function ClaimScreen({ token }: { token: string }) {
 }
 
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
-

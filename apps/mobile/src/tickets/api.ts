@@ -28,11 +28,17 @@ export const ticketKeys = {
   synced: ['tickets', 'synced'] as const,
   /** A claim link's token is a credential: this query is never written to the cache file. */
   claim: (token: string) => ['tickets', 'claim', token] as const,
+  link: (token: string) => ['tickets', 'link', token] as const,
 };
 
 export const newIdempotencyKey = (): string => randomUUID();
 
-export function fetchTicketPage(api: YayatohClient, when: TicketWhen, cursor: string | undefined, limit = PAGE_SIZE) {
+export function fetchTicketPage(
+  api: YayatohClient,
+  when: TicketWhen,
+  cursor: string | undefined,
+  limit = PAGE_SIZE,
+) {
   return unwrap(
     api.GET('/v1/me/tickets', { params: { query: { when, limit, ...(cursor ? { cursor } : {}) } } }),
   );
@@ -46,6 +52,9 @@ export const fetchOrder = (api: YayatohClient, id: string) =>
 
 export const fetchClaim = (api: YayatohClient, token: string) =>
   unwrap(api.GET('/v1/claims/{token}', { params: { path: { token } } }));
+
+export const fetchTicketLink = (api: YayatohClient, token: string) =>
+  unwrap(api.GET('/v1/me/ticket-links/{token}', { params: { path: { token } } }));
 
 export const fetchWalletLink = (api: YayatohClient, id: string, platform: 'apple' | 'google') =>
   unwrap(api.GET('/v1/me/tickets/{id}/wallet', { params: { path: { id }, query: { platform } } }));
@@ -77,4 +86,5 @@ export function viewProblem(error: unknown): ProblemView {
   return { status: 0, code: 'network', reason: null, details: {}, network: true, retryAfter: null };
 }
 
-export const isNotFound = (error: unknown): boolean => error instanceof YayatohApiError && error.status === 404;
+export const isNotFound = (error: unknown): boolean =>
+  error instanceof YayatohApiError && error.status === 404;

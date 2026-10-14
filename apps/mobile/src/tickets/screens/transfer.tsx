@@ -8,8 +8,8 @@ import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useFormatter, useTranslations } from 'use-intl';
-import { type Ticket, type TransferResult, type ProblemView, viewProblem } from '../api';
-import { formatMoney, formatMoment } from '../format';
+import { type ProblemView, type Ticket, type TransferResult, viewProblem } from '../api';
+import { formatMoment, formatMoney } from '../format';
 import { useRefreshTickets, useStartTransfer, useTicket } from '../hooks';
 import { hrefs } from '../nav';
 import { useTicketServices } from '../services';
@@ -27,7 +27,11 @@ export function validateTransfer(name: string, email: string, ownEmail: string |
   const trimmed = name.trim();
   const address = email.trim();
   return {
-    ...(trimmed.length === 0 ? { name: 'nameRequired' as const } : trimmed.length > 120 ? { name: 'nameTooLong' as const } : {}),
+    ...(trimmed.length === 0
+      ? { name: 'nameRequired' as const }
+      : trimmed.length > 120
+        ? { name: 'nameTooLong' as const }
+        : {}),
     ...(!EMAIL.test(address) || address.length > 254
       ? { email: 'emailInvalid' as const }
       : ownEmail && address.toLowerCase() === ownEmail.toLowerCase()
@@ -179,7 +183,12 @@ function TransferForm({ ticket, onBack }: { ticket: Ticket; onBack: () => void }
               onPress={send}
               testID="send"
             />
-            <Button label={t('transfer.edit')} variant="secondary" onPress={() => setStep('form')} testID="edit" />
+            <Button
+              label={t('transfer.edit')}
+              variant="secondary"
+              onPress={() => setStep('form')}
+              testID="edit"
+            />
           </View>
         </Card>
       ) : (

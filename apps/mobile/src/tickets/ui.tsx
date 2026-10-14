@@ -7,7 +7,6 @@ import { px, radius, space, TOUCH_TARGET_PX, type, useColors } from '@yayatoh/mo
 import type { ReactNode } from 'react';
 import {
   ActivityIndicator,
-  type AccessibilityRole,
   Pressable,
   RefreshControl,
   ScrollView,
@@ -156,11 +155,7 @@ export function Button({
   );
 }
 
-export function Field({
-  label,
-  error,
-  ...input
-}: TextInputProps & { label: string; error?: string | null }) {
+export function Field({ label, error, ...input }: TextInputProps & { label: string; error?: string | null }) {
   const colors = useColors();
   return (
     <View style={styles.field}>
@@ -200,13 +195,13 @@ export function Banner({
   title,
   children,
   testID,
-  role = 'alert',
+  announce = true,
 }: {
   tone?: Tone;
   title?: string;
   children?: ReactNode;
   testID?: string;
-  role?: AccessibilityRole;
+  announce?: boolean;
 }) {
   const colors = useColors();
   const soft = {
@@ -215,19 +210,26 @@ export function Banner({
     warning: colors.warningSoft,
     danger: colors.dangerSoft,
   }[tone];
-  const ink = { info: colors.primaryInk, success: colors.success, warning: colors.warning, danger: colors.danger }[
-    tone
-  ];
+  const ink = {
+    info: colors.primaryInk,
+    success: colors.success,
+    warning: colors.warning,
+    danger: colors.danger,
+  }[tone];
   return (
     <View
       testID={testID}
       accessible
-      accessibilityRole={role}
+      accessibilityRole={announce ? 'alert' : undefined}
       accessibilityLiveRegion="polite"
       style={[styles.banner, { backgroundColor: soft, borderColor: ink }]}
     >
       {title ? <Text style={[styles.bannerTitle, { color: ink }]}>{title}</Text> : null}
-      {typeof children === 'string' ? <Text style={[styles.body, { color: colors.ink }]}>{children}</Text> : children}
+      {typeof children === 'string' ? (
+        <Text style={[styles.body, { color: colors.ink }]}>{children}</Text>
+      ) : (
+        children
+      )}
     </View>
   );
 }
@@ -340,7 +342,11 @@ const styles = StyleSheet.create({
   h1: { fontSize: 28, fontWeight: '800', textAlign: 'auto' },
   h2: { fontSize: type.card.size, fontWeight: '800', textAlign: 'auto' },
   body: { fontSize: type.prose.size, lineHeight: type.prose.size * 1.5, textAlign: 'auto' },
-  caption: { fontSize: type.caption.size, lineHeight: type.caption.size * type.caption.lineHeight, textAlign: 'auto' },
+  caption: {
+    fontSize: type.caption.size,
+    lineHeight: type.caption.size * type.caption.lineHeight,
+    textAlign: 'auto',
+  },
   card: {
     borderWidth: StyleSheet.hairlineWidth,
     borderRadius: px(radius.card),

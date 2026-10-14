@@ -805,7 +805,8 @@ describe('GET /v1/me/ticket-links/{token}', () => {
     const link = await withTenant(ctx, (tx) => issueHolderLinkTx(tx, ctx, eventA.id, lena.email));
     linkToken = link.token;
   });
-  const open = (token: string, as?: string) => call('GET', `/me/ticket-links/${encodeURIComponent(token)}`, as);
+  const open = (token: string, as?: string) =>
+    call('GET', `/me/ticket-links/${encodeURIComponent(token)}`, as);
 
   it('names the tickets of the link’s event for the address it was sent to, and never their codes', async () => {
     const r = await open(linkToken, lena.token);
@@ -821,7 +822,14 @@ describe('GET /v1/me/ticket-links/{token}', () => {
     const other = await person('ned');
     expect((await open(linkToken, other.token)).status).toBe(404);
     expect((await open(`${linkToken}x`, lena.token)).status).toBe(404);
-    expect((await open('00000000-0000-4000-8000-000000000000~AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', lena.token)).status).toBe(404);
+    expect(
+      (
+        await open(
+          '00000000-0000-4000-8000-000000000000~AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+          lena.token,
+        )
+      ).status,
+    ).toBe(404);
     expect((await open(linkToken)).status).toBe(401);
     const unverified = await person('linkunverified', false);
     expect((await open(linkToken, unverified.token)).status).toBe(403);
@@ -831,7 +839,9 @@ describe('GET /v1/me/ticket-links/{token}', () => {
     const mixed = await person('mixed', true, `Mixed-${suffix}@Example.test`);
     const bought = await buy(a, eventA, `mixed-${suffix}@example.test`, 1);
     const ctx = systemCtx(a.org.id);
-    const link = await withTenant(ctx, (tx) => issueHolderLinkTx(tx, ctx, eventA.id, `MIXED-${suffix}@example.TEST`));
+    const link = await withTenant(ctx, (tx) =>
+      issueHolderLinkTx(tx, ctx, eventA.id, `MIXED-${suffix}@example.TEST`),
+    );
     const r = await open(link.token, mixed.token);
     expect(r.status).toBe(200);
     expect(r.body.ticketIds).toEqual(bought.ticketIds);

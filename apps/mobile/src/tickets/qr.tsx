@@ -49,7 +49,7 @@ export function TicketQr({ code, label, size }: TicketQrProps) {
       accessibilityLabel={label}
       style={{ width: size, height: size, backgroundColor: constant.white }}
     >
-      <Svg width={size} height={size} viewBox={`0 0 ${modules} ${modules}`} shapeRendering="crispEdges">
+      <Svg width={size} height={size} viewBox={`0 0 ${modules} ${modules}`}>
         <Rect width={modules} height={modules} fill={constant.white} />
         <Path d={d} fill={constant.black} />
       </Svg>

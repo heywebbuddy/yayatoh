@@ -4,7 +4,7 @@
  * with it (calendar, directions, wallet, transfer, refund). Opens from the encrypted cache with the
  * network off.
  */
-import { BrandScope, space, useColors, useIsOffline } from '@yayatoh/mobile-core';
+import { BrandScope, space, useColors, useCore, useIsOffline } from '@yayatoh/mobile-core';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
 import { Image, Platform, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
@@ -15,13 +15,31 @@ import { useCancelTransfer, useTicket, useWalletLink } from '../hooks';
 import { hrefs } from '../nav';
 import { TicketQr } from '../qr';
 import { type MapsTarget, useTicketServices } from '../services';
-import { BackBar, Banner, Body, Button, Caption, Card, EmptyState, Fact, Heading, Loading, Screen } from '../ui';
-import { useCore } from '@yayatoh/mobile-core';
+import {
+  BackBar,
+  Banner,
+  Body,
+  Button,
+  Caption,
+  Card,
+  EmptyState,
+  Fact,
+  Heading,
+  Loading,
+  Screen,
+} from '../ui';
 
 const QR_MAX = 340;
 
 const addressOf = (venue: NonNullable<Ticket['venue']>): string | null => {
-  const line = [venue.addressLine1, venue.addressLine2, venue.city, venue.region, venue.postalCode, venue.country]
+  const line = [
+    venue.addressLine1,
+    venue.addressLine2,
+    venue.city,
+    venue.region,
+    venue.postalCode,
+    venue.country,
+  ]
     .filter((p): p is string => Boolean(p))
     .join(', ');
   return line || null;
@@ -94,7 +112,12 @@ export function TicketDetailScreen({ id }: { id: string }) {
   }
   return (
     <BrandScope color={ticket.branding.accentColor ?? ticket.accentColor}>
-      <TicketBody ticket={ticket} updatedAt={query.dataUpdatedAt} refreshFailed={query.isError} onBack={back} />
+      <TicketBody
+        ticket={ticket}
+        updatedAt={query.dataUpdatedAt}
+        refreshFailed={query.isError}
+        onBack={back}
+      />
     </BrandScope>
   );
 }
@@ -145,7 +168,13 @@ function TicketBody({
 
   const cancel = useCancelTransfer(ticket.id);
   const wallet = useWalletLink(ticket.id);
-  const when = formatEventRange(format, span.startsAt, span.endsAt, ticket.event.timezone, t('common.rangeSeparator'));
+  const when = formatEventRange(
+    format,
+    span.startsAt,
+    span.endsAt,
+    ticket.event.timezone,
+    t('common.rangeSeparator'),
+  );
   const target = mapsTargetOf(ticket);
   const platform = Platform.OS === 'ios' ? 'apple' : 'google';
 
@@ -189,7 +218,8 @@ function TicketBody({
         onError: (error) =>
           setNotice({
             tone: 'danger',
-            text: viewProblem(error).status === 404 ? t('detail.walletUnavailable') : t('detail.walletFailed'),
+            text:
+              viewProblem(error).status === 404 ? t('detail.walletUnavailable') : t('detail.walletFailed'),
           }),
       },
     );
@@ -272,7 +302,9 @@ function TicketBody({
       <Card>
         <Fact label={t('detail.holder')} value={ticket.holderName} testID="fact-holder" />
         <Fact label={t('detail.type')} value={ticket.ticketTypeName} testID="fact-type" />
-        {ticket.seatLabel ? <Fact label={t('detail.seat')} value={ticket.seatLabel} testID="fact-seat" /> : null}
+        {ticket.seatLabel ? (
+          <Fact label={t('detail.seat')} value={ticket.seatLabel} testID="fact-seat" />
+        ) : null}
         {ticket.checkpoints.length > 0 ? (
           <Fact
             label={t('detail.entrances')}
@@ -286,9 +318,7 @@ function TicketBody({
         <Fact
           label={t('detail.where')}
           value={
-            target
-              ? [target.label, target.address].filter(Boolean).join('\n')
-              : t('detail.venueUnknown')
+            target ? [target.label, target.address].filter(Boolean).join('\n') : t('detail.venueUnknown')
           }
           testID="fact-where"
         />
@@ -310,10 +340,20 @@ function TicketBody({
 
       <View style={styles.actions}>
         {active && !ended ? (
-          <Button label={t('detail.calendar')} variant="secondary" onPress={() => void addToCalendar()} testID="add-calendar" />
+          <Button
+            label={t('detail.calendar')}
+            variant="secondary"
+            onPress={() => void addToCalendar()}
+            testID="add-calendar"
+          />
         ) : null}
         {target ? (
-          <Button label={t('detail.directions')} variant="secondary" onPress={() => void openDirections()} testID="directions" />
+          <Button
+            label={t('detail.directions')}
+            variant="secondary"
+            onPress={() => void openDirections()}
+            testID="directions"
+          />
         ) : null}
         {active ? (
           <Button
@@ -330,7 +370,7 @@ function TicketBody({
         <Card testID="transfer-card">
           {ticket.transfer.pendingTransferId ? (
             <>
-              <Banner tone="warning" title={t('detail.transferPendingTitle')} role="summary" testID="transfer-pending">
+              <Banner tone="warning" title={t('detail.transferPendingTitle')} testID="transfer-pending">
                 {t('detail.transferPendingBody', { name: pendingTo })}
               </Banner>
               {confirmingCancel ? (
@@ -370,7 +410,9 @@ function TicketBody({
               <Caption>{t('detail.transferUntil', { deadline })}</Caption>
             </>
           ) : refusal && refusal !== 'ticket_void' && refusal !== 'event_ended' ? (
-            <Caption testID="transfer-refused">{t(`detail.transferRefused.${refusal}`, { deadline })}</Caption>
+            <Caption testID="transfer-refused">
+              {t(`detail.transferRefused.${refusal}`, { deadline })}
+            </Caption>
           ) : null}
         </Card>
       ) : null}

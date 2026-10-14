@@ -39,7 +39,13 @@ function TicketCardBody({ ticket, onOpen }: { ticket: TicketSummary; onOpen: () 
   const format = useFormatter();
   const colors = useColors();
   const span = ticket.date ?? ticket.event;
-  const when = formatEventRange(format, span.startsAt, span.endsAt, ticket.event.timezone, t('common.rangeSeparator'));
+  const when = formatEventRange(
+    format,
+    span.startsAt,
+    span.endsAt,
+    ticket.event.timezone,
+    t('common.rangeSeparator'),
+  );
   return (
     <Pressable
       accessibilityRole="button"
@@ -57,9 +63,13 @@ function TicketCardBody({ ticket, onOpen }: { ticket: TicketSummary; onOpen: () 
       <View style={[styles.accent, { backgroundColor: colors.primary }]} />
       <View style={styles.cardText}>
         <Text style={[styles.cardTitle, { color: colors.ink }]}>{ticket.ticketTypeName}</Text>
-        <Text style={[styles.cardLine, { color: colors.ink2 }]}>{t('list.holder', { name: ticket.holderName })}</Text>
+        <Text style={[styles.cardLine, { color: colors.ink2 }]}>
+          {t('list.holder', { name: ticket.holderName })}
+        </Text>
         {ticket.seatLabel ? (
-          <Text style={[styles.cardLine, { color: colors.ink2 }]}>{t('list.cardSeat', { seat: ticket.seatLabel })}</Text>
+          <Text style={[styles.cardLine, { color: colors.ink2 }]}>
+            {t('list.cardSeat', { seat: ticket.seatLabel })}
+          </Text>
         ) : null}
         {ticket.pendingTransfer ? (
           <Text style={[styles.pending, { color: colors.warning, backgroundColor: colors.warningSoft }]}>
@@ -137,8 +147,13 @@ export function TicketsListScreen() {
         onChange={setWhen}
       />
       <Caption testID="last-synced">{syncedLine}</Caption>
-      {offline ? <Banner tone="info" testID="offline-note">{t('common.offline')}</Banner> : null}
-      {!offline && (outcome?.kind === 'failed' || (outcome?.kind === 'synced' && outcome.failedDetails > 0)) ? (
+      {offline ? (
+        <Banner tone="info" testID="offline-note">
+          {t('common.offline')}
+        </Banner>
+      ) : null}
+      {!offline &&
+      (outcome?.kind === 'failed' || (outcome?.kind === 'synced' && outcome.failedDetails > 0)) ? (
         <Banner tone="warning" testID="refresh-failed">
           {t('list.refreshFailed')}
         </Banner>
@@ -166,7 +181,13 @@ export function TicketsListScreen() {
           testID="empty-upcoming"
           title={t('list.emptyUpcomingTitle')}
           body={t('list.emptyUpcomingBody')}
-          action={<Button label={t('list.findEvents')} onPress={() => router.push(hrefs.discover())} testID="find-events" />}
+          action={
+            <Button
+              label={t('list.findEvents')}
+              onPress={() => router.push(hrefs.discover())}
+              testID="find-events"
+            />
+          }
         />
       ) : (
         <EmptyState testID="empty-past" title={t('list.emptyPastTitle')} body={t('list.emptyPastBody')} />
@@ -174,7 +195,11 @@ export function TicketsListScreen() {
   }
 
   return (
-    <SafeAreaView edges={['top']} style={[styles.screen, { backgroundColor: colors.canvas }]} testID="tickets-screen">
+    <SafeAreaView
+      edges={['top']}
+      style={[styles.screen, { backgroundColor: colors.canvas }]}
+      testID="tickets-screen"
+    >
       <PendingLinkResume />
       <SectionList
         sections={body ? [] : groups.map((g) => ({ ...g, data: g.data }))}
@@ -235,4 +260,3 @@ const styles = StyleSheet.create({
   },
   footer: { height: space[6] },
 });
-

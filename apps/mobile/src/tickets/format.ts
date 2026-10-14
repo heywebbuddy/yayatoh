@@ -80,7 +80,9 @@ export function formatDay(format: Formatter, instant: string, timeZone: string):
 export function formatMoney(format: Formatter, minor: number, currency: string): string {
   let digits = 2;
   try {
-    digits = new Intl.NumberFormat('en', { style: 'currency', currency }).resolvedOptions().maximumFractionDigits ?? 2;
+    digits =
+      new Intl.NumberFormat('en', { style: 'currency', currency }).resolvedOptions().maximumFractionDigits ??
+      2;
   } catch {
     // An unknown currency code is shown as a plain number with the code.
     return `${(minor / 100).toFixed(2)} ${currency}`;

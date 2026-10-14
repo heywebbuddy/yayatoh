@@ -1,10 +1,5 @@
 /** Query and mutation hooks for the Tickets screens (M7.3b). */
-import {
-  useInfiniteQuery,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query';
 import { useCore } from '@yayatoh/mobile-core';
 import { unwrap } from '@yayatoh/sdk';
 import { useCallback, useRef, useState } from 'react';
@@ -13,15 +8,16 @@ import {
   fetchClaim,
   fetchOrder,
   fetchTicket,
+  fetchTicketLink,
   fetchTicketPage,
   fetchWalletLink,
   newIdempotencyKey,
+  type RefundRequest,
   type Ticket,
   type TicketPage,
   type TicketWhen,
-  ticketKeys,
   type TransferResult,
-  type RefundRequest,
+  ticketKeys,
   type WalletLink,
 } from './api';
 import { SYNC_FRESH_MS, type SyncOutcome, syncTickets } from './sync';
@@ -56,6 +52,18 @@ export function useClaimDetails(token: string, enabled: boolean) {
   return useQuery<ClaimDetails>({
     queryKey: ticketKeys.claim(token),
     queryFn: () => fetchClaim(api, token),
+    enabled,
+    meta: { persist: false },
+    retry: false,
+  });
+}
+
+/** The tickets a web ticket link opens for the signed-in person. The token is a credential: not persisted. */
+export function useTicketLink(token: string, enabled: boolean) {
+  const { api } = useCore();
+  return useQuery({
+    queryKey: ticketKeys.link(token),
+    queryFn: () => fetchTicketLink(api, token),
     enabled,
     meta: { persist: false },
     retry: false,

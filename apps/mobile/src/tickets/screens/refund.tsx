@@ -3,18 +3,30 @@
  * ask the organizer, exactly as the order panel the API returns allows (`canRequest`, `refusal`).
  * `RefundPanel` is also what the order screen (M7.3c) shows for an order.
  */
-import { space } from '@yayatoh/mobile-core';
+
 import { useQueryClient } from '@tanstack/react-query';
+import { space, useColors } from '@yayatoh/mobile-core';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Switch, View, Text, StyleSheet } from 'react-native';
+import { StyleSheet, Switch, Text, View } from 'react-native';
 import { useFormatter, useTranslations } from 'use-intl';
 import { type Order, type ProblemView, type Ticket, ticketKeys, viewProblem } from '../api';
 import { formatMoment, formatMoney } from '../format';
 import { useOrder, useRequestRefund, useTicket } from '../hooks';
 import { hrefs } from '../nav';
-import { BackBar, Banner, Body, Button, Caption, Card, EmptyState, Field, Heading, Loading, Screen } from '../ui';
-import { useColors } from '@yayatoh/mobile-core';
+import {
+  BackBar,
+  Banner,
+  Body,
+  Button,
+  Caption,
+  Card,
+  EmptyState,
+  Field,
+  Heading,
+  Loading,
+  Screen,
+} from '../ui';
 
 /** The message key (under `tickets.refund`) for a failed request. */
 export function refundErrorKey(p: ProblemView): string {
@@ -84,7 +96,9 @@ export function RefundPanel({ order }: { order: Order }) {
           <Body>{policyText}</Body>
           {policy && policy.retainedMinor > 0 ? (
             <Body tone="ink2">
-              {t('refund.policyRetained', { amount: formatMoney(format, policy.retainedMinor, policy.currency) })}
+              {t('refund.policyRetained', {
+                amount: formatMoney(format, policy.retainedMinor, policy.currency),
+              })}
             </Body>
           ) : null}
         </Card>
@@ -97,8 +111,12 @@ export function RefundPanel({ order }: { order: Order }) {
             {latest.status === 'open'
               ? t('refund.statusOpen')
               : latest.status === 'approved'
-                ? t('refund.statusApproved', { when: formatMoment(format, latest.decidedAt ?? latest.createdAt, zone) })
-                : t('refund.statusDeclined', { when: formatMoment(format, latest.decidedAt ?? latest.createdAt, zone) })}
+                ? t('refund.statusApproved', {
+                    when: formatMoment(format, latest.decidedAt ?? latest.createdAt, zone),
+                  })
+                : t('refund.statusDeclined', {
+                    when: formatMoment(format, latest.decidedAt ?? latest.createdAt, zone),
+                  })}
           </Body>
           <Caption>{t('refund.requestTickets', { count: latest.tickets })}</Caption>
           {latest.status === 'declined' && latest.declineReason ? (
@@ -163,7 +181,12 @@ export function RefundPanel({ order }: { order: Order }) {
             maxLength={1100}
             testID="refund-message"
           />
-          <Button label={t('refund.submit')} busy={request.isPending} onPress={submit} testID="refund-submit" />
+          <Button
+            label={t('refund.submit')}
+            busy={request.isPending}
+            onPress={submit}
+            testID="refund-submit"
+          />
         </Card>
       ) : panel.refusal ? (
         <Banner tone="info" testID="refund-refusal">
@@ -180,7 +203,10 @@ export function RefundScreen({ id }: { id: string }) {
   const ticket = useTicket(id);
   const order = useOrder(ticket.data?.orderId);
   const back = () => (router.canGoBack() ? router.back() : router.replace(hrefs.ticket(id)));
-  const waiting = (ticket.isPending || (ticket.data && order.isPending)) && ticket.fetchStatus !== 'paused' && order.fetchStatus !== 'paused';
+  const waiting =
+    (ticket.isPending || (ticket.data && order.isPending)) &&
+    ticket.fetchStatus !== 'paused' &&
+    order.fetchStatus !== 'paused';
   return (
     <Screen testID="refund-screen">
       <BackBar label={t('common.back')} onBack={back} />
@@ -193,7 +219,11 @@ export function RefundScreen({ id }: { id: string }) {
         <EmptyState
           testID="refund-error"
           title={t('refund.loadFailed')}
-          body={ticket.fetchStatus === 'paused' || order.fetchStatus === 'paused' ? t('common.offline') : undefined}
+          body={
+            ticket.fetchStatus === 'paused' || order.fetchStatus === 'paused'
+              ? t('common.offline')
+              : undefined
+          }
           action={
             <Button
               label={t('common.retry')}
@@ -213,6 +243,12 @@ export function RefundScreen({ id }: { id: string }) {
 const styles = StyleSheet.create({
   stack: { gap: space[4] },
   legend: { fontSize: 15, fontWeight: '800', textAlign: 'auto' },
-  switchRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', minHeight: 44, gap: space[3] },
+  switchRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    minHeight: 44,
+    gap: space[3],
+  },
   switchLabel: { flex: 1, fontSize: 15, textAlign: 'auto' },
 });

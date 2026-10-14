@@ -101,7 +101,8 @@ export async function syncTickets(deps: SyncDeps, options: { force?: boolean } =
 
     queryClient.setQueryData(ticketKeys.list('upcoming'), upcoming);
     queryClient.setQueryData(ticketKeys.list('past'), past);
-    for (const id of before) if (!live.has(id)) queryClient.removeQueries({ queryKey: ticketKeys.detail(id) });
+    for (const id of before)
+      if (!live.has(id)) queryClient.removeQueries({ queryKey: ticketKeys.detail(id) });
     const at = (deps.now?.() ?? new Date()).toISOString();
     // A ticket whose record could not be fetched is not "synced": keep the old stamp then.
     if (failedDetails === 0) queryClient.setQueryData(ticketKeys.synced, at);
