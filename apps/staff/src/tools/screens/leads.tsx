@@ -20,17 +20,20 @@ import { toolKeys, useLeadList, useLeadSetup } from '../queries';
 import { Body, Button, Card, Chip, Empty, ErrorState, Field, Heading, Loading, Notice, Row, Screen } from '../ui';
 
 /** The rep's outbox: scans go in first and out when the connection allows. */
-function useLeadOutbox(): LeadOutbox | null {
+function useLeadOutbox(owner: string | null): LeadOutbox | null {
   const { portal, vault, newId, clock, useOffline } = useTools();
   const offline = useOffline();
   return useMemo(
     () =>
-      portal
-        ? createLeadOutbox({ vault, api: offline ? null : portal.api, owner: portal.owner, newId, now: clock.now })
+      portal && owner
+        ? createLeadOutbox({ vault, api: offline ? null : portal.api, owner, newId, now: clock.now })
         : null,
-    [portal, vault, newId, clock, offline],
+    [portal, owner, vault, newId, clock, offline],
   );
 }
+
+/** Whose queue it is: the rep's own address, as the route reports it, so a sign-out keeps unsent scans for them. */
+const ownerOf = (setup: { email: string } | undefined) => setup?.email.trim().toLowerCase() ?? null;
 
 const gateText = (why: Exclude<ScanGate, { open: true }>['why']) => `gate.${why}`;
 
@@ -44,7 +47,7 @@ export function LeadsScreen() {
   const setup = useLeadSetup();
   const gate = setup.data ? scanGate(setup.data, clock.now()) : null;
   const list = useLeadList(!!setup.data?.capture.accessOpen);
-  const outbox = useLeadOutbox();
+  const outbox = useLeadOutbox(ownerOf(setup.data));
   const [pending, setPending] = useState(0);
   const [failure, setFailure] = useState<FlushFailure | null>(null);
   const [sent, setSent] = useState(false);
@@ -56,7 +59,7 @@ export function LeadsScreen() {
     setPending(r.pending);
     setFailure(r.failure);
     setSent(r.failure === null && r.results.length > 0);
-    if (r.results.length > 0 && portal) await qc.invalidateQueries({ queryKey: toolKeys.leads(portal.owner) });
+    if (r.results.length > 0 && portal) await qc.invalidateQueries({ queryKey: toolKeys.leads(portal.sessionKey) });
   }, [outbox, portal, qc]);
 
   useEffect(() => {
@@ -167,7 +170,7 @@ export function LeadScanScreen() {
   const { portal, Scanner, clock, useOffline, feedback } = useTools();
   const offline = useOffline();
   const setup = useLeadSetup();
-  const outbox = useLeadOutbox();
+  const outbox = useLeadOutbox(ownerOf(setup.data));
   const [code, setCode] = useState<string | null>(null);
   const [typed, setTyped] = useState('');
   const [typedProblem, setTypedProblem] = useState(false);
@@ -382,7 +385,7 @@ export function LeadDetailScreen({ leadId }: { leadId: string }) {
     try {
       await (portal as NonNullable<typeof portal>).api.updateLead(leadId, form);
       setState('saved');
-      await qc.invalidateQueries({ queryKey: toolKeys.leads((portal as NonNullable<typeof portal>).owner) });
+      await qc.invalidateQueries({ queryKey: toolKeys.leads((portal as NonNullable<typeof portal>).sessionKey) });
     } catch {
       setState('failed');
     } finally {

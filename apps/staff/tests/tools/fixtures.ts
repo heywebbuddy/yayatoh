@@ -296,7 +296,7 @@ export const opsView = (): OpsView =>
       alerts: [
         {
           id: 'al1',
-          rule: 'door.device_offline',
+          rule: 'devicesOffline',
           severity: 'warning',
           state: 'open',
           count: 1,
@@ -352,4 +352,20 @@ export function fakePortal(over: Partial<PortalApi> = {}): jest.Mocked<PortalApi
   return Object.fromEntries(
     Object.entries(merged).map(([k, fn]) => [k, jest.fn(fn as never)]),
   ) as unknown as jest.Mocked<PortalApi>;
+}
+
+import type { OpsApi } from '../../src/tools/api';
+
+export function fakeOps(over: Partial<OpsApi> = {}): jest.Mocked<OpsApi> {
+  const base: OpsApi = {
+    ops: async () => opsView(),
+    organizations: async () => [{ id: 'org-1', slug: 'harbor', name: 'Harbor Events' }],
+    events: async () => [
+      { id: EVENT, name: 'Harbor Summit', startsAt: '2026-10-20T13:00:00Z', timezone: 'America/New_York' },
+    ],
+  };
+  const merged = { ...base, ...over };
+  return Object.fromEntries(
+    Object.entries(merged).map(([k, fn]) => [k, jest.fn(fn as never)]),
+  ) as unknown as jest.Mocked<OpsApi>;
 }

@@ -17,6 +17,14 @@ export interface ToolsDevice {
   readonly checkpointId: string | null;
 }
 
+/** The organization and event the organizer watches. */
+export interface OrganizerChoice {
+  readonly org: string;
+  readonly orgName: string;
+  readonly eventId: string;
+  readonly eventName: string;
+}
+
 export type PushPermission = 'granted' | 'denied' | 'undetermined';
 
 /** The phone's push service (`expo-notifications`), behind a port so tests use a fake. */
@@ -36,10 +44,17 @@ export interface ScannerProps {
 export interface ToolsDeps {
   readonly device: ToolsDevice | null;
   readonly staff: StaffApi | null;
-  /** The exhibitor rep's session (`owner` identifies the rep for the lead outbox), when signed in. */
-  readonly portal: { readonly api: PortalApi; readonly owner: string } | null;
-  /** The organizer's session and the event they chose, when signed in. */
-  readonly organizer: { readonly api: OpsApi; readonly org: string; readonly eventId: string } | null;
+  /**
+   * The exhibitor rep's portal session, when signed in. `sessionKey` changes when the rep signs out,
+   * so a screen never shows one rep's cached leads to the next.
+   */
+  readonly portal: { readonly api: PortalApi; readonly sessionKey: string } | null;
+  /** The organizer's account session and the event they chose, when signed in. */
+  readonly organizer: {
+    readonly api: OpsApi;
+    readonly choice: OrganizerChoice | null;
+    readonly choose: (choice: OrganizerChoice | null) => void;
+  } | null;
   /** The saved manifest of the phone (M7.4b), or null when there is none yet. */
   readonly manifest: () => Promise<ManifestSource | null>;
   readonly offlineCheckIn: OfflineCheckIn | null;

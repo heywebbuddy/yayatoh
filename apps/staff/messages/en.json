@@ -453,6 +453,17 @@
     "loadFailed": "Could not load the event-day view.",
     "notSignedIn": "Sign in as an organizer to see the event day.",
     "readOnly": "Read only. Numbers refresh while this screen is open.",
+    "changeEvent": "Change event",
+    "picker": {
+      "title": "Choose an event",
+      "chooseOrg": "Choose an organization.",
+      "chooseEvent": "Events of {org}",
+      "noOrgs": "You are not a member of any organization.",
+      "noEvents": "This organization has no events.",
+      "loadFailed": "Could not load your events.",
+      "open": "Watch",
+      "openFor": "Watch {name}"
+    },
     "mode": {
       "planning": "Planning",
       "pre_show": "Before doors",

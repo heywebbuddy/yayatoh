@@ -15,9 +15,11 @@ export const toolKeys = {
   overview: (eventId: string) => ['tools', 'overview', eventId] as const,
   assistance: (eventId: string) => ['tools', 'assistance', eventId] as const,
   ops: (org: string, eventId: string) => ['tools', 'ops', org, eventId] as const,
+  orgs: ['tools', 'ops', 'orgs'] as const,
+  events: (org: string) => ['tools', 'ops', 'events', org] as const,
   pushStatus: (deviceId: string) => ['tools', 'push', deviceId] as const,
-  leadSetup: (owner: string) => ['tools', 'leads', 'setup', owner] as const,
-  leads: (owner: string) => ['tools', 'leads', 'list', owner] as const,
+  leadSetup: (sessionKey: string) => ['tools', 'leads', 'setup', sessionKey] as const,
+  leads: (sessionKey: string) => ['tools', 'leads', 'list', sessionKey] as const,
 };
 
 /** True while the app is in the foreground: polling pauses in the background. */
@@ -58,10 +60,12 @@ export function useOps() {
   const { organizer } = useTools();
   const active = useAppActive();
   return useQuery({
-    queryKey: toolKeys.ops(organizer?.org ?? '', organizer?.eventId ?? ''),
+    queryKey: toolKeys.ops(organizer?.choice?.org ?? '', organizer?.choice?.eventId ?? ''),
     queryFn: () =>
-      organizer ? organizer.api.ops(organizer.org, organizer.eventId) : Promise.reject(new Error('no organizer')),
-    enabled: !!organizer,
+      organizer?.choice
+        ? organizer.api.ops(organizer.choice.org, organizer.choice.eventId)
+        : Promise.reject(new Error('no organizer')),
+    enabled: !!organizer?.choice,
     refetchInterval: active ? REFRESH_MS.ops : false,
     meta: { persist: false },
   });
@@ -70,7 +74,7 @@ export function useOps() {
 export function useLeadSetup() {
   const { portal } = useTools();
   return useQuery({
-    queryKey: toolKeys.leadSetup(portal?.owner ?? ''),
+    queryKey: toolKeys.leadSetup(portal?.sessionKey ?? ''),
     queryFn: () => (portal ? portal.api.setup() : Promise.reject(new Error('no portal'))),
     enabled: !!portal,
     meta: { persist: false },
@@ -80,7 +84,7 @@ export function useLeadSetup() {
 export function useLeadList(enabled: boolean) {
   const { portal } = useTools();
   return useQuery({
-    queryKey: toolKeys.leads(portal?.owner ?? ''),
+    queryKey: toolKeys.leads(portal?.sessionKey ?? ''),
     queryFn: () => (portal ? portal.api.leads() : Promise.reject(new Error('no portal'))),
     enabled: !!portal && enabled,
     meta: { persist: false },

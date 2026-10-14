@@ -1,8 +1,10 @@
+import { useQuery } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 import { useFormatter, useTranslations } from 'use-intl';
-import type { OpsView } from '../api';
+import type { OpsView, OrgChoice } from '../api';
 import { useTools } from '../deps';
-import { useOps } from '../queries';
-import { Body, Card, Columns, Empty, ErrorState, Heading, Loading, Notice, Pane, Row, Screen, Stat } from '../ui';
+import { toolKeys, useOps } from '../queries';
+import { Body, Button, Card, Columns, Empty, ErrorState, Heading, Loading, Notice, Pane, Row, Screen, Stat } from '../ui';
 
 const KNOWN_RULES = new Set([
   'devicesOffline',
@@ -33,6 +35,7 @@ export function OpsScreen() {
   const q = useOps();
 
   if (!organizer) return <Screen><Empty title={t('notSignedIn')} /></Screen>;
+  if (!organizer.choice) return <EventPicker />;
   if (q.isPending) return <Screen><Loading label={t('title')} /></Screen>;
   if (!q.data)
     return (
@@ -53,6 +56,10 @@ export function OpsScreen() {
       </Row>
       <Body muted>{stale ? t('savedOnly', { time: time(v.asOf) }) : t('updated', { time: time(v.asOf) })}</Body>
       <Body muted>{t('readOnly')}</Body>
+      <Row>
+        <Body testID="ops-event">{organizer.choice.eventName}</Body>
+        <Button label={t('changeEvent')} onPress={() => organizer.choose(null)} variant="secondary" testID="ops-change" />
+      </Row>
       <Columns>
         <Pane>
           <Checkins v={v} />
@@ -204,5 +211,76 @@ function Alerts({ v }: { v: OpsView }) {
         ))
       )}
     </Card>
+  );
+}
+
+/** Choose the organization and the event to watch: the organizer's own memberships and events. */
+function EventPicker() {
+  const t = useTranslations('ops');
+  const core = useTranslations('core');
+  const format = useFormatter();
+  const { organizer } = useTools();
+  const [org, setOrg] = useState<OrgChoice | null>(null);
+  const orgs = useQuery({
+    queryKey: toolKeys.orgs,
+    queryFn: () => (organizer as NonNullable<typeof organizer>).api.organizations(),
+    enabled: !!organizer,
+    meta: { persist: false },
+  });
+  const events = useQuery({
+    queryKey: toolKeys.events(org?.id ?? ''),
+    queryFn: () => (organizer as NonNullable<typeof organizer>).api.events(org?.slug ?? ''),
+    enabled: !!organizer && !!org,
+    meta: { persist: false },
+  });
+  // A person in one organization goes straight to its events.
+  useEffect(() => {
+    if (!org && orgs.data?.length === 1) setOrg(orgs.data[0] ?? null);
+  }, [org, orgs.data]);
+  const chosen = org;
+
+  return (
+    <Screen testID="ops-picker">
+      <Heading>{t('picker.title')}</Heading>
+      {orgs.isPending ? <Loading label={t('picker.title')} /> : null}
+      {orgs.isError ? (
+        <ErrorState message={t('picker.loadFailed')} retryLabel={core('common.retry')} onRetry={() => orgs.refetch()} />
+      ) : null}
+      {orgs.data && orgs.data.length === 0 ? <Empty title={t('picker.noOrgs')} /> : null}
+      {!chosen && orgs.data && orgs.data.length > 1 ? (
+        <>
+          <Body muted>{t('picker.chooseOrg')}</Body>
+          {orgs.data.map((o) => (
+            <Button key={o.id} label={o.name} onPress={() => setOrg(o)} variant="secondary" testID={`org-${o.slug}`} />
+          ))}
+        </>
+      ) : null}
+      {chosen ? (
+        <>
+          <Body muted>{t('picker.chooseEvent', { org: chosen.name })}</Body>
+          {events.isPending ? <Loading label={t('picker.chooseEvent', { org: chosen.name })} /> : null}
+          {events.isError ? (
+            <ErrorState message={t('picker.loadFailed')} retryLabel={core('common.retry')} onRetry={() => events.refetch()} />
+          ) : null}
+          {events.data && events.data.length === 0 ? <Empty title={t('picker.noEvents')} /> : null}
+          {events.data?.map((e) => (
+            <Card key={e.id}>
+              <Heading level={2}>{e.name}</Heading>
+              <Body muted>
+                {format.dateTime(new Date(e.startsAt), { dateStyle: 'medium', timeZone: e.timezone })}
+              </Body>
+              <Button
+                label={t('picker.open')}
+                a11yLabel={t('picker.openFor', { name: e.name })}
+                onPress={() =>
+                  organizer?.choose({ org: chosen.slug, orgName: chosen.name, eventId: e.id, eventName: e.name })
+                }
+                testID={`event-${e.id}`}
+              />
+            </Card>
+          ))}
+        </>
+      ) : null}
+    </Screen>
   );
 }

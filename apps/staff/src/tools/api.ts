@@ -95,8 +95,23 @@ export interface PortalApi {
   updateLead(leadId: string, edit: LeadEdit): Promise<void>;
 }
 
+export interface OrgChoice {
+  readonly id: string;
+  readonly slug: string;
+  readonly name: string;
+}
+
+export interface EventChoice {
+  readonly id: string;
+  readonly name: string;
+  readonly startsAt: string;
+  readonly timezone: string;
+}
+
 export interface OpsApi {
   ops(org: string, eventId: string): Promise<OpsView>;
+  organizations(): Promise<readonly OrgChoice[]>;
+  events(org: string): Promise<readonly EventChoice[]>;
 }
 
 const eventPath = (eventId: string) => ({ params: { path: { eventId } } });
@@ -198,6 +213,14 @@ export function createPortalApi(client: YayatohClient): PortalApi {
 /** The organizer's read-only event-day view over a client signed with their member session. */
 export function createOpsApi(client: YayatohClient): OpsApi {
   return {
+    async organizations() {
+      const r = await unwrap(client.GET('/v1/me/organizations'));
+      return r.data.map((o) => ({ id: o.id, slug: o.slug, name: o.name }));
+    },
+    async events(org) {
+      const r = await unwrap(client.GET('/v1/orgs/{org}/events', { params: { path: { org }, query: { limit: 50 } } }));
+      return r.data.map((e) => ({ id: e.id, name: e.name, startsAt: e.startsAt, timezone: e.timezone }));
+    },
     ops: (org, eventId) =>
       unwrap(client.GET('/v1/orgs/{org}/events/{eventId}/ops', { params: { path: { org, eventId } } })),
   };

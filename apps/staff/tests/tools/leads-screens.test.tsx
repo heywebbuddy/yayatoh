@@ -6,7 +6,7 @@ import { LeadDetailScreen, LeadScanScreen, LeadsScreen } from '../../src/tools/s
 import { fakePortal, lead, setup } from './fixtures';
 import { en, makeDeps, offlineSwitch, renderTool } from './harness';
 
-const rep = (api = fakePortal(), owner = 'rep@acme.test') => ({ api, owner });
+const rep = (api = fakePortal(), sessionKey = 'session-1') => ({ api, sessionKey });
 
 describe('Lead retrieval home', () => {
   it('asks the person to sign in as an exhibitor when there is no portal session', async () => {
@@ -176,7 +176,7 @@ describe('Lead retrieval home', () => {
     it('calls the routes with the rep’s own portal token and shows exactly what they return', async () => {
       const { fetchFake, seen } = serverByToken();
       const mk = (token: string) => createPortalApi(createYayatohClient({ baseUrl: 'https://x.test', token, fetch: fetchFake }));
-      renderTool(<LeadsScreen />, { deps: makeDeps({ portal: { api: mk('yyp_acme'), owner: 'rep@acme.test' } }) });
+      renderTool(<LeadsScreen />, { deps: makeDeps({ portal: { api: mk('yyp_acme'), sessionKey: 'session-1' } }) });
       expect(await screen.findByText('Acme Lead')).toBeOnTheScreen();
       expect(screen.queryByText('Globex Lead')).toBeNull();
       expect(seen.every((s) => s.endsWith('yyp_acme'))).toBe(true);
@@ -185,10 +185,10 @@ describe('Lead retrieval home', () => {
     it('does not show one rep’s cached leads to the next rep on the same phone', async () => {
       const { fetchFake } = serverByToken();
       const mk = (token: string) => createPortalApi(createYayatohClient({ baseUrl: 'https://x.test', token, fetch: fetchFake }));
-      const first = renderTool(<LeadsScreen />, { deps: makeDeps({ portal: { api: mk('yyp_acme'), owner: 'rep@acme.test' } }) });
+      const first = renderTool(<LeadsScreen />, { deps: makeDeps({ portal: { api: mk('yyp_acme'), sessionKey: 'session-1' } }) });
       await screen.findByText('Acme Lead');
       first.unmount();
-      renderTool(<LeadsScreen />, { deps: makeDeps({ portal: { api: mk('yyp_globex'), owner: 'rep@globex.test' } }) });
+      renderTool(<LeadsScreen />, { deps: makeDeps({ portal: { api: mk('yyp_globex'), sessionKey: 'session-2' } }) });
       expect(await screen.findByText('Globex Lead')).toBeOnTheScreen();
       expect(screen.queryByText('Acme Lead')).toBeNull();
     });
