@@ -23,6 +23,7 @@
     "expo": "catalog:mobile",
     "expo-apple-authentication": "catalog:mobile",
     "expo-application": "catalog:mobile",
+    "expo-asset": "catalog:mobile",
     "expo-audio": "catalog:mobile",
     "expo-auth-session": "catalog:mobile",
     "expo-battery": "catalog:mobile",
