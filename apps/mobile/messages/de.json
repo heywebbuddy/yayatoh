@@ -2,5 +2,67 @@
   "home": {
     "title": "Yayatoh",
     "tagline": "Deine Events und Tickets erscheinen bald hier."
+  },
+  "push": {
+    "channel": {
+      "name": "Tickets und Veranstaltungen"
+    },
+    "prompt": {
+      "title": "Updates zu deinen Tickets erhalten?",
+      "intro": "Yayatoh kann diesem Telefon Benachrichtigungen senden über:",
+      "items": {
+        "orders": "Die Bestätigung deiner Bestellung",
+        "tickets": "Ein Ticket, das dir geschickt wurde, oder eine angenommene oder abgebrochene Übertragung",
+        "changes": "Eine Änderung oder Absage einer Veranstaltung",
+        "reminders": "Eine Erinnerung 24 Stunden und 2 Stunden vor Beginn"
+      },
+      "privacy": "Benachrichtigungen zeigen den Namen der Veranstaltung und was sich geändert hat, niemals deinen Namen, deine E-Mail-Adresse, Telefonnummer, einen Zahlungsbetrag oder einen Ticketcode.",
+      "control": "Du kannst das jederzeit unter Konto, Benachrichtigungen ändern.",
+      "againLater": "Wenn du „Jetzt nicht“ wählst, fragen wir erst nach einem späteren Kauf wieder. Du kannst die App in beiden Fällen vollständig nutzen.",
+      "allow": "Benachrichtigungen aktivieren",
+      "notNow": "Jetzt nicht"
+    },
+    "banner": {
+      "dismiss": "Benachrichtigung schließen",
+      "open": "Öffnet den zugehörigen Bildschirm",
+      "fallbackTitle": "Yayatoh"
+    },
+    "settings": {
+      "title": "Benachrichtigungen",
+      "statusTitle": "Auf diesem Telefon",
+      "status": {
+        "granted": "Benachrichtigungen sind aktiviert",
+        "denied": "Benachrichtigungen sind deaktiviert",
+        "undetermined": "Benachrichtigungen sind noch nicht eingerichtet",
+        "loading": "Wird geprüft …"
+      },
+      "statusBody": {
+        "granted": "Du erhältst die unten aufgeführten Updates. Um alle auszuschalten, nutze die Einstellungen deines Telefons.",
+        "denied": "Benachrichtigungen sind für Yayatoh ausgeschaltet. Zum Einschalten öffne die Einstellungen deines Telefons.",
+        "undetermined": "Schalte sie ein, um Updates zu deinen Bestellungen, Tickets und Veranstaltungen zu erhalten."
+      },
+      "turnOn": "Benachrichtigungen aktivieren",
+      "openSystem": "Telefoneinstellungen öffnen",
+      "optional": "Benachrichtigungen sind optional. Tickets, Bestellungen und Anmeldung funktionieren auch ohne sie genauso.",
+      "kindsTitle": "Was wir senden",
+      "kinds": {
+        "service": {
+          "title": "Bestellungen und Tickets",
+          "body": "Bestellung bestätigt, Ticket erhalten, Übertragung angenommen oder abgebrochen. Wird immer gesendet, solange Benachrichtigungen aktiviert sind."
+        },
+        "reminders": {
+          "title": "Erinnerungen",
+          "body": "24 Stunden und 2 Stunden vor Beginn einer Veranstaltung."
+        },
+        "eventChanges": {
+          "title": "Änderungen an Veranstaltungen",
+          "body": "Wenn eine Veranstaltung geändert oder abgesagt wird."
+        }
+      },
+      "kindsUnavailable": "Die Auswahl, welche davon du erhältst, ist noch nicht verfügbar. Um alle zu stoppen, schalte Benachrichtigungen in den Telefoneinstellungen aus.",
+      "saveFailed": "Das konnte nicht gespeichert werden. Prüfe deine Verbindung und versuche es erneut.",
+      "marketingTitle": "Neuigkeiten und Angebote",
+      "marketingBody": "Aus. Wir senden sie nur, wenn du dich dafür entscheidest."
+    }
   }
 }

@@ -2,5 +2,67 @@
   "home": {
     "title": "Yayatoh",
     "tagline": "Your events and tickets will appear here soon."
+  },
+  "push": {
+    "channel": {
+      "name": "Ticket and event updates"
+    },
+    "prompt": {
+      "title": "Get updates about your tickets?",
+      "intro": "Yayatoh can send notifications to this phone about:",
+      "items": {
+        "orders": "Your order being confirmed",
+        "tickets": "A ticket sent to you, or a transfer accepted or cancelled",
+        "changes": "An event changing or being cancelled",
+        "reminders": "A reminder 24 hours and 2 hours before an event starts"
+      },
+      "privacy": "Notifications show the event name and what changed, never your name, email, phone number, payment amount or ticket code.",
+      "control": "You can change this any time in Account, Notifications.",
+      "againLater": "If you choose Not now, we will ask again only after a later purchase. You can use everything in the app either way.",
+      "allow": "Turn on notifications",
+      "notNow": "Not now"
+    },
+    "banner": {
+      "dismiss": "Dismiss notification",
+      "open": "Opens the related screen",
+      "fallbackTitle": "Yayatoh"
+    },
+    "settings": {
+      "title": "Notifications",
+      "statusTitle": "On this phone",
+      "status": {
+        "granted": "Notifications are on",
+        "denied": "Notifications are off",
+        "undetermined": "Notifications are not set up yet",
+        "loading": "Checking…"
+      },
+      "statusBody": {
+        "granted": "You will get the updates listed below. To turn them all off, use your phone’s settings.",
+        "denied": "Notifications are off for Yayatoh. To turn them on, open your phone’s settings.",
+        "undetermined": "Turn them on to get updates about your orders, tickets and events."
+      },
+      "turnOn": "Turn on notifications",
+      "openSystem": "Open phone settings",
+      "optional": "Notifications are optional. Tickets, orders and sign-in work the same with them off.",
+      "kindsTitle": "What we send",
+      "kinds": {
+        "service": {
+          "title": "Orders and tickets",
+          "body": "Order confirmed, ticket received, transfer accepted or cancelled. Sent whenever notifications are on."
+        },
+        "reminders": {
+          "title": "Reminders",
+          "body": "24 hours and 2 hours before an event starts."
+        },
+        "eventChanges": {
+          "title": "Event changes",
+          "body": "When an event changes or is cancelled."
+        }
+      },
+      "kindsUnavailable": "Choosing which of these you get is not available yet. To stop them all, turn notifications off in your phone’s settings.",
+      "saveFailed": "We could not save that. Check your connection and try again.",
+      "marketingTitle": "News and offers",
+      "marketingBody": "Off. We only send these if you choose to receive them."
+    }
   }
 }

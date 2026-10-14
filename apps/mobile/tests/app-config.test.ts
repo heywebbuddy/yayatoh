@@ -19,7 +19,7 @@ describe('Yayatoh app config', () => {
     expect(c.name).toBe('Yayatoh');
     expect(c.slug).toBe('yayatoh');
     expect(c.scheme).toBe('yayatoh');
-    expect(c.android?.permissions).toEqual([]);
+    expect(c.android?.permissions).toEqual(['android.permission.POST_NOTIFICATIONS']);
     expect(c.android?.blockedPermissions).toContain('android.permission.CAMERA');
     expect(c.ios?.infoPlist?.NSCameraUsageDescription).toBeUndefined();
   });

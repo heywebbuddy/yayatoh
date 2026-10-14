@@ -5,6 +5,8 @@ import { useMemo } from 'react';
 import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { getCore } from '../core';
+import { nativeDeviceFacts, nativePushPort } from '../push/native';
+import { PushProvider } from '../push/provider';
 
 /** The offline banner sits under the status bar and only takes room while the phone is offline. */
 function OfflineStrip() {
@@ -29,10 +31,14 @@ function ThemedStack() {
 
 export default function RootLayout() {
   const core = useMemo(getCore, []);
+  const port = useMemo(nativePushPort, []);
+  const device = useMemo(() => nativeDeviceFacts(core.identity.version), [core]);
   return (
     <CoreProvider core={core}>
       <StatusBar style="auto" />
-      <ThemedStack />
+      <PushProvider port={port} device={device}>
+        <ThemedStack />
+      </PushProvider>
     </CoreProvider>
   );
 }

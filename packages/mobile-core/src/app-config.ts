@@ -52,6 +52,8 @@ interface AppIdentity {
   readonly camera: boolean;
   /** Sign in with Apple is an attendee sign-in (P7-5); Staff signs in by enrolment QR or account. */
   readonly appleSignIn: boolean;
+  /** Only the attendee app registers for push here (M7.3d); Staff alerts come with M7.4c. */
+  readonly push: boolean;
 }
 
 const APPS: Record<AppId, AppIdentity> = {
@@ -65,6 +67,7 @@ const APPS: Record<AppId, AppIdentity> = {
     androidPackage: 'com.yayatoh.yayatohapp',
     camera: false,
     appleSignIn: true,
+    push: true,
   },
   staff: {
     name: 'Yayatoh Staff',
@@ -74,6 +77,7 @@ const APPS: Record<AppId, AppIdentity> = {
     androidPackage: 'com.yayatoh.staff',
     camera: true,
     appleSignIn: false,
+    push: false,
   },
 };
 
@@ -85,6 +89,19 @@ const VARIANTS: Record<AppEnv, { nameSuffix: string; schemeSuffix: string; idSuf
 
 /** Shown by iOS when the Staff app asks for the camera (the permission string, English). */
 export const STAFF_CAMERA_USAGE = 'Yayatoh Staff uses the camera to scan ticket QR codes at the door.';
+
+/** Android 13+ asks for this at runtime; the manifest must declare it (M7.3d). iOS has no usage string. */
+export const POST_NOTIFICATIONS = 'android.permission.POST_NOTIFICATIONS';
+
+/**
+ * The APNs environment a build's push token belongs to: a development build is signed for the
+ * sandbox, preview and production builds for production. The `expo-notifications` plugin gets the
+ * same answer as its `aps-environment` entitlement (`mode`), and the app reports it to
+ * `POST /v1/me/devices` so the server sends to the right APNs host.
+ */
+export function apnsEnvironment(appEnv: AppEnv): 'sandbox' | 'production' {
+  return appEnv === 'development' ? 'sandbox' : 'production';
+}
 
 export type EnvVars = Readonly<Record<string, string | undefined>>;
 
@@ -182,6 +199,12 @@ export function buildExpoConfig(opts: BuildOptions): ExpoConfig {
       },
     ],
   ];
+  if (id.push) {
+    plugins.push([
+      'expo-notifications',
+      { mode: apnsEnvironment(appEnv) === 'sandbox' ? 'development' : 'production' },
+    ]);
+  }
   // Only a development build may talk to a plain-http API on a developer's machine.
   if (!production && apiBaseUrl.startsWith('http://')) {
     plugins.push(['expo-build-properties', { android: { usesCleartextTraffic: true } }]);
@@ -198,6 +221,10 @@ export function buildExpoConfig(opts: BuildOptions): ExpoConfig {
     ...(googleIosClientId ? [googleIosRedirectScheme(googleIosClientId)] : []),
     ...(googleAndroidClientId ? [androidPackage] : []),
   ];
+
+  // The FCM client file belongs to the owner's Firebase project (an EAS file secret): the path comes
+  // from the build environment and is never in the repo. Without it Android push is simply off.
+  const googleServicesFile = id.push ? clean(env.GOOGLE_SERVICES_FILE) : undefined;
 
   const config: ExpoConfig = {
     name: `${id.name}${variant.nameSuffix}`,
@@ -234,7 +261,11 @@ export function buildExpoConfig(opts: BuildOptions): ExpoConfig {
       },
       intentFilters: androidIntentFilters(env),
       // The attendee app never scans; keep a library from adding the permission by accident.
-      permissions: id.camera ? ['android.permission.CAMERA'] : [],
+      permissions: [
+        ...(id.camera ? ['android.permission.CAMERA'] : []),
+        ...(id.push ? [POST_NOTIFICATIONS] : []),
+      ],
+      ...(googleServicesFile ? { googleServicesFile } : {}),
       blockedPermissions: id.camera ? [] : ['android.permission.CAMERA'],
     },
     ...(opts.locales ? { locales: { ...opts.locales } } : {}),

@@ -2,5 +2,67 @@
   "home": {
     "title": "Yayatoh",
     "tagline": "I tuoi eventi e i tuoi biglietti appariranno presto qui."
+  },
+  "push": {
+    "channel": {
+      "name": "Biglietti ed eventi"
+    },
+    "prompt": {
+      "title": "Vuoi ricevere aggiornamenti sui tuoi biglietti?",
+      "intro": "Yayatoh può inviare a questo telefono notifiche su:",
+      "items": {
+        "orders": "La conferma del tuo ordine",
+        "tickets": "Un biglietto inviato a te, o un trasferimento accettato o annullato",
+        "changes": "Un evento modificato o annullato",
+        "reminders": "Un promemoria 24 ore e 2 ore prima dell’inizio di un evento"
+      },
+      "privacy": "Le notifiche mostrano il nome dell’evento e cosa è cambiato, mai il tuo nome, la tua email, il numero di telefono, l’importo del pagamento o il codice del biglietto.",
+      "control": "Puoi cambiarlo in qualsiasi momento in Account, Notifiche.",
+      "againLater": "Se scegli «Non ora», lo chiederemo di nuovo solo dopo un acquisto successivo. In entrambi i casi puoi usare tutta l’app.",
+      "allow": "Attiva le notifiche",
+      "notNow": "Non ora"
+    },
+    "banner": {
+      "dismiss": "Chiudi la notifica",
+      "open": "Apre la schermata collegata",
+      "fallbackTitle": "Yayatoh"
+    },
+    "settings": {
+      "title": "Notifiche",
+      "statusTitle": "Su questo telefono",
+      "status": {
+        "granted": "Le notifiche sono attive",
+        "denied": "Le notifiche sono disattivate",
+        "undetermined": "Le notifiche non sono ancora configurate",
+        "loading": "Controllo in corso…"
+      },
+      "statusBody": {
+        "granted": "Riceverai gli aggiornamenti elencati qui sotto. Per disattivarli tutti, usa le impostazioni del telefono.",
+        "denied": "Le notifiche di Yayatoh sono disattivate. Per attivarle, apri le impostazioni del telefono.",
+        "undetermined": "Attivale per ricevere aggiornamenti su ordini, biglietti ed eventi."
+      },
+      "turnOn": "Attiva le notifiche",
+      "openSystem": "Apri le impostazioni del telefono",
+      "optional": "Le notifiche sono facoltative. Biglietti, ordini e accesso funzionano allo stesso modo anche senza.",
+      "kindsTitle": "Cosa inviamo",
+      "kinds": {
+        "service": {
+          "title": "Ordini e biglietti",
+          "body": "Ordine confermato, biglietto ricevuto, trasferimento accettato o annullato. Inviati ogni volta che le notifiche sono attive."
+        },
+        "reminders": {
+          "title": "Promemoria",
+          "body": "24 ore e 2 ore prima dell’inizio di un evento."
+        },
+        "eventChanges": {
+          "title": "Modifiche agli eventi",
+          "body": "Quando un evento cambia o viene annullato."
+        }
+      },
+      "kindsUnavailable": "La scelta di quali ricevere non è ancora disponibile. Per fermarle tutte, disattiva le notifiche nelle impostazioni del telefono.",
+      "saveFailed": "Non è stato possibile salvare. Controlla la connessione e riprova.",
+      "marketingTitle": "Novità e offerte",
+      "marketingBody": "Disattivate. Le inviamo solo se scegli di riceverle."
+    }
   }
 }

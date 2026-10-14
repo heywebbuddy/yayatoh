@@ -2,5 +2,67 @@
   "home": {
     "title": "Yayatoh",
     "tagline": "Tus eventos y entradas aparecerán aquí muy pronto."
+  },
+  "push": {
+    "channel": {
+      "name": "Entradas y eventos"
+    },
+    "prompt": {
+      "title": "¿Quieres recibir avisos sobre tus entradas?",
+      "intro": "Yayatoh puede enviar notificaciones a este teléfono sobre:",
+      "items": {
+        "orders": "La confirmación de tu pedido",
+        "tickets": "Una entrada que te envían, o una transferencia aceptada o cancelada",
+        "changes": "Un evento que cambia o se cancela",
+        "reminders": "Un recordatorio 24 horas y 2 horas antes de que empiece un evento"
+      },
+      "privacy": "Las notificaciones muestran el nombre del evento y lo que cambió, nunca tu nombre, correo, teléfono, importe del pago ni código de entrada.",
+      "control": "Puedes cambiarlo en cualquier momento en Cuenta, Notificaciones.",
+      "againLater": "Si eliges «Ahora no», solo volveremos a preguntar después de una compra posterior. Puedes usar toda la app en ambos casos.",
+      "allow": "Activar notificaciones",
+      "notNow": "Ahora no"
+    },
+    "banner": {
+      "dismiss": "Cerrar notificación",
+      "open": "Abre la pantalla relacionada",
+      "fallbackTitle": "Yayatoh"
+    },
+    "settings": {
+      "title": "Notificaciones",
+      "statusTitle": "En este teléfono",
+      "status": {
+        "granted": "Las notificaciones están activadas",
+        "denied": "Las notificaciones están desactivadas",
+        "undetermined": "Las notificaciones aún no están configuradas",
+        "loading": "Comprobando…"
+      },
+      "statusBody": {
+        "granted": "Recibirás los avisos que se indican abajo. Para desactivarlos todos, usa los ajustes del teléfono.",
+        "denied": "Las notificaciones de Yayatoh están desactivadas. Para activarlas, abre los ajustes del teléfono.",
+        "undetermined": "Actívalas para recibir avisos sobre tus pedidos, entradas y eventos."
+      },
+      "turnOn": "Activar notificaciones",
+      "openSystem": "Abrir los ajustes del teléfono",
+      "optional": "Las notificaciones son opcionales. Las entradas, los pedidos y el inicio de sesión funcionan igual sin ellas.",
+      "kindsTitle": "Qué enviamos",
+      "kinds": {
+        "service": {
+          "title": "Pedidos y entradas",
+          "body": "Pedido confirmado, entrada recibida, transferencia aceptada o cancelada. Se envían siempre que las notificaciones estén activadas."
+        },
+        "reminders": {
+          "title": "Recordatorios",
+          "body": "24 horas y 2 horas antes de que empiece un evento."
+        },
+        "eventChanges": {
+          "title": "Cambios en eventos",
+          "body": "Cuando un evento cambia o se cancela."
+        }
+      },
+      "kindsUnavailable": "Elegir cuáles recibes aún no está disponible. Para detenerlas todas, desactiva las notificaciones en los ajustes del teléfono.",
+      "saveFailed": "No pudimos guardarlo. Comprueba tu conexión e inténtalo de nuevo.",
+      "marketingTitle": "Novedades y ofertas",
+      "marketingBody": "Desactivado. Solo las enviamos si decides recibirlas."
+    }
   }
 }

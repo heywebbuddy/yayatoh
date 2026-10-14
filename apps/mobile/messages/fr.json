@@ -2,5 +2,67 @@
   "home": {
     "title": "Yayatoh",
     "tagline": "Vos événements et vos billets apparaîtront bientôt ici."
+  },
+  "push": {
+    "channel": {
+      "name": "Billets et événements"
+    },
+    "prompt": {
+      "title": "Recevoir des alertes sur vos billets ?",
+      "intro": "Yayatoh peut envoyer à ce téléphone des notifications concernant :",
+      "items": {
+        "orders": "La confirmation de votre commande",
+        "tickets": "Un billet qui vous est envoyé, ou un transfert accepté ou annulé",
+        "changes": "Un événement modifié ou annulé",
+        "reminders": "Un rappel 24 heures et 2 heures avant le début d’un événement"
+      },
+      "privacy": "Les notifications affichent le nom de l’événement et ce qui a changé, jamais votre nom, votre e-mail, votre numéro de téléphone, un montant ni un code de billet.",
+      "control": "Vous pouvez le modifier à tout moment dans Compte, Notifications.",
+      "againLater": "Si vous choisissez « Pas maintenant », nous ne redemanderons qu’après un achat ultérieur. Vous pouvez tout utiliser dans l’app dans les deux cas.",
+      "allow": "Activer les notifications",
+      "notNow": "Pas maintenant"
+    },
+    "banner": {
+      "dismiss": "Fermer la notification",
+      "open": "Ouvre l’écran concerné",
+      "fallbackTitle": "Yayatoh"
+    },
+    "settings": {
+      "title": "Notifications",
+      "statusTitle": "Sur ce téléphone",
+      "status": {
+        "granted": "Les notifications sont activées",
+        "denied": "Les notifications sont désactivées",
+        "undetermined": "Les notifications ne sont pas encore configurées",
+        "loading": "Vérification…"
+      },
+      "statusBody": {
+        "granted": "Vous recevrez les alertes listées ci-dessous. Pour toutes les désactiver, utilisez les réglages de votre téléphone.",
+        "denied": "Les notifications sont désactivées pour Yayatoh. Pour les activer, ouvrez les réglages de votre téléphone.",
+        "undetermined": "Activez-les pour recevoir des alertes sur vos commandes, billets et événements."
+      },
+      "turnOn": "Activer les notifications",
+      "openSystem": "Ouvrir les réglages du téléphone",
+      "optional": "Les notifications sont facultatives. Les billets, les commandes et la connexion fonctionnent de la même façon sans elles.",
+      "kindsTitle": "Ce que nous envoyons",
+      "kinds": {
+        "service": {
+          "title": "Commandes et billets",
+          "body": "Commande confirmée, billet reçu, transfert accepté ou annulé. Envoyé dès que les notifications sont activées."
+        },
+        "reminders": {
+          "title": "Rappels",
+          "body": "24 heures et 2 heures avant le début d’un événement."
+        },
+        "eventChanges": {
+          "title": "Modifications d’événements",
+          "body": "Lorsqu’un événement est modifié ou annulé."
+        }
+      },
+      "kindsUnavailable": "Choisir lesquelles vous recevez n’est pas encore possible. Pour toutes les arrêter, désactivez les notifications dans les réglages du téléphone.",
+      "saveFailed": "Nous n’avons pas pu l’enregistrer. Vérifiez votre connexion et réessayez.",
+      "marketingTitle": "Actualités et offres",
+      "marketingBody": "Désactivé. Nous ne les envoyons que si vous choisissez de les recevoir."
+    }
   }
 }

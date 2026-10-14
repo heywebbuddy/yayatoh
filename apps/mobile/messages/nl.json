@@ -2,5 +2,67 @@
   "home": {
     "title": "Yayatoh",
     "tagline": "Je evenementen en tickets verschijnen hier binnenkort."
+  },
+  "push": {
+    "channel": {
+      "name": "Tickets en evenementen"
+    },
+    "prompt": {
+      "title": "Updates over je tickets ontvangen?",
+      "intro": "Yayatoh kan meldingen naar deze telefoon sturen over:",
+      "items": {
+        "orders": "De bevestiging van je bestelling",
+        "tickets": "Een ticket dat naar je is gestuurd, of een overdracht die is geaccepteerd of geannuleerd",
+        "changes": "Een evenement dat wijzigt of wordt geannuleerd",
+        "reminders": "Een herinnering 24 uur en 2 uur voordat een evenement begint"
+      },
+      "privacy": "Meldingen tonen de naam van het evenement en wat er is veranderd, nooit je naam, e-mailadres, telefoonnummer, betaalde bedrag of ticketcode.",
+      "control": "Je kunt dit altijd wijzigen bij Account, Meldingen.",
+      "againLater": "Kies je „Niet nu”, dan vragen we het pas opnieuw na een latere aankoop. Je kunt de app in beide gevallen volledig gebruiken.",
+      "allow": "Meldingen aanzetten",
+      "notNow": "Niet nu"
+    },
+    "banner": {
+      "dismiss": "Melding sluiten",
+      "open": "Opent het bijbehorende scherm",
+      "fallbackTitle": "Yayatoh"
+    },
+    "settings": {
+      "title": "Meldingen",
+      "statusTitle": "Op deze telefoon",
+      "status": {
+        "granted": "Meldingen staan aan",
+        "denied": "Meldingen staan uit",
+        "undetermined": "Meldingen zijn nog niet ingesteld",
+        "loading": "Controleren…"
+      },
+      "statusBody": {
+        "granted": "Je ontvangt de hieronder genoemde updates. Gebruik de instellingen van je telefoon om ze allemaal uit te zetten.",
+        "denied": "Meldingen staan uit voor Yayatoh. Open de instellingen van je telefoon om ze aan te zetten.",
+        "undetermined": "Zet ze aan om updates over je bestellingen, tickets en evenementen te krijgen."
+      },
+      "turnOn": "Meldingen aanzetten",
+      "openSystem": "Telefooninstellingen openen",
+      "optional": "Meldingen zijn optioneel. Tickets, bestellingen en inloggen werken hetzelfde zonder.",
+      "kindsTitle": "Wat we sturen",
+      "kinds": {
+        "service": {
+          "title": "Bestellingen en tickets",
+          "body": "Bestelling bevestigd, ticket ontvangen, overdracht geaccepteerd of geannuleerd. Wordt altijd verstuurd als meldingen aan staan."
+        },
+        "reminders": {
+          "title": "Herinneringen",
+          "body": "24 uur en 2 uur voordat een evenement begint."
+        },
+        "eventChanges": {
+          "title": "Wijzigingen in evenementen",
+          "body": "Wanneer een evenement wijzigt of wordt geannuleerd."
+        }
+      },
+      "kindsUnavailable": "Kiezen welke je krijgt is nog niet beschikbaar. Zet meldingen uit in de instellingen van je telefoon om ze allemaal te stoppen.",
+      "saveFailed": "Opslaan is niet gelukt. Controleer je verbinding en probeer het opnieuw.",
+      "marketingTitle": "Nieuws en aanbiedingen",
+      "marketingBody": "Uit. We sturen deze alleen als je ervoor kiest ze te ontvangen."
+    }
   }
 }

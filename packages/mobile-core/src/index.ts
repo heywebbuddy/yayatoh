@@ -40,7 +40,7 @@ export {
   pickLocale,
 } from './i18n/locales';
 export { type LocaleApi, type LocaleChoice, LocaleProvider, useLocaleSettings } from './i18n/provider';
-export { type AppRoute, ROUTES, routeForLink, routeForPush } from './links/routes';
+export { type AppRoute, PLATFORM_HOSTS, ROUTES, routeForLink, routeForPush } from './links/routes';
 export { nativeAdapters } from './platform/adapters';
 export { type AppExtra, nativeIdentity, readAppExtra } from './platform/native';
 export { OfflineBanner, useIsOffline } from './platform/network';
