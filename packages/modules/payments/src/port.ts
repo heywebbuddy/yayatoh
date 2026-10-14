@@ -17,6 +17,11 @@ export interface CreatePaymentInput {
   readonly idempotencyKey: string;
   /** Where the buyer returns after paying. */
   readonly returnUrl: string;
+  /**
+   * M7.2f: where the buyer returns when they leave the hosted page without paying (the mobile
+   * apps open a universal link). Default: `returnUrl`, as the web checkout has always done.
+   */
+  readonly cancelUrl?: string;
 }
 
 export interface CreatePaymentResult {

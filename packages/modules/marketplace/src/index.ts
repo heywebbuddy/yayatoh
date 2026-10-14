@@ -131,6 +131,15 @@ export {
 } from './search/port.ts';
 export { PROMOTED_SLOTS, promotedPlacements, promotedSlugs } from './search/promoted.ts';
 export {
+  PUBLIC_EVENTS_DEFAULT_RADIUS_KM,
+  PUBLIC_EVENTS_MAX_LIMIT,
+  PUBLIC_EVENTS_MAX_RADIUS_KM,
+  PublicEventHit,
+  type PublicEventsAfter,
+  type PublicEventsQuery,
+  searchPublicEvents,
+} from './search/public-events.ts';
+export {
   cityCenters,
   type GeoPoint,
   listingsBySlugs,

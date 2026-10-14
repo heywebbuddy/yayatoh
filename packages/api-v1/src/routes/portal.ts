@@ -28,15 +28,9 @@ import {
   syncLeadScansCommand,
   updateLeadCommand,
 } from '@yayatoh/leads';
-import { postgresRateLimitStore } from '@yayatoh/platform';
-import {
-  createRateLimiter,
-  type RateLimiter as PlatformRateLimiter,
-  type RateLimitStore,
-  upstashRateLimitStore,
-} from '@yayatoh/platform/security';
 import { createMiddleware } from 'hono/factory';
 import type { V1Deps, V1Env } from '../context.ts';
+import { platformLimiter } from '../platform-limiter.ts';
 import { portalMailer } from '../portal-mail.ts';
 import { toWire } from '../resources.ts';
 import { body, json, problems, writeProblems } from './common.ts';
@@ -54,21 +48,6 @@ const portalSecurity = [{ portalSession: [] }];
 const iso = z.iso.datetime({ offset: true });
 
 const LOCALE = /^[a-z]{2}(-[A-Z]{2})?$/;
-
-let defaultLimiter: PlatformRateLimiter | undefined;
-/** The M1.14 limiter as the web app builds it: Upstash when configured, otherwise Postgres counters. */
-function platformLimiter(): PlatformRateLimiter {
-  if (!defaultLimiter) {
-    const url = process.env.UPSTASH_REDIS_REST_URL;
-    const token = process.env.UPSTASH_REDIS_REST_TOKEN;
-    const store: RateLimitStore =
-      url && token ? upstashRateLimitStore({ url, token }) : postgresRateLimitStore;
-    defaultLimiter = createRateLimiter(store, (err) =>
-      console.error(JSON.stringify({ rateLimit: 'store_error', message: String(err) })),
-    );
-  }
-  return defaultLimiter;
-}
 
 const localeOf = (h: Headers) => {
   const asked = (h.get('accept-language') ?? 'en').split(/[,;]/)[0]?.trim() ?? 'en';
