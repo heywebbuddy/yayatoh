@@ -335,3 +335,21 @@ export function fakeStaff(over: Partial<StaffApi> = {}): jest.Mocked<StaffApi> {
     Object.entries(merged).map(([k, fn]) => [k, jest.fn(fn as never)]),
   ) as unknown as jest.Mocked<StaffApi>;
 }
+
+import type { LeadScanResult, PortalApi } from '../../src/tools/api';
+
+export function fakePortal(over: Partial<PortalApi> = {}): jest.Mocked<PortalApi> {
+  const base: PortalApi = {
+    setup: async () => setup(),
+    leads: async () => ({ leads: [lead()], scope: 'own' }),
+    syncScans: async (scans) =>
+      scans.map(
+        (s): LeadScanResult => ({ scanId: s.scanId, status: 'captured', reason: null, lead: lead() }),
+      ),
+    updateLead: async () => {},
+  };
+  const merged = { ...base, ...over };
+  return Object.fromEntries(
+    Object.entries(merged).map(([k, fn]) => [k, jest.fn(fn as never)]),
+  ) as unknown as jest.Mocked<PortalApi>;
+}

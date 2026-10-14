@@ -252,6 +252,8 @@
   },
   "leads": {
     "title": "Your leads",
+    "open": "Open",
+    "openFor": "Open the lead for {name}",
     "setup": "{exhibitor} · {event}",
     "count": "{count, plural, one {# lead} other {# leads}}",
     "searchLabel": "Search leads",

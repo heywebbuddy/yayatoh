@@ -49,6 +49,8 @@ export interface ToolsDeps {
   readonly Scanner: ComponentType<ScannerProps> | null;
   readonly clock: { now(): Date; offsetMs(): number };
   readonly newId: () => string;
+  /** Opens a route of the app (`/tools/leads/scan`); expo-router's `router.push` in the app. */
+  readonly navigate: (path: string) => void;
   /** True while the phone has no connection (mobile-core's `useIsOffline` in the app). */
   readonly useOffline: () => boolean;
   /** Plays the verdict's sound and haptic (M7.4b); optional. */

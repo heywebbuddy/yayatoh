@@ -66,3 +66,23 @@ export function useOps() {
     meta: { persist: false },
   });
 }
+
+export function useLeadSetup() {
+  const { portal } = useTools();
+  return useQuery({
+    queryKey: toolKeys.leadSetup(portal?.owner ?? ''),
+    queryFn: () => (portal ? portal.api.setup() : Promise.reject(new Error('no portal'))),
+    enabled: !!portal,
+    meta: { persist: false },
+  });
+}
+
+export function useLeadList(enabled: boolean) {
+  const { portal } = useTools();
+  return useQuery({
+    queryKey: toolKeys.leads(portal?.owner ?? ''),
+    queryFn: () => (portal ? portal.api.leads() : Promise.reject(new Error('no portal'))),
+    enabled: !!portal && enabled,
+    meta: { persist: false },
+  });
+}

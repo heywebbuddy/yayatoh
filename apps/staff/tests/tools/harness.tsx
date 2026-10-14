@@ -25,6 +25,7 @@ export function makeDeps(over: Partial<ToolsDeps> = {}): ToolsDeps & { vaultFile
     Scanner: null,
     clock: { now: () => new Date('2026-10-20T10:00:00Z'), offsetMs: () => 0 },
     newId,
+    navigate: jest.fn(),
     useOffline: () => false,
     ...over,
   };
