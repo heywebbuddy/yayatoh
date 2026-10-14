@@ -1,7 +1,7 @@
 import { QueryClient } from '@tanstack/react-query';
 import { ticketKeys } from '../src/tickets/api';
 import { detailIsCurrent, MAX_SYNC_PAGES, syncTickets } from '../src/tickets/sync';
-import { setOnline, setup } from './helpers/app';
+import { setOnline, setup, teardown } from './helpers/app';
 import { IDS, page, summary, ticket } from './helpers/fixtures';
 import { problem } from './helpers/server';
 
@@ -13,7 +13,7 @@ function mount() {
 }
 afterEach(() => {
   setOnline(true);
-  for (const app of apps.splice(0)) app.core.queryClient.clear();
+  teardown(apps);
 });
 
 describe('detailIsCurrent', () => {

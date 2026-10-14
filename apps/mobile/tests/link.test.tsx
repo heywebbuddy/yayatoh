@@ -1,7 +1,7 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react-native';
 import { PENDING_KEY } from '../src/tickets/pending';
 import { TicketLinkScreen } from '../src/tickets/screens/ticket-link';
-import { setOnline, setup } from './helpers/app';
+import { setOnline, setup, teardown } from './helpers/app';
 import { IDS, ticket } from './helpers/fixtures';
 import { resetRouter, router } from './helpers/router-mock';
 import { json, problem } from './helpers/server';
@@ -24,7 +24,7 @@ beforeEach(() => {
 });
 afterEach(() => {
   setOnline(true);
-  for (const app of apps.splice(0)) app.core.queryClient.clear();
+  teardown(apps);
 });
 
 describe('Ticket link', () => {

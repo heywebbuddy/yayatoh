@@ -1,7 +1,7 @@
 import { screen } from '@testing-library/react-native';
 import { Text } from 'react-native';
 import { SignedInOnly } from '../src/tickets/signed-in';
-import { setup } from './helpers/app';
+import { setup, teardown } from './helpers/app';
 import { redirects, resetRouter } from './helpers/router-mock';
 
 jest.mock('expo-router', () => require('./helpers/router-mock').routerMock);
@@ -9,7 +9,7 @@ jest.mock('expo-router', () => require('./helpers/router-mock').routerMock);
 const apps: ReturnType<typeof setup>[] = [];
 beforeEach(() => resetRouter());
 afterEach(() => {
-  for (const app of apps.splice(0)) app.core.queryClient.clear();
+  teardown(apps);
 });
 
 describe('SignedInOnly', () => {

@@ -20,3 +20,13 @@ jest.mock('expo-crypto', () => ({
   ...jest.requireActual('expo-crypto'),
   randomUUID: () => require('node:crypto').randomUUID(),
 }));
+
+// TanStack Query keeps a garbage-collection timer of seven days (queries) or five minutes
+// (mutations) for what it has cached. A phone never waits for them, and under Jest they would keep
+// the process alive after the last test, so the long ones do not hold the event loop open.
+const realSetTimeout = global.setTimeout;
+(global as { setTimeout: unknown }).setTimeout = ((fn: () => void, delay?: number, ...rest: unknown[]) => {
+  const timer = realSetTimeout(fn, delay, ...rest);
+  if ((delay ?? 0) >= 60_000) (timer as { unref?: () => void }).unref?.();
+  return timer;
+}) as typeof setTimeout;

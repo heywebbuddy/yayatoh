@@ -1,7 +1,7 @@
 import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
 import { ticketKeys } from '../src/tickets/api';
 import { TicketDetailScreen } from '../src/tickets/screens/ticket-detail';
-import { fakeServices, setOnline, setup } from './helpers/app';
+import { fakeServices, setOnline, setup, teardown } from './helpers/app';
 import { IDS, PAST, ticket } from './helpers/fixtures';
 import { resetRouter, router } from './helpers/router-mock';
 import { json, problem } from './helpers/server';
@@ -23,7 +23,7 @@ beforeEach(() => {
 });
 afterEach(() => {
   setOnline(true);
-  for (const app of apps.splice(0)) app.core.queryClient.clear();
+  teardown(apps);
 });
 
 const open = async (app: ReturnType<typeof setup>) => {

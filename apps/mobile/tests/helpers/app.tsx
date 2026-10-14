@@ -1,6 +1,6 @@
 import { randomBytes } from 'node:crypto';
 import { onlineManager } from '@tanstack/react-query';
-import { render } from '@testing-library/react-native';
+import { cleanup, render } from '@testing-library/react-native';
 import {
   type AppLocale,
   type Core,
@@ -75,6 +75,9 @@ export function setup(options: AppOptions = {}) {
     catalogs,
     adapters: { storage, files, random: (n) => new Uint8Array(randomBytes(n)), fetch: server.fetch },
   });
+  // A finished mutation keeps a five-minute collection timer that would hold Jest open.
+  const defaults = core.queryClient.getDefaultOptions();
+  core.queryClient.setDefaultOptions({ ...defaults, mutations: { ...defaults.mutations, gcTime: 0 } });
   const locale = options.locale ?? 'en';
   const fake = fakeServices();
   const services = options.services ?? fake.services;
@@ -98,4 +101,17 @@ export function setup(options: AppOptions = {}) {
 /** Makes Query and the offline check agree the phone has no connection (or has it back). */
 export function setOnline(online: boolean) {
   onlineManager.setOnline(online);
+}
+
+/**
+ * Ends a test's apps: unmounts first (a mutation that finishes after a screen goes keeps a five-minute
+ * collection timer, which would hold Jest open), then empties the caches, which also drops the
+ * seven-day timers the persisted queries keep.
+ */
+export function teardown(apps: { core: Core }[]) {
+  cleanup();
+  for (const app of apps.splice(0)) {
+    app.core.queryClient.getMutationCache().clear();
+    app.core.queryClient.clear();
+  }
 }

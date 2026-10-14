@@ -2,7 +2,7 @@ import { fireEvent, screen, waitFor } from '@testing-library/react-native';
 import { YayatohApiError } from '@yayatoh/sdk';
 import { viewProblem } from '../src/tickets/api';
 import { RefundPanel, RefundScreen, refundErrorKey } from '../src/tickets/screens/refund';
-import { setOnline, setup } from './helpers/app';
+import { setOnline, setup, teardown } from './helpers/app';
 import { IDS, order, ticket } from './helpers/fixtures';
 import { resetRouter, router } from './helpers/router-mock';
 import { json, problem } from './helpers/server';
@@ -23,7 +23,7 @@ beforeEach(() => {
 });
 afterEach(() => {
   setOnline(true);
-  for (const app of apps.splice(0)) app.core.queryClient.clear();
+  teardown(apps);
 });
 
 const open = async (app: ReturnType<typeof setup>) => {

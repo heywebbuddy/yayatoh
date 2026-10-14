@@ -9,7 +9,7 @@ import { TicketLinkScreen } from '../src/tickets/screens/ticket-link';
 import { TicketsListScreen } from '../src/tickets/screens/tickets-list';
 import { TransferScreen } from '../src/tickets/screens/transfer';
 import { expectAccessibleControls } from './helpers/a11y';
-import { setOnline, setup } from './helpers/app';
+import { setOnline, setup, teardown } from './helpers/app';
 import { claimDetails, IDS, order, page, summary, ticket } from './helpers/fixtures';
 import { resetRouter } from './helpers/router-mock';
 import { json } from './helpers/server';
@@ -37,7 +37,7 @@ beforeEach(() => {
 });
 afterEach(() => {
   setOnline(true);
-  for (const app of apps.splice(0)) app.core.queryClient.clear();
+  teardown(apps);
 });
 
 const ar = catalogs.ar.tickets;

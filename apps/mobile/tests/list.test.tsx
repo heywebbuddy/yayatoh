@@ -3,7 +3,7 @@ import { act, fireEvent, screen, waitFor, within } from '@testing-library/react-
 import { ticketKeys } from '../src/tickets/api';
 import { TicketsListScreen } from '../src/tickets/screens/tickets-list';
 import { syncTickets } from '../src/tickets/sync';
-import { setOnline, setup } from './helpers/app';
+import { setOnline, setup, teardown } from './helpers/app';
 import { event, FUTURE, IDS, page, summary, ticket } from './helpers/fixtures';
 import { resetRouter, router } from './helpers/router-mock';
 import { problem } from './helpers/server';
@@ -25,7 +25,7 @@ beforeEach(() => {
 afterEach(() => {
   setOnline(true);
   // A cached query keeps a seven-day garbage-collection timer, which would keep Jest alive.
-  for (const app of apps.splice(0)) app.core.queryClient.clear();
+  teardown(apps);
 });
 
 const t1 = summary({ id: IDS.t1 });
