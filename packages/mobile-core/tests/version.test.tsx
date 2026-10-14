@@ -4,8 +4,8 @@ import { Text } from 'react-native';
 import { createApiClient } from '../src/client';
 import { LocaleProvider } from '../src/i18n/provider';
 import { ThemeProvider } from '../src/theme/provider';
-import { compareVersions, createVersionGate, evaluateVersion, safeStoreUrl } from '../src/version/gate';
 import { SoftUpdateBanner, UpdateScreen, VersionGateView } from '../src/version/components';
+import { compareVersions, createVersionGate, evaluateVersion, safeStoreUrl } from '../src/version/gate';
 import { json, problem } from './helpers/fake-api';
 
 const IOS_STORE = 'https://apps.apple.com/app/yayatoh/id111';
@@ -32,7 +32,10 @@ const config = (apps: Record<string, ReturnType<typeof policy>>) =>
   });
 
 const apiFor = (fetchImpl: () => Response | Promise<Response>) =>
-  createYayatohClient({ baseUrl: 'https://x.test/api', fetch: (async () => fetchImpl()) as unknown as typeof fetch });
+  createYayatohClient({
+    baseUrl: 'https://x.test/api',
+    fetch: (async () => fetchImpl()) as unknown as typeof fetch,
+  });
 
 describe('compareVersions', () => {
   it.each([
@@ -48,8 +51,17 @@ describe('compareVersions', () => {
 
 describe('evaluateVersion', () => {
   it('is required below the minimum, recommended below the latest, else ok', () => {
-    expect(evaluateVersion('1.0.0', policy('2.0.0', '2.1.0'))).toEqual({ kind: 'required', minimum: '2.0.0', latest: '2.1.0', storeUrl: IOS_STORE });
-    expect(evaluateVersion('2.0.0', policy('2.0.0', '2.1.0'))).toEqual({ kind: 'recommended', latest: '2.1.0', storeUrl: IOS_STORE });
+    expect(evaluateVersion('1.0.0', policy('2.0.0', '2.1.0'))).toEqual({
+      kind: 'required',
+      minimum: '2.0.0',
+      latest: '2.1.0',
+      storeUrl: IOS_STORE,
+    });
+    expect(evaluateVersion('2.0.0', policy('2.0.0', '2.1.0'))).toEqual({
+      kind: 'recommended',
+      latest: '2.1.0',
+      storeUrl: IOS_STORE,
+    });
     expect(evaluateVersion('2.1.0', policy('2.0.0', '2.1.0'))).toEqual({ kind: 'ok' });
     expect(evaluateVersion('9.9.9', policy('2.0.0', '2.1.0'))).toEqual({ kind: 'ok' });
   });
@@ -58,21 +70,42 @@ describe('evaluateVersion', () => {
   });
   it('only passes on an https store link', () => {
     expect(safeStoreUrl(IOS_STORE)).toBe(IOS_STORE);
-    for (const bad of ['http://x.test', 'javascript:alert(1)', 'itms-apps://x', '', null, undefined, 'https://a b'])
+    for (const bad of [
+      'http://x.test',
+      'javascript:alert(1)',
+      'itms-apps://x',
+      '',
+      null,
+      undefined,
+      'https://a b',
+    ])
       expect(safeStoreUrl(bad as string)).toBeNull();
-    expect(evaluateVersion('1.0.0', policy('2.0.0', '2.0.0', 'javascript:alert(1)'))).toMatchObject({ kind: 'required', storeUrl: null });
+    expect(evaluateVersion('1.0.0', policy('2.0.0', '2.0.0', 'javascript:alert(1)'))).toMatchObject({
+      kind: 'required',
+      storeUrl: null,
+    });
   });
 });
 
 describe('version gate', () => {
   it('a below-minimum /v1/mobile/config blocks, with this app’s store link', async () => {
     const gate = createVersionGate({
-      api: apiFor(() => config({ 'yayatoh-ios': policy('2.0.0', '2.0.0', IOS_STORE), 'yayatoh-android': policy('9.9.9', '9.9.9', 'https://play.google.com/x') })),
+      api: apiFor(() =>
+        config({
+          'yayatoh-ios': policy('2.0.0', '2.0.0', IOS_STORE),
+          'yayatoh-android': policy('9.9.9', '9.9.9', 'https://play.google.com/x'),
+        }),
+      ),
       client: 'yayatoh-ios',
       appVersion: '1.9.0',
     });
     expect(gate.state.kind).toBe('unknown');
-    expect(await gate.check()).toEqual({ kind: 'required', minimum: '2.0.0', latest: '2.0.0', storeUrl: IOS_STORE });
+    expect(await gate.check()).toEqual({
+      kind: 'required',
+      minimum: '2.0.0',
+      latest: '2.0.0',
+      storeUrl: IOS_STORE,
+    });
   });
 
   it('reads the Staff app’s own entry, not the attendee one', async () => {
@@ -86,13 +119,23 @@ describe('version gate', () => {
 
   it('a Staff device in its event window is never blocked, only nudged', async () => {
     const gate = createVersionGate({
-      api: apiFor(() => config({ 'yayatoh-staff-android': policy('3.0.0', '3.1.0', 'https://play.google.com/x') })),
+      api: apiFor(() =>
+        config({ 'yayatoh-staff-android': policy('3.0.0', '3.1.0', 'https://play.google.com/x') }),
+      ),
       client: 'yayatoh-staff-android',
       appVersion: '2.0.0',
       suppressRequired: () => true,
     });
-    expect(await gate.check()).toEqual({ kind: 'recommended', latest: '3.1.0', storeUrl: 'https://play.google.com/x' });
-    await gate.upgradeRequired({ minimumVersion: '3.0.0', latestVersion: '3.1.0', storeUrl: 'https://play.google.com/x' });
+    expect(await gate.check()).toEqual({
+      kind: 'recommended',
+      latest: '3.1.0',
+      storeUrl: 'https://play.google.com/x',
+    });
+    await gate.upgradeRequired({
+      minimumVersion: '3.0.0',
+      latestVersion: '3.1.0',
+      storeUrl: 'https://play.google.com/x',
+    });
     expect(gate.state.kind).toBe('recommended');
   });
 
@@ -101,12 +144,20 @@ describe('version gate', () => {
     ['a 503', () => problem(503, 'internal')],
     ['an unreadable body', () => new Response('<html>', { status: 200 })],
   ])('%s never blocks', async (_n, answer) => {
-    const gate = createVersionGate({ api: apiFor(answer as never), client: 'yayatoh-ios', appVersion: '1.0.0' });
+    const gate = createVersionGate({
+      api: apiFor(answer as never),
+      client: 'yayatoh-ios',
+      appVersion: '1.0.0',
+    });
     expect((await gate.check()).kind).toBe('unknown');
   });
 
   it('a later good answer does not lift a block set by a 426 unless it says the version is fine', async () => {
-    const gate = createVersionGate({ api: apiFor(() => problem(503, 'internal')), client: 'yayatoh-ios', appVersion: '1.0.0' });
+    const gate = createVersionGate({
+      api: apiFor(() => problem(503, 'internal')),
+      client: 'yayatoh-ios',
+      appVersion: '1.0.0',
+    });
     await gate.upgradeRequired({ minimumVersion: '2.0.0', latestVersion: null, storeUrl: IOS_STORE });
     expect(gate.state.kind).toBe('required');
     await gate.check(); // a failed check changes nothing
@@ -114,7 +165,11 @@ describe('version gate', () => {
   });
 
   it('notifies subscribers', async () => {
-    const gate = createVersionGate({ api: apiFor(() => config({})), client: 'yayatoh-ios', appVersion: '1.0.0' });
+    const gate = createVersionGate({
+      api: apiFor(() => config({})),
+      client: 'yayatoh-ios',
+      appVersion: '1.0.0',
+    });
     const seen: string[] = [];
     gate.subscribe(() => seen.push(gate.state.kind));
     await gate.check();
@@ -197,7 +252,12 @@ describe('VersionGateView', () => {
     const api = createApiClient({
       baseUrl: 'https://x.test/api/v1',
       identity: { app: 'mobile', platform: 'ios', version: '1.0.0' },
-      fetch: (async () => problem(426, 'upgrade_required', { minimumVersion: '2.0.0', latestVersion: '2.2.0', storeUrl: appStore })) as unknown as typeof fetch,
+      fetch: (async () =>
+        problem(426, 'upgrade_required', {
+          minimumVersion: '2.0.0',
+          latestVersion: '2.2.0',
+          storeUrl: appStore,
+        })) as unknown as typeof fetch,
       onUpgradeRequired: (info) => void gate.upgradeRequired(info),
     });
     gate = createVersionGate({ api, client: 'yayatoh-ios', appVersion: '1.0.0' });

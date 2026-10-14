@@ -10,7 +10,12 @@ jest.mock('expo-apple-authentication', () => ({
 }));
 jest.mock('expo-web-browser', () => ({ maybeCompleteAuthSession: jest.fn() }));
 jest.mock('expo-auth-session', () => {
-  const state = { promptResult: { type: 'success', params: { code: 'auth-code' } } as { type: string; params?: { code?: string } } };
+  const state = {
+    promptResult: { type: 'success', params: { code: 'auth-code' } } as {
+      type: string;
+      params?: { code?: string };
+    },
+  };
   class AuthRequest {
     static last: AuthRequest | null = null;
     codeVerifier = 'verifier-123';
@@ -25,7 +30,10 @@ jest.mock('expo-auth-session', () => {
     __state: state,
     AuthRequest,
     ResponseType: { Code: 'code' },
-    fetchDiscoveryAsync: jest.fn(async () => ({ authorizationEndpoint: 'https://accounts.google.com/o/oauth2/v2/auth', tokenEndpoint: 'https://oauth2.googleapis.com/token' })),
+    fetchDiscoveryAsync: jest.fn(async () => ({
+      authorizationEndpoint: 'https://accounts.google.com/o/oauth2/v2/auth',
+      tokenEndpoint: 'https://oauth2.googleapis.com/token',
+    })),
     exchangeCodeAsync: jest.fn(async () => ({ idToken: 'google.id.token' })),
   };
 });
@@ -58,7 +66,9 @@ describe('Apple adapter', () => {
   });
 
   it('a cancelled sheet is null; another failure is thrown', async () => {
-    apple.signInAsync.mockRejectedValueOnce(Object.assign(new Error('cancelled'), { code: 'ERR_REQUEST_CANCELED' }));
+    apple.signInAsync.mockRejectedValueOnce(
+      Object.assign(new Error('cancelled'), { code: 'ERR_REQUEST_CANCELED' }),
+    );
     expect(await expoAppleProvider().signIn('n')).toBeNull();
     apple.signInAsync.mockRejectedValueOnce(Object.assign(new Error('boom'), { code: 'ERR_REQUEST_FAILED' }));
     await expect(expoAppleProvider().signIn('n')).rejects.toThrow('boom');
@@ -76,7 +86,10 @@ describe('Apple adapter', () => {
 });
 
 describe('Google adapter', () => {
-  const options = { clientId: 'client.apps.googleusercontent.com', redirectUri: 'com.googleusercontent.apps.client:/oauthredirect' };
+  const options = {
+    clientId: 'client.apps.googleusercontent.com',
+    redirectUri: 'com.googleusercontent.apps.client:/oauthredirect',
+  };
   beforeEach(() => {
     jest.clearAllMocks();
     session.__state.promptResult = { type: 'success', params: { code: 'auth-code' } };

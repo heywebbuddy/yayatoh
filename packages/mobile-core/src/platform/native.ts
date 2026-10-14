@@ -20,7 +20,9 @@ export interface AppExtra {
 const text = (v: unknown): string | undefined => (typeof v === 'string' && v.trim() ? v.trim() : undefined);
 
 /** `extra` from the Expo config, checked; throws if the build has no API URL (a broken build). */
-export function readAppExtra(extra: Record<string, unknown> | undefined = Constants.expoConfig?.extra): AppExtra {
+export function readAppExtra(
+  extra: Record<string, unknown> | undefined = Constants.expoConfig?.extra,
+): AppExtra {
   const apiBaseUrl = text(extra?.apiBaseUrl);
   if (!apiBaseUrl) throw new Error('The build has no apiBaseUrl: check app.config.ts');
   return {
@@ -28,7 +30,9 @@ export function readAppExtra(extra: Record<string, unknown> | undefined = Consta
     apiBaseUrl,
     ...(text(extra?.sentryDsn) ? { sentryDsn: text(extra?.sentryDsn) } : {}),
     ...(text(extra?.googleIosClientId) ? { googleIosClientId: text(extra?.googleIosClientId) } : {}),
-    ...(text(extra?.googleAndroidClientId) ? { googleAndroidClientId: text(extra?.googleAndroidClientId) } : {}),
+    ...(text(extra?.googleAndroidClientId)
+      ? { googleAndroidClientId: text(extra?.googleAndroidClientId) }
+      : {}),
   };
 }
 
@@ -48,10 +52,17 @@ export function nativeIdentity(app: MobileApp): ClientIdentity {
  * app simply has no Google button). iOS clients redirect to `com.googleusercontent.apps.<id>:/oauthredirect`,
  * Android clients to `<package>:/oauth2redirect`.
  */
-export function googleOptions(extra: AppExtra, platform: MobilePlatform, androidPackage?: string): GoogleProviderOptions | null {
+export function googleOptions(
+  extra: AppExtra,
+  platform: MobilePlatform,
+  androidPackage?: string,
+): GoogleProviderOptions | null {
   if (platform === 'ios' && extra.googleIosClientId) {
     const id = extra.googleIosClientId.split('.apps.googleusercontent.com')[0];
-    return { clientId: extra.googleIosClientId, redirectUri: `com.googleusercontent.apps.${id}:/oauthredirect` };
+    return {
+      clientId: extra.googleIosClientId,
+      redirectUri: `com.googleusercontent.apps.${id}:/oauthredirect`,
+    };
   }
   const pkg = androidPackage ?? Application.applicationId;
   if (platform === 'android' && extra.googleAndroidClientId && pkg) {

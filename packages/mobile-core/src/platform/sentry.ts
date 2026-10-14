@@ -24,7 +24,8 @@ const YAYATOH_TOKEN = /\byy[a-z]{0,2}_[A-Za-z0-9_-]{6,}/g;
 const JWT = /\beyJ[A-Za-z0-9_-]{5,}\.[A-Za-z0-9_-]{5,}\.[A-Za-z0-9_-]*/g;
 const LONG_HEX = /\b[0-9a-f]{32,}\b/gi;
 const PHONE = /(?<![\w.])\+?\d[\d\s().-]{7,}\d(?![\w.])/g;
-const SENSITIVE_KEY = /e-?mail|token|password|passcode|secret|authorization|cookie|phone|name|address|ticket|qr|code|key|nonce|challenge/i;
+const SENSITIVE_KEY =
+  /e-?mail|token|password|passcode|secret|authorization|cookie|phone|name|address|ticket|qr|code|key|nonce|challenge/i;
 
 /** Masks personal data and secrets inside free text. */
 export function scrubText(text: string): string {
@@ -37,13 +38,17 @@ export function scrubText(text: string): string {
     .replace(PHONE, '[phone]');
 }
 
-const ID_SEGMENT = /^(?:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}|[A-Za-z0-9_-]{16,}|\d{4,})$/i;
+const ID_SEGMENT =
+  /^(?:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}|[A-Za-z0-9_-]{16,}|\d{4,})$/i;
 
 /** A URL without its query, fragment, credentials or identifier-like path segments. */
 export function scrubUrl(url: string): string {
   const m = /^([a-z][a-z0-9+.-]*:\/\/)(?:[^/@]*@)?([^/?#]*)([^?#]*)/i.exec(url);
   if (!m) return scrubText(url.split(/[?#]/, 1)[0] ?? '');
-  const path = (m[3] ?? '').split('/').map((s) => (ID_SEGMENT.test(s) ? ':id' : scrubText(s))).join('/');
+  const path = (m[3] ?? '')
+    .split('/')
+    .map((s) => (ID_SEGMENT.test(s) ? ':id' : scrubText(s)))
+    .join('/');
   return `${m[1]}${m[2]}${path}`;
 }
 
@@ -86,7 +91,8 @@ export function scrubEvent<T extends ScrubbableEvent>(event: T): T {
     };
   }
   for (const key of ['message', 'transaction', 'culprit']) {
-    if (typeof e[key] === 'string') e[key] = key === 'transaction' ? scrubUrl(e[key] as string) : scrubText(e[key] as string);
+    if (typeof e[key] === 'string')
+      e[key] = key === 'transaction' ? scrubUrl(e[key] as string) : scrubText(e[key] as string);
   }
   if (isObject(e.exception) && Array.isArray(e.exception.values)) {
     e.exception = { ...e.exception, values: scrubValue(e.exception.values) };
@@ -99,7 +105,8 @@ export function scrubEvent<T extends ScrubbableEvent>(event: T): T {
     e.contexts = { ...(scrubValue(rest) as Json), device: scrubValue(safeDevice) };
   }
   for (const key of ['extra', 'tags']) if (isObject(e[key])) e[key] = scrubValue(e[key], true);
-  if (Array.isArray(e.breadcrumbs)) e.breadcrumbs = e.breadcrumbs.map((b) => scrubBreadcrumb(b as ScrubbableEvent));
+  if (Array.isArray(e.breadcrumbs))
+    e.breadcrumbs = e.breadcrumbs.map((b) => scrubBreadcrumb(b as ScrubbableEvent));
   return e as T;
 }
 
@@ -111,7 +118,8 @@ export function scrubBreadcrumb<T extends ScrubbableEvent>(crumb: T): T {
     const d: Json = {};
     for (const [k, v] of Object.entries(c.data)) {
       if (k === 'url' && typeof v === 'string') d.url = scrubUrl(v);
-      else if (/^(?:method|status_code|reason|from|to)$/.test(k)) d[k] = typeof v === 'string' ? scrubUrl(v) : v;
+      else if (/^(?:method|status_code|reason|from|to)$/.test(k))
+        d[k] = typeof v === 'string' ? scrubUrl(v) : v;
     }
     c.data = d;
   }
@@ -140,7 +148,8 @@ export function initSentry(config: SentryConfig, sentry: Pick<typeof Sentry, 'in
     tracesSampleRate: 0,
     maxBreadcrumbs: 50,
     beforeSend: (event) => scrubEvent(event as unknown as ScrubbableEvent) as unknown as typeof event,
-    beforeBreadcrumb: (crumb) => scrubBreadcrumb(crumb as unknown as ScrubbableEvent) as unknown as typeof crumb,
+    beforeBreadcrumb: (crumb) =>
+      scrubBreadcrumb(crumb as unknown as ScrubbableEvent) as unknown as typeof crumb,
   });
   enabled = true;
   return true;

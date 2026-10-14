@@ -1,8 +1,8 @@
 import { type ReactNode, useState, useSyncExternalStore } from 'react';
 import { Linking, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useTranslations } from 'use-intl';
-import { px, radius, space, TOUCH_TARGET_PX, type } from '../theme/theme';
 import { useColors } from '../theme/provider';
+import { px, radius, space, TOUCH_TARGET_PX, type } from '../theme/theme';
 import type { VersionGate } from './gate';
 
 export interface UpdateScreenProps {
@@ -15,7 +15,12 @@ export interface UpdateScreenProps {
 }
 
 /** Shown instead of the app below the minimum version (or after a 426). Nothing else is reachable. */
-export function UpdateScreen({ appName, minimumVersion, storeUrl, openUrl = Linking.openURL }: UpdateScreenProps) {
+export function UpdateScreen({
+  appName,
+  minimumVersion,
+  storeUrl,
+  openUrl = Linking.openURL,
+}: UpdateScreenProps) {
   const t = useTranslations('core.update');
   const colors = useColors();
   return (
@@ -37,7 +42,9 @@ export function UpdateScreen({ appName, minimumVersion, storeUrl, openUrl = Link
             style={[styles.button, { backgroundColor: colors.primary }]}
             testID="update-button"
           >
-            <Text style={[styles.buttonText, { color: colors.onPrimary }]}>{t('action', { app: appName })}</Text>
+            <Text style={[styles.buttonText, { color: colors.onPrimary }]}>
+              {t('action', { app: appName })}
+            </Text>
           </Pressable>
         ) : (
           <Text style={[styles.body, { color: colors.ink2 }]} testID="update-no-link">
@@ -58,7 +65,13 @@ export interface SoftUpdateBannerProps {
 }
 
 /** A dismissible nudge above the app when a newer version exists. */
-export function SoftUpdateBanner({ appName, latestVersion, storeUrl, onDismiss, openUrl = Linking.openURL }: SoftUpdateBannerProps) {
+export function SoftUpdateBanner({
+  appName,
+  latestVersion,
+  storeUrl,
+  onDismiss,
+  openUrl = Linking.openURL,
+}: SoftUpdateBannerProps) {
   const t = useTranslations('core.update');
   const colors = useColors();
   return (
@@ -68,7 +81,9 @@ export function SoftUpdateBanner({ appName, latestVersion, storeUrl, onDismiss, 
       testID="soft-update"
     >
       <Text style={[styles.bannerTitle, { color: colors.ink }]}>{t('softTitle')}</Text>
-      <Text style={[styles.body, { color: colors.ink2 }]}>{t('softBody', { app: appName, latest: latestVersion })}</Text>
+      <Text style={[styles.body, { color: colors.ink2 }]}>
+        {t('softBody', { app: appName, latest: latestVersion })}
+      </Text>
       <View style={styles.row}>
         {storeUrl ? (
           <Pressable
@@ -102,13 +117,23 @@ export interface VersionGateViewProps {
   readonly openUrl?: (url: string) => Promise<unknown>;
 }
 
-
 /** The update screen when the version is too old, else the app (with a nudge when a newer one exists). */
 export function VersionGateView({ gate, appName, children, openUrl }: VersionGateViewProps) {
-  const state = useSyncExternalStore(gate.subscribe, () => gate.state, () => gate.state);
+  const state = useSyncExternalStore(
+    gate.subscribe,
+    () => gate.state,
+    () => gate.state,
+  );
   const [dismissed, setDismissed] = useState<string | null>(null);
   if (state.kind === 'required')
-    return <UpdateScreen appName={appName} minimumVersion={state.minimum} storeUrl={state.storeUrl} openUrl={openUrl} />;
+    return (
+      <UpdateScreen
+        appName={appName}
+        minimumVersion={state.minimum}
+        storeUrl={state.storeUrl}
+        openUrl={openUrl}
+      />
+    );
   return (
     <View style={styles.fill}>
       {state.kind === 'recommended' && dismissed !== state.latest ? (

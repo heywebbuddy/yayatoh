@@ -1,4 +1,13 @@
-import { initSentry, isValidDsn, reportError, scrubBreadcrumb, scrubEvent, scrubText, scrubUrl, sentryEnabled } from '../src/platform/sentry';
+import {
+  initSentry,
+  isValidDsn,
+  reportError,
+  scrubBreadcrumb,
+  scrubEvent,
+  scrubText,
+  scrubUrl,
+  sentryEnabled,
+} from '../src/platform/sentry';
 
 describe('scrubText', () => {
   it.each([
@@ -24,10 +33,14 @@ describe('scrubText', () => {
 
 describe('scrubUrl', () => {
   it('drops the query, the fragment and credentials, and masks identifier-like segments', () => {
-    expect(scrubUrl('https://user:pw@app.yayatoh.com/api/v1/tickets/3f2b8c1e-5d4a-4e6b-9a7c-0d1e2f3a4b5c?token=secret#frag')).toBe(
-      'https://app.yayatoh.com/api/v1/tickets/:id',
+    expect(
+      scrubUrl(
+        'https://user:pw@app.yayatoh.com/api/v1/tickets/3f2b8c1e-5d4a-4e6b-9a7c-0d1e2f3a4b5c?token=secret#frag',
+      ),
+    ).toBe('https://app.yayatoh.com/api/v1/tickets/:id');
+    expect(scrubUrl('https://yayatoh.com/claim/AbCdEf123456_-tokenXYZ')).toBe(
+      'https://yayatoh.com/claim/:id',
     );
-    expect(scrubUrl('https://yayatoh.com/claim/AbCdEf123456_-tokenXYZ')).toBe('https://yayatoh.com/claim/:id');
     expect(scrubUrl('https://yayatoh.com/scan#e=1&k=SECRETKEY123456')).toBe('https://yayatoh.com/scan');
     expect(scrubUrl('yayatoh-staff://scan#e=1&k=SECRETKEY123456')).toBe('yayatoh-staff://scan');
   });
@@ -57,18 +70,41 @@ describe('scrubEvent', () => {
         },
       ],
     },
-    contexts: { device: { name: 'Ada’s iPhone', model: 'iPhone15,2', geo: { city: 'London' } }, os: { name: 'iOS', version: '19.0' } },
+    contexts: {
+      device: { name: 'Ada’s iPhone', model: 'iPhone15,2', geo: { city: 'London' } },
+      os: { name: 'iOS', version: '19.0' },
+    },
     tags: { screen: 'tickets', email: 'ada@example.test', ticketCode: 'XYZ' },
     extra: { note: 'call +44 20 7946 0958', password: 'x' },
     breadcrumbs: [
-      { category: 'fetch', message: 'GET ada@example.test', data: { url: 'https://app.yayatoh.com/api/v1/me/tickets/3f2b8c1e-5d4a-4e6b-9a7c-0d1e2f3a4b5c?x=1', status_code: 200, request_body: 'secret' } },
+      {
+        category: 'fetch',
+        message: 'GET ada@example.test',
+        data: {
+          url: 'https://app.yayatoh.com/api/v1/me/tickets/3f2b8c1e-5d4a-4e6b-9a7c-0d1e2f3a4b5c?x=1',
+          status_code: 200,
+          request_body: 'secret',
+        },
+      },
     ],
   };
 
   it('removes the person, the request’s data and every identifier', () => {
     const out = scrubEvent(event) as typeof event & Record<string, unknown>;
     const all = JSON.stringify(out);
-    for (const secret of ['ada@example.test', 'hunter2', 'abc.def', 'yyr_AbCdEf', '1.2.3.4', 'Ada’s iPhone', '3f2b8c1e', '+44 20', 'London', 'secret', 'XYZ'])
+    for (const secret of [
+      'ada@example.test',
+      'hunter2',
+      'abc.def',
+      'yyr_AbCdEf',
+      '1.2.3.4',
+      'Ada’s iPhone',
+      '3f2b8c1e',
+      '+44 20',
+      'London',
+      'secret',
+      'XYZ',
+    ])
       expect(all).not.toContain(secret);
     expect(out.user).toBeUndefined();
     expect(out.server_name).toBeUndefined();
@@ -78,11 +114,18 @@ describe('scrubEvent', () => {
   it('keeps what is needed to debug a crash: the error, the stack, the model and OS, the route', () => {
     const out = scrubEvent(event) as typeof event;
     expect(out.exception.values[0]?.type).toBe('Error');
-    expect(out.exception.values[0]?.stacktrace.frames[0]).toEqual({ filename: 'app:///index.bundle', function: 'signIn', lineno: 10 });
+    expect(out.exception.values[0]?.stacktrace.frames[0]).toEqual({
+      filename: 'app:///index.bundle',
+      function: 'signIn',
+      lineno: 10,
+    });
     expect(out.contexts.device).toEqual({ model: 'iPhone15,2' });
     expect(out.contexts.os).toEqual({ name: 'iOS', version: '19.0' });
     expect(out.tags.screen).toBe('tickets');
-    expect(out.breadcrumbs[0]?.data).toEqual({ url: 'https://app.yayatoh.com/api/v1/me/tickets/:id', status_code: 200 });
+    expect(out.breadcrumbs[0]?.data).toEqual({
+      url: 'https://app.yayatoh.com/api/v1/me/tickets/:id',
+      status_code: 200,
+    });
   });
 
   it('does not change the event it was given', () => {
@@ -92,7 +135,12 @@ describe('scrubEvent', () => {
   });
 
   it('scrubs a breadcrumb on its own', () => {
-    expect(scrubBreadcrumb({ message: 'user ada@example.test tapped', data: { url: 'https://x.test/a/b?q=1', extra: 'leak' } })).toEqual({
+    expect(
+      scrubBreadcrumb({
+        message: 'user ada@example.test tapped',
+        data: { url: 'https://x.test/a/b?q=1', extra: 'leak' },
+      }),
+    ).toEqual({
       message: 'user [email] tapped',
       data: { url: 'https://x.test/a/b' },
     });
@@ -102,7 +150,15 @@ describe('scrubEvent', () => {
 describe('initSentry', () => {
   it('stays off without a DSN, with an empty one or with a malformed one', () => {
     const init = jest.fn();
-    for (const dsn of [undefined, null, '', '   ', 'http://key@o1.ingest.sentry.io/1', 'not a dsn', 'https://o1.ingest.sentry.io/1']) {
+    for (const dsn of [
+      undefined,
+      null,
+      '',
+      '   ',
+      'http://key@o1.ingest.sentry.io/1',
+      'not a dsn',
+      'https://o1.ingest.sentry.io/1',
+    ]) {
       expect(initSentry({ dsn, environment: 'production' }, { init })).toBe(false);
     }
     expect(init).not.toHaveBeenCalled();
@@ -113,7 +169,9 @@ describe('initSentry', () => {
     const init = jest.fn();
     const dsn = 'https://abc123@o1.ingest.sentry.io/42';
     expect(isValidDsn(dsn)).toBe(true);
-    expect(initSentry({ dsn: ` ${dsn} `, environment: 'preview', release: 'yayatoh-ios@1.0.0+1' }, { init })).toBe(true);
+    expect(
+      initSentry({ dsn: ` ${dsn} `, environment: 'preview', release: 'yayatoh-ios@1.0.0+1' }, { init }),
+    ).toBe(true);
     const options = init.mock.calls[0]?.[0];
     expect(options).toMatchObject({
       dsn,
@@ -137,11 +195,15 @@ describe('initSentry', () => {
     reportError(new Error('x'), { captureException: capture });
     expect(capture).not.toHaveBeenCalled();
 
-    initSentry({ dsn: 'https://abc123@o1.ingest.sentry.io/42', environment: 'production' }, { init: jest.fn() });
+    initSentry(
+      { dsn: 'https://abc123@o1.ingest.sentry.io/42', environment: 'production' },
+      { init: jest.fn() },
+    );
     reportError(new Error('boom'), { captureException: capture });
     reportError('failed for ada@example.test', { captureException: capture });
     expect(capture).toHaveBeenCalledTimes(2);
-    expect((capture.mock.calls[1]?.[0] as Error).message).toBe('failed for [email]');
+    const second = capture.mock.calls[1]?.[0] as Error | undefined;
+    expect(second?.message).toBe('failed for [email]');
     initSentry({ dsn: undefined, environment: 'development' }, { init: jest.fn() });
   });
 });

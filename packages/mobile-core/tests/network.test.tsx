@@ -1,5 +1,5 @@
-import { act, render, screen } from '@testing-library/react-native';
 import { onlineManager } from '@tanstack/react-query';
+import { act, render, screen } from '@testing-library/react-native';
 import * as Network from 'expo-network';
 import { LocaleProvider } from '../src/i18n/provider';
 import { bindQueryToNetwork, isOffline, OfflineBanner, subscribeToNetwork } from '../src/platform/network';
@@ -29,7 +29,12 @@ const Shell = ({ children, tags = ['en-US'] }: { children: React.ReactNode; tags
     <LocaleProvider
       catalogs={{}}
       deviceLanguageTags={tags}
-      direction={{ isRTL: tags[0]?.startsWith('ar') ?? false, allowRTL: () => {}, forceRTL: () => {}, reload: async () => {} }}
+      direction={{
+        isRTL: tags[0]?.startsWith('ar') ?? false,
+        allowRTL: () => {},
+        forceRTL: () => {},
+        reload: async () => {},
+      }}
     >
       {children}
     </LocaleProvider>

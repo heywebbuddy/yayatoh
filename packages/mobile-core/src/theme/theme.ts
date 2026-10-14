@@ -10,8 +10,8 @@
 import {
   type ColorRole,
   constant,
-  dark,
   DEFAULT_THEME,
+  dark,
   isThemeChoice,
   light,
   radius,
@@ -37,7 +37,13 @@ export interface ResolvedTheme {
 /** `system` follows the phone; an unknown stored value falls back to the default. */
 export function resolveScheme(choice: ThemeChoice, system: string | null | undefined): SchemeName {
   if (choice === 'light' || choice === 'dark') return choice;
-  return system === 'dark' ? 'dark' : system === 'light' ? 'light' : DEFAULT_THEME === 'dark' ? 'dark' : 'light';
+  return system === 'dark'
+    ? 'dark'
+    : system === 'light'
+      ? 'light'
+      : DEFAULT_THEME === 'dark'
+        ? 'dark'
+        : 'light';
 }
 
 /** The palette for `scheme`, with `brand` applied to the primary roles when it is readable. */

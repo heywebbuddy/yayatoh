@@ -8,7 +8,8 @@ export const MIN_TEXT_CONTRAST = 4.5;
 
 const HEX = /^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i;
 
-export const isHexColor = (value: unknown): value is string => typeof value === 'string' && HEX.test(value.trim());
+export const isHexColor = (value: unknown): value is string =>
+  typeof value === 'string' && HEX.test(value.trim());
 
 /** `#abc` and `#aabbcc` as `[r, g, b]`, or null for anything else. */
 export function parseHex(value: string): [number, number, number] | null {
@@ -39,5 +40,11 @@ export function contrastRatio(a: string, b: string): number {
 export function mix(from: string, to: string, amount: number): string {
   const [a, b] = [parseHex(from), parseHex(to)];
   if (!a || !b) return from;
-  return `#${a.map((v, i) => Math.round(v + ((b[i] ?? 0) - v) * amount).toString(16).padStart(2, '0')).join('')}`;
+  return `#${a
+    .map((v, i) =>
+      Math.round(v + ((b[i] ?? 0) - v) * amount)
+        .toString(16)
+        .padStart(2, '0'),
+    )
+    .join('')}`;
 }

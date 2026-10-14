@@ -72,7 +72,9 @@ const FAILURES: readonly SignInFailure[] = [
 ];
 
 function failureOf(p: ProblemInfo): SignInFailure {
-  return (FAILURES as readonly (string | null)[]).includes(p.reason) ? (p.reason as SignInFailure) : 'unknown';
+  return (FAILURES as readonly (string | null)[]).includes(p.reason)
+    ? (p.reason as SignInFailure)
+    : 'unknown';
 }
 
 const retryAfter = (response: Response, p: ProblemInfo): number | null => {
@@ -129,7 +131,6 @@ export function createSignIn(deps: SignInDeps) {
     return { kind: 'failed', reason: failureOf(p) };
   }
 
-
   return {
     /** Emails a six-digit code. The answer is the same for known and unknown addresses. */
     async requestEmailCode(email: string): Promise<EmailCodeOutcome> {
@@ -140,7 +141,8 @@ export function createSignIn(deps: SignInDeps) {
         return { kind: 'unavailable' };
       }
       const { data, error, response } = result;
-      if (response.ok && data) return { kind: 'sent', expiresInSeconds: (data as { expiresInSeconds: number }).expiresInSeconds };
+      if (response.ok && data)
+        return { kind: 'sent', expiresInSeconds: (data as { expiresInSeconds: number }).expiresInSeconds };
       const p = readProblem(error, response.status);
       if (response.status === 429 || p.code === 'rate_limited')
         return { kind: 'rateLimited', retryAfterSeconds: retryAfter(response, p) };
@@ -239,7 +241,8 @@ export function createSignIn(deps: SignInDeps) {
         return { kind: 'unavailable' };
       }
       const { data, error, response } = result;
-      if (response.ok && data) return { kind: 'confirmed', expiresAt: (data as { expiresAt: string }).expiresAt };
+      if (response.ok && data)
+        return { kind: 'confirmed', expiresAt: (data as { expiresAt: string }).expiresAt };
       const p = readProblem(error, response.status);
       if (response.status === 429 || p.code === 'rate_limited')
         return { kind: 'rateLimited', retryAfterSeconds: retryAfter(response, p) };

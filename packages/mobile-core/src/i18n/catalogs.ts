@@ -33,6 +33,9 @@ export const coreCatalogs: Record<AppLocale, MessageTree> = {
 };
 
 /** An app's own catalog for `locale` with the shared strings under the `core` namespace. */
-export function messagesFor(appCatalogs: Partial<Record<AppLocale, MessageTree>>, locale: AppLocale): MessageTree {
+export function messagesFor(
+  appCatalogs: Partial<Record<AppLocale, MessageTree>>,
+  locale: AppLocale,
+): MessageTree {
   return { ...(appCatalogs[locale] ?? appCatalogs.en ?? {}), core: coreCatalogs[locale] };
 }

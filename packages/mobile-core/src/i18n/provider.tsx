@@ -33,7 +33,13 @@ export interface LocaleProviderProps {
 
 const readDeviceTags = (): string[] => getLocales().map((l) => l.languageTag);
 
-export function LocaleProvider({ catalogs, store, deviceLanguageTags, direction, children }: LocaleProviderProps) {
+export function LocaleProvider({
+  catalogs,
+  store,
+  deviceLanguageTags,
+  direction,
+  children,
+}: LocaleProviderProps) {
   const [choice, setChoiceState] = useState<LocaleChoice>('system');
   const [device, setDevice] = useState<readonly string[]>(() => deviceLanguageTags ?? readDeviceTags());
   const ports = useMemo(() => direction ?? reactNativeDirection(), [direction]);
@@ -78,7 +84,10 @@ export function LocaleProvider({ catalogs, store, deviceLanguageTags, direction,
     [store],
   );
 
-  const api = useMemo<LocaleApi>(() => ({ locale, choice, setChoice, isRtl }), [locale, choice, setChoice, isRtl]);
+  const api = useMemo<LocaleApi>(
+    () => ({ locale, choice, setChoice, isRtl }),
+    [locale, choice, setChoice, isRtl],
+  );
   const messages = useMemo(() => messagesFor(catalogs, locale), [catalogs, locale]);
 
   return (

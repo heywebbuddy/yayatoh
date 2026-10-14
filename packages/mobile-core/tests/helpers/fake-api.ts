@@ -12,10 +12,10 @@ export const USER: Schemas['User'] = {
 };
 
 export const problem = (status: number, code: string, details: Record<string, unknown> = {}, headers = {}) =>
-  new Response(
-    JSON.stringify({ type: `https://x/${code}`, title: code, status, code, details }),
-    { status, headers: { 'content-type': 'application/problem+json', ...headers } },
-  );
+  new Response(JSON.stringify({ type: `https://x/${code}`, title: code, status, code, details }), {
+    status,
+    headers: { 'content-type': 'application/problem+json', ...headers },
+  });
 
 export const json = (status: number, body: unknown, headers = {}) =>
   new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json', ...headers } });
@@ -33,7 +33,14 @@ export function pair(n: number, now = Date.now(), ttlMs = 15 * 60_000): Schemas[
 
 export interface FakeApi {
   fetch: typeof globalThis.fetch;
-  calls: { method: string; path: string; fullPath: string; authorization: string | null; client: string | null; body: unknown }[];
+  calls: {
+    method: string;
+    path: string;
+    fullPath: string;
+    authorization: string | null;
+    client: string | null;
+    body: unknown;
+  }[];
   /** Access tokens the server accepts. */
   valid: Set<string>;
   /** The refresh token the server expects next; anything else is a reuse. */
@@ -52,7 +59,11 @@ export function createFakeApi(now: () => number = Date.now): FakeApi {
     expectedRefresh: 'refresh-0',
     generation: 0,
     delayRefreshMs: 0,
-    refreshes: () => api.calls.filter((c) => c.path === '/v1/auth/token' && (c.body as { grantType?: string })?.grantType === 'refresh_token').length,
+    refreshes: () =>
+      api.calls.filter(
+        (c) =>
+          c.path === '/v1/auth/token' && (c.body as { grantType?: string })?.grantType === 'refresh_token',
+      ).length,
     fetch: async (input, init) => {
       const request = input instanceof Request ? input : new Request(input, init);
       const url = new URL(request.url);

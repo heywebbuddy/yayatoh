@@ -61,7 +61,10 @@ export function createCacheKeyProvider(storage: KeyValueStore, random: RandomByt
       if (stored) {
         try {
           const key = fromBase64(stored);
-          if (key.length === KEY_LENGTH) return (cached = key);
+          if (key.length === KEY_LENGTH) {
+            cached = key;
+            return key;
+          }
         } catch {
           // A damaged key is as good as none.
         }
@@ -69,7 +72,8 @@ export function createCacheKeyProvider(storage: KeyValueStore, random: RandomByt
       if (!create) return null;
       const key = random(KEY_LENGTH);
       await storage.set(CACHE_KEY_NAME, toBase64(key));
-      return (cached = key);
+      cached = key;
+      return key;
     },
     /** Forgets the key: what it encrypted can no longer be read. */
     async destroy(): Promise<void> {

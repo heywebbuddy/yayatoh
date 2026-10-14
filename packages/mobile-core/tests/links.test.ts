@@ -10,7 +10,11 @@ describe('universal links (attendee app)', () => {
     ['https://yayatoh.com/events/summit-2026', ROUTES.event, { slug: 'summit-2026' }],
     ['https://app.yayatoh.com/e/Xk3p9', ROUTES.eventShort, { code: 'Xk3p9' }],
     ['https://abc.yayatoh.events/e/Xk3p9', ROUTES.eventShort, { code: 'Xk3p9', org: 'abc' }],
-    ['https://yayatoh.com/my-tickets/AbCdEf123456_-token', ROUTES.ticketLink, { token: 'AbCdEf123456_-token' }],
+    [
+      'https://yayatoh.com/my-tickets/AbCdEf123456_-token',
+      ROUTES.ticketLink,
+      { token: 'AbCdEf123456_-token' },
+    ],
     ['https://app.yayatoh.com/orders/ord_Token-12345', ROUTES.orderLink, { token: 'ord_Token-12345' }],
     ['https://app.yayatoh.com/claim/claimTOKEN987', ROUTES.claim, { token: 'claimTOKEN987' }],
   ])('%s', (url, pathname, params) => {
@@ -18,8 +22,14 @@ describe('universal links (attendee app)', () => {
   });
 
   it('strips a locale prefix (Arabic, Chinese) and ignores query and fragment', () => {
-    expect(attendee('https://yayatoh.com/ar/events/summit?utm=x#top')).toEqual({ pathname: ROUTES.event, params: { slug: 'summit' } });
-    expect(attendee('https://yayatoh.com/zh-CN/claim/abcdefgh')).toEqual({ pathname: ROUTES.claim, params: { token: 'abcdefgh' } });
+    expect(attendee('https://yayatoh.com/ar/events/summit?utm=x#top')).toEqual({
+      pathname: ROUTES.event,
+      params: { slug: 'summit' },
+    });
+    expect(attendee('https://yayatoh.com/zh-CN/claim/abcdefgh')).toEqual({
+      pathname: ROUTES.claim,
+      params: { token: 'abcdefgh' },
+    });
     // The default locale has no prefix on the web, so `/en/…` is not a link the server publishes.
     expect(attendee('https://yayatoh.com/en/events/x')).toBeNull();
   });
@@ -52,11 +62,15 @@ describe('universal links (attendee app)', () => {
   });
 
   it('honours a different tenant domain', () => {
-    expect(routeForLink('https://abc.example.test/events/x', { app: 'mobile', tenantDomain: 'example.test' })).toEqual({
+    expect(
+      routeForLink('https://abc.example.test/events/x', { app: 'mobile', tenantDomain: 'example.test' }),
+    ).toEqual({
       pathname: ROUTES.event,
       params: { slug: 'x', org: 'abc' },
     });
-    expect(routeForLink('https://abc.yayatoh.events/events/x', { app: 'mobile', tenantDomain: 'example.test' })).toBeNull();
+    expect(
+      routeForLink('https://abc.yayatoh.events/events/x', { app: 'mobile', tenantDomain: 'example.test' }),
+    ).toBeNull();
   });
 
   it('the Staff enrolment link is not for the attendee app', () => {
@@ -66,8 +80,14 @@ describe('universal links (attendee app)', () => {
 
 describe('app-scheme links', () => {
   it('opens the same routes through the app’s own scheme', () => {
-    expect(attendee('yayatoh://claim/claimTOKEN987')).toEqual({ pathname: ROUTES.claim, params: { token: 'claimTOKEN987' } });
-    expect(attendee('yayatoh-dev://events/summit')).toEqual({ pathname: ROUTES.event, params: { slug: 'summit' } });
+    expect(attendee('yayatoh://claim/claimTOKEN987')).toEqual({
+      pathname: ROUTES.claim,
+      params: { token: 'claimTOKEN987' },
+    });
+    expect(attendee('yayatoh-dev://events/summit')).toEqual({
+      pathname: ROUTES.event,
+      params: { slug: 'summit' },
+    });
   });
   it('refuses a scheme that is not the app’s', () => {
     expect(attendee('myapp://claim/claimTOKEN987')).toBeNull();
@@ -82,7 +102,10 @@ describe('Staff enrolment link', () => {
       pathname: ROUTES.enrol,
       params: { event: TICKET, key },
     });
-    expect(staff(`yayatoh-staff://scan#e=${TICKET}&k=${key}`)).toEqual({ pathname: ROUTES.enrol, params: { event: TICKET, key } });
+    expect(staff(`yayatoh-staff://scan#e=${TICKET}&k=${key}`)).toEqual({
+      pathname: ROUTES.enrol,
+      params: { event: TICKET, key },
+    });
     expect(staff(`https://abc.yayatoh.events/fr/scan#e=${TICKET}&k=${key}`)?.pathname).toBe(ROUTES.enrol);
   });
   it('never takes the key from the query string (it would reach server logs)', () => {

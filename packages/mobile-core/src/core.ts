@@ -17,9 +17,9 @@ import { clearServerState, createAppQueryClient } from './cache/query-client';
 import { type ClientIdentity, clientName, createApiClient, sdkBaseUrl } from './client';
 import type { MessageTree } from './i18n/catalogs';
 import type { AppLocale } from './i18n/locales';
-import type { FileStore, KeyValueStore, RandomBytes } from './ports';
 import { initSentry } from './platform/sentry';
-import { type AppleSignInProvider, type GoogleSignInProvider } from './session/providers';
+import type { FileStore, KeyValueStore, RandomBytes } from './ports';
+import type { AppleSignInProvider, GoogleSignInProvider } from './session/providers';
 import { createSessionStore, type SessionStore, tokenEndpoint } from './session/session-store';
 import { createSignIn, type SignIn } from './session/sign-in';
 import { createVersionGate, type VersionGate } from './version/gate';
@@ -73,7 +73,8 @@ export function createCore(options: CoreOptions): Core {
   initSentry({ dsn: options.sentryDsn, environment: options.environment ?? 'production', release });
 
   let gate!: VersionGate;
-  const onUpgradeRequired = (info: Parameters<VersionGate['upgradeRequired']>[0]) => void gate.upgradeRequired(info);
+  const onUpgradeRequired = (info: Parameters<VersionGate['upgradeRequired']>[0]) =>
+    void gate.upgradeRequired(info);
 
   const publicApi = createApiClient({
     baseUrl: options.apiBaseUrl,

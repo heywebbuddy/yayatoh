@@ -1,8 +1,8 @@
 import {
   associatedDomains,
   buildExpoConfig,
-  googleIosRedirectScheme,
   DEVELOPMENT_API_BASE_URL,
+  googleIosRedirectScheme,
   NATIVE_LOCALES,
   PRODUCTION_API_BASE_URL,
   resolveApiBaseUrl,
@@ -205,8 +205,16 @@ describe('sign-in configuration (M7.1c)', () => {
 
   it('adds Google’s redirect schemes only when the client ids are set, keeping the app scheme first', () => {
     expect(mobile({ APP_ENV: 'production' }).scheme).toBe('yayatoh');
-    const c = mobile({ APP_ENV: 'production', GOOGLE_IOS_CLIENT_ID: IOS, GOOGLE_ANDROID_CLIENT_ID: '999-x.apps.googleusercontent.com' });
-    expect(c.scheme).toEqual(['yayatoh', 'com.googleusercontent.apps.1234567890-abcdefg', 'com.yayatoh.yayatohapp']);
+    const c = mobile({
+      APP_ENV: 'production',
+      GOOGLE_IOS_CLIENT_ID: IOS,
+      GOOGLE_ANDROID_CLIENT_ID: '999-x.apps.googleusercontent.com',
+    });
+    expect(c.scheme).toEqual([
+      'yayatoh',
+      'com.googleusercontent.apps.1234567890-abcdefg',
+      'com.yayatoh.yayatohapp',
+    ]);
     expect(googleIosRedirectScheme(IOS)).toBe('com.googleusercontent.apps.1234567890-abcdefg');
   });
 
@@ -219,7 +227,8 @@ describe('sign-in configuration (M7.1c)', () => {
   });
 
   it('adds no permission string for sign-in', () => {
-    const keys = (c: ReturnType<typeof mobile>) => Object.keys(c.ios?.infoPlist ?? {}).filter((k) => k.startsWith('NS') && k.endsWith('UsageDescription'));
+    const keys = (c: ReturnType<typeof mobile>) =>
+      Object.keys(c.ios?.infoPlist ?? {}).filter((k) => k.startsWith('NS') && k.endsWith('UsageDescription'));
     expect(keys(mobile())).toEqual([]);
     expect(keys(staff())).toEqual(['NSCameraUsageDescription']);
   });

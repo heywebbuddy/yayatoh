@@ -27,7 +27,8 @@ const OPTIONAL: Record<string, readonly string[]> = {
   pt: ['many'],
 };
 
-export const requiredPluralForms = (locale: string): readonly string[] => REQUIRED[locale] ?? DEFAULT_REQUIRED;
+export const requiredPluralForms = (locale: string): readonly string[] =>
+  REQUIRED[locale] ?? DEFAULT_REQUIRED;
 
 export function flatten(tree: Tree, prefix = ''): Record<string, string> {
   const out: Record<string, string> = {};
@@ -118,7 +119,8 @@ export function validateCatalogs(catalogs: Record<string, Tree>, reference = 'en
       const allowed = new Set([...required, ...(OPTIONAL[locale] ?? [])]);
       for (const { arg, forms } of found.plurals) {
         for (const form of required)
-          if (!forms.includes(form)) problems.push(`${locale}: ${key} {${arg}} lacks the "${form}" plural form`);
+          if (!forms.includes(form))
+            problems.push(`${locale}: ${key} {${arg}} lacks the "${form}" plural form`);
         for (const form of forms)
           if (!allowed.has(form) && !form.startsWith('='))
             problems.push(`${locale}: ${key} {${arg}} has a "${form}" form ${locale} never uses`);

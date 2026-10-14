@@ -1,7 +1,7 @@
 /**
- * Placeholder translations for the M7.1b shell: static catalogs in `messages/<locale>.json` and a
- * device-locale pick. M7.1c replaces this with the shared `use-intl` setup in `@yayatoh/mobile-core`
- * (13 catalogs with plural checks, runtime locale switch, right-to-left through I18nManager).
+ * The app's own strings: one catalog per locale in `messages/<locale>.json`. Picking the language
+ * (the phone's, or the person's choice), right-to-left and the strings both apps share are in
+ * `@yayatoh/mobile-core` (M7.1c); `LocaleProvider` adds the shared strings under `core`.
  */
 import ar from '../messages/ar.json';
 import de from '../messages/de.json';
@@ -32,24 +32,3 @@ export const catalogs = {
   'zh-CN': zhCN,
   'zh-TW': zhTW,
 } as const;
-
-export type AppLocale = keyof typeof catalogs;
-export const LOCALES = Object.keys(catalogs) as AppLocale[];
-export const RTL_LOCALES: readonly AppLocale[] = ['ar'];
-export const DEFAULT_LOCALE: AppLocale = 'en';
-
-/** Maps a BCP 47 tag from the phone (`zh-Hant-TW`, `pt-BR`, `ar_EG`) to one of the 13 locales. */
-export function pickLocale(tag: string | undefined): AppLocale {
-  const parts = (tag ?? '').replace(/_/g, '-').toLowerCase().split('-');
-  const language = parts[0] ?? '';
-  if (language === 'zh') {
-    const traditional =
-      parts.includes('hant') || parts.includes('tw') || parts.includes('hk') || parts.includes('mo');
-    return traditional ? 'zh-TW' : 'zh-CN';
-  }
-  return (LOCALES as string[]).includes(language) ? (language as AppLocale) : DEFAULT_LOCALE;
-}
-
-export function deviceLocale(): AppLocale {
-  return pickLocale(Intl.DateTimeFormat().resolvedOptions().locale);
-}

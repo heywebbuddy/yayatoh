@@ -2,7 +2,13 @@ import type { ThemeChoice } from '@yayatoh/ui/tokens';
 import { createContext, type ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useColorScheme } from 'react-native';
 import type { KeyValueStore } from '../ports';
-import { parseThemeChoice, resolveScheme, resolveTheme, type ResolvedTheme, THEME_STORAGE_KEY } from './theme';
+import {
+  parseThemeChoice,
+  type ResolvedTheme,
+  resolveScheme,
+  resolveTheme,
+  THEME_STORAGE_KEY,
+} from './theme';
 
 export interface ThemeApi extends ResolvedTheme {
   /** What the person chose in the app: `system` (follow the phone), `light` or `dark`. */

@@ -1,10 +1,10 @@
+import { randomBytes } from 'node:crypto';
 import { mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { QueryClient } from '@tanstack/react-query';
 import type { PersistedClient } from '@tanstack/react-query-persist-client';
 import { YayatohApiError } from '@yayatoh/sdk';
-import { randomBytes } from 'node:crypto';
 import {
   CACHE_KEY_NAME,
   createCacheKeyProvider,
@@ -14,7 +14,12 @@ import {
   toBase64,
 } from '../src/cache/encryption';
 import { CACHE_FILE, createEncryptedPersister } from '../src/cache/persister';
-import { clearServerState, createAppQueryClient, persistOptions, shouldRetry } from '../src/cache/query-client';
+import {
+  clearServerState,
+  createAppQueryClient,
+  persistOptions,
+  shouldRetry,
+} from '../src/cache/query-client';
 import { type FileStore, memoryKeyValueStore } from '../src/ports';
 
 const random = (n: number) => new Uint8Array(randomBytes(n));
@@ -45,7 +50,20 @@ const snapshot = (): PersistedClient => ({
         dehydratedAt: 1,
         queryKey: ['tickets'],
         queryHash: '["tickets"]',
-        state: { data: [{ holder: SECRET }], dataUpdateCount: 1, dataUpdatedAt: 1, error: null, errorUpdateCount: 0, errorUpdatedAt: 0, fetchFailureCount: 0, fetchFailureReason: null, fetchMeta: null, isInvalidated: false, status: 'success', fetchStatus: 'idle' },
+        state: {
+          data: [{ holder: SECRET }],
+          dataUpdateCount: 1,
+          dataUpdatedAt: 1,
+          error: null,
+          errorUpdateCount: 0,
+          errorUpdatedAt: 0,
+          fetchFailureCount: 0,
+          fetchFailureReason: null,
+          fetchMeta: null,
+          isInvalidated: false,
+          status: 'success',
+          fetchStatus: 'idle',
+        },
       },
     ],
   },
@@ -124,7 +142,9 @@ describe('encrypted persister', () => {
     // …and with the right one it does (the key is only in secure storage).
     const key = fromBase64(secure.data.get(CACHE_KEY_NAME) ?? '');
     expect(key.length).toBe(32);
-    expect(JSON.parse(new TextDecoder().decode(open(new Uint8Array(raw), key) ?? new Uint8Array()))).toMatchObject({ buster: 'b1' });
+    expect(
+      JSON.parse(new TextDecoder().decode(open(new Uint8Array(raw), key) ?? new Uint8Array())),
+    ).toMatchObject({ buster: 'b1' });
   });
 
   it('a lost key makes the cache empty (and removes the dead file) rather than failing', async () => {

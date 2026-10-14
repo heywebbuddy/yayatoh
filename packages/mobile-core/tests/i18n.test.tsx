@@ -3,8 +3,15 @@ import { Text } from 'react-native';
 import { useTranslations } from 'use-intl';
 import { coreCatalogs, messagesFor } from '../src/i18n/catalogs';
 import { type DirectionPorts, resetDirectionGuard, syncDirection } from '../src/i18n/direction';
-import { DEFAULT_LOCALE, isRtlLocale, LOCALES, LOCALE_NAMES, pickFromPreferences, pickLocale } from '../src/i18n/locales';
-import { LOCALE_STORAGE_KEY, LocaleProvider, type LocaleApi, useLocaleSettings } from '../src/i18n/provider';
+import {
+  DEFAULT_LOCALE,
+  isRtlLocale,
+  LOCALE_NAMES,
+  LOCALES,
+  pickFromPreferences,
+  pickLocale,
+} from '../src/i18n/locales';
+import { LOCALE_STORAGE_KEY, type LocaleApi, LocaleProvider, useLocaleSettings } from '../src/i18n/provider';
 import { requiredPluralForms, validateCatalogs } from '../src/i18n/validate';
 import { memoryKeyValueStore } from '../src/ports';
 
@@ -31,7 +38,9 @@ describe('shared catalogs', () => {
   });
 
   it('really does contain plurals in Arabic and Russian (the check is not vacuous)', () => {
-    expect(String(coreCatalogs.ar.offline && (coreCatalogs.ar.offline as Record<string, string>).queued)).toContain('zero {');
+    expect(
+      String(coreCatalogs.ar.offline && (coreCatalogs.ar.offline as Record<string, string>).queued),
+    ).toContain('zero {');
     expect(String((coreCatalogs.ru.offline as Record<string, string>).queued)).toContain('many {');
   });
 });
@@ -41,13 +50,14 @@ describe('validateCatalogs', () => {
 
   it('reports a missing key, an extra key and an empty value', () => {
     const problems = validateCatalogs({ en, de: { a: ' ', extra: 'x' } });
-    expect(problems).toEqual(
-      expect.arrayContaining(['de: missing n', 'de: extra extra', 'de: a is empty']),
-    );
+    expect(problems).toEqual(expect.arrayContaining(['de: missing n', 'de: extra extra', 'de: a is empty']));
   });
 
   it('reports broken ICU syntax', () => {
-    const problems = validateCatalogs({ en, de: { a: 'Hallo {', n: '{count, plural, one {# Ding} other {# Dinge}}' } });
+    const problems = validateCatalogs({
+      en,
+      de: { a: 'Hallo {', n: '{count, plural, one {# Ding} other {# Dinge}}' },
+    });
     expect(problems.some((p) => p.startsWith('de: a is not valid ICU'))).toBe(true);
   });
 
@@ -78,7 +88,10 @@ describe('validateCatalogs', () => {
 
   it('accepts exact-number forms', () => {
     expect(
-      validateCatalogs({ en: { n: '{c, plural, =0 {none} one {#} other {#}}' }, de: { n: '{c, plural, =0 {keine} one {#} other {#}}' } }),
+      validateCatalogs({
+        en: { n: '{c, plural, =0 {none} one {#} other {#}}' },
+        de: { n: '{c, plural, =0 {keine} one {#} other {#}}' },
+      }),
     ).toEqual([]);
   });
 });
@@ -220,8 +233,8 @@ describe('LocaleProvider', () => {
       screen.unmount();
       return text;
     };
-    expect(view(['en'], 1)).toBe('1 change will be sent when you\'re back online.');
-    expect(view(['en'], 3)).toBe('3 changes will be sent when you\'re back online.');
+    expect(view(['en'], 1)).toBe("1 change will be sent when you're back online.");
+    expect(view(['en'], 3)).toBe("3 changes will be sent when you're back online.");
     expect(view(['ru'], 2)).toContain('2 изменения');
     expect(view(['ru'], 5)).toContain('5 изменений');
     expect(view(['ar'], 2)).toContain('تغييرين');
@@ -233,7 +246,12 @@ describe('LocaleProvider', () => {
     const store = memoryKeyValueStore();
     let api!: LocaleApi;
     render(
-      <LocaleProvider catalogs={{}} store={store} deviceLanguageTags={['en-US']} direction={fakeDirection(false)}>
+      <LocaleProvider
+        catalogs={{}}
+        store={store}
+        deviceLanguageTags={['en-US']}
+        direction={fakeDirection(false)}
+      >
         <Probe onApi={(a) => (api = a)} />
       </LocaleProvider>,
     );
@@ -243,7 +261,12 @@ describe('LocaleProvider', () => {
 
     screen.unmount();
     render(
-      <LocaleProvider catalogs={{}} store={store} deviceLanguageTags={['en-US']} direction={fakeDirection(false)}>
+      <LocaleProvider
+        catalogs={{}}
+        store={store}
+        deviceLanguageTags={['en-US']}
+        direction={fakeDirection(false)}
+      >
         <Probe />
       </LocaleProvider>,
     );
@@ -254,7 +277,12 @@ describe('LocaleProvider', () => {
   it('ignores a stored value that is not a locale', async () => {
     const store = memoryKeyValueStore({ [LOCALE_STORAGE_KEY]: 'klingon' });
     render(
-      <LocaleProvider catalogs={{}} store={store} deviceLanguageTags={['fr-FR']} direction={fakeDirection(false)}>
+      <LocaleProvider
+        catalogs={{}}
+        store={store}
+        deviceLanguageTags={['fr-FR']}
+        direction={fakeDirection(false)}
+      >
         <Probe />
       </LocaleProvider>,
     );

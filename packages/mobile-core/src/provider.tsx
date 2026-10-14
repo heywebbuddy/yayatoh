@@ -9,9 +9,9 @@ import { persistOptions } from './cache/query-client';
 import type { Core } from './core';
 import { LocaleProvider } from './i18n/provider';
 import { bindQueryToNetwork } from './platform/network';
+import type { SessionState } from './session/session-store';
 import { ThemeProvider } from './theme/provider';
 import { VersionGateView } from './version/components';
-import type { SessionState } from './session/session-store';
 
 const CoreContext = createContext<Core | null>(null);
 
@@ -24,7 +24,11 @@ export function useCore(): Core {
 /** The session state; re-renders when the person signs in or out. */
 export function useSession(): SessionState {
   const { session } = useCore();
-  return useSyncExternalStore(session.subscribe, () => session.state, () => session.state);
+  return useSyncExternalStore(
+    session.subscribe,
+    () => session.state,
+    () => session.state,
+  );
 }
 
 export interface CoreProviderProps {

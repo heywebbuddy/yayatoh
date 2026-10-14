@@ -42,7 +42,14 @@ export const ROUTES = {
 
 export const PLATFORM_HOSTS = ['yayatoh.com', 'www.yayatoh.com', 'app.yayatoh.com'] as const;
 const DEFAULT_TENANT_DOMAIN = 'yayatoh.events';
-const DEFAULT_SCHEMES = ['yayatoh', 'yayatoh-dev', 'yayatoh-preview', 'yayatoh-staff', 'yayatoh-staff-dev', 'yayatoh-staff-preview'];
+const DEFAULT_SCHEMES = [
+  'yayatoh',
+  'yayatoh-dev',
+  'yayatoh-preview',
+  'yayatoh-staff',
+  'yayatoh-staff-dev',
+  'yayatoh-staff-preview',
+];
 
 const SEGMENT = /^[A-Za-z0-9][A-Za-z0-9_-]{0,199}$/;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -61,7 +68,12 @@ interface Parts {
 function split(url: string): Parts | null {
   const m = URL_PARTS.exec(url.trim());
   if (!m) return null;
-  return { scheme: (m[1] ?? '').toLowerCase(), host: (m[2] ?? '').toLowerCase(), path: m[3] ?? '', fragment: m[5] ?? '' };
+  return {
+    scheme: (m[1] ?? '').toLowerCase(),
+    host: (m[2] ?? '').toLowerCase(),
+    path: m[3] ?? '',
+    fragment: m[5] ?? '',
+  };
 }
 
 /** `a=1&b=2` as a record. Values are used as given: callers validate each one they read. */
@@ -152,9 +164,7 @@ export function routeForLink(url: string, options: LinkOptions): AppRoute | null
   }
   const segments = segmentsOf(path);
   if (!segments) return null;
-  return options.app === 'staff'
-    ? staffRoute(segments, parts.fragment)
-    : attendeeRoute(segments, org);
+  return options.app === 'staff' ? staffRoute(segments, parts.fragment) : attendeeRoute(segments, org);
 }
 
 /**
@@ -168,7 +178,8 @@ export function routeForPush(data: unknown): AppRoute | null {
       : data && typeof data === 'object' && typeof (data as { path?: unknown }).path === 'string'
         ? (data as { path: string }).path
         : null;
-  if (!path || path.length > 300 || !path.startsWith('/') || path.includes('?') || path.includes('#')) return null;
+  if (!path || path.length > 300 || !path.startsWith('/') || path.includes('?') || path.includes('#'))
+    return null;
   const segments = path.split('/').filter((s) => s !== '');
   if (segments.length !== 2 || segments.some((s) => !SEGMENT.test(s))) return null;
   const [kind, id] = segments as [string, string];

@@ -67,7 +67,9 @@ export function OfflineBanner({ offline, queued = 0 }: OfflineBannerProps) {
       testID="offline-banner"
     >
       <Text style={[styles.text, { color: colors.ink }]}>{t('banner')}</Text>
-      {queued > 0 ? <Text style={[styles.text, { color: colors.ink2 }]}>{t('queued', { count: queued })}</Text> : null}
+      {queued > 0 ? (
+        <Text style={[styles.text, { color: colors.ink2 }]}>{t('queued', { count: queued })}</Text>
+      ) : null}
     </View>
   );
 }

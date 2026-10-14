@@ -106,7 +106,9 @@ describe('session store', () => {
     const { fake, session } = await signedIn();
     expect(await session.refreshAfterUnauthorized('access-0')).toBe(true);
     expect(await session.refreshAfterUnauthorized('access-1')).toBe(true);
-    const sent = fake.calls.filter((c) => c.path === '/v1/auth/token').map((c) => (c.body as { refreshToken: string }).refreshToken);
+    const sent = fake.calls
+      .filter((c) => c.path === '/v1/auth/token')
+      .map((c) => (c.body as { refreshToken: string }).refreshToken);
     expect(sent).toEqual(['refresh-0', 'refresh-1']);
   });
 
@@ -169,7 +171,12 @@ describe('session store', () => {
     const wipe = jest.fn();
     session.onSignedOut(wipe);
     await session.signOut();
-    expect(fake.calls.some((c) => c.path === '/v1/auth/revoke' && (c.body as { refreshToken: string }).refreshToken === 'refresh-0')).toBe(true);
+    expect(
+      fake.calls.some(
+        (c) =>
+          c.path === '/v1/auth/revoke' && (c.body as { refreshToken: string }).refreshToken === 'refresh-0',
+      ),
+    ).toBe(true);
     expect(wipe).toHaveBeenCalledWith('signed_out');
     expect(session.state).toEqual({ status: 'signedOut', reason: 'signed_out' });
     expect(storage.data.size).toBe(0);
@@ -180,7 +187,12 @@ describe('session store', () => {
     }) as never;
     const s = createSessionStore({
       storage: offline.storage,
-      endpoint: { refresh: async () => ({ ok: false, kind: 'unavailable' }), revoke: async () => { throw new Error('offline'); } },
+      endpoint: {
+        refresh: async () => ({ ok: false, kind: 'unavailable' }),
+        revoke: async () => {
+          throw new Error('offline');
+        },
+      },
     });
     await s.restore();
     await s.signOut();

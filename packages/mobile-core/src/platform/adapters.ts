@@ -1,5 +1,5 @@
-import type { CoreAdapters } from '../core';
 import type { MobileApp, MobilePlatform } from '../client';
+import type { CoreAdapters } from '../core';
 import { expoAppleProvider, expoGoogleProvider } from '../session/providers';
 import { type AppExtra, googleOptions } from './native';
 import { documentFileStore, secureKeyValueStore, secureRandomBytes } from './stores';

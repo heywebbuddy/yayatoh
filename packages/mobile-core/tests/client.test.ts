@@ -18,9 +18,12 @@ describe('X-Yayatoh-Client', () => {
   });
 
   it('names exactly the four identifiers the server knows', () => {
-    expect(
-      [clientName('mobile', 'ios'), clientName('mobile', 'android'), clientName('staff', 'ios'), clientName('staff', 'android')],
-    ).toEqual(['yayatoh-ios', 'yayatoh-android', 'yayatoh-staff-ios', 'yayatoh-staff-android']);
+    expect([
+      clientName('mobile', 'ios'),
+      clientName('mobile', 'android'),
+      clientName('staff', 'ios'),
+      clientName('staff', 'android'),
+    ]).toEqual(['yayatoh-ios', 'yayatoh-android', 'yayatoh-staff-ios', 'yayatoh-staff-android']);
   });
 });
 
@@ -113,7 +116,13 @@ describe('createApiClient', () => {
     const api = createApiClient({
       baseUrl: 'https://x.test/api/v1',
       identity,
-      tokens: { accessToken: async () => `t${attempt}`, refreshAfterUnauthorized: async () => ((attempt += 1), true) },
+      tokens: {
+        accessToken: async () => `t${attempt}`,
+        refreshAfterUnauthorized: async () => {
+          attempt += 1;
+          return true;
+        },
+      },
       fetch: (async (req: Request) => {
         bodies.push(await req.text());
         return attempt === 0 ? problem(401, 'unauthenticated') : json(200, {});

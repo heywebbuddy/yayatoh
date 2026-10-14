@@ -3,7 +3,7 @@ import { dark, light } from '@yayatoh/ui/tokens';
 import { Text } from 'react-native';
 import { memoryKeyValueStore } from '../src/ports';
 import { contrastRatio, isHexColor, mix, parseHex } from '../src/theme/contrast';
-import { BrandScope, ThemeProvider, type ThemeApi, useTheme } from '../src/theme/provider';
+import { BrandScope, type ThemeApi, ThemeProvider, useTheme } from '../src/theme/provider';
 import { resolveScheme, resolveTheme, THEME_STORAGE_KEY } from '../src/theme/theme';
 
 const mockScheme = jest.fn<'light' | 'dark' | null, []>();

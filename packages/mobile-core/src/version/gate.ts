@@ -9,17 +9,23 @@
  *   `suppressRequired` turns a hard block into the soft nudge.
  */
 import type { YayatohClient } from '@yayatoh/sdk';
-import { type ClientName, type UpgradeInfo } from '../client';
+import type { ClientName, UpgradeInfo } from '../client';
 
 export type GateState =
   | { readonly kind: 'unknown' }
   | { readonly kind: 'ok' }
   | { readonly kind: 'recommended'; readonly latest: string; readonly storeUrl: string | null }
-  | { readonly kind: 'required'; readonly minimum: string | null; readonly latest: string | null; readonly storeUrl: string | null };
+  | {
+      readonly kind: 'required';
+      readonly minimum: string | null;
+      readonly latest: string | null;
+      readonly storeUrl: string | null;
+    };
 
 /** Dotted numbers compared part by part (`3.10.0` > `3.9.1`); a pre-release or build suffix is ignored. */
 export function compareVersions(a: string, b: string): number {
-  const parts = (v: string) => (v.split(/[-+]/, 1)[0] ?? '').split('.').map((n) => Number.parseInt(n, 10) || 0);
+  const parts = (v: string) =>
+    (v.split(/[-+]/, 1)[0] ?? '').split('.').map((n) => Number.parseInt(n, 10) || 0);
   const [x, y] = [parts(a), parts(b)];
   for (let i = 0; i < Math.max(x.length, y.length); i++) {
     const d = (x[i] ?? 0) - (y[i] ?? 0);
@@ -96,7 +102,9 @@ export function createVersionGate(opts: VersionGateOptions): VersionGate {
       try {
         const controller = new AbortController();
         const timer = setTimeout(() => controller.abort(), opts.timeoutMs ?? 8000);
-        const { data } = await opts.api.GET('/v1/mobile/config', { signal: controller.signal }).finally(() => clearTimeout(timer));
+        const { data } = await opts.api
+          .GET('/v1/mobile/config', { signal: controller.signal })
+          .finally(() => clearTimeout(timer));
         const policy = data?.apps?.[opts.client];
         // An unreadable answer leaves the state alone: it must not lift a block a 426 set.
         if (policy) set(await soften(evaluateVersion(opts.appVersion, policy)));
