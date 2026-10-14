@@ -35,3 +35,5 @@ f43c277cbad51bf2648e35fbf8a0e39dda8def5e:packages/modules/webhooks/tests/signing
 09d49dd0221e3423631069f702b5e4f1d55c3bd4:env.rtf:generic-api-key:71
 09d49dd0221e3423631069f702b5e4f1d55c3bd4:env.rtf:jwt:19
 09d49dd0221e3423631069f702b5e4f1d55c3bd4:env.rtf:stripe-access-token:67
+# M7.1c deep-link tests: a made-up Staff enrolment key in a parsing fixture (not a credential)
+3590e784251fc3adfb12d5b91fc61034327d26e7:packages/mobile-core/tests/links.test.ts:generic-api-key:79
