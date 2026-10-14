@@ -267,7 +267,15 @@ function Download({
 
 const styles = StyleSheet.create({
   screen: { flex: 1 },
-  content: { padding: space[4], gap: space[3], flexGrow: 1 },
+  // A tablet at the door keeps the column a readable width instead of stretching it.
+  content: {
+    padding: space[4],
+    gap: space[3],
+    flexGrow: 1,
+    width: '100%',
+    maxWidth: 720,
+    alignSelf: 'center',
+  },
   header: { gap: space[1] },
   title: { fontSize: 24, fontWeight: '800', textAlign: 'auto' },
   sub: { fontSize: type.body.size + 2, textAlign: 'auto' },

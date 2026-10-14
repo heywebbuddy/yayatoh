@@ -1123,3 +1123,10 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **The version gate never blocks an enrolled device whose event dates are not known yet** (first minutes after enrolling, or a failed read); with dates it uses 24 h before to 2 h after, the same window the server uses.
 - [ ] **Exhibitor sign-in needs the invitation link pasted** (no `/event-portal/invite/…` app link in the M7.2d allowlist; "email me my invitation again" is not built).
 - [ ] **Device pass:** scan a real enrolment QR with the camera; wipe and revoke from the console while the app is open; the heartbeat battery reading on iOS and Android; iPad layout; run `apps/staff/.maestro/*.yaml`.
+
+## M7.4b — offline scanning (2026-10-14, pending owner; labels `mobile-contract`)
+- [ ] **Native verifier only if the phone is too slow.** Verification is pure JavaScript (M7.1a). The Node numbers are 3 to 4 ms a verdict with the whole app path; Hermes on a mid-range phone could not be measured in a cloud session. If the device pass shows any verdict over 300 ms, a small native verifier (CryptoKit on iOS, Tink on Android) goes behind the same function as an Expo module. Nothing to decide now; say if you would rather build it up front.
+- [ ] **The guest list refreshes while the app is open, not while it is closed.** An OS background task (`expo-background-task`) is not built: a door phone sits open on the scan screen. Say if phones should also refresh overnight.
+- [ ] **A phone that wins an offline race is not told.** Two phones admit the same ticket offline; the server keeps the earlier scan and the later phone flags the duplicate on screen. If the earlier scan syncs second, the first phone is not told (the API cannot), but the `checkin.duplicate_offline` alert reaches supervisors. Say if the sync response should also name the scans it flipped so the first phone can show it.
+- [ ] **Unsent scans are lost at expiry.** 24 h after the event ends the phone sends what it can, then deletes the list, the queue and the key whatever is left (the privacy rule outranks the queue). A phone offline for more than a day after the event loses its unsent scans.
+
