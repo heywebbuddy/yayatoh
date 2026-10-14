@@ -118,6 +118,7 @@ export function Button({
   busy,
   testID,
   hint,
+  a11yLabel,
 }: {
   label: string;
   onPress: () => void;
@@ -126,6 +127,8 @@ export function Button({
   busy?: boolean;
   testID?: string;
   hint?: string;
+  /** Spoken name when the visible label alone is ambiguous in a list ("Check in Ada Lovelace"). */
+  a11yLabel?: string;
 }) {
   const colors = useColors();
   const off = disabled || busy;
@@ -136,7 +139,7 @@ export function Button({
     <Pressable
       testID={testID}
       accessibilityRole="button"
-      accessibilityLabel={label}
+      accessibilityLabel={a11yLabel ?? label}
       accessibilityHint={hint}
       accessibilityState={{ disabled: !!off, busy: !!busy }}
       disabled={off}

@@ -49,6 +49,8 @@ export interface ToolsDeps {
   readonly Scanner: ComponentType<ScannerProps> | null;
   readonly clock: { now(): Date; offsetMs(): number };
   readonly newId: () => string;
+  /** True while the phone has no connection (mobile-core's `useIsOffline` in the app). */
+  readonly useOffline: () => boolean;
   /** Plays the verdict's sound and haptic (M7.4b); optional. */
   readonly feedback?: (tone: 'ok' | 'warn' | 'stop') => void;
 }
