@@ -10,6 +10,7 @@ export { admitBalanceDueCommand } from './balance-override.ts';
 export { sessionVisitsTx } from './ce-facts.ts';
 export {
   CheckpointDto,
+  checkpointsForTicketTx,
   createCheckpointCommand,
   INVALID_BURST,
   listCheckpointsQuery,

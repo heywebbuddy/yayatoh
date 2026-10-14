@@ -207,6 +207,30 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/claims/{token}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * What a claim link offers
+         * @description What a ticket claim link (or a transfer’s link) offers: its state, the event, the ticket type, and for a transfer who sent it and who it is for. The signed-in person must have a verified email. No ticket code is shown before claiming.
+         */
+        get: operations["getTicketClaim"];
+        put?: never;
+        /**
+         * Claim the ticket
+         * @description Claims the ticket for the signed-in person’s verified email: it is reissued to you and the previous holder’s code and wallet pass stop working. A transfer can only be claimed with the address it was sent to. Needs an `Idempotency-Key`. Returns the ticket.
+         */
+        post: operations["claimTicket"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/devices/heartbeat": {
         parameters: {
             query?: never;
@@ -327,6 +351,66 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/me/orders": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * My orders, newest first
+         * @description The orders bought with the signed-in person’s verified email (paid, partially refunded or refunded), across organizers, from the same source as the web’s My tickets. Keyset paging.
+         */
+        get: operations["listMyOrders"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/me/orders/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * One of my orders: lines, totals, refund policy and refund-request status
+         * @description The order’s lines and totals in minor units, the refund terms it was bought under, whether a refund can be requested now and the latest request’s status, and the tickets you still hold. An order that is not yours is a `404`.
+         */
+        get: operations["getMyOrder"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/me/orders/{id}/refund-requests": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Ask the organizer for a refund
+         * @description Asks for a refund of the tickets you hold (all of them when `ticketIds` is empty), within the policy the order was bought under; one open request per order. The organizer is told and has five business days to answer. Needs an `Idempotency-Key`.
+         */
+        post: operations["requestMyOrderRefund"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/me/organizations": {
         parameters: {
             query?: never;
@@ -339,6 +423,106 @@ export interface paths {
          * @description Every organization the signed-in user is a member of, with their role in it.
          */
         get: operations["listMyOrganizations"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/me/tickets": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * My tickets: upcoming or past
+         * @description The active tickets held by the signed-in person’s verified email, across organizers: the same tickets the web’s My tickets shows. `upcoming` (not yet over, soonest first) or `past` (latest first), with keyset paging. Codes are not listed; open a ticket for its QR code. Needs a verified email.
+         */
+        get: operations["listMyTickets"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/me/tickets/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * One of my tickets: QR code, seat, entrances, event, venue, branding and transfer options
+         * @description The ticket’s QR code string, short code, `rev` and status; its type, seat and the entrances and zones where it is checked; the event (instants plus its time zone) and venue; the organizer’s branding for theming; and what the holder may do (transfer, with its cutoff and fee). Send `If-None-Match` with the `ETag` for a 304. A ticket that is not yours is a `404`.
+         */
+        get: operations["getMyTicket"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/me/tickets/{id}/transfers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Transfer a ticket to someone by name and email
+         * @description Starts a transfer under the ticket type’s rules (`transfersAllowed`, the cutoff before the event). The recipient is emailed a claim link and the ticket stays yours until they claim it, which retires your code and wallet pass. If the ticket type charges a transfer fee, nothing is started: `web_payment_required` returns a link to agree to and pay it on the web. Needs an `Idempotency-Key`.
+         */
+        post: operations["startMyTicketTransfer"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/me/tickets/{id}/transfers/{transferId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Cancel a pending transfer
+         * @description Cancels your pending transfer of this ticket before it is claimed; the claim link stops working. Needs an `Idempotency-Key`.
+         */
+        delete: operations["cancelMyTicketTransfer"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/me/tickets/{id}/wallet": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Add a ticket to Apple Wallet or Google Wallet
+         * @description A link to add the ticket’s pass to the chosen wallet, from the pass provider. Until the platform’s wallet accounts exist the provider is a fake and the link is a placeholder. A transfer voids the sender’s pass. Only an active ticket you hold has one.
+         */
+        get: operations["getMyTicketWalletPass"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2795,8 +2979,56 @@ export interface components {
         BulkSelectionByIds: {
             ids: string[];
         };
+        BuyerRefundPanel: {
+            canRequest: boolean;
+            /** Format: date-time */
+            deadline: string | null;
+            latest: components["schemas"]["BuyerRefundRequest"];
+            refusal: components["schemas"]["RefundRefusal"];
+        };
+        BuyerRefundRequest: {
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            decidedAt: string | null;
+            declineReason: string | null;
+            status: components["schemas"]["RefundRequestStatus"];
+            tickets: number;
+        } | null;
+        BuyerRefundRequestInput: {
+            message?: string;
+            /**
+             * @description The tickets you hold to refund. Empty: all of them.
+             * @default []
+             */
+            ticketIds: string[];
+        };
         /** @enum {string} */
         CheckpointKind: "entrance" | "zone" | "session";
+        ClaimDetails: {
+            event: {
+                /** Format: date-time */
+                endsAt: string;
+                name: string;
+                /** Format: date-time */
+                startsAt: string;
+                timezone: string;
+            };
+            organizerName: string;
+            state: components["schemas"]["ClaimState"];
+            ticketTypeName: string;
+            /** @description A transfer’s link names who sent it and who it is for; null for a plain claim link. */
+            transfer: {
+                fromName: string;
+                toName: string;
+            } | null;
+        };
+        ClaimRequest: {
+            /** @description The name on the ticket. Default: the signed-in account’s name. */
+            name?: string;
+        };
+        /** @enum {string} */
+        ClaimState: "open" | "claimed" | "revoked" | "expired";
         ContactRef: {
             /** @description False when the org already had this email (nothing was duplicated). */
             created: boolean;
@@ -3371,6 +3603,166 @@ export interface components {
                 ios: string;
             };
         };
+        MyOrder: {
+            /** Format: date-time */
+            createdAt: string;
+            currency: string;
+            discountMinor: number;
+            event: {
+                /** Format: date-time */
+                endsAt: string;
+                name: string;
+                slug: string;
+                /** Format: date-time */
+                startsAt: string;
+                timezone: string;
+            };
+            /** Format: uuid */
+            eventId: string;
+            feeMinor: number;
+            /** Format: uuid */
+            id: string;
+            items: components["schemas"]["MyOrderLine"][];
+            organizerName: string;
+            /** Format: date-time */
+            paidAt: string | null;
+            refundPolicy: components["schemas"]["MyRefundPolicy"];
+            refundRequest: components["schemas"]["BuyerRefundPanel"];
+            status: components["schemas"]["OrderStatus"];
+            subtotalMinor: number;
+            /** @description The order’s active tickets you still hold. */
+            ticketIds: string[];
+            totalMinor: number;
+            /** @description Tickets of this order now held by someone else. */
+            transferred: number;
+        };
+        MyOrderLine: {
+            name: string;
+            quantity: number;
+            /** Format: uuid */
+            ticketTypeId: string;
+            unitAllInMinor: number;
+        };
+        MyOrderPage: {
+            data: components["schemas"]["MyOrderSummary"][];
+            nextCursor: string | null;
+        };
+        MyOrderSummary: {
+            /** Format: date-time */
+            createdAt: string;
+            currency: string;
+            /** Format: date-time */
+            endsAt: string;
+            /** Format: uuid */
+            eventId: string;
+            eventName: string;
+            /** Format: uuid */
+            id: string;
+            organizerName: string;
+            /** Format: date-time */
+            startsAt: string;
+            status: components["schemas"]["OrderStatus"];
+            tickets: number;
+            timezone: string;
+            totalMinor: number;
+        };
+        MyRefundPolicy: {
+            currency: string;
+            daysBefore: number | null;
+            /** Format: date-time */
+            deadline: string | null;
+            kind: components["schemas"]["RefundPolicyKind"];
+            retainedMinor: number;
+            timezone: string;
+        } | null;
+        MyTicket: {
+            /** @description The event’s own accent (#rrggbb), else the organizer’s. Null: use the app’s. */
+            accentColor: string | null;
+            branding: components["schemas"]["TicketBranding"];
+            /** @description The entrances and zones where this ticket is checked. */
+            checkpoints: components["schemas"]["TicketCheckpoint"][];
+            /** @description Multi-date events: the date this ticket admits. Null: the whole event. */
+            date: {
+                /** Format: date-time */
+                endsAt: string;
+                /** Format: date-time */
+                startsAt: string;
+            } | null;
+            event: components["schemas"]["MyTicketEvent"];
+            holderName: string;
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            orderId: string;
+            organizerName: string;
+            /** @description A transfer of this ticket is waiting for its recipient to claim it. */
+            pendingTransfer: boolean;
+            /** @description The signed code to draw as a QR. Null for a voided ticket. Re-read it when `rev` changes. */
+            qrCode: string | null;
+            /** @description The code revision. A transfer or re-send bumps it; the door refuses older codes as superseded. */
+            rev: number;
+            seatLabel: string | null;
+            serial: number;
+            shortCode: string;
+            status: components["schemas"]["MyTicketStatus"];
+            /** Format: uuid */
+            ticketTypeId: string;
+            ticketTypeName: string;
+            transfer: components["schemas"]["TicketTransferOptions"];
+            venue: components["schemas"]["TicketVenue"];
+        };
+        MyTicketEvent: {
+            city: string | null;
+            country: string | null;
+            /** Format: date-time */
+            endsAt: string;
+            /** Format: uuid */
+            id: string;
+            name: string;
+            slug: string;
+            /** Format: date-time */
+            startsAt: string;
+            status: components["schemas"]["EventStatus"];
+            /** @description IANA time zone of the event; show times in it. */
+            timezone: string;
+            venueName: string | null;
+        };
+        MyTicketPage: {
+            data: components["schemas"]["MyTicketSummary"][];
+            nextCursor: string | null;
+        };
+        /**
+         * @description A voided ticket (refunded or cancelled) admits nobody and has no code.
+         * @enum {string}
+         */
+        MyTicketStatus: "active" | "void";
+        MyTicketSummary: {
+            /** @description The event’s own accent (#rrggbb), else the organizer’s. Null: use the app’s. */
+            accentColor: string | null;
+            /** @description Multi-date events: the date this ticket admits. Null: the whole event. */
+            date: {
+                /** Format: date-time */
+                endsAt: string;
+                /** Format: date-time */
+                startsAt: string;
+            } | null;
+            event: components["schemas"]["MyTicketEvent"];
+            holderName: string;
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            orderId: string;
+            organizerName: string;
+            /** @description A transfer of this ticket is waiting for its recipient to claim it. */
+            pendingTransfer: boolean;
+            /** @description The code revision. A transfer or re-send bumps it; the door refuses older codes as superseded. */
+            rev: number;
+            seatLabel: string | null;
+            serial: number;
+            shortCode: string;
+            status: components["schemas"]["MyTicketStatus"];
+            ticketTypeName: string;
+        };
         /** @enum {string} */
         NativePushPlatform: "apns" | "fcm";
         OpsAlerts: {
@@ -3834,7 +4226,11 @@ export interface components {
             status: components["schemas"]["RefundStatus"];
         };
         /** @enum {string} */
+        RefundPolicyKind: "none" | "until" | "always";
+        /** @enum {string} */
         RefundReason: "requested_by_customer" | "event_cancelled" | "event_postponed" | "duplicate" | "fraudulent" | "goodwill";
+        /** @enum {string|null} */
+        RefundRefusal: "request_open" | "policy_no_refunds" | "policy_window_closed" | null;
         /** @description Refund whole tickets (`ticketIds`) or an amount (`amountMinor`), not both. */
         RefundRequest: {
             amountMinor?: number;
@@ -3842,6 +4238,8 @@ export interface components {
             reason: components["schemas"]["RefundReason"];
             ticketIds?: string[];
         };
+        /** @enum {string} */
+        RefundRequestStatus: "open" | "approved" | "declined";
         /** @enum {string} */
         RefundStatus: "succeeded" | "failed" | "pending";
         RevokeRequest: {
@@ -4147,6 +4545,48 @@ export interface components {
             /** @description Sanitized Markdown (small subset). */
             markdown: string;
         };
+        TicketBranding: {
+            accentColor: string | null;
+            logoAlt: string | null;
+            /** @description Absolute URL of the organizer’s logo. */
+            logoUrl: string | null;
+            organizerName: string;
+            poweredByVisible: boolean;
+        };
+        TicketCheckpoint: {
+            kind: components["schemas"]["TicketCheckpointKind"];
+            name: string;
+        };
+        /** @enum {string} */
+        TicketCheckpointKind: "entrance" | "zone";
+        TicketTransferOptions: {
+            allowed: boolean;
+            currency: string;
+            /**
+             * Format: date-time
+             * @description When holder transfers close for this ticket.
+             */
+            deadline: string;
+            /** @description The ticket type’s transfer fee in minor units (0: free). */
+            feeMinor: number;
+            /** @description A fee is paid on the web: `POST …/transfers` answers with a link instead of starting it. */
+            feeRequiresWeb: boolean;
+            /** Format: uuid */
+            pendingTransferId: string | null;
+            /** @description The recipient’s name. */
+            pendingTransferTo: string | null;
+            reason: components["schemas"]["TransferRefusal"];
+        };
+        /** @description `started`: the recipient is emailed a claim link and the ticket stays yours until they claim it. `web_payment_required`: the ticket type charges a transfer fee, which is paid on the web; nothing was changed. */
+        TicketTransferResult: {
+            currency: string;
+            feeMinor: number;
+            status: components["schemas"]["TransferOutcome"];
+            /** Format: uuid */
+            transferId: string | null;
+            /** @description `web_payment_required`: where to agree to the fee and pay it. Null otherwise. */
+            webUrl: string | null;
+        };
         TicketType: {
             accessDates: {
                 date: string;
@@ -4185,6 +4625,25 @@ export interface components {
         };
         /** @enum {string} */
         TicketTypeVisibility: "public" | "hidden";
+        TicketVenue: {
+            accessibilityNotes: string | null;
+            addressLine1: string | null;
+            addressLine2: string | null;
+            city: string | null;
+            country: string | null;
+            latitude: number | null;
+            longitude: number | null;
+            mapUrl: string | null;
+            name: string;
+            postalCode: string | null;
+            region: string | null;
+        } | null;
+        /**
+         * @description `upcoming`: not yet over, soonest first. `past`: over, latest first.
+         * @default upcoming
+         * @enum {string}
+         */
+        TicketWhen: "upcoming" | "past";
         TokenPair: {
             /** @description Send as `Authorization: Bearer <accessToken>`. Lasts 15 minutes and is never extended. */
             accessToken: string;
@@ -4246,6 +4705,19 @@ export interface components {
             /** Format: uuid */
             id: string;
             name: string;
+        };
+        /** @enum {string} */
+        TransferOutcome: "started" | "web_payment_required";
+        /** @enum {string|null} */
+        TransferRefusal: "ticket_void" | "event_ended" | "not_allowed" | "deadline_passed" | null;
+        TransferTicketRequest: {
+            /**
+             * Format: email
+             * @example sam@example.com
+             */
+            toEmail: string;
+            /** @example Sam Rivera */
+            toName: string;
         };
         /**
          * @description A kind of bulk action that can be undone
@@ -4332,6 +4804,13 @@ export interface components {
             data: components["schemas"]["Venue"][];
             nextCursor: string | null;
         };
+        WalletPassLink: {
+            platform: components["schemas"]["WalletPlatform"];
+            serial: string;
+            url: string;
+        };
+        /** @enum {string} */
+        WalletPlatform: "apple" | "google";
         WebhookAgendaPublishedV1: {
             agendaVersion: number;
             /** Format: uuid */
@@ -5810,6 +6289,183 @@ export interface operations {
             };
         };
     };
+    getTicketClaim: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The claim link’s token */
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The claim */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ClaimDetails"];
+                };
+            };
+            /** @description Not modified: `If-None-Match` matched the `ETag` */
+            304: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    claimTicket: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Required on every write. Retrying with the same key returns the stored result (kept 24 h). */
+                "idempotency-key": string;
+            };
+            path: {
+                /** @description The claim link’s token */
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ClaimRequest"];
+            };
+        };
+        responses: {
+            /** @description The claimed ticket */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MyTicket"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Conflict, invalid state, or the same Idempotency-Key is in flight */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The Idempotency-Key was used with a different request (`idempotency_key_reused`) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Read-only maintenance (`read_only_freeze`): nothing was changed; retry after `Retry-After` seconds */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
     deviceHeartbeat: {
         parameters: {
             query?: never;
@@ -6332,6 +6988,260 @@ export interface operations {
             };
         };
     };
+    listMyOrders: {
+        parameters: {
+            query?: {
+                /** @description The previous page’s `nextCursor`. */
+                cursor?: string;
+                /** @description Page size (1–100). */
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description A page of orders */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MyOrderPage"];
+                };
+            };
+            /** @description Not modified: `If-None-Match` matched the `ETag` */
+            304: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    getMyOrder: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The order id */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The order */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MyOrder"];
+                };
+            };
+            /** @description Not modified: `If-None-Match` matched the `ETag` */
+            304: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    requestMyOrderRefund: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Required on every write. Retrying with the same key returns the stored result (kept 24 h). */
+                "idempotency-key": string;
+            };
+            path: {
+                /** @description The order id */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BuyerRefundRequestInput"];
+            };
+        };
+        responses: {
+            /** @description The request */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BuyerRefundRequest"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Conflict, invalid state, or the same Idempotency-Key is in flight */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The Idempotency-Key was used with a different request (`idempotency_key_reused`) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Read-only maintenance (`read_only_freeze`): nothing was changed; retry after `Retry-After` seconds */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
     listMyOrganizations: {
         parameters: {
             query?: never;
@@ -6348,6 +7258,440 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MembershipList"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    listMyTickets: {
+        parameters: {
+            query?: {
+                /** @description The previous page’s `nextCursor`. */
+                cursor?: string;
+                /** @description Page size (1–100). */
+                limit?: number;
+                /** @description Which tickets to list */
+                when?: components["schemas"]["TicketWhen"];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description A page of tickets */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MyTicketPage"];
+                };
+            };
+            /** @description Not modified: `If-None-Match` matched the `ETag` */
+            304: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    getMyTicket: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The ticket id */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The ticket */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MyTicket"];
+                };
+            };
+            /** @description Not modified: `If-None-Match` matched the `ETag` */
+            304: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    startMyTicketTransfer: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Required on every write. Retrying with the same key returns the stored result (kept 24 h). */
+                "idempotency-key": string;
+            };
+            path: {
+                /** @description The ticket id */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TransferTicketRequest"];
+            };
+        };
+        responses: {
+            /** @description A transfer fee is paid on the web: nothing was started */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TicketTransferResult"];
+                };
+            };
+            /** @description The transfer was started */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TicketTransferResult"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Conflict, invalid state, or the same Idempotency-Key is in flight */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The Idempotency-Key was used with a different request (`idempotency_key_reused`) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Read-only maintenance (`read_only_freeze`): nothing was changed; retry after `Retry-After` seconds */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    cancelMyTicketTransfer: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Required on every write. Retrying with the same key returns the stored result (kept 24 h). */
+                "idempotency-key": string;
+            };
+            path: {
+                /** @description The ticket id */
+                id: string;
+                /** @description The transfer id */
+                transferId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Cancelled */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Conflict, invalid state, or the same Idempotency-Key is in flight */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The Idempotency-Key was used with a different request (`idempotency_key_reused`) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Read-only maintenance (`read_only_freeze`): nothing was changed; retry after `Retry-After` seconds */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    getMyTicketWalletPass: {
+        parameters: {
+            query: {
+                /** @description Which wallet app to add the pass to */
+                platform: components["schemas"]["WalletPlatform"];
+            };
+            header?: never;
+            path: {
+                /** @description The ticket id */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The pass link */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WalletPassLink"];
                 };
             };
             /** @description Validation failed (`validation_failed`) */

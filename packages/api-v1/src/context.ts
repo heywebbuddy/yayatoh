@@ -5,6 +5,7 @@ import type { CommandPorts, Ctx } from '@yayatoh/kernel';
 import type { PaymentProvider } from '@yayatoh/payments';
 import type { RateLimiter as PlatformRateLimiter } from '@yayatoh/platform/security';
 import type { ApiKeyIdentity } from '@yayatoh/tenancy';
+import type { WalletPassProvider } from '@yayatoh/ticketing';
 import type { PortalMailer } from './portal-mail.ts';
 import type { RateLimiter } from './rate-limit.ts';
 
@@ -52,6 +53,11 @@ export interface V1Deps {
    */
   readonly appSignIn?: () => AppSignIn;
   readonly payments: () => PaymentProvider;
+  /**
+   * M7.2b: the wallet pass provider behind `GET /v1/me/tickets/{id}/wallet` (default: the fake, until
+   * the owner's Apple and Google accounts exist).
+   */
+  readonly walletPasses?: () => WalletPassProvider;
   readonly rateLimiter?: RateLimiter;
   /** Count requests per route × client × app version (on unless false). */
   readonly telemetry?: boolean;

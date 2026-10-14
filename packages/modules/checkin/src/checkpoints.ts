@@ -179,6 +179,25 @@ export async function checkpointsTx(tx: TenantTx, eventId: string, includeArchiv
     .orderBy(asc(checkpoints.kind), asc(checkpoints.name));
 }
 
+/**
+ * Where a ticket is checked (M7.2b, the attendee app's ticket screen): the event's live entrances
+ * and the zones its ticket type is allowed into (a zone with no types admits every type). Names and
+ * kinds only; session doors, virtual checkpoints and archived ones are left out.
+ */
+export async function checkpointsForTicketTx(
+  tx: TenantTx,
+  eventId: string,
+  ticketTypeId: string,
+): Promise<{ name: string; kind: 'entrance' | 'zone' }[]> {
+  const out: { name: string; kind: 'entrance' | 'zone' }[] = [];
+  for (const c of await checkpointsTx(tx, eventId)) {
+    if (c.kind === 'entrance') out.push({ name: c.name, kind: 'entrance' });
+    else if (c.kind === 'zone' && (c.ticketTypeIds.length === 0 || c.ticketTypeIds.includes(ticketTypeId)))
+      out.push({ name: c.name, kind: 'zone' });
+  }
+  return out;
+}
+
 /** The live checkpoint a scan names, or null when the scan names none. */
 export async function scanCheckpointTx(
   tx: TenantTx,

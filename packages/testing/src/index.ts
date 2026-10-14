@@ -7,7 +7,13 @@ export {
   audienceScenario,
 } from './audiences.ts';
 export { type CampaignContactSeed, campaignScenario } from './campaigns.ts';
-export { type CanaryAdmin, type CanaryFile, type CanaryOrg, canaryOrg } from './canary/org.ts';
+export {
+  type CanaryAdmin,
+  type CanaryFile,
+  type CanaryOrg,
+  type CanarySignUp,
+  canaryOrg,
+} from './canary/org.ts';
 export {
   CONFERENCE_FIXTURE,
   type ConferenceScenario,
