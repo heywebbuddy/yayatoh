@@ -4,7 +4,7 @@
  * one server with the real first-wins rule. Time is simulated.
  */
 import { createScheduler } from '../../src/scan/scheduler';
-import { FakeServer, NORTH, NOW, SOUTH, header, rig, row } from './harness';
+import { FakeServer, header, NORTH, NOW, rig, row, SOUTH } from './harness';
 
 const atServerTime = Date.parse('2027-12-01T12:00:00Z');
 
@@ -107,7 +107,7 @@ describe('offline drill: two phones admit the same ticket', () => {
     const onExpired = jest.fn();
     const p = await rig(server, { at: atServerTime, onExpired });
     await p.engine.sync();
-    let t = Date.parse('2027-12-03T04:00:00Z') + 24 * 3_600_000 + 1;
+    const t = Date.parse('2027-12-03T04:00:00Z') + 24 * 3_600_000 + 1;
     p.clock.ms = t;
     const s = createScheduler({ engine: p.engine, now: () => t, online: false });
     s.start();

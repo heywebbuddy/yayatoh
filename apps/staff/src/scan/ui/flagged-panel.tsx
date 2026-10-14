@@ -30,7 +30,11 @@ export function FlaggedPanel({ flags, timezone, onDismiss, onDismissAll }: Flagg
   const open = flags.filter((f) => !f.dismissed);
   if (open.length === 0) return null;
   const time = (iso: string) =>
-    format.dateTime(new Date(iso), { hour: 'numeric', minute: '2-digit', ...(timezone ? { timeZone: timezone } : {}) });
+    format.dateTime(new Date(iso), {
+      hour: 'numeric',
+      minute: '2-digit',
+      ...(timezone ? { timeZone: timezone } : {}),
+    });
   return (
     <View
       accessibilityRole="alert"
@@ -46,10 +50,16 @@ export function FlaggedPanel({ flags, timezone, onDismiss, onDismissAll }: Flagg
           <Text style={[styles.name, { color: colors.ink }]}>{f.holderName ?? t('unknownHolder')}</Text>
           <Text style={[styles.body, { color: colors.ink2 }]}>{t(kindOf(f.serverResult))}</Text>
           <Text style={[styles.body, { color: colors.ink2 }]}>{t('when', { time: time(f.scannedAt) })}</Text>
-          <Button label={t('dismiss')} onPress={() => onDismiss(f.scanId)} testID={`flag-dismiss-${f.scanId}`} />
+          <Button
+            label={t('dismiss')}
+            onPress={() => onDismiss(f.scanId)}
+            testID={`flag-dismiss-${f.scanId}`}
+          />
         </View>
       ))}
-      {open.length > 1 ? <Button label={t('dismissAll')} onPress={onDismissAll} testID="flag-dismiss-all" /> : null}
+      {open.length > 1 ? (
+        <Button label={t('dismissAll')} onPress={onDismissAll} testID="flag-dismiss-all" />
+      ) : null}
     </View>
   );
 }

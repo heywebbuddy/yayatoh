@@ -1,6 +1,6 @@
 import { BACKOFF_BASE_MS, BACKOFF_MAX_MS, backoffMs } from '../../src/scan/backoff';
 import { BATCH_SIZE, disagrees } from '../../src/scan/engine';
-import { FakeServer, NOW, header, rig, row } from './harness';
+import { FakeServer, header, NOW, rig, row } from './harness';
 
 const atServerTime = Date.parse('2027-12-01T12:00:00Z');
 const rows = (n: number) => Array.from({ length: n }, (_, i) => row(i + 1));
@@ -142,7 +142,9 @@ describe('the outbox', () => {
     server.poison.add(queued[2]?.scanId as string);
     const result = await r.engine.flush();
     expect(result.sent).toBe(4);
-    expect(result.flagged.map((f) => [f.ticketId, f.serverResult])).toEqual([[queued[2]?.ticketId, 'rejected']]);
+    expect(result.flagged.map((f) => [f.ticketId, f.serverResult])).toEqual([
+      [queued[2]?.ticketId, 'rejected'],
+    ]);
     expect(r.engine.queueDepth).toBe(0);
     expect(r.engine.status.flaggedCount).toBe(1);
   });
@@ -175,7 +177,11 @@ describe('flags', () => {
     const restarted = await rig(server, { db: d.db, at: d.clock.ms });
     expect(restarted.engine.status.flaggedCount).toBe(1);
     const [flag] = await restarted.engine.flags();
-    expect(flag).toMatchObject({ localVerdict: 'admit', serverResult: 'duplicate_offline', holderName: 'Holder 2' });
+    expect(flag).toMatchObject({
+      localVerdict: 'admit',
+      serverResult: 'duplicate_offline',
+      holderName: 'Holder 2',
+    });
     await restarted.engine.dismissFlag(flag?.scanId as string);
     expect(restarted.engine.status.flaggedCount).toBe(0);
   });

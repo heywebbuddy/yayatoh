@@ -3,8 +3,9 @@
  * as in Node. Each scenario runs the whole way a door does: the manifest is downloaded through the
  * engine's sync (which verifies the signed scope), saved in SQLite, read back, and the code scanned.
  */
-import verdicts from '@yayatoh/checkin-engine/vectors/verdicts.json';
+
 import type { ManifestHeader, ManifestRow } from '@yayatoh/checkin-engine';
+import verdicts from '@yayatoh/checkin-engine/vectors/verdicts.json';
 import { FakeServer, rig } from './harness';
 
 interface StateDef {

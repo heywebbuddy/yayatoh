@@ -28,7 +28,10 @@ export function ManualEntry({ onSubmit, onClose }: ManualEntryProps) {
   };
 
   return (
-    <View style={[styles.box, { backgroundColor: colors.surfaceSolid, borderColor: colors.line }]} testID="manual-entry">
+    <View
+      style={[styles.box, { backgroundColor: colors.surfaceSolid, borderColor: colors.line }]}
+      testID="manual-entry"
+    >
       <Text accessibilityRole="header" style={[styles.title, { color: colors.ink }]}>
         {t('title')}
       </Text>
@@ -53,12 +56,20 @@ export function ManualEntry({ onSubmit, onClose }: ManualEntryProps) {
         placeholderTextColor={colors.ink3}
         style={[
           styles.input,
-          { color: colors.ink, borderColor: error ? colors.danger : colors.line, backgroundColor: colors.canvas },
+          {
+            color: colors.ink,
+            borderColor: error ? colors.danger : colors.line,
+            backgroundColor: colors.canvas,
+          },
         ]}
         testID="manual-input"
       />
       {error ? (
-        <Text accessibilityRole="alert" style={[styles.error, { color: colors.danger }]} testID="manual-error">
+        <Text
+          accessibilityRole="alert"
+          style={[styles.error, { color: colors.danger }]}
+          testID="manual-error"
+        >
           {t('empty')}
         </Text>
       ) : null}
@@ -71,7 +82,12 @@ export function ManualEntry({ onSubmit, onClose }: ManualEntryProps) {
 }
 
 const styles = StyleSheet.create({
-  box: { borderRadius: px(radius.card), borderWidth: StyleSheet.hairlineWidth, padding: space[5], gap: space[3] },
+  box: {
+    borderRadius: px(radius.card),
+    borderWidth: StyleSheet.hairlineWidth,
+    padding: space[5],
+    gap: space[3],
+  },
   title: { fontSize: type.card.size, fontWeight: '800', textAlign: 'auto' },
   input: {
     minHeight: TOUCH_TARGET_PX + 8,

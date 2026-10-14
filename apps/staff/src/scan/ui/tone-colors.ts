@@ -28,7 +28,8 @@ export function contrast(a: string, b: string): number {
 
 export function toneColors(tone: Tone, colors: PaletteLike): { fill: string; text: string } {
   const fill = tone === 'admit' ? colors.success : tone === 'warn' ? colors.warning : colors.danger;
-  const text = contrast(fill, constant.white) >= contrast(fill, constant.black) ? constant.white : constant.black;
+  const text =
+    contrast(fill, constant.white) >= contrast(fill, constant.black) ? constant.white : constant.black;
   return { fill, text };
 }
 

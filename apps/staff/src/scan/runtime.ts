@@ -8,12 +8,12 @@
  * `wipeScanData` works from the keychain and the file name alone, closing whatever is open first.
  */
 import type { KeyValueStore } from '@yayatoh/mobile-core';
-import type { RandomBytes } from './types';
-import { type ScanApi } from './api';
+import type { ScanApi } from './api';
 import { destroyScanDb, type ScanDb, type SqliteModule } from './db';
 import { ScanEngine } from './engine';
 import { createScheduler, type Scheduler } from './scheduler';
 import { ScanStore } from './store';
+import type { RandomBytes } from './types';
 
 export interface ScanRuntime {
   readonly engine: ScanEngine;
@@ -63,7 +63,11 @@ export async function openScanRuntime(deps: RuntimeDeps): Promise<ScanRuntime> {
   });
   await engine.load();
   // `load` can find an expired list; the store is gone then, and so is the database.
-  const scheduler = createScheduler({ engine, ...(deps.now ? { now: deps.now } : {}), ...(deps.onError ? { onError: deps.onError } : {}) });
+  const scheduler = createScheduler({
+    engine,
+    ...(deps.now ? { now: deps.now } : {}),
+    ...(deps.onError ? { onError: deps.onError } : {}),
+  });
   runtime = {
     engine,
     scheduler,
@@ -94,14 +98,13 @@ export async function wipeScanData(deps: { storage: KeyValueStore; sqlite: Sqlit
   await destroyScanDb(deps.sqlite, deps.storage);
 }
 
-/** M7.4a's `onWipe(callback)`: may return an unsubscribe function. */
-export type OnWipe = (callback: () => void | Promise<void>) => void | (() => void);
+/** M7.4a's `onWipe(callback)`: registers a callback and returns the function that removes it. */
+export type OnWipe = (callback: () => void | Promise<void>) => () => void;
 
 /** Wires the wipe to the device layer. Call once at app start. Returns an unsubscribe. */
 export function registerScanWipe(
   onWipe: OnWipe,
   deps: { storage: KeyValueStore; sqlite: SqliteModule },
 ): () => void {
-  const off = onWipe(() => wipeScanData(deps));
-  return typeof off === 'function' ? off : () => {};
+  return onWipe(() => wipeScanData(deps));
 }

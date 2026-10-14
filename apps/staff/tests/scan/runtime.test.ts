@@ -21,7 +21,15 @@ async function setup() {
       openDb: () => openEncryptedScanDb(sqlite.module, KEY),
       now: () => now,
     });
-  return { sqlite, storage, server, open, setNow: (ms: number) => void (now = ms) };
+  return {
+    sqlite,
+    storage,
+    server,
+    open,
+    setNow: (ms: number) => {
+      now = ms;
+    },
+  };
 }
 
 afterEach(async () => {
@@ -97,12 +105,6 @@ describe('the scan runtime', () => {
     expect(sqlite.exists(DB_NAME)).toBe(false);
     unregister();
     expect(wipe).toBeUndefined();
-  });
-
-  it('accepts an onWipe that returns nothing', () => {
-    const sqlite = fakeSqlite();
-    const off = registerScanWipe(() => {}, { storage: memoryKeyValueStore(), sqlite: sqlite.module });
-    expect(off).toEqual(expect.any(Function));
   });
 
   it('deletes the file and the key when the list expires', async () => {

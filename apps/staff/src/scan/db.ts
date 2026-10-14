@@ -59,14 +59,20 @@ export async function scanDbKey(storage: KeyValueStore, random: RandomBytes): Pr
  * form (`x'…'`) skips the passphrase derivation, which is slow on a phone. A wrong key shows up on
  * the first read, as SQLCipher's "file is not a database", and becomes `ScanDbKeyError`.
  */
-export async function openEncryptedScanDb(sqlite: SqliteModule, key: string, name = DB_NAME): Promise<ScanDb> {
+export async function openEncryptedScanDb(
+  sqlite: SqliteModule,
+  key: string,
+  name = DB_NAME,
+): Promise<ScanDb> {
   if (!HEX_KEY.test(key)) throw new Error('scan database key must be 64 hex characters');
   const handle = await sqlite.openDatabaseAsync(name);
   try {
     await handle.execAsync(`PRAGMA key = "x'${key}'";`);
     await handle.getAllAsync('SELECT count(*) AS n FROM sqlite_master', []);
-    await handle.execAsync('PRAGMA journal_mode = WAL; PRAGMA synchronous = NORMAL; PRAGMA foreign_keys = ON;');
-  } catch (e) {
+    await handle.execAsync(
+      'PRAGMA journal_mode = WAL; PRAGMA synchronous = NORMAL; PRAGMA foreign_keys = ON;',
+    );
+  } catch {
     await handle.closeAsync().catch(() => {});
     throw new ScanDbKeyError();
   }
@@ -109,7 +115,11 @@ export function wrapHandle(handle: SqliteHandle): ScanDb {
 }
 
 /** Deletes the database files and the key: after this the data cannot be read by anyone. */
-export async function destroyScanDb(sqlite: SqliteModule, storage: KeyValueStore, name = DB_NAME): Promise<void> {
+export async function destroyScanDb(
+  sqlite: SqliteModule,
+  storage: KeyValueStore,
+  name = DB_NAME,
+): Promise<void> {
   await sqlite.deleteDatabaseAsync(name).catch(() => {});
   await storage.delete(DB_KEY_NAME);
 }

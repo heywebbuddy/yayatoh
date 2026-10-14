@@ -7,15 +7,7 @@ import { ScanView } from '../../src/scan/ui/scan-screen';
 import { REPEAT_WINDOW_MS, VERDICT_HOLD_MS } from '../../src/scan/ui/use-scan-flow';
 import { ALL_VERDICTS, viewFor } from '../../src/scan/verdicts';
 import { camera } from '../mocks/vision-camera';
-import {
-  FakeServer,
-  NORTH,
-  NOW,
-  header,
-  rig,
-  row,
-  signedCode,
-} from './harness';
+import { FakeServer, header, NORTH, NOW, rig, row, signedCode } from './harness';
 import { renderIn, spyFeedback } from './ui-helpers';
 
 jest.mock('react-native-vision-camera', () => require('../mocks/vision-camera'));
@@ -49,7 +41,9 @@ async function view(
   scheduler = null as ReturnType<typeof createScheduler> | null,
   now?: () => number,
 ) {
-  const ui = renderIn(<ScanView engine={engine} scheduler={scheduler} feedback={feedback} {...(now ? { now } : {})} />);
+  const ui = renderIn(
+    <ScanView engine={engine} scheduler={scheduler} feedback={feedback} {...(now ? { now } : {})} />,
+  );
   await act(async () => {});
   return ui;
 }
@@ -77,7 +71,9 @@ describe('the scan screen: header', () => {
     await act(async () => camera.see(row(1).shortCode));
     await waitFor(() => expect(screen.getByTestId('scan-queue')).toHaveTextContent('1 scan waiting to send'));
     await act(async () => camera.see(row(2).shortCode));
-    await waitFor(() => expect(screen.getByTestId('scan-queue')).toHaveTextContent('2 scans waiting to send'));
+    await waitFor(() =>
+      expect(screen.getByTestId('scan-queue')).toHaveTextContent('2 scans waiting to send'),
+    );
   });
 });
 
@@ -126,7 +122,9 @@ describe('the scan screen: every verdict', () => {
     const { engine } = await ready({ rows: [row(1, { rev: 2 })], checkpoint: NORTH });
     await view(engine);
     await act(async () => camera.see(await signedCode(1, 1)));
-    await waitFor(() => expect(screen.getByTestId('verdict-title')).toHaveTextContent(t.verdict.superseded.title));
+    await waitFor(() =>
+      expect(screen.getByTestId('verdict-title')).toHaveTextContent(t.verdict.superseded.title),
+    );
     engine.setCheckpoint('not-an-entrance');
   });
 
@@ -138,7 +136,9 @@ describe('the scan screen: every verdict', () => {
     clock.ms += 5 * 60_000;
     cameraClock += 5 * 60_000;
     await act(async () => camera.see(`${row(1).shortCode} `));
-    await waitFor(() => expect(screen.getByTestId('verdict-title')).toHaveTextContent(t.verdict.duplicate.title));
+    await waitFor(() =>
+      expect(screen.getByTestId('verdict-title')).toHaveTextContent(t.verdict.duplicate.title),
+    );
     // 20:00Z is 2 pm in Chicago.
     expect(screen.getByText('First admitted at 2:00 PM at North gate.')).toBeOnTheScreen();
   });
@@ -208,7 +208,12 @@ describe('the scan screen: the camera', () => {
   it('ignores a scanned object that is not a code', async () => {
     const { engine } = await ready();
     await view(engine);
-    await act(async () => camera.output?.onObjectsScanned([{ type: 'face', faceID: 1 }, { type: 'qr', value: '' }]));
+    await act(async () =>
+      camera.output?.onObjectsScanned([
+        { type: 'face', faceID: 1 },
+        { type: 'qr', value: '' },
+      ]),
+    );
     expect(engine.queueDepth).toBe(0);
   });
 
@@ -274,7 +279,9 @@ describe('the scan screen: typing a code', () => {
       fireEvent.changeText(screen.getByTestId('manual-input'), row(1).shortCode);
       await act(async () => fireEvent.press(screen.getByTestId('manual-submit')));
     }
-    await waitFor(() => expect(screen.getByTestId('verdict-title')).toHaveTextContent(t.verdict.duplicate.title));
+    await waitFor(() =>
+      expect(screen.getByTestId('verdict-title')).toHaveTextContent(t.verdict.duplicate.title),
+    );
   });
 
   it('refuses an empty code with a message, and clears it once typing starts', async () => {
@@ -330,7 +337,13 @@ describe('the scan screen: before there is a list', () => {
 
   it('says when this device is not assigned to the event, and when the list failed its check', async () => {
     const good = await header();
-    const server = new FakeServer({ header: { ...good, scope: { ...good.scope!, checkpointIds: [NORTH] } }, rows: [row(1)] });
+    const server = new FakeServer({
+      header: {
+        ...good,
+        scope: { ...(good.scope as NonNullable<typeof good.scope>), checkpointIds: [NORTH] },
+      },
+      rows: [row(1)],
+    });
     const r = await rig(server, { at: atServerTime });
     await view(r.engine);
     await act(async () => {
@@ -374,7 +387,14 @@ describe('the scan screen: duplicates found after sync', () => {
     });
     const panel = await screen.findByTestId('flagged-panel');
     expect(panel).toBeOnTheScreen();
-    expect(screen.getByText(t.flagged.title.replace('{count, plural, one {# scan needs a second look} other {# scans need a second look}}', '1 scan needs a second look'))).toBeOnTheScreen();
+    expect(
+      screen.getByText(
+        t.flagged.title.replace(
+          '{count, plural, one {# scan needs a second look} other {# scans need a second look}}',
+          '1 scan needs a second look',
+        ),
+      ),
+    ).toBeOnTheScreen();
     expect(screen.getByText('Holder 1')).toBeOnTheScreen();
     expect(screen.getByText(t.flagged.duplicate)).toBeOnTheScreen();
     expect(feedback.played).toContain('duplicate+duplicate');

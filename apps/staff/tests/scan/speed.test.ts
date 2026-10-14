@@ -7,7 +7,7 @@
  */
 import { signTicketCode } from '@yayatoh/ticket-crypto';
 import { summarize, TimingLog, VERDICT_BUDGET_MS } from '../../src/scan/timing';
-import { FakeServer, NOW, ORG, header, rig, row, ticketId } from './harness';
+import { FakeServer, header, NOW, ORG, rig, row, ticketId } from './harness';
 
 const N = Number(process.env.BENCH_CODES ?? 300);
 
@@ -47,7 +47,7 @@ describe('verdict speed', () => {
 
   it('keeps only the most recent timings', () => {
     const log = new TimingLog(3);
-    [1, 2, 3, 4, 5].forEach((n) => log.add(n));
+    for (const n of [1, 2, 3, 4, 5]) log.add(n);
     expect(log.summary()).toMatchObject({ count: 3, max: 5 });
   });
 });

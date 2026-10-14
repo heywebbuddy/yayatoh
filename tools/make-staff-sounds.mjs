@@ -1,4 +1,4 @@
-// Generates the four verdict sounds (M7.4b) as small mono WAV files: `node scripts/make-sounds.mjs`.
+// Generates the four verdict sounds (M7.4b) as small mono WAV files: `node tools/make-staff-sounds.mjs`.
 // Each is a different rhythm and pitch, so a door can tell them apart without looking:
 //   admit      one short rising chirp
 //   warn       two mid beeps (provisional: admitted but flagged)
@@ -8,7 +8,7 @@ import { writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 const RATE = 22050;
-const out = (name) => fileURLToPath(new URL(`../assets/sounds/${name}.wav`, import.meta.url));
+const out = (name) => fileURLToPath(new URL(`../apps/staff/assets/sounds/${name}.wav`, import.meta.url));
 
 function tone(freq, ms, { to = freq, shape = 'sine', gain = 0.6 } = {}) {
   const n = Math.round((RATE * ms) / 1000);
@@ -36,7 +36,8 @@ const join = (...parts) => {
 
 function wav(samples) {
   const data = Buffer.alloc(samples.length * 2);
-  samples.forEach((s, i) => data.writeInt16LE(Math.round(Math.max(-1, Math.min(1, s)) * 32767), i * 2));
+  for (const [i, s] of samples.entries())
+    data.writeInt16LE(Math.round(Math.max(-1, Math.min(1, s)) * 32767), i * 2);
   const head = Buffer.alloc(44);
   head.write('RIFF', 0);
   head.writeUInt32LE(36 + data.length, 4);

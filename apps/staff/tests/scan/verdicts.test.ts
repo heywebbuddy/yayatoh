@@ -1,7 +1,6 @@
 import { dark, light } from '@yayatoh/ui/tokens';
-import { toneColors } from '../../src/scan/ui/tone-colors';
-import { contrast } from '../../src/scan/ui/tone-colors';
 import { createFeedback } from '../../src/scan/feedback';
+import { contrast, toneColors } from '../../src/scan/ui/tone-colors';
 import { ALL_VERDICTS, type SoundId, viewFor } from '../../src/scan/verdicts';
 
 describe('how each verdict looks, sounds and feels', () => {
@@ -16,16 +15,27 @@ describe('how each verdict looks, sounds and feels', () => {
   });
 
   it('admits are green, repeats and flagged passes are amber, refusals are red', () => {
-    for (const id of ['admit', 'granted', 'entered', 'scanned_out'] as const) expect(viewFor(id).tone).toBe('admit');
-    for (const id of ['duplicate', 'provisional', 'duplicate_offline'] as const) expect(viewFor(id).tone).toBe('warn');
-    for (const id of ['invalid', 'void', 'superseded', 'wrong_checkpoint', 'wrong_event', 'outside_window'] as const)
+    for (const id of ['admit', 'granted', 'entered', 'scanned_out'] as const)
+      expect(viewFor(id).tone).toBe('admit');
+    for (const id of ['duplicate', 'provisional', 'duplicate_offline'] as const)
+      expect(viewFor(id).tone).toBe('warn');
+    for (const id of [
+      'invalid',
+      'void',
+      'superseded',
+      'wrong_checkpoint',
+      'wrong_event',
+      'outside_window',
+    ] as const)
       expect(viewFor(id).tone).toBe('stop');
   });
 
   it('gives admit, a flagged pass, a repeat and a refusal four different sounds', () => {
     const sounds = (['admit', 'provisional', 'duplicate', 'invalid'] as const).map((id) => viewFor(id).sound);
     expect(new Set(sounds).size).toBe(4);
-    const haptics = (['admit', 'provisional', 'duplicate', 'invalid'] as const).map((id) => viewFor(id).haptic);
+    const haptics = (['admit', 'provisional', 'duplicate', 'invalid'] as const).map(
+      (id) => viewFor(id).haptic,
+    );
     expect(new Set(haptics).size).toBe(4);
   });
 

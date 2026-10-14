@@ -52,7 +52,9 @@ export function useScanFlow({ engine, scheduler, feedback, direction, now = Date
         // Device pass: the verdict times of a real phone, in the JS log (durations only).
         if (__DEV__ && engine.timings.summary().count % 25 === 0) {
           const t = engine.timings.summary();
-          console.info(`[scan] verdict ${t.count} scans: mean ${t.mean.toFixed(1)} ms, p95 ${t.p95.toFixed(1)} ms, max ${t.max.toFixed(1)} ms (budget 300)`);
+          console.info(
+            `[scan] verdict ${t.count} scans: mean ${t.mean.toFixed(1)} ms, p95 ${t.p95.toFixed(1)} ms, max ${t.max.toFixed(1)} ms (budget 300)`,
+          );
         }
         feedback.play(viewFor(result.verdict));
         scheduler?.kick();

@@ -5,9 +5,9 @@ import {
   destroyScanDb,
   openEncryptedScanDb,
   ScanDbKeyError,
-  scanDbKey,
   type SqliteHandle,
   type SqliteModule,
+  scanDbKey,
   wrapHandle,
 } from '../../src/scan/db';
 import { fakeSqlite, nodeHandle, testRandom } from './harness';
@@ -61,7 +61,10 @@ describe('the encrypted database', () => {
       },
       closeAsync,
     };
-    const module: SqliteModule = { openDatabaseAsync: async () => handle, deleteDatabaseAsync: async () => {} };
+    const module: SqliteModule = {
+      openDatabaseAsync: async () => handle,
+      deleteDatabaseAsync: async () => {},
+    };
     await expect(openEncryptedScanDb(module, KEY)).rejects.toThrow(ScanDbKeyError);
     expect(closeAsync).toHaveBeenCalled();
   });

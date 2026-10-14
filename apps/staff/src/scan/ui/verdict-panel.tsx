@@ -36,7 +36,11 @@ export function VerdictPanel({ outcome, timezone }: VerdictPanelProps) {
   const view = viewFor(outcome.verdict);
   const { fill, text } = toneColors(view.tone, colors);
   const time = (iso: string) =>
-    format.dateTime(new Date(iso), { hour: 'numeric', minute: '2-digit', ...(timezone ? { timeZone: timezone } : {}) });
+    format.dateTime(new Date(iso), {
+      hour: 'numeric',
+      minute: '2-digit',
+      ...(timezone ? { timeZone: timezone } : {}),
+    });
 
   let hint: string | null = null;
   if (view.id === 'duplicate' || view.id === 'duplicate_offline') {
@@ -62,7 +66,11 @@ export function VerdictPanel({ outcome, timezone }: VerdictPanelProps) {
       style={[styles.panel, { backgroundColor: fill, borderColor: fill }]}
       testID="verdict-panel"
     >
-      <Text style={[styles.glyph, { color: text }]} importantForAccessibility="no" testID={`verdict-glyph-${view.tone}`}>
+      <Text
+        style={[styles.glyph, { color: text }]}
+        importantForAccessibility="no"
+        testID={`verdict-glyph-${view.tone}`}
+      >
         {TONE_GLYPH[view.tone]}
       </Text>
       <Text style={[styles.title, { color: text }]} testID="verdict-title">

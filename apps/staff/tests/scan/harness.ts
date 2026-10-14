@@ -8,22 +8,22 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
 import {
+  eventDay,
   MANIFEST_VERSION,
   type ManifestHeader,
   type ManifestRow,
   SCOPE_TAG,
-  eventDay,
   scopeMessage,
 } from '@yayatoh/checkin-engine';
-import { ed25519KeyPairFromSeed, signStatement, signTicketCode, verifyTicketCode } from '@yayatoh/ticket-crypto';
 import {
-  type ManifestRequest,
-  type ScanApi,
-  ScanAuthError,
-  ScanRejectedError,
-} from '../../src/scan/api';
+  ed25519KeyPairFromSeed,
+  signStatement,
+  signTicketCode,
+  verifyTicketCode,
+} from '@yayatoh/ticket-crypto';
+import { type ManifestRequest, type ScanApi, ScanAuthError, ScanRejectedError } from '../../src/scan/api';
 import { type ScanDb, type SqliteHandle, type SqliteModule, wrapHandle } from '../../src/scan/db';
-import { ScanEngine, type EngineDeps } from '../../src/scan/engine';
+import { type EngineDeps, ScanEngine } from '../../src/scan/engine';
 import { ScanStore } from '../../src/scan/store';
 import type { ManifestPage, QueuedScan, SyncResponse } from '../../src/scan/types';
 

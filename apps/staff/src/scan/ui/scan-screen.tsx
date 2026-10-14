@@ -33,7 +33,13 @@ export interface ScanViewProps {
   readonly now?: () => number;
 }
 
-export function ScanView({ engine, scheduler, feedback = nativeFeedback, Camera = QrCamera, now }: ScanViewProps) {
+export function ScanView({
+  engine,
+  scheduler,
+  feedback = nativeFeedback,
+  Camera = QrCamera,
+  now,
+}: ScanViewProps) {
   const t = useTranslations('scan');
   const tc = useTranslations('core.common');
   const colors = useColors();
@@ -45,7 +51,13 @@ export function ScanView({ engine, scheduler, feedback = nativeFeedback, Camera 
   const [torchSupported, setTorchSupported] = useState(false);
   const [manual, setManual] = useState(false);
   const [flags, setFlags] = useState<FlaggedScan[]>([]);
-  const { outcome, unavailable, submit } = useScanFlow({ engine, scheduler, feedback, direction, ...(now ? { now } : {}) });
+  const { outcome, unavailable, submit } = useScanFlow({
+    engine,
+    scheduler,
+    feedback,
+    direction,
+    ...(now ? { now } : {}),
+  });
 
   const timezone = engine.timezone;
   const door = engine.sessionDoor;
@@ -78,7 +90,9 @@ export function ScanView({ engine, scheduler, feedback = nativeFeedback, Camera 
   const cameraHeight = Math.round(Math.min(width * 0.9, height * 0.42));
   const queue = t('status.queue', { count: status.queueDepth });
   const updated = status.lastSyncAt
-    ? t('status.updated', { time: format.dateTime(new Date(status.lastSyncAt), { hour: 'numeric', minute: '2-digit' }) })
+    ? t('status.updated', {
+        time: format.dateTime(new Date(status.lastSyncAt), { hour: 'numeric', minute: '2-digit' }),
+      })
     : null;
 
   return (
@@ -93,7 +107,10 @@ export function ScanView({ engine, scheduler, feedback = nativeFeedback, Camera 
           </Text>
           <View style={styles.statusRow}>
             <Text
-              style={[styles.sub, { color: status.queueDepth > 0 ? colors.warning : colors.ink2, fontWeight: '700' }]}
+              style={[
+                styles.sub,
+                { color: status.queueDepth > 0 ? colors.warning : colors.ink2, fontWeight: '700' },
+              ]}
               accessibilityLiveRegion="polite"
               testID="scan-queue"
             >
@@ -114,7 +131,11 @@ export function ScanView({ engine, scheduler, feedback = nativeFeedback, Camera 
             />
           ) : null}
           {door ? (
-            <View style={styles.directions} accessibilityRole="radiogroup" accessibilityLabel={t('direction.label')}>
+            <View
+              style={styles.directions}
+              accessibilityRole="radiogroup"
+              accessibilityLabel={t('direction.label')}
+            >
               <Button
                 label={t('direction.in')}
                 selected={direction === 'in'}
@@ -185,7 +206,10 @@ export function ScanView({ engine, scheduler, feedback = nativeFeedback, Camera 
 function Notice({ title, body, testID }: { title: string; body: string; testID?: string }) {
   const colors = useColors();
   return (
-    <View style={[styles.notice, { backgroundColor: colors.surfaceSolid, borderColor: colors.line }]} testID={testID}>
+    <View
+      style={[styles.notice, { backgroundColor: colors.surfaceSolid, borderColor: colors.line }]}
+      testID={testID}
+    >
       <Text accessibilityRole="header" style={[styles.noticeTitle, { color: colors.ink }]}>
         {title}
       </Text>
@@ -225,10 +249,18 @@ function Download({
           style={[styles.noticeBody, { color: colors.danger, fontWeight: '700' }]}
           testID="scan-download-error"
         >
-          {t(error === 'offline' ? 'failedOffline' : error === 'not_assigned' ? 'failedNotAssigned' : 'failedScope')}
+          {t(
+            error === 'offline'
+              ? 'failedOffline'
+              : error === 'not_assigned'
+                ? 'failedNotAssigned'
+                : 'failedScope',
+          )}
         </Text>
       ) : null}
-      {!syncing ? <Button variant="primary" label={retryLabel} onPress={onRetry} testID="scan-download-retry" /> : null}
+      {!syncing ? (
+        <Button variant="primary" label={retryLabel} onPress={onRetry} testID="scan-download-retry" />
+      ) : null}
     </View>
   );
 }
@@ -242,7 +274,12 @@ const styles = StyleSheet.create({
   statusRow: { flexDirection: 'row', flexWrap: 'wrap', columnGap: space[4], rowGap: space[1] },
   directions: { flexDirection: 'row', gap: space[2], marginTop: space[2] },
   tools: { flexDirection: 'row', flexWrap: 'wrap', gap: space[2] },
-  notice: { borderRadius: px(radius.card), borderWidth: StyleSheet.hairlineWidth, padding: space[5], gap: space[3] },
+  notice: {
+    borderRadius: px(radius.card),
+    borderWidth: StyleSheet.hairlineWidth,
+    padding: space[5],
+    gap: space[3],
+  },
   noticeTitle: { fontSize: type.card.size, fontWeight: '800', textAlign: 'auto' },
   noticeBody: { fontSize: type.prose.size + 1, lineHeight: (type.prose.size + 1) * 1.5, textAlign: 'auto' },
 });

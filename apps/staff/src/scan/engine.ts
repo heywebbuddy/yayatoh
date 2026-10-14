@@ -24,20 +24,13 @@ import {
   offlineVerdict,
   verifyManifestScope,
 } from '@yayatoh/checkin-engine';
-import type { RandomBytes } from './types';
-import { ScanAuthError, type ScanApi, ScanRejectedError, ScanSyncError } from './api';
+import { type ScanApi, ScanAuthError, ScanRejectedError, ScanSyncError } from './api';
 import { backoffMs } from './backoff';
 import { uuidv7 } from './ids';
 import { applyDoorVerdict, sessionOccupancy } from './session-door';
-import { TimingLog } from './timing';
 import type { DoorLogRow, ScanStore } from './store';
-import type {
-  AdmissionInfo,
-  Direction,
-  FlaggedScan,
-  OutboxEntry,
-  ScanOutcome,
-} from './types';
+import { TimingLog } from './timing';
+import type { AdmissionInfo, Direction, FlaggedScan, OutboxEntry, RandomBytes, ScanOutcome } from './types';
 
 /** Stop scanning with the downloaded list this long after the event ends (ADR 0011). */
 export const EXPIRY_MS = 24 * 3_600_000;
@@ -319,7 +312,11 @@ export class ScanEngine {
     try {
       for (;;) {
         const sentAt = this.now();
-        const page = await api.manifestPage(eventId, { cursor, overlap: cursor !== null && first, limit: PAGE_SIZE });
+        const page = await api.manifestPage(eventId, {
+          cursor,
+          overlap: cursor !== null && first,
+          limit: PAGE_SIZE,
+        });
         const receivedAt = this.now();
         // The scope is signed with the organization's key: a manifest whose scope does not verify
         // is never used (a tampered response cannot widen where this device may scan).
@@ -490,7 +487,13 @@ export class ScanEngine {
       return Promise.resolve({ sent: 0, remaining: this.depth, flagged: [], skipped: true, error: null });
     }
     if (this.unauthorized) {
-      return Promise.resolve({ sent: 0, remaining: this.depth, flagged: [], skipped: false, error: 'unauthorized' });
+      return Promise.resolve({
+        sent: 0,
+        remaining: this.depth,
+        flagged: [],
+        skipped: false,
+        error: 'unauthorized',
+      });
     }
     this.flushing = this.runFlush().finally(() => {
       this.flushing = null;
@@ -542,7 +545,10 @@ export class ScanEngine {
       if (!(e instanceof ScanRejectedError)) throw e;
       if (batch.length > 1) {
         const mid = Math.ceil(batch.length / 2);
-        return (await this.sendBatch(batch.slice(0, mid), flagged)) + (await this.sendBatch(batch.slice(mid), flagged));
+        return (
+          (await this.sendBatch(batch.slice(0, mid), flagged)) +
+          (await this.sendBatch(batch.slice(mid), flagged))
+        );
       }
       // One scan the server will never take: drop it, and say so rather than retry forever.
       const only = batch[0] as OutboxEntry;

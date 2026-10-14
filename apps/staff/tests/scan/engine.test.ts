@@ -1,14 +1,14 @@
-import { EXPIRY_MS, ScanUnavailableError } from '../../src/scan/engine';
 import { ScanAuthError, ScanSyncError } from '../../src/scan/api';
+import { EXPIRY_MS, ScanUnavailableError } from '../../src/scan/engine';
 import {
   FakeServer,
+  header,
   NORTH,
   NOW,
-  SOUTH,
-  SYNC_MS,
-  header,
   rig,
   row,
+  SOUTH,
+  SYNC_MS,
   signedCode,
   signedLate,
   ticketId,
@@ -68,7 +68,10 @@ describe('manifest download', () => {
 
   it('refuses a manifest whose scope signature does not verify, and keeps nothing of it', async () => {
     const good = await header();
-    const bad = { ...good, scope: { ...good.scope!, checkpointIds: [NORTH] } };
+    const bad = {
+      ...good,
+      scope: { ...(good.scope as NonNullable<typeof good.scope>), checkpointIds: [NORTH] },
+    };
     const server = new FakeServer({ header: bad, rows: rows(3) });
     const r = await rig(server, { at: atServerTime });
     await expect(r.engine.sync()).rejects.toThrow(ScanSyncError);
@@ -132,12 +135,20 @@ describe('scanning', () => {
     const r = await ready(server);
     r.engine.setCheckpoint(NORTH);
     const first = await r.engine.scan(row(1).shortCode);
-    expect(first).toMatchObject({ verdict: 'admit', holderName: 'Holder 1', typeName: 'General', firstAdmission: null });
+    expect(first).toMatchObject({
+      verdict: 'admit',
+      holderName: 'Holder 1',
+      typeName: 'General',
+      firstAdmission: null,
+    });
     r.clock.ms += 90_000;
     r.engine.setCheckpoint(SOUTH);
     const again = await r.engine.scan(` ${row(1).shortCode.toLowerCase()} `);
     expect(again.verdict).toBe('duplicate');
-    expect(again.firstAdmission).toEqual({ at: new Date(Date.parse(NOW)).toISOString(), checkpointName: 'North gate' });
+    expect(again.firstAdmission).toEqual({
+      at: new Date(Date.parse(NOW)).toISOString(),
+      checkpointName: 'North gate',
+    });
   });
 
   it('remembers admissions across a restart', async () => {
@@ -151,7 +162,10 @@ describe('scanning', () => {
   });
 
   it('verifies signed codes, including a superseded revision and an unknown ticket', async () => {
-    const server = new FakeServer({ header: await header(), rows: [row(1, { rev: 2 }), row(2, { status: 'void' })] });
+    const server = new FakeServer({
+      header: await header(),
+      rows: [row(1, { rev: 2 }), row(2, { status: 'void' })],
+    });
     const r = await ready(server);
     expect((await r.engine.scan(await signedCode(1, 1))).verdict).toBe('superseded');
     expect((await r.engine.scan(await signedCode(1, 2))).verdict).toBe('admit');

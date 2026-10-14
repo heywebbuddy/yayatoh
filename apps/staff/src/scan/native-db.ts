@@ -3,17 +3,18 @@
  * in `app.config.ts` sets `useSQLCipher`), keyed from the keychain. The only file that imports the
  * native module.
  */
-import * as SQLite from 'expo-sqlite';
+
 import type { KeyValueStore } from '@yayatoh/mobile-core';
-import type { RandomBytes } from './types';
+import * as SQLite from 'expo-sqlite';
 import {
   destroyScanDb,
   openEncryptedScanDb,
   type ScanDb,
   ScanDbKeyError,
-  scanDbKey,
   type SqliteModule,
+  scanDbKey,
 } from './db';
+import type { RandomBytes } from './types';
 
 /** `expo-sqlite` as the small interface the adapter needs. */
 export const nativeSqlite: SqliteModule = {

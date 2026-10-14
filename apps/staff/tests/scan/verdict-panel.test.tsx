@@ -52,7 +52,9 @@ describe('the verdict panel', () => {
   it('says when, without a place, for an admission with no checkpoint', () => {
     renderIn(
       <VerdictPanel
-        outcome={outcome('duplicate', { firstAdmission: { at: '2027-12-01T20:00:00Z', checkpointName: null } })}
+        outcome={outcome('duplicate', {
+          firstAdmission: { at: '2027-12-01T20:00:00Z', checkpointName: null },
+        })}
         timezone="America/Chicago"
       />,
     );
@@ -62,7 +64,9 @@ describe('the verdict panel', () => {
   it('uses the event’s time zone, not the phone’s', () => {
     renderIn(
       <VerdictPanel
-        outcome={outcome('duplicate', { firstAdmission: { at: '2027-12-01T20:00:00Z', checkpointName: 'Hall' } })}
+        outcome={outcome('duplicate', {
+          firstAdmission: { at: '2027-12-01T20:00:00Z', checkpointName: 'Hall' },
+        })}
         timezone="Asia/Tokyo"
       />,
     );
@@ -70,7 +74,9 @@ describe('the verdict panel', () => {
   });
 
   it('is readable without a holder (an unknown or provisional pass)', () => {
-    renderIn(<VerdictPanel outcome={outcome('provisional', { holderName: null, typeName: null })} timezone={null} />);
+    renderIn(
+      <VerdictPanel outcome={outcome('provisional', { holderName: null, typeName: null })} timezone={null} />,
+    );
     expect(screen.getByTestId('verdict-panel').props.accessibilityLabel).toContain(
       catalogs.en.scan.verdict.provisional.title,
     );

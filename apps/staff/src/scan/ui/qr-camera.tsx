@@ -3,6 +3,8 @@
  * v5 with an object output restricted to `qr`, so no barcode of another kind can ever become a scan.
  * The only file that imports the camera.
  */
+
+import { constant } from '@yayatoh/ui/tokens';
 import { useCallback, useEffect, useRef } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import {
@@ -47,7 +49,16 @@ export function QrCamera({ active, torch, height, onCode, onTorchSupport, onType
       />
     );
   }
-  return <Preview active={active} torch={torch} height={height} onCode={onCode} onTorchSupport={onTorchSupport} onTypeCode={onTypeCode} />;
+  return (
+    <Preview
+      active={active}
+      torch={torch}
+      height={height}
+      onCode={onCode}
+      onTorchSupport={onTorchSupport}
+      onTypeCode={onTypeCode}
+    />
+  );
 }
 
 function Preview({ active, torch, height, onCode, onTorchSupport, onTypeCode }: QrCameraProps) {
@@ -73,9 +84,16 @@ function Preview({ active, torch, height, onCode, onTorchSupport, onTypeCode }: 
 
   if (!device) {
     return (
-      <View style={[styles.empty, { height, backgroundColor: colors.surfaceSolid, borderColor: colors.line }]} testID="camera-unavailable">
+      <View
+        style={[styles.empty, { height, backgroundColor: colors.surfaceSolid, borderColor: colors.line }]}
+        testID="camera-unavailable"
+      >
         <Text style={[styles.emptyText, { color: colors.ink2 }]}>{t('unavailable')}</Text>
-        <Text accessibilityRole="button" onPress={onTypeCode} style={[styles.link, { color: colors.primaryInk }]}>
+        <Text
+          accessibilityRole="button"
+          onPress={onTypeCode}
+          style={[styles.link, { color: colors.primaryInk }]}
+        >
           {t('typeCode')}
         </Text>
       </View>
@@ -102,9 +120,22 @@ function Preview({ active, torch, height, onCode, onTorchSupport, onTypeCode }: 
 }
 
 const styles = StyleSheet.create({
-  frame: { borderRadius: px(radius.card), overflow: 'hidden', borderWidth: StyleSheet.hairlineWidth, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000' },
+  frame: {
+    borderRadius: px(radius.card),
+    overflow: 'hidden',
+    borderWidth: StyleSheet.hairlineWidth,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: constant.black,
+  },
   reticle: { width: '62%', aspectRatio: 1, borderWidth: 3, borderRadius: px(radius.tile) },
-  empty: { borderRadius: px(radius.card), borderWidth: StyleSheet.hairlineWidth, padding: space[5], justifyContent: 'center', gap: space[3] },
+  empty: {
+    borderRadius: px(radius.card),
+    borderWidth: StyleSheet.hairlineWidth,
+    padding: space[5],
+    justifyContent: 'center',
+    gap: space[3],
+  },
   emptyText: { fontSize: 17, textAlign: 'auto' },
   link: { fontSize: 17, fontWeight: '700', textAlign: 'auto', minHeight: 44, textAlignVertical: 'center' },
 });
