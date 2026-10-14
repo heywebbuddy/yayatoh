@@ -1,0 +1,33 @@
+# M7.4a: an organizer signs in with email, password and an authenticator code (two-step verification
+# is required). Written, not run in cloud sessions. Device pass: a seeded organizer with TOTP:
+#   maestro test -e EMAIL=omar@yayatoh.test -e PASSWORD=... -e CODE=<current 6-digit code> ...
+appId: com.yayatoh.staff.preview
+env:
+  EMAIL: ''
+  PASSWORD: ''
+  CODE: ''
+---
+- launchApp:
+    clearState: true
+- tapOn: 'Event organizer: sign in'
+- assertVisible: 'Organizer sign-in'
+# Validation first: an address that is not one, then no password.
+- tapOn: 'Email address'
+- inputText: 'not an email'
+- tapOn: 'Continue'
+- assertVisible: 'Enter a valid email address.'
+- clearState
+- launchApp
+- tapOn: 'Event organizer: sign in'
+- tapOn: 'Email address'
+- inputText: '${EMAIL}'
+- tapOn: 'Password'
+- inputText: '${PASSWORD}'
+- tapOn: 'Continue'
+- assertVisible: 'Enter the code from your authenticator app.*'
+- tapOn: 'Verification code'
+- inputText: '${CODE}'
+- tapOn: 'Verify and sign in'
+- extendedWaitUntil:
+    notVisible: 'Organizer sign-in'
+    timeout: 15000

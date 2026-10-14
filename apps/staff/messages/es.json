@@ -170,7 +170,7 @@
     "replace": {
       "title": "¿Reemplazar el registro de este dispositivo?",
       "body": "Este dispositivo está registrado para {event}. Registrarlo de nuevo borra su token y todo lo que guardó para ese evento.",
-      "thisEvent": "un evento",
+      "bodyNoEvent": "Este dispositivo está registrado para un evento. Registrarlo de nuevo borra su token y todo lo que guardó para ese evento.",
       "confirm": "Borrar y registrar de nuevo",
       "cancel": "Mantener el registro actual"
     },

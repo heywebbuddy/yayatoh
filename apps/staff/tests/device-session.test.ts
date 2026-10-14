@@ -231,6 +231,17 @@ describe('enrolling', () => {
     expect(r.session.state.status).toBe('enrolled');
   });
 
+  it('scanning the same code again keeps the chosen place and the event', async () => {
+    const r = await enrolled(rig());
+    await r.session.selectCheckpoint(CHECKPOINTS[1]?.id ?? null);
+    expect(await r.session.enrol(enrolLink())).toEqual({ kind: 'enrolled' });
+    expect(r.session.state).toMatchObject({
+      checkpointId: CHECKPOINTS[1]?.id,
+      checkpointChosen: true,
+      event: { name: 'Summit' },
+    });
+  });
+
   it('keeps the enrolment when only the event details cannot be read yet', async () => {
     const r = rig();
     const original = r.door.fetch;

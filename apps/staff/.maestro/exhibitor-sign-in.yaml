@@ -1,0 +1,41 @@
+# M7.4a: an exhibitor rep signs in with the invitation link and the emailed six-digit code. Written,
+# not run in cloud sessions. Device pass: a seeded exhibitor invitation and the local Mailpit, which
+# the script reads the code from:
+#   maestro test -e INVITE_LINK=<link from the invitation email> -e MAILPIT=http://localhost:8025 ...
+appId: com.yayatoh.staff.preview
+env:
+  INVITE_LINK: ''
+  MAILPIT: 'http://localhost:8025'
+---
+- launchApp:
+    clearState: true
+- tapOn: 'Exhibitor: sign in'
+- assertVisible: 'Exhibitor sign-in'
+# Something that is not an invitation link is refused without a request.
+- tapOn: 'Invitation link'
+- inputText: 'hello'
+- tapOn: 'Email me a code'
+- assertVisible: 'That is not an invitation link.*'
+- clearState
+- launchApp
+- tapOn: 'Exhibitor: sign in'
+- tapOn: 'Invitation link'
+- inputText: '${INVITE_LINK}'
+- tapOn: 'Email me a code'
+- assertVisible: 'We emailed a six-digit code.*'
+# A wrong code is refused and says how many tries are left.
+- tapOn: 'Six-digit code'
+- inputText: '000000'
+- tapOn: 'Verify and sign in'
+- assertVisible: 'That code is not right.*'
+- runScript:
+    file: scripts/mailpit-code.js
+    env:
+      MAILPIT: '${MAILPIT}'
+- tapOn: 'Six-digit code'
+- eraseText
+- inputText: '${output.code}'
+- tapOn: 'Verify and sign in'
+- extendedWaitUntil:
+    notVisible: 'Exhibitor sign-in'
+    timeout: 15000

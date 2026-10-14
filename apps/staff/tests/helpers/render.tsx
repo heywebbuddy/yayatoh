@@ -31,7 +31,7 @@ export interface App extends ReturnType<typeof createStaffServices> {
   clock: { now: number };
   /** The `/v1/mobile/config` answer: the minimum version the server wants for Staff on iOS. */
   config: { minimum: string; latest: string };
-  extra: { handler: ((request: Request) => Response | Promise<Response> | undefined) | null };
+  extra: { handler: ((request: Request) => Response | Promise<Response | undefined> | undefined) | null };
 }
 
 export function buildApp(
@@ -72,6 +72,7 @@ export function buildApp(
       fetch: (input, init) => door.fetch(input, init),
     },
     battery: async () => 77,
+    now: () => clock.now,
   });
   const app = { ...services, door, storage, clock, config, extra };
   built.push(app);
@@ -81,7 +82,7 @@ export function buildApp(
 /** Lets pending promises (storage reads, fetches, state updates) settle. */
 export const settle = () => act(async () => void (await new Promise((resolve) => setImmediate(resolve))));
 
-export async function renderApp(ui: ReactElement, app: App = buildApp()) {
+export async function renderApp(ui: ReactElement, app: App = buildApp(), opts: { settle?: boolean } = {}) {
   const view = render(
     <CoreProvider bindNetwork={false} core={app.core}>
       <DeviceProvider heartbeat={false} session={app.device}>
@@ -89,8 +90,10 @@ export async function renderApp(ui: ReactElement, app: App = buildApp()) {
       </DeviceProvider>
     </CoreProvider>,
   );
-  await settle();
-  await settle();
+  if (opts.settle !== false) {
+    await settle();
+    await settle();
+  }
   return { ...view, app };
 }
 
@@ -109,3 +112,27 @@ export const shownTexts = (): string[] =>
         .join(''),
     )
     .filter(Boolean);
+
+/**
+ * A keychain that answers only when told to: a test sees the app while it is still reading its
+ * stored enrolment, then lets it finish inside `act`.
+ */
+export function slowStorage(initial: Record<string, string> = {}) {
+  const inner = memoryKeyValueStore(initial);
+  const waiting: (() => void)[] = [];
+  const store = {
+    ...inner,
+    get: (key: string) =>
+      new Promise<string | null>((resolve) => waiting.push(() => resolve(inner.get(key)))),
+  };
+  /** Answers every pending read, and the reads those lead to, until nothing is waiting. */
+  const release = async () => {
+    for (let round = 0; round < 8; round++) {
+      await act(async () => {
+        for (const go of waiting.splice(0)) go();
+        await new Promise((resolve) => setImmediate(resolve));
+      });
+    }
+  };
+  return { store: store as typeof inner, release };
+}

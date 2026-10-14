@@ -135,6 +135,9 @@ function AlertsCard({ overview }: { overview: StaffOverview }) {
   );
 }
 
+/** A placeholder the server fills in when it sends the push: not text a person reads. */
+const slot = (name: string) => `{${name}}`;
+
 /** Staff push alerts on this phone (M7.2e): permission, the APNs/FCM token, and the text in the phone's language. */
 function PushCard() {
   const t = useTranslations('tools');
@@ -153,7 +156,7 @@ function PushCard() {
   const copyOf = (kind: StaffAlertKind | 'assistance') => ({
     title: t(`push.copy.${kind}.title`),
     // The server fills the placeholders when it sends; the app only supplies its own words.
-    body: t(`push.copy.${kind}.body`, { label: '{label}', percent: '{percent}' }),
+    body: t(`push.copy.${kind}.body`, { label: slot('label'), percent: slot('percent') }),
   });
 
   async function enable() {

@@ -1,4 +1,4 @@
-import { fireEvent, screen, waitFor } from '@testing-library/react-native';
+import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
 import { memoryKeyValueStore } from '@yayatoh/mobile-core';
 import EnrolScreen from '../src/app/enrol/index';
 import { DEVICE_KEY, ENDED_KEY } from '../src/device/session';
@@ -12,13 +12,6 @@ jest.mock('expo-localization', () => ({ getLocales: () => [{ languageTag: 'en-US
 
 const en = catalogs.en;
 beforeEach(resetRouter);
-
-const allText = () =>
-  screen.root
-    ? (JSON.stringify(screen.toJSON()).match(/"children":\["([^"]+)"\]/g) ?? []).map((m) =>
-        m.slice('"children":["'.length, -2),
-      )
-    : [];
 
 async function paste(link: string) {
   fireEvent.changeText(screen.getByTestId('enrol-link'), link);
@@ -128,7 +121,9 @@ describe('a revoked or wiped device', () => {
     expect(await app.device.enrol(enrolLink())).toEqual({ kind: 'enrolled' });
     await renderApp(<EnrolScreen />, app);
     app.door.wiping.add(TOKEN);
-    await app.device.heartbeat();
+    await act(async () => {
+      await app.device.heartbeat();
+    });
     await settle();
     expect(screen.getByTestId('enrol-ended')).toHaveTextContent(en.enrol.notices.wiped);
     expect(app.storage.data.has(DEVICE_KEY)).toBe(false);
