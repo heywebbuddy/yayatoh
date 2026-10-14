@@ -24,8 +24,7 @@ export function enrolmentFrom(event: unknown, key: unknown): Enrolment | null {
 }
 
 /** `https://abc.yayatoh.events/fr/scan#e=…&k=…` or `yayatoh-staff://scan#e=…&k=…`. */
-const LINK =
-  /^(?:https?|[a-z][a-z0-9+.-]*):\/\/[^/?#]*\/?(?:(?:[a-z]{2}(?:-[A-Za-z]{2,4})?)\/)?scan\/?(?:\?[^#]*)?#(.*)$/i;
+const LINK = /^https?:\/\/[^/?#]*\/(?:(?:[a-z]{2}(?:-[A-Za-z]{2,4})?)\/)?scan\/?(?:\?[^#]*)?#(.*)$/i;
 const SCHEME_LINK = /^[a-z][a-z0-9+.-]*:\/\/scan\/?(?:\?[^#]*)?#(.*)$/i;
 
 function fragmentFields(fragment: string): Record<string, string> {
@@ -59,8 +58,18 @@ export function enrolmentFromLink(link: string): Enrolment | null {
   return enrolmentFrom(fields.e, fields.k);
 }
 
+/**
+ * `https://host/scan`, `https://host/fr/scan`, `yayatoh-staff://scan` or a bare `/scan` path, with or
+ * without the fragment; not `/tools/scan` or `/scanner`.
+ */
+const LOCALE = '(?:[a-z]{2}(?:-[A-Za-z]{2,4})?\\/)?';
+const ENROLMENT_PATH = new RegExp(
+  `^(?:https?:\\/\\/[^/?#]*\\/${LOCALE}scan(?=[/?#]|$)|[a-z][a-z0-9+.-]*:\\/\\/scan(?=[/?#]|$)|\\/${LOCALE}scan(?=[/?#]|$))`,
+  'i',
+);
+
 /** True when a system link is the enrolment kind, whether or not it is valid. */
-export const looksLikeEnrolmentLink = (link: string): boolean => /\/scan\/?(?:[?#]|$)/i.test(link);
+export const looksLikeEnrolmentLink = (link: string): boolean => ENROLMENT_PATH.test(link.trim());
 
 /**
  * Masks the key (and the event) of an enrolment link, and any device token, in text that might be

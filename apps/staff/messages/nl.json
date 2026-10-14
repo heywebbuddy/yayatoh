@@ -170,7 +170,7 @@
     "replace": {
       "title": "Registratie van dit apparaat vervangen?",
       "body": "Dit apparaat is geregistreerd voor {event}. Opnieuw registreren wist de token en alles wat het voor dat evenement heeft opgeslagen.",
-      "thisEvent": "een evenement",
+      "bodyNoEvent": "Dit apparaat is geregistreerd voor een evenement. Opnieuw registreren wist de token en alles wat het voor dat evenement heeft opgeslagen.",
       "confirm": "Wissen en opnieuw registreren",
       "cancel": "Huidige registratie behouden"
     },

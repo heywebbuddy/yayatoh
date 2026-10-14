@@ -443,16 +443,19 @@ export function createDeviceSession(options: DeviceSessionOptions) {
         // A wipe that was cut short finishes before the device starts again.
         await runWipeCallbacks('replaced');
       }
+      // The same key scanned again keeps what the device already knows (its place, the event).
+      const same =
+        previous?.token === enrolment.token && previous.eventId === enrolment.eventId ? previous : null;
       stored = {
         token: enrolment.token,
         eventId: enrolment.eventId,
         deviceId: data.deviceId,
-        checkpointId: null,
-        checkpointChosen: false,
-        event: null,
-        checkpoints: [],
-        appliedCheckpointAt: null,
-        appliedSyncAt: null,
+        checkpointId: same?.checkpointId ?? null,
+        checkpointChosen: same?.checkpointChosen ?? false,
+        event: same?.event ?? null,
+        checkpoints: same?.checkpoints ?? [],
+        appliedCheckpointAt: same?.appliedCheckpointAt ?? null,
+        appliedSyncAt: same?.appliedSyncAt ?? null,
       };
       pendingWipe = false;
       await persist();

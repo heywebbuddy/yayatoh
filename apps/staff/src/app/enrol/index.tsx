@@ -82,7 +82,9 @@ export default function EnrolScreen() {
       {pending ? (
         <Card testID="enrol-replace">
           <Heading>{t('replace.title')}</Heading>
-          <Body>{t('replace.body', { event: device.event?.name ?? t('replace.thisEvent') })}</Body>
+          <Body>
+            {device.event ? t('replace.body', { event: device.event.name }) : t('replace.bodyNoEvent')}
+          </Body>
           <Button
             label={t('replace.confirm')}
             onPress={() => {

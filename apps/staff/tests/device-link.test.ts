@@ -40,9 +40,27 @@ describe('enrolment links', () => {
       expect(enrolmentFromLink(link)).toBeNull();
   });
 
-  it('recognises a system link meant for enrolment', () => {
-    expect(looksLikeEnrolmentLink(enrolLink())).toBe(true);
-    expect(looksLikeEnrolmentLink('https://app.yayatoh.com/tickets/1')).toBe(false);
+  it('recognises a system link meant for enrolment, and only that path', () => {
+    for (const link of [
+      enrolLink(),
+      'https://app.yayatoh.com/scan',
+      'https://summit.yayatoh.events/fr/scan?x=1',
+      'yayatoh-staff://scan#e=1',
+      'yayatoh-staff-preview://scan',
+      '/scan#e=1&k=2',
+      '/fr/scan',
+    ])
+      expect(looksLikeEnrolmentLink(link)).toBe(true);
+    for (const link of [
+      'https://app.yayatoh.com/tickets/1',
+      'https://app.yayatoh.com/tools/scan',
+      'https://app.yayatoh.com/scanner',
+      'yayatoh-staff://tools/scan',
+      '/tools/scan',
+      '/scanner',
+      '',
+    ])
+      expect(looksLikeEnrolmentLink(link)).toBe(false);
   });
 });
 
@@ -69,5 +87,12 @@ describe('redaction (the key never reaches a log or a crash report)', () => {
     });
     expect(JSON.stringify(event)).not.toContain(TOKEN);
     expect(JSON.stringify(event)).not.toContain('yyd_');
+  });
+});
+
+describe('only the enrolment path counts', () => {
+  it('does not take a key from another path of an app-scheme link', () => {
+    expect(enrolmentFromLink(`yayatoh-staff://tools/scan#e=${EVENT_ID}&k=${TOKEN}`)).toBeNull();
+    expect(enrolmentFromLink(`https://app.yayatoh.com/tools/scan#e=${EVENT_ID}&k=${TOKEN}`)).toBeNull();
   });
 });
