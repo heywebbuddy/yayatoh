@@ -1,8 +1,7 @@
 # Close the payment page without paying: back on the event's checkout with the selection intact, then
 # pay again. The same idempotency key is replayed, so there is one order, not two.
-appId: ${APP_ID}
+appId: com.yayatoh.yayatohapp.dev
 env:
-  APP_ID: com.yayatoh.yayatohapp.dev
   EMAIL: nia@newcomer.test
   PASSWORD: persona-dev-password
   EVENT_NAME: Harbor Spring Concert

@@ -1,5 +1,5 @@
 # Signs in with a seeded persona's password (M7.3a's welcome screen). Skips itself when already signed in.
-appId: ${APP_ID}
+appId: com.yayatoh.yayatohapp.dev
 ---
 - runFlow:
     when:

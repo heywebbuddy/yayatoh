@@ -1,8 +1,7 @@
 # A virtual (online) event shows "Buy on the web" and no quantity controls: it cannot be bought in the app (P7-7).
 # Needs an online event with passes: create one in the development organizer dashboard and pass its slug.
-appId: ${APP_ID}
+appId: com.yayatoh.yayatohapp.dev
 env:
-  APP_ID: com.yayatoh.yayatohapp.dev
   EMAIL: nia@newcomer.test
   PASSWORD: persona-dev-password
   ONLINE_EVENT_SLUG: harbor-online-talk

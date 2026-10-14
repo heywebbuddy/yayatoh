@@ -11,7 +11,7 @@ with the seeded personas. The server needs `pnpm db:bootstrap && pnpm db:migrate
 | `virtual-ticket.yaml` | An online event shows "Buy on the web" and no way to buy in the app |
 | `near-me.yaml` | "Near me" asks for the location only when tapped, and sorts nearest first |
 
-Environment (all optional): `APP_ID` (default `com.yayatoh.yayatohapp.dev`), `EMAIL` and `PASSWORD`
+The flows target the development build (`com.yayatoh.yayatohapp.dev`); for a preview build change the `appId` line. Environment (all optional): `EMAIL` and `PASSWORD`
 (a seeded persona and `DEV_PERSONA_PASSWORD`), `EVENT_QUERY` and `EVENT_NAME` (default the seeded Harbor
 Spring Concert), `ONLINE_EVENT_SLUG` (an online event created for the pass; the seed has none).
 

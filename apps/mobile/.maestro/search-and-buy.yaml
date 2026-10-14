@@ -1,7 +1,6 @@
 # Search for an event, choose tickets and buy them with the fake payment provider.
-appId: ${APP_ID}
+appId: com.yayatoh.yayatohapp.dev
 env:
-  APP_ID: com.yayatoh.yayatohapp.dev
   EMAIL: nia@newcomer.test
   PASSWORD: persona-dev-password
   EVENT_QUERY: Harbor Spring

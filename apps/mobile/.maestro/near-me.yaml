@@ -1,7 +1,6 @@
 # "Near me" asks for the location only when tapped, then sorts nearest first.
-appId: ${APP_ID}
+appId: com.yayatoh.yayatohapp.dev
 env:
-  APP_ID: com.yayatoh.yayatohapp.dev
   EMAIL: nia@newcomer.test
   PASSWORD: persona-dev-password
 ---
