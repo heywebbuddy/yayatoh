@@ -1,4 +1,150 @@
 {
+  "scan": {
+    "title": "Scansiona i biglietti",
+    "ready": "Pronto a scansionare",
+    "header": {
+      "at": "A: {name}",
+      "wholeEvent": "Tutto l’evento"
+    },
+    "status": {
+      "queue": "{count, plural, =0 {Tutte le scansioni sono state inviate} one {# scansione in attesa di invio} many {# di scansioni in attesa di invio} other {# scansioni in attesa di invio}}",
+      "updated": "Elenco ospiti aggiornato alle {time}"
+    },
+    "sync": {
+      "button": "Sincronizza ora",
+      "running": "Sincronizzazione…"
+    },
+    "download": {
+      "title": "Download dell’elenco ospiti",
+      "body": "Tieni il telefono connesso fino al termine. Dopo, la scansione funziona anche senza connessione.",
+      "failedOffline": "Impossibile scaricare l’elenco ospiti. Controlla la connessione e riprova.",
+      "failedNotAssigned": "Questo dispositivo non è assegnato a questo evento. Chiedi a un organizzatore di controllarne la registrazione.",
+      "failedScope": "L’elenco ospiti non ha superato il controllo di sicurezza. Riprova oppure chiedi a un organizzatore di registrare di nuovo questo dispositivo."
+    },
+    "expired": {
+      "title": "Elenco ospiti rimosso",
+      "body": "L’evento è terminato da più di un giorno, quindi l’elenco ospiti è stato eliminato da questo telefono."
+    },
+    "camera": {
+      "askTitle": "Consenti alla fotocamera di scansionare",
+      "askBody": "Yayatoh Staff usa la fotocamera per leggere i codici QR dei biglietti all’ingresso.",
+      "allow": "Consenti fotocamera",
+      "deniedTitle": "L’accesso alla fotocamera è disattivato",
+      "deniedBody": "Attiva la fotocamera per Yayatoh Staff nelle Impostazioni per scansionare i codici QR. Puoi comunque digitare il codice di un biglietto.",
+      "openSettings": "Apri le impostazioni",
+      "typeCode": "Digita un codice",
+      "unavailable": "Non è stata trovata alcuna fotocamera su questo dispositivo.",
+      "preview": "Vista della fotocamera. Inquadra il codice QR di un biglietto."
+    },
+    "torch": {
+      "on": "Accendi la luce",
+      "off": "Spegni la luce"
+    },
+    "manual": {
+      "open": "Digita un codice",
+      "title": "Codice del biglietto",
+      "label": "Codice del biglietto",
+      "hint": "Digita il codice stampato sotto il codice QR, poi controllalo.",
+      "placeholder": "Codice",
+      "submit": "Controlla il codice",
+      "close": "Torna alla fotocamera",
+      "empty": "Inserisci il codice di un biglietto."
+    },
+    "direction": {
+      "label": "Direzione",
+      "in": "Entrata",
+      "out": "Uscita"
+    },
+    "verdict": {
+      "admit": {
+        "title": "Ammetti"
+      },
+      "admitted": {
+        "title": "Ammesso"
+      },
+      "granted": {
+        "title": "Accesso consentito"
+      },
+      "entered": {
+        "title": "Entrato"
+      },
+      "scanned_out": {
+        "title": "Uscita registrata"
+      },
+      "provisional": {
+        "title": "Ammetti e segnala",
+        "hint": "Non è ancora nell’elenco ospiti. Fallo entrare; un supervisore controllerà."
+      },
+      "duplicate": {
+        "title": "Già scansionato",
+        "hint": "Questo biglietto è già stato scansionato oggi.",
+        "hintWhen": "Primo ingresso alle {time}.",
+        "hintWhere": "Primo ingresso alle {time} a {place}."
+      },
+      "duplicate_offline": {
+        "title": "Duplicato trovato",
+        "hint": "Un altro varco ha ammesso prima questo biglietto."
+      },
+      "superseded": {
+        "title": "Biglietto vecchio",
+        "hint": "Questo codice è stato sostituito. Chiedi il biglietto più recente."
+      },
+      "void": {
+        "title": "Biglietto annullato",
+        "hint": "Questo biglietto è stato rimborsato o annullato. Non ammetterlo."
+      },
+      "invalid": {
+        "title": "Non riconosciuto",
+        "hint": "Non è un biglietto valido per questo evento."
+      },
+      "wrong_event": {
+        "title": "Evento sbagliato",
+        "hint": "Questo biglietto è per un altro evento."
+      },
+      "outside_window": {
+        "title": "Ingressi chiusi"
+      },
+      "wrong_date": {
+        "title": "Data sbagliata"
+      },
+      "not_today": {
+        "title": "Non valido oggi"
+      },
+      "no_access": {
+        "title": "Nessun accesso qui"
+      },
+      "wrong_checkpoint": {
+        "title": "Ingresso sbagliato",
+        "hint": "Questo dispositivo non è configurato per scansionare a questo ingresso."
+      },
+      "balance_due": {
+        "title": "Saldo da pagare",
+        "hint": "Manda la persona al banco per pagare il saldo."
+      },
+      "not_in_room": {
+        "title": "Non è nella sala"
+      },
+      "not_enrolled": {
+        "title": "Non iscritto"
+      },
+      "admission_level": {
+        "title": "Non incluso"
+      },
+      "capacity": {
+        "title": "Sala piena"
+      }
+    },
+    "flagged": {
+      "title": "{count, plural, one {# scansione da ricontrollare} many {# di scansioni da ricontrollare} other {# scansioni da ricontrollare}}",
+      "duplicate": "Anche un altro varco ha ammesso questo biglietto. Controlla che la persona non entri due volte.",
+      "rejected": "Questa scansione non ha potuto essere inviata ed è stata scartata.",
+      "other": "Il server ha valutato questa scansione in modo diverso. Un supervisore la controllerà.",
+      "when": "Scansionato alle {time}",
+      "dismiss": "Ignora",
+      "dismissAll": "Ignora tutto",
+      "unknownHolder": "Un biglietto"
+    }
+  },
   "home": {
     "title": "Yayatoh Staff",
     "tagline": "Gli strumenti per l’ingresso nel giorno dell’evento arriveranno presto."
