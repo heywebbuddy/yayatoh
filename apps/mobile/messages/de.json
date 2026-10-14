@@ -2,5 +2,136 @@
   "home": {
     "title": "Yayatoh",
     "tagline": "Deine Events und Tickets erscheinen bald hier."
+  },
+  "welcome": {
+    "title": "Willkommen bei Yayatoh",
+    "tagline": "Deine Tickets und Veranstaltungen an einem Ort.",
+    "pointTickets": "Behalte deine Tickets auf dem Telefon, auch ohne Empfang.",
+    "pointDiscover": "Finde Veranstaltungen und kaufe Tickets mit wenigen Tipps.",
+    "pointUpdates": "Erfahre sofort, wenn sich bei deiner Veranstaltung etwas ändert.",
+    "email": "Mit E-Mail fortfahren",
+    "apple": "Mit Apple anmelden",
+    "google": "Weiter mit Google",
+    "password": "Passwort verwenden",
+    "offlineTitle": "Keine Verbindung",
+    "offlineBody": "Verbinde dich mit dem Internet, um dich anzumelden. Danach sind deine Tickets hier.",
+    "offlineRetry": "Erneut versuchen",
+    "loading": "Wird geladen"
+  },
+  "signIn": {
+    "back": "Zurück",
+    "startAgain": "Neu beginnen",
+    "rateLimitedNoTime": "Zu viele Versuche. Warte ein paar Minuten und versuche es erneut.",
+    "email": {
+      "title": "Wie lautet deine E-Mail-Adresse?",
+      "body": "Wir senden dir einen 6-stelligen Code per E-Mail. Du brauchst kein Passwort, und dein Konto wird beim ersten Mal angelegt.",
+      "label": "E-Mail-Adresse",
+      "placeholder": "du@beispiel.de",
+      "submit": "Code senden",
+      "required": "Gib deine E-Mail-Adresse ein.",
+      "invalid": "Gib eine gültige E-Mail-Adresse ein, zum Beispiel du@beispiel.de."
+    },
+    "code": {
+      "title": "Schau in dein Postfach",
+      "body": "Wir haben einen 6-stelligen Code an {email} gesendet. Er gilt {minutes, plural, one {# Minute} other {# Minuten}}.",
+      "label": "6-stelliger Code",
+      "submit": "Anmelden",
+      "incomplete": "Gib alle 6 Ziffern ein.",
+      "wrongOrExpired": "Dieser Code ist falsch oder abgelaufen. Prüfe ihn oder fordere einen neuen an.",
+      "resend": "Neuen Code senden",
+      "resendIn": "{seconds, plural, one {Neuen Code in # Sekunde senden} other {Neuen Code in # Sekunden senden}}",
+      "resent": "Wir haben dir einen neuen Code gesendet.",
+      "change": "Andere E-Mail-Adresse verwenden"
+    },
+    "password": {
+      "title": "Mit Passwort anmelden",
+      "body": "Für Konten, die bereits ein Passwort haben. Neu hier? Nutze stattdessen einen E-Mail-Code.",
+      "label": "Passwort",
+      "show": "Passwort anzeigen",
+      "hide": "Passwort verbergen",
+      "submit": "Anmelden",
+      "required": "Gib dein Passwort ein.",
+      "useCode": "Stattdessen einen Code per E-Mail senden"
+    },
+    "twoFactor": {
+      "title": "Bestätigung in zwei Schritten",
+      "body": "Gib den 6-stelligen Code aus deiner Authenticator-App ein oder einen deiner Backup-Codes.",
+      "label": "Bestätigungscode",
+      "submit": "Bestätigen",
+      "required": "Gib deinen Code ein."
+    },
+    "linkProof": {
+      "title": "Bestätige, dass du es bist",
+      "body": "Zu dieser E-Mail-Adresse gibt es bereits ein Yayatoh-Konto. Wir haben ihr einen 6-stelligen Code gesendet. Gib den Code ein, um dich anzumelden und diese Anmeldemethode zu verknüpfen.",
+      "submit": "Bestätigen und anmelden"
+    }
+  },
+  "account": {
+    "title": "Konto",
+    "cancel": "Abbrechen",
+    "preferences": "Einstellungen",
+    "notifications": "Benachrichtigungen",
+    "version": "Version {version}",
+    "tabs": {
+      "tickets": "Tickets",
+      "discover": "Entdecken",
+      "account": "Konto"
+    },
+    "profile": {
+      "name": "Name",
+      "email": "E-Mail",
+      "status": "E-Mail-Status",
+      "verified": "Bestätigt",
+      "unverified": "Nicht bestätigt"
+    },
+    "signOut": {
+      "button": "Abmelden",
+      "confirm": "Auf diesem Telefon von Yayatoh abmelden?",
+      "action": "Abmelden"
+    },
+    "signOutEverywhere": {
+      "button": "Überall abmelden",
+      "confirm": "Damit wirst du auf allen Telefonen und in allen Browsern von Yayatoh abgemeldet. Du musst dich überall neu anmelden.",
+      "action": "Überall abmelden",
+      "failed": "Wir konnten dich nicht überall abmelden. Prüfe deine Verbindung und versuche es erneut."
+    },
+    "danger": {
+      "title": "Konto löschen",
+      "body": "Lösche dein Yayatoh-Konto und alles auf diesem Telefon endgültig."
+    },
+    "delete": {
+      "entry": "Konto löschen",
+      "title": "Konto löschen",
+      "intro": "Dadurch wird dein Yayatoh-Konto endgültig gelöscht. Das lässt sich nicht rückgängig machen.",
+      "deletedTitle": "Was wir löschen",
+      "deleted1": "Deine Anmeldemethoden und jede Sitzung auf jedem Gerät.",
+      "deleted2": "Deine Benachrichtigungseinstellungen und die für Benachrichtigungen registrierten Telefone.",
+      "deleted3": "Die Verknüpfung zwischen dir und deinen Bestellungen und Tickets.",
+      "keptTitle": "Was Veranstalter behalten",
+      "kept": "Jeder Veranstalter ist für seine eigenen Unterlagen verantwortlich. Er behält die Bestellungen, Tickets und Marketing-Einwilligungen, die er zu dir führt, etwa Name und E-Mail-Adresse auf einer Bestellung, doch diese Daten sind danach keinem Konto mehr zugeordnet. Yayatoh speichert nie deine Kartendaten.",
+      "lastOwner": "{count, plural, one {Du bist der einzige Inhaber dieser Organisation: {names}. Übergib sie zuerst an jemand anderen oder lösche sie, und versuche es dann erneut.} other {Du bist der einzige Inhaber dieser Organisationen: {names}. Übergib sie zuerst an jemand anderen oder lösche sie, und versuche es dann erneut.}}",
+      "continue": "Weiter",
+      "unavailable": "Wir konnten Yayatoh nicht erreichen. Prüfe deine Verbindung und versuche es erneut.",
+      "confirmIntro": "Bestätige zuerst, dass du es bist, und dann deine E-Mail-Adresse.",
+      "stepUpTotp": "Gib den Code aus deiner Authenticator-App ein oder einen deiner Backup-Codes.",
+      "stepUpPassword": "Gib dein Passwort ein.",
+      "stepUpEmail": "Wir haben einen 6-stelligen Code an {email} gesendet. Gib ihn hier ein.",
+      "codeLabel": "Code",
+      "passwordLabel": "Passwort",
+      "proofRequired": "Gib deinen Code oder dein Passwort ein, um fortzufahren.",
+      "typeEmail": "Gib zur Bestätigung deine E-Mail-Adresse ein: {email}",
+      "emailLabel": "Deine E-Mail-Adresse",
+      "emailRequired": "Gib zur Bestätigung deine E-Mail-Adresse ein.",
+      "mismatch": "Das stimmt nicht mit deiner E-Mail-Adresse überein.",
+      "submit": "Mein Konto endgültig löschen",
+      "back": "Zurück",
+      "stepUpExpired": "Deine Bestätigung ist abgelaufen. Gib einen neuen Code oder dein Passwort ein und versuche es erneut.",
+      "failed": "Wir konnten dein Konto nicht löschen. Es wurde nichts gelöscht. Bitte versuche es erneut."
+    },
+    "deleted": {
+      "title": "Dein Konto wurde gelöscht",
+      "body": "Wir haben eine Bestätigung an deine alte Adresse gesendet. Alles aus deinem Konto wurde von diesem Telefon entfernt.",
+      "done": "Fertig"
+    }
   }
 }

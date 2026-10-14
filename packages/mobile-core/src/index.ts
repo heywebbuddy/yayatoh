@@ -49,6 +49,12 @@ export { documentFileStore, secureKeyValueStore } from './platform/stores';
 export { type FileStore, type KeyValueStore, memoryFileStore, memoryKeyValueStore } from './ports';
 export { CoreProvider, type CoreProviderProps, useCore, useSession } from './provider';
 export {
+  type Account,
+  createAccount,
+  type DeleteAccountOutcome,
+  type SignOutEverywhereOutcome,
+} from './session/account';
+export {
   type AppleSignInProvider,
   expoAppleProvider,
   expoGoogleProvider,

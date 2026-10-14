@@ -2,5 +2,136 @@
   "home": {
     "title": "Yayatoh",
     "tagline": "Je evenementen en tickets verschijnen hier binnenkort."
+  },
+  "welcome": {
+    "title": "Welkom bij Yayatoh",
+    "tagline": "Je tickets en evenementen, allemaal op één plek.",
+    "pointTickets": "Bewaar je tickets op je telefoon, ook zonder bereik.",
+    "pointDiscover": "Vind evenementen en koop tickets met een paar tikken.",
+    "pointUpdates": "Krijg een seintje als er iets verandert aan je evenement.",
+    "email": "Doorgaan met e-mail",
+    "apple": "Inloggen met Apple",
+    "google": "Doorgaan met Google",
+    "password": "Een wachtwoord gebruiken",
+    "offlineTitle": "Je bent niet verbonden",
+    "offlineBody": "Maak verbinding met internet om in te loggen. Daarna staan je tickets hier.",
+    "offlineRetry": "Opnieuw proberen",
+    "loading": "Laden"
+  },
+  "signIn": {
+    "back": "Terug",
+    "startAgain": "Opnieuw beginnen",
+    "rateLimitedNoTime": "Te veel pogingen. Wacht een paar minuten en probeer het opnieuw.",
+    "email": {
+      "title": "Wat is je e-mailadres?",
+      "body": "We mailen je een code van 6 cijfers. Je hebt geen wachtwoord nodig en je account wordt de eerste keer aangemaakt.",
+      "label": "E-mailadres",
+      "placeholder": "jij@voorbeeld.nl",
+      "submit": "Stuur me een code",
+      "required": "Vul je e-mailadres in.",
+      "invalid": "Vul een geldig e-mailadres in, bijvoorbeeld jij@voorbeeld.nl."
+    },
+    "code": {
+      "title": "Kijk in je mailbox",
+      "body": "We hebben een code van 6 cijfers gestuurd naar {email}. De code werkt {minutes, plural, one {# minuut} other {# minuten}}.",
+      "label": "Code van 6 cijfers",
+      "submit": "Inloggen",
+      "incomplete": "Vul alle 6 cijfers in.",
+      "wrongOrExpired": "Die code is onjuist of verlopen. Controleer hem of vraag een nieuwe aan.",
+      "resend": "Nieuwe code sturen",
+      "resendIn": "{seconds, plural, one {Nieuwe code sturen over # seconde} other {Nieuwe code sturen over # seconden}}",
+      "resent": "We hebben je een nieuwe code gestuurd.",
+      "change": "Een ander e-mailadres gebruiken"
+    },
+    "password": {
+      "title": "Inloggen met een wachtwoord",
+      "body": "Voor accounts die al een wachtwoord hebben. Nieuw hier? Gebruik dan een code per e-mail.",
+      "label": "Wachtwoord",
+      "show": "Wachtwoord tonen",
+      "hide": "Wachtwoord verbergen",
+      "submit": "Inloggen",
+      "required": "Vul je wachtwoord in.",
+      "useCode": "Mail me liever een code"
+    },
+    "twoFactor": {
+      "title": "Verificatie in twee stappen",
+      "body": "Vul de code van 6 cijfers uit je authenticator-app in, of een van je back-upcodes.",
+      "label": "Verificatiecode",
+      "submit": "Verifiëren",
+      "required": "Vul je code in."
+    },
+    "linkProof": {
+      "title": "Bevestig dat jij het bent",
+      "body": "Er bestaat al een Yayatoh-account met dit e-mailadres. We hebben er een code van 6 cijfers naartoe gestuurd. Vul de code in om in te loggen en deze inlogmethode te koppelen.",
+      "submit": "Bevestigen en inloggen"
+    }
+  },
+  "account": {
+    "title": "Account",
+    "cancel": "Annuleren",
+    "preferences": "Instellingen",
+    "notifications": "Meldingsinstellingen",
+    "version": "Versie {version}",
+    "tabs": {
+      "tickets": "Tickets",
+      "discover": "Ontdekken",
+      "account": "Account"
+    },
+    "profile": {
+      "name": "Naam",
+      "email": "E-mail",
+      "status": "E-mailstatus",
+      "verified": "Geverifieerd",
+      "unverified": "Niet geverifieerd"
+    },
+    "signOut": {
+      "button": "Uitloggen",
+      "confirm": "Uitloggen bij Yayatoh op deze telefoon?",
+      "action": "Uitloggen"
+    },
+    "signOutEverywhere": {
+      "button": "Overal uitloggen",
+      "confirm": "Hiermee log je uit bij Yayatoh op elke telefoon en browser. Je moet overal opnieuw inloggen.",
+      "action": "Overal uitloggen",
+      "failed": "We konden je niet overal uitloggen. Controleer je verbinding en probeer het opnieuw."
+    },
+    "danger": {
+      "title": "Account verwijderen",
+      "body": "Verwijder je Yayatoh-account en alles op deze telefoon definitief."
+    },
+    "delete": {
+      "entry": "Account verwijderen",
+      "title": "Je account verwijderen",
+      "intro": "Hiermee verwijder je je Yayatoh-account definitief. Dit kan niet ongedaan worden gemaakt.",
+      "deletedTitle": "Wat we verwijderen",
+      "deleted1": "Je inlogmethoden en elke sessie op elk apparaat.",
+      "deleted2": "Je meldingskeuzes en de telefoons die voor meldingen zijn geregistreerd.",
+      "deleted3": "De koppeling tussen jou en je bestellingen en tickets.",
+      "keptTitle": "Wat organisatoren bewaren",
+      "kept": "Elke organisator is verantwoordelijk voor zijn eigen administratie. Die bewaart de bestellingen, tickets en marketingtoestemmingen die hij van je heeft, zoals de naam en het e-mailadres op een bestelling, maar die gegevens zijn niet meer aan een account gekoppeld. Yayatoh slaat nooit je kaartgegevens op.",
+      "lastOwner": "{count, plural, one {Je bent de enige eigenaar van deze organisatie: {names}. Draag haar eerst over aan iemand anders of verwijder haar, en probeer het dan opnieuw.} other {Je bent de enige eigenaar van deze organisaties: {names}. Draag ze eerst over aan iemand anders of verwijder ze, en probeer het dan opnieuw.}}",
+      "continue": "Doorgaan",
+      "unavailable": "We konden Yayatoh niet bereiken. Controleer je verbinding en probeer het opnieuw.",
+      "confirmIntro": "Bevestig eerst dat jij het bent en bevestig daarna je e-mailadres.",
+      "stepUpTotp": "Vul de code uit je authenticator-app in, of een van je back-upcodes.",
+      "stepUpPassword": "Vul je wachtwoord in.",
+      "stepUpEmail": "We hebben een code van 6 cijfers gestuurd naar {email}. Vul hem hier in.",
+      "codeLabel": "Code",
+      "passwordLabel": "Wachtwoord",
+      "proofRequired": "Vul je code of wachtwoord in om door te gaan.",
+      "typeEmail": "Typ ter bevestiging je e-mailadres: {email}",
+      "emailLabel": "Je e-mailadres",
+      "emailRequired": "Typ je e-mailadres ter bevestiging.",
+      "mismatch": "Dat komt niet overeen met je e-mailadres.",
+      "submit": "Mijn account definitief verwijderen",
+      "back": "Terug",
+      "stepUpExpired": "Je bevestiging is verlopen. Vul een nieuwe code of je wachtwoord in en probeer het opnieuw.",
+      "failed": "We konden je account niet verwijderen. Er is niets verwijderd. Probeer het opnieuw."
+    },
+    "deleted": {
+      "title": "Je account is verwijderd",
+      "body": "We hebben een bevestiging gestuurd naar je oude adres. Alles van je account is van deze telefoon verwijderd.",
+      "done": "Klaar"
+    }
   }
 }

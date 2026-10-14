@@ -2,5 +2,136 @@
   "home": {
     "title": "Yayatoh",
     "tagline": "Tus eventos y entradas aparecerán aquí muy pronto."
+  },
+  "welcome": {
+    "title": "Te damos la bienvenida a Yayatoh",
+    "tagline": "Tus entradas y eventos, todo en un solo lugar.",
+    "pointTickets": "Guarda tus entradas en el teléfono, incluso sin cobertura.",
+    "pointDiscover": "Encuentra eventos y compra entradas con unos pocos toques.",
+    "pointUpdates": "Recibe un aviso cuando cambie algo de tu evento.",
+    "email": "Continuar con el correo",
+    "apple": "Iniciar sesión con Apple",
+    "google": "Continuar con Google",
+    "password": "Usar una contraseña",
+    "offlineTitle": "No tienes conexión",
+    "offlineBody": "Conéctate a internet para iniciar sesión. Tus entradas estarán aquí en cuanto lo hagas.",
+    "offlineRetry": "Reintentar",
+    "loading": "Cargando"
+  },
+  "signIn": {
+    "back": "Atrás",
+    "startAgain": "Empezar de nuevo",
+    "rateLimitedNoTime": "Demasiados intentos. Espera unos minutos e inténtalo de nuevo.",
+    "email": {
+      "title": "¿Cuál es tu correo electrónico?",
+      "body": "Te enviaremos un código de 6 dígitos por correo. No necesitas contraseña y tu cuenta se crea la primera vez.",
+      "label": "Correo electrónico",
+      "placeholder": "tu@ejemplo.com",
+      "submit": "Enviarme un código",
+      "required": "Escribe tu correo electrónico.",
+      "invalid": "Escribe un correo válido, como tu@ejemplo.com."
+    },
+    "code": {
+      "title": "Revisa tu correo",
+      "body": "Enviamos un código de 6 dígitos a {email}. Funciona durante {minutes, plural, one {# minuto} other {# minutos}}.",
+      "label": "Código de 6 dígitos",
+      "submit": "Iniciar sesión",
+      "incomplete": "Escribe los 6 dígitos.",
+      "wrongOrExpired": "Ese código es incorrecto o ha caducado. Revísalo o pide uno nuevo.",
+      "resend": "Enviar un código nuevo",
+      "resendIn": "{seconds, plural, one {Enviar un código nuevo en # segundo} other {Enviar un código nuevo en # segundos}}",
+      "resent": "Te enviamos un código nuevo.",
+      "change": "Usar otro correo"
+    },
+    "password": {
+      "title": "Iniciar sesión con contraseña",
+      "body": "Para cuentas que ya tienen contraseña. ¿Eres nuevo? Usa mejor un código por correo.",
+      "label": "Contraseña",
+      "show": "Mostrar contraseña",
+      "hide": "Ocultar contraseña",
+      "submit": "Iniciar sesión",
+      "required": "Escribe tu contraseña.",
+      "useCode": "Enviarme un código por correo"
+    },
+    "twoFactor": {
+      "title": "Verificación en dos pasos",
+      "body": "Escribe el código de 6 dígitos de tu aplicación de autenticación o uno de tus códigos de respaldo.",
+      "label": "Código de autenticación",
+      "submit": "Verificar",
+      "required": "Escribe tu código."
+    },
+    "linkProof": {
+      "title": "Confirma que eres tú",
+      "body": "Ya existe una cuenta de Yayatoh con este correo. Le enviamos un código de 6 dígitos. Escríbelo para iniciar sesión y vincular este método de acceso.",
+      "submit": "Confirmar e iniciar sesión"
+    }
+  },
+  "account": {
+    "title": "Cuenta",
+    "cancel": "Cancelar",
+    "preferences": "Ajustes",
+    "notifications": "Ajustes de notificaciones",
+    "version": "Versión {version}",
+    "tabs": {
+      "tickets": "Entradas",
+      "discover": "Descubrir",
+      "account": "Cuenta"
+    },
+    "profile": {
+      "name": "Nombre",
+      "email": "Correo",
+      "status": "Estado del correo",
+      "verified": "Verificado",
+      "unverified": "Sin verificar"
+    },
+    "signOut": {
+      "button": "Cerrar sesión",
+      "confirm": "¿Cerrar la sesión de Yayatoh en este teléfono?",
+      "action": "Cerrar sesión"
+    },
+    "signOutEverywhere": {
+      "button": "Cerrar sesión en todas partes",
+      "confirm": "Se cerrará tu sesión de Yayatoh en todos los teléfonos y navegadores. Tendrás que volver a iniciar sesión en todos.",
+      "action": "Cerrar sesión en todas partes",
+      "failed": "No pudimos cerrar tu sesión en todas partes. Revisa tu conexión e inténtalo de nuevo."
+    },
+    "danger": {
+      "title": "Eliminar cuenta",
+      "body": "Elimina para siempre tu cuenta de Yayatoh y todo lo que hay en este teléfono."
+    },
+    "delete": {
+      "entry": "Eliminar cuenta",
+      "title": "Eliminar tu cuenta",
+      "intro": "Esto elimina para siempre tu cuenta de Yayatoh. No se puede deshacer.",
+      "deletedTitle": "Lo que eliminamos",
+      "deleted1": "Tus métodos de acceso y todas las sesiones en todos los dispositivos.",
+      "deleted2": "Tus preferencias de notificaciones y los teléfonos registrados para recibirlas.",
+      "deleted3": "El vínculo entre tú y tus pedidos y entradas.",
+      "keptTitle": "Lo que conservan los organizadores",
+      "kept": "Cada organizador es responsable de sus propios registros. Conserva los pedidos, las entradas y los consentimientos de marketing que tiene sobre ti, como el nombre y el correo de un pedido, pero esos registros dejan de estar vinculados a una cuenta. Yayatoh nunca guarda los datos de tu tarjeta.",
+      "lastOwner": "{count, plural, one {Eres el único propietario de esta organización: {names}. Cédesela a otra persona o elimínala primero y vuelve a intentarlo.} other {Eres el único propietario de estas organizaciones: {names}. Cédeselas a otra persona o elimínalas primero y vuelve a intentarlo.}}",
+      "continue": "Continuar",
+      "unavailable": "No pudimos conectar con Yayatoh. Revisa tu conexión e inténtalo de nuevo.",
+      "confirmIntro": "Primero confirma que eres tú y después confirma tu correo electrónico.",
+      "stepUpTotp": "Escribe el código de tu aplicación de autenticación o uno de tus códigos de respaldo.",
+      "stepUpPassword": "Escribe tu contraseña.",
+      "stepUpEmail": "Enviamos un código de 6 dígitos a {email}. Escríbelo aquí.",
+      "codeLabel": "Código",
+      "passwordLabel": "Contraseña",
+      "proofRequired": "Escribe tu código o tu contraseña para continuar.",
+      "typeEmail": "Para confirmar, escribe tu correo electrónico: {email}",
+      "emailLabel": "Tu correo electrónico",
+      "emailRequired": "Escribe tu correo electrónico para confirmar.",
+      "mismatch": "No coincide con tu correo electrónico.",
+      "submit": "Eliminar mi cuenta para siempre",
+      "back": "Atrás",
+      "stepUpExpired": "Tu confirmación caducó. Escribe un código nuevo o tu contraseña e inténtalo de nuevo.",
+      "failed": "No pudimos eliminar tu cuenta. No se eliminó nada. Inténtalo de nuevo."
+    },
+    "deleted": {
+      "title": "Tu cuenta se eliminó",
+      "body": "Enviamos una confirmación a tu antiguo correo. Todo lo de tu cuenta se ha borrado de este teléfono.",
+      "done": "Listo"
+    }
   }
 }
