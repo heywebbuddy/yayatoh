@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render } from '@testing-library/react-native';
 import { type AppLocale, LocaleProvider, ThemeProvider } from '@yayatoh/mobile-core';
-import type { ReactElement } from 'react';
+import { type ReactElement, useSyncExternalStore } from 'react';
 import { catalogs } from '../../src/i18n';
 import { ToolsProvider, type ToolsDeps } from '../../src/tools/deps';
 import { CHECKPOINT, DEVICE, EVENT, fakeStaff, newId, testVault } from './fixtures';
@@ -60,3 +60,23 @@ export function renderTool(ui: ReactElement, opts: { deps?: ToolsDeps; locale?: 
 }
 
 export const en = catalogs.en;
+
+/** A connection switch for tests: `useOffline` follows `set(offline)` and re-renders the screen. */
+export function offlineSwitch(initial = false) {
+  let offline = initial;
+  const listeners = new Set<() => void>();
+  return {
+    useOffline: () =>
+      useSyncExternalStore(
+        (l) => {
+          listeners.add(l);
+          return () => listeners.delete(l);
+        },
+        () => offline,
+      ),
+    set(next: boolean) {
+      offline = next;
+      for (const l of listeners) l();
+    },
+  };
+}
