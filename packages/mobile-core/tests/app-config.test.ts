@@ -1,6 +1,7 @@
 import {
   associatedDomains,
   buildExpoConfig,
+  googleIosRedirectScheme,
   DEVELOPMENT_API_BASE_URL,
   NATIVE_LOCALES,
   PRODUCTION_API_BASE_URL,
@@ -191,5 +192,35 @@ describe('platforms and locales', () => {
     expect(JSON.stringify(c.plugins)).toContain('light-bg');
     expect(JSON.stringify(c.plugins)).toContain('dark-bg');
     expect(c.android?.adaptiveIcon?.backgroundColor).toBe('adaptive-bg');
+  });
+});
+
+describe('sign-in configuration (M7.1c)', () => {
+  const IOS = '1234567890-abcdefg.apps.googleusercontent.com';
+
+  it('enables Sign in with Apple for the attendee app only', () => {
+    expect(mobile().ios?.usesAppleSignIn).toBe(true);
+    expect(staff().ios?.usesAppleSignIn).toBeUndefined();
+  });
+
+  it('adds Google’s redirect schemes only when the client ids are set, keeping the app scheme first', () => {
+    expect(mobile({ APP_ENV: 'production' }).scheme).toBe('yayatoh');
+    const c = mobile({ APP_ENV: 'production', GOOGLE_IOS_CLIENT_ID: IOS, GOOGLE_ANDROID_CLIENT_ID: '999-x.apps.googleusercontent.com' });
+    expect(c.scheme).toEqual(['yayatoh', 'com.googleusercontent.apps.1234567890-abcdefg', 'com.yayatoh.yayatohapp']);
+    expect(googleIosRedirectScheme(IOS)).toBe('com.googleusercontent.apps.1234567890-abcdefg');
+  });
+
+  it('exposes the public client ids and the Sentry DSN to the app through extra, and nothing when unset', () => {
+    const c = mobile({ GOOGLE_IOS_CLIENT_ID: IOS, SENTRY_DSN: 'https://k@o1.ingest.sentry.io/1' });
+    expect(c.extra).toMatchObject({ googleIosClientId: IOS, sentryDsn: 'https://k@o1.ingest.sentry.io/1' });
+    expect(mobile().extra).not.toHaveProperty('sentryDsn');
+    expect(mobile().extra).not.toHaveProperty('googleIosClientId');
+    expect(mobile({ SENTRY_DSN: '  ' }).extra).not.toHaveProperty('sentryDsn');
+  });
+
+  it('adds no permission string for sign-in', () => {
+    const keys = (c: ReturnType<typeof mobile>) => Object.keys(c.ios?.infoPlist ?? {}).filter((k) => k.startsWith('NS') && k.endsWith('UsageDescription'));
+    expect(keys(mobile())).toEqual([]);
+    expect(keys(staff())).toEqual(['NSCameraUsageDescription']);
   });
 });

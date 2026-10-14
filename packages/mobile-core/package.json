@@ -10,6 +10,8 @@
   "exports": {
     ".": "./src/index.ts",
     "./app-config": "./src/app-config.ts",
+    "./catalog-check": "./src/i18n/validate.ts",
+    "./jest-setup": "./jest-setup.cjs",
     "./metro": "./metro.cjs"
   },
   "scripts": {
@@ -48,6 +50,7 @@
     "expo-apple-authentication": "catalog:mobile",
     "expo-application": "catalog:mobile",
     "expo-auth-session": "catalog:mobile",
+    "expo-constants": "catalog:mobile",
     "expo-crypto": "catalog:mobile",
     "expo-file-system": "catalog:mobile",
     "expo-localization": "catalog:mobile",
