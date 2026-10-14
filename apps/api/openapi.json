@@ -16,7 +16,7 @@
     },
     {
       "name": "me",
-      "description": "The signed-in user and their organizations."
+      "description": "The signed-in user and their organizations; as an attendee, their tickets, orders, transfers, refund requests, wallet passes, claims and phones for push."
     },
     {
       "name": "mobile",
@@ -3095,6 +3095,1104 @@
         ],
         "description": "APNs only: `sandbox` for a development build’s token (default `production`)."
       },
+      "MyTicketPage": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MyTicketSummary"
+            }
+          },
+          "nextCursor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "data",
+          "nextCursor"
+        ]
+      },
+      "MyTicketSummary": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "orderId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "$ref": "#/components/schemas/MyTicketStatus"
+          },
+          "rev": {
+            "type": "integer",
+            "description": "The code revision. A transfer or re-send bumps it; the door refuses older codes as superseded."
+          },
+          "shortCode": {
+            "type": "string"
+          },
+          "serial": {
+            "type": "integer"
+          },
+          "holderName": {
+            "type": "string"
+          },
+          "ticketTypeName": {
+            "type": "string"
+          },
+          "seatLabel": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "date": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "startsAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "endsAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "required": [
+              "startsAt",
+              "endsAt"
+            ],
+            "description": "Multi-date events: the date this ticket admits. Null: the whole event."
+          },
+          "event": {
+            "$ref": "#/components/schemas/MyTicketEvent"
+          },
+          "organizerName": {
+            "type": "string"
+          },
+          "accentColor": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The event’s own accent (#rrggbb), else the organizer’s. Null: use the app’s."
+          },
+          "pendingTransfer": {
+            "type": "boolean",
+            "description": "A transfer of this ticket is waiting for its recipient to claim it."
+          }
+        },
+        "required": [
+          "id",
+          "orderId",
+          "status",
+          "rev",
+          "shortCode",
+          "serial",
+          "holderName",
+          "ticketTypeName",
+          "seatLabel",
+          "date",
+          "event",
+          "organizerName",
+          "accentColor",
+          "pendingTransfer"
+        ]
+      },
+      "MyTicketStatus": {
+        "type": "string",
+        "enum": [
+          "active",
+          "void"
+        ],
+        "description": "A voided ticket (refunded or cancelled) admits nobody and has no code."
+      },
+      "MyTicketEvent": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/EventStatus"
+          },
+          "startsAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endsAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "timezone": {
+            "type": "string",
+            "description": "IANA time zone of the event; show times in it."
+          },
+          "venueName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "city": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "country": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "slug",
+          "name",
+          "status",
+          "startsAt",
+          "endsAt",
+          "timezone",
+          "venueName",
+          "city",
+          "country"
+        ]
+      },
+      "EventStatus": {
+        "type": "string",
+        "enum": [
+          "draft",
+          "published",
+          "postponed",
+          "cancelled",
+          "completed",
+          "archived"
+        ]
+      },
+      "TicketWhen": {
+        "type": "string",
+        "enum": [
+          "upcoming",
+          "past"
+        ],
+        "default": "upcoming",
+        "description": "`upcoming`: not yet over, soonest first. `past`: over, latest first."
+      },
+      "MyTicket": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "orderId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "$ref": "#/components/schemas/MyTicketStatus"
+          },
+          "rev": {
+            "type": "integer",
+            "description": "The code revision. A transfer or re-send bumps it; the door refuses older codes as superseded."
+          },
+          "shortCode": {
+            "type": "string"
+          },
+          "serial": {
+            "type": "integer"
+          },
+          "holderName": {
+            "type": "string"
+          },
+          "ticketTypeName": {
+            "type": "string"
+          },
+          "seatLabel": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "date": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "startsAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "endsAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "required": [
+              "startsAt",
+              "endsAt"
+            ],
+            "description": "Multi-date events: the date this ticket admits. Null: the whole event."
+          },
+          "event": {
+            "$ref": "#/components/schemas/MyTicketEvent"
+          },
+          "organizerName": {
+            "type": "string"
+          },
+          "accentColor": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The event’s own accent (#rrggbb), else the organizer’s. Null: use the app’s."
+          },
+          "pendingTransfer": {
+            "type": "boolean",
+            "description": "A transfer of this ticket is waiting for its recipient to claim it."
+          },
+          "qrCode": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The signed code to draw as a QR. Null for a voided ticket. Re-read it when `rev` changes."
+          },
+          "ticketTypeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "checkpoints": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TicketCheckpoint"
+            },
+            "description": "The entrances and zones where this ticket is checked."
+          },
+          "venue": {
+            "$ref": "#/components/schemas/TicketVenue"
+          },
+          "branding": {
+            "$ref": "#/components/schemas/TicketBranding"
+          },
+          "transfer": {
+            "$ref": "#/components/schemas/TicketTransferOptions"
+          }
+        },
+        "required": [
+          "id",
+          "orderId",
+          "status",
+          "rev",
+          "shortCode",
+          "serial",
+          "holderName",
+          "ticketTypeName",
+          "seatLabel",
+          "date",
+          "event",
+          "organizerName",
+          "accentColor",
+          "pendingTransfer",
+          "qrCode",
+          "ticketTypeId",
+          "checkpoints",
+          "venue",
+          "branding",
+          "transfer"
+        ]
+      },
+      "TicketCheckpoint": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "kind": {
+            "$ref": "#/components/schemas/TicketCheckpointKind"
+          }
+        },
+        "required": [
+          "name",
+          "kind"
+        ]
+      },
+      "TicketCheckpointKind": {
+        "type": "string",
+        "enum": [
+          "entrance",
+          "zone"
+        ]
+      },
+      "TicketVenue": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "addressLine1": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "addressLine2": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "city": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "region": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "postalCode": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "country": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "latitude": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "longitude": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "mapUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "accessibilityNotes": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "addressLine1",
+          "addressLine2",
+          "city",
+          "region",
+          "postalCode",
+          "country",
+          "latitude",
+          "longitude",
+          "mapUrl",
+          "accessibilityNotes"
+        ]
+      },
+      "TicketBranding": {
+        "type": "object",
+        "properties": {
+          "organizerName": {
+            "type": "string"
+          },
+          "logoUrl": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Absolute URL of the organizer’s logo."
+          },
+          "logoAlt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "accentColor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "poweredByVisible": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "organizerName",
+          "logoUrl",
+          "logoAlt",
+          "accentColor",
+          "poweredByVisible"
+        ]
+      },
+      "TicketTransferOptions": {
+        "type": "object",
+        "properties": {
+          "allowed": {
+            "type": "boolean"
+          },
+          "reason": {
+            "$ref": "#/components/schemas/TransferRefusal"
+          },
+          "deadline": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When holder transfers close for this ticket."
+          },
+          "feeMinor": {
+            "type": "integer",
+            "description": "The ticket type’s transfer fee in minor units (0: free)."
+          },
+          "currency": {
+            "type": "string"
+          },
+          "feeRequiresWeb": {
+            "type": "boolean",
+            "description": "A fee is paid on the web: `POST …/transfers` answers with a link instead of starting it."
+          },
+          "pendingTransferId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "pendingTransferTo": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The recipient’s name."
+          }
+        },
+        "required": [
+          "allowed",
+          "reason",
+          "deadline",
+          "feeMinor",
+          "currency",
+          "feeRequiresWeb",
+          "pendingTransferId",
+          "pendingTransferTo"
+        ]
+      },
+      "TransferRefusal": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "ticket_void",
+          "event_ended",
+          "not_allowed",
+          "deadline_passed",
+          null
+        ]
+      },
+      "TicketTransferResult": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/TransferOutcome"
+          },
+          "transferId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "feeMinor": {
+            "type": "integer"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "webUrl": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "`web_payment_required`: where to agree to the fee and pay it. Null otherwise."
+          }
+        },
+        "required": [
+          "status",
+          "transferId",
+          "feeMinor",
+          "currency",
+          "webUrl"
+        ],
+        "description": "`started`: the recipient is emailed a claim link and the ticket stays yours until they claim it. `web_payment_required`: the ticket type charges a transfer fee, which is paid on the web; nothing was changed."
+      },
+      "TransferOutcome": {
+        "type": "string",
+        "enum": [
+          "started",
+          "web_payment_required"
+        ]
+      },
+      "TransferTicketRequest": {
+        "type": "object",
+        "properties": {
+          "toName": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120,
+            "example": "Sam Rivera"
+          },
+          "toEmail": {
+            "type": "string",
+            "maxLength": 254,
+            "format": "email",
+            "example": "sam@example.com"
+          }
+        },
+        "required": [
+          "toName",
+          "toEmail"
+        ]
+      },
+      "WalletPassLink": {
+        "type": "object",
+        "properties": {
+          "platform": {
+            "$ref": "#/components/schemas/WalletPlatform"
+          },
+          "url": {
+            "type": "string"
+          },
+          "serial": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "platform",
+          "url",
+          "serial"
+        ]
+      },
+      "WalletPlatform": {
+        "type": "string",
+        "enum": [
+          "apple",
+          "google"
+        ]
+      },
+      "MyOrderPage": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MyOrderSummary"
+            }
+          },
+          "nextCursor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "data",
+          "nextCursor"
+        ]
+      },
+      "MyOrderSummary": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "organizerName": {
+            "type": "string"
+          },
+          "eventId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "eventName": {
+            "type": "string"
+          },
+          "startsAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endsAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "timezone": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/OrderStatus"
+          },
+          "tickets": {
+            "type": "integer"
+          },
+          "totalMinor": {
+            "type": "integer"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "organizerName",
+          "eventId",
+          "eventName",
+          "startsAt",
+          "endsAt",
+          "timezone",
+          "status",
+          "tickets",
+          "totalMinor",
+          "currency",
+          "createdAt"
+        ]
+      },
+      "OrderStatus": {
+        "type": "string",
+        "enum": [
+          "reserved",
+          "awaiting_payment",
+          "payment_failed",
+          "paid",
+          "expired",
+          "cancelled",
+          "partially_refunded",
+          "refunded",
+          "awaiting_invoice",
+          "void"
+        ]
+      },
+      "MyOrder": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "organizerName": {
+            "type": "string"
+          },
+          "event": {
+            "type": "object",
+            "properties": {
+              "slug": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "startsAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "endsAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "timezone": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "slug",
+              "name",
+              "startsAt",
+              "endsAt",
+              "timezone"
+            ]
+          },
+          "eventId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "$ref": "#/components/schemas/OrderStatus"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "subtotalMinor": {
+            "type": "integer"
+          },
+          "discountMinor": {
+            "type": "integer"
+          },
+          "feeMinor": {
+            "type": "integer"
+          },
+          "totalMinor": {
+            "type": "integer"
+          },
+          "paidAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MyOrderLine"
+            }
+          },
+          "refundPolicy": {
+            "$ref": "#/components/schemas/MyRefundPolicy"
+          },
+          "refundRequest": {
+            "$ref": "#/components/schemas/BuyerRefundPanel"
+          },
+          "ticketIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The order’s active tickets you still hold."
+          },
+          "transferred": {
+            "type": "integer",
+            "description": "Tickets of this order now held by someone else."
+          }
+        },
+        "required": [
+          "id",
+          "organizerName",
+          "event",
+          "eventId",
+          "status",
+          "currency",
+          "subtotalMinor",
+          "discountMinor",
+          "feeMinor",
+          "totalMinor",
+          "paidAt",
+          "createdAt",
+          "items",
+          "refundPolicy",
+          "refundRequest",
+          "ticketIds",
+          "transferred"
+        ]
+      },
+      "MyOrderLine": {
+        "type": "object",
+        "properties": {
+          "ticketTypeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "integer"
+          },
+          "unitAllInMinor": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "ticketTypeId",
+          "name",
+          "quantity",
+          "unitAllInMinor"
+        ]
+      },
+      "MyRefundPolicy": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "kind": {
+            "$ref": "#/components/schemas/RefundPolicyKind"
+          },
+          "daysBefore": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "retainedMinor": {
+            "type": "integer"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "deadline": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "timezone": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "daysBefore",
+          "retainedMinor",
+          "currency",
+          "deadline",
+          "timezone"
+        ]
+      },
+      "RefundPolicyKind": {
+        "type": "string",
+        "enum": [
+          "none",
+          "until",
+          "always"
+        ]
+      },
+      "BuyerRefundPanel": {
+        "type": "object",
+        "properties": {
+          "latest": {
+            "$ref": "#/components/schemas/BuyerRefundRequest"
+          },
+          "canRequest": {
+            "type": "boolean"
+          },
+          "refusal": {
+            "$ref": "#/components/schemas/RefundRefusal"
+          },
+          "deadline": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "latest",
+          "canRequest",
+          "refusal",
+          "deadline"
+        ]
+      },
+      "BuyerRefundRequest": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/RefundRequestStatus"
+          },
+          "tickets": {
+            "type": "integer"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "decidedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "declineReason": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "status",
+          "tickets",
+          "createdAt",
+          "decidedAt",
+          "declineReason"
+        ]
+      },
+      "RefundRequestStatus": {
+        "type": "string",
+        "enum": [
+          "open",
+          "approved",
+          "declined"
+        ]
+      },
+      "RefundRefusal": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "request_open",
+          "policy_no_refunds",
+          "policy_window_closed",
+          null
+        ]
+      },
+      "BuyerRefundRequestInput": {
+        "type": "object",
+        "properties": {
+          "ticketIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "maxItems": 500,
+            "default": [],
+            "description": "The tickets you hold to refund. Empty: all of them."
+          },
+          "message": {
+            "type": "string",
+            "maxLength": 1000
+          }
+        }
+      },
+      "ClaimDetails": {
+        "type": "object",
+        "properties": {
+          "state": {
+            "$ref": "#/components/schemas/ClaimState"
+          },
+          "event": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "startsAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "endsAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "timezone": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "startsAt",
+              "endsAt",
+              "timezone"
+            ]
+          },
+          "ticketTypeName": {
+            "type": "string"
+          },
+          "organizerName": {
+            "type": "string"
+          },
+          "transfer": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "fromName": {
+                "type": "string"
+              },
+              "toName": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "fromName",
+              "toName"
+            ],
+            "description": "A transfer’s link names who sent it and who it is for; null for a plain claim link."
+          }
+        },
+        "required": [
+          "state",
+          "event",
+          "ticketTypeName",
+          "organizerName",
+          "transfer"
+        ]
+      },
+      "ClaimState": {
+        "type": "string",
+        "enum": [
+          "open",
+          "claimed",
+          "revoked",
+          "expired"
+        ]
+      },
+      "ClaimRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120,
+            "description": "The name on the ticket. Default: the signed-in account’s name."
+          }
+        }
+      },
       "PublicEvent": {
         "type": "object",
         "properties": {
@@ -3187,17 +4285,6 @@
           "community",
           "agency",
           "other"
-        ]
-      },
-      "EventStatus": {
-        "type": "string",
-        "enum": [
-          "draft",
-          "published",
-          "postponed",
-          "cancelled",
-          "completed",
-          "archived"
         ]
       },
       "EventCategory": {
@@ -5914,21 +7001,6 @@
           "paidAt",
           "createdAt",
           "items"
-        ]
-      },
-      "OrderStatus": {
-        "type": "string",
-        "enum": [
-          "reserved",
-          "awaiting_payment",
-          "payment_failed",
-          "paid",
-          "expired",
-          "cancelled",
-          "partially_refunded",
-          "refunded",
-          "awaiting_invoice",
-          "void"
         ]
       },
       "OrderDetail": {
@@ -10347,6 +11419,1177 @@
           },
           "429": {
             "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/me/tickets": {
+      "get": {
+        "operationId": "listMyTickets",
+        "tags": [
+          "me"
+        ],
+        "summary": "My tickets: upcoming or past",
+        "description": "The active tickets held by the signed-in person’s verified email, across organizers: the same tickets the web’s My tickets shows. `upcoming` (not yet over, soonest first) or `past` (latest first), with keyset paging. Codes are not listed; open a ticket for its QR code. Needs a verified email.",
+        "security": [
+          {
+            "bearerSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 25,
+              "description": "Page size (1–100)."
+            },
+            "required": false,
+            "description": "Page size (1–100).",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "maxLength": 200,
+              "description": "The previous page’s `nextCursor`."
+            },
+            "required": false,
+            "description": "The previous page’s `nextCursor`.",
+            "name": "cursor",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "$ref": "#/components/schemas/TicketWhen"
+            },
+            "required": false,
+            "description": "Which tickets to list",
+            "name": "when",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A page of tickets",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MyTicketPage"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not modified: `If-None-Match` matched the `ETag`"
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/me/tickets/{id}": {
+      "get": {
+        "operationId": "getMyTicket",
+        "tags": [
+          "me"
+        ],
+        "summary": "One of my tickets: QR code, seat, entrances, event, venue, branding and transfer options",
+        "description": "The ticket’s QR code string, short code, `rev` and status; its type, seat and the entrances and zones where it is checked; the event (instants plus its time zone) and venue; the organizer’s branding for theming; and what the holder may do (transfer, with its cutoff and fee). Send `If-None-Match` with the `ETag` for a 304. A ticket that is not yours is a `404`.",
+        "security": [
+          {
+            "bearerSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The ticket id"
+            },
+            "required": true,
+            "description": "The ticket id",
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The ticket",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MyTicket"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not modified: `If-None-Match` matched the `ETag`"
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/me/tickets/{id}/transfers": {
+      "post": {
+        "operationId": "startMyTicketTransfer",
+        "tags": [
+          "me"
+        ],
+        "summary": "Transfer a ticket to someone by name and email",
+        "description": "Starts a transfer under the ticket type’s rules (`transfersAllowed`, the cutoff before the event). The recipient is emailed a claim link and the ticket stays yours until they claim it, which retires your code and wallet pass. If the ticket type charges a transfer fee, nothing is started: `web_payment_required` returns a link to agree to and pay it on the web. Needs an `Idempotency-Key`.",
+        "security": [
+          {
+            "bearerSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The ticket id"
+            },
+            "required": true,
+            "description": "The ticket id",
+            "name": "id",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "pattern": "^[\\x21-\\x7e]{8,255}$",
+              "description": "Required on every write. Retrying with the same key returns the stored result (kept 24 h).",
+              "example": "6f1c2c1e-5d1e-4d7a-9f5b-2c4b1f0e9a11"
+            },
+            "required": true,
+            "description": "Required on every write. Retrying with the same key returns the stored result (kept 24 h).",
+            "name": "idempotency-key",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransferTicketRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A transfer fee is paid on the web: nothing was started",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TicketTransferResult"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "The transfer was started",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TicketTransferResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict, invalid state, or the same Idempotency-Key is in flight",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The Idempotency-Key was used with a different request (`idempotency_key_reused`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Read-only maintenance (`read_only_freeze`): nothing was changed; retry after `Retry-After` seconds",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/me/tickets/{id}/transfers/{transferId}": {
+      "delete": {
+        "operationId": "cancelMyTicketTransfer",
+        "tags": [
+          "me"
+        ],
+        "summary": "Cancel a pending transfer",
+        "description": "Cancels your pending transfer of this ticket before it is claimed; the claim link stops working. Needs an `Idempotency-Key`.",
+        "security": [
+          {
+            "bearerSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The ticket id"
+            },
+            "required": true,
+            "description": "The ticket id",
+            "name": "id",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The transfer id"
+            },
+            "required": true,
+            "description": "The transfer id",
+            "name": "transferId",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "pattern": "^[\\x21-\\x7e]{8,255}$",
+              "description": "Required on every write. Retrying with the same key returns the stored result (kept 24 h).",
+              "example": "6f1c2c1e-5d1e-4d7a-9f5b-2c4b1f0e9a11"
+            },
+            "required": true,
+            "description": "Required on every write. Retrying with the same key returns the stored result (kept 24 h).",
+            "name": "idempotency-key",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Cancelled"
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict, invalid state, or the same Idempotency-Key is in flight",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The Idempotency-Key was used with a different request (`idempotency_key_reused`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Read-only maintenance (`read_only_freeze`): nothing was changed; retry after `Retry-After` seconds",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/me/tickets/{id}/wallet": {
+      "get": {
+        "operationId": "getMyTicketWalletPass",
+        "tags": [
+          "me"
+        ],
+        "summary": "Add a ticket to Apple Wallet or Google Wallet",
+        "description": "A link to add the ticket’s pass to the chosen wallet, from the pass provider. Until the platform’s wallet accounts exist the provider is a fake and the link is a placeholder. A transfer voids the sender’s pass. Only an active ticket you hold has one.",
+        "security": [
+          {
+            "bearerSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The ticket id"
+            },
+            "required": true,
+            "description": "The ticket id",
+            "name": "id",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "$ref": "#/components/schemas/WalletPlatform"
+            },
+            "required": true,
+            "description": "Which wallet app to add the pass to",
+            "name": "platform",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The pass link",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WalletPassLink"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/me/orders": {
+      "get": {
+        "operationId": "listMyOrders",
+        "tags": [
+          "me"
+        ],
+        "summary": "My orders, newest first",
+        "description": "The orders bought with the signed-in person’s verified email (paid, partially refunded or refunded), across organizers, from the same source as the web’s My tickets. Keyset paging.",
+        "security": [
+          {
+            "bearerSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 25,
+              "description": "Page size (1–100)."
+            },
+            "required": false,
+            "description": "Page size (1–100).",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "maxLength": 200,
+              "description": "The previous page’s `nextCursor`."
+            },
+            "required": false,
+            "description": "The previous page’s `nextCursor`.",
+            "name": "cursor",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A page of orders",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MyOrderPage"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not modified: `If-None-Match` matched the `ETag`"
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/me/orders/{id}": {
+      "get": {
+        "operationId": "getMyOrder",
+        "tags": [
+          "me"
+        ],
+        "summary": "One of my orders: lines, totals, refund policy and refund-request status",
+        "description": "The order’s lines and totals in minor units, the refund terms it was bought under, whether a refund can be requested now and the latest request’s status, and the tickets you still hold. An order that is not yours is a `404`.",
+        "security": [
+          {
+            "bearerSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The order id"
+            },
+            "required": true,
+            "description": "The order id",
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The order",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MyOrder"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not modified: `If-None-Match` matched the `ETag`"
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/me/orders/{id}/refund-requests": {
+      "post": {
+        "operationId": "requestMyOrderRefund",
+        "tags": [
+          "me"
+        ],
+        "summary": "Ask the organizer for a refund",
+        "description": "Asks for a refund of the tickets you hold (all of them when `ticketIds` is empty), within the policy the order was bought under; one open request per order. The organizer is told and has five business days to answer. Needs an `Idempotency-Key`.",
+        "security": [
+          {
+            "bearerSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The order id"
+            },
+            "required": true,
+            "description": "The order id",
+            "name": "id",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "pattern": "^[\\x21-\\x7e]{8,255}$",
+              "description": "Required on every write. Retrying with the same key returns the stored result (kept 24 h).",
+              "example": "6f1c2c1e-5d1e-4d7a-9f5b-2c4b1f0e9a11"
+            },
+            "required": true,
+            "description": "Required on every write. Retrying with the same key returns the stored result (kept 24 h).",
+            "name": "idempotency-key",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BuyerRefundRequestInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BuyerRefundRequest"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict, invalid state, or the same Idempotency-Key is in flight",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The Idempotency-Key was used with a different request (`idempotency_key_reused`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Read-only maintenance (`read_only_freeze`): nothing was changed; retry after `Retry-After` seconds",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/claims/{token}": {
+      "get": {
+        "operationId": "getTicketClaim",
+        "tags": [
+          "me"
+        ],
+        "summary": "What a claim link offers",
+        "description": "What a ticket claim link (or a transfer’s link) offers: its state, the event, the ticket type, and for a transfer who sent it and who it is for. The signed-in person must have a verified email. No ticket code is shown before claiming.",
+        "security": [
+          {
+            "bearerSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 10,
+              "maxLength": 200,
+              "description": "The claim link’s token"
+            },
+            "required": true,
+            "description": "The claim link’s token",
+            "name": "token",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The claim",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClaimDetails"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not modified: `If-None-Match` matched the `ETag`"
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "claimTicket",
+        "tags": [
+          "me"
+        ],
+        "summary": "Claim the ticket",
+        "description": "Claims the ticket for the signed-in person’s verified email: it is reissued to you and the previous holder’s code and wallet pass stop working. A transfer can only be claimed with the address it was sent to. Needs an `Idempotency-Key`. Returns the ticket.",
+        "security": [
+          {
+            "bearerSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 10,
+              "maxLength": 200,
+              "description": "The claim link’s token"
+            },
+            "required": true,
+            "description": "The claim link’s token",
+            "name": "token",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "pattern": "^[\\x21-\\x7e]{8,255}$",
+              "description": "Required on every write. Retrying with the same key returns the stored result (kept 24 h).",
+              "example": "6f1c2c1e-5d1e-4d7a-9f5b-2c4b1f0e9a11"
+            },
+            "required": true,
+            "description": "Required on every write. Retrying with the same key returns the stored result (kept 24 h).",
+            "name": "idempotency-key",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClaimRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The claimed ticket",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MyTicket"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict, invalid state, or the same Idempotency-Key is in flight",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The Idempotency-Key was used with a different request (`idempotency_key_reused`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Read-only maintenance (`read_only_freeze`): nothing was changed; retry after `Retry-After` seconds",
             "content": {
               "application/problem+json": {
                 "schema": {

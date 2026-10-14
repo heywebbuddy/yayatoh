@@ -85,7 +85,9 @@ const TicketWhen = z.enum(['upcoming', 'past']).openapi('TicketWhen', {
 const TicketsQuery = PageQuery.extend({
   when: TicketWhen.default('upcoming').openapi({ param: { description: 'Which tickets to list' } }),
 });
-const WalletQuery = z.object({ platform: WalletPlatform });
+const WalletQuery = z.object({
+  platform: WalletPlatform.openapi({ param: { description: 'Which wallet app to add the pass to' } }),
+});
 
 const routes = {
   listTickets: createRoute({
