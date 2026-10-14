@@ -1109,3 +1109,11 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **Search source:** the apps' search uses the public read model directly (exact keyset paging, works before a Meilisearch account exists). Free text is substring match; typo tolerance and facets wait for the Meilisearch index.
 - [ ] **Country rule skipped for the app** (no geo header); the velocity and payment-failure rules apply as on the web.
 - [ ] **Device pass:** pay on Stripe test mode in the secure in-app browser and land back in the app; cancel path.
+
+## M7.4a — Staff enrolment and devices (2026-10-14, pending owner; labels `mobile-contract`)
+- [ ] **No server change.** The app uses `GET /v1/staff/events/{eventId}/overview` (to prove an enrolment key and learn the device id), `GET /v1/events/{eventId}/manifest?limit=1` (event dates and entrances), `POST /v1/devices/heartbeat`, the account grants of `/v1/auth/token` and `/v1/portal/auth/*`. A small additive `startsAt`/`endsAt` on the staff overview would save the manifest call; not needed.
+- [ ] **Organizer sign-in requires two-step verification, as taken from P7-6:** an account that signs in with a password and gets tokens without a second step is signed out again with a message to turn it on in the web console. Say if organizers without it should be let in.
+- [ ] **Two camera libraries:** the enrolment screen uses `expo-camera` (~57.0.6); M7.4b's door scanner uses VisionCamera. `expo-battery` (~57.0.3) reads the battery for the heartbeat. Say if you would rather have one camera library; the enrolment scan is one small component.
+- [ ] **The version gate never blocks an enrolled device whose event dates are not known yet** (first minutes after enrolling, or a failed read); with dates it uses 24 h before to 2 h after, the same window the server uses.
+- [ ] **Exhibitor sign-in needs the invitation link pasted** (no `/event-portal/invite/…` app link in the M7.2d allowlist; "email me my invitation again" is not built).
+- [ ] **Device pass:** scan a real enrolment QR with the camera; wipe and revoke from the console while the app is open; the heartbeat battery reading on iOS and Android; iPad layout; run `apps/staff/.maestro/*.yaml`.
