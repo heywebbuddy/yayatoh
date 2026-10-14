@@ -143,7 +143,7 @@ describe('My tickets', () => {
     app.server.on('GET /v1/me/tickets', () => (fail ? problem(403, 'forbidden') : (page([t1]) as never)));
     await app.ready;
     app.view(<TicketsListScreen />);
-    expect(await screen.findByText("We couldn't load your tickets.")).toBeOnTheScreen();
+    expect(await screen.findByText('We couldn’t load your tickets.')).toBeOnTheScreen();
     fail = false;
     fireEvent.press(screen.getByRole('button', { name: 'Try again' }));
     expect(await screen.findByTestId(`ticket-card-${IDS.t1}`)).toBeOnTheScreen();

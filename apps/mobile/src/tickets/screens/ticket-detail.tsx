@@ -330,6 +330,7 @@ function TicketBody({
       {ticket.branding.logoUrl ? (
         <Image
           source={{ uri: ticket.branding.logoUrl }}
+          accessible
           accessibilityLabel={ticket.branding.logoAlt ?? ticket.branding.organizerName}
           accessibilityRole="image"
           resizeMode="contain"

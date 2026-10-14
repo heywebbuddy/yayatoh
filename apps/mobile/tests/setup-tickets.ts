@@ -15,3 +15,8 @@ jest.mock('expo-network', () => ({
   getNetworkStateAsync: jest.fn(async () => ({ isConnected: true, isInternetReachable: true })),
   addNetworkStateListener: jest.fn(() => ({ remove: jest.fn() })),
 }));
+// `expo-crypto` has no native module under Jest; the idempotency keys only need a UUID.
+jest.mock('expo-crypto', () => ({
+  ...jest.requireActual('expo-crypto'),
+  randomUUID: () => require('node:crypto').randomUUID(),
+}));
