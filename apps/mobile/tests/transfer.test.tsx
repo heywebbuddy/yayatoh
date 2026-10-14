@@ -1,7 +1,7 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react-native';
-import { TransferScreen, transferErrorKey, validateTransfer } from '../src/tickets/screens/transfer';
-import { viewProblem } from '../src/tickets/api';
 import { YayatohApiError } from '@yayatoh/sdk';
+import { viewProblem } from '../src/tickets/api';
+import { TransferScreen, transferErrorKey, validateTransfer } from '../src/tickets/screens/transfer';
 import { fakeServices, setOnline, setup } from './helpers/app';
 import { IDS, ticket } from './helpers/fixtures';
 import { resetRouter, router } from './helpers/router-mock';
@@ -47,26 +47,38 @@ describe('validateTransfer', () => {
     expect(validateTransfer('Sam', 'not-an-email', null)).toEqual({ email: 'emailInvalid' });
     expect(validateTransfer('Sam', 'a@b', null)).toEqual({ email: 'emailInvalid' });
     expect(validateTransfer('Sam', `${'a'.repeat(250)}@b.co`, null)).toEqual({ email: 'emailInvalid' });
-    expect(validateTransfer('Sam', ' Ada@Example.test ', 'ada@example.test')).toEqual({ email: 'emailIsYours' });
-    expect(validateTransfer('', 'x', 'ada@example.test')).toEqual({ name: 'nameRequired', email: 'emailInvalid' });
+    expect(validateTransfer('Sam', ' Ada@Example.test ', 'ada@example.test')).toEqual({
+      email: 'emailIsYours',
+    });
+    expect(validateTransfer('', 'x', 'ada@example.test')).toEqual({
+      name: 'nameRequired',
+      email: 'emailInvalid',
+    });
   });
 });
 
 describe('transferErrorKey', () => {
   const api = (status: number, code: string, details: Record<string, unknown> = {}, retry?: string) =>
     viewProblem(
-      new YayatohApiError(
-        new Response(null, { status, headers: retry ? { 'retry-after': retry } : {} }),
-        { type: 'x', title: code, status, code, details },
-      ),
+      new YayatohApiError(new Response(null, { status, headers: retry ? { 'retry-after': retry } : {} }), {
+        type: 'x',
+        title: code,
+        status,
+        code,
+        details,
+      }),
     );
   it('maps the server’s stable codes to messages', () => {
     expect(transferErrorKey(viewProblem(new TypeError('Network request failed')))).toBe('common.network');
     expect(transferErrorKey(api(429, 'rate_limited', {}, '30'))).toBe('common.rateLimited');
     expect(transferErrorKey(api(429, 'rate_limited'))).toBe('common.rateLimitedNoTime');
-    expect(transferErrorKey(api(403, 'forbidden', { reason: 'email_unverified' }))).toBe('common.verifyEmail');
+    expect(transferErrorKey(api(403, 'forbidden', { reason: 'email_unverified' }))).toBe(
+      'common.verifyEmail',
+    );
     expect(transferErrorKey(api(404, 'not_found'))).toBe('common.notFoundTitle');
-    expect(transferErrorKey(api(400, 'validation_failed', { reason: 'same_holder' }))).toBe('transfer.sameHolder');
+    expect(transferErrorKey(api(400, 'validation_failed', { reason: 'same_holder' }))).toBe(
+      'transfer.sameHolder',
+    );
     expect(transferErrorKey(api(409, 'invalid_state', { reason: 'deadline_passed' }))).toBe(
       'detail.transferRefused.deadline_passed',
     );
@@ -102,7 +114,9 @@ describe('Transfer screen', () => {
     await open(app);
     await fill('Sam Rivera', 'sam@example.test');
     review();
-    expect(screen.getByText(/Transfer General admission · Summer Night to Sam Rivera \(sam@example.test\)\?/)).toBeOnTheScreen();
+    expect(
+      screen.getByText(/Transfer General admission · Summer Night to Sam Rivera \(sam@example.test\)\?/),
+    ).toBeOnTheScreen();
     fireEvent.press(screen.getByRole('button', { name: 'Edit details' }));
     expect(screen.getByTestId('to-name').props.value).toBe('Sam Rivera');
     review();
@@ -135,7 +149,9 @@ describe('Transfer screen', () => {
     review();
     send();
     expect(await screen.findByTestId('transfer-sent')).toBeOnTheScreen();
-    const keys = app.server.callsTo('POST /v1/me/tickets/:id/transfers').map((c) => c.headers.get('idempotency-key'));
+    const keys = app.server
+      .callsTo('POST /v1/me/tickets/:id/transfers')
+      .map((c) => c.headers.get('idempotency-key'));
     expect(keys).toHaveLength(2);
     expect(keys[0]).toMatch(/^[0-9a-f-]{36}$/);
     expect(keys[1]).toBe(keys[0]);
@@ -145,13 +161,23 @@ describe('Transfer screen', () => {
     const app = mount();
     let n = 0;
     app.server.on('POST /v1/me/tickets/:id/transfers', () =>
-      ++n === 1 ? problem(400, 'validation_failed', { reason: 'same_holder' }) : json(201, { status: 'started', transferId: IDS.transfer, feeMinor: 0, currency: 'USD', webUrl: null }),
+      ++n === 1
+        ? problem(400, 'validation_failed', { reason: 'same_holder' })
+        : json(201, {
+            status: 'started',
+            transferId: IDS.transfer,
+            feeMinor: 0,
+            currency: 'USD',
+            webUrl: null,
+          }),
     );
     await open(app);
     await fill('Sam Rivera', 'sam@example.test');
     review();
     send();
-    expect(await screen.findByTestId('transfer-error')).toHaveTextContent('That person already holds this ticket.');
+    expect(await screen.findByTestId('transfer-error')).toHaveTextContent(
+      'That person already holds this ticket.',
+    );
     await fill('Robin Lee', 'robin@example.test');
     review();
     send();
@@ -169,7 +195,12 @@ describe('Transfer screen', () => {
   ] as const)('shows the server’s answer %s %s in words', async (status, code, details, text) => {
     const app = mount();
     app.server.on('POST /v1/me/tickets/:id/transfers', () =>
-      problem(status, code, details as Record<string, unknown>, status === 429 ? { 'retry-after': '30' } : {}),
+      problem(
+        status,
+        code,
+        details as Record<string, unknown>,
+        status === 429 ? { 'retry-after': '30' } : {},
+      ),
     );
     await open(app);
     await fill('Sam Rivera', 'sam@example.test');
@@ -196,7 +227,9 @@ describe('Transfer screen', () => {
     await open(app);
     await fill('Sam Rivera', 'sam@example.test');
     review();
-    expect(screen.getByTestId('fee-notice')).toHaveTextContent(/This ticket type charges a transfer fee of \$3\.50\./);
+    expect(screen.getByTestId('fee-notice')).toHaveTextContent(
+      /This ticket type charges a transfer fee of \$3\.50\./,
+    );
     fireEvent.press(screen.getByRole('button', { name: 'Continue on the web' }));
     expect(await screen.findByTestId('transfer-web')).toBeOnTheScreen();
     expect(fake.log.web).toEqual(['https://web.example.test/my-tickets/abc~def']);
@@ -208,11 +241,20 @@ describe('Transfer screen', () => {
   it('shows why a ticket cannot be transferred, with the deadline, and no form', async () => {
     const app = mount(
       {},
-      ticket({ transfer: { ...ticket().transfer, allowed: false, reason: 'deadline_passed', deadline: '2030-02-28T18:00:00Z' } }),
+      ticket({
+        transfer: {
+          ...ticket().transfer,
+          allowed: false,
+          reason: 'deadline_passed',
+          deadline: '2030-02-28T18:00:00Z',
+        },
+      }),
     );
     await app.ready;
     app.view(<TransferScreen id={IDS.t1} />);
-    expect(await screen.findByTestId('transfer-closed')).toHaveTextContent(/Transfers closed Feb 28, 2030, 12:00 PM/);
+    expect(await screen.findByTestId('transfer-closed')).toHaveTextContent(
+      /Transfers closed Feb 28, 2030, 12:00 PM/,
+    );
     expect(screen.queryByTestId('transfer-form')).toBeNull();
   });
 

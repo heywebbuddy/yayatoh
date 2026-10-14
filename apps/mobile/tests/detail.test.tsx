@@ -53,7 +53,9 @@ describe('Ticket detail', () => {
       'Entrances and zones: North gate (entrance)\nVIP lounge (zone)',
     );
     // 19:00 UTC on 1 March is 1:00 PM in Chicago (CST), whatever the phone's own zone is.
-    expect(screen.getByTestId('fact-when')).toHaveAccessibleName(/Fri, Mar 1, 2030, 1:00 PM – 5:00 PM (CST|GMT-6)/);
+    expect(screen.getByTestId('fact-when')).toHaveAccessibleName(
+      /Fri, Mar 1, 2030, 1:00 PM – 5:00 PM (CST|GMT-6)/,
+    );
     expect(screen.getByTestId('fact-where')).toHaveAccessibleName(
       'Where: Lakeside Pavilion\n1 Lake Shore Dr, Chicago, IL, 60601, US',
     );
@@ -211,7 +213,9 @@ describe('Ticket detail', () => {
       app.view(<TicketDetailScreen id={IDS.t1} />);
       expect(await screen.findByTestId('ticket-gone')).toBeOnTheScreen();
       expect(screen.queryByTestId('ticket-qr')).toBeNull();
-      await waitFor(() => expect(app.core.queryClient.getQueryData(ticketKeys.detail(IDS.t1))).toBeUndefined());
+      await waitFor(() =>
+        expect(app.core.queryClient.getQueryData(ticketKeys.detail(IDS.t1))).toBeUndefined(),
+      );
       fireEvent.press(screen.getByRole('button', { name: 'Go to my tickets' }));
       expect(router.replace).toHaveBeenCalledWith('/tickets');
     });
@@ -249,7 +253,9 @@ describe('Ticket detail', () => {
       app.server.on('GET /v1/me/tickets/:id', () => problem(500, 'internal'));
       await app.ready;
       app.view(<TicketDetailScreen id={IDS.t1} />);
-      expect(await screen.findByRole('image', { name: /Ticket QR code/ }, { timeout: 15000 })).toBeOnTheScreen();
+      expect(
+        await screen.findByRole('image', { name: /Ticket QR code/ }, { timeout: 15000 }),
+      ).toBeOnTheScreen();
       expect(await screen.findByTestId('update-failed', {}, { timeout: 15000 })).toBeOnTheScreen();
     }, 30000);
 
@@ -269,19 +275,29 @@ describe('Ticket detail', () => {
       await open(app);
       expect(screen.getByText(/You can transfer this ticket until/)).toBeOnTheScreen();
       fireEvent.press(screen.getByRole('button', { name: 'Transfer ticket' }));
-      expect(router.push).toHaveBeenCalledWith({ pathname: '/tickets/[id]/transfer', params: { id: IDS.t1 } });
+      expect(router.push).toHaveBeenCalledWith({
+        pathname: '/tickets/[id]/transfer',
+        params: { id: IDS.t1 },
+      });
     });
 
     it('explains a closed transfer window with the deadline in the event’s zone', async () => {
       const app = mount();
       app.server.on('GET /v1/me/tickets/:id', () =>
         ticket({
-          transfer: { ...ticket().transfer, allowed: false, reason: 'deadline_passed', deadline: '2030-02-28T18:00:00Z' },
+          transfer: {
+            ...ticket().transfer,
+            allowed: false,
+            reason: 'deadline_passed',
+            deadline: '2030-02-28T18:00:00Z',
+          },
         }),
       );
       await open(app);
       expect(screen.queryByRole('button', { name: 'Transfer ticket' })).toBeNull();
-      expect(screen.getByTestId('transfer-refused')).toHaveTextContent(/Transfers closed Feb 28, 2030, 12:00 PM/);
+      expect(screen.getByTestId('transfer-refused')).toHaveTextContent(
+        /Transfers closed Feb 28, 2030, 12:00 PM/,
+      );
     });
 
     it('explains a ticket type that does not allow transfers', async () => {
@@ -298,10 +314,17 @@ describe('Ticket detail', () => {
       app.server.on('GET /v1/me/tickets/:id', () =>
         ticket({
           pendingTransfer: true,
-          transfer: { ...ticket().transfer, pendingTransferId: IDS.transfer, pendingTransferTo: 'Grace Hopper' },
+          transfer: {
+            ...ticket().transfer,
+            pendingTransferId: IDS.transfer,
+            pendingTransferTo: 'Grace Hopper',
+          },
         }),
       );
-      app.server.on('DELETE /v1/me/tickets/:id/transfers/:transferId', () => new Response(null, { status: 204 }));
+      app.server.on(
+        'DELETE /v1/me/tickets/:id/transfers/:transferId',
+        () => new Response(null, { status: 204 }),
+      );
       await open(app);
       expect(screen.getByTestId('transfer-pending')).toHaveTextContent(/Waiting for Grace Hopper to claim/);
       expect(screen.queryByRole('button', { name: 'Transfer ticket' })).toBeNull();
@@ -325,7 +348,11 @@ describe('Ticket detail', () => {
       app.server.on('GET /v1/me/tickets/:id', () =>
         ticket({
           pendingTransfer: true,
-          transfer: { ...ticket().transfer, pendingTransferId: IDS.transfer, pendingTransferTo: 'Grace Hopper' },
+          transfer: {
+            ...ticket().transfer,
+            pendingTransferId: IDS.transfer,
+            pendingTransferTo: 'Grace Hopper',
+          },
         }),
       );
       app.server.on('DELETE /v1/me/tickets/:id/transfers/:transferId', () =>

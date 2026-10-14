@@ -13,7 +13,6 @@ export const routerMock = {
   useLocalSearchParams: () => ({}),
   useFocusEffect: (effect: () => undefined | (() => void)) => {
     // The focus callback is a stable `useCallback` in the screens.
-    // biome-ignore lint/correctness/useExhaustiveDependencies: mirrors the real hook's contract
     useEffect(effect, [effect]);
   },
   Link: ({ children }: { children: unknown }) => children,

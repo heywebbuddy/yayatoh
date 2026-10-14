@@ -44,13 +44,25 @@ const problemOf = (status: number, code: string, details: Record<string, unknown
 
 describe('claimFailure', () => {
   it('tells an address mismatch, a link’s state and everything else apart', () => {
-    expect(claimFailure(problemOf(400, 'validation_failed', { reason: 'email_mismatch', field: 'email' }))).toEqual({ kind: 'mismatch' });
+    expect(
+      claimFailure(problemOf(400, 'validation_failed', { reason: 'email_mismatch', field: 'email' })),
+    ).toEqual({ kind: 'mismatch' });
     for (const state of ['claimed', 'revoked', 'expired'] as const)
       expect(claimFailure(problemOf(409, 'invalid_state', { state }))).toEqual({ kind: 'state', state });
     expect(claimFailure(viewProblem(new TypeError('x')))).toEqual({ kind: 'message', key: 'common.network' });
-    expect(claimFailure(problemOf(429, 'rate_limited', {}, '5'))).toEqual({ kind: 'message', key: 'common.rateLimited', seconds: 5 });
-    expect(claimFailure(problemOf(429, 'rate_limited'))).toEqual({ kind: 'message', key: 'common.rateLimitedNoTime' });
-    expect(claimFailure(problemOf(403, 'forbidden', { reason: 'email_unverified' }))).toEqual({ kind: 'message', key: 'claim.unverified' });
+    expect(claimFailure(problemOf(429, 'rate_limited', {}, '5'))).toEqual({
+      kind: 'message',
+      key: 'common.rateLimited',
+      seconds: 5,
+    });
+    expect(claimFailure(problemOf(429, 'rate_limited'))).toEqual({
+      kind: 'message',
+      key: 'common.rateLimitedNoTime',
+    });
+    expect(claimFailure(problemOf(403, 'forbidden', { reason: 'email_unverified' }))).toEqual({
+      kind: 'message',
+      key: 'claim.unverified',
+    });
     expect(claimFailure(problemOf(404, 'not_found'))).toEqual({ kind: 'message', key: 'claim.invalid' });
     expect(claimFailure(problemOf(500, 'internal'))).toEqual({ kind: 'message', key: 'claim.failed' });
   });
@@ -72,7 +84,9 @@ describe('Claim a ticket', () => {
   it('shows what is being claimed from a transfer: who sent it, the event, type, time zone and organizer', async () => {
     const app = mount();
     await open(app);
-    expect(await screen.findByTestId('claim-offer')).toHaveTextContent(/Grace Hopper sent you a ticket for Summer Night\./);
+    expect(await screen.findByTestId('claim-offer')).toHaveTextContent(
+      /Grace Hopper sent you a ticket for Summer Night\./,
+    );
     expect(screen.getByText('This transfer is for Ada Lovelace.')).toBeOnTheScreen();
     expect(screen.getByText(/Fri, Mar 1, 2030, 1:00 PM – 5:00 PM (CST|GMT-6)/)).toBeOnTheScreen();
     expect(screen.getByText('Lakeside Events')).toBeOnTheScreen();
@@ -82,7 +96,9 @@ describe('Claim a ticket', () => {
   it('shows a plain claim link without a sender', async () => {
     const app = mount(claimDetails({ transfer: null }));
     await open(app);
-    expect(await screen.findByTestId('claim-offer')).toHaveTextContent(/Lakeside Events has a ticket for you to Summer Night\./);
+    expect(await screen.findByTestId('claim-offer')).toHaveTextContent(
+      /Lakeside Events has a ticket for you to Summer Night\./,
+    );
   });
 
   it('claims with the name on the ticket (the account’s by default), once per key, then offers the ticket', async () => {
@@ -92,7 +108,9 @@ describe('Claim a ticket', () => {
     const name = await screen.findByTestId('claim-name');
     await waitFor(() => expect(name.props.value).toBe('Ada'));
     fireEvent.press(screen.getByRole('button', { name: 'Claim ticket' }));
-    expect(await screen.findByTestId('claim-success')).toHaveTextContent(/General admission for Summer Night is now in your tickets/);
+    expect(await screen.findByTestId('claim-success')).toHaveTextContent(
+      /General admission for Summer Night is now in your tickets/,
+    );
     const [call] = app.server.callsTo('POST /v1/claims/:token');
     expect(call?.path).toBe(`/v1/claims/${TOKEN}`);
     expect(call?.body).toEqual({ name: 'Ada' });
@@ -124,7 +142,9 @@ describe('Claim a ticket', () => {
     fireEvent.press(screen.getByRole('button', { name: 'Claim ticket' }));
     const card = await screen.findByTestId('claim-mismatch');
     expect(card).toHaveTextContent(/This ticket was sent to a different email address/);
-    expect(card).toHaveTextContent(/It was sent for Ada Lovelace, and you are signed in as ada@example\.test\./);
+    expect(card).toHaveTextContent(
+      /It was sent for Ada Lovelace, and you are signed in as ada@example\.test\./,
+    );
     // Switching account remembers the link, signs out, and the sign-in flow brings the person back.
     fireEvent.press(screen.getByRole('button', { name: 'Use a different account' }));
     await waitFor(() => expect(app.core.session.state.status).toBe('signedOut'));

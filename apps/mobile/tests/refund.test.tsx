@@ -1,7 +1,7 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react-native';
-import { RefundPanel, RefundScreen, refundErrorKey } from '../src/tickets/screens/refund';
-import { viewProblem } from '../src/tickets/api';
 import { YayatohApiError } from '@yayatoh/sdk';
+import { viewProblem } from '../src/tickets/api';
+import { RefundPanel, RefundScreen, refundErrorKey } from '../src/tickets/screens/refund';
 import { setOnline, setup } from './helpers/app';
 import { IDS, order, ticket } from './helpers/fixtures';
 import { resetRouter, router } from './helpers/router-mock';
@@ -46,11 +46,19 @@ describe('refundErrorKey', () => {
   it('maps the server’s stable codes to messages', () => {
     expect(refundErrorKey(viewProblem(new TypeError('x')))).toBe('common.network');
     expect(refundErrorKey(problemOf(429, 'rate_limited', {}, '10'))).toBe('common.rateLimited');
-    expect(refundErrorKey(problemOf(403, 'forbidden', { reason: 'email_unverified' }))).toBe('common.verifyEmail');
+    expect(refundErrorKey(problemOf(403, 'forbidden', { reason: 'email_unverified' }))).toBe(
+      'common.verifyEmail',
+    );
     expect(refundErrorKey(problemOf(404, 'not_found'))).toBe('common.notFoundTitle');
-    expect(refundErrorKey(problemOf(409, 'invalid_state', { reason: 'request_open' }))).toBe('refund.alreadyOpen');
-    expect(refundErrorKey(problemOf(409, 'invalid_state', { reason: 'policy_window_closed' }))).toBe('refund.noLonger');
-    expect(refundErrorKey(problemOf(409, 'invalid_state', { reason: 'policy_no_refunds' }))).toBe('refund.noLonger');
+    expect(refundErrorKey(problemOf(409, 'invalid_state', { reason: 'request_open' }))).toBe(
+      'refund.alreadyOpen',
+    );
+    expect(refundErrorKey(problemOf(409, 'invalid_state', { reason: 'policy_window_closed' }))).toBe(
+      'refund.noLonger',
+    );
+    expect(refundErrorKey(problemOf(409, 'invalid_state', { reason: 'policy_no_refunds' }))).toBe(
+      'refund.noLonger',
+    );
     expect(refundErrorKey(problemOf(400, 'validation_failed'))).toBe('refund.pickOne');
     expect(refundErrorKey(problemOf(500, 'internal'))).toBe('refund.failed');
   });
@@ -60,7 +68,9 @@ describe('Refund request', () => {
   it('shows the refund policy the order was bought under, with the deadline and the retained fee', async () => {
     const app = mount();
     await open(app);
-    expect(screen.getByTestId('refund-policy')).toHaveTextContent(/Refunds can be requested until Feb 22, 2030, 1:00 PM/);
+    expect(screen.getByTestId('refund-policy')).toHaveTextContent(
+      /Refunds can be requested until Feb 22, 2030, 1:00 PM/,
+    );
     expect(screen.getByText('$1.00 is kept as a fee.')).toBeOnTheScreen();
   });
 
@@ -79,7 +89,13 @@ describe('Refund request', () => {
   it('asks for all the tickets by default, with an idempotency key, and says the request was sent', async () => {
     const app = mount();
     app.server.on('POST /v1/me/orders/:id/refund-requests', () =>
-      json(201, { status: 'open', tickets: 2, createdAt: '2030-02-01T12:00:00Z', decidedAt: null, declineReason: null }),
+      json(201, {
+        status: 'open',
+        tickets: 2,
+        createdAt: '2030-02-01T12:00:00Z',
+        decidedAt: null,
+        declineReason: null,
+      }),
     );
     await open(app);
     expect(screen.getByRole('switch', { name: /^Ticket 1/ })).toBeOnTheScreen();
@@ -97,13 +113,21 @@ describe('Refund request', () => {
   it('sends only the tickets that stay switched on', async () => {
     const app = mount();
     app.server.on('POST /v1/me/orders/:id/refund-requests', () =>
-      json(201, { status: 'open', tickets: 1, createdAt: '2030-02-01T12:00:00Z', decidedAt: null, declineReason: null }),
+      json(201, {
+        status: 'open',
+        tickets: 1,
+        createdAt: '2030-02-01T12:00:00Z',
+        decidedAt: null,
+        declineReason: null,
+      }),
     );
     await open(app);
     fireEvent(screen.getByTestId('refund-ticket-1'), 'valueChange', false);
     fireEvent.press(screen.getByRole('button', { name: 'Send request' }));
     await screen.findByTestId('refund-sent');
-    expect(app.server.callsTo('POST /v1/me/orders/:id/refund-requests')[0]?.body).toEqual({ ticketIds: [IDS.t1] });
+    expect(app.server.callsTo('POST /v1/me/orders/:id/refund-requests')[0]?.body).toEqual({
+      ticketIds: [IDS.t1],
+    });
   });
 
   it('will not send without a ticket chosen, or with a message that is too long', async () => {
@@ -128,7 +152,12 @@ describe('Refund request', () => {
   ] as const)('shows the server’s answer %s %j in words', async (status, code, details, text) => {
     const app = mount();
     app.server.on('POST /v1/me/orders/:id/refund-requests', () =>
-      problem(status, code, details as Record<string, unknown>, status === 429 ? { 'retry-after': '12' } : {}),
+      problem(
+        status,
+        code,
+        details as Record<string, unknown>,
+        status === 429 ? { 'retry-after': '12' } : {},
+      ),
     );
     await open(app);
     fireEvent.press(screen.getByRole('button', { name: 'Send request' }));
@@ -138,21 +167,56 @@ describe('Refund request', () => {
   it('shows the latest request’s status: open, approved, declined with its reason', async () => {
     const o = order();
     const cases = [
-      [{ status: 'open', tickets: 2, createdAt: '2030-02-01T12:00:00Z', decidedAt: null, declineReason: null }, /Waiting for the organizer/],
-      [{ status: 'approved', tickets: 1, createdAt: '2030-02-01T12:00:00Z', decidedAt: '2030-02-03T15:00:00Z', declineReason: null }, /Approved Feb 3, 2030, 9:00 AM/],
-      [{ status: 'declined', tickets: 1, createdAt: '2030-02-01T12:00:00Z', decidedAt: '2030-02-03T15:00:00Z', declineReason: 'Past the cut-off' }, /Declined Feb 3, 2030/],
+      [
+        {
+          status: 'open',
+          tickets: 2,
+          createdAt: '2030-02-01T12:00:00Z',
+          decidedAt: null,
+          declineReason: null,
+        },
+        /Waiting for the organizer/,
+      ],
+      [
+        {
+          status: 'approved',
+          tickets: 1,
+          createdAt: '2030-02-01T12:00:00Z',
+          decidedAt: '2030-02-03T15:00:00Z',
+          declineReason: null,
+        },
+        /Approved Feb 3, 2030, 9:00 AM/,
+      ],
+      [
+        {
+          status: 'declined',
+          tickets: 1,
+          createdAt: '2030-02-01T12:00:00Z',
+          decidedAt: '2030-02-03T15:00:00Z',
+          declineReason: 'Past the cut-off',
+        },
+        /Declined Feb 3, 2030/,
+      ],
     ] as const;
     for (const [latest, text] of cases) {
       const app = mount({
         ...o,
-        refundRequest: { latest, canRequest: latest.status === 'declined', refusal: latest.status === 'open' ? 'request_open' : null, deadline: null },
+        refundRequest: {
+          latest,
+          canRequest: latest.status === 'declined',
+          refusal: latest.status === 'open' ? 'request_open' : null,
+          deadline: null,
+        },
       } as never);
       await open(app);
       expect(screen.getByTestId('refund-latest')).toHaveTextContent(text);
-      if (latest.status === 'declined') expect(screen.getByText('Reason: Past the cut-off')).toBeOnTheScreen();
+      if (latest.status === 'declined')
+        expect(screen.getByText('Reason: Past the cut-off')).toBeOnTheScreen();
       if (latest.status === 'open') {
         expect(screen.queryByTestId('refund-form')).toBeNull();
-        expect(screen.getByTestId('refund-refusal')).toHaveTextContent('You already have a request waiting for an answer.');
+        expect(screen.getByTestId('refund-refusal')).toHaveTextContent(
+          'You already have a request waiting for an answer.',
+        );
       }
       screen.unmount();
     }
@@ -163,7 +227,10 @@ describe('Refund request', () => {
     ['policy_window_closed', /window to ask for a refund has closed/],
   ] as const)('explains why a refund cannot be requested: %s', async (refusal, text) => {
     const o = order();
-    const app = mount({ ...o, refundRequest: { latest: null, canRequest: false, refusal, deadline: null } } as never);
+    const app = mount({
+      ...o,
+      refundRequest: { latest: null, canRequest: false, refusal, deadline: null },
+    } as never);
     await open(app);
     expect(screen.getByTestId('refund-refusal')).toHaveTextContent(text);
     expect(screen.queryByTestId('refund-form')).toBeNull();

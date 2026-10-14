@@ -13,7 +13,9 @@ const apps: ReturnType<typeof setup>[] = [];
 function mount(over: Parameters<typeof setup>[0] = {}) {
   const app = setup(over);
   apps.push(app);
-  app.server.on('GET /v1/me/tickets/:id', (_c, p) => ticket({ id: p.id as string, holderName: p.id === IDS.t2 ? 'Grace Hopper' : 'Ada Lovelace' }));
+  app.server.on('GET /v1/me/tickets/:id', (_c, p) =>
+    ticket({ id: p.id as string, holderName: p.id === IDS.t2 ? 'Grace Hopper' : 'Ada Lovelace' }),
+  );
   return app;
 }
 beforeEach(() => {
@@ -46,7 +48,9 @@ describe('Ticket link', () => {
     await waitFor(() =>
       expect(router.replace).toHaveBeenCalledWith({ pathname: '/tickets/[id]', params: { id: IDS.t1 } }),
     );
-    expect(app.server.callsTo('GET /v1/me/ticket-links/:token')[0]?.path).toBe(`/v1/me/ticket-links/${encodeURIComponent(TOKEN)}`);
+    expect(app.server.callsTo('GET /v1/me/ticket-links/:token')[0]?.path).toBe(
+      `/v1/me/ticket-links/${encodeURIComponent(TOKEN)}`,
+    );
   });
 
   it('lists several tickets of the same event to choose from', async () => {
@@ -80,12 +84,16 @@ describe('Ticket link', () => {
   it('offers a retry on a server error', async () => {
     const app = mount();
     let fail = true;
-    app.server.on('GET /v1/me/ticket-links/:token', () => (fail ? problem(403, 'forbidden') : json(200, { ticketIds: [IDS.t1] })));
+    app.server.on('GET /v1/me/ticket-links/:token', () =>
+      fail ? problem(403, 'forbidden') : json(200, { ticketIds: [IDS.t1] }),
+    );
     await app.ready;
     app.view(<TicketLinkScreen token={TOKEN} />);
     const retry = await screen.findByRole('button', { name: 'Try again' });
     fail = false;
     fireEvent.press(retry);
-    await waitFor(() => expect(router.replace).toHaveBeenCalledWith({ pathname: '/tickets/[id]', params: { id: IDS.t1 } }));
+    await waitFor(() =>
+      expect(router.replace).toHaveBeenCalledWith({ pathname: '/tickets/[id]', params: { id: IDS.t1 } }),
+    );
   });
 });
