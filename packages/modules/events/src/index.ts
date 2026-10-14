@@ -250,6 +250,7 @@ export {
   eventRoleGrantsTx,
   eventRolesOf,
   eventStaffTx,
+  eventTicketFactsTx,
   findEventTx,
   getEventBySlugQuery,
   getEventQuery,

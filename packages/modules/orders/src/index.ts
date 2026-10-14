@@ -299,6 +299,8 @@ export {
   setCheckoutSettingsCommand,
   VERIFY_EMAIL_DEFAULT,
 } from './guest/orders.ts';
+// M7.2b: a person's own orders for the attendee app.
+export { MyOrderDetailDto, myOrderDetail, myOrderRefundTarget } from './my-orders.ts';
 export {
   checkGuestCode,
   checkGuestLink,

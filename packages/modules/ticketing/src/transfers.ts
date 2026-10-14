@@ -231,9 +231,14 @@ async function cancelTransferTx(
   emit: Emit,
   transferId: string,
   holderEmail?: string,
+  ticketId?: string,
 ) {
   const [t] = await tx.select().from(ticketTransfers).where(eq(ticketTransfers.id, transferId)).for('update');
-  if (!t || (holderEmail && normalizeEmail(t.fromEmail) !== holderEmail))
+  if (
+    !t ||
+    (holderEmail && normalizeEmail(t.fromEmail) !== holderEmail) ||
+    (ticketId && t.ticketId !== ticketId)
+  )
     throw new DomainError('not_found', 'Transfer not found');
   if (t.status !== 'pending')
     throw new DomainError('invalid_state', 'This transfer is no longer pending', { reason: t.status });
@@ -370,6 +375,81 @@ export const cancelHolderTransferCommand = tenantCommand({
     action: 'ticket.transfer_cancel',
     targetType: 'ticket_transfer',
     targetId: input.transferId,
+  }),
+});
+
+/**
+ * M7.2b: the signed-in person's own transfer, from the app. The holder is the verified email of the
+ * person's session (the route's job), not a holder link; everything else is the holder command's:
+ * the ticket must be an active ticket held by that address, the ticket type's rules (allowed,
+ * cutoff) are decided by `startTransferTx`, and a ticket with a transfer fee is refused until the
+ * fee is agreed (the app sends the person to the web for that: `fee_not_accepted`).
+ */
+export const startAppTransferCommand = tenantCommand({
+  name: 'ticketing.startAppTransfer',
+  // A ticket carries value (and holder transfers a fee): refused while staff act as a member.
+  category: 'money',
+  input: TransferInput.extend({
+    holderEmail: Email,
+    ticketId: z.uuid(),
+    acceptFee: z.boolean().default(false),
+  }),
+  output: z.object({ transferId: z.uuid(), claimId: z.uuid(), feeMinor: z.int() }),
+  entitlement: 'ticketing',
+  permission: 'public:holder',
+  handler: async ({ input, ctx, tx, emit }) => {
+    const [t] = await tx
+      .select({ id: tickets.id })
+      .from(tickets)
+      .where(
+        and(
+          eq(tickets.id, input.ticketId),
+          eq(sql`lower(${tickets.holderEmail})`, normalizeEmail(input.holderEmail)),
+        ),
+      );
+    if (!t) throw new DomainError('not_found', 'Ticket not found');
+    return startTransferTx(tx, ctx, emit, {
+      ticketId: t.id,
+      toName: input.toName,
+      toEmail: input.toEmail,
+      acceptFee: input.acceptFee,
+      by: 'holder',
+    });
+  },
+  // The claim link's token is emailed to the recipient; the sender's phone never holds it.
+  present: (r) => ({ transferId: r.transferId, claimId: r.claimId, feeMinor: r.feeMinor }),
+  audit: (input, r) => ({
+    action: 'ticket.transfer_start',
+    targetType: 'ticket',
+    targetId: input.ticketId,
+    data: { transferId: r.transferId, by: 'holder', via: 'app', feeMinor: r.feeMinor },
+  }),
+});
+
+/** M7.2b: the signed-in person cancels their own pending transfer of a ticket before it is claimed. */
+export const cancelAppTransferCommand = tenantCommand({
+  name: 'ticketing.cancelAppTransfer',
+  category: 'money',
+  input: z.object({ holderEmail: Email, ticketId: z.uuid(), transferId: z.uuid() }),
+  output: z.object({ ok: z.boolean() }),
+  entitlement: 'ticketing',
+  permission: 'public:holder',
+  handler: async ({ input, ctx, tx, emit }) => {
+    await cancelTransferTx(
+      tx,
+      ctx,
+      emit,
+      input.transferId,
+      normalizeEmail(input.holderEmail),
+      input.ticketId,
+    );
+    return { ok: true };
+  },
+  audit: (input) => ({
+    action: 'ticket.transfer_cancel',
+    targetType: 'ticket_transfer',
+    targetId: input.transferId,
+    data: { via: 'app' },
   }),
 });
 

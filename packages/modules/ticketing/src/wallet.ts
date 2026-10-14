@@ -2,7 +2,7 @@ import type { TenantTx } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
 import { type Ctx, requireOrg } from '@yayatoh/kernel';
 import { defineSubscriber, tenantQuery } from '@yayatoh/platform';
-import { and, asc, eq, inArray, isNull } from 'drizzle-orm';
+import { and, asc, eq, inArray, isNull, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { tickets, walletPasses } from './schema.ts';
 
@@ -23,10 +23,18 @@ export interface WalletPassProvider {
   }): Promise<{ ok: boolean }>;
   /** Void a pass (its barcode no longer admits; the device shows it as expired). */
   voidPass(input: { serial: string }): Promise<{ ok: boolean }>;
+  /**
+   * M7.2b: where the holder adds the pass to their wallet app (an Apple `.pkpass` download, a
+   * Google "Save to Wallet" link). Null when the provider cannot make one for that wallet.
+   */
+  passLink(input: { platform: WalletPlatform; serial: string }): Promise<{ url: string } | null>;
 }
 
+export const WALLET_PLATFORMS = ['apple', 'google'] as const;
+export type WalletPlatform = (typeof WALLET_PLATFORMS)[number];
+
 export interface FakeWalletPush {
-  readonly op: 'upsert' | 'void';
+  readonly op: 'upsert' | 'void' | 'link';
   readonly serial: string;
   readonly holderName?: string;
 }
@@ -45,6 +53,10 @@ export function fakeWalletPassProvider(log: FakeWalletPush[] = []): WalletPassPr
     async voidPass(input) {
       log.push({ op: 'void', serial: input.serial });
       return { ok: true };
+    },
+    async passLink(input) {
+      log.push({ op: 'link', serial: input.serial });
+      return { url: `https://wallet.fake.yayatoh.test/${input.platform}/${input.serial}` };
     },
   };
 }
@@ -75,6 +87,79 @@ export async function rotateWalletPassTx(
       holderName: ticket.holderName,
     })
     .onConflictDoNothing();
+}
+
+/** What the provider needs to issue the pass of a ticket a person holds (M7.2b). */
+export interface HolderWalletPass {
+  readonly id: string;
+  readonly serial: string;
+  readonly ticketId: string;
+  readonly rev: number;
+  readonly holderName: string;
+  readonly eventName: string;
+  /** Whether the provider has already been told about this pass. */
+  readonly pushed: boolean;
+}
+
+/**
+ * The live wallet pass of a ticket the person holds, made on first use. A ticket whose code was
+ * reissued (a transfer, a re-send with a new code) gets a new pass for its current revision and
+ * the old one is voided, as in a transfer claim. Null when the ticket is not an active ticket held
+ * by this address.
+ */
+export async function holderWalletPassTx(
+  tx: TenantTx,
+  ctx: Ctx,
+  emailNorm: string,
+  ticketId: string,
+): Promise<HolderWalletPass | null> {
+  const [t] = await tx
+    .select({
+      id: tickets.id,
+      rev: tickets.rev,
+      holderName: tickets.holderName,
+      eventId: tickets.eventId,
+    })
+    .from(tickets)
+    .where(
+      and(
+        eq(tickets.id, ticketId),
+        eq(tickets.status, 'active'),
+        eq(sql`lower(${tickets.holderEmail})`, emailNorm),
+      ),
+    )
+    .for('update');
+  if (!t) return null;
+  const find = () =>
+    tx
+      .select()
+      .from(walletPasses)
+      .where(and(eq(walletPasses.ticketId, t.id), eq(walletPasses.status, 'active')));
+  let [pass] = await find();
+  if (!pass || pass.rev !== t.rev) {
+    await rotateWalletPassTx(tx, ctx, { id: t.id, rev: t.rev, holderName: t.holderName });
+    [pass] = await find();
+  }
+  if (!pass) return null;
+  const ev = await findEventTx(tx, t.eventId);
+  return {
+    id: pass.id,
+    serial: pass.serial,
+    ticketId: t.id,
+    rev: pass.rev,
+    holderName: pass.holderName,
+    eventName: ev?.name ?? '',
+    pushed: pass.pushedAt !== null,
+  };
+}
+
+/** The provider was told about these passes. */
+export async function markWalletPassesPushedTx(tx: TenantTx, ids: readonly string[], now: Date) {
+  if (ids.length === 0) return;
+  await tx
+    .update(walletPasses)
+    .set({ pushedAt: now, updatedAt: now })
+    .where(inArray(walletPasses.id, [...ids]));
 }
 
 const TransferredPayload = z.object({ orgId: z.uuid(), ticketId: z.uuid(), eventId: z.uuid() });
