@@ -1,12 +1,14 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi';
 import { type AppSignInResult, isTwoFactorError } from '@yayatoh/auth';
 import { DomainError, STEP_UP_WINDOW_MS } from '@yayatoh/kernel';
+import { deleteAccount } from '@yayatoh/privacy';
 import { myOrganizations } from '@yayatoh/tenancy';
+import { accountNotifier } from '../account-mail.ts';
 import type { V1Deps, V1Env } from '../context.ts';
 import { RATE_LIMITS, type RateLimiter } from '../rate-limit.ts';
 import { listSchema, Membership, MobileConfig, Session, TokenPair, toWire, User } from '../resources.ts';
 import { mobileApps, resolveMobile } from '../versions.ts';
-import { body, json, problems, userSecurity } from './common.ts';
+import { body, json, problems, userSecurity, writeProblems } from './common.ts';
 import { API_VERSION } from './version.ts';
 
 const LoginBody = z
@@ -201,6 +203,47 @@ const me = createRoute({
   security: userSecurity,
   responses: { 200: json(User, 'The user'), ...problems },
 });
+const signOutEverywhere = createRoute({
+  method: 'post',
+  path: '/auth/sign-out-everywhere',
+  operationId: 'signOutEverywhere',
+  tags: ['auth'],
+  summary: 'Sign out of every device and session',
+  description:
+    'Ends every session of the signed-in person (the web, tenant sites and API clients) and revokes every refresh-token family, so no phone can refresh its way back in. The access token used for this call ends too. Answers `204`.',
+  security: userSecurity,
+  responses: { 204: { description: 'Signed out everywhere' }, ...problems },
+});
+const AccountErasure = z
+  .object({
+    requestId: z.uuid().openapi({ description: 'The recorded erasure request.' }),
+    summary: z
+      .object({
+        organizations: z.number().int(),
+        memberships: z.number().int(),
+        ordersUnlinked: z.number().int(),
+        invitations: z.number().int(),
+        sessions: z.number().int(),
+        credentials: z.number().int(),
+        signupCodes: z.number().int(),
+      })
+      .openapi({ description: 'How much was detached or removed, per category (counts only).' }),
+  })
+  .openapi('AccountErasure');
+const deleteMe = createRoute({
+  method: 'delete',
+  path: '/me',
+  operationId: 'deleteMe',
+  tags: ['me'],
+  summary: 'Delete the signed-in person’s account (needs a fresh step-up)',
+  description: [
+    'Deletes the account as the web’s account page does (App Store rule 5.1.1(v)): the person’s sign-in methods, sessions and refresh tokens end, their address joins the suppression list, and a confirmation goes to the old address. Organizers keep their orders, tickets and consents as the controllers of those records; they lose the link to the account.',
+    '',
+    'Needs a step-up within the last ten minutes (`POST /auth/step-up`); without one the answer is `401 step_up_required` and nothing is deleted. Refused with `409 invalid_state` (`details.reason: last_owner`, `details.orgs`: names) while the person is the only owner of an organization. Works for sessions whose email is not yet verified.',
+  ].join('\n'),
+  security: userSecurity,
+  responses: { 200: json(AccountErasure, 'Deleted'), ...writeProblems },
+});
 const myOrgs = createRoute({
   method: 'get',
   path: '/me/organizations',
@@ -384,6 +427,10 @@ export function authRoutes(deps: V1Deps, limiter: RateLimiter, ipOf: (h: Headers
         200,
       );
     })
+    .openapi(signOutEverywhere, async (c) => {
+      await appSignIn().signOutEverywhere(userOf(c).user.id);
+      return c.body(null, 204);
+    })
     .openapi(revoke, async (c) => {
       await sessions().revokeRefresh(c.req.valid('json').refreshToken);
       return c.body(null, 204);
@@ -411,6 +458,20 @@ export function authRoutes(deps: V1Deps, limiter: RateLimiter, ipOf: (h: Headers
       return c.body(null, 204);
     })
     .openapi(me, (c) => c.json(toWire(User, userOf(c).user), 200))
+    .openapi(deleteMe, async (c) => {
+      const s = userOf(c);
+      // The same command as the web's account page: the step-up, the last-owner rule, each org's
+      // detach and the anonymising all happen inside `deleteAccount`.
+      const r = await deleteAccount({
+        userId: s.user.id,
+        email: s.user.email,
+        by: { type: 'self' },
+        ports: deps.ports,
+        notify: deps.accountNotice ?? accountNotifier,
+        stepUpAt: s.stepUpAt,
+      });
+      return c.json(toWire(AccountErasure, r), 200);
+    })
     .openapi(myOrgs, async (c) => {
       const orgs = await myOrganizations(userOf(c).user.id);
       return c.json(

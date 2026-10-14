@@ -216,10 +216,14 @@ export async function isAccessToken(sessionToken: string): Promise<boolean> {
  * A password change or reset: every refresh-token family of the person is revoked and their
  * access tokens end (the web's sessions are handled by Better Auth).
  */
-export async function revokeAllRefreshTokens(userId: string, at: Date = new Date()): Promise<number> {
+export async function revokeAllRefreshTokens(
+  userId: string,
+  at: Date = new Date(),
+  reason: 'password_changed' | 'signed_out' = 'password_changed',
+): Promise<number> {
   const rows = await identityDatabase()
     .update(refreshTokens)
-    .set({ revokedAt: at, revokedReason: 'password_changed' })
+    .set({ revokedAt: at, revokedReason: reason })
     .where(and(eq(refreshTokens.userId, userId), isNull(refreshTokens.revokedAt)))
     .returning({ access: refreshTokens.accessSessionToken });
   await endAccessSessions(rows.map((r) => r.access));

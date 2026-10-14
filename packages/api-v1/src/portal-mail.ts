@@ -31,7 +31,7 @@ let transports: Transports | null | undefined;
  * production, and nothing in production, where sending refuses to pretend. Codes are never queued
  * or stored: they leave in this request.
  */
-function mailTransports(): Transports | null {
+export function mailTransports(): Transports | null {
   if (transports !== undefined) return transports;
   const production = process.env.NODE_ENV === 'production' && isProductionEnv();
   const origin = process.env.NEXT_PUBLIC_APP_ORIGIN || process.env.BETTER_AUTH_URL || 'http://localhost:3000';

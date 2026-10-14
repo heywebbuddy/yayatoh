@@ -1392,6 +1392,9 @@ importers:
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../platform
+      '@yayatoh/privacy':
+        specifier: workspace:*
+        version: link:../modules/privacy
       '@yayatoh/program':
         specifier: workspace:*
         version: link:../modules/program

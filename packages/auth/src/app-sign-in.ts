@@ -5,7 +5,7 @@ import { eq } from 'drizzle-orm';
 import type { Auth } from './auth.ts';
 import type { IdTokenVerifier } from './id-token.ts';
 import type { AuthMailer } from './mailer.ts';
-import { refreshTokenService, type TokenPair } from './refresh-tokens.ts';
+import { refreshTokenService, revokeAllRefreshTokens, type TokenPair } from './refresh-tokens.ts';
 import { securityEvents, verifications } from './schema.ts';
 import {
   confirmLinkProof,
@@ -315,6 +315,19 @@ export function appSignIn(auth: Auth, opts: AppSignInOptions) {
       const method = await opts.twoFactor.method(userId);
       if (method === 'email') await opts.twoFactor.sendStepUpEmail(userId, email);
       return method;
+    },
+
+    /**
+     * Sign out everywhere (M7.3a): every session of the person ends (the web's, tenant hosts, API
+     * clients) and every refresh-token family is revoked, so no phone can refresh its way back in.
+     * Audited. Returns how many refresh-token families were revoked.
+     */
+    async signOutEverywhere(userId: string): Promise<number> {
+      const at = now();
+      await opts.twoFactor.signOutEverywhere(userId);
+      const families = await revokeAllRefreshTokens(userId, at, 'signed_out');
+      await audit(userId, 'app_sign_in.signed_out_everywhere', { families }, at);
+      return families;
     },
 
     /** Check the proof and stamp the bearer session; returns the time stamped. Throws `TwoFactorError`. */
