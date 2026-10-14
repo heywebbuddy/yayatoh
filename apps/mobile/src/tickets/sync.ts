@@ -12,6 +12,7 @@ import type { YayatohClient } from '@yayatoh/sdk';
 import {
   fetchTicket,
   fetchTicketPage,
+  PAGE_SIZE,
   type Ticket,
   type TicketPage,
   type TicketSummary,
@@ -21,7 +22,6 @@ import {
 
 /** A guard against a runaway cursor, not a limit people meet: 20 pages of 50 is 1000 tickets. */
 export const MAX_SYNC_PAGES = 20;
-export const SYNC_PAGE_SIZE = 50;
 const DETAIL_CONCURRENCY = 4;
 /** Opening the tab again within this long does not sync again; pulling to refresh always does. */
 export const SYNC_FRESH_MS = 60_000;
@@ -62,7 +62,7 @@ async function walk(api: YayatohClient, when: TicketWhen, all: boolean): Promise
   const params: (string | undefined)[] = [];
   let cursor: string | undefined;
   do {
-    const page = await fetchTicketPage(api, when, cursor, SYNC_PAGE_SIZE);
+    const page = await fetchTicketPage(api, when, cursor, PAGE_SIZE);
     pages.push(page);
     params.push(cursor);
     cursor = page.nextCursor ?? undefined;

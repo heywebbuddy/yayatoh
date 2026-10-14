@@ -6,6 +6,7 @@
   "tickets": {
     "common": {
       "back": "Back",
+      "loading": "Loading…",
       "retry": "Try again",
       "offline": "You’re offline. Showing what is saved on this phone.",
       "syncedAt": "Last synced {when}",

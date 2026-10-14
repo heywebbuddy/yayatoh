@@ -6,6 +6,7 @@
   "tickets": {
     "common": {
       "back": "Terug",
+      "loading": "Laden…",
       "retry": "Opnieuw proberen",
       "offline": "Je bent offline. Wat op deze telefoon is opgeslagen wordt getoond.",
       "syncedAt": "Laatst gesynchroniseerd: {when}",

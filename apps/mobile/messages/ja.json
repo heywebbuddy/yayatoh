@@ -6,6 +6,7 @@
   "tickets": {
     "common": {
       "back": "戻る",
+      "loading": "読み込んでいます…",
       "retry": "もう一度試す",
       "offline": "オフラインです。この端末に保存されている内容を表示しています。",
       "syncedAt": "最終同期: {when}",

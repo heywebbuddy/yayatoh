@@ -17,7 +17,12 @@ export type TransferResult = Schemas['TicketTransferResult'];
 export type WalletLink = Schemas['WalletPassLink'];
 export type RefundRequest = Schemas['BuyerRefundRequest'];
 
-export const PAGE_SIZE = 20;
+/**
+ * Tickets per page, for the list and for the sync alike: Query refetches a list page by page from the
+ * cursor each fresh page returns, so a list built by the sync and one grown by scrolling must page
+ * the same way or a refetch would cut it short.
+ */
+export const PAGE_SIZE = 50;
 
 export const ticketKeys = {
   all: ['tickets'] as const,

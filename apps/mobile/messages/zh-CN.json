@@ -6,6 +6,7 @@
   "tickets": {
     "common": {
       "back": "返回",
+      "loading": "正在加载…",
       "retry": "重试",
       "offline": "您已离线。正在显示此手机上保存的内容。",
       "syncedAt": "上次同步：{when}",

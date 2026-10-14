@@ -8,6 +8,9 @@ export const router = {
   canGoBack: jest.fn(() => true),
 };
 
+/** Where a `Redirect` was asked to go, in order. */
+export const redirects: unknown[] = [];
+
 export const routerMock = {
   useRouter: () => router,
   useLocalSearchParams: () => ({}),
@@ -15,11 +18,16 @@ export const routerMock = {
     // The focus callback is a stable `useCallback` in the screens.
     useEffect(effect, [effect]);
   },
+  Redirect: ({ href }: { href: unknown }) => {
+    redirects.push(href);
+    return null;
+  },
   Link: ({ children }: { children: unknown }) => children,
   Stack: { Screen: () => null },
 };
 
 export const resetRouter = () => {
+  redirects.length = 0;
   for (const fn of Object.values(router)) fn.mockClear();
   router.canGoBack.mockReturnValue(true);
 };

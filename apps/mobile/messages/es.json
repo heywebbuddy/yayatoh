@@ -6,6 +6,7 @@
   "tickets": {
     "common": {
       "back": "Atrás",
+      "loading": "Cargando…",
       "retry": "Reintentar",
       "offline": "Estás sin conexión. Se muestra lo guardado en este teléfono.",
       "syncedAt": "Última sincronización: {when}",
