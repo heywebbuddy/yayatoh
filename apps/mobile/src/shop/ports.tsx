@@ -3,11 +3,14 @@
  * checkout flow run under Jest without a phone: the location, the secure browser session and the
  * random key. `ShopPortsProvider` swaps them in tests; the app uses the Expo ones.
  *
- * The Expo modules are loaded on first use, so a screen that never asks for the location never loads
- * (or asks for) it.
+ * The location is only asked for inside `requestNearMe`, which Discover calls when the person taps
+ * "near me": importing the module asks for nothing.
  */
 import { randomUUID } from 'expo-crypto';
+import * as Location from 'expo-location';
+import * as WebBrowser from 'expo-web-browser';
 import { createContext, type ReactNode, useContext } from 'react';
+import { Linking } from 'react-native';
 import type { NearMe } from './filters';
 
 export type NearMeResult =
@@ -62,7 +65,6 @@ export interface ShopPorts {
 
 const expoLocation: LocationPort = {
   async requestNearMe() {
-    const Location = await import('expo-location');
     try {
       if (!(await Location.hasServicesEnabledAsync())) return { status: 'unavailable' };
       const permission = await Location.requestForegroundPermissionsAsync();
@@ -81,14 +83,12 @@ const expoLocation: LocationPort = {
     }
   },
   async openSettings() {
-    const { Linking } = await import('react-native');
     await Linking.openSettings();
   },
 };
 
 const expoBrowser: BrowserPort = {
   async openPayment(paymentUrl, returnUrl) {
-    const WebBrowser = await import('expo-web-browser');
     try {
       const result = await WebBrowser.openAuthSessionAsync(paymentUrl, returnUrl);
       return result.type === 'success' ? { type: 'return', url: result.url } : { type: 'closed' };
@@ -100,11 +100,9 @@ const expoBrowser: BrowserPort = {
     }
   },
   async openExternal(url) {
-    const { Linking } = await import('react-native');
     await Linking.openURL(url);
   },
   async dismiss() {
-    const WebBrowser = await import('expo-web-browser');
     try {
       WebBrowser.dismissAuthSession();
       WebBrowser.dismissBrowser();
@@ -113,7 +111,6 @@ const expoBrowser: BrowserPort = {
     }
   },
   async openWeb(url) {
-    const WebBrowser = await import('expo-web-browser');
     await WebBrowser.openBrowserAsync(url);
   },
 };

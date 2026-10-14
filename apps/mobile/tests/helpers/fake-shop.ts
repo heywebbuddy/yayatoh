@@ -3,7 +3,7 @@
  * like the server's), and the person's orders (visible once paid, like `/v1/me/orders`).
  */
 import type { Schemas } from '@yayatoh/sdk';
-import { EVENT, order, ORDER_ID, PASSES, SLUG, summary, WEB } from './fixtures';
+import { EVENT, ORDER_ID, order, PASSES, SLUG, summary, WEB } from './fixtures';
 
 export const json = (status: number, body: unknown, headers: Record<string, string> = {}) =>
   new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json', ...headers } });
@@ -93,7 +93,12 @@ export function createFakeShop(): FakeShop {
       const app = { latestVersion: '1.0.0', minimumVersion: '0.0.1', storeUrl: 'https://stores.test/app' };
       return json(200, {
         apiVersion: '1',
-        apps: { 'yayatoh-android': app, 'yayatoh-ios': app, 'yayatoh-staff-android': app, 'yayatoh-staff-ios': app },
+        apps: {
+          'yayatoh-android': app,
+          'yayatoh-ios': app,
+          'yayatoh-staff-android': app,
+          'yayatoh-staff-ios': app,
+        },
         baseUrls: { api: `${WEB}/api/v1`, web: WEB },
         features: {},
         latestVersions: { android: '1.0.0', ios: '1.0.0' },
@@ -103,8 +108,10 @@ export function createFakeShop(): FakeShop {
     if (method === 'GET' && path === '/v1/public/events')
       return json(200, { data: [summary(1), summary(2)], nextCursor: null });
     if (method === 'GET' && path === `/v1/public/events/${SLUG}`) return json(200, EVENT);
-    if (method === 'GET' && path === `/v1/public/events/${SLUG}/ticket-types`) return json(200, { data: PASSES });
-    if (method === 'GET' && path === `/v1/public/events/${SLUG}/dates`) return json(200, { data: [], nextCursor: null });
+    if (method === 'GET' && path === `/v1/public/events/${SLUG}/ticket-types`)
+      return json(200, { data: PASSES });
+    if (method === 'GET' && path === `/v1/public/events/${SLUG}/dates`)
+      return json(200, { data: [], nextCursor: null });
     if (method === 'GET' && path === `/v1/public/events/${SLUG}/sections`) return json(200, { data: [] });
     if (method === 'GET' && path === '/v1/public/venues/city-hall')
       return json(200, {
@@ -151,7 +158,10 @@ export function createFakeShop(): FakeShop {
       return json(201, response);
     }
     if (method === 'GET' && path === '/v1/me/orders')
-      return json(200, { data: [...visibleOrders.values()].map((o) => ({ ...orderToSummary(o) })), nextCursor: null });
+      return json(200, {
+        data: [...visibleOrders.values()].map((o) => ({ ...orderToSummary(o) })),
+        nextCursor: null,
+      });
     const detail = /^\/v1\/me\/orders\/([^/]+)$/.exec(path);
     if (method === 'GET' && detail) {
       const found = visibleOrders.get(detail[1] ?? '');

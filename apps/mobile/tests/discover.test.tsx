@@ -24,7 +24,9 @@ describe('Discover', () => {
     expect(within(card).getByText('Event 1')).toBeOnTheScreen();
     expect(within(card).getByText('Blue Note Lisbon')).toBeOnTheScreen();
     expect(within(card).getByText('City Hall, Lisbon')).toBeOnTheScreen();
-    expect(within(card).getByText(formatEventStart('2027-07-10T19:00:00Z', 'Europe/Lisbon', 'en'))).toBeOnTheScreen();
+    expect(
+      within(card).getByText(formatEventStart('2027-07-10T19:00:00Z', 'Europe/Lisbon', 'en')),
+    ).toBeOnTheScreen();
     expect(within(card).getByText('From €25.00 – €90.00')).toBeOnTheScreen();
     expect(lastSearch(shop)?.get('limit')).toBe('20');
   });
@@ -48,11 +50,20 @@ describe('Discover', () => {
   it('marks cancelled and postponed events with words', async () => {
     const shop = createFakeShop();
     shop.on('GET', '/v1/public/events', () =>
-      json(200, { data: [summary(1, { status: 'cancelled' }), summary(2, { status: 'postponed' })], nextCursor: null }),
+      json(200, {
+        data: [summary(1, { status: 'cancelled' }), summary(2, { status: 'postponed' })],
+        nextCursor: null,
+      }),
     );
     await renderApp(<DiscoverScreen />, { shop });
-    expect(await within(await screen.findByTestId('event-event-1')).findByText(t('en', 'discover.statusCancelled'))).toBeOnTheScreen();
-    expect(within(screen.getByTestId('event-event-2')).getByText(t('en', 'discover.statusPostponed'))).toBeOnTheScreen();
+    expect(
+      await within(await screen.findByTestId('event-event-1')).findByText(
+        t('en', 'discover.statusCancelled'),
+      ),
+    ).toBeOnTheScreen();
+    expect(
+      within(screen.getByTestId('event-event-2')).getByText(t('en', 'discover.statusPostponed')),
+    ).toBeOnTheScreen();
   });
 
   describe('search', () => {
@@ -91,7 +102,9 @@ describe('Discover', () => {
     it('names every category in the person’s language', async () => {
       await renderApp(<DiscoverScreen />, { locale: 'de' });
       await screen.findByTestId('event-event-1');
-      expect(screen.getByTestId('category-music').props.accessibilityLabel).toBe(t('de', 'discover.categories.music'));
+      expect(screen.getByTestId('category-music').props.accessibilityLabel).toBe(
+        t('de', 'discover.categories.music'),
+      );
       expect(t('de', 'discover.categories.music')).not.toBe(t('en', 'discover.categories.music'));
     });
   });
@@ -173,7 +186,10 @@ describe('Discover', () => {
       await renderApp(<DiscoverScreen />, { ports });
       await screen.findByTestId('event-event-1');
       fireEvent.press(screen.getByTestId('near-me'));
-      expect(await screen.findByTestId('near-me-denied')).toHaveTextContent(t('en', 'discover.nearMeDenied'), { exact: false });
+      expect(await screen.findByTestId('near-me-denied')).toHaveTextContent(
+        t('en', 'discover.nearMeDenied'),
+        { exact: false },
+      );
       expect(screen.queryByText(t('en', 'discover.openSettings'))).toBeNull();
       fireEvent.press(screen.getByTestId('near-me'));
       await waitFor(() => expect(screen.queryByTestId('near-me-denied')).toBeNull());
@@ -185,7 +201,10 @@ describe('Discover', () => {
       await renderApp(<DiscoverScreen />, { ports });
       await screen.findByTestId('event-event-1');
       fireEvent.press(screen.getByTestId('near-me'));
-      expect(await screen.findByTestId('near-me-denied')).toHaveTextContent(t('en', 'discover.nearMeBlocked'), { exact: false });
+      expect(await screen.findByTestId('near-me-denied')).toHaveTextContent(
+        t('en', 'discover.nearMeBlocked'),
+        { exact: false },
+      );
       fireEvent.press(screen.getByRole('button', { name: t('en', 'discover.openSettings') }));
       expect(ports.location.openSettings).toHaveBeenCalled();
     });
@@ -307,7 +326,9 @@ describe('Discover', () => {
       const shop = createFakeShop();
       shop.on('GET', '/v1/public/events', () => problem(500, 'internal'));
       await renderApp(<DiscoverScreen />, { shop });
-      expect(await screen.findByTestId('search-error')).toHaveTextContent(t('en', 'core.errors.generic'), { exact: false });
+      expect(await screen.findByTestId('search-error')).toHaveTextContent(t('en', 'core.errors.generic'), {
+        exact: false,
+      });
       const limited = createFakeShop();
       limited.on('GET', '/v1/public/events', () => problem(429, 'rate_limited', {}, { 'retry-after': '30' }));
       await renderApp(<DiscoverScreen />, { shop: limited });
@@ -321,7 +342,9 @@ describe('Discover', () => {
       const card = await screen.findByTestId('event-event-1');
       const price = formatPriceRange(2500, 9000, 'EUR', 'de', t('de', 'discover.free'));
       expect(price).toBe('25,00 € – 90,00 €');
-      expect(within(card).getByText(t('de', 'discover.priceFrom').replace('{price}', price ?? ''))).toBeOnTheScreen();
+      expect(
+        within(card).getByText(t('de', 'discover.priceFrom').replace('{price}', price ?? '')),
+      ).toBeOnTheScreen();
     });
 
     it('Arabic reads right to left with the controls labelled in Arabic', async () => {
@@ -330,7 +353,9 @@ describe('Discover', () => {
       expect(await screen.findByRole('header', { name: t('ar', 'discover.title') })).toBeOnTheScreen();
       expect(screen.getByLabelText(t('ar', 'discover.searchLabel'))).toBeOnTheScreen();
       expect(screen.getByTestId('near-me').props.accessibilityLabel).toBe(t('ar', 'discover.nearMe'));
-      expect(screen.getByTestId('category-music').props.accessibilityLabel).toBe(t('ar', 'discover.categories.music'));
+      expect(screen.getByTestId('category-music').props.accessibilityLabel).toBe(
+        t('ar', 'discover.categories.music'),
+      );
       await screen.findByTestId('event-event-1');
       expect(screen.getByTestId('event-event-1').props.accessibilityHint).toBe(t('ar', 'discover.openEvent'));
     });

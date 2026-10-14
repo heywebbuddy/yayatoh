@@ -1,4 +1,11 @@
-import { currencyDigits, formatDistance, formatEventStart, formatEventWhen, formatMoney, formatPriceRange } from '../../src/shop/format';
+import {
+  currencyDigits,
+  formatDistance,
+  formatEventStart,
+  formatEventWhen,
+  formatMoney,
+  formatPriceRange,
+} from '../../src/shop/format';
 
 describe('formatMoney', () => {
   it('takes the decimals from the currency, never a fixed 100', () => {
@@ -34,7 +41,9 @@ describe('dates in the event time zone', () => {
   });
 
   it('writes a one-day event as a range with the zone name, and a longer one with an arrow', () => {
-    expect(formatEventWhen(start, end, 'America/Los_Angeles', 'en')).toBe('Sat, May 1, 4:30 PM – 7:00 PM PDT');
+    expect(formatEventWhen(start, end, 'America/Los_Angeles', 'en')).toBe(
+      'Sat, May 1, 4:30 PM – 7:00 PM PDT',
+    );
     expect(formatEventWhen(start, '2027-05-03T20:00:00Z', 'America/Los_Angeles', 'en')).toBe(
       'Sat, May 1, 4:30 PM → Mon, May 3, 1:00 PM PDT',
     );

@@ -22,19 +22,23 @@ describe('return links', () => {
       outcome: 'return',
       orderId: ORDER,
     });
-    expect(outcomeOfUrl(`https://app.yayatoh.com/events/summit?order=${ORDER}&checkout=cancelled#x`)).toEqual({
-      outcome: 'cancelled',
-      orderId: ORDER,
-    });
+    expect(outcomeOfUrl(`https://app.yayatoh.com/events/summit?order=${ORDER}&checkout=cancelled#x`)).toEqual(
+      {
+        outcome: 'cancelled',
+        orderId: ORDER,
+      },
+    );
     expect(outcomeOfUrl('https://app.yayatoh.com/events/summit')).toBeNull();
   });
 });
 
 describe('text from the API is untrusted', () => {
   it('strips Markdown and HTML to plain text', () => {
-    expect(plainText('# Welcome\n\nJoin **us** at [the hall](https://x.test).\n\n- one\n- two\n\n<script>alert(1)</script>![i](https://x.test/a.png)')).toBe(
-      'Welcome\n\nJoin us at the hall.\n\n• one\n• two\n\nalert(1)',
-    );
+    expect(
+      plainText(
+        '# Welcome\n\nJoin **us** at [the hall](https://x.test).\n\n- one\n- two\n\n<script>alert(1)</script>![i](https://x.test/a.png)',
+      ),
+    ).toBe('Welcome\n\nJoin us at the hall.\n\n• one\n• two\n\nalert(1)');
   });
 
   it('opens https links only', () => {
@@ -47,12 +51,23 @@ describe('text from the API is untrusted', () => {
   });
 
   it('links the map by the venue’s own link, else its coordinates, else its address', () => {
-    const base = { mapUrl: null, latitude: null, longitude: null, name: 'City Hall', addressLine1: '1 Main St', city: 'Lisbon' };
-    expect(mapLinkFor({ ...base, mapUrl: 'https://maps.example.test/hall' })).toBe('https://maps.example.test/hall');
+    const base = {
+      mapUrl: null,
+      latitude: null,
+      longitude: null,
+      name: 'City Hall',
+      addressLine1: '1 Main St',
+      city: 'Lisbon',
+    };
+    expect(mapLinkFor({ ...base, mapUrl: 'https://maps.example.test/hall' })).toBe(
+      'https://maps.example.test/hall',
+    );
     expect(mapLinkFor({ ...base, mapUrl: 'javascript:x', latitude: 38.7, longitude: -9.1 })).toBe(
       'https://www.google.com/maps/search/?api=1&query=38.7,-9.1',
     );
-    expect(mapLinkFor(base)).toBe('https://www.google.com/maps/search/?api=1&query=City%20Hall%2C%201%20Main%20St%2C%20Lisbon');
+    expect(mapLinkFor(base)).toBe(
+      'https://www.google.com/maps/search/?api=1&query=City%20Hall%2C%201%20Main%20St%2C%20Lisbon',
+    );
   });
 
   it('takes a brand colour only as an opaque hex colour', () => {

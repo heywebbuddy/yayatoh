@@ -3,8 +3,8 @@ import { EventScreen } from '../src/events/event-screen';
 import { clearAllCarts, getCartEntry, updateCart } from '../src/shop/cart-store';
 import { formatEventWhen } from '../src/shop/format';
 import { createFakeShop, json, problem } from './helpers/fake-shop';
-import { EVENT, ORDER_ID, pass, PASSES, SLUG, WEB } from './helpers/fixtures';
-import { createFakePorts, renderApp, t } from './helpers/harness';
+import { EVENT, ORDER_ID, PASSES, pass, SLUG, WEB } from './helpers/fixtures';
+import { renderApp, t } from './helpers/harness';
 import { resetRouter, router } from './helpers/router';
 
 jest.mock('expo-router', () => require('./helpers/router').routerModule);
@@ -35,7 +35,9 @@ describe('event page', () => {
       formatEventWhen(EVENT.startsAt, EVENT.endsAt, 'Europe/Lisbon', 'en'),
     );
     expect(screen.getByTestId('event-when')).toHaveTextContent('8:00 PM – 11:00 PM GMT+1', { exact: false });
-    expect(screen.getByText(t('en', 'discover.event.timezone').replace('{zone}', 'Europe/Lisbon'))).toBeOnTheScreen();
+    expect(
+      screen.getByText(t('en', 'discover.event.timezone').replace('{zone}', 'Europe/Lisbon')),
+    ).toBeOnTheScreen();
     expect(screen.getByTestId('event-where')).toHaveTextContent('City Hall, Lisbon');
     fireEvent.press(await screen.findByTestId('open-maps'));
     expect(view.ports.browser.openExternal).toHaveBeenCalledWith('https://maps.example.test/city-hall');
@@ -46,8 +48,18 @@ describe('event page', () => {
     shop.on('GET', `/v1/public/events/${SLUG}/sections`, () =>
       json(200, {
         data: [
-          { id: 's1', kind: 'text', title: 'About', content: { markdown: '**Doors** at 7. [Map](https://x.test)\n\n<script>x</script>' } },
-          { id: 's2', kind: 'location', title: 'Getting here', content: { address: 'Praça do Município, Lisbon', directions: '', mapUrl: null } },
+          {
+            id: 's1',
+            kind: 'text',
+            title: 'About',
+            content: { markdown: '**Doors** at 7. [Map](https://x.test)\n\n<script>x</script>' },
+          },
+          {
+            id: 's2',
+            kind: 'location',
+            title: 'Getting here',
+            content: { address: 'Praça do Município, Lisbon', directions: '', mapUrl: null },
+          },
         ],
       }),
     );
@@ -93,7 +105,9 @@ describe('event page', () => {
 
   it('an online event has no venue line and no map', async () => {
     const shop = createFakeShop();
-    shop.on('GET', `/v1/public/events/${SLUG}`, () => json(200, { ...EVENT, attendanceMode: 'online', venueSlug: null, venueName: null }));
+    shop.on('GET', `/v1/public/events/${SLUG}`, () =>
+      json(200, { ...EVENT, attendanceMode: 'online', venueSlug: null, venueName: null }),
+    );
     await renderApp(open(), { shop });
     expect(await screen.findByTestId('event-where')).toHaveTextContent(t('en', 'discover.event.onlineEvent'));
     expect(screen.queryByTestId('open-maps')).toBeNull();
@@ -111,7 +125,10 @@ describe('event page', () => {
       const shop = createFakeShop();
       shop.on('GET', `/v1/public/events/${SLUG}`, () => problem(404, 'not_found'));
       await renderApp(open(), { shop });
-      expect(await screen.findByTestId('event-not-found')).toHaveTextContent(t('en', 'discover.event.notFoundTitle'), { exact: false });
+      expect(await screen.findByTestId('event-not-found')).toHaveTextContent(
+        t('en', 'discover.event.notFoundTitle'),
+        { exact: false },
+      );
       fireEvent.press(screen.getByTestId('event-back'));
       expect(router.back).toHaveBeenCalled();
     });
@@ -124,7 +141,9 @@ describe('event page', () => {
         return json(200, EVENT);
       });
       await renderApp(open(), { shop });
-      expect(await screen.findByTestId('event-error')).toHaveTextContent(t('en', 'core.errors.network'), { exact: false });
+      expect(await screen.findByTestId('event-error')).toHaveTextContent(t('en', 'core.errors.network'), {
+        exact: false,
+      });
       fail = false;
       fireEvent.press(screen.getByRole('button', { name: t('en', 'core.common.retry') }));
       expect(await screen.findByRole('header', { name: 'Summer Jazz Night' })).toBeOnTheScreen();
@@ -133,11 +152,17 @@ describe('event page', () => {
     it('the tickets can fail on their own, with a retry', async () => {
       const shop = createFakeShop();
       let fail = true;
-      shop.on('GET', `/v1/public/events/${SLUG}/ticket-types`, () => (fail ? problem(500, 'internal') : json(200, { data: PASSES })));
+      shop.on('GET', `/v1/public/events/${SLUG}/ticket-types`, () =>
+        fail ? problem(500, 'internal') : json(200, { data: PASSES }),
+      );
       await renderApp(open(), { shop });
       expect(await screen.findByTestId('tickets-error')).toBeOnTheScreen();
       fail = false;
-      fireEvent.press(within(screen.getByTestId('tickets-error')).getByRole('button', { name: t('en', 'core.common.retry') }));
+      fireEvent.press(
+        within(screen.getByTestId('tickets-error')).getByRole('button', {
+          name: t('en', 'core.common.retry'),
+        }),
+      );
       expect(await screen.findByTestId('pass-pass-general')).toBeOnTheScreen();
     });
 
@@ -155,17 +180,23 @@ describe('event page', () => {
       await ready();
       expect(screen.getByTestId('pass-price-pass-general')).toHaveTextContent('€25.00', { exact: false });
       expect(screen.getByTestId('pass-price-pass-vip')).toHaveTextContent('€90.00', { exact: false });
-      expect(screen.getByTestId('pass-pass-vip')).toHaveTextContent(t('en', 'discover.event.fewLeft'), { exact: false });
+      expect(screen.getByTestId('pass-pass-vip')).toHaveTextContent(t('en', 'discover.event.fewLeft'), {
+        exact: false,
+      });
       expect(screen.queryByTestId('cart-bar')).toBeNull();
       const inc = () => fireEvent.press(screen.getByTestId('increase-pass-vip'));
       inc();
       inc();
       expect(screen.getByTestId('quantity-pass-vip')).toHaveTextContent('2');
       // The limit is 2: a third press does nothing and the control says it is disabled.
-      expect(screen.getByTestId('increase-pass-vip').props.accessibilityState).toMatchObject({ disabled: true });
+      expect(screen.getByTestId('increase-pass-vip').props.accessibilityState).toMatchObject({
+        disabled: true,
+      });
       inc();
       expect(screen.getByTestId('quantity-pass-vip')).toHaveTextContent('2');
-      expect(screen.getByTestId('pass-pass-vip')).toHaveTextContent('Most you can buy: 2 tickets', { exact: false });
+      expect(screen.getByTestId('pass-pass-vip')).toHaveTextContent('Most you can buy: 2 tickets', {
+        exact: false,
+      });
       fireEvent.press(screen.getByTestId('decrease-pass-vip'));
       expect(screen.getByTestId('quantity-pass-vip')).toHaveTextContent('1');
     });
@@ -191,7 +222,9 @@ describe('event page', () => {
       );
       await renderApp(open(), { shop });
       await ready();
-      expect(screen.getByTestId('pass-pass-general')).toHaveTextContent('Minimum 2 tickets per order', { exact: false });
+      expect(screen.getByTestId('pass-pass-general')).toHaveTextContent('Minimum 2 tickets per order', {
+        exact: false,
+      });
       fireEvent.press(screen.getByTestId('increase-pass-general'));
       expect(screen.getByTestId('quantity-pass-general')).toHaveTextContent('2');
       fireEvent.press(screen.getByTestId('decrease-pass-general'));
@@ -219,16 +252,23 @@ describe('event page', () => {
     it('shows an early-bird price with its last day and the regular price', async () => {
       const shop = createFakeShop();
       shop.on('GET', `/v1/public/events/${SLUG}/ticket-types`, () =>
-        json(200, { data: [pass({ allInMinor: 2000, regularAllInMinor: 2500, earlyEndsAt: '2027-06-01T21:59:00Z' })] }),
+        json(200, {
+          data: [pass({ allInMinor: 2000, regularAllInMinor: 2500, earlyEndsAt: '2027-06-01T21:59:00Z' })],
+        }),
       );
       await renderApp(open(), { shop });
-      expect(await screen.findByTestId('pass-pass-general')).toHaveTextContent('Early-bird price until Tue, Jun 1. Regular price €25.00.', { exact: false });
+      expect(await screen.findByTestId('pass-pass-general')).toHaveTextContent(
+        'Early-bird price until Tue, Jun 1. Regular price €25.00.',
+        { exact: false },
+      );
     });
 
     it('a free pass reads Free and a choose-your-amount pass reads “From”', async () => {
       const shop = createFakeShop();
       shop.on('GET', `/v1/public/events/${SLUG}/ticket-types`, () =>
-        json(200, { data: [pass({ id: 'f', allInMinor: 0 }), pass({ id: 'd', isDonation: true, allInMinor: 500 })] }),
+        json(200, {
+          data: [pass({ id: 'f', allInMinor: 0 }), pass({ id: 'd', isDonation: true, allInMinor: 500 })],
+        }),
       );
       await renderApp(open(), { shop });
       expect(await screen.findByTestId('pass-price-f')).toHaveTextContent(t('en', 'discover.event.free'));
@@ -243,11 +283,15 @@ describe('event page', () => {
       const up = screen.getByTestId('increase-pass-general');
       expect(up.props.accessibilityRole).toBe('button');
       expect(up.props.accessibilityLabel).toBe('Add one General admission');
-      expect(screen.getByTestId('decrease-pass-general').props.accessibilityLabel).toBe('Remove one General admission');
+      expect(screen.getByTestId('decrease-pass-general').props.accessibilityLabel).toBe(
+        'Remove one General admission',
+      );
       const style = Object.assign({}, ...[up.props.style].flat(Infinity).filter(Boolean));
       expect(style.minWidth).toBeGreaterThanOrEqual(44);
       expect(style.minHeight).toBeGreaterThanOrEqual(44);
-      expect(screen.getByTestId('quantity-pass-general').props.accessibilityLabel).toBe('General admission: 0 selected');
+      expect(screen.getByTestId('quantity-pass-general').props.accessibilityLabel).toBe(
+        'General admission: 0 selected',
+      );
     });
 
     it('Continue takes the cart to checkout, and the cart survives leaving and coming back', async () => {
@@ -266,9 +310,27 @@ describe('event page', () => {
 
   describe('multi-date events', () => {
     const dates = [
-      { id: 'd1', startsAt: '2027-07-10T19:00:00Z', endsAt: '2027-07-10T22:00:00Z', soldOut: false, status: 'scheduled' },
-      { id: 'd2', startsAt: '2027-07-11T19:00:00Z', endsAt: '2027-07-11T22:00:00Z', soldOut: true, status: 'scheduled' },
-      { id: 'd3', startsAt: '2027-07-12T19:00:00Z', endsAt: '2027-07-12T22:00:00Z', soldOut: false, status: 'cancelled' },
+      {
+        id: 'd1',
+        startsAt: '2027-07-10T19:00:00Z',
+        endsAt: '2027-07-10T22:00:00Z',
+        soldOut: false,
+        status: 'scheduled',
+      },
+      {
+        id: 'd2',
+        startsAt: '2027-07-11T19:00:00Z',
+        endsAt: '2027-07-11T22:00:00Z',
+        soldOut: true,
+        status: 'scheduled',
+      },
+      {
+        id: 'd3',
+        startsAt: '2027-07-12T19:00:00Z',
+        endsAt: '2027-07-12T22:00:00Z',
+        soldOut: false,
+        status: 'cancelled',
+      },
     ];
     const withDates = () => {
       const shop = createFakeShop();
@@ -280,7 +342,9 @@ describe('event page', () => {
       await renderApp(open(), { shop: withDates() });
       await ready();
       expect(screen.getByTestId('date-d1')).toBeOnTheScreen();
-      expect(screen.getByTestId('date-d2').props.accessibilityLabel).toContain(t('en', 'discover.event.soldOut'));
+      expect(screen.getByTestId('date-d2').props.accessibilityLabel).toContain(
+        t('en', 'discover.event.soldOut'),
+      );
       expect(screen.queryByTestId('date-d3')).toBeNull();
       fireEvent.press(screen.getByTestId('increase-pass-general'));
       fireEvent.press(screen.getByTestId('continue-to-checkout'));
@@ -308,9 +372,15 @@ describe('event page', () => {
         expect(screen.getByTestId(`buy-on-web-${id}`)).toBeOnTheScreen();
       }
       expect(screen.queryByTestId('cart-bar')).toBeNull();
-      await waitFor(() => expect(screen.getByTestId('buy-on-web-pass-general').props.accessibilityState).toMatchObject({ disabled: false }));
+      await waitFor(() =>
+        expect(screen.getByTestId('buy-on-web-pass-general').props.accessibilityState).toMatchObject({
+          disabled: false,
+        }),
+      );
       fireEvent.press(screen.getByTestId('buy-on-web-pass-general'));
-      expect(view.ports.browser.openWeb).toHaveBeenCalledWith(`${WEB}/events/${SLUG}?utm_source=yayatoh-app&utm_medium=app`);
+      expect(view.ports.browser.openWeb).toHaveBeenCalledWith(
+        `${WEB}/events/${SLUG}?utm_source=yayatoh-app&utm_medium=app`,
+      );
     });
 
     it('a hybrid event sells its in-person passes and marks the streamed ones once the server says so', async () => {
@@ -332,7 +402,10 @@ describe('event page', () => {
     it('a cancel link without an order shows the cancelled message and keeps the cart', async () => {
       updateCart(SLUG, { cart: { 'pass-general': 2 } });
       await renderApp(open({ outcome: 'cancelled', orderId: null }));
-      expect(await screen.findByTestId('event-cancelled')).toHaveTextContent(t('en', 'checkout.cancelledBody'), { exact: false });
+      expect(await screen.findByTestId('event-cancelled')).toHaveTextContent(
+        t('en', 'checkout.cancelledBody'),
+        { exact: false },
+      );
       await ready();
       expect(screen.getByTestId('quantity-pass-general')).toHaveTextContent('2');
     });
@@ -351,7 +424,12 @@ describe('event page', () => {
       shop.pay(ORDER_ID);
       updateCart(SLUG, { cart: { 'pass-general': 2 } });
       await renderApp(open({ outcome: 'return', orderId: ORDER_ID }), { shop });
-      await waitFor(() => expect(router.replace).toHaveBeenCalledWith({ pathname: '/orders/[id]', params: { id: ORDER_ID, placed: '1' } }));
+      await waitFor(() =>
+        expect(router.replace).toHaveBeenCalledWith({
+          pathname: '/orders/[id]',
+          params: { id: ORDER_ID, placed: '1' },
+        }),
+      );
       expect(getCartEntry(SLUG).cart).toEqual({});
     });
 
@@ -378,7 +456,9 @@ describe('event page', () => {
       );
       expect(screen.getByTestId('event-back').props.accessibilityLabel).toBe(t('ar', 'discover.event.back'));
       fireEvent.press(screen.getByTestId('increase-pass-general'));
-      expect(screen.getByTestId('continue-to-checkout').props.accessibilityLabel).toBe(t('ar', 'discover.event.continue'));
+      expect(screen.getByTestId('continue-to-checkout').props.accessibilityLabel).toBe(
+        t('ar', 'discover.event.continue'),
+      );
     });
 
     it('prices are written in the person’s language and the event’s currency', async () => {
@@ -391,7 +471,9 @@ describe('event page', () => {
 
     it('a currency with no decimals is shown without them', async () => {
       const shop = createFakeShop();
-      shop.on('GET', `/v1/public/events/${SLUG}/ticket-types`, () => json(200, { data: [pass({ currency: 'JPY', allInMinor: 3000 })] }));
+      shop.on('GET', `/v1/public/events/${SLUG}/ticket-types`, () =>
+        json(200, { data: [pass({ currency: 'JPY', allInMinor: 3000 })] }),
+      );
       await renderApp(open(), { shop, locale: 'ja' });
       const price = await screen.findByTestId('pass-price-pass-general');
       expect(price).toHaveTextContent('3,000', { exact: false });

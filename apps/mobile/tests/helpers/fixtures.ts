@@ -44,7 +44,10 @@ export const PASSES: Schemas['PublicTicketType'][] = [
   pass({ id: 'pass-vip', name: 'VIP table', allInMinor: 9000, maxPerOrder: 2, fewLeft: true }),
 ];
 
-export const summary = (n: number, over: Partial<Schemas['PublicEventSummary']> = {}): Schemas['PublicEventSummary'] => ({
+export const summary = (
+  n: number,
+  over: Partial<Schemas['PublicEventSummary']> = {},
+): Schemas['PublicEventSummary'] => ({
   category: 'music',
   city: 'Lisbon',
   country: 'PT',
@@ -93,7 +96,10 @@ export const order = (over: Partial<Schemas['MyOrder']> = {}): Schemas['MyOrder'
   ...over,
 });
 
-export const orderSummary = (n: number, over: Partial<Schemas['MyOrderSummary']> = {}): Schemas['MyOrderSummary'] => ({
+export const orderSummary = (
+  n: number,
+  over: Partial<Schemas['MyOrderSummary']> = {},
+): Schemas['MyOrderSummary'] => ({
   createdAt: '2027-06-01T10:00:00Z',
   currency: 'EUR',
   endsAt: EVENT.endsAt,

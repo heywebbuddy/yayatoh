@@ -10,8 +10,13 @@ import {
 } from '@yayatoh/mobile-core';
 import type { ReactElement } from 'react';
 import { catalogs } from '../../src/i18n';
-import { type NearMeResult, type ShopPorts, ShopPortsProvider, type BrowserOutcome } from '../../src/shop/ports';
-import { type FakeShop, createFakeShop } from './fake-shop';
+import {
+  type BrowserOutcome,
+  type NearMeResult,
+  type ShopPorts,
+  ShopPortsProvider,
+} from '../../src/shop/ports';
+import { createFakeShop, type FakeShop } from './fake-shop';
 import { WEB } from './fixtures';
 
 jest.mock('expo-network', () => ({
@@ -30,6 +35,8 @@ export interface FakePorts extends ShopPorts {
     openExternal: jest.Mock<Promise<void>, [string]>;
     dismiss: jest.Mock<Promise<void>, []>;
   };
+  /** Replaceable per test: how the checkout waits between reads of an order. */
+  wait: ShopPorts['wait'];
   readonly links: { resolveShortCode: jest.Mock<Promise<string | null>, [string, string]> };
   readonly keys: string[];
 }
@@ -40,10 +47,12 @@ export function createFakePorts(now = new Date(2027, 4, 5, 12, 0)): FakePorts {
   return {
     keys,
     location: {
-      requestNearMe: jest.fn(async (): Promise<NearMeResult> => ({
-        status: 'granted',
-        near: { lat: 38.722252, lng: -9.139337 },
-      })),
+      requestNearMe: jest.fn(
+        async (): Promise<NearMeResult> => ({
+          status: 'granted',
+          near: { lat: 38.722252, lng: -9.139337 },
+        }),
+      ),
       openSettings: jest.fn(async () => {}),
     },
     browser: {
@@ -66,7 +75,12 @@ export function createFakePorts(now = new Date(2027, 4, 5, 12, 0)): FakePorts {
   };
 }
 
-export const USER = { id: '00000000-0000-4000-8000-0000000000aa', email: 'ada@example.test', emailVerified: true, name: 'Ada' };
+export const USER = {
+  id: '00000000-0000-4000-8000-0000000000aa',
+  email: 'ada@example.test',
+  emailVerified: true,
+  name: 'Ada',
+};
 
 export interface App {
   readonly core: Core;
@@ -99,7 +113,12 @@ export async function renderApp(ui: ReactElement, options: RenderOptions = {}) {
     identity: { app: 'mobile', platform: 'ios', version: '1.0.0', build: '1' },
     apiBaseUrl: `${WEB}/api/v1`,
     catalogs,
-    adapters: { storage, files: memoryFileStore(), random: (n) => new Uint8Array(randomBytes(n)), fetch: shop.fetch },
+    adapters: {
+      storage,
+      files: memoryFileStore(),
+      random: (n) => new Uint8Array(randomBytes(n)),
+      fetch: shop.fetch,
+    },
   });
   built.push(core);
   core.queryClient.setDefaultOptions({
@@ -129,7 +148,10 @@ export async function renderApp(ui: ReactElement, options: RenderOptions = {}) {
 export const t = (locale: keyof typeof catalogs, path: string): string => {
   const value = path
     .split('.')
-    .reduce<unknown>((tree, key) => (tree as Record<string, unknown> | undefined)?.[key], messagesFor(catalogs, locale));
+    .reduce<unknown>(
+      (tree, key) => (tree as Record<string, unknown> | undefined)?.[key],
+      messagesFor(catalogs, locale),
+    );
   if (typeof value !== 'string') throw new Error(`No string at ${path} in ${locale}`);
   return value;
 };

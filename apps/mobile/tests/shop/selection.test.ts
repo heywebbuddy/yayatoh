@@ -92,14 +92,18 @@ describe('the cart', () => {
     expect(cartIssues(passes, {}, none, false)).toEqual([{ kind: 'empty' }]);
     expect(cartIssues(passes, { p1: 1 }, none, false)).toEqual([]);
     expect(cartIssues(passes, { gone: 1 }, none, false)).toEqual([{ kind: 'unavailable', passId: 'gone' }]);
-    expect(cartIssues(passes, { p2: 3 }, none, false)).toEqual([{ kind: 'above_maximum', passId: 'p2', maximum: 2 }]);
+    expect(cartIssues(passes, { p2: 3 }, none, false)).toEqual([
+      { kind: 'above_maximum', passId: 'p2', maximum: 2 },
+    ]);
     expect(cartIssues([pass({ minPerOrder: 2 })], { p1: 1 }, none, false)).toEqual([
       { kind: 'below_minimum', passId: 'p1', minimum: 2 },
     ]);
     expect(cartIssues([pass({ availability: 'sold_out' })], { p1: 1 }, none, false)).toEqual([
       { kind: 'unavailable', passId: 'p1' },
     ]);
-    expect(cartIssues(passes, { p1: 1 }, new Set(['p1']), false)).toEqual([{ kind: 'web_only', passId: 'p1' }]);
+    expect(cartIssues(passes, { p1: 1 }, new Set(['p1']), false)).toEqual([
+      { kind: 'web_only', passId: 'p1' },
+    ]);
     expect(cartIssues(passes, { p1: 1 }, none, true)).toEqual([{ kind: 'web_only', passId: 'p1' }]);
   });
 

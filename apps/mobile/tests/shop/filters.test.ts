@@ -11,7 +11,14 @@ describe('the search query', () => {
       { q: '  jazz  ', category: 'music', range: { from: '2027-05-01', to: '2027-05-31' }, near: null },
       'abc',
     );
-    expect(q).toEqual({ limit: PAGE_SIZE, q: 'jazz', category: 'music', from: '2027-05-01', to: '2027-05-31', cursor: 'abc' });
+    expect(q).toEqual({
+      limit: PAGE_SIZE,
+      q: 'jazz',
+      category: 'music',
+      from: '2027-05-01',
+      to: '2027-05-31',
+      cursor: 'abc',
+    });
   });
 
   it('sends a position rounded to about a kilometre, with the radius', () => {
