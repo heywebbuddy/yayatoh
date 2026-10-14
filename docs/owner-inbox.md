@@ -1094,3 +1094,10 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **Pinned to Expo's list:** `@sentry/react-native` is `~7.11.0` because `npx expo install --check` for SDK 57 asks for it (npm's newest is 8.x).
 - [ ] **Version policy:** the update screen is a hard block below the app's `minimumVersion` and a dismissible nudge below `latestVersion`; a failed config check never blocks. The cache keeps data for 7 days.
 
+## M7.2f — browse and checkout API (2026-10-14, pending owner; labels `payments`, `mobile-contract`, `db-migration`)
+- [ ] **Approval before main (`payments`, `mobile-contract`):** `GET /v1/public/events` and `POST /v1/public/events/{slug}/checkout` (additions only), `CreatePaymentInput.cancelUrl` (Stripe `cancel_url`), and one SECURITY DEFINER search function (`0174_public_event_search.sql`). Fake provider only in the build; nothing was run against Stripe.
+- [ ] **Which carts finish on the web (P7-7), as built:** checkout questions, seat selection, registration types (approvals, groups, guests), a pass with a transfer fee, and choose-your-amount passes. Say if a transfer fee should instead be shown in the app and accepted there, or if optional-only questions should be asked in the app.
+- [ ] **Return links:** the hosted payment page returns to `{MobileSettings.baseUrls.web}/events/{slug}?checkout=return|cancelled&order={id}` (app.yayatoh.com by default, a path the apps claim). The web event page ignores those parameters; a phone without the app shows the event page. Confirm you want the app (not a separate `/app/return` page) to read them.
+- [ ] **Search source:** the apps' search uses the public read model directly (exact keyset paging, works before a Meilisearch account exists). Free text is substring match; typo tolerance and facets wait for the Meilisearch index.
+- [ ] **Country rule skipped for the app** (no geo header); the velocity and payment-failure rules apply as on the web.
+- [ ] **Device pass:** pay on Stripe test mode in the secure in-app browser and land back in the app; cancel path.

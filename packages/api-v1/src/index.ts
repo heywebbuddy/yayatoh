@@ -353,11 +353,14 @@ export function createV1(deps: V1Deps) {
     return meScope(c, next);
   });
 
+  v1.use('/public/events/:slug/checkout', meScope);
+
   v1.route('/', health);
   v1.route('/', authRoutes(deps, limiter, clientIp));
   // M7.2c: the person's phones for push (`/me/devices`, behind the `/me` scope).
   v1.route('/', deviceRoutes(deps));
-  v1.route('/', publicRoutes());
+  // M7.2f: public event search and the apps' checkout (a signed-in person, like `/me/…`).
+  v1.route('/', publicRoutes(deps, limiter, clientIp, credentialKey));
   v1.route('/', contentRoutes(deps));
   v1.route('/', orgRoutes(deps));
   v1.route(

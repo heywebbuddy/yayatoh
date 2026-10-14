@@ -1,12 +1,12 @@
-import type { TenantTx } from '@yayatoh/db';
+import { type TenantTx, withTenant } from '@yayatoh/db';
 import { eventDeliveryTx } from '@yayatoh/events';
-import { DomainError, requireOrg } from '@yayatoh/kernel';
+import { createCtx, DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { sessionsOf } from '@yayatoh/program';
 import { ticketTypeNamesTx } from '@yayatoh/ticketing';
 import { and, eq, gte, lt, sql } from 'drizzle-orm';
 import { z } from 'zod';
-import { ACCESS_MODES, type AccessMode, effectiveAccess } from './domain/access.ts';
+import { ACCESS_MODES, type AccessMode, effectiveAccess, mayWatch } from './domain/access.ts';
 import {
   INGESTS,
   StreamDto,
@@ -62,6 +62,27 @@ export async function accessChoicesTx(tx: TenantTx, eventId: string): Promise<Ma
     .from(ticketAccess)
     .where(eq(ticketAccess.eventId, eventId));
   return new Map(rows.map((r) => [r.ticketTypeId, r.access as AccessMode]));
+}
+
+/**
+ * Which of these ticket types give access to the event's stream (virtual or both; every ticket of
+ * an online event unless the organizer chose otherwise). Apple requires in-app purchase for live
+ * one-to-many services, so the mobile apps never sell them (M7.2f, P7-7). Server-side only: the
+ * org comes from the event, never from a request.
+ */
+export async function streamingTicketTypeIds(
+  orgId: string,
+  eventId: string,
+  ticketTypeIds: readonly string[],
+): Promise<string[]> {
+  if (ticketTypeIds.length === 0) return [];
+  const ctx = createCtx({ orgId, actor: { type: 'system', name: 'virtual.app-checkout' } });
+  return withTenant(ctx, async (tx) => {
+    const ev = await eventDeliveryTx(tx, eventId);
+    if (!ev) return [];
+    const chosen = await accessChoicesTx(tx, eventId);
+    return ticketTypeIds.filter((id) => mayWatch(effectiveAccess(ev.attendanceMode, chosen.get(id) ?? null)));
+  });
 }
 
 async function ticketAccessListTx(tx: TenantTx, eventId: string): Promise<TicketAccessDto[]> {

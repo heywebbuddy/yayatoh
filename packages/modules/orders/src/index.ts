@@ -26,12 +26,16 @@ export { BuyerOrderDto, buyerOrdersInOrg } from './buyer.ts';
 export { PAYMENT_METHODS, recordBoxOfficeSaleCommand } from './commands/box-office.ts';
 export { ticketCancelAction, ticketCancelBulk } from './commands/cancel-tickets.ts';
 export {
+  AppCheckoutInput,
+  AppCheckoutResultDto,
   applyProviderEventCommand,
   attachPaymentCommand,
   checkoutRiskSignals,
+  checkoutRiskSignalsTx,
   expireOrdersCommand,
   hashManageToken,
   recordCheckoutBlockCommand,
+  startAppCheckoutCommand,
   startCheckoutCommand,
   startCheckoutTx,
 } from './commands/checkout.ts';
