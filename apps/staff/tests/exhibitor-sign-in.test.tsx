@@ -1,19 +1,17 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react-native';
-import { messagesFor } from '@yayatoh/mobile-core';
 import ExhibitorSignIn from '../src/app/sign-in/exhibitor';
 import { catalogs } from '../src/i18n';
 import { problem } from './helpers/fake-door';
 import { CHALLENGE, INVITE, inviteLink, type Portal, portal, portalHandler } from './helpers/portal-mock';
 import { type App, buildApp, missingMessages, renderApp, settle, shownTexts } from './helpers/render';
 import { resetRouter, router } from './helpers/router-mock';
+import { shared } from './helpers/shared';
 
 jest.mock('expo-router', () => require('./helpers/router-mock'));
 jest.mock('expo-localization', () => ({ getLocales: () => [{ languageTag: 'en-US' }] }));
 
 const en = catalogs.en;
 const x = en.exhibitor;
-const shared = (locale: 'en' | 'ar') =>
-  (messagesFor(catalogs, locale) as unknown as { core: Record<string, any> }).core;
 beforeEach(resetRouter);
 
 function appWith(p: Portal, locale?: string): App {

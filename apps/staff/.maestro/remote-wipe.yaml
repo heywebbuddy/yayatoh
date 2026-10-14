@@ -1,0 +1,38 @@
+# M7.4a: an organizer wipes (or revokes) the device from the console; within one heartbeat (30 s)
+# the app erases its token and data and shows the enrolment screen with the reason. Written, not run
+# in cloud sessions. Device pass: enrol the device (enrol-by-link.yaml), then run this flow and, while
+# it waits, an organizer clicks "Wipe" on that device in the console (Devices); for the revoke case
+# click "Revoke" and set -e REASON=revoked.
+appId: com.yayatoh.staff.preview
+env:
+  ENROL_EVENT: ''
+  ENROL_KEY: ''
+  REASON: 'wiped'
+---
+- launchApp:
+    clearState: true
+- openLink: 'yayatoh-staff-preview://scan#e=${ENROL_EVENT}&k=${ENROL_KEY}'
+- extendedWaitUntil:
+    visible: 'Where is this device scanning?'
+    timeout: 20000
+- tapOn: 'Whole event'
+# Now the organizer wipes or revokes the device. One heartbeat is 30 seconds; allow two.
+- extendedWaitUntil:
+    visible: 'Enrol this device'
+    timeout: 70000
+- runFlow:
+    when:
+      true: ${REASON == 'wiped'}
+    commands:
+      - assertVisible: 'An organizer wiped this device.*'
+- runFlow:
+    when:
+      true: ${REASON == 'revoked'}
+    commands:
+      - assertVisible: 'An organizer removed this device from the event.*'
+# The token is gone: a restart still shows enrolment, and the old key is refused.
+- stopApp
+- launchApp
+- assertVisible: 'Enrol this device'
+- openLink: 'yayatoh-staff-preview://scan#e=${ENROL_EVENT}&k=${ENROL_KEY}'
+- assertVisible: 'This enrolment code is no longer valid.*'
