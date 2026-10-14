@@ -23,6 +23,8 @@ export interface StaffServicesOptions {
   readonly catalogs: CoreOptions['catalogs'];
   readonly adapters: CoreAdapters;
   readonly battery?: () => Promise<number | null>;
+  /** The clock for token expiry and the event window; tests pass a fixed one. */
+  readonly now?: () => number;
   readonly environment?: string;
   readonly sentryDsn?: string;
 }
@@ -52,6 +54,7 @@ export function createStaffServices(options: StaffServicesOptions): StaffService
     apiBaseUrl: options.apiBaseUrl,
     identity: options.identity,
     ...(options.battery ? { battery: options.battery } : {}),
+    ...(options.now ? { now: options.now } : {}),
     ...(options.adapters.fetch ? { fetch: options.adapters.fetch } : {}),
     onUpgradeRequired,
   });
@@ -59,6 +62,7 @@ export function createStaffServices(options: StaffServicesOptions): StaffService
     storage: core.storage,
     apiBaseUrl: options.apiBaseUrl,
     identity: options.identity,
+    ...(options.now ? { now: options.now } : {}),
     ...(options.adapters.fetch ? { fetch: options.adapters.fetch } : {}),
     onUpgradeRequired,
   });

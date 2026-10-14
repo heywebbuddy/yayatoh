@@ -1,9 +1,11 @@
-# Smoke flow (M7.1b): the preview build opens on the placeholder home screen. Written, not run in
-# cloud sessions (no simulator); the device pass runs it with `maestro test apps/staff/.maestro`
-# against a preview build (a development build opens the dev launcher first).
+# Smoke flow (M7.1b, updated by M7.4a): a fresh install opens on enrolment. Written, not run in cloud
+# sessions (no simulator); the device pass runs it with `maestro test apps/staff/.maestro` against a
+# preview build (a development build opens the dev launcher first).
 appId: com.yayatoh.staff.preview
 ---
 - launchApp:
     clearState: true
-- assertVisible: 'Yayatoh Staff'
-- assertVisible: 'Door tools for event day are coming soon.'
+- assertVisible: 'Enrol this device'
+- assertVisible: 'Scan the enrolment QR code'
+- assertVisible: 'Event organizer: sign in'
+- assertVisible: 'Exhibitor: sign in'

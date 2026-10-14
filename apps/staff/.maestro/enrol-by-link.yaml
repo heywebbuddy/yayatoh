@@ -1,0 +1,25 @@
+# M7.4a: a door device enrols by opening the enrolment link (the QR code's link). Written, not run in
+# cloud sessions (no simulator). Device pass: a preview build against a seeded environment, with
+#   maestro test -e ENROL_EVENT=<event id> -e ENROL_KEY=<yyd_ token of a fresh device> \
+#     apps/staff/.maestro/enrol-by-link.yaml
+# The key is in the link's fragment: it never reaches a server log, and the app never logs it.
+appId: com.yayatoh.staff.preview
+env:
+  ENROL_EVENT: ''
+  ENROL_KEY: ''
+---
+- launchApp:
+    clearState: true
+- assertVisible: 'Enrol this device'
+- assertVisible: 'Scan the enrolment QR code'
+# The universal link opens the app on the enrolment screen, which proves the key and keeps it in the keychain.
+- openLink: 'yayatoh-staff-preview://scan#e=${ENROL_EVENT}&k=${ENROL_KEY}'
+- extendedWaitUntil:
+    visible: 'Where is this device scanning?'
+    timeout: 20000
+- assertVisible: 'Whole event'
+# A wrong link is refused with its message and changes nothing.
+- launchApp:
+    clearState: true
+- openLink: 'yayatoh-staff-preview://scan#e=${ENROL_EVENT}&k=yyd_not-a-real-key'
+- assertVisible: "That is not an enrolment link.*"

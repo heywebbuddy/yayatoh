@@ -1,19 +1,17 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react-native';
-import { messagesFor } from '@yayatoh/mobile-core';
 import OrganizerSignIn from '../src/app/sign-in/organizer';
 import { catalogs } from '../src/i18n';
 import { auth, authHandler, tokenPair } from './helpers/auth-mock';
 import { json, problem } from './helpers/fake-door';
 import { type App, buildApp, missingMessages, renderApp, settle, shownTexts } from './helpers/render';
 import { resetRouter, router } from './helpers/router-mock';
+import { shared } from './helpers/shared';
 
 jest.mock('expo-router', () => require('./helpers/router-mock'));
 jest.mock('expo-localization', () => ({ getLocales: () => [{ languageTag: 'en-US' }] }));
 
 const en = catalogs.en;
 const core = en.organizer;
-const shared = (locale: 'en' | 'ar') =>
-  (messagesFor(catalogs, locale) as unknown as { core: Record<string, any> }).core;
 beforeEach(resetRouter);
 
 function appWith(a: ReturnType<typeof auth>, locale?: string): App {

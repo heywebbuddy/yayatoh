@@ -218,6 +218,7 @@ export function Notice({
   ];
   return (
     <View
+      accessible
       accessibilityLiveRegion="polite"
       accessibilityRole="alert"
       style={[styles.notice, { backgroundColor: fill, borderColor: colors.line }]}
