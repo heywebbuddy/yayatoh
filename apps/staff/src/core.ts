@@ -2,9 +2,11 @@ import { type Core, createCore, nativeAdapters, nativeIdentity, readAppExtra } f
 import { batteryPercent } from './device/battery';
 import { createDeviceSession, type DeviceSession } from './device/session';
 import { catalogs } from './i18n';
+import { createPortalSession, type PortalSession } from './portal/session';
 
 let core: Core | undefined;
 let device: DeviceSession | undefined;
+let portal: PortalSession | undefined;
 
 /**
  * The app's one `Core` (session, `/v1` client, query cache, version gate), made on first use so
@@ -45,4 +47,21 @@ export function getDevice(): DeviceSession {
     });
   }
   return device;
+}
+
+/**
+ * The exhibitor rep's portal session (M7.4a): bearer tokens from the emailed invitation and code,
+ * in their own corner of secure storage, apart from an organizer's account session.
+ */
+export function getPortal(): PortalSession {
+  if (!portal) {
+    const { identity, storage, versionGate } = getCore();
+    portal = createPortalSession({
+      storage,
+      apiBaseUrl: readAppExtra().apiBaseUrl,
+      identity,
+      onUpgradeRequired: (info) => void versionGate.upgradeRequired(info),
+    });
+  }
+  return portal;
 }

@@ -2,5 +2,110 @@
   "home": {
     "title": "Yayatoh Staff",
     "tagline": "Gli strumenti per l’ingresso nel giorno dell’evento arriveranno presto."
+  },
+  "enrol": {
+    "title": "Registra questo dispositivo",
+    "intro": "Chiedi all’organizzatore dell’evento di mostrare il codice QR di registrazione dalla console, poi inquadralo qui. Questo dispositivo non richiede un account personale.",
+    "notices": {
+      "revoked": "Un organizzatore ha rimosso questo dispositivo dall’evento. Inquadra un nuovo codice di registrazione per usarlo di nuovo.",
+      "wiped": "Un organizzatore ha cancellato questo dispositivo. Token e dati sono stati eliminati. Inquadra un nuovo codice di registrazione per usarlo di nuovo."
+    },
+    "scan": "Inquadra il codice QR di registrazione",
+    "working": "Verifica della registrazione…",
+    "linkLabel": "Link di registrazione",
+    "linkPlaceholder": "Incolla il link dalla console",
+    "submit": "Registra con questo link",
+    "errors": {
+      "invalid_link": "Questo non è un link di registrazione. Usa il codice QR o il link dalla pagina dei dispositivi dell’evento.",
+      "rejected": "Questo codice di registrazione non è più valido. Chiedine uno nuovo all’organizzatore.",
+      "wrong_event": "Questo codice non è di un evento che questo dispositivo può gestire. Chiedine uno nuovo all’organizzatore.",
+      "unavailable": "Non siamo riusciti a raggiungere Yayatoh. Controlla la connessione e riprova."
+    },
+    "replace": {
+      "title": "Sostituire la registrazione di questo dispositivo?",
+      "body": "Questo dispositivo è registrato per {event}. Registrarlo di nuovo elimina il suo token e tutto ciò che ha salvato per quell’evento.",
+      "thisEvent": "un evento",
+      "confirm": "Cancella e registra di nuovo",
+      "cancel": "Mantieni la registrazione attuale"
+    },
+    "staffPrompt": "Non è un dispositivo per l’ingresso?",
+    "signInOrganizer": "Organizzatore: accedi",
+    "signInExhibitor": "Espositore: accedi",
+    "signInTitle": "Accedi",
+    "backToEnrol": "Torna alla registrazione",
+    "scanner": {
+      "title": "Inquadra il codice di registrazione",
+      "hint": "Punta la fotocamera sul codice QR sullo schermo dell’organizzatore.",
+      "preview": "Vista della fotocamera per inquadrare il codice QR di registrazione",
+      "checking": "Verifica dell’accesso alla fotocamera…",
+      "invalid": "Quel codice QR non è un codice di registrazione. Inquadra quello della pagina dei dispositivi dell’evento.",
+      "useLink": "Inserisci invece il link",
+      "permission": {
+        "title": "L’accesso alla fotocamera è disattivato",
+        "body": "Yayatoh Staff ha bisogno della fotocamera per leggere il codice QR di registrazione. Non viene usata per altro.",
+        "allow": "Consenti l’accesso alla fotocamera",
+        "settingsHint": "L’accesso alla fotocamera è stato disattivato. Apri le impostazioni, consenti la fotocamera a Yayatoh Staff e torna qui.",
+        "settings": "Apri le impostazioni"
+      }
+    }
+  },
+  "device": {
+    "select": {
+      "title": "Dove scansiona questo dispositivo?",
+      "unnamedEvent": "Evento",
+      "dates": "Da {start} a {end}",
+      "unavailable": "Non siamo riusciti a caricare gli ingressi di questo evento. Puoi comunque scansionare per l’intero evento o riprovare.",
+      "prompt": "Scegli l’ingresso in cui scansiona questo dispositivo. Un organizzatore può spostarlo in seguito.",
+      "wholeEvent": "Intero evento",
+      "wholeEventHint": "Scansiona a qualsiasi ingresso",
+      "selectedOption": "{name} (selezionato)",
+      "refused": "Quell’ingresso non è disponibile per questo dispositivo. Scegline un altro.",
+      "continue": "Continua con la scansione",
+      "remove": "Rimuovi questo dispositivo",
+      "removeTitle": "Rimuovere questo dispositivo?",
+      "removeBody": "Questo elimina il token di registrazione e tutto ciò che il dispositivo ha salvato per l’evento. Ti servirà un nuovo codice di registrazione per usarlo di nuovo.",
+      "removeConfirm": "Cancella e rimuovi"
+    }
+  },
+  "organizer": {
+    "about": "Sei un organizzatore? Segui il giorno dell’evento in diretta: check-in, flusso, problemi di scansione e dispositivi.",
+    "open": "Accedi come organizzatore",
+    "title": "Accesso organizzatore",
+    "intro": "Usa il tuo account Yayatoh. La verifica in due passaggi è obbligatoria.",
+    "email": "Indirizzo email",
+    "password": "Password",
+    "continue": "Continua",
+    "codeIntro": "Inserisci il codice della tua app di autenticazione o uno dei tuoi codici di backup.",
+    "code": "Codice di verifica",
+    "verify": "Verifica e accedi",
+    "back": "Indietro",
+    "twoFactorRequired": "L’accesso come organizzatore richiede la verifica in due passaggi. Attivala nella console web, poi accedi di nuovo qui.",
+    "errors": {
+      "emailInvalid": "Inserisci un indirizzo email valido.",
+      "passwordRequired": "Inserisci la tua password.",
+      "codeRequired": "Inserisci il codice di verifica."
+    }
+  },
+  "exhibitor": {
+    "about": "Sei un espositore? Raccogli contatti al tuo stand con l’invito che hai ricevuto via email.",
+    "open": "Accedi come espositore",
+    "title": "Accesso espositore",
+    "intro": "Apri l’email di invito e incolla qui il suo link. Invieremo un codice di sei cifre all’indirizzo invitato.",
+    "inviteLabel": "Link di invito",
+    "invitePlaceholder": "Incolla il link dell’email di invito",
+    "sendCode": "Inviami un codice via email",
+    "codeIntro": "Abbiamo inviato un codice di sei cifre all’indirizzo con cui sei stato invitato. Vale 10 minuti.",
+    "codeLabel": "Codice di sei cifre",
+    "verify": "Verifica e accedi",
+    "resend": "Invia un altro codice",
+    "back": "Indietro",
+    "errors": {
+      "inviteInvalid": "Questo non è un link di invito. Copia il link dalla tua email di invito.",
+      "invalidInvite": "Questo invito non può essere usato. Potrebbe essere scaduto o sostituito: chiedi all’organizzatore di inviarlo di nuovo.",
+      "codeInvalid": "Inserisci le sei cifre dell’email.",
+      "codeRejected": "Quel codice non può più essere usato. Chiedine uno nuovo.",
+      "wrongCode": "Quel codice non è corretto. Controllalo e riprova.",
+      "wrongCodeAttempts": "Quel codice non è corretto. {count, plural, one {Resta # tentativo.} other {Restano # tentativi.}}"
+    }
   }
 }
