@@ -9,41 +9,41 @@ env:
 - runFlow: sign-in-seeded.yaml
 - stopApp
 # Send it now from a second terminal: .maestro/send-push.sh order-confirmed
-- extendedWaitUntil: { visible: \"Summit 2026\", timeout: 60000 }
+- extendedWaitUntil: { visible: "Summit 2026", timeout: 60000 }
 - tapOn: "Summit 2026"
 - assertVisible: "Order"
 - stopApp
 # Send it now from a second terminal: .maestro/send-push.sh ticket-received
-- extendedWaitUntil: { visible: \"Summit 2026\", timeout: 60000 }
+- extendedWaitUntil: { visible: "Summit 2026", timeout: 60000 }
 - tapOn: "Summit 2026"
 - assertVisible: "Ticket QR code"
 - stopApp
 # Send it now from a second terminal: .maestro/send-push.sh transfer-accepted
-- extendedWaitUntil: { visible: \"Summit 2026\", timeout: 60000 }
+- extendedWaitUntil: { visible: "Summit 2026", timeout: 60000 }
 - tapOn: "Summit 2026"
 - assertVisible: "Order"
 - stopApp
 # Send it now from a second terminal: .maestro/send-push.sh transfer-cancelled
-- extendedWaitUntil: { visible: \"Summit 2026\", timeout: 60000 }
+- extendedWaitUntil: { visible: "Summit 2026", timeout: 60000 }
 - tapOn: "Summit 2026"
 - assertVisible: "Ticket QR code"
 - stopApp
 # Send it now from a second terminal: .maestro/send-push.sh event-changed
-- extendedWaitUntil: { visible: \"Summit 2026\", timeout: 60000 }
+- extendedWaitUntil: { visible: "Summit 2026", timeout: 60000 }
 - tapOn: "Summit 2026"
 - assertVisible: "Summit"
 - stopApp
 # Send it now from a second terminal: .maestro/send-push.sh event-cancelled
-- extendedWaitUntil: { visible: \"Summit 2026\", timeout: 60000 }
+- extendedWaitUntil: { visible: "Summit 2026", timeout: 60000 }
 - tapOn: "Summit 2026"
 - assertVisible: "Summit"
 - stopApp
 # Send it now from a second terminal: .maestro/send-push.sh reminder-24h
-- extendedWaitUntil: { visible: \"Summit 2026\", timeout: 60000 }
+- extendedWaitUntil: { visible: "Summit 2026", timeout: 60000 }
 - tapOn: "Summit 2026"
 - assertVisible: "Ticket QR code"
 - stopApp
 # Send it now from a second terminal: .maestro/send-push.sh reminder-2h
-- extendedWaitUntil: { visible: \"Summit 2026\", timeout: 60000 }
+- extendedWaitUntil: { visible: "Summit 2026", timeout: 60000 }
 - tapOn: "Summit 2026"
 - assertVisible: "Ticket QR code"

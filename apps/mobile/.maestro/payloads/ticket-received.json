@@ -1,1 +1,4 @@
-{ "aps": { "alert": { "title": "Summit 2026", "body": "A ticket was sent to you" } }, "path": "/tickets/${TICKET_ID}" }
+{
+  "aps": { "alert": { "title": "Summit 2026", "body": "A ticket was sent to you" } },
+  "path": "/tickets/${TICKET_ID}"
+}

@@ -1,1 +1,4 @@
-{ "aps": { "alert": { "title": "Summit 2026", "body": "This event was cancelled" } }, "path": "/events/${EVENT_SLUG}" }
+{
+  "aps": { "alert": { "title": "Summit 2026", "body": "This event was cancelled" } },
+  "path": "/events/${EVENT_SLUG}"
+}

@@ -1,1 +1,4 @@
-{ "aps": { "alert": { "title": "Summit 2026", "body": "Starts in 2 hours" } }, "path": "/tickets/${TICKET_ID}" }
+{
+  "aps": { "alert": { "title": "Summit 2026", "body": "Starts in 2 hours" } },
+  "path": "/tickets/${TICKET_ID}"
+}

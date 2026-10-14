@@ -8,7 +8,7 @@ env:
     permissions: { notifications: allow }
 - runFlow: sign-in-seeded.yaml
 # Send it now from a second terminal: .maestro/send-push.sh event-changed
-- extendedWaitUntil: { visible: \"Summit 2026\", timeout: 60000 }
+- extendedWaitUntil: { visible: "Summit 2026", timeout: 60000 }
 - assertVisible: "Summit 2026"
 - assertVisible: "The start time changed"
 # No personal data on the banner.
