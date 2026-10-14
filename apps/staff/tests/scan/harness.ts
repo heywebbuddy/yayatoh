@@ -3,6 +3,9 @@
  * database uses, a fake server with the real server's first-wins rule, and signed event fixtures.
  */
 import { createHash } from 'node:crypto';
+import { existsSync, mkdtempSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
 import {
   MANIFEST_VERSION,
@@ -17,6 +20,7 @@ import {
   type ManifestRequest,
   type ScanApi,
   ScanAuthError,
+  ScanRejectedError,
 } from '../../src/scan/api';
 import { type ScanDb, type SqliteHandle, type SqliteModule, wrapHandle } from '../../src/scan/db';
 import { ScanEngine, type EngineDeps } from '../../src/scan/engine';
@@ -36,15 +40,16 @@ export function nodeHandle(path = ':memory:'): SqliteHandle {
 
 export const memoryDb = (): ScanDb => wrapHandle(nodeHandle());
 
-/** A stand-in for `expo-sqlite` over Node's SQLite, keeping databases by name. */
+/** A stand-in for `expo-sqlite` over Node's SQLite, with real files so a reopen sees the same data. */
 export function fakeSqlite() {
+  const dir = mkdtempSync(join(tmpdir(), 'yy-scan-'));
   const opened: string[] = [];
   const deleted: string[] = [];
   const statements: string[] = [];
   const module: SqliteModule = {
     async openDatabaseAsync(name) {
       opened.push(name);
-      const handle = nodeHandle();
+      const handle = nodeHandle(join(dir, name));
       return {
         ...handle,
         execAsync: async (sql) => {
@@ -55,9 +60,10 @@ export function fakeSqlite() {
     },
     async deleteDatabaseAsync(name) {
       deleted.push(name);
+      for (const suffix of ['', '-wal', '-shm']) rmSync(join(dir, name + suffix), { force: true });
     },
   };
-  return { module, opened, deleted, statements };
+  return { module, opened, deleted, statements, exists: (name: string) => existsSync(join(dir, name)) };
 }
 
 // --- the event -------------------------------------------------------------------------------
@@ -125,6 +131,15 @@ export function row(n: number, over: Partial<ManifestRow> = {}): ManifestRow {
 export const signedCode = (n: number, rev = 0) =>
   signTicketCode({ kid: 1, ticketId: ticketId(n), rev }, ORG.privateKey);
 
+/** A ticket id issued `afterMs` after the last manifest sync (so it is not in the manifest). */
+export const lateTicketId = (afterMs = 60_000) =>
+  `${(SYNC_MS + afterMs)
+    .toString(16)
+    .padStart(12, '0')
+    .replace(/^(.{8})(.{4})$/, '$1-$2')}-7000-8000-0000000000ff`;
+export const signedLate = (afterMs?: number) =>
+  signTicketCode({ kid: 1, ticketId: lateTicketId(afterMs), rev: 0 }, ORG.privateKey);
+
 // --- the fake server -------------------------------------------------------------------------
 
 export interface FakeServerOptions {
@@ -182,7 +197,6 @@ export class FakeServer {
   private async sync(scans: readonly QueuedScan[]): Promise<SyncResponse> {
     this.gate();
     this.batches.push(scans.length);
-    const { ScanRejectedError } = await import('../../src/scan/api');
     if (scans.some((s) => this.poison.has(s.scanId))) throw new ScanRejectedError(422);
     const corrected = (s: QueuedScan) => Date.parse(s.deviceTs) + s.clockOffsetMs;
     const ordered = [...scans].sort((a, b) => corrected(a) - corrected(b));

@@ -6,7 +6,8 @@
  * file is encrypted with a random 256-bit key that lives only in the keychain (`expo-secure-store`,
  * this device only). Deleting the key makes the file unreadable even if a copy of it survives.
  */
-import type { KeyValueStore, RandomBytes } from '@yayatoh/mobile-core';
+import type { KeyValueStore } from '@yayatoh/mobile-core';
+import type { RandomBytes } from './types';
 
 export type SqlValue = string | number | null;
 
@@ -48,7 +49,7 @@ const HEX_KEY = /^[0-9a-f]{64}$/;
 export async function scanDbKey(storage: KeyValueStore, random: RandomBytes): Promise<string> {
   const stored = await storage.get(DB_KEY_NAME);
   if (stored && HEX_KEY.test(stored)) return stored;
-  const key = Array.from(random(32), (b) => b.toString(16).padStart(2, '0')).join('');
+  const key = Array.from(random(32), (b: number) => b.toString(16).padStart(2, '0')).join('');
   await storage.set(DB_KEY_NAME, key);
   return key;
 }

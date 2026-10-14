@@ -92,3 +92,6 @@ export interface SyncResponse {
   }[];
   readonly duplicatesOffline: number;
 }
+
+/** Fills a buffer with cryptographically secure random bytes (`expo-crypto` on a phone). */
+export type RandomBytes = (length: number) => Uint8Array;

@@ -12,6 +12,8 @@ import type { AdmissionInfo, Direction, FlaggedScan, OutboxEntry } from './types
 
 export const SCHEMA_VERSION = 1;
 
+const TABLES = ['manifest_rows', 'admissions', 'in_room', 'door_log', 'outbox', 'flags', 'meta'] as const;
+
 const SCHEMA = `
 CREATE TABLE IF NOT EXISTS meta (k TEXT PRIMARY KEY NOT NULL, v TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS manifest_rows (
@@ -120,6 +122,13 @@ export class ScanStore {
   async loadRows(): Promise<ManifestRow[]> {
     const rows = await this.db.all<{ json: string }>('SELECT json FROM manifest_rows');
     return rows.map((r) => JSON.parse(r.json) as ManifestRow);
+  }
+
+  /** Every table emptied, in one transaction: the guest list, the queue, the flags, the lot. */
+  async clearAll(): Promise<void> {
+    await this.db.transaction(async () => {
+      for (const table of TABLES) await this.db.run(`DELETE FROM ${table}`);
+    });
   }
 
   async clearManifest(): Promise<void> {

@@ -4,7 +4,7 @@
  * Random bytes come from the injected source (`expo-crypto` on a phone): Hermes has no
  * `crypto.getRandomValues` to rely on.
  */
-import type { RandomBytes } from '@yayatoh/mobile-core';
+import type { RandomBytes } from './types';
 
 export function uuidv7(random: RandomBytes, now: number): string {
   const b = Uint8Array.from(random(16));

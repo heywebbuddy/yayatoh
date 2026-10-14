@@ -24,7 +24,7 @@ import {
   offlineVerdict,
   verifyManifestScope,
 } from '@yayatoh/checkin-engine';
-import type { RandomBytes } from '@yayatoh/mobile-core';
+import type { RandomBytes } from './types';
 import { ScanAuthError, type ScanApi, ScanRejectedError, ScanSyncError } from './api';
 import { backoffMs } from './backoff';
 import { uuidv7 } from './ids';
@@ -254,11 +254,7 @@ export class ScanEngine {
   /** Remote wipe or expiry: forget the manifest, the queue and everything else in memory and in the tables. */
   async clearAll(): Promise<void> {
     await this.serial(async () => {
-      const { store } = this.deps;
-      await store.db.transaction(async () => {
-        for (const table of ['manifest_rows', 'admissions', 'in_room', 'door_log', 'outbox', 'flags', 'meta'])
-          await store.db.run(`DELETE FROM ${table}`);
-      });
+      await this.deps.store.clearAll();
       this.header = null;
       this.cursor = null;
       this.lastSync = null;
