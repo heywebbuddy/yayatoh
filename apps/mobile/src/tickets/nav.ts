@@ -13,6 +13,7 @@ export const hrefs = {
   ticket: (id: string): Href => href({ pathname: ROUTES.ticket, params: { id } }),
   transfer: (id: string): Href => href({ pathname: '/tickets/[id]/transfer', params: { id } }),
   refund: (id: string): Href => href({ pathname: '/tickets/[id]/refund', params: { id } }),
+  ticketLink: (token: string): Href => href({ pathname: ROUTES.ticketLink, params: { token } }),
   claim: (token: string): Href => href({ pathname: ROUTES.claim, params: { token } }),
   /** The Discover tab (M7.3c). */
   discover: (): Href => href('/discover'),

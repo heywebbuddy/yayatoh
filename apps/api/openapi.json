@@ -3628,6 +3628,22 @@
           null
         ]
       },
+      "TicketLinkTickets": {
+        "type": "object",
+        "properties": {
+          "ticketIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The active tickets of the link’s event that the signed-in person holds, in ticket-number order. Open each with `GET /me/tickets/{id}`."
+          }
+        },
+        "required": [
+          "ticketIds"
+        ]
+      },
       "TicketTransferResult": {
         "type": "object",
         "properties": {
@@ -11840,6 +11856,100 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/MyTicket"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not modified: `If-None-Match` matched the `ETag`"
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/me/ticket-links/{token}": {
+      "get": {
+        "operationId": "getMyTicketLink",
+        "tags": [
+          "me"
+        ],
+        "summary": "Which of my tickets a web ticket link opens",
+        "description": "The “My tickets” link in an order email names one event and the address it was sent to. For the signed-in person that address belongs to, this returns the ids of their active tickets for that event, so the app can open the ticket after sign-in. For an unknown or expired link, or when the link was sent to a different address, the answer is a `404` and nothing about the link is shown. Ticket codes in the link are never returned.",
+        "security": [
+          {
+            "bearerSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 10,
+              "maxLength": 300,
+              "description": "The token of a web “My tickets” link"
+            },
+            "required": true,
+            "description": "The token of a web “My tickets” link",
+            "name": "token",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The tickets the link opens",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TicketLinkTickets"
                 }
               }
             }

@@ -1,6 +1,7 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi';
 import { withTenant } from '@yayatoh/db';
-import { createCtx, DomainError, executeCommand, executeQuery } from '@yayatoh/kernel';
+import { normalizeEmail } from '@yayatoh/crm';
+import { createCtx, DomainError, executeCommand, executeQuery, isDomainError } from '@yayatoh/kernel';
 import { guestOrders, myOrderDetail, myOrderRefundTarget, requestRefundCommand } from '@yayatoh/orders';
 import { organizationNameTx } from '@yayatoh/tenancy';
 import {
@@ -9,6 +10,8 @@ import {
   claimDetailsQuery,
   claimTicketForPersonCommand,
   fakeWalletPassProvider,
+  holderContext,
+  holderTicketsQuery,
   holderWalletPassTx,
   issueAppHolderLinkCommand,
   markWalletPassesPushedTx,
@@ -27,6 +30,7 @@ import {
   MyTicket,
   MyTicketPage,
   RefundRequestInput,
+  TicketLinkTickets,
   TicketTransferResult,
   TransferTicketRequest,
   WalletPassLink,
@@ -79,6 +83,13 @@ const ClaimParams = z.object({
     .max(200)
     .openapi({ param: { name: 'token', in: 'path' }, description: 'The claim link’s token' }),
 });
+const TicketLinkParams = z.object({
+  token: z
+    .string()
+    .min(10)
+    .max(300)
+    .openapi({ param: { name: 'token', in: 'path' }, description: 'The token of a web “My tickets” link' }),
+});
 const TicketWhen = z.enum(['upcoming', 'past']).openapi('TicketWhen', {
   description: '`upcoming`: not yet over, soonest first. `past`: over, latest first.',
 });
@@ -113,6 +124,18 @@ const routes = {
     security: userSecurity,
     request: { params: TicketParams },
     responses: { 200: json(MyTicket, 'The ticket'), ...notModified, ...problems },
+  }),
+  ticketLink: createRoute({
+    method: 'get',
+    path: '/me/ticket-links/{token}',
+    operationId: 'getMyTicketLink',
+    tags: ['me'],
+    summary: 'Which of my tickets a web ticket link opens',
+    description:
+      'The “My tickets” link in an order email names one event and the address it was sent to. For the signed-in person that address belongs to, this returns the ids of their active tickets for that event, so the app can open the ticket after sign-in. For an unknown or expired link, or when the link was sent to a different address, the answer is a `404` and nothing about the link is shown. Ticket codes in the link are never returned.',
+    security: userSecurity,
+    request: { params: TicketLinkParams },
+    responses: { 200: json(TicketLinkTickets, 'The tickets the link opens'), ...notModified, ...problems },
   }),
   startTransfer: createRoute({
     method: 'post',
@@ -283,6 +306,26 @@ export function meRoutes(deps: V1Deps) {
       const found = await personTicket(c.get('me').user.email, c.req.valid('param').id);
       if (!found) throw new DomainError('not_found', 'Ticket not found');
       return cachedJson(c, detailWire(c, found), PRIVATE_CACHE);
+    })
+    .openapi(routes.ticketLink, async (c) => {
+      const me = c.get('me');
+      const notFound = () => new DomainError('not_found', 'This link is not valid');
+      const holder = await holderContext(c.req.valid('param').token);
+      if (!holder) throw notFound();
+      const data = await executeQuery(holderTicketsQuery, { linkId: holder.id }, holder.ctx, ports).catch(
+        (err: unknown) => {
+          if (isDomainError(err) && err.code === 'not_found') return null;
+          throw err;
+        },
+      );
+      // The link works for the address it was sent to and nobody else: a different account gets
+      // the same answer as an unknown link.
+      if (!data || normalizeEmail(data.email) !== personKey(me.user.email)) throw notFound();
+      return cachedJson(
+        c,
+        toWire(TicketLinkTickets, { ticketIds: data.tickets.map((t) => t.id) }),
+        PRIVATE_CACHE,
+      );
     })
     .openapi(routes.startTransfer, async (c) => {
       const me = c.get('me');
