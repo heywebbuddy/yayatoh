@@ -1,0 +1,62 @@
+{
+  "common": {
+    "retry": "もう一度試す",
+    "cancel": "キャンセル",
+    "close": "閉じる",
+    "continue": "続ける",
+    "ok": "OK"
+  },
+  "errors": {
+    "generic": "問題が発生しました。もう一度お試しください。",
+    "network": "接続できません。ネットワークを確認して、もう一度お試しください。"
+  },
+  "offline": {
+    "banner": "オフラインです。この端末に保存された内容は引き続き表示できます。",
+    "queued": "{count, plural, other {オンラインに戻ると、#件の変更が送信されます。}}"
+  },
+  "update": {
+    "requiredTitle": "アップデートが必要です",
+    "requiredBody": "このバージョンの{app}はサポートされなくなりました。続けるにはバージョン{minimum}以降にアップデートしてください。",
+    "requiredBodyGeneric": "このバージョンの{app}はサポートされなくなりました。続けるには最新バージョンにアップデートしてください。",
+    "action": "{app}をアップデート",
+    "noStoreLink": "この端末のアプリストアを開いて、{app}をアップデートしてください。",
+    "softTitle": "新しいバージョンがあります",
+    "softBody": "{app}のバージョン{latest}を利用できます。最新の修正と機能のためにアップデートしてください。",
+    "softAction": "アップデート",
+    "softDismiss": "今はしない"
+  },
+  "signIn": {
+    "failed": {
+      "invalid_credentials": "メールアドレスまたはパスワードが正しくありません。",
+      "invalid_code": "コードが正しくありません。確認して、もう一度お試しください。",
+      "too_many_attempts": "誤ったコードが多すぎます。最初からやり直して新しいコードを取得してください。",
+      "invalid_challenge": "この手順の有効期限が切れました。最初からやり直してください。",
+      "invalid_id_token": "サインインを確認できませんでした。もう一度お試しください。",
+      "provider_email_missing": "アカウントからメールアドレスが共有されなかったため、サインインできません。",
+      "provider_email_unverified": "そのアカウントでメールアドレスが確認されていません。確認するか、別の方法でサインインしてください。",
+      "provider_linked_elsewhere": "そのアカウントは、すでに別のYayatohアカウントにリンクされています。",
+      "unknown": "サインインできませんでした。もう一度お試しください。"
+    },
+    "rateLimited": "{minutes, plural, other {試行回数が多すぎます。#分後にもう一度お試しください。}}",
+    "unavailable": "Yayatohに接続できませんでした。接続を確認して、もう一度お試しください。",
+    "unsupported": "このサインイン方法はこの端末では利用できません。"
+  },
+  "stepUp": {
+    "invalid_code": "コードが正しくありません。",
+    "invalid_password": "パスワードが正しくありません。"
+  },
+  "session": {
+    "endedReused": "このサインインが別の端末で使われたため、サインアウトされました。もう一度サインインしてください。",
+    "endedExpired": "セッションが終了しました。もう一度サインインしてください。"
+  },
+  "language": {
+    "label": "言語",
+    "system": "この端末に合わせる"
+  },
+  "theme": {
+    "label": "外観",
+    "system": "この端末に合わせる",
+    "light": "ライト",
+    "dark": "ダーク"
+  }
+}

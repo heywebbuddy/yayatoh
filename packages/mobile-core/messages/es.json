@@ -1,0 +1,62 @@
+{
+  "common": {
+    "retry": "Reintentar",
+    "cancel": "Cancelar",
+    "close": "Cerrar",
+    "continue": "Continuar",
+    "ok": "Aceptar"
+  },
+  "errors": {
+    "generic": "Algo salió mal. Inténtalo de nuevo.",
+    "network": "Sin conexión. Revisa tu red e inténtalo de nuevo."
+  },
+  "offline": {
+    "banner": "Estás sin conexión. Aún puedes ver lo que se guardó en este teléfono.",
+    "queued": "{count, plural, one {# cambio se enviará cuando vuelvas a tener conexión.} many {# de cambios se enviarán cuando vuelvas a tener conexión.} other {# cambios se enviarán cuando vuelvas a tener conexión.}}"
+  },
+  "update": {
+    "requiredTitle": "Actualización necesaria",
+    "requiredBody": "Esta versión de {app} ya no es compatible. Actualiza a la versión {minimum} o posterior para continuar.",
+    "requiredBodyGeneric": "Esta versión de {app} ya no es compatible. Actualiza a la última versión para continuar.",
+    "action": "Actualizar {app}",
+    "noStoreLink": "Abre la tienda de aplicaciones de este teléfono y actualiza {app}.",
+    "softTitle": "Hay una nueva versión disponible",
+    "softBody": "La versión {latest} de {app} está lista. Actualiza para obtener las últimas correcciones y funciones.",
+    "softAction": "Actualizar",
+    "softDismiss": "Ahora no"
+  },
+  "signIn": {
+    "failed": {
+      "invalid_credentials": "Ese correo electrónico o esa contraseña no son correctos.",
+      "invalid_code": "Ese código no es correcto. Revísalo e inténtalo de nuevo.",
+      "too_many_attempts": "Demasiados códigos incorrectos. Empieza de nuevo para recibir un código nuevo.",
+      "invalid_challenge": "Ese paso ha caducado. Empieza de nuevo.",
+      "invalid_id_token": "No pudimos confirmar tu inicio de sesión. Inténtalo de nuevo.",
+      "provider_email_missing": "Tu cuenta no compartió una dirección de correo electrónico, así que no podemos iniciar sesión con ella.",
+      "provider_email_unverified": "Tu correo electrónico no está verificado en esa cuenta. Verifícalo o usa otra forma de iniciar sesión.",
+      "provider_linked_elsewhere": "Esa cuenta ya está vinculada a otra cuenta de Yayatoh.",
+      "unknown": "No pudimos iniciar tu sesión. Inténtalo de nuevo."
+    },
+    "rateLimited": "{minutes, plural, one {Demasiados intentos. Inténtalo de nuevo en # minuto.} many {Demasiados intentos. Inténtalo de nuevo en # de minutos.} other {Demasiados intentos. Inténtalo de nuevo en # minutos.}}",
+    "unavailable": "No pudimos conectar con Yayatoh. Revisa tu conexión e inténtalo de nuevo.",
+    "unsupported": "Ese inicio de sesión no está disponible en este teléfono."
+  },
+  "stepUp": {
+    "invalid_code": "Ese código no es correcto.",
+    "invalid_password": "Esa contraseña no es correcta."
+  },
+  "session": {
+    "endedReused": "Se cerró tu sesión porque este inicio de sesión se usó en otro dispositivo. Vuelve a iniciar sesión.",
+    "endedExpired": "Tu sesión terminó. Vuelve a iniciar sesión."
+  },
+  "language": {
+    "label": "Idioma",
+    "system": "Igual que este teléfono"
+  },
+  "theme": {
+    "label": "Apariencia",
+    "system": "Igual que este teléfono",
+    "light": "Claro",
+    "dark": "Oscuro"
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "common": {
+    "retry": "重试",
+    "cancel": "取消",
+    "close": "关闭",
+    "continue": "继续",
+    "ok": "确定"
+  },
+  "errors": {
+    "generic": "出了点问题，请重试。",
+    "network": "没有网络连接。请检查网络后重试。"
+  },
+  "offline": {
+    "banner": "你已离线。仍可查看此手机上已保存的内容。",
+    "queued": "{count, plural, other {恢复联网后，将发送 # 项更改。}}"
+  },
+  "update": {
+    "requiredTitle": "需要更新",
+    "requiredBody": "此版本的{app}已不再受支持。请更新到 {minimum} 或更高版本以继续使用。",
+    "requiredBodyGeneric": "此版本的{app}已不再受支持。请更新到最新版本以继续使用。",
+    "action": "更新{app}",
+    "noStoreLink": "请在此手机上打开应用商店并更新{app}。",
+    "softTitle": "有新版本可用",
+    "softBody": "{app}的 {latest} 版本已就绪。更新即可获得最新的修复和功能。",
+    "softAction": "更新",
+    "softDismiss": "以后再说"
+  },
+  "signIn": {
+    "failed": {
+      "invalid_credentials": "该邮箱或密码不正确。",
+      "invalid_code": "该验证码不正确。请检查后重试。",
+      "too_many_attempts": "错误的验证码次数过多。请重新开始以获取新的验证码。",
+      "invalid_challenge": "该步骤已过期。请重新开始。",
+      "invalid_id_token": "我们无法确认你的登录。请重试。",
+      "provider_email_missing": "你的账户未提供邮箱地址，因此我们无法用它登录。",
+      "provider_email_unverified": "你的邮箱地址在该账户中尚未验证。请先验证，或使用其他方式登录。",
+      "provider_linked_elsewhere": "该账户已关联到另一个 Yayatoh 账户。",
+      "unknown": "我们无法让你登录。请重试。"
+    },
+    "rateLimited": "{minutes, plural, other {尝试次数过多。请在 # 分钟后重试。}}",
+    "unavailable": "无法连接到 Yayatoh。请检查网络连接后重试。",
+    "unsupported": "此手机上无法使用该登录方式。"
+  },
+  "stepUp": {
+    "invalid_code": "该验证码不正确。",
+    "invalid_password": "该密码不正确。"
+  },
+  "session": {
+    "endedReused": "你已退出登录，因为此登录已在另一台设备上使用。请重新登录。",
+    "endedExpired": "你的会话已结束。请重新登录。"
+  },
+  "language": {
+    "label": "语言",
+    "system": "与此手机一致"
+  },
+  "theme": {
+    "label": "外观",
+    "system": "与此手机一致",
+    "light": "浅色",
+    "dark": "深色"
+  }
+}
