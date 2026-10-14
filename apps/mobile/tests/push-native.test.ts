@@ -195,7 +195,7 @@ describe('+native-intent', () => {
     expect(await path('https://acme.yayatoh.events/events/summit')).toBe('/events/summit?org=acme');
     expect(await path('yayatoh://claim/tok_1234567890')).toBe('/claim/tok_1234567890');
     expect(await path(`https://app.yayatoh.com/events/summit?checkout=return&order=${ORDER_ID}`)).toBe(
-      `/orders/${ORDER_ID}`,
+      `/events/summit?checkout=return&order=${ORDER_ID}`,
     );
     expect(await path('https://app.yayatoh.com/nothing/here')).toBe('/');
   });

@@ -14,6 +14,6 @@ appId: ${APP_ID}
 - openLink: https://app.yayatoh.com/my-tickets/${HOLDER_TOKEN}
 - assertVisible: "Ticket QR code"
 - stopApp
-# The checkout return link opens the order confirmation.
+# The checkout return link opens the event screen, which opens the order confirmation (M7.3c).
 - openLink: https://app.yayatoh.com/events/${EVENT_SLUG}?checkout=return&order=${ORDER_ID}
 - assertVisible: "Order"

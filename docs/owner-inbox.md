@@ -1116,5 +1116,4 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **Default taken, confirm or adjust: the permission is asked at the first purchase and the first time a ticket is opened; "Not now" asks again only after a later purchase** (P7-8). If the person is signed out when asked, the phone still registers after sign-in.
 - [ ] **A forced sign-out cannot delete the phone's registration** (the tokens are already dead). The row stays until another account registers that phone or the push service reports the token gone. Say if the server should also drop it when a refresh family is revoked.
 - [ ] **Owner accounts for real delivery:** an Apple APNs key and a Firebase project. For Android builds set `GOOGLE_SERVICES_FILE` (an EAS file secret) so `android.googleServicesFile` is set; the server needs `PUSH_PROVIDER` and the APNs/FCM names (M7.2c). Nothing here calls APNs or FCM.
-- [ ] **Return-link default taken:** the checkout return link (`…/events/{slug}?checkout=return&order={id}`) opens the order confirmation in the app (and counts as the first purchase for the notification prompt). Confirm with M7.3c's flow.
 

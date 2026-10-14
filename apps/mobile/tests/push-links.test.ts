@@ -116,33 +116,46 @@ describe('links that need sign-in', () => {
 describe('the checkout return link (M7.2f)', () => {
   const base = 'https://app.yayatoh.com/events/summit';
 
-  it('opens the order confirmation and counts as the first-purchase moment', async () => {
+  it('opens the event screen with its markers and counts as the first-purchase moment', async () => {
     const d = deps(true);
     expect(await resolveIncomingUrl(`${base}?checkout=return&order=${ORDER_ID}`, d)).toBe(
-      `/orders/${ORDER_ID}`,
+      `/events/summit?checkout=return&order=${ORDER_ID}`,
     );
     expect(d.purchases).toHaveLength(1);
   });
 
-  it('the cancel link returns to the event and is not a purchase', async () => {
+  it('the cancel link keeps its markers too and is not a purchase', async () => {
     const d = deps(true);
     expect(await resolveIncomingUrl(`${base}?checkout=cancelled&order=${ORDER_ID}`, d)).toBe(
-      '/events/summit',
+      `/events/summit?checkout=cancelled&order=${ORDER_ID}`,
     );
     expect(d.purchases).toHaveLength(0);
   });
 
-  it('refuses an order id that is not a UUID, and a return link with no order', async () => {
+  it('works on a tenant host and keeps the organization', async () => {
+    const d = deps(true);
+    expect(
+      await resolveIncomingUrl(
+        `https://acme.yayatoh.events/events/summit?checkout=return&order=${ORDER_ID}`,
+        d,
+      ),
+    ).toBe(`/events/summit?org=acme&checkout=return&order=${ORDER_ID}`);
+  });
+
+  it('refuses an order id that is not a UUID, a made-up marker, and a return link with no order', async () => {
     const d = deps(true);
     expect(await resolveIncomingUrl(`${base}?checkout=return&order=../../x`, d)).toBe('/events/summit');
     expect(await resolveIncomingUrl(`${base}?checkout=return`, d)).toBe('/events/summit');
+    expect(await resolveIncomingUrl(`${base}?checkout=paid&order=${ORDER_ID}`, d)).toBe('/events/summit');
     expect(d.purchases).toHaveLength(0);
   });
 
-  it('signed out, the confirmation waits for sign-in', async () => {
+  it('needs no sign-in: the event screen is public', async () => {
     const d = deps(false);
-    expect(await resolveIncomingUrl(`${base}?checkout=return&order=${ORDER_ID}`, d)).toBe('/');
-    expect(takePendingHref()).toBe(`/orders/${ORDER_ID}`);
+    expect(await resolveIncomingUrl(`${base}?checkout=return&order=${ORDER_ID}`, d)).toBe(
+      `/events/summit?checkout=return&order=${ORDER_ID}`,
+    );
+    expect(hasPendingHref()).toBe(false);
   });
 });
 

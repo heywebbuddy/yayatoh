@@ -10,8 +10,9 @@
  * - A link that is not ours at all (the development client's own URL) is passed through untouched.
  * - Routes that show a person's own tickets or orders need sign-in. Signed out, the link is kept and
  *   the person goes to the front door; the root layout opens the link once they have signed in.
- * - The checkout return link (`…/events/{slug}?checkout=return&order={id}`, M7.2f) opens the order
- *   confirmation, and counts as the first-purchase moment for the notification prompt.
+ * - The checkout return link (`…/events/{slug}?checkout=return&order={id}`, M7.2f) opens the event
+ *   screen with its two markers (it opens the confirmation, M7.3c), and counts as the first-purchase
+ *   moment for the notification prompt.
  */
 import { PLATFORM_HOSTS, ROUTES, routeForLink } from '@yayatoh/mobile-core';
 import { hrefFor } from './hrefs';
@@ -67,11 +68,16 @@ export async function resolveIncomingUrl(url: string | null, deps: IncomingDeps)
   let route = routeForLink(full, options);
   if (!route) return '/';
 
-  const query = queryOf(full);
-  const order = query.get('order');
-  if (route.pathname === ROUTES.event && query.get('checkout') === 'return' && order && UUID.test(order)) {
-    deps.onPurchase();
-    route = { pathname: ROUTES.order, params: { id: order } };
+  // The checkout's return and cancel links (M7.2f) land on the event screen with two markers it reads
+  // (M7.3c). They are kept here, validated, whatever `routeForLink` keeps, so the screen gets them
+  // either way; a return also counts as the first-purchase moment for the notification prompt.
+  if (route.pathname === ROUTES.event) {
+    const checkout = queryOf(full).get('checkout');
+    const order = queryOf(full).get('order');
+    if ((checkout === 'return' || checkout === 'cancelled') && order && UUID.test(order)) {
+      route = { ...route, params: { ...route.params, checkout, order } };
+      if (checkout === 'return') deps.onPurchase();
+    }
   }
 
   const href = hrefFor(route);
