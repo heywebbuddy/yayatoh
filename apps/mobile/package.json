@@ -30,6 +30,7 @@
     "expo-linking": "catalog:mobile",
     "expo-localization": "catalog:mobile",
     "expo-network": "catalog:mobile",
+    "expo-notifications": "catalog:mobile",
     "expo-router": "catalog:mobile",
     "expo-secure-store": "catalog:mobile",
     "expo-splash-screen": "catalog:mobile",
