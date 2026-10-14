@@ -47,12 +47,14 @@ export {
   claimDetailsQuery,
   claimsForTicketsTx,
   claimTicketCommand,
+  claimTicketForPersonCommand,
   createClaimLinksCommand,
   giveTicketCommand,
   HOLDER_PURPOSE,
   HolderTicketsDto,
   holderContext,
   holderTicketsQuery,
+  issueAppHolderLinkCommand,
   issueHolderLinkTx,
   listClaimLinksQuery,
   PublicClaimDto,
@@ -123,6 +125,8 @@ export {
   activeTicketsHeldByEmailTx,
   activeTicketsHeldByTx,
 } from './kiosk.ts';
+// M7.2b: a person's own tickets, for the attendee app.
+export { MyTicketDto, myTicketsTx } from './my-tickets.ts';
 export { nameTicketHolderTx } from './naming.ts';
 export {
   activeTicketsForOccurrenceTx,
@@ -186,10 +190,12 @@ export {
   tableUnitTx,
 } from './tables.ts';
 export {
+  cancelAppTransferCommand,
   cancelHolderTransferCommand,
   cancelTransferCommand,
   orderTransfersQuery,
   StartedTransferDto,
+  startAppTransferCommand,
   startHolderTransferCommand,
   startTransferCommand,
   startTransferTx,
@@ -207,9 +213,14 @@ export { ticketTypeNamesTx } from './virtual-facts.ts';
 export {
   type FakeWalletPush,
   fakeWalletPassProvider,
+  type HolderWalletPass,
+  holderWalletPassTx,
+  markWalletPassesPushedTx,
   orderWalletPassesQuery,
+  WALLET_PLATFORMS,
   WalletPassDto,
   type WalletPassProvider,
+  type WalletPlatform,
   walletPassSync,
   walletSerial,
 } from './wallet.ts';

@@ -304,6 +304,59 @@ export async function issueHolderLinkTx(
   return { id: link.id, token: signLinkToken(HOLDER_PURPOSE, link.id) };
 }
 
+type Emit = (e: {
+  type: string;
+  version: number;
+  aggregateType: string;
+  aggregateId: string;
+  payload: unknown;
+}) => void;
+
+/**
+ * Claim a ticket (inside a command's transaction): the ticket is reissued to the claimant (the old
+ * QR stops scanning), a transfer's claim also completes the transfer and rotates the wallet pass.
+ * Shared by the web's `claimTicket` and the app's `claimTicketForPerson`.
+ */
+async function claimTicketTx(
+  tx: Tx,
+  ctx: Ctx,
+  emit: Emit,
+  input: { claimId: string; name: string; email: string },
+): Promise<{ ticketId: string; eventId: string | null }> {
+  const [c] = await tx.select().from(ticketClaims).where(eq(ticketClaims.id, input.claimId)).for('update');
+  if (!c) throw new DomainError('not_found');
+  const state = claimState(c, ctx.now);
+  if (state !== 'open') throw new DomainError('invalid_state', `This link is ${state}`, { state });
+  // M3.10c: a transfer is claimed by the person it was sent to, with that email address.
+  const transfer = await transferForClaimTx(tx, c.id);
+  if (transfer && transfer.status !== 'pending')
+    throw new DomainError('invalid_state', 'This link is revoked', { state: 'revoked' });
+  if (transfer && normalizeEmail(input.email) !== transfer.toEmail)
+    throw new DomainError('validation_failed', 'Use the email address this ticket was sent to', {
+      reason: 'email_mismatch',
+      field: 'email',
+    });
+  const t = await reissueTicketTx(tx, ctx, c.ticketId, { name: input.name, email: input.email });
+  await tx
+    .update(ticketClaims)
+    .set({ claimedAt: ctx.now, claimedByEmail: input.email, updatedAt: ctx.now })
+    .where(eq(ticketClaims.id, c.id));
+  if (transfer) {
+    await completeTransferTx(tx, ctx, emit, transfer.id, t.rev);
+    await rotateWalletPassTx(tx, ctx, { id: t.id, rev: t.rev, holderName: input.name });
+  }
+  const [ticket] = await tx.select({ eventId: tickets.eventId }).from(tickets).where(eq(tickets.id, t.id));
+  const orgId = requireOrg(ctx);
+  emit({
+    type: 'ticket.claimed',
+    version: 1,
+    aggregateType: 'ticket',
+    aggregateId: t.id,
+    payload: { orgId, ticketId: t.id, claimId: c.id, rev: t.rev, eventId: ticket?.eventId ?? null },
+  });
+  return { ticketId: t.id, eventId: ticket?.eventId ?? null };
+}
+
 /**
  * Public: claim a ticket with a name and email. The ticket is reissued to the claimant (the old
  * QR stops scanning) and they get a holder link straight away, so they see their new ticket.
@@ -315,41 +368,66 @@ export const claimTicketCommand = tenantCommand({
   entitlement: 'ticketing',
   permission: 'public:claim',
   handler: async ({ input, ctx, tx, emit }) => {
-    const [c] = await tx.select().from(ticketClaims).where(eq(ticketClaims.id, input.claimId)).for('update');
-    if (!c) throw new DomainError('not_found');
-    const state = claimState(c, ctx.now);
-    if (state !== 'open') throw new DomainError('invalid_state', `This link is ${state}`, { state });
-    // M3.10c: a transfer is claimed by the person it was sent to, with that email address.
-    const transfer = await transferForClaimTx(tx, c.id);
-    if (transfer && transfer.status !== 'pending')
-      throw new DomainError('invalid_state', 'This link is revoked', { state: 'revoked' });
-    if (transfer && normalizeEmail(input.email) !== transfer.toEmail)
-      throw new DomainError('validation_failed', 'Use the email address this ticket was sent to', {
-        reason: 'email_mismatch',
-        field: 'email',
-      });
-    const t = await reissueTicketTx(tx, ctx, c.ticketId, { name: input.name, email: input.email });
-    await tx
-      .update(ticketClaims)
-      .set({ claimedAt: ctx.now, claimedByEmail: input.email, updatedAt: ctx.now })
-      .where(eq(ticketClaims.id, c.id));
-    if (transfer) {
-      await completeTransferTx(tx, ctx, emit, transfer.id, t.rev);
-      await rotateWalletPassTx(tx, ctx, { id: t.id, rev: t.rev, holderName: input.name });
-    }
-    const [ticket] = await tx.select({ eventId: tickets.eventId }).from(tickets).where(eq(tickets.id, t.id));
-    const orgId = requireOrg(ctx);
-    emit({
-      type: 'ticket.claimed',
-      version: 1,
-      aggregateType: 'ticket',
-      aggregateId: t.id,
-      payload: { orgId, ticketId: t.id, claimId: c.id, rev: t.rev, eventId: ticket?.eventId ?? null },
-    });
-    const link = ticket ? await createHolderLinkTx(tx, ctx, ticket.eventId, input.email) : null;
+    const claimed = await claimTicketTx(tx, ctx, emit, input);
+    const link = claimed.eventId ? await createHolderLinkTx(tx, ctx, claimed.eventId, input.email) : null;
     return { holderToken: link?.token ?? null };
   },
   audit: (input) => ({ action: 'ticket.claim', targetType: 'ticket_claim', targetId: input.claimId }),
+});
+
+/**
+ * M7.2b: a signed-in person claims a ticket from the app. The email is the verified address of
+ * their session (the route's job). Same rules as the web's claim (a transfer is claimed with the
+ * address it was sent to), without the web's holder link: the app finds the ticket in the person's
+ * own list, so no web credential is minted or stored in the idempotency record.
+ */
+export const claimTicketForPersonCommand = tenantCommand({
+  name: 'ticketing.claimTicketForPerson',
+  input: z.object({ claimId: z.uuid(), name: PersonName, email: Email }),
+  output: z.object({ ticketId: z.uuid() }),
+  entitlement: 'ticketing',
+  permission: 'public:claim',
+  handler: async ({ input, ctx, tx, emit }) => {
+    const { ticketId } = await claimTicketTx(tx, ctx, emit, input);
+    return { ticketId };
+  },
+  audit: (input) => ({
+    action: 'ticket.claim',
+    targetType: 'ticket_claim',
+    targetId: input.claimId,
+    data: { via: 'app' },
+  }),
+});
+
+/**
+ * M7.2b: the web link a person in the app follows to do what the app does not do itself (pay a
+ * ticket's transfer fee on the holder page). The holder is the verified email of the person's
+ * session; the ticket must be an active ticket they hold. Limited like every holder link (three per
+ * address and event per hour); the token is the web's credential for that one event.
+ */
+export const issueAppHolderLinkCommand = tenantCommand({
+  name: 'ticketing.issueAppHolderLink',
+  input: z.object({ holderEmail: Email, ticketId: z.uuid() }),
+  output: z.object({ token: z.string() }),
+  entitlement: 'ticketing',
+  permission: 'public:holder',
+  handler: async ({ input, ctx, tx }) => {
+    const [t] = await tx
+      .select({ eventId: tickets.eventId })
+      .from(tickets)
+      .where(
+        and(
+          eq(tickets.id, input.ticketId),
+          eq(tickets.status, 'active'),
+          eq(sql`lower(${tickets.holderEmail})`, normalizeEmail(input.holderEmail)),
+        ),
+      );
+    if (!t) throw new DomainError('not_found', 'Ticket not found');
+    const link = await createHolderLinkTx(tx, ctx, t.eventId, input.holderEmail);
+    if (!link) throw new DomainError('rate_limited', 'Too many links requested; try again later');
+    return { token: link.token };
+  },
+  audit: (input) => ({ action: 'ticket.holder_link_app', targetType: 'ticket', targetId: input.ticketId }),
 });
 
 /**

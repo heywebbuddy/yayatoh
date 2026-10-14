@@ -148,6 +148,23 @@ export async function findEventTx(tx: TenantTx, eventId: string): Promise<EventD
   return row ? EventDto.parse(row) : null;
 }
 
+/**
+ * What a person's own ticket shows of its event beyond the headline fields (M7.2b): the saved venue
+ * it is held at and the event's own accent colour. Ids in, the two facts out; inside the caller's
+ * tenant transaction.
+ */
+export async function eventTicketFactsTx(
+  tx: TenantTx,
+  eventIds: readonly string[],
+): Promise<Map<string, { venueId: string | null; brandColor: string | null }>> {
+  if (eventIds.length === 0) return new Map();
+  const rows = await tx
+    .select({ id: events.id, venueId: events.venueId, brandColor: events.brandColor })
+    .from(events)
+    .where(inArray(events.id, [...eventIds]));
+  return new Map(rows.map((r) => [r.id, { venueId: r.venueId, brandColor: r.brandColor }]));
+}
+
 /** Public checkout: resolve a published, non-private event slug to its org and id (server-side only). */
 export async function checkoutTarget(slug: string): Promise<{ orgId: string; eventId: string } | null> {
   const rows = await withoutTenant((tx) =>
