@@ -42,6 +42,7 @@ const snapshot = (): PersistedClient => ({
     mutations: [],
     queries: [
       {
+        dehydratedAt: 1,
         queryKey: ['tickets'],
         queryHash: '["tickets"]',
         state: { data: [{ holder: SECRET }], dataUpdateCount: 1, dataUpdatedAt: 1, error: null, errorUpdateCount: 0, errorUpdatedAt: 0, fetchFailureCount: 0, fetchFailureReason: null, fetchMeta: null, isInvalidated: false, status: 'success', fetchStatus: 'idle' },
@@ -91,12 +92,12 @@ describe('seal / open', () => {
     const sealed = seal(new TextEncoder().encode('hello'), key, random);
     expect(open(sealed, random(32))).toBeNull();
     const flipped = sealed.slice();
-    flipped[flipped.length - 1] ^= 1;
+    flipped[flipped.length - 1] = (flipped[flipped.length - 1] ?? 0) ^ 1;
     expect(open(flipped, key)).toBeNull();
     expect(open(sealed.subarray(0, 20), key)).toBeNull();
     expect(open(new TextEncoder().encode('{"plain":"json"}'.repeat(5)), key)).toBeNull();
     const header = sealed.slice();
-    header[0] ^= 1;
+    header[0] = (header[0] ?? 0) ^ 1;
     expect(open(header, key)).toBeNull();
   });
 });
@@ -140,7 +141,7 @@ describe('encrypted persister', () => {
     await persister.persistClient(snapshot());
     const path = join(dir, CACHE_FILE);
     const bytes = readFileSync(path);
-    bytes[bytes.length - 3] ^= 0xff;
+    bytes[bytes.length - 3] = (bytes[bytes.length - 3] ?? 0) ^ 0xff;
     writeFileSync(path, bytes);
     expect(await persister.restoreClient()).toBeUndefined();
     expect(readdirSync(dir)).toEqual([]);

@@ -116,7 +116,7 @@ describe('createApiClient', () => {
       tokens: { accessToken: async () => `t${attempt}`, refreshAfterUnauthorized: async () => ((attempt += 1), true) },
       fetch: (async (req: Request) => {
         bodies.push(await req.text());
-        return attempt === 0 ? problem(401, 'unauthenticated') : json(204 === 0 ? 0 : 200, {});
+        return attempt === 0 ? problem(401, 'unauthenticated') : json(200, {});
       }) as unknown as typeof fetch,
     });
     await api.POST('/v1/auth/step-up', { body: { method: 'password', password: 'r' } });
