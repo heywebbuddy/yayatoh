@@ -4,14 +4,14 @@
  * with it (calendar, directions, wallet, transfer, refund). Opens from the encrypted cache with the
  * network off.
  */
-import { BrandScope, space, useColors, useCore, useIsOffline } from '@yayatoh/mobile-core';
+import { BrandScope, space, useColors, useCore } from '@yayatoh/mobile-core';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
 import { Image, Platform, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { useFormatter, useTranslations } from 'use-intl';
 import { isNotFound, type Ticket, ticketKeys, viewProblem } from '../api';
 import { formatEventRange, formatMoment, spellOut } from '../format';
-import { useCancelTransfer, useTicket, useWalletLink } from '../hooks';
+import { useCancelTransfer, useOffline, useTicket, useWalletLink } from '../hooks';
 import { hrefs } from '../nav';
 import { TicketQr } from '../qr';
 import { type MapsTarget, useTicketServices } from '../services';
@@ -137,7 +137,7 @@ function TicketBody({
   const format = useFormatter();
   const colors = useColors();
   const router = useRouter();
-  const offline = useIsOffline();
+  const offline = useOffline();
   const services = useTicketServices();
   const { width } = useWindowDimensions();
   const [notice, setNotice] = useState<{ tone: 'success' | 'warning' | 'danger'; text: string } | null>(null);

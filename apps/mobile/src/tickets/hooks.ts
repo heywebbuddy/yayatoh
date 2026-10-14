@@ -1,8 +1,8 @@
 /** Query and mutation hooks for the Tickets screens (M7.3b). */
-import { useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query';
-import { useCore } from '@yayatoh/mobile-core';
+import { onlineManager, useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query';
+import { useCore, useIsOffline } from '@yayatoh/mobile-core';
 import { unwrap } from '@yayatoh/sdk';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useRef, useState, useSyncExternalStore } from 'react';
 import {
   type ClaimDetails,
   fetchClaim,
@@ -21,6 +21,17 @@ import {
   type WalletLink,
 } from './api';
 import { SYNC_FRESH_MS, type SyncOutcome, syncTickets } from './sync';
+
+/** The phone has no connection, by its own report or by what Query learned from failed requests. */
+export function useOffline(): boolean {
+  const phone = useIsOffline();
+  const query = useSyncExternalStore(
+    (listener) => onlineManager.subscribe(listener),
+    () => onlineManager.isOnline(),
+    () => true,
+  );
+  return phone || !query;
+}
 
 export function useTicketList(when: TicketWhen) {
   const { api } = useCore();

@@ -10,7 +10,6 @@ import {
   TOUCH_TARGET_PX,
   type,
   useColors,
-  useIsOffline,
   useSession,
 } from '@yayatoh/mobile-core';
 import { useRouter } from 'expo-router';
@@ -21,7 +20,7 @@ import { useFormatter, useTranslations } from 'use-intl';
 import type { TicketSummary, TicketWhen } from '../api';
 import { formatDay, formatEventRange } from '../format';
 import { groupByEvent, type TicketGroup } from '../group';
-import { useLastSynced, useTicketList, useTicketSync } from '../hooks';
+import { useLastSynced, useOffline, useTicketList, useTicketSync } from '../hooks';
 import { hrefs } from '../nav';
 import { Banner, Button, Caption, EmptyState, Heading, Loading, Segmented } from '../ui';
 import { PendingLinkResume } from './pending-resume';
@@ -113,7 +112,7 @@ export function TicketsListScreen() {
   const colors = useColors();
   const router = useRouter();
   const session = useSession();
-  const offline = useIsOffline();
+  const offline = useOffline();
   const [when, setWhen] = useState<TicketWhen>('upcoming');
   const list = useTicketList(when);
   const { sync, syncing, outcome } = useTicketSync();
@@ -162,7 +161,7 @@ export function TicketsListScreen() {
   );
 
   let body: ReactNode = null;
-  if (list.isPending && list.fetchStatus !== 'paused') {
+  if (list.isPending && list.fetchStatus !== 'paused' && !offline) {
     body = <Loading label={t('list.loading')} />;
   } else if (list.isPending) {
     body = <EmptyState title={t('list.loadFailed')} body={t('list.offlineNothing')} testID="offline-empty" />;
