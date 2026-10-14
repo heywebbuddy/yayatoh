@@ -719,6 +719,9 @@ importers:
       '@tanstack/react-query':
         specifier: catalog:mobile
         version: 5.104.2(react@19.2.3)
+      '@yayatoh/checkin-engine':
+        specifier: workspace:*
+        version: link:../../packages/checkin-engine
       '@yayatoh/mobile-core':
         specifier: workspace:*
         version: link:../../packages/mobile-core

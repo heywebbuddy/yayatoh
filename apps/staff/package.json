@@ -15,6 +15,7 @@
   "dependencies": {
     "@sentry/react-native": "catalog:mobile",
     "@tanstack/react-query": "catalog:mobile",
+    "@yayatoh/checkin-engine": "workspace:*",
     "@yayatoh/mobile-core": "workspace:*",
     "@yayatoh/sdk": "workspace:*",
     "@yayatoh/ui": "workspace:*",
