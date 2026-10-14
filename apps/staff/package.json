@@ -22,6 +22,8 @@
     "expo-apple-authentication": "catalog:mobile",
     "expo-application": "catalog:mobile",
     "expo-auth-session": "catalog:mobile",
+    "expo-battery": "catalog:mobile",
+    "expo-camera": "catalog:mobile",
     "expo-build-properties": "catalog:mobile",
     "expo-constants": "catalog:mobile",
     "expo-crypto": "catalog:mobile",
