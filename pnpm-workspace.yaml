@@ -111,6 +111,7 @@ catalogs:
     expo-crypto: ~57.0.4
     expo-file-system: ~57.0.7
     expo-localization: ~57.0.2
+    expo-location: ~57.0.21
     expo-network: ~57.0.2
     expo-secure-store: ~57.0.4
     expo-web-browser: ~57.0.3

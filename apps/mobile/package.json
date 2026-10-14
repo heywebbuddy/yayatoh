@@ -28,6 +28,7 @@
     "expo-dev-client": "catalog:mobile",
     "expo-file-system": "catalog:mobile",
     "expo-linking": "catalog:mobile",
+    "expo-location": "catalog:mobile",
     "expo-localization": "catalog:mobile",
     "expo-network": "catalog:mobile",
     "expo-router": "catalog:mobile",

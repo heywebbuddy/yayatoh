@@ -138,17 +138,45 @@ describe('permissions', () => {
   it('asks for the camera in the Staff app only', () => {
     const s = staff();
     expect(s.android?.permissions).toEqual(['android.permission.CAMERA']);
-    expect(s.android?.blockedPermissions).toEqual([]);
+    expect(s.android?.blockedPermissions).not.toContain('android.permission.CAMERA');
     expect(s.ios?.infoPlist?.NSCameraUsageDescription).toMatch(/camera/);
     const m = mobile();
-    expect(m.android?.permissions).toEqual([]);
-    expect(m.android?.blockedPermissions).toEqual(['android.permission.CAMERA']);
+    expect(m.android?.permissions).not.toContain('android.permission.CAMERA');
+    expect(m.android?.blockedPermissions).toContain('android.permission.CAMERA');
     expect(m.ios?.infoPlist?.NSCameraUsageDescription).toBeUndefined();
+  });
+
+  it('asks for location in the attendee app only: when in use, coarse, never in the background (M7.3c)', () => {
+    const m = mobile();
+    expect(m.ios?.infoPlist?.NSLocationWhenInUseUsageDescription).toMatch(/near me/);
+    expect(JSON.stringify(m.ios?.infoPlist)).not.toMatch(/NSLocationAlways/);
+    expect(m.android?.permissions).toEqual(['android.permission.ACCESS_COARSE_LOCATION']);
+    expect(m.android?.blockedPermissions).toEqual(
+      expect.arrayContaining([
+        'android.permission.ACCESS_FINE_LOCATION',
+        'android.permission.ACCESS_BACKGROUND_LOCATION',
+      ]),
+    );
+    expect(m.plugins).toContainEqual([
+      'expo-location',
+      expect.objectContaining({ isAndroidBackgroundLocationEnabled: false, isIosBackgroundLocationEnabled: false }),
+    ]);
+    const s = staff();
+    expect(s.ios?.infoPlist?.NSLocationWhenInUseUsageDescription).toBeUndefined();
+    expect(s.android?.permissions).toEqual(['android.permission.CAMERA']);
+    expect(s.android?.blockedPermissions).toEqual(
+      expect.arrayContaining([
+        'android.permission.ACCESS_COARSE_LOCATION',
+        'android.permission.ACCESS_FINE_LOCATION',
+        'android.permission.ACCESS_BACKGROUND_LOCATION',
+      ]),
+    );
+    expect(JSON.stringify(s.plugins)).not.toMatch(/expo-location/);
   });
 
   it('adds no permission for notifications yet (M7.2c and M7.3d own them)', () => {
     for (const c of [mobile(), staff()]) {
-      expect(JSON.stringify(c)).not.toMatch(/NOTIFICATION|UIBackgroundModes|RECORD_AUDIO|LOCATION/);
+      expect(JSON.stringify(c)).not.toMatch(/NOTIFICATION|UIBackgroundModes|RECORD_AUDIO/);
     }
   });
 });
@@ -229,7 +257,8 @@ describe('sign-in configuration (M7.1c)', () => {
   it('adds no permission string for sign-in', () => {
     const keys = (c: ReturnType<typeof mobile>) =>
       Object.keys(c.ios?.infoPlist ?? {}).filter((k) => k.startsWith('NS') && k.endsWith('UsageDescription'));
-    expect(keys(mobile())).toEqual([]);
+    // Sign-in adds none: the attendee app's only string is the "near me" location one (M7.3c).
+    expect(keys(mobile())).toEqual(['NSLocationWhenInUseUsageDescription']);
     expect(keys(staff())).toEqual(['NSCameraUsageDescription']);
   });
 });

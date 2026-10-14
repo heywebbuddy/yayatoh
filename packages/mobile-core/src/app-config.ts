@@ -50,6 +50,8 @@ interface AppIdentity {
   readonly androidPackage: string;
   /** Only the Staff app scans: the attendee app never asks for the camera. */
   readonly camera: boolean;
+  /** Only the attendee app uses the phone's location, and only when the person taps "near me" (M7.3c). */
+  readonly location: boolean;
   /** Sign in with Apple is an attendee sign-in (P7-5); Staff signs in by enrolment QR or account. */
   readonly appleSignIn: boolean;
 }
@@ -64,6 +66,7 @@ const APPS: Record<AppId, AppIdentity> = {
     iosBundleId: 'com.yayatoh.yayatohapp',
     androidPackage: 'com.yayatoh.yayatohapp',
     camera: false,
+    location: true,
     appleSignIn: true,
   },
   staff: {
@@ -73,6 +76,7 @@ const APPS: Record<AppId, AppIdentity> = {
     iosBundleId: 'com.yayatoh.staff',
     androidPackage: 'com.yayatoh.staff',
     camera: true,
+    location: false,
     appleSignIn: false,
   },
 };
@@ -85,6 +89,9 @@ const VARIANTS: Record<AppEnv, { nameSuffix: string; schemeSuffix: string; idSuf
 
 /** Shown by iOS when the Staff app asks for the camera (the permission string, English). */
 export const STAFF_CAMERA_USAGE = 'Yayatoh Staff uses the camera to scan ticket QR codes at the door.';
+
+/** Shown by iOS when the attendee app asks for the location, after the person taps "near me" (English). */
+export const NEAR_ME_USAGE = 'Yayatoh uses your location once, when you tap "near me", to list events close to you.';
 
 export type EnvVars = Readonly<Record<string, string | undefined>>;
 
@@ -182,6 +189,18 @@ export function buildExpoConfig(opts: BuildOptions): ExpoConfig {
       },
     ],
   ];
+  // Location is asked only when the person taps "near me", only while the app is open, and at city
+  // precision (coarse): no background location, no fine location.
+  if (id.location) {
+    plugins.push([
+      'expo-location',
+      {
+        locationWhenInUsePermission: NEAR_ME_USAGE,
+        isAndroidBackgroundLocationEnabled: false,
+        isIosBackgroundLocationEnabled: false,
+      },
+    ]);
+  }
   // Only a development build may talk to a plain-http API on a developer's machine.
   if (!production && apiBaseUrl.startsWith('http://')) {
     plugins.push(['expo-build-properties', { android: { usesCleartextTraffic: true } }]);
@@ -223,6 +242,7 @@ export function buildExpoConfig(opts: BuildOptions): ExpoConfig {
       infoPlist: {
         CFBundleAllowMixedLocalizations: true,
         ...(id.camera ? { NSCameraUsageDescription: STAFF_CAMERA_USAGE } : {}),
+        ...(id.location ? { NSLocationWhenInUseUsageDescription: NEAR_ME_USAGE } : {}),
         ...(appEnv === 'development' ? { NSAppTransportSecurity: { NSAllowsLocalNetworking: true } } : {}),
       },
     },
@@ -234,8 +254,21 @@ export function buildExpoConfig(opts: BuildOptions): ExpoConfig {
       },
       intentFilters: androidIntentFilters(env),
       // The attendee app never scans; keep a library from adding the permission by accident.
-      permissions: id.camera ? ['android.permission.CAMERA'] : [],
-      blockedPermissions: id.camera ? [] : ['android.permission.CAMERA'],
+      permissions: [
+        ...(id.camera ? ['android.permission.CAMERA'] : []),
+        ...(id.location ? ['android.permission.ACCESS_COARSE_LOCATION'] : []),
+      ],
+      // Location, when used, is coarse and foreground only; the Staff app asks for none.
+      blockedPermissions: [
+        ...(id.camera ? [] : ['android.permission.CAMERA']),
+        ...(id.location
+          ? ['android.permission.ACCESS_FINE_LOCATION', 'android.permission.ACCESS_BACKGROUND_LOCATION']
+          : [
+              'android.permission.ACCESS_COARSE_LOCATION',
+              'android.permission.ACCESS_FINE_LOCATION',
+              'android.permission.ACCESS_BACKGROUND_LOCATION',
+            ]),
+      ],
     },
     ...(opts.locales ? { locales: { ...opts.locales } } : {}),
     plugins,
