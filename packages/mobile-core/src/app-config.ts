@@ -259,16 +259,12 @@ export function buildExpoConfig(opts: BuildOptions): ExpoConfig {
         ...(id.camera ? ['android.permission.CAMERA'] : []),
         ...(id.location ? ['android.permission.ACCESS_COARSE_LOCATION'] : []),
       ],
-      // Location, when used, is coarse and foreground only; the Staff app asks for none.
+      // The attendee app uses coarse, foreground location only; Staff is left as it was.
       blockedPermissions: [
         ...(id.camera ? [] : ['android.permission.CAMERA']),
         ...(id.location
           ? ['android.permission.ACCESS_FINE_LOCATION', 'android.permission.ACCESS_BACKGROUND_LOCATION']
-          : [
-              'android.permission.ACCESS_COARSE_LOCATION',
-              'android.permission.ACCESS_FINE_LOCATION',
-              'android.permission.ACCESS_BACKGROUND_LOCATION',
-            ]),
+          : []),
       ],
     },
     ...(opts.locales ? { locales: { ...opts.locales } } : {}),

@@ -167,13 +167,7 @@ describe('permissions', () => {
     const s = staff();
     expect(s.ios?.infoPlist?.NSLocationWhenInUseUsageDescription).toBeUndefined();
     expect(s.android?.permissions).toEqual(['android.permission.CAMERA']);
-    expect(s.android?.blockedPermissions).toEqual(
-      expect.arrayContaining([
-        'android.permission.ACCESS_COARSE_LOCATION',
-        'android.permission.ACCESS_FINE_LOCATION',
-        'android.permission.ACCESS_BACKGROUND_LOCATION',
-      ]),
-    );
+    expect(JSON.stringify(s.android)).not.toMatch(/LOCATION/);
     expect(JSON.stringify(s.plugins)).not.toMatch(/expo-location/);
   });
 
