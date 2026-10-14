@@ -1,24 +1,25 @@
-# Shared start for the scanner flows (M7.4b): a clean install, enrolled by link, an entrance chosen,
-# the guest list downloaded. Written, not run in cloud sessions (no simulator); the device pass runs
-# it against a preview build with a seeded event and the fake providers.
+# Shared start for the scanner flows (M7.4b): a clean install, enrolled by link (as enrol-by-link.yaml
+# does), an entrance chosen, the guest list downloaded. Written, not run in cloud sessions (no
+# simulator); the device pass runs it against a preview build with a seeded event and the fake
+# providers.
 #
-# Env: ENROL_LINK (the pairing link or QR text from the event's devices page, with `#e=…&k=…`),
-#      CHECKPOINT_ID (optional: the entrance to pick; default is the whole event).
+# Env: ENROL_EVENT and ENROL_KEY (from the pairing link `#e=…&k=…` on the event's devices page),
+#      CHECKPOINT (the entrance to pick by name; default: the whole event).
 appId: com.yayatoh.staff.preview
+env:
+  ENROL_EVENT: ''
+  ENROL_KEY: ''
+  CHECKPOINT: 'Whole event'
 ---
 - launchApp:
     clearState: true
     permissions:
       camera: allow
-- openLink: ${ENROL_LINK}
+- openLink: 'yayatoh-staff-preview://scan#e=${ENROL_EVENT}&k=${ENROL_KEY}'
 - extendedWaitUntil:
-    visible:
-      id: select-continue
+    visible: 'Where is this device scanning?'
     timeout: 20000
-- tapOn:
-    id: ${CHECKPOINT_ID ? 'select-checkpoint-' + CHECKPOINT_ID : 'select-whole-event'}
-- tapOn:
-    id: select-continue
+- tapOn: '${CHECKPOINT}'
 # The list downloads once; after that scanning needs no connection.
 - extendedWaitUntil:
     visible:

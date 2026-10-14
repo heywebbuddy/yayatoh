@@ -2,7 +2,7 @@
 # admit the same ticket; after they reconnect the duplicate is flagged within 60 s. Run this flow on
 # phone A and `offline-drill-phone-b.yaml` on phone B at the same time (`maestro --device <id> test`).
 # A scans first and reconnects first, so it is accepted; B's later scan is the duplicate.
-# Env: ENROL_LINK (same event on both phones), TICKET_CODE (one seeded active ticket).
+# Env: ENROL_EVENT and ENROL_KEY (same event on both phones), TICKET_CODE (one seeded active ticket).
 appId: com.yayatoh.staff.preview
 ---
 - runFlow: scan-setup.yaml

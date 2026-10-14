@@ -1,5 +1,5 @@
 # Codes that must not get in (M7.4b): an unknown code, and a refunded ticket. Each shows a red
-# panel, the words, and the next step. Env: ENROL_LINK, VOID_TICKET_CODE (a seeded refunded ticket).
+# panel, the words, and the next step. Env: ENROL_EVENT, ENROL_KEY, VOID_TICKET_CODE (a seeded refunded ticket).
 appId: com.yayatoh.staff.preview
 ---
 - runFlow: scan-setup.yaml
