@@ -166,6 +166,9 @@ export function createSessionStore(opts: SessionStoreOptions): SessionStore {
     const from = current;
     if (!from) return false;
     const outcome = await opts.endpoint.refresh(from.refreshToken);
+    // The person signed out (or in again) while the request was away: its answer is for a session
+    // that no longer exists and must not bring it back.
+    if (current !== from) return false;
     if (outcome.ok) {
       await persist(toStored(outcome.tokens));
       setState({ status: 'signedIn', user: outcome.tokens.user });

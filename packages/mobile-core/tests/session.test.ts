@@ -212,6 +212,19 @@ describe('session store', () => {
     expect(session.state.status).toBe('signedOut');
   });
 
+  it('a refresh that finishes after sign-out does not bring the session back', async () => {
+    const { fake, session, storage } = await signedIn();
+    fake.delayRefreshMs = 30;
+    fake.valid.clear();
+    const refreshing = session.refreshAfterUnauthorized('access-0');
+    await new Promise((r) => setTimeout(r, 5));
+    await session.signOut();
+    expect(await refreshing).toBe(false);
+    expect(session.state).toMatchObject({ status: 'signedOut', reason: 'signed_out' });
+    expect(storage.data.size).toBe(0);
+    expect(await session.accessToken()).toBeUndefined();
+  });
+
   it('notifies subscribers of every state change', async () => {
     const { session } = setup();
     await session.restore();
