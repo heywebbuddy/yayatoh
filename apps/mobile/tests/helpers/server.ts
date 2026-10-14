@@ -2,9 +2,35 @@
  * A fake `/v1` for the Tickets tests: handlers by "METHOD /path" with `:param` segments, answers
  * problem+json the way the real server does, and records every call.
  */
-import { json, pair, problem } from '../../../../packages/mobile-core/tests/helpers/fake-api';
+import type { Schemas } from '@yayatoh/sdk';
 
-export { json, pair, problem };
+export const USER: Schemas['User'] = {
+  id: '00000000-0000-4000-8000-000000000001',
+  email: 'ada@example.test',
+  emailVerified: true,
+  name: 'Ada',
+};
+
+export const json = (status: number, body: unknown, headers = {}) =>
+  new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json', ...headers } });
+
+/** A problem+json answer, the way `/v1` sends one (`code`, and `details.reason` for the cause). */
+export const problem = (status: number, code: string, details: Record<string, unknown> = {}, headers = {}) =>
+  new Response(JSON.stringify({ type: `https://x/${code}`, title: code, status, code, details }), {
+    status,
+    headers: { 'content-type': 'application/problem+json', ...headers },
+  });
+
+export function pair(n: number, now = Date.now(), ttlMs = 15 * 60_000): Schemas['TokenPair'] {
+  return {
+    accessToken: `access-${n}`,
+    tokenType: 'bearer',
+    accessTokenExpiresAt: new Date(now + ttlMs).toISOString(),
+    refreshToken: `refresh-${n}`,
+    refreshTokenExpiresAt: new Date(now + 30 * 86_400_000).toISOString(),
+    user: USER,
+  };
+}
 
 export interface Call {
   readonly method: string;
