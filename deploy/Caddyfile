@@ -24,6 +24,8 @@
 }
 
 (to_web) {
+	# /.well-known/apple-app-site-association and /.well-known/assetlinks.json (M7.2d) are
+	# answered by the web app on these hosts as they are: no redirect, no rewrite, no auth.
 	import proxy_headers
 	# Caddy's internal TLS check and the internal routes are never public.
 	@internal path /api/internal/tls-ask

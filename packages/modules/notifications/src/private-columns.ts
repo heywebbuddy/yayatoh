@@ -69,6 +69,11 @@ export const privateColumns = columnPrivacy('notifications', {
     }),
     label: internal(),
     time_zone: 'vocab',
+    // Native apps (M7.2c): the app's bundle id, version and language, and the APNs environment.
+    app_id: 'vocab',
+    app_version: 'vocab',
+    locale: 'vocab',
+    environment: 'vocab',
   },
   // Campaign content (M3.6b): the organizer's own marketing copy, written to be sent to its
   // audience; merge fields are placeholders (recipient values are filled only at send time).

@@ -377,6 +377,38 @@
       "subject": "您的 Yayatoh 登录链接",
       "intro": "点击下方按钮，在此浏览器中登录 Yayatoh。链接仅可使用一次，{minutes} 分钟后失效。如果这不是您的请求，请忽略此邮件。",
       "cta": "登录 Yayatoh"
+    },
+    "push.order-confirmed": {
+      "subject": "{eventName}",
+      "intro": "您的订单已确认。"
+    },
+    "push.ticket-received": {
+      "subject": "{eventName}",
+      "intro": "有一张票已转让给您。"
+    },
+    "push.transfer-accepted": {
+      "subject": "{eventName}",
+      "intro": "您的转票已被接受。"
+    },
+    "push.transfer-cancelled": {
+      "subject": "{eventName}",
+      "intro": "一次转票已被取消。"
+    },
+    "push.event-changed": {
+      "subject": "{eventName}",
+      "intro": "日期、时间或地点已更改。"
+    },
+    "push.event-cancelled": {
+      "subject": "{eventName}",
+      "intro": "此活动已取消。"
+    },
+    "push.reminder-24h": {
+      "subject": "{eventName}",
+      "intro": "明天 {time} 开始。"
+    },
+    "push.reminder-2h": {
+      "subject": "{eventName}",
+      "intro": "2小时后（{time}）开始。"
     }
   },
   "roles": {

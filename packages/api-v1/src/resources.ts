@@ -81,7 +81,17 @@ export const Problem = z
   })
   .openapi('Problem') satisfies z.ZodType<ProblemDto>;
 
-export const User = z.object({ id: z.uuid(), name: z.string(), email: z.string() }).openapi('User');
+export const User = z
+  .object({
+    id: z.uuid(),
+    name: z.string(),
+    email: z.string(),
+    emailVerified: z.boolean().openapi({
+      description:
+        'Whether the person has proved the address (an emailed code, a provider’s verified email). `/me/…` routes other than `/me` and `/me/organizations` refuse unverified sessions (`403`, `details.reason: email_unverified`).',
+    }),
+  })
+  .openapi('User');
 
 export const Session = z
   .object({
@@ -322,6 +332,17 @@ export const PublicTicketType = z
   })
   .openapi('PublicTicketType');
 
+export const MobileAppConfig = z
+  .object({
+    minimumVersion: z.string().openapi({
+      description:
+        'Below this version the app’s `/v1` calls get `426 Upgrade Required` (never a Staff device during its event).',
+    }),
+    latestVersion: z.string().openapi({ description: 'The newest version in the stores.' }),
+    storeUrl: z.string().openapi({ description: 'Where to get the update (the app’s store page).' }),
+  })
+  .openapi('MobileAppConfig');
+
 export const MobileConfig = z
   .object({
     apiVersion: z.string(),
@@ -329,6 +350,17 @@ export const MobileConfig = z
     latestVersions: z.object({ ios: z.string(), android: z.string() }),
     baseUrls: z.object({ api: z.string(), web: z.string() }),
     features: z.record(z.string(), z.boolean()),
+    apps: z
+      .object({
+        'yayatoh-ios': MobileAppConfig,
+        'yayatoh-android': MobileAppConfig,
+        'yayatoh-staff-ios': MobileAppConfig,
+        'yayatoh-staff-android': MobileAppConfig,
+      })
+      .openapi({
+        description:
+          'Version policy per app, keyed by the identifier the app sends in `X-Yayatoh-Client`. `minimumVersions` and `latestVersions` above are the attendee apps’ per-platform values.',
+      }),
   })
   .openapi('MobileConfig');
 

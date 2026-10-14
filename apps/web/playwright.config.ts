@@ -1,5 +1,6 @@
 import { fileURLToPath } from 'node:url';
 import { defineConfig, devices } from '@playwright/test';
+import { appLinksEnv } from './e2e/app-links-env.ts';
 import { frontDoorEnv, legacyStubServer } from './e2e/front-door-env.ts';
 
 const PORT = Number(process.env.E2E_PORT ?? 3100);
@@ -122,6 +123,7 @@ export default defineConfig({
             // customer (none of the seeded ones), so every other spec runs as with billing off.
             BILLING_ENABLED: '1',
             ...frontDoorEnv,
+            ...appLinksEnv,
           },
         },
       ],

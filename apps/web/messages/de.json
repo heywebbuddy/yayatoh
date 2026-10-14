@@ -237,6 +237,16 @@
         "sign-in-code": "Anmeldecode",
         "password-reset": "Passwort zurücksetzen",
         "magic-link": "Anmeldelink"
+      },
+      "push": {
+        "order-confirmed": "App-Mitteilung: Bestellung bestätigt",
+        "ticket-received": "App-Mitteilung: Ticket erhalten",
+        "transfer-accepted": "App-Mitteilung: Übertragung angenommen",
+        "transfer-cancelled": "App-Mitteilung: Übertragung abgebrochen",
+        "event-changed": "App-Mitteilung: Veranstaltung geändert",
+        "event-cancelled": "App-Mitteilung: Veranstaltung abgesagt",
+        "reminder-24h": "App-Mitteilung: Erinnerung 24 Stunden vorher",
+        "reminder-2h": "App-Mitteilung: Erinnerung 2 Stunden vorher"
       }
     },
     "status": {
@@ -1341,6 +1351,8 @@
     "revokeFor": "{label} widerrufen",
     "linkHint": "Oder öffne diesen Link auf dem Gerät: Er richtet den Scanner für dieses Event ein.",
     "openScanner": "Scanner auf diesem Gerät öffnen",
+    "qrLabel": "QR-Code des Einrichtungslinks",
+    "qrHint": "Oder scannen Sie diesen Code mit der Staff-App oder mit der Kamera des Geräts, das Sie einrichten. Der Schlüssel bleibt im Link und wird nie an den Server gesendet.",
     "handedTo": "Übergeben an",
     "orgDevice": "Niemand (scannt überall)",
     "handedToName": "für {name}"

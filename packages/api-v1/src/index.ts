@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { OpenAPIHono } from '@hono/zod-openapi';
 import { type ApiAccessQuotas, apiAccessQuotas } from '@yayatoh/billing';
 import { DEVICE_TOKEN_SCHEME, scannerRoutes } from '@yayatoh/checkin/routes';
@@ -9,24 +10,38 @@ import { routePath } from 'hono/route';
 import type { Principal, V1Deps, V1Env } from './context.ts';
 import { deprecationMiddleware } from './deprecation.ts';
 import { onV1Error, problem, sendProblem } from './http.ts';
+import { isGuardedMePath, meScope } from './me-scope.ts';
 import { memoryRateLimiter, RATE_LIMITS, type RateDecision } from './rate-limit.ts';
 import { authRoutes } from './routes/auth.ts';
 import { automationRoutes } from './routes/automation.ts';
 import { bulkRoutes } from './routes/bulk.ts';
 import { contentRoutes } from './routes/content.ts';
+import { deviceRoutes } from './routes/devices.ts';
 import { docsRoutes } from './routes/docs.ts';
 import { health } from './routes/health.ts';
 import { hookRoutes } from './routes/hooks.ts';
 import { keyRoutes } from './routes/key.ts';
 import { orgRoutes } from './routes/org.ts';
+import { portalRoutes } from './routes/portal.ts';
 import { publicRoutes } from './routes/public.ts';
 import { salesRoutes } from './routes/sales.ts';
+import { staffRoutes } from './routes/staff.ts';
 import { API_VERSION } from './routes/version.ts';
 import { clientInfo } from './telemetry.ts';
+import { mobileApps, resolveMobile, versionGate } from './versions.ts';
 import { registerWebhooks } from './webhooks.ts';
 
 export { cachedJson, etagOf } from './caching.ts';
-export type { MobileSettings, Principal, V1Deps } from './context.ts';
+export {
+  type MeContext,
+  MOBILE_CLIENTS,
+  type MobileAppSettings,
+  type MobileClient,
+  type MobileSettings,
+  type Principal,
+  type V1Deps,
+  type V1Env,
+} from './context.ts';
 export { decodeCursor, encodeCursor, pageByKey, pageOf } from './cursor.ts';
 export {
   type Deprecation,
@@ -35,9 +50,12 @@ export {
   deprecationMiddleware,
   deprecations,
 } from './deprecation.ts';
+export { meScope } from './me-scope.ts';
+export { type PortalMail, type PortalMailer, portalMailer } from './portal-mail.ts';
 export { memoryRateLimiter, RATE_LIMITS, type RateDecision, type RateLimiter } from './rate-limit.ts';
 export { API_VERSION } from './routes/version.ts';
 export { type ClientInfo, clientInfo } from './telemetry.ts';
+export { compareVersions, mobileSettingsFromEnv } from './versions.ts';
 
 /** Every operation's tag, described (Spectral `openapi-tags`, `tag-description`). */
 const API_TAGS = [
@@ -69,7 +87,17 @@ const API_TAGS = [
     description:
       'REST hooks for automation tools (Zapier): subscribe a URL to one event type and unsubscribe.',
   },
+  {
+    name: 'portal',
+    description:
+      'Exhibitor reps in the Staff app: sign in with the emailed portal code, then lead setup, scan batches and per-lead rating, qualifiers and notes.',
+  },
   { name: 'scanner', description: 'The Scan PWA’s device-token routes (manifest, offline sync).' },
+  {
+    name: 'staff',
+    description:
+      'The Staff app’s device-token routes (counts, device board, alerts, guest check-in, help requests, push) and the organizer’s read-only event-day view.',
+  },
   {
     name: 'webhooks',
     description:
@@ -214,12 +242,18 @@ export function createV1(deps: V1Deps) {
     });
   }
 
-  // Credential → principal. Device tokens (`yyd_`) are left to the scanner routes.
+  // M7.2d: an app below its minimum version gets a 426 before anything else is looked up (never a
+  // Staff device inside its event window; a request without the app header always passes).
+  const apps = mobileApps(resolveMobile(deps.mobile));
+  v1.use('*', versionGate({ ports: deps.ports, settings: () => apps, basePath, now: deps.now }));
+
+  // Credential → principal. Device tokens (`yyd_`) are left to the scanner and staff routes, and
+  // exhibitor portal tokens (`yyp_`, M7.2e) to the portal routes.
   v1.use('*', async (c, next) => {
     c.set('principal', null);
     const m = /^Bearer\s+(\S+)$/i.exec(c.req.header('authorization') ?? '');
     const token = m?.[1];
-    if (token && !token.startsWith('yyd_')) {
+    if (token && !token.startsWith('yyd_') && !token.startsWith('yyp_')) {
       if (token.startsWith('yy_')) {
         const key = await apiKeyIdentity(token);
         if (!key) throw new DomainError('unauthenticated', 'Unknown, expired or revoked API key');
@@ -235,6 +269,7 @@ export function createV1(deps: V1Deps) {
     // headers describe the tighter of the two. Without the module its keys are refused.
     const p = c.get('principal');
     const device = token?.startsWith('yyd_');
+    const portal = token?.startsWith('yyp_');
     let d: RateDecision;
     let window: number;
     if (p?.kind === 'api_key') {
@@ -250,12 +285,22 @@ export function createV1(deps: V1Deps) {
         : perKey;
       d = !perOrg.allowed || perOrg.remaining < perKey.remaining ? perOrg : perKey;
     } else {
-      const rule = p ? RATE_LIMITS.credential : device ? { limit: 3000, window: 60 } : RATE_LIMITS.anonymous;
+      const rule = p
+        ? RATE_LIMITS.credential
+        : device
+          ? { limit: 3000, window: 60 }
+          : portal
+            ? RATE_LIMITS.credential
+            : RATE_LIMITS.anonymous;
       const key = p
         ? credentialKey(p)
         : device
           ? `device:${token?.slice(0, 20)}`
-          : `ip:${clientIp(c.req.raw.headers)}`;
+          : portal
+            ? `portal:${createHash('sha256')
+                .update(token ?? '')
+                .digest('base64url')}`
+            : `ip:${clientIp(c.req.raw.headers)}`;
       window = rule.window;
       d = limiter.take(key, rule.limit, rule.window);
     }
@@ -287,7 +332,12 @@ export function createV1(deps: V1Deps) {
       if (p.key.orgId !== orgId) throw new DomainError('not_found', 'Organization not found');
       c.set('ctx', createCtx({ ...base, actor: { type: 'api_key', keyId: p.key.keyId } }));
     } else {
-      const ctx = createCtx({ ...base, actor: { type: 'user', userId: p.session.user.id } });
+      // M7.2a: the session's last sign-in or step-up reaches commands marked `stepUp`.
+      const ctx = createCtx({
+        ...base,
+        actor: { type: 'user', userId: p.session.user.id },
+        stepUpAt: p.session.stepUpAt,
+      });
       if (!(await memberRole(ctx))) throw new DomainError('not_found', 'Organization not found');
       c.set('ctx', ctx);
     }
@@ -296,8 +346,17 @@ export function createV1(deps: V1Deps) {
   v1.use('/orgs/:org', orgScope);
   v1.use('/orgs/:org/*', orgScope);
 
+  // M7.2a: `/me/…` is for a signed-in person with a verified email (see `meScope`).
+  v1.use('/me/*', async (c, next) => {
+    const path = new URL(c.req.url).pathname.slice(basePath.length);
+    if (!isGuardedMePath(path)) return next();
+    return meScope(c, next);
+  });
+
   v1.route('/', health);
   v1.route('/', authRoutes(deps, limiter, clientIp));
+  // M7.2c: the person's phones for push (`/me/devices`, behind the `/me` scope).
+  v1.route('/', deviceRoutes(deps));
   v1.route('/', publicRoutes());
   v1.route('/', contentRoutes(deps));
   v1.route('/', orgRoutes(deps));
@@ -314,9 +373,18 @@ export function createV1(deps: V1Deps) {
   // M6.5c: webhook subscriptions (Make and n8n instant triggers).
   v1.route('/', hookRoutes(deps));
   v1.route('/', scannerRoutes(deps.ports));
+  // M7.2e: the Staff app's device-token routes and the organizer's event-day view.
+  v1.route('/', staffRoutes(deps));
+  v1.route('/', portalRoutes(deps, clientIp));
   v1.route('/', docsRoutes(basePath));
 
   v1.openAPIRegistry.registerComponent('securitySchemes', 'deviceToken', DEVICE_TOKEN_SCHEME);
+  v1.openAPIRegistry.registerComponent('securitySchemes', 'portalSession', {
+    type: 'http',
+    scheme: 'bearer',
+    description:
+      'An exhibitor portal access token (`yyp_…`) from `POST /v1/portal/auth/token` (15 minutes, with a rotating refresh token).',
+  });
   v1.openAPIRegistry.registerComponent('securitySchemes', 'apiKey', {
     type: 'http',
     scheme: 'bearer',

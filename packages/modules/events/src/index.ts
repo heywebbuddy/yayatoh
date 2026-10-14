@@ -220,6 +220,17 @@ export {
   revokePortalAccountTx,
   verifyPortalChallenge,
 } from './portal.ts';
+// M7.2e: the portal session as bearer tokens, for the Staff app.
+export {
+  createPortalBearerSession,
+  endPortalBearerSession,
+  isPortalAccessToken,
+  PORTAL_ACCESS_TTL_MS,
+  type PortalBearerTokens,
+  type PortalRefreshResult,
+  portalPrincipalByBearer,
+  refreshPortalBearerSession,
+} from './portal-bearer.ts';
 export { privateColumns } from './private-columns.ts';
 export {
   accessTarget,
@@ -299,4 +310,4 @@ export {
   TeamMemberDto,
   teamEventBySlugQuery,
 } from './team.ts';
-export { eventsOverTx } from './timings.ts';
+export { eventsInWindowTx, eventsOverTx } from './timings.ts';

@@ -282,7 +282,13 @@ describe('a key never exceeds its scopes or its org (generated from /v1)', () =>
   };
   const SCOPE = /[Ss]cope `([a-z_]+:[a-z_]+)`/;
   // Operations whose scope depends on the request (bulk kinds) or that need no scope.
-  const NO_SINGLE_SCOPE = new Set(['getCurrentApiKey', 'getBulkOperation', 'undoBulkOperation']);
+  // `getEventOps` (M7.2e) is for signed-in members only: a key is refused, whatever its scopes.
+  const NO_SINGLE_SCOPE = new Set([
+    'getCurrentApiKey',
+    'getBulkOperation',
+    'undoBulkOperation',
+    'getEventOps',
+  ]);
   const ops = Object.entries(doc.paths)
     .filter(([path]) => path.startsWith('/v1/orgs/{org}'))
     .flatMap(([path, byMethod]) =>

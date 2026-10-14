@@ -1,47 +1,24 @@
 import 'server-only';
-import { engineStaffAlerts } from '@yayatoh/alerts';
 import {
-  deviceContext,
-  type StaffAlertSource,
-  type StaffPushSender,
-  staffOverviewQuery,
-  subscribeStaffPushCommand,
-  supervisorViewQuery,
-} from '@yayatoh/checkin';
+  deviceFromAuthorization,
+  staffAlertSource,
+  staffOverview,
+  staffPushEndpointAllowed,
+  subscribeStaffPush,
+  supervisorView,
+} from '@yayatoh/api-v1/staff';
+import type { StaffPushSender } from '@yayatoh/checkin';
 import type { Ctx } from '@yayatoh/kernel';
-import {
-  devMailboxTransports,
-  fakePushAllowed,
-  isAllowedPushEndpoint,
-  withWebPush,
-} from '@yayatoh/notifications';
+import { devMailboxTransports, fakePushAllowed, withWebPush } from '@yayatoh/notifications';
 import { problem, problemResponse } from '@yayatoh/platform/http';
 import { webPushConfig } from './web-push.ts';
 
 /**
- * Staff mode of the Scan PWA (M3.4a), composed for the web app.
- *
- * `staffAlertSource` is where the alerts list comes from: the check-in module's per-device alerts
- * (device offline, low battery, backlog, capacity near) on the Command Center alert engine's
- * state, so what the organizer acknowledged or snoozed is quiet here too (same in the worker).
+ * Staff mode of the Scan PWA (M3.4a), composed for the web app. What the PWA's routes and the
+ * Staff app's `/v1/staff/*` routes both read and write lives in `@yayatoh/api-v1/staff` (M7.2e:
+ * one implementation); this file is the web side: the request's device and the dev push sender.
  */
-export const staffAlertSource: StaffAlertSource = engineStaffAlerts();
-
-export const staffOverview = staffOverviewQuery(staffAlertSource);
-export const supervisorView = supervisorViewQuery(staffAlertSource);
-
-/** Known push services only; in dev/CI also the fake push service on this origin. */
-export function staffPushEndpointAllowed(endpoint: string): boolean {
-  if (isAllowedPushEndpoint(endpoint)) return true;
-  if (!fakePushAllowed()) return false;
-  try {
-    return isAllowedPushEndpoint(endpoint, { fakeOrigin: new URL(endpoint).origin });
-  } catch {
-    return false;
-  }
-}
-
-export const subscribeStaffPush = subscribeStaffPushCommand(staffPushEndpointAllowed);
+export { staffAlertSource, staffOverview, staffPushEndpointAllowed, subscribeStaffPush, supervisorView };
 
 /** The web push adapter for staff alerts (dev drain; the worker composes its own). */
 export function staffPushSender(appOrigin: string): StaffPushSender | null {
@@ -53,15 +30,12 @@ export function staffPushSender(appOrigin: string): StaffPushSender | null {
   return push ? { send: (m) => push.send(m) } : null;
 }
 
-const BEARER = /^Bearer (yyd_[A-Za-z0-9_-]{43})$/;
-
 /**
  * The device behind a Scan PWA request: its bearer token decides the org (never a header or a
  * parameter). A missing, unknown or revoked token is a problem+json 401.
  */
 export async function scanDevice(req: Request): Promise<{ ctx: Ctx } | Response> {
-  const m = BEARER.exec(req.headers.get('authorization') ?? '');
-  const dc = m?.[1] ? await deviceContext(m[1]) : null;
-  if (!dc) return problemResponse(problem('unauthenticated', 'Device token required'));
-  return { ctx: dc.ctx };
+  const ctx = await deviceFromAuthorization(req.headers.get('authorization'));
+  if (!ctx) return problemResponse(problem('unauthenticated', 'Device token required'));
+  return { ctx };
 }

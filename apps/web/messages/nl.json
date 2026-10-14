@@ -237,6 +237,16 @@
         "sign-in-code": "Inlogcode",
         "password-reset": "Wachtwoord opnieuw instellen",
         "magic-link": "Inloglink"
+      },
+      "push": {
+        "order-confirmed": "App-melding: bestelling bevestigd",
+        "ticket-received": "App-melding: ticket ontvangen",
+        "transfer-accepted": "App-melding: overdracht geaccepteerd",
+        "transfer-cancelled": "App-melding: overdracht geannuleerd",
+        "event-changed": "App-melding: evenement gewijzigd",
+        "event-cancelled": "App-melding: evenement geannuleerd",
+        "reminder-24h": "App-melding: herinnering 24 uur van tevoren",
+        "reminder-2h": "App-melding: herinnering 2 uur van tevoren"
       }
     },
     "status": {
@@ -1341,6 +1351,8 @@
     "revokeFor": "{label} intrekken",
     "linkHint": "Of open deze link op het apparaat: hij stelt de scanner in voor dit evenement.",
     "openScanner": "Scanner openen op dit apparaat",
+    "qrLabel": "QR-code van de installatielink",
+    "qrHint": "Of scan deze code met de Staff-app of met de camera van het apparaat dat je instelt. De sleutel blijft in de link en wordt nooit naar de server gestuurd.",
     "handedTo": "Entregue a",
     "orgDevice": "Ninguém (escaneia em qualquer lugar)",
     "handedToName": "para {name}"

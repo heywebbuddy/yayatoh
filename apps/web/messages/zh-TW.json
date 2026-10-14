@@ -237,6 +237,16 @@
         "sign-in-code": "登入驗證碼",
         "password-reset": "重設密碼",
         "magic-link": "登入連結"
+      },
+      "push": {
+        "order-confirmed": "應用程式推播：訂單已確認",
+        "ticket-received": "應用程式推播：收到票券",
+        "transfer-accepted": "應用程式推播：轉讓已接受",
+        "transfer-cancelled": "應用程式推播：轉讓已取消",
+        "event-changed": "應用程式推播：活動有變更",
+        "event-cancelled": "應用程式推播：活動已取消",
+        "reminder-24h": "應用程式推播：提前 24 小時提醒",
+        "reminder-2h": "應用程式推播：提前 2 小時提醒"
       }
     },
     "status": {
@@ -1341,6 +1351,8 @@
     "revokeFor": "撤銷 {label}",
     "linkHint": "或在裝置上開啟此連結：它會為本活動設定好掃描器。",
     "openScanner": "在此裝置上開啟掃描器",
+    "qrLabel": "設定連結的 QR 碼",
+    "qrHint": "也可以用 Staff App 或正在設定的裝置的相機掃描此 QR 碼。金鑰只保留在連結中，絕不會傳送到伺服器。",
     "handedTo": "交給",
     "orgDevice": "無人(可在任何位置掃描)",
     "handedToName": "給 {name}"

@@ -1,4 +1,5 @@
 import { base32Decode, base32Encode } from './base32.ts';
+import { ed25519KeyPair, ed25519Sign, ed25519Verify } from './primitives.ts';
 
 /**
  * yy1 ticket code (ADR 0011): "YY1" + base32(payload ‖ Ed25519 signature).
@@ -21,10 +22,6 @@ export interface TicketClaims {
 export type VerifyResult =
   | ({ readonly ok: true } & TicketClaims)
   | { readonly ok: false; readonly reason: 'malformed' | 'unknown_key' | 'bad_signature' };
-
-const subtle = () => globalThis.crypto.subtle;
-/** Copy into a fresh ArrayBuffer-backed view (what Web Crypto's BufferSource type requires). */
-const buf = (u: Uint8Array): Uint8Array<ArrayBuffer> => new Uint8Array(u);
 
 function uuidToBytes(id: string): Uint8Array {
   const hex = id.replace(/-/g, '');
@@ -65,22 +62,12 @@ export interface KeyPair {
 }
 
 export async function generateKeyPair(): Promise<KeyPair> {
-  // Structural type so this compiles under both DOM and Node Web Crypto typings (universal package).
-  type Key = Awaited<ReturnType<ReturnType<typeof subtle>['importKey']>>;
-  const kp = (await subtle().generateKey({ name: 'Ed25519' }, true, ['sign', 'verify'])) as unknown as {
-    publicKey: Key;
-    privateKey: Key;
-  };
-  return {
-    publicKey: new Uint8Array(await subtle().exportKey('raw', kp.publicKey)),
-    privateKey: new Uint8Array(await subtle().exportKey('pkcs8', kp.privateKey)),
-  };
+  return ed25519KeyPair();
 }
 
 export async function signTicketCode(claims: TicketClaims, privateKeyPkcs8: Uint8Array): Promise<string> {
-  const key = await subtle().importKey('pkcs8', buf(privateKeyPkcs8), { name: 'Ed25519' }, false, ['sign']);
   const p = payload(claims);
-  const sig = new Uint8Array(await subtle().sign({ name: 'Ed25519' }, key, buf(signed(p))));
+  const sig = ed25519Sign(signed(p), privateKeyPkcs8);
   const all = new Uint8Array(PAYLOAD_LEN + SIG_LEN);
   all.set(p);
   all.set(sig, PAYLOAD_LEN);
@@ -100,9 +87,7 @@ export async function verifyTicketCode(
   const kid = ((p[1] as number) << 8) | (p[2] as number);
   const raw = publicKeys.get(kid);
   if (!raw) return { ok: false, reason: 'unknown_key' };
-  const key = await subtle().importKey('raw', buf(raw), { name: 'Ed25519' }, false, ['verify']);
-  const good = await subtle().verify({ name: 'Ed25519' }, key, buf(bytes.slice(PAYLOAD_LEN)), buf(signed(p)));
-  if (!good) return { ok: false, reason: 'bad_signature' };
+  if (!ed25519Verify(bytes.slice(PAYLOAD_LEN), signed(p), raw)) return { ok: false, reason: 'bad_signature' };
   return {
     ok: true,
     kid,
@@ -132,10 +117,7 @@ export async function signStatement(
   privateKeyPkcs8: Uint8Array,
 ): Promise<string> {
   if (!Number.isInteger(kid) || kid < 0 || kid > 0xffff) throw new Error('kid must be 0..65535');
-  const key = await subtle().importKey('pkcs8', buf(privateKeyPkcs8), { name: 'Ed25519' }, false, ['sign']);
-  const sig = new Uint8Array(
-    await subtle().sign({ name: 'Ed25519' }, key, buf(statementBytes(tag, message))),
-  );
+  const sig = ed25519Sign(statementBytes(tag, message), privateKeyPkcs8);
   const all = new Uint8Array(2 + SIG_LEN);
   all[0] = kid >> 8;
   all[1] = kid & 255;
@@ -154,17 +136,7 @@ export async function verifyStatement(
   if (!bytes || bytes.length !== 2 + SIG_LEN) return false;
   const raw = publicKeys.get(((bytes[0] as number) << 8) | (bytes[1] as number));
   if (!raw) return false;
-  try {
-    const key = await subtle().importKey('raw', buf(raw), { name: 'Ed25519' }, false, ['verify']);
-    return await subtle().verify(
-      { name: 'Ed25519' },
-      key,
-      buf(bytes.slice(2)),
-      buf(statementBytes(tag, message)),
-    );
-  } catch {
-    return false;
-  }
+  return ed25519Verify(bytes.slice(2), statementBytes(tag, message), raw);
 }
 
 const statementBytes = (tag: string, message: string) =>

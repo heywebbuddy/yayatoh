@@ -1,5 +1,4 @@
-import { queueQuery, staffRequestCommand } from '@yayatoh/assistance';
-import { executeCommand, executeQuery } from '@yayatoh/kernel';
+import { openAssistanceQueue, raiseStaffRequest } from '@yayatoh/api-v1/staff';
 import { problem, problemFor, problemResponse } from '@yayatoh/platform/http';
 import { ports } from '@/server/ports.ts';
 import { scanDevice } from '@/server/scan-staff.ts';
@@ -17,12 +16,7 @@ export async function GET(req: Request) {
   const eventId = new URL(req.url).searchParams.get('eventId') ?? '';
   if (!UUID.test(eventId)) return problemResponse(problem('validation_failed', 'eventId'));
   try {
-    const requests = await executeQuery(
-      queueQuery,
-      { eventId, status: 'open', limit: 50 },
-      device.ctx,
-      ports,
-    );
+    const requests = await openAssistanceQueue(device.ctx, eventId, ports);
     return Response.json({ requests }, { headers: { 'cache-control': 'no-store' } });
   } catch (err) {
     return problemResponse(problemFor(err));
@@ -39,18 +33,7 @@ export async function POST(req: Request) {
     return problemResponse(problem('validation_failed', 'Invalid JSON'));
   }
   try {
-    const r = await executeCommand(
-      staffRequestCommand,
-      {
-        eventId: body.eventId as string,
-        reason: body.reason as never,
-        note: typeof body.note === 'string' ? body.note : '',
-        checkpointId: typeof body.checkpointId === 'string' && body.checkpointId ? body.checkpointId : null,
-      },
-      device.ctx,
-      ports,
-    );
-    return Response.json(r, { status: 201 });
+    return Response.json(await raiseStaffRequest(device.ctx, body, ports), { status: 201 });
   } catch (err) {
     return problemResponse(problemFor(err));
   }

@@ -520,6 +520,60 @@ export const KINDS = {
     urgent: true,
     params: ['name', 'period'],
   },
+  // M7.2c native push (decision P7-8) for the attendee app. Push-only; the lock screen shows the
+  // event name and what changed, nothing else (no name, email, phone, amount or ticket code). The
+  // tap opens the route in `_path` (`/tickets/{id}`, `/orders/{id}`, `/events/{slug}`). Service
+  // notices are transactional; reminders can be switched off per org (the `reminders` category).
+  'push.order-confirmed': {
+    category: 'transactional',
+    channels: ['push'],
+    urgent: true,
+    params: ['eventName'],
+  },
+  'push.ticket-received': {
+    category: 'transactional',
+    channels: ['push'],
+    urgent: true,
+    params: ['eventName'],
+  },
+  'push.transfer-accepted': {
+    category: 'transactional',
+    channels: ['push'],
+    urgent: true,
+    params: ['eventName'],
+  },
+  'push.transfer-cancelled': {
+    category: 'transactional',
+    channels: ['push'],
+    urgent: true,
+    params: ['eventName'],
+  },
+  'push.event-changed': {
+    category: 'transactional',
+    channels: ['push'],
+    urgent: true,
+    params: ['eventName'],
+  },
+  'push.event-cancelled': {
+    category: 'transactional',
+    channels: ['push'],
+    urgent: true,
+    params: ['eventName'],
+  },
+  // Reminders respect the recipient's quiet hours like every optional kind; one that would be
+  // released only after the event started is dropped instead (`dispatch.ts`).
+  'push.reminder-24h': {
+    category: 'reminders',
+    channels: ['push'],
+    urgent: false,
+    params: ['eventName', 'startsAt', 'timeZone'],
+  },
+  'push.reminder-2h': {
+    category: 'reminders',
+    channels: ['push'],
+    urgent: false,
+    params: ['eventName', 'startsAt', 'timeZone'],
+  },
   'notifications.test': {
     category: 'transactional',
     channels: ['in_app', 'push'],
@@ -584,6 +638,11 @@ export const KINDS = {
 
 export type MessageKind = keyof typeof KINDS;
 export const MESSAGE_KINDS = Object.keys(KINDS) as MessageKind[];
+/** The attendee app's lock-screen kinds (M7.2c), push-only. */
+export const APP_PUSH_KINDS = MESSAGE_KINDS.filter((k) => k.startsWith('push.')) as Extract<
+  MessageKind,
+  `push.${string}`
+>[];
 /** Kinds rendered as emails (everything a customer can receive). */
 export const EMAIL_KINDS = MESSAGE_KINDS.filter((k) =>
   (KINDS[k].channels as readonly string[]).includes('email'),

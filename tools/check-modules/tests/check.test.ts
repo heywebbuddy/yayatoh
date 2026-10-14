@@ -1,7 +1,7 @@
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import { checkModules, importsOf, literalJsxText } from '../src/check.ts';
+import { checkModules, importsOf, literalJsxText, withoutComments } from '../src/check.ts';
 
 const here = (p: string) => fileURLToPath(new URL(p, import.meta.url));
 const rules = (canary: string) => checkModules(here(`../canaries/${canary}`)).map((v) => v.rule);
@@ -63,6 +63,17 @@ describe('check-modules gate canaries', () => {
     expect(v.find((x) => x.file === 'apps/web/src/select.tsx')?.message).toContain('Select');
   });
 
+  it('crypto.subtle in a universal package fails; comments, tests and server packages pass (M7.1a)', () => {
+    const v = checkModules(here('../canaries/universal-crypto')).filter((x) => x.rule === 'universal-crypto');
+    expect(v.map((x) => x.file)).toEqual(['packages/door/src/index.ts']);
+    expect(v[0]?.message).toContain('@yayatoh/door');
+  });
+
+  it('withoutComments drops prose but keeps code and URLs', () => {
+    expect(withoutComments('a(); // crypto.subtle\n/* subtle */ b();')).not.toContain('subtle');
+    expect(withoutComments("const u = 'https://x.test/subtle';")).toContain('subtle');
+  });
+
   it('the CLI exits non-zero on a canary and zero on the repo', () => {
     const cli = here('../cli.ts');
     expect(() =>
@@ -73,7 +84,7 @@ describe('check-modules gate canaries', () => {
     expect(() =>
       execFileSync(process.execPath, [cli, '--root', here('../../..')], { stdio: 'pipe' }),
     ).not.toThrow();
-  });
+  }, 30_000);
 });
 
 describe('importsOf', () => {

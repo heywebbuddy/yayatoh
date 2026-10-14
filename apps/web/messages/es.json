@@ -237,6 +237,16 @@
         "sign-in-code": "Código de inicio de sesión",
         "password-reset": "Restablecer contraseña",
         "magic-link": "Enlace de inicio de sesión"
+      },
+      "push": {
+        "order-confirmed": "Notificación de la app: pedido confirmado",
+        "ticket-received": "Notificación de la app: entrada recibida",
+        "transfer-accepted": "Notificación de la app: transferencia aceptada",
+        "transfer-cancelled": "Notificación de la app: transferencia cancelada",
+        "event-changed": "Notificación de la app: evento modificado",
+        "event-cancelled": "Notificación de la app: evento cancelado",
+        "reminder-24h": "Notificación de la app: recordatorio 24 horas antes",
+        "reminder-2h": "Notificación de la app: recordatorio 2 horas antes"
       }
     },
     "status": {
@@ -1341,6 +1351,8 @@
     "revokeFor": "Revocar {label}",
     "linkHint": "O abre este enlace en el dispositivo: configura el escáner para este evento.",
     "openScanner": "Abrir el escáner en este dispositivo",
+    "qrLabel": "Código QR del enlace de configuración",
+    "qrHint": "O escanea este código con la app Staff o con la cámara del dispositivo que estás configurando. La clave se queda en el enlace y nunca se envía al servidor.",
     "handedTo": "Entregado a",
     "orgDevice": "Nadie (escanea en cualquier lugar)",
     "handedToName": "para {name}"

@@ -272,21 +272,31 @@ export type StaffAlertKind = (typeof STAFF_ALERT_KINDS)[number];
 export const STAFF_PUSH_KINDS = [...STAFF_ALERT_KINDS, 'assistance'] as const;
 export type StaffPushKind = (typeof STAFF_PUSH_KINDS)[number];
 
+/** Where a staff push goes (M7.2e adds the native services to M3.4a's web push). */
+export const STAFF_PUSH_PLATFORMS = ['webpush', 'apns', 'fcm'] as const;
+export type StaffPushPlatform = (typeof STAFF_PUSH_PLATFORMS)[number];
+
 /**
- * Staff web push (M3.4a), opted in per device from the Scan PWA's staff mode. One subscription per
- * device. `supervisor_user_id` is the signed-in supervisor who opted in for device alerts (their
- * permission is re-checked at every alert); without one the device gets staff alerts only.
- * `copy` is the notification text per alert kind in the device's language, as the PWA rendered it
- * from its messages (placeholders `{label}` and `{percent}`), so the server holds no UI strings.
+ * Staff push (M3.4a web push; M7.2e APNs and FCM), opted in per device from the Scan PWA's or the
+ * Staff app's staff mode. One subscription per device. `endpoint` is the browser's push endpoint
+ * (`webpush`, with its `p256dh` and `auth_secret` keys) or the native token (`apns`, `fcm`; no
+ * keys, `app_id` = the app's bundle or package id). The row dies with the device: revoking or
+ * wiping it deletes it. `supervisor_user_id` is the signed-in supervisor who opted in for device
+ * alerts (their permission is re-checked at every alert); without one the device gets staff
+ * alerts only. `copy` is the notification text per alert kind in the device's language, as the
+ * app rendered it from its messages (placeholders `{label}` and `{percent}`), so the server holds
+ * no UI strings.
  */
 export const staffPushSubscriptions = tenantTable(
   checkinSchema,
   'staff_push_subscriptions',
   {
     deviceId: uuid('device_id').notNull(),
+    platform: text('platform').notNull().default('webpush'),
     endpoint: text('endpoint').notNull(),
-    p256dh: text('p256dh').notNull(),
-    authSecret: text('auth_secret').notNull(),
+    p256dh: text('p256dh'),
+    authSecret: text('auth_secret'),
+    appId: text('app_id'),
     locale: text('locale').notNull(),
     copy: jsonb('copy').$type<Record<string, { title: string; body: string }>>().notNull(),
     supervisorUserId: uuid('supervisor_user_id'),
@@ -300,11 +310,17 @@ export const staffPushSubscriptions = tenantTable(
       foreignColumns: [devices.orgId, devices.id],
     }).onDelete('cascade'),
     check(
-      'staff_push_subscriptions_endpoint_check',
-      sql`endpoint ~ '^https?://' and length(endpoint) <= 2048`,
+      'staff_push_subscriptions_platform_check',
+      sql.raw(`platform in (${STAFF_PUSH_PLATFORMS.map((k) => `'${k}'`).join(', ')})`),
     ),
-    check('staff_push_subscriptions_p256dh_check', sql`p256dh ~ '^[A-Za-z0-9_-]{87}$'`),
-    check('staff_push_subscriptions_auth_check', sql`auth_secret ~ '^[A-Za-z0-9_-]{22}$'`),
+    check(
+      'staff_push_subscriptions_endpoint_check',
+      sql`(platform = 'webpush' and endpoint ~ '^https?://' and length(endpoint) <= 2048) or (platform <> 'webpush' and length(endpoint) between 8 and 4096)`,
+    ),
+    check(
+      'staff_push_subscriptions_keys_check',
+      sql`(platform = 'webpush' and p256dh ~ '^[A-Za-z0-9_-]{87}$' and auth_secret ~ '^[A-Za-z0-9_-]{22}$' and app_id is null) or (platform <> 'webpush' and p256dh is null and auth_secret is null and (app_id is null or length(app_id) between 3 and 200))`,
+    ),
     check('staff_push_subscriptions_locale_check', sql`locale ~ '^[a-z]{2}(-[A-Z]{2})?$'`),
   ],
 );

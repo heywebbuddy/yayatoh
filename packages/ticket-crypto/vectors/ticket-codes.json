@@ -1,0 +1,514 @@
+{
+  "description": "yy1 ticket codes (ADR 0011): verifyTicketCode(code, publicKeys of `kids`) must give `expect`. Codes were signed by Node OpenSSL.",
+  "seedRule": "seed = SHA-256('yayatoh-test-vector-key:' + label)",
+  "keyLabels": {
+    "1": "org-a",
+    "2": "org-a-rotated",
+    "7": "org-b",
+    "65535": "org-max"
+  },
+  "publicKeys": {
+    "1": "2Je8S2xT8dr/dlVvxQxX2A3BR1OcJXI7RyLMHJtqHGE=",
+    "2": "A9NJI7Y7w6OxM7vted9KQY18J/48YGnY1+UE+H05i8Q=",
+    "7": "rjUSN5HOEDSEnzQjwJ0tYAnWqxu0CyXxFAQUmASjgKU=",
+    "65535": "iEzw+aQlvp/Z4L4g9tP/fA44K2nlV/KTWzOVcede4lA="
+  },
+  "vectors": [
+    {
+      "name": "valid kid 1 rev 0",
+      "code": "YY1AEAACAMS6AAAAADQACAAAAAAAAAAAAIAACSENBRGMW7TT6QMDPGBX33G3LNUXJXWTX6G3VTV3MYSSWQW7HLATFKWGGASPFK42Z2IWUBGLOD2KBVWUM6SXIIM3LJPWHEX5CP5MEIJ",
+      "kids": [
+        1,
+        2,
+        7,
+        65535
+      ],
+      "expect": {
+        "ok": true,
+        "kid": 1,
+        "ticketId": "0192f000-0000-7000-8000-000000000001",
+        "rev": 0
+      }
+    },
+    {
+      "name": "valid kid 1 rev 1",
+      "code": "YY1AEAACAMS6AAAAADQACAAAAAAAAAAAAIAAHKAIT5C65XEXUWZMZ624WUKBB5H4W7C3RTH3KUH4DKN7FRIGUB2LK7LI3MSYZ5JQMPAEASLDNG4HNVDQJE6AAJLSRTZIWGRUDGXNXQI",
+      "kids": [
+        1,
+        2,
+        7,
+        65535
+      ],
+      "expect": {
+        "ok": true,
+        "kid": 1,
+        "ticketId": "0192f000-0000-7000-8000-000000000001",
+        "rev": 1
+      }
+    },
+    {
+      "name": "valid kid 1 rev 2",
+      "code": "YY1AEAACAMS6AAAAADQACAAAAAAAAAAAAIAAJY6OVFR2726HJIYB3N3AFSNVMQLF3UCZYJHU2QEGXZT7UC22E3HQREP5NQ7RJT7GLJNE35QVGJDPXYTGWC3LVXJ64DU43ER6JKCVPIC",
+      "kids": [
+        1,
+        2,
+        7,
+        65535
+      ],
+      "expect": {
+        "ok": true,
+        "kid": 1,
+        "ticketId": "0192f000-0000-7000-8000-000000000001",
+        "rev": 2
+      }
+    },
+    {
+      "name": "valid kid 2 (rotated key)",
+      "code": "YY1AEAAEAMYBIVTYTL6L6NGW7ENTYHRUKYAAP2W7XUJMYGO6SJILY7RXUGAXCBORBAGO2ATLW7FBKWZM3S73EY5RDAZHIFW6AVBID2X6JOS47YYNO5AKVXMU6CCZGEIUF3QVR3NBYYH",
+      "kids": [
+        1,
+        2,
+        7,
+        65535
+      ],
+      "expect": {
+        "ok": true,
+        "kid": 2,
+        "ticketId": "01980a2b-3c4d-7e5f-9a6b-7c8d9e0f1a2b",
+        "rev": 3
+      }
+    },
+    {
+      "name": "valid kid 7, rev 65535",
+      "code": "YY1AEAAOAMYBIVTYTL6L6NGW7ENTYHRUK7777KRVOF2NVH7S7HVB3DSLARLOFK7SSBJYQ6BHBJMIIEYDQ75GCEHYQ6FFABGOPNJ7COD6MRGIPJ2R4FUC7ZYQGKB2GQIG6T44YT2D6YL",
+      "kids": [
+        1,
+        2,
+        7,
+        65535
+      ],
+      "expect": {
+        "ok": true,
+        "kid": 7,
+        "ticketId": "01980a2b-3c4d-7e5f-9a6b-7c8d9e0f1a2b",
+        "rev": 65535
+      }
+    },
+    {
+      "name": "valid kid 65535",
+      "code": "YY1AH7777777777777777777777777777YAABVLXQ5CHBVUETLYLYC347Q5MIJBGO7VDUL5335S26AQO2GSKWVEVMNR46MZ3RHNDUXE2D5JQYMVX27T6PPN35UB6I7EFBCC66VEBYAP",
+      "kids": [
+        1,
+        2,
+        7,
+        65535
+      ],
+      "expect": {
+        "ok": true,
+        "kid": 65535,
+        "ticketId": "ffffffff-ffff-ffff-ffff-ffffffffffff",
+        "rev": 0
+      }
+    },
+    {
+      "name": "valid all-zero ticket id",
+      "code": "YY1AEAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAACJCDHLWXG3ASN4DBBT63XJCPNHRKNEIPQ3NQLVF2OGEHTEOAZUZQTGIXY2A5BUIJB4ZRSE5TVKNCHB347XZFARL53VTTIBF3YWKFAE",
+      "kids": [
+        1,
+        2,
+        7,
+        65535
+      ],
+      "expect": {
+        "ok": true,
+        "kid": 1,
+        "ticketId": "00000000-0000-0000-0000-000000000000",
+        "rev": 0
+      }
+    },
+    {
+      "name": "valid with only its own key",
+      "code": "YY1AEAAOAMS6AAAAADQACAAAAAAAAAAAAIAABHTFFD3UYNZ7P2PYXSRXMBK6ZVLUBFSPRIECFG4CLQJBE7ZLVIVGVZWZGUQGIMZ6WM3Q4UUD2LK6ZYUNLAYYGYPPRFRHKHGUIAJKTYO",
+      "kids": [
+        7
+      ],
+      "expect": {
+        "ok": true,
+        "kid": 7,
+        "ticketId": "0192f000-0000-7000-8000-000000000001",
+        "rev": 0
+      }
+    },
+    {
+      "name": "valid, body in lower case",
+      "note": "the verifier upper-cases the body (not the YY1 prefix)",
+      "code": "YY1aeaacams6aaaaadqacaaaaaaaaaaaaiaacsenbrgmw7tt6qmdpgbx33g3lnuxjxwtx6g3vtv3mysswqw7hlatfkwggaspfk42z2iwubglod2kbvwum6sxiim3ljpwhex5cp5meij",
+      "kids": [
+        1,
+        2,
+        7,
+        65535
+      ],
+      "expect": {
+        "ok": true,
+        "kid": 1,
+        "ticketId": "0192f000-0000-7000-8000-000000000001",
+        "rev": 0
+      }
+    },
+    {
+      "name": "valid, trailing newline",
+      "note": "the body is trimmed",
+      "code": "YY1AEAACAMS6AAAAADQACAAAAAAAAAAAAIAACSENBRGMW7TT6QMDPGBX33G3LNUXJXWTX6G3VTV3MYSSWQW7HLATFKWGGASPFK42Z2IWUBGLOD2KBVWUM6SXIIM3LJPWHEX5CP5MEIJ\n",
+      "kids": [
+        1,
+        2,
+        7,
+        65535
+      ],
+      "expect": {
+        "ok": true,
+        "kid": 1,
+        "ticketId": "0192f000-0000-7000-8000-000000000001",
+        "rev": 0
+      }
+    },
+    {
+      "name": "valid, one extra base32 character",
+      "note": "a lone trailing character carries no whole byte, so it is ignored (current behaviour, frozen)",
+      "code": "YY1AEAACAMS6AAAAADQACAAAAAAAAAAAAIAACSENBRGMW7TT6QMDPGBX33G3LNUXJXWTX6G3VTV3MYSSWQW7HLATFKWGGASPFK42Z2IWUBGLOD2KBVWUM6SXIIM3LJPWHEX5CP5MEIJA",
+      "kids": [
+        1,
+        2,
+        7,
+        65535
+      ],
+      "expect": {
+        "ok": true,
+        "kid": 1,
+        "ticketId": "0192f000-0000-7000-8000-000000000001",
+        "rev": 0
+      }
+    },
+    {
+      "name": "unknown key id",
+      "code": "YY1AEAASAMS6AAAAADQACAAAAAAAAAAAAIAADCKOR3S27YFMQSFKLKUTWVVA4TDNGSKGWRO2Q22MK4WYAMVGMF2ABPT6YDODCRZYOFFXBF6MRAIU2VDX6M6KUR7FYQMXGHCYTOBZJIO",
+      "kids": [
+        1,
+        2,
+        7,
+        65535
+      ],
+      "expect": {
+        "ok": false,
+        "reason": "unknown_key"
+      }
+    },
+    {
+      "name": "key id not in this verifier’s set",
+      "code": "YY1AEAAEAMYBIVTYTL6L6NGW7ENTYHRUKYAAP2W7XUJMYGO6SJILY7RXUGAXCBORBAGO2ATLW7FBKWZM3S73EY5RDAZHIFW6AVBID2X6JOS47YYNO5AKVXMU6CCZGEIUF3QVR3NBYYH",
+      "kids": [
+        1
+      ],
+      "expect": {
+        "ok": false,
+        "reason": "unknown_key"
+      }
+    },
+    {
+      "name": "signed by another key under a known key id",
+      "code": "YY1AEAACAMS6AAAAADQACAAAAAAAAAAAAIAABQV3URWSM5GYUI62AG2XXIXSHML63GBGOQCGFXURS24HQTO47XLWD3HE4AXNUJCYJW7GF3A3P4YPULZVP3HPNCZD3CWUOS7QQ3OYFYN",
+      "kids": [
+        1,
+        2,
+        7,
+        65535
+      ],
+      "expect": {
+        "ok": false,
+        "reason": "bad_signature"
+      }
+    },
+    {
+      "name": "signed by key 2 but claiming key 1",
+      "code": "YY1AEAACAMS6AAAAADQACAAAAAAAAAAAAIAAAK5SHNGL4RVLOXRUVKDELHVSGVDXCJTOLVMD2C2FX6A5TQBOE2AIO5ELYAFDCJ26VPRKIXEMOV47SZC2RM3PQ7KPYVCFHPZRL2E5MYK",
+      "kids": [
+        1,
+        2,
+        7,
+        65535
+      ],
+      "expect": {
+        "ok": false,
+        "reason": "bad_signature"
+      }
+    },
+    {
+      "name": "tampered signature (first char)",
+      "code": "YY1AEAACAMS6AAAAADQACAAAAAAAAAAAAIAACAENBRGMW7TT6QMDPGBX33G3LNUXJXWTX6G3VTV3MYSSWQW7HLATFKWGGASPFK42Z2IWUBGLOD2KBVWUM6SXIIM3LJPWHEX5CP5MEIJ",
+      "kids": [
+        1,
+        2,
+        7,
+        65535
+      ],
+      "expect": {
+        "ok": false,
+        "reason": "bad_signature"
+      }
+    },
+    {
+      "name": "tampered signature (middle char)",
+      "code": "YY1AEAACAMS6AAAAADQACAAAAAAAAAAAAIAACSENBRGMW7TT6QMDPGBX33G3LNUXJXWTX6G3VTV3MYSSWQW7HLATFKWGGBSPFK42Z2IWUBGLOD2KBVWUM6SXIIM3LJPWHEX5CP5MEIJ",
+      "kids": [
+        1,
+        2,
+        7,
+        65535
+      ],
+      "expect": {
+        "ok": false,
+        "reason": "bad_signature"
+      }
+    },
+    {
+      "name": "tampered signature (last char)",
+      "code": "YY1AEAACAMS6AAAAADQACAAAAAAAAAAAAIAACSENBRGMW7TT6QMDPGBX33G3LNUXJXWTX6G3VTV3MYSSWQW7HLATFKWGGASPFK42Z2IWUBGLOD2KBVWUM6SXIIM3LJPWHEX5CP5MEIA",
+      "kids": [
+        1,
+        2,
+        7,
+        65535
+      ],
+      "expect": {
+        "ok": false,
+        "reason": "bad_signature"
+      }
+    },
+    {
+      "name": "tampered rev (signature kept)",
+      "code": "YY1AEAACAMS6AAAAADQACAAAAAAAAAAAAIAAGSENBRGMW7TT6QMDPGBX33G3LNUXJXWTX6G3VTV3MYSSWQW7HLATFKWGGASPFK42Z2IWUBGLOD2KBVWUM6SXIIM3LJPWHEX5CP5MEIJ",
+      "kids": [
+        1,
+        2,
+        7,
+        65535
+      ],
+      "expect": {
+        "ok": false,
+        "reason": "bad_signature"
+      }
+    },
+    {
+      "name": "tampered ticket id (signature kept)",
+      "code": "YY1AEAACAMS6AAAAADQACAAAAAAAAAAAAAAACSENBRGMW7TT6QMDPGBX33G3LNUXJXWTX6G3VTV3MYSSWQW7HLATFKWGGASPFK42Z2IWUBGLOD2KBVWUM6SXIIM3LJPWHEX5CP5MEIJ",
+      "kids": [
+        1,
+        2,
+        7,
+        65535
+      ],
+      "expect": {
+        "ok": false,
+        "reason": "bad_signature"
+      }
+    },
+    {
+      "name": "tampered key id to another known key",
+      "code": "YY1AEAAEAMS6AAAAADQACAAAAAAAAAAAAIAACSENBRGMW7TT6QMDPGBX33G3LNUXJXWTX6G3VTV3MYSSWQW7HLATFKWGGASPFK42Z2IWUBGLOD2KBVWUM6SXIIM3LJPWHEX5CP5MEIJ",
+      "kids": [
+        1,
+        2,
+        7,
+        65535
+      ],
+      "expect": {
+        "ok": false,
+        "reason": "bad_signature"
+      }
+    },
+    {
+      "name": "tampered key id to an unknown key",
+      "code": "YY1AEAAGAMS6AAAAADQACAAAAAAAAAAAAIAACSENBRGMW7TT6QMDPGBX33G3LNUXJXWTX6G3VTV3MYSSWQW7HLATFKWGGASPFK42Z2IWUBGLOD2KBVWUM6SXIIM3LJPWHEX5CP5MEIJ",
+      "kids": [
+        1,
+        2,
+        7,
+        65535
+      ],
+      "expect": {
+        "ok": false,
+        "reason": "unknown_key"
+      }
+    },
+    {
+      "name": "non-canonical signature (S + group order)",
+      "note": "a malleable twin of a valid signature must be refused",
+      "code": "YY1AEAACAMS6AAAAADQACAAAAAAAAAAAAIAACSENBRGMW7TT6QMDPGBX33G3LNUXJXWTX6G3VTV3MYSSWQW7HLATARKE7PED6DOFZFSQSGJHGAYIG5WUM6SXIIM3LJPWHEX5CP5MEIZ",
+      "kids": [
+        1,
+        2,
+        7,
+        65535
+      ],
+      "expect": {
+        "ok": false,
+        "reason": "bad_signature"
+      }
+    },
+    {
+      "name": "unknown version 2 (correctly signed)",
+      "code": "YY1AIAACAMS6AAAAADQACAAAAAAAAAAAAIAACGW6AH2H7OT7SIYE62LZ2QGHRRKI2SDKQ7QDHPTL2RYTBFSNUB6LAIZQLGTZTDT7CI3NOFZQZVZ2TWOGMJTFE6CHUNTAYY227JMDNAD",
+      "kids": [
+        1,
+        2,
+        7,
+        65535
+      ],
+      "expect": {
+        "ok": false,
+        "reason": "malformed"
+      }
+    },
+    {
+      "name": "unknown version 0 (correctly signed)",
+      "code": "YY1AAAACAMS6AAAAADQACAAAAAAAAAAAAIAACOOB4AKX3FBO4W4OKCFFLNNZL2UJXXOUUZWLGOXZN4YIHZESFHT5I4RMKMMVVWESIIETKOLVHYZVIOO3QYCEDUX7KE7T6U6P4ZR5LYN",
+      "kids": [
+        1,
+        2,
+        7,
+        65535
+      ],
+      "expect": {
+        "ok": false,
+        "reason": "malformed"
+      }
+    },
+    {
+      "name": "empty",
+      "code": "",
+      "kids": [
+        1,
+        2,
+        7,
+        65535
+      ],
+      "expect": {
+        "ok": false,
+        "reason": "malformed"
+      }
+    },
+    {
+      "name": "prefix only",
+      "code": "YY1",
+      "kids": [
+        1,
+        2,
+        7,
+        65535
+      ],
+      "expect": {
+        "ok": false,
+        "reason": "malformed"
+      }
+    },
+    {
+      "name": "other prefix",
+      "code": "YY2AEAACAMS6AAAAADQACAAAAAAAAAAAAIAACSENBRGMW7TT6QMDPGBX33G3LNUXJXWTX6G3VTV3MYSSWQW7HLATFKWGGASPFK42Z2IWUBGLOD2KBVWUM6SXIIM3LJPWHEX5CP5MEIJ",
+      "kids": [
+        1,
+        2,
+        7,
+        65535
+      ],
+      "expect": {
+        "ok": false,
+        "reason": "malformed"
+      }
+    },
+    {
+      "name": "prefix in lower case",
+      "code": "yy1AEAACAMS6AAAAADQACAAAAAAAAAAAAIAACSENBRGMW7TT6QMDPGBX33G3LNUXJXWTX6G3VTV3MYSSWQW7HLATFKWGGASPFK42Z2IWUBGLOD2KBVWUM6SXIIM3LJPWHEX5CP5MEIJ",
+      "kids": [
+        1,
+        2,
+        7,
+        65535
+      ],
+      "expect": {
+        "ok": false,
+        "reason": "malformed"
+      }
+    },
+    {
+      "name": "a short code",
+      "code": "ABCDEFGH",
+      "kids": [
+        1,
+        2,
+        7,
+        65535
+      ],
+      "expect": {
+        "ok": false,
+        "reason": "malformed"
+      }
+    },
+    {
+      "name": "one character short",
+      "code": "YY1AEAACAMS6AAAAADQACAAAAAAAAAAAAIAACSENBRGMW7TT6QMDPGBX33G3LNUXJXWTX6G3VTV3MYSSWQW7HLATFKWGGASPFK42Z2IWUBGLOD2KBVWUM6SXIIM3LJPWHEX5CP5MEI",
+      "kids": [
+        1,
+        2,
+        7,
+        65535
+      ],
+      "expect": {
+        "ok": false,
+        "reason": "malformed"
+      }
+    },
+    {
+      "name": "two characters long",
+      "code": "YY1AEAACAMS6AAAAADQACAAAAAAAAAAAAIAACSENBRGMW7TT6QMDPGBX33G3LNUXJXWTX6G3VTV3MYSSWQW7HLATFKWGGASPFK42Z2IWUBGLOD2KBVWUM6SXIIM3LJPWHEX5CP5MEIJAA",
+      "kids": [
+        1,
+        2,
+        7,
+        65535
+      ],
+      "expect": {
+        "ok": false,
+        "reason": "malformed"
+      }
+    },
+    {
+      "name": "character outside base32",
+      "code": "YY1AEAACAMS6AAAAADQA1AAAAAAAAAAAAIAACSENBRGMW7TT6QMDPGBX33G3LNUXJXWTX6G3VTV3MYSSWQW7HLATFKWGGASPFK42Z2IWUBGLOD2KBVWUM6SXIIM3LJPWHEX5CP5MEIJ",
+      "kids": [
+        1,
+        2,
+        7,
+        65535
+      ],
+      "expect": {
+        "ok": false,
+        "reason": "malformed"
+      }
+    },
+    {
+      "name": "space inside",
+      "code": "YY1AEAACAMS6AAAAADQA CAAAAAAAAAAAAIAACSENBRGMW7TT6QMDPGBX33G3LNUXJXWTX6G3VTV3MYSSWQW7HLATFKWGGASPFK42Z2IWUBGLOD2KBVWUM6SXIIM3LJPWHEX5CP5MEIJ",
+      "kids": [
+        1,
+        2,
+        7,
+        65535
+      ],
+      "expect": {
+        "ok": false,
+        "reason": "malformed"
+      }
+    }
+  ]
+}

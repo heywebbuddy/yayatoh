@@ -237,6 +237,16 @@
         "sign-in-code": "登录验证码",
         "password-reset": "重置密码",
         "magic-link": "登录链接"
+      },
+      "push": {
+        "order-confirmed": "应用推送：订单已确认",
+        "ticket-received": "应用推送：收到门票",
+        "transfer-accepted": "应用推送：转票已接受",
+        "transfer-cancelled": "应用推送：转票已取消",
+        "event-changed": "应用推送：活动有变更",
+        "event-cancelled": "应用推送：活动已取消",
+        "reminder-24h": "应用推送：提前 24 小时提醒",
+        "reminder-2h": "应用推送：提前 2 小时提醒"
       }
     },
     "status": {
@@ -1341,6 +1351,8 @@
     "revokeFor": "撤销 {label}",
     "linkHint": "或在设备上打开此链接：它会为本活动设置好扫描器。",
     "openScanner": "在此设备上打开扫描器",
+    "qrLabel": "设置链接的二维码",
+    "qrHint": "也可以用 Staff 应用或正在设置的设备的相机扫描此二维码。密钥只保留在链接中，绝不会发送到服务器。",
     "handedTo": "交给",
     "orgDevice": "无人(可在任何位置扫描)",
     "handedToName": "给 {name}"

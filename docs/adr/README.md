@@ -13,7 +13,7 @@ One file per decision, named `NNNN-short-title.md`. Each file has these sections
 | [0004](0004-hosting.md) | Hosting: Vercel + Fly worker + Neon + Upstash + R2 + AWS SES/KMS; Claude Code cloud sessions (runtime hosting superseded by 0024) | §3.6, §9 |
 | [0005](0005-hybrid-funds-flow-and-ledger.md) | Hybrid funds flow (`organizer_mor` / `platform_mor`), double-entry ledger, daily reconciliation | §5.3 |
 | [0006](0006-migration-postgres-first-cutover.md) | Migration: Postgres-first, no shared-MySQL writes, Next.js front door, rehearsed per-instance cutover | §7.4 |
-| [0007](0007-legacy-api-v2-facade.md) | Legacy `/api/v2` facade: frozen, allowlisted, host-namespaced, no sunset while mobile is deferred | §6.2, §8.3 |
+| [0007](0007-legacy-api-v2-facade.md) | Legacy `/api/v2` facade: frozen, allowlisted, host-namespaced, no sunset while mobile is deferred (proposed to be superseded by 0026) | §6.2, §8.3 |
 | [0008](0008-outbox-relay-pg-boss.md) | Outbox + single-leader relay + pg-boss; journeys on `scheduled_actions` | §3.1, §3.3 |
 | [0009](0009-realtime-ably.md) | Realtime via Ably behind `RealtimePublisher`, SSE fallback | §6.4 |
 | [0010](0010-auth-and-authz.md) | Auth (Better Auth + legacy bcrypt/Sanctum/APP_KEY compat) and in-house authz | §3.1, §4.1 |
@@ -31,3 +31,5 @@ One file per decision, named `NNNN-short-title.md`. Each file has these sections
 | [0022](0022-design-system-v2.md) | Design system v2: semantic tokens, light default, dark opt-in, Manrope, floating dark sidebar | §3.1 |
 | [0023](0023-phase-6-module-layout.md) | Phase 6 module layout: `analytics`/`integrations` (6), `agency` (5), `virtual` (4); crm grows; contact reference owners move a person's rows in one merge transaction; the timeline is a crm projection fed by its owners | §3.5 |
 | [0024](0024-self-hosted-single-server.md) | Hosting: one self-hosted server (Contabo) with Docker Compose, Caddy on-demand TLS, AWS KMS key vault, pgBackRest backups; supersedes 0004 for runtime hosting | §3.6, §9 |
+| [0025](0025-mobile-apps.md) | Mobile apps (proposed, M7.1b): Expo SDK 57, two apps (Yayatoh, Yayatoh Staff), `mobile-core`, import and styling rules enforced by check-modules, release policy | mobile plan P7-2, P7-3, P7-9 |
+| [0026](0026-no-api-v2-facade.md) | No `/api/v2` facade; old installs stop at cutover; supersedes 0007 (proposed, M7.1b) | mobile plan P7-4, §6.2 |

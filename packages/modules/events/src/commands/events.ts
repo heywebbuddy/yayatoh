@@ -104,7 +104,17 @@ export const updateEventCommand = tenantCommand({
         version: 1,
         aggregateType: 'event',
         aggregateId: row.id,
-        payload: { orgId: row.orgId, eventId: row.id, fields: Object.keys(fields) },
+        payload: {
+          orgId: row.orgId,
+          eventId: row.id,
+          fields: Object.keys(fields),
+          // What attendees notice (M7.2c): the schedule or place actually changed, not just was saved.
+          schedule: (['startsAt', 'endsAt', 'timezone', 'venueName', 'venueId'] as const).filter((k) => {
+            const was = current[k];
+            const now = row[k];
+            return was instanceof Date && now instanceof Date ? was.getTime() !== now.getTime() : was !== now;
+          }),
+        },
       });
       return row;
     } catch (err) {

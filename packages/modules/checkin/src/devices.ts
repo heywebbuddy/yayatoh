@@ -18,8 +18,15 @@ import {
 } from '@yayatoh/checkin-engine';
 import { contactPhonesByEmailTx } from '@yayatoh/crm';
 import { type TenantTx, withoutTenant } from '@yayatoh/db';
-import { findEventTx, occurrencesOfEventTx } from '@yayatoh/events';
-import { type Ctx, createCtx, DomainError, requireOrg } from '@yayatoh/kernel';
+import { eventsInWindowTx, findEventTx, occurrencesOfEventTx } from '@yayatoh/events';
+import {
+  type CommandPorts,
+  type Ctx,
+  createCtx,
+  DomainError,
+  executeQuery,
+  requireOrg,
+} from '@yayatoh/kernel';
 import { CHECKINS_CHANNEL, publishRealtimeTx, tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { memberRoleTx } from '@yayatoh/tenancy';
 import { CODE_PREFIX, verifyTicketCode } from '@yayatoh/ticket-crypto';
@@ -33,7 +40,15 @@ import {
 import { and, eq, gte, isNull, lte, sql } from 'drizzle-orm';
 import { checkpointsTx, raiseSignalTx, TWO_ENTRANCES_WINDOW_MS } from './checkpoints.ts';
 import { withOccurrenceTx } from './occurrence.ts';
-import { admissions, CHECKPOINT_KINDS, devices, KIOSK_KINDS, type ScanResult, scans } from './schema.ts';
+import {
+  admissions,
+  CHECKPOINT_KINDS,
+  devices,
+  KIOSK_KINDS,
+  type ScanResult,
+  scans,
+  staffPushSubscriptions,
+} from './schema.ts';
 import { occupiedTx, sessionAccessSource, sessionDoorTx, sessionScanTx } from './session-doors.ts';
 import { checkVelocityTx, openHighSignalCountTx } from './signals.ts';
 import { deviceScanScopeTx, scopeAllowsCheckpoint } from './staff.ts';
@@ -63,6 +78,62 @@ export async function deviceContext(token: string): Promise<{ ctx: Ctx; wipe: bo
     ctx: createCtx({ orgId: r.org_id, actor: { type: 'system', name: `device:${r.device_id}` } }),
     wipe: r.wipe_requested,
   };
+}
+
+/**
+ * M7.2d (decision P7-9): a Staff device is never refused for an old app version while its event is
+ * on: from 24 hours before the event starts to 2 hours after it ends.
+ */
+export const DEVICE_EVENT_WINDOW = { beforeMs: 24 * 3_600_000, afterMs: 2 * 3_600_000 } as const;
+
+/**
+ * Whether this device is inside an event window right now. Its event is the one it is asked about
+ * (`eventId`: the manifest path), else the one it last reported working (heartbeat); a device with
+ * neither yet counts as inside when any event of its org is on, since the door must not be stranded.
+ */
+export const deviceInEventWindowQuery = tenantQuery({
+  name: 'checkin.deviceInEventWindow',
+  input: z.object({ eventId: z.uuid().optional() }),
+  output: z.object({ inWindow: z.boolean() }),
+  entitlement: 'checkin',
+  permission: 'checkin:device',
+  handler: async ({ input, ctx, tx }) => {
+    let eventId = input.eventId;
+    if (!eventId) {
+      const [d] = await tx
+        .select({ eventId: devices.eventId })
+        .from(devices)
+        .where(eq(devices.id, deviceIdOf(ctx)));
+      eventId = d?.eventId ?? undefined;
+    }
+    const on = await eventsInWindowTx(tx, ctx.now, DEVICE_EVENT_WINDOW, eventId ? [eventId] : undefined);
+    return { inWindow: on.length > 0 };
+  },
+});
+
+export type DeviceWindowState = 'in_window' | 'outside' | 'unknown';
+
+/**
+ * The window state of a device token for the `/v1` version gate: `unknown` for a token that is not
+ * a live device (the route's own 401 answers it), `in_window` or `outside` otherwise.
+ */
+export async function deviceWindowState(
+  token: string,
+  ports: CommandPorts<TenantTx>,
+  opts: { readonly eventId?: string; readonly now?: Date } = {},
+): Promise<DeviceWindowState> {
+  const dc = await deviceContext(token);
+  if (!dc) return 'unknown';
+  const ctx = opts.now
+    ? createCtx({ orgId: requireOrg(dc.ctx), actor: dc.ctx.actor, now: opts.now })
+    : dc.ctx;
+  const r = await executeQuery(
+    deviceInEventWindowQuery,
+    opts.eventId ? { eventId: opts.eventId } : {},
+    ctx,
+    ports,
+  );
+  return r.inWindow ? 'in_window' : 'outside';
 }
 
 /** Device lifecycle events carry no label, token or member: only which device changed. */
@@ -187,6 +258,9 @@ export const setDeviceStateCommand = tenantCommand({
       .where(eq(devices.id, input.deviceId))
       .returning({ id: devices.id });
     if (rows.length === 0) throw new DomainError('not_found');
+    // M7.2e: a revoked or wiped device gets no more staff alerts, on any push service: its
+    // subscription (web, APNs or FCM) goes with it, and its queued alert pushes by cascade.
+    await tx.delete(staffPushSubscriptions).where(eq(staffPushSubscriptions.deviceId, input.deviceId));
     await deviceStateEventTx(tx, ctx, input.deviceId, input.action === 'revoke' ? 'revoked' : 'wiped');
     emit(deviceEvent('device.state_changed', requireOrg(ctx), input.deviceId));
     return { ok: true };

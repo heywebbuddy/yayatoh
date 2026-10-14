@@ -110,6 +110,10 @@ function values(input: RenderInput, locale: Locale, cat: Catalog): Record<string
       timeStyle: 'short',
       timeZone: tz,
     }).format(new Date(p.startsAt));
+    // The start's time of day alone, in the event's zone (the app's lock-screen reminders, M7.2c).
+    out.time = new Intl.DateTimeFormat(locale, { timeStyle: 'short', timeZone: tz }).format(
+      new Date(p.startsAt),
+    );
   }
   // Security notices: a moment (the end of a payout hold, of staff access) in the org's zone.
   const until = typeof p.holdUntil === 'string' ? p.holdUntil : typeof p.until === 'string' ? p.until : null;

@@ -1,0 +1,6 @@
+{
+  "name": "@yayatoh/db",
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}

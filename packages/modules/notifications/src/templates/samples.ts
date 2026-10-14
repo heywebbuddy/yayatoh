@@ -338,6 +338,23 @@ export const SAMPLE_PARAMS: Readonly<Record<MessageKind, Readonly<Record<string,
   'alerts.metric-now': { title: 'Daily registrations', reading: '12', windowDays: 1, severity: 'critical' },
   'analytics.report': { name: 'Weekly sales', period: 'Sep 28 – Oct 4, 2026' },
   'notifications.test': {},
+  // M7.2c: the attendee app's lock-screen pushes.
+  'push.order-confirmed': { eventName: 'Lakeside Jazz Night' },
+  'push.ticket-received': { eventName: 'Lakeside Jazz Night' },
+  'push.transfer-accepted': { eventName: 'Lakeside Jazz Night' },
+  'push.transfer-cancelled': { eventName: 'Lakeside Jazz Night' },
+  'push.event-changed': { eventName: 'Lakeside Jazz Night' },
+  'push.event-cancelled': { eventName: 'Lakeside Jazz Night' },
+  'push.reminder-24h': {
+    eventName: 'Lakeside Jazz Night',
+    startsAt: '2027-06-12T01:00:00.000Z',
+    timeZone: 'America/Chicago',
+  },
+  'push.reminder-2h': {
+    eventName: 'Lakeside Jazz Night',
+    startsAt: '2027-06-12T01:00:00.000Z',
+    timeZone: 'America/Chicago',
+  },
   'donations.receipt': {
     url: 'https://app.yayatoh.test/receipts/sample',
     name: 'Amina Diallo',

@@ -377,6 +377,38 @@
       "subject": "Je inloglink voor Yayatoh",
       "intro": "Gebruik de knop hieronder om in deze browser in te loggen bij Yayatoh. De link werkt één keer en verloopt over {minutes, plural, one {# minuut} other {# minuten}}. Heb je dit niet gevraagd, negeer dan deze e-mail.",
       "cta": "Inloggen bij Yayatoh"
+    },
+    "push.order-confirmed": {
+      "subject": "{eventName}",
+      "intro": "Je bestelling is bevestigd."
+    },
+    "push.ticket-received": {
+      "subject": "{eventName}",
+      "intro": "Er is een ticket aan je overgedragen."
+    },
+    "push.transfer-accepted": {
+      "subject": "{eventName}",
+      "intro": "Je ticketoverdracht is geaccepteerd."
+    },
+    "push.transfer-cancelled": {
+      "subject": "{eventName}",
+      "intro": "Een ticketoverdracht is geannuleerd."
+    },
+    "push.event-changed": {
+      "subject": "{eventName}",
+      "intro": "De datum, tijd of locatie is gewijzigd."
+    },
+    "push.event-cancelled": {
+      "subject": "{eventName}",
+      "intro": "Dit evenement is geannuleerd."
+    },
+    "push.reminder-24h": {
+      "subject": "{eventName}",
+      "intro": "Begint morgen om {time}."
+    },
+    "push.reminder-2h": {
+      "subject": "{eventName}",
+      "intro": "Begint over 2 uur, om {time}."
     }
   },
   "roles": {

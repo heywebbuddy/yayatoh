@@ -101,8 +101,18 @@ export interface OutboundPush {
   /** How long the push service may hold it (RFC 8030 TTL), seconds. */
   readonly ttlSeconds?: number;
   readonly urgency?: Urgency;
-  /** Collapses retries of one message on the push service (RFC 8030 Topic). */
+  /**
+   * Collapses retries of one message on the push service (RFC 8030 Topic). Native adapters use it
+   * as the collapse id (APNs `apns-collapse-id`, FCM `collapse_key` and the notification tag):
+   * a ticket's pushes share one, so a newer one replaces an older one on the lock screen.
+   */
   readonly topic?: string | null;
+  /** Native apps: the in-app route the tap opens (`/tickets/{id}`, `/orders/{id}`, `/events/{slug}`). */
+  readonly path?: string | null;
+  /** Native apps: the app's bundle id / package name as it registered (APNs topic). */
+  readonly appId?: string | null;
+  /** APNs only: which APNs host the token belongs to (a development build's token is sandbox). */
+  readonly environment?: 'sandbox' | 'production' | null;
   /** Language and direction of the text (the notification renders RTL for Arabic). */
   readonly lang?: string;
   readonly dir?: 'ltr' | 'rtl';

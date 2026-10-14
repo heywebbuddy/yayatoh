@@ -8,10 +8,16 @@
     "kind": "universal"
   },
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./vectors/verdicts.json": "./vectors/verdicts.json",
+    "./vectors/lookup.json": "./vectors/lookup.json",
+    "./vectors/first-wins.json": "./vectors/first-wins.json",
+    "./vectors/scopes.json": "./vectors/scopes.json"
   },
   "scripts": {
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "vectors:write": "node tests/write-vectors.ts",
+    "bench": "node tests/bench.ts"
   },
   "devDependencies": {
     "@yayatoh/config": "workspace:*",

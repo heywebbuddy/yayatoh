@@ -1,0 +1,9 @@
+# Smoke flow (M7.1b): the preview build opens on the placeholder home screen. Written, not run in
+# cloud sessions (no simulator); the device pass runs it with `maestro test apps/mobile/.maestro`
+# against a preview build (a development build opens the dev launcher first).
+appId: com.yayatoh.yayatohapp.preview
+---
+- launchApp:
+    clearState: true
+- assertVisible: 'Yayatoh'
+- assertVisible: 'Your events and tickets will appear here soon.'

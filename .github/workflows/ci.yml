@@ -40,6 +40,45 @@ jobs:
       - name: OpenAPI spec is up to date
         run: pnpm contracts:check
 
+  mobile:
+    # M7.1b (ADR 0025): the Expo apps and mobile-core. Cloud runners are Linux without a simulator, so
+    # this proves the code lints, type-checks, passes jest-expo and bundles for both platforms;
+    # Maestro flows run in the device pass. No Expo or store account is used: `expo export` and
+    # `expo-doctor` need no login (expo-doctor reaches api.expo.dev and reactnative.directory).
+    name: mobile · lint · typecheck · unit · export · expo-doctor
+    runs-on: ubuntu-latest
+    env:
+      EXPO_NO_TELEMETRY: '1'
+      APP_ENV: production
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Lint
+        run: pnpm exec biome check apps/mobile apps/staff packages/mobile-core
+      - name: Import, colour and string rules
+        run: pnpm check:modules
+      - name: Typecheck and unit (jest-expo)
+        run: |
+          pnpm turbo run typecheck --concurrency=1 --filter=@yayatoh/mobile --filter=@yayatoh/staff --filter=@yayatoh/mobile-core
+          pnpm test:mobile
+      - name: Export Yayatoh (iOS and Android)
+        run: |
+          pnpm --filter @yayatoh/mobile exec expo export --platform ios
+          pnpm --filter @yayatoh/mobile exec expo export --platform android
+      - name: Export Yayatoh Staff (iOS and Android)
+        run: |
+          pnpm --filter @yayatoh/staff exec expo export --platform ios
+          pnpm --filter @yayatoh/staff exec expo export --platform android
+      - name: expo-doctor
+        run: |
+          pnpm --filter @yayatoh/mobile exec expo-doctor
+          pnpm --filter @yayatoh/staff exec expo-doctor
+
   gate-canaries:
     name: gate self-test (canaries must fail)
     runs-on: ubuntu-latest

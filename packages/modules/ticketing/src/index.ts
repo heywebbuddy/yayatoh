@@ -117,7 +117,12 @@ export {
   ticketsForOrderTx,
   voidTicketsTx,
 } from './issue.ts';
-export { activeTicketIdForCodeTx, activeTicketShortCodeTx, activeTicketsHeldByTx } from './kiosk.ts';
+export {
+  activeTicketIdForCodeTx,
+  activeTicketShortCodeTx,
+  activeTicketsHeldByEmailTx,
+  activeTicketsHeldByTx,
+} from './kiosk.ts';
 export { nameTicketHolderTx } from './naming.ts';
 export {
   activeTicketsForOccurrenceTx,
@@ -188,9 +193,13 @@ export {
   startHolderTransferCommand,
   startTransferCommand,
   startTransferTx,
+  type TicketPushFacts,
   TRANSFER_CLAIM_DAYS,
   TRANSFER_STATES,
   TransferDto,
+  type TransferFacts,
+  ticketPushFactsTx,
+  transferFactsTx,
   transfersForOrderTx,
 } from './transfers.ts';
 // M6.9a: ticket type names for the virtual module's access modes.

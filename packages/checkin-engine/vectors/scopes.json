@@ -1,0 +1,824 @@
+{
+  "description": "Signed manifest scopes: verifyManifestScope(header) must give `expect`. The public key is in each header.",
+  "seedRule": "seed = SHA-256('yayatoh-test-vector-key:' + label)",
+  "vectors": [
+    {
+      "name": "signed by the org key",
+      "header": {
+        "event": {
+          "id": "e1",
+          "name": "Vector Summit",
+          "startsAt": "2027-12-01T15:00:00Z",
+          "endsAt": "2027-12-03T04:00:00Z",
+          "timezone": "America/Chicago"
+        },
+        "publicKeys": {
+          "1": "2Je8S2xT8dr/dlVvxQxX2A3BR1OcJXI7RyLMHJtqHGE="
+        },
+        "salt": "yy-manifest:e1",
+        "serverTime": "2027-12-01T12:00:00.000Z",
+        "unknownPolicy": "provisional",
+        "checkpoints": [
+          {
+            "id": "north",
+            "name": "North gate",
+            "kind": "entrance",
+            "ticketTypeIds": []
+          },
+          {
+            "id": "vip",
+            "name": "VIP lounge",
+            "kind": "zone",
+            "ticketTypeIds": [
+              "type-vip"
+            ]
+          },
+          {
+            "id": "hall",
+            "name": "Hall",
+            "kind": "zone",
+            "ticketTypeIds": []
+          }
+        ],
+        "version": 3,
+        "scope": {
+          "eventId": "e1",
+          "deviceId": "d1",
+          "checkpointIds": [
+            "north",
+            "hall"
+          ],
+          "signature": "AAFO-_n99Y2008AqGfLE_F1dsEGHB1mj0j4REhXizkV10KIjLl23EgKzzgMlod0OcA2fTlc0MEPGFFjB7_VT4kED"
+        }
+      },
+      "expect": true
+    },
+    {
+      "name": "checkpoint ids in another order",
+      "header": {
+        "event": {
+          "id": "e1",
+          "name": "Vector Summit",
+          "startsAt": "2027-12-01T15:00:00Z",
+          "endsAt": "2027-12-03T04:00:00Z",
+          "timezone": "America/Chicago"
+        },
+        "publicKeys": {
+          "1": "2Je8S2xT8dr/dlVvxQxX2A3BR1OcJXI7RyLMHJtqHGE="
+        },
+        "salt": "yy-manifest:e1",
+        "serverTime": "2027-12-01T12:00:00.000Z",
+        "unknownPolicy": "provisional",
+        "checkpoints": [
+          {
+            "id": "north",
+            "name": "North gate",
+            "kind": "entrance",
+            "ticketTypeIds": []
+          },
+          {
+            "id": "vip",
+            "name": "VIP lounge",
+            "kind": "zone",
+            "ticketTypeIds": [
+              "type-vip"
+            ]
+          },
+          {
+            "id": "hall",
+            "name": "Hall",
+            "kind": "zone",
+            "ticketTypeIds": []
+          }
+        ],
+        "version": 3,
+        "scope": {
+          "eventId": "e1",
+          "deviceId": "d1",
+          "checkpointIds": [
+            "hall",
+            "north"
+          ],
+          "signature": "AAFO-_n99Y2008AqGfLE_F1dsEGHB1mj0j4REhXizkV10KIjLl23EgKzzgMlod0OcA2fTlc0MEPGFFjB7_VT4kED"
+        }
+      },
+      "expect": true
+    },
+    {
+      "name": "checkpoints widened",
+      "header": {
+        "event": {
+          "id": "e1",
+          "name": "Vector Summit",
+          "startsAt": "2027-12-01T15:00:00Z",
+          "endsAt": "2027-12-03T04:00:00Z",
+          "timezone": "America/Chicago"
+        },
+        "publicKeys": {
+          "1": "2Je8S2xT8dr/dlVvxQxX2A3BR1OcJXI7RyLMHJtqHGE="
+        },
+        "salt": "yy-manifest:e1",
+        "serverTime": "2027-12-01T12:00:00.000Z",
+        "unknownPolicy": "provisional",
+        "checkpoints": [
+          {
+            "id": "north",
+            "name": "North gate",
+            "kind": "entrance",
+            "ticketTypeIds": []
+          },
+          {
+            "id": "vip",
+            "name": "VIP lounge",
+            "kind": "zone",
+            "ticketTypeIds": [
+              "type-vip"
+            ]
+          },
+          {
+            "id": "hall",
+            "name": "Hall",
+            "kind": "zone",
+            "ticketTypeIds": []
+          }
+        ],
+        "version": 3,
+        "scope": {
+          "eventId": "e1",
+          "deviceId": "d1",
+          "checkpointIds": [
+            "north",
+            "hall",
+            "vip"
+          ],
+          "signature": "AAFO-_n99Y2008AqGfLE_F1dsEGHB1mj0j4REhXizkV10KIjLl23EgKzzgMlod0OcA2fTlc0MEPGFFjB7_VT4kED"
+        }
+      },
+      "expect": false
+    },
+    {
+      "name": "scope removed from the checkpoints (whole event)",
+      "header": {
+        "event": {
+          "id": "e1",
+          "name": "Vector Summit",
+          "startsAt": "2027-12-01T15:00:00Z",
+          "endsAt": "2027-12-03T04:00:00Z",
+          "timezone": "America/Chicago"
+        },
+        "publicKeys": {
+          "1": "2Je8S2xT8dr/dlVvxQxX2A3BR1OcJXI7RyLMHJtqHGE="
+        },
+        "salt": "yy-manifest:e1",
+        "serverTime": "2027-12-01T12:00:00.000Z",
+        "unknownPolicy": "provisional",
+        "checkpoints": [
+          {
+            "id": "north",
+            "name": "North gate",
+            "kind": "entrance",
+            "ticketTypeIds": []
+          },
+          {
+            "id": "vip",
+            "name": "VIP lounge",
+            "kind": "zone",
+            "ticketTypeIds": [
+              "type-vip"
+            ]
+          },
+          {
+            "id": "hall",
+            "name": "Hall",
+            "kind": "zone",
+            "ticketTypeIds": []
+          }
+        ],
+        "version": 3,
+        "scope": {
+          "eventId": "e1",
+          "deviceId": "d1",
+          "checkpointIds": null,
+          "signature": "AAFO-_n99Y2008AqGfLE_F1dsEGHB1mj0j4REhXizkV10KIjLl23EgKzzgMlod0OcA2fTlc0MEPGFFjB7_VT4kED"
+        }
+      },
+      "expect": false
+    },
+    {
+      "name": "device re-targeted",
+      "header": {
+        "event": {
+          "id": "e1",
+          "name": "Vector Summit",
+          "startsAt": "2027-12-01T15:00:00Z",
+          "endsAt": "2027-12-03T04:00:00Z",
+          "timezone": "America/Chicago"
+        },
+        "publicKeys": {
+          "1": "2Je8S2xT8dr/dlVvxQxX2A3BR1OcJXI7RyLMHJtqHGE="
+        },
+        "salt": "yy-manifest:e1",
+        "serverTime": "2027-12-01T12:00:00.000Z",
+        "unknownPolicy": "provisional",
+        "checkpoints": [
+          {
+            "id": "north",
+            "name": "North gate",
+            "kind": "entrance",
+            "ticketTypeIds": []
+          },
+          {
+            "id": "vip",
+            "name": "VIP lounge",
+            "kind": "zone",
+            "ticketTypeIds": [
+              "type-vip"
+            ]
+          },
+          {
+            "id": "hall",
+            "name": "Hall",
+            "kind": "zone",
+            "ticketTypeIds": []
+          }
+        ],
+        "version": 3,
+        "scope": {
+          "eventId": "e1",
+          "deviceId": "d2",
+          "checkpointIds": [
+            "north",
+            "hall"
+          ],
+          "signature": "AAFO-_n99Y2008AqGfLE_F1dsEGHB1mj0j4REhXizkV10KIjLl23EgKzzgMlod0OcA2fTlc0MEPGFFjB7_VT4kED"
+        }
+      },
+      "expect": false
+    },
+    {
+      "name": "event re-targeted in the scope",
+      "header": {
+        "event": {
+          "id": "e1",
+          "name": "Vector Summit",
+          "startsAt": "2027-12-01T15:00:00Z",
+          "endsAt": "2027-12-03T04:00:00Z",
+          "timezone": "America/Chicago"
+        },
+        "publicKeys": {
+          "1": "2Je8S2xT8dr/dlVvxQxX2A3BR1OcJXI7RyLMHJtqHGE="
+        },
+        "salt": "yy-manifest:e1",
+        "serverTime": "2027-12-01T12:00:00.000Z",
+        "unknownPolicy": "provisional",
+        "checkpoints": [
+          {
+            "id": "north",
+            "name": "North gate",
+            "kind": "entrance",
+            "ticketTypeIds": []
+          },
+          {
+            "id": "vip",
+            "name": "VIP lounge",
+            "kind": "zone",
+            "ticketTypeIds": [
+              "type-vip"
+            ]
+          },
+          {
+            "id": "hall",
+            "name": "Hall",
+            "kind": "zone",
+            "ticketTypeIds": []
+          }
+        ],
+        "version": 3,
+        "scope": {
+          "eventId": "e2",
+          "deviceId": "d1",
+          "checkpointIds": [
+            "north",
+            "hall"
+          ],
+          "signature": "AAFO-_n99Y2008AqGfLE_F1dsEGHB1mj0j4REhXizkV10KIjLl23EgKzzgMlod0OcA2fTlc0MEPGFFjB7_VT4kED"
+        }
+      },
+      "expect": false
+    },
+    {
+      "name": "scope of another event in this header",
+      "header": {
+        "event": {
+          "id": "e1",
+          "name": "Vector Summit",
+          "startsAt": "2027-12-01T15:00:00Z",
+          "endsAt": "2027-12-03T04:00:00Z",
+          "timezone": "America/Chicago"
+        },
+        "publicKeys": {
+          "1": "2Je8S2xT8dr/dlVvxQxX2A3BR1OcJXI7RyLMHJtqHGE="
+        },
+        "salt": "yy-manifest:e1",
+        "serverTime": "2027-12-01T12:00:00.000Z",
+        "unknownPolicy": "provisional",
+        "checkpoints": [
+          {
+            "id": "north",
+            "name": "North gate",
+            "kind": "entrance",
+            "ticketTypeIds": []
+          },
+          {
+            "id": "vip",
+            "name": "VIP lounge",
+            "kind": "zone",
+            "ticketTypeIds": [
+              "type-vip"
+            ]
+          },
+          {
+            "id": "hall",
+            "name": "Hall",
+            "kind": "zone",
+            "ticketTypeIds": []
+          }
+        ],
+        "version": 3,
+        "scope": {
+          "eventId": "e2",
+          "deviceId": "d1",
+          "checkpointIds": [
+            "north",
+            "hall"
+          ],
+          "signature": "AAHPQScO0OQBHrm3sITMAKuYaffiUnRt9cmRmwraXTJ4LwxfCvT3SSoJpCD2UaW9ldwO2xvb55bpwLF_RDo-S20F"
+        }
+      },
+      "expect": false
+    },
+    {
+      "name": "signed by another key",
+      "header": {
+        "event": {
+          "id": "e1",
+          "name": "Vector Summit",
+          "startsAt": "2027-12-01T15:00:00Z",
+          "endsAt": "2027-12-03T04:00:00Z",
+          "timezone": "America/Chicago"
+        },
+        "publicKeys": {
+          "1": "2Je8S2xT8dr/dlVvxQxX2A3BR1OcJXI7RyLMHJtqHGE="
+        },
+        "salt": "yy-manifest:e1",
+        "serverTime": "2027-12-01T12:00:00.000Z",
+        "unknownPolicy": "provisional",
+        "checkpoints": [
+          {
+            "id": "north",
+            "name": "North gate",
+            "kind": "entrance",
+            "ticketTypeIds": []
+          },
+          {
+            "id": "vip",
+            "name": "VIP lounge",
+            "kind": "zone",
+            "ticketTypeIds": [
+              "type-vip"
+            ]
+          },
+          {
+            "id": "hall",
+            "name": "Hall",
+            "kind": "zone",
+            "ticketTypeIds": []
+          }
+        ],
+        "version": 3,
+        "scope": {
+          "eventId": "e1",
+          "deviceId": "d1",
+          "checkpointIds": [
+            "north",
+            "hall"
+          ],
+          "signature": "AAEfgHiWM6ZlxLne8mdhBCltYOCAJ418SumQnfVsGXLo9b9YihPRcJAa5_qmHEDTt-Pr1xyDNVQWPcvFu3LGbocA"
+        }
+      },
+      "expect": false
+    },
+    {
+      "name": "signed with an unknown key id",
+      "header": {
+        "event": {
+          "id": "e1",
+          "name": "Vector Summit",
+          "startsAt": "2027-12-01T15:00:00Z",
+          "endsAt": "2027-12-03T04:00:00Z",
+          "timezone": "America/Chicago"
+        },
+        "publicKeys": {
+          "1": "2Je8S2xT8dr/dlVvxQxX2A3BR1OcJXI7RyLMHJtqHGE="
+        },
+        "salt": "yy-manifest:e1",
+        "serverTime": "2027-12-01T12:00:00.000Z",
+        "unknownPolicy": "provisional",
+        "checkpoints": [
+          {
+            "id": "north",
+            "name": "North gate",
+            "kind": "entrance",
+            "ticketTypeIds": []
+          },
+          {
+            "id": "vip",
+            "name": "VIP lounge",
+            "kind": "zone",
+            "ticketTypeIds": [
+              "type-vip"
+            ]
+          },
+          {
+            "id": "hall",
+            "name": "Hall",
+            "kind": "zone",
+            "ticketTypeIds": []
+          }
+        ],
+        "version": 3,
+        "scope": {
+          "eventId": "e1",
+          "deviceId": "d1",
+          "checkpointIds": [
+            "north",
+            "hall"
+          ],
+          "signature": "AAlO-_n99Y2008AqGfLE_F1dsEGHB1mj0j4REhXizkV10KIjLl23EgKzzgMlod0OcA2fTlc0MEPGFFjB7_VT4kED"
+        }
+      },
+      "expect": false
+    },
+    {
+      "name": "garbage signature",
+      "header": {
+        "event": {
+          "id": "e1",
+          "name": "Vector Summit",
+          "startsAt": "2027-12-01T15:00:00Z",
+          "endsAt": "2027-12-03T04:00:00Z",
+          "timezone": "America/Chicago"
+        },
+        "publicKeys": {
+          "1": "2Je8S2xT8dr/dlVvxQxX2A3BR1OcJXI7RyLMHJtqHGE="
+        },
+        "salt": "yy-manifest:e1",
+        "serverTime": "2027-12-01T12:00:00.000Z",
+        "unknownPolicy": "provisional",
+        "checkpoints": [
+          {
+            "id": "north",
+            "name": "North gate",
+            "kind": "entrance",
+            "ticketTypeIds": []
+          },
+          {
+            "id": "vip",
+            "name": "VIP lounge",
+            "kind": "zone",
+            "ticketTypeIds": [
+              "type-vip"
+            ]
+          },
+          {
+            "id": "hall",
+            "name": "Hall",
+            "kind": "zone",
+            "ticketTypeIds": []
+          }
+        ],
+        "version": 3,
+        "scope": {
+          "eventId": "e1",
+          "deviceId": "d1",
+          "checkpointIds": [
+            "north",
+            "hall"
+          ],
+          "signature": "not-base64!"
+        }
+      },
+      "expect": false
+    },
+    {
+      "name": "a current-version manifest without a scope",
+      "header": {
+        "event": {
+          "id": "e1",
+          "name": "Vector Summit",
+          "startsAt": "2027-12-01T15:00:00Z",
+          "endsAt": "2027-12-03T04:00:00Z",
+          "timezone": "America/Chicago"
+        },
+        "publicKeys": {
+          "1": "2Je8S2xT8dr/dlVvxQxX2A3BR1OcJXI7RyLMHJtqHGE="
+        },
+        "salt": "yy-manifest:e1",
+        "serverTime": "2027-12-01T12:00:00.000Z",
+        "unknownPolicy": "provisional",
+        "checkpoints": [
+          {
+            "id": "north",
+            "name": "North gate",
+            "kind": "entrance",
+            "ticketTypeIds": []
+          },
+          {
+            "id": "vip",
+            "name": "VIP lounge",
+            "kind": "zone",
+            "ticketTypeIds": [
+              "type-vip"
+            ]
+          },
+          {
+            "id": "hall",
+            "name": "Hall",
+            "kind": "zone",
+            "ticketTypeIds": []
+          }
+        ],
+        "version": 3
+      },
+      "expect": false
+    },
+    {
+      "name": "version 1 manifest without a scope",
+      "header": {
+        "event": {
+          "id": "e1",
+          "name": "Vector Summit",
+          "startsAt": "2027-12-01T15:00:00Z",
+          "endsAt": "2027-12-03T04:00:00Z",
+          "timezone": "America/Chicago"
+        },
+        "publicKeys": {
+          "1": "2Je8S2xT8dr/dlVvxQxX2A3BR1OcJXI7RyLMHJtqHGE="
+        },
+        "salt": "yy-manifest:e1",
+        "serverTime": "2027-12-01T12:00:00.000Z",
+        "unknownPolicy": "provisional",
+        "checkpoints": [
+          {
+            "id": "north",
+            "name": "North gate",
+            "kind": "entrance",
+            "ticketTypeIds": []
+          },
+          {
+            "id": "vip",
+            "name": "VIP lounge",
+            "kind": "zone",
+            "ticketTypeIds": [
+              "type-vip"
+            ]
+          },
+          {
+            "id": "hall",
+            "name": "Hall",
+            "kind": "zone",
+            "ticketTypeIds": []
+          }
+        ]
+      },
+      "expect": true
+    },
+    {
+      "name": "session checkpoint with signed gates",
+      "header": {
+        "event": {
+          "id": "e1",
+          "name": "Vector Summit",
+          "startsAt": "2027-12-01T15:00:00Z",
+          "endsAt": "2027-12-03T04:00:00Z",
+          "timezone": "America/Chicago"
+        },
+        "publicKeys": {
+          "1": "2Je8S2xT8dr/dlVvxQxX2A3BR1OcJXI7RyLMHJtqHGE="
+        },
+        "salt": "yy-manifest:e1",
+        "serverTime": "2027-12-01T12:00:00.000Z",
+        "unknownPolicy": "provisional",
+        "checkpoints": [
+          {
+            "id": "room-a",
+            "name": "Room A",
+            "kind": "session",
+            "ticketTypeIds": [],
+            "sessionId": "s1"
+          }
+        ],
+        "version": 3,
+        "scope": {
+          "eventId": "e1",
+          "deviceId": "d1",
+          "checkpointIds": null,
+          "sessionGates": [
+            {
+              "checkpointId": "room-a",
+              "sessionId": "s1",
+              "capacity": 2,
+              "enrollmentRequired": true,
+              "enrolled": [
+                "t-a",
+                "t-b"
+              ]
+            }
+          ],
+          "signature": "AAFaFfz0IgVrN37RCIuAwGZqNwB-RBrfP_4R5-9OHPT5RHQRCwGek8fQRzhQHD7A3f6qJeqKEklhw97T08C7rPgI"
+        }
+      },
+      "expect": true
+    },
+    {
+      "name": "session checkpoint without gates in the scope",
+      "header": {
+        "event": {
+          "id": "e1",
+          "name": "Vector Summit",
+          "startsAt": "2027-12-01T15:00:00Z",
+          "endsAt": "2027-12-03T04:00:00Z",
+          "timezone": "America/Chicago"
+        },
+        "publicKeys": {
+          "1": "2Je8S2xT8dr/dlVvxQxX2A3BR1OcJXI7RyLMHJtqHGE="
+        },
+        "salt": "yy-manifest:e1",
+        "serverTime": "2027-12-01T12:00:00.000Z",
+        "unknownPolicy": "provisional",
+        "checkpoints": [
+          {
+            "id": "room-a",
+            "name": "Room A",
+            "kind": "session",
+            "ticketTypeIds": [],
+            "sessionId": "s1"
+          }
+        ],
+        "version": 3,
+        "scope": {
+          "eventId": "e1",
+          "deviceId": "d1",
+          "checkpointIds": [
+            "north",
+            "hall"
+          ],
+          "signature": "AAFO-_n99Y2008AqGfLE_F1dsEGHB1mj0j4REhXizkV10KIjLl23EgKzzgMlod0OcA2fTlc0MEPGFFjB7_VT4kED"
+        }
+      },
+      "expect": false
+    },
+    {
+      "name": "gate capacity widened",
+      "header": {
+        "event": {
+          "id": "e1",
+          "name": "Vector Summit",
+          "startsAt": "2027-12-01T15:00:00Z",
+          "endsAt": "2027-12-03T04:00:00Z",
+          "timezone": "America/Chicago"
+        },
+        "publicKeys": {
+          "1": "2Je8S2xT8dr/dlVvxQxX2A3BR1OcJXI7RyLMHJtqHGE="
+        },
+        "salt": "yy-manifest:e1",
+        "serverTime": "2027-12-01T12:00:00.000Z",
+        "unknownPolicy": "provisional",
+        "checkpoints": [
+          {
+            "id": "room-a",
+            "name": "Room A",
+            "kind": "session",
+            "ticketTypeIds": [],
+            "sessionId": "s1"
+          }
+        ],
+        "version": 3,
+        "scope": {
+          "eventId": "e1",
+          "deviceId": "d1",
+          "checkpointIds": null,
+          "sessionGates": [
+            {
+              "checkpointId": "room-a",
+              "sessionId": "s1",
+              "capacity": 500,
+              "enrollmentRequired": true,
+              "enrolled": [
+                "t-a",
+                "t-b"
+              ]
+            }
+          ],
+          "signature": "AAFaFfz0IgVrN37RCIuAwGZqNwB-RBrfP_4R5-9OHPT5RHQRCwGek8fQRzhQHD7A3f6qJeqKEklhw97T08C7rPgI"
+        }
+      },
+      "expect": false
+    },
+    {
+      "name": "a place added to the enrolled list",
+      "header": {
+        "event": {
+          "id": "e1",
+          "name": "Vector Summit",
+          "startsAt": "2027-12-01T15:00:00Z",
+          "endsAt": "2027-12-03T04:00:00Z",
+          "timezone": "America/Chicago"
+        },
+        "publicKeys": {
+          "1": "2Je8S2xT8dr/dlVvxQxX2A3BR1OcJXI7RyLMHJtqHGE="
+        },
+        "salt": "yy-manifest:e1",
+        "serverTime": "2027-12-01T12:00:00.000Z",
+        "unknownPolicy": "provisional",
+        "checkpoints": [
+          {
+            "id": "room-a",
+            "name": "Room A",
+            "kind": "session",
+            "ticketTypeIds": [],
+            "sessionId": "s1"
+          }
+        ],
+        "version": 3,
+        "scope": {
+          "eventId": "e1",
+          "deviceId": "d1",
+          "checkpointIds": null,
+          "sessionGates": [
+            {
+              "checkpointId": "room-a",
+              "sessionId": "s1",
+              "capacity": 2,
+              "enrollmentRequired": true,
+              "enrolled": [
+                "t-a",
+                "t-b",
+                "t-c"
+              ]
+            }
+          ],
+          "signature": "AAFaFfz0IgVrN37RCIuAwGZqNwB-RBrfP_4R5-9OHPT5RHQRCwGek8fQRzhQHD7A3f6qJeqKEklhw97T08C7rPgI"
+        }
+      },
+      "expect": false
+    },
+    {
+      "name": "enrolled list in another order",
+      "header": {
+        "event": {
+          "id": "e1",
+          "name": "Vector Summit",
+          "startsAt": "2027-12-01T15:00:00Z",
+          "endsAt": "2027-12-03T04:00:00Z",
+          "timezone": "America/Chicago"
+        },
+        "publicKeys": {
+          "1": "2Je8S2xT8dr/dlVvxQxX2A3BR1OcJXI7RyLMHJtqHGE="
+        },
+        "salt": "yy-manifest:e1",
+        "serverTime": "2027-12-01T12:00:00.000Z",
+        "unknownPolicy": "provisional",
+        "checkpoints": [
+          {
+            "id": "room-a",
+            "name": "Room A",
+            "kind": "session",
+            "ticketTypeIds": [],
+            "sessionId": "s1"
+          }
+        ],
+        "version": 3,
+        "scope": {
+          "eventId": "e1",
+          "deviceId": "d1",
+          "checkpointIds": null,
+          "sessionGates": [
+            {
+              "checkpointId": "room-a",
+              "sessionId": "s1",
+              "capacity": 2,
+              "enrollmentRequired": true,
+              "enrolled": [
+                "t-b",
+                "t-a"
+              ]
+            }
+          ],
+          "signature": "AAFaFfz0IgVrN37RCIuAwGZqNwB-RBrfP_4R5-9OHPT5RHQRCwGek8fQRzhQHD7A3f6qJeqKEklhw97T08C7rPgI"
+        }
+      },
+      "expect": true
+    }
+  ]
+}

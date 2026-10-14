@@ -237,6 +237,16 @@
         "sign-in-code": "Codice di accesso",
         "password-reset": "Reimpostazione password",
         "magic-link": "Link di accesso"
+      },
+      "push": {
+        "order-confirmed": "Notifica dell’app: ordine confermato",
+        "ticket-received": "Notifica dell’app: biglietto ricevuto",
+        "transfer-accepted": "Notifica dell’app: trasferimento accettato",
+        "transfer-cancelled": "Notifica dell’app: trasferimento annullato",
+        "event-changed": "Notifica dell’app: evento modificato",
+        "event-cancelled": "Notifica dell’app: evento annullato",
+        "reminder-24h": "Notifica dell’app: promemoria 24 ore prima",
+        "reminder-2h": "Notifica dell’app: promemoria 2 ore prima"
       }
     },
     "status": {
@@ -1341,6 +1351,8 @@
     "revokeFor": "Revoca {label}",
     "linkHint": "Oppure apri questo link sul dispositivo: configura lo scanner per questo evento.",
     "openScanner": "Apri lo scanner su questo dispositivo",
+    "qrLabel": "Codice QR del link di configurazione",
+    "qrHint": "Oppure inquadra questo codice con l’app Staff o con la fotocamera del dispositivo che stai configurando. La chiave resta nel link e non viene mai inviata al server.",
     "handedTo": "Affidato a",
     "orgDevice": "Nessuno (scansiona ovunque)",
     "handedToName": "per {name}"
