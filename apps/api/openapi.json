@@ -3323,6 +3323,268 @@
           "sales_ended"
         ]
       },
+      "PublicEventPage": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PublicEventSummary"
+            }
+          },
+          "nextCursor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "data",
+          "nextCursor"
+        ]
+      },
+      "PublicEventSummary": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "tagline": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "profile": {
+            "$ref": "#/components/schemas/EventProfile"
+          },
+          "category": {
+            "$ref": "#/components/schemas/EventCategory"
+          },
+          "status": {
+            "$ref": "#/components/schemas/EventStatus"
+          },
+          "timezone": {
+            "type": "string"
+          },
+          "startsAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endsAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "venueName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "city": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "country": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "currency": {
+            "type": "string"
+          },
+          "minPriceMinor": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "The cheapest pass, all-in, in minor units."
+          },
+          "maxPriceMinor": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "organizer": {
+            "type": "object",
+            "properties": {
+              "slug": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "slug",
+              "name"
+            ]
+          },
+          "distanceKm": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "description": "Kilometres from the search point, to one decimal; null without a point."
+          },
+          "url": {
+            "type": "string",
+            "description": "The event’s page on the web."
+          }
+        },
+        "required": [
+          "slug",
+          "name",
+          "tagline",
+          "profile",
+          "category",
+          "status",
+          "timezone",
+          "startsAt",
+          "endsAt",
+          "venueName",
+          "city",
+          "country",
+          "currency",
+          "minPriceMinor",
+          "maxPriceMinor",
+          "organizer",
+          "distanceKm",
+          "url"
+        ]
+      },
+      "AppCheckoutResult": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "$ref": "#/components/schemas/AppCheckoutAction"
+          },
+          "orderId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "paymentUrl": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The provider’s hosted payment page. It returns to the app through a universal link on completion or cancellation."
+          },
+          "expiresAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "description": "When the held tickets are released if the order is still unpaid."
+          },
+          "webUrl": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The event page where the web checkout runs (open it in the same browser session)."
+          },
+          "webReason": {
+            "$ref": "#/components/schemas/AppCheckoutWebReason"
+          }
+        },
+        "required": [
+          "action",
+          "orderId",
+          "paymentUrl",
+          "expiresAt",
+          "webUrl",
+          "webReason"
+        ]
+      },
+      "AppCheckoutAction": {
+        "type": "string",
+        "enum": [
+          "pay",
+          "paid",
+          "web"
+        ],
+        "description": "`pay`: open `paymentUrl` in a secure in-app browser session. `paid`: nothing to pay (a free cart); the tickets are issued. `web`: the app cannot finish this cart; open `webUrl` instead (nothing is held)."
+      },
+      "AppCheckoutWebReason": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "checkout_questions",
+          "seat_selection",
+          "registration",
+          "transfer_fee",
+          "choose_your_amount",
+          null
+        ],
+        "description": "Why this cart finishes on the web: the event asks checkout questions, sells by seat or through registration types, a pass has a transfer fee, or a pass lets the buyer choose the amount."
+      },
+      "AppCheckoutRequest": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "ticketTypeId": {
+                  "type": "string",
+                  "format": "uuid",
+                  "description": "A pass from `listPublicTicketTypes`."
+                },
+                "quantity": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 100
+                }
+              },
+              "required": [
+                "ticketTypeId",
+                "quantity"
+              ]
+            },
+            "minItems": 1,
+            "maxItems": 20
+          },
+          "occurrenceId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The chosen date of a multi-date event; required when the event has dates."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120,
+            "description": "The name on the order (default: the account’s name). The email is always the account’s."
+          },
+          "promoCode": {
+            "type": "string",
+            "maxLength": 64,
+            "description": "A promo code of the event, an organization coupon, or a store credit code."
+          },
+          "marketingOptIn": {
+            "type": "boolean",
+            "description": "Only an explicit yes: buying is never consent to marketing."
+          }
+        },
+        "required": [
+          "items"
+        ]
+      },
       "PublicEventSectionList": {
         "type": "object",
         "properties": {
@@ -10483,6 +10745,361 @@
           },
           "429": {
             "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/public/events": {
+      "get": {
+        "operationId": "searchPublicEvents",
+        "tags": [
+          "public"
+        ],
+        "summary": "Search the marketplace’s upcoming events (no credential)",
+        "description": "Upcoming and ongoing events listed on the marketplace, by text, platform category, organizer, date range and distance from a point. Soonest first, or nearest first when a point is given. Keyset paging: pass `nextCursor` back as `cursor` (a new event never shifts a page). Private and unlisted events, weddings, drafts and organizers that did not opt in to the marketplace never appear. No credential.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 25,
+              "description": "Page size (1–100)."
+            },
+            "required": false,
+            "description": "Page size (1–100).",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "maxLength": 512,
+              "description": "The previous page’s `nextCursor`."
+            },
+            "required": false,
+            "description": "The previous page’s `nextCursor`.",
+            "name": "cursor",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "maxLength": 100,
+              "description": "Words in the name, tagline, venue, city or organizer.",
+              "example": "jazz"
+            },
+            "required": false,
+            "description": "Words in the name, tagline, venue, city or organizer.",
+            "name": "q",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/EventCategory"
+                },
+                {
+                  "description": "A platform category key."
+                }
+              ]
+            },
+            "required": false,
+            "description": "A platform category key.",
+            "name": "category",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 63,
+              "pattern": "^[a-z0-9-]+$",
+              "description": "The organizer’s slug (`organizer.slug` of a result)."
+            },
+            "required": false,
+            "description": "The organizer’s slug (`organizer.slug` of a result).",
+            "name": "organizer",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              ],
+              "description": "Events still on at or after this moment. A date (`2027-05-01`) means the start of that UTC day."
+            },
+            "required": false,
+            "description": "Events still on at or after this moment. A date (`2027-05-01`) means the start of that UTC day.",
+            "name": "from",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              ],
+              "description": "Events starting before this moment. A date (`2027-05-31`) means the end of that UTC day (the next midnight, exclusive)."
+            },
+            "required": false,
+            "description": "Events starting before this moment. A date (`2027-05-31`) means the end of that UTC day (the next midnight, exclusive).",
+            "name": "to",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "minimum": -90,
+              "maximum": 90,
+              "description": "With `lng`: only events with a located venue within `radiusKm`, nearest first."
+            },
+            "required": false,
+            "description": "With `lng`: only events with a located venue within `radiusKm`, nearest first.",
+            "name": "lat",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "minimum": -180,
+              "maximum": 180,
+              "description": "With `lat`: the point’s longitude."
+            },
+            "required": false,
+            "description": "With `lat`: the point’s longitude.",
+            "name": "lng",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 500,
+              "default": 25,
+              "description": "Kilometres around the point (1–500)."
+            },
+            "required": false,
+            "description": "Kilometres around the point (1–500).",
+            "name": "radiusKm",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A page of events",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicEventPage"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/public/events/{slug}/checkout": {
+      "post": {
+        "operationId": "startAppCheckout",
+        "tags": [
+          "public"
+        ],
+        "summary": "Start a checkout from the app (signed-in person with a verified email)",
+        "description": "The same steps as the web checkout: the cart is priced all-in from the live passes and held for 10 minutes, then the provider payment is created and attached. The buyer is the signed-in person (their verified email); the response carries the hosted payment page to open in a secure in-app browser session, which returns to the app through a universal link (`…/events/{slug}?checkout=return|cancelled&order={orderId}`).\n\nNeeds an `Idempotency-Key`: a retry returns the same order and payment link while the hold lasts. A free cart is paid at once (`action: paid`).\n\nA cart the app cannot finish natively (the event asks checkout questions, sells by seat or through registration types, a pass has a transfer fee, or lets the buyer choose the amount) answers `action: web` with the event page to open instead. Passes that give access to a stream are refused: `409`, `details.reason: buy_on_web`, with `details.webUrl`.\n\nSame rules and rate limits as the web: promo and coupon codes, pass limits, sales windows, the pre-checkout risk rules, and the budget for starting checkouts (`429` with `Retry-After`).",
+        "security": [
+          {
+            "bearerSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 63,
+              "pattern": "^[a-z0-9-]+$",
+              "description": "The event’s public slug",
+              "example": "lakeside-jazz-night"
+            },
+            "required": true,
+            "description": "The event’s public slug",
+            "name": "slug",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "pattern": "^[\\x21-\\x7e]{8,255}$",
+              "description": "Required on every write. Retrying with the same key returns the stored result (kept 24 h).",
+              "example": "6f1c2c1e-5d1e-4d7a-9f5b-2c4b1f0e9a11"
+            },
+            "required": true,
+            "description": "Required on every write. Retrying with the same key returns the stored result (kept 24 h).",
+            "name": "idempotency-key",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AppCheckoutRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The cart finishes on the web (`action: web`)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppCheckoutResult"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "The order was placed (`action: pay` or `paid`)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppCheckoutResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict, invalid state, or the same Idempotency-Key is in flight",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The Idempotency-Key was used with a different request (`idempotency_key_reused`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Read-only maintenance (`read_only_freeze`): nothing was changed; retry after `Retry-After` seconds",
             "content": {
               "application/problem+json": {
                 "schema": {

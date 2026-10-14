@@ -1,0 +1,62 @@
+{
+  "common": {
+    "retry": "Opnieuw proberen",
+    "cancel": "Annuleren",
+    "close": "Sluiten",
+    "continue": "Doorgaan",
+    "ok": "OK"
+  },
+  "errors": {
+    "generic": "Er ging iets mis. Probeer het opnieuw.",
+    "network": "Geen verbinding. Controleer je netwerk en probeer het opnieuw."
+  },
+  "offline": {
+    "banner": "Je bent offline. Je kunt nog steeds zien wat op deze telefoon is opgeslagen.",
+    "queued": "{count, plural, one {# wijziging wordt verzonden zodra je weer online bent.} other {# wijzigingen worden verzonden zodra je weer online bent.}}"
+  },
+  "update": {
+    "requiredTitle": "Update vereist",
+    "requiredBody": "Deze versie van {app} wordt niet meer ondersteund. Update naar versie {minimum} of nieuwer om door te gaan.",
+    "requiredBodyGeneric": "Deze versie van {app} wordt niet meer ondersteund. Update naar de nieuwste versie om door te gaan.",
+    "action": "{app} updaten",
+    "noStoreLink": "Open de app store op deze telefoon en update {app}.",
+    "softTitle": "Er is een nieuwe versie beschikbaar",
+    "softBody": "Versie {latest} van {app} staat klaar. Update voor de nieuwste fixes en functies.",
+    "softAction": "Updaten",
+    "softDismiss": "Niet nu"
+  },
+  "signIn": {
+    "failed": {
+      "invalid_credentials": "Dat e-mailadres of wachtwoord klopt niet.",
+      "invalid_code": "Die code klopt niet. Controleer hem en probeer het opnieuw.",
+      "too_many_attempts": "Te veel foute codes. Begin opnieuw om een nieuwe code te krijgen.",
+      "invalid_challenge": "Die stap is verlopen. Begin opnieuw.",
+      "invalid_id_token": "We konden je aanmelding niet bevestigen. Probeer het opnieuw.",
+      "provider_email_missing": "Je account heeft geen e-mailadres gedeeld, dus we kunnen je er niet mee aanmelden.",
+      "provider_email_unverified": "Je e-mailadres is niet geverifieerd bij dat account. Verifieer het of gebruik een andere manier om aan te melden.",
+      "provider_linked_elsewhere": "Dat account is al gekoppeld aan een ander Yayatoh-account.",
+      "unknown": "We konden je niet aanmelden. Probeer het opnieuw."
+    },
+    "rateLimited": "{minutes, plural, one {Te veel pogingen. Probeer het over # minuut opnieuw.} other {Te veel pogingen. Probeer het over # minuten opnieuw.}}",
+    "unavailable": "We konden Yayatoh niet bereiken. Controleer je verbinding en probeer het opnieuw.",
+    "unsupported": "Die aanmelding is niet beschikbaar op deze telefoon."
+  },
+  "stepUp": {
+    "invalid_code": "Die code klopt niet.",
+    "invalid_password": "Dat wachtwoord klopt niet."
+  },
+  "session": {
+    "endedReused": "Je bent afgemeld omdat deze aanmelding op een ander apparaat is gebruikt. Meld je opnieuw aan.",
+    "endedExpired": "Je sessie is beëindigd. Meld je opnieuw aan."
+  },
+  "language": {
+    "label": "Taal",
+    "system": "Zoals deze telefoon"
+  },
+  "theme": {
+    "label": "Weergave",
+    "system": "Zoals deze telefoon",
+    "light": "Licht",
+    "dark": "Donker"
+  }
+}

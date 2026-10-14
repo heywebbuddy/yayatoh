@@ -18,6 +18,7 @@ export async function orderPaymentStateTx(tx: TenantTx, orderId: string) {
       fundsFlow: orders.fundsFlow,
       connectedAccountId: orders.connectedAccountId,
       feeMinor: orders.feeMinor,
+      expiresAt: orders.expiresAt,
     })
     .from(orders)
     .where(eq(orders.id, orderId));

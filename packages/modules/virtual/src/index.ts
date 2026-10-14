@@ -6,6 +6,7 @@ export {
   setActiveIngestCommand,
   setStreamEnabledCommand,
   setTicketAccessCommand,
+  streamingTicketTypeIds,
   streamingUsageQuery,
   switchStreamProviderCommand,
   virtualSetupQuery,

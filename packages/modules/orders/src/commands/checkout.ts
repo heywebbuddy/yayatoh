@@ -10,6 +10,7 @@ import {
   type ProviderEvent,
   postSaleTx,
   RISK_WINDOW_MINUTES,
+  rulesRiskProvider,
 } from '@yayatoh/payments';
 import { keyVault, tenantCommand } from '@yayatoh/platform';
 import {
@@ -449,6 +450,69 @@ export const startCheckoutCommand = tenantCommand({
   }),
 });
 
+/**
+ * M7.2f: the same checkout for the mobile apps (`POST /v1/public/events/{slug}/checkout`). It runs
+ * `startCheckoutTx` unchanged (same hold, fees, snapshot and events), with two differences that
+ * come from being a retried API call rather than a form post:
+ * - the pre-checkout risk rules (M1.6e) are assessed here, in the transaction, not by the caller:
+ *   what the rules decide is server state, so it stays out of the idempotency fingerprint (a retry
+ *   of the same request must replay, not fail because the buyer's order count has grown). The
+ *   app sends no geo header, so the country rule does not apply;
+ * - the result leaves out the manage token. An app signs in and finds its orders by the verified
+ *   email, and the result is stored for idempotent replays, where a bearer link to the order has no
+ *   business being kept.
+ */
+export const AppCheckoutInput = StartCheckoutInput.omit({ riskReview: true });
+export type AppCheckoutInput = z.input<typeof AppCheckoutInput>;
+export const AppCheckoutResultDto = z.object({
+  order: OrderDto,
+  payment: CheckoutResultDto.shape.payment,
+});
+export type AppCheckoutResultDto = z.infer<typeof AppCheckoutResultDto>;
+
+export const startAppCheckoutCommand = tenantCommand({
+  name: 'orders.startAppCheckout',
+  input: AppCheckoutInput,
+  output: AppCheckoutResultDto,
+  entitlement: 'ticketing',
+  permission: 'public:checkout',
+  handler: async (args) => {
+    const { input, ctx, tx } = args;
+    const signals = await checkoutRiskSignalsTx(tx, input.eventId, input.buyer.email, ctx.now);
+    const risk = await rulesRiskProvider().assess({
+      orgId: requireOrg(ctx),
+      eventId: input.eventId,
+      emailOrders: signals.emailOrders,
+      paymentFailures: signals.paymentFailures,
+      ipCountry: null,
+      eventCountry: signals.eventCountry,
+    });
+    if (risk.action === 'block')
+      throw new DomainError('forbidden', 'This order cannot be placed', {
+        reason: 'risk_blocked',
+        rules: [...risk.rules],
+        emailOrders: signals.emailOrders,
+        paymentFailures: signals.paymentFailures,
+      });
+    const { order, payment } = await startCheckoutTx({
+      ...args,
+      input: { ...input, riskReview: risk.action === 'review' ? [...risk.rules] : [] },
+    });
+    return { order, payment };
+  },
+  audit: (input, r) => ({
+    action: 'order.checkout',
+    targetType: 'order',
+    targetId: r.order.id,
+    data: {
+      eventId: input.eventId,
+      totalMinor: r.order.totalMinor,
+      items: input.items.length,
+      via: 'app',
+    },
+  }),
+});
+
 /** Record the provider payment and extend the hold by 5 minutes (payment started). */
 export const attachPaymentCommand = tenantCommand({
   name: 'orders.attachPayment',
@@ -717,13 +781,21 @@ export async function checkoutRiskSignals(
   email: string,
   now: Date,
 ): Promise<{ emailOrders: number; paymentFailures: number; eventCountry: string | null }> {
-  const since = new Date(now.getTime() - RISK_WINDOW_MINUTES * 60_000);
   const ctx = createCtx({ orgId, actor: { type: 'system', name: 'orders.checkout-risk' } });
-  return withTenant(ctx, async (tx) => {
-    const [r] = await tx.execute<{ n: number; failed: number }>(sql`
-      select count(*)::int as n, count(*) filter (where status = 'payment_failed')::int as failed
-      from orders.orders where buyer_email = ${email.trim().toLowerCase()} and created_at >= ${since.toISOString()}::timestamptz`);
-    const event = await findEventTx(tx, eventId);
-    return { emailOrders: r?.n ?? 0, paymentFailures: r?.failed ?? 0, eventCountry: event?.country ?? null };
-  });
+  return withTenant(ctx, (tx) => checkoutRiskSignalsTx(tx, eventId, email, now));
+}
+
+/** The same signals inside the caller's transaction (M7.2f: the apps' checkout assesses in-command). */
+export async function checkoutRiskSignalsTx(
+  tx: TenantTx,
+  eventId: string,
+  email: string,
+  now: Date,
+): Promise<{ emailOrders: number; paymentFailures: number; eventCountry: string | null }> {
+  const since = new Date(now.getTime() - RISK_WINDOW_MINUTES * 60_000);
+  const [r] = await tx.execute<{ n: number; failed: number }>(sql`
+    select count(*)::int as n, count(*) filter (where status = 'payment_failed')::int as failed
+    from orders.orders where buyer_email = ${email.trim().toLowerCase()} and created_at >= ${since.toISOString()}::timestamptz`);
+  const event = await findEventTx(tx, eventId);
+  return { emailOrders: r?.n ?? 0, paymentFailures: r?.failed ?? 0, eventCountry: event?.country ?? null };
 }

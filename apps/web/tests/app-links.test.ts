@@ -7,6 +7,7 @@ import {
   appLinksResponse,
   appleAppSiteAssociation,
   assetLinks,
+  fakeReturnTarget,
   isAppLinksPath,
 } from '../src/lib/app-links.ts';
 
@@ -177,5 +178,24 @@ describe('the response', () => {
     expect(appLinksResponse(AASA_PATH, 'tickets.example.org', env)).toBeNull();
     expect(appLinksResponse('/.well-known/assetlinks.json', 'tickets.example.org', env)).toBeNull();
     expect(appLinksResponse('/robots.txt', 'yayatoh.com', env)).toBeNull();
+  });
+});
+
+describe('where the fake payment page returns to (M7.2f)', () => {
+  const origin = 'http://localhost:3100';
+  it('a path on this origin stays a path', () => {
+    expect(fakeReturnTarget('/orders/abc', origin, env)).toBe('/orders/abc');
+    expect(fakeReturnTarget(`${origin}/events/x?y=1`, origin, env)).toBe('/events/x?y=1');
+  });
+  it('the apps’ universal links are followed, so the app opens', () => {
+    const link = 'https://app.yayatoh.com/events/jazz?checkout=return&order=o1';
+    expect(fakeReturnTarget(link, origin, env)).toBe(link);
+    expect(fakeReturnTarget('https://jazz.yayatoh.events/events/jazz', origin, env)).toBe(
+      'https://jazz.yayatoh.events/events/jazz',
+    );
+  });
+  it('any other host, or plain http, goes home', () => {
+    expect(fakeReturnTarget('https://evil.example/events/x', origin, env)).toBe('/');
+    expect(fakeReturnTarget('http://app.yayatoh.com/events/x', origin, env)).toBe('/');
   });
 });

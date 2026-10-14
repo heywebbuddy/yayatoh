@@ -119,7 +119,7 @@ export function stripePaymentProvider(opts: StripeProviderOptions): PaymentProvi
               : {}),
           },
           success_url: i.returnUrl,
-          cancel_url: i.returnUrl,
+          cancel_url: i.cancelUrl ?? i.returnUrl,
           expires_at: Math.floor(now().getTime() / 1000) + SESSION_MINUTES * 60,
         },
         { idempotencyKey: i.idempotencyKey, ...on(direct ? i.connectedAccountId : null) },

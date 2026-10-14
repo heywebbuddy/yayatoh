@@ -3,6 +3,7 @@
 import { isProductionEnv } from '@yayatoh/kernel';
 import { signFakeWebhook } from '@yayatoh/payments';
 import { redirect } from 'next/navigation';
+import { fakeReturnTarget } from '@/lib/app-links.ts';
 
 /** The fake hosted page's buttons: post a signed webhook to our own endpoint, then return. */
 export async function completeFakePayment(
@@ -36,7 +37,7 @@ export async function completeFakePayment(
     headers: { 'content-type': 'application/json', 'x-fake-signature': signature },
     body,
   });
-  // Only same-origin return URLs.
-  const back = new URL(params.returnUrl, origin);
-  redirect(back.origin === new URL(origin).origin ? `${back.pathname}${back.search}` : '/');
+  // Only same-origin return URLs, and the universal links of the mobile apps (M7.2f: the app's
+  // checkout returns to `https://app.yayatoh.com/events/…`, which the app opens).
+  redirect(fakeReturnTarget(params.returnUrl, origin));
 }

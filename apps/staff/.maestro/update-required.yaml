@@ -1,0 +1,10 @@
+# M7.1c: the Staff app below the server's minimum shows the update screen, except during an event
+# window (then only a nudge). Written, not run in cloud sessions. Device pass: a preview build whose
+# server sets apps."yayatoh-staff-ios".minimumVersion above the build's version and no active event.
+appId: com.yayatoh.staff.preview
+---
+- launchApp:
+    clearState: true
+- assertVisible: 'Update required'
+- assertVisible:
+    text: 'Update Yayatoh Staff'

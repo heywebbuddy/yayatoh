@@ -77,6 +77,8 @@ export interface V1Deps {
   readonly portalMail?: PortalMailer;
   /** M7.2e: the M1.14 limiter behind the portal sign-in (default: Upstash when configured, else Postgres counters). */
   readonly portalLimiter?: PlatformRateLimiter;
+  /** M7.2f: the M1.14 limiter behind the apps' checkout, the web's `checkoutStart` policy (default as `portalLimiter`). */
+  readonly checkoutLimiter?: PlatformRateLimiter;
 }
 
 /**
