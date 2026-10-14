@@ -295,8 +295,10 @@ export function meRoutes(deps: V1Deps) {
       // A transfer fee is agreed and paid on the web: send the person there. Only when the rules
       // would otherwise allow the transfer; a refused one gets the command's own refusal below.
       if (t.allowed && t.feeMinor > 0) {
+        // Not idempotent on purpose: its answer is a web credential, which the idempotency record
+        // would keep for a day. It is limited like every holder link (three an hour per event).
         const link = await executeCommand(
-          idempotent(issueAppHolderLinkCommand),
+          issueAppHolderLinkCommand,
           { holderEmail: me.user.email, ticketId: id },
           ctx,
           ports,
@@ -444,7 +446,8 @@ export function meRoutes(deps: V1Deps) {
         ports,
       );
       const claimed = await personTicket(me.user.email, ticketId);
-      if (!claimed) throw new DomainError('internal', 'The claimed ticket could not be read');
+      // Replayed after the claimant passed the ticket on: it is no longer theirs to read.
+      if (!claimed) throw new DomainError('not_found', 'Ticket not found');
       return c.json(detailWire(c, claimed), 200);
     });
 }

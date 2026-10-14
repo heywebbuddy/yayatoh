@@ -38,6 +38,26 @@ export const V1_ALLOW: Readonly<Record<string, readonly ColumnId[]>> = {
 };
 
 /**
+ * `/v1/me/…` and `/v1/claims/…` (M7.2b), read as the signed-in attendee: only the person's own
+ * ticket (its short code, holder name, seat and QR payload), the wallet pass serial that identifies
+ * their pass, the entrance and zone names where their type is checked (the brief asks the ticket
+ * screen to name them; the column is classified staff-facing, `internal`), a pending transfer's
+ * recipient name (they typed it) and the reason an organizer declined their own refund request.
+ * Never the buyer's or holder's email, the manage link, payment references, promo codes, notes,
+ * other holders or any other tenant column.
+ */
+export const ME_ALLOW: readonly ColumnId[] = [
+  'ticketing.tickets.short_code',
+  'ticketing.tickets.holder_name',
+  'ticketing.tickets.seat_label',
+  'ticketing.ticket_barcodes.payload',
+  'ticketing.wallet_passes.serial',
+  'ticketing.ticket_transfers.to_name',
+  'checkin.checkpoints.name',
+  'orders.refund_requests.decline_reason',
+];
+
+/**
  * The door (a device token's offline manifest): the holder's name, the ticket code and seat to
  * check, and the checkpoint names. Contact details only as salted hashes (roadmap §5.4).
  */

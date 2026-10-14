@@ -15,6 +15,7 @@ import {
   GUEST_SITE_ALLOW,
   type Leak,
   leaksIn,
+  ME_ALLOW,
   PARTY_ALLOW,
   V1_ALLOW,
 } from '@yayatoh/testing/canary';
@@ -294,6 +295,81 @@ test.describe('canary leak crawl (roadmap §9)', () => {
     // The check is live: the org does see its own buyers and guests (canaries) here.
     expect([...seen]).toEqual(
       expect.arrayContaining(['orders.orders.buyer_email', 'attendees.attendees.email']),
+    );
+    expect(formatLeaks(leaks)).toBe('no canary leaks');
+  });
+
+  test('/v1/me and /v1/claims show an attendee only their own columns', async ({ request }) => {
+    // M7.2b: a signed-in attendee (the buyer of a canary order, holder of one of its tickets) reads
+    // their tickets, orders, wallet links and a claim, and tries the writes. Every other private
+    // column of those rows holds a canary, so anything beyond the person's own data is a leak.
+    test.setTimeout(120_000);
+    const c = canary();
+    expect(c.attendee, 'the canary setup makes the attendee (canary-setup.ts)').not.toBeNull();
+    const who = c.attendee as NonNullable<CanaryOrg['attendee']>;
+    const login = await request.post('/api/v1/auth/login', {
+      data: { email: who.email, password: who.password },
+    });
+    expect(login.status()).toBe(200);
+    const token = ((await login.json()) as { token: string }).token;
+    const auth = { authorization: `Bearer ${token}` };
+    const leaks: Leak[] = [];
+    const seen = new Set<string>();
+    const scan = (path: string, text: string) => {
+      for (const h of findCanaries(text)) seen.add(h.column);
+      leaks.push(...leaksIn(path, text, { kind: 'scoped', allow: ME_ALLOW }));
+    };
+    const get = async (path: string, status = 200) => {
+      const res = await request.get(`/api/v1${path}`, { headers: auth });
+      expect(res.status(), path).toBe(status);
+      const text = await res.text();
+      scan(path, text);
+      return JSON.parse(text) as { data?: { id: string }[] } & Record<string, unknown>;
+    };
+    const write = async (method: 'post' | 'delete', path: string, data?: unknown) => {
+      const res = await request.fetch(`/api/v1${path}`, {
+        method,
+        headers: {
+          ...auth,
+          'idempotency-key': `canary-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+        },
+        ...(data === undefined ? {} : { data }),
+      });
+      expect(res.status(), path).toBeLessThan(500);
+      const text = await res.text();
+      scan(path, text);
+      return text ? (JSON.parse(text) as { transferId?: string | null }) : {};
+    };
+
+    const upcoming = (await get('/me/tickets?when=upcoming&limit=100')).data ?? [];
+    const past = (await get('/me/tickets?when=past&limit=100')).data ?? [];
+    const tickets = [...upcoming, ...past];
+    expect(tickets.length, 'the attendee holds a canary ticket').toBeGreaterThan(0);
+    for (const t of tickets) {
+      await get(`/me/tickets/${t.id}`);
+      await get(`/me/tickets/${t.id}/wallet?platform=apple`);
+      await get(`/me/tickets/${t.id}/wallet?platform=google`);
+      const started = await write('post', `/me/tickets/${t.id}/transfers`, {
+        toName: 'Canary Recipient',
+        toEmail: 'canary-recipient@example.test',
+      });
+      // Put it back as it was: a pending transfer would show on the next run's responses.
+      if (started.transferId) await write('delete', `/me/tickets/${t.id}/transfers/${started.transferId}`);
+    }
+    const orders = (await get('/me/orders?limit=100')).data ?? [];
+    expect(orders.length, 'the attendee bought a canary order').toBeGreaterThan(0);
+    for (const o of orders) {
+      await get(`/me/orders/${o.id}`);
+      await write('post', `/me/orders/${o.id}/refund-requests`, { message: 'Canary refund request' });
+    }
+    if (who.claimToken) {
+      const path = `/claims/${encodeURIComponent(who.claimToken)}`;
+      // Reading the offer; claiming it would move the canary ticket to the attendee for good.
+      await get(path);
+    }
+    // The checks are live: the attendee's own columns do come back (and are allowed).
+    expect([...seen]).toEqual(
+      expect.arrayContaining(['ticketing.tickets.short_code', 'ticketing.ticket_barcodes.payload']),
     );
     expect(formatLeaks(leaks)).toBe('no canary leaks');
   });

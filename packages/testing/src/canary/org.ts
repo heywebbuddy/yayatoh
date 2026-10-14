@@ -20,6 +20,7 @@ import {
   createApiKeyCommand,
   setLegalPageCommand,
 } from '@yayatoh/tenancy';
+import { createClaimLinksCommand } from '@yayatoh/ticketing';
 import { sql } from 'drizzle-orm';
 import { createOrgFixture, EXPORT_PARAMS, FIXTURE_SITE_PASSWORD, systemCtx, userCtx } from '../fixtures.ts';
 import { ports, runBulk } from '../ports.ts';
@@ -86,6 +87,23 @@ export interface CanaryOrg {
    */
   readonly partyToken: string | null;
   readonly screenVersion: number | null;
+  /**
+   * M7.2b: an attendee who signs in to the app (a verified password account) with the address of
+   * one canary order's buyer and holder of one of its tickets, and an open claim link for another
+   * ticket. Null when `canaryOrg` was not given a way to sign people up.
+   */
+  readonly attendee: {
+    readonly email: string;
+    readonly password: string;
+    readonly claimToken: string | null;
+  } | null;
+}
+
+/** The part of the auth instance the attendee needs: sign up with a password. */
+export interface CanarySignUp {
+  readonly api: {
+    signUpEmail(args: { body: { email: string; password: string; name: string } }): Promise<unknown>;
+  };
 }
 
 const ident = (...parts: string[]) => parts.map((p) => `"${p.replace(/"/g, '""')}"`).join('.');
@@ -106,6 +124,8 @@ export async function canaryOrg(o: {
   admin: CanaryAdmin;
   slug?: string;
   reuse?: boolean;
+  /** M7.2b: with it, the canary org also gets an app attendee (see `CanaryOrg.attendee`). */
+  auth?: CanarySignUp;
 }): Promise<CanaryOrg> {
   const slug = o.slug ?? `canary-${Date.now().toString(36)}`;
   const existing = o.reuse
@@ -130,6 +150,7 @@ export async function canaryOrg(o: {
   const event = await executeQuery(getEventBySlugQuery, { slug: `${slug}-launch` }, ctx(), ports);
 
   const filled = await fill(o.admin, orgId);
+  const attendee = o.auth ? await prepareAttendee(o.admin, o.auth, orgId, event.id, ctx) : null;
 
   const { key: apiKey } = await executeCommand(
     createApiKeyCommand,
@@ -182,7 +203,57 @@ export async function canaryOrg(o: {
     networkEmail: (member?.email as string | undefined) ?? null,
     partyToken: link ? rsvpLinkToken(link.link_id as string) : null,
     screenVersion: screen ? Number(screen.version) : null,
+    attendee,
   };
+}
+
+const ATTENDEE_PASSWORD = 'canary-attendee-password-1';
+
+/**
+ * M7.2b: after the fill, one canary order's buyer becomes a real, verified account that holds one
+ * of the order's tickets (its holder address is set to the buyer's, so "My tickets" finds it), and
+ * another ticket gets an open claim link. Every other private column of those rows still holds
+ * its canary, so a `/v1/me` response that shows more than the person's own data is caught.
+ */
+async function prepareAttendee(
+  admin: CanaryAdmin,
+  auth: CanarySignUp,
+  orgId: string,
+  eventId: string,
+  ctx: () => ReturnType<typeof userCtx>,
+): Promise<NonNullable<CanaryOrg['attendee']>> {
+  const [order] = await admin.unsafe(
+    `select id::text as id, lower(buyer_email) as email from orders.orders
+     where org_id = $1 and status = 'paid' order by created_at, id limit 1`,
+    [orgId],
+  );
+  if (!order) throw new Error('canary: the fixture has no paid order for the attendee');
+  const email = order.email as string;
+  const [mine] = await admin.unsafe(
+    `select id::text as id from ticketing.tickets
+     where org_id = $1 and order_id = $2 and status = 'active' order by serial limit 1`,
+    [orgId, order.id],
+  );
+  if (!mine) throw new Error('canary: the attendee order has no active ticket');
+  await admin.unsafe(`update ticketing.tickets set holder_email = $2 where id = $1`, [mine.id, email]);
+  await auth.api
+    .signUpEmail({ body: { email, password: ATTENDEE_PASSWORD, name: 'Canary Attendee' } })
+    .catch(() => undefined);
+  await admin.unsafe(`update auth.users set email_verified = true where lower(email) = $1`, [email]);
+  const [other] = await admin.unsafe(
+    `select id::text as id from ticketing.tickets
+     where org_id = $1 and event_id = $2 and status = 'active' and id <> $3 order by serial desc limit 1`,
+    [orgId, eventId, mine.id],
+  );
+  const [link] = other
+    ? await executeCommand(
+        createClaimLinksCommand,
+        { eventId, ticketIds: [other.id as string] },
+        ctx(),
+        ports,
+      )
+    : [];
+  return { email, password: ATTENDEE_PASSWORD, claimToken: link?.token ?? null };
 }
 
 /** One-time extras beyond the shared fixture. */

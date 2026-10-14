@@ -1,4 +1,5 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
+import { createAuth, memoryMailer } from '@yayatoh/auth';
 import { closePools } from '@yayatoh/db';
 import { adminClient } from '@yayatoh/db/testing';
 import { localKeyVault, setKeyVault } from '@yayatoh/platform';
@@ -15,7 +16,13 @@ if (!kms) throw new Error('LOCAL_KMS_KEY is not set');
 setKeyVault(localKeyVault(kms));
 const admin = adminClient();
 try {
-  const org = await canaryOrg({ admin, slug: 'canary-leaks', reuse: true });
+  // M7.2b: the attendee who reads /v1/me is a real password account (verified by the fill).
+  const auth = createAuth({
+    baseURL: process.env.BETTER_AUTH_URL ?? 'http://localhost:3100',
+    secret: process.env.BETTER_AUTH_SECRET ?? '',
+    mailer: memoryMailer().mailer,
+  });
+  const org = await canaryOrg({ admin, slug: 'canary-leaks', reuse: true, auth });
   const dir = new URL('./.generated/', import.meta.url);
   mkdirSync(dir, { recursive: true });
   writeFileSync(new URL('canary.json', dir), `${JSON.stringify(org, null, 2)}\n`);
