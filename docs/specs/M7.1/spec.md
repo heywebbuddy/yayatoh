@@ -91,3 +91,16 @@ Fill `packages/mobile-core` so M7.3 and M7.4 build screens, not plumbing: one ob
 | Sentry is off without a DSN; events carry no personal data | `tests/sentry.test.ts` |
 | Offline banner (online, offline, queued count with plural, Arabic) and Query pauses offline | `tests/network.test.tsx` |
 | Sign in with Apple and Google sheets; the keychain; VoiceOver and TalkBack; a real direction reload; the update screen on a build below the minimum; the offline banner in airplane mode | device pass (`apps/*/.maestro/update-required.yaml`, `apps/mobile/.maestro/offline-banner.yaml`) |
+
+### 5. Gate results (2026-10-14, Linux cloud session, Node 24.21, pnpm 12.6)
+| Check | Result |
+|---|---|
+| `pnpm lint`, `pnpm check:modules` | clean |
+| `pnpm typecheck` (turbo, 63 tasks incl. the three mobile packages) | pass |
+| `pnpm test:mobile` | `mobile-core` 277 tests in 14 suites, `mobile` 10, `staff` 11: pass |
+| `pnpm test` (Vitest unit, 336 files) | 4591 pass; 1 fails: `packages/modules/media/tests/golden.test.ts > logo.svg → the recorded variants` (the avif/webp/png hashes of a rasterised SVG differ in this container; nothing in this branch touches `packages/modules/media`) |
+| `pnpm test:int` | the full suite (251 files) did not finish inside the container's two-hour background limit and reported no failure; `packages/sdk/tests/sdk.int.test.ts` passes. This branch changes no server code, schema or SDK; the merge session's full run is the gate |
+| `expo export` iOS and Android, both apps | pass (1696 iOS and 1832 Android modules each) |
+| `expo-doctor`, `expo install --check` | 21/21 checks, dependencies up to date, both apps |
+| `pnpm why react` | `react@19.2.3` (Expo) and `react@19.3.0` (web) only; `@sentry/react` resolves to 19.2.3 |
+
