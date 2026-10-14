@@ -1,0 +1,62 @@
+{
+  "common": {
+    "retry": "Erneut versuchen",
+    "cancel": "Abbrechen",
+    "close": "Schließen",
+    "continue": "Weiter",
+    "ok": "OK"
+  },
+  "errors": {
+    "generic": "Etwas ist schiefgelaufen. Bitte versuche es erneut.",
+    "network": "Keine Verbindung. Prüfe dein Netzwerk und versuche es erneut."
+  },
+  "offline": {
+    "banner": "Du bist offline. Du kannst weiterhin sehen, was auf diesem Telefon gespeichert wurde.",
+    "queued": "{count, plural, one {# Änderung wird gesendet, sobald du wieder online bist.} other {# Änderungen werden gesendet, sobald du wieder online bist.}}"
+  },
+  "update": {
+    "requiredTitle": "Update erforderlich",
+    "requiredBody": "Diese Version von {app} wird nicht mehr unterstützt. Aktualisiere auf Version {minimum} oder neuer, um fortzufahren.",
+    "requiredBodyGeneric": "Diese Version von {app} wird nicht mehr unterstützt. Aktualisiere auf die neueste Version, um fortzufahren.",
+    "action": "{app} aktualisieren",
+    "noStoreLink": "Öffne den App-Store auf diesem Telefon und aktualisiere {app}.",
+    "softTitle": "Eine neue Version ist verfügbar",
+    "softBody": "Version {latest} von {app} ist bereit. Aktualisiere für die neuesten Fehlerbehebungen und Funktionen.",
+    "softAction": "Aktualisieren",
+    "softDismiss": "Nicht jetzt"
+  },
+  "signIn": {
+    "failed": {
+      "invalid_credentials": "Diese E-Mail-Adresse oder dieses Passwort stimmt nicht.",
+      "invalid_code": "Dieser Code stimmt nicht. Prüfe ihn und versuche es erneut.",
+      "too_many_attempts": "Zu viele falsche Codes. Beginne von vorn, um einen neuen Code zu erhalten.",
+      "invalid_challenge": "Dieser Schritt ist abgelaufen. Beginne von vorn.",
+      "invalid_id_token": "Wir konnten deine Anmeldung nicht bestätigen. Bitte versuche es erneut.",
+      "provider_email_missing": "Dein Konto hat keine E-Mail-Adresse geteilt, daher können wir dich damit nicht anmelden.",
+      "provider_email_unverified": "Deine E-Mail-Adresse ist bei diesem Konto nicht bestätigt. Bestätige sie oder melde dich auf anderem Weg an.",
+      "provider_linked_elsewhere": "Dieses Konto ist bereits mit einem anderen Yayatoh-Konto verknüpft.",
+      "unknown": "Wir konnten dich nicht anmelden. Bitte versuche es erneut."
+    },
+    "rateLimited": "{minutes, plural, one {Zu viele Versuche. Versuche es in # Minute erneut.} other {Zu viele Versuche. Versuche es in # Minuten erneut.}}",
+    "unavailable": "Yayatoh ist nicht erreichbar. Prüfe deine Verbindung und versuche es erneut.",
+    "unsupported": "Diese Anmeldung ist auf diesem Telefon nicht verfügbar."
+  },
+  "stepUp": {
+    "invalid_code": "Dieser Code stimmt nicht.",
+    "invalid_password": "Dieses Passwort stimmt nicht."
+  },
+  "session": {
+    "endedReused": "Du wurdest abgemeldet, weil diese Anmeldung auf einem anderen Gerät verwendet wurde. Bitte melde dich erneut an.",
+    "endedExpired": "Deine Sitzung ist beendet. Bitte melde dich erneut an."
+  },
+  "language": {
+    "label": "Sprache",
+    "system": "Wie dieses Telefon"
+  },
+  "theme": {
+    "label": "Darstellung",
+    "system": "Wie dieses Telefon",
+    "light": "Hell",
+    "dark": "Dunkel"
+  }
+}

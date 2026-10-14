@@ -1,0 +1,62 @@
+{
+  "common": {
+    "retry": "Tentar novamente",
+    "cancel": "Cancelar",
+    "close": "Fechar",
+    "continue": "Continuar",
+    "ok": "OK"
+  },
+  "errors": {
+    "generic": "Algo deu errado. Tente novamente.",
+    "network": "Sem conexão. Verifique sua rede e tente novamente."
+  },
+  "offline": {
+    "banner": "Você está offline. Ainda pode ver o que foi salvo neste telefone.",
+    "queued": "{count, plural, one {# alteração será enviada quando você voltar a ficar online.} many {# de alterações serão enviadas quando você voltar a ficar online.} other {# alterações serão enviadas quando você voltar a ficar online.}}"
+  },
+  "update": {
+    "requiredTitle": "Atualização necessária",
+    "requiredBody": "Esta versão do {app} não é mais compatível. Atualize para a versão {minimum} ou posterior para continuar.",
+    "requiredBodyGeneric": "Esta versão do {app} não é mais compatível. Atualize para a versão mais recente para continuar.",
+    "action": "Atualizar o {app}",
+    "noStoreLink": "Abra a loja de aplicativos deste telefone e atualize o {app}.",
+    "softTitle": "Há uma nova versão disponível",
+    "softBody": "A versão {latest} do {app} está pronta. Atualize para ter as correções e os recursos mais recentes.",
+    "softAction": "Atualizar",
+    "softDismiss": "Agora não"
+  },
+  "signIn": {
+    "failed": {
+      "invalid_credentials": "Esse e-mail ou essa senha não está correto.",
+      "invalid_code": "Esse código não está correto. Verifique e tente novamente.",
+      "too_many_attempts": "Muitos códigos incorretos. Comece de novo para receber um código novo.",
+      "invalid_challenge": "Essa etapa expirou. Comece de novo.",
+      "invalid_id_token": "Não foi possível confirmar o seu login. Tente novamente.",
+      "provider_email_missing": "Sua conta não compartilhou um endereço de e-mail, então não podemos fazer o login com ela.",
+      "provider_email_unverified": "Seu e-mail não está verificado nessa conta. Verifique-o ou use outra forma de entrar.",
+      "provider_linked_elsewhere": "Essa conta já está vinculada a outra conta Yayatoh.",
+      "unknown": "Não foi possível fazer o seu login. Tente novamente."
+    },
+    "rateLimited": "{minutes, plural, one {Muitas tentativas. Tente novamente em # minuto.} many {Muitas tentativas. Tente novamente em # de minutos.} other {Muitas tentativas. Tente novamente em # minutos.}}",
+    "unavailable": "Não foi possível acessar o Yayatoh. Verifique sua conexão e tente novamente.",
+    "unsupported": "Esse login não está disponível neste telefone."
+  },
+  "stepUp": {
+    "invalid_code": "Esse código não está correto.",
+    "invalid_password": "Essa senha não está correta."
+  },
+  "session": {
+    "endedReused": "Você foi desconectado porque esse login foi usado em outro dispositivo. Entre novamente.",
+    "endedExpired": "Sua sessão terminou. Entre novamente."
+  },
+  "language": {
+    "label": "Idioma",
+    "system": "Igual a este telefone"
+  },
+  "theme": {
+    "label": "Aparência",
+    "system": "Igual a este telefone",
+    "light": "Claro",
+    "dark": "Escuro"
+  }
+}

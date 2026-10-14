@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react-native';
+import { type AppLocale, LocaleProvider, ThemeProvider } from '@yayatoh/mobile-core';
 import { dark, light } from '@yayatoh/ui/tokens';
-import { IntlProvider } from 'use-intl';
 import Home from '../src/app/index';
-import { type AppLocale, catalogs } from '../src/i18n';
+import { catalogs } from '../src/i18n';
 
 const mockScheme = jest.fn<'light' | 'dark', []>();
 jest.mock('react-native/Libraries/Utilities/useColorScheme', () => ({
@@ -12,9 +12,15 @@ jest.mock('react-native/Libraries/Utilities/useColorScheme', () => ({
 
 function renderHome(locale: AppLocale = 'en') {
   return render(
-    <IntlProvider locale={locale} messages={catalogs[locale]}>
-      <Home />
-    </IntlProvider>,
+    <ThemeProvider>
+      <LocaleProvider
+        catalogs={catalogs}
+        deviceLanguageTags={[locale]}
+        direction={{ isRTL: locale === 'ar', allowRTL: () => {}, forceRTL: () => {}, reload: async () => {} }}
+      >
+        <Home />
+      </LocaleProvider>
+    </ThemeProvider>,
   );
 }
 
@@ -27,13 +33,14 @@ describe('Yayatoh home screen (placeholder)', () => {
     expect(screen.getByText(catalogs.en.home.tagline)).toBeOnTheScreen();
   });
 
-  it('renders every locale from its own catalog, Arabic included', () => {
+  it('renders every locale from its own catalog, Arabic included, right to left', () => {
     renderHome('ar');
     expect(screen.getByText(catalogs.ar.home.tagline)).toBeOnTheScreen();
     // The tagline is not the English one, and text alignment follows the language (right to left).
     expect(catalogs.ar.home.tagline).not.toBe(catalogs.en.home.tagline);
     expect(screen.getByText(catalogs.ar.home.tagline)).toHaveStyle({ textAlign: 'auto' });
     expect(screen.getByRole('header', { name: 'Yayatoh' })).toHaveStyle({ textAlign: 'auto' });
+    expect(screen.getByTestId('locale-root')).toHaveStyle({ direction: 'rtl' });
   });
 
   it('takes its colours from the design tokens in light mode', () => {
