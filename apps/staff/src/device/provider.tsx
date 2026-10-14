@@ -6,7 +6,6 @@
  * (battery, queue depth, clock offset); a 401 or a wipe command erases local data and the root
  * layout returns to the enrolment screen.
  */
-import { clearServerState, useCore } from '@yayatoh/mobile-core';
 import type { YayatohClient } from '@yayatoh/sdk';
 import {
   createContext,
@@ -56,7 +55,6 @@ export interface DeviceProviderProps {
 }
 
 export function DeviceProvider({ session, children, heartbeat = true }: DeviceProviderProps) {
-  const core = useCore();
   const state = useSyncExternalStore(
     session.subscribe,
     () => session.state,
@@ -66,9 +64,6 @@ export function DeviceProvider({ session, children, heartbeat = true }: DevicePr
   useEffect(() => {
     void session.restore();
   }, [session]);
-
-  // Whatever the cached server state holds belongs to the enrolment that ended.
-  useEffect(() => session.onWipe(() => clearServerState(core.queryClient, core.persister)), [session, core]);
 
   const enrolled = state.status === 'enrolled';
   useEffect(() => {
@@ -83,12 +78,6 @@ export function DeviceProvider({ session, children, heartbeat = true }: DevicePr
       session.stopHeartbeat();
     };
   }, [session, enrolled, heartbeat]);
-
-  // The event's dates just became known (or changed): the gate may now lift an update screen.
-  const windowKey = state.event ? `${state.event.startsAt}|${state.event.endsAt}` : '';
-  useEffect(() => {
-    if (windowKey) void core.versionGate.check();
-  }, [windowKey, core]);
 
   return <DeviceContext.Provider value={session}>{children}</DeviceContext.Provider>;
 }

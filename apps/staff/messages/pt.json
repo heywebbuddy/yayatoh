@@ -148,5 +148,110 @@
   "home": {
     "title": "Yayatoh Staff",
     "tagline": "As ferramentas de portaria para o dia do evento chegam em breve."
+  },
+  "enrol": {
+    "title": "Registar este dispositivo",
+    "intro": "Peça ao organizador do evento para mostrar o código QR de registo na consola e leia-o aqui. Este dispositivo não precisa de uma conta pessoal.",
+    "notices": {
+      "revoked": "Um organizador removeu este dispositivo do evento. Leia um novo código de registo para voltar a usá-lo.",
+      "wiped": "Um organizador apagou este dispositivo. O token e os dados foram eliminados. Leia um novo código de registo para voltar a usá-lo."
+    },
+    "scan": "Ler o código QR de registo",
+    "working": "A verificar o registo…",
+    "linkLabel": "Link de registo",
+    "linkPlaceholder": "Cole o link da consola",
+    "submit": "Registar com este link",
+    "errors": {
+      "invalid_link": "Isto não é um link de registo. Use o código QR ou o link da página de dispositivos do evento.",
+      "rejected": "Este código de registo já não é válido. Peça um novo ao organizador.",
+      "wrong_event": "Este código não é de um evento que este dispositivo possa atender. Peça um novo ao organizador.",
+      "unavailable": "Não foi possível contactar a Yayatoh. Verifique a ligação e tente novamente."
+    },
+    "replace": {
+      "title": "Substituir o registo deste dispositivo?",
+      "body": "Este dispositivo está registado para {event}. Registá-lo de novo elimina o token e tudo o que guardou para esse evento.",
+      "thisEvent": "um evento",
+      "confirm": "Apagar e registar de novo",
+      "cancel": "Manter o registo atual"
+    },
+    "staffPrompt": "Não é um dispositivo de porta?",
+    "signInOrganizer": "Organizador: iniciar sessão",
+    "signInExhibitor": "Expositor: iniciar sessão",
+    "signInTitle": "Iniciar sessão",
+    "backToEnrol": "Voltar ao registo",
+    "scanner": {
+      "title": "Leia o código de registo",
+      "hint": "Aponte a câmara para o código QR no ecrã do organizador.",
+      "preview": "Vista da câmara para ler o código QR de registo",
+      "checking": "A verificar o acesso à câmara…",
+      "invalid": "Esse código QR não é um código de registo. Leia o da página de dispositivos do evento.",
+      "useLink": "Introduzir o link em vez disso",
+      "permission": {
+        "title": "O acesso à câmara está desativado",
+        "body": "O Yayatoh Staff precisa da câmara para ler o código QR de registo. Não é usada para mais nada.",
+        "allow": "Permitir o acesso à câmara",
+        "settingsHint": "O acesso à câmara foi desativado. Abra as definições, permita a câmara ao Yayatoh Staff e volte.",
+        "settings": "Abrir as definições"
+      }
+    }
+  },
+  "device": {
+    "select": {
+      "title": "Onde lê este dispositivo?",
+      "unnamedEvent": "Evento",
+      "dates": "{start} a {end}",
+      "unavailable": "Não foi possível carregar as entradas deste evento. Pode continuar a ler em todo o evento ou tentar novamente.",
+      "prompt": "Escolha a entrada onde este dispositivo lê. Um organizador pode movê-lo mais tarde.",
+      "wholeEvent": "Todo o evento",
+      "wholeEventHint": "Ler em qualquer entrada",
+      "selectedOption": "{name} (selecionada)",
+      "refused": "Essa entrada não está disponível para este dispositivo. Escolha outra.",
+      "continue": "Continuar para a leitura",
+      "remove": "Remover este dispositivo",
+      "removeTitle": "Remover este dispositivo?",
+      "removeBody": "Isto elimina o token de registo e tudo o que este dispositivo guardou para o evento. Vai precisar de um novo código de registo para voltar a usá-lo.",
+      "removeConfirm": "Apagar e remover"
+    }
+  },
+  "organizer": {
+    "about": "É organizador? Acompanhe o dia do evento em direto: check-ins, fluxo, problemas de leitura e dispositivos.",
+    "open": "Iniciar sessão como organizador",
+    "title": "Início de sessão do organizador",
+    "intro": "Use a sua conta Yayatoh. A verificação em dois passos é obrigatória.",
+    "email": "Endereço de email",
+    "password": "Palavra-passe",
+    "continue": "Continuar",
+    "codeIntro": "Introduza o código da sua aplicação de autenticação ou um dos seus códigos de segurança.",
+    "code": "Código de verificação",
+    "verify": "Verificar e iniciar sessão",
+    "back": "Voltar",
+    "twoFactorRequired": "O início de sessão como organizador exige a verificação em dois passos. Ative-a na consola web e inicie sessão aqui de novo.",
+    "errors": {
+      "emailInvalid": "Introduza um endereço de email válido.",
+      "passwordRequired": "Introduza a sua palavra-passe.",
+      "codeRequired": "Introduza o código de verificação."
+    }
+  },
+  "exhibitor": {
+    "about": "É expositor? Recolha contactos no seu stand com o convite que recebeu por email.",
+    "open": "Iniciar sessão como expositor",
+    "title": "Início de sessão do expositor",
+    "intro": "Abra o email de convite e cole aqui o respetivo link. Enviaremos um código de seis dígitos para o endereço convidado.",
+    "inviteLabel": "Link do convite",
+    "invitePlaceholder": "Cole o link do email de convite",
+    "sendCode": "Enviar-me um código por email",
+    "codeIntro": "Enviámos um código de seis dígitos para o endereço com que foi convidado. É válido durante 10 minutos.",
+    "codeLabel": "Código de seis dígitos",
+    "verify": "Verificar e iniciar sessão",
+    "resend": "Enviar outro código",
+    "back": "Voltar",
+    "errors": {
+      "inviteInvalid": "Isto não é um link de convite. Copie o link do seu email de convite.",
+      "invalidInvite": "Este convite não pode ser usado. Pode ter expirado ou ter sido substituído: peça ao organizador que o envie de novo.",
+      "codeInvalid": "Introduza os seis dígitos do email.",
+      "codeRejected": "Esse código já não pode ser usado. Peça um novo.",
+      "wrongCode": "Esse código não está certo. Verifique-o e tente novamente.",
+      "wrongCodeAttempts": "Esse código não está certo. {count, plural, one {Resta # tentativa.} other {Restam # tentativas.}}"
+    }
   }
 }

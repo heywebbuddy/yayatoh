@@ -148,5 +148,110 @@
   "home": {
     "title": "Yayatoh Staff",
     "tagline": "活動當天的入場工具即將推出。"
+  },
+  "enrol": {
+    "title": "註冊此裝置",
+    "intro": "請活動主辦人在主控台顯示註冊 QR 碼，然後在此掃描。此裝置不需要個人帳號。",
+    "notices": {
+      "revoked": "主辦人已將此裝置從活動中移除。請掃描新的註冊碼以再次使用。",
+      "wiped": "主辦人已清除此裝置。其權杖與資料皆已刪除。請掃描新的註冊碼以再次使用。"
+    },
+    "scan": "掃描註冊 QR 碼",
+    "working": "正在檢查註冊…",
+    "linkLabel": "註冊連結",
+    "linkPlaceholder": "貼上主控台中的連結",
+    "submit": "使用此連結註冊",
+    "errors": {
+      "invalid_link": "這不是註冊連結。請使用活動裝置頁面上的 QR 碼或連結。",
+      "rejected": "此註冊碼已失效。請向主辦人索取新的註冊碼。",
+      "wrong_event": "此註冊碼不屬於此裝置可處理的活動。請向主辦人索取新的註冊碼。",
+      "unavailable": "無法連線到 Yayatoh。請檢查網路連線後再試一次。"
+    },
+    "replace": {
+      "title": "要取代此裝置的註冊嗎？",
+      "body": "此裝置已註冊到{event}。重新註冊會刪除其權杖，以及它為該活動儲存的所有內容。",
+      "thisEvent": "某個活動",
+      "confirm": "清除並重新註冊",
+      "cancel": "保留目前的註冊"
+    },
+    "staffPrompt": "不是入口裝置？",
+    "signInOrganizer": "主辦人：登入",
+    "signInExhibitor": "參展商：登入",
+    "signInTitle": "登入",
+    "backToEnrol": "返回註冊",
+    "scanner": {
+      "title": "掃描註冊碼",
+      "hint": "請將相機對準主辦人螢幕上的 QR 碼。",
+      "preview": "用於掃描註冊 QR 碼的相機畫面",
+      "checking": "正在檢查相機權限…",
+      "invalid": "該 QR 碼不是註冊碼。請掃描活動裝置頁面上的 QR 碼。",
+      "useLink": "改為輸入連結",
+      "permission": {
+        "title": "相機權限已關閉",
+        "body": "Yayatoh Staff 需要使用相機讀取註冊 QR 碼，不會用於其他用途。",
+        "allow": "允許使用相機",
+        "settingsHint": "相機權限已被關閉。請開啟設定，允許 Yayatoh Staff 使用相機，然後返回。",
+        "settings": "開啟設定"
+      }
+    }
+  },
+  "device": {
+    "select": {
+      "title": "此裝置在哪裡掃描？",
+      "unnamedEvent": "活動",
+      "dates": "{start} 至 {end}",
+      "unavailable": "無法載入此活動的入口。您仍可針對整個活動掃描，或再試一次。",
+      "prompt": "請選擇此裝置掃描的入口。主辦人之後可以調整。",
+      "wholeEvent": "整個活動",
+      "wholeEventHint": "在任一入口掃描",
+      "selectedOption": "{name}（已選取）",
+      "refused": "此裝置無法使用該入口。請選擇其他入口。",
+      "continue": "繼續掃描",
+      "remove": "移除此裝置",
+      "removeTitle": "要移除此裝置嗎？",
+      "removeBody": "這會刪除註冊權杖，以及此裝置為活動儲存的所有內容。再次使用需要新的註冊碼。",
+      "removeConfirm": "清除並移除"
+    }
+  },
+  "organizer": {
+    "about": "您是主辦人？可即時查看活動當天的狀況：報到、通行速度、掃描問題與裝置。",
+    "open": "以主辦人身分登入",
+    "title": "主辦人登入",
+    "intro": "請使用您的 Yayatoh 帳號。必須啟用兩步驟驗證。",
+    "email": "電子郵件地址",
+    "password": "密碼",
+    "continue": "繼續",
+    "codeIntro": "請輸入驗證器應用程式中的驗證碼，或輸入一組備用碼。",
+    "code": "驗證碼",
+    "verify": "驗證並登入",
+    "back": "返回",
+    "twoFactorRequired": "主辦人登入需要兩步驟驗證。請先在網頁主控台中啟用，然後在此重新登入。",
+    "errors": {
+      "emailInvalid": "請輸入有效的電子郵件地址。",
+      "passwordRequired": "請輸入密碼。",
+      "codeRequired": "請輸入驗證碼。"
+    }
+  },
+  "exhibitor": {
+    "about": "您是參展商？使用電子郵件中收到的邀請，在攤位上蒐集銷售線索。",
+    "open": "以參展商身分登入",
+    "title": "參展商登入",
+    "intro": "請開啟邀請郵件並在此貼上其中的連結。我們會將六位數驗證碼寄到受邀的電子郵件地址。",
+    "inviteLabel": "邀請連結",
+    "invitePlaceholder": "貼上邀請郵件中的連結",
+    "sendCode": "寄給我驗證碼",
+    "codeIntro": "我們已將六位數驗證碼寄到您受邀時使用的電子郵件地址，有效時間為 10 分鐘。",
+    "codeLabel": "六位數驗證碼",
+    "verify": "驗證並登入",
+    "resend": "再寄一組驗證碼",
+    "back": "返回",
+    "errors": {
+      "inviteInvalid": "這不是邀請連結。請複製邀請郵件中的連結。",
+      "invalidInvite": "此邀請無法使用。它可能已過期或已被取代：請主辦人重新寄送。",
+      "codeInvalid": "請輸入郵件中的六位數字。",
+      "codeRejected": "此驗證碼已無法使用。請重新取得。",
+      "wrongCode": "驗證碼不正確。請檢查後再試一次。",
+      "wrongCodeAttempts": "驗證碼不正確。{count, plural, other {還剩 # 次機會。}}"
+    }
   }
 }

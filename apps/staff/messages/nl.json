@@ -148,5 +148,110 @@
   "home": {
     "title": "Yayatoh Staff",
     "tagline": "De ingangstools voor de eventdag komen binnenkort."
+  },
+  "enrol": {
+    "title": "Dit apparaat registreren",
+    "intro": "Vraag de organisator van het evenement om de QR-code voor registratie in de console te tonen en scan die hier. Dit apparaat heeft geen persoonlijk account nodig.",
+    "notices": {
+      "revoked": "Een organisator heeft dit apparaat uit het evenement verwijderd. Scan een nieuwe registratiecode om het opnieuw te gebruiken.",
+      "wiped": "Een organisator heeft dit apparaat gewist. De token en gegevens zijn verwijderd. Scan een nieuwe registratiecode om het opnieuw te gebruiken."
+    },
+    "scan": "Scan de QR-code voor registratie",
+    "working": "Registratie controleren…",
+    "linkLabel": "Registratielink",
+    "linkPlaceholder": "Plak de link uit de console",
+    "submit": "Registreren met deze link",
+    "errors": {
+      "invalid_link": "Dit is geen registratielink. Gebruik de QR-code of link van de apparatenpagina van het evenement.",
+      "rejected": "Deze registratiecode is niet meer geldig. Vraag de organisator om een nieuwe.",
+      "wrong_event": "Deze code hoort niet bij een evenement dat dit apparaat kan bedienen. Vraag de organisator om een nieuwe.",
+      "unavailable": "We konden Yayatoh niet bereiken. Controleer de verbinding en probeer het opnieuw."
+    },
+    "replace": {
+      "title": "Registratie van dit apparaat vervangen?",
+      "body": "Dit apparaat is geregistreerd voor {event}. Opnieuw registreren wist de token en alles wat het voor dat evenement heeft opgeslagen.",
+      "thisEvent": "een evenement",
+      "confirm": "Wissen en opnieuw registreren",
+      "cancel": "Huidige registratie behouden"
+    },
+    "staffPrompt": "Geen deurapparaat?",
+    "signInOrganizer": "Organisator: inloggen",
+    "signInExhibitor": "Exposant: inloggen",
+    "signInTitle": "Inloggen",
+    "backToEnrol": "Terug naar registratie",
+    "scanner": {
+      "title": "Scan de registratiecode",
+      "hint": "Richt de camera op de QR-code op het scherm van de organisator.",
+      "preview": "Camerabeeld om de QR-code voor registratie te scannen",
+      "checking": "Cameratoegang controleren…",
+      "invalid": "Deze QR-code is geen registratiecode. Scan de code van de apparatenpagina van het evenement.",
+      "useLink": "Voer in plaats daarvan de link in",
+      "permission": {
+        "title": "Cameratoegang staat uit",
+        "body": "Yayatoh Staff heeft de camera nodig om de QR-code voor registratie te lezen. De camera wordt voor niets anders gebruikt.",
+        "allow": "Cameratoegang toestaan",
+        "settingsHint": "Cameratoegang is uitgezet. Open de instellingen, sta de camera toe voor Yayatoh Staff en kom terug.",
+        "settings": "Instellingen openen"
+      }
+    }
+  },
+  "device": {
+    "select": {
+      "title": "Waar scant dit apparaat?",
+      "unnamedEvent": "Evenement",
+      "dates": "{start} tot {end}",
+      "unavailable": "We konden de ingangen van dit evenement niet laden. Je kunt nog steeds voor het hele evenement scannen of het opnieuw proberen.",
+      "prompt": "Kies de ingang waar dit apparaat scant. Een organisator kan het later verplaatsen.",
+      "wholeEvent": "Hele evenement",
+      "wholeEventHint": "Scannen bij elke ingang",
+      "selectedOption": "{name} (geselecteerd)",
+      "refused": "Die ingang is niet beschikbaar voor dit apparaat. Kies een andere.",
+      "continue": "Verder naar scannen",
+      "remove": "Dit apparaat verwijderen",
+      "removeTitle": "Dit apparaat verwijderen?",
+      "removeBody": "Hiermee worden de registratietoken en alles wat dit apparaat voor het evenement heeft opgeslagen gewist. Je hebt een nieuwe registratiecode nodig om het opnieuw te gebruiken.",
+      "removeConfirm": "Wissen en verwijderen"
+    }
+  },
+  "organizer": {
+    "about": "Organisator? Volg de evenementdag live: check-ins, doorstroom, scanproblemen en apparaten.",
+    "open": "Inloggen als organisator",
+    "title": "Inloggen als organisator",
+    "intro": "Gebruik je Yayatoh-account. Verificatie in twee stappen is verplicht.",
+    "email": "E-mailadres",
+    "password": "Wachtwoord",
+    "continue": "Doorgaan",
+    "codeIntro": "Voer de code uit je authenticatie-app in, of een van je back-upcodes.",
+    "code": "Verificatiecode",
+    "verify": "Verifiëren en inloggen",
+    "back": "Terug",
+    "twoFactorRequired": "Inloggen als organisator vereist verificatie in twee stappen. Zet die aan in de webconsole en log hier daarna opnieuw in.",
+    "errors": {
+      "emailInvalid": "Voer een geldig e-mailadres in.",
+      "passwordRequired": "Voer je wachtwoord in.",
+      "codeRequired": "Voer de verificatiecode in."
+    }
+  },
+  "exhibitor": {
+    "about": "Exposant? Verzamel leads bij je stand met de uitnodiging die je per e-mail hebt gekregen.",
+    "open": "Inloggen als exposant",
+    "title": "Inloggen als exposant",
+    "intro": "Open de uitnodigingsmail en plak de link hier. We sturen een code van zes cijfers naar het uitgenodigde adres.",
+    "inviteLabel": "Uitnodigingslink",
+    "invitePlaceholder": "Plak de link uit je uitnodigingsmail",
+    "sendCode": "Stuur me een code per e-mail",
+    "codeIntro": "We hebben een code van zes cijfers gestuurd naar het adres waarmee je bent uitgenodigd. Hij is 10 minuten geldig.",
+    "codeLabel": "Code van zes cijfers",
+    "verify": "Verifiëren en inloggen",
+    "resend": "Nog een code sturen",
+    "back": "Terug",
+    "errors": {
+      "inviteInvalid": "Dit is geen uitnodigingslink. Kopieer de link uit je uitnodigingsmail.",
+      "invalidInvite": "Deze uitnodiging kan niet worden gebruikt. Hij is mogelijk verlopen of vervangen: vraag de organisator hem opnieuw te sturen.",
+      "codeInvalid": "Voer de zes cijfers uit de e-mail in.",
+      "codeRejected": "Die code kan niet meer worden gebruikt. Vraag een nieuwe aan.",
+      "wrongCode": "Die code klopt niet. Controleer hem en probeer het opnieuw.",
+      "wrongCodeAttempts": "Die code klopt niet. {count, plural, one {Nog # poging.} other {Nog # pogingen.}}"
+    }
   }
 }

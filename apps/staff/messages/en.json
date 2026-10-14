@@ -148,5 +148,110 @@
   "home": {
     "title": "Yayatoh Staff",
     "tagline": "Door tools for event day are coming soon."
+  },
+  "enrol": {
+    "title": "Enrol this device",
+    "intro": "Ask the event organizer to show the enrolment QR code from the console, then scan it here. This device needs no personal account.",
+    "notices": {
+      "revoked": "An organizer removed this device from the event. Scan a new enrolment code to use it again.",
+      "wiped": "An organizer wiped this device. Its token and data were erased. Scan a new enrolment code to use it again."
+    },
+    "scan": "Scan the enrolment QR code",
+    "working": "Checking the enrolment…",
+    "linkLabel": "Enrolment link",
+    "linkPlaceholder": "Paste the link from the console",
+    "submit": "Enrol with this link",
+    "errors": {
+      "invalid_link": "That is not an enrolment link. Use the QR code or link from the event's devices page.",
+      "rejected": "This enrolment code is no longer valid. Ask the organizer for a new one.",
+      "wrong_event": "This code is not for an event this device can work. Ask the organizer for a new one.",
+      "unavailable": "We could not reach Yayatoh. Check the connection and try again."
+    },
+    "replace": {
+      "title": "Replace this device's enrolment?",
+      "body": "This device is enrolled for {event}. Enrolling again erases its token and everything it saved for that event.",
+      "thisEvent": "an event",
+      "confirm": "Erase and enrol again",
+      "cancel": "Keep the current enrolment"
+    },
+    "staffPrompt": "Not a door device?",
+    "signInOrganizer": "Event organizer: sign in",
+    "signInExhibitor": "Exhibitor: sign in",
+    "signInTitle": "Sign in",
+    "backToEnrol": "Back to enrolment",
+    "scanner": {
+      "title": "Scan the enrolment code",
+      "hint": "Point the camera at the QR code on the organizer's screen.",
+      "preview": "Camera view for scanning the enrolment QR code",
+      "checking": "Checking camera access…",
+      "invalid": "That QR code is not an enrolment code. Scan the one from the event's devices page.",
+      "useLink": "Enter the link instead",
+      "permission": {
+        "title": "Camera access is off",
+        "body": "Yayatoh Staff needs the camera to read the enrolment QR code. It is used for nothing else.",
+        "allow": "Allow camera access",
+        "settingsHint": "Camera access was turned off. Open the settings, allow the camera for Yayatoh Staff, then come back.",
+        "settings": "Open settings"
+      }
+    }
+  },
+  "device": {
+    "select": {
+      "title": "Where is this device scanning?",
+      "unnamedEvent": "Event",
+      "dates": "{start} to {end}",
+      "unavailable": "We could not load this event's entrances. You can still scan at the whole event, or try again.",
+      "prompt": "Choose the entrance this device scans at. An organizer can move it later.",
+      "wholeEvent": "Whole event",
+      "wholeEventHint": "Scan at any entrance",
+      "selectedOption": "{name} (selected)",
+      "refused": "That entrance is not available for this device. Choose another one.",
+      "continue": "Continue to scanning",
+      "remove": "Remove this device",
+      "removeTitle": "Remove this device?",
+      "removeBody": "This erases the enrolment token and everything this device saved for the event. You will need a new enrolment code to use it again.",
+      "removeConfirm": "Erase and remove"
+    }
+  },
+  "organizer": {
+    "about": "Event organizer? See the event day live: check-ins, throughput, scan issues and devices.",
+    "open": "Sign in as organizer",
+    "title": "Organizer sign-in",
+    "intro": "Use your Yayatoh account. Two-step verification is required.",
+    "email": "Email address",
+    "password": "Password",
+    "continue": "Continue",
+    "codeIntro": "Enter the code from your authenticator app, or one of your backup codes.",
+    "code": "Verification code",
+    "verify": "Verify and sign in",
+    "back": "Back",
+    "twoFactorRequired": "Organizer sign-in needs two-step verification. Turn it on in the web console, then sign in here again.",
+    "errors": {
+      "emailInvalid": "Enter a valid email address.",
+      "passwordRequired": "Enter your password.",
+      "codeRequired": "Enter the verification code."
+    }
+  },
+  "exhibitor": {
+    "about": "Exhibitor? Capture leads at your booth with the invitation you were emailed.",
+    "open": "Sign in as exhibitor",
+    "title": "Exhibitor sign-in",
+    "intro": "Open the invitation email and paste its link here. We will email a six-digit code to the invited address.",
+    "inviteLabel": "Invitation link",
+    "invitePlaceholder": "Paste the link from your invitation email",
+    "sendCode": "Email me a code",
+    "codeIntro": "We emailed a six-digit code to the address you were invited with. It works for 10 minutes.",
+    "codeLabel": "Six-digit code",
+    "verify": "Verify and sign in",
+    "resend": "Send another code",
+    "back": "Back",
+    "errors": {
+      "inviteInvalid": "That is not an invitation link. Copy the link from your invitation email.",
+      "invalidInvite": "This invitation cannot be used. It may have expired or been replaced: ask the organizer to send it again.",
+      "codeInvalid": "Enter the six digits from the email.",
+      "codeRejected": "That code can no longer be used. Ask for a new one.",
+      "wrongCode": "That code is not right. Check it and try again.",
+      "wrongCodeAttempts": "That code is not right. {count, plural, one {# try left.} other {# tries left.}}"
+    }
   }
 }
