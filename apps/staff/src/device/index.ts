@@ -8,6 +8,7 @@ export {
   looksLikeEnrolmentLink,
   redactEnrolment,
 } from './link';
+export { DeviceGuard, EnrolmentLinks } from './navigation';
 export { type DeviceApi, DeviceProvider, useDevice } from './provider';
 export {
   createDeviceSession,

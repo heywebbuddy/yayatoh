@@ -31,7 +31,11 @@ export function Screen({
   readonly scroll?: boolean;
 }) {
   const colors = useColors();
-  const body = <View style={styles.column}>{children}</View>;
+  const body = (
+    <View style={styles.column} testID={testID ? `${testID}-column` : undefined}>
+      {children}
+    </View>
+  );
   return (
     <SafeAreaView style={[styles.screen, { backgroundColor: colors.canvas }]} testID={testID}>
       {scroll ? (
