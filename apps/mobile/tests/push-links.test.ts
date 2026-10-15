@@ -134,18 +134,28 @@ describe('the checkout return link (M7.2f)', () => {
 
   it('works on a tenant host and keeps the organization', async () => {
     const d = deps(true);
-    expect(
-      await resolveIncomingUrl(
-        `https://acme.yayatoh.events/events/summit?checkout=return&order=${ORDER_ID}`,
-        d,
-      ),
-    ).toBe(`/events/summit?org=acme&checkout=return&order=${ORDER_ID}`);
+    const href = await resolveIncomingUrl(
+      `https://acme.yayatoh.events/events/summit?checkout=return&order=${ORDER_ID}`,
+      d,
+    );
+    // The query's order is the router's; what matters is the path and the three values.
+    const [path, query] = href.split('?');
+    expect(path).toBe('/events/summit');
+    expect(Object.fromEntries(new URLSearchParams(query))).toEqual({
+      org: 'acme',
+      checkout: 'return',
+      order: ORDER_ID,
+    });
   });
 
-  it('refuses an order id that is not a UUID, a made-up marker, and a return link with no order', async () => {
+  it('never counts a return with a bad or missing order as a purchase, and drops a made-up marker', async () => {
     const d = deps(true);
-    expect(await resolveIncomingUrl(`${base}?checkout=return&order=../../x`, d)).toBe('/events/summit');
-    expect(await resolveIncomingUrl(`${base}?checkout=return`, d)).toBe('/events/summit');
+    // The shared router keeps a bare `checkout` marker (M7.3c): the event screen reads it as a return
+    // with no order. Without a valid order it never counts as a purchase, so no prompt (below).
+    expect(await resolveIncomingUrl(`${base}?checkout=return&order=../../x`, d)).toBe(
+      '/events/summit?checkout=return',
+    );
+    expect(await resolveIncomingUrl(`${base}?checkout=return`, d)).toBe('/events/summit?checkout=return');
     expect(await resolveIncomingUrl(`${base}?checkout=paid&order=${ORDER_ID}`, d)).toBe('/events/summit');
     expect(d.purchases).toHaveLength(0);
   });
