@@ -1698,7 +1698,14 @@
     "charityLink": "Perfil benéfico",
     "planLink": "Plan y módulos",
     "findOwner": "Buscar un propietario o administrador",
-    "categoriesLink": "Categorías de eventos"
+    "categoriesLink": "Categorías de eventos",
+    "security": {
+      "title": "Seguridad",
+      "description": "La verificación en dos pasos pide un código de una app de autenticación al iniciar sesión. Protege los roles que pueden mover dinero, cambiar pagos y dominios o dar acceso: {roles}.",
+      "require": "Exigir verificación en dos pasos para estos roles",
+      "requireHint": "Activado: la configuran antes de usar la consola y no pueden desactivarla. Desactivado: cada persona decide.",
+      "offNote": "Al guardar se le pedirá confirmar que es usted. Quien ya usa un autenticador lo conserva hasta que lo desactive en la página de seguridad de su cuenta."
+    }
   },
   "legal": {
     "platform": "Yayatoh",
@@ -5238,7 +5245,13 @@
       "revokeAll": "Revocar todos los dispositivos de confianza",
       "revoked": "Revocado. Ese dispositivo volverá a pedir tu código.",
       "revokedAll": "Todos los dispositivos de confianza revocados. Todos volverán a pedir tu código."
-    }
+    },
+    "addDeviceTitle": "Añadir otro dispositivo",
+    "addDeviceExplain": "Use el mismo autenticador en un segundo teléfono o tableta, o con un compañero que comparte esta cuenta. Primero confirma con un código actual; los dispositivos que ya usa siguen funcionando.",
+    "addDevice": "Mostrar mi autenticador de nuevo",
+    "addDeviceScan": "Escanee este código QR con la app de autenticación del otro dispositivo o escriba la clave de configuración. Después mostrará los mismos códigos que su primer dispositivo.",
+    "addDeviceShared": "Quien escanee este código puede iniciar sesión como usted con su contraseña. Compártalo solo con personas de confianza. Desactive y vuelva a activar la verificación en dos pasos para detener todos los dispositivos a la vez.",
+    "addDeviceDone": "Listo"
   },
   "stepUp": {
     "title": "Confirma que eres tú",

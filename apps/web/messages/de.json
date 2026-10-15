@@ -1698,7 +1698,14 @@
     "charityLink": "Gemeinnützigkeitsprofil",
     "planLink": "Tarif und Module",
     "findOwner": "Inhaber oder Admin finden",
-    "categoriesLink": "Veranstaltungskategorien"
+    "categoriesLink": "Veranstaltungskategorien",
+    "security": {
+      "title": "Sicherheit",
+      "description": "Die Bestätigung in zwei Schritten fragt bei der Anmeldung nach einem Code aus einer Authenticator-App. Sie schützt die Rollen, die Geld bewegen, Auszahlungen und Domains ändern oder Zugriff vergeben können: {roles}.",
+      "require": "Bestätigung in zwei Schritten für diese Rollen verlangen",
+      "requireHint": "An: Sie richten sie ein, bevor sie die Konsole nutzen, und können sie nicht ausschalten. Aus: Jede Person entscheidet selbst.",
+      "offNote": "Beim Speichern bestätigen Sie, dass Sie es sind. Wer bereits einen Authenticator nutzt, behält ihn, bis er ihn auf der Seite zur Kontosicherheit ausschaltet."
+    }
   },
   "legal": {
     "platform": "Yayatoh",
@@ -5238,7 +5245,13 @@
       "revokeAll": "Alle vertrauenswürdigen Geräte widerrufen",
       "revoked": "Widerrufen. Dieses Gerät fragt wieder nach Ihrem Code.",
       "revokedAll": "Alle vertrauenswürdigen Geräte widerrufen. Jedes Gerät fragt wieder nach Ihrem Code."
-    }
+    },
+    "addDeviceTitle": "Weiteres Gerät hinzufügen",
+    "addDeviceExplain": "Nutzen Sie denselben Authenticator auf einem zweiten Telefon oder Tablet oder mit einer Person, die dieses Konto mit Ihnen teilt. Sie bestätigen zuerst mit einem aktuellen Code; Ihre bisherigen Geräte funktionieren weiter.",
+    "addDevice": "Meinen Authenticator erneut anzeigen",
+    "addDeviceScan": "Scannen Sie diesen QR-Code mit der Authenticator-App auf dem anderen Gerät oder geben Sie den Einrichtungsschlüssel ein. Danach zeigt es dieselben Codes wie Ihr erstes Gerät.",
+    "addDeviceShared": "Wer diesen Code scannt, kann sich mit Ihrem Passwort als Sie anmelden. Teilen Sie ihn nur mit Personen, denen Sie vertrauen. Schalten Sie die Bestätigung in zwei Schritten aus und wieder ein, um alle Geräte auf einmal zu sperren.",
+    "addDeviceDone": "Fertig"
   },
   "stepUp": {
     "title": "Bestätige, dass du es bist",

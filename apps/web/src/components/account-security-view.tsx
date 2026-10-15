@@ -7,7 +7,7 @@ import { AccountDelete, AccountExport } from '@/components/account-data.tsx';
 import { SignInMethods, TrustedDevices } from '@/components/sign-in-methods.tsx';
 import { SignOutEverywhere } from '@/components/sign-out-everywhere.tsx';
 import { StepUpProvider } from '@/components/step-up.tsx';
-import { RegenerateCodes, TwoFactorOff, TwoFactorSetup } from '@/components/two-factor.tsx';
+import { AddDevice, RegenerateCodes, TwoFactorOff, TwoFactorSetup } from '@/components/two-factor.tsx';
 import { Link, redirect } from '@/i18n/navigation.ts';
 import { getTwoFactor } from '@/server/auth.ts';
 import { getSession } from '@/server/session.ts';
@@ -111,6 +111,14 @@ export async function AccountSecurityView({
             <TwoFactorSetup required={required} />
           )}
         </Card>
+        {status.enabled ? (
+          <Card role="region" aria-labelledby="devices-add-heading" className="flex flex-col gap-3">
+            <h2 id="devices-add-heading" className="text-section">
+              {t('security.addDeviceTitle')}
+            </h2>
+            <AddDevice />
+          </Card>
+        ) : null}
         {status.enabled ? (
           <Card role="region" aria-labelledby="codes-heading" className="flex flex-col gap-3">
             <h2 id="codes-heading" className="text-section">

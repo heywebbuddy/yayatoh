@@ -53,6 +53,7 @@ export type SecurityAction =
   | 'two_factor.setup_started'
   | 'two_factor.enabled'
   | 'two_factor.disabled'
+  | 'two_factor.device_added'
   | 'two_factor.backup_codes_regenerated'
   | 'two_factor.backup_code_used'
   | 'two_factor.challenge_passed'
@@ -320,6 +321,40 @@ export function twoFactorService(auth: Auth, opts: TwoFactorServiceOptions) {
       await succeeded(userId);
       if (used === 'backup_code') await record(userId, 'two_factor.backup_code_used', { purpose: 'disable' });
       await record(userId, 'two_factor.disabled', { method: used });
+    },
+
+    /**
+     * Add another device (a second phone, a colleague sharing a test account): the authenticator
+     * already in use, as its setup key and QR code, so another app produces the same codes. The
+     * caller requires a fresh step-up (which, with an authenticator on, is a current code: only
+     * someone holding it sees it again). Audited.
+     */
+    async currentSetup(userId: string, email: string) {
+      const r = await row(userId);
+      if (!r?.verified || !(await enabled(userId))) throw new TwoFactorError('not_enabled');
+      const secret = await secretOf(r);
+      await record(userId, 'two_factor.device_added');
+      return { setupKey: setupKey(secret), uri: otpauthUri({ issuer, account: email, secret }) };
+    },
+
+    /**
+     * Platform staff turn a person's two-step verification off (the admin console: a lost phone,
+     * a shared test account). No code from the person; the caller checks the staff member's role
+     * and their own confirmation, and keeps the reason.
+     */
+    async staffDisable(userId: string, by: { staffUserId: string; reason: string }) {
+      const c = await context();
+      const on = await enabled(userId);
+      await c.adapter.delete({ model: 'twoFactor', where: [{ field: 'userId', value: userId }] });
+      await c.internalAdapter.updateUser(userId, { twoFactorEnabled: false });
+      await succeeded(userId);
+      await record(userId, 'two_factor.disabled', {
+        method: 'staff',
+        by: by.staffUserId,
+        reason: by.reason.slice(0, 500),
+        wasOn: on,
+      });
+      return { wasOn: on };
     },
 
     /** Replace the backup codes (the old ones stop working). The caller requires a step-up. */

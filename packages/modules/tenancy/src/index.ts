@@ -182,6 +182,13 @@ export {
   suspensionHistoryQuery,
   suspensionsQuery,
 } from './commands/suspensions.ts';
+// Two-step verification policy per org (owners/admins or staff switch the D14 requirement).
+export {
+  setTwoFactorPolicyCommand,
+  staffSetTwoFactorPolicyCommand,
+  TwoFactorPolicyDto,
+  twoFactorPolicyQuery,
+} from './commands/two-factor-policy.ts';
 // M6.14b venue portal: the venue's partner organizers (`venue_partner`).
 export {
   addVenuePartnerCommand,
@@ -280,8 +287,10 @@ export {
   organizationLogoTx,
   organizationNameTx,
   organizationPublicTx,
+  orgRequiresTwoFactorTx,
   resolveOrgSlug,
   setOrganizationLogoTx,
+  twoFactorPolicies,
   twoFactorRequiredBy,
 } from './queries.ts';
 export {

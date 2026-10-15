@@ -8,6 +8,7 @@ import {
   LEGAL_PAGE_KINDS,
   type LegalPageKind,
   setLegalPageCommand,
+  setTwoFactorPolicyCommand,
   updateOrganizationCommand,
 } from '@yayatoh/tenancy';
 import { revalidatePath } from 'next/cache';
@@ -92,6 +93,30 @@ export async function acceptAction(
   if (form.get('agree') !== 'yes') return { ok: false, code: 'validation_failed' };
   try {
     await executeCommand(acceptAgreementCommand, { document, version }, data.ctx, ports);
+    revalidatePath(`/o/${org}`, 'layout');
+    return { ok: true, code: null };
+  } catch (err) {
+    return fail(err);
+  }
+}
+
+/**
+ * Two-step verification for owners, admins and finance (D14): required, or left to each person.
+ * The command needs a recent step-up; the form re-submits after "Confirm it's you".
+ */
+export async function twoFactorPolicyAction(
+  org: string,
+  _prev: SettingsState,
+  form: FormData,
+): Promise<SettingsState> {
+  const data = await loadConsole(org);
+  try {
+    await executeCommand(
+      setTwoFactorPolicyCommand,
+      { required: form.get('required') === 'on' },
+      data.ctx,
+      ports,
+    );
     revalidatePath(`/o/${org}`, 'layout');
     return { ok: true, code: null };
   } catch (err) {

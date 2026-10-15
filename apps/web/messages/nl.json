@@ -1698,7 +1698,14 @@
     "charityLink": "Goededoelenprofiel",
     "planLink": "Abonnement en modules",
     "findOwner": "Zoek een eigenaar of beheerder",
-    "categoriesLink": "Evenementcategorieën"
+    "categoriesLink": "Evenementcategorieën",
+    "security": {
+      "title": "Beveiliging",
+      "description": "Verificatie in twee stappen vraagt bij het inloggen om een code uit een authenticator-app. Het beschermt de rollen die geld kunnen verplaatsen, uitbetalingen en domeinen kunnen wijzigen of toegang kunnen geven: {roles}.",
+      "require": "Verificatie in twee stappen verplichten voor deze rollen",
+      "requireHint": "Aan: zij stellen het in voordat ze de console gebruiken en kunnen het niet uitzetten. Uit: ieder beslist zelf.",
+      "offNote": "Bij opslaan bevestigt u dat u het bent. Wie al een authenticator gebruikt, houdt die tot hij hem uitzet op de beveiligingspagina van zijn account."
+    }
   },
   "legal": {
     "platform": "Yayatoh",
@@ -5238,7 +5245,13 @@
       "revokeAll": "Alle vertrouwde apparaten intrekken",
       "revoked": "Ingetrokken. Dat apparaat vraagt weer om je code.",
       "revokedAll": "Alle vertrouwde apparaten zijn ingetrokken. Elk apparaat vraagt weer om je code."
-    }
+    },
+    "addDeviceTitle": "Nog een apparaat toevoegen",
+    "addDeviceExplain": "Gebruik dezelfde authenticator op een tweede telefoon of tablet, of met een collega die dit account deelt. U bevestigt eerst met een actuele code; uw huidige apparaten blijven werken.",
+    "addDevice": "Mijn authenticator opnieuw tonen",
+    "addDeviceScan": "Scan deze QR-code met de authenticator-app op het andere apparaat, of typ de instelsleutel. Daarna toont het dezelfde codes als uw eerste apparaat.",
+    "addDeviceShared": "Wie deze code scant, kan met uw wachtwoord als u inloggen. Deel hem alleen met mensen die u vertrouwt. Zet verificatie in twee stappen uit en weer aan om alle apparaten tegelijk te blokkeren.",
+    "addDeviceDone": "Klaar"
   },
   "stepUp": {
     "title": "Bevestig dat jij het bent",

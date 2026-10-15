@@ -78,3 +78,19 @@ export async function regenerateCodesAction(_prev: CodesState, _form: FormData):
     return { ok: false, code: codeOf(err) };
   }
 }
+
+/**
+ * Add another device: the authenticator already in use, as its setup key and QR code, for a
+ * second phone or a colleague sharing the account. Needs a fresh step-up (a current code).
+ */
+export async function addDeviceAction(_prev: SetupStart, _form: FormData): Promise<SetupStart> {
+  const session = await ownSession();
+  if (!session) return { ok: false, code: 'unauthenticated' };
+  if (!isStepUpFresh(session.stepUpAt, new Date())) return { ok: false, code: 'step_up_required' };
+  try {
+    const { setupKey, uri } = await getTwoFactor().currentSetup(session.userId, session.email);
+    return { ok: true, code: null, setupKey, qr: qrPath(uri) };
+  } catch (err) {
+    return { ok: false, code: codeOf(err) };
+  }
+}

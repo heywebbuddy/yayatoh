@@ -29,6 +29,7 @@ import {
   type SuspensionKind,
   setOrgStatusCommand,
   setSuspensionCommand,
+  staffSetTwoFactorPolicyCommand,
   startImpersonationCommand,
 } from '@yayatoh/tenancy';
 import { sql } from 'drizzle-orm';
@@ -37,6 +38,7 @@ import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { getAuth, getTwoFactor } from '@/server/auth.ts';
+import { confirmStaff } from '@/server/confirm.ts';
 import { getPaymentProvider } from '@/server/payments.ts';
 import { ports } from '@/server/ports.ts';
 import { requireStaff, type StaffAction } from '@/server/staff.ts';
@@ -352,4 +354,40 @@ export async function endImpersonationAction(orgId: string, impersonationId: str
       ports,
     );
   });
+}
+
+/**
+ * Switch the org's two-step verification requirement for its owners, admins and finance (D14;
+ * admins and support). A reason is required and kept in the org's audit log; the staff member
+ * confirms it's them in the same form, and the platform access log names them.
+ */
+export async function twoFactorPolicyAction(orgId: string, required: boolean, form: FormData) {
+  if (!Id.safeParse(orgId).success) redirect('/');
+  const staff = await requireStaff('twoFactor');
+  const back = `/tenants/${orgId}`;
+  const reason = String(form.get('reason') ?? '').trim();
+  if (reason.length < 3 || reason.length > 500) redirect(`${back}?error=two_factor_reason#two-factor`);
+  const confirmed = await confirmStaff(staff, form);
+  if (!confirmed.ok) redirect(`${back}?error=two_factor_${confirmed.code}#two-factor`);
+  await withPlatformReader(
+    {
+      actor: staff.actor,
+      reason: `staff console: two-step verification ${required ? 'required' : 'optional'} for org ${orgId}: ${reason}`,
+    },
+    (tx) => tx.execute(sql`select 1`),
+  );
+  let outcome: string;
+  try {
+    await executeCommand(
+      staffSetTwoFactorPolicyCommand,
+      { required, reason },
+      staff.ctx(orgId, confirmed.at),
+      ports,
+    );
+    outcome = `done=${required ? 'two_factor_required' : 'two_factor_optional'}`;
+  } catch (err) {
+    outcome = `error=${isDomainError(err) ? err.code : 'internal'}`;
+  }
+  revalidatePath(back);
+  redirect(`${back}?${outcome}#two-factor`);
 }

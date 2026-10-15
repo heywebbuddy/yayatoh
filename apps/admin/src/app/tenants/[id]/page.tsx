@@ -18,6 +18,7 @@ import {
   restoredOrgStatus,
   SUSPENSION_KINDS,
   suspensionHistoryQuery,
+  twoFactorPolicyQuery,
 } from '@yayatoh/tenancy';
 import { Alert, Button, buttonClass, Card, CurrencyPicker, PageHeader, Select, StatusDot } from '@yayatoh/ui';
 import Link from 'next/link';
@@ -26,6 +27,7 @@ import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { z } from 'zod';
 import { Shell } from '@/components/shell.tsx';
+import { StaffProofField } from '@/components/staff-proof-field.tsx';
 import { getTwoFactor } from '@/server/auth.ts';
 import { ports } from '@/server/ports.ts';
 import { requireStaff } from '@/server/staff.ts';
@@ -40,9 +42,19 @@ import {
   startImpersonationAction,
   submitEvidenceAction,
   suspensionAction,
+  twoFactorPolicyAction,
 } from './actions.ts';
 
 /** Refusals of a status change with their own message (others use the generic one). */
+/** Refusals of a two-step verification policy change with their own message. */
+const TWO_FACTOR_ERRORS = new Set([
+  'two_factor_reason',
+  'two_factor_step_up',
+  'two_factor_rate_limited',
+  'two_factor_method',
+  'two_factor_signed_out',
+]);
+
 const STATUS_ERRORS = new Set([
   'status_reason',
   'status_confirm',
@@ -113,19 +125,31 @@ export default async function TenantPage({
     if (isDomainError(err) && err.code === 'not_found') notFound();
     throw err;
   }
-  const [members, pauses, payout, entitlements, fee, domains, ledger, disputes, recon, statusHistory] =
-    await Promise.all([
-      executeQuery(listMembersQuery, {}, ctx, ports),
-      executeQuery(suspensionHistoryQuery, {}, ctx, ports),
-      executeQuery(payoutAccountQuery, {}, ctx, ports),
-      executeQuery(getEntitlementsQuery, {}, ctx, ports),
-      executeQuery(feeScheduleQuery, { currency: org.currency }, ctx, ports),
-      executeQuery(listDomainsQuery, {}, ctx, ports),
-      executeQuery(ledgerBalancesQuery, {}, ctx, ports),
-      executeQuery(disputesQuery, {}, ctx, ports),
-      executeQuery(reconciliationItemsQuery, { status: 'open' }, ctx, ports),
-      executeQuery(orgStatusHistoryQuery, {}, ctx, ports),
-    ]);
+  const [
+    members,
+    pauses,
+    payout,
+    entitlements,
+    fee,
+    domains,
+    ledger,
+    disputes,
+    recon,
+    statusHistory,
+    twoFactor,
+  ] = await Promise.all([
+    executeQuery(listMembersQuery, {}, ctx, ports),
+    executeQuery(suspensionHistoryQuery, {}, ctx, ports),
+    executeQuery(payoutAccountQuery, {}, ctx, ports),
+    executeQuery(getEntitlementsQuery, {}, ctx, ports),
+    executeQuery(feeScheduleQuery, { currency: org.currency }, ctx, ports),
+    executeQuery(listDomainsQuery, {}, ctx, ports),
+    executeQuery(ledgerBalancesQuery, {}, ctx, ports),
+    executeQuery(disputesQuery, {}, ctx, ports),
+    executeQuery(reconciliationItemsQuery, { status: 'open' }, ctx, ports),
+    executeQuery(orgStatusHistoryQuery, {}, ctx, ports),
+    executeQuery(twoFactorPolicyQuery, {}, ctx, ports),
+  ]);
   // Status changes name the staff member (`system:staff:<id>`): show their name.
   const staffIdOf = (actor: string) => /staff:([0-9a-f-]{36})$/.exec(actor)?.[1] ?? null;
   const [people, impersonations, changers] = await Promise.all([
@@ -139,6 +163,7 @@ export default async function TenantPage({
   const restoreTo = restoredOrgStatus(org.status, termination ? { fromStatus: termination.from } : null);
   const stepUpMethod =
     org.status === 'terminated' && staff.can('status') ? await getTwoFactor().method(staff.userId) : null;
+  const proofMethod = staff.can('twoFactor') ? await getTwoFactor().method(staff.userId) : null;
   const now = new Date();
   const when = new Intl.DateTimeFormat('en', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'UTC' });
   const active = new Set(pauses.filter((p) => !p.liftedAt).map((p) => p.kind));
@@ -157,9 +182,11 @@ export default async function TenantPage({
             title={
               IMPERSONATE_ERRORS.has(error)
                 ? t(`impersonate.errors.${error}`)
-                : STATUS_ERRORS.has(error)
-                  ? t(`status.errors.${error}`)
-                  : t('error', { code: error })
+                : TWO_FACTOR_ERRORS.has(error)
+                  ? t(`twoFactor.errors.${error}`)
+                  : STATUS_ERRORS.has(error)
+                    ? t(`status.errors.${error}`)
+                    : t('error', { code: error })
             }
           />
         ) : null}
@@ -381,6 +408,36 @@ export default async function TenantPage({
             </ul>
           </details>
         ) : null}
+      </Section>
+
+      <Section id="two-factor" title={t('twoFactor.title')}>
+        <p className="text-caption text-ink-2">{t('twoFactor.description')}</p>
+        <StatusDot
+          status={twoFactor.required ? 'success' : 'warning'}
+          label={twoFactor.required ? t('twoFactor.required') : t('twoFactor.optional')}
+        />
+        {proofMethod ? (
+          <form
+            action={twoFactorPolicyAction.bind(null, id, !twoFactor.required)}
+            className="flex flex-col gap-3 border-t border-line pt-4"
+          >
+            <Reason id="reason-two-factor" label={t('reason')} />
+            <StaffProofField id="two-factor-proof" method={proofMethod} />
+            <Button
+              type="submit"
+              variant={twoFactor.required ? 'secondary' : 'primary'}
+              className="self-start"
+            >
+              {twoFactor.required ? t('twoFactor.makeOptional') : t('twoFactor.makeRequired')}
+            </Button>
+          </form>
+        ) : null}
+        <p className="text-caption text-ink-2">
+          {t('twoFactor.personHint')}{' '}
+          <Link href="/people" className="underline underline-offset-2">
+            {t('twoFactor.peopleLink')}
+          </Link>
+        </p>
       </Section>
 
       <Section id="payouts" title={t('payouts.title')}>

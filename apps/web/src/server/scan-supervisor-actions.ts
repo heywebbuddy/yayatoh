@@ -11,12 +11,13 @@ import {
   switchDeviceCheckpointCommand,
 } from '@yayatoh/checkin';
 import { type Ctx, createCtx, executeCommand, executeQuery, isDomainError } from '@yayatoh/kernel';
-import { memberRole, roleRequiresTwoFactor } from '@yayatoh/tenancy';
+import { memberRole } from '@yayatoh/tenancy';
 import { getLocale } from 'next-intl/server';
 import type { z } from 'zod';
 import { ports } from './ports.ts';
 import { supervisorView } from './scan-staff.ts';
 import { getSession, sessionOpensOrg } from './session.ts';
+import { roleMustUseTwoFactor } from './two-factor-policy.ts';
 
 /**
  * Supervisor mode in the Scan PWA (M3.4a). Two credentials meet here: the device token picks the
@@ -41,8 +42,9 @@ async function supervisorCtx(token: string): Promise<Ctx | 'signed_out' | 'forbi
   });
   const role = await memberRole(ctx);
   if (!role) return 'forbidden';
-  // Roles that must use two-step verification only act once it is on (as in the console).
-  if (!session.twoFactorEnabled && roleRequiresTwoFactor(role)) return 'forbidden';
+  // Roles that must use two-step verification only act once it is on (as in the console), unless
+  // the org switched its requirement off.
+  if (!session.twoFactorEnabled && (await roleMustUseTwoFactor(ctx, role))) return 'forbidden';
   return ctx;
 }
 
