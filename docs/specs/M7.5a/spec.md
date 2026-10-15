@@ -44,3 +44,11 @@ Everything the stores ask for, written down, checked by tests and runnable from 
 | The screenshot plan matches its flows and the stores' sizes; a finished folder is complete | `tools/store-kit/tests/screenshots.test.ts` |
 | Maestro screenshot flows for each listed screen, light and dark, phone and iPad | `apps/mobile/.maestro/store/`, `apps/staff/.maestro/store/` via `capture.sh` — **device pass** |
 | Store text reads correctly in the 12 translated locales | **native reader (owner)** |
+
+## 5. Gate (2026-10-15)
+- `pnpm lint` clean (9 warnings and 1 info, none in new files); `pnpm check:modules` ok; `pnpm turbo run typecheck --concurrency=1` 75 of 75 tasks.
+- `pnpm test`: 4 720 of 4 721 unit tests pass; the one failure, `packages/modules/media/tests/golden.test.ts` (logo.svg variants), is in code this branch does not touch.
+- `pnpm test:mobile`: mobile 645 tests (39 suites), staff and mobile-core pass.
+- `expo export` for iOS and Android in both apps, and `expo-doctor` (21 of 21) in both apps: pass.
+- `pnpm test:int`: 2 542 of 2 546 pass on the full run. `badges.int` (Gotenberg was not running) and `relay.int` (30 s timeout under load) pass when re-run alone with Gotenberg up. `tools/automation-apps/tests/apps.int.test.ts` "trigger subscriptions" fails with a 400 because the sandbox cannot resolve the `hook.eu1.make.com` host that its SSRF guard checks; it does not touch auth or this branch.
+- New tests: 119 unit tests across `tools/store-kit` (listing, privacy, compliance, screenshots, eas, runbook), `packages/auth/tests/reviewer-codes.test.ts` and `apps/web/tests/reviewer-demo-guard.test.ts`; 2 in `packages/mobile-core` (export compliance); 6 integration tests (`reviewer-code.int`, `reviewer-demo.int`).
