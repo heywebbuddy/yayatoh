@@ -51,12 +51,7 @@ function instance(shared: ReturnType<typeof createRateLimiter>) {
 }
 
 let ipCounter = 0;
-async function call(
-  host: Hono,
-  method: string,
-  path: string,
-  o: { token?: string; body?: unknown } = {},
-) {
+async function call(host: Hono, method: string, path: string, o: { token?: string; body?: unknown } = {}) {
   const res = await host.request(`/v1${path}`, {
     method,
     headers: {
@@ -92,7 +87,9 @@ describe('sign-in counters are shared across server instances', () => {
     expect(sixth.body?.code).toBe('rate_limited');
     expect(Number(sixth.headers.get('retry-after'))).toBeGreaterThan(0);
     // The address under attack is the one that is limited, not the whole network.
-    const other = await call(hosts[0] as Hono, 'POST', '/auth/email-code', { body: { email: addr('other') } });
+    const other = await call(hosts[0] as Hono, 'POST', '/auth/email-code', {
+      body: { email: addr('other') },
+    });
     expect(other.status).toBe(202);
     // Case does not give the attacker a second bucket.
     const upper = await call(hosts[1] as Hono, 'POST', '/auth/email-code', {
@@ -137,7 +134,9 @@ describe('sign-in counters are shared across server instances', () => {
     const shared = createRateLimiter(memoryRateLimitStore());
     const hosts = Array.from({ length: 4 }, () => instance(shared));
     const email = addr('stepup');
-    const made = await auth.api.signUpEmail({ body: { email, password: 'correct horse battery', name: 'S' } });
+    const made = await auth.api.signUpEmail({
+      body: { email, password: 'correct horse battery', name: 'S' },
+    });
     await (await auth.$context).internalAdapter.updateUser(made.user.id, { emailVerified: true });
     const signedIn = await call(hosts[0] as Hono, 'POST', '/auth/login', {
       body: { email, password: 'correct horse battery' },
@@ -146,7 +145,9 @@ describe('sign-in counters are shared across server instances', () => {
     const bearer = String(signedIn.body?.token);
     const statuses: number[] = [];
     for (let i = 0; i < 6; i++)
-      statuses.push((await call(hosts[i % 4] as Hono, 'POST', '/auth/step-up/start', { token: bearer })).status);
+      statuses.push(
+        (await call(hosts[i % 4] as Hono, 'POST', '/auth/step-up/start', { token: bearer })).status,
+      );
     expect(statuses.slice(0, 5).every((s) => s === 200)).toBe(true);
     expect(statuses[5]).toBe(429);
   });
@@ -159,7 +160,9 @@ describe('answers with a person’s data or a credential are not cached', () => 
     const email = addr('cache');
     await call(host, 'POST', '/auth/email-code', { body: { email } });
     const code = [...sent].reverse().find((m) => m.to === email && m.kind === 'otp')?.value ?? '';
-    const tokens = await call(host, 'POST', '/auth/token', { body: { grantType: 'email_code', email, code } });
+    const tokens = await call(host, 'POST', '/auth/token', {
+      body: { grantType: 'email_code', email, code },
+    });
     expect(tokens.status).toBe(200);
     expect(tokens.headers.get('cache-control')).toBe('private, no-store');
     const bearer = String(tokens.body?.accessToken);

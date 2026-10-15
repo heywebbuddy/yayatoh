@@ -20,12 +20,12 @@ import {
   DEVICE_API_ALLOW,
   findCanaries,
   formatLeaks,
+  type Leak,
+  leaksIn,
   ME_ALLOW,
   ME_IDENTITY_ALLOW,
   OPS_ALLOW,
   PORTAL_API_ALLOW,
-  type Leak,
-  leaksIn,
 } from '@yayatoh/testing/canary';
 import { issueHolderLinkTx } from '@yayatoh/ticketing';
 import { Hono } from 'hono';
@@ -113,7 +113,8 @@ async function hit(
   const path = o.path ?? pattern;
   // The person's own address is theirs to read on the sign-in and identity routes.
   const identityRoute =
-    kind === 'attendee' && (pattern.startsWith('/auth/') || pattern === '/me' || pattern === '/me/organizations');
+    kind === 'attendee' &&
+    (pattern.startsWith('/auth/') || pattern === '/me' || pattern === '/me/organizations');
   const res = await app.request(`/v1${path}`, {
     method,
     headers: {
@@ -130,7 +131,10 @@ async function hit(
   reached.add(`${method} ${pattern}`);
   for (const h of findCanaries(text)) seen[kind].add(h.column);
   leaks[kind].push(
-    ...leaksIn(`${method} ${path}`, text, { kind: 'scoped', allow: (o.allow ?? (identityRoute ? ME_IDENTITY_ALLOW : ALLOW[kind])) as ColumnId[] }),
+    ...leaksIn(`${method} ${path}`, text, {
+      kind: 'scoped',
+      allow: (o.allow ?? (identityRoute ? ME_IDENTITY_ALLOW : ALLOW[kind])) as ColumnId[],
+    }),
   );
   let body: Record<string, unknown> = {};
   try {
@@ -157,7 +161,9 @@ describe('nobody signed in', () => {
     const slug = canary.event.slug;
     await hit('anonymous', null, 'GET', '/mobile/config');
     await hit('anonymous', null, 'GET', '/public/events', { path: '/public/events?q=canary&limit=50' });
-    await hit('anonymous', null, 'GET', '/public/events', { path: '/public/events?limit=50&near=41.88,-87.63' });
+    await hit('anonymous', null, 'GET', '/public/events', {
+      path: '/public/events?limit=50&near=41.88,-87.63',
+    });
     await hit('anonymous', null, 'GET', '/public/events/{slug}', { path: `/public/events/${slug}` });
     await hit('anonymous', null, 'GET', '/public/events/{slug}/ticket-types', {
       path: `/public/events/${slug}/ticket-types`,
@@ -190,9 +196,7 @@ describe('nobody signed in', () => {
       ['GET', '/portal/leads'],
       ['GET', '/orgs/{org}/events/{eventId}/ops'],
     ] as const) {
-      const path = pattern
-        .replace('{eventId}', canary.event.id)
-        .replace('{org}', canary.slug);
+      const path = pattern.replace('{eventId}', canary.event.id).replace('{org}', canary.slug);
       const r = await hit('anonymous', null, method, `${pattern}#refused`, { path });
       expect(r.status, path).toBe(401);
     }
@@ -228,7 +232,9 @@ describe('a signed-in attendee (the apps’ /v1/me, /v1/claims and checkout)', (
     const tickets = [...upcoming, ...past];
     expect(tickets.length, 'the attendee holds a canary ticket').toBeGreaterThan(0);
     for (const t of tickets) {
-      const detail = await hit('attendee', access, 'GET', '/me/tickets/{id}', { path: `/me/tickets/${t.id}` });
+      const detail = await hit('attendee', access, 'GET', '/me/tickets/{id}', {
+        path: `/me/tickets/${t.id}`,
+      });
       if (!ticketId && detail.status === 200) {
         ticketId = t.id;
         code = String((detail.body.qrCode as string | undefined) ?? '');
@@ -321,7 +327,9 @@ describe('a signed-in attendee (the apps’ /v1/me, /v1/claims and checkout)', (
     expect([200, 201, 400, 403, 409, 429]).toContain(checkout.status);
 
     await hit('attendee', access, 'POST', '/auth/step-up/start');
-    await hit('attendee', access, 'POST', '/auth/step-up', { body: { method: 'password', password: 'wrong' } });
+    await hit('attendee', access, 'POST', '/auth/step-up', {
+      body: { method: 'password', password: 'wrong' },
+    });
     await hit('attendee', access, 'POST', '/auth/step-up', {
       body: { method: 'password', password: PASSWORD },
     });
@@ -444,9 +452,15 @@ describe('a Staff app door device (/v1/staff)', () => {
   });
 
   it('a revoked device is refused everywhere at once without a body worth reading', async () => {
-    const r = await hit('device', `yyd_${randomBytes(32).toString('base64url')}`, 'GET', '/staff/push#unknown', {
-      path: '/staff/push',
-    });
+    const r = await hit(
+      'device',
+      `yyd_${randomBytes(32).toString('base64url')}`,
+      'GET',
+      '/staff/push#unknown',
+      {
+        path: '/staff/push',
+      },
+    );
     expect(r.status).toBe(401);
     expect(formatLeaks(leaks.device)).toBe('no canary leaks');
   });
@@ -506,7 +520,9 @@ describe('an exhibitor rep (/v1/portal)', () => {
 describe('an organizer’s session (/v1/orgs/{org}/events/{eventId}/ops)', () => {
   it('sees the event-day numbers and not a private column', async () => {
     const email = `canary-organizer-${randomBytes(3).toString('hex')}@example.test`;
-    const made = await auth.api.signUpEmail({ body: { email, password: PASSWORD, name: 'Canary Organizer' } });
+    const made = await auth.api.signUpEmail({
+      body: { email, password: PASSWORD, name: 'Canary Organizer' },
+    });
     await (await auth.$context).internalAdapter.updateUser(made.user.id, { emailVerified: true });
     await executeCommand(
       addMemberCommand,
