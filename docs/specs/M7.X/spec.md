@@ -50,4 +50,10 @@ None added. No permission string added or changed.
 | Leak crawler green: every new response reached, no private column beyond each allowlist | `packages/api-v1/tests/canary-mobile.int.test.ts` (11 tests, including "every Phase 7 route is reached"); the browser crawl `apps/web/e2e/canary-crawl.spec.ts` is unchanged |
 
 ## 6. Gate results
-Filled in at the end of the branch (see the final commit message).
+Run on the VM (Linux, no simulator) on 2026-10-15:
+- `pnpm lint` clean (9 warnings, all in files this branch did not touch); `pnpm check:modules` ok; full `turbo run typecheck` ok (75 tasks; `apps/api` needs to run alone on a 16 GB VM).
+- `pnpm test` (unit): 4 671 of 4 672 pass. The one failure is `packages/modules/media/tests/golden.test.ts` (the SVG logo's rasterised hashes differ on this VM's image library); nothing in this branch touches it.
+- `pnpm test:mobile` equivalents, run in band: mobile-core 398, mobile 845, staff 873 tests, all pass.
+- `pnpm test:int`: 2 555 of 2 557 pass. `apps/worker/tests/analytics-pro.int.test.ts` fails only inside the full run (it lists at most 500 orgs and the full run creates more) and passes alone; `tools/automation-apps/tests/apps.int.test.ts` (trigger subscriptions) needs public DNS for its `hook.eu1.make.com` URL and fails here with 400 in isolation too. Neither touches code changed here.
+- `expo export` for iOS and Android and `expo-doctor` (21 of 21) for both apps.
+- k6, Maestro and EAS: see `load.md` and `maestro.md`; the Maestro flows and EAS workflows were not run (no simulator, no EAS account).
