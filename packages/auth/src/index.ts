@@ -26,6 +26,7 @@ export {
   consumeTotpStep,
   createAuth,
   devPersonaReplayExempt,
+  reviewerFixedCodes,
   SESSION_COOKIE_BASENAME,
   type SecretSealer,
 } from './auth.ts';
