@@ -1,4 +1,150 @@
 {
+  "scan": {
+    "title": "掃描門票",
+    "ready": "準備掃描",
+    "header": {
+      "at": "入口：{name}",
+      "wholeEvent": "整個活動"
+    },
+    "status": {
+      "queue": "{count, plural, =0 {所有掃描都已傳送} other {有 # 筆掃描等待傳送}}",
+      "updated": "賓客名單已於 {time} 更新"
+    },
+    "sync": {
+      "button": "立即同步",
+      "running": "同步中…"
+    },
+    "download": {
+      "title": "正在下載賓客名單",
+      "body": "請讓手機保持連線，直到完成。之後即使沒有網路也能掃描。",
+      "failedOffline": "無法下載賓客名單。請檢查網路後再試一次。",
+      "failedNotAssigned": "這部裝置未分配到此活動。請主辦單位檢查它的註冊狀態。",
+      "failedScope": "賓客名單未通過安全檢查。請再試一次，或請主辦單位重新註冊這部裝置。"
+    },
+    "expired": {
+      "title": "賓客名單已刪除",
+      "body": "活動已結束超過一天，因此已從這支手機刪除賓客名單。"
+    },
+    "camera": {
+      "askTitle": "允許使用相機掃描",
+      "askBody": "Yayatoh Staff 會使用相機在入口讀取門票的 QR 碼。",
+      "allow": "允許使用相機",
+      "deniedTitle": "相機權限已關閉",
+      "deniedBody": "請在「設定」中為 Yayatoh Staff 開啟相機，以掃描 QR 碼。你仍可手動輸入票券代碼。",
+      "openSettings": "開啟設定",
+      "typeCode": "改為輸入代碼",
+      "unavailable": "這部裝置上找不到相機。",
+      "preview": "相機畫面。請對準門票上的 QR 碼。"
+    },
+    "torch": {
+      "on": "開啟補光燈",
+      "off": "關閉補光燈"
+    },
+    "manual": {
+      "open": "輸入代碼",
+      "title": "票券代碼",
+      "label": "票券代碼",
+      "hint": "輸入印在 QR 碼下方的代碼，然後檢查。",
+      "placeholder": "代碼",
+      "submit": "檢查代碼",
+      "close": "返回相機",
+      "empty": "請輸入票券代碼。"
+    },
+    "direction": {
+      "label": "方向",
+      "in": "進",
+      "out": "出"
+    },
+    "verdict": {
+      "admit": {
+        "title": "放行"
+      },
+      "admitted": {
+        "title": "已放行"
+      },
+      "granted": {
+        "title": "允許進入"
+      },
+      "entered": {
+        "title": "已進入"
+      },
+      "scanned_out": {
+        "title": "已掃碼離場"
+      },
+      "provisional": {
+        "title": "放行並標記",
+        "hint": "尚未出現在賓客名單中。請放行，主管會再確認。"
+      },
+      "duplicate": {
+        "title": "已掃描過",
+        "hint": "這張票今天已經掃描過。",
+        "hintWhen": "首次入場時間：{time}。",
+        "hintWhere": "首次入場時間：{time}，地點：{place}。"
+      },
+      "duplicate_offline": {
+        "title": "發現重複",
+        "hint": "另一個入口已先放行這張票。"
+      },
+      "superseded": {
+        "title": "舊票",
+        "hint": "此代碼已被取代。請對方出示最新的票。"
+      },
+      "void": {
+        "title": "票券已作廢",
+        "hint": "這張票已退款或取消。請勿放行。"
+      },
+      "invalid": {
+        "title": "無法辨識",
+        "hint": "這不是此活動的有效門票。"
+      },
+      "wrong_event": {
+        "title": "活動不符",
+        "hint": "這張票屬於另一場活動。"
+      },
+      "outside_window": {
+        "title": "尚未開放入場"
+      },
+      "wrong_date": {
+        "title": "日期不符"
+      },
+      "not_today": {
+        "title": "今天無效"
+      },
+      "no_access": {
+        "title": "無權進入此處"
+      },
+      "wrong_checkpoint": {
+        "title": "入口不對",
+        "hint": "這部裝置未設定在此入口掃描。"
+      },
+      "balance_due": {
+        "title": "尚有未付款項",
+        "hint": "請引導對方到服務台補繳餘款。"
+      },
+      "not_in_room": {
+        "title": "不在場內"
+      },
+      "not_enrolled": {
+        "title": "未報名"
+      },
+      "admission_level": {
+        "title": "不包含此項目"
+      },
+      "capacity": {
+        "title": "場地已滿"
+      }
+    },
+    "flagged": {
+      "title": "{count, plural, other {有 # 筆掃描需要再確認}}",
+      "duplicate": "另一個入口也放行了這張票。請確認此人沒有重複入場。",
+      "rejected": "這筆掃描無法傳送，已被捨棄。",
+      "other": "伺服器對這筆掃描的判斷不同。主管會進行複核。",
+      "when": "掃描時間：{time}",
+      "dismiss": "略過",
+      "dismissAll": "全部略過",
+      "unknownHolder": "一張票"
+    }
+  },
   "home": {
     "title": "Yayatoh Staff",
     "tagline": "活動當天的入場工具即將推出。"

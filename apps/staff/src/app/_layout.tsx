@@ -7,6 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { getCore, getDevice, getPortal } from '../core';
 import { DeviceCoreBridge, DeviceGuard, DeviceProvider, EnrolmentLinks } from '../device';
 import { PortalProvider } from '../portal';
+import { ScanProvider } from '../scan/provider';
 
 /** The offline banner sits under the status bar and only takes room while the phone is offline. */
 function OfflineStrip() {
@@ -41,7 +42,9 @@ export default function RootLayout() {
           <DeviceCoreBridge />
           <EnrolmentLinks />
           <StatusBar style="auto" />
-          <ThemedStack />
+          <ScanProvider>
+            <ThemedStack />
+          </ScanProvider>
         </PortalProvider>
       </DeviceProvider>
     </CoreProvider>

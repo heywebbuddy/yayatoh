@@ -1,4 +1,150 @@
 {
+  "scan": {
+    "title": "扫描门票",
+    "ready": "准备扫描",
+    "header": {
+      "at": "入口：{name}",
+      "wholeEvent": "整个活动"
+    },
+    "status": {
+      "queue": "{count, plural, =0 {所有扫描均已发送} other {有 # 条扫描等待发送}}",
+      "updated": "宾客名单已于 {time} 更新"
+    },
+    "sync": {
+      "button": "立即同步",
+      "running": "正在同步…"
+    },
+    "download": {
+      "title": "正在下载宾客名单",
+      "body": "请保持手机联网直至完成。之后即使没有网络也可以扫描。",
+      "failedOffline": "无法下载宾客名单。请检查网络后重试。",
+      "failedNotAssigned": "此设备未分配到该活动。请让组织者检查其注册情况。",
+      "failedScope": "宾客名单未通过安全检查。请重试，或让组织者重新注册此设备。"
+    },
+    "expired": {
+      "title": "宾客名单已删除",
+      "body": "活动已结束超过一天，因此宾客名单已从此手机中删除。"
+    },
+    "camera": {
+      "askTitle": "允许使用相机扫描",
+      "askBody": "Yayatoh Staff 使用相机在入口读取门票二维码。",
+      "allow": "允许使用相机",
+      "deniedTitle": "相机权限已关闭",
+      "deniedBody": "请在“设置”中为 Yayatoh Staff 打开相机以扫描二维码。你仍然可以手动输入票码。",
+      "openSettings": "打开设置",
+      "typeCode": "改为输入票码",
+      "unavailable": "此设备上没有找到相机。",
+      "preview": "相机画面。请对准门票上的二维码。"
+    },
+    "torch": {
+      "on": "打开补光灯",
+      "off": "关闭补光灯"
+    },
+    "manual": {
+      "open": "输入票码",
+      "title": "票码",
+      "label": "票码",
+      "hint": "输入二维码下方印的票码，然后检查。",
+      "placeholder": "票码",
+      "submit": "检查票码",
+      "close": "返回相机",
+      "empty": "请输入票码。"
+    },
+    "direction": {
+      "label": "方向",
+      "in": "进",
+      "out": "出"
+    },
+    "verdict": {
+      "admit": {
+        "title": "放行"
+      },
+      "admitted": {
+        "title": "已放行"
+      },
+      "granted": {
+        "title": "允许进入"
+      },
+      "entered": {
+        "title": "已进入"
+      },
+      "scanned_out": {
+        "title": "已扫码离场"
+      },
+      "provisional": {
+        "title": "放行并标记",
+        "hint": "尚未出现在宾客名单中。请放行，主管会核实。"
+      },
+      "duplicate": {
+        "title": "已扫描过",
+        "hint": "这张票今天已经扫描过。",
+        "hintWhen": "首次入场时间：{time}。",
+        "hintWhere": "首次入场时间：{time}，地点：{place}。"
+      },
+      "duplicate_offline": {
+        "title": "发现重复",
+        "hint": "另一个入口已先放行这张票。"
+      },
+      "superseded": {
+        "title": "旧票",
+        "hint": "此票码已被替换。请对方出示最新的票。"
+      },
+      "void": {
+        "title": "票已作废",
+        "hint": "这张票已退款或取消。请勿放行。"
+      },
+      "invalid": {
+        "title": "无法识别",
+        "hint": "这不是本活动的有效门票。"
+      },
+      "wrong_event": {
+        "title": "活动不符",
+        "hint": "这张票属于另一场活动。"
+      },
+      "outside_window": {
+        "title": "入场未开放"
+      },
+      "wrong_date": {
+        "title": "日期不符"
+      },
+      "not_today": {
+        "title": "今天无效"
+      },
+      "no_access": {
+        "title": "无权进入此处"
+      },
+      "wrong_checkpoint": {
+        "title": "入口不对",
+        "hint": "此设备未设置在该入口扫描。"
+      },
+      "balance_due": {
+        "title": "尚有欠款",
+        "hint": "请让对方到服务台补缴余款。"
+      },
+      "not_in_room": {
+        "title": "不在场内"
+      },
+      "not_enrolled": {
+        "title": "未报名"
+      },
+      "admission_level": {
+        "title": "不包含此项"
+      },
+      "capacity": {
+        "title": "场地已满"
+      }
+    },
+    "flagged": {
+      "title": "{count, plural, other {有 # 条扫描需要再看一眼}}",
+      "duplicate": "另一个入口也放行了这张票。请确认此人没有重复入场。",
+      "rejected": "这条扫描无法发送，已被丢弃。",
+      "other": "服务器对这条扫描的判断不同。主管会进行复核。",
+      "when": "扫描时间：{time}",
+      "dismiss": "忽略",
+      "dismissAll": "全部忽略",
+      "unknownHolder": "一张票"
+    }
+  },
   "home": {
     "title": "Yayatoh Staff",
     "tagline": "活动当天的入场工具即将推出。"

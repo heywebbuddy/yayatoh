@@ -1,4 +1,150 @@
 {
+  "scan": {
+    "title": "チケットをスキャン",
+    "ready": "スキャンの準備ができました",
+    "header": {
+      "at": "場所: {name}",
+      "wholeEvent": "イベント全体"
+    },
+    "status": {
+      "queue": "{count, plural, =0 {すべてのスキャンを送信済み} other {送信待ちのスキャン: #件}}",
+      "updated": "参加者リストを{time}に更新しました"
+    },
+    "sync": {
+      "button": "今すぐ同期",
+      "running": "同期しています…"
+    },
+    "download": {
+      "title": "参加者リストをダウンロード中",
+      "body": "完了するまで電話を接続したままにしてください。その後は、接続がなくてもスキャンできます。",
+      "failedOffline": "参加者リストをダウンロードできません。接続を確認して、もう一度お試しください。",
+      "failedNotAssigned": "この端末はこのイベントに割り当てられていません。主催者に登録を確認してもらってください。",
+      "failedScope": "参加者リストがセキュリティチェックに合格しませんでした。もう一度お試しいただくか、主催者にこの端末を再登録してもらってください。"
+    },
+    "expired": {
+      "title": "参加者リストを削除しました",
+      "body": "イベントが終了して1日以上たったため、この電話から参加者リストを削除しました。"
+    },
+    "camera": {
+      "askTitle": "スキャンのためカメラを許可してください",
+      "askBody": "Yayatoh Staffは、入口でチケットのQRコードを読み取るためにカメラを使います。",
+      "allow": "カメラを許可",
+      "deniedTitle": "カメラへのアクセスがオフです",
+      "deniedBody": "QRコードをスキャンするには、設定でYayatoh Staffのカメラをオンにしてください。チケットコードの入力は引き続き使えます。",
+      "openSettings": "設定を開く",
+      "typeCode": "コードを入力する",
+      "unavailable": "この端末にカメラが見つかりません。",
+      "preview": "カメラのプレビュー。チケットのQRコードに向けてください。"
+    },
+    "torch": {
+      "on": "ライトをつける",
+      "off": "ライトを消す"
+    },
+    "manual": {
+      "open": "コードを入力",
+      "title": "チケットコード",
+      "label": "チケットコード",
+      "hint": "QRコードの下に印刷されたコードを入力して、確認してください。",
+      "placeholder": "コード",
+      "submit": "コードを確認",
+      "close": "カメラに戻る",
+      "empty": "チケットコードを入力してください。"
+    },
+    "direction": {
+      "label": "方向",
+      "in": "入場",
+      "out": "退場"
+    },
+    "verdict": {
+      "admit": {
+        "title": "入場OK"
+      },
+      "admitted": {
+        "title": "入場済み"
+      },
+      "granted": {
+        "title": "アクセス許可"
+      },
+      "entered": {
+        "title": "入室しました"
+      },
+      "scanned_out": {
+        "title": "退場を記録"
+      },
+      "provisional": {
+        "title": "入場OK・要確認",
+        "hint": "まだ参加者リストにありません。入場させ、スーパーバイザーが確認します。"
+      },
+      "duplicate": {
+        "title": "スキャン済み",
+        "hint": "このチケットは今日すでにスキャンされています。",
+        "hintWhen": "最初の入場は{time}です。",
+        "hintWhere": "最初の入場は{time}、{place}です。"
+      },
+      "duplicate_offline": {
+        "title": "重複を検出",
+        "hint": "別の入口が先にこのチケットで入場させています。"
+      },
+      "superseded": {
+        "title": "古いチケット",
+        "hint": "このコードは再発行されました。最新のチケットを見せてもらってください。"
+      },
+      "void": {
+        "title": "無効なチケット",
+        "hint": "このチケットは払い戻しまたはキャンセルされました。入場させないでください。"
+      },
+      "invalid": {
+        "title": "認識できません",
+        "hint": "このイベントの有効なチケットではありません。"
+      },
+      "wrong_event": {
+        "title": "イベントが違います",
+        "hint": "このチケットは別のイベントのものです。"
+      },
+      "outside_window": {
+        "title": "受付時間外"
+      },
+      "wrong_date": {
+        "title": "日付が違います"
+      },
+      "not_today": {
+        "title": "本日は無効"
+      },
+      "no_access": {
+        "title": "ここは入れません"
+      },
+      "wrong_checkpoint": {
+        "title": "入口が違います",
+        "hint": "この端末はこの入口でスキャンするよう設定されていません。"
+      },
+      "balance_due": {
+        "title": "未払いがあります",
+        "hint": "受付カウンターで残金をお支払いいただくよう案内してください。"
+      },
+      "not_in_room": {
+        "title": "入室記録なし"
+      },
+      "not_enrolled": {
+        "title": "申し込みなし"
+      },
+      "admission_level": {
+        "title": "対象外"
+      },
+      "capacity": {
+        "title": "満席です"
+      }
+    },
+    "flagged": {
+      "title": "{count, plural, other {再確認が必要なスキャン: #件}}",
+      "duplicate": "別の入口もこのチケットで入場させています。同じ人が二重に入場していないか確認してください。",
+      "rejected": "このスキャンは送信できず、破棄されました。",
+      "other": "サーバーはこのスキャンを別の結果と判断しました。スーパーバイザーが確認します。",
+      "when": "{time}にスキャン",
+      "dismiss": "閉じる",
+      "dismissAll": "すべて閉じる",
+      "unknownHolder": "チケット"
+    }
+  },
   "home": {
     "title": "Yayatoh Staff",
     "tagline": "イベント当日の受付ツールはまもなく登場します。"

@@ -1,4 +1,150 @@
 {
+  "scan": {
+    "title": "Scan tickets",
+    "ready": "Ready to scan",
+    "header": {
+      "at": "At {name}",
+      "wholeEvent": "Whole event"
+    },
+    "status": {
+      "queue": "{count, plural, =0 {All scans sent} one {# scan waiting to send} other {# scans waiting to send}}",
+      "updated": "Guest list updated {time}"
+    },
+    "sync": {
+      "button": "Sync now",
+      "running": "Syncing…"
+    },
+    "download": {
+      "title": "Downloading the guest list",
+      "body": "Keep the phone connected until it finishes. After that, scanning works without a connection.",
+      "failedOffline": "Can't download the guest list. Check the connection and try again.",
+      "failedNotAssigned": "This device isn't assigned to this event. Ask an organizer to check its enrolment.",
+      "failedScope": "The guest list failed its security check. Try again, or ask an organizer to enrol this device again."
+    },
+    "expired": {
+      "title": "Guest list removed",
+      "body": "The event ended more than a day ago, so the guest list was deleted from this phone."
+    },
+    "camera": {
+      "askTitle": "Allow the camera to scan",
+      "askBody": "Yayatoh Staff uses the camera to read ticket QR codes at the door.",
+      "allow": "Allow camera",
+      "deniedTitle": "Camera access is off",
+      "deniedBody": "Turn on the camera for Yayatoh Staff in Settings to scan QR codes. You can still type a ticket code.",
+      "openSettings": "Open settings",
+      "typeCode": "Type a code instead",
+      "unavailable": "No camera was found on this device.",
+      "preview": "Camera view. Point it at a ticket QR code."
+    },
+    "torch": {
+      "on": "Turn the light on",
+      "off": "Turn the light off"
+    },
+    "manual": {
+      "open": "Type a code",
+      "title": "Ticket code",
+      "label": "Ticket code",
+      "hint": "Type the code printed under the QR code, then check it.",
+      "placeholder": "Code",
+      "submit": "Check code",
+      "close": "Back to the camera",
+      "empty": "Enter a ticket code."
+    },
+    "direction": {
+      "label": "Direction",
+      "in": "In",
+      "out": "Out"
+    },
+    "verdict": {
+      "admit": {
+        "title": "Admit"
+      },
+      "admitted": {
+        "title": "Admitted"
+      },
+      "granted": {
+        "title": "Access granted"
+      },
+      "entered": {
+        "title": "Entered"
+      },
+      "scanned_out": {
+        "title": "Scanned out"
+      },
+      "provisional": {
+        "title": "Admit and flag",
+        "hint": "Not on the guest list yet. Let them in; a supervisor will check."
+      },
+      "duplicate": {
+        "title": "Already scanned",
+        "hint": "This ticket was already scanned in today.",
+        "hintWhen": "First admitted at {time}.",
+        "hintWhere": "First admitted at {time} at {place}."
+      },
+      "duplicate_offline": {
+        "title": "Duplicate found",
+        "hint": "Another door admitted this ticket first."
+      },
+      "superseded": {
+        "title": "Old ticket",
+        "hint": "This code was replaced. Ask for the latest ticket."
+      },
+      "void": {
+        "title": "Cancelled ticket",
+        "hint": "This ticket was refunded or cancelled. Do not admit."
+      },
+      "invalid": {
+        "title": "Not recognised",
+        "hint": "This is not a valid ticket for this event."
+      },
+      "wrong_event": {
+        "title": "Wrong event",
+        "hint": "This ticket is for a different event."
+      },
+      "outside_window": {
+        "title": "Doors closed"
+      },
+      "wrong_date": {
+        "title": "Wrong date"
+      },
+      "not_today": {
+        "title": "Not valid today"
+      },
+      "no_access": {
+        "title": "No access here"
+      },
+      "wrong_checkpoint": {
+        "title": "Wrong entrance",
+        "hint": "This device is not set up to scan at this entrance."
+      },
+      "balance_due": {
+        "title": "Balance due",
+        "hint": "Send them to the desk to pay the balance."
+      },
+      "not_in_room": {
+        "title": "Not in the room"
+      },
+      "not_enrolled": {
+        "title": "Not signed up"
+      },
+      "admission_level": {
+        "title": "Not included"
+      },
+      "capacity": {
+        "title": "Room is full"
+      }
+    },
+    "flagged": {
+      "title": "{count, plural, one {# scan needs a second look} other {# scans need a second look}}",
+      "duplicate": "Another door admitted this ticket too. Check that the person is not entering twice.",
+      "rejected": "This scan could not be sent and was dropped.",
+      "other": "The server judged this scan differently. A supervisor will review it.",
+      "when": "Scanned at {time}",
+      "dismiss": "Dismiss",
+      "dismissAll": "Dismiss all",
+      "unknownHolder": "A ticket"
+    }
+  },
   "home": {
     "title": "Yayatoh Staff",
     "tagline": "Door tools for event day are coming soon."

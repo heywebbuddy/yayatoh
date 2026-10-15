@@ -1,0 +1,35 @@
+# Offline drill (X), phone B (M7.4b): see offline-drill-phone-a.yaml. B admits the same ticket a
+# little after A, reconnects after A, and must show the duplicate within 60 s of reconnecting.
+appId: com.yayatoh.staff.preview
+---
+- runFlow: scan-setup.yaml
+- setAirplaneMode: enabled
+# (Maestro has no sleep: waiting for text that never shows, as optional, waits out the timeout.)
+- extendedWaitUntil:
+    visible: 'ThisNeverShows'
+    timeout: 20000
+    optional: true
+- tapOn:
+    id: manual-open
+- tapOn:
+    id: manual-input
+- inputText: ${TICKET_CODE}
+- tapOn:
+    id: manual-submit
+- assertVisible: 'Admit'
+- assertVisible: '1 scan waiting to send'
+# A reconnects at about +30 s; B follows at +40 s.
+# (Maestro has no sleep: waiting for text that never shows, as optional, waits out the timeout.)
+- extendedWaitUntil:
+    visible: 'ThisNeverShows'
+    timeout: 20000
+    optional: true
+- setAirplaneMode: disabled
+# The duplicate is flagged on screen within 60 s of the connection returning.
+- extendedWaitUntil:
+    visible: '1 scan needs a second look'
+    timeout: 60000
+- assertVisible: 'Another door admitted this ticket too. Check that the person is not entering twice.'
+- tapOn: 'Dismiss'
+- assertNotVisible:
+    id: flagged-panel

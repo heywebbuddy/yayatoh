@@ -1,4 +1,150 @@
 {
+  "scan": {
+    "title": "Tickets scannen",
+    "ready": "Klaar om te scannen",
+    "header": {
+      "at": "Bij: {name}",
+      "wholeEvent": "Hele evenement"
+    },
+    "status": {
+      "queue": "{count, plural, =0 {Alle scans zijn verzonden} one {# scan wacht op verzending} other {# scans wachten op verzending}}",
+      "updated": "Gastenlijst bijgewerkt om {time}"
+    },
+    "sync": {
+      "button": "Nu synchroniseren",
+      "running": "Synchroniseren…"
+    },
+    "download": {
+      "title": "Gastenlijst wordt gedownload",
+      "body": "Houd de telefoon verbonden tot het klaar is. Daarna werkt scannen ook zonder verbinding.",
+      "failedOffline": "De gastenlijst kan niet worden gedownload. Controleer de verbinding en probeer het opnieuw.",
+      "failedNotAssigned": "Dit apparaat is niet aan dit evenement toegewezen. Vraag een organisator de aanmelding te controleren.",
+      "failedScope": "De gastenlijst haalde de beveiligingscontrole niet. Probeer het opnieuw of vraag een organisator dit apparaat opnieuw aan te melden."
+    },
+    "expired": {
+      "title": "Gastenlijst verwijderd",
+      "body": "Het evenement is meer dan een dag geleden afgelopen, dus de gastenlijst is van deze telefoon verwijderd."
+    },
+    "camera": {
+      "askTitle": "Sta de camera toe om te scannen",
+      "askBody": "Yayatoh Staff gebruikt de camera om qr-codes van tickets bij de ingang te lezen.",
+      "allow": "Camera toestaan",
+      "deniedTitle": "Cameratoegang staat uit",
+      "deniedBody": "Zet de camera voor Yayatoh Staff aan in Instellingen om qr-codes te scannen. Je kunt nog steeds een ticketcode intypen.",
+      "openSettings": "Instellingen openen",
+      "typeCode": "Typ in plaats daarvan een code",
+      "unavailable": "Er is geen camera gevonden op dit apparaat.",
+      "preview": "Camerabeeld. Richt op de qr-code van een ticket."
+    },
+    "torch": {
+      "on": "Licht aanzetten",
+      "off": "Licht uitzetten"
+    },
+    "manual": {
+      "open": "Code intypen",
+      "title": "Ticketcode",
+      "label": "Ticketcode",
+      "hint": "Typ de code die onder de qr-code staat en controleer hem.",
+      "placeholder": "Code",
+      "submit": "Code controleren",
+      "close": "Terug naar de camera",
+      "empty": "Voer een ticketcode in."
+    },
+    "direction": {
+      "label": "Richting",
+      "in": "In",
+      "out": "Uit"
+    },
+    "verdict": {
+      "admit": {
+        "title": "Toelaten"
+      },
+      "admitted": {
+        "title": "Toegelaten"
+      },
+      "granted": {
+        "title": "Toegang verleend"
+      },
+      "entered": {
+        "title": "Binnen"
+      },
+      "scanned_out": {
+        "title": "Uitgecheckt"
+      },
+      "provisional": {
+        "title": "Toelaten en markeren",
+        "hint": "Nog niet op de gastenlijst. Laat de persoon binnen; een toezichthouder controleert het."
+      },
+      "duplicate": {
+        "title": "Al gescand",
+        "hint": "Dit ticket is vandaag al gescand.",
+        "hintWhen": "Eerst toegelaten om {time}.",
+        "hintWhere": "Eerst toegelaten om {time} bij {place}."
+      },
+      "duplicate_offline": {
+        "title": "Dubbel ticket gevonden",
+        "hint": "Een andere ingang liet dit ticket eerder toe."
+      },
+      "superseded": {
+        "title": "Oud ticket",
+        "hint": "Deze code is vervangen. Vraag naar het nieuwste ticket."
+      },
+      "void": {
+        "title": "Geannuleerd ticket",
+        "hint": "Dit ticket is terugbetaald of geannuleerd. Niet toelaten."
+      },
+      "invalid": {
+        "title": "Niet herkend",
+        "hint": "Dit is geen geldig ticket voor dit evenement."
+      },
+      "wrong_event": {
+        "title": "Verkeerd evenement",
+        "hint": "Dit ticket is voor een ander evenement."
+      },
+      "outside_window": {
+        "title": "Deuren gesloten"
+      },
+      "wrong_date": {
+        "title": "Verkeerde datum"
+      },
+      "not_today": {
+        "title": "Vandaag niet geldig"
+      },
+      "no_access": {
+        "title": "Hier geen toegang"
+      },
+      "wrong_checkpoint": {
+        "title": "Verkeerde ingang",
+        "hint": "Dit apparaat is niet ingesteld om bij deze ingang te scannen."
+      },
+      "balance_due": {
+        "title": "Openstaand bedrag",
+        "hint": "Stuur de persoon naar de balie om het bedrag te betalen."
+      },
+      "not_in_room": {
+        "title": "Niet in de zaal"
+      },
+      "not_enrolled": {
+        "title": "Niet aangemeld"
+      },
+      "admission_level": {
+        "title": "Niet inbegrepen"
+      },
+      "capacity": {
+        "title": "Zaal is vol"
+      }
+    },
+    "flagged": {
+      "title": "{count, plural, one {# scan moet nog eens bekeken worden} other {# scans moeten nog eens bekeken worden}}",
+      "duplicate": "Een andere ingang liet dit ticket ook toe. Controleer of de persoon niet twee keer binnenkomt.",
+      "rejected": "Deze scan kon niet worden verzonden en is verwijderd.",
+      "other": "De server beoordeelde deze scan anders. Een toezichthouder bekijkt hem.",
+      "when": "Gescand om {time}",
+      "dismiss": "Sluiten",
+      "dismissAll": "Alles sluiten",
+      "unknownHolder": "Een ticket"
+    }
+  },
   "home": {
     "title": "Yayatoh Staff",
     "tagline": "De ingangstools voor de eventdag komen binnenkort."
