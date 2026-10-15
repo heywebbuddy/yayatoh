@@ -15,7 +15,7 @@
 | EAS Workflows, one per app | `.eas/workflows/maestro-mobile.yml`, `.eas/workflows/maestro-staff.yml` |
 | Simulator and emulator build profiles (the existing profiles are untouched) | `e2e-ios`, `e2e-android` in `apps/mobile/eas.json` and `apps/staff/eas.json` |
 | The GitHub Action that starts the EAS workflows, and skips cleanly without the secret | `.github/workflows/maestro.yml` |
-| Tests for all of it | `tools/check-maestro/tests/` (`check`, `scripts`, `workflows`; 69 tests, run by `pnpm test`) |
+| Tests for all of it | `tools/check-maestro/tests/` (`check`, `scripts`, `workflows`; 70 tests, run by `pnpm test`) |
 
 ### The checker (`tools/check-maestro`)
 `node tools/check-maestro/cli.ts [--app mobile|staff]` exits 1 when:

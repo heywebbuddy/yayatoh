@@ -260,9 +260,9 @@ describe('banned things', () => {
   });
 
   it('fails on a literal password in an env block, and allows a passed-in value', () => {
-    edit('mobile', 'sign-out.yaml', (t) => t.replace('---\n', 'env:\n  PASSWORD: hunter2hunter2\n---\n'));
+    edit('mobile', 'sign-out.yaml', (t) => t.replace('---\n', 'env:\n  PASSWORD: aaaaaaaaaaaa\n---\n'));
     expect(has(checkApp(root, 'mobile'), 'credential', 'PASSWORD')).toBe(true);
-    edit('mobile', 'sign-out.yaml', (t) => t.replace('hunter2hunter2', '${MAESTRO_DEV_PERSONA_PASSWORD}'));
+    edit('mobile', 'sign-out.yaml', (t) => t.replace('aaaaaaaaaaaa', '${MAESTRO_DEV_PERSONA_PASSWORD}'));
     expect(has(checkApp(root, 'mobile'), 'credential')).toBe(false);
   });
 
@@ -338,6 +338,12 @@ describe('what the EAS workflow runs', () => {
         for (const flow of ciFlows(repo, app, platform)) {
           expect(flow).not.toMatch(/scan-|offline-drill|remote-wipe|revoke|push-tap|update-required/);
         }
+  });
+
+  it('has the journey tables of the spec in step with the manifests', () => {
+    // Regenerate with: node tools/check-maestro/cli.ts --table mobile (and staff), and paste into the spec.
+    const spec = readFileSync(join(repo, 'docs', 'specs', 'M7.X', 'maestro.md'), 'utf8');
+    for (const app of APPS) expect(spec).toContain(journeyTable(repo, app));
   });
 
   it('prints them from the command line, and prints a journey table', () => {

@@ -38,8 +38,26 @@ function run(code: string, env: Record<string, unknown>, replies: (call: Call) =
   return { output, calls };
 }
 
+// The setup key is the base32 of the HMAC key (the UTF-8 bytes of the stored secret).
+const base32 = (bytes: Buffer) => {
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+  let bits = 0;
+  let value = 0;
+  let out = '';
+  for (const b of bytes) {
+    value = (value << 8) | b;
+    bits += 8;
+    while (bits >= 5) {
+      out += alphabet[(value >>> (bits - 5)) & 31];
+      bits -= 5;
+    }
+  }
+  if (bits > 0) out += alphabet[(value << (5 - bits)) & 31];
+  return out;
+};
+
 // RFC 6238 appendix B, SHA-1, secret "12345678901234567890" (the 6 low digits of the 8-digit values).
-const RFC_KEY = 'GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ';
+const RFC_KEY = base32(Buffer.from('12345678901234567890', 'utf8'));
 const RFC_VECTORS: [number, string][] = [
   [59, '287082'],
   [1111111109, '081804'],
@@ -65,22 +83,6 @@ describe("scripts/totp.js (the organizer's authenticator code)", () => {
 
   it("matches Node's HMAC for keys of any length, as the server computes it", () => {
     // The server's key is the UTF-8 bytes of a stored secret; the setup key is its base32.
-    const base32 = (bytes: Buffer) => {
-      const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
-      let bits = 0;
-      let value = 0;
-      let out = '';
-      for (const b of bytes) {
-        value = (value << 8) | b;
-        bits += 8;
-        while (bits >= 5) {
-          out += alphabet[(value >>> (bits - 5)) & 31];
-          bits -= 5;
-        }
-      }
-      if (bits > 0) out += alphabet[(value << (5 - bits)) & 31];
-      return out;
-    };
     for (const secret of ['k', 'abcdefghij', 'A'.repeat(32), 'Zq9'.repeat(30)]) {
       for (const at of [1_700_000_000_000, 1_700_000_029_999, 1_700_000_030_000, 4_102_444_800_000]) {
         const counter = Buffer.alloc(8);
@@ -101,7 +103,7 @@ describe("scripts/totp.js (the organizer's authenticator code)", () => {
 });
 
 describe('the dev-server scripts', () => {
-  const server = { DEV_SERVER: 'http://10.0.2.2:3000', DEV_PERSONA_PASSWORD: 'from-the-environment' };
+  const server = { DEV_SERVER: 'http://10.0.2.2:3000', DEV_PERSONA_PASSWORD: 'a'.repeat(14) };
 
   it('new-user.js makes an account and returns the password it was given, never one of its own', () => {
     const { output, calls } = run(script('mobile', 'new-user.js'), { ...server, TWO_FACTOR: '1' }, () => ({
@@ -114,14 +116,14 @@ describe('the dev-server scripts', () => {
     expect(output).toEqual({
       email: 'e2e-1@example.test',
       backupCode: 'b1',
-      password: 'from-the-environment',
+      password: 'a'.repeat(14),
     });
   });
 
   it('new-user.js takes the server and the password from MAESTRO_ variables too, and refuses to run without one', () => {
     const viaPrefix = run(
       script('mobile', 'new-user.js'),
-      { MAESTRO_DEV_SERVER: 'https://e2e.example.test', MAESTRO_DEV_PERSONA_PASSWORD: 'x'.repeat(14) },
+      { MAESTRO_DEV_SERVER: 'https://e2e.example.test', MAESTRO_DEV_PERSONA_PASSWORD: 'b'.repeat(14) },
       () => ({ email: 'e@example.test' }),
     );
     expect(viaPrefix.calls[0]?.url).toBe('https://e2e.example.test/api/dev/user');
@@ -176,7 +178,7 @@ describe('the dev-server scripts', () => {
       email: 'o@example.test',
       setupKey: 'GEZD GNBV',
       backupCode: 'bk1',
-      password: 'from-the-environment',
+      password: 'a'.repeat(14),
     });
     const exhibitor = run(script('staff', 'new-exhibitor.js'), server, () => ({
       admin: { email: 'admin.x@exhibitor.test', invite: '/event-portal/invite/abc' },
