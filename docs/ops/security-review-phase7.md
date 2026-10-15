@@ -11,8 +11,8 @@ end. No real Expo, Apple, Google, APNs, FCM or Sentry account was used. Written 
 purpose (the repo is public).
 
 **Result: no open high finding.** Two medium findings and two low ones are fixed on this branch,
-each with a test. Four medium findings stay open with an owner. The reviewer demo (M7.5a) did not
-exist on this branch; its guard is a checklist (section 4), not a verdict.
+each with a test. Three medium findings and one low one stay open with an owner. The reviewer demo
+(M7.5a) is read from `origin/agent/m7.5a` at `6b8fee87` (not merged yet): section 4.
 
 ## 1. Fixed in M7.x
 | # | Severity | Finding | Fix | Test |
@@ -28,7 +28,7 @@ exist on this branch; its guard is a checklist (section 4), not a verdict.
 | O1 | Medium | **A lost refresh response signs the person out and wipes their data.** The server spends the refresh token before the response arrives. If the response is lost (a tunnel, a venue's Wi-Fi), the app still holds the spent token, tries it on the next request, and the server treats that as a theft: it revokes the whole family and the app wipes its tickets. Rare per refresh (every 15 minutes), certain across a crowd, and at a door the person cannot sign in again without a network. | A short reuse window (10–30 s) in `refreshTokenService.rotate`: a spent token presented again within it, from the same family and with no later child used, gets a new child instead of a revoke. Needs a decision on the small window of theft it allows. | `auth` (M7.2a, M7.1c) |
 | O2 | Medium | **A Staff device token is org-wide and never expires; the enrolment QR is the credential.** Anyone who photographs the organizer's QR, or finds a phone nobody revoked, holds a `yyd_` token for every event of the org (guest lists, help queue, manifest) until someone revokes it. The Scan PWA has the same design; the apps make it easier to leave a token on a phone for months. | Bind a device to the event it enrolled for (refuse `eventId` mismatches), end tokens at event end + 24 h unless renewed, and make the QR a single-use exchange for the token. Changes enrolment: owner call. | `checkin` (M7.2e), owner |
 | O3 | Medium | **Over-the-air updates are not code-signed.** `runtimeVersion: fingerprint` stops a mismatched update, but a stolen Expo account or `EXPO_TOKEN` could publish JavaScript to every phone, including Staff phones at doors. | Turn on EAS Update code signing (`updates.codeSigningCertificate` and metadata) with a key the owner keeps offline; protect the Expo account with a hardware key and the token with an environment scope. Write it into the release runbook. | M7.5a, owner |
-| O4 | Medium | **Reviewer demo accounts (M7.5a) can become a sign-in backdoor.** Not present on this branch. A fixed email code for one address, or a seeded Staff enrolment link, must never work in production. | The checklist in section 4, verified when M7.5a merges. | M7.5a |
+| O4 | Low | **The reviewer demo's fixed email code turns on by "not known to be production".** `reviewerFixedCodes` and `generateOTP` ignore the code when `isProductionEnv()` is true, which needs `YAYATOH_ENV=production` or `VERCEL_ENV=production`. A deployment that sets neither and also has `REVIEWER_DEMO_EMAIL` and `REVIEWER_DEMO_CODE` would let anyone who knows the address sign in as it. Production never sets those two, and the blast radius is the one address. | Require `YAYATOH_ENV` to be set to a non-production name before honouring a fixed code, and only for addresses ending in `.test`. Two lines in `packages/auth/src/auth.ts` and a test. Not changed here: it is M7.5a's code on another branch. | M7.5a |
 
 ## 3. Hardening, not exploitable today
 - **Custom URL schemes** (`yayatoh-staff://scan#…`) can be claimed by another Android app. The enrolment QR holds the `https` universal link, not the scheme link, so nothing sends a key through it; the scheme exists for development builds. Do not generate scheme links for enrolment.
@@ -40,14 +40,13 @@ exist on this branch; its guard is a checklist (section 4), not a verdict.
 - **Rate limits per person** (600 requests a minute per signed-in user, 3 000 for a door device) are in-memory per instance; the sign-in and checkout limits are shared (S1, M7.2f). Moving the credential limit to the shared store is the follow-up.
 - **The two-factor challenge counts wrong codes with a read-then-write.** Parallel guesses can exceed five; the per-person pause (5 wrong codes in 15 minutes, in the database) and S1's shared limit bound them. Make the increment atomic when the challenge moves to its own table.
 
-## 4. The reviewer demo (M7.5a): what must hold at merge
-The demo is the one place Phase 7 adds a deliberate shortcut. When `agent/m7.5a` merges, check each line (and add a test if the branch lacks one):
-- The seeding script refuses to run when the database is production (`isProductionEnv()`, the platform flags and `NODE_ENV`), and says why.
-- A fixed email code for the reviewer address exists only in the fake mailer, which production never builds; the real mailer path has no address-specific branch (grep the auth package for the address and for `fixedCode`).
-- The reviewer attendee has no step-up or deletion exemption; deleting the demo account works like any other.
-- The Staff enrolment link is for the demo org's own device token: revocable, event-scoped to the demo event and expired after the review window.
-- The demo org is never listed in the marketplace, sitemaps or search (D13: private), and sends no real email or push.
-- The listing's review notes contain no real credential: only the instruction to use the email code shown in-app or in the notes, in non-production builds.
+## 4. The reviewer demo (M7.5a)
+Read from `origin/agent/m7.5a` (`6b8fee87`), not merged when this review was written. What holds:
+- `pnpm reviewer-demo` refuses to run unless told `--target=local` or `--target=staging`; refuses when `VERCEL_ENV`, `NODE_ENV` or `YAYATOH_ENV` says production, when `PAYMENTS_PROVIDER` is not the fake one, when any database URL's host is not local (or not in `REVIEWER_DEMO_HOSTS` for staging), and for staging without `YAYATOH_ENV` set (`apps/web/scripts/reviewer-demo-guard.ts`, with tests). It prints host names only, never a URL or password.
+- The fixed code is one address and six digits, built from two environment values; `createAuth` ignores it in production whatever the caller passes (`generateOTP` asks `isProductionEnv()` on every code). The real mailer path has no address-specific branch. See O4 for the one gap.
+- The demo organization is public and listed on the marketplace on purpose (Discover must find it), so it belongs on the review server only; the script and the guard keep it off production databases.
+- The demo's door device token does not expire and the demo event runs for 180 days: revoke the device (`--rotate-door` replaces it) when a review ends. Add that line to the release runbook's first-submission checklist.
+When the branch merges, re-check: no new route or flag reads `REVIEWER_DEMO_*`, and `reviewerFixedCodes` is called only from `apps/web/src/server/auth.ts`.
 
 ## 5. Checked, no finding
 - **Token storage.** Access and refresh tokens live in one keychain item (`AFTER_FIRST_UNLOCK_THIS_DEVICE_ONLY`); they leave it only in an `Authorization` header (`session-store.ts`). Memory is updated before the write, so a spent refresh token is never reused after a failed write. One refresh at a time; a second 401 waits for the first. A 401 on refresh ends the session and wipes; a network error or 5xx does not.
