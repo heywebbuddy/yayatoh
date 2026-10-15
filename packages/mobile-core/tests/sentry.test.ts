@@ -18,7 +18,10 @@ describe('scrubText', () => {
     ['key yy_live_AbC12345678', 'key [token]'],
     ['eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiIxIn0.c2lnbmF0dXJl', '[jwt]'],
     ['hash 0123456789abcdef0123456789abcdef0123', 'hash [hex]'],
-    ['bad code YY1MFRGGZDFMZTWQ2LKNNWG23TPOBYXE43UOV3HO6DZPJAGK4TBOBUW42LOMQ4TKMBQ scanned', 'bad code [ticket-code] scanned'],
+    [
+      'bad code YY1MFRGGZDFMZTWQ2LKNNWG23TPOBYXE43UOV3HO6DZPJAGK4TBOBUW42LOMQ4TKMBQ scanned',
+      'bad code [ticket-code] scanned',
+    ],
     ['lower yy1mfrggzdfmztwq2lknnwg23tpobyxe43uov3ho6dzpjagk4tbobuw42lomq4tkmbq', 'lower [ticket-code]'],
     ['call +1 (415) 555-0123 now', 'call [phone] now'],
     ['call 020 7946 0958', 'call [phone]'],

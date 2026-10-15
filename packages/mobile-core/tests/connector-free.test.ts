@@ -4,7 +4,7 @@
  * store keys) both apps still configure, build and run, and each connector is simply off. And the
  * repository carries no credential for any of them.
  */
-import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { buildExpoConfig } from '../src/app-config';
 import { initSentry, sentryEnabled } from '../src/platform/sentry';
@@ -19,19 +19,22 @@ const build = (app: 'mobile' | 'staff', appEnv: string) =>
   buildExpoConfig({ ...base, app, env: { APP_ENV: appEnv } });
 
 describe.each(['mobile', 'staff'] as const)('%s app with no connector configured', (app) => {
-  it.each(['development', 'preview', 'production'])('%s: every connector is off, nothing throws', (appEnv) => {
-    const c = build(app, appEnv);
-    expect(c.extra).not.toHaveProperty('sentryDsn');
-    expect(c.extra).not.toHaveProperty('googleIosClientId');
-    expect(c.extra).not.toHaveProperty('googleAndroidClientId');
-    expect(c.extra).not.toHaveProperty('eas');
-    expect(c.owner).toBeUndefined();
-    // No Firebase client file, so no Android push; no EAS project, so no over-the-air updates.
-    expect(c.android).not.toHaveProperty('googleServicesFile');
-    expect(c.updates).toEqual({ enabled: false });
-    // One scheme: no Google redirect scheme without a Google client id.
-    expect(typeof c.scheme).toBe('string');
-  });
+  it.each(['development', 'preview', 'production'])(
+    '%s: every connector is off, nothing throws',
+    (appEnv) => {
+      const c = build(app, appEnv);
+      expect(c.extra).not.toHaveProperty('sentryDsn');
+      expect(c.extra).not.toHaveProperty('googleIosClientId');
+      expect(c.extra).not.toHaveProperty('googleAndroidClientId');
+      expect(c.extra).not.toHaveProperty('eas');
+      expect(c.owner).toBeUndefined();
+      // No Firebase client file, so no Android push; no EAS project, so no over-the-air updates.
+      expect(c.android).not.toHaveProperty('googleServicesFile');
+      expect(c.updates).toEqual({ enabled: false });
+      // One scheme: no Google redirect scheme without a Google client id.
+      expect(typeof c.scheme).toBe('string');
+    },
+  );
 
   it('keeps Sentry off without a DSN, and an invalid one', () => {
     const init = jest.fn();
