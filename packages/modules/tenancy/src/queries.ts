@@ -228,6 +228,22 @@ export async function twoFactorRequiredBy(
   return roles.filter((o) => policies.get(o.orgId) ?? true);
 }
 
+/**
+ * The client orgs whose finance access this person has through an agency (M6.7a) and that keep
+ * two-step verification required: the same rule as the client's own finance members. Empty: the
+ * agency access doesn't require it.
+ */
+export async function agencyTwoFactorRequiredBy(
+  userId: string,
+): Promise<{ readonly orgId: string; readonly name: string }[]> {
+  const rows = await withoutTenant((tx) =>
+    tx.execute<{ org_id: string; name: string; require_two_factor: boolean }>(
+      sql`select org_id, name, require_two_factor from tenancy.agency_two_factor_policies(${userId}::uuid)`,
+    ),
+  );
+  return rows.filter((r) => r.require_two_factor).map((r) => ({ orgId: r.org_id, name: r.name }));
+}
+
 /** Whether the current org requires two-step verification of its owners, admins and finance (tenant tx). */
 export async function orgRequiresTwoFactorTx(tx: TenantTx, orgId: string): Promise<boolean> {
   const [row] = await tx

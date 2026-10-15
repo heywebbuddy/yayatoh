@@ -254,7 +254,7 @@ async function asMember(
   if (
     !imp &&
     !session.twoFactorEnabled &&
-    (actor.agency?.finance || (await roleMustUseTwoFactor(actor.ctx, actor.role)))
+    (await roleMustUseTwoFactor(actor.ctx, actor.agency?.finance ? 'finance' : actor.role))
   )
     return { status: 403, body: { error: 'two_factor_required' } };
   const ctx = await commandCenterCtx(actor.ctx);

@@ -21,6 +21,7 @@ import { auditLogQuery, catchUpSubscriber } from '@yayatoh/platform';
 import {
   addMemberCommand,
   agencyAccess,
+  agencyTwoFactorRequiredBy,
   consoleRole,
   createOrganization,
   getOrganizationQuery,
@@ -31,6 +32,7 @@ import {
   MONEY_TABLES,
   myAgencyClients,
   revokeAgencyGrantCommand,
+  setTwoFactorPolicyCommand,
   updateAgencyGrantCommand,
 } from '@yayatoh/tenancy';
 import { sql } from 'drizzle-orm';
@@ -292,6 +294,12 @@ describe('agency v1: grants (M6.7a)', () => {
       ports,
     );
     expect((await agencyAccess(userCtx(staff, a.org.id)))?.consoleRole).toBe('agency_manager_finance');
+    // Finance access needs two-step verification, as for the client's own finance members, unless
+    // the client switched its requirement off.
+    expect(await agencyTwoFactorRequiredBy(staff)).toEqual([expect.objectContaining({ orgId: a.org.id })]);
+    await executeCommand(setTwoFactorPolicyCommand, { required: false }, a.ctx(), ports);
+    expect(await agencyTwoFactorRequiredBy(staff)).toEqual([]);
+    await executeCommand(setTwoFactorPolicyCommand, { required: true }, a.ctx(), ports);
     for (const table of MONEY_TABLES)
       expect(await countRows(agent, table), `${table}: with finance`).toBe(await countRows(owner, table));
     // A's finance opt-in never opens B's money, even naming A's grant.
@@ -305,6 +313,7 @@ describe('agency v1: grants (M6.7a)', () => {
       ports,
     );
     for (const table of MONEY_TABLES) expect(await countRows(agent, table)).toBe(0);
+    expect(await agencyTwoFactorRequiredBy(staff)).toEqual([]);
   });
 
   it('the agency pages read snapshots of live clients only; money only with the opt-in', async () => {

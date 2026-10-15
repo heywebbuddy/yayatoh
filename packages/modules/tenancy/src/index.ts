@@ -274,6 +274,7 @@ export {
 } from './hosting/self-hosted.ts';
 export { privateColumns } from './private-columns.ts';
 export {
+  agencyTwoFactorRequiredBy,
   domainProblemsTx,
   getOrganizationQuery,
   listInvitationsQuery,

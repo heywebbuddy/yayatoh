@@ -3,7 +3,7 @@
 import { isTwoFactorError } from '@yayatoh/auth';
 import { isStepUpFresh } from '@yayatoh/kernel';
 import { qrPath } from '@yayatoh/pdf';
-import { twoFactorRequiredBy } from '@yayatoh/tenancy';
+import { agencyTwoFactorRequiredBy, twoFactorRequiredBy } from '@yayatoh/tenancy';
 import { revalidatePath } from 'next/cache';
 import { getTwoFactor } from '@/server/auth.ts';
 import { ownSession } from '@/server/session.ts';
@@ -58,7 +58,11 @@ export async function confirmSetupAction(_prev: CodesState, form: FormData): Pro
 export async function disableAction(_prev: SecurityState, form: FormData): Promise<SecurityState> {
   const session = await ownSession();
   if (!session) return { ok: false, code: 'unauthenticated' };
-  if ((await twoFactorRequiredBy(session.userId)).length > 0) return { ok: false, code: 'required' };
+  const [orgs, agency] = await Promise.all([
+    twoFactorRequiredBy(session.userId),
+    agencyTwoFactorRequiredBy(session.userId),
+  ]);
+  if (orgs.length > 0 || agency.length > 0) return { ok: false, code: 'required' };
   try {
     await getTwoFactor().disable(session.userId, String(form.get('code') ?? ''));
   } catch (err) {

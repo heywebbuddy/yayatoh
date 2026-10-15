@@ -6,6 +6,7 @@ import { listMediaQuery } from '@yayatoh/media';
 import { isProfileKey, type ProfileKey, profileOpensSection } from '@yayatoh/platform';
 import { ssoRequiredFor } from '@yayatoh/sso';
 import {
+  agencyTwoFactorRequiredBy,
   eventRoleCan,
   eventRolesOpenSection,
   getOrganizationQuery,
@@ -52,8 +53,14 @@ export const loadConsoleBase = cache(async (orgSlug: string) => {
   if (!imp && !session.twoFactorEnabled && (await twoFactorRequiredBy(session.userId, orgs)).length > 0)
     return redirect({ href: '/account/security?required=1', locale });
   const clients = imp ? [] : await myAgencyClients(session.userId);
-  // M6.7a: a client's finance opt-in opens its money to the agency: the same rule as finance members.
-  if (!imp && !session.twoFactorEnabled && clients.some((c) => c.finance))
+  // M6.7a: a client's finance opt-in opens its money to the agency: the same rule as finance
+  // members, so it follows that client's own two-step verification setting.
+  if (
+    !imp &&
+    !session.twoFactorEnabled &&
+    clients.some((c) => c.finance) &&
+    (await agencyTwoFactorRequiredBy(session.userId)).length > 0
+  )
     return redirect({ href: '/account/security?required=1', locale });
   const resolved = await resolveOrgSlug(orgSlug);
   if (!resolved) notFound();
