@@ -9,7 +9,7 @@
 |---|---|---|
 | `me-tickets.js` | The attendee app at doors-open: launch (tickets and orders lists, together), a tap on a ticket after `THINK` seconds (the QR code must show), a tap on the order. | `GET /v1/me/tickets`, `/me/tickets/{id}`, `/me/orders`, `/me/orders/{id}` |
 | `app-checkout.js` | Signed-in attendees starting a checkout for the load event's free pass with the fake provider (`action: paid`), one `Idempotency-Key` per iteration and a replay of the same request that must return the same order. A second scenario, the limit probe, shows the `checkoutStart` policy does trigger. | `POST /v1/public/events/{slug}/checkout` |
-| `scan-batch-peak.js` | Staff devices syncing at 3× the `scan.js` peak: small live batches (1–3 scans) and 500-scan offline outbox syncs, each replayed to prove idempotency. Payload copied from `apps/staff/src/scan/api.ts` and the route's schema. | `POST /v1/scans/batch` (device token `yyd_…`) |
+| `scan-batch-peak.js` | Staff devices syncing at 3× the `scan.js` peak. `MODEL=open` (default): a fixed request rate of small live batches (1–3 scans) and 500-scan offline outbox syncs, each replayed to prove idempotency. `MODEL=closed`: 30 door phones with one flush in flight each, an outbox that grows while the server is slow, and the app's backoff (section 5.2). Payload copied from `apps/staff/src/scan/api.ts` and the route's schema. | `POST /v1/scans/batch` (device token `yyd_…`) |
 | `staff-heartbeat.js` | 500 devices, a heartbeat each every 30 s (payload of `apps/staff/src/device/session.ts`), plus 25 devices reading the device board every 15 s. | `POST /v1/devices/heartbeat`, `GET /v1/staff/events/{eventId}/overview` |
 
 Every request carries the `X-Yayatoh-Client` header the apps send (so the version gate and the telemetry run as in production) and its own client IP. Every script stops at once, with a message that says what to do, when the prepared data is missing or from before M7.x, when the prepared accounts or devices are refused by the target, or when the requested rate would use up the prepared data, the `checkoutStart` budget or the risk-rule allowance (verified).
@@ -27,7 +27,8 @@ pnpm --filter @yayatoh/web load:prepare            # LOAD_TICKETS=6000 for scan-
 pnpm --filter @yayatoh/web build && (cd apps/web && npx next start -p 3000) &
 k6 run -e BASE_URL=http://localhost:3000 k6/me-tickets.js
 k6 run -e BASE_URL=http://localhost:3000 k6/app-checkout.js
-k6 run -e BASE_URL=http://localhost:3000 k6/scan-batch-peak.js
+k6 run -e BASE_URL=http://localhost:3000 k6/scan-batch-peak.js               # open model, 3×
+k6 run -e BASE_URL=http://localhost:3000 -e MODEL=closed k6/scan-batch-peak.js  # the Staff app's closed loop
 k6 run -e BASE_URL=http://localhost:3000 k6/staff-heartbeat.js
 ```
 Knobs, in the style of the other scripts (`BASE_URL`, `LOAD_DATA`, `DURATION`, `PEAK_*`): see `k6/README.md`. Run one script at a time. Re-prepare between runs of `scan-batch-peak.js` (it admits the codes it uses; `CODE_OFFSET` skips used ones) and wait 10 minutes between runs of `app-checkout.js` (the limiter keeps its counters that long) or prepare more accounts.
@@ -57,6 +58,7 @@ Two limits that shape `app-checkout.js` (both are the server's rules, not the sc
 | `scan-batch-peak` | **small live batches p95 < 300 ms** | **Roadmap §10, scan verify online p95 < 300 ms.** A small batch is one verify's worth of work. |
 | | **500-scan batches p95 < 1.5 s** | **Not a roadmap number: this project's budget, set by the M7.x brief** (3 ms a scan). The roadmap and plan fix only the 300 ms verify path. It has to be small enough that a door device finishes a sync well inside the 30 s heartbeat interval. |
 | | `replay_idempotent` = 100 %: a replayed batch answers `stored: false` for every scan, `duplicatesOffline: 0`, the very same verdicts | ADR 0011 (idempotent by `scanId`); the second post creates no new admission. |
+| | `MODEL=closed`: small batches (≤ 3 scans) p95 < 300 ms; batches of ≥ 100 scans p95 < 1.5 s; **age of the oldest unsynced scan when a batch is sent (`outbox_oldest_age_ms`) p95 < 5 s** | Latency bars as above. The 5 s is **our proposal, not a roadmap number**: Command Center tiles are ≤ 3 s p95 from the moment the data is on the server (§10), so a scan should wait on the phone not much longer than that; 5 s is 3 s plus the network, and half of the app's own 10 s retry tick (`scheduler.ts`). |
 | | `fresh_admitted` > 99 % (the first post admits every scan: the data is fresh), no 429, errors < 1 % | Script sanity; the device bucket is 3 000 a minute per token. |
 | `staff-heartbeat` | heartbeat p95 < 300 ms | M7.x brief; the same bar as verify. |
 | | **no 429** (`heartbeat_rate_limited` = 0) | M7.x brief. The device bucket is `{ limit: 3000, window: 60 }` per token (`packages/api-v1/src/index.ts`); a device sends 2 heartbeats and 4 board reads a minute, so none is limited and **the limiter needed no change**. |
@@ -94,6 +96,21 @@ These are not script faults: the idempotency and payload checks pass. The Staff 
 2. Narrow the lock to the admission insert, or key it by ticket instead of by event.
 3. Fewer queries per scan (look up the prior scans and tickets of a batch at once).
 4. If the budget is the problem rather than the design: measure on staging first (below), then decide; the 1.5 s budget is this project's number, not the roadmap's.
+
+### 5.2 Closed-loop model (`MODEL=closed`), the Staff app's own behaviour
+The open runs above push a fixed request rate whatever the server does. The Staff app does not: `scheduler.ts` flushes the outbox after each scan with one flush in flight per device, and `engine.ts` `runFlush` peeks again as soon as an answer arrives and sends everything queued (up to 500), oldest first; a failed flush waits `backoff.ts` (2 s, 4 s, 8 s … ±20 %). The script's second scenario is exactly that: 30 VUs, one door phone each, scans arriving per phone as a Poisson process at its share of the target (30 scans/s × the multiplier ÷ 30 phones), an outbox per phone, one POST in flight, the app's backoff on a 429/5xx. There is no offline share: big batches appear only if the server falls behind. One batch in 20 is replayed (extra to the app's traffic) to check idempotency. Run for 60 s each on the same local setup (load average 1.2–1.7), 0 errors, 0 × 429, no backoff ever taken, every first post admitted every scan and every replay was idempotent (78/78, 91/91, 60/60).
+
+| Target | Scans admitted | Requests/s (incl. replays) | Batch size (avg / p95 / max) | ≤ 3-scan batches p95 | Oldest unsynced scan when sent, p95 (max) | … until the answer arrives, p95 (max) |
+|---|---|---|---|---|---|---|
+| 1× (30/s) | 1 878 (31/s) | 32 | 1.0 / 1 / 2 | **103 ms** ✓ | **5 ms** (0.3 s) | 112 ms (0.5 s) |
+| 2× (60/s) | 3 650 (61/s) | 37 | 1.7 / 4 / 7 | **962 ms** ✗ | **835 ms** (1.6 s) | 1.7 s (2.5 s) |
+| 3× (90/s) | 5 247 (87/s) | 25 | 3.6 / 7 / 15 | **1.48 s** ✗ | **1.51 s** (2.6 s) | 3.0 s (4.0 s) |
+
+Reading:
+1. **The closed loop self-regulates at 3×.** The phones kept up (87 of 90 scans/s admitted), requests per second fell from 37 to 25 as batches grew from 1.7 to 3.6 scans (never more than 15), and nothing collapsed, where the open model with the same scan rate queued without bound (section 5). That is the Staff app's real behaviour, and it is the better predictor for one event with 30 phones.
+2. **Oldest-unsynced-scan age is inside the proposed 5 s budget at every size**: p95 1.5 s when a batch is sent at 3× (3.0 s until it is acknowledged, max 4.0 s). The scan is decided and saved on the phone first, so the door never waits for this; the age is how stale the organizer's live counts and the other doors' duplicate checks can be.
+3. **The 300 ms bar for batches of ≤ 3 scans is still not met at 2× and 3×** (p95 0.96 s and 1.5 s). It is the same per-event lock as in 5.1: 30 phones with a request each in flight queue behind one lock (about 27 ms apiece), so each flush takes roughly 30 × the hold time. The app does not wait for that answer, so the cost is sync lag (point 2), not a slower door. The 300 ms SLO belongs to the online verify path; for the Staff app's batch sync the age of the oldest unsynced scan is the number that matters, and it passes.
+4. **Limits of this reading:** one event, 30 phones, a Poisson arrival (no crowd bursts), no offline spells, a shared VM. A burst or a phone returning with a 500-scan outbox would take the 3 s lock hold of 5.1 and add it to everyone's age; this model does not include that. The 5.1 options (chunked uploads, a narrower lock) would help both.
 
 ## 6. Notes
 - The final numbers for `me-tickets`, `app-checkout` and `staff-heartbeat` are far inside their budgets, which only says this VM at this load is fine; the 3× `me-tickets` run (116 req/s on one Node process) still passed.

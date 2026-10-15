@@ -28,13 +28,36 @@
 // (`fresh_admitted` > 99 %): codes are used once per run, so a second run on the same data admits
 // nothing new. Prepare again, or move on with CODE_OFFSET.
 //
+// TWO LOAD MODELS (MODEL=open, the default, or MODEL=closed).
+// `open` fixes the requests a second whatever the server does (a constant arrival rate): it finds the
+// capacity and the lock contention, but a real phone never behaves like that. `closed` is the Staff
+// app (apps/staff/src/scan/scheduler.ts + engine.ts): every device has ONE flush in flight. A scan
+// is queued in the outbox and "kicks" a flush; while a flush runs, new scans only queue; when the
+// answer arrives, the loop peeks again and sends everything queued, up to 500 (BATCH_SIZE), oldest
+// first. So a slow server makes batches grow and requests a second per device fall. A failed flush
+// (429, 5xx, offline) waits the app's backoff (2 s, 4 s, 8 s … ±20 %, apps/staff/src/scan/backoff.ts)
+// and queued scans keep accumulating. One VU is one door phone (SCAN_DEVICES of them), scans arrive
+// per device as a Poisson process at its share of the target (SCANS_PER_SECOND × MULTIPLIER ÷ devices);
+// there is no separate offline share: big batches appear only when the server falls behind.
+// Extra requests are not the app's: one in REPLAY_EVERY_CLOSED batches (default 20) is replayed to
+// check idempotency, tagged `closed_replay`.
+// What the closed model measures for the app: `outbox_oldest_age_ms`, the age of the oldest unsynced
+// scan when a batch is sent (and `outbox_oldest_age_at_ack_ms`, when the answer arrives), and
+// `closed_batch_size`. Budget: outbox_oldest_age_ms p95 < 5 s. That is this project's proposal, not a
+// roadmap number: the roadmap gives Command Center tiles ≤ 3 s p95 (§10), counted from the moment
+// the data is on the server, so a scan should wait on the phone for not much more than that; 5 s is
+// that 3 s plus the network, and half of the app's own 10 s retry tick (scheduler.ts TICK_MS). The
+// 300 ms p95 stays for batches of at most 3 scans (a verify's worth); batches of 100 or more scans
+// get the 1.5 s budget of the 500-scan batch.
+//
 // Knobs: SCANS_PER_SECOND (peak, default 30), MULTIPLIER (default 3), OFFLINE_SHARE (0–1, default
 // 0.3), OUTBOX_SIZE (default 500), SCAN_DEVICES (default 30), REPLAY_EVERY (default 10),
-// CODE_OFFSET (first unused code, default 0), DURATION (default 60s), LOAD_DATA, BASE_URL.
-import { check } from 'k6';
+// CODE_OFFSET (first unused code, default 0), DURATION (default 60s), LOAD_DATA, BASE_URL;
+// MODEL (open | closed), REPLAY_EVERY_CLOSED (default 20).
+import { check, sleep } from 'k6';
 import exec from 'k6/execution';
 import http from 'k6/http';
-import { Counter, Rate } from 'k6/metrics';
+import { Counter, Rate, Trend } from 'k6/metrics';
 import { BASE, bearer, envNumber, jsonOf, loadMobileData, uuid } from './lib.js';
 
 const data = loadMobileData(['eventId', 'codes', 'deviceTokens']);
@@ -48,6 +71,11 @@ const REPLAY_EVERY = Math.max(1, envNumber('REPLAY_EVERY', 10));
 const CODE_OFFSET = envNumber('CODE_OFFSET', 0);
 const DURATION = __ENV.DURATION || '60s';
 const CLIENT = 'yayatoh-staff-ios';
+const CLOSED = (__ENV.MODEL || 'open') === 'closed';
+if (!['open', 'closed'].includes(__ENV.MODEL || 'open'))
+  throw new Error(`MODEL=${__ENV.MODEL} is not open or closed`);
+const REPLAY_EVERY_CLOSED = Math.max(1, envNumber('REPLAY_EVERY_CLOSED', 20));
+const BATCH_SIZE = 500;
 
 // Live batches are 1, 2, 3, 1, 2, 3, … scans (mean 2): the request rate that carries the live share.
 const LIVE_RATE = (TOTAL * (1 - OFFLINE_SHARE)) / 2;
@@ -57,6 +85,12 @@ const replayIdempotent = new Rate('replay_idempotent');
 const freshAdmitted = new Rate('fresh_admitted');
 const scansPosted = new Counter('scans_posted');
 const limited = new Counter('scan_rate_limited');
+// Closed model only.
+const oldestAge = new Trend('outbox_oldest_age_ms', true);
+const oldestAgeAtAck = new Trend('outbox_oldest_age_at_ack_ms', true);
+const batchSize = new Trend('closed_batch_size');
+const backoffs = new Counter('closed_backoffs');
+const codesExhausted = new Counter('closed_codes_exhausted');
 
 function seconds(text) {
   let s = 0;
@@ -67,7 +101,18 @@ function seconds(text) {
 const DURATION_S = seconds(DURATION);
 
 const scenarios = {};
-if (LIVE_RATE > 0)
+// Per device: scans a second, and the codes reserved for it (the mean plus 25 % and 30 for the tail).
+const DEVICE_RATE = TOTAL / DEVICES;
+const RESERVE = Math.ceil(DEVICE_RATE * DURATION_S * 1.25) + 30;
+if (CLOSED)
+  scenarios.door_phones = {
+    executor: 'constant-vus',
+    vus: DEVICES,
+    duration: DURATION,
+    exec: 'closed',
+    gracefulStop: '60s',
+  };
+if (!CLOSED && LIVE_RATE > 0)
   scenarios.live_batches = {
     executor: 'constant-arrival-rate',
     rate: Math.max(1, Math.round(LIVE_RATE * 100)),
@@ -77,7 +122,7 @@ if (LIVE_RATE > 0)
     maxVUs: Math.max(60, Math.ceil(LIVE_RATE) * 6),
     exec: 'live',
   };
-if (OUTBOX_RATE > 0)
+if (!CLOSED && OUTBOX_RATE > 0)
   scenarios.outbox_syncs = {
     executor: 'constant-arrival-rate',
     // k6 wants whole numbers per time unit: scale the unit so a fraction of a batch a second is exact.
@@ -89,15 +134,26 @@ if (OUTBOX_RATE > 0)
     exec: 'outbox',
   };
 
+const openThresholds = {
+  // Online verify SLO (roadmap §10): small live batches.
+  'http_req_duration{name:scan_batch_small}': ['p(95)<300'],
+  'http_req_duration{name:scan_batch_small_replay}': ['p(95)<300'],
+  // Offline outbox sync: this project's budget (3 ms a scan), not a roadmap SLO.
+  'http_req_duration{name:scan_batch_500}': ['p(95)<1500'],
+  'http_req_duration{name:scan_batch_500_replay}': ['p(95)<1500'],
+};
+const closedThresholds = {
+  // The verify SLO only for batches of at most 3 scans; the 500-scan budget for 100 or more.
+  'http_req_duration{name:closed_small}': ['p(95)<300'],
+  'http_req_duration{name:closed_large}': ['p(95)<1500'],
+  // What matters at the door: how long the oldest unsynced scan waited (project proposal, see above).
+  outbox_oldest_age_ms: ['p(95)<5000'],
+};
+
 export const options = {
   scenarios,
   thresholds: {
-    // Online verify SLO (roadmap §10): small live batches.
-    'http_req_duration{name:scan_batch_small}': ['p(95)<300'],
-    'http_req_duration{name:scan_batch_small_replay}': ['p(95)<300'],
-    // Offline outbox sync: this project's budget (3 ms a scan), not a roadmap SLO.
-    'http_req_duration{name:scan_batch_500}': ['p(95)<1500'],
-    'http_req_duration{name:scan_batch_500_replay}': ['p(95)<1500'],
+    ...(CLOSED ? closedThresholds : openThresholds),
     http_req_failed: ['rate<0.01'],
     checks: ['rate>0.99'],
     // A replayed batch applies nothing: every scan `stored: false`, no offline duplicates, same verdicts.
@@ -117,7 +173,7 @@ const LIVE_CODES = LIVE_RATE > 0 ? liveStart(LIVE_ITERATIONS) + 3 : 0;
 const OUTBOX_BASE = CODE_OFFSET + LIVE_CODES;
 
 export function setup() {
-  const needed = OUTBOX_BASE + OUTBOX_ITERATIONS * OUTBOX_SIZE;
+  const needed = CLOSED ? CODE_OFFSET + DEVICES * RESERVE : OUTBOX_BASE + OUTBOX_ITERATIONS * OUTBOX_SIZE;
   if (needed > data.codes.length && envNumber('ALLOW_CODE_REUSE', 0) !== 1)
     exec.test.abort(
       `This run scans ${needed - CODE_OFFSET} tickets (from code #${CODE_OFFSET}) but only ${data.codes.length} are prepared. ` +
@@ -212,4 +268,93 @@ export function outbox() {
   const scans = scansFrom(OUTBOX_BASE + i * OUTBOX_SIZE, OUTBOX_SIZE, 180000);
   const first = checkFirst(post(token, scans, 'scan_batch_500'), scans, 'outbox sync');
   if (first) checkReplay(post(token, scans, 'scan_batch_500_replay'), scans, first, 'outbox replay');
+}
+
+/* ------------------------------------------------------------------ closed model: door phones ---- */
+
+/** The app's retry delay after `failures` failed flushes in a row (backoff.ts, with its ±20 % jitter). */
+function backoffMs(failures) {
+  const raw = Math.min(300000, 2000 * 2 ** (failures - 1));
+  return Math.round(raw * (0.8 + 0.4 * Math.random()));
+}
+
+/** Gap to the next scan at this device: exponential, mean 1 ÷ its rate. */
+const gapMs = () => (-Math.log(1 - Math.random()) / DEVICE_RATE) * 1000;
+
+let phone = null; // per VU: this door phone's outbox and state
+
+function arrivals(p, now) {
+  while (p.next <= now) {
+    if (p.seq < RESERVE) {
+      p.queue.push({
+        scanId: uuid(),
+        code: code(CODE_OFFSET + p.index * RESERVE + p.seq),
+        at: Math.floor(p.next),
+      });
+      p.seq += 1;
+    } else {
+      codesExhausted.add(1);
+    }
+    p.next += gapMs();
+  }
+}
+
+const asScans = (entries) =>
+  entries.map((e) => ({
+    scanId: e.scanId,
+    code: e.code,
+    deviceTs: new Date(e.at).toISOString(),
+    clockOffsetMs: 0,
+    verdict: 'admit',
+  }));
+
+const bucket = (n) => (n <= 3 ? 'closed_small' : n >= 100 ? 'closed_large' : 'closed_medium');
+
+export function closed() {
+  if (!phone) {
+    const index = (exec.vu.idInTest - 1) % DEVICES;
+    phone = {
+      index,
+      token: data.deviceTokens[index],
+      queue: [],
+      next: Date.now() + gapMs(),
+      seq: 0,
+      failures: 0,
+      retryAt: 0,
+      sent: 0,
+    };
+  }
+  const p = phone;
+  const end = exec.scenario.startTime + DURATION_S * 1000;
+  const wait = (until) => {
+    const ms = Math.min(until, end) - Date.now();
+    if (ms > 0) sleep(ms / 1000);
+  };
+  arrivals(p, Date.now());
+  // Nothing to send: wait for the next scan (it kicks a flush). Backing off: wait for the retry.
+  if (p.queue.length === 0) return wait(p.next);
+  if (Date.now() < p.retryAt) return wait(p.retryAt);
+
+  const batch = p.queue.slice(0, BATCH_SIZE);
+  const scans = asScans(batch);
+  const sentAt = Date.now();
+  oldestAge.add(sentAt - batch[0].at);
+  batchSize.add(batch.length);
+  const res = post(p.token, scans, bucket(batch.length));
+  oldestAgeAtAck.add(Date.now() - batch[0].at);
+  const body = res.status === 200 ? jsonOf(res) : null;
+  if (!body?.results || body.results.length !== batch.length) {
+    // 429, 5xx, a lost answer: keep the outbox, wait the app's backoff.
+    check(res, { 'closed flush 200': (r) => r.status === 200 });
+    p.failures += 1;
+    p.retryAt = Date.now() + backoffMs(p.failures);
+    backoffs.add(1);
+    return;
+  }
+  checkFirst(res, scans, 'closed flush');
+  p.failures = 0;
+  p.queue.splice(0, batch.length);
+  p.sent += 1;
+  if (p.sent % REPLAY_EVERY_CLOSED === 0)
+    checkReplay(post(p.token, scans, 'closed_replay'), scans, body, 'closed replay');
 }

@@ -59,6 +59,8 @@ oversell). Staging runs at 3× the expected peak are the real gate before M2.1 (
 | `scans/batch`, 1× and 2×, small batches | 30 and 60 scans/s | p95 **53 ms** and **185 ms**; replays idempotent | ✓ |
 | `scans/batch`, **3×** (90 scans/s, 30 % as 500-scan syncs) | small live batches + 500-scan outbox syncs, each replayed | admissions and replays correct (replays idempotent 179/179, 0 errors, 0 × 429), **latency not met**: small p95 7.7 s, 500-scan p95 7.5 s (alone 2.8–3.7 s) | ✗ |
 
+With the Staff app's closed loop (`MODEL=closed`, one flush in flight per phone) 3× self-regulates: 87 of 90 scans/s admitted, batches grow to 3.6 scans on average (max 15), 0 errors, oldest unsynced scan p95 **1.5 s** when sent (budget 5 s, ours); ≤ 3-scan batches p95 1.5 s, over 300 ms.
+
 The 3× scan result is a finding, not noise: `syncScansCommand` holds a per-event advisory lock for the whole request, so one event tops out near 30 batches a second here, and a 500-scan batch (about 3 s) stalls every live scan of the event (load.md §5.1). `scan.js` itself now gives p95 619 ms at its 30 scans/s on this data (37 ms on 2026-09-27). Re-run on staging before the first real event.
 
 ## Accessibility
