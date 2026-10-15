@@ -75,4 +75,4 @@ jobs:
         working-directory: apps/${{ matrix.app }}
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-        run: npx --yes eas-cli@latest workflow:run ../../.eas/workflows/maestro-${{ matrix.app }}.yml --non-interactive --wait
+        run: npx --yes eas-cli@16 workflow:run ../../.eas/workflows/maestro-${{ matrix.app }}.yml --non-interactive --wait
