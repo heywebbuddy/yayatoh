@@ -1,11 +1,15 @@
 // Pure canary-leak tooling (roadmap §9): the column-privacy registry, the matcher and the crawler.
 // No database: the e2e crawler and unit tests import this; `canaryOrg()` lives in the main entry.
 export {
+  DEVICE_API_ALLOW,
   DOOR_ALLOW,
   EXPORT_ALLOW,
   GUEST_SITE_ALLOW,
   ME_ALLOW,
+  ME_IDENTITY_ALLOW,
+  OPS_ALLOW,
   PARTY_ALLOW,
+  PORTAL_API_ALLOW,
   V1_ALLOW,
 } from './allowlists.ts';
 export { type CoverageProblem, columnCoverage, type Snapshot, TEXTUAL } from './coverage.ts';
