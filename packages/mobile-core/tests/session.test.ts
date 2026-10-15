@@ -2,6 +2,7 @@ import { createYayatohClient } from '@yayatoh/sdk';
 import { createApiClient } from '../src/client';
 import { memoryKeyValueStore } from '../src/ports';
 import {
+  BEFORE_SIGN_OUT_TIMEOUT_MS,
   createSessionStore,
   SESSION_KEY,
   type SessionStore,
@@ -210,6 +211,51 @@ describe('session store', () => {
     await session.signOut();
     expect(second).toHaveBeenCalled();
     expect(session.state.status).toBe('signedOut');
+  });
+
+  it('runs before-sign-out callbacks while the tokens still work, and never lets one stop the sign-out', async () => {
+    const { fake, session } = await signedIn();
+    const order: string[] = [];
+    session.beforeSignOut(async () => {
+      // The tokens still work here, so a signed request can be made.
+      order.push((await session.accessToken()) ? 'before' : 'broken');
+    });
+    session.beforeSignOut(() => {
+      throw new Error('boom');
+    });
+    session.onSignedOut(() => void order.push('wiped'));
+    const removed = jest.fn();
+    session.beforeSignOut(removed)();
+    await session.signOut();
+    expect(order).toEqual(['before', 'wiped']);
+    expect(removed).not.toHaveBeenCalled();
+    expect(fake.calls.some((c) => c.path === '/v1/auth/revoke')).toBe(true);
+    expect(session.state).toEqual({ status: 'signedOut', reason: 'signed_out' });
+  });
+
+  it('abandons a before-sign-out callback that hangs (offline), then signs out', async () => {
+    jest.useFakeTimers();
+    try {
+      const { session } = await signedIn();
+      session.beforeSignOut(() => new Promise<void>(() => {}));
+      const done = session.signOut();
+      await jest.advanceTimersByTimeAsync(BEFORE_SIGN_OUT_TIMEOUT_MS + 10);
+      await done;
+      expect(session.state).toEqual({ status: 'signedOut', reason: 'signed_out' });
+    } finally {
+      jest.useRealTimers();
+    }
+  });
+
+  it('does not run before-sign-out callbacks when the server ended the session', async () => {
+    const { fake, session } = await signedIn();
+    const before = jest.fn();
+    session.beforeSignOut(before);
+    fake.valid.clear();
+    fake.expectedRefresh = 'other';
+    await session.refreshAfterUnauthorized('access-0');
+    expect(session.state.status).toBe('signedOut');
+    expect(before).not.toHaveBeenCalled();
   });
 
   it('a refresh that finishes after sign-out does not bring the session back', async () => {

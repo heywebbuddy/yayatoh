@@ -612,5 +612,67 @@
       "open": "開啟訂單",
       "myOrders": "我的訂單"
     }
+  },
+  "push": {
+    "channel": {
+      "name": "票券與活動動態"
+    },
+    "prompt": {
+      "title": "接收有關票券的通知？",
+      "intro": "Yayatoh 可以向這支手機傳送以下通知：",
+      "items": {
+        "orders": "訂單已確認",
+        "tickets": "寄給你的票券，或已接受或已取消的轉讓",
+        "changes": "活動變更或取消",
+        "reminders": "活動開始前 24 小時和 2 小時的提醒"
+      },
+      "privacy": "通知只會顯示活動名稱和變更內容，絕不會顯示你的姓名、電子郵件、手機號碼、付款金額或票券代碼。",
+      "control": "你可以隨時在「帳戶」的「通知」中更改。",
+      "againLater": "如果選擇「暫不」，我們只會在你下次購買之後再次詢問。無論如何，你都可以使用應用程式的全部功能。",
+      "allow": "開啟通知",
+      "notNow": "暫不"
+    },
+    "banner": {
+      "dismiss": "關閉通知",
+      "open": "開啟相關頁面",
+      "fallbackTitle": "Yayatoh"
+    },
+    "settings": {
+      "title": "通知",
+      "statusTitle": "在這支手機上",
+      "status": {
+        "granted": "通知已開啟",
+        "denied": "通知已關閉",
+        "undetermined": "尚未設定通知",
+        "loading": "正在檢查…"
+      },
+      "statusBody": {
+        "granted": "你將收到下列通知。若要全部關閉，請使用手機的設定。",
+        "denied": "Yayatoh 的通知已關閉。若要開啟，請開啟手機的設定。",
+        "undetermined": "開啟後，你將收到有關訂單、票券和活動的通知。"
+      },
+      "turnOn": "開啟通知",
+      "openSystem": "開啟手機設定",
+      "optional": "通知是選用的。關閉後，票券、訂單和登入的使用不受影響。",
+      "kindsTitle": "我們會傳送什麼",
+      "kinds": {
+        "service": {
+          "title": "訂單和票券",
+          "body": "訂單已確認、收到票券、轉讓已接受或已取消。只要開啟了通知就會傳送。"
+        },
+        "reminders": {
+          "title": "提醒",
+          "body": "活動開始前 24 小時和 2 小時。"
+        },
+        "eventChanges": {
+          "title": "活動變更",
+          "body": "活動變更或取消時。"
+        }
+      },
+      "kindsUnavailable": "暫時還不能選擇接收其中哪些通知。若要全部停止，請在手機設定中關閉通知。",
+      "saveFailed": "無法儲存。請檢查網路連線後重試。",
+      "marketingTitle": "資訊和優惠",
+      "marketingBody": "已關閉。只有在你選擇接收時，我們才會傳送。"
+    }
   }
 }

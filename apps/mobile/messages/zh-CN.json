@@ -612,5 +612,67 @@
       "open": "打开订单",
       "myOrders": "我的订单"
     }
+  },
+  "push": {
+    "channel": {
+      "name": "门票和活动动态"
+    },
+    "prompt": {
+      "title": "接收有关门票的通知？",
+      "intro": "Yayatoh 可以向这部手机发送以下通知：",
+      "items": {
+        "orders": "订单已确认",
+        "tickets": "发给你的门票，或已接受或已取消的转让",
+        "changes": "活动变更或取消",
+        "reminders": "活动开始前 24 小时和 2 小时的提醒"
+      },
+      "privacy": "通知只显示活动名称和变更内容，绝不会显示你的姓名、邮箱、手机号、付款金额或门票码。",
+      "control": "你可以随时在“账户”的“通知”中更改。",
+      "againLater": "如果选择“暂不”，我们只会在你下次购买之后再次询问。无论如何，你都可以使用应用的全部功能。",
+      "allow": "开启通知",
+      "notNow": "暂不"
+    },
+    "banner": {
+      "dismiss": "关闭通知",
+      "open": "打开相关页面",
+      "fallbackTitle": "Yayatoh"
+    },
+    "settings": {
+      "title": "通知",
+      "statusTitle": "在这部手机上",
+      "status": {
+        "granted": "通知已开启",
+        "denied": "通知已关闭",
+        "undetermined": "尚未设置通知",
+        "loading": "正在检查…"
+      },
+      "statusBody": {
+        "granted": "你将收到下列通知。若要全部关闭，请使用手机的设置。",
+        "denied": "Yayatoh 的通知已关闭。若要开启，请打开手机的设置。",
+        "undetermined": "开启后，你将收到有关订单、门票和活动的通知。"
+      },
+      "turnOn": "开启通知",
+      "openSystem": "打开手机设置",
+      "optional": "通知是可选的。关闭后，门票、订单和登录的使用不受影响。",
+      "kindsTitle": "我们会发送什么",
+      "kinds": {
+        "service": {
+          "title": "订单和门票",
+          "body": "订单已确认、收到门票、转让已接受或已取消。只要开启了通知就会发送。"
+        },
+        "reminders": {
+          "title": "提醒",
+          "body": "活动开始前 24 小时和 2 小时。"
+        },
+        "eventChanges": {
+          "title": "活动变更",
+          "body": "活动变更或取消时。"
+        }
+      },
+      "kindsUnavailable": "暂时还不能选择接收其中哪些通知。若要全部停止，请在手机设置中关闭通知。",
+      "saveFailed": "无法保存。请检查网络连接后重试。",
+      "marketingTitle": "资讯和优惠",
+      "marketingBody": "已关闭。只有在你选择接收时，我们才会发送。"
+    }
   }
 }
