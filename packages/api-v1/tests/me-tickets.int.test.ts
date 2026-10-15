@@ -299,7 +299,7 @@ describe('GET /v1/me/tickets', () => {
     });
     expect(r.text).not.toContain('qrCode');
     expect(r.body.nextCursor).toBeNull();
-    expect(r.headers.get('cache-control')).toBe('private, no-cache');
+    expect(r.headers.get('cache-control')).toBe('private, no-store');
   });
 
   it('lists past tickets separately, latest first', async () => {

@@ -18,7 +18,7 @@ import {
   startAppTransferCommand,
   type WalletPassProvider,
 } from '@yayatoh/ticketing';
-import { cachedJson, PRIVATE_CACHE } from '../caching.ts';
+import { cachedJson, SENSITIVE_CACHE } from '../caching.ts';
 import type { V1Deps, V1Env } from '../context.ts';
 import { newestFirst, pageByKey } from '../cursor.ts';
 import {
@@ -299,13 +299,13 @@ export function meRoutes(deps: V1Deps) {
       return cachedJson(
         c,
         toWire(MyTicketPage, { data: page.data.map(summaryOf), nextCursor: page.nextCursor }),
-        PRIVATE_CACHE,
+        SENSITIVE_CACHE,
       );
     })
     .openapi(routes.getTicket, async (c) => {
       const found = await personTicket(c.get('me').user.email, c.req.valid('param').id);
       if (!found) throw new DomainError('not_found', 'Ticket not found');
-      return cachedJson(c, detailWire(c, found), PRIVATE_CACHE);
+      return cachedJson(c, detailWire(c, found), SENSITIVE_CACHE);
     })
     .openapi(routes.ticketLink, async (c) => {
       const me = c.get('me');
@@ -324,7 +324,7 @@ export function meRoutes(deps: V1Deps) {
       return cachedJson(
         c,
         toWire(TicketLinkTickets, { ticketIds: data.tickets.map((t) => t.id) }),
-        PRIVATE_CACHE,
+        SENSITIVE_CACHE,
       );
     })
     .openapi(routes.startTransfer, async (c) => {
@@ -435,13 +435,13 @@ export function meRoutes(deps: V1Deps) {
           })),
           nextCursor: page.nextCursor,
         }),
-        PRIVATE_CACHE,
+        SENSITIVE_CACHE,
       );
     })
     .openapi(routes.getOrder, async (c) => {
       const order = await myOrderDetail(c.get('me').user.email, c.req.valid('param').id);
       if (!order) throw new DomainError('not_found', 'Order not found');
-      return cachedJson(c, toWire(MyOrder, { ...order, organizerName: order.orgName }), PRIVATE_CACHE);
+      return cachedJson(c, toWire(MyOrder, { ...order, organizerName: order.orgName }), SENSITIVE_CACHE);
     })
     .openapi(routes.requestRefund, async (c) => {
       const me = c.get('me');
@@ -470,7 +470,7 @@ export function meRoutes(deps: V1Deps) {
       return cachedJson(
         c,
         toWire(ClaimDetails, { ...details, organizerName: organizerName ?? '' }),
-        PRIVATE_CACHE,
+        SENSITIVE_CACHE,
       );
     })
     .openapi(routes.claim, async (c) => {
