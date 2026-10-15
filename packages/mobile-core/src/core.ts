@@ -19,6 +19,7 @@ import type { MessageTree } from './i18n/catalogs';
 import type { AppLocale } from './i18n/locales';
 import { initSentry } from './platform/sentry';
 import type { FileStore, KeyValueStore, RandomBytes } from './ports';
+import { type Account, createAccount } from './session/account';
 import type { AppleSignInProvider, GoogleSignInProvider } from './session/providers';
 import { createSessionStore, type SessionStore, tokenEndpoint } from './session/session-store';
 import { createSignIn, type SignIn } from './session/sign-in';
@@ -59,6 +60,8 @@ export interface Core {
   /** Unsigned client for the calls made before there is a session. */
   readonly publicApi: YayatohClient;
   readonly signIn: SignIn;
+  /** Sign out everywhere and delete the account (M7.3a). */
+  readonly account: Account;
   readonly queryClient: QueryClient;
   readonly persister: EncryptedPersister;
   readonly versionGate: VersionGate;
@@ -129,6 +132,7 @@ export function createCore(options: CoreOptions): Core {
       ...(adapters.apple ? { apple: adapters.apple } : {}),
       ...(adapters.google ? { google: adapters.google } : {}),
     }),
+    account: createAccount({ api, session }),
     queryClient,
     persister,
     versionGate: gate,

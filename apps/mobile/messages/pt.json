@@ -2,5 +2,136 @@
   "home": {
     "title": "Yayatoh",
     "tagline": "Seus eventos e ingressos vão aparecer aqui em breve."
+  },
+  "welcome": {
+    "title": "Boas-vindas ao Yayatoh",
+    "tagline": "Seus ingressos e eventos, tudo em um só lugar.",
+    "pointTickets": "Guarde seus ingressos no celular, mesmo sem sinal.",
+    "pointDiscover": "Encontre eventos e compre ingressos com poucos toques.",
+    "pointUpdates": "Receba um aviso quando algo mudar no seu evento.",
+    "email": "Continuar com o e-mail",
+    "apple": "Entrar com a Apple",
+    "google": "Continuar com o Google",
+    "password": "Usar uma senha",
+    "offlineTitle": "Você está sem conexão",
+    "offlineBody": "Conecte-se à internet para entrar. Seus ingressos aparecerão aqui assim que você fizer isso.",
+    "offlineRetry": "Tentar novamente",
+    "loading": "Carregando"
+  },
+  "signIn": {
+    "back": "Voltar",
+    "startAgain": "Começar de novo",
+    "rateLimitedNoTime": "Tentativas demais. Aguarde alguns minutos e tente novamente.",
+    "email": {
+      "title": "Qual é o seu e-mail?",
+      "body": "Enviaremos um código de 6 dígitos por e-mail. Não precisa de senha, e sua conta é criada na primeira vez.",
+      "label": "Endereço de e-mail",
+      "placeholder": "voce@exemplo.com",
+      "submit": "Enviar um código",
+      "required": "Digite o seu e-mail.",
+      "invalid": "Digite um e-mail válido, como voce@exemplo.com."
+    },
+    "code": {
+      "title": "Verifique seu e-mail",
+      "body": "Enviamos um código de 6 dígitos para {email}. Ele vale por {minutes, plural, one {# minuto} other {# minutos}}.",
+      "label": "Código de 6 dígitos",
+      "submit": "Entrar",
+      "incomplete": "Digite os 6 dígitos.",
+      "wrongOrExpired": "Esse código está errado ou expirou. Confira-o ou peça um novo.",
+      "resend": "Enviar um novo código",
+      "resendIn": "{seconds, plural, one {Enviar um novo código em # segundo} other {Enviar um novo código em # segundos}}",
+      "resent": "Enviamos um novo código para você.",
+      "change": "Usar outro e-mail"
+    },
+    "password": {
+      "title": "Entrar com uma senha",
+      "body": "Para contas que já têm senha. Novo por aqui? Use um código por e-mail.",
+      "label": "Senha",
+      "show": "Mostrar senha",
+      "hide": "Ocultar senha",
+      "submit": "Entrar",
+      "required": "Digite a sua senha.",
+      "useCode": "Enviar um código por e-mail"
+    },
+    "twoFactor": {
+      "title": "Verificação em duas etapas",
+      "body": "Digite o código de 6 dígitos do seu app autenticador ou um dos seus códigos de backup.",
+      "label": "Código de autenticação",
+      "submit": "Verificar",
+      "required": "Digite o seu código."
+    },
+    "linkProof": {
+      "title": "Confirme que é você",
+      "body": "Já existe uma conta do Yayatoh com este e-mail. Enviamos a ele um código de 6 dígitos. Digite o código para entrar e vincular este método de acesso.",
+      "submit": "Confirmar e entrar"
+    }
+  },
+  "account": {
+    "title": "Conta",
+    "cancel": "Cancelar",
+    "preferences": "Ajustes",
+    "notifications": "Ajustes de notificações",
+    "version": "Versão {version}",
+    "tabs": {
+      "tickets": "Ingressos",
+      "discover": "Descobrir",
+      "account": "Conta"
+    },
+    "profile": {
+      "name": "Nome",
+      "email": "E-mail",
+      "status": "Situação do e-mail",
+      "verified": "Verificado",
+      "unverified": "Não verificado"
+    },
+    "signOut": {
+      "button": "Sair",
+      "confirm": "Sair do Yayatoh neste celular?",
+      "action": "Sair"
+    },
+    "signOutEverywhere": {
+      "button": "Sair de todos os lugares",
+      "confirm": "Isso encerra sua sessão do Yayatoh em todos os celulares e navegadores. Você precisará entrar de novo em todos.",
+      "action": "Sair de todos os lugares",
+      "failed": "Não conseguimos encerrar suas sessões em todos os lugares. Verifique a conexão e tente novamente."
+    },
+    "danger": {
+      "title": "Excluir conta",
+      "body": "Exclua para sempre a sua conta do Yayatoh e tudo o que está neste celular."
+    },
+    "delete": {
+      "entry": "Excluir conta",
+      "title": "Excluir sua conta",
+      "intro": "Isso exclui para sempre a sua conta do Yayatoh. Não é possível desfazer.",
+      "deletedTitle": "O que excluímos",
+      "deleted1": "Seus métodos de acesso e todas as sessões em todos os dispositivos.",
+      "deleted2": "Suas escolhas de notificação e os celulares registrados para recebê-las.",
+      "deleted3": "O vínculo entre você e seus pedidos e ingressos.",
+      "keptTitle": "O que os organizadores guardam",
+      "kept": "Cada organizador é responsável pelos próprios registros. Ele guarda os pedidos, os ingressos e os consentimentos de marketing que tem sobre você, como o nome e o e-mail de um pedido, mas esses registros deixam de estar ligados a uma conta. O Yayatoh nunca guarda os dados do seu cartão.",
+      "lastOwner": "{count, plural, one {Você é o único proprietário desta organização: {names}. Transfira-a para outra pessoa ou exclua-a primeiro e tente de novo.} other {Você é o único proprietário destas organizações: {names}. Transfira-as para outra pessoa ou exclua-as primeiro e tente de novo.}}",
+      "continue": "Continuar",
+      "unavailable": "Não conseguimos falar com o Yayatoh. Verifique a conexão e tente novamente.",
+      "confirmIntro": "Primeiro confirme que é você; depois confirme o seu e-mail.",
+      "stepUpTotp": "Digite o código do seu app autenticador ou um dos seus códigos de backup.",
+      "stepUpPassword": "Digite a sua senha.",
+      "stepUpEmail": "Enviamos um código de 6 dígitos para {email}. Digite-o aqui.",
+      "codeLabel": "Código",
+      "passwordLabel": "Senha",
+      "proofRequired": "Digite o código ou a senha para continuar.",
+      "typeEmail": "Para confirmar, digite o seu e-mail: {email}",
+      "emailLabel": "Seu e-mail",
+      "emailRequired": "Digite o seu e-mail para confirmar.",
+      "mismatch": "Isso não corresponde ao seu e-mail.",
+      "submit": "Excluir minha conta para sempre",
+      "back": "Voltar",
+      "stepUpExpired": "Sua confirmação expirou. Digite um novo código ou a sua senha e tente novamente.",
+      "failed": "Não conseguimos excluir a sua conta. Nada foi excluído. Tente novamente."
+    },
+    "deleted": {
+      "title": "Sua conta foi excluída",
+      "body": "Enviamos uma confirmação para o seu endereço antigo. Tudo da sua conta foi removido deste celular.",
+      "done": "Concluir"
+    }
   }
 }

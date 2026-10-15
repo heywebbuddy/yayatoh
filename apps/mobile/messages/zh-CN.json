@@ -2,5 +2,136 @@
   "home": {
     "title": "Yayatoh",
     "tagline": "您的活动和门票很快会显示在这里。"
+  },
+  "welcome": {
+    "title": "欢迎使用 Yayatoh",
+    "tagline": "您的票券和活动，尽在一处。",
+    "pointTickets": "把票券保存在手机里，没有信号也能查看。",
+    "pointDiscover": "轻点几下，即可发现活动并购票。",
+    "pointUpdates": "活动有变动时，第一时间通知您。",
+    "email": "使用邮箱继续",
+    "apple": "通过 Apple 登录",
+    "google": "使用 Google 继续",
+    "password": "使用密码",
+    "offlineTitle": "未连接网络",
+    "offlineBody": "请连接互联网后登录。连接后，您的票券会显示在这里。",
+    "offlineRetry": "重试",
+    "loading": "加载中"
+  },
+  "signIn": {
+    "back": "返回",
+    "startAgain": "重新开始",
+    "rateLimitedNoTime": "尝试次数过多。请等待几分钟后重试。",
+    "email": {
+      "title": "您的邮箱是什么？",
+      "body": "我们会通过邮件向您发送 6 位验证码。无需密码，首次使用时会自动创建账户。",
+      "label": "邮箱地址",
+      "placeholder": "you@example.com",
+      "submit": "发送验证码",
+      "required": "请输入您的邮箱地址。",
+      "invalid": "请输入有效的邮箱地址，例如 you@example.com。"
+    },
+    "code": {
+      "title": "请查收邮件",
+      "body": "我们已向 {email} 发送了 6 位验证码，有效期 {minutes, plural, other {# 分钟}}。",
+      "label": "6 位验证码",
+      "submit": "登录",
+      "incomplete": "请输入全部 6 位数字。",
+      "wrongOrExpired": "验证码有误或已过期。请检查，或重新获取。",
+      "resend": "重新发送验证码",
+      "resendIn": "{seconds, plural, other {# 秒后可重新发送验证码}}",
+      "resent": "我们已向您发送新的验证码。",
+      "change": "使用其他邮箱"
+    },
+    "password": {
+      "title": "使用密码登录",
+      "body": "适用于已设置密码的账户。第一次使用？请改用邮件验证码。",
+      "label": "密码",
+      "show": "显示密码",
+      "hide": "隐藏密码",
+      "submit": "登录",
+      "required": "请输入密码。",
+      "useCode": "改为通过邮件发送验证码"
+    },
+    "twoFactor": {
+      "title": "两步验证",
+      "body": "请输入验证器应用中的 6 位验证码，或输入一个备用码。",
+      "label": "验证码",
+      "submit": "验证",
+      "required": "请输入验证码。"
+    },
+    "linkProof": {
+      "title": "请确认是您本人",
+      "body": "此邮箱已有 Yayatoh 账户。我们已向它发送了 6 位验证码。输入验证码即可登录，并关联这种登录方式。",
+      "submit": "确认并登录"
+    }
+  },
+  "account": {
+    "title": "账户",
+    "cancel": "取消",
+    "preferences": "设置",
+    "notifications": "通知设置",
+    "version": "版本 {version}",
+    "tabs": {
+      "tickets": "票券",
+      "discover": "发现",
+      "account": "账户"
+    },
+    "profile": {
+      "name": "姓名",
+      "email": "邮箱",
+      "status": "邮箱状态",
+      "verified": "已验证",
+      "unverified": "未验证"
+    },
+    "signOut": {
+      "button": "退出登录",
+      "confirm": "要在此手机上退出 Yayatoh 吗？",
+      "action": "退出登录"
+    },
+    "signOutEverywhere": {
+      "button": "在所有设备上退出",
+      "confirm": "这会让您在所有手机和浏览器上退出 Yayatoh。您需要在每个地方重新登录。",
+      "action": "在所有设备上退出",
+      "failed": "无法在所有设备上退出。请检查网络连接后重试。"
+    },
+    "danger": {
+      "title": "删除账户",
+      "body": "永久删除您的 Yayatoh 账户以及此手机上的所有内容。"
+    },
+    "delete": {
+      "entry": "删除账户",
+      "title": "删除您的账户",
+      "intro": "这会永久删除您的 Yayatoh 账户，且无法撤销。",
+      "deletedTitle": "我们会删除的内容",
+      "deleted1": "您的登录方式，以及所有设备上的全部登录会话。",
+      "deleted2": "您的通知偏好，以及为接收通知而登记的手机。",
+      "deleted3": "您与订单和票券之间的关联。",
+      "keptTitle": "主办方会保留的内容",
+      "kept": "每个主办方对自己的记录负责。主办方会保留其持有的与您相关的订单、票券和营销同意，例如订单上的姓名和邮箱，但这些记录不再与任何账户关联。Yayatoh 从不保存您的银行卡信息。",
+      "lastOwner": "{count, plural, other {您是以下组织的唯一所有者：{names}。请先将其转交给他人或删除，然后再试一次。}}",
+      "continue": "继续",
+      "unavailable": "无法连接到 Yayatoh。请检查网络连接后重试。",
+      "confirmIntro": "请先确认是您本人，再确认您的邮箱地址。",
+      "stepUpTotp": "请输入验证器应用中的验证码，或输入一个备用码。",
+      "stepUpPassword": "请输入您的密码。",
+      "stepUpEmail": "我们已向 {email} 发送了 6 位验证码。请在此输入。",
+      "codeLabel": "验证码",
+      "passwordLabel": "密码",
+      "proofRequired": "请输入验证码或密码以继续。",
+      "typeEmail": "请输入您的邮箱地址以确认：{email}",
+      "emailLabel": "您的邮箱地址",
+      "emailRequired": "请输入您的邮箱地址以确认。",
+      "mismatch": "与您的邮箱地址不一致。",
+      "submit": "永久删除我的账户",
+      "back": "返回",
+      "stepUpExpired": "您的确认已过期。请输入新的验证码或密码后重试。",
+      "failed": "无法删除您的账户，没有任何内容被删除。请重试。"
+    },
+    "deleted": {
+      "title": "您的账户已删除",
+      "body": "我们已向您原来的邮箱发送了确认邮件。账户中的所有内容都已从此手机中移除。",
+      "done": "完成"
+    }
   }
 }

@@ -2857,6 +2857,56 @@
           "password"
         ]
       },
+      "AccountErasure": {
+        "type": "object",
+        "properties": {
+          "requestId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The recorded erasure request."
+          },
+          "summary": {
+            "type": "object",
+            "properties": {
+              "organizations": {
+                "type": "integer"
+              },
+              "memberships": {
+                "type": "integer"
+              },
+              "ordersUnlinked": {
+                "type": "integer"
+              },
+              "invitations": {
+                "type": "integer"
+              },
+              "sessions": {
+                "type": "integer"
+              },
+              "credentials": {
+                "type": "integer"
+              },
+              "signupCodes": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "organizations",
+              "memberships",
+              "ordersUnlinked",
+              "invitations",
+              "sessions",
+              "credentials",
+              "signupCodes"
+            ],
+            "description": "How much was detached or removed, per category (counts only)."
+          }
+        },
+        "required": [
+          "requestId",
+          "summary"
+        ]
+      },
       "MembershipList": {
         "type": "object",
         "properties": {
@@ -11011,6 +11061,76 @@
         }
       }
     },
+    "/v1/auth/sign-out-everywhere": {
+      "post": {
+        "operationId": "signOutEverywhere",
+        "tags": [
+          "auth"
+        ],
+        "summary": "Sign out of every device and session",
+        "description": "Ends every session of the signed-in person (the web, tenant sites and API clients) and revokes every refresh-token family, so no phone can refresh its way back in. The access token used for this call ends too. Answers `204`.",
+        "security": [
+          {
+            "bearerSession": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Signed out everywhere"
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/auth/revoke": {
       "post": {
         "operationId": "revokeToken",
@@ -11381,6 +11501,111 @@
           },
           "429": {
             "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteMe",
+        "tags": [
+          "me"
+        ],
+        "summary": "Delete the signed-in person’s account (needs a fresh step-up)",
+        "description": "Deletes the account as the web’s account page does (App Store rule 5.1.1(v)): the person’s sign-in methods, sessions and refresh tokens end, their address joins the suppression list, and a confirmation goes to the old address. Organizers keep their orders, tickets and consents as the controllers of those records; they lose the link to the account.\n\nNeeds a step-up within the last ten minutes (`POST /auth/step-up`); without one the answer is `401 step_up_required` and nothing is deleted. Refused with `409 invalid_state` (`details.reason: last_owner`, `details.orgs`: names) while the person is the only owner of an organization. Works for sessions whose email is not yet verified. Refused with `403 forbidden` (`details.reason: impersonation`) while a staff member is acting as the person.",
+        "security": [
+          {
+            "bearerSession": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountErasure"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict, invalid state, or the same Idempotency-Key is in flight",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The Idempotency-Key was used with a different request (`idempotency_key_reused`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Read-only maintenance (`read_only_freeze`): nothing was changed; retry after `Retry-After` seconds",
             "content": {
               "application/problem+json": {
                 "schema": {

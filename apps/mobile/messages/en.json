@@ -2,5 +2,136 @@
   "home": {
     "title": "Yayatoh",
     "tagline": "Your events and tickets will appear here soon."
+  },
+  "welcome": {
+    "title": "Welcome to Yayatoh",
+    "tagline": "Your tickets and events, all in one place.",
+    "pointTickets": "Keep your tickets on your phone, even without a signal.",
+    "pointDiscover": "Find events and buy tickets in a few taps.",
+    "pointUpdates": "Get a heads-up when something about your event changes.",
+    "email": "Continue with email",
+    "apple": "Sign in with Apple",
+    "google": "Continue with Google",
+    "password": "Use a password",
+    "offlineTitle": "You're not connected",
+    "offlineBody": "Connect to the internet to sign in. Your tickets will be here once you do.",
+    "offlineRetry": "Try again",
+    "loading": "Loading"
+  },
+  "signIn": {
+    "back": "Back",
+    "startAgain": "Start again",
+    "rateLimitedNoTime": "Too many attempts. Please wait a few minutes and try again.",
+    "email": {
+      "title": "What's your email?",
+      "body": "We'll email you a 6-digit code. No password needed, and your account is created the first time.",
+      "label": "Email address",
+      "placeholder": "you@example.com",
+      "submit": "Send me a code",
+      "required": "Enter your email address.",
+      "invalid": "Enter a valid email address, like you@example.com."
+    },
+    "code": {
+      "title": "Check your email",
+      "body": "We sent a 6-digit code to {email}. It works for {minutes, plural, one {# minute} other {# minutes}}.",
+      "label": "6-digit code",
+      "submit": "Sign in",
+      "incomplete": "Enter all 6 digits.",
+      "wrongOrExpired": "That code is wrong or has expired. Check it, or ask for a new one.",
+      "resend": "Send a new code",
+      "resendIn": "{seconds, plural, one {Send a new code in # second} other {Send a new code in # seconds}}",
+      "resent": "We sent you a new code.",
+      "change": "Use a different email"
+    },
+    "password": {
+      "title": "Sign in with a password",
+      "body": "For accounts that already have a password. New here? Use an email code instead.",
+      "label": "Password",
+      "show": "Show password",
+      "hide": "Hide password",
+      "submit": "Sign in",
+      "required": "Enter your password.",
+      "useCode": "Email me a code instead"
+    },
+    "twoFactor": {
+      "title": "Two-step verification",
+      "body": "Enter the 6-digit code from your authenticator app, or one of your backup codes.",
+      "label": "Authentication code",
+      "submit": "Verify",
+      "required": "Enter your code."
+    },
+    "linkProof": {
+      "title": "Confirm it's you",
+      "body": "There's already a Yayatoh account with this email. We emailed it a 6-digit code. Enter the code to sign in and link this sign-in method.",
+      "submit": "Confirm and sign in"
+    }
+  },
+  "account": {
+    "title": "Account",
+    "cancel": "Cancel",
+    "preferences": "Settings",
+    "notifications": "Notification settings",
+    "version": "Version {version}",
+    "tabs": {
+      "tickets": "Tickets",
+      "discover": "Discover",
+      "account": "Account"
+    },
+    "profile": {
+      "name": "Name",
+      "email": "Email",
+      "status": "Email status",
+      "verified": "Verified",
+      "unverified": "Not verified"
+    },
+    "signOut": {
+      "button": "Sign out",
+      "confirm": "Sign out of Yayatoh on this phone?",
+      "action": "Sign out"
+    },
+    "signOutEverywhere": {
+      "button": "Sign out everywhere",
+      "confirm": "This signs you out of Yayatoh on every phone and browser. You'll need to sign in again everywhere.",
+      "action": "Sign out everywhere",
+      "failed": "We couldn't sign you out everywhere. Check your connection and try again."
+    },
+    "danger": {
+      "title": "Delete account",
+      "body": "Permanently delete your Yayatoh account and everything on this phone."
+    },
+    "delete": {
+      "entry": "Delete account",
+      "title": "Delete your account",
+      "intro": "This permanently deletes your Yayatoh account. It can't be undone.",
+      "deletedTitle": "What we delete",
+      "deleted1": "Your sign-in methods, and every session on every device.",
+      "deleted2": "Your notification choices and the phones registered for notifications.",
+      "deleted3": "The link between you and your orders and tickets.",
+      "keptTitle": "What organizers keep",
+      "kept": "Each organizer is responsible for its own records. They keep the orders, tickets and marketing consents they hold for you, such as the name and email on an order, but those records no longer connect to an account. Yayatoh never stores your card details.",
+      "lastOwner": "{count, plural, one {You're the only owner of this organization: {names}. Hand it over to someone else or delete it first, then try again.} other {You're the only owner of these organizations: {names}. Hand them over to someone else or delete them first, then try again.}}",
+      "continue": "Continue",
+      "unavailable": "We couldn't reach Yayatoh. Check your connection and try again.",
+      "confirmIntro": "First confirm it's you, then confirm your email address.",
+      "stepUpTotp": "Enter the code from your authenticator app, or one of your backup codes.",
+      "stepUpPassword": "Enter your password.",
+      "stepUpEmail": "We emailed a 6-digit code to {email}. Enter it here.",
+      "codeLabel": "Code",
+      "passwordLabel": "Password",
+      "proofRequired": "Enter your code or password to continue.",
+      "typeEmail": "To confirm, type your email address: {email}",
+      "emailLabel": "Your email address",
+      "emailRequired": "Type your email address to confirm.",
+      "mismatch": "That doesn't match your email address.",
+      "submit": "Delete my account permanently",
+      "back": "Back",
+      "stepUpExpired": "Your confirmation expired. Enter a fresh code or your password and try again.",
+      "failed": "We couldn't delete your account. Nothing was deleted. Please try again."
+    },
+    "deleted": {
+      "title": "Your account was deleted",
+      "body": "We emailed a confirmation to your old address. Everything from your account has been removed from this phone.",
+      "done": "Done"
+    }
   }
 }
