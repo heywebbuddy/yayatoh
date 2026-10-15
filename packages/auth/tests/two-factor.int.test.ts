@@ -378,6 +378,32 @@ describe('two-step verification: step-up, turning off, backup codes', () => {
       expect.arrayContaining(['two_factor.backup_codes_regenerated', 'two_factor.disabled']),
     );
   });
+  it('another device gets the authenticator already in use: the same codes, nothing changes', async () => {
+    const u = await newUser('device');
+    await expect(tf.currentSetup(u.id, u.email)).rejects.toMatchObject({ code: 'not_enabled' });
+    const e = await enrolled('device2');
+    const { setupKey: key, uri } = await tf.currentSetup(e.id, e.email);
+    expect(key.replace(/ /g, '')).toBe(new URL(uri).searchParams.get('secret'));
+    // The key shown again is the one in use: its codes are the first device's codes.
+    const t = Date.now();
+    expect(totp(base32Decode(key), t)).toBe(totp(secretKey(e.secret), t));
+    expect(await tf.status(e.id)).toMatchObject({ enabled: true, backupCodesLeft: 10 });
+    expect(await actions(e.id)).toContain('two_factor.device_added');
+  });
+
+  it('staff turn a person’s two-step verification off without their code, with a reason', async () => {
+    const u = await enrolled('staffoff');
+    const staffUserId = (await newUser('staff')).id;
+    expect(await tf.staffDisable(u.id, { staffUserId, reason: 'lost phone, ticket 42' })).toEqual({
+      wasOn: true,
+    });
+    expect(await tf.status(u.id)).toMatchObject({ enabled: false, pending: false, method: 'password' });
+    expect((await passwordSignIn(u.email)).body.twoFactorRedirect).toBeUndefined();
+    const [event] = (await tf.events(u.id, 50)).filter((x) => x.action === 'two_factor.disabled');
+    expect(event?.data).toMatchObject({ method: 'staff', by: staffUserId, reason: 'lost phone, ticket 42' });
+    // Off already: nothing to undo, still recorded.
+    expect(await tf.staffDisable(u.id, { staffUserId, reason: 'again' })).toEqual({ wasOn: false });
+  });
 });
 
 describe('TOTP replay protection (M1.2c leftover)', () => {

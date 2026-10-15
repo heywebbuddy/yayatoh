@@ -1710,7 +1710,14 @@
     "charityLink": "Perfil beneficente",
     "planLink": "Plano e módulos",
     "findOwner": "Encontrar um proprietário ou administrador",
-    "categoriesLink": "Categorias de eventos"
+    "categoriesLink": "Categorias de eventos",
+    "security": {
+      "title": "Segurança",
+      "description": "A verificação em dois passos pede um código de uma app de autenticação ao entrar. Protege as funções que podem movimentar dinheiro, alterar pagamentos e domínios ou dar acesso: {roles}.",
+      "require": "Exigir verificação em dois passos para estas funções",
+      "requireHint": "Ativada: configuram-na antes de usar a consola e não a podem desativar. Desativada: cada pessoa decide.",
+      "offNote": "Ao guardar, terá de confirmar que é você. Quem já usa um autenticador mantém-no até o desativar na página de segurança da conta."
+    }
   },
   "legal": {
     "platform": "Yayatoh",
@@ -5250,7 +5257,13 @@
       "revokeAll": "Revogar todos os dispositivos confiáveis",
       "revoked": "Revogado. Esse dispositivo vai pedir seu código de novo.",
       "revokedAll": "Todos os dispositivos confiáveis foram revogados. Todos vão pedir seu código de novo."
-    }
+    },
+    "addDeviceTitle": "Adicionar outro dispositivo",
+    "addDeviceExplain": "Use o mesmo autenticador num segundo telefone ou tablet, ou com um colega que partilha esta conta. Primeiro confirme com um código atual; os dispositivos que já usa continuam a funcionar.",
+    "addDevice": "Mostrar o meu autenticador novamente",
+    "addDeviceScan": "Leia este código QR com a app de autenticação do outro dispositivo, ou escreva a chave de configuração. Depois mostra os mesmos códigos que o seu primeiro dispositivo.",
+    "addDeviceShared": "Quem ler este código pode entrar como você com a sua senha. Partilhe-o apenas com pessoas de confiança. Desative e volte a ativar a verificação em dois passos para bloquear todos os dispositivos de uma vez.",
+    "addDeviceDone": "Concluído"
   },
   "stepUp": {
     "title": "Confirme que é você",

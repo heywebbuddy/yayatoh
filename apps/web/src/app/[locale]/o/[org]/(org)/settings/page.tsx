@@ -6,6 +6,8 @@ import {
   LEGAL_PAGE_KINDS,
   legalPagesQuery,
   roleCan,
+  TWO_FACTOR_ROLES,
+  twoFactorPolicyQuery,
 } from '@yayatoh/tenancy';
 import {
   buttonClass,
@@ -26,7 +28,7 @@ import { Link } from '@/i18n/navigation.ts';
 import { loadConsole } from '@/server/console.ts';
 import { mediaPanel } from '@/server/media.ts';
 import { ports } from '@/server/ports.ts';
-import { acceptAction, brandAction, generalAction, legalAction } from './actions.ts';
+import { acceptAction, brandAction, generalAction, legalAction, twoFactorPolicyAction } from './actions.ts';
 
 const field = 'field';
 
@@ -64,6 +66,7 @@ export default async function SettingsPage({
   const agreements = await executeQuery(agreementsQuery, {}, data.ctx, ports);
   const logo = await mediaPanel(data, 'org', o.id, 'logo');
   const canAccept = roleCan(data.role, 'members:manage');
+  const twoFactor = await executeQuery(twoFactorPolicyQuery, {}, data.ctx, ports);
   const labelled = (id: string, label: string, control: React.ReactNode) => (
     <div className="flex flex-col gap-1.5">
       <label htmlFor={id} className="text-[13px] font-bold text-ink">
@@ -259,6 +262,39 @@ export default async function SettingsPage({
           >
             <p className="text-body text-ink-2">{t('settings.brand.description')}</p>
             <BrandColorField initial={o.brandColor} fallback={light.primary.toLowerCase()} />
+          </SettingsForm>
+        </Card>
+      </section>
+
+      <section aria-labelledby="security-heading" className="flex flex-col gap-3">
+        <h2 id="security-heading" className="text-section">
+          {t('settings.security.title')}
+        </h2>
+        <Card>
+          <SettingsForm
+            action={twoFactorPolicyAction.bind(null, org)}
+            submitLabel={t('settings.save')}
+            savedLabel={t('settings.saved')}
+          >
+            <p className="text-body text-ink-2">
+              {t('settings.security.description', {
+                roles: TWO_FACTOR_ROLES.map((r) => t(`roles.${r}`)).join(', '),
+              })}
+            </p>
+            <label className="flex items-start gap-3 text-body">
+              <input
+                type="checkbox"
+                name="required"
+                defaultChecked={twoFactor.required}
+                className="mt-1 size-5"
+                data-testid="require-two-factor"
+              />
+              <span className="flex flex-col gap-1">
+                <span className="font-bold">{t('settings.security.require')}</span>
+                <span className="text-caption text-ink-2">{t('settings.security.requireHint')}</span>
+              </span>
+            </label>
+            <p className="text-caption text-ink-2">{t('settings.security.offNote')}</p>
           </SettingsForm>
         </Card>
       </section>

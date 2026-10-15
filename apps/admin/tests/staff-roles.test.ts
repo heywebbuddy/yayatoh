@@ -59,4 +59,10 @@ describe('staff roles (M1.3e/f)', () => {
     expect(staffCan('support', 'listings')).toBe(true);
     expect(staffCan('finance', 'listings')).toBe(false);
   });
+
+  it('admins and support handle two-step verification lockouts; finance does not (pending owner)', () => {
+    expect(staffCan('admin', 'twoFactor')).toBe(true);
+    expect(staffCan('support', 'twoFactor')).toBe(true);
+    expect(staffCan('finance', 'twoFactor')).toBe(false);
+  });
 });

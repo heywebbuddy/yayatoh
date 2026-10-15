@@ -63,6 +63,12 @@ export const organizations = tenantTable(
      */
     sandbox: boolean('sandbox').notNull().default(false),
     sandboxParentOrgId: uuid('sandbox_parent_org_id'),
+    /**
+     * Whether owners, admins and finance members must use two-step verification here (decision
+     * D14, on by default). The org's owners or admins, or platform staff, can switch it off: its
+     * members are then no longer sent to set it up and may turn their own authenticator off.
+     */
+    requireTwoFactor: boolean('require_two_factor').notNull().default(true),
   },
   () => [
     uniqueIndex('organizations_slug_key').on(sql`slug`),

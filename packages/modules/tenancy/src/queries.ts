@@ -200,11 +200,57 @@ export async function organizationBrandTx(
 }
 
 /**
- * The memberships that make two-step verification mandatory for this person (owner, admin or
- * finance in any org). Empty: it is optional for them.
+ * Whether each org this person belongs to requires two-step verification of its owners, admins
+ * and finance members (org id → required; the org's own setting, on by default).
  */
-export async function twoFactorRequiredBy(userId: string): Promise<MyOrganizationDto[]> {
-  return (await myOrganizations(userId)).filter((o) => roleRequiresTwoFactor(o.role));
+export async function twoFactorPolicies(userId: string): Promise<Map<string, boolean>> {
+  const rows = await withoutTenant((tx) =>
+    tx.execute<{ org_id: string; require_two_factor: boolean }>(
+      sql`select org_id, require_two_factor from tenancy.user_two_factor_policies(${userId}::uuid)`,
+    ),
+  );
+  return new Map(rows.map((r) => [r.org_id, Boolean(r.require_two_factor)]));
+}
+
+/**
+ * The memberships that make two-step verification mandatory for this person (owner, admin or
+ * finance in an org that requires it). Empty: it is optional for them. `orgs` narrows it to
+ * memberships the caller already read (the console's, scoped to its session).
+ */
+export async function twoFactorRequiredBy(
+  userId: string,
+  orgs?: readonly MyOrganizationDto[],
+): Promise<MyOrganizationDto[]> {
+  const mine = orgs ?? (await myOrganizations(userId));
+  const roles = mine.filter((o) => roleRequiresTwoFactor(o.role));
+  if (roles.length === 0) return [];
+  const policies = await twoFactorPolicies(userId);
+  return roles.filter((o) => policies.get(o.orgId) ?? true);
+}
+
+/**
+ * The client orgs whose finance access this person has through an agency (M6.7a) and that keep
+ * two-step verification required: the same rule as the client's own finance members. Empty: the
+ * agency access doesn't require it.
+ */
+export async function agencyTwoFactorRequiredBy(
+  userId: string,
+): Promise<{ readonly orgId: string; readonly name: string }[]> {
+  const rows = await withoutTenant((tx) =>
+    tx.execute<{ org_id: string; name: string; require_two_factor: boolean }>(
+      sql`select org_id, name, require_two_factor from tenancy.agency_two_factor_policies(${userId}::uuid)`,
+    ),
+  );
+  return rows.filter((r) => r.require_two_factor).map((r) => ({ orgId: r.org_id, name: r.name }));
+}
+
+/** Whether the current org requires two-step verification of its owners, admins and finance (tenant tx). */
+export async function orgRequiresTwoFactorTx(tx: TenantTx, orgId: string): Promise<boolean> {
+  const [row] = await tx
+    .select({ required: organizations.requireTwoFactor })
+    .from(organizations)
+    .where(eq(organizations.id, orgId));
+  return row?.required ?? true;
 }
 
 /**

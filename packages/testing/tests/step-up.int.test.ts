@@ -35,7 +35,10 @@ import {
   revokeApiKeyCommand,
   roleRequiresTwoFactor,
   setPrimaryDomainCommand,
+  setTwoFactorPolicyCommand,
+  staffSetTwoFactorPolicyCommand,
   TWO_FACTOR_ROLES,
+  twoFactorPolicyQuery,
   twoFactorRequiredBy,
 } from '@yayatoh/tenancy';
 import { createTicketTypeCommand } from '@yayatoh/ticketing';
@@ -377,6 +380,56 @@ describe('two-step verification is required for owners, admins and finance (M1.2
     expect(await twoFactorRequiredBy(managerId)).toEqual([]);
     await executeCommand(changeMemberRoleCommand, { userId: managerId, role: 'admin' }, a.ctx(), ports);
     expect(await twoFactorRequiredBy(managerId)).toEqual([expect.objectContaining({ role: 'admin' })]);
+  });
+
+  it('the org decides: owners and admins switch it off (with a step-up), staff with a reason', async () => {
+    const policy = async () => (await executeQuery(twoFactorPolicyQuery, {}, a.ctx(), ports)).required;
+    expect(await policy()).toBe(true);
+    // Viewers can't change it; owners need a step-up.
+    await expect(
+      executeCommand(setTwoFactorPolicyCommand, { required: false }, userCtx(a.viewerId, a.org.id), ports),
+    ).rejects.toMatchObject({ code: 'forbidden' });
+    expect(await expectGate(setTwoFactorPolicyCommand, { required: false })).toEqual({
+      required: false,
+      changed: true,
+    });
+    expect(await policy()).toBe(false);
+    // Off in this org: its owner is no longer required (the other org still decides for itself).
+    expect(await twoFactorRequiredBy(a.ownerId)).toEqual([]);
+    expect((await twoFactorRequiredBy(b.ownerId)).map((o) => o.orgId)).toEqual([b.org.id]);
+
+    // Staff only (a platform actor), always with a reason; owners can't use the staff command.
+    const staff = createCtx({ orgId: a.org.id, actor: { type: 'system', name: `staff:${tag}` } });
+    await expect(
+      executeCommand(
+        staffSetTwoFactorPolicyCommand,
+        { required: true, reason: 'locked out' },
+        a.ctx(),
+        ports,
+      ),
+    ).rejects.toMatchObject({ code: 'forbidden' });
+    await expect(
+      executeCommand(staffSetTwoFactorPolicyCommand, { required: true, reason: '' }, staff, ports),
+    ).rejects.toMatchObject({ code: 'validation_failed' });
+    await executeCommand(
+      staffSetTwoFactorPolicyCommand,
+      { required: true, reason: 'back on, ticket 7' },
+      staff,
+      ports,
+    );
+    expect(await policy()).toBe(true);
+    expect((await twoFactorRequiredBy(a.ownerId)).map((o) => o.orgId)).toEqual([a.org.id]);
+    const [audit] = await withTenant(systemCtx(a.org.id), (tx) =>
+      tx.execute<{ data: Record<string, unknown> }>(
+        sql`select data from platform.audit_events where action = 'org.two_factor_policy' order by seq desc limit 1`,
+      ),
+    );
+    expect(audit?.data).toMatchObject({
+      required: true,
+      changed: true,
+      reason: 'back on, ticket 7',
+      by: 'staff',
+    });
   });
 });
 

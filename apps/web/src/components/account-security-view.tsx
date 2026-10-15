@@ -1,13 +1,13 @@
 import { isSocialProvider, listSocialAccounts, listTrustedDevices } from '@yayatoh/auth';
 import { accountDeletionBlockers } from '@yayatoh/privacy';
-import { twoFactorRequiredBy } from '@yayatoh/tenancy';
+import { agencyTwoFactorRequiredBy, twoFactorRequiredBy } from '@yayatoh/tenancy';
 import { buttonClass, Card, Label, PageHeader, StatusDot } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { AccountDelete, AccountExport } from '@/components/account-data.tsx';
 import { SignInMethods, TrustedDevices } from '@/components/sign-in-methods.tsx';
 import { SignOutEverywhere } from '@/components/sign-out-everywhere.tsx';
 import { StepUpProvider } from '@/components/step-up.tsx';
-import { RegenerateCodes, TwoFactorOff, TwoFactorSetup } from '@/components/two-factor.tsx';
+import { AddDevice, RegenerateCodes, TwoFactorOff, TwoFactorSetup } from '@/components/two-factor.tsx';
 import { Link, redirect } from '@/i18n/navigation.ts';
 import { getTwoFactor } from '@/server/auth.ts';
 import { getSession } from '@/server/session.ts';
@@ -50,9 +50,10 @@ export async function AccountSecurityView({
         </Card>
       </Container>
     );
-  const [status, requiredBy, blockers, linked, devices] = await Promise.all([
+  const [status, requiredBy, agencyRequiredBy, blockers, linked, devices] = await Promise.all([
     getTwoFactor().status(session.userId),
     twoFactorRequiredBy(session.userId),
+    agencyTwoFactorRequiredBy(session.userId),
     accountDeletionBlockers(session.userId),
     listSocialAccounts(session.userId),
     listTrustedDevices(session.userId),
@@ -60,10 +61,12 @@ export async function AccountSecurityView({
   const providers = enabledSocialProviders();
   // Personal dates (not an org's): shown in UTC, like the rest of this page's times.
   const day = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeZone: 'UTC' });
-  const required = requiredBy.length > 0;
-  const reasons = requiredBy.map((o) =>
-    t('security.requiredFor', { role: t(`roles.${o.role}`), org: o.name }),
-  );
+  const required = requiredBy.length > 0 || agencyRequiredBy.length > 0;
+  // An agency's finance access to a client (M6.7a) counts as finance in that client.
+  const reasons = [
+    ...requiredBy.map((o) => t('security.requiredFor', { role: t(`roles.${o.role}`), org: o.name })),
+    ...agencyRequiredBy.map((o) => t('security.requiredFor', { role: t('roles.finance'), org: o.name })),
+  ];
   return (
     <Container id={embedded ? undefined : 'main'} className={containerClass}>
       <StepUpProvider>
@@ -111,6 +114,14 @@ export async function AccountSecurityView({
             <TwoFactorSetup required={required} />
           )}
         </Card>
+        {status.enabled ? (
+          <Card role="region" aria-labelledby="devices-add-heading" className="flex flex-col gap-3">
+            <h2 id="devices-add-heading" className="text-section">
+              {t('security.addDeviceTitle')}
+            </h2>
+            <AddDevice />
+          </Card>
+        ) : null}
         {status.enabled ? (
           <Card role="region" aria-labelledby="codes-heading" className="flex flex-col gap-3">
             <h2 id="codes-heading" className="text-section">

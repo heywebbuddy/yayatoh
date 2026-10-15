@@ -6,6 +6,7 @@ import { listMediaQuery } from '@yayatoh/media';
 import { isProfileKey, type ProfileKey, profileOpensSection } from '@yayatoh/platform';
 import { ssoRequiredFor } from '@yayatoh/sso';
 import {
+  agencyTwoFactorRequiredBy,
   eventRoleCan,
   eventRolesOpenSection,
   getOrganizationQuery,
@@ -13,7 +14,7 @@ import {
   myOrganizations,
   resolveOrgSlug,
   roleCan,
-  roleRequiresTwoFactor,
+  twoFactorRequiredBy,
 } from '@yayatoh/tenancy';
 import { notFound } from 'next/navigation';
 import { getLocale } from 'next-intl/server';
@@ -26,8 +27,9 @@ import { getSession, sessionOpensOrg, sessionOrgScope } from './session.ts';
 /**
  * Everything the console needs for one org, loaded once per request. The org comes from the
  * route param; the user must be a member (RLS + membership check). A non-member gets a 404 so
- * the org's existence is not revealed. Owners, admins and finance (in any org) must turn on
- * two-step verification first: every console sends them to set it up (M1.2c). Server Actions
+ * the org's existence is not revealed. Owners, admins and finance (in any org that keeps the
+ * requirement on) must turn on two-step verification first: every console sends them to set it
+ * up (M1.2c). Server Actions
  * load the console too, so the same rule covers every write.
  *
  * M6.7a: a member of an agency reaches a client org through the client's live grant instead of a
@@ -47,11 +49,18 @@ export const loadConsoleBase = cache(async (orgSlug: string) => {
   // M6.5a: a session from an org's single sign-on opens that org only.
   const scope = sessionOrgScope(session);
   const orgs = scope ? allOrgs.filter((o) => o.orgId === scope) : allOrgs;
-  if (!imp && !session.twoFactorEnabled && orgs.some((o) => roleRequiresTwoFactor(o.role)))
+  // D14: owners, admins and finance set it up first, in orgs that keep the requirement on.
+  if (!imp && !session.twoFactorEnabled && (await twoFactorRequiredBy(session.userId, orgs)).length > 0)
     return redirect({ href: '/account/security?required=1', locale });
   const clients = imp ? [] : await myAgencyClients(session.userId);
-  // M6.7a: a client's finance opt-in opens its money to the agency: the same rule as finance members.
-  if (!imp && !session.twoFactorEnabled && clients.some((c) => c.finance))
+  // M6.7a: a client's finance opt-in opens its money to the agency: the same rule as finance
+  // members, so it follows that client's own two-step verification setting.
+  if (
+    !imp &&
+    !session.twoFactorEnabled &&
+    clients.some((c) => c.finance) &&
+    (await agencyTwoFactorRequiredBy(session.userId)).length > 0
+  )
     return redirect({ href: '/account/security?required=1', locale });
   const resolved = await resolveOrgSlug(orgSlug);
   if (!resolved) notFound();
