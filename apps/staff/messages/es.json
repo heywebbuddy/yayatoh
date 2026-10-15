@@ -253,5 +253,431 @@
       "wrongCode": "Ese código no es correcto. Revísalo e inténtalo de nuevo.",
       "wrongCodeAttempts": "Ese código no es correcto. {count, plural, one {Queda # intento.} other {Quedan # intentos.}}"
     }
+  },
+  "tools": {
+    "title": "Herramientas de acceso",
+    "nav": {
+      "hub": "Herramientas de acceso",
+      "lookup": "Buscar invitado",
+      "guests": "Lista de invitados",
+      "assistance": "Solicitudes de ayuda",
+      "today": "Hoy",
+      "leads": "Captura de leads",
+      "scanBadge": "Escanear credencial",
+      "lead": "Lead",
+      "ops": "Día del evento"
+    },
+    "hub": {
+      "intro": "Todo lo del acceso en un solo lugar.",
+      "none": "Este teléfono aún no está configurado para el acceso. Regístralo con el código del organizador o inicia sesión.",
+      "lookup": "Buscar invitado",
+      "lookupHint": "Por nombre, teléfono o correo. Funciona sin conexión.",
+      "guests": "Lista de invitados",
+      "guestsHint": "Registra la entrada de invitados por nombre o grupo.",
+      "assistance": "Solicitudes de ayuda",
+      "assistanceHint": "Toma, atiende y resuelve solicitudes.",
+      "today": "Hoy",
+      "todayHint": "Registros de entrada, dispositivos y alertas.",
+      "leads": "Captura de leads",
+      "leadsHint": "Escanea credenciales y guarda tus leads.",
+      "ops": "Día del evento",
+      "opsHint": "Cifras en vivo para el organizador."
+    },
+    "lookup": {
+      "queryLabel": "Nombre, teléfono o correo",
+      "queryHint": "Escribe al menos dos letras de un nombre, un correo completo o un número de teléfono.",
+      "search": "Buscar",
+      "tooShort": "Escribe al menos dos letras.",
+      "sourceDevice": "Buscando en la lista guardada en este teléfono.",
+      "sourceDownload": "Buscando en la lista recién descargada.",
+      "loading": "Cargando la lista de invitados…",
+      "unavailable": "La lista de invitados aún no está en este teléfono. Conéctate una vez para descargarla.",
+      "loadFailed": "No se pudo cargar la lista de invitados.",
+      "results": "{count, plural, one {# resultado} other {# resultados}}",
+      "none": "No se encontró a nadie",
+      "noneBody": "Revisa la ortografía o prueba con su correo o teléfono.",
+      "pass": "{type} · Código {code}",
+      "voidPass": "Este pase fue anulado y no se puede usar.",
+      "admittedHere": "Ya registró su entrada hoy en este teléfono.",
+      "checkIn": "Registrar entrada",
+      "checkInFor": "Registrar entrada de {name}"
+    },
+    "manual": {
+      "title": "Registrar entrada de {name}",
+      "reasonLabel": "¿Por qué registras su entrada manualmente?",
+      "reasons": {
+        "wont_scan": "El código no se escanea",
+        "phone_dead": "Su teléfono está apagado",
+        "lost_ticket": "Perdió su entrada",
+        "other": "Otro motivo"
+      },
+      "noteLabel": "Nota",
+      "noteHint": "Explica qué pasó. Obligatoria si el motivo es otro.",
+      "errors": {
+        "reason_missing": "Elige un motivo.",
+        "note_missing": "Añade una nota breve de al menos 3 caracteres.",
+        "note_too_long": "La nota debe tener menos de 300 caracteres."
+      },
+      "confirm": "Registrar entrada",
+      "cancel": "Cancelar",
+      "working": "Registrando entrada…",
+      "noWay": "Sin conexión ni lista de invitados guardada. Conéctate e inténtalo de nuevo.",
+      "failed": "No se pudo registrar la entrada. Inténtalo de nuevo.",
+      "offlineNote": "Decidido en este teléfono. Se sincronizará cuando vuelvas a tener conexión.",
+      "firstAdmitted": "Primera entrada registrada a las {time}."
+    },
+    "verdict": {
+      "admitted": "Entrada registrada",
+      "provisional": "Entrada registrada, por confirmar",
+      "granted": "Acceso concedido",
+      "duplicate": "Entrada ya registrada",
+      "duplicate_offline": "Entrada ya registrada en otro lugar",
+      "invalid": "Pase no válido",
+      "void": "Pase anulado",
+      "wrong_event": "El pase es de otro evento",
+      "not_today": "No válido hoy",
+      "outside_window": "Fuera del horario de entrada",
+      "wrong_date": "El pase es de otra fecha",
+      "superseded": "Reemplazado por un pase más reciente",
+      "no_access": "Sin acceso aquí",
+      "wrong_checkpoint": "Acceso incorrecto",
+      "balance_due": "Saldo pendiente",
+      "entered": "Admitido",
+      "scanned_out": "Salida escaneada",
+      "not_in_room": "No está en la sala",
+      "not_enrolled": "No inscrito",
+      "admission_level": "El pase no incluye esta sesión",
+      "capacity": "La sesión está llena"
+    },
+    "guests": {
+      "searchLabel": "Buscar por nombre o grupo",
+      "labels": "Etiquetas",
+      "loading": "Cargando la lista de invitados…",
+      "loadFailed": "No se pudo cargar la lista de invitados.",
+      "unavailable": "La lista de invitados aún no está en este teléfono. Conéctate una vez para descargarla.",
+      "emptyList": "Este evento no tiene lista de invitados.",
+      "prompt": "Busca un invitado para registrar su entrada.",
+      "none": "No se encontraron invitados",
+      "noneBody": "Revisa la ortografía o busca el grupo.",
+      "savedCopy": "Sin conexión: mostrando la lista guardada a las {time}.",
+      "guestOf": "Invitado de {name}",
+      "unnamed": "Invitado",
+      "status": {
+        "attending": "Asistirá",
+        "pending": "Sin respuesta",
+        "declined": "Rechazó"
+      },
+      "arrived": "Llegó a las {time}",
+      "waiting": "Entrada registrada, pendiente de envío",
+      "checkIn": "Registrar entrada",
+      "checkInFor": "Registrar entrada de {name}",
+      "already": "Alguien ya registró la entrada de {name}.",
+      "unknown": "{name} no está en la lista de invitados de este evento.",
+      "pending": "{count, plural, one {# entrada pendiente de envío} other {# entradas pendientes de envío}}",
+      "sendNow": "Enviar ahora",
+      "sent": "Enviado.",
+      "sendFailed": "No se pudo enviar. Se enviarán cuando tengas conexión.",
+      "noPlace": "Aún sin mesa"
+    },
+    "assistance": {
+      "empty": "No hay solicitudes abiertas",
+      "emptyBody": "Las nuevas solicitudes aparecen aquí al llegar.",
+      "loadFailed": "No se pudieron cargar las solicitudes.",
+      "number": "Solicitud n.º {number}",
+      "reason": {
+        "seat": "Ubicación",
+        "accessibility": "Accesibilidad",
+        "medical": "Médica",
+        "lost_item": "Objeto perdido",
+        "other": "Otra",
+        "backup": "Refuerzo",
+        "supervisor": "Supervisor",
+        "security": "Seguridad",
+        "device": "Soporte de dispositivos"
+      },
+      "priority": {
+        "urgent": "Urgente",
+        "high": "Prioridad alta",
+        "normal": "Prioridad normal"
+      },
+      "state": {
+        "new": "Nueva",
+        "assigned": "Tomada",
+        "in_progress": "En curso",
+        "resolved": "Resuelta",
+        "cancelled": "Cancelada"
+      },
+      "overdue": "Vencida",
+      "mine": "Tomada por este dispositivo",
+      "guest": "Invitado: {name}",
+      "where": "Lugar: {location}",
+      "take": "Tomar",
+      "takeFor": "Tomar la solicitud {number}",
+      "start": "Iniciar",
+      "startFor": "Iniciar la solicitud {number}",
+      "resolve": "Resolver",
+      "resolveFor": "Resolver la solicitud {number}",
+      "cancel": "Cancelar solicitud",
+      "cancelFor": "Cancelar la solicitud {number}",
+      "changed": "Esta solicitud cambió. Se actualizó la lista.",
+      "actionFailed": "No se pudo actualizar la solicitud. Inténtalo de nuevo.",
+      "raise": {
+        "title": "Pedir ayuda",
+        "reasonLabel": "¿Qué necesitas?",
+        "reasons": {
+          "backup": "Refuerzo",
+          "supervisor": "Supervisor",
+          "medical": "Ayuda médica",
+          "security": "Seguridad",
+          "device": "Soporte de dispositivos"
+        },
+        "noteLabel": "Nota (opcional)",
+        "send": "Enviar solicitud",
+        "reasonMissing": "Elige lo que necesitas.",
+        "sent": "Solicitud n.º {number} enviada.",
+        "failed": "No se pudo enviar la solicitud. Inténtalo de nuevo."
+      }
+    },
+    "today": {
+      "checkedIn": "Entradas registradas",
+      "expected": "Previstos",
+      "percent": "{percent}% de lo previsto",
+      "entrances": "Por acceso",
+      "days": "Por día",
+      "devices": "Dispositivos",
+      "online": "En línea",
+      "deviceOffline": "Sin conexión",
+      "thisDevice": "Este dispositivo",
+      "battery": "Batería {percent}%",
+      "queue": "{count, plural, one {# escaneo pendiente de envío} other {# escaneos pendientes de envío}}",
+      "alerts": "Alertas",
+      "noAlerts": "No hay alertas por ahora.",
+      "alert": {
+        "device_offline": "{label} está sin conexión.",
+        "device_low_battery": "La batería de {label} está al {percent}%.",
+        "device_backlog": "{label} tiene escaneos pendientes de envío.",
+        "capacity_near": "Casi se alcanza el aforo."
+      },
+      "severity": {
+        "warning": "Aviso",
+        "critical": "Crítica"
+      },
+      "updated": "Actualizado {time}",
+      "savedOnly": "Sin conexión: mostrando las últimas cifras guardadas a las {time}.",
+      "loadFailed": "No se pudieron cargar las cifras de hoy.",
+      "unlabeled": "Un dispositivo"
+    },
+    "push": {
+      "title": "Alertas en este teléfono",
+      "body": "Recibe una notificación cuando un dispositivo se quede sin conexión, con poca batería o atrasado.",
+      "on": "Las alertas están activadas.",
+      "off": "Las alertas están desactivadas.",
+      "enable": "Activar alertas",
+      "disable": "Desactivar alertas",
+      "denied": "Las notificaciones están bloqueadas para esta app. Permítelas en los Ajustes del teléfono e inténtalo de nuevo.",
+      "unavailable": "Este teléfono no pudo registrarse para recibir alertas.",
+      "failed": "No se pudieron cambiar las alertas. Inténtalo de nuevo.",
+      "copy": {
+        "device_offline": {
+          "title": "Dispositivo sin conexión",
+          "body": "{label} está sin conexión."
+        },
+        "device_low_battery": {
+          "title": "Batería baja",
+          "body": "La batería de {label} está al {percent}%."
+        },
+        "device_backlog": {
+          "title": "Escaneos pendientes",
+          "body": "{label} tiene escaneos pendientes de envío."
+        },
+        "capacity_near": {
+          "title": "Aforo",
+          "body": "Casi se alcanza el aforo."
+        },
+        "assistance": {
+          "title": "Ayuda solicitada",
+          "body": "Alguien necesita ayuda en el acceso."
+        }
+      }
+    }
+  },
+  "leads": {
+    "title": "Tus leads",
+    "open": "Abrir",
+    "openFor": "Abrir el lead de {name}",
+    "setup": "{exhibitor} · {event}",
+    "count": "{count, plural, one {# lead} other {# leads}}",
+    "searchLabel": "Buscar leads",
+    "empty": "Aún no hay leads",
+    "emptyBody": "Escanea una credencial para capturar tu primer lead.",
+    "noMatches": "Ningún lead coincide con tu búsqueda.",
+    "loadFailed": "No se pudieron cargar tus leads.",
+    "accessEnded": "El acceso a leads de este evento ha terminado.",
+    "notSignedIn": "Inicia sesión como expositor para usar la captura de leads.",
+    "scan": "Escanear credencial",
+    "pending": "{count, plural, one {# escaneo pendiente de envío} other {# escaneos pendientes de envío}}",
+    "sendNow": "Enviar ahora",
+    "sent": "Enviado.",
+    "scope": {
+      "all": "Todos los leads de tu expositor",
+      "team": "Los leads de tu equipo",
+      "own": "Leads que escaneaste"
+    },
+    "gate": {
+      "no_license": "No tienes una licencia de leads. Pídesela al administrador de tu expositor.",
+      "over_allowance": "Tu expositor ya usó todas sus licencias de leads.",
+      "terms": "El administrador de tu expositor aún no ha aceptado los términos de leads.",
+      "not_open": "La captura de leads aún no está abierta.",
+      "closed": "La captura de leads ha cerrado. Aún puedes editar tus notas."
+    },
+    "syncFailed": {
+      "unreachable": "Sin conexión. Tus escaneos están guardados y se enviarán más tarde.",
+      "no_license": "No tienes una licencia de leads, por lo que no se pueden enviar los escaneos.",
+      "over_allowance": "Tu expositor superó sus licencias de leads, por lo que no se pueden enviar los escaneos.",
+      "terms": "No se han aceptado los términos de leads, por lo que no se pueden enviar los escaneos.",
+      "ended": "El acceso a leads ha terminado, por lo que no se pueden enviar los escaneos.",
+      "rejected": "El servidor rechazó los escaneos."
+    },
+    "scanner": {
+      "hint": "Apunta la cámara al código de la credencial del asistente.",
+      "cameraOff": "La cámara no está disponible. Escribe el código de la credencial.",
+      "manualLabel": "Código de la credencial",
+      "manualHint": "Escribe el código si la cámara no puede leerlo.",
+      "useCode": "Usar este código",
+      "codeMissing": "Ingresa el código de la credencial."
+    },
+    "capture": {
+      "title": "Capturar lead",
+      "rating": "Valoración",
+      "ratings": {
+        "hot": "Caliente",
+        "warm": "Tibio",
+        "cold": "Frío"
+      },
+      "qualifiers": "Calificadores",
+      "noQualifiers": "Tu expositor no ha definido calificadores.",
+      "notes": "Notas",
+      "save": "Guardar lead",
+      "saving": "Guardando…",
+      "savedOnline": "Lead capturado.",
+      "savedOffline": "Guardado en este teléfono. Se enviará cuando tengas conexión.",
+      "rescanned": "Ya estaba en tus leads. Actualizado.",
+      "another": "Escanear otra credencial",
+      "errors": {
+        "too_many_qualifiers": "Elige como máximo 10 calificadores.",
+        "qualifier_too_long": "Un calificador es demasiado largo.",
+        "notes_too_long": "Las notas deben tener menos de 2000 caracteres."
+      }
+    },
+    "refused": {
+      "invalid": "No se pudo leer esa credencial.",
+      "wrong_event": "Esa credencial es de otro evento.",
+      "not_open": "La captura de leads aún no está abierta.",
+      "closed": "La captura de leads ha cerrado."
+    },
+    "lead": {
+      "consent": "Solo ves lo que el asistente aceptó compartir.",
+      "name": "Nombre",
+      "jobTitle": "Cargo",
+      "company": "Empresa",
+      "email": "Correo",
+      "notShared": "El asistente no lo compartió",
+      "emailWithdrawn": "El asistente retiró el permiso para compartir su correo.",
+      "scans": "{count, plural, one {Escaneado # vez} other {Escaneado # veces}}",
+      "capturedAt": "Capturado {time}",
+      "scannedBy": "Escaneado por {name}",
+      "save": "Guardar cambios",
+      "saved": "Guardado.",
+      "saveFailed": "No se pudo guardar. Inténtalo de nuevo.",
+      "notFound": "Este lead no está en tu lista."
+    }
+  },
+  "ops": {
+    "title": "Día del evento",
+    "updated": "Actualizado {time}",
+    "savedOnly": "Sin conexión: mostrando las últimas cifras de las {time}.",
+    "loadFailed": "No se pudo cargar la vista del día del evento.",
+    "notSignedIn": "Inicia sesión como organizador para ver el día del evento.",
+    "readOnly": "Solo lectura. Las cifras se actualizan mientras esta pantalla está abierta.",
+    "changeEvent": "Cambiar evento",
+    "picker": {
+      "title": "Elige un evento",
+      "chooseOrg": "Elige una organización.",
+      "chooseEvent": "Eventos de {org}",
+      "noOrgs": "No eres miembro de ninguna organización.",
+      "noEvents": "Esta organización no tiene eventos.",
+      "loadFailed": "No se pudieron cargar tus eventos.",
+      "open": "Ver",
+      "openFor": "Ver {name}"
+    },
+    "mode": {
+      "planning": "Planificación",
+      "pre_show": "Antes de abrir",
+      "live": "En vivo",
+      "wrap": "Cierre"
+    },
+    "hidden": "No incluido para tu rol o plan.",
+    "checkins": {
+      "title": "Entradas registradas",
+      "of": "{checkedIn} de {expected}",
+      "checkedIn": "Entrada registrada",
+      "expected": "Previstos",
+      "remaining": "{count, plural, one {Falta # invitado por llegar} other {Faltan # invitados por llegar}}",
+      "entrances": "Por acceso",
+      "days": "Por día"
+    },
+    "throughput": {
+      "title": "Flujo de entrada",
+      "rate": "Escaneos por minuto: {rate}",
+      "gap": "Intervalo mediano entre escaneos: {seconds} s",
+      "queue": "{minutes, plural, one {Unos # minuto en la fila} other {Unos # minutos en la fila}}",
+      "entrances": "Escaneos por minuto por acceso",
+      "recent": "Últimos 15 minutos"
+    },
+    "issues": {
+      "title": "Problemas de escaneo",
+      "duplicates": "Duplicados",
+      "refused": "Rechazados",
+      "none": "Hoy no hay problemas de escaneo."
+    },
+    "devices": {
+      "title": "Dispositivos",
+      "online": "En línea",
+      "offline": "Sin conexión",
+      "battery": "Batería {percent}%",
+      "queue": "{count, plural, one {# escaneo pendiente} other {# escaneos pendientes}}",
+      "at": "En {place}",
+      "none": "No hay dispositivos."
+    },
+    "alerts": {
+      "title": "Alertas",
+      "none": "No hay alertas por ahora.",
+      "count": "{count, plural, one {# afectado} other {# afectados}}",
+      "severity": {
+        "info": "Info",
+        "warning": "Aviso",
+        "critical": "Crítica"
+      },
+      "state": {
+        "open": "Abierta",
+        "acknowledged": "Reconocida",
+        "snoozed": "Pospuesta"
+      },
+      "rule": {
+        "devicesOffline": "Dispositivos sin conexión",
+        "devicesLowBattery": "Dispositivos con poca batería",
+        "devicesBacklog": "Dispositivos con escaneos pendientes",
+        "capacityNear": "Aforo casi completo",
+        "capacityFull": "Aforo completo",
+        "assistanceOverdue": "Solicitudes de ayuda vencidas",
+        "printersKiosksOffline": "Impresoras o quioscos sin conexión",
+        "paymentsFailed": "Pagos fallidos",
+        "paymentsStuck": "Pagos atascados",
+        "refundSurge": "Reembolsos en aumento",
+        "sellOut": "Agotado",
+        "readiness": "Evento no listo",
+        "other": "Requiere atención en la consola"
+      }
+    }
   }
 }

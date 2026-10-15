@@ -9,6 +9,7 @@
  * or `react-dom` (`pnpm check:modules`). `@yayatoh/mobile-core/app-config` is separate because it
  * runs in Node when Expo reads `app.config.ts`.
  */
+export { fromBase64, open as openSealed, seal, toBase64 } from './cache/encryption';
 export {
   bindOnlineManager,
   clearServerState,

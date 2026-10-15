@@ -471,6 +471,29 @@ export class ScanEngine {
 
   // --- the outbox ---------------------------------------------------------------------------
 
+  /**
+   * The saved list for door lookup (M7.4c): the manifest rows, the salt their contact hashes were
+   * made with, and whether this phone admitted a ticket today. Null before a list is downloaded
+   * and after it expires. `rows` can be walked again and again.
+   */
+  get lookupSource(): {
+    readonly salt: string;
+    readonly rows: Iterable<ManifestRow>;
+    admittedToday(ticketId: string): boolean;
+  } | null {
+    const header = this.header;
+    if (!header || this.expired) return null;
+    const byId = this.byId;
+    return {
+      salt: header.salt,
+      rows: { [Symbol.iterator]: () => byId.values() },
+      admittedToday: (ticketId) =>
+        this.admittedKeys.has(
+          admittedKey(ticketId, eventDay(new Date(this.now() + this.clockOffset), header.event.timezone)),
+        ),
+    };
+  }
+
   /** Scans waiting for the server (the heartbeat reports this). */
   get queueDepth(): number {
     return this.depth;

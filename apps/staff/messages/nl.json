@@ -253,5 +253,431 @@
       "wrongCode": "Die code klopt niet. Controleer hem en probeer het opnieuw.",
       "wrongCodeAttempts": "Die code klopt niet. {count, plural, one {Nog # poging.} other {Nog # pogingen.}}"
     }
+  },
+  "tools": {
+    "title": "Toegangstools",
+    "nav": {
+      "hub": "Toegangstools",
+      "lookup": "Gast zoeken",
+      "guests": "Gastenlijst",
+      "assistance": "Hulpverzoeken",
+      "today": "Vandaag",
+      "leads": "Leadverzameling",
+      "scanBadge": "Badge scannen",
+      "lead": "Lead",
+      "ops": "Evenementdag"
+    },
+    "hub": {
+      "intro": "Alles voor de ingang op één plek.",
+      "none": "Deze telefoon is nog niet ingesteld voor werk bij de ingang. Registreer hem met de code van de organisator of log in.",
+      "lookup": "Gast zoeken",
+      "lookupHint": "Op naam, telefoon of e-mail. Werkt offline.",
+      "guests": "Gastenlijst",
+      "guestsHint": "Check gasten in op naam of gezelschap.",
+      "assistance": "Hulpverzoeken",
+      "assistanceHint": "Pak verzoeken op, behandel en los ze op.",
+      "today": "Vandaag",
+      "todayHint": "Check-ins, apparaten en meldingen.",
+      "leads": "Leadverzameling",
+      "leadsHint": "Scan badges en bewaar je leads.",
+      "ops": "Evenementdag",
+      "opsHint": "Live cijfers voor de organisator."
+    },
+    "lookup": {
+      "queryLabel": "Naam, telefoon of e-mail",
+      "queryHint": "Typ minstens twee letters van een naam, een volledig e-mailadres of een telefoonnummer.",
+      "search": "Zoeken",
+      "tooShort": "Typ minstens twee letters.",
+      "sourceDevice": "Zoeken in de lijst die op deze telefoon is opgeslagen.",
+      "sourceDownload": "Zoeken in de lijst die net is gedownload.",
+      "loading": "Gastenlijst laden…",
+      "unavailable": "De gastenlijst staat nog niet op deze telefoon. Maak één keer verbinding om hem te downloaden.",
+      "loadFailed": "De gastenlijst kon niet worden geladen.",
+      "results": "{count, plural, one {# resultaat} other {# resultaten}}",
+      "none": "Niemand gevonden",
+      "noneBody": "Controleer de spelling of probeer het e-mailadres of telefoonnummer.",
+      "pass": "{type} · Code {code}",
+      "voidPass": "Dit ticket is ongeldig verklaard en kan niet worden gebruikt.",
+      "admittedHere": "Vandaag al ingecheckt op deze telefoon.",
+      "checkIn": "Inchecken",
+      "checkInFor": "{name} inchecken"
+    },
+    "manual": {
+      "title": "{name} inchecken",
+      "reasonLabel": "Waarom check je deze gast handmatig in?",
+      "reasons": {
+        "wont_scan": "De code wordt niet gescand",
+        "phone_dead": "Hun telefoon is leeg",
+        "lost_ticket": "Ze zijn hun ticket kwijt",
+        "other": "Andere reden"
+      },
+      "noteLabel": "Notitie",
+      "noteHint": "Vertel wat er is gebeurd. Verplicht bij een andere reden.",
+      "errors": {
+        "reason_missing": "Kies een reden.",
+        "note_missing": "Voeg een korte notitie van minstens 3 tekens toe.",
+        "note_too_long": "Houd de notitie onder de 300 tekens."
+      },
+      "confirm": "Inchecken",
+      "cancel": "Annuleren",
+      "working": "Inchecken…",
+      "noWay": "Geen verbinding en geen opgeslagen gastenlijst. Maak verbinding en probeer het opnieuw.",
+      "failed": "Inchecken is mislukt. Probeer het opnieuw.",
+      "offlineNote": "Op deze telefoon beslist. Wordt gesynchroniseerd zodra je weer online bent.",
+      "firstAdmitted": "Voor het eerst ingecheckt om {time}."
+    },
+    "verdict": {
+      "admitted": "Ingecheckt",
+      "provisional": "Ingecheckt, nog te bevestigen",
+      "granted": "Toegang verleend",
+      "duplicate": "Al ingecheckt",
+      "duplicate_offline": "Elders al ingecheckt",
+      "invalid": "Geen geldig ticket",
+      "void": "Ticket ongeldig verklaard",
+      "wrong_event": "Ticket is voor een ander evenement",
+      "not_today": "Vandaag niet geldig",
+      "outside_window": "Buiten de toegangstijden",
+      "wrong_date": "Ticket is voor een andere datum",
+      "superseded": "Vervangen door een nieuwer ticket",
+      "no_access": "Geen toegang hier",
+      "wrong_checkpoint": "Verkeerde ingang",
+      "balance_due": "Openstaand saldo",
+      "entered": "Binnengelaten",
+      "scanned_out": "Uitgescand",
+      "not_in_room": "Niet in de zaal",
+      "not_enrolled": "Niet ingeschreven",
+      "admission_level": "Ticket geldt niet voor deze sessie",
+      "capacity": "Sessie is vol"
+    },
+    "guests": {
+      "searchLabel": "Zoek op naam of gezelschap",
+      "labels": "Labels",
+      "loading": "Gastenlijst laden…",
+      "loadFailed": "De gastenlijst kon niet worden geladen.",
+      "unavailable": "De gastenlijst staat nog niet op deze telefoon. Maak één keer verbinding om hem te downloaden.",
+      "emptyList": "Dit evenement heeft geen gastenlijst.",
+      "prompt": "Zoek een gast om in te checken.",
+      "none": "Geen gasten gevonden",
+      "noneBody": "Controleer de spelling of zoek op gezelschap.",
+      "savedCopy": "Offline: de lijst die om {time} is opgeslagen wordt getoond.",
+      "guestOf": "Gast van {name}",
+      "unnamed": "Gast",
+      "status": {
+        "attending": "Komt",
+        "pending": "Geen antwoord",
+        "declined": "Afgemeld"
+      },
+      "arrived": "Aangekomen om {time}",
+      "waiting": "Ingecheckt, wacht op verzending",
+      "checkIn": "Inchecken",
+      "checkInFor": "{name} inchecken",
+      "already": "Iemand heeft {name} eerder al ingecheckt.",
+      "unknown": "{name} staat niet op de gastenlijst van dit evenement.",
+      "pending": "{count, plural, one {# check-in wacht op verzending} other {# check-ins wachten op verzending}}",
+      "sendNow": "Nu verzenden",
+      "sent": "Verzonden.",
+      "sendFailed": "Verzenden is mislukt. Ze gaan weg zodra je online bent.",
+      "noPlace": "Nog geen tafel"
+    },
+    "assistance": {
+      "empty": "Geen openstaande verzoeken",
+      "emptyBody": "Nieuwe verzoeken verschijnen hier zodra ze binnenkomen.",
+      "loadFailed": "De verzoeken konden niet worden geladen.",
+      "number": "Verzoek #{number}",
+      "reason": {
+        "seat": "Plaatsen",
+        "accessibility": "Toegankelijkheid",
+        "medical": "Medisch",
+        "lost_item": "Verloren voorwerp",
+        "other": "Overig",
+        "backup": "Versterking",
+        "supervisor": "Leidinggevende",
+        "security": "Beveiliging",
+        "device": "Apparaatondersteuning"
+      },
+      "priority": {
+        "urgent": "Dringend",
+        "high": "Hoge prioriteit",
+        "normal": "Normale prioriteit"
+      },
+      "state": {
+        "new": "Nieuw",
+        "assigned": "Opgepakt",
+        "in_progress": "In behandeling",
+        "resolved": "Opgelost",
+        "cancelled": "Geannuleerd"
+      },
+      "overdue": "Te laat",
+      "mine": "Opgepakt door dit apparaat",
+      "guest": "Gast: {name}",
+      "where": "Waar: {location}",
+      "take": "Oppakken",
+      "takeFor": "Verzoek {number} oppakken",
+      "start": "Starten",
+      "startFor": "Verzoek {number} starten",
+      "resolve": "Oplossen",
+      "resolveFor": "Verzoek {number} oplossen",
+      "cancel": "Verzoek annuleren",
+      "cancelFor": "Verzoek {number} annuleren",
+      "changed": "Dit verzoek is gewijzigd. De lijst is vernieuwd.",
+      "actionFailed": "Het verzoek kon niet worden bijgewerkt. Probeer het opnieuw.",
+      "raise": {
+        "title": "Hulp vragen",
+        "reasonLabel": "Wat heb je nodig?",
+        "reasons": {
+          "backup": "Versterking",
+          "supervisor": "Leidinggevende",
+          "medical": "Medische hulp",
+          "security": "Beveiliging",
+          "device": "Apparaatondersteuning"
+        },
+        "noteLabel": "Notitie (optioneel)",
+        "send": "Verzoek verzenden",
+        "reasonMissing": "Kies wat je nodig hebt.",
+        "sent": "Verzoek #{number} verzonden.",
+        "failed": "Het verzoek kon niet worden verzonden. Probeer het opnieuw."
+      }
+    },
+    "today": {
+      "checkedIn": "Ingecheckt",
+      "expected": "Verwacht",
+      "percent": "{percent}% van verwacht",
+      "entrances": "Per ingang",
+      "days": "Per dag",
+      "devices": "Apparaten",
+      "online": "Online",
+      "deviceOffline": "Offline",
+      "thisDevice": "Dit apparaat",
+      "battery": "Batterij {percent}%",
+      "queue": "{count, plural, one {# scan wacht op verzending} other {# scans wachten op verzending}}",
+      "alerts": "Meldingen",
+      "noAlerts": "Op dit moment geen meldingen.",
+      "alert": {
+        "device_offline": "{label} is offline.",
+        "device_low_battery": "De batterij van {label} is op {percent}%.",
+        "device_backlog": "{label} heeft scans die op verzending wachten.",
+        "capacity_near": "De capaciteit is bijna bereikt."
+      },
+      "severity": {
+        "warning": "Waarschuwing",
+        "critical": "Kritiek"
+      },
+      "updated": "Bijgewerkt {time}",
+      "savedOnly": "Offline: de laatst opgeslagen cijfers van {time} worden getoond.",
+      "loadFailed": "De cijfers van vandaag konden niet worden geladen.",
+      "unlabeled": "Een apparaat"
+    },
+    "push": {
+      "title": "Meldingen op deze telefoon",
+      "body": "Ontvang een melding wanneer een apparaat offline gaat, bijna leeg is of achterloopt.",
+      "on": "Meldingen staan aan.",
+      "off": "Meldingen staan uit.",
+      "enable": "Meldingen aanzetten",
+      "disable": "Meldingen uitzetten",
+      "denied": "Meldingen zijn geblokkeerd voor deze app. Sta ze toe in de instellingen van de telefoon en probeer het opnieuw.",
+      "unavailable": "Deze telefoon kon zich niet registreren voor meldingen.",
+      "failed": "Meldingen konden niet worden gewijzigd. Probeer het opnieuw.",
+      "copy": {
+        "device_offline": {
+          "title": "Apparaat offline",
+          "body": "{label} is offline."
+        },
+        "device_low_battery": {
+          "title": "Batterij bijna leeg",
+          "body": "De batterij van {label} is op {percent}%."
+        },
+        "device_backlog": {
+          "title": "Scans wachten",
+          "body": "{label} heeft scans die op verzending wachten."
+        },
+        "capacity_near": {
+          "title": "Capaciteit",
+          "body": "De capaciteit is bijna bereikt."
+        },
+        "assistance": {
+          "title": "Hulp gevraagd",
+          "body": "Iemand heeft hulp nodig bij de ingang."
+        }
+      }
+    }
+  },
+  "leads": {
+    "title": "Jouw leads",
+    "open": "Openen",
+    "openFor": "Lead van {name} openen",
+    "setup": "{exhibitor} · {event}",
+    "count": "{count, plural, one {# lead} other {# leads}}",
+    "searchLabel": "Leads zoeken",
+    "empty": "Nog geen leads",
+    "emptyBody": "Scan een badge om je eerste lead vast te leggen.",
+    "noMatches": "Geen leads gevonden voor je zoekopdracht.",
+    "loadFailed": "Je leads konden niet worden geladen.",
+    "accessEnded": "De toegang tot leads voor dit evenement is afgelopen.",
+    "notSignedIn": "Log in als exposant om leadverzameling te gebruiken.",
+    "scan": "Badge scannen",
+    "pending": "{count, plural, one {# scan wacht op verzending} other {# scans wachten op verzending}}",
+    "sendNow": "Nu verzenden",
+    "sent": "Verzonden.",
+    "scope": {
+      "all": "Alle leads van je exposant",
+      "team": "Leads van je team",
+      "own": "Leads die je hebt gescand"
+    },
+    "gate": {
+      "no_license": "Je hebt geen leadlicentie. Vraag je exposantbeheerder om er een.",
+      "over_allowance": "Je exposant heeft alle leadlicenties gebruikt.",
+      "terms": "Je exposantbeheerder heeft de leadvoorwaarden nog niet geaccepteerd.",
+      "not_open": "Leadverzameling is nog niet geopend.",
+      "closed": "Leadverzameling is gesloten. Je kunt je notities nog wel bewerken."
+    },
+    "syncFailed": {
+      "unreachable": "Geen verbinding. Je scans zijn opgeslagen en worden later verzonden.",
+      "no_license": "Je hebt geen leadlicentie, dus scans kunnen niet worden verzonden.",
+      "over_allowance": "Je exposant heeft te veel leadlicenties in gebruik, dus scans kunnen niet worden verzonden.",
+      "terms": "De leadvoorwaarden zijn niet geaccepteerd, dus scans kunnen niet worden verzonden.",
+      "ended": "De toegang tot leads is afgelopen, dus scans kunnen niet worden verzonden.",
+      "rejected": "De server heeft de scans geweigerd."
+    },
+    "scanner": {
+      "hint": "Richt de camera op de badgecode van de deelnemer.",
+      "cameraOff": "De camera is niet beschikbaar. Typ de badgecode in.",
+      "manualLabel": "Badgecode",
+      "manualHint": "Typ de code in als de camera hem niet kan lezen.",
+      "useCode": "Deze code gebruiken",
+      "codeMissing": "Voer de badgecode in."
+    },
+    "capture": {
+      "title": "Lead vastleggen",
+      "rating": "Beoordeling",
+      "ratings": {
+        "hot": "Heet",
+        "warm": "Warm",
+        "cold": "Koud"
+      },
+      "qualifiers": "Kwalificaties",
+      "noQualifiers": "Je exposant heeft geen kwalificaties ingesteld.",
+      "notes": "Notities",
+      "save": "Lead opslaan",
+      "saving": "Opslaan…",
+      "savedOnline": "Lead vastgelegd.",
+      "savedOffline": "Opgeslagen op deze telefoon. Wordt verzonden zodra je online bent.",
+      "rescanned": "Staat al in je leads. Bijgewerkt.",
+      "another": "Nog een badge scannen",
+      "errors": {
+        "too_many_qualifiers": "Kies maximaal 10 kwalificaties.",
+        "qualifier_too_long": "Een kwalificatie is te lang.",
+        "notes_too_long": "Houd notities onder de 2000 tekens."
+      }
+    },
+    "refused": {
+      "invalid": "Die badge kon niet worden gelezen.",
+      "wrong_event": "Die badge is voor een ander evenement.",
+      "not_open": "Leadverzameling is nog niet geopend.",
+      "closed": "Leadverzameling is gesloten."
+    },
+    "lead": {
+      "consent": "Je ziet alleen wat de deelnemer heeft goedgekeurd om te delen.",
+      "name": "Naam",
+      "jobTitle": "Functie",
+      "company": "Bedrijf",
+      "email": "E-mail",
+      "notShared": "Niet gedeeld door de deelnemer",
+      "emailWithdrawn": "De deelnemer heeft de toestemming om het e-mailadres te delen ingetrokken.",
+      "scans": "{count, plural, one {# keer gescand} other {# keer gescand}}",
+      "capturedAt": "Vastgelegd {time}",
+      "scannedBy": "Gescand door {name}",
+      "save": "Wijzigingen opslaan",
+      "saved": "Opgeslagen.",
+      "saveFailed": "Opslaan is mislukt. Probeer het opnieuw.",
+      "notFound": "Deze lead staat niet in je lijst."
+    }
+  },
+  "ops": {
+    "title": "Evenementdag",
+    "updated": "Bijgewerkt {time}",
+    "savedOnly": "Offline: de laatste cijfers van {time} worden getoond.",
+    "loadFailed": "Het overzicht van de evenementdag kon niet worden geladen.",
+    "notSignedIn": "Log in als organisator om de evenementdag te zien.",
+    "readOnly": "Alleen lezen. Cijfers worden vernieuwd zolang dit scherm open is.",
+    "changeEvent": "Evenement wijzigen",
+    "picker": {
+      "title": "Kies een evenement",
+      "chooseOrg": "Kies een organisatie.",
+      "chooseEvent": "Evenementen van {org}",
+      "noOrgs": "Je bent geen lid van een organisatie.",
+      "noEvents": "Deze organisatie heeft geen evenementen.",
+      "loadFailed": "Je evenementen konden niet worden geladen.",
+      "open": "Volgen",
+      "openFor": "{name} volgen"
+    },
+    "mode": {
+      "planning": "Planning",
+      "pre_show": "Voor opening",
+      "live": "Live",
+      "wrap": "Afronding"
+    },
+    "hidden": "Niet inbegrepen voor jouw rol of abonnement.",
+    "checkins": {
+      "title": "Check-ins",
+      "of": "{checkedIn} van {expected}",
+      "checkedIn": "Ingecheckt",
+      "expected": "Verwacht",
+      "remaining": "{count, plural, one {# gast moet nog komen} other {# gasten moeten nog komen}}",
+      "entrances": "Per ingang",
+      "days": "Per dag"
+    },
+    "throughput": {
+      "title": "Doorstroom",
+      "rate": "Scans per minuut: {rate}",
+      "gap": "Mediaan tussen scans: {seconds} s",
+      "queue": "{minutes, plural, one {Ongeveer # minuut in de rij} other {Ongeveer # minuten in de rij}}",
+      "entrances": "Scans per minuut per ingang",
+      "recent": "Laatste 15 minuten"
+    },
+    "issues": {
+      "title": "Scanproblemen",
+      "duplicates": "Dubbel",
+      "refused": "Geweigerd",
+      "none": "Vandaag geen scanproblemen."
+    },
+    "devices": {
+      "title": "Apparaten",
+      "online": "Online",
+      "offline": "Offline",
+      "battery": "Batterij {percent}%",
+      "queue": "{count, plural, one {# scan wacht} other {# scans wachten}}",
+      "at": "Bij {place}",
+      "none": "Geen apparaten."
+    },
+    "alerts": {
+      "title": "Meldingen",
+      "none": "Op dit moment geen meldingen.",
+      "count": "{count, plural, one {# getroffen} other {# getroffen}}",
+      "severity": {
+        "info": "Info",
+        "warning": "Waarschuwing",
+        "critical": "Kritiek"
+      },
+      "state": {
+        "open": "Open",
+        "acknowledged": "Erkend",
+        "snoozed": "Uitgesteld"
+      },
+      "rule": {
+        "devicesOffline": "Apparaten offline",
+        "devicesLowBattery": "Apparaten met lage batterij",
+        "devicesBacklog": "Apparaten met scans die wachten op verzending",
+        "capacityNear": "Capaciteit bijna bereikt",
+        "capacityFull": "Capaciteit vol",
+        "assistanceOverdue": "Hulpverzoeken te laat",
+        "printersKiosksOffline": "Printers of kiosken offline",
+        "paymentsFailed": "Betalingen mislukken",
+        "paymentsStuck": "Betalingen blijven hangen",
+        "refundSurge": "Meer terugbetalingen",
+        "sellOut": "Uitverkocht",
+        "readiness": "Evenement niet gereed",
+        "other": "Aandacht nodig in de console"
+      }
+    }
   }
 }
