@@ -14,9 +14,6 @@
  */
 import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
 import { type AppLocale, memoryKeyValueStore } from '@yayatoh/mobile-core';
-import { YayatohApiError } from '@yayatoh/sdk';
-import type { ReactElement } from 'react';
-import { Dimensions, PixelRatio, StyleSheet } from 'react-native';
 import {
   type AuditOptions,
   announcements,
@@ -24,6 +21,9 @@ import {
   hasArabicLetters,
   hasPlaceholderLeak,
 } from '@yayatoh/mobile-core/testing/a11y-audit';
+import { YayatohApiError } from '@yayatoh/sdk';
+import type { ReactElement } from 'react';
+import { Dimensions, PixelRatio, StyleSheet } from 'react-native';
 import EnrolScreen from '../src/app/enrol/index';
 import EnrolScanScreen from '../src/app/enrol/scan';
 import SelectScreen from '../src/app/select/index';

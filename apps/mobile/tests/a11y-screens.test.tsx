@@ -12,9 +12,6 @@
  */
 import { act, fireEvent, screen, waitFor, within } from '@testing-library/react-native';
 import { OfflineBanner, SoftUpdateBanner, UpdateScreen } from '@yayatoh/mobile-core';
-import * as Network from 'expo-network';
-import { type ReactElement, type ReactNode, useEffect, useState } from 'react';
-import { Dimensions, Modal, PixelRatio, StyleSheet } from 'react-native';
 import {
   type AuditOptions,
   announcements,
@@ -23,6 +20,9 @@ import {
   hasPlaceholderLeak,
   nameOf,
 } from '@yayatoh/mobile-core/testing/a11y-audit';
+import * as Network from 'expo-network';
+import { type ReactElement, type ReactNode, useEffect, useState } from 'react';
+import { Dimensions, Modal, PixelRatio, StyleSheet } from 'react-native';
 import CodeScreen from '../src/app/(auth)/code';
 import EmailScreen from '../src/app/(auth)/email';
 import LinkProofScreen from '../src/app/(auth)/link-proof';

@@ -51,9 +51,7 @@ describe('.github/workflows/maestro.yml', () => {
     expect(job.if).toBe("needs.gate.outputs.has_token == 'true'");
     expect(job.strategy.matrix.app).toEqual(['mobile', 'staff']);
     const run = steps('maestro').find((s) => String(s.run ?? '').includes('workflow:run'));
-    expect(run?.run).toContain(
-      'eas-cli@16 workflow:run ../../.eas/workflows/maestro-${{ matrix.app }}.yml',
-    );
+    expect(run?.run).toContain('eas-cli@16 workflow:run ../../.eas/workflows/maestro-${{ matrix.app }}.yml');
     expect(run?.run).toContain('--non-interactive');
     expect(run?.['working-directory']).toBe('apps/${{ matrix.app }}');
     expect(run?.env).toEqual({ EXPO_TOKEN: '${{ secrets.EXPO_TOKEN }}' });
