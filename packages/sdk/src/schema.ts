@@ -457,6 +457,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/me/ticket-links/{token}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Which of my tickets a web ticket link opens
+         * @description The “My tickets” link in an order email names one event and the address it was sent to. For the signed-in person that address belongs to, this returns the ids of their active tickets for that event, so the app can open the ticket after sign-in. For an unknown or expired link, or when the link was sent to a different address, the answer is a `404` and nothing about the link is shown. Ticket codes in the link are never returned.
+         */
+        get: operations["getMyTicketLink"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/me/tickets": {
         parameters: {
             query?: never;
@@ -4726,6 +4746,10 @@ export interface components {
         };
         /** @enum {string} */
         TicketCheckpointKind: "entrance" | "zone";
+        TicketLinkTickets: {
+            /** @description The active tickets of the link’s event that the signed-in person holds, in ticket-number order. Open each with `GET /me/tickets/{id}`. */
+            ticketIds: string[];
+        };
         TicketTransferOptions: {
             allowed: boolean;
             currency: string;
@@ -7581,6 +7605,81 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["MembershipList"];
                 };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    getMyTicketLink: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The token of a web “My tickets” link */
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The tickets the link opens */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TicketLinkTickets"];
+                };
+            };
+            /** @description Not modified: `If-None-Match` matched the `ETag` */
+            304: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             /** @description Validation failed (`validation_failed`) */
             400: {

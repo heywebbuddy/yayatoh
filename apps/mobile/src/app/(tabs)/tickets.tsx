@@ -1,12 +1,6 @@
-import { useTranslations } from 'use-intl';
-import { Heading, Screen } from '../../auth/ui';
+import { TicketsListScreen } from '../../tickets/screens/tickets-list';
 
-/** Placeholder until M7.3b's Tickets tab is merged (the merge keeps theirs). */
+/** The Tickets tab (M7.3b). The tab shell around it is M7.3a's. */
 export default function TicketsTab() {
-  const t = useTranslations('account.tabs');
-  return (
-    <Screen edges={['top', 'left', 'right']} testID="tickets-screen">
-      <Heading>{t('tickets')}</Heading>
-    </Screen>
-  );
+  return <TicketsListScreen />;
 }

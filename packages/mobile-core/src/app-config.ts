@@ -50,6 +50,8 @@ interface AppIdentity {
   readonly androidPackage: string;
   /** Only the Staff app scans: the attendee app never asks for the camera. */
   readonly camera: boolean;
+  /** Only the attendee app adds an event to the phone's calendar (write-only on iOS 17+). */
+  readonly calendar: boolean;
   /** Sign in with Apple is an attendee sign-in (P7-5); Staff signs in by enrolment QR or account. */
   readonly appleSignIn: boolean;
 }
@@ -64,6 +66,7 @@ const APPS: Record<AppId, AppIdentity> = {
     iosBundleId: 'com.yayatoh.yayatohapp',
     androidPackage: 'com.yayatoh.yayatohapp',
     camera: false,
+    calendar: true,
     appleSignIn: true,
   },
   staff: {
@@ -73,6 +76,7 @@ const APPS: Record<AppId, AppIdentity> = {
     iosBundleId: 'com.yayatoh.staff',
     androidPackage: 'com.yayatoh.staff',
     camera: true,
+    calendar: false,
     appleSignIn: false,
   },
 };
@@ -85,6 +89,9 @@ const VARIANTS: Record<AppEnv, { nameSuffix: string; schemeSuffix: string; idSuf
 
 /** Shown by iOS when the Staff app asks for the camera (the permission string, English). */
 export const STAFF_CAMERA_USAGE = 'Yayatoh Staff uses the camera to scan ticket QR codes at the door.';
+
+/** Shown by iOS when the attendee app adds a ticket's event to the calendar (English). */
+export const ATTENDEE_CALENDAR_USAGE = 'Yayatoh adds the events you choose to your calendar.';
 
 export type EnvVars = Readonly<Record<string, string | undefined>>;
 
@@ -182,6 +189,18 @@ export function buildExpoConfig(opts: BuildOptions): ExpoConfig {
       },
     ],
   ];
+  // Add to calendar (M7.3b): write-only access, so the app can add an event but never reads one.
+  if (id.calendar) {
+    plugins.push([
+      'expo-calendar',
+      {
+        writeOnlyAccess: true,
+        calendarPermission: ATTENDEE_CALENDAR_USAGE,
+        writeOnlyCalendarPermission: ATTENDEE_CALENDAR_USAGE,
+        remindersPermission: false,
+      },
+    ]);
+  }
   // Only a development build may talk to a plain-http API on a developer's machine.
   if (!production && apiBaseUrl.startsWith('http://')) {
     plugins.push(['expo-build-properties', { android: { usesCleartextTraffic: true } }]);
