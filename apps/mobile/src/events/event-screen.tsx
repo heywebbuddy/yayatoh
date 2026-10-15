@@ -210,7 +210,7 @@ function EventBody({
         <BackButton />
 
         {state.phase === 'confirming' ? (
-          <Banner tone="info" title={ct('confirmingTitle')} testID="event-confirming">
+          <Banner tone="info" title={ct('confirmingTitle')} live testID="event-confirming">
             {ct('confirmingBody')}
           </Banner>
         ) : null}

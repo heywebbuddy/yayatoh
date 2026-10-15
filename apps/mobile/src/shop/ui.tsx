@@ -262,6 +262,7 @@ export function Banner({
   action,
   testID,
   heading = false,
+  live = false,
 }: {
   tone: BannerTone;
   title: string;
@@ -270,6 +271,8 @@ export function Banner({
   testID?: string;
   /** The banner is the whole message of a screen (an error page): its title is the screen's heading. */
   heading?: boolean;
+  /** The banner shows up as the result of something the person did (a payment, a send): say so aloud. */
+  live?: boolean;
 }) {
   const colors = useColors();
   const fill = {
@@ -286,6 +289,7 @@ export function Banner({
   }[tone];
   const mark = { info: 'ℹ', warning: '!', danger: '⚠', success: '✓' }[tone];
   const urgent = tone === 'danger' || tone === 'warning';
+  const announced = urgent || live;
   const role: AccessibilityRole = urgent ? 'alert' : 'summary';
   return (
     <View testID={testID} style={[styles.banner, { backgroundColor: fill }]}>
@@ -293,7 +297,7 @@ export function Banner({
       <View
         accessible
         accessibilityRole={role}
-        accessibilityLiveRegion={urgent ? 'polite' : 'none'}
+        accessibilityLiveRegion={announced ? 'polite' : 'none'}
         style={styles.bannerText}
       >
         <Text accessibilityRole={heading ? 'header' : undefined} style={[styles.bannerTitle, { color: ink }]}>
@@ -309,7 +313,16 @@ export function Banner({
   );
 }
 
-export function Loading({ label, testID = 'loading' }: { label: string; testID?: string }) {
+export function Loading({
+  label,
+  testID = 'loading',
+  live = false,
+}: {
+  label: string;
+  testID?: string;
+  /** The step changes as work goes on ("holding your order", "paying"): say each aloud. */
+  live?: boolean;
+}) {
   const colors = useColors();
   return (
     <View
@@ -317,6 +330,7 @@ export function Loading({ label, testID = 'loading' }: { label: string; testID?:
       accessible
       accessibilityRole="progressbar"
       accessibilityLabel={label}
+      accessibilityLiveRegion={live ? 'polite' : 'none'}
       style={styles.center}
     >
       <ActivityIndicator color={colors.primary} size="large" />

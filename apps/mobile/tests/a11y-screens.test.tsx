@@ -10,11 +10,11 @@
  * Jest has no layout engine, so "fits at the largest size" is proven through its causes (see
  * `a11y-static.test.ts`); how it looks on a phone is a device pass (docs/specs/M7.X/a11y.md).
  */
-import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
+import { act, fireEvent, screen, waitFor, within } from '@testing-library/react-native';
 import { OfflineBanner, SoftUpdateBanner, UpdateScreen } from '@yayatoh/mobile-core';
 import * as Network from 'expo-network';
 import { type ReactElement, type ReactNode, useEffect, useState } from 'react';
-import { Dimensions, PixelRatio, StyleSheet } from 'react-native';
+import { Dimensions, Modal, PixelRatio, StyleSheet } from 'react-native';
 import {
   type AuditOptions,
   announcements,
@@ -859,6 +859,7 @@ const orders: Scenario[] = [
       await shopScreen(ctx, <OrderScreen id={ORDER_ID} placed="confirmed" />, { shop });
       await screen.findByTestId('order-view-tickets');
     },
+    announces: (ctx) => [ctx.t('orders.confirmed.title')],
   },
   {
     name: 'order, payment still being confirmed',
@@ -1268,7 +1269,42 @@ describe.each(LOCALES)('every attendee screen in %s at the largest text size', (
   }
 });
 
-describe('the audit sees real problems', () => {
+describe('a chosen row or tab is marked by more than colour', () => {
+  const ticks = (node: Parameters<typeof within>[0]) =>
+    within(node).queryAllByText('✓', { includeHiddenElements: true }).length;
+
+  it('puts a tick on the chosen language and the chosen theme, and on no other row', async () => {
+    await authScreen({ locale: 'en', t: (p) => translate('en', p) }, <LanguageScreen />, { signedIn: true });
+    const chosen = screen.getByTestId('language-system');
+    expect(chosen.props.accessibilityState).toMatchObject({ checked: true });
+    expect(ticks(chosen)).toBe(1);
+    expect(ticks(screen.getByTestId('language-en'))).toBe(0);
+  });
+
+  it('puts a tick on the open tab of My tickets', async () => {
+    const app = ticketsApp({ locale: 'en', t: (p) => translate('en', p) });
+    await app.ready;
+    app.view(<TicketsListScreen />);
+    await screen.findByTestId(`ticket-card-${IDS.t1}`);
+    expect(ticks(screen.getByTestId('segment-upcoming'))).toBe(1);
+    expect(ticks(screen.getByTestId('segment-past'))).toBe(0);
+  });
+});
+
+describe('the push explanation is a real modal', () => {
+  it('sets accessibilityViewIsModal inside the Modal so focus stays in the sheet, and Not now closes it', async () => {
+    const close = jest.fn();
+    await shopScreen(
+      { locale: 'en', t: (p) => translate('en', p) },
+      <PrePrompt visible remembers={false} onAllow={() => {}} onNotNow={close} />,
+    );
+    const modal = screen.UNSAFE_getByType(Modal);
+    expect(modal.props.onRequestClose).toBe(close);
+    expect(screen.UNSAFE_getAllByProps({ accessibilityViewIsModal: true }).length).toBeGreaterThan(0);
+  });
+});
+
+describe('the audit covers the whole app', () => {
   it('has scenarios for every screen file', () => {
     const count = Object.values(GROUPS).reduce((n, list) => n + list.length, 0);
     expect(count).toBeGreaterThan(90);

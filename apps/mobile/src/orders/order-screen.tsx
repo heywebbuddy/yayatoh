@@ -118,6 +118,7 @@ export function OrderScreen({ id, placed }: { id: string; placed: 'confirmed' | 
           {back}
           <Banner
             tone="info"
+            live
             title={gaveUp ? t('processing.stillTitle') : t('processing.title')}
             heading
             testID="order-processing"
@@ -169,6 +170,7 @@ export function OrderScreen({ id, placed }: { id: string; placed: 'confirmed' | 
         {placed && order.status === 'paid' ? (
           <Banner
             tone="success"
+            live
             title={t('confirmed.title')}
             testID="order-confirmed"
             action={

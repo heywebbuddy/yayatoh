@@ -243,6 +243,7 @@ export function CheckoutScreen({ slug }: { slug: string }) {
         {state.phase === 'web' ? (
           <Banner
             tone="info"
+            live
             title={t('web.title')}
             testID="checkout-web"
             action={
@@ -262,6 +263,7 @@ export function CheckoutScreen({ slug }: { slug: string }) {
         {state.phase === 'buy_on_web' ? (
           <Banner
             tone="info"
+            live
             title={t('buyOnWeb.title')}
             testID="checkout-buy-on-web"
             action={
@@ -290,10 +292,12 @@ export function CheckoutScreen({ slug }: { slug: string }) {
           </Banner>
         ) : null}
 
-        {state.phase === 'starting' ? <Loading label={t('starting')} testID="checkout-starting" /> : null}
-        {state.phase === 'paying' ? <Loading label={t('paying')} testID="checkout-paying" /> : null}
+        {state.phase === 'starting' ? (
+          <Loading label={t('starting')} testID="checkout-starting" live />
+        ) : null}
+        {state.phase === 'paying' ? <Loading label={t('paying')} testID="checkout-paying" live /> : null}
         {state.phase === 'confirming' ? (
-          <Loading label={t('confirmingTitle')} testID="checkout-confirming" />
+          <Loading label={t('confirmingTitle')} testID="checkout-confirming" live />
         ) : null}
 
         <Caption>{t('holdNote')}</Caption>
