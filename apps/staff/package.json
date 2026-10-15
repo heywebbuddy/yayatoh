@@ -10,7 +10,10 @@
     "typecheck": "tsc --noEmit",
     "test": "jest",
     "export": "expo export --platform ios && expo export --platform android",
-    "doctor": "expo-doctor"
+    "doctor": "expo-doctor",
+    "privacy:check": "node ../../tools/store-kit/cli.ts privacy --app staff",
+    "store:check": "node ../../tools/store-kit/cli.ts check --app staff",
+    "store:render": "node ../../tools/store-kit/cli.ts render --app staff"
   },
   "dependencies": {
     "@sentry/react-native": "catalog:mobile",

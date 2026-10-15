@@ -1,0 +1,18 @@
+# Store screenshot 01-discover for Yayatoh (M7.5a). Written, not run in cloud sessions; `store/capture.sh` runs it
+# on a simulator or emulator against a preview build, with the seeded reviewer demo
+# (`pnpm reviewer-demo`). Env: SHOT_DIR (where the PNG goes), REVIEW_DEMO_EMAIL, REVIEW_DEMO_CODE,
+# EVENT_NAME (default the demo concert).
+appId: com.yayatoh.yayatohapp.preview
+env:
+  SHOT_DIR: ./store/screenshots/manual
+  REVIEW_DEMO_EMAIL: ''
+  REVIEW_DEMO_CODE: ''
+  EVENT_NAME: 'App Review Concert'
+---
+- launchApp:
+    clearState: true
+    permissions: { notifications: unset, location: deny }
+- runFlow: _sign-in.yaml
+- tapOn: 'Discover, tab, 2 of 3'
+- assertVisible: ${EVENT_NAME}
+- takeScreenshot: ${SHOT_DIR}/01-discover

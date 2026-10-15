@@ -61,6 +61,13 @@ export interface AuthOptions {
    */
   readonly totpReplayExempt?: (user: { id: string; email: string }, secret: string) => boolean;
   /**
+   * Fixed emailed codes by lower-case address (M7.5a): the store reviewer demo's attendee signs in
+   * with the same six digits every time, so App Review needs no mailbox. Non-production only:
+   * `createAuth` ignores it when `isProductionEnv()` is true, whatever the caller passed. Build it
+   * with `reviewerFixedCodes`.
+   */
+  readonly fixedEmailCodes?: Readonly<Record<string, string>>;
+  /**
    * Called after a new account is created (a first sign-in with an emailed code, an accepted
    * invitation). The web lifts an erased address's account-mail suppression here (M1.14e).
    */
@@ -83,6 +90,22 @@ export function devPersonaReplayExempt(
   const password = env.DEV_PERSONA_PASSWORD;
   if (env.YAYATOH_DEV_AUTH !== '1' || isProductionEnv(env) || !password) return undefined;
   return (user, secret) => secret === devPersonaTotpSecret(user.email, password);
+}
+
+/**
+ * The reviewer demo's fixed sign-in code (M7.5a): `REVIEWER_DEMO_EMAIL` gets the six digits in
+ * `REVIEWER_DEMO_CODE`, and nobody else's code changes. Returns nothing in production, when either
+ * value is missing, or when the code is not exactly six digits. A hosted staging or review server
+ * sets both; production never does, and would ignore them if it did.
+ */
+export function reviewerFixedCodes(
+  env: Record<string, string | undefined> = process.env,
+): Record<string, string> | undefined {
+  if (isProductionEnv(env)) return undefined;
+  const email = env.REVIEWER_DEMO_EMAIL?.trim().toLowerCase();
+  const code = env.REVIEWER_DEMO_CODE?.trim();
+  if (!email || !code || !/^\d{6}$/.test(code)) return undefined;
+  return { [email]: code };
 }
 
 export const SESSION_COOKIE_BASENAME = 'yy.session';
@@ -632,6 +655,9 @@ export function createAuth(opts: AuthOptions) {
       emailOTP({
         otpLength: 6,
         expiresIn: 600,
+        // Undefined means "use a random code": only the reviewer demo's address has a fixed one.
+        generateOTP: ({ email }) =>
+          isProductionEnv() ? undefined : opts.fixedEmailCodes?.[email.toLowerCase()],
         sendVerificationOTP: ({ email, otp, type }) => opts.mailer.sendOtp(email, otp, type),
       }),
       magicLink({ expiresIn: 900, sendMagicLink: ({ email, url }) => opts.mailer.sendMagicLink(email, url) }),

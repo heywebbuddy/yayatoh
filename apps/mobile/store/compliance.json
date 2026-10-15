@@ -1,0 +1,78 @@
+{
+  "app": "mobile",
+  "reviewedOn": "2026-10-15",
+  "exportCompliance": {
+    "usesEncryption": true,
+    "usesNonExemptEncryption": true,
+    "algorithms": "standard-only",
+    "inApp": [
+      "TLS to the Yayatoh API and the payment page, from the operating system",
+      "Ed25519 signature verification of ticket codes (@noble/curves or ticket-crypto)",
+      "XChaCha20-Poly1305 (@noble/ciphers) for the cached tickets and the encrypted file cache",
+      "Keys kept in the iOS Keychain and Android Keystore (expo-secure-store)"
+    ],
+    "classification": "Mass-market encryption item, ECCN 5D992.c, self-classified (EAR 740.17(b)(1)) because the apps use standard algorithms for data protection beyond the operating system. Standard algorithms only, no proprietary cryptography, no encryption for third parties.",
+    "annualReport": "A self-classification report to BIS and the ENC Encryption Request Coordinator is due each year by 1 February for items exported in the year before.",
+    "france": "Apple handles the French declaration with the documents uploaded in App Store Connect; nothing is added to the app.",
+    "owner": "pending owner and counsel: confirm the classification, upload the documents in App Store Connect, then set IOS_ENCRYPTION_COMPLIANCE_CODE in the EAS environment. Until then each upload asks the export question once per build."
+  },
+  "contentRating": {
+    "apple": {
+      "expected": "12+",
+      "why": "Organizers list events that may serve alcohol (infrequent or mild references); no other sensitive content. The app has no chat and no unrestricted web view.",
+      "capabilities": {
+        "unrestrictedWebAccess": false,
+        "userGeneratedContent": true,
+        "messaging": false,
+        "advertising": false,
+        "ageAssurance": false,
+        "gambling": false,
+        "lootBoxes": false
+      },
+      "answers": "mirrors apple.advisory in store.config.json"
+    },
+    "play": {
+      "category": "Utility, Productivity, Communication or other",
+      "answers": {
+        "violence": "No",
+        "sexualContent": "No",
+        "language": "No",
+        "controlledSubstances": "Yes, mild references (event listings may mention bars and alcohol)",
+        "gambling": "No",
+        "usersCanInteract": "No",
+        "sharesLocation": "No (approximate location is used for search only)",
+        "digitalPurchases": "Yes (tickets to physical events, paid in a web checkout)",
+        "webBrowser": "No"
+      },
+      "expected": "Everyone 10+ / PEGI 12 (the IARC result decides)"
+    }
+  },
+  "guidelines": {
+    "3.1.3(e)": {
+      "answer": "Tickets are admission to physical events, a real-world service. They are paid in the payment provider's web checkout opened from the app, not with in-app purchase. Virtual and livestream access is not sold in the app (those ticket types say \"Buy on the web\").",
+      "where": "Discover > event > Continue to checkout; docs/plans/mobile.md P7-7"
+    },
+    "4.8": {
+      "answer": "Sign in with Apple is offered beside Continue with Google, an emailed code and a password.",
+      "where": "Welcome screen"
+    },
+    "5.1.1(v)": {
+      "answer": "Account deletion is inside the app, after confirming identity and typing the email address.",
+      "where": "Account > Delete account"
+    },
+    "4.2": {
+      "answer": "The app is a full ticket wallet with offline QR codes, search, checkout, transfers, refunds, calendar and notifications, not a wrapped website.",
+      "where": "Tickets, Discover and Account tabs"
+    },
+    "5.1.2": {
+      "answer": "No tracking. Notifications are asked after a first purchase or first opened ticket. Location only after \"Near me\".",
+      "where": "docs/specs/M7.3/m7.3d.md"
+    }
+  },
+  "play": {
+    "accountDeletionUrl": "${STORE_ACCOUNT_DELETION_URL}",
+    "targetAudience": "18 and over (ticket buyers); not designed for children",
+    "adsDeclaration": "No ads",
+    "financialFeatures": "None (no loans, no banking); payments happen on the provider's web page"
+  }
+}
