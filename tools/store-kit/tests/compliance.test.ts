@@ -49,9 +49,10 @@ describe('the Staff review notes', () => {
 
   it('walk a reviewer through enrolment, a scan and a repeat scan', () => {
     expect(notes).toMatch(/Enrol this device/);
-    expect(notes).toMatch(/Enter the link instead/);
+    expect(notes).toMatch(/Enrolment link/);
+    expect(notes).toMatch(/Enrol with this link/);
     expect(notes).toMatch(/Type a code/);
-    expect(notes).toMatch(/already admitted/i);
+    expect(notes).toMatch(/Already scanned/);
     expect(notes).toMatch(/airplane mode/);
   });
 
