@@ -35,7 +35,10 @@ describe('Ticket link', () => {
     expect(await screen.findByTestId('link-sign-in')).toBeOnTheScreen();
     fireEvent.press(screen.getByRole('button', { name: 'Sign in' }));
     await waitFor(() => expect(router.push).toHaveBeenCalledWith('/welcome'));
-    expect(JSON.parse((await app.storage.get(PENDING_KEY)) ?? '{}')).toEqual({ kind: 'link', token: TOKEN });
+    expect(JSON.parse((await app.storage.get(PENDING_KEY)) ?? '{}')).toMatchObject({
+      kind: 'link',
+      token: TOKEN,
+    });
     expect(app.server.callsTo('GET /v1/me/ticket-links/:token')).toHaveLength(0);
   });
 

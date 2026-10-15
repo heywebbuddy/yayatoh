@@ -311,7 +311,7 @@ describe('My tickets', () => {
     app.server.on('GET /v1/me/tickets', () => page([]) as never);
     await app.storage.set(
       'yayatoh.pending-ticket-link.v1',
-      JSON.stringify({ kind: 'claim', token: 'abcdefghij12' }),
+      JSON.stringify({ kind: 'claim', token: 'abcdefghij12', at: Date.now() }),
     );
     await app.ready;
     app.view(<TicketsListScreen />);

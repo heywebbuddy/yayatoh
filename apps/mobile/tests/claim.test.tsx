@@ -78,7 +78,10 @@ describe('Claim a ticket', () => {
     expect(app.server.callsTo('GET /v1/claims/:token')).toHaveLength(0);
     fireEvent.press(screen.getByRole('button', { name: 'Sign in' }));
     await waitFor(() => expect(router.push).toHaveBeenCalledWith('/welcome'));
-    expect(JSON.parse((await app.storage.get(PENDING_KEY)) ?? '{}')).toEqual({ kind: 'claim', token: TOKEN });
+    expect(JSON.parse((await app.storage.get(PENDING_KEY)) ?? '{}')).toMatchObject({
+      kind: 'claim',
+      token: TOKEN,
+    });
   });
 
   it('shows what is being claimed from a transfer: who sent it, the event, type, time zone and organizer', async () => {
@@ -148,7 +151,10 @@ describe('Claim a ticket', () => {
     // Switching account remembers the link, signs out, and the sign-in flow brings the person back.
     fireEvent.press(screen.getByRole('button', { name: 'Use a different account' }));
     await waitFor(() => expect(app.core.session.state.status).toBe('signedOut'));
-    expect(JSON.parse((await app.storage.get(PENDING_KEY)) ?? '{}')).toEqual({ kind: 'claim', token: TOKEN });
+    expect(JSON.parse((await app.storage.get(PENDING_KEY)) ?? '{}')).toMatchObject({
+      kind: 'claim',
+      token: TOKEN,
+    });
   });
 
   it.each([

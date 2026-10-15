@@ -12,7 +12,13 @@ import {
   spellOut,
 } from '../src/tickets/format';
 import { groupByEvent, ticketEnd, ticketStart } from '../src/tickets/group';
-import { clearPending, PENDING_KEY, rememberPending, takePending } from '../src/tickets/pending';
+import {
+  clearPending,
+  PENDING_KEY,
+  PENDING_TTL_MS,
+  rememberPending,
+  takePending,
+} from '../src/tickets/pending';
 import { qrPath, TicketQr } from '../src/tickets/qr';
 import { event, IDS, summary } from './helpers/fixtures';
 
@@ -148,6 +154,17 @@ describe('pending link', () => {
     await rememberPending(store, { kind: 'claim', token: 'abcdefgh12345' });
     expect(await takePending(store)).toEqual({ kind: 'claim', token: 'abcdefgh12345' });
     expect(await takePending(store)).toBeNull();
+  });
+  it('is forgotten after half an hour, so it never follows a different person who signs in later', async () => {
+    const store = memoryKeyValueStore();
+    await rememberPending(store, { kind: 'claim', token: 'abcdefgh12345' }, 1_000);
+    expect(await takePending(store, 1_000 + PENDING_TTL_MS + 1)).toBeNull();
+    expect(store.data.has(PENDING_KEY)).toBe(false);
+    await rememberPending(store, { kind: 'claim', token: 'abcdefgh12345' }, 1_000);
+    expect(await takePending(store, 1_000 + PENDING_TTL_MS)).toEqual({
+      kind: 'claim',
+      token: 'abcdefgh12345',
+    });
   });
   it('ignores anything that is not a link we wrote', async () => {
     const store = memoryKeyValueStore();
