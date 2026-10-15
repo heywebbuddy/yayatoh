@@ -30,13 +30,7 @@ import {
   realtimeChannelName,
 } from '@yayatoh/platform';
 import { applyUnpublishedMetricEvents } from '@yayatoh/reports';
-import {
-  type ConsoleRole,
-  eventRoleCan,
-  resolveOrgSlug,
-  roleCan,
-  roleRequiresTwoFactor,
-} from '@yayatoh/tenancy';
+import { type ConsoleRole, eventRoleCan, resolveOrgSlug, roleCan } from '@yayatoh/tenancy';
 import { cookies } from 'next/headers';
 import { realtimeUrl } from '@/lib/realtime-url.ts';
 import { conferenceSources } from './conference-sources.ts';
@@ -44,6 +38,7 @@ import { devAuthEnabled } from './dev.ts';
 import { orgActor } from './org-actor.ts';
 import { ports } from './ports.ts';
 import { getSession, sessionOpensOrg } from './session.ts';
+import { roleMustUseTwoFactor } from './two-factor-policy.ts';
 
 /**
  * The web app's Command Center (M3.2a): the widget registry as composed here (the M3.2b alert
@@ -219,7 +214,11 @@ async function asMember(
   // M6.7a: a member, or an agency acting through the client's live grant.
   const actor = await orgActor(resolved.orgId, session);
   if (!actor) return { status: 404, body: { error: 'not_found' } };
-  if (!imp && !session.twoFactorEnabled && (roleRequiresTwoFactor(actor.role) || actor.agency?.finance))
+  if (
+    !imp &&
+    !session.twoFactorEnabled &&
+    (await roleMustUseTwoFactor(actor.ctx, actor.agency?.finance ? 'finance' : actor.role))
+  )
     return { status: 403, body: { error: 'two_factor_required' } };
   const ctx = await commandCenterCtx(actor.ctx);
   try {

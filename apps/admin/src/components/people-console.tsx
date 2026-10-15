@@ -3,7 +3,7 @@
 import { Alert, Button, buttonClass, Card, Input } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState, useEffect, useState } from 'react';
-import type { EraseState, ExportState, FindState } from '@/app/people/actions.ts';
+import type { EraseState, ExportState, FindState, ResetTwoFactorState } from '@/app/people/actions.ts';
 
 const when = new Intl.DateTimeFormat('en', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'UTC' });
 
@@ -16,10 +16,16 @@ export function PeopleConsole({
   find,
   exportData,
   erase,
+  resetTwoFactor,
+  proof,
 }: {
   find: (prev: FindState, form: FormData) => Promise<FindState>;
   exportData: (prev: ExportState, form: FormData) => Promise<ExportState>;
   erase: (prev: EraseState, form: FormData) => Promise<EraseState>;
+  /** Absent when this staff role may not turn a person's two-step verification off. */
+  resetTwoFactor?: (prev: ResetTwoFactorState, form: FormData) => Promise<ResetTwoFactorState>;
+  /** The staff member's own "confirm it's you" field (authenticator code or password). */
+  proof?: React.ReactNode;
 }) {
   const t = useTranslations('people');
   const [found, findAction, finding] = useActionState(find, { kind: 'idle' });
@@ -49,7 +55,14 @@ export function PeopleConsole({
       </Card>
       {found.kind === 'found' ? (
         // A new search starts a new request: export and erase results belong to the previous one.
-        <PersonResult key={found.nonce} found={found} exportData={exportData} erase={erase} />
+        <PersonResult
+          key={found.nonce}
+          found={found}
+          exportData={exportData}
+          erase={erase}
+          resetTwoFactor={resetTwoFactor}
+          proof={proof}
+        />
       ) : null}
     </div>
   );
@@ -59,10 +72,14 @@ function PersonResult({
   found,
   exportData,
   erase,
+  resetTwoFactor,
+  proof,
 }: {
   found: Extract<FindState, { kind: 'found' }>;
   exportData: (prev: ExportState, form: FormData) => Promise<ExportState>;
   erase: (prev: EraseState, form: FormData) => Promise<EraseState>;
+  resetTwoFactor?: (prev: ResetTwoFactorState, form: FormData) => Promise<ResetTwoFactorState>;
+  proof?: React.ReactNode;
 }) {
   const t = useTranslations('people');
   const [exported, exportAction, exporting] = useActionState(exportData, { kind: 'idle' });
@@ -138,6 +155,10 @@ function PersonResult({
                 <History person={person} />
               </Card>
             </section>
+
+            {resetTwoFactor && person.account?.twoFactor && !person.staffRole ? (
+              <ResetTwoFactor email={person.email} reset={resetTwoFactor} proof={proof} />
+            ) : null}
 
             <Card className="flex flex-col gap-3">
               <h2 className="text-section">{t('export.title')}</h2>
@@ -249,6 +270,59 @@ function PersonResult({
         ) : null}
       </div>
     </div>
+  );
+}
+
+/**
+ * Turn the person's two-step verification off (lost phone, shared test account). They keep their
+ * password and can set an authenticator up again from their Security page.
+ */
+function ResetTwoFactor({
+  email,
+  reset,
+  proof,
+}: {
+  email: string;
+  reset: (prev: ResetTwoFactorState, form: FormData) => Promise<ResetTwoFactorState>;
+  proof?: React.ReactNode;
+}) {
+  const t = useTranslations('people');
+  const [state, action, pending] = useActionState(reset, { kind: 'idle' });
+  const message = (code: string) => (t.has(`errors.${code}`) ? t(`errors.${code}`) : t('errors.internal'));
+  if (state.kind === 'reset')
+    return (
+      <p
+        role="status"
+        className="rounded-card border border-success bg-surface px-4 py-3 text-body"
+        data-testid="two-factor-reset"
+      >
+        {t('twoFactor.done')}
+      </p>
+    );
+  const error = state.kind === 'error' ? state : null;
+  return (
+    <Card className="flex flex-col gap-3" data-testid="reset-two-factor">
+      <h2 className="text-section">{t('twoFactor.title')}</h2>
+      <p className="text-body text-ink-2">{t('twoFactor.hint')}</p>
+      {error && error.field !== 'reason' ? <Alert title={message(error.code)} /> : null}
+      <form action={action} className="flex flex-col gap-3" noValidate>
+        <input type="hidden" name="email" value={email} />
+        <Input
+          id="two-factor-reason"
+          name="reason"
+          autoComplete="off"
+          required
+          maxLength={500}
+          label={t('twoFactor.reason')}
+          hint={t('reasonHint')}
+          error={error?.field === 'reason' ? message(error.code) : undefined}
+        />
+        {proof}
+        <Button type="submit" variant="secondary" disabled={pending} className="self-start">
+          {t('twoFactor.submit')}
+        </Button>
+      </form>
+    </Card>
   );
 }
 

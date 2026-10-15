@@ -1710,7 +1710,14 @@
     "charityLink": "Charity profile",
     "planLink": "Plan and modules",
     "findOwner": "Find an owner or admin",
-    "categoriesLink": "Event categories"
+    "categoriesLink": "Event categories",
+    "security": {
+      "title": "Security",
+      "description": "Two-step verification asks for a code from an authenticator app at sign-in. It protects the roles that can move money, change payouts and domains, or give access: {roles}.",
+      "require": "Require two-step verification for these roles",
+      "requireHint": "On: they set it up before using the console and can’t turn it off. Off: each person decides for themselves.",
+      "offNote": "Saving asks you to confirm it’s you. People who already use an authenticator keep it until they turn it off on their account security page."
+    }
   },
   "legal": {
     "platform": "Yayatoh",
@@ -5250,7 +5257,13 @@
       "revokeAll": "Revoke all trusted devices",
       "revoked": "Revoked. That device will ask for your code again.",
       "revokedAll": "All trusted devices revoked. Every device will ask for your code again."
-    }
+    },
+    "addDeviceTitle": "Add another device",
+    "addDeviceExplain": "Use the same authenticator on a second phone or tablet, or with a colleague who shares this account. You confirm with a current code first; the devices you already use keep working.",
+    "addDevice": "Show my authenticator again",
+    "addDeviceScan": "Scan this QR code with the authenticator app on the other device, or type the setup key. It then shows the same codes as your first device.",
+    "addDeviceShared": "Anyone who scans this code can sign in as you with your password. Only share it with people you trust, and turn two-step verification off and on again to stop every device at once.",
+    "addDeviceDone": "Done"
   },
   "stepUp": {
     "title": "Confirm it's you",

@@ -250,6 +250,8 @@ export const PLATFORM_PERMISSIONS = [
   'platform:org.suspend',
   /** Suspend, reactivate or terminate the whole org (M1.3f). */
   'platform:org.status',
+  /** Staff switch an org's two-step verification requirement (support: lockouts, shared test logins). */
+  'platform:org.security',
   /** Restore a terminated org (the reviewed un-termination, M1.13d; staff step-up). */
   'platform:org.restore',
   'platform:payouts.hold',

@@ -3,7 +3,7 @@
 import { isTwoFactorError } from '@yayatoh/auth';
 import { isStepUpFresh } from '@yayatoh/kernel';
 import { qrPath } from '@yayatoh/pdf';
-import { twoFactorRequiredBy } from '@yayatoh/tenancy';
+import { agencyTwoFactorRequiredBy, twoFactorRequiredBy } from '@yayatoh/tenancy';
 import { revalidatePath } from 'next/cache';
 import { getTwoFactor } from '@/server/auth.ts';
 import { ownSession } from '@/server/session.ts';
@@ -58,7 +58,11 @@ export async function confirmSetupAction(_prev: CodesState, form: FormData): Pro
 export async function disableAction(_prev: SecurityState, form: FormData): Promise<SecurityState> {
   const session = await ownSession();
   if (!session) return { ok: false, code: 'unauthenticated' };
-  if ((await twoFactorRequiredBy(session.userId)).length > 0) return { ok: false, code: 'required' };
+  const [orgs, agency] = await Promise.all([
+    twoFactorRequiredBy(session.userId),
+    agencyTwoFactorRequiredBy(session.userId),
+  ]);
+  if (orgs.length > 0 || agency.length > 0) return { ok: false, code: 'required' };
   try {
     await getTwoFactor().disable(session.userId, String(form.get('code') ?? ''));
   } catch (err) {
@@ -74,6 +78,22 @@ export async function regenerateCodesAction(_prev: CodesState, _form: FormData):
   if (!isStepUpFresh(session.stepUpAt, new Date())) return { ok: false, code: 'step_up_required' };
   try {
     return { ok: true, code: null, backupCodes: await getTwoFactor().regenerateBackupCodes(session.userId) };
+  } catch (err) {
+    return { ok: false, code: codeOf(err) };
+  }
+}
+
+/**
+ * Add another device: the authenticator already in use, as its setup key and QR code, for a
+ * second phone or a colleague sharing the account. Needs a fresh step-up (a current code).
+ */
+export async function addDeviceAction(_prev: SetupStart, _form: FormData): Promise<SetupStart> {
+  const session = await ownSession();
+  if (!session) return { ok: false, code: 'unauthenticated' };
+  if (!isStepUpFresh(session.stepUpAt, new Date())) return { ok: false, code: 'step_up_required' };
+  try {
+    const { setupKey, uri } = await getTwoFactor().currentSetup(session.userId, session.email);
+    return { ok: true, code: null, setupKey, qr: qrPath(uri) };
   } catch (err) {
     return { ok: false, code: codeOf(err) };
   }

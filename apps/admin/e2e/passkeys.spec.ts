@@ -57,8 +57,9 @@ test('staff add a passkey and sign in with it, skipping the authenticator code (
   const staff = await twoFactorStaff(page);
   await passwordAndCode(page, staff.email, staff.setupKey);
 
-  await page.getByRole('link', { name: 'Passkeys' }).click();
-  await expect(page.getByRole('heading', { name: 'Passkeys', level: 1 })).toBeVisible();
+  await page.getByRole('link', { name: 'Sign-in security' }).click();
+  await expect(page.getByRole('heading', { name: 'Sign-in security', level: 1 })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Passkeys', level: 2 })).toBeVisible();
   await expect(page.getByText('No passkeys yet.')).toBeVisible();
   await expectAccessible(page);
   await page.getByLabel('Name (optional)').fill('Work laptop');

@@ -22,7 +22,8 @@ export type StaffAction =
   | 'maintenance'
   | 'charities'
   | 'categories'
-  | 'listings';
+  | 'listings'
+  | 'twoFactor';
 
 /**
  * What each staff role may do in the console (roadmap §8 M1.3; owner-approved staff only).
@@ -48,6 +49,9 @@ export type StaffAction =
  *   starts from: admins only (pending owner).
  * - `listings` (M6.14a): hide a marketplace listing from the marketplace and its search, or show
  *   it again, always with a reason (content moderation): admins and support (pending owner).
+ * - `twoFactor`: switch an org's two-step verification requirement, or turn a person's
+ *   authenticator off (a lost phone, a shared test account), always with a reason and a
+ *   confirmation: admins and support (support handles lockouts; pending owner).
  */
 const CAN: Readonly<Record<StaffRole, readonly StaffAction[]>> = {
   admin: [
@@ -72,6 +76,7 @@ const CAN: Readonly<Record<StaffRole, readonly StaffAction[]>> = {
     'charities',
     'categories',
     'listings',
+    'twoFactor',
   ],
   support: [
     'view',
@@ -83,6 +88,7 @@ const CAN: Readonly<Record<StaffRole, readonly StaffAction[]>> = {
     'incidents',
     'charities',
     'listings',
+    'twoFactor',
   ],
   finance: ['view', 'payouts', 'fees', 'quotas'],
 };

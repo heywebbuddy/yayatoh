@@ -1,10 +1,14 @@
 'use server';
 
 import type { AccountUser } from '@yayatoh/auth';
+import { withPlatformReader } from '@yayatoh/db/platform';
 import { isDomainError, isProductionEnv } from '@yayatoh/kernel';
 import { consoleTransport, devMailboxTransports, sendAccountNotice } from '@yayatoh/notifications';
 import { deleteAccount, exportAccount, StaffReason } from '@yayatoh/privacy';
+import { sql } from 'drizzle-orm';
 import { z } from 'zod';
+import { getTwoFactor } from '@/server/auth.ts';
+import { confirmStaff } from '@/server/confirm.ts';
 import { liveEmail } from '@/server/mail.ts';
 import { hasAnything, lookupPerson, type PersonLookup } from '@/server/people.ts';
 import { ports } from '@/server/ports.ts';
@@ -107,4 +111,41 @@ export async function erasePersonAction(_prev: EraseState, form: FormData): Prom
       return { kind: 'error', code: 'last_owner', orgs: d.orgs.map(String) };
     return { kind: 'error', code: err.code };
   }
+}
+
+export type ResetTwoFactorState =
+  | { readonly kind: 'idle' }
+  | { readonly kind: 'error'; readonly code: string; readonly field?: string }
+  | { readonly kind: 'reset'; readonly wasOn: boolean };
+
+/**
+ * Turn a person's two-step verification off (a lost phone, a shared test account): their
+ * authenticator and backup codes are removed, and they sign in with their password or an email
+ * code until they set one up again. Admin and support, with a reason and their own confirmation.
+ * Staff accounts are refused: staff manage their own on the Security page.
+ */
+export async function resetTwoFactorAction(
+  _prev: ResetTwoFactorState,
+  form: FormData,
+): Promise<ResetTwoFactorState> {
+  const staff = await requireStaff('twoFactor');
+  const email = Email.safeParse(form.get('email'));
+  if (!email.success) return { kind: 'error', code: 'invalid_email' };
+  const reason = StaffReason.safeParse(form.get('reason'));
+  if (!reason.success) return { kind: 'error', code: 'reason_required', field: 'reason' };
+  const person = await lookupPerson(staff, email.data);
+  if (!person.account) return { kind: 'error', code: 'not_found' };
+  if (person.staffRole) return { kind: 'error', code: 'is_staff_two_factor' };
+  const confirmed = await confirmStaff(staff, form);
+  if (!confirmed.ok) return { kind: 'error', code: `two_factor_${confirmed.code}`, field: 'proof' };
+  const [user] = await withPlatformReader(
+    { actor: staff.actor, reason: `staff console: two-step verification off for a person: ${reason.data}` },
+    (tx) =>
+      tx.execute<{ id: string }>(
+        sql`select id from auth.users where lower(email) = ${email.data} and deleted_at is null`,
+      ),
+  );
+  if (!user) return { kind: 'error', code: 'not_found' };
+  const r = await getTwoFactor().staffDisable(user.id, { staffUserId: staff.userId, reason: reason.data });
+  return { kind: 'reset', wasOn: r.wasOn };
 }

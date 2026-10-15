@@ -4,6 +4,7 @@ import { Alert, Button, buttonClass, Input } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState, useId, useState, useTransition } from 'react';
 import {
+  addDeviceAction,
   beginSetupAction,
   type CodesState,
   confirmSetupAction,
@@ -93,6 +94,41 @@ export function BackupCodes({ codes, onDone }: { codes: readonly string[]; onDon
   );
 }
 
+/** An authenticator's QR code, with its setup key as the text alternative (and to type in). */
+function AuthenticatorKey({ qr, setupKey }: { qr: { size: number; d: string }; setupKey: string }) {
+  const t = useTranslations('security');
+  const keyId = useId();
+  return (
+    <>
+      <svg
+        role="img"
+        aria-label={t('qrLabel')}
+        aria-describedby={keyId}
+        viewBox={`0 0 ${qr.size} ${qr.size}`}
+        shapeRendering="crispEdges"
+        className="size-44 rounded-card border border-line text-ink"
+      >
+        <rect width={qr.size} height={qr.size} fill="white" />
+        <path d={qr.d} fill="currentColor" />
+      </svg>
+      <div className="flex flex-col gap-1.5">
+        <p className="text-caption text-ink-2">{t('manualKeyLabel')}</p>
+        <p className="flex flex-wrap items-center gap-2">
+          <code
+            id={keyId}
+            data-testid="setup-key"
+            dir="ltr"
+            className="rounded-tag bg-surface-3 px-2 py-1 font-mono text-body tracking-wide select-all"
+          >
+            {setupKey}
+          </code>
+          <CopyButton text={setupKey.replace(/ /g, '')} label={t('copyKey')} />
+        </p>
+      </div>
+    </>
+  );
+}
+
 /** Set up an authenticator app: QR code (with the setup key as its text alternative), then a code. */
 export function TwoFactorSetup({ required }: { required: boolean }) {
   const t = useTranslations('security');
@@ -105,7 +141,6 @@ export function TwoFactorSetup({ required }: { required: boolean }) {
     ok: false,
     code: null,
   });
-  const keyId = useId();
   const errorId = useId();
 
   const begin = () =>
@@ -145,31 +180,7 @@ export function TwoFactorSetup({ required }: { required: boolean }) {
       <ol className="flex list-none flex-col gap-5 p-0">
         <li className="flex flex-col gap-3">
           <p className="text-body">{t('step1')}</p>
-          <svg
-            role="img"
-            aria-label={t('qrLabel')}
-            aria-describedby={keyId}
-            viewBox={`0 0 ${start.qr.size} ${start.qr.size}`}
-            shapeRendering="crispEdges"
-            className="size-44 rounded-card border border-line text-ink"
-          >
-            <rect width={start.qr.size} height={start.qr.size} fill="white" />
-            <path d={start.qr.d} fill="currentColor" />
-          </svg>
-          <div className="flex flex-col gap-1.5">
-            <p className="text-caption text-ink-2">{t('manualKeyLabel')}</p>
-            <p className="flex flex-wrap items-center gap-2">
-              <code
-                id={keyId}
-                data-testid="setup-key"
-                dir="ltr"
-                className="rounded-tag bg-surface-3 px-2 py-1 font-mono text-body tracking-wide select-all"
-              >
-                {start.setupKey}
-              </code>
-              <CopyButton text={start.setupKey.replace(/ /g, '')} label={t('copyKey')} />
-            </p>
-          </div>
+          <AuthenticatorKey qr={start.qr} setupKey={start.setupKey} />
         </li>
         <li>
           <form action={formAction} className="flex flex-col gap-3" noValidate>
@@ -292,6 +303,41 @@ export function RegenerateCodes({ left }: { left: number }) {
           {t('regenerate')}
         </Button>
       )}
+    </form>
+  );
+}
+
+/**
+ * Add another device: after confirming it's them (a current code), the authenticator already in
+ * use appears again as a QR code, so a second phone or a colleague sharing the account gets the
+ * same codes. Nothing changes for the devices already set up.
+ */
+export function AddDevice() {
+  const t = useTranslations('security');
+  const message = useCodeMessage();
+  const [state, formAction, pending, formRef] = useStepUpActionState<SetupStart>(addDeviceAction, {
+    ok: false,
+    code: null,
+  });
+  const [hidden, setHidden] = useState<SetupStart | null>(null);
+  if (state.ok && state.setupKey && state.qr && hidden !== state)
+    return (
+      <div className="flex flex-col gap-3" data-testid="add-device">
+        <p className="text-body">{t('addDeviceScan')}</p>
+        <AuthenticatorKey qr={state.qr} setupKey={state.setupKey} />
+        <p className="text-caption text-ink-2">{t('addDeviceShared')}</p>
+        <Button variant="secondary" className="self-start" onClick={() => setHidden(state)}>
+          {t('addDeviceDone')}
+        </Button>
+      </div>
+    );
+  return (
+    <form ref={formRef} action={formAction} className="flex flex-col gap-3">
+      <p className="text-body text-ink-2">{t('addDeviceExplain')}</p>
+      <div aria-live="polite">{state.code ? <Alert title={message(state.code) ?? ''} /> : null}</div>
+      <Button type="submit" variant="secondary" className="self-start" disabled={pending}>
+        {t('addDevice')}
+      </Button>
     </form>
   );
 }

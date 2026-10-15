@@ -1710,7 +1710,14 @@
     "charityLink": "Profilo benefico",
     "planLink": "Piano e moduli",
     "findOwner": "Trova un proprietario o un amministratore",
-    "categoriesLink": "Categorie di eventi"
+    "categoriesLink": "Categorie di eventi",
+    "security": {
+      "title": "Sicurezza",
+      "description": "La verifica in due passaggi chiede un codice da un’app di autenticazione all’accesso. Protegge i ruoli che possono spostare denaro, modificare pagamenti e domini o concedere accessi: {roles}.",
+      "require": "Richiedi la verifica in due passaggi per questi ruoli",
+      "requireHint": "Attiva: la configurano prima di usare la console e non possono disattivarla. Disattiva: ognuno decide per sé.",
+      "offNote": "Al salvataggio ti verrà chiesto di confermare la tua identità. Chi usa già un autenticatore lo mantiene finché non lo disattiva nella pagina sicurezza dell’account."
+    }
   },
   "legal": {
     "platform": "Yayatoh",
@@ -5250,7 +5257,13 @@
       "revokeAll": "Revoca tutti i dispositivi attendibili",
       "revoked": "Revocato. Quel dispositivo chiederà di nuovo il codice.",
       "revokedAll": "Tutti i dispositivi attendibili sono stati revocati. Ogni dispositivo chiederà di nuovo il codice."
-    }
+    },
+    "addDeviceTitle": "Aggiungi un altro dispositivo",
+    "addDeviceExplain": "Usa lo stesso autenticatore su un secondo telefono o tablet, o con un collega che condivide questo account. Prima confermi con un codice attuale; i dispositivi che già usi continuano a funzionare.",
+    "addDevice": "Mostra di nuovo il mio autenticatore",
+    "addDeviceScan": "Scansiona questo codice QR con l’app di autenticazione sull’altro dispositivo, oppure inserisci la chiave di configurazione. Mostrerà gli stessi codici del primo dispositivo.",
+    "addDeviceShared": "Chiunque scansioni questo codice può accedere come te con la tua password. Condividilo solo con persone di fiducia. Disattiva e riattiva la verifica in due passaggi per bloccare tutti i dispositivi insieme.",
+    "addDeviceDone": "Fatto"
   },
   "stepUp": {
     "title": "Conferma che sei tu",

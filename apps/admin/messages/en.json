@@ -213,7 +213,7 @@
     "signupCodes": "Signup codes",
     "reports": "Messaging reports",
     "people": "Privacy requests",
-    "passkeys": "Passkeys",
+    "passkeys": "Sign-in security",
     "messaging": "Auto-paused messaging",
     "messagingCount": "Auto-paused messaging ({count})",
     "openSignup": "Open signup",
@@ -277,7 +277,9 @@
       "status_reactivate": "Reactivated. Its public pages, listings and ticket sales are back.",
       "status_terminate": "Terminated. Its public pages are offline for good; its owners can still export their data.",
       "status_restore": "Organization restored to the status it had before it was terminated. Its owners are told.",
-      "reconciled": "Reconciliation difference resolved."
+      "reconciled": "Reconciliation difference resolved.",
+      "two_factor_required": "Two-step verification is required for this organization’s owners, admins and finance again.",
+      "two_factor_optional": "Two-step verification is now optional in this organization."
     },
     "field": {
       "status": "Status",
@@ -475,7 +477,24 @@
       "note": "Resolution note",
       "resolve": "Resolve"
     },
-    "messagingLink": "Messaging: auto-pause and quotas"
+    "messagingLink": "Messaging: auto-pause and quotas",
+    "twoFactor": {
+      "title": "Two-step verification",
+      "description": "Whether this organization’s owners, admins and finance members must use an authenticator app. Off: they are no longer sent to set one up and may turn their own off. People who keep theirs on still answer it at sign-in.",
+      "required": "Required for owners, admins and finance",
+      "optional": "Optional: each person decides",
+      "makeOptional": "Make two-step verification optional",
+      "makeRequired": "Require two-step verification again",
+      "personHint": "To turn off one person’s authenticator (a lost phone, a shared test account), find them in",
+      "peopleLink": "People",
+      "errors": {
+        "two_factor_reason": "Give a reason of 3 to 500 characters.",
+        "two_factor_step_up": "That code or password didn’t work. Confirm it’s you again.",
+        "two_factor_rate_limited": "Too many attempts. Wait 15 minutes, then try again.",
+        "two_factor_method": "Set a password or an authenticator app on your account first: this change needs you to confirm it’s you.",
+        "two_factor_signed_out": "Your session ended. Sign in again."
+      }
+    }
   },
   "accessLog": {
     "title": "Access log",
@@ -774,7 +793,19 @@
       "is_staff": "This person is active staff. Revoke their staff role first (owner CLI).",
       "not_found": "Nothing is held about this email.",
       "forbidden": "You can't do that.",
-      "internal": "Something went wrong. Try again."
+      "internal": "Something went wrong. Try again.",
+      "is_staff_two_factor": "This person is staff. Staff turn their own two-step verification off on the Security page.",
+      "two_factor_step_up": "That code or password wasn't right. Try again.",
+      "two_factor_rate_limited": "Too many tries. Wait a few minutes and try again.",
+      "two_factor_method": "Set up an authenticator or a password on your own account first, so you can confirm it's you.",
+      "two_factor_signed_out": "Your session ended. Sign in again."
+    },
+    "twoFactor": {
+      "title": "Turn off two-step verification",
+      "hint": "Removes this person's authenticator app and backup codes, for example after a lost phone or on a shared test account. They sign in with their password or an email code, and can set an authenticator up again on their Security page. If their organization requires two-step verification for their role, they will be asked to set it up again at their next sign-in.",
+      "reason": "Reason (kept with the change)",
+      "submit": "Turn off two-step verification",
+      "done": "Two-step verification is off for this person. They can now sign in without an authenticator code."
     }
   },
   "passkeys": {
@@ -1389,5 +1420,51 @@
     "emptySearch": "No listings match that search",
     "emptyListedDescription": "Listings appear here when enrolled organizers publish public events.",
     "emptyHiddenDescription": "Listings you hide appear here, with the reason, so you can show them again."
+  },
+  "staffProof": {
+    "code": "Code from your authenticator app (confirm it’s you)",
+    "password": "Your password (confirm it’s you)",
+    "method": "Set a password or an authenticator app on your account first: this change needs you to confirm it’s you."
+  },
+  "staffTwoFactor": {
+    "pageTitle": "Sign-in security",
+    "pageDescription": "Your own two-step verification and passkeys for the staff console. The authenticator is shared with your organizer account (same email).",
+    "title": "Authenticator app",
+    "on": "On. {count, plural, =0 {No backup codes left: make new ones.} one {# backup code left.} other {# backup codes left.}}",
+    "off": "Off. Sign-in asks only for your password (or a passkey).",
+    "setUp": "Set up an authenticator",
+    "scan": "Scan this code with your authenticator app (Google Authenticator, 1Password, Authy…), then enter the 6-digit code it shows.",
+    "scanDevice": "Scan this code on the other phone or app. It shows the same codes as your current one; nothing changes for your current device.",
+    "qrLabel": "QR code for your authenticator app. The setup key below is the same.",
+    "manualKey": "Can't scan? Enter this setup key instead:",
+    "verify": "Turn on",
+    "done": "Done",
+    "deviceTitle": "Add another device",
+    "deviceHint": "Shows your authenticator again so a second phone (or a colleague testing on this account) gets the same codes.",
+    "device": "Show the authenticator",
+    "codesSection": "Backup codes",
+    "newCodes": "Make new backup codes",
+    "codesTitle": "Save these backup codes now",
+    "codesHint": "Each code works once, if you can't use your authenticator. They won't be shown again.",
+    "offTitle": "Turn off two-step verification",
+    "offHint": "Sign-in will then ask only for your password. You can set it up again at any time.",
+    "turnOff": "Turn off",
+    "turnedOff": "Two-step verification is off.",
+    "code": "Code from your authenticator",
+    "codeOrBackup": "Authenticator code or a backup code",
+    "password": "Your password",
+    "errors": {
+      "invalid_code": "That code wasn't right. Try again.",
+      "invalid_password": "That password wasn't right. Try again.",
+      "rate_limited": "Too many tries. Wait a few minutes and try again.",
+      "not_enabled": "Two-step verification isn't on.",
+      "already_enabled": "Two-step verification is already on.",
+      "not_pending": "Start the set-up again.",
+      "two_factor_step_up": "That code or password wasn't right. Try again.",
+      "two_factor_rate_limited": "Too many tries. Wait a few minutes and try again.",
+      "two_factor_method": "Your account has no password or authenticator to confirm it's you. Set a password first.",
+      "two_factor_signed_out": "Your session ended. Sign in again.",
+      "internal": "Something went wrong. Try again."
+    }
   }
 }

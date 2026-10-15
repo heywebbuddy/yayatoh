@@ -1710,7 +1710,14 @@
     "charityLink": "Profil caritatif",
     "planLink": "Offre et modules",
     "findOwner": "Trouver un propriétaire ou un admin",
-    "categoriesLink": "Catégories d’événements"
+    "categoriesLink": "Catégories d’événements",
+    "security": {
+      "title": "Sécurité",
+      "description": "La validation en deux étapes demande un code d’une application d’authentification à la connexion. Elle protège les rôles qui peuvent déplacer de l’argent, modifier les virements et les domaines, ou donner des accès : {roles}.",
+      "require": "Exiger la validation en deux étapes pour ces rôles",
+      "requireHint": "Activé : ils la configurent avant d’utiliser la console et ne peuvent pas la désactiver. Désactivé : chacun décide pour soi.",
+      "offNote": "L’enregistrement vous demande de confirmer votre identité. Les personnes qui utilisent déjà un authentificateur le gardent jusqu’à ce qu’elles le désactivent dans la sécurité de leur compte."
+    }
   },
   "legal": {
     "platform": "Yayatoh",
@@ -5250,7 +5257,13 @@
       "revokeAll": "Révoquer tous les appareils de confiance",
       "revoked": "Révoqué. Cet appareil redemandera votre code.",
       "revokedAll": "Tous les appareils de confiance sont révoqués. Chaque appareil redemandera votre code."
-    }
+    },
+    "addDeviceTitle": "Ajouter un autre appareil",
+    "addDeviceExplain": "Utilisez le même authentificateur sur un deuxième téléphone ou une tablette, ou avec un collègue qui partage ce compte. Vous confirmez d’abord avec un code actuel ; vos appareils actuels continuent de fonctionner.",
+    "addDevice": "Afficher à nouveau mon authentificateur",
+    "addDeviceScan": "Scannez ce code QR avec l’application d’authentification de l’autre appareil, ou saisissez la clé de configuration. Il affichera ensuite les mêmes codes que votre premier appareil.",
+    "addDeviceShared": "Toute personne qui scanne ce code peut se connecter en votre nom avec votre mot de passe. Ne le partagez qu’avec des personnes de confiance. Désactivez puis réactivez la validation en deux étapes pour bloquer tous les appareils d’un coup.",
+    "addDeviceDone": "Terminé"
   },
   "stepUp": {
     "title": "Confirmez votre identité",
