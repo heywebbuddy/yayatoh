@@ -10,24 +10,23 @@ import { afterAll, describe, expect, it } from 'vitest';
  * It must create the demo once, change nothing the second time, and refuse production.
  */
 const web = join(dirname(fileURLToPath(import.meta.url)), '..');
-const env = {
-  ...process.env,
+const REMOVED = new Set(['PAYMENTS_PROVIDER', 'YAYATOH_ENV', 'VERCEL_ENV', 'NODE_ENV']);
+const env: Record<string, string> = {
+  ...(Object.fromEntries(
+    Object.entries(process.env).filter(([k, v]) => v !== undefined && !REMOVED.has(k)),
+  ) as Record<string, string>),
   BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET ?? randomBytes(32).toString('hex'),
   LOCAL_KMS_KEY: process.env.LOCAL_KMS_KEY ?? randomBytes(32).toString('hex'),
   APP_TOKEN_SECRET: process.env.APP_TOKEN_SECRET ?? randomBytes(32).toString('hex'),
   BETTER_AUTH_URL: 'http://localhost:3100',
   REVIEWER_DEMO_EMAIL: 'app-review@yayatoh.test',
   REVIEWER_DEMO_CODE: '424242',
-} as NodeJS.ProcessEnv;
-delete env.PAYMENTS_PROVIDER;
-delete env.YAYATOH_ENV;
-delete env.VERCEL_ENV;
-delete env.NODE_ENV;
+};
 
 const run = (args: string[], extra: Record<string, string> = {}): SpawnSyncReturns<string> =>
   spawnSync('node', ['--conditions=react-server', 'scripts/reviewer-demo.ts', ...args], {
     cwd: web,
-    env: { ...env, ...extra },
+    env: { ...env, ...extra } as NodeJS.ProcessEnv,
     encoding: 'utf8',
     timeout: 120_000,
   });
