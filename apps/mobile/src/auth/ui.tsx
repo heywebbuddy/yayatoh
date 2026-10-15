@@ -9,6 +9,7 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
+  Switch,
   Text,
   TextInput,
   type TextInputProps,
@@ -152,6 +153,7 @@ export function Field({ label, error, testID, ...input }: FieldProps) {
       <Text style={[styles.label, { color: colors.ink }]}>{label}</Text>
       <TextInput
         accessibilityLabel={label}
+        accessibilityHint={error ?? undefined}
         placeholderTextColor={colors.ink3}
         style={[
           styles.input,
@@ -220,8 +222,20 @@ export function Row({ label, value, onPress, role = 'button', checked, hint, tes
   const colors = useColors();
   const content = (
     <>
-      <Text style={[styles.rowLabel, { color: colors.ink }]}>{label}</Text>
-      {value ? <Text style={[styles.rowValue, { color: colors.ink2 }]}>{value}</Text> : null}
+      <View style={styles.rowText}>
+        <Text style={[styles.rowLabel, { color: colors.ink }]}>{label}</Text>
+        {value ? <Text style={[styles.rowValue, { color: colors.ink2 }]}>{value}</Text> : null}
+      </View>
+      {/* The chosen row is also marked with a tick: a fill alone is not enough for everyone. */}
+      {checked ? (
+        <Text
+          accessibilityElementsHidden
+          importantForAccessibility="no"
+          style={[styles.rowMark, { color: colors.primaryInk }]}
+        >
+          ✓
+        </Text>
+      ) : null}
     </>
   );
   if (!onPress) {
@@ -251,6 +265,35 @@ export function Row({ label, value, onPress, role = 'button', checked, hint, tes
     >
       {content}
     </Pressable>
+  );
+}
+
+export interface ToggleRowProps {
+  readonly label: string;
+  readonly body?: string;
+  readonly value: boolean;
+  readonly onValueChange: (value: boolean) => void;
+  readonly testID?: string;
+}
+
+/** A setting you switch on or off. The switch is small, so the row around it carries the 44 points. */
+export function ToggleRow({ label, body, value, onValueChange, testID }: ToggleRowProps) {
+  const colors = useColors();
+  return (
+    <View style={styles.toggleRow}>
+      <View style={styles.rowText}>
+        <Text style={[styles.rowLabel, { color: colors.ink }]}>{label}</Text>
+        {body ? <Text style={[styles.rowValue, { color: colors.ink2 }]}>{body}</Text> : null}
+      </View>
+      <Switch
+        accessibilityRole="switch"
+        accessibilityLabel={label}
+        accessibilityHint={body}
+        value={value}
+        onValueChange={onValueChange}
+        testID={testID}
+      />
+    </View>
   );
 }
 
@@ -305,9 +348,13 @@ const styles = StyleSheet.create({
     borderRadius: px(radius.control),
     paddingHorizontal: space[3],
     paddingVertical: space[3],
-    gap: space[1],
-    justifyContent: 'center',
+    gap: space[2],
+    flexDirection: 'row',
+    alignItems: 'center',
   },
+  toggleRow: { minHeight: TOUCH_TARGET_PX, flexDirection: 'row', alignItems: 'center', gap: space[3] },
+  rowText: { flex: 1, gap: space[1] },
+  rowMark: { fontSize: 18, fontWeight: '800' },
   rowLabel: { fontSize: 16, fontWeight: '600', textAlign: 'auto' },
   rowValue: { fontSize: type.body.size, textAlign: 'auto' },
 });

@@ -112,6 +112,7 @@ export default function ExhibitorSignIn() {
         <>
           <Body muted>{t('intro')}</Body>
           <TextField
+            autoComplete="off"
             error={fieldError?.field === 'invite' ? t(fieldError.key) : null}
             keyboardType="url"
             label={t('inviteLabel')}

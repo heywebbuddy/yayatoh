@@ -10,6 +10,7 @@ export function AppleButton({ label, onPress }: { label: string; onPress: () => 
   const { scheme } = useTheme();
   return (
     <AppleAuthentication.AppleAuthenticationButton
+      accessibilityRole="button"
       accessibilityLabel={label}
       buttonStyle={
         scheme === 'dark'

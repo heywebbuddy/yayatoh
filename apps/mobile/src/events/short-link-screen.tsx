@@ -1,21 +1,18 @@
 /** `/e/[code]` (M7.3c): finds the event a short code names and opens it. */
 
 import { useQuery } from '@tanstack/react-query';
-import { ROUTES, space, useColors } from '@yayatoh/mobile-core';
+import { ROUTES } from '@yayatoh/mobile-core';
 import { useRouter } from 'expo-router';
 import { useEffect } from 'react';
-import { StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslations } from 'use-intl';
 import { useWebBaseUrl } from '../shop/api';
 import { useShopPorts } from '../shop/ports';
-import { Banner, Button, Empty, Loading } from '../shop/ui';
+import { Banner, Button, Empty, Loading, Page } from '../shop/ui';
 
 export function ShortLinkScreen({ code }: { code: string }) {
   const t = useTranslations('discover.shortLink');
   const core = useTranslations('core');
   const router = useRouter();
-  const colors = useColors();
   const ports = useShopPorts();
   const base = useWebBaseUrl();
 
@@ -32,7 +29,7 @@ export function ShortLinkScreen({ code }: { code: string }) {
 
   const failed = base.isError || slug.isError;
   return (
-    <SafeAreaView style={[styles.screen, { backgroundColor: colors.canvas }]}>
+    <Page>
       {slug.data === null ? (
         <Empty
           testID="short-link-not-found"
@@ -44,6 +41,7 @@ export function ShortLinkScreen({ code }: { code: string }) {
         <Banner
           tone="danger"
           title={t('errorTitle')}
+          heading
           testID="short-link-error"
           action={
             <Button
@@ -57,8 +55,6 @@ export function ShortLinkScreen({ code }: { code: string }) {
       ) : (
         <Loading label={t('opening')} />
       )}
-    </SafeAreaView>
+    </Page>
   );
 }
-
-const styles = StyleSheet.create({ screen: { flex: 1, padding: space[4], justifyContent: 'center' } });

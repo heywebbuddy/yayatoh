@@ -116,6 +116,7 @@ export default function EnrolScreen() {
             </Body>
           ) : null}
           <TextField
+            autoComplete="off"
             keyboardType="url"
             label={t('linkLabel')}
             onChangeText={(v) => {

@@ -17,7 +17,7 @@ import { updateCart, useCartEntry } from '../shop/cart-store';
 import type { Failure, FailureKind } from '../shop/errors';
 import { formatEventWhen, formatMoney } from '../shop/format';
 import { cartIssues, summarize } from '../shop/selection';
-import { Banner, Body, Button, Caption, Card, Empty, Field, Heading, Loading } from '../shop/ui';
+import { Banner, Body, Button, Caption, Card, Empty, Field, Heading, Loading, Page } from '../shop/ui';
 import { useCheckout } from './use-checkout';
 
 const ERROR_KEYS: Readonly<Record<FailureKind, string>> = {
@@ -84,19 +84,19 @@ export function CheckoutScreen({ slug }: { slug: string }) {
 
   if (event.isPending || passesQuery.isPending) {
     return (
-      <SafeAreaView style={[styles.screen, { backgroundColor: colors.canvas }]}>
+      <Page>
         <Loading label={t('loading')} />
-      </SafeAreaView>
+      </Page>
     );
   }
   if (event.isError || passesQuery.isError || !event.data) {
     return (
-      <SafeAreaView style={[styles.screen, styles.padded, { backgroundColor: colors.canvas }]}>
+      <Page>
         <Button tone="secondary" label={t('backToEvent')} onPress={goBackToEvent} />
-        <Banner tone="danger" title={t('loadErrorTitle')} testID="checkout-load-error">
+        <Banner tone="danger" title={t('loadErrorTitle')} heading testID="checkout-load-error">
           {t('loadErrorBody')}
         </Banner>
-      </SafeAreaView>
+      </Page>
     );
   }
 
@@ -107,14 +107,14 @@ export function CheckoutScreen({ slug }: { slug: string }) {
 
   if (issues.length === 1 && issues[0]?.kind === 'empty' && state.phase === 'idle') {
     return (
-      <SafeAreaView style={[styles.screen, styles.padded, { backgroundColor: colors.canvas }]}>
+      <Page>
         <Empty
           testID="checkout-empty"
           title={t('emptyTitle')}
           body={t('emptyBody')}
           action={<Button label={t('backToEvent')} onPress={goBackToEvent} />}
         />
-      </SafeAreaView>
+      </Page>
     );
   }
 
@@ -233,6 +233,7 @@ export function CheckoutScreen({ slug }: { slug: string }) {
             value={entry.promoCode}
             onChangeText={(v) => updateCart(slug, { promoCode: v })}
             autoCapitalize="characters"
+            autoComplete="off"
             autoCorrect={false}
             maxLength={64}
             error={failure?.kind === 'promo_invalid' ? t('errors.promoInvalid') : null}
@@ -314,7 +315,6 @@ export function CheckoutScreen({ slug }: { slug: string }) {
 
 const styles = StyleSheet.create({
   screen: { flex: 1 },
-  padded: { padding: space[4], gap: space[4] },
   content: { padding: space[4], gap: space[4], paddingBottom: space[8] },
   line: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', gap: space[3] },
   totalLine: { borderTopWidth: StyleSheet.hairlineWidth, paddingTop: space[2] },

@@ -10,6 +10,7 @@ import {
   type AccessibilityRole,
   ActivityIndicator,
   Pressable,
+  ScrollView,
   type StyleProp,
   StyleSheet,
   Text,
@@ -18,8 +19,35 @@ import {
   View,
   type ViewStyle,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const MIN_TARGET = Math.max(TOUCH_TARGET_PX, 44);
+
+type Edge = 'top' | 'right' | 'bottom' | 'left';
+
+/**
+ * A screen that is not a list: the canvas inside the safe area, with a scroll view so the content
+ * stays reachable at the largest system font size (a state like "loading" or "not found" is short
+ * today and long in Arabic at 200 %).
+ */
+export function Page({
+  children,
+  edges,
+  testID,
+}: {
+  children: ReactNode;
+  edges?: readonly Edge[];
+  testID?: string;
+}) {
+  const colors = useColors();
+  return (
+    <SafeAreaView edges={edges} style={[styles.page, { backgroundColor: colors.canvas }]} testID={testID}>
+      <ScrollView contentContainerStyle={styles.pageContent} keyboardShouldPersistTaps="handled">
+        {children}
+      </ScrollView>
+    </SafeAreaView>
+  );
+}
 
 export function Heading({ children, level = 1 }: { children: ReactNode; level?: 1 | 2 }) {
   const colors = useColors();
@@ -198,6 +226,7 @@ export function Field({
       <TextInput
         testID={testID}
         accessibilityLabel={label}
+        accessibilityHint={error ?? undefined}
         placeholderTextColor={colors.ink3}
         {...input}
         style={[
@@ -211,7 +240,11 @@ export function Field({
         ]}
       />
       {error ? (
-        <Text accessibilityRole="alert" style={[styles.caption, { color: colors.danger }]}>
+        <Text
+          accessibilityRole="alert"
+          accessibilityLiveRegion="polite"
+          style={[styles.caption, { color: colors.danger }]}
+        >
           {error}
         </Text>
       ) : null}
@@ -228,12 +261,15 @@ export function Banner({
   children,
   action,
   testID,
+  heading = false,
 }: {
   tone: BannerTone;
   title: string;
   children?: ReactNode;
   action?: ReactNode;
   testID?: string;
+  /** The banner is the whole message of a screen (an error page): its title is the screen's heading. */
+  heading?: boolean;
 }) {
   const colors = useColors();
   const fill = {
@@ -249,16 +285,25 @@ export function Banner({
     success: colors.success,
   }[tone];
   const mark = { info: 'ℹ', warning: '!', danger: '⚠', success: '✓' }[tone];
-  const role: AccessibilityRole = tone === 'danger' || tone === 'warning' ? 'alert' : 'summary';
+  const urgent = tone === 'danger' || tone === 'warning';
+  const role: AccessibilityRole = urgent ? 'alert' : 'summary';
   return (
-    <View testID={testID} accessibilityRole={role} style={[styles.banner, { backgroundColor: fill }]}>
-      <Text style={[styles.bannerTitle, { color: ink }]}>
-        <Text accessibilityElementsHidden importantForAccessibility="no">
-          {mark}{' '}
+    <View testID={testID} style={[styles.banner, { backgroundColor: fill }]}>
+      {/* The words are one announcement; the action stays a separate stop, so it can be reached. */}
+      <View
+        accessible
+        accessibilityRole={role}
+        accessibilityLiveRegion={urgent ? 'polite' : 'none'}
+        style={styles.bannerText}
+      >
+        <Text accessibilityRole={heading ? 'header' : undefined} style={[styles.bannerTitle, { color: ink }]}>
+          <Text accessibilityElementsHidden importantForAccessibility="no">
+            {mark}{' '}
+          </Text>
+          {title}
         </Text>
-        {title}
-      </Text>
-      {children ? <Text style={[styles.body, { color: colors.ink }]}>{children}</Text> : null}
+        {children ? <Text style={[styles.body, { color: colors.ink }]}>{children}</Text> : null}
+      </View>
       {action}
     </View>
   );
@@ -267,7 +312,13 @@ export function Banner({
 export function Loading({ label, testID = 'loading' }: { label: string; testID?: string }) {
   const colors = useColors();
   return (
-    <View testID={testID} accessibilityRole="progressbar" accessibilityLabel={label} style={styles.center}>
+    <View
+      testID={testID}
+      accessible
+      accessibilityRole="progressbar"
+      accessibilityLabel={label}
+      style={styles.center}
+    >
       <ActivityIndicator color={colors.primary} size="large" />
       <Text style={[styles.body, { color: colors.ink2 }]}>{label}</Text>
     </View>
@@ -298,6 +349,8 @@ export function Empty({
 }
 
 const styles = StyleSheet.create({
+  page: { flex: 1 },
+  pageContent: { flexGrow: 1, padding: space[4], gap: space[4] },
   h1: {
     fontSize: type.section.size,
     fontWeight: '800',
@@ -360,6 +413,7 @@ const styles = StyleSheet.create({
     fontSize: type.body.size + 2,
   },
   banner: { borderRadius: px(radius.tile), padding: space[4], gap: space[2] },
+  bannerText: { gap: space[2] },
   bannerTitle: { fontSize: type.body.size + 1, fontWeight: '800', textAlign: 'auto' },
   center: { alignItems: 'center', justifyContent: 'center', padding: space[6], gap: space[3] },
   centerText: { textAlign: 'center' },

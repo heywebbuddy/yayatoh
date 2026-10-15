@@ -129,14 +129,8 @@ export function ForegroundBanner({
           style={styles.bannerText}
           testID="push-banner-open"
         >
-          <Text numberOfLines={1} style={[styles.bannerTitle, { color: colors.ink }]}>
-            {heading}
-          </Text>
-          {text ? (
-            <Text numberOfLines={3} style={[styles.bannerBody, { color: colors.ink2 }]}>
-              {text}
-            </Text>
-          ) : null}
+          <Text style={[styles.bannerTitle, { color: colors.ink }]}>{heading}</Text>
+          {text ? <Text style={[styles.bannerBody, { color: colors.ink2 }]}>{text}</Text> : null}
         </Pressable>
         <Pressable
           accessibilityRole="button"

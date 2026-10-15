@@ -16,7 +16,7 @@ import { useLocale, useTranslations } from 'use-intl';
 import { type MyOrder, useMyOrder } from '../shop/api';
 import { failureOf } from '../shop/errors';
 import { formatEventStart, formatEventWhen, formatMoney } from '../shop/format';
-import { Banner, Body, Button, Caption, Card, Empty, Heading, Loading } from '../shop/ui';
+import { Banner, Body, Button, Caption, Card, Empty, Heading, Loading, Page } from '../shop/ui';
 import { statusTone } from './status';
 
 export const POLL_LIMIT_MS = 2 * 60_000;
@@ -106,22 +106,20 @@ export function OrderScreen({ id, placed }: { id: string; placed: 'confirmed' | 
   if (!order) {
     if (query.isPending) {
       return (
-        <SafeAreaView style={[styles.screen, { backgroundColor: colors.canvas }]}>
+        <Page>
           <Loading label={t('loading')} />
-        </SafeAreaView>
+        </Page>
       );
     }
     // A just-paid order is not listed until the provider confirms it.
     if (placed === 'pending' && failure?.kind === 'not_found') {
       return (
-        <SafeAreaView
-          edges={['top']}
-          style={[styles.screen, styles.padded, { backgroundColor: colors.canvas }]}
-        >
+        <Page edges={['top']}>
           {back}
           <Banner
             tone="info"
             title={gaveUp ? t('processing.stillTitle') : t('processing.title')}
+            heading
             testID="order-processing"
             action={
               gaveUp ? (
@@ -136,14 +134,11 @@ export function OrderScreen({ id, placed }: { id: string; placed: 'confirmed' | 
             {gaveUp ? t('processing.stillBody') : t('processing.body')}
           </Banner>
           {gaveUp ? null : <Loading label={t('processing.waiting')} testID="order-waiting" />}
-        </SafeAreaView>
+        </Page>
       );
     }
     return (
-      <SafeAreaView
-        edges={['top']}
-        style={[styles.screen, styles.padded, { backgroundColor: colors.canvas }]}
-      >
+      <Page edges={['top']}>
         {back}
         {failure?.kind === 'not_found' ? (
           <Empty testID="order-not-found" title={t('notFoundTitle')} body={t('notFoundBody')} />
@@ -151,6 +146,7 @@ export function OrderScreen({ id, placed }: { id: string; placed: 'confirmed' | 
           <Banner
             tone="danger"
             title={t('errorTitle')}
+            heading
             testID="order-error"
             action={<Button label={core('common.retry')} onPress={() => void query.refetch()} />}
           >
@@ -161,7 +157,7 @@ export function OrderScreen({ id, placed }: { id: string; placed: 'confirmed' | 
                 : core('errors.generic')}
           </Banner>
         )}
-      </SafeAreaView>
+      </Page>
     );
   }
 
@@ -256,7 +252,6 @@ export function OrderScreen({ id, placed }: { id: string; placed: 'confirmed' | 
 
 const styles = StyleSheet.create({
   screen: { flex: 1 },
-  padded: { padding: space[4], gap: space[4] },
   content: { padding: space[4], gap: space[4], paddingBottom: space[10] },
   line: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', gap: space[3] },
   totals: { borderTopWidth: StyleSheet.hairlineWidth, paddingTop: space[2], gap: space[1] },
