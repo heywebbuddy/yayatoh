@@ -158,6 +158,8 @@ describe('permissions', () => {
       writeOnlyCalendarPermission: expect.stringMatching(/calendar/i),
     });
     expect(calendar(staff())).toBeUndefined();
+    // Full brightness is a window setting: it needs no plugin and never asks for WRITE_SETTINGS.
+    expect(JSON.stringify(mobile())).not.toMatch(/WRITE_SETTINGS|expo-brightness/);
   });
 
   it('adds no permission for notifications yet (M7.2c and M7.3d own them)', () => {
