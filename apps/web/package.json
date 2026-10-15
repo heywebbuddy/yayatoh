@@ -11,7 +11,7 @@
     "e2e": "playwright test",
     "e2e:lighthouse": "E2E_LIGHTHOUSE=1 playwright test --project=lighthouse --workers=1",
     "seed": "node --conditions=react-server scripts/seed.ts",
-    "load:prepare": "node scripts/load-prepare.ts"
+    "load:prepare": "node --conditions=react-server scripts/load-prepare.ts"
   },
   "dependencies": {
     "@fontsource-variable/manrope": "5.3.0",

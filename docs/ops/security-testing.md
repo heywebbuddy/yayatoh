@@ -48,6 +48,19 @@ oversell). Staging runs at 3× the expected peak are the real gate before M2.1 (
 | Sync throughput | demo connector, 1 500 contacts, 3 syncs | **244 records/s** (min 229); sync p95 **8.6 s**; every record pulled, no failures beyond the seeded one | ✓ all |
 | Warehouse ingest | full analytics rebuild, 3 runs | rebuild finished, events read, repeats idempotent; p95 **216 ms** | ✓ all |
 
+### Phase 7 load tests (M7.x, local run 2026-10-15)
+`k6/me-tickets.js`, `k6/app-checkout.js`, `k6/scan-batch-peak.js`, `k6/staff-heartbeat.js` against one `next start` and Postgres 18 in Docker on the same shared 4 vCPU VM (not a performance environment); fake provider only. Peak models, thresholds with their sources and the full table: docs/specs/M7.X/load.md.
+
+| Run | Load | Result | Thresholds |
+|---|---|---|---|
+| My tickets and orders | 10 app openings/s (4 requests each) for 60 s; also 30/s for 30 s | lists p95 **47 / 27 ms**, ticket **26 ms**, order **24 ms**; at 3×: **93 / 73 / 73 / 66 ms**; 0 errors | ✓ all |
+| App checkout start | 3 starts/s for 60 s, each replayed with the same Idempotency-Key | p95 **74 ms**, replay **30 ms**, same order every time; **0 × 429** below the `checkoutStart` budget; the probe account was stopped after 20 starts by a well-formed 429 | ✓ all |
+| Staff heartbeat | 500 devices × 30 s for 3 min + 25 board readers | heartbeat p95 **26 ms**, board (500 devices) **75 ms**; **0 × 429**; 0 errors | ✓ all |
+| `scans/batch`, 1× and 2×, small batches | 30 and 60 scans/s | p95 **53 ms** and **185 ms**; replays idempotent | ✓ |
+| `scans/batch`, **3×** (90 scans/s, 30 % as 500-scan syncs) | small live batches + 500-scan outbox syncs, each replayed | admissions and replays correct (replays idempotent 179/179, 0 errors, 0 × 429), **latency not met**: small p95 7.7 s, 500-scan p95 7.5 s (alone 2.8–3.7 s) | ✗ |
+
+The 3× scan result is a finding, not noise: `syncScansCommand` holds a per-event advisory lock for the whole request, so one event tops out near 30 batches a second here, and a 500-scan batch (about 3 s) stalls every live scan of the event (load.md §5.1). `scan.js` itself now gives p95 619 ms at its 30 scans/s on this data (37 ms on 2026-09-27). Re-run on staging before the first real event.
+
 ## Accessibility
 - Every new screen and state in M1.14 has an axe check (WCAG 2.2 AA tags, zero serious/critical):
   Activity (list, filters, empty, export, refused), Privacy requests (find, results, export, erase,
