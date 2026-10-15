@@ -86,6 +86,8 @@ It creates the database roles and pgvector, sets up backups and takes the first 
 
 **Rollback:** deploy the previous sha from `/var/lib/yayatoh/releases.log`. Migrations are expand-only, so the previous code runs on the newer schema.
 
+A teammate can run these steps from their own account: see **E. Giving a teammate deploy access**.
+
 ## C. Backups and restore
 - **What:** pgBackRest, encrypted, to the R2 bucket. Full every Sunday 03:15 UTC, differential Monday–Saturday, WAL every minute (restore to any moment). Four weeks of fulls are kept.
 - **Check by hand:** `sudo bash /opt/yayatoh/src/deploy/scripts/backup.sh check`.
@@ -101,3 +103,34 @@ It creates the database roles and pgvector, sets up backups and takes the first 
 - Secrets exist on the server only in `/run/yayatoh` (memory, root only) and inside the running containers. Rotating a secret = change it in Doppler, then redeploy the same sha.
 - Disk: `df -h /` and `sudo docker system df`. Old images are pruned after 7 days.
 - OS updates install automatically; reboot during a quiet hour when `/var/run/reboot-required` exists. Containers start again on their own.
+
+## E. Giving a teammate deploy access
+SSH on the server takes keys only (A3 turns password login off), and a release needs `sudo` because `deploy.sh` reads the root-only Doppler token and `/run/yayatoh`. Give each teammate **their own account**, allowed to run only the release commands. Never share the root login or your own key, and don't add them to the `docker` group: Docker access is root in all but name.
+
+1. **The teammate makes a key on their computer** and sends you only the public half (`.pub`), never the private key:
+   ```sh
+   ssh-keygen -t ed25519 -C "<their name>"
+   cat ~/.ssh/id_ed25519.pub
+   ```
+2. **On the server, as root,** create their account (replace `alex`) and install the key:
+   ```sh
+   adduser --disabled-password --gecos "" alex
+   install -d -m 700 -o alex -g alex /home/alex/.ssh
+   printf '%s\n' 'ssh-ed25519 AAAA… <their name>' > /home/alex/.ssh/authorized_keys
+   chown alex:alex /home/alex/.ssh/authorized_keys && chmod 600 /home/alex/.ssh/authorized_keys
+   ```
+3. **Allow the release commands, and nothing else:**
+   ```sh
+   cat > /etc/sudoers.d/yayatoh-deployers <<'EOF2'
+   alex ALL=(root) NOPASSWD: /usr/bin/bash /opt/yayatoh/src/deploy/scripts/deploy.sh *, /usr/bin/bash /opt/yayatoh/src/deploy/scripts/backup.sh check, /usr/bin/docker compose -f /opt/yayatoh/src/deploy/docker-compose.prod.yml --project-directory /opt/yayatoh/src/deploy logs *
+   EOF2
+   chmod 440 /etc/sudoers.d/yayatoh-deployers && visudo -c
+   ```
+   `visudo -c` must print "parsed OK"; if it doesn't, delete the file before you log out. For several teammates, put one line per person in the same file.
+4. **The teammate releases** exactly as in B, from their own login: `ssh alex@<server-ip>`, then `sudo bash /opt/yayatoh/src/deploy/scripts/deploy.sh <commit-sha>`. Logs: the `sudo docker compose … logs -f web worker` command in B.
+
+Notes:
+- **Restore stays with the owner.** The rule leaves out `restore.sh` (it can roll the database back). Add it only for someone on call for restores.
+- **Keep `/opt/yayatoh/src` owned by root.** The rule lets a teammate run those scripts as root; if they could edit them, the rule would be root for anything.
+- **Code access is separate:** releases come from a green `main`; add the teammate on GitHub (`heywebbuddy/yayatoh`) only with the access they need.
+- **Removing access:** `deluser --remove-home alex`, then delete their line in `/etc/sudoers.d/yayatoh-deployers` and run `visudo -c`.
