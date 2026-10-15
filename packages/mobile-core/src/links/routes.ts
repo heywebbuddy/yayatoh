@@ -62,6 +62,7 @@ interface Parts {
   readonly scheme: string;
   readonly host: string;
   readonly path: string;
+  readonly query: string;
   readonly fragment: string;
 }
 
@@ -72,6 +73,7 @@ function split(url: string): Parts | null {
     scheme: (m[1] ?? '').toLowerCase(),
     host: (m[2] ?? '').toLowerCase(),
     path: m[3] ?? '',
+    query: m[4] ?? '',
     fragment: m[5] ?? '',
   };
 }
@@ -110,13 +112,24 @@ function tenantOf(host: string, tenantDomain: string): string | null | undefined
   return undefined;
 }
 
-function attendeeRoute(segments: readonly string[], org: string | null): AppRoute | null {
+/**
+ * The checkout's return and cancel links (`/events/{slug}?checkout=return|cancelled&order={id}`, M7.2f)
+ * carry two markers the event screen reads. Only these two query fields are kept, only with a value
+ * of the right shape; the rest of the query is dropped like any other.
+ */
+function checkoutMarkers(query: string): Record<string, string> {
+  const { checkout, order } = fields(query);
+  if (checkout !== 'return' && checkout !== 'cancelled') return {};
+  return order && UUID.test(order) ? { checkout, order } : { checkout };
+}
+
+function attendeeRoute(segments: readonly string[], org: string | null, query: string): AppRoute | null {
   const [a, b, ...rest] = segments;
   if (!a || !b || rest.length > 0) return null;
   const withOrg = (params: Record<string, string>) => (org ? { ...params, org } : params);
   switch (a) {
     case 'events':
-      return { pathname: ROUTES.event, params: withOrg({ slug: b }) };
+      return { pathname: ROUTES.event, params: withOrg({ slug: b, ...checkoutMarkers(query) }) };
     case 'e':
       return { pathname: ROUTES.eventShort, params: withOrg({ code: b }) };
     case 'my-tickets':
@@ -164,7 +177,9 @@ export function routeForLink(url: string, options: LinkOptions): AppRoute | null
   }
   const segments = segmentsOf(path);
   if (!segments) return null;
-  return options.app === 'staff' ? staffRoute(segments, parts.fragment) : attendeeRoute(segments, org);
+  return options.app === 'staff'
+    ? staffRoute(segments, parts.fragment)
+    : attendeeRoute(segments, org, parts.query);
 }
 
 /**

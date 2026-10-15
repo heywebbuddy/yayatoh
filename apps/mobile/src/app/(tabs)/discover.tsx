@@ -1,12 +1,5 @@
-import { useTranslations } from 'use-intl';
-import { Heading, Screen } from '../../auth/ui';
+import { DiscoverScreen } from '../../discover/discover-screen';
 
-/** Placeholder until M7.3c's Discover tab is merged (the merge keeps theirs). */
 export default function DiscoverTab() {
-  const t = useTranslations('account.tabs');
-  return (
-    <Screen edges={['top', 'left', 'right']} testID="discover-screen">
-      <Heading>{t('discover')}</Heading>
-    </Screen>
-  );
+  return <DiscoverScreen />;
 }
