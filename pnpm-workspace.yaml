@@ -34,6 +34,9 @@ catalog:
 # in every package (apps/zapier's tests pass drizzle SQL into @yayatoh/db's transactions).
 overrides:
   "@opentelemetry/api": 1.9.1
+  # One metro runtime for every Expo install: `expo` takes it as an optional peer, and two versions
+  # split `expo` into separate installs that expo-doctor refuses (duplicate native modules).
+  "@expo/metro-runtime": ~57.0.17
 
 allowBuilds:
   "@node-rs/argon2": true
@@ -47,29 +50,31 @@ allowBuilds:
   "@sentry/cli": false
 
 minimumReleaseAgeExclude:
+  - expo@57.0.28 || 57.0.29
+  - expo-auth-session@57.0.16
+  - expo-linking@57.0.13
+  - expo-router@57.0.26 || 57.0.27
   - pg-boss@12.35.0
-  - '@expo/cli@57.0.29'
+  - '@expo/cli@57.0.29 || 57.0.30'
   - '@expo/fingerprint@0.20.14'
   - '@expo/inline-modules@0.1.8'
   - '@expo/local-build-cache-provider@57.0.9'
-  - '@expo/prebuild-config@57.0.18'
-  - '@expo/ui@57.0.23'
+  - '@expo/prebuild-config@57.0.18 || 57.0.19'
+  - '@expo/ui@57.0.23 || 57.0.24'
   - babel-preset-expo@57.0.15
   - expo-dev-client@57.0.20
   - expo-dev-launcher@57.0.21
   - expo-dev-menu@57.0.20
-  - expo-modules-autolinking@57.0.15
-  - expo-modules-core@57.0.22
+  - expo-modules-autolinking@57.0.15 || 57.0.16
+  - expo-modules-core@57.0.22 || 57.0.23
   - expo-modules-jsi@57.1.2
-  - expo-router@57.0.26
   - expo-splash-screen@57.0.10
   - expo-updates@57.0.26
-  - expo@57.0.28
   - jest-expo@57.0.6
   - expo-notifications@57.0.23
   - expo-asset@57.0.20
   - expo-constants@57.0.22
-  - expo-notifications@57.0.23
+  - '@expo/metro-runtime@57.0.17'
 
 # Phase 7 (M7.1b, ADR 0025): the Expo apps pin the React and React Native that Expo SDK 57 expects.
 # They live in a named catalog so the web's `catalog:` React (19.3.0) is never touched; the two
@@ -77,15 +82,15 @@ minimumReleaseAgeExclude:
 # Versions are what `npx expo install --check` wants for SDK 57; bump them together with `expo`.
 catalogs:
   mobile:
-    expo: ~57.0.28
+    expo: ~57.0.29
     expo-brightness: ~57.0.2
     expo-build-properties: ~57.0.22
     expo-calendar: ~57.0.5
     expo-constants: ~57.0.21
     expo-dev-client: ~57.0.20
     expo-doctor: 1.20.4
-    expo-linking: ~57.0.12
-    expo-router: ~57.0.26
+    expo-linking: ~57.0.13
+    expo-router: ~57.0.27
     expo-splash-screen: ~57.0.10
     expo-status-bar: ~57.0.1
     expo-system-ui: ~57.0.4
@@ -115,7 +120,7 @@ catalogs:
     "@tanstack/react-query": 5.104.2
     "@tanstack/react-query-persist-client": 5.104.2
     expo-application: ~57.0.3
-    expo-auth-session: ~57.0.15
+    expo-auth-session: ~57.0.16
     expo-battery: ~57.0.3
     expo-camera: ~57.0.6
     expo-apple-authentication: ~57.0.2
@@ -127,7 +132,7 @@ catalogs:
     expo-network: ~57.0.2
     expo-secure-store: ~57.0.4
     expo-web-browser: ~57.0.3
-    expo-asset: 57.0.19
+    expo-asset: ~57.0.20
     expo-audio: ~57.0.5
     expo-haptics: ~57.0.3
     expo-sqlite: ~57.0.4
