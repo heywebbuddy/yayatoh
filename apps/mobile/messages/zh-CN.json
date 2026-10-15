@@ -1,8 +1,4 @@
 {
-  "home": {
-    "title": "Yayatoh",
-    "tagline": "您的活动和门票很快会显示在这里。"
-  },
   "tickets": {
     "common": {
       "back": "返回",
@@ -201,5 +197,9 @@
       "toMyTickets": "前往我的票券",
       "retry": "重试"
     }
+  },
+  "home": {
+    "title": "Yayatoh",
+    "tagline": "您的活动和门票很快会显示在这里。"
   }
 }

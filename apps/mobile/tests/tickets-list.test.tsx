@@ -3,12 +3,12 @@ import { act, fireEvent, screen, waitFor, within } from '@testing-library/react-
 import { ticketKeys } from '../src/tickets/api';
 import { TicketsListScreen } from '../src/tickets/screens/tickets-list';
 import { syncTickets } from '../src/tickets/sync';
-import { setOnline, setup, teardown } from './helpers/app';
-import { event, FUTURE, IDS, page, summary, ticket } from './helpers/fixtures';
-import { resetRouter, router } from './helpers/router-mock';
-import { problem } from './helpers/server';
+import { setOnline, setup, teardown } from './helpers/tickets-app';
+import { event, FUTURE, IDS, page, summary, ticket } from './helpers/tickets-fixtures';
+import { resetRouter, router } from './helpers/tickets-router-mock';
+import { problem } from './helpers/tickets-server';
 
-jest.mock('expo-router', () => require('./helpers/router-mock').routerMock);
+jest.mock('expo-router', () => require('./helpers/tickets-router-mock').routerMock);
 
 const apps: ReturnType<typeof setup>[] = [];
 function mount(opts: Parameters<typeof setup>[0] = {}) {

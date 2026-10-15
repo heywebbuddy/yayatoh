@@ -1,12 +1,12 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react-native';
 import { PENDING_KEY } from '../src/tickets/pending';
 import { TicketLinkScreen } from '../src/tickets/screens/ticket-link';
-import { setOnline, setup, teardown } from './helpers/app';
-import { IDS, ticket } from './helpers/fixtures';
-import { resetRouter, router } from './helpers/router-mock';
-import { json, problem } from './helpers/server';
+import { setOnline, setup, teardown } from './helpers/tickets-app';
+import { IDS, ticket } from './helpers/tickets-fixtures';
+import { resetRouter, router } from './helpers/tickets-router-mock';
+import { json, problem } from './helpers/tickets-server';
 
-jest.mock('expo-router', () => require('./helpers/router-mock').routerMock);
+jest.mock('expo-router', () => require('./helpers/tickets-router-mock').routerMock);
 
 const TOKEN = '11111111-1111-4111-8111-111111111111~signature';
 const apps: ReturnType<typeof setup>[] = [];

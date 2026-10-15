@@ -2,12 +2,12 @@ import { fireEvent, screen, waitFor } from '@testing-library/react-native';
 import { YayatohApiError } from '@yayatoh/sdk';
 import { viewProblem } from '../src/tickets/api';
 import { TransferScreen, transferErrorKey, validateTransfer } from '../src/tickets/screens/transfer';
-import { fakeServices, setOnline, setup, teardown } from './helpers/app';
-import { IDS, ticket } from './helpers/fixtures';
-import { resetRouter, router } from './helpers/router-mock';
-import { json, problem } from './helpers/server';
+import { fakeServices, setOnline, setup, teardown } from './helpers/tickets-app';
+import { IDS, ticket } from './helpers/tickets-fixtures';
+import { resetRouter, router } from './helpers/tickets-router-mock';
+import { json, problem } from './helpers/tickets-server';
 
-jest.mock('expo-router', () => require('./helpers/router-mock').routerMock);
+jest.mock('expo-router', () => require('./helpers/tickets-router-mock').routerMock);
 
 const apps: ReturnType<typeof setup>[] = [];
 function mount(over: Parameters<typeof setup>[0] = {}, t = ticket()) {

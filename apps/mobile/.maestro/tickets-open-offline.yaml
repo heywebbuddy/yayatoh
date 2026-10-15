@@ -8,7 +8,7 @@ env:
 ---
 - launchApp:
     clearState: true
-- runFlow: sign-in-email-code.yaml
+- runFlow: tickets-sign-in.yaml
 # One sync happens when the tab opens.
 - assertVisible: 'Upcoming'
 - assertVisible:

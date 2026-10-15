@@ -12,7 +12,7 @@ import {
 import type { ReactElement } from 'react';
 import { catalogs } from '../../src/i18n';
 import { type TicketServices, TicketServicesProvider } from '../../src/tickets/services';
-import { createServer, pair } from './server';
+import { createServer, pair } from './tickets-server';
 
 export const flush = () => new Promise<void>((resolve) => setImmediate(resolve));
 

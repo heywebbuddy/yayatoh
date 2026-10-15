@@ -1,8 +1,4 @@
 {
-  "home": {
-    "title": "Yayatoh",
-    "tagline": "Your events and tickets will appear here soon."
-  },
   "tickets": {
     "common": {
       "back": "Back",
@@ -201,5 +197,9 @@
       "toMyTickets": "Go to my tickets",
       "retry": "Try again"
     }
+  },
+  "home": {
+    "title": "Yayatoh",
+    "tagline": "Your events and tickets will appear here soon."
   }
 }

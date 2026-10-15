@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react-native';
 import { Pressable, Text, TextInput } from 'react-native';
-import { expectAccessibleControls } from './helpers/a11y';
+import { expectAccessibleControls } from './helpers/tickets-a11y';
 
 describe('the accessibility audit used by the screen tests', () => {
   it('passes controls that have a name and 44 points', () => {

@@ -9,7 +9,7 @@ env:
 ---
 - launchApp:
     clearState: true
-- runFlow: sign-in-email-code.yaml
+- runFlow: tickets-sign-in.yaml
 - tapOn:
     text: 'General admission for ${EVENT}.*'
 - tapOn: 'Transfer ticket'

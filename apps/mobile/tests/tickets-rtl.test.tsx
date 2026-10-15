@@ -8,13 +8,13 @@ import { TicketDetailScreen } from '../src/tickets/screens/ticket-detail';
 import { TicketLinkScreen } from '../src/tickets/screens/ticket-link';
 import { TicketsListScreen } from '../src/tickets/screens/tickets-list';
 import { TransferScreen } from '../src/tickets/screens/transfer';
-import { expectAccessibleControls } from './helpers/a11y';
-import { setOnline, setup, teardown } from './helpers/app';
-import { claimDetails, IDS, order, page, summary, ticket } from './helpers/fixtures';
-import { resetRouter } from './helpers/router-mock';
-import { json } from './helpers/server';
+import { expectAccessibleControls } from './helpers/tickets-a11y';
+import { setOnline, setup, teardown } from './helpers/tickets-app';
+import { claimDetails, IDS, order, page, summary, ticket } from './helpers/tickets-fixtures';
+import { resetRouter } from './helpers/tickets-router-mock';
+import { json } from './helpers/tickets-server';
 
-jest.mock('expo-router', () => require('./helpers/router-mock').routerMock);
+jest.mock('expo-router', () => require('./helpers/tickets-router-mock').routerMock);
 
 const apps: ReturnType<typeof setup>[] = [];
 function mount(locale: 'en' | 'ar' | 'ja' | 'ru' = 'ar') {

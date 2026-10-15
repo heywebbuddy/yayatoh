@@ -1,8 +1,4 @@
 {
-  "home": {
-    "title": "Yayatoh",
-    "tagline": "Je evenementen en tickets verschijnen hier binnenkort."
-  },
   "tickets": {
     "common": {
       "back": "Terug",
@@ -201,5 +197,9 @@
       "toMyTickets": "Naar mijn tickets",
       "retry": "Opnieuw proberen"
     }
+  },
+  "home": {
+    "title": "Yayatoh",
+    "tagline": "Je evenementen en tickets verschijnen hier binnenkort."
   }
 }

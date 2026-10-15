@@ -1,9 +1,9 @@
 import { QueryClient } from '@tanstack/react-query';
 import { ticketKeys } from '../src/tickets/api';
 import { detailIsCurrent, MAX_SYNC_PAGES, syncTickets } from '../src/tickets/sync';
-import { setOnline, setup, teardown } from './helpers/app';
-import { IDS, page, summary, ticket } from './helpers/fixtures';
-import { problem } from './helpers/server';
+import { setOnline, setup, teardown } from './helpers/tickets-app';
+import { IDS, page, summary, ticket } from './helpers/tickets-fixtures';
+import { problem } from './helpers/tickets-server';
 
 const apps: ReturnType<typeof setup>[] = [];
 function mount() {

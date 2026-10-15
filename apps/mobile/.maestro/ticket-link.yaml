@@ -10,6 +10,6 @@ env:
 - openLink: yayatoh-preview://my-tickets/${HOLDER_TOKEN}
 - assertVisible: 'Sign in to open your ticket'
 - tapOn: 'Sign in'
-- runFlow: sign-in-email-code.yaml
+- runFlow: tickets-sign-in.yaml
 - assertVisible:
     text: 'Ticket QR code for ${EVENT}'

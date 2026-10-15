@@ -1,8 +1,4 @@
 {
-  "home": {
-    "title": "Yayatoh",
-    "tagline": "イベントとチケットはまもなくここに表示されます。"
-  },
   "tickets": {
     "common": {
       "back": "戻る",
@@ -201,5 +197,9 @@
       "toMyTickets": "マイチケットへ",
       "retry": "もう一度試す"
     }
+  },
+  "home": {
+    "title": "Yayatoh",
+    "tagline": "イベントとチケットはまもなくここに表示されます。"
   }
 }

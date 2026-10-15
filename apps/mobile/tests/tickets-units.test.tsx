@@ -20,7 +20,7 @@ import {
   takePending,
 } from '../src/tickets/pending';
 import { qrPath, TicketQr } from '../src/tickets/qr';
-import { event, IDS, summary } from './helpers/fixtures';
+import { event, IDS, summary } from './helpers/tickets-fixtures';
 
 /** The dark modules a path draws, as `x,y` keys (the quiet zone removed). */
 function modulesOf(d: string, quiet = 4): Set<string> {

@@ -3,12 +3,12 @@ import { YayatohApiError } from '@yayatoh/sdk';
 import { viewProblem } from '../src/tickets/api';
 import { PENDING_KEY } from '../src/tickets/pending';
 import { ClaimScreen, claimFailure } from '../src/tickets/screens/claim';
-import { setOnline, setup, teardown } from './helpers/app';
-import { claimDetails, IDS, ticket } from './helpers/fixtures';
-import { resetRouter, router } from './helpers/router-mock';
-import { json, problem } from './helpers/server';
+import { setOnline, setup, teardown } from './helpers/tickets-app';
+import { claimDetails, IDS, ticket } from './helpers/tickets-fixtures';
+import { resetRouter, router } from './helpers/tickets-router-mock';
+import { json, problem } from './helpers/tickets-server';
 
-jest.mock('expo-router', () => require('./helpers/router-mock').routerMock);
+jest.mock('expo-router', () => require('./helpers/tickets-router-mock').routerMock);
 
 const TOKEN = 'claimtoken-abcdef123456';
 const apps: ReturnType<typeof setup>[] = [];
