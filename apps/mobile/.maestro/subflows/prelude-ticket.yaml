@@ -1,0 +1,31 @@
+# Journey: (sub-flow) the shared start of every flow that needs a ticket: a fresh install, a new event,
+#   a new account signed in with a password, and one free ticket bought on the fake provider.
+# Preconditions: an e2e build; a server with YAYATOH_DEV_AUTH, the fake providers and DEV_PERSONA_PASSWORD
+#   (passed with -e, or MAESTRO_DEV_PERSONA_PASSWORD in the environment).
+# Personas: a throwaway buyer; the event belongs to a throwaway organization (scripts/new-event.js).
+#   Leaves ${output.email}, ${output.password}, ${output.eventName}, ${output.eventQuery} set for the caller.
+appId: com.yayatoh.yayatohapp.preview
+env:
+  TICKET_TYPE: 'Free entry'
+---
+- launchApp:
+    clearState: true
+- runScript:
+    file: ../scripts/new-event.js
+- runScript:
+    file: ../scripts/new-user.js
+- runFlow:
+    file: sign-in.yaml
+    env:
+      EMAIL: ${output.email}
+      PASSWORD: ${output.password}
+- runFlow:
+    file: acquire-ticket.yaml
+    env:
+      EVENT_QUERY: ${output.eventQuery}
+      EVENT_NAME: ${output.eventName}
+      TICKET_TYPE: ${TICKET_TYPE}
+- tapOn: 'View my tickets'
+- extendedWaitUntil:
+    visible: '.*${output.eventName}.*'
+    timeout: 30000

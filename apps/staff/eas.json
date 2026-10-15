@@ -32,6 +32,18 @@
       "env": {
         "APP_ENV": "production"
       }
+    },
+    "e2e-ios": {
+      "distribution": "internal",
+      "channel": "e2e",
+      "env": { "APP_ENV": "preview", "API_BASE_URL": "https://e2e-server.invalid/api/v1" },
+      "ios": { "simulator": true }
+    },
+    "e2e-android": {
+      "distribution": "internal",
+      "channel": "e2e",
+      "env": { "APP_ENV": "preview", "API_BASE_URL": "https://e2e-server.invalid/api/v1" },
+      "android": { "buildType": "apk" }
     }
   },
   "submit": {

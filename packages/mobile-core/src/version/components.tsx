@@ -1,5 +1,5 @@
 import { type ReactNode, useState, useSyncExternalStore } from 'react';
-import { Linking, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Linking, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useTranslations } from 'use-intl';
 import { useColors } from '../theme/provider';
 import { px, radius, space, TOUCH_TARGET_PX, type } from '../theme/theme';
@@ -24,7 +24,11 @@ export function UpdateScreen({
   const t = useTranslations('core.update');
   const colors = useColors();
   return (
-    <View style={[styles.screen, { backgroundColor: colors.canvas }]} testID="update-screen">
+    <ScrollView
+      style={{ backgroundColor: colors.canvas }}
+      contentContainerStyle={styles.screen}
+      testID="update-screen"
+    >
       <View style={[styles.card, { backgroundColor: colors.surfaceSolid, borderColor: colors.line }]}>
         <Text accessibilityRole="header" style={[styles.title, { color: colors.ink }]}>
           {t('requiredTitle')}
@@ -52,7 +56,7 @@ export function UpdateScreen({
           </Text>
         )}
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -77,6 +81,7 @@ export function SoftUpdateBanner({
   return (
     <View
       accessibilityRole="alert"
+      accessibilityLiveRegion="polite"
       style={[styles.banner, { backgroundColor: colors.primarySoft, borderColor: colors.line }]}
       testID="soft-update"
     >
@@ -152,7 +157,8 @@ export function VersionGateView({ gate, appName, children, openUrl }: VersionGat
 
 const styles = StyleSheet.create({
   fill: { flex: 1 },
-  screen: { flex: 1, justifyContent: 'center', paddingHorizontal: space[4] },
+  // Centred while it fits, scrolls when the text is larger than the screen.
+  screen: { flexGrow: 1, justifyContent: 'center', paddingHorizontal: space[4], paddingVertical: space[4] },
   card: {
     borderWidth: StyleSheet.hairlineWidth,
     borderRadius: px(radius.card),
@@ -177,7 +183,7 @@ const styles = StyleSheet.create({
     gap: space[2],
   },
   bannerTitle: { fontSize: type.body.size, fontWeight: '800', textAlign: 'auto' },
-  row: { flexDirection: 'row', gap: space[2] },
+  row: { flexDirection: 'row', flexWrap: 'wrap', gap: space[2] },
   smallButton: {
     minHeight: TOUCH_TARGET_PX,
     minWidth: TOUCH_TARGET_PX,

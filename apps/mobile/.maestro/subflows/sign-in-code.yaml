@@ -1,0 +1,23 @@
+# Journey: (sub-flow) sign in with an emailed code. The first sign-in for an address creates the account.
+# Preconditions: the app is open on the welcome screen; EMAIL is passed by the caller; the e2e server
+#   runs with YAYATOH_DEV_AUTH so scripts/last-code.js can read the code the dev mailer "sent".
+# Personas: none; the address is the caller's (a made-up one, or a ticket holder's).
+appId: com.yayatoh.yayatohapp.preview
+---
+- assertVisible: 'Welcome to Yayatoh'
+- tapOn: 'Continue with email'
+- tapOn:
+    id: 'email-input'
+- inputText: ${EMAIL}
+- tapOn: 'Send me a code'
+- assertVisible: 'Check your email'
+- runScript:
+    file: ../scripts/last-code.js
+    env:
+      EMAIL: ${EMAIL}
+- tapOn:
+    id: 'code-input'
+- inputText: ${output.code}
+- extendedWaitUntil:
+    visible: 'Tickets, tab, 1 of 3'
+    timeout: 20000

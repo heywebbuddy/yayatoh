@@ -1,6 +1,10 @@
-# Codes that must not get in (M7.4b): an unknown code, and a refunded ticket. Each shows a red
-# panel, the words, and the next step. Env: ENROL_EVENT, ENROL_KEY, VOID_TICKET_CODE (a seeded refunded ticket).
+# Journey: scan refusals — codes that must not get in: an unknown code, and a refunded ticket; each shows a
+#   red panel, the words and the next step.
+# Preconditions: as enrol-by-link.yaml, plus -e VOID_TICKET_CODE=<short code of a refunded ticket>.
+# Personas: none (a door device); the refunded ticket is a seeded one.
 appId: com.yayatoh.staff.preview
+env:
+  VOID_TICKET_CODE: ''
 ---
 - runFlow: scan-setup.yaml
 - tapOn:

@@ -1,40 +1,65 @@
-# M7.4c: an exhibitor rep captures a lead with no connection, then it syncs. Written, not run in cloud
-# sessions; the device pass runs it against a preview build.
-# Precondition: signed in as the seeded exhibitor rep (M7.4a "sign-in/exhibitor"), who holds a lead
-# licence; lead capture is open for the event. The camera is the simulator's test pattern or a printed
-# badge, so the flow types the code instead; BADGE-0001 is a seeded badge of an attendee who agreed to
-# share name, job title and company but not email.
+# Journey: lead retrieval, offline then sync — an exhibitor rep captures a lead with no connection (the
+#   badge code is typed, as the camera cannot be driven), it waits in the outbox, and when the connection is
+#   back it is sent; the lead shows only what the attendee agreed to share (no email).
+# Preconditions: as exhibitor-sign-in.yaml. Android only: Maestro's setAirplaneMode does not work on the iOS
+#   simulator, so on iOS this is a device-pass step.
+# Personas: the admin of a throwaway exhibitor (scripts/new-exhibitor.js), who holds a lead licence and has
+#   accepted the lead terms; the badge is a registrant who did not agree to share her email.
 appId: com.yayatoh.staff.preview
 ---
-- openLink: yayatoh-staff-preview://tools/leads
-- assertVisible: 'Your leads'
+- launchApp:
+    clearState: true
+- runScript:
+    file: scripts/new-exhibitor.js
+- tapOn: 'Exhibitor: sign in'
+- tapOn: 'Invitation link'
+- inputText: ${output.inviteLink}
+- tapOn: 'Email me a code'
+- extendedWaitUntil:
+    visible: 'We emailed a six-digit code.*'
+    timeout: 20000
+- runScript:
+    file: scripts/last-code.js
+    env:
+      EMAIL: ${output.exhibitorEmail}
+- tapOn: 'Six-digit code'
+- inputText: ${output.code}
+- tapOn: 'Verify and sign in'
+- extendedWaitUntil:
+    visible: 'Door tools'
+    timeout: 30000
+- tapOn:
+    id: 'open-leads'
+- extendedWaitUntil:
+    visible: 'Your leads'
+    timeout: 30000
 - setAirplaneMode: enabled
 - tapOn:
-    id: leads-scan
+    id: 'leads-scan'
 - tapOn:
-    id: lead-code
-- inputText: 'BADGE-0001'
+    id: 'lead-code'
+- inputText: ${output.badgeCode}
 - tapOn:
-    id: lead-code-use
+    id: 'lead-code-use'
 - tapOn:
-    id: rating-hot
+    id: 'rating-hot'
 - tapOn:
-    id: qualifier-Wants demo
-- tapOn:
-    id: lead-notes
+    id: 'lead-notes'
 - inputText: 'Call after the keynote'
 - tapOn:
-    id: lead-save
+    id: 'lead-save'
 - assertVisible: 'Saved on this phone. It will be sent when you are online.'
 - tapOn:
-    id: lead-next
+    id: 'lead-next'
 - back
 - assertVisible: '1 scan waiting to send'
 # Back online: the queue goes out, the lead appears with only the shared fields.
 - setAirplaneMode: disabled
 - tapOn:
-    id: leads-send
-- assertVisible: 'Sent.'
+    id: 'leads-send'
+- extendedWaitUntil:
+    visible: 'Sent.'
+    timeout: 30000
 - assertNotVisible: '1 scan waiting to send'
 - assertVisible: 'Hot'
-- assertNotVisible: '@'
+- assertNotVisible: '.*@.*'

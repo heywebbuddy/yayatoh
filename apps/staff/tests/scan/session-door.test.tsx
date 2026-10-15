@@ -135,9 +135,10 @@ describe('the in/out switch', () => {
     await waitFor(() => expect(screen.getByTestId('verdict-title')).toHaveTextContent('Entered'));
     fireEvent.press(screen.getByTestId('direction-out'));
     cameraClock += 10_000;
-    expect(screen.getByRole('button', { name: 'Out' })).toHaveProp('accessibilityState', {
+    // One choice out of two: a radio, so a screen reader says "selected, 2 of 2" (M7.X).
+    expect(screen.getByRole('radio', { name: 'Out' })).toHaveProp('accessibilityState', {
       disabled: false,
-      selected: true,
+      checked: true,
     });
     await act(async () => camera.see(`${A} `));
     await waitFor(() => expect(screen.getByTestId('verdict-title')).toHaveTextContent('Scanned out'));

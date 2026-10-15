@@ -1,0 +1,23 @@
+# Journey: sign in with Apple / sign in with Google — which one-tap buttons the welcome screen offers.
+#   Only the presence rules run here. Completing either sign-in needs the system's Apple or Google
+#   account sheet and a real account, which the app has no test seam for, so the sign-in itself is a
+#   device-pass step (manual) and the server side is covered by the api-v1 integration tests.
+# Preconditions: an e2e build with no Google client id (GOOGLE_IOS_CLIENT_ID / GOOGLE_ANDROID_CLIENT_ID
+#   unset), so the Google button is absent by design.
+# Personas: none.
+appId: com.yayatoh.yayatohapp.preview
+---
+- launchApp:
+    clearState: true
+- assertVisible: 'Welcome to Yayatoh'
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - assertVisible: 'Sign in with Apple'
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - assertNotVisible: 'Sign in with Apple'
+- assertNotVisible: 'Continue with Google'

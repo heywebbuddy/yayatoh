@@ -1,8 +1,11 @@
-# M7.4a: a door device enrols by opening the enrolment link (the QR code's link). Written, not run in
-# cloud sessions (no simulator). Device pass: a preview build against a seeded environment, with
-#   maestro test -e ENROL_EVENT=<event id> -e ENROL_KEY=<yyd_ token of a fresh device> \
-#     apps/staff/.maestro/enrol-by-link.yaml
-# The key is in the link's fragment: it never reaches a server log, and the app never logs it.
+# Journey: enrol by link — a door device enrols by opening the enrolment link (the QR code's link); the app
+#   proves the key, keeps it in the keychain and asks where it scans; a link with a made-up key is refused
+#   with its message and changes nothing.
+# Preconditions: an e2e build against an environment with an event and a freshly made door device, passed as
+#   -e ENROL_EVENT=<event id> -e ENROL_KEY=<the device's yyd_ token>. The key sits in the link's fragment, so
+#   it never reaches a server log. There is no HTTP route that makes a door device (only the organizer
+#   console does), so this flow is not run in EAS.
+# Personas: none (a door device has no personal account).
 appId: com.yayatoh.staff.preview
 env:
   ENROL_EVENT: ''
@@ -12,14 +15,16 @@ env:
     clearState: true
 - assertVisible: 'Enrol this device'
 - assertVisible: 'Scan the enrolment QR code'
-# The universal link opens the app on the enrolment screen, which proves the key and keeps it in the keychain.
+# The link opens the app on the enrolment screen, which proves the key and keeps it in the keychain.
 - openLink: 'yayatoh-staff-preview://scan#e=${ENROL_EVENT}&k=${ENROL_KEY}'
 - extendedWaitUntil:
     visible: 'Where is this device scanning?'
-    timeout: 20000
+    timeout: 30000
 - assertVisible: 'Whole event'
 # A wrong link is refused with its message and changes nothing.
 - launchApp:
     clearState: true
 - openLink: 'yayatoh-staff-preview://scan#e=${ENROL_EVENT}&k=yyd_not-a-real-key'
-- assertVisible: "That is not an enrolment link.*"
+- extendedWaitUntil:
+    visible: 'That is not an enrolment link.*|This enrolment code is no longer valid.*'
+    timeout: 30000

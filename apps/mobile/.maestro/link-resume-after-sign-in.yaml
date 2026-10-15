@@ -1,9 +1,23 @@
-# Device pass. A link that needs sign-in opens the front door first, then resumes after sign-in.
-appId: ${APP_ID}
+# Journey: link resume after sign-in — a ticket link opened while signed out sends the person to sign in
+#   first, then lands on the ticket (the app keeps the link for 30 minutes, in memory).
+# Preconditions: as ticket-link.yaml.
+# Personas: the first registrant of a conference made by scripts/new-holder.js.
+appId: com.yayatoh.yayatohapp.preview
 ---
 - launchApp:
     clearState: true
-- openLink: https://app.yayatoh.com/my-tickets/${HOLDER_TOKEN}
-- assertVisible: "Continue with email"
-- runFlow: sign-in-seeded.yaml
-- assertVisible: "Ticket QR code"
+- runScript:
+    file: scripts/new-holder.js
+- openLink: yayatoh-preview://my-tickets/${output.holderToken}
+- extendedWaitUntil:
+    visible: 'Sign in to open your ticket'
+    timeout: 20000
+- tapOn: 'Sign in'
+- runFlow:
+    file: subflows/sign-in-code.yaml
+    env:
+      EMAIL: ${output.holderEmail}
+# The link resumes after sign-in.
+- extendedWaitUntil:
+    visible: 'Ticket QR code for .*'
+    timeout: 30000

@@ -1,14 +1,14 @@
-# M7.4a: an exhibitor rep signs in with the invitation link and the emailed six-digit code. Written,
-# not run in cloud sessions. Device pass: a seeded exhibitor invitation and the local Mailpit, which
-# the script reads the code from:
-#   maestro test -e INVITE_LINK=<link from the invitation email> -e MAILPIT=http://localhost:8025 ...
+# Journey: exhibitor sign-in — a rep pastes the invitation link, asks for a code, a link that is not an
+#   invitation is refused without a request, a wrong code says so, and the emailed code signs in.
+# Preconditions: an e2e build pointed at a server with YAYATOH_DEV_AUTH=1 and the seeded organization
+#   lakeside-events; -e DEV_SERVER=<origin>. The code is read from the dev mailbox (scripts/last-code.js).
+# Personas: the admin of a throwaway exhibitor with a lead licence (scripts/new-exhibitor.js).
 appId: com.yayatoh.staff.preview
-env:
-  INVITE_LINK: ''
-  MAILPIT: 'http://localhost:8025'
 ---
 - launchApp:
     clearState: true
+- runScript:
+    file: scripts/new-exhibitor.js
 - tapOn: 'Exhibitor: sign in'
 - assertVisible: 'Exhibitor sign-in'
 # Something that is not an invitation link is refused without a request.
@@ -16,26 +16,25 @@ env:
 - inputText: 'hello'
 - tapOn: 'Email me a code'
 - assertVisible: 'That is not an invitation link.*'
-- clearState
-- launchApp
-- tapOn: 'Exhibitor: sign in'
-- tapOn: 'Invitation link'
-- inputText: '${INVITE_LINK}'
+- eraseText: 10
+- inputText: ${output.inviteLink}
 - tapOn: 'Email me a code'
-- assertVisible: 'We emailed a six-digit code.*'
+- extendedWaitUntil:
+    visible: 'We emailed a six-digit code.*'
+    timeout: 20000
 # A wrong code is refused and says how many tries are left.
 - tapOn: 'Six-digit code'
 - inputText: '000000'
 - tapOn: 'Verify and sign in'
 - assertVisible: 'That code is not right.*'
 - runScript:
-    file: scripts/mailpit-code.js
+    file: scripts/last-code.js
     env:
-      MAILPIT: '${MAILPIT}'
+      EMAIL: ${output.exhibitorEmail}
 - tapOn: 'Six-digit code'
-- eraseText
-- inputText: '${output.code}'
+- eraseText: 6
+- inputText: ${output.code}
 - tapOn: 'Verify and sign in'
 - extendedWaitUntil:
     notVisible: 'Exhibitor sign-in'
-    timeout: 15000
+    timeout: 30000

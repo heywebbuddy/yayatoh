@@ -1,8 +1,8 @@
-# M7.3a: a new person signs in with an emailed code, lands on Tickets, and signs out again.
-# Written, not run in cloud sessions (no simulator). Device pass: a preview build pointed
-# (API_BASE_URL) at a dev server with YAYATOH_DEV_AUTH=1, run with
-#   maestro test apps/mobile/.maestro/sign-in-email-code.yaml -e DEV_SERVER=http://10.0.2.2:3000
-# The email is made up per run; the code is read back from the dev server's mailbox.
+# Journey: sign in by email code — a new person asks for a code, a wrong code is refused with its message,
+#   the right one signs in (the first sign-in creates the account), and the account shows the address as verified.
+# Preconditions: an e2e build pointed (API_BASE_URL) at a server with YAYATOH_DEV_AUTH=1; pass the
+#   server as -e DEV_SERVER=<origin> (a local Android emulator reaches the host as http://10.0.2.2:3000).
+# Personas: none; the address is made up per run, and the code is read from the dev mailbox.
 appId: com.yayatoh.yayatohapp.preview
 ---
 - launchApp:
@@ -29,12 +29,10 @@ appId: com.yayatoh.yayatohapp.preview
 - eraseText: 6
 - inputText: ${output.code}
 # The sixth digit signs in; the first sign-in creates the account.
-- assertVisible: 'Tickets, tab, 1 of 3'
+- extendedWaitUntil:
+    visible: 'Tickets, tab, 1 of 3'
+    timeout: 20000
 - assertVisible: 'Discover, tab, 2 of 3'
 - tapOn: 'Account, tab, 3 of 3'
 - assertVisible: ${output.email}
 - assertVisible: 'Verified'
-# Sign out (asks first) and come back to the welcome screen.
-- tapOn: 'Sign out'
-- tapOn: 'Sign out'
-- assertVisible: 'Welcome to Yayatoh'

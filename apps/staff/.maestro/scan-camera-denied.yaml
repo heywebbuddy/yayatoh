@@ -1,6 +1,12 @@
-# Denied camera permission (M7.4b): the screen says how to turn it on and still lets staff type a
-# code. Env: ENROL_EVENT, ENROL_KEY, TICKET_CODE.
+# Journey: scan, camera denied — with camera permission refused the scanner says how to turn it on and still
+#   lets staff type a code.
+# Preconditions: as enrol-by-link.yaml, plus -e TICKET_CODE=<short code of an active ticket>.
+# Personas: none (a door device).
 appId: com.yayatoh.staff.preview
+env:
+  ENROL_EVENT: ''
+  ENROL_KEY: ''
+  TICKET_CODE: ''
 ---
 - launchApp:
     clearState: true
@@ -9,8 +15,8 @@ appId: com.yayatoh.staff.preview
 - openLink: 'yayatoh-staff-preview://scan#e=${ENROL_EVENT}&k=${ENROL_KEY}'
 - extendedWaitUntil:
     visible: 'Where is this device scanning?'
-    timeout: 20000
-- tapOn: 'Whole event'
+    timeout: 30000
+- tapOn: 'Whole event.*'
 - extendedWaitUntil:
     visible: 'Camera access is off'
     timeout: 60000

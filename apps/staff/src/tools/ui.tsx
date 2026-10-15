@@ -197,7 +197,7 @@ export function Field({
       <Text style={[styles.fieldLabel, { color: colors.ink }]}>{label}</Text>
       <TextInput
         accessibilityLabel={label}
-        accessibilityHint={hint}
+        accessibilityHint={error ?? hint}
         placeholderTextColor={colors.ink3}
         style={[
           styles.input,
@@ -212,7 +212,10 @@ export function Field({
       {hint && !error ? <Text style={[styles.caption, { color: colors.ink2 }]}>{hint}</Text> : null}
       {error ? (
         <Text accessibilityLiveRegion="polite" style={[styles.caption, { color: colors.danger }]}>
-          ! {error}
+          <Text accessibilityElementsHidden importantForAccessibility="no">
+            !{' '}
+          </Text>
+          {error}
         </Text>
       ) : null}
     </View>
@@ -271,7 +274,13 @@ export function Stat({ label, value, testID }: { label: string; value: string; t
 export function Loading({ label }: { label: string }) {
   const colors = useColors();
   return (
-    <View accessibilityLabel={label} accessibilityRole="progressbar" style={styles.state} testID="loading">
+    <View
+      accessible
+      accessibilityLabel={label}
+      accessibilityRole="progressbar"
+      style={styles.state}
+      testID="loading"
+    >
       <ActivityIndicator color={colors.primaryInk} />
       <Text style={[styles.body, { color: colors.ink2 }]}>{label}</Text>
     </View>

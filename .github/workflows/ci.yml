@@ -62,6 +62,8 @@ jobs:
         run: pnpm exec biome check apps/mobile apps/staff packages/mobile-core
       - name: Import, colour and string rules
         run: pnpm check:modules
+      - name: Maestro journey inventory
+        run: node tools/check-maestro/cli.ts
       - name: Typecheck and unit (jest-expo)
         run: |
           pnpm turbo run typecheck --concurrency=1 --filter=@yayatoh/mobile --filter=@yayatoh/staff --filter=@yayatoh/mobile-core

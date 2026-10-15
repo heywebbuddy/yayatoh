@@ -5,6 +5,11 @@ import type { Context } from 'hono';
 export const PUBLIC_CACHE = 'public, max-age=60';
 /** Org reads: only the caller may keep them, and must revalidate (cheap with the ETag). */
 export const PRIVATE_CACHE = 'private, no-cache';
+/**
+ * A person's own data or a credential (`/me/…`, tokens, the door's lists): not stored anywhere, not
+ * even by the caller's own HTTP cache, which a phone keeps in plain files (M7.x).
+ */
+export const SENSITIVE_CACHE = 'private, no-store';
 
 /** A strong ETag over the exact JSON body. */
 export function etagOf(body: string): string {

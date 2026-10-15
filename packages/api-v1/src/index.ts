@@ -7,6 +7,7 @@ import { recordApiUsage } from '@yayatoh/platform';
 import { apiKeyIdentity, memberRole, recordApiKeyUsage, resolveOrgSlug } from '@yayatoh/tenancy';
 import { createMiddleware } from 'hono/factory';
 import { routePath } from 'hono/route';
+import { SENSITIVE_CACHE } from './caching.ts';
 import type { Principal, V1Deps, V1Env } from './context.ts';
 import { deprecationMiddleware } from './deprecation.ts';
 import { onV1Error, problem, sendProblem } from './http.ts';
@@ -216,6 +217,20 @@ export function createV1(deps: V1Deps) {
     c.set('requestId', id);
     c.header('x-request-id', id);
     await next();
+  });
+
+  // M7.x: an answer that carries a person's data or a credential (tokens, tickets and their QR
+  // codes, guest lists) is never kept by an HTTP cache. A phone's networking stack (iOS's URL cache
+  // writes responses to disk) would otherwise hold a plain copy outside the app's encrypted cache
+  // that survives sign-out. Routes that set their own `Cache-Control` (public reads, the org
+  // reads' `private, no-cache`) keep it; everything else answered to a credential, and every
+  // sign-in or write, gets `private, no-store`.
+  v1.use('*', async (c, next) => {
+    await next();
+    if (c.res.headers.has('cache-control')) return;
+    const credentialed = c.req.raw.headers.has('authorization');
+    if (credentialed || c.req.method !== 'GET' || c.req.path.includes('/auth/'))
+      c.header('cache-control', SENSITIVE_CACHE);
   });
 
   // App-version telemetry per route (M1.15). Best effort: never delays or fails a request.

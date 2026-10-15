@@ -1,0 +1,29 @@
+# Journey: update required, inside an event window — an enrolled Staff device never gets the update screen
+#   from 24 h before the event starts to 2 h after it ends, even when its version is below the server's
+#   minimum: the door must not be stranded; the scanner keeps working.
+# Preconditions: as enrol-by-link.yaml for an event whose window is open now, against a server whose
+#   MOBILE_CONFIG_JSON sets the Staff minimum version above the build's version (as update-required.yaml).
+# Personas: none (a door device).
+appId: com.yayatoh.staff.preview
+env:
+  ENROL_EVENT: ''
+  ENROL_KEY: ''
+---
+- launchApp:
+    clearState: true
+- openLink: 'yayatoh-staff-preview://scan#e=${ENROL_EVENT}&k=${ENROL_KEY}'
+- extendedWaitUntil:
+    visible: 'Where is this device scanning?'
+    timeout: 30000
+- tapOn: 'Whole event.*'
+- extendedWaitUntil:
+    visible:
+      id: scan-screen
+    timeout: 60000
+- assertNotVisible: 'Update required'
+# Still true after a restart.
+- stopApp
+- launchApp
+- assertNotVisible: 'Update required'
+- assertVisible:
+    id: scan-screen

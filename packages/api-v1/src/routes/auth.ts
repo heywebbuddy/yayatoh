@@ -1,10 +1,12 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi';
 import { type AppSignInResult, isTwoFactorError } from '@yayatoh/auth';
 import { DomainError, STEP_UP_WINDOW_MS } from '@yayatoh/kernel';
+import type { RateLimitPolicyName } from '@yayatoh/platform/security';
 import { deleteAccount } from '@yayatoh/privacy';
 import { myOrganizations } from '@yayatoh/tenancy';
 import { accountNotifier } from '../account-mail.ts';
 import type { V1Deps, V1Env } from '../context.ts';
+import { platformLimiter } from '../platform-limiter.ts';
 import { RATE_LIMITS, type RateLimiter } from '../rate-limit.ts';
 import { listSchema, Membership, MobileConfig, Session, TokenPair, toWire, User } from '../resources.ts';
 import { mobileApps, resolveMobile } from '../versions.ts';
@@ -338,6 +340,21 @@ export function authRoutes(deps: V1Deps, limiter: RateLimiter, ipOf: (h: Headers
     if (!d.allowed)
       throw new DomainError('rate_limited', 'Too many attempts', { retryAfter: d.resetSeconds });
   };
+  /**
+   * The counters every server instance shares (M7.x): the in-memory buckets above are per instance,
+   * so on a serverless host an attacker could spread guesses and emails across instances. The
+   * address or challenge under attack is the identity; the IP budgets are generous (venue Wi-Fi).
+   */
+  const sharedTake = async (
+    policy: RateLimitPolicyName,
+    subject: { readonly ip: string; readonly identity: string },
+  ) => {
+    const d = await (deps.authLimiter ?? platformLimiter()).check(policy, subject);
+    if (!d.allowed)
+      throw new DomainError('rate_limited', 'Too many attempts', {
+        retryAfter: Math.max(1, Math.ceil(d.retryAfterMs / 1000)),
+      });
+  };
   return new OpenAPIHono<V1Env>()
     .openapi(token, async (c) => {
       const req = c.req.valid('json');
@@ -379,6 +396,7 @@ export function authRoutes(deps: V1Deps, limiter: RateLimiter, ipOf: (h: Headers
         case 'email_code':
           takeOrThrow(`emailcode:verify:${req.email.toLowerCase()}`, RATE_LIMITS.loginAccount);
           takeOrThrow(`emailcode:verify:ip:${ip}`, RATE_LIMITS.loginIp);
+          await sharedTake('appSignInVerify', { ip, identity: req.email });
           r = await app.signInWithEmailCode(req.email, req.code);
           break;
         case 'apple':
@@ -393,10 +411,12 @@ export function authRoutes(deps: V1Deps, limiter: RateLimiter, ipOf: (h: Headers
           break;
         case 'two_factor':
           takeOrThrow(`challenge:ip:${ip}`, RATE_LIMITS.loginIp);
+          await sharedTake('appSignInVerify', { ip, identity: req.challenge });
           r = await app.completeTwoFactor(req.challenge, req.code);
           break;
         case 'link_proof':
           takeOrThrow(`challenge:ip:${ip}`, RATE_LIMITS.loginIp);
+          await sharedTake('appSignInVerify', { ip, identity: req.challenge });
           r = await app.completeLinkProof(req.challenge, req.code);
           break;
       }
@@ -408,11 +428,13 @@ export function authRoutes(deps: V1Deps, limiter: RateLimiter, ipOf: (h: Headers
       const ip = ipOf(c.req.raw.headers);
       takeOrThrow(`emailcode:acct:${email.toLowerCase()}`, RATE_LIMITS.emailCodeAccount);
       takeOrThrow(`emailcode:ip:${ip}`, RATE_LIMITS.emailCodeIp);
+      await sharedTake('appEmailCode', { ip, identity: email });
       return c.json(toWire(EmailCodeRequested, await appSignIn().requestEmailCode(email)), 202);
     })
     .openapi(stepUpStart, async (c) => {
       const s = userOf(c);
       takeOrThrow(`stepup:mail:${s.user.id}`, RATE_LIMITS.stepUpMail);
+      await sharedTake('appStepUpMail', { ip: ipOf(c.req.raw.headers), identity: s.user.id });
       const method = await appSignIn().startStepUp(s.user.id, s.user.email);
       return c.json(toWire(StepUpStarted, { method }), 200);
     })

@@ -1,40 +1,43 @@
-# Search for an event, choose tickets and buy them with the fake payment provider.
-appId: com.yayatoh.yayatohapp.dev
-env:
-  EMAIL: nia@newcomer.test
-  PASSWORD: persona-dev-password
-  EVENT_QUERY: Harbor Spring
-  EVENT_NAME: Harbor Spring Concert
+# Journey: buy a ticket with the fake provider — search for the event, choose a paid pass, check out, pay on the
+#   fake provider's page in the secure browser, return to the confirmation, and find the ticket in My tickets.
+# Preconditions: as subflows/prelude-signed-in.yaml; PAYMENTS_PROVIDER unset on the server, so the hosted
+#   payment page is the fake one ("Pay now (test)"); the event's organizer has a fake connected account
+#   (scripts/new-event.js asks for payouts=active).
+# Personas: a throwaway buyer; the event comes from scripts/new-event.js.
+appId: com.yayatoh.yayatohapp.preview
 ---
-- launchApp:
-    clearState: true
-- runFlow: subflows/sign-in.yaml
-- tapOn: 'Discover'
+- runFlow: subflows/prelude-signed-in.yaml
+- tapOn: 'Discover, tab, 2 of 3'
 - tapOn: 'Search events'
-- inputText: ${EVENT_QUERY}
-- hideKeyboard
-- assertVisible: ${EVENT_NAME}
+- inputText: ${output.eventQuery}
+- extendedWaitUntil:
+    visible: '.*${output.eventName}.*'
+    timeout: 30000
 - assertVisible: 'Soonest first'
-- tapOn: ${EVENT_NAME}
+- tapOn: '.*${output.eventName}.*'
 # The event page: details first, then the passes with all-in prices.
 - assertVisible: 'Tickets'
 - scrollUntilVisible:
-    element: 'Add one General admission'
-- tapOn: 'Add one General admission'
-- tapOn: 'Add one General admission'
-- assertVisible: '2 tickets'
+    element: 'Add one Supporter'
+- tapOn: 'Add one Supporter'
+- tapOn: 'Add one Supporter'
+- assertVisible: '2 tickets.*'
 - tapOn: 'Continue to checkout'
 # Checkout: the lines, the total, then the hosted (fake) payment page in the secure browser.
 - assertVisible: 'Checkout'
-- assertVisible: '2 × General admission'
+- assertVisible: '2 × Supporter'
 - tapOn:
     text: 'Pay .*'
-- assertVisible: 'Pay for your order'
+- extendedWaitUntil:
+    visible: 'Pay for your order'
+    timeout: 30000
 - tapOn: 'Pay now (test)'
 # The return link brings the person back to the confirmation.
-- assertVisible:
-    text: "You're going!"
+- extendedWaitUntil:
+    visible: "You're going!"
     timeout: 30000
-- assertVisible: '2 × General admission'
+- assertVisible: '2 × Supporter'
 - tapOn: 'View my tickets'
-- assertVisible: ${EVENT_NAME}
+- extendedWaitUntil:
+    visible: '.*${output.eventName}.*'
+    timeout: 30000

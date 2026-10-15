@@ -1,0 +1,27 @@
+# Journey: Arabic right-to-left smoke — with the phone in Arabic the enrolment screen is in Arabic and
+#   right-to-left (the Staff app follows the phone's language; it has no in-app picker). The layout
+#   direction itself is checked in the device pass; here the Arabic strings prove the catalog was picked.
+# Preconditions: iOS: the flow launches with the language override below. Android: set the emulator's
+#   system language to Arabic first (Maestro cannot), then run this flow; the iOS branch is skipped.
+# Personas: none.
+appId: com.yayatoh.staff.preview
+---
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - launchApp:
+          clearState: true
+          arguments:
+            '-AppleLanguages': '(ar)'
+            '-AppleLocale': 'ar_SA'
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - launchApp:
+          clearState: true
+- extendedWaitUntil:
+    visible: 'تسجيل هذا الجهاز'
+    timeout: 30000
+- assertNotVisible: 'Enrol this device'

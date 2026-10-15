@@ -1,17 +1,30 @@
-# Device pass. A push while the app is open is an in-app banner; a tap opens its screen.
-appId: ${APP_ID}
+# Journey: push tap, foreground — a push that arrives while the app is open is drawn as an in-app banner
+#   (no personal data on it); tapping it opens the screen it names.
+# Preconditions: as push-tap-cold-start.yaml (a booted iOS simulator and `.maestro/send-push.sh`).
+# Personas: a throwaway buyer who holds a ticket of the event named by -e EVENT_SLUG.
+appId: com.yayatoh.yayatohapp.preview
 env:
-  EVENT_SLUG: summit
+  EVENT_TITLE: Summit 2026
 ---
 - launchApp:
     clearState: true
-    permissions: { notifications: allow }
-- runFlow: sign-in-seeded.yaml
+    permissions:
+      notifications: allow
+- runScript:
+    file: scripts/new-user.js
+- runFlow:
+    file: subflows/sign-in.yaml
+    env:
+      EMAIL: ${output.email}
+      PASSWORD: ${output.password}
 # Send it now from a second terminal: .maestro/send-push.sh event-changed
-- extendedWaitUntil: { visible: "Summit 2026", timeout: 60000 }
-- assertVisible: "Summit 2026"
-- assertVisible: "The start time changed"
+- extendedWaitUntil:
+    visible: ${EVENT_TITLE}
+    timeout: 60000
+- assertVisible: 'The start time changed'
 # No personal data on the banner.
-- assertNotVisible: ${PERSONA_EMAIL}
-- tapOn: "Summit 2026"
-- assertVisible: "Summit"
+- assertNotVisible: ${output.email}
+- tapOn: ${EVENT_TITLE}
+- extendedWaitUntil:
+    visible: 'About this event|Tickets'
+    timeout: 30000

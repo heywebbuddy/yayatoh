@@ -1,10 +1,17 @@
-# M7.1c: with the network off the app tells the person so. Written, not run in cloud sessions.
-# Device pass: iOS simulator or emulator with airplane mode toggled by the runner.
+# Journey: offline banner — with the network off the app says so, and the banner goes when it is back.
+# Preconditions: an e2e build. Android only: Maestro's setAirplaneMode does not work on the iOS simulator,
+#   so on iOS this is a device-pass step.
+# Personas: none (the banner shows on the welcome screen too).
 appId: com.yayatoh.yayatohapp.preview
 ---
 - launchApp:
     clearState: true
+- assertVisible: 'Welcome to Yayatoh'
 - setAirplaneMode: enabled
-- assertVisible: "You're offline. You can still see what was saved on this phone."
+- extendedWaitUntil:
+    visible: "You're offline. You can still see what was saved on this phone."
+    timeout: 20000
 - setAirplaneMode: disabled
-- assertNotVisible: "You're offline. You can still see what was saved on this phone."
+- extendedWaitUntil:
+    notVisible: "You're offline. You can still see what was saved on this phone."
+    timeout: 30000

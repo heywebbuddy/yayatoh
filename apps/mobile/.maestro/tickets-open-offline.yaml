@@ -1,44 +1,46 @@
-# M7.3b acceptance: after one sync, My tickets and every ticket's QR open with the network off, and
-# signing out removes them. Written, not run in cloud sessions (device pass: iOS simulator and
-# Android emulator; the runner toggles airplane mode). Seed: persona tess@example.test holds the
-# ticket "General admission" for the event named in EVENT.
+# Journey: tickets open offline — after one sync, My tickets and the ticket's QR open with the network off
+#   (also after a restart), and signing out removes them.
+# Preconditions: as subflows/prelude-ticket.yaml. Android only: Maestro's setAirplaneMode does not work on
+#   the iOS simulator, so on iOS this is a device-pass step (turn on airplane mode by hand).
+# Personas: a throwaway buyer holding one free ticket (bought by the flow).
 appId: com.yayatoh.yayatohapp.preview
-env:
-  EVENT: Summer Night
 ---
-- launchApp:
-    clearState: true
-- runFlow: tickets-sign-in.yaml
+- runFlow: subflows/prelude-ticket.yaml
 # One sync happens when the tab opens.
 - assertVisible: 'Upcoming'
-- assertVisible:
-    text: ${EVENT}
 - assertVisible: 'Last synced.*'
 - tapOn:
-    text: 'General admission for ${EVENT}.*'
+    text: 'Free entry for ${output.eventName}.*'
 - assertVisible:
-    text: 'Ticket QR code for ${EVENT}'
+    text: 'Ticket QR code for ${output.eventName}'
 - assertVisible: 'Ticket code'
 - back
 # Network off, app restarted from the saved copy.
 - setAirplaneMode: enabled
 - launchApp
-- assertVisible: 'You’re offline.*'
+- extendedWaitUntil:
+    visible: 'You’re offline.*'
+    timeout: 20000
 - assertVisible:
-    text: ${EVENT}
+    text: '.*${output.eventName}.*'
 - tapOn:
-    text: 'General admission for ${EVENT}.*'
+    text: 'Free entry for ${output.eventName}.*'
 - assertVisible:
-    text: 'Ticket QR code for ${EVENT}'
+    text: 'Ticket QR code for ${output.eventName}'
 - assertVisible: 'You’re offline. This is the copy saved on this phone.'
 - setAirplaneMode: disabled
-# Signing out removes the saved tickets.
+# Signing out removes the saved tickets: the next start is the welcome screen, not the list.
 - back
-- tapOn: 'Account'
-- tapOn: 'Sign out'
-- tapOn: 'Sign out'
-- setAirplaneMode: enabled
-- launchApp
+- tapOn: 'Account, tab, 3 of 3'
+- scrollUntilVisible:
+    element:
+      id: 'account-sign-out'
+- tapOn:
+    id: 'account-sign-out'
+- tapOn:
+    id: 'account-sign-out-confirm'
+- extendedWaitUntil:
+    visible: 'Welcome to Yayatoh'
+    timeout: 20000
 - assertNotVisible:
-    text: ${EVENT}
-- setAirplaneMode: disabled
+    text: '.*${output.eventName}.*'

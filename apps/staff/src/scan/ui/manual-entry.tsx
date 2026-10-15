@@ -37,7 +37,7 @@ export function ManualEntry({ onSubmit, onClose }: ManualEntryProps) {
       </Text>
       <TextInput
         accessibilityLabel={t('label')}
-        accessibilityHint={t('hint')}
+        accessibilityHint={error ? t('empty') : t('hint')}
         autoCapitalize="characters"
         autoCorrect={false}
         autoComplete="off"
@@ -67,6 +67,7 @@ export function ManualEntry({ onSubmit, onClose }: ManualEntryProps) {
       {error ? (
         <Text
           accessibilityRole="alert"
+          accessibilityLiveRegion="polite"
           style={[styles.error, { color: colors.danger }]}
           testID="manual-error"
         >

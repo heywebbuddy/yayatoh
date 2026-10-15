@@ -299,6 +299,15 @@ export function Segmented<T extends string>({
             testID={`segment-${o.value}`}
             style={[styles.segment, { backgroundColor: selected ? colors.surfaceSolid : 'transparent' }]}
           >
+            {selected ? (
+              <Text
+                accessibilityElementsHidden
+                importantForAccessibility="no"
+                style={{ color: colors.primaryInk }}
+              >
+                ✓
+              </Text>
+            ) : null}
             <Text style={[styles.buttonLabel, { color: selected ? colors.primaryInk : colors.ink2 }]}>
               {o.label}
             </Text>
@@ -388,6 +397,8 @@ const styles = StyleSheet.create({
     flex: 1,
     minHeight: TOUCH_TARGET_PX,
     borderRadius: px(radius.pill),
+    flexDirection: 'row',
+    gap: space[1],
     alignItems: 'center',
     justifyContent: 'center',
   },

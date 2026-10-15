@@ -136,6 +136,25 @@ describe('link domains', () => {
   });
 });
 
+describe('backups (M7.x security review)', () => {
+  it('keeps tokens, the ticket cache and the guest list out of cloud and device-to-device backups', () => {
+    for (const env of ['development', 'preview', 'production']) {
+      expect(mobile({ APP_ENV: env }).android?.allowBackup).toBe(false);
+      expect(staff({ APP_ENV: env }).android?.allowBackup).toBe(false);
+    }
+  });
+
+  it('allows plain-http API traffic in development builds only, and never on a shipping build', () => {
+    expect(() => mobile({ APP_ENV: 'production', API_BASE_URL: 'http://example.test/api/v1' })).toThrow(
+      /https/,
+    );
+    expect(() => staff({ APP_ENV: 'preview', API_BASE_URL: 'http://example.test/api/v1' })).toThrow(/https/);
+    const plugins = (c: ReturnType<typeof mobile>) => JSON.stringify(c.plugins);
+    expect(plugins(mobile({ APP_ENV: 'production' }))).not.toContain('usesCleartextTraffic');
+    expect(plugins(staff({ APP_ENV: 'preview' }))).not.toContain('usesCleartextTraffic');
+  });
+});
+
 describe('permissions', () => {
   it('asks for the camera in the Staff app only', () => {
     const s = staff();

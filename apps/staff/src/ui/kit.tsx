@@ -159,6 +159,7 @@ export function TextField({
       <Text style={[styles.fieldLabel, { color: colors.ink }]}>{label}</Text>
       <TextInput
         accessibilityLabel={label}
+        accessibilityHint={error ?? undefined}
         autoCapitalize="none"
         autoCorrect={false}
         placeholderTextColor={colors.ink3}

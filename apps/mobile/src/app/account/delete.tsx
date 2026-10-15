@@ -173,6 +173,8 @@ export default function DeleteAccount() {
                 error={errors.email ?? null}
                 keyboardType="email-address"
                 inputMode="email"
+                textContentType="emailAddress"
+                autoComplete="email"
                 autoCapitalize="none"
                 autoCorrect={false}
               />

@@ -34,7 +34,7 @@ import { formatEventStart, formatEventWhen, formatMoney } from '../shop/format';
 import { useShopPorts } from '../shop/ports';
 import { cartIssues, passStatus, stepQuantity, summarize, withQuantity } from '../shop/selection';
 import { brandColorOf, mapLinkFor, plainText } from '../shop/text';
-import { Banner, Body, Button, Caption, Card, Chip, Empty, Heading, Loading } from '../shop/ui';
+import { Banner, Body, Button, Caption, Card, Chip, Empty, Heading, Loading, Page } from '../shop/ui';
 import { PassRow } from './pass-row';
 
 export interface ReturnMarker {
@@ -142,16 +142,16 @@ function EventBody({
 
   if (eventQuery.isPending) {
     return (
-      <SafeAreaView style={[styles.screen, { backgroundColor: colors.canvas }]}>
+      <Page>
         <Loading label={t('loading')} />
-      </SafeAreaView>
+      </Page>
     );
   }
   if (eventQuery.isError || !event) {
     const failure = failureOf(eventQuery.error);
     const missing = failure.kind === 'not_found';
     return (
-      <SafeAreaView style={[styles.screen, styles.padded, { backgroundColor: colors.canvas }]}>
+      <Page>
         <BackButton />
         {missing ? (
           <Empty testID="event-not-found" title={t('notFoundTitle')} body={t('notFoundBody')} />
@@ -159,13 +159,14 @@ function EventBody({
           <Banner
             tone="danger"
             title={t('errorTitle')}
+            heading
             testID="event-error"
             action={<Button label={core('common.retry')} onPress={() => void eventQuery.refetch()} />}
           >
             {failure.kind === 'network' ? core('errors.network') : core('errors.generic')}
           </Banner>
         )}
-      </SafeAreaView>
+      </Page>
     );
   }
 
@@ -209,7 +210,7 @@ function EventBody({
         <BackButton />
 
         {state.phase === 'confirming' ? (
-          <Banner tone="info" title={ct('confirmingTitle')} testID="event-confirming">
+          <Banner tone="info" title={ct('confirmingTitle')} live testID="event-confirming">
             {ct('confirmingBody')}
           </Banner>
         ) : null}
@@ -368,7 +369,6 @@ function EventBody({
 
 const styles = StyleSheet.create({
   screen: { flex: 1 },
-  padded: { padding: space[4], gap: space[4] },
   content: { padding: space[4], gap: space[4], paddingBottom: space[8] },
   titleBlock: { gap: space[1] },
   block: { gap: space[3] },

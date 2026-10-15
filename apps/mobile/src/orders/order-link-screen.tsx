@@ -3,24 +3,20 @@
  * holds the link, not to a signed-in account, and `/v1` has no route for that, so the app opens the web
  * order page in the secure browser. (The person's own orders are in Account → Orders.)
  */
-import { space, useColors } from '@yayatoh/mobile-core';
 import { useRouter } from 'expo-router';
-import { StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslations } from 'use-intl';
 import { useWebBaseUrl } from '../shop/api';
 import { useShopPorts } from '../shop/ports';
-import { Banner, Button, Heading } from '../shop/ui';
+import { Banner, Button, Heading, Page } from '../shop/ui';
 
 export function OrderLinkScreen({ token }: { token: string }) {
   const t = useTranslations('orders.link');
   const router = useRouter();
-  const colors = useColors();
   const ports = useShopPorts();
   const base = useWebBaseUrl();
   const url = base.data ? `${base.data.replace(/\/+$/, '')}/orders/${encodeURIComponent(token)}` : null;
   return (
-    <SafeAreaView style={[styles.screen, { backgroundColor: colors.canvas }]}>
+    <Page>
       <Heading>{t('title')}</Heading>
       <Banner tone="info" title={t('bannerTitle')} testID="order-link-banner">
         {t('body')}
@@ -37,10 +33,6 @@ export function OrderLinkScreen({ token }: { token: string }) {
         onPress={() => router.replace('/orders')}
         testID="order-link-orders"
       />
-    </SafeAreaView>
+    </Page>
   );
 }
-
-const styles = StyleSheet.create({
-  screen: { flex: 1, padding: space[4], gap: space[4], justifyContent: 'center' },
-});
