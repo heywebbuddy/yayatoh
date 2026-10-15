@@ -8,7 +8,10 @@ appId: com.yayatoh.staff.preview
 - extendedWaitUntil:
     visible: 'No open requests|Request #.*'
     timeout: 30000
-# Ask for help: a reason is required.
+# Ask for help (the form is below the queue): a reason is required.
+- scrollUntilVisible:
+    element:
+      id: raise-send
 - tapOn:
     id: raise-send
 - assertVisible: 'Choose what you need.'
@@ -19,7 +22,10 @@ appId: com.yayatoh.staff.preview
 - extendedWaitUntil:
     visible: 'Request #.* sent.'
     timeout: 30000
-# Work the request: take, start, resolve.
+# Work the request (it is at the top of the queue): take, start, resolve.
+- scrollUntilVisible:
+    element: 'Take request .*'
+    direction: UP
 - tapOn: 'Take request .*'
 - extendedWaitUntil:
     visible: 'Taken by this device'
