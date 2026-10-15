@@ -1,0 +1,23 @@
+{
+  "name": "@yayatoh/store-kit",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "store-kit": "./cli.ts"
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@yayatoh/mobile-core": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@yayatoh/config": "workspace:*",
+    "typescript": "catalog:"
+  }
+}

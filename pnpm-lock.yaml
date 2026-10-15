@@ -4577,6 +4577,22 @@ importers:
         specifier: 'catalog:'
         version: 6.0.3
 
+  tools/store-kit:
+    dependencies:
+      '@yayatoh/mobile-core':
+        specifier: workspace:*
+        version: link:../../packages/mobile-core
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.19.0
+      '@yayatoh/config':
+        specifier: workspace:*
+        version: link:../../packages/config
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
 packages:
 
   '@ai-sdk/gateway@3.0.13':
