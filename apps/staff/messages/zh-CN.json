@@ -2,5 +2,110 @@
   "home": {
     "title": "Yayatoh Staff",
     "tagline": "活动当天的入场工具即将推出。"
+  },
+  "enrol": {
+    "title": "注册此设备",
+    "intro": "请活动组织者在控制台显示注册二维码，然后在此扫描。此设备不需要个人账号。",
+    "notices": {
+      "revoked": "组织者已将此设备从活动中移除。请扫描新的注册码以再次使用。",
+      "wiped": "组织者已清除此设备。其令牌和数据均已删除。请扫描新的注册码以再次使用。"
+    },
+    "scan": "扫描注册二维码",
+    "working": "正在检查注册…",
+    "linkLabel": "注册链接",
+    "linkPlaceholder": "粘贴控制台中的链接",
+    "submit": "使用此链接注册",
+    "errors": {
+      "invalid_link": "这不是注册链接。请使用活动设备页面上的二维码或链接。",
+      "rejected": "此注册码已失效。请向组织者索取新的注册码。",
+      "wrong_event": "此注册码不属于此设备可处理的活动。请向组织者索取新的注册码。",
+      "unavailable": "无法连接到 Yayatoh。请检查网络连接后重试。"
+    },
+    "replace": {
+      "title": "要替换此设备的注册吗？",
+      "body": "此设备已注册到{event}。重新注册将删除其令牌以及它为该活动保存的所有内容。",
+      "bodyNoEvent": "此设备已注册到某个活动。重新注册将删除其令牌以及它为该活动保存的所有内容。",
+      "confirm": "清除并重新注册",
+      "cancel": "保留当前注册"
+    },
+    "staffPrompt": "不是入口设备？",
+    "signInOrganizer": "组织者：登录",
+    "signInExhibitor": "参展商：登录",
+    "signInTitle": "登录",
+    "backToEnrol": "返回注册",
+    "scanner": {
+      "title": "扫描注册码",
+      "hint": "请将相机对准组织者屏幕上的二维码。",
+      "preview": "用于扫描注册二维码的相机画面",
+      "checking": "正在检查相机权限…",
+      "invalid": "该二维码不是注册码。请扫描活动设备页面上的二维码。",
+      "useLink": "改为输入链接",
+      "permission": {
+        "title": "相机权限已关闭",
+        "body": "Yayatoh Staff 需要使用相机读取注册二维码，不会用于其他用途。",
+        "allow": "允许使用相机",
+        "settingsHint": "相机权限已被关闭。请打开设置，允许 Yayatoh Staff 使用相机，然后返回。",
+        "settings": "打开设置"
+      }
+    }
+  },
+  "device": {
+    "select": {
+      "title": "此设备在哪里扫码？",
+      "unnamedEvent": "活动",
+      "dates": "{start} 至 {end}",
+      "unavailable": "无法加载此活动的入口。您仍可对整个活动扫码，或重试。",
+      "prompt": "请选择此设备扫码的入口。组织者之后可以调整。",
+      "wholeEvent": "整个活动",
+      "wholeEventHint": "在任意入口扫码",
+      "selectedOption": "{name}（已选）",
+      "refused": "此设备无法使用该入口。请选择其他入口。",
+      "continue": "继续扫码",
+      "remove": "移除此设备",
+      "removeTitle": "要移除此设备吗？",
+      "removeBody": "这将删除注册令牌以及此设备为活动保存的所有内容。再次使用需要新的注册码。",
+      "removeConfirm": "清除并移除"
+    }
+  },
+  "organizer": {
+    "about": "您是组织者？可实时查看活动当天的情况：签到、通行速度、扫码问题和设备。",
+    "open": "以组织者身份登录",
+    "title": "组织者登录",
+    "intro": "请使用您的 Yayatoh 账号。必须启用两步验证。",
+    "email": "电子邮件地址",
+    "password": "密码",
+    "continue": "继续",
+    "codeIntro": "请输入验证器应用中的验证码，或输入一个备用码。",
+    "code": "验证码",
+    "verify": "验证并登录",
+    "back": "返回",
+    "twoFactorRequired": "组织者登录需要两步验证。请先在网页控制台中启用，然后在此重新登录。",
+    "errors": {
+      "emailInvalid": "请输入有效的电子邮件地址。",
+      "passwordRequired": "请输入密码。",
+      "codeRequired": "请输入验证码。"
+    }
+  },
+  "exhibitor": {
+    "about": "您是参展商？使用邮件中收到的邀请，在展位上收集销售线索。",
+    "open": "以参展商身份登录",
+    "title": "参展商登录",
+    "intro": "请打开邀请邮件并在此粘贴其中的链接。我们会向受邀邮箱发送一个六位数验证码。",
+    "inviteLabel": "邀请链接",
+    "invitePlaceholder": "粘贴邀请邮件中的链接",
+    "sendCode": "给我发送验证码",
+    "codeIntro": "我们已向您受邀时使用的邮箱发送了六位数验证码，有效期为 10 分钟。",
+    "codeLabel": "六位数验证码",
+    "verify": "验证并登录",
+    "resend": "再发送一个验证码",
+    "back": "返回",
+    "errors": {
+      "inviteInvalid": "这不是邀请链接。请复制邀请邮件中的链接。",
+      "invalidInvite": "此邀请无法使用。它可能已过期或已被替换：请让组织者重新发送。",
+      "codeInvalid": "请输入邮件中的六位数字。",
+      "codeRejected": "此验证码已无法使用。请重新获取。",
+      "wrongCode": "验证码不正确。请检查后重试。",
+      "wrongCodeAttempts": "验证码不正确。{count, plural, other {还剩 # 次机会。}}"
+    }
   }
 }

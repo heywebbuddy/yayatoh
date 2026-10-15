@@ -1,0 +1,25 @@
+/** The door device (M7.4a): enrolment, the `yyd_` token in secure storage, heartbeat, wipe. */
+export { batteryPercent } from './battery';
+export { DeviceCoreBridge } from './bridge';
+export {
+  type Enrolment,
+  enrolmentFrom,
+  enrolmentFromLink,
+  looksLikeEnrolmentLink,
+  redactEnrolment,
+} from './link';
+export { DeviceGuard, EnrolmentLinks } from './navigation';
+export { type DeviceApi, DeviceProvider, useDevice } from './provider';
+export {
+  createDeviceSession,
+  type DeviceCheckpoint,
+  type DeviceEvent,
+  type DeviceSession,
+  type DeviceState,
+  type DeviceStatus,
+  type EnrolOutcome,
+  EVENT_WINDOW,
+  type HeartbeatOutcome,
+  insideEventWindow,
+  type WipeReason,
+} from './session';

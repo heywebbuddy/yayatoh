@@ -2,5 +2,110 @@
   "home": {
     "title": "Yayatoh Staff",
     "tagline": "Die Einlass-Tools für den Eventtag kommen bald."
+  },
+  "enrol": {
+    "title": "Dieses Gerät registrieren",
+    "intro": "Bitten Sie die Veranstalterin oder den Veranstalter, den QR-Code zur Registrierung in der Konsole anzuzeigen, und scannen Sie ihn hier. Für dieses Gerät ist kein persönliches Konto nötig.",
+    "notices": {
+      "revoked": "Ein Veranstalter hat dieses Gerät aus der Veranstaltung entfernt. Scannen Sie einen neuen Registrierungscode, um es wieder zu verwenden.",
+      "wiped": "Ein Veranstalter hat dieses Gerät gelöscht. Token und Daten wurden entfernt. Scannen Sie einen neuen Registrierungscode, um es wieder zu verwenden."
+    },
+    "scan": "QR-Code zur Registrierung scannen",
+    "working": "Registrierung wird geprüft…",
+    "linkLabel": "Registrierungslink",
+    "linkPlaceholder": "Link aus der Konsole einfügen",
+    "submit": "Mit diesem Link registrieren",
+    "errors": {
+      "invalid_link": "Das ist kein Registrierungslink. Verwenden Sie den QR-Code oder Link von der Geräteseite der Veranstaltung.",
+      "rejected": "Dieser Registrierungscode ist nicht mehr gültig. Bitten Sie den Veranstalter um einen neuen.",
+      "wrong_event": "Dieser Code gehört zu keiner Veranstaltung, die dieses Gerät bedienen kann. Bitten Sie den Veranstalter um einen neuen.",
+      "unavailable": "Yayatoh ist nicht erreichbar. Prüfen Sie die Verbindung und versuchen Sie es erneut."
+    },
+    "replace": {
+      "title": "Registrierung dieses Geräts ersetzen?",
+      "body": "Dieses Gerät ist für {event} registriert. Eine erneute Registrierung löscht sein Token und alles, was es für diese Veranstaltung gespeichert hat.",
+      "bodyNoEvent": "Dieses Gerät ist für eine Veranstaltung registriert. Eine erneute Registrierung löscht sein Token und alles, was es für diese Veranstaltung gespeichert hat.",
+      "confirm": "Löschen und neu registrieren",
+      "cancel": "Aktuelle Registrierung behalten"
+    },
+    "staffPrompt": "Kein Türgerät?",
+    "signInOrganizer": "Veranstalter: anmelden",
+    "signInExhibitor": "Aussteller: anmelden",
+    "signInTitle": "Anmelden",
+    "backToEnrol": "Zurück zur Registrierung",
+    "scanner": {
+      "title": "Registrierungscode scannen",
+      "hint": "Richten Sie die Kamera auf den QR-Code auf dem Bildschirm des Veranstalters.",
+      "preview": "Kameraansicht zum Scannen des QR-Codes zur Registrierung",
+      "checking": "Kamerazugriff wird geprüft…",
+      "invalid": "Dieser QR-Code ist kein Registrierungscode. Scannen Sie den Code von der Geräteseite der Veranstaltung.",
+      "useLink": "Stattdessen den Link eingeben",
+      "permission": {
+        "title": "Kamerazugriff ist ausgeschaltet",
+        "body": "Yayatoh Staff braucht die Kamera, um den QR-Code zur Registrierung zu lesen. Sie wird für nichts anderes verwendet.",
+        "allow": "Kamerazugriff erlauben",
+        "settingsHint": "Der Kamerazugriff wurde ausgeschaltet. Öffnen Sie die Einstellungen, erlauben Sie die Kamera für Yayatoh Staff und kehren Sie zurück.",
+        "settings": "Einstellungen öffnen"
+      }
+    }
+  },
+  "device": {
+    "select": {
+      "title": "Wo scannt dieses Gerät?",
+      "unnamedEvent": "Veranstaltung",
+      "dates": "{start} bis {end}",
+      "unavailable": "Die Eingänge dieser Veranstaltung konnten nicht geladen werden. Sie können weiterhin für die ganze Veranstaltung scannen oder es erneut versuchen.",
+      "prompt": "Wählen Sie den Eingang, an dem dieses Gerät scannt. Ein Veranstalter kann es später verschieben.",
+      "wholeEvent": "Ganze Veranstaltung",
+      "wholeEventHint": "An jedem Eingang scannen",
+      "selectedOption": "{name} (ausgewählt)",
+      "refused": "Dieser Eingang ist für dieses Gerät nicht verfügbar. Wählen Sie einen anderen.",
+      "continue": "Weiter zum Scannen",
+      "remove": "Dieses Gerät entfernen",
+      "removeTitle": "Dieses Gerät entfernen?",
+      "removeBody": "Dadurch werden das Registrierungstoken und alles gelöscht, was dieses Gerät für die Veranstaltung gespeichert hat. Für die erneute Nutzung brauchen Sie einen neuen Registrierungscode.",
+      "removeConfirm": "Löschen und entfernen"
+    }
+  },
+  "organizer": {
+    "about": "Veranstalter? Verfolgen Sie den Veranstaltungstag live: Check-ins, Durchsatz, Scan-Probleme und Geräte.",
+    "open": "Als Veranstalter anmelden",
+    "title": "Anmeldung für Veranstalter",
+    "intro": "Verwenden Sie Ihr Yayatoh-Konto. Die Bestätigung in zwei Schritten ist erforderlich.",
+    "email": "E-Mail-Adresse",
+    "password": "Passwort",
+    "continue": "Weiter",
+    "codeIntro": "Geben Sie den Code aus Ihrer Authentifizierungs-App oder einen Ihrer Backup-Codes ein.",
+    "code": "Bestätigungscode",
+    "verify": "Bestätigen und anmelden",
+    "back": "Zurück",
+    "twoFactorRequired": "Für die Anmeldung als Veranstalter ist die Bestätigung in zwei Schritten nötig. Schalten Sie sie in der Web-Konsole ein und melden Sie sich hier erneut an.",
+    "errors": {
+      "emailInvalid": "Geben Sie eine gültige E-Mail-Adresse ein.",
+      "passwordRequired": "Geben Sie Ihr Passwort ein.",
+      "codeRequired": "Geben Sie den Bestätigungscode ein."
+    }
+  },
+  "exhibitor": {
+    "about": "Aussteller? Erfassen Sie Leads an Ihrem Stand mit der Einladung, die Sie per E-Mail erhalten haben.",
+    "open": "Als Aussteller anmelden",
+    "title": "Anmeldung für Aussteller",
+    "intro": "Öffnen Sie die Einladungs-E-Mail und fügen Sie deren Link hier ein. Wir senden einen sechsstelligen Code an die eingeladene Adresse.",
+    "inviteLabel": "Einladungslink",
+    "invitePlaceholder": "Link aus der Einladungs-E-Mail einfügen",
+    "sendCode": "Code per E-Mail senden",
+    "codeIntro": "Wir haben einen sechsstelligen Code an die Adresse gesendet, mit der Sie eingeladen wurden. Er gilt 10 Minuten.",
+    "codeLabel": "Sechsstelliger Code",
+    "verify": "Bestätigen und anmelden",
+    "resend": "Weiteren Code senden",
+    "back": "Zurück",
+    "errors": {
+      "inviteInvalid": "Das ist kein Einladungslink. Kopieren Sie den Link aus Ihrer Einladungs-E-Mail.",
+      "invalidInvite": "Diese Einladung kann nicht verwendet werden. Sie ist möglicherweise abgelaufen oder ersetzt worden: Bitten Sie den Veranstalter, sie erneut zu senden.",
+      "codeInvalid": "Geben Sie die sechs Ziffern aus der E-Mail ein.",
+      "codeRejected": "Dieser Code kann nicht mehr verwendet werden. Fordern Sie einen neuen an.",
+      "wrongCode": "Dieser Code ist nicht richtig. Prüfen Sie ihn und versuchen Sie es erneut.",
+      "wrongCodeAttempts": "Dieser Code ist nicht richtig. {count, plural, one {# Versuch übrig.} other {# Versuche übrig.}}"
+    }
   }
 }
