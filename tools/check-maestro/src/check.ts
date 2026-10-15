@@ -387,7 +387,9 @@ export function checkApp(root: string, app: App): Problem[] {
   checkJourneys(app, m, add);
 
   const files = walk(dir).map((p) => toPosix(relative(dir, p)));
-  const flowFiles = files.filter((f) => /\.ya?ml$/.test(f));
+  // `store/` holds the store screenshot flows (M7.5a), checked by tools/store-kit, not journeys; the secret
+  // scan below still reads them.
+  const flowFiles = files.filter((f) => /\.ya?ml$/.test(f) && !f.startsWith('store/'));
   for (const f of flowFiles)
     if (!m.flows?.[f]) add(f, 'unlisted', 'is a flow in the directory but not in journeys.json');
   for (const f of Object.keys(m.flows ?? {}))

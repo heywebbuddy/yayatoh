@@ -161,20 +161,30 @@ describe('.eas/workflows', () => {
         developmentClient: true,
         distribution: 'internal',
         channel: 'development',
+        environment: 'development',
         env: { APP_ENV: 'development' },
         ios: { simulator: true },
       });
       expect(eas.build.preview).toEqual({
         distribution: 'internal',
         channel: 'preview',
+        environment: 'preview',
         env: { APP_ENV: 'preview' },
       });
       expect(eas.build.production).toEqual({
+        distribution: 'store',
         channel: 'production',
+        environment: 'production',
         autoIncrement: true,
         env: { APP_ENV: 'production' },
       });
-      expect(eas.submit).toEqual({ production: {} });
+      // The submit profiles are M7.5a's; the e2e profiles add none.
+      expect(Object.keys(eas.submit).sort()).toEqual([
+        'play-closed',
+        'play-internal',
+        'production',
+        'testflight',
+      ]);
       for (const [name, os] of [
         ['e2e-ios', 'ios'],
         ['e2e-android', 'android'],
