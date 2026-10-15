@@ -22,7 +22,7 @@ import {
   hasArabicLetters,
   hasPlaceholderLeak,
   nameOf,
-} from '../../../packages/mobile-core/tests/support/a11y-audit';
+} from '@yayatoh/mobile-core/testing/a11y-audit';
 import CodeScreen from '../src/app/(auth)/code';
 import EmailScreen from '../src/app/(auth)/email';
 import LinkProofScreen from '../src/app/(auth)/link-proof';

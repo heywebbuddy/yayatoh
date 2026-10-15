@@ -13,7 +13,7 @@ import {
   type Finding,
   type ScanConfig,
   scanSource,
-} from '../../../packages/mobile-core/tests/support/a11y-scan';
+} from '@yayatoh/mobile-core/testing/a11y-scan';
 
 const REPO = join(__dirname, '../../..');
 const ROOTS = ['apps/mobile/src', 'packages/mobile-core/src'];

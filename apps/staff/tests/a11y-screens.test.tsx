@@ -23,7 +23,7 @@ import {
   auditTree,
   hasArabicLetters,
   hasPlaceholderLeak,
-} from '../../../packages/mobile-core/tests/support/a11y-audit';
+} from '@yayatoh/mobile-core/testing/a11y-audit';
 import EnrolScreen from '../src/app/enrol/index';
 import EnrolScanScreen from '../src/app/enrol/scan';
 import SelectScreen from '../src/app/select/index';
