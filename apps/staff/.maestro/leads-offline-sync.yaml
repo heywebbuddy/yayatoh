@@ -1,0 +1,40 @@
+# M7.4c: an exhibitor rep captures a lead with no connection, then it syncs. Written, not run in cloud
+# sessions; the device pass runs it against a preview build.
+# Precondition: signed in as the seeded exhibitor rep (M7.4a "sign-in/exhibitor"), who holds a lead
+# licence; lead capture is open for the event. The camera is the simulator's test pattern or a printed
+# badge, so the flow types the code instead; BADGE-0001 is a seeded badge of an attendee who agreed to
+# share name, job title and company but not email.
+appId: com.yayatoh.staff.preview
+---
+- openLink: yayatoh-staff-preview://tools/leads
+- assertVisible: 'Your leads'
+- setAirplaneMode: enabled
+- tapOn:
+    id: leads-scan
+- tapOn:
+    id: lead-code
+- inputText: 'BADGE-0001'
+- tapOn:
+    id: lead-code-use
+- tapOn:
+    id: rating-hot
+- tapOn:
+    id: qualifier-Wants demo
+- tapOn:
+    id: lead-notes
+- inputText: 'Call after the keynote'
+- tapOn:
+    id: lead-save
+- assertVisible: 'Saved on this phone. It will be sent when you are online.'
+- tapOn:
+    id: lead-next
+- back
+- assertVisible: '1 scan waiting to send'
+# Back online: the queue goes out, the lead appears with only the shared fields.
+- setAirplaneMode: disabled
+- tapOn:
+    id: leads-send
+- assertVisible: 'Sent.'
+- assertNotVisible: '1 scan waiting to send'
+- assertVisible: 'Hot'
+- assertNotVisible: '@'

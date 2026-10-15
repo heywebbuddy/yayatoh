@@ -1,0 +1,24 @@
+# Denied camera permission (M7.4b): the screen says how to turn it on and still lets staff type a
+# code. Env: ENROL_EVENT, ENROL_KEY, TICKET_CODE.
+appId: com.yayatoh.staff.preview
+---
+- launchApp:
+    clearState: true
+    permissions:
+      camera: deny
+- openLink: 'yayatoh-staff-preview://scan#e=${ENROL_EVENT}&k=${ENROL_KEY}'
+- extendedWaitUntil:
+    visible: 'Where is this device scanning?'
+    timeout: 20000
+- tapOn: 'Whole event'
+- extendedWaitUntil:
+    visible: 'Camera access is off'
+    timeout: 60000
+- assertVisible: 'Open settings'
+- tapOn: 'Type a code instead'
+- tapOn:
+    id: manual-input
+- inputText: ${TICKET_CODE}
+- tapOn:
+    id: manual-submit
+- assertVisible: 'Admit'

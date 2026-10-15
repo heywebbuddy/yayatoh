@@ -1,0 +1,40 @@
+# Search for an event, choose tickets and buy them with the fake payment provider.
+appId: com.yayatoh.yayatohapp.dev
+env:
+  EMAIL: nia@newcomer.test
+  PASSWORD: persona-dev-password
+  EVENT_QUERY: Harbor Spring
+  EVENT_NAME: Harbor Spring Concert
+---
+- launchApp:
+    clearState: true
+- runFlow: subflows/sign-in.yaml
+- tapOn: 'Discover'
+- tapOn: 'Search events'
+- inputText: ${EVENT_QUERY}
+- hideKeyboard
+- assertVisible: ${EVENT_NAME}
+- assertVisible: 'Soonest first'
+- tapOn: ${EVENT_NAME}
+# The event page: details first, then the passes with all-in prices.
+- assertVisible: 'Tickets'
+- scrollUntilVisible:
+    element: 'Add one General admission'
+- tapOn: 'Add one General admission'
+- tapOn: 'Add one General admission'
+- assertVisible: '2 tickets'
+- tapOn: 'Continue to checkout'
+# Checkout: the lines, the total, then the hosted (fake) payment page in the secure browser.
+- assertVisible: 'Checkout'
+- assertVisible: '2 × General admission'
+- tapOn:
+    text: 'Pay .*'
+- assertVisible: 'Pay for your order'
+- tapOn: 'Pay now (test)'
+# The return link brings the person back to the confirmation.
+- assertVisible:
+    text: "You're going!"
+    timeout: 30000
+- assertVisible: '2 × General admission'
+- tapOn: 'View my tickets'
+- assertVisible: ${EVENT_NAME}

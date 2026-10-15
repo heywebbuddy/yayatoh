@@ -1,0 +1,27 @@
+# Device pass. Refusing the phone's sheet blocks no purchase, ticket or sign-in, and is not asked again.
+appId: ${APP_ID}
+env:
+  EVENT_SLUG: summit
+---
+- launchApp:
+    clearState: true
+    permissions: { notifications: unset }
+- runFlow: sign-in-seeded.yaml
+- runFlow: buy-ticket.yaml
+- assertVisible: "Get updates about your tickets?"
+- tapOn: "Turn on notifications"
+- tapOn: "Don’t Allow"
+# Everything still works: the order, the ticket and the account.
+- assertVisible: "Order confirmed"
+- tapOn: "Tickets"
+- tapOn:
+    index: 0
+- assertVisible: "Ticket QR code"
+- runFlow: buy-ticket.yaml
+- assertNotVisible: "Get updates about your tickets?"
+# The Notifications screen explains and links to the phone's settings.
+- tapOn: "Account"
+- tapOn: "Notifications"
+- assertVisible: "Notifications are off"
+- assertVisible: "Tickets, orders and sign-in work the same with them off."
+- tapOn: "Open phone settings"

@@ -1,25 +1,35 @@
-import { type Core, createCore, nativeAdapters, nativeIdentity, readAppExtra } from '@yayatoh/mobile-core';
+import { type Core, nativeAdapters, nativeIdentity, readAppExtra } from '@yayatoh/mobile-core';
+import { batteryPercent } from './device/battery';
+import type { DeviceSession } from './device/session';
 import { catalogs } from './i18n';
+import type { PortalSession } from './portal/session';
+import { createStaffServices, type StaffServices } from './services';
 
-let core: Core | undefined;
+let services: StaffServices | undefined;
 
-/**
- * The app's one `Core` (session, `/v1` client, query cache, version gate), made on first use so
- * importing a screen in a test does not read the native build configuration.
- */
-export function getCore(): Core {
-  if (!core) {
+/** Made on first use, so importing a screen in a test does not read the native build configuration. */
+function app(): StaffServices {
+  if (!services) {
     const extra = readAppExtra();
     const identity = nativeIdentity('staff');
-    core = createCore({
-      appName: 'Yayatoh Staff',
-      identity,
+    services = createStaffServices({
       apiBaseUrl: extra.apiBaseUrl,
+      identity,
       catalogs,
       adapters: nativeAdapters('staff', identity.platform, extra),
+      battery: batteryPercent,
       environment: extra.appEnv,
       ...(extra.sentryDsn ? { sentryDsn: extra.sentryDsn } : {}),
     });
   }
-  return core;
+  return services;
 }
+
+/** The app's one `Core`: the person's session, the `/v1` client, the query cache, the version gate. */
+export const getCore = (): Core => app().core;
+
+/** The door device's session (M7.4a): the `yyd_` token in the keychain, the heartbeat, wipe. */
+export const getDevice = (): DeviceSession => app().device;
+
+/** The exhibitor rep's portal session (M7.4a), apart from an organizer's account session. */
+export const getPortal = (): PortalSession => app().portal;

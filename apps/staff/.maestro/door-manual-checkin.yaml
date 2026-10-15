@@ -1,0 +1,45 @@
+# M7.4c: find a guest at the door and check them in by hand, with a reason. Written, not run in cloud
+# sessions (no simulator); the device pass runs it against a preview build.
+# Precondition: the device is enrolled (M7.4a) for the seeded "Harbor Summit" event, the guest list has
+# downloaded (the scanner screen shows it), and the seeded guest "Ada Lovelace" (code ADA00001) has a
+# valid pass that has not been used.
+appId: com.yayatoh.staff.preview
+---
+- openLink: yayatoh-staff-preview://tools/lookup
+- assertVisible: 'Name, phone or email'
+# Offline lookup works from the saved list: go offline first.
+- setAirplaneMode: enabled
+- tapOn:
+    id: lookup-query
+- inputText: 'ada love'
+- tapOn:
+    id: lookup-search
+- assertVisible: 'Ada Lovelace'
+- assertVisible: 'Searching the list saved on this phone.'
+# A reason is required.
+- tapOn:
+    id: checkin-ADA00001
+- tapOn:
+    id: manual-confirm
+- assertVisible: 'Choose a reason.'
+- tapOn:
+    id: reason-wont_scan
+- tapOn:
+    id: manual-confirm
+# Decided on the phone, queued for sync.
+- assertVisible: 'Checked in'
+- assertVisible: 'Decided on this phone. It will sync when you are back online.'
+- tapOn:
+    id: manual-done
+- assertVisible: 'Already checked in on this phone today.'
+# Back online: the queued scan syncs, and a second try shows the duplicate.
+- setAirplaneMode: disabled
+- tapOn:
+    id: lookup-search
+- tapOn:
+    id: checkin-ADA00001
+- tapOn:
+    id: reason-phone_dead
+- tapOn:
+    id: manual-confirm
+- assertVisible: 'Already checked in'

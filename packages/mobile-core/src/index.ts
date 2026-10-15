@@ -9,6 +9,7 @@
  * or `react-dom` (`pnpm check:modules`). `@yayatoh/mobile-core/app-config` is separate because it
  * runs in Node when Expo reads `app.config.ts`.
  */
+export { fromBase64, open as openSealed, seal, toBase64 } from './cache/encryption';
 export {
   bindOnlineManager,
   clearServerState,
@@ -40,7 +41,7 @@ export {
   pickLocale,
 } from './i18n/locales';
 export { type LocaleApi, type LocaleChoice, LocaleProvider, useLocaleSettings } from './i18n/provider';
-export { type AppRoute, ROUTES, routeForLink, routeForPush } from './links/routes';
+export { type AppRoute, PLATFORM_HOSTS, ROUTES, routeForLink, routeForPush } from './links/routes';
 export { nativeAdapters } from './platform/adapters';
 export { type AppExtra, nativeIdentity, readAppExtra } from './platform/native';
 export { OfflineBanner, useIsOffline } from './platform/network';
@@ -48,6 +49,12 @@ export { initSentry, reportError, scrubEvent, scrubText } from './platform/sentr
 export { documentFileStore, secureKeyValueStore } from './platform/stores';
 export { type FileStore, type KeyValueStore, memoryFileStore, memoryKeyValueStore } from './ports';
 export { CoreProvider, type CoreProviderProps, useCore, useSession } from './provider';
+export {
+  type Account,
+  createAccount,
+  type DeleteAccountOutcome,
+  type SignOutEverywhereOutcome,
+} from './session/account';
 export {
   type AppleSignInProvider,
   expoAppleProvider,

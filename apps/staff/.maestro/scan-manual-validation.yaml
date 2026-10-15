@@ -1,0 +1,16 @@
+# Typing nothing is refused with a message that goes away as soon as typing starts (M7.4b).
+appId: com.yayatoh.staff.preview
+---
+- runFlow: scan-setup.yaml
+- tapOn:
+    id: manual-open
+- tapOn:
+    id: manual-submit
+- assertVisible: 'Enter a ticket code.'
+- tapOn:
+    id: manual-input
+- inputText: A
+- assertNotVisible: 'Enter a ticket code.'
+- tapOn:
+    id: manual-close
+- assertVisible: 'Type a code'

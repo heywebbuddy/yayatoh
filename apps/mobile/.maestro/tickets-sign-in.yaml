@@ -1,0 +1,18 @@
+# Shared sub-flow for the M7.3b journeys: signs in with an email code as a seeded persona. The steps
+# mirror the welcome and email-code screens of M7.3a (`welcome`, `signIn` catalogs); the device pass
+# keeps them in step. The fake mailer's code for a seeded persona is fixed (see the device-pass notes in
+# docs/specs/M7.3b/spec.md). Written, not run in cloud sessions.
+appId: com.yayatoh.yayatohapp.preview
+env:
+  EMAIL: tess@example.test
+  CODE: '000000'
+---
+- tapOn: 'Continue with email'
+- tapOn:
+    id: 'email-input'
+- inputText: ${EMAIL}
+- tapOn: 'Continue'
+- tapOn:
+    id: 'code-input'
+- inputText: ${CODE}
+- assertVisible: 'My tickets'

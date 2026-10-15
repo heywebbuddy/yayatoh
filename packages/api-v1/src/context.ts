@@ -1,4 +1,4 @@
-import type { AppSignIn, BearerSession, BearerSessions } from '@yayatoh/auth';
+import type { AccountUser, AppSignIn, BearerSession, BearerSessions } from '@yayatoh/auth';
 import type { ApiAccessQuotas } from '@yayatoh/billing';
 import type { TenantTx } from '@yayatoh/db';
 import type { CommandPorts, Ctx } from '@yayatoh/kernel';
@@ -73,6 +73,11 @@ export interface V1Deps {
   readonly bulkInlineMs?: number;
   /** Where the router is mounted (`/v1` on api.yayatoh.com, `/api/v1` on the web app). */
   readonly basePath?: string;
+  /**
+   * M7.3a: sends the deletion confirmation to the old address before `DELETE /v1/me` erases it
+   * (default: the notifications providers, as the portal's emails).
+   */
+  readonly accountNotice?: (to: string, user: AccountUser) => Promise<void>;
   /** M6.3a: an org's `api_access` quotas (default: its plan, from billing; null = no API access). */
   readonly apiQuotas?: (orgId: string) => Promise<ApiAccessQuotas | null>;
   /** How long an org's quotas are cached (default 30 s). */

@@ -1,41 +1,20 @@
-import { StyleSheet, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useTranslations } from 'use-intl';
-import { px, radius, space, type, useColors } from '../theme';
+import { useSession } from '@yayatoh/mobile-core';
+import { Redirect } from 'expo-router';
+import { useDevice } from '../device';
+import { usePortal } from '../portal';
+import { Splash } from '../ui/splash';
 
-/** Placeholder home screen (M7.1b): one translated string, styled from the design tokens only. */
-export default function Home() {
-  const t = useTranslations('home');
-  const colors = useColors();
-  return (
-    <SafeAreaView style={[styles.screen, { backgroundColor: colors.canvas }]}>
-      <View
-        style={[styles.card, { backgroundColor: colors.surfaceSolid, borderColor: colors.line }]}
-        testID="home-card"
-      >
-        <Text accessibilityRole="header" style={[styles.title, { color: colors.ink }]}>
-          {t('title')}
-        </Text>
-        <Text style={[styles.tagline, { color: colors.ink2 }]}>{t('tagline')}</Text>
-      </View>
-    </SafeAreaView>
-  );
+/**
+ * Where the app starts (M7.4a): the device gate. An enrolled device goes to its scanner, or to the
+ * place picker until it has one; a signed-in organizer or exhibitor rep goes to the tools; anyone
+ * else to enrolment. The splash shows while the stored enrolment and sessions are read.
+ */
+export default function Index() {
+  const device = useDevice();
+  const portal = usePortal();
+  const session = useSession();
+  if (!device.loaded || portal.status === 'loading' || session.status === 'loading') return <Splash />;
+  if (device.status === 'enrolled') return <Redirect href={device.checkpointChosen ? '/scan' : '/select'} />;
+  if (session.status === 'signedIn' || portal.status === 'signedIn') return <Redirect href="/tools" />;
+  return <Redirect href="/enrol" />;
 }
-
-const styles = StyleSheet.create({
-  screen: { flex: 1, justifyContent: 'center', paddingHorizontal: space[4] },
-  card: {
-    borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: px(radius.card),
-    paddingHorizontal: space[6],
-    paddingVertical: space[8],
-    gap: space[2],
-  },
-  // Logical alignment: `auto` follows the text's own direction, so Arabic reads right to left.
-  title: { fontSize: 28, fontWeight: '800', textAlign: 'auto' },
-  tagline: {
-    fontSize: type.prose.size,
-    lineHeight: type.prose.size * type.prose.lineHeight,
-    textAlign: 'auto',
-  },
-});

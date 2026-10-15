@@ -1,0 +1,22 @@
+# Device pass. "Not now" shows no sheet; tickets do not ask again; the next purchase does.
+appId: ${APP_ID}
+env:
+  EVENT_SLUG: summit
+---
+- launchApp:
+    clearState: true
+    permissions: { notifications: unset }
+- runFlow: sign-in-seeded.yaml
+- runFlow: buy-ticket.yaml
+- assertVisible: "Get updates about your tickets?"
+- tapOn: "Not now"
+- assertNotVisible: "Get updates about your tickets?"
+# The phone was never asked, and opening a ticket does not ask.
+- tapOn: "Tickets"
+- tapOn:
+    index: 0
+- assertNotVisible: "Get updates about your tickets?"
+# A later purchase asks again.
+- runFlow: buy-ticket.yaml
+- assertVisible: "Get updates about your tickets?"
+- tapOn: "Not now"

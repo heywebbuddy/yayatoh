@@ -1,0 +1,40 @@
+# M7.3b: start a transfer, see it pending, cancel it. Written, not run in cloud sessions. Seed:
+# persona tess@example.test holds a ticket whose type allows transfers; RECIPIENT_EMAIL is any
+# address that is not the sender's (the fake mailer takes the email).
+appId: com.yayatoh.yayatohapp.preview
+env:
+  EVENT: Summer Night
+  RECIPIENT_NAME: Sam Rivera
+  RECIPIENT_EMAIL: sam.rivera@example.test
+---
+- launchApp:
+    clearState: true
+- runFlow: tickets-sign-in.yaml
+- tapOn:
+    text: 'General admission for ${EVENT}.*'
+- tapOn: 'Transfer ticket'
+# Validation first: nothing entered.
+- tapOn: 'Review transfer'
+- assertVisible: 'Enter the recipient’s name.'
+- assertVisible: 'Enter a valid email address.'
+- tapOn:
+    id: 'to-name'
+- inputText: ${RECIPIENT_NAME}
+- tapOn:
+    id: 'to-email'
+- inputText: ${RECIPIENT_EMAIL}
+- tapOn: 'Review transfer'
+- assertVisible: 'Confirm transfer'
+- tapOn: 'Send transfer'
+- assertVisible: 'Transfer sent'
+- tapOn: 'Done'
+# The ticket stays the sender's until the recipient claims it.
+- assertVisible: 'Transfer pending'
+- assertVisible: 'Waiting for ${RECIPIENT_NAME} to claim this ticket.*'
+- tapOn: 'Cancel transfer'
+- assertVisible: 'Cancel the transfer to ${RECIPIENT_NAME}.*'
+- tapOn:
+    text: 'Cancel transfer'
+    index: 1
+- assertVisible: 'Transfer cancelled.'
+- assertVisible: 'Transfer ticket'

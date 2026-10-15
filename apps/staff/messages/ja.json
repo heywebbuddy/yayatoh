@@ -1,6 +1,683 @@
 {
+  "scan": {
+    "title": "チケットをスキャン",
+    "ready": "スキャンの準備ができました",
+    "header": {
+      "at": "場所: {name}",
+      "wholeEvent": "イベント全体"
+    },
+    "status": {
+      "queue": "{count, plural, =0 {すべてのスキャンを送信済み} other {送信待ちのスキャン: #件}}",
+      "updated": "参加者リストを{time}に更新しました"
+    },
+    "sync": {
+      "button": "今すぐ同期",
+      "running": "同期しています…"
+    },
+    "download": {
+      "title": "参加者リストをダウンロード中",
+      "body": "完了するまで電話を接続したままにしてください。その後は、接続がなくてもスキャンできます。",
+      "failedOffline": "参加者リストをダウンロードできません。接続を確認して、もう一度お試しください。",
+      "failedNotAssigned": "この端末はこのイベントに割り当てられていません。主催者に登録を確認してもらってください。",
+      "failedScope": "参加者リストがセキュリティチェックに合格しませんでした。もう一度お試しいただくか、主催者にこの端末を再登録してもらってください。"
+    },
+    "expired": {
+      "title": "参加者リストを削除しました",
+      "body": "イベントが終了して1日以上たったため、この電話から参加者リストを削除しました。"
+    },
+    "camera": {
+      "askTitle": "スキャンのためカメラを許可してください",
+      "askBody": "Yayatoh Staffは、入口でチケットのQRコードを読み取るためにカメラを使います。",
+      "allow": "カメラを許可",
+      "deniedTitle": "カメラへのアクセスがオフです",
+      "deniedBody": "QRコードをスキャンするには、設定でYayatoh Staffのカメラをオンにしてください。チケットコードの入力は引き続き使えます。",
+      "openSettings": "設定を開く",
+      "typeCode": "コードを入力する",
+      "unavailable": "この端末にカメラが見つかりません。",
+      "preview": "カメラのプレビュー。チケットのQRコードに向けてください。"
+    },
+    "torch": {
+      "on": "ライトをつける",
+      "off": "ライトを消す"
+    },
+    "manual": {
+      "open": "コードを入力",
+      "title": "チケットコード",
+      "label": "チケットコード",
+      "hint": "QRコードの下に印刷されたコードを入力して、確認してください。",
+      "placeholder": "コード",
+      "submit": "コードを確認",
+      "close": "カメラに戻る",
+      "empty": "チケットコードを入力してください。"
+    },
+    "direction": {
+      "label": "方向",
+      "in": "入場",
+      "out": "退場"
+    },
+    "verdict": {
+      "admit": {
+        "title": "入場OK"
+      },
+      "admitted": {
+        "title": "入場済み"
+      },
+      "granted": {
+        "title": "アクセス許可"
+      },
+      "entered": {
+        "title": "入室しました"
+      },
+      "scanned_out": {
+        "title": "退場を記録"
+      },
+      "provisional": {
+        "title": "入場OK・要確認",
+        "hint": "まだ参加者リストにありません。入場させ、スーパーバイザーが確認します。"
+      },
+      "duplicate": {
+        "title": "スキャン済み",
+        "hint": "このチケットは今日すでにスキャンされています。",
+        "hintWhen": "最初の入場は{time}です。",
+        "hintWhere": "最初の入場は{time}、{place}です。"
+      },
+      "duplicate_offline": {
+        "title": "重複を検出",
+        "hint": "別の入口が先にこのチケットで入場させています。"
+      },
+      "superseded": {
+        "title": "古いチケット",
+        "hint": "このコードは再発行されました。最新のチケットを見せてもらってください。"
+      },
+      "void": {
+        "title": "無効なチケット",
+        "hint": "このチケットは払い戻しまたはキャンセルされました。入場させないでください。"
+      },
+      "invalid": {
+        "title": "認識できません",
+        "hint": "このイベントの有効なチケットではありません。"
+      },
+      "wrong_event": {
+        "title": "イベントが違います",
+        "hint": "このチケットは別のイベントのものです。"
+      },
+      "outside_window": {
+        "title": "受付時間外"
+      },
+      "wrong_date": {
+        "title": "日付が違います"
+      },
+      "not_today": {
+        "title": "本日は無効"
+      },
+      "no_access": {
+        "title": "ここは入れません"
+      },
+      "wrong_checkpoint": {
+        "title": "入口が違います",
+        "hint": "この端末はこの入口でスキャンするよう設定されていません。"
+      },
+      "balance_due": {
+        "title": "未払いがあります",
+        "hint": "受付カウンターで残金をお支払いいただくよう案内してください。"
+      },
+      "not_in_room": {
+        "title": "入室記録なし"
+      },
+      "not_enrolled": {
+        "title": "申し込みなし"
+      },
+      "admission_level": {
+        "title": "対象外"
+      },
+      "capacity": {
+        "title": "満席です"
+      }
+    },
+    "flagged": {
+      "title": "{count, plural, other {再確認が必要なスキャン: #件}}",
+      "duplicate": "別の入口もこのチケットで入場させています。同じ人が二重に入場していないか確認してください。",
+      "rejected": "このスキャンは送信できず、破棄されました。",
+      "other": "サーバーはこのスキャンを別の結果と判断しました。スーパーバイザーが確認します。",
+      "when": "{time}にスキャン",
+      "dismiss": "閉じる",
+      "dismissAll": "すべて閉じる",
+      "unknownHolder": "チケット"
+    }
+  },
   "home": {
     "title": "Yayatoh Staff",
     "tagline": "イベント当日の受付ツールはまもなく登場します。"
+  },
+  "enrol": {
+    "title": "この端末を登録",
+    "intro": "イベント主催者にコンソールの登録用QRコードを表示してもらい、ここでスキャンしてください。この端末に個人アカウントは必要ありません。",
+    "notices": {
+      "revoked": "主催者がこの端末をイベントから削除しました。再び使うには、新しい登録コードをスキャンしてください。",
+      "wiped": "主催者がこの端末を消去しました。トークンとデータは削除されました。再び使うには、新しい登録コードをスキャンしてください。"
+    },
+    "scan": "登録用QRコードをスキャン",
+    "working": "登録を確認しています…",
+    "linkLabel": "登録リンク",
+    "linkPlaceholder": "コンソールのリンクを貼り付け",
+    "submit": "このリンクで登録",
+    "errors": {
+      "invalid_link": "これは登録リンクではありません。イベントの端末ページにあるQRコードまたはリンクを使ってください。",
+      "rejected": "この登録コードは無効になりました。主催者に新しいコードを依頼してください。",
+      "wrong_event": "このコードは、この端末が担当できるイベントのものではありません。主催者に新しいコードを依頼してください。",
+      "unavailable": "Yayatohに接続できませんでした。接続を確認して、もう一度お試しください。"
+    },
+    "replace": {
+      "title": "この端末の登録を置き換えますか？",
+      "body": "この端末は{event}に登録されています。再登録すると、トークンとそのイベント用に保存したすべてのデータが消去されます。",
+      "bodyNoEvent": "この端末はイベントに登録されています。再登録すると、トークンとそのイベント用に保存したすべてのデータが消去されます。",
+      "confirm": "消去して再登録",
+      "cancel": "現在の登録を保持"
+    },
+    "staffPrompt": "入口用の端末ではありませんか？",
+    "signInOrganizer": "主催者：サインイン",
+    "signInExhibitor": "出展者：サインイン",
+    "signInTitle": "サインイン",
+    "backToEnrol": "登録に戻る",
+    "scanner": {
+      "title": "登録コードをスキャン",
+      "hint": "主催者の画面に表示されたQRコードにカメラを向けてください。",
+      "preview": "登録用QRコードをスキャンするカメラ映像",
+      "checking": "カメラへのアクセスを確認しています…",
+      "invalid": "このQRコードは登録コードではありません。イベントの端末ページのコードをスキャンしてください。",
+      "useLink": "代わりにリンクを入力",
+      "permission": {
+        "title": "カメラへのアクセスがオフです",
+        "body": "Yayatoh Staffは登録用QRコードを読み取るためにカメラを使います。ほかの目的には使いません。",
+        "allow": "カメラへのアクセスを許可",
+        "settingsHint": "カメラへのアクセスがオフになっています。設定を開いてYayatoh Staffのカメラを許可し、戻ってきてください。",
+        "settings": "設定を開く"
+      }
+    }
+  },
+  "device": {
+    "select": {
+      "title": "この端末はどこでスキャンしますか？",
+      "unnamedEvent": "イベント",
+      "dates": "{start}から{end}まで",
+      "unavailable": "このイベントの入口を読み込めませんでした。イベント全体でスキャンするか、もう一度お試しください。",
+      "prompt": "この端末がスキャンする入口を選んでください。主催者があとから移動することもできます。",
+      "wholeEvent": "イベント全体",
+      "wholeEventHint": "どの入口でもスキャン",
+      "selectedOption": "{name}（選択中）",
+      "refused": "その入口はこの端末では使えません。ほかの入口を選んでください。",
+      "continue": "スキャンに進む",
+      "remove": "この端末を削除",
+      "removeTitle": "この端末を削除しますか？",
+      "removeBody": "登録トークンと、この端末がイベント用に保存したすべてのデータが消去されます。再び使うには新しい登録コードが必要です。",
+      "removeConfirm": "消去して削除"
+    }
+  },
+  "organizer": {
+    "about": "主催者の方へ。チェックイン、通過数、スキャンの問題、端末など、イベント当日の状況をリアルタイムで確認できます。",
+    "open": "主催者としてサインイン",
+    "title": "主催者のサインイン",
+    "intro": "Yayatohアカウントを使用してください。2段階認証が必要です。",
+    "email": "メールアドレス",
+    "password": "パスワード",
+    "continue": "続ける",
+    "codeIntro": "認証アプリのコード、またはバックアップコードを入力してください。",
+    "code": "確認コード",
+    "verify": "確認してサインイン",
+    "back": "戻る",
+    "twoFactorRequired": "主催者のサインインには2段階認証が必要です。ウェブコンソールで有効にしてから、もう一度サインインしてください。",
+    "errors": {
+      "emailInvalid": "有効なメールアドレスを入力してください。",
+      "passwordRequired": "パスワードを入力してください。",
+      "codeRequired": "確認コードを入力してください。"
+    }
+  },
+  "exhibitor": {
+    "about": "出展者の方へ。メールで届いた招待を使って、ブースでリードを獲得できます。",
+    "open": "出展者としてサインイン",
+    "title": "出展者のサインイン",
+    "intro": "招待メールを開き、そのリンクをここに貼り付けてください。招待されたアドレスに6桁のコードをメールで送信します。",
+    "inviteLabel": "招待リンク",
+    "invitePlaceholder": "招待メールのリンクを貼り付け",
+    "sendCode": "コードをメールで送信",
+    "codeIntro": "招待されたアドレスに6桁のコードをメールで送信しました。有効期間は10分です。",
+    "codeLabel": "6桁のコード",
+    "verify": "確認してサインイン",
+    "resend": "別のコードを送信",
+    "back": "戻る",
+    "errors": {
+      "inviteInvalid": "これは招待リンクではありません。招待メールのリンクをコピーしてください。",
+      "invalidInvite": "この招待は使用できません。期限切れか、再発行された可能性があります。主催者に再送を依頼してください。",
+      "codeInvalid": "メールに記載された6桁の数字を入力してください。",
+      "codeRejected": "このコードはもう使用できません。新しいコードを依頼してください。",
+      "wrongCode": "コードが正しくありません。確認してもう一度お試しください。",
+      "wrongCodeAttempts": "コードが正しくありません。{count, plural, other {残り#回です。}}"
+    }
+  },
+  "tools": {
+    "title": "ドアツール",
+    "nav": {
+      "hub": "ドアツール",
+      "lookup": "ゲストを探す",
+      "guests": "ゲストリスト",
+      "assistance": "ヘルプ依頼",
+      "today": "本日",
+      "leads": "リード取得",
+      "scanBadge": "バッジをスキャン",
+      "lead": "リード",
+      "ops": "イベント当日"
+    },
+    "hub": {
+      "intro": "入口に必要なものをすべて1か所に。",
+      "none": "この端末はまだ入口業務用に設定されていません。主催者から受け取ったコードで登録するか、サインインしてください。",
+      "lookup": "ゲストを探す",
+      "lookupHint": "名前・電話番号・メールで検索。オフラインでも使えます。",
+      "guests": "ゲストリスト",
+      "guestsHint": "名前またはグループでゲストをチェックイン。",
+      "assistance": "ヘルプ依頼",
+      "assistanceHint": "依頼の受付・対応・完了。",
+      "today": "本日",
+      "todayHint": "チェックイン数、端末、アラート。",
+      "leads": "リード取得",
+      "leadsHint": "バッジをスキャンしてリードを管理。",
+      "ops": "イベント当日",
+      "opsHint": "主催者向けのリアルタイム数値。"
+    },
+    "lookup": {
+      "queryLabel": "名前、電話番号、メール",
+      "queryHint": "名前は2文字以上、メールアドレスは全体、または電話番号を入力してください。",
+      "search": "検索",
+      "tooShort": "2文字以上入力してください。",
+      "sourceDevice": "この端末に保存されたリストを検索しています。",
+      "sourceDownload": "たった今ダウンロードしたリストを検索しています。",
+      "loading": "ゲストリストを読み込み中…",
+      "unavailable": "ゲストリストはまだこの端末にありません。一度接続してダウンロードしてください。",
+      "loadFailed": "ゲストリストを読み込めませんでした。",
+      "results": "{count, plural, other {#件ヒット}}",
+      "none": "該当者なし",
+      "noneBody": "綴りを確認するか、メールアドレスや電話番号でお試しください。",
+      "pass": "{type} · コード {code}",
+      "voidPass": "このパスは無効化されており、使用できません。",
+      "admittedHere": "本日、この端末でチェックイン済みです。",
+      "checkIn": "チェックイン",
+      "checkInFor": "{name}さんをチェックイン"
+    },
+    "manual": {
+      "title": "{name}さんをチェックイン",
+      "reasonLabel": "手動でチェックインする理由は何ですか?",
+      "reasons": {
+        "wont_scan": "コードをスキャンできない",
+        "phone_dead": "スマホの電池切れ",
+        "lost_ticket": "チケットを紛失",
+        "other": "その他の理由"
+      },
+      "noteLabel": "メモ",
+      "noteHint": "状況を記入してください。その他の理由の場合は必須です。",
+      "errors": {
+        "reason_missing": "理由を選択してください。",
+        "note_missing": "3文字以上の短いメモを入力してください。",
+        "note_too_long": "メモは300文字以内にしてください。"
+      },
+      "confirm": "チェックイン",
+      "cancel": "キャンセル",
+      "working": "チェックイン中…",
+      "noWay": "接続がなく、保存されたゲストリストもありません。接続してからもう一度お試しください。",
+      "failed": "チェックインできませんでした。もう一度お試しください。",
+      "offlineNote": "この端末で判断しました。オンラインに戻ると同期されます。",
+      "firstAdmitted": "{time}に初回チェックイン済み。"
+    },
+    "verdict": {
+      "admitted": "チェックイン済み",
+      "provisional": "チェックイン済み(要確認)",
+      "granted": "入場可",
+      "duplicate": "すでにチェックイン済み",
+      "duplicate_offline": "別の場所でチェックイン済み",
+      "invalid": "無効なパス",
+      "void": "パスは無効化済み",
+      "wrong_event": "別イベントのパス",
+      "not_today": "本日は無効",
+      "outside_window": "入場時間外",
+      "wrong_date": "別の日付のパス",
+      "superseded": "新しいパスに置き換え済み",
+      "no_access": "ここは入場不可",
+      "wrong_checkpoint": "入口が違います",
+      "balance_due": "未払いあり",
+      "entered": "入場済み",
+      "scanned_out": "退場スキャン済み",
+      "not_in_room": "会場内にいません",
+      "not_enrolled": "未登録",
+      "admission_level": "このパスではこのセッションに入場できません",
+      "capacity": "セッションは満席です"
+    },
+    "guests": {
+      "searchLabel": "名前またはグループで検索",
+      "labels": "ラベル",
+      "loading": "ゲストリストを読み込み中…",
+      "loadFailed": "ゲストリストを読み込めませんでした。",
+      "unavailable": "ゲストリストはまだこの端末にありません。一度接続してダウンロードしてください。",
+      "emptyList": "このイベントにはゲストリストがありません。",
+      "prompt": "ゲストを検索してチェックインしてください。",
+      "none": "ゲストが見つかりません",
+      "noneBody": "綴りを確認するか、グループ名で検索してください。",
+      "savedCopy": "オフライン: {time}に保存されたリストを表示中。",
+      "guestOf": "{name}さんのゲスト",
+      "unnamed": "ゲスト",
+      "status": {
+        "attending": "出席",
+        "pending": "未回答",
+        "declined": "欠席"
+      },
+      "arrived": "{time}に到着",
+      "waiting": "チェックイン済み・送信待ち",
+      "checkIn": "チェックイン",
+      "checkInFor": "{name}さんをチェックイン",
+      "already": "{name}さんは先ほど他のスタッフがチェックイン済みです。",
+      "unknown": "{name}さんはこのイベントのゲストリストにありません。",
+      "pending": "{count, plural, other {チェックイン#件が送信待ち}}",
+      "sendNow": "今すぐ送信",
+      "sent": "送信しました。",
+      "sendFailed": "送信できませんでした。オンラインになると送信されます。",
+      "noPlace": "テーブル未割り当て"
+    },
+    "assistance": {
+      "empty": "未対応の依頼はありません",
+      "emptyBody": "新しい依頼はここに表示されます。",
+      "loadFailed": "依頼を読み込めませんでした。",
+      "number": "依頼 #{number}",
+      "reason": {
+        "seat": "座席",
+        "accessibility": "バリアフリー",
+        "medical": "医療",
+        "lost_item": "落とし物",
+        "other": "その他",
+        "backup": "応援",
+        "supervisor": "責任者",
+        "security": "警備",
+        "device": "端末サポート"
+      },
+      "priority": {
+        "urgent": "緊急",
+        "high": "優先度 高",
+        "normal": "優先度 通常"
+      },
+      "state": {
+        "new": "新規",
+        "assigned": "受付済み",
+        "in_progress": "対応中",
+        "resolved": "完了",
+        "cancelled": "キャンセル済み"
+      },
+      "overdue": "期限超過",
+      "mine": "この端末で受付済み",
+      "guest": "ゲスト: {name}",
+      "where": "場所: {location}",
+      "take": "受け付ける",
+      "takeFor": "依頼{number}を受け付ける",
+      "start": "開始",
+      "startFor": "依頼{number}を開始",
+      "resolve": "完了にする",
+      "resolveFor": "依頼{number}を完了にする",
+      "cancel": "依頼をキャンセル",
+      "cancelFor": "依頼{number}をキャンセル",
+      "changed": "この依頼は更新されました。リストを再読み込みしました。",
+      "actionFailed": "依頼を更新できませんでした。もう一度お試しください。",
+      "raise": {
+        "title": "ヘルプを依頼",
+        "reasonLabel": "必要なものは何ですか?",
+        "reasons": {
+          "backup": "応援",
+          "supervisor": "責任者",
+          "medical": "医療対応",
+          "security": "警備",
+          "device": "端末サポート"
+        },
+        "noteLabel": "メモ(任意)",
+        "send": "依頼を送信",
+        "reasonMissing": "必要なものを選択してください。",
+        "sent": "依頼 #{number} を送信しました。",
+        "failed": "依頼を送信できませんでした。もう一度お試しください。"
+      }
+    },
+    "today": {
+      "checkedIn": "チェックイン済み",
+      "expected": "予定",
+      "percent": "予定の{percent}%",
+      "entrances": "入口別",
+      "days": "日別",
+      "devices": "端末",
+      "online": "オンライン",
+      "deviceOffline": "オフライン",
+      "thisDevice": "この端末",
+      "battery": "バッテリー {percent}%",
+      "queue": "{count, plural, other {スキャン#件が送信待ち}}",
+      "alerts": "アラート",
+      "noAlerts": "現在アラートはありません。",
+      "alert": {
+        "device_offline": "{label}がオフラインです。",
+        "device_low_battery": "{label}のバッテリー残量は{percent}%です。",
+        "device_backlog": "{label}に送信待ちのスキャンがあります。",
+        "capacity_near": "まもなく定員に達します。"
+      },
+      "severity": {
+        "warning": "警告",
+        "critical": "重大"
+      },
+      "updated": "{time}に更新",
+      "savedOnly": "オフライン: {time}に保存された最新の数値を表示中。",
+      "loadFailed": "本日の数値を読み込めませんでした。",
+      "unlabeled": "ある端末"
+    },
+    "push": {
+      "title": "この端末のアラート",
+      "body": "端末がオフラインになったり、バッテリーが少なくなったり、送信が遅れたりしたときに通知を受け取れます。",
+      "on": "アラートはオンです。",
+      "off": "アラートはオフです。",
+      "enable": "アラートをオンにする",
+      "disable": "アラートをオフにする",
+      "denied": "このアプリの通知がブロックされています。端末の設定で許可してから、もう一度お試しください。",
+      "unavailable": "この端末をアラートに登録できませんでした。",
+      "failed": "アラートを変更できませんでした。もう一度お試しください。",
+      "copy": {
+        "device_offline": {
+          "title": "端末オフライン",
+          "body": "{label}がオフラインです。"
+        },
+        "device_low_battery": {
+          "title": "バッテリー残量低下",
+          "body": "{label}のバッテリー残量は{percent}%です。"
+        },
+        "device_backlog": {
+          "title": "スキャン送信待ち",
+          "body": "{label}に送信待ちのスキャンがあります。"
+        },
+        "capacity_near": {
+          "title": "定員",
+          "body": "まもなく定員に達します。"
+        },
+        "assistance": {
+          "title": "ヘルプ依頼",
+          "body": "入口でサポートが必要な方がいます。"
+        }
+      }
+    }
+  },
+  "leads": {
+    "title": "あなたのリード",
+    "open": "開く",
+    "openFor": "{name}さんのリードを開く",
+    "setup": "{exhibitor} · {event}",
+    "count": "{count, plural, other {リード#件}}",
+    "searchLabel": "リードを検索",
+    "empty": "リードはまだありません",
+    "emptyBody": "バッジをスキャンして最初のリードを取得しましょう。",
+    "noMatches": "検索に一致するリードはありません。",
+    "loadFailed": "リードを読み込めませんでした。",
+    "accessEnded": "このイベントのリードへのアクセスは終了しました。",
+    "notSignedIn": "リード取得を使うには、出展者としてサインインしてください。",
+    "scan": "バッジをスキャン",
+    "pending": "{count, plural, other {スキャン#件が送信待ち}}",
+    "sendNow": "今すぐ送信",
+    "sent": "送信しました。",
+    "scope": {
+      "all": "出展者のすべてのリード",
+      "team": "チームのリード",
+      "own": "自分がスキャンしたリード"
+    },
+    "gate": {
+      "no_license": "リードライセンスがありません。出展者の管理者に付与を依頼してください。",
+      "over_allowance": "出展者のリードライセンスをすべて使用済みです。",
+      "terms": "出展者の管理者がリード利用規約にまだ同意していません。",
+      "not_open": "リード取得はまだ始まっていません。",
+      "closed": "リード取得は終了しました。メモは引き続き編集できます。"
+    },
+    "syncFailed": {
+      "unreachable": "接続がありません。スキャンは保存済みで、後で送信されます。",
+      "no_license": "リードライセンスがないため、スキャンを送信できません。",
+      "over_allowance": "出展者のリードライセンスが上限を超えているため、スキャンを送信できません。",
+      "terms": "リード利用規約に同意されていないため、スキャンを送信できません。",
+      "ended": "リードへのアクセスが終了したため、スキャンを送信できません。",
+      "rejected": "サーバーがスキャンを受け付けませんでした。"
+    },
+    "scanner": {
+      "hint": "参加者のバッジのコードにカメラを向けてください。",
+      "cameraOff": "カメラを使用できません。バッジコードを入力してください。",
+      "manualLabel": "バッジコード",
+      "manualHint": "カメラで読み取れない場合は、コードを入力してください。",
+      "useCode": "このコードを使用",
+      "codeMissing": "バッジコードを入力してください。"
+    },
+    "capture": {
+      "title": "リードを取得",
+      "rating": "評価",
+      "ratings": {
+        "hot": "ホット",
+        "warm": "ウォーム",
+        "cold": "コールド"
+      },
+      "qualifiers": "確認項目",
+      "noQualifiers": "出展者が確認項目を設定していません。",
+      "notes": "メモ",
+      "save": "リードを保存",
+      "saving": "保存中…",
+      "savedOnline": "リードを取得しました。",
+      "savedOffline": "この端末に保存しました。オンラインになると送信されます。",
+      "rescanned": "すでにリードに登録済みです。更新しました。",
+      "another": "別のバッジをスキャン",
+      "errors": {
+        "too_many_qualifiers": "確認項目は最大10個まで選択できます。",
+        "qualifier_too_long": "確認項目が長すぎます。",
+        "notes_too_long": "メモは2000文字以内にしてください。"
+      }
+    },
+    "refused": {
+      "invalid": "このバッジを読み取れませんでした。",
+      "wrong_event": "このバッジは別のイベントのものです。",
+      "not_open": "リード取得はまだ始まっていません。",
+      "closed": "リード取得は終了しました。"
+    },
+    "lead": {
+      "consent": "参加者が共有に同意した情報のみ表示されます。",
+      "name": "名前",
+      "jobTitle": "役職",
+      "company": "会社名",
+      "email": "メール",
+      "notShared": "参加者は共有していません",
+      "emailWithdrawn": "参加者がメールの共有許可を取り消しました。",
+      "scans": "{count, plural, other {#回スキャン}}",
+      "capturedAt": "{time}に取得",
+      "scannedBy": "スキャン担当: {name}",
+      "save": "変更を保存",
+      "saved": "保存しました。",
+      "saveFailed": "保存できませんでした。もう一度お試しください。",
+      "notFound": "このリードはリストにありません。"
+    }
+  },
+  "ops": {
+    "title": "イベント当日",
+    "updated": "{time}に更新",
+    "savedOnly": "オフライン: {time}時点の最新の数値を表示中。",
+    "loadFailed": "イベント当日の画面を読み込めませんでした。",
+    "notSignedIn": "イベント当日を見るには、主催者としてサインインしてください。",
+    "readOnly": "閲覧専用です。この画面を開いている間、数値は自動更新されます。",
+    "changeEvent": "イベントを変更",
+    "picker": {
+      "title": "イベントを選択",
+      "chooseOrg": "組織を選択してください。",
+      "chooseEvent": "{org}のイベント",
+      "noOrgs": "どの組織にも所属していません。",
+      "noEvents": "この組織にはイベントがありません。",
+      "loadFailed": "イベントを読み込めませんでした。",
+      "open": "表示",
+      "openFor": "{name}を表示"
+    },
+    "mode": {
+      "planning": "準備中",
+      "pre_show": "開場前",
+      "live": "開催中",
+      "wrap": "終了作業"
+    },
+    "hidden": "お客様の権限またはプランには含まれていません。",
+    "checkins": {
+      "title": "チェックイン",
+      "of": "{checkedIn} / {expected}",
+      "checkedIn": "チェックイン済み",
+      "expected": "予定",
+      "remaining": "{count, plural, other {未到着のゲスト#名}}",
+      "entrances": "入口別",
+      "days": "日別"
+    },
+    "throughput": {
+      "title": "処理速度",
+      "rate": "1分あたりのスキャン数: {rate}",
+      "gap": "スキャン間隔の中央値: {seconds}秒",
+      "queue": "{minutes, plural, other {行列の待ち時間は約#分}}",
+      "entrances": "入口別の1分あたりスキャン数",
+      "recent": "直近15分"
+    },
+    "issues": {
+      "title": "スキャンの問題",
+      "duplicates": "重複",
+      "refused": "拒否",
+      "none": "本日、スキャンの問題はありません。"
+    },
+    "devices": {
+      "title": "端末",
+      "online": "オンライン",
+      "offline": "オフライン",
+      "battery": "バッテリー {percent}%",
+      "queue": "{count, plural, other {スキャン#件が送信待ち}}",
+      "at": "設置場所: {place}",
+      "none": "端末はありません。"
+    },
+    "alerts": {
+      "title": "アラート",
+      "none": "現在アラートはありません。",
+      "count": "{count, plural, other {#件が対象}}",
+      "severity": {
+        "info": "情報",
+        "warning": "警告",
+        "critical": "重大"
+      },
+      "state": {
+        "open": "未対応",
+        "acknowledged": "確認済み",
+        "snoozed": "スヌーズ中"
+      },
+      "rule": {
+        "devicesOffline": "オフラインの端末",
+        "devicesLowBattery": "バッテリー残量が少ない端末",
+        "devicesBacklog": "スキャンが送信待ちの端末",
+        "capacityNear": "まもなく定員",
+        "capacityFull": "定員に到達",
+        "assistanceOverdue": "期限超過のヘルプ依頼",
+        "printersKiosksOffline": "オフラインのプリンターまたはキオスク",
+        "paymentsFailed": "決済の失敗",
+        "paymentsStuck": "決済の停滞",
+        "refundSurge": "返金の増加",
+        "sellOut": "完売",
+        "readiness": "イベントの準備未完了",
+        "other": "コンソールで要対応"
+      }
+    }
   }
 }
