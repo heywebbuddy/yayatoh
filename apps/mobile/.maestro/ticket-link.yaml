@@ -1,0 +1,22 @@
+# Journey: web "My tickets" link — a ticket holder's link from an email opens that ticket in the app once the
+#   person is signed in with the address the ticket belongs to.
+# Preconditions: an e2e build; a server with YAYATOH_DEV_AUTH and the seeded organization lakeside-events
+#   (scripts/new-holder.js makes a conference with registrants through /api/dev/leads).
+# Personas: the first registrant of that conference, who has no account yet: the flow signs in with an
+#   emailed code to their address, which creates and verifies the account.
+appId: com.yayatoh.yayatohapp.preview
+---
+- launchApp:
+    clearState: true
+- runScript:
+    file: scripts/new-holder.js
+- runFlow:
+    file: subflows/sign-in-code.yaml
+    env:
+      EMAIL: ${output.holderEmail}
+# From a closed app, as a link in an email would open it.
+- stopApp
+- openLink: yayatoh-preview://my-tickets/${output.holderToken}
+- extendedWaitUntil:
+    visible: 'Ticket QR code for .*'
+    timeout: 30000

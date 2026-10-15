@@ -1,22 +1,19 @@
-# M7.3a (App Review 5.1.1(v)): a person deletes their account from the app. It explains what goes
-# and what organizers keep, asks them to confirm it is them and their address, deletes, signs out
-# and wipes the phone, and the account no longer signs in. Written, not run in cloud sessions.
-# Device pass: see password-two-factor.yaml for the options.
+# Journey: delete account (App Review 5.1.1(v)) — the screen says what goes and what organizers keep, asks
+#   the person to prove it is them and to type their address, deletes, signs out and wipes the phone, and
+#   the account no longer signs in.
+# Preconditions: as password-two-factor.yaml (a server with YAYATOH_DEV_AUTH, DEV_PERSONA_PASSWORD passed).
+# Personas: a throwaway password account (scripts/new-user.js), deleted by the flow.
 appId: com.yayatoh.yayatohapp.preview
 ---
 - launchApp:
     clearState: true
 - runScript:
     file: scripts/new-user.js
-- tapOn: 'Use a password'
-- tapOn:
-    id: 'password-email'
-- inputText: ${output.email}
-- tapOn:
-    id: 'password-input'
-- inputText: ${output.password}
-- tapOn: 'Sign in'
-- assertVisible: 'Tickets, tab, 1 of 3'
+- runFlow:
+    file: subflows/sign-in.yaml
+    env:
+      EMAIL: ${output.email}
+      PASSWORD: ${output.password}
 - tapOn: 'Account, tab, 3 of 3'
 - scrollUntilVisible:
     element: 'Delete account'
@@ -39,7 +36,9 @@ appId: com.yayatoh.yayatohapp.preview
 - eraseText: 40
 - inputText: ${output.email}
 - tapOn: 'Delete my account permanently'
-- assertVisible: 'Your account was deleted'
+- extendedWaitUntil:
+    visible: 'Your account was deleted'
+    timeout: 30000
 - tapOn: 'Done'
 - assertVisible: 'Welcome to Yayatoh'
 # The account is gone: the same email and password no longer sign in.

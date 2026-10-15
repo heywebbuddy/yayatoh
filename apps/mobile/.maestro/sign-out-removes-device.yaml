@@ -1,11 +1,30 @@
-# Device pass. Sign-out deletes the phone's registration. Maestro cannot see the server: check the API
-# log for `POST /v1/me/devices` after granting and `DELETE /v1/me/devices/…` before `POST /v1/auth/revoke`.
-appId: ${APP_ID}
+# Journey: sign-out removes the device — with notifications on, signing out takes the phone off the account's
+#   push list (the registration is deleted before the session ends). The app shows nothing about it, so the
+#   flow proves the sign-out half and the server half is read from the API log:
+#   `POST /v1/me/devices` after allowing, `DELETE /v1/me/devices/...` before `POST /v1/auth/revoke`.
+# Preconditions: as push-prompt-after-purchase.yaml, with the notification permission granted at launch.
+# Personas: a throwaway buyer.
+appId: com.yayatoh.yayatohapp.preview
 ---
 - launchApp:
     clearState: true
-    permissions: { notifications: allow }
-- runFlow: sign-in-seeded.yaml
-- tapOn: "Account"
-- tapOn: "Sign out"
-- assertVisible: "Continue with email"
+    permissions:
+      notifications: allow
+- runScript:
+    file: scripts/new-user.js
+- runFlow:
+    file: subflows/sign-in.yaml
+    env:
+      EMAIL: ${output.email}
+      PASSWORD: ${output.password}
+- tapOn: 'Account, tab, 3 of 3'
+- scrollUntilVisible:
+    element:
+      id: 'account-sign-out'
+- tapOn:
+    id: 'account-sign-out'
+- tapOn:
+    id: 'account-sign-out-confirm'
+- extendedWaitUntil:
+    visible: 'Welcome to Yayatoh'
+    timeout: 20000

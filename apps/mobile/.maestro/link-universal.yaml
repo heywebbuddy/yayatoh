@@ -1,0 +1,23 @@
+# Journey: universal link cold start — an https link on app.yayatoh.com opens the app on the right screen from
+#   a closed app (apple-app-site-association on iOS, assetlinks.json on Android).
+# Preconditions: a store-signed or TestFlight / Play internal build (an unsigned CI build never passes the
+#   operating system's link verification, so this is a device-pass flow), the build's API pointing at a server
+#   that has the event, and -e EVENT_SLUG=<slug of a public event on it>. Production domains only: the apps
+#   do not open links for any other host.
+# Personas: none (events open without signing in).
+appId: com.yayatoh.yayatohapp.preview
+env:
+  EVENT_SLUG: ''
+---
+- launchApp:
+    clearState: true
+- stopApp
+- openLink: https://app.yayatoh.com/events/${EVENT_SLUG}
+- extendedWaitUntil:
+    visible: 'About this event|Tickets|Online event'
+    timeout: 30000
+- stopApp
+- openLink: https://app.yayatoh.com/claim/not-a-real-claim-token
+- extendedWaitUntil:
+    visible: 'This link isn’t valid'
+    timeout: 30000

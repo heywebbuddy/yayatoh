@@ -1,0 +1,141 @@
+# Maestro flows on EAS Workflows: Maestro · Yayatoh (attendee app)
+#
+# Builds the attendee app as an iOS simulator build and an Android emulator build (profiles e2e-ios and
+# e2e-android in apps/mobile/eas.json) and runs, on each platform, every flow that tools/check-maestro marks
+# "ci" in apps/mobile/.maestro/journeys.json. Flows that need hardware, a second phone, a push sender or a
+# door device are left out on purpose; docs/specs/M7.X/maestro.md lists them with the reason.
+#
+# Started by .github/workflows/maestro.yml (`eas workflow:run`, only when its Expo token secret exists), by
+# hand with `eas workflow:run` from apps/mobile, or by EAS itself on a pull request into main when the Expo
+# GitHub app is linked (the `on` block below). Choose one of the last two: with the GitHub app linked,
+# delete the `maestro` job in the GitHub workflow, or every pull request runs twice.
+#
+# The e2e builds talk to a server the owner provides: replace the placeholder API_BASE_URL (https, ends in
+# /api/v1) in the env of the e2e-ios and e2e-android profiles of apps/mobile/eas.json (docs/owner-inbox.md).
+# Flows read the server's origin and the dev persona password from MAESTRO_DEV_SERVER and
+# MAESTRO_DEV_PERSONA_PASSWORD (Maestro exposes MAESTRO_-prefixed environment variables to flows).
+#
+# NOT VERIFIED OFFLINE (written from memory of the EAS Workflows documentation, no EAS account was used):
+#   - the job types `fingerprint`, `get-build`, `build` and `maestro`, and the fields used on them:
+#     params.fingerprint_hash, params.profile, params.platform, params.build_id, params.flow_path;
+#   - the output names needs.fingerprint.outputs.ios_fingerprint_hash / android_fingerprint_hash and
+#     needs.<job>.outputs.build_id;
+#   - the `if` expressions (including `always()` and `||`) that pick the cached build or the new one;
+#   - that a repository-root `.eas/workflows` directory is picked up for an app in a subdirectory, and that
+#     flow_path is relative to the repository root. If EAS wants the project root, move this file to
+#     apps/mobile/.eas/workflows/ and drop the `apps/mobile/` prefix from the flow paths;
+#   - that job `env` reaches Maestro, which is why the server and password are named MAESTRO_*;
+#   - that `on.pull_request.branches` is the right trigger key (EAS has no workflow_dispatch: a manual run is
+#     `eas workflow:run`).
+# If EAS rejects the file, remove the fingerprint and get-build jobs and the `if` lines first: build_* then
+# feeds maestro_* directly, which is the smallest documented shape.
+name: Maestro · Yayatoh (attendee app)
+
+on:
+  pull_request:
+    branches: ['main']
+
+jobs:
+  fingerprint:
+    name: Fingerprint
+    type: fingerprint
+
+  get_ios_build:
+    name: Reuse an iOS e2e build with the same fingerprint
+    needs: [fingerprint]
+    type: get-build
+    params:
+      fingerprint_hash: ${{ needs.fingerprint.outputs.ios_fingerprint_hash }}
+      profile: e2e-ios
+
+  get_android_build:
+    name: Reuse an Android e2e build with the same fingerprint
+    needs: [fingerprint]
+    type: get-build
+    params:
+      fingerprint_hash: ${{ needs.fingerprint.outputs.android_fingerprint_hash }}
+      profile: e2e-android
+
+  build_ios:
+    name: Build for the iOS simulator
+    needs: [get_ios_build]
+    if: ${{ !needs.get_ios_build.outputs.build_id }}
+    type: build
+    params:
+      platform: ios
+      profile: e2e-ios
+
+  build_android:
+    name: Build for the Android emulator
+    needs: [get_android_build]
+    if: ${{ !needs.get_android_build.outputs.build_id }}
+    type: build
+    params:
+      platform: android
+      profile: e2e-android
+
+  maestro_ios:
+    name: Maestro on the iOS simulator
+    needs: [get_ios_build, build_ios]
+    if: ${{ always() && (needs.build_ios.outputs.build_id || needs.get_ios_build.outputs.build_id) }}
+    type: maestro
+    params:
+      build_id: ${{ needs.build_ios.outputs.build_id || needs.get_ios_build.outputs.build_id }}
+      flow_path:
+        - apps/mobile/.maestro/arabic-rtl-smoke.yaml
+        - apps/mobile/.maestro/cancel-payment.yaml
+        - apps/mobile/.maestro/claim-from-link.yaml
+        - apps/mobile/.maestro/delete-account.yaml
+        - apps/mobile/.maestro/discover-search.yaml
+        - apps/mobile/.maestro/event-page.yaml
+        - apps/mobile/.maestro/launch.yaml
+        - apps/mobile/.maestro/link-cold-start.yaml
+        - apps/mobile/.maestro/link-resume-after-sign-in.yaml
+        - apps/mobile/.maestro/notification-settings.yaml
+        - apps/mobile/.maestro/orders-detail.yaml
+        - apps/mobile/.maestro/password-two-factor.yaml
+        - apps/mobile/.maestro/push-denied-blocks-nothing.yaml
+        - apps/mobile/.maestro/push-not-now.yaml
+        - apps/mobile/.maestro/push-prompt-after-purchase.yaml
+        - apps/mobile/.maestro/refund-request.yaml
+        - apps/mobile/.maestro/search-and-buy.yaml
+        - apps/mobile/.maestro/sign-in-email-code.yaml
+        - apps/mobile/.maestro/sign-out-removes-device.yaml
+        - apps/mobile/.maestro/sign-out.yaml
+        - apps/mobile/.maestro/ticket-link.yaml
+        - apps/mobile/.maestro/tickets-transfer-cancel.yaml
+        - apps/mobile/.maestro/welcome-methods.yaml
+
+  maestro_android:
+    name: Maestro on the Android emulator
+    needs: [get_android_build, build_android]
+    if: ${{ always() && (needs.build_android.outputs.build_id || needs.get_android_build.outputs.build_id) }}
+    type: maestro
+    params:
+      build_id: ${{ needs.build_android.outputs.build_id || needs.get_android_build.outputs.build_id }}
+      flow_path:
+        - apps/mobile/.maestro/arabic-rtl-smoke.yaml
+        - apps/mobile/.maestro/cancel-payment.yaml
+        - apps/mobile/.maestro/claim-from-link.yaml
+        - apps/mobile/.maestro/delete-account.yaml
+        - apps/mobile/.maestro/discover-search.yaml
+        - apps/mobile/.maestro/event-page.yaml
+        - apps/mobile/.maestro/launch.yaml
+        - apps/mobile/.maestro/link-cold-start.yaml
+        - apps/mobile/.maestro/link-resume-after-sign-in.yaml
+        - apps/mobile/.maestro/notification-settings.yaml
+        - apps/mobile/.maestro/offline-banner.yaml
+        - apps/mobile/.maestro/orders-detail.yaml
+        - apps/mobile/.maestro/password-two-factor.yaml
+        - apps/mobile/.maestro/push-denied-blocks-nothing.yaml
+        - apps/mobile/.maestro/push-not-now.yaml
+        - apps/mobile/.maestro/push-prompt-after-purchase.yaml
+        - apps/mobile/.maestro/refund-request.yaml
+        - apps/mobile/.maestro/search-and-buy.yaml
+        - apps/mobile/.maestro/sign-in-email-code.yaml
+        - apps/mobile/.maestro/sign-out-removes-device.yaml
+        - apps/mobile/.maestro/sign-out.yaml
+        - apps/mobile/.maestro/ticket-link.yaml
+        - apps/mobile/.maestro/tickets-open-offline.yaml
+        - apps/mobile/.maestro/tickets-transfer-cancel.yaml
+        - apps/mobile/.maestro/welcome-methods.yaml

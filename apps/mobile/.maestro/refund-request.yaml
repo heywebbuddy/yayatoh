@@ -1,16 +1,26 @@
-# M7.3b: ask the organizer for a refund from a ticket, under the order's policy. Written, not run in
-# cloud sessions. Seed: tess@example.test holds a ticket from an order whose policy allows requests.
+# Journey: refund request — from a ticket, the person reads the order's refund policy and asks the organizer
+#   for a refund; the request shows as waiting.
+# Preconditions: as subflows/prelude-ticket.yaml; the event's refund page says "Refunds up to a week before"
+#   and the event is 30 days out, so the order allows a request. The paid pass is bought so the order has money.
+# Personas: a throwaway buyer holding one Supporter ticket (bought on the fake provider).
 appId: com.yayatoh.yayatohapp.preview
 env:
-  EVENT: Summer Night
+  TICKET_TYPE: Supporter
 ---
-- launchApp:
-    clearState: true
-- runFlow: tickets-sign-in.yaml
+- runFlow:
+    file: subflows/prelude-ticket.yaml
+    env:
+      TICKET_TYPE: ${TICKET_TYPE}
 - tapOn:
-    text: 'General admission for ${EVENT}.*'
+    text: 'Supporter for ${output.eventName}.*'
+- scrollUntilVisible:
+    element: 'Request a refund'
 - tapOn: 'Request a refund'
-- assertVisible: 'Refund policy'
+- extendedWaitUntil:
+    visible: 'Refund policy'
+    timeout: 20000
 - tapOn: 'Send request'
-- assertVisible: 'Request sent.*'
+- extendedWaitUntil:
+    visible: 'Request sent.*'
+    timeout: 20000
 - assertVisible: 'Your request'

@@ -1,0 +1,27 @@
+# Journey: discover search — searching by words lists the matching event soonest first, a search with no match
+#   says so and "Clear filters" brings the list back, clearing the search works.
+# Preconditions: as subflows/prelude-signed-in.yaml; the new event is listed on the marketplace.
+# Personas: a throwaway buyer; the event comes from scripts/new-event.js.
+appId: com.yayatoh.yayatohapp.preview
+---
+- runFlow: subflows/prelude-signed-in.yaml
+- tapOn: 'Discover, tab, 2 of 3'
+- assertVisible: 'Find events'
+- tapOn: 'Search events'
+- inputText: ${output.eventQuery}
+- extendedWaitUntil:
+    visible: '.*${output.eventName}.*'
+    timeout: 30000
+- assertVisible: 'Soonest first'
+# Words nobody used: the empty state, then the way back.
+- eraseText: 40
+- inputText: 'zzzz-no-such-event-zzzz'
+- extendedWaitUntil:
+    visible: 'No events found'
+    timeout: 30000
+- assertVisible: 'Try other words, another date or fewer filters.'
+- tapOn: 'Clear filters'
+- extendedWaitUntil:
+    visible: 'Soonest first'
+    timeout: 30000
+- assertNotVisible: 'No events found'

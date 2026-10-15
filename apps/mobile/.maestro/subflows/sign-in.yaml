@@ -1,20 +1,18 @@
-# Signs in with a seeded persona's password (M7.3a's welcome screen). Skips itself when already signed in.
-appId: com.yayatoh.yayatohapp.dev
+# Journey: (sub-flow) sign in with a password, the shortest sign-in path to the tab shell.
+# Preconditions: the app is open on the welcome screen; EMAIL and PASSWORD are passed by the caller
+#   (from scripts/new-user.js: a throwaway account on the e2e server).
+# Personas: none; the account is made per run.
+appId: com.yayatoh.yayatohapp.preview
 ---
-- runFlow:
-    when:
-      visible: 'Use a password'
-    commands:
-      - tapOn: 'Use a password'
-      - tapOn:
-          text: 'Email'
-      - inputText: ${EMAIL}
-      - tapOn:
-          text: 'Password'
-      - inputText: ${PASSWORD}
-      - hideKeyboard
-      - tapOn:
-          text: 'Sign in'
-          index: 0
-- assertVisible:
-    text: 'Discover'
+- assertVisible: 'Welcome to Yayatoh'
+- tapOn: 'Use a password'
+- tapOn:
+    id: 'password-email'
+- inputText: ${EMAIL}
+- tapOn:
+    id: 'password-input'
+- inputText: ${PASSWORD}
+- tapOn: 'Sign in'
+- extendedWaitUntil:
+    visible: 'Tickets, tab, 1 of 3'
+    timeout: 20000

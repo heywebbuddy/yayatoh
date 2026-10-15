@@ -1,14 +1,41 @@
-# M7.4c: the organizer's read-only event-day view. Written, not run in cloud sessions; the device pass
-# runs it against a preview build.
-# Precondition: signed in as the seeded organizer with two-step verification (M7.4a "sign-in/organizer")
-# for an organization with one live event, "Harbor Summit".
+# Journey: organizer event-day view — the read-only event-day page shows check-ins, throughput, scan issues,
+#   devices and alerts for the organizer's event, says it is read only, and offers no way to change data.
+# Preconditions: as organizer-sign-in.yaml.
+# Personas: a throwaway organizer with two-step verification on, who owns one organization with one
+#   published event (scripts/new-organizer.js).
 appId: com.yayatoh.staff.preview
 ---
-- openLink: yayatoh-staff-preview://tools/ops
+- launchApp:
+    clearState: true
+- runScript:
+    file: scripts/new-organizer.js
+- tapOn: 'Event organizer: sign in'
+- tapOn: 'Email address'
+- inputText: ${output.email}
+- tapOn: 'Password'
+- inputText: ${output.password}
+- tapOn: 'Continue'
+- extendedWaitUntil:
+    visible: 'Enter the code from your authenticator app.*'
+    timeout: 20000
+- runScript:
+    file: scripts/totp.js
+    env:
+      SETUP_KEY: ${output.setupKey}
+- tapOn: 'Verification code'
+- inputText: ${output.totp}
+- tapOn: 'Verify and sign in'
+- extendedWaitUntil:
+    visible: 'Door tools'
+    timeout: 30000
+- tapOn:
+    id: 'open-ops'
 # One organization: straight to its events.
 - tapOn:
-    id: event-.*
-- assertVisible: 'Check-ins'
+    id: 'event-.*'
+- extendedWaitUntil:
+    visible: 'Check-ins'
+    timeout: 30000
 - assertVisible: 'Throughput'
 - assertVisible: 'Scan issues'
 - assertVisible: 'Devices'
@@ -16,10 +43,3 @@ appId: com.yayatoh.staff.preview
 - assertVisible: 'Read only. Numbers refresh while this screen is open.'
 # Nothing on this screen changes data.
 - assertNotVisible: 'Check in'
-# The numbers move while the screen stays open: a scan at the door raises the count within 15 seconds.
-- copyTextFrom:
-    id: ops-checked-in
-- waitForAnimationToEnd:
-    timeout: 20000
-- assertVisible:
-    id: ops-checked-in

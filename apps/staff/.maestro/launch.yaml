@@ -1,6 +1,7 @@
-# Smoke flow (M7.1b, updated by M7.4a): a fresh install opens on enrolment. Written, not run in cloud
-# sessions (no simulator); the device pass runs it with `maestro test apps/staff/.maestro` against a
-# preview build (a development build opens the dev launcher first).
+# Journey: launch smoke — a fresh install opens on enrolment, with the organizer and exhibitor sign-in doors.
+# Preconditions: an e2e build (APP_ENV=preview) pointed at any reachable server; no sign-in needed. A
+#   development build opens the dev launcher first, so this does not run against one.
+# Personas: none.
 appId: com.yayatoh.staff.preview
 ---
 - launchApp:

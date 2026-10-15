@@ -1,10 +1,7 @@
-# Shared start for the scanner flows (M7.4b): a clean install, enrolled by link (as enrol-by-link.yaml
-# does), an entrance chosen, the guest list downloaded. Written, not run in cloud sessions (no
-# simulator); the device pass runs it against a preview build with a seeded event and the fake
-# providers.
-#
-# Env: ENROL_EVENT and ENROL_KEY (from the pairing link `#e=…&k=…` on the event's devices page),
-#      CHECKPOINT (the entrance to pick by name; default: the whole event).
+# Journey: (sub-flow) the shared start of the scanner flows: a clean install, enrolled by link, an entrance
+#   chosen, the guest list downloaded.
+# Preconditions: as enrol-by-link.yaml; CHECKPOINT is the entrance to pick by name (default: the whole event).
+# Personas: none.
 appId: com.yayatoh.staff.preview
 env:
   ENROL_EVENT: ''
@@ -18,8 +15,8 @@ env:
 - openLink: 'yayatoh-staff-preview://scan#e=${ENROL_EVENT}&k=${ENROL_KEY}'
 - extendedWaitUntil:
     visible: 'Where is this device scanning?'
-    timeout: 20000
-- tapOn: '${CHECKPOINT}'
+    timeout: 30000
+- tapOn: '${CHECKPOINT}.*'
 # The list downloads once; after that scanning needs no connection.
 - extendedWaitUntil:
     visible:
